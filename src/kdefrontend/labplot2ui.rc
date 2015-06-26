@@ -10,11 +10,13 @@
 <Action name="undo" />
 <Action name="redo" />
 <Separator/>
+<Action name="new_workbook" />
+<Action name="new_spreadsheet" />
+<Action name="new_matrix" />
+<Action name="new_worksheet" />
+<Separator/>
 <Action name="import" />
 <Action name="export" />
-<Action name="new_spreadsheet" />
-<Action name="new_worksheet" />
-
 </ToolBar>
 
 <ToolBar name="worksheet_toolbar" >
@@ -32,6 +34,7 @@
 <MenuBar>
 <Menu name="file" ><text>&amp;File</text>
 <Menu name="new"><text>&amp;New</text>
+	<Action name="new_workbook" />
 	<Action name="new_spreadsheet" />
 	<Action name="new_matrix" />
 	<Action name="new_worksheet" />
@@ -53,6 +56,7 @@
 	<Action name="history" />
 </Menu>
 <Menu name="spreadsheet"><text>&amp;Spreadsheet</text></Menu>
+<!-- <Menu name="matrix"><text>&amp;Matrix</text></Menu> -->
 <Menu name="worksheet"><text>&amp;Worksheet</text></Menu>
 <!-- <Menu name="analysis"><text>&amp;Analysis</text></Menu> -->
 <!-- <Menu name="drawing"><text>&amp;Drawing</text></Menu> -->

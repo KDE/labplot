@@ -1,6 +1,10 @@
 LabPlot requires
+	* CMake version 2.8.10 or higher
 	* Qt version 4.7 or higher
-	* GSL version 1.16 or higher
+	* GSL version 1.15 or higher
+optional
+	* HDF5 1.8 or higher
+	* NetCDF 3 or higher
 
 ===============================================================================
 To build LabPlot just execute

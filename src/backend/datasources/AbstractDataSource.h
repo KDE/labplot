@@ -1,12 +1,11 @@
 /***************************************************************************
-    File                 : AbstractDataSource.h
-    Project              : LabPlot/SciDAVis
-    Description 		: Interface for data sources
-    --------------------------------------------------------------------
-    Copyright            		: (C) 2009 Alexander Semke
-    Email (use @ for *)  	: alexander.semke*web.de
-
- ***************************************************************************/
+File		: AbstractDataSource.h
+Project		: LabPlot
+Description 	: Interface for data sources
+--------------------------------------------------------------------
+Copyright	: (C) 2009 Alexander Semke (alexander.semke@web.de)
+Copyright	: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -31,12 +30,16 @@
 
 #include "backend/core/AbstractPart.h"
 #include "backend/core/AbstractScriptingEngine.h"
+#include "backend/datasources/filters/AbstractFileFilter.h"
 
 class AbstractDataSource : public AbstractPart, public scripted{
 
 	public:
    		AbstractDataSource(AbstractScriptingEngine *engine, const QString& name);
 		virtual ~AbstractDataSource() {};
+		void clear();
+		int resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols);
+		int create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode, int actualRows, int actualCols);
 };
 
 #endif // ifndef ABSTRACTDATASOURCE_H

@@ -423,12 +423,7 @@ void CartesianPlot::initMenus(){
 
 QMenu* CartesianPlot::createContextMenu(){
 	QMenu* menu = WorksheetElement::createContextMenu();
-
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	QAction* firstAction = menu->actions().first();
-#else
 	QAction* firstAction = menu->actions().at(1);
-#endif
 
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
@@ -444,13 +439,7 @@ QMenu* CartesianPlot::createContextMenu(){
 	Returns an icon to be used in the project explorer.
 */
 QIcon CartesianPlot::icon() const{
-	QIcon ico;
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	ico.addPixmap(QPixmap(":/graph.xpm"));
-#else
-	ico = KIcon("office-chart-line");
-#endif
-	return ico;
+	return KIcon("office-chart-line");
 }
 
 //##############################################################################

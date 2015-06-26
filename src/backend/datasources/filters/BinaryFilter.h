@@ -35,24 +35,29 @@ class BinaryFilter : public AbstractFileFilter{
 	Q_OBJECT
 
   public:
-	enum DataFormat{INT8,INT16,INT32,INT64,UINT8,UINT16,UINT32,UINT64,REAL32,REAL64};
+	enum DataType{INT8,INT16,INT32,INT64,UINT8,UINT16,UINT32,UINT64,REAL32,REAL64};
 	enum ByteOrder{LittleEndian, BigEndian};
 
 	BinaryFilter();
 	~BinaryFilter();
 
-	static QStringList dataFormats();
+	static QStringList dataTypes();
 	static QStringList byteOrders();
-	static int dataSize(BinaryFilter::DataFormat);
+	static int dataSize(BinaryFilter::DataType);
+	static long rowNumber(const QString & fileName, const int vectors, const BinaryFilter::DataType type);
 
 	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
+	QString readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
 	void write(const QString & fileName, AbstractDataSource* dataSource);
+
+	void loadFilterSettings(const QString&);
+	void saveFilterSettings(const QString&) const;
 
 	void setVectors(const int);
 	int vectors() const;
 
-	void setDataFormat(const BinaryFilter::DataFormat);
-	BinaryFilter::DataFormat dataFormat() const;
+	void setDataType(const BinaryFilter::DataType);
+	BinaryFilter::DataType dataType() const;
 
 	void setByteOrder(const BinaryFilter::ByteOrder);
 	BinaryFilter::ByteOrder byteOrder() const;
@@ -62,13 +67,17 @@ class BinaryFilter : public AbstractFileFilter{
 
 	void setStartRow(const int);
 	int startRow() const;
-
 	void setEndRow(const int);
 	int endRow() const;
 
 	void setSkipBytes(const int);
 	int skipBytes() const;
 
+	void setAutoModeEnabled(const bool);
+	bool isAutoModeEnabled() const;
+
+	virtual void save(QXmlStreamWriter*) const;
+	virtual bool load(XmlStreamReader*);
   private:
 	BinaryFilterPrivate* const d;
 	friend class BinaryFilterPrivate;

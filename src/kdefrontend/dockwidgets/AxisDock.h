@@ -62,6 +62,9 @@ private:
 	void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
 
+	void load();
+	void loadConfig(KConfig&);
+
 private slots:
 	void init();
 
@@ -196,11 +199,9 @@ private slots:
 
 	void axisVisibleChanged(bool);
 
-	//save/load
-	void load();
+	//save/load template
 	void loadConfigFromTemplate(KConfig&);
-	void loadConfig(KConfig&);
-	void saveConfig(KConfig&);
+	void saveConfigAsTemplate(KConfig&);
 
 signals:
 	void info(const QString&);

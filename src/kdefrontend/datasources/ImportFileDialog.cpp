@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : import file data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
+    Copyright            : (C) 2008 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -32,6 +32,8 @@
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/matrix/Matrix.h"
+#include "backend/core/Workbook.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include <kmessagebox.h>
@@ -40,6 +42,10 @@
 #include <QStatusBar>
 #include <QDir>
 #include <QInputDialog>
+#include <QToolButton>
+#include <KMenu>
+#include <QDebug>
+
 
 /*!
 	\class ImportFileDialog
@@ -48,7 +54,7 @@
 	\ingroup kdefrontend
  */
 
-ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent), cbPosition(0), m_optionsShown(false) {
+ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent), cbPosition(0), m_optionsShown(false), m_newDataContainerMenu(new KMenu(this)) {
 	mainWidget = new QWidget(this);
 	vLayout = new QVBoxLayout(mainWidget);
 	vLayout->setSpacing(0);
@@ -72,7 +78,7 @@ ImportFileDialog::ImportFileDialog(QWidget* parent) : KDialog(parent), cbPositio
 
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
-	setCaption(i18n("Import Data to Spreadsheet/Matrix"));
+	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
 	setWindowIcon(KIcon("document-import-database"));
 	resize( QSize(500,0).expandedTo(minimumSize()) );
 }
@@ -93,32 +99,32 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	//Frame for the "Add To"-Stuff
 	frameAddTo = new QGroupBox(this);
 	frameAddTo->setTitle(i18n("Import To"));
-	QHBoxLayout* hLayout = new QHBoxLayout(frameAddTo);
-	hLayout->addWidget( new QLabel(i18n("Spreadsheet"),  frameAddTo) );
+	QGridLayout *grid = new QGridLayout(frameAddTo);
+	grid->addWidget( new QLabel(i18n("Data container"),  frameAddTo),0,0 );
 
 	cbAddTo = new TreeViewComboBox(frameAddTo);
 	cbAddTo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
 	QList<const char *> list;
-	list<<"Folder"<<"Spreadsheet";
+	list<<"Folder"<<"Spreadsheet"<<"Matrix"<<"Workbook";
 	cbAddTo->setTopLevelClasses(list);
-	hLayout->addWidget( cbAddTo);
+	grid->addWidget(cbAddTo,0,1);
 	connect( cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(currentAddToIndexChanged(QModelIndex)) );
 
 	list.clear();
-	list<<"Spreadsheet";
+	list<<"Spreadsheet"<<"Matrix"<<"Workbook";
 	cbAddTo->setSelectableClasses(list);
 
-	bNewSpreadsheet = new QPushButton(frameAddTo);
-	bNewSpreadsheet->setIcon(KIcon("insert-table"));
-	bNewSpreadsheet->setToolTip(i18n("Add new spreadsheet"));
-	hLayout->addWidget( bNewSpreadsheet);
-	connect( bNewSpreadsheet, SIGNAL(clicked()), this, SLOT(newSpreadsheet()));
+	tbNewDataContainer = new QToolButton(frameAddTo);
+	tbNewDataContainer->setIcon( KIcon("list-add") );
+	grid->addWidget( tbNewDataContainer,0,2);
+	connect(tbNewDataContainer, SIGNAL(clicked(bool)), this, SLOT(newDataContainerMenu()));
+	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
 
-	hLayout->addItem( new QSpacerItem(50,10, QSizePolicy::Preferred, QSizePolicy::Fixed) );
+	//grid->addItem( new QSpacerItem(50,10, QSizePolicy::Preferred, QSizePolicy::Fixed) );
 
-	lPosition = new QLabel(i18n("Position"),  frameAddTo);
+	lPosition = new QLabel(i18n("Position"), frameAddTo);
 	lPosition->setEnabled(false);
-	hLayout->addWidget(lPosition);
+	grid->addWidget(lPosition,1,0);
 
 	cbPosition = new QComboBox(frameAddTo);
 	cbPosition->setEnabled(false);
@@ -128,8 +134,8 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
 	cbPosition->setCurrentIndex( conf.readEntry("Position", 0) );
 
-	cbPosition->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
-	hLayout->addWidget( cbPosition);
+	cbPosition->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+	grid->addWidget(cbPosition,1,1);
 
 	vLayout->addWidget(frameAddTo);
 	cbAddTo->setModel(m_model.get());
@@ -137,8 +143,8 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	//hide the data-source related widgets
 	importFileWidget->hideDataSource();
 
-  //ok is only available if a valid spreadsheet was selected
-  enableButtonOk(false);
+	//ok is only available if a valid spreadsheet was selected
+	enableButtonOk(false);
 }
 
 void ImportFileDialog::updateModel(std::auto_ptr<QAbstractItemModel> model){
@@ -147,10 +153,9 @@ void ImportFileDialog::updateModel(std::auto_ptr<QAbstractItemModel> model){
 }
 
 void ImportFileDialog::setCurrentIndex(const QModelIndex& index){
-  cbAddTo->setCurrentModelIndex(index);
-  this->currentAddToIndexChanged(index);
+	cbAddTo->setCurrentModelIndex(index);
+	this->currentAddToIndexChanged(index);
 }
-
 
 /*!
   triggers data import to the file data source \c source
@@ -158,7 +163,7 @@ void ImportFileDialog::setCurrentIndex(const QModelIndex& index){
 void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar* statusBar) const {
 	importFileWidget->saveSettings(source);
 
-		//show a progress bar in the status bar
+	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
 	progressBar->setMinimum(0);
 	progressBar->setMaximum(100);
@@ -178,11 +183,10 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
 }
 
 /*!
-  triggers data import to the currently selected spreadsheet
+  triggers data import to the currently selected data container
 */
-void ImportFileDialog::importToSpreadsheet(QStatusBar* statusBar) const{
+void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	AbstractAspect * aspect = static_cast<AbstractAspect *>(cbAddTo->currentModelIndex().internalPointer());
-	Spreadsheet* sheet = qobject_cast<Spreadsheet*>(aspect);
 	QString fileName = importFileWidget->fileName();
 	AbstractFileFilter* filter = importFileWidget->currentFileFilter();
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
@@ -201,7 +205,29 @@ void ImportFileDialog::importToSpreadsheet(QStatusBar* statusBar) const{
 
 	QTime timer;
 	timer.start();
-	filter->read(fileName, sheet, mode);
+	if(aspect->inherits("Matrix")) {
+		Matrix* matrix = qobject_cast<Matrix*>(aspect);
+		filter->read(fileName, matrix, mode);
+	}
+	else if (aspect->inherits("Spreadsheet")) {
+		Spreadsheet* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
+		filter->read(fileName, spreadsheet, mode);
+	}
+	else if (aspect->inherits("Workbook")) {
+		const Workbook* workbook = qobject_cast<const Workbook*>(aspect);
+
+		// use active spreadsheet/matrix if present, else new spreadsheet
+		Spreadsheet* spreadsheet = workbook->currentSpreadsheet();
+		Matrix* matrix = workbook->currentMatrix();
+		if(spreadsheet != NULL)
+			filter->read(fileName, spreadsheet, mode);
+		else if (matrix != NULL)
+			filter->read(fileName, matrix, mode);
+		else {
+			qDebug()<<"Import to empty workbook not implemented yet";
+			// TODO: add new spreadsheet or let filter do it
+		}
+	}
 	statusBar->showMessage( i18n("File %1 imported in %2 seconds.").arg(fileName).arg((float)timer.elapsed()/1000) );
 
 	QApplication::restoreOverrideCursor();
@@ -225,36 +251,49 @@ void ImportFileDialog::toggleOptions(){
 }
 
 void ImportFileDialog::currentAddToIndexChanged(QModelIndex index){
-	AbstractAspect * aspect = static_cast<AbstractAspect *>(index.internalPointer());
+	AbstractAspect* aspect = static_cast<AbstractAspect *>(index.internalPointer());
 
-	if ( aspect ){
+	if (aspect) {
 		lPosition->setEnabled(true);
 		cbPosition->setEnabled(true);
 		enableButtonOk(true);
-	}else{
+	} else{
 		lPosition->setEnabled(false);
 		cbPosition->setEnabled(false);
 		enableButtonOk(false);
 	}
 }
 
-void ImportFileDialog::newSpreadsheet(){
+void ImportFileDialog::newDataContainer(QAction *action){
 	QString path = importFileWidget->fileName();
 	QString name=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
 
+	QString type = action->iconText().split(' ')[1];
 	if (name.isEmpty())
-		name = i18n("new Spreadsheet");
+		name = action->iconText();
 
 	bool ok;
-	//TODO: how to set the icon in QInputDialog or in KInputDialog?
+	// child widgets can't have own icons
 	QInputDialog* dlg = new QInputDialog(this);
-
-//	this->setWindowIcon( QIcon(KIcon("insert-table")) );
-	dlg->setWindowIcon( QIcon(KIcon("insert-table")) );
-	name = dlg->getText(this, i18n("Add new Spreadsheet"), i18n("Spreadsheet name:"), QLineEdit::Normal, name, &ok);
-// 	name = KInputDialog::getText( i18n("Add new Spreadsheet"), i18n("Spreadsheet name:"), name, &ok);
-	if (ok)
-		emit newSpreadsheetRequested(name);
+	name = dlg->getText(this, i18n("Add %1", action->iconText()), i18n("%1 name:", type), QLineEdit::Normal, name, &ok);
+	if (ok) {
+		if( action->iconText() == i18n("new Workbook"))
+			emit newWorkbookRequested(name);
+		else if( action->iconText() == i18n("new Spreadsheet"))
+			emit newSpreadsheetRequested(name);
+		else if( action->iconText() == i18n("new Matrix"))
+			emit newMatrixRequested(name);
+	}
 
 	delete dlg;
+}
+
+void ImportFileDialog::newDataContainerMenu() {
+        m_newDataContainerMenu->clear();
+
+        m_newDataContainerMenu->addAction( QIcon(KIcon("tab-new-background")), i18n("new Workbook") );
+        m_newDataContainerMenu->addAction( QIcon(KIcon("insert-table")), i18n("new Spreadsheet") );
+        m_newDataContainerMenu->addAction( QIcon(KIcon("resource-calendar-insert")), i18n("new Matrix") );
+
+        m_newDataContainerMenu->exec( tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
 }

@@ -29,8 +29,11 @@
 #include "Plot3D.h"
 #include "Plot3DPrivate.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/TextLabel.h"
+#include "backend/worksheet/Worksheet.h"
 
 #include <QDebug>
 #include <QGraphicsItem>
@@ -42,6 +45,8 @@
 #include <QFileInfo>
 
 #include <KIcon>
+#include <KConfig>
+#include <KConfigGroup>
 
 #include <QVTKGraphicsItem.h>
 #include <vtkSphereSource.h>
@@ -91,6 +96,13 @@ QIcon Plot3D::icon() const{
 	return KIcon("office-chart-line");
 }
 
+QMenu* Plot3D::createContextMenu(){
+	QMenu* menu = WorksheetElement::createContextMenu();
+	//TODO
+
+	return menu;
+}
+
 void Plot3D::setRect(const QRectF &rect){
 	Q_D(Plot3D);
 	d->rect = rect;
@@ -112,12 +124,14 @@ void Plot3D::setDataSource(DataSource source){
 		setYColumn(0);
 		setZColumn(0);
 	}
+	retransform();
 }
 
 void Plot3D::setFile(const KUrl& path){
 	Q_D(Plot3D);
 	d->path = path;
 	d->isChanged = true;
+	retransform();
 }
 
 void Plot3D::setXColumn(AbstractColumn *column){
@@ -150,10 +164,16 @@ void Plot3D::retransform(){
 	Q_D(Plot3D);
 	d->retransform();
 	WorksheetElementContainer::retransform();
+
+	//TODO:do we really need to trigger an update in the view?
+// 	Worksheet* w = dynamic_cast<Worksheet*>(this->parentAspect());
+// 	if (w)
+// 		w->view()->update();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-
+//##############################################################################
+//######################### Private implementation #############################
+//##############################################################################
 Plot3DPrivate::Plot3DPrivate(Plot3D* owner, QGLContext *context)
 	: AbstractPlotPrivate(owner)
 	, q_ptr(owner)
@@ -163,7 +183,8 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner, QGLContext *context)
 	, isChanged(false)
 	, xColumn(0)
 	, yColumn(0)
-	, zColumn(0){
+	, zColumn(0)
+	, matrix(0) {
 
 	for (int i = 0; i < 3; ++i){
 		nodeColumn[i] = 0;
@@ -175,23 +196,32 @@ Plot3DPrivate::~Plot3DPrivate(){
 
 void Plot3DPrivate::init(){
 	Q_Q(Plot3D);
+
+	//initialize VTK
 	vtkItem = new QVTKGraphicsItem(context, q->plotArea()->graphicsItem());
 
-	vtkGenericOpenGLRenderWindow *renderWindow = vtkItem->GetRenderWindow();
+	vtkGenericOpenGLRenderWindow* renderWindow = vtkItem->GetRenderWindow();
 
 	renderer = vtkSmartPointer<vtkRenderer>::New();
 	renderWindow->AddRenderer(renderer);
 
 	vtkSmartPointer<vtkInteractorStyleTrackballCamera> style = vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
-
 	renderWindow->GetInteractor()->SetInteractorStyle(style);
 
 	vtkSmartPointer<vtkLight> light = vtkSmartPointer<vtkLight>::New();
-	light->SetFocalPoint(1.875, 0.6125, 0);
-	light->SetPosition(0.875, 1.6125, 1);
 	renderer->AddLight(light);
 
+	//TODO: make the axes optional
 	addAxes();
+
+	//TODO: read default settings
+	KConfig config;
+	KConfigGroup group = config.group( "Plot3D" );
+
+	light->SetFocalPoint(1.875, 0.6125, 0);
+	light->SetPosition(0.875, 1.6125, 1);
+
+	//renderer->SetBackground(.3, .6, .3);
 }
 
 void Plot3DPrivate::clearActors(){
@@ -221,6 +251,9 @@ void Plot3DPrivate::createReader(){
 	vtkSmartPointer<TReader> reader = vtkSmartPointer<TReader>::New();
 	reader->SetFileName(path);
 	reader->Update();
+
+	//reader fails to read obj-files if the locale is not set to 'C'
+	setlocale (LC_NUMERIC,"C");
 
 	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 	mapper->SetInputConnection(reader->GetOutputPort());
@@ -343,6 +376,13 @@ void Plot3DPrivate::readFromColumns(){
 	}
 }
 
+void Plot3DPrivate::readFromMatrix(){
+	if (!matrix)
+		return;
+
+	//TODO:
+}
+
 void Plot3DPrivate::retransform(){
 	prepareGeometryChange();
 	setPos(rect.x()+rect.width()/2, rect.y()+rect.height()/2);
@@ -362,10 +402,27 @@ void Plot3DPrivate::retransform(){
 			readFromFile();
 		}else if(sourceType == Plot3D::DataSource_Spreadsheet){
 			readFromColumns();
+		} else if (sourceType == Plot3D::DataSource_Matrix) {
+			readFromMatrix();
 		}
 
 		isChanged = false;
 	}
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
+}
+
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+//! Save as XML
+void Plot3D::save(QXmlStreamWriter* writer) const {
+	//TODO
+}
+
+//! Load from XML
+bool Plot3D::load(XmlStreamReader* reader) {
+	//TODO
+	return true;
 }

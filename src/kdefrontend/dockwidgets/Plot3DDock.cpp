@@ -44,30 +44,29 @@
 #include <KUrlRequester>
 #include <KLocalizedString>
 
-Plot3DDock::Plot3DDock(QWidget* parent)
-	: QWidget(parent){
+Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	ui.setupUi(this);
 
+	//TODO: remove this later - the initialization of the dock widget will be done in setPlots() later
 	hideDataSource();
 	hideFileUrl();
 	hideTriangleInfo();
+	//######
 
-	ui.cbDataSourceComboBox->insertItem(Plot3D::DataSource_File, i18n("From file"));
-	ui.cbDataSourceComboBox->insertItem(Plot3D::DataSource_Spreadsheet, i18n("Spreadsheet"));
-	ui.cbDataSourceComboBox->insertItem(Plot3D::DataSource_Empty, i18n("Demo"));
-	ui.cbDataSourceComboBox->setCurrentIndex(Plot3D::DataSource_File);
-	connect(ui.cbDataSourceComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onDataSourceChanged(int)));
+	ui.cbDataSource->insertItem(Plot3D::DataSource_File, i18n("File"));
+	ui.cbDataSource->insertItem(Plot3D::DataSource_Spreadsheet, i18n("Spreadsheet"));
+	ui.cbDataSource->insertItem(Plot3D::DataSource_Matrix, i18n("Matrix"));
+	ui.cbDataSource->insertItem(Plot3D::DataSource_Empty, i18n("Demo"));
+	ui.cbDataSource->setCurrentIndex(Plot3D::DataSource_File);
 
-	ui.cbTypeComboBox->insertItem(Plot3D::VisualizationType_Triangles, i18n("Triangles"));
-	ui.cbTypeComboBox->setCurrentIndex(Plot3D::VisualizationType_Triangles);
-	onVisualizationTypeChanged(ui.cbTypeComboBox->currentIndex());
+	ui.cbType->insertItem(Plot3D::VisualizationType_Triangles, i18n("Triangles"));
+	ui.cbType->setCurrentIndex(Plot3D::VisualizationType_Triangles);
+	onVisualizationTypeChanged(ui.cbType->currentIndex());
 
-	connect(ui.cbTypeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onVisualizationTypeChanged(int)));
 
-	connect(ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), this, SLOT(onFileChanged(const KUrl&)));
-
+	//Spreadsheet data source
 	QList<const char*>  list;
-	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
+	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 
 	const QVector<TreeViewComboBox*> treeViews(QVector<TreeViewComboBox*>()
 			<< ui.cbXCoordinate << ui.cbYCoordinate << ui.cbZCoordinate
@@ -84,6 +83,20 @@ Plot3DDock::Plot3DDock(QWidget* parent)
 		view->setSelectableClasses(list);
 		connect(view, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(onTreeViewIndexChanged(const QModelIndex&)));
 	}
+
+	//Matrix data source
+	list.clear();
+	list<<"Folder"<<"Workbook"<<"Matrix";
+	ui.cbMatrix->setTopLevelClasses(list);
+
+	list.clear();
+	list<<"Matrix";
+	ui.cbMatrix->setSelectableClasses(list);
+
+	//SIGNALs/SLOTs
+	connect(ui.cbDataSource, SIGNAL(currentIndexChanged(int)), this, SLOT(onDataSourceChanged(int)));
+	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(onVisualizationTypeChanged(int)));
+	connect(ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), this, SLOT(onFileChanged(const KUrl&)));
 }
 
 AbstractColumn* Plot3DDock::getColumn(const QModelIndex& index) const{
@@ -124,7 +137,7 @@ void Plot3DDock::onVisualizationTypeChanged(int index){
 
 	if (index == Plot3D::VisualizationType_Triangles){
 		hideDataSource(false);
-		onDataSourceChanged(ui.cbDataSourceComboBox->currentIndex());
+		onDataSourceChanged(ui.cbDataSource->currentIndex());
 	}else{
 		hideDataSource();
 		hideFileUrl();
@@ -133,37 +146,30 @@ void Plot3DDock::onVisualizationTypeChanged(int index){
 }
 
 void Plot3DDock::onFileChanged(const KUrl& path){
-	if (path.isLocalFile()){
-		foreach(Plot3D* plot, plots){
-			plot->setDataSource(Plot3D::DataSource_File);
-			plot->setFile(path);
-			plot->retransform();
-		}
-		emit needRepaint();
-	}
+	if (!path.isLocalFile())
+		return;
+
+	foreach(Plot3D* plot, plots)
+		plot->setFile(path);
 }
 
 void Plot3DDock::onDataSourceChanged(int index){
 	qDebug() << Q_FUNC_INFO << index;
+	Plot3D::DataSource type = (Plot3D::DataSource)index;
 	hideFileUrl(index != Plot3D::DataSource_File);
 	hideTriangleInfo(index != Plot3D::DataSource_Spreadsheet);
-	if (index == Plot3D::DataSource_Empty){
-		foreach(Plot3D* plot, plots){
-			plot->setDataSource(Plot3D::DataSource_Empty);
-			plot->retransform();
-		}
-		emit needRepaint();
-	}else if (index == Plot3D::DataSource_Spreadsheet){
-		foreach(Plot3D* plot, plots){
-			plot->setDataSource(Plot3D::DataSource_Spreadsheet);
-			plot->retransform();
-		}
-	}
+	
+	bool b = (type==Plot3D::DataSource_Matrix);
+	ui.labelMatrix->setVisible(b);
+	ui.cbMatrix->setVisible(b);
+
+	foreach(Plot3D* plot, plots)
+		plot->setDataSource(type);
 }
 
 void Plot3DDock::hideDataSource(bool hide){
 	ui.labelSource->setVisible(!hide);
-	ui.cbDataSourceComboBox->setVisible(!hide);
+	ui.cbDataSource->setVisible(!hide);
 }
 
 void Plot3DDock::hideFileUrl(bool hide){
@@ -190,13 +196,13 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 
 		const QVector<TreeViewComboBox*> treeViews(QVector<TreeViewComboBox*>()
 				<< ui.cbXCoordinate << ui.cbYCoordinate << ui.cbZCoordinate
-				<< ui.cbNode1 << ui.cbNode2 << ui.cbNode3);
+				<< ui.cbNode1 << ui.cbNode2 << ui.cbNode3 << ui.cbMatrix);
 
 		foreach(TreeViewComboBox* cb, treeViews){
 			cb->setModel(aspectTreeModel);
 		}
 
-		if (ui.cbTypeComboBox->currentIndex() != -1)
-			onVisualizationTypeChanged(ui.cbTypeComboBox->currentIndex());
+		if (ui.cbType->currentIndex() != -1)
+			onVisualizationTypeChanged(ui.cbType->currentIndex());
 	}
 }

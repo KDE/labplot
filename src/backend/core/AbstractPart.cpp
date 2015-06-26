@@ -32,10 +32,8 @@
 #include <QMenu>
 #include <QStyle>
 
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KIcon>
 #include <KLocale>
-#endif
 
 /**
  * \class AbstractPart
@@ -69,11 +67,10 @@ AbstractPart::~AbstractPart() {
  * A new view is only created the first time this method is called;
  * after that, a pointer to the pre-existing view is returned.
  */
-PartMdiView* AbstractPart::mdiSubWindow() const
-{
-	if (!m_mdiWindow){
-		m_mdiWindow = new PartMdiView(const_cast<AbstractPart*>(this), view());
-	}
+PartMdiView* AbstractPart::mdiSubWindow() const {
+	if (!m_mdiWindow)
+		m_mdiWindow = new PartMdiView(const_cast<AbstractPart*>(this));
+
 	return m_mdiWindow;
 }
 
@@ -113,15 +110,9 @@ QMenu* AbstractPart::createContextMenu(){
 	menu->addSeparator();
 
 	if (m_mdiWindow) {
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-		menu->addAction(QIcon(KIcon("document-export-database")), i18n("Export"), this, SIGNAL(exportRequested()));
-		menu->addAction(QIcon(KIcon("document-print")), i18n("Print"), this, SIGNAL(printRequested()));
-		menu->addAction(QIcon(KIcon("document-print-preview")), i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
-#else
-		menu->addAction(i18n("Export"), this, SIGNAL(exportRequested()));
-		menu->addAction(i18n("Print"), this, SIGNAL(printRequested()));
-		menu->addAction(i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
-#endif
+		menu->addAction(KIcon("document-export-database"), i18n("Export"), this, SIGNAL(exportRequested()));
+		menu->addAction(KIcon("document-print"), i18n("Print"), this, SIGNAL(printRequested()));
+		menu->addAction(KIcon("document-print-preview"), i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
 		menu->addSeparator();
 
 		const QStyle *widget_style = m_mdiWindow->style();
@@ -146,34 +137,3 @@ QMenu* AbstractPart::createContextMenu(){
 
 	return menu;
 }
-
-/**
- * \brief Fill the part specific menu for the main window including setting the title
- *
- * \return true on success, otherwise false (e.g. part has no actions).
- */
-bool AbstractPart::fillProjectMenu(QMenu * menu) {
-	Q_UNUSED(menu);
-	return false;
-}
-
-/**
- * \brief Copy current selection.
- */
-void AbstractPart::editCopy() {}
-
-/**
- * \brief Cut current selection.
- */
-void AbstractPart::editCut() {}
-
-/**
- * \brief Paste at the current location or into the current selection.
- */
-void AbstractPart::editPaste() {}
-
-/**
- * \var AbstractPart::m_mdiWindow
- * \brief The MDI sub-window that is wrapped around my primary view.
- */
-

@@ -29,6 +29,7 @@
 #include "kdefrontend/GuiObserver.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/AbstractAspect.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -45,6 +46,7 @@
 #include "kdefrontend/dockwidgets/Plot3DDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
+#include "kdefrontend/dockwidgets/MatrixDock.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
@@ -143,6 +145,22 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->columnDock->setColumns(list);
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->columnDock);
+  }else if (className=="Matrix"){
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Matrix properties"));
+
+	if (!mainWindow->matrixDock){
+	  mainWindow->matrixDock = new MatrixDock(mainWindow->stackedWidget);
+	  connect(mainWindow->matrixDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+	  mainWindow->stackedWidget->addWidget(mainWindow->matrixDock);
+	}
+
+	QList<Matrix*> list;
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<Matrix*>(aspect);
+	}
+	mainWindow->matrixDock->setMatrices(list);
+
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->matrixDock);
   }else if (className=="Worksheet"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Worksheet properties"));
 
@@ -179,7 +197,6 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 		if (!mainWindow->plot3dDock){
 			mainWindow->plot3dDock = new Plot3DDock(mainWindow->stackedWidget);
 			mainWindow->stackedWidget->addWidget(mainWindow->plot3dDock);
-			connect(mainWindow->plot3dDock, SIGNAL(needRepaint()), mainWindow->activeWorksheet()->view(), SLOT(update()));
 		}
 
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("3D Plot Properties"));
