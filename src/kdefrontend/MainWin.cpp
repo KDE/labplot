@@ -361,15 +361,18 @@ void MainWin::initMenus(){
     if(m_availableBackend.count() > 0) {
 	m_newCantorWorksheetMenu = new QMenu(i18n("CAS Worksheet"));
 	m_newCantorWorksheetMenu->setIcon(QIcon::fromTheme("archive-insert"));
-	
-	foreach(QString backend_name, m_availableBackend) {
-	    QAction* backend = new QAction(backend_name,this);
-	    backend->setData(backend_name);
-	    m_newCantorWorksheetMenu->addAction(backend);
+	unplugActionList(QLatin1String("backends_list"));
+	QList<QAction*> newBackendActions;
+	foreach (Cantor::Backend* backend, Cantor::Backend::availableBackends()) {
+	    if (!backend->isEnabled()) continue;
+	    QAction* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(),this);
+	    action->setData(backend->name());
+	    newBackendActions << action;
+	    m_newCantorWorksheetMenu->addAction(action);
 	}
 	
 	connect(m_newCantorWorksheetMenu, SIGNAL(triggered(QAction*)), this, SLOT(newCantorWorksheet(QAction*)));
-	
+	plugActionList(QLatin1String("backends_list"), newBackendActions);
 	m_newMenu->addMenu(m_newCantorWorksheetMenu);
     } else {
 	int choice = KMessageBox::warningContinueCancel(this, i18n("No backend for Cantor is installed."), i18n("Warning"));
@@ -922,7 +925,9 @@ void MainWin::print(){
 	    statusBar()->showMessage(i18n("Spreadsheet printed"));
 	}else{
 	    CantorWorksheet *c = this->activeCantorWorksheet();
-	    c->getPart()->action("file_print")->trigger();
+	    if(c!=0) {
+		c->getPart()->action("file_print")->trigger();
+	    }
 	}
     }
 }
@@ -942,7 +947,12 @@ void MainWin::printPreview(){
             QPrintPreviewDialog *dialog = new QPrintPreviewDialog(this);
             connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
             dialog->exec();
-        }
+        } else {
+	    CantorWorksheet* c=this->activeCantorWorksheet();
+	    if(c!=0) {
+		c->getPart()->action("file_print_preview")->trigger();
+	    }
+	}
     }
 }
 

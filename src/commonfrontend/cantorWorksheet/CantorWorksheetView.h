@@ -69,6 +69,14 @@ class CantorWorksheetView : public QWidget {
 	void differentiationActionTriggered();
 	void integrationActionTriggered();
 	void solveEquationsActionTriggered();
+	void zoomInActionTriggered();
+	void zoomOutActionTriggered();
+	void findActionTriggered();
+	void replaceActionTriggered();
+	void syntaxHighlightingActionTriggered();
+	void completionActionTriggered();
+	void lineNumbersActionTriggered();
+	void animateWorksheetActionTriggered();
 
     private:
 	CantorWorksheet* m_worksheet;  
@@ -87,6 +95,14 @@ class CantorWorksheetView : public QWidget {
 	QAction* m_differentiationAction;
 	QAction* m_integrationAction;
 	QAction* m_solveEquationsAction;
+	QAction* m_zoomIn;
+	QAction* m_zoomOut;
+	QAction* m_find;
+	QAction* m_replace;
+	QAction* m_syntaxHighlighting;
+	QAction* m_completion;
+	QAction* m_lineNumbers;
+	QAction* m_animateWorksheet;
 	QMenu* m_worksheetMenu;
 	QMenu* m_linearAlgebraMenu;
 	QMenu* m_calculateMenu;

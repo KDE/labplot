@@ -80,6 +80,7 @@ KParts::ReadWritePart* CantorWorksheet::getPart() {
 QWidget* CantorWorksheet::view() const {
     if (!m_view) {
 	m_view = new CantorWorksheetView(const_cast<CantorWorksheet*>(this));
+	m_view->setBaseSize(1500, 1500);
 // 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
     }
     return m_view;

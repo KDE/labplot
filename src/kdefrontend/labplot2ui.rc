@@ -46,6 +46,9 @@
 	<Action name="new_database_datasource" />
 	<Separator/>
 	<Action name="new_project" />
+	<Menu name="new_casWorksheet"><text>&amp;CAS Worksheet</text>
+	    <ActionList name="backends_list" />
+	</Menu>
 </Menu>
 <Action name="import" />
 <Action name="export" />
