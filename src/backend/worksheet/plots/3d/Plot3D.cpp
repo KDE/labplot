@@ -45,6 +45,8 @@
 #include <QFileInfo>
 
 #include <KIcon>
+#include <KConfig>
+#include <KConfigGroup>
 
 #include <QVTKGraphicsItem.h>
 #include <vtkSphereSource.h>
@@ -194,23 +196,32 @@ Plot3DPrivate::~Plot3DPrivate(){
 
 void Plot3DPrivate::init(){
 	Q_Q(Plot3D);
+
+	//initialize VTK
 	vtkItem = new QVTKGraphicsItem(context, q->plotArea()->graphicsItem());
 
-	vtkGenericOpenGLRenderWindow *renderWindow = vtkItem->GetRenderWindow();
+	vtkGenericOpenGLRenderWindow* renderWindow = vtkItem->GetRenderWindow();
 
 	renderer = vtkSmartPointer<vtkRenderer>::New();
 	renderWindow->AddRenderer(renderer);
 
 	vtkSmartPointer<vtkInteractorStyleTrackballCamera> style = vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
-
 	renderWindow->GetInteractor()->SetInteractorStyle(style);
 
 	vtkSmartPointer<vtkLight> light = vtkSmartPointer<vtkLight>::New();
-	light->SetFocalPoint(1.875, 0.6125, 0);
-	light->SetPosition(0.875, 1.6125, 1);
 	renderer->AddLight(light);
 
+	//TODO: make the axes optional
 	addAxes();
+
+	//TODO: read default settings
+	KConfig config;
+	KConfigGroup group = config.group( "Plot3D" );
+
+	light->SetFocalPoint(1.875, 0.6125, 0);
+	light->SetPosition(0.875, 1.6125, 1);
+
+	//renderer->SetBackground(.3, .6, .3);
 }
 
 void Plot3DPrivate::clearActors(){
@@ -264,6 +275,9 @@ vtkSmartPointer<vtkPolyDataAlgorithm> Plot3DPrivate::createReader(const KUrl& fi
 void Plot3DPrivate::readFromFile(){
 	if (!path.isValid())
 		return;
+
+	//reader fails to read obj-files if the locale is not set to 'C'
+	setlocale (LC_NUMERIC,"C");
 
 	vtkSmartPointer<vtkPolyDataAlgorithm> reader = createReader(path);
 	//TODO
