@@ -41,6 +41,10 @@ void CustomItem::init() {
     d->itemsPen.setStyle( (Qt::PenStyle)group.readEntry("ItemBorderStyle", (int)Qt::SolidLine) );
     d->itemsPen.setColor( group.readEntry("ItemBorderColor", QColor(Qt::black)) );
     d->itemsPen.setWidthF( group.readEntry("ItemBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
+    d->itemErrorBar.minusDeltaX = group.readEntry("MinusDeltaX", 0.0);
+    d->itemErrorBar.plusDeltaX = group.readEntry("PlusDeltaX", 0.0);
+    d->itemErrorBar.minusDeltaY = group.readEntry("MinusDeltaY", 0.0);
+    d->itemErrorBar.plusDeltaY = group.readEntry("PlusDeltaY", 0.0);
     this->initActions();
 }
 
@@ -101,7 +105,8 @@ QMenu* CustomItem::createContextMenu(){
 }
 
 /* ============================ getter methods ================= */
-CLASS_SHARED_D_READER_IMPL(CustomItem, CustomItem::PositionWrapper, position, position);
+CLASS_SHARED_D_READER_IMPL(CustomItem, CustomItem::PositionWrapper, position, position)
+CLASS_SHARED_D_READER_IMPL(CustomItem, CustomItem::ErrorBar, itemErrorBar, itemErrorBar)
 BASIC_SHARED_D_READER_IMPL(CustomItem, CustomItem::ItemsStyle, itemsStyle, itemsStyle)
 BASIC_SHARED_D_READER_IMPL(CustomItem, qreal, itemsOpacity, itemsOpacity)
 BASIC_SHARED_D_READER_IMPL(CustomItem, qreal, itemsRotationAngle, itemsRotationAngle)
@@ -151,13 +156,20 @@ void CustomItem::setItemsOpacity(qreal opacity) {
     if (opacity != d->itemsOpacity)
         exec(new CustomItemSetItemsOpacityCmd(d, opacity, i18n("%1: set items opacity")));
 }
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetPosition, CustomItem::PositionWrapper, position, retransform);
+
+STD_SETTER_CMD_IMPL_F_S(CustomItem, SetPosition, CustomItem::PositionWrapper, position, retransform)
 void CustomItem::setPosition(const PositionWrapper& pos) {
     Q_D(CustomItem);
     if (pos.point!=d->position.point || pos.horizontalPosition!=d->position.horizontalPosition || pos.verticalPosition!=d->position.verticalPosition)
         exec(new CustomItemSetPositionCmd(d, pos, i18n("%1: set position")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(CustomItem, SetItemErrorBar, CustomItem::ErrorBar, itemErrorBar, retransform)
+void CustomItem::setItemErrorBar(const ErrorBar& error) {
+    Q_D(CustomItem);
+    if (memcmp(&error, &d->itemErrorBar, sizeof(error)) != 0)
+        exec(new CustomItemSetItemErrorBarCmd(d, error, i18n("%1: set error")));
+}
 
 QPainterPath CustomItem::itemsPathFromStyle(CustomItem::ItemsStyle style) {
     QPainterPath path;
@@ -268,6 +280,28 @@ QString CustomItem::itemsNameFromStyle(CustomItem::ItemsStyle style) {
     return name;
 }
 
+QPainterPath CustomItem::errorBarsPath() {
+    QPainterPath path;
+    QPolygonF polygon;
+    if (itemErrorBar().minusDeltaX || itemErrorBar().plusDeltaX) {
+        polygon<<QPointF(-itemErrorBar().minusDeltaX, 2)<<QPointF(-itemErrorBar().minusDeltaX, -2)
+              <<QPointF(-itemErrorBar().minusDeltaX, 0)<<QPointF(itemErrorBar().plusDeltaX, 0)
+             <<QPointF(itemErrorBar().plusDeltaX, 2)<<QPointF(itemErrorBar().plusDeltaX, -2)
+            <<QPointF(itemErrorBar().plusDeltaX, 0)<<QPointF(0,0);
+        path.addPolygon(polygon);
+    }
+
+    if (itemErrorBar().minusDeltaY || itemErrorBar().minusDeltaY) {
+        polygon<<QPointF(0, -itemErrorBar().minusDeltaY)<<QPointF(2, -itemErrorBar().minusDeltaY)
+              <<QPointF(-2,-itemErrorBar().minusDeltaY)<<QPointF(0, -itemErrorBar().minusDeltaY)
+             <<QPointF(0, itemErrorBar().plusDeltaY)<<QPointF(2, itemErrorBar().plusDeltaY)
+            <<QPointF(-2, itemErrorBar().plusDeltaY);
+        path.addPolygon(polygon);
+    }
+
+    return path;
+}
+
 
 /*!
     sets the position without undo/redo-stuff
@@ -357,6 +391,8 @@ void CustomItemPrivate::retransform(){
     setPos(itemPos);
     suppressItemChangeEvent=false;
     QPainterPath path = CustomItem::itemsPathFromStyle(itemsStyle);
+    QPainterPath errorBar = q->errorBarsPath();
+    path.addPath(errorBar);
     boundingRectangle = path.boundingRect();
     recalcShapeAndBoundingRect();
 
@@ -446,6 +482,7 @@ void CustomItemPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     if (positionInvalid)
         return;
     QPainterPath path = CustomItem::itemsPathFromStyle(itemsStyle);
+    QPainterPath errorBar = q->errorBarsPath();
     QTransform trafo;
     trafo.scale(itemsSize, itemsSize);
     path = trafo.map(path);
@@ -454,6 +491,7 @@ void CustomItemPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem 
         trafo.rotate(-itemsRotationAngle);
         path = trafo.map(path);
     }
+    path.addPath(errorBar);
     painter->save();
     painter->setPen(itemsPen);
     painter->setBrush(itemsBrush);

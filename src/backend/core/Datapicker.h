@@ -8,7 +8,6 @@ class Spreadsheet;
 class Image;
 class QXmlStreamWriter;
 class XmlStreamReader;
-class QPointF;
 
 class Datapicker : public AbstractPart, public scripted {
 	Q_OBJECT
@@ -24,6 +23,7 @@ class Datapicker : public AbstractPart, public scripted {
 		Spreadsheet* currentSpreadsheet() const;
         Image* currentImage() const;
 		void setChildSelectedInView(int index, bool selected);
+        void addDataToDatasheet(double, int, int,const QString&);
 
         Spreadsheet* m_datasheet;
         Image* m_image;
@@ -38,8 +38,6 @@ class Datapicker : public AbstractPart, public scripted {
 		virtual void childDeselected(const AbstractAspect*);
 
         //void handleAspectAboutToBeRemoved(const AbstractAspect*);
-        void initImageConnections();
-        void addDataToDatasheet(const QPointF&, int);
 
 	signals:
         void datapickerItemSelected(int);

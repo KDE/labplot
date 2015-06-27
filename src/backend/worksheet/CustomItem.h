@@ -26,6 +26,13 @@ class CustomItem : public WorksheetElement{
 			VerticalPosition   verticalPosition;
 		};
 
+        struct ErrorBar{
+            double plusDeltaX;
+            double minusDeltaX;
+            double plusDeltaY;
+            double minusDeltaY;
+        };
+
 		explicit CustomItem(const QString& name );
 		~CustomItem();
 
@@ -37,11 +44,11 @@ class CustomItem : public WorksheetElement{
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 
-		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
+        CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
 		void setPosition(const QPointF&);
 		void setPositionInvalid(bool);
-        //BASIC_D_ACCESSOR_DECL(float, itemsRotationAngle, RotationAngle);
 
+        CLASS_D_ACCESSOR_DECL(ErrorBar, itemErrorBar, ItemErrorBar)
         BASIC_D_ACCESSOR_DECL(ItemsStyle, itemsStyle, ItemsStyle)
         BASIC_D_ACCESSOR_DECL(qreal, itemsOpacity, ItemsOpacity)
         BASIC_D_ACCESSOR_DECL(qreal, itemsRotationAngle, ItemsRotationAngle)
@@ -57,6 +64,7 @@ class CustomItem : public WorksheetElement{
 
         static QPainterPath itemsPathFromStyle(CustomItem::ItemsStyle);
         static QString itemsNameFromStyle(CustomItem::ItemsStyle);
+        QPainterPath errorBarsPath();
 
 	public slots:
 		virtual void retransform();
@@ -76,12 +84,9 @@ class CustomItem : public WorksheetElement{
 
 	signals:
 		friend class CustomItemSetPositionCmd;
-        //friend class CustomItemSetRotationAngleCmd;
 		void positionChanged(const CustomItem::PositionWrapper&);
-        //void rotationAngleChanged(float);
 		void visibleChanged(bool);
-
-		void changed();
+        void changed();
 
         friend class CustomItemSetItemsStyleCmd;
         friend class CustomItemSetItemsSizeCmd;
@@ -89,6 +94,8 @@ class CustomItem : public WorksheetElement{
         friend class CustomItemSetItemsOpacityCmd;
         friend class CustomItemSetItemsBrushCmd;
         friend class CustomItemSetItemsPenCmd;
+        friend class CustomItemSetItemErrorBarCmd;
+        void itemErrorBarChanged(const CustomItem::ErrorBar&);
         void itemsStyleChanged(CustomItem::ItemsStyle);
         void itemsSizeChanged(qreal);
         void itemsRotationAngleChanged(qreal);

@@ -11,22 +11,30 @@ class QRectF;
 class ImagePrivate;
 class Transform;
 class ImageEditor;
+class CustomItem;
 
 class Image: public AbstractPart, public scripted {
 	Q_OBJECT
 
 	public:
 		Image(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
-		~Image();
+        ~Image();
 
-        enum GraphType {Cartesian,Polar,Logarithmic};
-        enum ColorAttributes{ None, Intensity, Foreground, Hue, Saturation, Value };
-        enum PlotImageType{OriginalImage, ProcessedImage};
+        enum GraphType { Cartesian, Polar, Logarithmic };
+        enum ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
+        enum PlotImageType { OriginalImage, ProcessedImage };
+        enum PointsType { AxisPoints, CurvePoints, SegmentPoints };
+        enum ErrorType { NoError, SymmetricError, AsymmetricError };
 
-        struct ReferencePoints{
+        struct ReferencePoints {
             GraphType type;
             QPointF scenePos[3];
             QPointF logicalPos[3];
+        };
+
+        struct ErrorTypes {
+            ErrorType x;
+            ErrorType y;
         };
 
         struct EditorSettings
@@ -57,21 +65,23 @@ class Image: public AbstractPart, public scripted {
 		void update();
 		void setPrinting(bool) const;
         void setSelectedInView(const bool);
-        void uploadFile(const QString&);
         void discretize(const EditorSettings&);
         void setPlotImageType(const Image::PlotImageType&);
+        void updateData(const CustomItem*, int);
+        void updateAllData();
 
         bool isLoaded;
         QImage originalPlotImage;
         QImage processedPlotImage;
         PlotImageType plotImageType;
+        CustomItem* lastCurvePoint;
 
-        CLASS_D_ACCESSOR_DECL(QString, imageFileName, ImageFileName)
-        CLASS_D_ACCESSOR_DECL(Image::ReferencePoints, points, Points)
+        CLASS_D_ACCESSOR_DECL(QString, plotFileName, PlotFileName)
+        CLASS_D_ACCESSOR_DECL(Image::ReferencePoints, axisPoints, AxisPoints)
         CLASS_D_ACCESSOR_DECL(Image::EditorSettings, settings, Settings)
         BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle)
-        BASIC_D_ACCESSOR_DECL(bool, drawPoints, DrawPoints)
-
+        BASIC_D_ACCESSOR_DECL(ErrorTypes, plotErrorTypes, PlotErrorTypes)
+        BASIC_D_ACCESSOR_DECL(PointsType, plotPointsType, PlotPointsType)
 
 		typedef ImagePrivate Private;
 
@@ -80,8 +90,8 @@ class Image: public AbstractPart, public scripted {
 		ImagePrivate* const d;
 		friend class ImagePrivate;
 
-        Transform* m_transform;
         ImageEditor* m_imageEditor;
+        Transform* m_transform;
 
 	 private slots:
 		void handleAspectAdded(const AbstractAspect*);
@@ -93,11 +103,11 @@ class Image: public AbstractPart, public scripted {
 		void requestUpdate();
         void updateLogicalPositions();
 
-        void addDataToSheet(const QPointF&, int);
-        void imageFileNameChanged(const QString&);
+        void plotFileNameChanged(const QString&);
         void rotationAngleChanged(float);
-        friend class ImageSetImageFileNameCmd;
+        void plotErrorTypesChanged(Image::ErrorTypes);
+        friend class ImageSetPlotFileNameCmd;
         friend class ImageSetRotationAngleCmd;
+        friend class ImageSetPlotErrorTypesCmd;
 };
-
 #endif

@@ -1,6 +1,5 @@
 #include "Image.h"
 #include "ImagePrivate.h"
-#include "WorksheetElement.h"
 #include "backend/worksheet/CustomItem.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -17,7 +16,7 @@
 
 Image::Image(AbstractScriptingEngine* engine, const QString& name, bool loading)
     : AbstractPart(name), scripted(engine), d(new ImagePrivate(this)),
-      isLoaded(false), m_transform(new Transform(this)), m_imageEditor(new ImageEditor(this)){
+      isLoaded(false), m_imageEditor(new ImageEditor(this)), m_transform(new Transform()){
 
     connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
             this, SLOT(handleAspectAdded(const AbstractAspect*)));
@@ -37,10 +36,9 @@ Image::~Image() {
 void Image::init() {
     KConfig config;
     KConfigGroup group = config.group( "Image" );
-    d->imageFileName = group.readEntry("ImageFileName", QString());
-    d->drawPoints = group.readEntry("DrawPoints", false);
+    d->plotFileName = group.readEntry("PlotFileName", QString());
     d->rotationAngle = group.readEntry("RotationAngle", 0.0);
-    d->points.type = (Image::GraphType) group.readEntry("GraphType", (int) Image::Cartesian);
+    d->axisPoints.type = (Image::GraphType) group.readEntry("GraphType", (int) Image::Cartesian);
     d->settings.type = (Image::ColorAttributes) group.readEntry("ColorAttributesType", (int) Image::Intensity);
     d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", 10);
     d->settings.foregroundThresholdLow = group.readEntry("ForegroundThresholdLow", 0);
@@ -52,6 +50,9 @@ void Image::init() {
     d->settings.saturationThresholdLow = group.readEntry("SaturationThresholdLow", 50);
     d->settings.valueThresholdHigh = group.readEntry("ValueThresholdHigh", 50);
     d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", 0);
+    d->plotErrorTypes.x = (Image::ErrorType) group.readEntry("PlotErrorTypeX", (int) Image::SymmetricError);
+    d->plotErrorTypes.y = (Image::ErrorType) group.readEntry("PlotErrorTypeY", (int) Image::NoError);
+    d->plotPointsType = (Image::PointsType) group.readEntry("PlotPointsType", (int) Image::AxisPoints);
     plotImageType = (Image::PlotImageType) group.readEntry("PlotImageType", (int) Image::OriginalImage);
 }
 
@@ -78,28 +79,16 @@ QWidget *Image::view() const {
 
 
 void Image::handleAspectAdded(const AbstractAspect* aspect) {
-    const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
-    int count = childCount<WorksheetElement>(IncludeHidden);
+    const CustomItem* addedElement = qobject_cast<const CustomItem*>(aspect);
     if (addedElement) {
         if (aspect->parentAspect() == this){
             QGraphicsItem *item = addedElement->graphicsItem();
             Q_ASSERT(item != NULL);
             d->m_scene->addItem(item);
 
-            if (count <= 3) {
-                d->points.scenePos[count - 1].setX(item->pos().x());
-                d->points.scenePos[count - 1].setY(item->pos().y());
-                if (count == 3)
-                    d->drawPoints = false;
-            } else {
-                emit updateLogicalPositions();
-                QPointF point = m_transform->mapSceneToLogical(item->pos());
-                emit addDataToSheet(point, count - 4);
-            }
-
             qreal zVal = 0;
-            QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
-            foreach(WorksheetElement *elem, childElements) {
+            QList<CustomItem *> childElements = children<CustomItem>(IncludeHidden);
+            foreach(CustomItem *elem, childElements) {
                 elem->graphicsItem()->setZValue(zVal++);
             }
         }
@@ -107,7 +96,7 @@ void Image::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void Image::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-    const WorksheetElement *removedElement = qobject_cast<const WorksheetElement*>(aspect);
+    const CustomItem *removedElement = qobject_cast<const CustomItem*>(aspect);
     if (removedElement) {
         QGraphicsItem *item = removedElement->graphicsItem();
         Q_ASSERT(item != NULL);
@@ -140,40 +129,75 @@ void Image::update() {
     emit requestUpdate();
 }
 
-void Image::uploadFile(const QString& fileName) {
-    originalPlotImage.load(fileName);
-
-    processedPlotImage = originalPlotImage;
-    m_imageEditor->discretize(&processedPlotImage, settings());
-
-    QRect rect = originalPlotImage.rect();
-    rect.translate(-rect.width()/2,-rect.height()/2);
-    d->m_scene->setSceneRect(rect);
-}
-
-void Image::discretize(const EditorSettings& newSettings){
+void Image::discretize(const EditorSettings& newSettings) {
     d->settings = newSettings;
     m_imageEditor->discretize(&processedPlotImage, newSettings);
     emit requestUpdate();
 }
 
-void Image::setPlotImageType(const Image::PlotImageType& type){
+void Image::setPlotImageType(const Image::PlotImageType& type) {
     plotImageType = type;
     emit requestUpdate();
 }
 
+void Image::updateData(const CustomItem *item, int row) {
+    emit updateLogicalPositions();
+
+    QPointF data;
+    Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
+    int colCount = 0;
+    if (datapicker) {
+        data = m_transform->mapSceneToLogical(item->position().point, axisPoints());
+        datapicker->addDataToDatasheet(data.x(), colCount++, row, "x");
+        datapicker->addDataToDatasheet(data.y(), colCount++, row, "y");
+
+        if (plotErrorTypes().x != NoError) {
+            data = m_transform->mapSceneToLogical(QPointF(item->itemErrorBar().plusDeltaX, 0), axisPoints());
+            datapicker->addDataToDatasheet(data.x(), colCount++, row, "+delta_x");
+            if (plotErrorTypes().x == AsymmetricError) {
+                data = m_transform->mapSceneToLogical(QPointF(item->itemErrorBar().minusDeltaX, 0), axisPoints());
+                datapicker->addDataToDatasheet(data.x(), colCount++, row, "-delta_x");
+            }
+        }
+
+        if (plotErrorTypes().y != NoError) {
+            data = m_transform->mapSceneToLogical(QPointF(item->itemErrorBar().plusDeltaY, 0), axisPoints());
+            datapicker->addDataToDatasheet(data.y(), colCount++, row, "+delta_y");
+            if (plotErrorTypes().y == AsymmetricError) {
+                data = m_transform->mapSceneToLogical(QPointF(item->itemErrorBar().minusDeltaY, 0), axisPoints());
+                datapicker->addDataToDatasheet(data.y(), colCount++, row, "-delta_y");
+            }
+        }
+    }
+}
+
+void Image::updateAllData() {
+    QList<CustomItem*> childElements = children<CustomItem>(AbstractAspect::IncludeHidden);
+    if (childElements.count() > 3) {
+        //remove axis points
+        childElements.removeAt(0);
+        childElements.removeAt(1);
+        childElements.removeAt(2);
+
+        int row = 0;
+        foreach(CustomItem* elem, childElements)
+            updateData(elem, row++);
+    }
+}
+
 /* =============================== getter methods for background options ================================= */
-CLASS_D_READER_IMPL(Image, QString, imageFileName, imageFileName)
-CLASS_D_READER_IMPL(Image, Image::ReferencePoints, points, points)
+CLASS_D_READER_IMPL(Image, QString, plotFileName, plotFileName)
+CLASS_D_READER_IMPL(Image, Image::ReferencePoints, axisPoints, axisPoints)
 CLASS_D_READER_IMPL(Image, Image::EditorSettings, settings, settings)
 BASIC_D_READER_IMPL(Image, float, rotationAngle, rotationAngle)
-BASIC_D_READER_IMPL(Image, bool, drawPoints, drawPoints)
+BASIC_D_READER_IMPL(Image, Image::ErrorTypes, plotErrorTypes, plotErrorTypes)
+BASIC_D_READER_IMPL(Image, Image::PointsType, plotPointsType, plotPointsType)
 
 /* ============================ setter methods and undo commands  for background options  ================= */
-STD_SETTER_CMD_IMPL_F_S(Image, SetImageFileName, QString, imageFileName, updateFileName)
-void Image::setImageFileName(const QString& fileName) {
-    if (fileName!= d->imageFileName)
-        exec(new ImageSetImageFileNameCmd(d, fileName, i18n("%1: set image")));
+STD_SETTER_CMD_IMPL_F_S(Image, SetPlotFileName, QString, plotFileName, updateFileName)
+void Image::setPlotFileName(const QString& fileName) {
+    if (fileName!= d->plotFileName)
+        exec(new ImageSetPlotFileNameCmd(d, fileName, i18n("%1: set image")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Image, SetRotationAngle, float, rotationAngle, update)
@@ -182,18 +206,24 @@ void Image::setRotationAngle(float angle) {
         exec(new ImageSetRotationAngleCmd(d, angle, i18n("%1: set rotation angle")));
 }
 
+STD_SETTER_CMD_IMPL_S(Image, SetPlotErrorTypes, Image::ErrorTypes, plotErrorTypes)
+void Image::setPlotErrorTypes(const ErrorTypes types) {
+    if (types.x != d->plotErrorTypes.x || types.y != d->plotErrorTypes.y)
+        exec(new ImageSetPlotErrorTypesCmd(d, types, i18n("%1: set Error Type")));
+}
+
 void Image::setPrinting(bool on) const {
-    QList<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-    foreach(WorksheetElement* elem, childElements)
+    QList<CustomItem*> childElements = children<CustomItem>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+    foreach(CustomItem* elem, childElements)
         elem->setPrinting(on);
 }
 
-void Image::setPoints(const Image::ReferencePoints& points) {
-    d->points = points;
+void Image::setPlotPointsType(const PointsType pointsType) {
+    d->plotPointsType = pointsType;
 }
 
-void Image::setDrawPoints(const bool value) {
-    d->drawPoints = value;
+void Image::setAxisPoints(const Image::ReferencePoints& points) {
+    d->axisPoints = points;
 }
 
 //Private implementation
@@ -219,11 +249,19 @@ ImagePrivate::~ImagePrivate(){
     delete m_scene;
 }
 
-void ImagePrivate::updateFileName(){
+void ImagePrivate::updateFileName() {
     q->removeAllChildren();
-    const QString& fileName = imageFileName.trimmed();
-    if ( !fileName.isEmpty() ){
-        q->uploadFile(fileName);
+    const QString& fileName = plotFileName.trimmed();
+    if ( !fileName.isEmpty() ) {
+        q->originalPlotImage.load(fileName);
+
+        q->processedPlotImage = q->originalPlotImage;
+        q->m_imageEditor->discretize(&q->processedPlotImage, settings);
+
+        QRect rect = q->originalPlotImage.rect();
+        rect.translate(-rect.width()/2,-rect.height()/2);
+        m_scene->setSceneRect(rect);
+
         q->isLoaded = true;
     } else {
         q->isLoaded = false;
@@ -242,14 +280,13 @@ void Image::save(QXmlStreamWriter* writer) const{
     writeCommentElement(writer);
     //background properties
     writer->writeStartElement( "background" );
-    writer->writeAttribute( "fileName", d->imageFileName );
+    writer->writeAttribute( "fileName", d->plotFileName );
     writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
-    writer->writeAttribute( "drawPoints", QString::number(d->drawPoints) );
     writer->writeEndElement();
 
     //serialize all children
-    QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
-    foreach(WorksheetElement *elem, childElements)
+    QList<CustomItem *> childElements = children<CustomItem>(IncludeHidden);
+    foreach(CustomItem *elem, childElements)
         elem->save(writer);
 
     writer->writeEndElement();
@@ -257,7 +294,7 @@ void Image::save(QXmlStreamWriter* writer) const{
 
 //! Load from XML
 bool Image::load(XmlStreamReader* reader){
-    if(!reader->isStartElement() || reader->name() != "image"){
+    if(!reader->isStartElement() || reader->name() != "image") {
         reader->raiseError(i18n("no image element found"));
         return false;
     }
@@ -279,24 +316,18 @@ bool Image::load(XmlStreamReader* reader){
 
         if (reader->name() == "comment"){
             if (!readCommentElement(reader)) return false;
-        }else if (reader->name() == "background"){
+        } else if (reader->name() == "background") {
             attribs = reader->attributes();
 
             str = attribs.value("fileName").toString();
-            d->imageFileName = str;
-
-            str = attribs.value("drawPoints").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'drawPoints'"));
-            else
-                d->drawPoints = str.toInt();
+            d->plotFileName = str;
 
             str = attribs.value("rotationAngle").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("rotationAngle"));
             else
                 d->rotationAngle = str.toFloat();
-        }else if(reader->name() == "customItem"){
+        } else if(reader->name() == "customItem") {
             //change it with
             CustomItem* customItem = new CustomItem("");
             if (!customItem->load(reader)){
@@ -305,7 +336,7 @@ bool Image::load(XmlStreamReader* reader){
             }else{
                 addChild(customItem);
             }
-        }else{ // unknown element
+        } else { // unknown element
             reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
             if (!reader->skipToEndElement()) return false;
         }

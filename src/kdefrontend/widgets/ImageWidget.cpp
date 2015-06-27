@@ -59,6 +59,13 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     ui.cbPlotImageType->addItem(i18n("Original Image"));
     ui.cbPlotImageType->addItem(i18n("Processed Image"));
 
+    ui.cbXErrorType->addItem(i18n("No Error"));
+    ui.cbXErrorType->addItem(i18n("symmetric"));
+    ui.cbXErrorType->addItem(i18n("asymmetric"));
+    ui.cbYErrorType->addItem(i18n("No Error"));
+    ui.cbYErrorType->addItem(i18n("symmetric"));
+    ui.cbYErrorType->addItem(i18n("asymmetric"));
+
     m_itemsList.clear();
     //SLOTS
     // geometry
@@ -67,6 +74,8 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     connect( ui.kleBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
     connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
     connect( ui.cbPlotImageType, SIGNAL(currentIndexChanged(int)), this, SLOT(plotImageTypeChanged(int)) );
+    connect( ui.cbXErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(xErrorTypeChanged(int)) );
+    connect( ui.cbYErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(yErrorTypeChanged(int)) );
     connect( ssIntensity, SIGNAL(spanChanged(int,int)), this, SLOT(intensitySpanChanged(int,int)) );
     connect( ssForeground, SIGNAL(spanChanged(int,int)), this, SLOT(foregroundSpanChanged(int,int)) );
     connect( ssHue, SIGNAL(spanChanged(int,int)), this, SLOT(hueSpanChanged(int,int)) );
@@ -93,6 +102,7 @@ void ImageWidget::initConnections() {
     connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)), this,SLOT(handleAspectRemoved()));
     connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(handleAspectAdded()));
     connect( m_image, SIGNAL(updateLogicalPositions()), this, SLOT(updateLogicalPositions()));
+    connect( m_image, SIGNAL(plotErrorTypeChanged(Image::ErrorTypes)), this, SLOT(plotErrorTypeChanged(Image::ErrorTypes)) );
 }
 
 void ImageWidget::handleWidgetActions() {
@@ -140,7 +150,7 @@ void ImageWidget::selectFile() {
     handleWidgetActions();
 
     foreach(Image* image, m_imagesList)
-        image->setImageFileName(path);
+        image->setPlotFileName(path);
 }
 
 void ImageWidget::fileNameChanged(){
@@ -150,12 +160,12 @@ void ImageWidget::fileNameChanged(){
     QString fileName = ui.kleBackgroundFileName->text();
     handleWidgetActions();
     foreach(Image* image, m_imagesList){
-        image->setImageFileName(fileName);
+        image->setPlotFileName(fileName);
     }
 }
 
 void ImageWidget::updateLogicalPositions() {
-    Image::ReferencePoints points = m_image->points();
+    Image::ReferencePoints points = m_image->axisPoints();
     points.logicalPos[0].setX(ui.sbPoisitionX1->value());
     points.logicalPos[0].setY(ui.sbPoisitionY1->value());
     points.logicalPos[1].setX(ui.sbPoisitionX2->value());
@@ -163,7 +173,7 @@ void ImageWidget::updateLogicalPositions() {
     points.logicalPos[2].setX(ui.sbPoisitionX3->value());
     points.logicalPos[2].setY(ui.sbPoisitionY3->value());
     points.type = Image::GraphType(ui.cbGraphType->currentIndex());
-    m_image->setPoints(points);
+    m_image->setAxisPoints(points);
 }
 
 void ImageWidget::rotationChanged(double value){
@@ -284,6 +294,27 @@ void ImageWidget::plotImageTypeChanged(int index) {
         image->setPlotImageType(Image::PlotImageType(index));
 }
 
+void ImageWidget::xErrorTypeChanged(int index) {
+    if (m_initializing)
+        return;
+    Image::ErrorTypes errorTypes = m_image->plotErrorTypes();
+    errorTypes.x = Image::ErrorType(index);
+
+    foreach(Image* image, m_imagesList)
+        image->setPlotErrorTypes(errorTypes);
+}
+
+void ImageWidget::yErrorTypeChanged(int index) {
+    if (m_initializing)
+        return;
+
+    Image::ErrorTypes errorTypes = m_image->plotErrorTypes();
+    errorTypes.y = Image::ErrorType(index);
+
+    foreach(Image* image, m_imagesList)
+        image->setPlotErrorTypes(errorTypes);
+}
+
 //*********************************************************
 //****** SLOTs for changes triggered in Image *********
 //*********************************************************
@@ -296,6 +327,13 @@ void ImageWidget::imageFileNameChanged(const QString& name) {
 void ImageWidget::imageRotationAngleChanged(float angle){
     m_initializing = true;
     ui.sbRotation->setValue(angle);
+    m_initializing = false;
+}
+
+void ImageWidget::plotErrorTypeChanged(Image::ErrorTypes errorTypes){
+    m_initializing = true;
+    ui.cbXErrorType->setCurrentIndex((int) errorTypes.x);
+    ui.cbYErrorType->setCurrentIndex((int) errorTypes.y);
     m_initializing = false;
 }
 
@@ -339,15 +377,17 @@ void ImageWidget::load() {
     m_initializing = true;
     // Geometry
     ui.sbRotation->setValue( m_image->rotationAngle() );
-    ui.kleBackgroundFileName->setText( m_image->imageFileName() );
-    ui.cbGraphType->setCurrentIndex((int) m_image->points().type);
-    ui.sbPoisitionX1->setValue(m_image->points().logicalPos[0].x());
-    ui.sbPoisitionY1->setValue(m_image->points().logicalPos[0].y());
-    ui.sbPoisitionX2->setValue(m_image->points().logicalPos[1].x());
-    ui.sbPoisitionY2->setValue(m_image->points().logicalPos[1].y());
-    ui.sbPoisitionX3->setValue(m_image->points().logicalPos[2].x());
-    ui.sbPoisitionY3->setValue(m_image->points().logicalPos[2].y());
+    ui.kleBackgroundFileName->setText( m_image->plotFileName() );
+    ui.cbGraphType->setCurrentIndex((int) m_image->axisPoints().type);
+    ui.sbPoisitionX1->setValue(m_image->axisPoints().logicalPos[0].x());
+    ui.sbPoisitionY1->setValue(m_image->axisPoints().logicalPos[0].y());
+    ui.sbPoisitionX2->setValue(m_image->axisPoints().logicalPos[1].x());
+    ui.sbPoisitionY2->setValue(m_image->axisPoints().logicalPos[1].y());
+    ui.sbPoisitionX3->setValue(m_image->axisPoints().logicalPos[2].x());
+    ui.sbPoisitionY3->setValue(m_image->axisPoints().logicalPos[2].y());
     ui.cbPlotImageType->setCurrentIndex((int) m_image->plotImageType);
+    ui.cbXErrorType->setCurrentIndex((int) m_image->plotErrorTypes().x);
+    ui.cbYErrorType->setCurrentIndex((int) m_image->plotErrorTypes().y);
     ssIntensity->setSpan(m_image->settings().intensityThresholdLow, m_image->settings().intensityThresholdHigh);
     ssForeground->setSpan(m_image->settings().foregroundThresholdLow, m_image->settings().foregroundThresholdHigh);
     ssHue->setSpan(m_image->settings().hueThresholdLow, m_image->settings().hueThresholdHigh);

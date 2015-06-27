@@ -37,12 +37,6 @@ void Datapicker::initDefault() {
     addChild(m_datasheet);
     m_image = new Image(0, i18n("Image"));
     addChild(m_image);
-    initImageConnections();
-}
-
-void Datapicker::initImageConnections() {
-    connect(m_image, SIGNAL(addDataToSheet(QPointF,int)),
-            this, SLOT(addDataToDatasheet(QPointF,int)));
 }
 
 Spreadsheet* Datapicker::currentSpreadsheet() const {
@@ -110,8 +104,8 @@ void Datapicker::setChildSelectedInView(int index, bool selected){
     }
 }
 
-void Datapicker::addDataToDatasheet(const QPointF& data, int index){
-    //add spreadsheet if its not present
+void Datapicker::addDataToDatasheet(double data, int col, int row, const QString& colName){
+    //add spreadsheet if it's not present
     //change code
     int count = childCount<Spreadsheet>();
     if (!count) {
@@ -119,19 +113,19 @@ void Datapicker::addDataToDatasheet(const QPointF& data, int index){
         addChild(m_datasheet);
     }
 
-    //add column if its not present
-    if(m_datasheet->columnCount() < 2) {
-        m_datasheet->appendColumns(2 - m_datasheet->columnCount());
+    //add column if it's not present
+    if(m_datasheet->columnCount() < col) {
+        m_datasheet->appendColumns(col - m_datasheet->columnCount());
+        m_datasheet->column(col)->setName(colName);
     }
 
-    //add row if its not present
-    if(m_datasheet->rowCount() < index) {
-        m_datasheet->appendRows(index - m_datasheet->rowCount());
+    //add row if it's not present
+    if(m_datasheet->rowCount() < row) {
+        m_datasheet->appendRows(row - m_datasheet->rowCount());
     }
 
     m_datasheet->setUndoAware(false);
-    m_datasheet->column(0)->setValueAt(index, data.x());
-    m_datasheet->column(1)->setValueAt(index, data.y());
+    m_datasheet->column(col)->setValueAt(row, data);
     m_datasheet->setUndoAware(true);
 }
 
@@ -194,6 +188,5 @@ bool Datapicker::load(XmlStreamReader* reader){
         }
     }
 
-    initImageConnections();
     return true;
 }

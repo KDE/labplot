@@ -13,6 +13,7 @@ class CustomItemPrivate: public QGraphicsItem {
 
 		CustomItem::PositionWrapper position;
 		bool positionInvalid;
+		CustomItem::ErrorBar itemErrorBar;
 
 		QString name() const;
 		void retransform();

@@ -11,20 +11,20 @@ class ImagePrivate{
 		explicit ImagePrivate(Image*);
 		virtual ~ImagePrivate();
 		
-		Image::ReferencePoints points;
+		Image::ReferencePoints axisPoints;
 		Image::EditorSettings settings;
+		Image::ErrorTypes plotErrorTypes;
+		Image::PointsType plotPointsType;
 		Image* const q;
 		QRectF pageRect;
 		QGraphicsScene* m_scene;
 		float rotationAngle;
-		bool drawPoints;
+		QString plotFileName;
 
 		QString name() const;
 		void update();
 		void updateFileName();
 		void updatePageRect();
-
-		QString imageFileName;
 };
 
 #endif

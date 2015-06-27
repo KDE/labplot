@@ -43,6 +43,8 @@ private slots:
     void updateLogicalPositions();
     void selectFile();
     void fileNameChanged();
+    void xErrorTypeChanged(int);
+    void yErrorTypeChanged(int);
 
     void imageFileNameChanged(const QString&);
     void imageRotationAngleChanged(float);
@@ -51,6 +53,7 @@ private slots:
     void handleWidgetActions();
 
     void plotImageTypeChanged(int);
+    void plotErrorTypeChanged(Image::ErrorTypes);
     void intensitySpanChanged(int, int);
     void foregroundSpanChanged(int, int);
     void hueSpanChanged(int, int);

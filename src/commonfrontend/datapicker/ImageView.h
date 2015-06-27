@@ -62,8 +62,9 @@ class ImageView : public QGraphicsView {
 	QAction* zoomFitPageWidthAction;
 	QAction* zoomFitSelectionAction;
 
-    QAction* setReferencePointsAction;
+    QAction* setAxisPointsAction;
     QAction* setCurvePointsAction;
+    QAction* selectSegmentAction;
 
 	QAction* navigationModeAction;
 	QAction* zoomSelectionModeAction;
@@ -79,8 +80,7 @@ class ImageView : public QGraphicsView {
 	void changeZoom(QAction*);
     void handleImageActions();
 	void updateBackground();
-    void setReferencePoints();
-    void setCurvePoints();
+    void changePointsType(QAction*);
 
   signals:
 	void statusInfo(const QString&);

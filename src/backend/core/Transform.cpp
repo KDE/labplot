@@ -3,7 +3,7 @@
 
 #define PI 3.14159265
 
-Transform::Transform(Image *image): m_image(image) {
+Transform::Transform() {
 }
 
 bool Transform::mapTypeToCartesian() {
@@ -36,8 +36,8 @@ bool Transform::mapTypeToCartesian() {
     return true;
 }
 
-QPointF Transform::mapSceneToLogical(const QPointF& scenePoint) {
-    m_points = m_image->points();
+QPointF Transform::mapSceneToLogical(const QPointF& scenePoint, Image::ReferencePoints axisPoints) {
+    m_points = axisPoints;
 
     X[3] = scenePoint.x();
     Y[3] = scenePoint.y();
