@@ -26,8 +26,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CARTESIANPLOTPRIVATE_H
-#define CARTESIANPLOTPRIVATE_H
+#ifndef PLOT3DPRIVATE_H
+#define PLOT3DPRIVATE_H
 
 #include "Plot3D.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
@@ -37,7 +37,6 @@
 #include <vtkSmartPointer.h>
 #include <vtkRenderer.h>
 
-class AbstractColumn;
 class Matrix;
 
 class vtkActor;
@@ -59,8 +58,8 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		void init();
 
 		virtual void retransform();
+		void updateBackground();
 
-	private:
 		void addSphere();
 		void readFromFile();
 		void readFromColumns();
@@ -77,9 +76,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		void renderTriangles(vtkSmartPointer<vtkPoints>& points,
 				vtkSmartPointer<vtkCellArray>& triangles);
 
-	private:
-		Plot3D* const q_ptr;
-		Q_DECLARE_PUBLIC(Plot3D);
+		Plot3D* const q;
 		QGLContext *context;
 		QVTKGraphicsItem *vtkItem;
 		Plot3D::VisualizationType visType;
@@ -98,6 +95,19 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		AbstractColumn *zColumn;
 		AbstractColumn *nodeColumn[3];
 		Matrix* matrix;
+
+		//background
+		PlotArea::BackgroundType backgroundType;
+		PlotArea::BackgroundColorStyle backgroundColorStyle;
+		PlotArea::BackgroundImageStyle backgroundImageStyle;
+		Qt::BrushStyle backgroundBrushStyle;
+		QColor backgroundFirstColor;
+		QColor backgroundSecondColor;
+		QString backgroundFileName;
+		float backgroundOpacity;
+
+		//light
+
 };
 
 #endif

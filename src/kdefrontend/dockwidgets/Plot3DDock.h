@@ -29,14 +29,14 @@
 #ifndef PLOT3DDOCK_H
 #define PLOT3DDOCK_H
 
-#include <QWidget>
+#include "backend/worksheet/plots/PlotArea.h"
 #include "ui_plot3ddock.h"
 
 class Plot3D;
 class KUrl;
 class AbstractColumn;
 
-class Plot3DDock: public QWidget{
+class Plot3DDock: public QWidget {
 	Q_OBJECT
 
 	public:
@@ -44,24 +44,60 @@ class Plot3DDock: public QWidget{
 		void setPlots(const QList<Plot3D*>& plots);
 
 	private:
+		Ui::Plot3DDock ui;
+		Plot3D* m_plot;
+		QList<Plot3D*> m_plotsList;
+		bool m_initializing;
+
 		void hideDataSource(bool hide = true);
 		void hideFileUrl(bool hide = true);
 		void hideTriangleInfo(bool hide = true);
-
 		AbstractColumn* getColumn(const QModelIndex& index) const;
 
+		void load();
+		void loadConfig(KConfig&);
+
 	private slots:
+		//SLOTs for changes triggered in Plot3DDock
+		void retranslateUi();
+
+		//"General"-tab
+		void nameChanged();
+		void commentChanged();
 		void onVisualizationTypeChanged(int index);
 		void onDataSourceChanged(int index);
 		void onFileChanged(const KUrl& path);
-
 		void onTreeViewIndexChanged(const QModelIndex& index);
-
 		void onShowAxes(bool show);
 
-	private:
-		Ui::Plot3DDock ui;
-		QList<Plot3D*> plots;
+		//"Background"-tab
+		void backgroundTypeChanged(int);
+		void backgroundColorStyleChanged(int);
+		void backgroundImageStyleChanged(int);
+		void backgroundBrushStyleChanged(int);
+		void backgroundFirstColorChanged(const QColor&);
+		void backgroundSecondColorChanged(const QColor&);
+		void backgroundOpacityChanged(int);
+		void backgroundSelectFile();
+		void backgroundFileNameChanged();
+
+		//SLOTs for changes triggered in Plot3D
+		//"General"-tab
+		void plotDescriptionChanged(const AbstractAspect*);
+
+		//"Background"-tab
+		void plotBackgroundTypeChanged(PlotArea::BackgroundType);
+		void plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
+		void plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+		void plotBackgroundBrushStyleChanged(Qt::BrushStyle);
+		void plotBackgroundFirstColorChanged(const QColor&);
+		void plotBackgroundSecondColorChanged(const QColor&);
+		void plotBackgroundFileNameChanged(const QString&);
+		void plotBackgroundOpacityChanged(float);
+
+		//saving/loading
+		void loadConfigFromTemplate(KConfig&);
+		void saveConfigAsTemplate(KConfig&);
 };
 
 #endif
