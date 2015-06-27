@@ -34,6 +34,7 @@
 #include "backend/worksheet/plots/3d/Plot3D.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
+#include "kdefrontend/TemplateHandler.h"
 
 #include <QDebug>
 #include <QLabel>
@@ -143,6 +144,13 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed(QColor)), this, SLOT(backgroundSecondColorChanged(QColor)) );
 	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
 
+	//Template handler
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
+	ui.verticalLayout->addWidget(templateHandler, 0, 0);
+	templateHandler->show();
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
+	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 }
 
 void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
