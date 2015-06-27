@@ -45,6 +45,8 @@ class vtkCubeAxesActor;
 class vtkRenderer;
 class vtkPolyDataMapper;
 class vtkOrientationMarkerWidget;
+class vtkPoints;
+class vtkCellArray;
 
 class QGLContext;
 class QVTKGraphicsItem;
@@ -71,6 +73,9 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 
 		template<class TReader>
 		void createReader();
+
+		void renderTriangles(vtkSmartPointer<vtkPoints>& points,
+				vtkSmartPointer<vtkCellArray>& triangles);
 
 	private:
 		Plot3D* const q_ptr;

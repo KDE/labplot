@@ -373,30 +373,73 @@ void Plot3DPrivate::readFromColumns(){
 			triangles->InsertNextCell(triangle);
 		}
 
-		qDebug() << Q_FUNC_INFO << "Amount of triangles:" << triangles->GetSize();
-
-		vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
-
-		polydata->SetPoints(points);
-		polydata->SetPolys(triangles);
-
-		axes->SetBounds(polydata->GetBounds());
-		vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-		mapper->SetInputData(polydata);
-
-		vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
-		actor->SetMapper(mapper);
-
-		renderer->AddActor(actor);
-		actors.push_back(actor);
+		renderTriangles(points, triangles);
 	}
+}
+
+void Plot3DPrivate::renderTriangles(vtkSmartPointer<vtkPoints>& points,
+		vtkSmartPointer<vtkCellArray>& triangles){
+	qDebug() << Q_FUNC_INFO << "Amount of triangles:" << triangles->GetSize();
+
+	vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
+
+	polydata->SetPoints(points);
+	polydata->SetPolys(triangles);
+
+	axes->SetBounds(polydata->GetBounds());
+	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+	mapper->SetInputData(polydata);
+
+	vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+	actor->SetMapper(mapper);
+
+	renderer->AddActor(actor);
+	actors.push_back(actor);
 }
 
 void Plot3DPrivate::readFromMatrix(){
 	if (!matrix)
 		return;
 
-	//TODO:
+	if (visType == Plot3D::VisualizationType_Triangles){
+		qDebug() << Q_FUNC_INFO << "Triangles rendering";
+		vtkSmartPointer<vtkCellArray> triangles = vtkSmartPointer<vtkCellArray>::New();
+		vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
+
+		const double deltaX = (matrix->xEnd() - matrix->xStart()) / matrix->columnCount();
+		const double deltaY = (matrix->yEnd() - matrix->yStart()) / matrix->rowCount();
+		QVector<QVector<vtkIdType> > cellPoints(matrix->columnCount(), QVector<vtkIdType>(matrix->rowCount()));
+		for (int x = 0; x < matrix->columnCount(); ++x){
+			for (int y = 0; y < matrix->rowCount(); ++y){
+				const double x_val = matrix->xStart() + deltaX * x;
+				const double y_val = matrix->yStart() + deltaY * y;
+				const double z_val = matrix->cell(x, y);
+				cellPoints[x][y] = points->InsertNextPoint(x_val, y_val, z_val);
+			}
+		}
+
+		for (int x = 0, max_x = cellPoints.size() - 1; x < max_x; ++x){
+			for (int y = 0, max_y = cellPoints[0].size() - 1; y < max_y; ++y){
+				const vtkIdType rectPoints[4] = {cellPoints[x][y], cellPoints[x +1][y],
+					cellPoints[x + 1][y + 1], cellPoints[x][y + 1]};
+
+				vtkSmartPointer<vtkTriangle> triangle1 = vtkSmartPointer<vtkTriangle>::New();
+				triangle1->GetPointIds()->SetId(0, rectPoints[0]);
+				triangle1->GetPointIds()->SetId(1, rectPoints[1]);
+				triangle1->GetPointIds()->SetId(2, rectPoints[2]);
+
+				vtkSmartPointer<vtkTriangle> triangle2 = vtkSmartPointer<vtkTriangle>::New();
+				triangle2->GetPointIds()->SetId(0, rectPoints[2]);
+				triangle2->GetPointIds()->SetId(1, rectPoints[3]);
+				triangle2->GetPointIds()->SetId(2, rectPoints[0]);
+
+				triangles->InsertNextCell(triangle1);
+				triangles->InsertNextCell(triangle2);
+			}
+		}
+
+		renderTriangles(points, triangles);
+	}
 }
 
 void Plot3DPrivate::retransform(){
