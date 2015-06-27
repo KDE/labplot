@@ -160,28 +160,26 @@ void HDFFilterPrivate::handleError(int err, QString function, QString arg) {
 
 QString HDFFilterPrivate::translateHDFOrder(H5T_order_t o) {
 	QString order;
-        switch(o) {
+	switch(o) {
         case H5T_ORDER_LE:
-		order="LE";
-                break;
+			order="LE";
+			break;
         case H5T_ORDER_BE:
-		order="BE";
-                break;
+			order="BE";
+			break;
         case H5T_ORDER_VAX:
-		order="VAX";
-                break;
+			order="VAX";
+			break;
         case H5T_ORDER_MIXED:
-		order="MIXED";
-                break;
+			order="MIXED";
+			break;
         case H5T_ORDER_NONE:
-		order="NONE";
-                break;
+			order="NONE";
+			break;
         case H5T_ORDER_ERROR:
-		order="ERROR";
-                break;
-	default:
-		order="UNKNOWN";
-        }
+			order="ERROR";
+			break;
+	}
 
 	return order;
 }
@@ -316,7 +314,8 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 	int members = H5Tget_nmembers(tid);
 	handleError(members,"H5Tget_nmembers");
 
-	QStringList data[members];
+	QStringList data;
+	data.reserve(members);
 	for(int m=0;m<members;m++) {
 		hid_t mtype = H5Tget_member_type(tid,m);
 		handleError((int)mtype,"H5Tget_member_type");

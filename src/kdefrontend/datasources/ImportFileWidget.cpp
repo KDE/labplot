@@ -291,7 +291,6 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 		return filter;
 //		source->setFilter(filter);
-		break;
 	}
 	case FileDataSource::Binary: {
 		BinaryFilter* filter = new BinaryFilter();
@@ -311,7 +310,6 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 //		source->setFilter(filter);
 		return filter;
-		break;
 	}
 	case FileDataSource::Image: {
 		ImageFilter* filter = new ImageFilter();
@@ -323,7 +321,6 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		filter->setEndColumn( ui.sbEndColumn->value() );
 		
 		return filter;
-		break;
 	}
 	case FileDataSource::HDF: {
 		HDFFilter* filter = new HDFFilter();
@@ -336,7 +333,6 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		filter->setEndColumn( ui.sbEndColumn->value() );
 
 		return filter;
-		break;
 	}
 	case FileDataSource::NETCDF: {
 		NetCDFFilter* filter = new NetCDFFilter();
@@ -349,7 +345,6 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		filter->setEndColumn( ui.sbEndColumn->value() );
 
 		return filter;
-		break;
 	}
 	default: 
 		qDebug()<<"Unknown file type!";	
