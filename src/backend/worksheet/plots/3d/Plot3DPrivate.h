@@ -41,6 +41,7 @@ class Matrix;
 
 class vtkActor;
 class vtkCubeAxesActor;
+class vtkImageActor;
 class vtkRenderer;
 class vtkPolyDataMapper;
 class vtkOrientationMarkerWidget;
@@ -87,7 +88,9 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 
 		vtkSmartPointer<vtkCubeAxesActor> axes;
 		vtkSmartPointer<vtkRenderer> renderer;
+		vtkSmartPointer<vtkRenderer> backgroundRenderer;
 		QVector<vtkSmartPointer<vtkActor> > actors;
+		vtkSmartPointer<vtkImageActor> backgroundImageActor;
 		vtkSmartPointer<vtkOrientationMarkerWidget> axesWidget;
 
 		AbstractColumn *xColumn;

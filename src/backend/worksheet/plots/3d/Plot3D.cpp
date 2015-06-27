@@ -54,8 +54,11 @@
 #include <vtkSphereSource.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkActor.h>
+#include <vtkImageActor.h>
+#include <vtkCubeAxesActor.h>
 #include <vtkLight.h>
 #include <vtkGenericOpenGLRenderWindow.h>
+#include <vtkImageData.h>
 #include <vtkProperty.h>
 #include <vtkTextProperty.h>
 #include <vtkRendererCollection.h>
@@ -66,7 +69,7 @@
 #include <vtkTriangle.h>
 #include <vtkCellArray.h>
 #include <vtkOrientationMarkerWidget.h>
-#include <vtkCubeAxesActor.h>
+#include <vtkQImageToImageSource.h>
 
 
 Plot3D::Plot3D(const QString& name, QGLContext *context)
@@ -298,27 +301,39 @@ void Plot3DPrivate::init(){
 	//initialize VTK
 	vtkItem = new QVTKGraphicsItem(context, q->plotArea()->graphicsItem());
 
-	vtkGenericOpenGLRenderWindow* renderWindow = vtkItem->GetRenderWindow();
-
+	//foreground renderer
 	renderer = vtkSmartPointer<vtkRenderer>::New();
+	vtkSmartPointer<vtkLight> light = vtkSmartPointer<vtkLight>::New();
+	renderer->AddLight(light);
+
+	//background renderer
+	backgroundRenderer = vtkSmartPointer<vtkRenderer>::New();
+	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
+	backgroundRenderer->AddActor(backgroundImageActor);
+
+	//render window and layers
+	vtkGenericOpenGLRenderWindow* renderWindow = vtkItem->GetRenderWindow();
+	backgroundRenderer->SetLayer(0);
+	backgroundRenderer->InteractiveOff();
+	renderer->SetLayer(1);
+	renderWindow->SetNumberOfLayers(2);
+	renderWindow->AddRenderer(backgroundRenderer);
 	renderWindow->AddRenderer(renderer);
 
 	vtkSmartPointer<vtkInteractorStyleTrackballCamera> style = vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
 	renderWindow->GetInteractor()->SetInteractorStyle(style);
 
-	vtkSmartPointer<vtkLight> light = vtkSmartPointer<vtkLight>::New();
-	renderer->AddLight(light);
-
 	if (showAxes)
 		addAxes();
 
 	//background
-	renderer->SetBackground(.3, .6, .3);
+// 	renderer->SetBackground(.3, .6, .3);
 
 	//light
 	light->SetFocalPoint(1.875, 0.6125, 0);
 	light->SetPosition(0.875, 1.6125, 1);
 
+	updateBackground();
 }
 
 void Plot3DPrivate::setShowAxes(bool show){
@@ -562,8 +577,108 @@ void Plot3DPrivate::retransform(){
 }
 
 void Plot3DPrivate::updateBackground() {
-	//TODO: prepare the image
-// 	renderer->SetBackgroundTexture();
+	//prepare the image
+	QImage image(rect.width(), rect.height(), QImage::Format_ARGB32_Premultiplied);
+	double borderCornerRadius = 0.0; //TODO
+	QPainter painter(&image);
+	painter.setOpacity(backgroundOpacity);
+	painter.setPen(Qt::NoPen);
+	if (backgroundType == PlotArea::Color){
+		switch (backgroundColorStyle){
+			case PlotArea::SingleColor:{
+				painter.setBrush(QBrush(backgroundFirstColor));
+				break;
+			}
+			case PlotArea::HorizontalLinearGradient:{
+				QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
+				linearGrad.setColorAt(0, backgroundFirstColor);
+				linearGrad.setColorAt(1, backgroundSecondColor);
+				painter.setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::VerticalLinearGradient:{
+				QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
+				linearGrad.setColorAt(0, backgroundFirstColor);
+				linearGrad.setColorAt(1, backgroundSecondColor);
+				painter.setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::TopLeftDiagonalLinearGradient:{
+				QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
+				linearGrad.setColorAt(0, backgroundFirstColor);
+				linearGrad.setColorAt(1, backgroundSecondColor);
+				painter.setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::BottomLeftDiagonalLinearGradient:{
+				QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
+				linearGrad.setColorAt(0, backgroundFirstColor);
+				linearGrad.setColorAt(1, backgroundSecondColor);
+				painter.setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::RadialGradient:{
+				QRadialGradient radialGrad(rect.center(), rect.width()/2);
+				radialGrad.setColorAt(0, backgroundFirstColor);
+				radialGrad.setColorAt(1, backgroundSecondColor);
+				painter.setBrush(QBrush(radialGrad));
+				break;
+			}
+		}
+	}else if (backgroundType == PlotArea::Image){
+		if ( !backgroundFileName.trimmed().isEmpty() ) {
+			QPixmap pix(backgroundFileName);
+			switch (backgroundImageStyle){
+				case PlotArea::ScaledCropped:
+					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
+					painter.setBrush(QBrush(pix));
+					painter.setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+					painter.drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+					break;
+				case PlotArea::Scaled:
+					pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+					painter.setBrush(QBrush(pix));
+					painter.setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+					painter.drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+					break;
+				case PlotArea::ScaledAspectRatio:
+					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+					painter.setBrush(QBrush(pix));
+					painter.setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+					painter.drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+					break;
+				case PlotArea::Centered:
+					painter.drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
+					break;
+				case PlotArea::Tiled:
+					painter.setBrush(QBrush(pix));
+					painter.drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+					break;
+				case PlotArea::CenterTiled:
+					painter.setBrush(QBrush(pix));
+					painter.setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+					painter.drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+			}
+		}
+	} else if (backgroundType == PlotArea::Pattern){
+		painter.setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
+	}
+
+	if ( qFuzzyIsNull(borderCornerRadius) )
+		painter.drawRect(rect);
+	else
+		painter.drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+
+	//set the prepared image in the background actor
+	vtkSmartPointer<vtkImageData> imageData;
+	vtkSmartPointer<vtkQImageToImageSource> qimageToImageSource = vtkSmartPointer<vtkQImageToImageSource>::New();
+	qimageToImageSource->SetQImage(&image);
+	qimageToImageSource->Update();
+	imageData = qimageToImageSource->GetOutput();
+	backgroundImageActor->SetInputData(imageData);
+
+	//TODO how to update?
+	//vtkItem->GetRenderWindow()->Render();
 }
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
