@@ -314,8 +314,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 	int members = H5Tget_nmembers(tid);
 	handleError(members,"H5Tget_nmembers");
 
-	QStringList data;
-	data.reserve(members);
+	QStringList* data = new QStringList[members];
 	for(int m=0;m<members;m++) {
 		hid_t mtype = H5Tget_member_type(tid,m);
 		handleError((int)mtype,"H5Tget_member_type");
@@ -391,6 +390,8 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 		}
 	}
 
+	delete[] data;
+
 	return dataString;
 }
 
@@ -424,7 +425,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 	int members = H5Tget_nmembers(tid);
 	handleError(members,"H5Tget_nmembers");
 
-	QStringList data[members];
+	QStringList* data = new QStringList[members];
 	for(int m=0;m<members;m++) {
 		hid_t mtype = H5Tget_member_type(tid,m);
 		handleError((int)mtype,"H5Tget_member_type");
@@ -495,6 +496,8 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 		}
 		dataString<<"\n";
 	}
+
+	delete[] data;
 
 	return dataString;
 }
