@@ -27,10 +27,10 @@ class CustomItem : public WorksheetElement{
 		};
 
         struct ErrorBar{
-            double plusDeltaX;
-            double minusDeltaX;
-            double plusDeltaY;
-            double minusDeltaY;
+            int plusDeltaX;
+            int minusDeltaX;
+            int plusDeltaY;
+            int minusDeltaY;
         };
 
 		explicit CustomItem(const QString& name );
@@ -59,6 +59,7 @@ class CustomItem : public WorksheetElement{
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool);
+        void suppressHoverEvents(bool);
 
 		typedef CustomItemPrivate Private;
 

@@ -6,7 +6,7 @@
 class Transform {
     public:
         Transform();
-        QPointF mapSceneToLogical(const QPointF&, Image::ReferencePoints);
+        QPointF mapSceneToLogical(const QPointF&,const Image::ReferencePoints&);
 
     private:
         bool mapTypeToCartesian();

@@ -40,7 +40,7 @@ signals:
 
 private slots:
     void rotationChanged(double);
-    void updateLogicalPositions();
+    void updateAxisPoints();
     void selectFile();
     void fileNameChanged();
     void xErrorTypeChanged(int);
@@ -48,12 +48,12 @@ private slots:
 
     void imageFileNameChanged(const QString&);
     void imageRotationAngleChanged(float);
-    void handleAspectRemoved();
+    void updateCustomItemList();
     void handleAspectAdded();
     void handleWidgetActions();
 
     void plotImageTypeChanged(int);
-    void plotErrorTypeChanged(Image::ErrorTypes);
+    void plotErrorsChanged(Image::Errors);
     void intensitySpanChanged(int, int);
     void foregroundSpanChanged(int, int);
     void hueSpanChanged(int, int);

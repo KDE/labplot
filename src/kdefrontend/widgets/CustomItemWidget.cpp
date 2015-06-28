@@ -83,11 +83,11 @@ void CustomItemWidget::init() {
 }
 
 void CustomItemWidget::setCustomItems(QList<CustomItem*> list) {
-    m_itemList = list;
-    m_item = list.first();
-
-	this->load();
-	initConnections();
+        this->setEnabled(true);
+        m_itemList = list;
+        m_item = list.first();
+        this->load();
+        initConnections();
 }
 
 void CustomItemWidget::initConnections() {
@@ -112,8 +112,13 @@ void CustomItemWidget::hidePositionWidgets() {
 }
 
 void CustomItemWidget::updateItemList(QList<CustomItem*> list) {
-    m_itemList = list;
-    m_item = list.first();
+    if (m_itemList.isEmpty()) {
+        m_itemList = list;
+        m_item = list.first();
+        this->setEnabled(true);
+    } else {
+        this->setEnabled(false);
+    }
 }
 
 //**********************************************************

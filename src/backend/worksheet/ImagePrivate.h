@@ -13,7 +13,7 @@ class ImagePrivate{
 		
 		Image::ReferencePoints axisPoints;
 		Image::EditorSettings settings;
-		Image::ErrorTypes plotErrorTypes;
+		Image::Errors plotErrors;
 		Image::PointsType plotPointsType;
 		Image* const q;
 		QRectF pageRect;

@@ -9,7 +9,7 @@
 class QGraphicsItem;
 class QRectF;
 class ImagePrivate;
-class Transform;
+//class Transform;
 class ImageEditor;
 class CustomItem;
 
@@ -32,7 +32,7 @@ class Image: public AbstractPart, public scripted {
             QPointF logicalPos[3];
         };
 
-        struct ErrorTypes {
+        struct Errors {
             ErrorType x;
             ErrorType y;
         };
@@ -67,20 +67,18 @@ class Image: public AbstractPart, public scripted {
         void setSelectedInView(const bool);
         void discretize(const EditorSettings&);
         void setPlotImageType(const Image::PlotImageType&);
-        void updateData(const CustomItem*, int);
-        void updateAllData();
+        void updateAxisPoints();
 
         bool isLoaded;
         QImage originalPlotImage;
         QImage processedPlotImage;
         PlotImageType plotImageType;
-        CustomItem* lastCurvePoint;
 
         CLASS_D_ACCESSOR_DECL(QString, plotFileName, PlotFileName)
         CLASS_D_ACCESSOR_DECL(Image::ReferencePoints, axisPoints, AxisPoints)
         CLASS_D_ACCESSOR_DECL(Image::EditorSettings, settings, Settings)
         BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle)
-        BASIC_D_ACCESSOR_DECL(ErrorTypes, plotErrorTypes, PlotErrorTypes)
+        BASIC_D_ACCESSOR_DECL(Errors, plotErrors, PlotErrors)
         BASIC_D_ACCESSOR_DECL(PointsType, plotPointsType, PlotPointsType)
 
 		typedef ImagePrivate Private;
@@ -91,7 +89,7 @@ class Image: public AbstractPart, public scripted {
 		friend class ImagePrivate;
 
         ImageEditor* m_imageEditor;
-        Transform* m_transform;
+        //Transform* m_transform;
 
 	 private slots:
 		void handleAspectAdded(const AbstractAspect*);
@@ -101,13 +99,13 @@ class Image: public AbstractPart, public scripted {
 	 signals:
 		void requestProjectContextMenu(QMenu*);
 		void requestUpdate();
-        void updateLogicalPositions();
+        void requestUpdateAxisPoints();
 
         void plotFileNameChanged(const QString&);
         void rotationAngleChanged(float);
-        void plotErrorTypesChanged(Image::ErrorTypes);
+        void plotErrorsChanged(Image::Errors);
         friend class ImageSetPlotFileNameCmd;
         friend class ImageSetRotationAngleCmd;
-        friend class ImageSetPlotErrorTypesCmd;
+        friend class ImageSetPlotErrorsCmd;
 };
 #endif

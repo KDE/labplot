@@ -2,6 +2,8 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElementGroup.h"
 #include "backend/worksheet/CustomItem.h"
+#include "backend/core/Datapicker.h"
+#include "backend/core/Transform.h"
 
 #include <QApplication>
 #include <QMenu>
@@ -25,7 +27,8 @@ ImageView::ImageView(Image* image) : QGraphicsView(),
     m_image(image),
     m_mouseMode(SelectionMode),
     m_selectionBandIsShown(false),
-    tbZoom(0) {
+    tbZoom(0),
+    m_transform(new Transform()){
 
     setScene(m_image->scene());
 
@@ -94,12 +97,15 @@ void ImageView::initActions() {
     selectSegmentAction = new KAction(KIcon(""), i18n("Select Curve Segments"), plotPointsTypeActionGroup);
     selectSegmentAction->setCheckable(true);
 
+    updateDatasheetAction = new KAction(KIcon(""), i18n("Update Datasheet"), this);
+
     connect(mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)));
     connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
     connect(plotPointsTypeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changePointsType(QAction*)));
+    connect(updateDatasheetAction, SIGNAL(triggered()), this, SLOT(updateDatasheet()) );
 }
 
-void ImageView::initMenus(){
+void ImageView::initMenus() {
 
     m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"));
     m_viewMouseModeMenu->setIcon(KIcon("input-mouse"));
@@ -138,9 +144,11 @@ void ImageView::createContextMenu(QMenu* menu) const {
     menu->insertSeparator(firstAction);
     menu->insertMenu(firstAction, m_viewImageMenu);
     menu->insertSeparator(firstAction);
+    menu->insertAction(firstAction, updateDatasheetAction);
+    menu->insertSeparator(firstAction);
 }
 
-void ImageView::fillToolBar(QToolBar* toolBar){
+void ImageView::fillToolBar(QToolBar* toolBar) {
     toolBar->addSeparator();
     toolBar->addAction(selectionModeAction);
     toolBar->addAction(navigationModeAction);
@@ -148,6 +156,7 @@ void ImageView::fillToolBar(QToolBar* toolBar){
     toolBar->addAction(setAxisPointsAction);
     toolBar->addAction(setCurvePointsAction);
     toolBar->addAction(selectSegmentAction);
+    toolBar->addAction(updateDatasheetAction);
     tbZoom = new QToolButton(toolBar);
     tbZoom->setPopupMode(QToolButton::MenuButtonPopup);
     tbZoom->setMenu(m_zoomMenu);
@@ -209,6 +218,14 @@ void ImageView::drawBackground(QPainter* painter, const QRectF& rect) {
     painter->restore();
 }
 
+CustomItem *ImageView::addCustomItem(const QPointF& position) {
+    CustomItem* item = new CustomItem(i18n("item"));
+    item->setPosition(position);
+    item->setHidden(true);
+    m_image->addChild(item);
+    return item;
+}
+
 //##############################################################################
 //####################################  Events   ###############################
 //##############################################################################
@@ -235,64 +252,55 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
     }
 
     if ( m_mouseMode == SelectionMode && m_image->isLoaded ) {
-        int itemCount = m_image->childCount<CustomItem>(AbstractAspect::IncludeHidden);
+        QList<CustomItem*> childItems = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
+        CustomItem* lastCurvePoint;
         QPointF eventPos = mapToScene(event->pos());
-        if (m_image->plotPointsType() == Image::AxisPoints && itemCount < 3) {
-            CustomItem* item = new CustomItem(i18n("item"));
-            item->setPosition(eventPos);
-            item->setHidden(true);
-            m_image->addChild(item);
+        if (m_image->plotPointsType() == Image::AxisPoints && childItems.count() < 3) {
+            addCustomItem(eventPos);
 
             Image::ReferencePoints points = m_image->axisPoints();
-            points.scenePos[itemCount - 1].setX(eventPos.x());
-            points.scenePos[itemCount - 1].setY(eventPos.y());
+            points.scenePos[childItems.count() - 1].setX(eventPos.x());
+            points.scenePos[childItems.count() - 1].setY(eventPos.y());
             m_image->setAxisPoints(points);
-
         } else if (m_image->plotPointsType() == Image::CurvePoints) {
-            if (itemCount == 3 || (m_image->plotErrorTypes().x == Image::NoError)
-                    & (m_image->plotErrorTypes().y == Image::NoError)) {
-                CustomItem* item = new CustomItem(i18n("item"));
-                item->setPosition(eventPos);
-                item->setHidden(true);
-                m_image->addChild(item);
-                m_image->lastCurvePoint = item;
+
+            if (childItems.count() == 3) {
+                lastCurvePoint = addCustomItem(eventPos);
             } else {
-                CustomItem::ErrorBar errorBar = m_image->lastCurvePoint->itemErrorBar();
+                lastCurvePoint = childItems.last();
+                CustomItem::ErrorBar errorBar = lastCurvePoint->itemErrorBar();
+                QPoint errorSpan = event->pos() - mapFromScene(lastCurvePoint->position().point);
 
-                if (m_image->plotErrorTypes().x == Image::AsymmetricError && !errorBar.minusDeltaX) {
+                if (m_image->plotErrors().x == Image::AsymmetricError && !errorBar.minusDeltaX) {
                     if (!errorBar.plusDeltaX)
-                        errorBar.plusDeltaX = abs(eventPos.x() - m_image->lastCurvePoint->position().point.x());
+                        errorBar.plusDeltaX = abs(errorSpan.x());
                     else
-                        errorBar.minusDeltaX = abs(eventPos.x() - m_image->lastCurvePoint->position().point.x());
+                        errorBar.minusDeltaX = abs(errorSpan.x());
 
-                    m_image->lastCurvePoint->setItemErrorBar(errorBar);
-                } else if (m_image->plotErrorTypes().x == Image::SymmetricError && !errorBar.plusDeltaX) {
-                    errorBar.plusDeltaX = abs(eventPos.x() - m_image->lastCurvePoint->position().point.x());
+                    lastCurvePoint->setItemErrorBar(errorBar);
+                } else if (m_image->plotErrors().x == Image::SymmetricError && !errorBar.plusDeltaX) {
+                    errorBar.plusDeltaX = abs(errorSpan.x());
                     errorBar.minusDeltaX = errorBar.plusDeltaX;
 
-                    m_image->lastCurvePoint->setItemErrorBar(errorBar);
-                } else if (m_image->plotErrorTypes().y == Image::AsymmetricError && !errorBar.minusDeltaY) {
+                    lastCurvePoint->setItemErrorBar(errorBar);
+                } else if (m_image->plotErrors().y == Image::AsymmetricError && !errorBar.minusDeltaY) {
                     if (!errorBar.plusDeltaY)
-                        errorBar.plusDeltaY = abs(eventPos.y() - m_image->lastCurvePoint->position().point.y());
+                        errorBar.plusDeltaY = abs(errorSpan.y());
                     else
-                        errorBar.minusDeltaY = abs(eventPos.y() - m_image->lastCurvePoint->position().point.y());
+                        errorBar.minusDeltaY = abs(errorSpan.y());
 
-                    m_image->lastCurvePoint->setItemErrorBar(errorBar);
-                } else if (m_image->plotErrorTypes().y == Image::SymmetricError && !errorBar.plusDeltaY) {
-                    errorBar.plusDeltaY = abs(eventPos.y() - m_image->lastCurvePoint->position().point.y());
+                    lastCurvePoint->setItemErrorBar(errorBar);
+                } else if (m_image->plotErrors().y == Image::SymmetricError && !errorBar.plusDeltaY) {
+                    errorBar.plusDeltaY = abs(errorSpan.y());
                     errorBar.minusDeltaY = errorBar.plusDeltaY;
 
-                    m_image->lastCurvePoint->setItemErrorBar(errorBar);
+                    lastCurvePoint->setItemErrorBar(errorBar);
                 } else {
-                    CustomItem* item = new CustomItem(i18n("item"));
-                    item->setPosition(eventPos);
-                    item->setHidden(true);
-                    m_image->addChild(item);
-                    m_image->lastCurvePoint = item;
+                    lastCurvePoint = addCustomItem(eventPos);
                 }
             }
 
-            //m_image->updateData(m_image->lastCurvePoint, itemCount - 3);
+            updateData(lastCurvePoint);
         } else if (m_image->plotPointsType() == Image::SegmentPoints) {
             //Todo
         }
@@ -328,14 +336,17 @@ void ImageView::mouseMoveEvent(QMouseEvent* event) {
 }
 
 void ImageView::contextMenuEvent(QContextMenuEvent* e) {
+    Q_UNUSED(e);
     QMenu *menu = new QMenu(this);
     this->createContextMenu(menu);
     menu->exec(QCursor::pos());
 }
 
-//  SLOTs
-void ImageView::changePointsType(QAction* action){
-    if (action==setAxisPointsAction){
+//##############################################################################
+//####################################  SLOTs   ###############################
+//##############################################################################
+void ImageView::changePointsType(QAction* action) {
+    if (action==setAxisPointsAction) {
         //clear image
         m_image->removeAllChildren();
         m_image->setPlotPointsType(Image::AxisPoints);
@@ -346,22 +357,22 @@ void ImageView::changePointsType(QAction* action){
     }
 }
 
-void ImageView::changeZoom(QAction* action){
-    if (action==zoomInViewAction){
+void ImageView::changeZoom(QAction* action) {
+    if (action==zoomInViewAction) {
         scale(1.2, 1.2);
-    } else if (action==zoomOutViewAction){
+    } else if (action==zoomOutViewAction) {
         scale(1.0/1.2, 1.0/1.2);
-    } else if (action==zoomOriginAction){
+    } else if (action==zoomOriginAction) {
         static const float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
         static const float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
         setTransform(QTransform::fromScale(hscale, vscale));
-    } else if (action==zoomFitPageWidthAction){
+    } else if (action==zoomFitPageWidthAction) {
         float scaleFactor = viewport()->width()/scene()->sceneRect().width();
         setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-    } else if (action==zoomFitPageHeightAction){
+    } else if (action==zoomFitPageHeightAction) {
         float scaleFactor = viewport()->height()/scene()->sceneRect().height();
         setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-    } else if (action==zoomFitSelectionAction){
+    } else if (action==zoomFitSelectionAction) {
         fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
     }
     currentZoomAction=action;
@@ -390,7 +401,7 @@ void ImageView::exportToFile(const QString& path, const ExportFormat format, con
     sourceRect = scene()->sceneRect();
 
     //print
-    if (format==ImageView::Pdf || format==ImageView::Eps){
+    if (format==ImageView::Pdf || format==ImageView::Eps) {
         QPrinter printer(QPrinter::HighResolution);
         if (format==ImageView::Pdf)
             printer.setOutputFormat(QPrinter::PdfFormat);
@@ -411,7 +422,7 @@ void ImageView::exportToFile(const QString& path, const ExportFormat format, con
         painter.begin(&printer);
         exportPaint(&painter, targetRect, sourceRect);
         painter.end();
-    }else if (format==ImageView::Svg){
+    } else if (format==ImageView::Svg) {
         QSvgGenerator generator;
         generator.setFileName(path);
         int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
@@ -427,7 +438,7 @@ void ImageView::exportToFile(const QString& path, const ExportFormat format, con
         painter.begin(&generator);
         exportPaint(&painter, targetRect, sourceRect);
         painter.end();
-    }else{
+    } else {
         //PNG
         //TODO add all formats supported by Qt in QImage
         int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
@@ -471,9 +482,57 @@ void ImageView::updateBackground() {
     handleImageActions();
 }
 
+void ImageView::updateDatasheet() {
+    QList<CustomItem*> childElements = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
+    if (childElements.count() > 3) {
+        //remove axis points
+        childElements.removeAt(0);
+        childElements.removeAt(1);
+        childElements.removeAt(2);
+
+        foreach(CustomItem* elem, childElements)
+            updateData(elem);
+    }
+}
+
+void ImageView::updateData(const CustomItem *item) {
+    m_image->updateAxisPoints();
+
+    QPointF data;
+    Datapicker* datapicker = dynamic_cast<Datapicker*>(m_image->parentAspect());
+    int row = m_image->childCount<CustomItem>(AbstractAspect::IncludeHidden) - 4;
+
+    int colCount = 0;
+    if (datapicker) {
+        data = m_transform->mapSceneToLogical(item->position().point, m_image->axisPoints());
+        datapicker->addDataToSheet(data.x(), colCount++, row, "x");
+        datapicker->addDataToSheet(data.y(), colCount++, row, "y");
+
+        if (m_image->plotErrors().x != Image::NoError) {
+            data = m_transform->mapSceneToLogical(mapToScene(QPoint(item->itemErrorBar().plusDeltaX, 0)), m_image->axisPoints());
+            datapicker->addDataToSheet(data.x(), colCount++, row, "+delta_x");
+
+            if (m_image->plotErrors().x == Image::AsymmetricError) {
+                data = m_transform->mapSceneToLogical(mapToScene(QPoint(item->itemErrorBar().minusDeltaX, 0)), m_image->axisPoints());
+                datapicker->addDataToSheet(data.x(), colCount++, row, "-delta_x");
+            }
+        }
+
+        if (m_image->plotErrors().y != Image::NoError) {
+            data = m_transform->mapSceneToLogical(mapToScene(QPoint(0, item->itemErrorBar().plusDeltaY)), m_image->axisPoints());
+            datapicker->addDataToSheet(data.y(), colCount++, row, "+delta_y");
+
+            if (m_image->plotErrors().y == Image::AsymmetricError) {
+                data = m_transform->mapSceneToLogical(mapToScene(QPoint(0, item->itemErrorBar().minusDeltaY)), m_image->axisPoints());
+                datapicker->addDataToSheet(data.y(), colCount++, row, "-delta_y");
+            }
+        }
+    }
+}
+
 void ImageView::handleImageActions() {
     int count = m_image->childCount<CustomItem>(AbstractAspect::IncludeHidden);
-    if (m_image->isLoaded){
+    if (m_image->isLoaded) {
         if (count > 2){
             setCurvePointsAction->setEnabled(true);
             selectSegmentAction->setEnabled(true);

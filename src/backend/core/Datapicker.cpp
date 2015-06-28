@@ -33,8 +33,6 @@ QWidget* Datapicker::view() const {
 }
 
 void Datapicker::initDefault() {
-    m_datasheet = new Spreadsheet(0, i18n("Data"));
-    addChild(m_datasheet);
     m_image = new Image(0, i18n("Image"));
     addChild(m_image);
 }
@@ -104,24 +102,25 @@ void Datapicker::setChildSelectedInView(int index, bool selected){
     }
 }
 
-void Datapicker::addDataToDatasheet(double data, int col, int row, const QString& colName){
+void Datapicker::addDataToSheet(double data, int col, int row, const QString& colName) {
     //add spreadsheet if it's not present
-    //change code
     int count = childCount<Spreadsheet>();
     if (!count) {
         m_datasheet = new Spreadsheet(0, i18n("Data"));
+        m_datasheet->column(0)->setName("x");
+        m_datasheet->column(1)->setName("y");
         addChild(m_datasheet);
     }
 
     //add column if it's not present
-    if(m_datasheet->columnCount() < col) {
-        m_datasheet->appendColumns(col - m_datasheet->columnCount());
+    if( col >= m_datasheet->columnCount()) {
+        m_datasheet->appendColumns(col - m_datasheet->columnCount() + 1);
         m_datasheet->column(col)->setName(colName);
     }
 
     //add row if it's not present
-    if(m_datasheet->rowCount() < row) {
-        m_datasheet->appendRows(row - m_datasheet->rowCount());
+    if(row >= m_datasheet->rowCount()) {
+        m_datasheet->appendRows(row - m_datasheet->rowCount() + 1);
     }
 
     m_datasheet->setUndoAware(false);

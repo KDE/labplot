@@ -25,6 +25,7 @@ class CustomItemPrivate: public QGraphicsItem {
 		bool suppressRetransform;
 		bool m_printing;
 		bool m_hovered;
+		bool m_suppressHoverEvents;
 		
 		CustomItem::ItemsStyle itemsStyle;
 		QBrush itemsBrush;

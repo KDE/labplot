@@ -36,7 +36,7 @@ bool Transform::mapTypeToCartesian() {
     return true;
 }
 
-QPointF Transform::mapSceneToLogical(const QPointF& scenePoint, Image::ReferencePoints axisPoints) {
+QPointF Transform::mapSceneToLogical(const QPointF& scenePoint, const Image::ReferencePoints& axisPoints) {
     m_points = axisPoints;
 
     X[3] = scenePoint.x();

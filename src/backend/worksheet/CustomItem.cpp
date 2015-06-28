@@ -33,7 +33,7 @@ void CustomItem::init() {
     d->position.point.setY( group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
     d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
     d->itemsStyle = (CustomItem::ItemsStyle)group.readEntry("ItemStyle", (int)CustomItem::Circle);
-    d->itemsSize = group.readEntry("ItemSize", Worksheet::convertToSceneUnits(5, Worksheet::Point));
+    d->itemsSize = group.readEntry("ItemSize", Worksheet::convertToSceneUnits(3, Worksheet::Point));
     d->itemsRotationAngle = group.readEntry("ItemRotation", 0.0);
     d->itemsOpacity = group.readEntry("ItemOpacity", 1.0);
     d->itemsBrush.setStyle( (Qt::BrushStyle)group.readEntry("ItemFillingStyle", (int)Qt::NoBrush) );
@@ -41,10 +41,10 @@ void CustomItem::init() {
     d->itemsPen.setStyle( (Qt::PenStyle)group.readEntry("ItemBorderStyle", (int)Qt::SolidLine) );
     d->itemsPen.setColor( group.readEntry("ItemBorderColor", QColor(Qt::black)) );
     d->itemsPen.setWidthF( group.readEntry("ItemBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
-    d->itemErrorBar.minusDeltaX = group.readEntry("MinusDeltaX", 0.0);
-    d->itemErrorBar.plusDeltaX = group.readEntry("PlusDeltaX", 0.0);
-    d->itemErrorBar.minusDeltaY = group.readEntry("MinusDeltaY", 0.0);
-    d->itemErrorBar.plusDeltaY = group.readEntry("PlusDeltaY", 0.0);
+    d->itemErrorBar.minusDeltaX = group.readEntry("MinusDeltaX", 0);
+    d->itemErrorBar.plusDeltaX = group.readEntry("PlusDeltaX", 0);
+    d->itemErrorBar.minusDeltaY = group.readEntry("MinusDeltaY", 0);
+    d->itemErrorBar.plusDeltaY = group.readEntry("PlusDeltaY", 0);
     this->initActions();
 }
 
@@ -59,7 +59,7 @@ CustomItem::~CustomItem() {
     //and is deleted during the cleanup in QGraphicsScene
 }
 
-QGraphicsItem* CustomItem::graphicsItem() const{
+QGraphicsItem* CustomItem::graphicsItem() const {
     return d_ptr;
 }
 
@@ -74,7 +74,7 @@ void CustomItem::retransform(){
     d->retransform();
 }
 
-void CustomItem::handlePageResize(double horizontalRatio, double verticalRatio){
+void CustomItem::handlePageResize(double horizontalRatio, double verticalRatio) {
     Q_UNUSED(horizontalRatio);
     Q_UNUSED(verticalRatio);
 
@@ -282,20 +282,20 @@ QString CustomItem::itemsNameFromStyle(CustomItem::ItemsStyle style) {
 
 QPainterPath CustomItem::errorBarsPath() {
     QPainterPath path;
-    QPolygonF polygon;
+    QPolygon polygon;
     if (itemErrorBar().minusDeltaX || itemErrorBar().plusDeltaX) {
-        polygon<<QPointF(-itemErrorBar().minusDeltaX, 2)<<QPointF(-itemErrorBar().minusDeltaX, -2)
-              <<QPointF(-itemErrorBar().minusDeltaX, 0)<<QPointF(itemErrorBar().plusDeltaX, 0)
-             <<QPointF(itemErrorBar().plusDeltaX, 2)<<QPointF(itemErrorBar().plusDeltaX, -2)
-            <<QPointF(itemErrorBar().plusDeltaX, 0)<<QPointF(0,0);
+        polygon<<QPoint(-itemErrorBar().minusDeltaX, 2)<<QPoint(-itemErrorBar().minusDeltaX, -2)
+              <<QPoint(-itemErrorBar().minusDeltaX, 0)<<QPoint(itemErrorBar().plusDeltaX, 0)
+             <<QPoint(itemErrorBar().plusDeltaX, 2)<<QPoint(itemErrorBar().plusDeltaX, -2)
+            <<QPoint(itemErrorBar().plusDeltaX, 0)<<QPoint(0,0);
         path.addPolygon(polygon);
     }
 
     if (itemErrorBar().minusDeltaY || itemErrorBar().minusDeltaY) {
-        polygon<<QPointF(0, -itemErrorBar().minusDeltaY)<<QPointF(2, -itemErrorBar().minusDeltaY)
-              <<QPointF(-2,-itemErrorBar().minusDeltaY)<<QPointF(0, -itemErrorBar().minusDeltaY)
-             <<QPointF(0, itemErrorBar().plusDeltaY)<<QPointF(2, itemErrorBar().plusDeltaY)
-            <<QPointF(-2, itemErrorBar().plusDeltaY);
+        polygon<<QPoint(0, -itemErrorBar().minusDeltaY)<<QPoint(2, -itemErrorBar().minusDeltaY)
+              <<QPoint(-2,-itemErrorBar().minusDeltaY)<<QPoint(0, -itemErrorBar().minusDeltaY)
+             <<QPoint(0, itemErrorBar().plusDeltaY)<<QPoint(2, itemErrorBar().plusDeltaY)
+            <<QPoint(-2, itemErrorBar().plusDeltaY);
         path.addPolygon(polygon);
     }
 
@@ -341,6 +341,11 @@ void CustomItem::setPrinting(bool on) {
     d->m_printing = on;
 }
 
+void CustomItem::suppressHoverEvents(bool on) {
+    Q_D(CustomItem);
+    d->m_suppressHoverEvents = on;
+}
+
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
@@ -358,6 +363,7 @@ CustomItemPrivate::CustomItemPrivate(CustomItem *owner)
           suppressRetransform(false),
           m_printing(false),
           m_hovered(false),
+          m_suppressHoverEvents(false),
           q(owner){
 
     setFlag(QGraphicsItem::ItemIsSelectable);
@@ -472,7 +478,6 @@ void CustomItemPrivate::recalcShapeAndBoundingRect(){
 
     itemShape = QPainterPath();
     itemShape.addRect(transformedBoundingRectangle);
-    itemShape = matrix.map(itemShape);
 }
 
 void CustomItemPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
@@ -500,16 +505,18 @@ void CustomItemPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     painter->drawPath(path);
     painter->restore();
 
-    if (m_hovered && !isSelected() && !m_printing){
-        painter->setPen(q->hoveredPen);
-        painter->setOpacity(q->hoveredOpacity);
-        painter->drawPath(itemShape);
-    }
+    if (m_suppressHoverEvents) {
+        if (m_hovered && !isSelected() && !m_printing){
+            painter->setPen(q->hoveredPen);
+            painter->setOpacity(q->hoveredOpacity);
+            painter->drawPath(itemShape);
+        }
 
-    if (isSelected() && !m_printing){
-        painter->setPen(q->selectedPen);
-        painter->setOpacity(q->selectedOpacity);
-        painter->drawPath(itemShape);
+        if (isSelected() && !m_printing){
+            painter->setPen(q->selectedPen);
+            painter->setOpacity(q->selectedOpacity);
+            painter->drawPath(itemShape);
+        }
     }
 }
 

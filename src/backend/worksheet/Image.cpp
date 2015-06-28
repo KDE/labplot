@@ -4,8 +4,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/datapicker/ImageView.h"
-#include "backend/core/Transform.h"
-#include "backend/core/Datapicker.h"
 #include "backend/core/ImageEditor.h"
 
 #include <QMenu>
@@ -16,7 +14,9 @@
 
 Image::Image(AbstractScriptingEngine* engine, const QString& name, bool loading)
     : AbstractPart(name), scripted(engine), d(new ImagePrivate(this)),
-      isLoaded(false), m_imageEditor(new ImageEditor(this)), m_transform(new Transform()){
+      plotImageType(Image::OriginalImage),
+      isLoaded(false),
+      m_imageEditor(new ImageEditor(this)) {
 
     connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
             this, SLOT(handleAspectAdded(const AbstractAspect*)));
@@ -50,10 +50,9 @@ void Image::init() {
     d->settings.saturationThresholdLow = group.readEntry("SaturationThresholdLow", 50);
     d->settings.valueThresholdHigh = group.readEntry("ValueThresholdHigh", 50);
     d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", 0);
-    d->plotErrorTypes.x = (Image::ErrorType) group.readEntry("PlotErrorTypeX", (int) Image::SymmetricError);
-    d->plotErrorTypes.y = (Image::ErrorType) group.readEntry("PlotErrorTypeY", (int) Image::NoError);
+    d->plotErrors.x = (Image::ErrorType) group.readEntry("PlotErrorTypeX", (int) Image::NoError);
+    d->plotErrors.y = (Image::ErrorType) group.readEntry("PlotErrorTypeY", (int) Image::NoError);
     d->plotPointsType = (Image::PointsType) group.readEntry("PlotPointsType", (int) Image::AxisPoints);
-    plotImageType = (Image::PlotImageType) group.readEntry("PlotImageType", (int) Image::OriginalImage);
 }
 
 QIcon Image::icon() const {
@@ -110,7 +109,7 @@ void Image::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspe
     Q_UNUSED(child);
 }
 
-void Image::setSelectedInView(const bool b){
+void Image::setSelectedInView(const bool b) {
     if (b)
         emit childAspectSelectedInView(this);
     else
@@ -140,57 +139,15 @@ void Image::setPlotImageType(const Image::PlotImageType& type) {
     emit requestUpdate();
 }
 
-void Image::updateData(const CustomItem *item, int row) {
-    emit updateLogicalPositions();
-
-    QPointF data;
-    Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
-    int colCount = 0;
-    if (datapicker) {
-        data = m_transform->mapSceneToLogical(item->position().point, axisPoints());
-        datapicker->addDataToDatasheet(data.x(), colCount++, row, "x");
-        datapicker->addDataToDatasheet(data.y(), colCount++, row, "y");
-
-        if (plotErrorTypes().x != NoError) {
-            data = m_transform->mapSceneToLogical(QPointF(item->itemErrorBar().plusDeltaX, 0), axisPoints());
-            datapicker->addDataToDatasheet(data.x(), colCount++, row, "+delta_x");
-            if (plotErrorTypes().x == AsymmetricError) {
-                data = m_transform->mapSceneToLogical(QPointF(item->itemErrorBar().minusDeltaX, 0), axisPoints());
-                datapicker->addDataToDatasheet(data.x(), colCount++, row, "-delta_x");
-            }
-        }
-
-        if (plotErrorTypes().y != NoError) {
-            data = m_transform->mapSceneToLogical(QPointF(item->itemErrorBar().plusDeltaY, 0), axisPoints());
-            datapicker->addDataToDatasheet(data.y(), colCount++, row, "+delta_y");
-            if (plotErrorTypes().y == AsymmetricError) {
-                data = m_transform->mapSceneToLogical(QPointF(item->itemErrorBar().minusDeltaY, 0), axisPoints());
-                datapicker->addDataToDatasheet(data.y(), colCount++, row, "-delta_y");
-            }
-        }
-    }
+void Image::updateAxisPoints() {
+    emit requestUpdateAxisPoints();
 }
-
-void Image::updateAllData() {
-    QList<CustomItem*> childElements = children<CustomItem>(AbstractAspect::IncludeHidden);
-    if (childElements.count() > 3) {
-        //remove axis points
-        childElements.removeAt(0);
-        childElements.removeAt(1);
-        childElements.removeAt(2);
-
-        int row = 0;
-        foreach(CustomItem* elem, childElements)
-            updateData(elem, row++);
-    }
-}
-
 /* =============================== getter methods for background options ================================= */
 CLASS_D_READER_IMPL(Image, QString, plotFileName, plotFileName)
 CLASS_D_READER_IMPL(Image, Image::ReferencePoints, axisPoints, axisPoints)
 CLASS_D_READER_IMPL(Image, Image::EditorSettings, settings, settings)
 BASIC_D_READER_IMPL(Image, float, rotationAngle, rotationAngle)
-BASIC_D_READER_IMPL(Image, Image::ErrorTypes, plotErrorTypes, plotErrorTypes)
+BASIC_D_READER_IMPL(Image, Image::Errors, plotErrors, plotErrors)
 BASIC_D_READER_IMPL(Image, Image::PointsType, plotPointsType, plotPointsType)
 
 /* ============================ setter methods and undo commands  for background options  ================= */
@@ -206,10 +163,10 @@ void Image::setRotationAngle(float angle) {
         exec(new ImageSetRotationAngleCmd(d, angle, i18n("%1: set rotation angle")));
 }
 
-STD_SETTER_CMD_IMPL_S(Image, SetPlotErrorTypes, Image::ErrorTypes, plotErrorTypes)
-void Image::setPlotErrorTypes(const ErrorTypes types) {
-    if (types.x != d->plotErrorTypes.x || types.y != d->plotErrorTypes.y)
-        exec(new ImageSetPlotErrorTypesCmd(d, types, i18n("%1: set Error Type")));
+STD_SETTER_CMD_IMPL_S(Image, SetPlotErrors, Image::Errors, plotErrors)
+void Image::setPlotErrors(const Errors types) {
+    if (types.x != d->plotErrors.x || types.y != d->plotErrors.y)
+        exec(new ImageSetPlotErrorsCmd(d, types, i18n("%1: set Error Type")));
 }
 
 void Image::setPrinting(bool on) const {
@@ -226,14 +183,15 @@ void Image::setAxisPoints(const Image::ReferencePoints& points) {
     d->axisPoints = points;
 }
 
-//Private implementation
-
+//##############################################################################
+//######################  Private implementation ###############################
+//##############################################################################
 ImagePrivate::ImagePrivate(Image *owner):q(owner),
     pageRect(0, 0, 1500, 1500),
-    m_scene(new QGraphicsScene(pageRect)){
+    m_scene(new QGraphicsScene(pageRect)) {
 }
 
-QString ImagePrivate::name() const{
+QString ImagePrivate::name() const {
     return q->name();
 }
 
@@ -241,15 +199,16 @@ void ImagePrivate::updatePageRect() {
     m_scene->setSceneRect(pageRect);
 }
 
-void ImagePrivate::update(){
+void ImagePrivate::update() {
     q->update();
 }
 
-ImagePrivate::~ImagePrivate(){
+ImagePrivate::~ImagePrivate() {
     delete m_scene;
 }
 
 void ImagePrivate::updateFileName() {
+    WAIT_CURSOR;
     q->removeAllChildren();
     const QString& fileName = plotFileName.trimmed();
     if ( !fileName.isEmpty() ) {
@@ -267,6 +226,7 @@ void ImagePrivate::updateFileName() {
         q->isLoaded = false;
     }
     q->update();
+    RESET_CURSOR;
 }
 
 //##############################################################################
@@ -274,7 +234,7 @@ void ImagePrivate::updateFileName() {
 //##############################################################################
 
 //! Save as XML
-void Image::save(QXmlStreamWriter* writer) const{
+void Image::save(QXmlStreamWriter* writer) const {
     writer->writeStartElement( "image" );
     writeBasicAttributes(writer);
     writeCommentElement(writer);
@@ -293,7 +253,7 @@ void Image::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool Image::load(XmlStreamReader* reader){
+bool Image::load(XmlStreamReader* reader) {
     if(!reader->isStartElement() || reader->name() != "image") {
         reader->raiseError(i18n("no image element found"));
         return false;

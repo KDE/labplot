@@ -23,7 +23,7 @@ class Datapicker : public AbstractPart, public scripted {
 		Spreadsheet* currentSpreadsheet() const;
         Image* currentImage() const;
 		void setChildSelectedInView(int index, bool selected);
-        void addDataToDatasheet(double, int, int,const QString&);
+        void addDataToSheet(double, int, int,const QString&);
 
         Spreadsheet* m_datasheet;
         Image* m_image;

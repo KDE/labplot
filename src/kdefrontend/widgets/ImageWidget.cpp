@@ -20,6 +20,7 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     customItemWidget = new CustomItemWidget(ui.tSymbol);
     hboxLayout->addWidget(customItemWidget);
     customItemWidget->hidePositionWidgets();
+    m_itemsList.clear();
 
     ui.kleBackgroundFileName->setClearButtonShown(true);
     ui.bOpen->setIcon( KIcon("document-open") );
@@ -66,7 +67,6 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     ui.cbYErrorType->addItem(i18n("symmetric"));
     ui.cbYErrorType->addItem(i18n("asymmetric"));
 
-    m_itemsList.clear();
     //SLOTS
     // geometry
     connect( ui.sbRotation, SIGNAL(valueChanged(double)), this, SLOT(rotationChanged(double)) );
@@ -99,17 +99,20 @@ void ImageWidget::setImages(QList<Image*> list){
 
 void ImageWidget::initConnections() {
     connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(imageRotationAngleChanged(float)) );
-    connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)), this,SLOT(handleAspectRemoved()));
+    connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)), this,SLOT(updateCustomItemList()));
     connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(handleAspectAdded()));
-    connect( m_image, SIGNAL(updateLogicalPositions()), this, SLOT(updateLogicalPositions()));
-    connect( m_image, SIGNAL(plotErrorTypeChanged(Image::ErrorTypes)), this, SLOT(plotErrorTypeChanged(Image::ErrorTypes)) );
+    connect( m_image, SIGNAL(requestUpdateAxisPoints()), this, SLOT(updateAxisPoints()));
+    connect( m_image, SIGNAL(plotErrorsChanged(Image::Errors)), this, SLOT(plotErrorsChanged(Image::Errors)) );
 }
 
 void ImageWidget::handleWidgetActions() {
     QString fileName = ui.kleBackgroundFileName->text().trimmed();
     if (!fileName.isEmpty()) {
         ui.tEdit->setEnabled(true);
+        //ui.tSymbol->setEnabled(true);
         ui.cbGraphType->setEnabled(true);
+        ui.cbXErrorType->setEnabled(true);
+        ui.cbYErrorType->setEnabled(true);
         ui.sbPoisitionX1->setEnabled(true);
         ui.sbPoisitionX2->setEnabled(true);
         ui.sbPoisitionX3->setEnabled(true);
@@ -118,8 +121,10 @@ void ImageWidget::handleWidgetActions() {
         ui.sbPoisitionY3->setEnabled(true);
     } else {
         ui.tEdit->setEnabled(false);
-        ui.tSymbol->setEnabled(false);
+        //ui.tSymbol->setEnabled(false);
         ui.cbGraphType->setEnabled(false);
+        ui.cbXErrorType->setEnabled(false);
+        ui.cbYErrorType->setEnabled(false);
         ui.sbPoisitionX1->setEnabled(false);
         ui.sbPoisitionX2->setEnabled(false);
         ui.sbPoisitionX3->setEnabled(false);
@@ -127,6 +132,8 @@ void ImageWidget::handleWidgetActions() {
         ui.sbPoisitionY2->setEnabled(false);
         ui.sbPoisitionY3->setEnabled(false);
     }
+
+    updateCustomItemList();
 }
 
 //**********************************************************
@@ -164,7 +171,7 @@ void ImageWidget::fileNameChanged(){
     }
 }
 
-void ImageWidget::updateLogicalPositions() {
+void ImageWidget::updateAxisPoints() {
     Image::ReferencePoints points = m_image->axisPoints();
     points.logicalPos[0].setX(ui.sbPoisitionX1->value());
     points.logicalPos[0].setY(ui.sbPoisitionY1->value());
@@ -297,22 +304,22 @@ void ImageWidget::plotImageTypeChanged(int index) {
 void ImageWidget::xErrorTypeChanged(int index) {
     if (m_initializing)
         return;
-    Image::ErrorTypes errorTypes = m_image->plotErrorTypes();
-    errorTypes.x = Image::ErrorType(index);
+    Image::Errors errors = m_image->plotErrors();
+    errors.x = Image::ErrorType(index);
 
     foreach(Image* image, m_imagesList)
-        image->setPlotErrorTypes(errorTypes);
+        image->setPlotErrors(errors);
 }
 
 void ImageWidget::yErrorTypeChanged(int index) {
     if (m_initializing)
         return;
 
-    Image::ErrorTypes errorTypes = m_image->plotErrorTypes();
-    errorTypes.y = Image::ErrorType(index);
+    Image::Errors errors = m_image->plotErrors();
+    errors.y = Image::ErrorType(index);
 
     foreach(Image* image, m_imagesList)
-        image->setPlotErrorTypes(errorTypes);
+        image->setPlotErrors(errors);
 }
 
 //*********************************************************
@@ -330,17 +337,15 @@ void ImageWidget::imageRotationAngleChanged(float angle){
     m_initializing = false;
 }
 
-void ImageWidget::plotErrorTypeChanged(Image::ErrorTypes errorTypes){
+void ImageWidget::plotErrorsChanged(Image::Errors errors){
     m_initializing = true;
-    ui.cbXErrorType->setCurrentIndex((int) errorTypes.x);
-    ui.cbYErrorType->setCurrentIndex((int) errorTypes.y);
+    ui.cbXErrorType->setCurrentIndex((int) errors.x);
+    ui.cbYErrorType->setCurrentIndex((int) errors.y);
     m_initializing = false;
 }
 
-void ImageWidget::handleAspectRemoved() {
+void ImageWidget::updateCustomItemList() {
     m_itemsList = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
-    if (!m_itemsList.count())
-        ui.tSymbol->setEnabled(false);
     customItemWidget->updateItemList(m_itemsList);
 }
 
@@ -348,10 +353,6 @@ void ImageWidget::handleAspectAdded() {
     m_itemsList = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
     CustomItem* m_item = m_itemsList.first();
     if ( m_itemsList.count() == 1 ) {
-        ui.tSymbol->setEnabled(true);
-        m_item->setUndoAware(false);
-        m_item->setItemsStyle(CustomItem::Cross);
-        m_item->setUndoAware(true);
         customItemWidget->setCustomItems(m_itemsList);
     } else {
         customItemWidget->updateItemList(m_itemsList);
@@ -386,8 +387,8 @@ void ImageWidget::load() {
     ui.sbPoisitionX3->setValue(m_image->axisPoints().logicalPos[2].x());
     ui.sbPoisitionY3->setValue(m_image->axisPoints().logicalPos[2].y());
     ui.cbPlotImageType->setCurrentIndex((int) m_image->plotImageType);
-    ui.cbXErrorType->setCurrentIndex((int) m_image->plotErrorTypes().x);
-    ui.cbYErrorType->setCurrentIndex((int) m_image->plotErrorTypes().y);
+    ui.cbXErrorType->setCurrentIndex((int) m_image->plotErrors().x);
+    ui.cbYErrorType->setCurrentIndex((int) m_image->plotErrors().y);
     ssIntensity->setSpan(m_image->settings().intensityThresholdLow, m_image->settings().intensityThresholdHigh);
     ssForeground->setSpan(m_image->settings().foregroundThresholdLow, m_image->settings().foregroundThresholdHigh);
     ssHue->setSpan(m_image->settings().hueThresholdLow, m_image->settings().hueThresholdHigh);
