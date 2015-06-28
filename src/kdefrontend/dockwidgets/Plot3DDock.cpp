@@ -126,11 +126,12 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 
 	//SIGNALs/SLOTs
 	//General
-	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
-	connect(ui.cbDataSource, SIGNAL(currentIndexChanged(int)), this, SLOT(onDataSourceChanged(int)));
-	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(onVisualizationTypeChanged(int)));
-	connect(ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), this, SLOT(onFileChanged(const KUrl&)));
-	connect(ui.showAxes, SIGNAL(toggled(bool)), this, SLOT(onShowAxes(bool)));
+	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
+	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+	connect( ui.cbDataSource, SIGNAL(currentIndexChanged(int)), this, SLOT(onDataSourceChanged(int)) ) ;
+	connect( ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(onVisualizationTypeChanged(int)) );
+	connect( ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), this, SLOT(onFileChanged(const KUrl&)) );
+	connect( ui.showAxes, SIGNAL(toggled(bool)), this, SLOT(onShowAxes(bool)));
 
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -159,17 +160,33 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	Q_ASSERT(m_plotsList.size());
 	m_plot = m_plotsList.first();
 
-	QAbstractItemModel *aspectTreeModel = new AspectTreeModel(m_plot->project());
+	QAbstractItemModel* aspectTreeModel = new AspectTreeModel(m_plot->project());
+	ui.cbXCoordinate->setModel(aspectTreeModel);
+	ui.cbYCoordinate->setModel(aspectTreeModel);
+	ui.cbZCoordinate->setModel(aspectTreeModel);
+	ui.cbNode1->setModel(aspectTreeModel);
+	ui.cbNode2->setModel(aspectTreeModel);
+	ui.cbNode3->setModel(aspectTreeModel);
+	ui.cbMatrix->setModel(aspectTreeModel);
 
-	const QVector<TreeViewComboBox*> treeViews(QVector<TreeViewComboBox*>()
-			<< ui.cbXCoordinate << ui.cbYCoordinate << ui.cbZCoordinate
-			<< ui.cbNode1 << ui.cbNode2 << ui.cbNode3 << ui.cbMatrix);
+	//if there is more then one plot in the list, disable the name and comment fields in the tab "general"
+	if (m_plotsList.size()==1){
+		ui.lName->setEnabled(true);
+		ui.leName->setEnabled(true);
+		ui.lComment->setEnabled(true);
+		ui.leComment->setEnabled(true);
 
-	foreach(TreeViewComboBox* cb, treeViews)
-		cb->setModel(aspectTreeModel);
+		ui.leName->setText(m_plot->name());
+		ui.leComment->setText(m_plot->comment());
+	}else{
+		ui.lName->setEnabled(false);
+		ui.leName->setEnabled(false);
+		ui.lComment->setEnabled(false);
+		ui.leComment->setEnabled(false);
 
-// 	if (ui.cbType->currentIndex() != -1)
-// 		onVisualizationTypeChanged(ui.cbType->currentIndex());
+		ui.leName->setText("");
+		ui.leComment->setText("");
+	}
 
 	//show the properties of the first plot
 	this->load();
@@ -580,6 +597,8 @@ void Plot3DDock::plotBackgroundOpacityChanged(float opacity) {
 //*************************************************************
 void Plot3DDock::load(){
 	//General
+	//TODO:
+	//ui.cbType->setCurrentIndex((int)m_plot->visualizationType())
 
 	//Background
 	ui.cbBackgroundType->setCurrentIndex( (int) m_plot->backgroundType() );
