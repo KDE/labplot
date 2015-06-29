@@ -1,11 +1,13 @@
 #include "Image.h"
 #include "ImagePrivate.h"
-#include "backend/worksheet/CustomItem.h"
+#include "backend/core/ImageEditor.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/worksheet/CustomItem.h"
+#include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/datapicker/ImageView.h"
-#include "backend/core/ImageEditor.h"
 
+#include <QDesktopWidget>
 #include <QMenu>
 #include "KIcon"
 #include <KConfigGroup>
@@ -210,21 +212,27 @@ ImagePrivate::~ImagePrivate() {
 void ImagePrivate::updateFileName() {
     WAIT_CURSOR;
     q->removeAllChildren();
+	q->isLoaded = false;
     const QString& fileName = plotFileName.trimmed();
+
     if ( !fileName.isEmpty() ) {
-        q->originalPlotImage.load(fileName);
+        bool rc = q->originalPlotImage.load(fileName);
+		if (rc) {
+			q->processedPlotImage = q->originalPlotImage;
+			q->m_imageEditor->discretize(&q->processedPlotImage, settings);
 
-        q->processedPlotImage = q->originalPlotImage;
-        q->m_imageEditor->discretize(&q->processedPlotImage, settings);
+			//resize the screen
+			int w = Worksheet::convertToSceneUnits(q->originalPlotImage.width()/QApplication::desktop()->physicalDpiX(), Worksheet::Inch);
+			int h = Worksheet::convertToSceneUnits(q->originalPlotImage.height()/QApplication::desktop()->physicalDpiX(), Worksheet::Inch);
+			m_scene->setSceneRect(0, 0, w, h);
 
-        QRect rect = q->originalPlotImage.rect();
-        rect.translate(-rect.width()/2,-rect.height()/2);
-        m_scene->setSceneRect(rect);
+			//TODO: scene size was change -> reinitialize all the screen size dependent parameters
+			q->init();
 
-        q->isLoaded = true;
-    } else {
-        q->isLoaded = false;
+			q->isLoaded = true;
+		}
     }
+
     q->update();
     RESET_CURSOR;
 }

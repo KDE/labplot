@@ -36,11 +36,11 @@ void CustomItem::init() {
     d->itemsSize = group.readEntry("ItemSize", Worksheet::convertToSceneUnits(3, Worksheet::Point));
     d->itemsRotationAngle = group.readEntry("ItemRotation", 0.0);
     d->itemsOpacity = group.readEntry("ItemOpacity", 1.0);
-    d->itemsBrush.setStyle( (Qt::BrushStyle)group.readEntry("ItemFillingStyle", (int)Qt::NoBrush) );
-    d->itemsBrush.setColor( group.readEntry("ItemFillingColor", QColor(Qt::black)) );
+    d->itemsBrush.setStyle( (Qt::BrushStyle)group.readEntry("ItemFillingStyle", (int)Qt::SolidPattern) );
+    d->itemsBrush.setColor( group.readEntry("ItemFillingColor", QColor(Qt::red)) );
     d->itemsPen.setStyle( (Qt::PenStyle)group.readEntry("ItemBorderStyle", (int)Qt::SolidLine) );
     d->itemsPen.setColor( group.readEntry("ItemBorderColor", QColor(Qt::black)) );
-    d->itemsPen.setWidthF( group.readEntry("ItemBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
+    d->itemsPen.setWidthF( group.readEntry("ItemBorderWidth", Worksheet::convertToSceneUnits(0.5, Worksheet::Point)) );
     d->itemErrorBar.minusDeltaX = group.readEntry("MinusDeltaX", 0);
     d->itemErrorBar.plusDeltaX = group.readEntry("PlusDeltaX", 0);
     d->itemErrorBar.minusDeltaY = group.readEntry("MinusDeltaY", 0);

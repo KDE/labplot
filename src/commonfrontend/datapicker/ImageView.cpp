@@ -205,12 +205,15 @@ void ImageView::drawBackground(QPainter* painter, const QRectF& rect) {
     if (m_image->isLoaded) {
         painter->rotate(-m_image->rotationAngle());
 
-        if (m_image->plotImageType == Image::OriginalImage)
-            painter->drawImage(scene_rect.topLeft(),m_image->originalPlotImage);
-        else
-            painter->drawImage(scene_rect.topLeft(),m_image->processedPlotImage);
+        if (m_image->plotImageType == Image::OriginalImage) {
+			QImage todraw = m_image->originalPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            painter->drawImage(scene_rect.topLeft(), todraw);
+		} else {
+			QImage todraw = m_image->processedPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            painter->drawImage(scene_rect.topLeft(), todraw);
+		}
     } else {
-        painter->setBrush(QBrush(Qt::white));
+        painter->setBrush(QBrush(Qt::gray));
         painter->drawRect(scene_rect);
     }
 
