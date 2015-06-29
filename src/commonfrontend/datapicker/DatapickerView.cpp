@@ -1,18 +1,11 @@
 #include "DatapickerView.h"
-#include "backend/core/AbstractAspect.h"
-#include "backend/core/AbstractPart.h"
 #include "backend/core/Datapicker.h"
-#include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Image.h"
-#include "commonfrontend/workbook/WorkbookView.h"
 
 #include <QHBoxLayout>
 #include <QMenu>
-#include <QDebug>
-
-#include <KAction>
-#include <KLocale>
+#include <QTabWidget>
 
 /*!
     \class DatapickerView
@@ -20,13 +13,12 @@
     \ingroup commonfrontend
  */
 DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
-    m_tabWidget(new TabWidget(this)),
+    m_tabWidget(new QTabWidget(this)),
     m_datapicker(datapicker),
     lastSelectedIndex(0) {
 
     m_tabWidget->setTabPosition(QTabWidget::South);
     m_tabWidget->setTabShape(QTabWidget::Rounded);
-    m_tabWidget->setMovable(true);
     m_tabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     m_tabWidget->setMinimumSize(200, 200);
 
@@ -45,7 +37,6 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 
     connect(m_tabWidget, SIGNAL(currentChanged(int)), SLOT(tabChanged(int)));
     connect(m_tabWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTabContextMenu(QPoint)));
-    connect(m_tabWidget, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int,int)));
 }
 
 DatapickerView::~DatapickerView() {
@@ -72,20 +63,6 @@ void DatapickerView::tabChanged(int index) {
     m_datapicker->setChildSelectedInView(lastSelectedIndex, false);
     m_datapicker->setChildSelectedInView(index, true);
     lastSelectedIndex = index;
-}
-
-void DatapickerView::tabMoved(int from, int to) {
-    //TODO:
-// 	AbstractAspect* aspect = m_datapicker->child<AbstractAspect>(to);
-// 	if (aspect) {
-// 		m_tabMoving = true;
-// 		AbstractAspect* sibling = m_datapicker->child<AbstractAspect>(from);
-// 		qDebug()<<"insert: " << to << "  " <<  aspect->name() << ",  " << from << "  " << sibling->name();
-// 		aspect->remove();
-// 		m_datapicker->insertChildBefore(aspect, sibling);
-// 		qDebug()<<"inserted";
-// 		m_tabMoving = false;
-// 	}
 }
 
 void DatapickerView::itemSelected(int index) {

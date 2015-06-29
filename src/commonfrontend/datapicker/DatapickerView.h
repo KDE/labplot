@@ -2,7 +2,6 @@
 #define DATAPICKERVIEW_H
 
 #include <QWidget>
-#include <QTabBar>
 
 class AbstractAspect;
 class Datapicker;
@@ -10,7 +9,7 @@ class QAction;
 class QMenu;
 class QPrinter;
 class QToolBar;
-class TabWidget;
+class QTabWidget;
 
 
 class DatapickerView : public QWidget {
@@ -23,7 +22,7 @@ class DatapickerView : public QWidget {
         int currentIndex() const;
 
     private:
-        TabWidget* m_tabWidget;
+        QTabWidget* m_tabWidget;
         Datapicker* m_datapicker;
         int lastSelectedIndex;
 
@@ -31,10 +30,8 @@ class DatapickerView : public QWidget {
         void showTabContextMenu(const QPoint&);
         void itemSelected(int);
         void tabChanged(int);
-        void tabMoved(int,int);
         void handleAspectAdded(const AbstractAspect*);
         void handleAspectAboutToBeRemoved(const AbstractAspect*);
-
 };
 
 #endif
