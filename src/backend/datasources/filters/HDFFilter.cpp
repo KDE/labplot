@@ -160,28 +160,26 @@ void HDFFilterPrivate::handleError(int err, QString function, QString arg) {
 
 QString HDFFilterPrivate::translateHDFOrder(H5T_order_t o) {
 	QString order;
-        switch(o) {
+	switch(o) {
         case H5T_ORDER_LE:
-		order="LE";
-                break;
+			order="LE";
+			break;
         case H5T_ORDER_BE:
-		order="BE";
-                break;
+			order="BE";
+			break;
         case H5T_ORDER_VAX:
-		order="VAX";
-                break;
+			order="VAX";
+			break;
         case H5T_ORDER_MIXED:
-		order="MIXED";
-                break;
+			order="MIXED";
+			break;
         case H5T_ORDER_NONE:
-		order="NONE";
-                break;
+			order="NONE";
+			break;
         case H5T_ORDER_ERROR:
-		order="ERROR";
-                break;
-	default:
-		order="UNKNOWN";
-        }
+			order="ERROR";
+			break;
+	}
 
 	return order;
 }
@@ -316,7 +314,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 	int members = H5Tget_nmembers(tid);
 	handleError(members,"H5Tget_nmembers");
 
-	QStringList data[members];
+	QStringList* data = new QStringList[members];
 	for(int m=0;m<members;m++) {
 		hid_t mtype = H5Tget_member_type(tid,m);
 		handleError((int)mtype,"H5Tget_member_type");
@@ -392,6 +390,8 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 		}
 	}
 
+	delete[] data;
+
 	return dataString;
 }
 
@@ -425,7 +425,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 	int members = H5Tget_nmembers(tid);
 	handleError(members,"H5Tget_nmembers");
 
-	QStringList data[members];
+	QStringList* data = new QStringList[members];
 	for(int m=0;m<members;m++) {
 		hid_t mtype = H5Tget_member_type(tid,m);
 		handleError((int)mtype,"H5Tget_member_type");
@@ -496,6 +496,8 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 		}
 		dataString<<"\n";
 	}
+
+	delete[] data;
 
 	return dataString;
 }
@@ -975,7 +977,8 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	QStringList dataString;
 
 	if(currentDataSetName.isEmpty())
-		return QString("No data set selected");
+		return QString("No data set selected").replace(' ',QChar::Nbsp);
+		//return QString("No data set selected");
 #ifdef QT_DEBUG
 	qDebug()<<" current data set ="<<currentDataSetName;
 #endif
@@ -1025,7 +1028,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			break;
 		}
 		default: {
-			dataString<<"rank = 0 not implemented yet for type "<<translateHDFClass(dclass);
+			dataString<<QString("rank = 0 not implemented yet for type ").replace(' ',QChar::Nbsp)<<translateHDFClass(dclass);
 			qDebug()<<dataString.join("");
 		}
 		}
@@ -1232,9 +1235,11 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		}
 		break;
 	}
-	default:
-		dataString<<"rank = "<<QString::number(rank)<<" not supported";
-		qDebug()<<dataString.join("");
+	default: {
+		QString message = "rank = "+QString::number(rank)+" not supported";
+		qDebug()<<message;
+		dataString<<message.replace(' ',QChar::Nbsp);
+	}	
 	}
 
 	status = H5Sclose(dataspace);

@@ -191,6 +191,7 @@ void SpreadsheetView::initActions(){
 // 	action_set_as_none = new KAction(KIcon(""), i18n("None, Plot Designation"), this);
 	action_reverse_columns = new KAction(KIcon(""), i18n("Reverse"), this);
 	action_drop_values = new KAction(KIcon(""), i18n("Drop Values"), this);
+	action_mask_values = new KAction(KIcon(""), i18n("Mask Values"), this);
 	action_join_columns = new KAction(KIcon(""), i18n("Join"), this);
 	action_normalize_columns = new KAction(KIcon(""), i18n("&Normalize"), this);
 	action_normalize_selection = new KAction(KIcon(""), i18n("&Normalize Selection"), this);
@@ -262,6 +263,7 @@ void SpreadsheetView::initMenus(){
 
 	m_columnMenu->addAction(action_reverse_columns);
 	m_columnMenu->addAction(action_drop_values);
+	m_columnMenu->addAction(action_mask_values);
 	m_columnMenu->addAction(action_join_columns);
 	m_columnMenu->addAction(action_normalize_columns);
 
@@ -355,6 +357,7 @@ void SpreadsheetView::connectActions(){
 // 	connect(action_set_as_none, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsNone()));
 	connect(action_reverse_columns, SIGNAL(triggered()), this, SLOT(reverseColumns()));
 	connect(action_drop_values, SIGNAL(triggered()), this, SLOT(dropColumnValues()));
+	connect(action_mask_values, SIGNAL(triggered()), this, SLOT(maskColumnValues()));
 	connect(action_join_columns, SIGNAL(triggered()), this, SLOT(joinColumns()));
 	connect(action_normalize_columns, SIGNAL(triggered()), this, SLOT(normalizeSelectedColumns()));
 -	connect(action_normalize_selection, SIGNAL(triggered()), this, SLOT(normalizeSelection()));
@@ -1309,6 +1312,14 @@ void SpreadsheetView::reverseColumns() {
 void SpreadsheetView::dropColumnValues() {
 	if (selectedColumnCount() < 1) return;
 	DropValuesDialog* dlg = new DropValuesDialog(m_spreadsheet);
+	dlg->setAttribute(Qt::WA_DeleteOnClose);
+	dlg->setColumns(selectedColumns());
+	dlg->exec();
+}
+
+void SpreadsheetView::maskColumnValues() {
+	if (selectedColumnCount() < 1) return;
+	DropValuesDialog* dlg = new DropValuesDialog(m_spreadsheet, true);
 	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();
