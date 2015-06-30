@@ -34,7 +34,9 @@ QWidget* Datapicker::view() const {
 
 void Datapicker::initDefault() {
     m_image = new Image(0, i18n("Image"));
+	setUndoAware(false);
     addChild(m_image);
+	setUndoAware(true);
 }
 
 Spreadsheet* Datapicker::currentSpreadsheet() const {
