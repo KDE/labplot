@@ -33,6 +33,7 @@
 
 class Worksheet;
 class QGraphicsScene;
+class QGLContext;
 
 class WorksheetPrivate{
 	public:
@@ -68,6 +69,8 @@ class WorksheetPrivate{
 		float layoutHorizontalSpacing;
 		int layoutColumnCount;
 		int layoutRowCount;
+
+		QGLContext* glContext;
 };
 
 #endif

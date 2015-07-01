@@ -50,7 +50,6 @@
 #include <QMessageBox>
 #include <QGraphicsOpacityEffect>
 #include <QTimeLine>
-#include <QGLContext>
 
 #include <KAction>
 #include <KLocale>
@@ -68,7 +67,7 @@
   Constructur of the class.
   Creates a view for the Worksheet \c worksheet and initializes the internal model.
 */
-WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
+WorksheetView::WorksheetView(Worksheet* worksheet, QGLContext* glContext) : QGraphicsView(),
 	m_worksheet(worksheet),
 	m_mouseMode(SelectionMode),
 	m_cartesianPlotActionMode(ApplyActionToSelection),
@@ -80,7 +79,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_fadeOutTimeLine(0),
 	tbNewCartesianPlot(0),
 	tbZoom(0),
-	glContext(new QGLContext(QGLFormat(QGL::DoubleBuffer))),
+	glContext(glContext),
 	vtkWidget(new QVTKWidget2(glContext)){
 
 	setViewport(vtkWidget);

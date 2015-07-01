@@ -48,7 +48,7 @@ class WorksheetView : public QGraphicsView {
 	Q_OBJECT
 
   public:
-	explicit WorksheetView(Worksheet* worksheet);
+	explicit WorksheetView(Worksheet* worksheet, QGLContext* glContext);
 
 	enum ExportFormat{Pdf, Eps, Svg, Png};
 	enum GridStyle{NoGrid, LineGrid, DotGrid};
@@ -180,7 +180,7 @@ class WorksheetView : public QGraphicsView {
 	QAction* shiftUpYAction;
 	QAction* shiftDownYAction;
 
-	QGLContext* glContext;
+	QGLContext* const glContext;
 	QVTKWidget2* vtkWidget;
 
   public slots:

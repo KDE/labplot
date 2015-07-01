@@ -31,6 +31,7 @@
 #include "WorksheetElement.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/3d/Plot3D.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -40,6 +41,7 @@
 #include <KConfigGroup>
 #include <KLocale>
 #include <QDebug>
+#include <QGLContext>
 
 /**
  * \class Worksheet
@@ -158,7 +160,7 @@ QMenu *Worksheet::createContextMenu() {
  */
 QWidget *Worksheet::view() const {
 	if (!m_view) {
-		m_view = new WorksheetView(const_cast<Worksheet *>(this));
+		m_view = new WorksheetView(const_cast<Worksheet *>(this), d->glContext);
 		connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 	}
 	return m_view;
@@ -529,7 +531,8 @@ void Worksheet::setPrinting(bool on) const {
 WorksheetPrivate::WorksheetPrivate(Worksheet *owner):q(owner),
 	pageRect(0, 0, 1500, 1500),
 	m_scene(new QGraphicsScene(pageRect)),
-	scaleContent(false) {
+	scaleContent(false),
+	glContext(new QGLContext(QGLFormat(QGL::DoubleBuffer))){
 }
 
 QString WorksheetPrivate::name() const{
@@ -886,6 +889,14 @@ bool Worksheet::load(XmlStreamReader* reader){
                 d->backgroundOpacity = str.toDouble();
         }else if(reader->name() == "cartesianPlot"){
             CartesianPlot* plot = new CartesianPlot("");
+            if (!plot->load(reader)){
+                delete plot;
+                return false;
+            }else{
+                addChild(plot);
+            }
+        }else if(reader->name() == "Plot3D"){
+            Plot3D* plot = new Plot3D("", d->glContext);
             if (!plot->load(reader)){
                 delete plot;
                 return false;

@@ -685,11 +685,58 @@ void Plot3DPrivate::updateBackground() {
 //##############################################################################
 //! Save as XML
 void Plot3D::save(QXmlStreamWriter* writer) const {
-	//TODO
+	qDebug() << Q_FUNC_INFO;
+	Q_D(const Plot3D);
+
+	writer->writeStartElement("Plot3D");
+		writeBasicAttributes(writer);
+		writeCommentElement(writer);
+
+		writer->writeStartElement("general");
+			writer->writeAttribute("show_axes", QString::number(d->showAxes));
+		writer->writeEndElement();
+	writer->writeEndElement();
 }
 
 //! Load from XML
 bool Plot3D::load(XmlStreamReader* reader) {
-	//TODO
+	qDebug() << Q_FUNC_INFO;
+	Q_D(Plot3D);
+
+	if(!reader->isStartElement() || reader->name() != "Plot3D"){
+		reader->raiseError(i18n("no Plot3D element found"));
+		qDebug() << Q_FUNC_INFO << __LINE__;
+		return false;
+	}
+
+	if(!readBasicAttributes(reader)){
+		qDebug() << Q_FUNC_INFO << __LINE__;
+		return false;
+	}
+
+	const QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+
+	while(!reader->atEnd()){
+		reader->readNext();
+		const QStringRef& sectionName = reader->name();
+		if(reader->isEndElement() && sectionName == "Plot3D")
+			break;
+
+		if(sectionName == "comment"){
+			if(!readCommentElement(reader)){
+				qDebug() << Q_FUNC_INFO << __LINE__;
+				return false;
+			}
+		}else if(sectionName == "general"){
+			const QXmlStreamAttributes& attribs = reader->attributes();
+			const QString& showAxesAttr = attribs.value("show_axes").toString();
+			if(!showAxesAttr.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'show_axes'"));
+			else{
+				d->showAxes = static_cast<bool>(showAxesAttr.toInt());
+				qDebug() << Q_FUNC_INFO << "show_axes == " << d->showAxes;
+			}
+		}
+	}
 	return true;
 }
