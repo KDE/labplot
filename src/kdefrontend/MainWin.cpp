@@ -250,7 +250,7 @@ void MainWin::initActions() {
 // 	ac->addAction("new_database_datasource", m_newSqlDataSourceAction);
 // 	connect(m_newSqlDataSourceAction, SIGNAL(triggered()), this, SLOT(newSqlDataSourceActionTriggered()));
 
-    m_importAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Import"), this);    
+    m_importAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Import"), this);
     ac->addAction("import", m_importAction);
     ac->setDefaultShortcut(m_importAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
     connect(m_importAction, SIGNAL(triggered()),SLOT(importFileDialog()));
@@ -355,9 +355,9 @@ void MainWin::initMenus(){
     m_newMenu->addSeparator();
     m_newMenu->addAction(m_newFileDataSourceAction);
     m_newMenu->addSeparator();
-    
+
     QStringList m_availableBackend = Cantor::Backend::listAvailableBackends();
-    
+
     if(m_availableBackend.count() > 0) {
 	m_newCantorWorksheetMenu = new QMenu(i18n("CAS Worksheet"));
 	m_newCantorWorksheetMenu->setIcon(QIcon::fromTheme("archive-insert"));
@@ -370,7 +370,7 @@ void MainWin::initMenus(){
 	    newBackendActions << action;
 	    m_newCantorWorksheetMenu->addAction(action);
 	}
-	
+
 	connect(m_newCantorWorksheetMenu, SIGNAL(triggered(QAction*)), this, SLOT(newCantorWorksheet(QAction*)));
 	plugActionList(QLatin1String("backends_list"), newBackendActions);
 	m_newMenu->addMenu(m_newCantorWorksheetMenu);
@@ -501,7 +501,7 @@ void MainWin::updateGUI() {
 
 	//disable cantor worksheet related menus
 	factory->container("casWorksheet", this)->setEnabled(false);
-	
+
         //populate worksheet-menu
         WorksheetView* view=qobject_cast<WorksheetView*>(w->view());
         QMenu* menu=qobject_cast<QMenu*>(factory->container("worksheet", this));
@@ -560,7 +560,7 @@ void MainWin::updateGUI() {
 	    //no spreadsheet selected -> deactivate spreadsheet related menus and the toolbar
 	    factory->container("spreadsheet", this)->setEnabled(false);
 	    factory->container("spreadsheet_toolbar", this)->setVisible(false);
-	    
+
 	    //Handle the Cantor Worksheet-object
 	    CantorWorksheet* cantorworksheet = this->activeCantorWorksheet();
 	    if(cantorworksheet) {
@@ -570,7 +570,7 @@ void MainWin::updateGUI() {
 		QMenu* menu=qobject_cast<QMenu*>(factory->container("casWorksheet", this));
 		menu->clear();
 		view->createContextMenu(menu);
-		
+
 		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("cantorworksheet_toolbar", this));
 		toolbar->setVisible(true);
 		toolbar->clear();
@@ -918,7 +918,7 @@ void MainWin::print(){
 	    dialog->setWindowTitle(i18n("Print spreadsheet"));
 	    if (dialog->exec() != QDialog::Accepted)
 		return;
-    
+
 	    SpreadsheetView* view = qobject_cast<SpreadsheetView*>(s->view());
 	    view->print(&printer);
 
@@ -926,7 +926,7 @@ void MainWin::print(){
 	}else{
 	    CantorWorksheet *c = this->activeCantorWorksheet();
 	    if(c!=0) {
-		c->getPart()->action("file_print")->trigger();
+		c->part()->action("file_print")->trigger();
 	    }
 	}
     }
@@ -950,7 +950,7 @@ void MainWin::printPreview(){
         } else {
 	    CantorWorksheet* c=this->activeCantorWorksheet();
 	    if(c!=0) {
-		c->getPart()->action("file_print_preview")->trigger();
+		c->part()->action("file_print_preview")->trigger();
 	    }
 	}
     }

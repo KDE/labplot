@@ -111,7 +111,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
   }
 
   if (mainWindow->stackedWidget->currentWidget())
-	mainWindow->stackedWidget->currentWidget()->show();  
+	mainWindow->stackedWidget->currentWidget()->show();
 
   if (className=="Spreadsheet"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Spreadsheet properties"));
@@ -286,7 +286,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->projectDock->setProject(mainWindow->m_project);
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->projectDock);
-  }else if (className=="CantorWorksheet"){      
+  }else if (className=="CantorWorksheet"){
 
 	if (!mainWindow->cantorWorksheetDock){
 	  mainWindow->cantorWorksheetDock = new CantorWorksheetDock(mainWindow->stackedWidget);
@@ -299,14 +299,14 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	  list<<qobject_cast<CantorWorksheet *>(aspect);
 	}
 	if (list.size()==1){
-	    mainWindow->m_propertiesDock->setWindowTitle(list.first()->BackendName() + " Properties");
+	    mainWindow->m_propertiesDock->setWindowTitle(list.first()->backendName() + " Properties");
 	} else {
 	    mainWindow->m_propertiesDock->setWindowTitle("CAS Properties");
 	}
 	mainWindow->cantorWorksheetDock->setCantorWorksheets(list);
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->cantorWorksheetDock);
-      
+
   }else{
     mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
 	if (mainWindow->stackedWidget->currentWidget())

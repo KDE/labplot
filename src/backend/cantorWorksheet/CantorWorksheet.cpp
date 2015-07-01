@@ -36,7 +36,7 @@
 #include <cantor/backend.h>
 
 CantorWorksheet::CantorWorksheet(AbstractScriptingEngine* engine, const QString &name)
-		: AbstractPart(name), scripted(engine), backendName(name){
+		: AbstractPart(name), scripted(engine), m_part(0), m_backendName(name){
     initialize();
 }
 
@@ -45,12 +45,12 @@ void CantorWorksheet::initialize() {
     if (factory) {
         // now that the Part is loaded, we cast it to a Part to get
         // our hands on it
-        part = factory->create<KParts::ReadWritePart>(this, QVariantList()<<BackendName());
-	if (!part) {
+        m_part = factory->create<KParts::ReadWritePart>(this, QVariantList()<<m_backendName);
+	if (!m_part) {
             qDebug()<<"error creating part ";
 	    return;
         }
-	Cantor::PanelPluginHandler* handler=part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
+	Cantor::PanelPluginHandler* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
 	if(!handler) {
 	    KMessageBox::error(view(), i18n("no PanelPluginHandle found for the Cantor Part."));
 	    qApp->quit();
@@ -72,9 +72,8 @@ QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins(){
     return plugins;
 }
 
-KParts::ReadWritePart* CantorWorksheet::getPart() {
-    if(part) return part;
-    else return NULL;
+KParts::ReadWritePart* CantorWorksheet::part() {
+    return m_part;
 }
 
 QWidget* CantorWorksheet::view() const {
@@ -97,6 +96,76 @@ QMenu* CantorWorksheet::createContextMenu() {
     return menu;
 }
 
-QString CantorWorksheet::BackendName() {
-    return this->backendName;
+QString CantorWorksheet::backendName() {
+    return this->m_backendName;
+}
+
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+
+//! Save as XML
+void CantorWorksheet::save(QXmlStreamWriter* writer) const{
+    writer->writeStartElement("cantorWorksheet");
+    writeBasicAttributes(writer);
+    writeCommentElement(writer);
+
+	//general
+	QString content; //TODO: get the content of the cantor's worksheet as cdata-string and save it here.
+    writer->writeStartElement("cantor");
+    writer->writeAttribute("backend", m_backendName);
+    writer->writeAttribute("content", content);
+    writer->writeEndElement();
+
+    writer->writeEndElement(); // close "cantorWorksheet" section
+}
+
+//! Load from XML
+bool CantorWorksheet::load(XmlStreamReader* reader){
+    if(!reader->isStartElement() || reader->name() != "cantorWorksheet"){
+        reader->raiseError(i18n("no cantor worksheet element found"));
+        return false;
+    }
+
+    if (!readBasicAttributes(reader))
+        return false;
+
+    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+    QXmlStreamAttributes attribs;
+    QString str;
+    QRectF rect;
+
+    while (!reader->atEnd()){
+        reader->readNext();
+        if (reader->isEndElement() && reader->name() == "cantorWorksheet")
+            break;
+
+        if (!reader->isStartElement())
+            continue;
+
+        if (reader->name() == "comment"){
+            if (!readCommentElement(reader)) return false;
+        }else if (reader->name() == "cantor"){
+            attribs = reader->attributes();
+
+            str = attribs.value("backend").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'backend'"));
+            else
+                m_backendName = str;
+
+
+			str = attribs.value("content").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'content'"));
+            else
+                m_backendName = str;//TODO:
+        }else{ // unknown element
+            reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+            if (!reader->skipToEndElement()) return false;
+        }
+    }
+
+    return true;
 }

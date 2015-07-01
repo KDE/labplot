@@ -32,13 +32,26 @@
 #include <cantor/session.h>
 #include <KParts/ReadWritePart>
 
-CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent) {
-    ui.setupUi(this);   
+CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent), m_initializing(false) {
+    ui.setupUi(this);
     ui.tabWidget->setMovable(true);
+
+	//SLOTs
+	//General
+	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
+	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 }
 
 void CantorWorksheetDock::setCantorWorksheets(QList< CantorWorksheet* > list) {
+	m_initializing = true;
     m_cantorworksheetlist = list;
+	m_worksheet = list.first();
+
+	//show name/comment
+	ui.leName->setText(m_worksheet->name());
+	ui.leComment->setText(m_worksheet->comment());
+
+	//show all available plugins
     int k = 0;
     int prev_index = ui.tabWidget->currentIndex();
     foreach(int i, index) {
@@ -55,5 +68,45 @@ void CantorWorksheetDock::setCantorWorksheets(QList< CantorWorksheet* > list) {
 	}
     }
     ui.tabWidget->setCurrentIndex(prev_index);
+
+	//SIGNALs/SLOTs
+	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
+
+	m_initializing = false;
 }
 
+
+//*************************************************************
+//**** SLOTs for changes triggered in CantorWorksheetDock *****
+//*************************************************************
+// "General"-tab
+void CantorWorksheetDock::nameChanged(){
+	if (m_initializing)
+		return;
+
+	m_worksheet->setName(ui.leName->text());
+}
+
+void CantorWorksheetDock::commentChanged(){
+	if (m_initializing)
+		return;
+
+	m_worksheet->setComment(ui.leComment->text());
+}
+
+
+//*************************************************************
+//******** SLOTs for changes triggered in CantorWorksheet ***********
+//*************************************************************
+void CantorWorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspect) {
+	if (m_worksheet != aspect)
+		return;
+
+	m_initializing = true;
+	if (aspect->name() != ui.leName->text()) {
+		ui.leName->setText(aspect->name());
+	} else if (aspect->comment() != ui.leComment->text()) {
+		ui.leComment->setText(aspect->comment());
+	}
+	m_initializing = false;
+}

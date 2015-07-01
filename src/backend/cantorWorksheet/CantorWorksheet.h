@@ -38,24 +38,27 @@
 
 class CantorWorksheet : public AbstractPart, public scripted{
     Q_OBJECT
-    
+
     public:
-	CantorWorksheet(AbstractScriptingEngine *engine, const QString &name);
-	virtual QWidget* view() const;
-	virtual QMenu *createContextMenu();
-	QString BackendName();
-	KParts::ReadWritePart* getPart();
-	QList<Cantor::PanelPlugin*> getPlugins();
+		CantorWorksheet(AbstractScriptingEngine* engine, const QString& name);
+		virtual QWidget* view() const;
+		virtual QMenu* createContextMenu();
+		QString backendName();
+		KParts::ReadWritePart* part();
+		QList<Cantor::PanelPlugin*> getPlugins();
+
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 
     signals:
-	void requestProjectContextMenu(QMenu*);
-    
+		void requestProjectContextMenu(QMenu*);
+
     private:
-	KParts::ReadWritePart* part;
-	QList<Cantor::PanelPlugin*> plugins;
-	QString backendName;
-	
-	void initialize();
+		KParts::ReadWritePart* m_part;
+		QList<Cantor::PanelPlugin*> plugins;
+		QString m_backendName;
+
+		void initialize();
 };
 
 #endif // CANTORWORKSHEET_H
