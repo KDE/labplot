@@ -139,6 +139,11 @@ void Plot3D::setVisualizationType(VisualizationType type){
 	d->isChanged = true;
 }
 
+Plot3D::VisualizationType Plot3D::visualizationType() const{
+	Q_D(const Plot3D);
+	return d->visType;
+}
+
 void Plot3D::setDataSource(DataSource source){
 	Q_D(Plot3D);
 	d->sourceType = source;
@@ -699,6 +704,7 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 
 		writer->writeStartElement("general");
 			writer->writeAttribute("show_axes", QString::number(d->showAxes));
+			writer->writeAttribute("vis_type", QString::number(d->visType));
 		writer->writeEndElement();
 	writer->writeEndElement();
 }
@@ -740,6 +746,14 @@ bool Plot3D::load(XmlStreamReader* reader) {
 			else{
 				d->showAxes = static_cast<bool>(showAxesAttr.toInt());
 				qDebug() << Q_FUNC_INFO << "show_axes == " << d->showAxes;
+			}
+			
+			const QString& visTypeAttr = attribs.value("vis_type").toString();
+			if (!visTypeAttr.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'vis_type'"));
+			else{
+				d->visType = static_cast<VisualizationType>(visTypeAttr.toInt());
+				qDebug() << Q_FUNC_INFO << "vis_type == " << d->visType;
 			}
 		}
 	}

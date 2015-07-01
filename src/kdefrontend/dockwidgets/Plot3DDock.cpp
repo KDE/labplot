@@ -604,6 +604,7 @@ void Plot3DDock::load(){
 	ui.leName->setText(m_plot->name());
 	ui.leComment->setText(m_plot->comment());
 	ui.showAxes->setChecked(m_plot->needAxes());
+	ui.cbType->setCurrentIndex(m_plot->visualizationType());
 
 	//Background
 	ui.cbBackgroundType->setCurrentIndex( (int) m_plot->backgroundType() );

@@ -64,6 +64,8 @@ class Plot3D:public AbstractPlot{
 		void setRect(const QRectF&);
 
 		void setVisualizationType(VisualizationType type);
+		VisualizationType visualizationType() const;
+
 		void setDataSource(DataSource source);
 		void setFile(const KUrl& path);
 
