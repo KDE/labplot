@@ -67,6 +67,7 @@ class Plot3D:public AbstractPlot{
 		VisualizationType visualizationType() const;
 
 		void setDataSource(DataSource source);
+		DataSource dataSource() const;
 		void setFile(const KUrl& path);
 
 		void setXColumn(AbstractColumn *column);
