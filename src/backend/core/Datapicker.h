@@ -5,6 +5,7 @@
 #include "backend/core/AbstractScriptingEngine.h"
 
 class Spreadsheet;
+class Column;
 class Image;
 class QXmlStreamWriter;
 class XmlStreamReader;
@@ -14,6 +15,7 @@ class Datapicker : public AbstractPart, public scripted {
 
 	public:
 		Datapicker(AbstractScriptingEngine* engine, const QString& name);
+        enum DataColumnType { PositionX, PositionY, PlusDeltaX, MinusDeltaX, PlusDeltaY, MinusDeltaY };
 
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
@@ -23,7 +25,7 @@ class Datapicker : public AbstractPart, public scripted {
 		Spreadsheet* currentSpreadsheet() const;
         Image* currentImage() const;
 		void setChildSelectedInView(int index, bool selected);
-        void addDataToSheet(double, int, int,const QString&);
+        void addDataToSheet(double, int, const Datapicker::DataColumnType&);
 
         Spreadsheet* m_datasheet;
         Image* m_image;
@@ -34,10 +36,23 @@ class Datapicker : public AbstractPart, public scripted {
     public slots:
         virtual void childSelected(const AbstractAspect*);
 
+    private:
+        static QString columnNameFromType(Datapicker::DataColumnType);
+        int* columnIndexFromType(Datapicker::DataColumnType);
+        void addDataToColumn(int, double, DataColumnType);
+        void addDatasheet();
+
+        //column index
+        int m_positionX;
+        int m_positionY;
+        int m_plusDeltaX;
+        int m_minusDeltaX;
+        int m_plusDeltaY;
+        int m_minusDeltaY;
+
     private slots:
 		virtual void childDeselected(const AbstractAspect*);
-
-        //void handleAspectAboutToBeRemoved(const AbstractAspect*);
+        void handleColumnRemoved(const AbstractAspect*);
 
 	signals:
         void datapickerItemSelected(int);

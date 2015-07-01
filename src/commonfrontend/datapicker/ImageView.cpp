@@ -504,30 +504,29 @@ void ImageView::updateData(const CustomItem *item) {
     Datapicker* datapicker = dynamic_cast<Datapicker*>(m_image->parentAspect());
     int row = m_image->childCount<CustomItem>(AbstractAspect::IncludeHidden) - 4;
 
-    int colCount = 0;
     QPointF data;
     if (datapicker) {
         data = m_transform->mapSceneToLogical(item->position().point, m_image->axisPoints());
-        datapicker->addDataToSheet(data.x(), colCount++, row, "x");
-        datapicker->addDataToSheet(data.y(), colCount++, row, "y");
+        datapicker->addDataToSheet(data.x(), row, Datapicker::PositionX);
+        datapicker->addDataToSheet(data.y(), row, Datapicker::PositionY);
 
         if (m_image->plotErrors().x != Image::NoError) {
             data = m_transform->mapSceneLengthToLogical(QPointF(item->itemErrorBar().plusDeltaX, 0), m_image->axisPoints());
-            datapicker->addDataToSheet(qAbs(data.x()), colCount++, row, "+delta_x");
+            datapicker->addDataToSheet(qAbs(data.x()), row, Datapicker::PlusDeltaX);
 
             if (m_image->plotErrors().x == Image::AsymmetricError) {
                 data = m_transform->mapSceneLengthToLogical(QPointF(item->itemErrorBar().minusDeltaX, 0), m_image->axisPoints());
-                datapicker->addDataToSheet(qAbs(data.x()), colCount++, row, "-delta_x");
+                datapicker->addDataToSheet(qAbs(data.x()), row, Datapicker::MinusDeltaX);
             }
         }
 
         if (m_image->plotErrors().y != Image::NoError) {
             data = m_transform->mapSceneLengthToLogical(QPointF(0, item->itemErrorBar().plusDeltaY), m_image->axisPoints());
-            datapicker->addDataToSheet(qAbs(data.y()), colCount++, row, "+delta_y");
+            datapicker->addDataToSheet(qAbs(data.y()), row, Datapicker::PlusDeltaY);
 
             if (m_image->plotErrors().y == Image::AsymmetricError) {
                 data = m_transform->mapSceneLengthToLogical(QPointF(0, item->itemErrorBar().minusDeltaY), m_image->axisPoints());
-                datapicker->addDataToSheet(qAbs(data.y()), colCount++, row, "-delta_y");
+                datapicker->addDataToSheet(qAbs(data.y()), row, Datapicker::MinusDeltaY);
             }
         }
     }

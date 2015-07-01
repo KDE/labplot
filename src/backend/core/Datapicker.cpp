@@ -9,7 +9,15 @@
 #include <QDebug>
 
 Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name)
-        : AbstractPart(name), scripted(engine), m_datasheet(0), m_image(0){
+    : AbstractPart(name), scripted(engine),
+      m_datasheet(0),
+      m_image(0),
+      m_positionX(-1),
+      m_positionY(-1),
+      m_plusDeltaX(-1),
+      m_minusDeltaX(-1),
+      m_plusDeltaY(-1),
+      m_minusDeltaY(-1) {
 }
 
 QIcon Datapicker::icon() const {
@@ -33,12 +41,7 @@ QWidget* Datapicker::view() const {
 }
 
 void Datapicker::initDefault() {
-    m_datasheet = new Spreadsheet(0, i18n("Data"));
-    m_datasheet->setUndoAware(false);
-    m_datasheet->column(0)->setName("x");
-    m_datasheet->column(1)->setName("y");
-    addChild(m_datasheet);
-    m_datasheet->setUndoAware(true);
+    addDatasheet();
     m_image = new Image(0, i18n("Image"));
 	setUndoAware(false);
     addChild(m_image);
@@ -110,32 +113,91 @@ void Datapicker::setChildSelectedInView(int index, bool selected){
     }
 }
 
-void Datapicker::addDataToSheet(double data, int col, int row, const QString& colName) {
-    //add spreadsheet if it's not present
-    int count = childCount<Spreadsheet>();
-    if (!count) {
-        m_datasheet->setUndoAware(false);
-        m_datasheet = new Spreadsheet(0, i18n("Data"));
-        m_datasheet->column(0)->setName("x");
-        m_datasheet->column(1)->setName("y");
-        addChild(m_datasheet);
-        m_datasheet->setUndoAware(true);
-    }
+void Datapicker::addDataToSheet(double data, int row, const DataColumnType& type) {
+    if (indexOfChild<Spreadsheet>(m_datasheet) == -1)
+        addDatasheet();
 
     m_datasheet->setUndoAware(false);
-    //add column if it's not present
-    if( col >= m_datasheet->columnCount()) {
-        m_datasheet->appendColumns(col - m_datasheet->columnCount() + 1);
-        m_datasheet->column(col)->setName(colName);
+    int *index = columnIndexFromType(type);
+    Column* column;
+    if (*index == -1 || m_datasheet->columnCount() <= *index) {
+        column = new Column(columnNameFromType(type), AbstractColumn::Numeric);
+        column->setPlotDesignation(AbstractColumn::Y);
+        column->insertRows(0, m_datasheet->rowCount());
+        m_datasheet->addChild(column);
+        *index = m_datasheet->indexOfChild<Column>(column);
+    } else {
+        column = m_datasheet->child<Column>(*index);
     }
-    //add row if it's not present
-    if(row >= m_datasheet->rowCount()) {
-        m_datasheet->appendRows(row - m_datasheet->rowCount() + 1);
-    }
-    m_datasheet->column(col)->setValueAt(row, data);
+
+    column->setUndoAware(false);
+    column->setValueAt(row, data);
+    column->setUndoAware(true);
     m_datasheet->setUndoAware(true);
 }
 
+QString Datapicker::columnNameFromType(Datapicker::DataColumnType type) {
+    QString name;
+    if (type == Datapicker::PositionX)
+        name = i18n("x");
+    else if (type == Datapicker::PositionY)
+        name = i18n("y");
+    else if (type == Datapicker::PlusDeltaX)
+        name = i18n("+delta_x");
+    else if (type == Datapicker::MinusDeltaX)
+        name = i18n("-delta_x");
+    else if (type == Datapicker::PlusDeltaY)
+        name = i18n("+delta_y");
+    else if (type == Datapicker::MinusDeltaY)
+        name = i18n("-delta_y");
+
+    return name;
+}
+
+int *Datapicker::columnIndexFromType(Datapicker::DataColumnType type) {
+    int *index;
+    if (type == Datapicker::PositionX)
+        index = &m_positionX;
+    else if (type == Datapicker::PositionY)
+        index = &m_positionY;
+    else if (type == Datapicker::PlusDeltaX)
+        index = &m_plusDeltaX;
+    else if (type == Datapicker::MinusDeltaX)
+        index = &m_minusDeltaX;
+    else if (type == Datapicker::PlusDeltaY)
+        index = &m_plusDeltaY;
+    else
+        index = &m_minusDeltaY;
+
+    return index;
+}
+
+void Datapicker::addDatasheet() {
+    m_datasheet = new Spreadsheet(0, i18n("Data"));
+    m_datasheet->setUndoAware(false);
+    m_datasheet->column(0)->setName("x");
+    m_positionX = 0;
+    m_datasheet->column(1)->setName("y");
+    m_positionY = 1;
+    addChild(m_datasheet);
+    m_datasheet->setUndoAware(true);
+    connect(m_datasheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+            this, SLOT(handleColumnRemoved(const AbstractAspect*)));
+}
+
+void Datapicker::handleColumnRemoved(const AbstractAspect* aspect) {
+    const Column* column = qobject_cast<const Column*>(aspect);
+    if (column){
+        int removedIndex = m_datasheet->indexOfChild<Column>(column);
+        for(int i = PositionX; i <= MinusDeltaY; i++) {
+            int *index = columnIndexFromType(DataColumnType(i));
+            if (*index == removedIndex)
+                *index = -1;
+            else if (*index > removedIndex)
+                --*index;
+        }
+    }
+}
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -176,7 +238,7 @@ bool Datapicker::load(XmlStreamReader* reader){
             if (!spreadsheet->load(reader)){
                 delete spreadsheet;
                 return false;
-            }else{
+            } else {
                 addChild(spreadsheet);
                 m_datasheet = spreadsheet;
             }
@@ -185,7 +247,7 @@ bool Datapicker::load(XmlStreamReader* reader){
             if (!image->load(reader)){
                 delete image;
                 return false;
-            }else{
+            } else {
                 addChild(image);
                 m_image = image;
             }

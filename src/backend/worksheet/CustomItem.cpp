@@ -284,18 +284,18 @@ QPainterPath CustomItem::errorBarsPath() {
     QPainterPath path;
     QPolygonF polygon;
     if (itemErrorBar().minusDeltaX || itemErrorBar().plusDeltaX) {
-        polygon<<QPointF(-itemErrorBar().minusDeltaX, 0)<<QPointF(-itemErrorBar().minusDeltaX, 5)
+        polygon<<QPointF(0, 0)<<QPointF(-itemErrorBar().minusDeltaX, 0)<<QPointF(-itemErrorBar().minusDeltaX, 5)
               <<QPointF(-itemErrorBar().minusDeltaX, -5)<<QPointF(-itemErrorBar().minusDeltaX, 0)
              <<QPointF(itemErrorBar().plusDeltaX, 0)<<QPointF(itemErrorBar().plusDeltaX, 5)
-            <<QPointF(itemErrorBar().plusDeltaX, -5)<<QPointF(itemErrorBar().plusDeltaX, 0)<<QPointF(0,0);
+            <<QPointF(itemErrorBar().plusDeltaX, -5)<<QPointF(itemErrorBar().plusDeltaX, 0);
         path.addPolygon(polygon);
     }
 
-    if (itemErrorBar().minusDeltaY || itemErrorBar().minusDeltaY) {
-        polygon<<QPointF(0, -itemErrorBar().minusDeltaY)<<QPointF(5, -itemErrorBar().minusDeltaY)
-              <<QPointF(-5,-itemErrorBar().minusDeltaY)<<QPointF(0, -itemErrorBar().minusDeltaY)
-             <<QPointF(0, itemErrorBar().plusDeltaY)<<QPointF(5, itemErrorBar().plusDeltaY)
-            <<QPointF(-5, itemErrorBar().plusDeltaY);
+    if (itemErrorBar().minusDeltaY || itemErrorBar().plusDeltaY) {
+        polygon<<QPointF(0, 0)<<QPointF(0, -itemErrorBar().plusDeltaY)<<QPointF(5, -itemErrorBar().plusDeltaY)
+              <<QPointF(-5, -itemErrorBar().plusDeltaY)<<QPointF(0, -itemErrorBar().plusDeltaY)
+             <<QPointF(0, itemErrorBar().minusDeltaY)<<QPointF(5, itemErrorBar().minusDeltaY)
+            <<QPointF(-5, itemErrorBar().minusDeltaY)<<QPointF(0, itemErrorBar().minusDeltaY);
         path.addPolygon(polygon);
     }
 
@@ -365,9 +365,6 @@ CustomItemPrivate::CustomItemPrivate(CustomItem *owner)
           m_hovered(false),
           m_suppressHoverEvents(false),
           q(owner){
-
-    setFlag(QGraphicsItem::ItemIsSelectable);
-    setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
     setAcceptHoverEvents(true);
 }
@@ -500,8 +497,8 @@ void CustomItemPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     painter->setPen(itemsPen);
     painter->setBrush(itemsBrush);
     painter->setOpacity(itemsOpacity);
-    painter->drawPath(path);
     painter->drawPath(errorBar);
+    painter->drawPath(path);
     painter->restore();
 
     if (m_suppressHoverEvents) {
