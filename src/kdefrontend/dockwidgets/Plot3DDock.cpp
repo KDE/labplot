@@ -600,6 +600,11 @@ void Plot3DDock::load(){
 	//TODO:
 	//ui.cbType->setCurrentIndex((int)m_plot->visualizationType())
 
+	// General
+	ui.leName->setText(m_plot->name());
+	ui.leComment->setText(m_plot->comment());
+	ui.showAxes->setChecked(m_plot->needAxes());
+
 	//Background
 	ui.cbBackgroundType->setCurrentIndex( (int) m_plot->backgroundType() );
 	ui.cbBackgroundColorStyle->setCurrentIndex( (int) m_plot->backgroundColorStyle() );

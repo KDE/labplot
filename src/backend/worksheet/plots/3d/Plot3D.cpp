@@ -189,6 +189,11 @@ void Plot3D::setShowAxes(bool show){
 	d->setShowAxes(show);
 }
 
+bool Plot3D::needAxes() const{
+	Q_D(const Plot3D);
+	return d->showAxes;
+}
+
 void Plot3D::retransform(){
 	Q_D(Plot3D);
 	d->retransform();

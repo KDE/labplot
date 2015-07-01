@@ -74,6 +74,7 @@ class Plot3D:public AbstractPlot{
 		void setNodeColumn(int node, AbstractColumn *column);
 
 		void setShowAxes(bool show);
+		bool needAxes() const;
 
 		BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
