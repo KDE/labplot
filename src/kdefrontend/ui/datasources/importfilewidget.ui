@@ -93,7 +93,7 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="lFilter">
         <property name="text">
          <string>Filter</string>
         </property>
@@ -227,7 +227,7 @@
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tabDataFormat">
          <attribute name="title">
@@ -294,9 +294,12 @@
            </widget>
           </item>
           <item row="1" column="0" colspan="4">
-           <widget class="QPlainTextEdit" name="tePreview">
+           <widget class="QTextEdit" name="tePreview">
+            <property name="undoRedoEnabled">
+             <bool>true</bool>
+            </property>
             <property name="lineWrapMode">
-             <enum>QPlainTextEdit::NoWrap</enum>
+             <enum>QTextEdit::NoWrap</enum>
             </property>
            </widget>
           </item>

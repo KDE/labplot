@@ -108,7 +108,7 @@ void NetCDFFilter::setCurrentVarName(QString ds){
 	d->currentVarName = ds;
 }
 
-QString NetCDFFilter::currentVarName() const{
+const QString NetCDFFilter::currentVarName() const{
 	return d->currentVarName;
 }
 
@@ -155,7 +155,7 @@ bool NetCDFFilter::isAutoModeEnabled() const{
 //################### Private implementation ##########################
 //#####################################################################
 
-NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) : 
+NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) :
 	q(owner),startRow(1), endRow(-1),startColumn(1),endColumn(-1) {
 }
 
@@ -357,6 +357,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 			props<<translateDataType(type)<<" ("<<QString::number(len)<<")";
 			QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<typeName<<props.join("")<<valueString.join(", "));
 			attrItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
+			attrItem->setFlags(Qt::ItemIsEnabled);
 			parentItem->addChild(attrItem);
 		}
 	}
@@ -377,7 +378,7 @@ void NetCDFFilterPrivate::scanDims(int ncid, int ndims, QTreeWidgetItem* parentI
 #ifdef QT_DEBUG
 		qDebug()<<"	dim"<<i+1<<": name/len="<<name<<len;
 #endif
-		
+
 		QStringList props;
 		props<<"length = "<<QString::number(len);
 		QString value;
@@ -385,6 +386,7 @@ void NetCDFFilterPrivate::scanDims(int ncid, int ndims, QTreeWidgetItem* parentI
 			value="unlimited";
 		QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<"dimension"<<props.join("")<<value);
 		attrItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
+		attrItem->setFlags(Qt::ItemIsEnabled);
 		parentItem->addChild(attrItem);
 	}
 }
@@ -417,9 +419,12 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 		}
 		props<<")";
 
-		QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<"variable"<<props.join(""));
+		QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<"variable"<<props.join("")<<"");
 		varItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
-		varItem->setBackground(0,QBrush(QColor(192,255,192)));
+		varItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+		// highlight item
+		for(int c=0;c<varItem->columnCount();c++)
+			varItem->setBackground(c,QBrush(QColor(192,255,192)));
 		parentItem->addChild(varItem);
 
 		scanAttrs(ncid,i,-1,varItem);
@@ -437,7 +442,7 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 	int ncid;
 	status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
 	handleError(status,"nc_open");
-	
+
 	int ndims, nvars, nattr, uldid;
 	status = nc_inq(ncid, &ndims, &nvars, &nattr, &uldid);
 	handleError(status,"nc_inq");
@@ -447,16 +452,19 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 
 	QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString("Attributes"));
 	attrItem->setIcon(0,QIcon(KIcon("folder")));
+	attrItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(attrItem);
 	scanAttrs(ncid,NC_GLOBAL,-1,attrItem);
 
 	QTreeWidgetItem *dimItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString("Dimensions"));
 	dimItem->setIcon(0,QIcon(KIcon("folder")));
+	dimItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(dimItem);
 	scanDims(ncid,ndims,dimItem);
 
 	QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString("Variables"));
 	varItem->setIcon(0,QIcon(KIcon("folder")));
+	varItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(varItem);
 	scanVars(ncid,nvars,varItem);
 #else
@@ -653,7 +661,7 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 }
 
 /*!
-    reads the content of the file \c fileName to the data source \c dataSource.
+    reads the content of the current selected variable from file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
 void NetCDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){

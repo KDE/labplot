@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : FunctionValuesDialog.h
+    File                 : DropValuesDialog.h
     Project              : LabPlot
-    Description          : Dialog for generating values from a mathematical function
+    Description          : Dialog for droping and masking values in columns
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -25,40 +25,35 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef FUNCTIONVALUESDIALOG_H
-#define FUNCTIONVALUESDIALOG_H
+#ifndef DROPVALUESDIALOG_H
+#define DROPVALUESDIALOG_H
 
-#include "ui_functionvalueswidget.h"
+#include "ui_dropvalueswidget.h"
 #include <KDialog>
 
-#include <memory>
 
 class Column;
 class Spreadsheet;
-class TreeViewComboBox;
-class AspectTreeModel;
 
-class FunctionValuesDialog : public KDialog{
+class DropValuesDialog : public KDialog {
 	Q_OBJECT
 
 	public:
-		explicit FunctionValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
+		explicit DropValuesDialog(Spreadsheet* s, bool mask = false, QWidget* parent = 0, Qt::WFlags fl = 0);
 		void setColumns(QList<Column*>);
 
 	private:
-		Ui::FunctionValuesWidget ui;
-		TreeViewComboBox* cbXDataColumn;
+		Ui::DropValuesWidget ui;
 		QList<Column*> m_columns;
 		Spreadsheet* m_spreadsheet;
-		std::auto_ptr<AspectTreeModel> m_aspectTreeModel;
+		bool m_mask;
+
+		void dropValues() const;
+		void maskValues() const;
 
 	private slots:
-		void generate();
-		void checkValues();
-		void showConstants();
-		void showFunctions();
-		void insertFunction(const QString&);
-		void insertConstant(const QString&);
+		void operatorChanged(int) const;
+		void okClicked() const;
 };
 
 #endif

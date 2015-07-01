@@ -178,6 +178,7 @@ bool MatrixModel::setData(const QModelIndex& index, const QVariant& value, int r
 
 	if(role ==  Qt::EditRole) {
 		m_matrix->setCell(row, column, value.toDouble());
+		emit changed();
 		return true;
 	}
 	return false;
@@ -205,6 +206,7 @@ void MatrixModel::handleColumnsInserted(int first, int count) {
 	Q_UNUSED(first)
 	Q_UNUSED(count)
 	endInsertColumns();
+	emit changed();
 }
 
 void MatrixModel::handleColumnsAboutToBeRemoved(int first, int count) {
@@ -215,6 +217,7 @@ void MatrixModel::handleColumnsRemoved(int first, int count) {
 	Q_UNUSED(first)
 	Q_UNUSED(count)
 	endRemoveColumns();
+	emit changed();
 }
 
 void MatrixModel::handleRowsAboutToBeInserted(int before, int count) {
@@ -225,6 +228,7 @@ void MatrixModel::handleRowsInserted(int first, int count) {
 	Q_UNUSED(first)
 	Q_UNUSED(count)
 	endInsertRows();
+	emit changed();
 }
 
 void MatrixModel::handleRowsAboutToBeRemoved(int first, int count) {
@@ -235,10 +239,12 @@ void MatrixModel::handleRowsRemoved(int first, int count) {
 	Q_UNUSED(first)
 	Q_UNUSED(count)
 	endRemoveRows();
+	emit changed();
 }
 
 void MatrixModel::handleDataChanged(int top, int left, int bottom, int right) {
 	emit dataChanged(index(top, left), index(bottom, right));
+	emit changed();
 }
 
 void MatrixModel::handleCoordinatesChanged() {

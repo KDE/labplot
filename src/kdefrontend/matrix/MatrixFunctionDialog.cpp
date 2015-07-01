@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : FunctionValuesDialog.cpp
+    File                 : MatrixFunctionDialog.cpp
     Project              : LabPlot
-    Description          : Dialog for generating values from a mathematical function
+    Description          : Dialog for generating matrix values from a mathematical function
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -25,14 +25,10 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "FunctionValuesDialog.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/column/Column.h"
-#include "backend/core/Project.h"
-#include "backend/gsl/ExpressionParser.h"
+#include "MatrixFunctionDialog.h"
 #include "backend/lib/macros.h"
-#include "backend/spreadsheet/Spreadsheet.h"
-#include "commonfrontend/widgets/TreeViewComboBox.h"
+#include "backend/matrix/Matrix.h"
+#include "backend/gsl/parser_extern.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
 
@@ -41,56 +37,39 @@
 
 
 /*!
-	\class FunctionValuesDialog
-	\brief Dialog for generating values from a mathematical function.
+	\class MatrixFunctionDialog
+	\brief Dialog for generating matrix values from a mathematical function.
 
 	\ingroup kdefrontend
  */
 
-FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : KDialog(parent, fl), m_spreadsheet(s) {
-
+MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent, Qt::WFlags fl) : KDialog(parent, fl), m_matrix(m) {
+	Q_ASSERT(m_matrix);
 	setWindowTitle(i18n("Function values"));
 
 	QFrame* mainWidget = new QFrame(this);
 	ui.setupUi(mainWidget);
 	setMainWidget( mainWidget );
 
-	cbXDataColumn = new TreeViewComboBox(mainWidget);
-	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(mainWidget->layout());
-	Q_ASSERT(gridLayout);
-	gridLayout->addWidget(cbXDataColumn, 0, 2, 1, 1);
-
 	ui.tbConstants->setIcon( KIcon("format-text-symbol") );
 	ui.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
 
 	QStringList vars;
-	vars<<"x";
+	vars<<"x"<<"y";
 	ui.teEquation->setVariables(vars);
-
 	ui.teEquation->setFocus();
 
-	if (m_spreadsheet) {
-		m_aspectTreeModel = std::auto_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
+	QString info = "[" + QString::number(m_matrix->xStart()) + ", " + QString::number(m_matrix->xEnd()) + "], " + QString::number(m_matrix->columnCount()) + " " + i18n("values");
+	ui.lXInfo->setText(info);
+	info = "[" + QString::number(m_matrix->yStart()) + ", " + QString::number(m_matrix->yEnd()) + "], " + QString::number(m_matrix->rowCount()) + " " + i18n("values");
+	ui.lYInfo->setText(info);
 
-		QList<const char *>  list;
-		list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column";
-		cbXDataColumn->setTopLevelClasses(list);
-
-		list.clear();
-		list<<"Column";
-		m_aspectTreeModel->setSelectableAspects(list);
-		cbXDataColumn->setSelectableClasses(list);
-		cbXDataColumn->setModel(m_aspectTreeModel.get());
-
-		//select the first available column in the spreadsheet
-		cbXDataColumn->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(m_spreadsheet->column(0)));
-	}
+	ui.teEquation->setPlainText(m_matrix->formula());
 
 	setButtons( KDialog::Ok | KDialog::Cancel );
 	setButtonText(KDialog::Ok, i18n("&Generate"));
 	setButtonToolTip(KDialog::Ok, i18n("Generate function values"));
 
-	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkValues()) );
 	connect( ui.teEquation, SIGNAL(expressionChanged()), this, SLOT(checkValues()) );
 	connect( ui.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()) );
 	connect( ui.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()) );
@@ -99,18 +78,8 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	resize( QSize(300,0).expandedTo(minimumSize()) );
 }
 
-void FunctionValuesDialog::setColumns(QList<Column*> list) {
-	m_columns = list;
-}
-
-void FunctionValuesDialog::checkValues() {
+void MatrixFunctionDialog::checkValues() {
 	if (!ui.teEquation->isValid()) {
-		enableButton(KDialog::Ok, false);
-		return;
-	}
-
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-	if (!aspect) {
 		enableButton(KDialog::Ok, false);
 		return;
 	}
@@ -118,7 +87,7 @@ void FunctionValuesDialog::checkValues() {
 	enableButton(KDialog::Ok, true);
 }
 
-void FunctionValuesDialog::showConstants() {
+void MatrixFunctionDialog::showConstants() {
 	QMenu menu;
 	ConstantsWidget constants(&menu);
 	connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant(QString)));
@@ -133,7 +102,7 @@ void FunctionValuesDialog::showConstants() {
 	menu.exec(ui.tbConstants->mapToGlobal(pos));
 }
 
-void FunctionValuesDialog::showFunctions() {
+void MatrixFunctionDialog::showFunctions() {
 	QMenu menu;
 	FunctionsWidget functions(&menu);
 	connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insertFunction(QString)));
@@ -148,51 +117,49 @@ void FunctionValuesDialog::showFunctions() {
 	menu.exec(ui.tbFunctions->mapToGlobal(pos));
 }
 
-void FunctionValuesDialog::insertFunction(const QString& str) {
+void MatrixFunctionDialog::insertFunction(const QString& str) {
 	ui.teEquation->insertPlainText(str + "(x)");
 }
 
-void FunctionValuesDialog::insertConstant(const QString& str) {
+void MatrixFunctionDialog::insertConstant(const QString& str) {
 	ui.teEquation->insertPlainText(str);
 }
 
-void FunctionValuesDialog::generate() {
-	Q_ASSERT(m_spreadsheet);
-
+void MatrixFunctionDialog::generate() {
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18np("%1: fill column with function values",
-									"%1: fill columns with function values",
-									m_spreadsheet->name(),
-									m_columns.size()));
 
+	QVector<QVector<double> >& matrixData = m_matrix->data();
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-	if (!aspect)
-		return;
+	QByteArray funcba = ui.teEquation->toPlainText().toLocal8Bit();
+	char* func = funcba.data();
+	char varX[] = "x";
+	char varY[] = "y";
 
-	Column* xColumn = dynamic_cast<Column*>(aspect);
-	Q_ASSERT(xColumn);
+	double diff = m_matrix->xEnd() - m_matrix->xStart();
+	double xStep = 0.0;
+	if (m_matrix->columnCount() > 1)
+		xStep = diff/double(m_matrix->columnCount()-1);
 
-	if (m_spreadsheet->rowCount()<xColumn->rowCount())
-		m_spreadsheet->setRowCount(xColumn->rowCount());
+	diff = m_matrix->yEnd() - m_matrix->yStart();
+	double yStep = 0.0;
+	if (m_matrix->rowCount() > 1)
+		yStep = diff/double(m_matrix->rowCount()-1);
 
-	QVector<double>* xVector = static_cast<QVector<double>* >(xColumn->data());
-	ExpressionParser* parser = ExpressionParser::getInstance();
-	const QString& expression = ui.teEquation->toPlainText();
-
-	foreach(Column* col, m_columns) {
-		if (m_spreadsheet->rowCount()>xColumn->rowCount())
-			col->clear();
-
-		QVector<double>* yVector = static_cast<QVector<double>* >(col->data());
-		bool rc = false;
-		rc = parser->evaluateCartesian(expression, xVector, yVector);
-		if (!rc)
-			yVector->clear();
-
-		col->setChanged();
+	double x = m_matrix->xStart();
+	double y = m_matrix->yStart();
+	for (int col=0; col<m_matrix->columnCount(); ++col) {
+		for (int row=0; row<m_matrix->rowCount(); row++) {
+			assign_variable(varX, x);
+			assign_variable(varY, y);
+			double z = parse(func);
+			matrixData[col][row] = z;
+			y += yStep;
+		}
+		y = m_matrix->yStart();
+		x += xStep;
 	}
 
-	m_spreadsheet->endMacro();
+	m_matrix->setFormula(ui.teEquation->toPlainText());
+
 	RESET_CURSOR;
 }

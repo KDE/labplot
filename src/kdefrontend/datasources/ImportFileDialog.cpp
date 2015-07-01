@@ -31,6 +31,8 @@
 #include "ImportFileWidget.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include "backend/datasources/filters/HDFFilter.h"
+#include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/core/Workbook.h"
@@ -141,6 +143,7 @@ void ImportFileDialog::setModel(std::auto_ptr<QAbstractItemModel> model){
 	cbAddTo->setModel(m_model.get());
 
 	//hide the data-source related widgets
+	//TODO: disable for file data sources
 	importFileWidget->hideDataSource();
 
 	//ok is only available if a valid spreadsheet was selected
@@ -214,19 +217,64 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		filter->read(fileName, spreadsheet, mode);
 	}
 	else if (aspect->inherits("Workbook")) {
-		const Workbook* workbook = qobject_cast<const Workbook*>(aspect);
+		Workbook* workbook = qobject_cast<Workbook*>(aspect);
+		QList<AbstractAspect*> sheets = workbook->children<AbstractAspect>();				
 
-		// use active spreadsheet/matrix if present, else new spreadsheet
-		Spreadsheet* spreadsheet = workbook->currentSpreadsheet();
-		Matrix* matrix = workbook->currentMatrix();
-		if(spreadsheet != NULL)
-			filter->read(fileName, spreadsheet, mode);
-		else if (matrix != NULL)
-			filter->read(fileName, matrix, mode);
-		else {
-			qDebug()<<"Import to empty workbook not implemented yet";
-			// TODO: add new spreadsheet or let filter do it
+		QStringList names;
+		FileDataSource::FileType fileType = importFileWidget->currentFileType();
+		if(fileType == FileDataSource::HDF)
+			names = importFileWidget->selectedHDFNames();
+		else if (fileType == FileDataSource::NETCDF)
+			names = importFileWidget->selectedNetCDFNames();
+
+		// multiple data sets/variables for HDF/NetCDF
+		if( fileType == FileDataSource::HDF || fileType == FileDataSource::NETCDF) {
+			int nrNames = names.size(), offset = sheets.size();
+
+			int start=0;
+			if(mode == AbstractFileFilter::Replace)
+				start=offset;
+
+			// add additional sheets
+			for(int i=start;i<nrNames;i++) {
+				Spreadsheet *spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
+				if(mode == AbstractFileFilter::Prepend)
+					workbook->insertChildBefore(spreadsheet,sheets[0]);
+				else
+					workbook->addChild(spreadsheet);
+			}
+
+			if(mode != AbstractFileFilter::Append)
+				offset=0;
+
+			// import to sheets
+			sheets = workbook->children<AbstractAspect>();				
+			for(int i=0;i<nrNames;i++) {
+				if( fileType == FileDataSource::HDF)
+					((HDFFilter*) filter)->setCurrentDataSetName(names[i]);
+				else
+					((NetCDFFilter*) filter)->setCurrentVarName(names[i]);
+
+				if(sheets[i+offset]->inherits("Matrix"))
+					filter->read(fileName, qobject_cast<Matrix*>(sheets[i+offset]), AbstractFileFilter::Replace);
+				else if (sheets[i+offset]->inherits("Spreadsheet"))
+					filter->read(fileName, qobject_cast<Spreadsheet*>(sheets[i+offset]), AbstractFileFilter::Replace);
+			}
+		} else { // single import file types
+			// use active spreadsheet/matrix if present, else new spreadsheet
+			Spreadsheet* spreadsheet = workbook->currentSpreadsheet();
+			Matrix* matrix = workbook->currentMatrix();
+			if(spreadsheet != NULL)
+				filter->read(fileName, spreadsheet, mode);
+			else if (matrix != NULL)
+				filter->read(fileName, matrix, mode);
+			else {
+				spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
+				workbook->addChild(spreadsheet);
+				filter->read(fileName, spreadsheet, mode);
+			}
 		}
+
 	}
 	statusBar->showMessage( i18n("File %1 imported in %2 seconds.").arg(fileName).arg((float)timer.elapsed()/1000) );
 

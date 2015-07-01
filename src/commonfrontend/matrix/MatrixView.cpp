@@ -33,30 +33,38 @@
 #include "backend/matrix/MatrixModel.h"
 #include "backend/matrix/matrixcommands.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/matrix/MatrixFunctionDialog.h"
 
+#include <QStackedWidget>
 #include <QTableView>
 #include <QHeaderView>
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QShortcut>
 #include <QMenu>
+#include <QPainter>
+#include <QPrinter>
+#include <QScrollArea>
 #include <QInputDialog>
-#include <QDebug>
-
 #include <QApplication>
 #include <QClipboard>
 #include <QMimeData>
 #include <QInputDialog>
-#include <QLocale>
+#include <QDebug>
 
 #include <KLocale>
 #include <KAction>
 #include <KIcon>
 
+#include <float.h>
+
 MatrixView::MatrixView(Matrix* matrix) : QWidget(),
+	m_stackedWidget(new QStackedWidget(this)),
 	m_tableView(new QTableView(this)),
+	m_imageLabel(new QLabel(this)),
 	m_matrix(matrix),
-	m_model(new MatrixModel(matrix)) {
+	m_model(new MatrixModel(matrix)),
+	m_imageIsDirty(true) {
 
 	init();
 }
@@ -76,13 +84,16 @@ void MatrixView::init() {
 
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
-	layout->addWidget(m_tableView);
 	setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
 	setFocusPolicy(Qt::StrongFocus);
 	setFocus();
 	installEventFilter(this);
 
+	layout->addWidget(m_stackedWidget);
+
+	//table data view
 	m_tableView->setModel(m_model);
+	m_stackedWidget->addWidget(m_tableView);
 
 	//horizontal header
 	QHeaderView* h_header = m_tableView->horizontalHeader();
@@ -100,11 +111,20 @@ void MatrixView::init() {
 
 	adjustHeaders();
 
-	// keyboard shortcuts
-	QShortcut * sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
+	//image view
+	QScrollArea* area = new QScrollArea(this);
+	m_stackedWidget->addWidget(area);
+	area->setWidget(m_imageLabel);
+
+
+	//SLOTs
+	connect(m_matrix, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
+	connect(m_model, SIGNAL(changed()), this, SLOT(matrixDataChanged()));
+
+	//keyboard shortcuts
+	QShortcut* sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
 	connect(sel_all, SIGNAL(activated()), m_tableView, SLOT(selectAll()));
 
-	connect(m_matrix, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 }
 
 void MatrixView::initActions() {
@@ -116,14 +136,23 @@ void MatrixView::initActions() {
 	action_select_all = new KAction(KIcon("edit-select-all"), i18n("Select All"), this);
 
 	// matrix related actions
-// 	action_set_formula = new QAction(KIcon(""), i18n("Assign &Formula"), this);
-// 	action_recalculate = new QAction(KIcon(""), i18n("Recalculate"), this);
-	action_clear_matrix = new QAction(KIcon("edit-clear"), i18n("Clear Matrix"), this);
-	action_go_to_cell = new QAction(KIcon("go-jump"), i18n("&Go to Cell"), this);
+	QActionGroup* viewActionGroup = new QActionGroup(this);
+	viewActionGroup->setExclusive(true);
+	action_data_view = new KAction(KIcon(""), i18n("Data"), viewActionGroup);
+	action_data_view->setCheckable(true);
+	action_data_view->setChecked(true);
+	action_image_view = new KAction(KIcon("image-x-generic"), i18n("Image"), viewActionGroup);
+	action_image_view->setCheckable(true);
+	connect(viewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(switchView(QAction*)));
 
-	action_transpose = new QAction(i18n("&Transpose"), this);
-	action_mirror_horizontally = new QAction(KIcon("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
-	action_mirror_vertically = new QAction(KIcon("object-flip-vertical"), i18n("Mirror &Vertically"), this);
+	action_fill_function = new KAction(KIcon(""), i18n("Function Values"), this);
+	action_fill_const = new KAction(KIcon(""), i18n("Const Values"), this);
+	action_clear_matrix = new KAction(KIcon("edit-clear"), i18n("Clear Matrix"), this);
+	action_go_to_cell = new KAction(KIcon("go-jump"), i18n("&Go to Cell"), this);
+
+	action_transpose = new KAction(i18n("&Transpose"), this);
+	action_mirror_horizontally = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
+	action_mirror_vertically = new KAction(KIcon("object-flip-vertical"), i18n("Mirror &Vertically"), this);
 // 	action_import_image = new QAction(i18nc("import image as matrix", "&Import image"), this);
 // 	action_duplicate = new QAction(i18nc("duplicate matrix", "&Duplicate"), this);
 // 	action_edit_format = new QAction(i18n("Display &Format"), this);
@@ -166,9 +195,10 @@ void MatrixView::connectActions() {
 	connect(action_select_all, SIGNAL(triggered()), m_tableView, SLOT(selectAll()));
 
 	// matrix related actions
+	connect(action_fill_function, SIGNAL(triggered()), this, SLOT(fillWithFunctionValues()));
+	connect(action_fill_const, SIGNAL(triggered()), this, SLOT(fillWithConstValues()));
+
 	connect(action_go_to_cell, SIGNAL(triggered()), this, SLOT(goToCell()));
-// 	connect(action_set_formula, SIGNAL(triggered()), this, SLOT(editFormula()));
-// 	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculate()));
 // 	connect(action_edit_format, SIGNAL(triggered()), this, SLOT(editFormat()));
 	//connect(action_import_image, SIGNAL(triggered()), this, SLOT(importImageDialog()));
 	//connect(action_duplicate, SIGNAL(triggered()), this, SLOT(duplicate()));
@@ -212,12 +242,22 @@ void MatrixView::initMenus() {
 
 	//matrix menu
 	m_matrixMenu = new QMenu();
+
+	QMenu* submenu = new QMenu(i18n("Generate Data"));
+	submenu->addAction(action_fill_const);
+	submenu->addAction(action_fill_function);
+	m_matrixMenu->addMenu(submenu);
+	m_matrixMenu->addSeparator();
+
+	submenu = new QMenu(i18n("View"));
+	submenu->addAction(action_data_view);
+	submenu->addAction(action_image_view);
+	m_matrixMenu->addMenu(submenu);
+	m_matrixMenu->addSeparator();
+
 	m_matrixMenu->addAction(action_select_all);
 	m_matrixMenu->addAction(action_clear_matrix);
 	m_matrixMenu->addSeparator();
-// 	m_matrixMenu->addAction(action_set_formula);
-// 	m_matrixMenu->addAction(action_recalculate);
-// 	m_matrixMenu->addSeparator();
 // 	m_matrixMenu->addAction(action_edit_format);
 
 	m_matrixMenu->addAction(action_transpose);
@@ -252,9 +292,18 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
 
-// 	menu->insertAction(firstAction, action_set_formula);
-// 	menu->insertAction(firstAction, action_recalculate);
-// 	menu->insertSeparator(firstAction);
+	QMenu* submenu = new QMenu(i18n("Generate Data"));
+	submenu->addAction(action_fill_const);
+	submenu->addAction(action_fill_function);
+	menu->insertMenu(firstAction, submenu);
+	menu->insertSeparator(firstAction);
+
+	submenu = new QMenu(i18n("View"));
+	submenu->addAction(action_data_view);
+	submenu->addAction(action_image_view);
+	menu->insertMenu(firstAction, submenu);
+	menu->insertSeparator(firstAction);
+
 	menu->insertAction(firstAction, action_select_all);
 	menu->insertAction(firstAction, action_clear_matrix);
 	menu->insertSeparator(firstAction);
@@ -524,6 +573,29 @@ void MatrixView::handleVerticalSectionResized(int logicalIndex, int oldSize, int
 	inside = false;
 }
 
+void MatrixView::fillWithFunctionValues() {
+	MatrixFunctionDialog* dlg = new MatrixFunctionDialog(m_matrix);
+	dlg->setAttribute(Qt::WA_DeleteOnClose);
+	dlg->exec();
+}
+
+void MatrixView::fillWithConstValues() {
+	bool ok = false;
+	double value = QInputDialog::getDouble(this, i18n("Fill the matrix with constant value"),
+												i18n("Value"), 0, -2147483647, 2147483647, 6, &ok);
+	if (ok) {
+		WAIT_CURSOR;
+		QVector<QVector<double> >& matrixData = m_matrix->data();
+		for (int col=0; col<m_matrix->columnCount(); ++col) {
+			for (int row=0; row<m_matrix->rowCount(); row++) {
+				matrixData[col][row] = value;
+			}
+		}
+
+		RESET_CURSOR;
+	}
+}
+
 //############################ selection related slots #########################
 void MatrixView::cutSelection() {
 	int first = firstSelectedRow();
@@ -649,7 +721,51 @@ void MatrixView::clearSelectedCells() {
 // 	RESET_CURSOR;
 }
 
+void MatrixView::updateImage() {
+	m_image = QImage(m_matrix->columnCount(), m_matrix->rowCount(), QImage::Format_ARGB32);
+
+	//TODO: use faster QImage::scanLine()-method here
+
+	//find min/max value
+	double dmax= -DBL_MAX, dmin= DBL_MAX;
+	const QVector<QVector<double> >& matrixData = m_matrix->data();
+	for (int col=0; col<m_matrix->columnCount(); ++col) {
+		for (int row=0; row<m_matrix->rowCount(); ++row) {
+			double value = matrixData[col][row];
+			if (dmax<value) dmax=value;
+			if (dmin>value) dmin=value;
+		}
+	}
+
+	for (int col=0; col<m_matrix->columnCount(); ++col) {
+		for (int row=0; row<m_matrix->rowCount(); ++row) {
+			int gray = 255.0*(matrixData[col][row]-dmin)/(dmax-dmin);
+			m_image.setPixel(col, row, QColor(gray, gray, gray).rgb());
+		}
+	}
+
+	m_imageLabel->resize(m_matrix->columnCount(), m_matrix->rowCount());
+	m_imageLabel->setPixmap(QPixmap::fromImage(m_image));
+	m_imageIsDirty = false;
+}
+
 //############################# matrix related slots ###########################
+void MatrixView::switchView(QAction* action) {
+	if (action == action_data_view) {
+		m_stackedWidget->setCurrentIndex(0);
+	} else {
+		if (m_imageIsDirty)
+			this->updateImage();
+
+		m_stackedWidget->setCurrentIndex(1);
+	}
+}
+
+void MatrixView::matrixDataChanged() {
+	m_imageIsDirty = true;
+	if (m_stackedWidget->currentIndex() == 1)
+		this->updateImage();
+}
 
 void MatrixView::headerFormatChanged(QAction* action) {
 	if (action == action_header_format_1)
@@ -771,4 +887,118 @@ void MatrixView::clearSelectedRows() {
 // 	}
 // 	m_matrix->endMacro();
 // 	RESET_CURSOR;
+}
+
+
+/*!
+  prints the complete matrix to \c printer.
+ */
+void MatrixView::print(QPrinter* printer) const {
+	QPainter painter (printer);
+
+	int dpiy = printer->logicalDpiY();
+	const int margin = (int) ( (1/2.54)*dpiy ); // 1 cm margins
+
+	QHeaderView* hHeader = m_tableView->horizontalHeader();
+	QHeaderView* vHeader = m_tableView->verticalHeader();
+
+	int rows = m_matrix->rowCount();
+	int cols = m_matrix->columnCount();
+	int height = margin;
+	int i;
+	int vertHeaderWidth = vHeader->width();
+	int right = margin + vertHeaderWidth;
+
+	//Paint the horizontal header first
+	painter.setFont(hHeader->font());
+	QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();
+	QRect br = painter.boundingRect(br, Qt::AlignCenter, headerString);
+	painter.drawLine(right, height, right, height+br.height());
+	QRect tr(br);
+
+	int w;
+	for (i=0; i<cols; ++i) {
+		headerString = m_tableView->model()->headerData(i, Qt::Horizontal).toString();
+		w = m_tableView->columnWidth(i);
+		tr.setTopLeft(QPoint(right,height));
+		tr.setWidth(w);
+		tr.setHeight(br.height());
+
+		painter.drawText(tr, Qt::AlignCenter, headerString);
+		right += w;
+		painter.drawLine(right, height, right, height+tr.height());
+
+		if (right >= printer->pageRect().width()-2*margin )
+			break;
+	}
+
+	painter.drawLine(margin + vertHeaderWidth, height, right-1, height);//first horizontal line
+	height += tr.height();
+	painter.drawLine(margin, height, right-1, height);
+
+
+	// print table values
+	const QVector<QVector<double> >& matrixData = m_matrix->data();
+	QString cellText;
+	for (i=0; i<rows; ++i) {
+		right = margin;
+		cellText = m_tableView->model()->headerData(i, Qt::Vertical).toString()+'\t';
+		tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
+		painter.drawLine(right, height, right, height+tr.height());
+
+		br.setTopLeft(QPoint(right,height));
+		br.setWidth(vertHeaderWidth);
+		br.setHeight(tr.height());
+		painter.drawText(br, Qt::AlignCenter, cellText);
+		right += vertHeaderWidth;
+		painter.drawLine(right, height, right, height+tr.height());
+
+		for(int j=0;j<cols;j++){
+			int w = m_tableView->columnWidth(j);
+			cellText = QString::number(matrixData[j][i]) +'\t';
+			tr = painter.boundingRect(tr,Qt::AlignCenter,cellText);
+			br.setTopLeft(QPoint(right,height));
+			br.setWidth(w);
+			br.setHeight(tr.height());
+			painter.drawText(br, Qt::AlignCenter, cellText);
+			right += w;
+			painter.drawLine(right, height, right, height+tr.height());
+
+			if (right >= printer->width()-2*margin )
+				break;
+		}
+		height += br.height();
+		painter.drawLine(margin, height, right-1, height);
+
+		if (height >= printer->height()-margin ){
+			printer->newPage();
+			height = margin;
+			painter.drawLine(margin, height, right, height);
+		}
+	}
+}
+
+void MatrixView::exportToFile(const QString& path, const QString& separator) const {
+	QFile file(path);
+	if (!file.open(QFile::WriteOnly | QFile::Truncate))
+		return;
+
+	QTextStream out(&file);
+
+	QString sep = separator;
+	sep = sep.replace(QString("TAB"), QString("\t"), Qt::CaseInsensitive);
+	sep = sep.replace(QString("SPACE"), QString(" "), Qt::CaseInsensitive);
+
+	//export values
+	const int cols = m_matrix->columnCount();
+	const int rows = m_matrix->rowCount();
+	const QVector<QVector<double> >& matrixData = m_matrix->data();
+	for (int row=0; row<rows; ++row) {
+		for (int col=0; col<cols; ++col) {
+			out << matrixData[col][row];
+			if (col!=cols-1)
+				out<<sep;
+		}
+		out << '\n';
+	}
 }

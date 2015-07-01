@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if ! [ -d build_clang ]; then
+	mkdir build_clang
+fi
+
+cd build_clang
+
+export CC=/usr/bin/clang
+export CXX=/usr/bin/clang++
+
+cmake .. -DCMAKE_BUILD_TYPE=DebugFull -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions" -DCMAKE_INSTALL_PREFIX=/usr && make -j 2

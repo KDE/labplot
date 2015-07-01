@@ -56,31 +56,12 @@ class NetCDFFilterPrivate {
 
 	private:
 		int status;
-		//const static int MAXNAMELENGTH=1024;
-		//QList<unsigned long> multiLinkList;	// used to find hard links
 #ifdef HAVE_NETCDF
 		void handleError(int status, QString function);
 		QString translateDataType(nc_type type);
 		QString scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem=NULL);
 		void scanDims(int ncid, int ndims, QTreeWidgetItem* parentItem);
 		void scanVars(int ncid, int nvars, QTreeWidgetItem* parentItem);
-/*		QString translateHDFOrder(H5T_order_t);
-		QString translateHDFType(hid_t);
-		QString translateHDFClass(H5T_class_t);
-		QStringList readHDFCompound(hid_t tid);
-		template <typename T> QStringList readHDFData1D(hid_t dataset, hid_t type, int rows, int lines, QVector<double> *dataPointer=NULL);
-		QStringList readHDFCompoundData1D(hid_t dataset, hid_t tid, int rows, int lines,QVector< QVector<double>* >& dataPointer);
-		template <typename T> QStringList readHDFData2D(hid_t dataset, hid_t ctype, int rows, int cols, int lines, QVector< QVector<double>* >& dataPointer);
-		QStringList readHDFCompoundData2D(hid_t dataset, hid_t tid, int rows, int cols, int lines);
-		QStringList readHDFAttr(hid_t aid);
-		QStringList scanHDFAttrs(hid_t oid);
-		QStringList readHDFDataType(hid_t tid);
-		QStringList readHDFPropertyList(hid_t pid);
-		void scanHDFDataType(hid_t tid, char *dataTypeName,  QTreeWidgetItem* parentItem);
-		void scanHDFLink(hid_t gid, char *linkName,  QTreeWidgetItem* parentItem);
-		void scanHDFDataSet(hid_t dsid, char *dataSetName,  QTreeWidgetItem* parentItem);
-		void scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem* parentItem);
-*/
 #endif
 };
 

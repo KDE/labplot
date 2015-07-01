@@ -180,10 +180,6 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		actualRows = (endColumn-startColumn+1)*(endRow-startRow+1);
 		break;
 	}
-	default: {
-		qDebug()<<"Unknown image format! Giving up.";
-		return;
-	}
 	}
 
 #ifdef QT_DEBUG
@@ -241,8 +237,6 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		}
 		break;
 	}
-	default:
-		qDebug()<<"Unknown image format";
 	}
 
 	if (dataSource->inherits("Spreadsheet")) {

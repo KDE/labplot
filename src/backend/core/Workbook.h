@@ -54,11 +54,10 @@ class Workbook : public AbstractPart, public scripted {
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
 
-	private slots:
-		void handleAspectAdded(const AbstractAspect* aspect);
-		void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
-
+	public slots:
 		virtual void childSelected(const AbstractAspect*);
+
+	private slots:
 		virtual void childDeselected(const AbstractAspect*);
 
 	signals:

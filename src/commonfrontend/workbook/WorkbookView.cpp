@@ -28,6 +28,7 @@
 
 #include "WorkbookView.h"
 #include "backend/core/AbstractAspect.h"
+#include "backend/core/AbstractPart.h"
 #include "backend/core/Workbook.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -48,7 +49,7 @@
 	\ingroup commonfrontend
  */
 WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
-	m_tabWidget(new QTabWidget(this)),
+	m_tabWidget(new TabWidget(this)),
 	m_workbook(workbook),
 	lastSelectedIndex(0) {
 
@@ -62,10 +63,9 @@ WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
 	layout->setContentsMargins(0,0,0,0);
 	layout->addWidget(m_tabWidget);
 
-	//TODO:
-// 	foreach(const AbstractAspect* aspect, m_workbook->children<AbstractAspect>())
-// 		handleAspectAdded(aspect);
-
+	//add tab for each children view
+	foreach(const AbstractAspect* aspect, m_workbook->children<AbstractAspect>())
+		handleAspectAdded(aspect);
 
 	//Actions
 	action_add_spreadsheet = new KAction(KIcon("insert-table"), i18n("Add new Spreadsheet"), this);
@@ -74,14 +74,21 @@ WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
 	connect(action_add_matrix, SIGNAL(triggered()), this, SLOT(addMatrix()));
 
 	//SIGNALs/SLOTs
+	connect(m_workbook, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(handleDescriptionChanged(const AbstractAspect*)));
 	connect(m_workbook, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(m_workbook, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(m_workbook, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
-	connect(m_workbook, SIGNAL(workbookItemSelected(int)), m_tabWidget, SLOT(setCurrentIndex(int)) );
+	connect(m_workbook, SIGNAL(workbookItemSelected(int)), this, SLOT(itemSelected(int)) );
 
 	connect(m_tabWidget, SIGNAL(currentChanged(int)), SLOT(tabChanged(int)));
 	connect(m_tabWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTabContextMenu(QPoint)));
-	//TODO: connect(m_tabWidget->tabBar(), SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int,int)));
+	connect(m_tabWidget, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int,int)));
+}
+
+WorkbookView::~WorkbookView() {
+	//delete all children views here, its own view will be deleted in ~AbstractPart()
+	foreach(const AbstractPart* part, m_workbook->children<AbstractPart>())
+		part->deleteView();
 }
 
 int WorkbookView::currentIndex() const {
@@ -96,17 +103,30 @@ int WorkbookView::currentIndex() const {
   or of a \c Matrix object to \c Workbook.
 */
 void WorkbookView::tabChanged(int index) {
+	if (index==-1)
+		return;
+
 	m_workbook->setChildSelectedInView(lastSelectedIndex, false);
 	m_workbook->setChildSelectedInView(index, true);
 	lastSelectedIndex = index;
 }
 
-
 void WorkbookView::tabMoved(int from, int to) {
-	//TODO:test this
-	AbstractAspect* aspect = m_workbook->child<AbstractAspect>(from);
-	if (aspect)
-		aspect->reparent(m_workbook, to);
+	//TODO:
+// 	AbstractAspect* aspect = m_workbook->child<AbstractAspect>(to);
+// 	if (aspect) {
+// 		m_tabMoving = true;
+// 		AbstractAspect* sibling = m_workbook->child<AbstractAspect>(from);
+// 		qDebug()<<"insert: " << to << "  " <<  aspect->name() << ",  " << from << "  " << sibling->name();
+// 		aspect->remove();
+// 		m_workbook->insertChildBefore(aspect, sibling);
+// 		qDebug()<<"inserted";
+// 		m_tabMoving = false;
+// 	}
+}
+
+void WorkbookView::itemSelected(int index) {
+	m_tabWidget->setCurrentIndex(index);
 }
 
 /*!
@@ -157,6 +177,13 @@ void WorkbookView::addSpreadsheet() {
 	m_workbook->addChild(spreadsheet);
 }
 
+void WorkbookView::handleDescriptionChanged(const AbstractAspect* aspect) {
+	int index = m_workbook->indexOfChild<AbstractAspect>(aspect);
+	if (index != -1 && index<m_tabWidget->count())
+		m_tabWidget->setTabText(index, aspect->name());
+
+}
+
 void WorkbookView::handleAspectAdded(const AbstractAspect* aspect) {
 	const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (!part)
@@ -166,6 +193,7 @@ void WorkbookView::handleAspectAdded(const AbstractAspect* aspect) {
 	m_tabWidget->insertTab(index, part->view(), aspect->name());
 	m_tabWidget->setCurrentIndex(index);
 	m_tabWidget->setTabIcon(m_tabWidget->count(), aspect->icon());
+	this->tabChanged(index);
 }
 
 void WorkbookView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
