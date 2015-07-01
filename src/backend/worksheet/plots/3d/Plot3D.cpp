@@ -136,7 +136,7 @@ void Plot3D::setRect(const QRectF &rect){
 void Plot3D::setVisualizationType(VisualizationType type){
 	Q_D(Plot3D);
 	d->visType = type;
-	d->isChanged = true;
+	d->updatePlot();
 }
 
 Plot3D::VisualizationType Plot3D::visualizationType() const{
@@ -147,13 +147,7 @@ Plot3D::VisualizationType Plot3D::visualizationType() const{
 void Plot3D::setDataSource(DataSource source){
 	Q_D(Plot3D);
 	d->sourceType = source;
-	d->isChanged = true;
-	if (source != DataSource_Spreadsheet){
-		setXColumn(0);
-		setYColumn(0);
-		setZColumn(0);
-	}
-	retransform();
+	d->updatePlot();
 }
 
 Plot3D::DataSource Plot3D::dataSource() const{
@@ -164,26 +158,28 @@ Plot3D::DataSource Plot3D::dataSource() const{
 void Plot3D::setFile(const KUrl& path){
 	Q_D(Plot3D);
 	d->path = path;
-	d->isChanged = true;
-	retransform();
+	d->updatePlot();
 }
 
 void Plot3D::setXColumn(AbstractColumn *column){
 	qDebug() << Q_FUNC_INFO;
 	Q_D(Plot3D);
 	d->xColumn= column;
+	d->updatePlot();
 }
 
 void Plot3D::setYColumn(AbstractColumn *column){
 	qDebug() << Q_FUNC_INFO;
 	Q_D(Plot3D);
 	d->yColumn= column;
+	d->updatePlot();
 }
 
 void Plot3D::setZColumn(AbstractColumn *column){
 	qDebug() << Q_FUNC_INFO;
 	Q_D(Plot3D);
 	d->zColumn= column;
+	d->updatePlot();
 }
 
 void Plot3D::setNodeColumn(int node, AbstractColumn* column){
@@ -191,12 +187,14 @@ void Plot3D::setNodeColumn(int node, AbstractColumn* column){
 	if (node >= 0 && node < 3){
 		Q_D(Plot3D);
 		d->nodeColumn[node] = column;
+		d->updatePlot();
 	}
 }
 
 void Plot3D::setShowAxes(bool show){
 	Q_D(Plot3D);
 	d->setShowAxes(show);
+	d->updatePlot();
 }
 
 bool Plot3D::needAxes() const{
@@ -297,7 +295,6 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner, QGLContext *context)
 	, context(context)
 	, visType(Plot3D::VisualizationType_Triangles)
 	, sourceType(Plot3D::DataSource_Empty)
-	, isChanged(false)
 	, showAxes(true)
 	, xColumn(0)
 	, yColumn(0)
@@ -361,13 +358,6 @@ void Plot3DPrivate::setShowAxes(bool show){
 	}
 }
 
-void Plot3DPrivate::clearActors(){
-	foreach(vtkActor *actor, actors){
-		renderer->RemoveActor(actor);
-	}
-	actors.clear();
-}
-
 void Plot3DPrivate::addSphere(){
 	vtkSmartPointer<vtkSphereSource> sphereSource = vtkSmartPointer<vtkSphereSource>::New();
 	sphereSource->Update();
@@ -378,7 +368,6 @@ void Plot3DPrivate::addSphere(){
 	sphereActor->SetMapper(sphereMapper);
 	axes->SetBounds(sphereSource->GetOutput()->GetBounds());
 	renderer->AddActor(sphereActor);
-	actors.push_back(sphereActor);
 }
 
 template<class TReader>
@@ -401,7 +390,6 @@ void Plot3DPrivate::createReader(){
 	actor->SetMapper(mapper);
 
 	renderer->AddActor(actor);
-	actors.push_back(actor);
 }
 
 void Plot3DPrivate::readFromFile(){
@@ -515,7 +503,6 @@ void Plot3DPrivate::renderTriangles(vtkSmartPointer<vtkPoints>& points,
 	actor->SetMapper(mapper);
 
 	renderer->AddActor(actor);
-	actors.push_back(actor);
 }
 
 void Plot3DPrivate::readFromMatrix(){
@@ -571,24 +558,31 @@ void Plot3DPrivate::retransform(){
 	vtkItem->setGeometry(q->plotArea()->rect());
 	q->plotArea()->setRect(rect);
 
-	if (isChanged){
-		clearActors();
-		if (sourceType == Plot3D::DataSource_Empty){
-			qDebug() << Q_FUNC_INFO << "Add Sphere";
-			addSphere();
-		}else if(sourceType == Plot3D::DataSource_File){
-			qDebug() << Q_FUNC_INFO << "Read file";
-			readFromFile();
-		}else if(sourceType == Plot3D::DataSource_Spreadsheet){
-			readFromColumns();
-		} else if (sourceType == Plot3D::DataSource_Matrix) {
-			readFromMatrix();
-		}
-
-		isChanged = false;
-	}
+	updateBackground();
+	updatePlot();
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
+}
+
+void Plot3DPrivate::updatePlot() {
+	//clear all the available actors
+	vtkActorCollection* actors = renderer->GetActors();
+	actors->InitTraversal();
+	for (int i=0; i<actors->GetNumberOfItems(); i++)
+		renderer->RemoveActor(actors->GetNextActor());
+
+	//render the plot
+	if (sourceType == Plot3D::DataSource_Empty){
+		qDebug() << Q_FUNC_INFO << "Add Sphere";
+		addSphere();
+	}else if(sourceType == Plot3D::DataSource_File){
+		qDebug() << Q_FUNC_INFO << "Read file";
+		readFromFile();
+	}else if(sourceType == Plot3D::DataSource_Spreadsheet){
+		readFromColumns();
+	} else if (sourceType == Plot3D::DataSource_Matrix) {
+		readFromMatrix();
+	}
 }
 
 void Plot3DPrivate::updateBackground() {
@@ -693,7 +687,7 @@ void Plot3DPrivate::updateBackground() {
 	backgroundImageActor->SetInputData(imageData);
 
 	//TODO how to update?
-	//vtkItem->GetRenderWindow()->Render();
+	vtkItem->GetRenderWindow()->Render();
 }
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################

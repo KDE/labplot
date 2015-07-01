@@ -59,6 +59,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		void init();
 
 		virtual void retransform();
+		void updatePlot();
 		void updateBackground();
 
 		void addSphere();
@@ -69,7 +70,6 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 
 		void setShowAxes(bool show);
 
-		void clearActors();
 
 		template<class TReader>
 		void createReader();
@@ -83,13 +83,11 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		Plot3D::VisualizationType visType;
 		Plot3D::DataSource sourceType;
 		KUrl path;
-		bool isChanged;
 		bool showAxes;
 
 		vtkSmartPointer<vtkCubeAxesActor> axes;
 		vtkSmartPointer<vtkRenderer> renderer;
 		vtkSmartPointer<vtkRenderer> backgroundRenderer;
-		QVector<vtkSmartPointer<vtkActor> > actors;
 		vtkSmartPointer<vtkImageActor> backgroundImageActor;
 		vtkSmartPointer<vtkOrientationMarkerWidget> axesWidget;
 
