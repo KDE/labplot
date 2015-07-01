@@ -73,6 +73,10 @@ QPointF Transform::mapSceneToLogical(const QPointF& scenePoint, const Image::Ref
     return QPointF();
 }
 
+QPointF Transform::mapSceneLengthToLogical(const QPointF& errorSpan, const Image::ReferencePoints& axisPoints) {
+    return mapSceneToLogical(errorSpan, axisPoints) - mapSceneToLogical(QPointF(0,0), axisPoints);
+}
+
 QPointF Transform::mapCartesianToType(const QPointF& point){
     if (m_points.type == Image::Logarithmic) {
         return QPointF(exp(point.x()), point.y());

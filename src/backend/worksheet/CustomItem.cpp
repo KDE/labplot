@@ -33,7 +33,7 @@ void CustomItem::init() {
     d->position.point.setY( group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
     d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
     d->itemsStyle = (CustomItem::ItemsStyle)group.readEntry("ItemStyle", (int)CustomItem::Circle);
-    d->itemsSize = group.readEntry("ItemSize", Worksheet::convertToSceneUnits(3, Worksheet::Point));
+    d->itemsSize = group.readEntry("ItemSize", Worksheet::convertToSceneUnits(2, Worksheet::Point));
     d->itemsRotationAngle = group.readEntry("ItemRotation", 0.0);
     d->itemsOpacity = group.readEntry("ItemOpacity", 1.0);
     d->itemsBrush.setStyle( (Qt::BrushStyle)group.readEntry("ItemFillingStyle", (int)Qt::SolidPattern) );
@@ -282,20 +282,20 @@ QString CustomItem::itemsNameFromStyle(CustomItem::ItemsStyle style) {
 
 QPainterPath CustomItem::errorBarsPath() {
     QPainterPath path;
-    QPolygon polygon;
+    QPolygonF polygon;
     if (itemErrorBar().minusDeltaX || itemErrorBar().plusDeltaX) {
-        polygon<<QPoint(-itemErrorBar().minusDeltaX, 2)<<QPoint(-itemErrorBar().minusDeltaX, -2)
-              <<QPoint(-itemErrorBar().minusDeltaX, 0)<<QPoint(itemErrorBar().plusDeltaX, 0)
-             <<QPoint(itemErrorBar().plusDeltaX, 2)<<QPoint(itemErrorBar().plusDeltaX, -2)
-            <<QPoint(itemErrorBar().plusDeltaX, 0)<<QPoint(0,0);
+        polygon<<QPointF(-itemErrorBar().minusDeltaX, 0)<<QPointF(-itemErrorBar().minusDeltaX, 5)
+              <<QPointF(-itemErrorBar().minusDeltaX, -5)<<QPointF(-itemErrorBar().minusDeltaX, 0)
+             <<QPointF(itemErrorBar().plusDeltaX, 0)<<QPointF(itemErrorBar().plusDeltaX, 5)
+            <<QPointF(itemErrorBar().plusDeltaX, -5)<<QPointF(itemErrorBar().plusDeltaX, 0)<<QPointF(0,0);
         path.addPolygon(polygon);
     }
 
     if (itemErrorBar().minusDeltaY || itemErrorBar().minusDeltaY) {
-        polygon<<QPoint(0, -itemErrorBar().minusDeltaY)<<QPoint(2, -itemErrorBar().minusDeltaY)
-              <<QPoint(-2,-itemErrorBar().minusDeltaY)<<QPoint(0, -itemErrorBar().minusDeltaY)
-             <<QPoint(0, itemErrorBar().plusDeltaY)<<QPoint(2, itemErrorBar().plusDeltaY)
-            <<QPoint(-2, itemErrorBar().plusDeltaY);
+        polygon<<QPointF(0, -itemErrorBar().minusDeltaY)<<QPointF(5, -itemErrorBar().minusDeltaY)
+              <<QPointF(-5,-itemErrorBar().minusDeltaY)<<QPointF(0, -itemErrorBar().minusDeltaY)
+             <<QPointF(0, itemErrorBar().plusDeltaY)<<QPointF(5, itemErrorBar().plusDeltaY)
+            <<QPointF(-5, itemErrorBar().plusDeltaY);
         path.addPolygon(polygon);
     }
 
@@ -475,7 +475,6 @@ void CustomItemPrivate::recalcShapeAndBoundingRect(){
     matrix.rotate(-itemsRotationAngle);
     matrix.scale(scaleFactor,scaleFactor);
     transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
-
     itemShape = QPainterPath();
     itemShape.addRect(transformedBoundingRectangle);
 }
@@ -490,19 +489,19 @@ void CustomItemPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     QPainterPath errorBar = q->errorBarsPath();
     QTransform trafo;
     trafo.scale(itemsSize, itemsSize);
+    trafo.scale(scaleFactor, scaleFactor);
     path = trafo.map(path);
     trafo.reset();
     if (itemsRotationAngle != 0) {
         trafo.rotate(-itemsRotationAngle);
         path = trafo.map(path);
     }
-    path.addPath(errorBar);
     painter->save();
     painter->setPen(itemsPen);
     painter->setBrush(itemsBrush);
     painter->setOpacity(itemsOpacity);
-    painter->scale(scaleFactor, scaleFactor);
     painter->drawPath(path);
+    painter->drawPath(errorBar);
     painter->restore();
 
     if (m_suppressHoverEvents) {

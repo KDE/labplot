@@ -33,6 +33,12 @@ QWidget* Datapicker::view() const {
 }
 
 void Datapicker::initDefault() {
+    m_datasheet = new Spreadsheet(0, i18n("Data"));
+    m_datasheet->setUndoAware(false);
+    m_datasheet->column(0)->setName("x");
+    m_datasheet->column(1)->setName("y");
+    addChild(m_datasheet);
+    m_datasheet->setUndoAware(true);
     m_image = new Image(0, i18n("Image"));
 	setUndoAware(false);
     addChild(m_image);
@@ -108,24 +114,24 @@ void Datapicker::addDataToSheet(double data, int col, int row, const QString& co
     //add spreadsheet if it's not present
     int count = childCount<Spreadsheet>();
     if (!count) {
+        m_datasheet->setUndoAware(false);
         m_datasheet = new Spreadsheet(0, i18n("Data"));
         m_datasheet->column(0)->setName("x");
         m_datasheet->column(1)->setName("y");
         addChild(m_datasheet);
+        m_datasheet->setUndoAware(true);
     }
 
+    m_datasheet->setUndoAware(false);
     //add column if it's not present
     if( col >= m_datasheet->columnCount()) {
         m_datasheet->appendColumns(col - m_datasheet->columnCount() + 1);
         m_datasheet->column(col)->setName(colName);
     }
-
     //add row if it's not present
     if(row >= m_datasheet->rowCount()) {
         m_datasheet->appendRows(row - m_datasheet->rowCount() + 1);
     }
-
-    m_datasheet->setUndoAware(false);
     m_datasheet->column(col)->setValueAt(row, data);
     m_datasheet->setUndoAware(true);
 }

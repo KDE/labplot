@@ -112,7 +112,7 @@ void CustomItemWidget::hidePositionWidgets() {
 }
 
 void CustomItemWidget::updateItemList(QList<CustomItem*> list) {
-    if (m_itemList.isEmpty()) {
+    if (!m_itemList.isEmpty()) {
         m_itemList = list;
         m_item = list.first();
         this->setEnabled(true);

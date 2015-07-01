@@ -262,8 +262,8 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
             addCustomItem(eventPos);
 
             Image::ReferencePoints points = m_image->axisPoints();
-            points.scenePos[childItems.count() - 1].setX(eventPos.x());
-            points.scenePos[childItems.count() - 1].setY(eventPos.y());
+            points.scenePos[childItems.count()].setX(eventPos.x());
+            points.scenePos[childItems.count()].setY(eventPos.y());
             m_image->setAxisPoints(points);
         } else if (m_image->plotPointsType() == Image::CurvePoints) {
 
@@ -272,29 +272,29 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
             } else {
                 lastCurvePoint = childItems.last();
                 CustomItem::ErrorBar errorBar = lastCurvePoint->itemErrorBar();
-                QPoint errorSpan = event->pos() - mapFromScene(lastCurvePoint->position().point);
+                QPointF errorSpan = eventPos - lastCurvePoint->position().point;
 
                 if (m_image->plotErrors().x == Image::AsymmetricError && !errorBar.minusDeltaX) {
                     if (!errorBar.plusDeltaX)
-                        errorBar.plusDeltaX = abs(errorSpan.x());
+                        errorBar.plusDeltaX = qAbs(errorSpan.x());
                     else
-                        errorBar.minusDeltaX = abs(errorSpan.x());
+                        errorBar.minusDeltaX = qAbs(errorSpan.x());
 
                     lastCurvePoint->setItemErrorBar(errorBar);
                 } else if (m_image->plotErrors().x == Image::SymmetricError && !errorBar.plusDeltaX) {
-                    errorBar.plusDeltaX = abs(errorSpan.x());
+                    errorBar.plusDeltaX = qAbs(errorSpan.x());
                     errorBar.minusDeltaX = errorBar.plusDeltaX;
 
                     lastCurvePoint->setItemErrorBar(errorBar);
                 } else if (m_image->plotErrors().y == Image::AsymmetricError && !errorBar.minusDeltaY) {
                     if (!errorBar.plusDeltaY)
-                        errorBar.plusDeltaY = abs(errorSpan.y());
+                        errorBar.plusDeltaY = qAbs(errorSpan.y());
                     else
-                        errorBar.minusDeltaY = abs(errorSpan.y());
+                        errorBar.minusDeltaY = qAbs(errorSpan.y());
 
                     lastCurvePoint->setItemErrorBar(errorBar);
                 } else if (m_image->plotErrors().y == Image::SymmetricError && !errorBar.plusDeltaY) {
-                    errorBar.plusDeltaY = abs(errorSpan.y());
+                    errorBar.plusDeltaY = qAbs(errorSpan.y());
                     errorBar.minusDeltaY = errorBar.plusDeltaY;
 
                     lastCurvePoint->setItemErrorBar(errorBar);
@@ -501,33 +501,33 @@ void ImageView::updateDatasheet() {
 void ImageView::updateData(const CustomItem *item) {
     m_image->updateAxisPoints();
 
-    QPointF data;
     Datapicker* datapicker = dynamic_cast<Datapicker*>(m_image->parentAspect());
     int row = m_image->childCount<CustomItem>(AbstractAspect::IncludeHidden) - 4;
 
     int colCount = 0;
+    QPointF data;
     if (datapicker) {
         data = m_transform->mapSceneToLogical(item->position().point, m_image->axisPoints());
         datapicker->addDataToSheet(data.x(), colCount++, row, "x");
         datapicker->addDataToSheet(data.y(), colCount++, row, "y");
 
         if (m_image->plotErrors().x != Image::NoError) {
-            data = m_transform->mapSceneToLogical(mapToScene(QPoint(item->itemErrorBar().plusDeltaX, 0)), m_image->axisPoints());
-            datapicker->addDataToSheet(data.x(), colCount++, row, "+delta_x");
+            data = m_transform->mapSceneLengthToLogical(QPointF(item->itemErrorBar().plusDeltaX, 0), m_image->axisPoints());
+            datapicker->addDataToSheet(qAbs(data.x()), colCount++, row, "+delta_x");
 
             if (m_image->plotErrors().x == Image::AsymmetricError) {
-                data = m_transform->mapSceneToLogical(mapToScene(QPoint(item->itemErrorBar().minusDeltaX, 0)), m_image->axisPoints());
-                datapicker->addDataToSheet(data.x(), colCount++, row, "-delta_x");
+                data = m_transform->mapSceneLengthToLogical(QPointF(item->itemErrorBar().minusDeltaX, 0), m_image->axisPoints());
+                datapicker->addDataToSheet(qAbs(data.x()), colCount++, row, "-delta_x");
             }
         }
 
         if (m_image->plotErrors().y != Image::NoError) {
-            data = m_transform->mapSceneToLogical(mapToScene(QPoint(0, item->itemErrorBar().plusDeltaY)), m_image->axisPoints());
-            datapicker->addDataToSheet(data.y(), colCount++, row, "+delta_y");
+            data = m_transform->mapSceneLengthToLogical(QPointF(0, item->itemErrorBar().plusDeltaY), m_image->axisPoints());
+            datapicker->addDataToSheet(qAbs(data.y()), colCount++, row, "+delta_y");
 
             if (m_image->plotErrors().y == Image::AsymmetricError) {
-                data = m_transform->mapSceneToLogical(mapToScene(QPoint(0, item->itemErrorBar().minusDeltaY)), m_image->axisPoints());
-                datapicker->addDataToSheet(data.y(), colCount++, row, "-delta_y");
+                data = m_transform->mapSceneLengthToLogical(QPointF(0, item->itemErrorBar().minusDeltaY), m_image->axisPoints());
+                datapicker->addDataToSheet(qAbs(data.y()), colCount++, row, "-delta_y");
             }
         }
     }

@@ -27,10 +27,10 @@ class CustomItem : public WorksheetElement{
 		};
 
         struct ErrorBar{
-            int plusDeltaX;
-            int minusDeltaX;
-            int plusDeltaY;
-            int minusDeltaY;
+            qreal plusDeltaX;
+            qreal minusDeltaX;
+            qreal plusDeltaY;
+            qreal minusDeltaY;
         };
 
 		explicit CustomItem(const QString& name );
