@@ -126,8 +126,8 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 
 	//SIGNALs/SLOTs
 	//General
-	connect( ui.leName, SIGNAL(textChanged(const QString&)), this, SLOT(nameChanged()) );
-	connect( ui.leComment, SIGNAL(textChanged(const QString&)), this, SLOT(commentChanged()) );
+	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
+	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( ui.cbDataSource, SIGNAL(currentIndexChanged(int)), this, SLOT(onDataSourceChanged(int)) ) ;
 	connect( ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(onVisualizationTypeChanged(int)) );
 	connect( ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), this, SLOT(onFileChanged(const KUrl&)) );
