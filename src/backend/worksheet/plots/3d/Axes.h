@@ -58,14 +58,17 @@ class Axes{
 		Axes(vtkRenderer& renderer, const Properties& props);
 		~Axes();
 
+		void updateBounds();
+
 		bool operator==(vtkProp* prop) const;
 		bool operator!=(vtkProp* prop) const;
 
 	private:
-		void init(const Properties& props);
+		void init();
 
 	private:
 		vtkRenderer& renderer;
+		const Properties props;
 		vtkSmartPointer<vtkProp> vtkAxes;
 };
 

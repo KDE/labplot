@@ -33,6 +33,7 @@
 #include <vtkTextProperty.h>
 #include <vtkAxesActor.h>
 #include <vtkProperty.h>
+#include <vtkBoundingBox.h>
 
 
 Axes::Properties::Properties()
@@ -45,12 +46,33 @@ Axes::Properties::Properties()
 }
 
 Axes::Axes(vtkRenderer& renderer, const Properties& props)
-	: renderer(renderer) {
-	init(props);
+	: renderer(renderer)
+	, props(props) {
+	init();
 }
 
 Axes::~Axes() {
 	renderer.RemoveActor(vtkAxes);
+}
+
+void Axes::updateBounds() {
+	if (props.type == AxesType_Cube) {
+		vtkActorCollection* actors = renderer.GetActors();
+		actors->InitTraversal();
+
+		vtkBoundingBox bb;
+
+		vtkActor* actor = 0;
+		while ((actor = actors->GetNextActor()) != 0) {
+			if (operator!=(actor))
+				bb.AddBounds(actor->GetBounds());
+		}
+
+		vtkCubeAxesActor *axes = dynamic_cast<vtkCubeAxesActor*>(vtkAxes.GetPointer());
+		double bounds[6];
+		bb.GetBounds(bounds);
+		axes->SetBounds(bounds);
+	}
 }
 
 bool Axes::operator==(vtkProp* prop) const {
@@ -61,15 +83,14 @@ bool Axes::operator!=(vtkProp* prop) const {
 	return !operator==(prop);
 }
 
-void Axes::init(const Properties& props) {
-	if (props.type == AxesType_Cube){
+void Axes::init() {
+	if (props.type == AxesType_Cube) {
 		vtkSmartPointer<vtkCubeAxesActor> axes = vtkSmartPointer<vtkCubeAxesActor>::New();
 		axes->SetCamera(renderer.GetActiveCamera());
 		axes->DrawXGridlinesOn();
 		axes->DrawYGridlinesOn();
 		axes->DrawZGridlinesOn();
 
-		// TODO: Check that values are from 0 to 1.
 		const double colors[][3] = {
 			{props.xLabelColor.redF(), props.xLabelColor.greenF(), props.xLabelColor.blueF()},
 			{props.yLabelColor.redF(), props.yLabelColor.greenF(), props.yLabelColor.blueF()},

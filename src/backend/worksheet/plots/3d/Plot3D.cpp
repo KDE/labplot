@@ -565,6 +565,9 @@ void Plot3DPrivate::updatePlot() {
 	} else if (sourceType == Plot3D::DataSource_Matrix) {
 		readFromMatrix();
 	}
+
+	if (axes)
+		axes->updateBounds();
 }
 
 void Plot3DPrivate::updateBackground() {
