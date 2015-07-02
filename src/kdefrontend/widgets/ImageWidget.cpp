@@ -99,17 +99,17 @@ void ImageWidget::setImages(QList<Image*> list){
 
 void ImageWidget::initConnections() {
     connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(imageRotationAngleChanged(float)) );
-    connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)), this,SLOT(updateCustomItemList()));
+    connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
+             this,SLOT(updateCustomItemList()));
     connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(handleAspectAdded()));
     connect( m_image, SIGNAL(requestUpdateAxisPoints()), this, SLOT(updateAxisPoints()));
     connect( m_image, SIGNAL(plotErrorsChanged(Image::Errors)), this, SLOT(plotErrorsChanged(Image::Errors)) );
 }
 
 void ImageWidget::handleWidgetActions() {
-    QString fileName = ui.kleBackgroundFileName->text().trimmed();
+    QString fileName =  ui.kleBackgroundFileName->text().trimmed();
     if (!fileName.isEmpty()) {
         ui.tEdit->setEnabled(true);
-        //ui.tSymbol->setEnabled(true);
         ui.cbGraphType->setEnabled(true);
         ui.cbXErrorType->setEnabled(true);
         ui.cbYErrorType->setEnabled(true);
@@ -121,7 +121,6 @@ void ImageWidget::handleWidgetActions() {
         ui.sbPoisitionY3->setEnabled(true);
     } else {
         ui.tEdit->setEnabled(false);
-        //ui.tSymbol->setEnabled(false);
         ui.cbGraphType->setEnabled(false);
         ui.cbXErrorType->setEnabled(false);
         ui.cbYErrorType->setEnabled(false);
@@ -164,8 +163,9 @@ void ImageWidget::fileNameChanged(){
     if (m_initializing)
         return;
 
-    QString fileName = ui.kleBackgroundFileName->text();
     handleWidgetActions();
+
+    QString fileName = ui.kleBackgroundFileName->text();
     foreach(Image* image, m_imagesList){
         image->setPlotFileName(fileName);
     }
@@ -346,7 +346,7 @@ void ImageWidget::plotErrorsChanged(Image::Errors errors){
 
 void ImageWidget::updateCustomItemList() {
     m_itemsList = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
-    customItemWidget->updateItemList(m_itemsList);
+    customItemWidget->setCustomItems(m_itemsList);
 }
 
 void ImageWidget::handleAspectAdded() {
@@ -355,7 +355,7 @@ void ImageWidget::handleAspectAdded() {
     if ( m_itemsList.count() == 1 ) {
         customItemWidget->setCustomItems(m_itemsList);
     } else {
-        customItemWidget->updateItemList(m_itemsList);
+        customItemWidget->setCustomItems(m_itemsList);
         //set properties of new item
         CustomItem* newItem = m_itemsList.last();
         newItem->setUndoAware(false);
@@ -376,8 +376,6 @@ void ImageWidget::load() {
         return;
 
     m_initializing = true;
-    // Geometry
-    ui.sbRotation->setValue( m_image->rotationAngle() );
     ui.kleBackgroundFileName->setText( m_image->plotFileName() );
     ui.cbGraphType->setCurrentIndex((int) m_image->axisPoints().type);
     ui.sbPoisitionX1->setValue(m_image->axisPoints().logicalPos[0].x());

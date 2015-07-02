@@ -64,7 +64,6 @@ void CustomItemWidget::init() {
     int iconSize = 20;
     QPixmap pm(iconSize, iconSize);
     QPen pen(Qt::SolidPattern, 0);
-    pa.setPen( pen );
     ui.cbStyle->setIconSize(QSize(iconSize, iconSize));
     QTransform trafo;
     trafo.scale(15, 15);
@@ -72,6 +71,7 @@ void CustomItemWidget::init() {
         CustomItem::ItemsStyle style = (CustomItem::ItemsStyle)i;
         pm.fill(Qt::transparent);
         pa.begin(&pm);
+        pa.setPen( pen );
         pa.setRenderHint(QPainter::Antialiasing);
         pa.translate(iconSize/2,iconSize/2);
         pa.drawPath(trafo.map(CustomItem::itemsPathFromStyle(style)));
@@ -83,11 +83,15 @@ void CustomItemWidget::init() {
 }
 
 void CustomItemWidget::setCustomItems(QList<CustomItem*> list) {
+    if (!list.isEmpty()) {
         this->setEnabled(true);
         m_itemList = list;
         m_item = list.first();
         this->load();
         initConnections();
+    } else {
+        this->setEnabled(false);
+    }
 }
 
 void CustomItemWidget::initConnections() {
@@ -109,16 +113,6 @@ void CustomItemWidget::hidePositionWidgets() {
     ui.lPositionY->hide();
     ui.sbPositionX->hide();
     ui.sbPositionY->hide();
-}
-
-void CustomItemWidget::updateItemList(QList<CustomItem*> list) {
-    if (!m_itemList.isEmpty()) {
-        m_itemList = list;
-        m_item = list.first();
-        this->setEnabled(true);
-    } else {
-        this->setEnabled(false);
-    }
 }
 
 //**********************************************************

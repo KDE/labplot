@@ -1,6 +1,5 @@
 #include "commonfrontend/datapicker/ImageView.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/WorksheetElementGroup.h"
 #include "backend/worksheet/CustomItem.h"
 #include "backend/core/Datapicker.h"
 #include "backend/core/Transform.h"

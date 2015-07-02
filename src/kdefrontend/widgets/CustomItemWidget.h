@@ -14,7 +14,6 @@ public:
 	void load();
 
     void hidePositionWidgets();
-    void updateItemList(QList<CustomItem*>);
 
 private:
 	Ui::CustomItemWidget ui;

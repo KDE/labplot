@@ -227,7 +227,8 @@ void ImagePrivate::updateFileName() {
 			m_scene->setSceneRect(0, 0, w, h);
 
 			//TODO: scene size was change -> reinitialize all the screen size dependent parameters
-			q->init();
+            q->init();
+            plotFileName = fileName;
 
 			q->isLoaded = true;
 		}

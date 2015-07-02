@@ -9,7 +9,6 @@
 class QGraphicsItem;
 class QRectF;
 class ImagePrivate;
-//class Transform;
 class ImageEditor;
 class CustomItem;
 
@@ -89,7 +88,6 @@ class Image: public AbstractPart, public scripted {
 		friend class ImagePrivate;
 
         ImageEditor* m_imageEditor;
-        //Transform* m_transform;
 
 	 private slots:
 		void handleAspectAdded(const AbstractAspect*);
