@@ -38,13 +38,12 @@
 #include <vtkRenderer.h>
 
 class Matrix;
+class Axes;
 
 class vtkActor;
-class vtkCubeAxesActor;
 class vtkImageActor;
 class vtkRenderer;
 class vtkPolyDataMapper;
-class vtkOrientationMarkerWidget;
 class vtkPoints;
 class vtkCellArray;
 
@@ -78,18 +77,17 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 				vtkSmartPointer<vtkCellArray>& triangles);
 
 		Plot3D* const q;
-		QGLContext *context;
+		QGLContext * const context;
 		QVTKGraphicsItem *vtkItem;
 		Plot3D::VisualizationType visType;
 		Plot3D::DataSource sourceType;
 		KUrl path;
 		bool showAxes;
 
-		vtkSmartPointer<vtkCubeAxesActor> axes;
+		QScopedPointer<Axes> axes;
 		vtkSmartPointer<vtkRenderer> renderer;
 		vtkSmartPointer<vtkRenderer> backgroundRenderer;
 		vtkSmartPointer<vtkImageActor> backgroundImageActor;
-		vtkSmartPointer<vtkOrientationMarkerWidget> axesWidget;
 
 		AbstractColumn *xColumn;
 		AbstractColumn *yColumn;

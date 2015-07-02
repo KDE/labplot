@@ -28,6 +28,7 @@
 
 #include "Plot3D.h"
 #include "Plot3DPrivate.h"
+#include "Axes.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -55,7 +56,6 @@
 #include <vtkPolyDataMapper.h>
 #include <vtkActor.h>
 #include <vtkImageActor.h>
-#include <vtkCubeAxesActor.h>
 #include <vtkLight.h>
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkImageData.h>
@@ -68,7 +68,6 @@
 #include <vtkInteractorStyleTrackballCamera.h>
 #include <vtkTriangle.h>
 #include <vtkCellArray.h>
-#include <vtkOrientationMarkerWidget.h>
 #include <vtkQImageToImageSource.h>
 
 
@@ -307,15 +306,15 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner, QGLContext *context)
 	, zColumn(0)
 	, matrix(0) {
 
-	for (int i = 0; i < 3; ++i){
+	for (int i = 0; i < 3; ++i) {
 		nodeColumn[i] = 0;
 	}
 }
 
-Plot3DPrivate::~Plot3DPrivate(){
+Plot3DPrivate::~Plot3DPrivate() {
 }
 
-void Plot3DPrivate::init(){
+void Plot3DPrivate::init() {
 	//initialize VTK
 	vtkItem = new QVTKGraphicsItem(context, q->plotArea()->graphicsItem());
 
@@ -354,17 +353,17 @@ void Plot3DPrivate::init(){
 	updateBackground();
 }
 
-void Plot3DPrivate::setShowAxes(bool show){
+void Plot3DPrivate::setShowAxes(bool show) {
 	const bool prevState = showAxes;
 	showAxes = show;
 	if (!showAxes && axes){
-		renderer->RemoveActor(axes);
+		axes.reset();
 	} else if (showAxes && !prevState){
 		addAxes();
 	}
 }
 
-void Plot3DPrivate::addSphere(){
+void Plot3DPrivate::addSphere() {
 	vtkSmartPointer<vtkSphereSource> sphereSource = vtkSmartPointer<vtkSphereSource>::New();
 	sphereSource->Update();
 	vtkSmartPointer<vtkPolyDataMapper> sphereMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
@@ -372,12 +371,11 @@ void Plot3DPrivate::addSphere(){
 	vtkSmartPointer<vtkActor> sphereActor = vtkSmartPointer<vtkActor>::New();
 	sphereActor->GetProperty()->SetFrontfaceCulling(true);
 	sphereActor->SetMapper(sphereMapper);
-	axes->SetBounds(sphereSource->GetOutput()->GetBounds());
 	renderer->AddActor(sphereActor);
 }
 
 template<class TReader>
-void Plot3DPrivate::createReader(){
+void Plot3DPrivate::createReader() {
 	const QByteArray ascii = path.path().toAscii();
 	const char *path = ascii.constData();
 	vtkSmartPointer<TReader> reader = vtkSmartPointer<TReader>::New();
@@ -390,15 +388,13 @@ void Plot3DPrivate::createReader(){
 	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 	mapper->SetInputConnection(reader->GetOutputPort());
 
-	axes->SetBounds(mapper->GetBounds());
-
 	vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
 	actor->SetMapper(mapper);
 
 	renderer->AddActor(actor);
 }
 
-void Plot3DPrivate::readFromFile(){
+void Plot3DPrivate::readFromFile() {
 	const QString& fileName = path.fileName();
 	qDebug() << Q_FUNC_INFO << "Read from the file:" << path.path().toAscii();
 	const QString& fileType = fileName.split('.').last().toLower();
@@ -412,49 +408,25 @@ void Plot3DPrivate::readFromFile(){
 	}
 }
 
-void Plot3DPrivate::addAxes(){
-	axes = vtkSmartPointer<vtkCubeAxesActor>::New();
-
-	axes->SetCamera(renderer->GetActiveCamera());
-	axes->DrawXGridlinesOn();
-	axes->DrawYGridlinesOn();
-	axes->DrawZGridlinesOn();
-
-	const double colors[][3] = {{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}};
-
-	const int fontSize = 72;
-	for (int i = 0; i < 3; ++i){
-		vtkTextProperty *titleProp = axes->GetTitleTextProperty(i);
-		titleProp->SetColor(colors[i][0], colors[i][1], colors[i][2]);
-		titleProp->SetBold(true);
-		titleProp->SetFontSize(fontSize);
-
-		vtkTextProperty *labelProp = axes->GetLabelTextProperty(i);
-		labelProp->SetColor(colors[i][0], colors[i][1], colors[i][2]);
-		labelProp->SetBold(true);
-		labelProp->SetFontSize(fontSize);
-	}
-
-	axes->GetXAxesLinesProperty()->SetLineWidth(10);
-	axes->GetYAxesLinesProperty()->SetLineWidth(10);
-	axes->GetZAxesLinesProperty()->SetLineWidth(10);
-	axes->GetAxisLabels(0);
-
-	renderer->AddActor(axes);
+void Plot3DPrivate::addAxes() {
+	Axes::Properties props;
+	props.type = Axes::Axes::AxesType_Cube;
+	props.width = 10;
+	axes.reset(new Axes(*renderer, props));
 }
 
-void Plot3DPrivate::readFromColumns(){
-	if (xColumn == 0 || yColumn == 0 || zColumn == 0){
+void Plot3DPrivate::readFromColumns() {
+	if (xColumn == 0 || yColumn == 0 || zColumn == 0) {
 		return;
 	}
 
 	for (int i = 0; i < 3; ++i)
-		if (nodeColumn[i] == 0){
+		if (nodeColumn[i] == 0) {
 			qDebug() << Q_FUNC_INFO << "Node" << i << "== 0";
 			return;
 		}
 
-	if (visType == Plot3D::VisualizationType_Triangles){
+	if (visType == Plot3D::VisualizationType_Triangles) {
 		qDebug() << Q_FUNC_INFO << "Triangles rendering";
 		vtkSmartPointer<vtkCellArray> triangles = vtkSmartPointer<vtkCellArray>::New();
 		vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
@@ -462,7 +434,7 @@ void Plot3DPrivate::readFromColumns(){
 		qDebug() << Q_FUNC_INFO << "Row count:" << xColumn->rowCount() << yColumn->rowCount() << zColumn->rowCount();
 
 		const int numPoints = std::min(xColumn->rowCount(), std::min(yColumn->rowCount(), zColumn->rowCount()));
-		for (int i = 0; i < numPoints; ++i){
+		for (int i = 0; i < numPoints; ++i) {
 			const int x = static_cast<int>(xColumn->valueAt(i));
 			const int y = static_cast<int>(yColumn->valueAt(i));
 			const int z = static_cast<int>(zColumn->valueAt(i));
@@ -471,7 +443,7 @@ void Plot3DPrivate::readFromColumns(){
 		}
 
 		const int numTrianges = std::min(nodeColumn[0]->rowCount(), std::min(nodeColumn[1]->rowCount(), nodeColumn[2]->rowCount()));
-		for (int i = 0; i < numTrianges; ++i){
+		for (int i = 0; i < numTrianges; ++i) {
 			vtkSmartPointer<vtkTriangle> triangle = vtkSmartPointer<vtkTriangle>::New();
 			const int id1 = static_cast<int>(nodeColumn[0]->valueAt(i));
 			const int id2 = static_cast<int>(nodeColumn[1]->valueAt(i));
@@ -493,7 +465,7 @@ void Plot3DPrivate::readFromColumns(){
 }
 
 void Plot3DPrivate::renderTriangles(vtkSmartPointer<vtkPoints>& points,
-		vtkSmartPointer<vtkCellArray>& triangles){
+		vtkSmartPointer<vtkCellArray>& triangles) {
 	qDebug() << Q_FUNC_INFO << "Amount of triangles:" << triangles->GetSize();
 
 	vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
@@ -501,7 +473,6 @@ void Plot3DPrivate::renderTriangles(vtkSmartPointer<vtkPoints>& points,
 	polydata->SetPoints(points);
 	polydata->SetPolys(triangles);
 
-	axes->SetBounds(polydata->GetBounds());
 	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 	mapper->SetInputData(polydata);
 
@@ -511,12 +482,12 @@ void Plot3DPrivate::renderTriangles(vtkSmartPointer<vtkPoints>& points,
 	renderer->AddActor(actor);
 }
 
-void Plot3DPrivate::readFromMatrix(){
+void Plot3DPrivate::readFromMatrix() {
 	qDebug() << Q_FUNC_INFO;
 	if (!matrix)
 		return;
 
-	if (visType == Plot3D::VisualizationType_Triangles){
+	if (visType == Plot3D::VisualizationType_Triangles) {
 		qDebug() << Q_FUNC_INFO << "Triangles rendering";
 		vtkSmartPointer<vtkCellArray> triangles = vtkSmartPointer<vtkCellArray>::New();
 		vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
@@ -533,8 +504,8 @@ void Plot3DPrivate::readFromMatrix(){
 			}
 		}
 
-		for (int x = 0, max_x = cellPoints.size() - 1; x < max_x; ++x){
-			for (int y = 0, max_y = cellPoints[0].size() - 1; y < max_y; ++y){
+		for (int x = 0, max_x = cellPoints.size() - 1; x < max_x; ++x) {
+			for (int y = 0, max_y = cellPoints[0].size() - 1; y < max_y; ++y) {
 				const vtkIdType rectPoints[4] = {cellPoints[x][y], cellPoints[x +1][y],
 					cellPoints[x + 1][y + 1], cellPoints[x][y + 1]};
 
@@ -557,7 +528,7 @@ void Plot3DPrivate::readFromMatrix(){
 	}
 }
 
-void Plot3DPrivate::retransform(){
+void Plot3DPrivate::retransform() {
 	prepareGeometryChange();
 	setPos(rect.x()+rect.width()/2, rect.y()+rect.height()/2);
 
@@ -575,17 +546,21 @@ void Plot3DPrivate::updatePlot() {
 	//clear all the available actors
 	vtkActorCollection* actors = renderer->GetActors();
 	actors->InitTraversal();
-	for (int i=0; i<actors->GetNumberOfItems(); i++)
-		renderer->RemoveActor(actors->GetNextActor());
+
+	vtkActor* actor = 0;
+	while ((actor = actors->GetNextActor()) != 0) {
+		if (*axes != actor)
+			renderer->RemoveActor(actor);
+	}
 
 	//render the plot
-	if (sourceType == Plot3D::DataSource_Empty){
+	if (sourceType == Plot3D::DataSource_Empty) {
 		qDebug() << Q_FUNC_INFO << "Add Sphere";
 		addSphere();
-	}else if(sourceType == Plot3D::DataSource_File){
+	} else if (sourceType == Plot3D::DataSource_File) {
 		qDebug() << Q_FUNC_INFO << "Read file";
 		readFromFile();
-	}else if(sourceType == Plot3D::DataSource_Spreadsheet){
+	} else if (sourceType == Plot3D::DataSource_Spreadsheet) {
 		readFromColumns();
 	} else if (sourceType == Plot3D::DataSource_Matrix) {
 		readFromMatrix();
