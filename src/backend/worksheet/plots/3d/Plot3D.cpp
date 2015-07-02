@@ -28,7 +28,6 @@
 
 #include "Plot3D.h"
 #include "Plot3DPrivate.h"
-#include "Axes.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -199,6 +198,37 @@ void Plot3D::setShowAxes(bool show){
 bool Plot3D::needAxes() const{
 	Q_D(const Plot3D);
 	return d->showAxes;
+}
+
+void Plot3D::setAxesType(Axes::AxesType type) {
+	Q_D(Plot3D);
+	d->axesProps.type = type;
+	d->addAxes();
+}
+
+void Plot3D::setAxesFontSize(int size) {
+	if (size < 0 || size > 72)
+		// TODO: Error message
+		return;
+
+	Q_D(Plot3D);
+	d->axesProps.fontSize = size;
+	d->addAxes();
+}
+
+void Plot3D::setAxesColor(int axes, const QColor& color) {
+	if (axes < 0 || axes > 2)
+		// TODO: Error message
+		return;
+
+	Q_D(Plot3D);
+	if (axes == 0)
+		d->axesProps.xLabelColor = color;
+	else if (axes == 1)
+		d->axesProps.yLabelColor = color;
+	else
+		d->axesProps.zLabelColor = color;
+	d->addAxes();
 }
 
 void Plot3D::setMatrix(Matrix* matrix){
@@ -409,10 +439,7 @@ void Plot3DPrivate::readFromFile() {
 }
 
 void Plot3DPrivate::addAxes() {
-	Axes::Properties props;
-	props.type = Axes::Axes::AxesType_Cube;
-	props.width = 10;
-	axes.reset(new Axes(*renderer, props));
+	axes.reset(new Axes(*renderer, axesProps));
 }
 
 void Plot3DPrivate::readFromColumns() {
@@ -549,7 +576,7 @@ void Plot3DPrivate::updatePlot() {
 
 	vtkActor* actor = 0;
 	while ((actor = actors->GetNextActor()) != 0) {
-		if (*axes != actor)
+		if (axes == 0 || *axes != actor)
 			renderer->RemoveActor(actor);
 	}
 

@@ -33,6 +33,7 @@
 #include "backend/core/Project.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/plots/3d/Plot3D.h"
+#include "backend/worksheet/plots/3d/Axes.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
@@ -154,6 +155,34 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+	// Axes
+	ui.axesType->insertItem(Axes::AxesType_Cube, i18n("Cube Axes"));
+	ui.axesType->insertItem(Axes::AxesType_Plain, i18n("Plain Axes"));
+	connect( ui.axesType, SIGNAL(currentIndexChanged(int)), this, SLOT(onAxesTypeChanged(int)) );
+	connect( ui.labelFontSize, SIGNAL(valueChanged(int)), this, SLOT(onAxesLabelFontChanged(int)) );
+	connect( ui.axisXLabelColor, SIGNAL(changed(const QColor&)), this, SLOT(onAxesLabelColorChanged(const QColor&)) );
+	connect( ui.axisYLabelColor, SIGNAL(changed(const QColor&)), this, SLOT(onAxesLabelColorChanged(const QColor&)) );
+	connect( ui.axisZLabelColor, SIGNAL(changed(const QColor&)), this, SLOT(onAxesLabelColorChanged(const QColor&)) );
+}
+
+void Plot3DDock::onAxesTypeChanged(int type) {
+	m_plot->setAxesType(static_cast<Axes::AxesType>(type));
+}
+
+void Plot3DDock::onAxesLabelFontChanged(int size) {
+	m_plot->setAxesFontSize(size);
+}
+
+void Plot3DDock::onAxesLabelColorChanged(const QColor& color) {
+	const QObject *s = sender();
+	if (s == ui.axisXLabelColor) {
+		m_plot->setAxesColor(0, color);
+	} else if (s == ui.axisYLabelColor) {
+		m_plot->setAxesColor(1, color);
+	} else if (s == ui.axisZLabelColor) {
+		m_plot->setAxesColor(2, color);
+	}
 }
 
 void Plot3DDock::setPlots(const QList<Plot3D*>& plots){

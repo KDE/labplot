@@ -100,6 +100,11 @@ class Plot3DDock: public QWidget {
 		//saving/loading
 		void loadConfigFromTemplate(KConfig&);
 		void saveConfigAsTemplate(KConfig&);
+
+		// Axes tab
+		void onAxesTypeChanged(int type);
+		void onAxesLabelFontChanged(int size);
+		void onAxesLabelColorChanged(const QColor& color);
 };
 
 #endif

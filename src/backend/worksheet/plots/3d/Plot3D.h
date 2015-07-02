@@ -29,6 +29,7 @@
 #ifndef PLOT3D_H
 #define PLOT3D_H
 
+#include "Axes.h"
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/PlotArea.h"
 
@@ -78,8 +79,12 @@ class Plot3D:public AbstractPlot{
 
 		void setNodeColumn(int node, AbstractColumn *column);
 
+		// Axes
 		void setShowAxes(bool show);
 		bool needAxes() const;
+		void setAxesType(Axes::AxesType type);
+		void setAxesFontSize(int size);
+		void setAxesColor(int axes, const QColor& color);
 
 		void setMatrix(Matrix* matrix);
 

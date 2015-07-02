@@ -30,6 +30,7 @@
 #define PLOT3DPRIVATE_H
 
 #include "Plot3D.h"
+#include "Axes.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 
 #include <KUrl>
@@ -83,6 +84,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		Plot3D::DataSource sourceType;
 		KUrl path;
 		bool showAxes;
+		Axes::Properties axesProps;
 
 		QScopedPointer<Axes> axes;
 		vtkSmartPointer<vtkRenderer> renderer;
