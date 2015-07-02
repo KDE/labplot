@@ -152,6 +152,8 @@ void Plot3D::setDataSource(DataSource source){
 		setXColumn(0);
 		setYColumn(0);
 		setZColumn(0);
+	}else if(source != DataSource_Matrix){
+		setMatrix(0);
 	}
 	retransform();
 }
@@ -202,6 +204,12 @@ void Plot3D::setShowAxes(bool show){
 bool Plot3D::needAxes() const{
 	Q_D(const Plot3D);
 	return d->showAxes;
+}
+
+void Plot3D::setMatrix(Matrix* matrix){
+	Q_D(Plot3D);
+	qDebug() << Q_FUNC_INFO << matrix;
+	d->matrix = matrix;
 }
 
 void Plot3D::retransform(){
@@ -519,6 +527,7 @@ void Plot3DPrivate::renderTriangles(vtkSmartPointer<vtkPoints>& points,
 }
 
 void Plot3DPrivate::readFromMatrix(){
+	qDebug() << Q_FUNC_INFO;
 	if (!matrix)
 		return;
 

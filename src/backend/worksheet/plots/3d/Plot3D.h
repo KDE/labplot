@@ -35,6 +35,8 @@
 class QGLContext;
 class Plot3DPrivate;
 class KUrl;
+
+class Matrix;
 class AbstractColumn;
 
 class Plot3D:public AbstractPlot{
@@ -78,6 +80,8 @@ class Plot3D:public AbstractPlot{
 
 		void setShowAxes(bool show);
 		bool needAxes() const;
+
+		void setMatrix(Matrix* matrix);
 
 		BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)

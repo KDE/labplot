@@ -35,6 +35,7 @@
 class Plot3D;
 class KUrl;
 class AbstractColumn;
+class Matrix;
 
 class Plot3DDock: public QWidget {
 	Q_OBJECT
@@ -53,6 +54,7 @@ class Plot3DDock: public QWidget {
 		void hideFileUrl(bool hide = true);
 		void hideTriangleInfo(bool hide = true);
 		AbstractColumn* getColumn(const QModelIndex& index) const;
+		Matrix* getMatrix(const QModelIndex& index) const;
 
 		void load();
 		void loadConfig(KConfig&);

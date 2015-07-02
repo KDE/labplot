@@ -31,6 +31,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/worksheet/plots/3d/Plot3D.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
@@ -102,6 +103,7 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	list.clear();
 	list<<"Matrix";
 	ui.cbMatrix->setSelectableClasses(list);
+	connect(ui.cbMatrix, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(onTreeViewIndexChanged(const QModelIndex&)));
 
 	//Background-tab
 	ui.cbBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
@@ -131,7 +133,7 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	connect( ui.cbDataSource, SIGNAL(currentIndexChanged(int)), this, SLOT(onDataSourceChanged(int)) ) ;
 	connect( ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(onVisualizationTypeChanged(int)) );
 	connect( ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), this, SLOT(onFileChanged(const KUrl&)) );
-	connect( ui.showAxes, SIGNAL(toggled(bool)), this, SLOT(onShowAxes(bool)));
+	connect( ui.showAxes, SIGNAL(toggled(bool)), this, SLOT(onShowAxes(bool)) );
 
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -219,6 +221,11 @@ AbstractColumn* Plot3DDock::getColumn(const QModelIndex& index) const{
 	return aspect ? dynamic_cast<AbstractColumn*>(aspect) : 0;
 }
 
+Matrix* Plot3DDock::getMatrix(const QModelIndex& index) const{
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	return aspect ? dynamic_cast<Matrix*>(aspect) : 0;
+}
+
 //*************************************************************
 //****** SLOTs for changes triggered in Plot3DDock *********
 //*************************************************************
@@ -272,7 +279,6 @@ void Plot3DDock::onTreeViewIndexChanged(const QModelIndex& index){
 	Q_ASSERT(column);
 
 	foreach(Plot3D* plot, m_plotsList){
-		plot->setDataSource(Plot3D::DataSource_Spreadsheet);
 		QObject *senderW = sender();
 		if(senderW == ui.cbXCoordinate)
 			plot->setXColumn(column);
@@ -286,6 +292,14 @@ void Plot3DDock::onTreeViewIndexChanged(const QModelIndex& index){
 			plot->setNodeColumn(1, column);
 		else if(senderW == ui.cbNode3)
 			plot->setNodeColumn(2, column);
+		else if(senderW == ui.cbMatrix){
+			plot->setMatrix(getMatrix(index));
+
+		if(senderW == ui.cbMatrix)
+			plot->setDataSource(Plot3D::DataSource_Matrix);
+		else
+			plot->setDataSource(Plot3D::DataSource_Spreadsheet);
+		}
 		plot->retransform();
 	}
 }
