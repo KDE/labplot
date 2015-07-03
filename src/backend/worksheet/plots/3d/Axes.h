@@ -37,25 +37,14 @@ class vtkProp;
 class vtkActor;
 class vtkRenderer;
 
-class Axes{
+class Axes {
 	public:
-		enum AxesType{
+		enum AxesType {
 			AxesType_Cube = 0,
 			AxesType_Plain = 1
 		};
 
-		struct Properties{
-			AxesType type;
-			int fontSize;
-			double width;
-			QColor xLabelColor;
-			QColor yLabelColor;
-			QColor zLabelColor;
-
-			Properties();
-		};
-
-		Axes(vtkRenderer& renderer, const Properties& props);
+		Axes(vtkRenderer& renderer);
 		~Axes();
 
 		void updateBounds();
@@ -63,12 +52,24 @@ class Axes{
 		bool operator==(vtkProp* prop) const;
 		bool operator!=(vtkProp* prop) const;
 
+		void show(bool pred = true);
+		bool isShown() const;
+
+		void setType(AxesType type);
+		void setFontSize(int fontSize);
+		void setWidth(double width);
+		void setXLabelColor(const QColor& color);
+		void setYLabelColor(const QColor& color);
+		void setZLabelColor(const QColor& color);
+
 	private:
 		void init();
+		void hide();
 
 	private:
 		vtkRenderer& renderer;
-		const Properties props;
+		struct Properties;
+		const QScopedPointer<Properties> props;
 		vtkSmartPointer<vtkProp> vtkAxes;
 };
 

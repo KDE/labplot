@@ -66,10 +66,6 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		void readFromFile();
 		void readFromColumns();
 		void readFromMatrix();
-		void addAxes();
-
-		void setShowAxes(bool show);
-
 
 		template<class TReader>
 		void createReader();
@@ -83,8 +79,6 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		Plot3D::VisualizationType visType;
 		Plot3D::DataSource sourceType;
 		KUrl path;
-		bool showAxes;
-		Axes::Properties axesProps;
 
 		QScopedPointer<Axes> axes;
 		vtkSmartPointer<vtkRenderer> renderer;

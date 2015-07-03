@@ -78,15 +78,9 @@ class Plot3D:public AbstractPlot{
 		void setZColumn(AbstractColumn *column);
 
 		void setNodeColumn(int node, AbstractColumn *column);
-
-		// Axes
-		void setShowAxes(bool show);
-		bool needAxes() const;
-		void setAxesType(Axes::AxesType type);
-		void setAxesFontSize(int size);
-		void setAxesColor(int axes, const QColor& color);
-
 		void setMatrix(Matrix* matrix);
+
+		Axes& axes();
 
 		BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)

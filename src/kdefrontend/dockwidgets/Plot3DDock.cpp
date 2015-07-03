@@ -167,22 +167,26 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 }
 
 void Plot3DDock::onAxesTypeChanged(int type) {
-	m_plot->setAxesType(static_cast<Axes::AxesType>(type));
+	m_plot->axes().setType(static_cast<Axes::AxesType>(type));
+	m_plot->axes().show(ui.showAxes->isChecked());
 }
 
 void Plot3DDock::onAxesLabelFontChanged(int size) {
-	m_plot->setAxesFontSize(size);
+	m_plot->axes().setFontSize(size);
+	m_plot->axes().show(ui.showAxes->isChecked());
 }
 
 void Plot3DDock::onAxesLabelColorChanged(const QColor& color) {
 	const QObject *s = sender();
+	Axes& plotAxes = m_plot->axes();
 	if (s == ui.axisXLabelColor) {
-		m_plot->setAxesColor(0, color);
+		plotAxes.setXLabelColor(color);
 	} else if (s == ui.axisYLabelColor) {
-		m_plot->setAxesColor(1, color);
+		plotAxes.setYLabelColor(color);
 	} else if (s == ui.axisZLabelColor) {
-		m_plot->setAxesColor(2, color);
+		plotAxes.setZLabelColor(color);
 	}
+	plotAxes.show(ui.showAxes->isChecked());
 }
 
 void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
@@ -350,9 +354,9 @@ void Plot3DDock::onVisualizationTypeChanged(int index){
 	}
 }
 
-void Plot3DDock::onShowAxes(bool show){
+void Plot3DDock::onShowAxes(bool pred){
 	foreach(Plot3D* plot, m_plotsList){
-		plot->setShowAxes(show);
+		plot->axes().show(pred);
 		plot->retransform();
 	}
 }
@@ -646,7 +650,7 @@ void Plot3DDock::load(){
 	// General
 	ui.leName->setText(m_plot->name());
 	ui.leComment->setText(m_plot->comment());
-	ui.showAxes->setChecked(m_plot->needAxes());
+	ui.showAxes->setChecked(m_plot->axes().isShown());
 	ui.cbType->setCurrentIndex(m_plot->visualizationType());
 	ui.cbDataSource->setCurrentIndex(m_plot->dataSource());
 

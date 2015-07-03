@@ -160,28 +160,24 @@ void Plot3D::setFile(const KUrl& path){
 }
 
 void Plot3D::setXColumn(AbstractColumn *column){
-	qDebug() << Q_FUNC_INFO;
 	Q_D(Plot3D);
 	d->xColumn= column;
 	d->updatePlot();
 }
 
 void Plot3D::setYColumn(AbstractColumn *column){
-	qDebug() << Q_FUNC_INFO;
 	Q_D(Plot3D);
 	d->yColumn= column;
 	d->updatePlot();
 }
 
 void Plot3D::setZColumn(AbstractColumn *column){
-	qDebug() << Q_FUNC_INFO;
 	Q_D(Plot3D);
 	d->zColumn= column;
 	d->updatePlot();
 }
 
 void Plot3D::setNodeColumn(int node, AbstractColumn* column){
-	qDebug() << Q_FUNC_INFO;
 	if (node >= 0 && node < 3){
 		Q_D(Plot3D);
 		d->nodeColumn[node] = column;
@@ -189,46 +185,9 @@ void Plot3D::setNodeColumn(int node, AbstractColumn* column){
 	}
 }
 
-void Plot3D::setShowAxes(bool show){
+Axes& Plot3D::axes() {
 	Q_D(Plot3D);
-	d->setShowAxes(show);
-	d->updatePlot();
-}
-
-bool Plot3D::needAxes() const{
-	Q_D(const Plot3D);
-	return d->showAxes;
-}
-
-void Plot3D::setAxesType(Axes::AxesType type) {
-	Q_D(Plot3D);
-	d->axesProps.type = type;
-	d->addAxes();
-}
-
-void Plot3D::setAxesFontSize(int size) {
-	if (size < 0 || size > 72)
-		// TODO: Error message
-		return;
-
-	Q_D(Plot3D);
-	d->axesProps.fontSize = size;
-	d->addAxes();
-}
-
-void Plot3D::setAxesColor(int axes, const QColor& color) {
-	if (axes < 0 || axes > 2)
-		// TODO: Error message
-		return;
-
-	Q_D(Plot3D);
-	if (axes == 0)
-		d->axesProps.xLabelColor = color;
-	else if (axes == 1)
-		d->axesProps.yLabelColor = color;
-	else
-		d->axesProps.zLabelColor = color;
-	d->addAxes();
+	return *d->axes;
 }
 
 void Plot3D::setMatrix(Matrix* matrix){
@@ -330,7 +289,6 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner, QGLContext *context)
 	, context(context)
 	, visType(Plot3D::VisualizationType_Triangles)
 	, sourceType(Plot3D::DataSource_Empty)
-	, showAxes(true)
 	, xColumn(0)
 	, yColumn(0)
 	, zColumn(0)
@@ -370,8 +328,7 @@ void Plot3DPrivate::init() {
 	vtkSmartPointer<vtkInteractorStyleTrackballCamera> style = vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
 	renderWindow->GetInteractor()->SetInteractorStyle(style);
 
-	if (showAxes)
-		addAxes();
+	axes.reset(new Axes(*renderer));
 
 	//background
 // 	renderer->SetBackground(.3, .6, .3);
@@ -381,16 +338,6 @@ void Plot3DPrivate::init() {
 	light->SetPosition(0.875, 1.6125, 1);
 
 	updateBackground();
-}
-
-void Plot3DPrivate::setShowAxes(bool show) {
-	const bool prevState = showAxes;
-	showAxes = show;
-	if (!showAxes && axes){
-		axes.reset();
-	} else if (showAxes && !prevState){
-		addAxes();
-	}
 }
 
 void Plot3DPrivate::addSphere() {
@@ -436,11 +383,6 @@ void Plot3DPrivate::readFromFile() {
 		qDebug() << Q_FUNC_INFO << "Create STL reader";
 		createReader<vtkSTLReader>();
 	}
-}
-
-void Plot3DPrivate::addAxes() {
-	if (showAxes)
-		axes.reset(new Axes(*renderer, axesProps));
 }
 
 void Plot3DPrivate::readFromColumns() {
@@ -577,7 +519,7 @@ void Plot3DPrivate::updatePlot() {
 
 	vtkActor* actor = 0;
 	while ((actor = actors->GetNextActor()) != 0) {
-		if (axes == 0 || *axes != actor)
+		if (*axes != actor)
 			renderer->RemoveActor(actor);
 	}
 
@@ -594,8 +536,7 @@ void Plot3DPrivate::updatePlot() {
 		readFromMatrix();
 	}
 
-	if (axes)
-		axes->updateBounds();
+	axes->updateBounds();
 }
 
 void Plot3DPrivate::updateBackground() {
@@ -715,7 +656,7 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 		writeCommentElement(writer);
 
 		writer->writeStartElement("general");
-			writer->writeAttribute("show_axes", QString::number(d->showAxes));
+			writer->writeAttribute("show_axes", QString::number(d->axes->isShown()));
 			writer->writeAttribute("vis_type", QString::number(d->visType));
 			if (d->visType == VisualizationType_Triangles){
 				writer->writeAttribute("data_source", QString::number(d->sourceType));
@@ -758,10 +699,8 @@ bool Plot3D::load(XmlStreamReader* reader) {
 			const QString& showAxesAttr = attribs.value("show_axes").toString();
 			if(!showAxesAttr.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'show_axes'"));
-			else{
-				d->showAxes = static_cast<bool>(showAxesAttr.toInt());
-				qDebug() << Q_FUNC_INFO << "show_axes == " << d->showAxes;
-			}
+			else
+				d->axes->show(static_cast<bool>(showAxesAttr.toInt()));
 
 			const QString& visTypeAttr = attribs.value("vis_type").toString();
 			if (!visTypeAttr.isEmpty())
