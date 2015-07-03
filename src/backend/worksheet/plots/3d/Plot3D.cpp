@@ -313,17 +313,16 @@ void Plot3DPrivate::init() {
 
 	//background renderer
 	backgroundRenderer = vtkSmartPointer<vtkRenderer>::New();
-	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
-	backgroundRenderer->AddActor(backgroundImageActor);
 
 	//render window and layers
 	vtkGenericOpenGLRenderWindow* renderWindow = vtkItem->GetRenderWindow();
-	backgroundRenderer->SetLayer(0);
-	backgroundRenderer->InteractiveOff();
-	renderer->SetLayer(1);
 	renderWindow->SetNumberOfLayers(2);
 	renderWindow->AddRenderer(backgroundRenderer);
 	renderWindow->AddRenderer(renderer);
+
+	backgroundRenderer->SetLayer(0);
+	renderer->SetLayer(1);
+	backgroundRenderer->InteractiveOff();
 
 	vtkSmartPointer<vtkInteractorStyleTrackballCamera> style = vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
 	renderWindow->GetInteractor()->SetInteractorStyle(style);
@@ -336,6 +335,9 @@ void Plot3DPrivate::init() {
 	//light
 	light->SetFocalPoint(1.875, 0.6125, 0);
 	light->SetPosition(0.875, 1.6125, 1);
+
+	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
+	backgroundRenderer->AddActor(backgroundImageActor);
 
 	updateBackground();
 }
@@ -624,7 +626,7 @@ void Plot3DPrivate::updateBackground() {
 			}
 		}
 	} else if (backgroundType == PlotArea::Pattern){
-		painter.setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
+		painter.setBrush(QBrush(backgroundFirstColor, backgroundBrushStyle));
 	}
 
 	if ( qFuzzyIsNull(borderCornerRadius) )
@@ -633,15 +635,11 @@ void Plot3DPrivate::updateBackground() {
 		painter.drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 
 	//set the prepared image in the background actor
-	vtkSmartPointer<vtkImageData> imageData;
 	vtkSmartPointer<vtkQImageToImageSource> qimageToImageSource = vtkSmartPointer<vtkQImageToImageSource>::New();
 	qimageToImageSource->SetQImage(&image);
-	qimageToImageSource->Update();
-	imageData = qimageToImageSource->GetOutput();
-	backgroundImageActor->SetInputData(imageData);
 
-	//TODO how to update?
-	vtkItem->GetRenderWindow()->Render();
+	backgroundImageActor->SetInputData(qimageToImageSource->GetOutput());
+	qimageToImageSource->Update();
 }
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
