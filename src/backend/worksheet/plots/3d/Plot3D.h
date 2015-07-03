@@ -40,6 +40,11 @@ class KUrl;
 class Matrix;
 class AbstractColumn;
 
+class DemoDataHandler;
+class SpreadsheetDataHandler;
+class MatrixDataHandler;
+class FileDataHandler;
+
 class Plot3D:public AbstractPlot{
 	Q_OBJECT
 	Q_DECLARE_PRIVATE(Plot3D);
@@ -71,14 +76,11 @@ class Plot3D:public AbstractPlot{
 
 		void setDataSource(DataSource source);
 		DataSource dataSource() const;
-		void setFile(const KUrl& path);
 
-		void setXColumn(AbstractColumn *column);
-		void setYColumn(AbstractColumn *column);
-		void setZColumn(AbstractColumn *column);
-
-		void setNodeColumn(int node, AbstractColumn *column);
-		void setMatrix(Matrix* matrix);
+		DemoDataHandler& demoDataHandler();
+		SpreadsheetDataHandler& spreadsheetDataHandler();
+		MatrixDataHandler& matrixDataHandler();
+		FileDataHandler& fileDataHandler();
 
 		Axes& axes();
 
@@ -101,6 +103,9 @@ class Plot3D:public AbstractPlot{
 
 	private:
 		void init();
+
+	private slots:
+		void updatePlot();
 
 	signals:
 		friend class Plot3DSetBackgroundTypeCmd;

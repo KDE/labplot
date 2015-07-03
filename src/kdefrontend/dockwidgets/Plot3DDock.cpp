@@ -34,6 +34,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/plots/3d/Plot3D.h"
 #include "backend/worksheet/plots/3d/Axes.h"
+#include "backend/worksheet/plots/3d/DataHandlers.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
@@ -378,19 +379,19 @@ void Plot3DDock::onTreeViewIndexChanged(const QModelIndex& index){
 	foreach(Plot3D* plot, m_plotsList){
 		QObject *senderW = sender();
 		if(senderW == ui.cbXCoordinate)
-			plot->setXColumn(column);
+			plot->spreadsheetDataHandler().setXColumn(column);
 		else if(senderW  == ui.cbYCoordinate)
-			plot->setYColumn(column);
+			plot->spreadsheetDataHandler().setYColumn(column);
 		else if(senderW  == ui.cbZCoordinate)
-			plot->setZColumn(column);
+			plot->spreadsheetDataHandler().setZColumn(column);
 		else if(senderW  == ui.cbNode1)
-			plot->setNodeColumn(0, column);
+			plot->spreadsheetDataHandler().setNodeColumn(0, column);
 		else if(senderW  == ui.cbNode2)
-			plot->setNodeColumn(1, column);
+			plot->spreadsheetDataHandler().setNodeColumn(1, column);
 		else if(senderW == ui.cbNode3)
-			plot->setNodeColumn(2, column);
+			plot->spreadsheetDataHandler().setNodeColumn(2, column);
 		else if(senderW == ui.cbMatrix){
-			plot->setMatrix(getMatrix(index));
+			plot->matrixDataHandler().setMatrix(getMatrix(index));
 		}
 	}
 }
@@ -424,7 +425,7 @@ void Plot3DDock::onFileChanged(const KUrl& path){
 		return;
 
 	foreach(Plot3D* plot, m_plotsList)
-		plot->setFile(path);
+		plot->fileDataHandler().setFile(path);
 }
 
 void Plot3DDock::onDataSourceChanged(int index){

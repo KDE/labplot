@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : Plot3DPrivate.h
+    File                 : DataHandlers.h
     Project              : LabPlot
-    Description          : Private members of Plot3D.
+    Description          : 3D plot data handlers
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 Minh Ngo (minh@fedoraproject.org)
+    Copyright            : (C) 2015 by Minh Ngo (minh@fedoraproject.org)
 
  ***************************************************************************/
 
@@ -26,71 +26,70 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PLOT3DPRIVATE_H
-#define PLOT3DPRIVATE_H
-
-#include "Plot3D.h"
-#include "Axes.h"
-#include "DataHandlers.h"
-#include "backend/worksheet/plots/AbstractPlotPrivate.h"
+#ifndef DATAHANDLERS_H
+#define DATAHANDLERS_H
 
 #include <KUrl>
 
 #include <vtkSmartPointer.h>
-#include <vtkRenderer.h>
 
+class AbstractColumn;
 class Matrix;
-class Axes;
 
 class vtkActor;
-class vtkImageActor;
-class vtkRenderer;
-class vtkPolyDataMapper;
-class vtkPoints;
-class vtkCellArray;
 
-class QGLContext;
-class QVTKGraphicsItem;
-
-class Plot3DPrivate:public AbstractPlotPrivate{
+class IDataHandler : public QObject {
+		Q_OBJECT
 	public:
-		explicit Plot3DPrivate(Plot3D* owner, QGLContext *context);
-		virtual ~Plot3DPrivate();
+		virtual ~IDataHandler() {}
 
-		void init();
+		virtual vtkSmartPointer<vtkActor> actor() = 0;
 
-		virtual void retransform();
-		void updatePlot();
-		void updateBackground();
+	signals:
+		void parametersChanged();
+};
 
-		Plot3D* const q;
-		QGLContext * const context;
-		QVTKGraphicsItem *vtkItem;
-		Plot3D::VisualizationType visType;
-		Plot3D::DataSource sourceType;
+class MatrixDataHandler : public IDataHandler {
+	public:
+		MatrixDataHandler();
 
-		DemoDataHandler demoHandler;
-		SpreadsheetDataHandler spreadsheetHandler;
-		MatrixDataHandler matrixHandler;
-		FileDataHandler fileHandler;
+		vtkSmartPointer<vtkActor> actor();
+		void setMatrix(Matrix* matrix);
 
-		QScopedPointer<Axes> axes;
-		vtkSmartPointer<vtkRenderer> renderer;
-		vtkSmartPointer<vtkRenderer> backgroundRenderer;
-		vtkSmartPointer<vtkImageActor> backgroundImageActor;
+	private:
+		Matrix* matrix;
+};
 
-		//background
-		PlotArea::BackgroundType backgroundType;
-		PlotArea::BackgroundColorStyle backgroundColorStyle;
-		PlotArea::BackgroundImageStyle backgroundImageStyle;
-		Qt::BrushStyle backgroundBrushStyle;
-		QColor backgroundFirstColor;
-		QColor backgroundSecondColor;
-		QString backgroundFileName;
-		float backgroundOpacity;
+class SpreadsheetDataHandler : public IDataHandler {
+	public:
+		SpreadsheetDataHandler();
 
-		//light
+		vtkSmartPointer<vtkActor> actor();
+		void setXColumn(AbstractColumn *column);
+		void setYColumn(AbstractColumn *column);
+		void setZColumn(AbstractColumn *column);
 
+		void setNodeColumn(int node, AbstractColumn *column);
+
+	private:
+		AbstractColumn *xColumn;
+		AbstractColumn *yColumn;
+		AbstractColumn *zColumn;
+		AbstractColumn *nodeColumn[3];
+};
+
+class FileDataHandler : public IDataHandler {
+	public:
+		vtkSmartPointer<vtkActor> actor();
+		void setFile(const KUrl& path);
+
+	private:
+		KUrl path;
+};
+
+class DemoDataHandler : public IDataHandler {
+	public:
+		vtkSmartPointer<vtkActor> actor();
 };
 
 #endif

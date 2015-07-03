@@ -232,6 +232,9 @@
        </item>
        <item row="10" column="3">
         <widget class="KComboBox" name="cbType">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
