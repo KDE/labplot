@@ -29,6 +29,7 @@
 #ifndef PLOT3DDOCK_H
 #define PLOT3DDOCK_H
 
+#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "ui_plot3ddock.h"
 
@@ -66,6 +67,9 @@ class Plot3DDock: public QWidget {
 		//"General"-tab
 		void nameChanged();
 		void commentChanged();
+		void visibilityChanged(int);
+		void geometryChanged();
+		void layoutChanged(Worksheet::Layout);
 		void onVisualizationTypeChanged(int index);
 		void onDataSourceChanged(int index);
 		void onFileChanged(const KUrl& path);
@@ -86,6 +90,8 @@ class Plot3DDock: public QWidget {
 		//SLOTs for changes triggered in Plot3D
 		//"General"-tab
 		void plotDescriptionChanged(const AbstractAspect*);
+		void plotRectChanged(QRectF&);
+		void plotVisibleChanged(bool);
 
 		//"Background"-tab
 		void plotBackgroundTypeChanged(PlotArea::BackgroundType);

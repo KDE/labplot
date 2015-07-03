@@ -131,6 +131,12 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	//General
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
+	connect( ui.sbLeft, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
+	connect( ui.sbTop, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
+	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
+	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
+
 	connect( ui.cbDataSource, SIGNAL(currentIndexChanged(int)), this, SLOT(onDataSourceChanged(int)) ) ;
 	connect( ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(onVisualizationTypeChanged(int)) );
 	connect( ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), this, SLOT(onFileChanged(const KUrl&)) );
@@ -229,8 +235,23 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	//update active widgets
 	backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
 
+	//Deactivate the geometry related widgets, if the worksheet layout is active.
+	//Currently, a plot can only be a child of the worksheet itself, so we only need to ask the parent aspect (=worksheet).
+	//TODO redesign this, if the hierarchy will be changend in future (a plot is a child of a new object group/container or so)
+	Worksheet* w = dynamic_cast<Worksheet*>(m_plot->parentAspect());
+	if (w){
+		bool b = (w->layout()==Worksheet::NoLayout);
+		ui.sbTop->setEnabled(b);
+		ui.sbLeft->setEnabled(b);
+		ui.sbWidth->setEnabled(b);
+		ui.sbHeight->setEnabled(b);
+		connect(w, SIGNAL(layoutChanged(Worksheet::Layout)), this, SLOT(layoutChanged(Worksheet::Layout)));
+	}
+
 	//SIGNALs/SLOTs
 	//general
+	connect( m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(plotDescriptionChanged(const AbstractAspect*)) );
+	connect( m_plot, SIGNAL(rectChanged(QRectF&)), this, SLOT(plotRectChanged(QRectF&)) );
 
 	//background
 	connect(m_plot,SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)),this,SLOT(plotBackgroundTypeChanged(PlotArea::BackgroundType)));
@@ -306,6 +327,49 @@ void Plot3DDock::commentChanged(){
 	m_plot->setComment(ui.leComment->text());
 }
 
+void Plot3DDock::visibilityChanged(int state){
+	if (m_initializing)
+		return;
+
+	bool b = (state==Qt::Checked);
+	foreach(Plot3D* plot, m_plotsList)
+		plot->setVisible(b);
+}
+
+void Plot3DDock::geometryChanged(){
+	if (m_initializing)
+		return;
+
+	float x = Worksheet::convertToSceneUnits(ui.sbLeft->value(), Worksheet::Centimeter);
+	float y = Worksheet::convertToSceneUnits(ui.sbTop->value(), Worksheet::Centimeter);
+	float w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter);
+	float h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter);
+
+	QRectF rect(x,y,w,h);
+	m_plot->setRect(rect);
+}
+
+/*!
+	Called when the layout in the worksheet gets changed.
+	Enables/disables the geometry widgets if the layout was deactivated/activated.
+	Shows the new geometry values of the first plot if the layout was activated.
+ */
+void Plot3DDock::layoutChanged(Worksheet::Layout layout){
+	bool b = (layout == Worksheet::NoLayout);
+	ui.sbTop->setEnabled(b);
+	ui.sbLeft->setEnabled(b);
+	ui.sbWidth->setEnabled(b);
+	ui.sbHeight->setEnabled(b);
+	if (!b){
+		m_initializing = true;
+		ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), Worksheet::Centimeter));
+		ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), Worksheet::Centimeter));
+		ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), Worksheet::Centimeter));
+		ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), Worksheet::Centimeter));
+		m_initializing = false;
+	}
+}
+
 void Plot3DDock::onTreeViewIndexChanged(const QModelIndex& index){
 	qDebug() << Q_FUNC_INFO;
 	AbstractColumn* column = getColumn(index);
@@ -327,13 +391,7 @@ void Plot3DDock::onTreeViewIndexChanged(const QModelIndex& index){
 			plot->setNodeColumn(2, column);
 		else if(senderW == ui.cbMatrix){
 			plot->setMatrix(getMatrix(index));
-
-		if(senderW == ui.cbMatrix)
-			plot->setDataSource(Plot3D::DataSource_Matrix);
-		else
-			plot->setDataSource(Plot3D::DataSource_Spreadsheet);
 		}
-		plot->retransform();
 	}
 }
 
@@ -589,6 +647,22 @@ void Plot3DDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
+
+void Plot3DDock::plotRectChanged(QRectF& rect){
+	m_initializing = true;
+	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(rect.x(), Worksheet::Centimeter));
+	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(rect.y(), Worksheet::Centimeter));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), Worksheet::Centimeter));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), Worksheet::Centimeter));
+	m_initializing = false;
+}
+
+void Plot3DDock::plotVisibleChanged(bool on){
+	m_initializing = true;
+	ui.chkVisible->setChecked(on);
+	m_initializing = false;
+}
+
 // "Background"-tab
 void Plot3DDock::plotBackgroundTypeChanged(PlotArea::BackgroundType type) {
 	m_initializing = true;
@@ -644,6 +718,12 @@ void Plot3DDock::plotBackgroundOpacityChanged(float opacity) {
 //*************************************************************
 void Plot3DDock::load(){
 	//General
+	ui.chkVisible->setChecked(m_plot->isVisible());
+	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), Worksheet::Centimeter));
+	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), Worksheet::Centimeter));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), Worksheet::Centimeter));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), Worksheet::Centimeter));
+
 	//TODO:
 	//ui.cbType->setCurrentIndex((int)m_plot->visualizationType())
 

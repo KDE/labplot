@@ -194,6 +194,7 @@ void Plot3D::setMatrix(Matrix* matrix){
 	Q_D(Plot3D);
 	qDebug() << Q_FUNC_INFO << matrix;
 	d->matrix = matrix;
+	d->updatePlot();
 }
 
 void Plot3D::retransform(){
@@ -304,7 +305,8 @@ Plot3DPrivate::~Plot3DPrivate() {
 
 void Plot3DPrivate::init() {
 	//initialize VTK
-	vtkItem = new QVTKGraphicsItem(context, q->plotArea()->graphicsItem());
+// 	vtkItem = new QVTKGraphicsItem(context, q->plotArea()->graphicsItem());
+	vtkItem = new QVTKGraphicsItem(context, this);
 
 	//foreground renderer
 	renderer = vtkSmartPointer<vtkRenderer>::New();
@@ -505,8 +507,8 @@ void Plot3DPrivate::retransform() {
 	setPos(rect.x()+rect.width()/2, rect.y()+rect.height()/2);
 
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
-	vtkItem->setGeometry(q->plotArea()->rect());
 	q->plotArea()->setRect(rect);
+	vtkItem->setGeometry(q->plotArea()->rect());
 
 	updateBackground();
 	updatePlot();
@@ -641,6 +643,7 @@ void Plot3DPrivate::updateBackground() {
 	backgroundImageActor->SetInputData(qimageToImageSource->GetOutput());
 	qimageToImageSource->Update();
 }
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
