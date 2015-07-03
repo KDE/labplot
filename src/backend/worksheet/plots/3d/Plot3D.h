@@ -102,7 +102,7 @@ class Plot3D:public AbstractPlot{
 	private:
 		void init();
 
-	 signals:
+	signals:
 		friend class Plot3DSetBackgroundTypeCmd;
 		friend class Plot3DSetBackgroundColorStyleCmd;
 		friend class Plot3DSetBackgroundImageStyleCmd;
