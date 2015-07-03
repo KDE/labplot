@@ -439,7 +439,8 @@ void Plot3DPrivate::readFromFile() {
 }
 
 void Plot3DPrivate::addAxes() {
-	axes.reset(new Axes(*renderer, axesProps));
+	if (showAxes)
+		axes.reset(new Axes(*renderer, axesProps));
 }
 
 void Plot3DPrivate::readFromColumns() {
