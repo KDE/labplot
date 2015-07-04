@@ -74,7 +74,6 @@ class Plot3DDock: public QWidget {
 		void onDataSourceChanged(int index);
 		void onFileChanged(const KUrl& path);
 		void onTreeViewIndexChanged(const QModelIndex& index);
-		void onShowAxes(bool pred);
 
 		//"Background"-tab
 		void backgroundTypeChanged(int);

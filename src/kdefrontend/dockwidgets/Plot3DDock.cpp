@@ -60,7 +60,6 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	hideDataSource();
 	hideFileUrl();
 	hideTriangleInfo();
-	onShowAxes(ui.showAxes->isChecked());
 	//######
 
 	this->retranslateUi();
@@ -141,7 +140,6 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	connect( ui.cbDataSource, SIGNAL(currentIndexChanged(int)), this, SLOT(onDataSourceChanged(int)) ) ;
 	connect( ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(onVisualizationTypeChanged(int)) );
 	connect( ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), this, SLOT(onFileChanged(const KUrl&)) );
-	connect( ui.showAxes, SIGNAL(toggled(bool)), this, SLOT(onShowAxes(bool)) );
 
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -164,6 +162,7 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	// Axes
+	ui.axesType->insertItem(Axes::AxesType_NoAxes, i18n("No Axes"));
 	ui.axesType->insertItem(Axes::AxesType_Cube, i18n("Cube Axes"));
 	ui.axesType->insertItem(Axes::AxesType_Plain, i18n("Plain Axes"));
 	connect( ui.axesType, SIGNAL(currentIndexChanged(int)), this, SLOT(onAxesTypeChanged(int)) );
@@ -175,12 +174,11 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 
 void Plot3DDock::onAxesTypeChanged(int type) {
 	m_plot->axes().setType(static_cast<Axes::AxesType>(type));
-	m_plot->axes().show(ui.showAxes->isChecked());
 }
 
 void Plot3DDock::onAxesLabelFontChanged(int size) {
 	m_plot->axes().setFontSize(size);
-	m_plot->axes().show(ui.showAxes->isChecked());
+	m_plot->axes().show(static_cast<Axes::AxesType>(ui.axesType->currentIndex()) != Axes::AxesType_NoAxes);
 }
 
 void Plot3DDock::onAxesLabelColorChanged(const QColor& color) {
@@ -193,7 +191,7 @@ void Plot3DDock::onAxesLabelColorChanged(const QColor& color) {
 	} else if (s == ui.axisZLabelColor) {
 		plotAxes.setZLabelColor(color);
 	}
-	plotAxes.show(ui.showAxes->isChecked());
+	plotAxes.show(static_cast<Axes::AxesType>(ui.axesType->currentIndex()) != Axes::AxesType_NoAxes);
 }
 
 void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
@@ -410,13 +408,6 @@ void Plot3DDock::onVisualizationTypeChanged(int index){
 		hideDataSource();
 		hideFileUrl();
 		hideTriangleInfo();
-	}
-}
-
-void Plot3DDock::onShowAxes(bool pred){
-	foreach(Plot3D* plot, m_plotsList){
-		plot->axes().show(pred);
-		plot->retransform();
 	}
 }
 
@@ -731,7 +722,6 @@ void Plot3DDock::load(){
 	// General
 	ui.leName->setText(m_plot->name());
 	ui.leComment->setText(m_plot->comment());
-	ui.showAxes->setChecked(m_plot->axes().isShown());
 	ui.cbType->setCurrentIndex(m_plot->visualizationType());
 	ui.cbDataSource->setCurrentIndex(m_plot->dataSource());
 

@@ -41,7 +41,8 @@ class Axes {
 	public:
 		enum AxesType {
 			AxesType_Cube = 0,
-			AxesType_Plain = 1
+			AxesType_Plain = 1,
+			AxesType_NoAxes = 2
 		};
 
 		Axes(vtkRenderer& renderer);

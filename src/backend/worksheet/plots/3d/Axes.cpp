@@ -160,6 +160,10 @@ bool Axes::isShown() const {
 
 void Axes::setType(AxesType type) {
 	props->type = type;
+	if (type == AxesType_NoAxes)
+		hide();
+	else
+		show();
 }
 
 void Axes::setFontSize(int fontSize) {
