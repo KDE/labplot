@@ -29,6 +29,8 @@
 #ifndef DATAHANDLERS_H
 #define DATAHANDLERS_H
 
+#include "Plot3D.h"
+
 #include <KUrl>
 
 #include <vtkSmartPointer.h>
@@ -43,7 +45,10 @@ class IDataHandler : public QObject {
 	public:
 		virtual ~IDataHandler() {}
 
-		virtual vtkSmartPointer<vtkActor> actor() = 0;
+		vtkSmartPointer<vtkActor> actor(Plot3D::VisualizationType type);
+
+	private:
+		virtual vtkSmartPointer<vtkActor> trianglesActor() = 0;
 
 	signals:
 		void parametersChanged();
@@ -53,8 +58,10 @@ class MatrixDataHandler : public IDataHandler {
 	public:
 		MatrixDataHandler();
 
-		vtkSmartPointer<vtkActor> actor();
 		void setMatrix(Matrix* matrix);
+
+	private:
+		vtkSmartPointer<vtkActor> trianglesActor();
 
 	private:
 		Matrix* matrix;
@@ -64,12 +71,14 @@ class SpreadsheetDataHandler : public IDataHandler {
 	public:
 		SpreadsheetDataHandler();
 
-		vtkSmartPointer<vtkActor> actor();
 		void setXColumn(AbstractColumn *column);
 		void setYColumn(AbstractColumn *column);
 		void setZColumn(AbstractColumn *column);
 
 		void setNodeColumn(int node, AbstractColumn *column);
+
+	private:
+		vtkSmartPointer<vtkActor> trianglesActor();
 
 	private:
 		AbstractColumn *xColumn;
@@ -80,16 +89,18 @@ class SpreadsheetDataHandler : public IDataHandler {
 
 class FileDataHandler : public IDataHandler {
 	public:
-		vtkSmartPointer<vtkActor> actor();
 		void setFile(const KUrl& path);
+
+	private:
+		vtkSmartPointer<vtkActor> trianglesActor();
 
 	private:
 		KUrl path;
 };
 
 class DemoDataHandler : public IDataHandler {
-	public:
-		vtkSmartPointer<vtkActor> actor();
+	private:
+		vtkSmartPointer<vtkActor> trianglesActor();
 };
 
 #endif

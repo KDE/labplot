@@ -42,7 +42,16 @@
 #include <vtkCellArray.h>
 #include <vtkTriangle.h>
 
-vtkSmartPointer<vtkActor> DemoDataHandler::actor() {
+vtkSmartPointer<vtkActor> IDataHandler::actor(Plot3D::VisualizationType type) {
+	if (type == Plot3D::VisualizationType_Triangles)
+		return trianglesActor();
+	else
+		return vtkSmartPointer<vtkActor>();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+vtkSmartPointer<vtkActor> DemoDataHandler::trianglesActor() {
 	vtkSmartPointer<vtkSphereSource> sphereSource = vtkSmartPointer<vtkSphereSource>::New();
 	sphereSource->Update();
 	vtkSmartPointer<vtkPolyDataMapper> sphereMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
@@ -77,7 +86,7 @@ namespace {
 	}
 }
 
-vtkSmartPointer<vtkActor> FileDataHandler::actor() {
+vtkSmartPointer<vtkActor> FileDataHandler::trianglesActor() {
 	const QString& fileName = path.fileName();
 	const QString& fileType = fileName.split('.').last().toLower();
 
@@ -128,7 +137,7 @@ namespace {
 	}
 }
 
-vtkSmartPointer<vtkActor> SpreadsheetDataHandler::actor() {
+vtkSmartPointer<vtkActor> SpreadsheetDataHandler::trianglesActor() {
 	if (xColumn == 0 || yColumn == 0 || zColumn == 0) {
 		return vtkSmartPointer<vtkActor>();
 	}
@@ -206,7 +215,7 @@ MatrixDataHandler::MatrixDataHandler()
 	: matrix(0) {
 }
 
-vtkSmartPointer<vtkActor> MatrixDataHandler::actor() {
+vtkSmartPointer<vtkActor> MatrixDataHandler::trianglesActor() {
 	if (!matrix)
 		return vtkSmartPointer<vtkActor>();
 

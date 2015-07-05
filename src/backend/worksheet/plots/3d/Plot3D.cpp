@@ -347,14 +347,14 @@ void Plot3DPrivate::updatePlot() {
 	//render the plot
 	if (sourceType == Plot3D::DataSource_Empty) {
 		qDebug() << Q_FUNC_INFO << "Add Sphere";
-		renderer->AddActor(demoHandler.actor());
+		renderer->AddActor(demoHandler.actor(visType));
 	} else if (sourceType == Plot3D::DataSource_File) {
 		qDebug() << Q_FUNC_INFO << "Read file";
-		renderer->AddActor(fileHandler.actor());
+		renderer->AddActor(fileHandler.actor(visType));
 	} else if (sourceType == Plot3D::DataSource_Spreadsheet) {
-		renderer->AddActor(spreadsheetHandler.actor());
+		renderer->AddActor(spreadsheetHandler.actor(visType));
 	} else if (sourceType == Plot3D::DataSource_Matrix) {
-		renderer->AddActor(matrixHandler.actor());
+		renderer->AddActor(matrixHandler.actor(visType));
 	}
 
 	axes->updateBounds();
