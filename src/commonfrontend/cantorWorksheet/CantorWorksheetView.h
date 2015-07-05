@@ -54,29 +54,7 @@ class CantorWorksheetView : public QWidget {
 	void fillToolBar(QToolBar*);	
 
     private slots:
-	void restartActionTriggered();
-	void evaluateWorsheetActionTriggered();
-	void evaluateEntryActionTriggered();
-	void insertCommandEntryActionTriggered();
-	void insertTextEntryActionTriggered();
-	void insertLatexEntryActionTriggered();
-	void insertPageBreakActionTriggered();
-	void removeCurrentEntryActionTriggered();
-	void computeEigenvectorsActionTriggered();
-	void createMattrixActionTriggered();
-	void computeEigenvaluesActionTriggered();
-	void invertMattrixActionTriggered();
-	void differentiationActionTriggered();
-	void integrationActionTriggered();
-	void solveEquationsActionTriggered();
-	void zoomInActionTriggered();
-	void zoomOutActionTriggered();
-	void findActionTriggered();
-	void replaceActionTriggered();
-	void syntaxHighlightingActionTriggered();
-	void completionActionTriggered();
-	void lineNumbersActionTriggered();
-	void animateWorksheetActionTriggered();
+	void triggerCantorAction(QAction*);
 
     private:
 	CantorWorksheet* m_worksheet;  

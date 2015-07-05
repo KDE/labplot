@@ -29,6 +29,7 @@
 #include "CantorWorksheet.h"
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 #include "backend/core/column/Column.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QDebug>
 #include <KLocalizedString>
@@ -45,17 +46,28 @@ void CantorWorksheet::initialize() {
     if (factory) {
         // now that the Part is loaded, we cast it to a Part to get
         // our hands on it
-        part = factory->create<KParts::ReadWritePart>(this, QVariantList()<<BackendName());
-	if (!part) {
+        m_part = factory->create<KParts::ReadWritePart>(this, QVariantList()<<getBackendName());
+	if (!m_part) {
             qDebug()<<"error creating part ";
 	    return;
         }
-	Cantor::PanelPluginHandler* handler=part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
+	Cantor::PanelPluginHandler* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
 	if(!handler) {
 	    KMessageBox::error(view(), i18n("no PanelPluginHandle found for the Cantor Part."));
 	    qApp->quit();
 	}
-	plugins = handler->plugins();
+	 m_plugins = handler->plugins();
+	 foreach(Cantor::PanelPlugin* plugin, m_plugins) {
+	     if(plugin->name() == "Variable Manager") {
+		Cantor::PanelPlugin* m_variablemgr = plugin;
+		m_session = m_variablemgr->session();
+		m_variableModel = m_session->variableModel();
+		connect(m_variableModel, SIGNAL(rowsInserted(const QModelIndex, int, int)), this, SLOT(rowsInserted(const QModelIndex, int, int)));
+		connect(m_variableModel, SIGNAL(rowsRemoved(const QModelIndex, int, int)), this, SLOT(rowsRemoved(const QModelIndex, int, int)));
+		connect(m_variableModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
+		 break;
+	     }
+	 }
     }
     else {
         // if we couldn't find our Part, we exit since the Shell by
@@ -68,12 +80,32 @@ void CantorWorksheet::initialize() {
     }
 }
 
+void CantorWorksheet::rowsInserted(const QModelIndex & parent, int first, int last) {
+    for(int i = first; i <= last; ++i) {
+	QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
+	QString value = m_variableModel->data(m_variableModel->index(first, 1)).toString();
+	m_map[name] = value;
+    }
+}
+
+void CantorWorksheet::modelReset() {
+    m_map.clear();
+}
+
+void CantorWorksheet::rowsRemoved(const QModelIndex & parent, int first, int last) {
+    for(int i = first; i <= last; ++i) {
+	QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
+	QMap<QString, QString>::iterator it = m_map.find(name);
+	m_map.erase(it);
+    }
+}
+
 QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins(){
-    return plugins;
+    return m_plugins;
 }
 
 KParts::ReadWritePart* CantorWorksheet::getPart() {
-    if(part) return part;
+    if(m_part) return m_part;
     else return NULL;
 }
 
@@ -97,6 +129,6 @@ QMenu* CantorWorksheet::createContextMenu() {
     return menu;
 }
 
-QString CantorWorksheet::BackendName() {
+QString CantorWorksheet::getBackendName() {
     return this->backendName;
 }

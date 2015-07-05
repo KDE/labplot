@@ -40,6 +40,7 @@
 #include <KMessageBox>
 #include <KToggleAction>
 #include <cantor/backend.h>
+#include <cantor/extension.h>
 
 CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget(),
     m_worksheet(worksheet) {
@@ -54,57 +55,82 @@ CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget()
 }
 
 void CantorWorksheetView::initActions() {
-    m_restartBackendAction = new QAction(QIcon::fromTheme("system-reboot"), i18n("Restart Backend"), part);
-    connect(m_restartBackendAction, SIGNAL(triggered()), this, SLOT(restartActionTriggered()));
-    m_evaluateWorsheetAction = new QAction(QIcon::fromTheme("system-run"), i18n("Evaluate Worksheet"), part);
-    connect(m_evaluateWorsheetAction, SIGNAL(triggered()), this, SLOT(evaluateWorsheetActionTriggered()));
-    m_evaluateEntryAction = new QAction(i18n("Evaluate Entry"), part);
+    QActionGroup* cantorActionGroup = new QActionGroup(this);
+    m_restartBackendAction = new QAction(QIcon::fromTheme("system-reboot"), i18n("Restart Backend"), cantorActionGroup);
+    m_restartBackendAction->setData("restart_backend");
+
+    m_evaluateWorsheetAction = new QAction(QIcon::fromTheme("system-run"), i18n("Evaluate Worksheet"), cantorActionGroup);
+    m_evaluateWorsheetAction->setData("evaluate_worksheet");
+
+    m_evaluateEntryAction = new QAction(i18n("Evaluate Entry"), cantorActionGroup);
     m_evaluateEntryAction->setShortcut(Qt::CTRL + Qt::Key_Return);
-    connect(m_evaluateEntryAction, SIGNAL(triggered()), this, SLOT(evaluateEntryActionTriggered()));
-    m_insertCommandEntryAction = new QAction(i18n("Insert Command Entry"), part);
-    connect(m_insertCommandEntryAction, SIGNAL(triggered()), this, SLOT(insertCommandEntryActionTriggered()));
-    m_insertTextEntryAction = new QAction(i18n("Insert Text Entry"), part);
-    connect(m_insertTextEntryAction, SIGNAL(triggered()), this, SLOT(insertTextEntryActionTriggered()));
-    m_insertLatexEntryAction = new QAction(i18n("Insert Latex Entry"), part);
-    connect(m_insertLatexEntryAction, SIGNAL(triggered()), this, SLOT(insertLatexEntryActionTriggered()));
-    m_insertPageBreakAction = new QAction(i18n("Insert Page Break"), part);
-    connect(m_insertPageBreakAction, SIGNAL(triggered()), this, SLOT(insertPageBreakActionTriggered()));
-    m_removeCurrentEntryAction = new QAction(i18n("Remove Current Entry"), part);
-    connect(m_removeCurrentEntryAction, SIGNAL(triggered()), this, SLOT(removeCurrentEntryActionTriggered()));
-    m_computeEigenvectorsAction = new QAction(i18n("Compute Eigenvectors"), part);
-    connect(m_computeEigenvectorsAction, SIGNAL(triggered()), this, SLOT(computeEigenvectorsActionTriggered()));
-    m_createMattrixAction = new QAction(i18n("Create Matrix"), part);
-    connect(m_createMattrixAction, SIGNAL(triggered()), this, SLOT(createMattrixActionTriggered()));
-    m_computeEigenvaluesAction = new QAction(i18n("Compute Eigenvalues"), part);
-    connect(m_computeEigenvaluesAction, SIGNAL(triggered()), this, SLOT(computeEigenvaluesActionTriggered()));
-    m_invertMattrixAction = new QAction(i18n("Invert Matrix"), part);
-    connect(m_invertMattrixAction, SIGNAL(triggered()), this, SLOT(invertMattrixActionTriggered()));
-    m_differentiationAction = new QAction(i18n("Differentiation"), part);
-    connect(m_differentiationAction, SIGNAL(triggered()), this, SLOT(differentiationActionTriggered()));
-    m_integrationAction = new QAction(i18n("Integration"), part);
-    connect(m_integrationAction, SIGNAL(triggered()), this, SLOT(integrationActionTriggered()));
-    m_solveEquationsAction = new QAction(i18n("Solve Equations"), part);
-    connect(m_solveEquationsAction, SIGNAL(triggered()), this, SLOT(solveEquationsActionTriggered()));
-    m_zoomIn = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom in"), part);
-    connect(m_zoomIn, SIGNAL(triggered()), this, SLOT(zoomInActionTriggered()));
-    m_zoomOut = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom out"), part);
-    connect(m_zoomOut, SIGNAL(triggered()), this, SLOT(zoomOutActionTriggered()));
-    m_find = new QAction(QIcon::fromTheme("edit-find"), i18n("Find"), part);
-    connect(m_find, SIGNAL(triggered()), this, SLOT(findActionTriggered()));
-    m_replace = new QAction(QIcon::fromTheme("edit-replace"), i18n("Replace"), part);
-    connect(m_replace, SIGNAL(triggered()), this, SLOT(replaceActionTriggered()));
-//     m_syntaxHighlighting = new KToggleAction(i18n("Syntax Highlighting"), part);
+    m_evaluateEntryAction->setData("evaluate_current");
+
+    m_insertCommandEntryAction = new QAction(i18n("Insert Command Entry"), cantorActionGroup);
+    m_insertCommandEntryAction->setData("insert_command_entry");
+
+    m_insertTextEntryAction = new QAction(i18n("Insert Text Entry"), cantorActionGroup);
+    m_insertTextEntryAction->setData("insert_text_entry");
+
+    m_insertLatexEntryAction = new QAction(i18n("Insert Latex Entry"), cantorActionGroup);
+    m_insertLatexEntryAction->setData("insert_latex_entry");
+
+    m_insertPageBreakAction = new QAction(i18n("Insert Page Break"), cantorActionGroup);
+    m_insertPageBreakAction->setData("insert_page_break_entry");
+
+    m_removeCurrentEntryAction = new QAction(i18n("Remove Current Entry"), cantorActionGroup);
+    m_removeCurrentEntryAction->setData("remove_current");
+
+    m_computeEigenvectorsAction = new QAction(i18n("Compute Eigenvectors"), cantorActionGroup);
+    m_computeEigenvectorsAction->setData("eigenvectors_assistant");
+
+    m_createMattrixAction = new QAction(i18n("Create Matrix"), cantorActionGroup);
+    m_createMattrixAction->setData("creatematrix_assistant");
+
+    m_computeEigenvaluesAction = new QAction(i18n("Compute Eigenvalues"), cantorActionGroup);
+    m_computeEigenvaluesAction->setData("eigenvalues_assistant");
+
+    m_invertMattrixAction = new QAction(i18n("Invert Matrix"), cantorActionGroup);
+    m_invertMattrixAction->setData("invertmatrix_assistant");
+
+    m_differentiationAction = new QAction(i18n("Differentiation"), cantorActionGroup);
+    m_differentiationAction->setData("differentiate_assistant");
+
+    m_integrationAction = new QAction(i18n("Integration"), cantorActionGroup);
+    m_integrationAction->setData("integrate_assistant");
+
+    m_solveEquationsAction = new QAction(i18n("Solve Equations"), cantorActionGroup);
+    m_solveEquationsAction->setData("solve_assistant");
+
+    m_zoomIn = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom in"), cantorActionGroup);
+    m_zoomIn->setData("view_zoom_in");
+
+    m_zoomOut = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom out"), cantorActionGroup);
+    m_zoomOut->setData("view_zoom_out");
+
+    m_find = new QAction(QIcon::fromTheme("edit-find"), i18n("Find"), cantorActionGroup);
+    m_find->setData("edit_find");
+
+    m_replace = new QAction(QIcon::fromTheme("edit-replace"), i18n("Replace"), cantorActionGroup);
+    m_replace->setData("edit_replace");
+
+//     m_syntaxHighlighting = new KToggleAction(i18n("Syntax Highlighting"), cantorActionGroup);
 //     connect(m_syntaxHighlighting, SIGNAL(triggered()), this, SLOT(syntaxHighlightingActionTriggered()));
 //     m_syntaxHighlighting->setChecked(true);
-    m_completion = new KToggleAction(i18n("Completion"), part);
-    connect(m_completion, SIGNAL(triggered()), this, SLOT(completionActionTriggered()));
+
+    m_completion = new KToggleAction(i18n("Completion"), cantorActionGroup);
     m_completion->setChecked(true);
-    m_lineNumbers = new KToggleAction(i18n("Line Numbers"), part);
-    connect(m_lineNumbers, SIGNAL(triggered()), this, SLOT(lineNumbersActionTriggered()));
+    m_completion->setData("enable_completion");
+
+    m_lineNumbers = new KToggleAction(i18n("Line Numbers"), cantorActionGroup);
     m_lineNumbers->setChecked(false);
-    m_animateWorksheet = new KToggleAction(i18n("Animate Worksheet"), part);
-    connect(m_animateWorksheet, SIGNAL(triggered()), this, SLOT(animateWorksheetActionTriggered()));
+    m_lineNumbers->setData("enable_expression_numbers");
+
+    m_animateWorksheet = new KToggleAction(i18n("Animate Worksheet"), cantorActionGroup);
     m_animateWorksheet->setChecked(true);
+    m_animateWorksheet->setData("enable_animations");
+
+    connect(cantorActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(triggerCantorAction(QAction*)));
 }
 
 void CantorWorksheetView::initMenus() {
@@ -162,96 +188,9 @@ void CantorWorksheetView::fillToolBar(QToolBar* toolbar) {
     toolbar->addAction(m_evaluateWorsheetAction);
 }
 
-void CantorWorksheetView::restartActionTriggered() {
-    part->action("restart_backend")->trigger();
-}
-
-void CantorWorksheetView::evaluateWorsheetActionTriggered() {
-    part->action("evaluate_worksheet")->trigger();
-}
-
-void CantorWorksheetView::computeEigenvaluesActionTriggered() {
-    part->action("eigenvalues_assistant")->trigger();
-}
-
-void CantorWorksheetView::computeEigenvectorsActionTriggered() {
-    part->action("eigenvectors_assistant")->trigger();
-}
-
-void CantorWorksheetView::createMattrixActionTriggered() {
-    part->action("creatematrix_assistant")->trigger();
-}
-
-void CantorWorksheetView::differentiationActionTriggered() {
-    part->action("differentiate_assistant")->trigger();
-}
-
-void CantorWorksheetView::evaluateEntryActionTriggered() {
-    part->action("evaluate_current")->trigger();
-}
-
-void CantorWorksheetView::insertCommandEntryActionTriggered() {
-    part->action("insert_command_entry")->trigger();
-}
-
-void CantorWorksheetView::insertLatexEntryActionTriggered() {
-    part->action("insert_latex_entry")->trigger();
-}
-
-void CantorWorksheetView::insertPageBreakActionTriggered() {
-    part->action("insert_page_break_entry")->trigger();
-}
-
-void CantorWorksheetView::insertTextEntryActionTriggered() {
-    part->action("insert_text_entry")->trigger();
-}
-
-void CantorWorksheetView::integrationActionTriggered() {
-    part->action("integrate_assistant")->trigger();
-}
-
-void CantorWorksheetView::invertMattrixActionTriggered() {
-    part->action("invertmatrix_assistant")->trigger();
-}
-
-void CantorWorksheetView::removeCurrentEntryActionTriggered() {
-    part->action("remove_current")->trigger();
-}
-
-void CantorWorksheetView::solveEquationsActionTriggered() {
-    part->action("solve_assistant")->trigger();
-}
-
-void CantorWorksheetView::animateWorksheetActionTriggered() {
-    part->action("enable_animations")->trigger();
-}
-
-void CantorWorksheetView::completionActionTriggered() {
-    part->action("enable_completion")->trigger();
-}
-
-void CantorWorksheetView::findActionTriggered() {
-    part->action("edit_find")->trigger();
-}
-
-void CantorWorksheetView::lineNumbersActionTriggered() {
-    part->action("enable_expression_numbers")->trigger();
-}
-
-void CantorWorksheetView::replaceActionTriggered() {
-    part->action("edit_replace")->trigger();
-}
-
-void CantorWorksheetView::syntaxHighlightingActionTriggered() {
-    part->action("enable_highlighting")->trigger();
-}
-
-void CantorWorksheetView::zoomInActionTriggered() {
-    part->action("view_zoom_in")->trigger();
-}
-
-void CantorWorksheetView::zoomOutActionTriggered() {
-    part->action("view_zoom_out")->trigger();
+void CantorWorksheetView::triggerCantorAction(QAction* action) {
+    QString actionName = action->data().toString();
+    if(!actionName.isEmpty()) part->action(actionName.toStdString().c_str())->trigger();
 }
 
 CantorWorksheetView::~CantorWorksheetView() {

@@ -299,7 +299,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	  list<<qobject_cast<CantorWorksheet *>(aspect);
 	}
 	if (list.size()==1){
-	    mainWindow->m_propertiesDock->setWindowTitle(list.first()->BackendName() + " Properties");
+	    mainWindow->m_propertiesDock->setWindowTitle(list.first()->getBackendName() + " Properties");
 	} else {
 	    mainWindow->m_propertiesDock->setWindowTitle("CAS Properties");
 	}
