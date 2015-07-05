@@ -96,7 +96,7 @@ void ImageView::initActions() {
     selectSegmentAction = new KAction(KIcon(""), i18n("Select Curve Segments"), plotPointsTypeActionGroup);
     selectSegmentAction->setCheckable(true);
 
-    updateDatasheetAction = new KAction(KIcon(""), i18n("Update Datasheet"), this);
+    updateDatasheetAction = new KAction(KIcon("view-refresh"), i18n("Update Datasheet"), this);
 
     connect(mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)));
     connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
