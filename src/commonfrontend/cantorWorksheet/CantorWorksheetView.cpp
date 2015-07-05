@@ -44,10 +44,10 @@
 
 CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget(),
     m_worksheet(worksheet) {
-	
+
     layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    part = worksheet->getPart();
+    part = worksheet->part();
     layout->addWidget(part->widget());
     initActions();
     initMenus();
@@ -155,7 +155,7 @@ void CantorWorksheetView::initMenus() {
 
 void CantorWorksheetView::createContextMenu(QMenu* menu) const{
     Q_ASSERT(menu);
-    
+
     #ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	QAction* firstAction = menu->actions().first();
     #else

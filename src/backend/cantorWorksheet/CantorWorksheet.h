@@ -38,19 +38,21 @@
 
 class CantorWorksheet : public AbstractPart, public scripted{
     Q_OBJECT
-    
+
     public:
-	CantorWorksheet(AbstractScriptingEngine *engine, const QString &name);
-	virtual QWidget* view() const;
-	virtual QMenu *createContextMenu();
-	QString getBackendName();
-	KParts::ReadWritePart* getPart();
-	QList<Cantor::PanelPlugin*> getPlugins();
+		CantorWorksheet(AbstractScriptingEngine* engine, const QString& name);
+		virtual QWidget* view() const;
+		virtual QMenu* createContextMenu();
+		QString backendName();
+		KParts::ReadWritePart* part();
+		QList<Cantor::PanelPlugin*> getPlugins();
 
     private slots:
 	void rowsInserted(const QModelIndex & parent, int first, int last);
 	void rowsRemoved(const QModelIndex & parent, int first, int last);
 	void modelReset();
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 
     signals:
 	void requestProjectContextMenu(QMenu*);
@@ -60,7 +62,7 @@ class CantorWorksheet : public AbstractPart, public scripted{
 	QList<Cantor::PanelPlugin*> m_plugins;
 	QAbstractItemModel* m_variableModel;
 	Cantor::Session* m_session;
-	QString backendName;
+	QString m_backendName;
 	QMap<QString, QString> m_map;
 	
 	void initialize();
