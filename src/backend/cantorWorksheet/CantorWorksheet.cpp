@@ -83,7 +83,7 @@ void CantorWorksheet::rowsInserted(const QModelIndex & parent, int first, int la
     for(int i = first; i <= last; ++i) {
 	QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
 	QString value = m_variableModel->data(m_variableModel->index(first, 1)).toString();
-	QRegExp re = QRegExp("[0-9]+");
+	QRegExp re = QRegExp("[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?");
 	bool list = false;
 	QStringList valueStringList;
 	if(value[0] == '[' && value[1] == '[' && value[value.size()-1] == ']' && value[value.size()-2] == ']') {
