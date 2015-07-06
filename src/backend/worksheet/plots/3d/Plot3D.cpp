@@ -52,6 +52,7 @@
 
 #include <QVTKGraphicsItem.h>
 #include <vtkActor.h>
+#include <vtkCamera.h>
 #include <vtkImageActor.h>
 #include <vtkLight.h>
 #include <vtkGenericOpenGLRenderWindow.h>
@@ -326,6 +327,15 @@ void Plot3DPrivate::retransform() {
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
 	q->plotArea()->setRect(rect);
 	vtkItem->setGeometry(q->plotArea()->rect());
+
+	//set the background camera in front of the background image (fill the complete layer)
+	vtkCamera* camera = backgroundRenderer->GetActiveCamera();
+	camera->ParallelProjectionOn();
+	double x = vtkItem->rect().width()/2;
+	double y = vtkItem->rect().height()/2;
+	camera->SetFocalPoint(x,y,0.0);
+	camera->SetParallelScale(x); //FIXME: this seems to be wrong.
+	camera->SetPosition(x,y,camera->GetDistance());
 
 	updateBackground();
 	updatePlot();
