@@ -456,9 +456,10 @@ void Plot3DPrivate::updateBackground() {
 	}
 
 	if ( qFuzzyIsNull(borderCornerRadius) )
-		painter.drawRect(rect);
+		painter.drawRect(0, 0, rect.width(), rect.height());
 	else
-		painter.drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+		painter.drawRoundedRect(0, 0, rect.width(), rect.height(),
+				borderCornerRadius, borderCornerRadius);
 
 	//set the prepared image in the background actor
 	vtkSmartPointer<vtkQImageToImageSource> qimageToImageSource = vtkSmartPointer<vtkQImageToImageSource>::New();
