@@ -36,22 +36,22 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent), m_in
     ui.setupUi(this);
     ui.tabWidget->setMovable(true);
 
-	//SLOTs
-	//General
-	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
-	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+    //SLOTs
+    //General
+    connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
+    connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 }
 
 void CantorWorksheetDock::setCantorWorksheets(QList< CantorWorksheet* > list) {
-	m_initializing = true;
+    m_initializing = true;
     m_cantorworksheetlist = list;
-	m_worksheet = list.first();
+    m_worksheet = list.first();
 
-	//show name/comment
-	ui.leName->setText(m_worksheet->name());
-	ui.leComment->setText(m_worksheet->comment());
+    //show name/comment
+    ui.leName->setText(m_worksheet->name());
+    ui.leComment->setText(m_worksheet->comment());
 
-	//show all available plugins
+    //show all available plugins
     int k = 0;
     int prev_index = ui.tabWidget->currentIndex();
     foreach(int i, index) {
@@ -69,10 +69,10 @@ void CantorWorksheetDock::setCantorWorksheets(QList< CantorWorksheet* > list) {
     }
     ui.tabWidget->setCurrentIndex(prev_index);
 
-	//SIGNALs/SLOTs
-	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
+    //SIGNALs/SLOTs
+    connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
 
-	m_initializing = false;
+    m_initializing = false;
 }
 
 

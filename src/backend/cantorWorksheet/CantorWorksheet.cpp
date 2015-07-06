@@ -28,8 +28,6 @@
 
 #include "CantorWorksheet.h"
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
-#include "backend/core/column/Column.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QDebug>
 #include <KLocalizedString>
@@ -63,7 +61,7 @@ void CantorWorksheet::initialize() {
 		m_session = m_variablemgr->session();
 		m_variableModel = m_session->variableModel();
 		connect(m_variableModel, SIGNAL(rowsInserted(const QModelIndex, int, int)), this, SLOT(rowsInserted(const QModelIndex, int, int)));
-		connect(m_variableModel, SIGNAL(rowsRemoved(const QModelIndex, int, int)), this, SLOT(rowsRemoved(const QModelIndex, int, int)));
+		connect(m_variableModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex, int, int)), this, SLOT(rowsAboutToBeRemoved(const QModelIndex, int, int)));
 		connect(m_variableModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
 		 break;
 	     }
@@ -81,22 +79,54 @@ void CantorWorksheet::initialize() {
 }
 
 void CantorWorksheet::rowsInserted(const QModelIndex & parent, int first, int last) {
+    qDebug() << "Inserting Row";
     for(int i = first; i <= last; ++i) {
 	QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
 	QString value = m_variableModel->data(m_variableModel->index(first, 1)).toString();
-	m_map[name] = value;
+	QRegExp re = QRegExp("[0-9]+");
+	bool list = false;
+	QStringList valueStringList;
+	if(value[0] == '[' && value[1] == '[' && value[value.size()-1] == ']' && value[value.size()-2] == ']') {
+	    list = true;
+	    value = value.remove(0, 2);
+	    value = value.remove(value.size()-2, 2);
+	    valueStringList = value.split(',');
+	    foreach(QString valueString, valueStringList) {
+		valueString = valueString.trimmed();
+		if(!re.exactMatch(valueString)) {
+		    list = false;
+		    break;
+		}
+	    }
+	}
+	if(list) {
+	    qDebug() << "List FOund";
+	    Column * new_col = new Column(name, AbstractColumn::Numeric);
+	    new_col->insertRows(0, 5);
+	    int row = 0;
+	    foreach(QString valueString, valueStringList) {
+		qDebug() << valueString;
+		qDebug() << valueString.toDouble();
+		new_col->setValueAt(row, valueString.toDouble());
+		++row;
+	    }
+	    insertChildBefore(new_col, 0);
+	}
     }
 }
 
 void CantorWorksheet::modelReset() {
-    m_map.clear();
+    qDebug() << "Model Reset";
+    for(int i = 0; i < columnCount(); ++i) {
+	child<Column>(i)->remove();
+    }
 }
 
-void CantorWorksheet::rowsRemoved(const QModelIndex & parent, int first, int last) {
+void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last) {
+    qDebug() << "Removing Row";
     for(int i = first; i <= last; ++i) {
 	QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
-	QMap<QString, QString>::iterator it = m_map.find(name);
-	m_map.erase(it);
+	if(child<Column>(name)) child<Column>(name)->remove();
     }
 }
 
@@ -106,6 +136,14 @@ QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins(){
 
 KParts::ReadWritePart* CantorWorksheet::part() {
     return m_part;
+}
+
+Column* CantorWorksheet::column(const QString &name) const{
+  return child<Column>(name);
+}
+
+int CantorWorksheet::columnCount() const{
+  return childCount<Column>();
 }
 
 QWidget* CantorWorksheet::view() const {
@@ -143,8 +181,8 @@ void CantorWorksheet::save(QXmlStreamWriter* writer) const{
     writeBasicAttributes(writer);
     writeCommentElement(writer);
 
-	//general
-	QString content; //TODO: get the content of the cantor's worksheet as cdata-string and save it here.
+    //general
+    QString content; //TODO: get the content of the cantor's worksheet as cdata-string and save it here.
     writer->writeStartElement("cantor");
     writer->writeAttribute("backend", m_backendName);
     writer->writeAttribute("content", content);

@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : CantorWorksheet.h
+    File                 : CantorVariable.h
     Project              : LabPlot
     Description          : Aspect providing a Cantor Worksheets for Multiple backends
     --------------------------------------------------------------------
@@ -26,48 +26,53 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CANTORWORKSHEET_H
-#define CANTORWORKSHEET_H
+#ifndef CANTORVARIABLE_H
+#define CANTORVARIABLE_H
 
-#include <backend/core/AbstractPart.h>
-#include <cantor/session.h>
-#include <cantor/panelpluginhandler.h>
-#include <cantor/panelplugin.h>
-#include <KParts/ReadWritePart>
-#include "backend/core/AbstractScriptingEngine.h"
 #include "backend/core/column/Column.h"
+#include <QIcon>
 
-class CantorWorksheet : public AbstractPart, public scripted{
+class CantorVariable : public Column {
     Q_OBJECT
-
+    
     public:
-	CantorWorksheet(AbstractScriptingEngine* engine, const QString& name);
-	virtual QWidget* view() const;
-	virtual QMenu* createContextMenu();
-	QString backendName();
-	KParts::ReadWritePart* part();
-	QList<Cantor::PanelPlugin*> getPlugins();
-	Column* column(const QString &name) const;
-	int columnCount() const;
+	CantorVariable(QString);
+	~CantorVariable();
+	
+    virtual QIcon icon() const;
+    
+	bool isReadOnly() const;
+	AbstractColumn::ColumnMode columnMode() const;
+	bool copy(const AbstractColumn * other);
+	bool copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows);
+	int rowCount() const;
+	AbstractColumn::PlotDesignation plotDesignation() const;
+	void setPlotDesignation(AbstractColumn::PlotDesignation pd);
+	int width() const;
+	void setWidth(int value);
+	void clear();
+	AbstractSimpleFilter *outputFilter() const;
+	ColumnStringIO *asStringColumn() const;
 
-    private slots:
-	void rowsInserted(const QModelIndex & parent, int first, int last);
-	void rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last);
-	void modelReset();
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+	QString formula(int row) const;
+	QList< Interval<int> > formulaIntervals() const;
+	void setFormula(Interval<int> i, QString formula);
+	void setFormula(int row, QString formula);
+	void clearFormulas();
+	
+	void* data() const;
+	double valueAt(int row) const;
+	void setValueAt(int row, double new_value);
+	virtual void replaceValues(int first, const QVector<double>& new_values);
+	void setChanged();
+	void setSuppressDataChangedSignal(bool b);
+
+	void save(QXmlStreamWriter * writer) const;
+	bool load(XmlStreamReader * reader);
 
     signals:
-	void requestProjectContextMenu(QMenu*);
-
-    private:
-	KParts::ReadWritePart* m_part;
-	QList<Cantor::PanelPlugin*> m_plugins;
-	QAbstractItemModel* m_variableModel;
-	Cantor::Session* m_session;
-	QString m_backendName;
-	
-	void initialize();
+	void widthAboutToChange(const Column*);
+	void widthChanged(const Column*);
 };
 
-#endif // CANTORWORKSHEET_H
+#endif // CANTORVARIABLE_H
