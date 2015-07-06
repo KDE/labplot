@@ -55,10 +55,11 @@ class Plot3D:public AbstractPlot{
 		};
 
 		enum DataSource{
-			DataSource_File = 0,
-			DataSource_Spreadsheet = 1,
-			DataSource_Matrix = 2,
-			DataSource_Empty
+			DataSource_File,
+			DataSource_Spreadsheet,
+			DataSource_Matrix,
+			DataSource_Empty,
+			DataSource_MAX
 		};
 
 		explicit Plot3D(const QString &name, QGLContext *context);

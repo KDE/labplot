@@ -101,10 +101,9 @@ void Plot3D::init(){
 
 	d->init();
 
-	connect(&d->fileHandler, SIGNAL(parametersChanged()), this, SLOT(updatePlot()));
-	connect(&d->demoHandler, SIGNAL(parametersChanged()), this, SLOT(updatePlot()));
-	connect(&d->spreadsheetHandler, SIGNAL(parametersChanged()), this, SLOT(updatePlot()));
-	connect(&d->matrixHandler, SIGNAL(parametersChanged()), this, SLOT(updatePlot()));
+	foreach (IDataHandler* handler, d->dataHandlers) {
+		connect(handler, SIGNAL(parametersChanged()), this, SLOT(updatePlot()));
+	}
 }
 
 void Plot3D::updatePlot() {
@@ -307,9 +306,6 @@ void Plot3DPrivate::init() {
 
 	axes.reset(new Axes(*renderer));
 
-	//background
-// 	renderer->SetBackground(.3, .6, .3);
-
 	//light
 	light->SetFocalPoint(1.875, 0.6125, 0);
 	light->SetPosition(0.875, 1.6125, 1);
@@ -318,6 +314,12 @@ void Plot3DPrivate::init() {
 	backgroundRenderer->AddActor(backgroundImageActor);
 
 	updateBackground();
+
+	dataHandlers.reserve(Plot3D::DataSource_MAX);
+	dataHandlers[Plot3D::DataSource_Empty] = &demoHandler;
+	dataHandlers[Plot3D::DataSource_File] = &fileHandler;
+	dataHandlers[Plot3D::DataSource_Spreadsheet] = &spreadsheetHandler;
+	dataHandlers[Plot3D::DataSource_Matrix] = &matrixHandler;
 }
 
 void Plot3DPrivate::retransform() {
@@ -355,14 +357,7 @@ void Plot3DPrivate::updatePlot() {
 	}
 
 	//render the plot
-	QMap<Plot3D::DataSource, IDataHandler*> handlersMap;
-	handlersMap[Plot3D::DataSource_Empty] = &demoHandler;
-	handlersMap[Plot3D::DataSource_File] = &fileHandler;
-	handlersMap[Plot3D::DataSource_Spreadsheet] = &spreadsheetHandler;
-	handlersMap[Plot3D::DataSource_Matrix] = &matrixHandler;
-
-	if (handlersMap.contains(sourceType))
-		renderer->AddActor(handlersMap[sourceType]->actor(visType));
+	renderer->AddActor(dataHandlers[sourceType]->actor(visType));
 
 	axes->updateBounds();
 }

@@ -74,6 +74,8 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		MatrixDataHandler matrixHandler;
 		FileDataHandler fileHandler;
 
+		QVector<IDataHandler*> dataHandlers;
+
 		QScopedPointer<Axes> axes;
 		vtkSmartPointer<vtkRenderer> renderer;
 		vtkSmartPointer<vtkRenderer> backgroundRenderer;
