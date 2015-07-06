@@ -368,6 +368,7 @@ void Plot3DPrivate::updatePlot() {
 }
 
 void Plot3DPrivate::updateBackground() {
+	const QRectF rect(0, 0, this->rect.width(), this->rect.height());
 	//prepare the image
 	QImage image(rect.width(), rect.height(), QImage::Format_ARGB32_Premultiplied);
 	double borderCornerRadius = 0.0; //TODO
@@ -456,10 +457,9 @@ void Plot3DPrivate::updateBackground() {
 	}
 
 	if ( qFuzzyIsNull(borderCornerRadius) )
-		painter.drawRect(0, 0, rect.width(), rect.height());
+		painter.drawRect(rect);
 	else
-		painter.drawRoundedRect(0, 0, rect.width(), rect.height(),
-				borderCornerRadius, borderCornerRadius);
+		painter.drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 
 	//set the prepared image in the background actor
 	vtkSmartPointer<vtkQImageToImageSource> qimageToImageSource = vtkSmartPointer<vtkQImageToImageSource>::New();
