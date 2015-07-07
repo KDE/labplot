@@ -405,6 +405,7 @@ void Plot3DDock::onTreeViewIndexChanged(const QModelIndex& index){
 		else if(senderW == ui.cbMatrix){
 			plot->matrixDataHandler().setMatrix(getMatrix(index));
 		}
+		plot->retransform();
 	}
 }
 
