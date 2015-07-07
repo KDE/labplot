@@ -41,6 +41,8 @@
 #include <vtkSTLReader.h>
 #include <vtkCellArray.h>
 #include <vtkTriangle.h>
+#include <vtkLookupTable.h>
+#include <vtkPointData.h>
 
 vtkSmartPointer<vtkActor> IDataHandler::actor(Plot3D::VisualizationType type) {
 	if (type == Plot3D::VisualizationType_Triangles)
@@ -126,6 +128,36 @@ namespace {
 
 		polydata->SetPoints(points);
 		polydata->SetPolys(triangles);
+
+		double bounds[6];
+		polydata->GetBounds(bounds);
+
+		// Find min and max z
+		double minz = bounds[4];
+		double maxz = bounds[5];
+
+		vtkSmartPointer<vtkLookupTable> colorLookupTable = vtkSmartPointer<vtkLookupTable>::New();
+		colorLookupTable->SetTableRange(minz, maxz);
+		colorLookupTable->Build();
+
+		vtkSmartPointer<vtkUnsignedCharArray> colors = vtkSmartPointer<vtkUnsignedCharArray>::New();
+		colors->SetNumberOfComponents(3);
+		colors->SetName("Colors");
+
+		for(int i = 0; i < polydata->GetNumberOfPoints(); ++i) {
+			double p[3];
+			polydata->GetPoint(i,p);
+
+			double dcolor[3];
+			colorLookupTable->GetColor(p[2], dcolor);
+			unsigned char color[3];
+			for(unsigned int j = 0; j < 3; j++)
+				color[j] = static_cast<unsigned char>(255.0 * dcolor[j]);
+
+			colors->InsertNextTupleValue(color);
+		}
+
+		polydata->GetPointData()->SetScalars(colors);
 
 		vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 		mapper->SetInputData(polydata);

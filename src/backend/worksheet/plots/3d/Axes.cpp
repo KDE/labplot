@@ -92,6 +92,7 @@ void Axes::updateBounds() {
 		double bounds[6];
 		bb.GetBounds(bounds);
 		axes->SetBounds(bounds);
+		qDebug() << Q_FUNC_INFO << "Updating Bound";
 	}
 }
 
