@@ -54,6 +54,7 @@ class Plot3DDock: public QWidget {
 		void hideDataSource(bool hide = true);
 		void hideFileUrl(bool hide = true);
 		void hideTriangleInfo(bool hide = true);
+		void hideAxesProperties(bool hide = true);
 		AbstractColumn* getColumn(const QModelIndex& index) const;
 		Matrix* getMatrix(const QModelIndex& index) const;
 

@@ -60,6 +60,7 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	hideDataSource();
 	hideFileUrl();
 	hideTriangleInfo();
+	hideAxesProperties();
 	//######
 
 	this->retranslateUi();
@@ -173,7 +174,20 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 }
 
 void Plot3DDock::onAxesTypeChanged(int type) {
+	hideAxesProperties(type == Axes::AxesType_NoAxes);
 	m_plot->axes().setType(static_cast<Axes::AxesType>(type));
+}
+
+void Plot3DDock::hideAxesProperties(bool hide) {
+	ui.labelFontSize->setVisible(!hide);
+	ui.axisXLabelColor->setVisible(!hide);
+	ui.axisYLabelColor->setVisible(!hide);
+	ui.axisZLabelColor->setVisible(!hide);
+
+	ui.label_2->setVisible(!hide);
+	ui.label_3->setVisible(!hide);
+	ui.label_4->setVisible(!hide);
+	ui.label_5->setVisible(!hide);
 }
 
 void Plot3DDock::onAxesLabelFontChanged(int size) {

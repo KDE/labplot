@@ -36,6 +36,10 @@
 #include <vtkAxesActor.h>
 #include <vtkProperty.h>
 #include <vtkBoundingBox.h>
+#include <vtkTextActor.h>
+#include <vtkCaptionActor2D.h>
+#include <vtkAxisActor2D.h>
+#include <vtkCamera.h>
 
 struct Axes::Properties {
 	AxesType type;
@@ -50,7 +54,7 @@ struct Axes::Properties {
 
 Axes::Properties::Properties()
 	: type(AxesType_Cube)
-	, fontSize(14)
+	, fontSize(32)
 	, width(10)
 	, xLabelColor(Qt::red)
 	, yLabelColor(Qt::green)
@@ -104,6 +108,12 @@ void Axes::init() {
 		hide();
 	}
 
+	double colors[][3] = {
+		{props->xLabelColor.redF(), props->xLabelColor.greenF(), props->xLabelColor.blueF()},
+		{props->yLabelColor.redF(), props->yLabelColor.greenF(), props->yLabelColor.blueF()},
+		{props->zLabelColor.redF(), props->zLabelColor.greenF(), props->zLabelColor.blueF()}
+	};
+
 	if (props->type == AxesType_Cube) {
 		vtkSmartPointer<vtkCubeAxesActor> axes = vtkSmartPointer<vtkCubeAxesActor>::New();
 		axes->SetCamera(renderer.GetActiveCamera());
@@ -111,21 +121,20 @@ void Axes::init() {
 		axes->DrawYGridlinesOn();
 		axes->DrawZGridlinesOn();
 
-		const double colors[][3] = {
-			{props->xLabelColor.redF(), props->xLabelColor.greenF(), props->xLabelColor.blueF()},
-			{props->yLabelColor.redF(), props->yLabelColor.greenF(), props->yLabelColor.blueF()},
-			{props->zLabelColor.redF(), props->zLabelColor.greenF(), props->zLabelColor.blueF()}
-		};
+		axes->XAxisMinorTickVisibilityOff();
+		axes->YAxisMinorTickVisibilityOff();
+		axes->ZAxisMinorTickVisibilityOff();
+
+		axes->SetLabelScaling(false, 0, 0, 0);
 
 		for (int i = 0; i < 3; ++i) {
 			vtkTextProperty *titleProp = axes->GetTitleTextProperty(i);
-			titleProp->SetColor(colors[i][0], colors[i][1], colors[i][2]);
-			titleProp->SetBold(true);
-			titleProp->SetFontSize(VTK_INT_MAX);
+			titleProp->SetColor(colors[i]);
+			titleProp->SetFontSize(props->fontSize);
 
 			vtkTextProperty *labelProp = axes->GetLabelTextProperty(i);
-			labelProp->SetColor(colors[i][0], colors[i][1], colors[i][2]);
-			labelProp->SetBold(true);
+			labelProp->SetColor(colors[i]);
+			labelProp->SetFontSize(props->fontSize);
 		}
 
 		axes->GetXAxesLinesProperty()->SetLineWidth(props->width);
@@ -135,7 +144,28 @@ void Axes::init() {
 		vtkAxes = axes;
 	} else if (props->type == AxesType_Plain) {
 		vtkSmartPointer<vtkAxesActor> axes = vtkSmartPointer<vtkAxesActor>::New();
-		// TODO: Set properties here.
+
+		QVector<vtkCaptionActor2D*> captionActors;
+		captionActors << axes->GetXAxisCaptionActor2D() << axes->GetYAxisCaptionActor2D()
+				<< axes->GetZAxisCaptionActor2D();
+
+		QVector<vtkProperty*> shaftProps;
+		shaftProps << axes->GetXAxisShaftProperty() << axes->GetYAxisShaftProperty()
+				<< axes->GetZAxisShaftProperty();
+
+		QVector<vtkProperty*> tipProps;
+		tipProps << axes->GetXAxisTipProperty() << axes->GetYAxisTipProperty()
+				<< axes->GetZAxisTipProperty();
+
+		for (int i = 0; i < 3; ++i) {
+			vtkCaptionActor2D* const captionActor = captionActors[i];
+			captionActor->GetTextActor()->SetTextScaleModeToNone();
+			captionActor->GetCaptionTextProperty()->SetFontSize(props->fontSize);
+			captionActor->GetCaptionTextProperty()->SetColor(colors[i]);
+
+			shaftProps[i]->SetColor(colors[i]);
+			tipProps[i]->SetColor(colors[i]);
+		}
 
 		vtkAxes = axes;
 	}
