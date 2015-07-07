@@ -143,6 +143,7 @@ void Axes::init() {
 		axes->GetZAxesLinesProperty()->SetLineWidth(props->width);
 
 		vtkAxes = axes;
+		updateBounds();
 	} else if (props->type == AxesType_Plain) {
 		vtkSmartPointer<vtkAxesActor> axes = vtkSmartPointer<vtkAxesActor>::New();
 
