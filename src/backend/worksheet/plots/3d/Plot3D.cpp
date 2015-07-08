@@ -319,10 +319,10 @@ void Plot3DPrivate::init() {
 void Plot3DPrivate::retransform() {
 	prepareGeometryChange();
 	setPos(rect.x()+rect.width()/2, rect.y()+rect.height()/2);
-
+	
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
-	q->plotArea()->setRect(rect);
 	vtkItem->setGeometry(q->plotArea()->rect());
+	q->plotArea()->setRect(rect);
 
 	//set the background camera in front of the background image (fill the complete layer)
 	vtkCamera* camera = backgroundRenderer->GetActiveCamera();
