@@ -333,12 +333,11 @@ void Plot3DPrivate::retransform() {
 	//set the background camera in front of the background image (fill the complete layer)
 	vtkCamera* camera = backgroundRenderer->GetActiveCamera();
 	camera->ParallelProjectionOn();
-	double x = vtkItem->rect().width()/2;
-	double y = vtkItem->rect().height()/2;
-	camera->SetFocalPoint(x,y,0.0);
-	camera->SetParallelScale(x); //FIXME: this seems to be wrong.
+	const double x = rect.width() / 2;
+	const double y = rect.height() / 2;
+	camera->SetFocalPoint(x, y, 0.0);
+	camera->SetParallelScale(y);
 	camera->SetPosition(x,y,camera->GetDistance());
-
 	updateBackground();
 	updatePlot();
 
