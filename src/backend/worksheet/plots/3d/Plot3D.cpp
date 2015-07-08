@@ -37,13 +37,8 @@
 #include "backend/worksheet/Worksheet.h"
 
 #include <QDebug>
-#include <QGraphicsItem>
-#include <QGraphicsScene>
-#include <QGraphicsProxyWidget>
-#include <QGraphicsView>
 #include <QPainter>
 #include <QWidget>
-#include <QFileInfo>
 
 #include <KIcon>
 #include <KConfig>
@@ -263,10 +258,10 @@ void Plot3D::setBackgroundOpacity(float opacity) {
 		exec(new Plot3DSetBackgroundOpacityCmd(d, opacity, i18n("%1: set opacity")));
 }
 
-
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
+
 Plot3DPrivate::Plot3DPrivate(Plot3D* owner, QGLContext *context)
 	: AbstractPlotPrivate(owner)
 	, q(owner)
@@ -280,7 +275,6 @@ Plot3DPrivate::~Plot3DPrivate() {
 
 void Plot3DPrivate::init() {
 	//initialize VTK
-// 	vtkItem = new QVTKGraphicsItem(context, q->plotArea()->graphicsItem());
 	vtkItem = new QVTKGraphicsItem(context, this);
 
 	//foreground renderer
