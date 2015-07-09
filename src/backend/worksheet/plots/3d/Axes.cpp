@@ -53,7 +53,7 @@ struct Axes::Properties {
 };
 
 Axes::Properties::Properties()
-	: type(AxesType_Cube)
+	: type(AxesType_NoAxes)
 	, fontSize(32)
 	, width(10)
 	, xLabelColor(Qt::red)

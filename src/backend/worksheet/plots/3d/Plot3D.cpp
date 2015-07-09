@@ -267,7 +267,7 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner, QGLContext *context)
 	, q(owner)
 	, context(context)
 	, visType(Plot3D::VisualizationType_Triangles)
-	, sourceType(Plot3D::DataSource_Empty) {
+	, sourceType(Plot3D::DataSource_File) {
 }
 
 Plot3DPrivate::~Plot3DPrivate() {
