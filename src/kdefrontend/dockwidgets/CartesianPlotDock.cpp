@@ -28,7 +28,6 @@
  ***************************************************************************/
 
 #include "CartesianPlotDock.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/GuiTools.h"
