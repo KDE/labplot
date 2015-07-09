@@ -62,6 +62,8 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		virtual void retransform();
 		void updatePlot();
 		void updateBackground();
+		void mousePressEvent(QGraphicsSceneMouseEvent* event);
+		void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
 
 		Plot3D* const q;
 		QGLContext * const context;

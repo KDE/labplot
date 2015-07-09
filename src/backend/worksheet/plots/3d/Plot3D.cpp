@@ -273,9 +273,37 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner, QGLContext *context)
 Plot3DPrivate::~Plot3DPrivate() {
 }
 
+void Plot3DPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	QGraphicsItem::mousePressEvent(event);
+}
+
+void Plot3DPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	QGraphicsItem::mouseReleaseEvent(event);
+}
+
+namespace {
+		class VTKGraphicsItem : public QVTKGraphicsItem {
+		public:
+			VTKGraphicsItem(QGLContext* ctx, QGraphicsItem* p)
+				: QVTKGraphicsItem(ctx, p) {
+			}
+
+		protected:
+			void mousePressEvent(QGraphicsSceneMouseEvent* event) {
+				dynamic_cast<Plot3DPrivate*>(parentItem())->mousePressEvent(event);
+				QVTKGraphicsItem::mousePressEvent(event);
+			}
+
+			void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+				dynamic_cast<Plot3DPrivate*>(parentItem())->mouseReleaseEvent(event);
+				QVTKGraphicsItem::mouseReleaseEvent(event);
+			}
+	};
+}
+
 void Plot3DPrivate::init() {
 	//initialize VTK
-	vtkItem = new QVTKGraphicsItem(context, this);
+	vtkItem = new VTKGraphicsItem(context, this);
 
 	//foreground renderer
 	renderer = vtkSmartPointer<vtkRenderer>::New();
