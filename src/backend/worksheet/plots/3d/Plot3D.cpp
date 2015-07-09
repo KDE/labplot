@@ -318,22 +318,30 @@ void Plot3DPrivate::init() {
 
 void Plot3DPrivate::retransform() {
 	prepareGeometryChange();
-	setPos(rect.x()+rect.width()/2, rect.y()+rect.height()/2);
+	const double halfWidth = rect.width() / 2;
+	const double halfHeight = rect.height() / 2;
+	setPos(rect.x() + halfWidth, rect.y() + halfHeight);
 	
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
-	vtkItem->setGeometry(q->plotArea()->rect());
 	q->plotArea()->setRect(rect);
 
-	//set the background camera in front of the background image (fill the complete layer)
-	vtkCamera* camera = backgroundRenderer->GetActiveCamera();
-	camera->ParallelProjectionOn();
-	const double x = rect.width() / 2;
-	const double y = rect.height() / 2;
-	camera->SetFocalPoint(x, y, 0.0);
-	camera->SetParallelScale(y);
-	camera->SetPosition(x,y,camera->GetDistance());
-	updateBackground();
-	updatePlot();
+	if (halfHeight < 0.1 || halfWidth < 0.1) {
+		vtkItem->hide();
+	} else {
+		vtkItem->show();
+		vtkItem->setGeometry(-halfWidth, -halfHeight, rect.width(), rect.height());
+
+		//set the background camera in front of the background image (fill the complete layer)
+		vtkCamera* camera = backgroundRenderer->GetActiveCamera();
+		camera->ParallelProjectionOn();
+		const double x = rect.width() / 2;
+		const double y = rect.height() / 2;
+		camera->SetFocalPoint(x, y, 0.0);
+		camera->SetParallelScale(y);
+		camera->SetPosition(x,y,camera->GetDistance());
+		updateBackground();
+		updatePlot();
+	}
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 }
