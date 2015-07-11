@@ -122,15 +122,17 @@ int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList 
 	return columnOffset;
 }
 
+
+//TODO: use polymorphism instead  - provide Spreadsheet::create() and Matrix::create() instead if this function.
 int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode, int actualRows, int actualCols) {
 	int columnOffset = 0;
 
-	if(this->inherits("Spreadsheet")) {
+	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(this);
+	if(spreadsheet) {
 		columnOffset = this->resize(mode,QStringList(),actualCols);
 		//qDebug()<<"column offset"<<columnOffset;
 
 		// resize the spreadsheet
-		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(this);
 		if (mode==AbstractFileFilter::Replace) {
 			spreadsheet->clear();
 			spreadsheet->setRowCount(actualRows);
@@ -144,8 +146,13 @@ int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, Abstract
 			vector->resize(actualRows);
 			dataPointers.push_back(vector);
 		}
-	} else if (this->inherits("Matrix")) {
-		Matrix* matrix = dynamic_cast<Matrix*>(this);
+
+		return columnOffset;
+	}
+
+	Matrix* matrix = dynamic_cast<Matrix*>(this);
+	if (matrix) {
+		matrix->setSuppressDataChangedSignal(true);
 		// resize the matrix
 		if (mode==AbstractFileFilter::Replace) {
 			matrix->clear();

@@ -53,6 +53,8 @@ class MatrixModel : public QAbstractItemModel {
 		//@}
 
 		void updateHeader();
+		void setSuppressDataChangedSignal(bool);
+		void setChanged();
 
 	private slots:
 		void handleColumnsAboutToBeInserted(int before, int count);
@@ -69,6 +71,7 @@ class MatrixModel : public QAbstractItemModel {
 
 	private:
 		Matrix* m_matrix;
+		bool m_suppressDataChangedSignal;
 
 	signals:
 		void changed();

@@ -44,7 +44,7 @@
 
 	\ingroup backend
 */
-MatrixModel::MatrixModel(Matrix* matrix) : QAbstractItemModel(0), m_matrix(matrix) {
+MatrixModel::MatrixModel(Matrix* matrix) : QAbstractItemModel(0), m_matrix(matrix), m_suppressDataChangedSignal(false) {
 	connect(m_matrix, SIGNAL(columnsAboutToBeInserted(int, int)),
 			this, SLOT(handleColumnsAboutToBeInserted(int, int)));
 	connect(m_matrix, SIGNAL(columnsInserted(int, int)),
@@ -67,6 +67,14 @@ MatrixModel::MatrixModel(Matrix* matrix) : QAbstractItemModel(0), m_matrix(matri
 			this, SLOT(handleCoordinatesChanged()));
 	connect(m_matrix, SIGNAL(numericFormatChanged(char)), this, SLOT(handleFormatChanged()));
 	connect(m_matrix, SIGNAL(precisionChanged(int)), this, SLOT(handleFormatChanged()));
+}
+
+void MatrixModel::setSuppressDataChangedSignal(bool b) {
+	m_suppressDataChangedSignal = b;
+}
+
+void MatrixModel::setChanged() {
+	emit changed();
 }
 
 Qt::ItemFlags MatrixModel::flags(const QModelIndex& index) const {
@@ -178,7 +186,7 @@ bool MatrixModel::setData(const QModelIndex& index, const QVariant& value, int r
 
 	if(role ==  Qt::EditRole) {
 		m_matrix->setCell(row, column, value.toDouble());
-		emit changed();
+		if (!m_suppressDataChangedSignal) emit changed();
 		return true;
 	}
 	return false;
@@ -206,7 +214,7 @@ void MatrixModel::handleColumnsInserted(int first, int count) {
 	Q_UNUSED(first)
 	Q_UNUSED(count)
 	endInsertColumns();
-	emit changed();
+	if (!m_suppressDataChangedSignal) emit changed();
 }
 
 void MatrixModel::handleColumnsAboutToBeRemoved(int first, int count) {
@@ -217,7 +225,7 @@ void MatrixModel::handleColumnsRemoved(int first, int count) {
 	Q_UNUSED(first)
 	Q_UNUSED(count)
 	endRemoveColumns();
-	emit changed();
+	if (!m_suppressDataChangedSignal) emit changed();
 }
 
 void MatrixModel::handleRowsAboutToBeInserted(int before, int count) {
@@ -228,7 +236,7 @@ void MatrixModel::handleRowsInserted(int first, int count) {
 	Q_UNUSED(first)
 	Q_UNUSED(count)
 	endInsertRows();
-	emit changed();
+	if (!m_suppressDataChangedSignal) emit changed();
 }
 
 void MatrixModel::handleRowsAboutToBeRemoved(int first, int count) {
@@ -239,12 +247,12 @@ void MatrixModel::handleRowsRemoved(int first, int count) {
 	Q_UNUSED(first)
 	Q_UNUSED(count)
 	endRemoveRows();
-	emit changed();
+	if (!m_suppressDataChangedSignal) emit changed();
 }
 
 void MatrixModel::handleDataChanged(int top, int left, int bottom, int right) {
 	emit dataChanged(index(top, left), index(bottom, right));
-	emit changed();
+	if (!m_suppressDataChangedSignal) emit changed();
 }
 
 void MatrixModel::handleCoordinatesChanged() {

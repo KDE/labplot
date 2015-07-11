@@ -460,9 +460,13 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 				column->setChanged();
 			}
 		}
-
-		spreadsheet->setUndoAware(true);
+	} else if (dataSource != NULL && dataSource->inherits("Matrix")) {
+		Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+		matrix->setSuppressDataChangedSignal(false);
+		matrix->setChanged();
 	}
+
+	dataSource->setUndoAware(true);
 
 	return dataString.join("");
 }
