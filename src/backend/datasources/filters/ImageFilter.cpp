@@ -251,9 +251,13 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 				column->setChanged();
 			}
 		}
-
-		spreadsheet->setUndoAware(true);
+	} else if (dataSource->inherits("Matrix")) {
+		Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+		matrix->setSuppressDataChangedSignal(false);
+		matrix->setChanged();
 	}
+
+	dataSource->setUndoAware(true);
 
 	return;
 }

@@ -74,6 +74,8 @@ Matrix::~Matrix() {
 }
 
 void Matrix::init() {
+	m_model = 0;
+
 	KConfig config;
 	KConfigGroup group = config.group("Matrix");
 
@@ -93,6 +95,7 @@ void Matrix::init() {
 	d->numericFormat = *group.readEntry("NumericFormat", "f").toLatin1().data();
 	d->precision = group.readEntry("Precision", 3);
 	d->headerFormat = (Matrix::HeaderFormat)group.readEntry("HeaderFormat", (int)Matrix::HeaderRowsColumns);
+
 }
 
 /*!
@@ -112,8 +115,10 @@ QMenu* Matrix::createContextMenu() {
 }
 
 QWidget* Matrix::view() const {
-	if (!m_view) 	{
-		m_view = new MatrixView(const_cast<Matrix*>(this));
+	if (!m_view) {
+		MatrixView* view = new MatrixView(const_cast<Matrix*>(this));
+		m_model = view->model();
+		m_view = view;
 	}
 	return m_view;
 }
@@ -135,6 +140,16 @@ QString Matrix ::formula () const{
 
 QVector<QVector<double> >& Matrix::data() const {
 	return d->matrixData;
+}
+
+void Matrix::setSuppressDataChangedSignal(bool b) {
+	if (m_model)
+		m_model->setSuppressDataChangedSignal(b);
+}
+
+void Matrix::setChanged() {
+	if (m_model)
+		m_model->setChanged();
 }
 
 int Matrix::defaultRowHeight() const {
