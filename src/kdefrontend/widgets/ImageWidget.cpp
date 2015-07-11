@@ -100,6 +100,7 @@ void ImageWidget::setImages(QList<Image*> list){
 }
 
 void ImageWidget::initConnections() {
+	connect( m_image, SIGNAL(plotFileNameChanged(QString)), this, SLOT(imageFileNameChanged(QString)) );
     connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(imageRotationAngleChanged(float)) );
     connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
              this,SLOT(updateCustomItemList()));

@@ -6,7 +6,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
+<<<<<<< HEAD
     <width>440</width>
+=======
+    <width>461</width>
+>>>>>>> 5b1f32456f7f315276b3a9cc09e5a3845a949b2b
     <height>568</height>
    </rect>
   </property>
@@ -28,8 +32,13 @@
          </property>
         </widget>
        </item>
+<<<<<<< HEAD
        <item row="0" column="2" colspan="3">
         <widget class="KLineEdit" name="kleFileName">
+=======
+       <item row="0" column="2" colspan="6">
+        <widget class="KLineEdit" name="kleBackgroundFileName">
+>>>>>>> 5b1f32456f7f315276b3a9cc09e5a3845a949b2b
          <property name="toolTip">
           <string>Specify the name of the image file.</string>
          </property>
@@ -38,7 +47,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="7">
+       <item row="0" column="8">
         <widget class="QPushButton" name="bOpen">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -61,7 +70,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="2" colspan="2">
+       <item row="1" column="2" colspan="6">
         <widget class="KComboBox" name="cbGraphType">
          <property name="toolTip">
           <string>Vertical position relative to label's parent</string>
@@ -75,7 +84,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="2" colspan="2">
+       <item row="2" column="2" colspan="6">
         <widget class="KComboBox" name="cbXErrorType">
          <property name="toolTip">
           <string>Vertical position relative to label's parent</string>
@@ -89,7 +98,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="2" colspan="2">
+       <item row="3" column="2" colspan="6">
         <widget class="KComboBox" name="cbYErrorType">
          <property name="toolTip">
           <string>Vertical position relative to label's parent</string>
@@ -112,7 +121,7 @@
          </property>
         </spacer>
        </item>
-       <item row="5" column="0" colspan="2">
+       <item row="5" column="0">
         <widget class="QLabel" name="label">
          <property name="font">
           <font>
@@ -215,16 +224,6 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="6">
-        <widget class="QDoubleSpinBox" name="sbPoisitionY2">
-         <property name="minimum">
-          <double>-9999.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>9999.000000000000000</double>
-         </property>
-        </widget>
-       </item>
        <item row="8" column="2">
         <widget class="QLabel" name="lPoisitionX3">
          <property name="text">
@@ -249,16 +248,6 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="6">
-        <widget class="QDoubleSpinBox" name="sbPoisitionY3">
-         <property name="minimum">
-          <double>-9999.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>9999.000000000000000</double>
-         </property>
-        </widget>
-       </item>
        <item row="9" column="1">
         <spacer name="verticalSpacer">
          <property name="orientation">
@@ -271,6 +260,26 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="7" column="6">
+        <widget class="QDoubleSpinBox" name="sbPoisitionY2">
+         <property name="minimum">
+          <double>-9999.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>9999.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="6">
+        <widget class="QDoubleSpinBox" name="sbPoisitionY3">
+         <property name="minimum">
+          <double>-9999.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>9999.000000000000000</double>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
