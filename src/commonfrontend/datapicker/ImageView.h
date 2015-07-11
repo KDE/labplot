@@ -11,7 +11,6 @@ class QWheelEvent;
 
 class AbstractAspect;
 class WorksheetElement;
-class Transform;
 
 class ImageView : public QGraphicsView {
 	Q_OBJECT
@@ -43,7 +42,6 @@ class ImageView : public QGraphicsView {
     void updateData(const CustomItem*);
 
     Image* m_image;
-    Transform* m_transform;
 	MouseMode m_mouseMode;
 	bool m_selectionBandIsShown;
 	QPoint m_selectionStart;

@@ -22,11 +22,11 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     customItemWidget->hidePositionWidgets();
     m_itemsList.clear();
 
-    ui.kleBackgroundFileName->setClearButtonShown(true);
+    ui.kleFileName->setClearButtonShown(true);
     ui.bOpen->setIcon( KIcon("document-open") );
 
     KUrlCompletion *comp = new KUrlCompletion();
-    ui.kleBackgroundFileName->setCompletionObject(comp);
+    ui.kleFileName->setCompletionObject(comp);
 
     QGridLayout* layout =static_cast<QGridLayout*>(ui.tEdit->layout());
     layout->setContentsMargins(2,2,2,2);
@@ -71,8 +71,8 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     // geometry
     connect( ui.sbRotation, SIGNAL(valueChanged(double)), this, SLOT(rotationChanged(double)) );
     connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
-    connect( ui.kleBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
-    connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
+    connect( ui.kleFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
+    connect( ui.kleFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
     connect( ui.cbPlotImageType, SIGNAL(currentIndexChanged(int)), this, SLOT(plotImageTypeChanged(int)) );
     connect( ui.cbXErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(xErrorTypeChanged(int)) );
     connect( ui.cbYErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(yErrorTypeChanged(int)) );
@@ -86,6 +86,8 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     connect( ui.rbHue, SIGNAL(clicked()), this, SLOT(rbClicked()) );
     connect( ui.rbSaturation, SIGNAL(clicked()), this, SLOT(rbClicked()) );
     connect( ui.rbValue, SIGNAL(clicked()), this, SLOT(rbClicked()) );
+    connect( ui.sbMinSegmentLength, SIGNAL(valueChanged(int)), this, SLOT(minSegmentLengthChanged(int)) );
+    connect( ui.sbPointSeparation, SIGNAL(valueChanged(int)), this, SLOT(pointSeparationChanged(int)) );
 }
 
 void ImageWidget::setImages(QList<Image*> list){
@@ -107,7 +109,7 @@ void ImageWidget::initConnections() {
 }
 
 void ImageWidget::handleWidgetActions() {
-    QString fileName =  ui.kleBackgroundFileName->text().trimmed();
+    QString fileName =  ui.kleFileName->text().trimmed();
     if (!fileName.isEmpty()) {
         ui.tEdit->setEnabled(true);
         ui.cbGraphType->setEnabled(true);
@@ -152,11 +154,11 @@ void ImageWidget::selectFile() {
             conf.writeEntry("LastImageDir", newDir);
     }
 
-    ui.kleBackgroundFileName->setText( path );
+    ui.kleFileName->setText( path );
     handleWidgetActions();
 
     foreach(Image* image, m_imagesList)
-        image->setPlotFileName(path);
+        image->setFileName(path);
 }
 
 void ImageWidget::fileNameChanged(){
@@ -165,9 +167,9 @@ void ImageWidget::fileNameChanged(){
 
     handleWidgetActions();
 
-    QString fileName = ui.kleBackgroundFileName->text();
+    QString fileName = ui.kleFileName->text();
     foreach(Image* image, m_imagesList){
-        image->setPlotFileName(fileName);
+        image->setFileName(fileName);
     }
 }
 
@@ -322,12 +324,28 @@ void ImageWidget::yErrorTypeChanged(int index) {
         image->setPlotErrors(errors);
 }
 
+void ImageWidget::minSegmentLengthChanged(int value) {
+    if (m_initializing)
+        return;
+
+    foreach(Image* image, m_imagesList)
+        image->setminSegmentLength(value);
+}
+
+void ImageWidget::pointSeparationChanged(int value) {
+    if (m_initializing)
+        return;
+
+    foreach(Image* image, m_imagesList)
+        image->setPointSeparation(value);
+}
+
 //*********************************************************
 //****** SLOTs for changes triggered in Image *********
 //*********************************************************
 void ImageWidget::imageFileNameChanged(const QString& name) {
     m_initializing = true;
-    ui.kleBackgroundFileName->setText(name);
+    ui.kleFileName->setText(name);
     m_initializing = false;
 }
 
@@ -376,7 +394,7 @@ void ImageWidget::load() {
         return;
 
     m_initializing = true;
-    ui.kleBackgroundFileName->setText( m_image->plotFileName() );
+    ui.kleFileName->setText( m_image->fileName() );
     ui.cbGraphType->setCurrentIndex((int) m_image->axisPoints().type);
     ui.sbPoisitionX1->setValue(m_image->axisPoints().logicalPos[0].x());
     ui.sbPoisitionY1->setValue(m_image->axisPoints().logicalPos[0].y());
@@ -397,5 +415,7 @@ void ImageWidget::load() {
     ui.rbHue->setChecked(m_image->settings().type == Image::Hue);
     ui.rbSaturation->setChecked(m_image->settings().type == Image::Saturation);
     ui.rbValue->setChecked(m_image->settings().type == Image::Value);
+    ui.sbPointSeparation->setValue(m_image->pointSeparation());
+    ui.sbMinSegmentLength->setValue(m_image->minSegmentLength());
     m_initializing = false;
 }

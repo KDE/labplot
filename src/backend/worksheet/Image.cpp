@@ -6,6 +6,9 @@
 #include "backend/worksheet/CustomItem.h"
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/datapicker/ImageView.h"
+#include "backend/worksheet/Segments.h"
+#include "backend/core/Datapicker.h"
+#include "backend/core/Transform.h"
 
 #include <QDesktopWidget>
 #include <QMenu>
@@ -18,7 +21,9 @@ Image::Image(AbstractScriptingEngine* engine, const QString& name, bool loading)
     : AbstractPart(name), scripted(engine), d(new ImagePrivate(this)),
       plotImageType(Image::OriginalImage),
       isLoaded(false),
-      m_imageEditor(new ImageEditor(this)) {
+      m_imageEditor(new ImageEditor()),
+      m_segments(new Segments(this)),
+      m_transform(new Transform()){
 
     connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
             this, SLOT(handleAspectAdded(const AbstractAspect*)));
@@ -38,8 +43,10 @@ Image::~Image() {
 void Image::init() {
     KConfig config;
     KConfigGroup group = config.group( "Image" );
-    d->plotFileName = group.readEntry("PlotFileName", QString());
+    d->fileName = group.readEntry("FileName", QString());
     d->rotationAngle = group.readEntry("RotationAngle", 0.0);
+    d->minSegmentLength = group.readEntry("MinSegmentLength", 30);
+    d->pointSeparation = group.readEntry("PointSeparation", 30);
     d->axisPoints.type = (Image::GraphType) group.readEntry("GraphType", (int) Image::Cartesian);
     d->settings.type = (Image::ColorAttributes) group.readEntry("ColorAttributesType", (int) Image::Intensity);
     d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", 10);
@@ -80,7 +87,7 @@ QWidget *Image::view() const {
 
 
 void Image::handleAspectAdded(const AbstractAspect* aspect) {
-    const CustomItem* addedElement = qobject_cast<const CustomItem*>(aspect);
+    const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
     if (addedElement) {
         if (aspect->parentAspect() == this){
             QGraphicsItem *item = addedElement->graphicsItem();
@@ -88,8 +95,8 @@ void Image::handleAspectAdded(const AbstractAspect* aspect) {
             d->m_scene->addItem(item);
 
             qreal zVal = 0;
-            QList<CustomItem *> childElements = children<CustomItem>(IncludeHidden);
-            foreach(CustomItem *elem, childElements) {
+            QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
+            foreach(WorksheetElement *elem, childElements) {
                 elem->graphicsItem()->setZValue(zVal++);
             }
         }
@@ -97,7 +104,7 @@ void Image::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void Image::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-    const CustomItem *removedElement = qobject_cast<const CustomItem*>(aspect);
+    const WorksheetElement *removedElement = qobject_cast<const WorksheetElement*>(aspect);
     if (removedElement) {
         QGraphicsItem *item = removedElement->graphicsItem();
         Q_ASSERT(item != NULL);
@@ -132,7 +139,10 @@ void Image::update() {
 
 void Image::discretize(const EditorSettings& newSettings) {
     d->settings = newSettings;
-    m_imageEditor->discretize(&processedPlotImage, newSettings);
+    m_imageEditor->discretize(&processedPlotImage, &originalPlotImage, newSettings);
+    m_segments->makeSegments(processedPlotImage);
+    if (plotPointsType() == Image::SegmentPoints)
+        m_segments->setSegmentsVisible(true);
     emit requestUpdate();
 }
 
@@ -144,19 +154,61 @@ void Image::setPlotImageType(const Image::PlotImageType& type) {
 void Image::updateAxisPoints() {
     emit requestUpdateAxisPoints();
 }
+
+void Image::setSegmentVisible(bool on) {
+    m_segments->setSegmentsVisible(on);
+}
+
+
+void Image::updateData(const CustomItem *item) {
+    updateAxisPoints();
+
+    Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
+    int row = childCount<CustomItem>(AbstractAspect::IncludeHidden) - 4;
+
+    QPointF data;
+    if (datapicker) {
+        data = m_transform->mapSceneToLogical(item->position().point, axisPoints());
+        datapicker->addDataToSheet(data.x(), row, Datapicker::PositionX);
+        datapicker->addDataToSheet(data.y(), row, Datapicker::PositionY);
+
+        if (plotErrors().x != Image::NoError) {
+            data = m_transform->mapSceneLengthToLogical(QPointF(item->itemErrorBar().plusDeltaX, 0), axisPoints());
+            datapicker->addDataToSheet(qAbs(data.x()), row, Datapicker::PlusDeltaX);
+
+            if (plotErrors().x == Image::AsymmetricError) {
+                data = m_transform->mapSceneLengthToLogical(QPointF(item->itemErrorBar().minusDeltaX, 0), axisPoints());
+                datapicker->addDataToSheet(qAbs(data.x()), row, Datapicker::MinusDeltaX);
+            }
+        }
+
+        if (plotErrors().y != Image::NoError) {
+            data = m_transform->mapSceneLengthToLogical(QPointF(0, item->itemErrorBar().plusDeltaY), axisPoints());
+            datapicker->addDataToSheet(qAbs(data.y()), row, Datapicker::PlusDeltaY);
+
+            if (plotErrors().y == Image::AsymmetricError) {
+                data = m_transform->mapSceneLengthToLogical(QPointF(0, item->itemErrorBar().minusDeltaY), axisPoints());
+                datapicker->addDataToSheet(qAbs(data.y()), row, Datapicker::MinusDeltaY);
+            }
+        }
+    }
+}
+
 /* =============================== getter methods for background options ================================= */
-CLASS_D_READER_IMPL(Image, QString, plotFileName, plotFileName)
+CLASS_D_READER_IMPL(Image, QString, fileName, fileName)
 CLASS_D_READER_IMPL(Image, Image::ReferencePoints, axisPoints, axisPoints)
 CLASS_D_READER_IMPL(Image, Image::EditorSettings, settings, settings)
 BASIC_D_READER_IMPL(Image, float, rotationAngle, rotationAngle)
 BASIC_D_READER_IMPL(Image, Image::Errors, plotErrors, plotErrors)
 BASIC_D_READER_IMPL(Image, Image::PointsType, plotPointsType, plotPointsType)
+BASIC_D_READER_IMPL(Image, int, pointSeparation, pointSeparation)
+BASIC_D_READER_IMPL(Image, int, minSegmentLength, minSegmentLength)
 
 /* ============================ setter methods and undo commands  for background options  ================= */
-STD_SETTER_CMD_IMPL_F_S(Image, SetPlotFileName, QString, plotFileName, updateFileName)
-void Image::setPlotFileName(const QString& fileName) {
-    if (fileName!= d->plotFileName)
-        exec(new ImageSetPlotFileNameCmd(d, fileName, i18n("%1: set image")));
+STD_SETTER_CMD_IMPL_F_S(Image, SetFileName, QString, fileName, updateFileName)
+void Image::setFileName(const QString& fileName) {
+    if (fileName!= d->fileName)
+        exec(new ImageSetFileNameCmd(d, fileName, i18n("%1: set image")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Image, SetRotationAngle, float, rotationAngle, update)
@@ -183,6 +235,14 @@ void Image::setPlotPointsType(const PointsType pointsType) {
 
 void Image::setAxisPoints(const Image::ReferencePoints& points) {
     d->axisPoints = points;
+}
+
+void Image::setminSegmentLength(const int value) {
+    d->minSegmentLength = value;
+}
+
+void Image::setPointSeparation(const int value) {
+    d->pointSeparation = value;
 }
 
 //##############################################################################
@@ -213,22 +273,23 @@ void ImagePrivate::updateFileName() {
     WAIT_CURSOR;
     q->removeAllChildren();
 	q->isLoaded = false;
-    const QString& fileName = plotFileName.trimmed();
+    const QString& address = fileName.trimmed();
 
-    if ( !fileName.isEmpty() ) {
-        bool rc = q->originalPlotImage.load(fileName);
+    if ( !address.isEmpty() ) {
+        bool rc = q->originalPlotImage.load(address);
 		if (rc) {
-			q->processedPlotImage = q->originalPlotImage;
-			q->m_imageEditor->discretize(&q->processedPlotImage, settings);
+            q->processedPlotImage = q->originalPlotImage;
+            q->m_imageEditor->discretize(&q->processedPlotImage, &q->originalPlotImage, settings);
 
-			//resize the screen
-			int w = Worksheet::convertToSceneUnits(q->originalPlotImage.width()/QApplication::desktop()->physicalDpiX(), Worksheet::Inch);
-			int h = Worksheet::convertToSceneUnits(q->originalPlotImage.height()/QApplication::desktop()->physicalDpiX(), Worksheet::Inch);
-			m_scene->setSceneRect(0, 0, w, h);
+            //resize the screen
+            double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Inch)/QApplication::desktop()->physicalDpiX();
+            double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Inch)/QApplication::desktop()->physicalDpiX();
+            m_scene->setSceneRect(0, 0, w, h);
 
 			//TODO: scene size was change -> reinitialize all the screen size dependent parameters
             q->init();
-            plotFileName = fileName;
+            q->m_segments->makeSegments(q->processedPlotImage);
+            fileName = address;
 
 			q->isLoaded = true;
 		}
@@ -237,7 +298,6 @@ void ImagePrivate::updateFileName() {
     q->update();
     RESET_CURSOR;
 }
-
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -249,7 +309,7 @@ void Image::save(QXmlStreamWriter* writer) const {
     writeCommentElement(writer);
     //background properties
     writer->writeStartElement( "background" );
-    writer->writeAttribute( "fileName", d->plotFileName );
+    writer->writeAttribute( "fileName", d->fileName );
     writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
     writer->writeEndElement();
 
@@ -289,7 +349,7 @@ bool Image::load(XmlStreamReader* reader) {
             attribs = reader->attributes();
 
             str = attribs.value("fileName").toString();
-            d->plotFileName = str;
+            d->fileName = str;
 
             str = attribs.value("rotationAngle").toString();
             if(str.isEmpty())

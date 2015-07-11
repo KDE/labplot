@@ -2,7 +2,7 @@
 
 #include "math.h"
 
-ImageEditor::ImageEditor(Image* image):m_image(image) {
+ImageEditor::ImageEditor() {
 }
 
 ImageEditor::~ImageEditor() {
@@ -34,7 +34,7 @@ QRgb ImageEditor::backgroundColor(const QImage* plotImage) {
 
     ColorEntry cMax;
     cMax.count = 0;
-    for (itrC = colors.begin(); itrC != colors.end(); ++itrC){
+    for (itrC = colors.begin(); itrC != colors.end(); ++itrC) {
         if ((*itrC).count > cMax.count)
             cMax = (*itrC);
     }
@@ -67,7 +67,8 @@ bool ImageEditor::colorCompare(QRgb color1, QRgb color2) {
     return (color1 & MASK) == (color2 & MASK);
 }
 
-void ImageEditor::discretize(QImage* plotImage, Image::EditorSettings settings) {
+void ImageEditor::discretize(QImage* plotImage, QImage* originalImage, Image::EditorSettings settings) {
+    m_originalImage = originalImage;
     QColor background;
     int rBg, gBg, bBg;
     int value;
@@ -77,7 +78,7 @@ void ImageEditor::discretize(QImage* plotImage, Image::EditorSettings settings) 
     for (int x = 0; x < plotImage->width(); x++) {
         for (int y = 0; y < plotImage->height(); y++) {
             if (settings.type == Image::Foreground) {
-                background = backgroundColor(&m_image->originalPlotImage);
+                background = backgroundColor(m_originalImage);
                 rBg = background.red();
                 gBg = background.green();
                 bBg = background.blue();
@@ -100,7 +101,7 @@ void ImageEditor::discretize(QImage* plotImage, Image::EditorSettings settings) 
 int ImageEditor::discretizeValueForeground(int x, int y, int rBg, int gBg, int bBg) const {
     int attributeMax = colorAttributeMax(Image::Foreground);
 
-    QColor color(m_image->originalPlotImage.pixel(x,y));
+    QColor color(m_originalImage->pixel(x,y));
     int r = color.red();
     int g = color.green();
     int b = color.blue();
@@ -117,7 +118,7 @@ int ImageEditor::discretizeValueForeground(int x, int y, int rBg, int gBg, int b
 }
 
 int ImageEditor::discretizeValueNotForeground(int x, int y, Image::ColorAttributes type) const{
-    QColor color(m_image->originalPlotImage.pixel(x,y));
+    QColor color(m_originalImage->pixel(x,y));
     int r, g, b, h, s, v;
     double intensity;
     int attributeMax = colorAttributeMax(type);

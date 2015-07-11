@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>433</width>
+    <width>440</width>
     <height>568</height>
    </rect>
   </property>
@@ -29,7 +29,7 @@
         </widget>
        </item>
        <item row="0" column="2" colspan="3">
-        <widget class="KLineEdit" name="kleBackgroundFileName">
+        <widget class="KLineEdit" name="kleFileName">
          <property name="toolTip">
           <string>Specify the name of the image file.</string>
          </property>
@@ -291,13 +291,6 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="KComboBox" name="cbPlotImageType">
-         <property name="toolTip">
-          <string>Vertical position relative to label's parent</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0">
         <widget class="QRadioButton" name="rbIntensity">
          <property name="text">
@@ -308,10 +301,10 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QRadioButton" name="rbForeground">
-         <property name="text">
-          <string>Foreground</string>
+       <item row="0" column="1">
+        <widget class="KComboBox" name="cbPlotImageType">
+         <property name="toolTip">
+          <string>Vertical position relative to label's parent</string>
          </property>
         </widget>
        </item>
@@ -326,6 +319,53 @@
         <widget class="QRadioButton" name="rbSaturation">
          <property name="text">
           <string>Saturation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="lMinSegmentLength">
+           <property name="text">
+            <string>Minimum Segment lenght(pixels)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="sbMinSegmentLength"/>
+         </item>
+        </layout>
+       </item>
+       <item row="9" column="2">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="0">
+        <widget class="QRadioButton" name="rbForeground">
+         <property name="text">
+          <string>Foreground</string>
          </property>
         </widget>
        </item>
@@ -346,18 +386,32 @@
        <item row="6" column="1">
         <widget class="QDoubleSpinBox" name="sbRotation"/>
        </item>
-       <item row="7" column="1">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
+       <item row="8" column="0" colspan="2">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="lPointSeparation">
+           <property name="text">
+            <string>Minimum Segment points separation(pixels)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="sbPointSeparation"/>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>

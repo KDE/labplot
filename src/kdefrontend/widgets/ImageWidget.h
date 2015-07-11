@@ -45,6 +45,8 @@ private slots:
     void fileNameChanged();
     void xErrorTypeChanged(int);
     void yErrorTypeChanged(int);
+    void minSegmentLengthChanged(int);
+    void pointSeparationChanged(int);
 
     void imageFileNameChanged(const QString&);
     void imageRotationAngleChanged(float);

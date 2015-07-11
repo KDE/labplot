@@ -9,7 +9,7 @@
 class ImageEditor {
     public:
 
-        ImageEditor(Image* image);
+        ImageEditor();
         ~ImageEditor();
 
         int colorAttributeMax(Image::ColorAttributes) const;
@@ -21,7 +21,7 @@ class ImageEditor {
         int discretizeValueNotForeground(int, int, Image::ColorAttributes) const;
         int discretizeValueForeground(int, int, int, int, int) const;
 
-        void discretize(QImage*, Image::EditorSettings);
+        void discretize(QImage*, QImage*, Image::EditorSettings);
 
         bool pixelIsOn(int, Image::EditorSettings) const;
         bool processedPixelIsOn(const QImage&, int, int) const;
@@ -35,7 +35,7 @@ class ImageEditor {
 
         typedef QList<ColorEntry> ColorList;
 
-        Image* m_image;
+        QImage* m_originalImage;
         bool pixelIsOn(int, int, int) const;
 };
 

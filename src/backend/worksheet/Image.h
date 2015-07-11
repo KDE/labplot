@@ -11,6 +11,8 @@ class QRectF;
 class ImagePrivate;
 class ImageEditor;
 class CustomItem;
+class Segments;
+class Transform;
 
 class Image: public AbstractPart, public scripted {
 	Q_OBJECT
@@ -67,27 +69,33 @@ class Image: public AbstractPart, public scripted {
         void discretize(const EditorSettings&);
         void setPlotImageType(const Image::PlotImageType&);
         void updateAxisPoints();
+        void setSegmentVisible(bool);
+        void updateData(const CustomItem*);
 
         bool isLoaded;
         QImage originalPlotImage;
         QImage processedPlotImage;
         PlotImageType plotImageType;
 
-        CLASS_D_ACCESSOR_DECL(QString, plotFileName, PlotFileName)
+        CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
         CLASS_D_ACCESSOR_DECL(Image::ReferencePoints, axisPoints, AxisPoints)
         CLASS_D_ACCESSOR_DECL(Image::EditorSettings, settings, Settings)
         BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle)
         BASIC_D_ACCESSOR_DECL(Errors, plotErrors, PlotErrors)
         BASIC_D_ACCESSOR_DECL(PointsType, plotPointsType, PlotPointsType)
+        BASIC_D_ACCESSOR_DECL(int, pointSeparation, PointSeparation)
+        BASIC_D_ACCESSOR_DECL(int, minSegmentLength, minSegmentLength)
 
 		typedef ImagePrivate Private;
 
-	private:
+    private:
 		void init();
 		ImagePrivate* const d;
 		friend class ImagePrivate;
 
         ImageEditor* m_imageEditor;
+        Transform* m_transform;
+        Segments* m_segments;
 
 	 private slots:
 		void handleAspectAdded(const AbstractAspect*);
@@ -99,10 +107,10 @@ class Image: public AbstractPart, public scripted {
 		void requestUpdate();
         void requestUpdateAxisPoints();
 
-        void plotFileNameChanged(const QString&);
+        void fileNameChanged(const QString&);
         void rotationAngleChanged(float);
         void plotErrorsChanged(Image::Errors);
-        friend class ImageSetPlotFileNameCmd;
+        friend class ImageSetFileNameCmd;
         friend class ImageSetRotationAngleCmd;
         friend class ImageSetPlotErrorsCmd;
 };

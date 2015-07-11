@@ -2,7 +2,6 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/CustomItem.h"
 #include "backend/core/Datapicker.h"
-#include "backend/core/Transform.h"
 
 #include <QApplication>
 #include <QMenu>
@@ -26,8 +25,7 @@ ImageView::ImageView(Image* image) : QGraphicsView(),
     m_image(image),
     m_mouseMode(SelectionMode),
     m_selectionBandIsShown(false),
-    tbZoom(0),
-    m_transform(new Transform()){
+    tbZoom(0) {
 
     setScene(m_image->scene());
 
@@ -301,10 +299,7 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
                     lastCurvePoint = addCustomItem(eventPos);
                 }
             }
-
-            updateData(lastCurvePoint);
-        } else if (m_image->plotPointsType() == Image::SegmentPoints) {
-            //Todo
+            m_image->updateData(lastCurvePoint);
         }
     }
 
@@ -352,10 +347,13 @@ void ImageView::changePointsType(QAction* action) {
         //clear image
         m_image->removeAllChildren();
         m_image->setPlotPointsType(Image::AxisPoints);
+        m_image->setSegmentVisible(false);
     } else if (action==setCurvePointsAction){
         m_image->setPlotPointsType(Image::CurvePoints);
+        m_image->setSegmentVisible(false);
     } else if (action==selectSegmentAction){
         m_image->setPlotPointsType(Image::SegmentPoints);
+        m_image->setSegmentVisible(true);
     }
 }
 
@@ -493,41 +491,7 @@ void ImageView::updateDatasheet() {
         childElements.removeAt(2);
 
         foreach(CustomItem* elem, childElements)
-            updateData(elem);
-    }
-}
-
-void ImageView::updateData(const CustomItem *item) {
-    m_image->updateAxisPoints();
-
-    Datapicker* datapicker = dynamic_cast<Datapicker*>(m_image->parentAspect());
-    int row = m_image->childCount<CustomItem>(AbstractAspect::IncludeHidden) - 4;
-
-    QPointF data;
-    if (datapicker) {
-        data = m_transform->mapSceneToLogical(item->position().point, m_image->axisPoints());
-        datapicker->addDataToSheet(data.x(), row, Datapicker::PositionX);
-        datapicker->addDataToSheet(data.y(), row, Datapicker::PositionY);
-
-        if (m_image->plotErrors().x != Image::NoError) {
-            data = m_transform->mapSceneLengthToLogical(QPointF(item->itemErrorBar().plusDeltaX, 0), m_image->axisPoints());
-            datapicker->addDataToSheet(qAbs(data.x()), row, Datapicker::PlusDeltaX);
-
-            if (m_image->plotErrors().x == Image::AsymmetricError) {
-                data = m_transform->mapSceneLengthToLogical(QPointF(item->itemErrorBar().minusDeltaX, 0), m_image->axisPoints());
-                datapicker->addDataToSheet(qAbs(data.x()), row, Datapicker::MinusDeltaX);
-            }
-        }
-
-        if (m_image->plotErrors().y != Image::NoError) {
-            data = m_transform->mapSceneLengthToLogical(QPointF(0, item->itemErrorBar().plusDeltaY), m_image->axisPoints());
-            datapicker->addDataToSheet(qAbs(data.y()), row, Datapicker::PlusDeltaY);
-
-            if (m_image->plotErrors().y == Image::AsymmetricError) {
-                data = m_transform->mapSceneLengthToLogical(QPointF(0, item->itemErrorBar().minusDeltaY), m_image->axisPoints());
-                datapicker->addDataToSheet(qAbs(data.y()), row, Datapicker::MinusDeltaY);
-            }
-        }
+            m_image->updateData(elem);
     }
 }
 

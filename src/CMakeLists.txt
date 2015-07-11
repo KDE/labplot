@@ -163,6 +163,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/Datapicker.cpp
 	${BACKEND_DIR}/core/Transform.cpp
         ${BACKEND_DIR}/core/ImageEditor.cpp
+       	${BACKEND_DIR}/worksheet/Segment.cpp
+        ${BACKEND_DIR}/worksheet/Segments.cpp
 )
 
 set(COMMONFRONTEND_SOURCES

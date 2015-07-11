@@ -3,7 +3,6 @@
 
 #include <QBrush>
 
-class Image;
 class QGraphicsScene;
 
 class ImagePrivate{
@@ -19,7 +18,9 @@ class ImagePrivate{
 		QRectF pageRect;
 		QGraphicsScene* m_scene;
 		float rotationAngle;
-		QString plotFileName;
+        QString fileName;
+        int pointSeparation;
+        int minSegmentLength;
 
 		QString name() const;
 		void update();
