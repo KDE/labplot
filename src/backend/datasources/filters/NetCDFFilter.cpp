@@ -613,7 +613,6 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 
 		status = nc_get_var_double(ncid, varid, &data[0][0]);
 		handleError(status,"nc_get_var_double");
-
 		for (int i=0; i < qMin((int)rows,lines); i++) {
 			for (unsigned int j=0; j < cols; j++) {
 				if (dataPointers.size()>0)
@@ -634,9 +633,13 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 
 	free(dimids);
 
+	if (!dataSource)
+		return dataString.join("");
+
+	// make everything undo/redo-able again
 	// set column comments in spreadsheet
-	if (dataSource != NULL && dataSource->inherits("Spreadsheet")) {
-		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	if (spreadsheet) {
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
 		for ( int n=0; n<actualCols; n++ ){
 			Column* column = spreadsheet->column(columnOffset+n);
@@ -648,7 +651,16 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 			}
 		}
 		spreadsheet->setUndoAware(true);
+		return dataString.join("");
 	}
+
+	Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+	if (matrix) {
+		matrix->setSuppressDataChangedSignal(false);
+		matrix->setChanged();
+		matrix->setUndoAware(true);
+	}
+
 
 #else
 	Q_UNUSED(fileName)

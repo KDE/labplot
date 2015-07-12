@@ -231,7 +231,10 @@ bool Datapicker::load(XmlStreamReader* reader){
         if (!reader->isStartElement())
             continue;
 
-        if(reader->name() == "spreadsheet"){
+		if (reader->name() == "comment") {
+            if (!readCommentElement(reader))
+				return false;
+		} else if(reader->name() == "spreadsheet"){
             Spreadsheet* spreadsheet = new Spreadsheet(0, "spreadsheet", true);
             if (!spreadsheet->load(reader)){
                 delete spreadsheet;

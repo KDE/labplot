@@ -404,7 +404,7 @@ void ProjectExplorer::toggleFilterCaseSensitivity(){
 
 
 void ProjectExplorer::toggleFilterMatchCompleteWord(){
-	AspectTreeModel * model = qobject_cast<AspectTreeModel *>(m_treeView->model());
+	AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	if(!model)
 		return;
 
@@ -415,7 +415,9 @@ void ProjectExplorer::toggleFilterMatchCompleteWord(){
 }
 
 void ProjectExplorer::selectIndex(const QModelIndex&  index){
-// 	qDebug()<<"ProjectExplorer::selectIndex";
+	if (m_project->isLoading())
+		return;
+
 	if ( !m_treeView->selectionModel()->isSelected(index) ) {
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 		m_treeView->setExpanded(index, true);
@@ -424,14 +426,14 @@ void ProjectExplorer::selectIndex(const QModelIndex&  index){
 }
 
 void ProjectExplorer::deselectIndex(const QModelIndex & index){
-// 	qDebug()<<"ProjectExplorer::deselectIndex";
-	if ( m_treeView->selectionModel()->isSelected(index) ) {
+	if (m_project->isLoading())
+		return;
+
+	if ( m_treeView->selectionModel()->isSelected(index) )
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
-	}
 }
 
 void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected){
-// 	qDebug()<<"ProjectExplorer::selectionChanged";
 	QModelIndex index;
 	QModelIndexList items;
 	AbstractAspect* aspect = 0;

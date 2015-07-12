@@ -337,7 +337,7 @@ bool Image::load(XmlStreamReader* reader) {
 
     while (!reader->atEnd()){
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "worksheet")
+        if (reader->isEndElement() && reader->name() == "image")
             break;
 
         if (!reader->isStartElement())

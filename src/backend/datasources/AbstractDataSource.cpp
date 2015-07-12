@@ -59,8 +59,6 @@ void AbstractDataSource::clear() {
 	returns column offset depending on import mode
 */
 int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols) {
-	setUndoAware(false);
-
 	// name additional columns
 	for (int k=colNameList.size(); k<cols; k++ )
 		colNameList.append( "Column " + QString::number(k+1) );
@@ -126,6 +124,7 @@ int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList 
 //TODO: use polymorphism instead  - provide Spreadsheet::create() and Matrix::create() instead if this function.
 int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode, int actualRows, int actualCols) {
 	int columnOffset = 0;
+	setUndoAware(false);
 
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(this);
 	if(spreadsheet) {

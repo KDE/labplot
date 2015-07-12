@@ -374,7 +374,13 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 		dataString<<"\n";
 	}
 
-	if (dataSource != NULL && dataSource->inherits("Spreadsheet")) {
+	if (!dataSource)
+		return dataString.join("");
+
+	//make everything undo/redo-able again
+	//set the comments for each of the columns
+	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	if (spreadsheet) {
 		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
 		for ( int n=0; n<actualCols; n++ ){
@@ -386,8 +392,15 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 				column->setChanged();
 			}
 		}
-
 		spreadsheet->setUndoAware(true);
+		return dataString.join("");
+	}
+
+	Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+	if (matrix) {
+		matrix->setSuppressDataChangedSignal(false);
+		matrix->setChanged();
+		matrix->setUndoAware(true);
 	}
 
 	return dataString.join("");
