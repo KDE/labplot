@@ -9,6 +9,8 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QDesktopWidget>
 
+#include <KLocale>
+
 Segment::Segment(Image* image): d_ptr(new SegmentPrivate(this)),
     m_image(image), length(0) {
     m_image->scene()->addItem(this->graphicsItem());
@@ -143,13 +145,13 @@ void SegmentPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
     if (change == QGraphicsItem::ItemSelectedChange && value == true) {
         int count = 0;
-        q->m_image->beginMacro("");
+        q->m_image->beginMacro(i18n(""));
         foreach (QLine* line, q->path) {
             int l = (line->y1() > line->y2())?line->y2():line->y1();
             int h = (line->y1() > line->y2())?line->y1():line->y2();
             for (int i = l; i <= h; i++) {
                 if (count%q->m_image->pointSeparation() == 0) {
-                    CustomItem* item = new CustomItem("item");
+                    CustomItem* item = new CustomItem(i18n(""));
                     item->setHidden(true);
                     item->setPosition(QPoint(line->x1(), i)*scaleFactor);
                     q->m_image->addChild(item);

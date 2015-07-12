@@ -130,9 +130,7 @@ void Datapicker::addDataToSheet(double data, int row, const DataColumnType& type
         column = m_datasheet->child<Column>(*index);
     }
 
-    column->setUndoAware(false);
     column->setValueAt(row, data);
-    column->setUndoAware(true);
     m_datasheet->setUndoAware(true);
 }
 

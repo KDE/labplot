@@ -4,8 +4,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 
-#include <QApplication>
-#include <QDesktopWidget>
 #include <QPainter>
 #include <QGraphicsScene>
 #include <QMenu>

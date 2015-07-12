@@ -263,7 +263,7 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
             points.scenePos[childItems.count()].setY(eventPos.y());
             m_image->setAxisPoints(points);
         } else if (m_image->plotPointsType() == Image::CurvePoints) {
-
+            m_image->beginMacro(i18n(""));
             if (childItems.count() == 3) {
                 lastCurvePoint = addCustomItem(eventPos);
             } else {
@@ -300,6 +300,7 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
                 }
             }
             m_image->updateData(lastCurvePoint);
+            m_image->endMacro();
         }
     }
 
