@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>347</width>
-    <height>53</height>
+    <width>453</width>
+    <height>51</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,12 +25,26 @@
     <widget class="QComboBox" name="cbOperator"/>
    </item>
    <item>
+    <widget class="QLabel" name="lMin">
+     <property name="text">
+      <string>min.</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QLineEdit" name="leValue1"/>
    </item>
    <item>
     <widget class="QLabel" name="lAnd">
      <property name="text">
       <string>and</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="lMax">
+     <property name="text">
+      <string>max.</string>
      </property>
     </widget>
    </item>

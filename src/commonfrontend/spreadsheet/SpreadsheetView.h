@@ -128,6 +128,7 @@ class SpreadsheetView : public QWidget {
 // 		QAction* action_set_as_none;
 		QAction* action_reverse_columns;
 		QAction* action_drop_values;
+		QAction* action_mask_values;
 		QAction* action_join_columns;
 		QAction* action_normalize_columns;
 		QAction* action_normalize_selection;
@@ -191,6 +192,7 @@ class SpreadsheetView : public QWidget {
 
 		void reverseColumns();
 		void dropColumnValues();
+		void maskColumnValues();
 		void joinColumns();
 		void normalizeSelectedColumns();
 		void normalizeSelection();

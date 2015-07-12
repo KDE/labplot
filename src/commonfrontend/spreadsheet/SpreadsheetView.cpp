@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -34,7 +34,6 @@
 #include "backend/lib/macros.h"
 
 #include "backend/core/column/Column.h"
-#include "backend/core/AbstractFilter.h"
 #include "backend/core/datatypes/SimpleCopyThroughFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/core/datatypes/String2DoubleFilter.h"
@@ -191,7 +190,8 @@ void SpreadsheetView::initActions(){
 // 	action_set_as_none = new KAction(KIcon(""), i18n("None, Plot Designation"), this);
 	action_reverse_columns = new KAction(KIcon(""), i18n("Reverse"), this);
 	action_drop_values = new KAction(KIcon(""), i18n("Drop Values"), this);
-	action_join_columns = new KAction(KIcon(""), i18n("Join"), this);
+	action_mask_values = new KAction(KIcon(""), i18n("Mask Values"), this);
+// 	action_join_columns = new KAction(KIcon(""), i18n("Join"), this);
 	action_normalize_columns = new KAction(KIcon(""), i18n("&Normalize"), this);
 	action_normalize_selection = new KAction(KIcon(""), i18n("&Normalize Selection"), this);
 	action_sort_columns = new KAction(KIcon(""), i18n("&Selected Columns"), this);
@@ -262,7 +262,8 @@ void SpreadsheetView::initMenus(){
 
 	m_columnMenu->addAction(action_reverse_columns);
 	m_columnMenu->addAction(action_drop_values);
-	m_columnMenu->addAction(action_join_columns);
+	m_columnMenu->addAction(action_mask_values);
+// 	m_columnMenu->addAction(action_join_columns);
 	m_columnMenu->addAction(action_normalize_columns);
 
 	submenu = new QMenu(i18n("Sort"));
@@ -355,7 +356,8 @@ void SpreadsheetView::connectActions(){
 // 	connect(action_set_as_none, SIGNAL(triggered()), this, SLOT(setSelectedColumnsAsNone()));
 	connect(action_reverse_columns, SIGNAL(triggered()), this, SLOT(reverseColumns()));
 	connect(action_drop_values, SIGNAL(triggered()), this, SLOT(dropColumnValues()));
-	connect(action_join_columns, SIGNAL(triggered()), this, SLOT(joinColumns()));
+	connect(action_mask_values, SIGNAL(triggered()), this, SLOT(maskColumnValues()));
+// 	connect(action_join_columns, SIGNAL(triggered()), this, SLOT(joinColumns()));
 	connect(action_normalize_columns, SIGNAL(triggered()), this, SLOT(normalizeSelectedColumns()));
 -	connect(action_normalize_selection, SIGNAL(triggered()), this, SLOT(normalizeSelection()));
 	connect(action_sort_columns, SIGNAL(triggered()), this, SLOT(sortSelectedColumns()));
@@ -1309,6 +1311,14 @@ void SpreadsheetView::reverseColumns() {
 void SpreadsheetView::dropColumnValues() {
 	if (selectedColumnCount() < 1) return;
 	DropValuesDialog* dlg = new DropValuesDialog(m_spreadsheet);
+	dlg->setAttribute(Qt::WA_DeleteOnClose);
+	dlg->setColumns(selectedColumns());
+	dlg->exec();
+}
+
+void SpreadsheetView::maskColumnValues() {
+	if (selectedColumnCount() < 1) return;
+	DropValuesDialog* dlg = new DropValuesDialog(m_spreadsheet, true);
 	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();

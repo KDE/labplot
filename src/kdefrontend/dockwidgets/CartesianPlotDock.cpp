@@ -28,7 +28,6 @@
  ***************************************************************************/
 
 #include "CartesianPlotDock.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/GuiTools.h"
@@ -227,7 +226,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 
 	labelWidget->setLabels(labels);
 
-	//if there is more then one curve in the list, disable the tab "general"
+	//if there is more then one plot in the list, disable the name and comment fields in the tab "general"
 	if (list.size()==1){
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -246,7 +245,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 		ui.leComment->setText("");
 	}
 
-	//show the properties of the first curve
+	//show the properties of the first plot
   	this->load();
 
 	//update active widgets

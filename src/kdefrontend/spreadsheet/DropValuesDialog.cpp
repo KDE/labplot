@@ -65,6 +65,8 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent, Q
 	if (m_mask) {
 		setButtonText(KDialog::Ok, i18n("&Mask"));
 		setButtonToolTip(KDialog::Ok, i18n("Mask values in the specified region"));
+		ui.lMode->setText(i18n("Mask values"));
+		setWindowTitle(i18n("Mask values"));
 	} else {
 		setButtonText(KDialog::Ok, i18n("&Drop"));
 		setButtonToolTip(KDialog::Ok, i18n("Drop values in the specified region"));
@@ -82,7 +84,9 @@ void DropValuesDialog::setColumns(QList<Column*> list) {
 }
 
 void DropValuesDialog::operatorChanged(int index) const {
-	bool value2 = (index==1);
+	bool value2 = (index==1) || (index==2);
+	ui.lMin->setVisible(value2);
+	ui.lMax->setVisible(value2);
 	ui.lAnd->setVisible(value2);
 	ui.leValue2->setVisible(value2);
 }
@@ -94,19 +98,102 @@ void DropValuesDialog::okClicked() const {
 		dropValues();
 }
 
-void DropValuesDialog::maskValues() const {
-	Q_ASSERT(m_spreadsheet);
+//TODO: m_column->setMasked() is slow, we need direct access to the masked-container -> redesign
+class MaskValuesTask : public QRunnable {
+	public:
+		MaskValuesTask(Column* col, int op, double value1, double value2){
+			m_column = col;
+			m_operator = op;
+			m_value1 = value1;
+			m_value2 = value2;
+		};
 
-	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18np("%1: fill column with function values",
-									"%1: fill columns with function values",
-									m_spreadsheet->name(),
-									m_columns.size()));
+		void run() {
+			m_column->setSuppressDataChangedSignal(true);
+			bool changed = false;
+			QVector<double>* data = static_cast<QVector<double>* >(m_column->data());
 
-	m_spreadsheet->endMacro();
-	RESET_CURSOR;
-}
+			//equal to
+			if (m_operator == 0) {
+				for (int i=0; i<data->size(); ++i) {
+					if (data->at(i) == m_value1) {
+						m_column->setMasked(i, true);
+						changed = true;
+					}
+				}
+			}
 
+			//between (including end points)
+			else if (m_operator == 1) {
+				for (int i=0; i<data->size(); ++i) {
+					if (data->at(i) >= m_value1 && data->at(i) <= m_value2) {
+						m_column->setMasked(i, true);
+						changed = true;
+					}
+				}
+			}
+
+			//between (excluding end points)
+			else if (m_operator == 2) {
+				for (int i=0; i<data->size(); ++i) {
+					if (data->at(i) > m_value1 && data->at(i) < m_value2) {
+						m_column->setMasked(i, true);
+						changed = true;
+					}
+				}
+			}
+
+			//greater then
+			else if (m_operator == 3) {
+				for (int i=0; i<data->size(); ++i) {
+					if (data->at(i) > m_value1) {
+						m_column->setMasked(i, true);
+						changed = true;
+					}
+				}
+			}
+
+			//greater then or equal to
+			else if (m_operator == 4) {
+				for (int i=0; i<data->size(); ++i) {
+					if (data->at(i) >= m_value1) {
+						m_column->setMasked(i, true);
+						changed = true;
+					}
+				}
+			}
+
+			//lesser then
+			else if (m_operator == 5) {
+				for (int i=0; i<data->size(); ++i) {
+					if (data->at(i) < m_value1) {
+						m_column->setMasked(i, true);
+						changed = true;
+					}
+				}
+			}
+
+			//lesser then or equal to
+			else if (m_operator == 6) {
+				for (int i=0; i<data->size(); ++i) {
+					if (data->at(i) <= m_value1) {
+						m_column->setMasked(i, true);
+						changed = true;
+					}
+				}
+			}
+
+			m_column->setSuppressDataChangedSignal(false);
+			if (changed)
+				m_column->setChanged();
+		}
+
+	private:
+		Column* m_column;
+		int m_operator;
+		double m_value1;
+		double m_value2;
+};
 
 class DropValuesTask : public QRunnable {
 	public:
@@ -119,104 +206,81 @@ class DropValuesTask : public QRunnable {
 
 		void run() {
 			bool changed = false;
+			QVector<double>* data = static_cast<QVector<double>* >(m_column->data());
+			QVector<double> new_data(*data);
 
 			//equal to
 			if (m_operator == 0) {
-				QVector<double>* data = static_cast<QVector<double>* >(m_column->data());
-				QVector<double> new_data(*data);
 				for (int i=0; i<new_data.size(); ++i) {
 					if (new_data[i] == m_value1) {
 						new_data[i] = NAN;
 						changed = true;
 					}
 				}
-				if (changed)
-					m_column->replaceValues(0, new_data);
 			}
 
 			//between (including end points)
 			else if (m_operator == 1) {
-				QVector<double>* data = static_cast<QVector<double>* >(m_column->data());
-				QVector<double> new_data(*data);
 				for (int i=0; i<new_data.size(); ++i) {
 					if (new_data[i] >= m_value1 && new_data[i] <= m_value2) {
 						new_data[i] = NAN;
 						changed = true;
 					}
 				}
-				if (changed)
-					m_column->replaceValues(0, new_data);
 			}
 
 			//between (excluding end points)
 			else if (m_operator == 2) {
-				QVector<double>* data = static_cast<QVector<double>* >(m_column->data());
-				QVector<double> new_data(*data);
 				for (int i=0; i<new_data.size(); ++i) {
 					if (new_data[i] > m_value1 && new_data[i] < m_value2) {
 						new_data[i] = NAN;
 						changed = true;
 					}
 				}
-				if (changed)
-					m_column->replaceValues(0, new_data);
 			}
 
 			//greater then
 			else if (m_operator == 3) {
-				QVector<double>* data = static_cast<QVector<double>* >(m_column->data());
-				QVector<double> new_data(*data);
 				for (int i=0; i<new_data.size(); ++i) {
 					if (new_data[i] > m_value1) {
 						new_data[i] = NAN;
 						changed = true;
 					}
 				}
-				if (changed)
-					m_column->replaceValues(0, new_data);
 			}
 
 			//greater then or equal to
 			else if (m_operator == 4) {
-				QVector<double>* data = static_cast<QVector<double>* >(m_column->data());
-				QVector<double> new_data(*data);
 				for (int i=0; i<new_data.size(); ++i) {
 					if (new_data[i] >= m_value1) {
 						new_data[i] = NAN;
 						changed = true;
 					}
 				}
-				if (changed)
-					m_column->replaceValues(0, new_data);
 			}
 
 			//lesser then
 			else if (m_operator == 5) {
-				QVector<double>* data = static_cast<QVector<double>* >(m_column->data());
-				QVector<double> new_data(*data);
 				for (int i=0; i<new_data.size(); ++i) {
 					if (new_data[i] < m_value1) {
 						new_data[i] = NAN;
 						changed = true;
 					}
 				}
-				if (changed)
-					m_column->replaceValues(0, new_data);
 			}
 
 			//lesser then or equal to
 			else if (m_operator == 6) {
-				QVector<double>* data = static_cast<QVector<double>* >(m_column->data());
-				QVector<double> new_data(*data);
 				for (int i=0; i<new_data.size(); ++i) {
 					if (new_data[i] <= m_value1) {
 						new_data[i] = NAN;
 						changed = true;
 					}
 				}
-				if (changed)
-					m_column->replaceValues(0, new_data);
 			}
+
+			if (changed)
+				m_column->replaceValues(0, new_data);
 		}
 
 	private:
@@ -226,14 +290,35 @@ class DropValuesTask : public QRunnable {
 		double m_value2;
 };
 
+void DropValuesDialog::maskValues() const {
+	Q_ASSERT(m_spreadsheet);
+
+	WAIT_CURSOR;
+	m_spreadsheet->beginMacro(i18n("%1: mask values", m_spreadsheet->name()));
+
+	const int op = ui.cbOperator->currentIndex();
+	const double value1 = ui.leValue1->text().toDouble();
+	const double value2 = ui.leValue2->text().toDouble();
+
+	foreach(Column* col, m_columns) {
+		MaskValuesTask* task = new MaskValuesTask(col, op, value1, value2);
+		task->run();
+		//TODO: writing to the undo-stack in Column::setMasked() is not tread-safe -> redesign
+// 		QThreadPool::globalInstance()->start(task);
+	}
+
+	//wait until all columns were processed
+// 	QThreadPool::globalInstance()->waitForDone();
+
+	m_spreadsheet->endMacro();
+	RESET_CURSOR;
+}
+
 void DropValuesDialog::dropValues() const {
 	Q_ASSERT(m_spreadsheet);
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18np("%1: fill column with function values",
-									"%1: fill columns with function values",
-									m_spreadsheet->name(),
-									m_columns.size()));
+	m_spreadsheet->beginMacro(i18n("%1: drop values", m_spreadsheet->name()));
 
 	const int op = ui.cbOperator->currentIndex();
 	const double value1 = ui.leValue1->text().toDouble();

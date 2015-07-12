@@ -815,8 +815,8 @@ void WorksheetView::useViewSizeRequested() {
 
 void WorksheetView::processResize() {
 	if (size() != sceneRect().size()) {
-		static const float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
-		static const float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
+		static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
+		static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
 		m_worksheet->setUndoAware(false);
 		m_worksheet->setPageRect(QRectF(0.0, 0.0, width()/hscale, height()/vscale));
 		m_worksheet->setUndoAware(true);
@@ -829,8 +829,8 @@ void WorksheetView::changeZoom(QAction* action){
 	}else if (action==zoomOutViewAction){
 		scale(1.0/1.2, 1.0/1.2);
 	}else if (action==zoomOriginAction){
-		static const float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
-		static const float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
+		static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
+		static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
 		setTransform(QTransform::fromScale(hscale, vscale));
 	}else if (action==zoomFitPageWidthAction){
 		float scaleFactor = viewport()->width()/scene()->sceneRect().width();
