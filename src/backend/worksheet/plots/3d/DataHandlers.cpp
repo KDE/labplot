@@ -122,7 +122,7 @@ namespace {
 	vtkSmartPointer<vtkActor> renderTriangles(vtkSmartPointer<vtkPoints>& points,
 			vtkSmartPointer<vtkCellArray>& triangles) {
 
-		qDebug() << Q_FUNC_INFO << "Amount of triangles:" << triangles->GetSize();
+		qDebug() << Q_FUNC_INFO << "Amount of triangles:" << triangles->GetNumberOfCells();
 
 		vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
 
