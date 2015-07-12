@@ -446,9 +446,13 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 		emit q->completed(100*currentRow/actualRows);
 	}
 
+	if (!dataSource)
+		return dataString.join("");
+
+	//make everything undo/redo-able again
 	//set the comments for each of the columns
-	if (dataSource != NULL && dataSource->inherits("Spreadsheet")) {
-		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	if (spreadsheet) {
 		//TODO: generalize to different data types
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", headerEnabled ? currentRow : currentRow+1);
 		for ( int n=startColumn; n<=endColumn; n++ ){
@@ -460,13 +464,17 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 				column->setChanged();
 			}
 		}
-	} else if (dataSource != NULL && dataSource->inherits("Matrix")) {
-		Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-		matrix->setSuppressDataChangedSignal(false);
-		matrix->setChanged();
+		spreadsheet->setUndoAware(true);
+		return dataString.join("");
 	}
 
-	dataSource->setUndoAware(true);
+
+	Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+	if (matrix) {
+		matrix->setSuppressDataChangedSignal(false);
+		matrix->setChanged();
+		matrix->setUndoAware(true);
+	}
 
 	return dataString.join("");
 }

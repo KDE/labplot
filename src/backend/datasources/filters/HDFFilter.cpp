@@ -148,7 +148,7 @@ bool HDFFilter::isAutoModeEnabled() const{
 //################### Private implementation ##########################
 //#####################################################################
 
-HDFFilterPrivate::HDFFilterPrivate(HDFFilter* owner) : 
+HDFFilterPrivate::HDFFilterPrivate(HDFFilter* owner) :
 	q(owner),currentDataSetName(""),startRow(1), endRow(-1),startColumn(1),endColumn(-1) {
 }
 
@@ -262,14 +262,14 @@ QString HDFFilterPrivate::translateHDFClass(H5T_class_t c) {
 QStringList HDFFilterPrivate::readHDFCompound(hid_t tid) {
 	QStringList dataString;
 	size_t typeSize = H5Tget_size(tid);
-	
+
 	dataString<<"COMPOUND("<<QString::number(typeSize)<<"):(";
 	int members = H5Tget_nmembers(tid);
 	handleError(members,"H5Tget_nmembers");
 	for(int i=0;i<members;i++) {
 		H5T_class_t mclass = H5Tget_member_class(tid,i);
 		handleError((int)mclass,"H5Tget_member_class");
-		hid_t mtype = H5Tget_member_type(tid,i); 
+		hid_t mtype = H5Tget_member_type(tid,i);
 		handleError((int)mtype,"H5Tget_member_type");
 		size_t size = H5Tget_size(mtype);
 		handleError((int)size,"H5Tget_size");
@@ -359,7 +359,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 			for(int i=0;i<rows;i++)
 				data[m]<<"_"<<"\n";
 			if(dataP != NULL) {
-				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) 
+				for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++)
 					dataP->operator[](i-startRow+1) = 0;
 			}
 			H5T_class_t mclass = H5Tget_member_class(tid,m);
@@ -715,7 +715,7 @@ QStringList HDFFilterPrivate::readHDFPropertyList(hid_t pid) {
 		case H5Z_FILTER_DEFLATE:  /* AKA GZIP compression */
 			props<<": DEFLATE level ="<<QString::number(cd_values[0]);
 			break;
-		case H5Z_FILTER_SHUFFLE: 
+		case H5Z_FILTER_SHUFFLE:
 			props<<": SHUFFLE"; /* no parms */
 			break;
 		case H5Z_FILTER_FLETCHER32:
@@ -779,9 +779,9 @@ QStringList HDFFilterPrivate::readHDFPropertyList(hid_t pid) {
         if (fvstatus == H5D_FILL_VALUE_UNDEFINED) {
 		props<<" No fill value defined";
         } else {
-                /* TODO: Read  the fill value with H5Pget_fill_value. 
+                /* TODO: Read  the fill value with H5Pget_fill_value.
                  * Fill value is the same data type as the dataset.
-                 * (details not shown) 
+                 * (details not shown)
                  **/
         }
 
@@ -1239,7 +1239,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		QString message = "rank = "+QString::number(rank)+" not supported";
 		qDebug()<<message;
 		dataString<<message.replace(' ',QChar::Nbsp);
-	}	
+	}
 	}
 
 	status = H5Sclose(dataspace);
@@ -1251,9 +1251,13 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	status = H5Fclose(file);
 	handleError(status,"H5Fclose");
 
+	if (!dataSource)
+		return dataString.join("");
+
+	// make everything undo/redo-able again
 	// set column comments in spreadsheet
-	if (dataSource != NULL && dataSource->inherits("Spreadsheet")) {
-		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	if (spreadsheet) {
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
 		for ( int n=0; n<actualCols; n++ ){
 			Column* column = spreadsheet->column(columnOffset+n);
@@ -1265,7 +1269,16 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			}
 		}
 		spreadsheet->setUndoAware(true);
+		return dataString.join("");
 	}
+
+	Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+	if (matrix) {
+		matrix->setSuppressDataChangedSignal(false);
+		matrix->setChanged();
+		matrix->setUndoAware(true);
+	}
+
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)
@@ -1281,7 +1294,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
     Uses the settings defined in the data source.
 */
 void HDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
-	
+
 	if(currentDataSetName.isEmpty()) {
 		qDebug()<<" No data set selected";
 		return;
