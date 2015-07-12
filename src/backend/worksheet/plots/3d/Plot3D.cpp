@@ -58,20 +58,23 @@
 #include <vtkQImageToImageSource.h>
 
 
-Plot3D::Plot3D(const QString& name, QGLContext *context)
-	: AbstractPlot(name, new Plot3DPrivate(this, context)){
-	qDebug() << Q_FUNC_INFO;
-	init();
+Plot3D::Plot3D(const QString& name)
+	: AbstractPlot(name, new Plot3DPrivate(this)){
 }
 
 Plot3D::Plot3D(const QString &name, Plot3DPrivate *dd)
 	: AbstractPlot(name, dd){
-	qDebug() << Q_FUNC_INFO;
-	init();
 }
 
-void Plot3D::init(){
+void Plot3D::init(bool transform){
 	Q_D(Plot3D);
+	if (d->isInitialized)
+		return;
+
+	if (!d->rectSet || d->context == 0)
+		return;
+
+	qDebug() << Q_FUNC_INFO << this;
 
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
@@ -99,9 +102,21 @@ void Plot3D::init(){
 	foreach (IDataHandler* handler, d->dataHandlers) {
 		connect(handler, SIGNAL(parametersChanged()), this, SLOT(updatePlot()));
 	}
+
+	d->isInitialized = true;
+
+	if (transform)
+		retransform();
+}
+
+void Plot3D::setContext(QGLContext *context) {
+	qDebug() << Q_FUNC_INFO << this;
+	Q_D(Plot3D);
+	d->context = context;
 }
 
 void Plot3D::updatePlot() {
+	qDebug() << Q_FUNC_INFO << this;
 	Q_D(Plot3D);
 	d->updatePlot();
 }
@@ -123,15 +138,18 @@ QMenu* Plot3D::createContextMenu(){
 }
 
 void Plot3D::setRect(const QRectF &rect){
+	qDebug() << Q_FUNC_INFO << this;
 	Q_D(Plot3D);
 	d->rect = rect;
-	d->retransform();
+	d->rectSet = true;
+
+	retransform();
 }
 
 void Plot3D::setVisualizationType(VisualizationType type){
 	Q_D(Plot3D);
 	d->visType = type;
-	d->updatePlot();
+	updatePlot();
 }
 
 Plot3D::VisualizationType Plot3D::visualizationType() const{
@@ -142,7 +160,7 @@ Plot3D::VisualizationType Plot3D::visualizationType() const{
 void Plot3D::setDataSource(DataSource source){
 	Q_D(Plot3D);
 	d->sourceType = source;
-	d->updatePlot();
+	updatePlot();
 }
 
 Plot3D::DataSource Plot3D::dataSource() const{
@@ -177,6 +195,13 @@ Axes& Plot3D::axes() {
 
 void Plot3D::retransform(){
 	Q_D(Plot3D);
+	if (d->context == 0)
+		return;
+
+	if (!d->isInitialized)
+		init(false);
+	qDebug() << Q_FUNC_INFO << this;
+
 	d->retransform();
 	WorksheetElementContainer::retransform();
 
@@ -262,12 +287,14 @@ void Plot3D::setBackgroundOpacity(float opacity) {
 //######################### Private implementation #############################
 //##############################################################################
 
-Plot3DPrivate::Plot3DPrivate(Plot3D* owner, QGLContext *context)
+Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	: AbstractPlotPrivate(owner)
 	, q(owner)
-	, context(context)
+	, context(0)
 	, visType(Plot3D::VisualizationType_Triangles)
-	, sourceType(Plot3D::DataSource_File) {
+	, sourceType(Plot3D::DataSource_File)
+	, isInitialized(false)
+	, rectSet(false) {
 }
 
 Plot3DPrivate::~Plot3DPrivate() {
@@ -335,8 +362,6 @@ void Plot3DPrivate::init() {
 	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
 	backgroundRenderer->AddActor(backgroundImageActor);
 
-	updateBackground();
-
 	dataHandlers.reserve(Plot3D::DataSource_MAX);
 	dataHandlers[Plot3D::DataSource_Empty] = &demoHandler;
 	dataHandlers[Plot3D::DataSource_File] = &fileHandler;
@@ -392,6 +417,7 @@ void Plot3DPrivate::updatePlot() {
 }
 
 void Plot3DPrivate::updateBackground() {
+	qDebug() << Q_FUNC_INFO << this;
 	const QRectF rect(0, 0, this->rect.width(), this->rect.height());
 	//prepare the image
 	QImage image(rect.width(), rect.height(), QImage::Format_ARGB32_Premultiplied);
@@ -549,8 +575,9 @@ bool Plot3D::load(XmlStreamReader* reader) {
 			const QString& showAxesAttr = attribs.value("show_axes").toString();
 			if(!showAxesAttr.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'show_axes'"));
-			else
-				d->axes->show(static_cast<bool>(showAxesAttr.toInt()));
+			else {
+				// TODO: Implement
+			}
 
 			const QString& visTypeAttr = attribs.value("vis_type").toString();
 			if (!visTypeAttr.isEmpty())

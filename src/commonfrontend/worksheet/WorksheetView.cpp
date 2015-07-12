@@ -67,7 +67,7 @@
   Constructur of the class.
   Creates a view for the Worksheet \c worksheet and initializes the internal model.
 */
-WorksheetView::WorksheetView(Worksheet* worksheet, QGLContext* glContext) : QGraphicsView(),
+WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_worksheet(worksheet),
 	m_mouseMode(SelectionMode),
 	m_cartesianPlotActionMode(ApplyActionToSelection),
@@ -79,7 +79,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet, QGLContext* glContext) : QGra
 	m_fadeOutTimeLine(0),
 	tbNewCartesianPlot(0),
 	tbZoom(0),
-	glContext(glContext),
+	glContext(new QGLContext(QGLFormat(QGL::DoubleBuffer))),
 	vtkWidget(new QVTKWidget2(glContext)){
 
 	setViewport(vtkWidget);
@@ -126,6 +126,11 @@ WorksheetView::WorksheetView(Worksheet* worksheet, QGLContext* glContext) : QGra
 	connect(m_worksheet, SIGNAL(useViewSizeRequested()), this, SLOT(useViewSizeRequested()) );
 	connect(m_worksheet, SIGNAL(layoutChanged(Worksheet::Layout)), this, SLOT(layoutChanged(Worksheet::Layout)) );
 	connect(scene(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
+
+	foreach(Plot3D* child, worksheet->children<Plot3D>()){
+		child->setContext(glContext);
+		child->init();
+	}
 }
 
 void WorksheetView::initActions(){
@@ -891,7 +896,9 @@ void WorksheetView::addNew(QAction* action){
 	}else if ( action == add3DPlotAction ){
 		// TODO: Create a 3D plot widget
 		qDebug() << Q_FUNC_INFO << "Add3dPlot menu clicked";
-		Plot3D* plot = new Plot3D(i18n("3D Plot"), glContext);
+		Plot3D* plot = new Plot3D(i18n("3D Plot"));
+		plot->setContext(glContext);
+		plot->init();
 		aspect = plot;
 	}else if ( action == addTextLabelAction ){
 		TextLabel* l = new TextLabel(i18n("text label"));

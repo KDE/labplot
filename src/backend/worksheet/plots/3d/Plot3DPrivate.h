@@ -54,7 +54,7 @@ class QVTKGraphicsItem;
 
 class Plot3DPrivate:public AbstractPlotPrivate{
 	public:
-		explicit Plot3DPrivate(Plot3D* owner, QGLContext *context);
+		explicit Plot3DPrivate(Plot3D* owner);
 		virtual ~Plot3DPrivate();
 
 		void init();
@@ -66,10 +66,12 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
 
 		Plot3D* const q;
-		QGLContext * const context;
+		QGLContext* context;
 		QVTKGraphicsItem *vtkItem;
 		Plot3D::VisualizationType visType;
 		Plot3D::DataSource sourceType;
+		bool isInitialized;
+		bool rectSet;
 
 		DemoDataHandler demoHandler;
 		SpreadsheetDataHandler spreadsheetHandler;

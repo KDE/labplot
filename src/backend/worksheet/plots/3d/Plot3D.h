@@ -62,8 +62,11 @@ class Plot3D:public AbstractPlot{
 			DataSource_MAX
 		};
 
-		explicit Plot3D(const QString &name, QGLContext *context);
+		explicit Plot3D(const QString &name);
 		virtual ~Plot3D();
+		void init(bool transform = true);
+
+		void setContext(QGLContext *context);
 
 		QIcon icon() const;
 		virtual QMenu* createContextMenu();
@@ -101,9 +104,6 @@ class Plot3D:public AbstractPlot{
 
 	protected:
 		Plot3D(const QString &name, Plot3DPrivate *dd);
-
-	private:
-		void init();
 
 	private slots:
 		void updatePlot();

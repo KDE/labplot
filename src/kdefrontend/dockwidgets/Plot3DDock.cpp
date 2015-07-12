@@ -160,7 +160,9 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+	// TODO: Uncomment later
+	//connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	// Axes
 	ui.axesType->insertItem(Axes::AxesType_NoAxes, i18n("No Axes"));
@@ -264,7 +266,8 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	//SIGNALs/SLOTs
 	//general
 	connect( m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(plotDescriptionChanged(const AbstractAspect*)) );
-	connect( m_plot, SIGNAL(rectChanged(QRectF&)), this, SLOT(plotRectChanged(QRectF&)) );
+	// TODO: Uncomment later
+	//connect( m_plot, SIGNAL(rectChanged(QRectF&)), this, SLOT(plotRectChanged(QRectF&)) );
 
 	//background
 	connect(m_plot,SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)),this,SLOT(plotBackgroundTypeChanged(PlotArea::BackgroundType)));

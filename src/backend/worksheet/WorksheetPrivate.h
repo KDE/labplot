@@ -69,8 +69,6 @@ class WorksheetPrivate{
 		float layoutHorizontalSpacing;
 		int layoutColumnCount;
 		int layoutRowCount;
-
-		QGLContext* glContext;
 };
 
 #endif

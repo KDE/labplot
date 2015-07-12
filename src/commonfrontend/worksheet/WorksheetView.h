@@ -48,7 +48,7 @@ class WorksheetView : public QGraphicsView {
 	Q_OBJECT
 
   public:
-	explicit WorksheetView(Worksheet* worksheet, QGLContext* glContext);
+	explicit WorksheetView(Worksheet* worksheet);
 
 	enum ExportFormat{Pdf, Eps, Svg, Png};
 	enum GridStyle{NoGrid, LineGrid, DotGrid};

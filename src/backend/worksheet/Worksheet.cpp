@@ -160,7 +160,7 @@ QMenu *Worksheet::createContextMenu() {
  */
 QWidget *Worksheet::view() const {
 	if (!m_view) {
-		m_view = new WorksheetView(const_cast<Worksheet *>(this), d->glContext);
+		m_view = new WorksheetView(const_cast<Worksheet *>(this));
 		connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 	}
 	return m_view;
@@ -531,8 +531,7 @@ void Worksheet::setPrinting(bool on) const {
 WorksheetPrivate::WorksheetPrivate(Worksheet *owner):q(owner),
 	pageRect(0, 0, 1500, 1500),
 	m_scene(new QGraphicsScene(pageRect)),
-	scaleContent(false),
-	glContext(new QGLContext(QGLFormat(QGL::DoubleBuffer))){
+	scaleContent(false){
 }
 
 QString WorksheetPrivate::name() const{
@@ -896,7 +895,7 @@ bool Worksheet::load(XmlStreamReader* reader){
                 addChild(plot);
             }
         }else if(reader->name() == "Plot3D"){
-            Plot3D* plot = new Plot3D("", d->glContext);
+            Plot3D* plot = new Plot3D("");
             if (!plot->load(reader)){
                 delete plot;
                 return false;
