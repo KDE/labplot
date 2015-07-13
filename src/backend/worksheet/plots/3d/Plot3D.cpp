@@ -29,16 +29,12 @@
 #include "Plot3D.h"
 #include "Plot3DPrivate.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/matrix/Matrix.h"
 #include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 
 #include <QDebug>
 #include <QPainter>
-#include <QWidget>
 
 #include <KIcon>
 #include <KConfig>
