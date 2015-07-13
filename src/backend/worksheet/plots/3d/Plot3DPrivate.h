@@ -34,10 +34,7 @@
 #include "DataHandlers.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 
-#include <KUrl>
-
 #include <vtkSmartPointer.h>
-#include <vtkRenderer.h>
 
 class Matrix;
 class Axes;
