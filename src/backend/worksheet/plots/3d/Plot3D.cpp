@@ -148,20 +148,10 @@ void Plot3D::setVisualizationType(VisualizationType type){
 	updatePlot();
 }
 
-Plot3D::VisualizationType Plot3D::visualizationType() const{
-	Q_D(const Plot3D);
-	return d->visType;
-}
-
 void Plot3D::setDataSource(DataSource source){
 	Q_D(Plot3D);
 	d->sourceType = source;
 	updatePlot();
-}
-
-Plot3D::DataSource Plot3D::dataSource() const{
-	Q_D(const Plot3D);
-	return d->sourceType;
 }
 
 DemoDataHandler& Plot3D::demoDataHandler() {
@@ -210,6 +200,8 @@ void Plot3D::retransform(){
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
+BASIC_SHARED_D_READER_IMPL(Plot3D, Plot3D::VisualizationType, visualizationType, visType)
+BASIC_SHARED_D_READER_IMPL(Plot3D, Plot3D::DataSource, dataSource, sourceType)
 BASIC_SHARED_D_READER_IMPL(Plot3D, PlotArea::BackgroundType, backgroundType, backgroundType)
 BASIC_SHARED_D_READER_IMPL(Plot3D, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
 BASIC_SHARED_D_READER_IMPL(Plot3D, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle)

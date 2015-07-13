@@ -29,9 +29,10 @@
 #ifndef PLOT3D_H
 #define PLOT3D_H
 
-#include "Axes.h"
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/PlotArea.h"
+
+class Axes;
 
 class QGLContext;
 class Plot3DPrivate;
@@ -61,21 +62,12 @@ class Plot3D:public AbstractPlot{
 		explicit Plot3D(const QString &name);
 		virtual ~Plot3D();
 		void init(bool transform = true);
-
-		void setContext(QGLContext *context);
+		void retransform();
 
 		QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
-
-		void setRect(const QRectF&);
-
-		void setVisualizationType(VisualizationType type);
-		VisualizationType visualizationType() const;
-
-		void setDataSource(DataSource source);
-		DataSource dataSource() const;
 
 		DemoDataHandler& demoDataHandler();
 		SpreadsheetDataHandler& spreadsheetDataHandler();
@@ -84,6 +76,11 @@ class Plot3D:public AbstractPlot{
 
 		Axes& axes();
 
+		void setRect(const QRectF&);
+		void setContext(QGLContext *context);
+
+		BASIC_D_ACCESSOR_DECL(VisualizationType, visualizationType, VisualizationType)
+		BASIC_D_ACCESSOR_DECL(DataSource, dataSource, DataSource)
 		BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
@@ -92,8 +89,6 @@ class Plot3D:public AbstractPlot{
 		CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
 		CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
 		CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
-
-		void retransform();
 
 		typedef Plot3D BaseClass;
 		typedef Plot3DPrivate Private;
