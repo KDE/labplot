@@ -176,7 +176,7 @@ bool Workbook::load(XmlStreamReader* reader){
                 addChild(spreadsheet);
             }
 		} else if (reader->name() == "matrix"){
-            Matrix* matrix = new Matrix(0, i18n("matrix"));
+            Matrix* matrix = new Matrix(0, i18n("matrix"), true);
             if (!matrix->load(reader)){
                 delete matrix;
                 return false;
