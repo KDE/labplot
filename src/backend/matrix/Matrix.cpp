@@ -610,7 +610,6 @@ void MatrixPrivate::clearColumn(int col) {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 void Matrix::save(QXmlStreamWriter* writer) const {
-	qDebug()<<"in save";
 	writer->writeStartElement("matrix");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
