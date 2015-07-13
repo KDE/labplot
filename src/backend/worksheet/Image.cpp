@@ -88,15 +88,13 @@ QIcon Image::icon() const {
     return KIcon("image-x-generic");
 }
 
-QMenu *Image::createContextMenu() {
-    // 	QMenu *menu = AbstractPart::createContextMenu();
-    //     Q_ASSERT(menu);
+QMenu* Image::createContextMenu() {
     QMenu* menu = new QMenu(0);
     emit requestProjectContextMenu(menu);
     return menu;
 }
 
-QWidget *Image::view() const {
+QWidget* Image::view() const {
     if (!m_view) {
         m_view = new ImageView(const_cast<Image *>(this));
         connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));

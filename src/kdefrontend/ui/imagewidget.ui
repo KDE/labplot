@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>461</width>
+    <width>474</width>
     <height>568</height>
    </rect>
   </property>
@@ -431,6 +431,29 @@
    <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>kleFileName</tabstop>
+  <tabstop>bOpen</tabstop>
+  <tabstop>cbGraphType</tabstop>
+  <tabstop>cbXErrorType</tabstop>
+  <tabstop>cbYErrorType</tabstop>
+  <tabstop>sbPoisitionX1</tabstop>
+  <tabstop>sbPoisitionY1</tabstop>
+  <tabstop>sbPoisitionX2</tabstop>
+  <tabstop>sbPoisitionY2</tabstop>
+  <tabstop>sbPoisitionX3</tabstop>
+  <tabstop>sbPoisitionY3</tabstop>
+  <tabstop>cbPlotImageType</tabstop>
+  <tabstop>rbIntensity</tabstop>
+  <tabstop>rbForeground</tabstop>
+  <tabstop>rbHue</tabstop>
+  <tabstop>rbSaturation</tabstop>
+  <tabstop>rbValue</tabstop>
+  <tabstop>sbRotation</tabstop>
+  <tabstop>sbMinSegmentLength</tabstop>
+  <tabstop>sbPointSeparation</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
