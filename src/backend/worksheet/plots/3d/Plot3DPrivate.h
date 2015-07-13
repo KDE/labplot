@@ -60,7 +60,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		Plot3D* const q;
 		QGLContext* context;
 		QVTKGraphicsItem *vtkItem;
-		Plot3D::VisualizationType visType;
+		Plot3D::VisualizationType visualizationType;
 		Plot3D::DataSource sourceType;
 		bool isInitialized;
 		bool rectSet;

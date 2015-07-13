@@ -31,6 +31,7 @@
 
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
+#include "backend/worksheet/plots/3d/Plot3D.h"
 #include "ui_plot3ddock.h"
 
 class Plot3D;
@@ -75,6 +76,9 @@ class Plot3DDock: public QWidget {
 		void onDataSourceChanged(int index);
 		void onFileChanged(const KUrl& path);
 		void onTreeViewIndexChanged(const QModelIndex& index);
+
+		void visualizationTypeChanged(Plot3D::VisualizationType);
+		void sourceTypeChanged(Plot3D::DataSource);
 
 		//"Background"-tab
 		void backgroundTypeChanged(int);

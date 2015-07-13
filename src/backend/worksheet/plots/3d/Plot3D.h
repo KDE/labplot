@@ -100,6 +100,8 @@ class Plot3D:public AbstractPlot{
 		void updatePlot();
 
 	signals:
+		friend class Plot3DSetVisualizationTypeCmd;
+		friend class Plot3DSetDataSourceCmd;
 		friend class Plot3DSetBackgroundTypeCmd;
 		friend class Plot3DSetBackgroundColorStyleCmd;
 		friend class Plot3DSetBackgroundImageStyleCmd;
@@ -108,6 +110,8 @@ class Plot3D:public AbstractPlot{
 		friend class Plot3DSetBackgroundSecondColorCmd;
 		friend class Plot3DSetBackgroundFileNameCmd;
 		friend class Plot3DSetBackgroundOpacityCmd;
+		void visualizationTypeChanged(Plot3D::VisualizationType);
+		void sourceTypeChanged(Plot3D::DataSource);
 		void backgroundTypeChanged(PlotArea::BackgroundType);
 		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
 		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);

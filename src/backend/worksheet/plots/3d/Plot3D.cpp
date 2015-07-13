@@ -142,18 +142,6 @@ void Plot3D::setRect(const QRectF &rect){
 	retransform();
 }
 
-void Plot3D::setVisualizationType(VisualizationType type){
-	Q_D(Plot3D);
-	d->visType = type;
-	updatePlot();
-}
-
-void Plot3D::setDataSource(DataSource source){
-	Q_D(Plot3D);
-	d->sourceType = source;
-	updatePlot();
-}
-
 DemoDataHandler& Plot3D::demoDataHandler() {
 	Q_D(Plot3D);
 	return d->demoHandler;
@@ -179,7 +167,7 @@ Axes& Plot3D::axes() {
 	return *d->axes;
 }
 
-void Plot3D::retransform(){
+void Plot3D::retransform() {
 	Q_D(Plot3D);
 	if (d->context == 0)
 		return;
@@ -190,17 +178,12 @@ void Plot3D::retransform(){
 
 	d->retransform();
 	WorksheetElementContainer::retransform();
-
-	//TODO:do we really need to trigger an update in the view?
-// 	Worksheet* w = dynamic_cast<Worksheet*>(this->parentAspect());
-// 	if (w)
-// 		w->view()->update();
 }
 
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(Plot3D, Plot3D::VisualizationType, visualizationType, visType)
+BASIC_SHARED_D_READER_IMPL(Plot3D, Plot3D::VisualizationType, visualizationType, visualizationType)
 BASIC_SHARED_D_READER_IMPL(Plot3D, Plot3D::DataSource, dataSource, sourceType)
 BASIC_SHARED_D_READER_IMPL(Plot3D, PlotArea::BackgroundType, backgroundType, backgroundType)
 BASIC_SHARED_D_READER_IMPL(Plot3D, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
@@ -215,6 +198,20 @@ BASIC_SHARED_D_READER_IMPL(Plot3D, float, backgroundOpacity, backgroundOpacity)
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetVisualizationType, Plot3D::VisualizationType, visualizationType, updatePlot)
+void Plot3D::setVisualizationType(VisualizationType type) {
+	Q_D(Plot3D);
+	if (type != d->visualizationType)
+		exec(new Plot3DSetVisualizationTypeCmd(d, type, i18n("%1: visualization type changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetDataSource, Plot3D::DataSource, sourceType, updatePlot)
+void Plot3D::setDataSource(DataSource source) {
+	Q_D(Plot3D);
+	if (source != d->sourceType)
+		exec(new Plot3DSetDataSourceCmd(d, source, i18n("%1: data source type changed")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundType, PlotArea::BackgroundType, backgroundType, updateBackground)
 void Plot3D::setBackgroundType(PlotArea::BackgroundType type) {
 	Q_D(Plot3D);
@@ -279,7 +276,7 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	: AbstractPlotPrivate(owner)
 	, q(owner)
 	, context(0)
-	, visType(Plot3D::VisualizationType_Triangles)
+	, visualizationType(Plot3D::VisualizationType_Triangles)
 	, sourceType(Plot3D::DataSource_File)
 	, isInitialized(false)
 	, rectSet(false) {
@@ -399,7 +396,7 @@ void Plot3DPrivate::updatePlot() {
 	}
 
 	//render the plot
-	renderer->AddActor(dataHandlers[sourceType]->actor(visType));
+	renderer->AddActor(dataHandlers[sourceType]->actor(visualizationType));
 
 	axes->updateBounds();
 }
@@ -521,8 +518,8 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 
 		writer->writeStartElement("general");
 			writer->writeAttribute("show_axes", QString::number(d->axes->isShown()));
-			writer->writeAttribute("vis_type", QString::number(d->visType));
-			if (d->visType == VisualizationType_Triangles){
+			writer->writeAttribute("vis_type", QString::number(d->visualizationType));
+			if (d->visualizationType == VisualizationType_Triangles){
 				writer->writeAttribute("data_source", QString::number(d->sourceType));
 			}
 		writer->writeEndElement();
@@ -571,8 +568,8 @@ bool Plot3D::load(XmlStreamReader* reader) {
 			if (!visTypeAttr.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'vis_type'"));
 			else{
-				d->visType = static_cast<VisualizationType>(visTypeAttr.toInt());
-				qDebug() << Q_FUNC_INFO << "vis_type == " << d->visType;
+				d->visualizationType = static_cast<VisualizationType>(visTypeAttr.toInt());
+				qDebug() << Q_FUNC_INFO << "vis_type == " << d->visualizationType;
 			}
 
 			const QString& dataSourceAttr = attribs.value("data_source").toString();

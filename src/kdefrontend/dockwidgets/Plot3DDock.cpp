@@ -269,6 +269,9 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	// TODO: Uncomment later
 	//connect( m_plot, SIGNAL(rectChanged(QRectF&)), this, SLOT(plotRectChanged(QRectF&)) );
 
+	connect(m_plot, SIGNAL(visualizationTypeChanged(Plot3D::VisualizationType)), this, SLOT(visualizationTypeChanged(Plot3D::VisualizationType)));
+	connect(m_plot, SIGNAL(sourceTypeChanged(Plot3D::DataSource)), this, SLOT(sourceTypeChanged(Plot3D::DataSource)));
+
 	//background
 	connect(m_plot,SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)),this,SLOT(plotBackgroundTypeChanged(PlotArea::BackgroundType)));
 	connect(m_plot,SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)),this,SLOT(plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)));
@@ -282,6 +285,18 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	//light
 
 
+	m_initializing = false;
+}
+
+void Plot3DDock::visualizationTypeChanged(Plot3D::VisualizationType type){
+	m_initializing = true;
+	ui.cbType->setCurrentIndex(type);
+	m_initializing = false;
+}
+
+void Plot3DDock::sourceTypeChanged(Plot3D::DataSource type){
+	m_initializing = true;
+	ui.cbDataSource->setCurrentIndex(type);
 	m_initializing = false;
 }
 
