@@ -391,7 +391,7 @@ void Plot3DPrivate::retransform() {
 		const double y = rect.height() / 2;
 		camera->SetFocalPoint(x, y, 0.0);
 		camera->SetParallelScale(y);
-		camera->SetPosition(x,y,camera->GetDistance());
+		camera->SetPosition(x,y, 900);
 		updateBackground();
 		updatePlot();
 	}
