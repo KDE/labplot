@@ -1,5 +1,24 @@
+
+/***************************************************************************
+ *                                                                         *
+ *  This program is free software; you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation; either version 2 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the Free Software           *
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
+ *   Boston, MA  02110-1301  USA                                           *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "ImageWidget.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/CustomItem.h"
 #include "kdefrontend/widgets/CustomItemWidget.h"
 #include "commonfrontend/widgets/qxtspanslider.h"
@@ -88,6 +107,15 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     connect( ui.rbValue, SIGNAL(clicked()), this, SLOT(rbClicked()) );
     connect( ui.sbMinSegmentLength, SIGNAL(valueChanged(int)), this, SLOT(minSegmentLengthChanged(int)) );
     connect( ui.sbPointSeparation, SIGNAL(valueChanged(int)), this, SLOT(pointSeparationChanged(int)) );
+
+    //axis point
+    connect( ui.cbGraphType, SIGNAL(currentIndexChanged(int)), this, SLOT(graphTypeChanged()) );
+    connect( ui.sbPoisitionX1, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+    connect( ui.sbPoisitionY1, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+    connect( ui.sbPoisitionX2, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+    connect( ui.sbPoisitionY2, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+    connect( ui.sbPoisitionX3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+    connect( ui.sbPoisitionY3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
 }
 
 void ImageWidget::setImages(QList<Image*> list){
@@ -103,10 +131,10 @@ void ImageWidget::initConnections() {
     connect( m_image, SIGNAL(fileNameChanged(QString)), this, SLOT(imageFileNameChanged(QString)) );
     connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(imageRotationAngleChanged(float)) );
     connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-             this,SLOT(updateCustomItemList()));
-    connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(handleAspectAdded()));
-    connect( m_image, SIGNAL(requestUpdateAxisPoints()), this, SLOT(updateAxisPoints()));
-    connect( m_image, SIGNAL(plotErrorsChanged(Image::Errors)), this, SLOT(plotErrorsChanged(Image::Errors)) );
+             this,SLOT(updateCustomItemList()) );
+    connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(handleAspectAdded()) );
+    connect( m_image, SIGNAL(axisPointsChanged(Image::ReferencePoints)), this, SLOT(imageAxisPointsChanged(Image::ReferencePoints)) );
+    connect( m_image, SIGNAL(settingsChanged(Image::EditorSettings)), this, SLOT(imageEditorSettingsChanged(Image::EditorSettings)) );
 }
 
 void ImageWidget::handleWidgetActions() {
@@ -174,7 +202,21 @@ void ImageWidget::fileNameChanged(){
     }
 }
 
-void ImageWidget::updateAxisPoints() {
+void ImageWidget::graphTypeChanged() {
+    if (m_initializing)
+        return;
+
+    Image::ReferencePoints points = m_image->axisPoints();
+    points.type = Image::GraphType(ui.cbGraphType->currentIndex());
+
+    foreach(Image* image, m_imagesList)
+        image->setAxisPoints(points);
+}
+
+void ImageWidget::logicalPositionChanged() {
+    if (m_initializing)
+        return;
+
     Image::ReferencePoints points = m_image->axisPoints();
     points.logicalPos[0].setX(ui.sbPoisitionX1->value());
     points.logicalPos[0].setY(ui.sbPoisitionY1->value());
@@ -182,8 +224,9 @@ void ImageWidget::updateAxisPoints() {
     points.logicalPos[1].setY(ui.sbPoisitionY2->value());
     points.logicalPos[2].setX(ui.sbPoisitionX3->value());
     points.logicalPos[2].setY(ui.sbPoisitionY3->value());
-    points.type = Image::GraphType(ui.cbGraphType->currentIndex());
-    m_image->setAxisPoints(points);
+
+    foreach(Image* image, m_imagesList)
+        image->setAxisPoints(points);
 }
 
 void ImageWidget::rotationChanged(double value){
@@ -208,7 +251,7 @@ void ImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit) {
     settings.intensityThresholdHigh = upperLimit;
     settings.intensityThresholdLow = lowerLimit;
     foreach(Image* image, m_imagesList)
-        image->discretize(settings);
+        image->setSettings(settings);
 }
 
 void ImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit) {
@@ -224,7 +267,7 @@ void ImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit) {
     settings.foregroundThresholdHigh = upperLimit;
     settings.foregroundThresholdLow = lowerLimit;
     foreach(Image* image, m_imagesList)
-        image->discretize(settings);
+        image->setSettings(settings);
 }
 
 void ImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
@@ -240,7 +283,7 @@ void ImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
     settings.hueThresholdHigh = upperLimit;
     settings.hueThresholdLow = lowerLimit;
     foreach(Image* image, m_imagesList)
-        image->discretize(settings);
+        image->setSettings(settings);
 }
 
 void ImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit) {
@@ -256,7 +299,7 @@ void ImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit) {
     settings.saturationThresholdHigh = upperLimit;
     settings.saturationThresholdLow = lowerLimit;
     foreach(Image* image, m_imagesList)
-        image->discretize(settings);
+        image->setSettings(settings);
 }
 
 void ImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
@@ -272,7 +315,7 @@ void ImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
     settings.valueThresholdHigh = upperLimit;
     settings.valueThresholdLow = lowerLimit;
     foreach(Image* image, m_imagesList)
-        image->discretize(settings);
+        image->setSettings(settings);
 }
 
 void ImageWidget::rbClicked() {
@@ -293,7 +336,7 @@ void ImageWidget::rbClicked() {
     }
 
     foreach(Image* image, m_imagesList)
-        image->discretize(settings);
+        image->setSettings(settings);
 }
 
 void ImageWidget::plotImageTypeChanged(int index) {
@@ -353,6 +396,33 @@ void ImageWidget::imageFileNameChanged(const QString& name) {
 void ImageWidget::imageRotationAngleChanged(float angle){
     m_initializing = true;
     ui.sbRotation->setValue(angle);
+    m_initializing = false;
+}
+
+void ImageWidget::imageAxisPointsChanged(const Image::ReferencePoints& axisPoints) {
+    m_initializing = true;
+    ui.cbGraphType->setCurrentIndex((int) axisPoints.type);
+    ui.sbPoisitionX1->setValue(axisPoints.logicalPos[0].x());
+    ui.sbPoisitionY1->setValue(axisPoints.logicalPos[0].y());
+    ui.sbPoisitionX2->setValue(axisPoints.logicalPos[1].x());
+    ui.sbPoisitionY2->setValue(axisPoints.logicalPos[1].y());
+    ui.sbPoisitionX3->setValue(axisPoints.logicalPos[2].x());
+    ui.sbPoisitionY3->setValue(axisPoints.logicalPos[2].y());
+    m_initializing = false;
+}
+
+void ImageWidget::imageEditorSettingsChanged(const Image::EditorSettings& settings) {
+    m_initializing = true;
+    ssIntensity->setSpan(settings.intensityThresholdLow, settings.intensityThresholdHigh);
+    ssForeground->setSpan(m_image->settings().foregroundThresholdLow, settings.foregroundThresholdHigh);
+    ssHue->setSpan(settings.hueThresholdLow, settings.hueThresholdHigh);
+    ssSaturation->setSpan(settings.saturationThresholdLow, settings.saturationThresholdHigh);
+    ssValue->setSpan(settings.valueThresholdLow, settings.valueThresholdHigh);
+    ui.rbIntensity->setChecked(settings.type == Image::Intensity);
+    ui.rbForeground->setChecked(settings.type == Image::Foreground);
+    ui.rbHue->setChecked(settings.type == Image::Hue);
+    ui.rbSaturation->setChecked(settings.type == Image::Saturation);
+    ui.rbValue->setChecked(settings.type == Image::Value);
     m_initializing = false;
 }
 

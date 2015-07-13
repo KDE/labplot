@@ -1,3 +1,23 @@
+
+/***************************************************************************
+ *                                                                         *
+ *  This program is free software; you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation; either version 2 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the Free Software           *
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
+ *   Boston, MA  02110-1301  USA                                           *
+ *                                                                         *
+ ***************************************************************************/
+
 #ifndef IMAGE_H
 #define IMAGE_H
 
@@ -66,9 +86,7 @@ class Image: public AbstractPart, public scripted {
 		void update();
 		void setPrinting(bool) const;
         void setSelectedInView(const bool);
-        void discretize(const EditorSettings&);
         void setPlotImageType(const Image::PlotImageType&);
-        void updateAxisPoints();
         void setSegmentVisible(bool);
         void updateData(const CustomItem*);
 
@@ -105,13 +123,16 @@ class Image: public AbstractPart, public scripted {
 	 signals:
 		void requestProjectContextMenu(QMenu*);
 		void requestUpdate();
-        void requestUpdateAxisPoints();
 
         void fileNameChanged(const QString&);
         void rotationAngleChanged(float);
-        void plotErrorsChanged(Image::Errors);
+        void plotErrorsChanged(const Image::Errors&);
+        void axisPointsChanged(const Image::ReferencePoints&);
+        void settingsChanged(const Image::EditorSettings&);
         friend class ImageSetFileNameCmd;
         friend class ImageSetRotationAngleCmd;
         friend class ImageSetPlotErrorsCmd;
+        friend class ImageSetAxisPointsCmd;
+        friend class ImageSetSettingsCmd;
 };
 #endif

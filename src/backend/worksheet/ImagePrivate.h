@@ -25,7 +25,8 @@ class ImagePrivate{
 		QString name() const;
 		void update();
 		void updateFileName();
-		void updatePageRect();
+        void discretize();
+        bool uploadImage(const QString&);
 };
 
 #endif
