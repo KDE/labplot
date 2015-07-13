@@ -35,10 +35,6 @@
 
 class QGLContext;
 class Plot3DPrivate;
-class KUrl;
-
-class Matrix;
-class AbstractColumn;
 
 class DemoDataHandler;
 class SpreadsheetDataHandler;

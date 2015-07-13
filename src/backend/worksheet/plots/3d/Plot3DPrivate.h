@@ -36,15 +36,10 @@
 
 #include <vtkSmartPointer.h>
 
-class Matrix;
 class Axes;
 
-class vtkActor;
 class vtkImageActor;
 class vtkRenderer;
-class vtkPolyDataMapper;
-class vtkPoints;
-class vtkCellArray;
 
 class QGLContext;
 class QVTKGraphicsItem;
