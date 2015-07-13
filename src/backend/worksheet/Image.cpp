@@ -597,6 +597,7 @@ bool Image::load(XmlStreamReader* reader) {
 
         } else if(reader->name() == "customItem") {
             CustomItem* customItem = new CustomItem("");
+            customItem->setHidden(true);
             if (!customItem->load(reader)){
                 delete customItem;
                 return false;
