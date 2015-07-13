@@ -362,7 +362,7 @@ void Plot3DPrivate::init() {
 	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
 	backgroundRenderer->AddActor(backgroundImageActor);
 
-	dataHandlers.reserve(Plot3D::DataSource_MAX);
+	dataHandlers.resize(Plot3D::DataSource_MAX);
 	dataHandlers[Plot3D::DataSource_Empty] = &demoHandler;
 	dataHandlers[Plot3D::DataSource_File] = &fileHandler;
 	dataHandlers[Plot3D::DataSource_Spreadsheet] = &spreadsheetHandler;
