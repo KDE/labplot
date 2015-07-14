@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : Axes.h
+    File                 : AxesPrivate.h
     Project              : LabPlot
     Description          : 3D plot axes
     --------------------------------------------------------------------
@@ -26,67 +26,36 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PLOT3D_AXES_H
-#define PLOT3D_AXES_H
+#ifndef PLOT3D_AXESPRIVATE_H
+#define PLOT3D_AXESPRIVATE_H
 
-#include "backend/core/AbstractAspect.h"
+#include "Axes.h"
 
-#include <QColor>
-
-#include <vtkSmartPointer.h>
-
-class vtkProp;
-class vtkActor;
 class vtkRenderer;
+class vtkProp;
 
-class AxesPrivate;
-class Axes : public AbstractAspect {
-		Q_OBJECT
-		Q_DECLARE_PRIVATE(Axes)
-		Q_DISABLE_COPY(Axes)
-	public:
-		enum AxesType {
-			AxesType_Cube = 0,
-			AxesType_Plain = 1,
-			AxesType_NoAxes = 2
-		};
+struct AxesPrivate {
+	Axes* const q;
 
-		Axes(vtkRenderer& renderer);
-		~Axes();
+	Axes::AxesType type;
+	int fontSize;
+	double width;
+	QColor xLabelColor;
+	QColor yLabelColor;
+	QColor zLabelColor;
 
-		void updateBounds();
+	vtkRenderer& renderer;
+	vtkSmartPointer<vtkProp> vtkAxes;
 
-		bool operator==(vtkProp* prop) const;
-		bool operator!=(vtkProp* prop) const;
+	AxesPrivate(vtkRenderer& renderer, Axes *parent);
+	~AxesPrivate();
 
-		bool isShown() const;
+	void init();
+	void hide();
+	void update();
+	void show(bool pred = true);
 
-		void setType(AxesType type);
-		void setFontSize(int fontSize);
-		void setWidth(double width);
-		void setXLabelColor(const QColor& color);
-		void setYLabelColor(const QColor& color);
-		void setZLabelColor(const QColor& color);
-
-		typedef Axes BaseClass;
-		typedef AxesPrivate Private;
-
-	signals:
-		friend class AxesSetTypeCmd;
-		friend class AxesSetFontSizeCmd;
-		friend class AxesSetWidthCmd;
-		friend class AxesSetXLabelColorCmd;
-		friend class AxesSetYLabelColorCmd;
-		friend class AxesSetZLabelColorCmd;
-		void typeChanged(Axes::AxesType);
-		void fontSizeChanged(int);
-		void widthChanged(double);
-		void xLabelColorChanged(const QColor&);
-		void yLabelColorChanged(const QColor&);
-		void zLabelColorChanged(const QColor&);
-
-	private:
-		const QScopedPointer<AxesPrivate> d_ptr;
+	QString name() const;
 };
 
 #endif

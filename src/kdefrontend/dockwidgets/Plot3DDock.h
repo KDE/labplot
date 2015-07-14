@@ -32,6 +32,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/3d/Plot3D.h"
+#include "backend/worksheet/plots/3d/Axes.h"
 #include "ui_plot3ddock.h"
 
 class Plot3D;
@@ -115,6 +116,12 @@ class Plot3DDock: public QWidget {
 		void onAxesTypeChanged(int type);
 		void onAxesLabelFontChanged(int size);
 		void onAxesLabelColorChanged(const QColor& color);
+
+		void axesTypeChanged(Axes::AxesType);
+		void fontSizeChanged(int);
+		void xLabelColorChanged(const QColor&);
+		void yLabelColorChanged(const QColor&);
+		void zLabelColorChanged(const QColor&);
 };
 
 #endif

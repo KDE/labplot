@@ -27,8 +27,14 @@
  ***************************************************************************/
 
 #include "Axes.h"
+#include "AxesPrivate.h"
+
+#include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 
 #include <QDebug>
+
+#include <KLocale>
 
 #include <vtkRenderer.h>
 #include <vtkCubeAxesActor.h>
@@ -41,42 +47,21 @@
 #include <vtkAxisActor2D.h>
 #include <vtkCamera.h>
 
-struct Axes::Properties {
-	AxesType type;
-	int fontSize;
-	double width;
-	QColor xLabelColor;
-	QColor yLabelColor;
-	QColor zLabelColor;
-
-	Properties();
-};
-
-Axes::Properties::Properties()
-	: type(AxesType_NoAxes)
-	, fontSize(32)
-	, width(10)
-	, xLabelColor(Qt::red)
-	, yLabelColor(Qt::green)
-	, zLabelColor(Qt::blue) {
-}
-
 Axes::Axes(vtkRenderer& renderer)
-	: renderer(renderer)
-	, props(new Properties) {
-	init();
+	: AbstractAspect(i18n("Axes"))
+	, d_ptr(new AxesPrivate(renderer, this)) {
 }
 
 Axes::~Axes() {
-	hide();
 }
 
 void Axes::updateBounds() {
-	if (!vtkAxes)
+	Q_D(Axes);
+	if (!d->vtkAxes)
 		return;
 
-	if (props->type == AxesType_Cube) {
-		vtkActorCollection* actors = renderer.GetActors();
+	if (d->type == AxesType_Cube) {
+		vtkActorCollection* actors = d->renderer.GetActors();
 		actors->InitTraversal();
 
 		vtkBoundingBox bb;
@@ -87,35 +72,105 @@ void Axes::updateBounds() {
 				bb.AddBounds(actor->GetBounds());
 		}
 
-		vtkCubeAxesActor *axes = dynamic_cast<vtkCubeAxesActor*>(vtkAxes.GetPointer());
+		vtkCubeAxesActor *axes = dynamic_cast<vtkCubeAxesActor*>(d->vtkAxes.GetPointer());
 
 		double bounds[6];
 		bb.GetBounds(bounds);
 		axes->SetBounds(bounds);
-		qDebug() << Q_FUNC_INFO << "Updating Bound";
 	}
 }
 
 bool Axes::operator==(vtkProp* prop) const {
-	return vtkAxes == prop;
+	Q_D(const Axes);
+	return d->vtkAxes == prop;
 }
 
 bool Axes::operator!=(vtkProp* prop) const {
 	return !operator==(prop);
 }
 
-void Axes::init() {
-	if (vtkAxes) {
-		hide();
-	}
+bool Axes::isShown() const {
+	Q_D(const Axes);
+	return d->vtkAxes;
+}
 
+STD_SETTER_CMD_IMPL_F_S(Axes, SetType, Axes::AxesType, type, update)
+void Axes::setType(AxesType type) {
+	Q_D(Axes);
+	if (type != d->type)
+		exec(new AxesSetTypeCmd(d, type, i18n("%1: axes type changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axes, SetFontSize, int, fontSize, update)
+void Axes::setFontSize(int fontSize) {
+	Q_D(Axes);
+	if (fontSize != d->fontSize)
+		exec(new AxesSetFontSizeCmd(d, fontSize, i18n("%1: axes font size changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axes, SetWidth, double, width, update)
+void Axes::setWidth(double width) {
+	Q_D(Axes);
+	if (!qFuzzyCompare(width, d->width))
+		exec(new AxesSetWidthCmd(d, width, i18n("%1: axes width changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axes, SetXLabelColor, QColor, xLabelColor, update)
+void Axes::setXLabelColor(const QColor& color){
+	Q_D(Axes);
+	if (color != d->xLabelColor)
+		exec(new AxesSetXLabelColorCmd(d, color, i18n("%1: axes X label color changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axes, SetYLabelColor, QColor, yLabelColor, update)
+void Axes::setYLabelColor(const QColor& color){
+	Q_D(Axes);
+	if (color != d->yLabelColor)
+		exec(new AxesSetYLabelColorCmd(d, color, i18n("%1: axes Y label color changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axes, SetZLabelColor, QColor, zLabelColor, update)
+void Axes::setZLabelColor(const QColor& color){
+	Q_D(Axes);
+	if (color != d->zLabelColor)
+		exec(new AxesSetZLabelColorCmd(d, color, i18n("%1: axes Z label color changed")));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+AxesPrivate::AxesPrivate(vtkRenderer& renderer, Axes *parent)
+	: q(parent)
+	, type(Axes::AxesType_NoAxes)
+	, fontSize(32)
+	, width(10)
+	, xLabelColor(Qt::red)
+	, yLabelColor(Qt::green)
+	, zLabelColor(Qt::blue)
+	, renderer(renderer) {
+	init();
+}
+
+AxesPrivate::~AxesPrivate() {
+}
+
+void AxesPrivate::show(bool pred) {
+	hide();
+	if (pred)
+		init();
+}
+
+QString AxesPrivate::name() const{
+	return i18n("Axes");
+}
+
+void AxesPrivate::init() {
 	double colors[][3] = {
-		{props->xLabelColor.redF(), props->xLabelColor.greenF(), props->xLabelColor.blueF()},
-		{props->yLabelColor.redF(), props->yLabelColor.greenF(), props->yLabelColor.blueF()},
-		{props->zLabelColor.redF(), props->zLabelColor.greenF(), props->zLabelColor.blueF()}
+		{xLabelColor.redF(), xLabelColor.greenF(), xLabelColor.blueF()},
+		{yLabelColor.redF(), yLabelColor.greenF(), yLabelColor.blueF()},
+		{zLabelColor.redF(), zLabelColor.greenF(), zLabelColor.blueF()}
 	};
 
-	if (props->type == AxesType_Cube) {
+	if (type == Axes::AxesType_Cube) {
 		vtkSmartPointer<vtkCubeAxesActor> axes = vtkSmartPointer<vtkCubeAxesActor>::New();
 		axes->SetCamera(renderer.GetActiveCamera());
 		axes->DrawXGridlinesOn();
@@ -131,20 +186,20 @@ void Axes::init() {
 		for (int i = 0; i < 3; ++i) {
 			vtkTextProperty *titleProp = axes->GetTitleTextProperty(i);
 			titleProp->SetColor(colors[i]);
-			titleProp->SetFontSize(props->fontSize);
+			titleProp->SetFontSize(fontSize);
 
 			vtkTextProperty *labelProp = axes->GetLabelTextProperty(i);
 			labelProp->SetColor(colors[i]);
-			labelProp->SetFontSize(props->fontSize);
+			labelProp->SetFontSize(fontSize);
 		}
 
-		axes->GetXAxesLinesProperty()->SetLineWidth(props->width);
-		axes->GetYAxesLinesProperty()->SetLineWidth(props->width);
-		axes->GetZAxesLinesProperty()->SetLineWidth(props->width);
+		axes->GetXAxesLinesProperty()->SetLineWidth(width);
+		axes->GetYAxesLinesProperty()->SetLineWidth(width);
+		axes->GetZAxesLinesProperty()->SetLineWidth(width);
 
 		vtkAxes = axes;
-		updateBounds();
-	} else if (props->type == AxesType_Plain) {
+		q->updateBounds();
+	} else if (type == Axes::AxesType_Plain) {
 		vtkSmartPointer<vtkAxesActor> axes = vtkSmartPointer<vtkAxesActor>::New();
 
 		QVector<vtkCaptionActor2D*> captionActors;
@@ -162,7 +217,7 @@ void Axes::init() {
 		for (int i = 0; i < 3; ++i) {
 			vtkCaptionActor2D* const captionActor = captionActors[i];
 			captionActor->GetTextActor()->SetTextScaleModeToNone();
-			captionActor->GetCaptionTextProperty()->SetFontSize(props->fontSize);
+			captionActor->GetCaptionTextProperty()->SetFontSize(fontSize);
 			captionActor->GetCaptionTextProperty()->SetColor(colors[i]);
 
 			shaftProps[i]->SetColor(colors[i]);
@@ -172,48 +227,15 @@ void Axes::init() {
 		vtkAxes = axes;
 	}
 
-	renderer.AddActor(vtkAxes);
+	if (vtkAxes)
+		renderer.AddActor(vtkAxes);
 }
 
-void Axes::show(bool pred) {
-	if (pred)
-		init();
-	else
-		hide();
+void AxesPrivate::hide() {
+	if (vtkAxes)
+		renderer.RemoveActor(vtkAxes);
 }
 
-void Axes::hide() {
-	renderer.RemoveActor(vtkAxes);
-}
-
-bool Axes::isShown() const {
-	return vtkAxes;
-}
-
-void Axes::setType(AxesType type) {
-	props->type = type;
-	if (type == AxesType_NoAxes)
-		hide();
-	else
-		show();
-}
-
-void Axes::setFontSize(int fontSize) {
-	props->fontSize = fontSize;
-}
-
-void Axes::setWidth(double width) {
-	props->width = width;
-}
-
-void Axes::setXLabelColor(const QColor& color){
-	props->xLabelColor = color;
-}
-
-void Axes::setYLabelColor(const QColor& color){
-	props->yLabelColor = color;
-}
-
-void Axes::setZLabelColor(const QColor& color){
-	props->zLabelColor = color;
+void AxesPrivate::update() {
+	show(type != Axes::AxesType_NoAxes);
 }

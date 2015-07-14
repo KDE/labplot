@@ -72,7 +72,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 
 		QVector<IDataHandler*> dataHandlers;
 
-		QScopedPointer<Axes> axes;
+		Axes* axes;
 		vtkSmartPointer<vtkRenderer> renderer;
 		vtkSmartPointer<vtkRenderer> backgroundRenderer;
 		vtkSmartPointer<vtkImageActor> backgroundImageActor;

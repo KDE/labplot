@@ -32,8 +32,6 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/matrix/Matrix.h"
-#include "backend/worksheet/plots/3d/Plot3D.h"
-#include "backend/worksheet/plots/3d/Axes.h"
 #include "backend/worksheet/plots/3d/DataHandlers.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
@@ -194,7 +192,7 @@ void Plot3DDock::hideAxesProperties(bool hide) {
 
 void Plot3DDock::onAxesLabelFontChanged(int size) {
 	m_plot->axes().setFontSize(size);
-	m_plot->axes().show(static_cast<Axes::AxesType>(ui.axesType->currentIndex()) != Axes::AxesType_NoAxes);
+	m_plot->axes().setType(static_cast<Axes::AxesType>(ui.axesType->currentIndex()));
 }
 
 void Plot3DDock::onAxesLabelColorChanged(const QColor& color) {
@@ -207,7 +205,8 @@ void Plot3DDock::onAxesLabelColorChanged(const QColor& color) {
 	} else if (s == ui.axisZLabelColor) {
 		plotAxes.setZLabelColor(color);
 	}
-	plotAxes.show(static_cast<Axes::AxesType>(ui.axesType->currentIndex()) != Axes::AxesType_NoAxes);
+
+	m_plot->axes().setType(static_cast<Axes::AxesType>(ui.axesType->currentIndex()));
 }
 
 void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
@@ -272,6 +271,15 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	connect(m_plot, SIGNAL(visualizationTypeChanged(Plot3D::VisualizationType)), this, SLOT(visualizationTypeChanged(Plot3D::VisualizationType)));
 	connect(m_plot, SIGNAL(sourceTypeChanged(Plot3D::DataSource)), this, SLOT(sourceTypeChanged(Plot3D::DataSource)));
 
+	// Axes
+	// TODO: Move to another dock widget
+	Axes* axes = &m_plot->axes();
+	connect(axes, SIGNAL(typeChanged(Axes::AxesType)), this, SLOT(axesTypeChanged(Axes::AxesType)));
+	connect(axes, SIGNAL(fontSizeChanged(int)), this, SLOT(fontSizeChanged(int)));
+	connect(axes, SIGNAL(xLabelColorChanged(const QColor&)), this, SLOT(xLabelColorChanged(const QColor&)));
+	connect(axes, SIGNAL(yLabelColorChanged(const QColor&)), this, SLOT(yLabelColorChanged(const QColor&)));
+	connect(axes, SIGNAL(zLabelColorChanged(const QColor&)), this, SLOT(zLabelColorChanged(const QColor&)));
+
 	//background
 	connect(m_plot,SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)),this,SLOT(plotBackgroundTypeChanged(PlotArea::BackgroundType)));
 	connect(m_plot,SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)),this,SLOT(plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)));
@@ -288,16 +296,55 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	m_initializing = false;
 }
 
+namespace{
+	struct Lock{
+		Lock(bool& variable)
+			: variable(variable){
+			variable = true;
+		}
+
+		~Lock(){
+			variable = false;
+		}
+
+	private:
+		bool& variable;
+	};
+}
+
+void Plot3DDock::fontSizeChanged(int value){
+	Lock lock(m_initializing);
+	ui.labelFontSize->setValue(value);
+}
+
+void Plot3DDock::xLabelColorChanged(const QColor& color){
+	Lock lock(m_initializing);
+	ui.axisXLabelColor->setColor(color);
+}
+
+void Plot3DDock::yLabelColorChanged(const QColor& color){
+	Lock lock(m_initializing);
+	ui.axisYLabelColor->setColor(color);
+}
+
+void Plot3DDock::zLabelColorChanged(const QColor& color){
+	Lock lock(m_initializing);
+	ui.axisZLabelColor->setColor(color);
+}
+
+void Plot3DDock::axesTypeChanged(Axes::AxesType type){
+	Lock lock(m_initializing);
+	ui.axesType->setCurrentIndex(type);
+}
+
 void Plot3DDock::visualizationTypeChanged(Plot3D::VisualizationType type){
-	m_initializing = true;
+	Lock lock(m_initializing);
 	ui.cbType->setCurrentIndex(type);
-	m_initializing = false;
 }
 
 void Plot3DDock::sourceTypeChanged(Plot3D::DataSource type){
-	m_initializing = true;
+	Lock lock(m_initializing);
 	ui.cbDataSource->setCurrentIndex(type);
-	m_initializing = false;
 }
 
 //TODO:
@@ -315,7 +362,7 @@ Matrix* Plot3DDock::getMatrix(const QModelIndex& index) const{
 //****** SLOTs for changes triggered in Plot3DDock *********
 //*************************************************************
 void Plot3DDock::retranslateUi(){
-	m_initializing = true;
+	Lock lock(m_initializing);
 
 	//general
 
@@ -339,8 +386,6 @@ void Plot3DDock::retranslateUi(){
 	ui.cbBackgroundImageStyle->addItem(i18n("center tiled"));
 
 	//light
-
-	m_initializing = false;
 }
 
 // "General"-tab
@@ -663,78 +708,67 @@ void Plot3DDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_plot != aspect)
 		return;
 
-	m_initializing = true;
+	Lock lock(m_initializing);
 	if (aspect->name() != ui.leName->text()) {
 		ui.leName->setText(aspect->name());
 	} else if (aspect->comment() != ui.leComment->text()) {
 		ui.leComment->setText(aspect->comment());
 	}
-	m_initializing = false;
 }
 
 
 void Plot3DDock::plotRectChanged(QRectF& rect){
-	m_initializing = true;
+	Lock lock(m_initializing);
 	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(rect.x(), Worksheet::Centimeter));
 	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(rect.y(), Worksheet::Centimeter));
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), Worksheet::Centimeter));
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), Worksheet::Centimeter));
-	m_initializing = false;
 }
 
 void Plot3DDock::plotVisibleChanged(bool on){
-	m_initializing = true;
+	Lock lock(m_initializing);
 	ui.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 // "Background"-tab
 void Plot3DDock::plotBackgroundTypeChanged(PlotArea::BackgroundType type) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	ui.cbBackgroundType->setCurrentIndex(type);
-	m_initializing = false;
 }
 
 void Plot3DDock::plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle style) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	ui.cbBackgroundColorStyle->setCurrentIndex(style);
-	m_initializing = false;
 }
 
 void Plot3DDock::plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle style) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	ui.cbBackgroundImageStyle->setCurrentIndex(style);
-	m_initializing = false;
 }
 
 void Plot3DDock::plotBackgroundBrushStyleChanged(Qt::BrushStyle style) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	ui.cbBackgroundBrushStyle->setCurrentIndex(style);
-	m_initializing = false;
 }
 
 void Plot3DDock::plotBackgroundFirstColorChanged(const QColor& color) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	ui.kcbBackgroundFirstColor->setColor(color);
-	m_initializing = false;
 }
 
 void Plot3DDock::plotBackgroundSecondColorChanged(const QColor& color) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	ui.kcbBackgroundSecondColor->setColor(color);
-	m_initializing = false;
 }
 
 void Plot3DDock::plotBackgroundFileNameChanged(const QString& name) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	ui.kleBackgroundFileName->setText(name);
-	m_initializing = false;
 }
 
 void Plot3DDock::plotBackgroundOpacityChanged(float opacity) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	ui.sbBackgroundOpacity->setValue( round(opacity*100.0) );
-	m_initializing = false;
 }
 
 

@@ -32,17 +32,16 @@
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/PlotArea.h"
 
-class Axes;
-
 class QGLContext;
 class Plot3DPrivate;
 
+class Axes;
 class DemoDataHandler;
 class SpreadsheetDataHandler;
 class MatrixDataHandler;
 class FileDataHandler;
 
-class Plot3D:public AbstractPlot{
+class Plot3D : public AbstractPlot {
 	Q_OBJECT
 	Q_DECLARE_PRIVATE(Plot3D);
 

@@ -70,8 +70,6 @@ void Plot3D::init(bool transform){
 	if (!d->rectSet || d->context == 0)
 		return;
 
-	qDebug() << Q_FUNC_INFO << this;
-
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
 
@@ -95,6 +93,10 @@ void Plot3D::init(bool transform){
 
 	d->init();
 
+	// TODO: Configure as a separate widget
+	d->axes = new Axes(*d->renderer);
+	addChild(d->axes);
+
 	foreach (IDataHandler* handler, d->dataHandlers) {
 		connect(handler, SIGNAL(parametersChanged()), this, SLOT(updatePlot()));
 	}
@@ -106,13 +108,11 @@ void Plot3D::init(bool transform){
 }
 
 void Plot3D::setContext(QGLContext *context) {
-	qDebug() << Q_FUNC_INFO << this;
 	Q_D(Plot3D);
 	d->context = context;
 }
 
 void Plot3D::updatePlot() {
-	qDebug() << Q_FUNC_INFO << this;
 	Q_D(Plot3D);
 	d->updatePlot();
 }
@@ -134,7 +134,6 @@ QMenu* Plot3D::createContextMenu(){
 }
 
 void Plot3D::setRect(const QRectF &rect){
-	qDebug() << Q_FUNC_INFO << this;
 	Q_D(Plot3D);
 	d->rect = rect;
 	d->rectSet = true;
@@ -174,7 +173,6 @@ void Plot3D::retransform() {
 
 	if (!d->isInitialized)
 		init(false);
-	qDebug() << Q_FUNC_INFO << this;
 
 	d->retransform();
 	WorksheetElementContainer::retransform();
@@ -338,8 +336,6 @@ void Plot3DPrivate::init() {
 	vtkSmartPointer<vtkInteractorStyleTrackballCamera> style = vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
 	renderWindow->GetInteractor()->SetInteractorStyle(style);
 
-	axes.reset(new Axes(*renderer));
-
 	//light
 	light->SetFocalPoint(1.875, 0.6125, 0);
 	light->SetPosition(0.875, 1.6125, 1);
@@ -402,7 +398,6 @@ void Plot3DPrivate::updatePlot() {
 }
 
 void Plot3DPrivate::updateBackground() {
-	qDebug() << Q_FUNC_INFO << this;
 	const QRectF rect(0, 0, this->rect.width(), this->rect.height());
 	//prepare the image
 	QImage image(rect.width(), rect.height(), QImage::Format_ARGB32_Premultiplied);
@@ -509,7 +504,6 @@ void Plot3DPrivate::updateBackground() {
 //##############################################################################
 //! Save as XML
 void Plot3D::save(QXmlStreamWriter* writer) const {
-	qDebug() << Q_FUNC_INFO;
 	Q_D(const Plot3D);
 
 	writer->writeStartElement("Plot3D");
@@ -528,7 +522,6 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool Plot3D::load(XmlStreamReader* reader) {
-	qDebug() << Q_FUNC_INFO;
 	Q_D(Plot3D);
 
 	if(!reader->isStartElement() || reader->name() != "Plot3D"){
