@@ -63,12 +63,12 @@ class Datapicker : public AbstractPart, public scripted {
         void addDatasheet();
 
         //column index
-        int m_positionX;
-        int m_positionY;
-        int m_plusDeltaX;
-        int m_minusDeltaX;
-        int m_plusDeltaY;
-        int m_minusDeltaY;
+        int positionXIndex;
+        int positionYIndex;
+        int plusDeltaXIndex;
+        int minusDeltaXIndex;
+        int plusDeltaYIndex;
+        int minusDeltaYIndex;
 
     private slots:
 		virtual void childDeselected(const AbstractAspect*);

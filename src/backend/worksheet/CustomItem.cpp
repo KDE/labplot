@@ -635,7 +635,6 @@ bool CustomItem::load(XmlStreamReader* reader){
     QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
     QXmlStreamAttributes attribs;
     QString str;
-    QRectF rect;
 
     while (!reader->atEnd()){
         reader->readNext();

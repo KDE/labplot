@@ -45,6 +45,7 @@ class DatapickerView : public QWidget {
         QTabWidget* m_tabWidget;
         Datapicker* m_datapicker;
         int lastSelectedIndex;
+        bool m_initializing;
 
     private  slots:
         void showTabContextMenu(const QPoint&);

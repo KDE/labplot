@@ -32,12 +32,12 @@ Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name)
     : AbstractPart(name), scripted(engine),
       m_datasheet(0),
       m_image(0),
-      m_positionX(-1),
-      m_positionY(-1),
-      m_plusDeltaX(-1),
-      m_minusDeltaX(-1),
-      m_plusDeltaY(-1),
-      m_minusDeltaY(-1) {
+      positionXIndex(-1),
+      positionYIndex(-1),
+      plusDeltaXIndex(-1),
+      minusDeltaXIndex(-1),
+      plusDeltaYIndex(-1),
+      minusDeltaYIndex(-1) {
 }
 
 QIcon Datapicker::icon() const {
@@ -174,17 +174,17 @@ QString Datapicker::columnNameFromType(Datapicker::DataColumnType type) {
 int *Datapicker::columnIndexFromType(Datapicker::DataColumnType type) {
     int *index;
     if (type == Datapicker::PositionX)
-        index = &m_positionX;
+        index = &positionXIndex;
     else if (type == Datapicker::PositionY)
-        index = &m_positionY;
+        index = &positionYIndex;
     else if (type == Datapicker::PlusDeltaX)
-        index = &m_plusDeltaX;
+        index = &plusDeltaXIndex;
     else if (type == Datapicker::MinusDeltaX)
-        index = &m_minusDeltaX;
+        index = &minusDeltaXIndex;
     else if (type == Datapicker::PlusDeltaY)
-        index = &m_plusDeltaY;
+        index = &plusDeltaYIndex;
     else
-        index = &m_minusDeltaY;
+        index = &minusDeltaYIndex;
 
     return index;
 }
@@ -193,9 +193,9 @@ void Datapicker::addDatasheet() {
     m_datasheet = new Spreadsheet(0, i18n("Data"));
     m_datasheet->setUndoAware(false);
     m_datasheet->column(0)->setName("x");
-    m_positionX = 0;
+    positionXIndex = 0;
     m_datasheet->column(1)->setName("y");
-    m_positionY = 1;
+    positionYIndex = 1;
     addChild(m_datasheet);
     m_datasheet->setUndoAware(true);
     connect(m_datasheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
@@ -224,6 +224,14 @@ void Datapicker::save(QXmlStreamWriter* writer) const{
     writer->writeStartElement( "datapicker" );
     writeBasicAttributes(writer);
     writeCommentElement(writer);
+    writer->writeStartElement( "columnsIndex" );
+    writer->writeAttribute( "positionXIndex", QString::number(positionXIndex) );
+    writer->writeAttribute( "positionYIndex", QString::number(positionYIndex) );
+    writer->writeAttribute( "plusDeltaXIndex", QString::number(plusDeltaXIndex) );
+    writer->writeAttribute( "minusDeltaXIndex", QString::number(minusDeltaXIndex) );
+    writer->writeAttribute( "plusDeltaYIndex", QString::number(plusDeltaYIndex) );
+    writer->writeAttribute( "minusDeltaYIndex", QString::number(minusDeltaYIndex) );
+    writer->writeEndElement();
 
     //serialize all children
     foreach(AbstractAspect* aspect, children<AbstractAspect>())
@@ -242,6 +250,10 @@ bool Datapicker::load(XmlStreamReader* reader){
     if (!readBasicAttributes(reader))
         return false;
 
+    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+    QXmlStreamAttributes attribs;
+    QString str;
+
     while (!reader->atEnd()){
         reader->readNext();
         if (reader->isEndElement() && reader->name() == "datapicker")
@@ -253,7 +265,45 @@ bool Datapicker::load(XmlStreamReader* reader){
 		if (reader->name() == "comment") {
             if (!readCommentElement(reader))
 				return false;
-		} else if(reader->name() == "spreadsheet"){
+        } else if (reader->name() == "columnsIndex") {
+            attribs = reader->attributes();
+
+            str = attribs.value("positionXIndex").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("positionXIndex"));
+            else
+                positionXIndex = str.toInt();
+
+            str = attribs.value("positionYIndex").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("positionYIndex"));
+            else
+                positionYIndex = str.toInt();
+
+            str = attribs.value("plusDeltaXIndex").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("plusDeltaXIndex"));
+            else
+                plusDeltaXIndex = str.toInt();
+
+            str = attribs.value("minusDeltaXIndex").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("minusDeltaXIndex"));
+            else
+                minusDeltaXIndex = str.toInt();
+
+            str = attribs.value("plusDeltaYIndex").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("plusDeltaYIndex"));
+            else
+                plusDeltaYIndex = str.toInt();
+
+            str = attribs.value("minusDeltaYIndex").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("minusDeltaYIndex"));
+            else
+                minusDeltaYIndex = str.toInt();
+        } else if(reader->name() == "spreadsheet"){
             Spreadsheet* spreadsheet = new Spreadsheet(0, "spreadsheet", true);
             if (!spreadsheet->load(reader)){
                 delete spreadsheet;
@@ -271,7 +321,7 @@ bool Datapicker::load(XmlStreamReader* reader){
                 addChild(image);
                 m_image = image;
             }
-        }else{ // unknown element
+        } else { // unknown element
             reader->raiseWarning(i18n("unknown datapicker element '%1'", reader->name().toString()));
             if (!reader->skipToEndElement()) return false;
         }

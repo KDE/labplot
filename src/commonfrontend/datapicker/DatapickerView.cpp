@@ -39,6 +39,7 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 
     m_tabWidget->setTabPosition(QTabWidget::South);
     m_tabWidget->setTabShape(QTabWidget::Rounded);
+    m_tabWidget->setMovable(true);
     m_tabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     m_tabWidget->setMinimumSize(200, 200);
 
@@ -47,8 +48,10 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
     layout->addWidget(m_tabWidget);
 
     //add tab for each children view
+    m_initializing = true;
     foreach(const AbstractAspect* aspect, m_datapicker->children<AbstractAspect>())
         handleAspectAdded(aspect);
+    m_initializing = false;
 
     //SIGNALs/SLOTs
     connect(m_datapicker, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
@@ -77,7 +80,7 @@ int DatapickerView::currentIndex() const {
   or of a \c Image object to \c Datapicker.
 */
 void DatapickerView::tabChanged(int index) {
-    if (index==-1)
+    if (m_initializing)
         return;
 
     m_datapicker->setChildSelectedInView(lastSelectedIndex, false);
