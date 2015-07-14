@@ -28,6 +28,8 @@
 
 #include "Plot3D.h"
 #include "Plot3DPrivate.h"
+#include "Axes.h"
+#include "DataHandlers.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/plots/PlotArea.h"
@@ -100,6 +102,8 @@ void Plot3D::init(bool transform){
 
 	foreach (IDataHandler* handler, d->dataHandlers) {
 		connect(handler, SIGNAL(parametersChanged()), this, SLOT(updatePlot()));
+		addChild(handler);
+		handler->setHidden(true);
 	}
 
 	d->isInitialized = true;
@@ -144,22 +148,22 @@ void Plot3D::setRect(const QRectF &rect){
 
 DemoDataHandler& Plot3D::demoDataHandler() {
 	Q_D(Plot3D);
-	return d->demoHandler;
+	return *d->demoHandler;
 }
 
 SpreadsheetDataHandler& Plot3D::spreadsheetDataHandler() {
 	Q_D(Plot3D);
-	return d->spreadsheetHandler;
+	return *d->spreadsheetHandler;
 }
 
 MatrixDataHandler& Plot3D::matrixDataHandler() {
 	Q_D(Plot3D);
-	return d->matrixHandler;
+	return *d->matrixHandler;
 }
 
 FileDataHandler& Plot3D::fileDataHandler() {
 	Q_D(Plot3D);
-	return d->fileHandler;
+	return *d->fileHandler;
 }
 
 Axes& Plot3D::axes() {
@@ -344,11 +348,16 @@ void Plot3DPrivate::init() {
 	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
 	backgroundRenderer->AddActor(backgroundImageActor);
 
+	demoHandler = new DemoDataHandler;
+	fileHandler = new FileDataHandler;
+	spreadsheetHandler = new SpreadsheetDataHandler;
+	matrixHandler = new MatrixDataHandler;
+
 	dataHandlers.resize(Plot3D::DataSource_MAX);
-	dataHandlers[Plot3D::DataSource_Empty] = &demoHandler;
-	dataHandlers[Plot3D::DataSource_File] = &fileHandler;
-	dataHandlers[Plot3D::DataSource_Spreadsheet] = &spreadsheetHandler;
-	dataHandlers[Plot3D::DataSource_Matrix] = &matrixHandler;
+	dataHandlers[Plot3D::DataSource_Empty] = demoHandler;
+	dataHandlers[Plot3D::DataSource_File] = fileHandler;
+	dataHandlers[Plot3D::DataSource_Spreadsheet] = spreadsheetHandler;
+	dataHandlers[Plot3D::DataSource_Matrix] = matrixHandler;
 }
 
 void Plot3DPrivate::retransform() {

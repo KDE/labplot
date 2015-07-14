@@ -34,23 +34,43 @@
 class AbstractColumn;
 class Matrix;
 
-struct MatrixDataHandlerPrivate {
+class IDataHandler;
+class MatrixDataHandler;
+class SpreadsheetDataHandler;
+class FileDataHandler;
+
+#define DECLARE_PLOT3D_DATAHANDLER_INTERFACE \
+	void update();\
+	QString name() const;
+
+struct MatrixDataHandlerPrivate{
+	MatrixDataHandler* const q;
 	Matrix* matrix;
 
-	MatrixDataHandlerPrivate();
+	MatrixDataHandlerPrivate(MatrixDataHandler *parent);
+	DECLARE_PLOT3D_DATAHANDLER_INTERFACE
 };
 
 struct SpreadsheetDataHandlerPrivate {
+	SpreadsheetDataHandler* const q;
 	AbstractColumn *xColumn;
 	AbstractColumn *yColumn;
 	AbstractColumn *zColumn;
-	AbstractColumn *nodeColumn[3];
 
-	SpreadsheetDataHandlerPrivate();
+	AbstractColumn *firstNode;
+	AbstractColumn *secondNode;
+	AbstractColumn *thirdNode;
+
+	SpreadsheetDataHandlerPrivate(SpreadsheetDataHandler *parent);
+	DECLARE_PLOT3D_DATAHANDLER_INTERFACE
 };
 
 struct FileDataHandlerPrivate {
+	FileDataHandler* const q;
 	KUrl path;
+
+	FileDataHandlerPrivate(FileDataHandler *parent);
+	DECLARE_PLOT3D_DATAHANDLER_INTERFACE
 };
 
 #endif

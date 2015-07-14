@@ -29,6 +29,9 @@
 #include "DataHandlers.h"
 #include "DataHandlersPrivate.h"
 
+#include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
+
 #include "backend/core/AbstractColumn.h"
 #include "backend/matrix/Matrix.h"
 
@@ -57,6 +60,10 @@ vtkSmartPointer<vtkActor> IDataHandler::actor(Plot3D::VisualizationType type) {
 		return vtkSmartPointer<vtkActor>();
 }
 
+void IDataHandler::update() {
+	emit parametersChanged();
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 DemoDataHandler::DemoDataHandler(){
@@ -78,7 +85,7 @@ vtkSmartPointer<vtkActor> DemoDataHandler::trianglesActor() {
 
 FileDataHandler::FileDataHandler()
 	: IDataHandler()
-	, d_ptr(new FileDataHandlerPrivate) {
+	, d_ptr(new FileDataHandlerPrivate(this)) {
 }
 
 FileDataHandler::~FileDataHandler() {
@@ -119,17 +126,18 @@ vtkSmartPointer<vtkActor> FileDataHandler::trianglesActor() {
 	}
 }
 
+STD_SETTER_CMD_IMPL_F_S(FileDataHandler, SetFile, KUrl, path, update)
 void FileDataHandler::setFile(const KUrl& path) {
 	Q_D(FileDataHandler);
-	d->path = path;
-	emit parametersChanged();
+	if (d->path != path)
+		exec(new FileDataHandlerSetFileCmd(d, path, i18n("%1: file path changed")));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 SpreadsheetDataHandler::SpreadsheetDataHandler()
 	: IDataHandler()
-	, d_ptr(new SpreadsheetDataHandlerPrivate) {
+	, d_ptr(new SpreadsheetDataHandlerPrivate(this)) {
 }
 
 SpreadsheetDataHandler::~SpreadsheetDataHandler() {
@@ -192,17 +200,14 @@ vtkSmartPointer<vtkActor> SpreadsheetDataHandler::trianglesActor() {
 	AbstractColumn* const xColumn = d->xColumn;
 	AbstractColumn* const yColumn = d->yColumn;
 	AbstractColumn* const zColumn = d->zColumn;
-	AbstractColumn** const nodeColumn = d->nodeColumn;
+	AbstractColumn* const firstNode = d->firstNode;
+	AbstractColumn* const secondNode = d->secondNode;
+	AbstractColumn* const thirdNode = d->thirdNode;
 
-	if (xColumn == 0 || yColumn == 0 || zColumn == 0) {
+	if (xColumn == 0 || yColumn == 0 || zColumn == 0
+			|| firstNode == 0 || secondNode == 0 || thirdNode == 0) {
 		return vtkSmartPointer<vtkActor>();
 	}
-
-	for (int i = 0; i < 3; ++i)
-		if (nodeColumn[i] == 0) {
-			qDebug() << Q_FUNC_INFO << "Node" << i << "== 0";
-			return vtkSmartPointer<vtkActor>();
-		}
 
 	qDebug() << Q_FUNC_INFO << "Triangles rendering";
 	vtkSmartPointer<vtkCellArray> triangles = vtkSmartPointer<vtkCellArray>::New();
@@ -219,14 +224,14 @@ vtkSmartPointer<vtkActor> SpreadsheetDataHandler::trianglesActor() {
 		points->InsertNextPoint(x, y, z);
 	}
 
-	const int numTrianges = std::min(nodeColumn[0]->rowCount(),
-			std::min(nodeColumn[1]->rowCount(), nodeColumn[2]->rowCount()));
+	const int numTrianges = std::min(firstNode->rowCount(),
+			std::min(secondNode->rowCount(), thirdNode->rowCount()));
 
 	for (int i = 0; i < numTrianges; ++i) {
 		vtkSmartPointer<vtkTriangle> triangle = vtkSmartPointer<vtkTriangle>::New();
-		const int id1 = static_cast<int>(nodeColumn[0]->valueAt(i));
-		const int id2 = static_cast<int>(nodeColumn[1]->valueAt(i));
-		const int id3 = static_cast<int>(nodeColumn[2]->valueAt(i));
+		const int id1 = static_cast<int>(firstNode->valueAt(i));
+		const int id2 = static_cast<int>(secondNode->valueAt(i));
+		const int id3 = static_cast<int>(thirdNode->valueAt(i));
 
 		if (id1 < 1 || id2 < 1 || id3 < 1
 				|| id1 > numPoints || id2 > numPoints || id3 > numPoints)
@@ -243,37 +248,54 @@ vtkSmartPointer<vtkActor> SpreadsheetDataHandler::trianglesActor() {
 	return renderTriangles(points, triangles);
 }
 
+STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetXColumn, AbstractColumn*, xColumn, update)
 void SpreadsheetDataHandler::setXColumn(AbstractColumn *column) {
 	Q_D(SpreadsheetDataHandler);
-	d->xColumn = column;
-	emit parametersChanged();
+	if (d->xColumn != column)
+		exec(new SpreadsheetDataHandlerSetXColumnCmd(d, column, i18n("%1: X column changed")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetYColumn, AbstractColumn*, yColumn, update)
 void SpreadsheetDataHandler::setYColumn(AbstractColumn *column) {
 	Q_D(SpreadsheetDataHandler);
-	d->yColumn = column;
-	emit parametersChanged();
+	if (d->yColumn != column)
+		exec(new SpreadsheetDataHandlerSetYColumnCmd(d, column, i18n("%1: Y column changed")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetZColumn, AbstractColumn*, zColumn, update)
 void SpreadsheetDataHandler::setZColumn(AbstractColumn *column) {
 	Q_D(SpreadsheetDataHandler);
-	d->zColumn = column;
-	emit parametersChanged();
+	if (d->zColumn != column)
+		exec(new SpreadsheetDataHandlerSetYColumnCmd(d, column, i18n("%1: Z column changed")));
 }
 
-void SpreadsheetDataHandler::setNodeColumn(int node, AbstractColumn *column) {
+STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetFirstNode, AbstractColumn*, firstNode, update)
+void SpreadsheetDataHandler::setFirstNode(AbstractColumn *column) {
 	Q_D(SpreadsheetDataHandler);
-	if (node >= 0 && node < 3){
-		d->nodeColumn[node] = column;
-		emit parametersChanged();
-	}
+	if (d->firstNode != column)
+		exec(new SpreadsheetDataHandlerSetFirstNodeCmd(d, column, i18n("%1: First node changed")));
 }
+
+STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetSecondNode, AbstractColumn*, secondNode, update)
+void SpreadsheetDataHandler::setSecondNode(AbstractColumn *column) {
+	Q_D(SpreadsheetDataHandler);
+	if (d->secondNode != column)
+		exec(new SpreadsheetDataHandlerSetSecondNodeCmd(d, column, i18n("%1: Second node changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetThirdNode, AbstractColumn*, thirdNode, update)
+void SpreadsheetDataHandler::setThirdNode(AbstractColumn *column) {
+	Q_D(SpreadsheetDataHandler);
+	if (d->thirdNode != column)
+		exec(new SpreadsheetDataHandlerSetSecondNodeCmd(d, column, i18n("%1: Third node changed")));
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
 MatrixDataHandler::MatrixDataHandler()
 	: IDataHandler()
-	, d_ptr(new MatrixDataHandlerPrivate) {
+	, d_ptr(new MatrixDataHandlerPrivate(this)) {
 }
 
 MatrixDataHandler::~MatrixDataHandler() {
@@ -326,26 +348,51 @@ vtkSmartPointer<vtkActor> MatrixDataHandler::trianglesActor() {
 	return renderTriangles(points, triangles);
 }
 
+STD_SETTER_CMD_IMPL_F_S(MatrixDataHandler, SetMatrix, Matrix*, matrix, update)
 void MatrixDataHandler::setMatrix(Matrix* matrix) {
 	Q_D(MatrixDataHandler);
-	d->matrix = matrix;
-	emit parametersChanged();
+	if (d->matrix != matrix)
+		exec(new MatrixDataHandlerSetMatrixCmd(d, matrix, i18n("%1: matrix changed")));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-MatrixDataHandlerPrivate::MatrixDataHandlerPrivate()
-	: matrix(0) {
+// TODO: Remove this macros and rewrite to templates later
+#define DECLARE_PLOT3D_DATAHANDLER_INTERFACE_IMPL(Class) \
+	void Class::update() {\
+		q->update();\
+	}\
+	\
+	QString Class::name() const {\
+		return "";\
+	}\
+
+
+MatrixDataHandlerPrivate::MatrixDataHandlerPrivate(MatrixDataHandler *parent)
+	: q(parent)
+	, matrix(0) {
 }
+
+DECLARE_PLOT3D_DATAHANDLER_INTERFACE_IMPL(MatrixDataHandlerPrivate)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-SpreadsheetDataHandlerPrivate::SpreadsheetDataHandlerPrivate()
-	: xColumn(0)
+SpreadsheetDataHandlerPrivate::SpreadsheetDataHandlerPrivate(SpreadsheetDataHandler *parent)
+	: q(parent)
+	, xColumn(0)
 	, yColumn(0)
-	, zColumn(0) {
-
-	for (int i = 0; i < 3; ++i) {
-		nodeColumn[i] = 0;
-	}
+	, zColumn(0)
+	, firstNode(0)
+	, secondNode(0)
+	, thirdNode(0) {
 }
+
+DECLARE_PLOT3D_DATAHANDLER_INTERFACE_IMPL(SpreadsheetDataHandlerPrivate)
+
+////////////////////////////////////////////////////////////////////////////////
+
+FileDataHandlerPrivate::FileDataHandlerPrivate(FileDataHandler *parent)
+	: q(parent) {
+}
+
+DECLARE_PLOT3D_DATAHANDLER_INTERFACE_IMPL(FileDataHandlerPrivate)

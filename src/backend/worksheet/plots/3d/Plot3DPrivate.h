@@ -30,13 +30,16 @@
 #define PLOT3DPRIVATE_H
 
 #include "Plot3D.h"
-#include "Axes.h"
-#include "DataHandlers.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 
 #include <vtkSmartPointer.h>
 
 class Axes;
+class DemoDataHandler;
+class SpreadsheetDataHandler;
+class MatrixDataHandler;
+class FileDataHandler;
+class IDataHandler;
 
 class vtkImageActor;
 class vtkRenderer;
@@ -65,10 +68,10 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		bool isInitialized;
 		bool rectSet;
 
-		DemoDataHandler demoHandler;
-		SpreadsheetDataHandler spreadsheetHandler;
-		MatrixDataHandler matrixHandler;
-		FileDataHandler fileHandler;
+		DemoDataHandler *demoHandler;
+		SpreadsheetDataHandler *spreadsheetHandler;
+		MatrixDataHandler *matrixHandler;
+		FileDataHandler *fileHandler;
 
 		QVector<IDataHandler*> dataHandlers;
 

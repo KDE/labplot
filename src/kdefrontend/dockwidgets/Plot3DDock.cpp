@@ -460,11 +460,11 @@ void Plot3DDock::onTreeViewIndexChanged(const QModelIndex& index){
 		else if(senderW  == ui.cbZCoordinate)
 			plot->spreadsheetDataHandler().setZColumn(column);
 		else if(senderW  == ui.cbNode1)
-			plot->spreadsheetDataHandler().setNodeColumn(0, column);
+			plot->spreadsheetDataHandler().setFirstNode(column);
 		else if(senderW  == ui.cbNode2)
-			plot->spreadsheetDataHandler().setNodeColumn(1, column);
+			plot->spreadsheetDataHandler().setSecondNode(column);
 		else if(senderW == ui.cbNode3)
-			plot->spreadsheetDataHandler().setNodeColumn(2, column);
+			plot->spreadsheetDataHandler().setThirdNode(column);
 		else if(senderW == ui.cbMatrix){
 			plot->matrixDataHandler().setMatrix(getMatrix(index));
 		}

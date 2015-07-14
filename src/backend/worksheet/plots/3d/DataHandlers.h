@@ -51,6 +51,8 @@ class IDataHandler : public AbstractAspect {
 
 		vtkSmartPointer<vtkActor> actor(Plot3D::VisualizationType type);
 
+		void update();
+
 	private:
 		virtual vtkSmartPointer<vtkActor> trianglesActor() = 0;
 
@@ -59,6 +61,7 @@ class IDataHandler : public AbstractAspect {
 };
 
 class MatrixDataHandler : public IDataHandler {
+		Q_OBJECT
 		Q_DISABLE_COPY(MatrixDataHandler)
 		Q_DECLARE_PRIVATE(MatrixDataHandler)
 	public:
@@ -67,14 +70,22 @@ class MatrixDataHandler : public IDataHandler {
 
 		void setMatrix(Matrix* matrix);
 
+		typedef MatrixDataHandler BaseClass;
+		typedef MatrixDataHandlerPrivate Private;
+
 	private:
 		vtkSmartPointer<vtkActor> trianglesActor();
+
+	signals:
+		friend class MatrixDataHandlerSetMatrixCmd;
+		void matrixChanged(Matrix*);
 
 	private:
 		const QScopedPointer<MatrixDataHandlerPrivate> d_ptr;
 };
 
 class SpreadsheetDataHandler : public IDataHandler {
+		Q_OBJECT
 		Q_DISABLE_COPY(SpreadsheetDataHandler)
 		Q_DECLARE_PRIVATE(SpreadsheetDataHandler)
 	public:
@@ -85,16 +96,36 @@ class SpreadsheetDataHandler : public IDataHandler {
 		void setYColumn(AbstractColumn *column);
 		void setZColumn(AbstractColumn *column);
 
-		void setNodeColumn(int node, AbstractColumn *column);
+		void setFirstNode(AbstractColumn *column);
+		void setSecondNode(AbstractColumn *column);
+		void setThirdNode(AbstractColumn *column);
+
+		typedef SpreadsheetDataHandler BaseClass;
+		typedef SpreadsheetDataHandlerPrivate Private;
 
 	private:
 		vtkSmartPointer<vtkActor> trianglesActor();
+
+	signals:
+		friend class SpreadsheetDataHandlerSetXColumnCmd;
+		friend class SpreadsheetDataHandlerSetYColumnCmd;
+		friend class SpreadsheetDataHandlerSetZColumnCmd;
+		friend class SpreadsheetDataHandlerSetFirstNodeCmd;
+		friend class SpreadsheetDataHandlerSetSecondNodeCmd;
+		friend class SpreadsheetDataHandlerSetThirdNodeCmd;
+		void xColumnChanged(AbstractColumn*);
+		void yColumnChanged(AbstractColumn*);
+		void zColumnChanged(AbstractColumn*);
+		void firstNodeChanged(AbstractColumn*);
+		void secondNodeChanged(AbstractColumn*);
+		void thirdNodeChanged(AbstractColumn*);
 
 	private:
 		const QScopedPointer<SpreadsheetDataHandlerPrivate> d_ptr;
 };
 
 class FileDataHandler : public IDataHandler {
+		Q_OBJECT
 		Q_DISABLE_COPY(FileDataHandler)
 		Q_DECLARE_PRIVATE(FileDataHandler)
 	public:
@@ -103,8 +134,15 @@ class FileDataHandler : public IDataHandler {
 
 		void setFile(const KUrl& path);
 
+		typedef FileDataHandler BaseClass;
+		typedef FileDataHandlerPrivate Private;
+
 	private:
 		vtkSmartPointer<vtkActor> trianglesActor();
+
+	signals:
+		friend class FileDataHandlerSetFileCmd;
+		void pathChanged(const KUrl&);
 
 	private:
 		const QScopedPointer<FileDataHandlerPrivate> d_ptr;
