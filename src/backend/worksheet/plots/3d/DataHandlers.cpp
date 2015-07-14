@@ -27,11 +27,14 @@
  ***************************************************************************/
 
 #include "DataHandlers.h"
+#include "DataHandlersPrivate.h"
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/matrix/Matrix.h"
 
 #include <QDebug>
+
+#include <KLocale>
 
 #include <vtkSphereSource.h>
 #include <vtkPolyDataMapper.h>
@@ -44,6 +47,9 @@
 #include <vtkLookupTable.h>
 #include <vtkPointData.h>
 
+IDataHandler::IDataHandler(): AbstractAspect(i18n("Data handler")) {
+}
+
 vtkSmartPointer<vtkActor> IDataHandler::actor(Plot3D::VisualizationType type) {
 	if (type == Plot3D::VisualizationType_Triangles)
 		return trianglesActor();
@@ -52,6 +58,9 @@ vtkSmartPointer<vtkActor> IDataHandler::actor(Plot3D::VisualizationType type) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+DemoDataHandler::DemoDataHandler(){
+}
 
 vtkSmartPointer<vtkActor> DemoDataHandler::trianglesActor() {
 	vtkSmartPointer<vtkSphereSource> sphereSource = vtkSmartPointer<vtkSphereSource>::New();
@@ -66,6 +75,14 @@ vtkSmartPointer<vtkActor> DemoDataHandler::trianglesActor() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+FileDataHandler::FileDataHandler()
+	: IDataHandler()
+	, d_ptr(new FileDataHandlerPrivate) {
+}
+
+FileDataHandler::~FileDataHandler() {
+}
 
 namespace {
 	template<class TReader>
@@ -89,33 +106,34 @@ namespace {
 }
 
 vtkSmartPointer<vtkActor> FileDataHandler::trianglesActor() {
-	const QString& fileName = path.fileName();
+	Q_D(FileDataHandler);
+	const QString& fileName = d->path.fileName();
 	const QString& fileType = fileName.split('.').last().toLower();
 
 	if (fileType == "obj") {
-		return createReader<vtkOBJReader>(path);
+		return createReader<vtkOBJReader>(d->path);
 	} else if (fileType == "stl") {
-		return createReader<vtkSTLReader>(path);
+		return createReader<vtkSTLReader>(d->path);
 	} else {
 		return vtkSmartPointer<vtkActor>();
 	}
 }
 
 void FileDataHandler::setFile(const KUrl& path) {
-	this->path = path;
+	Q_D(FileDataHandler);
+	d->path = path;
 	emit parametersChanged();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 SpreadsheetDataHandler::SpreadsheetDataHandler()
-	: xColumn(0)
-	, yColumn(0)
-	, zColumn(0) {
+	: IDataHandler()
+	, d_ptr(new SpreadsheetDataHandlerPrivate) {
+}
 
-	for (int i = 0; i < 3; ++i) {
-		nodeColumn[i] = 0;
-	}
+SpreadsheetDataHandler::~SpreadsheetDataHandler() {
+
 }
 
 namespace {
@@ -170,6 +188,12 @@ namespace {
 }
 
 vtkSmartPointer<vtkActor> SpreadsheetDataHandler::trianglesActor() {
+	Q_D(SpreadsheetDataHandler);
+	AbstractColumn* const xColumn = d->xColumn;
+	AbstractColumn* const yColumn = d->yColumn;
+	AbstractColumn* const zColumn = d->zColumn;
+	AbstractColumn** const nodeColumn = d->nodeColumn;
+
 	if (xColumn == 0 || yColumn == 0 || zColumn == 0) {
 		return vtkSmartPointer<vtkActor>();
 	}
@@ -220,23 +244,27 @@ vtkSmartPointer<vtkActor> SpreadsheetDataHandler::trianglesActor() {
 }
 
 void SpreadsheetDataHandler::setXColumn(AbstractColumn *column) {
-	xColumn = column;
+	Q_D(SpreadsheetDataHandler);
+	d->xColumn = column;
 	emit parametersChanged();
 }
 
 void SpreadsheetDataHandler::setYColumn(AbstractColumn *column) {
-	yColumn = column;
+	Q_D(SpreadsheetDataHandler);
+	d->yColumn = column;
 	emit parametersChanged();
 }
 
 void SpreadsheetDataHandler::setZColumn(AbstractColumn *column) {
-	zColumn = column;
+	Q_D(SpreadsheetDataHandler);
+	d->zColumn = column;
 	emit parametersChanged();
 }
 
 void SpreadsheetDataHandler::setNodeColumn(int node, AbstractColumn *column) {
+	Q_D(SpreadsheetDataHandler);
 	if (node >= 0 && node < 3){
-		nodeColumn[node] = column;
+		d->nodeColumn[node] = column;
 		emit parametersChanged();
 	}
 }
@@ -244,10 +272,16 @@ void SpreadsheetDataHandler::setNodeColumn(int node, AbstractColumn *column) {
 ////////////////////////////////////////////////////////////////////////////////
 
 MatrixDataHandler::MatrixDataHandler()
-	: matrix(0) {
+	: IDataHandler()
+	, d_ptr(new MatrixDataHandlerPrivate) {
+}
+
+MatrixDataHandler::~MatrixDataHandler() {
 }
 
 vtkSmartPointer<vtkActor> MatrixDataHandler::trianglesActor() {
+	Q_D(MatrixDataHandler);
+	Matrix * const matrix = d->matrix;
 	if (!matrix)
 		return vtkSmartPointer<vtkActor>();
 
@@ -293,6 +327,25 @@ vtkSmartPointer<vtkActor> MatrixDataHandler::trianglesActor() {
 }
 
 void MatrixDataHandler::setMatrix(Matrix* matrix) {
-	this->matrix = matrix;
+	Q_D(MatrixDataHandler);
+	d->matrix = matrix;
 	emit parametersChanged();
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+MatrixDataHandlerPrivate::MatrixDataHandlerPrivate()
+	: matrix(0) {
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+SpreadsheetDataHandlerPrivate::SpreadsheetDataHandlerPrivate()
+	: xColumn(0)
+	, yColumn(0)
+	, zColumn(0) {
+
+	for (int i = 0; i < 3; ++i) {
+		nodeColumn[i] = 0;
+	}
 }

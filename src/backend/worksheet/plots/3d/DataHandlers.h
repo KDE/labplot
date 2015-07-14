@@ -26,23 +26,27 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef DATAHANDLERS_H
-#define DATAHANDLERS_H
+#ifndef PLOT3D_DATAHANDLERS_H
+#define PLOT3D_DATAHANDLERS_H
 
 #include "Plot3D.h"
 
-#include <KUrl>
-
 #include <vtkSmartPointer.h>
+
+class KUrl;
 
 class AbstractColumn;
 class Matrix;
+class MatrixDataHandlerPrivate;
+class SpreadsheetDataHandlerPrivate;
+class FileDataHandlerPrivate;
 
 class vtkActor;
 
-class IDataHandler : public QObject {
+class IDataHandler : public AbstractAspect {
 		Q_OBJECT
 	public:
+		IDataHandler();
 		virtual ~IDataHandler() {}
 
 		vtkSmartPointer<vtkActor> actor(Plot3D::VisualizationType type);
@@ -55,8 +59,11 @@ class IDataHandler : public QObject {
 };
 
 class MatrixDataHandler : public IDataHandler {
+		Q_DISABLE_COPY(MatrixDataHandler)
+		Q_DECLARE_PRIVATE(MatrixDataHandler)
 	public:
 		MatrixDataHandler();
+		virtual ~MatrixDataHandler();
 
 		void setMatrix(Matrix* matrix);
 
@@ -64,12 +71,15 @@ class MatrixDataHandler : public IDataHandler {
 		vtkSmartPointer<vtkActor> trianglesActor();
 
 	private:
-		Matrix* matrix;
+		const QScopedPointer<MatrixDataHandlerPrivate> d_ptr;
 };
 
 class SpreadsheetDataHandler : public IDataHandler {
+		Q_DISABLE_COPY(SpreadsheetDataHandler)
+		Q_DECLARE_PRIVATE(SpreadsheetDataHandler)
 	public:
 		SpreadsheetDataHandler();
+		virtual ~SpreadsheetDataHandler();
 
 		void setXColumn(AbstractColumn *column);
 		void setYColumn(AbstractColumn *column);
@@ -81,24 +91,31 @@ class SpreadsheetDataHandler : public IDataHandler {
 		vtkSmartPointer<vtkActor> trianglesActor();
 
 	private:
-		AbstractColumn *xColumn;
-		AbstractColumn *yColumn;
-		AbstractColumn *zColumn;
-		AbstractColumn *nodeColumn[3];
+		const QScopedPointer<SpreadsheetDataHandlerPrivate> d_ptr;
 };
 
 class FileDataHandler : public IDataHandler {
+		Q_DISABLE_COPY(FileDataHandler)
+		Q_DECLARE_PRIVATE(FileDataHandler)
 	public:
+		FileDataHandler();
+		virtual ~FileDataHandler();
+
 		void setFile(const KUrl& path);
 
 	private:
 		vtkSmartPointer<vtkActor> trianglesActor();
 
 	private:
-		KUrl path;
+		const QScopedPointer<FileDataHandlerPrivate> d_ptr;
+
 };
 
 class DemoDataHandler : public IDataHandler {
+		Q_DISABLE_COPY(DemoDataHandler)
+	public:
+		DemoDataHandler();
+
 	private:
 		vtkSmartPointer<vtkActor> trianglesActor();
 };
