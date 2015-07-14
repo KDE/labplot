@@ -197,12 +197,12 @@ namespace {
 
 vtkSmartPointer<vtkActor> SpreadsheetDataHandler::trianglesActor() {
 	Q_D(SpreadsheetDataHandler);
-	AbstractColumn* const xColumn = d->xColumn;
-	AbstractColumn* const yColumn = d->yColumn;
-	AbstractColumn* const zColumn = d->zColumn;
-	AbstractColumn* const firstNode = d->firstNode;
-	AbstractColumn* const secondNode = d->secondNode;
-	AbstractColumn* const thirdNode = d->thirdNode;
+	const AbstractColumn* const xColumn = d->xColumn;
+	const AbstractColumn* const yColumn = d->yColumn;
+	const AbstractColumn* const zColumn = d->zColumn;
+	const AbstractColumn* const firstNode = d->firstNode;
+	const AbstractColumn* const secondNode = d->secondNode;
+	const AbstractColumn* const thirdNode = d->thirdNode;
 
 	if (xColumn == 0 || yColumn == 0 || zColumn == 0
 			|| firstNode == 0 || secondNode == 0 || thirdNode == 0) {
@@ -248,43 +248,43 @@ vtkSmartPointer<vtkActor> SpreadsheetDataHandler::trianglesActor() {
 	return renderTriangles(points, triangles);
 }
 
-STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetXColumn, AbstractColumn*, xColumn, update)
-void SpreadsheetDataHandler::setXColumn(AbstractColumn *column) {
+STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetXColumn, const AbstractColumn*, xColumn, update)
+void SpreadsheetDataHandler::setXColumn(const AbstractColumn *column) {
 	Q_D(SpreadsheetDataHandler);
 	if (d->xColumn != column)
 		exec(new SpreadsheetDataHandlerSetXColumnCmd(d, column, i18n("%1: X column changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetYColumn, AbstractColumn*, yColumn, update)
-void SpreadsheetDataHandler::setYColumn(AbstractColumn *column) {
+STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetYColumn, const AbstractColumn*, yColumn, update)
+void SpreadsheetDataHandler::setYColumn(const AbstractColumn *column) {
 	Q_D(SpreadsheetDataHandler);
 	if (d->yColumn != column)
 		exec(new SpreadsheetDataHandlerSetYColumnCmd(d, column, i18n("%1: Y column changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetZColumn, AbstractColumn*, zColumn, update)
-void SpreadsheetDataHandler::setZColumn(AbstractColumn *column) {
+STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetZColumn, const AbstractColumn*, zColumn, update)
+void SpreadsheetDataHandler::setZColumn(const AbstractColumn *column) {
 	Q_D(SpreadsheetDataHandler);
 	if (d->zColumn != column)
 		exec(new SpreadsheetDataHandlerSetYColumnCmd(d, column, i18n("%1: Z column changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetFirstNode, AbstractColumn*, firstNode, update)
-void SpreadsheetDataHandler::setFirstNode(AbstractColumn *column) {
+STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetFirstNode, const AbstractColumn*, firstNode, update)
+void SpreadsheetDataHandler::setFirstNode(const AbstractColumn *column) {
 	Q_D(SpreadsheetDataHandler);
 	if (d->firstNode != column)
 		exec(new SpreadsheetDataHandlerSetFirstNodeCmd(d, column, i18n("%1: First node changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetSecondNode, AbstractColumn*, secondNode, update)
-void SpreadsheetDataHandler::setSecondNode(AbstractColumn *column) {
+STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetSecondNode, const AbstractColumn*, secondNode, update)
+void SpreadsheetDataHandler::setSecondNode(const AbstractColumn *column) {
 	Q_D(SpreadsheetDataHandler);
 	if (d->secondNode != column)
 		exec(new SpreadsheetDataHandlerSetSecondNodeCmd(d, column, i18n("%1: Second node changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetThirdNode, AbstractColumn*, thirdNode, update)
-void SpreadsheetDataHandler::setThirdNode(AbstractColumn *column) {
+STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetThirdNode, const AbstractColumn*, thirdNode, update)
+void SpreadsheetDataHandler::setThirdNode(const AbstractColumn *column) {
 	Q_D(SpreadsheetDataHandler);
 	if (d->thirdNode != column)
 		exec(new SpreadsheetDataHandlerSetSecondNodeCmd(d, column, i18n("%1: Third node changed")));
@@ -303,7 +303,7 @@ MatrixDataHandler::~MatrixDataHandler() {
 
 vtkSmartPointer<vtkActor> MatrixDataHandler::trianglesActor() {
 	Q_D(MatrixDataHandler);
-	Matrix * const matrix = d->matrix;
+	const Matrix * const matrix = d->matrix;
 	if (!matrix)
 		return vtkSmartPointer<vtkActor>();
 
@@ -348,8 +348,8 @@ vtkSmartPointer<vtkActor> MatrixDataHandler::trianglesActor() {
 	return renderTriangles(points, triangles);
 }
 
-STD_SETTER_CMD_IMPL_F_S(MatrixDataHandler, SetMatrix, Matrix*, matrix, update)
-void MatrixDataHandler::setMatrix(Matrix* matrix) {
+STD_SETTER_CMD_IMPL_F_S(MatrixDataHandler, SetMatrix, const Matrix*, matrix, update)
+void MatrixDataHandler::setMatrix(const Matrix* matrix) {
 	Q_D(MatrixDataHandler);
 	if (d->matrix != matrix)
 		exec(new MatrixDataHandlerSetMatrixCmd(d, matrix, i18n("%1: matrix changed")));

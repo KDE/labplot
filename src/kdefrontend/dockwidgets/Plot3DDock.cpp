@@ -209,13 +209,29 @@ void Plot3DDock::onAxesLabelColorChanged(const QColor& color) {
 	m_plot->axes().setType(static_cast<Axes::AxesType>(ui.axesType->currentIndex()));
 }
 
+namespace{
+	struct Lock{
+		Lock(bool& variable)
+			: variable(variable){
+			variable = true;
+		}
+
+		~Lock(){
+			variable = false;
+		}
+
+	private:
+		bool& variable;
+	};
+}
+
 void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
-	m_initializing = true;
+	Lock lock(m_initializing);
 	m_plotsList = plots;
 	Q_ASSERT(m_plotsList.size());
 	m_plot = m_plotsList.first();
 
-	QAbstractItemModel* aspectTreeModel = new AspectTreeModel(m_plot->project());
+	aspectTreeModel = new AspectTreeModel(m_plot->project());
 	ui.cbXCoordinate->setModel(aspectTreeModel);
 	ui.cbYCoordinate->setModel(aspectTreeModel);
 	ui.cbZCoordinate->setModel(aspectTreeModel);
@@ -271,6 +287,17 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	connect(m_plot, SIGNAL(visualizationTypeChanged(Plot3D::VisualizationType)), this, SLOT(visualizationTypeChanged(Plot3D::VisualizationType)));
 	connect(m_plot, SIGNAL(sourceTypeChanged(Plot3D::DataSource)), this, SLOT(sourceTypeChanged(Plot3D::DataSource)));
 
+	// DataHandlers
+	connect(&m_plot->fileDataHandler(), SIGNAL(pathChanged(const KUrl&)), this, SLOT(pathChanged(const KUrl&)));
+	connect(&m_plot->matrixDataHandler(), SIGNAL(matrixChanged(const Matrix*)), this, SLOT(matrixChanged(const Matrix*)));
+	SpreadsheetDataHandler *sdh = &m_plot->spreadsheetDataHandler();
+	connect(sdh, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(xColumnChanged(const AbstractColumn*)));
+	connect(sdh, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(yColumnChanged(const AbstractColumn*)));
+	connect(sdh, SIGNAL(zColumnChanged(const AbstractColumn*)), this, SLOT(zColumnChanged(const AbstractColumn*)));
+	connect(sdh, SIGNAL(firstNodeChanged(const AbstractColumn*)), this, SLOT(firstNodeChanged(const AbstractColumn*)));
+	connect(sdh, SIGNAL(secondNodeChanged(const AbstractColumn*)), this, SLOT(secondNodeChanged(const AbstractColumn*)));
+	connect(sdh, SIGNAL(thirdNodeChanged(const AbstractColumn*)), this, SLOT(thirdNodeChanged(const AbstractColumn*)));
+
 	// Axes
 	// TODO: Move to another dock widget
 	Axes* axes = &m_plot->axes();
@@ -291,25 +318,67 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	connect(m_plot,SIGNAL(backgroundOpacityChanged(float)),this,SLOT(plotBackgroundOpacityChanged(float)));
 
 	//light
-
-
-	m_initializing = false;
 }
 
-namespace{
-	struct Lock{
-		Lock(bool& variable)
-			: variable(variable){
-			variable = true;
-		}
+void Plot3DDock::xColumnChanged(const AbstractColumn* column){
+	Lock lock(m_initializing);
+	if (column)
+		ui.cbXCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
+	else
+		ui.cbXCoordinate->setCurrentIndex(-1);
+}
 
-		~Lock(){
-			variable = false;
-		}
+void Plot3DDock::yColumnChanged(const AbstractColumn* column){
+	Lock lock(m_initializing);
+	if (column)
+		ui.cbYCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
+	else
+		ui.cbYCoordinate->setCurrentIndex(-1);
+}
 
-	private:
-		bool& variable;
-	};
+void Plot3DDock::zColumnChanged(const AbstractColumn* column){
+	Lock lock(m_initializing);
+	if (column)
+		ui.cbZCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
+	else
+		ui.cbZCoordinate->setCurrentIndex(-1);
+}
+
+void Plot3DDock::firstNodeChanged(const AbstractColumn* column){
+	Lock lock(m_initializing);
+	if (column)
+		ui.cbNode1->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
+	else
+		ui.cbNode1->setCurrentIndex(-1);
+}
+
+void Plot3DDock::secondNodeChanged(const AbstractColumn* column){
+	Lock lock(m_initializing);
+	if (column)
+		ui.cbNode2->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
+	else
+		ui.cbNode2->setCurrentIndex(-1);
+}
+
+void Plot3DDock::thirdNodeChanged(const AbstractColumn* column){
+	Lock lock(m_initializing);
+	if (column)
+		ui.cbNode3->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
+	else
+		ui.cbNode3->setCurrentIndex(-1);
+}
+
+void Plot3DDock::matrixChanged(const Matrix* matrix){
+	Lock lock(m_initializing);
+	if (matrix)
+		ui.cbMatrix->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(matrix));
+	else
+		ui.cbMatrix->setCurrentIndex(-1);
+}
+
+void Plot3DDock::pathChanged(const KUrl& url){
+	Lock lock(m_initializing);
+	ui.cbFileRequester->setUrl(url);
 }
 
 void Plot3DDock::fontSizeChanged(int value){

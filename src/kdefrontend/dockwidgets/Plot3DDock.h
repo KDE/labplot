@@ -39,6 +39,7 @@ class Plot3D;
 class KUrl;
 class AbstractColumn;
 class Matrix;
+class AspectTreeModel;
 
 class Plot3DDock: public QWidget {
 	Q_OBJECT
@@ -52,6 +53,7 @@ class Plot3DDock: public QWidget {
 		Plot3D* m_plot;
 		QList<Plot3D*> m_plotsList;
 		bool m_initializing;
+		AspectTreeModel* aspectTreeModel;
 
 		void hideDataSource(bool hide = true);
 		void hideFileUrl(bool hide = true);
@@ -80,6 +82,16 @@ class Plot3DDock: public QWidget {
 
 		void visualizationTypeChanged(Plot3D::VisualizationType);
 		void sourceTypeChanged(Plot3D::DataSource);
+
+		// Data handlers
+		void pathChanged(const KUrl&);
+		void matrixChanged(const Matrix*);
+		void xColumnChanged(const AbstractColumn*);
+		void yColumnChanged(const AbstractColumn*);
+		void zColumnChanged(const AbstractColumn*);
+		void firstNodeChanged(const AbstractColumn*);
+		void secondNodeChanged(const AbstractColumn*);
+		void thirdNodeChanged(const AbstractColumn*);
 
 		//"Background"-tab
 		void backgroundTypeChanged(int);

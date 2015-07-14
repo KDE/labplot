@@ -45,7 +45,7 @@ class FileDataHandler;
 
 struct MatrixDataHandlerPrivate{
 	MatrixDataHandler* const q;
-	Matrix* matrix;
+	const Matrix* matrix;
 
 	MatrixDataHandlerPrivate(MatrixDataHandler *parent);
 	DECLARE_PLOT3D_DATAHANDLER_INTERFACE
@@ -53,13 +53,13 @@ struct MatrixDataHandlerPrivate{
 
 struct SpreadsheetDataHandlerPrivate {
 	SpreadsheetDataHandler* const q;
-	AbstractColumn *xColumn;
-	AbstractColumn *yColumn;
-	AbstractColumn *zColumn;
+	const AbstractColumn *xColumn;
+	const AbstractColumn *yColumn;
+	const AbstractColumn *zColumn;
 
-	AbstractColumn *firstNode;
-	AbstractColumn *secondNode;
-	AbstractColumn *thirdNode;
+	const AbstractColumn *firstNode;
+	const AbstractColumn *secondNode;
+	const AbstractColumn *thirdNode;
 
 	SpreadsheetDataHandlerPrivate(SpreadsheetDataHandler *parent);
 	DECLARE_PLOT3D_DATAHANDLER_INTERFACE

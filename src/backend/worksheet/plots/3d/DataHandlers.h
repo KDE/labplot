@@ -68,7 +68,7 @@ class MatrixDataHandler : public IDataHandler {
 		MatrixDataHandler();
 		virtual ~MatrixDataHandler();
 
-		void setMatrix(Matrix* matrix);
+		void setMatrix(const Matrix* matrix);
 
 		typedef MatrixDataHandler BaseClass;
 		typedef MatrixDataHandlerPrivate Private;
@@ -78,7 +78,7 @@ class MatrixDataHandler : public IDataHandler {
 
 	signals:
 		friend class MatrixDataHandlerSetMatrixCmd;
-		void matrixChanged(Matrix*);
+		void matrixChanged(const Matrix*);
 
 	private:
 		const QScopedPointer<MatrixDataHandlerPrivate> d_ptr;
@@ -92,13 +92,13 @@ class SpreadsheetDataHandler : public IDataHandler {
 		SpreadsheetDataHandler();
 		virtual ~SpreadsheetDataHandler();
 
-		void setXColumn(AbstractColumn *column);
-		void setYColumn(AbstractColumn *column);
-		void setZColumn(AbstractColumn *column);
+		void setXColumn(const AbstractColumn *column);
+		void setYColumn(const AbstractColumn *column);
+		void setZColumn(const AbstractColumn *column);
 
-		void setFirstNode(AbstractColumn *column);
-		void setSecondNode(AbstractColumn *column);
-		void setThirdNode(AbstractColumn *column);
+		void setFirstNode(const AbstractColumn *column);
+		void setSecondNode(const AbstractColumn *column);
+		void setThirdNode(const AbstractColumn *column);
 
 		typedef SpreadsheetDataHandler BaseClass;
 		typedef SpreadsheetDataHandlerPrivate Private;
@@ -113,12 +113,12 @@ class SpreadsheetDataHandler : public IDataHandler {
 		friend class SpreadsheetDataHandlerSetFirstNodeCmd;
 		friend class SpreadsheetDataHandlerSetSecondNodeCmd;
 		friend class SpreadsheetDataHandlerSetThirdNodeCmd;
-		void xColumnChanged(AbstractColumn*);
-		void yColumnChanged(AbstractColumn*);
-		void zColumnChanged(AbstractColumn*);
-		void firstNodeChanged(AbstractColumn*);
-		void secondNodeChanged(AbstractColumn*);
-		void thirdNodeChanged(AbstractColumn*);
+		void xColumnChanged(const AbstractColumn*);
+		void yColumnChanged(const AbstractColumn*);
+		void zColumnChanged(const AbstractColumn*);
+		void firstNodeChanged(const AbstractColumn*);
+		void secondNodeChanged(const AbstractColumn*);
+		void thirdNodeChanged(const AbstractColumn*);
 
 	private:
 		const QScopedPointer<SpreadsheetDataHandlerPrivate> d_ptr;
