@@ -96,6 +96,7 @@ void Plot3D::init(bool transform){
 	// TODO: Configure as a separate widget
 	d->axes = new Axes(*d->renderer);
 	addChild(d->axes);
+	d->axes->setHidden(true);
 
 	foreach (IDataHandler* handler, d->dataHandlers) {
 		connect(handler, SIGNAL(parametersChanged()), this, SLOT(updatePlot()));
