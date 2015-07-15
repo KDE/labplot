@@ -289,19 +289,19 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
   }else if (className=="CantorWorksheet"){
 
 	if (!mainWindow->cantorWorksheetDock){
-	  mainWindow->cantorWorksheetDock = new CantorWorksheetDock(mainWindow->stackedWidget);
-	  connect(mainWindow->cantorWorksheetDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
-	  mainWindow->stackedWidget->addWidget(mainWindow->cantorWorksheetDock);
+		mainWindow->cantorWorksheetDock = new CantorWorksheetDock(mainWindow->stackedWidget);
+		connect(mainWindow->cantorWorksheetDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+		mainWindow->stackedWidget->addWidget(mainWindow->cantorWorksheetDock);
 	}
 
 	QList<CantorWorksheet*> list;
 	foreach(aspect, selectedAspects){
-	  list<<qobject_cast<CantorWorksheet *>(aspect);
+		list<<qobject_cast<CantorWorksheet *>(aspect);
 	}
 	if (list.size()==1){
-	    mainWindow->m_propertiesDock->setWindowTitle(list.first()->backendName() + " Properties");
+		mainWindow->m_propertiesDock->setWindowTitle(list.first()->backendName() + " Properties");
 	} else {
-	    mainWindow->m_propertiesDock->setWindowTitle("CAS Properties");
+		mainWindow->m_propertiesDock->setWindowTitle("CAS Properties");
 	}
 	mainWindow->cantorWorksheetDock->setCantorWorksheets(list);
 

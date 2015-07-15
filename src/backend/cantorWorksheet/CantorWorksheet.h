@@ -36,38 +36,40 @@
 #include <KParts/ReadWritePart>
 #include "backend/core/AbstractScriptingEngine.h"
 #include "backend/core/column/Column.h"
+#include "cantor/cantor_part.h"
 
 class CantorWorksheet : public AbstractPart, public scripted{
-    Q_OBJECT
+	Q_OBJECT
 
-    public:
-	CantorWorksheet(AbstractScriptingEngine* engine, const QString& name);
-	virtual QWidget* view() const;
-	virtual QMenu* createContextMenu();
-	QString backendName();
-	KParts::ReadWritePart* part();
-	QList<Cantor::PanelPlugin*> getPlugins();
-	Column* column(const QString &name) const;
-	int columnCount() const;
+	public:
+		CantorWorksheet(AbstractScriptingEngine* engine, const QString& name);
+		virtual QWidget* view() const;
+		virtual QMenu* createContextMenu();
+		QString backendName();
+		KParts::ReadWritePart* part();
+		QList<Cantor::PanelPlugin*> getPlugins();
+		Column* column(const QString &name) const;
+		Column* column(int &index) const;
+		int columnCount() const;
 
-    private slots:
-	void rowsInserted(const QModelIndex & parent, int first, int last);
-	void rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last);
-	void modelReset();
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+	private slots:
+		void rowsInserted(const QModelIndex & parent, int first, int last);
+		void rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last);
+		void modelReset();
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 
-    signals:
-	void requestProjectContextMenu(QMenu*);
+	signals:
+		void requestProjectContextMenu(QMenu*);
 
-    private:
-	KParts::ReadWritePart* m_part;
-	QList<Cantor::PanelPlugin*> m_plugins;
-	QAbstractItemModel* m_variableModel;
-	Cantor::Session* m_session;
-	QString m_backendName;
+	private:
+		KParts::ReadWritePart* m_part;
+		QList<Cantor::PanelPlugin*> m_plugins;
+		QAbstractItemModel* m_variableModel;
+		Cantor::Session* m_session;
+		QString m_backendName;
 	
-	void initialize();
+		void initialize();
 };
 
 #endif // CANTORWORKSHEET_H

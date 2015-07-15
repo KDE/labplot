@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : CantorVariable.h
+    File                 : CantorWorksheet.cpp
     Project              : LabPlot
     Description          : Aspect providing a Cantor Worksheets for Multiple backends
     --------------------------------------------------------------------
@@ -26,53 +26,45 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CANTORVARIABLE_H
-#define CANTORVARIABLE_H
+#include "VariableParser.h"
 
-#include "backend/core/column/Column.h"
-#include <QIcon>
+VariableParser::VariableParser(const QString& name, const QString& value)
+	: m_backendName(name), m_string(value){
+	init();
+}
 
-class CantorVariable : public Column {
-    Q_OBJECT
-    
-    public:
-	CantorVariable(QString);
-	~CantorVariable();
-	
-    virtual QIcon icon() const;
-    
-	bool isReadOnly() const;
-	AbstractColumn::ColumnMode columnMode() const;
-	bool copy(const AbstractColumn * other);
-	bool copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows);
-	int rowCount() const;
-	AbstractColumn::PlotDesignation plotDesignation() const;
-	void setPlotDesignation(AbstractColumn::PlotDesignation pd);
-	int width() const;
-	void setWidth(int value);
-	void clear();
-	AbstractSimpleFilter *outputFilter() const;
-	ColumnStringIO *asStringColumn() const;
+void VariableParser::init() {
+	if(m_backendName.compare(QString("Maxima"), Qt::CaseInsensitive) == 0) {
+		return parseMaximaValues();
+	}
+}
 
-	QString formula(int row) const;
-	QList< Interval<int> > formulaIntervals() const;
-	void setFormula(Interval<int> i, QString formula);
-	void setFormula(int row, QString formula);
-	void clearFormulas();
-	
-	void* data() const;
-	double valueAt(int row) const;
-	void setValueAt(int row, double new_value);
-	virtual void replaceValues(int first, const QVector<double>& new_values);
-	void setChanged();
-	void setSuppressDataChangedSignal(bool b);
+void VariableParser::parseMaximaValues() {
+	QTime t = QTime::currentTime();
+	QStringList valueStringList;
+	m_string = m_string.replace(QString("["), QString(""));
+	m_string = m_string.replace(QString("]"), QString(""));
+	m_string = m_string.trimmed();
+	valueStringList = m_string.split(',');
+	foreach(QString valueString, valueStringList) {
+		valueString = valueString.trimmed();
+		bool isNumber = false;
+		double value = valueString.toDouble(&isNumber);
+		if(!isNumber) value = NAN;
+		m_values << value;
+	}
+	m_parsed = true;
+	qDebug() << "Time taken to parse: " << t.elapsed();
+}
 
-	void save(QXmlStreamWriter * writer) const;
-	bool load(XmlStreamReader * reader);
+bool VariableParser::isParsed() {
+	return m_parsed;
+}
 
-    signals:
-	void widthAboutToChange(const Column*);
-	void widthChanged(const Column*);
-};
+QVector< double > VariableParser::values() {
+	return m_values;
+}
 
-#endif // CANTORVARIABLE_H
+int VariableParser::valuesCount() {
+	return m_values.count();
+}

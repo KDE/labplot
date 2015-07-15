@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : CantorWorksheetDock.h
+    File                 : CantorWorksheet.cpp
     Project              : LabPlot
-    Description          : widget for CantorWorksheet properties
+    Description          : Aspect providing a Cantor Worksheets for Multiple backends
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Garvit Khatri (garvitdelhi@gmail.com)
 
@@ -26,44 +26,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CANTORWORKSHEETDOCK_H
-#define CANTORWORKSHEETDOCK_H
+#ifndef VARIABLEPARSER_H
+#define VARIABLEPARSER_H
 
-#include <QtWidgets/QWidget>
-#include <QPair>
+#include <QtCore>
 
-#include <cantor/panelplugin.h>
-#include "ui_cantorworksheetdock.h"
-
-class CantorWorksheet;
-class AbstractAspect;
-
-class CantorWorksheetDock : public QWidget {
-	Q_OBJECT
-
+class VariableParser {
 	public:
-		explicit CantorWorksheetDock(QWidget *parent);
-		void setCantorWorksheets(QList<CantorWorksheet*>);
-
+		VariableParser(const QString& name, const QString& value);
+		int valuesCount();
+		QVector< double > values();
+		bool isParsed();
+		
 	private:
-		Ui::CantorWorksheetDock ui;
-		QList< CantorWorksheet* > m_cantorworksheetlist;
-		CantorWorksheet* m_worksheet;
-		QList<int> index;
-		QWidget* w = NULL;
-		bool m_initializing;
-
-	private slots:
-		//SLOTs for changes triggered in WorksheetDock
-		//"General"-tab
-		void nameChanged();
-		void commentChanged();
-
-		//SLOTs for changes triggered in Worksheet
-		void worksheetDescriptionChanged(const AbstractAspect*);
-	signals:
-		void info(const QString&);
-
+		QString m_backendName;
+		QString m_string;
+		QVector< double > m_values;
+		bool m_parsed = false;
+		
+		void init();
+		void parseMaximaValues();
 };
 
-#endif // CANTORWORKSHEETDOCK_H
+#endif // VARIABLEPARSER_H

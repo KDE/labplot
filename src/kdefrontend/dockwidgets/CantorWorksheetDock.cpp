@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : CantorWorksheetDock.cpp
     Project              : LabPlot
-    Description          : Aspect providing a Cantor Worksheets for Multiple backends
+    Description          : widget for CantorWorksheet properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Garvit Khatri (garvitdelhi@gmail.com)
 
@@ -33,46 +33,45 @@
 #include <KParts/ReadWritePart>
 
 CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent), m_initializing(false) {
-    ui.setupUi(this);
-    ui.tabWidget->setMovable(true);
+	ui.setupUi(this);
+	ui.tabWidget->setMovable(true);
 
-    //SLOTs
-    //General
-    connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
-    connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+	//SLOTs
+	//General
+	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
+	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 }
 
 void CantorWorksheetDock::setCantorWorksheets(QList< CantorWorksheet* > list) {
-    m_initializing = true;
-    m_cantorworksheetlist = list;
-    m_worksheet = list.first();
+	m_initializing = true;
+	m_cantorworksheetlist = list;
+	m_worksheet = list.first();
 
-    //show name/comment
-    ui.leName->setText(m_worksheet->name());
-    ui.leComment->setText(m_worksheet->comment());
+	//show name/comment
+	ui.leName->setText(m_worksheet->name());
+	ui.leComment->setText(m_worksheet->comment());
 
-    //show all available plugins
-    int k = 0;
-    int prev_index = ui.tabWidget->currentIndex();
-    foreach(int i, index) {
-	ui.tabWidget->removeTab(i-k);
-	++k;
-    }
-    if (m_cantorworksheetlist.size()==1) {
-	QList<Cantor::PanelPlugin*> plugins = m_cantorworksheetlist.first()->getPlugins();
-	index.clear();
-	foreach(Cantor::PanelPlugin* plugin, plugins) {
-	    plugin->setParentWidget(this);
-	    int i = ui.tabWidget->addTab(plugin->widget(), plugin->name());
-	    index.append(i);
+	//show all available plugins
+	int k = 0;
+	int prev_index = ui.tabWidget->currentIndex();
+	foreach(int i, index) {
+		ui.tabWidget->removeTab(i-k);
+		++k;
 	}
-    }
-    ui.tabWidget->setCurrentIndex(prev_index);
+	if (m_cantorworksheetlist.size()==1) {
+		QList<Cantor::PanelPlugin*> plugins = m_cantorworksheetlist.first()->getPlugins();
+		index.clear();
+		foreach(Cantor::PanelPlugin* plugin, plugins) {
+			plugin->setParentWidget(this);
+			int i = ui.tabWidget->addTab(plugin->widget(), plugin->name());
+			index.append(i);
+		}
+	}
+	ui.tabWidget->setCurrentIndex(prev_index);
 
-    //SIGNALs/SLOTs
-    connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
-
-    m_initializing = false;
+	//SIGNALs/SLOTs
+	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
+	m_initializing = false;
 }
 
 

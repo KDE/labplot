@@ -90,7 +90,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/column/Column.cpp
 	${BACKEND_DIR}/core/column/ColumnPrivate.cpp
 	${BACKEND_DIR}/core/column/columncommands.cpp
-	${BACKEND_DIR}/core/column/CantorVariable.cpp
 	${BACKEND_DIR}/core/AbstractScriptingEngine.cpp
 	${BACKEND_DIR}/core/AbstractScript.cpp
 	${BACKEND_DIR}/core/ScriptingEngineManager.cpp
@@ -138,6 +137,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
+	${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp
 	${BACKEND_DIR}/cantorWorksheet/CantorWorksheet.cpp
 )
 
@@ -157,6 +157,7 @@ set(CANTOR_SOURCES
 	${CANTOR_DIR}/panelplugin.cp
 	${CANTOR_DIR}/panelpluginhandler.cpp
 	${CANTOR_DIR}/cantor_export.cpp
+	${CANTOR_DIR}/cantor_part.cpp
 )
 
 set(TOOLS_SOURCES

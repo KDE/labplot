@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : CantorWorksheetView.h
     Project              : LabPlot
-    Description          : Aspect providing a Cantor Worksheets for Multiple backends
+    Description          : View class for CantorWorksheet
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Garvit Khatri (garvitdelhi@gmail.com)
 
@@ -42,53 +42,53 @@
 #include <KParts/ReadWritePart>
 
 class CantorWorksheetView : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
     
-    public:
-	CantorWorksheetView(CantorWorksheet* cantorWorksheet);
+	public:
+		CantorWorksheetView(CantorWorksheet* cantorWorksheet);
 	
-	~CantorWorksheetView();
+		~CantorWorksheetView();
 	
-    public slots:
-	void createContextMenu(QMenu*) const;
-	void fillToolBar(QToolBar*);	
+	public slots:
+		void createContextMenu(QMenu*) const;
+		void fillToolBar(QToolBar*);
 
-    private slots:
-	void triggerCantorAction(QAction*);
+	private slots:
+		void triggerCantorAction(QAction*);
 
-    private:
-	CantorWorksheet* m_worksheet;  
-	QAction* m_restartBackendAction;
-	QAction* m_evaluateWorsheetAction;
-	QAction* m_evaluateEntryAction;
-	QAction* m_insertCommandEntryAction;
-	QAction* m_insertTextEntryAction;
-	QAction* m_insertLatexEntryAction;
-	QAction* m_insertPageBreakAction;
-	QAction* m_removeCurrentEntryAction;
-	QAction* m_computeEigenvectorsAction;
-	QAction* m_createMattrixAction;
-	QAction* m_computeEigenvaluesAction;
-	QAction* m_invertMattrixAction;
-	QAction* m_differentiationAction;
-	QAction* m_integrationAction;
-	QAction* m_solveEquationsAction;
-	QAction* m_zoomIn;
-	QAction* m_zoomOut;
-	QAction* m_find;
-	QAction* m_replace;
-	QAction* m_syntaxHighlighting;
-	QAction* m_completion;
-	QAction* m_lineNumbers;
-	QAction* m_animateWorksheet;
-	QMenu* m_worksheetMenu;
-	QMenu* m_linearAlgebraMenu;
-	QMenu* m_calculateMenu;
-	QHBoxLayout* layout;
-	KParts::ReadWritePart* part;
-	
-	void initActions();
-	void initMenus();
+	private:
+		CantorWorksheet* m_worksheet;
+		QAction* m_restartBackendAction;
+		QAction* m_evaluateWorsheetAction;
+		QAction* m_evaluateEntryAction;
+		QAction* m_insertCommandEntryAction;
+		QAction* m_insertTextEntryAction;
+		QAction* m_insertLatexEntryAction;
+		QAction* m_insertPageBreakAction;
+		QAction* m_removeCurrentEntryAction;
+		QAction* m_computeEigenvectorsAction;
+		QAction* m_createMattrixAction;
+		QAction* m_computeEigenvaluesAction;
+		QAction* m_invertMattrixAction;
+		QAction* m_differentiationAction;
+		QAction* m_integrationAction;
+		QAction* m_solveEquationsAction;
+		QAction* m_zoomIn;
+		QAction* m_zoomOut;
+		QAction* m_find;
+		QAction* m_replace;
+		QAction* m_syntaxHighlighting;
+		QAction* m_completion;
+		QAction* m_lineNumbers;
+		QAction* m_animateWorksheet;
+		QMenu* m_worksheetMenu;
+		QMenu* m_linearAlgebraMenu;
+		QMenu* m_calculateMenu;
+		QHBoxLayout* layout;
+		KParts::ReadWritePart* part;
+
+		void initActions();
+		void initMenus();
 };
 
 #endif // CANTORWORKSHEETVIEW_H
