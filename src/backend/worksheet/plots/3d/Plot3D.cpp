@@ -460,6 +460,12 @@ void Plot3DPrivate::updateBackground() {
 	}else if (backgroundType == PlotArea::Image){
 		if ( !backgroundFileName.trimmed().isEmpty() ) {
 			QPixmap pix(backgroundFileName);
+			if (pix.width() > 0 && pix.height() > 0) {
+				const QImage img(pix.toImage());
+				painter.fillRect(rect, img.pixel(QPoint(0, 0)));
+			} else {
+				painter.fillRect(rect, Qt::white);
+			}
 			switch (backgroundImageStyle){
 				case PlotArea::ScaledCropped:
 					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
