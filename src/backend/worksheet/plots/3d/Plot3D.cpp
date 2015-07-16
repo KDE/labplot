@@ -499,6 +499,7 @@ void Plot3DPrivate::updateBackground() {
 			}
 		}
 	} else if (backgroundType == PlotArea::Pattern){
+		painter.fillRect(rect, Qt::white);
 		painter.setBrush(QBrush(backgroundFirstColor, backgroundBrushStyle));
 	}
 
