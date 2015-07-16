@@ -464,7 +464,7 @@ void Plot3DPrivate::updateBackground() {
 				case PlotArea::ScaledCropped:
 					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
 					painter.setBrush(QBrush(pix));
-					painter.setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+					painter.setBrushOrigin(0, 0);
 					painter.drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 					break;
 				case PlotArea::Scaled:
