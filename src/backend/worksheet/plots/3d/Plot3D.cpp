@@ -488,7 +488,7 @@ void Plot3DPrivate::updateBackground() {
 					break;
 				case PlotArea::CenterTiled:
 					painter.setBrush(QBrush(pix));
-					painter.setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+					painter.setBrushOrigin(rect.center().x()-pix.size().width()/2, 0);
 					painter.drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 			}
 		}
