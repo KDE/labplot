@@ -357,28 +357,32 @@ void MatrixDataHandler::setMatrix(const Matrix* matrix) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// TODO: Remove this macros and rewrite to templates later
-#define DECLARE_PLOT3D_DATAHANDLER_INTERFACE_IMPL(Class) \
-	void Class::update() {\
-		q->update();\
-	}\
-	\
-	QString Class::name() const {\
-		return "";\
-	}\
-
-
-MatrixDataHandlerPrivate::MatrixDataHandlerPrivate(MatrixDataHandler *parent)
-	: q(parent)
-	, matrix(0) {
+template<typename TParent>
+BaseDataHandlerPrivate<TParent>::BaseDataHandlerPrivate(TParent* parent)
+	: q(parent) {
 }
 
-DECLARE_PLOT3D_DATAHANDLER_INTERFACE_IMPL(MatrixDataHandlerPrivate)
+template<typename TParent>
+void BaseDataHandlerPrivate<TParent>::update() {
+	q->update();
+}
+
+template<typename TParent>
+QString BaseDataHandlerPrivate<TParent>::name() const {
+	return "";
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
-SpreadsheetDataHandlerPrivate::SpreadsheetDataHandlerPrivate(SpreadsheetDataHandler *parent)
-	: q(parent)
+MatrixDataHandlerPrivate::MatrixDataHandlerPrivate(MatrixDataHandler* parent)
+	: BaseDataHandlerPrivate<MatrixDataHandler>(parent)
+	, matrix(0) {
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+SpreadsheetDataHandlerPrivate::SpreadsheetDataHandlerPrivate(SpreadsheetDataHandler* parent)
+	: BaseDataHandlerPrivate<SpreadsheetDataHandler>(parent)
 	, xColumn(0)
 	, yColumn(0)
 	, zColumn(0)
@@ -387,12 +391,8 @@ SpreadsheetDataHandlerPrivate::SpreadsheetDataHandlerPrivate(SpreadsheetDataHand
 	, thirdNode(0) {
 }
 
-DECLARE_PLOT3D_DATAHANDLER_INTERFACE_IMPL(SpreadsheetDataHandlerPrivate)
-
 ////////////////////////////////////////////////////////////////////////////////
 
-FileDataHandlerPrivate::FileDataHandlerPrivate(FileDataHandler *parent)
-	: q(parent) {
+FileDataHandlerPrivate::FileDataHandlerPrivate(FileDataHandler* parent)
+	: BaseDataHandlerPrivate<FileDataHandler>(parent) {
 }
-
-DECLARE_PLOT3D_DATAHANDLER_INTERFACE_IMPL(FileDataHandlerPrivate)

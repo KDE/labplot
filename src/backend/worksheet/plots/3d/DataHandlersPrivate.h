@@ -39,20 +39,23 @@ class MatrixDataHandler;
 class SpreadsheetDataHandler;
 class FileDataHandler;
 
-#define DECLARE_PLOT3D_DATAHANDLER_INTERFACE \
-	void update();\
+template<typename TParent>
+struct BaseDataHandlerPrivate{
+	TParent* const q;
+
+	void update();
 	QString name() const;
 
-struct MatrixDataHandlerPrivate{
-	MatrixDataHandler* const q;
+	BaseDataHandlerPrivate(TParent* parent);
+};
+
+struct MatrixDataHandlerPrivate : public BaseDataHandlerPrivate<MatrixDataHandler>{
 	const Matrix* matrix;
 
 	MatrixDataHandlerPrivate(MatrixDataHandler *parent);
-	DECLARE_PLOT3D_DATAHANDLER_INTERFACE
 };
 
-struct SpreadsheetDataHandlerPrivate {
-	SpreadsheetDataHandler* const q;
+struct SpreadsheetDataHandlerPrivate : public BaseDataHandlerPrivate<SpreadsheetDataHandler>{
 	const AbstractColumn *xColumn;
 	const AbstractColumn *yColumn;
 	const AbstractColumn *zColumn;
@@ -62,15 +65,12 @@ struct SpreadsheetDataHandlerPrivate {
 	const AbstractColumn *thirdNode;
 
 	SpreadsheetDataHandlerPrivate(SpreadsheetDataHandler *parent);
-	DECLARE_PLOT3D_DATAHANDLER_INTERFACE
 };
 
-struct FileDataHandlerPrivate {
-	FileDataHandler* const q;
+struct FileDataHandlerPrivate : public BaseDataHandlerPrivate<FileDataHandler>{
 	KUrl path;
 
 	FileDataHandlerPrivate(FileDataHandler *parent);
-	DECLARE_PLOT3D_DATAHANDLER_INTERFACE
 };
 
 #endif
