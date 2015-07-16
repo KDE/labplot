@@ -30,6 +30,7 @@
 #include "Plot3DPrivate.h"
 #include "Axes.h"
 #include "DataHandlers.h"
+#include "VTKGraphicsItem.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/plots/PlotArea.h"
@@ -43,7 +44,6 @@
 #include <KConfigGroup>
 #include <KLocale>
 
-#include <QVTKGraphicsItem.h>
 #include <vtkActor.h>
 #include <vtkCamera.h>
 #include <vtkImageActor.h>
@@ -94,17 +94,6 @@ void Plot3D::init(bool transform){
 	//light
 
 	d->init();
-
-	// TODO: Configure as a separate widget
-	d->axes = new Axes(*d->renderer);
-	addChild(d->axes);
-	d->axes->setHidden(true);
-
-	foreach (IDataHandler* handler, d->dataHandlers) {
-		connect(handler, SIGNAL(parametersChanged()), this, SLOT(updatePlot()));
-		addChild(handler);
-		handler->setHidden(true);
-	}
 
 	d->isInitialized = true;
 
@@ -296,29 +285,10 @@ void Plot3DPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	QGraphicsItem::mouseReleaseEvent(event);
 }
 
-namespace {
-		class VTKGraphicsItem : public QVTKGraphicsItem {
-		public:
-			VTKGraphicsItem(QGLContext* ctx, QGraphicsItem* p)
-				: QVTKGraphicsItem(ctx, p) {
-			}
-
-		protected:
-			void mousePressEvent(QGraphicsSceneMouseEvent* event) {
-				dynamic_cast<Plot3DPrivate*>(parentItem())->mousePressEvent(event);
-				QVTKGraphicsItem::mousePressEvent(event);
-			}
-
-			void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-				dynamic_cast<Plot3DPrivate*>(parentItem())->mouseReleaseEvent(event);
-				QVTKGraphicsItem::mouseReleaseEvent(event);
-			}
-	};
-}
-
 void Plot3DPrivate::init() {
 	//initialize VTK
 	vtkItem = new VTKGraphicsItem(context, this);
+	vtkItem->connect(q, SIGNAL(parametersChanged()), SLOT(refresh()));
 
 	//foreground renderer
 	renderer = vtkSmartPointer<vtkRenderer>::New();
@@ -358,6 +328,18 @@ void Plot3DPrivate::init() {
 	dataHandlers[Plot3D::DataSource_File] = fileHandler;
 	dataHandlers[Plot3D::DataSource_Spreadsheet] = spreadsheetHandler;
 	dataHandlers[Plot3D::DataSource_Matrix] = matrixHandler;
+
+	// TODO: Configure as a separate widget
+	axes = new Axes(*renderer);
+	q->addChild(axes);
+	axes->setHidden(true);
+	vtkItem->connect(axes, SIGNAL(parametersChanged()), SLOT(refresh()));
+
+	foreach (IDataHandler* handler, dataHandlers) {
+		q->connect(handler, SIGNAL(parametersChanged()), SLOT(updatePlot()));
+		q->addChild(handler);
+		handler->setHidden(true);
+	}
 }
 
 void Plot3DPrivate::retransform() {
@@ -405,6 +387,7 @@ void Plot3DPrivate::updatePlot() {
 	renderer->AddActor(dataHandlers[sourceType]->actor(visualizationType));
 
 	axes->updateBounds();
+	emit q->parametersChanged();
 }
 
 void Plot3DPrivate::updateBackground() {
@@ -514,6 +497,7 @@ void Plot3DPrivate::updateBackground() {
 
 	backgroundImageActor->SetInputData(qimageToImageSource->GetOutput());
 	qimageToImageSource->Update();
+	emit q->parametersChanged();
 }
 
 //##############################################################################

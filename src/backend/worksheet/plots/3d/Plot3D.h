@@ -119,6 +119,7 @@ class Plot3D : public AbstractPlot {
 		void backgroundSecondColorChanged(const QColor&);
 		void backgroundFileNameChanged(const QString&);
 		void backgroundOpacityChanged(float);
+		void parametersChanged();
 };
 
 #endif

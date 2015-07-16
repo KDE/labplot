@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : Axes.h
+    File                 : VTKGraphicsItem.cpp
     Project              : LabPlot
-    Description          : 3D plot axes
+    Description          : Custom QVTKGraphicsItem class
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Minh Ngo (minh@fedoraproject.org)
 
@@ -26,68 +26,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PLOT3D_AXES_H
-#define PLOT3D_AXES_H
+#include "VTKGraphicsItem.h"
+#include "Plot3DPrivate.h"
+#include <QGraphicsSceneMouseEvent>
 
-#include "backend/core/AbstractAspect.h"
+VTKGraphicsItem::VTKGraphicsItem(QGLContext* ctx, QGraphicsItem* p)
+	: QVTKGraphicsItem(ctx, p) {
+}
 
-#include <QColor>
+void VTKGraphicsItem::refresh() {
+	QGraphicsSceneMouseEvent pressEvent(QEvent::MouseButtonPress);
+	pressEvent.setButton(Qt::LeftButton);
+	QVTKGraphicsItem::mousePressEvent(&pressEvent);
+	QGraphicsSceneMouseEvent releaseEvent(QEvent::MouseButtonRelease);
+	releaseEvent.setButton(Qt::LeftButton);
+	QVTKGraphicsItem::mouseReleaseEvent(&releaseEvent);
+}
 
-#include <vtkSmartPointer.h>
+void VTKGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	dynamic_cast<Plot3DPrivate*>(parentItem())->mousePressEvent(event);
+	QVTKGraphicsItem::mousePressEvent(event);
+}
 
-class vtkProp;
-class vtkActor;
-class vtkRenderer;
-
-class AxesPrivate;
-class Axes : public AbstractAspect {
-		Q_OBJECT
-		Q_DECLARE_PRIVATE(Axes)
-		Q_DISABLE_COPY(Axes)
-	public:
-		enum AxesType {
-			AxesType_Cube = 0,
-			AxesType_Plain = 1,
-			AxesType_NoAxes = 2
-		};
-
-		Axes(vtkRenderer& renderer);
-		~Axes();
-
-		void updateBounds();
-
-		bool operator==(vtkProp* prop) const;
-		bool operator!=(vtkProp* prop) const;
-
-		bool isShown() const;
-
-		void setType(AxesType type);
-		void setFontSize(int fontSize);
-		void setWidth(double width);
-		void setXLabelColor(const QColor& color);
-		void setYLabelColor(const QColor& color);
-		void setZLabelColor(const QColor& color);
-
-		typedef Axes BaseClass;
-		typedef AxesPrivate Private;
-
-	signals:
-		friend class AxesSetTypeCmd;
-		friend class AxesSetFontSizeCmd;
-		friend class AxesSetWidthCmd;
-		friend class AxesSetXLabelColorCmd;
-		friend class AxesSetYLabelColorCmd;
-		friend class AxesSetZLabelColorCmd;
-		void typeChanged(Axes::AxesType);
-		void fontSizeChanged(int);
-		void widthChanged(double);
-		void xLabelColorChanged(const QColor&);
-		void yLabelColorChanged(const QColor&);
-		void zLabelColorChanged(const QColor&);
-		void parametersChanged();
-
-	private:
-		const QScopedPointer<AxesPrivate> d_ptr;
-};
-
-#endif
+void VTKGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	dynamic_cast<Plot3DPrivate*>(parentItem())->mouseReleaseEvent(event);
+	QVTKGraphicsItem::mouseReleaseEvent(event);
+}

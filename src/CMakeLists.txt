@@ -157,6 +157,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/3d/Plot3D.cpp
 	${BACKEND_DIR}/worksheet/plots/3d/Axes.cpp
 	${BACKEND_DIR}/worksheet/plots/3d/DataHandlers.cpp
+	${BACKEND_DIR}/worksheet/plots/3d/VTKGraphicsItem.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 )
 

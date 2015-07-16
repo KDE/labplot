@@ -157,6 +157,7 @@ void AxesPrivate::show(bool pred) {
 	hide();
 	if (pred)
 		init();
+	emit q->parametersChanged();
 }
 
 QString AxesPrivate::name() const{
