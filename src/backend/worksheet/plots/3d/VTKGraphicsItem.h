@@ -31,17 +31,17 @@
 
 #include <QVTKGraphicsItem.h>
 
-		class VTKGraphicsItem : public QVTKGraphicsItem {
-			Q_OBJECT
-		public:
-			VTKGraphicsItem(QGLContext* ctx, QGraphicsItem* p);
+class VTKGraphicsItem : public QVTKGraphicsItem {
+		Q_OBJECT
+	public:
+		VTKGraphicsItem(QGLContext* ctx, QGraphicsItem* p);
 
-		public slots:
-			void refresh();
+	public slots:
+		void refresh();
 
-		protected:
-			void mousePressEvent(QGraphicsSceneMouseEvent* event);
-			void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-	};
+	protected:
+		void mousePressEvent(QGraphicsSceneMouseEvent* event);
+		void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+};
 
 #endif
