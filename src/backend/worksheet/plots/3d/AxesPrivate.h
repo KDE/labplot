@@ -37,6 +37,7 @@ class vtkProp;
 struct AxesPrivate {
 	Axes* const q;
 
+	bool showAxes;
 	Axes::AxesType type;
 	int fontSize;
 	double width;

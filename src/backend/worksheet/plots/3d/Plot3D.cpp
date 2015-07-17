@@ -126,6 +126,7 @@ QIcon Plot3D::icon() const{
 }
 
 void Plot3D::initActions(){
+	Q_D(Plot3D);
 	//"add new" actions
 	addCurveAction = new KAction(KIcon("3d-curve"), i18n("3D-curve"), this);
 	addEquationCurveAction = new KAction(KIcon("3d-equation-curve"), i18n("3D-curve from a mathematical equation"), this);
@@ -134,6 +135,11 @@ void Plot3D::initActions(){
 // 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 // 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
 // 	connect(addSurfaceAction, SIGNAL(triggered()), SLOT(addSurface()));
+
+	showAxesAction = new KAction(i18n("Axes"), this);
+	showAxesAction->setCheckable(true);
+	showAxesAction->setChecked(d->axes->isVisible());
+	connect(showAxesAction, SIGNAL(toggled(bool)), d->axes, SLOT(show(bool)));
 
 	//zoom/navigate actions
 	scaleAutoAction = new KAction(KIcon("auto-scale-all"), i18n("auto scale"), this);
@@ -148,7 +154,7 @@ void Plot3D::initActions(){
 	zoomOutYAction = new KAction(KIcon("zoom-out-y"), i18n("zoom out Y"), this);
 	zoomInZAction = new KAction(KIcon("zoom-in-z"), i18n("zoom in Z"), this);
 	zoomOutZAction = new KAction(KIcon("zoom-out-z"), i18n("zoom out Z"), this);
-    shiftLeftXAction = new KAction(KIcon("shift-left-x"), i18n("shift left X"), this);
+	shiftLeftXAction = new KAction(KIcon("shift-left-x"), i18n("shift left X"), this);
 	shiftRightXAction = new KAction(KIcon("shift-right-x"), i18n("shift right X"), this);
 	shiftUpYAction = new KAction(KIcon("shift-up-y"), i18n("shift up Y"), this);
 	shiftDownYAction = new KAction(KIcon("shift-down-y"), i18n("shift down Y"), this);
@@ -217,6 +223,8 @@ QMenu* Plot3D::createContextMenu(){
 
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
+
+	menu->insertAction(firstAction, showAxesAction);
 
 	menu->insertMenu(firstAction, addNewMenu);
 	menu->insertMenu(firstAction, zoomMenu);
@@ -610,7 +618,7 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 		writeCommentElement(writer);
 
 		writer->writeStartElement("general");
-			writer->writeAttribute("show_axes", QString::number(d->axes->isShown()));
+			writer->writeAttribute("show_axes", QString::number(d->axes->isVisible()));
 			writer->writeAttribute("vis_type", QString::number(d->visualizationType));
 			if (d->visualizationType == VisualizationType_Triangles){
 				writer->writeAttribute("data_source", QString::number(d->sourceType));

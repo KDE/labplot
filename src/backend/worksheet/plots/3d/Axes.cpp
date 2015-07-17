@@ -35,6 +35,8 @@
 #include <QDebug>
 
 #include <KLocale>
+#include <KMenu>
+#include <KIcon>
 
 #include <vtkRenderer.h>
 #include <vtkCubeAxesActor.h>
@@ -55,6 +57,18 @@ Axes::Axes(vtkRenderer& renderer)
 Axes::~Axes() {
 }
 
+QIcon Axes::icon() const {
+	return KIcon("axis-horizontal");
+}
+
+QMenu* Axes::createContextMenu() {
+	// Reimplements createContextMenu to hide a delete button
+	KMenu* menu = new KMenu();
+	menu->addTitle(this->name());
+	menu->addAction(KIcon("edit-rename"), i18n("Rename"), this, SIGNAL(renameRequested()));
+	return menu;
+}
+
 void Axes::updateBounds() {
 	Q_D(Axes);
 	if (!d->vtkAxes)
@@ -66,17 +80,21 @@ void Axes::updateBounds() {
 
 		vtkBoundingBox bb;
 
-		vtkActor* actor = 0;
-		while ((actor = actors->GetNextActor()) != 0) {
-			if (operator!=(actor))
-				bb.AddBounds(actor->GetBounds());
-		}
-
-		vtkCubeAxesActor *axes = dynamic_cast<vtkCubeAxesActor*>(d->vtkAxes.GetPointer());
-
 		double bounds[6];
-		bb.GetBounds(bounds);
-		axes->SetBounds(bounds);
+		if (actors->GetNumberOfItems() != 0) {
+			vtkActor* actor = 0;
+			while ((actor = actors->GetNextActor()) != 0) {
+				if (operator!=(actor))
+					bb.AddBounds(actor->GetBounds());
+			}
+
+			vtkCubeAxesActor *axes = dynamic_cast<vtkCubeAxesActor*>(d->vtkAxes.GetPointer());
+			bb.GetBounds(bounds);
+			axes->SetBounds(bounds);
+		} else {
+			bounds[0] = bounds[2] = bounds[4] = -100;
+			bounds[1] = bounds[3] = bounds[5] = 100;
+		}
 	}
 }
 
@@ -89,10 +107,32 @@ bool Axes::operator!=(vtkProp* prop) const {
 	return !operator==(prop);
 }
 
-bool Axes::isShown() const {
+bool Axes::isVisible() const {
 	Q_D(const Axes);
-	return d->vtkAxes;
+	return d->showAxes;
 }
+
+void Axes::show(bool pred) {
+	Q_D(Axes);
+	d->showAxes = pred;
+	d->update();
+	setHidden(!pred);
+}
+
+//##############################################################################
+//##########################  getter methods  ##################################
+//##############################################################################
+
+BASIC_SHARED_D_READER_IMPL(Axes, Axes::AxesType, type, type)
+BASIC_SHARED_D_READER_IMPL(Axes, int, fontSize, fontSize)
+BASIC_SHARED_D_READER_IMPL(Axes, double, width, width)
+BASIC_SHARED_D_READER_IMPL(Axes, QColor, xLabelColor, xLabelColor)
+BASIC_SHARED_D_READER_IMPL(Axes, QColor, yLabelColor, yLabelColor)
+BASIC_SHARED_D_READER_IMPL(Axes, QColor, zLabelColor, zLabelColor)
+
+//##############################################################################
+//#################  setter methods and undo commands ##########################
+//##############################################################################
 
 STD_SETTER_CMD_IMPL_F_S(Axes, SetType, Axes::AxesType, type, update)
 void Axes::setType(AxesType type) {
@@ -140,7 +180,8 @@ void Axes::setZLabelColor(const QColor& color){
 
 AxesPrivate::AxesPrivate(vtkRenderer& renderer, Axes *parent)
 	: q(parent)
-	, type(Axes::AxesType_NoAxes)
+	, showAxes(false)
+	, type(Axes::Axes::AxesType_Plain)
 	, fontSize(32)
 	, width(10)
 	, xLabelColor(Qt::red)
@@ -165,6 +206,9 @@ QString AxesPrivate::name() const{
 }
 
 void AxesPrivate::init() {
+	if (!showAxes)
+		return;
+
 	double colors[][3] = {
 		{xLabelColor.redF(), xLabelColor.greenF(), xLabelColor.blueF()},
 		{yLabelColor.redF(), yLabelColor.greenF(), yLabelColor.blueF()},
@@ -238,5 +282,5 @@ void AxesPrivate::hide() {
 }
 
 void AxesPrivate::update() {
-	show(type != Axes::AxesType_NoAxes);
+	show(showAxes);
 }

@@ -32,7 +32,6 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/3d/Plot3D.h"
-#include "backend/worksheet/plots/3d/Axes.h"
 #include "ui_plot3ddock.h"
 
 class Plot3D;
@@ -58,7 +57,6 @@ class Plot3DDock: public QWidget {
 		void hideDataSource(bool hide = true);
 		void hideFileUrl(bool hide = true);
 		void hideTriangleInfo(bool hide = true);
-		void hideAxesProperties(bool hide = true);
 		AbstractColumn* getColumn(const QModelIndex& index) const;
 		Matrix* getMatrix(const QModelIndex& index) const;
 
@@ -123,17 +121,6 @@ class Plot3DDock: public QWidget {
 		//saving/loading
 		void loadConfigFromTemplate(KConfig&);
 		void saveConfigAsTemplate(KConfig&);
-
-		// Axes tab
-		void onAxesTypeChanged(int type);
-		void onAxesLabelFontChanged(int size);
-		void onAxesLabelColorChanged(const QColor& color);
-
-		void axesTypeChanged(Axes::AxesType);
-		void fontSizeChanged(int);
-		void xLabelColorChanged(const QColor&);
-		void yLabelColorChanged(const QColor&);
-		void zLabelColorChanged(const QColor&);
 };
 
 #endif

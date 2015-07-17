@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : Axes.h
+    File                 : Axes3D.h
     Project              : LabPlot
-    Description          : 3D plot axes
+    Description          : widget for 3D Axes properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Minh Ngo (minh@fedoraproject.org)
+    Copyright            : (C) 2015 Minh Ngo (minh@fedoraproject.org)
 
  ***************************************************************************/
 
@@ -26,74 +26,36 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PLOT3D_AXES_H
-#define PLOT3D_AXES_H
+#ifndef AXES3DDOCK_H
+#define AXES3DDOCK_H
 
-#include "backend/core/AbstractAspect.h"
-#include "backend/lib/macros.h"
+#include <QWidget>
+#include "backend/worksheet/plots/3d/Axes.h"
+#include "ui_axes3ddock.h"
 
-#include <QColor>
+class Axes;
 
-#include <vtkSmartPointer.h>
+class Axes3DDock : public QWidget {
+	Q_OBJECT
 
-class vtkProp;
-class vtkActor;
-class vtkRenderer;
-
-class AxesPrivate;
-class Axes : public AbstractAspect {
-		Q_OBJECT
-		Q_DECLARE_PRIVATE(Axes)
-		Q_DISABLE_COPY(Axes)
 	public:
-		enum AxesType {
-			AxesType_Cube = 0,
-			AxesType_Plain = 1
-		};
+		explicit Axes3DDock(QWidget* parent);
+		void setAxes(Axes *axes);
 
-		Axes(vtkRenderer& renderer);
-		~Axes();
+	private slots:
+		void onTypeChanged(int type);
+		void onLabelFontChanged(int size);
+		void onLabelColorChanged(const QColor& color);
 
-		QIcon icon() const;
-		QMenu* createContextMenu();
-
-		void updateBounds();
-
-		bool operator==(vtkProp* prop) const;
-		bool operator!=(vtkProp* prop) const;
-
-		bool isVisible() const;
-
-		BASIC_D_ACCESSOR_DECL(AxesType, type, Type)
-		BASIC_D_ACCESSOR_DECL(int, fontSize, FontSize)
-		BASIC_D_ACCESSOR_DECL(double, width, Width)
-		CLASS_D_ACCESSOR_DECL(QColor, xLabelColor, XLabelColor)
-		CLASS_D_ACCESSOR_DECL(QColor, yLabelColor, YLabelColor)
-		CLASS_D_ACCESSOR_DECL(QColor, zLabelColor, ZLabelColor)
-
-		typedef Axes BaseClass;
-		typedef AxesPrivate Private;
-
-	public slots:
-		void show(bool pred);
-
-	signals:
-		friend class AxesSetTypeCmd;
-		friend class AxesSetFontSizeCmd;
-		friend class AxesSetWidthCmd;
-		friend class AxesSetXLabelColorCmd;
-		friend class AxesSetYLabelColorCmd;
-		friend class AxesSetZLabelColorCmd;
-		void typeChanged(Axes::AxesType);
+		void axesTypeChanged(Axes::AxesType);
 		void fontSizeChanged(int);
-		void widthChanged(double);
 		void xLabelColorChanged(const QColor&);
 		void yLabelColorChanged(const QColor&);
 		void zLabelColorChanged(const QColor&);
-		void parametersChanged();
 
 	private:
-		const QScopedPointer<AxesPrivate> d_ptr;
+		Ui::Axes3DDock ui;
+		Axes *axes;
 };
 
 #endif

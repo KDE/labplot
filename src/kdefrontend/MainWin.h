@@ -45,6 +45,7 @@ class GuiObserver;
 class AxisDock;
 class CartesianPlotDock;
 class Plot3DDock;
+class Axes3DDock;
 class CartesianPlotLegendDock;
 class ColumnDock;
 class MatrixDock;
@@ -144,6 +145,7 @@ private:
 	CartesianPlotDock* cartesianPlotDock;
 	CartesianPlotLegendDock* cartesianPlotLegendDock;
 	Plot3DDock *plot3dDock;
+	Axes3DDock *axes3dDock;
 	ColumnDock* columnDock;
 	MatrixDock* matrixDock;
 	SpreadsheetDock* spreadsheetDock;

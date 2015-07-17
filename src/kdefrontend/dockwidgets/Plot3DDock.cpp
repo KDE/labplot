@@ -54,13 +54,6 @@
 Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	ui.setupUi(this);
 
-	//TODO: remove this later - the initialization of the dock widget will be done in setPlots() later
-	hideDataSource();
-	hideFileUrl();
-	hideTriangleInfo();
-	hideAxesProperties();
-	//######
-
 	this->retranslateUi();
 
 	//General-tab
@@ -161,52 +154,6 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 
 	// TODO: Uncomment later
 	//connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
-
-	// Axes
-	ui.axesType->insertItem(Axes::AxesType_NoAxes, i18n("No Axes"));
-	ui.axesType->insertItem(Axes::AxesType_Cube, i18n("Cube Axes"));
-	ui.axesType->insertItem(Axes::AxesType_Plain, i18n("Plain Axes"));
-	connect( ui.axesType, SIGNAL(currentIndexChanged(int)), this, SLOT(onAxesTypeChanged(int)) );
-	connect( ui.labelFontSize, SIGNAL(valueChanged(int)), this, SLOT(onAxesLabelFontChanged(int)) );
-	connect( ui.axisXLabelColor, SIGNAL(changed(const QColor&)), this, SLOT(onAxesLabelColorChanged(const QColor&)) );
-	connect( ui.axisYLabelColor, SIGNAL(changed(const QColor&)), this, SLOT(onAxesLabelColorChanged(const QColor&)) );
-	connect( ui.axisZLabelColor, SIGNAL(changed(const QColor&)), this, SLOT(onAxesLabelColorChanged(const QColor&)) );
-}
-
-void Plot3DDock::onAxesTypeChanged(int type) {
-	hideAxesProperties(type == Axes::AxesType_NoAxes);
-	m_plot->axes().setType(static_cast<Axes::AxesType>(type));
-}
-
-void Plot3DDock::hideAxesProperties(bool hide) {
-	ui.labelFontSize->setVisible(!hide);
-	ui.axisXLabelColor->setVisible(!hide);
-	ui.axisYLabelColor->setVisible(!hide);
-	ui.axisZLabelColor->setVisible(!hide);
-
-	ui.label_2->setVisible(!hide);
-	ui.label_3->setVisible(!hide);
-	ui.label_4->setVisible(!hide);
-	ui.label_5->setVisible(!hide);
-}
-
-void Plot3DDock::onAxesLabelFontChanged(int size) {
-	m_plot->axes().setFontSize(size);
-	m_plot->axes().setType(static_cast<Axes::AxesType>(ui.axesType->currentIndex()));
-}
-
-void Plot3DDock::onAxesLabelColorChanged(const QColor& color) {
-	const QObject *s = sender();
-	Axes& plotAxes = m_plot->axes();
-	if (s == ui.axisXLabelColor) {
-		plotAxes.setXLabelColor(color);
-	} else if (s == ui.axisYLabelColor) {
-		plotAxes.setYLabelColor(color);
-	} else if (s == ui.axisZLabelColor) {
-		plotAxes.setZLabelColor(color);
-	}
-
-	m_plot->axes().setType(static_cast<Axes::AxesType>(ui.axesType->currentIndex()));
 }
 
 namespace{
@@ -280,42 +227,33 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 
 	//SIGNALs/SLOTs
 	//general
-	connect( m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(plotDescriptionChanged(const AbstractAspect*)) );
+	connect( m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), SLOT(plotDescriptionChanged(const AbstractAspect*)) );
 	// TODO: Uncomment later
 	//connect( m_plot, SIGNAL(rectChanged(QRectF&)), this, SLOT(plotRectChanged(QRectF&)) );
 
-	connect(m_plot, SIGNAL(visualizationTypeChanged(Plot3D::VisualizationType)), this, SLOT(visualizationTypeChanged(Plot3D::VisualizationType)));
-	connect(m_plot, SIGNAL(sourceTypeChanged(Plot3D::DataSource)), this, SLOT(sourceTypeChanged(Plot3D::DataSource)));
+	connect(m_plot, SIGNAL(visualizationTypeChanged(Plot3D::VisualizationType)), SLOT(visualizationTypeChanged(Plot3D::VisualizationType)));
+	connect(m_plot, SIGNAL(sourceTypeChanged(Plot3D::DataSource)), SLOT(sourceTypeChanged(Plot3D::DataSource)));
 
 	// DataHandlers
-	connect(&m_plot->fileDataHandler(), SIGNAL(pathChanged(const KUrl&)), this, SLOT(pathChanged(const KUrl&)));
-	connect(&m_plot->matrixDataHandler(), SIGNAL(matrixChanged(const Matrix*)), this, SLOT(matrixChanged(const Matrix*)));
+	connect(&m_plot->fileDataHandler(), SIGNAL(pathChanged(const KUrl&)), SLOT(pathChanged(const KUrl&)));
+	connect(&m_plot->matrixDataHandler(), SIGNAL(matrixChanged(const Matrix*)), SLOT(matrixChanged(const Matrix*)));
 	SpreadsheetDataHandler *sdh = &m_plot->spreadsheetDataHandler();
-	connect(sdh, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(xColumnChanged(const AbstractColumn*)));
-	connect(sdh, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(yColumnChanged(const AbstractColumn*)));
-	connect(sdh, SIGNAL(zColumnChanged(const AbstractColumn*)), this, SLOT(zColumnChanged(const AbstractColumn*)));
-	connect(sdh, SIGNAL(firstNodeChanged(const AbstractColumn*)), this, SLOT(firstNodeChanged(const AbstractColumn*)));
-	connect(sdh, SIGNAL(secondNodeChanged(const AbstractColumn*)), this, SLOT(secondNodeChanged(const AbstractColumn*)));
-	connect(sdh, SIGNAL(thirdNodeChanged(const AbstractColumn*)), this, SLOT(thirdNodeChanged(const AbstractColumn*)));
-
-	// Axes
-	// TODO: Move to another dock widget
-	Axes* axes = &m_plot->axes();
-	connect(axes, SIGNAL(typeChanged(Axes::AxesType)), this, SLOT(axesTypeChanged(Axes::AxesType)));
-	connect(axes, SIGNAL(fontSizeChanged(int)), this, SLOT(fontSizeChanged(int)));
-	connect(axes, SIGNAL(xLabelColorChanged(const QColor&)), this, SLOT(xLabelColorChanged(const QColor&)));
-	connect(axes, SIGNAL(yLabelColorChanged(const QColor&)), this, SLOT(yLabelColorChanged(const QColor&)));
-	connect(axes, SIGNAL(zLabelColorChanged(const QColor&)), this, SLOT(zLabelColorChanged(const QColor&)));
+	connect(sdh, SIGNAL(xColumnChanged(const AbstractColumn*)), SLOT(xColumnChanged(const AbstractColumn*)));
+	connect(sdh, SIGNAL(yColumnChanged(const AbstractColumn*)), SLOT(yColumnChanged(const AbstractColumn*)));
+	connect(sdh, SIGNAL(zColumnChanged(const AbstractColumn*)), SLOT(zColumnChanged(const AbstractColumn*)));
+	connect(sdh, SIGNAL(firstNodeChanged(const AbstractColumn*)), SLOT(firstNodeChanged(const AbstractColumn*)));
+	connect(sdh, SIGNAL(secondNodeChanged(const AbstractColumn*)), SLOT(secondNodeChanged(const AbstractColumn*)));
+	connect(sdh, SIGNAL(thirdNodeChanged(const AbstractColumn*)), SLOT(thirdNodeChanged(const AbstractColumn*)));
 
 	//background
-	connect(m_plot,SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)),this,SLOT(plotBackgroundTypeChanged(PlotArea::BackgroundType)));
-	connect(m_plot,SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)),this,SLOT(plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)));
-	connect(m_plot,SIGNAL(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)),this,SLOT(plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle)));
-	connect(m_plot,SIGNAL(backgroundBrushStyleChanged(Qt::BrushStyle)),this,SLOT(plotBackgroundBrushStyleChanged(Qt::BrushStyle)));
-	connect(m_plot,SIGNAL(backgroundFirstColorChanged(QColor)),this,SLOT(plotBackgroundFirstColorChanged(QColor)));
-	connect(m_plot,SIGNAL(backgroundSecondColorChanged(QColor)),this,SLOT(plotBackgroundSecondColorChanged(QColor)));
-	connect(m_plot,SIGNAL(backgroundFileNameChanged(QString)),this,SLOT(plotBackgroundFileNameChanged(QString)));
-	connect(m_plot,SIGNAL(backgroundOpacityChanged(float)),this,SLOT(plotBackgroundOpacityChanged(float)));
+	connect(m_plot, SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), SLOT(plotBackgroundTypeChanged(PlotArea::BackgroundType)));
+	connect(m_plot, SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)), SLOT(plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)));
+	connect(m_plot, SIGNAL(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)), SLOT(plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle)));
+	connect(m_plot, SIGNAL(backgroundBrushStyleChanged(Qt::BrushStyle)), SLOT(plotBackgroundBrushStyleChanged(Qt::BrushStyle)));
+	connect(m_plot, SIGNAL(backgroundFirstColorChanged(QColor)), SLOT(plotBackgroundFirstColorChanged(QColor)));
+	connect(m_plot, SIGNAL(backgroundSecondColorChanged(QColor)), SLOT(plotBackgroundSecondColorChanged(QColor)));
+	connect(m_plot, SIGNAL(backgroundFileNameChanged(QString)), SLOT(plotBackgroundFileNameChanged(QString)));
+	connect(m_plot, SIGNAL(backgroundOpacityChanged(float)), SLOT(plotBackgroundOpacityChanged(float)));
 
 	//light
 }
@@ -379,31 +317,6 @@ void Plot3DDock::matrixChanged(const Matrix* matrix){
 void Plot3DDock::pathChanged(const KUrl& url){
 	Lock lock(m_initializing);
 	ui.cbFileRequester->setUrl(url);
-}
-
-void Plot3DDock::fontSizeChanged(int value){
-	Lock lock(m_initializing);
-	ui.labelFontSize->setValue(value);
-}
-
-void Plot3DDock::xLabelColorChanged(const QColor& color){
-	Lock lock(m_initializing);
-	ui.axisXLabelColor->setColor(color);
-}
-
-void Plot3DDock::yLabelColorChanged(const QColor& color){
-	Lock lock(m_initializing);
-	ui.axisYLabelColor->setColor(color);
-}
-
-void Plot3DDock::zLabelColorChanged(const QColor& color){
-	Lock lock(m_initializing);
-	ui.axisZLabelColor->setColor(color);
-}
-
-void Plot3DDock::axesTypeChanged(Axes::AxesType type){
-	Lock lock(m_initializing);
-	ui.axesType->setCurrentIndex(type);
 }
 
 void Plot3DDock::visualizationTypeChanged(Plot3D::VisualizationType type){

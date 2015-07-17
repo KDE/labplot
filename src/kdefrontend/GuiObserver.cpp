@@ -44,6 +44,7 @@
 #include "kdefrontend/dockwidgets/AxisDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 #include "kdefrontend/dockwidgets/Plot3DDock.h"
+#include "kdefrontend/dockwidgets/Axes3DDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
 #include "kdefrontend/dockwidgets/MatrixDock.h"
@@ -208,6 +209,15 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 		}
 		mainWindow->plot3dDock->setPlots(list);
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->plot3dDock);
+	}else if (className=="Axes"){
+		if (!mainWindow->axes3dDock){
+			mainWindow->axes3dDock = new Axes3DDock(mainWindow->stackedWidget);
+			mainWindow->stackedWidget->addWidget(mainWindow->axes3dDock);
+		}
+
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("3D Axes properties"));
+		mainWindow->axes3dDock->setAxes(qobject_cast<Axes*>(selectedAspects.first()));
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->axes3dDock);
 	}else if (className=="CartesianPlotLegend"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Cartesian plot legend properties"));
 

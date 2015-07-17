@@ -104,6 +104,8 @@ class Plot3D : public AbstractPlot {
 		QAction* addEquationCurveAction;
 		QAction* addSurfaceAction;
 
+		QAction* showAxesAction;
+
 		QAction* scaleAutoXAction;
 		QAction* scaleAutoYAction;
 		QAction* scaleAutoZAction;

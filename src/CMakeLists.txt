@@ -28,6 +28,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/Plot3DDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/Axes3DDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/MatrixDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ProjectDock.cpp
@@ -80,6 +81,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyequationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/plot3ddock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/axes3ddock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/exportspreadsheetwidget.ui
