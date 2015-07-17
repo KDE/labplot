@@ -38,7 +38,9 @@
 
 #include <QDebug>
 #include <QPainter>
+#include <QMenu>
 
+#include <KAction>
 #include <KIcon>
 #include <KConfig>
 #include <KConfigGroup>
@@ -97,6 +99,9 @@ void Plot3D::init(bool transform){
 
 	d->isInitialized = true;
 
+	initActions();
+	initMenus();
+
 	if (transform)
 		retransform();
 }
@@ -120,9 +125,102 @@ QIcon Plot3D::icon() const{
 	return KIcon("office-chart-line");
 }
 
+void Plot3D::initActions(){
+	//"add new" actions
+	addCurveAction = new KAction(KIcon("3d-curve"), i18n("3D-curve"), this);
+	addEquationCurveAction = new KAction(KIcon("3d-equation-curve"), i18n("3D-curve from a mathematical equation"), this);
+	addSurfaceAction = new KAction(KIcon("3d-surface"), i18n("3D-surface"), this);
+
+// 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
+// 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
+// 	connect(addSurfaceAction, SIGNAL(triggered()), SLOT(addSurface()));
+
+	//zoom/navigate actions
+	scaleAutoAction = new KAction(KIcon("auto-scale-all"), i18n("auto scale"), this);
+	scaleAutoXAction = new KAction(KIcon("auto-scale-x"), i18n("auto scale X"), this);
+	scaleAutoYAction = new KAction(KIcon("auto-scale-y"), i18n("auto scale Y"), this);
+	scaleAutoZAction = new KAction(KIcon("auto-scale-z"), i18n("auto scale Z"), this);
+	zoomInAction = new KAction(KIcon("zoom-in"), i18n("zoom in"), this);
+	zoomOutAction = new KAction(KIcon("zoom-out"), i18n("zoom out"), this);
+	zoomInXAction = new KAction(KIcon("zoom-in-x"), i18n("zoom in X"), this);
+	zoomOutXAction = new KAction(KIcon("zoom-out-x"), i18n("zoom out X"), this);
+	zoomInYAction = new KAction(KIcon("zoom-in-y"), i18n("zoom in Y"), this);
+	zoomOutYAction = new KAction(KIcon("zoom-out-y"), i18n("zoom out Y"), this);
+	zoomInZAction = new KAction(KIcon("zoom-in-z"), i18n("zoom in Z"), this);
+	zoomOutZAction = new KAction(KIcon("zoom-out-z"), i18n("zoom out Z"), this);
+    shiftLeftXAction = new KAction(KIcon("shift-left-x"), i18n("shift left X"), this);
+	shiftRightXAction = new KAction(KIcon("shift-right-x"), i18n("shift right X"), this);
+	shiftUpYAction = new KAction(KIcon("shift-up-y"), i18n("shift up Y"), this);
+	shiftDownYAction = new KAction(KIcon("shift-down-y"), i18n("shift down Y"), this);
+	shiftUpZAction = new KAction(KIcon("shift-up-z"), i18n("shift up Z"), this);
+	shiftDownZAction = new KAction(KIcon("shift-down-z"), i18n("shift down Z"), this);
+
+// 	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(scaleAuto()));
+// 	connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(scaleAutoX()));
+// 	connect(scaleAutoYAction, SIGNAL(triggered()), SLOT(scaleAutoY()));
+// 	connect(zoomInAction, SIGNAL(triggered()), SLOT(zoomIn()));
+// 	connect(zoomOutAction, SIGNAL(triggered()), SLOT(zoomOut()));
+// 	connect(zoomInXAction, SIGNAL(triggered()), SLOT(zoomInX()));
+// 	connect(zoomOutXAction, SIGNAL(triggered()), SLOT(zoomOutX()));
+// 	connect(zoomInYAction, SIGNAL(triggered()), SLOT(zoomInY()));
+// 	connect(zoomOutYAction, SIGNAL(triggered()), SLOT(zoomOutY()));
+// 	connect(shiftLeftXAction, SIGNAL(triggered()), SLOT(shiftLeftX()));
+// 	connect(shiftRightXAction, SIGNAL(triggered()), SLOT(shiftRightX()));
+// 	connect(shiftUpYAction, SIGNAL(triggered()), SLOT(shiftUpY()));
+// 	connect(shiftDownYAction, SIGNAL(triggered()), SLOT(shiftDownY()));
+
+	//visibility action
+	visibilityAction = new QAction(i18n("visible"), this);
+	visibilityAction->setCheckable(true);
+// 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+}
+
+void Plot3D::initMenus(){
+	addNewMenu = new QMenu(i18n("Add new"));
+	addNewMenu->addAction(addCurveAction);
+	addNewMenu->addAction(addEquationCurveAction);
+	addNewMenu->addAction(addSurfaceAction);
+
+	zoomMenu = new QMenu(i18n("Zoom"));
+	zoomMenu->addAction(scaleAutoAction);
+	zoomMenu->addAction(scaleAutoXAction);
+	zoomMenu->addAction(scaleAutoYAction);
+	zoomMenu->addAction(scaleAutoZAction);
+	zoomMenu->addSeparator();
+	zoomMenu->addAction(zoomInAction);
+	zoomMenu->addAction(zoomOutAction);
+	zoomMenu->addSeparator();
+	zoomMenu->addAction(zoomInXAction);
+	zoomMenu->addAction(zoomOutXAction);
+	zoomMenu->addAction(zoomOutZAction);
+	zoomMenu->addSeparator();
+	zoomMenu->addAction(zoomInYAction);
+	zoomMenu->addAction(zoomOutYAction);
+	zoomMenu->addAction(zoomOutZAction);
+	zoomMenu->addSeparator();
+	zoomMenu->addAction(shiftLeftXAction);
+	zoomMenu->addAction(shiftRightXAction);
+	zoomMenu->addSeparator();
+	zoomMenu->addAction(shiftUpYAction);
+	zoomMenu->addAction(shiftDownYAction);
+	zoomMenu->addSeparator();
+	zoomMenu->addAction(shiftUpZAction);
+	zoomMenu->addAction(shiftDownZAction);
+
+	zoomMenu = new QMenu(i18n("Rotate"));
+	//TODO
+}
+
 QMenu* Plot3D::createContextMenu(){
 	QMenu* menu = WorksheetElement::createContextMenu();
-	//TODO
+	QAction* firstAction = menu->actions().at(1);
+
+	visibilityAction->setChecked(isVisible());
+	menu->insertAction(firstAction, visibilityAction);
+
+	menu->insertMenu(firstAction, addNewMenu);
+	menu->insertMenu(firstAction, zoomMenu);
+	menu->insertSeparator(firstAction);
 
 	return menu;
 }
@@ -347,7 +445,7 @@ void Plot3DPrivate::retransform() {
 	const double halfWidth = rect.width() / 2;
 	const double halfHeight = rect.height() / 2;
 	setPos(rect.x() + halfWidth, rect.y() + halfHeight);
-	
+
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
 	q->plotArea()->setRect(rect);
 

@@ -41,6 +41,8 @@ class SpreadsheetDataHandler;
 class MatrixDataHandler;
 class FileDataHandler;
 
+class QMenu;
+
 class Plot3D : public AbstractPlot {
 	Q_OBJECT
 	Q_DECLARE_PRIVATE(Plot3D);
@@ -91,6 +93,38 @@ class Plot3D : public AbstractPlot {
 
 		typedef Plot3D BaseClass;
 		typedef Plot3DPrivate Private;
+
+	private:
+		void initActions();
+		void initMenus();
+
+		QAction* visibilityAction;
+
+		QAction* addCurveAction;
+		QAction* addEquationCurveAction;
+		QAction* addSurfaceAction;
+
+		QAction* scaleAutoXAction;
+		QAction* scaleAutoYAction;
+		QAction* scaleAutoZAction;
+		QAction* scaleAutoAction;
+		QAction* zoomInAction;
+		QAction* zoomOutAction;
+		QAction* zoomInXAction;
+		QAction* zoomOutXAction;
+		QAction* zoomInYAction;
+		QAction* zoomOutYAction;
+		QAction* zoomInZAction;
+		QAction* zoomOutZAction;
+		QAction* shiftLeftXAction;
+		QAction* shiftRightXAction;
+		QAction* shiftUpYAction;
+		QAction* shiftDownYAction;
+		QAction* shiftUpZAction;
+		QAction* shiftDownZAction;
+
+		QMenu* addNewMenu;
+		QMenu* zoomMenu;
 
 	protected:
 		Plot3D(const QString &name, Plot3DPrivate *dd);
