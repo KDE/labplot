@@ -31,8 +31,6 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
-#include "backend/matrix/Matrix.h"
-#include "backend/worksheet/plots/3d/DataHandlers.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
@@ -194,6 +192,20 @@ void Plot3DDock::retranslateUi(){
 	Lock lock(m_initializing);
 
 	//general
+	ui.cbXScaling->addItem( i18n("linear") );
+	ui.cbXScaling->addItem( i18n("log(x)") );
+	ui.cbXScaling->addItem( i18n("log2(x)") );
+	ui.cbXScaling->addItem( i18n("ln(x)") );
+
+	ui.cbYScaling->addItem( i18n("linear") );
+	ui.cbYScaling->addItem( i18n("log(y)") );
+	ui.cbYScaling->addItem( i18n("log2(y)") );
+	ui.cbYScaling->addItem( i18n("ln(y)") );
+
+	ui.cbZScaling->addItem( i18n("linear") );
+	ui.cbZScaling->addItem( i18n("log(y)") );
+	ui.cbZScaling->addItem( i18n("log2(y)") );
+	ui.cbZScaling->addItem( i18n("ln(y)") );
 
 	//background
 	ui.cbBackgroundType->addItem(i18n("color"));
