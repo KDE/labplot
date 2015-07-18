@@ -22,6 +22,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/CustomItem.h"
 #include "backend/core/Datapicker.h"
+#include "backend/core/Transform.h"
 
 #include <QApplication>
 #include <QMenu>
@@ -43,7 +44,7 @@
 
 ImageView::ImageView(Image* image) : QGraphicsView(),
     m_image(image),
-    m_mouseMode(SelectionMode),
+    m_mouseMode(SelectAndEditMode),
     m_selectionBandIsShown(false),
     tbZoom(0) {
 
@@ -62,7 +63,7 @@ ImageView::ImageView(Image* image) : QGraphicsView(),
 
     initActions();
     initMenus();
-    selectionModeAction->setChecked(true);
+    selectAndEditModeAction->setChecked(true);
 
     changeZoom(zoomOriginAction);
     currentZoomAction=zoomInViewAction;
@@ -80,6 +81,7 @@ void ImageView::initActions() {
     QActionGroup* zoomActionGroup = new QActionGroup(this);
     QActionGroup* mouseModeActionGroup = new QActionGroup(this);
     QActionGroup* plotPointsTypeActionGroup = new QActionGroup(this);
+    QActionGroup* navigationActionGroup = new QActionGroup(this);
 
     //Zoom actions
     zoomInViewAction = new KAction(KIcon("zoom-in"), i18n("Zoom in"), zoomActionGroup);
@@ -96,14 +98,17 @@ void ImageView::initActions() {
     zoomFitSelectionAction = new KAction(i18n("Fit to selection"), zoomActionGroup);
 
     // Mouse mode actions
-    selectionModeAction = new KAction(KIcon("cursor-arrow"), i18n("Select and Edit"), mouseModeActionGroup);
-    selectionModeAction->setCheckable(true);
+    selectAndEditModeAction = new KAction(KIcon("cursor-arrow"), i18n("Select and Edit"), mouseModeActionGroup);
+    selectAndEditModeAction->setCheckable(true);
 
     navigationModeAction = new KAction(KIcon("input-mouse"), i18n("Navigate"), mouseModeActionGroup);
     navigationModeAction->setCheckable(true);
 
     zoomSelectionModeAction = new KAction(KIcon("page-zoom"), i18n("Select and Zoom"), mouseModeActionGroup);
     zoomSelectionModeAction->setCheckable(true);
+
+    selectionModeAction = new KAction(KIcon("cursor-arrow"), i18n("Only Select"), mouseModeActionGroup);
+    selectionModeAction->setCheckable(true);
 
     setAxisPointsAction = new KAction(KIcon(""), i18n("Set Axis Points"), plotPointsTypeActionGroup);
     setAxisPointsAction->setCheckable(true);
@@ -116,19 +121,33 @@ void ImageView::initActions() {
 
     updateDatasheetAction = new KAction(KIcon("view-refresh"), i18n("Update Datasheet"), this);
 
-    connect(mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)));
-    connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
-    connect(plotPointsTypeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changePointsType(QAction*)));
-    connect(updateDatasheetAction, SIGNAL(triggered()), this, SLOT(updateDatasheet()) );
+    shiftLeftAction = new KAction(KIcon("shift-left-x"), i18n("Shift Left"), navigationActionGroup);
+    shiftLeftAction->setShortcut(Qt::Key_Right);
+
+    shiftRightAction = new KAction(KIcon("shift-right-x"), i18n("Shift Right"), navigationActionGroup);
+    shiftRightAction->setShortcut(Qt::Key_Left);
+
+    shiftUpAction = new KAction(KIcon("shift-down-y"), i18n("Shift Up"), navigationActionGroup);
+    shiftUpAction->setShortcut(Qt::Key_Up);
+
+    shiftDownAction = new KAction(KIcon("shift-up-y"), i18n("Shift Down"), navigationActionGroup);
+    shiftDownAction->setShortcut(Qt::Key_Down);
+
+    connect( mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)) );
+    connect( zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)) );
+    connect( plotPointsTypeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changePointsType(QAction*)) );
+    connect( updateDatasheetAction, SIGNAL(triggered()), this, SLOT(updateDatasheet()) );
+    connect( navigationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeSelectedItemsPosition(QAction*)) );
 }
 
 void ImageView::initMenus() {
 
     m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"));
     m_viewMouseModeMenu->setIcon(KIcon("input-mouse"));
-    m_viewMouseModeMenu->addAction(selectionModeAction);
+    m_viewMouseModeMenu->addAction(selectAndEditModeAction);
     m_viewMouseModeMenu->addAction(navigationModeAction);
     m_viewMouseModeMenu->addAction(zoomSelectionModeAction);
+    m_viewMouseModeMenu->addAction(selectionModeAction);
 
     m_viewImageMenu = new QMenu(i18n("Image Menu"));
     //m_viewImageMenu->setIcon();
@@ -144,6 +163,14 @@ void ImageView::initMenus() {
     m_zoomMenu->addAction(zoomFitPageHeightAction);
     m_zoomMenu->addAction(zoomFitPageWidthAction);
     m_zoomMenu->addAction(zoomFitSelectionAction);
+
+    m_navigationMenu = new QMenu(i18n("Navigate Selected Items"));
+    m_navigationMenu->setEnabled(false);
+    //m_navigationMenu->setIcon();
+    m_navigationMenu->addAction(shiftLeftAction);
+    m_navigationMenu->addAction(shiftRightAction);
+    m_navigationMenu->addAction(shiftUpAction);
+    m_navigationMenu->addAction(shiftDownAction);
 }
 
 void ImageView::createContextMenu(QMenu* menu) const {
@@ -163,22 +190,32 @@ void ImageView::createContextMenu(QMenu* menu) const {
     menu->insertSeparator(firstAction);
     menu->insertAction(firstAction, updateDatasheetAction);
     menu->insertSeparator(firstAction);
+    menu->insertMenu(firstAction, m_navigationMenu);
+    menu->insertSeparator(firstAction);
 }
 
 void ImageView::fillToolBar(QToolBar* toolBar) {
     toolBar->addSeparator();
-    toolBar->addAction(selectionModeAction);
+    toolBar->addAction(selectAndEditModeAction);
     toolBar->addAction(navigationModeAction);
     toolBar->addAction(zoomSelectionModeAction);
+    toolBar->addAction(selectionModeAction);
+    toolBar->addSeparator();
     toolBar->addAction(setAxisPointsAction);
     toolBar->addAction(setCurvePointsAction);
     toolBar->addAction(selectSegmentAction);
+    toolBar->addSeparator();
     toolBar->addAction(updateDatasheetAction);
     tbZoom = new QToolButton(toolBar);
     tbZoom->setPopupMode(QToolButton::MenuButtonPopup);
     tbZoom->setMenu(m_zoomMenu);
     tbZoom->setDefaultAction(currentZoomAction);
     toolBar->addWidget(tbZoom);
+    toolBar->addSeparator();
+    toolBar->addAction(shiftRightAction);
+    toolBar->addAction(shiftLeftAction);
+    toolBar->addAction(shiftUpAction);
+    toolBar->addAction(shiftDownAction);
 }
 
 void ImageView::setScene(QGraphicsScene* scene) {
@@ -271,23 +308,25 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
         return;
     }
 
-    if ( m_mouseMode == SelectionMode && m_image->isLoaded ) {
-        QList<CustomItem*> childItems = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
+    if ( m_mouseMode == SelectAndEditMode && m_image->isLoaded ) {
         CustomItem* lastCurvePoint;
         QPointF eventPos = mapToScene(event->pos());
-        if (m_image->plotPointsType() == Image::AxisPoints && childItems.count() < 3) {
+        if (m_image->plotPointsType() == Image::AxisPoints && m_childItems.count() < 3) {
             addCustomItem(eventPos);
 
             Image::ReferencePoints points = m_image->axisPoints();
-            points.scenePos[childItems.count()].setX(eventPos.x());
-            points.scenePos[childItems.count()].setY(eventPos.y());
+            points.scenePos[m_childItems.count() - 1].setX(eventPos.x());
+            points.scenePos[m_childItems.count() - 1].setY(eventPos.y());
+            m_image->setUndoAware(false);
             m_image->setAxisPoints(points);
+            m_image->setUndoAware(true);
         } else if (m_image->plotPointsType() == Image::CurvePoints) {
-            m_image->beginMacro(i18n(""));
-            if (childItems.count() == 3) {
+            m_image->beginMacro(i18n("%1: add new curve point.", m_image->name()));
+
+            if (m_childItems.count() == 3) {
                 lastCurvePoint = addCustomItem(eventPos);
             } else {
-                lastCurvePoint = childItems.last();
+                lastCurvePoint = m_childItems.last();
                 CustomItem::ErrorBar errorBar = lastCurvePoint->itemErrorBar();
                 QPointF errorSpan = eventPos - lastCurvePoint->position().point;
 
@@ -319,6 +358,7 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
                     lastCurvePoint = addCustomItem(eventPos);
                 }
             }
+
             m_image->updateData(lastCurvePoint);
             m_image->endMacro();
         }
@@ -344,12 +384,18 @@ void ImageView::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 void ImageView::mouseMoveEvent(QMouseEvent* event) {
-    if (m_mouseMode == SelectionMode ) {
+    if (m_mouseMode == SelectAndEditMode ) {
         setCursor(Qt::CrossCursor);
     } else if (m_selectionBandIsShown) {
         m_selectionEnd = event->pos();
         viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
     }
+
+    if (m_childItems.count() > 2) {
+        QPointF logicalPos = m_image->m_transform->mapSceneToLogical(mapToScene(event->pos()), m_image->axisPoints());
+        emit statusInfo(i18n("%1: Logical Position (%2, %3)", m_image->name(), logicalPos.x(), logicalPos.y()));
+    }
+
     QGraphicsView::mouseMoveEvent(event);
 }
 
@@ -366,7 +412,8 @@ void ImageView::contextMenuEvent(QContextMenuEvent* e) {
 void ImageView::changePointsType(QAction* action) {
     if (action==setAxisPointsAction) {
         //clear image
-        m_image->removeAllChildren();
+        if (!m_childItems.isEmpty())
+            m_image->removeAllChildren();
         m_image->setPlotPointsType(Image::AxisPoints);
         m_image->setSegmentVisible(false);
     } else if (action==setCurvePointsAction){
@@ -401,18 +448,58 @@ void ImageView::changeZoom(QAction* action) {
         tbZoom->setDefaultAction(action);
 }
 
+void ImageView::changeSelectedItemsPosition(QAction* action) {
+    if (scene()->selectedItems().isEmpty())
+        return;
+
+    QPointF shift(0, 0);
+    if (action == shiftLeftAction)
+        shift.setX(1);
+    else if (action == shiftRightAction)
+        shift.setX(-1);
+    else if (action == shiftUpAction)
+        shift.setY(-1);
+    else if (action == shiftDownAction)
+        shift.setY(1);
+
+    m_image->beginMacro(i18n("%1: change position of selected CustomItems.", m_image->name()));
+    foreach (CustomItem* item, m_childItems) {
+        if (!item->graphicsItem()->isSelected())
+            continue;
+
+        item->setPosition(item->position().point + shift);
+
+        int itemIndex = m_image->indexOfChild<CustomItem>(item , AbstractAspect::IncludeHidden);
+        if (itemIndex > 2) {
+            m_image->updateData(item);
+        } else {
+            Image::ReferencePoints points = m_image->axisPoints();
+            points.scenePos[itemIndex].setX(item->position().point.x());
+            points.scenePos[itemIndex].setY(item->position().point.y());
+            m_image->setUndoAware(false);
+            m_image->setAxisPoints(points);
+            m_image->setUndoAware(true);
+        }
+    }
+    m_image->endMacro();
+}
+
 void ImageView::mouseModeChanged(QAction* action) {
-    if (action==selectionModeAction) {
-        m_mouseMode = SelectionMode;
+    if (action==selectAndEditModeAction) {
+        m_mouseMode = SelectAndEditMode;
         setInteractive(true);
         setDragMode(QGraphicsView::NoDrag);
     } else if (action==navigationModeAction) {
         m_mouseMode = NavigationMode;
         setInteractive(false);
         setDragMode(QGraphicsView::ScrollHandDrag);
-    } else {
+    } else if (action==zoomSelectionModeAction){
         m_mouseMode = ZoomSelectionMode;
         setInteractive(false);
+        setDragMode(QGraphicsView::NoDrag);
+    } else {
+        m_mouseMode = SelectionMode;
+        setInteractive(true);
         setDragMode(QGraphicsView::NoDrag);
     }
 }
@@ -504,34 +591,47 @@ void ImageView::updateBackground() {
 }
 
 void ImageView::updateDatasheet() {
-    QList<CustomItem*> childElements = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
-    if (childElements.count() > 3) {
-        //remove axis points
-        childElements.removeAt(0);
-        childElements.removeAt(1);
-        childElements.removeAt(2);
-
-        foreach(CustomItem* elem, childElements)
-            m_image->updateData(elem);
-    }
+    if (m_childItems.count() > 3)
+        foreach(CustomItem* item, m_childItems){
+            if (m_image->indexOfChild<CustomItem>(item ,AbstractAspect::IncludeHidden) > 2)
+                m_image->updateData(item);
+        }
 }
 
 void ImageView::handleImageActions() {
-    int count = m_image->childCount<CustomItem>(AbstractAspect::IncludeHidden);
+    m_childItems = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
+
     if (m_image->isLoaded) {
-        if (count > 2){
+        if (m_childItems.count() > 2){
             setCurvePointsAction->setEnabled(true);
             selectSegmentAction->setEnabled(true);
         } else {
             setCurvePointsAction->setEnabled(false);
             selectSegmentAction->setEnabled(false);
-        }
 
+            if (m_image->plotPointsType() != Image::AxisPoints) {
+                m_image->setUndoAware(false);
+                m_image->setPlotPointsType(Image::AxisPoints);
+                m_image->setUndoAware(true);
+            }
+        }
         setAxisPointsAction->setEnabled(true);
     } else {
         setAxisPointsAction->setEnabled(false);
         setCurvePointsAction->setEnabled(false);
         selectSegmentAction->setEnabled(false);
+    }
+
+    if (m_childItems.count()) {
+        shiftRightAction->setEnabled(true);
+        shiftLeftAction->setEnabled(true);
+        shiftUpAction->setEnabled(true);
+        shiftDownAction->setEnabled(true);
+    } else {
+        shiftRightAction->setEnabled(false);
+        shiftLeftAction->setEnabled(false);
+        shiftUpAction->setEnabled(false);
+        shiftDownAction->setEnabled(false);
     }
 
     setAxisPointsAction->setChecked(m_image->plotPointsType() == Image::AxisPoints);

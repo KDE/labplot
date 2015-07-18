@@ -67,6 +67,7 @@ void CustomItem::init() {
 }
 
 void CustomItem::initActions() {
+    Q_D(CustomItem);
     visibilityAction = new QAction(i18n("visible"), this);
     visibilityAction->setCheckable(true);
     connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
@@ -359,6 +360,11 @@ void CustomItem::setPrinting(bool on) {
     d->m_printing = on;
 }
 
+void CustomItem::setSelected(bool on) {
+    Q_D(CustomItem);
+    d->setSelected(on);
+}
+
 void CustomItem::suppressHoverEvents(bool on) {
     Q_D(CustomItem);
     d->m_suppressHoverEvents = on;
@@ -384,6 +390,7 @@ CustomItemPrivate::CustomItemPrivate(CustomItem *owner)
           m_suppressHoverEvents(false),
           q(owner){
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+    setFlag(QGraphicsItem::ItemIsSelectable);
     setAcceptHoverEvents(true);
 }
 
@@ -525,13 +532,14 @@ void CustomItemPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem 
             painter->setOpacity(q->hoveredOpacity);
             painter->drawPath(itemShape);
         }
-
-        if (isSelected() && !m_printing){
-            painter->setPen(q->selectedPen);
-            painter->setOpacity(q->selectedOpacity);
-            painter->drawPath(itemShape);
-        }
     }
+
+    if (isSelected() && !m_printing){
+        painter->setPen(q->selectedPen);
+        painter->setOpacity(q->selectedOpacity);
+        painter->drawPath(itemShape);
+    }
+
 }
 
 QVariant CustomItemPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
@@ -548,8 +556,7 @@ QVariant CustomItemPrivate::itemChange(GraphicsItemChange change, const QVariant
         //we don't set the position related member variables during the mouse movements.
         //this is done on mouse release events only.
         emit q->positionChanged(tempPosition);
-     }
-
+    }
     return QGraphicsItem::itemChange(change, value);
 }
 

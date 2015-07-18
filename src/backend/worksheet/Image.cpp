@@ -164,6 +164,38 @@ void Image::setSegmentVisible(bool on) {
     m_segments->setSegmentsVisible(on);
 }
 
+void Image::initSceneParameters() {
+    setRotationAngle(0.0);
+    setminSegmentLength(30);
+    setPointSeparation(30);
+
+    ReferencePoints axisPoints;
+    axisPoints.type = Image::Cartesian;
+    setAxisPoints(axisPoints);
+
+    EditorSettings settings;
+    settings.type = Image::Intensity;
+    settings.foregroundThresholdHigh = 10;
+    settings.foregroundThresholdLow = 0;
+    settings.hueThresholdHigh = 360;
+    settings.hueThresholdLow = 180;
+    settings.intensityThresholdHigh = 50;
+    settings.intensityThresholdLow = 0;
+    settings.saturationThresholdHigh = 100;
+    settings.saturationThresholdLow = 50;
+    settings.valueThresholdHigh = 50;
+    settings.valueThresholdLow = 0;
+    setSettings(settings);
+
+    Errors plotErrors;
+    plotErrors.x = Image::NoError;
+    plotErrors.y = Image::NoError;
+    setPlotErrors(plotErrors);
+
+    PointsType plotPointsType = Image::AxisPoints;
+    setPlotPointsType(plotPointsType);
+}
+
 
 void Image::updateData(const CustomItem *item) {
     Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
@@ -210,8 +242,11 @@ BASIC_D_READER_IMPL(Image, int, minSegmentLength, minSegmentLength)
 /* ============================ setter methods and undo commands  for background options  ================= */
 STD_SETTER_CMD_IMPL_F_S(Image, SetFileName, QString, fileName, updateFileName)
 void Image::setFileName(const QString& fileName) {
-    if (fileName!= d->fileName)
-        exec(new ImageSetFileNameCmd(d, fileName, i18n("%1: set image")));
+    if (fileName!= d->fileName) {
+        beginMacro(i18n("%1: upload new image", name()));
+        exec(new ImageSetFileNameCmd(d, fileName, i18n("%1: upload image")));
+        endMacro();
+    }
 }
 
 STD_SETTER_CMD_IMPL_F_S(Image, SetRotationAngle, float, rotationAngle, update)
@@ -303,14 +338,17 @@ ImagePrivate::~ImagePrivate() {
 
 void ImagePrivate::updateFileName() {
     WAIT_CURSOR;
-    q->removeAllChildren();
+    int childCount = q->childCount<CustomItem>(AbstractAspect::IncludeHidden);
+    if (childCount)
+        q->removeAllChildren();
+
     q->isLoaded = false;
     const QString& address = fileName.trimmed();
 
     if ( !address.isEmpty() ) {
         if (uploadImage(address)) {
             //TODO: scene size was change -> reinitialize all the screen size dependent parameters
-            q->init();
+            q->initSceneParameters();
             fileName = address;
         }
     }

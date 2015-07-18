@@ -93,6 +93,7 @@ class Image: public AbstractPart, public scripted {
         bool isLoaded;
         QImage originalPlotImage;
         QImage processedPlotImage;
+        Transform* m_transform;
         PlotImageType plotImageType;
 
         CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
@@ -108,14 +109,14 @@ class Image: public AbstractPart, public scripted {
 
     private:
 		void init();
+        void initSceneParameters();
+
 		ImagePrivate* const d;
 		friend class ImagePrivate;
-
         ImageEditor* m_imageEditor;
-        Transform* m_transform;
-        Segments* m_segments;
+        Segments* m_segments;    
 
-	 private slots:
+    private slots:
 		void handleAspectAdded(const AbstractAspect*);
 		void handleAspectAboutToBeRemoved(const AbstractAspect*);
 		void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);

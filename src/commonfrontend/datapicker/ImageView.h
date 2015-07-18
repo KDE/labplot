@@ -44,7 +44,7 @@ class ImageView : public QGraphicsView {
     void exportToFile(const QString&, const ExportFormat, const int);
 
   private:
-	enum MouseMode{SelectionMode, NavigationMode, ZoomSelectionMode};
+    enum MouseMode{SelectAndEditMode, NavigationMode, ZoomSelectionMode, SelectionMode};
 
 	void initActions();
 	void initMenus();
@@ -59,18 +59,19 @@ class ImageView : public QGraphicsView {
 	void mouseReleaseEvent(QMouseEvent*);
 	void mouseMoveEvent(QMouseEvent*);
     CustomItem *addCustomItem(const QPointF&);
-    void updateData(const CustomItem*);
 
     Image* m_image;
 	MouseMode m_mouseMode;
 	bool m_selectionBandIsShown;
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;
+    QList<CustomItem*> m_childItems;
 
 	//Menus
 	QMenu* m_zoomMenu;
 	QMenu* m_viewMouseModeMenu;
     QMenu* m_viewImageMenu;
+    QMenu* m_navigationMenu;
 
 
 	QToolButton* tbZoom;
@@ -92,7 +93,13 @@ class ImageView : public QGraphicsView {
 
 	QAction* navigationModeAction;
 	QAction* zoomSelectionModeAction;
-	QAction* selectionModeAction;
+    QAction* selectAndEditModeAction;
+    QAction* selectionModeAction;
+
+    QAction* shiftLeftAction;
+    QAction* shiftRightAction;
+    QAction* shiftDownAction;
+    QAction* shiftUpAction;
 
   public slots:
 	void createContextMenu(QMenu*) const;
@@ -102,6 +109,7 @@ class ImageView : public QGraphicsView {
   private slots:
 	void mouseModeChanged(QAction*);
 	void changeZoom(QAction*);
+    void changeSelectedItemsPosition(QAction*);
     void handleImageActions();
 	void updateBackground();
     void changePointsType(QAction*);

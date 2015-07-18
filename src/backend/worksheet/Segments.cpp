@@ -130,8 +130,6 @@ void Segments::removeUnneededLines(Segment** lastSegment, Segment** currSegment,
     }
 }
 
-
-
 void Segments::loadBool(const ImageEditor* editor, bool* columnBool,
                         QImage* image, int x) {
     for (int y = 0; y < image->height(); y++)

@@ -163,9 +163,9 @@ void SegmentPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 }
 
 QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
-    if (change == QGraphicsItem::ItemSelectedChange && value == true) {
+    if ( change == QGraphicsItem::ItemSelectedChange && value == true ) {
         int count = 0;
-        q->m_image->beginMacro(i18n(""));
+        q->m_image->beginMacro(i18n("%1:draw points over segment", q->m_image->name()));
         foreach (QLine* line, q->path) {
             int l = (line->y1() > line->y2())?line->y2():line->y1();
             int h = (line->y1() > line->y2())?line->y1():line->y2();

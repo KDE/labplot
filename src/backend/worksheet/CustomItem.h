@@ -79,6 +79,7 @@ class CustomItem : public WorksheetElement{
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool);
+        void setSelected(bool);
         void suppressHoverEvents(bool);
 
 		typedef CustomItemPrivate Private;
