@@ -97,8 +97,17 @@ class Plot3D : public AbstractPlot {
 		QAction* shiftUpZAction;
 		QAction* shiftDownZAction;
 
+		QAction* rotateClockwiseAction;
+		QAction* rotateCounterclockwiseAction;
+		QAction* tiltLeftAction;
+		QAction* tiltRightAction;
+		QAction* tiltUpAction;
+		QAction* tiltDownAction;
+		QAction* resetRotationAction;
+
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;
+		QMenu* rotateMenu;
 
 	private slots:
 		void updatePlot();
