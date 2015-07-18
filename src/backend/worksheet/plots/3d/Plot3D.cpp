@@ -171,6 +171,15 @@ void Plot3D::initActions(){
 // 	connect(shiftUpYAction, SIGNAL(triggered()), SLOT(shiftUpY()));
 // 	connect(shiftDownYAction, SIGNAL(triggered()), SLOT(shiftDownY()));
 
+	//rotation action
+	rotateClockwiseAction = new KAction(KIcon("rotate-clockwise"), i18n("rotate clockwise"), this);
+	rotateCounterclockwiseAction = new KAction(KIcon("rotate-counterclockwise"), i18n("rotate counterclockwise"), this);
+	tiltLeftAction = new KAction(KIcon("tilt-left"), i18n("tilt left"), this);
+	tiltRightAction = new KAction(KIcon("tilt-right"), i18n("tilt right"), this);
+	tiltUpAction = new KAction(KIcon("tilt-up"), i18n("tilt up"), this);
+	tiltDownAction = new KAction(KIcon("tilt-down"), i18n("tilt down"), this);
+	resetRotationAction = new KAction(KIcon("reset-rotation"), i18n("reset rotation"), this);
+
 	//visibility action
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
@@ -209,8 +218,34 @@ void Plot3D::initMenus(){
 	zoomMenu->addAction(shiftUpZAction);
 	zoomMenu->addAction(shiftDownZAction);
 
-	zoomMenu = new QMenu(i18n("Rotate"));
-	//TODO
+	rotateMenu = new QMenu(i18n("Rotate"));
+	rotateMenu->addAction(rotateClockwiseAction);
+	rotateMenu->addAction(rotateCounterclockwiseAction);
+	rotateMenu->addSeparator();
+	rotateMenu->addAction(tiltLeftAction);
+	rotateMenu->addAction(tiltRightAction);
+	rotateMenu->addAction(tiltUpAction);
+	rotateMenu->addAction(tiltDownAction);
+	rotateMenu->addSeparator();
+	rotateMenu->addAction(resetRotationAction);
+	rotateMenu->addSeparator();
+
+	QMenu* angleMenu = new QMenu(i18n("rotation angle"));
+	//TODO: use QActionGroup and exlusive actions for this later.
+	angleMenu->addAction("1°");
+	angleMenu->addAction("2°");
+	angleMenu->addAction("5°");
+	angleMenu->addAction("10°");
+	angleMenu->addAction("20°");
+	angleMenu->addAction("30°");
+	angleMenu->addAction("40°");
+	angleMenu->addAction("50°");
+	angleMenu->addAction("60°");
+	angleMenu->addAction("70°");
+	angleMenu->addAction("80°");
+	angleMenu->addAction("90°");
+
+	rotateMenu->addMenu(angleMenu);
 }
 
 QMenu* Plot3D::createContextMenu(){
@@ -224,6 +259,7 @@ QMenu* Plot3D::createContextMenu(){
 
 	menu->insertMenu(firstAction, addNewMenu);
 	menu->insertMenu(firstAction, zoomMenu);
+	menu->insertMenu(firstAction, rotateMenu);
 	menu->insertSeparator(firstAction);
 
 	return menu;
