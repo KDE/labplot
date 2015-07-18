@@ -586,6 +586,8 @@ void Plot3DPrivate::updateBackground() {
 					painter.setBrushOrigin(rect.center().x()-pix.size().width()/2, 0);
 					painter.drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 			}
+		} else {
+			painter.fillRect(rect, Qt::white);
 		}
 	} else if (backgroundType == PlotArea::Pattern){
 		painter.fillRect(rect, Qt::white);
