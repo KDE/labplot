@@ -59,6 +59,8 @@ class Surface3D : public AbstractAspect {
 			DataSource_MAX
 		};
 
+		enum CollorFilling {NoFilling, SolidColor, ColorMap, ColorMapFromMatrix};
+
 		Surface3D(vtkSmartPointer<vtkRenderer> renderer);
 		void init();
 		void setParent(Plot3D *parent);

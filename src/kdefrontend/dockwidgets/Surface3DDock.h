@@ -51,6 +51,7 @@ class Surface3DDock : public QWidget {
 		void hideTriangleInfo(bool hide = true);
 
 	private slots:
+		void retranslateUi();
 		void onTreeViewIndexChanged(const QModelIndex&);
 		void onDataSourceChanged(int);
 		void onVisualizationTypeChanged(int);
@@ -73,6 +74,9 @@ class Surface3DDock : public QWidget {
 		void firstNodeChanged(const AbstractColumn*);
 		void secondNodeChanged(const AbstractColumn*);
 		void thirdNodeChanged(const AbstractColumn*);
+
+		//Color filling
+		void colorFillingTypeChanged(int);
 
 	private:
 		Ui::Surface3DDock ui;
