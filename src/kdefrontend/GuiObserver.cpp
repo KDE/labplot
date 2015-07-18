@@ -45,6 +45,7 @@
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 #include "kdefrontend/dockwidgets/Plot3DDock.h"
 #include "kdefrontend/dockwidgets/Axes3DDock.h"
+#include "kdefrontend/dockwidgets/Surface3DDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
 #include "kdefrontend/dockwidgets/MatrixDock.h"
@@ -216,8 +217,31 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 		}
 
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("3D Axes properties"));
-		mainWindow->axes3dDock->setAxes(qobject_cast<Axes*>(selectedAspects.first()));
+		foreach(aspect, selectedAspects){
+			Axes* axes = qobject_cast<Axes*>(aspect);
+			if (axes) {
+				mainWindow->axes3dDock->setAxes(axes);
+				break;
+			}
+		}
+
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->axes3dDock);
+	}else if (className=="Surface3D"){
+		if (!mainWindow->surface3dDock){
+			mainWindow->surface3dDock = new Surface3DDock(mainWindow->surface3dDock);
+			mainWindow->stackedWidget->addWidget(mainWindow->surface3dDock);
+		}
+
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("3D Surface properties"));
+		foreach(aspect, selectedAspects){
+			Surface3D* surface = qobject_cast<Surface3D*>(aspect);
+			if (surface) {
+				mainWindow->surface3dDock->setSurface(surface);
+				break;
+			}
+		}
+
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->surface3dDock);
 	}else if (className=="CartesianPlotLegend"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Cartesian plot legend properties"));
 

@@ -29,8 +29,8 @@
 #ifndef PLOT3D_DATAHANDLERS_H
 #define PLOT3D_DATAHANDLERS_H
 
-#include "Plot3D.h"
-
+#include "Surface3D.h"
+#include "backend/core/AbstractAspect.h"
 #include <vtkSmartPointer.h>
 
 class KUrl;
@@ -49,7 +49,7 @@ class IDataHandler : public AbstractAspect {
 		IDataHandler();
 		virtual ~IDataHandler() {}
 
-		vtkSmartPointer<vtkActor> actor(Plot3D::VisualizationType type);
+		vtkSmartPointer<vtkActor> actor(Surface3D::VisualizationType type);
 
 		void update();
 

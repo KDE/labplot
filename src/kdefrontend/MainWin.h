@@ -46,6 +46,7 @@ class AxisDock;
 class CartesianPlotDock;
 class Plot3DDock;
 class Axes3DDock;
+class Surface3DDock;
 class CartesianPlotLegendDock;
 class ColumnDock;
 class MatrixDock;
@@ -146,6 +147,7 @@ private:
 	CartesianPlotLegendDock* cartesianPlotLegendDock;
 	Plot3DDock *plot3dDock;
 	Axes3DDock *axes3dDock;
+	Surface3DDock *surface3dDock;
 	ColumnDock* columnDock;
 	MatrixDock* matrixDock;
 	SpreadsheetDock* spreadsheetDock;

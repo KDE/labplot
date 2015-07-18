@@ -24,38 +24,8 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QLabel" name="lName">
-         <property name="text">
-          <string>Name</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <spacer name="horizontalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>10</width>
-           <height>23</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="3">
-        <widget class="KLineEdit" name="leName"/>
-       </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QLabel" name="lComment">
-         <property name="text">
-          <string>Comment</string>
-         </property>
-        </widget>
+       <item row="11" column="2" colspan="2">
+        <widget class="TreeViewComboBox" name="cbNode2"/>
        </item>
        <item row="1" column="3">
         <widget class="KLineEdit" name="leComment">
@@ -133,6 +103,36 @@
          </property>
         </widget>
        </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="labelZ">
+         <property name="text">
+          <string>Z</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="0" colspan="2">
+        <widget class="QLabel" name="labelMatrix">
+         <property name="text">
+          <string>Matrix</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="2" colspan="2">
+        <widget class="TreeViewComboBox" name="cbMatrix"/>
+       </item>
+       <item row="14" column="1">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>159</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item row="6" column="2" colspan="2">
         <widget class="KUrlRequester" name="cbFileRequester">
          <property name="filter">
@@ -147,6 +147,13 @@
          </property>
         </widget>
        </item>
+       <item row="15" column="0" colspan="2">
+        <widget class="QCheckBox" name="chkVisible">
+         <property name="text">
+          <string>visible</string>
+         </property>
+        </widget>
+       </item>
        <item row="7" column="2" colspan="2">
         <widget class="TreeViewComboBox" name="cbXCoordinate"/>
        </item>
@@ -157,46 +164,69 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="2" colspan="2">
-        <widget class="TreeViewComboBox" name="cbYCoordinate"/>
-       </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="labelZ">
-         <property name="text">
-          <string>Z</string>
-         </property>
-        </widget>
-       </item>
        <item row="9" column="2" colspan="2">
         <widget class="TreeViewComboBox" name="cbZCoordinate"/>
        </item>
-       <item row="10" column="0" colspan="2">
-        <widget class="QLabel" name="labelMatrix">
+       <item row="8" column="2" colspan="2">
+        <widget class="TreeViewComboBox" name="cbYCoordinate"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lName">
          <property name="text">
-          <string>Matrix</string>
+          <string>Name</string>
          </property>
         </widget>
        </item>
-       <item row="10" column="2" colspan="2">
-        <widget class="TreeViewComboBox" name="cbMatrix"/>
-       </item>
-       <item row="11" column="1">
-        <spacer name="verticalSpacer">
+       <item row="0" column="2">
+        <spacer name="horizontalSpacer_4">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>20</width>
-           <height>159</height>
+           <width>10</width>
+           <height>23</height>
           </size>
          </property>
         </spacer>
        </item>
-       <item row="12" column="0" colspan="2">
-        <widget class="QCheckBox" name="chkVisible">
+       <item row="10" column="2" colspan="2">
+        <widget class="TreeViewComboBox" name="cbNode1"/>
+       </item>
+       <item row="0" column="3">
+        <widget class="KLineEdit" name="leName"/>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QLabel" name="lComment">
          <property name="text">
-          <string>visible</string>
+          <string>Comment</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="2" colspan="2">
+        <widget class="TreeViewComboBox" name="cbNode3"/>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="labelNode1">
+         <property name="text">
+          <string>Node 1</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="labelNode2">
+         <property name="text">
+          <string>Node 2</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <widget class="QLabel" name="labelNode3">
+         <property name="text">
+          <string>Node 3</string>
          </property>
         </widget>
        </item>
@@ -368,6 +398,27 @@
    <header>commonfrontend/widgets/TreeViewComboBox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>leName</tabstop>
+  <tabstop>leComment</tabstop>
+  <tabstop>cbType</tabstop>
+  <tabstop>cbDataSource</tabstop>
+  <tabstop>cbFileRequester</tabstop>
+  <tabstop>cbXCoordinate</tabstop>
+  <tabstop>cbYCoordinate</tabstop>
+  <tabstop>cbZCoordinate</tabstop>
+  <tabstop>cbNode1</tabstop>
+  <tabstop>cbNode2</tabstop>
+  <tabstop>cbNode3</tabstop>
+  <tabstop>cbMatrix</tabstop>
+  <tabstop>chkVisible</tabstop>
+  <tabstop>kcbColorFillingBack</tabstop>
+  <tabstop>sbBackgroundOpacity_2</tabstop>
+  <tabstop>kcbColorFillingFront</tabstop>
+  <tabstop>cbColorFillingMap</tabstop>
+  <tabstop>cbColorFillingType</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

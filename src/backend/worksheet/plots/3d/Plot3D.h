@@ -32,34 +32,15 @@
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/PlotArea.h"
 
+class QMenu;
 class QGLContext;
 class Plot3DPrivate;
-
-class Axes;
-class DemoDataHandler;
-class SpreadsheetDataHandler;
-class MatrixDataHandler;
-class FileDataHandler;
-
-class QMenu;
 
 class Plot3D : public AbstractPlot {
 	Q_OBJECT
 	Q_DECLARE_PRIVATE(Plot3D)
 	Q_DISABLE_COPY(Plot3D)
 	public:
-		enum VisualizationType{
-			VisualizationType_Triangles = 0
-		};
-
-		enum DataSource{
-			DataSource_File,
-			DataSource_Spreadsheet,
-			DataSource_Matrix,
-			DataSource_Empty,
-			DataSource_MAX
-		};
-
 		explicit Plot3D(const QString &name);
 		virtual ~Plot3D();
 		void init(bool transform = true);
@@ -70,18 +51,9 @@ class Plot3D : public AbstractPlot {
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
 
-		DemoDataHandler& demoDataHandler();
-		SpreadsheetDataHandler& spreadsheetDataHandler();
-		MatrixDataHandler& matrixDataHandler();
-		FileDataHandler& fileDataHandler();
-
-		Axes& axes();
-
 		void setRect(const QRectF&);
 		void setContext(QGLContext *context);
 
-		BASIC_D_ACCESSOR_DECL(VisualizationType, visualizationType, VisualizationType)
-		BASIC_D_ACCESSOR_DECL(DataSource, dataSource, DataSource)
 		BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
@@ -130,10 +102,9 @@ class Plot3D : public AbstractPlot {
 
 	private slots:
 		void updatePlot();
+		void addSurface();
 
 	signals:
-		friend class Plot3DSetVisualizationTypeCmd;
-		friend class Plot3DSetDataSourceCmd;
 		friend class Plot3DSetBackgroundTypeCmd;
 		friend class Plot3DSetBackgroundColorStyleCmd;
 		friend class Plot3DSetBackgroundImageStyleCmd;
@@ -142,8 +113,6 @@ class Plot3D : public AbstractPlot {
 		friend class Plot3DSetBackgroundSecondColorCmd;
 		friend class Plot3DSetBackgroundFileNameCmd;
 		friend class Plot3DSetBackgroundOpacityCmd;
-		void visualizationTypeChanged(Plot3D::VisualizationType);
-		void sourceTypeChanged(Plot3D::DataSource);
 		void backgroundTypeChanged(PlotArea::BackgroundType);
 		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
 		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);

@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : Plot3DPrivate.h
+    File                 : Surface3DPrivate.h
     Project              : LabPlot
-    Description          : Private members of Plot3D.
+    Description          : 3D surface class
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 Minh Ngo (minh@fedoraproject.org)
+    Copyright            : (C) 2015 by Minh Ngo (minh@fedoraproject.org)
 
  ***************************************************************************/
 
@@ -26,61 +26,37 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PLOT3DPRIVATE_H
-#define PLOT3DPRIVATE_H
+#ifndef SURFACE3DPRIVATE_H
+#define SURFACE3DPRIVATE_H
 
-#include "Plot3D.h"
-#include "backend/worksheet/plots/AbstractPlotPrivate.h"
+#include "Surface3D.h"
+#include "DataHandlers.h"
 
-#include <vtkSmartPointer.h>
-
-class Axes;
-class Surface3D;
-
-class vtkImageActor;
+class vtkProp;
 class vtkRenderer;
+class Plot3D;
 
-class QGLContext;
-class QVTKGraphicsItem;
+struct Surface3DPrivate {
+	Surface3D* const q;
+	Plot3D* plot3d;
 
-class Plot3DPrivate:public AbstractPlotPrivate{
-	public:
-		explicit Plot3DPrivate(Plot3D* owner);
-		virtual ~Plot3DPrivate();
+	vtkRenderer& renderer;
+	Surface3D::VisualizationType visualizationType;
+	Surface3D::DataSource sourceType;
 
-		void init();
+	DemoDataHandler *demoHandler;
+	SpreadsheetDataHandler *spreadsheetHandler;
+	MatrixDataHandler *matrixHandler;
+	FileDataHandler *fileHandler;
+	vtkSmartPointer<vtkProp> surfaceActor;
 
-		virtual void retransform();
-		void updatePlot();
-		void updateBackground();
-		void mousePressEvent(QGraphicsSceneMouseEvent* event);
-		void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+	Surface3DPrivate(vtkRenderer& renderer, Surface3D *parent);
+	void init();
+	~Surface3DPrivate();
+	QString name() const;
+	void update();
 
-		Plot3D* const q;
-		QGLContext* context;
-		QVTKGraphicsItem *vtkItem;
-		bool isInitialized;
-		bool rectSet;
-
-		QList<Surface3D*> surfaces;
-
-		Axes* axes;
-		vtkSmartPointer<vtkRenderer> renderer;
-		vtkSmartPointer<vtkRenderer> backgroundRenderer;
-		vtkSmartPointer<vtkImageActor> backgroundImageActor;
-
-		//background
-		PlotArea::BackgroundType backgroundType;
-		PlotArea::BackgroundColorStyle backgroundColorStyle;
-		PlotArea::BackgroundImageStyle backgroundImageStyle;
-		Qt::BrushStyle backgroundBrushStyle;
-		QColor backgroundFirstColor;
-		QColor backgroundSecondColor;
-		QString backgroundFileName;
-		float backgroundOpacity;
-
-		//light
-
+	void hide();
 };
 
 #endif

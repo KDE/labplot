@@ -29,7 +29,8 @@
 #include "Axes3DDock.h"
 
 Axes3DDock::Axes3DDock(QWidget* parent)
-	: axes(0) {
+	: QWidget(parent)
+	, axes(0) {
 	ui.setupUi(this);
 
 	// Axes

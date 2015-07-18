@@ -71,7 +71,7 @@ QMenu* Axes::createContextMenu() {
 
 void Axes::updateBounds() {
 	Q_D(Axes);
-	if (!d->vtkAxes)
+	if (!d->showAxes || !d->vtkAxes)
 		return;
 
 	if (d->type == AxesType_Cube) {

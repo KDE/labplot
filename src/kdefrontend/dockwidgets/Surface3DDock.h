@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : Plot3DPrivate.h
+    File                 : Surface3DDock.h
     Project              : LabPlot
-    Description          : Private members of Plot3D.
+    Description          : widget for 3D surfaces properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Minh Ngo (minh@fedoraproject.org)
 
@@ -26,61 +26,59 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PLOT3DPRIVATE_H
-#define PLOT3DPRIVATE_H
+#ifndef SURFACE3DDOCK_H
+#define SURFACE3DDOCK_H
 
-#include "Plot3D.h"
-#include "backend/worksheet/plots/AbstractPlotPrivate.h"
+#include <QWidget>
+#include "backend/worksheet/plots/3d/Surface3D.h"
+#include "ui_surface3ddock.h"
 
-#include <vtkSmartPointer.h>
-
-class Axes;
+class Matrix;
 class Surface3D;
+class AbstractColumn;
+class AspectTreeModel;
 
-class vtkImageActor;
-class vtkRenderer;
+class Surface3DDock : public QWidget {
+	Q_OBJECT
 
-class QGLContext;
-class QVTKGraphicsItem;
-
-class Plot3DPrivate:public AbstractPlotPrivate{
 	public:
-		explicit Plot3DPrivate(Plot3D* owner);
-		virtual ~Plot3DPrivate();
+		explicit Surface3DDock(QWidget* parent);
+		void setSurface(Surface3D *surface);
 
-		void init();
+	private:
+		void hideDataSource(bool hide = true);
+		void hideFileUrl(bool hide = true);
+		void hideTriangleInfo(bool hide = true);
 
-		virtual void retransform();
-		void updatePlot();
-		void updateBackground();
-		void mousePressEvent(QGraphicsSceneMouseEvent* event);
-		void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+	private slots:
+		void onTreeViewIndexChanged(const QModelIndex&);
+		void onDataSourceChanged(int);
+		void onVisualizationTypeChanged(int);
+		void onFileChanged(const KUrl&);
 
-		Plot3D* const q;
-		QGLContext* context;
-		QVTKGraphicsItem *vtkItem;
-		bool isInitialized;
-		bool rectSet;
+		// Surface 3D
+		void visualizationTypeChanged(Surface3D::VisualizationType);
+		void sourceTypeChanged(Surface3D::DataSource);
 
-		QList<Surface3D*> surfaces;
+		// File handling
+		void pathChanged(const KUrl&);
 
-		Axes* axes;
-		vtkSmartPointer<vtkRenderer> renderer;
-		vtkSmartPointer<vtkRenderer> backgroundRenderer;
-		vtkSmartPointer<vtkImageActor> backgroundImageActor;
+		// Matrix handling
+		void matrixChanged(const Matrix*);
 
-		//background
-		PlotArea::BackgroundType backgroundType;
-		PlotArea::BackgroundColorStyle backgroundColorStyle;
-		PlotArea::BackgroundImageStyle backgroundImageStyle;
-		Qt::BrushStyle backgroundBrushStyle;
-		QColor backgroundFirstColor;
-		QColor backgroundSecondColor;
-		QString backgroundFileName;
-		float backgroundOpacity;
+		// Spreadsheet handling
+		void xColumnChanged(const AbstractColumn*);
+		void yColumnChanged(const AbstractColumn*);
+		void zColumnChanged(const AbstractColumn*);
+		void firstNodeChanged(const AbstractColumn*);
+		void secondNodeChanged(const AbstractColumn*);
+		void thirdNodeChanged(const AbstractColumn*);
 
-		//light
-
+	private:
+		Ui::Surface3DDock ui;
+		Surface3D *surface;
+		AspectTreeModel *aspectTreeModel;
+		bool m_initializing;
 };
 
 #endif

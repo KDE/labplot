@@ -28,6 +28,7 @@
 
 #include "DataHandlers.h"
 #include "DataHandlersPrivate.h"
+#include "Surface3D.h"
 
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
@@ -53,8 +54,8 @@
 IDataHandler::IDataHandler(): AbstractAspect(i18n("Data handler")) {
 }
 
-vtkSmartPointer<vtkActor> IDataHandler::actor(Plot3D::VisualizationType type) {
-	if (type == Plot3D::VisualizationType_Triangles)
+vtkSmartPointer<vtkActor> IDataHandler::actor(Surface3D::VisualizationType type) {
+	if (type == Surface3D::VisualizationType_Triangles)
 		return trianglesActor();
 	else
 		return vtkSmartPointer<vtkActor>();

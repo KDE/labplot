@@ -29,6 +29,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/Plot3DDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/Axes3DDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/Surface3DDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/MatrixDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ProjectDock.cpp
@@ -81,6 +82,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyequationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/plot3ddock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/surface3ddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axes3ddock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
@@ -160,6 +162,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/3d/Axes.cpp
 	${BACKEND_DIR}/worksheet/plots/3d/DataHandlers.cpp
 	${BACKEND_DIR}/worksheet/plots/3d/VTKGraphicsItem.cpp
+	${BACKEND_DIR}/worksheet/plots/3d/Surface3D.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 )
 

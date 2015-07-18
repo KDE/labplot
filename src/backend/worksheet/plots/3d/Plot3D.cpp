@@ -28,6 +28,7 @@
 
 #include "Plot3D.h"
 #include "Plot3DPrivate.h"
+#include "Surface3D.h"
 #include "Axes.h"
 #include "DataHandlers.h"
 #include "VTKGraphicsItem.h"
@@ -116,12 +117,22 @@ Plot3D::~Plot3D(){
 
 }
 
-QIcon Plot3D::icon() const{
+QIcon Plot3D::icon() const {
 	// TODO: Replace by some 3D chart
 	return KIcon("office-chart-line");
 }
 
-void Plot3D::initActions(){
+void Plot3D::addSurface() {
+	Q_D(Plot3D);
+	Surface3D* newSurface = new Surface3D(*d->renderer);
+	d->surfaces.append(newSurface);
+	d->vtkItem->connect(newSurface, SIGNAL(parametersChanged()), SLOT(refresh()));
+	newSurface->setParent(this);
+	newSurface->init();
+	addChild(newSurface);
+}
+
+void Plot3D::initActions() {
 	Q_D(Plot3D);
 	//"add new" actions
 	addCurveAction = new KAction(KIcon("3d-curve"), i18n("3D-curve"), this);
@@ -130,7 +141,7 @@ void Plot3D::initActions(){
 
 // 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 // 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
-// 	connect(addSurfaceAction, SIGNAL(triggered()), SLOT(addSurface()));
+ 	connect(addSurfaceAction, SIGNAL(triggered()), SLOT(addSurface()));
 
 	showAxesAction = new KAction(i18n("Axes"), this);
 	showAxesAction->setCheckable(true);
@@ -237,31 +248,6 @@ void Plot3D::setRect(const QRectF &rect){
 	retransform();
 }
 
-DemoDataHandler& Plot3D::demoDataHandler() {
-	Q_D(Plot3D);
-	return *d->demoHandler;
-}
-
-SpreadsheetDataHandler& Plot3D::spreadsheetDataHandler() {
-	Q_D(Plot3D);
-	return *d->spreadsheetHandler;
-}
-
-MatrixDataHandler& Plot3D::matrixDataHandler() {
-	Q_D(Plot3D);
-	return *d->matrixHandler;
-}
-
-FileDataHandler& Plot3D::fileDataHandler() {
-	Q_D(Plot3D);
-	return *d->fileHandler;
-}
-
-Axes& Plot3D::axes() {
-	Q_D(Plot3D);
-	return *d->axes;
-}
-
 void Plot3D::retransform() {
 	Q_D(Plot3D);
 	if (d->context == 0)
@@ -277,8 +263,7 @@ void Plot3D::retransform() {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(Plot3D, Plot3D::VisualizationType, visualizationType, visualizationType)
-BASIC_SHARED_D_READER_IMPL(Plot3D, Plot3D::DataSource, dataSource, sourceType)
+
 BASIC_SHARED_D_READER_IMPL(Plot3D, PlotArea::BackgroundType, backgroundType, backgroundType)
 BASIC_SHARED_D_READER_IMPL(Plot3D, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
 BASIC_SHARED_D_READER_IMPL(Plot3D, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle)
@@ -292,19 +277,6 @@ BASIC_SHARED_D_READER_IMPL(Plot3D, float, backgroundOpacity, backgroundOpacity)
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_F_S(Plot3D, SetVisualizationType, Plot3D::VisualizationType, visualizationType, updatePlot)
-void Plot3D::setVisualizationType(VisualizationType type) {
-	Q_D(Plot3D);
-	if (type != d->visualizationType)
-		exec(new Plot3DSetVisualizationTypeCmd(d, type, i18n("%1: visualization type changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Plot3D, SetDataSource, Plot3D::DataSource, sourceType, updatePlot)
-void Plot3D::setDataSource(DataSource source) {
-	Q_D(Plot3D);
-	if (source != d->sourceType)
-		exec(new Plot3DSetDataSourceCmd(d, source, i18n("%1: data source type changed")));
-}
 
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundType, PlotArea::BackgroundType, backgroundType, updateBackground)
 void Plot3D::setBackgroundType(PlotArea::BackgroundType type) {
@@ -370,8 +342,6 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	: AbstractPlotPrivate(owner)
 	, q(owner)
 	, context(0)
-	, visualizationType(Plot3D::VisualizationType_Triangles)
-	, sourceType(Plot3D::DataSource_File)
 	, isInitialized(false)
 	, rectSet(false) {
 }
@@ -420,28 +390,11 @@ void Plot3DPrivate::init() {
 	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
 	backgroundRenderer->AddActor(backgroundImageActor);
 
-	demoHandler = new DemoDataHandler;
-	fileHandler = new FileDataHandler;
-	spreadsheetHandler = new SpreadsheetDataHandler;
-	matrixHandler = new MatrixDataHandler;
-
-	dataHandlers.resize(Plot3D::DataSource_MAX);
-	dataHandlers[Plot3D::DataSource_Empty] = demoHandler;
-	dataHandlers[Plot3D::DataSource_File] = fileHandler;
-	dataHandlers[Plot3D::DataSource_Spreadsheet] = spreadsheetHandler;
-	dataHandlers[Plot3D::DataSource_Matrix] = matrixHandler;
-
 	// TODO: Configure as a separate widget
 	axes = new Axes(*renderer);
 	q->addChild(axes);
 	axes->setHidden(true);
 	vtkItem->connect(axes, SIGNAL(parametersChanged()), SLOT(refresh()));
-
-	foreach (IDataHandler* handler, dataHandlers) {
-		q->connect(handler, SIGNAL(parametersChanged()), SLOT(updatePlot()));
-		q->addChild(handler);
-		handler->setHidden(true);
-	}
 }
 
 void Plot3DPrivate::retransform() {
@@ -475,19 +428,6 @@ void Plot3DPrivate::retransform() {
 }
 
 void Plot3DPrivate::updatePlot() {
-	//clear all the available actors
-	vtkActorCollection* actors = renderer->GetActors();
-	actors->InitTraversal();
-
-	vtkActor* actor = 0;
-	while ((actor = actors->GetNextActor()) != 0) {
-		if (*axes != actor)
-			renderer->RemoveActor(actor);
-	}
-
-	//render the plot
-	renderer->AddActor(dataHandlers[sourceType]->actor(visualizationType));
-
 	axes->updateBounds();
 	emit q->parametersChanged();
 }
@@ -617,10 +557,6 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 
 		writer->writeStartElement("general");
 			writer->writeAttribute("show_axes", QString::number(d->axes->isVisible()));
-			writer->writeAttribute("vis_type", QString::number(d->visualizationType));
-			if (d->visualizationType == VisualizationType_Triangles){
-				writer->writeAttribute("data_source", QString::number(d->sourceType));
-			}
 		writer->writeEndElement();
 	writer->writeEndElement();
 }
@@ -660,21 +596,6 @@ bool Plot3D::load(XmlStreamReader* reader) {
 				reader->raiseWarning(attributeWarning.arg("'show_axes'"));
 			else {
 				// TODO: Implement
-			}
-
-			const QString& visTypeAttr = attribs.value("vis_type").toString();
-			if (!visTypeAttr.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'vis_type'"));
-			else{
-				d->visualizationType = static_cast<VisualizationType>(visTypeAttr.toInt());
-				qDebug() << Q_FUNC_INFO << "vis_type == " << d->visualizationType;
-			}
-
-			const QString& dataSourceAttr = attribs.value("data_source").toString();
-			if (!dataSourceAttr.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'data_source'"));
-			else{
-				d->sourceType = static_cast<DataSource>(dataSourceAttr.toInt());
 			}
 		}
 	}

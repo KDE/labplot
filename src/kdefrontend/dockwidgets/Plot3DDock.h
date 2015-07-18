@@ -52,13 +52,6 @@ class Plot3DDock: public QWidget {
 		Plot3D* m_plot;
 		QList<Plot3D*> m_plotsList;
 		bool m_initializing;
-		AspectTreeModel* aspectTreeModel;
-
-		void hideDataSource(bool hide = true);
-		void hideFileUrl(bool hide = true);
-		void hideTriangleInfo(bool hide = true);
-		AbstractColumn* getColumn(const QModelIndex& index) const;
-		Matrix* getMatrix(const QModelIndex& index) const;
 
 		void load();
 		void loadConfig(KConfig&);
@@ -73,23 +66,6 @@ class Plot3DDock: public QWidget {
 		void visibilityChanged(int);
 		void geometryChanged();
 		void layoutChanged(Worksheet::Layout);
-		void onVisualizationTypeChanged(int index);
-		void onDataSourceChanged(int index);
-		void onFileChanged(const KUrl& path);
-		void onTreeViewIndexChanged(const QModelIndex& index);
-
-		void visualizationTypeChanged(Plot3D::VisualizationType);
-		void sourceTypeChanged(Plot3D::DataSource);
-
-		// Data handlers
-		void pathChanged(const KUrl&);
-		void matrixChanged(const Matrix*);
-		void xColumnChanged(const AbstractColumn*);
-		void yColumnChanged(const AbstractColumn*);
-		void zColumnChanged(const AbstractColumn*);
-		void firstNodeChanged(const AbstractColumn*);
-		void secondNodeChanged(const AbstractColumn*);
-		void thirdNodeChanged(const AbstractColumn*);
 
 		//"Background"-tab
 		void backgroundTypeChanged(int);

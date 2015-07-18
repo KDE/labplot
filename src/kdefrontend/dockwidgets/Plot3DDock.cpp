@@ -56,48 +56,6 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 
 	this->retranslateUi();
 
-	//General-tab
-	ui.cbDataSource->insertItem(Plot3D::DataSource_File, i18n("File"));
-	ui.cbDataSource->insertItem(Plot3D::DataSource_Spreadsheet, i18n("Spreadsheet"));
-	ui.cbDataSource->insertItem(Plot3D::DataSource_Matrix, i18n("Matrix"));
-	ui.cbDataSource->insertItem(Plot3D::DataSource_Empty, i18n("Demo"));
-	ui.cbDataSource->setCurrentIndex(Plot3D::DataSource_File);
-
-	ui.cbType->insertItem(Plot3D::VisualizationType_Triangles, i18n("Triangles"));
-	ui.cbType->setCurrentIndex(Plot3D::VisualizationType_Triangles);
-	onVisualizationTypeChanged(ui.cbType->currentIndex());
-
-
-	//Spreadsheet data source
-	QList<const char*>  list;
-	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column";
-
-	const QVector<TreeViewComboBox*> treeViews(QVector<TreeViewComboBox*>()
-			<< ui.cbXCoordinate << ui.cbYCoordinate << ui.cbZCoordinate
-			<< ui.cbNode1 << ui.cbNode2 << ui.cbNode3);
-
-	foreach(TreeViewComboBox* view, treeViews){
-		view->setTopLevelClasses(list);
-	}
-
-	list.clear();
-	list<<"Column";
-
-	foreach(TreeViewComboBox* view, treeViews){
-		view->setSelectableClasses(list);
-		connect(view, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(onTreeViewIndexChanged(const QModelIndex&)));
-	}
-
-	//Matrix data source
-	list.clear();
-	list<<"Folder"<<"Workbook"<<"Matrix";
-	ui.cbMatrix->setTopLevelClasses(list);
-
-	list.clear();
-	list<<"Matrix";
-	ui.cbMatrix->setSelectableClasses(list);
-	connect(ui.cbMatrix, SIGNAL(currentModelIndexChanged(const QModelIndex&)), this, SLOT(onTreeViewIndexChanged(const QModelIndex&)));
-
 	//Background-tab
 	ui.cbBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.kleBackgroundFileName->setClearButtonShown(true);
@@ -128,10 +86,6 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	connect( ui.sbTop, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
-
-	connect( ui.cbDataSource, SIGNAL(currentIndexChanged(int)), this, SLOT(onDataSourceChanged(int)) ) ;
-	connect( ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(onVisualizationTypeChanged(int)) );
-	connect( ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), this, SLOT(onFileChanged(const KUrl&)) );
 
 	//Background
 	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
@@ -178,15 +132,6 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	Q_ASSERT(m_plotsList.size());
 	m_plot = m_plotsList.first();
 
-	aspectTreeModel = new AspectTreeModel(m_plot->project());
-	ui.cbXCoordinate->setModel(aspectTreeModel);
-	ui.cbYCoordinate->setModel(aspectTreeModel);
-	ui.cbZCoordinate->setModel(aspectTreeModel);
-	ui.cbNode1->setModel(aspectTreeModel);
-	ui.cbNode2->setModel(aspectTreeModel);
-	ui.cbNode3->setModel(aspectTreeModel);
-	ui.cbMatrix->setModel(aspectTreeModel);
-
 	//if there is more then one plot in the list, disable the name and comment fields in the tab "general"
 	if (m_plotsList.size()==1){
 		ui.lName->setEnabled(true);
@@ -227,23 +172,7 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 
 	//SIGNALs/SLOTs
 	//general
-	connect( m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), SLOT(plotDescriptionChanged(const AbstractAspect*)) );
-	// TODO: Uncomment later
-	//connect( m_plot, SIGNAL(rectChanged(QRectF&)), this, SLOT(plotRectChanged(QRectF&)) );
-
-	connect(m_plot, SIGNAL(visualizationTypeChanged(Plot3D::VisualizationType)), SLOT(visualizationTypeChanged(Plot3D::VisualizationType)));
-	connect(m_plot, SIGNAL(sourceTypeChanged(Plot3D::DataSource)), SLOT(sourceTypeChanged(Plot3D::DataSource)));
-
-	// DataHandlers
-	connect(&m_plot->fileDataHandler(), SIGNAL(pathChanged(const KUrl&)), SLOT(pathChanged(const KUrl&)));
-	connect(&m_plot->matrixDataHandler(), SIGNAL(matrixChanged(const Matrix*)), SLOT(matrixChanged(const Matrix*)));
-	SpreadsheetDataHandler *sdh = &m_plot->spreadsheetDataHandler();
-	connect(sdh, SIGNAL(xColumnChanged(const AbstractColumn*)), SLOT(xColumnChanged(const AbstractColumn*)));
-	connect(sdh, SIGNAL(yColumnChanged(const AbstractColumn*)), SLOT(yColumnChanged(const AbstractColumn*)));
-	connect(sdh, SIGNAL(zColumnChanged(const AbstractColumn*)), SLOT(zColumnChanged(const AbstractColumn*)));
-	connect(sdh, SIGNAL(firstNodeChanged(const AbstractColumn*)), SLOT(firstNodeChanged(const AbstractColumn*)));
-	connect(sdh, SIGNAL(secondNodeChanged(const AbstractColumn*)), SLOT(secondNodeChanged(const AbstractColumn*)));
-	connect(sdh, SIGNAL(thirdNodeChanged(const AbstractColumn*)), SLOT(thirdNodeChanged(const AbstractColumn*)));
+	connect(m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), SLOT(plotDescriptionChanged(const AbstractAspect*)));
 
 	//background
 	connect(m_plot, SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), SLOT(plotBackgroundTypeChanged(PlotArea::BackgroundType)));
@@ -256,88 +185,6 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	connect(m_plot, SIGNAL(backgroundOpacityChanged(float)), SLOT(plotBackgroundOpacityChanged(float)));
 
 	//light
-}
-
-void Plot3DDock::xColumnChanged(const AbstractColumn* column){
-	Lock lock(m_initializing);
-	if (column)
-		ui.cbXCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
-	else
-		ui.cbXCoordinate->setCurrentIndex(-1);
-}
-
-void Plot3DDock::yColumnChanged(const AbstractColumn* column){
-	Lock lock(m_initializing);
-	if (column)
-		ui.cbYCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
-	else
-		ui.cbYCoordinate->setCurrentIndex(-1);
-}
-
-void Plot3DDock::zColumnChanged(const AbstractColumn* column){
-	Lock lock(m_initializing);
-	if (column)
-		ui.cbZCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
-	else
-		ui.cbZCoordinate->setCurrentIndex(-1);
-}
-
-void Plot3DDock::firstNodeChanged(const AbstractColumn* column){
-	Lock lock(m_initializing);
-	if (column)
-		ui.cbNode1->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
-	else
-		ui.cbNode1->setCurrentIndex(-1);
-}
-
-void Plot3DDock::secondNodeChanged(const AbstractColumn* column){
-	Lock lock(m_initializing);
-	if (column)
-		ui.cbNode2->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
-	else
-		ui.cbNode2->setCurrentIndex(-1);
-}
-
-void Plot3DDock::thirdNodeChanged(const AbstractColumn* column){
-	Lock lock(m_initializing);
-	if (column)
-		ui.cbNode3->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
-	else
-		ui.cbNode3->setCurrentIndex(-1);
-}
-
-void Plot3DDock::matrixChanged(const Matrix* matrix){
-	Lock lock(m_initializing);
-	if (matrix)
-		ui.cbMatrix->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(matrix));
-	else
-		ui.cbMatrix->setCurrentIndex(-1);
-}
-
-void Plot3DDock::pathChanged(const KUrl& url){
-	Lock lock(m_initializing);
-	ui.cbFileRequester->setUrl(url);
-}
-
-void Plot3DDock::visualizationTypeChanged(Plot3D::VisualizationType type){
-	Lock lock(m_initializing);
-	ui.cbType->setCurrentIndex(type);
-}
-
-void Plot3DDock::sourceTypeChanged(Plot3D::DataSource type){
-	Lock lock(m_initializing);
-	ui.cbDataSource->setCurrentIndex(type);
-}
-
-//TODO:
-AbstractColumn* Plot3DDock::getColumn(const QModelIndex& index) const{
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	return aspect ? dynamic_cast<AbstractColumn*>(aspect) : 0;
-}
-
-Matrix* Plot3DDock::getMatrix(const QModelIndex& index) const{
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	return aspect ? dynamic_cast<Matrix*>(aspect) : 0;
 }
 
 //*************************************************************
@@ -419,99 +266,11 @@ void Plot3DDock::layoutChanged(Worksheet::Layout layout){
 	ui.sbWidth->setEnabled(b);
 	ui.sbHeight->setEnabled(b);
 	if (!b){
-		m_initializing = true;
+		Lock lock(m_initializing);
 		ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), Worksheet::Centimeter));
 		ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), Worksheet::Centimeter));
 		ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), Worksheet::Centimeter));
 		ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), Worksheet::Centimeter));
-		m_initializing = false;
-	}
-}
-
-void Plot3DDock::onTreeViewIndexChanged(const QModelIndex& index){
-	qDebug() << Q_FUNC_INFO;
-	AbstractColumn* column = getColumn(index);
-	Q_ASSERT(column);
-
-	foreach(Plot3D* plot, m_plotsList){
-		QObject *senderW = sender();
-		if(senderW == ui.cbXCoordinate)
-			plot->spreadsheetDataHandler().setXColumn(column);
-		else if(senderW  == ui.cbYCoordinate)
-			plot->spreadsheetDataHandler().setYColumn(column);
-		else if(senderW  == ui.cbZCoordinate)
-			plot->spreadsheetDataHandler().setZColumn(column);
-		else if(senderW  == ui.cbNode1)
-			plot->spreadsheetDataHandler().setFirstNode(column);
-		else if(senderW  == ui.cbNode2)
-			plot->spreadsheetDataHandler().setSecondNode(column);
-		else if(senderW == ui.cbNode3)
-			plot->spreadsheetDataHandler().setThirdNode(column);
-		else if(senderW == ui.cbMatrix){
-			plot->matrixDataHandler().setMatrix(getMatrix(index));
-		}
-		plot->retransform();
-	}
-}
-
-void Plot3DDock::onVisualizationTypeChanged(int index){
-	qDebug() << Q_FUNC_INFO << index;
-	foreach(Plot3D* plot, m_plotsList){
-		plot->setVisualizationType(static_cast<Plot3D::VisualizationType>(index));
-		plot->retransform();
-	}
-
-	if (index == Plot3D::VisualizationType_Triangles){
-		hideDataSource(false);
-		onDataSourceChanged(ui.cbDataSource->currentIndex());
-	}else{
-		hideDataSource();
-		hideFileUrl();
-		hideTriangleInfo();
-	}
-}
-
-void Plot3DDock::onFileChanged(const KUrl& path){
-	if (!path.isLocalFile())
-		return;
-
-	foreach(Plot3D* plot, m_plotsList)
-		plot->fileDataHandler().setFile(path);
-}
-
-void Plot3DDock::onDataSourceChanged(int index){
-	qDebug() << Q_FUNC_INFO << index;
-	Plot3D::DataSource type = (Plot3D::DataSource)index;
-	hideFileUrl(index != Plot3D::DataSource_File);
-	hideTriangleInfo(index != Plot3D::DataSource_Spreadsheet);
-
-	bool b = (type==Plot3D::DataSource_Matrix);
-	ui.labelMatrix->setVisible(b);
-	ui.cbMatrix->setVisible(b);
-
-	foreach(Plot3D* plot, m_plotsList)
-		plot->setDataSource(type);
-}
-
-void Plot3DDock::hideDataSource(bool hide){
-	ui.labelSource->setVisible(!hide);
-	ui.cbDataSource->setVisible(!hide);
-}
-
-void Plot3DDock::hideFileUrl(bool hide){
-	ui.labelFile->setVisible(!hide);
-	ui.cbFileRequester->setVisible(!hide);
-}
-
-void Plot3DDock::hideTriangleInfo(bool hide){
-	const QVector<QWidget*> widgets(QVector<QWidget*>()
-			<< ui.labelX << ui.labelY << ui.labelZ
-			<< ui.cbXCoordinate << ui.cbYCoordinate << ui.cbZCoordinate
-			<< ui.labelNode1 << ui.labelNode2 << ui.labelNode3
-			<< ui.cbNode1 << ui.cbNode2 << ui.cbNode3);
-
-	foreach(QWidget* w, widgets){
-		w->setVisible(!hide);
 	}
 }
 
@@ -771,8 +530,6 @@ void Plot3DDock::load(){
 	// General
 	ui.leName->setText(m_plot->name());
 	ui.leComment->setText(m_plot->comment());
-	ui.cbType->setCurrentIndex(m_plot->visualizationType());
-	ui.cbDataSource->setCurrentIndex(m_plot->dataSource());
 
 	//Background
 	ui.cbBackgroundType->setCurrentIndex( (int) m_plot->backgroundType() );
