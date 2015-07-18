@@ -33,6 +33,7 @@
 
 class VTKGraphicsItem : public QVTKGraphicsItem {
 		Q_OBJECT
+		Q_DISABLE_COPY(VTKGraphicsItem)
 	public:
 		VTKGraphicsItem(QGLContext* ctx, QGraphicsItem* p);
 

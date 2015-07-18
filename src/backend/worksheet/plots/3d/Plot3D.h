@@ -45,8 +45,8 @@ class QMenu;
 
 class Plot3D : public AbstractPlot {
 	Q_OBJECT
-	Q_DECLARE_PRIVATE(Plot3D);
-
+	Q_DECLARE_PRIVATE(Plot3D)
+	Q_DISABLE_COPY(Plot3D)
 	public:
 		enum VisualizationType{
 			VisualizationType_Triangles = 0
@@ -127,9 +127,6 @@ class Plot3D : public AbstractPlot {
 
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;
-
-	protected:
-		Plot3D(const QString &name, Plot3DPrivate *dd);
 
 	private slots:
 		void updatePlot();

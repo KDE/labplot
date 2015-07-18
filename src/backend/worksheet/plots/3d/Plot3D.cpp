@@ -62,10 +62,6 @@ Plot3D::Plot3D(const QString& name)
 	: AbstractPlot(name, new Plot3DPrivate(this)){
 }
 
-Plot3D::Plot3D(const QString &name, Plot3DPrivate *dd)
-	: AbstractPlot(name, dd){
-}
-
 void Plot3D::init(bool transform){
 	Q_D(Plot3D);
 	if (d->isInitialized)
