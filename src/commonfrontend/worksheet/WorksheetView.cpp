@@ -462,6 +462,7 @@ void WorksheetView::fillToolBar(QToolBar* toolBar){
 	tbNewCartesianPlot->setMenu(m_addNewCartesianPlotMenu);
 	tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
 	toolBar->addWidget(tbNewCartesianPlot);
+	toolBar->addAction(add3DPlotAction);
 	toolBar->addAction(addTextLabelAction);
 
 	toolBar->addSeparator();
