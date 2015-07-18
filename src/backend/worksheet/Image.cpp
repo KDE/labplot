@@ -196,7 +196,6 @@ void Image::initSceneParameters() {
     setPlotPointsType(plotPointsType);
 }
 
-
 void Image::updateData(const CustomItem *item) {
     Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
     int row = childCount<CustomItem>(AbstractAspect::IncludeHidden) - 4;

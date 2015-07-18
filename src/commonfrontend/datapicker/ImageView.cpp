@@ -384,9 +384,12 @@ void ImageView::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 void ImageView::mouseMoveEvent(QMouseEvent* event) {
-    if (m_mouseMode == SelectAndEditMode ) {
+    if ( m_mouseMode == SelectAndEditMode || m_mouseMode == ZoomSelectionMode )
         setCursor(Qt::CrossCursor);
-    } else if (m_selectionBandIsShown) {
+    else
+        setCursor(Qt::ArrowCursor);
+
+    if (m_selectionBandIsShown) {
         m_selectionEnd = event->pos();
         viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
     }

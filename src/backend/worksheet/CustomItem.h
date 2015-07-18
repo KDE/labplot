@@ -97,6 +97,7 @@ class CustomItem : public WorksheetElement{
 
 	protected:
 		CustomItemPrivate* const d_ptr;
+
 	private:
     	Q_DECLARE_PRIVATE(CustomItem)
 		void init();

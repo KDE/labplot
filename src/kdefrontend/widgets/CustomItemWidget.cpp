@@ -154,7 +154,7 @@ void CustomItemWidget::positionXChanged(int index) {
 
     CustomItem::PositionWrapper position = m_item->position();
     position.horizontalPosition = CustomItem::HorizontalPosition(index);
-    m_item->beginMacro(i18n(""));
+    m_item->beginMacro(i18n("%1 CustomItems: changed", m_itemList.count()));
     foreach(CustomItem* item, m_itemList)
         item->setPosition(position);
     m_item->endMacro();
@@ -176,7 +176,8 @@ void CustomItemWidget::positionYChanged(int index) {
 
     CustomItem::PositionWrapper position = m_item->position();
     position.verticalPosition = CustomItem::VerticalPosition(index);
-    m_item->beginMacro(i18n(""));
+        m_item->beginMacro(i18n("%1 CustomItems: changed", m_itemList.count()));
+
     foreach(CustomItem* item, m_itemList)
         item->setPosition(position);
     m_item->endMacro();
@@ -189,7 +190,8 @@ void CustomItemWidget::customPositionXChanged(double value) {
 
     CustomItem::PositionWrapper position = m_item->position();
 	position.point.setX(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
-    m_item->beginMacro(i18n(""));
+        m_item->beginMacro(i18n("%1 CustomItems: changed", m_itemList.count()));
+
     foreach(CustomItem* item, m_itemList)
         item->setPosition(position);
     m_item->endMacro();
@@ -201,7 +203,8 @@ void CustomItemWidget::customPositionYChanged(double value) {
 
     CustomItem::PositionWrapper position = m_item->position();
 	position.point.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
-    m_item->beginMacro(i18n(""));
+        m_item->beginMacro(i18n("%1 CustomItems: changed", m_itemList.count()));
+
     foreach(CustomItem* item, m_itemList)
         item->setPosition(position);
     m_item->endMacro();
@@ -226,7 +229,7 @@ void CustomItemWidget::styleChanged(int index) {
   if (m_initializing)
     return;
 
-  m_item->beginMacro(i18n(""));
+  m_item->beginMacro(i18n("%1 CustomItems: style changed", m_itemList.count()));
   foreach(CustomItem* item, m_itemList)
     item->setItemsStyle(style);
   m_item->endMacro();
@@ -236,7 +239,7 @@ void CustomItemWidget::sizeChanged(double value) {
   if (m_initializing)
     return;
 
-  m_item->beginMacro(i18n(""));
+  m_item->beginMacro(i18n("%1 CustomItems: size changed", m_itemList.count()));
   foreach(CustomItem* item, m_itemList)
     item->setItemsSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
   m_item->endMacro();
@@ -246,7 +249,7 @@ void CustomItemWidget::rotationChanged(int value) {
     if (m_initializing)
         return;
 
-    m_item->beginMacro(i18n(""));
+    m_item->beginMacro(i18n("%1 CustomItems: rotation changed", m_itemList.count()));
     foreach(CustomItem* item, m_itemList)
         item->setItemsRotationAngle(value);
     m_item->endMacro();
@@ -257,7 +260,7 @@ void CustomItemWidget::opacityChanged(int value) {
         return;
 
     qreal opacity = (float)value/100.;
-    m_item->beginMacro(i18n(""));
+    m_item->beginMacro(i18n("%1 CustomItems: opacity changed", m_itemList.count()));
     foreach(CustomItem* item, m_itemList)
         item->setItemsOpacity(opacity);
     m_item->endMacro();
@@ -271,7 +274,7 @@ void CustomItemWidget::fillingStyleChanged(int index) {
     return;
 
   QBrush brush;
-  m_item->beginMacro(i18n(""));
+  m_item->beginMacro(i18n("%1 CustomItems: filling style changed", m_itemList.count()));
   foreach(CustomItem* item, m_itemList){
     brush = item->itemsBrush();
     brush.setStyle(brushStyle);
@@ -286,7 +289,7 @@ void CustomItemWidget::fillingColorChanged(const QColor& color) {
     return;
 
   QBrush brush;
-  m_item->beginMacro(i18n(""));
+  m_item->beginMacro(i18n("%1 CustomItems: filling color changed", m_itemList.count()));
   foreach(CustomItem* item, m_itemList){
     brush=item->itemsBrush();
     brush.setColor(color);
@@ -314,7 +317,7 @@ void CustomItemWidget::borderStyleChanged(int index) {
     return;
 
   QPen pen;
-  m_item->beginMacro(i18n(""));
+  m_item->beginMacro(i18n("%1 CustomItems: border style changed", m_itemList.count()));
   foreach(CustomItem* item, m_itemList){
     pen=item->itemsPen();
     pen.setStyle(penStyle);
@@ -328,7 +331,7 @@ void CustomItemWidget::borderColorChanged(const QColor& color) {
     return;
 
   QPen pen;
-  m_item->beginMacro(i18n(""));
+  m_item->beginMacro(i18n("%1 CustomItems: border color changed", m_itemList.count()));
   foreach(CustomItem* item, m_itemList){
     pen=item->itemsPen();
     pen.setColor(color);
@@ -346,9 +349,9 @@ void CustomItemWidget::borderWidthChanged(double value) {
     return;
 
   QPen pen;
-  m_item->beginMacro(i18n(""));
+  m_item->beginMacro(i18n("%1 CustomItems: border width changed", m_itemList.count()));
   foreach(CustomItem* item, m_itemList){
-    pen=item->itemsPen();
+    pen = item->itemsPen();
     pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
     item->setItemsPen(pen);
   }
@@ -359,7 +362,7 @@ void CustomItemWidget::visibilityChanged(bool state) {
     if (m_initializing)
         return;
 
-    m_item->beginMacro(i18n(""));
+    m_item->beginMacro(i18n("%1 CustomItems: visibility changed", m_itemList.count()));
     foreach(CustomItem* item, m_itemList)
         item->setVisible(state);
     m_item->endMacro();

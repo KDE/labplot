@@ -29,14 +29,14 @@ class CustomItemWidget;
 class QxtSpanSlider;
 
 class ImageWidget: public QWidget{
-	Q_OBJECT
+    Q_OBJECT
 
 public:
     explicit ImageWidget(QWidget *);
 
 
     void setImages(QList<Image*>);
-	void load();
+    void load();
 
     QxtSpanSlider* ssIntensity;
     QxtSpanSlider* ssForeground;
@@ -45,18 +45,18 @@ public:
     QxtSpanSlider* ssValue;
 
 private:
-	Ui::ImageWidget ui;
-	Image *m_image;
+    Ui::ImageWidget ui;
+    Image *m_image;
     QList<CustomItem*> m_itemsList;
     QList<Image*> m_imagesList;
-	bool m_initializing;
+    bool m_initializing;
     CustomItemWidget* customItemWidget;
 
     void initConnections();
 
 signals:
     //delete it
-	void dataChanged(bool);
+    void dataChanged(bool);
 
 private slots:
     void rotationChanged(double);

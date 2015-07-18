@@ -615,6 +615,7 @@ void CustomItem::save(QXmlStreamWriter* writer) const{
     writer->writeAttribute( "verticalPosition", QString::number(d->position.verticalPosition) );
     writer->writeAttribute( "visible", QString::number(d->isVisible()) );
     writer->writeEndElement();
+
     writer->writeStartElement( "properties" );
     writer->writeAttribute( "itemsStyle", QString::number(d->itemsStyle) );
     writer->writeAttribute( "opacity", QString::number(d->itemsOpacity) );
