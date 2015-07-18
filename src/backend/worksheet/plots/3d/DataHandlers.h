@@ -37,6 +37,7 @@ class KUrl;
 
 class AbstractColumn;
 class Matrix;
+class BaseDataHandlerPrivate;
 class MatrixDataHandlerPrivate;
 class SpreadsheetDataHandlerPrivate;
 class FileDataHandlerPrivate;
@@ -46,8 +47,8 @@ class vtkActor;
 class IDataHandler : public AbstractAspect {
 		Q_OBJECT
 	public:
-		IDataHandler();
-		virtual ~IDataHandler() {}
+		IDataHandler(BaseDataHandlerPrivate *d);
+		virtual ~IDataHandler();
 
 		vtkSmartPointer<vtkActor> actor(Plot3D::VisualizationType type);
 
@@ -58,6 +59,9 @@ class IDataHandler : public AbstractAspect {
 
 	signals:
 		void parametersChanged();
+
+	protected:
+		const QScopedPointer<BaseDataHandlerPrivate> d_ptr;
 };
 
 class MatrixDataHandler : public IDataHandler {
@@ -79,9 +83,6 @@ class MatrixDataHandler : public IDataHandler {
 	signals:
 		friend class MatrixDataHandlerSetMatrixCmd;
 		void matrixChanged(const Matrix*);
-
-	private:
-		const QScopedPointer<MatrixDataHandlerPrivate> d_ptr;
 };
 
 class SpreadsheetDataHandler : public IDataHandler {
@@ -119,9 +120,6 @@ class SpreadsheetDataHandler : public IDataHandler {
 		void firstNodeChanged(const AbstractColumn*);
 		void secondNodeChanged(const AbstractColumn*);
 		void thirdNodeChanged(const AbstractColumn*);
-
-	private:
-		const QScopedPointer<SpreadsheetDataHandlerPrivate> d_ptr;
 };
 
 class FileDataHandler : public IDataHandler {
@@ -143,10 +141,6 @@ class FileDataHandler : public IDataHandler {
 	signals:
 		friend class FileDataHandlerSetFileCmd;
 		void pathChanged(const KUrl&);
-
-	private:
-		const QScopedPointer<FileDataHandlerPrivate> d_ptr;
-
 };
 
 class DemoDataHandler : public IDataHandler {

@@ -145,7 +145,7 @@ class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Privat
 	public: \
 		class_name ## cmd_name ## Cmd(class_name::Private *target, Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) \
 			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {} \
-		virtual void finalize() { emit m_target->q->field_name##Changed(m_target->*m_field); } \
+		virtual void finalize() { emit dynamic_cast<class_name*>(m_target->q)->field_name##Changed(m_target->*m_field); } \
 };
 
 #define STD_SETTER_CMD_IMPL_F_S(class_name, cmd_name, value_type, field_name, finalize_method) \
@@ -153,7 +153,7 @@ class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Privat
 	public: \
 		class_name ## cmd_name ## Cmd(class_name::Private *target, Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) \
 			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {} \
-		virtual void finalize() { m_target->finalize_method(); emit m_target->q->field_name##Changed(m_target->*m_field); } \
+		virtual void finalize() { m_target->finalize_method(); emit dynamic_cast<class_name*>(m_target->q)->field_name##Changed(m_target->*m_field); } \
 };
 
 // setter class with finalize() and signal emmiting for changing several properties in one single step (embedded in beginMacro/endMacro)
@@ -162,8 +162,8 @@ class class_name ## cmd_name ## Cmd: public StandardMacroSetterCmd<class_name::P
 	public: \
 		class_name ## cmd_name ## Cmd(class_name::Private *target, Loki::TypeTraits<value_type>::ParameterType newValue, const QString &description) \
 			: StandardMacroSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {} \
-		virtual void finalize() { m_target->finalize_method(); emit m_target->q->field_name##Changed(m_target->*m_field); } \
-		virtual void finalizeUndo() { emit m_target->q->field_name##Changed(m_target->*m_field); } \
+		virtual void finalize() { m_target->finalize_method(); emit dynamic_cast<class_name*>(m_target->q)->field_name##Changed(m_target->*m_field); } \
+		virtual void finalizeUndo() { emit dynamic_cast<class_name*>(m_target->q)->field_name##Changed(m_target->*m_field); } \
 };
 
 #define STD_SETTER_CMD_IMPL_I(class_name, cmd_name, value_type, field_name, init_method) \

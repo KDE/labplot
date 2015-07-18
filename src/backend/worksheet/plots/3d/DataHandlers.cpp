@@ -50,7 +50,12 @@
 #include <vtkLookupTable.h>
 #include <vtkPointData.h>
 
-IDataHandler::IDataHandler(): AbstractAspect(i18n("Data handler")) {
+IDataHandler::IDataHandler(BaseDataHandlerPrivate *d)
+	: AbstractAspect(i18n("Data handler"))
+	, d_ptr(d) {
+}
+
+IDataHandler::~IDataHandler() {
 }
 
 vtkSmartPointer<vtkActor> IDataHandler::actor(Plot3D::VisualizationType type) {
@@ -66,7 +71,8 @@ void IDataHandler::update() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-DemoDataHandler::DemoDataHandler(){
+DemoDataHandler::DemoDataHandler()
+	: IDataHandler(new BaseDataHandlerPrivate(this)){
 }
 
 vtkSmartPointer<vtkActor> DemoDataHandler::trianglesActor() {
@@ -84,8 +90,7 @@ vtkSmartPointer<vtkActor> DemoDataHandler::trianglesActor() {
 ////////////////////////////////////////////////////////////////////////////////
 
 FileDataHandler::FileDataHandler()
-	: IDataHandler()
-	, d_ptr(new FileDataHandlerPrivate(this)) {
+	: IDataHandler(new FileDataHandlerPrivate(this)) {
 }
 
 FileDataHandler::~FileDataHandler() {
@@ -136,12 +141,10 @@ void FileDataHandler::setFile(const KUrl& path) {
 ////////////////////////////////////////////////////////////////////////////////
 
 SpreadsheetDataHandler::SpreadsheetDataHandler()
-	: IDataHandler()
-	, d_ptr(new SpreadsheetDataHandlerPrivate(this)) {
+	: IDataHandler(new SpreadsheetDataHandlerPrivate(this)) {
 }
 
 SpreadsheetDataHandler::~SpreadsheetDataHandler() {
-
 }
 
 namespace {
@@ -294,8 +297,7 @@ void SpreadsheetDataHandler::setThirdNode(const AbstractColumn *column) {
 ////////////////////////////////////////////////////////////////////////////////
 
 MatrixDataHandler::MatrixDataHandler()
-	: IDataHandler()
-	, d_ptr(new MatrixDataHandlerPrivate(this)) {
+	: IDataHandler(new MatrixDataHandlerPrivate(this)) {
 }
 
 MatrixDataHandler::~MatrixDataHandler() {
@@ -357,32 +359,32 @@ void MatrixDataHandler::setMatrix(const Matrix* matrix) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template<typename TParent>
-BaseDataHandlerPrivate<TParent>::BaseDataHandlerPrivate(TParent* parent)
+BaseDataHandlerPrivate::BaseDataHandlerPrivate(IDataHandler* parent)
 	: q(parent) {
 }
 
-template<typename TParent>
-void BaseDataHandlerPrivate<TParent>::update() {
+BaseDataHandlerPrivate::~BaseDataHandlerPrivate() {
+}
+
+void BaseDataHandlerPrivate::update() {
 	q->update();
 }
 
-template<typename TParent>
-QString BaseDataHandlerPrivate<TParent>::name() const {
+QString BaseDataHandlerPrivate::name() const {
 	return "";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 MatrixDataHandlerPrivate::MatrixDataHandlerPrivate(MatrixDataHandler* parent)
-	: BaseDataHandlerPrivate<MatrixDataHandler>(parent)
+	: BaseDataHandlerPrivate(parent)
 	, matrix(0) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 SpreadsheetDataHandlerPrivate::SpreadsheetDataHandlerPrivate(SpreadsheetDataHandler* parent)
-	: BaseDataHandlerPrivate<SpreadsheetDataHandler>(parent)
+	: BaseDataHandlerPrivate(parent)
 	, xColumn(0)
 	, yColumn(0)
 	, zColumn(0)
@@ -394,5 +396,5 @@ SpreadsheetDataHandlerPrivate::SpreadsheetDataHandlerPrivate(SpreadsheetDataHand
 ////////////////////////////////////////////////////////////////////////////////
 
 FileDataHandlerPrivate::FileDataHandlerPrivate(FileDataHandler* parent)
-	: BaseDataHandlerPrivate<FileDataHandler>(parent) {
+	: BaseDataHandlerPrivate(parent) {
 }
