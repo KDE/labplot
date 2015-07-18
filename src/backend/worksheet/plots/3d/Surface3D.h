@@ -32,6 +32,8 @@
 #include "backend/lib/macros.h"
 #include "backend/core/AbstractAspect.h"
 
+#include <vtkSmartPointer.h>
+
 class vtkRenderer;
 class Plot3D;
 class DemoDataHandler;
@@ -57,7 +59,7 @@ class Surface3D : public AbstractAspect {
 			DataSource_MAX
 		};
 
-		Surface3D(vtkRenderer& renderer);
+		Surface3D(vtkSmartPointer<vtkRenderer> renderer);
 		void init();
 		void setParent(Plot3D *parent);
 		virtual ~Surface3D();

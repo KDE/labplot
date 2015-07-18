@@ -114,7 +114,6 @@ void Plot3D::updatePlot() {
 }
 
 Plot3D::~Plot3D(){
-
 }
 
 QIcon Plot3D::icon() const {
@@ -124,10 +123,9 @@ QIcon Plot3D::icon() const {
 
 void Plot3D::addSurface() {
 	Q_D(Plot3D);
-	Surface3D* newSurface = new Surface3D(*d->renderer);
+	Surface3D* newSurface = new Surface3D(d->renderer);
 	d->surfaces.append(newSurface);
 	d->vtkItem->connect(newSurface, SIGNAL(parametersChanged()), SLOT(refresh()));
-	newSurface->setParent(this);
 	newSurface->init();
 	addChild(newSurface);
 }

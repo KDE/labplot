@@ -37,7 +37,7 @@
 
 #include <vtkRenderer.h>
 
-Surface3D::Surface3D(vtkRenderer& renderer)
+Surface3D::Surface3D(vtkSmartPointer<vtkRenderer> renderer)
 	: AbstractAspect("")
 	, d_ptr(new Surface3DPrivate(renderer, this)) {
 }
@@ -48,11 +48,6 @@ void Surface3D::init() {
 }
 
 Surface3D::~Surface3D() {
-}
-
-void Surface3D::setParent(Plot3D *parent) {
-	Q_D(Surface3D);
-	d->plot3d = parent;
 }
 
 DemoDataHandler& Surface3D::demoDataHandler() {
@@ -76,8 +71,8 @@ FileDataHandler& Surface3D::fileDataHandler() {
 }
 
 void Surface3D::remove(){
-	AbstractAspect::remove();
 	Q_D(Surface3D);
+	AbstractAspect::remove();
 	d->hide();
 	emit parametersChanged();
 }
@@ -114,9 +109,8 @@ void Surface3D::setDataSource(DataSource source) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Surface3DPrivate::Surface3DPrivate(vtkRenderer& renderer, Surface3D *parent)
+Surface3DPrivate::Surface3DPrivate(vtkSmartPointer<vtkRenderer> renderer, Surface3D *parent)
 	: q(parent)
-	, plot3d(0)
 	, renderer(renderer)
 	, visualizationType(Surface3D::VisualizationType_Triangles)
 	, sourceType(Surface3D::Surface3D::DataSource_Empty)
@@ -128,19 +122,19 @@ Surface3DPrivate::Surface3DPrivate(vtkRenderer& renderer, Surface3D *parent)
 
 void Surface3DPrivate::init() {
 	demoHandler = new DemoDataHandler;
-	plot3d->addChild(demoHandler);
+	q->addChild(demoHandler);
 	demoHandler->setHidden(true);
 	
 	spreadsheetHandler = new SpreadsheetDataHandler;
-	plot3d->addChild(spreadsheetHandler);
+	q->addChild(spreadsheetHandler);
 	spreadsheetHandler->setHidden(true);
 	
 	matrixHandler = new MatrixDataHandler;
-	plot3d->addChild(matrixHandler);
+	q->addChild(matrixHandler);
 	matrixHandler->setHidden(true);
 
 	fileHandler = new FileDataHandler;
-	plot3d->addChild(fileHandler);
+	q->addChild(fileHandler);
 	fileHandler->setHidden(true);
 
 	update();
@@ -159,8 +153,9 @@ QString Surface3DPrivate::name() const {
 }
 
 void Surface3DPrivate::hide() {
-	if (surfaceActor)
-		renderer.RemoveActor(surfaceActor);
+	if (surfaceActor) {
+		renderer->RemoveActor(surfaceActor);
+	}
 }
 
 void Surface3DPrivate::update() {
@@ -175,6 +170,6 @@ void Surface3DPrivate::update() {
 		surfaceActor = spreadsheetHandler->actor(visualizationType);
 	}
 
-	renderer.AddActor(surfaceActor);
+	renderer->AddActor(surfaceActor);
 	emit q->parametersChanged();
 }
