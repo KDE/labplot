@@ -39,23 +39,23 @@ class MatrixDataHandler;
 class SpreadsheetDataHandler;
 class FileDataHandler;
 
+template<typename TParent>
 struct BaseDataHandlerPrivate{
-	IDataHandler* const q;
+	TParent* const q;
 
 	void update();
 	QString name() const;
 
-	BaseDataHandlerPrivate(IDataHandler* parent);
-	virtual ~BaseDataHandlerPrivate();
+	BaseDataHandlerPrivate(TParent* parent);
 };
 
-struct MatrixDataHandlerPrivate : public BaseDataHandlerPrivate{
+struct MatrixDataHandlerPrivate : public BaseDataHandlerPrivate<MatrixDataHandler>{
 	const Matrix* matrix;
 
 	MatrixDataHandlerPrivate(MatrixDataHandler *parent);
 };
 
-struct SpreadsheetDataHandlerPrivate : public BaseDataHandlerPrivate{
+struct SpreadsheetDataHandlerPrivate : public BaseDataHandlerPrivate<SpreadsheetDataHandler>{
 	const AbstractColumn *xColumn;
 	const AbstractColumn *yColumn;
 	const AbstractColumn *zColumn;
@@ -67,7 +67,7 @@ struct SpreadsheetDataHandlerPrivate : public BaseDataHandlerPrivate{
 	SpreadsheetDataHandlerPrivate(SpreadsheetDataHandler *parent);
 };
 
-struct FileDataHandlerPrivate : public BaseDataHandlerPrivate{
+struct FileDataHandlerPrivate : public BaseDataHandlerPrivate<FileDataHandler>{
 	KUrl path;
 
 	FileDataHandlerPrivate(FileDataHandler *parent);
