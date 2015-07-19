@@ -260,12 +260,12 @@ void ImageView::drawBackground(QPainter* painter, const QRectF& rect) {
         painter->rotate(-m_image->rotationAngle());
 
         if (m_image->plotImageType == Image::OriginalImage) {
-			QImage todraw = m_image->originalPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            QImage todraw = m_image->originalPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
             painter->drawImage(scene_rect.topLeft(), todraw);
-		} else {
-			QImage todraw = m_image->processedPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        } else {
+            QImage todraw = m_image->processedPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
             painter->drawImage(scene_rect.topLeft(), todraw);
-		}
+        }
     } else {
         painter->setBrush(QBrush(Qt::gray));
         painter->drawRect(scene_rect);
@@ -330,28 +330,28 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
                 CustomItem::ErrorBar errorBar = lastCurvePoint->itemErrorBar();
                 QPointF errorSpan = eventPos - lastCurvePoint->position().point;
 
-                if (m_image->plotErrors().x == Image::AsymmetricError && !errorBar.minusDeltaX) {
-                    if (!errorBar.plusDeltaX)
-                        errorBar.plusDeltaX = qAbs(errorSpan.x());
+                if (m_image->plotErrors().x == Image::AsymmetricError && errorBar.minusDeltaX.isNull()) {
+                    if (errorBar.plusDeltaX.isNull())
+                        errorBar.plusDeltaX = errorSpan;
                     else
-                        errorBar.minusDeltaX = qAbs(errorSpan.x());
+                        errorBar.minusDeltaX = errorSpan;
 
                     lastCurvePoint->setItemErrorBar(errorBar);
-                } else if (m_image->plotErrors().x == Image::SymmetricError && !errorBar.plusDeltaX) {
-                    errorBar.plusDeltaX = qAbs(errorSpan.x());
-                    errorBar.minusDeltaX = errorBar.plusDeltaX;
+                } else if (m_image->plotErrors().x == Image::SymmetricError && errorBar.plusDeltaX.isNull()) {
+                    errorBar.plusDeltaX = errorSpan;
+                    errorBar.minusDeltaX = errorSpan;
 
                     lastCurvePoint->setItemErrorBar(errorBar);
-                } else if (m_image->plotErrors().y == Image::AsymmetricError && !errorBar.minusDeltaY) {
-                    if (!errorBar.plusDeltaY)
-                        errorBar.plusDeltaY = qAbs(errorSpan.y());
+                } else if (m_image->plotErrors().y == Image::AsymmetricError && errorBar.minusDeltaY.isNull()) {
+                    if (errorBar.plusDeltaY.isNull())
+                        errorBar.plusDeltaY = errorSpan;
                     else
-                        errorBar.minusDeltaY = qAbs(errorSpan.y());
+                        errorBar.minusDeltaY = errorSpan;
 
                     lastCurvePoint->setItemErrorBar(errorBar);
-                } else if (m_image->plotErrors().y == Image::SymmetricError && !errorBar.plusDeltaY) {
-                    errorBar.plusDeltaY = qAbs(errorSpan.y());
-                    errorBar.minusDeltaY = errorBar.plusDeltaY;
+                } else if (m_image->plotErrors().y == Image::SymmetricError && errorBar.plusDeltaY.isNull()) {
+                    errorBar.plusDeltaY = errorSpan;
+                    errorBar.minusDeltaY = errorSpan;
 
                     lastCurvePoint->setItemErrorBar(errorBar);
                 } else {
@@ -595,7 +595,7 @@ void ImageView::updateBackground() {
 
 void ImageView::updateDatasheet() {
     if (m_childItems.count() > 3)
-        foreach(CustomItem* item, m_childItems){
+        foreach(CustomItem* item, m_childItems) {
             if (m_image->indexOfChild<CustomItem>(item ,AbstractAspect::IncludeHidden) > 2)
                 m_image->updateData(item);
         }

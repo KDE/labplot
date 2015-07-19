@@ -59,10 +59,10 @@ void CustomItem::init() {
     d->itemsPen.setStyle( (Qt::PenStyle)group.readEntry("ItemBorderStyle", (int)Qt::SolidLine) );
     d->itemsPen.setColor( group.readEntry("ItemBorderColor", QColor(Qt::red)) );
     d->itemsPen.setWidthF( group.readEntry("ItemBorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Point)) );
-    d->itemErrorBar.minusDeltaX = group.readEntry("MinusDeltaX", 0);
-    d->itemErrorBar.plusDeltaX = group.readEntry("PlusDeltaX", 0);
-    d->itemErrorBar.minusDeltaY = group.readEntry("MinusDeltaY", 0);
-    d->itemErrorBar.plusDeltaY = group.readEntry("PlusDeltaY", 0);
+    d->itemErrorBar.minusDeltaX = group.readEntry("MinusDeltaX", QPointF());
+    d->itemErrorBar.plusDeltaX = group.readEntry("PlusDeltaX", QPointF());
+    d->itemErrorBar.minusDeltaY = group.readEntry("MinusDeltaY", QPointF());
+    d->itemErrorBar.plusDeltaY = group.readEntry("PlusDeltaY", QPointF());
     this->initActions();
 }
 
@@ -300,23 +300,14 @@ QString CustomItem::itemsNameFromStyle(CustomItem::ItemsStyle style) {
 }
 
 QPainterPath CustomItem::errorBarsPath() {
-    QPainterPath path;
-    QPolygonF polygon;
-    if (itemErrorBar().minusDeltaX || itemErrorBar().plusDeltaX) {
-        polygon<<QPointF(0, 0)<<QPointF(-itemErrorBar().minusDeltaX, 0)<<QPointF(-itemErrorBar().minusDeltaX, 5)
-              <<QPointF(-itemErrorBar().minusDeltaX, -5)<<QPointF(-itemErrorBar().minusDeltaX, 0)
-             <<QPointF(itemErrorBar().plusDeltaX, 0)<<QPointF(itemErrorBar().plusDeltaX, 5)
-            <<QPointF(itemErrorBar().plusDeltaX, -5)<<QPointF(itemErrorBar().plusDeltaX, 0);
-        path.addPolygon(polygon);
-    }
+    Q_D(CustomItem);
 
-    if (itemErrorBar().minusDeltaY || itemErrorBar().plusDeltaY) {
-        polygon<<QPointF(0, 0)<<QPointF(0, -itemErrorBar().plusDeltaY)<<QPointF(5, -itemErrorBar().plusDeltaY)
-              <<QPointF(-5, -itemErrorBar().plusDeltaY)<<QPointF(0, -itemErrorBar().plusDeltaY)
-             <<QPointF(0, itemErrorBar().minusDeltaY)<<QPointF(5, itemErrorBar().minusDeltaY)
-            <<QPointF(-5, itemErrorBar().minusDeltaY)<<QPointF(0, itemErrorBar().minusDeltaY);
-        path.addPolygon(polygon);
-    }
+    QPainterPath path;
+//    if (!itemErrorBar().minusDeltaX.isNull() || !itemErrorBar().plusDeltaX.isNull()) {
+//    }
+
+//    if (!itemErrorBar().minusDeltaY.isNull() || !itemErrorBar().plusDeltaY.isNull()) {
+//    }
 
     return path;
 }

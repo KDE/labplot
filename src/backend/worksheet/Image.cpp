@@ -198,7 +198,7 @@ void Image::initSceneParameters() {
 
 void Image::updateData(const CustomItem *item) {
     Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
-    int row = childCount<CustomItem>(AbstractAspect::IncludeHidden) - 4;
+    int row = indexOfChild<CustomItem>(item ,AbstractAspect::IncludeHidden) - 3;
 
     QPointF data;
     if (datapicker) {
@@ -207,21 +207,21 @@ void Image::updateData(const CustomItem *item) {
         datapicker->addDataToSheet(data.y(), row, Datapicker::PositionY);
 
         if (plotErrors().x != Image::NoError) {
-            data = m_transform->mapSceneLengthToLogical(QPointF(item->itemErrorBar().plusDeltaX, 0), axisPoints());
+            data = m_transform->mapSceneLengthToLogical(QPointF(item->itemErrorBar().plusDeltaX.x(), 0), axisPoints());
             datapicker->addDataToSheet(qAbs(data.x()), row, Datapicker::PlusDeltaX);
 
             if (plotErrors().x == Image::AsymmetricError) {
-                data = m_transform->mapSceneLengthToLogical(QPointF(item->itemErrorBar().minusDeltaX, 0), axisPoints());
+                data = m_transform->mapSceneLengthToLogical(QPointF(item->itemErrorBar().minusDeltaX.x(), 0), axisPoints());
                 datapicker->addDataToSheet(qAbs(data.x()), row, Datapicker::MinusDeltaX);
             }
         }
 
         if (plotErrors().y != Image::NoError) {
-            data = m_transform->mapSceneLengthToLogical(QPointF(0, item->itemErrorBar().plusDeltaY), axisPoints());
+            data = m_transform->mapSceneLengthToLogical(QPointF(0, item->itemErrorBar().plusDeltaY.y()), axisPoints());
             datapicker->addDataToSheet(qAbs(data.y()), row, Datapicker::PlusDeltaY);
 
             if (plotErrors().y == Image::AsymmetricError) {
-                data = m_transform->mapSceneLengthToLogical(QPointF(0, item->itemErrorBar().minusDeltaY), axisPoints());
+                data = m_transform->mapSceneLengthToLogical(QPointF(0, item->itemErrorBar().minusDeltaY.y()), axisPoints());
                 datapicker->addDataToSheet(qAbs(data.y()), row, Datapicker::MinusDeltaY);
             }
         }
