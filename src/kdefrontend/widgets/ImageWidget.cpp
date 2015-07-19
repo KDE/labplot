@@ -75,6 +75,7 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     ui.cbGraphType->addItem(i18n("Cartesian (x, y)"));
     ui.cbGraphType->addItem(i18n("Polar (x, y°)"));
     ui.cbGraphType->addItem(i18n("Logarithmic (ln(x), y)"));
+    ui.cbGraphType->addItem(i18n("Logarithmic (x, ln(y))"));
 
     ui.cbPlotImageType->addItem(i18n("Original Image"));
     ui.cbPlotImageType->addItem(i18n("Processed Image"));
@@ -436,15 +437,17 @@ void ImageWidget::plotErrorsChanged(Image::Errors errors){
 void ImageWidget::updateCustomItemList() {
     m_itemsList = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
     customItemWidget->setCustomItems(m_itemsList);
+
+    if (m_itemsList.isEmpty())
+        ui.sbRotation->setEnabled(true);
+    else
+        ui.sbRotation->setEnabled(false);
 }
 
 void ImageWidget::handleAspectAdded() {
-    m_itemsList = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
+    updateCustomItemList();
     CustomItem* m_item = m_itemsList.first();
-    if ( m_itemsList.count() == 1 ) {
-        customItemWidget->setCustomItems(m_itemsList);
-    } else {
-        customItemWidget->setCustomItems(m_itemsList);
+    if ( m_itemsList.count() > 1 ) {
         //set properties of new item
         CustomItem* newItem = m_itemsList.last();
         newItem->setUndoAware(false);

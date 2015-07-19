@@ -256,7 +256,9 @@ void ImageView::drawBackground(QPainter* painter, const QRectF& rect) {
 
     // canvas
     if (m_image->isLoaded) {
+        painter->translate(sceneRect().width()/2, sceneRect().height()/2);
         painter->rotate(-m_image->rotationAngle());
+        painter->translate(-sceneRect().width()/2, -sceneRect().height()/2);
 
         if (m_image->plotImageType == Image::OriginalImage) {
             QImage todraw = m_image->originalPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);

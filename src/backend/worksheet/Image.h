@@ -41,7 +41,7 @@ class Image: public AbstractPart, public scripted {
 		Image(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
         ~Image();
 
-        enum GraphType { Cartesian, Polar, Logarithmic };
+        enum GraphType { Cartesian, Polar, LogarithmicX, LogarithmicY};
         enum ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
         enum PlotImageType { OriginalImage, ProcessedImage };
         enum PointsType { AxisPoints, CurvePoints, SegmentPoints };
