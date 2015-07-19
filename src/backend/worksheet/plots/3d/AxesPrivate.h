@@ -48,7 +48,7 @@ struct AxesPrivate {
 	vtkRenderer& renderer;
 	vtkSmartPointer<vtkProp> vtkAxes;
 
-	AxesPrivate(vtkRenderer& renderer, Axes *parent);
+	AxesPrivate(vtkRenderer& renderer, Axes* parent);
 	~AxesPrivate();
 
 	void init();

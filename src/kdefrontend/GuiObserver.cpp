@@ -228,7 +228,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->axes3dDock);
 	}else if (className=="Surface3D"){
 		if (!mainWindow->surface3dDock){
-			mainWindow->surface3dDock = new Surface3DDock(mainWindow->surface3dDock);
+			mainWindow->surface3dDock = new Surface3DDock(mainWindow->stackedWidget);
 			mainWindow->stackedWidget->addWidget(mainWindow->surface3dDock);
 		}
 

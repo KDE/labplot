@@ -59,7 +59,6 @@ class Surface3D : public AbstractAspect {
 
 		Surface3D(vtkRenderer& renderer);
 		void init();
-		void setParent(Plot3D *parent);
 		virtual ~Surface3D();
 
 		DemoDataHandler& demoDataHandler();

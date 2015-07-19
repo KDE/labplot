@@ -41,7 +41,7 @@ class vtkImageActor;
 class vtkRenderer;
 
 class QGLContext;
-class QVTKGraphicsItem;
+class VTKGraphicsItem;
 
 class Plot3DPrivate:public AbstractPlotPrivate{
 	public:
@@ -58,7 +58,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 
 		Plot3D* const q;
 		QGLContext* context;
-		QVTKGraphicsItem *vtkItem;
+		VTKGraphicsItem *vtkItem;
 		bool isInitialized;
 		bool rectSet;
 

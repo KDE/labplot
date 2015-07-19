@@ -28,6 +28,7 @@
 
 #include "Axes.h"
 #include "AxesPrivate.h"
+#include "Plot3D.h"
 
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
@@ -178,7 +179,7 @@ void Axes::setZLabelColor(const QColor& color){
 
 ////////////////////////////////////////////////////////////////////////////////
 
-AxesPrivate::AxesPrivate(vtkRenderer& renderer, Axes *parent)
+AxesPrivate::AxesPrivate(vtkRenderer& renderer, Axes* parent)
 	: q(parent)
 	, showAxes(false)
 	, type(Axes::Axes::AxesType_Plain)

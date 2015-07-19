@@ -114,7 +114,6 @@ void Plot3D::updatePlot() {
 }
 
 Plot3D::~Plot3D(){
-
 }
 
 QIcon Plot3D::icon() const {
@@ -126,10 +125,9 @@ void Plot3D::addSurface() {
 	Q_D(Plot3D);
 	Surface3D* newSurface = new Surface3D(*d->renderer);
 	d->surfaces.append(newSurface);
-	d->vtkItem->connect(newSurface, SIGNAL(parametersChanged()), SLOT(refresh()));
-	newSurface->setParent(this);
-	newSurface->init();
 	addChild(newSurface);
+	d->vtkItem->connect(newSurface, SIGNAL(parametersChanged()), SLOT(refresh()));
+	d->vtkItem->refresh();
 }
 
 void Plot3D::initActions() {
@@ -378,11 +376,19 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	: AbstractPlotPrivate(owner)
 	, q(owner)
 	, context(0)
+	, vtkItem(0)
 	, isInitialized(false)
-	, rectSet(false) {
+	, rectSet(false)
+	, axes(0) {
 }
 
 Plot3DPrivate::~Plot3DPrivate() {
+	q->removeChild(axes);
+	axes = 0;
+
+	foreach (Surface3D* surface, surfaces) {
+		q->removeChild(surface);
+	}
 }
 
 void Plot3DPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
@@ -464,8 +470,10 @@ void Plot3DPrivate::retransform() {
 }
 
 void Plot3DPrivate::updatePlot() {
-	axes->updateBounds();
-	emit q->parametersChanged();
+	if (axes) {
+		axes->updateBounds();
+		emit q->parametersChanged();
+	}
 }
 
 void Plot3DPrivate::updateBackground() {
