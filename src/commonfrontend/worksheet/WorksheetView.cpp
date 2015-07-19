@@ -27,12 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 #include "commonfrontend/worksheet/WorksheetView.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/WorksheetElementGroup.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/core/column/Column.h"
 #include "backend/worksheet/TextLabel.h"
 #include "kdefrontend/worksheet/GridDialog.h"
 
@@ -45,7 +41,6 @@
 #include <QSvgGenerator>
 #include <QImage>
 #include <QToolButton>
-#include <QDebug>
 #include <QMessageBox>
 #include <QGraphicsOpacityEffect>
 #include <QTimeLine>
