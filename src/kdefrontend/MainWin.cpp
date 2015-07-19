@@ -1209,9 +1209,13 @@ void MainWin::handleAspectRemoved(const AbstractAspect *parent){
 void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){
 	const AbstractPart *part = qobject_cast<const AbstractPart*>(aspect);
 	if (!part) return;
-	PartMdiView* win = part->mdiSubWindow();
-	if (win)
-		m_mdiArea->removeSubWindow(win);
+
+	const Workbook* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
+	if (!workbook) {
+		PartMdiView* win = part->mdiSubWindow();
+		if (win)
+			m_mdiArea->removeSubWindow(win);
+	}
 }
 
 /*!
@@ -1255,8 +1259,8 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 
 		if (m_mdiArea->subWindowList().indexOf(win) == -1) {
 			m_mdiArea->addSubWindow(win);
+			win->show();
 		}
-		win->show();
 		m_mdiArea->setActiveSubWindow(win);
 	} else {
 		//activate the mdiView of the parent, if a child was selected
