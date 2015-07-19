@@ -165,7 +165,6 @@ void ImageView::initMenus() {
     m_zoomMenu->addAction(zoomFitSelectionAction);
 
     m_navigationMenu = new QMenu(i18n("Navigate Selected Items"));
-    m_navigationMenu->setEnabled(false);
     //m_navigationMenu->setIcon();
     m_navigationMenu->addAction(shiftLeftAction);
     m_navigationMenu->addAction(shiftRightAction);
