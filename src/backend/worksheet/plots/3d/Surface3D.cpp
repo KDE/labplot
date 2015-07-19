@@ -71,8 +71,8 @@ FileDataHandler& Surface3D::fileDataHandler() {
 }
 
 void Surface3D::remove(){
-	AbstractAspect::remove();
 	Q_D(Surface3D);
+	AbstractAspect::remove();
 	d->hide();
 	emit parametersChanged();
 }
@@ -150,8 +150,9 @@ QString Surface3DPrivate::name() const {
 }
 
 void Surface3DPrivate::hide() {
-	if (surfaceActor)
+	if (surfaceActor) {
 		renderer.RemoveActor(surfaceActor);
+	}
 }
 
 void Surface3DPrivate::update() {

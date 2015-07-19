@@ -38,7 +38,6 @@ class Plot3D;
 
 struct Surface3DPrivate {
 	Surface3D* const q;
-	Plot3D* plot3d;
 
 	vtkRenderer& renderer;
 	Surface3D::VisualizationType visualizationType;

@@ -32,6 +32,8 @@
 #include "backend/lib/macros.h"
 #include "backend/core/AbstractAspect.h"
 
+#include <vtkSmartPointer.h>
+
 class vtkRenderer;
 class Plot3D;
 class DemoDataHandler;
@@ -56,6 +58,8 @@ class Surface3D : public AbstractAspect {
 			DataSource_Empty,
 			DataSource_MAX
 		};
+
+		enum CollorFilling {NoFilling, SolidColor, ColorMap, ColorMapFromMatrix};
 
 		Surface3D(vtkRenderer& renderer);
 		void init();

@@ -24,19 +24,6 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="11" column="2" colspan="2">
-        <widget class="TreeViewComboBox" name="cbNode2"/>
-       </item>
-       <item row="1" column="3">
-        <widget class="KLineEdit" name="leComment">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="0">
         <spacer name="verticalSpacer_10">
          <property name="orientation">
@@ -53,6 +40,60 @@
          </property>
         </spacer>
        </item>
+       <item row="8" column="3">
+        <widget class="TreeViewComboBox" name="cbZCoordinate"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lName">
+         <property name="text">
+          <string>Name</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QLabel" name="labelSource">
+         <property name="text">
+          <string>Data source</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="labelFile">
+         <property name="text">
+          <string>File</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0" colspan="2">
+        <widget class="QLabel" name="labelMatrix">
+         <property name="text">
+          <string>Matrix</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="1">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>159</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="labelY">
+         <property name="text">
+          <string>Y</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="3">
+        <widget class="KComboBox" name="cbDataSource"/>
+       </item>
        <item row="3" column="0" colspan="2">
         <widget class="QLabel" name="lPlotType">
          <property name="font">
@@ -66,116 +107,38 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="labelType">
-         <property name="text">
-          <string>Type</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2" colspan="2">
-        <widget class="KComboBox" name="cbType">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0" colspan="2">
-        <widget class="QLabel" name="labelSource">
-         <property name="text">
-          <string>Data source</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2" colspan="2">
-        <widget class="KComboBox" name="cbDataSource"/>
+       <item row="6" column="3">
+        <widget class="TreeViewComboBox" name="cbXCoordinate"/>
        </item>
        <item row="6" column="0">
-        <widget class="QLabel" name="labelFile">
-         <property name="text">
-          <string>File</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="labelZ">
-         <property name="text">
-          <string>Z</string>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="0" colspan="2">
-        <widget class="QLabel" name="labelMatrix">
-         <property name="text">
-          <string>Matrix</string>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="2" colspan="2">
-        <widget class="TreeViewComboBox" name="cbMatrix"/>
-       </item>
-       <item row="14" column="1">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>159</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="6" column="2" colspan="2">
-        <widget class="KUrlRequester" name="cbFileRequester">
-         <property name="filter">
-          <string>*.obj *.stl</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
         <widget class="QLabel" name="labelX">
          <property name="text">
           <string>X</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="0" colspan="2">
+       <item row="11" column="0" colspan="2">
         <widget class="QCheckBox" name="chkVisible">
          <property name="text">
           <string>visible</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="2" colspan="2">
-        <widget class="TreeViewComboBox" name="cbXCoordinate"/>
-       </item>
        <item row="8" column="0">
-        <widget class="QLabel" name="labelY">
+        <widget class="QLabel" name="labelZ">
          <property name="text">
-          <string>Y</string>
+          <string>Z</string>
          </property>
         </widget>
        </item>
-       <item row="9" column="2" colspan="2">
-        <widget class="TreeViewComboBox" name="cbZCoordinate"/>
+       <item row="9" column="3">
+        <widget class="TreeViewComboBox" name="cbMatrix"/>
        </item>
-       <item row="8" column="2" colspan="2">
+       <item row="7" column="3">
         <widget class="TreeViewComboBox" name="cbYCoordinate"/>
        </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="lName">
-         <property name="text">
-          <string>Name</string>
-         </property>
-        </widget>
+       <item row="0" column="3">
+        <widget class="KLineEdit" name="leName"/>
        </item>
        <item row="0" column="2">
         <spacer name="horizontalSpacer_4">
@@ -193,11 +156,15 @@
          </property>
         </spacer>
        </item>
-       <item row="10" column="2" colspan="2">
-        <widget class="TreeViewComboBox" name="cbNode1"/>
-       </item>
-       <item row="0" column="3">
-        <widget class="KLineEdit" name="leName"/>
+       <item row="1" column="3">
+        <widget class="KLineEdit" name="leComment">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0" colspan="2">
         <widget class="QLabel" name="lComment">
@@ -206,27 +173,10 @@
          </property>
         </widget>
        </item>
-       <item row="12" column="2" colspan="2">
-        <widget class="TreeViewComboBox" name="cbNode3"/>
-       </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="labelNode1">
-         <property name="text">
-          <string>Node 1</string>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="0">
-        <widget class="QLabel" name="labelNode2">
-         <property name="text">
-          <string>Node 2</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="0">
-        <widget class="QLabel" name="labelNode3">
-         <property name="text">
-          <string>Node 3</string>
+       <item row="5" column="3">
+        <widget class="KUrlRequester" name="cbFileRequester">
+         <property name="filter">
+          <string>*.obj *.stl</string>
          </property>
         </widget>
        </item>
@@ -271,14 +221,14 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="lColorFillingFront">
+        <widget class="QLabel" name="lColorFilling">
          <property name="text">
-          <string>Front color</string>
+          <string>Color</string>
          </property>
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="KColorButton" name="kcbColorFillingFront"/>
+        <widget class="KColorButton" name="kcbColorFilling"/>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="lColorFillingMap">
@@ -291,31 +241,24 @@
         <widget class="QComboBox" name="cbColorFillingMap"/>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="lColorFillingMap_2">
+        <widget class="QLabel" name="lColorFillingMatrix">
          <property name="text">
           <string>Matrix</string>
          </property>
         </widget>
        </item>
+       <item row="3" column="2">
+        <widget class="TreeViewComboBox" name="cbColorFillingMatrix"/>
+       </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="lColorFillingBack">
-         <property name="text">
-          <string>Back color</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="KColorButton" name="kcbColorFillingBack"/>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="lBackgroundOpacity_2">
+        <widget class="QLabel" name="lColorFillingOpacity">
          <property name="text">
           <string>Opacity</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="2">
-        <widget class="QSpinBox" name="sbBackgroundOpacity_2">
+       <item row="4" column="2">
+        <widget class="QSpinBox" name="sbColorFillingOpacity">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -342,7 +285,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
+       <item row="5" column="0">
         <spacer name="verticalSpacer_8">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -361,6 +304,87 @@
       <attribute name="title">
        <string>Mesh</string>
       </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelType">
+         <property name="text">
+          <string>Type</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>13</width>
+           <height>23</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="2">
+        <widget class="KComboBox" name="cbType">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="labelNode1">
+         <property name="text">
+          <string>Node 1</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="TreeViewComboBox" name="cbNode1"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="labelNode2">
+         <property name="text">
+          <string>Node 2</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="TreeViewComboBox" name="cbNode2"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="labelNode3">
+         <property name="text">
+          <string>Node 3</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="TreeViewComboBox" name="cbNode3"/>
+       </item>
+       <item row="4" column="0">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>398</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="tabProjection">
       <attribute name="title">
@@ -402,7 +426,6 @@
   <tabstop>tabWidget</tabstop>
   <tabstop>leName</tabstop>
   <tabstop>leComment</tabstop>
-  <tabstop>cbType</tabstop>
   <tabstop>cbDataSource</tabstop>
   <tabstop>cbFileRequester</tabstop>
   <tabstop>cbXCoordinate</tabstop>
@@ -413,9 +436,8 @@
   <tabstop>cbNode3</tabstop>
   <tabstop>cbMatrix</tabstop>
   <tabstop>chkVisible</tabstop>
-  <tabstop>kcbColorFillingBack</tabstop>
-  <tabstop>sbBackgroundOpacity_2</tabstop>
-  <tabstop>kcbColorFillingFront</tabstop>
+  <tabstop>sbColorFillingOpacity</tabstop>
+  <tabstop>kcbColorFilling</tabstop>
   <tabstop>cbColorFillingMap</tabstop>
   <tabstop>cbColorFillingType</tabstop>
  </tabstops>

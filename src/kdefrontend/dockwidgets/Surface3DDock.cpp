@@ -44,6 +44,8 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	, m_initializing(false) {
 	ui.setupUi(this);
 
+	this->retranslateUi();
+
 	ui.cbDataSource->insertItem(Surface3D::DataSource_File, i18n("File"));
 	ui.cbDataSource->insertItem(Surface3D::DataSource_Spreadsheet, i18n("Spreadsheet"));
 	ui.cbDataSource->insertItem(Surface3D::DataSource_Matrix, i18n("Matrix"));
@@ -79,11 +81,20 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	list.clear();
 	list<<"Matrix";
 	ui.cbMatrix->setSelectableClasses(list);
-	connect(ui.cbMatrix, SIGNAL(currentModelIndexChanged(const QModelIndex&)), SLOT(onTreeViewIndexChanged(const QModelIndex&)));
 
+	//SIGNALs/SLOTs
+	//General
 	connect(ui.cbDataSource, SIGNAL(currentIndexChanged(int)), SLOT(onDataSourceChanged(int)));
 	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), SLOT(onVisualizationTypeChanged(int)));
 	connect(ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), SLOT(onFileChanged(const KUrl&)));
+	connect(ui.cbMatrix, SIGNAL(currentModelIndexChanged(const QModelIndex&)), SLOT(onTreeViewIndexChanged(const QModelIndex&)));
+
+	//Color filling
+	connect( ui.cbColorFillingType, SIGNAL(currentIndexChanged(int)), this, SLOT(colorFillingTypeChanged(int)) );
+
+	//Mesh
+
+	//Projection
 }
 
 namespace {
@@ -95,7 +106,7 @@ namespace {
 	Matrix* getMatrix(const QModelIndex& index) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		return aspect ? dynamic_cast<Matrix*>(aspect) : 0;
-	}	
+	}
 }
 
 void Surface3DDock::setSurface(Surface3D *surface) {
@@ -109,6 +120,7 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	ui.cbNode2->setModel(aspectTreeModel);
 	ui.cbNode3->setModel(aspectTreeModel);
 	ui.cbMatrix->setModel(aspectTreeModel);
+	ui.cbColorFillingMatrix->setModel(aspectTreeModel);
 
 	ui.cbType->setCurrentIndex(surface->visualizationType());
 	ui.cbDataSource->setCurrentIndex(surface->dataSource());
@@ -148,6 +160,35 @@ void Surface3DDock::hideTriangleInfo(bool hide) {
 	foreach(QWidget* w, widgets){
 		w->setVisible(!hide);
 	}
+}
+
+namespace{
+	struct Lock{
+		Lock(bool& variable)
+			: variable(variable){
+			variable = true;
+		}
+
+		~Lock(){
+			variable = false;
+		}
+
+	private:
+		bool& variable;
+	};
+}
+
+//*************************************************************
+//****** SLOTs for changes triggered in Surface3DDock *********
+//*************************************************************
+void Surface3DDock::retranslateUi(){
+	Lock lock(m_initializing);
+
+	//color filling
+	ui.cbColorFillingType->addItem( i18n("no filling") );
+	ui.cbColorFillingType->addItem( i18n("solid color") );
+	ui.cbColorFillingType->addItem( i18n("color map") );
+	ui.cbColorFillingType->addItem( i18n("color map from matrix") );
 }
 
 void Surface3DDock::onTreeViewIndexChanged(const QModelIndex& index) {
@@ -206,22 +247,6 @@ void Surface3DDock::onFileChanged(const KUrl& path) {
 		return;
 
 	surface->fileDataHandler().setFile(path);
-}
-
-namespace{
-	struct Lock{
-		Lock(bool& variable)
-			: variable(variable){
-			variable = true;
-		}
-
-		~Lock(){
-			variable = false;
-		}
-
-	private:
-		bool& variable;
-	};
 }
 
 void Surface3DDock::visualizationTypeChanged(Surface3D::VisualizationType type) {
@@ -294,3 +319,46 @@ void Surface3DDock::thirdNodeChanged(const AbstractColumn* column) {
 	else
 		ui.cbNode3->setCurrentIndex(-1);
 }
+
+//Collor filling
+void Surface3DDock::colorFillingTypeChanged(int index) {
+	Surface3D::CollorFilling type = (Surface3D::CollorFilling)index;
+	if (type == Surface3D::NoFilling) {
+		ui.lColorFilling->hide();
+		ui.kcbColorFilling->hide();
+		ui.lColorFillingMap->hide();
+		ui.cbColorFillingMap->hide();
+		ui.lColorFillingMatrix->hide();
+		ui.cbColorFillingMatrix->hide();
+		ui.lColorFillingOpacity->hide();
+		ui.sbColorFillingOpacity->hide();
+	} else if (type == Surface3D::SolidColor) {
+		ui.lColorFilling->show();
+		ui.kcbColorFilling->show();
+		ui.lColorFillingMap->hide();
+		ui.cbColorFillingMap->hide();
+		ui.lColorFillingMatrix->hide();
+		ui.cbColorFillingMatrix->hide();
+		ui.lColorFillingOpacity->show();
+		ui.sbColorFillingOpacity->show();
+	} else if (type == Surface3D::ColorMap) {
+		ui.lColorFilling->hide();
+		ui.kcbColorFilling->hide();
+		ui.lColorFillingMap->show();
+		ui.cbColorFillingMap->show();
+		ui.lColorFillingMatrix->hide();
+		ui.cbColorFillingMatrix->hide();
+		ui.lColorFillingOpacity->show();
+		ui.sbColorFillingOpacity->show();
+	} else if (type == Surface3D::ColorMapFromMatrix) {
+		ui.lColorFilling->hide();
+		ui.kcbColorFilling->hide();
+		ui.lColorFillingMap->hide();
+		ui.cbColorFillingMap->hide();
+		ui.lColorFillingMatrix->show();
+		ui.cbColorFillingMatrix->show();
+		ui.lColorFillingOpacity->show();
+		ui.sbColorFillingOpacity->show();
+	}
+}
+
