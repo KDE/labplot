@@ -42,6 +42,9 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent), m_in
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 }
 
+/*!
+    
+*/
 void CantorWorksheetDock::setCantorWorksheets(QList< CantorWorksheet* > list) {
 	m_initializing = true;
 	m_cantorworksheetlist = list;

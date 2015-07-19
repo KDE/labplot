@@ -142,8 +142,8 @@ void MainWin::initGUI(const QString& fileName){
 
     statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
     initActions();
-    initMenus();
     setupGUI(Default, QLatin1String("labplot2ui.rc"));
+	initMenus();
     setWindowIcon(QIcon::fromTheme("LabPlot2"));
     setAttribute( Qt::WA_DeleteOnClose );
 
@@ -356,6 +356,7 @@ void MainWin::initMenus(){
     m_newMenu->addAction(m_newFileDataSourceAction);
     m_newMenu->addSeparator();
 
+	//"Adding Cantor backends to menue and context menu"
     QStringList m_availableBackend = Cantor::Backend::listAvailableBackends();
     if(m_availableBackend.count() > 0) {
 		m_newCantorWorksheetMenu = new QMenu(i18n("CAS Worksheet"));
@@ -371,6 +372,9 @@ void MainWin::initMenus(){
 		}
 
 		connect(m_newCantorWorksheetMenu, SIGNAL(triggered(QAction*)), this, SLOT(newCantorWorksheet(QAction*)));
+		foreach(QAction* a, newBackendActions) {
+			qDebug() << a->data().toString();
+		}
 		plugActionList(QLatin1String("backends_list"), newBackendActions);
 		m_newMenu->addMenu(m_newCantorWorksheetMenu);
 	} else {
@@ -920,6 +924,7 @@ void MainWin::print(){
 
 			statusBar()->showMessage(i18n("Spreadsheet printed"));
 		}else{
+			//CantorWorksheet
 			CantorWorksheet *c = this->activeCantorWorksheet();
 			if(c!=0) {
 				c->part()->action("file_print")->trigger();
@@ -944,6 +949,7 @@ void MainWin::printPreview(){
             connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
             dialog->exec();
         } else {
+			//CantorWorksheet
 			CantorWorksheet* c=this->activeCantorWorksheet();
 			if(c!=0) {
 				c->part()->action("file_print_preview")->trigger();
@@ -1024,6 +1030,10 @@ Worksheet* MainWin::activeWorksheet() const{
     return dynamic_cast<Worksheet*>(part);
 }
 
+/*!
+    returns a pointer to a CantorWorksheet-object, if the currently active Mdi-Subwindow is \a CantorWorksheetView
+    Otherwise returns \a 0.
+*/
 CantorWorksheet* MainWin::activeCantorWorksheet() const{
     QMdiSubWindow* win = m_mdiArea->currentSubWindow();
     if (!win)

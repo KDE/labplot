@@ -40,6 +40,9 @@ CantorWorksheet::CantorWorksheet(AbstractScriptingEngine* engine, const QString 
 	initialize();
 }
 
+/*!
+	initializes the spreadsheet with the default number of columns and rows
+*/
 void CantorWorksheet::initialize() {
 	KPluginFactory* factory = KPluginLoader(QLatin1String("libcantorpart")).factory();
 	if (factory) {
@@ -80,6 +83,7 @@ void CantorWorksheet::initialize() {
 	}
 }
 
+//SLots
 void CantorWorksheet::rowsInserted(const QModelIndex & parent, int first, int last) {
 	qDebug() << "Inserting Row";
 	for(int i = first; i <= last; ++i) {
@@ -118,6 +122,10 @@ QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins(){
 
 KParts::ReadWritePart* CantorWorksheet::part() {
 	return m_part;
+}
+
+QIcon CantorWorksheet::icon() const {
+	return QIcon::fromTheme(m_session->backend()->icon());
 }
 
 Column* CantorWorksheet::column(const QString &name) const{

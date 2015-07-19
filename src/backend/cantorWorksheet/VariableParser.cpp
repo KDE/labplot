@@ -42,19 +42,21 @@ void VariableParser::init() {
 void VariableParser::parseMaximaValues() {
 	QTime t = QTime::currentTime();
 	QStringList valueStringList;
-	m_string = m_string.replace(QString("["), QString(""));
-	m_string = m_string.replace(QString("]"), QString(""));
-	m_string = m_string.trimmed();
-	valueStringList = m_string.split(',');
-	foreach(QString valueString, valueStringList) {
-		valueString = valueString.trimmed();
-		bool isNumber = false;
-		double value = valueString.toDouble(&isNumber);
-		if(!isNumber) value = NAN;
-		m_values << value;
+	if(m_string.count(QString("[")) <= 2 && m_string.count(QString("]")) <= 2) {
+		m_string = m_string.replace(QString("["), QString(""));
+		m_string = m_string.replace(QString("]"), QString(""));
+		m_string = m_string.trimmed();
+		valueStringList = m_string.split(',');
+		foreach(QString valueString, valueStringList) {
+			valueString = valueString.trimmed();
+			bool isNumber = false;
+			double value = valueString.toDouble(&isNumber);
+			if(!isNumber) value = NAN;
+			m_values << value;
+		}
+		m_parsed = true;
+		qDebug() << "Time taken to parse: " << t.elapsed();
 	}
-	m_parsed = true;
-	qDebug() << "Time taken to parse: " << t.elapsed();
 }
 
 bool VariableParser::isParsed() {

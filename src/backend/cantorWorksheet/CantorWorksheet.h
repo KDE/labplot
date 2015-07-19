@@ -45,6 +45,7 @@ class CantorWorksheet : public AbstractPart, public scripted{
 		CantorWorksheet(AbstractScriptingEngine* engine, const QString& name);
 		virtual QWidget* view() const;
 		virtual QMenu* createContextMenu();
+		virtual QIcon icon() const;
 		QString backendName();
 		KParts::ReadWritePart* part();
 		QList<Cantor::PanelPlugin*> getPlugins();

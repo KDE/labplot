@@ -148,6 +148,13 @@ void CantorWorksheetView::initMenus() {
 	m_calculateMenu->addAction(m_differentiationAction);
 }
 
+/*!
+ * Populates the menu \c menu with the CantorWorksheet and CantorWorksheet view relevant actions.
+ * The menu is used
+ *   - as the context menu in CantorWorksheetView
+ *   - as the "CantorWorksheet menu" in the main menu-bar (called form MainWin)
+ *   - as a part of the CantorWorksheet context menu in project explorer
+ */
 void CantorWorksheetView::createContextMenu(QMenu* menu) const{
 	Q_ASSERT(menu);
 
@@ -182,6 +189,9 @@ void CantorWorksheetView::fillToolBar(QToolBar* toolbar) {
 	toolbar->addAction(m_evaluateWorsheetAction);
 }
 
+/*!
+ * Slot for actions triggered
+ */
 void CantorWorksheetView::triggerCantorAction(QAction* action) {
 	QString actionName = action->data().toString();
 	if(!actionName.isEmpty()) part->action(actionName.toStdString().c_str())->trigger();
