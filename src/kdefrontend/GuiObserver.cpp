@@ -91,8 +91,6 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	return;
   }
 
-  mainWindow->handleCurrentAspectChanged(selectedAspects.last());
-
   AbstractAspect* aspect=0;
   QString prevClassName, className;
 
