@@ -52,6 +52,10 @@ class Surface3DDock : public QWidget {
 
 	private slots:
 		void retranslateUi();
+
+		void nameChanged();
+		void commentChanged();
+
 		void onTreeViewIndexChanged(const QModelIndex&);
 		void onDataSourceChanged(int);
 		void onVisualizationTypeChanged(int);

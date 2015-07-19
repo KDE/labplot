@@ -84,13 +84,15 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 
 	//SIGNALs/SLOTs
 	//General
+	connect(ui.leName, SIGNAL(returnPressed()), SLOT(nameChanged()));
+	connect(ui.leComment, SIGNAL(returnPressed()), SLOT(commentChanged()));
 	connect(ui.cbDataSource, SIGNAL(currentIndexChanged(int)), SLOT(onDataSourceChanged(int)));
 	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), SLOT(onVisualizationTypeChanged(int)));
 	connect(ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), SLOT(onFileChanged(const KUrl&)));
 	connect(ui.cbMatrix, SIGNAL(currentModelIndexChanged(const QModelIndex&)), SLOT(onTreeViewIndexChanged(const QModelIndex&)));
 
 	//Color filling
-	connect( ui.cbColorFillingType, SIGNAL(currentIndexChanged(int)), this, SLOT(colorFillingTypeChanged(int)) );
+	connect(ui.cbColorFillingType, SIGNAL(currentIndexChanged(int)), SLOT(colorFillingTypeChanged(int)));
 
 	//Mesh
 
@@ -111,6 +113,9 @@ namespace {
 
 void Surface3DDock::setSurface(Surface3D *surface) {
 	this->surface = surface;
+
+	ui.leName->setText(surface->name());
+	ui.leComment->setText(surface->comment());
 
 	aspectTreeModel = new AspectTreeModel(surface->project());
 	ui.cbXCoordinate->setModel(aspectTreeModel);
@@ -318,6 +323,20 @@ void Surface3DDock::thirdNodeChanged(const AbstractColumn* column) {
 		ui.cbNode3->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
 	else
 		ui.cbNode3->setCurrentIndex(-1);
+}
+
+void Surface3DDock::nameChanged() {
+	if (m_initializing)
+		return;
+
+	surface->setName(ui.leName->text());
+}
+
+void Surface3DDock::commentChanged() {
+	if (m_initializing)
+		return;
+
+	surface->setComment(ui.leComment->text());
 }
 
 //Collor filling
