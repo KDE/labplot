@@ -206,7 +206,12 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("3D Plot Properties"));
 		QList<Plot3D*> list;
 		foreach(aspect, selectedAspects){
-			list<<qobject_cast<Plot3D*>(aspect);
+			Plot3D *plot3D = qobject_cast<Plot3D*>(aspect);
+			connect(plot3D,
+					SIGNAL(currentAspectChanged(const AbstractAspect*)),
+					mainWindow->m_projectExplorer,
+					SLOT(setCurrentAspect(const AbstractAspect*)));
+			list<<plot3D;
 		}
 		mainWindow->plot3dDock->setPlots(list);
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->plot3dDock);

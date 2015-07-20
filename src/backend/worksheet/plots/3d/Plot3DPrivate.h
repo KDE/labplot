@@ -32,6 +32,8 @@
 #include "Plot3D.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 
+#include <QSet>
+
 #include <vtkSmartPointer.h>
 
 class Axes;
@@ -62,7 +64,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		bool isInitialized;
 		bool rectSet;
 
-		QList<Surface3D*> surfaces;
+		QSet<Surface3D*> surfaces;
 
 		Axes* axes;
 		vtkSmartPointer<vtkRenderer> renderer;

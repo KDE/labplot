@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : Surface3D.h
+    File                 : MouseInteractor.h
     Project              : LabPlot
-    Description          : 3D surface class
+    Description          : 3D plot mouse interactor
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Minh Ngo (minh@fedoraproject.org)
 
@@ -26,77 +26,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SURFACE3D_H
-#define SURFACE3D_H
+#ifndef MOUSEINTERACTOR_H
+#define MOUSEINTERACTOR_H
 
-#include "backend/lib/macros.h"
-#include "backend/core/AbstractAspect.h"
-
-#include <vtkSmartPointer.h>
+#include <QObject>
+#include <vtkInteractorStyleTrackballCamera.h>
 
 class vtkProp;
-class vtkRenderer;
-
-class Plot3D;
-class DemoDataHandler;
-class SpreadsheetDataHandler;
-class MatrixDataHandler;
-class FileDataHandler;
-
-class Surface3DPrivate;
-class Surface3D : public AbstractAspect {
+class MouseInteractorBroadcaster : public QObject {
 		Q_OBJECT
-		Q_DECLARE_PRIVATE(Surface3D)
-		Q_DISABLE_COPY(Surface3D)
 	public:
-		enum VisualizationType {
-			VisualizationType_Triangles = 0
-		};
-
-		enum DataSource {
-			DataSource_File,
-			DataSource_Spreadsheet,
-			DataSource_Matrix,
-			DataSource_Empty,
-			DataSource_MAX
-		};
-
-		enum CollorFilling {NoFilling, SolidColor, ColorMap, ColorMapFromMatrix};
-
-		Surface3D(vtkRenderer& renderer);
-		void init();
-		virtual ~Surface3D();
-
-		bool operator==(vtkProp* prop) const;
-		bool operator!=(vtkProp* prop) const;
-
-		DemoDataHandler& demoDataHandler();
-		SpreadsheetDataHandler& spreadsheetDataHandler();
-		MatrixDataHandler& matrixDataHandler();
-		FileDataHandler& fileDataHandler();
-
-		BASIC_D_ACCESSOR_DECL(VisualizationType, visualizationType, VisualizationType)
-		BASIC_D_ACCESSOR_DECL(DataSource, dataSource, DataSource)
-
-		typedef Surface3D BaseClass;
-		typedef Surface3DPrivate Private;
-
-	public slots:
-		void remove();
-
-	private slots:
-		void update();
-
+		void setObject(vtkProp* object);
 	signals:
-		friend class Surface3DSetVisualizationTypeCmd;
-		friend class Surface3DSetDataSourceCmd;
-		void visualizationTypeChanged(Surface3D::VisualizationType);
-		void sourceTypeChanged(Surface3D::DataSource);
-		void parametersChanged();
-		void removed();
+		void objectClicked(vtkProp*);
+};
 
-	private:
-		const QScopedPointer<Surface3DPrivate> d_ptr;
+class MouseInteractor : public vtkInteractorStyleTrackballCamera {
+	public:
+		static MouseInteractor* New();
+		vtkTypeMacro(MouseInteractor, vtkInteractorStyleTrackballCamera);
+
+		virtual void OnLeftButtonDown();
+
+		MouseInteractorBroadcaster broadcaster;
 };
 
 #endif

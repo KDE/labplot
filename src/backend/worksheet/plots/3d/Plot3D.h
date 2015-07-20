@@ -34,6 +34,7 @@
 
 class QMenu;
 class QGLContext;
+class vtkProp;
 class Plot3DPrivate;
 
 class Plot3D : public AbstractPlot {
@@ -112,6 +113,8 @@ class Plot3D : public AbstractPlot {
 	private slots:
 		void updatePlot();
 		void addSurface();
+		void itemRemoved();
+		void objectClicked(vtkProp*);
 
 	signals:
 		friend class Plot3DSetBackgroundTypeCmd;
@@ -131,6 +134,7 @@ class Plot3D : public AbstractPlot {
 		void backgroundFileNameChanged(const QString&);
 		void backgroundOpacityChanged(float);
 		void parametersChanged();
+		void currentAspectChanged(const AbstractAspect*);
 };
 
 #endif

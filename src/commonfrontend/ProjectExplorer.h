@@ -51,11 +51,13 @@ class ProjectExplorer : public QWidget {
 	public:
 		explicit ProjectExplorer(QWidget* parent = 0);
 
-		void setCurrentAspect(const AbstractAspect*);
 		void setModel(QAbstractItemModel*);
 		void setProject(const Project*);
 		QModelIndex currentIndex() const;
 		QAbstractItemModel* model() const;
+
+	public slots:
+		void setCurrentAspect(const AbstractAspect*);
 
 	private:
 		void createActions();

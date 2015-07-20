@@ -31,6 +31,7 @@
 #include "Surface3D.h"
 #include "Axes.h"
 #include "DataHandlers.h"
+#include "MouseInteractor.h"
 #include "VTKGraphicsItem.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -55,7 +56,6 @@
 #include <vtkImageData.h>
 #include <vtkRendererCollection.h>
 #include <vtkRenderWindowInteractor.h>
-#include <vtkInteractorStyleTrackballCamera.h>
 #include <vtkQImageToImageSource.h>
 
 
@@ -124,10 +124,41 @@ QIcon Plot3D::icon() const {
 void Plot3D::addSurface() {
 	Q_D(Plot3D);
 	Surface3D* newSurface = new Surface3D(*d->renderer);
-	d->surfaces.append(newSurface);
+	d->surfaces.insert(newSurface);
 	addChild(newSurface);
 	d->vtkItem->connect(newSurface, SIGNAL(parametersChanged()), SLOT(refresh()));
+	d->vtkItem->connect(newSurface, SIGNAL(removed()), SLOT(refresh()));
+	connect(newSurface, SIGNAL(removed()), SLOT(itemRemoved()));
 	d->vtkItem->refresh();
+}
+
+void Plot3D::itemRemoved() {
+	Q_D(Plot3D);
+	Surface3D* surface = qobject_cast<Surface3D*>(sender());
+	if (surface != 0) {
+		d->surfaces.remove(surface);
+	}
+}
+
+void Plot3D::objectClicked(vtkProp* object) {
+	Q_D(Plot3D);
+	if (d->axes == 0)
+		return;
+
+	if (object == 0) {
+		// Deselect all Plot3D children
+		qDebug() << Q_FUNC_INFO << "Deselect";
+		emit currentAspectChanged(this);
+		return;
+	}
+
+	foreach(Surface3D *surface, d->surfaces) {
+		if (*surface == object) {
+			qDebug() << Q_FUNC_INFO << "Surface clicked" << surface->name();
+			emit currentAspectChanged(surface);
+			break;
+		}
+	}
 }
 
 void Plot3D::initActions() {
@@ -392,11 +423,11 @@ Plot3DPrivate::~Plot3DPrivate() {
 }
 
 void Plot3DPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-	QGraphicsItem::mousePressEvent(event);
+	Q_UNUSED(event);
 }
 
 void Plot3DPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	QGraphicsItem::mouseReleaseEvent(event);
+	Q_UNUSED(event);
 }
 
 void Plot3DPrivate::init() {
@@ -422,7 +453,9 @@ void Plot3DPrivate::init() {
 	renderer->SetLayer(1);
 	backgroundRenderer->InteractiveOff();
 
-	vtkSmartPointer<vtkInteractorStyleTrackballCamera> style = vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
+	vtkSmartPointer<MouseInteractor> style = vtkSmartPointer<MouseInteractor>::New();
+	style->SetDefaultRenderer(renderer);
+	q->connect(&style->broadcaster, SIGNAL(objectClicked(vtkProp*)), SLOT(objectClicked(vtkProp*)));
 	renderWindow->GetInteractor()->SetInteractorStyle(style);
 
 	//light

@@ -50,6 +50,15 @@ void Surface3D::init() {
 Surface3D::~Surface3D() {
 }
 
+bool Surface3D::operator==(vtkProp* prop) const {
+	Q_D(const Surface3D);
+	return d->surfaceActor == prop;
+}
+
+bool Surface3D::operator!=(vtkProp* prop) const {
+	return !operator==(prop);
+}
+
 DemoDataHandler& Surface3D::demoDataHandler() {
 	Q_D(Surface3D);
 	return *d->demoHandler;
@@ -74,7 +83,7 @@ void Surface3D::remove(){
 	Q_D(Surface3D);
 	AbstractAspect::remove();
 	d->hide();
-	emit parametersChanged();
+	emit removed();
 }
 
 void Surface3D::update() {

@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : Surface3D.h
+    File                 : MouseInteractor.cpp
     Project              : LabPlot
-    Description          : 3D surface class
+    Description          : 3D plot mouse interactor
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Minh Ngo (minh@fedoraproject.org)
 
@@ -26,77 +26,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SURFACE3D_H
-#define SURFACE3D_H
+#include "MouseInteractor.h"
 
-#include "backend/lib/macros.h"
-#include "backend/core/AbstractAspect.h"
-
+#include <vtkObjectFactory.h>
+#include <vtkRenderWindowInteractor.h>
 #include <vtkSmartPointer.h>
+#include <vtkPicker.h>
 
-class vtkProp;
-class vtkRenderer;
+void MouseInteractorBroadcaster::setObject(vtkProp* object) {
+	emit objectClicked(object);
+}
 
-class Plot3D;
-class DemoDataHandler;
-class SpreadsheetDataHandler;
-class MatrixDataHandler;
-class FileDataHandler;
+vtkStandardNewMacro(MouseInteractor);
 
-class Surface3DPrivate;
-class Surface3D : public AbstractAspect {
-		Q_OBJECT
-		Q_DECLARE_PRIVATE(Surface3D)
-		Q_DISABLE_COPY(Surface3D)
-	public:
-		enum VisualizationType {
-			VisualizationType_Triangles = 0
-		};
+void MouseInteractor::OnLeftButtonDown() {
+	int* clickPos = GetInteractor()->GetEventPosition();
+	
+	vtkSmartPointer<vtkPicker> picker = vtkSmartPointer<vtkPicker>::New();
+	picker->SetTolerance(0.0);
+	picker->Pick(clickPos[0], clickPos[1], 0, GetDefaultRenderer());
+	broadcaster.setObject(picker->GetViewProp());
 
-		enum DataSource {
-			DataSource_File,
-			DataSource_Spreadsheet,
-			DataSource_Matrix,
-			DataSource_Empty,
-			DataSource_MAX
-		};
-
-		enum CollorFilling {NoFilling, SolidColor, ColorMap, ColorMapFromMatrix};
-
-		Surface3D(vtkRenderer& renderer);
-		void init();
-		virtual ~Surface3D();
-
-		bool operator==(vtkProp* prop) const;
-		bool operator!=(vtkProp* prop) const;
-
-		DemoDataHandler& demoDataHandler();
-		SpreadsheetDataHandler& spreadsheetDataHandler();
-		MatrixDataHandler& matrixDataHandler();
-		FileDataHandler& fileDataHandler();
-
-		BASIC_D_ACCESSOR_DECL(VisualizationType, visualizationType, VisualizationType)
-		BASIC_D_ACCESSOR_DECL(DataSource, dataSource, DataSource)
-
-		typedef Surface3D BaseClass;
-		typedef Surface3DPrivate Private;
-
-	public slots:
-		void remove();
-
-	private slots:
-		void update();
-
-	signals:
-		friend class Surface3DSetVisualizationTypeCmd;
-		friend class Surface3DSetDataSourceCmd;
-		void visualizationTypeChanged(Surface3D::VisualizationType);
-		void sourceTypeChanged(Surface3D::DataSource);
-		void parametersChanged();
-		void removed();
-
-	private:
-		const QScopedPointer<Surface3DPrivate> d_ptr;
-};
-
-#endif
+	vtkInteractorStyleTrackballCamera::OnLeftButtonDown();
+}

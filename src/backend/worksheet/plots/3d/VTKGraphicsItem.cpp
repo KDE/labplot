@@ -36,10 +36,10 @@ VTKGraphicsItem::VTKGraphicsItem(QGLContext* ctx, QGraphicsItem* p)
 
 void VTKGraphicsItem::refresh() {
 	QGraphicsSceneMouseEvent pressEvent(QEvent::MouseButtonPress);
-	pressEvent.setButton(Qt::LeftButton);
+	pressEvent.setButton(Qt::MiddleButton);
 	QVTKGraphicsItem::mousePressEvent(&pressEvent);
 	QGraphicsSceneMouseEvent releaseEvent(QEvent::MouseButtonRelease);
-	releaseEvent.setButton(Qt::LeftButton);
+	releaseEvent.setButton(Qt::MiddleButton);
 	QVTKGraphicsItem::mouseReleaseEvent(&releaseEvent);
 }
 
