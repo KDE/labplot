@@ -29,6 +29,7 @@
 #include "Axes.h"
 #include "AxesPrivate.h"
 #include "Plot3D.h"
+#include "XmlAttributeReader.h"
 
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
@@ -50,12 +51,18 @@
 #include <vtkAxisActor2D.h>
 #include <vtkCamera.h>
 
-Axes::Axes(vtkRenderer& renderer)
+Axes::Axes(vtkRenderer* renderer)
 	: AbstractAspect(i18n("Axes"))
 	, d_ptr(new AxesPrivate(renderer, this)) {
 }
 
 Axes::~Axes() {
+}
+
+void Axes::setRenderer(vtkRenderer* renderer) {
+	Q_D(Axes);
+	d->renderer = renderer;
+	d->init();
 }
 
 QIcon Axes::icon() const {
@@ -72,11 +79,11 @@ QMenu* Axes::createContextMenu() {
 
 void Axes::updateBounds() {
 	Q_D(Axes);
-	if (!d->showAxes || !d->vtkAxes)
+	if (!d->showAxes || !d->vtkAxes || !d->renderer)
 		return;
 
 	if (d->type == AxesType_Cube) {
-		vtkActorCollection* actors = d->renderer.GetActors();
+		vtkActorCollection* actors = d->renderer->GetActors();
 		actors->InitTraversal();
 
 		vtkBoundingBox bb;
@@ -179,7 +186,7 @@ void Axes::setZLabelColor(const QColor& color){
 
 ////////////////////////////////////////////////////////////////////////////////
 
-AxesPrivate::AxesPrivate(vtkRenderer& renderer, Axes* parent)
+AxesPrivate::AxesPrivate(vtkRenderer* renderer, Axes* parent)
 	: q(parent)
 	, showAxes(false)
 	, type(Axes::Axes::AxesType_Plain)
@@ -189,7 +196,6 @@ AxesPrivate::AxesPrivate(vtkRenderer& renderer, Axes* parent)
 	, yLabelColor(Qt::green)
 	, zLabelColor(Qt::blue)
 	, renderer(renderer) {
-	init();
 }
 
 AxesPrivate::~AxesPrivate() {
@@ -207,7 +213,7 @@ QString AxesPrivate::name() const{
 }
 
 void AxesPrivate::init() {
-	if (!showAxes)
+	if (!showAxes || !renderer)
 		return;
 
 	double colors[][3] = {
@@ -218,7 +224,7 @@ void AxesPrivate::init() {
 
 	if (type == Axes::AxesType_Cube) {
 		vtkSmartPointer<vtkCubeAxesActor> axes = vtkSmartPointer<vtkCubeAxesActor>::New();
-		axes->SetCamera(renderer.GetActiveCamera());
+		axes->SetCamera(renderer->GetActiveCamera());
 		axes->DrawXGridlinesOn();
 		axes->DrawYGridlinesOn();
 		axes->DrawZGridlinesOn();
@@ -274,14 +280,50 @@ void AxesPrivate::init() {
 	}
 
 	if (vtkAxes)
-		renderer.AddActor(vtkAxes);
+		renderer->AddActor(vtkAxes);
 }
 
 void AxesPrivate::hide() {
-	if (vtkAxes)
-		renderer.RemoveActor(vtkAxes);
+	if (vtkAxes && renderer)
+		renderer->RemoveActor(vtkAxes);
 }
 
 void AxesPrivate::update() {
 	show(showAxes);
+}
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+//! Save as XML
+void Axes::save(QXmlStreamWriter* writer) const {
+	Q_D(const Axes);
+
+	writer->writeStartElement("axes");
+		writer->writeAttribute("showAxes", QString::number(d->showAxes));
+		writer->writeAttribute("type", QString::number(d->type));
+		writer->writeAttribute("fontSize", QString::number(d->fontSize));
+		writer->writeAttribute("width", QString::number(d->width));
+
+		writer->writeAttribute("xLabelColor", d->xLabelColor.name());
+		writer->writeAttribute("yLabelColor", d->yLabelColor.name());
+		writer->writeAttribute("zLabelColor", d->zLabelColor.name());
+	writer->writeEndElement();
+}
+
+
+//! Load from XML
+bool Axes::load(XmlStreamReader* reader) {
+	Q_D(Axes);
+
+	const QXmlStreamAttributes& attribs = reader->attributes();
+	XmlAttributeReader attributeReader(reader, attribs);
+	attributeReader.checkAndLoadAttribute("showAxes", d->showAxes);
+	attributeReader.checkAndLoadAttribute<AxesType>("type", d->type);
+	attributeReader.checkAndLoadAttribute("fontSize", d->fontSize);
+	attributeReader.checkAndLoadAttribute("width", d->width);
+	attributeReader.checkAndLoadAttribute("xLabelColor", d->xLabelColor);
+	attributeReader.checkAndLoadAttribute("yLabelColor", d->yLabelColor);
+	attributeReader.checkAndLoadAttribute("zLabelColor", d->zLabelColor);
+	return true;
 }

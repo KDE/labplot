@@ -410,7 +410,7 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	, vtkItem(0)
 	, isInitialized(false)
 	, rectSet(false)
-	, axes(0) {
+	, axes(new Axes) {
 }
 
 Plot3DPrivate::~Plot3DPrivate() {
@@ -465,10 +465,9 @@ void Plot3DPrivate::init() {
 	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
 	backgroundRenderer->AddActor(backgroundImageActor);
 
-	// TODO: Configure as a separate widget
-	axes = new Axes(*renderer);
+	axes->setRenderer(renderer);
 	q->addChild(axes);
-	axes->setHidden(true);
+	axes->setHidden(!axes->isVisible());
 	vtkItem->connect(axes, SIGNAL(parametersChanged()), SLOT(refresh()));
 }
 
@@ -633,8 +632,8 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 		writeCommentElement(writer);
 
 		writer->writeStartElement("general");
-			writer->writeAttribute("show_axes", QString::number(d->axes->isVisible()));
 		writer->writeEndElement();
+		d->axes->save(writer);
 	writer->writeEndElement();
 }
 
@@ -644,12 +643,10 @@ bool Plot3D::load(XmlStreamReader* reader) {
 
 	if(!reader->isStartElement() || reader->name() != "Plot3D"){
 		reader->raiseError(i18n("no Plot3D element found"));
-		qDebug() << Q_FUNC_INFO << __LINE__;
 		return false;
 	}
 
 	if(!readBasicAttributes(reader)){
-		qDebug() << Q_FUNC_INFO << __LINE__;
 		return false;
 	}
 
@@ -658,22 +655,18 @@ bool Plot3D::load(XmlStreamReader* reader) {
 	while(!reader->atEnd()){
 		reader->readNext();
 		const QStringRef& sectionName = reader->name();
-		if(reader->isEndElement() && sectionName == "Plot3D")
+		if (reader->isEndElement() && sectionName == "Plot3D")
 			break;
 
 		if(sectionName == "comment"){
 			if(!readCommentElement(reader)){
-				qDebug() << Q_FUNC_INFO << __LINE__;
 				return false;
 			}
-		}else if(sectionName == "general"){
-			const QXmlStreamAttributes& attribs = reader->attributes();
-			const QString& showAxesAttr = attribs.value("show_axes").toString();
-			if(!showAxesAttr.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'show_axes'"));
-			else {
-				// TODO: Implement
-			}
+		}else if(sectionName == "axes"){
+			if(!d->axes)
+				qWarning() << Q_FUNC_INFO << "Axes has not been created!";
+			else if(!d->axes->load(reader))
+					return false;
 		}
 	}
 	return true;

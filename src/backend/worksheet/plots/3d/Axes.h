@@ -51,8 +51,13 @@ class Axes : public AbstractAspect {
 			AxesType_Plain = 1
 		};
 
-		Axes(vtkRenderer& renderer);
+		Axes(vtkRenderer* renderer = 0);
 		~Axes();
+
+		void setRenderer(vtkRenderer* renderer);
+
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 
 		QIcon icon() const;
 		QMenu* createContextMenu();

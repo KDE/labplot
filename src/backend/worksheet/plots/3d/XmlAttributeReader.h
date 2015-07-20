@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : AxesPrivate.h
+    File                 : XmlAttributeReader.h
     Project              : LabPlot
-    Description          : 3D plot axes
+    Description          : Xml Attribute Reader class
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Minh Ngo (minh@fedoraproject.org)
 
@@ -26,37 +26,60 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PLOT3D_AXESPRIVATE_H
-#define PLOT3D_AXESPRIVATE_H
+#ifndef XMLATTRIBUTEREADER_H
+#define XMLATTRIBUTEREADER_H
 
-#include "Axes.h"
+#include "backend/lib/XmlStreamReader.h"
 
-class vtkRenderer;
-class vtkProp;
+#include <QDebug>
+#include <QColor>
+#include <QXmlStreamWriter>
+#include <KLocale>
 
-struct AxesPrivate {
-	Axes* const q;
+namespace AttributeReaderHelper{
+	template<class TAttribute>
+	TAttribute convertQStringToAttributeType(const QString& str) {
+		return static_cast<TAttribute>(str.toInt());
+	}
 
-	bool showAxes;
-	Axes::AxesType type;
-	int fontSize;
-	double width;
-	QColor xLabelColor;
-	QColor yLabelColor;
-	QColor zLabelColor;
+	template<>
+  int convertQStringToAttributeType<int>(const QString& str) {
+		return str.toInt();
+	}
 
-	vtkRenderer* renderer;
-	vtkSmartPointer<vtkProp> vtkAxes;
+	template<>
+	bool convertQStringToAttributeType<bool>(const QString& str) {
+		return str.toInt() == 1;
+	}
 
-	AxesPrivate(vtkRenderer* renderer, Axes* parent);
-	~AxesPrivate();
+	template<>
+	QColor convertQStringToAttributeType<QColor>(const QString& str) {
+		return QColor(str);
+	}
+}
 
-	void init();
-	void hide();
-	void update();
-	void show(bool pred = true);
+class XmlAttributeReader{
+	public:
+		XmlAttributeReader(XmlStreamReader* reader, const QXmlStreamAttributes& attribs)
+			: reader(reader)
+			, attribs(attribs) {
+		}
 
-	QString name() const;
+	template<class TAttribute>
+	void checkAndLoadAttribute(const QString& attributeName, TAttribute& result) {
+		const QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+
+		const QString& attr = attribs.value(attributeName).toString();
+		if(attr.isEmpty()) {
+			reader->raiseWarning(attributeWarning.arg(attributeName));
+		} else {
+			result = AttributeReaderHelper::convertQStringToAttributeType<TAttribute>(attr);
+		}
+	}
+	
+	private:
+		XmlStreamReader* const reader;
+		const QXmlStreamAttributes& attribs;
 };
 
 #endif
