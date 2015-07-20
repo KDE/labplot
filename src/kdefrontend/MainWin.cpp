@@ -129,6 +129,10 @@ MainWin::~MainWin() {
 	}
 }
 
+AspectTreeModel* MainWin::model() const {
+	return m_aspectTreeModel;
+}
+
 void MainWin::initGUI(const QString& fileName){
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
@@ -1014,61 +1018,6 @@ void MainWin::newWorksheet() {
 //TODO: void MainWin::newScript(){}
 
 /*!
- * adds a new WorkbookView to the project.
- * this slot is only supposed to be called from ImportFileDialog
- */
-void MainWin::newWorkbookForImportFileDialog(const QString& name){
-	if (!m_importFileDialog)
-		return;
-
-	Workbook* workbook = new Workbook(0, name);
-	this->addAspectToProject(workbook);
-
-	std::auto_ptr<QAbstractItemModel> model(new AspectTreeModel(m_project, this));
-	m_importFileDialog->updateModel( model );
-
-	 if ( m_currentAspect->inherits("Workbook") )
-		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
-}
-
-/*!
- * adds a new SpreadsheetView to the project.
- * this slot is only supposed to be called from ImportFileDialog
- */
-void MainWin::newSpreadsheetForImportFileDialog(const QString& name){
-	if (!m_importFileDialog)
-		return;
-
-	Spreadsheet* spreadsheet = new Spreadsheet(0, name);
-	this->addAspectToProject(spreadsheet);
-
-	std::auto_ptr<QAbstractItemModel> model(new AspectTreeModel(m_project, this));
-	m_importFileDialog->updateModel( model );
-
-	 if ( m_currentAspect->inherits("Spreadsheet") )
-		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
-}
-
-/*!
- * adds a new MatrixView to the project.
- * this slot is only supposed to be called from ImportFileDialog
- */
-void MainWin::newMatrixForImportFileDialog(const QString& name){
-	if (!m_importFileDialog)
-		return;
-
-	Matrix* matrix = new Matrix(0, name);
-	this->addAspectToProject(matrix);
-
-	std::auto_ptr<QAbstractItemModel> model(new AspectTreeModel(m_project, this));
-	m_importFileDialog->updateModel( model );
-
-	 if ( m_currentAspect->inherits("Matrix") )
-		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
-}
-
-
-/*!
 	returns a pointer to a Workbook-object, if the currently active Mdi-Subwindow is \a WorkbookView.
 	Otherwise returns \a 0.
 */
@@ -1471,12 +1420,6 @@ void MainWin::historyDialog(){
 */
 void MainWin::importFileDialog(){
 	m_importFileDialog = new ImportFileDialog(this);
-	connect (m_importFileDialog, SIGNAL(newWorkbookRequested(QString)),this, SLOT(newWorkbookForImportFileDialog(QString)));
-	connect (m_importFileDialog, SIGNAL(newSpreadsheetRequested(QString)),this, SLOT(newSpreadsheetForImportFileDialog(QString)));
-	connect (m_importFileDialog, SIGNAL(newMatrixRequested(QString)),this, SLOT(newMatrixForImportFileDialog(QString)));
-
-	std::auto_ptr<QAbstractItemModel> model(new AspectTreeModel(m_project, this));
-	m_importFileDialog->setModel( model );
 
 	if ( m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook") ) {
 		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
@@ -1560,7 +1503,7 @@ void MainWin::exportDialog(){
 	adds a new file data source to the current project.
 */
 void MainWin::newFileDataSourceActionTriggered(){
-  ImportFileDialog* dlg = new ImportFileDialog(this);
+  ImportFileDialog* dlg = new ImportFileDialog(this, true);
   if ( dlg->exec() == QDialog::Accepted ) {
 	  FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1", 1));
 	  dlg->importToFileDataSource(dataSource, statusBar());

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2015 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -31,7 +31,8 @@
 #define IMPORTFILEDIALOG_H
 
 #include <KDialog>
-#include <memory>
+
+class MainWin;
 class ImportFileWidget;
 class FileDataSource;
 class TreeViewComboBox;
@@ -45,34 +46,32 @@ class QLabel;
 class QComboBox;
 class QGroupBox;
 class QToolButton;
-class QProgressBar;
 
 class ImportFileDialog: public KDialog {
   Q_OBJECT
 
   public:
-	explicit ImportFileDialog(QWidget*);
+	explicit ImportFileDialog(MainWin*, bool fileDataSource = false);
 	~ImportFileDialog();
 
 	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
 	void importTo(QStatusBar*) const;
-	void setModel(std::auto_ptr<QAbstractItemModel>);
-	void updateModel(std::auto_ptr<QAbstractItemModel>);
 	void setCurrentIndex(const QModelIndex&);
 
   private:
+	void setModel(QAbstractItemModel*);
+
+	MainWin* m_mainWin;
 	QVBoxLayout* vLayout;
-	ImportFileWidget *importFileWidget;
+	ImportFileWidget* importFileWidget;
 	QGroupBox* frameAddTo;
 	TreeViewComboBox* cbAddTo;
 	QLabel* lPosition;
 	QComboBox* cbPosition;
-	QWidget* mainWidget;
 	QPushButton* bNewSpreadsheet;
 	QPushButton* bNewMatrix;
 	QPushButton* bNewWorkbook;
 	QToolButton* tbNewDataContainer;
-	std::auto_ptr<QAbstractItemModel> m_model;
 	bool m_optionsShown;
 	KMenu* m_newDataContainerMenu;
 
@@ -81,11 +80,6 @@ class ImportFileDialog: public KDialog {
 	void currentAddToIndexChanged(QModelIndex);
 	void newDataContainerMenu();
 	void newDataContainer(QAction*);
-
-  signals:
-	void newSpreadsheetRequested(const QString&);
-	void newMatrixRequested(const QString&);
-	void newWorkbookRequested(const QString&);
 };
 
 #endif //IMPORTFILEDIALOG_H
