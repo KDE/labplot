@@ -153,16 +153,15 @@ void Plot3D::objectClicked(vtkProp* object) {
 		foreach(Surface3D *surface, d->surfaces) {
 			surface->highlight(false);
 		}
-		return;
-	}
-
-	foreach(Surface3D *surface, d->surfaces) {
-		if (*surface == object) {
-			qDebug() << Q_FUNC_INFO << "Surface clicked" << surface->name();
-			emit currentAspectChanged(surface);
-			surface->highlight(true);
-		} else {
-			surface->highlight(false);
+	} else {
+		foreach(Surface3D *surface, d->surfaces) {
+			if (*surface == object) {
+				qDebug() << Q_FUNC_INFO << "Surface clicked" << surface->name();
+				emit currentAspectChanged(surface);
+				surface->highlight(true);
+			} else {
+				surface->highlight(false);
+			}
 		}
 	}
 	d->vtkItem->refresh();

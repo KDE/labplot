@@ -45,7 +45,7 @@ namespace AttributeReaderHelper{
 	}
 
 	template<>
-  inline int convertQStringToAttributeType<int>(const QString& str) {
+	inline int convertQStringToAttributeType<int>(const QString& str) {
 		return str.toInt();
 	}
 
@@ -72,17 +72,17 @@ class XmlAttributeReader{
 			, attribs(attribs) {
 		}
 
-	template<class TAttribute>
-	void checkAndLoadAttribute(const QString& attributeName, TAttribute& result) {
-		const QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+		template<class TAttribute>
+		void checkAndLoadAttribute(const QString& attributeName, TAttribute& result) {
+			const QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 
-		const QString& attr = attribs.value(attributeName).toString();
-		if(attr.isEmpty()) {
-			reader->raiseWarning(attributeWarning.arg(attributeName));
-		} else {
-			result = AttributeReaderHelper::convertQStringToAttributeType<TAttribute>(attr);
+			const QString& attr = attribs.value(attributeName).toString();
+			if(attr.isEmpty()) {
+				reader->raiseWarning(attributeWarning.arg(attributeName));
+			} else {
+				result = AttributeReaderHelper::convertQStringToAttributeType<TAttribute>(attr);
+			}
 		}
-	}
 	
 	private:
 		XmlStreamReader* const reader;
