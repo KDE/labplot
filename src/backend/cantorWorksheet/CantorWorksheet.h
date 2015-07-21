@@ -37,6 +37,7 @@
 #include "backend/core/AbstractScriptingEngine.h"
 #include "backend/core/column/Column.h"
 #include "cantor/cantor_part.h"
+#include <cantor/worksheetaccess.h>
 
 class CantorWorksheet : public AbstractPart, public scripted{
 	Q_OBJECT
@@ -52,13 +53,14 @@ class CantorWorksheet : public AbstractPart, public scripted{
 		Column* column(const QString &name) const;
 		Column* column(int &index) const;
 		int columnCount() const;
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
+		void initialize();
 
 	private slots:
 		void rowsInserted(const QModelIndex & parent, int first, int last);
 		void rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last);
 		void modelReset();
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
 
 	signals:
 		void requestProjectContextMenu(QMenu*);
@@ -69,8 +71,7 @@ class CantorWorksheet : public AbstractPart, public scripted{
 		QAbstractItemModel* m_variableModel;
 		Cantor::Session* m_session;
 		QString m_backendName;
-	
-		void initialize();
+		Cantor::WorksheetAccessInterface* m_worksheetAccess;
 };
 
 #endif // CANTORWORKSHEET_H

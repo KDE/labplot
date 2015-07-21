@@ -35,6 +35,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/cantorWorksheet/CantorWorksheet.h"
 
 #include <QXmlStreamWriter>
 
@@ -224,6 +225,14 @@ bool Folder::readChildAspectElement(XmlStreamReader * reader)
 			return false;
 		}
 		addChild(worksheet);
+		loaded = true;
+	}else if (element_name == "cantorWorksheet"){
+		CantorWorksheet * cantorWorksheet = new CantorWorksheet(0, QLatin1String("null"));
+		if (!cantorWorksheet->load(reader)){
+			delete cantorWorksheet;
+			return false;
+		}
+		addChild(cantorWorksheet);
 		loaded = true;
 	} else if (element_name == "fileDataSource") {
 		FileDataSource* fileDataSource = new FileDataSource(0, "");

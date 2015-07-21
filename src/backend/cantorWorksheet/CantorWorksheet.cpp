@@ -33,11 +33,9 @@
 #include <QDebug>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <cantor/backend.h>
 
 CantorWorksheet::CantorWorksheet(AbstractScriptingEngine* engine, const QString &name)
 		: AbstractPart(name), scripted(engine), m_part(0), m_backendName(name){
-	initialize();
 }
 
 /*!
@@ -54,6 +52,7 @@ void CantorWorksheet::initialize() {
 			qDebug()<<"error creating part ";
 			return;
 		}
+		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
 		Cantor::PanelPluginHandler* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
 		if(!handler) {
 			KMessageBox::error(view(), i18n("no PanelPluginHandle found for the Cantor Part."));
@@ -176,10 +175,9 @@ void CantorWorksheet::save(QXmlStreamWriter* writer) const{
 	writeCommentElement(writer);
 
 	//general
-	QString content; //TODO: get the content of the cantor's worksheet as cdata-string and save it here.
+	QByteArray content = m_worksheetAccess->saveWorksheetToByteArray();
 	writer->writeStartElement("cantor");
-	writer->writeAttribute("backend", m_backendName);
-	writer->writeAttribute("content", content);
+	writer->writeAttribute("content", content.toBase64());
 	writer->writeEndElement();
 	writer->writeEndElement(); // close "cantorWorksheet" section
 }
@@ -212,17 +210,42 @@ bool CantorWorksheet::load(XmlStreamReader* reader){
 		} else if (reader->name() == "cantor"){
 			attribs = reader->attributes();
 
-			str = attribs.value("backend").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'backend'"));
-			else
-				m_backendName = str;
+			str = attribs.value("content").toString().trimmed();
+			QByteArray content = QByteArray::fromBase64(str.toAscii());
 
-			str = attribs.value("content").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'content'"));
-			else
-				m_backendName = str;//TODO:
+			KPluginFactory* factory = KPluginLoader(QLatin1String("libcantorpart")).factory();
+			if (factory) {
+				m_part = factory->create<KParts::ReadWritePart>(this, QVariantList()<<m_backendName);
+				if(m_part) {
+					m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
+					m_worksheetAccess->loadWorksheetFromByteArray(&content);
+					Cantor::PanelPluginHandler* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
+					if(!handler) {
+						KMessageBox::error(view(), i18n("no PanelPluginHandle found for the Cantor Part."));
+						qApp->quit();
+					}
+					m_plugins = handler->plugins();
+					foreach(Cantor::PanelPlugin* plugin, m_plugins) {
+						if(plugin->name() == "Variable Manager") {
+							Cantor::PanelPlugin* m_variablemgr = plugin;
+							m_session = m_variablemgr->session();
+							m_backendName = m_session->backend()->name();
+							m_variableModel = m_session->variableModel();
+							connect(m_variableModel, SIGNAL(rowsInserted(const QModelIndex, int, int)), this, SLOT(rowsInserted(const QModelIndex, int, int)));
+							connect(m_variableModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex, int, int)), this, SLOT(rowsAboutToBeRemoved(const QModelIndex, int, int)));
+							connect(m_variableModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
+							break;
+						}
+						
+					}
+				}
+				else {
+					return false;
+				}
+			}
+			else {
+				return false;
+			}
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;
