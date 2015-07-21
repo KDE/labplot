@@ -49,6 +49,7 @@ class Surface3DDock : public QWidget {
 		void hideDataSource(bool hide = true);
 		void hideFileUrl(bool hide = true);
 		void hideTriangleInfo(bool hide = true);
+		void setModelFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect);
 
 	private slots:
 		void retranslateUi();

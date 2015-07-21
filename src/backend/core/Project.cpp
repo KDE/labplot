@@ -32,6 +32,9 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/3d/Surface3D.h"
+#include "backend/worksheet/plots/3d/DataHandlers.h"
+#include "backend/matrix/Matrix.h"
 
 #include <QUndoStack>
 #include <QMenu>
@@ -278,8 +281,11 @@ bool Project::load(XmlStreamReader* reader) {
 			//restore the pointer to the data sets (columns) in xy-curves etc.
 			QList<AbstractAspect*> curves = children("XYCurve", AbstractAspect::Recursive);
 			QList<AbstractAspect*> axes = children("Axes", AbstractAspect::Recursive);
-			if (curves.size()!=0 || axes.size()!=0) {
+			QList<AbstractAspect*> surfaces = children("Surface3D", AbstractAspect::Recursive);
+
+			if (curves.size()!=0 || axes.size()!=0 || !surfaces.isEmpty()) {
 				QList<AbstractAspect*> columns = children("Column", AbstractAspect::Recursive);
+				QList<AbstractAspect*> matrices = children("Matrix", AbstractAspect::Recursive);
 
 				//XY-curves
 				foreach (AbstractAspect* aspect, curves) {
@@ -309,6 +315,24 @@ bool Project::load(XmlStreamReader* reader) {
 					}
 					curve->suppressRetransform(false);
 					curve->retransform();
+				}
+
+				// 3D surfaces
+				foreach (AbstractAspect *aspect, surfaces) {
+					Surface3D* surface = dynamic_cast<Surface3D*>(aspect);
+					if (!surface)
+						continue;
+
+					MatrixDataHandler* mdh = &surface->matrixDataHandler();
+					RESTORE_MATRIX_POINTER(mdh, matrix, Matrix);
+					SpreadsheetDataHandler* sdh = &surface->spreadsheetDataHandler();
+					RESTORE_COLUMN_POINTER(sdh, xColumn, XColumn);
+					RESTORE_COLUMN_POINTER(sdh, yColumn, YColumn);
+					RESTORE_COLUMN_POINTER(sdh, yColumn, ZColumn);
+
+					RESTORE_COLUMN_POINTER(sdh, firstNode, FirstNode);
+					RESTORE_COLUMN_POINTER(sdh, secondNode, SecondNode);
+					RESTORE_COLUMN_POINTER(sdh, thirdNode, ThirdNode);
 				}
 
 				//Axes

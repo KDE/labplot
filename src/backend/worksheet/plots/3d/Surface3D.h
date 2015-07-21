@@ -63,9 +63,13 @@ class Surface3D : public AbstractAspect {
 
 		enum CollorFilling {NoFilling, SolidColor, ColorMap, ColorMapFromMatrix};
 
-		Surface3D(vtkRenderer& renderer);
+		Surface3D(vtkRenderer* renderer = 0);
+		void setRenderer(vtkRenderer* renderer);
 		void init();
 		virtual ~Surface3D();
+
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 
 		bool operator==(vtkProp* prop) const;
 		bool operator!=(vtkProp* prop) const;

@@ -35,8 +35,6 @@
 
 #include "backend/worksheet/plots/3d/DataHandlers.h"
 
-#include <QDebug>
-
 Surface3DDock::Surface3DDock(QWidget* parent)
 	: QWidget(parent)
 	, surface(0)
@@ -112,6 +110,13 @@ namespace {
 }
 
 void Surface3DDock::setSurface(Surface3D *surface) {
+	if (this->surface) {
+		this->surface->disconnect(this);
+		this->surface->fileDataHandler().disconnect(this);
+		this->surface->spreadsheetDataHandler().disconnect(this);
+		this->surface->matrixDataHandler().disconnect(this);
+	}
+
 	this->surface = surface;
 
 	ui.leName->setText(surface->name());
@@ -134,9 +139,33 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	connect(surface, SIGNAL(sourceTypeChanged(Surface3D::DataSource)), SLOT(sourceTypeChanged(Surface3D::DataSource)));
 
 	// DataHandlers
+	ui.cbFileRequester->setUrl(surface->fileDataHandler().file());
 	connect(&surface->fileDataHandler(), SIGNAL(pathChanged(const KUrl&)), SLOT(pathChanged(const KUrl&)));
+
+	const Matrix *matrix = surface->matrixDataHandler().matrix();
+	if (matrix)
+		ui.cbMatrix->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(matrix));
 	connect(&surface->matrixDataHandler(), SIGNAL(matrixChanged(const Matrix*)), SLOT(matrixChanged(const Matrix*)));
+
 	SpreadsheetDataHandler *sdh = &surface->spreadsheetDataHandler();
+	if (sdh->xColumn())
+		ui.cbXCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(sdh->xColumn()));
+
+	if (sdh->yColumn())
+		ui.cbYCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(sdh->yColumn()));
+
+	if (sdh->zColumn())
+		ui.cbZCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(sdh->zColumn()));
+
+	if (sdh->firstNode())
+		ui.cbNode1->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(sdh->firstNode()));
+
+	if (sdh->secondNode())
+		ui.cbNode2->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(sdh->secondNode()));
+
+	if (sdh->thirdNode())
+		ui.cbNode3->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(sdh->thirdNode()));
+
 	connect(sdh, SIGNAL(xColumnChanged(const AbstractColumn*)), SLOT(xColumnChanged(const AbstractColumn*)));
 	connect(sdh, SIGNAL(yColumnChanged(const AbstractColumn*)), SLOT(yColumnChanged(const AbstractColumn*)));
 	connect(sdh, SIGNAL(zColumnChanged(const AbstractColumn*)), SLOT(zColumnChanged(const AbstractColumn*)));
@@ -269,60 +298,41 @@ void Surface3DDock::pathChanged(const KUrl& url) {
 	ui.cbFileRequester->setUrl(url);
 }
 
-void Surface3DDock::matrixChanged(const Matrix* matrix) {
+void Surface3DDock::setModelFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
 	Lock lock(m_initializing);
-	if (matrix)
-		ui.cbMatrix->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(matrix));
-	else
-		ui.cbMatrix->setCurrentIndex(-1);
+	if (aspect) {
+		cb->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(aspect));
+	} else {
+		cb->setCurrentModelIndex(QModelIndex());
+	}
+}
+
+void Surface3DDock::matrixChanged(const Matrix* matrix) {
+	setModelFromAspect(ui.cbMatrix, matrix);
 }
 
 void Surface3DDock::xColumnChanged(const AbstractColumn* column) {
-	Lock lock(m_initializing);
-	if (column)
-		ui.cbXCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
-	else
-		ui.cbXCoordinate->setCurrentIndex(-1);
+	setModelFromAspect(ui.cbXCoordinate, column);
 }
 
 void Surface3DDock::yColumnChanged(const AbstractColumn* column) {
-	Lock lock(m_initializing);
-	if (column)
-		ui.cbYCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
-	else
-		ui.cbYCoordinate->setCurrentIndex(-1);
+	setModelFromAspect(ui.cbYCoordinate, column);
 }
 
 void Surface3DDock::zColumnChanged(const AbstractColumn* column) {
-	Lock lock(m_initializing);
-	if (column)
-		ui.cbZCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
-	else
-		ui.cbZCoordinate->setCurrentIndex(-1);
+	setModelFromAspect(ui.cbZCoordinate, column);
 }
 
 void Surface3DDock::firstNodeChanged(const AbstractColumn* column) {
-	Lock lock(m_initializing);
-	if (column)
-		ui.cbNode1->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
-	else
-		ui.cbNode1->setCurrentIndex(-1);
+	setModelFromAspect(ui.cbNode1, column);
 }
 
 void Surface3DDock::secondNodeChanged(const AbstractColumn* column) {
-	Lock lock(m_initializing);
-	if (column)
-		ui.cbNode2->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
-	else
-		ui.cbNode2->setCurrentIndex(-1);
+	setModelFromAspect(ui.cbNode2, column);
 }
 
 void Surface3DDock::thirdNodeChanged(const AbstractColumn* column) {
-	Lock lock(m_initializing);
-	if (column)
-		ui.cbNode3->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(column));
-	else
-		ui.cbNode3->setCurrentIndex(-1);
+	setModelFromAspect(ui.cbNode3, column);
 }
 
 void Surface3DDock::nameChanged() {

@@ -395,7 +395,24 @@ if (!obj->col ##Path().isEmpty()) {													\
 		if (aspect->path() == obj->col ##Path()) {									\
 			AbstractColumn* column = dynamic_cast<AbstractColumn*>(aspect);			\
 			if (!column) continue;													\
- 			obj->set## Col(column);													\
+				obj->set## Col(column);													\
+			break;				 													\
+		}																			\
+	}																				\
+}																					\
+} while(0)
+
+// The same but for matrices
+#define RESTORE_MATRIX_POINTER(obj, mat, Mat) 										\
+do {																				\
+if (!obj->mat ##Path().isEmpty()) {													\
+	foreach (AbstractAspect* aspect, matrices) {										\
+		qDebug() << Q_FUNC_INFO << aspect->path() << obj->mat ##Path();\
+		if (aspect->path() == obj->mat ##Path()) {									\
+			Matrix* matrix = dynamic_cast<Matrix*>(aspect);			\
+			qDebug() << Q_FUNC_INFO << matrix; \
+			if (!matrix) continue;													\
+				obj->set## Mat(matrix);													\
 			break;				 													\
 		}																			\
 	}																				\

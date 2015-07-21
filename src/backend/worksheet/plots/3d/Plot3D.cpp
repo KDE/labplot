@@ -123,7 +123,8 @@ QIcon Plot3D::icon() const {
 
 void Plot3D::addSurface() {
 	Q_D(Plot3D);
-	Surface3D* newSurface = new Surface3D(*d->renderer);
+	Surface3D* newSurface = new Surface3D(d->renderer);
+	newSurface->init();
 	d->surfaces.insert(newSurface);
 	addChild(newSurface);
 	d->vtkItem->connect(newSurface, SIGNAL(parametersChanged()), SLOT(refresh()));
@@ -414,12 +415,6 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 }
 
 Plot3DPrivate::~Plot3DPrivate() {
-	q->removeChild(axes);
-	axes = 0;
-
-	foreach (Surface3D* surface, surfaces) {
-		q->removeChild(surface);
-	}
 }
 
 void Plot3DPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
@@ -469,6 +464,15 @@ void Plot3DPrivate::init() {
 	q->addChild(axes);
 	axes->setHidden(!axes->isVisible());
 	vtkItem->connect(axes, SIGNAL(parametersChanged()), SLOT(refresh()));
+
+	foreach(Surface3D* surface, surfaces) {
+		surface->setRenderer(renderer);
+		surface->init();
+		q->addChild(surface);
+		vtkItem->connect(surface, SIGNAL(parametersChanged()), SLOT(refresh()));
+		vtkItem->connect(surface, SIGNAL(removed()), SLOT(refresh()));
+		q->connect(surface, SIGNAL(removed()), SLOT(itemRemoved()));
+	}
 }
 
 void Plot3DPrivate::retransform() {
@@ -634,13 +638,15 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 		writer->writeStartElement("general");
 		writer->writeEndElement();
 		d->axes->save(writer);
+		foreach(const Surface3D* surface, d->surfaces){
+			surface->save(writer);
+		}
 	writer->writeEndElement();
 }
 
 //! Load from XML
 bool Plot3D::load(XmlStreamReader* reader) {
 	Q_D(Plot3D);
-
 	if(!reader->isStartElement() || reader->name() != "Plot3D"){
 		reader->raiseError(i18n("no Plot3D element found"));
 		return false;
@@ -658,15 +664,22 @@ bool Plot3D::load(XmlStreamReader* reader) {
 		if (reader->isEndElement() && sectionName == "Plot3D")
 			break;
 
+		if (reader->isEndElement())
+			continue;
+
 		if(sectionName == "comment"){
 			if(!readCommentElement(reader)){
 				return false;
 			}
 		}else if(sectionName == "axes"){
-			if(!d->axes)
-				qWarning() << Q_FUNC_INFO << "Axes has not been created!";
-			else if(!d->axes->load(reader))
-					return false;
+			qDebug() << Q_FUNC_INFO << "Load axes";
+			if(!d->axes->load(reader))
+				return false;
+		}else if(sectionName == "surface3d"){
+			qDebug() << Q_FUNC_INFO << "Load surface";
+			Surface3D* newSurface = new Surface3D();
+			newSurface->load(reader);
+			d->surfaces.insert(newSurface);
 		}
 	}
 	return true;

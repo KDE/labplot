@@ -39,7 +39,7 @@ class Plot3D;
 struct Surface3DPrivate {
 	Surface3D* const q;
 
-	vtkRenderer& renderer;
+	vtkSmartPointer<vtkRenderer> renderer;
 	Surface3D::VisualizationType visualizationType;
 	Surface3D::DataSource sourceType;
 
@@ -49,7 +49,7 @@ struct Surface3DPrivate {
 	FileDataHandler *fileHandler;
 	vtkSmartPointer<vtkProp> surfaceActor;
 
-	Surface3DPrivate(vtkRenderer& renderer, Surface3D *parent);
+	Surface3DPrivate(vtkRenderer* renderer, Surface3D *parent);
 	void init();
 	~Surface3DPrivate();
 	QString name() const;

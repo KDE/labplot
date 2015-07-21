@@ -29,6 +29,7 @@
 #include "Surface3D.h"
 #include "Surface3DPrivate.h"
 #include "Plot3D.h"
+#include "XmlAttributeReader.h"
 #include "backend/lib/commandtemplates.h"
 
 #include <QDebug>
@@ -37,7 +38,7 @@
 
 #include <vtkRenderer.h>
 
-Surface3D::Surface3D(vtkRenderer& renderer)
+Surface3D::Surface3D(vtkRenderer* renderer)
 	: AbstractAspect("Surface")
 	, d_ptr(new Surface3DPrivate(renderer, this)) {
 }
@@ -45,6 +46,11 @@ Surface3D::Surface3D(vtkRenderer& renderer)
 void Surface3D::init() {
 	Q_D(Surface3D);
 	d->init();
+}
+
+void Surface3D::setRenderer(vtkRenderer* renderer) {
+	Q_D(Surface3D);
+	d->renderer = renderer;
 }
 
 Surface3D::~Surface3D() {
@@ -118,28 +124,27 @@ void Surface3D::setDataSource(DataSource source) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Surface3DPrivate::Surface3DPrivate(vtkRenderer& renderer, Surface3D *parent)
+Surface3DPrivate::Surface3DPrivate(vtkRenderer* renderer, Surface3D *parent)
 	: q(parent)
 	, renderer(renderer)
 	, visualizationType(Surface3D::VisualizationType_Triangles)
-	, sourceType(Surface3D::Surface3D::DataSource_Empty) {
-	init();
+	, sourceType(Surface3D::Surface3D::DataSource_Empty)
+	, demoHandler(new DemoDataHandler)
+	, spreadsheetHandler(new SpreadsheetDataHandler)
+	, matrixHandler(new MatrixDataHandler)
+	, fileHandler(new FileDataHandler) {
 }
 
 void Surface3DPrivate::init() {
-	demoHandler = new DemoDataHandler;
 	q->addChild(demoHandler);
 	demoHandler->setHidden(true);
 	
-	spreadsheetHandler = new SpreadsheetDataHandler;
 	q->addChild(spreadsheetHandler);
 	spreadsheetHandler->setHidden(true);
 	
-	matrixHandler = new MatrixDataHandler;
 	q->addChild(matrixHandler);
 	matrixHandler->setHidden(true);
 
-	fileHandler = new FileDataHandler;
 	q->addChild(fileHandler);
 	fileHandler->setHidden(true);
 
@@ -159,12 +164,15 @@ QString Surface3DPrivate::name() const {
 }
 
 void Surface3DPrivate::hide() {
-	if (surfaceActor) {
-		renderer.RemoveActor(surfaceActor);
+	if (surfaceActor && renderer) {
+		renderer->RemoveActor(surfaceActor);
 	}
 }
 
 void Surface3DPrivate::update() {
+	if (!renderer)
+		return;
+
 	hide();
 	if (sourceType == Surface3D::DataSource_Empty) {
 		surfaceActor = demoHandler->actor(visualizationType);
@@ -176,6 +184,68 @@ void Surface3DPrivate::update() {
 		surfaceActor = spreadsheetHandler->actor(visualizationType);
 	}
 
-	renderer.AddActor(surfaceActor);
+	renderer->AddActor(surfaceActor);
 	emit q->parametersChanged();
+}
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+//! Save as XML
+void Surface3D::save(QXmlStreamWriter* writer) const {
+	Q_D(const Surface3D);
+
+	writer->writeStartElement("surface3d");
+		writer->writeAttribute("visualizationType", QString::number(d->visualizationType));
+		writer->writeAttribute("sourceType", QString::number(d->sourceType));
+		writeBasicAttributes(writer);
+		writeCommentElement(writer);
+		d->spreadsheetHandler->save(writer);
+		d->matrixHandler->save(writer);
+		d->fileHandler->save(writer);
+	writer->writeEndElement();
+}
+
+
+//! Load from XML
+bool Surface3D::load(XmlStreamReader* reader) {
+	Q_D(Surface3D);
+
+	const QXmlStreamAttributes& attribs = reader->attributes();
+	XmlAttributeReader attributeReader(reader, attribs);
+	attributeReader.checkAndLoadAttribute<VisualizationType>("visualizationType", d->visualizationType);
+	attributeReader.checkAndLoadAttribute<DataSource>("sourceType", d->sourceType);
+
+	if(!readBasicAttributes(reader)){
+		return false;
+	}
+
+	while(!reader->atEnd()){
+		reader->readNext();
+		const QStringRef& sectionName = reader->name();
+		if (reader->isEndElement() && sectionName == "surface3d")
+			break;
+
+		if (reader->isEndElement())
+			continue;
+
+		if (sectionName == "comment") {
+			if (!readCommentElement(reader))
+				return false;
+		} else if (sectionName == "matrix") {
+			qDebug() << Q_FUNC_INFO << "Load matrix";
+			if (!d->matrixHandler->load(reader))
+				return false;
+		} else if (sectionName == "spreadsheet") {
+			qDebug() << Q_FUNC_INFO << "Load spreadsheet";
+			if (!d->spreadsheetHandler->load(reader))
+				return false;
+		} else if (sectionName == "file") {
+			qDebug() << Q_FUNC_INFO << "Load file";
+			if (!d->fileHandler->load(reader))
+				return false;
+		}
+	}
+
+	return true;
 }

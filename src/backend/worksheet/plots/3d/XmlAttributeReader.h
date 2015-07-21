@@ -34,27 +34,34 @@
 #include <QDebug>
 #include <QColor>
 #include <QXmlStreamWriter>
+
+#include <KUrl>
 #include <KLocale>
 
 namespace AttributeReaderHelper{
 	template<class TAttribute>
-	TAttribute convertQStringToAttributeType(const QString& str) {
+	inline TAttribute convertQStringToAttributeType(const QString& str) {
 		return static_cast<TAttribute>(str.toInt());
 	}
 
 	template<>
-  int convertQStringToAttributeType<int>(const QString& str) {
+  inline int convertQStringToAttributeType<int>(const QString& str) {
 		return str.toInt();
 	}
 
 	template<>
-	bool convertQStringToAttributeType<bool>(const QString& str) {
+	inline bool convertQStringToAttributeType<bool>(const QString& str) {
 		return str.toInt() == 1;
 	}
 
 	template<>
-	QColor convertQStringToAttributeType<QColor>(const QString& str) {
+	inline QColor convertQStringToAttributeType<QColor>(const QString& str) {
 		return QColor(str);
+	}
+
+	template<>
+	inline KUrl convertQStringToAttributeType<KUrl>(const QString& str) {
+		return KUrl(str);
 	}
 }
 

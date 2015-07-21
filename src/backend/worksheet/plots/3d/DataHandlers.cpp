@@ -29,6 +29,7 @@
 #include "DataHandlers.h"
 #include "DataHandlersPrivate.h"
 #include "Surface3D.h"
+#include "XmlAttributeReader.h"
 
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
@@ -92,6 +93,22 @@ FileDataHandler::FileDataHandler()
 FileDataHandler::~FileDataHandler() {
 }
 
+void FileDataHandler::save(QXmlStreamWriter* writer) const {
+	Q_D(const FileDataHandler);
+
+	writer->writeStartElement("file");
+		writer->writeAttribute("url", d->path.path());
+	writer->writeEndElement();
+}
+
+bool FileDataHandler::load(XmlStreamReader* reader) {
+	Q_D(FileDataHandler);
+	const QXmlStreamAttributes& attribs = reader->attributes();
+	XmlAttributeReader attributeReader(reader, attribs);
+	attributeReader.checkAndLoadAttribute("url", d->path);
+	return true;
+}
+
 namespace {
 	template<class TReader>
 	vtkSmartPointer<vtkActor> createReader(const KUrl& path) {
@@ -127,6 +144,8 @@ vtkSmartPointer<vtkActor> FileDataHandler::trianglesActor() {
 	}
 }
 
+CLASS_SHARED_D_READER_IMPL(FileDataHandler, KUrl, file, path)
+
 STD_SETTER_CMD_IMPL_F_S(FileDataHandler, SetFile, KUrl, path, update)
 void FileDataHandler::setFile(const KUrl& path) {
 	Q_D(FileDataHandler);
@@ -142,7 +161,50 @@ SpreadsheetDataHandler::SpreadsheetDataHandler()
 }
 
 SpreadsheetDataHandler::~SpreadsheetDataHandler() {
+}
 
+BASIC_SHARED_D_READER_IMPL(SpreadsheetDataHandler, const AbstractColumn*, xColumn, xColumn)
+BASIC_SHARED_D_READER_IMPL(SpreadsheetDataHandler, const AbstractColumn*, yColumn, yColumn)
+BASIC_SHARED_D_READER_IMPL(SpreadsheetDataHandler, const AbstractColumn*, zColumn, zColumn)
+
+BASIC_SHARED_D_READER_IMPL(SpreadsheetDataHandler, const AbstractColumn*, firstNode, firstNode)
+BASIC_SHARED_D_READER_IMPL(SpreadsheetDataHandler, const AbstractColumn*, secondNode, secondNode)
+BASIC_SHARED_D_READER_IMPL(SpreadsheetDataHandler, const AbstractColumn*, thirdNode, thirdNode)
+
+const QString& SpreadsheetDataHandler::xColumnPath() const { Q_D(const SpreadsheetDataHandler); return d->xColumnPath; }
+const QString& SpreadsheetDataHandler::yColumnPath() const { Q_D(const SpreadsheetDataHandler); return d->yColumnPath; }
+const QString& SpreadsheetDataHandler::zColumnPath() const { Q_D(const SpreadsheetDataHandler); return d->zColumnPath; }
+
+const QString& SpreadsheetDataHandler::firstNodePath() const { Q_D(const SpreadsheetDataHandler); return d->firstNodePath; }
+const QString& SpreadsheetDataHandler::secondNodePath() const { Q_D(const SpreadsheetDataHandler); return d->secondNodePath; }
+const QString& SpreadsheetDataHandler::thirdNodePath() const { Q_D(const SpreadsheetDataHandler); return d->thirdNodePath; }
+
+void SpreadsheetDataHandler::save(QXmlStreamWriter* writer) const {
+	Q_D(const SpreadsheetDataHandler);
+
+	writer->writeStartElement("spreadsheet");
+		WRITE_COLUMN(d->xColumn, xColumn);
+		WRITE_COLUMN(d->yColumn, yColumn);
+		WRITE_COLUMN(d->zColumn, zColumn);
+
+		WRITE_COLUMN(d->firstNode, firstNode);
+		WRITE_COLUMN(d->secondNode, secondNode);
+		WRITE_COLUMN(d->thirdNode, thirdNode);
+	writer->writeEndElement();
+}
+
+bool SpreadsheetDataHandler::load(XmlStreamReader* reader) {
+	Q_D(SpreadsheetDataHandler);
+	const QXmlStreamAttributes& attribs = reader->attributes();
+	QString str;
+	READ_COLUMN(xColumn);
+	READ_COLUMN(yColumn);
+	READ_COLUMN(zColumn);
+
+	READ_COLUMN(firstNode);
+	READ_COLUMN(secondNode);
+	READ_COLUMN(thirdNode);
+	return true;
 }
 
 namespace {
@@ -302,6 +364,21 @@ MatrixDataHandler::MatrixDataHandler()
 MatrixDataHandler::~MatrixDataHandler() {
 }
 
+void MatrixDataHandler::save(QXmlStreamWriter* writer) const {
+	Q_D(const MatrixDataHandler);
+
+	writer->writeStartElement("matrix");
+		writer->writeAttribute("matrixPath", d->matrix ? d->matrix->path() : "");
+	writer->writeEndElement();
+}
+
+bool MatrixDataHandler::load(XmlStreamReader* reader) {
+	Q_D(MatrixDataHandler);
+	const QXmlStreamAttributes& attribs = reader->attributes();
+	d->matrixPath = attribs.value("matrixPath").toString();
+	return true;
+}
+
 vtkSmartPointer<vtkActor> MatrixDataHandler::trianglesActor() {
 	Q_D(MatrixDataHandler);
 	const Matrix * const matrix = d->matrix;
@@ -348,6 +425,9 @@ vtkSmartPointer<vtkActor> MatrixDataHandler::trianglesActor() {
 
 	return renderTriangles(points, triangles);
 }
+
+BASIC_SHARED_D_READER_IMPL(MatrixDataHandler, const Matrix*, matrix, matrix)
+const QString& MatrixDataHandler::matrixPath() const { Q_D(const MatrixDataHandler); return d->matrixPath; }
 
 STD_SETTER_CMD_IMPL_F_S(MatrixDataHandler, SetMatrix, const Matrix*, matrix, update)
 void MatrixDataHandler::setMatrix(const Matrix* matrix) {

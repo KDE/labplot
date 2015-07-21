@@ -51,6 +51,7 @@ struct BaseDataHandlerPrivate{
 
 struct MatrixDataHandlerPrivate : public BaseDataHandlerPrivate<MatrixDataHandler>{
 	const Matrix* matrix;
+	QString matrixPath;
 
 	MatrixDataHandlerPrivate(MatrixDataHandler *parent);
 };
@@ -63,6 +64,13 @@ struct SpreadsheetDataHandlerPrivate : public BaseDataHandlerPrivate<Spreadsheet
 	const AbstractColumn *firstNode;
 	const AbstractColumn *secondNode;
 	const AbstractColumn *thirdNode;
+
+	QString xColumnPath;
+	QString yColumnPath;
+	QString zColumnPath;
+	QString firstNodePath;
+	QString secondNodePath;
+	QString thirdNodePath;
 
 	SpreadsheetDataHandlerPrivate(SpreadsheetDataHandler *parent);
 };

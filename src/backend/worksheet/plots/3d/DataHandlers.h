@@ -68,7 +68,11 @@ class MatrixDataHandler : public IDataHandler {
 		MatrixDataHandler();
 		virtual ~MatrixDataHandler();
 
-		void setMatrix(const Matrix* matrix);
+		POINTER_D_ACCESSOR_DECL(const Matrix, matrix, Matrix);
+		const QString& matrixPath() const;
+
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 
 		typedef MatrixDataHandler BaseClass;
 		typedef MatrixDataHandlerPrivate Private;
@@ -92,13 +96,24 @@ class SpreadsheetDataHandler : public IDataHandler {
 		SpreadsheetDataHandler();
 		virtual ~SpreadsheetDataHandler();
 
-		void setXColumn(const AbstractColumn *column);
-		void setYColumn(const AbstractColumn *column);
-		void setZColumn(const AbstractColumn *column);
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn);
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, zColumn, ZColumn);
 
-		void setFirstNode(const AbstractColumn *column);
-		void setSecondNode(const AbstractColumn *column);
-		void setThirdNode(const AbstractColumn *column);
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, firstNode, FirstNode);
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, secondNode, SecondNode);
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, thirdNode, ThirdNode);
+
+		const QString& xColumnPath() const;
+		const QString& yColumnPath() const;
+		const QString& zColumnPath() const;
+
+		const QString& firstNodePath() const;
+		const QString& secondNodePath() const;
+		const QString& thirdNodePath() const;
+
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 
 		typedef SpreadsheetDataHandler BaseClass;
 		typedef SpreadsheetDataHandlerPrivate Private;
@@ -132,7 +147,10 @@ class FileDataHandler : public IDataHandler {
 		FileDataHandler();
 		virtual ~FileDataHandler();
 
-		void setFile(const KUrl& path);
+		CLASS_D_ACCESSOR_DECL(KUrl, file, File);
+
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 
 		typedef FileDataHandler BaseClass;
 		typedef FileDataHandlerPrivate Private;
