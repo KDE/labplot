@@ -150,6 +150,9 @@ void Plot3D::objectClicked(vtkProp* object) {
 		// Deselect all Plot3D children
 		qDebug() << Q_FUNC_INFO << "Deselect";
 		emit currentAspectChanged(this);
+		foreach(Surface3D *surface, d->surfaces) {
+			surface->highlight(false);
+		}
 		return;
 	}
 
@@ -157,9 +160,12 @@ void Plot3D::objectClicked(vtkProp* object) {
 		if (*surface == object) {
 			qDebug() << Q_FUNC_INFO << "Surface clicked" << surface->name();
 			emit currentAspectChanged(surface);
-			break;
+			surface->highlight(true);
+		} else {
+			surface->highlight(false);
 		}
 	}
+	d->vtkItem->refresh();
 }
 
 void Plot3D::initActions() {

@@ -407,10 +407,8 @@ if (!obj->col ##Path().isEmpty()) {													\
 do {																				\
 if (!obj->mat ##Path().isEmpty()) {													\
 	foreach (AbstractAspect* aspect, matrices) {										\
-		qDebug() << Q_FUNC_INFO << aspect->path() << obj->mat ##Path();\
 		if (aspect->path() == obj->mat ##Path()) {									\
 			Matrix* matrix = dynamic_cast<Matrix*>(aspect);			\
-			qDebug() << Q_FUNC_INFO << matrix; \
 			if (!matrix) continue;													\
 				obj->set## Mat(matrix);													\
 			break;				 													\

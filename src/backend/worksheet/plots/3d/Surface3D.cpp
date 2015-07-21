@@ -37,6 +37,7 @@
 #include <KLocale>
 
 #include <vtkRenderer.h>
+#include <vtkProperty.h>
 
 Surface3D::Surface3D(vtkRenderer* renderer)
 	: AbstractAspect("Surface")
@@ -53,12 +54,28 @@ void Surface3D::setRenderer(vtkRenderer* renderer) {
 	d->renderer = renderer;
 }
 
+void Surface3D::highlight(bool pred) {
+	Q_D(Surface3D);
+
+	if (pred && !d->isSelected) {
+		d->isSelected = pred;
+		vtkProperty *prop = d->surfaceActor->GetProperty();
+		d->surfaceProperty->DeepCopy(prop);
+		prop->SetColor(1.0, 0.0, 0.0);
+		prop->SetDiffuse(1.0);
+		prop->SetSpecular(0.0);
+	} else if (d->isSelected && !pred) {
+		d->isSelected = pred;
+		d->surfaceActor->GetProperty()->DeepCopy(d->surfaceProperty);
+	}
+}
+
 Surface3D::~Surface3D() {
 }
 
 bool Surface3D::operator==(vtkProp* prop) const {
 	Q_D(const Surface3D);
-	return d->surfaceActor == prop;
+	return dynamic_cast<vtkProp*>(d->surfaceActor.Get()) == prop;
 }
 
 bool Surface3D::operator!=(vtkProp* prop) const {
@@ -129,10 +146,12 @@ Surface3DPrivate::Surface3DPrivate(vtkRenderer* renderer, Surface3D *parent)
 	, renderer(renderer)
 	, visualizationType(Surface3D::VisualizationType_Triangles)
 	, sourceType(Surface3D::Surface3D::DataSource_Empty)
+	, isSelected(false)
 	, demoHandler(new DemoDataHandler)
 	, spreadsheetHandler(new SpreadsheetDataHandler)
 	, matrixHandler(new MatrixDataHandler)
-	, fileHandler(new FileDataHandler) {
+	, fileHandler(new FileDataHandler)
+	, surfaceProperty(vtkProperty::New()) {
 }
 
 void Surface3DPrivate::init() {

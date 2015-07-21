@@ -34,6 +34,7 @@
 
 class vtkProp;
 class vtkRenderer;
+class vtkProperty;
 class Plot3D;
 
 struct Surface3DPrivate {
@@ -43,11 +44,13 @@ struct Surface3DPrivate {
 	Surface3D::VisualizationType visualizationType;
 	Surface3D::DataSource sourceType;
 
+	bool isSelected;
 	DemoDataHandler *demoHandler;
 	SpreadsheetDataHandler *spreadsheetHandler;
 	MatrixDataHandler *matrixHandler;
 	FileDataHandler *fileHandler;
-	vtkSmartPointer<vtkProp> surfaceActor;
+	vtkSmartPointer<vtkActor> surfaceActor;
+	vtkSmartPointer<vtkProperty> surfaceProperty;
 
 	Surface3DPrivate(vtkRenderer* renderer, Surface3D *parent);
 	void init();
