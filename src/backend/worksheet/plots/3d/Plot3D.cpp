@@ -33,6 +33,7 @@
 #include "DataHandlers.h"
 #include "MouseInteractor.h"
 #include "VTKGraphicsItem.h"
+#include "XmlAttributeReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/plots/PlotArea.h"
@@ -61,6 +62,22 @@
 
 Plot3D::Plot3D(const QString& name)
 	: AbstractPlot(name, new Plot3DPrivate(this)){
+	//read default settings
+	KConfig config;
+	KConfigGroup group = config.group("Plot3D");
+
+	//general
+
+	//background
+	Q_D(Plot3D);
+	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
+	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
+	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled);
+	d->backgroundBrushStyle = (Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern);
+	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
+	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
+	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
+	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 }
 
 void Plot3D::init(bool transform){
@@ -73,22 +90,6 @@ void Plot3D::init(bool transform){
 
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
-
-	//read default settings
-	KConfig config;
-	KConfigGroup group = config.group("Plot3D");
-
-	//general
-
-	//background
-	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
-	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
-	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled);
-	d->backgroundBrushStyle = (Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern);
-	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
-	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
-	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
-	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 
 	//light
 
@@ -642,6 +643,18 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 
 		writer->writeStartElement("general");
 		writer->writeEndElement();
+
+		writer->writeStartElement("background");
+			writer->writeAttribute("type", QString::number(d->backgroundType));
+			writer->writeAttribute("colorStyle", QString::number(d->backgroundColorStyle));
+			writer->writeAttribute("imageStyle", QString::number(d->backgroundImageStyle));
+			writer->writeAttribute("brushStyle", QString::number(d->backgroundBrushStyle));
+			writer->writeAttribute("firstColor", d->backgroundFirstColor.name());
+			writer->writeAttribute("secondColor", d->backgroundSecondColor.name());
+			writer->writeAttribute("fileName", d->backgroundFileName);
+			writer->writeAttribute("opacity", QString::number(d->backgroundOpacity));
+		writer->writeEndElement();
+
 		d->axes->save(writer);
 		foreach(const Surface3D* surface, d->surfaces){
 			surface->save(writer);
@@ -685,6 +698,17 @@ bool Plot3D::load(XmlStreamReader* reader) {
 			Surface3D* newSurface = new Surface3D();
 			newSurface->load(reader);
 			d->surfaces.insert(newSurface);
+		}else if(sectionName == "background"){
+			const QXmlStreamAttributes& attribs = reader->attributes();
+			XmlAttributeReader attributeReader(reader, attribs);
+			attributeReader.checkAndLoadAttribute<PlotArea::BackgroundType>("type", d->backgroundType);
+			attributeReader.checkAndLoadAttribute<PlotArea::BackgroundColorStyle>("colorStyle", d->backgroundColorStyle);
+			attributeReader.checkAndLoadAttribute<PlotArea::BackgroundImageStyle>("imageStyle", d->backgroundImageStyle);
+			attributeReader.checkAndLoadAttribute<Qt::BrushStyle>("brushStyle", d->backgroundBrushStyle);
+			attributeReader.checkAndLoadAttribute("firstColor", d->backgroundFirstColor);
+			attributeReader.checkAndLoadAttribute("secondColor", d->backgroundSecondColor);
+			attributeReader.checkAndLoadAttribute("fileName", d->backgroundFileName);
+			attributeReader.checkAndLoadAttribute("opacity", d->backgroundOpacity);
 		}
 	}
 	return true;

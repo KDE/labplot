@@ -45,6 +45,16 @@ namespace AttributeReaderHelper{
 	}
 
 	template<>
+	inline QString convertQStringToAttributeType<QString>(const QString& str) {
+		return str;
+	}
+
+	template<>
+	inline float convertQStringToAttributeType<float>(const QString& str) {
+		return str.toFloat();
+	}
+
+	template<>
 	inline int convertQStringToAttributeType<int>(const QString& str) {
 		return str.toInt();
 	}
