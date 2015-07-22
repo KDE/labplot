@@ -160,7 +160,22 @@ void Plot3D::itemRemoved() {
 	Q_D(Plot3D);
 	Surface3D* surface = qobject_cast<Surface3D*>(sender());
 	if (surface != 0) {
+		qDebug() << "Remove surface";
 		d->surfaces.remove(surface);
+		return;
+	}
+
+	Curve3D* curve = qobject_cast<Curve3D*>(sender());
+	if (curve != 0) {
+		qDebug() << "Remove curve";
+		d->curves.remove(curve);
+		return;
+	}
+
+	Light* light = qobject_cast<Light*>(sender());
+	if (light != 0) {
+		qDebug() << "Remove light";
+		d->lights.remove(light);
 	}
 }
 
