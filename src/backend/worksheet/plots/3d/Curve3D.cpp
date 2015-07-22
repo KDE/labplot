@@ -90,6 +90,8 @@ void Curve3D::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute("pointRadius", QString::number(d->pointRadius));
 		writer->writeAttribute("showVertices", QString::number(d->showVertices));
 		writer->writeAttribute("isClosed", QString::number(d->isClosed));
+		writeBasicAttributes(writer);
+		writeCommentElement(writer);
 	writer->writeEndElement();
 }
 
@@ -104,6 +106,26 @@ bool Curve3D::load(XmlStreamReader* reader) {
 	attributeReader.checkAndLoadAttribute("pointRadius", d->pointRadius);
 	attributeReader.checkAndLoadAttribute("showVertices", d->showVertices);
 	attributeReader.checkAndLoadAttribute("isClosed", d->isClosed);
+
+	if(!readBasicAttributes(reader)){
+		return false;
+	}
+
+	while(!reader->atEnd()){
+		reader->readNext();
+		const QStringRef& sectionName = reader->name();
+		if (reader->isEndElement() && sectionName == "curve3d")
+			break;
+
+		if (reader->isEndElement())
+			continue;
+
+		if (sectionName == "comment") {
+			if (!readCommentElement(reader))
+				return false;
+		}
+	}
+
 	return true;
 }
 
