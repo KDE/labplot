@@ -164,6 +164,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/3d/VTKGraphicsItem.cpp
 	${BACKEND_DIR}/worksheet/plots/3d/Surface3D.cpp
 	${BACKEND_DIR}/worksheet/plots/3d/MouseInteractor.cpp
+	${BACKEND_DIR}/worksheet/plots/3d/Light.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 )
 

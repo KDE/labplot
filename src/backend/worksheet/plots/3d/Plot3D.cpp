@@ -30,6 +30,7 @@
 #include "Plot3DPrivate.h"
 #include "Surface3D.h"
 #include "Axes.h"
+#include "Light.h"
 #include "DataHandlers.h"
 #include "MouseInteractor.h"
 #include "VTKGraphicsItem.h"
@@ -417,7 +418,8 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	, vtkItem(0)
 	, isInitialized(false)
 	, rectSet(false)
-	, axes(new Axes) {
+	, axes(new Axes)
+	, mainLight(new Light(0, false)) {
 }
 
 Plot3DPrivate::~Plot3DPrivate() {
@@ -438,8 +440,6 @@ void Plot3DPrivate::init() {
 
 	//foreground renderer
 	renderer = vtkSmartPointer<vtkRenderer>::New();
-	vtkSmartPointer<vtkLight> light = vtkSmartPointer<vtkLight>::New();
-	renderer->AddLight(light);
 
 	//background renderer
 	backgroundRenderer = vtkSmartPointer<vtkRenderer>::New();
@@ -460,8 +460,8 @@ void Plot3DPrivate::init() {
 	renderWindow->GetInteractor()->SetInteractorStyle(style);
 
 	//light
-	light->SetFocalPoint(1.875, 0.6125, 0);
-	light->SetPosition(0.875, 1.6125, 1);
+	mainLight->setRenderer(renderer);
+	q->addChild(mainLight);
 
 	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
 	backgroundRenderer->AddActor(backgroundImageActor);
