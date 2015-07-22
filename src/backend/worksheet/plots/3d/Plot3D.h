@@ -115,6 +115,7 @@ class Plot3D : public AbstractPlot {
 	private slots:
 		void updatePlot();
 		void addSurface();
+		void addCurve();
 		void addLight();
 		void itemRemoved();
 		void lightRemoved();

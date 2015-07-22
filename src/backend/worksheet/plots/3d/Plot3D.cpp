@@ -29,6 +29,7 @@
 #include "Plot3D.h"
 #include "Plot3DPrivate.h"
 #include "Surface3D.h"
+#include "Curve3D.h"
 #include "Axes.h"
 #include "Light.h"
 #include "DataHandlers.h"
@@ -129,7 +130,6 @@ void Plot3D::configureAspect(AbstractAspect* aspect) {
 	d->vtkItem->connect(aspect, SIGNAL(parametersChanged()), SLOT(refresh()));
 	d->vtkItem->connect(aspect, SIGNAL(removed()), SLOT(refresh()));
 	connect(aspect, SIGNAL(removed()), SLOT(itemRemoved()));
-	d->vtkItem->refresh();
 }
 
 void Plot3D::addSurface() {
@@ -137,6 +137,15 @@ void Plot3D::addSurface() {
 	Surface3D* newSurface = new Surface3D(d->renderer);
 	d->surfaces.insert(newSurface);
 	configureAspect(newSurface);
+	d->vtkItem->refresh();
+}
+
+void Plot3D::addCurve() {
+	Q_D(Plot3D);
+	Curve3D* newCurve = new Curve3D(d->renderer);
+	d->curves.insert(newCurve);
+	configureAspect(newCurve);
+	d->vtkItem->refresh();
 }
 
 void Plot3D::addLight() {
@@ -144,6 +153,7 @@ void Plot3D::addLight() {
 	Light* newLight = new Light(d->renderer);
 	d->lights.insert(newLight);
 	configureAspect(newLight);
+	d->vtkItem->refresh();
 }
 
 void Plot3D::itemRemoved() {
@@ -170,17 +180,31 @@ void Plot3D::objectClicked(vtkProp* object) {
 		// Deselect all Plot3D children
 		qDebug() << Q_FUNC_INFO << "Deselect";
 		emit currentAspectChanged(this);
-		foreach(Surface3D *surface, d->surfaces) {
+		foreach(Surface3D* surface, d->surfaces) {
 			surface->highlight(false);
 		}
+
+		foreach(Curve3D* curve, d->curves) {
+			curve->highlight(false);
+		}
 	} else {
-		foreach(Surface3D *surface, d->surfaces) {
+		foreach(Surface3D* surface, d->surfaces) {
 			if (*surface == object) {
 				qDebug() << Q_FUNC_INFO << "Surface clicked" << surface->name();
 				emit currentAspectChanged(surface);
 				surface->highlight(true);
 			} else {
 				surface->highlight(false);
+			}
+		}
+
+		foreach(Curve3D* curve, d->curves) {
+			if (*curve == object) {
+				qDebug() << Q_FUNC_INFO << "Curve clicked" << curve->name();
+				emit currentAspectChanged(curve);
+				curve->highlight(true);
+			} else {
+				curve->highlight(false);
 			}
 		}
 	}
@@ -196,7 +220,7 @@ void Plot3D::initActions() {
 	addSurfaceAction = new KAction(KIcon("3d-surface"), i18n("3D-surface"), this);
 
 	connect(addLightAction, SIGNAL(triggered(bool)), SLOT(addLight()));
-// 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
+ 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 // 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
  	connect(addSurfaceAction, SIGNAL(triggered()), SLOT(addSurface()));
 
@@ -463,18 +487,17 @@ void Plot3DPrivate::init() {
 
 	foreach(Surface3D* surface, surfaces) {
 		surface->setRenderer(renderer);
-		q->addChild(surface);
-		vtkItem->connect(surface, SIGNAL(parametersChanged()), SLOT(refresh()));
-		vtkItem->connect(surface, SIGNAL(removed()), SLOT(refresh()));
-		q->connect(surface, SIGNAL(removed()), SLOT(itemRemoved()));
+		q->configureAspect(surface);
+	}
+
+	foreach(Curve3D* curve, curves) {
+		curve->setRenderer(renderer);
+		q->configureAspect(curve);
 	}
 
 	foreach(Light* light, lights) {
 		light->setRenderer(renderer);
-		q->addChild(light);
-		vtkItem->connect(light, SIGNAL(parametersChanged()), SLOT(refresh()));
-		vtkItem->connect(light, SIGNAL(removed()), SLOT(refresh()));
-		q->connect(light, SIGNAL(removed()), SLOT(lightRemoved()));
+		q->configureAspect(light);
 	}
 }
 
@@ -656,6 +679,9 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 		foreach(const Surface3D* surface, d->surfaces){
 			surface->save(writer);
 		}
+		foreach(const Curve3D* curve, d->curves){
+			curve->save(writer);
+		}
 		d->mainLight->save(writer);
 		foreach(const Light* light, d->lights){
 			light->save(writer);
@@ -699,6 +725,11 @@ bool Plot3D::load(XmlStreamReader* reader) {
 			Surface3D* newSurface = new Surface3D();
 			newSurface->load(reader);
 			d->surfaces.insert(newSurface);
+		}else if(sectionName == "curve3d"){
+			qDebug() << Q_FUNC_INFO << "Load curve";
+			Curve3D* newCurve = new Curve3D();
+			newCurve->load(reader);
+			d->curves.insert(newCurve);
 		}else if(sectionName == "background"){
 			const QXmlStreamAttributes& attribs = reader->attributes();
 			XmlAttributeReader attributeReader(reader, attribs);

@@ -38,6 +38,7 @@
 
 class Axes;
 class Light;
+class Curve3D;
 class Surface3D;
 
 class vtkImageActor;
@@ -65,7 +66,10 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		bool isInitialized;
 		bool rectSet;
 
+		// TODO: Store surfaces and curves in the same collection after creating a
+		// base class between them
 		QSet<Surface3D*> surfaces;
+		QSet<Curve3D*> curves;
 		QSet<Light*> lights;
 
 		Axes* axes;
