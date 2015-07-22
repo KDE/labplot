@@ -40,7 +40,27 @@ class Light3DDock : public QWidget {
 		void setLight(Light *light);
 
 	private slots:
+		void onFocalPointChanged(double);
 
+		void onPositionChanged(double);
+
+		void onIntensityChanged(double);
+		void onAmbientChanged(const QColor&);
+		void onDiffuseChanged(const QColor&);
+		void onSpecularChanged(const QColor&);
+		void onElevationChanged(int);
+		void onAzimuthChanged(int);
+		void onConeAngleChanged(int);
+
+		void focalPointChanged(const QVector3D&);
+		void positionChanged(const QVector3D&);
+		void intensityChanged(double);
+		void ambientChanged(const QColor&);
+		void diffuseChanged(const QColor&);
+		void specularChanged(const QColor&);
+		void elevationChanged(double);
+		void azimuthChanged(double);
+		void coneAngleChanged(double);
 	private:
 		Ui::Light3DDock ui;
 		Light *light;

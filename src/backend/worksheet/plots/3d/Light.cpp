@@ -65,6 +65,7 @@ BASIC_SHARED_D_READER_IMPL(Light, QColor, ambient, ambient)
 BASIC_SHARED_D_READER_IMPL(Light, QColor, diffuse, diffuse)
 BASIC_SHARED_D_READER_IMPL(Light, QColor, specular, specular)
 BASIC_SHARED_D_READER_IMPL(Light, double, elevation, elevation)
+BASIC_SHARED_D_READER_IMPL(Light, double, azimuth, azimuth)
 BASIC_SHARED_D_READER_IMPL(Light, double, coneAngle, coneAngle)
 
 //##############################################################################
@@ -159,6 +160,7 @@ void LightPrivate::hide() {
 void LightPrivate::update() {
 	hide();
 	init();
+	emit q->parametersChanged();
 }
 
 QString LightPrivate::name() const {

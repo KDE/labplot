@@ -85,6 +85,7 @@ class Light : public AbstractAspect {
 		void elevationChanged(double);
 		void azimuthChanged(double);
 		void coneAngleChanged(double);
+		void parametersChanged();
 
 	private:
 		const QScopedPointer<LightPrivate> d_ptr;

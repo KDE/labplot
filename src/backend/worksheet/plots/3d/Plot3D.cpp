@@ -431,6 +431,7 @@ void Plot3DPrivate::init() {
 	//light
 	mainLight->setRenderer(renderer);
 	q->addChild(mainLight);
+	vtkItem->connect(mainLight, SIGNAL(parametersChanged()), SLOT(refresh()));
 
 	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
 	backgroundRenderer->AddActor(backgroundImageActor);
