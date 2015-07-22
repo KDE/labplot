@@ -35,6 +35,7 @@
 #include "MouseInteractor.h"
 #include "VTKGraphicsItem.h"
 #include "XmlAttributeReader.h"
+#include "Utils3D.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/plots/PlotArea.h"
@@ -352,60 +353,28 @@ BASIC_SHARED_D_READER_IMPL(Plot3D, float, backgroundOpacity, backgroundOpacity)
 //##############################################################################
 
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundType, PlotArea::BackgroundType, backgroundType, updateBackground)
-void Plot3D::setBackgroundType(PlotArea::BackgroundType type) {
-	Q_D(Plot3D);
-	if (type != d->backgroundType)
-		exec(new Plot3DSetBackgroundTypeCmd(d, type, i18n("%1: background type changed")));
-}
+STD_SETTER_IMPL(Plot3D, BackgroundType, PlotArea::BackgroundType, backgroundType, "%1: background type changed")
 
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, updateBackground)
-void Plot3D::setBackgroundColorStyle(PlotArea::BackgroundColorStyle style) {
-	Q_D(Plot3D);
-	if (style != d->backgroundColorStyle)
-		exec(new Plot3DSetBackgroundColorStyleCmd(d, style, i18n("%1: background color style changed")));
-}
+STD_SETTER_IMPL(Plot3D, BackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, "%1: background color style changed")
 
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, updateBackground)
-void Plot3D::setBackgroundImageStyle(PlotArea::BackgroundImageStyle style) {
-	Q_D(Plot3D);
-	if (style != d->backgroundImageStyle)
-		exec(new Plot3DSetBackgroundImageStyleCmd(d, style, i18n("%1: background image style changed")));
-}
+STD_SETTER_IMPL(Plot3D, BackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, "%1: background image style changed")
 
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, updateBackground)
-void Plot3D::setBackgroundBrushStyle(Qt::BrushStyle style) {
-	Q_D(Plot3D);
-	if (style != d->backgroundBrushStyle)
-		exec(new Plot3DSetBackgroundBrushStyleCmd(d, style, i18n("%1: background brush style changed")));
-}
+STD_SETTER_IMPL(Plot3D, BackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, "%1: background brush style changed")
 
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundFirstColor, QColor, backgroundFirstColor, updateBackground)
-void Plot3D::setBackgroundFirstColor(const QColor &color) {
-	Q_D(Plot3D);
-	if (color!= d->backgroundFirstColor)
-		exec(new Plot3DSetBackgroundFirstColorCmd(d, color, i18n("%1: set background first color")));
-}
+STD_SETTER_IMPL(Plot3D, BackgroundFirstColor, const QColor&, backgroundFirstColor, "%1: set background first color")
 
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundSecondColor, QColor, backgroundSecondColor, updateBackground)
-void Plot3D::setBackgroundSecondColor(const QColor &color) {
-	Q_D(Plot3D);
-	if (color!= d->backgroundSecondColor)
-		exec(new Plot3DSetBackgroundSecondColorCmd(d, color, i18n("%1: set background second color")));
-}
+STD_SETTER_IMPL(Plot3D, BackgroundSecondColor, const QColor&, backgroundSecondColor, "%1: set background second color")
 
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundFileName, QString, backgroundFileName, updateBackground)
-void Plot3D::setBackgroundFileName(const QString& fileName) {
-	Q_D(Plot3D);
-	if (fileName!= d->backgroundFileName)
-		exec(new Plot3DSetBackgroundFileNameCmd(d, fileName, i18n("%1: set background image")));
-}
+STD_SETTER_IMPL(Plot3D, BackgroundFileName, const QString&, backgroundFileName, "%1: set background image")
 
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundOpacity, float, backgroundOpacity, updateBackground)
-void Plot3D::setBackgroundOpacity(float opacity) {
-	Q_D(Plot3D);
-	if (opacity != d->backgroundOpacity)
-		exec(new Plot3DSetBackgroundOpacityCmd(d, opacity, i18n("%1: set opacity")));
-}
+STD_SETTER_IMPL(Plot3D, BackgroundOpacity, float, backgroundOpacity, "%1: set opacity")
 
 //##############################################################################
 //######################### Private implementation #############################
