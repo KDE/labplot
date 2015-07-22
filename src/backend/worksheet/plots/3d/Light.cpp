@@ -28,7 +28,6 @@
 
 #include "Light.h"
 #include "LightPrivate.h"
-#include "Utils3D.h"
 #include "XmlAttributeReader.h"
 
 #include "backend/lib/commandtemplates.h"

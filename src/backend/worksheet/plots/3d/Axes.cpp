@@ -30,7 +30,6 @@
 #include "AxesPrivate.h"
 #include "Plot3D.h"
 #include "XmlAttributeReader.h"
-#include "Utils3D.h"
 
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"

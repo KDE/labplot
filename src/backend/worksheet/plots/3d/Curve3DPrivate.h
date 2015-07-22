@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : Utils.h
+    File                 : Curve3DPrivate.h
     Project              : LabPlot
-    Description          : 3D plot util functions
+    Description          : 3D curve class
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Minh Ngo (minh@fedoraproject.org)
 
@@ -26,14 +26,41 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PLOT3D_UTILS_H
-#define PLOT3D_UTILS_H
+#ifndef CURVE3DPRIVATE_H
+#define CURVE3DPRIVATE_H
 
-#define STD_SETTER_IMPL(Class, Method, type, var, message)\
-	void Class::set##Method(type var) {\
-		Q_D(Class);\
-		if (var != d->var)\
-			exec(new Class##Set##Method##Cmd(d, var, i18n(message)));\
-	}
+#include <vtkSmartPointer.h>
+
+class vtkRenderer;
+class vtkActor;
+class vtkProperty;
+
+class Curve3D;
+class AbstractColumn;
+struct Curve3DPrivate {
+	Curve3D* const q;
+
+	bool isSelected;
+	vtkSmartPointer<vtkRenderer> renderer;
+	const AbstractColumn* xColumn;
+	const AbstractColumn* yColumn;
+	const AbstractColumn* zColumn;
+	QString xColumnPath;
+	QString yColumnPath;
+	QString zColumnPath;
+	float pointRadius;
+	bool showVertices;
+	bool isClosed;
+	vtkSmartPointer<vtkActor> curveActor;
+	vtkSmartPointer<vtkProperty> curveProperty;
+
+	Curve3DPrivate(vtkRenderer* renderer, Curve3D* parent);
+	void init();
+	~Curve3DPrivate();
+	QString name() const;
+	void update();
+
+	void hide();
+};
 
 #endif

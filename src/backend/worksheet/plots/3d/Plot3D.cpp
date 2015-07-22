@@ -35,7 +35,6 @@
 #include "MouseInteractor.h"
 #include "VTKGraphicsItem.h"
 #include "XmlAttributeReader.h"
-#include "Utils3D.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/plots/PlotArea.h"

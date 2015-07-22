@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : Surface3D.h
+    File                 : Curve3D.h
     Project              : LabPlot
-    Description          : 3D surface class
+    Description          : 3D curve class
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Minh Ngo (minh@fedoraproject.org)
 
@@ -26,45 +26,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SURFACE3D_H
-#define SURFACE3D_H
+#ifndef CURVE3D_H
+#define CURVE3D_H
 
 #include "backend/lib/macros.h"
 #include "backend/core/AbstractAspect.h"
 
-class vtkProp;
 class vtkRenderer;
+class vtkProp;
 
-class Plot3D;
-class DemoDataHandler;
-class SpreadsheetDataHandler;
-class MatrixDataHandler;
-class FileDataHandler;
-
-class Surface3DPrivate;
-class Surface3D : public AbstractAspect {
+class AbstractColumn;
+class Curve3DPrivate;
+class Curve3D : public AbstractAspect {
 		Q_OBJECT
-		Q_DECLARE_PRIVATE(Surface3D)
-		Q_DISABLE_COPY(Surface3D)
+		Q_DECLARE_PRIVATE(Curve3D)
+		Q_DISABLE_COPY(Curve3D)
 	public:
-		enum VisualizationType {
-			VisualizationType_Triangles = 0
-		};
-
-		enum DataSource {
-			DataSource_File,
-			DataSource_Spreadsheet,
-			DataSource_Matrix,
-			DataSource_Empty,
-			DataSource_MAX
-		};
-
-		enum CollorFilling {NoFilling, SolidColor, ColorMap, ColorMapFromMatrix};
-
-		Surface3D(vtkRenderer* renderer = 0);
+		Curve3D(vtkRenderer* renderer = 0);
 		void setRenderer(vtkRenderer* renderer);
 		void highlight(bool pred);
-		virtual ~Surface3D();
+		virtual ~Curve3D();
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
@@ -72,16 +53,20 @@ class Surface3D : public AbstractAspect {
 		bool operator==(vtkProp* prop) const;
 		bool operator!=(vtkProp* prop) const;
 
-		DemoDataHandler& demoDataHandler();
-		SpreadsheetDataHandler& spreadsheetDataHandler();
-		MatrixDataHandler& matrixDataHandler();
-		FileDataHandler& fileDataHandler();
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn);
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, zColumn, ZColumn);
 
-		BASIC_D_ACCESSOR_DECL(VisualizationType, visualizationType, VisualizationType)
-		BASIC_D_ACCESSOR_DECL(DataSource, dataSource, DataSource)
+		const QString& xColumnPath() const;
+		const QString& yColumnPath() const;
+		const QString& zColumnPath() const;
 
-		typedef Surface3D BaseClass;
-		typedef Surface3DPrivate Private;
+		BASIC_D_ACCESSOR_DECL(float, pointRadius, PointRadius);
+		BASIC_D_ACCESSOR_DECL(bool, showVertices, ShowVertices);
+		BASIC_D_ACCESSOR_DECL(bool, isClosed, IsClosed);
+
+		typedef Curve3D BaseClass;
+		typedef Curve3DPrivate Private;
 
 	public slots:
 		void remove();
@@ -90,15 +75,23 @@ class Surface3D : public AbstractAspect {
 		void update();
 
 	signals:
-		friend class Surface3DSetVisualizationTypeCmd;
-		friend class Surface3DSetDataSourceCmd;
-		void visualizationTypeChanged(Surface3D::VisualizationType);
-		void sourceTypeChanged(Surface3D::DataSource);
+		friend class Curve3DSetXColumnCmd;
+		friend class Curve3DSetYColumnCmd;
+		friend class Curve3DSetZColumnCmd;
+		friend class Curve3DSetPointRadiusCmd;
+		friend class Curve3DSetShowVerticesCmd;
+		friend class Curve3DSetIsClosedCmd;
+		void xColumnChanged(const AbstractColumn*);
+		void yColumnChanged(const AbstractColumn*);
+		void zColumnChanged(const AbstractColumn*);
+		void pointRadiusChanged(float);
+		void showVerticesChanged(bool);
+		void isClosedChanged(bool);
 		void parametersChanged();
 		void removed();
 
 	private:
-		const QScopedPointer<Surface3DPrivate> d_ptr;
+		const QScopedPointer<Curve3DPrivate> d_ptr;
 };
 
 #endif

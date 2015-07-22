@@ -215,6 +215,12 @@ class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_na
 		virtual void finalize() { m_target->finalize_method(); } \
 };
 
+#define STD_SETTER_IMPL(Class, Method, type, var, message)\
+	void Class::set##Method(type var) {\
+		Q_D(Class);\
+		if (var != d->var)\
+			exec(new Class##Set##Method##Cmd(d, var, i18n(message)));\
+	}
 
 //xml-serialization/deserialization
 //QColor

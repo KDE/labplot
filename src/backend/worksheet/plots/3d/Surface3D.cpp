@@ -30,7 +30,6 @@
 #include "Surface3DPrivate.h"
 #include "Plot3D.h"
 #include "XmlAttributeReader.h"
-#include "Utils3D.h"
 #include "backend/lib/commandtemplates.h"
 
 #include <QDebug>
@@ -41,7 +40,7 @@
 #include <vtkProperty.h>
 
 Surface3D::Surface3D(vtkRenderer* renderer)
-	: AbstractAspect("Surface")
+	: AbstractAspect(i18n("Surface"))
 	, d_ptr(new Surface3DPrivate(renderer, this)) {
 	Q_D(Surface3D);
 	if (renderer)
