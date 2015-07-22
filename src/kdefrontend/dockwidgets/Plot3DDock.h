@@ -31,12 +31,12 @@
 
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/3d/Plot3D.h"
 #include "ui_plot3ddock.h"
 
 class KUrl;
 class AbstractColumn;
 class Matrix;
+class Plot3D;
 class AspectTreeModel;
 
 class Plot3DDock: public QWidget {

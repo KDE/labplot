@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : Surface3DDock.h
+    File                 : Curve3DDock.h
     Project              : LabPlot
-    Description          : widget for 3D surfaces properties
+    Description          : widget for 3D curves properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Minh Ngo (minh@fedoraproject.org)
 
@@ -26,66 +26,27 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SURFACE3DDOCK_H
-#define SURFACE3DDOCK_H
+#ifndef CURVE3DDOCK_H
+#define CURVE3DDOCK_H
 
 #include <QWidget>
-#include "backend/worksheet/plots/3d/Surface3D.h"
-#include "ui_surface3ddock.h"
 
-class Surface3D;
-class Matrix;
+#include "ui_curve3ddock.h"
+
+class Curve3D;
 class AbstractColumn;
 class AspectTreeModel;
 
-class Surface3DDock : public QWidget {
+class Curve3DDock : public QWidget {
 	Q_OBJECT
 
 	public:
-		explicit Surface3DDock(QWidget* parent);
-		void setSurface(Surface3D *surface);
+		explicit Curve3DDock(QWidget* parent);
+		void setCurve(Curve3D* curve);
 
 	private:
-		void hideDataSource(bool hide = true);
-		void hideFileUrl(bool hide = true);
-		void hideTriangleInfo(bool hide = true);
-		void setModelFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect);
-
-	private slots:
-		void retranslateUi();
-
-		void nameChanged();
-		void commentChanged();
-
-		void onTreeViewIndexChanged(const QModelIndex&);
-		void onDataSourceChanged(int);
-		void onVisualizationTypeChanged(int);
-		void onFileChanged(const KUrl&);
-
-		// Surface 3D
-		void visualizationTypeChanged(Surface3D::VisualizationType);
-		void sourceTypeChanged(Surface3D::DataSource);
-
-		// File handling
-		void pathChanged(const KUrl&);
-
-		// Matrix handling
-		void matrixChanged(const Matrix*);
-
-		// Spreadsheet handling
-		void xColumnChanged(const AbstractColumn*);
-		void yColumnChanged(const AbstractColumn*);
-		void zColumnChanged(const AbstractColumn*);
-		void firstNodeChanged(const AbstractColumn*);
-		void secondNodeChanged(const AbstractColumn*);
-		void thirdNodeChanged(const AbstractColumn*);
-
-		//Color filling
-		void colorFillingTypeChanged(int);
-
-	private:
-		Ui::Surface3DDock ui;
-		Surface3D *surface;
+		Ui::Curve3DDock ui;
+		Curve3D *curve;
 		AspectTreeModel *aspectTreeModel;
 		bool m_initializing;
 };

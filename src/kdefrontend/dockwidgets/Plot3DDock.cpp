@@ -27,6 +27,7 @@
  ***************************************************************************/
 
 #include "Plot3DDock.h"
+#include "backend/worksheet/plots/3d/Plot3D.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"

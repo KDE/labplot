@@ -30,8 +30,10 @@
 #define LIGHT3DDOCK_H
 
 #include <QWidget>
-#include "backend/worksheet/plots/3d/Light.h"
+
 #include "ui_light3ddock.h"
+
+class Light;
 
 class Light3DDock : public QWidget {
 		Q_OBJECT

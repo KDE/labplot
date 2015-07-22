@@ -102,6 +102,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	plot3dDock(0),
 	axes3dDock(0),
 	surface3dDock(0),
+	curve3dDock(0),
 	light3dDock(0),
 	columnDock(0),
 	matrixDock(0),

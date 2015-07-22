@@ -30,6 +30,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/Plot3DDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/Axes3DDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/Surface3DDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/Curve3DDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/Light3DDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/MatrixDock.cpp
@@ -84,6 +85,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/plot3ddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/surface3ddock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/curve3ddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axes3ddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/light3ddock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui

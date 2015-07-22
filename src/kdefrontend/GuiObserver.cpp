@@ -37,6 +37,10 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/3d/Plot3D.h"
+#include "backend/worksheet/plots/3d/Surface3D.h"
+#include "backend/worksheet/plots/3d/Curve3D.h"
+#include "backend/worksheet/plots/3d/Axes.h"
+#include "backend/worksheet/plots/3d/Light.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/core/Project.h"
 #include "commonfrontend/ProjectExplorer.h"
@@ -46,6 +50,7 @@
 #include "kdefrontend/dockwidgets/Plot3DDock.h"
 #include "kdefrontend/dockwidgets/Axes3DDock.h"
 #include "kdefrontend/dockwidgets/Surface3DDock.h"
+#include "kdefrontend/dockwidgets/Curve3DDock.h"
 #include "kdefrontend/dockwidgets/Light3DDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
@@ -259,6 +264,22 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 			Surface3D* surface = qobject_cast<Surface3D*>(aspect);
 			if (surface) {
 				mainWindow->surface3dDock->setSurface(surface);
+				break;
+			}
+		}
+
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->surface3dDock);
+	}else if(className == "Curve3D"){
+		if (!mainWindow->curve3dDock){
+			mainWindow->curve3dDock = new Curve3DDock(mainWindow->stackedWidget);
+			mainWindow->stackedWidget->addWidget(mainWindow->curve3dDock);
+		}
+
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("3D Curve properties"));
+		foreach(aspect, selectedAspects){
+			Curve3D* curve = qobject_cast<Curve3D*>(aspect);
+			if (curve) {
+				mainWindow->curve3dDock->setCurve(curve);
 				break;
 			}
 		}

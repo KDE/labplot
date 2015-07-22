@@ -30,6 +30,7 @@
 #define AXES3DDOCK_H
 
 #include <QWidget>
+
 #include "backend/worksheet/plots/3d/Axes.h"
 #include "ui_axes3ddock.h"
 

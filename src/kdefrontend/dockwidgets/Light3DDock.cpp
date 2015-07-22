@@ -27,6 +27,7 @@
  ***************************************************************************/
 
 #include "Light3DDock.h"
+#include "backend/worksheet/plots/3d/Light.h"
 
 Light3DDock::Light3DDock(QWidget* parent)
 	: QWidget(parent)
