@@ -189,7 +189,8 @@ void Surface3DDock::hideTriangleInfo(bool hide) {
 			<< ui.labelX << ui.labelY << ui.labelZ
 			<< ui.cbXCoordinate << ui.cbYCoordinate << ui.cbZCoordinate
 			<< ui.labelNode1 << ui.labelNode2 << ui.labelNode3
-			<< ui.cbNode1 << ui.cbNode2 << ui.cbNode3);
+			<< ui.cbNode1 << ui.cbNode2 << ui.cbNode3
+			<< ui.labelNodeHeader << ui.labelPointHeader);
 
 	foreach(QWidget* w, widgets){
 		w->setVisible(!hide);
