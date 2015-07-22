@@ -116,12 +116,16 @@ void Surface3D::update() {
 
 void Surface3D::show(bool pred) {
 	Q_D(Surface3D);
-	d->surfaceActor->SetVisibility(pred);
-	emit parametersChanged();
+	if (d->surfaceActor) {
+		d->surfaceActor->SetVisibility(pred);
+		emit parametersChanged();
+	}
 }
 
 bool Surface3D::isVisible() const {
 	Q_D(const Surface3D);
+	if (!d->surfaceActor)
+		return false;
 	return d->surfaceActor->GetVisibility() != 0;
 }
 

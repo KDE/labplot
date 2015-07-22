@@ -192,12 +192,16 @@ void Curve3D::update() {
 
 void Curve3D::show(bool pred) {
 	Q_D(Curve3D);
-	d->curveActor->SetVisibility(pred);
-	emit parametersChanged();
+	if (d->curveActor) {
+		d->curveActor->SetVisibility(pred);
+		emit parametersChanged();
+	}
 }
 
 bool Curve3D::isVisible() const {
 	Q_D(const Curve3D);
+	if (!d->curveActor)
+		return false;
 	return d->curveActor->GetVisibility() != 0;
 }
 
