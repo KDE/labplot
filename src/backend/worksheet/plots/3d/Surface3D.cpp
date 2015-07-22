@@ -30,6 +30,7 @@
 #include "Surface3DPrivate.h"
 #include "Plot3D.h"
 #include "XmlAttributeReader.h"
+#include "Utils3D.h"
 #include "backend/lib/commandtemplates.h"
 
 #include <QDebug>
@@ -126,18 +127,10 @@ BASIC_SHARED_D_READER_IMPL(Surface3D, Surface3D::DataSource, dataSource, sourceT
 //##############################################################################
 
 STD_SETTER_CMD_IMPL_F_S(Surface3D, SetVisualizationType, Surface3D::VisualizationType, visualizationType, update)
-void Surface3D::setVisualizationType(VisualizationType type) {
-	Q_D(Surface3D);
-	if (type != d->visualizationType)
-		exec(new Surface3DSetVisualizationTypeCmd(d, type, i18n("%1: visualization type changed")));
-}
+STD_SETTER_IMPL(Surface3D, VisualizationType, Surface3D::VisualizationType, visualizationType, "%1: visualization type changed")
 
 STD_SETTER_CMD_IMPL_F_S(Surface3D, SetDataSource, Surface3D::DataSource, sourceType, update)
-void Surface3D::setDataSource(DataSource source) {
-	Q_D(Surface3D);
-	if (source != d->sourceType)
-		exec(new Surface3DSetDataSourceCmd(d, source, i18n("%1: data source type changed")));
-}
+STD_SETTER_IMPL(Surface3D, DataSource, Surface3D::DataSource, sourceType, "%1: data source type changed")
 
 ////////////////////////////////////////////////////////////////////////////////
 

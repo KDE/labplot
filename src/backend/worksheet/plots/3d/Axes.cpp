@@ -30,6 +30,7 @@
 #include "AxesPrivate.h"
 #include "Plot3D.h"
 #include "XmlAttributeReader.h"
+#include "Utils3D.h"
 
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
@@ -143,18 +144,10 @@ BASIC_SHARED_D_READER_IMPL(Axes, QColor, zLabelColor, zLabelColor)
 //##############################################################################
 
 STD_SETTER_CMD_IMPL_F_S(Axes, SetType, Axes::AxesType, type, update)
-void Axes::setType(AxesType type) {
-	Q_D(Axes);
-	if (type != d->type)
-		exec(new AxesSetTypeCmd(d, type, i18n("%1: axes type changed")));
-}
+STD_SETTER_IMPL(Axes, Type, Axes::AxesType, type, "%1: axes type changed")
 
 STD_SETTER_CMD_IMPL_F_S(Axes, SetFontSize, int, fontSize, update)
-void Axes::setFontSize(int fontSize) {
-	Q_D(Axes);
-	if (fontSize != d->fontSize)
-		exec(new AxesSetFontSizeCmd(d, fontSize, i18n("%1: axes font size changed")));
-}
+STD_SETTER_IMPL(Axes, FontSize, int, fontSize, "%1: axes font size changed")
 
 STD_SETTER_CMD_IMPL_F_S(Axes, SetWidth, double, width, update)
 void Axes::setWidth(double width) {
@@ -164,25 +157,13 @@ void Axes::setWidth(double width) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axes, SetXLabelColor, QColor, xLabelColor, update)
-void Axes::setXLabelColor(const QColor& color){
-	Q_D(Axes);
-	if (color != d->xLabelColor)
-		exec(new AxesSetXLabelColorCmd(d, color, i18n("%1: axes X label color changed")));
-}
+STD_SETTER_IMPL(Axes, XLabelColor, const QColor&, xLabelColor, "%1: axes X label color changed")
 
 STD_SETTER_CMD_IMPL_F_S(Axes, SetYLabelColor, QColor, yLabelColor, update)
-void Axes::setYLabelColor(const QColor& color){
-	Q_D(Axes);
-	if (color != d->yLabelColor)
-		exec(new AxesSetYLabelColorCmd(d, color, i18n("%1: axes Y label color changed")));
-}
+STD_SETTER_IMPL(Axes, YLabelColor, const QColor&, yLabelColor, "%1: axes Y label color changed")
 
 STD_SETTER_CMD_IMPL_F_S(Axes, SetZLabelColor, QColor, zLabelColor, update)
-void Axes::setZLabelColor(const QColor& color){
-	Q_D(Axes);
-	if (color != d->zLabelColor)
-		exec(new AxesSetZLabelColorCmd(d, color, i18n("%1: axes Z label color changed")));
-}
+STD_SETTER_IMPL(Axes, ZLabelColor, const QColor&, zLabelColor, "%1: axes Z label color changed")
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -30,6 +30,7 @@
 #include "DataHandlersPrivate.h"
 #include "Surface3D.h"
 #include "XmlAttributeReader.h"
+#include "Utils3D.h"
 
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
@@ -147,11 +148,7 @@ vtkSmartPointer<vtkActor> FileDataHandler::trianglesActor() {
 CLASS_SHARED_D_READER_IMPL(FileDataHandler, KUrl, file, path)
 
 STD_SETTER_CMD_IMPL_F_S(FileDataHandler, SetFile, KUrl, path, update)
-void FileDataHandler::setFile(const KUrl& path) {
-	Q_D(FileDataHandler);
-	if (d->path != path)
-		exec(new FileDataHandlerSetFileCmd(d, path, i18n("%1: file path changed")));
-}
+STD_SETTER_IMPL(FileDataHandler, File, const KUrl&, path, "%1: file path changed")
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -312,46 +309,22 @@ vtkSmartPointer<vtkActor> SpreadsheetDataHandler::trianglesActor() {
 }
 
 STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetXColumn, const AbstractColumn*, xColumn, update)
-void SpreadsheetDataHandler::setXColumn(const AbstractColumn *column) {
-	Q_D(SpreadsheetDataHandler);
-	if (d->xColumn != column)
-		exec(new SpreadsheetDataHandlerSetXColumnCmd(d, column, i18n("%1: X column changed")));
-}
+STD_SETTER_IMPL(SpreadsheetDataHandler, XColumn, const AbstractColumn*, xColumn, "%1: X column changed")
 
 STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetYColumn, const AbstractColumn*, yColumn, update)
-void SpreadsheetDataHandler::setYColumn(const AbstractColumn *column) {
-	Q_D(SpreadsheetDataHandler);
-	if (d->yColumn != column)
-		exec(new SpreadsheetDataHandlerSetYColumnCmd(d, column, i18n("%1: Y column changed")));
-}
+STD_SETTER_IMPL(SpreadsheetDataHandler, YColumn, const AbstractColumn*, yColumn, "%1: Y column changed")
 
 STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetZColumn, const AbstractColumn*, zColumn, update)
-void SpreadsheetDataHandler::setZColumn(const AbstractColumn *column) {
-	Q_D(SpreadsheetDataHandler);
-	if (d->zColumn != column)
-		exec(new SpreadsheetDataHandlerSetYColumnCmd(d, column, i18n("%1: Z column changed")));
-}
+STD_SETTER_IMPL(SpreadsheetDataHandler, ZColumn, const AbstractColumn*, zColumn, "%1: Z column changed")
 
 STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetFirstNode, const AbstractColumn*, firstNode, update)
-void SpreadsheetDataHandler::setFirstNode(const AbstractColumn *column) {
-	Q_D(SpreadsheetDataHandler);
-	if (d->firstNode != column)
-		exec(new SpreadsheetDataHandlerSetFirstNodeCmd(d, column, i18n("%1: First node changed")));
-}
+STD_SETTER_IMPL(SpreadsheetDataHandler, FirstNode, const AbstractColumn*, firstNode, "%1: First node changed")
 
 STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetSecondNode, const AbstractColumn*, secondNode, update)
-void SpreadsheetDataHandler::setSecondNode(const AbstractColumn *column) {
-	Q_D(SpreadsheetDataHandler);
-	if (d->secondNode != column)
-		exec(new SpreadsheetDataHandlerSetSecondNodeCmd(d, column, i18n("%1: Second node changed")));
-}
+STD_SETTER_IMPL(SpreadsheetDataHandler, SecondNode, const AbstractColumn*, secondNode, "%1: Second node changed")
 
 STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetThirdNode, const AbstractColumn*, thirdNode, update)
-void SpreadsheetDataHandler::setThirdNode(const AbstractColumn *column) {
-	Q_D(SpreadsheetDataHandler);
-	if (d->thirdNode != column)
-		exec(new SpreadsheetDataHandlerSetSecondNodeCmd(d, column, i18n("%1: Third node changed")));
-}
+STD_SETTER_IMPL(SpreadsheetDataHandler, ThirdNode, const AbstractColumn*, thirdNode, "%1: Third node changed")
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -430,11 +403,7 @@ BASIC_SHARED_D_READER_IMPL(MatrixDataHandler, const Matrix*, matrix, matrix)
 const QString& MatrixDataHandler::matrixPath() const { Q_D(const MatrixDataHandler); return d->matrixPath; }
 
 STD_SETTER_CMD_IMPL_F_S(MatrixDataHandler, SetMatrix, const Matrix*, matrix, update)
-void MatrixDataHandler::setMatrix(const Matrix* matrix) {
-	Q_D(MatrixDataHandler);
-	if (d->matrix != matrix)
-		exec(new MatrixDataHandlerSetMatrixCmd(d, matrix, i18n("%1: matrix changed")));
-}
+STD_SETTER_IMPL(MatrixDataHandler, Matrix, const Matrix*, matrix, "%1: Matrix changed")
 
 ////////////////////////////////////////////////////////////////////////////////
 
