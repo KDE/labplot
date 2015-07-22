@@ -124,16 +124,27 @@ QIcon Plot3D::icon() const {
 	return KIcon("office-chart-line");
 }
 
+void Plot3D::configureAspect(AbstractAspect* aspect) {
+	Q_D(Plot3D);
+	addChild(aspect);
+	d->vtkItem->connect(aspect, SIGNAL(parametersChanged()), SLOT(refresh()));
+	d->vtkItem->connect(aspect, SIGNAL(removed()), SLOT(refresh()));
+	connect(aspect, SIGNAL(removed()), SLOT(itemRemoved()));
+	d->vtkItem->refresh();
+}
+
 void Plot3D::addSurface() {
 	Q_D(Plot3D);
 	Surface3D* newSurface = new Surface3D(d->renderer);
-	newSurface->init();
 	d->surfaces.insert(newSurface);
-	addChild(newSurface);
-	d->vtkItem->connect(newSurface, SIGNAL(parametersChanged()), SLOT(refresh()));
-	d->vtkItem->connect(newSurface, SIGNAL(removed()), SLOT(refresh()));
-	connect(newSurface, SIGNAL(removed()), SLOT(itemRemoved()));
-	d->vtkItem->refresh();
+	configureAspect(newSurface);
+}
+
+void Plot3D::addLight() {
+	Q_D(Plot3D);
+	Light* newLight = new Light(d->renderer);
+	d->lights.insert(newLight);
+	configureAspect(newLight);
 }
 
 void Plot3D::itemRemoved() {
@@ -142,6 +153,13 @@ void Plot3D::itemRemoved() {
 	if (surface != 0) {
 		d->surfaces.remove(surface);
 	}
+}
+
+void Plot3D::lightRemoved() {
+	Q_D(Plot3D);
+	Light* light = qobject_cast<Light*>(sender());
+	if (light != 0)
+		d->lights.remove(light);
 }
 
 void Plot3D::objectClicked(vtkProp* object) {
@@ -173,10 +191,12 @@ void Plot3D::objectClicked(vtkProp* object) {
 void Plot3D::initActions() {
 	Q_D(Plot3D);
 	//"add new" actions
+	addLightAction = new KAction(KIcon("light"), i18n("Light"), this);
 	addCurveAction = new KAction(KIcon("3d-curve"), i18n("3D-curve"), this);
 	addEquationCurveAction = new KAction(KIcon("3d-equation-curve"), i18n("3D-curve from a mathematical equation"), this);
 	addSurfaceAction = new KAction(KIcon("3d-surface"), i18n("3D-surface"), this);
 
+	connect(addLightAction, SIGNAL(triggered(bool)), SLOT(addLight()));
 // 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 // 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
  	connect(addSurfaceAction, SIGNAL(triggered()), SLOT(addSurface()));
@@ -237,6 +257,7 @@ void Plot3D::initActions() {
 
 void Plot3D::initMenus(){
 	addNewMenu = new QMenu(i18n("Add new"));
+	addNewMenu->addAction(addLightAction);
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addAction(addSurfaceAction);
@@ -443,11 +464,18 @@ void Plot3DPrivate::init() {
 
 	foreach(Surface3D* surface, surfaces) {
 		surface->setRenderer(renderer);
-		surface->init();
 		q->addChild(surface);
 		vtkItem->connect(surface, SIGNAL(parametersChanged()), SLOT(refresh()));
 		vtkItem->connect(surface, SIGNAL(removed()), SLOT(refresh()));
 		q->connect(surface, SIGNAL(removed()), SLOT(itemRemoved()));
+	}
+
+	foreach(Light* light, lights) {
+		light->setRenderer(renderer);
+		q->addChild(light);
+		vtkItem->connect(light, SIGNAL(parametersChanged()), SLOT(refresh()));
+		vtkItem->connect(light, SIGNAL(removed()), SLOT(refresh()));
+		q->connect(light, SIGNAL(removed()), SLOT(lightRemoved()));
 	}
 }
 
@@ -630,6 +658,9 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 			surface->save(writer);
 		}
 		d->mainLight->save(writer);
+		foreach(const Light* light, d->lights){
+			light->save(writer);
+		}
 	writer->writeEndElement();
 }
 
@@ -684,7 +715,9 @@ bool Plot3D::load(XmlStreamReader* reader) {
 			if (!d->mainLight->load(reader))
 				return false;
 		}else if(sectionName == "light"){
-			// TODO: Implement
+			Light* newLight = new Light();
+			newLight->load(reader);
+			d->lights.insert(newLight);
 		}
 	}
 	return true;

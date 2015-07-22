@@ -66,6 +66,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		bool rectSet;
 
 		QSet<Surface3D*> surfaces;
+		QSet<Light*> lights;
 
 		Axes* axes;
 		Light* mainLight;

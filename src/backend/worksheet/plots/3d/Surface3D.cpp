@@ -43,16 +43,16 @@
 Surface3D::Surface3D(vtkRenderer* renderer)
 	: AbstractAspect("Surface")
 	, d_ptr(new Surface3DPrivate(renderer, this)) {
-}
-
-void Surface3D::init() {
 	Q_D(Surface3D);
-	d->init();
+	if (renderer)
+		d->init();
 }
 
 void Surface3D::setRenderer(vtkRenderer* renderer) {
 	Q_D(Surface3D);
 	d->renderer = renderer;
+	if (renderer)
+		d->init();
 }
 
 void Surface3D::highlight(bool pred) {

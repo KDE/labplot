@@ -65,7 +65,6 @@ class Surface3D : public AbstractAspect {
 
 		Surface3D(vtkRenderer* renderer = 0);
 		void setRenderer(vtkRenderer* renderer);
-		void init();
 		void highlight(bool pred);
 		virtual ~Surface3D();
 

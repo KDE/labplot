@@ -70,9 +70,11 @@ class Plot3D : public AbstractPlot {
 	private:
 		void initActions();
 		void initMenus();
+		void configureAspect(AbstractAspect* aspect);
 
 		QAction* visibilityAction;
 
+		QAction* addLightAction;
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
 		QAction* addSurfaceAction;
@@ -113,7 +115,9 @@ class Plot3D : public AbstractPlot {
 	private slots:
 		void updatePlot();
 		void addSurface();
+		void addLight();
 		void itemRemoved();
+		void lightRemoved();
 		void objectClicked(vtkProp*);
 
 	signals:

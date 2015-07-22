@@ -66,6 +66,9 @@ class Light : public AbstractAspect {
 		typedef Light BaseClass;
 		typedef LightPrivate Private;
 
+	public slots:
+		void remove();
+
 	signals:
 		friend class LightSetFocalPointCmd;
 		friend class LightSetPositionCmd;
@@ -86,6 +89,7 @@ class Light : public AbstractAspect {
 		void azimuthChanged(double);
 		void coneAngleChanged(double);
 		void parametersChanged();
+		void removed();
 
 	private:
 		const QScopedPointer<LightPrivate> d_ptr;

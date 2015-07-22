@@ -63,7 +63,8 @@ Axes::~Axes() {
 void Axes::setRenderer(vtkRenderer* renderer) {
 	Q_D(Axes);
 	d->renderer = renderer;
-	d->init();
+	if (renderer)
+		d->init();
 }
 
 QIcon Axes::icon() const {
