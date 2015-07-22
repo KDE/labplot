@@ -629,6 +629,7 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 		foreach(const Surface3D* surface, d->surfaces){
 			surface->save(writer);
 		}
+		d->mainLight->save(writer);
 	writer->writeEndElement();
 }
 
@@ -679,6 +680,11 @@ bool Plot3D::load(XmlStreamReader* reader) {
 			attributeReader.checkAndLoadAttribute("secondColor", d->backgroundSecondColor);
 			attributeReader.checkAndLoadAttribute("fileName", d->backgroundFileName);
 			attributeReader.checkAndLoadAttribute("opacity", d->backgroundOpacity);
+		}else if(sectionName == "mainLight"){
+			if (!d->mainLight->load(reader))
+				return false;
+		}else if(sectionName == "light"){
+			// TODO: Implement
 		}
 	}
 	return true;

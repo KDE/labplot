@@ -33,6 +33,7 @@
 
 #include <QDebug>
 #include <QColor>
+#include <QVector3D>
 #include <QXmlStreamWriter>
 
 #include <KUrl>
@@ -45,8 +46,19 @@ namespace AttributeReaderHelper{
 	}
 
 	template<>
+	inline QVector3D convertQStringToAttributeType<QVector3D>(const QString& str) {
+		const QStringList& coordinates = str.split(',');
+		return QVector3D(coordinates[0].toFloat(), coordinates[1].toFloat(), coordinates[2].toFloat());
+	}
+
+	template<>
 	inline QString convertQStringToAttributeType<QString>(const QString& str) {
 		return str;
+	}
+
+	template<>
+	inline double convertQStringToAttributeType<double>(const QString& str) {
+		return str.toDouble();
 	}
 
 	template<>

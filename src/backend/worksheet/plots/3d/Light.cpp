@@ -29,6 +29,7 @@
 #include "Light.h"
 #include "LightPrivate.h"
 #include "Utils3D.h"
+#include "XmlAttributeReader.h"
 
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
@@ -99,10 +100,47 @@ STD_SETTER_IMPL(Light, Azimuth, double, azimuth, "%1: azimuth changed")
 STD_SETTER_CMD_IMPL_F_S(Light, SetConeAngle, double, coneAngle, update)
 STD_SETTER_IMPL(Light, ConeAngle, double, coneAngle, "%1: coneAngle changed")
 
+namespace {
+	QString pointToString(const QVector3D& point) {
+		return QString::number(point.x()) + "," + QString::number(point.y())
+				+ "," + QString::number(point.z());
+	}
+}
+
 void Light::save(QXmlStreamWriter* writer) const {
+	Q_D(const Light);
+
+	if (d->canRemove)
+		writer->writeStartElement("light");
+	else
+		writer->writeStartElement("mainLight");
+
+		writeBasicAttributes(writer);
+		writer->writeAttribute("focalPoint", pointToString(d->focalPoint));
+		writer->writeAttribute("position", pointToString(d->position));
+		writer->writeAttribute("intensity", QString::number(d->intensity));
+		writer->writeAttribute("ambient", d->ambient.name());
+		writer->writeAttribute("diffuse", d->diffuse.name());
+		writer->writeAttribute("specular", d->specular.name());
+		writer->writeAttribute("elevation", QString::number(d->elevation));
+		writer->writeAttribute("azimuth", QString::number(d->azimuth));
+		writer->writeAttribute("coneAngle", QString::number(d->coneAngle));
+	writer->writeEndElement();
 }
 
 bool Light::load(XmlStreamReader* reader) {
+	Q_D(Light);
+	const QXmlStreamAttributes& attribs = reader->attributes();
+	XmlAttributeReader attributeReader(reader, attribs);
+	attributeReader.checkAndLoadAttribute("focalPoint", d->focalPoint);
+	attributeReader.checkAndLoadAttribute("position", d->position);
+	attributeReader.checkAndLoadAttribute("intensity", d->intensity);
+	attributeReader.checkAndLoadAttribute("ambient", d->ambient);
+	attributeReader.checkAndLoadAttribute("diffuse", d->diffuse);
+	attributeReader.checkAndLoadAttribute("specular", d->specular);
+	attributeReader.checkAndLoadAttribute("elevation", d->elevation);
+	attributeReader.checkAndLoadAttribute("azimuth", d->azimuth);
+	attributeReader.checkAndLoadAttribute("coneAngle", d->coneAngle);
 	return true;
 }
 
