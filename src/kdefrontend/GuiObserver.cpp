@@ -284,7 +284,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 			}
 		}
 
-		mainWindow->stackedWidget->setCurrentWidget(mainWindow->surface3dDock);
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->curve3dDock);
 	}else if (className=="CartesianPlotLegend"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Cartesian plot legend properties"));
 
