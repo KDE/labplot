@@ -27,12 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 #include "commonfrontend/worksheet/WorksheetView.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/WorksheetElementGroup.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/core/column/Column.h"
 #include "backend/worksheet/TextLabel.h"
 #include "kdefrontend/worksheet/GridDialog.h"
 
@@ -45,7 +41,6 @@
 #include <QSvgGenerator>
 #include <QImage>
 #include <QToolButton>
-#include <QDebug>
 #include <QMessageBox>
 #include <QGraphicsOpacityEffect>
 #include <QTimeLine>
@@ -268,20 +263,6 @@ void WorksheetView::initActions(){
     addHorizontalAxisAction = new QAction(QIcon::fromTheme("axis-horizontal"), i18n("horizontal axis"), this);
     addVerticalAxisAction = new QAction(QIcon::fromTheme("axis-vertical"), i18n("vertical axis"), this);
 
-    scaleAutoAction = new QAction(QIcon::fromTheme("auto-scale-all"), i18n("auto scale"), this);
-    scaleAutoXAction = new QAction(QIcon::fromTheme("auto-scale-x"), i18n("auto scale X"), this);
-    scaleAutoYAction = new QAction(QIcon::fromTheme("auto-scale-y"), i18n("auto scale Y"), this);
-    zoomInAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("zoom in"), this);
-    zoomOutAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("zoom out"), this);
-    zoomInXAction = new QAction(QIcon::fromTheme("zoom-in-x"), i18n("zoom in X"), this);
-    zoomOutXAction = new QAction(QIcon::fromTheme("zoom-out-x"), i18n("zoom out X"), this);
-    zoomInYAction = new QAction(QIcon::fromTheme("zoom-in-y"), i18n("zoom in Y"), this);
-    zoomOutYAction = new QAction(QIcon::fromTheme("zoom-out-y"), i18n("zoom out Y"), this);
-    shiftLeftXAction = new QAction(QIcon::fromTheme("shift-left-x"), i18n("shift left X"), this);
-    shiftRightXAction = new QAction(QIcon::fromTheme("shift-right-x"), i18n("shift right X"), this);
-    shiftUpYAction = new QAction(QIcon::fromTheme("shift-up-y"), i18n("shift up Y"), this);
-    shiftDownYAction = new QAction(QIcon::fromTheme("shift-down-y"), i18n("shift down Y"), this);
-
     connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
     connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
     connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
@@ -289,20 +270,35 @@ void WorksheetView::initActions(){
     connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
     connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
 
-    //zoom actions
-    connect(scaleAutoAction, SIGNAL(triggered()), SLOT(scaleAuto()));
-    connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(scaleAutoX()));
-    connect(scaleAutoYAction, SIGNAL(triggered()), SLOT(scaleAutoY()));
-    connect(zoomInAction, SIGNAL(triggered()), SLOT(zoomIn()));
-    connect(zoomOutAction, SIGNAL(triggered()), SLOT(zoomOut()));
-    connect(zoomInXAction, SIGNAL(triggered()), SLOT(zoomInX()));
-    connect(zoomOutXAction, SIGNAL(triggered()), SLOT(zoomOutX()));
-    connect(zoomInYAction, SIGNAL(triggered()), SLOT(zoomInY()));
-    connect(zoomOutYAction, SIGNAL(triggered()), SLOT(zoomOutY()));
-    connect(shiftLeftXAction, SIGNAL(triggered()), SLOT(shiftLeftX()));
-    connect(shiftRightXAction, SIGNAL(triggered()), SLOT(shiftRightX()));
-    connect(shiftUpYAction, SIGNAL(triggered()), SLOT(shiftUpY()));
-    connect(shiftDownYAction, SIGNAL(triggered()), SLOT(shiftDownY()));
+	QActionGroup* cartesianPlotNavigationGroup = new QActionGroup(this);
+	scaleAutoAction = new KAction(KIcon("auto-scale-all"), i18n("auto scale"), cartesianPlotNavigationGroup);
+	scaleAutoAction->setData(CartesianPlot::ScaleAuto);
+	scaleAutoXAction = new KAction(KIcon("auto-scale-x"), i18n("auto scale X"), cartesianPlotNavigationGroup);
+	scaleAutoXAction->setData(CartesianPlot::ScaleAutoX);
+	scaleAutoYAction = new KAction(KIcon("auto-scale-y"), i18n("auto scale Y"), cartesianPlotNavigationGroup);
+	scaleAutoYAction->setData(CartesianPlot::ScaleAutoY);
+	zoomInAction = new KAction(KIcon("zoom-in"), i18n("zoom in"), cartesianPlotNavigationGroup);
+	zoomInAction->setData(CartesianPlot::ZoomIn);
+	zoomOutAction = new KAction(KIcon("zoom-out"), i18n("zoom out"), cartesianPlotNavigationGroup);
+	zoomOutAction->setData(CartesianPlot::ZoomOut);
+	zoomInXAction = new KAction(KIcon("zoom-in-x"), i18n("zoom in X"), cartesianPlotNavigationGroup);
+	zoomInXAction->setData(CartesianPlot::ZoomInX);
+	zoomOutXAction = new KAction(KIcon("zoom-out-x"), i18n("zoom out X"), cartesianPlotNavigationGroup);
+	zoomOutXAction->setData(CartesianPlot::ZoomOutX);
+	zoomInYAction = new KAction(KIcon("zoom-in-y"), i18n("zoom in Y"), cartesianPlotNavigationGroup);
+	zoomInYAction->setData(CartesianPlot::ZoomInY);
+	zoomOutYAction = new KAction(KIcon("zoom-out-y"), i18n("zoom out Y"), cartesianPlotNavigationGroup);
+	zoomOutYAction->setData(CartesianPlot::ZoomOutY);
+    shiftLeftXAction = new KAction(KIcon("shift-left-x"), i18n("shift left X"), cartesianPlotNavigationGroup);
+	shiftLeftXAction->setData(CartesianPlot::ShiftLeftX);
+	shiftRightXAction = new KAction(KIcon("shift-right-x"), i18n("shift right X"), cartesianPlotNavigationGroup);
+	shiftRightXAction->setData(CartesianPlot::ShiftRightX);
+	shiftUpYAction = new KAction(KIcon("shift-up-y"), i18n("shift up Y"), cartesianPlotNavigationGroup);
+	shiftUpYAction->setData(CartesianPlot::ShiftUpY);
+	shiftDownYAction = new KAction(KIcon("shift-down-y"), i18n("shift down Y"), cartesianPlotNavigationGroup);
+	shiftDownYAction->setData(CartesianPlot::ShiftDownY);
+
+	connect(cartesianPlotNavigationGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotNavigationChanged(QAction*)));
 }
 
 void WorksheetView::initMenus(){
@@ -415,16 +411,12 @@ void WorksheetView::initMenus(){
 void WorksheetView::createContextMenu(QMenu* menu) const {
     Q_ASSERT(menu);
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-    QAction* firstAction = menu->actions().first();
-#else
-    QAction* firstAction = 0;
-    // if we're populating the context menu for the project explorer, then
-    //there're already actions available there. Skip the first title-action
-    //and insert the action at the beginning of the menu.
-    if (menu->actions().size()>1)
-        firstAction = menu->actions().at(1);
-#endif
+	QAction* firstAction = 0;
+	// if we're populating the context menu for the project explorer, then
+	//there're already actions available there. Skip the first title-action
+	//and insert the action at the beginning of the menu.
+	if (menu->actions().size()>1)
+		firstAction = menu->actions().at(1);
 
     menu->insertMenu(firstAction, m_addNewMenu);
     menu->insertSeparator(firstAction);
@@ -788,36 +780,36 @@ void WorksheetView::useViewSizeRequested() {
 }
 
 void WorksheetView::processResize() {
-    if (size() != sceneRect().size()) {
-        static const float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
-        static const float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
-        m_worksheet->setUndoAware(false);
-        m_worksheet->setPageRect(QRectF(0.0, 0.0, width()/hscale, height()/vscale));
-        m_worksheet->setUndoAware(true);
-    }
+	if (size() != sceneRect().size()) {
+		static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
+		static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
+		m_worksheet->setUndoAware(false);
+		m_worksheet->setPageRect(QRectF(0.0, 0.0, width()/hscale, height()/vscale));
+		m_worksheet->setUndoAware(true);
+	}
 }
 
 void WorksheetView::changeZoom(QAction* action){
-    if (action==zoomInViewAction){
-        scale(1.2, 1.2);
-    }else if (action==zoomOutViewAction){
-        scale(1.0/1.2, 1.0/1.2);
-    }else if (action==zoomOriginAction){
-        static const float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
-        static const float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
-        setTransform(QTransform::fromScale(hscale, vscale));
-    }else if (action==zoomFitPageWidthAction){
-        float scaleFactor = viewport()->width()/scene()->sceneRect().width();
-        setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-    }else if (action==zoomFitPageHeightAction){
-        float scaleFactor = viewport()->height()/scene()->sceneRect().height();
-        setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-    }else if (action==zoomFitSelectionAction){
-        fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
-    }
-    currentZoomAction=action;
-    if (tbZoom)
-        tbZoom->setDefaultAction(action);
+	if (action==zoomInViewAction){
+		scale(1.2, 1.2);
+	}else if (action==zoomOutViewAction){
+		scale(1.0/1.2, 1.0/1.2);
+	}else if (action==zoomOriginAction){
+		static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
+		static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
+		setTransform(QTransform::fromScale(hscale, vscale));
+	}else if (action==zoomFitPageWidthAction){
+		float scaleFactor = viewport()->width()/scene()->sceneRect().width();
+		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
+	}else if (action==zoomFitPageHeightAction){
+		float scaleFactor = viewport()->height()/scene()->sceneRect().height();
+		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
+	}else if (action==zoomFitSelectionAction){
+		fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
+	}
+	currentZoomAction=action;
+	if (tbZoom)
+		tbZoom->setDefaultAction(action);
 }
 
 void WorksheetView::mouseModeChanged(QAction* action) {
@@ -1422,171 +1414,16 @@ void WorksheetView::addVerticalAxis() {
     }
 }
 
-void WorksheetView::scaleAuto() {
-    if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-                plot->scaleAuto();
-        }
-    } else {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            plot->scaleAuto();
-        }
-    }
-}
-
-void WorksheetView::scaleAutoX() {
-    if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-                plot->scaleAutoX();
-        }
-    } else {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            plot->scaleAutoX();
-        }
-    }
-}
-
-void WorksheetView::scaleAutoY() {
-    if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-                plot->scaleAutoY();
-        }
-    } else {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            plot->scaleAutoY();
-        }
-    }
-}
-
-void WorksheetView::zoomIn() {
-    if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-                plot->zoomIn();
-        }
-    } else {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            plot->zoomIn();
-        }
-    }
-}
-
-void WorksheetView::zoomOut() {
-    if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-                plot->zoomOut();
-        }
-    } else {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            plot->zoomOut();
-        }
-    }
-}
-
-void WorksheetView::zoomInX() {
-    if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-                plot->zoomInX();
-        }
-    } else {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            plot->zoomInX();
-        }
-    }
-}
-
-void WorksheetView::zoomOutX() {
-    if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-                plot->zoomOutX();
-        }
-    } else {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            plot->zoomOutX();
-        }
-    }
-}
-
-void WorksheetView::zoomInY() {
-    if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-                plot->zoomInY();
-        }
-    } else {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            plot->zoomInY();
-        }
-    }
-}
-
-void WorksheetView::zoomOutY() {
-    if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-                plot->zoomOutY();
-        }
-    } else {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            plot->zoomOutY();
-        }
-    }
-}
-
-void WorksheetView::shiftLeftX() {
-    if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-                plot->shiftLeftX();
-        }
-    } else {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            plot->shiftLeftX();
-        }
-    }
-}
-
-void WorksheetView::shiftRightX() {
-    if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-                plot->shiftRightX();
-        }
-    } else {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            plot->shiftRightX();
-        }
-    }
-}
-
-void WorksheetView::shiftUpY() {
-    if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-                plot->shiftUpY();
-        }
-    } else {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            plot->shiftUpY();
-        }
-    }
-}
-
-void WorksheetView::shiftDownY() {
-    if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-                plot->shiftDownY();
-        }
-    } else {
-        foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-            plot->shiftDownY();
-        }
-    }
+void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
+	CartesianPlot::NavigationOperation op = (CartesianPlot::NavigationOperation)action->data().toInt();
+	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				plot->navigate(op);
+		}
+	} else {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+			plot->navigate(op);
+		}
+	}
 }

@@ -389,7 +389,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter3->setText("3.0");
 	}
 
-    QString file = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "LabPlot2/pics/gsl_distributions/" + m_formulaPixs[distr] + ".jpg");
+    QString file = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "labplot2/pics/gsl_distributions/" + m_formulaPixs[distr] + ".jpg");
 	ui.lFuncPic->setPixmap(QPixmap(file));
 }
 

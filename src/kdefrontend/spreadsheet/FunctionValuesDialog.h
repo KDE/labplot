@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : FunctionValuesDialog.h
     Project              : LabPlot
-    Description          : Dialog for generating equidistant numbers
+    Description          : Dialog for generating values from a mathematical function
     --------------------------------------------------------------------
     Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
 

@@ -88,7 +88,7 @@ SignallingUndoCommand::SignallingUndoCommand(const QString &text, QObject *recei
 	// munge arguments
 	const char *type_names[] = { val0.name(), val1.name(), val2.name(), val3.name() };
 	void *argument_data[] = { val0.data(), val1.data(), val2.data(), val3.data() };
-	for (m_argument_count=0; qstrlen(type_names[m_argument_count]) > 0; m_argument_count++);
+	for (m_argument_count=0; qstrlen(type_names[m_argument_count]) > 0; ++m_argument_count);
 
 	// copy arguments (Q_ARG references will often go out of scope before redo/undo are called)
 	m_argument_types = new int[m_argument_count];

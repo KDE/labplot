@@ -69,6 +69,6 @@ Comment[zh_TW]=LabPlot 是一套互動式圖形與分析科學資料的應用程
 Terminal=false
 MimeType=application/x-LabPlot-gzip;
 Categories=Qt;KDE;Education;Science;Physics;Math;
-X-DocPath=LabPlot2/index.html
+X-DocPath=labplot2/index.html
 X-ServiceTypes=Browser/View
 X-KDE-Library=libLabPlot

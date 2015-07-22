@@ -1318,6 +1318,12 @@ void AxisPrivate::retransformTickLabelStrings(){
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
 		}
+	} else if (labelsFormat == Axis::FormatMultipliesPi) {
+		foreach(float value, tickLabelValues) {
+			str = "<span>"+ QString::number(value / M_PI,'f',labelsPrecision)+"</span>" + QChar(0x03C0);
+			str = labelsPrefix + str + labelsSuffix;
+			tickLabelStrings << str;
+		}
 	}
 
 	//recalculate the position of the tick labels
@@ -1415,7 +1421,8 @@ void AxisPrivate::retransformTickLabelPositions(){
 			width = fm.width(tickLabelStrings.at(i));
 		} else {
 			td.setHtml(tickLabelStrings.at(i));
-			width = td.textWidth();
+			width = td.size().width();
+			height = td.size().height();
 		}
 		anchorPoint = majorTickPoints.at(i);
 
@@ -1605,7 +1612,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 				tempPath.addRect( fm.boundingRect(tickLabelStrings.at(i)) );
 			} else {
 				td.setHtml(tickLabelStrings.at(i));
-				tempPath.addRect( QRectF(-td.size().width(), -td.size().height(), td.size().width(), td.size().height()) );
+				tempPath.addRect( QRectF(0, -td.size().height(), td.size().width(), td.size().height()) );
 			}
 
 			trafo.reset();
@@ -1721,7 +1728,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 				painter->drawText(QPoint(0,0), tickLabelStrings.at(i));
 			} else {
 				td.setHtml(tickLabelStrings.at(i));
-				painter->translate(-td.size().width(), -td.size().height());
+				painter->translate(0, -td.size().height());
 				td.drawContents(painter);
 			}
 

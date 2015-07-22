@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for cartesian plot properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -28,7 +28,6 @@
  ***************************************************************************/
 
 #include "CartesianPlotDock.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/GuiTools.h"
@@ -155,12 +154,12 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
     connect( ui.sbPaddingHorizontal, SIGNAL(valueChanged(double)), this, SLOT(horizontalPaddingChanged(double)) );
     connect( ui.sbPaddingVertical, SIGNAL(valueChanged(double)), this, SLOT(verticalPaddingChanged(double)) );
 
-    TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
-    ui.verticalLayout->addWidget(templateHandler);
-    templateHandler->show();
-    connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-    connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
-    connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
+	ui.verticalLayout->addWidget(templateHandler);
+	templateHandler->show();
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
+	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
     init();
 
@@ -228,12 +227,12 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 
     labelWidget->setLabels(labels);
 
-    //if there is more then one curve in the list, disable the tab "general"
-    if (list.size()==1){
-        ui.lName->setEnabled(true);
-        ui.leName->setEnabled(true);
-        ui.lComment->setEnabled(true);
-        ui.leComment->setEnabled(true);
+	//if there is more then one plot in the list, disable the name and comment fields in the tab "general"
+	if (list.size()==1){
+		ui.lName->setEnabled(true);
+		ui.leName->setEnabled(true);
+		ui.lComment->setEnabled(true);
+		ui.leComment->setEnabled(true);
 
         ui.leName->setText(m_plot->name());
         ui.leComment->setText(m_plot->comment());
@@ -247,8 +246,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
         ui.leComment->setText("");
     }
 
-    //show the properties of the first curve
-    this->load();
+	//show the properties of the first plot
+  	this->load();
 
     //update active widgets
     backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
@@ -680,19 +679,17 @@ void CartesianPlotDock::backgroundTypeChanged(int index){
 void CartesianPlotDock::backgroundColorStyleChanged(int index){
     PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
 
-    if (style == PlotArea::SingleColor){
-        ui.lBackgroundFirstColor->setText(i18n("Color"));
-        ui.lBackgroundSecondColor->hide();
-        ui.kcbBackgroundSecondColor->hide();
-        ui.lBackgroundBrushStyle->show();
-        ui.cbBackgroundBrushStyle->show();
-    }else{
-        ui.lBackgroundFirstColor->setText(i18n("First Color"));
-        ui.lBackgroundSecondColor->show();
-        ui.kcbBackgroundSecondColor->show();
-        ui.lBackgroundBrushStyle->hide();
-        ui.cbBackgroundBrushStyle->hide();
-    }
+	if (style == PlotArea::SingleColor){
+		ui.lBackgroundFirstColor->setText(i18n("Color"));
+		ui.lBackgroundSecondColor->hide();
+		ui.kcbBackgroundSecondColor->hide();
+	}else{
+		ui.lBackgroundFirstColor->setText(i18n("First Color"));
+		ui.lBackgroundSecondColor->show();
+		ui.kcbBackgroundSecondColor->show();
+		ui.lBackgroundBrushStyle->hide();
+		ui.cbBackgroundBrushStyle->hide();
+	}
 
     if (m_initializing)
         return;
@@ -1160,7 +1157,7 @@ void CartesianPlotDock::loadConfig(KConfig& config){
     m_initializing=false;
 }
 
-void CartesianPlotDock::saveConfig(KConfig& config){
+void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 //  KConfigGroup group = config.group( "CartesianPlot" );
 
     //General-tab

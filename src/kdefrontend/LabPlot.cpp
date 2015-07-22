@@ -41,7 +41,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 int main (int argc, char *argv[]) {
-    KAboutData aboutData( QStringLiteral("LabPlot2"), QString("LabPlot2"),
+    KAboutData aboutData( QStringLiteral("labplot2"), QString("LabPlot2"),
                 LVERSION,
                 i18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
                 KAboutLicense::GPL,
@@ -52,7 +52,9 @@ int main (int argc, char *argv[]) {
     aboutData.addAuthor(i18n("Stefan Gerlach"), i18n("developer"), "stefan.gerlach@uni-konstanz.de", 0);
     aboutData.addAuthor(i18n("Alexander Semke"), i18n("developer"), "alexander.semke@web.de", 0);
     aboutData.addAuthor(i18n("Andreas Kainz"), i18n("icon designer"), "kainz.a@gmail.com", 0);
+	aboutData.addCredit(ki18n("Yuri Chornoivan"), ki18n("Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", 0);
     KAboutData::setApplicationData(aboutData);
+
 
     QApplication app(argc, argv);
 

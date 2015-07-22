@@ -74,13 +74,9 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) {
 	lFilter = new QLabel(i18n("Search/Filter:"));
 	layoutFilter->addWidget(lFilter);
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	leFilter= new QLineEdit(frameFilter);
-#else
 	leFilter= new KLineEdit(frameFilter);
 	qobject_cast<KLineEdit*>(leFilter)->setClearButtonShown(true);
-    qobject_cast<KLineEdit*>(leFilter)->setPlaceholderText(i18n("Search/Filter text"));
-#endif
+	qobject_cast<KLineEdit*>(leFilter)->setPlaceholderText(i18n("Search/Filter text"));
 	layoutFilter->addWidget(leFilter);
 
 	bFilterOptions = new QPushButton(frameFilter);
@@ -175,7 +171,6 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event){
 }
 
 void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect){
-// 	qDebug()<<"ProjectExplorer::setCurrentAspect" << aspect->name();
 	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	if(tree_model)
 	  m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(aspect));
@@ -250,15 +245,8 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 	QContextMenuEvent* e = static_cast<QContextMenuEvent*>(event);
 
 	//Menu for showing/hiding the columns in the tree view
-	QMenu* columnsMenu;
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	columnsMenu = new QMenu(h);
-	//TODO how to add a caption/title for the QMenu, when used as a context menu?
-#else
-    columnsMenu = new QMenu(h);
-    (qobject_cast<QMenu*>(columnsMenu))->addSection(i18n("Columns"));
-#endif
-
+	QMenu* columnsMenu = new QMenu(h);
+	columnsMenu->addSection(i18n("Columns"));
 	columnsMenu->addAction(showAllColumnsAction);
 	columnsMenu->addSeparator();
 	for (int i=0; i<list_showColumnActions.size(); i++)
@@ -292,18 +280,14 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect){
 	//expand and make the aspect visible
 	m_treeView->setExpanded(index, true);
 
-	//"auxiliary" aspects like residual columns in XYFitCurve are only expanded
-	//but not selected, return here
-	if ( aspect->parentAspect()->inherits("XYFitCurve") ) {
+	// newly added columns are only expanded but not selected, return here
+	if ( aspect->inherits("Column") ) {
 		m_treeView->setExpanded(tree_model->modelIndexOfAspect(aspect->parentAspect()), true);
 		return;
 	}
 
 	m_treeView->scrollTo(index);
 	m_treeView->setCurrentIndex(index);
-
-	//select the added aspect.
-	m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 }
 
 void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous){
@@ -417,7 +401,7 @@ void ProjectExplorer::toggleFilterCaseSensitivity(){
 
 
 void ProjectExplorer::toggleFilterMatchCompleteWord(){
-	AspectTreeModel * model = qobject_cast<AspectTreeModel *>(m_treeView->model());
+	AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	if(!model)
 		return;
 
@@ -428,7 +412,9 @@ void ProjectExplorer::toggleFilterMatchCompleteWord(){
 }
 
 void ProjectExplorer::selectIndex(const QModelIndex&  index){
-// 	qDebug()<<"ProjectExplorer::selectIndex";
+	if (m_project->isLoading())
+		return;
+
 	if ( !m_treeView->selectionModel()->isSelected(index) ) {
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 		m_treeView->setExpanded(index, true);
@@ -437,14 +423,14 @@ void ProjectExplorer::selectIndex(const QModelIndex&  index){
 }
 
 void ProjectExplorer::deselectIndex(const QModelIndex & index){
-// 	qDebug()<<"ProjectExplorer::deselectIndex";
-	if ( m_treeView->selectionModel()->isSelected(index) ) {
+	if (m_project->isLoading())
+		return;
+
+	if ( m_treeView->selectionModel()->isSelected(index) )
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
-	}
 }
 
 void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected){
-// 	qDebug()<<"ProjectExplorer::selectionChanged";
 	QModelIndex index;
 	QModelIndexList items;
 	AbstractAspect* aspect = 0;

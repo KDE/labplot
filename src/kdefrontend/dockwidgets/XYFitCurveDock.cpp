@@ -162,7 +162,7 @@ void XYFitCurveDock::initGeneralTab() {
 
 void XYFitCurveDock::setModel() {
 	QList<const char*>  list;
-	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
+	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbWeightsColumn->setTopLevelClasses(list);

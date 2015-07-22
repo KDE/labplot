@@ -40,7 +40,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/gsl/parser_extern.h"
-#include "backend/gsl/parser_struct.h"
 
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_vector.h>

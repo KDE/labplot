@@ -279,6 +279,7 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect * aspect)
 	//endInsertColumns();
 	endResetModel();
 
+	m_spreadsheet->emitColumnCountChanged();
 }
 
 void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect * aspect)
@@ -312,6 +313,8 @@ void SpreadsheetModel::handleAspectRemoved(const AbstractAspect * parent, const 
 	beginResetModel();
 	endRemoveColumns();
 	endResetModel();
+
+	m_spreadsheet->emitColumnCountChanged();
 }
 
 void SpreadsheetModel::handleDescriptionChange(const AbstractAspect * aspect)

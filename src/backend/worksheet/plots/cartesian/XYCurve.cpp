@@ -57,7 +57,6 @@
 #include <QElapsedTimer>
 
 #include <KIcon>
-#include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
 
@@ -494,56 +493,56 @@ void XYCurve::setFillingPosition(FillingPosition position) {
 		exec(new XYCurveSetFillingPositionCmd(d, position, i18n("%1: filling position changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingType, PlotArea::BackgroundType, fillingType, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingType, PlotArea::BackgroundType, fillingType, updatePixmap)
 void XYCurve::setFillingType(PlotArea::BackgroundType type) {
 	Q_D(XYCurve);
 	if (type != d->fillingType)
 		exec(new XYCurveSetFillingTypeCmd(d, type, i18n("%1: filling type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingColorStyle, PlotArea::BackgroundColorStyle, fillingColorStyle, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingColorStyle, PlotArea::BackgroundColorStyle, fillingColorStyle, updatePixmap)
 void XYCurve::setFillingColorStyle(PlotArea::BackgroundColorStyle style) {
 	Q_D(XYCurve);
 	if (style != d->fillingColorStyle)
 		exec(new XYCurveSetFillingColorStyleCmd(d, style, i18n("%1: filling color style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingImageStyle, PlotArea::BackgroundImageStyle, fillingImageStyle, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingImageStyle, PlotArea::BackgroundImageStyle, fillingImageStyle, updatePixmap)
 void XYCurve::setFillingImageStyle(PlotArea::BackgroundImageStyle style) {
 	Q_D(XYCurve);
 	if (style != d->fillingImageStyle)
 		exec(new XYCurveSetFillingImageStyleCmd(d, style, i18n("%1: filling image style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingBrushStyle, Qt::BrushStyle, fillingBrushStyle, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingBrushStyle, Qt::BrushStyle, fillingBrushStyle, updatePixmap)
 void XYCurve::setFillingBrushStyle(Qt::BrushStyle style) {
 	Q_D(XYCurve);
 	if (style != d->fillingBrushStyle)
 		exec(new XYCurveSetFillingBrushStyleCmd(d, style, i18n("%1: filling brush style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFirstColor, QColor, fillingFirstColor, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFirstColor, QColor, fillingFirstColor, updatePixmap)
 void XYCurve::setFillingFirstColor(const QColor& color) {
 	Q_D(XYCurve);
 	if (color!= d->fillingFirstColor)
 		exec(new XYCurveSetFillingFirstColorCmd(d, color, i18n("%1: set filling first color")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingSecondColor, QColor, fillingSecondColor, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingSecondColor, QColor, fillingSecondColor, updatePixmap)
 void XYCurve::setFillingSecondColor(const QColor& color) {
 	Q_D(XYCurve);
 	if (color!= d->fillingSecondColor)
 		exec(new XYCurveSetFillingSecondColorCmd(d, color, i18n("%1: set filling second color")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFileName, QString, fillingFileName, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFileName, QString, fillingFileName, updatePixmap)
 void XYCurve::setFillingFileName(const QString& fileName) {
 	Q_D(XYCurve);
 	if (fileName!= d->fillingFileName)
 		exec(new XYCurveSetFillingFileNameCmd(d, fileName, i18n("%1: set filling image")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingOpacity, qreal, fillingOpacity, updateFilling)
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingOpacity, qreal, fillingOpacity, updatePixmap)
 void XYCurve::setFillingOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->fillingOpacity)
@@ -907,7 +906,7 @@ void XYCurvePrivate::retransform(){
 // 	qDebug()<<"XYCurvePrivate::retransform() " << q->name();
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
-	connectedPoints.clear();
+	connectedPointsLogical.clear();
 
 	if ( (NULL == xColumn) || (NULL == yColumn) ){
 		linePath = QPainterPath();
@@ -961,10 +960,10 @@ void XYCurvePrivate::retransform(){
 					break;
 			}
 			symbolPointsLogical.append(tempPoint);
-			connectedPoints.push_back(true);
+			connectedPointsLogical.push_back(true);
 		} else {
-			if (connectedPoints.size())
-				connectedPoints[connectedPoints.size()-1] = false;
+			if (connectedPointsLogical.size())
+				connectedPointsLogical[connectedPointsLogical.size()-1] = false;
 		}
 	}
 
@@ -1014,14 +1013,14 @@ void XYCurvePrivate::updateLines(){
 	switch(lineType){
 	  case XYCurve::Line:{
 		for (int i=0; i<count-1; i++){
-		  if (!lineSkipGaps && !connectedPoints[i]) continue;
+		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 		  lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
 		break;
 	  }
 	  case XYCurve::StartHorizontal:{
 		for (int i=0; i<count-1; i++){
-		  if (!lineSkipGaps && !connectedPoints[i]) continue;
+		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 		  curPoint=symbolPointsLogical.at(i);
 		  nextPoint=symbolPointsLogical.at(i+1);
 		  tempPoint1=QPointF(nextPoint.x(), curPoint.y());
@@ -1032,7 +1031,7 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::StartVertical:{
 		for (int i=0; i<count-1; i++){
-		  if (!lineSkipGaps && !connectedPoints[i]) continue;
+		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 		  curPoint=symbolPointsLogical.at(i);
 		  nextPoint=symbolPointsLogical.at(i+1);
 		  tempPoint1=QPointF(curPoint.x(), nextPoint.y());
@@ -1043,7 +1042,7 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::MidpointHorizontal:{
 		for (int i=0; i<count-1; i++){
-		  if (!lineSkipGaps && !connectedPoints[i]) continue;
+		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 		  curPoint=symbolPointsLogical.at(i);
 		  nextPoint=symbolPointsLogical.at(i+1);
 		  tempPoint1=QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, curPoint.y());
@@ -1056,7 +1055,7 @@ void XYCurvePrivate::updateLines(){
 	  }
 	  case XYCurve::MidpointVertical:{
 		for (int i=0; i<count-1; i++){
-		  if (!lineSkipGaps && !connectedPoints[i]) continue;
+		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 		  curPoint=symbolPointsLogical.at(i);
 		  nextPoint=symbolPointsLogical.at(i+1);
 		  tempPoint1=QPointF(curPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
@@ -1071,7 +1070,7 @@ void XYCurvePrivate::updateLines(){
 		int skip=0;
 		for (int i=0; i<count-1; i++){
 		  if (skip!=1){
-			if (!lineSkipGaps && !connectedPoints[i]) {skip=0; continue;}
+			if (!lineSkipGaps && !connectedPointsLogical[i]) {skip=0; continue;}
 			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 			skip++;
 		  }else{
@@ -1084,7 +1083,7 @@ void XYCurvePrivate::updateLines(){
 		int skip=0;
 		for (int i=0; i<count-1; i++){
 		  if (skip!=2){
-			if (!lineSkipGaps && !connectedPoints[i]) {skip=0; continue;}
+			if (!lineSkipGaps && !connectedPointsLogical[i]) {skip=0; continue;}
 			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 			skip++;
 		  }else{
@@ -1452,7 +1451,7 @@ void XYCurvePrivate::updateFilling() {
 	fillPolygons.clear();
 
 	if (fillingPosition==XYCurve::NoFilling) {
-		updatePixmap();
+		recalcShapeAndBoundingRect();
 		return;
 	}
 
@@ -1460,13 +1459,13 @@ void XYCurvePrivate::updateFilling() {
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
 
-	//if there're no interpolation lines available (XYCurve::NoLine selected)create line-interpolation,
+	//if there're no interpolation lines available (XYCurve::NoLine selected), create line-interpolation,
 	//use already available lines otherwise.
 	if (lines.size()) {
 		fillLines = lines;
 	} else {
 		for (int i=0; i<symbolPointsLogical.count()-1; i++){
-		  if (!lineSkipGaps && !connectedPoints[i]) continue;
+		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 		  fillLines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
 		fillLines = cSystem->mapLogicalToScene(fillLines);
@@ -1476,53 +1475,210 @@ void XYCurvePrivate::updateFilling() {
 	if (!fillLines.size())
 		return;
 
-	QPolygonF pol;
-	QPointF p1, p2;
-	float xEnd, yEnd;
-	if (fillingPosition == XYCurve::FillingAbove)
-		yEnd = cSystem->mapLogicalToScene(QPointF(0, plot->yMax())).y();
-	else if (fillingPosition == XYCurve::FillingBelow)
-		yEnd = cSystem->mapLogicalToScene(QPointF(0, plot->yMin())).y();
-	else if (fillingPosition == XYCurve::FillingZeroBaseline)
-		yEnd = cSystem->mapLogicalToScene(QPointF(0, 0)).y();
-	else if (fillingPosition == XYCurve::FillingLeft)
-		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), 0)).x();
-	else
-		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMax(), 0)).x();
 
-	QPointF start = fillLines.at(0).p1(); //starting point of the current polygon
+	//create polygon(s):
+	//1. Depending on the current zoom-level, only a subset of the curve may be visible in the plot
+	//and more of the filling area should be shown than the area defined by the start and end points of the currently visible points.
+	//We check first whether the curve crosses the boundaries of the plot and determine new start and end points and put them to the boundaries.
+	//2. Furthermore, depending on the current filling type we determine the end point (x- or y-coordinate) where all polygons are closed at the end.
+	QPolygonF pol;
+	QPointF start = fillLines.at(0).p1(); //starting point of the current polygon, initialize with the first visible point
+	QPointF end = fillLines.at(fillLines.size()-1).p2(); //starting point of the current polygon, initialize with the last visible point
+	const QPointF& first = symbolPointsLogical.at(0); //first point of the curve, may not be visible currently
+	const QPointF& last = symbolPointsLogical.at(symbolPointsLogical.size()-1);//first point of the curve, may not be visible currently
+	QPointF edge;
+	float xEnd, yEnd;
+	if (fillingPosition == XYCurve::FillingAbove) {
+		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()));
+
+		//start point
+		if (AbstractCoordinateSystem::essentiallyEqual(start.y(), edge.y())) {
+			if (first.x() < plot->xMin())
+				start = edge;
+			else if (first.x() > plot->xMax())
+				start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
+			else
+				start = cSystem->mapLogicalToScene(QPointF(first.x(), plot->yMin()));
+		}
+
+		//end point
+		if (AbstractCoordinateSystem::essentiallyEqual(end.y(), edge.y())) {
+			if (last.x() < plot->xMin())
+				end = edge;
+			else if (last.x() > plot->xMax())
+				end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
+			else
+				end = cSystem->mapLogicalToScene(QPointF(last.x(), plot->yMin()));
+		}
+
+		//coordinate at which to close all polygons
+		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax())).y();
+	} else if (fillingPosition == XYCurve::FillingBelow) {
+		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
+
+		//start point
+		if (AbstractCoordinateSystem::essentiallyEqual(start.y(), edge.y())) {
+			if (first.x() < plot->xMin())
+				start = edge;
+			else if (first.x() > plot->xMax())
+				start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+			else
+				start = cSystem->mapLogicalToScene(QPointF(first.x(), plot->yMax()));
+		}
+
+		//end point
+		if (AbstractCoordinateSystem::essentiallyEqual(end.y(), edge.y())) {
+			if (last.x() < plot->xMin())
+				end = edge;
+			else if (last.x() > plot->xMax())
+				end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+			else
+				end = cSystem->mapLogicalToScene(QPointF(last.x(), plot->yMax()));
+		}
+
+		//coordinate at which to close all polygons
+		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin())).y();
+	} else if (fillingPosition == XYCurve::FillingZeroBaseline) {
+		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
+
+		//start point
+		if (AbstractCoordinateSystem::essentiallyEqual(start.y(), edge.y())) {
+			if (plot->yMax()>0) {
+				if (first.x() < plot->xMin())
+					start = edge;
+				else if (first.x() > plot->xMax())
+					start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+				else
+					start = cSystem->mapLogicalToScene(QPointF(first.x(), plot->yMax()));
+			} else {
+				if (first.x() < plot->xMin())
+					start = edge;
+				else if (first.x() > plot->xMax())
+					start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
+				else
+					start = cSystem->mapLogicalToScene(QPointF(first.x(), plot->yMin()));
+			}
+		}
+
+		//end point
+		if (AbstractCoordinateSystem::essentiallyEqual(end.y(), edge.y())) {
+			if (plot->yMax()>0) {
+				if (last.x() < plot->xMin())
+					end = edge;
+				else if (last.x() > plot->xMax())
+					end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+				else
+					end = cSystem->mapLogicalToScene(QPointF(last.x(), plot->yMax()));
+			} else {
+				if (last.x() < plot->xMin())
+					end = edge;
+				else if (last.x() > plot->xMax())
+					end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
+				else
+					end = cSystem->mapLogicalToScene(QPointF(last.x(), plot->yMin()));
+			}
+		}
+
+		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()>0 ? plot->yMin() : 0)).y();
+	}else if (fillingPosition == XYCurve::FillingLeft) {
+		edge = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
+
+		//start point
+		if (AbstractCoordinateSystem::essentiallyEqual(start.x(), edge.x())) {
+			if (first.y() < plot->yMin())
+				start = edge;
+			else if (first.y() > plot->yMax())
+				start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+			else
+				start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), first.y()));
+		}
+
+		//end point
+		if (AbstractCoordinateSystem::essentiallyEqual(end.x(), edge.x())) {
+			if (last.y() < plot->yMin())
+				end = edge;
+			else if (last.y() > plot->yMax())
+				end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+			else
+				end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), last.y()));
+		}
+
+		//coordinate at which to close all polygons
+		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin())).x();
+	} else { //FillingRight
+		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()));
+
+		//start point
+		if (AbstractCoordinateSystem::essentiallyEqual(start.x(), edge.x())) {
+			if (first.y() < plot->yMin())
+				start = edge;
+			else if (first.y() > plot->yMax())
+				start = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
+			else
+				start = cSystem->mapLogicalToScene(QPointF(plot->xMin(), first.y()));
+		}
+
+		//end point
+		if (AbstractCoordinateSystem::essentiallyEqual(end.x(), edge.x())) {
+			if (last.y() < plot->yMin())
+				end = edge;
+			else if (last.y() > plot->yMax())
+				end = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
+			else
+				end = cSystem->mapLogicalToScene(QPointF(plot->xMin(), last.y()));
+		}
+
+		//coordinate at which to close all polygons
+		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin())).x();
+	}
+
+	if (start != fillLines.at(0).p1())
+		pol << start;
+
+	QPointF p1, p2;
 	for (int i=0; i<fillLines.size(); ++i) {
 		const QLineF& line = fillLines.at(i);
 		p1 = line.p1();
 		p2 = line.p2();
 		if (i!=0 && p1!=fillLines.at(i-1).p2()) {
 			//the first point of the current line is not equal to the last point of the previous line
-			//-> we have a break in the curve -> close the polygon add it to the polygon list and start a new polygon
-			if (fillingPosition==XYCurve::FillingAbove || fillingPosition==XYCurve::FillingBelow || fillingPosition==XYCurve::FillingZeroBaseline) {
-				pol << QPointF(fillLines.at(i-1).p2().x(), yEnd);
-				pol << QPointF(start.x(), yEnd);
+			//->check whether we have a break in between.
+			bool gap = false; //TODO
+			if (!gap) {
+				//-> we have no break in the curve -> connect the points by a horizontal/vertical line
+				pol << fillLines.at(i-1).p2() << p1;
 			} else {
-				pol << QPointF(xEnd, fillLines.at(i-1).p2().y());
-				pol << QPointF(xEnd, start.y());
+				//-> we have a break in the curve -> close the polygon add it to the polygon list and start a new polygon
+				if (fillingPosition==XYCurve::FillingAbove || fillingPosition==XYCurve::FillingBelow || fillingPosition==XYCurve::FillingZeroBaseline) {
+					pol << QPointF(fillLines.at(i-1).p2().x(), yEnd);
+					pol << QPointF(start.x(), yEnd);
+				} else {
+					pol << QPointF(xEnd, fillLines.at(i-1).p2().y());
+					pol << QPointF(xEnd, start.y());
+				}
+
+				fillPolygons << pol;
+				pol.clear();
+				start = p1;
 			}
-			fillPolygons << pol;
-			pol.clear();
-			start = p1;
 		}
 		pol << p1 << p2;
 	}
 
+	if (p2!=end)
+		pol << end;
+
 	//close the last polygon
 	if (fillingPosition==XYCurve::FillingAbove || fillingPosition==XYCurve::FillingBelow || fillingPosition==XYCurve::FillingZeroBaseline) {
-		pol << QPointF(p2.x(), yEnd);
+		pol << QPointF(end.x(), yEnd);
 		pol << QPointF(start.x(), yEnd);
 	} else {
-		pol << QPointF(xEnd, p2.y());
+		pol << QPointF(xEnd, end.y());
 		pol << QPointF(xEnd, start.y());
 	}
 
 	fillPolygons << pol;
-	updatePixmap();
+	recalcShapeAndBoundingRect();
 }
 
 void XYCurvePrivate::updateErrorBars(){
@@ -1698,7 +1854,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	boundingRectangle = curveShape.boundingRect();
 
 	foreach(const QPolygonF& pol, fillPolygons)
-		boundingRectangle = boundingRectangle.unite(pol.boundingRect());
+		boundingRectangle = boundingRectangle.united(pol.boundingRect());
 
 	//TODO: when the selection is painted, line intersections are visible.
 	//simplified() removes those artifacts but is horrible slow for curves with large number of points.
@@ -2008,17 +2164,22 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 						painter->setBrush(QBrush(pix));
 						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 						break;
-					case PlotArea::Centered:
-	// 					painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
+					case PlotArea::Centered:{
+						QPixmap backpix(rect.size().toSize());
+						backpix.fill();
+						QPainter p(&backpix);
+						p.drawPixmap(QPointF(0,0),pix);
+						p.end();
+						painter->setBrush(QBrush(backpix));
+						painter->setBrushOrigin(-pix.size().width()/2,-pix.size().height()/2);
 						break;
+					}
 					case PlotArea::Tiled:
 						painter->setBrush(QBrush(pix));
-	// 					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 						break;
 					case PlotArea::CenterTiled:
 						painter->setBrush(QBrush(pix));
 						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-	// 					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 				}
 			}
 		} else if (fillingType == PlotArea::Pattern){

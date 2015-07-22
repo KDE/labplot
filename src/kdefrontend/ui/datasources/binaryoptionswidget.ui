@@ -11,6 +11,26 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="3" column="1">
+    <widget class="QSpinBox" name="sbSkipStartBytes">
+     <property name="toolTip">
+      <string>Skip bytes at start of file</string>
+     </property>
+     <property name="maximum">
+      <number>2147483647</number>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lSkipStartBytes">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string>Skip start bytes:</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lVectors">
      <property name="text">
@@ -47,12 +67,12 @@
    <item row="1" column="0">
     <widget class="QLabel" name="lFormat">
      <property name="text">
-      <string>Format:</string>
+      <string>Data type:</string>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="KComboBox" name="cbFormat"/>
+    <widget class="QComboBox" name="cbDataType"/>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="lByteOrder">
@@ -62,9 +82,9 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="KComboBox" name="cbByteOrder"/>
+    <widget class="QComboBox" name="cbByteOrder"/>
    </item>
-   <item row="3" column="0">
+   <item row="5" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -76,6 +96,23 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="lSkipBytes">
+     <property name="text">
+      <string>Skip Bytes:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QSpinBox" name="sbSkipBytes">
+     <property name="toolTip">
+      <string>Skip bytes after each value</string>
+     </property>
+     <property name="maximum">
+      <number>2147483647</number>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
