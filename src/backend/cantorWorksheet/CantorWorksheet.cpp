@@ -43,7 +43,7 @@ CantorWorksheet::CantorWorksheet(AbstractScriptingEngine* engine, const QString 
 /*!
 	initializes Cantor's part and plugins
 */
-void CantorWorksheet::init() {
+void CantorWorksheet::init(QByteArray* content) {
 	KPluginFactory* factory = KPluginLoader(QLatin1String("libcantorpart")).factory();
 	if (factory) {
 		// now that the Part is loaded, we cast it to a Part to get
@@ -55,6 +55,8 @@ void CantorWorksheet::init() {
 			return;
 		}
 		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
+		if(content)
+			m_worksheetAccess->loadWorksheetFromByteArray(content);
 		Cantor::PanelPluginHandler* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
 		if(!handler) {
 			KMessageBox::error(view(), i18n("no PanelPluginHandle found for the Cantor Part."));
@@ -214,40 +216,7 @@ bool CantorWorksheet::load(XmlStreamReader* reader){
 
 			str = attribs.value("content").toString().trimmed();
 			QByteArray content = QByteArray::fromBase64(str.toAscii());
-
-			KPluginFactory* factory = KPluginLoader(QLatin1String("libcantorpart")).factory();
-			if (factory) {
-				m_part = factory->create<KParts::ReadWritePart>(this, QVariantList()<<m_backendName);
-				if(m_part) {
-					m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
-					m_worksheetAccess->loadWorksheetFromByteArray(&content);
-					Cantor::PanelPluginHandler* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
-					if(!handler) {
-						KMessageBox::error(view(), i18n("no PanelPluginHandle found for the Cantor Part."));
-						qApp->quit();
-					}
-					m_plugins = handler->plugins();
-					foreach(Cantor::PanelPlugin* plugin, m_plugins) {
-						if(plugin->name() == "Variable Manager") {
-							Cantor::PanelPlugin* m_variablemgr = plugin;
-							m_session = m_variablemgr->session();
-							m_backendName = m_session->backend()->name();
-							m_variableModel = m_session->variableModel();
-							connect(m_variableModel, SIGNAL(rowsInserted(const QModelIndex, int, int)), this, SLOT(rowsInserted(const QModelIndex, int, int)));
-							connect(m_variableModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex, int, int)), this, SLOT(rowsAboutToBeRemoved(const QModelIndex, int, int)));
-							connect(m_variableModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
-							break;
-						}
-						
-					}
-				}
-				else {
-					return false;
-				}
-			}
-			else {
-				return false;
-			}
+			init(&content);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;

@@ -65,7 +65,7 @@ class CantorWorksheet : public AbstractPart, public scripted{
 		void requestProjectContextMenu(QMenu*);
 
 	private:
-		void init();
+		void init(QByteArray* content = NULL);
 
 		KParts::ReadWritePart* m_part;
 		QList<Cantor::PanelPlugin*> m_plugins;
