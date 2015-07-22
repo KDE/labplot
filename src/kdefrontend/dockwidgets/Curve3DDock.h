@@ -44,6 +44,22 @@ class Curve3DDock : public QWidget {
 		explicit Curve3DDock(QWidget* parent);
 		void setCurve(Curve3D* curve);
 
+	private slots:
+		void onTreeViewIndexChanged(const QModelIndex& index);
+
+		void nameChanged();
+		void commentChanged();
+
+		void xColumnChanged(const AbstractColumn* column);
+		void yColumnChanged(const AbstractColumn* column);
+		void zColumnChanged(const AbstractColumn* column);
+		void pointRadiusChanged(float radius);
+		void isClosedChanged(bool checked);
+		void showVerticesChanged(bool checked);
+
+		void onShowVerticesChanged(bool checked);
+		void onClosedCurveChanged(bool checked);
+
 	private:
 		Ui::Curve3DDock ui;
 		Curve3D *curve;
