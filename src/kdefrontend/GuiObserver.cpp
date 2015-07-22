@@ -46,6 +46,7 @@
 #include "kdefrontend/dockwidgets/Plot3DDock.h"
 #include "kdefrontend/dockwidgets/Axes3DDock.h"
 #include "kdefrontend/dockwidgets/Surface3DDock.h"
+#include "kdefrontend/dockwidgets/Light3DDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
 #include "kdefrontend/dockwidgets/MatrixDock.h"
@@ -231,6 +232,22 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 		}
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->axes3dDock);
+	}else if(className=="Light"){
+		if (!mainWindow->light3dDock){
+			mainWindow->light3dDock = new Light3DDock(mainWindow->stackedWidget);
+			mainWindow->stackedWidget->addWidget(mainWindow->light3dDock);
+		}
+
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Light properties"));
+		foreach(aspect, selectedAspects){
+			Light* light = qobject_cast<Light*>(aspect);
+			if (light) {
+				mainWindow->light3dDock->setLight(light);
+				break;
+			}
+		}
+
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->light3dDock);
 	}else if (className=="Surface3D"){
 		if (!mainWindow->surface3dDock){
 			mainWindow->surface3dDock = new Surface3DDock(mainWindow->stackedWidget);

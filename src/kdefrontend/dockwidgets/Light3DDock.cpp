@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : Surface3DDock.h
+    File                 : Light3DDock.cpp
     Project              : LabPlot
-    Description          : widget for 3D surfaces properties
+    Description          : widget for 3D Light properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Minh Ngo (minh@fedoraproject.org)
 
@@ -26,67 +26,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SURFACE3DDOCK_H
-#define SURFACE3DDOCK_H
+#include "Light3DDock.h"
 
-#include <QWidget>
-#include "backend/worksheet/plots/3d/Surface3D.h"
-#include "ui_surface3ddock.h"
+Light3DDock::Light3DDock(QWidget* parent)
+	: QWidget(parent)
+	, light(0) {
+	ui.setupUi(this);
+}
 
-class Matrix;
-class AbstractColumn;
-class AspectTreeModel;
-
-class Surface3DDock : public QWidget {
-	Q_OBJECT
-
-	public:
-		explicit Surface3DDock(QWidget* parent);
-		void setSurface(Surface3D *surface);
-
-	private:
-		void hideDataSource(bool hide = true);
-		void hideFileUrl(bool hide = true);
-		void hideTriangleInfo(bool hide = true);
-		void setModelFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect);
-
-	private slots:
-		void retranslateUi();
-
-		void nameChanged();
-		void commentChanged();
-
-		void onTreeViewIndexChanged(const QModelIndex&);
-		void onDataSourceChanged(int);
-		void onVisualizationTypeChanged(int);
-		void onFileChanged(const KUrl&);
-
-		// Surface 3D
-		void visualizationTypeChanged(Surface3D::VisualizationType);
-		void sourceTypeChanged(Surface3D::DataSource);
-
-		// File handling
-		void pathChanged(const KUrl&);
-
-		// Matrix handling
-		void matrixChanged(const Matrix*);
-
-		// Spreadsheet handling
-		void xColumnChanged(const AbstractColumn*);
-		void yColumnChanged(const AbstractColumn*);
-		void zColumnChanged(const AbstractColumn*);
-		void firstNodeChanged(const AbstractColumn*);
-		void secondNodeChanged(const AbstractColumn*);
-		void thirdNodeChanged(const AbstractColumn*);
-
-		//Color filling
-		void colorFillingTypeChanged(int);
-
-	private:
-		Ui::Surface3DDock ui;
-		Surface3D *surface;
-		AspectTreeModel *aspectTreeModel;
-		bool m_initializing;
-};
-
-#endif
+void Light3DDock::setLight(Light *light) {
+	this->light = light;
+}

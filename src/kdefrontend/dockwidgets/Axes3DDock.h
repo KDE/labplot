@@ -33,8 +33,6 @@
 #include "backend/worksheet/plots/3d/Axes.h"
 #include "ui_axes3ddock.h"
 
-class Axes;
-
 class Axes3DDock : public QWidget {
 	Q_OBJECT
 

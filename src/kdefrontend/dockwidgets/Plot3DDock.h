@@ -34,7 +34,6 @@
 #include "backend/worksheet/plots/3d/Plot3D.h"
 #include "ui_plot3ddock.h"
 
-class Plot3D;
 class KUrl;
 class AbstractColumn;
 class Matrix;
