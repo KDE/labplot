@@ -88,6 +88,7 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), SLOT(onVisualizationTypeChanged(int)));
 	connect(ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), SLOT(onFileChanged(const KUrl&)));
 	connect(ui.cbMatrix, SIGNAL(currentModelIndexChanged(const QModelIndex&)), SLOT(onTreeViewIndexChanged(const QModelIndex&)));
+	connect(ui.chkVisible, SIGNAL(toggled(bool)), SLOT(onVisibilityChanged(bool)));
 
 	//Color filling
 	connect(ui.cbColorFillingType, SIGNAL(currentIndexChanged(int)), SLOT(colorFillingTypeChanged(int)));
@@ -121,6 +122,7 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 
 	ui.leName->setText(surface->name());
 	ui.leComment->setText(surface->comment());
+	ui.chkVisible->setChecked(surface->isVisible());
 
 	aspectTreeModel = new AspectTreeModel(surface->project());
 	ui.cbXCoordinate->setModel(aspectTreeModel);
@@ -248,6 +250,11 @@ void Surface3DDock::onTreeViewIndexChanged(const QModelIndex& index) {
 		surface->spreadsheetDataHandler().setThirdNode(column);
 	else if(senderW == ui.cbMatrix)
 		surface->matrixDataHandler().setMatrix(getMatrix(index));
+}
+
+void Surface3DDock::onVisibilityChanged(bool visible) {
+	if(!m_initializing)
+		surface->show(visible);
 }
 
 void Surface3DDock::onDataSourceChanged(int index) {

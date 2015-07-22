@@ -49,6 +49,8 @@ class Curve3D : public AbstractAspect {
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
+		void show(bool pred);
+		bool isVisible() const;
 
 		bool operator==(vtkProp* prop) const;
 		bool operator!=(vtkProp* prop) const;

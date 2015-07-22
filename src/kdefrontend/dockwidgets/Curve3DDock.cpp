@@ -59,6 +59,7 @@ Curve3DDock::Curve3DDock(QWidget* parent)
 
 	connect(ui.leName, SIGNAL(returnPressed()), SLOT(nameChanged()));
 	connect(ui.leComment, SIGNAL(returnPressed()), SLOT(commentChanged()));
+	connect(ui.chkVisible, SIGNAL(toggled(bool)), SLOT(onVisibilityChanged(bool)));
 
 	connect(ui.cbShowVertices, SIGNAL(toggled(bool)), SLOT(onShowVerticesChanged(bool)));
 	connect(ui.cbClosedCurve, SIGNAL(toggled(bool)), SLOT(onClosedCurveChanged(bool)));
@@ -96,6 +97,7 @@ void Curve3DDock::setCurve(Curve3D* curve) {
 
 	ui.leName->setText(curve->name());
 	ui.leComment->setText(curve->comment());
+	ui.chkVisible->setChecked(curve->isVisible());
 
 	aspectTreeModel = new AspectTreeModel(curve->project());
 	ui.cbXCoordinate->setModel(aspectTreeModel);
@@ -152,6 +154,11 @@ void Curve3DDock::onShowVerticesChanged(bool checked) {
 		return;
 
 	curve->setShowVertices(checked);
+}
+
+void Curve3DDock::onVisibilityChanged(bool visible) {
+	if (!m_initializing)
+		curve->show(visible);
 }
 
 void Curve3DDock::onClosedCurveChanged(bool checked) {

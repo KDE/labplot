@@ -61,6 +61,7 @@ class Surface3DDock : public QWidget {
 		void onDataSourceChanged(int);
 		void onVisualizationTypeChanged(int);
 		void onFileChanged(const KUrl&);
+		void onVisibilityChanged(bool);
 
 		// Surface 3D
 		void visualizationTypeChanged(Surface3D::VisualizationType);

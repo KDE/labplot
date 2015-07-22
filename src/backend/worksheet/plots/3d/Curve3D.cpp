@@ -190,6 +190,17 @@ void Curve3D::update() {
 	d->update();
 }
 
+void Curve3D::show(bool pred) {
+	Q_D(Curve3D);
+	d->curveActor->SetVisibility(pred);
+	emit parametersChanged();
+}
+
+bool Curve3D::isVisible() const {
+	Q_D(const Curve3D);
+	return d->curveActor->GetVisibility() != 0;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 Curve3DPrivate::Curve3DPrivate(vtkRenderer* renderer, Curve3D* parent)

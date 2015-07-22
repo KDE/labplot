@@ -49,6 +49,7 @@ class Curve3DDock : public QWidget {
 
 		void nameChanged();
 		void commentChanged();
+		void onVisibilityChanged(bool visible);
 
 		void xColumnChanged(const AbstractColumn* column);
 		void yColumnChanged(const AbstractColumn* column);

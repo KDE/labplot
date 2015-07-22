@@ -114,6 +114,17 @@ void Surface3D::update() {
 	d->update();
 }
 
+void Surface3D::show(bool pred) {
+	Q_D(Surface3D);
+	d->surfaceActor->SetVisibility(pred);
+	emit parametersChanged();
+}
+
+bool Surface3D::isVisible() const {
+	Q_D(const Surface3D);
+	return d->surfaceActor->GetVisibility() != 0;
+}
+
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################

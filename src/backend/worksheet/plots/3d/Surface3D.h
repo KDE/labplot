@@ -64,6 +64,8 @@ class Surface3D : public AbstractAspect {
 		Surface3D(vtkRenderer* renderer = 0);
 		void setRenderer(vtkRenderer* renderer);
 		void highlight(bool pred);
+		void show(bool pred);
+		bool isVisible() const;
 		virtual ~Surface3D();
 
 		virtual void save(QXmlStreamWriter*) const;
