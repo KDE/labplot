@@ -79,6 +79,9 @@
        </item>
        <item row="10" column="0">
         <widget class="QCheckBox" name="cbClosedCurve">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Closed curve</string>
          </property>
@@ -163,9 +166,9 @@
         </spacer>
        </item>
        <item row="9" column="0">
-        <widget class="QCheckBox" name="cbShowVertices">
+        <widget class="QCheckBox" name="cbShowEdges">
          <property name="text">
-          <string>Show vertices</string>
+          <string>Show edges</string>
          </property>
         </widget>
        </item>

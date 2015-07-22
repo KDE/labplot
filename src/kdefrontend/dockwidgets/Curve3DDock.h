@@ -56,11 +56,11 @@ class Curve3DDock : public QWidget {
 		void zColumnChanged(const AbstractColumn* column);
 		void pointRadiusChanged(float radius);
 		void isClosedChanged(bool checked);
-		void showVerticesChanged(bool checked);
+		void showEdgesChanged(bool checked);
 
-		void onShowVerticesChanged(bool checked);
+		void onShowEdgesChanged(bool checked);
 		void onClosedCurveChanged(bool checked);
-		void onPointSizeChanged(float size);
+		void onPointSizeChanged(double size);
 
 	private:
 		Ui::Curve3DDock ui;

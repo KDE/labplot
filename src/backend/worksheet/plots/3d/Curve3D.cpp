@@ -88,7 +88,7 @@ void Curve3D::save(QXmlStreamWriter* writer) const {
 		WRITE_COLUMN(d->yColumn, yColumn);
 		WRITE_COLUMN(d->zColumn, zColumn);
 		writer->writeAttribute("pointRadius", QString::number(d->pointRadius));
-		writer->writeAttribute("showVertices", QString::number(d->showVertices));
+		writer->writeAttribute("showEdges", QString::number(d->showEdges));
 		writer->writeAttribute("isClosed", QString::number(d->isClosed));
 		writeBasicAttributes(writer);
 		writeCommentElement(writer);
@@ -104,7 +104,7 @@ bool Curve3D::load(XmlStreamReader* reader) {
 	READ_COLUMN(zColumn);
 	XmlAttributeReader attributeReader(reader, attribs);
 	attributeReader.checkAndLoadAttribute("pointRadius", d->pointRadius);
-	attributeReader.checkAndLoadAttribute("showVertices", d->showVertices);
+	attributeReader.checkAndLoadAttribute("showEdges", d->showEdges);
 	attributeReader.checkAndLoadAttribute("isClosed", d->isClosed);
 
 	if(!readBasicAttributes(reader)){
@@ -152,7 +152,7 @@ const QString& Curve3D::yColumnPath() const { Q_D(const Curve3D); return d->yCol
 const QString& Curve3D::zColumnPath() const { Q_D(const Curve3D); return d->zColumnPath; }
 
 BASIC_SHARED_D_READER_IMPL(Curve3D, float, pointRadius, pointRadius)
-BASIC_SHARED_D_READER_IMPL(Curve3D, bool, showVertices, showVertices)
+BASIC_SHARED_D_READER_IMPL(Curve3D, bool, showEdges, showEdges)
 BASIC_SHARED_D_READER_IMPL(Curve3D, bool, isClosed, isClosed)
 
 //##############################################################################
@@ -171,8 +171,8 @@ STD_SETTER_IMPL(Curve3D, ZColumn, const AbstractColumn*, zColumn, "%1: Z column 
 STD_SETTER_CMD_IMPL_F_S(Curve3D, SetPointRadius, float, pointRadius, update)
 STD_SETTER_IMPL(Curve3D, PointRadius, float, pointRadius, "%1: point radius changed")
 
-STD_SETTER_CMD_IMPL_F_S(Curve3D, SetShowVertices, bool, showVertices, update)
-STD_SETTER_IMPL(Curve3D, ShowVertices, bool, showVertices, "%1: show vertices flag changed")
+STD_SETTER_CMD_IMPL_F_S(Curve3D, SetShowEdges, bool, showEdges, update)
+STD_SETTER_IMPL(Curve3D, ShowEdges, bool, showEdges, "%1: show edges flag changed")
 
 STD_SETTER_CMD_IMPL_F_S(Curve3D, SetIsClosed, bool, isClosed, update)
 STD_SETTER_IMPL(Curve3D, IsClosed, bool, isClosed, "%1: closed flag changed")
@@ -214,9 +214,10 @@ Curve3DPrivate::Curve3DPrivate(vtkRenderer* renderer, Curve3D* parent)
 	, xColumn(0)
 	, yColumn(0)
 	, zColumn(0)
-	, pointRadius(0)
-	, showVertices(true)
-	, isClosed(false) {
+	, pointRadius(20.0)
+	, showEdges(true)
+	, isClosed(false)
+	, curveProperty(vtkProperty::New()) {
 }
 
 void Curve3DPrivate::init() {
@@ -234,51 +235,58 @@ void Curve3DPrivate::update() {
 	if (!renderer)
 		return;
 
+	if (curveActor)
+		renderer->RemoveActor(curveActor);
+
 	if (xColumn == 0 || yColumn == 0 || zColumn == 0)
 		return;
 
-	vtkSmartPointer<vtkPolyData> point = vtkSmartPointer<vtkPolyData>::New();
+	vtkSmartPointer<vtkPolyData> pdata = vtkSmartPointer<vtkPolyData>::New();
 	
 	vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
 	vtkSmartPointer<vtkCellArray> vertices = vtkSmartPointer<vtkCellArray>::New();
 
-	vtkIdType pid[1];
 	// TODO: Remove duplicate in DataHandlers
 	const int numPoints = std::min(xColumn->rowCount(),
 			std::min(yColumn->rowCount(), zColumn->rowCount()));
 	if (numPoints == 0)
 		return;
 
-	const int fx = static_cast<int>(xColumn->valueAt(0));
-	const int fy = static_cast<int>(yColumn->valueAt(0));
-	const int fz = static_cast<int>(zColumn->valueAt(0));
-	const vtkIdType firstPid = points->InsertNextPoint(fx, fy, fz);
-	pid[0] = firstPid;
-	vertices->InsertNextCell(1, pid);
-	for (int i = 1; i < numPoints; ++i) {
+	vtkIdType pid[1];
+	if (showEdges) {
+		points->SetNumberOfPoints(numPoints);
+		vertices->InsertNextCell(isClosed ? numPoints + 1 : numPoints);
+	}
+	for (int i = 0; i < numPoints; ++i) {
 		const int x = static_cast<int>(xColumn->valueAt(i));
 		const int y = static_cast<int>(yColumn->valueAt(i));
 		const int z = static_cast<int>(zColumn->valueAt(i));
 
-		pid[0] = points->InsertNextPoint(x, y, z);
-		vertices->InsertNextCell(1, pid);
+		if (showEdges) {
+			points->SetPoint(i, x, y, z);
+			vertices->InsertCellPoint(i);
+		} else {
+			pid[0] = points->InsertNextPoint(x, y, z);
+			vertices->InsertNextCell(1, pid);
+		}
 	}
 
-	if (isClosed) {
-		pid[0] = firstPid;
-		vertices->InsertNextCell(1, pid);
-	}
+	if (showEdges && isClosed)
+		vertices->InsertCellPoint(0);
 
-	point->SetPoints(points);
-	if (showVertices)
-		point->SetVerts(vertices);
+	pdata->SetPoints(points);
+	if (showEdges)
+		pdata->SetLines(vertices);
+	else
+		pdata->SetVerts(vertices);
 
 	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-	mapper->SetInputData(point);
+	mapper->SetInputData(pdata);
 
-	vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
-	actor->SetMapper(mapper);
-	actor->GetProperty()->SetPointSize(pointRadius);
+	curveActor = vtkSmartPointer<vtkActor>::New();
+	curveActor->SetMapper(mapper);
+	curveActor->GetProperty()->SetPointSize(pointRadius);
+	curveActor->GetProperty()->SetLineWidth(pointRadius);
 
 	renderer->AddActor(curveActor);
 	emit q->parametersChanged();

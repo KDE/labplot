@@ -61,9 +61,9 @@ Curve3DDock::Curve3DDock(QWidget* parent)
 	connect(ui.leComment, SIGNAL(returnPressed()), SLOT(commentChanged()));
 	connect(ui.chkVisible, SIGNAL(toggled(bool)), SLOT(onVisibilityChanged(bool)));
 
-	connect(ui.cbShowVertices, SIGNAL(toggled(bool)), SLOT(onShowVerticesChanged(bool)));
+	connect(ui.cbShowEdges, SIGNAL(toggled(bool)), SLOT(onShowEdgesChanged(bool)));
 	connect(ui.cbClosedCurve, SIGNAL(toggled(bool)), SLOT(onClosedCurveChanged(bool)));
-	connect(ui.sbPointSize, SIGNAL(valueChanged(float)), SLOT(onPointSizeChanged(float)));
+	connect(ui.sbPointSize, SIGNAL(valueChanged(double)), SLOT(onPointSizeChanged(double)));
 }
 
 namespace {
@@ -114,7 +114,8 @@ void Curve3DDock::setCurve(Curve3D* curve) {
 		ui.cbZCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(curve->zColumn()));
 
 	ui.cbClosedCurve->setChecked(curve->isClosed());
-	ui.cbShowVertices->setChecked(curve->showVertices());
+	ui.cbShowEdges->setChecked(curve->showEdges());
+	ui.cbClosedCurve->setEnabled(ui.cbShowEdges->isChecked());
 
 	connect(curve, SIGNAL(xColumnChanged(const AbstractColumn*)), SLOT(xColumnChanged(const AbstractColumn*)));
 	connect(curve, SIGNAL(yColumnChanged(const AbstractColumn*)), SLOT(yColumnChanged(const AbstractColumn*)));
@@ -122,7 +123,7 @@ void Curve3DDock::setCurve(Curve3D* curve) {
 
 	connect(curve, SIGNAL(pointRadiusChanged(float)), SLOT(pointRadiusChanged(float)));
 	connect(curve, SIGNAL(isClosedChanged(bool)), SLOT(isClosedChanged(bool)));
-	connect(curve, SIGNAL(showVerticesChanged(bool)), SLOT(showVerticesChanged(bool)));
+	connect(curve, SIGNAL(showEdgesChanged(bool)), SLOT(showEdgesChanged(bool)));
 	connect(curve, SIGNAL(visibilityChanged(bool)), ui.chkVisible, SLOT(setChecked(bool)));
 }
 
@@ -136,11 +137,11 @@ void Curve3DDock::commentChanged() {
 	curve->setComment(ui.leComment->text());
 }
 
-void Curve3DDock::onPointSizeChanged(float size) {
+void Curve3DDock::onPointSizeChanged(double size) {
 	if (m_initializing)
 		return;
 
-	curve->setPointRadius(size);
+	curve->setPointRadius(static_cast<float>(size));
 }
 
 void Curve3DDock::onTreeViewIndexChanged(const QModelIndex& index) {
@@ -159,11 +160,12 @@ void Curve3DDock::onTreeViewIndexChanged(const QModelIndex& index) {
 		curve->setZColumn(column);
 }
 
-void Curve3DDock::onShowVerticesChanged(bool checked) {
+void Curve3DDock::onShowEdgesChanged(bool checked) {
 	if (m_initializing)
 		return;
 
-	curve->setShowVertices(checked);
+	curve->setShowEdges(checked);
+	ui.cbClosedCurve->setEnabled(checked);
 }
 
 void Curve3DDock::onVisibilityChanged(bool visible) {
@@ -203,7 +205,7 @@ void Curve3DDock::isClosedChanged(bool checked) {
 	curve->setIsClosed(checked);
 }
 
-void Curve3DDock::showVerticesChanged(bool checked) {
+void Curve3DDock::showEdgesChanged(bool checked) {
 	Lock lock(m_initializing);
-	curve->setShowVertices(checked);
+	curve->setShowEdges(checked);
 }

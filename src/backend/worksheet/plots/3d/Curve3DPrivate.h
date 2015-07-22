@@ -49,7 +49,7 @@ struct Curve3DPrivate {
 	QString yColumnPath;
 	QString zColumnPath;
 	float pointRadius;
-	bool showVertices;
+	bool showEdges;
 	bool isClosed;
 	vtkSmartPointer<vtkActor> curveActor;
 	vtkSmartPointer<vtkProperty> curveProperty;

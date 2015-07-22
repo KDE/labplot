@@ -64,7 +64,7 @@ class Curve3D : public AbstractAspect {
 		const QString& zColumnPath() const;
 
 		BASIC_D_ACCESSOR_DECL(float, pointRadius, PointRadius);
-		BASIC_D_ACCESSOR_DECL(bool, showVertices, ShowVertices);
+		BASIC_D_ACCESSOR_DECL(bool, showEdges, ShowEdges);
 		BASIC_D_ACCESSOR_DECL(bool, isClosed, IsClosed);
 
 		typedef Curve3D BaseClass;
@@ -81,13 +81,13 @@ class Curve3D : public AbstractAspect {
 		friend class Curve3DSetYColumnCmd;
 		friend class Curve3DSetZColumnCmd;
 		friend class Curve3DSetPointRadiusCmd;
-		friend class Curve3DSetShowVerticesCmd;
+		friend class Curve3DSetShowEdgesCmd;
 		friend class Curve3DSetIsClosedCmd;
 		void xColumnChanged(const AbstractColumn*);
 		void yColumnChanged(const AbstractColumn*);
 		void zColumnChanged(const AbstractColumn*);
 		void pointRadiusChanged(float);
-		void showVerticesChanged(bool);
+		void showEdgesChanged(bool);
 		void isClosedChanged(bool);
 		void parametersChanged();
 		void removed();
