@@ -468,6 +468,7 @@ void Plot3DPrivate::init() {
 
 	//foreground renderer
 	renderer = vtkSmartPointer<vtkRenderer>::New();
+	renderer->TwoSidedLightingOn();
 
 	//background renderer
 	backgroundRenderer = vtkSmartPointer<vtkRenderer>::New();
