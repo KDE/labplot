@@ -60,6 +60,7 @@ class Curve3DDock : public QWidget {
 
 		void onShowVerticesChanged(bool checked);
 		void onClosedCurveChanged(bool checked);
+		void onPointSizeChanged(float size);
 
 	private:
 		Ui::Curve3DDock ui;
