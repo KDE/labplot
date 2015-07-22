@@ -98,6 +98,7 @@ class Surface3D : public AbstractAspect {
 		void sourceTypeChanged(Surface3D::DataSource);
 		void parametersChanged();
 		void removed();
+		void visibilityChanged(bool);
 
 	private:
 		const QScopedPointer<Surface3DPrivate> d_ptr;

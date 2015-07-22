@@ -212,6 +212,7 @@ void Surface3DPrivate::update() {
 
 	renderer->AddActor(surfaceActor);
 	emit q->parametersChanged();
+	emit q->visibilityChanged(true);
 }
 
 //##############################################################################

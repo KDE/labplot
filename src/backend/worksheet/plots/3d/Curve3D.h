@@ -91,6 +91,7 @@ class Curve3D : public AbstractAspect {
 		void isClosedChanged(bool);
 		void parametersChanged();
 		void removed();
+		void visibilityChanged(bool);
 
 	private:
 		const QScopedPointer<Curve3DPrivate> d_ptr;

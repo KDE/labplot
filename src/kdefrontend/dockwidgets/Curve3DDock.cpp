@@ -121,6 +121,7 @@ void Curve3DDock::setCurve(Curve3D* curve) {
 	connect(curve, SIGNAL(pointRadiusChanged(float)), SLOT(pointRadiusChanged(float)));
 	connect(curve, SIGNAL(isClosedChanged(bool)), SLOT(isClosedChanged(bool)));
 	connect(curve, SIGNAL(showVerticesChanged(bool)), SLOT(showVerticesChanged(bool)));
+	connect(curve, SIGNAL(visibilityChanged(bool)), ui.chkVisible, SLOT(setChecked(bool)));
 }
 
 void Curve3DDock::nameChanged() {

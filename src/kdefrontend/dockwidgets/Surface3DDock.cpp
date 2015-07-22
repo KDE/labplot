@@ -139,6 +139,7 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 
 	connect(surface, SIGNAL(visualizationTypeChanged(Surface3D::VisualizationType)), SLOT(visualizationTypeChanged(Surface3D::VisualizationType)));
 	connect(surface, SIGNAL(sourceTypeChanged(Surface3D::DataSource)), SLOT(sourceTypeChanged(Surface3D::DataSource)));
+	connect(surface, SIGNAL(visibilityChanged(bool)), ui.chkVisible, SLOT(setChecked(bool)));
 
 	// DataHandlers
 	ui.cbFileRequester->setUrl(surface->fileDataHandler().file());

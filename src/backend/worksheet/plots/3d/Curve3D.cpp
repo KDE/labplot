@@ -282,6 +282,7 @@ void Curve3DPrivate::update() {
 
 	renderer->AddActor(curveActor);
 	emit q->parametersChanged();
+	emit q->visibilityChanged(true);
 }
 
 // TODO: Move to the base class between Curve3D and Surface3D
