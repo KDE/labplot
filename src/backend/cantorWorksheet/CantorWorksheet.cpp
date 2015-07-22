@@ -36,12 +36,14 @@
 
 CantorWorksheet::CantorWorksheet(AbstractScriptingEngine* engine, const QString &name)
 		: AbstractPart(name), scripted(engine), m_part(0), m_backendName(name){
+
+	init();
 }
 
 /*!
-	initializes the spreadsheet with the default number of columns and rows
+	initializes Cantor's part and plugins
 */
-void CantorWorksheet::initialize() {
+void CantorWorksheet::init() {
 	KPluginFactory* factory = KPluginLoader(QLatin1String("libcantorpart")).factory();
 	if (factory) {
 		// now that the Part is loaded, we cast it to a Part to get

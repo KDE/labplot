@@ -55,7 +55,6 @@ class CantorWorksheet : public AbstractPart, public scripted{
 		int columnCount() const;
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
-		void initialize();
 
 	private slots:
 		void rowsInserted(const QModelIndex & parent, int first, int last);
@@ -66,6 +65,8 @@ class CantorWorksheet : public AbstractPart, public scripted{
 		void requestProjectContextMenu(QMenu*);
 
 	private:
+		void init();
+
 		KParts::ReadWritePart* m_part;
 		QList<Cantor::PanelPlugin*> m_plugins;
 		QAbstractItemModel* m_variableModel;
