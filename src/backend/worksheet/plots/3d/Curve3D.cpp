@@ -180,9 +180,9 @@ STD_SETTER_IMPL(Curve3D, IsClosed, bool, isClosed, "%1: closed flag changed")
 // TODO: Move to the base class between Curve3D and Surface3D
 void Curve3D::remove() {
 	Q_D(Curve3D);
-	AbstractAspect::remove();
 	d->hide();
 	emit removed();
+	AbstractAspect::remove();
 }
 
 void Curve3D::update() {

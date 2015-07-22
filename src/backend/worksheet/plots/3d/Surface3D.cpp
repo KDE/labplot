@@ -104,9 +104,9 @@ FileDataHandler& Surface3D::fileDataHandler() {
 
 void Surface3D::remove(){
 	Q_D(Surface3D);
-	AbstractAspect::remove();
 	d->hide();
 	emit removed();
+	AbstractAspect::remove();
 }
 
 void Surface3D::update() {

@@ -56,9 +56,9 @@ void Light::setRenderer(vtkRenderer* renderer) {
 
 void Light::remove(){
 	Q_D(Light);
-	AbstractAspect::remove();
 	d->hide();
 	emit removed();
+	AbstractAspect::remove();
 }
 
 //##############################################################################
