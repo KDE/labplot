@@ -33,6 +33,7 @@
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/3d/Surface3D.h"
+#include "backend/worksheet/plots/3d/Curve3D.h"
 #include "backend/worksheet/plots/3d/DataHandlers.h"
 #include "backend/matrix/Matrix.h"
 
@@ -282,6 +283,7 @@ bool Project::load(XmlStreamReader* reader) {
 			QList<AbstractAspect*> curves = children("XYCurve", AbstractAspect::Recursive);
 			QList<AbstractAspect*> axes = children("Axes", AbstractAspect::Recursive);
 			QList<AbstractAspect*> surfaces = children("Surface3D", AbstractAspect::Recursive);
+			QList<AbstractAspect*> curves3d = children("Curve3D", AbstractAspect::Recursive);
 
 			if (curves.size()!=0 || axes.size()!=0 || !surfaces.isEmpty()) {
 				QList<AbstractAspect*> columns = children("Column", AbstractAspect::Recursive);
@@ -318,7 +320,7 @@ bool Project::load(XmlStreamReader* reader) {
 				}
 
 				// 3D surfaces
-				foreach (AbstractAspect *aspect, surfaces) {
+				foreach (AbstractAspect* aspect, surfaces) {
 					Surface3D* surface = dynamic_cast<Surface3D*>(aspect);
 					if (!surface)
 						continue;
@@ -333,6 +335,16 @@ bool Project::load(XmlStreamReader* reader) {
 					RESTORE_COLUMN_POINTER(sdh, firstNode, FirstNode);
 					RESTORE_COLUMN_POINTER(sdh, secondNode, SecondNode);
 					RESTORE_COLUMN_POINTER(sdh, thirdNode, ThirdNode);
+				}
+
+				// 3D curves
+				foreach (AbstractAspect* aspect, curves3d) {
+					Curve3D* curve = dynamic_cast<Curve3D*>(aspect);
+					if (!curve)
+						continue;
+					RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
+					RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
+					RESTORE_COLUMN_POINTER(curve, zColumn, ZColumn);
 				}
 
 				//Axes
