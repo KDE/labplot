@@ -67,6 +67,7 @@ void CantorWorksheet::init(QByteArray* content) {
 			if(plugin->name() == "Variable Manager") {
 				Cantor::PanelPlugin* m_variablemgr = plugin;
 				m_session = m_variablemgr->session();
+				m_backendName = m_session->backend()->name();
 				m_variableModel = m_session->variableModel();
 				connect(m_variableModel, SIGNAL(rowsInserted(const QModelIndex, int, int)), this, SLOT(rowsInserted(const QModelIndex, int, int)));
 				connect(m_variableModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex, int, int)), this, SLOT(rowsAboutToBeRemoved(const QModelIndex, int, int)));
