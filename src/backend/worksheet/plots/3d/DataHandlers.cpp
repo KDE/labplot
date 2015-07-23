@@ -308,23 +308,52 @@ vtkSmartPointer<vtkActor> SpreadsheetDataHandler::trianglesActor() {
 }
 
 STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetXColumn, const AbstractColumn*, xColumn, update)
-STD_SETTER_IMPL(SpreadsheetDataHandler, XColumn, const AbstractColumn*, xColumn, "%1: X column changed")
+STD_SETTER_COLUMN_IMPL(SpreadsheetDataHandler, XColumn, xColumn, "%1: X column changed")
 
 STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetYColumn, const AbstractColumn*, yColumn, update)
-STD_SETTER_IMPL(SpreadsheetDataHandler, YColumn, const AbstractColumn*, yColumn, "%1: Y column changed")
+STD_SETTER_COLUMN_IMPL(SpreadsheetDataHandler, YColumn, yColumn, "%1: Y column changed")
 
 STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetZColumn, const AbstractColumn*, zColumn, update)
-STD_SETTER_IMPL(SpreadsheetDataHandler, ZColumn, const AbstractColumn*, zColumn, "%1: Z column changed")
+STD_SETTER_COLUMN_IMPL(SpreadsheetDataHandler, ZColumn, zColumn, "%1: Z column changed")
 
 STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetFirstNode, const AbstractColumn*, firstNode, update)
-STD_SETTER_IMPL(SpreadsheetDataHandler, FirstNode, const AbstractColumn*, firstNode, "%1: First node changed")
+STD_SETTER_COLUMN_IMPL(SpreadsheetDataHandler, FirstNode, firstNode, "%1: First node changed")
 
 STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetSecondNode, const AbstractColumn*, secondNode, update)
-STD_SETTER_IMPL(SpreadsheetDataHandler, SecondNode, const AbstractColumn*, secondNode, "%1: Second node changed")
+STD_SETTER_COLUMN_IMPL(SpreadsheetDataHandler, SecondNode, secondNode, "%1: Second node changed")
 
 STD_SETTER_CMD_IMPL_F_S(SpreadsheetDataHandler, SetThirdNode, const AbstractColumn*, thirdNode, update)
-STD_SETTER_IMPL(SpreadsheetDataHandler, ThirdNode, const AbstractColumn*, thirdNode, "%1: Third node changed")
+STD_SETTER_COLUMN_IMPL(SpreadsheetDataHandler, ThirdNode, thirdNode, "%1: Third node changed")
 
+void SpreadsheetDataHandler::xColumnAboutToBeRemoved(const AbstractAspect*) {
+	Q_D(SpreadsheetDataHandler);
+	d->xColumn = 0;
+}
+
+void SpreadsheetDataHandler::yColumnAboutToBeRemoved(const AbstractAspect*) {
+	Q_D(SpreadsheetDataHandler);
+	d->yColumn = 0;
+}
+
+void SpreadsheetDataHandler::zColumnAboutToBeRemoved(const AbstractAspect*) {
+	Q_D(SpreadsheetDataHandler);
+	d->zColumn = 0;
+}
+
+void SpreadsheetDataHandler::firstNodeAboutToBeRemoved(const AbstractAspect*) {
+	Q_D(SpreadsheetDataHandler);
+	d->firstNode = 0;
+}
+
+void SpreadsheetDataHandler::secondNodeAboutToBeRemoved(const AbstractAspect*) {
+	Q_D(SpreadsheetDataHandler);
+	d->secondNode = 0;
+}
+
+void SpreadsheetDataHandler::thirdNodeAboutToBeRemoved(const AbstractAspect*) {
+	Q_D(SpreadsheetDataHandler);
+	d->thirdNode = 0;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 

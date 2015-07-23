@@ -121,6 +121,15 @@ class SpreadsheetDataHandler : public IDataHandler {
 	private:
 		vtkSmartPointer<vtkActor> trianglesActor();
 
+	private slots:
+		void xColumnAboutToBeRemoved(const AbstractAspect*);
+		void yColumnAboutToBeRemoved(const AbstractAspect*);
+		void zColumnAboutToBeRemoved(const AbstractAspect*);
+
+		void firstNodeAboutToBeRemoved(const AbstractAspect*);
+		void secondNodeAboutToBeRemoved(const AbstractAspect*);
+		void thirdNodeAboutToBeRemoved(const AbstractAspect*);
+
 	signals:
 		friend class SpreadsheetDataHandlerSetXColumnCmd;
 		friend class SpreadsheetDataHandlerSetYColumnCmd;

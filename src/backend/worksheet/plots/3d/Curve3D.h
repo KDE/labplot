@@ -75,6 +75,9 @@ class Curve3D : public AbstractAspect {
 
 	private slots:
 		void update();
+		void xColumnAboutToBeRemoved(const AbstractAspect*);
+		void yColumnAboutToBeRemoved(const AbstractAspect*);
+		void zColumnAboutToBeRemoved(const AbstractAspect*);
 
 	signals:
 		friend class Curve3DSetXColumnCmd;

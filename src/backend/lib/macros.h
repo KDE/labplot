@@ -222,6 +222,19 @@ class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_na
 			exec(new Class##Set##Method##Cmd(d, var, i18n(message)));\
 	}
 
+#define STD_SETTER_COLUMN_IMPL(Class, Method, column, message)\
+	void Class::set##Method(const AbstractColumn* column) {\
+		Q_D(Class);\
+		if (column != d->column){\
+			exec(new Class##Set##Method##Cmd(d, column, i18n(message)));\
+			if (column) {\
+				connect(column, SIGNAL(dataChanged(const AbstractColumn*)), SIGNAL(column##Changed()));\
+				connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),\
+						SLOT(column##AboutToBeRemoved(const AbstractAspect*)));\
+			}\
+		}\
+	}
+
 //xml-serialization/deserialization
 //QColor
 #define WRITE_QCOLOR(color) 												\

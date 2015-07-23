@@ -160,13 +160,13 @@ BASIC_SHARED_D_READER_IMPL(Curve3D, bool, isClosed, isClosed)
 //##############################################################################
 
 STD_SETTER_CMD_IMPL_F_S(Curve3D, SetXColumn, const AbstractColumn*, xColumn, update)
-STD_SETTER_IMPL(Curve3D, XColumn, const AbstractColumn*, xColumn, "%1: X column changed")
+STD_SETTER_COLUMN_IMPL(Curve3D, XColumn, xColumn, "%1: X column changed")
 
 STD_SETTER_CMD_IMPL_F_S(Curve3D, SetYColumn, const AbstractColumn*, yColumn, update)
-STD_SETTER_IMPL(Curve3D, YColumn, const AbstractColumn*, yColumn, "%1: Y column changed")
+STD_SETTER_COLUMN_IMPL(Curve3D, YColumn, yColumn, "%1: Y column changed")
 
 STD_SETTER_CMD_IMPL_F_S(Curve3D, SetZColumn, const AbstractColumn*, zColumn, update)
-STD_SETTER_IMPL(Curve3D, ZColumn, const AbstractColumn*, zColumn, "%1: Z column changed")
+STD_SETTER_COLUMN_IMPL(Curve3D, ZColumn, zColumn, "%1: Z column changed")
 
 STD_SETTER_CMD_IMPL_F_S(Curve3D, SetPointRadius, float, pointRadius, update)
 STD_SETTER_IMPL(Curve3D, PointRadius, float, pointRadius, "%1: point radius changed")
@@ -176,6 +176,21 @@ STD_SETTER_IMPL(Curve3D, ShowEdges, bool, showEdges, "%1: show edges flag change
 
 STD_SETTER_CMD_IMPL_F_S(Curve3D, SetIsClosed, bool, isClosed, update)
 STD_SETTER_IMPL(Curve3D, IsClosed, bool, isClosed, "%1: closed flag changed")
+
+void Curve3D::xColumnAboutToBeRemoved(const AbstractAspect*) {
+	Q_D(Curve3D);
+	d->xColumn = 0;
+}
+
+void Curve3D::yColumnAboutToBeRemoved(const AbstractAspect*) {
+	Q_D(Curve3D);
+	d->yColumn = 0;
+}
+
+void Curve3D::zColumnAboutToBeRemoved(const AbstractAspect*) {
+	Q_D(Curve3D);
+	d->zColumn = 0;
+}
 
 // TODO: Move to the base class between Curve3D and Surface3D
 void Curve3D::remove() {
