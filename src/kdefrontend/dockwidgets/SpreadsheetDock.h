@@ -30,8 +30,10 @@
 #ifndef SPREADSHEETDOCK_H
 #define SPREADSHEETDOCK_H
 
-#include <<QtWidgets/QWidget>
+#include <QtWidgets/QWidget>
 #include "ui_spreadsheetdock.h"
+
+#include <KConfig>
 
 class Spreadsheet;
 class AbstractAspect;

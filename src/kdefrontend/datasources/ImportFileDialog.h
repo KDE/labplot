@@ -37,7 +37,6 @@ class ImportFileWidget;
 class FileDataSource;
 class TreeViewComboBox;
 
-class KMenu;
 class QStatusBar;
 class QAbstractItemModel;
 class QModelIndex;
@@ -73,7 +72,7 @@ class ImportFileDialog: public KDialog {
 	QPushButton* bNewWorkbook;
 	QToolButton* tbNewDataContainer;
 	bool m_optionsShown;
-	KMenu* m_newDataContainerMenu;
+	QMenu* m_newDataContainerMenu;
 
   private slots:
 	void toggleOptions();

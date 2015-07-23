@@ -35,6 +35,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 
+#include <KLocalizedString>
 
 /*!
 	\class MatrixFunctionDialog
@@ -51,8 +52,8 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent, Qt::WFlag
 	ui.setupUi(mainWidget);
 	setMainWidget( mainWidget );
 
-	ui.tbConstants->setIcon( KIcon("format-text-symbol") );
-	ui.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
+	ui.tbConstants->setIcon( QIcon::fromTheme("format-text-symbol") );
+	ui.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
 
 	QStringList vars;
 	vars<<"x"<<"y";

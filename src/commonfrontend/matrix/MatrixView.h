@@ -31,6 +31,7 @@
 #define MATRIXVIEW_H
 
 #include <QWidget>
+#include <QPrinter>
 
 class Matrix;
 class MatrixModel;

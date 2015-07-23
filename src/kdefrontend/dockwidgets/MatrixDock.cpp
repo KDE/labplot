@@ -31,6 +31,7 @@
 #include "backend/matrix/Matrix.h"
 #include "kdefrontend/TemplateHandler.h"
 #include <QDir>
+#include <KLocalizedString>
 
  /*!
   \class MatrixDock

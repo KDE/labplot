@@ -31,7 +31,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QThreadPool>
-
+#include <KLocalizedString>
 #include <math.h>
 
 /*!

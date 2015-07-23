@@ -29,8 +29,11 @@
 #ifndef MATRIXDOCK_H
 #define MATRIXDOCK_H
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 #include "ui_matrixdock.h"
+
+#include <KConfig>
+#include <KConfigGroup>
 
 class Matrix;
 class AbstractAspect;
