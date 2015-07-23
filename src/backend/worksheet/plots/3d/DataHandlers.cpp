@@ -433,6 +433,11 @@ const QString& MatrixDataHandler::matrixPath() const { Q_D(const MatrixDataHandl
 STD_SETTER_CMD_IMPL_F_S(MatrixDataHandler, SetMatrix, const Matrix*, matrix, update)
 STD_SETTER_IMPL(MatrixDataHandler, Matrix, const Matrix*, matrix, "%1: Matrix changed")
 
+void MatrixDataHandler::matrixAboutToBeRemoved(const AbstractAspect*) {
+	Q_D(MatrixDataHandler);
+	d->matrix = 0;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 template<typename TParent>

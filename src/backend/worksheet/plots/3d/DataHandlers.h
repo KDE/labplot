@@ -77,6 +77,9 @@ class MatrixDataHandler : public IDataHandler {
 		typedef MatrixDataHandler BaseClass;
 		typedef MatrixDataHandlerPrivate Private;
 
+	private slots:
+		void matrixAboutToBeRemoved(const AbstractAspect*);
+
 	private:
 		vtkSmartPointer<vtkActor> trianglesActor();
 

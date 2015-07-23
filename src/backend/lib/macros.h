@@ -235,6 +235,20 @@ class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_na
 		}\
 	}
 
+#define STD_SETTER_MATRIX_IMPL(Class, Method, matrix, message)\
+	void Class::set##Method(const Matrix* matrix) {\
+		Q_D(Class);\
+		if (matrix != d->matrix){\
+			exec(new Class##Set##Method##Cmd(d, matrix, i18n(message)));\
+			if (matrix) {\
+				connect(matrix, SIGNAL(dataChanged(int, int, int, int)), SIGNAL(matrix##Changed()));\
+				connect(matrix->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),\
+						SLOT(matrix##AboutToBeRemoved(const AbstractAspect*)));\
+			}\
+		}\
+	}
+
+
 //xml-serialization/deserialization
 //QColor
 #define WRITE_QCOLOR(color) 												\
