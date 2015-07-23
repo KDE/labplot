@@ -23,6 +23,7 @@
 #include "backend/worksheet/CustomItem.h"
 #include "backend/core/Datapicker.h"
 #include "backend/core/Transform.h"
+#include "backend/worksheet/ZoomWindow.h"
 
 #include <QApplication>
 #include <QMenu>
@@ -74,7 +75,7 @@ ImageView::ImageView(Image* image) : QGraphicsView(),
     connect(m_image, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
     connect(m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleImageActions()));
     connect(m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-            this, SLOT(handleImageActions()));
+            this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)) );
 }
 
 void ImageView::initActions() {
@@ -82,6 +83,7 @@ void ImageView::initActions() {
     QActionGroup* mouseModeActionGroup = new QActionGroup(this);
     QActionGroup* plotPointsTypeActionGroup = new QActionGroup(this);
     QActionGroup* navigationActionGroup = new QActionGroup(this);
+    QActionGroup* magnificationActionGroup = new QActionGroup(this);
 
     //Zoom actions
     zoomInViewAction = new KAction(KIcon("zoom-in"), i18n("Zoom in"), zoomActionGroup);
@@ -95,7 +97,6 @@ void ImageView::initActions() {
 
     zoomFitPageHeightAction = new KAction(KIcon("zoom-fit-height"), i18n("Fit to height"), zoomActionGroup);
     zoomFitPageWidthAction = new KAction(KIcon("zoom-fit-width"), i18n("Fit to width"), zoomActionGroup);
-    zoomFitSelectionAction = new KAction(i18n("Fit to selection"), zoomActionGroup);
 
     // Mouse mode actions
     selectAndEditModeAction = new KAction(KIcon("cursor-arrow"), i18n("Select and Edit"), mouseModeActionGroup);
@@ -107,8 +108,8 @@ void ImageView::initActions() {
     zoomSelectionModeAction = new KAction(KIcon("page-zoom"), i18n("Select and Zoom"), mouseModeActionGroup);
     zoomSelectionModeAction->setCheckable(true);
 
-    selectionModeAction = new KAction(KIcon("cursor-arrow"), i18n("Only Select"), mouseModeActionGroup);
-    selectionModeAction->setCheckable(true);
+    selectAndMoveModeAction = new KAction(KIcon("cursor-arrow"), i18n("Select and Move"), mouseModeActionGroup);
+    selectAndMoveModeAction->setCheckable(true);
 
     setAxisPointsAction = new KAction(KIcon(""), i18n("Set Axis Points"), plotPointsTypeActionGroup);
     setAxisPointsAction->setCheckable(true);
@@ -133,11 +134,28 @@ void ImageView::initActions() {
     shiftDownAction = new KAction(KIcon("shift-up-y"), i18n("Shift Down"), navigationActionGroup);
     shiftDownAction->setShortcut(Qt::Key_Down);
 
+    noMagnificationAction = new KAction(KIcon(""), i18n("No Magnification"), magnificationActionGroup);
+    noMagnificationAction->setCheckable(true);
+    noMagnificationAction->setChecked(true);
+
+    twoTimesMagnificationAction = new KAction(KIcon(""), i18n("2x Magnification"), magnificationActionGroup);
+    twoTimesMagnificationAction->setCheckable(true);
+
+    threeTimesMagnificationAction = new KAction(KIcon(""), i18n("3x Magnification"), magnificationActionGroup);
+    threeTimesMagnificationAction->setCheckable(true);
+
+    fourTimesMagnificationAction = new KAction(KIcon(""), i18n("4x Magnification"), magnificationActionGroup);
+    fourTimesMagnificationAction->setCheckable(true);
+
+    fiveTimesMagnificationAction = new KAction(KIcon(""), i18n("5x Magnification"), magnificationActionGroup);
+    fiveTimesMagnificationAction->setCheckable(true);
+
     connect( mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)) );
     connect( zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)) );
     connect( plotPointsTypeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changePointsType(QAction*)) );
     connect( updateDatasheetAction, SIGNAL(triggered()), this, SLOT(updateDatasheet()) );
     connect( navigationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeSelectedItemsPosition(QAction*)) );
+    connect( magnificationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(magnificationChanged(QAction*)) );
 }
 
 void ImageView::initMenus() {
@@ -147,7 +165,7 @@ void ImageView::initMenus() {
     m_viewMouseModeMenu->addAction(selectAndEditModeAction);
     m_viewMouseModeMenu->addAction(navigationModeAction);
     m_viewMouseModeMenu->addAction(zoomSelectionModeAction);
-    m_viewMouseModeMenu->addAction(selectionModeAction);
+    m_viewMouseModeMenu->addAction(selectAndMoveModeAction);
 
     m_viewImageMenu = new QMenu(i18n("Image Menu"));
     //m_viewImageMenu->setIcon();
@@ -162,7 +180,6 @@ void ImageView::initMenus() {
     m_zoomMenu->addAction(zoomOriginAction);
     m_zoomMenu->addAction(zoomFitPageHeightAction);
     m_zoomMenu->addAction(zoomFitPageWidthAction);
-    m_zoomMenu->addAction(zoomFitSelectionAction);
 
     m_navigationMenu = new QMenu(i18n("Navigate Selected Items"));
     //m_navigationMenu->setIcon();
@@ -170,6 +187,14 @@ void ImageView::initMenus() {
     m_navigationMenu->addAction(shiftRightAction);
     m_navigationMenu->addAction(shiftUpAction);
     m_navigationMenu->addAction(shiftDownAction);
+
+    m_magnificationMenu = new QMenu(i18n("Magnification"));
+    //m_viewImageMenu->setIcon();
+    m_magnificationMenu->addAction(noMagnificationAction);
+    m_magnificationMenu->addAction(twoTimesMagnificationAction);
+    m_magnificationMenu->addAction(threeTimesMagnificationAction);
+    m_magnificationMenu->addAction(fourTimesMagnificationAction);
+    m_magnificationMenu->addAction(fiveTimesMagnificationAction);
 }
 
 void ImageView::createContextMenu(QMenu* menu) const {
@@ -184,6 +209,7 @@ void ImageView::createContextMenu(QMenu* menu) const {
 
     menu->insertMenu(firstAction, m_viewMouseModeMenu);
     menu->insertMenu(firstAction, m_zoomMenu);
+    menu->insertMenu(firstAction, m_magnificationMenu);
     menu->insertSeparator(firstAction);
     menu->insertMenu(firstAction, m_viewImageMenu);
     menu->insertSeparator(firstAction);
@@ -198,7 +224,7 @@ void ImageView::fillToolBar(QToolBar* toolBar) {
     toolBar->addAction(selectAndEditModeAction);
     toolBar->addAction(navigationModeAction);
     toolBar->addAction(zoomSelectionModeAction);
-    toolBar->addAction(selectionModeAction);
+    toolBar->addAction(selectAndMoveModeAction);
     toolBar->addSeparator();
     toolBar->addAction(setAxisPointsAction);
     toolBar->addAction(setCurvePointsAction);
@@ -210,6 +236,11 @@ void ImageView::fillToolBar(QToolBar* toolBar) {
     tbZoom->setMenu(m_zoomMenu);
     tbZoom->setDefaultAction(currentZoomAction);
     toolBar->addWidget(tbZoom);
+    toolBar->addAction(noMagnificationAction);
+    toolBar->addAction(twoTimesMagnificationAction);
+    toolBar->addAction(threeTimesMagnificationAction);
+    toolBar->addAction(fourTimesMagnificationAction);
+    toolBar->addAction(fiveTimesMagnificationAction);
     toolBar->addSeparator();
     toolBar->addAction(shiftRightAction);
     toolBar->addAction(shiftLeftAction);
@@ -400,6 +431,9 @@ void ImageView::mouseMoveEvent(QMouseEvent* event) {
         emit statusInfo(i18n("%1: Logical Position (%2, %3)", m_image->name(), logicalPos.x(), logicalPos.y()));
     }
 
+    if (m_image->indexOfChild<ZoomWindow>(m_zoomWindow, AbstractAspect::IncludeHidden) != -1)
+        m_zoomWindow->updatePixmap(winId(), QPoint(event->pos()));
+
     QGraphicsView::mouseMoveEvent(event);
 }
 
@@ -420,10 +454,10 @@ void ImageView::changePointsType(QAction* action) {
             m_image->removeAllChildren();
         m_image->setPlotPointsType(Image::AxisPoints);
         m_image->setSegmentVisible(false);
-    } else if (action==setCurvePointsAction){
+    } else if (action==setCurvePointsAction) {
         m_image->setPlotPointsType(Image::CurvePoints);
         m_image->setSegmentVisible(false);
-    } else if (action==selectSegmentAction){
+    } else if (action==selectSegmentAction) {
         m_image->setPlotPointsType(Image::SegmentPoints);
         m_image->setSegmentVisible(true);
     }
@@ -444,9 +478,8 @@ void ImageView::changeZoom(QAction* action) {
     } else if (action==zoomFitPageHeightAction) {
         float scaleFactor = viewport()->height()/scene()->sceneRect().height();
         setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-    } else if (action==zoomFitSelectionAction) {
-        fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
     }
+
     currentZoomAction=action;
     if (tbZoom)
         tbZoom->setDefaultAction(action);
@@ -497,7 +530,7 @@ void ImageView::mouseModeChanged(QAction* action) {
         m_mouseMode = NavigationMode;
         setInteractive(false);
         setDragMode(QGraphicsView::ScrollHandDrag);
-    } else if (action==zoomSelectionModeAction){
+    } else if (action==zoomSelectionModeAction) {
         m_mouseMode = ZoomSelectionMode;
         setInteractive(false);
         setDragMode(QGraphicsView::NoDrag);
@@ -506,6 +539,29 @@ void ImageView::mouseModeChanged(QAction* action) {
         setInteractive(true);
         setDragMode(QGraphicsView::NoDrag);
     }
+}
+
+void ImageView::magnificationChanged(QAction* action) {
+    bool loaded = (m_image->indexOfChild<ZoomWindow>(m_zoomWindow, AbstractAspect::IncludeHidden) != -1);
+
+    if (action==noMagnificationAction && loaded) {
+        m_image->removeChild(m_zoomWindow);
+        return;
+    } else if (!loaded) {
+        m_zoomWindow = new ZoomWindow(i18n("Magnification Window"));
+        m_zoomWindow->setHidden(true);
+        m_image->addChild(m_zoomWindow);
+    }
+
+    if (action==twoTimesMagnificationAction)
+        m_zoomWindow->setScaleFactor(2);
+    else if (action==threeTimesMagnificationAction)
+        m_zoomWindow->setScaleFactor(3);
+    else if (action==fourTimesMagnificationAction)
+        m_zoomWindow->setScaleFactor(4);
+    else if (action==fiveTimesMagnificationAction)
+        m_zoomWindow->setScaleFactor(5);
+
 }
 
 void ImageView::exportToFile(const QString& path, const ExportFormat format, const int resolution) {
@@ -602,11 +658,21 @@ void ImageView::updateDatasheet() {
         }
 }
 
+void ImageView::handleAspectRemoved(const AbstractAspect *parent, const AbstractAspect *before, const AbstractAspect *child) {
+    Q_UNUSED(parent)
+    Q_UNUSED(before)
+    const ZoomWindow *removedElement = qobject_cast<const ZoomWindow*>(child);
+    if (removedElement)
+        noMagnificationAction->setChecked(true);
+    else
+        handleImageActions();
+}
+
 void ImageView::handleImageActions() {
     m_childItems = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
 
     if (m_image->isLoaded) {
-        if (m_childItems.count() > 2){
+        if (m_childItems.count() > 2) {
             setCurvePointsAction->setEnabled(true);
             selectSegmentAction->setEnabled(true);
         } else {
@@ -626,7 +692,7 @@ void ImageView::handleImageActions() {
         selectSegmentAction->setEnabled(false);
     }
 
-    if (m_childItems.count()) {
+    if (!m_childItems.isEmpty()) {
         shiftRightAction->setEnabled(true);
         shiftLeftAction->setEnabled(true);
         shiftUpAction->setEnabled(true);

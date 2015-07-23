@@ -164,6 +164,7 @@ set(BACKEND_SOURCES
         ${BACKEND_DIR}/core/ImageEditor.cpp
        	${BACKEND_DIR}/worksheet/Segment.cpp
         ${BACKEND_DIR}/worksheet/Segments.cpp
+        ${BACKEND_DIR}/worksheet/ZoomWindow.cpp
 )
 
 set(COMMONFRONTEND_SOURCES

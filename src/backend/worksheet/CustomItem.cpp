@@ -324,17 +324,6 @@ void CustomItem::setPosition(const QPointF& point) {
     }
 }
 
-/*!
- * position is set to invalid if the parent item is not drawn on the scene
- * (e.g. axis is not drawn because it's outside plot ranges -> don't draw axis' title label)
- */
-void CustomItem::setPositionInvalid(bool invalid) {
-    Q_D(CustomItem);
-    if (invalid != d->positionInvalid){
-        d->positionInvalid = invalid;
-    }
-}
-
 STD_SWAP_METHOD_SETTER_CMD_IMPL_F(CustomItem, SetVisible, bool, swapVisible, retransform);
 void CustomItem::setVisible(bool on) {
     Q_D(CustomItem);
@@ -351,11 +340,6 @@ void CustomItem::setPrinting(bool on) {
     d->m_printing = on;
 }
 
-void CustomItem::setSelected(bool on) {
-    Q_D(CustomItem);
-    d->setSelected(on);
-}
-
 void CustomItem::suppressHoverEvents(bool on) {
     Q_D(CustomItem);
     d->m_suppressHoverEvents = on;
@@ -364,7 +348,7 @@ void CustomItem::suppressHoverEvents(bool on) {
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void CustomItem::visibilityChanged(){
+void CustomItem::visibilityChanged() {
     Q_D(const CustomItem);
     this->setVisible(!d->isVisible());
 }
@@ -373,12 +357,11 @@ void CustomItem::visibilityChanged(){
 //####################### Private implementation ###############################
 //##############################################################################
 CustomItemPrivate::CustomItemPrivate(CustomItem *owner)
-        : positionInvalid(false),
-          suppressItemChangeEvent(false),
+        : suppressItemChangeEvent(false),
           suppressRetransform(false),
           m_printing(false),
           m_hovered(false),
-          m_suppressHoverEvents(false),
+          m_suppressHoverEvents(true),
           q(owner){
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
     setFlag(QGraphicsItem::ItemIsSelectable);
@@ -496,8 +479,6 @@ void CustomItemPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-    if (positionInvalid)
-        return;
     QPainterPath path = CustomItem::itemsPathFromStyle(itemsStyle);
     QPainterPath errorBar = q->errorBarsPath();
     QTransform trafo;
@@ -517,7 +498,7 @@ void CustomItemPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     painter->drawPath(path);
     painter->restore();
 
-    if (m_suppressHoverEvents) {
+    if (!m_suppressHoverEvents) {
         if (m_hovered && !isSelected() && !m_printing){
             painter->setPen(q->hoveredPen);
             painter->setOpacity(q->hoveredOpacity);

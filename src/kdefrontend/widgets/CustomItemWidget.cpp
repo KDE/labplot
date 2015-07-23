@@ -25,8 +25,6 @@
 
 #include "math.h"
 
-#include <QWidgetAction>
-#include <QGridLayout>
 #include <QDoubleSpinBox>
 #include <QPainter>
 #include <QDir>
@@ -115,15 +113,15 @@ void CustomItemWidget::setCustomItems(QList<CustomItem*> list) {
 }
 
 void CustomItemWidget::initConnections() {
-    connect( m_item, SIGNAL(positionChanged(CustomItem::PositionWrapper)),
-             this, SLOT(customItemPositionChanged(CustomItem::PositionWrapper)) );
+    connect(m_item, SIGNAL(positionChanged(CustomItem::PositionWrapper)),
+             this, SLOT(customItemPositionChanged(CustomItem::PositionWrapper)));
     connect(m_item, SIGNAL(itemsStyleChanged(CustomItem::ItemsStyle)), this, SLOT(customItemStyleChanged(CustomItem::ItemsStyle)));
     connect(m_item, SIGNAL(itemsSizeChanged(qreal)), this, SLOT(customItemSizeChanged(qreal)));
-    connect( m_item, SIGNAL(itemsRotationAngleChanged(qreal)), this, SLOT(customItemRotationAngleChanged(qreal)) );
+    connect(m_item, SIGNAL(itemsRotationAngleChanged(qreal)), this, SLOT(customItemRotationAngleChanged(qreal)));
     connect(m_item, SIGNAL(itemsOpacityChanged(qreal)), this, SLOT(customItemOpacityChanged(qreal)));
     connect(m_item, SIGNAL(itemsBrushChanged(QBrush)), this, SLOT(customItemBrushChanged(QBrush)));
     connect(m_item, SIGNAL(itemsPenChanged(QPen)), this, SLOT(customItemPenChanged(QPen)));
-    connect( m_item, SIGNAL(visibleChanged(bool)), this, SLOT(customItemVisibleChanged(bool)) );
+    connect(m_item, SIGNAL(visibleChanged(bool)), this, SLOT(customItemVisibleChanged(bool)));
 }
 
 void CustomItemWidget::hidePositionWidgets() {

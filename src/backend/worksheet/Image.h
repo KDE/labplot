@@ -41,7 +41,7 @@ class Image: public AbstractPart, public scripted {
 		Image(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
         ~Image();
 
-        enum GraphType { Cartesian, Polar, LogarithmicX, LogarithmicY};
+        enum GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY};
         enum ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
         enum PlotImageType { OriginalImage, ProcessedImage };
         enum PointsType { AxisPoints, CurvePoints, SegmentPoints };
@@ -58,8 +58,7 @@ class Image: public AbstractPart, public scripted {
             ErrorType y;
         };
 
-        struct EditorSettings
-        {
+        struct EditorSettings {
           ColorAttributes type;
           int intensityThresholdLow;
           int intensityThresholdHigh;
@@ -113,15 +112,15 @@ class Image: public AbstractPart, public scripted {
 
 		ImagePrivate* const d;
 		friend class ImagePrivate;
-        ImageEditor* m_imageEditor;
-        Segments* m_segments;    
+        Segments* m_segments;
+        ImageEditor* m_editor;
 
     private slots:
 		void handleAspectAdded(const AbstractAspect*);
 		void handleAspectAboutToBeRemoved(const AbstractAspect*);
 		void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 
-	 signals:
+    signals:
 		void requestProjectContextMenu(QMenu*);
 		void requestUpdate();
 
@@ -130,10 +129,12 @@ class Image: public AbstractPart, public scripted {
         void plotErrorsChanged(const Image::Errors&);
         void axisPointsChanged(const Image::ReferencePoints&);
         void settingsChanged(const Image::EditorSettings&);
+        void minSegmentLengthChanged(const int);
         friend class ImageSetFileNameCmd;
         friend class ImageSetRotationAngleCmd;
         friend class ImageSetPlotErrorsCmd;
         friend class ImageSetAxisPointsCmd;
         friend class ImageSetSettingsCmd;
+        friend class ImageSetMinSegmentLengthCmd;
 };
 #endif

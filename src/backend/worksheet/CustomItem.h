@@ -22,7 +22,6 @@
 #define CUSTOMITEM_H
 
 #include <QObject>
-#include <QFont>
 #include <QBrush>
 #include <QPen>
 #include "backend/lib/macros.h"
@@ -30,23 +29,23 @@
 
 
 class CustomItemPrivate;
-class CustomItem : public WorksheetElement{
+class CustomItem : public WorksheetElement {
     Q_OBJECT
 
 	public:
-		enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
-		enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
+        enum HorizontalPosition { hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom };
+        enum VerticalPosition { vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom };
         enum ItemsStyle {Circle, Square, EquilateralTriangle, RightTriangle, Bar, PeakedBar,
                         SkewedBar, Diamond, Lozenge, Tie, TinyTie, Plus, Boomerang, SmallBoomerang,
-                        Star4, Star5, Line, Cross};
+                        Star4, Star5, Line, Cross };
 
-		struct PositionWrapper{
+        struct PositionWrapper {
 			QPointF 		   point;
 			HorizontalPosition horizontalPosition;
 			VerticalPosition   verticalPosition;
 		};
 
-        struct ErrorBar{
+        struct ErrorBar {
             QPointF plusDeltaX;
             QPointF minusDeltaX;
             QPointF plusDeltaY;
@@ -66,7 +65,6 @@ class CustomItem : public WorksheetElement{
 
         CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
 		void setPosition(const QPointF&);
-		void setPositionInvalid(bool);
 
         CLASS_D_ACCESSOR_DECL(ErrorBar, itemErrorBar, ItemErrorBar)
         BASIC_D_ACCESSOR_DECL(ItemsStyle, itemsStyle, ItemsStyle)
@@ -79,7 +77,6 @@ class CustomItem : public WorksheetElement{
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool);
-        void setSelected(bool);
         void suppressHoverEvents(bool);
 
 		typedef CustomItemPrivate Private;

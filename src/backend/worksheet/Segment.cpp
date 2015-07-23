@@ -20,7 +20,6 @@
 
 #include "Segment.h"
 #include "SegmentPrivate.h"
-#include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/CustomItem.h"
 #include "backend/worksheet/Worksheet.h"
@@ -68,7 +67,6 @@ void Segment::setVisible(bool on) {
     Q_D(Segment);
     d->setVisible(on);
 }
-
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
@@ -135,13 +133,13 @@ void SegmentPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     painter->drawPath(linePath);
     painter->restore();
 
-    if (m_hovered && !isSelected()){
+    if (m_hovered && !isSelected()) {
         painter->setPen(hoveredPen);
         painter->setOpacity(hoveredOpacity);
         painter->drawPath(itemShape);
     }
 
-    if (isSelected()){
+    if (isSelected()) {
         painter->setPen(selectedPen);
         painter->setOpacity(selectedOpacity);
         painter->drawPath(itemShape);
@@ -171,11 +169,20 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
             int h = (line->y1() > line->y2())?line->y1():line->y2();
             for (int i = l; i <= h; i++) {
                 if (count%q->m_image->pointSeparation() == 0) {
-                    CustomItem* item = new CustomItem(i18n(""));
-                    item->setHidden(true);
-                    item->setPosition(QPoint(line->x1(), i)*scaleFactor);
-                    q->m_image->addChild(item);
-                    q->m_image->updateData(item);
+                    bool positionUsed = false;
+                    QList<CustomItem*> imageItemsList = q->m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
+                    foreach (CustomItem* item, imageItemsList) {
+                        if ( item->position().point == QPoint(line->x1(), i)*scaleFactor )
+                            positionUsed = true;
+                    }
+
+                    if (!positionUsed) {
+                        CustomItem* item = new CustomItem(i18n("CustomItem"));
+                        item->setHidden(true);
+                        item->setPosition(QPoint(line->x1(), i)*scaleFactor);
+                        q->m_image->addChild(item);
+                        q->m_image->updateData(item);
+                    }
                 }
                 count++;
             }

@@ -23,7 +23,6 @@
 #include "kdefrontend/widgets/CustomItemWidget.h"
 #include "commonfrontend/widgets/qxtspanslider.h"
 
-#include <QWidgetAction>
 #include <QGridLayout>
 #include <QRadioButton>
 #include <QDoubleSpinBox>
@@ -74,6 +73,7 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
 
     ui.cbGraphType->addItem(i18n("Cartesian (x, y)"));
     ui.cbGraphType->addItem(i18n("Polar (x, y°)"));
+    ui.cbGraphType->addItem(i18n("Polar (x, y(rad))"));
     ui.cbGraphType->addItem(i18n("Logarithmic (ln(x), y)"));
     ui.cbGraphType->addItem(i18n("Logarithmic (x, ln(y))"));
 
@@ -83,6 +83,7 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     ui.cbXErrorType->addItem(i18n("No Error"));
     ui.cbXErrorType->addItem(i18n("symmetric"));
     ui.cbXErrorType->addItem(i18n("asymmetric"));
+
     ui.cbYErrorType->addItem(i18n("No Error"));
     ui.cbYErrorType->addItem(i18n("symmetric"));
     ui.cbYErrorType->addItem(i18n("asymmetric"));
@@ -136,6 +137,7 @@ void ImageWidget::initConnections() {
     connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(handleAspectAdded()) );
     connect( m_image, SIGNAL(axisPointsChanged(Image::ReferencePoints)), this, SLOT(imageAxisPointsChanged(Image::ReferencePoints)) );
     connect( m_image, SIGNAL(settingsChanged(Image::EditorSettings)), this, SLOT(imageEditorSettingsChanged(Image::EditorSettings)) );
+    connect( m_image, SIGNAL(minSegmentLengthChanged(int)), this, SLOT(imageMinSegmentLengthChanged(int)) );
 }
 
 void ImageWidget::handleWidgetActions() {
@@ -424,6 +426,12 @@ void ImageWidget::imageEditorSettingsChanged(const Image::EditorSettings& settin
     ui.rbHue->setChecked(settings.type == Image::Hue);
     ui.rbSaturation->setChecked(settings.type == Image::Saturation);
     ui.rbValue->setChecked(settings.type == Image::Value);
+    m_initializing = false;
+}
+
+void ImageWidget::imageMinSegmentLengthChanged(const int value) {
+    m_initializing = true;
+    ui.sbMinSegmentLength->setValue(value);
     m_initializing = false;
 }
 

@@ -83,16 +83,13 @@ void Segments::matchRunsToSegments(int x, int height, bool* lastBool, Segment** 
 
     int yStart = 0;
     bool inRun = false;
-    for (int y = 0; y < height; y++)
-    {
-        if (!inRun && currBool [y])
-        {
+    for (int y = 0; y < height; y++) {
+        if (!inRun && currBool [y]) {
             inRun = true;
             yStart = y;
         }
 
-        if ((y + 1 >= height) || !currBool [y + 1])
-        {
+        if ((y + 1 >= height) || !currBool [y + 1]) {
             if (inRun)
                 finishRun(lastBool, nextBool, lastSegment, currSegment, x, yStart, y, height);
 
@@ -190,17 +187,14 @@ void Segments::finishRun(bool* lastBool, bool* nextBool, Segment** lastSegment, 
 int Segments::adjacentRuns(bool* columnBool, int yStart, int yStop, int height) {
     int runs = 0;
     bool inRun = false;
-    for (int y = yStart - 1; y <= yStop + 1; y++)
-    {
-        if ((0 <= y) && (y < height))
-        {
-            if (!inRun && columnBool [y])
-            {
+    for (int y = yStart - 1; y <= yStop + 1; y++) {
+        if ((0 <= y) && (y < height)) {
+            if (!inRun && columnBool [y]) {
                 inRun = true;
                 ++runs;
-            }
-            else if (inRun && !columnBool [y])
+            } else if (inRun && !columnBool [y]) {
                 inRun = false;
+            }
         }
     }
 
@@ -208,10 +202,11 @@ int Segments::adjacentRuns(bool* columnBool, int yStart, int yStop, int height) 
 }
 
 Segment* Segments::adjacentSegment(Segment** lastSegment, int yStart, int yStop, int height) {
-    for (int y = yStart - 1; y <= yStop + 1; y++)
+    for (int y = yStart - 1; y <= yStop + 1; y++) {
         if ((0 <= y) && (y < height))
             if (lastSegment [y])
                 return lastSegment [y];
+    }
 
     return 0;
 }
@@ -219,17 +214,14 @@ Segment* Segments::adjacentSegment(Segment** lastSegment, int yStart, int yStop,
 int Segments::adjacentSegments(Segment** lastSegment, int yStart, int yStop, int height) {
     int count = 0;
     bool inSegment = false;
-    for (int y = yStart - 1; y <= yStop + 1; y++)
-    {
-        if ((0 <= y) && (y < height))
-        {
-            if (!inSegment && lastSegment [y])
-            {
+    for (int y = yStart - 1; y <= yStop + 1; y++) {
+        if ((0 <= y) && (y < height)) {
+            if (!inSegment && lastSegment [y]) {
                 inSegment = true;
                 ++count;
-            }
-            else if (inSegment && !lastSegment [y])
+            } else if (inSegment && !lastSegment [y]) {
                 inSegment = false;
+            }
         }
     }
 

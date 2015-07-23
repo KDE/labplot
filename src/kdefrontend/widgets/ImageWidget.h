@@ -73,6 +73,7 @@ private slots:
     void imageRotationAngleChanged(float);
     void imageAxisPointsChanged(const Image::ReferencePoints&);
     void imageEditorSettingsChanged(const Image::EditorSettings&);
+    void imageMinSegmentLengthChanged(const int);
     void updateCustomItemList();
     void handleAspectAdded();
     void handleWidgetActions();

@@ -41,9 +41,9 @@ Image::Image(AbstractScriptingEngine* engine, const QString& name, bool loading)
     : AbstractPart(name), scripted(engine), d(new ImagePrivate(this)),
       plotImageType(Image::OriginalImage),
       isLoaded(false),
-      m_imageEditor(new ImageEditor()),
       m_segments(new Segments(this)),
-      m_transform(new Transform()){
+      m_transform(new Transform()),
+      m_editor(new ImageEditor()){
 
     connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
             this, SLOT(handleAspectAdded(const AbstractAspect*)));
@@ -107,7 +107,7 @@ QWidget* Image::view() const {
 void Image::handleAspectAdded(const AbstractAspect* aspect) {
     const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
     if (addedElement) {
-        if (aspect->parentAspect() == this){
+        if (aspect->parentAspect() == this) {
             QGraphicsItem *item = addedElement->graphicsItem();
             Q_ASSERT(item != NULL);
             d->m_scene->addItem(item);
@@ -272,6 +272,12 @@ void Image::setSettings(const Image::EditorSettings& editorSettings) {
         exec(new ImageSetSettingsCmd(d, editorSettings, i18n("%1: set editor settings")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(Image, SetMinSegmentLength, int, minSegmentLength, makeSegments)
+void Image::setminSegmentLength(const int value) {
+    if (d->minSegmentLength != value)
+        exec(new ImageSetMinSegmentLengthCmd(d, value, i18n("%1: set minimum segment length")));        ;
+}
+
 void Image::setPrinting(bool on) const {
     QList<CustomItem*> childElements = children<CustomItem>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
     foreach(CustomItem* elem, childElements)
@@ -280,10 +286,6 @@ void Image::setPrinting(bool on) const {
 
 void Image::setPlotPointsType(const PointsType pointsType) {
     d->plotPointsType = pointsType;
-}
-
-void Image::setminSegmentLength(const int value) {
-    d->minSegmentLength = value;
 }
 
 void Image::setPointSeparation(const int value) {
@@ -322,9 +324,12 @@ void ImagePrivate::update() {
 }
 
 void ImagePrivate::discretize() {
-    q->m_imageEditor->discretize(&q->processedPlotImage, &q->originalPlotImage, settings);
-
+    q->m_editor->discretize(&q->processedPlotImage, &q->originalPlotImage, settings);
     //update segments
+    makeSegments();
+}
+
+void ImagePrivate::makeSegments() {
     q->m_segments->makeSegments(q->processedPlotImage);
     if (plotPointsType == Image::SegmentPoints)
         q->m_segments->setSegmentsVisible(true);
@@ -337,16 +342,17 @@ ImagePrivate::~ImagePrivate() {
 
 void ImagePrivate::updateFileName() {
     WAIT_CURSOR;
-    int childCount = q->childCount<CustomItem>(AbstractAspect::IncludeHidden);
-    if (childCount)
-        q->removeAllChildren();
+    QList<CustomItem*> childItemList = q->children<CustomItem>(AbstractAspect::IncludeHidden);
+    if (childItemList.count()) {
+        foreach(CustomItem* item, childItemList)
+            item->remove();
+    }
 
     q->isLoaded = false;
     const QString& address = fileName.trimmed();
 
     if ( !address.isEmpty() ) {
         if (uploadImage(address)) {
-            //TODO: scene size was change -> reinitialize all the screen size dependent parameters
             q->initSceneParameters();
             fileName = address;
         }

@@ -12,7 +12,6 @@ class CustomItemPrivate: public QGraphicsItem {
 		float scaleFactor;
 
 		CustomItem::PositionWrapper position;
-		bool positionInvalid;
 		CustomItem::ErrorBar itemErrorBar;
 
 		QString name() const;
@@ -33,9 +32,6 @@ class CustomItemPrivate: public QGraphicsItem {
 		qreal itemsOpacity;
 		qreal itemsRotationAngle;
 		qreal itemsSize;
-		//not used
-		//qreal itemsAspectRatio;
-
 		QRectF boundingRectangle; 
 		QRectF transformedBoundingRectangle;
 		QPainterPath itemShape;
