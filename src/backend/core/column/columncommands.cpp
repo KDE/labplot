@@ -756,38 +756,41 @@ void ColumnClearCmd::undo()
  * \brief Ctor
  */
 ColumnSetFormulaCmd::ColumnSetFormulaCmd(Column::Private * col, Interval<int> interval, const QString& formula, QUndoCommand * parent )
-: QUndoCommand( parent ), m_col(col), m_interval(interval), m_formula(formula)
+: QUndoCommand( parent ), m_col(col), m_interval(interval), m_newFormula(formula), m_copied(false), m_global(true)
 {
 	setText(i18n("%1: set cell formula", col->name()));
-	m_copied = false;
 }
 
-/**
- * \brief Dtor
- */
-ColumnSetFormulaCmd::~ColumnSetFormulaCmd()
-{
+ColumnSetFormulaCmd::ColumnSetFormulaCmd(Column::Private* col, const QString& formula)
+: QUndoCommand(), m_col(col), m_newFormula(formula), m_copied(false), m_global(true) {
+	setText(i18n("%1: set formula", col->name()));
 }
 
 /**
  * \brief Execute the command
  */
-void ColumnSetFormulaCmd::redo()
-{
-	if(!m_copied)
-	{
+void ColumnSetFormulaCmd::redo() {
+	if(!m_copied) {
 		m_formulas = m_col->formulaAttribute();
 		m_copied = true;
 	}
-	m_col->setFormula(m_interval, m_formula);
+
+	if (m_global) {
+		m_oldFormula = m_col->formula();
+		m_col->setFormula(m_newFormula);
+	} else {
+		m_col->setFormula(m_interval, m_newFormula);
+	}
 }
 
 /**
  * \brief Undo the command
  */
-void ColumnSetFormulaCmd::undo()
-{
-	m_col->replaceFormulas(m_formulas);
+void ColumnSetFormulaCmd::undo() {
+	if (m_global){
+		m_col->replaceFormula(m_oldFormula);
+	}else
+		m_col->replaceFormulas(m_formulas);
 }
 
 /** ***************************************************************************
