@@ -39,22 +39,12 @@ class PartMdiView : public QMdiSubWindow {
 	Q_OBJECT
 
 	public:
-		PartMdiView(AbstractPart* part, QWidget* embedded_view);
-
-		enum SubWindowStatus {Closed, Hidden, Visible};
-		AbstractPart *part() const;
-		SubWindowStatus status() const;
+		PartMdiView(AbstractPart* part);
+		AbstractPart* part() const;
 
 	private:
-		void closeEvent(QCloseEvent *event);
-		void hideEvent(QHideEvent *event);
-		void showEvent(QShowEvent *event);
-
-		AbstractPart *m_part;
-		SubWindowStatus m_status;
-
-	signals:
-		void statusChanged(PartMdiView* view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to);
+		void closeEvent(QCloseEvent*);
+		AbstractPart* m_part;
 
 	private slots:
 		void handleAspectDescriptionChanged(const AbstractAspect*);

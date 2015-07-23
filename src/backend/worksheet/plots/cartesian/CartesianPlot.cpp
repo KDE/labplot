@@ -423,12 +423,7 @@ void CartesianPlot::initMenus(){
 
 QMenu* CartesianPlot::createContextMenu(){
 	QMenu* menu = WorksheetElement::createContextMenu();
-
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	QAction* firstAction = menu->actions().first();
-#else
 	QAction* firstAction = menu->actions().at(1);
-#endif
 
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
@@ -444,13 +439,23 @@ QMenu* CartesianPlot::createContextMenu(){
 	Returns an icon to be used in the project explorer.
 */
 QIcon CartesianPlot::icon() const{
-    QIcon ico;
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	ico.addPixmap(QPixmap(":/graph.xpm"));
-#else
-    ico = QIcon::fromTheme("office-chart-line");
-#endif
-	return ico;
+	return QIcon::fromTheme("office-chart-line");
+}
+
+void CartesianPlot::navigate(CartesianPlot::NavigationOperation op) {
+	if (op==ScaleAuto) scaleAuto();
+	else if (op==ScaleAutoX) scaleAutoX();
+	else if (op==ScaleAutoY) scaleAutoY();
+	else if (op==ZoomIn) zoomIn();
+	else if (op==ZoomOut) zoomOut();
+	else if (op==ZoomInX) zoomInX();
+	else if (op==ZoomOutX) zoomOutX();
+	else if (op==ZoomInY) zoomInY();
+	else if (op==ZoomOutY) zoomOutY();
+	else if (op==ShiftLeftX) shiftLeftX();
+	else if (op==ShiftRightX) shiftRightX();
+	else if (op==ShiftUpY) shiftUpY();
+	else if (op==ShiftDownY) shiftDownY();
 }
 
 //##############################################################################

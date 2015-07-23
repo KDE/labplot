@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Main window of the application
  ***************************************************************************/
 
@@ -38,13 +38,16 @@ class Folder;
 class ProjectExplorer;
 class Project;
 class Worksheet;
+class Workbook;
 class Spreadsheet;
 class CantorWorksheet;
+class Matrix;
 class GuiObserver;
 class AxisDock;
 class CartesianPlotDock;
 class CartesianPlotLegendDock;
 class ColumnDock;
+class MatrixDock;
 class ProjectDock;
 class SpreadsheetDock;
 class XYCurveDock;
@@ -64,6 +67,9 @@ class MainWin : public KXmlGuiWindow{
 public:
 	explicit MainWin(QWidget* parent = 0, const QString& filename=0);
 	~MainWin();
+
+	AspectTreeModel* model() const;
+	void addAspectToProject(AbstractAspect*);
 
 private:
 	QMdiArea* m_mdiArea;
@@ -85,26 +91,27 @@ private:
 	Qt::WindowStates m_lastWindowState; //< last window state before switching to full screen mode
 
 	KRecentFilesAction* m_recentProjectsAction;
-    QAction* m_saveAction;
-    QAction* m_saveAsAction;
-    QAction* m_printAction;
-    QAction* m_printPreviewAction;
-    QAction* m_importAction;
-    QAction* m_exportAction;
-    QAction* m_closeAction;
-    QAction* m_newFolderAction;
-    QAction* m_newSpreadsheetAction;
-    QAction* m_newMatrixAction;
-    QAction* m_newWorksheetAction;
-    QAction* m_newFileDataSourceAction;
-    QAction* m_newSqlDataSourceAction;
-    QAction* m_newScriptAction;
-    QAction* m_newProjectAction;
-    QAction* m_historyAction;
-    QAction* m_undoAction;
-    QAction* m_redoAction;
-    QAction* m_tileWindows;
-    QAction* m_cascadeWindows;
+	QAction* m_saveAction;
+	QAction* m_saveAsAction;
+	QAction* m_printAction;
+	QAction* m_printPreviewAction;
+	QAction* m_importAction;
+	QAction* m_exportAction;
+	QAction* m_closeAction;
+	QAction* m_newFolderAction;
+	QAction* m_newWorkbookAction;
+	QAction* m_newSpreadsheetAction;
+	QAction* m_newMatrixAction;
+	QAction* m_newWorksheetAction;
+	QAction* m_newFileDataSourceAction;
+	QAction* m_newSqlDataSourceAction;
+	QAction* m_newScriptAction;
+	QAction* m_newProjectAction;
+	QAction* m_historyAction;
+	QAction* m_undoAction;
+	QAction* m_redoAction;
+	QAction* m_tileWindows;
+	QAction* m_cascadeWindows;
 
 	//toggling doch widgets
     QAction* m_toggleProjectExplorerDocQAction;
@@ -144,6 +151,7 @@ private:
 	CartesianPlotDock* cartesianPlotDock;
 	CartesianPlotLegendDock* cartesianPlotLegendDock;
 	ColumnDock* columnDock;
+	MatrixDock* matrixDock;
 	SpreadsheetDock* spreadsheetDock;
 	ProjectDock* projectDock;
 	XYCurveDock* xyCurveDock;
@@ -158,12 +166,13 @@ private:
 	void initActions();
 	void initMenus();
 	bool warnModified();
-	void addAspectToProject(AbstractAspect*);
 	void activateSubWindowForAspect(const AbstractAspect*) const;
 	bool save(const QString&);
 	void closeEvent(QCloseEvent*);
 
+	Workbook* activeWorkbook() const;
 	Spreadsheet* activeSpreadsheet() const;
+	Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
 	CantorWorksheet* activeCantorWorksheet() const;
 
@@ -196,12 +205,12 @@ private slots:
 	void projectChanged();
 
 	void newFolder();
+	void newWorkbook();
 	void newSpreadsheet();
 	void newCantorWorksheet(QAction* action);
-	void newSpreadsheetForImportFileDialog(const QString&);
-	void newWorksheet();
-	void newScript();
 	void newMatrix();
+	void newWorksheet();
+	//TODO: void newScript();
 	void newFileDataSourceActionTriggered();
 	void newSqlDataSourceActionTriggered();
 
@@ -213,7 +222,6 @@ private slots:
 	void handleAspectRemoved(const AbstractAspect* parent);
 	void handleCurrentAspectChanged(AbstractAspect* );
 	void handleCurrentSubWindowChanged(QMdiSubWindow*);
-	void handleSubWindowStatusChange(PartMdiView* view, PartMdiView::SubWindowStatus from, PartMdiView::SubWindowStatus to);
 	void handleShowSubWindowRequested();
 
 	void handleSettingsChanges();

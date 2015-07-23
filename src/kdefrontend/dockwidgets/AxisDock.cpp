@@ -168,7 +168,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_aspectTreeModel(0), m_ini
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Axis);
 	ui.verticalLayout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	init();
@@ -322,6 +322,7 @@ void AxisDock::init(){
 	ui.cbLabelsFormat->addItem( i18n("Powers of 10") );
 	ui.cbLabelsFormat->addItem( i18n("Powers of 2") );
 	ui.cbLabelsFormat->addItem( i18n("Powers of e") );
+	ui.cbLabelsFormat->addItem( i18n("Multiplier of \u03C0") );
 
 	m_initializing=false;
 }
@@ -1816,7 +1817,7 @@ void AxisDock::loadConfig(KConfig& config){
 	m_initializing=false;
 }
 
-void AxisDock::saveConfig(KConfig& config){
+void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group( "Axis" );
 
 	//General

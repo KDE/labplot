@@ -29,13 +29,12 @@
 
 #include "backend/core/AbstractPart.h"
 #include "commonfrontend/core/PartMdiView.h"
+#include "backend/core/Workbook.h"
 #include <QMenu>
 #include <QStyle>
 
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KIcon>
 #include <KLocale>
-#endif
 
 /**
  * \class AbstractPart
@@ -69,11 +68,10 @@ AbstractPart::~AbstractPart() {
  * A new view is only created the first time this method is called;
  * after that, a pointer to the pre-existing view is returned.
  */
-PartMdiView* AbstractPart::mdiSubWindow() const
-{
-	if (!m_mdiWindow){
-		m_mdiWindow = new PartMdiView(const_cast<AbstractPart*>(this), view());
-	}
+PartMdiView* AbstractPart::mdiSubWindow() const {
+	if (!m_mdiWindow)
+		m_mdiWindow = new PartMdiView(const_cast<AbstractPart*>(this));
+
 	return m_mdiWindow;
 }
 
@@ -95,8 +93,14 @@ void AbstractPart::deleteMdiSubWindow() {
  * this function is called when PartMdiView, the mdi-subwindow-wrapper of the actual view,
  * is closed (=deleted) in MainWindow. Makes sure that the view also gets deleted.
  */
-//TODO: maybe this part needs to be redesigned. the view can be deleted in PartMdiView
 void AbstractPart::deleteView() const {
+	//if the parent is a Workbook, the actual view was already deleted when QTabWidget was deleted.
+	//here just set the pointer to 0.
+	if (dynamic_cast<const Workbook*>(parentAspect())) {
+		m_view = 0;
+		return;
+	}
+
 	if (m_view) {
 		delete m_view;
 		m_view = 0;
@@ -113,15 +117,9 @@ QMenu* AbstractPart::createContextMenu(){
 	menu->addSeparator();
 
 	if (m_mdiWindow) {
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-        menu->addAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this, SIGNAL(exportRequested()));
-        menu->addAction(QIcon::fromTheme("document-print"), i18n("Print"), this, SIGNAL(printRequested()));
-        menu->addAction(QIcon::fromTheme("document-print-preview"), i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
-#else
-		menu->addAction(i18n("Export"), this, SIGNAL(exportRequested()));
-		menu->addAction(i18n("Print"), this, SIGNAL(printRequested()));
-		menu->addAction(i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
-#endif
+		menu->addAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this, SIGNAL(exportRequested()));
+		menu->addAction(QIcon::fromTheme("document-print"), i18n("Print"), this, SIGNAL(printRequested()));
+		menu->addAction(QIcon::fromTheme("document-print-preview"), i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
 		menu->addSeparator();
 
 		const QStyle *widget_style = m_mdiWindow->style();
@@ -146,34 +144,3 @@ QMenu* AbstractPart::createContextMenu(){
 
 	return menu;
 }
-
-/**
- * \brief Fill the part specific menu for the main window including setting the title
- *
- * \return true on success, otherwise false (e.g. part has no actions).
- */
-bool AbstractPart::fillProjectMenu(QMenu * menu) {
-	Q_UNUSED(menu);
-	return false;
-}
-
-/**
- * \brief Copy current selection.
- */
-void AbstractPart::editCopy() {}
-
-/**
- * \brief Cut current selection.
- */
-void AbstractPart::editCut() {}
-
-/**
- * \brief Paste at the current location or into the current selection.
- */
-void AbstractPart::editPaste() {}
-
-/**
- * \var AbstractPart::m_mdiWindow
- * \brief The MDI sub-window that is wrapped around my primary view.
- */
-

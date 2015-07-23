@@ -30,6 +30,7 @@
 #define FILEDATASOURCE_H
 
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/matrix/Matrix.h"
 #include <QString>
 
 class AbstractFileFilter;
@@ -40,10 +41,10 @@ class FileDataSource : public Spreadsheet {
     Q_OBJECT
 
 	public:
-		FileDataSource(AbstractScriptingEngine* engine,  const QString& name);
+		FileDataSource(AbstractScriptingEngine* engine,  const QString& name, bool loading = false);
 		~FileDataSource();
 
-		enum FileType{AsciiVector, BinaryVector, AsciiMatrix, BinaryMatrix, Image, Sound};
+		enum FileType{Ascii, Binary, Image, HDF, NETCDF, CDF, FITS, Sound};
 
 		static QStringList fileTypes();
 		static QString fileInfoString(const QString&);

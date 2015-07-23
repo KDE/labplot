@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for spreadsheet properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2015 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -31,18 +31,18 @@
 #define SPREADSHEETDOCK_H
 
 #include <QtWidgets/QWidget>
-#include <QtCore/QList>
-#include <kconfig.h>
 #include "ui_spreadsheetdock.h"
+
+#include <KConfig>
 
 class Spreadsheet;
 class AbstractAspect;
 
-class SpreadsheetDock: public QWidget{
+class SpreadsheetDock: public QWidget {
 	Q_OBJECT
 
 public:
-	explicit SpreadsheetDock(QWidget *parent);
+	explicit SpreadsheetDock(QWidget*);
 	void setSpreadsheets(QList<Spreadsheet*>);
 
 private:
@@ -51,8 +51,11 @@ private:
 	Spreadsheet* m_spreadsheet;
 	bool m_initializing;
 
+	void load();
+	void loadConfig(KConfig&);
+
 private slots:
-	//SLOTs for changes triggered in WorksheetDock
+	//SLOTs for changes triggered in SpreadsheetDock
 	void nameChanged();
 	void commentChanged();
 	void rowCountChanged(int);
@@ -65,9 +68,9 @@ private slots:
 	void spreadsheetColumnCountChanged(int);
 	void spreadsheetShowCommentsChanged(int);
 
+	//save/load template
 	void loadConfigFromTemplate(KConfig&);
-	void loadConfig(KConfig&);
-	void saveConfig(KConfig&);
+	void saveConfigAsTemplate(KConfig&);
 
 signals:
 	void info(const QString&);

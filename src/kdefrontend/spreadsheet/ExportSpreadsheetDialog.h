@@ -40,6 +40,7 @@ class ExportSpreadsheetDialog: public KDialog{
 	explicit ExportSpreadsheetDialog(QWidget*);
 	QString path() const;
 	void setFileName(const QString&);
+	void setMatrixMode(bool);
 	bool exportHeader() const;
 	QString separator() const;
 

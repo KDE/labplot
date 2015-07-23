@@ -19,13 +19,17 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
 	${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/HDFOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/FileInfoDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
-	${KDEFRONTEND_DIR}/datasources/FileInfoDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/MatrixDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ProjectDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYCurveDock.cpp
@@ -33,8 +37,10 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CantorWorksheetDock.cpp
+	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/EquidistantValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/ExportSpreadsheetDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/DropValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/FunctionValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/RandomValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
@@ -58,11 +64,15 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/hdfoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/netcdfoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/projectdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
@@ -71,8 +81,10 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyequationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cantorworksheetdock.ui
+	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/exportspreadsheetwidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/dropvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
@@ -95,6 +107,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/ScriptingEngineManager.cpp
 	${BACKEND_DIR}/core/Project.cpp
 	${BACKEND_DIR}/core/AbstractPart.cpp
+	${BACKEND_DIR}/core/Workbook.cpp
 	${BACKEND_DIR}/core/AspectTreeModel.cpp
 	${BACKEND_DIR}/core/datatypes/DateTime2DoubleFilter.h
 	${BACKEND_DIR}/core/datatypes/DayOfWeek2DoubleFilter.h
@@ -115,9 +128,15 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/FileDataSource.cpp
 	${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
 	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
-	#${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
+	${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
+	${BACKEND_DIR}/datasources/filters/HDFFilter.cpp
+	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
+	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
  	${BACKEND_DIR}/gsl/parser.tab.c
+	${BACKEND_DIR}/matrix/Matrix.cpp
+	${BACKEND_DIR}/matrix/matrixcommands.cpp
+	${BACKEND_DIR}/matrix/MatrixModel.cpp
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
@@ -142,10 +161,12 @@ set(BACKEND_SOURCES
 )
 
 set(COMMONFRONTEND_SOURCES
+	${COMMONFRONTEND_DIR}/matrix/MatrixView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetDoubleHeaderView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
+	${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
 	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
@@ -174,13 +195,13 @@ set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 INCLUDE_DIRECTORIES(. ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/..)
 qt5_wrap_ui(LABPLOT_SRCS ${UI_SOURCES})
 add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
-target_link_libraries(labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${CANTOR_LIBS})
+target_link_libraries(labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${CANTOR_LIBS} ${HDF5_LIBRARY} ${NETCDF_LIBRARY})
 # ${OPJ_LIBRARY}
 
 ############## installation ################################
 
 install(TARGETS labplot2 DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png DESTINATION  ${KDE_INSTALL_KXMLGUI5DIR}/${PROJECT_NAME})
-install(PROGRAMS LabPlot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install(PROGRAMS labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
 update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )

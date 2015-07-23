@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for worksheet properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2015 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -140,7 +140,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	ui.verticalLayout->addWidget(templateHandler, 0, 0);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	this->retranslateUi();
@@ -902,7 +902,7 @@ void WorksheetDock::loadConfig(KConfig& config){
 	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount", m_worksheet->layoutColumnCount()));
 }
 
-void WorksheetDock::saveConfig(KConfig& config){
+void WorksheetDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group( "Worksheet" );
 
 	//General

@@ -74,7 +74,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 		m_aspectTreeModel = std::auto_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
 
 		QList<const char *>  list;
-		list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column";
+		list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 		cbXDataColumn->setTopLevelClasses(list);
 
 		list.clear();
@@ -161,7 +161,7 @@ void FunctionValuesDialog::generate() {
 	Q_ASSERT(m_spreadsheet);
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18np("%1: fill column function values",
+	m_spreadsheet->beginMacro(i18np("%1: fill column with function values",
 									"%1: fill columns with function values",
 									m_spreadsheet->name(),
 									m_columns.size()));

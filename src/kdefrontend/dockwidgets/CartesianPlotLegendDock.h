@@ -2,10 +2,9 @@
     File                 : CartesianPlotLegendDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2014 Alexander Semke (alexander.semke*web.de)
-							(use @ for *)
+    Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
     Description          : widget for cartesian legend legend properties
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -38,29 +37,32 @@
 
 class LabelWidget;
 
-class CartesianPlotLegendDock: public QWidget{
+class CartesianPlotLegendDock : public QWidget {
 	Q_OBJECT
-	
+
 public:
-	explicit CartesianPlotLegendDock(QWidget *parent);
+	explicit CartesianPlotLegendDock(QWidget*);
 	void setLegends(QList<CartesianPlotLegend*>);
 	void activateTitleTab() const;
-	
+
 private:
 	Ui::CartesianPlotLegendDock ui;
 	QList<CartesianPlotLegend*> m_legendList;
 	CartesianPlotLegend* m_legend;
 	LabelWidget* labelWidget;
 	bool m_initializing;
-	
+
+	void load();
+	void loadConfig(KConfig&);
+
 private slots:
 	void init();
 	void retranslateUi();
-  
+
 	//SLOTs for changes triggered in CartesianPlotLegendDock
 	//"General"-tab
 	void nameChanged();
-	void commentChanged();	
+	void commentChanged();
 	void visibilityChanged(int);
 	void labelFontChanged(const QFont&);
 	void labelColorChanged(const QColor&);
@@ -69,7 +71,7 @@ private slots:
 	void positionXChanged(int);
 	void positionYChanged(int);
 	void customPositionXChanged(double);
-	void customPositionYChanged(double);	
+	void customPositionYChanged(double);
 
 	//"Background"-tab
   	void backgroundTypeChanged(int);
@@ -86,7 +88,7 @@ private slots:
 	void borderWidthChanged(double);
 	void borderCornerRadiusChanged(double);
 	void borderOpacityChanged(int);
-	
+
 	//"Layout"-tab
 	void layoutTopMarginChanged(double);
 	void layoutBottomMarginChanged(double);
@@ -95,7 +97,7 @@ private slots:
 	void layoutHorizontalSpacingChanged(double);
 	void layoutVerticalSpacingChanged(double);
 	void layoutColumnCountChanged(int);
-	
+
 	//SLOTs for changes triggered in CartesianPlotLegend
 	void legendDescriptionChanged(const AbstractAspect*);
 	void legendLabelFontChanged(QFont&);
@@ -124,12 +126,10 @@ private slots:
 	void legendLayoutVerticalSpacingChanged(float);
 	void legendLayoutHorizontalSpacingChanged(float);
 	void legendLayoutColumnCountChanged(int);
-	
-	//save/load
-	void load();
+
+	//save/load template
 	void loadConfigFromTemplate(KConfig&);
-	void loadConfig(KConfig&);
-	void saveConfig(KConfig&);
+	void saveConfigAsTemplate(KConfig&);
 
 signals:
 	void info(const QString&);

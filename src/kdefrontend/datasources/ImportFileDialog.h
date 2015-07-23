@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : import data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
+    Copyright            : (C) 2008-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -31,7 +31,8 @@
 #define IMPORTFILEDIALOG_H
 
 #include <KDialog>
-#include <memory>
+
+class MainWin;
 class ImportFileWidget;
 class FileDataSource;
 class TreeViewComboBox;
@@ -43,40 +44,41 @@ class QVBoxLayout;
 class QLabel;
 class QComboBox;
 class QGroupBox;
-class QProgressBar;
+class QToolButton;
 
 class ImportFileDialog: public KDialog {
   Q_OBJECT
 
   public:
-	explicit ImportFileDialog(QWidget*);
+	explicit ImportFileDialog(MainWin*, bool fileDataSource = false);
 	~ImportFileDialog();
 
 	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
-	void importToSpreadsheet(QStatusBar*) const;
-	void setModel(std::auto_ptr<QAbstractItemModel>);
-	void updateModel(std::auto_ptr<QAbstractItemModel>);
+	void importTo(QStatusBar*) const;
 	void setCurrentIndex(const QModelIndex&);
 
   private:
+	void setModel(QAbstractItemModel*);
+
+	MainWin* m_mainWin;
 	QVBoxLayout* vLayout;
-	ImportFileWidget *importFileWidget;
+	ImportFileWidget* importFileWidget;
 	QGroupBox* frameAddTo;
 	TreeViewComboBox* cbAddTo;
 	QLabel* lPosition;
 	QComboBox* cbPosition;
-	QWidget* mainWidget;
-    QPushButton* bNewSpreadsheet;
-	std::auto_ptr<QAbstractItemModel> m_model;
+	QPushButton* bNewSpreadsheet;
+	QPushButton* bNewMatrix;
+	QPushButton* bNewWorkbook;
+	QToolButton* tbNewDataContainer;
 	bool m_optionsShown;
+	QMenu* m_newDataContainerMenu;
 
   private slots:
 	void toggleOptions();
 	void currentAddToIndexChanged(QModelIndex);
-	void newSpreadsheet();
-
-	signals:
-		void newSpreadsheetRequested(const QString&);
+	void newDataContainerMenu();
+	void newDataContainer(QAction*);
 };
 
 #endif //IMPORTFILEDIALOG_H

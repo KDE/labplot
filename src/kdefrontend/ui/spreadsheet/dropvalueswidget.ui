@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DropValuesWidget</class>
+ <widget class="QWidget" name="DropValuesWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>453</width>
+    <height>51</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QLabel" name="lMode">
+     <property name="text">
+      <string>Drop values</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="cbOperator"/>
+   </item>
+   <item>
+    <widget class="QLabel" name="lMin">
+     <property name="text">
+      <string>min.</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="leValue1"/>
+   </item>
+   <item>
+    <widget class="QLabel" name="lAnd">
+     <property name="text">
+      <string>and</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="lMax">
+     <property name="text">
+      <string>max.</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="leValue2"/>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

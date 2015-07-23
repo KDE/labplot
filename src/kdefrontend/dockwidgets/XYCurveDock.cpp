@@ -43,7 +43,6 @@
 #include <QDir>
 #include <QFileDialog>
 #include <KUrlCompletion>
-#include <QDebug>
 #include <KLocalizedString>
 #include <KConfigGroup>
 
@@ -68,7 +67,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYCol
 	//Tab "Filling"
 	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.kleFillingFileName->setClearButtonShown(true);
-	ui.bFillingOpen->setIcon( QIcon("document-open") );
+	ui.bFillingOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	KUrlCompletion *comp = new KUrlCompletion();
 	ui.kleFillingFileName->setCompletionObject(comp);
@@ -175,7 +174,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYCol
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	retranslateUi();
@@ -482,7 +481,7 @@ void XYCurveDock::init(){
 
 void XYCurveDock::setModel() {
 	QList<const char*>  list;
-	list<<"Folder"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve"<<"CantorWorksheet";
+	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve"<<"CantorWorksheet";
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);
 		cbYColumn->setTopLevelClasses(list);
@@ -1236,7 +1235,7 @@ void XYCurveDock::valuesTypeChanged(int index){
 void XYCurveDock::valuesColumnChanged(const QModelIndex& index){
   if (m_initializing)
 	return;
-qDebug()<<"in slot";
+
   Column* column= static_cast<Column*>(index.internalPointer());
   this->showValuesColumnFormat(column);
 
@@ -1413,8 +1412,6 @@ void XYCurveDock::fillingColorStyleChanged(int index){
 		ui.lFillingFirstColor->setText(i18n("Color"));
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
-		ui.lFillingBrushStyle->show();
-		ui.cbFillingBrushStyle->show();
 	}else{
 		ui.lFillingFirstColor->setText(i18n("First Color"));
 		ui.lFillingSecondColor->show();
@@ -2165,7 +2162,7 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	m_initializing=false;
 }
 
-void XYCurveDock::saveConfig(KConfig& config){
+void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group( "XYCurve" );
 
   	//General

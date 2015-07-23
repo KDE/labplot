@@ -83,32 +83,52 @@ ELSE (GSL_FOUND)
 	MESSAGE (FATAL_ERROR "GNU Scientific Library not found.")
 ENDIF (GSL_FOUND)
 
-# ### HDF5 #####################################
-# FIND_LIBRARY(HDF5_LIBRARY
-#   NAMES hdf5
-# )
-# IF(HDF5_LIBRARY)
-# MESSAGE ("-- Found HDF5 library: ${HDF5_LIBRARY}")
-# add_definitions (-DHAVE_HDF5=1)
-# ###### version 1.8 has different API
-# add_definitions (-DH5_USE_16_API=1)
-# ELSE(HDF5_LIBRARY)
-# MESSAGE ("-- HDF5 library NOT FOUND!")
-# SET(HDF5_LIBRARY "")
-# ENDIF(HDF5_LIBRARY)
-#  
+### HDF5 #####################################
+FIND_LIBRARY(HDF5_LIBRARY hdf5
+	PATHS
+	/usr/lib
+	/usr/local/lib
+)
+FIND_PATH (HDF5_INCLUDE_DIR hdf5.h
+	/usr/include/
+	/usr/local/include/
+)
+IF (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
+	SET (HDF5_FOUND TRUE)
+ELSE (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
+	SET (HDF5_FOUND FALSE)
+	SET (HDF5_LIBRARY "")
+ENDIF (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
+IF (HDF5_FOUND)
+	MESSAGE (STATUS "Found Hierarchical Data Format (HDF) 5 Library: ${HDF5_INCLUDE_DIR} ${HDF5_LIBRARY}")
+	add_definitions (-DHAVE_HDF5=1)
+ELSE (HDF5_FOUND)
+	MESSAGE (STATUS "Hierarchical Data Format (HDF) 5 Library not found.")
+ENDIF (HDF5_FOUND)
+
 # ### NETCDF #####################################
-# FIND_LIBRARY(NETCDF_LIBRARY
-#   NAMES netcdf
-# )
-# IF(NETCDF_LIBRARY)
-# MESSAGE ("-- Found NETCDF library: ${NETCDF_LIBRARY}")
-# add_definitions (-DHAVE_NETCDF=1)
-# ELSE(NETCDF_LIBRARY)
-# MESSAGE ("-- NETCDF library NOT FOUND!")
-# SET(NETCDF_LIBRARY "")
-# ENDIF(NETCDF_LIBRARY)
-#  
+FIND_LIBRARY(NETCDF_LIBRARY netcdf
+	PATHS
+	/usr/lib
+	/usr/local/lib
+)
+FIND_PATH (NETCDF_INCLUDE_DIR netcdf.h
+	/usr/include/
+	/usr/local/include/
+)
+IF (NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
+	SET (NETCDF_FOUND TRUE)
+ELSE (NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
+	SET (NETCDF_FOUND FALSE)
+	SET (NETCDF_LIBRARY "")
+ENDIF (NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
+IF (NETCDF_FOUND)
+	MESSAGE (STATUS "Found Network Common Data Format (NetCDF) Library: ${NETCDF_INCLUDE_DIR} ${NETCDF_LIBRARY}")
+	add_definitions (-DHAVE_NETCDF=1)
+ELSE (NETCDF_FOUND)
+	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library not found.")
+ENDIF (NETCDF_FOUND)
+  
 # ### CDF #####################################
 # FIND_LIBRARY(CDF_LIBRARY
 #   NAMES cdf
