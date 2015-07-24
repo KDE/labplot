@@ -426,9 +426,10 @@ void ImageView::mouseMoveEvent(QMouseEvent* event) {
         viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
     }
 
-    if (m_childItems.count() > 2) {
+	if (m_image->plotPointsType() == Image::CurvePoints) {
         QPointF logicalPos = m_image->m_transform->mapSceneToLogical(mapToScene(event->pos()), m_image->axisPoints());
-        emit statusInfo(i18n("%1: Logical Position (%2, %3)", m_image->name(), logicalPos.x(), logicalPos.y()));
+		//TODO: take polar coordinates into account here.
+        emit statusInfo( "x=" + QString::number(logicalPos.x()) + ", y=" + QString::number(logicalPos.y()) );
     }
 
     if (m_image->indexOfChild<ZoomWindow>(m_zoomWindow, AbstractAspect::IncludeHidden) != -1) {
