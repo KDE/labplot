@@ -431,8 +431,13 @@ void ImageView::mouseMoveEvent(QMouseEvent* event) {
         emit statusInfo(i18n("%1: Logical Position (%2, %3)", m_image->name(), logicalPos.x(), logicalPos.y()));
     }
 
-    if (m_image->indexOfChild<ZoomWindow>(m_zoomWindow, AbstractAspect::IncludeHidden) != -1)
+    if (m_image->indexOfChild<ZoomWindow>(m_zoomWindow, AbstractAspect::IncludeHidden) != -1) {
         m_zoomWindow->updatePixmap(winId(), QPoint(event->pos()));
+		QPointF pos = mapToScene(event->pos());
+		pos.setX(pos.x()-m_zoomWindow->graphicsItem()->boundingRect().width()/2);
+		pos.setY(pos.y()-m_zoomWindow->graphicsItem()->boundingRect().height()/2);
+		m_zoomWindow->setPosition(pos);
+	}
 
     QGraphicsView::mouseMoveEvent(event);
 }
