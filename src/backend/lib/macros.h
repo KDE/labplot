@@ -225,10 +225,12 @@ class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_na
 #define STD_SETTER_COLUMN_IMPL(Class, Method, column, message)\
 	void Class::set##Method(const AbstractColumn* column) {\
 		Q_D(Class);\
+		if (column != 0)\
+			disconnect(column);\
 		if (column != d->column){\
 			exec(new Class##Set##Method##Cmd(d, column, i18n(message)));\
 			if (column) {\
-				connect(column, SIGNAL(dataChanged(const AbstractColumn*)), SIGNAL(column##Changed()));\
+				connect(column, SIGNAL(dataChanged(const AbstractColumn*)), SIGNAL(parametersChanged()));\
 				connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),\
 						SLOT(column##AboutToBeRemoved(const AbstractAspect*)));\
 			}\
@@ -238,10 +240,13 @@ class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_na
 #define STD_SETTER_MATRIX_IMPL(Class, Method, matrix, message)\
 	void Class::set##Method(const Matrix* matrix) {\
 		Q_D(Class);\
+		if (matrix != 0)\
+			disconnect(matrix);\
 		if (matrix != d->matrix){\
 			exec(new Class##Set##Method##Cmd(d, matrix, i18n(message)));\
 			if (matrix) {\
-				connect(matrix, SIGNAL(dataChanged(int, int, int, int)), SIGNAL(matrix##Changed()));\
+				connect(matrix, SIGNAL(dataChanged(int, int, int, int)), SIGNAL(parametersChanged()));\
+				connect(matrix, SIGNAL(formulaChanged()), SIGNAL(parametersChanged()));\
 				connect(matrix->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),\
 						SLOT(matrix##AboutToBeRemoved(const AbstractAspect*)));\
 			}\

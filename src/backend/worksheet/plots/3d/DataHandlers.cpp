@@ -431,7 +431,7 @@ BASIC_SHARED_D_READER_IMPL(MatrixDataHandler, const Matrix*, matrix, matrix)
 const QString& MatrixDataHandler::matrixPath() const { Q_D(const MatrixDataHandler); return d->matrixPath; }
 
 STD_SETTER_CMD_IMPL_F_S(MatrixDataHandler, SetMatrix, const Matrix*, matrix, update)
-STD_SETTER_IMPL(MatrixDataHandler, Matrix, const Matrix*, matrix, "%1: Matrix changed")
+STD_SETTER_MATRIX_IMPL(MatrixDataHandler, Matrix, matrix, "%1: Matrix changed")
 
 void MatrixDataHandler::matrixAboutToBeRemoved(const AbstractAspect*) {
 	Q_D(MatrixDataHandler);
