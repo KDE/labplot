@@ -24,45 +24,35 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="5" column="0">
-        <widget class="QLabel" name="labelFile">
-         <property name="text">
-          <string>File</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="labelZ">
-         <property name="text">
-          <string>Z</string>
-         </property>
-        </widget>
-       </item>
        <item row="8" column="3">
-        <widget class="TreeViewComboBox" name="cbXCoordinate"/>
-       </item>
-       <item row="10" column="3">
         <widget class="TreeViewComboBox" name="cbZCoordinate"/>
        </item>
-       <item row="3" column="0" colspan="2">
-        <widget class="QLabel" name="lPlotType">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
+       <item row="6" column="0">
+        <widget class="QLabel" name="labelX">
          <property name="text">
-          <string>Data:</string>
+          <string>x-data</string>
          </property>
         </widget>
        </item>
-       <item row="9" column="0">
+       <item row="0" column="3">
+        <widget class="KLineEdit" name="leName"/>
+       </item>
+       <item row="7" column="0">
         <widget class="QLabel" name="labelY">
          <property name="text">
-          <string>Y</string>
+          <string>y-data</string>
          </property>
         </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QLabel" name="lComment">
+         <property name="text">
+          <string>Comment</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="3">
+        <widget class="TreeViewComboBox" name="cbYCoordinate"/>
        </item>
        <item row="2" column="0">
         <spacer name="verticalSpacer_10">
@@ -80,22 +70,25 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="lName">
+       <item row="3" column="0" colspan="2">
+        <widget class="QLabel" name="lPlotType">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
-          <string>Name</string>
+          <string>Data:</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="labelX">
+       <item row="9" column="0" colspan="2">
+        <widget class="QLabel" name="labelMatrix">
          <property name="text">
-          <string>X</string>
+          <string>Matrix</string>
          </property>
         </widget>
-       </item>
-       <item row="9" column="3">
-        <widget class="TreeViewComboBox" name="cbYCoordinate"/>
        </item>
        <item row="4" column="0" colspan="2">
         <widget class="QLabel" name="labelSource">
@@ -104,10 +97,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="3">
-        <widget class="KComboBox" name="cbDataSource"/>
-       </item>
-       <item row="12" column="1">
+       <item row="10" column="1">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -120,13 +110,10 @@
          </property>
         </spacer>
        </item>
-       <item row="11" column="3">
-        <widget class="TreeViewComboBox" name="cbMatrix"/>
-       </item>
-       <item row="11" column="0" colspan="2">
-        <widget class="QLabel" name="labelMatrix">
+       <item row="5" column="0">
+        <widget class="QLabel" name="labelFile">
          <property name="text">
-          <string>Matrix</string>
+          <string>File</string>
          </property>
         </widget>
        </item>
@@ -139,6 +126,9 @@
           </sizepolicy>
          </property>
         </widget>
+       </item>
+       <item row="6" column="3">
+        <widget class="TreeViewComboBox" name="cbXCoordinate"/>
        </item>
        <item row="0" column="2">
         <spacer name="horizontalSpacer_4">
@@ -156,6 +146,16 @@
          </property>
         </spacer>
        </item>
+       <item row="4" column="3">
+        <widget class="KComboBox" name="cbDataSource"/>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="labelZ">
+         <property name="text">
+          <string>z-data</string>
+         </property>
+        </widget>
+       </item>
        <item row="5" column="3">
         <widget class="KUrlRequester" name="cbFileRequester">
          <property name="filter">
@@ -163,51 +163,22 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QLabel" name="lComment">
-         <property name="text">
-          <string>Comment</string>
-         </property>
-        </widget>
+       <item row="9" column="3">
+        <widget class="TreeViewComboBox" name="cbMatrix"/>
        </item>
-       <item row="0" column="3">
-        <widget class="KLineEdit" name="leName"/>
-       </item>
-       <item row="13" column="0" colspan="2">
+       <item row="11" column="0" colspan="2">
         <widget class="QCheckBox" name="chkVisible">
          <property name="text">
           <string>visible</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="labelPointHeader">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lName">
          <property name="text">
-          <string>Point</string>
+          <string>Name</string>
          </property>
         </widget>
-       </item>
-       <item row="6" column="0">
-        <spacer name="verticalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>28</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -448,6 +419,74 @@
       <attribute name="title">
        <string>Projection</string>
       </attribute>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="chbXYProjection">
+         <property name="text">
+          <string>xy-Projection</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <spacer name="verticalSpacer_11">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>28</width>
+           <height>13</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="chbXZProjection">
+         <property name="text">
+          <string>xz-Projection</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <spacer name="verticalSpacer_12">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>28</width>
+           <height>13</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="4" column="0">
+        <widget class="QCheckBox" name="chbYZProjection">
+         <property name="text">
+          <string>yz-Projection</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>406</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
