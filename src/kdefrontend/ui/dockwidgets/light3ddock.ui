@@ -126,10 +126,18 @@
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="QDoubleSpinBox" name="sbYFocalPoint"/>
+        <widget class="QDoubleSpinBox" name="sbYFocalPoint">
+         <property name="minimum">
+          <double>-99.989999999999995</double>
+         </property>
+        </widget>
        </item>
        <item row="6" column="2">
-        <widget class="QDoubleSpinBox" name="sbXPosition"/>
+        <widget class="QDoubleSpinBox" name="sbXPosition">
+         <property name="minimum">
+          <double>-99.989999999999995</double>
+         </property>
+        </widget>
        </item>
        <item row="10" column="2">
         <widget class="QDoubleSpinBox" name="sbLightIntensity">
@@ -210,7 +218,11 @@
         </spacer>
        </item>
        <item row="3" column="2">
-        <widget class="QDoubleSpinBox" name="sbZFocalPoint"/>
+        <widget class="QDoubleSpinBox" name="sbZFocalPoint">
+         <property name="minimum">
+          <double>-99.989999999999995</double>
+         </property>
+        </widget>
        </item>
        <item row="15" column="0">
         <widget class="QLabel" name="lLightSpecularColor">
@@ -230,7 +242,11 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QDoubleSpinBox" name="sbXFocalPoint"/>
+        <widget class="QDoubleSpinBox" name="sbXFocalPoint">
+         <property name="minimum">
+          <double>-99.989999999999995</double>
+         </property>
+        </widget>
        </item>
        <item row="13" column="2">
         <widget class="KColorButton" name="kcbLightAmbientColor"/>
@@ -306,7 +322,11 @@
         </widget>
        </item>
        <item row="7" column="2">
-        <widget class="QDoubleSpinBox" name="sbYPosition"/>
+        <widget class="QDoubleSpinBox" name="sbYPosition">
+         <property name="minimum">
+          <double>-99.989999999999995</double>
+         </property>
+        </widget>
        </item>
        <item row="7" column="0">
         <widget class="QLabel" name="label_5">
@@ -316,7 +336,11 @@
         </widget>
        </item>
        <item row="8" column="2">
-        <widget class="QDoubleSpinBox" name="sbZPosition"/>
+        <widget class="QDoubleSpinBox" name="sbZPosition">
+         <property name="minimum">
+          <double>-99.989999999999995</double>
+         </property>
+        </widget>
        </item>
        <item row="8" column="0">
         <widget class="QLabel" name="label_6">

@@ -60,7 +60,7 @@
        <item row="7" column="3">
         <widget class="QDoubleSpinBox" name="sbPointSize">
          <property name="minimum">
-          <double>1.000000000000000</double>
+          <double>0.010000000000000</double>
          </property>
         </widget>
        </item>
