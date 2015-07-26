@@ -42,6 +42,7 @@ class SpreadsheetDataHandlerPrivate;
 class FileDataHandlerPrivate;
 
 class vtkActor;
+class vtkPolyData;
 
 class IDataHandler : public AbstractAspect {
 		Q_OBJECT
@@ -49,12 +50,15 @@ class IDataHandler : public AbstractAspect {
 		IDataHandler();
 		virtual ~IDataHandler() {}
 
-		vtkSmartPointer<vtkActor> actor(Surface3D::VisualizationType type);
+		vtkSmartPointer<vtkActor> actor(Surface3D::VisualizationType type, bool coloredElevation = false);
 
 		void update();
 
-	private:
-		virtual vtkSmartPointer<vtkActor> trianglesActor() = 0;
+	protected:
+		vtkSmartPointer<vtkActor> mapData(vtkPolyData* data);
+		virtual vtkSmartPointer<vtkPolyData> generateData() = 0;
+		vtkSmartPointer<vtkPolyData> extractEdges(vtkPolyData* data) const;
+		void makeColorElevation(vtkPolyData* polydata);
 
 	signals:
 		void parametersChanged();
@@ -77,11 +81,11 @@ class MatrixDataHandler : public IDataHandler {
 		typedef MatrixDataHandler BaseClass;
 		typedef MatrixDataHandlerPrivate Private;
 
+	private:
+		vtkSmartPointer<vtkPolyData> generateData();
+
 	private slots:
 		void matrixAboutToBeRemoved(const AbstractAspect*);
-
-	private:
-		vtkSmartPointer<vtkActor> trianglesActor();
 
 	signals:
 		friend class MatrixDataHandlerSetMatrixCmd;
@@ -122,7 +126,7 @@ class SpreadsheetDataHandler : public IDataHandler {
 		typedef SpreadsheetDataHandlerPrivate Private;
 
 	private:
-		vtkSmartPointer<vtkActor> trianglesActor();
+		vtkSmartPointer<vtkPolyData> generateData();
 
 	private slots:
 		void xColumnAboutToBeRemoved(const AbstractAspect*);
@@ -168,7 +172,7 @@ class FileDataHandler : public IDataHandler {
 		typedef FileDataHandlerPrivate Private;
 
 	private:
-		vtkSmartPointer<vtkActor> trianglesActor();
+		vtkSmartPointer<vtkPolyData> generateData();
 
 	signals:
 		friend class FileDataHandlerSetFileCmd;
@@ -185,7 +189,7 @@ class DemoDataHandler : public IDataHandler {
 		DemoDataHandler();
 
 	private:
-		vtkSmartPointer<vtkActor> trianglesActor();
+		vtkSmartPointer<vtkPolyData> generateData();
 };
 
 #endif

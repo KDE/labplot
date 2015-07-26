@@ -51,19 +51,74 @@
 #include <vtkTriangle.h>
 #include <vtkLookupTable.h>
 #include <vtkPointData.h>
+#include <vtkExtractEdges.h>
+#include <vtkAlgorithm.h>
 
 IDataHandler::IDataHandler(): AbstractAspect(i18n("Data handler")) {
 }
 
-vtkSmartPointer<vtkActor> IDataHandler::actor(Surface3D::VisualizationType type) {
-	if (type == Surface3D::VisualizationType_Triangles)
-		return trianglesActor();
-	else
-		return vtkSmartPointer<vtkActor>();
-}
-
 void IDataHandler::update() {
 	emit parametersChanged();
+}
+
+void IDataHandler::makeColorElevation(vtkPolyData* polydata) {
+		double bounds[6];
+		polydata->GetBounds(bounds);
+
+		// Find min and max z
+		double minz = bounds[4];
+		double maxz = bounds[5];
+
+		vtkSmartPointer<vtkLookupTable> colorLookupTable = vtkSmartPointer<vtkLookupTable>::New();
+		colorLookupTable->SetTableRange(minz, maxz);
+		colorLookupTable->Build();
+
+		vtkSmartPointer<vtkUnsignedCharArray> colors = vtkSmartPointer<vtkUnsignedCharArray>::New();
+		colors->SetNumberOfComponents(3);
+		colors->SetName("Colors");
+
+		for(int i = 0; i < polydata->GetNumberOfPoints(); ++i) {
+			double p[3];
+			polydata->GetPoint(i,p);
+
+			double dcolor[3];
+			colorLookupTable->GetColor(p[2], dcolor);
+			unsigned char color[3];
+			for(unsigned int j = 0; j < 3; j++)
+				color[j] = static_cast<unsigned char>(255.0 * dcolor[j]);
+
+			colors->InsertNextTupleValue(color);
+		}
+
+		polydata->GetPointData()->SetScalars(colors);
+}
+
+vtkSmartPointer<vtkActor> IDataHandler::actor(Surface3D::VisualizationType type, bool coloredElevation) {
+	vtkSmartPointer<vtkPolyData> data = generateData();
+	if (type == Surface3D::Surface3D::VisualizationType_Wireframe)
+		data = extractEdges(data);
+	else if (coloredElevation)
+		makeColorElevation(data);
+
+	return mapData(data);
+}
+
+vtkSmartPointer<vtkPolyData> IDataHandler::extractEdges(vtkPolyData* data) const {
+	vtkSmartPointer<vtkExtractEdges> edges = vtkSmartPointer<vtkExtractEdges>::New();
+	edges->SetInputData(data);
+	edges->Update();
+	return vtkSmartPointer<vtkPolyData>(edges->GetOutput());
+}
+
+vtkSmartPointer<vtkActor> IDataHandler::mapData(vtkPolyData* data) {
+	//reader fails to read obj-files if the locale is not set to 'C'
+	setlocale(LC_NUMERIC, "C");
+
+	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+	mapper->SetInputData(data);
+	vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+	actor->SetMapper(mapper);
+	return actor;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -71,16 +126,10 @@ void IDataHandler::update() {
 DemoDataHandler::DemoDataHandler(){
 }
 
-vtkSmartPointer<vtkActor> DemoDataHandler::trianglesActor() {
+vtkSmartPointer<vtkPolyData> DemoDataHandler::generateData() {
 	vtkSmartPointer<vtkSphereSource> sphereSource = vtkSmartPointer<vtkSphereSource>::New();
 	sphereSource->Update();
-	vtkSmartPointer<vtkPolyDataMapper> sphereMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-	sphereMapper->SetInputConnection(sphereSource->GetOutputPort());
-	vtkSmartPointer<vtkActor> sphereActor = vtkSmartPointer<vtkActor>::New();
-	sphereActor->GetProperty()->SetFrontfaceCulling(true);
-	sphereActor->SetMapper(sphereMapper);
-
-	return sphereActor;
+	return vtkSmartPointer<vtkPolyData>(sphereSource->GetOutput());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -111,36 +160,25 @@ bool FileDataHandler::load(XmlStreamReader* reader) {
 
 namespace {
 	template<class TReader>
-	vtkSmartPointer<vtkActor> createReader(const KUrl& path) {
+	vtkSmartPointer<vtkPolyData> createReader(const KUrl& path) {
 		const QByteArray ascii = path.path().toAscii();
 		vtkSmartPointer<TReader> reader = vtkSmartPointer<TReader>::New();
 		reader->SetFileName(ascii.constData());
 		reader->Update();
-
-		//reader fails to read obj-files if the locale is not set to 'C'
-		setlocale (LC_NUMERIC,"C");
-
-		vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-		mapper->SetInputConnection(reader->GetOutputPort());
-
-		vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
-		actor->SetMapper(mapper);
-
-		return actor;
+		return vtkSmartPointer<vtkPolyData>(reader->GetOutput());
 	}
 }
 
-vtkSmartPointer<vtkActor> FileDataHandler::trianglesActor() {
+vtkSmartPointer<vtkPolyData> FileDataHandler::generateData() {
 	Q_D(FileDataHandler);
 	const QString& fileName = d->path.fileName();
 	const QString& fileType = fileName.split('.').last().toLower();
-
 	if (fileType == "obj") {
 		return createReader<vtkOBJReader>(d->path);
 	} else if (fileType == "stl") {
 		return createReader<vtkSTLReader>(d->path);
 	} else {
-		return vtkSmartPointer<vtkActor>();
+		return vtkSmartPointer<vtkPolyData>();
 	}
 }
 
@@ -204,7 +242,7 @@ bool SpreadsheetDataHandler::load(XmlStreamReader* reader) {
 }
 
 namespace {
-	vtkSmartPointer<vtkActor> renderTriangles(vtkSmartPointer<vtkPoints>& points,
+	vtkSmartPointer<vtkPolyData> renderTriangles(vtkSmartPointer<vtkPoints>& points,
 			vtkSmartPointer<vtkCellArray>& triangles) {
 
 		qDebug() << Q_FUNC_INFO << "Amount of triangles:" << triangles->GetNumberOfCells();
@@ -214,47 +252,11 @@ namespace {
 		polydata->SetPoints(points);
 		polydata->SetPolys(triangles);
 
-		double bounds[6];
-		polydata->GetBounds(bounds);
-
-		// Find min and max z
-		double minz = bounds[4];
-		double maxz = bounds[5];
-
-		vtkSmartPointer<vtkLookupTable> colorLookupTable = vtkSmartPointer<vtkLookupTable>::New();
-		colorLookupTable->SetTableRange(minz, maxz);
-		colorLookupTable->Build();
-
-		vtkSmartPointer<vtkUnsignedCharArray> colors = vtkSmartPointer<vtkUnsignedCharArray>::New();
-		colors->SetNumberOfComponents(3);
-		colors->SetName("Colors");
-
-		for(int i = 0; i < polydata->GetNumberOfPoints(); ++i) {
-			double p[3];
-			polydata->GetPoint(i,p);
-
-			double dcolor[3];
-			colorLookupTable->GetColor(p[2], dcolor);
-			unsigned char color[3];
-			for(unsigned int j = 0; j < 3; j++)
-				color[j] = static_cast<unsigned char>(255.0 * dcolor[j]);
-
-			colors->InsertNextTupleValue(color);
-		}
-
-		polydata->GetPointData()->SetScalars(colors);
-
-		vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-		mapper->SetInputData(polydata);
-
-		vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
-		actor->SetMapper(mapper);
-
-		return actor;
+		return polydata;
 	}
 }
 
-vtkSmartPointer<vtkActor> SpreadsheetDataHandler::trianglesActor() {
+vtkSmartPointer<vtkPolyData> SpreadsheetDataHandler::generateData() {
 	Q_D(SpreadsheetDataHandler);
 	const AbstractColumn* const xColumn = d->xColumn;
 	const AbstractColumn* const yColumn = d->yColumn;
@@ -265,7 +267,7 @@ vtkSmartPointer<vtkActor> SpreadsheetDataHandler::trianglesActor() {
 
 	if (xColumn == 0 || yColumn == 0 || zColumn == 0
 			|| firstNode == 0 || secondNode == 0 || thirdNode == 0) {
-		return vtkSmartPointer<vtkActor>();
+		return vtkSmartPointer<vtkPolyData>();
 	}
 
 	qDebug() << Q_FUNC_INFO << "Triangles rendering";
@@ -380,11 +382,11 @@ bool MatrixDataHandler::load(XmlStreamReader* reader) {
 	return true;
 }
 
-vtkSmartPointer<vtkActor> MatrixDataHandler::trianglesActor() {
+vtkSmartPointer<vtkPolyData> MatrixDataHandler::generateData() {
 	Q_D(MatrixDataHandler);
 	const Matrix * const matrix = d->matrix;
 	if (!matrix)
-		return vtkSmartPointer<vtkActor>();
+		return vtkSmartPointer<vtkPolyData>();
 
 	qDebug() << Q_FUNC_INFO << "Triangles rendering";
 	vtkSmartPointer<vtkCellArray> triangles = vtkSmartPointer<vtkCellArray>::New();

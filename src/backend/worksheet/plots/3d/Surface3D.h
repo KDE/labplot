@@ -48,7 +48,8 @@ class Surface3D : public AbstractAspect {
 		Q_DISABLE_COPY(Surface3D)
 	public:
 		enum VisualizationType {
-			VisualizationType_Triangles = 0
+			VisualizationType_Triangles = 0,
+			VisualizationType_Wireframe = 1
 		};
 
 		enum DataSource {
