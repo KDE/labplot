@@ -31,7 +31,6 @@ class QWheelEvent;
 
 class AbstractAspect;
 class WorksheetElement;
-class ZoomWindow;
 
 class ImageView : public QGraphicsView {
     Q_OBJECT
@@ -63,11 +62,12 @@ class ImageView : public QGraphicsView {
 
         Image* m_image;
         MouseMode m_mouseMode;
-        ZoomWindow* m_zoomWindow;
         bool m_selectionBandIsShown;
         QPoint m_selectionStart;
         QPoint m_selectionEnd;
         QList<CustomItem*> m_childItems;
+        int magnificationFactor;
+        QGraphicsPixmapItem* m_magnificationWindow;
 
         //Menus
         QMenu* m_zoomMenu;
@@ -123,7 +123,6 @@ class ImageView : public QGraphicsView {
         void handleImageActions();
         void updateBackground();
         void updateDatasheet();
-        void handleAspectRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*);
 
     signals:
         void statusInfo(const QString&);
