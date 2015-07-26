@@ -32,8 +32,11 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/matrix/Matrix.h"
-
 #include "backend/worksheet/plots/3d/DataHandlers.h"
+#include "kdefrontend/TemplateHandler.h"
+
+#include <QDir>
+
 
 Surface3DDock::Surface3DDock(QWidget* parent)
 	: QWidget(parent)
@@ -96,6 +99,15 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	//Mesh
 
 	//Projection
+
+
+	//template handler
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Surface3D);
+	ui.verticalLayout->addWidget(templateHandler);
+	templateHandler->show();
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
+	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 }
 
 namespace {
@@ -193,7 +205,7 @@ void Surface3DDock::hideTriangleInfo(bool hide) {
 			<< ui.cbXCoordinate << ui.cbYCoordinate << ui.cbZCoordinate
 			<< ui.labelNode1 << ui.labelNode2 << ui.labelNode3
 			<< ui.cbNode1 << ui.cbNode2 << ui.cbNode3
-			<< ui.labelNodeHeader << ui.labelPointHeader);
+			<< ui.labelNodeHeader);
 
 	foreach(QWidget* w, widgets){
 		w->setVisible(!hide);
@@ -400,3 +412,44 @@ void Surface3DDock::colorFillingTypeChanged(int index) {
 	}
 }
 
+
+//*************************************************************
+//************************* Settings **************************
+//*************************************************************
+void Surface3DDock::load() {
+	//TODO
+}
+
+void Surface3DDock::loadConfigFromTemplate(KConfig& config) {
+	//extract the name of the template from the file name
+	QString name;
+	int index = config.name().lastIndexOf(QDir::separator());
+	if (index!=-1)
+		name = config.name().right(config.name().size() - index - 1);
+	else
+		name = config.name();
+
+	//TODO
+// 	int size = m_curvesList.size();
+// 	if (size>1)
+// 		m_curve->beginMacro(i18n("%1 3D-surfaces: template \"%2\" loaded", size, name));
+// 	else
+// 		m_curve->beginMacro(i18n("%1: template \"%2\" loaded", m_surface->name(), name));
+
+	this->loadConfig(config);
+
+// 	m_surface->endMacro();
+}
+
+void Surface3DDock::loadConfig(KConfig& config) {
+	KConfigGroup group = config.group("Surface3D");
+	//TODO
+
+}
+
+void Surface3DDock::saveConfigAsTemplate(KConfig& config) {
+	KConfigGroup group = config.group("Surface3D");
+	//TODO
+
+	config.sync();
+}

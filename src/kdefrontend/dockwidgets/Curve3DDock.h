@@ -45,6 +45,7 @@ class Curve3DDock : public QWidget {
 		void setCurve(Curve3D* curve);
 
 	private slots:
+		//SLOTs for changes triggered in Curve3DDock
 		void onTreeViewIndexChanged(const QModelIndex& index);
 
 		void nameChanged();
@@ -62,11 +63,21 @@ class Curve3DDock : public QWidget {
 		void onClosedCurveChanged(bool checked);
 		void onPointSizeChanged(double size);
 
+		//SLOTs for changes triggered in Curve3D
+		//TODO
+
+		//load and save
+		void loadConfigFromTemplate(KConfig&);
+		void saveConfigAsTemplate(KConfig&);
+
 	private:
 		Ui::Curve3DDock ui;
 		Curve3D *curve;
 		AspectTreeModel *aspectTreeModel;
 		bool m_initializing;
+
+		void load();
+		void loadConfig(KConfig&);
 };
 
 #endif

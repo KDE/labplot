@@ -4,7 +4,7 @@
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
 	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-	Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -91,7 +91,8 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 	className = name;
 
 	//synchronize this with the ordering in TemplateHandler::ClassName
-	dirNames<<"spreadsheet"<<"matrix"<<"worksheet"<<"cartesianplot"<<"cartesianplotlegend"<<"xycurve"<<"axis";
+	dirNames<<"spreadsheet"<<"matrix"<<"worksheet"<<"cartesianplot"<<"cartesianplotlegend"<<"xycurve"<<"axis"
+			<<"curve3d"<<"surface3d";
 
 	this->retranslateUi();
 
