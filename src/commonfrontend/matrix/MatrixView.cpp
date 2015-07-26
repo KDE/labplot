@@ -585,13 +585,13 @@ void MatrixView::fillWithConstValues() {
 												i18n("Value"), 0, -2147483647, 2147483647, 6, &ok);
 	if (ok) {
 		WAIT_CURSOR;
-		QVector<QVector<double> >& matrixData = m_matrix->data();
+		QVector<QVector<double> > newData = m_matrix->data();
 		for (int col=0; col<m_matrix->columnCount(); ++col) {
-			for (int row=0; row<m_matrix->rowCount(); row++) {
-				matrixData[col][row] = value;
+			for (int row=0; row<m_matrix->rowCount(); ++row) {
+				newData[col][row] = value;
 			}
 		}
-
+		m_matrix->setData(newData);
 		RESET_CURSOR;
 	}
 }

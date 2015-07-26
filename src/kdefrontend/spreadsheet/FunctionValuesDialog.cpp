@@ -183,6 +183,9 @@ void FunctionValuesDialog::generate() {
 	const QString& expression = ui.teEquation->toPlainText();
 
 	QVector<double> new_data(m_spreadsheet->rowCount());
+
+	//x-vector can be smaller then the y-vector. So, not all values in the y-vector might get initialized.
+	//->"clean" the y-vector first
 	for (int i=0; i<new_data.size(); ++i)
 		new_data[i] = NAN;
 
