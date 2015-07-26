@@ -54,6 +54,7 @@ class Surface3DDock : public QWidget {
 	private slots:
 		void retranslateUi();
 
+		//SLOTs for changes triggered in Surface3DDock
 		void nameChanged();
 		void commentChanged();
 
@@ -84,11 +85,21 @@ class Surface3DDock : public QWidget {
 		//Color filling
 		void colorFillingTypeChanged(int);
 
+		//SLOTs for changes triggered in Surface3D
+		//TODO
+
+		//load and save
+		void loadConfigFromTemplate(KConfig&);
+		void saveConfigAsTemplate(KConfig&);
+
 	private:
 		Ui::Surface3DDock ui;
 		Surface3D *surface;
 		AspectTreeModel *aspectTreeModel;
 		bool m_initializing;
+
+		void load();
+		void loadConfig(KConfig&);
 };
 
 #endif
