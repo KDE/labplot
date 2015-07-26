@@ -93,11 +93,12 @@ void IDataHandler::makeColorElevation(vtkPolyData* polydata) {
 		polydata->GetPointData()->SetScalars(colors);
 }
 
-vtkSmartPointer<vtkActor> IDataHandler::actor(Surface3D::VisualizationType type, bool coloredElevation) {
+vtkSmartPointer<vtkActor> IDataHandler::actor(Surface3D::VisualizationType type, Surface3D::ColorFilling color) {
 	vtkSmartPointer<vtkPolyData> data = generateData();
 	if (type == Surface3D::Surface3D::VisualizationType_Wireframe)
 		data = extractEdges(data);
-	else if (coloredElevation)
+
+	if (color == Surface3D::ColorFilling_ElevationLevel)
 		makeColorElevation(data);
 
 	return mapData(data);

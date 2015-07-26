@@ -135,6 +135,7 @@ bool Surface3D::isVisible() const {
 
 BASIC_SHARED_D_READER_IMPL(Surface3D, Surface3D::VisualizationType, visualizationType, visualizationType)
 BASIC_SHARED_D_READER_IMPL(Surface3D, Surface3D::DataSource, dataSource, sourceType)
+BASIC_SHARED_D_READER_IMPL(Surface3D, Surface3D::ColorFilling, colorFilling, colorFilling)
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
@@ -146,13 +147,17 @@ STD_SETTER_IMPL(Surface3D, VisualizationType, Surface3D::VisualizationType, visu
 STD_SETTER_CMD_IMPL_F_S(Surface3D, SetDataSource, Surface3D::DataSource, sourceType, update)
 STD_SETTER_IMPL(Surface3D, DataSource, Surface3D::DataSource, sourceType, "%1: data source type changed")
 
+STD_SETTER_CMD_IMPL_F_S(Surface3D, SetColorFilling, Surface3D::ColorFilling, colorFilling, update)
+STD_SETTER_IMPL(Surface3D, ColorFilling, Surface3D::ColorFilling, colorFilling, "%1: color filling type changed")
+
 ////////////////////////////////////////////////////////////////////////////////
 
 Surface3DPrivate::Surface3DPrivate(vtkRenderer* renderer, Surface3D *parent)
 	: q(parent)
 	, renderer(renderer)
 	, visualizationType(Surface3D::VisualizationType_Triangles)
-	, sourceType(Surface3D::Surface3D::DataSource_Empty)
+	, sourceType(Surface3D::DataSource_Empty)
+	, colorFilling(Surface3D::ColorFilling_Empty)
 	, isSelected(false)
 	, demoHandler(new DemoDataHandler)
 	, spreadsheetHandler(new SpreadsheetDataHandler)
@@ -201,13 +206,13 @@ void Surface3DPrivate::update() {
 
 	hide();
 	if (sourceType == Surface3D::DataSource_Empty) {
-		surfaceActor = demoHandler->actor(visualizationType);
+		surfaceActor = demoHandler->actor(visualizationType, colorFilling);
 	} else if (sourceType == Surface3D::DataSource_File) {
-		surfaceActor = fileHandler->actor(visualizationType);
+		surfaceActor = fileHandler->actor(visualizationType, colorFilling);
 	} else if (sourceType == Surface3D::DataSource_Matrix) {
-		surfaceActor = matrixHandler->actor(visualizationType);
+		surfaceActor = matrixHandler->actor(visualizationType, colorFilling);
 	} else if (sourceType == Surface3D::DataSource_Spreadsheet) {
-		surfaceActor = spreadsheetHandler->actor(visualizationType);
+		surfaceActor = spreadsheetHandler->actor(visualizationType, colorFilling);
 	}
 
 	renderer->AddActor(surfaceActor);

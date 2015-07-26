@@ -50,7 +50,8 @@ class IDataHandler : public AbstractAspect {
 		IDataHandler();
 		virtual ~IDataHandler() {}
 
-		vtkSmartPointer<vtkActor> actor(Surface3D::VisualizationType type, bool coloredElevation = false);
+		vtkSmartPointer<vtkActor> actor(Surface3D::VisualizationType type,
+				Surface3D::ColorFilling color);
 
 		void update();
 

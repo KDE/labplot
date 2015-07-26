@@ -67,6 +67,7 @@ class Surface3DDock : public QWidget {
 		// Surface 3D
 		void visualizationTypeChanged(Surface3D::VisualizationType);
 		void sourceTypeChanged(Surface3D::DataSource);
+		void colorFillingChanged(Surface3D::ColorFilling);
 
 		// File handling
 		void pathChanged(const KUrl&);

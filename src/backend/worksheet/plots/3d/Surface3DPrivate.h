@@ -43,6 +43,7 @@ struct Surface3DPrivate {
 	vtkSmartPointer<vtkRenderer> renderer;
 	Surface3D::VisualizationType visualizationType;
 	Surface3D::DataSource sourceType;
+	Surface3D::ColorFilling colorFilling;
 
 	bool isSelected;
 	DemoDataHandler *demoHandler;

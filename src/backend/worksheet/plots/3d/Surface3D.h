@@ -60,7 +60,14 @@ class Surface3D : public AbstractAspect {
 			DataSource_MAX
 		};
 
-		enum CollorFilling {NoFilling, SolidColor, ColorMap, ColorMapFromMatrix};
+		enum ColorFilling {
+			ColorFilling_Empty,
+			ColorFilling_SolidColor,
+			ColorFilling_ColorMap,
+			ColorFilling_ColorMapFromMatrix,
+			ColorFilling_ElevationLevel,
+			ColorFilling_MAX
+		};
 
 		Surface3D(vtkRenderer* renderer = 0);
 		void setRenderer(vtkRenderer* renderer);
@@ -82,6 +89,7 @@ class Surface3D : public AbstractAspect {
 
 		BASIC_D_ACCESSOR_DECL(VisualizationType, visualizationType, VisualizationType)
 		BASIC_D_ACCESSOR_DECL(DataSource, dataSource, DataSource)
+		BASIC_D_ACCESSOR_DECL(ColorFilling, colorFilling, ColorFilling)
 
 		typedef Surface3D BaseClass;
 		typedef Surface3DPrivate Private;
@@ -95,8 +103,10 @@ class Surface3D : public AbstractAspect {
 	signals:
 		friend class Surface3DSetVisualizationTypeCmd;
 		friend class Surface3DSetDataSourceCmd;
+		friend class Surface3DSetColorFillingCmd;
 		void visualizationTypeChanged(Surface3D::VisualizationType);
 		void sourceTypeChanged(Surface3D::DataSource);
+		void colorFillingChanged(Surface3D::ColorFilling);
 		void parametersChanged();
 		void removed();
 		void visibilityChanged(bool);

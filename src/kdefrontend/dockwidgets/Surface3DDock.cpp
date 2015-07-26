@@ -54,6 +54,7 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	ui.cbDataSource->setCurrentIndex(Surface3D::DataSource_File);
 
 	ui.cbType->insertItem(Surface3D::VisualizationType_Triangles, i18n("Triangles"));
+	ui.cbType->insertItem(Surface3D::VisualizationType_Wireframe, i18n("Wireframe"));
 
 	QList<const char*>  list;
 	list << "Folder" << "Workbook" << "Spreadsheet" << "FileDataSource" << "Column";
@@ -152,6 +153,7 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	connect(surface, SIGNAL(visualizationTypeChanged(Surface3D::VisualizationType)), SLOT(visualizationTypeChanged(Surface3D::VisualizationType)));
 	connect(surface, SIGNAL(sourceTypeChanged(Surface3D::DataSource)), SLOT(sourceTypeChanged(Surface3D::DataSource)));
 	connect(surface, SIGNAL(visibilityChanged(bool)), ui.chkVisible, SLOT(setChecked(bool)));
+	connect(surface, SIGNAL(colorFillingChanged(Surface3D::ColorFilling)), SLOT(colorFillingChanged(Surface3D::ColorFilling)));
 
 	// DataHandlers
 	ui.cbFileRequester->setUrl(surface->fileDataHandler().file());
@@ -235,10 +237,11 @@ void Surface3DDock::retranslateUi(){
 	Lock lock(m_initializing);
 
 	//color filling
-	ui.cbColorFillingType->addItem( i18n("no filling") );
-	ui.cbColorFillingType->addItem( i18n("solid color") );
-	ui.cbColorFillingType->addItem( i18n("color map") );
-	ui.cbColorFillingType->addItem( i18n("color map from matrix") );
+	ui.cbColorFillingType->insertItem(Surface3D::ColorFilling_Empty, i18n("no filling"));
+	ui.cbColorFillingType->insertItem(Surface3D::ColorFilling_SolidColor, i18n("solid color"));
+	ui.cbColorFillingType->insertItem(Surface3D::ColorFilling_ColorMap, i18n("color map"));
+	ui.cbColorFillingType->insertItem(Surface3D::ColorFilling_ElevationLevel, i18n("elevation level"));
+	ui.cbColorFillingType->insertItem(Surface3D::ColorFilling_ColorMapFromMatrix, i18n("color map from matrix"));
 }
 
 void Surface3DDock::onTreeViewIndexChanged(const QModelIndex& index) {
@@ -356,6 +359,13 @@ void Surface3DDock::thirdNodeChanged(const AbstractColumn* column) {
 	setModelFromAspect(ui.cbNode3, column);
 }
 
+void Surface3DDock::colorFillingChanged(Surface3D::ColorFilling color) {
+	if (m_initializing)
+		return;
+
+	ui.cbColorFillingType->setCurrentIndex(color);
+}
+
 void Surface3DDock::nameChanged() {
 	if (m_initializing)
 		return;
@@ -372,8 +382,9 @@ void Surface3DDock::commentChanged() {
 
 //Collor filling
 void Surface3DDock::colorFillingTypeChanged(int index) {
-	Surface3D::CollorFilling type = (Surface3D::CollorFilling)index;
-	if (type == Surface3D::NoFilling) {
+	const Surface3D::ColorFilling type = static_cast<Surface3D::ColorFilling>(index);
+	if (type == Surface3D::ColorFilling_Empty
+			|| type == Surface3D::ColorFilling_ElevationLevel) {
 		ui.lColorFilling->hide();
 		ui.kcbColorFilling->hide();
 		ui.lColorFillingMap->hide();
@@ -382,7 +393,10 @@ void Surface3DDock::colorFillingTypeChanged(int index) {
 		ui.cbColorFillingMatrix->hide();
 		ui.lColorFillingOpacity->hide();
 		ui.sbColorFillingOpacity->hide();
-	} else if (type == Surface3D::SolidColor) {
+		if (type == Surface3D::ColorFilling_ElevationLevel) {
+			surface->setColorFilling(type);
+		}
+	} else if (type == Surface3D::ColorFilling_SolidColor) {
 		ui.lColorFilling->show();
 		ui.kcbColorFilling->show();
 		ui.lColorFillingMap->hide();
@@ -391,7 +405,7 @@ void Surface3DDock::colorFillingTypeChanged(int index) {
 		ui.cbColorFillingMatrix->hide();
 		ui.lColorFillingOpacity->show();
 		ui.sbColorFillingOpacity->show();
-	} else if (type == Surface3D::ColorMap) {
+	} else if (type == Surface3D::ColorFilling_ColorMap) {
 		ui.lColorFilling->hide();
 		ui.kcbColorFilling->hide();
 		ui.lColorFillingMap->show();
@@ -400,7 +414,7 @@ void Surface3DDock::colorFillingTypeChanged(int index) {
 		ui.cbColorFillingMatrix->hide();
 		ui.lColorFillingOpacity->show();
 		ui.sbColorFillingOpacity->show();
-	} else if (type == Surface3D::ColorMapFromMatrix) {
+	} else if (type == Surface3D::ColorFilling_ColorMapFromMatrix) {
 		ui.lColorFilling->hide();
 		ui.kcbColorFilling->hide();
 		ui.lColorFillingMap->hide();
