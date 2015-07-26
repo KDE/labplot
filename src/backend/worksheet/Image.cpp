@@ -43,6 +43,7 @@ Image::Image(AbstractScriptingEngine* engine, const QString& name, bool loading)
       isLoaded(false),
       m_segments(new Segments(this)),
       m_transform(new Transform()),
+      m_magnificationWindow(0),
       m_editor(new ImageEditor()){
 
     connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),

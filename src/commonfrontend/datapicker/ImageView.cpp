@@ -47,7 +47,6 @@ ImageView::ImageView(Image* image) : QGraphicsView(),
     m_mouseMode(SelectAndEditMode),
     m_selectionBandIsShown(false),
     magnificationFactor(0),
-    m_magnificationWindow(0),
     tbZoom(0) {
 
     setScene(m_image->scene());
@@ -445,20 +444,22 @@ void ImageView::mouseMoveEvent(QMouseEvent* event) {
 
     if ( magnificationFactor && m_image->isLoaded && sceneRect().contains(pos)
          && m_image->plotPointsType() != Image::SegmentPoints ) {
-
-        if (!m_magnificationWindow)
-            m_magnificationWindow = new QGraphicsPixmapItem(0, scene());
+        if (!m_image->m_magnificationWindow) {
+            m_image->m_magnificationWindow = new QGraphicsPixmapItem(0, scene());
+            m_image->m_magnificationWindow->setZValue(-1);
+        }
 
         int size = 100;
         QImage imageSection = m_image->originalPlotImage.scaled(scene()->width(), scene()->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         imageSection = imageSection.copy(pos.x() - size/2, pos.y() - size/2, size, size);
         imageSection = imageSection.scaled(size*magnificationFactor, size*magnificationFactor, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         imageSection = imageSection.copy(imageSection.width()/2 - size/2, imageSection.height()/2 - size/2, size, size);
-        m_magnificationWindow->setPixmap(QPixmap::fromImage(imageSection));
-        m_magnificationWindow->setPos(pos.x()- imageSection.width()/2, pos.y()- imageSection.height()/2);
-    } else if (m_magnificationWindow) {
-        scene()->removeItem(m_magnificationWindow);
-        m_magnificationWindow = 0;
+
+        m_image->m_magnificationWindow->setVisible(true);
+        m_image->m_magnificationWindow->setPixmap(QPixmap::fromImage(imageSection));
+        m_image->m_magnificationWindow->setPos(pos.x()- imageSection.width()/2, pos.y()- imageSection.height()/2);
+    } else if (m_image->m_magnificationWindow) {
+        m_image->m_magnificationWindow->setVisible(false);
     }
 
     QGraphicsView::mouseMoveEvent(event);

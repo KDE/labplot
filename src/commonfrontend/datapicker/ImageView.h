@@ -67,7 +67,6 @@ class ImageView : public QGraphicsView {
         QPoint m_selectionEnd;
         QList<CustomItem*> m_childItems;
         int magnificationFactor;
-        QGraphicsPixmapItem* m_magnificationWindow;
 
         //Menus
         QMenu* m_zoomMenu;

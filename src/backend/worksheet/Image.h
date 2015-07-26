@@ -94,6 +94,7 @@ class Image: public AbstractPart, public scripted {
         QImage processedPlotImage;
         Transform* m_transform;
         PlotImageType plotImageType;
+        QGraphicsPixmapItem* m_magnificationWindow;
 
         CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
         CLASS_D_ACCESSOR_DECL(Image::ReferencePoints, axisPoints, AxisPoints)
