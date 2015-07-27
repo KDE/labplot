@@ -31,13 +31,11 @@
 
 #include "Base3DPrivate.h"
 #include "Surface3D.h"
-#include "DataHandlers.h"
 
-class vtkProp;
-class vtkRenderer;
-class vtkProperty;
-class Plot3D;
-
+class DemoDataHandler;
+class SpreadsheetDataHandler;
+class MatrixDataHandler;
+class FileDataHandler;
 struct Surface3DPrivate : public Base3DPrivate {
 	Surface3D* const q;
 

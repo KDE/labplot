@@ -28,6 +28,7 @@
 
 #include "Surface3D.h"
 #include "Surface3DPrivate.h"
+#include "DataHandlers.h"
 #include "Plot3D.h"
 #include "XmlAttributeReader.h"
 #include "backend/lib/commandtemplates.h"

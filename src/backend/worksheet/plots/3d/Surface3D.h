@@ -32,7 +32,6 @@
 #include "Base3D.h"
 #include "backend/lib/macros.h"
 
-class Plot3D;
 class DemoDataHandler;
 class SpreadsheetDataHandler;
 class MatrixDataHandler;
