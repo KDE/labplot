@@ -26,14 +26,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SURFACE3D_H
-#define SURFACE3D_H
+#ifndef PLOT3D_SURFACE3D_H
+#define PLOT3D_SURFACE3D_H
 
+#include "Base3D.h"
 #include "backend/lib/macros.h"
-#include "backend/core/AbstractAspect.h"
-
-class vtkProp;
-class vtkRenderer;
 
 class Plot3D;
 class DemoDataHandler;
@@ -42,7 +39,7 @@ class MatrixDataHandler;
 class FileDataHandler;
 
 class Surface3DPrivate;
-class Surface3D : public AbstractAspect {
+class Surface3D : public Base3D {
 		Q_OBJECT
 		Q_DECLARE_PRIVATE(Surface3D)
 		Q_DISABLE_COPY(Surface3D)
@@ -70,17 +67,10 @@ class Surface3D : public AbstractAspect {
 		};
 
 		Surface3D(vtkRenderer* renderer = 0);
-		void setRenderer(vtkRenderer* renderer);
-		void highlight(bool pred);
-		void show(bool pred);
-		bool isVisible() const;
 		virtual ~Surface3D();
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
-
-		bool operator==(vtkProp* prop) const;
-		bool operator!=(vtkProp* prop) const;
 
 		DemoDataHandler& demoDataHandler();
 		SpreadsheetDataHandler& spreadsheetDataHandler();
@@ -94,12 +84,6 @@ class Surface3D : public AbstractAspect {
 		typedef Surface3D BaseClass;
 		typedef Surface3DPrivate Private;
 
-	public slots:
-		void remove();
-
-	private slots:
-		void update();
-
 	signals:
 		friend class Surface3DSetVisualizationTypeCmd;
 		friend class Surface3DSetDataSourceCmd;
@@ -107,12 +91,6 @@ class Surface3D : public AbstractAspect {
 		void visualizationTypeChanged(Surface3D::VisualizationType);
 		void sourceTypeChanged(Surface3D::DataSource);
 		void colorFillingChanged(Surface3D::ColorFilling);
-		void parametersChanged();
-		void removed();
-		void visibilityChanged(bool);
-
-	private:
-		const QScopedPointer<Surface3DPrivate> d_ptr;
 };
 
 #endif

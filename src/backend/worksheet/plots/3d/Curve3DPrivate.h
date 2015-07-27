@@ -26,22 +26,15 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CURVE3DPRIVATE_H
-#define CURVE3DPRIVATE_H
+#ifndef PLOT3D_CURVE3DPRIVATE_H
+#define PLOT3D_CURVE3DPRIVATE_H
 
-#include <vtkSmartPointer.h>
-
-class vtkRenderer;
-class vtkActor;
-class vtkProperty;
-
+#include "Base3DPrivate.h"
 class Curve3D;
 class AbstractColumn;
-struct Curve3DPrivate {
+struct Curve3DPrivate : public Base3DPrivate {
 	Curve3D* const q;
 
-	bool isSelected;
-	vtkSmartPointer<vtkRenderer> renderer;
 	const AbstractColumn* xColumn;
 	const AbstractColumn* yColumn;
 	const AbstractColumn* zColumn;
@@ -51,16 +44,12 @@ struct Curve3DPrivate {
 	float pointRadius;
 	bool showEdges;
 	bool isClosed;
-	vtkSmartPointer<vtkActor> curveActor;
-	vtkSmartPointer<vtkProperty> curveProperty;
 
 	Curve3DPrivate(vtkRenderer* renderer, Curve3D* parent);
 	void init();
 	~Curve3DPrivate();
 	QString name() const;
 	void update();
-
-	void hide();
 };
 
 #endif

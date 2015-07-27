@@ -163,6 +163,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/3d/Plot3D.cpp
+	${BACKEND_DIR}/worksheet/plots/3d/Base3D.cpp
 	${BACKEND_DIR}/worksheet/plots/3d/Axes.cpp
 	${BACKEND_DIR}/worksheet/plots/3d/DataHandlers.cpp
 	${BACKEND_DIR}/worksheet/plots/3d/VTKGraphicsItem.cpp

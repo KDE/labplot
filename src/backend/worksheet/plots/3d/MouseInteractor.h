@@ -26,8 +26,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef MOUSEINTERACTOR_H
-#define MOUSEINTERACTOR_H
+#ifndef PLOT3D_MOUSEINTERACTOR_H
+#define PLOT3D_MOUSEINTERACTOR_H
 
 #include <QObject>
 #include <vtkInteractorStyleTrackballCamera.h>

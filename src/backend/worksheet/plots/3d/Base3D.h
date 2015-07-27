@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : Curve3D.h
+    File                 : Base3D.h
     Project              : LabPlot
-    Description          : 3D curve class
+    Description          : Base class for 3D objects
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Minh Ngo (minh@fedoraproject.org)
 
@@ -26,58 +26,42 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PLOT3D_CURVE3D_H
-#define PLOT3D_CURVE3D_H
+#ifndef PLOT3D_BASE3D_H
+#define PLOT3D_BASE3D_H
 
-#include "Base3D.h"
-#include "backend/lib/macros.h"
+#include "backend/core/AbstractAspect.h"
 
-class AbstractColumn;
-class Curve3DPrivate;
-class Curve3D : public Base3D {
+class vtkProp;
+class vtkRenderer;
+
+class Base3DPrivate;
+class Base3D : public AbstractAspect {
 		Q_OBJECT
-		Q_DECLARE_PRIVATE(Curve3D)
-		Q_DISABLE_COPY(Curve3D)
+		Q_DISABLE_COPY(Base3D)
+		Q_DECLARE_PRIVATE(Base3D)
 	public:
-		Curve3D(vtkRenderer* renderer = 0);
-		virtual ~Curve3D();
+		explicit Base3D(const QString& name, Base3DPrivate* priv);
+		virtual ~Base3D();
+		void setRenderer(vtkRenderer* renderer);
+		void show(bool pred);
+		bool isVisible() const;
+		void highlight(bool pred);
+		bool operator==(vtkProp* prop) const;
+		bool operator!=(vtkProp* prop) const;
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+	public slots:
+		void remove();
 
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn);
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, zColumn, ZColumn);
-
-		const QString& xColumnPath() const;
-		const QString& yColumnPath() const;
-		const QString& zColumnPath() const;
-
-		BASIC_D_ACCESSOR_DECL(float, pointRadius, PointRadius);
-		BASIC_D_ACCESSOR_DECL(bool, showEdges, ShowEdges);
-		BASIC_D_ACCESSOR_DECL(bool, isClosed, IsClosed);
-
-		typedef Curve3D BaseClass;
-		typedef Curve3DPrivate Private;
-
-	private slots:
-		void xColumnAboutToBeRemoved(const AbstractAspect*);
-		void yColumnAboutToBeRemoved(const AbstractAspect*);
-		void zColumnAboutToBeRemoved(const AbstractAspect*);
+	protected slots:
+		void update();
 
 	signals:
-		friend class Curve3DSetXColumnCmd;
-		friend class Curve3DSetYColumnCmd;
-		friend class Curve3DSetZColumnCmd;
-		friend class Curve3DSetPointRadiusCmd;
-		friend class Curve3DSetShowEdgesCmd;
-		friend class Curve3DSetIsClosedCmd;
-		void xColumnChanged(const AbstractColumn*);
-		void yColumnChanged(const AbstractColumn*);
-		void zColumnChanged(const AbstractColumn*);
-		void pointRadiusChanged(float);
-		void showEdgesChanged(bool);
-		void isClosedChanged(bool);
+		void parametersChanged();
+		void removed();
+		void visibilityChanged(bool);
+
+	protected:
+		const QScopedPointer<Base3DPrivate> d_ptr;
 };
 
 #endif

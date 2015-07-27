@@ -41,43 +41,14 @@
 #include <vtkPoints.h>
 #include <vtkCellArray.h>
 #include <vtkPolyData.h>
-#include <vtkPolyDataMapper.h>
 #include <vtkProperty.h>
+#include <vtkPolyDataMapper.h>
 
 Curve3D::Curve3D(vtkRenderer* renderer)
-	: AbstractAspect(i18n("Curve 3D"))
-	, d_ptr(new Curve3DPrivate(renderer, this)) {
-	Q_D(Curve3D);
-	if (renderer)
-		d->init();
+	: Base3D(i18n("Curve 3D"), new Curve3DPrivate(renderer, this)) {
 }
 
 Curve3D::~Curve3D() {
-}
-
-void Curve3D::setRenderer(vtkRenderer* renderer) {
-	Q_D(Curve3D);
-	// TODO: Move to the base class between Curve3D and Surface3D
-	d->renderer = renderer;
-	if (renderer)
-		d->init();
-}
-
-void Curve3D::highlight(bool pred) {
-	Q_D(Curve3D);
-
-	// TODO: Move to the base class between Curve3D and Surface3D
-	if (pred && !d->isSelected) {
-		d->isSelected = pred;
-		vtkProperty *prop = d->curveActor->GetProperty();
-		d->curveProperty->DeepCopy(prop);
-		prop->SetColor(1.0, 0.0, 0.0);
-		prop->SetDiffuse(1.0);
-		prop->SetSpecular(0.0);
-	} else if (d->isSelected && !pred) {
-		d->isSelected = pred;
-		d->curveActor->GetProperty()->DeepCopy(d->curveProperty);
-	}
 }
 
 void Curve3D::save(QXmlStreamWriter* writer) const {
@@ -127,16 +98,6 @@ bool Curve3D::load(XmlStreamReader* reader) {
 	}
 
 	return true;
-}
-
-// TODO: Move to the base class between Curve3D and Surface3D
-bool Curve3D::operator==(vtkProp* prop) const {
-	Q_D(const Curve3D);
-	return dynamic_cast<vtkProp*>(d->curveActor.Get()) == prop;
-}
-
-bool Curve3D::operator!=(vtkProp* prop) const {
-	return !operator==(prop);
 }
 
 //##############################################################################
@@ -192,47 +153,17 @@ void Curve3D::zColumnAboutToBeRemoved(const AbstractAspect*) {
 	d->zColumn = 0;
 }
 
-// TODO: Move to the base class between Curve3D and Surface3D
-void Curve3D::remove() {
-	Q_D(Curve3D);
-	d->hide();
-	emit removed();
-	AbstractAspect::remove();
-}
-
-void Curve3D::update() {
-	Q_D(Curve3D);
-	d->update();
-}
-
-void Curve3D::show(bool pred) {
-	Q_D(Curve3D);
-	if (d->curveActor) {
-		d->curveActor->SetVisibility(pred);
-		emit parametersChanged();
-	}
-}
-
-bool Curve3D::isVisible() const {
-	Q_D(const Curve3D);
-	if (!d->curveActor)
-		return false;
-	return d->curveActor->GetVisibility() != 0;
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 
 Curve3DPrivate::Curve3DPrivate(vtkRenderer* renderer, Curve3D* parent)
-	: q(parent)
-	, isSelected(false)
-	, renderer(renderer)
+	: Base3DPrivate(renderer)
+	, q(parent)
 	, xColumn(0)
 	, yColumn(0)
 	, zColumn(0)
 	, pointRadius(20.0)
 	, showEdges(true)
-	, isClosed(false)
-	, curveProperty(vtkProperty::New()) {
+	, isClosed(false) {
 }
 
 void Curve3DPrivate::init() {
@@ -250,8 +181,8 @@ void Curve3DPrivate::update() {
 	if (!renderer)
 		return;
 
-	if (curveActor)
-		renderer->RemoveActor(curveActor);
+	if (actor)
+		renderer->RemoveActor(actor);
 
 	if (xColumn == 0 || yColumn == 0 || zColumn == 0)
 		return;
@@ -298,18 +229,12 @@ void Curve3DPrivate::update() {
 	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 	mapper->SetInputData(pdata);
 
-	curveActor = vtkSmartPointer<vtkActor>::New();
-	curveActor->SetMapper(mapper);
-	curveActor->GetProperty()->SetPointSize(pointRadius);
-	curveActor->GetProperty()->SetLineWidth(pointRadius);
+	actor = vtkSmartPointer<vtkActor>::New();
+	actor->SetMapper(mapper);
+	actor->GetProperty()->SetPointSize(pointRadius);
+	actor->GetProperty()->SetLineWidth(pointRadius);
 
-	renderer->AddActor(curveActor);
+	renderer->AddActor(actor);
 	emit q->parametersChanged();
 	emit q->visibilityChanged(true);
-}
-
-// TODO: Move to the base class between Curve3D and Surface3D
-void Curve3DPrivate::hide() {
-	if (curveActor && renderer)
-		renderer->RemoveActor(curveActor);
 }

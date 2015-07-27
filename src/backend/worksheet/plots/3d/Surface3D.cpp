@@ -40,46 +40,10 @@
 #include <vtkProperty.h>
 
 Surface3D::Surface3D(vtkRenderer* renderer)
-	: AbstractAspect(i18n("Surface"))
-	, d_ptr(new Surface3DPrivate(renderer, this)) {
-	Q_D(Surface3D);
-	if (renderer)
-		d->init();
-}
-
-void Surface3D::setRenderer(vtkRenderer* renderer) {
-	Q_D(Surface3D);
-	d->renderer = renderer;
-	if (renderer)
-		d->init();
-}
-
-void Surface3D::highlight(bool pred) {
-	Q_D(Surface3D);
-
-	if (pred && !d->isSelected) {
-		d->isSelected = pred;
-		vtkProperty *prop = d->surfaceActor->GetProperty();
-		d->surfaceProperty->DeepCopy(prop);
-		prop->SetColor(1.0, 0.0, 0.0);
-		prop->SetDiffuse(1.0);
-		prop->SetSpecular(0.0);
-	} else if (d->isSelected && !pred) {
-		d->isSelected = pred;
-		d->surfaceActor->GetProperty()->DeepCopy(d->surfaceProperty);
-	}
+	: Base3D(i18n("Surface"), new Surface3DPrivate(renderer, this)) {
 }
 
 Surface3D::~Surface3D() {
-}
-
-bool Surface3D::operator==(vtkProp* prop) const {
-	Q_D(const Surface3D);
-	return dynamic_cast<vtkProp*>(d->surfaceActor.Get()) == prop;
-}
-
-bool Surface3D::operator!=(vtkProp* prop) const {
-	return !operator==(prop);
 }
 
 DemoDataHandler& Surface3D::demoDataHandler() {
@@ -100,33 +64,6 @@ MatrixDataHandler& Surface3D::matrixDataHandler() {
 FileDataHandler& Surface3D::fileDataHandler() {
 	Q_D(Surface3D);
 	return *d->fileHandler;
-}
-
-void Surface3D::remove(){
-	Q_D(Surface3D);
-	d->hide();
-	emit removed();
-	AbstractAspect::remove();
-}
-
-void Surface3D::update() {
-	Q_D(Surface3D);
-	d->update();
-}
-
-void Surface3D::show(bool pred) {
-	Q_D(Surface3D);
-	if (d->surfaceActor) {
-		d->surfaceActor->SetVisibility(pred);
-		emit parametersChanged();
-	}
-}
-
-bool Surface3D::isVisible() const {
-	Q_D(const Surface3D);
-	if (!d->surfaceActor)
-		return false;
-	return d->surfaceActor->GetVisibility() != 0;
 }
 
 //##############################################################################
@@ -153,17 +90,15 @@ STD_SETTER_IMPL(Surface3D, ColorFilling, Surface3D::ColorFilling, colorFilling, 
 ////////////////////////////////////////////////////////////////////////////////
 
 Surface3DPrivate::Surface3DPrivate(vtkRenderer* renderer, Surface3D *parent)
-	: q(parent)
-	, renderer(renderer)
+	: Base3DPrivate(renderer)
+	, q(parent)
 	, visualizationType(Surface3D::VisualizationType_Triangles)
 	, sourceType(Surface3D::DataSource_Empty)
 	, colorFilling(Surface3D::ColorFilling_Empty)
-	, isSelected(false)
 	, demoHandler(new DemoDataHandler)
 	, spreadsheetHandler(new SpreadsheetDataHandler)
 	, matrixHandler(new MatrixDataHandler)
-	, fileHandler(new FileDataHandler)
-	, surfaceProperty(vtkProperty::New()) {
+	, fileHandler(new FileDataHandler) {
 }
 
 void Surface3DPrivate::init() {
@@ -187,35 +122,27 @@ void Surface3DPrivate::init() {
 }
 
 Surface3DPrivate::~Surface3DPrivate() {
-	hide();
 }
 
 QString Surface3DPrivate::name() const {
 	return i18n("3D Surface");
 }
-
-void Surface3DPrivate::hide() {
-	if (surfaceActor && renderer) {
-		renderer->RemoveActor(surfaceActor);
-	}
-}
-
 void Surface3DPrivate::update() {
 	if (!renderer)
 		return;
 
 	hide();
 	if (sourceType == Surface3D::DataSource_Empty) {
-		surfaceActor = demoHandler->actor(visualizationType, colorFilling);
+		actor = demoHandler->actor(visualizationType, colorFilling);
 	} else if (sourceType == Surface3D::DataSource_File) {
-		surfaceActor = fileHandler->actor(visualizationType, colorFilling);
+		actor = fileHandler->actor(visualizationType, colorFilling);
 	} else if (sourceType == Surface3D::DataSource_Matrix) {
-		surfaceActor = matrixHandler->actor(visualizationType, colorFilling);
+		actor = matrixHandler->actor(visualizationType, colorFilling);
 	} else if (sourceType == Surface3D::DataSource_Spreadsheet) {
-		surfaceActor = spreadsheetHandler->actor(visualizationType, colorFilling);
+		actor = spreadsheetHandler->actor(visualizationType, colorFilling);
 	}
 
-	renderer->AddActor(surfaceActor);
+	renderer->AddActor(actor);
 	emit q->parametersChanged();
 	emit q->visibilityChanged(true);
 }

@@ -26,9 +26,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SURFACE3DPRIVATE_H
-#define SURFACE3DPRIVATE_H
+#ifndef PLOT3D_SURFACE3DPRIVATE_H
+#define PLOT3D_SURFACE3DPRIVATE_H
 
+#include "Base3DPrivate.h"
 #include "Surface3D.h"
 #include "DataHandlers.h"
 
@@ -37,29 +38,23 @@ class vtkRenderer;
 class vtkProperty;
 class Plot3D;
 
-struct Surface3DPrivate {
+struct Surface3DPrivate : public Base3DPrivate {
 	Surface3D* const q;
 
-	vtkSmartPointer<vtkRenderer> renderer;
 	Surface3D::VisualizationType visualizationType;
 	Surface3D::DataSource sourceType;
 	Surface3D::ColorFilling colorFilling;
 
-	bool isSelected;
 	DemoDataHandler *demoHandler;
 	SpreadsheetDataHandler *spreadsheetHandler;
 	MatrixDataHandler *matrixHandler;
 	FileDataHandler *fileHandler;
-	vtkSmartPointer<vtkActor> surfaceActor;
-	vtkSmartPointer<vtkProperty> surfaceProperty;
 
 	Surface3DPrivate(vtkRenderer* renderer, Surface3D *parent);
 	void init();
 	~Surface3DPrivate();
 	QString name() const;
 	void update();
-
-	void hide();
 };
 
 #endif
