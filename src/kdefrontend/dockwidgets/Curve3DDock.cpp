@@ -27,6 +27,7 @@
  ***************************************************************************/
 
 #include "Curve3DDock.h"
+#include "DockHelpers.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/3d/Curve3D.h"
@@ -35,6 +36,7 @@
 
 #include <QDir>
 
+using namespace DockHelpers;
 
 Curve3DDock::Curve3DDock(QWidget* parent)
 	: QWidget(parent)
@@ -83,21 +85,6 @@ namespace {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		return aspect ? dynamic_cast<AbstractColumn*>(aspect) : 0;
 	}
-
-	// TODO: Move to the common place
-	struct Lock{
-		Lock(bool& variable)
-			: variable(variable){
-			variable = true;
-		}
-
-		~Lock(){
-			variable = false;
-		}
-
-	private:
-		bool& variable;
-	};
 }
 
 

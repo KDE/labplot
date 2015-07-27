@@ -27,6 +27,7 @@
  ***************************************************************************/
 
 #include "Surface3DDock.h"
+#include "DockHelpers.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
@@ -37,6 +38,7 @@
 
 #include <QDir>
 
+using namespace DockHelpers;
 
 Surface3DDock::Surface3DDock(QWidget* parent)
 	: QWidget(parent)
@@ -212,22 +214,6 @@ void Surface3DDock::hideTriangleInfo(bool hide) {
 	foreach(QWidget* w, widgets){
 		w->setVisible(!hide);
 	}
-}
-
-namespace{
-	struct Lock{
-		Lock(bool& variable)
-			: variable(variable){
-			variable = true;
-		}
-
-		~Lock(){
-			variable = false;
-		}
-
-	private:
-		bool& variable;
-	};
 }
 
 //*************************************************************

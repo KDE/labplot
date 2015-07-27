@@ -27,6 +27,7 @@
  ***************************************************************************/
 
 #include "Plot3DDock.h"
+#include "DockHelpers.h"
 #include "backend/worksheet/plots/3d/Plot3D.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
@@ -49,6 +50,8 @@
 #include <KLocalizedString>
 
 #include <math.h>
+
+using namespace DockHelpers;
 
 Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 	ui.setupUi(this);
@@ -107,22 +110,6 @@ Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
 
 	// TODO: Uncomment later
 	//connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
-}
-
-namespace{
-	struct Lock{
-		Lock(bool& variable)
-			: variable(variable){
-			variable = true;
-		}
-
-		~Lock(){
-			variable = false;
-		}
-
-	private:
-		bool& variable;
-	};
 }
 
 void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
