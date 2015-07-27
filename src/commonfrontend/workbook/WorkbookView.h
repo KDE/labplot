@@ -64,6 +64,7 @@ class WorkbookView : public QWidget {
 		TabWidget* m_tabWidget;
 		Workbook* m_workbook;
 		int lastSelectedIndex;
+		bool m_initializing;
 
 		//actions
 		QAction* action_add_spreadsheet;

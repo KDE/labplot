@@ -239,8 +239,8 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	}
 	}
 
-	if (dataSource->inherits("Spreadsheet")) {
-		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	if (spreadsheet) {
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
 		for ( int n=0; n<actualCols; n++ ){
 			Column* column = spreadsheet->column(columnOffset+n);
@@ -251,11 +251,16 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 				column->setChanged();
 			}
 		}
-
 		spreadsheet->setUndoAware(true);
+		return;
 	}
 
-	return;
+	Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+	if (matrix) {
+		matrix->setSuppressDataChangedSignal(false);
+		matrix->setChanged();
+		matrix->setUndoAware(true);
+	}
 }
 
 /*!

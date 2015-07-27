@@ -74,6 +74,8 @@ Matrix::~Matrix() {
 }
 
 void Matrix::init() {
+	m_model = 0;
+
 	KConfig config;
 	KConfigGroup group = config.group("Matrix");
 
@@ -112,13 +114,17 @@ QMenu* Matrix::createContextMenu() {
 }
 
 QWidget* Matrix::view() const {
-	if (!m_view) 	{
-		m_view = new MatrixView(const_cast<Matrix*>(this));
+	if (!m_view) {
+		MatrixView* view = new MatrixView(const_cast<Matrix*>(this));
+		m_model = view->model();
+		m_view = view;
 	}
 	return m_view;
 }
 
-/* ========================================== getter methods ============================================= */
+//##############################################################################
+//##########################  getter methods  ##################################
+//##############################################################################
 BASIC_D_READER_IMPL(Matrix, int, columnCount, columnCount)
 BASIC_D_READER_IMPL(Matrix, int, rowCount, rowCount)
 BASIC_D_READER_IMPL(Matrix, double, xStart, xStart)
@@ -128,13 +134,20 @@ BASIC_D_READER_IMPL(Matrix, double, yEnd, yEnd)
 BASIC_D_READER_IMPL(Matrix, char, numericFormat, numericFormat)
 BASIC_D_READER_IMPL(Matrix, int, precision, precision)
 BASIC_D_READER_IMPL(Matrix, Matrix::HeaderFormat, headerFormat, headerFormat)
-
-QString Matrix ::formula () const{
-	return d->formula;
-}
+CLASS_D_READER_IMPL(Matrix, QString, formula, formula)
 
 QVector<QVector<double> >& Matrix::data() const {
 	return d->matrixData;
+}
+
+void Matrix::setSuppressDataChangedSignal(bool b) {
+	if (m_model)
+		m_model->setSuppressDataChangedSignal(b);
+}
+
+void Matrix::setChanged() {
+	if (m_model)
+		m_model->setChanged();
 }
 
 int Matrix::defaultRowHeight() const {
@@ -145,7 +158,9 @@ int Matrix::defaultColumnWidth() const {
 	return  100;
 }
 
-/* ========================================== setter methods ============================================= */
+//##############################################################################
+//#################  setter methods and undo commands ##########################
+//##############################################################################
 void Matrix::setRowCount(int count) {
 	if (count == d->rowCount)
 		return;
@@ -167,8 +182,6 @@ void Matrix::setColumnCount(int count) {
 	else if(diff < 0)
 		exec(new MatrixRemoveColumnsCmd(d, columnCount()+diff, -diff));
 }
-
-
 
 STD_SETTER_CMD_IMPL_F_S(Matrix, SetXStart, double, xStart, updateViewHeader)
 void Matrix::setXStart(double xStart) {
@@ -345,19 +358,12 @@ void Matrix::addColumns() {
 }
 
 void Matrix::setCoordinates(double x1, double x2, double y1, double y2) {
-	WAIT_CURSOR;
 	exec(new MatrixSetCoordinatesCmd(d, x1, x2, y1, y2));
-	RESET_CURSOR;
 }
 
-//TODO:
 void Matrix::setFormula(const QString& formula) {
-	WAIT_CURSOR;
 	exec(new MatrixSetFormulaCmd(d, formula));
-	emit formulaChanged();
-	RESET_CURSOR;
 }
-
 
 //! This method should only be called by the view.
 /** This method does not change the view, it only changes the
@@ -405,6 +411,11 @@ void Matrix::setRowCells(int row, int first_column, int last_column, const QVect
 	WAIT_CURSOR;
 	exec(new MatrixSetRowCellsCmd(d, row, first_column, last_column, values));
 	RESET_CURSOR;
+}
+
+void Matrix::setData(const QVector<QVector<double> >& data) {
+	if (!data.isEmpty())
+		exec(new MatrixReplaceValuesCmd(d, data));
 }
 
 //##############################################################################
@@ -595,7 +606,6 @@ void MatrixPrivate::clearColumn(int col) {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 void Matrix::save(QXmlStreamWriter* writer) const {
-	qDebug()<<"in save";
 	writer->writeStartElement("matrix");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);

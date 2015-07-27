@@ -32,6 +32,7 @@
 #include "backend/datasources/AbstractDataSource.h"
 
 class MatrixPrivate;
+class MatrixModel;
 class MatrixView;
 
 class Matrix : public AbstractDataSource {
@@ -59,6 +60,9 @@ class Matrix : public AbstractDataSource {
 		CLASS_D_ACCESSOR_DECL(QString, formula, Formula)
 
 		QVector<QVector<double> >& data() const;
+		void setData(const QVector<QVector<double> >&);
+		void setSuppressDataChangedSignal(bool);
+		void setChanged();
 
 		int defaultRowHeight() const;
 		int defaultColumnWidth() const;
@@ -115,7 +119,6 @@ class Matrix : public AbstractDataSource {
 		void rowsRemoved(int first, int count);
 		void dataChanged(int top, int left, int bottom, int right);
 		void coordinatesChanged();
-		void formulaChanged();
 
 		friend class MatrixInsertRowsCmd;
 		friend class MatrixRemoveRowsCmd;
@@ -143,6 +146,7 @@ class Matrix : public AbstractDataSource {
 
 		MatrixPrivate* const d;
 		friend class MatrixPrivate;
+		mutable MatrixModel* m_model;
 };
 
 #endif

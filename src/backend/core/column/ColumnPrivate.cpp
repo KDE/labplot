@@ -855,6 +855,19 @@ AbstractSimpleFilter *Column::Private::outputFilter() const {
 //! \name Formula related functions
 //@{
 ////////////////////////////////////////////////////////////////////////////////
+/**
+ * \brief Return the formula last used to generate data for the column
+ */
+QString Column::Private::formula() const {
+	return m_formula;
+}
+
+/**
+ * \brief Sets the formula used to generate column values
+ */
+void Column::Private::setFormula(QString f) {
+	m_formula = f;
+}
 
 /**
  * \brief Return the formula associated with row 'row'
@@ -1130,6 +1143,13 @@ void Column::Private::replaceValues(int first, const QVector<double>& new_values
  */
 IntervalAttribute<QString> Column::Private::formulaAttribute() const {
 	return m_formulas;
+}
+
+/**
+ * \brief Replace the formula used to generate column values
+ */
+void Column::Private::replaceFormula(QString formula) {
+	m_formula = formula;
 }
 
 /**

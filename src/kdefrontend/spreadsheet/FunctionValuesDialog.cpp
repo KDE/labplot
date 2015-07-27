@@ -39,6 +39,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 
+#include <math.h>
 
 /*!
 	\class FunctionValuesDialog
@@ -101,6 +102,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 
 void FunctionValuesDialog::setColumns(QList<Column*> list) {
 	m_columns = list;
+	ui.teEquation->setPlainText(m_columns.first()->formula());
 }
 
 void FunctionValuesDialog::checkValues() {
@@ -180,17 +182,18 @@ void FunctionValuesDialog::generate() {
 	ExpressionParser* parser = ExpressionParser::getInstance();
 	const QString& expression = ui.teEquation->toPlainText();
 
+	QVector<double> new_data(m_spreadsheet->rowCount());
+
+	//x-vector can be smaller then the y-vector. So, not all values in the y-vector might get initialized.
+	//->"clean" the y-vector first
+	for (int i=0; i<new_data.size(); ++i)
+		new_data[i] = NAN;
+
+	parser->evaluateCartesian(expression, xVector, &new_data);
+
 	foreach(Column* col, m_columns) {
-		if (m_spreadsheet->rowCount()>xColumn->rowCount())
-			col->clear();
-
-		QVector<double>* yVector = static_cast<QVector<double>* >(col->data());
-		bool rc = false;
-		rc = parser->evaluateCartesian(expression, xVector, yVector);
-		if (!rc)
-			yVector->clear();
-
-		col->setChanged();
+		col->setFormula(expression);
+		col->replaceValues(0, new_data);
 	}
 
 	m_spreadsheet->endMacro();

@@ -71,6 +71,9 @@ public:
 	explicit MainWin(QWidget* parent = 0, const QString& filename=0);
 	~MainWin();
 
+	AspectTreeModel* model() const;
+	void addAspectToProject(AbstractAspect*);
+
 private:
 	QMdiArea* m_mdiArea;
 	QMdiSubWindow* m_currentSubWindow;
@@ -167,7 +170,6 @@ private:
 	void initActions();
 	void initMenus();
 	bool warnModified();
-	void addAspectToProject(AbstractAspect*);
 	void activateSubWindowForAspect(const AbstractAspect*) const;
 	bool save(const QString&);
 	void closeEvent(QCloseEvent*);
@@ -211,9 +213,6 @@ private slots:
 	void newMatrix();
 	void newWorksheet();
 	//TODO: void newScript();
-	void newWorkbookForImportFileDialog(const QString&);
-	void newSpreadsheetForImportFileDialog(const QString&);
-	void newMatrixForImportFileDialog(const QString&);
 	void newFileDataSourceActionTriggered();
 	void newSqlDataSourceActionTriggered();
 

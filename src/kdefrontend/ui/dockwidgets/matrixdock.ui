@@ -308,6 +308,19 @@
    <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>leName</tabstop>
+  <tabstop>leComment</tabstop>
+  <tabstop>sbRowCount</tabstop>
+  <tabstop>sbColumnCount</tabstop>
+  <tabstop>kleXStart</tabstop>
+  <tabstop>kleXEnd</tabstop>
+  <tabstop>kleYStart</tabstop>
+  <tabstop>kleYEnd</tabstop>
+  <tabstop>cbFormat</tabstop>
+  <tabstop>sbPrecision</tabstop>
+  <tabstop>cbHeader</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

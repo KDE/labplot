@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Worksheet view
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -214,6 +214,7 @@ class WorksheetView : public QGraphicsView {
 	//SLOTs for cartesian plots
 	void cartesianPlotActionModeChanged(QAction*);
 	void cartesianPlotMouseModeChanged(QAction*);
+	void cartesianPlotNavigationChanged(QAction*);
 	void handleCartesianPlotActions();
 	void addCurve();
 	void addEquationCurve();
@@ -221,19 +222,6 @@ class WorksheetView : public QGraphicsView {
 	void addLegend();
 	void addHorizontalAxis();
 	void addVerticalAxis();
-	void scaleAuto();
-	void scaleAutoX();
-	void scaleAutoY();
-	void zoomIn();
-	void zoomOut();
-	void zoomInX();
-	void zoomOutX();
-	void zoomInY();
-	void zoomOutY();
-	void shiftLeftX();
-	void shiftRightX();
-	void shiftUpY();
-	void shiftDownY();
 
   signals:
 	void statusInfo(const QString&);

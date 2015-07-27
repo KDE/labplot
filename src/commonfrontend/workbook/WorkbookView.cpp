@@ -64,8 +64,10 @@ WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
 	layout->addWidget(m_tabWidget);
 
 	//add tab for each children view
+	m_initializing = true;
 	foreach(const AbstractAspect* aspect, m_workbook->children<AbstractAspect>())
 		handleAspectAdded(aspect);
+	m_initializing = false;
 
 	//Actions
 	action_add_spreadsheet = new KAction(KIcon("insert-table"), i18n("Add new Spreadsheet"), this);
@@ -103,6 +105,9 @@ int WorkbookView::currentIndex() const {
   or of a \c Matrix object to \c Workbook.
 */
 void WorkbookView::tabChanged(int index) {
+	if (m_initializing)
+		return;
+
 	if (index==-1)
 		return;
 
@@ -112,6 +117,8 @@ void WorkbookView::tabChanged(int index) {
 }
 
 void WorkbookView::tabMoved(int from, int to) {
+	Q_UNUSED(from);
+	Q_UNUSED(to);
 	//TODO:
 // 	AbstractAspect* aspect = m_workbook->child<AbstractAspect>(to);
 // 	if (aspect) {
@@ -181,7 +188,6 @@ void WorkbookView::handleDescriptionChanged(const AbstractAspect* aspect) {
 	int index = m_workbook->indexOfChild<AbstractAspect>(aspect);
 	if (index != -1 && index<m_tabWidget->count())
 		m_tabWidget->setTabText(index, aspect->name());
-
 }
 
 void WorkbookView::handleAspectAdded(const AbstractAspect* aspect) {

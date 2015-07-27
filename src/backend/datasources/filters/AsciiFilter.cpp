@@ -313,6 +313,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	if( simplifyWhitespacesEnabled)
 		line = line.simplified();
 
+	// determine separator
 	QString separator;
 	QStringList lineStringList;
 	if( separatingCharacter == "auto" ){
@@ -321,9 +322,9 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 
 		//determine the separator
 		if (lineStringList.size()){
-		int length1 = lineStringList.at(0).length();
+			int length1 = lineStringList.at(0).length();
 			if (lineStringList.size()>1){
-				int pos2 = line.indexOf(lineStringList.at(1));
+				int pos2 = line.indexOf(lineStringList.at(1),length1);
 				separator = line.mid(length1, pos2-length1);
 			}else {
 				separator = line.right(line.length()-length1);
@@ -334,7 +335,9 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 		separator = separatingCharacter.replace(QString("SPACE"), QString(" "), Qt::CaseInsensitive);
 		lineStringList = line.split( separator, QString::SplitBehavior(skipEmptyParts) );
 	}
-// 	qDebug() << "separator '"<<separator << "'";
+#ifdef QT_DEBUG
+ 	qDebug() << "separator '"<<separator << "'";
+#endif
 
 	if (endColumn == -1)
 		endColumn = lineStringList.size(); //use the last available column index
@@ -351,7 +354,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 
 	//qDebug()<<"	vector names ="<<vectorNameList;
 
-	int actualRows = AsciiFilter::lineNumber(fileName);
+	int actualRows = AsciiFilter::lineNumber(fileName);	// data rows
 	int actualEndRow;
 	if (endRow == -1)
 		actualEndRow = actualRows;
@@ -408,7 +411,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	}
 
 	//Read the remainder of the file.
-	for (int i=0; i<qMin(lines-1,actualRows-1); i++){
+	for (int i=currentRow; i<qMin(lines,actualRows); i++){
 		line = in.readLine();
 
 		if(simplifyWhitespacesEnabled)
@@ -446,9 +449,13 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 		emit q->completed(100*currentRow/actualRows);
 	}
 
+	if (!dataSource)
+		return dataString.join("");
+
+	//make everything undo/redo-able again
 	//set the comments for each of the columns
-	if (dataSource != NULL && dataSource->inherits("Spreadsheet")) {
-		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	if (spreadsheet) {
 		//TODO: generalize to different data types
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", headerEnabled ? currentRow : currentRow+1);
 		for ( int n=startColumn; n<=endColumn; n++ ){
@@ -460,8 +467,16 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 				column->setChanged();
 			}
 		}
-
 		spreadsheet->setUndoAware(true);
+		return dataString.join("");
+	}
+
+
+	Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+	if (matrix) {
+		matrix->setSuppressDataChangedSignal(false);
+		matrix->setChanged();
+		matrix->setUndoAware(true);
 	}
 
 	return dataString.join("");

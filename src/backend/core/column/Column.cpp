@@ -261,6 +261,19 @@ void Column::clear()
 //! \name Formula related functions
 //@{
 ////////////////////////////////////////////////////////////////////////////////
+/**
+ * \brief Returns the formula used to generate column values
+ */
+QString Column::formula() const {
+	return m_column_private->formula();
+}
+
+/**
+ * \brief Sets the formula used to generate column values
+ */
+void Column::setFormula(QString formula) {
+	exec(new ColumnSetFormulaCmd(m_column_private, formula));
+}
 
 /**
  * \brief Set a formula string for an interval of rows
@@ -470,30 +483,35 @@ QIcon Column::icon() const {
 /**
  * \brief Save the column as XML
  */
-void Column::save(QXmlStreamWriter * writer) const
-{
+void Column::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("column");
 	writeBasicAttributes(writer);
+
 	writer->writeAttribute("mode", enumValueToString(columnMode(), "ColumnMode"));
 	writer->writeAttribute("plot_designation", enumValueToString(plotDesignation(), "PlotDesignation"));
 	writer->writeAttribute("width", QString::number(width()));
+	writer->writeAttribute("formula", formula());
+
 	writeCommentElement(writer);
+
 	writer->writeStartElement("input_filter");
 	m_column_private->inputFilter()->save(writer);
 	writer->writeEndElement();
+
 	writer->writeStartElement("output_filter");
 	m_column_private->outputFilter()->save(writer);
 	writer->writeEndElement();
+
 	XmlWriteMask(writer);
 	QList< Interval<int> > formulas = formulaIntervals();
-	foreach(const Interval<int>& interval, formulas)
-	{
+	foreach(const Interval<int>& interval, formulas) {
 		writer->writeStartElement("formula");
 		writer->writeAttribute("start_row", QString::number(interval.start()));
 		writer->writeAttribute("end_row", QString::number(interval.end()));
 		writer->writeCharacters(formula(interval.start()));
 		writer->writeEndElement();
 	}
+
 	int i;
 	switch(columnMode()) {
 		case AbstractColumn::Numeric:
@@ -526,6 +544,7 @@ void Column::save(QXmlStreamWriter * writer) const
 			}
 			break;
 	}
+
 	writer->writeEndElement(); // "column"
 }
 
@@ -571,6 +590,7 @@ bool Column::load(XmlStreamReader * reader)
 			return false;
 		}
 		setColumnMode((AbstractColumn::ColumnMode)mode_code);
+
 		// read plot designation
 		str = attribs.value(reader->namespaceUri().toString(), "plot_designation").toString();
 		int pd_code = enumStringToValue(str, "PlotDesignation");
@@ -583,6 +603,7 @@ bool Column::load(XmlStreamReader * reader)
 		}
 		else
 			setPlotDesignation((AbstractColumn::PlotDesignation)pd_code);
+
 		bool ok;
 		int width = attribs.value(reader->namespaceUri().toString(), "width").toString().toInt(&ok);
 		if (ok)
@@ -591,6 +612,8 @@ bool Column::load(XmlStreamReader * reader)
 			reader->raiseError(i18n("missing or invalid column width"));
 			return false;
 		}
+
+		setFormula(attribs.value(reader->namespaceUri().toString(), "formula").toString());
 
 		setComment("");
 		if (rowCount() > 0)
@@ -791,7 +814,6 @@ ColumnStringIO *Column::asStringColumn() const {
 //! \name IntervalAttribute related functions
 //@{
 ////////////////////////////////////////////////////////////////////////////////
-
 /**
  * \brief Return the formula associated with row 'row'
  */
