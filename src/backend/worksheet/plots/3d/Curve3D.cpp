@@ -156,7 +156,7 @@ void Curve3D::zColumnAboutToBeRemoved(const AbstractAspect*) {
 ////////////////////////////////////////////////////////////////////////////////
 
 Curve3DPrivate::Curve3DPrivate(vtkRenderer* renderer, Curve3D* parent)
-	: Base3DPrivate(renderer)
+	: Base3DPrivate(renderer, parent)
 	, q(parent)
 	, xColumn(0)
 	, yColumn(0)
@@ -166,10 +166,6 @@ Curve3DPrivate::Curve3DPrivate(vtkRenderer* renderer, Curve3D* parent)
 	, isClosed(false) {
 }
 
-void Curve3DPrivate::init() {
-	update();
-}
-
 Curve3DPrivate::~Curve3DPrivate() {
 }
 
@@ -177,13 +173,7 @@ QString Curve3DPrivate::name() const {
 	return i18n("Curve 3D");
 }
 
-void Curve3DPrivate::update() {
-	if (!renderer)
-		return;
-
-	if (actor)
-		renderer->RemoveActor(actor);
-
+void Curve3DPrivate::createActor() {
 	if (xColumn == 0 || yColumn == 0 || zColumn == 0)
 		return;
 
@@ -233,8 +223,4 @@ void Curve3DPrivate::update() {
 	actor->SetMapper(mapper);
 	actor->GetProperty()->SetPointSize(pointRadius);
 	actor->GetProperty()->SetLineWidth(pointRadius);
-
-	renderer->AddActor(actor);
-	emit q->parametersChanged();
-	emit q->visibilityChanged(true);
 }

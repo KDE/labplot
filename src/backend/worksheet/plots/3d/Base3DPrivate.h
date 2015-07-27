@@ -35,16 +35,19 @@ class vtkActor;
 class vtkProperty;
 class vtkRenderer;
 
+class Base3D;
 struct Base3DPrivate {
+	Base3D *baseParent;
 	bool isSelected;
 	vtkSmartPointer<vtkRenderer> renderer;
 	vtkSmartPointer<vtkActor> actor;
 	vtkSmartPointer<vtkProperty> property;
-	Base3DPrivate(vtkRenderer *renderer = 0);
+	Base3DPrivate(vtkRenderer *renderer, Base3D *baseParent);
 	virtual ~Base3DPrivate();
 
-	virtual void init() = 0;
-	virtual void update() = 0;
+	virtual void init();
+	void update();
+	virtual void createActor() = 0;
 	void hide();
 };
 

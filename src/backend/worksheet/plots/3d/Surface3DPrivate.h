@@ -54,7 +54,7 @@ struct Surface3DPrivate : public Base3DPrivate {
 	void init();
 	~Surface3DPrivate();
 	QString name() const;
-	void update();
+	void createActor();
 };
 
 #endif

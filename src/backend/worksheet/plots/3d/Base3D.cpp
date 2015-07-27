@@ -106,13 +106,32 @@ void Base3D::remove() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Base3DPrivate::Base3DPrivate(vtkRenderer *renderer)
-	: isSelected(false)
+Base3DPrivate::Base3DPrivate(vtkRenderer* renderer, Base3D* baseParent)
+	: baseParent(baseParent)
+	, isSelected(false)
 	, renderer(renderer)
 	, property(vtkProperty::New()) {
 }
 
 Base3DPrivate::~Base3DPrivate() {
+}
+
+void Base3DPrivate::init() {
+	update();
+}
+
+void Base3DPrivate::update() {
+	if (!renderer)
+		return;
+
+	hide();
+
+	createActor();
+	if (actor) {
+		renderer->AddActor(actor);
+		emit baseParent->parametersChanged();
+		emit baseParent->visibilityChanged(true);
+	}
 }
 
 void Base3DPrivate::hide() {

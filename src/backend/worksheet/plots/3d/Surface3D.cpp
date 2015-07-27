@@ -90,7 +90,7 @@ STD_SETTER_IMPL(Surface3D, ColorFilling, Surface3D::ColorFilling, colorFilling, 
 ////////////////////////////////////////////////////////////////////////////////
 
 Surface3DPrivate::Surface3DPrivate(vtkRenderer* renderer, Surface3D *parent)
-	: Base3DPrivate(renderer)
+	: Base3DPrivate(renderer, parent)
 	, q(parent)
 	, visualizationType(Surface3D::VisualizationType_Triangles)
 	, sourceType(Surface3D::DataSource_Empty)
@@ -114,7 +114,8 @@ void Surface3DPrivate::init() {
 	q->addChild(fileHandler);
 	fileHandler->setHidden(true);
 
-	update();
+	Base3DPrivate::update();
+
 	q->connect(demoHandler, SIGNAL(parametersChanged()), SLOT(update()));
 	q->connect(spreadsheetHandler, SIGNAL(parametersChanged()), SLOT(update()));
 	q->connect(matrixHandler, SIGNAL(parametersChanged()), SLOT(update()));
@@ -127,11 +128,7 @@ Surface3DPrivate::~Surface3DPrivate() {
 QString Surface3DPrivate::name() const {
 	return i18n("3D Surface");
 }
-void Surface3DPrivate::update() {
-	if (!renderer)
-		return;
-
-	hide();
+void Surface3DPrivate::createActor() {
 	if (sourceType == Surface3D::DataSource_Empty) {
 		actor = demoHandler->actor(visualizationType, colorFilling);
 	} else if (sourceType == Surface3D::DataSource_File) {
@@ -141,10 +138,6 @@ void Surface3DPrivate::update() {
 	} else if (sourceType == Surface3D::DataSource_Spreadsheet) {
 		actor = spreadsheetHandler->actor(visualizationType, colorFilling);
 	}
-
-	renderer->AddActor(actor);
-	emit q->parametersChanged();
-	emit q->visibilityChanged(true);
 }
 
 //##############################################################################
