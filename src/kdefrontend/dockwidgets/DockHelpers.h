@@ -29,6 +29,8 @@
 #ifndef DOCKHELPERS_H
 #define DOCKHELPERS_H
 
+#include <QWidget>
+
 namespace DockHelpers {
 	struct Lock{
 		Lock(bool& variable)
@@ -42,6 +44,15 @@ namespace DockHelpers {
 	private:
 		bool& variable;
 	};
+
+	inline void showItem(QWidget* labelWidget, QWidget* inputWidget, bool pred = true) {
+		labelWidget->setVisible(pred);
+		inputWidget->setVisible(pred);
+	}
+
+	inline void hideItem(QWidget* labelWidget, QWidget* inputWidget) {
+		showItem(labelWidget, inputWidget, false);
+	}
 }
 
 #endif

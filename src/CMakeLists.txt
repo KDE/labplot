@@ -10,7 +10,6 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/GuiObserver.cpp
 	${KDEFRONTEND_DIR}/GuiTools.cpp
 	${KDEFRONTEND_DIR}/HistoryDialog.cpp
-	${KDEFRONTEND_DIR}/LabPlot.cpp
 	${KDEFRONTEND_DIR}/MainWin.cpp
 	${KDEFRONTEND_DIR}/SettingsDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
@@ -200,9 +199,25 @@ add_subdirectory( pics/gsl_distributions )
 set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 INCLUDE_DIRECTORIES(. ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/..)
 kde4_add_ui_files(LABPLOT_SRCS ${UI_SOURCES})
-kde4_add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES})
-target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${HDF5_LIBRARY} ${NETCDF_LIBRARY} ${VTK_LIBRARIES} ${OPENGL_LIBRARIES} ${QT_LIBRARIES})
+kde4_add_library(liblabplot2 STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES})
+
+kde4_add_executable(labplot2 ${KDEFRONTEND_DIR}/LabPlot.cpp)
+
+target_link_libraries(labplot2 liblabplot2)
+
+target_link_libraries(labplot2
+	${KDE4_KDEUI_LIBS}
+	${KDE4_KIO_LIBS}
+	${GSL_LIBRARIES}
+	${GSL_CBLAS_LIBRARIES}
+	${HDF5_LIBRARY}
+	${NETCDF_LIBRARY}
+	${VTK_LIBRARIES}
+	${OPENGL_LIBRARIES}
+	${QT_LIBRARIES}
 # ${OPJ_LIBRARY}
+)
+
 
 ############## installation ################################
 
@@ -211,3 +226,11 @@ install(FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png DES
 install(PROGRAMS labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
 update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )
+
+option(ENABLE_TESTS "Enabling unit tests" OFF)
+
+if(ENABLE_TESTS)
+  message(STATUS "Enabling unit tests")
+  enable_testing()
+  add_subdirectory(tests)
+endif()

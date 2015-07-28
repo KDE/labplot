@@ -47,13 +47,13 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	, m_initializing(false) {
 	ui.setupUi(this);
 
+	Lock lock(m_initializing);
 	this->retranslateUi();
 
 	ui.cbDataSource->insertItem(Surface3D::DataSource_File, i18n("File"));
 	ui.cbDataSource->insertItem(Surface3D::DataSource_Spreadsheet, i18n("Spreadsheet"));
 	ui.cbDataSource->insertItem(Surface3D::DataSource_Matrix, i18n("Matrix"));
 	ui.cbDataSource->insertItem(Surface3D::DataSource_Empty, i18n("Demo"));
-	ui.cbDataSource->setCurrentIndex(Surface3D::DataSource_File);
 
 	ui.cbType->insertItem(Surface3D::VisualizationType_Triangles, i18n("Triangles"));
 	ui.cbType->insertItem(Surface3D::VisualizationType_Wireframe, i18n("Wireframe"));
@@ -97,7 +97,7 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	connect(ui.chkVisible, SIGNAL(toggled(bool)), SLOT(onVisibilityChanged(bool)));
 
 	//Color filling
-	connect(ui.cbColorFillingType, SIGNAL(currentIndexChanged(int)), SLOT(colorFillingTypeChanged(int)));
+	connect(ui.cbColorFillingType, SIGNAL(currentIndexChanged(int)), SLOT(onColorFillingTypeChanged(int)));
 
 	//Mesh
 
@@ -111,6 +111,10 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+	onVisualizationTypeChanged(Surface3D::VisualizationType_Triangles);
+	onDataSourceChanged(Surface3D::DataSource_File);
+	onColorFillingTypeChanged(Surface3D::ColorFilling_Empty);
 }
 
 namespace {
@@ -126,6 +130,7 @@ namespace {
 }
 
 void Surface3DDock::setSurface(Surface3D *surface) {
+	Lock lock(m_initializing);
 	if (this->surface) {
 		this->surface->disconnect(this);
 		this->surface->fileDataHandler().disconnect(this);
@@ -134,11 +139,9 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	}
 
 	this->surface = surface;
-
 	ui.leName->setText(surface->name());
 	ui.leComment->setText(surface->comment());
 	ui.chkVisible->setChecked(surface->isVisible());
-
 	aspectTreeModel = new AspectTreeModel(surface->project());
 	ui.cbXCoordinate->setModel(aspectTreeModel);
 	ui.cbYCoordinate->setModel(aspectTreeModel);
@@ -150,7 +153,10 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	ui.cbColorFillingMatrix->setModel(aspectTreeModel);
 
 	ui.cbType->setCurrentIndex(surface->visualizationType());
+
 	ui.cbDataSource->setCurrentIndex(surface->dataSource());
+
+	ui.cbColorFillingType->setCurrentIndex(surface->colorFilling());
 
 	connect(surface, SIGNAL(visualizationTypeChanged(Surface3D::VisualizationType)), SLOT(visualizationTypeChanged(Surface3D::VisualizationType)));
 	connect(surface, SIGNAL(sourceTypeChanged(Surface3D::DataSource)), SLOT(sourceTypeChanged(Surface3D::DataSource)));
@@ -193,35 +199,21 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	connect(sdh, SIGNAL(thirdNodeChanged(const AbstractColumn*)), SLOT(thirdNodeChanged(const AbstractColumn*)));
 }
 
-void Surface3DDock::hideDataSource(bool hide) {
-	ui.labelSource->setVisible(!hide);
-	ui.cbDataSource->setVisible(!hide);
-}
-
-void Surface3DDock::hideFileUrl(bool hide) {
-	ui.labelFile->setVisible(!hide);
-	ui.cbFileRequester->setVisible(!hide);
-}
-
-void Surface3DDock::hideTriangleInfo(bool hide) {
-	const QVector<QWidget*> widgets(QVector<QWidget*>()
-			<< ui.labelX << ui.labelY << ui.labelZ
-			<< ui.cbXCoordinate << ui.cbYCoordinate << ui.cbZCoordinate
-			<< ui.labelNode1 << ui.labelNode2 << ui.labelNode3
-			<< ui.cbNode1 << ui.cbNode2 << ui.cbNode3
-			<< ui.labelNodeHeader);
-
-	foreach(QWidget* w, widgets){
-		w->setVisible(!hide);
-	}
+void Surface3DDock::showTriangleInfo(bool pred) {
+	showItem(ui.labelX, ui.cbXCoordinate, pred);
+	showItem(ui.labelY, ui.cbYCoordinate, pred);
+	showItem(ui.labelZ, ui.cbZCoordinate, pred);
+	showItem(ui.labelNode1, ui.cbNode1, pred);
+	showItem(ui.labelNode2, ui.cbNode2, pred);
+	showItem(ui.labelNode3, ui.cbNode3, pred);
+	ui.labelNodeHeader->setVisible(pred);
+	emit elementVisibilityChanged();
 }
 
 //*************************************************************
 //****** SLOTs for changes triggered in Surface3DDock *********
 //*************************************************************
 void Surface3DDock::retranslateUi(){
-	Lock lock(m_initializing);
-
 	//color filling
 	ui.cbColorFillingType->insertItem(Surface3D::ColorFilling_Empty, i18n("no filling"));
 	ui.cbColorFillingType->insertItem(Surface3D::ColorFilling_SolidColor, i18n("solid color"));
@@ -261,15 +253,12 @@ void Surface3DDock::onVisibilityChanged(bool visible) {
 
 void Surface3DDock::onDataSourceChanged(int index) {
 	const Surface3D::DataSource type = static_cast<Surface3D::DataSource>(index);
-	hideFileUrl(type != Surface3D::DataSource_File);
-	hideTriangleInfo(type != Surface3D::DataSource_Spreadsheet);
-
-	const bool b = (type == Surface3D::DataSource_Matrix);
-	ui.labelMatrix->setVisible(b);
-	ui.cbMatrix->setVisible(b);
+	showItem(ui.labelFile, ui.cbFileRequester, type == Surface3D::DataSource_File);
+	showItem(ui.labelMatrix, ui.cbMatrix, type == Surface3D::DataSource_Matrix);
 
 	if (!m_initializing)
 		surface->setDataSource(type);
+	emit elementVisibilityChanged();
 }
 
 void Surface3DDock::onVisualizationTypeChanged(int index) {
@@ -277,12 +266,12 @@ void Surface3DDock::onVisualizationTypeChanged(int index) {
 		surface->setVisualizationType(static_cast<Surface3D::VisualizationType>(index));
 
 	if(index == Surface3D::VisualizationType_Triangles){
-		hideDataSource(false);
+		showItem(ui.labelSource, ui.cbDataSource);
 		onDataSourceChanged(ui.cbDataSource->currentIndex());
 	}else{
-		hideDataSource();
-		hideFileUrl();
-		hideTriangleInfo();
+		hideItem(ui.labelSource, ui.cbDataSource);
+		hideItem(ui.labelFile, ui.cbFileRequester);
+		showTriangleInfo(false);
 	}
 }
 
@@ -367,49 +356,34 @@ void Surface3DDock::commentChanged() {
 }
 
 //Collor filling
-void Surface3DDock::colorFillingTypeChanged(int index) {
+void Surface3DDock::onColorFillingTypeChanged(int index) {
 	const Surface3D::ColorFilling type = static_cast<Surface3D::ColorFilling>(index);
 	if (type == Surface3D::ColorFilling_Empty
 			|| type == Surface3D::ColorFilling_ElevationLevel) {
-		ui.lColorFilling->hide();
-		ui.kcbColorFilling->hide();
-		ui.lColorFillingMap->hide();
-		ui.cbColorFillingMap->hide();
-		ui.lColorFillingMatrix->hide();
-		ui.cbColorFillingMatrix->hide();
-		ui.lColorFillingOpacity->hide();
-		ui.sbColorFillingOpacity->hide();
-		if (type == Surface3D::ColorFilling_ElevationLevel) {
-			surface->setColorFilling(type);
-		}
+		hideItem(ui.lColorFilling, ui.kcbColorFilling);
+		hideItem(ui.lColorFillingMap, ui.cbColorFillingMap);
+		hideItem(ui.lColorFillingMatrix, ui.cbColorFillingMatrix);
+		hideItem(ui.lColorFillingOpacity, ui.sbColorFillingOpacity);
 	} else if (type == Surface3D::ColorFilling_SolidColor) {
-		ui.lColorFilling->show();
-		ui.kcbColorFilling->show();
-		ui.lColorFillingMap->hide();
-		ui.cbColorFillingMap->hide();
-		ui.lColorFillingMatrix->hide();
-		ui.cbColorFillingMatrix->hide();
-		ui.lColorFillingOpacity->show();
-		ui.sbColorFillingOpacity->show();
+		showItem(ui.lColorFilling, ui.kcbColorFilling);
+		hideItem(ui.lColorFillingMap, ui.cbColorFillingMap);
+		hideItem(ui.lColorFillingMatrix, ui.cbColorFillingMatrix);
+		showItem(ui.lColorFillingOpacity, ui.sbColorFillingOpacity);
 	} else if (type == Surface3D::ColorFilling_ColorMap) {
-		ui.lColorFilling->hide();
-		ui.kcbColorFilling->hide();
-		ui.lColorFillingMap->show();
-		ui.cbColorFillingMap->show();
-		ui.lColorFillingMatrix->hide();
-		ui.cbColorFillingMatrix->hide();
-		ui.lColorFillingOpacity->show();
-		ui.sbColorFillingOpacity->show();
+		hideItem(ui.lColorFilling, ui.kcbColorFilling);
+		showItem(ui.lColorFillingMap, ui.cbColorFillingMap);
+		hideItem(ui.lColorFillingMatrix, ui.cbColorFillingMatrix);
+		showItem(ui.lColorFillingOpacity, ui.sbColorFillingOpacity);
 	} else if (type == Surface3D::ColorFilling_ColorMapFromMatrix) {
-		ui.lColorFilling->hide();
-		ui.kcbColorFilling->hide();
-		ui.lColorFillingMap->hide();
-		ui.cbColorFillingMap->hide();
-		ui.lColorFillingMatrix->show();
-		ui.cbColorFillingMatrix->show();
-		ui.lColorFillingOpacity->show();
-		ui.sbColorFillingOpacity->show();
+		hideItem(ui.lColorFilling, ui.kcbColorFilling);
+		hideItem(ui.lColorFillingMap, ui.cbColorFillingMap);
+		showItem(ui.lColorFillingMatrix, ui.cbColorFillingMatrix);
+		showItem(ui.lColorFillingOpacity, ui.sbColorFillingOpacity);
 	}
+
+	if (!m_initializing)
+		surface->setColorFilling(type);
+	emit elementVisibilityChanged();
 }
 
 

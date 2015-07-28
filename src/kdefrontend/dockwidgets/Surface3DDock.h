@@ -46,9 +46,7 @@ class Surface3DDock : public QWidget {
 		void setSurface(Surface3D *surface);
 
 	private:
-		void hideDataSource(bool hide = true);
-		void hideFileUrl(bool hide = true);
-		void hideTriangleInfo(bool hide = true);
+		void showTriangleInfo(bool pred);
 		void setModelFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect);
 
 	private slots:
@@ -69,6 +67,9 @@ class Surface3DDock : public QWidget {
 		void sourceTypeChanged(Surface3D::DataSource);
 		void colorFillingChanged(Surface3D::ColorFilling);
 
+		// Color filling
+		void onColorFillingTypeChanged(int);
+
 		// File handling
 		void pathChanged(const KUrl&);
 
@@ -83,15 +84,15 @@ class Surface3DDock : public QWidget {
 		void secondNodeChanged(const AbstractColumn*);
 		void thirdNodeChanged(const AbstractColumn*);
 
-		//Color filling
-		void colorFillingTypeChanged(int);
-
 		//SLOTs for changes triggered in Surface3D
 		//TODO
 
 		//load and save
 		void loadConfigFromTemplate(KConfig&);
 		void saveConfigAsTemplate(KConfig&);
+
+	signals:
+		void elementVisibilityChanged();
 
 	private:
 		Ui::Surface3DDock ui;
