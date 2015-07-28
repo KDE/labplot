@@ -107,6 +107,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	twPreview = new QTableWidget(ui.tePreview);
 	twPreview->horizontalHeader()->hide();
 	twPreview->verticalHeader()->hide();
+	twPreview->setEditTriggers(QTableWidget::NoEditTriggers);
 	QHBoxLayout* layout = new QHBoxLayout;
 	layout->addWidget(twPreview);
 	ui.tePreview->setLayout(layout);
@@ -267,7 +268,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	case FileDataSource::Ascii: {
 		 //TODO use auto_ptr
 		AsciiFilter* filter = new AsciiFilter();
-	
+
 		if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
 			filter->setAutoModeEnabled(true);
 		} else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
@@ -319,7 +320,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		filter->setEndRow( ui.sbEndRow->value() );
 		filter->setStartColumn( ui.sbStartColumn->value() );
 		filter->setEndColumn( ui.sbEndColumn->value() );
-		
+
 		return filter;
 	}
 	case FileDataSource::HDF: {
@@ -346,8 +347,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 		return filter;
 	}
-	default: 
-		qDebug()<<"Unknown file type!";	
+	default:
+		qDebug()<<"Unknown file type!";
 	}
 
 	return 0;
@@ -465,7 +466,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			netcdfOptionsWidget.twContent->expandAll();
 			netcdfOptionsWidget.twContent->resizeColumnToContents(0);
 			netcdfOptionsWidget.twContent->resizeColumnToContents(2);
-			
+
 		} else {
 			debug="probably BINARY file";
 			ui.cbFileType->setCurrentIndex(FileDataSource::Binary);
@@ -508,8 +509,12 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	//default
 	ui.lFilter->show();
 	ui.cbFilter->show();
-	ui.tabWidget->setTabText(0,i18n("Data format"));
-	ui.tabWidget->insertTab(1,ui.tabDataPreview,i18n("Preview"));
+
+	//if we switch from netCDF-format (only two tabs available), add the data preview-tab again
+	if (ui.tabWidget->count() == 2) {
+		ui.tabWidget->setTabText(0,i18n("Data format"));
+		ui.tabWidget->insertTab(1,ui.tabDataPreview,i18n("Preview"));
+	}
 	ui.lPreviewLines->show();
 	ui.sbPreviewLines->show();
 	ui.lStartColumn->show();
@@ -537,7 +542,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.tabWidget->removeTab(1);
 		ui.tabWidget->setCurrentIndex(0);
 		break;
-	}	
+	}
 	case FileDataSource::Image: {
 		ui.lPreviewLines->hide();
 		ui.sbPreviewLines->hide();
@@ -694,6 +699,8 @@ void ImportFileWidget::refreshPreview(){
 	QTableWidget *tmpTableWidget=0;
 	switch (fileType) {
 	case FileDataSource::Ascii: {
+		ui.tePreview->clear();
+
 		AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
 		importedText = filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
 		tmpTableWidget = twPreview;
