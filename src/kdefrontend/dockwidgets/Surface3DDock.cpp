@@ -117,18 +117,6 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	onColorFillingTypeChanged(Surface3D::ColorFilling_Empty);
 }
 
-namespace {
-	AbstractColumn* getColumn(const QModelIndex& index) {
-		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		return aspect ? dynamic_cast<AbstractColumn*>(aspect) : 0;
-	}
-
-	Matrix* getMatrix(const QModelIndex& index) {
-		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		return aspect ? dynamic_cast<Matrix*>(aspect) : 0;
-	}
-}
-
 void Surface3DDock::setSurface(Surface3D *surface) {
 	Lock lock(m_initializing);
 	if (this->surface) {

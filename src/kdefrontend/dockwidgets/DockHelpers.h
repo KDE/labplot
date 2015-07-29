@@ -31,6 +31,9 @@
 
 #include <QWidget>
 
+#include "backend/core/AbstractColumn.h"
+#include "backend/matrix/Matrix.h"
+
 namespace DockHelpers {
 	struct Lock{
 		Lock(bool& variable)
@@ -52,6 +55,16 @@ namespace DockHelpers {
 
 	inline void hideItem(QWidget* labelWidget, QWidget* inputWidget) {
 		showItem(labelWidget, inputWidget, false);
+	}
+
+	inline AbstractColumn* getColumn(const QModelIndex& index) {
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		return aspect ? dynamic_cast<AbstractColumn*>(aspect) : 0;
+	}
+
+	inline Matrix* getMatrix(const QModelIndex& index) {
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		return aspect ? dynamic_cast<Matrix*>(aspect) : 0;
 	}
 }
 

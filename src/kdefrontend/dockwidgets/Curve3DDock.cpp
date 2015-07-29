@@ -80,14 +80,6 @@ Curve3DDock::Curve3DDock(QWidget* parent)
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 }
 
-namespace {
-	AbstractColumn* getColumn(const QModelIndex& index) {
-		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		return aspect ? dynamic_cast<AbstractColumn*>(aspect) : 0;
-	}
-}
-
-
 void Curve3DDock::setCurve(Curve3D* curve) {
 	Lock lock(m_initializing);
 	if (this->curve)
