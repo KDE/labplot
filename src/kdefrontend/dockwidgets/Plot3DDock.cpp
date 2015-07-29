@@ -280,61 +280,40 @@ void Plot3DDock::backgroundTypeChanged(int index){
 	PlotArea::BackgroundType type = (PlotArea::BackgroundType)index;
 
 	if (type == PlotArea::Color){
-		ui.lBackgroundColorStyle->show();
-		ui.cbBackgroundColorStyle->show();
-		ui.lBackgroundImageStyle->hide();
-		ui.cbBackgroundImageStyle->hide();
-		ui.lBackgroundBrushStyle->hide();
-		ui.cbBackgroundBrushStyle->hide();
-
-		ui.lBackgroundFileName->hide();
-		ui.kleBackgroundFileName->hide();
+		showItem(ui.lBackgroundColorStyle, ui.cbBackgroundColorStyle);
+		hideItem(ui.lBackgroundImageStyle, ui.cbBackgroundImageStyle);
+		hideItem(ui.lBackgroundBrushStyle, ui.cbBackgroundBrushStyle);
+		hideItem(ui.lBackgroundFileName, ui.kleBackgroundFileName);
 		ui.bBackgroundOpen->hide();
 
-		ui.lBackgroundFirstColor->show();
-		ui.kcbBackgroundFirstColor->show();
+		showItem(ui.lBackgroundFirstColor, ui.kcbBackgroundFirstColor);
 
 		PlotArea::BackgroundColorStyle style =
 			(PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor){
 			ui.lBackgroundFirstColor->setText(i18n("Color"));
-			ui.lBackgroundSecondColor->hide();
-			ui.kcbBackgroundSecondColor->hide();
+			hideItem(ui.lBackgroundSecondColor, ui.kcbBackgroundSecondColor);
 		}else{
 			ui.lBackgroundFirstColor->setText(i18n("First Color"));
-			ui.lBackgroundSecondColor->show();
-			ui.kcbBackgroundSecondColor->show();
+			showItem(ui.lBackgroundSecondColor, ui.kcbBackgroundSecondColor);
 		}
 	}else if(type == PlotArea::Image){
-		ui.lBackgroundFirstColor->hide();
-		ui.kcbBackgroundFirstColor->hide();
-		ui.lBackgroundSecondColor->hide();
-		ui.kcbBackgroundSecondColor->hide();
-
-		ui.lBackgroundColorStyle->hide();
-		ui.cbBackgroundColorStyle->hide();
-		ui.lBackgroundImageStyle->show();
-		ui.cbBackgroundImageStyle->show();
-		ui.lBackgroundBrushStyle->hide();
-		ui.cbBackgroundBrushStyle->hide();
-		ui.lBackgroundFileName->show();
-		ui.kleBackgroundFileName->show();
+		hideItem(ui.lBackgroundFirstColor, ui.kcbBackgroundFirstColor);
+		hideItem(ui.lBackgroundSecondColor, ui.kcbBackgroundSecondColor);
+		hideItem(ui.lBackgroundColorStyle, ui.cbBackgroundColorStyle);
+		showItem(ui.lBackgroundImageStyle, ui.cbBackgroundImageStyle);
+		hideItem(ui.lBackgroundBrushStyle, ui.cbBackgroundBrushStyle);
+		showItem(ui.lBackgroundFileName, ui.kleBackgroundFileName);
 		ui.bBackgroundOpen->show();
 	}else if(type == PlotArea::Pattern){
 		ui.lBackgroundFirstColor->setText(i18n("Color"));
-		ui.lBackgroundFirstColor->show();
-		ui.kcbBackgroundFirstColor->show();
-		ui.lBackgroundSecondColor->hide();
-		ui.kcbBackgroundSecondColor->hide();
+		showItem(ui.lBackgroundFirstColor, ui.kcbBackgroundFirstColor);
+		hideItem(ui.lBackgroundSecondColor, ui.kcbBackgroundSecondColor);
 
-		ui.lBackgroundColorStyle->hide();
-		ui.cbBackgroundColorStyle->hide();
-		ui.lBackgroundImageStyle->hide();
-		ui.cbBackgroundImageStyle->hide();
-		ui.lBackgroundBrushStyle->show();
-		ui.cbBackgroundBrushStyle->show();
-		ui.lBackgroundFileName->hide();
-		ui.kleBackgroundFileName->hide();
+		hideItem(ui.lBackgroundColorStyle, ui.cbBackgroundColorStyle);
+		hideItem(ui.lBackgroundImageStyle, ui.cbBackgroundImageStyle);
+		showItem(ui.lBackgroundBrushStyle, ui.cbBackgroundBrushStyle);
+		hideItem(ui.lBackgroundFileName, ui.kleBackgroundFileName);
 		ui.bBackgroundOpen->hide();
 	}
 
@@ -350,12 +329,10 @@ void Plot3DDock::backgroundColorStyleChanged(int index){
 
 	if (style == PlotArea::SingleColor){
 		ui.lBackgroundFirstColor->setText(i18n("Color"));
-		ui.lBackgroundSecondColor->hide();
-		ui.kcbBackgroundSecondColor->hide();
+		hideItem(ui.lBackgroundSecondColor, ui.kcbBackgroundSecondColor);
 	}else{
 		ui.lBackgroundFirstColor->setText(i18n("First Color"));
-		ui.lBackgroundSecondColor->show();
-		ui.kcbBackgroundSecondColor->show();
+		showItem(ui.lBackgroundSecondColor, ui.kcbBackgroundSecondColor);
 	}
 
 	if (m_initializing)
@@ -385,8 +362,8 @@ void Plot3DDock::backgroundBrushStyleChanged(int index){
 }
 
 void Plot3DDock::backgroundFirstColorChanged(const QColor& c){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
 	foreach(Plot3D* plot, m_plotsList){
 		plot->setBackgroundFirstColor(c);
@@ -394,8 +371,8 @@ void Plot3DDock::backgroundFirstColorChanged(const QColor& c){
 }
 
 void Plot3DDock::backgroundSecondColorChanged(const QColor& c){
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
 	foreach(Plot3D* plot, m_plotsList){
 		plot->setBackgroundSecondColor(c);
@@ -414,9 +391,9 @@ void Plot3DDock::backgroundOpacityChanged(int value){
 void Plot3DDock::backgroundSelectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "Plot3DDock");
 	QString dir = conf.readEntry("LastImageDir", "");
-    QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
-    if (path.isEmpty())
-        return; //cancel was clicked in the file-dialog
+	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
+	if (path.isEmpty())
+		return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());
 	if (pos!=-1) {
@@ -425,7 +402,7 @@ void Plot3DDock::backgroundSelectFile() {
 			conf.writeEntry("LastImageDir", newDir);
 	}
 
-    ui.kleBackgroundFileName->setText( path );
+	ui.kleBackgroundFileName->setText( path );
 
 	foreach(Plot3D* plot, m_plotsList)
 		plot->setBackgroundFileName(path);
