@@ -27,10 +27,14 @@
  ***************************************************************************/
 
 #include "Axes3DDock.h"
+#include "DockHelpers.h"
+
+using namespace DockHelpers;
 
 Axes3DDock::Axes3DDock(QWidget* parent)
 	: QWidget(parent)
-	, axes(0) {
+	, axes(0)
+	, m_initializing(false) {
 	ui.setupUi(this);
 
 	// Axes
@@ -44,6 +48,7 @@ Axes3DDock::Axes3DDock(QWidget* parent)
 }
 
 void Axes3DDock::setAxes(Axes *axes) {
+	const Lock lock(m_initializing);
 	this->axes = axes;
 
 	ui.cbType->setCurrentIndex(axes->type());
@@ -60,15 +65,18 @@ void Axes3DDock::setAxes(Axes *axes) {
 }
 
 void Axes3DDock::onTypeChanged(int type) {
+	const Lock lock(m_initializing);
 	axes->setType(static_cast<Axes::AxesType>(type));
 }
 
 void Axes3DDock::onLabelFontChanged(int size) {
+	const Lock lock(m_initializing);
 	axes->setFontSize(size);
 	axes->setType(static_cast<Axes::AxesType>(ui.cbType->currentIndex()));
 }
 
 void Axes3DDock::onLabelColorChanged(const QColor& color) {
+	const Lock lock(m_initializing);
 	const QObject *s = sender();
 	if (s == ui.cbXLabelColor) {
 		axes->setXLabelColor(color);
@@ -82,21 +90,31 @@ void Axes3DDock::onLabelColorChanged(const QColor& color) {
 }
 
 void Axes3DDock::fontSizeChanged(int value){
+	if (m_initializing)
+		return;
 	ui.cbLabelFontSize->setValue(value);
 }
 
 void Axes3DDock::xLabelColorChanged(const QColor& color){
+	if (m_initializing)
+		return;
 	ui.cbXLabelColor->setColor(color);
 }
 
 void Axes3DDock::yLabelColorChanged(const QColor& color){
+	if (m_initializing)
+		return;
 	ui.cbYLabelColor->setColor(color);
 }
 
 void Axes3DDock::zLabelColorChanged(const QColor& color){
+	if (m_initializing)
+		return;
 	ui.cbZLabelColor->setColor(color);
 }
 
 void Axes3DDock::axesTypeChanged(Axes::AxesType type){
+	if (m_initializing)
+		return;
 	ui.cbType->setCurrentIndex(type);
 }

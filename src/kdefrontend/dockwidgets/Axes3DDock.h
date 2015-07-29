@@ -35,8 +35,7 @@
 #include "ui_axes3ddock.h"
 
 class Axes3DDock : public QWidget {
-	Q_OBJECT
-
+		Q_OBJECT
 	public:
 		explicit Axes3DDock(QWidget* parent);
 		void setAxes(Axes *axes);
@@ -55,6 +54,7 @@ class Axes3DDock : public QWidget {
 	private:
 		Ui::Axes3DDock ui;
 		Axes *axes;
+		bool m_initializing;
 };
 
 #endif
