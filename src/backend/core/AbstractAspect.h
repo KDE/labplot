@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 by Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2007-2010 by Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
     Description          : Base class for all objects in a Project.
 
  ***************************************************************************/
@@ -77,8 +77,10 @@ class AbstractAspect : public QObject {
 		Folder* folder();
 		bool isDescendantOf(AbstractAspect* other);
 		void addChild(AbstractAspect*);
+		void addChildFast(AbstractAspect*);
 		QList<AbstractAspect*> children(const char* className, const ChildIndexFlags& flags=0);
 		void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
+		void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);
 		void reparent(AbstractAspect* newParent, int newIndex=-1);
 		void removeChild(AbstractAspect*);
 		void removeAllChildren();

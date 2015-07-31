@@ -501,7 +501,6 @@ void AsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dat
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
-
 /*!
   Saves as XML.
  */
@@ -605,5 +604,3 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 
 	return true;
 }
-
-// Q_EXPORT_PLUGIN2(ioasciifilter, AsciiFilter)
