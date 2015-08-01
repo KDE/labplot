@@ -442,6 +442,22 @@ QIcon CartesianPlot::icon() const{
 	return KIcon("office-chart-line");
 }
 
+void CartesianPlot::navigate(CartesianPlot::NavigationOperation op) {
+	if (op==ScaleAuto) scaleAuto();
+	else if (op==ScaleAutoX) scaleAutoX();
+	else if (op==ScaleAutoY) scaleAutoY();
+	else if (op==ZoomIn) zoomIn();
+	else if (op==ZoomOut) zoomOut();
+	else if (op==ZoomInX) zoomInX();
+	else if (op==ZoomOutX) zoomOutX();
+	else if (op==ZoomInY) zoomInY();
+	else if (op==ZoomOutY) zoomOutY();
+	else if (op==ShiftLeftX) shiftLeftX();
+	else if (op==ShiftRightX) shiftRightX();
+	else if (op==ShiftUpY) shiftUpY();
+	else if (op==ShiftDownY) shiftDownY();
+}
+
 //##############################################################################
 //################################  getter methods  ############################
 //##############################################################################

@@ -288,9 +288,6 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect){
 
 	m_treeView->scrollTo(index);
 	m_treeView->setCurrentIndex(index);
-
-	//select the added aspect.
-	m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 }
 
 void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous){

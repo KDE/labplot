@@ -4,7 +4,7 @@
     Description          : Private data class of Column
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
+                           (replace * with @ in the email addresses)
 
  ***************************************************************************/
 
@@ -68,14 +68,18 @@ class Column::Private
 				AbstractSimpleFilter *out_filter);
 		void replaceData(void * data);
 		IntervalAttribute<QString> formulaAttribute() const;
-		void replaceFormulas(IntervalAttribute<QString> formulas); 
+		void replaceFormulas(IntervalAttribute<QString> formulas);
+		void replaceFormula(QString);
+
+		QString formula() const;
+		void setFormula(QString);
 
 		QString formula(int row) const;
 		QList< Interval<int> > formulaIntervals() const;
 		void setFormula(Interval<int> i, QString formula);
 		void setFormula(int row, QString formula);
 		void clearFormulas();
-		
+
 		QString textAt(int row) const;
 		void setTextAt(int row, const QString& new_value);
 		void replaceTexts(int first, const QStringList& new_values);
@@ -95,6 +99,7 @@ class Column::Private
 		void * m_data;
 		AbstractSimpleFilter* m_input_filter;
 		AbstractSimpleFilter* m_output_filter;
+		QString m_formula;
 		IntervalAttribute<QString> m_formulas;
 		AbstractColumn::PlotDesignation m_plot_designation;
 		int m_width;

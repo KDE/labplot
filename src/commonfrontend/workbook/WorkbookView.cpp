@@ -188,7 +188,6 @@ void WorkbookView::handleDescriptionChanged(const AbstractAspect* aspect) {
 	int index = m_workbook->indexOfChild<AbstractAspect>(aspect);
 	if (index != -1 && index<m_tabWidget->count())
 		m_tabWidget->setTabText(index, aspect->name());
-
 }
 
 void WorkbookView::handleAspectAdded(const AbstractAspect* aspect) {

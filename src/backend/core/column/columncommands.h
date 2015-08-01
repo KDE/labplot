@@ -184,7 +184,7 @@ class ColumnSetFormulaCmd : public QUndoCommand
 {
 public:
 	explicit ColumnSetFormulaCmd(Column::Private * col, Interval<int> interval, const QString& formula, QUndoCommand * parent = 0 );
-	~ColumnSetFormulaCmd();
+	explicit ColumnSetFormulaCmd(Column::Private* col, const QString& formula);
 
 	virtual void redo();
 	virtual void undo();
@@ -192,10 +192,11 @@ public:
 private:
 	Column::Private * m_col;
 	Interval<int> m_interval;
-	QString m_formula;
+	QString m_oldFormula;
+	QString m_newFormula;
 	IntervalAttribute<QString> m_formulas;
 	bool m_copied;
-
+	bool m_global;
 };
 
 class ColumnClearFormulasCmd : public QUndoCommand

@@ -106,7 +106,6 @@ void Workbook::childSelected(const AbstractAspect* aspect){
  */
 void Workbook::childDeselected(const AbstractAspect* aspect){
 	Q_UNUSED(aspect);
-	//TODO: do we need this slot?
 }
 
 /*!
@@ -146,7 +145,7 @@ void Workbook::save(QXmlStreamWriter* writer) const{
     foreach(AbstractAspect* aspect, children<AbstractAspect>())
         aspect->save(writer);
 
-    writer->writeEndElement(); // close "worksheet" section
+    writer->writeEndElement(); // close "workbook" section
 }
 
 //! Load from XML
