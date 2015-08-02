@@ -372,6 +372,7 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 			}
 		}
 		dataString<<"\n";
+		emit q->completed(100*i/actualRows);
 	}
 
 	if (!dataSource)
