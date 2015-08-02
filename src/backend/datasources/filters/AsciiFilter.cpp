@@ -273,7 +273,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 
 	QIODevice *device = KFilterDev::deviceForFile(fileName);
 	if (!device->open(QIODevice::ReadOnly))
-		return i18n("could not open file for reading");
+		return QString();
 
 	QTextStream in(device);
 

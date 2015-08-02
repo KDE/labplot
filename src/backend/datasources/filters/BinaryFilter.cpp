@@ -218,7 +218,7 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 
 	QIODevice *device = KFilterDev::deviceForFile(fileName);
 	if (! device->open(QIODevice::ReadOnly))
-        	return i18n("could not open file for reading");
+		return QString();
 
 	QDataStream in(device);
 

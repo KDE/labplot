@@ -4,7 +4,7 @@ Project              : LabPlot
 Description          : import file data widget
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
-Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 
@@ -395,7 +395,7 @@ void ImportFileWidget::selectFile() {
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
 	QString fileName=name;
-	if ( fileName.left(1)!=QDir::separator()) {
+	if ( !fileName.isEmpty() && fileName.left(1)!=QDir::separator()) {
 		fileName=QDir::homePath() + QDir::separator() + fileName;
 	}
 
@@ -408,9 +408,11 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	ui.kleSourceName->setEnabled(fileExists);
 	ui.chbWatchFile->setEnabled(fileExists);
 	ui.chbLinkFile->setEnabled(fileExists);
-
-	if ( !fileExists )
+	if ( !fileExists ) {
+		refreshPreview();
+		emit fileNameChanged();
 		return;
+	}
 
 	//check, if we can guess the file type by content
 	QProcess *proc = new QProcess(this);
@@ -477,6 +479,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 #endif
 
 	refreshPreview();
+	emit fileNameChanged();
 }
 
 /*!
@@ -694,6 +697,13 @@ void ImportFileWidget::refreshPreview(){
 
 	QString importedText;
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
+
+	// generic table widget
+	if(fileType == FileDataSource::Ascii || fileType == FileDataSource::Binary)
+		twPreview->show();
+	else
+		twPreview->hide();
+
 	int lines = ui.sbPreviewLines->value();
 
 	QTableWidget *tmpTableWidget=0;
@@ -707,6 +717,8 @@ void ImportFileWidget::refreshPreview(){
 		break;
 	}
 	case FileDataSource::Binary: {
+		ui.tePreview->clear();
+
 		BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
 		importedText = filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
 		tmpTableWidget = twPreview;
@@ -718,7 +730,7 @@ void ImportFileWidget::refreshPreview(){
 		QImage image(fileName);
 		QTextCursor cursor = ui.tePreview->textCursor();
 		cursor.insertImage(image);
-		break;
+		return;
 	}
 	case FileDataSource::HDF: {
 		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
@@ -734,13 +746,10 @@ void ImportFileWidget::refreshPreview(){
 		tmpTableWidget = netcdfOptionsWidget.twPreview;
 		break;
 	}
-	default:
-		importedText += "Unknown file type";
-		ui.tePreview->setPlainText(importedText);
 	}
 
 	// fill the table widget
-	if(fileType == FileDataSource::Ascii || fileType == FileDataSource::Binary || fileType == FileDataSource::HDF || fileType == FileDataSource::NETCDF ) {
+	if( !importedText.isEmpty() ) {
 		tmpTableWidget->clear();
 
 		QStringList lineStrings = importedText.split("\n");
@@ -759,10 +768,4 @@ void ImportFileWidget::refreshPreview(){
 
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	}
-
-	// generic table widget
-	if(fileType == FileDataSource::Ascii || fileType == FileDataSource::Binary)
-		twPreview->show();
-	else
-		twPreview->hide();
 }
