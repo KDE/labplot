@@ -257,7 +257,7 @@ void Surface3DDock::onDataSourceChanged(int index) {
 void Surface3DDock::updateUiVisibility() {
 	const int type = ui.cbType->currentIndex();
 	const int dataType = ui.cbDataSource->currentIndex();
-	if (type == Surface3D::VisualizationType_Triangles) {
+	if (type == Surface3D::VisualizationType_Triangles || type == Surface3D::VisualizationType_Wireframe) {
 		showItem(ui.labelSource, ui.cbDataSource);
 		showItem(ui.labelFile, ui.cbFileRequester, dataType == Surface3D::DataSource_File);
 		showItem(ui.labelMatrix, ui.cbMatrix, dataType == Surface3D::DataSource_Matrix);
