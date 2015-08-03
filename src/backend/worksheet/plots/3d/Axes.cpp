@@ -90,6 +90,7 @@ void Axes::updateBounds() {
 		vtkBoundingBox bb;
 
 		double bounds[6];
+		vtkCubeAxesActor *axes = dynamic_cast<vtkCubeAxesActor*>(d->vtkAxes.GetPointer());
 		if (actors->GetNumberOfItems() != 0) {
 			vtkActor* actor = 0;
 			while ((actor = actors->GetNextActor()) != 0) {
@@ -97,13 +98,12 @@ void Axes::updateBounds() {
 					bb.AddBounds(actor->GetBounds());
 			}
 
-			vtkCubeAxesActor *axes = dynamic_cast<vtkCubeAxesActor*>(d->vtkAxes.GetPointer());
 			bb.GetBounds(bounds);
-			axes->SetBounds(bounds);
 		} else {
 			bounds[0] = bounds[2] = bounds[4] = -100;
 			bounds[1] = bounds[3] = bounds[5] = 100;
 		}
+		axes->SetBounds(bounds);
 	}
 }
 
