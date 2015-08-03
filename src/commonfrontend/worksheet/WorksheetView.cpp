@@ -75,7 +75,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_fadeOutTimeLine(0),
 	tbNewCartesianPlot(0),
 	tbZoom(0),
-	glContext(new QGLContext(QGLFormat(QGL::DoubleBuffer))),
+	glContext(new QGLContext(QGLFormat())),
 	vtkWidget(new QVTKWidget2(glContext)){
 
 	setViewport(vtkWidget);

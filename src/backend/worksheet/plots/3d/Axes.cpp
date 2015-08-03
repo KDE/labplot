@@ -214,7 +214,7 @@ void AxesPrivate::init() {
 		axes->YAxisMinorTickVisibilityOff();
 		axes->ZAxisMinorTickVisibilityOff();
 
-		axes->SetLabelScaling(false, 0, 0, 0);
+		axes->SetScreenSize(fontSize);
 
 		for (int i = 0; i < 3; ++i) {
 			vtkTextProperty *titleProp = axes->GetTitleTextProperty(i);

@@ -33,3 +33,4 @@ endfunction()
 
 add_subdirectory(Surface3DDock)
 add_subdirectory(Surface3D)
+add_subdirectory(Axes3D)

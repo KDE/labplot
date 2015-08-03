@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : Surface3DTest.cpp
+    File                 : Axes3DTest.cpp
     Project              : LabPlot
-    Description          : Surface3D tests
+    Description          : Axes3D tests
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Minh Ngo (minh@fedoraproject.org)
 
@@ -25,9 +25,8 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "Surface3DTest.h"
-#include "backend/worksheet/plots/3d/Surface3D.h"
-#include "backend/worksheet/plots/3d/DataHandlers.h"
+#include "Axes3DTest.h"
+#include "backend/worksheet/plots/3d/Axes.h"
 #include "backend/core/Project.h"
 
 #include <QtTest>
@@ -38,20 +37,18 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkProperty.h>
 
-Surface3DTest::Surface3DTest() {
+Axes3DTest::Axes3DTest() {
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 }
 
-void Surface3DTest::test_solidColorFilling() {
+void Axes3DTest::test_fontSize() {
 	Project project;
 	vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
-	Surface3D *surf = new Surface3D(renderer);
-	project.addChild(surf);
-	surf->setColorFilling(Surface3D::ColorFilling_SolidColor);
-	const QColor red(Qt::red);
-	const double opacity = 0.7;
-	surf->setColor(red);
-	surf->setOpacity(opacity);
+	Axes *axes = new Axes(renderer);
+	project.addChild(axes);
+	axes->setType(Axes::AxesType_Cube);
+	axes->setFontSize(10);
+	axes->show(true);
 
 	vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
 	renderWindow->AddRenderer(renderer);
@@ -61,15 +58,7 @@ void Surface3DTest::test_solidColorFilling() {
 	renderer->SetBackground(.3, .6, .3);
 
 	renderWindow->Render();
-	vtkProperty* prop = renderer->GetActors()->GetLastActor()->GetProperty();
-	double rgb[3];
-	prop->GetColor(rgb);
-	QVERIFY(qFuzzyCompare(rgb[0], red.redF()));
-	QVERIFY(qFuzzyCompare(rgb[1], red.greenF()));
-	QVERIFY(qFuzzyCompare(rgb[2], red.blueF()));
-	
-	QVERIFY(qFuzzyCompare(prop->GetOpacity(), opacity));
 	// renderWindowInteractor->Start();
 }
 
-QTEST_MAIN(Surface3DTest)
+QTEST_MAIN(Axes3DTest)

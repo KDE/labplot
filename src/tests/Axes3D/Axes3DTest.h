@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : Surface3DTest.cpp
+    File                 : Axes3DTest.h
     Project              : LabPlot
-    Description          : Surface3D tests
+    Description          : Axes3D tests
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Minh Ngo (minh@fedoraproject.org)
 
@@ -25,51 +25,17 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "Surface3DTest.h"
-#include "backend/worksheet/plots/3d/Surface3D.h"
-#include "backend/worksheet/plots/3d/DataHandlers.h"
-#include "backend/core/Project.h"
+#ifndef AXES3DTEST_H
+#define AXES3DTEST_H
 
-#include <QtTest>
+#include <QObject>
 
-#include <vtkActor.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindow.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkProperty.h>
+class Axes3DTest : public QObject {
+		Q_OBJECT
+	public:
+		Axes3DTest();
+	private slots:
+		void test_fontSize();
+};
 
-Surface3DTest::Surface3DTest() {
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-}
-
-void Surface3DTest::test_solidColorFilling() {
-	Project project;
-	vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
-	Surface3D *surf = new Surface3D(renderer);
-	project.addChild(surf);
-	surf->setColorFilling(Surface3D::ColorFilling_SolidColor);
-	const QColor red(Qt::red);
-	const double opacity = 0.7;
-	surf->setColor(red);
-	surf->setOpacity(opacity);
-
-	vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
-	renderWindow->AddRenderer(renderer);
-	vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
-	renderWindowInteractor->SetRenderWindow(renderWindow);
-
-	renderer->SetBackground(.3, .6, .3);
-
-	renderWindow->Render();
-	vtkProperty* prop = renderer->GetActors()->GetLastActor()->GetProperty();
-	double rgb[3];
-	prop->GetColor(rgb);
-	QVERIFY(qFuzzyCompare(rgb[0], red.redF()));
-	QVERIFY(qFuzzyCompare(rgb[1], red.greenF()));
-	QVERIFY(qFuzzyCompare(rgb[2], red.blueF()));
-	
-	QVERIFY(qFuzzyCompare(prop->GetOpacity(), opacity));
-	// renderWindowInteractor->Start();
-}
-
-QTEST_MAIN(Surface3DTest)
+#endif
