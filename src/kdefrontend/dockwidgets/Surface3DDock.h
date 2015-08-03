@@ -48,13 +48,14 @@ class Surface3DDock : public QWidget {
 	private:
 		void showTriangleInfo(bool pred);
 		void setModelFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect);
+		void updateUiVisibility();
 
 	private slots:
 		void retranslateUi();
 
 		//SLOTs for changes triggered in Surface3DDock
-		void nameChanged();
-		void commentChanged();
+		void onNameChanged();
+		void onCommentChanged();
 
 		void onTreeViewIndexChanged(const QModelIndex&);
 		void onDataSourceChanged(int);

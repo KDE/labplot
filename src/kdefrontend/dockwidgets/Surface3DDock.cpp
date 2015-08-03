@@ -47,16 +47,7 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	, m_initializing(false) {
 	ui.setupUi(this);
 
-	Lock lock(m_initializing);
 	this->retranslateUi();
-
-	ui.cbDataSource->insertItem(Surface3D::DataSource_File, i18n("File"));
-	ui.cbDataSource->insertItem(Surface3D::DataSource_Spreadsheet, i18n("Spreadsheet"));
-	ui.cbDataSource->insertItem(Surface3D::DataSource_Matrix, i18n("Matrix"));
-	ui.cbDataSource->insertItem(Surface3D::DataSource_Empty, i18n("Demo"));
-
-	ui.cbType->insertItem(Surface3D::VisualizationType_Triangles, i18n("Triangles"));
-	ui.cbType->insertItem(Surface3D::VisualizationType_Wireframe, i18n("Wireframe"));
 
 	QList<const char*>  list;
 	list << "Folder" << "Workbook" << "Spreadsheet" << "FileDataSource" << "Column";
@@ -88,8 +79,8 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 
 	//SIGNALs/SLOTs
 	//General
-	connect(ui.leName, SIGNAL(returnPressed()), SLOT(nameChanged()));
-	connect(ui.leComment, SIGNAL(returnPressed()), SLOT(commentChanged()));
+	connect(ui.leName, SIGNAL(returnPressed()), SLOT(onNameChanged()));
+	connect(ui.leComment, SIGNAL(returnPressed()), SLOT(onCommentChanged()));
 	connect(ui.cbDataSource, SIGNAL(currentIndexChanged(int)), SLOT(onDataSourceChanged(int)));
 	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), SLOT(onVisualizationTypeChanged(int)));
 	connect(ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), SLOT(onFileChanged(const KUrl&)));
@@ -111,14 +102,9 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
-
-	onVisualizationTypeChanged(Surface3D::VisualizationType_Triangles);
-	onDataSourceChanged(Surface3D::DataSource_File);
-	onColorFillingTypeChanged(Surface3D::ColorFilling_Empty);
 }
 
 void Surface3DDock::setSurface(Surface3D *surface) {
-	Lock lock(m_initializing);
 	if (this->surface) {
 		this->surface->disconnect(this);
 		this->surface->fileDataHandler().disconnect(this);
@@ -127,6 +113,7 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	}
 
 	this->surface = surface;
+	blockSignals(true);
 	ui.leName->setText(surface->name());
 	ui.leComment->setText(surface->comment());
 	ui.chkVisible->setChecked(surface->isVisible());
@@ -140,11 +127,23 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	ui.cbMatrix->setModel(aspectTreeModel);
 	ui.cbColorFillingMatrix->setModel(aspectTreeModel);
 
-	ui.cbType->setCurrentIndex(surface->visualizationType());
+	visualizationTypeChanged(surface->visualizationType());
+	sourceTypeChanged(surface->dataSource());
+	colorFillingChanged(surface->colorFilling());
+	pathChanged(surface->fileDataHandler().file());
 
-	ui.cbDataSource->setCurrentIndex(surface->dataSource());
+	const Matrix *matrix = surface->matrixDataHandler().matrix();
+	matrixChanged(matrix);
 
-	ui.cbColorFillingType->setCurrentIndex(surface->colorFilling());
+	SpreadsheetDataHandler *sdh = &surface->spreadsheetDataHandler();
+	xColumnChanged(sdh->xColumn());
+	yColumnChanged(sdh->yColumn());
+	zColumnChanged(sdh->zColumn());
+
+	firstNodeChanged(sdh->firstNode());
+	secondNodeChanged(sdh->secondNode());
+	thirdNodeChanged(sdh->thirdNode());
+	blockSignals(false);
 
 	connect(surface, SIGNAL(visualizationTypeChanged(Surface3D::VisualizationType)), SLOT(visualizationTypeChanged(Surface3D::VisualizationType)));
 	connect(surface, SIGNAL(sourceTypeChanged(Surface3D::DataSource)), SLOT(sourceTypeChanged(Surface3D::DataSource)));
@@ -152,32 +151,10 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	connect(surface, SIGNAL(colorFillingChanged(Surface3D::ColorFilling)), SLOT(colorFillingChanged(Surface3D::ColorFilling)));
 
 	// DataHandlers
-	ui.cbFileRequester->setUrl(surface->fileDataHandler().file());
+
 	connect(&surface->fileDataHandler(), SIGNAL(pathChanged(const KUrl&)), SLOT(pathChanged(const KUrl&)));
 
-	const Matrix *matrix = surface->matrixDataHandler().matrix();
-	if (matrix)
-		ui.cbMatrix->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(matrix));
 	connect(&surface->matrixDataHandler(), SIGNAL(matrixChanged(const Matrix*)), SLOT(matrixChanged(const Matrix*)));
-
-	SpreadsheetDataHandler *sdh = &surface->spreadsheetDataHandler();
-	if (sdh->xColumn())
-		ui.cbXCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(sdh->xColumn()));
-
-	if (sdh->yColumn())
-		ui.cbYCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(sdh->yColumn()));
-
-	if (sdh->zColumn())
-		ui.cbZCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(sdh->zColumn()));
-
-	if (sdh->firstNode())
-		ui.cbNode1->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(sdh->firstNode()));
-
-	if (sdh->secondNode())
-		ui.cbNode2->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(sdh->secondNode()));
-
-	if (sdh->thirdNode())
-		ui.cbNode3->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(sdh->thirdNode()));
 
 	connect(sdh, SIGNAL(xColumnChanged(const AbstractColumn*)), SLOT(xColumnChanged(const AbstractColumn*)));
 	connect(sdh, SIGNAL(yColumnChanged(const AbstractColumn*)), SLOT(yColumnChanged(const AbstractColumn*)));
@@ -188,6 +165,9 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 }
 
 void Surface3DDock::showTriangleInfo(bool pred) {
+	if (m_initializing)
+		return;
+
 	showItem(ui.labelX, ui.cbXCoordinate, pred);
 	showItem(ui.labelY, ui.cbYCoordinate, pred);
 	showItem(ui.labelZ, ui.cbZCoordinate, pred);
@@ -208,16 +188,21 @@ void Surface3DDock::retranslateUi(){
 	ui.cbColorFillingType->insertItem(Surface3D::ColorFilling_ColorMap, i18n("color map"));
 	ui.cbColorFillingType->insertItem(Surface3D::ColorFilling_ElevationLevel, i18n("elevation level"));
 	ui.cbColorFillingType->insertItem(Surface3D::ColorFilling_ColorMapFromMatrix, i18n("color map from matrix"));
+
+	ui.cbDataSource->insertItem(Surface3D::DataSource_File, i18n("File"));
+	ui.cbDataSource->insertItem(Surface3D::DataSource_Spreadsheet, i18n("Spreadsheet"));
+	ui.cbDataSource->insertItem(Surface3D::DataSource_Matrix, i18n("Matrix"));
+	ui.cbDataSource->insertItem(Surface3D::DataSource_Empty, i18n("Demo"));
+
+	ui.cbType->insertItem(Surface3D::VisualizationType_Triangles, i18n("Triangles"));
+	ui.cbType->insertItem(Surface3D::VisualizationType_Wireframe, i18n("Wireframe"));
 }
 
 void Surface3DDock::onTreeViewIndexChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
-
-	AbstractColumn* column = getColumn(index);
-	Q_ASSERT(column);
+	const AbstractColumn* column = getColumn(index);
 
 	QObject *senderW = sender();
+	const Lock lock(m_initializing);
 	if(senderW == ui.cbXCoordinate)
 		surface->spreadsheetDataHandler().setXColumn(column);
 	else if(senderW  == ui.cbYCoordinate)
@@ -235,63 +220,83 @@ void Surface3DDock::onTreeViewIndexChanged(const QModelIndex& index) {
 }
 
 void Surface3DDock::onVisibilityChanged(bool visible) {
-	if(!m_initializing)
-		surface->show(visible);
+	const Lock lock(m_initializing);
+	surface->show(visible);
 }
 
 void Surface3DDock::onDataSourceChanged(int index) {
+	if (m_initializing)
+		return;
 	const Surface3D::DataSource type = static_cast<Surface3D::DataSource>(index);
-	showItem(ui.labelFile, ui.cbFileRequester, type == Surface3D::DataSource_File);
-	showItem(ui.labelMatrix, ui.cbMatrix, type == Surface3D::DataSource_Matrix);
 
-	if (!m_initializing)
-		surface->setDataSource(type);
-	emit elementVisibilityChanged();
+	{
+	const Lock lock(m_initializing);
+	surface->setDataSource(type);
+	}
+	updateUiVisibility();
 }
 
-void Surface3DDock::onVisualizationTypeChanged(int index) {
-	if(!m_initializing)
-		surface->setVisualizationType(static_cast<Surface3D::VisualizationType>(index));
-
-	if(index == Surface3D::VisualizationType_Triangles){
+void Surface3DDock::updateUiVisibility() {
+	const int type = ui.cbType->currentIndex();
+	const int dataType = ui.cbDataSource->currentIndex();
+	if (type == Surface3D::VisualizationType_Triangles) {
 		showItem(ui.labelSource, ui.cbDataSource);
-		onDataSourceChanged(ui.cbDataSource->currentIndex());
-	}else{
+		showItem(ui.labelFile, ui.cbFileRequester, dataType == Surface3D::DataSource_File);
+		showItem(ui.labelMatrix, ui.cbMatrix, dataType == Surface3D::DataSource_Matrix);
+		showTriangleInfo(dataType == Surface3D::DataSource_Spreadsheet);
+	} else {
 		hideItem(ui.labelSource, ui.cbDataSource);
 		hideItem(ui.labelFile, ui.cbFileRequester);
 		showTriangleInfo(false);
 	}
+
+	emit elementVisibilityChanged();
+}
+
+void Surface3DDock::onVisualizationTypeChanged(int index) {
+	{
+	const Lock lock(m_initializing);
+	surface->setVisualizationType(static_cast<Surface3D::VisualizationType>(index));
+	}
+
+	if(index == Surface3D::VisualizationType_Triangles)
+		onDataSourceChanged(ui.cbDataSource->currentIndex());
+	else
+		updateUiVisibility();
 }
 
 void Surface3DDock::onFileChanged(const KUrl& path) {
-	if (m_initializing || !path.isLocalFile())
+	if (!path.isLocalFile())
 		return;
 
+	const Lock lock(m_initializing);
 	surface->fileDataHandler().setFile(path);
 }
 
 void Surface3DDock::visualizationTypeChanged(Surface3D::VisualizationType type) {
-	Lock lock(m_initializing);
+	if (m_initializing)
+		return;
 	ui.cbType->setCurrentIndex(type);
+	updateUiVisibility();
 }
 
 void Surface3DDock::sourceTypeChanged(Surface3D::DataSource type) {
-	Lock lock(m_initializing);
+	if (m_initializing)
+		return;
 	ui.cbDataSource->setCurrentIndex(type);
+	updateUiVisibility();
 }
 
 void Surface3DDock::pathChanged(const KUrl& url) {
-	Lock lock(m_initializing);
+	if (m_initializing)
+		return;
 	ui.cbFileRequester->setUrl(url);
 }
 
 void Surface3DDock::setModelFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
-	Lock lock(m_initializing);
-	if (aspect) {
-		cb->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(aspect));
-	} else {
-		cb->setCurrentModelIndex(QModelIndex());
-	}
+	if (m_initializing)
+		return;
+	cb->setCurrentModelIndex(modelIndexOfAspect(aspectTreeModel, aspect));
 }
 
 void Surface3DDock::matrixChanged(const Matrix* matrix) {
@@ -325,26 +330,23 @@ void Surface3DDock::thirdNodeChanged(const AbstractColumn* column) {
 void Surface3DDock::colorFillingChanged(Surface3D::ColorFilling color) {
 	if (m_initializing)
 		return;
-
 	ui.cbColorFillingType->setCurrentIndex(color);
 }
 
-void Surface3DDock::nameChanged() {
-	if (m_initializing)
-		return;
-
+void Surface3DDock::onNameChanged() {
+	const Lock lock(m_initializing);
 	surface->setName(ui.leName->text());
 }
 
-void Surface3DDock::commentChanged() {
-	if (m_initializing)
-		return;
-
+void Surface3DDock::onCommentChanged() {
+	const Lock lock(m_initializing);
 	surface->setComment(ui.leComment->text());
 }
 
 //Collor filling
 void Surface3DDock::onColorFillingTypeChanged(int index) {
+	if (m_initializing)
+		return;
 	const Surface3D::ColorFilling type = static_cast<Surface3D::ColorFilling>(index);
 	if (type == Surface3D::ColorFilling_Empty
 			|| type == Surface3D::ColorFilling_ElevationLevel) {
@@ -369,8 +371,10 @@ void Surface3DDock::onColorFillingTypeChanged(int index) {
 		showItem(ui.lColorFillingOpacity, ui.sbColorFillingOpacity);
 	}
 
-	if (!m_initializing)
-		surface->setColorFilling(type);
+	{
+	const Lock lock(m_initializing);
+	surface->setColorFilling(type);
+	}
 	emit elementVisibilityChanged();
 }
 

@@ -99,3 +99,4 @@ class Plot3DDock: public QWidget {
 };
 
 #endif
+

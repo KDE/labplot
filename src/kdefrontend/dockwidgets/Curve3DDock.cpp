@@ -58,55 +58,53 @@ Curve3DDock::Curve3DDock(QWidget* parent)
 	list.clear();
 	list << "Column";
 
+	//template handler
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Curve3D);
+	ui.verticalLayout->addWidget(templateHandler);
+	templateHandler->show();
+
 	foreach(TreeViewComboBox* view, treeViews) {
 		view->setSelectableClasses(list);
 		connect(view, SIGNAL(currentModelIndexChanged(const QModelIndex&)), SLOT(onTreeViewIndexChanged(const QModelIndex&)));
 	}
 
-	connect(ui.leName, SIGNAL(returnPressed()), SLOT(nameChanged()));
-	connect(ui.leComment, SIGNAL(returnPressed()), SLOT(commentChanged()));
+	connect(ui.leName, SIGNAL(returnPressed()), SLOT(onNameChanged()));
+	connect(ui.leComment, SIGNAL(returnPressed()), SLOT(onCommentChanged()));
 	connect(ui.chkVisible, SIGNAL(toggled(bool)), SLOT(onVisibilityChanged(bool)));
 
 	connect(ui.cbShowEdges, SIGNAL(toggled(bool)), SLOT(onShowEdgesChanged(bool)));
-	connect(ui.cbClosedCurve, SIGNAL(toggled(bool)), SLOT(onClosedCurveChanged(bool)));
-	connect(ui.sbPointSize, SIGNAL(valueChanged(double)), SLOT(onPointSizeChanged(double)));
+	connect(ui.cbClosedCurve, SIGNAL(toggled(bool)), SLOT(onIsClosedChanged(bool)));
+	connect(ui.sbPointSize, SIGNAL(valueChanged(double)), SLOT(onPointRadiusChanged(double)));
 
-	//template handler
-	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Curve3D);
-	ui.verticalLayout->addWidget(templateHandler);
-	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 }
 
 void Curve3DDock::setCurve(Curve3D* curve) {
-	Lock lock(m_initializing);
 	if (this->curve)
 		this->curve->disconnect(this);
 
 	this->curve = curve;
 
+	blockSignals(true);
 	ui.leName->setText(curve->name());
 	ui.leComment->setText(curve->comment());
 	ui.chkVisible->setChecked(curve->isVisible());
-	ui.sbPointSize->setValue(curve->pointRadius());
+	pointRadiusChanged(curve->pointRadius());
 
 	aspectTreeModel = new AspectTreeModel(curve->project());
 	ui.cbXCoordinate->setModel(aspectTreeModel);
 	ui.cbYCoordinate->setModel(aspectTreeModel);
 	ui.cbZCoordinate->setModel(aspectTreeModel);
 
-	if (curve->xColumn())
-		ui.cbXCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(curve->xColumn()));
-	if (curve->yColumn())
-		ui.cbYCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(curve->yColumn()));
-	if (curve->zColumn())
-		ui.cbZCoordinate->setCurrentModelIndex(aspectTreeModel->modelIndexOfAspect(curve->zColumn()));
+	xColumnChanged(curve->xColumn());
+	yColumnChanged(curve->yColumn());
+	zColumnChanged(curve->zColumn());
 
-	ui.cbClosedCurve->setChecked(curve->isClosed());
-	ui.cbShowEdges->setChecked(curve->showEdges());
-	ui.cbClosedCurve->setEnabled(ui.cbShowEdges->isChecked());
+	isClosedChanged(curve->isClosed());
+	showEdgesChanged(curve->showEdges());
+	blockSignals(false);
 
 	connect(curve, SIGNAL(xColumnChanged(const AbstractColumn*)), SLOT(xColumnChanged(const AbstractColumn*)));
 	connect(curve, SIGNAL(yColumnChanged(const AbstractColumn*)), SLOT(yColumnChanged(const AbstractColumn*)));
@@ -118,31 +116,21 @@ void Curve3DDock::setCurve(Curve3D* curve) {
 	connect(curve, SIGNAL(visibilityChanged(bool)), ui.chkVisible, SLOT(setChecked(bool)));
 }
 
-void Curve3DDock::nameChanged() {
-	Lock lock(m_initializing);
+void Curve3DDock::onNameChanged() {
+	const Lock lock(m_initializing);
 	curve->setName(ui.leName->text());
 }
 
-void Curve3DDock::commentChanged() {
-	Lock lock(m_initializing);
+void Curve3DDock::onCommentChanged() {
+	const Lock lock(m_initializing);
 	curve->setComment(ui.leComment->text());
 }
 
-void Curve3DDock::onPointSizeChanged(double size) {
-	if (m_initializing)
-		return;
-
-	curve->setPointRadius(static_cast<float>(size));
-}
-
 void Curve3DDock::onTreeViewIndexChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	const AbstractColumn* column = getColumn(index);
 
-	AbstractColumn* column = getColumn(index);
-	Q_ASSERT(column);
-
-	QObject *senderW = sender();
+	const QObject *senderW = sender();
+	const Lock lock(m_initializing);
 	if(senderW == ui.cbXCoordinate)
 		curve->setXColumn(column);
 	else if(senderW  == ui.cbYCoordinate)
@@ -152,53 +140,75 @@ void Curve3DDock::onTreeViewIndexChanged(const QModelIndex& index) {
 }
 
 void Curve3DDock::onShowEdgesChanged(bool checked) {
-	if (m_initializing)
-		return;
-
-	curve->setShowEdges(checked);
 	ui.cbClosedCurve->setEnabled(checked);
+	const Lock lock(m_initializing);
+	curve->setShowEdges(checked);
 }
 
 void Curve3DDock::onVisibilityChanged(bool visible) {
-	if (!m_initializing)
-		curve->show(visible);
+	const Lock lock(m_initializing);
+	curve->show(visible);
 }
 
-void Curve3DDock::onClosedCurveChanged(bool checked) {
-	if (m_initializing)
-		return;
-
-	curve->setIsClosed(checked);
-}
-
-void Curve3DDock::xColumnChanged(const AbstractColumn* column) {
-	Lock lock(m_initializing);
+void Curve3DDock::onXColumnChanged(const AbstractColumn* column) {
+	const Lock lock(m_initializing);
 	curve->setXColumn(column);
 }
 
-void Curve3DDock::yColumnChanged(const AbstractColumn* column) {
-	Lock lock(m_initializing);
+void Curve3DDock::onYColumnChanged(const AbstractColumn* column) {
+	const Lock lock(m_initializing);
 	curve->setYColumn(column);
 }
 
-void Curve3DDock::zColumnChanged(const AbstractColumn* column) {
-	Lock lock(m_initializing);
+void Curve3DDock::onZColumnChanged(const AbstractColumn* column) {
+	const Lock lock(m_initializing);
 	curve->setZColumn(column);
 }
 
-void Curve3DDock::pointRadiusChanged(float radius) {
-	Lock lock(m_initializing);
-	curve->setPointRadius(radius);
+void Curve3DDock::onPointRadiusChanged(double radius) {
+	const Lock lock(m_initializing);
+	curve->setPointRadius(static_cast<float>(radius));
 }
 
-void Curve3DDock::isClosedChanged(bool checked) {
-	Lock lock(m_initializing);
+void Curve3DDock::onIsClosedChanged(bool checked) {
+	const Lock lock(m_initializing);
 	curve->setIsClosed(checked);
 }
 
 void Curve3DDock::showEdgesChanged(bool checked) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	curve->setShowEdges(checked);
+}
+
+void Curve3DDock::isClosedChanged(bool checked) {
+	if (m_initializing)
+		return;
+	ui.cbClosedCurve->setChecked(checked);
+}
+
+void Curve3DDock::pointRadiusChanged(float radius) {
+	if (m_initializing)
+		return;
+	ui.sbPointSize->setValue(radius);
+}
+
+// TODO: Move to the common place
+void Curve3DDock::setModelFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
+	if (m_initializing)
+		return;
+	cb->setCurrentModelIndex(modelIndexOfAspect(aspectTreeModel, aspect));
+}
+
+void Curve3DDock::xColumnChanged(const AbstractColumn* column) {
+	setModelFromAspect(ui.cbXCoordinate, column);
+}
+
+void Curve3DDock::yColumnChanged(const AbstractColumn* column) {
+	setModelFromAspect(ui.cbYCoordinate, column);
+}
+
+void Curve3DDock::zColumnChanged(const AbstractColumn* column) {
+	setModelFromAspect(ui.cbZCoordinate, column);
 }
 
 //*************************************************************

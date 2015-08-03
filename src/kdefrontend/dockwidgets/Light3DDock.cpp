@@ -27,11 +27,15 @@
  ***************************************************************************/
 
 #include "Light3DDock.h"
+#include "DockHelpers.h"
 #include "backend/worksheet/plots/3d/Light.h"
+
+using namespace DockHelpers;
 
 Light3DDock::Light3DDock(QWidget* parent)
 	: QWidget(parent)
-	, light(0) {
+	, light(0)
+	, m_initializing(false) {
 	ui.setupUi(this);
 
 	connect(ui.sbXFocalPoint, SIGNAL(valueChanged(double)), SLOT(onFocalPointChanged(double)));
@@ -50,38 +54,47 @@ Light3DDock::Light3DDock(QWidget* parent)
 }
 
 void Light3DDock::onFocalPointChanged(double) {
+	const Lock lock(m_initializing);
 	light->setFocalPoint(QVector3D(ui.sbXFocalPoint->value(), ui.sbYFocalPoint->value(), ui.sbZFocalPoint->value()));
 }
 
 void Light3DDock::onPositionChanged(double) {
+	const Lock lock(m_initializing);
 	light->setPosition(QVector3D(ui.sbXPosition->value(), ui.sbYPosition->value(), ui.sbZPosition->value()));
 }
 
 void Light3DDock::onIntensityChanged(double value) {
+	const Lock lock(m_initializing);
 	light->setIntensity(value);
 }
 
 void Light3DDock::onAmbientChanged(const QColor& color) {
+	const Lock lock(m_initializing);
 	light->setAmbient(color);
 }
 
 void Light3DDock::onDiffuseChanged(const QColor& color) {
+	const Lock lock(m_initializing);
 	light->setDiffuse(color);
 }
 
 void Light3DDock::onSpecularChanged(const QColor& color) {
+	const Lock lock(m_initializing);
 	light->setSpecular(color);
 }
 
 void Light3DDock::onElevationChanged(int elevation) {
+	const Lock lock(m_initializing);
 	light->setElevation(elevation);
 }
 
 void Light3DDock::onAzimuthChanged(int azimuth) {
+	const Lock lock(m_initializing);
 	light->setAzimuth(azimuth);
 }
 
 void Light3DDock::onConeAngleChanged(int angle) {
+	const Lock lock(m_initializing);
 	light->setConeAngle(angle);
 }
 
@@ -91,20 +104,22 @@ void Light3DDock::setLight(Light *light) {
 
 	this->light = light;
 
+	blockSignals(true);
 	const QVector3D& fp = light->focalPoint();
 	focalPointChanged(fp);
 
 	const QVector3D& pos = light->position();
 	positionChanged(pos);
 
-	ui.sbLightIntensity->setValue(light->intensity());
-	ui.kcbLightAmbientColor->setColor(light->ambient());
-	ui.kcbLightDiffuseColor->setColor(light->diffuse());
-	ui.kcbLightSpecularColor->setColor(light->specular());
+	intensityChanged(light->intensity());
+	ambientChanged(light->ambient());
+	diffuseChanged(light->diffuse());
+	specularChanged(light->specular());
 
-	ui.sbLightElevation->setValue(light->elevation());
-	ui.sbLightAzimuth->setValue(light->azimuth());
-	ui.sbLightConeAngle->setValue(light->coneAngle());
+	elevationChanged(light->elevation());
+	azimuthChanged(light->azimuth());
+	coneAngleChanged(light->coneAngle());
+	blockSignals(false);
 
 	connect(light, SIGNAL(focalPointChanged(const QVector3D&)), SLOT(focalPointChanged(const QVector3D&)));
 	connect(light, SIGNAL(positionChanged(const QVector3D&)), SLOT(positionChanged(const QVector3D&)));
@@ -121,41 +136,59 @@ void Light3DDock::setLight(Light *light) {
 }
 
 void Light3DDock::focalPointChanged(const QVector3D& fp) {
+	if (m_initializing)
+		return;
 	ui.sbXFocalPoint->setValue(fp.x());
 	ui.sbYFocalPoint->setValue(fp.y());
 	ui.sbZFocalPoint->setValue(fp.z());
 }
 
 void Light3DDock::positionChanged(const QVector3D& pos) {
+	if (m_initializing)
+		return;
 	ui.sbXPosition->setValue(pos.x());
 	ui.sbYPosition->setValue(pos.y());
 	ui.sbZPosition->setValue(pos.z());
 }
 
 void Light3DDock::intensityChanged(double val) {
+	if (m_initializing)
+		return;
 	ui.sbLightIntensity->setValue(val);
 }
 
 void Light3DDock::ambientChanged(const QColor& color) {
+	if (m_initializing)
+		return;
 	ui.kcbLightAmbientColor->setColor(color);
 }
 
 void Light3DDock::diffuseChanged(const QColor& color) {
+	if (m_initializing)
+		return;
 	ui.kcbLightDiffuseColor->setColor(color);
 }
 
 void Light3DDock::specularChanged(const QColor& color) {
+	if (m_initializing)
+		return;
 	ui.kcbLightSpecularColor->setColor(color);
 }
 
 void Light3DDock::elevationChanged(double val) {
+	if (m_initializing)
+		return;
 	ui.sbLightElevation->setValue(val);
 }
 
 void Light3DDock::azimuthChanged(double val) {
+	if (m_initializing)
+		return;
 	ui.sbLightAzimuth->setValue(val);
 }
 
 void Light3DDock::coneAngleChanged(double val) {
+	if (m_initializing)
+		return;
 	ui.sbLightConeAngle->setValue(val);
 }

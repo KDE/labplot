@@ -53,7 +53,9 @@
 
 using namespace DockHelpers;
 
-Plot3DDock::Plot3DDock(QWidget* parent) : QWidget(parent){
+Plot3DDock::Plot3DDock(QWidget* parent)
+	: QWidget(parent)
+	, m_initializing(false) {
 	ui.setupUi(this);
 
 	this->retranslateUi();

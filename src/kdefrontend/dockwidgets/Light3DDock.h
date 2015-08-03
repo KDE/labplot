@@ -66,6 +66,7 @@ class Light3DDock : public QWidget {
 	private:
 		Ui::Light3DDock ui;
 		Light *light;
+		bool m_initializing;
 };
 
 

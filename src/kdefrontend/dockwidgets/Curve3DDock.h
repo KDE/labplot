@@ -44,27 +44,34 @@ class Curve3DDock : public QWidget {
 		explicit Curve3DDock(QWidget* parent);
 		void setCurve(Curve3D* curve);
 
+	private:
+		void setModelFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect);
+
 	private slots:
 		//SLOTs for changes triggered in Curve3DDock
 		void onTreeViewIndexChanged(const QModelIndex& index);
 
-		void nameChanged();
-		void commentChanged();
+		void onNameChanged();
+		void onCommentChanged();
 		void onVisibilityChanged(bool visible);
+
+		void onShowEdgesChanged(bool checked);
+		void onIsClosedChanged(bool checked);
+		void onPointRadiusChanged(double size);
+
+		void onXColumnChanged(const AbstractColumn* column);
+		void onYColumnChanged(const AbstractColumn* column);
+		void onZColumnChanged(const AbstractColumn* column);
+
+
+		void showEdgesChanged(bool checked);
+		void isClosedChanged(bool checked);
+		void pointRadiusChanged(float radius);
 
 		void xColumnChanged(const AbstractColumn* column);
 		void yColumnChanged(const AbstractColumn* column);
 		void zColumnChanged(const AbstractColumn* column);
-		void pointRadiusChanged(float radius);
-		void isClosedChanged(bool checked);
-		void showEdgesChanged(bool checked);
 
-		void onShowEdgesChanged(bool checked);
-		void onClosedCurveChanged(bool checked);
-		void onPointSizeChanged(double size);
-
-		//SLOTs for changes triggered in Curve3D
-		//TODO
 
 		//load and save
 		void loadConfigFromTemplate(KConfig&);

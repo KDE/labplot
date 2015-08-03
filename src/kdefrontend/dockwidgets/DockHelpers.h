@@ -31,10 +31,12 @@
 
 #include <QWidget>
 
+#include "backend/core/AspectTreeModel.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/matrix/Matrix.h"
 
 namespace DockHelpers {
+	// Locks ui changes, but not AbstractAspect changes!
 	struct Lock{
 		Lock(bool& variable)
 			: variable(variable = true){
@@ -65,6 +67,12 @@ namespace DockHelpers {
 	inline Matrix* getMatrix(const QModelIndex& index) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		return aspect ? dynamic_cast<Matrix*>(aspect) : 0;
+	}
+
+	inline QModelIndex modelIndexOfAspect(AspectTreeModel *model, const AbstractAspect *aspect) {
+		if (!aspect)
+			return QModelIndex();
+		return model->modelIndexOfAspect(aspect);
 	}
 }
 

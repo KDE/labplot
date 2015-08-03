@@ -36,10 +36,9 @@ Axes3DDock::Axes3DDock(QWidget* parent)
 	, axes(0)
 	, m_initializing(false) {
 	ui.setupUi(this);
+	retranslateUi();
 
 	// Axes
-	ui.cbType->insertItem(Axes::AxesType_Cube, i18n("Cube Axes"));
-	ui.cbType->insertItem(Axes::AxesType_Plain, i18n("Plain Axes"));
 	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), SLOT(onTypeChanged(int)));
 	connect(ui.cbLabelFontSize, SIGNAL(valueChanged(int)), SLOT(onLabelFontChanged(int)));
 	connect(ui.cbXLabelColor, SIGNAL(changed(const QColor&)), SLOT(onLabelColorChanged(const QColor&)));
@@ -47,15 +46,21 @@ Axes3DDock::Axes3DDock(QWidget* parent)
 	connect(ui.cbZLabelColor, SIGNAL(changed(const QColor&)), SLOT(onLabelColorChanged(const QColor&)));
 }
 
+void Axes3DDock::retranslateUi() {
+	ui.cbType->insertItem(Axes::AxesType_Cube, i18n("Cube Axes"));
+	ui.cbType->insertItem(Axes::AxesType_Plain, i18n("Plain Axes"));
+}
+
 void Axes3DDock::setAxes(Axes *axes) {
-	const Lock lock(m_initializing);
 	this->axes = axes;
 
-	ui.cbType->setCurrentIndex(axes->type());
-	ui.cbLabelFontSize->setValue(axes->fontSize());
-	ui.cbXLabelColor->setColor(axes->xLabelColor());
-	ui.cbYLabelColor->setColor(axes->yLabelColor());
-	ui.cbZLabelColor->setColor(axes->zLabelColor());
+	blockSignals(true);
+	axesTypeChanged(axes->type());
+	fontSizeChanged(axes->fontSize());
+	xLabelColorChanged(axes->xLabelColor());
+	yLabelColorChanged(axes->yLabelColor());
+	zLabelColorChanged(axes->zLabelColor());
+	blockSignals(false);
 
 	connect(axes, SIGNAL(typeChanged(Axes::AxesType)), SLOT(axesTypeChanged(Axes::AxesType)));
 	connect(axes, SIGNAL(fontSizeChanged(int)), SLOT(fontSizeChanged(int)));
@@ -76,8 +81,8 @@ void Axes3DDock::onLabelFontChanged(int size) {
 }
 
 void Axes3DDock::onLabelColorChanged(const QColor& color) {
-	const Lock lock(m_initializing);
 	const QObject *s = sender();
+	const Lock lock(m_initializing);
 	if (s == ui.cbXLabelColor) {
 		axes->setXLabelColor(color);
 	} else if (s == ui.cbYLabelColor) {
