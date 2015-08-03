@@ -75,6 +75,9 @@ class Axes : public AbstractAspect {
 		CLASS_D_ACCESSOR_DECL(QColor, xLabelColor, XLabelColor)
 		CLASS_D_ACCESSOR_DECL(QColor, yLabelColor, YLabelColor)
 		CLASS_D_ACCESSOR_DECL(QColor, zLabelColor, ZLabelColor)
+		CLASS_D_ACCESSOR_DECL(QString, xLabel, XLabel)
+		CLASS_D_ACCESSOR_DECL(QString, yLabel, YLabel)
+		CLASS_D_ACCESSOR_DECL(QString, zLabel, ZLabel)
 
 		typedef Axes BaseClass;
 		typedef AxesPrivate Private;
@@ -89,12 +92,18 @@ class Axes : public AbstractAspect {
 		friend class AxesSetXLabelColorCmd;
 		friend class AxesSetYLabelColorCmd;
 		friend class AxesSetZLabelColorCmd;
+		friend class AxesSetXLabelCmd;
+		friend class AxesSetYLabelCmd;
+		friend class AxesSetZLabelCmd;
 		void typeChanged(Axes::AxesType);
 		void fontSizeChanged(int);
 		void widthChanged(double);
 		void xLabelColorChanged(const QColor&);
 		void yLabelColorChanged(const QColor&);
 		void zLabelColorChanged(const QColor&);
+		void xLabelChanged(const QString&);
+		void yLabelChanged(const QString&);
+		void zLabelChanged(const QString&);
 		void parametersChanged();
 
 	private:

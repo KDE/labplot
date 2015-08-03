@@ -100,8 +100,8 @@ void Axes::updateBounds() {
 
 			bb.GetBounds(bounds);
 		} else {
-			bounds[0] = bounds[2] = bounds[4] = -100;
-			bounds[1] = bounds[3] = bounds[5] = 100;
+			bounds[0] = bounds[2] = bounds[4] = -1;
+			bounds[1] = bounds[3] = bounds[5] = 1;
 		}
 		axes->SetBounds(bounds);
 	}
@@ -138,6 +138,9 @@ BASIC_SHARED_D_READER_IMPL(Axes, double, width, width)
 BASIC_SHARED_D_READER_IMPL(Axes, QColor, xLabelColor, xLabelColor)
 BASIC_SHARED_D_READER_IMPL(Axes, QColor, yLabelColor, yLabelColor)
 BASIC_SHARED_D_READER_IMPL(Axes, QColor, zLabelColor, zLabelColor)
+BASIC_SHARED_D_READER_IMPL(Axes, QString, xLabel, xLabel)
+BASIC_SHARED_D_READER_IMPL(Axes, QString, yLabel, yLabel)
+BASIC_SHARED_D_READER_IMPL(Axes, QString, zLabel, zLabel)
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
@@ -165,6 +168,15 @@ STD_SETTER_IMPL(Axes, YLabelColor, const QColor&, yLabelColor, "%1: axes Y label
 STD_SETTER_CMD_IMPL_F_S(Axes, SetZLabelColor, QColor, zLabelColor, update)
 STD_SETTER_IMPL(Axes, ZLabelColor, const QColor&, zLabelColor, "%1: axes Z label color changed")
 
+STD_SETTER_CMD_IMPL_F_S(Axes, SetXLabel, QString, xLabel, update)
+STD_SETTER_IMPL(Axes, XLabel, const QString&, xLabel, "%1: axes X label changed")
+
+STD_SETTER_CMD_IMPL_F_S(Axes, SetYLabel, QString, yLabel, update)
+STD_SETTER_IMPL(Axes, YLabel, const QString&, yLabel, "%1: axes Y label changed")
+
+STD_SETTER_CMD_IMPL_F_S(Axes, SetZLabel, QString, zLabel, update)
+STD_SETTER_IMPL(Axes, ZLabel, const QString&, zLabel, "%1: axes Z label changed")
+
 ////////////////////////////////////////////////////////////////////////////////
 
 AxesPrivate::AxesPrivate(vtkRenderer* renderer, Axes* parent)
@@ -176,6 +188,9 @@ AxesPrivate::AxesPrivate(vtkRenderer* renderer, Axes* parent)
 	, xLabelColor(Qt::red)
 	, yLabelColor(Qt::green)
 	, zLabelColor(Qt::blue)
+	, xLabel("X")
+	, yLabel("Y")
+	, zLabel("Z")
 	, renderer(renderer) {
 }
 
@@ -214,6 +229,10 @@ void AxesPrivate::init() {
 		axes->YAxisMinorTickVisibilityOff();
 		axes->ZAxisMinorTickVisibilityOff();
 
+		axes->SetXTitle(xLabel.toAscii());
+		axes->SetYTitle(yLabel.toAscii());
+		axes->SetZTitle(zLabel.toAscii());
+
 		axes->SetScreenSize(fontSize);
 
 		for (int i = 0; i < 3; ++i) {
@@ -246,6 +265,10 @@ void AxesPrivate::init() {
 		QVector<vtkProperty*> tipProps;
 		tipProps << axes->GetXAxisTipProperty() << axes->GetYAxisTipProperty()
 				<< axes->GetZAxisTipProperty();
+
+		axes->SetXAxisLabelText(xLabel.toAscii());
+		axes->SetYAxisLabelText(yLabel.toAscii());
+		axes->SetZAxisLabelText(zLabel.toAscii());
 
 		for (int i = 0; i < 3; ++i) {
 			vtkCaptionActor2D* const captionActor = captionActors[i];

@@ -46,12 +46,16 @@ class Axes3DDock : public QWidget {
 		void onTypeChanged(int type);
 		void onLabelFontChanged(int size);
 		void onLabelColorChanged(const QColor& color);
+		void onLabelChanged(const QString& label);
 
 		void axesTypeChanged(Axes::AxesType);
 		void fontSizeChanged(int);
 		void xLabelColorChanged(const QColor&);
 		void yLabelColorChanged(const QColor&);
 		void zLabelColorChanged(const QColor&);
+		void xLabelChanged(const QString&);
+		void yLabelChanged(const QString&);
+		void zLabelChanged(const QString&);
 
 	private:
 		Ui::Axes3DDock ui;

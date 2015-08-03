@@ -44,6 +44,9 @@ struct AxesPrivate {
 	QColor xLabelColor;
 	QColor yLabelColor;
 	QColor zLabelColor;
+	QString xLabel;
+	QString yLabel;
+	QString zLabel;
 
 	vtkSmartPointer<vtkRenderer> renderer;
 	vtkSmartPointer<vtkProp> vtkAxes;

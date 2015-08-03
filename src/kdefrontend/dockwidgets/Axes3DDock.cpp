@@ -44,6 +44,9 @@ Axes3DDock::Axes3DDock(QWidget* parent)
 	connect(ui.cbXLabelColor, SIGNAL(changed(const QColor&)), SLOT(onLabelColorChanged(const QColor&)));
 	connect(ui.cbYLabelColor, SIGNAL(changed(const QColor&)), SLOT(onLabelColorChanged(const QColor&)));
 	connect(ui.cbZLabelColor, SIGNAL(changed(const QColor&)), SLOT(onLabelColorChanged(const QColor&)));
+	connect(ui.leXLabel, SIGNAL(returnPressed(const QString&)), SLOT(onLabelChanged(const QString&)));
+	connect(ui.leYLabel, SIGNAL(returnPressed(const QString&)), SLOT(onLabelChanged(const QString&)));
+	connect(ui.leZLabel, SIGNAL(returnPressed(const QString&)), SLOT(onLabelChanged(const QString&)));
 }
 
 void Axes3DDock::retranslateUi() {
@@ -61,6 +64,9 @@ void Axes3DDock::setAxes(Axes *axes) {
 	xLabelColorChanged(axes->xLabelColor());
 	yLabelColorChanged(axes->yLabelColor());
 	zLabelColorChanged(axes->zLabelColor());
+	xLabelChanged(axes->xLabel());
+	yLabelChanged(axes->yLabel());
+	zLabelChanged(axes->zLabel());
 	}
 
 	connect(axes, SIGNAL(typeChanged(Axes::AxesType)), SLOT(axesTypeChanged(Axes::AxesType)));
@@ -68,6 +74,9 @@ void Axes3DDock::setAxes(Axes *axes) {
 	connect(axes, SIGNAL(xLabelColorChanged(const QColor&)), SLOT(xLabelColorChanged(const QColor&)));
 	connect(axes, SIGNAL(yLabelColorChanged(const QColor&)), SLOT(yLabelColorChanged(const QColor&)));
 	connect(axes, SIGNAL(zLabelColorChanged(const QColor&)), SLOT(zLabelColorChanged(const QColor&)));
+	connect(axes, SIGNAL(xLabelChanged(const QString&)), SLOT(xLabelChanged(const QString&)));
+	connect(axes, SIGNAL(yLabelChanged(const QString&)), SLOT(yLabelChanged(const QString&)));
+	connect(axes, SIGNAL(zLabelChanged(const QString&)), SLOT(zLabelChanged(const QString&)));
 }
 
 void Axes3DDock::onTypeChanged(int type) {
@@ -95,6 +104,18 @@ void Axes3DDock::onLabelColorChanged(const QColor& color) {
 	axes->setType(static_cast<Axes::AxesType>(ui.cbType->currentIndex()));
 }
 
+void Axes3DDock::onLabelChanged(const QString& label) {
+	const QObject *s = sender();
+	const Lock lock(m_initializing);
+	if (s == ui.leXLabel) {
+		axes->setXLabel(label);
+	} else if (s == ui.leYLabel) {
+		axes->setYLabel(label);
+	} else {
+		axes->setZLabel(label);
+	}
+}
+
 void Axes3DDock::fontSizeChanged(int value){
 	if (m_initializing)
 		return;
@@ -117,6 +138,24 @@ void Axes3DDock::zLabelColorChanged(const QColor& color){
 	if (m_initializing)
 		return;
 	ui.cbZLabelColor->setColor(color);
+}
+
+void Axes3DDock::xLabelChanged(const QString& label) {
+	if (m_initializing)
+		return;
+	ui.leXLabel->setText(label);
+}
+
+void Axes3DDock::yLabelChanged(const QString& label) {
+	if (m_initializing)
+		return;
+	ui.leYLabel->setText(label);
+}
+
+void Axes3DDock::zLabelChanged(const QString& label) {
+	if (m_initializing)
+		return;
+	ui.leZLabel->setText(label);
 }
 
 void Axes3DDock::axesTypeChanged(Axes::AxesType type){
