@@ -87,7 +87,8 @@ void Curve3DDock::setCurve(Curve3D* curve) {
 
 	this->curve = curve;
 
-	blockSignals(true);
+	{
+	const SignalBlocker blocker(this);
 	ui.leName->setText(curve->name());
 	ui.leComment->setText(curve->comment());
 	ui.chkVisible->setChecked(curve->isVisible());
@@ -104,7 +105,7 @@ void Curve3DDock::setCurve(Curve3D* curve) {
 
 	isClosedChanged(curve->isClosed());
 	showEdgesChanged(curve->showEdges());
-	blockSignals(false);
+	}
 
 	connect(curve, SIGNAL(xColumnChanged(const AbstractColumn*)), SLOT(xColumnChanged(const AbstractColumn*)));
 	connect(curve, SIGNAL(yColumnChanged(const AbstractColumn*)), SLOT(yColumnChanged(const AbstractColumn*)));

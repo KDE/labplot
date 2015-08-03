@@ -113,7 +113,10 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	}
 
 	this->surface = surface;
-	blockSignals(true);
+	const Matrix *matrix = surface->matrixDataHandler().matrix();
+	const SpreadsheetDataHandler *sdh = &surface->spreadsheetDataHandler();
+	{
+	const SignalBlocker blocker(this);
 	ui.leName->setText(surface->name());
 	ui.leComment->setText(surface->comment());
 	ui.chkVisible->setChecked(surface->isVisible());
@@ -132,10 +135,9 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	colorFillingChanged(surface->colorFilling());
 	pathChanged(surface->fileDataHandler().file());
 
-	const Matrix *matrix = surface->matrixDataHandler().matrix();
+
 	matrixChanged(matrix);
 
-	SpreadsheetDataHandler *sdh = &surface->spreadsheetDataHandler();
 	xColumnChanged(sdh->xColumn());
 	yColumnChanged(sdh->yColumn());
 	zColumnChanged(sdh->zColumn());
@@ -143,7 +145,7 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	firstNodeChanged(sdh->firstNode());
 	secondNodeChanged(sdh->secondNode());
 	thirdNodeChanged(sdh->thirdNode());
-	blockSignals(false);
+	}
 
 	connect(surface, SIGNAL(visualizationTypeChanged(Surface3D::VisualizationType)), SLOT(visualizationTypeChanged(Surface3D::VisualizationType)));
 	connect(surface, SIGNAL(sourceTypeChanged(Surface3D::DataSource)), SLOT(sourceTypeChanged(Surface3D::DataSource)));

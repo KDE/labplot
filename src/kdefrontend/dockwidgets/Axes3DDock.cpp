@@ -54,13 +54,14 @@ void Axes3DDock::retranslateUi() {
 void Axes3DDock::setAxes(Axes *axes) {
 	this->axes = axes;
 
-	blockSignals(true);
+	{
+	const SignalBlocker blocker(this);
 	axesTypeChanged(axes->type());
 	fontSizeChanged(axes->fontSize());
 	xLabelColorChanged(axes->xLabelColor());
 	yLabelColorChanged(axes->yLabelColor());
 	zLabelColorChanged(axes->zLabelColor());
-	blockSignals(false);
+	}
 
 	connect(axes, SIGNAL(typeChanged(Axes::AxesType)), SLOT(axesTypeChanged(Axes::AxesType)));
 	connect(axes, SIGNAL(fontSizeChanged(int)), SLOT(fontSizeChanged(int)));

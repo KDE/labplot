@@ -126,7 +126,8 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	Q_ASSERT(m_plotsList.size());
 	m_plot = m_plotsList.first();
 
-	blockSignals(true);
+	{
+	const SignalBlocker blocker(this);
 	//if there is more then one plot in the list, disable the name and comment fields in the tab "general"
 	if (m_plotsList.size()==1){
 		ui.lName->setEnabled(true);
@@ -148,6 +149,7 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 
 	//show the properties of the first plot
 	this->load();
+	}
 
 	//Deactivate the geometry related widgets, if the worksheet layout is active.
 	//Currently, a plot can only be a child of the worksheet itself, so we only need to ask the parent aspect (=worksheet).
@@ -161,8 +163,6 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 		ui.sbHeight->setEnabled(b);
 		connect(w, SIGNAL(layoutChanged(Worksheet::Layout)), SLOT(onLayoutChanged(Worksheet::Layout)));
 	}
-
-	blockSignals(false);
 
 	//SIGNALs/SLOTs
 	//general

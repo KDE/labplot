@@ -36,8 +36,8 @@
 #include "backend/matrix/Matrix.h"
 
 namespace DockHelpers {
-	// Locks ui changes, but not AbstractAspect changes!
-	struct Lock{
+	// Locks AbstractAspect changes!
+	struct Lock {
 		Lock(bool& variable)
 			: variable(variable = true){
 		}
@@ -48,6 +48,20 @@ namespace DockHelpers {
 
 	private:
 		bool& variable;
+	};
+
+	struct SignalBlocker {
+		SignalBlocker(QObject* object)
+			: object(object) {
+			object->blockSignals(true);
+		}
+
+		~SignalBlocker() {
+			object->blockSignals(false);
+		}
+
+	private:
+		QObject* const object;
 	};
 
 	inline void showItem(QWidget* labelWidget, QWidget* inputWidget, bool pred = true) {

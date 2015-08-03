@@ -104,7 +104,8 @@ void Light3DDock::setLight(Light *light) {
 
 	this->light = light;
 
-	blockSignals(true);
+	{
+	const SignalBlocker blocker(this);
 	const QVector3D& fp = light->focalPoint();
 	focalPointChanged(fp);
 
@@ -119,7 +120,7 @@ void Light3DDock::setLight(Light *light) {
 	elevationChanged(light->elevation());
 	azimuthChanged(light->azimuth());
 	coneAngleChanged(light->coneAngle());
-	blockSignals(false);
+	}
 
 	connect(light, SIGNAL(focalPointChanged(const QVector3D&)), SLOT(focalPointChanged(const QVector3D&)));
 	connect(light, SIGNAL(positionChanged(const QVector3D&)), SLOT(positionChanged(const QVector3D&)));
