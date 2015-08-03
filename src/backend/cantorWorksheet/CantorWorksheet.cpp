@@ -33,17 +33,18 @@
 #include <QDebug>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <QGraphicsView>
 
-CantorWorksheet::CantorWorksheet(AbstractScriptingEngine* engine, const QString &name)
+CantorWorksheet::CantorWorksheet(AbstractScriptingEngine* engine, const QString &name, bool loading)
 		: AbstractPart(name), scripted(engine), m_part(0), m_backendName(name){
-
-	init();
+	if(!loading)
+		init();
 }
 
 /*!
 	initializes Cantor's part and plugins
 */
-void CantorWorksheet::init(QByteArray* content) {
+bool CantorWorksheet::init(QByteArray* content) {
 	KPluginFactory* factory = KPluginLoader(QLatin1String("libcantorpart")).factory();
 	if (factory) {
 		// now that the Part is loaded, we cast it to a Part to get
@@ -51,8 +52,8 @@ void CantorWorksheet::init(QByteArray* content) {
 		m_part = factory->create<KParts::ReadWritePart>(this, QVariantList()<<m_backendName);
 		// CantorPart* m_cantorPart = dynamic_cast<CantorPart*>(m_part);
 		if (!m_part) {
-			qDebug()<<"error creating part ";
-			return;
+			KMessageBox::error(view(), i18n("Could not create the Cantor Part."));
+			return false;
 		}
 		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
 		if(content)
@@ -60,7 +61,7 @@ void CantorWorksheet::init(QByteArray* content) {
 		Cantor::PanelPluginHandler* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
 		if(!handler) {
 			KMessageBox::error(view(), i18n("no PanelPluginHandle found for the Cantor Part."));
-			qApp->quit();
+			return false;
 		}
 		m_plugins = handler->plugins();
 		foreach(Cantor::PanelPlugin* plugin, m_plugins) {
@@ -80,11 +81,11 @@ void CantorWorksheet::init(QByteArray* content) {
 		// if we couldn't find our Part, we exit since the Shell by
 		// itself can't do anything useful
 		KMessageBox::error(view(), i18n("Could not find the Cantor Part."));
-		qApp->quit();
 		// we return here, cause qApp->quit() only means "exit the
 		// next time we enter the event loop...
-		return;
+		return false;
 	}
+	return true;
 }
 
 //SLots
@@ -97,6 +98,7 @@ void CantorWorksheet::rowsInserted(const QModelIndex & parent, int first, int la
 		VariableParser* parser = new VariableParser(m_backendName, value);
 		if(parser->isParsed()) {
 			Column * new_col = new Column(name, AbstractColumn::Numeric);
+			new_col->setUndoAware(false);
 			new_col->insertRows(0, parser->valuesCount());
 			new_col->replaceValues(0, parser->values());
 			insertChildBefore(new_col, 0);
@@ -217,12 +219,11 @@ bool CantorWorksheet::load(XmlStreamReader* reader){
 
 			str = attribs.value("content").toString().trimmed();
 			QByteArray content = QByteArray::fromBase64(str.toAscii());
-			init(&content);
+			return init(&content);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;
 		}
 	}
-
 	return true;
 }

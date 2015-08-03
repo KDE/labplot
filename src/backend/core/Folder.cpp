@@ -169,7 +169,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 		addChild(worksheet);
 		loaded = true;
 	}else if (element_name == "cantorWorksheet"){
-		CantorWorksheet * cantorWorksheet = new CantorWorksheet(0, QLatin1String("null"));
+		CantorWorksheet * cantorWorksheet = new CantorWorksheet(0, QLatin1String("null"), true);
 		if (!cantorWorksheet->load(reader)){
 			delete cantorWorksheet;
 			return false;

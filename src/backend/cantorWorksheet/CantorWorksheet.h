@@ -43,7 +43,7 @@ class CantorWorksheet : public AbstractPart, public scripted{
 	Q_OBJECT
 
 	public:
-		CantorWorksheet(AbstractScriptingEngine* engine, const QString& name);
+		CantorWorksheet(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
 		virtual QWidget* view() const;
 		virtual QMenu* createContextMenu();
 		virtual QIcon icon() const;
@@ -62,11 +62,10 @@ class CantorWorksheet : public AbstractPart, public scripted{
 		void modelReset();
 
 	signals:
-		void requestProjectContextMenu(QMenu*);
+        void requestProjectContextMenu(QMenu*);
 
 	private:
-		void init(QByteArray* content = NULL);
-
+		bool init(QByteArray* content = NULL);
 		KParts::ReadWritePart* m_part;
 		QList<Cantor::PanelPlugin*> m_plugins;
 		QAbstractItemModel* m_variableModel;
