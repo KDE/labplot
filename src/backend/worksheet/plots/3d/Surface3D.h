@@ -79,6 +79,8 @@ class Surface3D : public Base3D {
 		BASIC_D_ACCESSOR_DECL(VisualizationType, visualizationType, VisualizationType)
 		BASIC_D_ACCESSOR_DECL(DataSource, dataSource, DataSource)
 		BASIC_D_ACCESSOR_DECL(ColorFilling, colorFilling, ColorFilling)
+		CLASS_D_ACCESSOR_DECL(QColor, color, Color)
+		BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
 
 		typedef Surface3D BaseClass;
 		typedef Surface3DPrivate Private;
@@ -87,9 +89,13 @@ class Surface3D : public Base3D {
 		friend class Surface3DSetVisualizationTypeCmd;
 		friend class Surface3DSetDataSourceCmd;
 		friend class Surface3DSetColorFillingCmd;
+		friend class Surface3DSetColorCmd;
+		friend class Surface3DSetOpacityCmd;
 		void visualizationTypeChanged(Surface3D::VisualizationType);
 		void sourceTypeChanged(Surface3D::DataSource);
 		void colorFillingChanged(Surface3D::ColorFilling);
+		void colorChanged(const QColor&);
+		void opacityChanged(double);
 };
 
 #endif

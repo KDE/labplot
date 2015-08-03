@@ -93,15 +93,24 @@ void IDataHandler::makeColorElevation(vtkPolyData* polydata) {
 		polydata->GetPointData()->SetScalars(colors);
 }
 
-vtkSmartPointer<vtkActor> IDataHandler::actor(Surface3D::VisualizationType type, Surface3D::ColorFilling color) {
+vtkSmartPointer<vtkActor> IDataHandler::actor(const DataHandlerConfig& config) {
 	vtkSmartPointer<vtkPolyData> data = generateData();
-	if (type == Surface3D::Surface3D::VisualizationType_Wireframe)
+	if (config.type == Surface3D::Surface3D::VisualizationType_Wireframe)
 		data = extractEdges(data);
 
-	if (color == Surface3D::ColorFilling_ElevationLevel)
+	if (config.colorFilling == Surface3D::ColorFilling_ElevationLevel)
 		makeColorElevation(data);
 
-	return mapData(data);
+	vtkSmartPointer<vtkActor> actor = mapData(data);
+
+	if (config.colorFilling == Surface3D::ColorFilling_SolidColor) {
+		const QColor& color = config.color;
+		vtkProperty* prop = actor->GetProperty();
+		prop->SetColor(color.redF(), color.greenF(), color.blueF());
+		prop->SetOpacity(config.opacity);
+	}
+
+	return actor;
 }
 
 vtkSmartPointer<vtkPolyData> IDataHandler::extractEdges(vtkPolyData* data) const {

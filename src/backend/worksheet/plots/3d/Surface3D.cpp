@@ -74,6 +74,8 @@ FileDataHandler& Surface3D::fileDataHandler() {
 BASIC_SHARED_D_READER_IMPL(Surface3D, Surface3D::VisualizationType, visualizationType, visualizationType)
 BASIC_SHARED_D_READER_IMPL(Surface3D, Surface3D::DataSource, dataSource, sourceType)
 BASIC_SHARED_D_READER_IMPL(Surface3D, Surface3D::ColorFilling, colorFilling, colorFilling)
+BASIC_SHARED_D_READER_IMPL(Surface3D, QColor, color, color)
+BASIC_SHARED_D_READER_IMPL(Surface3D, double, opacity, opacity)
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
@@ -88,6 +90,12 @@ STD_SETTER_IMPL(Surface3D, DataSource, Surface3D::DataSource, sourceType, "%1: d
 STD_SETTER_CMD_IMPL_F_S(Surface3D, SetColorFilling, Surface3D::ColorFilling, colorFilling, update)
 STD_SETTER_IMPL(Surface3D, ColorFilling, Surface3D::ColorFilling, colorFilling, "%1: color filling type changed")
 
+STD_SETTER_CMD_IMPL_F_S(Surface3D, SetColor, QColor, color, update)
+STD_SETTER_IMPL(Surface3D, Color, const QColor&, color, "%1: color changed")
+
+STD_SETTER_CMD_IMPL_F_S(Surface3D, SetOpacity, double, opacity, update)
+STD_SETTER_IMPL(Surface3D, Opacity, double, opacity, "%1: opacity changed")
+
 ////////////////////////////////////////////////////////////////////////////////
 
 Surface3DPrivate::Surface3DPrivate(vtkRenderer* renderer, Surface3D *parent)
@@ -96,6 +104,8 @@ Surface3DPrivate::Surface3DPrivate(vtkRenderer* renderer, Surface3D *parent)
 	, visualizationType(Surface3D::VisualizationType_Triangles)
 	, sourceType(Surface3D::DataSource_Empty)
 	, colorFilling(Surface3D::ColorFilling_Empty)
+	, color(Qt::gray)
+	, opacity(0.5)
 	, demoHandler(new DemoDataHandler)
 	, spreadsheetHandler(new SpreadsheetDataHandler)
 	, matrixHandler(new MatrixDataHandler)
@@ -130,14 +140,19 @@ QString Surface3DPrivate::name() const {
 	return i18n("3D Surface");
 }
 void Surface3DPrivate::createActor() {
+	DataHandlerConfig config;
+	config.type = visualizationType;
+	config.colorFilling = colorFilling;
+	config.color = color;
+	config.opacity = opacity;
 	if (sourceType == Surface3D::DataSource_Empty) {
-		actor = demoHandler->actor(visualizationType, colorFilling);
+		actor = demoHandler->actor(config);
 	} else if (sourceType == Surface3D::DataSource_File) {
-		actor = fileHandler->actor(visualizationType, colorFilling);
+		actor = fileHandler->actor(config);
 	} else if (sourceType == Surface3D::DataSource_Matrix) {
-		actor = matrixHandler->actor(visualizationType, colorFilling);
+		actor = matrixHandler->actor(config);
 	} else if (sourceType == Surface3D::DataSource_Spreadsheet) {
-		actor = spreadsheetHandler->actor(visualizationType, colorFilling);
+		actor = spreadsheetHandler->actor(config);
 	}
 }
 

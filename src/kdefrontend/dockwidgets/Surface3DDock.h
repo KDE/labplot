@@ -67,9 +67,13 @@ class Surface3DDock : public QWidget {
 		void visualizationTypeChanged(Surface3D::VisualizationType);
 		void sourceTypeChanged(Surface3D::DataSource);
 		void colorFillingChanged(Surface3D::ColorFilling);
+		void colorChanged(const QColor&);
+		void opacityChanged(double);
 
 		// Color filling
 		void onColorFillingTypeChanged(int);
+		void onColorChanged(const QColor&);
+		void onOpacityChanged(int);
 
 		// File handling
 		void pathChanged(const KUrl&);

@@ -15,7 +15,7 @@ function(CREATE_TEST TEST_NAME)
 
 	add_executable(${TEST_NAME} ${TEST_SRCS} ${TEST_MOC})
 	target_link_libraries(${TEST_NAME}
-		liblabplot2
+		liblabplot2_shared
 		${KDE4_KDEUI_LIBS}
 		${KDE4_KIO_LIBS}
 		${GSL_LIBRARIES}
@@ -25,9 +25,11 @@ function(CREATE_TEST TEST_NAME)
 		${VTK_LIBRARIES}
 		${OPENGL_LIBRARIES}
 		${QT_LIBRARIES}
-		${QT_QTTEST_LIBRARY})
+		${QT_QTTEST_LIBRARY}
+	)
 
 	add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
 endfunction()
 
-add_subdirectory(DockWidgets)
+add_subdirectory(Surface3DDock)
+add_subdirectory(Surface3D)

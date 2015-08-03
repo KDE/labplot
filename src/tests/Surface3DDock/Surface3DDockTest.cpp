@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : Surface3DPrivate.h
+    File                 : Surface3DDockTest.cpp
     Project              : LabPlot
-    Description          : 3D surface class
+    Description          : Surface3DDock tests
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Minh Ngo (minh@fedoraproject.org)
+    Copyright            : (C) 2015 Minh Ngo (minh@fedoraproject.org)
 
  ***************************************************************************/
 
@@ -25,38 +25,34 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#include "Surface3DDockTest.h"
+#include "backend/worksheet/plots/3d/Surface3D.h"
+#include "kdefrontend/dockwidgets/Surface3DDock.h"
+#include "backend/core/Project.h"
 
-#ifndef PLOT3D_SURFACE3DPRIVATE_H
-#define PLOT3D_SURFACE3DPRIVATE_H
+#include <QtTest>
 
-#include "Base3DPrivate.h"
-#include "Surface3D.h"
+void Surface3DDockTest::test_colorFillingTypeChangedCall() {
+	Project project;
+	Surface3D *surf = new Surface3D;
+	project.addChild(surf);
+	Surface3DDock w(0);
+	connect(&w, SIGNAL(elementVisibilityChanged()), SLOT(onElementVisibilityChanged()));
+	visibilityCounter = 0;
+	w.setSurface(surf);
+	QCOMPARE(visibilityCounter, 0);
 
-#include <QColor>
+	surf = new Surface3D;
+	project.addChild(surf);
+	surf->setColorFilling(Surface3D::ColorFilling_ColorMap);
+	surf->setVisualizationType(Surface3D::VisualizationType_Wireframe);
+	visibilityCounter = 0;
+	w.setSurface(surf);
+	QCOMPARE(visibilityCounter, 0);
+}
 
-class DemoDataHandler;
-class SpreadsheetDataHandler;
-class MatrixDataHandler;
-class FileDataHandler;
-struct Surface3DPrivate : public Base3DPrivate {
-	Surface3D* const q;
+void Surface3DDockTest::onElementVisibilityChanged() {
+	++visibilityCounter;
+}
 
-	Surface3D::VisualizationType visualizationType;
-	Surface3D::DataSource sourceType;
-	Surface3D::ColorFilling colorFilling;
-	QColor color;
-	double opacity;
-
-	DemoDataHandler *demoHandler;
-	SpreadsheetDataHandler *spreadsheetHandler;
-	MatrixDataHandler *matrixHandler;
-	FileDataHandler *fileHandler;
-
-	Surface3DPrivate(vtkRenderer* renderer, Surface3D *parent);
-	void init();
-	~Surface3DPrivate();
-	QString name() const;
-	void createActor();
-};
-
-#endif
+QTEST_MAIN(Surface3DDockTest)

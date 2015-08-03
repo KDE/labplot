@@ -199,11 +199,8 @@ add_subdirectory( pics/gsl_distributions )
 set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 INCLUDE_DIRECTORIES(. ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/..)
 kde4_add_ui_files(LABPLOT_SRCS ${UI_SOURCES})
-kde4_add_library(liblabplot2 STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES})
 
-kde4_add_executable(labplot2 ${KDEFRONTEND_DIR}/LabPlot.cpp)
-
-target_link_libraries(labplot2 liblabplot2)
+kde4_add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${KDEFRONTEND_DIR}/LabPlot.cpp)
 
 target_link_libraries(labplot2
 	${KDE4_KDEUI_LIBS}
@@ -230,6 +227,19 @@ update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )
 option(ENABLE_TESTS "Enabling unit tests" OFF)
 
 if(ENABLE_TESTS)
+	kde4_add_library(liblabplot2_shared ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES})
+	target_link_libraries(liblabplot2_shared
+		${KDE4_KDEUI_LIBS}
+		${KDE4_KIO_LIBS}
+		${GSL_LIBRARIES}
+		${GSL_CBLAS_LIBRARIES}
+		${HDF5_LIBRARY}
+		${NETCDF_LIBRARY}
+		${VTK_LIBRARIES}
+		${OPENGL_LIBRARIES}
+		${QT_LIBRARIES}
+	)
+
   message(STATUS "Enabling unit tests")
   enable_testing()
   add_subdirectory(tests)

@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : Surface3DDockTest.cpp
+    File                 : Surface3DTest.h
     Project              : LabPlot
-    Description          : Surface3DDock tests
+    Description          : Surface3D tests
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Minh Ngo (minh@fedoraproject.org)
 
@@ -25,34 +25,17 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "Surface3DDockTest.h"
-#include "backend/worksheet/plots/3d/Surface3D.h"
-#include "kdefrontend/dockwidgets/Surface3DDock.h"
-#include "backend/core/Project.h"
+#ifndef SURFACE3DTEST_H
+#define SURFACE3DTEST_H
 
-#include <QtTest>
+#include <QObject>
 
-void Surface3DDockTest::test_colorFillingTypeChangedCall() {
-	Project project;
-	Surface3D *surf = new Surface3D;
-	project.addChild(surf);
-	Surface3DDock w(0);
-	connect(&w, SIGNAL(elementVisibilityChanged()), SLOT(onElementVisibilityChanged()));
-	visibilityCounter = 0;
-	w.setSurface(surf);
-	QCOMPARE(visibilityCounter, 1);
+class Surface3DTest : public QObject {
+		Q_OBJECT
+	public:
+		Surface3DTest();
+	private slots:
+		void test_solidColorFilling();
+};
 
-	surf = new Surface3D;
-	project.addChild(surf);
-	surf->setColorFilling(Surface3D::ColorFilling_ColorMap);
-	surf->setVisualizationType(Surface3D::VisualizationType_Wireframe);
-	visibilityCounter = 0;
-	w.setSurface(surf);
-	QCOMPARE(visibilityCounter, 2);
-}
-
-void Surface3DDockTest::onElementVisibilityChanged() {
-	++visibilityCounter;
-}
-
-QTEST_MAIN(Surface3DDockTest)
+#endif

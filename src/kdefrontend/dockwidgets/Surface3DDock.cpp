@@ -37,6 +37,7 @@
 #include "kdefrontend/TemplateHandler.h"
 
 #include <QDir>
+#include <QDebug>
 
 using namespace DockHelpers;
 
@@ -89,6 +90,8 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 
 	//Color filling
 	connect(ui.cbColorFillingType, SIGNAL(currentIndexChanged(int)), SLOT(onColorFillingTypeChanged(int)));
+	connect(ui.kcbColorFilling, SIGNAL(changed(QColor)), SLOT(onColorChanged(const QColor&)));
+	connect(ui.sbColorFillingOpacity, SIGNAL(valueChanged(int)), SLOT(onOpacityChanged(int)));
 
 	//Mesh
 
@@ -133,8 +136,9 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	visualizationTypeChanged(surface->visualizationType());
 	sourceTypeChanged(surface->dataSource());
 	colorFillingChanged(surface->colorFilling());
+	colorChanged(surface->color());
+	opacityChanged(surface->opacity());
 	pathChanged(surface->fileDataHandler().file());
-
 
 	matrixChanged(matrix);
 
@@ -151,6 +155,8 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	connect(surface, SIGNAL(sourceTypeChanged(Surface3D::DataSource)), SLOT(sourceTypeChanged(Surface3D::DataSource)));
 	connect(surface, SIGNAL(visibilityChanged(bool)), ui.chkVisible, SLOT(setChecked(bool)));
 	connect(surface, SIGNAL(colorFillingChanged(Surface3D::ColorFilling)), SLOT(colorFillingChanged(Surface3D::ColorFilling)));
+	connect(surface, SIGNAL(colorChanged(const QColor&)), SLOT(colorChanged(const QColor&)));
+	connect(surface, SIGNAL(opacityChanged(double)), SLOT(opacityChanged(double)));
 
 	// DataHandlers
 
@@ -224,6 +230,16 @@ void Surface3DDock::onTreeViewIndexChanged(const QModelIndex& index) {
 void Surface3DDock::onVisibilityChanged(bool visible) {
 	const Lock lock(m_initializing);
 	surface->show(visible);
+}
+
+void Surface3DDock::onColorChanged(const QColor& color) {
+	const Lock lock(m_initializing);
+	surface->setColor(color);
+}
+
+void Surface3DDock::onOpacityChanged(int val) {
+	const Lock lock(m_initializing);
+	surface->setOpacity(val / 100.0);
 }
 
 void Surface3DDock::onDataSourceChanged(int index) {
@@ -329,27 +345,7 @@ void Surface3DDock::thirdNodeChanged(const AbstractColumn* column) {
 	setModelFromAspect(ui.cbNode3, column);
 }
 
-void Surface3DDock::colorFillingChanged(Surface3D::ColorFilling color) {
-	if (m_initializing)
-		return;
-	ui.cbColorFillingType->setCurrentIndex(color);
-}
-
-void Surface3DDock::onNameChanged() {
-	const Lock lock(m_initializing);
-	surface->setName(ui.leName->text());
-}
-
-void Surface3DDock::onCommentChanged() {
-	const Lock lock(m_initializing);
-	surface->setComment(ui.leComment->text());
-}
-
-//Collor filling
-void Surface3DDock::onColorFillingTypeChanged(int index) {
-	if (m_initializing)
-		return;
-	const Surface3D::ColorFilling type = static_cast<Surface3D::ColorFilling>(index);
+void Surface3DDock::colorFillingChanged(Surface3D::ColorFilling type) {
 	if (type == Surface3D::ColorFilling_Empty
 			|| type == Surface3D::ColorFilling_ElevationLevel) {
 		hideItem(ui.lColorFilling, ui.kcbColorFilling);
@@ -373,10 +369,43 @@ void Surface3DDock::onColorFillingTypeChanged(int index) {
 		showItem(ui.lColorFillingOpacity, ui.sbColorFillingOpacity);
 	}
 
+	if (m_initializing)
+		return;
+	ui.cbColorFillingType->setCurrentIndex(type);
+}
+
+void Surface3DDock::colorChanged(const QColor& color) {
+	if (m_initializing)
+		return;
+
+	ui.kcbColorFilling->setColor(color);
+}
+
+void Surface3DDock::opacityChanged(double val) {
+	if (m_initializing)
+		return;
+
+	ui.sbColorFillingOpacity->setValue(qRound(val * 100));
+}
+
+void Surface3DDock::onNameChanged() {
+	const Lock lock(m_initializing);
+	surface->setName(ui.leName->text());
+}
+
+void Surface3DDock::onCommentChanged() {
+	const Lock lock(m_initializing);
+	surface->setComment(ui.leComment->text());
+}
+
+//Collor filling
+void Surface3DDock::onColorFillingTypeChanged(int index) {
+	const Surface3D::ColorFilling type = static_cast<Surface3D::ColorFilling>(index);
 	{
 	const Lock lock(m_initializing);
 	surface->setColorFilling(type);
 	}
+	colorFillingChanged(type);
 	emit elementVisibilityChanged();
 }
 

@@ -31,6 +31,9 @@
 
 #include "Surface3D.h"
 #include "backend/core/AbstractAspect.h"
+
+#include <QColor>
+
 #include <vtkSmartPointer.h>
 
 class KUrl;
@@ -44,14 +47,20 @@ class FileDataHandlerPrivate;
 class vtkActor;
 class vtkPolyData;
 
+struct DataHandlerConfig {
+	Surface3D::VisualizationType type;
+	Surface3D::ColorFilling colorFilling;
+	QColor color;
+	double opacity;
+};
+
 class IDataHandler : public AbstractAspect {
 		Q_OBJECT
 	public:
 		IDataHandler();
 		virtual ~IDataHandler() {}
 
-		vtkSmartPointer<vtkActor> actor(Surface3D::VisualizationType type,
-				Surface3D::ColorFilling color);
+		vtkSmartPointer<vtkActor> actor(const DataHandlerConfig& config);
 
 		void update();
 
