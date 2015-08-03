@@ -55,6 +55,7 @@ using namespace DockHelpers;
 
 Plot3DDock::Plot3DDock(QWidget* parent)
 	: QWidget(parent)
+	, m_plot(0)
 	, m_initializing(false) {
 	ui.setupUi(this);
 
@@ -115,6 +116,12 @@ Plot3DDock::Plot3DDock(QWidget* parent)
 }
 
 void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
+	if (m_plot) {
+		m_plot->disconnect(this);
+		foreach(Plot3D* plot, m_plotsList)
+			plot->disconnect(this);
+	}
+
 	Lock lock(m_initializing);
 	m_plotsList = plots;
 	Q_ASSERT(m_plotsList.size());
@@ -143,7 +150,7 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	this->load();
 
 	//update active widgets
-	backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
+	backgroundTypeChanged(m_plot->backgroundType());
 
 	//Deactivate the geometry related widgets, if the worksheet layout is active.
 	//Currently, a plot can only be a child of the worksheet itself, so we only need to ask the parent aspect (=worksheet).
