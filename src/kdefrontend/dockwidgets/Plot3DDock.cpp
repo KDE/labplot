@@ -59,7 +59,7 @@ Plot3DDock::Plot3DDock(QWidget* parent)
 	, m_initializing(false) {
 	ui.setupUi(this);
 
-	this->retranslateUi();
+	retranslateUi();
 
 	//Background-tab
 	ui.cbBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
@@ -84,25 +84,25 @@ Plot3DDock::Plot3DDock(QWidget* parent)
 
 	//SIGNALs/SLOTs
 	//General
-	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
-	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
-	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
-	connect( ui.sbLeft, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
-	connect( ui.sbTop, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
-	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
-	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
+	connect(ui.leName, SIGNAL(returnPressed()), SLOT(onNameChanged()));
+	connect(ui.leComment, SIGNAL(returnPressed()), SLOT(onCommentChanged()));
+	connect(ui.chkVisible, SIGNAL(stateChanged(int)), SLOT(onVisibilityChanged(int)));
+	connect(ui.sbLeft, SIGNAL(valueChanged(double)), SLOT(onGeometryChanged()));
+	connect(ui.sbTop, SIGNAL(valueChanged(double)), SLOT(onGeometryChanged()));
+	connect(ui.sbWidth, SIGNAL(valueChanged(double)), SLOT(onGeometryChanged()));
+	connect(ui.sbHeight, SIGNAL(valueChanged(double)), SLOT(onGeometryChanged()));
 
 	//Background
-	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
-	connect( ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundColorStyleChanged(int)) );
-	connect( ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundImageStyleChanged(int)) );
-	connect( ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundBrushStyleChanged(int)) );
-	connect( ui.bBackgroundOpen, SIGNAL(clicked(bool)), this, SLOT(backgroundSelectFile()));
-	connect( ui.kleBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(backgroundFileNameChanged()) );
-	connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(backgroundFileNameChanged()) );
-	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed(QColor)), this, SLOT(backgroundFirstColorChanged(QColor)) );
-	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed(QColor)), this, SLOT(backgroundSecondColorChanged(QColor)) );
-	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
+	connect(ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundTypeChanged(int)));
+	connect(ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundColorStyleChanged(int)));
+	connect(ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundImageStyleChanged(int)));
+	connect(ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundBrushStyleChanged(int)));
+	connect(ui.bBackgroundOpen, SIGNAL(clicked(bool)), SLOT(onBackgroundSelectFile()));
+	connect(ui.kleBackgroundFileName, SIGNAL(returnPressed()), SLOT(onBackgroundFileNameChanged()));
+	connect(ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), SLOT(onBackgroundFileNameChanged()));
+	connect(ui.kcbBackgroundFirstColor, SIGNAL(changed(const QColor&)), SLOT(onBackgroundFirstColorChanged(const QColor&)));
+	connect(ui.kcbBackgroundSecondColor, SIGNAL(changed(const QColor&)), SLOT(onBackgroundSecondColorChanged(const QColor&)));
+	connect(ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), SLOT(onBackgroundOpacityChanged(int)));
 
 	//Template handler
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
@@ -122,11 +122,11 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 			plot->disconnect(this);
 	}
 
-	Lock lock(m_initializing);
 	m_plotsList = plots;
 	Q_ASSERT(m_plotsList.size());
 	m_plot = m_plotsList.first();
 
+	blockSignals(true);
 	//if there is more then one plot in the list, disable the name and comment fields in the tab "general"
 	if (m_plotsList.size()==1){
 		ui.lName->setEnabled(true);
@@ -149,9 +149,6 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	//show the properties of the first plot
 	this->load();
 
-	//update active widgets
-	backgroundTypeChanged(m_plot->backgroundType());
-
 	//Deactivate the geometry related widgets, if the worksheet layout is active.
 	//Currently, a plot can only be a child of the worksheet itself, so we only need to ask the parent aspect (=worksheet).
 	//TODO redesign this, if the hierarchy will be changend in future (a plot is a child of a new object group/container or so)
@@ -162,22 +159,24 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 		ui.sbLeft->setEnabled(b);
 		ui.sbWidth->setEnabled(b);
 		ui.sbHeight->setEnabled(b);
-		connect(w, SIGNAL(layoutChanged(Worksheet::Layout)), this, SLOT(layoutChanged(Worksheet::Layout)));
+		connect(w, SIGNAL(layoutChanged(Worksheet::Layout)), SLOT(onLayoutChanged(Worksheet::Layout)));
 	}
+
+	blockSignals(false);
 
 	//SIGNALs/SLOTs
 	//general
-	connect(m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), SLOT(plotDescriptionChanged(const AbstractAspect*)));
+	connect(m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), SLOT(descriptionChanged(const AbstractAspect*)));
 
 	//background
-	connect(m_plot, SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), SLOT(plotBackgroundTypeChanged(PlotArea::BackgroundType)));
-	connect(m_plot, SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)), SLOT(plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)));
-	connect(m_plot, SIGNAL(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)), SLOT(plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle)));
-	connect(m_plot, SIGNAL(backgroundBrushStyleChanged(Qt::BrushStyle)), SLOT(plotBackgroundBrushStyleChanged(Qt::BrushStyle)));
-	connect(m_plot, SIGNAL(backgroundFirstColorChanged(QColor)), SLOT(plotBackgroundFirstColorChanged(QColor)));
-	connect(m_plot, SIGNAL(backgroundSecondColorChanged(QColor)), SLOT(plotBackgroundSecondColorChanged(QColor)));
-	connect(m_plot, SIGNAL(backgroundFileNameChanged(QString)), SLOT(plotBackgroundFileNameChanged(QString)));
-	connect(m_plot, SIGNAL(backgroundOpacityChanged(float)), SLOT(plotBackgroundOpacityChanged(float)));
+	connect(m_plot, SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), SLOT(backgroundTypeChanged(PlotArea::BackgroundType)));
+	connect(m_plot, SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)), SLOT(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)));
+	connect(m_plot, SIGNAL(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)), SLOT(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)));
+	connect(m_plot, SIGNAL(backgroundBrushStyleChanged(Qt::BrushStyle)), SLOT(backgroundBrushStyleChanged(Qt::BrushStyle)));
+	connect(m_plot, SIGNAL(backgroundFirstColorChanged(const QColor&)), SLOT(backgroundFirstColorChanged(const QColor&)));
+	connect(m_plot, SIGNAL(backgroundSecondColorChanged(const QColor&)), SLOT(backgroundSecondColorChanged(const QColor&)));
+	connect(m_plot, SIGNAL(backgroundFileNameChanged(const QString&)), SLOT(backgroundFileNameChanged(const QString&)));
+	connect(m_plot, SIGNAL(backgroundOpacityChanged(float)), SLOT(backgroundOpacityChanged(float)));
 
 	//light
 }
@@ -186,8 +185,6 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 //****** SLOTs for changes triggered in Plot3DDock *********
 //*************************************************************
 void Plot3DDock::retranslateUi(){
-	Lock lock(m_initializing);
-
 	//general
 	ui.cbXScaling->addItem( i18n("linear") );
 	ui.cbXScaling->addItem( i18n("log(x)") );
@@ -227,39 +224,32 @@ void Plot3DDock::retranslateUi(){
 }
 
 // "General"-tab
-void Plot3DDock::nameChanged(){
-	if (m_initializing)
-		return;
-
+void Plot3DDock::onNameChanged(){
+	const Lock lock(m_initializing);
 	m_plot->setName(ui.leName->text());
 }
 
-void Plot3DDock::commentChanged(){
-	if (m_initializing)
-		return;
-
+void Plot3DDock::onCommentChanged(){
+	const Lock lock(m_initializing);
 	m_plot->setComment(ui.leComment->text());
 }
 
-void Plot3DDock::visibilityChanged(int state){
-	if (m_initializing)
-		return;
+void Plot3DDock::onVisibilityChanged(int state){
+	const Lock lock(m_initializing);
 
-	bool b = (state==Qt::Checked);
+	const bool b = (state==Qt::Checked);
 	foreach(Plot3D* plot, m_plotsList)
 		plot->setVisible(b);
 }
 
-void Plot3DDock::geometryChanged(){
-	if (m_initializing)
-		return;
+void Plot3DDock::onGeometryChanged(){
+	const float x = Worksheet::convertToSceneUnits(ui.sbLeft->value(), Worksheet::Centimeter);
+	const float y = Worksheet::convertToSceneUnits(ui.sbTop->value(), Worksheet::Centimeter);
+	const float w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter);
+	const float h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter);
 
-	float x = Worksheet::convertToSceneUnits(ui.sbLeft->value(), Worksheet::Centimeter);
-	float y = Worksheet::convertToSceneUnits(ui.sbTop->value(), Worksheet::Centimeter);
-	float w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter);
-	float h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter);
-
-	QRectF rect(x,y,w,h);
+	const QRectF rect(x,y,w,h);
+	const Lock lock(m_initializing);
 	m_plot->setRect(rect);
 }
 
@@ -268,26 +258,152 @@ void Plot3DDock::geometryChanged(){
 	Enables/disables the geometry widgets if the layout was deactivated/activated.
 	Shows the new geometry values of the first plot if the layout was activated.
  */
-void Plot3DDock::layoutChanged(Worksheet::Layout layout){
+void Plot3DDock::onLayoutChanged(Worksheet::Layout layout){
 	bool b = (layout == Worksheet::NoLayout);
 	ui.sbTop->setEnabled(b);
 	ui.sbLeft->setEnabled(b);
 	ui.sbWidth->setEnabled(b);
 	ui.sbHeight->setEnabled(b);
-	if (!b){
-		Lock lock(m_initializing);
-		ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), Worksheet::Centimeter));
-		ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), Worksheet::Centimeter));
-		ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), Worksheet::Centimeter));
-		ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), Worksheet::Centimeter));
-	}
+	if (!b)
+		rectChanged(m_plot->rect());
 }
 
 // "Background"-tab
-void Plot3DDock::backgroundTypeChanged(int index){
-	qDebug()<<"Plot3DDock::backgroundTypeChanged " << index;
+void Plot3DDock::onBackgroundTypeChanged(int index){
 	PlotArea::BackgroundType type = (PlotArea::BackgroundType)index;
 
+	const Lock lock(m_initializing);
+	foreach(Plot3D* plot, m_plotsList)
+		plot->setBackgroundType(type);
+
+	backgroundTypeChanged(type);
+}
+
+void Plot3DDock::onBackgroundColorStyleChanged(int index){
+	PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
+
+	if (style == PlotArea::SingleColor){
+		ui.lBackgroundFirstColor->setText(i18n("Color"));
+		hideItem(ui.lBackgroundSecondColor, ui.kcbBackgroundSecondColor);
+	}else{
+		ui.lBackgroundFirstColor->setText(i18n("First Color"));
+		showItem(ui.lBackgroundSecondColor, ui.kcbBackgroundSecondColor);
+	}
+
+	const Lock lock(m_initializing);
+	foreach(Plot3D* plot, m_plotsList)
+		plot->setBackgroundColorStyle(style);
+}
+
+void Plot3DDock::onBackgroundImageStyleChanged(int index){
+	const Lock lock(m_initializing);
+
+	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
+	foreach(Plot3D* plot, m_plotsList)
+		plot->setBackgroundImageStyle(style);
+}
+
+void Plot3DDock::onBackgroundBrushStyleChanged(int index){
+	const Lock lock(m_initializing);
+
+	Qt::BrushStyle style = (Qt::BrushStyle)index;
+	foreach(Plot3D* plot, m_plotsList){
+		plot->setBackgroundBrushStyle(style);
+	}
+}
+
+void Plot3DDock::onBackgroundFirstColorChanged(const QColor& c){
+	const Lock lock(m_initializing);
+
+	foreach(Plot3D* plot, m_plotsList){
+		plot->setBackgroundFirstColor(c);
+	}
+}
+
+void Plot3DDock::onBackgroundSecondColorChanged(const QColor& c){
+	const Lock lock(m_initializing);
+
+	foreach(Plot3D* plot, m_plotsList){
+		plot->setBackgroundSecondColor(c);
+	}
+}
+
+void Plot3DDock::onBackgroundOpacityChanged(int value){
+	const Lock lock(m_initializing);
+
+	float opacity = (float)value/100;
+	foreach(Plot3D* plot, m_plotsList)
+		plot->setBackgroundOpacity(opacity);
+}
+
+void Plot3DDock::onBackgroundSelectFile() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "Plot3DDock");
+	QString dir = conf.readEntry("LastImageDir", "");
+	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
+	if (path.isEmpty())
+		return; //cancel was clicked in the file-dialog
+
+	int pos = path.lastIndexOf(QDir::separator());
+	if (pos!=-1) {
+		QString newDir = path.left(pos);
+		if (newDir!=dir)
+			conf.writeEntry("LastImageDir", newDir);
+	}
+
+	ui.kleBackgroundFileName->setText( path );
+
+	const Lock lock(m_initializing);
+	foreach(Plot3D* plot, m_plotsList)
+		plot->setBackgroundFileName(path);
+}
+
+void Plot3DDock::onBackgroundFileNameChanged(){
+	if (m_initializing)
+		return;
+
+	const Lock lock(m_initializing);
+	QString fileName = ui.kleBackgroundFileName->text();
+	foreach(Plot3D* plot, m_plotsList)
+		plot->setBackgroundFileName(fileName);
+}
+
+
+//*************************************************************
+//******** SLOTs for changes triggered in Plot3D **************
+//*************************************************************
+// "General"-tab
+void Plot3DDock::descriptionChanged(const AbstractAspect* aspect) {
+	if (m_plot != aspect)
+		return;
+
+	if (m_initializing)
+		return;
+
+	if (aspect->name() != ui.leName->text()) {
+		ui.leName->setText(aspect->name());
+	} else if (aspect->comment() != ui.leComment->text()) {
+		ui.leComment->setText(aspect->comment());
+	}
+}
+
+
+void Plot3DDock::rectChanged(const QRectF& rect){
+	if (m_initializing)
+		return;
+	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(rect.x(), Worksheet::Centimeter));
+	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(rect.y(), Worksheet::Centimeter));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), Worksheet::Centimeter));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), Worksheet::Centimeter));
+}
+
+void Plot3DDock::visibleChanged(bool on){
+	if (m_initializing)
+		return;
+	ui.chkVisible->setChecked(on);
+}
+
+// "Background"-tab
+void Plot3DDock::backgroundTypeChanged(PlotArea::BackgroundType type) {
 	if (type == PlotArea::Color){
 		showItem(ui.lBackgroundColorStyle, ui.cbBackgroundColorStyle);
 		hideItem(ui.lBackgroundImageStyle, ui.cbBackgroundImageStyle);
@@ -328,173 +444,48 @@ void Plot3DDock::backgroundTypeChanged(int index){
 
 	if (m_initializing)
 		return;
-
-	foreach(Plot3D* plot, m_plotsList)
-		plot->setBackgroundType(type);
-}
-
-void Plot3DDock::backgroundColorStyleChanged(int index){
-	PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
-
-	if (style == PlotArea::SingleColor){
-		ui.lBackgroundFirstColor->setText(i18n("Color"));
-		hideItem(ui.lBackgroundSecondColor, ui.kcbBackgroundSecondColor);
-	}else{
-		ui.lBackgroundFirstColor->setText(i18n("First Color"));
-		showItem(ui.lBackgroundSecondColor, ui.kcbBackgroundSecondColor);
-	}
-
-	if (m_initializing)
-		return;
-
-	foreach(Plot3D* plot, m_plotsList)
-		plot->setBackgroundColorStyle(style);
-}
-
-void Plot3DDock::backgroundImageStyleChanged(int index){
-	if (m_initializing)
-		return;
-
-	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
-	foreach(Plot3D* plot, m_plotsList)
-		plot->setBackgroundImageStyle(style);
-}
-
-void Plot3DDock::backgroundBrushStyleChanged(int index){
-	if (m_initializing)
-		return;
-
-	Qt::BrushStyle style = (Qt::BrushStyle)index;
-	foreach(Plot3D* plot, m_plotsList){
-		plot->setBackgroundBrushStyle(style);
-	}
-}
-
-void Plot3DDock::backgroundFirstColorChanged(const QColor& c){
-	if (m_initializing)
-		return;
-
-	foreach(Plot3D* plot, m_plotsList){
-		plot->setBackgroundFirstColor(c);
-	}
-}
-
-void Plot3DDock::backgroundSecondColorChanged(const QColor& c){
-	if (m_initializing)
-		return;
-
-	foreach(Plot3D* plot, m_plotsList){
-		plot->setBackgroundSecondColor(c);
-	}
-}
-
-void Plot3DDock::backgroundOpacityChanged(int value){
-	if (m_initializing)
-		return;
-
-	float opacity = (float)value/100;
-	foreach(Plot3D* plot, m_plotsList)
-		plot->setBackgroundOpacity(opacity);
-}
-
-void Plot3DDock::backgroundSelectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "Plot3DDock");
-	QString dir = conf.readEntry("LastImageDir", "");
-	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
-	if (path.isEmpty())
-		return; //cancel was clicked in the file-dialog
-
-	int pos = path.lastIndexOf(QDir::separator());
-	if (pos!=-1) {
-		QString newDir = path.left(pos);
-		if (newDir!=dir)
-			conf.writeEntry("LastImageDir", newDir);
-	}
-
-	ui.kleBackgroundFileName->setText( path );
-
-	foreach(Plot3D* plot, m_plotsList)
-		plot->setBackgroundFileName(path);
-}
-
-void Plot3DDock::backgroundFileNameChanged(){
-	if (m_initializing)
-		return;
-
-	QString fileName = ui.kleBackgroundFileName->text();
-	foreach(Plot3D* plot, m_plotsList)
-		plot->setBackgroundFileName(fileName);
-}
-
-
-//*************************************************************
-//******** SLOTs for changes triggered in Plot3D **************
-//*************************************************************
-// "General"-tab
-void Plot3DDock::plotDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_plot != aspect)
-		return;
-
-	Lock lock(m_initializing);
-	if (aspect->name() != ui.leName->text()) {
-		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.leComment->text()) {
-		ui.leComment->setText(aspect->comment());
-	}
-}
-
-
-void Plot3DDock::plotRectChanged(QRectF& rect){
-	Lock lock(m_initializing);
-	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(rect.x(), Worksheet::Centimeter));
-	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(rect.y(), Worksheet::Centimeter));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), Worksheet::Centimeter));
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), Worksheet::Centimeter));
-}
-
-void Plot3DDock::plotVisibleChanged(bool on){
-	Lock lock(m_initializing);
-	ui.chkVisible->setChecked(on);
-}
-
-// "Background"-tab
-void Plot3DDock::plotBackgroundTypeChanged(PlotArea::BackgroundType type) {
-	Lock lock(m_initializing);
 	ui.cbBackgroundType->setCurrentIndex(type);
 }
 
-void Plot3DDock::plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle style) {
-	Lock lock(m_initializing);
+void Plot3DDock::backgroundColorStyleChanged(PlotArea::BackgroundColorStyle style) {
+	if (m_initializing)
+		return;
 	ui.cbBackgroundColorStyle->setCurrentIndex(style);
 }
 
-void Plot3DDock::plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle style) {
-	Lock lock(m_initializing);
+void Plot3DDock::backgroundImageStyleChanged(PlotArea::BackgroundImageStyle style) {
+	if (m_initializing)
+		return;
 	ui.cbBackgroundImageStyle->setCurrentIndex(style);
 }
 
-void Plot3DDock::plotBackgroundBrushStyleChanged(Qt::BrushStyle style) {
-	Lock lock(m_initializing);
+void Plot3DDock::backgroundBrushStyleChanged(Qt::BrushStyle style) {
+	if (m_initializing)
+		return;
 	ui.cbBackgroundBrushStyle->setCurrentIndex(style);
 }
 
-void Plot3DDock::plotBackgroundFirstColorChanged(const QColor& color) {
-	Lock lock(m_initializing);
+void Plot3DDock::backgroundFirstColorChanged(const QColor& color) {
+	if (m_initializing)
+		return;
 	ui.kcbBackgroundFirstColor->setColor(color);
 }
 
-void Plot3DDock::plotBackgroundSecondColorChanged(const QColor& color) {
-	Lock lock(m_initializing);
+void Plot3DDock::backgroundSecondColorChanged(const QColor& color) {
+	if (m_initializing)
+		return;
 	ui.kcbBackgroundSecondColor->setColor(color);
 }
 
-void Plot3DDock::plotBackgroundFileNameChanged(const QString& name) {
-	Lock lock(m_initializing);
+void Plot3DDock::backgroundFileNameChanged(const QString& name) {
+	if (m_initializing)
+		return;
 	ui.kleBackgroundFileName->setText(name);
 }
 
-void Plot3DDock::plotBackgroundOpacityChanged(float opacity) {
-	Lock lock(m_initializing);
+void Plot3DDock::backgroundOpacityChanged(float opacity) {
+	if (m_initializing)
+		return;
 	ui.sbBackgroundOpacity->setValue( round(opacity*100.0) );
 }
 
@@ -504,12 +495,8 @@ void Plot3DDock::plotBackgroundOpacityChanged(float opacity) {
 //*************************************************************
 void Plot3DDock::load(){
 	//General
-	ui.chkVisible->setChecked(m_plot->isVisible());
-	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), Worksheet::Centimeter));
-	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), Worksheet::Centimeter));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), Worksheet::Centimeter));
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), Worksheet::Centimeter));
-
+	visibleChanged(m_plot->isVisible());
+	rectChanged(m_plot->rect());
 	//TODO:
 	//ui.cbType->setCurrentIndex((int)m_plot->visualizationType())
 
@@ -518,15 +505,14 @@ void Plot3DDock::load(){
 	ui.leComment->setText(m_plot->comment());
 
 	//Background
-	ui.cbBackgroundType->setCurrentIndex( (int) m_plot->backgroundType() );
-	ui.cbBackgroundColorStyle->setCurrentIndex( (int) m_plot->backgroundColorStyle() );
-	ui.cbBackgroundImageStyle->setCurrentIndex( (int) m_plot->backgroundImageStyle() );
-	ui.cbBackgroundBrushStyle->setCurrentIndex( (int) m_plot->backgroundBrushStyle() );
-	ui.kleBackgroundFileName->setText( m_plot->backgroundFileName() );
-	ui.kcbBackgroundFirstColor->setColor( m_plot->backgroundFirstColor() );
-	ui.kcbBackgroundSecondColor->setColor( m_plot->backgroundSecondColor() );
-	ui.sbBackgroundOpacity->setValue( round(m_plot->backgroundOpacity()*100) );
-
+	backgroundTypeChanged(m_plot->backgroundType());
+	backgroundColorStyleChanged(m_plot->backgroundColorStyle());
+	backgroundImageStyleChanged(m_plot->backgroundImageStyle());
+	backgroundBrushStyleChanged(m_plot->backgroundBrushStyle());
+	backgroundFileNameChanged(m_plot->backgroundFileName());
+	backgroundFirstColorChanged(m_plot->backgroundFirstColor());
+	backgroundSecondColorChanged(m_plot->backgroundSecondColor());
+	backgroundOpacityChanged(m_plot->backgroundOpacity());
 	//Light
 }
 
@@ -562,7 +548,7 @@ void Plot3DDock::loadConfig(KConfig& config){
 	ui.kleBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_plot->backgroundFileName()) );
 	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_plot->backgroundFirstColor()) );
 	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_plot->backgroundSecondColor()) );
-	ui.sbBackgroundOpacity->setValue( round(group.readEntry("BackgroundOpacity", m_plot->backgroundOpacity())*100) );
+	backgroundOpacityChanged(group.readEntry("BackgroundOpacity", m_plot->backgroundOpacity()));
 
 	//Light
 }

@@ -60,38 +60,38 @@ class Plot3DDock: public QWidget {
 		void retranslateUi();
 
 		//"General"-tab
-		void nameChanged();
-		void commentChanged();
-		void visibilityChanged(int);
-		void geometryChanged();
-		void layoutChanged(Worksheet::Layout);
+		void onNameChanged();
+		void onCommentChanged();
+		void onVisibilityChanged(int);
+		void onGeometryChanged();
+		void onLayoutChanged(Worksheet::Layout);
 
 		//"Background"-tab
-		void backgroundTypeChanged(int);
-		void backgroundColorStyleChanged(int);
-		void backgroundImageStyleChanged(int);
-		void backgroundBrushStyleChanged(int);
-		void backgroundFirstColorChanged(const QColor&);
-		void backgroundSecondColorChanged(const QColor&);
-		void backgroundOpacityChanged(int);
-		void backgroundSelectFile();
-		void backgroundFileNameChanged();
+		void onBackgroundTypeChanged(int);
+		void onBackgroundColorStyleChanged(int);
+		void onBackgroundImageStyleChanged(int);
+		void onBackgroundBrushStyleChanged(int);
+		void onBackgroundFirstColorChanged(const QColor&);
+		void onBackgroundSecondColorChanged(const QColor&);
+		void onBackgroundOpacityChanged(int);
+		void onBackgroundSelectFile();
+		void onBackgroundFileNameChanged();
 
 		//SLOTs for changes triggered in Plot3D
 		//"General"-tab
-		void plotDescriptionChanged(const AbstractAspect*);
-		void plotRectChanged(QRectF&);
-		void plotVisibleChanged(bool);
+		void descriptionChanged(const AbstractAspect*);
+		void rectChanged(const QRectF&);
+		void visibleChanged(bool);
 
 		//"Background"-tab
-		void plotBackgroundTypeChanged(PlotArea::BackgroundType);
-		void plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
-		void plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
-		void plotBackgroundBrushStyleChanged(Qt::BrushStyle);
-		void plotBackgroundFirstColorChanged(const QColor&);
-		void plotBackgroundSecondColorChanged(const QColor&);
-		void plotBackgroundFileNameChanged(const QString&);
-		void plotBackgroundOpacityChanged(float);
+		void backgroundTypeChanged(PlotArea::BackgroundType);
+		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
+		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+		void backgroundBrushStyleChanged(Qt::BrushStyle);
+		void backgroundFirstColorChanged(const QColor&);
+		void backgroundSecondColorChanged(const QColor&);
+		void backgroundFileNameChanged(const QString&);
+		void backgroundOpacityChanged(float);
 
 		//saving/loading
 		void loadConfigFromTemplate(KConfig&);
