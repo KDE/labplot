@@ -53,6 +53,7 @@
 #include <vtkPointData.h>
 #include <vtkExtractEdges.h>
 #include <vtkAlgorithm.h>
+#include <vtkDecimatePro.h>
 
 IDataHandler::IDataHandler(): AbstractAspect(i18n("Data handler")) {
 }
@@ -95,6 +96,14 @@ void IDataHandler::makeColorElevation(vtkPolyData* polydata) {
 
 vtkSmartPointer<vtkActor> IDataHandler::actor(const DataHandlerConfig& config) {
 	vtkSmartPointer<vtkPolyData> data = generateData();
+	if (data && data->GetNumberOfPolys() > 10000) {
+		vtkSmartPointer<vtkDecimatePro> decimate = vtkSmartPointer<vtkDecimatePro>::New();
+		decimate->SetInputData(data);
+		decimate->SetTargetReduction(1.0 - 10000.0 / data->GetNumberOfPolys());
+		decimate->Update();
+		data = decimate->GetOutput();
+	}
+
 	if (config.type == Surface3D::Surface3D::VisualizationType_Wireframe)
 		data = extractEdges(data);
 
