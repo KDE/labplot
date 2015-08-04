@@ -39,8 +39,12 @@ Light3DDock::Light3DDock(QWidget* parent)
 	ui.setupUi(this);
 
 	connect(ui.sbXFocalPoint, SIGNAL(valueChanged(double)), SLOT(onFocalPointChanged(double)));
+	connect(ui.sbYFocalPoint, SIGNAL(valueChanged(double)), SLOT(onFocalPointChanged(double)));
+	connect(ui.sbZFocalPoint, SIGNAL(valueChanged(double)), SLOT(onFocalPointChanged(double)));
 
 	connect(ui.sbXPosition, SIGNAL(valueChanged(double)), SLOT(onPositionChanged(double)));
+	connect(ui.sbYPosition, SIGNAL(valueChanged(double)), SLOT(onPositionChanged(double)));
+	connect(ui.sbZPosition, SIGNAL(valueChanged(double)), SLOT(onPositionChanged(double)));
 
 	connect(ui.sbLightIntensity, SIGNAL(valueChanged(double)), SLOT(onIntensityChanged(double)));
 
@@ -51,7 +55,8 @@ Light3DDock::Light3DDock(QWidget* parent)
 	connect(ui.sbLightElevation, SIGNAL(valueChanged(int)), SLOT(onElevationChanged(int)));
 	connect(ui.sbLightAzimuth, SIGNAL(valueChanged(int)), SLOT(onAzimuthChanged(int)));
 	connect(ui.sbLightConeAngle, SIGNAL(valueChanged(int)), SLOT(onConeAngleChanged(int)));
-	children << ui.sbXFocalPoint << ui.sbXPosition << ui.sbLightIntensity
+	children << ui.sbXFocalPoint << ui.sbYFocalPoint << ui.sbZFocalPoint
+			<< ui.sbXPosition << ui.sbYPosition << ui.sbZPosition << ui.sbLightIntensity
 			<< ui.kcbLightAmbientColor << ui.kcbLightDiffuseColor << ui.kcbLightSpecularColor
 			<< ui.sbLightElevation << ui.sbLightAzimuth << ui.sbLightConeAngle;
 }
