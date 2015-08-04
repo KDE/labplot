@@ -191,7 +191,7 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	connect(surface, SIGNAL(opacityChanged(double)), SLOT(opacityChanged(double)));
 	connect(surface, SIGNAL(showXYProjectionChanged(bool)), SLOT(xyProjection(bool)));
 	connect(surface, SIGNAL(showXZProjectionChanged(bool)), SLOT(xzProjection(bool)));
-	connect(surface, SIGNAL(ShowYZProjectionChanged(bool)), SLOT(yzProjection(bool)));
+	connect(surface, SIGNAL(showYZProjectionChanged(bool)), SLOT(yzProjection(bool)));
 
 	// DataHandlers
 
