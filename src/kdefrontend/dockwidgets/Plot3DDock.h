@@ -48,6 +48,7 @@ class Plot3DDock: public QWidget {
 
 	private:
 		Ui::Plot3DDock ui;
+		QVector<QObject*> children;
 		Plot3D* m_plot;
 		QList<Plot3D*> m_plotsList;
 		bool m_initializing;

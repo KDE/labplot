@@ -51,6 +51,9 @@ Light3DDock::Light3DDock(QWidget* parent)
 	connect(ui.sbLightElevation, SIGNAL(valueChanged(int)), SLOT(onElevationChanged(int)));
 	connect(ui.sbLightAzimuth, SIGNAL(valueChanged(int)), SLOT(onAzimuthChanged(int)));
 	connect(ui.sbLightConeAngle, SIGNAL(valueChanged(int)), SLOT(onConeAngleChanged(int)));
+	children << ui.sbXFocalPoint << ui.sbXPosition << ui.sbLightIntensity
+			<< ui.kcbLightAmbientColor << ui.kcbLightDiffuseColor << ui.kcbLightSpecularColor
+			<< ui.sbLightElevation << ui.sbLightAzimuth << ui.sbLightConeAngle;
 }
 
 void Light3DDock::onFocalPointChanged(double) {
@@ -102,7 +105,7 @@ void Light3DDock::setLight(Light *light) {
 	this->light = light;
 
 	{
-	const SignalBlocker blocker(this);
+	const SignalBlocker blocker(children);
 	const QVector3D& fp = light->focalPoint();
 	focalPointChanged(fp);
 

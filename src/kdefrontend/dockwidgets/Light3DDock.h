@@ -65,6 +65,7 @@ class Light3DDock : public QWidget {
 		void coneAngleChanged(double);
 	private:
 		Ui::Light3DDock ui;
+		QVector<QObject*> children;
 		Light *light;
 		bool m_initializing;
 };

@@ -148,14 +148,6 @@ void Plot3D::addCurve() {
 	d->vtkItem->refresh();
 }
 
-void Plot3D::addLight() {
-	Q_D(Plot3D);
-	Light* newLight = new Light(d->renderer);
-	d->lights.insert(newLight);
-	configureAspect(newLight);
-	d->vtkItem->refresh();
-}
-
 void Plot3D::itemRemoved() {
 	Q_D(Plot3D);
 	Surface3D* surface = qobject_cast<Surface3D*>(sender());
@@ -171,19 +163,6 @@ void Plot3D::itemRemoved() {
 		d->curves.remove(curve);
 		return;
 	}
-
-	Light* light = qobject_cast<Light*>(sender());
-	if (light != 0) {
-		qDebug() << "Remove light";
-		d->lights.remove(light);
-	}
-}
-
-void Plot3D::lightRemoved() {
-	Q_D(Plot3D);
-	Light* light = qobject_cast<Light*>(sender());
-	if (light != 0)
-		d->lights.remove(light);
 }
 
 void Plot3D::objectClicked(vtkProp* object) {
@@ -246,12 +225,10 @@ void Plot3D::objectHovered(vtkProp* object) {
 void Plot3D::initActions() {
 	Q_D(Plot3D);
 	//"add new" actions
-	addLightAction = new KAction(KIcon("light"), i18n("Light"), this);
 	addCurveAction = new KAction(KIcon("3d-curve"), i18n("3D-curve"), this);
 	addEquationCurveAction = new KAction(KIcon("3d-equation-curve"), i18n("3D-curve from a mathematical equation"), this);
 	addSurfaceAction = new KAction(KIcon("3d-surface"), i18n("3D-surface"), this);
 
-	connect(addLightAction, SIGNAL(triggered(bool)), SLOT(addLight()));
  	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 // 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
  	connect(addSurfaceAction, SIGNAL(triggered()), SLOT(addSurface()));
@@ -312,7 +289,6 @@ void Plot3D::initActions() {
 
 void Plot3D::initMenus(){
 	addNewMenu = new QMenu(i18n("Add new"));
-	addNewMenu->addAction(addLightAction);
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addAction(addSurfaceAction);
@@ -463,8 +439,9 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	, vtkItem(0)
 	, isInitialized(false)
 	, rectSet(false)
-	, axes(new Axes)
-	, mainLight(new Light(0, false)) {
+	, axes(new Axes) {
+	for (int i = 0; i < 2; ++i)
+		mainLight[i] = new Light;
 }
 
 Plot3DPrivate::~Plot3DPrivate() {
@@ -507,9 +484,19 @@ void Plot3DPrivate::init() {
 	renderWindow->GetInteractor()->SetInteractorStyle(style);
 
 	//light
-	mainLight->setRenderer(renderer);
-	q->addChild(mainLight);
-	vtkItem->connect(mainLight, SIGNAL(parametersChanged()), SLOT(refresh()));
+	for (int i = 0; i < 2; ++i) {
+		mainLight[i]->setRenderer(renderer);
+		q->addChild(mainLight[i]);
+		vtkItem->connect(mainLight[i], SIGNAL(parametersChanged()), SLOT(refresh()));
+	}
+
+	const QVector3D fp(1.875, 0.6125, 0);
+	const QVector3D pos(0.875, 1.6125, 1);
+	mainLight[0]->setFocalPoint(fp);
+	mainLight[0]->setPosition(pos);
+	// Highlighting the back side
+	mainLight[1]->setFocalPoint(-fp);
+	mainLight[1]->setPosition(-pos);
 
 	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
 	backgroundRenderer->AddActor(backgroundImageActor);
@@ -527,11 +514,6 @@ void Plot3DPrivate::init() {
 	foreach(Curve3D* curve, curves) {
 		curve->setRenderer(renderer);
 		q->configureAspect(curve);
-	}
-
-	foreach(Light* light, lights) {
-		light->setRenderer(renderer);
-		q->configureAspect(light);
 	}
 }
 
@@ -716,10 +698,8 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 		foreach(const Curve3D* curve, d->curves){
 			curve->save(writer);
 		}
-		d->mainLight->save(writer);
-		foreach(const Light* light, d->lights){
-			light->save(writer);
-		}
+		for (int i = 0; i < 2; ++i)
+			d->mainLight[i]->save(writer);
 	writer->writeEndElement();
 }
 
@@ -737,6 +717,7 @@ bool Plot3D::load(XmlStreamReader* reader) {
 
 	const QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 
+	bool firstLightLoaded = false;
 	while(!reader->atEnd()){
 		reader->readNext();
 		const QStringRef& sectionName = reader->name();
@@ -776,12 +757,12 @@ bool Plot3D::load(XmlStreamReader* reader) {
 			attributeReader.checkAndLoadAttribute("fileName", d->backgroundFileName);
 			attributeReader.checkAndLoadAttribute("opacity", d->backgroundOpacity);
 		}else if(sectionName == "mainLight"){
-			if (!d->mainLight->load(reader))
-				return false;
-		}else if(sectionName == "light"){
-			Light* newLight = new Light();
-			newLight->load(reader);
-			d->lights.insert(newLight);
+			if (!firstLightLoaded) {
+				firstLightLoaded = true;
+				if (!d->mainLight[0]->load(reader))
+					return false;
+			} else if (!d->mainLight[1]->load(reader))
+					return false;
 		}
 	}
 	return true;

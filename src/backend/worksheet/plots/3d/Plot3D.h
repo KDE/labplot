@@ -74,7 +74,6 @@ class Plot3D : public AbstractPlot {
 
 		QAction* visibilityAction;
 
-		QAction* addLightAction;
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
 		QAction* addSurfaceAction;
@@ -116,9 +115,7 @@ class Plot3D : public AbstractPlot {
 		void updatePlot();
 		void addSurface();
 		void addCurve();
-		void addLight();
 		void itemRemoved();
-		void lightRemoved();
 		void objectClicked(vtkProp*);
 		void objectHovered(vtkProp*);
 

@@ -113,6 +113,11 @@ Plot3DDock::Plot3DDock(QWidget* parent)
 
 	// TODO: Uncomment later
 	//connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	children << ui.leName << ui.leComment << ui.chkVisible << ui.sbLeft << ui.sbTop
+			<< ui.sbWidth << ui.sbHeight << ui.cbBackgroundType << ui.cbBackgroundColorStyle
+			<< ui.cbBackgroundImageStyle << ui.cbBackgroundBrushStyle << ui.bBackgroundOpen
+			<< ui.kleBackgroundFileName << ui.kcbBackgroundFirstColor << ui.kcbBackgroundSecondColor
+			<< ui.sbBackgroundOpacity;
 }
 
 void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
@@ -121,7 +126,7 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	m_plot = m_plotsList.first();
 
 	{
-	const SignalBlocker blocker(this);
+	const SignalBlocker blocker(children);
 	//if there is more then one plot in the list, disable the name and comment fields in the tab "general"
 	if (m_plotsList.size()==1){
 		ui.lName->setEnabled(true);

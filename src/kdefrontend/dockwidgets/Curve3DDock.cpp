@@ -79,13 +79,17 @@ Curve3DDock::Curve3DDock(QWidget* parent)
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+	children << ui.cbXCoordinate << ui.cbYCoordinate << ui.cbZCoordinate
+			<< ui.leName << ui.leComment << ui.chkVisible << ui.cbShowEdges
+			<< ui.cbClosedCurve << ui.sbPointSize;
 }
 
 void Curve3DDock::setCurve(Curve3D* curve) {
 	this->curve = curve;
 
 	{
-	const SignalBlocker blocker(this);
+	const SignalBlocker blocker(children);
 	ui.leName->setText(curve->name());
 	ui.leComment->setText(curve->comment());
 	ui.chkVisible->setChecked(curve->isVisible());

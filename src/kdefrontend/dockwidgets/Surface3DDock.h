@@ -101,6 +101,7 @@ class Surface3DDock : public QWidget {
 
 	private:
 		Ui::Surface3DDock ui;
+		QVector<QObject*> children;
 		Surface3D *surface;
 		AspectTreeModel *aspectTreeModel;
 		bool m_initializing;

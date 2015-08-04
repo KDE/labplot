@@ -79,6 +79,7 @@ class Curve3DDock : public QWidget {
 
 	private:
 		Ui::Curve3DDock ui;
+		QVector<QObject*> children;
 		Curve3D *curve;
 		AspectTreeModel *aspectTreeModel;
 		bool m_initializing;

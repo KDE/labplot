@@ -105,6 +105,10 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+	children << ui.leName << ui.leComment << ui.cbDataSource << ui.cbType
+			<< ui.cbFileRequester << ui.cbMatrix << ui.chkVisible << ui.cbColorFillingType
+			<< ui.kcbColorFilling << ui.sbColorFillingOpacity;
 }
 
 void Surface3DDock::setSurface(Surface3D *surface) {
@@ -112,7 +116,7 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	const Matrix *matrix = surface->matrixDataHandler().matrix();
 	const SpreadsheetDataHandler *sdh = &surface->spreadsheetDataHandler();
 	{
-	const SignalBlocker blocker(this);
+	const SignalBlocker blocker(children);
 	ui.leName->setText(surface->name());
 	ui.leComment->setText(surface->comment());
 	ui.chkVisible->setChecked(surface->isVisible());

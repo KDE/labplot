@@ -47,6 +47,9 @@ Axes3DDock::Axes3DDock(QWidget* parent)
 	connect(ui.leXLabel, SIGNAL(returnPressed(const QString&)), SLOT(onLabelChanged(const QString&)));
 	connect(ui.leYLabel, SIGNAL(returnPressed(const QString&)), SLOT(onLabelChanged(const QString&)));
 	connect(ui.leZLabel, SIGNAL(returnPressed(const QString&)), SLOT(onLabelChanged(const QString&)));
+	children << ui.cbType << ui.cbLabelFontSize << ui.cbXLabelColor
+			<< ui.cbYLabelColor << ui.cbZLabelColor << ui.leXLabel
+			<< ui.leYLabel << ui.leZLabel;
 }
 
 void Axes3DDock::retranslateUi() {
@@ -58,7 +61,7 @@ void Axes3DDock::setAxes(Axes *axes) {
 	this->axes = axes;
 
 	{
-	const SignalBlocker blocker(this);
+	const SignalBlocker blocker(children);
 	axesTypeChanged(axes->type());
 	fontSizeChanged(axes->fontSize());
 	xLabelColorChanged(axes->xLabelColor());

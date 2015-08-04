@@ -51,17 +51,21 @@ namespace DockHelpers {
 	};
 
 	struct SignalBlocker {
-		SignalBlocker(QObject* object)
-			: object(object) {
-			object->blockSignals(true);
+		SignalBlocker(const QVector<QObject*>& objects)
+			: objects(objects) {
+			foreach(QObject* object, objects) {
+				object->blockSignals(true);
+			}
 		}
 
 		~SignalBlocker() {
-			object->blockSignals(false);
+			foreach(QObject* object, objects) {
+				object->blockSignals(false);
+			}
 		}
 
 	private:
-		QObject* const object;
+		const QVector<QObject*>& objects;
 	};
 
 	inline void showItem(QWidget* labelWidget, QWidget* inputWidget, bool pred = true) {

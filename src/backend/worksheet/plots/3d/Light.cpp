@@ -40,9 +40,9 @@
 #include <vtkLight.h>
 #include <vtkRenderer.h>
 
-Light::Light(vtkRenderer* renderer, bool canRemove)
-	: AbstractAspect(i18n(canRemove ? "Light" : "Main Light"))
-	, d_ptr(new LightPrivate(renderer, this, canRemove)) {
+Light::Light(vtkRenderer* renderer)
+	: AbstractAspect(i18n("Main Light"))
+	, d_ptr(new LightPrivate(renderer, this)) {
 }
 
 Light::~Light() {
@@ -116,11 +116,7 @@ namespace {
 void Light::save(QXmlStreamWriter* writer) const {
 	Q_D(const Light);
 
-	if (d->canRemove)
-		writer->writeStartElement("light");
-	else
-		writer->writeStartElement("mainLight");
-
+	writer->writeStartElement("mainLight");
 		writeBasicAttributes(writer);
 		writer->writeAttribute("focalPoint", pointToString(d->focalPoint));
 		writer->writeAttribute("position", pointToString(d->position));
@@ -153,9 +149,6 @@ bool Light::load(XmlStreamReader* reader) {
 QMenu* Light::createContextMenu() {
 	// Reimplements createContextMenu to hide a delete button
 	Q_D(const Light);
-	if (d->canRemove)
-		return AbstractAspect::createContextMenu();
-
 	KMenu* menu = new KMenu();
 	menu->addTitle(name());
 	menu->addAction(KIcon("edit-rename"), i18n("Rename"), this, SIGNAL(renameRequested()));
@@ -164,9 +157,8 @@ QMenu* Light::createContextMenu() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-LightPrivate::LightPrivate(vtkRenderer* renderer, Light* parent, bool canRemove)
+LightPrivate::LightPrivate(vtkRenderer* renderer, Light* parent)
 	: q(parent)
-	, canRemove(canRemove)
 	, renderer(renderer)
 	, focalPoint(1.875, 0.6125, 0)
 	, position(0.875, 1.6125, 1)

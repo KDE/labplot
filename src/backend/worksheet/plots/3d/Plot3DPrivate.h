@@ -70,10 +70,9 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		// base class between them
 		QSet<Surface3D*> surfaces;
 		QSet<Curve3D*> curves;
-		QSet<Light*> lights;
 
 		Axes* axes;
-		Light* mainLight;
+		Light* mainLight[2];
 		vtkSmartPointer<vtkRenderer> renderer;
 		vtkSmartPointer<vtkRenderer> backgroundRenderer;
 		vtkSmartPointer<vtkImageActor> backgroundImageActor;

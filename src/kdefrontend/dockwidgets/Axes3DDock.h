@@ -59,6 +59,7 @@ class Axes3DDock : public QWidget {
 
 	private:
 		Ui::Axes3DDock ui;
+		QVector<QObject*> children;
 		Axes *axes;
 		bool m_initializing;
 };

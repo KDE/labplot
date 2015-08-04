@@ -41,7 +41,6 @@ class Light;
 struct LightPrivate {
 	Light* const q;
 
-	bool canRemove;
 	vtkSmartPointer<vtkRenderer> renderer;
 	vtkSmartPointer<vtkLight> light;
 
@@ -55,7 +54,7 @@ struct LightPrivate {
 	double azimuth;
 	double coneAngle;
 
-	LightPrivate(vtkRenderer* renderer, Light* parent, bool canRemove);
+	LightPrivate(vtkRenderer* renderer, Light* parent);
 	~LightPrivate();
 
 	void init();

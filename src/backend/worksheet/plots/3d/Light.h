@@ -43,7 +43,7 @@ class Light : public AbstractAspect {
 		Q_DECLARE_PRIVATE(Light)
 		Q_DISABLE_COPY(Light)
 	public:
-		Light(vtkRenderer* renderer = 0, bool canRemove = true);
+		Light(vtkRenderer* renderer = 0);
 		virtual ~Light();
 
 		void setRenderer(vtkRenderer* renderer);
