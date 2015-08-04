@@ -359,7 +359,7 @@ void SpreadsheetView::connectActions(){
 	connect(action_mask_values, SIGNAL(triggered()), this, SLOT(maskColumnValues()));
 // 	connect(action_join_columns, SIGNAL(triggered()), this, SLOT(joinColumns()));
 	connect(action_normalize_columns, SIGNAL(triggered()), this, SLOT(normalizeSelectedColumns()));
--	connect(action_normalize_selection, SIGNAL(triggered()), this, SLOT(normalizeSelection()));
+	connect(action_normalize_selection, SIGNAL(triggered()), this, SLOT(normalizeSelection()));
 	connect(action_sort_columns, SIGNAL(triggered()), this, SLOT(sortSelectedColumns()));
 	connect(action_sort_asc_column, SIGNAL(triggered()), this, SLOT(sortColumnAscending()));
 	connect(action_sort_desc_column, SIGNAL(triggered()), this, SLOT(sortColumnDescending()));
