@@ -108,13 +108,6 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 }
 
 void Surface3DDock::setSurface(Surface3D *surface) {
-	if (this->surface) {
-		this->surface->disconnect(this);
-		this->surface->fileDataHandler().disconnect(this);
-		this->surface->spreadsheetDataHandler().disconnect(this);
-		this->surface->matrixDataHandler().disconnect(this);
-	}
-
 	this->surface = surface;
 	const Matrix *matrix = surface->matrixDataHandler().matrix();
 	const SpreadsheetDataHandler *sdh = &surface->spreadsheetDataHandler();

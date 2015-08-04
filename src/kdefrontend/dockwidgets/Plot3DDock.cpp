@@ -116,12 +116,6 @@ Plot3DDock::Plot3DDock(QWidget* parent)
 }
 
 void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
-	if (m_plot) {
-		m_plot->disconnect(this);
-		foreach(Plot3D* plot, m_plotsList)
-			plot->disconnect(this);
-	}
-
 	m_plotsList = plots;
 	Q_ASSERT(m_plotsList.size());
 	m_plot = m_plotsList.first();

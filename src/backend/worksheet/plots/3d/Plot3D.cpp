@@ -188,28 +188,25 @@ void Plot3D::lightRemoved() {
 
 void Plot3D::objectClicked(vtkProp* object) {
 	Q_D(Plot3D);
-	if (d->axes == 0)
-		return;
-
 	if (object == 0) {
 		// Deselect all Plot3D children
 		qDebug() << Q_FUNC_INFO << "Deselect";
 		emit currentAspectChanged(this);
 		foreach(Surface3D* surface, d->surfaces) {
-			surface->highlight(false);
+			surface->select(false);
 		}
 
 		foreach(Curve3D* curve, d->curves) {
-			curve->highlight(false);
+			curve->select(false);
 		}
 	} else {
 		foreach(Surface3D* surface, d->surfaces) {
 			if (*surface == object) {
 				qDebug() << Q_FUNC_INFO << "Surface clicked" << surface->name();
 				emit currentAspectChanged(surface);
-				surface->highlight(true);
+				surface->select(true);
 			} else {
-				surface->highlight(false);
+				surface->select(false);
 			}
 		}
 
@@ -217,12 +214,32 @@ void Plot3D::objectClicked(vtkProp* object) {
 			if (*curve == object) {
 				qDebug() << Q_FUNC_INFO << "Curve clicked" << curve->name();
 				emit currentAspectChanged(curve);
-				curve->highlight(true);
+				curve->select(true);
 			} else {
-				curve->highlight(false);
+				curve->select(false);
 			}
 		}
 	}
+	d->vtkItem->refresh();
+}
+
+void Plot3D::objectHovered(vtkProp* object) {
+	Q_D(Plot3D);
+
+	if (object == 0) {
+		foreach(Surface3D* surface, d->surfaces)
+			surface->highlight(false);
+
+		foreach(Curve3D* curve, d->curves)
+			curve->highlight(false);
+	} else {
+		foreach(Surface3D* surface, d->surfaces)
+			surface->highlight(*surface == object);
+
+		foreach(Curve3D* curve, d->curves)
+			curve->highlight(*curve == object);
+	}
+
 	d->vtkItem->refresh();
 }
 
@@ -486,6 +503,7 @@ void Plot3DPrivate::init() {
 	vtkSmartPointer<MouseInteractor> style = vtkSmartPointer<MouseInteractor>::New();
 	style->SetDefaultRenderer(renderer);
 	q->connect(&style->broadcaster, SIGNAL(objectClicked(vtkProp*)), SLOT(objectClicked(vtkProp*)));
+	q->connect(&style->broadcaster, SIGNAL(objectHovered(vtkProp*)), SLOT(objectHovered(vtkProp*)));
 	renderWindow->GetInteractor()->SetInteractorStyle(style);
 
 	//light

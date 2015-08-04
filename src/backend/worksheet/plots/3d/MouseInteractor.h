@@ -35,20 +35,29 @@
 class vtkProp;
 class MouseInteractorBroadcaster : public QObject {
 		Q_OBJECT
-	public:
-		void setObject(vtkProp* object);
+		friend class MouseInteractor;
 	signals:
+		void objectHovered(vtkProp*);
 		void objectClicked(vtkProp*);
 };
 
 class MouseInteractor : public vtkInteractorStyleTrackballCamera {
 	public:
+		MouseInteractor();
 		static MouseInteractor* New();
 		vtkTypeMacro(MouseInteractor, vtkInteractorStyleTrackballCamera);
 
+		virtual void OnMouseMove();
 		virtual void OnLeftButtonDown();
 
 		MouseInteractorBroadcaster broadcaster;
+
+	private:
+		vtkProp* getPickedObject(int *pos = 0);
+
+	private:
+		vtkProp* prevHovered;
+		vtkProp* prevClicked;
 };
 
 #endif

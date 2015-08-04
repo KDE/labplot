@@ -38,6 +38,7 @@ class vtkRenderer;
 class Base3D;
 struct Base3DPrivate {
 	Base3D *baseParent;
+	bool isHighlighted;
 	bool isSelected;
 	vtkSmartPointer<vtkRenderer> renderer;
 	vtkSmartPointer<vtkActor> actor;

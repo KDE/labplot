@@ -54,15 +54,37 @@ void Base3D::setRenderer(vtkRenderer* renderer) {
 
 void Base3D::highlight(bool pred) {
 	Q_D(Base3D);
-	if (pred && !d->isSelected) {
-		d->isSelected = pred;
+	if (pred && !d->isHighlighted) {
+		d->isHighlighted = true;
 		vtkProperty *prop = d->actor->GetProperty();
-		d->property->DeepCopy(prop);
+		if (!d->isSelected)
+			d->property->DeepCopy(prop);
+		prop->SetColor(1.0, 1.0, 0.0);
+		prop->SetDiffuse(1.0);
+		prop->SetSpecular(0.0);
+	} else if (d->isHighlighted && !pred) {
+		d->isHighlighted = false;
+		d->actor->GetProperty()->DeepCopy(d->property);
+		if (d->isSelected) {
+			d->isSelected = false;
+			select(true);
+		}
+	}
+}
+
+void Base3D::select(bool pred) {
+	Q_D(Base3D);
+	if (pred && !d->isSelected) {
+		d->isSelected = true;
+		vtkProperty *prop = d->actor->GetProperty();
+		if (!d->isHighlighted)
+			d->property->DeepCopy(prop);
 		prop->SetColor(1.0, 0.0, 0.0);
 		prop->SetDiffuse(1.0);
 		prop->SetSpecular(0.0);
 	} else if (d->isSelected && !pred) {
-		d->isSelected = pred;
+		d->isSelected = false;
+		d->isHighlighted = false;
 		d->actor->GetProperty()->DeepCopy(d->property);
 	}
 }
@@ -108,6 +130,7 @@ void Base3D::remove() {
 
 Base3DPrivate::Base3DPrivate(vtkRenderer* renderer, Base3D* baseParent)
 	: baseParent(baseParent)
+	, isHighlighted(false)
 	, isSelected(false)
 	, renderer(renderer)
 	, property(vtkProperty::New()) {

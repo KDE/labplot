@@ -99,9 +99,6 @@ void Light3DDock::onConeAngleChanged(int angle) {
 }
 
 void Light3DDock::setLight(Light *light) {
-	if (this->light)
-		this->light->disconnect(this);
-
 	this->light = light;
 
 	{

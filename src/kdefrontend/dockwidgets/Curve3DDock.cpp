@@ -82,9 +82,6 @@ Curve3DDock::Curve3DDock(QWidget* parent)
 }
 
 void Curve3DDock::setCurve(Curve3D* curve) {
-	if (this->curve)
-		this->curve->disconnect(this);
-
 	this->curve = curve;
 
 	{

@@ -33,19 +33,40 @@
 #include <vtkSmartPointer.h>
 #include <vtkPicker.h>
 
-void MouseInteractorBroadcaster::setObject(vtkProp* object) {
-	emit objectClicked(object);
-}
-
 vtkStandardNewMacro(MouseInteractor);
 
-void MouseInteractor::OnLeftButtonDown() {
-	int* clickPos = GetInteractor()->GetEventPosition();
+MouseInteractor::MouseInteractor()
+	: prevHovered(0)
+	, prevClicked(0) {
+
+}
+
+vtkProp* MouseInteractor::getPickedObject(int *pos) {
+	if (pos == 0)
+		pos = GetInteractor()->GetEventPosition();
 	
 	vtkSmartPointer<vtkPicker> picker = vtkSmartPointer<vtkPicker>::New();
 	picker->SetTolerance(0.0);
-	picker->Pick(clickPos[0], clickPos[1], 0, GetDefaultRenderer());
-	broadcaster.setObject(picker->GetViewProp());
+	picker->Pick(pos[0], pos[1], 0, GetDefaultRenderer());
+	return picker->GetViewProp();
+}
 
+void MouseInteractor::OnMouseMove() {
+	int pos[2];
+	GetInteractor()->GetEventPosition(pos);
+	vtkInteractorStyleTrackballCamera::OnMouseMove();
+	vtkProp* object = getPickedObject(pos);
+	if (object != prevHovered) {
+		prevHovered = object;
+		emit broadcaster.objectHovered(prevHovered);
+	}
+}
+
+void MouseInteractor::OnLeftButtonDown() {
 	vtkInteractorStyleTrackballCamera::OnLeftButtonDown();
+	vtkProp* object = getPickedObject();
+	if (object != prevClicked) {
+		prevClicked = object;
+		emit broadcaster.objectClicked(prevClicked);
+	}
 }

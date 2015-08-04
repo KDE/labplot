@@ -46,6 +46,7 @@ class Base3D : public AbstractAspect {
 		void show(bool pred);
 		bool isVisible() const;
 		void highlight(bool pred);
+		void select(bool pred);
 		bool operator==(vtkProp* prop) const;
 		bool operator!=(vtkProp* prop) const;
 

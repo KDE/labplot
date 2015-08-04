@@ -120,6 +120,7 @@ class Plot3D : public AbstractPlot {
 		void itemRemoved();
 		void lightRemoved();
 		void objectClicked(vtkProp*);
+		void objectHovered(vtkProp*);
 
 	signals:
 		friend class Plot3DSetBackgroundTypeCmd;
