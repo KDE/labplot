@@ -82,6 +82,26 @@ Plot3D::Plot3D(const QString& name)
 	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 }
 
+void Plot3D::childSelected(const AbstractAspect* aspect) {
+	Base3D* object = qobject_cast<Base3D*>(const_cast<AbstractAspect*>(aspect));
+	if (object != 0)
+		object->select(true);
+
+	AbstractPlot::childSelected(aspect);
+	Q_D(Plot3D);
+	d->vtkItem->refresh();
+}
+
+void Plot3D::childDeselected(const AbstractAspect* aspect) {
+	Base3D* object = qobject_cast<Base3D*>(const_cast<AbstractAspect*>(aspect));
+	if (object != 0)
+		object->select(false);
+
+	AbstractPlot::childDeselected(aspect);
+	Q_D(Plot3D);
+	d->vtkItem->refresh();
+}
+
 void Plot3D::init(bool transform){
 	Q_D(Plot3D);
 	if (d->isInitialized)

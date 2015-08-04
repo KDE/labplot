@@ -111,6 +111,10 @@ class Plot3D : public AbstractPlot {
 		QMenu* zoomMenu;
 		QMenu* rotateMenu;
 
+	protected slots:
+		void childSelected(const AbstractAspect*);
+		void childDeselected(const AbstractAspect*);
+
 	private slots:
 		void updatePlot();
 		void addSurface();
