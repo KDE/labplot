@@ -395,6 +395,15 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 }
 
 /**
+ * \brief Add the given Aspect to my list of children without any checks and without putting this step onto the undo-stack
+ */
+void AbstractAspect::addChildFast(AbstractAspect* child) {
+	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
+	connect(child, SIGNAL(deselected(const AbstractAspect*)), this, SLOT(childDeselected(const AbstractAspect*)));
+	m_aspect_private->insertChild(m_aspect_private->m_children.count(), child);
+}
+
+/**
  * \brief Insert the given Aspect at a specific position in my list of children.
  */
 void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* before) {
@@ -412,6 +421,19 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 
 	exec(new AspectChildAddCmd(m_aspect_private, child, index));
 	endMacro();
+}
+
+/**
+ * \brief Insert the given Aspect at a specific position in my list of children.without any checks and without putting this step onto the undo-stack
+ */
+void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before) {
+	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
+	connect(child, SIGNAL(deselected(const AbstractAspect*)), this, SLOT(childDeselected(const AbstractAspect*)));
+
+	int index = m_aspect_private->indexOfChild(before);
+	if (index == -1)
+		index = m_aspect_private->m_children.count();
+	m_aspect_private->insertChild(index, child);
 }
 
 /**

@@ -40,7 +40,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 int main (int argc, char *argv[]) {
-	KAboutData aboutData( "labplot2", "LabPlot2",
+	KAboutData aboutData( "labplot2", "labplot2",
 			ki18n("LabPlot2"), LVERSION,
 			ki18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
 			KAboutData::License_GPL,
