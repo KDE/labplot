@@ -83,7 +83,6 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	connect(ui.leName, SIGNAL(returnPressed()), SLOT(onNameChanged()));
 	connect(ui.leComment, SIGNAL(returnPressed()), SLOT(onCommentChanged()));
 	connect(ui.cbDataSource, SIGNAL(currentIndexChanged(int)), SLOT(onDataSourceChanged(int)));
-	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), SLOT(onVisualizationTypeChanged(int)));
 	connect(ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), SLOT(onFileChanged(const KUrl&)));
 	connect(ui.cbMatrix, SIGNAL(currentModelIndexChanged(const QModelIndex&)), SLOT(onTreeViewIndexChanged(const QModelIndex&)));
 	connect(ui.chkVisible, SIGNAL(toggled(bool)), SLOT(onVisibilityChanged(bool)));
@@ -94,9 +93,12 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	connect(ui.sbColorFillingOpacity, SIGNAL(valueChanged(int)), SLOT(onOpacityChanged(int)));
 
 	//Mesh
+	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), SLOT(onVisualizationTypeChanged(int)));
 
 	//Projection
-
+	connect(ui.chbXYProjection, SIGNAL(toggled(bool)), SLOT(onXYProjection(bool)));
+	connect(ui.chbXZProjection, SIGNAL(toggled(bool)), SLOT(onXZProjection(bool)));
+	connect(ui.chbYZProjection, SIGNAL(toggled(bool)), SLOT(onYZProjection(bool)));
 
 	//template handler
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Surface3D);
@@ -108,7 +110,41 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 
 	children << ui.leName << ui.leComment << ui.cbDataSource << ui.cbType
 			<< ui.cbFileRequester << ui.cbMatrix << ui.chkVisible << ui.cbColorFillingType
-			<< ui.kcbColorFilling << ui.sbColorFillingOpacity;
+			<< ui.kcbColorFilling << ui.sbColorFillingOpacity
+			<< ui.chbXYProjection << ui.chbXZProjection << ui.chbYZProjection;
+}
+
+void Surface3DDock::onXYProjection(bool show) {
+	const Lock lock(m_initializing);
+	surface->setShowXYProjection(show);
+}
+
+void Surface3DDock::onXZProjection(bool show) {
+	const Lock lock(m_initializing);
+	surface->setShowXZProjection(show);
+}
+
+void Surface3DDock::onYZProjection(bool show) {
+	const Lock lock(m_initializing);
+	surface->setShowYZProjection(show);
+}
+
+void Surface3DDock::xyProjection(bool show) {
+	if (m_initializing)
+		return;
+	ui.chbXYProjection->setChecked(show);
+}
+
+void Surface3DDock::xzProjection(bool show) {
+	if (m_initializing)
+		return;
+	ui.chbXZProjection->setChecked(show);
+}
+
+void Surface3DDock::yzProjection(bool show) {
+	if (m_initializing)
+		return;
+	ui.chbYZProjection->setChecked(show);
 }
 
 void Surface3DDock::setSurface(Surface3D *surface) {
@@ -136,6 +172,9 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	colorChanged(surface->color());
 	opacityChanged(surface->opacity());
 	pathChanged(surface->fileDataHandler().file());
+	xyProjection(surface->showXYProjection());
+	xzProjection(surface->showXZProjection());
+	yzProjection(surface->showYZProjection());
 
 	matrixChanged(matrix);
 
@@ -154,6 +193,9 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	connect(surface, SIGNAL(colorFillingChanged(Surface3D::ColorFilling)), SLOT(colorFillingChanged(Surface3D::ColorFilling)));
 	connect(surface, SIGNAL(colorChanged(const QColor&)), SLOT(colorChanged(const QColor&)));
 	connect(surface, SIGNAL(opacityChanged(double)), SLOT(opacityChanged(double)));
+	connect(surface, SIGNAL(showXYProjectionChanged(bool)), SLOT(xyProjection(bool)));
+	connect(surface, SIGNAL(showXZProjectionChanged(bool)), SLOT(xzProjection(bool)));
+	connect(surface, SIGNAL(ShowYZProjectionChanged(bool)), SLOT(yzProjection(bool)));
 
 	// DataHandlers
 

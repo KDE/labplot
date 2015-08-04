@@ -52,6 +52,9 @@ struct DataHandlerConfig {
 	Surface3D::ColorFilling colorFilling;
 	QColor color;
 	double opacity;
+	bool showXYProjection;
+	bool showXZProjection;
+	bool showYZProjection;
 };
 
 class IDataHandler : public AbstractAspect {

@@ -76,6 +76,9 @@ BASIC_SHARED_D_READER_IMPL(Surface3D, Surface3D::DataSource, dataSource, sourceT
 BASIC_SHARED_D_READER_IMPL(Surface3D, Surface3D::ColorFilling, colorFilling, colorFilling)
 BASIC_SHARED_D_READER_IMPL(Surface3D, QColor, color, color)
 BASIC_SHARED_D_READER_IMPL(Surface3D, double, opacity, opacity)
+BASIC_SHARED_D_READER_IMPL(Surface3D, bool, showXYProjection, showXYProjection)
+BASIC_SHARED_D_READER_IMPL(Surface3D, bool, showXZProjection, showXZProjection)
+BASIC_SHARED_D_READER_IMPL(Surface3D, bool, showYZProjection, showYZProjection)
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
@@ -96,6 +99,15 @@ STD_SETTER_IMPL(Surface3D, Color, const QColor&, color, "%1: color changed")
 STD_SETTER_CMD_IMPL_F_S(Surface3D, SetOpacity, double, opacity, update)
 STD_SETTER_IMPL(Surface3D, Opacity, double, opacity, "%1: opacity changed")
 
+STD_SETTER_CMD_IMPL_F_S(Surface3D, SetShowXYProjection, bool, showXYProjection, update)
+STD_SETTER_IMPL(Surface3D, ShowXYProjection, bool, showXYProjection, "%1: show XY projection changed")
+
+STD_SETTER_CMD_IMPL_F_S(Surface3D, SetShowXZProjection, bool, showXZProjection, update)
+STD_SETTER_IMPL(Surface3D, ShowXZProjection, bool, showXZProjection, "%1: show XZ projection changed")
+
+STD_SETTER_CMD_IMPL_F_S(Surface3D, SetShowYZProjection, bool, showYZProjection, update)
+STD_SETTER_IMPL(Surface3D, ShowYZProjection, bool, showYZProjection, "%1: show YZ projection changed")
+
 ////////////////////////////////////////////////////////////////////////////////
 
 Surface3DPrivate::Surface3DPrivate(vtkRenderer* renderer, Surface3D *parent)
@@ -106,6 +118,9 @@ Surface3DPrivate::Surface3DPrivate(vtkRenderer* renderer, Surface3D *parent)
 	, colorFilling(Surface3D::ColorFilling_Empty)
 	, color(Qt::gray)
 	, opacity(0.5)
+	, showXYProjection(false)
+	, showXZProjection(false)
+	, showYZProjection(false)
 	, demoHandler(new DemoDataHandler)
 	, spreadsheetHandler(new SpreadsheetDataHandler)
 	, matrixHandler(new MatrixDataHandler)
@@ -145,6 +160,9 @@ void Surface3DPrivate::createActor() {
 	config.colorFilling = colorFilling;
 	config.color = color;
 	config.opacity = opacity;
+	config.showXYProjection = showXYProjection;
+	config.showXZProjection = showXZProjection;
+	config.showYZProjection = showYZProjection;
 	if (sourceType == Surface3D::DataSource_Empty) {
 		actor = demoHandler->actor(config);
 	} else if (sourceType == Surface3D::DataSource_File) {
@@ -166,6 +184,12 @@ void Surface3D::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("surface3d");
 		writer->writeAttribute("visualizationType", QString::number(d->visualizationType));
 		writer->writeAttribute("sourceType", QString::number(d->sourceType));
+		writer->writeAttribute("colorFilling", QString::number(d->colorFilling));
+		writer->writeAttribute("color", d->color.name());
+		writer->writeAttribute("opacity", QString::number(d->opacity));
+		writer->writeAttribute("showXYProjection", QString::number(d->showXYProjection));
+		writer->writeAttribute("showXZProjection", QString::number(d->showXZProjection));
+		writer->writeAttribute("showYZProjection", QString::number(d->showYZProjection));
 		writeBasicAttributes(writer);
 		writeCommentElement(writer);
 		d->spreadsheetHandler->save(writer);
@@ -183,6 +207,12 @@ bool Surface3D::load(XmlStreamReader* reader) {
 	XmlAttributeReader attributeReader(reader, attribs);
 	attributeReader.checkAndLoadAttribute<VisualizationType>("visualizationType", d->visualizationType);
 	attributeReader.checkAndLoadAttribute<DataSource>("sourceType", d->sourceType);
+	attributeReader.checkAndLoadAttribute<ColorFilling>("colorFilling", d->colorFilling);
+	attributeReader.checkAndLoadAttribute("color", d->color);
+	attributeReader.checkAndLoadAttribute("opacity", d->opacity);
+	attributeReader.checkAndLoadAttribute("showXYProjection", d->showXYProjection);
+	attributeReader.checkAndLoadAttribute("showXZProjection", d->showXZProjection);
+	attributeReader.checkAndLoadAttribute("showYZProjection", d->showYZProjection);
 
 	if(!readBasicAttributes(reader)){
 		return false;

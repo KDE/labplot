@@ -46,6 +46,9 @@ struct Surface3DPrivate : public Base3DPrivate {
 	Surface3D::ColorFilling colorFilling;
 	QColor color;
 	double opacity;
+	bool showXYProjection;
+	bool showXZProjection;
+	bool showYZProjection;
 
 	DemoDataHandler *demoHandler;
 	SpreadsheetDataHandler *spreadsheetHandler;

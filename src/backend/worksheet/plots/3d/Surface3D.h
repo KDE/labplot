@@ -81,6 +81,9 @@ class Surface3D : public Base3D {
 		BASIC_D_ACCESSOR_DECL(ColorFilling, colorFilling, ColorFilling)
 		CLASS_D_ACCESSOR_DECL(QColor, color, Color)
 		BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
+		BASIC_D_ACCESSOR_DECL(bool, showXYProjection, ShowXYProjection)
+		BASIC_D_ACCESSOR_DECL(bool, showXZProjection, ShowXZProjection)
+		BASIC_D_ACCESSOR_DECL(bool, showYZProjection, ShowYZProjection)
 
 		typedef Surface3D BaseClass;
 		typedef Surface3DPrivate Private;
@@ -91,11 +94,17 @@ class Surface3D : public Base3D {
 		friend class Surface3DSetColorFillingCmd;
 		friend class Surface3DSetColorCmd;
 		friend class Surface3DSetOpacityCmd;
+		friend class Surface3DSetShowXYProjectionCmd;
+		friend class Surface3DSetShowXZProjectionCmd;
+		friend class Surface3DSetShowYZProjectionCmd;
 		void visualizationTypeChanged(Surface3D::VisualizationType);
 		void sourceTypeChanged(Surface3D::DataSource);
 		void colorFillingChanged(Surface3D::ColorFilling);
 		void colorChanged(const QColor&);
 		void opacityChanged(double);
+		void showXYProjectionChanged(bool);
+		void showXZProjectionChanged(bool);
+		void showYZProjectionChanged(bool);
 };
 
 #endif

@@ -75,6 +75,11 @@ class Surface3DDock : public QWidget {
 		void onColorChanged(const QColor&);
 		void onOpacityChanged(int);
 
+		// Projection
+		void onXYProjection(bool);
+		void onXZProjection(bool);
+		void onYZProjection(bool);
+
 		// File handling
 		void pathChanged(const KUrl&);
 
@@ -88,6 +93,10 @@ class Surface3DDock : public QWidget {
 		void firstNodeChanged(const AbstractColumn*);
 		void secondNodeChanged(const AbstractColumn*);
 		void thirdNodeChanged(const AbstractColumn*);
+
+		void xyProjection(bool);
+		void xzProjection(bool);
+		void yzProjection(bool);
 
 		//SLOTs for changes triggered in Surface3D
 		//TODO
