@@ -27,29 +27,26 @@
  ***************************************************************************/
 
 #include "Axes3DDock.h"
-#include "DockHelpers.h"
 
 using namespace DockHelpers;
 
 Axes3DDock::Axes3DDock(QWidget* parent)
 	: QWidget(parent)
+	, recorder(this)
 	, axes(0)
 	, m_initializing(false) {
 	ui.setupUi(this);
 	retranslateUi();
 
 	// Axes
-	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), SLOT(onTypeChanged(int)));
-	connect(ui.cbLabelFontSize, SIGNAL(valueChanged(int)), SLOT(onLabelFontChanged(int)));
-	connect(ui.cbXLabelColor, SIGNAL(changed(const QColor&)), SLOT(onLabelColorChanged(const QColor&)));
-	connect(ui.cbYLabelColor, SIGNAL(changed(const QColor&)), SLOT(onLabelColorChanged(const QColor&)));
-	connect(ui.cbZLabelColor, SIGNAL(changed(const QColor&)), SLOT(onLabelColorChanged(const QColor&)));
-	connect(ui.leXLabel, SIGNAL(returnPressed(const QString&)), SLOT(onLabelChanged(const QString&)));
-	connect(ui.leYLabel, SIGNAL(returnPressed(const QString&)), SLOT(onLabelChanged(const QString&)));
-	connect(ui.leZLabel, SIGNAL(returnPressed(const QString&)), SLOT(onLabelChanged(const QString&)));
-	children << ui.cbType << ui.cbLabelFontSize << ui.cbXLabelColor
-			<< ui.cbYLabelColor << ui.cbZLabelColor << ui.leXLabel
-			<< ui.leYLabel << ui.leZLabel;
+	recorder.connect(ui.cbType, SIGNAL(currentIndexChanged(int)), SLOT(onTypeChanged(int)));
+	recorder.connect(ui.cbLabelFontSize, SIGNAL(valueChanged(int)), SLOT(onLabelFontChanged(int)));
+	recorder.connect(ui.cbXLabelColor, SIGNAL(changed(const QColor&)), SLOT(onLabelColorChanged(const QColor&)));
+	recorder.connect(ui.cbYLabelColor, SIGNAL(changed(const QColor&)), SLOT(onLabelColorChanged(const QColor&)));
+	recorder.connect(ui.cbZLabelColor, SIGNAL(changed(const QColor&)), SLOT(onLabelColorChanged(const QColor&)));
+	recorder.connect(ui.leXLabel, SIGNAL(returnPressed(const QString&)), SLOT(onLabelChanged(const QString&)));
+	recorder.connect(ui.leYLabel, SIGNAL(returnPressed(const QString&)), SLOT(onLabelChanged(const QString&)));
+	recorder.connect(ui.leZLabel, SIGNAL(returnPressed(const QString&)), SLOT(onLabelChanged(const QString&)));
 }
 
 void Axes3DDock::retranslateUi() {
@@ -61,7 +58,7 @@ void Axes3DDock::setAxes(Axes *axes) {
 	this->axes = axes;
 
 	{
-	const SignalBlocker blocker(children);
+	const SignalBlocker blocker(recorder.children());
 	axesTypeChanged(axes->type());
 	fontSizeChanged(axes->fontSize());
 	xLabelColorChanged(axes->xLabelColor());

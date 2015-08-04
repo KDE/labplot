@@ -30,7 +30,6 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/Axes3DDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/Surface3DDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/Curve3DDock.cpp
-	${KDEFRONTEND_DIR}/dockwidgets/Light3DDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/MatrixDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ProjectDock.cpp
@@ -86,7 +85,6 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/surface3ddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/curve3ddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axes3ddock.ui
-	${KDEFRONTEND_DIR}/ui/dockwidgets/light3ddock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/exportspreadsheetwidget.ui
@@ -169,7 +167,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/3d/Surface3D.cpp
 	${BACKEND_DIR}/worksheet/plots/3d/Curve3D.cpp
 	${BACKEND_DIR}/worksheet/plots/3d/MouseInteractor.cpp
-	${BACKEND_DIR}/worksheet/plots/3d/Light.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 )
 

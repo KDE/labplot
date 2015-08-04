@@ -27,7 +27,6 @@
  ***************************************************************************/
 
 #include "Plot3DDock.h"
-#include "DockHelpers.h"
 #include "backend/worksheet/plots/3d/Plot3D.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
@@ -55,6 +54,7 @@ using namespace DockHelpers;
 
 Plot3DDock::Plot3DDock(QWidget* parent)
 	: QWidget(parent)
+	, recorder(this)
 	, m_plot(0)
 	, m_initializing(false) {
 	ui.setupUi(this);
@@ -84,40 +84,46 @@ Plot3DDock::Plot3DDock(QWidget* parent)
 
 	//SIGNALs/SLOTs
 	//General
-	connect(ui.leName, SIGNAL(returnPressed()), SLOT(onNameChanged()));
-	connect(ui.leComment, SIGNAL(returnPressed()), SLOT(onCommentChanged()));
-	connect(ui.chkVisible, SIGNAL(stateChanged(int)), SLOT(onVisibilityChanged(int)));
-	connect(ui.sbLeft, SIGNAL(valueChanged(double)), SLOT(onGeometryChanged()));
-	connect(ui.sbTop, SIGNAL(valueChanged(double)), SLOT(onGeometryChanged()));
-	connect(ui.sbWidth, SIGNAL(valueChanged(double)), SLOT(onGeometryChanged()));
-	connect(ui.sbHeight, SIGNAL(valueChanged(double)), SLOT(onGeometryChanged()));
+	recorder.connect(ui.leName, SIGNAL(returnPressed()), SLOT(onNameChanged()));
+	recorder.connect(ui.leComment, SIGNAL(returnPressed()), SLOT(onCommentChanged()));
+	recorder.connect(ui.chkVisible, SIGNAL(stateChanged(int)), SLOT(onVisibilityChanged(int)));
+	recorder.connect(ui.sbLeft, SIGNAL(valueChanged(double)), SLOT(onGeometryChanged()));
+	recorder.connect(ui.sbTop, SIGNAL(valueChanged(double)), SLOT(onGeometryChanged()));
+	recorder.connect(ui.sbWidth, SIGNAL(valueChanged(double)), SLOT(onGeometryChanged()));
+	recorder.connect(ui.sbHeight, SIGNAL(valueChanged(double)), SLOT(onGeometryChanged()));
 
 	//Background
-	connect(ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundTypeChanged(int)));
-	connect(ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundColorStyleChanged(int)));
-	connect(ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundImageStyleChanged(int)));
-	connect(ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundBrushStyleChanged(int)));
-	connect(ui.bBackgroundOpen, SIGNAL(clicked(bool)), SLOT(onBackgroundSelectFile()));
-	connect(ui.kleBackgroundFileName, SIGNAL(returnPressed()), SLOT(onBackgroundFileNameChanged()));
-	connect(ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), SLOT(onBackgroundFileNameChanged()));
-	connect(ui.kcbBackgroundFirstColor, SIGNAL(changed(const QColor&)), SLOT(onBackgroundFirstColorChanged(const QColor&)));
-	connect(ui.kcbBackgroundSecondColor, SIGNAL(changed(const QColor&)), SLOT(onBackgroundSecondColorChanged(const QColor&)));
-	connect(ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), SLOT(onBackgroundOpacityChanged(int)));
+	recorder.connect(ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundTypeChanged(int)));
+	recorder.connect(ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundColorStyleChanged(int)));
+	recorder.connect(ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundImageStyleChanged(int)));
+	recorder.connect(ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundBrushStyleChanged(int)));
+	recorder.connect(ui.bBackgroundOpen, SIGNAL(clicked(bool)), SLOT(onBackgroundSelectFile()));
+	recorder.connect(ui.kleBackgroundFileName, SIGNAL(returnPressed()), SLOT(onBackgroundFileNameChanged()));
+	recorder.connect(ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), SLOT(onBackgroundFileNameChanged()));
+	recorder.connect(ui.kcbBackgroundFirstColor, SIGNAL(changed(const QColor&)), SLOT(onBackgroundFirstColorChanged(const QColor&)));
+	recorder.connect(ui.kcbBackgroundSecondColor, SIGNAL(changed(const QColor&)), SLOT(onBackgroundSecondColorChanged(const QColor&)));
+	recorder.connect(ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), SLOT(onBackgroundOpacityChanged(int)));
+
+	// Light
+	recorder.connect(ui.sbLightIntensity, SIGNAL(valueChanged(double)), SLOT(onIntensityChanged(double)));
+
+	recorder.connect(ui.kcbLightAmbientColor, SIGNAL(changed(const QColor&)), SLOT(onAmbientChanged(const QColor&)));
+	recorder.connect(ui.kcbLightDiffuseColor, SIGNAL(changed(const QColor&)), SLOT(onDiffuseChanged(const QColor&)));
+	recorder.connect(ui.kcbLightSpecularColor, SIGNAL(changed(const QColor&)), SLOT(onSpecularChanged(const QColor&)));
+
+	recorder.connect(ui.sbLightElevation, SIGNAL(valueChanged(int)), SLOT(onElevationChanged(int)));
+	recorder.connect(ui.sbLightAzimuth, SIGNAL(valueChanged(int)), SLOT(onAzimuthChanged(int)));
+	recorder.connect(ui.sbLightConeAngle, SIGNAL(valueChanged(int)), SLOT(onConeAngleChanged(int)));
 
 	//Template handler
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
 	ui.verticalLayout->addWidget(templateHandler, 0, 0);
 	templateHandler->show();
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
+	recorder.connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), SLOT(loadConfigFromTemplate(KConfig&)));
+	recorder.connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), SLOT(saveConfigAsTemplate(KConfig&)));
 
 	// TODO: Uncomment later
 	//connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
-	children << ui.leName << ui.leComment << ui.chkVisible << ui.sbLeft << ui.sbTop
-			<< ui.sbWidth << ui.sbHeight << ui.cbBackgroundType << ui.cbBackgroundColorStyle
-			<< ui.cbBackgroundImageStyle << ui.cbBackgroundBrushStyle << ui.bBackgroundOpen
-			<< ui.kleBackgroundFileName << ui.kcbBackgroundFirstColor << ui.kcbBackgroundSecondColor
-			<< ui.sbBackgroundOpacity;
 }
 
 void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
@@ -126,7 +132,7 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	m_plot = m_plotsList.first();
 
 	{
-	const SignalBlocker blocker(children);
+	const SignalBlocker blocker(recorder.children());
 	//if there is more then one plot in the list, disable the name and comment fields in the tab "general"
 	if (m_plotsList.size()==1){
 		ui.lName->setEnabled(true);
@@ -178,6 +184,15 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	connect(m_plot, SIGNAL(backgroundOpacityChanged(float)), SLOT(backgroundOpacityChanged(float)));
 
 	//light
+	connect(m_plot, SIGNAL(intensityChanged(double)), SLOT(intensityChanged(double)));
+
+	connect(m_plot, SIGNAL(ambientChanged(const QColor&)), SLOT(ambientChanged(const QColor&)));
+	connect(m_plot, SIGNAL(diffuseChanged(const QColor&)), SLOT(diffuseChanged(const QColor&)));
+	connect(m_plot, SIGNAL(specularChanged(const QColor&)), SLOT(specularChanged(const QColor&)));
+
+	connect(m_plot, SIGNAL(elevationChanged(double)), SLOT(elevationChanged(double)));
+	connect(m_plot, SIGNAL(azimuthChanged(double)), SLOT(azimuthChanged(double)));
+	connect(m_plot, SIGNAL(coneAngleChanged(double)), SLOT(coneAngleChanged(double)));
 }
 
 //*************************************************************
@@ -366,6 +381,43 @@ void Plot3DDock::onBackgroundFileNameChanged(){
 		plot->setBackgroundFileName(fileName);
 }
 
+// Light
+
+void Plot3DDock::onIntensityChanged(double value) {
+	const Lock lock(m_initializing);
+	m_plot->setIntensity(value);
+}
+
+void Plot3DDock::onAmbientChanged(const QColor& color) {
+	const Lock lock(m_initializing);
+	m_plot->setAmbient(color);
+}
+
+void Plot3DDock::onDiffuseChanged(const QColor& color) {
+	const Lock lock(m_initializing);
+	m_plot->setDiffuse(color);
+}
+
+void Plot3DDock::onSpecularChanged(const QColor& color) {
+	const Lock lock(m_initializing);
+	m_plot->setSpecular(color);
+}
+
+void Plot3DDock::onElevationChanged(int elevation) {
+	const Lock lock(m_initializing);
+	m_plot->setElevation(elevation);
+}
+
+void Plot3DDock::onAzimuthChanged(int azimuth) {
+	const Lock lock(m_initializing);
+	m_plot->setAzimuth(azimuth);
+}
+
+void Plot3DDock::onConeAngleChanged(int angle) {
+	const Lock lock(m_initializing);
+	m_plot->setConeAngle(angle);
+}
+
 
 //*************************************************************
 //******** SLOTs for changes triggered in Plot3D **************
@@ -488,6 +540,48 @@ void Plot3DDock::backgroundOpacityChanged(float opacity) {
 	ui.sbBackgroundOpacity->setValue( round(opacity*100.0) );
 }
 
+// Light
+void Plot3DDock::intensityChanged(double val) {
+	if (m_initializing)
+		return;
+	ui.sbLightIntensity->setValue(val);
+}
+
+void Plot3DDock::ambientChanged(const QColor& color) {
+	if (m_initializing)
+		return;
+	ui.kcbLightAmbientColor->setColor(color);
+}
+
+void Plot3DDock::diffuseChanged(const QColor& color) {
+	if (m_initializing)
+		return;
+	ui.kcbLightDiffuseColor->setColor(color);
+}
+
+void Plot3DDock::specularChanged(const QColor& color) {
+	if (m_initializing)
+		return;
+	ui.kcbLightSpecularColor->setColor(color);
+}
+
+void Plot3DDock::elevationChanged(double val) {
+	if (m_initializing)
+		return;
+	ui.sbLightElevation->setValue(val);
+}
+
+void Plot3DDock::azimuthChanged(double val) {
+	if (m_initializing)
+		return;
+	ui.sbLightAzimuth->setValue(val);
+}
+
+void Plot3DDock::coneAngleChanged(double val) {
+	if (m_initializing)
+		return;
+	ui.sbLightConeAngle->setValue(val);
+}
 
 //*************************************************************
 //******************** SETTINGS *******************************
@@ -513,6 +607,14 @@ void Plot3DDock::load(){
 	backgroundSecondColorChanged(m_plot->backgroundSecondColor());
 	backgroundOpacityChanged(m_plot->backgroundOpacity());
 	//Light
+	intensityChanged(m_plot->intensity());
+	ambientChanged(m_plot->ambient());
+	diffuseChanged(m_plot->diffuse());
+	specularChanged(m_plot->specular());
+
+	elevationChanged(m_plot->elevation());
+	azimuthChanged(m_plot->azimuth());
+	coneAngleChanged(m_plot->coneAngle());
 }
 
 void Plot3DDock::loadConfigFromTemplate(KConfig& config) {

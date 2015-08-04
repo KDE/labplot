@@ -27,7 +27,7 @@
  ***************************************************************************/
 
 #include "Surface3DDock.h"
-#include "DockHelpers.h"
+
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
@@ -43,6 +43,7 @@ using namespace DockHelpers;
 
 Surface3DDock::Surface3DDock(QWidget* parent)
 	: QWidget(parent)
+	, recorder(this)
 	, surface(0)
 	, aspectTreeModel(0)
 	, m_initializing(false) {
@@ -66,7 +67,7 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 
 	foreach(TreeViewComboBox* view, treeViews) {
 		view->setSelectableClasses(list);
-		connect(view, SIGNAL(currentModelIndexChanged(const QModelIndex&)), SLOT(onTreeViewIndexChanged(const QModelIndex&)));
+		recorder.connect(view, SIGNAL(currentModelIndexChanged(const QModelIndex&)), SLOT(onTreeViewIndexChanged(const QModelIndex&)));
 	}
 
 	//Matrix data source
@@ -80,38 +81,33 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 
 	//SIGNALs/SLOTs
 	//General
-	connect(ui.leName, SIGNAL(returnPressed()), SLOT(onNameChanged()));
-	connect(ui.leComment, SIGNAL(returnPressed()), SLOT(onCommentChanged()));
-	connect(ui.cbDataSource, SIGNAL(currentIndexChanged(int)), SLOT(onDataSourceChanged(int)));
-	connect(ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), SLOT(onFileChanged(const KUrl&)));
-	connect(ui.cbMatrix, SIGNAL(currentModelIndexChanged(const QModelIndex&)), SLOT(onTreeViewIndexChanged(const QModelIndex&)));
-	connect(ui.chkVisible, SIGNAL(toggled(bool)), SLOT(onVisibilityChanged(bool)));
+	recorder.connect(ui.leName, SIGNAL(returnPressed()), SLOT(onNameChanged()));
+	recorder.connect(ui.leComment, SIGNAL(returnPressed()), SLOT(onCommentChanged()));
+	recorder.connect(ui.cbDataSource, SIGNAL(currentIndexChanged(int)), SLOT(onDataSourceChanged(int)));
+	recorder.connect(ui.cbFileRequester, SIGNAL(urlSelected(const KUrl&)), SLOT(onFileChanged(const KUrl&)));
+	recorder.connect(ui.cbMatrix, SIGNAL(currentModelIndexChanged(const QModelIndex&)), SLOT(onTreeViewIndexChanged(const QModelIndex&)));
+	recorder.connect(ui.chkVisible, SIGNAL(toggled(bool)), SLOT(onVisibilityChanged(bool)));
 
 	//Color filling
-	connect(ui.cbColorFillingType, SIGNAL(currentIndexChanged(int)), SLOT(onColorFillingTypeChanged(int)));
-	connect(ui.kcbColorFilling, SIGNAL(changed(QColor)), SLOT(onColorChanged(const QColor&)));
-	connect(ui.sbColorFillingOpacity, SIGNAL(valueChanged(int)), SLOT(onOpacityChanged(int)));
+	recorder.connect(ui.cbColorFillingType, SIGNAL(currentIndexChanged(int)), SLOT(onColorFillingTypeChanged(int)));
+	recorder.connect(ui.kcbColorFilling, SIGNAL(changed(QColor)), SLOT(onColorChanged(const QColor&)));
+	recorder.connect(ui.sbColorFillingOpacity, SIGNAL(valueChanged(int)), SLOT(onOpacityChanged(int)));
 
 	//Mesh
-	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), SLOT(onVisualizationTypeChanged(int)));
+	recorder.connect(ui.cbType, SIGNAL(currentIndexChanged(int)), SLOT(onVisualizationTypeChanged(int)));
 
 	//Projection
-	connect(ui.chbXYProjection, SIGNAL(toggled(bool)), SLOT(onXYProjection(bool)));
-	connect(ui.chbXZProjection, SIGNAL(toggled(bool)), SLOT(onXZProjection(bool)));
-	connect(ui.chbYZProjection, SIGNAL(toggled(bool)), SLOT(onYZProjection(bool)));
+	recorder.connect(ui.chbXYProjection, SIGNAL(toggled(bool)), SLOT(onXYProjection(bool)));
+	recorder.connect(ui.chbXZProjection, SIGNAL(toggled(bool)), SLOT(onXZProjection(bool)));
+	recorder.connect(ui.chbYZProjection, SIGNAL(toggled(bool)), SLOT(onYZProjection(bool)));
 
 	//template handler
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Surface3D);
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
-
-	children << ui.leName << ui.leComment << ui.cbDataSource << ui.cbType
-			<< ui.cbFileRequester << ui.cbMatrix << ui.chkVisible << ui.cbColorFillingType
-			<< ui.kcbColorFilling << ui.sbColorFillingOpacity
-			<< ui.chbXYProjection << ui.chbXZProjection << ui.chbYZProjection;
+	recorder.connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), SLOT(loadConfigFromTemplate(KConfig&)));
+	recorder.connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), SLOT(saveConfigAsTemplate(KConfig&)));
+	recorder.connect(templateHandler, SIGNAL(info(QString)), SIGNAL(info(QString)));
 }
 
 void Surface3DDock::onXYProjection(bool show) {
@@ -152,7 +148,7 @@ void Surface3DDock::setSurface(Surface3D *surface) {
 	const Matrix *matrix = surface->matrixDataHandler().matrix();
 	const SpreadsheetDataHandler *sdh = &surface->spreadsheetDataHandler();
 	{
-	const SignalBlocker blocker(children);
+	const SignalBlocker blocker(recorder.children());
 	ui.leName->setText(surface->name());
 	ui.leComment->setText(surface->comment());
 	ui.chkVisible->setChecked(surface->isVisible());

@@ -31,7 +31,6 @@
 #include "Surface3D.h"
 #include "Curve3D.h"
 #include "Axes.h"
-#include "Light.h"
 #include "DataHandlers.h"
 #include "MouseInteractor.h"
 #include "VTKGraphicsItem.h"
@@ -419,6 +418,15 @@ CLASS_SHARED_D_READER_IMPL(Plot3D, QColor, backgroundSecondColor, backgroundSeco
 CLASS_SHARED_D_READER_IMPL(Plot3D, QString, backgroundFileName, backgroundFileName)
 BASIC_SHARED_D_READER_IMPL(Plot3D, float, backgroundOpacity, backgroundOpacity)
 
+// Light
+BASIC_SHARED_D_READER_IMPL(Plot3D, double, intensity, intensity)
+BASIC_SHARED_D_READER_IMPL(Plot3D, QColor, ambient, ambient)
+BASIC_SHARED_D_READER_IMPL(Plot3D, QColor, diffuse, diffuse)
+BASIC_SHARED_D_READER_IMPL(Plot3D, QColor, specular, specular)
+BASIC_SHARED_D_READER_IMPL(Plot3D, double, elevation, elevation)
+BASIC_SHARED_D_READER_IMPL(Plot3D, double, azimuth, azimuth)
+BASIC_SHARED_D_READER_IMPL(Plot3D, double, coneAngle, coneAngle)
+
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
@@ -448,6 +456,29 @@ STD_SETTER_IMPL(Plot3D, BackgroundFileName, const QString&, backgroundFileName, 
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundOpacity, float, backgroundOpacity, updateBackground)
 STD_SETTER_IMPL(Plot3D, BackgroundOpacity, float, backgroundOpacity, "%1: set opacity")
 
+// Light
+
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetIntensity, double, intensity, updateLight)
+STD_SETTER_IMPL(Plot3D, Intensity, double, intensity, "%1: intensity changed")
+
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetAmbient, QColor, ambient, updateLight)
+STD_SETTER_IMPL(Plot3D, Ambient, const QColor&, ambient, "%1: ambient changed")
+
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetDiffuse, QColor, diffuse, updateLight)
+STD_SETTER_IMPL(Plot3D, Diffuse, const QColor&, diffuse, "%1: diffuse changed")
+
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetSpecular, QColor, specular, updateLight)
+STD_SETTER_IMPL(Plot3D, Specular, const QColor&, specular, "%1: specular changed")
+
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetElevation, double, elevation, updateLight)
+STD_SETTER_IMPL(Plot3D, Elevation, double, elevation, "%1: elevation changed")
+
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetAzimuth, double, azimuth, updateLight)
+STD_SETTER_IMPL(Plot3D, Azimuth, double, azimuth, "%1: azimuth changed")
+
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetConeAngle, double, coneAngle, updateLight)
+	STD_SETTER_IMPL(Plot3D, ConeAngle, double, coneAngle, "%1: coneAngle changed")
+
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
@@ -459,16 +490,14 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	, vtkItem(0)
 	, isInitialized(false)
 	, rectSet(false)
-	, axes(new Axes) {
-	for (int i = 0; i < 2; ++i)
-		mainLight[i] = new Light;
-	const QVector3D fp(1.875, 0.6125, 0);
-	const QVector3D pos(0.875, 1.6125, 1);
-	mainLight[0]->setFocalPoint(fp);
-	mainLight[0]->setPosition(pos);
-	// Highlighting the back side
-	mainLight[1]->setFocalPoint(-fp);
-	mainLight[1]->setPosition(-pos);
+	, axes(new Axes)
+	, intensity(1.0)
+	, ambient(Qt::white)
+	, diffuse(Qt::white)
+	, specular(Qt::white)
+	, elevation(15)
+	, azimuth(15)
+	, coneAngle(15) {
 }
 
 Plot3DPrivate::~Plot3DPrivate() {
@@ -480,6 +509,22 @@ void Plot3DPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 void Plot3DPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	Q_UNUSED(event);
+}
+
+void Plot3DPrivate::updateLight(bool notify) {
+	vtkLight* lights[] = {lightAbove, lightBelow};
+	for (int i = 0; i < 2; ++i) {
+		lights[i]->SetIntensity(intensity);
+		lights[i]->SetAmbientColor(ambient.redF(), ambient.greenF(), ambient.blueF());
+		lights[i]->SetDiffuseColor(diffuse.redF(), diffuse.greenF(), diffuse.blueF());
+		lights[i]->SetSpecularColor(specular.redF(), specular.greenF(), specular.blueF());
+
+		lights[i]->SetDirectionAngle(elevation, azimuth);
+		lights[i]->SetConeAngle(coneAngle);
+	}
+
+	if (notify)
+		emit q->parametersChanged();
 }
 
 void Plot3DPrivate::init() {
@@ -511,11 +556,16 @@ void Plot3DPrivate::init() {
 	renderWindow->GetInteractor()->SetInteractorStyle(style);
 
 	//light
-	for (int i = 0; i < 2; ++i) {
-		mainLight[i]->setRenderer(renderer);
-		q->addChild(mainLight[i]);
-		vtkItem->connect(mainLight[i], SIGNAL(parametersChanged()), SLOT(refresh()));
-	}
+	lightAbove = vtkSmartPointer<vtkLight>::New();
+	lightBelow = vtkSmartPointer<vtkLight>::New();
+
+	lightAbove->SetFocalPoint(1.876, 0.6125, 0);
+	lightAbove->SetPosition(0.875, 1.6125, 1);
+
+	lightBelow->SetFocalPoint(-1.876, -0.6125, 0);
+	lightBelow->SetPosition(-0.875, -1.612, -1);
+	renderer->AddLight(lightAbove);
+	renderer->AddLight(lightBelow);
 
 	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
 	backgroundRenderer->AddActor(backgroundImageActor);
@@ -559,21 +609,23 @@ void Plot3DPrivate::retransform() {
 		camera->SetFocalPoint(x, y, 0.0);
 		camera->SetParallelScale(y);
 		camera->SetPosition(x,y, 900);
-		updateBackground();
-		updatePlot();
+		updateBackground(false);
+		updatePlot(false);
+		updateLight();
 	}
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 }
 
-void Plot3DPrivate::updatePlot() {
+void Plot3DPrivate::updatePlot(bool notify) {
 	if (axes) {
 		axes->updateBounds();
-		emit q->parametersChanged();
+		if (notify)
+			emit q->parametersChanged();
 	}
 }
 
-void Plot3DPrivate::updateBackground() {
+void Plot3DPrivate::updateBackground(bool notify) {
 	const QRectF rect(0, 0, this->rect.width(), this->rect.height());
 	//prepare the image
 	QImage image(rect.width(), rect.height(), QImage::Format_ARGB32_Premultiplied);
@@ -682,7 +734,8 @@ void Plot3DPrivate::updateBackground() {
 
 	backgroundImageActor->SetInputData(qimageToImageSource->GetOutput());
 	qimageToImageSource->Update();
-	emit q->parametersChanged();
+	if (notify)
+		emit q->parametersChanged();
 }
 
 //##############################################################################
@@ -710,6 +763,16 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 			writer->writeAttribute("opacity", QString::number(d->backgroundOpacity));
 		writer->writeEndElement();
 
+		writer->writeStartElement("light");
+			writer->writeAttribute("intensity", QString::number(d->intensity));
+			writer->writeAttribute("ambient", d->ambient.name());
+			writer->writeAttribute("diffuse", d->diffuse.name());
+			writer->writeAttribute("specular", d->specular.name());
+			writer->writeAttribute("elevation", QString::number(d->elevation));
+			writer->writeAttribute("azimuth", QString::number(d->azimuth));
+			writer->writeAttribute("coneAngle", QString::number(d->coneAngle));
+		writer->writeEndElement();
+
 		d->axes->save(writer);
 		foreach(const Surface3D* surface, d->surfaces){
 			surface->save(writer);
@@ -717,8 +780,6 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 		foreach(const Curve3D* curve, d->curves){
 			curve->save(writer);
 		}
-		for (int i = 0; i < 2; ++i)
-			d->mainLight[i]->save(writer);
 	writer->writeEndElement();
 }
 
@@ -736,7 +797,6 @@ bool Plot3D::load(XmlStreamReader* reader) {
 
 	const QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 
-	bool firstLightLoaded = false;
 	while(!reader->atEnd()){
 		reader->readNext();
 		const QStringRef& sectionName = reader->name();
@@ -775,13 +835,16 @@ bool Plot3D::load(XmlStreamReader* reader) {
 			attributeReader.checkAndLoadAttribute("secondColor", d->backgroundSecondColor);
 			attributeReader.checkAndLoadAttribute("fileName", d->backgroundFileName);
 			attributeReader.checkAndLoadAttribute("opacity", d->backgroundOpacity);
-		}else if(sectionName == "mainLight"){
-			if (!firstLightLoaded) {
-				firstLightLoaded = true;
-				if (!d->mainLight[0]->load(reader))
-					return false;
-			} else if (!d->mainLight[1]->load(reader))
-					return false;
+		}else if(sectionName == "light"){
+			const QXmlStreamAttributes& attribs = reader->attributes();
+			XmlAttributeReader attributeReader(reader, attribs);
+			attributeReader.checkAndLoadAttribute("intensity", d->intensity);
+			attributeReader.checkAndLoadAttribute("ambient", d->ambient);
+			attributeReader.checkAndLoadAttribute("diffuse", d->diffuse);
+			attributeReader.checkAndLoadAttribute("specular", d->specular);
+			attributeReader.checkAndLoadAttribute("elevation", d->elevation);
+			attributeReader.checkAndLoadAttribute("azimuth", d->azimuth);
+			attributeReader.checkAndLoadAttribute("coneAngle", d->coneAngle);
 		}
 	}
 	return true;

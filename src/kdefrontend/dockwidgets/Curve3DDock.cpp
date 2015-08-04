@@ -27,7 +27,6 @@
  ***************************************************************************/
 
 #include "Curve3DDock.h"
-#include "DockHelpers.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/3d/Curve3D.h"
@@ -40,6 +39,7 @@ using namespace DockHelpers;
 
 Curve3DDock::Curve3DDock(QWidget* parent)
 	: QWidget(parent)
+	, recorder(this)
 	, curve(0)
 	, aspectTreeModel(0)
 	, m_initializing(false) {
@@ -65,31 +65,27 @@ Curve3DDock::Curve3DDock(QWidget* parent)
 
 	foreach(TreeViewComboBox* view, treeViews) {
 		view->setSelectableClasses(list);
-		connect(view, SIGNAL(currentModelIndexChanged(const QModelIndex&)), SLOT(onTreeViewIndexChanged(const QModelIndex&)));
+		recorder.connect(view, SIGNAL(currentModelIndexChanged(const QModelIndex&)), SLOT(onTreeViewIndexChanged(const QModelIndex&)));
 	}
 
-	connect(ui.leName, SIGNAL(returnPressed()), SLOT(onNameChanged()));
-	connect(ui.leComment, SIGNAL(returnPressed()), SLOT(onCommentChanged()));
-	connect(ui.chkVisible, SIGNAL(toggled(bool)), SLOT(onVisibilityChanged(bool)));
+	recorder.connect(ui.leName, SIGNAL(returnPressed()), SLOT(onNameChanged()));
+	recorder.connect(ui.leComment, SIGNAL(returnPressed()), SLOT(onCommentChanged()));
+	recorder.connect(ui.chkVisible, SIGNAL(toggled(bool)), SLOT(onVisibilityChanged(bool)));
 
-	connect(ui.cbShowEdges, SIGNAL(toggled(bool)), SLOT(onShowEdgesChanged(bool)));
-	connect(ui.cbClosedCurve, SIGNAL(toggled(bool)), SLOT(onIsClosedChanged(bool)));
-	connect(ui.sbPointSize, SIGNAL(valueChanged(double)), SLOT(onPointRadiusChanged(double)));
+	recorder.connect(ui.cbShowEdges, SIGNAL(toggled(bool)), SLOT(onShowEdgesChanged(bool)));
+	recorder.connect(ui.cbClosedCurve, SIGNAL(toggled(bool)), SLOT(onIsClosedChanged(bool)));
+	recorder.connect(ui.sbPointSize, SIGNAL(valueChanged(double)), SLOT(onPointRadiusChanged(double)));
 
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
-
-	children << ui.cbXCoordinate << ui.cbYCoordinate << ui.cbZCoordinate
-			<< ui.leName << ui.leComment << ui.chkVisible << ui.cbShowEdges
-			<< ui.cbClosedCurve << ui.sbPointSize;
+	recorder.connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), SLOT(loadConfigFromTemplate(KConfig&)));
+	recorder.connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), SLOT(saveConfigAsTemplate(KConfig&)));
+	recorder.connect(templateHandler, SIGNAL(info(QString)), SIGNAL(info(QString)));
 }
 
 void Curve3DDock::setCurve(Curve3D* curve) {
 	this->curve = curve;
 
 	{
-	const SignalBlocker blocker(children);
+	const SignalBlocker blocker(recorder.children());
 	ui.leName->setText(curve->name());
 	ui.leComment->setText(curve->comment());
 	ui.chkVisible->setChecked(curve->isVisible());

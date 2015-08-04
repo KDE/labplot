@@ -32,6 +32,7 @@
 #include <QWidget>
 #include "backend/worksheet/plots/3d/Surface3D.h"
 #include "ui_surface3ddock.h"
+#include "DockHelpers.h"
 
 class Surface3D;
 class Matrix;
@@ -110,7 +111,7 @@ class Surface3DDock : public QWidget {
 
 	private:
 		Ui::Surface3DDock ui;
-		QVector<QObject*> children;
+		DockHelpers::ChildrenRecorder recorder;
 		Surface3D *surface;
 		AspectTreeModel *aspectTreeModel;
 		bool m_initializing;

@@ -64,6 +64,15 @@ class Plot3D : public AbstractPlot {
 		CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
 		CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
 
+		// Light parameters
+		BASIC_D_ACCESSOR_DECL(double, intensity, Intensity); // From 1 to 0
+		CLASS_D_ACCESSOR_DECL(QColor, ambient, Ambient);
+		CLASS_D_ACCESSOR_DECL(QColor, diffuse, Diffuse);
+		CLASS_D_ACCESSOR_DECL(QColor, specular, Specular);
+		BASIC_D_ACCESSOR_DECL(double, elevation, Elevation);
+		BASIC_D_ACCESSOR_DECL(double, azimuth, Azimuth);
+		BASIC_D_ACCESSOR_DECL(double, coneAngle, ConeAngle);
+
 		typedef Plot3D BaseClass;
 		typedef Plot3DPrivate Private;
 
@@ -132,6 +141,15 @@ class Plot3D : public AbstractPlot {
 		friend class Plot3DSetBackgroundSecondColorCmd;
 		friend class Plot3DSetBackgroundFileNameCmd;
 		friend class Plot3DSetBackgroundOpacityCmd;
+
+		friend class Plot3DSetIntensityCmd;
+		friend class Plot3DSetAmbientCmd;
+		friend class Plot3DSetDiffuseCmd;
+		friend class Plot3DSetSpecularCmd;
+		friend class Plot3DSetElevationCmd;
+		friend class Plot3DSetAzimuthCmd;
+		friend class Plot3DSetConeAngleCmd;
+
 		void backgroundTypeChanged(PlotArea::BackgroundType);
 		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
 		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
@@ -142,6 +160,14 @@ class Plot3D : public AbstractPlot {
 		void backgroundOpacityChanged(float);
 		void parametersChanged();
 		void currentAspectChanged(const AbstractAspect*);
+
+		void intensityChanged(double);
+		void ambientChanged(const QColor&);
+		void diffuseChanged(const QColor&);
+		void specularChanged(const QColor&);
+		void elevationChanged(double);
+		void azimuthChanged(double);
+		void coneAngleChanged(double);
 };
 
 #endif

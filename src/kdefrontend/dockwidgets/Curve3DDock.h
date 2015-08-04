@@ -32,6 +32,7 @@
 #include <QWidget>
 
 #include "ui_curve3ddock.h"
+#include "DockHelpers.h"
 
 class Curve3D;
 class AbstractColumn;
@@ -79,7 +80,7 @@ class Curve3DDock : public QWidget {
 
 	private:
 		Ui::Curve3DDock ui;
-		QVector<QObject*> children;
+		DockHelpers::ChildrenRecorder recorder;
 		Curve3D *curve;
 		AspectTreeModel *aspectTreeModel;
 		bool m_initializing;

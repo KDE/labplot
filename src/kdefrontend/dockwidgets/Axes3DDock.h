@@ -33,6 +33,7 @@
 
 #include "backend/worksheet/plots/3d/Axes.h"
 #include "ui_axes3ddock.h"
+#include "DockHelpers.h"
 
 class Axes3DDock : public QWidget {
 		Q_OBJECT
@@ -59,7 +60,7 @@ class Axes3DDock : public QWidget {
 
 	private:
 		Ui::Axes3DDock ui;
-		QVector<QObject*> children;
+		DockHelpers::ChildrenRecorder recorder;
 		Axes *axes;
 		bool m_initializing;
 };

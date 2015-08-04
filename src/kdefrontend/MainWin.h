@@ -48,7 +48,6 @@ class Plot3DDock;
 class Axes3DDock;
 class Surface3DDock;
 class Curve3DDock;
-class Light3DDock;
 class CartesianPlotLegendDock;
 class ColumnDock;
 class MatrixDock;
@@ -154,7 +153,6 @@ private:
 	Axes3DDock *axes3dDock;
 	Surface3DDock *surface3dDock;
 	Curve3DDock *curve3dDock;
-	Light3DDock *light3dDock;
 	ColumnDock* columnDock;
 	MatrixDock* matrixDock;
 	SpreadsheetDock* spreadsheetDock;

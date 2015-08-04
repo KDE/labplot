@@ -38,11 +38,11 @@
 namespace DockHelpers {
 	// Locks AbstractAspect changes!
 	struct Lock {
-		Lock(bool& variable)
+		inline Lock(bool& variable)
 			: variable(variable = true){
 		}
 
-		~Lock(){
+		inline ~Lock(){
 			variable = false;
 		}
 
@@ -51,21 +51,21 @@ namespace DockHelpers {
 	};
 
 	struct SignalBlocker {
-		SignalBlocker(const QVector<QObject*>& objects)
+		inline SignalBlocker(const QSet<QObject*>& objects)
 			: objects(objects) {
 			foreach(QObject* object, objects) {
 				object->blockSignals(true);
 			}
 		}
 
-		~SignalBlocker() {
+		inline ~SignalBlocker() {
 			foreach(QObject* object, objects) {
 				object->blockSignals(false);
 			}
 		}
 
 	private:
-		const QVector<QObject*>& objects;
+		const QSet<QObject*>& objects;
 	};
 
 	inline void showItem(QWidget* labelWidget, QWidget* inputWidget, bool pred = true) {
@@ -92,6 +92,20 @@ namespace DockHelpers {
 			return QModelIndex();
 		return model->modelIndexOfAspect(aspect);
 	}
+
+	class ChildrenRecorder {
+		public:
+			inline ChildrenRecorder(QObject* dockWidget) : dockWidget(dockWidget) {}
+			inline const QSet<QObject*>& children() const { return objects; }
+			inline void connect(QObject* sender, const char* signal, const char* member) {
+				dockWidget->connect(sender, signal, member);
+				objects.insert(sender);
+			}
+
+		private:
+			QObject* dockWidget;
+			QSet<QObject*> objects;
+	};
 }
 
 #endif

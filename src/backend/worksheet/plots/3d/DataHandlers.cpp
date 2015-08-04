@@ -104,6 +104,10 @@ vtkSmartPointer<vtkActor> IDataHandler::actor(const DataHandlerConfig& config) {
 		data = decimate->GetOutput();
 	}
 
+	if (config.showXYProjection) {
+		// TODO: Implement
+	}
+
 	if (config.type == Surface3D::Surface3D::VisualizationType_Wireframe)
 		data = extractEdges(data);
 

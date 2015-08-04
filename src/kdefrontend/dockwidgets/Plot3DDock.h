@@ -33,6 +33,8 @@
 #include "backend/worksheet/plots/PlotArea.h"
 #include "ui_plot3ddock.h"
 
+#include "DockHelpers.h"
+
 class KUrl;
 class AbstractColumn;
 class Matrix;
@@ -48,7 +50,7 @@ class Plot3DDock: public QWidget {
 
 	private:
 		Ui::Plot3DDock ui;
-		QVector<QObject*> children;
+		DockHelpers::ChildrenRecorder recorder;
 		Plot3D* m_plot;
 		QList<Plot3D*> m_plotsList;
 		bool m_initializing;
@@ -78,6 +80,15 @@ class Plot3DDock: public QWidget {
 		void onBackgroundSelectFile();
 		void onBackgroundFileNameChanged();
 
+		// Light
+		void onIntensityChanged(double);
+		void onAmbientChanged(const QColor&);
+		void onDiffuseChanged(const QColor&);
+		void onSpecularChanged(const QColor&);
+		void onElevationChanged(int);
+		void onAzimuthChanged(int);
+		void onConeAngleChanged(int);
+
 		//SLOTs for changes triggered in Plot3D
 		//"General"-tab
 		void descriptionChanged(const AbstractAspect*);
@@ -93,6 +104,15 @@ class Plot3DDock: public QWidget {
 		void backgroundSecondColorChanged(const QColor&);
 		void backgroundFileNameChanged(const QString&);
 		void backgroundOpacityChanged(float);
+
+		// Light
+		void intensityChanged(double);
+		void ambientChanged(const QColor&);
+		void diffuseChanged(const QColor&);
+		void specularChanged(const QColor&);
+		void elevationChanged(double);
+		void azimuthChanged(double);
+		void coneAngleChanged(double);
 
 		//saving/loading
 		void loadConfigFromTemplate(KConfig&);

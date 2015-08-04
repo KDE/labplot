@@ -37,12 +37,12 @@
 #include <vtkSmartPointer.h>
 
 class Axes;
-class Light;
 class Curve3D;
 class Surface3D;
 
 class vtkImageActor;
 class vtkRenderer;
+class vtkLight;
 
 class QGLContext;
 class VTKGraphicsItem;
@@ -55,8 +55,9 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		void init();
 
 		virtual void retransform();
-		void updatePlot();
-		void updateBackground();
+		void updateLight(bool notify = true);
+		void updatePlot(bool notify = true);
+		void updateBackground(bool notify = true);
 		void mousePressEvent(QGraphicsSceneMouseEvent* event);
 		void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
 
@@ -72,7 +73,6 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		QSet<Curve3D*> curves;
 
 		Axes* axes;
-		Light* mainLight[2];
 		vtkSmartPointer<vtkRenderer> renderer;
 		vtkSmartPointer<vtkRenderer> backgroundRenderer;
 		vtkSmartPointer<vtkImageActor> backgroundImageActor;
@@ -88,7 +88,16 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		float backgroundOpacity;
 
 		//light
+		double intensity;
+		QColor ambient;
+		QColor diffuse;
+		QColor specular;
+		double elevation;
+		double azimuth;
+		double coneAngle;
 
+		vtkSmartPointer<vtkLight> lightAbove;
+		vtkSmartPointer<vtkLight> lightBelow;
 };
 
 #endif
