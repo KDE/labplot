@@ -43,6 +43,8 @@
 #include <vtkPolyData.h>
 #include <vtkProperty.h>
 #include <vtkPolyDataMapper.h>
+#include <vtkGlyph3D.h>
+#include <vtkSphereSource.h>
 
 Curve3D::Curve3D(vtkRenderer* renderer)
 	: Base3D(i18n("Curve 3D"), new Curve3DPrivate(renderer, this)) {
@@ -217,7 +219,17 @@ void Curve3DPrivate::createActor() {
 		pdata->SetVerts(vertices);
 
 	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-	mapper->SetInputData(pdata);
+	if (showEdges)
+		mapper->SetInputData(pdata);
+	else {
+		vtkSmartPointer<vtkSphereSource> sphereSource = vtkSmartPointer<vtkSphereSource>::New();
+		sphereSource->SetRadius(pointRadius);
+		vtkSmartPointer<vtkGlyph3D> glyph3D = vtkSmartPointer<vtkGlyph3D>::New();
+		glyph3D->SetSourceConnection(sphereSource->GetOutputPort());
+		glyph3D->SetInputData(pdata);
+		glyph3D->Update();
+		mapper->SetInputConnection(glyph3D->GetOutputPort());
+	}
 
 	actor = vtkSmartPointer<vtkActor>::New();
 	actor->SetMapper(mapper);
