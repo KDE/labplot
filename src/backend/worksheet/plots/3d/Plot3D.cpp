@@ -462,6 +462,13 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	, axes(new Axes) {
 	for (int i = 0; i < 2; ++i)
 		mainLight[i] = new Light;
+	const QVector3D fp(1.875, 0.6125, 0);
+	const QVector3D pos(0.875, 1.6125, 1);
+	mainLight[0]->setFocalPoint(fp);
+	mainLight[0]->setPosition(pos);
+	// Highlighting the back side
+	mainLight[1]->setFocalPoint(-fp);
+	mainLight[1]->setPosition(-pos);
 }
 
 Plot3DPrivate::~Plot3DPrivate() {
@@ -509,14 +516,6 @@ void Plot3DPrivate::init() {
 		q->addChild(mainLight[i]);
 		vtkItem->connect(mainLight[i], SIGNAL(parametersChanged()), SLOT(refresh()));
 	}
-
-	const QVector3D fp(1.875, 0.6125, 0);
-	const QVector3D pos(0.875, 1.6125, 1);
-	mainLight[0]->setFocalPoint(fp);
-	mainLight[0]->setPosition(pos);
-	// Highlighting the back side
-	mainLight[1]->setFocalPoint(-fp);
-	mainLight[1]->setPosition(-pos);
 
 	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
 	backgroundRenderer->AddActor(backgroundImageActor);
