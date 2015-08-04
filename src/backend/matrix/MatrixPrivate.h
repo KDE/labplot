@@ -34,7 +34,7 @@
 
 class MatrixPrivate {
 	public:
-		MatrixPrivate(Matrix*);
+		explicit MatrixPrivate(Matrix*);
 
 		void insertColumns(int before, int count);
 		void removeColumns(int first, int count);

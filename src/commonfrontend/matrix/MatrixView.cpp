@@ -49,9 +49,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QMimeData>
-#include <QInputDialog>
 #include <QDebug>
-#include <QThreadPool>
 
 #include <KLocale>
 #include <KAction>
