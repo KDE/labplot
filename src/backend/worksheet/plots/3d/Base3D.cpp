@@ -150,7 +150,9 @@ void Base3DPrivate::update() {
 	hide();
 
 	createActor();
+
 	if (actor) {
+		property->DeepCopy(actor->GetProperty());
 		renderer->AddActor(actor);
 		emit baseParent->parametersChanged();
 		emit baseParent->visibilityChanged(true);

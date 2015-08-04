@@ -154,8 +154,6 @@ void Surface3DPrivate::createActor() {
 	} else if (sourceType == Surface3D::DataSource_Spreadsheet) {
 		actor = spreadsheetHandler->actor(config);
 	}
-
-	property->DeepCopy(actor->GetProperty());
 }
 
 //##############################################################################
