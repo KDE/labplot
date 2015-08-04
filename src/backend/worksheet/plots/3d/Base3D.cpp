@@ -75,6 +75,8 @@ void Base3D::highlight(bool pred) {
 void Base3D::select(bool pred) {
 	Q_D(Base3D);
 	if (pred && !d->isSelected) {
+		if (!d->actor)
+			return;
 		d->isSelected = true;
 		vtkProperty *prop = d->actor->GetProperty();
 		if (!d->isHighlighted)
