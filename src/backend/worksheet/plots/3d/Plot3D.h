@@ -132,6 +132,10 @@ class Plot3D : public AbstractPlot {
 		void objectClicked(vtkProp*);
 		void objectHovered(vtkProp*);
 
+		// Zoom
+		void zoomIn();
+		void zoomOut();
+
 	signals:
 		friend class Plot3DSetBackgroundTypeCmd;
 		friend class Plot3DSetBackgroundColorStyleCmd;

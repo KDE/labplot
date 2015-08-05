@@ -280,8 +280,8 @@ void Plot3D::initActions() {
 // 	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(scaleAuto()));
 // 	connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(scaleAutoX()));
 // 	connect(scaleAutoYAction, SIGNAL(triggered()), SLOT(scaleAutoY()));
-// 	connect(zoomInAction, SIGNAL(triggered()), SLOT(zoomIn()));
-// 	connect(zoomOutAction, SIGNAL(triggered()), SLOT(zoomOut()));
+	connect(zoomInAction, SIGNAL(triggered()), SLOT(zoomIn()));
+	connect(zoomOutAction, SIGNAL(triggered()), SLOT(zoomOut()));
 // 	connect(zoomInXAction, SIGNAL(triggered()), SLOT(zoomInX()));
 // 	connect(zoomOutXAction, SIGNAL(triggered()), SLOT(zoomOutX()));
 // 	connect(zoomInYAction, SIGNAL(triggered()), SLOT(zoomInY()));
@@ -304,6 +304,18 @@ void Plot3D::initActions() {
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
 // 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+}
+
+void Plot3D::zoomIn() {
+	Q_D(Plot3D);
+	d->renderer->GetActiveCamera()->Zoom(2);
+	d->vtkItem->refresh();
+}
+
+void Plot3D::zoomOut() {
+	Q_D(Plot3D);
+	d->renderer->GetActiveCamera()->Zoom(0.5);
+	d->vtkItem->refresh();
 }
 
 void Plot3D::initMenus(){
