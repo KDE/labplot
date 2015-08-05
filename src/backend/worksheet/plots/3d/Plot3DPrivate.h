@@ -65,6 +65,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		QGLContext* context;
 		VTKGraphicsItem *vtkItem;
 		bool isInitialized;
+		bool rectSet;
 
 		// TODO: Store surfaces and curves in the same collection after creating a
 		// base class between them

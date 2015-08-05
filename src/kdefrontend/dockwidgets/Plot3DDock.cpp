@@ -172,7 +172,6 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	//SIGNALs/SLOTs
 	//general
 	connect(m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), SLOT(descriptionChanged(const AbstractAspect*)));
-	connect(m_plot, SIGNAL(rectChanged(QRectF&)), this, SLOT(rectChanged(QRectF&)));
 
 	//background
 	connect(m_plot, SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), SLOT(backgroundTypeChanged(PlotArea::BackgroundType)));
