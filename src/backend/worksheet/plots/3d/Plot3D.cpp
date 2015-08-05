@@ -79,6 +79,16 @@ Plot3D::Plot3D(const QString& name)
 	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
 	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
 	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
+
+	//Geometry, specify the plot rect in scene coordinates.
+	float x = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
+	float y = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
+	float w = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
+	float h = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
+	d->rect = QRectF(x,y,w,h);
+
+	//light
+	//TODO
 }
 
 void Plot3D::childSelected(const AbstractAspect* aspect) {
@@ -106,13 +116,11 @@ void Plot3D::init(bool transform){
 	if (d->isInitialized)
 		return;
 
-	if (!d->rectSet || d->context == 0)
+	if (d->context == 0)
 		return;
 
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
-
-	//light
 
 	d->init();
 
@@ -303,7 +311,7 @@ void Plot3D::initActions() {
 	//visibility action
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
-// 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 }
 
 void Plot3D::initMenus(){
@@ -385,14 +393,6 @@ QMenu* Plot3D::createContextMenu(){
 	return menu;
 }
 
-void Plot3D::setRect(const QRectF &rect){
-	Q_D(Plot3D);
-	d->rect = rect;
-	d->rectSet = true;
-
-	retransform();
-}
-
 void Plot3D::retransform() {
 	Q_D(Plot3D);
 	if (d->context == 0)
@@ -432,6 +432,11 @@ BASIC_SHARED_D_READER_IMPL(Plot3D, double, coneAngle, coneAngle)
 //#################  setter methods and undo commands ##########################
 //##############################################################################
 
+// Geometry and data ranges
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetRect, QRectF, rect, retransform)
+STD_SETTER_IMPL(Plot3D, Rect, const QRectF&, rect, "%1: set geometry rect");
+
+// Background
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundType, PlotArea::BackgroundType, backgroundType, updateBackground)
 STD_SETTER_IMPL(Plot3D, BackgroundType, PlotArea::BackgroundType, backgroundType, "%1: background type changed")
 
@@ -457,7 +462,6 @@ STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundOpacity, float, backgroundOpacity, 
 STD_SETTER_IMPL(Plot3D, BackgroundOpacity, float, backgroundOpacity, "%1: set opacity")
 
 // Light
-
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetIntensity, double, intensity, updateLight)
 STD_SETTER_IMPL(Plot3D, Intensity, double, intensity, "%1: intensity changed")
 
@@ -477,7 +481,16 @@ STD_SETTER_CMD_IMPL_F_S(Plot3D, SetAzimuth, double, azimuth, updateLight)
 STD_SETTER_IMPL(Plot3D, Azimuth, double, azimuth, "%1: azimuth changed")
 
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetConeAngle, double, coneAngle, updateLight)
-	STD_SETTER_IMPL(Plot3D, ConeAngle, double, coneAngle, "%1: coneAngle changed")
+STD_SETTER_IMPL(Plot3D, ConeAngle, double, coneAngle, "%1: coneAngle changed")
+
+//##############################################################################
+//######  SLOTs for changes triggered via QActions in the context menu  ########
+//##############################################################################
+void Plot3D::visibilityChanged(){
+	Q_D(Plot3D);
+	this->setVisible(!d->isVisible());
+}
+
 
 //##############################################################################
 //######################### Private implementation #############################
@@ -489,7 +502,6 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	, context(0)
 	, vtkItem(0)
 	, isInitialized(false)
-	, rectSet(false)
 	, axes(new Axes)
 	, intensity(1.0)
 	, ambient(Qt::white)

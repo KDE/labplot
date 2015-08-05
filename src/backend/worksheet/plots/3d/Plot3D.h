@@ -132,7 +132,12 @@ class Plot3D : public AbstractPlot {
 		void objectClicked(vtkProp*);
 		void objectHovered(vtkProp*);
 
+		//SLOTs for changes triggered via QActions in the context menu
+		void visibilityChanged();
+
 	signals:
+		friend class Plot3DSetRectCmd;
+
 		friend class Plot3DSetBackgroundTypeCmd;
 		friend class Plot3DSetBackgroundColorStyleCmd;
 		friend class Plot3DSetBackgroundImageStyleCmd;
@@ -149,6 +154,8 @@ class Plot3D : public AbstractPlot {
 		friend class Plot3DSetElevationCmd;
 		friend class Plot3DSetAzimuthCmd;
 		friend class Plot3DSetConeAngleCmd;
+
+		void rectChanged(QRectF&);
 
 		void backgroundTypeChanged(PlotArea::BackgroundType);
 		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
