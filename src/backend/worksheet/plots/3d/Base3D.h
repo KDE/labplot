@@ -32,6 +32,7 @@
 #include "backend/core/AbstractAspect.h"
 
 class vtkProp;
+class vtkProperty;
 class vtkRenderer;
 
 class Base3DPrivate;

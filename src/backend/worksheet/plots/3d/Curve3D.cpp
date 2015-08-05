@@ -231,8 +231,9 @@ void Curve3DPrivate::createActor() {
 		mapper->SetInputConnection(glyph3D->GetOutputPort());
 	}
 
-	actor = vtkSmartPointer<vtkActor>::New();
+	vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
 	actor->SetMapper(mapper);
 	actor->GetProperty()->SetPointSize(pointRadius);
 	actor->GetProperty()->SetLineWidth(pointRadius);
+	this->actor = actor;
 }

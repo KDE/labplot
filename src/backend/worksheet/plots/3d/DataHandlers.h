@@ -45,6 +45,7 @@ class SpreadsheetDataHandlerPrivate;
 class FileDataHandlerPrivate;
 
 class vtkActor;
+class vtkProp3D;
 class vtkPolyData;
 
 struct DataHandlerConfig {
@@ -63,7 +64,7 @@ class IDataHandler : public AbstractAspect {
 		IDataHandler();
 		virtual ~IDataHandler() {}
 
-		vtkSmartPointer<vtkActor> actor(const DataHandlerConfig& config);
+		vtkSmartPointer<vtkProp3D> actor(const DataHandlerConfig& config);
 
 		void update();
 

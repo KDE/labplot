@@ -32,6 +32,8 @@
 #include <vtkRenderer.h>
 #include <vtkProperty.h>
 #include <vtkActor.h>
+#include <vtkAssembly.h>
+#include <vtkProp3DCollection.h>
 
 Base3D::Base3D(const QString& name, Base3DPrivate* priv)
 	: AbstractAspect(name)
@@ -56,7 +58,7 @@ void Base3D::highlight(bool pred) {
 	Q_D(Base3D);
 	if (pred && !d->isHighlighted) {
 		d->isHighlighted = true;
-		vtkProperty *prop = d->actor->GetProperty();
+		vtkProperty *prop = d->getProperty();
 		if (!d->isSelected)
 			d->property->DeepCopy(prop);
 		prop->SetColor(1.0, 1.0, 0.0);
@@ -64,7 +66,7 @@ void Base3D::highlight(bool pred) {
 		prop->SetSpecular(0.0);
 	} else if (d->isHighlighted && !pred) {
 		d->isHighlighted = false;
-		d->actor->GetProperty()->DeepCopy(d->property);
+		d->getProperty()->DeepCopy(d->property);
 		if (d->isSelected) {
 			d->isSelected = false;
 			select(true);
@@ -78,7 +80,7 @@ void Base3D::select(bool pred) {
 		if (!d->actor)
 			return;
 		d->isSelected = true;
-		vtkProperty *prop = d->actor->GetProperty();
+		vtkProperty *prop = d->getProperty();
 		if (!d->isHighlighted)
 			d->property->DeepCopy(prop);
 		prop->SetColor(1.0, 0.0, 0.0);
@@ -87,7 +89,7 @@ void Base3D::select(bool pred) {
 	} else if (d->isSelected && !pred) {
 		d->isSelected = false;
 		d->isHighlighted = false;
-		d->actor->GetProperty()->DeepCopy(d->property);
+		d->getProperty()->DeepCopy(d->property);
 	}
 }
 
@@ -145,6 +147,16 @@ void Base3DPrivate::init() {
 	update();
 }
 
+vtkProperty* Base3DPrivate::getProperty() const {
+	vtkActor* p = dynamic_cast<vtkActor*>(actor.Get());
+	if (p)
+		return p->GetProperty();
+
+	vtkAssembly* assembly = dynamic_cast<vtkAssembly*>(actor.Get());
+	vtkProp3DCollection* parts = assembly->GetParts();
+	return dynamic_cast<vtkActor*>(parts->GetLastProp3D())->GetProperty();
+}
+
 void Base3DPrivate::update() {
 	if (!renderer)
 		return;
@@ -154,7 +166,7 @@ void Base3DPrivate::update() {
 	createActor();
 
 	if (actor) {
-		property->DeepCopy(actor->GetProperty());
+		property->DeepCopy(getProperty());
 		renderer->AddActor(actor);
 		emit baseParent->parametersChanged();
 		emit baseParent->visibilityChanged(true);

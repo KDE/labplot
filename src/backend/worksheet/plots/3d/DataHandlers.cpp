@@ -54,6 +54,7 @@
 #include <vtkExtractEdges.h>
 #include <vtkAlgorithm.h>
 #include <vtkDecimatePro.h>
+#include <vtkAssembly.h>
 
 IDataHandler::IDataHandler(): AbstractAspect(i18n("Data handler")) {
 }
@@ -94,7 +95,7 @@ void IDataHandler::makeColorElevation(vtkPolyData* polydata) {
 		polydata->GetPointData()->SetScalars(colors);
 }
 
-vtkSmartPointer<vtkActor> IDataHandler::actor(const DataHandlerConfig& config) {
+vtkSmartPointer<vtkProp3D> IDataHandler::actor(const DataHandlerConfig& config) {
 	vtkSmartPointer<vtkPolyData> data = generateData();
 	if (data && data->GetNumberOfPolys() > 10000) {
 		vtkSmartPointer<vtkDecimatePro> decimate = vtkSmartPointer<vtkDecimatePro>::New();
@@ -104,8 +105,36 @@ vtkSmartPointer<vtkActor> IDataHandler::actor(const DataHandlerConfig& config) {
 		data = decimate->GetOutput();
 	}
 
-	if (config.showXYProjection) {
-		// TODO: Implement
+	vtkSmartPointer<vtkAssembly> assembly = vtkSmartPointer<vtkAssembly>::New();
+	if (data) {
+		double bounds[6];
+		data->GetBounds(bounds);
+		for (int i = 0; i < 3; ++i)
+			bounds[i * 2] -= bounds[i * 2 + 1] - bounds[i * 2];
+
+		int flag = static_cast<int>(config.showYZProjection);
+		flag |= static_cast<int>(config.showXZProjection) << 1;
+		flag |= static_cast<int>(config.showXYProjection) << 2;
+		for (int i = 0; i < 3; ++i) {
+			if ((flag & (1 << i)) == 0)
+				continue;
+			vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
+			points->DeepCopy(data->GetPoints());
+			double point[3];
+			for (vtkIdType j = 0; j < points->GetNumberOfPoints(); ++j) {
+				// TODO: Temporary. Move to the beginning of BB
+				points->GetPoint(j, point);
+				point[i] = bounds[i * 2];
+				points->SetPoint(j, point);
+			}
+			vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
+			polydata->SetPoints(points);
+			polydata->SetPolys(data->GetPolys());
+			qDebug() << Q_FUNC_INFO << "Number of polys" << polydata->GetNumberOfPolys();
+
+			vtkSmartPointer<vtkActor> actor = mapData(polydata);
+			assembly->AddPart(actor);
+		}
 	}
 
 	if (config.type == Surface3D::Surface3D::VisualizationType_Wireframe)
@@ -122,8 +151,9 @@ vtkSmartPointer<vtkActor> IDataHandler::actor(const DataHandlerConfig& config) {
 		prop->SetColor(color.redF(), color.greenF(), color.blueF());
 		prop->SetOpacity(config.opacity);
 	}
+	assembly->AddPart(actor);
 
-	return actor;
+	return assembly;
 }
 
 vtkSmartPointer<vtkPolyData> IDataHandler::extractEdges(vtkPolyData* data) const {
