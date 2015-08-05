@@ -46,6 +46,7 @@ class Plot3D : public AbstractPlot {
 		virtual ~Plot3D();
 		void init(bool transform = true);
 		void retransform();
+		void setPrinting(bool);
 
 		QIcon icon() const;
 		virtual QMenu* createContextMenu();

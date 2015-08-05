@@ -60,6 +60,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		void updateBackground(bool notify = true);
 		void mousePressEvent(QGraphicsSceneMouseEvent* event);
 		void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 
 		Plot3D* const q;
 		QGLContext* context;

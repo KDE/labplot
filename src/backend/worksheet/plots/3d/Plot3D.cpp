@@ -59,6 +59,7 @@
 #include <vtkRendererCollection.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkQImageToImageSource.h>
+#include <vtkWindowToImageFilter.h>
 
 
 Plot3D::Plot3D(const QString& name)
@@ -239,6 +240,11 @@ void Plot3D::objectHovered(vtkProp* object) {
 	}
 
 	d->vtkItem->refresh();
+}
+
+void Plot3D::setPrinting(bool pred) {
+	plotArea()->setVisible(!pred);
+	AbstractPlot::setPrinting(pred);
 }
 
 void Plot3D::initActions() {
@@ -489,7 +495,7 @@ STD_SETTER_CMD_IMPL_F_S(Plot3D, SetAzimuth, double, azimuth, updateLight)
 STD_SETTER_IMPL(Plot3D, Azimuth, double, azimuth, "%1: azimuth changed")
 
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetConeAngle, double, coneAngle, updateLight)
-	STD_SETTER_IMPL(Plot3D, ConeAngle, double, coneAngle, "%1: coneAngle changed")
+STD_SETTER_IMPL(Plot3D, ConeAngle, double, coneAngle, "%1: coneAngle changed")
 
 //##############################################################################
 //######################### Private implementation #############################
@@ -521,6 +527,46 @@ void Plot3DPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 void Plot3DPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	Q_UNUSED(event);
+}
+
+namespace {
+	// http://www.vtk.org/Wiki/VTK/Examples/Cxx/Qt/ImageDataToQImage
+	QImage vtkImageDataToQImage(vtkImageData* imageData) {
+		if (!imageData)
+			return QImage();
+
+		int width = imageData->GetDimensions()[0];
+		int height = imageData->GetDimensions()[1];
+		QImage image(width, height, QImage::Format_RGB32);
+		QRgb* rgbPtr = reinterpret_cast<QRgb*>(image.bits()) + width * (height-1);
+		unsigned char* colorsPtr = reinterpret_cast<unsigned char*>(imageData->GetScalarPointer());
+		for(int row = 0; row < height; ++row) {
+			for (int col = 0; col < width; ++col) {
+				*(rgbPtr++) = QColor(colorsPtr[0], colorsPtr[1], colorsPtr[2]).rgb();
+				colorsPtr +=  3;
+			}
+			rgbPtr -= width * 2;
+		}
+		return image;
+	}
+}
+
+void Plot3DPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+	if (!q->isVisible())
+		return;
+
+	if (m_printing){
+		vtkSmartPointer<vtkWindowToImageFilter> wti = vtkSmartPointer<vtkWindowToImageFilter>::New();
+		wti->SetInput(vtkItem->GetRenderWindow());
+		wti->Update();
+		vtkSmartPointer<vtkImageData> image = wti->GetOutput();
+		QPixmap pixmap(QPixmap::fromImage(vtkImageDataToQImage(image)));
+		const double halfWidth = rect.width() / 2;
+		const double halfHeight = rect.height() / 2;
+		painter->drawPixmap(-halfWidth, -halfHeight, pixmap);
+		painter->setPen(QPen(Qt::black));
+		painter->drawRect(-halfWidth, -halfHeight, rect.width(), rect.height());
+	}
 }
 
 void Plot3DPrivate::updateLight(bool notify) {
