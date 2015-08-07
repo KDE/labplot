@@ -49,7 +49,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 	if (factory) {
 		// now that the Part is loaded, we cast it to a Part to get
 		// our hands on it
-		m_part = factory->create<KParts::ReadWritePart>(this, QVariantList()<<m_backendName);
+		m_part = factory->create<KParts::ReadWritePart>(this, QVariantList()<<m_backendName<<"--noprogress");
 		// CantorPart* m_cantorPart = dynamic_cast<CantorPart*>(m_part);
 		if (!m_part) {
 			KMessageBox::error(view(), i18n("Could not create the Cantor Part."));
@@ -218,6 +218,8 @@ bool CantorWorksheet::load(XmlStreamReader* reader){
 			attribs = reader->attributes();
 
 			str = attribs.value("content").toString().trimmed();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'content'"));
 			QByteArray content = QByteArray::fromBase64(str.toAscii());
 			return init(&content);
 		} else { // unknown element
