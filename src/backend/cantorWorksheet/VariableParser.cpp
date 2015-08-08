@@ -30,6 +30,8 @@
 
 VariableParser::VariableParser(const QString& name, const QString& value)
 	: m_backendName(name), m_string(value){
+	m_parsed = false;
+	qDebug() << "String is: " << m_string;
 	init();
 }
 
@@ -37,14 +39,54 @@ void VariableParser::init() {
 	if(m_backendName.compare(QString("Maxima"), Qt::CaseInsensitive) == 0) {
 		return parseMaximaValues();
 	}
+	if(m_backendName.compare(QString("Python 3"), Qt::CaseInsensitive) == 0) {
+		return parsePythonValues();
+	}
 }
 
 void VariableParser::parseMaximaValues() {
 	QTime t = QTime::currentTime();
 	QStringList valueStringList;
-	if(m_string.count(QString("[")) <= 2 && m_string.count(QString("]")) <= 2) {
+	if(m_string.count(QString("[")) < 2) {
 		m_string = m_string.replace(QString("["), QString(""));
 		m_string = m_string.replace(QString("]"), QString(""));
+		m_string = m_string.trimmed();
+		valueStringList = m_string.split(',');
+		foreach(QString valueString, valueStringList) {
+			valueString = valueString.trimmed();
+			bool isNumber = false;
+			double value = valueString.toDouble(&isNumber);
+			if(!isNumber) value = NAN;
+			m_values << value;
+		}
+		m_parsed = true;
+		qDebug() << "Time taken to parse: " << t.elapsed();
+	}
+}
+
+void VariableParser::parsePythonValues() {
+	QTime t = QTime::currentTime();
+	QStringList valueStringList;
+	qDebug() << "[ === " << m_string.count(QString("["));
+	qDebug() << "( === " << m_string.count(QString("("));
+	if(m_string.count(QString("[")) < 2 && m_string.count(QString("[")) > 0 && m_string.count(QString("(")) == 0) {
+		m_string = m_string.replace(QString("["), QString(""));
+		m_string = m_string.replace(QString("]"), QString(""));
+		m_string = m_string.trimmed();
+		valueStringList = m_string.split(',');
+		foreach(QString valueString, valueStringList) {
+			valueString = valueString.trimmed();
+			bool isNumber = false;
+			double value = valueString.toDouble(&isNumber);
+			if(!isNumber) value = NAN;
+			m_values << value;
+		}
+		m_parsed = true;
+		qDebug() << "Time taken to parse: " << t.elapsed();
+	}
+	if(m_string.count(QString("(")) < 2 && m_string.count(QString("[")) == 0) {
+		m_string = m_string.replace(QString("("), QString(""));
+		m_string = m_string.replace(QString(")"), QString(""));
 		m_string = m_string.trimmed();
 		valueStringList = m_string.split(',');
 		foreach(QString valueString, valueStringList) {

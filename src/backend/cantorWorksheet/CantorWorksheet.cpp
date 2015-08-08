@@ -56,6 +56,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 			return false;
 		}
 		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
+		connect(m_worksheetAccess, SIGNAL(sessionChanged()), this, SIGNAL(sessionChanged()));
 		if(content)
 			m_worksheetAccess->loadWorksheetFromByteArray(content);
 		Cantor::PanelPluginHandler* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
@@ -107,6 +108,10 @@ void CantorWorksheet::rowsInserted(const QModelIndex & parent, int first, int la
     }
 }
 
+void CantorWorksheet::sessionChanged() {
+
+}
+
 void CantorWorksheet::modelReset() {
 	qDebug() << "Model Reset";
 	for(int i = 0; i < columnCount(); ++i) {
@@ -131,7 +136,9 @@ KParts::ReadWritePart* CantorWorksheet::part() {
 }
 
 QIcon CantorWorksheet::icon() const {
-	return QIcon::fromTheme(m_session->backend()->icon());
+	if(m_session)
+		return QIcon::fromTheme(m_session->backend()->icon());
+	return QIcon();
 }
 
 Column* CantorWorksheet::column(const QString &name) const{
