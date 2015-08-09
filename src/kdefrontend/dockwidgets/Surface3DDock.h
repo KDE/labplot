@@ -31,13 +31,16 @@
 
 #include <QWidget>
 #include "backend/worksheet/plots/3d/Surface3D.h"
-#include "ui_surface3ddock.h"
+#include "backend/worksheet/plots/ColorMapManager.h"
 #include "DockHelpers.h"
+
+#include "ui_surface3ddock.h"
 
 class Surface3D;
 class Matrix;
 class AbstractColumn;
 class AspectTreeModel;
+class ColorMapSelector;
 
 class Surface3DDock : public QWidget {
 	Q_OBJECT
@@ -74,6 +77,7 @@ class Surface3DDock : public QWidget {
 		// Color filling
 		void onColorFillingTypeChanged(int);
 		void onColorChanged(const QColor&);
+		void onColorMapChanged(ColorMapManager::ColorMapId);
 		void onOpacityChanged(int);
 
 		// Projection
@@ -114,6 +118,7 @@ class Surface3DDock : public QWidget {
 		DockHelpers::ChildrenRecorder recorder;
 		Surface3D *surface;
 		AspectTreeModel *aspectTreeModel;
+		ColorMapSelector* cmsColorFilling;
 		bool m_initializing;
 
 		void load();

@@ -45,6 +45,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/FunctionValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/RandomValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
+	${KDEFRONTEND_DIR}/worksheet/ColorMapSelectorDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ConstantsWidget.cpp
@@ -92,6 +93,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
+	${KDEFRONTEND_DIR}/ui/worksheet/colormapselectorwidget.ui
 )
 
 set(BACKEND_SOURCES
@@ -151,6 +153,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp
 	${BACKEND_DIR}/worksheet/plots/AbstractPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
+	${BACKEND_DIR}/worksheet/plots/ColorMapManager.cpp
 	${BACKEND_DIR}/worksheet/plots/PlotArea.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Axis.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp
@@ -180,6 +183,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
 	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
+	${COMMONFRONTEND_DIR}/widgets/ColorMapSelector.cpp
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
 )
 
