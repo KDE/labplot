@@ -62,7 +62,7 @@ class Axis: public WorksheetElement {
 		explicit Axis(const QString &name, const AxisOrientation &orientation = AxisHorizontal);
 		virtual ~Axis();
 
-        virtual QIcon icon() const;
+		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual QGraphicsItem *graphicsItem() const;
 

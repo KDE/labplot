@@ -54,7 +54,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 
 	//"Title"-tab
 	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
- 	labelWidget=new LabelWidget(ui.tabTitle);
+	labelWidget=new LabelWidget(ui.tabTitle);
 	labelWidget->setNoGeometryMode(true);
 	hboxLayout->addWidget(labelWidget);
 	hboxLayout->setContentsMargins(2,2,2,2);
@@ -62,7 +62,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 
 	//"Background"-tab
 	ui.kleBackgroundFileName->setClearButtonShown(true);
-    ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
+	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	KUrlCompletion *comp = new KUrlCompletion();
 	ui.kleBackgroundFileName->setCompletionObject(comp);

@@ -59,7 +59,7 @@ private:
 	QList<TextLabel*> m_labelsList;
 	QList<Axis*> m_axesList;
 	bool m_initializing;
-    QMenu* m_dateTimeMenu;
+	QMenu* m_dateTimeMenu;
 
 	void initConnections();
 

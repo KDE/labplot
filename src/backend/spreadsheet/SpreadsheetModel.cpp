@@ -120,7 +120,7 @@ QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 			return QVariant(col_ptr->formula(row));
 		case Qt::DecorationRole:
 			if(m_formula_mode)
-                return QIcon(QPixmap(":/equals.png"));
+				return QIcon(QPixmap(":/equals.png"));
 			break;
 	}
 

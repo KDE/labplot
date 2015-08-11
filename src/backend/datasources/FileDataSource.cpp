@@ -69,14 +69,14 @@ FileDataSource::~FileDataSource(){
 }
 
 void FileDataSource::initActions(){
-    m_reloadAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Reload"), this);
+	m_reloadAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Reload"), this);
 	connect(m_reloadAction, SIGNAL(triggered()), this, SLOT(read()));
 
-    m_toggleWatchAction = new QAction(i18n("Watch the file"), this);
+	m_toggleWatchAction = new QAction(i18n("Watch the file"), this);
 	m_toggleWatchAction->setCheckable(true);
 	connect(m_toggleWatchAction, SIGNAL(triggered()), this, SLOT(watchToggled()));
 
-    m_toggleLinkAction = new QAction(i18n("Link the file"), this);
+	m_toggleLinkAction = new QAction(i18n("Link the file"), this);
 	m_toggleLinkAction->setCheckable(true);
 	connect(m_toggleLinkAction, SIGNAL(triggered()), this, SLOT(linkToggled()));
 }
@@ -159,7 +159,7 @@ bool FileDataSource::isFileLinked() const{
 
 
 QIcon FileDataSource::icon() const{
-    QIcon icon;
+	QIcon icon;
 #ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	if (m_fileType == FileDataSource::Ascii)
 		icon = QIcon::fromTheme("text-plain");

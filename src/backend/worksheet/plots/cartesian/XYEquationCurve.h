@@ -53,7 +53,7 @@ class XYEquationCurve: public XYCurve {
 		virtual ~XYEquationCurve();
 
 		void recalculate();
-        virtual QIcon icon() const;
+		virtual QIcon icon() const;
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
 

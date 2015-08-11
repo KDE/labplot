@@ -47,10 +47,10 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : KDialog(parent) {
 	textEditWidget.setReadOnly(true);
 	textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
 	setMainWidget( &textEditWidget );
- 	setButtons( KDialog::Ok);
-    setWindowIcon(QIcon::fromTheme("help-about"));
+	setButtons( KDialog::Ok);
+	setWindowIcon(QIcon::fromTheme("help-about"));
 	setCaption(i18n("File info"));
- 	resize( QSize(500,300) );
+	resize( QSize(500,300) );
 }
 
 void FileInfoDialog::setFiles(QStringList& files){
@@ -64,10 +64,10 @@ void FileInfoDialog::setFiles(QStringList& files){
 		if(fileName.isEmpty())
 			continue;
 
-        if (!infoString.isEmpty())
-            infoString += "<br><br><br>";
+		if (!infoString.isEmpty())
+			infoString += "<br><br><br>";
 
-        infoString += FileDataSource::fileInfoString(fileName);
+		infoString += FileDataSource::fileInfoString(fileName);
 	}
 
 	textEditWidget.document()->setHtml(infoString);

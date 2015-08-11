@@ -70,7 +70,7 @@ class TextLabel : public WorksheetElement{
 		~TextLabel();
 
 		Type type() const;
-        virtual QIcon icon() const;
+		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual QGraphicsItem *graphicsItem() const;
 		void setParentGraphicsItem(QGraphicsItem*);

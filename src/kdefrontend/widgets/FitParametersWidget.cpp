@@ -39,8 +39,8 @@
  */
 FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* data) : QWidget(parent), m_fitData(data) {
 	ui.setupUi(this);
-    ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
-    ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
+	ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
+	ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
 
 	ui.tableWidget->setColumnCount(2);
 
@@ -86,9 +86,9 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			ui.tableWidget->setItem(0, 1, new QTableWidgetItem());
 		}
 		ui.tableWidget->setCurrentCell(0, 0);
-        ui.pbAdd->setIcon(QIcon::fromTheme("list-add"));
+		ui.pbAdd->setIcon(QIcon::fromTheme("list-add"));
 		ui.pbAdd->setVisible(true);
-        ui.pbRemove->setIcon(QIcon::fromTheme("list-remove"));
+		ui.pbRemove->setIcon(QIcon::fromTheme("list-remove"));
 		ui.pbRemove->setVisible(true);
 		ui.pbRemove->setEnabled(m_fitData->paramNames.size()>1);
 	}

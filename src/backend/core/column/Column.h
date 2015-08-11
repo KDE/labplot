@@ -52,7 +52,7 @@ class Column : public AbstractColumn
 		void init();
 		~Column();
 
-        virtual QIcon icon() const;
+		virtual QIcon icon() const;
 
 		bool isReadOnly() const;
 		AbstractColumn::ColumnMode columnMode() const;

@@ -61,8 +61,8 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	Q_ASSERT(gridLayout);
 	gridLayout->addWidget(cbXDataColumn, 0, 2, 1, 1);
 
-    ui.tbConstants->setIcon( QIcon::fromTheme("format-text-symbol") );
-    ui.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
+	ui.tbConstants->setIcon( QIcon::fromTheme("format-text-symbol") );
+	ui.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
 
 	QStringList vars;
 	vars<<"x";

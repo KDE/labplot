@@ -1,10 +1,10 @@
 /***************************************************************************
-	File                 : MainWin.cc
-	Project              : LabPlot
-	Description          : Main window of the application
-	--------------------------------------------------------------------
-	Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
-	Copyright            : (C) 2008-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+    File                 : MainWin.cc
+    Project              : LabPlot
+    Description          : Main window of the application
+    --------------------------------------------------------------------
+    Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -185,7 +185,7 @@ void MainWin::initGUI(const QString& fileName){
 		//create a new project or open the last used project.
 		int load = group.readEntry("LoadOnStart", 0);
 		if (load == 1) { //create new project
-				newProject();
+			newProject();
 		} else if (load == 2) { //create new project with a worksheet
 			newProject();
 			newWorksheet();
@@ -1256,8 +1256,8 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){
 }
 
 /*!
-	called when the current aspect in the tree of the project explorer was changed.
-	Selects the new aspect.
+    called when the current aspect in the tree of the project explorer was changed.
+    Selects the new aspect.
 */
 void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect){
 	if (!aspect)
@@ -1482,7 +1482,7 @@ void MainWin::handleSettingsChanges() {
 /************************************** dialogs ***************************************/
 /***************************************************************************************/
 /*!
-	shows the dialog with the Undo-history.
+  shows the dialog with the Undo-history.
 */
 void MainWin::historyDialog(){
 	if (!m_project->undoStack())
@@ -1504,7 +1504,7 @@ void MainWin::historyDialog(){
 }
 
 /*!
-	Opens the dialog to import data to the selected workbook, spreadsheet or matrix
+  Opens the dialog to import data to the selected workbook, spreadsheet or matrix
 */
 void MainWin::importFileDialog(){
 	m_importFileDialog = new ImportFileDialog(this);
@@ -1526,7 +1526,7 @@ void MainWin::importFileDialog(){
 }
 
 /*!
-	opens the dialog for the export of the currently active worksheet, spreadsheet or matrix.
+  opens the dialog for the export of the currently active worksheet, spreadsheet or matrix.
  */
 void MainWin::exportDialog(){
 	Worksheet* w=this->activeWorksheet();
@@ -1588,20 +1588,20 @@ void MainWin::exportDialog(){
 }
 
 /*!
-	adds a new file data source to the current project.
+  adds a new file data source to the current project.
 */
 void MainWin::newFileDataSourceActionTriggered(){
 	ImportFileDialog* dlg = new ImportFileDialog(this, true);
 	if ( dlg->exec() == QDialog::Accepted ) {
-	  FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1", 1));
-	  dlg->importToFileDataSource(dataSource, statusBar());
-	  this->addAspectToProject(dataSource);
+		FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1", 1));
+		dlg->importToFileDataSource(dataSource, statusBar());
+		this->addAspectToProject(dataSource);
 	}
 	delete dlg;
 }
 
 /*!
-	adds a new SQL data source to the current project.
+  adds a new SQL data source to the current project.
 */
 void MainWin::newSqlDataSourceActionTriggered(){
 	//TODO

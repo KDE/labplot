@@ -35,26 +35,26 @@ class SettingsGeneralPage;
 // class SettingsPrintingPage;
 
 class SettingsDialog : public KPageDialog {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit SettingsDialog(QWidget*);
-    virtual ~SettingsDialog();
+	explicit SettingsDialog(QWidget*);
+	virtual ~SettingsDialog();
 
 private slots:
 	void changed();
-    void onOkButton();
-    void onApplyButton();
-    void onRestoreDefaultsButton();
+	void onOkButton();
+	void onApplyButton();
+	void onRestoreDefaultsButton();
 
 private:
 	bool m_changed;
-    QPushButton* applybutton;
-    SettingsGeneralPage* generalPage;
+	QPushButton* applybutton;
+	SettingsGeneralPage* generalPage;
 //     SettingsPrintingPage* printingPage;
 
-    void applySettings();
-    void restoreDefaults();
+	void applySettings();
+	void restoreDefaults();
 
 signals:
 	void settingsChanged();

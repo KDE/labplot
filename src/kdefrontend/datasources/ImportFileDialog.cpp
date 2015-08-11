@@ -92,7 +92,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource) : KDial
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
-    setWindowIcon(QIcon::fromTheme("document-import-database"));
+	setWindowIcon(QIcon::fromTheme("document-import-database"));
 	resize( QSize(500,0).expandedTo(minimumSize()) );
 }
 

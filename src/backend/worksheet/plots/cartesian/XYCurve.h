@@ -58,7 +58,7 @@ class XYCurve: public WorksheetElement {
 		explicit XYCurve(const QString &name);
 		virtual ~XYCurve();
 
-        virtual QIcon icon() const;
+		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual QGraphicsItem *graphicsItem() const;
 		virtual void save(QXmlStreamWriter*) const;

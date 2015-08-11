@@ -39,7 +39,7 @@ class Folder : public AbstractAspect {
 
 		virtual ~Folder();
 
-        virtual QIcon icon() const;
+		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 
 		virtual void save(QXmlStreamWriter*) const;

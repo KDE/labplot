@@ -50,87 +50,87 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent){
 	setMinimumSize(QSize(512, minSize.height()));
 
 
-    setFaceType(List);
-    setWindowTitle(i18n("Preferences"));
-    QDialogButtonBox* dialogButtonBox = new QDialogButtonBox;
+	setFaceType(List);
+	setWindowTitle(i18n("Preferences"));
+	QDialogButtonBox* dialogButtonBox = new QDialogButtonBox;
 
-    QPushButton* okbutton = dialogButtonBox->addButton(QDialogButtonBox::Ok);
-    connect( okbutton, &QAbstractButton::clicked, this, &SettingsDialog::onOkButton );
+	QPushButton* okbutton = dialogButtonBox->addButton(QDialogButtonBox::Ok);
+	connect( okbutton, &QAbstractButton::clicked, this, &SettingsDialog::onOkButton );
 
-    applybutton = dialogButtonBox->addButton(QDialogButtonBox::Apply);
-    connect( applybutton, &QAbstractButton::clicked, this, &SettingsDialog::onApplyButton );
+	applybutton = dialogButtonBox->addButton(QDialogButtonBox::Apply);
+	connect( applybutton, &QAbstractButton::clicked, this, &SettingsDialog::onApplyButton );
 	generalPage = new SettingsGeneralPage(this);
 	KPageWidgetItem* generalFrame = addPage(generalPage, i18n("General"));
-    generalFrame->setIcon(QIcon::fromTheme("system-run"));
+	generalFrame->setIcon(QIcon::fromTheme("system-run"));
 
-    dialogButtonBox->addButton(QDialogButtonBox::Cancel);
+	dialogButtonBox->addButton(QDialogButtonBox::Cancel);
 
-    QPushButton* defaultbutton = dialogButtonBox->addButton(QDialogButtonBox::RestoreDefaults);
-    connect( defaultbutton, &QAbstractButton::clicked, this, &SettingsDialog::onRestoreDefaultsButton );
+	QPushButton* defaultbutton = dialogButtonBox->addButton(QDialogButtonBox::RestoreDefaults);
+	connect( defaultbutton, &QAbstractButton::clicked, this, &SettingsDialog::onRestoreDefaultsButton );
 
-    okbutton->setDefault(true);
-    applybutton->setEnabled(false);
+	okbutton->setDefault(true);
+	applybutton->setEnabled(false);
 
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->addWidget( dialogButtonBox );
-    setLayout( layout );
-    generalFrame->setIcon(QIcon::fromTheme("system-run"));
-    connect(generalPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
+	QVBoxLayout* layout = new QVBoxLayout;
+	layout->addWidget( dialogButtonBox );
+	setLayout( layout );
+	generalFrame->setIcon(QIcon::fromTheme("system-run"));
+   connect(generalPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
 
 //     printingPage = new SettingsPrintingPage(mainWindow, this);
 //     KPageWidgetItem* printingFrame = addPage(printingPage, i18nc("@title:group", "Print"));
 //     printingFrame->setIcon(KIcon("document-print"));
 
-    const KConfigGroup dialogConfig = KSharedConfig::openConfig()->group("SettingsDialog");
-    KWindowConfig::restoreWindowSize(windowHandle(), dialogConfig);
+	const KConfigGroup dialogConfig = KSharedConfig::openConfig()->group("SettingsDialog");
+	KWindowConfig::restoreWindowSize(windowHandle(), dialogConfig);
 }
 
 SettingsDialog::~SettingsDialog(){
-    KConfigGroup dialogConfig = KSharedConfig::openConfig()->group("SettingsDialog");
-    KWindowConfig::saveWindowSize(windowHandle(), dialogConfig);
+	KConfigGroup dialogConfig = KSharedConfig::openConfig()->group("SettingsDialog");
+	KWindowConfig::saveWindowSize(windowHandle(), dialogConfig);
 }
 
 void SettingsDialog::onOkButton(){
-    if (m_changed){
-        applySettings();
-        setWindowTitle(i18n("Preferences"));
-        applybutton->setEnabled(false);
-    }
+	if (m_changed){
+		applySettings();
+		setWindowTitle(i18n("Preferences"));
+		applybutton->setEnabled(false);
+	}
 }
 
 void SettingsDialog::onApplyButton(){
-    if (m_changed){
-        applySettings();
-        setWindowTitle(i18n("Preferences"));
-        applybutton->setEnabled(false);
-    }
+	if (m_changed){
+		applySettings();
+		setWindowTitle(i18n("Preferences"));
+		applybutton->setEnabled(false);
+	}
 }
 
 void SettingsDialog::onRestoreDefaultsButton(){
-    const QString text(i18n("All settings will be reset to default values. Do you want to continue?"));
-    if (KMessageBox::questionYesNo(this, text) == KMessageBox::Yes) {
-        restoreDefaults();
-        setWindowTitle(i18n("Preferences"));
-        applybutton->setEnabled(false);
-    }
+	const QString text(i18n("All settings will be reset to default values. Do you want to continue?"));
+	if (KMessageBox::questionYesNo(this, text) == KMessageBox::Yes) {
+		restoreDefaults();
+		setWindowTitle(i18n("Preferences"));
+		applybutton->setEnabled(false);
+	}
 }
 
 void SettingsDialog::changed() {
-    m_changed = true;
-    setWindowTitle(i18n("Preferences    [Changed]"));
-    applybutton->setEnabled(true);
+	m_changed = true;
+	setWindowTitle(i18n("Preferences    [Changed]"));
+	applybutton->setEnabled(true);
 }
 
 void SettingsDialog::applySettings(){
-    m_changed = false;
+	m_changed = false;
 	generalPage->applySettings();
 //     printingPage->applySettings();
-    KSharedConfig::openConfig()->sync();
-    emit settingsChanged();
+	KSharedConfig::openConfig()->sync();
+	emit settingsChanged();
 }
 
 void SettingsDialog::restoreDefaults(){
-    m_changed = false;
+	m_changed = false;
 	generalPage->restoreDefaults();
 //    printingPage->restoreDefaults();
 }

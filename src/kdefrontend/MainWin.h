@@ -114,31 +114,31 @@ private:
 	QAction* m_cascadeWindows;
 
 	//toggling doch widgets
-    QAction* m_toggleProjectExplorerDocQAction;
-    QAction* m_togglePropertiesDocQAction;
+	QAction* m_toggleProjectExplorerDocQAction;
+	QAction* m_togglePropertiesDocQAction;
 
 	//worksheet actions
-    QAction* worksheetZoomInAction;
-    QAction* worksheetZoomOutAction;
-    QAction* worksheetZoomOriginAction;
-    QAction* worksheetZoomFitPageHeightAction;
-    QAction* worksheetZoomFitPageWidthAction;
-    QAction* worksheetZoomFitSelectionAction;
+	QAction* worksheetZoomInAction;
+	QAction* worksheetZoomOutAction;
+	QAction* worksheetZoomOriginAction;
+	QAction* worksheetZoomFitPageHeightAction;
+	QAction* worksheetZoomFitPageWidthAction;
+	QAction* worksheetZoomFitSelectionAction;
 
-    QAction* worksheetNavigationModeAction;
-    QAction* worksheetZoomModeAction;
-    QAction* worksheetSelectionModeAction;
+	QAction* worksheetNavigationModeAction;
+	QAction* worksheetZoomModeAction;
+	QAction* worksheetSelectionModeAction;
 
-    QAction* worksheetVerticalLayoutAction;
-    QAction* worksheetHorizontalLayoutAction;
-    QAction* worksheetGridLayoutAction;
-    QAction* worksheetBreakLayoutAction;
+	QAction* worksheetVerticalLayoutAction;
+	QAction* worksheetHorizontalLayoutAction;
+	QAction* worksheetGridLayoutAction;
+	QAction* worksheetBreakLayoutAction;
 
-    QAction* m_visibilityFolderAction;
-    QAction* m_visibilitySubfolderAction;
-    QAction* m_visibilityAllAction;
-    QAction* m_toggleProjectExplorerDockAction;
-    QAction* m_togglePropertiesDockAction;
+	QAction* m_visibilityFolderAction;
+	QAction* m_visibilitySubfolderAction;
+	QAction* m_visibilityAllAction;
+	QAction* m_toggleProjectExplorerDockAction;
+	QAction* m_togglePropertiesDockAction;
 
 	//Menus
 	QMenu* m_visibilityMenu;
@@ -189,7 +189,7 @@ private slots:
 	bool newProject();
 	void openProject();
 	void openProject(const QString&);
-    void openRecentProject(const QUrl&);
+	void openRecentProject(const QUrl&);
 	bool closeProject();
 	bool saveProject();
 	bool saveProjectAs();

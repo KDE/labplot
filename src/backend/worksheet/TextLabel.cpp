@@ -159,7 +159,7 @@ void TextLabel::handlePageResize(double horizontalRatio, double verticalRatio){
 	Returns an icon to be used in the project explorer.
 */
 QIcon TextLabel::icon() const{
-    return  QIcon::fromTheme("draw-text");
+	return  QIcon::fromTheme("draw-text");
 }
 
 QMenu* TextLabel::createContextMenu(){

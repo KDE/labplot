@@ -50,7 +50,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	ui.gbOptions->hide();
 
 	KUrlCompletion *comp = new KUrlCompletion();
-    ui.kleFileName->setCompletionObject(comp);
+	ui.kleFileName->setCompletionObject(comp);
 
 	ui.cbFormat->addItem("ASCII");
 	ui.cbFormat->addItem("Binary");
@@ -70,7 +70,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	ui.cbSeparator->addItem(";SPACE");
 	ui.cbSeparator->addItem(":SPACE");
 
-    ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
+	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	setMainWidget( mainWidget );
 
@@ -82,7 +82,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
 	setCaption(i18n("Export spreadsheet"));
-    setWindowIcon(QIcon::fromTheme("document-export-database"));
+	setWindowIcon(QIcon::fromTheme("document-export-database"));
 
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	ui.cbFormat->setCurrentIndex(conf.readEntry("Format", 0));

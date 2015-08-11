@@ -106,7 +106,7 @@ void Worksheet::init() {
  */
 float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit unit){
 	switch (unit){
-    case Worksheet::Millimeter:
+	case Worksheet::Millimeter:
 		return value*10.0;
 	case Worksheet::Centimeter:
 		return value*100.0;
@@ -123,7 +123,7 @@ float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit un
  */
 float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit unit){
 	switch (unit){
-    case Worksheet::Millimeter:
+	case Worksheet::Millimeter:
 		return value/10.0;
 	case Worksheet::Centimeter:
 		return value/100.0;
@@ -137,7 +137,7 @@ float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit 
 
 //! Return an icon to be used for decorating my views.
 QIcon Worksheet::icon() const {
-    return QIcon::fromTheme("office-chart-area");
+	return QIcon::fromTheme("office-chart-area");
 }
 
 //! Return a new context menu.

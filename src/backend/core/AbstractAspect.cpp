@@ -295,7 +295,7 @@ void AbstractAspect::setHidden(bool value) {
  * \brief Return an icon to be used for decorating my views.
  */
 QIcon AbstractAspect::icon() const {
-    return QIcon();
+	return QIcon();
 }
 
 /**
@@ -312,15 +312,15 @@ QMenu* AbstractAspect::createContextMenu() {
 	action->setIcon(widget_style->standardIcon(QStyle::SP_TrashIcon));
 	return menu;
 #else
-    QMenu* menu = new QMenu();
-    menu->addSection(this->name());
+	QMenu* menu = new QMenu();
+	menu->addSection(this->name());
 	//TODO: activate this again when the functionality is implemented
 // 	menu->addAction( KStandardAction::cut(this) );
 // 	menu->addAction(KStandardAction::copy(this));
 // 	menu->addAction(KStandardAction::paste(this));
 // 	menu->addSeparator();
-    menu->addAction(QIcon::fromTheme("edit-rename"), i18n("Rename"), this, SIGNAL(renameRequested()));
-    menu->addAction(QIcon::fromTheme("edit-delete"), i18n("Delete"), this, SLOT(remove()));
+	menu->addAction(QIcon::fromTheme("edit-rename"), i18n("Rename"), this, SIGNAL(renameRequested()));
+	menu->addAction(QIcon::fromTheme("edit-delete"), i18n("Delete"), this, SLOT(remove()));
 	return menu;
 #endif
 }

@@ -126,11 +126,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 
 	ui.gbOptions->hide();
 
-    ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
-    ui.bFileInfo->setIcon( QIcon::fromTheme("help-about") );
-    ui.bManageFilters->setIcon( QIcon::fromTheme("configure") );
-    ui.bSaveFilter->setIcon( QIcon::fromTheme("document-save") );
-    ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
+	ui.bFileInfo->setIcon( QIcon::fromTheme("help-about") );
+	ui.bManageFilters->setIcon( QIcon::fromTheme("configure") );
+	ui.bSaveFilter->setIcon( QIcon::fromTheme("document-save") );
+	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
 
 	connect( ui.kleFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
@@ -142,7 +142,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 	//load last used settings
-    KConfigGroup conf(KSharedConfig::openConfig(),"Import");
+	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
 
 	//settings for data type specific widgets
 	// ascii data
@@ -359,7 +359,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	opens a file dialog and lets the user select the file data source.
 */
 void ImportFileWidget::selectFile() {
-    KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileWidget");
+	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileWidget");
 	QString dir = conf.readEntry("LastDir", "");
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the File Data Source"), dir);
 	if (path.isEmpty())

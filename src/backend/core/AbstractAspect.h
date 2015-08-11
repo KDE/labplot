@@ -69,7 +69,7 @@ class AbstractAspect : public QObject {
 		void setHidden(bool);
 		bool hidden() const;
 		void setSelected(bool);
-        virtual QIcon icon() const;
+		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 
 		//functions related to the handling of the tree-like project structure

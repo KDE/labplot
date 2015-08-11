@@ -39,10 +39,10 @@ void VariableParser::init() {
 	if(m_backendName.compare(QString("Maxima"), Qt::CaseInsensitive) == 0) {
 		return parseMaximaValues();
 	}
-	if(m_backendName.compare(QString("Python 3"), Qt::CaseInsensitive) == 0) {
+	else if(m_backendName.compare(QString("Python 3"), Qt::CaseInsensitive) == 0) {
 		return parsePythonValues();
 	}
-	if(m_backendName.compare(QString("Python 2"), Qt::CaseInsensitive) == 0) {
+	else if(m_backendName.compare(QString("Python 2"), Qt::CaseInsensitive) == 0) {
 		return parsePythonValues();
 	}
 }
@@ -70,13 +70,15 @@ void VariableParser::parseMaximaValues() {
 void VariableParser::parsePythonValues() {
 	QTime t = QTime::currentTime();
 	QStringList valueStringList;
-	qDebug() << "[ === " << m_string.count(QString("["));
-	qDebug() << "( === " << m_string.count(QString("("));
+	qDebug() << "Variable is: " << m_string;
 	if(m_string.count(QString("[")) < 2 && m_string.count(QString("[")) > 0 && m_string.count(QString("(")) == 0) {
 		m_string = m_string.replace(QString("["), QString(""));
 		m_string = m_string.replace(QString("]"), QString(""));
 		m_string = m_string.trimmed();
-		valueStringList = m_string.split(',');
+		if(m_string.count(QString(","))>1)
+			valueStringList = m_string.split(',');
+		else
+			valueStringList = m_string.split(' ');
 		foreach(QString valueString, valueStringList) {
 			valueString = valueString.trimmed();
 			bool isNumber = false;
@@ -91,7 +93,10 @@ void VariableParser::parsePythonValues() {
 		m_string = m_string.replace(QString("("), QString(""));
 		m_string = m_string.replace(QString(")"), QString(""));
 		m_string = m_string.trimmed();
-		valueStringList = m_string.split(',');
+		if(m_string.count(QString(","))>1)
+			valueStringList = m_string.split(',');
+		else
+			valueStringList = m_string.split(' ');
 		foreach(QString valueString, valueStringList) {
 			valueString = valueString.trimmed();
 			bool isNumber = false;
