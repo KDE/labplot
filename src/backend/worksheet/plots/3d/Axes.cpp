@@ -233,6 +233,10 @@ void AxesPrivate::createCubeAxes() {
 	axes->ZAxisMinorTickVisibilityOn();
 	renderer->AddViewProp(axes);
 
+	axes->GetXAxesGridlinesProperty()->SetLineWidth(3);
+	axes->GetYAxesGridlinesProperty()->SetLineWidth(3);
+	axes->GetZAxesGridlinesProperty()->SetLineWidth(3);
+
 	axes->GetXAxesLinesProperty()->SetLineWidth(5);
 	axes->GetYAxesLinesProperty()->SetLineWidth(5);
 	axes->GetZAxesLinesProperty()->SetLineWidth(5);
