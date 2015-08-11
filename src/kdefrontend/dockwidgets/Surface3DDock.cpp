@@ -35,6 +35,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/plots/3d/DataHandlers.h"
 #include "kdefrontend/TemplateHandler.h"
+#include "commonfrontend/widgets/ColorMapSelector.h"
 
 #include <QDir>
 #include <QDebug>
@@ -79,6 +80,12 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	list<<"Matrix";
 	ui.cbMatrix->setSelectableClasses(list);
 
+	//Tab "Color Filling"
+	QGridLayout* gridLayout = qobject_cast<QGridLayout*>(ui.tabColorFilling->layout());
+	cmsColorFilling = new ColorMapSelector(ui.tabColorFilling);
+	gridLayout->addWidget(cmsColorFilling, 2, 2, 1, 1);
+
+
 	//SIGNALs/SLOTs
 	//General
 	recorder.connect(ui.leName, SIGNAL(returnPressed()), SLOT(onNameChanged()));
@@ -91,6 +98,7 @@ Surface3DDock::Surface3DDock(QWidget* parent)
 	//Color filling
 	recorder.connect(ui.cbColorFillingType, SIGNAL(currentIndexChanged(int)), SLOT(onColorFillingTypeChanged(int)));
 	recorder.connect(ui.kcbColorFilling, SIGNAL(changed(QColor)), SLOT(onColorChanged(const QColor&)));
+	recorder.connect(cmsColorFilling, SIGNAL(changed(ColorMapManager::ColorMapId)), SLOT(onColorMapChanged(ColorMapManager::ColorMapId)));
 	recorder.connect(ui.sbColorFillingOpacity, SIGNAL(valueChanged(int)), SLOT(onOpacityChanged(int)));
 
 	//Mesh
@@ -272,6 +280,11 @@ void Surface3DDock::onColorChanged(const QColor& color) {
 	surface->setColor(color);
 }
 
+void Surface3DDock::onColorMapChanged(ColorMapManager::ColorMapId id) {
+	const Lock lock(m_initializing);
+// 	surface->setColorMap(id);
+}
+
 void Surface3DDock::onOpacityChanged(int val) {
 	const Lock lock(m_initializing);
 	surface->setOpacity(val / 100.0);
@@ -384,22 +397,22 @@ void Surface3DDock::colorFillingChanged(Surface3D::ColorFilling type) {
 	if (type == Surface3D::ColorFilling_Empty
 			|| type == Surface3D::ColorFilling_ElevationLevel) {
 		hideItem(ui.lColorFilling, ui.kcbColorFilling);
-		hideItem(ui.lColorFillingMap, ui.cbColorFillingMap);
+		hideItem(ui.lColorFillingMap, cmsColorFilling);
 		hideItem(ui.lColorFillingMatrix, ui.cbColorFillingMatrix);
 		hideItem(ui.lColorFillingOpacity, ui.sbColorFillingOpacity);
 	} else if (type == Surface3D::ColorFilling_SolidColor) {
 		showItem(ui.lColorFilling, ui.kcbColorFilling);
-		hideItem(ui.lColorFillingMap, ui.cbColorFillingMap);
+		hideItem(ui.lColorFillingMap, cmsColorFilling);
 		hideItem(ui.lColorFillingMatrix, ui.cbColorFillingMatrix);
 		showItem(ui.lColorFillingOpacity, ui.sbColorFillingOpacity);
 	} else if (type == Surface3D::ColorFilling_ColorMap) {
 		hideItem(ui.lColorFilling, ui.kcbColorFilling);
-		showItem(ui.lColorFillingMap, ui.cbColorFillingMap);
+		showItem(ui.lColorFillingMap, cmsColorFilling);
 		hideItem(ui.lColorFillingMatrix, ui.cbColorFillingMatrix);
 		showItem(ui.lColorFillingOpacity, ui.sbColorFillingOpacity);
 	} else if (type == Surface3D::ColorFilling_ColorMapFromMatrix) {
 		hideItem(ui.lColorFilling, ui.kcbColorFilling);
-		hideItem(ui.lColorFillingMap, ui.cbColorFillingMap);
+		hideItem(ui.lColorFillingMap, cmsColorFilling);
 		showItem(ui.lColorFillingMatrix, ui.cbColorFillingMatrix);
 		showItem(ui.lColorFillingOpacity, ui.sbColorFillingOpacity);
 	}

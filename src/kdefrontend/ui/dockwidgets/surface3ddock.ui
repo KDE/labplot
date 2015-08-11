@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -236,9 +236,6 @@
           <string>Color map</string>
          </property>
         </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QComboBox" name="cbColorFillingMap"/>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="lColorFillingMatrix">
@@ -535,7 +532,6 @@
   <tabstop>chkVisible</tabstop>
   <tabstop>sbColorFillingOpacity</tabstop>
   <tabstop>kcbColorFilling</tabstop>
-  <tabstop>cbColorFillingMap</tabstop>
   <tabstop>cbColorFillingType</tabstop>
  </tabstops>
  <resources/>
