@@ -34,6 +34,13 @@
 			<address><email>yurchor@ukr.net</email></address>
 		</affiliation>
 	</author>
+	<author>
+		<firstname>Garvit</firstname>
+		<surname>Khatri</surname>
+		<affiliation>
+			<address><email>garvitdelhi@gmail.com</email></address>
+		</affiliation>
+	</author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 
@@ -90,6 +97,10 @@ Features:
 <listitem><para>Definition of mathematical formulas is supported by syntax-highlighting and completion and by the list of thematicaly grouped mathematical and physical constants and functions</para></listitem>
 <listitem><para>Analysis of plotted data is supported by many zooming and navigation features</para></listitem>
 <listitem><para>Linear and non-linear fits to data, several fit-models are predefined and custom models with arbitrary number of parameters can be provided</para></listitem>
+<listitem><para>Supports many CAS backends like Maxima, Python, KAlgebra, Sage</para></listitem>
+<listitem><para>Nice Worksheet view for evaluating expressions</para></listitem>
+<listitem><para>Easy plugin based structure to add different Backends</para></listitem>
+<listitem><para>Plugin based assistant dialogs for common tasks (like integrating a function or entering a matrix)</para></listitem>
 </itemizedlist>
 </para>
 
@@ -284,6 +295,158 @@ Different worksheet actions dealing with the creation of new objects, changing o
 
 <para>
 The results shown on the worksheet can be exported to different formats via the <link linkend="exportdialog">export dialog</link>.
+</para>
+</sect1>
+
+<sect1 id="CASworksheet">
+<title>CAS Worksheet</title>
+<para>
+The CAS worksheet is, besides the <link linkend="worksheet">worksheet</link>, the third central part of the application and provides an area to you use your favorite mathematical applications from within an elegant &kde;-integrated Worksheet Interface.
+</para>
+<para>
+  &LabPlot; offers you several choices for the backends you wish to use with it. The choice to make depends on what you want to achieve.
+</para>
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="worksheet.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+<para>
+  Currently the following backends are available:
+  <variablelist>
+    <varlistentry>
+      <term>Sage:</term>
+      <listitem>
+	<para>
+	  Sage is a free open-source mathematics software system licensed under the GPL.
+	  It combines the power of many existing open-source packages, within a common Python-based interface.
+	  See <ulink url="http://sagemath.org">http://sagemath.org</ulink> for more information.
+	</para>
+	</listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>Maxima:</term>
+      <listitem>
+	<para>
+	  Maxima is a system for the manipulation of symbolic and numeric expressions,
+	  including differentiation, integration, Taylor series, Laplace transforms,
+	  ordinary differential equations, systems of linear equations, polynomials, sets,
+	  lists, vectors, matrices, and tensors. Maxima yields high-precision numeric results
+	  by using exact fractions, arbitrary precision integers, and variable precision
+	  floating point numbers. Maxima can plot functions and data in two and three dimensions.
+	  See <ulink url="http://maxima.sourceforge.net">http://maxima.sourceforge.net</ulink> for more information.
+	</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>R:</term>
+      <listitem>
+	<para>
+	  R is a language and environment for statistical computing and graphics, similar to the S language and environment.
+	  It provides a wide variety of statistical (linear and nonlinear modelling,
+	  classical statistical tests, time-series analysis, classification, clustering, ...)
+	  and graphical techniques, and is highly extensible. The S language is often the
+	  vehicle of choice for research in statistical methodology,
+	  and R provides an open-source route to this.
+	  See <ulink url="http://www.r-project.org">http://www.r-project.org</ulink> for more information.
+	</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>&kalgebra;:</term>
+      <listitem>
+	<para>
+	  &kalgebra; is a MathML-based graph calculator, that ships with &kde; Education project.
+	  See <ulink url="http://edu.kde.org/kalgebra/">http://edu.kde.org/kalgebra/</ulink> for more information.
+	  </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>Qalculate!:</term>
+      <listitem>
+  <para>
+    Qalculate! is not your regular software replication of the cheapest
+    available calculator. Qalculate! aims to make full use of the superior
+    interface, power and flexibility of modern computers. The center of
+    attention in Qalculate! is the expression entry. Instead of entering each
+    number in a mathematical expression separately, you can directly write the
+    whole expression and later modify it. The interpretation of expressions is
+    flexible and fault tolerant, and if you nevertheless do something wrong,
+    Qalculate! will tell you so. Not fully solvable expressions are however not
+    errors. Qalculate! will simplify as far as it can and answer with an
+    expression. In addition to numbers and arithmetic operators, an expression
+    may contain any combination of variables, units, and functions.
+    See <ulink url="http://qalculate.sourceforge.net/">http://qalculate.sourceforge.net/</ulink> for more information.
+  </para>
+  </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>Python2:</term>
+      <listitem>
+  <para>
+    Python is a remarkably powerful dynamic programming language that is used
+in a wide variety of application domains. There are several Python packages
+to scientific programming.
+  </para>
+  <para>Python is distributed under Python Software Foundation license (GPL compatible).
+    See the <ulink url="http://www.python.org/">official website</ulink> for more information.
+  </para>
+  <note>
+    <para>
+      This backend adds an additional item to the &cantor;'s main menu, <guimenu>Package</guimenu>. The only item of this menu is <menuchoice><guimenu>Package</guimenu><guimenuitem>Import Package</guimenuitem></menuchoice>. This item can be used to import Python packages to the worksheet.
+    </para>
+  </note>
+  <warning>
+    <para>
+      This backend supports Python 2 only.
+    </para>
+  </warning>
+  </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>Scilab:</term>
+      <listitem>
+  <para>
+    Scilab is an free software, cross-platform numerical computational package
+    and a high-level, numerically oriented programming language.
+  </para>
+  <para>Scilab is distributed under CeCILL license (GPL compatible).
+    See <ulink url="http://www.scilab.org/">http://www.scilab.org/</ulink> for more information.
+  </para>
+  <warning>
+    <para>
+      You need Scilab version 5.5 or higher to be installed in your system to make this backend usable.
+    </para>
+  </warning>
+  </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>Octave:</term>
+      <listitem>
+  <para>
+    &GNU; Octave is a high-level language, primarily intended for numerical
+    computations. It provides a convenient command line interface for
+    solving linear and nonlinear problems numerically, and for performing other
+    numerical experiments using a language that is mostly compatible with <ulink url="http://www.mathworks.com/products/matlab/">MATLAB</ulink>.
+    See <ulink url="http://www.gnu.org/software/octave/">http://www.gnu.org/software/octave/</ulink> for more information.
+    </para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>Lua:</term>
+      <listitem>
+  <para>
+    Lua is a fast and lightweight scripting language, with a simple procedural syntax. There are several libraries in Lua aimed at math and science.
+  </para>
+  <para>
+    See <ulink url="http://www.lua.org/">http://www.lua.org/</ulink> for more information.
+  </para>
+  <para>
+    This backend supports <ulink url="http://luajit.org/">luajit 2</ulink>.
+  </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
 </para>
 </sect1>
 
@@ -545,6 +708,13 @@ The menu is only available when a spreadsheet object is selected on the <guilabe
 </para>
 </sect1>
 
+<sect1 id="CASworksheet-menu">
+<title>The CAS Worksheet Menu</title>
+<para>
+This menu contains all the items that can also be found in the context menu (right mouse) of a CAS worksheet.
+The menu is only available when a worksheet object is selected on the <guilabel>Project Explorer</guilabel> panel.
+</para>
+</sect1>
 
 <sect1 id="settings-menu">
 <title>The Settings Menu</title>
@@ -1772,7 +1942,7 @@ bug-fixed packages are released regular and can be found there too.
 <title>Requirements</title>
 
 <para>
-In order to successfully use &LabPlot;, you need at least a standard &Qt; 4.7 and &kde; installation and the &GNU; scientific library (GSL).
+In order to successfully use &LabPlot;, you need at least a standard &Qt; 5 and &kde; KF5 installation, the &GNU; scientific library (GSL), &cantor; libcantor library.
 </para>
 
 <!-- <para>

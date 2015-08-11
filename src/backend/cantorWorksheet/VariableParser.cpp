@@ -42,6 +42,9 @@ void VariableParser::init() {
 	if(m_backendName.compare(QString("Python 3"), Qt::CaseInsensitive) == 0) {
 		return parsePythonValues();
 	}
+	if(m_backendName.compare(QString("Python 2"), Qt::CaseInsensitive) == 0) {
+		return parsePythonValues();
+	}
 }
 
 void VariableParser::parseMaximaValues() {
@@ -84,7 +87,7 @@ void VariableParser::parsePythonValues() {
 		m_parsed = true;
 		qDebug() << "Time taken to parse: " << t.elapsed();
 	}
-	if(m_string.count(QString("(")) < 2 && m_string.count(QString("[")) == 0) {
+	else if(m_string.count(QString("(")) < 2 && m_string.count(QString("[")) == 0) {
 		m_string = m_string.replace(QString("("), QString(""));
 		m_string = m_string.replace(QString(")"), QString(""));
 		m_string = m_string.trimmed();
