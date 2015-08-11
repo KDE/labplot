@@ -80,31 +80,7 @@ QMenu* Axes::createContextMenu() {
 
 void Axes::updateBounds() {
 	Q_D(Axes);
-	if (!d->showAxes || !d->vtkAxes || !d->renderer)
-		return;
-
-	if (d->type == AxesType_Cube) {
-		vtkActorCollection* actors = d->renderer->GetActors();
-		actors->InitTraversal();
-
-		vtkBoundingBox bb;
-
-		double bounds[6];
-		vtkCubeAxesActor *axes = dynamic_cast<vtkCubeAxesActor*>(d->vtkAxes.GetPointer());
-		if (actors->GetNumberOfItems() != 0) {
-			vtkActor* actor = 0;
-			while ((actor = actors->GetNextActor()) != 0) {
-				if (operator!=(actor))
-					bb.AddBounds(actor->GetBounds());
-			}
-
-			bb.GetBounds(bounds);
-		} else {
-			bounds[0] = bounds[2] = bounds[4] = -1;
-			bounds[1] = bounds[3] = bounds[5] = 1;
-		}
-		axes->SetBounds(bounds);
-	}
+	d->updateBounds();
 }
 
 bool Axes::operator==(vtkProp* prop) const {
@@ -204,84 +180,117 @@ void AxesPrivate::show(bool pred) {
 	emit q->parametersChanged();
 }
 
-QString AxesPrivate::name() const{
+QString AxesPrivate::name() const {
 	return i18n("Axes");
 }
 
-void AxesPrivate::init() {
-	if (!showAxes || !renderer)
+void AxesPrivate::getBoundingBox(double bounds[6]) {
+	vtkPropCollection* actors = renderer->GetViewProps();
+	actors->InitTraversal();
+
+	vtkBoundingBox bb;
+	if (actors->GetNumberOfItems() > 1) {
+		vtkProp* actor = 0;
+		while ((actor = actors->GetNextProp()) != 0) {
+			if (actor == vtkAxes)
+				continue;
+			double *tb = actor->GetBounds();
+			qDebug() << "Actor" << tb[0] << tb[1] << tb[2] << tb[3] << tb[4] << tb[5];
+			bb.AddBounds(actor->GetBounds());
+		}
+
+		bb.GetBounds(bounds);
+	} else {
+		qDebug() << Q_FUNC_INFO;
+		bounds[0] = bounds[2] = bounds[4] = -1;
+		bounds[1] = bounds[3] = bounds[5] = 1;
+	}
+}
+
+void AxesPrivate::updateBounds() {
+	if (!showAxes || !vtkAxes.GetPointer() || !renderer)
 		return;
 
+	if (type == Axes::AxesType_Cube) {
+		double bounds[6];
+		getBoundingBox(bounds);
+		qDebug() << Q_FUNC_INFO << bounds[0] << bounds[1] << bounds[2] << bounds[3]
+				<< bounds[4] << bounds[5];
+		dynamic_cast<vtkCubeAxesActor*>(vtkAxes.GetPointer())->SetBounds(bounds);
+	}
+}
+
+void AxesPrivate::createCubeAxes() {
+	vtkSmartPointer<vtkCubeAxesActor> axes = vtkSmartPointer<vtkCubeAxesActor>::New();
+	axes->SetCamera(renderer->GetActiveCamera());
+	axes->SetScreenSize(30.0);
+	axes->DrawXGridlinesOn();
+	axes->DrawYGridlinesOn();
+	axes->DrawZGridlinesOn();
+
+	axes->XAxisMinorTickVisibilityOn();
+	axes->YAxisMinorTickVisibilityOn();
+	axes->ZAxisMinorTickVisibilityOn();
+	renderer->AddViewProp(axes);
+
+	axes->GetXAxesLinesProperty()->SetLineWidth(5);
+	axes->GetYAxesLinesProperty()->SetLineWidth(5);
+	axes->GetZAxesLinesProperty()->SetLineWidth(5);
+
+	axes->SetFlyModeToOuterEdges();
+
+	axes->PickableOn();
+	axes->SetGridLineLocation(2);
+	vtkAxes = axes;
+	updateBounds();
+}
+
+void AxesPrivate::createPlainAxes() {
 	double colors[][3] = {
 		{xLabelColor.redF(), xLabelColor.greenF(), xLabelColor.blueF()},
 		{yLabelColor.redF(), yLabelColor.greenF(), yLabelColor.blueF()},
 		{zLabelColor.redF(), zLabelColor.greenF(), zLabelColor.blueF()}
 	};
 
-	if (type == Axes::AxesType_Cube) {
-		vtkSmartPointer<vtkCubeAxesActor> axes = vtkSmartPointer<vtkCubeAxesActor>::New();
-		axes->SetCamera(renderer->GetActiveCamera());
-		axes->DrawXGridlinesOn();
-		axes->DrawYGridlinesOn();
-		axes->DrawZGridlinesOn();
+	vtkSmartPointer<vtkAxesActor> axes = vtkSmartPointer<vtkAxesActor>::New();
 
-		axes->XAxisMinorTickVisibilityOff();
-		axes->YAxisMinorTickVisibilityOff();
-		axes->ZAxisMinorTickVisibilityOff();
+	QVector<vtkCaptionActor2D*> captionActors;
+	captionActors << axes->GetXAxisCaptionActor2D() << axes->GetYAxisCaptionActor2D()
+			<< axes->GetZAxisCaptionActor2D();
 
-		axes->SetXTitle(xLabel.toAscii());
-		axes->SetYTitle(yLabel.toAscii());
-		axes->SetZTitle(zLabel.toAscii());
+	QVector<vtkProperty*> shaftProps;
+	shaftProps << axes->GetXAxisShaftProperty() << axes->GetYAxisShaftProperty()
+			<< axes->GetZAxisShaftProperty();
 
-		axes->SetScreenSize(fontSize);
+	QVector<vtkProperty*> tipProps;
+	tipProps << axes->GetXAxisTipProperty() << axes->GetYAxisTipProperty()
+			<< axes->GetZAxisTipProperty();
 
-		for (int i = 0; i < 3; ++i) {
-			vtkTextProperty *titleProp = axes->GetTitleTextProperty(i);
-			titleProp->SetColor(colors[i]);
-			titleProp->SetFontSize(fontSize);
+	axes->SetXAxisLabelText(xLabel.toAscii());
+	axes->SetYAxisLabelText(yLabel.toAscii());
+	axes->SetZAxisLabelText(zLabel.toAscii());
 
-			vtkTextProperty *labelProp = axes->GetLabelTextProperty(i);
-			labelProp->SetColor(colors[i]);
-			labelProp->SetFontSize(fontSize);
-		}
+	for (int i = 0; i < 3; ++i) {
+		vtkCaptionActor2D* const captionActor = captionActors[i];
+		captionActor->GetTextActor()->SetTextScaleModeToNone();
+		captionActor->GetCaptionTextProperty()->SetFontSize(fontSize);
+		captionActor->GetCaptionTextProperty()->SetColor(colors[i]);
 
-		axes->GetXAxesLinesProperty()->SetLineWidth(width);
-		axes->GetYAxesLinesProperty()->SetLineWidth(width);
-		axes->GetZAxesLinesProperty()->SetLineWidth(width);
-
-		vtkAxes = axes;
-		q->updateBounds();
-	} else if (type == Axes::AxesType_Plain) {
-		vtkSmartPointer<vtkAxesActor> axes = vtkSmartPointer<vtkAxesActor>::New();
-
-		QVector<vtkCaptionActor2D*> captionActors;
-		captionActors << axes->GetXAxisCaptionActor2D() << axes->GetYAxisCaptionActor2D()
-				<< axes->GetZAxisCaptionActor2D();
-
-		QVector<vtkProperty*> shaftProps;
-		shaftProps << axes->GetXAxisShaftProperty() << axes->GetYAxisShaftProperty()
-				<< axes->GetZAxisShaftProperty();
-
-		QVector<vtkProperty*> tipProps;
-		tipProps << axes->GetXAxisTipProperty() << axes->GetYAxisTipProperty()
-				<< axes->GetZAxisTipProperty();
-
-		axes->SetXAxisLabelText(xLabel.toAscii());
-		axes->SetYAxisLabelText(yLabel.toAscii());
-		axes->SetZAxisLabelText(zLabel.toAscii());
-
-		for (int i = 0; i < 3; ++i) {
-			vtkCaptionActor2D* const captionActor = captionActors[i];
-			captionActor->GetTextActor()->SetTextScaleModeToNone();
-			captionActor->GetCaptionTextProperty()->SetFontSize(fontSize);
-			captionActor->GetCaptionTextProperty()->SetColor(colors[i]);
-
-			shaftProps[i]->SetColor(colors[i]);
-			tipProps[i]->SetColor(colors[i]);
-		}
-
-		vtkAxes = axes;
+		shaftProps[i]->SetColor(colors[i]);
+		tipProps[i]->SetColor(colors[i]);
 	}
+
+	vtkAxes = axes;
+}
+
+void AxesPrivate::init() {
+	if (!showAxes || !renderer)
+		return;
+
+	if (type == Axes::AxesType_Cube)
+		createCubeAxes();
+	else if (type == Axes::AxesType_Plain)
+		createPlainAxes();
 
 	if (vtkAxes)
 		renderer->AddActor(vtkAxes);

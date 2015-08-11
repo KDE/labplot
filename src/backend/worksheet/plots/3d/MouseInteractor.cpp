@@ -54,8 +54,10 @@ vtkProp* MouseInteractor::getPickedObject(int *pos) {
 void MouseInteractor::OnMouseMove() {
 	int pos[2];
 	GetInteractor()->GetEventPosition(pos);
-	vtkInteractorStyleTrackballCamera::OnMouseMove();
 	vtkProp* object = getPickedObject(pos);
+	if (object == 0)
+		vtkInteractorStyleTrackballCamera::OnMouseMove();
+
 	if (object != prevHovered) {
 		prevHovered = object;
 		emit broadcaster.objectHovered(prevHovered);
@@ -63,8 +65,9 @@ void MouseInteractor::OnMouseMove() {
 }
 
 void MouseInteractor::OnLeftButtonDown() {
-	vtkInteractorStyleTrackballCamera::OnLeftButtonDown();
 	vtkProp* object = getPickedObject();
+	if (object == 0)
+		vtkInteractorStyleTrackballCamera::OnLeftButtonDown();
 	if (object != prevClicked) {
 		prevClicked = object;
 		emit broadcaster.objectClicked(prevClicked);

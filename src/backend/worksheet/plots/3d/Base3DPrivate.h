@@ -34,7 +34,6 @@
 class vtkActor;
 class vtkProperty;
 class vtkRenderer;
-class vtkProp3D;
 
 class Base3D;
 struct Base3DPrivate {
@@ -42,7 +41,7 @@ struct Base3DPrivate {
 	bool isHighlighted;
 	bool isSelected;
 	vtkSmartPointer<vtkRenderer> renderer;
-	vtkSmartPointer<vtkProp3D> actor;
+	vtkSmartPointer<vtkActor> actor;
 	vtkSmartPointer<vtkProperty> property;
 	Base3DPrivate(vtkRenderer *renderer, Base3D *baseParent);
 	virtual ~Base3DPrivate();

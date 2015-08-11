@@ -132,6 +132,7 @@ class Plot3D : public AbstractPlot {
 		void itemRemoved();
 		void objectClicked(vtkProp*);
 		void objectHovered(vtkProp*);
+		void onParametersChanged();
 
 		// Zoom
 		void zoomIn();

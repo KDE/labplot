@@ -64,7 +64,7 @@ class IDataHandler : public AbstractAspect {
 		IDataHandler();
 		virtual ~IDataHandler() {}
 
-		vtkSmartPointer<vtkProp3D> actor(const DataHandlerConfig& config);
+		vtkSmartPointer<vtkActor> actor(const DataHandlerConfig& config);
 
 		void update();
 

@@ -31,35 +31,45 @@
 
 #include "Axes.h"
 
+#include <vtkNew.h>
+#include <vtkSmartPointer.h>
+
 class vtkRenderer;
 class vtkProp;
 
 struct AxesPrivate {
-	Axes* const q;
+	public:
+		Axes* const q;
 
-	bool showAxes;
-	Axes::AxesType type;
-	int fontSize;
-	double width;
-	QColor xLabelColor;
-	QColor yLabelColor;
-	QColor zLabelColor;
-	QString xLabel;
-	QString yLabel;
-	QString zLabel;
+		bool showAxes;
+		Axes::AxesType type;
+		int fontSize;
+		double width;
+		QColor xLabelColor;
+		QColor yLabelColor;
+		QColor zLabelColor;
+		QString xLabel;
+		QString yLabel;
+		QString zLabel;
 
-	vtkSmartPointer<vtkRenderer> renderer;
-	vtkSmartPointer<vtkProp> vtkAxes;
+		vtkSmartPointer<vtkRenderer> renderer;
+		vtkSmartPointer<vtkProp> vtkAxes;
 
-	AxesPrivate(vtkRenderer* renderer, Axes* parent);
-	~AxesPrivate();
+		AxesPrivate(vtkRenderer* renderer, Axes* parent);
+		~AxesPrivate();
 
-	void init();
-	void hide();
-	void update();
-	void show(bool pred = true);
+		void init();
+		void hide();
+		void update();
+		void show(bool pred = true);
 
-	QString name() const;
+		QString name() const;
+
+		void updateBounds();
+	private:
+		void createCubeAxes();
+		void createPlainAxes();
+		void getBoundingBox(double bounds[6]);
 };
 
 #endif

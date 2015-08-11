@@ -148,13 +148,7 @@ void Base3DPrivate::init() {
 }
 
 vtkProperty* Base3DPrivate::getProperty() const {
-	vtkActor* p = dynamic_cast<vtkActor*>(actor.Get());
-	if (p)
-		return p->GetProperty();
-
-	vtkAssembly* assembly = dynamic_cast<vtkAssembly*>(actor.Get());
-	vtkProp3DCollection* parts = assembly->GetParts();
-	return dynamic_cast<vtkActor*>(parts->GetLastProp3D())->GetProperty();
+	return actor.Get()->GetProperty();
 }
 
 void Base3DPrivate::update() {

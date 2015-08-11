@@ -58,6 +58,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		void updateLight(bool notify = true);
 		void updatePlot(bool notify = true);
 		void updateBackground(bool notify = true);
+		void setupCamera();
 		void mousePressEvent(QGraphicsSceneMouseEvent* event);
 		void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
 		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);

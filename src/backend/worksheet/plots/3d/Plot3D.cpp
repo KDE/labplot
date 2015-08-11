@@ -50,6 +50,8 @@
 #include <KConfigGroup>
 #include <KLocale>
 
+#include <cmath>
+
 #include <vtkActor.h>
 #include <vtkCamera.h>
 #include <vtkImageActor.h>
@@ -60,6 +62,7 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkQImageToImageSource.h>
 #include <vtkWindowToImageFilter.h>
+#include <vtkBoundingBox.h>
 
 
 Plot3D::Plot3D(const QString& name)
@@ -147,9 +150,17 @@ QIcon Plot3D::icon() const {
 void Plot3D::configureAspect(AbstractAspect* aspect) {
 	Q_D(Plot3D);
 	addChild(aspect);
-	d->vtkItem->connect(aspect, SIGNAL(parametersChanged()), SLOT(refresh()));
+	connect(aspect, SIGNAL(parametersChanged()), SLOT(onParametersChanged()));
 	d->vtkItem->connect(aspect, SIGNAL(removed()), SLOT(refresh()));
 	connect(aspect, SIGNAL(removed()), SLOT(itemRemoved()));
+}
+
+void Plot3D::onParametersChanged() {
+	Q_D(Plot3D);
+	d->axes->updateBounds();
+	d->renderer->ResetCamera();
+	d->renderer->GetActiveCamera()->Azimuth(25);
+	d->vtkItem->refresh();
 }
 
 void Plot3D::addSurface() {
@@ -158,6 +169,7 @@ void Plot3D::addSurface() {
 	d->surfaces.insert(newSurface);
 	configureAspect(newSurface);
 	d->vtkItem->refresh();
+	d->axes->updateBounds();
 }
 
 void Plot3D::addCurve() {
@@ -166,6 +178,7 @@ void Plot3D::addCurve() {
 	d->curves.insert(newCurve);
 	configureAspect(newCurve);
 	d->vtkItem->refresh();
+	d->axes->updateBounds();
 }
 
 void Plot3D::itemRemoved() {
@@ -183,6 +196,7 @@ void Plot3D::itemRemoved() {
 		d->curves.remove(curve);
 		return;
 	}
+	d->axes->updateBounds();
 }
 
 void Plot3D::objectClicked(vtkProp* object) {
@@ -644,6 +658,17 @@ void Plot3DPrivate::init() {
 	}
 }
 
+void Plot3DPrivate::setupCamera() {
+	//set the background camera in front of the background image (fill the complete layer)
+	vtkCamera* camera = backgroundRenderer->GetActiveCamera();
+	camera->ParallelProjectionOn();
+	const double x = rect.width() / 2;
+	const double y = rect.height() / 2;
+	camera->SetFocalPoint(x, y, 0.0);
+	camera->SetParallelScale(y);
+	camera->SetPosition(x,y, 900);
+}
+
 void Plot3DPrivate::retransform() {
 	prepareGeometryChange();
 	const double halfWidth = rect.width() / 2;
@@ -659,17 +684,13 @@ void Plot3DPrivate::retransform() {
 		vtkItem->show();
 		vtkItem->setGeometry(-halfWidth, -halfHeight, rect.width(), rect.height());
 
-		//set the background camera in front of the background image (fill the complete layer)
-		vtkCamera* camera = backgroundRenderer->GetActiveCamera();
-		camera->ParallelProjectionOn();
-		const double x = rect.width() / 2;
-		const double y = rect.height() / 2;
-		camera->SetFocalPoint(x, y, 0.0);
-		camera->SetParallelScale(y);
-		camera->SetPosition(x,y, 900);
+		setupCamera();
 		updateBackground(false);
 		updatePlot(false);
 		updateLight();
+
+		renderer->ResetCamera();
+		renderer->GetActiveCamera()->Azimuth(25);
 	}
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();

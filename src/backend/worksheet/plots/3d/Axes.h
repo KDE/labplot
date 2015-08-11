@@ -62,8 +62,6 @@ class Axes : public AbstractAspect {
 		QIcon icon() const;
 		QMenu* createContextMenu();
 
-		void updateBounds();
-
 		bool operator==(vtkProp* prop) const;
 		bool operator!=(vtkProp* prop) const;
 
@@ -84,6 +82,7 @@ class Axes : public AbstractAspect {
 
 	public slots:
 		void show(bool pred);
+		void updateBounds();
 
 	signals:
 		friend class AxesSetTypeCmd;
