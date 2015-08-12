@@ -240,13 +240,14 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 		}
 
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("3D Surface properties"));
+		QList<Surface3D*> list;
 		foreach(aspect, selectedAspects){
 			Surface3D* surface = qobject_cast<Surface3D*>(aspect);
 			if (surface) {
-				mainWindow->surface3dDock->setSurface(surface);
-				break;
+				list << surface;
 			}
 		}
+		mainWindow->surface3dDock->setSurfaces(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->surface3dDock);
 	}else if(className == "Curve3D"){

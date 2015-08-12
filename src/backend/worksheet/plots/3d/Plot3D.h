@@ -42,6 +42,13 @@ class Plot3D : public AbstractPlot {
 	Q_DECLARE_PRIVATE(Plot3D)
 	Q_DISABLE_COPY(Plot3D)
 	public:
+		enum Scaling {
+			Scaling_Linear,
+			Scaling_Log10,
+			Scaling_Log2,
+			Scaling_Ln
+		};
+
 		explicit Plot3D(const QString &name);
 		virtual ~Plot3D();
 		void init(bool transform = true);
@@ -56,6 +63,12 @@ class Plot3D : public AbstractPlot {
 		void setRect(const QRectF&);
 		void setContext(QGLContext *context);
 
+		// General parameters
+		BASIC_D_ACCESSOR_DECL(Plot3D::Scaling, xScaling, XScaling)
+		BASIC_D_ACCESSOR_DECL(Plot3D::Scaling, yScaling, YScaling)
+		BASIC_D_ACCESSOR_DECL(Plot3D::Scaling, zScaling, ZScaling)
+
+		// Background parameters
 		BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
@@ -123,6 +136,7 @@ class Plot3D : public AbstractPlot {
 	protected slots:
 		void childSelected(const AbstractAspect*);
 		void childDeselected(const AbstractAspect*);
+		void handleAspectAdded(const AbstractAspect*);
 
 	private slots:
 		void addSurface();
@@ -139,6 +153,15 @@ class Plot3D : public AbstractPlot {
 		void zoomOut();
 
 	signals:
+		// General
+		friend class Plot3DSetXScalingCmd;
+		friend class Plot3DSetYScalingCmd;
+		friend class Plot3DSetZScalingCmd;
+		void xScalingChanged(Plot3D::Scaling);
+		void yScalingChanged(Plot3D::Scaling);
+		void zScalingChanged(Plot3D::Scaling);
+
+		// Background
 		friend class Plot3DSetBackgroundTypeCmd;
 		friend class Plot3DSetBackgroundColorStyleCmd;
 		friend class Plot3DSetBackgroundImageStyleCmd;
@@ -147,15 +170,6 @@ class Plot3D : public AbstractPlot {
 		friend class Plot3DSetBackgroundSecondColorCmd;
 		friend class Plot3DSetBackgroundFileNameCmd;
 		friend class Plot3DSetBackgroundOpacityCmd;
-
-		friend class Plot3DSetIntensityCmd;
-		friend class Plot3DSetAmbientCmd;
-		friend class Plot3DSetDiffuseCmd;
-		friend class Plot3DSetSpecularCmd;
-		friend class Plot3DSetElevationCmd;
-		friend class Plot3DSetAzimuthCmd;
-		friend class Plot3DSetConeAngleCmd;
-
 		void backgroundTypeChanged(PlotArea::BackgroundType);
 		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
 		void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
@@ -164,9 +178,15 @@ class Plot3D : public AbstractPlot {
 		void backgroundSecondColorChanged(const QColor&);
 		void backgroundFileNameChanged(const QString&);
 		void backgroundOpacityChanged(float);
-		void parametersChanged();
-		void currentAspectChanged(const AbstractAspect*);
 
+		// Light
+		friend class Plot3DSetIntensityCmd;
+		friend class Plot3DSetAmbientCmd;
+		friend class Plot3DSetDiffuseCmd;
+		friend class Plot3DSetSpecularCmd;
+		friend class Plot3DSetElevationCmd;
+		friend class Plot3DSetAzimuthCmd;
+		friend class Plot3DSetConeAngleCmd;
 		void intensityChanged(double);
 		void ambientChanged(const QColor&);
 		void diffuseChanged(const QColor&);
@@ -174,6 +194,9 @@ class Plot3D : public AbstractPlot {
 		void elevationChanged(double);
 		void azimuthChanged(double);
 		void coneAngleChanged(double);
+
+		void parametersChanged();
+		void currentAspectChanged(const AbstractAspect*);
 };
 
 #endif

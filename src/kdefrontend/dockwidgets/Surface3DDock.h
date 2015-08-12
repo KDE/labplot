@@ -47,7 +47,7 @@ class Surface3DDock : public QWidget {
 
 	public:
 		explicit Surface3DDock(QWidget* parent);
-		void setSurface(Surface3D *surface);
+		void setSurfaces(const QList<Surface3D*>& surfaces);
 
 	private:
 		void showTriangleInfo(bool pred);
@@ -116,7 +116,7 @@ class Surface3DDock : public QWidget {
 	private:
 		Ui::Surface3DDock ui;
 		DockHelpers::ChildrenRecorder recorder;
-		Surface3D *surface;
+		QList<Surface3D*> surfaces;
 		AspectTreeModel *aspectTreeModel;
 		ColorMapSelector* cmsColorFilling;
 		bool m_initializing;

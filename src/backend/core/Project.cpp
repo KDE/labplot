@@ -34,7 +34,6 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/3d/Surface3D.h"
 #include "backend/worksheet/plots/3d/Curve3D.h"
-#include "backend/worksheet/plots/3d/DataHandlers.h"
 #include "backend/matrix/Matrix.h"
 
 #include <QUndoStack>
@@ -325,16 +324,14 @@ bool Project::load(XmlStreamReader* reader) {
 					if (!surface)
 						continue;
 
-					MatrixDataHandler* mdh = &surface->matrixDataHandler();
-					RESTORE_MATRIX_POINTER(mdh, matrix, Matrix);
-					SpreadsheetDataHandler* sdh = &surface->spreadsheetDataHandler();
-					RESTORE_COLUMN_POINTER(sdh, xColumn, XColumn);
-					RESTORE_COLUMN_POINTER(sdh, yColumn, YColumn);
-					RESTORE_COLUMN_POINTER(sdh, yColumn, ZColumn);
+					RESTORE_MATRIX_POINTER(surface, matrix, Matrix);
+					RESTORE_COLUMN_POINTER(surface, xColumn, XColumn);
+					RESTORE_COLUMN_POINTER(surface, yColumn, YColumn);
+					RESTORE_COLUMN_POINTER(surface, yColumn, ZColumn);
 
-					RESTORE_COLUMN_POINTER(sdh, firstNode, FirstNode);
-					RESTORE_COLUMN_POINTER(sdh, secondNode, SecondNode);
-					RESTORE_COLUMN_POINTER(sdh, thirdNode, ThirdNode);
+					RESTORE_COLUMN_POINTER(surface, firstNode, FirstNode);
+					RESTORE_COLUMN_POINTER(surface, secondNode, SecondNode);
+					RESTORE_COLUMN_POINTER(surface, thirdNode, ThirdNode);
 				}
 
 				// 3D curves

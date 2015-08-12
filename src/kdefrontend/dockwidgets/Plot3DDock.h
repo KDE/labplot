@@ -30,6 +30,7 @@
 #define PLOT3DDOCK_H
 
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/3d/Plot3D.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "ui_plot3ddock.h"
 
@@ -68,6 +69,9 @@ class Plot3DDock: public QWidget {
 		void onVisibilityChanged(int);
 		void onGeometryChanged();
 		void onLayoutChanged(Worksheet::Layout);
+		void onXScalingChanged(int);
+		void onYScalingChanged(int);
+		void onZScalingChanged(int);
 
 		//"Background"-tab
 		void onBackgroundTypeChanged(int);
@@ -94,6 +98,9 @@ class Plot3DDock: public QWidget {
 		void descriptionChanged(const AbstractAspect*);
 		void rectChanged(const QRectF&);
 		void visibleChanged(bool);
+		void xScalingChanged(Plot3D::Scaling);
+		void yScalingChanged(Plot3D::Scaling);
+		void zScalingChanged(Plot3D::Scaling);
 
 		//"Background"-tab
 		void backgroundTypeChanged(PlotArea::BackgroundType);

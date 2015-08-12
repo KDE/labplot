@@ -32,10 +32,10 @@
 #include "Base3D.h"
 #include "backend/lib/macros.h"
 
-class DemoDataHandler;
-class SpreadsheetDataHandler;
-class MatrixDataHandler;
-class FileDataHandler;
+class KUrl;
+
+class Matrix;
+class AbstractColumn;
 
 class Surface3DPrivate;
 class Surface3D : public Base3D {
@@ -71,11 +71,7 @@ class Surface3D : public Base3D {
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
 
-		DemoDataHandler& demoDataHandler();
-		SpreadsheetDataHandler& spreadsheetDataHandler();
-		MatrixDataHandler& matrixDataHandler();
-		FileDataHandler& fileDataHandler();
-
+		// General parameters
 		BASIC_D_ACCESSOR_DECL(VisualizationType, visualizationType, VisualizationType)
 		BASIC_D_ACCESSOR_DECL(DataSource, dataSource, DataSource)
 		BASIC_D_ACCESSOR_DECL(ColorFilling, colorFilling, ColorFilling)
@@ -85,10 +81,48 @@ class Surface3D : public Base3D {
 		BASIC_D_ACCESSOR_DECL(bool, showXZProjection, ShowXZProjection)
 		BASIC_D_ACCESSOR_DECL(bool, showYZProjection, ShowYZProjection)
 
+		// Matrix parameters
+		POINTER_D_ACCESSOR_DECL(const Matrix, matrix, Matrix);
+		const QString& matrixPath() const;
+
+		// Spreadsheet parameters
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn);
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn);
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, zColumn, ZColumn);
+
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, firstNode, FirstNode);
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, secondNode, SecondNode);
+		POINTER_D_ACCESSOR_DECL(const AbstractColumn, thirdNode, ThirdNode);
+
+		const QString& xColumnPath() const;
+		const QString& yColumnPath() const;
+		const QString& zColumnPath() const;
+
+		const QString& firstNodePath() const;
+		const QString& secondNodePath() const;
+		const QString& thirdNodePath() const;
+
+		// FileData parameters
+		CLASS_D_ACCESSOR_DECL(KUrl, file, File);
+
 		typedef Surface3D BaseClass;
 		typedef Surface3DPrivate Private;
 
+	private slots:
+		// Spreadsheet slots
+		void xColumnAboutToBeRemoved(const AbstractAspect*);
+		void yColumnAboutToBeRemoved(const AbstractAspect*);
+		void zColumnAboutToBeRemoved(const AbstractAspect*);
+
+		void firstNodeAboutToBeRemoved(const AbstractAspect*);
+		void secondNodeAboutToBeRemoved(const AbstractAspect*);
+		void thirdNodeAboutToBeRemoved(const AbstractAspect*);
+
+		// Matrix slots
+		void matrixAboutToBeRemoved(const AbstractAspect*);
+
 	signals:
+		// General parameters
 		friend class Surface3DSetVisualizationTypeCmd;
 		friend class Surface3DSetDataSourceCmd;
 		friend class Surface3DSetColorFillingCmd;
@@ -105,6 +139,28 @@ class Surface3D : public Base3D {
 		void showXYProjectionChanged(bool);
 		void showXZProjectionChanged(bool);
 		void showYZProjectionChanged(bool);
+
+		// Matrix parameters
+		friend class Surface3DSetMatrixCmd;
+		void matrixChanged(const Matrix*);
+
+		// Spreadsheet parameters
+		friend class Surface3DSetXColumnCmd;
+		friend class Surface3DSetYColumnCmd;
+		friend class Surface3DSetZColumnCmd;
+		friend class Surface3DSetFirstNodeCmd;
+		friend class Surface3DSetSecondNodeCmd;
+		friend class Surface3DSetThirdNodeCmd;
+		void xColumnChanged(const AbstractColumn*);
+		void yColumnChanged(const AbstractColumn*);
+		void zColumnChanged(const AbstractColumn*);
+		void firstNodeChanged(const AbstractColumn*);
+		void secondNodeChanged(const AbstractColumn*);
+		void thirdNodeChanged(const AbstractColumn*);
+
+		// FileData parameters
+		friend class Surface3DSetFileCmd;
+		void pathChanged(const KUrl&);
 };
 
 #endif

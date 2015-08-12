@@ -32,7 +32,7 @@
 #include "Axes.h"
 #include "Base3DPrivate.h"
 
-class vtkActor;
+#include <QColor>
 
 struct AxesPrivate : public Base3DPrivate {
 		Axes* const q;

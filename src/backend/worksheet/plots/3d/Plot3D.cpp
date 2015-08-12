@@ -31,7 +31,6 @@
 #include "Surface3D.h"
 #include "Curve3D.h"
 #include "Axes.h"
-#include "DataHandlers.h"
 #include "MouseInteractor.h"
 #include "VTKGraphicsItem.h"
 #include "XmlAttributeReader.h"
@@ -39,6 +38,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/core/AbstractAspect.h"
 
 #include <QDebug>
 #include <QPainter>
@@ -89,6 +89,29 @@ void Plot3D::childDeselected(const AbstractAspect* aspect) {
 	d->vtkItem->refresh();
 }
 
+void Plot3D::handleAspectAdded(const AbstractAspect* aspect) {
+	Q_D(Plot3D);
+	if (d->isInitialized) {
+		Base3D* object = dynamic_cast<Base3D*>(const_cast<AbstractAspect*>(aspect));
+		if (object != 0)
+			object->reset();
+		if (d->axes)
+			d->axes->updateBounds();
+		d->resetCamera();
+		d->vtkItem->refresh();
+		Surface3D* surface = dynamic_cast<Surface3D*>(object);
+		if (surface) {
+			d->surfaces.insert(surface);
+		} else {
+			Curve3D* curve = dynamic_cast<Curve3D*>(object);
+			if (curve) {
+				d->curves.insert(curve);
+			} else
+				d->axes = dynamic_cast<Axes*>(object);
+		}
+	}
+}
+
 void Plot3D::init(bool transform){
 	Q_D(Plot3D);
 	if (d->isInitialized)
@@ -137,16 +160,20 @@ void Plot3D::configureAspect(AbstractAspect* aspect) {
 void Plot3D::onParametersChanged() {
 	Q_D(Plot3D);
 	d->axes->updateBounds();
+	d->resetCamera();
 	d->vtkItem->refresh();
 }
 
 void Plot3D::addSurface() {
 	Q_D(Plot3D);
 	Surface3D* newSurface = new Surface3D;
+	newSurface->setXScaling(d->xScaling);
+	newSurface->setYScaling(d->yScaling);
+	newSurface->setZScaling(d->zScaling);
 	newSurface->setRenderer(d->renderer);
 	d->surfaces.insert(newSurface);
 	configureAspect(newSurface);
-	d->renderer->ResetCamera();
+	d->resetCamera();
 	if (d->axes)
 		d->axes->updateBounds();
 	d->vtkItem->refresh();
@@ -155,10 +182,13 @@ void Plot3D::addSurface() {
 void Plot3D::addCurve() {
 	Q_D(Plot3D);
 	Curve3D* newCurve = new Curve3D;
+	newCurve->setXScaling(d->xScaling);
+	newCurve->setYScaling(d->yScaling);
+	newCurve->setZScaling(d->zScaling);
 	newCurve->setRenderer(d->renderer);
 	d->curves.insert(newCurve);
 	configureAspect(newCurve);
-	d->renderer->ResetCamera();
+	d->resetCamera();
 	d->vtkItem->refresh();
 	if (d->axes)
 		d->axes->updateBounds();
@@ -170,6 +200,7 @@ void Plot3D::addAxes() {
 	d->axes->setRenderer(d->renderer);
 	configureAspect(d->axes);
 	d->axes->updateBounds();
+	d->resetCamera();
 	d->vtkItem->refresh();
 	addAxesAction->setEnabled(false);
 }
@@ -183,6 +214,7 @@ void Plot3D::onItemRemoved() {
 		d->surfaces.remove(surface);
 		if (d->axes)
 			d->axes->updateBounds();
+		d->resetCamera();
 		return;
 	}
 
@@ -192,6 +224,7 @@ void Plot3D::onItemRemoved() {
 		d->curves.remove(curve);
 		if (d->axes)
 			d->axes->updateBounds();
+		d->resetCamera();
 		return;
 	}
 
@@ -451,7 +484,12 @@ void Plot3D::retransform() {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
+// General
+BASIC_SHARED_D_READER_IMPL(Plot3D, Plot3D::Scaling, xScaling, xScaling)
+BASIC_SHARED_D_READER_IMPL(Plot3D, Plot3D::Scaling, yScaling, yScaling)
+BASIC_SHARED_D_READER_IMPL(Plot3D, Plot3D::Scaling, zScaling, zScaling)
 
+// Background
 BASIC_SHARED_D_READER_IMPL(Plot3D, PlotArea::BackgroundType, backgroundType, backgroundType)
 BASIC_SHARED_D_READER_IMPL(Plot3D, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
 BASIC_SHARED_D_READER_IMPL(Plot3D, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle)
@@ -474,7 +512,17 @@ BASIC_SHARED_D_READER_IMPL(Plot3D, double, coneAngle, coneAngle)
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
+// General
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetXScaling, Plot3D::Scaling, xScaling, updateXScaling)
+STD_SETTER_IMPL(Plot3D, XScaling, Plot3D::Scaling, xScaling, "%1: X axis scaling changed")
 
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetYScaling, Plot3D::Scaling, yScaling, updateYScaling)
+STD_SETTER_IMPL(Plot3D, YScaling, Plot3D::Scaling, yScaling, "%1: Y axis scaling changed")
+
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetZScaling, Plot3D::Scaling, zScaling, updateZScaling)
+STD_SETTER_IMPL(Plot3D, ZScaling, Plot3D::Scaling, zScaling, "%1: Z axis scaling changed")
+
+// Background
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundType, PlotArea::BackgroundType, backgroundType, updateBackground)
 STD_SETTER_IMPL(Plot3D, BackgroundType, PlotArea::BackgroundType, backgroundType, "%1: background type changed")
 
@@ -500,7 +548,6 @@ STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundOpacity, float, backgroundOpacity, 
 STD_SETTER_IMPL(Plot3D, BackgroundOpacity, float, backgroundOpacity, "%1: set opacity")
 
 // Light
-
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetIntensity, double, intensity, updateLight)
 STD_SETTER_IMPL(Plot3D, Intensity, double, intensity, "%1: intensity changed")
 
@@ -534,6 +581,9 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	, isInitialized(false)
 	, rectSet(false)
 	, axes(0)
+	, xScaling(Plot3D::Scaling_Linear)
+	, yScaling(Plot3D::Scaling_Linear)
+	, zScaling(Plot3D::Scaling_Linear)
 	, intensity(1.0)
 	, ambient(Qt::white)
 	, diffuse(Qt::white)
@@ -592,6 +642,8 @@ namespace {
 }
 
 void Plot3DPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+	Q_UNUSED(option);
+	Q_UNUSED(widget);
 	if (!q->isVisible())
 		return;
 
@@ -717,10 +769,46 @@ void Plot3DPrivate::retransform() {
 		updateBackground(false);
 		updateLight();
 
-		renderer->ResetCamera();
+		resetCamera();
 	}
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
+}
+
+void Plot3DPrivate::resetCamera() {
+	renderer->ResetCamera();
+	renderer->GetActiveCamera()->Azimuth(15);
+}
+
+void Plot3DPrivate::updateXScaling() {
+	qDebug() << Q_FUNC_INFO;
+	foreach (Surface3D* surface, surfaces) {
+		surface->setXScaling(xScaling);
+	}
+
+	foreach (Curve3D* curve, curves) {
+		curve->setXScaling(xScaling);
+	}
+}
+
+void Plot3DPrivate::updateYScaling() {
+	foreach (Surface3D* surface, surfaces) {
+		surface->setYScaling(yScaling);
+	}
+
+	foreach (Curve3D* curve, curves) {
+		curve->setYScaling(yScaling);
+	}
+}
+
+void Plot3DPrivate::updateZScaling() {
+	foreach (Surface3D* surface, surfaces) {
+		surface->setZScaling(zScaling);
+	}
+
+	foreach (Curve3D* curve, curves) {
+		curve->setZScaling(zScaling);
+	}
 }
 
 void Plot3DPrivate::updateBackground(bool notify) {
@@ -848,6 +936,9 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 		writeCommentElement(writer);
 
 		writer->writeStartElement("general");
+			writer->writeAttribute("xScaling", QString::number(d->xScaling));
+			writer->writeAttribute("yScaling", QString::number(d->yScaling));
+			writer->writeAttribute("zScaling", QString::number(d->zScaling));
 		writer->writeEndElement();
 
 		writer->writeStartElement("background");
@@ -908,6 +999,12 @@ bool Plot3D::load(XmlStreamReader* reader) {
 			if(!readCommentElement(reader)){
 				return false;
 			}
+		} else if(sectionName == "general"){
+			const QXmlStreamAttributes& attribs = reader->attributes();
+			XmlAttributeReader attributeReader(reader, attribs);
+			attributeReader.checkAndLoadAttribute("xScaling", d->xScaling);
+			attributeReader.checkAndLoadAttribute("yScaling", d->yScaling);
+			attributeReader.checkAndLoadAttribute("zScaling", d->zScaling);
 		}else if(sectionName == "axes"){
 			qDebug() << Q_FUNC_INFO << "Load axes";
 			if (!d->axes) {
@@ -919,11 +1016,18 @@ bool Plot3D::load(XmlStreamReader* reader) {
 			qDebug() << Q_FUNC_INFO << "Load surface";
 			Surface3D* newSurface = new Surface3D();
 			newSurface->load(reader);
+			// Scaling has been already initialized in the general section
+			newSurface->setXScaling(d->xScaling);
+			newSurface->setYScaling(d->yScaling);
+			newSurface->setZScaling(d->zScaling);
 			d->surfaces.insert(newSurface);
 		}else if(sectionName == "curve3d"){
 			qDebug() << Q_FUNC_INFO << "Load curve";
 			Curve3D* newCurve = new Curve3D();
 			newCurve->load(reader);
+			newCurve->setXScaling(d->xScaling);
+			newCurve->setYScaling(d->yScaling);
+			newCurve->setZScaling(d->zScaling);
 			d->curves.insert(newCurve);
 		}else if(sectionName == "background"){
 			const QXmlStreamAttributes& attribs = reader->attributes();

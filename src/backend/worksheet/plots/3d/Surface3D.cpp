@@ -28,17 +28,36 @@
 
 #include "Surface3D.h"
 #include "Surface3DPrivate.h"
-#include "DataHandlers.h"
 #include "Plot3D.h"
 #include "XmlAttributeReader.h"
+
 #include "backend/lib/commandtemplates.h"
+
+#include "backend/core/AbstractColumn.h"
+#include "backend/matrix/Matrix.h"
 
 #include <QDebug>
 
 #include <KLocale>
 
+#include <cmath>
+
 #include <vtkRenderer.h>
 #include <vtkProperty.h>
+#include <vtkSphereSource.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkActor.h>
+#include <vtkProperty.h>
+#include <vtkOBJReader.h>
+#include <vtkSTLReader.h>
+#include <vtkCellArray.h>
+#include <vtkTriangle.h>
+#include <vtkLookupTable.h>
+#include <vtkPointData.h>
+#include <vtkExtractEdges.h>
+#include <vtkAlgorithm.h>
+#include <vtkDecimatePro.h>
+#include <vtkNew.h>
 
 Surface3D::Surface3D()
 	: Base3D(new Surface3DPrivate(i18n("Surface"), this)) {
@@ -47,30 +66,48 @@ Surface3D::Surface3D()
 Surface3D::~Surface3D() {
 }
 
-DemoDataHandler& Surface3D::demoDataHandler() {
+// Spreadsheet slots
+void Surface3D::xColumnAboutToBeRemoved(const AbstractAspect*) {
 	Q_D(Surface3D);
-	return *d->demoHandler;
+	d->xColumn = 0;
 }
 
-SpreadsheetDataHandler& Surface3D::spreadsheetDataHandler() {
+void Surface3D::yColumnAboutToBeRemoved(const AbstractAspect*) {
 	Q_D(Surface3D);
-	return *d->spreadsheetHandler;
+	d->yColumn = 0;
 }
 
-MatrixDataHandler& Surface3D::matrixDataHandler() {
+void Surface3D::zColumnAboutToBeRemoved(const AbstractAspect*) {
 	Q_D(Surface3D);
-	return *d->matrixHandler;
+	d->zColumn = 0;
 }
 
-FileDataHandler& Surface3D::fileDataHandler() {
+void Surface3D::firstNodeAboutToBeRemoved(const AbstractAspect*) {
 	Q_D(Surface3D);
-	return *d->fileHandler;
+	d->firstNode = 0;
+}
+
+void Surface3D::secondNodeAboutToBeRemoved(const AbstractAspect*) {
+	Q_D(Surface3D);
+	d->secondNode = 0;
+}
+
+void Surface3D::thirdNodeAboutToBeRemoved(const AbstractAspect*) {
+	Q_D(Surface3D);
+	d->thirdNode = 0;
+}
+
+// Matrix slots
+void Surface3D::matrixAboutToBeRemoved(const AbstractAspect*) {
+	Q_D(Surface3D);
+	d->matrix = 0;
 }
 
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
 
+// General parameters
 BASIC_SHARED_D_READER_IMPL(Surface3D, Surface3D::VisualizationType, visualizationType, visualizationType)
 BASIC_SHARED_D_READER_IMPL(Surface3D, Surface3D::DataSource, dataSource, sourceType)
 BASIC_SHARED_D_READER_IMPL(Surface3D, Surface3D::ColorFilling, colorFilling, colorFilling)
@@ -80,10 +117,35 @@ BASIC_SHARED_D_READER_IMPL(Surface3D, bool, showXYProjection, showXYProjection)
 BASIC_SHARED_D_READER_IMPL(Surface3D, bool, showXZProjection, showXZProjection)
 BASIC_SHARED_D_READER_IMPL(Surface3D, bool, showYZProjection, showYZProjection)
 
+// Matrix parameters
+BASIC_SHARED_D_READER_IMPL(Surface3D, const Matrix*, matrix, matrix)
+const QString& Surface3D::matrixPath() const { Q_D(const Surface3D); return d->matrixPath; }
+
+// Spreadsheet parameters
+BASIC_SHARED_D_READER_IMPL(Surface3D, const AbstractColumn*, xColumn, xColumn)
+BASIC_SHARED_D_READER_IMPL(Surface3D, const AbstractColumn*, yColumn, yColumn)
+BASIC_SHARED_D_READER_IMPL(Surface3D, const AbstractColumn*, zColumn, zColumn)
+
+BASIC_SHARED_D_READER_IMPL(Surface3D, const AbstractColumn*, firstNode, firstNode)
+BASIC_SHARED_D_READER_IMPL(Surface3D, const AbstractColumn*, secondNode, secondNode)
+BASIC_SHARED_D_READER_IMPL(Surface3D, const AbstractColumn*, thirdNode, thirdNode)
+
+const QString& Surface3D::xColumnPath() const { Q_D(const Surface3D); return d->xColumnPath; }
+const QString& Surface3D::yColumnPath() const { Q_D(const Surface3D); return d->yColumnPath; }
+const QString& Surface3D::zColumnPath() const { Q_D(const Surface3D); return d->zColumnPath; }
+
+const QString& Surface3D::firstNodePath() const { Q_D(const Surface3D); return d->firstNodePath; }
+const QString& Surface3D::secondNodePath() const { Q_D(const Surface3D); return d->secondNodePath; }
+const QString& Surface3D::thirdNodePath() const { Q_D(const Surface3D); return d->thirdNodePath; }
+
+// FileData parameters
+CLASS_SHARED_D_READER_IMPL(Surface3D, KUrl, file, path)
+
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
 
+// General parameters
 STD_SETTER_CMD_IMPL_F_S(Surface3D, SetVisualizationType, Surface3D::VisualizationType, visualizationType, update)
 STD_SETTER_IMPL(Surface3D, VisualizationType, Surface3D::VisualizationType, visualizationType, "%1: visualization type changed")
 
@@ -108,68 +170,35 @@ STD_SETTER_IMPL(Surface3D, ShowXZProjection, bool, showXZProjection, "%1: show X
 STD_SETTER_CMD_IMPL_F_S(Surface3D, SetShowYZProjection, bool, showYZProjection, update)
 STD_SETTER_IMPL(Surface3D, ShowYZProjection, bool, showYZProjection, "%1: show YZ projection changed")
 
-////////////////////////////////////////////////////////////////////////////////
 
-Surface3DPrivate::Surface3DPrivate(const QString& name, Surface3D *parent)
-	: Base3DPrivate(name, parent)
-	, q(parent)
-	, visualizationType(Surface3D::VisualizationType_Triangles)
-	, sourceType(Surface3D::DataSource_Empty)
-	, colorFilling(Surface3D::ColorFilling_Empty)
-	, color(Qt::gray)
-	, opacity(0.5)
-	, showXYProjection(false)
-	, showXZProjection(false)
-	, showYZProjection(false)
-	, demoHandler(new DemoDataHandler)
-	, spreadsheetHandler(new SpreadsheetDataHandler)
-	, matrixHandler(new MatrixDataHandler)
-	, fileHandler(new FileDataHandler) {
-}
+// Matrix parameters
+STD_SETTER_CMD_IMPL_F_S(Surface3D, SetMatrix, const Matrix*, matrix, update)
+STD_SETTER_MATRIX_IMPL(Surface3D, Matrix, matrix, "%1: Matrix changed")
 
-void Surface3DPrivate::init() {
-	q->addChild(demoHandler);
-	demoHandler->setHidden(true);
-	
-	q->addChild(spreadsheetHandler);
-	spreadsheetHandler->setHidden(true);
-	
-	q->addChild(matrixHandler);
-	matrixHandler->setHidden(true);
 
-	q->addChild(fileHandler);
-	fileHandler->setHidden(true);
+// Spreadsheet parameters
+STD_SETTER_CMD_IMPL_F_S(Surface3D, SetXColumn, const AbstractColumn*, xColumn, update)
+STD_SETTER_COLUMN_IMPL(Surface3D, XColumn, xColumn, "%1: X column changed")
 
-	Base3DPrivate::update();
+STD_SETTER_CMD_IMPL_F_S(Surface3D, SetYColumn, const AbstractColumn*, yColumn, update)
+STD_SETTER_COLUMN_IMPL(Surface3D, YColumn, yColumn, "%1: Y column changed")
 
-	q->connect(demoHandler, SIGNAL(parametersChanged()), SLOT(update()));
-	q->connect(spreadsheetHandler, SIGNAL(parametersChanged()), SLOT(update()));
-	q->connect(matrixHandler, SIGNAL(parametersChanged()), SLOT(update()));
-	q->connect(fileHandler, SIGNAL(parametersChanged()), SLOT(update()));
-}
+STD_SETTER_CMD_IMPL_F_S(Surface3D, SetZColumn, const AbstractColumn*, zColumn, update)
+STD_SETTER_COLUMN_IMPL(Surface3D, ZColumn, zColumn, "%1: Z column changed")
 
-Surface3DPrivate::~Surface3DPrivate() {
-}
+STD_SETTER_CMD_IMPL_F_S(Surface3D, SetFirstNode, const AbstractColumn*, firstNode, update)
+STD_SETTER_COLUMN_IMPL(Surface3D, FirstNode, firstNode, "%1: First node changed")
 
-void Surface3DPrivate::createActor() {
-	DataHandlerConfig config;
-	config.type = visualizationType;
-	config.colorFilling = colorFilling;
-	config.color = color;
-	config.opacity = opacity;
-	config.showXYProjection = showXYProjection;
-	config.showXZProjection = showXZProjection;
-	config.showYZProjection = showYZProjection;
-	if (sourceType == Surface3D::DataSource_Empty) {
-		actor = demoHandler->actor(config);
-	} else if (sourceType == Surface3D::DataSource_File) {
-		actor = fileHandler->actor(config);
-	} else if (sourceType == Surface3D::DataSource_Matrix) {
-		actor = matrixHandler->actor(config);
-	} else if (sourceType == Surface3D::DataSource_Spreadsheet) {
-		actor = spreadsheetHandler->actor(config);
-	}
-}
+STD_SETTER_CMD_IMPL_F_S(Surface3D, SetSecondNode, const AbstractColumn*, secondNode, update)
+STD_SETTER_COLUMN_IMPL(Surface3D, SecondNode, secondNode, "%1: Second node changed")
+
+STD_SETTER_CMD_IMPL_F_S(Surface3D, SetThirdNode, const AbstractColumn*, thirdNode, update)
+STD_SETTER_COLUMN_IMPL(Surface3D, ThirdNode, thirdNode, "%1: Third node changed")
+
+// FileData parameters
+STD_SETTER_CMD_IMPL_F_S(Surface3D, SetFile, KUrl, path, update)
+STD_SETTER_IMPL(Surface3D, File, const KUrl&, path, "%1: file path changed")
+
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
@@ -189,9 +218,9 @@ void Surface3D::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute("showYZProjection", QString::number(d->showYZProjection));
 		writeBasicAttributes(writer);
 		writeCommentElement(writer);
-		d->spreadsheetHandler->save(writer);
-		d->matrixHandler->save(writer);
-		d->fileHandler->save(writer);
+		d->saveSpreadsheetConfig(writer);
+		d->saveMatrixConfig(writer);
+		d->saveFileDataConfig(writer);
 	writer->writeEndElement();
 }
 
@@ -229,18 +258,307 @@ bool Surface3D::load(XmlStreamReader* reader) {
 				return false;
 		} else if (sectionName == "matrix") {
 			qDebug() << Q_FUNC_INFO << "Load matrix";
-			if (!d->matrixHandler->load(reader))
+			if (!d->loadMatrixConfig(reader))
 				return false;
 		} else if (sectionName == "spreadsheet") {
 			qDebug() << Q_FUNC_INFO << "Load spreadsheet";
-			if (!d->spreadsheetHandler->load(reader))
+			if (!d->loadSpreadsheetConfig(reader))
 				return false;
 		} else if (sectionName == "file") {
 			qDebug() << Q_FUNC_INFO << "Load file";
-			if (!d->fileHandler->load(reader))
+			if (!d->loadFileDataConfig(reader))
 				return false;
 		}
 	}
 
+	return true;
+}
+
+//##############################################################################
+//##############################  Private class  ###############################
+//##############################################################################
+
+Surface3DPrivate::Surface3DPrivate(const QString& name, Surface3D *parent)
+	: Base3DPrivate(name, parent)
+	, q(parent)
+	// General properties
+	, visualizationType(Surface3D::VisualizationType_Triangles)
+	, sourceType(Surface3D::DataSource_Empty)
+	, colorFilling(Surface3D::ColorFilling_Empty)
+	, color(Qt::gray)
+	, opacity(0.5)
+	, showXYProjection(false)
+	, showXZProjection(false)
+	, showYZProjection(false)
+	// Matrix properties
+	, matrix(0)
+	// Spreadsheet properties
+	, xColumn(0)
+	, yColumn(0)
+	, zColumn(0)
+	, firstNode(0)
+	, secondNode(0)
+	, thirdNode(0){
+}
+
+Surface3DPrivate::~Surface3DPrivate() {
+}
+
+void Surface3DPrivate::createActor() {
+	vtkSmartPointer<vtkPolyData> data = generateData();
+
+	scale(data);
+	if (visualizationType == Surface3D::Surface3D::VisualizationType_Wireframe)
+		data = extractEdges(data);
+
+	if (colorFilling == Surface3D::ColorFilling_ElevationLevel)
+		makeColorElevation(data);
+
+	actor = mapData(data);
+
+	if (colorFilling == Surface3D::ColorFilling_SolidColor) {
+		vtkProperty* prop = actor->GetProperty();
+		prop->SetColor(color.redF(), color.greenF(), color.blueF());
+		prop->SetOpacity(opacity);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+vtkSmartPointer<vtkActor> Surface3DPrivate::mapData(vtkPolyData* data) const {
+	//reader fails to read obj-files if the locale is not set to 'C'
+	setlocale(LC_NUMERIC, "C");
+
+	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+	mapper->SetInputData(data);
+	vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+	actor->SetMapper(mapper);
+	return actor;
+}
+
+vtkSmartPointer<vtkPolyData> Surface3DPrivate::extractEdges(vtkPolyData* data) const {
+	vtkSmartPointer<vtkExtractEdges> edges = vtkSmartPointer<vtkExtractEdges>::New();
+	edges->SetInputData(data);
+	edges->Update();
+	return vtkSmartPointer<vtkPolyData>(edges->GetOutput());
+}
+
+void Surface3DPrivate::makeColorElevation(vtkPolyData* polydata) const {
+	double bounds[6];
+	polydata->GetBounds(bounds);
+
+	// Find min and max z
+	const double minz = bounds[4];
+	const double maxz = bounds[5];
+
+	vtkNew<vtkLookupTable> colorLookupTable;
+	colorLookupTable->SetTableRange(minz, maxz);
+	colorLookupTable->Build();
+
+	vtkSmartPointer<vtkUnsignedCharArray> colors = vtkSmartPointer<vtkUnsignedCharArray>::New();
+	colors->SetNumberOfComponents(3);
+	colors->SetName("Colors");
+
+	for(int i = 0; i < polydata->GetNumberOfPoints(); ++i) {
+		double p[3];
+		polydata->GetPoint(i, p);
+
+		double dcolor[3];
+		colorLookupTable->GetColor(p[2], dcolor);
+		unsigned char color[3];
+		for(unsigned int j = 0; j < 3; ++j)
+			color[j] = static_cast<unsigned char>(255.0 * dcolor[j]);
+
+		colors->InsertNextTupleValue(color);
+	}
+
+	polydata->GetPointData()->SetScalars(colors);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+vtkSmartPointer<vtkPolyData> Surface3DPrivate::generateData() const {
+	if (sourceType == Surface3D::DataSource_Empty)
+		return generateDemoData();
+	else if (sourceType == Surface3D::DataSource_File)
+		return generateFileData();
+	else if (sourceType == Surface3D::DataSource_Matrix)
+		return generateMatrixData();
+	else
+		return generateSpreadsheetData();
+}
+
+namespace {
+	template<class TReader>
+	vtkSmartPointer<vtkPolyData> createReader(const KUrl& path) {
+		const QByteArray ascii = path.path().toAscii();
+		vtkSmartPointer<TReader> reader = vtkSmartPointer<TReader>::New();
+		reader->SetFileName(ascii.constData());
+		reader->Update();
+		return vtkSmartPointer<vtkPolyData>(reader->GetOutput());
+	}
+
+	vtkSmartPointer<vtkPolyData> renderTriangles(vtkSmartPointer<vtkPoints>& points,
+			vtkSmartPointer<vtkCellArray>& triangles) {
+
+		qDebug() << Q_FUNC_INFO << "Amount of triangles:" << triangles->GetNumberOfCells();
+
+		vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
+
+		polydata->SetPoints(points);
+		polydata->SetPolys(triangles);
+
+		return polydata;
+	}
+}
+
+vtkSmartPointer<vtkPolyData> Surface3DPrivate::generateDemoData() const {
+	vtkSmartPointer<vtkSphereSource> sphereSource = vtkSmartPointer<vtkSphereSource>::New();
+	sphereSource->Update();
+	return vtkSmartPointer<vtkPolyData>(sphereSource->GetOutput());
+}
+
+vtkSmartPointer<vtkPolyData> Surface3DPrivate::generateFileData() const {
+	const QString& fileName = path.fileName();
+	const QString& fileType = fileName.split('.').last().toLower();
+	if (fileType == "obj") {
+		return createReader<vtkOBJReader>(path);
+	} else if (fileType == "stl") {
+		return createReader<vtkSTLReader>(path);
+	} else {
+		return vtkSmartPointer<vtkPolyData>();
+	}
+}
+
+namespace {
+	vtkSmartPointer<vtkTriangle> createTriangle(vtkIdType p1, vtkIdType p2, vtkIdType p3) {
+		vtkSmartPointer<vtkTriangle> triangle = vtkSmartPointer<vtkTriangle>::New();
+		triangle->GetPointIds()->SetId(0, p1);
+		triangle->GetPointIds()->SetId(1, p2);
+		triangle->GetPointIds()->SetId(2, p3);
+		return triangle;
+	}
+}
+
+vtkSmartPointer<vtkPolyData> Surface3DPrivate::generateMatrixData() const {
+	if (!matrix)
+		return vtkSmartPointer<vtkPolyData>();
+
+	qDebug() << Q_FUNC_INFO << "Triangles rendering";
+	vtkSmartPointer<vtkCellArray> triangles = vtkSmartPointer<vtkCellArray>::New();
+	vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
+
+	const double deltaX = (matrix->xEnd() - matrix->xStart()) / matrix->columnCount();
+	const double deltaY = (matrix->yEnd() - matrix->yStart()) / matrix->rowCount();
+	QVector<QVector<vtkIdType> > cellPoints(matrix->columnCount(),
+			QVector<vtkIdType>(matrix->rowCount()));
+
+	for (int x = 0; x < matrix->columnCount(); ++x) {
+		for (int y = 0; y < matrix->rowCount(); ++y) {
+			const double x_val = matrix->xStart() + deltaX * x;
+			const double y_val = matrix->yStart() + deltaY * y;
+			const double z_val = matrix->cell(x, y);
+			cellPoints[x][y] = points->InsertNextPoint(x_val, y_val, z_val);
+		}
+	}
+
+	for (int x = 0, max_x = cellPoints.size() - 1; x < max_x; ++x) {
+		for (int y = 0, max_y = cellPoints[0].size() - 1; y < max_y; ++y) {
+			const vtkIdType rectPoints[4] = {cellPoints[x][y], cellPoints[x +1][y],
+					cellPoints[x + 1][y + 1], cellPoints[x][y + 1]};
+
+			triangles->InsertNextCell(createTriangle(rectPoints[0], rectPoints[1], rectPoints[2]));
+			triangles->InsertNextCell(createTriangle(rectPoints[2], rectPoints[3], rectPoints[0]));
+		}
+	}
+
+	return renderTriangles(points, triangles);
+}
+
+vtkSmartPointer<vtkPolyData> Surface3DPrivate::generateSpreadsheetData() const {
+	if (xColumn == 0 || yColumn == 0 || zColumn == 0
+			|| firstNode == 0 || secondNode == 0 || thirdNode == 0) {
+		return vtkSmartPointer<vtkPolyData>();
+	}
+
+	qDebug() << Q_FUNC_INFO << "Triangles rendering";
+	vtkSmartPointer<vtkCellArray> triangles = vtkSmartPointer<vtkCellArray>::New();
+	vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
+
+	const int numPoints = std::min(xColumn->rowCount(),
+			std::min(yColumn->rowCount(), zColumn->rowCount()));
+
+	for (int i = 0; i < numPoints; ++i) {
+		const int x = static_cast<int>(xColumn->valueAt(i));
+		const int y = static_cast<int>(yColumn->valueAt(i));
+		const int z = static_cast<int>(zColumn->valueAt(i));
+
+		points->InsertNextPoint(x, y, z);
+	}
+
+	const int numTrianges = std::min(firstNode->rowCount(),
+			std::min(secondNode->rowCount(), thirdNode->rowCount()));
+
+	for (int i = 0; i < numTrianges; ++i) {
+		const int id1 = static_cast<int>(firstNode->valueAt(i));
+		const int id2 = static_cast<int>(secondNode->valueAt(i));
+		const int id3 = static_cast<int>(thirdNode->valueAt(i));
+
+		triangles->InsertNextCell(createTriangle(id1, id2, id3));
+	}
+
+	return renderTriangles(points, triangles);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void Surface3DPrivate::saveSpreadsheetConfig(QXmlStreamWriter* writer) const {
+	writer->writeStartElement("spreadsheet");
+		WRITE_COLUMN(xColumn, xColumn);
+		WRITE_COLUMN(yColumn, yColumn);
+		WRITE_COLUMN(zColumn, zColumn);
+
+		WRITE_COLUMN(firstNode, firstNode);
+		WRITE_COLUMN(secondNode, secondNode);
+		WRITE_COLUMN(thirdNode, thirdNode);
+	writer->writeEndElement();
+}
+
+void Surface3DPrivate::saveMatrixConfig(QXmlStreamWriter* writer) const {
+	writer->writeStartElement("matrix");
+		writer->writeAttribute("matrixPath", matrix ? matrix->path() : "");
+	writer->writeEndElement();
+}
+
+void Surface3DPrivate::saveFileDataConfig(QXmlStreamWriter* writer) const {
+	writer->writeStartElement("file");
+	writer->writeAttribute("url", path.path());
+	writer->writeEndElement();
+}
+
+bool Surface3DPrivate::loadSpreadsheetConfig(XmlStreamReader* reader) {
+	const QXmlStreamAttributes& attribs = reader->attributes();
+	QString str;
+	Surface3DPrivate* d = this;
+	READ_COLUMN(xColumn);
+	READ_COLUMN(yColumn);
+	READ_COLUMN(zColumn);
+
+	READ_COLUMN(firstNode);
+	READ_COLUMN(secondNode);
+	READ_COLUMN(thirdNode);
+	return true;
+}
+
+bool Surface3DPrivate::loadMatrixConfig(XmlStreamReader* reader) {
+	const QXmlStreamAttributes& attribs = reader->attributes();
+	matrixPath = attribs.value("matrixPath").toString();
+	return true;
+}
+
+bool Surface3DPrivate::loadFileDataConfig(XmlStreamReader* reader) {
+	const QXmlStreamAttributes& attribs = reader->attributes();
+	XmlAttributeReader attributeReader(reader, attribs);
+	attributeReader.checkAndLoadAttribute("url", path);
 	return true;
 }

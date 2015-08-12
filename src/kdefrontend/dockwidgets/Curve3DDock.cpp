@@ -174,8 +174,10 @@ void Curve3DDock::onIsClosedChanged(bool checked) {
 }
 
 void Curve3DDock::showEdgesChanged(bool checked) {
-	const Lock lock(m_initializing);
-	curve->setShowEdges(checked);
+	if (m_initializing)
+		return;
+
+	ui.cbShowEdges->setChecked(checked);
 }
 
 void Curve3DDock::isClosedChanged(bool checked) {

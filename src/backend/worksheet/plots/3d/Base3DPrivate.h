@@ -29,11 +29,14 @@
 #ifndef PLOT3D_BASE3DPRIVATE_H
 #define PLOT3D_BASE3DPRIVATE_H
 
+#include "Plot3D.h"
+
 #include <vtkSmartPointer.h>
 
 class vtkActor;
 class vtkProperty;
 class vtkRenderer;
+class vtkPolyData;
 
 class Base3D;
 struct Base3DPrivate {
@@ -44,6 +47,10 @@ struct Base3DPrivate {
 	vtkSmartPointer<vtkActor> actor;
 	vtkSmartPointer<vtkProperty> property;
 	QString objName;
+	Plot3D::Scaling xScaling;
+	Plot3D::Scaling yScaling;
+	Plot3D::Scaling zScaling;
+
 	Base3DPrivate(const QString& name, Base3D *baseParent);
 	virtual ~Base3DPrivate();
 
@@ -54,6 +61,11 @@ struct Base3DPrivate {
 	vtkProperty* getProperty() const;
 
 	const QString& name() const;
+protected:
+	// Scale coordinates
+	void scale(vtkPolyData* data);
+private:
+	void scale(vtkPolyData* data, int id, double (*scaleFunction)(double value));
 };
 
 #endif

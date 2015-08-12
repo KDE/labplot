@@ -47,7 +47,7 @@ class vtkLight;
 class QGLContext;
 class VTKGraphicsItem;
 
-class Plot3DPrivate:public AbstractPlotPrivate{
+class Plot3DPrivate : public AbstractPlotPrivate{
 	public:
 		explicit Plot3DPrivate(Plot3D* owner);
 		virtual ~Plot3DPrivate();
@@ -55,9 +55,14 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		void init();
 		void initLights();
 
+		void resetCamera();
+
 		virtual void retransform();
 		void updateLight(bool notify = true);
 		void updateBackground(bool notify = true);
+		void updateXScaling();
+		void updateYScaling();
+		void updateZScaling();
 		void setupCamera();
 		void mousePressEvent(QGraphicsSceneMouseEvent* event);
 		void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
@@ -69,17 +74,22 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		bool isInitialized;
 		bool rectSet;
 
-		// TODO: Store surfaces and curves in the same collection after creating a
-		// base class between them
+		Axes* axes;
 		QSet<Surface3D*> surfaces;
 		QSet<Curve3D*> curves;
 
-		Axes* axes;
 		vtkSmartPointer<vtkRenderer> renderer;
 		vtkSmartPointer<vtkRenderer> backgroundRenderer;
 		vtkSmartPointer<vtkImageActor> backgroundImageActor;
+		vtkSmartPointer<vtkLight> lightAbove;
+		vtkSmartPointer<vtkLight> lightBelow;
 
-		//background
+		// General parameters
+		Plot3D::Scaling xScaling;
+		Plot3D::Scaling yScaling;
+		Plot3D::Scaling zScaling;
+
+		// Background parameters
 		PlotArea::BackgroundType backgroundType;
 		PlotArea::BackgroundColorStyle backgroundColorStyle;
 		PlotArea::BackgroundImageStyle backgroundImageStyle;
@@ -89,7 +99,7 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		QString backgroundFileName;
 		float backgroundOpacity;
 
-		//light
+		// Light parameters
 		double intensity;
 		QColor ambient;
 		QColor diffuse;
@@ -97,9 +107,6 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		double elevation;
 		double azimuth;
 		double coneAngle;
-
-		vtkSmartPointer<vtkLight> lightAbove;
-		vtkSmartPointer<vtkLight> lightBelow;
 };
 
 #endif

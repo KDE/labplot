@@ -30,6 +30,7 @@
 #define PLOT3D_BASE3D_H
 
 #include "backend/core/AbstractAspect.h"
+#include "Plot3D.h"
 
 class vtkProp;
 class vtkProperty;
@@ -45,12 +46,16 @@ class Base3D : public AbstractAspect {
 		virtual ~Base3D();
 		QIcon icon() const;
 		void setRenderer(vtkRenderer* renderer);
+		void setXScaling(Plot3D::Scaling scaling);
+		void setYScaling(Plot3D::Scaling scaling);
+		void setZScaling(Plot3D::Scaling scaling);
 		void show(bool pred);
 		bool isVisible() const;
 		void highlight(bool pred);
 		void select(bool pred);
 		bool operator==(vtkProp* prop) const;
 		bool operator!=(vtkProp* prop) const;
+		void reset();
 
 	public slots:
 		void remove();

@@ -214,6 +214,8 @@ void Curve3DPrivate::createActor() {
 	else
 		pdata->SetVerts(vertices);
 
+	scale(pdata);
+
 	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 	if (showEdges)
 		mapper->SetInputData(pdata);

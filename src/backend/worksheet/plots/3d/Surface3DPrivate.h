@@ -34,13 +34,14 @@
 
 #include <QColor>
 
-class DemoDataHandler;
-class SpreadsheetDataHandler;
-class MatrixDataHandler;
-class FileDataHandler;
+#include <KUrl>
+
+class vtkPolyData;
+
 struct Surface3DPrivate : public Base3DPrivate {
 	Surface3D* const q;
 
+	// General properties
 	Surface3D::VisualizationType visualizationType;
 	Surface3D::DataSource sourceType;
 	Surface3D::ColorFilling colorFilling;
@@ -50,15 +51,54 @@ struct Surface3DPrivate : public Base3DPrivate {
 	bool showXZProjection;
 	bool showYZProjection;
 
-	DemoDataHandler *demoHandler;
-	SpreadsheetDataHandler *spreadsheetHandler;
-	MatrixDataHandler *matrixHandler;
-	FileDataHandler *fileHandler;
+	// Matrix properties
+	const Matrix* matrix;
+	QString matrixPath;
+
+	// Spreadsheet properties
+	const AbstractColumn *xColumn;
+	const AbstractColumn *yColumn;
+	const AbstractColumn *zColumn;
+
+	const AbstractColumn *firstNode;
+	const AbstractColumn *secondNode;
+	const AbstractColumn *thirdNode;
+
+	QString xColumnPath;
+	QString yColumnPath;
+	QString zColumnPath;
+	QString firstNodePath;
+	QString secondNodePath;
+	QString thirdNodePath;
+
+	// FileData properties
+	KUrl path;
 
 	Surface3DPrivate(const QString& name, Surface3D *parent);
-	void init();
 	~Surface3DPrivate();
 	void createActor();
+
+	// Surface3D
+	vtkSmartPointer<vtkActor> mapData(vtkPolyData* data) const;
+	vtkSmartPointer<vtkPolyData> extractEdges(vtkPolyData* data) const;
+	void makeColorElevation(vtkPolyData* polydata) const;
+
+	vtkSmartPointer<vtkPolyData> generateData() const;
+	// PolyData generation
+	vtkSmartPointer<vtkPolyData> generateDemoData() const;
+	vtkSmartPointer<vtkPolyData> generateFileData() const;
+	vtkSmartPointer<vtkPolyData> generateMatrixData() const;
+	vtkSmartPointer<vtkPolyData> generateSpreadsheetData() const;
+
+	// Export
+	void saveSpreadsheetConfig(QXmlStreamWriter*) const;
+	void saveMatrixConfig(QXmlStreamWriter*) const;
+	void saveFileDataConfig(QXmlStreamWriter*) const;
+
+	// Import
+	bool loadSpreadsheetConfig(XmlStreamReader*);
+	bool loadMatrixConfig(XmlStreamReader*);
+	bool loadFileDataConfig(XmlStreamReader*);
 };
 
 #endif

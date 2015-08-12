@@ -92,6 +92,10 @@ Plot3DDock::Plot3DDock(QWidget* parent)
 	recorder.connect(ui.sbWidth, SIGNAL(valueChanged(double)), SLOT(onGeometryChanged()));
 	recorder.connect(ui.sbHeight, SIGNAL(valueChanged(double)), SLOT(onGeometryChanged()));
 
+	recorder.connect(ui.cbXScaling, SIGNAL(currentIndexChanged(int)), SLOT(onXScalingChanged(int)));
+	recorder.connect(ui.cbYScaling, SIGNAL(currentIndexChanged(int)), SLOT(onYScalingChanged(int)));
+	recorder.connect(ui.cbZScaling, SIGNAL(currentIndexChanged(int)), SLOT(onZScalingChanged(int)));
+
 	//Background
 	recorder.connect(ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundTypeChanged(int)));
 	recorder.connect(ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundColorStyleChanged(int)));
@@ -172,6 +176,9 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	//SIGNALs/SLOTs
 	//general
 	connect(m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), SLOT(descriptionChanged(const AbstractAspect*)));
+	connect(m_plot, SIGNAL(xScalingChanged(Plot3D::Scaling)), SLOT(xScalingChanged(Plot3D::Scaling)));
+	connect(m_plot, SIGNAL(yScalingChanged(Plot3D::Scaling)), SLOT(yScalingChanged(Plot3D::Scaling)));
+	connect(m_plot, SIGNAL(zScalingChanged(Plot3D::Scaling)), SLOT(zScalingChanged(Plot3D::Scaling)));
 
 	//background
 	connect(m_plot, SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), SLOT(backgroundTypeChanged(PlotArea::BackgroundType)));
@@ -200,20 +207,13 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 //*************************************************************
 void Plot3DDock::retranslateUi(){
 	//general
-	ui.cbXScaling->addItem( i18n("linear") );
-	ui.cbXScaling->addItem( i18n("log(x)") );
-	ui.cbXScaling->addItem( i18n("log2(x)") );
-	ui.cbXScaling->addItem( i18n("ln(x)") );
-
-	ui.cbYScaling->addItem( i18n("linear") );
-	ui.cbYScaling->addItem( i18n("log(y)") );
-	ui.cbYScaling->addItem( i18n("log2(y)") );
-	ui.cbYScaling->addItem( i18n("ln(y)") );
-
-	ui.cbZScaling->addItem( i18n("linear") );
-	ui.cbZScaling->addItem( i18n("log(y)") );
-	ui.cbZScaling->addItem( i18n("log2(y)") );
-	ui.cbZScaling->addItem( i18n("ln(y)") );
+	KComboBox* scalingWidgets[3] = {ui.cbXScaling, ui.cbYScaling, ui.cbZScaling};
+	for (int i = 0; i < 3; ++i) {
+		scalingWidgets[i]->insertItem( Plot3D::Scaling_Linear, i18n("linear") );
+		scalingWidgets[i]->insertItem( Plot3D::Scaling_Log10, i18n("log(x)") );
+		scalingWidgets[i]->insertItem( Plot3D::Scaling_Log2, i18n("log2(x)") );
+		scalingWidgets[i]->insertItem( Plot3D::Scaling_Ln, i18n("ln(x)") );
+	}
 
 	//background
 	ui.cbBackgroundType->addItem(i18n("color"));
@@ -265,6 +265,21 @@ void Plot3DDock::onGeometryChanged(){
 	const QRectF rect(x,y,w,h);
 	const Lock lock(m_initializing);
 	m_plot->setRect(rect);
+}
+
+void Plot3DDock::onXScalingChanged(int index) {
+	const Lock lock(m_initializing);
+	m_plot->setXScaling(static_cast<Plot3D::Scaling>(index));
+}
+
+void Plot3DDock::onYScalingChanged(int index) {
+	const Lock lock(m_initializing);
+	m_plot->setYScaling(static_cast<Plot3D::Scaling>(index));
+}
+
+void Plot3DDock::onZScalingChanged(int index) {
+	const Lock lock(m_initializing);
+	m_plot->setZScaling(static_cast<Plot3D::Scaling>(index));
 }
 
 /*!
@@ -583,6 +598,23 @@ void Plot3DDock::coneAngleChanged(double val) {
 	ui.sbLightConeAngle->setValue(val);
 }
 
+void Plot3DDock::xScalingChanged(Plot3D::Scaling scaling) {
+	if (m_initializing)
+		return;
+	ui.cbXScaling->setCurrentIndex(scaling);
+}
+
+void Plot3DDock::yScalingChanged(Plot3D::Scaling scaling) {
+	if (m_initializing)
+		return;
+	ui.cbYScaling->setCurrentIndex(scaling);
+}
+void Plot3DDock::zScalingChanged(Plot3D::Scaling scaling) {
+	if (m_initializing)
+		return;
+	ui.cbZScaling->setCurrentIndex(scaling);
+}
+
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
@@ -596,6 +628,10 @@ void Plot3DDock::load(){
 	// General
 	ui.leName->setText(m_plot->name());
 	ui.leComment->setText(m_plot->comment());
+
+	xScalingChanged(m_plot->xScaling());
+	yScalingChanged(m_plot->yScaling());
+	zScalingChanged(m_plot->zScaling());
 
 	//Background
 	backgroundTypeChanged(m_plot->backgroundType());

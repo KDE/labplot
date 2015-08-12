@@ -38,6 +38,8 @@
 #include <vtkActor.h>
 #include <vtkAssembly.h>
 #include <vtkProp3DCollection.h>
+#include <vtkPoints.h>
+#include <vtkPolyData.h>
 
 Base3D::Base3D(Base3DPrivate* priv)
 	: AbstractAspect(priv->name())
@@ -60,6 +62,25 @@ void Base3D::setRenderer(vtkRenderer* renderer) {
 	d->renderer = renderer;
 	if (renderer)
 		d->init();
+}
+
+void Base3D::setXScaling(Plot3D::Scaling scaling) {
+	Q_D(Base3D);
+	d->xScaling = scaling;
+	// TODO: Separate update method for scaling
+	update();
+}
+
+void Base3D::setYScaling(Plot3D::Scaling scaling) {
+	Q_D(Base3D);
+	d->yScaling = scaling;
+	update();
+}
+
+void Base3D::setZScaling(Plot3D::Scaling scaling) {
+	Q_D(Base3D);
+	d->zScaling = scaling;
+	update();
 }
 
 void Base3D::highlight(bool pred) {
@@ -115,6 +136,13 @@ void Base3D::show(bool pred) {
 	if (d->actor) {
 		d->actor->SetVisibility(pred);
 		emit parametersChanged();
+	}
+}
+
+void Base3D::reset() {
+	Q_D(Base3D);
+	if (!d->renderer->HasViewProp(d->actor)) {
+		d->renderer->AddActor(d->actor);
 	}
 }
 
@@ -181,6 +209,32 @@ void Base3DPrivate::update() {
 }
 
 void Base3DPrivate::hide() {
-	if (actor && renderer)
+	if (actor && renderer) {
+		baseParent->select(false);
+		baseParent->highlight(false);
 		renderer->RemoveActor(actor);
+	}
+}
+
+void Base3DPrivate::scale(vtkPolyData* data) {
+	const Plot3D::Scaling scaling[3] = {xScaling, yScaling, zScaling};
+
+	for (int i = 0; i < 3; ++i) {
+		if (scaling[i] == Plot3D::Scaling_Ln)
+			scale(data, i, log);
+		else if (scaling[i] == Plot3D::Scaling_Log10)
+			scale(data, i, log10);
+		else if (scaling[i] == Plot3D::Scaling_Log2)
+			scale(data, i, log2);
+	}
+}
+
+void Base3DPrivate::scale(vtkPolyData* data, int id, double (*scaleFunction)(double value)) {
+	vtkPoints* points = data->GetPoints();
+	double point[3];
+	for (vtkIdType i = 0; i < points->GetNumberOfPoints(); ++i) {
+		points->GetPoint(i, point);
+		point[id] = scaleFunction(point[id]);
+		points->SetPoint(i, point);
+	}
 }

@@ -32,13 +32,7 @@
 #include "Base3D.h"
 #include "backend/lib/macros.h"
 
-#include <QColor>
-
-#include <vtkSmartPointer.h>
-
-class vtkProp;
-class vtkActor;
-class vtkRenderer;
+class QColor;
 
 class AxesPrivate;
 class Axes : public Base3D {
