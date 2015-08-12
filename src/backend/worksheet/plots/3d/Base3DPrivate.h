@@ -43,7 +43,8 @@ struct Base3DPrivate {
 	vtkSmartPointer<vtkRenderer> renderer;
 	vtkSmartPointer<vtkActor> actor;
 	vtkSmartPointer<vtkProperty> property;
-	Base3DPrivate(vtkRenderer *renderer, Base3D *baseParent);
+	QString objName;
+	Base3DPrivate(const QString& name, Base3D *baseParent);
 	virtual ~Base3DPrivate();
 
 	virtual void init();
@@ -51,6 +52,8 @@ struct Base3DPrivate {
 	virtual void createActor() = 0;
 	void hide();
 	vtkProperty* getProperty() const;
+
+	const QString& name() const;
 };
 
 #endif

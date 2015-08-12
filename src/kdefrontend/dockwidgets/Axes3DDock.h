@@ -44,12 +44,11 @@ class Axes3DDock : public QWidget {
 	private slots:
 		void retranslateUi();
 
-		void onTypeChanged(int type);
 		void onLabelFontChanged(int size);
 		void onLabelColorChanged(const QColor& color);
 		void onLabelChanged(const QString& label);
+		void onVisibilityChanged(bool);
 
-		void axesTypeChanged(Axes::AxesType);
 		void fontSizeChanged(int);
 		void xLabelColorChanged(const QColor&);
 		void yLabelColorChanged(const QColor&);

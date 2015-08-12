@@ -39,7 +39,7 @@ class Curve3D : public Base3D {
 		Q_DECLARE_PRIVATE(Curve3D)
 		Q_DISABLE_COPY(Curve3D)
 	public:
-		Curve3D(vtkRenderer* renderer = 0);
+		Curve3D();
 		virtual ~Curve3D();
 
 		virtual void save(QXmlStreamWriter*) const;

@@ -41,8 +41,9 @@ class Base3D : public AbstractAspect {
 		Q_DISABLE_COPY(Base3D)
 		Q_DECLARE_PRIVATE(Base3D)
 	public:
-		explicit Base3D(const QString& name, Base3DPrivate* priv);
+		explicit Base3D(Base3DPrivate* priv);
 		virtual ~Base3D();
+		QIcon icon() const;
 		void setRenderer(vtkRenderer* renderer);
 		void show(bool pred);
 		bool isVisible() const;

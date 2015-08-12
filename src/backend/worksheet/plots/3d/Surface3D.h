@@ -65,7 +65,7 @@ class Surface3D : public Base3D {
 			ColorFilling_MAX
 		};
 
-		Surface3D(vtkRenderer* renderer = 0);
+		Surface3D();
 		virtual ~Surface3D();
 
 		virtual void save(QXmlStreamWriter*) const;

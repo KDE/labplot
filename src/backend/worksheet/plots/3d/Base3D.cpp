@@ -29,22 +29,30 @@
 #include "Base3D.h"
 #include "Base3DPrivate.h"
 
+#include <QDebug>
+
+#include <KIcon>
+
 #include <vtkRenderer.h>
 #include <vtkProperty.h>
 #include <vtkActor.h>
 #include <vtkAssembly.h>
 #include <vtkProp3DCollection.h>
 
-Base3D::Base3D(const QString& name, Base3DPrivate* priv)
-	: AbstractAspect(name)
+Base3D::Base3D(Base3DPrivate* priv)
+	: AbstractAspect(priv->name())
 	, d_ptr(priv) {
 	Q_D(Base3D);
+	qDebug() << Q_FUNC_INFO << d;
 	if (d->renderer)
 		d->init();
 }
 
 Base3D::~Base3D() {
+}
 
+QIcon Base3D::icon() const {
+	return KIcon("xy-curve");
 }
 
 void Base3D::setRenderer(vtkRenderer* renderer) {
@@ -132,12 +140,17 @@ void Base3D::remove() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Base3DPrivate::Base3DPrivate(vtkRenderer* renderer, Base3D* baseParent)
+Base3DPrivate::Base3DPrivate(const QString& name, Base3D* baseParent)
 	: baseParent(baseParent)
 	, isHighlighted(false)
 	, isSelected(false)
-	, renderer(renderer)
-	, property(vtkProperty::New()) {
+	, renderer(0)
+	, property(vtkProperty::New())
+	, objName(name) {
+}
+
+const QString& Base3DPrivate::name() const {
+	return objName;
 }
 
 Base3DPrivate::~Base3DPrivate() {

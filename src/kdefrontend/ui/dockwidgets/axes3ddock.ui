@@ -33,79 +33,20 @@
      </property>
      <widget class="QWidget" name="tabAxes">
       <attribute name="title">
-       <string>Axes</string>
+       <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="4" column="1">
-        <widget class="KLineEdit" name="leYLabel"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="xLabel">
+       <item row="4" column="0">
+        <widget class="QCheckBox" name="chkVisible">
          <property name="text">
-          <string>X axis label</string>
+          <string>visible</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
-        <widget class="KColorButton" name="cbYLabelColor">
-         <property name="color">
-          <color>
-           <red>0</red>
-           <green>255</green>
-           <blue>0</blue>
-          </color>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="zAxisColorLabel">
-         <property name="text">
-          <string>Z axis label color</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="typeLabel">
-         <property name="text">
-          <string>Type</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QComboBox" name="cbType"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="fontLabel">
-         <property name="text">
-          <string>Font Size</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QSpinBox" name="cbLabelFontSize">
-         <property name="minimum">
-          <number>8</number>
-         </property>
-         <property name="maximum">
-          <number>72</number>
-         </property>
-         <property name="value">
-          <number>32</number>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
-        <widget class="KColorButton" name="cbZLabelColor">
-         <property name="color">
-          <color>
-           <red>0</red>
-           <green>0</green>
-           <blue>255</blue>
-          </color>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="0">
+       <item row="3" column="0">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -118,14 +59,195 @@
          </property>
         </spacer>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="xAxisColorLabel">
+       <item row="0" column="0">
+        <widget class="QLabel" name="fontLabel">
          <property name="text">
-          <string>X axis label color</string>
+          <string>Font Size</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="0" column="2">
+        <widget class="QSpinBox" name="cbLabelFontSize">
+         <property name="minimum">
+          <number>8</number>
+         </property>
+         <property name="maximum">
+          <number>72</number>
+         </property>
+         <property name="value">
+          <number>32</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>17</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Labels</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="xAxisLabel">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>X axis</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2" colspan="2">
+        <widget class="KColorButton" name="cbYLabelColor">
+         <property name="color">
+          <color>
+           <red>0</red>
+           <green>255</green>
+           <blue>0</blue>
+          </color>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="yAxisLabel">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Y axis</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="16" column="2">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>272</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="2" colspan="2">
+        <widget class="KLineEdit" name="leXLabel"/>
+       </item>
+       <item row="12" column="0">
+        <widget class="QLabel" name="zAxisLabel">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Z axis</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="xAxisColorLabel">
+         <property name="text">
+          <string>Color</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="yLabel">
+         <property name="text">
+          <string>Text</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="xAxisFormatLabel">
+         <property name="text">
+          <string>Format</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="5" column="2" colspan="2">
+        <widget class="QComboBox" name="cbXLabelFormat"/>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="yAxisColorLabel">
+         <property name="text">
+          <string>Color</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2" colspan="2">
+        <widget class="KLineEdit" name="leYLabel"/>
+       </item>
+       <item row="10" column="2" colspan="2">
+        <widget class="QComboBox" name="cbYLabelFormat"/>
+       </item>
+       <item row="14" column="0">
+        <widget class="QLabel" name="zAxisColorLabel">
+         <property name="text">
+          <string>Color</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="2" colspan="2">
+        <widget class="KLineEdit" name="leZLabel"/>
+       </item>
+       <item row="3" column="2" colspan="2">
         <widget class="KColorButton" name="cbXLabelColor">
          <property name="color">
           <color>
@@ -136,32 +258,63 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="yAxisColorLabel">
-         <property name="text">
-          <string>Y axis label color</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="KLineEdit" name="leXLabel"/>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="yLabel">
-         <property name="text">
-          <string>Y axis label</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
+       <item row="13" column="0">
         <widget class="QLabel" name="zLabel">
          <property name="text">
-          <string>Z axis label</string>
+          <string>Text</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
-        <widget class="KLineEdit" name="leZLabel"/>
+       <item row="1" column="0">
+        <widget class="QLabel" name="xLabel">
+         <property name="text">
+          <string>Text</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>17</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="yAxisFormatLabel">
+         <property name="text">
+          <string>Format</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="2" colspan="2">
+        <widget class="KColorButton" name="cbZLabelColor">
+         <property name="color">
+          <color>
+           <red>0</red>
+           <green>0</green>
+           <blue>255</blue>
+          </color>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="2" colspan="2">
+        <widget class="QComboBox" name="cbZLabelFormat"/>
+       </item>
+       <item row="15" column="0">
+        <widget class="QLabel" name="zAxisFormatLabel">
+         <property name="text">
+          <string>Format</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -183,14 +336,17 @@
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>cbType</tabstop>
   <tabstop>cbLabelFontSize</tabstop>
   <tabstop>leXLabel</tabstop>
   <tabstop>cbXLabelColor</tabstop>
+  <tabstop>cbXLabelFormat</tabstop>
   <tabstop>leYLabel</tabstop>
   <tabstop>cbYLabelColor</tabstop>
+  <tabstop>cbYLabelFormat</tabstop>
   <tabstop>leZLabel</tabstop>
   <tabstop>cbZLabelColor</tabstop>
+  <tabstop>cbZLabelFormat</tabstop>
+  <tabstop>chkVisible</tabstop>
  </tabstops>
  <resources/>
  <connections/>

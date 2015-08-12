@@ -30,21 +30,14 @@
 #define PLOT3D_AXESPRIVATE_H
 
 #include "Axes.h"
+#include "Base3DPrivate.h"
 
-#include <vtkNew.h>
-#include <vtkSmartPointer.h>
+class vtkActor;
 
-class vtkRenderer;
-class vtkProp;
-
-struct AxesPrivate {
-	public:
+struct AxesPrivate : public Base3DPrivate {
 		Axes* const q;
 
-		bool showAxes;
-		Axes::AxesType type;
 		int fontSize;
-		double width;
 		QColor xLabelColor;
 		QColor yLabelColor;
 		QColor zLabelColor;
@@ -52,23 +45,16 @@ struct AxesPrivate {
 		QString yLabel;
 		QString zLabel;
 
-		vtkSmartPointer<vtkRenderer> renderer;
-		vtkSmartPointer<vtkProp> vtkAxes;
-
-		AxesPrivate(vtkRenderer* renderer, Axes* parent);
+		AxesPrivate(const QString& name, Axes* parent);
 		~AxesPrivate();
 
-		void init();
-		void hide();
-		void update();
-		void show(bool pred = true);
+		void createActor();
 
-		QString name() const;
+		// Update methods
 
 		void updateBounds();
+
 	private:
-		void createCubeAxes();
-		void createPlainAxes();
 		void getBoundingBox(double bounds[6]);
 };
 

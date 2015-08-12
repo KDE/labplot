@@ -45,9 +45,8 @@ struct Curve3DPrivate : public Base3DPrivate {
 	bool showEdges;
 	bool isClosed;
 
-	Curve3DPrivate(vtkRenderer* renderer, Curve3D* parent);
+	Curve3DPrivate(const QString& name, Curve3D* parent);
 	~Curve3DPrivate();
-	QString name() const;
 	void createActor();
 };
 

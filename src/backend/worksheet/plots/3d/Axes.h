@@ -29,7 +29,7 @@
 #ifndef PLOT3D_AXES_H
 #define PLOT3D_AXES_H
 
-#include "backend/core/AbstractAspect.h"
+#include "Base3D.h"
 #include "backend/lib/macros.h"
 
 #include <QColor>
@@ -41,35 +41,20 @@ class vtkActor;
 class vtkRenderer;
 
 class AxesPrivate;
-class Axes : public AbstractAspect {
+class Axes : public Base3D {
 		Q_OBJECT
 		Q_DECLARE_PRIVATE(Axes)
 		Q_DISABLE_COPY(Axes)
 	public:
-		enum AxesType {
-			AxesType_Cube = 0,
-			AxesType_Plain = 1
-		};
-
-		Axes(vtkRenderer* renderer = 0);
+		Axes();
 		~Axes();
-
-		void setRenderer(vtkRenderer* renderer);
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
 
 		QIcon icon() const;
-		QMenu* createContextMenu();
 
-		bool operator==(vtkProp* prop) const;
-		bool operator!=(vtkProp* prop) const;
-
-		bool isVisible() const;
-
-		BASIC_D_ACCESSOR_DECL(AxesType, type, Type)
 		BASIC_D_ACCESSOR_DECL(int, fontSize, FontSize)
-		BASIC_D_ACCESSOR_DECL(double, width, Width)
 		CLASS_D_ACCESSOR_DECL(QColor, xLabelColor, XLabelColor)
 		CLASS_D_ACCESSOR_DECL(QColor, yLabelColor, YLabelColor)
 		CLASS_D_ACCESSOR_DECL(QColor, zLabelColor, ZLabelColor)
@@ -81,32 +66,23 @@ class Axes : public AbstractAspect {
 		typedef AxesPrivate Private;
 
 	public slots:
-		void show(bool pred);
 		void updateBounds();
 
 	signals:
-		friend class AxesSetTypeCmd;
 		friend class AxesSetFontSizeCmd;
-		friend class AxesSetWidthCmd;
 		friend class AxesSetXLabelColorCmd;
 		friend class AxesSetYLabelColorCmd;
 		friend class AxesSetZLabelColorCmd;
 		friend class AxesSetXLabelCmd;
 		friend class AxesSetYLabelCmd;
 		friend class AxesSetZLabelCmd;
-		void typeChanged(Axes::AxesType);
 		void fontSizeChanged(int);
-		void widthChanged(double);
 		void xLabelColorChanged(const QColor&);
 		void yLabelColorChanged(const QColor&);
 		void zLabelColorChanged(const QColor&);
 		void xLabelChanged(const QString&);
 		void yLabelChanged(const QString&);
 		void zLabelChanged(const QString&);
-		void parametersChanged();
-
-	private:
-		const QScopedPointer<AxesPrivate> d_ptr;
 };
 
 #endif

@@ -87,8 +87,7 @@ class Plot3D : public AbstractPlot {
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
 		QAction* addSurfaceAction;
-
-		QAction* showAxesAction;
+		QAction* addAxesAction;
 
 		QAction* scaleAutoXAction;
 		QAction* scaleAutoYAction;
@@ -126,12 +125,13 @@ class Plot3D : public AbstractPlot {
 		void childDeselected(const AbstractAspect*);
 
 	private slots:
-		void updatePlot();
 		void addSurface();
 		void addCurve();
-		void itemRemoved();
-		void objectClicked(vtkProp*);
-		void objectHovered(vtkProp*);
+		void addAxes();
+
+		void onItemRemoved();
+		void onObjectClicked(vtkProp*);
+		void onObjectHovered(vtkProp*);
 		void onParametersChanged();
 
 		// Zoom

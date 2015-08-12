@@ -55,10 +55,9 @@ struct Surface3DPrivate : public Base3DPrivate {
 	MatrixDataHandler *matrixHandler;
 	FileDataHandler *fileHandler;
 
-	Surface3DPrivate(vtkRenderer* renderer, Surface3D *parent);
+	Surface3DPrivate(const QString& name, Surface3D *parent);
 	void init();
 	~Surface3DPrivate();
-	QString name() const;
 	void createActor();
 };
 

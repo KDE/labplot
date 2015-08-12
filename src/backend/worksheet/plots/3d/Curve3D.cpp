@@ -46,8 +46,8 @@
 #include <vtkGlyph3D.h>
 #include <vtkSphereSource.h>
 
-Curve3D::Curve3D(vtkRenderer* renderer)
-	: Base3D(i18n("Curve 3D"), new Curve3DPrivate(renderer, this)) {
+Curve3D::Curve3D()
+	: Base3D(new Curve3DPrivate(i18n("Curve 3D"), this)) {
 }
 
 Curve3D::~Curve3D() {
@@ -157,8 +157,8 @@ void Curve3D::zColumnAboutToBeRemoved(const AbstractAspect*) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Curve3DPrivate::Curve3DPrivate(vtkRenderer* renderer, Curve3D* parent)
-	: Base3DPrivate(renderer, parent)
+Curve3DPrivate::Curve3DPrivate(const QString& name, Curve3D* parent)
+	: Base3DPrivate(name, parent)
 	, q(parent)
 	, xColumn(0)
 	, yColumn(0)
@@ -169,10 +169,6 @@ Curve3DPrivate::Curve3DPrivate(vtkRenderer* renderer, Curve3D* parent)
 }
 
 Curve3DPrivate::~Curve3DPrivate() {
-}
-
-QString Curve3DPrivate::name() const {
-	return i18n("Curve 3D");
 }
 
 void Curve3DPrivate::createActor() {

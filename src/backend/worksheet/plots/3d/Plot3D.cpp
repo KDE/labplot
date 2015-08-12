@@ -67,22 +67,6 @@
 
 Plot3D::Plot3D(const QString& name)
 	: AbstractPlot(name, new Plot3DPrivate(this)){
-	//read default settings
-	KConfig config;
-	KConfigGroup group = config.group("Plot3D");
-
-	//general
-
-	//background
-	Q_D(Plot3D);
-	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
-	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
-	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled);
-	d->backgroundBrushStyle = (Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern);
-	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
-	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
-	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
-	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 }
 
 void Plot3D::childSelected(const AbstractAspect* aspect) {
@@ -134,11 +118,6 @@ void Plot3D::setContext(QGLContext *context) {
 	d->context = context;
 }
 
-void Plot3D::updatePlot() {
-	Q_D(Plot3D);
-	d->updatePlot();
-}
-
 Plot3D::~Plot3D(){
 }
 
@@ -151,42 +130,59 @@ void Plot3D::configureAspect(AbstractAspect* aspect) {
 	Q_D(Plot3D);
 	addChild(aspect);
 	connect(aspect, SIGNAL(parametersChanged()), SLOT(onParametersChanged()));
-	d->vtkItem->connect(aspect, SIGNAL(removed()), SLOT(refresh()));
-	connect(aspect, SIGNAL(removed()), SLOT(itemRemoved()));
+	connect(aspect, SIGNAL(removed()), d->vtkItem, SLOT(refresh()));
+	connect(aspect, SIGNAL(removed()), SLOT(onItemRemoved()));
 }
 
 void Plot3D::onParametersChanged() {
 	Q_D(Plot3D);
 	d->axes->updateBounds();
-	d->renderer->ResetCamera();
-	d->renderer->GetActiveCamera()->Azimuth(25);
 	d->vtkItem->refresh();
 }
 
 void Plot3D::addSurface() {
 	Q_D(Plot3D);
-	Surface3D* newSurface = new Surface3D(d->renderer);
+	Surface3D* newSurface = new Surface3D;
+	newSurface->setRenderer(d->renderer);
 	d->surfaces.insert(newSurface);
 	configureAspect(newSurface);
+	d->renderer->ResetCamera();
+	if (d->axes)
+		d->axes->updateBounds();
 	d->vtkItem->refresh();
-	d->axes->updateBounds();
 }
 
 void Plot3D::addCurve() {
 	Q_D(Plot3D);
-	Curve3D* newCurve = new Curve3D(d->renderer);
+	Curve3D* newCurve = new Curve3D;
+	newCurve->setRenderer(d->renderer);
 	d->curves.insert(newCurve);
 	configureAspect(newCurve);
+	d->renderer->ResetCamera();
 	d->vtkItem->refresh();
-	d->axes->updateBounds();
+	if (d->axes)
+		d->axes->updateBounds();
 }
 
-void Plot3D::itemRemoved() {
+void Plot3D::addAxes() {
 	Q_D(Plot3D);
+	d->axes = new Axes;
+	d->axes->setRenderer(d->renderer);
+	configureAspect(d->axes);
+	d->axes->updateBounds();
+	d->vtkItem->refresh();
+	addAxesAction->setEnabled(false);
+}
+
+void Plot3D::onItemRemoved() {
+	Q_D(Plot3D);
+	// TODO: Update axes bounding box
 	Surface3D* surface = qobject_cast<Surface3D*>(sender());
 	if (surface != 0) {
 		qDebug() << "Remove surface";
 		d->surfaces.remove(surface);
+		if (d->axes)
+			d->axes->updateBounds();
 		return;
 	}
 
@@ -194,12 +190,21 @@ void Plot3D::itemRemoved() {
 	if (curve != 0) {
 		qDebug() << "Remove curve";
 		d->curves.remove(curve);
+		if (d->axes)
+			d->axes->updateBounds();
 		return;
 	}
-	d->axes->updateBounds();
+
+	Axes* axes = qobject_cast<Axes*>(sender());
+	if (axes != 0) {
+		qDebug() << "Remove axes";
+		d->axes = 0;
+		addAxesAction->setEnabled(true);
+		return;
+	}
 }
 
-void Plot3D::objectClicked(vtkProp* object) {
+void Plot3D::onObjectClicked(vtkProp* object) {
 	Q_D(Plot3D);
 	if (object == 0) {
 		// Deselect all Plot3D children
@@ -212,6 +217,7 @@ void Plot3D::objectClicked(vtkProp* object) {
 		foreach(Curve3D* curve, d->curves) {
 			curve->select(false);
 		}
+		d->axes->select(false);
 	} else {
 		foreach(Surface3D* surface, d->surfaces) {
 			if (*surface == object) {
@@ -232,11 +238,18 @@ void Plot3D::objectClicked(vtkProp* object) {
 				curve->select(false);
 			}
 		}
+		if (*d->axes == object) {
+			qDebug() << Q_FUNC_INFO << "Axes clicked";
+			emit currentAspectChanged(d->axes);
+			d->axes->select(true);
+		} else {
+			d->axes->select(false);
+		}
 	}
 	d->vtkItem->refresh();
 }
 
-void Plot3D::objectHovered(vtkProp* object) {
+void Plot3D::onObjectHovered(vtkProp* object) {
 	Q_D(Plot3D);
 
 	if (object == 0) {
@@ -245,12 +258,16 @@ void Plot3D::objectHovered(vtkProp* object) {
 
 		foreach(Curve3D* curve, d->curves)
 			curve->highlight(false);
+		d->axes->highlight(false);
 	} else {
 		foreach(Surface3D* surface, d->surfaces)
 			surface->highlight(*surface == object);
 
 		foreach(Curve3D* curve, d->curves)
 			curve->highlight(*curve == object);
+		if (*d->axes == object)
+			qDebug() << Q_FUNC_INFO << "Axes hovered";
+		d->axes->highlight(*d->axes == object);
 	}
 
 	d->vtkItem->refresh();
@@ -267,15 +284,14 @@ void Plot3D::initActions() {
 	addCurveAction = new KAction(KIcon("3d-curve"), i18n("3D-curve"), this);
 	addEquationCurveAction = new KAction(KIcon("3d-equation-curve"), i18n("3D-curve from a mathematical equation"), this);
 	addSurfaceAction = new KAction(KIcon("3d-surface"), i18n("3D-surface"), this);
+	addAxesAction = new KAction(KIcon("axis-horizontal"), i18n("Axes"), this);
+	if (d->axes)
+		addAxesAction->setEnabled(false);
 
  	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 // 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
  	connect(addSurfaceAction, SIGNAL(triggered()), SLOT(addSurface()));
-
-	showAxesAction = new KAction(i18n("Axes"), this);
-	showAxesAction->setCheckable(true);
-	showAxesAction->setChecked(d->axes->isVisible());
-	connect(showAxesAction, SIGNAL(toggled(bool)), d->axes, SLOT(show(bool)));
+	connect(addAxesAction, SIGNAL(triggered()), SLOT(addAxes()));
 
 	//zoom/navigate actions
 	scaleAutoAction = new KAction(KIcon("auto-scale-all"), i18n("auto scale"), this);
@@ -328,18 +344,15 @@ void Plot3D::initActions() {
 
 void Plot3D::zoomIn() {
 	Q_D(Plot3D);
-	d->renderer->GetActiveCamera()->Zoom(2);
-	d->vtkItem->refresh();
 }
 
 void Plot3D::zoomOut() {
 	Q_D(Plot3D);
-	d->renderer->GetActiveCamera()->Zoom(0.5);
-	d->vtkItem->refresh();
 }
 
 void Plot3D::initMenus(){
 	addNewMenu = new QMenu(i18n("Add new"));
+	addNewMenu->addAction(addAxesAction);
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addAction(addSurfaceAction);
@@ -406,8 +419,6 @@ QMenu* Plot3D::createContextMenu(){
 
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
-
-	menu->insertAction(firstAction, showAxesAction);
 
 	menu->insertMenu(firstAction, addNewMenu);
 	menu->insertMenu(firstAction, zoomMenu);
@@ -522,7 +533,7 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	, vtkItem(0)
 	, isInitialized(false)
 	, rectSet(false)
-	, axes(new Axes)
+	, axes(0)
 	, intensity(1.0)
 	, ambient(Qt::white)
 	, diffuse(Qt::white)
@@ -530,6 +541,21 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	, elevation(15)
 	, azimuth(15)
 	, coneAngle(15) {
+	//read default settings
+	KConfig config;
+	KConfigGroup group = config.group("Plot3D");
+
+	//general
+
+	//background
+	backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
+	backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
+	backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled);
+	backgroundBrushStyle = (Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern);
+	backgroundFileName = group.readEntry("BackgroundFileName", QString());
+	backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
+	backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
+	backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 }
 
 Plot3DPrivate::~Plot3DPrivate() {
@@ -574,7 +600,7 @@ void Plot3DPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 		wti->SetInput(vtkItem->GetRenderWindow());
 		wti->Update();
 		vtkSmartPointer<vtkImageData> image = wti->GetOutput();
-		QPixmap pixmap(QPixmap::fromImage(vtkImageDataToQImage(image)));
+		const QPixmap pixmap(QPixmap::fromImage(vtkImageDataToQImage(image)));
 		const double halfWidth = rect.width() / 2;
 		const double halfHeight = rect.height() / 2;
 		painter->drawPixmap(-halfWidth, -halfHeight, pixmap);
@@ -599,6 +625,20 @@ void Plot3DPrivate::updateLight(bool notify) {
 		emit q->parametersChanged();
 }
 
+void Plot3DPrivate::initLights() {
+	//light
+	lightAbove = vtkSmartPointer<vtkLight>::New();
+	lightBelow = vtkSmartPointer<vtkLight>::New();
+
+	lightAbove->SetFocalPoint(1.876, 0.6125, 0);
+	lightAbove->SetPosition(0.875, 1.6125, 1);
+
+	lightBelow->SetFocalPoint(-1.876, -0.6125, 0);
+	lightBelow->SetPosition(-0.875, -1.612, -1);
+	renderer->AddLight(lightAbove);
+	renderer->AddLight(lightBelow);
+}
+
 void Plot3DPrivate::init() {
 	//initialize VTK
 	vtkItem = new VTKGraphicsItem(context, this);
@@ -606,7 +646,6 @@ void Plot3DPrivate::init() {
 
 	//foreground renderer
 	renderer = vtkSmartPointer<vtkRenderer>::New();
-	renderer->TwoSidedLightingOn();
 
 	//background renderer
 	backgroundRenderer = vtkSmartPointer<vtkRenderer>::New();
@@ -623,29 +662,19 @@ void Plot3DPrivate::init() {
 
 	vtkSmartPointer<MouseInteractor> style = vtkSmartPointer<MouseInteractor>::New();
 	style->SetDefaultRenderer(renderer);
-	q->connect(&style->broadcaster, SIGNAL(objectClicked(vtkProp*)), SLOT(objectClicked(vtkProp*)));
-	q->connect(&style->broadcaster, SIGNAL(objectHovered(vtkProp*)), SLOT(objectHovered(vtkProp*)));
+	q->connect(&style->broadcaster, SIGNAL(objectClicked(vtkProp*)), SLOT(onObjectClicked(vtkProp*)));
+	q->connect(&style->broadcaster, SIGNAL(objectHovered(vtkProp*)), SLOT(onObjectHovered(vtkProp*)));
 	renderWindow->GetInteractor()->SetInteractorStyle(style);
 
-	//light
-	lightAbove = vtkSmartPointer<vtkLight>::New();
-	lightBelow = vtkSmartPointer<vtkLight>::New();
-
-	lightAbove->SetFocalPoint(1.876, 0.6125, 0);
-	lightAbove->SetPosition(0.875, 1.6125, 1);
-
-	lightBelow->SetFocalPoint(-1.876, -0.6125, 0);
-	lightBelow->SetPosition(-0.875, -1.612, -1);
-	renderer->AddLight(lightAbove);
-	renderer->AddLight(lightBelow);
+	initLights();
 
 	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
 	backgroundRenderer->AddActor(backgroundImageActor);
 
-	axes->setRenderer(renderer);
-	q->addChild(axes);
-	axes->setHidden(!axes->isVisible());
-	vtkItem->connect(axes, SIGNAL(parametersChanged()), SLOT(refresh()));
+	if (axes) {
+		axes->setRenderer(renderer);
+		q->configureAspect(axes);
+	}
 
 	foreach(Surface3D* surface, surfaces) {
 		surface->setRenderer(renderer);
@@ -666,7 +695,7 @@ void Plot3DPrivate::setupCamera() {
 	const double y = rect.height() / 2;
 	camera->SetFocalPoint(x, y, 0.0);
 	camera->SetParallelScale(y);
-	camera->SetPosition(x,y, 900);
+	camera->SetPosition(x, y, 900);
 }
 
 void Plot3DPrivate::retransform() {
@@ -686,22 +715,12 @@ void Plot3DPrivate::retransform() {
 
 		setupCamera();
 		updateBackground(false);
-		updatePlot(false);
 		updateLight();
 
 		renderer->ResetCamera();
-		renderer->GetActiveCamera()->Azimuth(25);
 	}
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
-}
-
-void Plot3DPrivate::updatePlot(bool notify) {
-	if (axes) {
-		axes->updateBounds();
-		if (notify)
-			emit q->parametersChanged();
-	}
 }
 
 void Plot3DPrivate::updateBackground(bool notify) {
@@ -853,12 +872,12 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 
 		d->axes->save(writer);
-		foreach(const Surface3D* surface, d->surfaces){
+		foreach(const Surface3D* surface, d->surfaces)
 			surface->save(writer);
-		}
-		foreach(const Curve3D* curve, d->curves){
+		
+		foreach(const Curve3D* curve, d->curves)
 			curve->save(writer);
-		}
+
 	writer->writeEndElement();
 }
 
@@ -891,8 +910,11 @@ bool Plot3D::load(XmlStreamReader* reader) {
 			}
 		}else if(sectionName == "axes"){
 			qDebug() << Q_FUNC_INFO << "Load axes";
-			if(!d->axes->load(reader))
-				return false;
+			if (!d->axes) {
+				d->axes = new Axes;
+				if(!d->axes->load(reader))
+					return false;
+			}
 		}else if(sectionName == "surface3d"){
 			qDebug() << Q_FUNC_INFO << "Load surface";
 			Surface3D* newSurface = new Surface3D();

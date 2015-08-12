@@ -40,8 +40,8 @@
 #include <vtkRenderer.h>
 #include <vtkProperty.h>
 
-Surface3D::Surface3D(vtkRenderer* renderer)
-	: Base3D(i18n("Surface"), new Surface3DPrivate(renderer, this)) {
+Surface3D::Surface3D()
+	: Base3D(new Surface3DPrivate(i18n("Surface"), this)) {
 }
 
 Surface3D::~Surface3D() {
@@ -110,8 +110,8 @@ STD_SETTER_IMPL(Surface3D, ShowYZProjection, bool, showYZProjection, "%1: show Y
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Surface3DPrivate::Surface3DPrivate(vtkRenderer* renderer, Surface3D *parent)
-	: Base3DPrivate(renderer, parent)
+Surface3DPrivate::Surface3DPrivate(const QString& name, Surface3D *parent)
+	: Base3DPrivate(name, parent)
 	, q(parent)
 	, visualizationType(Surface3D::VisualizationType_Triangles)
 	, sourceType(Surface3D::DataSource_Empty)
@@ -151,9 +151,6 @@ void Surface3DPrivate::init() {
 Surface3DPrivate::~Surface3DPrivate() {
 }
 
-QString Surface3DPrivate::name() const {
-	return i18n("3D Surface");
-}
 void Surface3DPrivate::createActor() {
 	DataHandlerConfig config;
 	config.type = visualizationType;

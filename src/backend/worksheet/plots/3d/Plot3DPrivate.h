@@ -53,10 +53,10 @@ class Plot3DPrivate:public AbstractPlotPrivate{
 		virtual ~Plot3DPrivate();
 
 		void init();
+		void initLights();
 
 		virtual void retransform();
 		void updateLight(bool notify = true);
-		void updatePlot(bool notify = true);
 		void updateBackground(bool notify = true);
 		void setupCamera();
 		void mousePressEvent(QGraphicsSceneMouseEvent* event);

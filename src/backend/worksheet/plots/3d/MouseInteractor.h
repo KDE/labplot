@@ -32,6 +32,8 @@
 #include <QObject>
 #include <vtkInteractorStyleTrackballCamera.h>
 
+class Axes;
+
 class vtkProp;
 class MouseInteractorBroadcaster : public QObject {
 		Q_OBJECT
@@ -53,7 +55,7 @@ class MouseInteractor : public vtkInteractorStyleTrackballCamera {
 		MouseInteractorBroadcaster broadcaster;
 
 	private:
-		vtkProp* getPickedObject(int *pos = 0);
+		vtkProp* getPickedObject(int* pos = 0);
 
 	private:
 		vtkProp* prevHovered;

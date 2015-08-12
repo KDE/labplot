@@ -27,11 +27,17 @@
  ***************************************************************************/
 
 #include "MouseInteractor.h"
+#include "Axes.h"
+
+#include <QDebug>
 
 #include <vtkObjectFactory.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkSmartPointer.h>
 #include <vtkPicker.h>
+#include <vtkBoundingBox.h>
+#include <vtkNew.h>
+#include <vtkProp.h>
 
 vtkStandardNewMacro(MouseInteractor);
 
@@ -41,11 +47,11 @@ MouseInteractor::MouseInteractor()
 
 }
 
-vtkProp* MouseInteractor::getPickedObject(int *pos) {
+vtkProp* MouseInteractor::getPickedObject(int* pos) {
 	if (pos == 0)
 		pos = GetInteractor()->GetEventPosition();
 	
-	vtkSmartPointer<vtkPicker> picker = vtkSmartPointer<vtkPicker>::New();
+	vtkNew<vtkPicker> picker;
 	picker->SetTolerance(0.0);
 	picker->Pick(pos[0], pos[1], 0, GetDefaultRenderer());
 	return picker->GetViewProp();
