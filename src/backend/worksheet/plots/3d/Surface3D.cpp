@@ -42,7 +42,6 @@
 
 #include <cmath>
 
-#include <vtkRenderer.h>
 #include <vtkProperty.h>
 #include <vtkSphereSource.h>
 #include <vtkPolyDataMapper.h>
@@ -304,37 +303,29 @@ Surface3DPrivate::Surface3DPrivate(const QString& name, Surface3D *parent)
 Surface3DPrivate::~Surface3DPrivate() {
 }
 
-void Surface3DPrivate::createActor() {
+vtkSmartPointer<vtkPolyData> Surface3DPrivate::createData() {
 	vtkSmartPointer<vtkPolyData> data = generateData();
 
-	scale(data);
 	if (visualizationType == Surface3D::Surface3D::VisualizationType_Wireframe)
 		data = extractEdges(data);
 
 	if (colorFilling == Surface3D::ColorFilling_ElevationLevel)
 		makeColorElevation(data);
 
-	actor = mapData(data);
+	return data;
+}
 
+vtkSmartPointer<vtkActor> Surface3DPrivate::modifyActor(vtkActor* actor) {
 	if (colorFilling == Surface3D::ColorFilling_SolidColor) {
 		vtkProperty* prop = actor->GetProperty();
 		prop->SetColor(color.redF(), color.greenF(), color.blueF());
 		prop->SetOpacity(opacity);
 	}
+
+	return actor;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-
-vtkSmartPointer<vtkActor> Surface3DPrivate::mapData(vtkPolyData* data) const {
-	//reader fails to read obj-files if the locale is not set to 'C'
-	setlocale(LC_NUMERIC, "C");
-
-	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-	mapper->SetInputData(data);
-	vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
-	actor->SetMapper(mapper);
-	return actor;
-}
 
 vtkSmartPointer<vtkPolyData> Surface3DPrivate::extractEdges(vtkPolyData* data) const {
 	vtkSmartPointer<vtkExtractEdges> edges = vtkSmartPointer<vtkExtractEdges>::New();

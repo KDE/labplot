@@ -76,10 +76,10 @@ struct Surface3DPrivate : public Base3DPrivate {
 
 	Surface3DPrivate(const QString& name, Surface3D *parent);
 	~Surface3DPrivate();
-	void createActor();
+	vtkSmartPointer<vtkPolyData> createData();
+	vtkSmartPointer<vtkActor> modifyActor(vtkActor*);
 
 	// Surface3D
-	vtkSmartPointer<vtkActor> mapData(vtkPolyData* data) const;
 	vtkSmartPointer<vtkPolyData> extractEdges(vtkPolyData* data) const;
 	void makeColorElevation(vtkPolyData* polydata) const;
 

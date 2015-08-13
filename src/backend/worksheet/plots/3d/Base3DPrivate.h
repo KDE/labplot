@@ -37,35 +37,48 @@ class vtkActor;
 class vtkProperty;
 class vtkRenderer;
 class vtkPolyData;
+class vtkPropCollection;
 
 class Base3D;
-struct Base3DPrivate {
-	Base3D *baseParent;
-	bool isHighlighted;
-	bool isSelected;
-	vtkSmartPointer<vtkRenderer> renderer;
-	vtkSmartPointer<vtkActor> actor;
-	vtkSmartPointer<vtkProperty> property;
-	QString objName;
-	Plot3D::Scaling xScaling;
-	Plot3D::Scaling yScaling;
-	Plot3D::Scaling zScaling;
-
+class Base3DPrivate {
+	friend class Base3D;
+public:
 	Base3DPrivate(const QString& name, Base3D *baseParent);
 	virtual ~Base3DPrivate();
 
-	virtual void init();
-	void update();
-	virtual void createActor() = 0;
+	virtual vtkSmartPointer<vtkPolyData> createData();
+	virtual vtkSmartPointer<vtkActor> modifyActor(vtkActor*);
 	void hide();
 	vtkProperty* getProperty() const;
 
 	const QString& name() const;
+
+	// Update methods
+	void update();
+	void updateScaling();
+
 protected:
 	// Scale coordinates
-	void scale(vtkPolyData* data);
+	vtkPolyData* scale(vtkPolyData* data);
+
 private:
+	vtkSmartPointer<vtkActor> mapData(vtkPolyData* data) const;
 	void scale(vtkPolyData* data, int id, double (*scaleFunction)(double value));
+
+public:
+	Plot3D::Scaling xScaling;
+	Plot3D::Scaling yScaling;
+	Plot3D::Scaling zScaling;
+
+	Base3D * const baseParent;
+	const QString aspectName;
+	bool isHighlighted;
+	bool isSelected;
+	vtkSmartPointer<vtkPolyData> polyData;
+	vtkSmartPointer<vtkPolyData> scaledPolyData;
+	vtkSmartPointer<vtkRenderer> renderer;
+	vtkSmartPointer<vtkActor> actor;
+	vtkSmartPointer<vtkProperty> property;
 };
 
 #endif

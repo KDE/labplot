@@ -60,9 +60,6 @@ class Base3D : public AbstractAspect {
 	public slots:
 		void remove();
 
-	protected slots:
-		void update();
-
 	signals:
 		void parametersChanged();
 		void removed();

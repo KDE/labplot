@@ -40,14 +40,13 @@
 #include <vtkProp3DCollection.h>
 #include <vtkPoints.h>
 #include <vtkPolyData.h>
+#include <vtkPolyDataMapper.h>
 
 Base3D::Base3D(Base3DPrivate* priv)
 	: AbstractAspect(priv->name())
 	, d_ptr(priv) {
 	Q_D(Base3D);
-	qDebug() << Q_FUNC_INFO << d;
-	if (d->renderer)
-		d->init();
+	d->update();
 }
 
 Base3D::~Base3D() {
@@ -61,26 +60,25 @@ void Base3D::setRenderer(vtkRenderer* renderer) {
 	Q_D(Base3D);
 	d->renderer = renderer;
 	if (renderer)
-		d->init();
+		d->update();
 }
 
 void Base3D::setXScaling(Plot3D::Scaling scaling) {
 	Q_D(Base3D);
 	d->xScaling = scaling;
-	// TODO: Separate update method for scaling
-	update();
+	d->updateScaling();
 }
 
 void Base3D::setYScaling(Plot3D::Scaling scaling) {
 	Q_D(Base3D);
 	d->yScaling = scaling;
-	update();
+	d->updateScaling();
 }
 
 void Base3D::setZScaling(Plot3D::Scaling scaling) {
 	Q_D(Base3D);
 	d->zScaling = scaling;
-	update();
+	d->updateScaling();
 }
 
 void Base3D::highlight(bool pred) {
@@ -153,11 +151,6 @@ bool Base3D::isVisible() const {
 	return d->actor->GetVisibility() != 0;
 }
 
-void Base3D::update() {
-	Q_D(Base3D);
-	d->update();
-}
-
 void Base3D::remove() {
 	Q_D(Base3D);
 	d->hide();
@@ -170,35 +163,33 @@ void Base3D::remove() {
 
 Base3DPrivate::Base3DPrivate(const QString& name, Base3D* baseParent)
 	: baseParent(baseParent)
+	, aspectName(name)
 	, isHighlighted(false)
 	, isSelected(false)
 	, renderer(0)
-	, property(vtkProperty::New())
-	, objName(name) {
+	, property(vtkProperty::New()) {
 }
 
 const QString& Base3DPrivate::name() const {
-	return objName;
+	return aspectName;
 }
 
 Base3DPrivate::~Base3DPrivate() {
-}
-
-void Base3DPrivate::init() {
-	update();
 }
 
 vtkProperty* Base3DPrivate::getProperty() const {
 	return actor.Get()->GetProperty();
 }
 
-void Base3DPrivate::update() {
+void Base3DPrivate::updateScaling() {
 	if (!renderer)
 		return;
 
 	hide();
 
-	createActor();
+	scaledPolyData = scale(polyData);
+	actor = mapData(scaledPolyData);
+	actor = modifyActor(actor);
 
 	if (actor) {
 		property->DeepCopy(getProperty());
@@ -206,6 +197,23 @@ void Base3DPrivate::update() {
 		emit baseParent->parametersChanged();
 		emit baseParent->visibilityChanged(true);
 	}
+}
+
+vtkSmartPointer<vtkPolyData> Base3DPrivate::createData() {
+	return 0;
+}
+
+vtkSmartPointer<vtkActor> Base3DPrivate::modifyActor(vtkActor* actor) {
+	return actor;
+}
+
+void Base3DPrivate::update() {
+	if (!renderer)
+		return;
+
+	polyData = createData();
+
+	updateScaling();
 }
 
 void Base3DPrivate::hide() {
@@ -216,17 +224,39 @@ void Base3DPrivate::hide() {
 	}
 }
 
-void Base3DPrivate::scale(vtkPolyData* data) {
+vtkSmartPointer<vtkActor> Base3DPrivate::mapData(vtkPolyData* data) const {
+	//reader fails to read obj-files if the locale is not set to 'C'
+	setlocale(LC_NUMERIC, "C");
+
+	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+	mapper->SetInputData(data);
+	vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+	actor->SetMapper(mapper);
+	return actor;
+}
+
+vtkPolyData* Base3DPrivate::scale(vtkPolyData* data) {
+	if (data == 0)
+		return 0;
+
+	if (xScaling == Plot3D::Scaling_Linear && yScaling == Plot3D::Scaling_Linear
+			&& zScaling == Plot3D::Scaling_Linear)
+		return data;
+
 	const Plot3D::Scaling scaling[3] = {xScaling, yScaling, zScaling};
 
+	vtkPolyData* result = vtkPolyData::New();
+	result->DeepCopy(data);
 	for (int i = 0; i < 3; ++i) {
 		if (scaling[i] == Plot3D::Scaling_Ln)
-			scale(data, i, log);
+			scale(result, i, log);
 		else if (scaling[i] == Plot3D::Scaling_Log10)
-			scale(data, i, log10);
+			scale(result, i, log10);
 		else if (scaling[i] == Plot3D::Scaling_Log2)
-			scale(data, i, log2);
+			scale(result, i, log2);
 	}
+
+	return result;
 }
 
 void Base3DPrivate::scale(vtkPolyData* data, int id, double (*scaleFunction)(double value)) {

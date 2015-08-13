@@ -147,7 +147,7 @@ void AxesPrivate::updateBounds() {
 }
 
 
-void AxesPrivate::createActor() {
+vtkSmartPointer<vtkActor> AxesPrivate::modifyActor(vtkActor*) {
 	vtkSmartPointer<vtkCubeAxesActor> axes = vtkSmartPointer<vtkCubeAxesActor>::New();
 	axes->SetCamera(renderer->GetActiveCamera());
 
@@ -193,7 +193,7 @@ void AxesPrivate::createActor() {
 		labelProp->SetFontSize(fontSize);
 	}
 
-	actor = axes;
+	return axes;
 }
 
 //##############################################################################

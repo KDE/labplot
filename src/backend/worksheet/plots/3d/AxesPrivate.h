@@ -48,7 +48,7 @@ struct AxesPrivate : public Base3DPrivate {
 		AxesPrivate(const QString& name, Axes* parent);
 		~AxesPrivate();
 
-		void createActor();
+		vtkSmartPointer<vtkActor> modifyActor(vtkActor*);
 
 		// Update methods
 

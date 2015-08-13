@@ -37,8 +37,8 @@
 #include <KLocale>
 
 #include <vtkActor.h>
-#include <vtkRenderer.h>
 #include <vtkPoints.h>
+#include <vtkNew.h>
 #include <vtkCellArray.h>
 #include <vtkPolyData.h>
 #include <vtkProperty.h>
@@ -171,9 +171,9 @@ Curve3DPrivate::Curve3DPrivate(const QString& name, Curve3D* parent)
 Curve3DPrivate::~Curve3DPrivate() {
 }
 
-void Curve3DPrivate::createActor() {
+vtkSmartPointer<vtkPolyData> Curve3DPrivate::createData() {
 	if (xColumn == 0 || yColumn == 0 || zColumn == 0)
-		return;
+		return 0;
 
 	vtkSmartPointer<vtkPolyData> pdata = vtkSmartPointer<vtkPolyData>::New();
 	
@@ -184,7 +184,7 @@ void Curve3DPrivate::createActor() {
 	const int numPoints = std::min(xColumn->rowCount(),
 			std::min(yColumn->rowCount(), zColumn->rowCount()));
 	if (numPoints == 0)
-		return;
+		return 0;
 
 	vtkIdType pid[1];
 	if (showEdges) {
@@ -214,24 +214,21 @@ void Curve3DPrivate::createActor() {
 	else
 		pdata->SetVerts(vertices);
 
-	scale(pdata);
-
-	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-	if (showEdges)
-		mapper->SetInputData(pdata);
-	else {
-		vtkSmartPointer<vtkSphereSource> sphereSource = vtkSmartPointer<vtkSphereSource>::New();
+	if (!showEdges) {
+		vtkNew<vtkSphereSource> sphereSource;
 		sphereSource->SetRadius(pointRadius);
-		vtkSmartPointer<vtkGlyph3D> glyph3D = vtkSmartPointer<vtkGlyph3D>::New();
+		vtkNew<vtkGlyph3D> glyph3D;
 		glyph3D->SetSourceConnection(sphereSource->GetOutputPort());
 		glyph3D->SetInputData(pdata);
 		glyph3D->Update();
-		mapper->SetInputConnection(glyph3D->GetOutputPort());
+		pdata = glyph3D->GetOutput();
 	}
 
-	vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
-	actor->SetMapper(mapper);
+	return pdata;
+}
+
+vtkSmartPointer<vtkActor> Curve3DPrivate::modifyActor(vtkActor* actor) {
 	actor->GetProperty()->SetPointSize(pointRadius);
 	actor->GetProperty()->SetLineWidth(pointRadius);
-	this->actor = actor;
+	return actor;
 }
