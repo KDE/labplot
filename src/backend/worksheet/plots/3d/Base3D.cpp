@@ -44,6 +44,10 @@
 #include <vtkPolyData.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkBoundingBox.h>
+#include <vtkPlane.h>
+#include <vtkNew.h>
+#include <vtkClipPolyData.h>
+#include <vtkAlgorithmOutput.h>
 
 Base3D::Base3D(Base3DPrivate* priv)
 	: AbstractAspect(priv->name())
@@ -278,8 +282,48 @@ vtkSmartPointer<vtkPolyData> Base3DPrivate::scale(vtkPolyData* data) {
 			&& zScaling == Plot3D::Scaling_Linear)
 		return data;
 
-	vtkPolyData* result = vtkPolyData::New();
+	vtkSmartPointer<vtkPolyData> result = vtkSmartPointer<vtkPolyData>::New();
 	result->DeepCopy(data);
+
+	vtkNew<vtkPlane> planeX;
+	planeX->SetOrigin(0.00000001, 0, 0);
+	planeX->SetNormal(1, 0, 0);
+
+	vtkNew<vtkClipPolyData> clipperX;
+	clipperX->SetClipFunction(planeX.GetPointer());
+
+	vtkNew<vtkPlane> planeY;
+	planeY->SetOrigin(0, 0.00000001, 0);
+	planeY->SetNormal(0, 1, 0);
+
+	vtkNew<vtkClipPolyData> clipperY;
+	clipperY->SetClipFunction(planeY.GetPointer());
+
+	vtkNew<vtkPlane> planeZ;
+	planeZ->SetOrigin(0, 0, 0.00000001);
+	planeZ->SetNormal(0, 0, 1);
+
+	vtkNew<vtkClipPolyData> clipperZ;
+	clipperZ->SetClipFunction(planeZ.GetPointer());
+
+	if (xScaling != Plot3D::Scaling_Linear) {
+		clipperX->SetInputData(result);
+		clipperX->Update();
+		result = clipperX->GetOutput();
+	}
+
+	if (yScaling != Plot3D::Scaling_Linear) {
+		clipperY->SetInputData(result);
+		clipperY->Update();
+		result = clipperY->GetOutput();
+	}
+
+	if (zScaling != Plot3D::Scaling_Linear) {
+		clipperZ->SetInputData(result);
+		clipperZ->Update();
+		result = clipperZ->GetOutput();
+	}
+
 	double (*scaleX)(double);
 	double (*scaleY)(double);
 	double (*scaleZ)(double);
@@ -312,7 +356,6 @@ vtkSmartPointer<vtkPolyData> Base3DPrivate::scale(vtkPolyData* data) {
 		scaleZ = self;
 
 	scale(result, scaleX, scaleY, scaleZ);
-
 	return result;
 }
 
@@ -325,10 +368,7 @@ void Base3DPrivate::scale(vtkPolyData* data, double (*scaleX)(double),
 		point[0] = scaleX(point[0]);
 		point[1] = scaleY(point[1]);
 		point[2] = scaleZ(point[2]);
-		//if (isnan(point[0]) || isnan(point[1]) || isnan(point[2])) {
-		//	data->DeletePoint(i);
-		//}
-		//else
-			points->SetPoint(i, point);
+		points->SetPoint(i, point);
 	}
+
 }
