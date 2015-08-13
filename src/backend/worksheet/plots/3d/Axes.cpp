@@ -39,12 +39,15 @@
 #include <KLocale>
 #include <KIcon>
 
+#include <limits>
+#include <cmath>
+
 #include <vtkRenderer.h>
 #include <vtkCubeAxesActor.h>
 #include <vtkTextProperty.h>
 #include <vtkProperty.h>
-#include <vtkBoundingBox.h>
 #include <vtkCamera.h>
+#include <vtkStringArray.h>
 
 Axes::Axes()
 	: Base3D(new AxesPrivate(i18n("Axes"), this)) {
@@ -59,7 +62,7 @@ QIcon Axes::icon() const {
 
 void Axes::updateBounds() {
 	Q_D(Axes);
-	d->updateBounds();
+	d->Base3DPrivate::updateBounds();
 }
 
 //##############################################################################
@@ -102,7 +105,7 @@ STD_SETTER_IMPL(Axes, ZLabel, const QString&, zLabel, "%1: axes Z label changed"
 ////////////////////////////////////////////////////////////////////////////////
 
 AxesPrivate::AxesPrivate(const QString& name, Axes* parent)
-	: Base3DPrivate(name, parent)
+	: Base3DPrivate(name, parent, vtkCubeAxesActor::New())
 	, q(parent)
 	, fontSize(32)
 	, xLabelColor(Qt::red)
@@ -116,39 +119,84 @@ AxesPrivate::AxesPrivate(const QString& name, Axes* parent)
 AxesPrivate::~AxesPrivate() {
 }
 
-void AxesPrivate::getBoundingBox(double bounds[6]) {
-	vtkPropCollection* actors = renderer->GetViewProps();
-	actors->InitTraversal();
-
-	vtkBoundingBox bb;
-	if (actors->GetNumberOfItems() > 1) {
-		vtkProp* actor = 0;
-		while ((actor = actors->GetNextProp()) != 0) {
-			if (actor == this->actor.GetPointer())
-				continue;
-
-			bb.AddBounds(actor->GetBounds());
+namespace {
+	void addLabels(double init, double delta, int numIter, vtkStringArray* labels, double (*scaleFunction)(double)) {
+		for (int i = 0; i < numIter; ++i) {
+			const double scaledLabel = scaleFunction(init + i * delta);
+			if (!std::isnan(scaledLabel))
+				labels->InsertValue(i, QString::number(scaledLabel, 'g', 2).toAscii());
 		}
-
-		bb.GetBounds(bounds);
-	} else {
-		bounds[0] = bounds[2] = bounds[4] = -1;
-		bounds[1] = bounds[3] = bounds[5] = 1;
 	}
 }
 
-void AxesPrivate::updateBounds() {
-	if (!actor || !renderer)
+void AxesPrivate::objectScaled(vtkActor* actor) const {
+	vtkCubeAxesActor* cubeAxes = dynamic_cast<vtkCubeAxesActor*>(actor);
+	double bounds[6];
+	getBounds(bounds);
+	if (xScaling != Plot3D::Scaling_Linear) {
+		const int numXValues = 5;
+		const double dx = (bounds[1] - bounds[0]) / (numXValues - 1);
+		vtkSmartPointer<vtkStringArray> labels = vtkSmartPointer<vtkStringArray>::New();
+
+		if (xScaling == Plot3D::Scaling_Log10)
+			addLabels(bounds[0], dx, numXValues, labels, log10);
+		else if (xScaling == Plot3D::Scaling_Log2)
+			addLabels(bounds[0], dx, numXValues, labels, log2);
+		else if (xScaling == Plot3D::Scaling_Ln)
+			addLabels(bounds[0], dx, numXValues, labels, log);
+
+		cubeAxes->SetAxisLabels(0, labels);
+	} else
+		cubeAxes->SetAxisLabels(0, 0);
+
+	if (yScaling != Plot3D::Scaling_Linear) {
+		const int numYValues = 5;
+		const double dy = (bounds[3] - bounds[2]) / (numYValues - 1);
+		vtkSmartPointer<vtkStringArray> labels = vtkSmartPointer<vtkStringArray>::New();
+
+		if (yScaling == Plot3D::Scaling_Log10)
+			addLabels(bounds[2], dy, numYValues, labels, log10);
+		else if (yScaling == Plot3D::Scaling_Log2)
+			addLabels(bounds[2], dy, numYValues, labels, log2);
+		else if (yScaling == Plot3D::Scaling_Ln)
+			addLabels(bounds[2], dy, numYValues, labels, log);
+
+		cubeAxes->SetAxisLabels(1, labels);
+	} else
+		cubeAxes->SetAxisLabels(1, 0);
+
+	if (zScaling != Plot3D::Scaling_Linear) {
+		const int numZValues = 5;
+		const double dz = (bounds[5] - bounds[4]) / (numZValues - 1);
+		vtkSmartPointer<vtkStringArray> labels = vtkSmartPointer<vtkStringArray>::New();
+
+		if (zScaling == Plot3D::Scaling_Log10)
+			addLabels(bounds[4], dz, numZValues, labels, log10);
+		else if (zScaling == Plot3D::Scaling_Log2)
+			addLabels(bounds[4], dz, numZValues, labels, log2);
+		else if (zScaling == Plot3D::Scaling_Ln)
+			addLabels(bounds[4], dz, numZValues, labels, log);
+
+		cubeAxes->SetAxisLabels(2, labels);
+	} else
+		cubeAxes->SetAxisLabels(2, 0);
+}
+
+void AxesPrivate::updateBounds(vtkActor* actor) const {
+	if (!isInitialized())
 		return;
 
 	double bounds[6];
-	getBoundingBox(bounds);
-	dynamic_cast<vtkCubeAxesActor*>(actor.GetPointer())->SetBounds(bounds);
+	getBounds(bounds);
+	vtkCubeAxesActor* cubeAxes = dynamic_cast<vtkCubeAxesActor*>(actor);
+
+	cubeAxes->SetBounds(bounds);
 }
 
+void AxesPrivate::modifyActor(vtkRenderer* renderer, vtkActor* actor) const {
+	vtkCubeAxesActor* axes = dynamic_cast<vtkCubeAxesActor*>(actor);
+	Q_ASSERT(axes != 0);
 
-vtkSmartPointer<vtkActor> AxesPrivate::modifyActor(vtkActor*) {
-	vtkSmartPointer<vtkCubeAxesActor> axes = vtkSmartPointer<vtkCubeAxesActor>::New();
 	axes->SetCamera(renderer->GetActiveCamera());
 
 	axes->SetXTitle(xLabel.toAscii());
@@ -192,8 +240,6 @@ vtkSmartPointer<vtkActor> AxesPrivate::modifyActor(vtkActor*) {
 		labelProp->SetColor(colors[i]);
 		labelProp->SetFontSize(fontSize);
 	}
-
-	return axes;
 }
 
 //##############################################################################

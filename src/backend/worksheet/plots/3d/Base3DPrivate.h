@@ -43,33 +43,42 @@ class Base3D;
 class Base3DPrivate {
 	friend class Base3D;
 public:
-	Base3DPrivate(const QString& name, Base3D *baseParent);
+	Base3DPrivate(const QString& name, Base3D *baseParent, vtkActor* actor = 0);
 	virtual ~Base3DPrivate();
 
-	virtual vtkSmartPointer<vtkPolyData> createData();
-	virtual vtkSmartPointer<vtkActor> modifyActor(vtkActor*);
-	void hide();
-	vtkProperty* getProperty() const;
+	// Returns vtkPolyData instance that represents data
+	virtual vtkSmartPointer<vtkPolyData> createData() const;
+
+	// Modifies a created actor
+	virtual void modifyActor(vtkRenderer* renderer, vtkActor* actor) const;
 
 	const QString& name() const;
 
+	void updateBounds();
+
 	// Update methods
 	void update();
-	void updateScaling();
+	void updateScaling(bool notify = true);
 
 protected:
-	// Scale coordinates
-	vtkPolyData* scale(vtkPolyData* data);
+	virtual void objectScaled(vtkActor* actor) const;
+	virtual void updateBounds(vtkActor* actor) const;
+	// Scales coordinates. Returns a new instance of vtkPolyData
+	vtkSmartPointer<vtkPolyData> scale(vtkPolyData* data);
+	// Returns a bounding box of all 3d objects
+	void getBounds(double bounds[6]) const;
+	bool isInitialized() const;
 
 private:
-	vtkSmartPointer<vtkActor> mapData(vtkPolyData* data) const;
-	void scale(vtkPolyData* data, int id, double (*scaleFunction)(double value));
+	void mapData(vtkPolyData* data);
+	static void scale(vtkPolyData* data, double (*scaleX)(double),  double (*scaleY)(double),  double (*scaleZ)(double));
 
-public:
+protected:
 	Plot3D::Scaling xScaling;
 	Plot3D::Scaling yScaling;
 	Plot3D::Scaling zScaling;
 
+private:
 	Base3D * const baseParent;
 	const QString aspectName;
 	bool isHighlighted;

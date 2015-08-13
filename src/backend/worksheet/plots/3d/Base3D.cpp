@@ -33,6 +33,8 @@
 
 #include <KIcon>
 
+#include <cmath>
+
 #include <vtkRenderer.h>
 #include <vtkProperty.h>
 #include <vtkActor.h>
@@ -41,6 +43,7 @@
 #include <vtkPoints.h>
 #include <vtkPolyData.h>
 #include <vtkPolyDataMapper.h>
+#include <vtkBoundingBox.h>
 
 Base3D::Base3D(Base3DPrivate* priv)
 	: AbstractAspect(priv->name())
@@ -59,8 +62,10 @@ QIcon Base3D::icon() const {
 void Base3D::setRenderer(vtkRenderer* renderer) {
 	Q_D(Base3D);
 	d->renderer = renderer;
-	if (renderer)
+	if (renderer) {
+		d->renderer->AddViewProp(d->actor);
 		d->update();
+	}
 }
 
 void Base3D::setXScaling(Plot3D::Scaling scaling) {
@@ -83,9 +88,9 @@ void Base3D::setZScaling(Plot3D::Scaling scaling) {
 
 void Base3D::highlight(bool pred) {
 	Q_D(Base3D);
+	vtkProperty *prop = d->actor->GetProperty();
 	if (pred && !d->isHighlighted) {
 		d->isHighlighted = true;
-		vtkProperty *prop = d->getProperty();
 		if (!d->isSelected)
 			d->property->DeepCopy(prop);
 		prop->SetColor(1.0, 1.0, 0.0);
@@ -93,7 +98,7 @@ void Base3D::highlight(bool pred) {
 		prop->SetSpecular(0.0);
 	} else if (d->isHighlighted && !pred) {
 		d->isHighlighted = false;
-		d->getProperty()->DeepCopy(d->property);
+		prop->DeepCopy(d->property);
 		if (d->isSelected) {
 			d->isSelected = false;
 			select(true);
@@ -103,11 +108,9 @@ void Base3D::highlight(bool pred) {
 
 void Base3D::select(bool pred) {
 	Q_D(Base3D);
+	vtkProperty *prop = d->actor->GetProperty();
 	if (pred && !d->isSelected) {
-		if (!d->actor)
-			return;
 		d->isSelected = true;
-		vtkProperty *prop = d->getProperty();
 		if (!d->isHighlighted)
 			d->property->DeepCopy(prop);
 		prop->SetColor(1.0, 0.0, 0.0);
@@ -116,13 +119,13 @@ void Base3D::select(bool pred) {
 	} else if (d->isSelected && !pred) {
 		d->isSelected = false;
 		d->isHighlighted = false;
-		d->getProperty()->DeepCopy(d->property);
+		prop->DeepCopy(d->property);
 	}
 }
 
 bool Base3D::operator==(vtkProp* prop) const {
 	Q_D(const Base3D);
-	return dynamic_cast<vtkProp*>(d->actor.Get()) == prop;
+	return dynamic_cast<vtkProp*>(d->actor.GetPointer()) == prop;
 }
 
 bool Base3D::operator!=(vtkProp* prop) const {
@@ -131,43 +134,42 @@ bool Base3D::operator!=(vtkProp* prop) const {
 
 void Base3D::show(bool pred) {
 	Q_D(Base3D);
-	if (d->actor) {
-		d->actor->SetVisibility(pred);
-		emit parametersChanged();
-	}
-}
-
-void Base3D::reset() {
-	Q_D(Base3D);
-	if (!d->renderer->HasViewProp(d->actor)) {
-		d->renderer->AddActor(d->actor);
-	}
+	d->actor->SetVisibility(pred);
+	emit parametersChanged();
 }
 
 bool Base3D::isVisible() const {
 	Q_D(const Base3D);
-	if (!d->actor)
-		return false;
 	return d->actor->GetVisibility() != 0;
 }
 
 void Base3D::remove() {
 	Q_D(Base3D);
-	d->hide();
+	d->renderer->RemoveViewProp(d->actor);
 	emit removed();
 	AbstractAspect::remove();
 }
 
+void Base3D::recover() {
+	Q_D(Base3D);
+	if (!d->renderer->HasViewProp(d->actor)) {
+		d->renderer->AddViewProp(d->actor);
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
-Base3DPrivate::Base3DPrivate(const QString& name, Base3D* baseParent)
-	: baseParent(baseParent)
+Base3DPrivate::Base3DPrivate(const QString& name, Base3D* baseParent, vtkActor* actor)
+	: xScaling(Plot3D::Scaling_Linear)
+	, yScaling(Plot3D::Scaling_Linear)
+	, zScaling(Plot3D::Scaling_Linear)
+	, baseParent(baseParent)
 	, aspectName(name)
 	, isHighlighted(false)
 	, isSelected(false)
 	, renderer(0)
-	, property(vtkProperty::New()) {
+	, actor(actor == 0 ? vtkActor::New() : actor)
+	, property(vtkProperty::New()){
 }
 
 const QString& Base3DPrivate::name() const {
@@ -177,65 +179,98 @@ const QString& Base3DPrivate::name() const {
 Base3DPrivate::~Base3DPrivate() {
 }
 
-vtkProperty* Base3DPrivate::getProperty() const {
-	return actor.Get()->GetProperty();
+void Base3DPrivate::updateBounds() {
+	updateBounds(actor);
 }
 
-void Base3DPrivate::updateScaling() {
-	if (!renderer)
+vtkSmartPointer<vtkPolyData> Base3DPrivate::createData() const {
+	return 0;
+}
+
+void Base3DPrivate::modifyActor(vtkRenderer* renderer, vtkActor* actor) const {
+	Q_UNUSED(renderer);
+	Q_UNUSED(actor);
+}
+
+void Base3DPrivate::objectScaled(vtkActor* actor) const {
+	Q_UNUSED(actor);
+}
+
+void Base3DPrivate::updateBounds(vtkActor* actor) const {
+	Q_UNUSED(actor);
+}
+
+void Base3DPrivate::updateScaling(bool notify) {
+	if (!isInitialized())
 		return;
 
-	hide();
+	objectScaled(actor);
 
 	scaledPolyData = scale(polyData);
-	actor = mapData(scaledPolyData);
-	actor = modifyActor(actor);
-
-	if (actor) {
-		property->DeepCopy(getProperty());
-		renderer->AddActor(actor);
+	// Maps scaledPolyData to actor
+	mapData(scaledPolyData);
+	if (notify) {
 		emit baseParent->parametersChanged();
 		emit baseParent->visibilityChanged(true);
 	}
 }
 
-vtkSmartPointer<vtkPolyData> Base3DPrivate::createData() {
-	return 0;
-}
-
-vtkSmartPointer<vtkActor> Base3DPrivate::modifyActor(vtkActor* actor) {
-	return actor;
-}
-
 void Base3DPrivate::update() {
-	if (!renderer)
+	if (!isInitialized())
 		return;
 
 	polyData = createData();
 
-	updateScaling();
-}
+	updateScaling(false);
+	modifyActor(renderer, actor);
 
-void Base3DPrivate::hide() {
-	if (actor && renderer) {
-		baseParent->select(false);
-		baseParent->highlight(false);
-		renderer->RemoveActor(actor);
+	if (actor) {
+		// Initially actor is in the unclicked state
+		property->DeepCopy(actor->GetProperty());
+		emit baseParent->parametersChanged();
+		emit baseParent->visibilityChanged(true);
 	}
 }
 
-vtkSmartPointer<vtkActor> Base3DPrivate::mapData(vtkPolyData* data) const {
+void Base3DPrivate::getBounds(double bounds[6]) const {
+	vtkPropCollection* actors = renderer->GetViewProps();
+	actors->InitTraversal();
+
+	vtkBoundingBox bb;
+	if (actors->GetNumberOfItems() > 1) {
+		vtkProp* actor = 0;
+		while ((actor = actors->GetNextProp()) != 0) {
+			if (actor == this->actor.GetPointer())
+				continue;
+
+			bb.AddBounds(actor->GetBounds());
+		}
+
+		bb.GetBounds(bounds);
+	} else {
+		bounds[0] = bounds[2] = bounds[4] = -1;
+		bounds[1] = bounds[3] = bounds[5] = 1;
+	}
+}
+
+bool Base3DPrivate::isInitialized() const {
+	return renderer;
+}
+
+void Base3DPrivate::mapData(vtkPolyData* data) {
 	//reader fails to read obj-files if the locale is not set to 'C'
 	setlocale(LC_NUMERIC, "C");
 
 	vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 	mapper->SetInputData(data);
-	vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
 	actor->SetMapper(mapper);
-	return actor;
 }
 
-vtkPolyData* Base3DPrivate::scale(vtkPolyData* data) {
+namespace {
+	double self(double val) { return val; }
+}
+
+vtkSmartPointer<vtkPolyData> Base3DPrivate::scale(vtkPolyData* data) {
 	if (data == 0)
 		return 0;
 
@@ -243,28 +278,57 @@ vtkPolyData* Base3DPrivate::scale(vtkPolyData* data) {
 			&& zScaling == Plot3D::Scaling_Linear)
 		return data;
 
-	const Plot3D::Scaling scaling[3] = {xScaling, yScaling, zScaling};
-
 	vtkPolyData* result = vtkPolyData::New();
 	result->DeepCopy(data);
-	for (int i = 0; i < 3; ++i) {
-		if (scaling[i] == Plot3D::Scaling_Ln)
-			scale(result, i, log);
-		else if (scaling[i] == Plot3D::Scaling_Log10)
-			scale(result, i, log10);
-		else if (scaling[i] == Plot3D::Scaling_Log2)
-			scale(result, i, log2);
-	}
+	double (*scaleX)(double);
+	double (*scaleY)(double);
+	double (*scaleZ)(double);
+
+	if (xScaling == Plot3D::Scaling_Ln)
+		scaleX = log;
+	else if (xScaling == Plot3D::Scaling_Log10)
+		scaleX = log10;
+	else if (xScaling == Plot3D::Scaling_Log2)
+		scaleX = log2;
+	else
+		scaleX = self;
+
+	if (yScaling == Plot3D::Scaling_Ln)
+		scaleY = log;
+	else if (yScaling == Plot3D::Scaling_Log10)
+		scaleY = log10;
+	else if (yScaling == Plot3D::Scaling_Log2)
+		scaleY = log2;
+	else
+		scaleY = self;
+
+	if (zScaling == Plot3D::Scaling_Ln)
+		scaleZ = log;
+	else if (zScaling == Plot3D::Scaling_Log10)
+		scaleZ = log10;
+	else if (zScaling == Plot3D::Scaling_Log2)
+		scaleZ = log2;
+	else
+		scaleZ = self;
+
+	scale(result, scaleX, scaleY, scaleZ);
 
 	return result;
 }
 
-void Base3DPrivate::scale(vtkPolyData* data, int id, double (*scaleFunction)(double value)) {
+void Base3DPrivate::scale(vtkPolyData* data, double (*scaleX)(double),
+		double (*scaleY)(double),  double (*scaleZ)(double)) {
 	vtkPoints* points = data->GetPoints();
 	double point[3];
-	for (vtkIdType i = 0; i < points->GetNumberOfPoints(); ++i) {
+	for (vtkIdType i = 0, max = points->GetNumberOfPoints(); i < max; ++i) {
 		points->GetPoint(i, point);
-		point[id] = scaleFunction(point[id]);
-		points->SetPoint(i, point);
+		point[0] = scaleX(point[0]);
+		point[1] = scaleY(point[1]);
+		point[2] = scaleZ(point[2]);
+		//if (isnan(point[0]) || isnan(point[1]) || isnan(point[2])) {
+		//	data->DeletePoint(i);
+		//}
+		//else
+			points->SetPoint(i, point);
 	}
 }

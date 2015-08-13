@@ -47,8 +47,8 @@ struct Curve3DPrivate : public Base3DPrivate {
 
 	Curve3DPrivate(const QString& name, Curve3D* parent);
 	~Curve3DPrivate();
-	vtkSmartPointer<vtkPolyData> createData();
-	vtkSmartPointer<vtkActor> modifyActor(vtkActor*);
+	vtkSmartPointer<vtkPolyData> createData() const;
+	void modifyActor(vtkRenderer* renderer, vtkActor*) const;
 };
 
 #endif

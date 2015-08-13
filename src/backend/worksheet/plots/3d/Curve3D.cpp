@@ -171,7 +171,7 @@ Curve3DPrivate::Curve3DPrivate(const QString& name, Curve3D* parent)
 Curve3DPrivate::~Curve3DPrivate() {
 }
 
-vtkSmartPointer<vtkPolyData> Curve3DPrivate::createData() {
+vtkSmartPointer<vtkPolyData> Curve3DPrivate::createData() const {
 	if (xColumn == 0 || yColumn == 0 || zColumn == 0)
 		return 0;
 
@@ -227,8 +227,8 @@ vtkSmartPointer<vtkPolyData> Curve3DPrivate::createData() {
 	return pdata;
 }
 
-vtkSmartPointer<vtkActor> Curve3DPrivate::modifyActor(vtkActor* actor) {
+void Curve3DPrivate::modifyActor(vtkRenderer* renderer, vtkActor* actor) const {
+	Q_UNUSED(renderer);
 	actor->GetProperty()->SetPointSize(pointRadius);
 	actor->GetProperty()->SetLineWidth(pointRadius);
-	return actor;
 }

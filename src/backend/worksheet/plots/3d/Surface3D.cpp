@@ -303,7 +303,7 @@ Surface3DPrivate::Surface3DPrivate(const QString& name, Surface3D *parent)
 Surface3DPrivate::~Surface3DPrivate() {
 }
 
-vtkSmartPointer<vtkPolyData> Surface3DPrivate::createData() {
+vtkSmartPointer<vtkPolyData> Surface3DPrivate::createData() const {
 	vtkSmartPointer<vtkPolyData> data = generateData();
 
 	if (visualizationType == Surface3D::Surface3D::VisualizationType_Wireframe)
@@ -315,14 +315,15 @@ vtkSmartPointer<vtkPolyData> Surface3DPrivate::createData() {
 	return data;
 }
 
-vtkSmartPointer<vtkActor> Surface3DPrivate::modifyActor(vtkActor* actor) {
+void Surface3DPrivate::modifyActor(vtkRenderer* renderer, vtkActor* actor) const {
+	Q_UNUSED(renderer);
 	if (colorFilling == Surface3D::ColorFilling_SolidColor) {
 		vtkProperty* prop = actor->GetProperty();
 		prop->SetColor(color.redF(), color.greenF(), color.blueF());
 		prop->SetOpacity(opacity);
+	} else {
+		actor->SetProperty(vtkProperty::New());
 	}
-
-	return actor;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

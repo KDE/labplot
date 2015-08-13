@@ -55,14 +55,17 @@ class Base3D : public AbstractAspect {
 		void select(bool pred);
 		bool operator==(vtkProp* prop) const;
 		bool operator!=(vtkProp* prop) const;
-		void reset();
 
 	public slots:
 		void remove();
+		void recover();
 
 	signals:
-		void parametersChanged();
 		void removed();
+		// TODO: Emit signals when it's appropriate
+		// Emits when parameters have been changed
+		void parametersChanged();
+		// Emits when visibility has been changed
 		void visibilityChanged(bool);
 
 	protected:

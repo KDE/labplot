@@ -48,14 +48,12 @@ struct AxesPrivate : public Base3DPrivate {
 		AxesPrivate(const QString& name, Axes* parent);
 		~AxesPrivate();
 
-		vtkSmartPointer<vtkActor> modifyActor(vtkActor*);
+		void modifyActor(vtkRenderer* renderer, vtkActor* actor) const;
 
+	protected:
 		// Update methods
-
-		void updateBounds();
-
-	private:
-		void getBoundingBox(double bounds[6]);
+		void objectScaled(vtkActor* actor) const;
+		void updateBounds(vtkActor* actor) const;
 };
 
 #endif

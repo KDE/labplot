@@ -94,7 +94,7 @@ void Plot3D::handleAspectAdded(const AbstractAspect* aspect) {
 	if (d->isInitialized) {
 		Base3D* object = dynamic_cast<Base3D*>(const_cast<AbstractAspect*>(aspect));
 		if (object != 0)
-			object->reset();
+			object->recover();
 		if (d->axes)
 			d->axes->updateBounds();
 		d->resetCamera();
@@ -789,6 +789,8 @@ void Plot3DPrivate::updateXScaling() {
 	foreach (Curve3D* curve, curves) {
 		curve->setXScaling(xScaling);
 	}
+
+	axes->setXScaling(xScaling);
 }
 
 void Plot3DPrivate::updateYScaling() {
@@ -799,6 +801,8 @@ void Plot3DPrivate::updateYScaling() {
 	foreach (Curve3D* curve, curves) {
 		curve->setYScaling(yScaling);
 	}
+
+	axes->setYScaling(yScaling);
 }
 
 void Plot3DPrivate::updateZScaling() {
@@ -809,6 +813,8 @@ void Plot3DPrivate::updateZScaling() {
 	foreach (Curve3D* curve, curves) {
 		curve->setZScaling(zScaling);
 	}
+
+	axes->setZScaling(zScaling);
 }
 
 void Plot3DPrivate::updateBackground(bool notify) {
