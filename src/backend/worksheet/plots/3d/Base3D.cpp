@@ -356,82 +356,55 @@ vtkSmartPointer<vtkPolyData> Base3DPrivate::scale(vtkPolyData* data) {
 	if (data == 0)
 		return 0;
 
+	// This condition guarantees that clippersPipeline.size() will be > 0
 	if (xScaling == Plot3D::Scaling_Linear && yScaling == Plot3D::Scaling_Linear
 			&& zScaling == Plot3D::Scaling_Linear)
 		return data;
 
-	vtkNew<vtkPlane> planeX;
-	planeX->SetOrigin(0.00000001, 0, 0);
-	planeX->SetNormal(1, 0, 0);
+	const Plot3D::Scaling scales[] = {xScaling, yScaling, zScaling};
 
-	vtkNew<vtkPlane> planeY;
-	planeY->SetOrigin(0, 0.00000001, 0);
-	planeY->SetNormal(0, 1, 0);
-
-	vtkNew<vtkPlane> planeZ;
-	planeZ->SetOrigin(0, 0, 0.00000001);
-	planeZ->SetNormal(0, 0, 1);
+	vtkNew<vtkPlane> planes[3];
+	planes[0]->SetOrigin(0.00000001, 0, 0);
+	planes[0]->SetNormal(1, 0, 0);
+	planes[1]->SetOrigin(0, 0.00000001, 0);
+	planes[1]->SetNormal(0, 1, 0);
+	planes[2]->SetOrigin(0, 0, 0.00000001);
+	planes[2]->SetNormal(0, 0, 1);
 
 	QVector<vtkSmartPointer<vtkClipPolyData> > clippersPipeline;
-	if (xScaling != Plot3D::Scaling_Linear) {
-		vtkClipPolyData* clipper = vtkClipPolyData::New();
-		clipper->SetClipFunction(planeX.GetPointer());
-		clippersPipeline << clipper;
-	}
-
-	if (yScaling != Plot3D::Scaling_Linear) {
-		vtkClipPolyData* clipper = vtkClipPolyData::New();
-		clipper->SetClipFunction(planeY.GetPointer());
-		clippersPipeline << clipper;
-	}
-
-	if (zScaling != Plot3D::Scaling_Linear) {
-		vtkClipPolyData* clipper = vtkClipPolyData::New();
-		clipper->SetClipFunction(planeZ.GetPointer());
-		clippersPipeline << clipper;
-	}
-
 	vtkAlgorithmOutput* output = 0;
-	foreach(const vtkSmartPointer<vtkClipPolyData>& clipper, clippersPipeline) {
-		clipper->SetInputConnection(output);
-		output = clipper->GetOutputPort();
+	for (int i = 0; i < 3; ++i) {
+		if (scales[i] != Plot3D::Scaling_Linear) {
+			vtkClipPolyData* clipper = vtkClipPolyData::New();
+			clipper->SetClipFunction(planes[i].GetPointer());
+			clipper->SetInputConnection(output);
+			output = clipper->GetOutputPort();
+			clippersPipeline << clipper;
+		}
 	}
+
 	clippersPipeline.first()->SetInputData(data);
 	clippersPipeline.last()->Update();
 	vtkSmartPointer<vtkPolyData> result = clippersPipeline.last()->GetOutput();
 
-	double (*scaleX)(double);
-	double (*scaleY)(double);
-	double (*scaleZ)(double);
+	double (*scaleFunctions[3])(double);
+	for (int i = 0; i < 3; ++i) {
+		switch (scales[i]) {
+			case Plot3D::Scaling_Ln:
+				scaleFunctions[i] = log;
+				break;
+			case Plot3D::Scaling_Log10:
+				scaleFunctions[i] = log10;
+				break;
+			case Plot3D::Scaling_Log2:
+				scaleFunctions[i] = log2;
+				break;
+			default:
+				scaleFunctions[i] = self;
+		}
+	}
 
-	if (xScaling == Plot3D::Scaling_Ln)
-		scaleX = log;
-	else if (xScaling == Plot3D::Scaling_Log10)
-		scaleX = log10;
-	else if (xScaling == Plot3D::Scaling_Log2)
-		scaleX = log2;
-	else
-		scaleX = self;
-
-	if (yScaling == Plot3D::Scaling_Ln)
-		scaleY = log;
-	else if (yScaling == Plot3D::Scaling_Log10)
-		scaleY = log10;
-	else if (yScaling == Plot3D::Scaling_Log2)
-		scaleY = log2;
-	else
-		scaleY = self;
-
-	if (zScaling == Plot3D::Scaling_Ln)
-		scaleZ = log;
-	else if (zScaling == Plot3D::Scaling_Log10)
-		scaleZ = log10;
-	else if (zScaling == Plot3D::Scaling_Log2)
-		scaleZ = log2;
-	else
-		scaleZ = self;
-
-	scale(result, scaleX, scaleY, scaleZ);
+	scale(result, scaleFunctions[0], scaleFunctions[1], scaleFunctions[2]);
 	return result;
 }
 
