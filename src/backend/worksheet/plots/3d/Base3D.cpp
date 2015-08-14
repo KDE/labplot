@@ -289,40 +289,41 @@ vtkSmartPointer<vtkPolyData> Base3DPrivate::scale(vtkPolyData* data) {
 	planeX->SetOrigin(0.00000001, 0, 0);
 	planeX->SetNormal(1, 0, 0);
 
-	vtkNew<vtkClipPolyData> clipperX;
-	clipperX->SetClipFunction(planeX.GetPointer());
-
 	vtkNew<vtkPlane> planeY;
 	planeY->SetOrigin(0, 0.00000001, 0);
 	planeY->SetNormal(0, 1, 0);
-
-	vtkNew<vtkClipPolyData> clipperY;
-	clipperY->SetClipFunction(planeY.GetPointer());
 
 	vtkNew<vtkPlane> planeZ;
 	planeZ->SetOrigin(0, 0, 0.00000001);
 	planeZ->SetNormal(0, 0, 1);
 
-	vtkNew<vtkClipPolyData> clipperZ;
-	clipperZ->SetClipFunction(planeZ.GetPointer());
-
+	QVector<vtkSmartPointer<vtkClipPolyData> > clippersPipeline;
 	if (xScaling != Plot3D::Scaling_Linear) {
-		clipperX->SetInputData(result);
-		clipperX->Update();
-		result = clipperX->GetOutput();
+		vtkClipPolyData* clipper = vtkClipPolyData::New();
+		clipper->SetClipFunction(planeX.GetPointer());
+		clippersPipeline << clipper;
 	}
 
 	if (yScaling != Plot3D::Scaling_Linear) {
-		clipperY->SetInputData(result);
-		clipperY->Update();
-		result = clipperY->GetOutput();
+		vtkClipPolyData* clipper = vtkClipPolyData::New();
+		clipper->SetClipFunction(planeY.GetPointer());
+		clippersPipeline << clipper;
 	}
 
 	if (zScaling != Plot3D::Scaling_Linear) {
-		clipperZ->SetInputData(result);
-		clipperZ->Update();
-		result = clipperZ->GetOutput();
+		vtkClipPolyData* clipper = vtkClipPolyData::New();
+		clipper->SetClipFunction(planeZ.GetPointer());
+		clippersPipeline << clipper;
 	}
+
+	vtkAlgorithmOutput* output = 0;
+	foreach(const vtkSmartPointer<vtkClipPolyData>& clipper, clippersPipeline) {
+		clipper->SetInputConnection(output);
+		output = clipper->GetOutputPort();
+	}
+	clippersPipeline.first()->SetInputData(result);
+	clippersPipeline.last()->Update();
+	result = clippersPipeline.last()->GetOutput();
 
 	double (*scaleX)(double);
 	double (*scaleY)(double);
