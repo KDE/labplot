@@ -96,6 +96,18 @@ Plot3DDock::Plot3DDock(QWidget* parent)
 	recorder.connect(ui.cbYScaling, SIGNAL(currentIndexChanged(int)), SLOT(onYScalingChanged(int)));
 	recorder.connect(ui.cbZScaling, SIGNAL(currentIndexChanged(int)), SLOT(onZScalingChanged(int)));
 
+	recorder.connect(ui.chkAutoScaleX, SIGNAL(stateChanged(int)), SLOT(onAutoScaleXChanged(int)));
+	recorder.connect(ui.chkAutoScaleY, SIGNAL(stateChanged(int)), SLOT(onAutoScaleYChanged(int)));
+	recorder.connect(ui.chkAutoScaleZ, SIGNAL(stateChanged(int)), SLOT(onAutoScaleZChanged(int)));
+
+	recorder.connect(ui.kleXMin, SIGNAL(returnPressed()), SLOT(onXMinChanged()));
+	recorder.connect(ui.kleYMin, SIGNAL(returnPressed()), SLOT(onYMinChanged()));
+	recorder.connect(ui.kleZMin, SIGNAL(returnPressed()), SLOT(onZMinChanged()));
+
+	recorder.connect(ui.kleXMax, SIGNAL(returnPressed()), SLOT(onXMaxChanged()));
+	recorder.connect(ui.kleYMax, SIGNAL(returnPressed()), SLOT(onYMaxChanged()));
+	recorder.connect(ui.kleZMax, SIGNAL(returnPressed()), SLOT(onZMaxChanged()));
+
 	//Background
 	recorder.connect(ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundTypeChanged(int)));
 	recorder.connect(ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), SLOT(onBackgroundColorStyleChanged(int)));
@@ -280,6 +292,102 @@ void Plot3DDock::onYScalingChanged(int index) {
 void Plot3DDock::onZScalingChanged(int index) {
 	const Lock lock(m_initializing);
 	m_plot->setZScaling(static_cast<Plot3D::Scaling>(index));
+}
+
+void Plot3DDock::onAutoScaleXChanged(int state) {
+	const Lock lock(m_initializing);
+	const bool b = (state == Qt::Checked);
+	if (b) {
+		double bounds[6];
+		m_plot->getBounds(bounds);
+		double ranges[6];
+		m_plot->getRange(ranges);
+		ranges[0] = bounds[0];
+		ranges[1] = bounds[1];
+		m_plot->setRange(ranges);
+		ui.kleXMin->setText(QString::number(ranges[0]));
+		ui.kleXMax->setText(QString::number(ranges[1]));
+	}
+}
+
+void Plot3DDock::onAutoScaleYChanged(int state) {
+	const Lock lock(m_initializing);
+	const bool b = (state == Qt::Checked);
+	if (b) {
+		double bounds[6];
+		m_plot->getBounds(bounds);
+		double ranges[6];
+		m_plot->getRange(ranges);
+		ranges[2] = bounds[2];
+		ranges[3] = bounds[3];
+		m_plot->setRange(ranges);
+		ui.kleYMin->setText(QString::number(ranges[2]));
+		ui.kleYMax->setText(QString::number(ranges[3]));
+	}
+}
+
+void Plot3DDock::onAutoScaleZChanged(int state) {
+	const Lock lock(m_initializing);
+	const bool b = (state == Qt::Checked);
+	if (b) {
+		double bounds[6];
+		m_plot->getBounds(bounds);
+		double ranges[6];
+		m_plot->getRange(ranges);
+		ranges[4] = bounds[4];
+		ranges[5] = bounds[5];
+		m_plot->setRange(ranges);
+		ui.kleZMin->setText(QString::number(ranges[4]));
+		ui.kleZMax->setText(QString::number(ranges[5]));
+	}
+}
+
+void Plot3DDock::onXMinChanged() {
+	const Lock lock(m_initializing);
+	double ranges[6];
+	m_plot->getRange(ranges);
+	ranges[0] = ui.kleXMin->text().toDouble();
+	m_plot->setRange(ranges);
+}
+
+void Plot3DDock::onYMinChanged() {
+	const Lock lock(m_initializing);
+	double ranges[6];
+	m_plot->getRange(ranges);
+	ranges[2] = ui.kleYMin->text().toDouble();
+	m_plot->setRange(ranges);
+}
+
+void Plot3DDock::onZMinChanged() {
+	const Lock lock(m_initializing);
+	double ranges[6];
+	m_plot->getRange(ranges);
+	ranges[4] = ui.kleZMin->text().toDouble();
+	m_plot->setRange(ranges);
+}
+
+void Plot3DDock::onXMaxChanged() {
+	const Lock lock(m_initializing);
+	double ranges[6];
+	m_plot->getRange(ranges);
+	ranges[1] = ui.kleXMax->text().toDouble();
+	m_plot->setRange(ranges);
+}
+
+void Plot3DDock::onYMaxChanged() {
+	const Lock lock(m_initializing);
+	double ranges[6];
+	m_plot->getRange(ranges);
+	ranges[3] = ui.kleYMax->text().toDouble();
+	m_plot->setRange(ranges);
+}
+
+void Plot3DDock::onZMaxChanged() {
+	const Lock lock(m_initializing);
+	double ranges[6];
+	m_plot->getRange(ranges);
+	ranges[5] = ui.kleZMax->text().toDouble();
+	m_plot->setRange(ranges);
 }
 
 /*!

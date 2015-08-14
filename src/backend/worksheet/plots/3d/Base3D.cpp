@@ -34,6 +34,7 @@
 #include <KIcon>
 
 #include <cmath>
+#include <limits>
 
 #include <vtkRenderer.h>
 #include <vtkProperty.h>
@@ -70,6 +71,19 @@ void Base3D::setRenderer(vtkRenderer* renderer) {
 		d->renderer->AddViewProp(d->actor);
 		d->update();
 	}
+}
+
+void Base3D::setRange(const double bounds[6]) {
+	Q_D(Base3D);
+	for (int i = 0; i < 6; ++i)
+		d->rangeBounds[i] = bounds[i];
+	d->updateRange();
+	d->isRangeInitialized = true;
+}
+
+void Base3D::getBounds(double bounds[6]) const {
+	Q_D(const Base3D);
+	const_cast<Base3DPrivate*>(d)->getBounds(bounds);
 }
 
 void Base3D::setXScaling(Plot3D::Scaling scaling) {
@@ -167,6 +181,7 @@ Base3DPrivate::Base3DPrivate(const QString& name, Base3D* baseParent, vtkActor* 
 	: xScaling(Plot3D::Scaling_Linear)
 	, yScaling(Plot3D::Scaling_Linear)
 	, zScaling(Plot3D::Scaling_Linear)
+	, isRangeInitialized(false)
 	, baseParent(baseParent)
 	, aspectName(name)
 	, isHighlighted(false)
@@ -174,6 +189,8 @@ Base3DPrivate::Base3DPrivate(const QString& name, Base3D* baseParent, vtkActor* 
 	, renderer(0)
 	, actor(actor == 0 ? vtkActor::New() : actor)
 	, property(vtkProperty::New()){
+	rangeBounds[0] = rangeBounds[2] = rangeBounds[4] = -INFINITY;
+	rangeBounds[1] = rangeBounds[3] = rangeBounds[5] = INFINITY;
 }
 
 const QString& Base3DPrivate::name() const {
@@ -204,19 +221,71 @@ void Base3DPrivate::updateBounds(vtkActor* actor) const {
 	Q_UNUSED(actor);
 }
 
-void Base3DPrivate::updateScaling(bool notify) {
-	if (!isInitialized())
-		return;
-
-	objectScaled(actor);
-
-	scaledPolyData = scale(polyData);
-	// Maps scaledPolyData to actor
-	mapData(scaledPolyData);
+void Base3DPrivate::notify(bool notify) {
 	if (notify) {
 		emit baseParent->parametersChanged();
 		emit baseParent->visibilityChanged(true);
 	}
+}
+
+void Base3DPrivate::updateRange(bool needNotify) {
+	if (!isInitialized() || !polyData) {
+		rangedPolyData = polyData;
+		return;
+	}
+
+	if (!isRangeInitialized) {
+		rangedPolyData = polyData;
+		updateScaling(needNotify);
+		return;
+	}
+
+	vtkNew<vtkPlane> planes[6];
+	planes[0]->SetOrigin(rangeBounds[0], 0, 0);
+	planes[0]->SetNormal(1, 0, 0);
+	planes[1]->SetOrigin(rangeBounds[1], 0, 0);
+	planes[1]->SetNormal(-1, 0, 0);
+
+	planes[2]->SetOrigin(0, rangeBounds[2], 0);
+	planes[2]->SetNormal(0, 1, 0);
+	planes[3]->SetOrigin(0, rangeBounds[3], 0);
+	planes[3]->SetNormal(0, -1, 0);
+
+	planes[4]->SetOrigin(0, 0, rangeBounds[4]);
+	planes[4]->SetNormal(0, 0, 1);
+	planes[5]->SetOrigin(0, 0, rangeBounds[5]);
+	planes[5]->SetNormal(0, 0, -1);
+
+	QVector<vtkSmartPointer<vtkClipPolyData> > clippersPipeline;
+	vtkAlgorithmOutput* output = 0;
+	for (int i = 0; i < 6; ++i) {
+		vtkClipPolyData* clipper = vtkClipPolyData::New();
+		clipper->SetClipFunction(planes[i].GetPointer());
+		clipper->SetInputConnection(output);
+		output = clipper->GetOutputPort();
+		clippersPipeline << clipper;
+	}
+
+	clippersPipeline.first()->SetInputData(polyData);
+	clippersPipeline.last()->Update();
+	rangedPolyData = clippersPipeline.last()->GetOutput();
+	updateScaling(needNotify);
+}
+
+void Base3DPrivate::updateScaling(bool needNotify) {
+	if (!isInitialized())
+		return;
+
+	objectScaled(actor);
+	if (rangedPolyData->GetNumberOfCells() == 0) {
+		scaledPolyData = rangedPolyData;
+	} else {
+		scaledPolyData = scale(rangedPolyData);
+	}
+
+	// Maps scaledPolyData to actor
+	mapData(scaledPolyData);
+	notify(needNotify);
 }
 
 void Base3DPrivate::update() {
@@ -225,18 +294,18 @@ void Base3DPrivate::update() {
 
 	polyData = createData();
 
-	updateScaling(false);
+	updateRange(false);
+
 	modifyActor(renderer, actor);
 
 	if (actor) {
 		// Initially actor is in the unclicked state
 		property->DeepCopy(actor->GetProperty());
-		emit baseParent->parametersChanged();
-		emit baseParent->visibilityChanged(true);
+		notify(true);
 	}
 }
 
-void Base3DPrivate::getBounds(double bounds[6]) const {
+void Base3DPrivate::getSystemBounds(double bounds[6]) const {
 	vtkPropCollection* actors = renderer->GetViewProps();
 	actors->InitTraversal();
 
@@ -255,6 +324,15 @@ void Base3DPrivate::getBounds(double bounds[6]) const {
 		bounds[0] = bounds[2] = bounds[4] = -1;
 		bounds[1] = bounds[3] = bounds[5] = 1;
 	}
+}
+
+void Base3DPrivate::getBounds(double bounds[6]) const {
+	if (polyData)
+		polyData->GetBounds(bounds);
+	else if (actor)
+		actor->GetBounds(bounds);
+	else
+		bounds[0] = bounds[1] = bounds[2] = bounds[3] = bounds[4] = bounds[5] = 0;
 }
 
 bool Base3DPrivate::isInitialized() const {
@@ -281,9 +359,6 @@ vtkSmartPointer<vtkPolyData> Base3DPrivate::scale(vtkPolyData* data) {
 	if (xScaling == Plot3D::Scaling_Linear && yScaling == Plot3D::Scaling_Linear
 			&& zScaling == Plot3D::Scaling_Linear)
 		return data;
-
-	vtkSmartPointer<vtkPolyData> result = vtkSmartPointer<vtkPolyData>::New();
-	result->DeepCopy(data);
 
 	vtkNew<vtkPlane> planeX;
 	planeX->SetOrigin(0.00000001, 0, 0);
@@ -321,9 +396,9 @@ vtkSmartPointer<vtkPolyData> Base3DPrivate::scale(vtkPolyData* data) {
 		clipper->SetInputConnection(output);
 		output = clipper->GetOutputPort();
 	}
-	clippersPipeline.first()->SetInputData(result);
+	clippersPipeline.first()->SetInputData(data);
 	clippersPipeline.last()->Update();
-	result = clippersPipeline.last()->GetOutput();
+	vtkSmartPointer<vtkPolyData> result = clippersPipeline.last()->GetOutput();
 
 	double (*scaleX)(double);
 	double (*scaleY)(double);

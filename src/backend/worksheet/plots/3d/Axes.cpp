@@ -132,7 +132,7 @@ namespace {
 void AxesPrivate::objectScaled(vtkActor* actor) const {
 	vtkCubeAxesActor* cubeAxes = dynamic_cast<vtkCubeAxesActor*>(actor);
 	double bounds[6];
-	getBounds(bounds);
+	getSystemBounds(bounds);
 	if (xScaling != Plot3D::Scaling_Linear) {
 		const int numXValues = 5;
 		const double dx = (bounds[1] - bounds[0]) / (numXValues - 1);
@@ -187,7 +187,7 @@ void AxesPrivate::updateBounds(vtkActor* actor) const {
 		return;
 
 	double bounds[6];
-	getBounds(bounds);
+	getSystemBounds(bounds);
 	vtkCubeAxesActor* cubeAxes = dynamic_cast<vtkCubeAxesActor*>(actor);
 
 	cubeAxes->SetBounds(bounds);

@@ -72,6 +72,15 @@ class Plot3DDock: public QWidget {
 		void onXScalingChanged(int);
 		void onYScalingChanged(int);
 		void onZScalingChanged(int);
+		void onAutoScaleXChanged(int);
+		void onAutoScaleYChanged(int);
+		void onAutoScaleZChanged(int);
+		void onXMinChanged();
+		void onYMinChanged();
+		void onZMinChanged();
+		void onXMaxChanged();
+		void onYMaxChanged();
+		void onZMaxChanged();
 
 		//"Background"-tab
 		void onBackgroundTypeChanged(int);

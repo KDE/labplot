@@ -149,6 +149,57 @@ QIcon Plot3D::icon() const {
 	return KIcon("office-chart-line");
 }
 
+void Plot3D::setRange(const double bounds[6]) {
+	Q_D(Plot3D);
+	for (int i = 0; i < 6; ++i) {
+		d->rangeBounds[i] = bounds[i];
+	}
+
+	d->isRangeInitialized = true;
+
+	foreach(Surface3D* surface, d->surfaces) {
+		surface->setRange(bounds);
+	}
+
+	foreach(Curve3D* curve, d->curves) {
+		curve->setRange(bounds);
+	}
+
+	d->axes->updateBounds();
+	d->vtkItem->refresh();
+}
+
+void Plot3D::getRange(double bounds[6]) {
+	Q_D(Plot3D);
+	if (!d->isRangeInitialized) {
+		double bb[6];
+		getBounds(bb);
+		for (int i = 0; i < 6; ++i)
+			d->rangeBounds[i] = bb[i];
+	}
+
+	for (int i = 0; i < 6; ++i) {
+		bounds[i] = d->rangeBounds[i];
+	}
+}
+
+void Plot3D::getBounds(double bounds[6]) const {
+	vtkBoundingBox bb;
+	Q_D(const Plot3D);
+	double objBounds[6];
+	foreach(Surface3D* surface, d->surfaces) {
+		surface->getBounds(objBounds);
+		bb.AddBounds(objBounds);
+	}
+
+	foreach(Curve3D* curve, d->curves) {
+		curve->getBounds(objBounds);
+		bb.AddBounds(objBounds);
+	}
+
+	bb.GetBounds(bounds);
+}
+
 void Plot3D::configureAspect(AbstractAspect* aspect) {
 	Q_D(Plot3D);
 	addChild(aspect);
@@ -580,6 +631,7 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	, vtkItem(0)
 	, isInitialized(false)
 	, rectSet(false)
+	, isRangeInitialized(false)
 	, axes(0)
 	, xScaling(Plot3D::Scaling_Linear)
 	, yScaling(Plot3D::Scaling_Linear)

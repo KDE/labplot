@@ -58,7 +58,8 @@ public:
 
 	// Update methods
 	void update();
-	void updateScaling(bool notify = true);
+	void updateRange(bool needNotify = true);
+	void updateScaling(bool needNotify = true);
 
 protected:
 	virtual void objectScaled(vtkActor* actor) const;
@@ -66,17 +67,22 @@ protected:
 	// Scales coordinates. Returns a new instance of vtkPolyData
 	vtkSmartPointer<vtkPolyData> scale(vtkPolyData* data);
 	// Returns a bounding box of all 3d objects
+	void getSystemBounds(double bounds[6]) const;
+	// Returns a bounding box of the current 3d object
 	void getBounds(double bounds[6]) const;
 	bool isInitialized() const;
 
 private:
 	void mapData(vtkPolyData* data);
 	static void scale(vtkPolyData* data, double (*scaleX)(double),  double (*scaleY)(double),  double (*scaleZ)(double));
+	void notify(bool notify);
 
 protected:
 	Plot3D::Scaling xScaling;
 	Plot3D::Scaling yScaling;
 	Plot3D::Scaling zScaling;
+	double rangeBounds[6];
+	bool isRangeInitialized;
 
 private:
 	Base3D * const baseParent;
@@ -84,6 +90,7 @@ private:
 	bool isHighlighted;
 	bool isSelected;
 	vtkSmartPointer<vtkPolyData> polyData;
+	vtkSmartPointer<vtkPolyData> rangedPolyData;
 	vtkSmartPointer<vtkPolyData> scaledPolyData;
 	vtkSmartPointer<vtkRenderer> renderer;
 	vtkSmartPointer<vtkActor> actor;

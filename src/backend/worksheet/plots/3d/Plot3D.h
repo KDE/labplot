@@ -62,6 +62,9 @@ class Plot3D : public AbstractPlot {
 
 		void setRect(const QRectF&);
 		void setContext(QGLContext *context);
+		void getBounds(double bounds[6]) const;
+		void getRange(double bounds[6]);
+		void setRange(const double bounds[6]);
 
 		// General parameters
 		BASIC_D_ACCESSOR_DECL(Plot3D::Scaling, xScaling, XScaling)

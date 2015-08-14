@@ -49,6 +49,10 @@ class Base3D : public AbstractAspect {
 		void setXScaling(Plot3D::Scaling scaling);
 		void setYScaling(Plot3D::Scaling scaling);
 		void setZScaling(Plot3D::Scaling scaling);
+
+		void setRange(const double bounds[6]);
+		void getBounds(double bounds[6]) const;
+
 		void show(bool pred);
 		bool isVisible() const;
 		void highlight(bool pred);

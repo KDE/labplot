@@ -73,6 +73,8 @@ class Plot3DPrivate : public AbstractPlotPrivate{
 		VTKGraphicsItem *vtkItem;
 		bool isInitialized;
 		bool rectSet;
+		double rangeBounds[6];
+		bool isRangeInitialized;
 
 		Axes* axes;
 		QSet<Surface3D*> surfaces;
