@@ -277,7 +277,7 @@ void Base3DPrivate::updateScaling(bool needNotify) {
 		return;
 
 	objectScaled(actor);
-	if (rangedPolyData->GetNumberOfCells() == 0) {
+	if (rangedPolyData.GetPointer() == 0 || rangedPolyData->GetNumberOfCells() == 0) {
 		scaledPolyData = rangedPolyData;
 	} else {
 		scaledPolyData = scale(rangedPolyData);
