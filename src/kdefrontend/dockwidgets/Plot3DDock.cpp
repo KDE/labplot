@@ -28,6 +28,7 @@
 
 #include "Plot3DDock.h"
 #include "backend/worksheet/plots/3d/Plot3D.h"
+#include "backend/worksheet/plots/3d/BoundingBox.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
@@ -298,15 +299,13 @@ void Plot3DDock::onAutoScaleXChanged(int state) {
 	const Lock lock(m_initializing);
 	const bool b = (state == Qt::Checked);
 	if (b) {
-		double bounds[6];
-		m_plot->getBounds(bounds);
-		double ranges[6];
-		m_plot->getRange(ranges);
-		ranges[0] = bounds[0];
-		ranges[1] = bounds[1];
-		m_plot->setRange(ranges);
-		ui.kleXMin->setText(QString::number(ranges[0]));
-		ui.kleXMax->setText(QString::number(ranges[1]));
+		const BoundingBox& bounds = m_plot->bounds();
+		BoundingBox range = m_plot->range();
+		range.setXMin(bounds.xMin());
+		range.setXMax(bounds.xMax());
+		m_plot->setRange(range);
+		ui.kleXMin->setText(QString::number(range.xMin()));
+		ui.kleXMax->setText(QString::number(range.xMax()));
 	}
 }
 
@@ -314,15 +313,13 @@ void Plot3DDock::onAutoScaleYChanged(int state) {
 	const Lock lock(m_initializing);
 	const bool b = (state == Qt::Checked);
 	if (b) {
-		double bounds[6];
-		m_plot->getBounds(bounds);
-		double ranges[6];
-		m_plot->getRange(ranges);
-		ranges[2] = bounds[2];
-		ranges[3] = bounds[3];
-		m_plot->setRange(ranges);
-		ui.kleYMin->setText(QString::number(ranges[2]));
-		ui.kleYMax->setText(QString::number(ranges[3]));
+		const BoundingBox& bounds = m_plot->bounds();
+		BoundingBox range = m_plot->range();
+		range.setYMin(bounds.yMin());
+		range.setYMax(bounds.yMax());
+		m_plot->setRange(range);
+		ui.kleYMin->setText(QString::number(range.yMin()));
+		ui.kleYMax->setText(QString::number(range.yMax()));
 	}
 }
 
@@ -330,64 +327,56 @@ void Plot3DDock::onAutoScaleZChanged(int state) {
 	const Lock lock(m_initializing);
 	const bool b = (state == Qt::Checked);
 	if (b) {
-		double bounds[6];
-		m_plot->getBounds(bounds);
-		double ranges[6];
-		m_plot->getRange(ranges);
-		ranges[4] = bounds[4];
-		ranges[5] = bounds[5];
-		m_plot->setRange(ranges);
-		ui.kleZMin->setText(QString::number(ranges[4]));
-		ui.kleZMax->setText(QString::number(ranges[5]));
+		const BoundingBox& bounds = m_plot->bounds();
+		BoundingBox range = m_plot->range();
+		range.setZMin(bounds.zMin());
+		range.setZMax(bounds.zMax());
+		m_plot->setRange(range);
+		ui.kleZMin->setText(QString::number(range.zMin()));
+		ui.kleZMax->setText(QString::number(range.zMax()));
 	}
 }
 
 void Plot3DDock::onXMinChanged() {
 	const Lock lock(m_initializing);
-	double ranges[6];
-	m_plot->getRange(ranges);
-	ranges[0] = ui.kleXMin->text().toDouble();
-	m_plot->setRange(ranges);
+	BoundingBox range = m_plot->range();
+	range.setXMin(ui.kleXMin->text().toDouble());
+	m_plot->setRange(range);
 }
 
 void Plot3DDock::onYMinChanged() {
 	const Lock lock(m_initializing);
-	double ranges[6];
-	m_plot->getRange(ranges);
-	ranges[2] = ui.kleYMin->text().toDouble();
-	m_plot->setRange(ranges);
+	BoundingBox range = m_plot->range();
+	range.setYMin(ui.kleYMin->text().toDouble());
+	m_plot->setRange(range);
 }
 
 void Plot3DDock::onZMinChanged() {
 	const Lock lock(m_initializing);
-	double ranges[6];
-	m_plot->getRange(ranges);
-	ranges[4] = ui.kleZMin->text().toDouble();
-	m_plot->setRange(ranges);
+	BoundingBox range = m_plot->range();
+	range.setZMin(ui.kleZMin->text().toDouble());
+	m_plot->setRange(range);
 }
 
 void Plot3DDock::onXMaxChanged() {
 	const Lock lock(m_initializing);
-	double ranges[6];
-	m_plot->getRange(ranges);
-	ranges[1] = ui.kleXMax->text().toDouble();
-	m_plot->setRange(ranges);
+	BoundingBox range = m_plot->range();
+	range.setXMax(ui.kleXMax->text().toDouble());
+	m_plot->setRange(range);
 }
 
 void Plot3DDock::onYMaxChanged() {
 	const Lock lock(m_initializing);
-	double ranges[6];
-	m_plot->getRange(ranges);
-	ranges[3] = ui.kleYMax->text().toDouble();
-	m_plot->setRange(ranges);
+	BoundingBox range = m_plot->range();
+	range.setYMax(ui.kleYMax->text().toDouble());
+	m_plot->setRange(range);
 }
 
 void Plot3DDock::onZMaxChanged() {
 	const Lock lock(m_initializing);
-	double ranges[6];
-	m_plot->getRange(ranges);
-	ranges[5] = ui.kleZMax->text().toDouble();
-	m_plot->setRange(ranges);
+	BoundingBox range = m_plot->range();
+	range.setZMax(ui.kleZMax->text().toDouble());
+	m_plot->setRange(range);
 }
 
 /*!

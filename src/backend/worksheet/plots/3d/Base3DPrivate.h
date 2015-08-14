@@ -30,6 +30,7 @@
 #define PLOT3D_BASE3DPRIVATE_H
 
 #include "Plot3D.h"
+#include "BoundingBox.h"
 
 #include <vtkSmartPointer.h>
 
@@ -67,9 +68,9 @@ protected:
 	// Scales coordinates. Returns a new instance of vtkPolyData
 	vtkSmartPointer<vtkPolyData> scale(vtkPolyData* data);
 	// Returns a bounding box of all 3d objects
-	void getSystemBounds(double bounds[6]) const;
+	BoundingBox systemBounds() const;
 	// Returns a bounding box of the current 3d object
-	void getBounds(double bounds[6]) const;
+	BoundingBox bounds() const;
 	bool isInitialized() const;
 
 private:
@@ -81,8 +82,7 @@ protected:
 	Plot3D::Scaling xScaling;
 	Plot3D::Scaling yScaling;
 	Plot3D::Scaling zScaling;
-	double rangeBounds[6];
-	bool isRangeInitialized;
+	BoundingBox rangeBounds;
 
 private:
 	Base3D * const baseParent;

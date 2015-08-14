@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : Base3D.h
+    File                 : BoundingBox
     Project              : LabPlot
-    Description          : Base class for 3D objects
+    Description          : Bounding Box
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Minh Ngo (minh@fedoraproject.org)
 
@@ -25,55 +25,47 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef PLOT3D_BOUNDINGBOX_H
+#define PLOT3D_BOUNDINGBOX_H
 
-#ifndef PLOT3D_BASE3D_H
-#define PLOT3D_BASE3D_H
+#include <cmath>
 
-#include "backend/core/AbstractAspect.h"
-#include "Plot3D.h"
+#include <vtkBoundingBox.h>
 
-class vtkProp;
-class vtkProperty;
-class vtkRenderer;
-
-class Base3DPrivate;
-class Base3D : public AbstractAspect {
-		Q_OBJECT
-		Q_DISABLE_COPY(Base3D)
-		Q_DECLARE_PRIVATE(Base3D)
+class BoundingBox : public vtkBoundingBox {
 	public:
-		explicit Base3D(Base3DPrivate* priv);
-		virtual ~Base3D();
-		QIcon icon() const;
-		void setRenderer(vtkRenderer* renderer);
-		void setXScaling(Plot3D::Scaling scaling);
-		void setYScaling(Plot3D::Scaling scaling);
-		void setZScaling(Plot3D::Scaling scaling);
+		inline BoundingBox() : vtkBoundingBox() {}
+		inline BoundingBox(const double bounds[6]) : vtkBoundingBox(bounds) {}
+		inline BoundingBox(double xMin, double xMax,
+				double yMin, double yMax,
+				double zMin, double zMax) : vtkBoundingBox(xMin, xMax, yMin, yMax, zMin, zMax) {}
 
-		void setRange(const BoundingBox& bounds);
-		BoundingBox bounds() const;
+		inline void setXMin(double val) { MinPnt[0] = val; }
+		inline void setXMax(double val) { MaxPnt[0] = val; }
+		inline void setYMin(double val) { MinPnt[1] = val; }
+		inline void setYMax(double val) { MaxPnt[1] = val; }
+		inline void setZMin(double val) { MinPnt[2] = val; }
+		inline void setZMax(double val) { MaxPnt[2] = val; }
 
-		void show(bool pred);
-		bool isVisible() const;
-		void highlight(bool pred);
-		void select(bool pred);
-		bool operator==(vtkProp* prop) const;
-		bool operator!=(vtkProp* prop) const;
+		inline double xMin() const { return MinPnt[0]; }
+		inline double xMax() const { return MaxPnt[0]; }
+		inline double yMin() const { return MinPnt[1]; }
+		inline double yMax() const { return MaxPnt[1]; }
+		inline double zMin() const { return MinPnt[2]; }
+		inline double zMax() const { return MaxPnt[2]; }
 
-	public slots:
-		void remove();
-		void recover();
+		inline double* getBounds() const {
+			double* mutableBounds = const_cast<double*>(bounds);
+			vtkBoundingBox::GetBounds(mutableBounds);
+			return mutableBounds;
+		}
 
-	signals:
-		void removed();
-		// TODO: Emit signals when it's appropriate
-		// Emits when parameters have been changed
-		void parametersChanged();
-		// Emits when visibility has been changed
-		void visibilityChanged(bool);
-
-	protected:
-		const QScopedPointer<Base3DPrivate> d_ptr;
+		inline bool isInitialized() const {
+			return !(isinf(MinPnt[0]) && isinf(MinPnt[1]) && isinf(MinPnt[2])
+					&& isinf(MaxPnt[0]) && isinf(MaxPnt[1]) && isinf(MaxPnt[2]));
+		}
+	private:
+		double bounds[6];
 };
 
 #endif

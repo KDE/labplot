@@ -149,55 +149,27 @@ QIcon Plot3D::icon() const {
 	return KIcon("office-chart-line");
 }
 
-void Plot3D::setRange(const double bounds[6]) {
-	Q_D(Plot3D);
-	for (int i = 0; i < 6; ++i) {
-		d->rangeBounds[i] = bounds[i];
-	}
-
-	d->isRangeInitialized = true;
-
-	foreach(Surface3D* surface, d->surfaces) {
-		surface->setRange(bounds);
-	}
-
-	foreach(Curve3D* curve, d->curves) {
-		curve->setRange(bounds);
-	}
-
-	d->axes->updateBounds();
-	d->vtkItem->refresh();
-}
-
-void Plot3D::getRange(double bounds[6]) {
-	Q_D(Plot3D);
-	if (!d->isRangeInitialized) {
-		double bb[6];
-		getBounds(bb);
-		for (int i = 0; i < 6; ++i)
-			d->rangeBounds[i] = bb[i];
-	}
-
-	for (int i = 0; i < 6; ++i) {
-		bounds[i] = d->rangeBounds[i];
-	}
-}
-
-void Plot3D::getBounds(double bounds[6]) const {
-	vtkBoundingBox bb;
+BoundingBox Plot3D::range() const {
 	Q_D(const Plot3D);
-	double objBounds[6];
+	if (!d->rangeBounds.isInitialized()) {
+		const_cast<BoundingBox&>(d->rangeBounds) = bounds();
+	}
+
+	return d->rangeBounds;
+}
+
+BoundingBox Plot3D::bounds() const {
+	BoundingBox bb;
+	Q_D(const Plot3D);
 	foreach(Surface3D* surface, d->surfaces) {
-		surface->getBounds(objBounds);
-		bb.AddBounds(objBounds);
+		bb.AddBox(surface->bounds());
 	}
 
 	foreach(Curve3D* curve, d->curves) {
-		curve->getBounds(objBounds);
-		bb.AddBounds(objBounds);
+		bb.AddBox(curve->bounds());
 	}
 
-	bb.GetBounds(bounds);
+	return bb;
 }
 
 void Plot3D::configureAspect(AbstractAspect* aspect) {
@@ -573,6 +545,9 @@ STD_SETTER_IMPL(Plot3D, YScaling, Plot3D::Scaling, yScaling, "%1: Y axis scaling
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetZScaling, Plot3D::Scaling, zScaling, updateZScaling)
 STD_SETTER_IMPL(Plot3D, ZScaling, Plot3D::Scaling, zScaling, "%1: Z axis scaling changed")
 
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetRange, BoundingBox, rangeBounds, updateRange)
+STD_SETTER_IMPL(Plot3D, Range, const BoundingBox&, rangeBounds, "%1: bound range changed")
+
 // Background
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundType, PlotArea::BackgroundType, backgroundType, updateBackground)
 STD_SETTER_IMPL(Plot3D, BackgroundType, PlotArea::BackgroundType, backgroundType, "%1: background type changed")
@@ -631,7 +606,7 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	, vtkItem(0)
 	, isInitialized(false)
 	, rectSet(false)
-	, isRangeInitialized(false)
+	, rangeBounds(-INFINITY, INFINITY, -INFINITY, INFINITY, -INFINITY, INFINITY)
 	, axes(0)
 	, xScaling(Plot3D::Scaling_Linear)
 	, yScaling(Plot3D::Scaling_Linear)
@@ -867,6 +842,21 @@ void Plot3DPrivate::updateZScaling() {
 	}
 
 	axes->setZScaling(zScaling);
+}
+
+void Plot3DPrivate::updateRange(bool notify) {
+	qDebug() << Q_FUNC_INFO << __LINE__;
+	foreach(Surface3D* surface, surfaces) {
+		surface->setRange(rangeBounds);
+	}
+
+	foreach(Curve3D* curve, curves) {
+		curve->setRange(rangeBounds);
+	}
+
+	axes->updateBounds();
+	if (notify)
+		emit q->parametersChanged();
 }
 
 void Plot3DPrivate::updateBackground(bool notify) {

@@ -30,6 +30,7 @@
 #define PLOT3DPRIVATE_H
 
 #include "Plot3D.h"
+#include "BoundingBox.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 
 #include <QSet>
@@ -58,6 +59,7 @@ class Plot3DPrivate : public AbstractPlotPrivate{
 		void resetCamera();
 
 		virtual void retransform();
+		void updateRange(bool notify = true);
 		void updateLight(bool notify = true);
 		void updateBackground(bool notify = true);
 		void updateXScaling();
@@ -73,8 +75,7 @@ class Plot3DPrivate : public AbstractPlotPrivate{
 		VTKGraphicsItem *vtkItem;
 		bool isInitialized;
 		bool rectSet;
-		double rangeBounds[6];
-		bool isRangeInitialized;
+		BoundingBox rangeBounds;
 
 		Axes* axes;
 		QSet<Surface3D*> surfaces;

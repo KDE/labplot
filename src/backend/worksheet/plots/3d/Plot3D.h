@@ -35,6 +35,7 @@
 class QMenu;
 class QGLContext;
 class vtkProp;
+class BoundingBox;
 class Plot3DPrivate;
 
 class Plot3D : public AbstractPlot {
@@ -62,14 +63,13 @@ class Plot3D : public AbstractPlot {
 
 		void setRect(const QRectF&);
 		void setContext(QGLContext *context);
-		void getBounds(double bounds[6]) const;
-		void getRange(double bounds[6]);
-		void setRange(const double bounds[6]);
+		BoundingBox bounds() const;
 
 		// General parameters
 		BASIC_D_ACCESSOR_DECL(Plot3D::Scaling, xScaling, XScaling)
 		BASIC_D_ACCESSOR_DECL(Plot3D::Scaling, yScaling, YScaling)
 		BASIC_D_ACCESSOR_DECL(Plot3D::Scaling, zScaling, ZScaling)
+		CLASS_D_ACCESSOR_DECL(BoundingBox, range, Range)
 
 		// Background parameters
 		BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
@@ -160,9 +160,11 @@ class Plot3D : public AbstractPlot {
 		friend class Plot3DSetXScalingCmd;
 		friend class Plot3DSetYScalingCmd;
 		friend class Plot3DSetZScalingCmd;
+		friend class Plot3DSetRangeCmd;
 		void xScalingChanged(Plot3D::Scaling);
 		void yScalingChanged(Plot3D::Scaling);
 		void zScalingChanged(Plot3D::Scaling);
+		void rangeBoundsChanged(const BoundingBox&);
 
 		// Background
 		friend class Plot3DSetBackgroundTypeCmd;

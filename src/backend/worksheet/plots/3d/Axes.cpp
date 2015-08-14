@@ -131,19 +131,18 @@ namespace {
 
 void AxesPrivate::objectScaled(vtkActor* actor) const {
 	vtkCubeAxesActor* cubeAxes = dynamic_cast<vtkCubeAxesActor*>(actor);
-	double bounds[6];
-	getSystemBounds(bounds);
+	const BoundingBox& bounds = systemBounds();
 	if (xScaling != Plot3D::Scaling_Linear) {
 		const int numXValues = 5;
-		const double dx = (bounds[1] - bounds[0]) / (numXValues - 1);
+		const double dx = (bounds.xMax() - bounds.xMin()) / (numXValues - 1);
 		vtkSmartPointer<vtkStringArray> labels = vtkSmartPointer<vtkStringArray>::New();
 
 		if (xScaling == Plot3D::Scaling_Log10)
-			addLabels(bounds[0], dx, numXValues, labels, log10);
+			addLabels(bounds.xMin(), dx, numXValues, labels, log10);
 		else if (xScaling == Plot3D::Scaling_Log2)
-			addLabels(bounds[0], dx, numXValues, labels, log2);
+			addLabels(bounds.xMin(), dx, numXValues, labels, log2);
 		else if (xScaling == Plot3D::Scaling_Ln)
-			addLabels(bounds[0], dx, numXValues, labels, log);
+			addLabels(bounds.xMin(), dx, numXValues, labels, log);
 
 		cubeAxes->SetAxisLabels(0, labels);
 	} else
@@ -151,15 +150,15 @@ void AxesPrivate::objectScaled(vtkActor* actor) const {
 
 	if (yScaling != Plot3D::Scaling_Linear) {
 		const int numYValues = 5;
-		const double dy = (bounds[3] - bounds[2]) / (numYValues - 1);
+		const double dy = (bounds.yMax() - bounds.yMin()) / (numYValues - 1);
 		vtkSmartPointer<vtkStringArray> labels = vtkSmartPointer<vtkStringArray>::New();
 
 		if (yScaling == Plot3D::Scaling_Log10)
-			addLabels(bounds[2], dy, numYValues, labels, log10);
+			addLabels(bounds.yMin(), dy, numYValues, labels, log10);
 		else if (yScaling == Plot3D::Scaling_Log2)
-			addLabels(bounds[2], dy, numYValues, labels, log2);
+			addLabels(bounds.yMin(), dy, numYValues, labels, log2);
 		else if (yScaling == Plot3D::Scaling_Ln)
-			addLabels(bounds[2], dy, numYValues, labels, log);
+			addLabels(bounds.yMin(), dy, numYValues, labels, log);
 
 		cubeAxes->SetAxisLabels(1, labels);
 	} else
@@ -167,15 +166,15 @@ void AxesPrivate::objectScaled(vtkActor* actor) const {
 
 	if (zScaling != Plot3D::Scaling_Linear) {
 		const int numZValues = 5;
-		const double dz = (bounds[5] - bounds[4]) / (numZValues - 1);
+		const double dz = (bounds.zMax() - bounds.zMin()) / (numZValues - 1);
 		vtkSmartPointer<vtkStringArray> labels = vtkSmartPointer<vtkStringArray>::New();
 
 		if (zScaling == Plot3D::Scaling_Log10)
-			addLabels(bounds[4], dz, numZValues, labels, log10);
+			addLabels(bounds.zMin(), dz, numZValues, labels, log10);
 		else if (zScaling == Plot3D::Scaling_Log2)
-			addLabels(bounds[4], dz, numZValues, labels, log2);
+			addLabels(bounds.zMin(), dz, numZValues, labels, log2);
 		else if (zScaling == Plot3D::Scaling_Ln)
-			addLabels(bounds[4], dz, numZValues, labels, log);
+			addLabels(bounds.zMin(), dz, numZValues, labels, log);
 
 		cubeAxes->SetAxisLabels(2, labels);
 	} else
@@ -186,11 +185,10 @@ void AxesPrivate::updateBounds(vtkActor* actor) const {
 	if (!isInitialized())
 		return;
 
-	double bounds[6];
-	getSystemBounds(bounds);
+	const BoundingBox& bb = systemBounds();
 	vtkCubeAxesActor* cubeAxes = dynamic_cast<vtkCubeAxesActor*>(actor);
 
-	cubeAxes->SetBounds(bounds);
+	cubeAxes->SetBounds(bb.getBounds());
 }
 
 void AxesPrivate::modifyActor(vtkRenderer* renderer, vtkActor* actor) const {
