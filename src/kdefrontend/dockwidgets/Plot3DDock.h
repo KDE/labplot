@@ -111,6 +111,8 @@ class Plot3DDock: public QWidget {
 		void yScalingChanged(Plot3D::Scaling);
 		void zScalingChanged(Plot3D::Scaling);
 
+		void rangeBoundsChanged(const BoundingBox&);
+
 		//"Background"-tab
 		void backgroundTypeChanged(PlotArea::BackgroundType);
 		void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);

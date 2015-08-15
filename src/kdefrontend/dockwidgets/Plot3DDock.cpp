@@ -298,6 +298,8 @@ void Plot3DDock::onZScalingChanged(int index) {
 void Plot3DDock::onAutoScaleXChanged(int state) {
 	const Lock lock(m_initializing);
 	const bool b = (state == Qt::Checked);
+	ui.kleXMin->setEnabled(!b);
+	ui.kleXMax->setEnabled(!b);
 	if (b) {
 		const BoundingBox& bounds = m_plot->bounds();
 		BoundingBox range = m_plot->range();
@@ -312,6 +314,8 @@ void Plot3DDock::onAutoScaleXChanged(int state) {
 void Plot3DDock::onAutoScaleYChanged(int state) {
 	const Lock lock(m_initializing);
 	const bool b = (state == Qt::Checked);
+	ui.kleYMin->setEnabled(!b);
+	ui.kleYMax->setEnabled(!b);
 	if (b) {
 		const BoundingBox& bounds = m_plot->bounds();
 		BoundingBox range = m_plot->range();
@@ -326,6 +330,8 @@ void Plot3DDock::onAutoScaleYChanged(int state) {
 void Plot3DDock::onAutoScaleZChanged(int state) {
 	const Lock lock(m_initializing);
 	const bool b = (state == Qt::Checked);
+	ui.kleZMin->setEnabled(!b);
+	ui.kleZMax->setEnabled(!b);
 	if (b) {
 		const BoundingBox& bounds = m_plot->bounds();
 		BoundingBox range = m_plot->range();
@@ -712,6 +718,18 @@ void Plot3DDock::zScalingChanged(Plot3D::Scaling scaling) {
 	ui.cbZScaling->setCurrentIndex(scaling);
 }
 
+void Plot3DDock::rangeBoundsChanged(const BoundingBox& bounds) {
+	if (m_initializing)
+		return;
+
+	ui.kleXMin->setText(QString::number(bounds.xMin()));
+	ui.kleYMin->setText(QString::number(bounds.yMin()));
+	ui.kleZMin->setText(QString::number(bounds.zMin()));
+	ui.kleXMax->setText(QString::number(bounds.xMax()));
+	ui.kleYMax->setText(QString::number(bounds.yMax()));
+	ui.kleZMax->setText(QString::number(bounds.zMax()));
+}
+
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
@@ -729,6 +747,7 @@ void Plot3DDock::load(){
 	xScalingChanged(m_plot->xScaling());
 	yScalingChanged(m_plot->yScaling());
 	zScalingChanged(m_plot->zScaling());
+	rangeBoundsChanged(m_plot->range());
 
 	//Background
 	backgroundTypeChanged(m_plot->backgroundType());
