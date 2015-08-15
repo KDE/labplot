@@ -369,19 +369,25 @@ void Plot3D::initActions() {
 	shiftUpZAction = new KAction(KIcon("shift-up-z"), i18n("shift up Z"), this);
 	shiftDownZAction = new KAction(KIcon("shift-down-z"), i18n("shift down Z"), this);
 
-// 	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(scaleAuto()));
-// 	connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(scaleAutoX()));
-// 	connect(scaleAutoYAction, SIGNAL(triggered()), SLOT(scaleAutoY()));
+	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(autoScale()));
+	connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(autoScaleX()));
+	connect(scaleAutoYAction, SIGNAL(triggered()), SLOT(autoScaleY()));
+	connect(scaleAutoZAction, SIGNAL(triggered()), SLOT(autoScaleZ()));
 	connect(zoomInAction, SIGNAL(triggered()), SLOT(zoomIn()));
 	connect(zoomOutAction, SIGNAL(triggered()), SLOT(zoomOut()));
-// 	connect(zoomInXAction, SIGNAL(triggered()), SLOT(zoomInX()));
-// 	connect(zoomOutXAction, SIGNAL(triggered()), SLOT(zoomOutX()));
-// 	connect(zoomInYAction, SIGNAL(triggered()), SLOT(zoomInY()));
-// 	connect(zoomOutYAction, SIGNAL(triggered()), SLOT(zoomOutY()));
-// 	connect(shiftLeftXAction, SIGNAL(triggered()), SLOT(shiftLeftX()));
-// 	connect(shiftRightXAction, SIGNAL(triggered()), SLOT(shiftRightX()));
-// 	connect(shiftUpYAction, SIGNAL(triggered()), SLOT(shiftUpY()));
-// 	connect(shiftDownYAction, SIGNAL(triggered()), SLOT(shiftDownY()));
+	connect(zoomInXAction, SIGNAL(triggered()), SLOT(zoomInX()));
+	connect(zoomOutXAction, SIGNAL(triggered()), SLOT(zoomOutX()));
+	connect(zoomInYAction, SIGNAL(triggered()), SLOT(zoomInY()));
+	connect(zoomOutYAction, SIGNAL(triggered()), SLOT(zoomOutY()));
+	connect(zoomOutZAction, SIGNAL(triggered()), SLOT(zoomOutZ()));
+ 	connect(zoomInZAction, SIGNAL(triggered()), SLOT(zoomInZ()));
+
+	connect(shiftLeftXAction, SIGNAL(triggered()), SLOT(shiftLeftX()));
+	connect(shiftRightXAction, SIGNAL(triggered()), SLOT(shiftRightX()));
+	connect(shiftUpYAction, SIGNAL(triggered()), SLOT(shiftUpY()));
+	connect(shiftDownYAction, SIGNAL(triggered()), SLOT(shiftDownY()));
+	connect(shiftUpZAction, SIGNAL(triggered()), SLOT(shiftUpZ()));
+	connect(shiftDownZAction, SIGNAL(triggered()), SLOT(shiftDownZ()));
 
 	//rotation action
 	rotateClockwiseAction = new KAction(KIcon("rotate-clockwise"), i18n("rotate clockwise"), this);
@@ -398,12 +404,128 @@ void Plot3D::initActions() {
 // 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 }
 
+void Plot3D::autoScale() {
+	setRange(bounds());
+}
+
+void Plot3D::autoScaleX() {
+	const BoundingBox& bb = bounds();
+	BoundingBox r = range();
+	r.setXMin(bb.xMin());
+	r.setXMax(bb.xMax());
+	setRange(r);
+}
+
+void Plot3D::autoScaleY() {
+	const BoundingBox& bb = bounds();
+	BoundingBox r = range();
+	r.setYMin(bb.yMin());
+	r.setYMax(bb.yMax());
+	setRange(r);
+}
+
+void Plot3D::autoScaleZ() {
+	const BoundingBox& bb = bounds();
+	BoundingBox r = range();
+	r.setZMin(bb.zMin());
+	r.setZMax(bb.zMax());
+	setRange(r);
+}
+
 void Plot3D::zoomIn() {
-	Q_D(Plot3D);
+	BoundingBox r = range();
+	r.Scale(0.9, 0.9, 0.9);
+	setRange(r);
 }
 
 void Plot3D::zoomOut() {
-	Q_D(Plot3D);
+	BoundingBox r = range();
+	r.Scale(1.1, 1.1, 1.1);
+	setRange(r);
+}
+
+void Plot3D::zoomInX() {
+	BoundingBox r = range();
+	r.Scale(0.9, 1, 1);
+	setRange(r);
+}
+
+void Plot3D::zoomOutX() {
+	BoundingBox r = range();
+	r.Scale(1.1, 1, 1);
+	setRange(r);
+}
+
+void Plot3D::zoomInY() {
+	BoundingBox r = range();
+	r.Scale(1, 0.9, 1);
+	setRange(r);
+}
+
+void Plot3D::zoomOutY() {
+	BoundingBox r = range();
+	r.Scale(1, 1.1, 1);
+	setRange(r);
+}
+
+void Plot3D::zoomInZ() {
+	BoundingBox r = range();
+	r.Scale(1, 1, 0.9);
+	setRange(r);
+}
+
+void Plot3D::zoomOutZ() {
+	BoundingBox r = range();
+	r.Scale(1, 1, 1.1);
+	setRange(r);
+}
+
+void Plot3D::shiftLeftX() {
+	BoundingBox r = range();
+	const double dx = (r.xMax() - r.xMin()) * 0.1;
+	r.setXMin(r.xMin() - dx);
+	r.setXMax(r.xMax() - dx);
+	setRange(r);
+}
+
+void Plot3D::shiftRightX() {
+	BoundingBox r = range();
+	const double dx = (r.xMax() - r.xMin()) * 0.1;
+	r.setXMin(r.xMin() + dx);
+	r.setXMax(r.xMax() + dx);
+	setRange(r);
+}
+
+void Plot3D::shiftUpY() {
+	BoundingBox r = range();
+	const double dy = (r.yMax() - r.yMin()) * 0.1;
+	r.setYMin(r.yMin() + dy);
+	r.setYMax(r.yMax() + dy);
+	setRange(r);
+}
+
+void Plot3D::shiftDownY() {
+	BoundingBox r = range();
+	const double dy = (r.yMax() - r.yMin()) * 0.1;
+	r.setYMin(r.yMin() - dy);
+	r.setYMax(r.yMax() - dy);
+	setRange(r);
+}
+
+void Plot3D::shiftUpZ() {
+	BoundingBox r = range();
+	const double dz = (r.zMax() - r.zMin()) * 0.1;
+	r.setZMin(r.zMin() + dz);
+	r.setZMax(r.zMax() + dz);
+	setRange(r);
+}
+
+void Plot3D::shiftDownZ() {
+	BoundingBox r = range();
+	const double dz = (r.zMax() - r.zMin()) * 0.1;
+	r.setZMin(r.zMin() - dz);
+	r.setZMax(r.zMax() - dz);
+	setRange(r);
 }
 
 void Plot3D::initMenus(){
@@ -424,10 +546,11 @@ void Plot3D::initMenus(){
 	zoomMenu->addSeparator();
 	zoomMenu->addAction(zoomInXAction);
 	zoomMenu->addAction(zoomOutXAction);
-	zoomMenu->addAction(zoomOutZAction);
 	zoomMenu->addSeparator();
 	zoomMenu->addAction(zoomInYAction);
 	zoomMenu->addAction(zoomOutYAction);
+	zoomMenu->addSeparator();
+	zoomMenu->addAction(zoomInZAction);
 	zoomMenu->addAction(zoomOutZAction);
 	zoomMenu->addSeparator();
 	zoomMenu->addAction(shiftLeftXAction);

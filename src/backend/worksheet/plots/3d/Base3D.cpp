@@ -323,10 +323,9 @@ BoundingBox Base3DPrivate::systemBounds() const {
 BoundingBox Base3DPrivate::bounds() const {
 	if (polyData)
 		return BoundingBox(polyData->GetBounds());
-	else if (actor)
+	if (actor)
 		return BoundingBox(actor->GetBounds());
-	else
-		return BoundingBox();
+	return BoundingBox();
 }
 
 bool Base3DPrivate::isInitialized() const {

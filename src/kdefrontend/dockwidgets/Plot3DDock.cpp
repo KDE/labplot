@@ -301,13 +301,10 @@ void Plot3DDock::onAutoScaleXChanged(int state) {
 	ui.kleXMin->setEnabled(!b);
 	ui.kleXMax->setEnabled(!b);
 	if (b) {
+		m_plot->autoScaleX();
 		const BoundingBox& bounds = m_plot->bounds();
-		BoundingBox range = m_plot->range();
-		range.setXMin(bounds.xMin());
-		range.setXMax(bounds.xMax());
-		m_plot->setRange(range);
-		ui.kleXMin->setText(QString::number(range.xMin()));
-		ui.kleXMax->setText(QString::number(range.xMax()));
+		ui.kleXMin->setText(QString::number(bounds.xMin()));
+		ui.kleXMax->setText(QString::number(bounds.xMax()));
 	}
 }
 
@@ -317,13 +314,10 @@ void Plot3DDock::onAutoScaleYChanged(int state) {
 	ui.kleYMin->setEnabled(!b);
 	ui.kleYMax->setEnabled(!b);
 	if (b) {
+		m_plot->autoScaleY();
 		const BoundingBox& bounds = m_plot->bounds();
-		BoundingBox range = m_plot->range();
-		range.setYMin(bounds.yMin());
-		range.setYMax(bounds.yMax());
-		m_plot->setRange(range);
-		ui.kleYMin->setText(QString::number(range.yMin()));
-		ui.kleYMax->setText(QString::number(range.yMax()));
+		ui.kleYMin->setText(QString::number(bounds.yMin()));
+		ui.kleYMax->setText(QString::number(bounds.yMax()));
 	}
 }
 
@@ -333,13 +327,10 @@ void Plot3DDock::onAutoScaleZChanged(int state) {
 	ui.kleZMin->setEnabled(!b);
 	ui.kleZMax->setEnabled(!b);
 	if (b) {
+		m_plot->autoScaleZ();
 		const BoundingBox& bounds = m_plot->bounds();
-		BoundingBox range = m_plot->range();
-		range.setZMin(bounds.zMin());
-		range.setZMax(bounds.zMax());
-		m_plot->setRange(range);
-		ui.kleZMin->setText(QString::number(range.zMin()));
-		ui.kleZMax->setText(QString::number(range.zMax()));
+		ui.kleZMin->setText(QString::number(bounds.zMin()));
+		ui.kleZMax->setText(QString::number(bounds.zMax()));
 	}
 }
 

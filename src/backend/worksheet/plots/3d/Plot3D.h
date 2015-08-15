@@ -93,6 +93,34 @@ class Plot3D : public AbstractPlot {
 		typedef Plot3D BaseClass;
 		typedef Plot3DPrivate Private;
 
+	public slots:
+		// Zoom
+		void autoScale();
+		void autoScaleX();
+		void autoScaleY();
+		void autoScaleZ();
+
+		void zoomIn();
+		void zoomOut();
+
+		void zoomInX();
+		void zoomOutX();
+
+		void zoomInY();
+		void zoomOutY();
+
+		void zoomInZ();
+		void zoomOutZ();
+
+		void shiftLeftX();
+		void shiftRightX();
+
+		void shiftUpY();
+		void shiftDownY();
+
+		void shiftUpZ();
+		void shiftDownZ();
+
 	private:
 		void initActions();
 		void initMenus();
@@ -150,10 +178,6 @@ class Plot3D : public AbstractPlot {
 		void onObjectClicked(vtkProp*);
 		void onObjectHovered(vtkProp*);
 		void onParametersChanged();
-
-		// Zoom
-		void zoomIn();
-		void zoomOut();
 
 	signals:
 		// General
