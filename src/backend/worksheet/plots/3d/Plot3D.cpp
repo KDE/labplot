@@ -149,27 +149,20 @@ QIcon Plot3D::icon() const {
 	return KIcon("office-chart-line");
 }
 
-BoundingBox Plot3D::range() const {
+BoundingBox Plot3D::ranges() const {
 	Q_D(const Plot3D);
-	if (!d->rangeBounds.isInitialized()) {
-		const_cast<BoundingBox&>(d->rangeBounds) = bounds();
+	if (!d->ranges.isInitialized()) {
+		qDebug() << Q_FUNC_INFO << "ranges has not been initialized. returning bounds";
+		return bounds();
 	}
 
-	return d->rangeBounds;
+	qDebug() << Q_FUNC_INFO << "returning ranges";
+	return d->ranges;
 }
 
 BoundingBox Plot3D::bounds() const {
-	BoundingBox bb;
 	Q_D(const Plot3D);
-	foreach(Surface3D* surface, d->surfaces) {
-		bb.AddBox(surface->bounds());
-	}
-
-	foreach(Curve3D* curve, d->curves) {
-		bb.AddBox(curve->bounds());
-	}
-
-	return bb;
+	return d->bounds;
 }
 
 void Plot3D::configureAspect(AbstractAspect* aspect) {
@@ -178,6 +171,7 @@ void Plot3D::configureAspect(AbstractAspect* aspect) {
 	connect(aspect, SIGNAL(parametersChanged()), SLOT(onParametersChanged()));
 	connect(aspect, SIGNAL(removed()), d->vtkItem, SLOT(refresh()));
 	connect(aspect, SIGNAL(removed()), SLOT(onItemRemoved()));
+	connect(aspect, SIGNAL(boundsChanged(const BoundingBox&)), SLOT(updateBounds()));
 }
 
 void Plot3D::onParametersChanged() {
@@ -334,6 +328,22 @@ void Plot3D::setPrinting(bool pred) {
 	AbstractPlot::setPrinting(pred);
 }
 
+void Plot3D::updateBounds() {
+	BoundingBox bb;
+	Q_D(Plot3D);
+	foreach(Surface3D* surface, d->surfaces)
+		bb.AddBox(surface->bounds());
+
+	foreach(Curve3D* curve, d->curves)
+		bb.AddBox(curve->bounds());
+
+	if (bb != d->bounds) {
+		d->bounds = bb;
+		emit boundsChanged(bb);
+	}
+
+}
+
 void Plot3D::initActions() {
 	Q_D(Plot3D);
 	//"add new" actions
@@ -405,127 +415,127 @@ void Plot3D::initActions() {
 }
 
 void Plot3D::autoScale() {
-	setRange(bounds());
+	setRanges(bounds());
 }
 
 void Plot3D::autoScaleX() {
 	const BoundingBox& bb = bounds();
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	r.setXMin(bb.xMin());
 	r.setXMax(bb.xMax());
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::autoScaleY() {
 	const BoundingBox& bb = bounds();
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	r.setYMin(bb.yMin());
 	r.setYMax(bb.yMax());
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::autoScaleZ() {
 	const BoundingBox& bb = bounds();
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	r.setZMin(bb.zMin());
 	r.setZMax(bb.zMax());
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::zoomIn() {
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	r.Scale(0.9, 0.9, 0.9);
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::zoomOut() {
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	r.Scale(1.1, 1.1, 1.1);
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::zoomInX() {
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	r.Scale(0.9, 1, 1);
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::zoomOutX() {
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	r.Scale(1.1, 1, 1);
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::zoomInY() {
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	r.Scale(1, 0.9, 1);
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::zoomOutY() {
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	r.Scale(1, 1.1, 1);
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::zoomInZ() {
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	r.Scale(1, 1, 0.9);
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::zoomOutZ() {
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	r.Scale(1, 1, 1.1);
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::shiftLeftX() {
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	const double dx = (r.xMax() - r.xMin()) * 0.1;
 	r.setXMin(r.xMin() - dx);
 	r.setXMax(r.xMax() - dx);
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::shiftRightX() {
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	const double dx = (r.xMax() - r.xMin()) * 0.1;
 	r.setXMin(r.xMin() + dx);
 	r.setXMax(r.xMax() + dx);
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::shiftUpY() {
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	const double dy = (r.yMax() - r.yMin()) * 0.1;
 	r.setYMin(r.yMin() + dy);
 	r.setYMax(r.yMax() + dy);
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::shiftDownY() {
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	const double dy = (r.yMax() - r.yMin()) * 0.1;
 	r.setYMin(r.yMin() - dy);
 	r.setYMax(r.yMax() - dy);
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::shiftUpZ() {
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	const double dz = (r.zMax() - r.zMin()) * 0.1;
 	r.setZMin(r.zMin() + dz);
 	r.setZMax(r.zMax() + dz);
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::shiftDownZ() {
-	BoundingBox r = range();
+	BoundingBox r = ranges();
 	const double dz = (r.zMax() - r.zMin()) * 0.1;
 	r.setZMin(r.zMin() - dz);
 	r.setZMax(r.zMax() - dz);
-	setRange(r);
+	setRanges(r);
 }
 
 void Plot3D::initMenus(){
@@ -668,8 +678,8 @@ STD_SETTER_IMPL(Plot3D, YScaling, Plot3D::Scaling, yScaling, "%1: Y axis scaling
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetZScaling, Plot3D::Scaling, zScaling, updateZScaling)
 STD_SETTER_IMPL(Plot3D, ZScaling, Plot3D::Scaling, zScaling, "%1: Z axis scaling changed")
 
-STD_SETTER_CMD_IMPL_F_S(Plot3D, SetRange, BoundingBox, rangeBounds, updateRange)
-STD_SETTER_IMPL(Plot3D, Range, const BoundingBox&, rangeBounds, "%1: bound range changed")
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetRanges, BoundingBox, ranges, updateRanges)
+STD_SETTER_IMPL(Plot3D, Ranges, const BoundingBox&, ranges, "%1: bound range changed")
 
 // Background
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetBackgroundType, PlotArea::BackgroundType, backgroundType, updateBackground)
@@ -729,7 +739,6 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	, vtkItem(0)
 	, isInitialized(false)
 	, rectSet(false)
-	, rangeBounds(-INFINITY, INFINITY, -INFINITY, INFINITY, -INFINITY, INFINITY)
 	, axes(0)
 	, xScaling(Plot3D::Scaling_Linear)
 	, yScaling(Plot3D::Scaling_Linear)
@@ -878,6 +887,8 @@ void Plot3DPrivate::init() {
 		q->configureAspect(axes);
 	}
 
+	qDebug() << Q_FUNC_INFO << __LINE__;
+
 	foreach(Surface3D* surface, surfaces) {
 		surface->setRenderer(renderer);
 		q->configureAspect(surface);
@@ -967,14 +978,14 @@ void Plot3DPrivate::updateZScaling() {
 	axes->setZScaling(zScaling);
 }
 
-void Plot3DPrivate::updateRange(bool notify) {
+void Plot3DPrivate::updateRanges(bool notify) {
 	qDebug() << Q_FUNC_INFO << __LINE__;
 	foreach(Surface3D* surface, surfaces) {
-		surface->setRange(rangeBounds);
+		surface->setRanges(ranges);
 	}
 
 	foreach(Curve3D* curve, curves) {
-		curve->setRange(rangeBounds);
+		curve->setRanges(ranges);
 	}
 
 	axes->updateBounds();

@@ -256,15 +256,15 @@ bool Surface3D::load(XmlStreamReader* reader) {
 			if (!readCommentElement(reader))
 				return false;
 		} else if (sectionName == "matrix") {
-			qDebug() << Q_FUNC_INFO << "Load matrix";
+			// qDebug() << Q_FUNC_INFO << "Load matrix";
 			if (!d->loadMatrixConfig(reader))
 				return false;
 		} else if (sectionName == "spreadsheet") {
-			qDebug() << Q_FUNC_INFO << "Load spreadsheet";
+			// qDebug() << Q_FUNC_INFO << "Load spreadsheet";
 			if (!d->loadSpreadsheetConfig(reader))
 				return false;
 		} else if (sectionName == "file") {
-			qDebug() << Q_FUNC_INFO << "Load file";
+			// qDebug() << Q_FUNC_INFO << "Load file";
 			if (!d->loadFileDataConfig(reader))
 				return false;
 		}
@@ -393,12 +393,13 @@ namespace {
 	vtkSmartPointer<vtkPolyData> renderTriangles(vtkSmartPointer<vtkPoints>& points,
 			vtkSmartPointer<vtkCellArray>& triangles) {
 
-		qDebug() << Q_FUNC_INFO << "Amount of triangles:" << triangles->GetNumberOfCells();
+		// qDebug() << Q_FUNC_INFO << "Amount of triangles:" << triangles->GetNumberOfCells();
 
 		vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
 
 		polydata->SetPoints(points);
 		polydata->SetPolys(triangles);
+		// qDebug() << Q_FUNC_INFO << polydata->GetBounds()[0] << polydata->GetBounds()[1];
 
 		return polydata;
 	}
@@ -433,8 +434,10 @@ namespace {
 }
 
 vtkSmartPointer<vtkPolyData> Surface3DPrivate::generateMatrixData() const {
-	if (!matrix)
+	if (!matrix) {
+		qDebug() << "Matrix has not been set";
 		return vtkSmartPointer<vtkPolyData>();
+	}
 
 	qDebug() << Q_FUNC_INFO << "Triangles rendering";
 	vtkSmartPointer<vtkCellArray> triangles = vtkSmartPointer<vtkCellArray>::New();

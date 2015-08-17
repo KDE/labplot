@@ -73,10 +73,10 @@ void Base3D::setRenderer(vtkRenderer* renderer) {
 	}
 }
 
-void Base3D::setRange(const BoundingBox& bounds) {
+void Base3D::setRanges(const BoundingBox& bounds) {
 	Q_D(Base3D);
-	d->rangeBounds = bounds;
-	d->updateRange();
+	d->ranges = bounds;
+	d->updateRanges();
 }
 
 BoundingBox Base3D::bounds() const {
@@ -179,7 +179,6 @@ Base3DPrivate::Base3DPrivate(const QString& name, Base3D* baseParent, vtkActor* 
 	: xScaling(Plot3D::Scaling_Linear)
 	, yScaling(Plot3D::Scaling_Linear)
 	, zScaling(Plot3D::Scaling_Linear)
-	, rangeBounds(-INFINITY, INFINITY, -INFINITY, INFINITY, -INFINITY, INFINITY)
 	, baseParent(baseParent)
 	, aspectName(name)
 	, isHighlighted(false)
@@ -224,32 +223,33 @@ void Base3DPrivate::notify(bool notify) {
 	}
 }
 
-void Base3DPrivate::updateRange(bool needNotify) {
+void Base3DPrivate::updateRanges(bool needNotify) {
 	if (!isInitialized() || !polyData) {
 		rangedPolyData = polyData;
 		return;
 	}
 
-	if (!rangeBounds.isInitialized()) {
+	if (!ranges.isInitialized()) {
+		// If ranges have not been initialized then just return an original object.
 		rangedPolyData = polyData;
 		updateScaling(needNotify);
 		return;
 	}
 
 	vtkNew<vtkPlane> planes[6];
-	planes[0]->SetOrigin(rangeBounds.xMin(), 0, 0);
+	planes[0]->SetOrigin(ranges.xMin(), 0, 0);
 	planes[0]->SetNormal(1, 0, 0);
-	planes[1]->SetOrigin(rangeBounds.xMax(), 0, 0);
+	planes[1]->SetOrigin(ranges.xMax(), 0, 0);
 	planes[1]->SetNormal(-1, 0, 0);
 
-	planes[2]->SetOrigin(0, rangeBounds.yMin(), 0);
+	planes[2]->SetOrigin(0, ranges.yMin(), 0);
 	planes[2]->SetNormal(0, 1, 0);
-	planes[3]->SetOrigin(0, rangeBounds.yMax(), 0);
+	planes[3]->SetOrigin(0, ranges.yMax(), 0);
 	planes[3]->SetNormal(0, -1, 0);
 
-	planes[4]->SetOrigin(0, 0, rangeBounds.zMin());
+	planes[4]->SetOrigin(0, 0, ranges.zMin());
 	planes[4]->SetNormal(0, 0, 1);
-	planes[5]->SetOrigin(0, 0, rangeBounds.zMax());
+	planes[5]->SetOrigin(0, 0, ranges.zMax());
 	planes[5]->SetNormal(0, 0, -1);
 
 	QVector<vtkSmartPointer<vtkClipPolyData> > clippersPipeline;
@@ -289,8 +289,15 @@ void Base3DPrivate::update() {
 		return;
 
 	polyData = createData();
+	if (polyData) {
+		const BoundingBox newBB(polyData->GetBounds());
+		if (newBB != boundingBox) {
+			boundingBox = newBB;
+			emit baseParent->boundsChanged(boundingBox);
+		}
+	}
 
-	updateRange(false);
+	updateRanges(false);
 
 	modifyActor(renderer, actor);
 
@@ -323,9 +330,7 @@ BoundingBox Base3DPrivate::systemBounds() const {
 BoundingBox Base3DPrivate::bounds() const {
 	if (polyData)
 		return BoundingBox(polyData->GetBounds());
-	if (actor)
-		return BoundingBox(actor->GetBounds());
-	return BoundingBox();
+	return BoundingBox(actor->GetBounds());
 }
 
 bool Base3DPrivate::isInitialized() const {

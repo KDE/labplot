@@ -34,7 +34,8 @@
 
 class BoundingBox : public vtkBoundingBox {
 	public:
-		inline BoundingBox() : vtkBoundingBox() {}
+		inline BoundingBox()
+			: vtkBoundingBox() {}
 		inline BoundingBox(const double bounds[6]) : vtkBoundingBox(bounds) {}
 		inline BoundingBox(double xMin, double xMax,
 				double yMin, double yMax,
@@ -61,8 +62,8 @@ class BoundingBox : public vtkBoundingBox {
 		}
 
 		inline bool isInitialized() const {
-			return !(isinf(MinPnt[0]) && isinf(MinPnt[1]) && isinf(MinPnt[2])
-					&& isinf(MaxPnt[0]) && isinf(MaxPnt[1]) && isinf(MaxPnt[2]));
+			return !(MinPnt[0] == VTK_DOUBLE_MAX  && MinPnt[1] == VTK_DOUBLE_MAX && MinPnt[2] == VTK_DOUBLE_MAX
+					&& MaxPnt[0] == VTK_DOUBLE_MIN && MaxPnt[1] == VTK_DOUBLE_MIN && MaxPnt[2] == VTK_DOUBLE_MIN);
 		}
 	private:
 		double bounds[6];

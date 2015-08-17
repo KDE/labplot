@@ -103,6 +103,7 @@ class Plot3DDock: public QWidget {
 		void onConeAngleChanged(int);
 
 		//SLOTs for changes triggered in Plot3D
+		void boundsChanged(const BoundingBox&);
 		//"General"-tab
 		void descriptionChanged(const AbstractAspect*);
 		void rectChanged(const QRectF&);
@@ -111,7 +112,7 @@ class Plot3DDock: public QWidget {
 		void yScalingChanged(Plot3D::Scaling);
 		void zScalingChanged(Plot3D::Scaling);
 
-		void rangeBoundsChanged(const BoundingBox&);
+		void rangesChanged(const BoundingBox&);
 
 		//"Background"-tab
 		void backgroundTypeChanged(PlotArea::BackgroundType);

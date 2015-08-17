@@ -59,7 +59,7 @@ public:
 
 	// Update methods
 	void update();
-	void updateRange(bool needNotify = true);
+	void updateRanges(bool needNotify = true);
 	void updateScaling(bool needNotify = true);
 
 protected:
@@ -82,7 +82,8 @@ protected:
 	Plot3D::Scaling xScaling;
 	Plot3D::Scaling yScaling;
 	Plot3D::Scaling zScaling;
-	BoundingBox rangeBounds;
+	BoundingBox boundingBox;
+	BoundingBox ranges;
 
 private:
 	Base3D * const baseParent;

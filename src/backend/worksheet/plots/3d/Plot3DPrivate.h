@@ -59,7 +59,7 @@ class Plot3DPrivate : public AbstractPlotPrivate{
 		void resetCamera();
 
 		virtual void retransform();
-		void updateRange(bool notify = true);
+		void updateRanges(bool notify = true);
 		void updateLight(bool notify = true);
 		void updateBackground(bool notify = true);
 		void updateXScaling();
@@ -75,7 +75,8 @@ class Plot3DPrivate : public AbstractPlotPrivate{
 		VTKGraphicsItem *vtkItem;
 		bool isInitialized;
 		bool rectSet;
-		BoundingBox rangeBounds;
+		BoundingBox bounds;
+		BoundingBox ranges;
 
 		Axes* axes;
 		QSet<Surface3D*> surfaces;

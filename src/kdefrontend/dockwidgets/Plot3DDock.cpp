@@ -192,6 +192,7 @@ void Plot3DDock::setPlots(const QList<Plot3D*>& plots){
 	connect(m_plot, SIGNAL(xScalingChanged(Plot3D::Scaling)), SLOT(xScalingChanged(Plot3D::Scaling)));
 	connect(m_plot, SIGNAL(yScalingChanged(Plot3D::Scaling)), SLOT(yScalingChanged(Plot3D::Scaling)));
 	connect(m_plot, SIGNAL(zScalingChanged(Plot3D::Scaling)), SLOT(zScalingChanged(Plot3D::Scaling)));
+	connect(m_plot, SIGNAL(boundsChanged(const BoundingBox&)), SLOT(boundsChanged(const BoundingBox&)));
 
 	//background
 	connect(m_plot, SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), SLOT(backgroundTypeChanged(PlotArea::BackgroundType)));
@@ -336,44 +337,44 @@ void Plot3DDock::onAutoScaleZChanged(int state) {
 
 void Plot3DDock::onXMinChanged() {
 	const Lock lock(m_initializing);
-	BoundingBox range = m_plot->range();
-	range.setXMin(ui.kleXMin->text().toDouble());
-	m_plot->setRange(range);
+	BoundingBox ranges = m_plot->ranges();
+	ranges.setXMin(ui.kleXMin->text().toDouble());
+	m_plot->setRanges(ranges);
 }
 
 void Plot3DDock::onYMinChanged() {
 	const Lock lock(m_initializing);
-	BoundingBox range = m_plot->range();
-	range.setYMin(ui.kleYMin->text().toDouble());
-	m_plot->setRange(range);
+	BoundingBox ranges = m_plot->ranges();
+	ranges.setYMin(ui.kleYMin->text().toDouble());
+	m_plot->setRanges(ranges);
 }
 
 void Plot3DDock::onZMinChanged() {
 	const Lock lock(m_initializing);
-	BoundingBox range = m_plot->range();
-	range.setZMin(ui.kleZMin->text().toDouble());
-	m_plot->setRange(range);
+	BoundingBox ranges = m_plot->ranges();
+	ranges.setZMin(ui.kleZMin->text().toDouble());
+	m_plot->setRanges(ranges);
 }
 
 void Plot3DDock::onXMaxChanged() {
 	const Lock lock(m_initializing);
-	BoundingBox range = m_plot->range();
-	range.setXMax(ui.kleXMax->text().toDouble());
-	m_plot->setRange(range);
+	BoundingBox ranges = m_plot->ranges();
+	ranges.setXMax(ui.kleXMax->text().toDouble());
+	m_plot->setRanges(ranges);
 }
 
 void Plot3DDock::onYMaxChanged() {
 	const Lock lock(m_initializing);
-	BoundingBox range = m_plot->range();
-	range.setYMax(ui.kleYMax->text().toDouble());
-	m_plot->setRange(range);
+	BoundingBox ranges = m_plot->ranges();
+	ranges.setYMax(ui.kleYMax->text().toDouble());
+	m_plot->setRanges(ranges);
 }
 
 void Plot3DDock::onZMaxChanged() {
 	const Lock lock(m_initializing);
-	BoundingBox range = m_plot->range();
-	range.setZMax(ui.kleZMax->text().toDouble());
-	m_plot->setRange(range);
+	BoundingBox ranges = m_plot->ranges();
+	ranges.setZMax(ui.kleZMax->text().toDouble());
+	m_plot->setRanges(ranges);
 }
 
 /*!
@@ -556,6 +557,10 @@ void Plot3DDock::rectChanged(const QRectF& rect){
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), Worksheet::Centimeter));
 }
 
+void Plot3DDock::boundsChanged(const BoundingBox&) {
+	rangesChanged(m_plot->ranges());
+}
+
 void Plot3DDock::visibleChanged(bool on){
 	if (m_initializing)
 		return;
@@ -709,7 +714,7 @@ void Plot3DDock::zScalingChanged(Plot3D::Scaling scaling) {
 	ui.cbZScaling->setCurrentIndex(scaling);
 }
 
-void Plot3DDock::rangeBoundsChanged(const BoundingBox& bounds) {
+void Plot3DDock::rangesChanged(const BoundingBox& bounds) {
 	if (m_initializing)
 		return;
 
@@ -725,6 +730,7 @@ void Plot3DDock::rangeBoundsChanged(const BoundingBox& bounds) {
 //******************** SETTINGS *******************************
 //*************************************************************
 void Plot3DDock::load(){
+	qDebug() << Q_FUNC_INFO;
 	//General
 	visibleChanged(m_plot->isVisible());
 	rectChanged(m_plot->rect());
@@ -738,7 +744,7 @@ void Plot3DDock::load(){
 	xScalingChanged(m_plot->xScaling());
 	yScalingChanged(m_plot->yScaling());
 	zScalingChanged(m_plot->zScaling());
-	rangeBoundsChanged(m_plot->range());
+	rangesChanged(m_plot->ranges());
 
 	//Background
 	backgroundTypeChanged(m_plot->backgroundType());

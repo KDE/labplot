@@ -69,7 +69,7 @@ class Plot3D : public AbstractPlot {
 		BASIC_D_ACCESSOR_DECL(Plot3D::Scaling, xScaling, XScaling)
 		BASIC_D_ACCESSOR_DECL(Plot3D::Scaling, yScaling, YScaling)
 		BASIC_D_ACCESSOR_DECL(Plot3D::Scaling, zScaling, ZScaling)
-		CLASS_D_ACCESSOR_DECL(BoundingBox, range, Range)
+		CLASS_D_ACCESSOR_DECL(BoundingBox, ranges, Ranges)
 
 		// Background parameters
 		BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
@@ -178,17 +178,18 @@ class Plot3D : public AbstractPlot {
 		void onObjectClicked(vtkProp*);
 		void onObjectHovered(vtkProp*);
 		void onParametersChanged();
+		void updateBounds();
 
 	signals:
 		// General
 		friend class Plot3DSetXScalingCmd;
 		friend class Plot3DSetYScalingCmd;
 		friend class Plot3DSetZScalingCmd;
-		friend class Plot3DSetRangeCmd;
+		friend class Plot3DSetRangesCmd;
 		void xScalingChanged(Plot3D::Scaling);
 		void yScalingChanged(Plot3D::Scaling);
 		void zScalingChanged(Plot3D::Scaling);
-		void rangeBoundsChanged(const BoundingBox&);
+		void rangesChanged(const BoundingBox&);
 
 		// Background
 		friend class Plot3DSetBackgroundTypeCmd;
@@ -226,6 +227,7 @@ class Plot3D : public AbstractPlot {
 
 		void parametersChanged();
 		void currentAspectChanged(const AbstractAspect*);
+		void boundsChanged(const BoundingBox&);
 };
 
 #endif

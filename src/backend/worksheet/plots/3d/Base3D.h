@@ -50,7 +50,8 @@ class Base3D : public AbstractAspect {
 		void setYScaling(Plot3D::Scaling scaling);
 		void setZScaling(Plot3D::Scaling scaling);
 
-		void setRange(const BoundingBox& bounds);
+		void setRanges(const BoundingBox& bounds);
+		// Returns a bounding box of the current 3d object
 		BoundingBox bounds() const;
 
 		void show(bool pred);
@@ -71,6 +72,7 @@ class Base3D : public AbstractAspect {
 		void parametersChanged();
 		// Emits when visibility has been changed
 		void visibilityChanged(bool);
+		void boundsChanged(const BoundingBox&);
 
 	protected:
 		const QScopedPointer<Base3DPrivate> d_ptr;
