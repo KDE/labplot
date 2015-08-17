@@ -384,7 +384,8 @@ vtkSmartPointer<vtkPolyData> Base3DPrivate::scale(vtkPolyData* data) {
 	clippersPipeline.first()->SetInputData(data);
 	clippersPipeline.last()->Update();
 	vtkSmartPointer<vtkPolyData> result = clippersPipeline.last()->GetOutput();
-
+	//qDebug() << Q_FUNC_INFO << result->GetBounds()[0] << result->GetBounds()[1] << result->GetBounds()[2] << result->GetBounds()[3]
+	//		<< result->GetBounds()[4] << result->GetBounds()[5];
 	double (*scaleFunctions[3])(double);
 	for (int i = 0; i < 3; ++i) {
 		switch (scales[i]) {

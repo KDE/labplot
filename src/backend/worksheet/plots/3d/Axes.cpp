@@ -123,17 +123,17 @@ namespace {
 	void addLabels(double init, double delta, int numIter, vtkStringArray* labels, double (*scaleFunction)(double)) {
 		for (int i = 0; i < numIter; ++i) {
 			const double scaledLabel = scaleFunction(init + i * delta);
-			if (!std::isnan(scaledLabel))
-				labels->InsertValue(i, QString::number(scaledLabel, 'g', 2).toAscii());
+			labels->InsertValue(i, QString::number(scaledLabel, 'g', 2).toAscii());
 		}
 	}
 }
 
 void AxesPrivate::objectScaled(vtkActor* actor) const {
 	vtkCubeAxesActor* cubeAxes = dynamic_cast<vtkCubeAxesActor*>(actor);
-	const BoundingBox& bounds = systemBounds();
+	BoundingBox bounds = systemBounds();
 	if (xScaling != Plot3D::Scaling_Linear) {
-		const int numXValues = 5;
+		bounds.setXMin(0.00000001);
+		const int numXValues = 3;
 		const double dx = (bounds.xMax() - bounds.xMin()) / (numXValues - 1);
 		vtkSmartPointer<vtkStringArray> labels = vtkSmartPointer<vtkStringArray>::New();
 
@@ -149,7 +149,8 @@ void AxesPrivate::objectScaled(vtkActor* actor) const {
 		cubeAxes->SetAxisLabels(0, 0);
 
 	if (yScaling != Plot3D::Scaling_Linear) {
-		const int numYValues = 5;
+		bounds.setYMin(0.00000001);
+		const int numYValues = 3;
 		const double dy = (bounds.yMax() - bounds.yMin()) / (numYValues - 1);
 		vtkSmartPointer<vtkStringArray> labels = vtkSmartPointer<vtkStringArray>::New();
 
@@ -165,7 +166,8 @@ void AxesPrivate::objectScaled(vtkActor* actor) const {
 		cubeAxes->SetAxisLabels(1, 0);
 
 	if (zScaling != Plot3D::Scaling_Linear) {
-		const int numZValues = 5;
+		bounds.setZMin(0.00000001);
+		const int numZValues = 3;
 		const double dz = (bounds.zMax() - bounds.zMin()) / (numZValues - 1);
 		vtkSmartPointer<vtkStringArray> labels = vtkSmartPointer<vtkStringArray>::New();
 
