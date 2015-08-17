@@ -47,6 +47,7 @@ class VariableParser {
 		void init();
 		void parseMaximaValues();
 		void parsePythonValues();
+		void parseRValues();
 };
 
 #endif // VARIABLEPARSER_H

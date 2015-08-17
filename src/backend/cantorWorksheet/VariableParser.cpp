@@ -45,6 +45,12 @@ void VariableParser::init() {
 	else if(m_backendName.compare(QString("Python 2"), Qt::CaseInsensitive) == 0) {
 		return parsePythonValues();
 	}
+	else if(m_backendName.compare(QString("Sage"), Qt::CaseInsensitive) == 0) {
+		return parsePythonValues();
+	}
+	else if(m_backendName.compare(QString("R"), Qt::CaseInsensitive) == 0) {
+		return parseRValues();
+	}
 }
 
 void VariableParser::parseMaximaValues() {
@@ -107,6 +113,25 @@ void VariableParser::parsePythonValues() {
 		m_parsed = true;
 		qDebug() << "Time taken to parse: " << t.elapsed();
 	}
+}
+
+void VariableParser::parseRValues() {
+QTime t = QTime::currentTime();
+	QStringList valueStringList;
+	m_string = "[1] 1 2 3 4 5 6";
+	int index = m_string.indexOf("]");
+	m_string = m_string.remove( QRegExp("\\[.*\\]"));
+	m_string.trimmed();
+	valueStringList = m_string.split(' ');
+	foreach(QString valueString, valueStringList) {
+		valueString = valueString.trimmed();
+		bool isNumber = false;
+		double value = valueString.toDouble(&isNumber);
+		if(!isNumber) value = NAN;
+		m_values << value;
+	}
+	m_parsed = true;
+	qDebug() << "Time taken to parse: " << t.elapsed();
 }
 
 bool VariableParser::isParsed() {
