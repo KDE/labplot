@@ -52,7 +52,7 @@
 
 /*!
 	\class ImportFileDialog
-	\brief Dialog for importing data from a file. Embeddes \c ImportFileWidget and provides the standard buttons.
+	\brief Dialog for importing data from a file. Embeds \c ImportFileWidget and provides the standard buttons.
 
 	\ingroup kdefrontend
  */
@@ -69,14 +69,14 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource) : KDial
 	vLayout->addWidget(importFileWidget);
 	setMainWidget( mainWidget );
 
+	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
+
 	//hide the data-source related widgets
 	if (!fileDataSource) {
 		this->setModel(m_mainWin->model());
 		//TODO: disable for file data sources
 		importFileWidget->hideDataSource();
 	}
-
-	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 
 	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
 	m_optionsShown = conf.readEntry("ShowOptions", false);
@@ -88,6 +88,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource) : KDial
 	importFileWidget->showOptions(m_optionsShown);
 
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
+	connect(importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
 
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
 	setWindowIcon(KIcon("document-import-database"));
@@ -153,14 +154,14 @@ void ImportFileDialog::setModel(QAbstractItemModel* model) {
 	//ok is only available if a valid spreadsheet was selected
 	enableButtonOk(false);
 
-	connect(cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(currentAddToIndexChanged(QModelIndex)));
+	connect(cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkOkButton()));
 	connect(tbNewDataContainer, SIGNAL(clicked(bool)), this, SLOT(newDataContainerMenu()));
 	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
 }
 
 void ImportFileDialog::setCurrentIndex(const QModelIndex& index){
 	cbAddTo->setCurrentModelIndex(index);
-	this->currentAddToIndexChanged(index);
+	this->checkOkButton();
 }
 
 /*!
@@ -192,7 +193,10 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
   triggers data import to the currently selected data container
 */
 void ImportFileDialog::importTo(QStatusBar* statusBar) const {
-	AbstractAspect * aspect = static_cast<AbstractAspect *>(cbAddTo->currentModelIndex().internalPointer());
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
+	if (!aspect)
+		return;
+
 	QString fileName = importFileWidget->fileName();
 	AbstractFileFilter* filter = importFileWidget->currentFileFilter();
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
@@ -301,20 +305,6 @@ void ImportFileDialog::toggleOptions(){
  	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
 }
 
-void ImportFileDialog::currentAddToIndexChanged(QModelIndex index){
-	AbstractAspect* aspect = static_cast<AbstractAspect *>(index.internalPointer());
-
-	if (aspect) {
-		lPosition->setEnabled(true);
-		cbPosition->setEnabled(true);
-		enableButtonOk(true);
-	} else{
-		lPosition->setEnabled(false);
-		cbPosition->setEnabled(false);
-		enableButtonOk(false);
-	}
-}
-
 void ImportFileDialog::newDataContainer(QAction* action){
 	QString path = importFileWidget->fileName();
 	QString name=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
@@ -334,11 +324,12 @@ void ImportFileDialog::newDataContainer(QAction* action){
 			aspect = new Workbook(0, name);
 		else if(actionIndex == 1)
 			aspect = new Spreadsheet(0, name);
-		else if(actionIndex == 2)
+		else
 			aspect = new Matrix(0, name);
 
 		m_mainWin->addAspectToProject(aspect);
 		cbAddTo->setCurrentModelIndex(m_mainWin->model()->modelIndexOfAspect(aspect));
+		checkOkButton();
 	}
 
 	delete dlg;
@@ -346,4 +337,23 @@ void ImportFileDialog::newDataContainer(QAction* action){
 
 void ImportFileDialog::newDataContainerMenu() {
 	m_newDataContainerMenu->exec( tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
+}
+
+void ImportFileDialog::checkOkButton() {
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
+	if (!aspect) {
+		enableButtonOk(false);
+		lPosition->setEnabled(false);
+		cbPosition->setEnabled(false);
+		return;
+	} else {
+		lPosition->setEnabled(true);
+		cbPosition->setEnabled(true);
+	}
+
+	QString fileName = importFileWidget->fileName();
+	if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator() )
+		fileName = QDir::homePath() + QDir::separator() + fileName;
+
+	enableButtonOk( QFile::exists(fileName) ) ;
 }

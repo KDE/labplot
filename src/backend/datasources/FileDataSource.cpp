@@ -160,33 +160,26 @@ bool FileDataSource::isFileLinked() const{
 
 QIcon FileDataSource::icon() const{
 	QIcon icon;
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 	if (m_fileType == FileDataSource::Ascii)
 		icon = KIcon("text-plain");
 	else if (m_fileType == FileDataSource::Binary)
 		icon = KIcon("application-octet-stream");
 	else if (m_fileType == FileDataSource::Image)
 		icon = KIcon("image-x-generic");
-	else if (m_fileType == FileDataSource::Sound)
-		icon = KIcon("audio-x-generic");
 	// TODO: HDF, NetCDF
-#endif
+
 	return icon;
 }
 
 QMenu* FileDataSource::createContextMenu(){
 	QMenu* menu = AbstractPart::createContextMenu();
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	QAction* firstAction = menu->actions().first();
-#else
 	QAction* firstAction = 0;
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
-#endif
 
 	if (!m_fileWatched)
 		menu->insertAction(firstAction, m_reloadAction);
