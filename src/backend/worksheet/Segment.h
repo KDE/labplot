@@ -30,7 +30,6 @@ class SegmentPrivate;
 class Image;
 
 class Segment {
-
 	public:
         explicit Segment(Image*);
 		~Segment();
@@ -44,11 +43,9 @@ class Segment {
 
         bool isVisible() const;
         void setVisible(bool);
+        void retransform();
 
 		typedef SegmentPrivate Private;
-
-    public slots:
-        void retransform();
 
 	protected:
 		SegmentPrivate* const d_ptr;

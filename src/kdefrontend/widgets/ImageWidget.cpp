@@ -22,6 +22,9 @@
 #include "backend/worksheet/CustomItem.h"
 #include "kdefrontend/widgets/CustomItemWidget.h"
 #include "commonfrontend/widgets/qxtspanslider.h"
+#include "commonfrontend/widgets/TreeViewComboBox.h"
+#include "backend/core/AspectTreeModel.h"
+#include "backend/core/PlotCurve.h"
 
 #include <QGridLayout>
 #include <QRadioButton>
@@ -31,14 +34,13 @@
 #include <QDir>
 
 
-ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
+ImageWidget::ImageWidget(QWidget *parent): QWidget(parent), m_aspectTreeModel(0) {
     ui.setupUi(this);
 
     QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tSymbol);
     customItemWidget = new CustomItemWidget(ui.tSymbol);
     hboxLayout->addWidget(customItemWidget);
     customItemWidget->hidePositionWidgets();
-    m_itemsList.clear();
 
     ui.kleFileName->setClearButtonShown(true);
     ui.bOpen->setIcon( KIcon("document-open") );
@@ -46,30 +48,34 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     KUrlCompletion *comp = new KUrlCompletion();
     ui.kleFileName->setCompletionObject(comp);
 
-    QGridLayout* layout =static_cast<QGridLayout*>(ui.tEdit->layout());
-    layout->setContentsMargins(2,2,2,2);
-    layout->setHorizontalSpacing(2);
-    layout->setVerticalSpacing(4);
+    QGridLayout* generalTabLayout = static_cast<QGridLayout*>(ui.tGeneral->layout());
+    cbActiveCurve = new TreeViewComboBox(ui.tGeneral);
+    generalTabLayout->addWidget(cbActiveCurve, 4, 2, 1, 6);
+
+    QGridLayout* editTabLayout = static_cast<QGridLayout*>(ui.tEdit->layout());
+    editTabLayout->setContentsMargins(2,2,2,2);
+    editTabLayout->setHorizontalSpacing(2);
+    editTabLayout->setVerticalSpacing(4);
 
     ssIntensity = new QxtSpanSlider(Qt::Horizontal,ui.tEdit);
     ssIntensity->setRange(0, 100);
-    layout->addWidget(ssIntensity, 1, 1);
+    editTabLayout->addWidget(ssIntensity, 1, 1);
 
     ssForeground = new QxtSpanSlider(Qt::Horizontal,ui.tEdit);
     ssForeground->setRange(0, 100);
-    layout->addWidget(ssForeground, 2, 1);
+    editTabLayout->addWidget(ssForeground, 2, 1);
 
     ssHue = new QxtSpanSlider(Qt::Horizontal,ui.tEdit);
     ssHue->setRange(0, 360);
-    layout->addWidget(ssHue, 3, 1);
+    editTabLayout->addWidget(ssHue, 3, 1);
 
     ssSaturation = new QxtSpanSlider(Qt::Horizontal,ui.tEdit);
     ssSaturation->setRange(0,100);
-    layout->addWidget(ssSaturation, 4, 1);
+    editTabLayout->addWidget(ssSaturation, 4, 1);
 
     ssValue = new QxtSpanSlider(Qt::Horizontal,ui.tEdit);
     ssValue->setRange(0,100);
-    layout->addWidget(ssValue, 5, 1);
+    editTabLayout->addWidget(ssValue, 5, 1);
 
     ui.cbGraphType->addItem(i18n("Cartesian (x, y)"));
     ui.cbGraphType->addItem(i18n("Polar (x, y°)"));
@@ -109,6 +115,7 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     connect( ui.rbValue, SIGNAL(clicked()), this, SLOT(rbClicked()) );
     connect( ui.sbMinSegmentLength, SIGNAL(valueChanged(int)), this, SLOT(minSegmentLengthChanged(int)) );
     connect( ui.sbPointSeparation, SIGNAL(valueChanged(int)), this, SLOT(pointSeparationChanged(int)) );
+    connect( cbActiveCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(activeCurveChanged(QModelIndex)) );
 
     //axis point
     connect( ui.cbGraphType, SIGNAL(currentIndexChanged(int)), this, SLOT(graphTypeChanged()) );
@@ -120,10 +127,17 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     connect( ui.sbPoisitionY3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
 }
 
-void ImageWidget::setImages(QList<Image*> list){
+ImageWidget::~ImageWidget() {
+    if (m_aspectTreeModel)
+        delete m_aspectTreeModel;
+}
+
+void ImageWidget::setImages(QList<Image*> list) {
     m_imagesList = list;
     m_image = list.first();
-
+    Q_ASSERT(m_image);
+    m_aspectTreeModel = new AspectTreeModel(m_image->parentAspect());
+    setModel();
     this->load();
     initConnections();
     handleWidgetActions();
@@ -134,11 +148,28 @@ void ImageWidget::initConnections() {
     connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(imageRotationAngleChanged(float)) );
     connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
              this,SLOT(updateCustomItemList()) );
-    connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(handleAspectAdded()) );
+    connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(updateCustomItemList()) );
     connect( m_image, SIGNAL(axisPointsChanged(Image::ReferencePoints)), this, SLOT(imageAxisPointsChanged(Image::ReferencePoints)) );
     connect( m_image, SIGNAL(settingsChanged(Image::EditorSettings)), this, SLOT(imageEditorSettingsChanged(Image::EditorSettings)) );
     connect( m_image, SIGNAL(minSegmentLengthChanged(int)), this, SLOT(imageMinSegmentLengthChanged(int)) );
+    connect( m_image, SIGNAL(activeCurveChanged(const PlotCurve*)), this, SLOT(updateCustomItemList()) );
+    if (m_image->activeCurve())
+        connect( m_image->activeCurve(), SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(updateCustomItemList()) );
 }
+
+
+void ImageWidget::setModel() {
+    QList<const char*>  list;
+    list<<"Datapicker"<<"Image"<<"PlotCurve";
+    cbActiveCurve->setTopLevelClasses(list);
+
+    list.clear();
+    list<<"PlotCurve";
+    m_aspectTreeModel->setSelectableAspects(list);
+    cbActiveCurve->setSelectableClasses(list);
+    cbActiveCurve->setModel(m_aspectTreeModel);
+}
+
 
 void ImageWidget::handleWidgetActions() {
     QString fileName =  ui.kleFileName->text().trimmed();
@@ -230,6 +261,17 @@ void ImageWidget::logicalPositionChanged() {
 
     foreach(Image* image, m_imagesList)
         image->setAxisPoints(points);
+}
+
+void ImageWidget::activeCurveChanged(const QModelIndex& index) {
+    if (m_initializing)
+        return;
+
+    AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+    PlotCurve* curve = dynamic_cast<PlotCurve*>(aspect);
+
+    foreach(Image* image, m_imagesList)
+        image->setActiveCurve(curve);
 }
 
 void ImageWidget::rotationChanged(double value){
@@ -387,6 +429,12 @@ void ImageWidget::pointSeparationChanged(int value) {
         image->setPointSeparation(value);
 }
 
+void ImageWidget::setModelIndexFromCurve(TreeViewComboBox* cb, const PlotCurve* curve){
+    if (curve)
+        cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(curve));
+    else
+        cb->setCurrentModelIndex(QModelIndex());
+}
 //*********************************************************
 //****** SLOTs for changes triggered in Image *********
 //*********************************************************
@@ -443,30 +491,13 @@ void ImageWidget::plotErrorsChanged(Image::Errors errors){
 }
 
 void ImageWidget::updateCustomItemList() {
-    m_itemsList = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
-    customItemWidget->setCustomItems(m_itemsList);
-
-    if (m_itemsList.isEmpty())
-        ui.sbRotation->setEnabled(true);
+    QList<CustomItem*> itemsList;
+    if (m_image->activeCurve())
+        itemsList = m_image->activeCurve()->children<CustomItem>(AbstractAspect::IncludeHidden);
     else
-        ui.sbRotation->setEnabled(false);
-}
+        itemsList = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
 
-void ImageWidget::handleAspectAdded() {
-    updateCustomItemList();
-    CustomItem* m_item = m_itemsList.first();
-    if ( m_itemsList.count() > 1 ) {
-        //set properties of new item
-        CustomItem* newItem = m_itemsList.last();
-        newItem->setUndoAware(false);
-        newItem->setItemsBrush(m_item->itemsBrush());
-        newItem->setItemsOpacity(m_item->itemsOpacity());
-        newItem->setItemsPen(m_item->itemsPen());
-        newItem->setItemsRotationAngle(m_item->itemsRotationAngle());
-        newItem->setItemsSize(m_item->itemsSize());
-        newItem->setItemsStyle(m_item->itemsStyle());
-        newItem->setUndoAware(true);
-    }
+    customItemWidget->setCustomItems(itemsList);
 }
 //**********************************************************
 //******************** SETTINGS ****************************
@@ -499,5 +530,6 @@ void ImageWidget::load() {
     ui.rbValue->setChecked(m_image->settings().type == Image::Value);
     ui.sbPointSeparation->setValue(m_image->pointSeparation());
     ui.sbMinSegmentLength->setValue(m_image->minSegmentLength());
+    this->setModelIndexFromCurve(cbActiveCurve, m_image->activeCurve());
     m_initializing = false;
 }

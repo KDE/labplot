@@ -24,9 +24,35 @@
 #include <QObject>
 #include <QBrush>
 #include <QPen>
+
 #include "backend/lib/macros.h"
+#include "backend/worksheet/Image.h"
 #include "backend/worksheet/WorksheetElement.h"
 
+class CustomItem;
+
+class ErrorBarItem : public QObject, public QGraphicsRectItem {
+    Q_OBJECT
+
+    public:
+        enum ErrorBarType { PlusDeltaX, MinusDeltaX, PlusDeltaY, MinusDeltaY};
+
+        explicit ErrorBarItem(CustomItem* parent = 0, const ErrorBarType& type = PlusDeltaX);
+
+        virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+        void setRectSize(const qreal);
+
+    public slots:
+        void setPosition(const QPointF&);
+
+    private:
+        void initRect();
+        virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+        QGraphicsLineItem* barLineItem;
+        QRectF m_rect;
+        ErrorBarType m_type;
+        CustomItem* m_parentItem;
+};
 
 class CustomItemPrivate;
 class CustomItem : public WorksheetElement {
@@ -45,13 +71,6 @@ class CustomItem : public WorksheetElement {
 			VerticalPosition   verticalPosition;
 		};
 
-        struct ErrorBar {
-            QPointF plusDeltaX;
-            QPointF minusDeltaX;
-            QPointF plusDeltaY;
-            QPointF minusDeltaY;
-        };
-
 		explicit CustomItem(const QString& name );
 		~CustomItem();
 
@@ -60,19 +79,32 @@ class CustomItem : public WorksheetElement {
 		virtual QGraphicsItem *graphicsItem() const;
 		void setParentGraphicsItem(QGraphicsItem*);
 
+        void initErrorBar(const Image::Errors&);
+
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 
         CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
-		void setPosition(const QPointF&);
+        void setPosition(const QPointF&);
 
-        CLASS_D_ACCESSOR_DECL(ErrorBar, itemErrorBar, ItemErrorBar)
         BASIC_D_ACCESSOR_DECL(ItemsStyle, itemsStyle, ItemsStyle)
         BASIC_D_ACCESSOR_DECL(qreal, itemsOpacity, ItemsOpacity)
         BASIC_D_ACCESSOR_DECL(qreal, itemsRotationAngle, ItemsRotationAngle)
         BASIC_D_ACCESSOR_DECL(qreal, itemsSize, ItemsSize)
         CLASS_D_ACCESSOR_DECL(QBrush, itemsBrush, ItemsBrush)
         CLASS_D_ACCESSOR_DECL(QPen, itemsPen, ItemsPen)
+
+        BASIC_D_ACCESSOR_DECL(qreal, errorBarSize, ErrorBarSize)
+        CLASS_D_ACCESSOR_DECL(QBrush, errorBarBrush, ErrorBarBrush)
+        CLASS_D_ACCESSOR_DECL(QPen, errorBarPen, ErrorBarPen)
+        CLASS_D_ACCESSOR_DECL(QPointF, plusDeltaXPos, PlusDeltaXPos)
+        CLASS_D_ACCESSOR_DECL(QPointF, minusDeltaXPos, MinusDeltaXPos)
+        CLASS_D_ACCESSOR_DECL(QPointF, plusDeltaYPos, PlusDeltaYPos)
+        CLASS_D_ACCESSOR_DECL(QPointF, minusDeltaYPos, MinusDeltaYPos)
+        BASIC_D_ACCESSOR_DECL(bool, xSymmetricError, XSymmetricError)
+        BASIC_D_ACCESSOR_DECL(bool, ySymmetricError, YSymmetricError)
+
+
 
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
@@ -83,7 +115,6 @@ class CustomItem : public WorksheetElement {
 
         static QPainterPath itemsPathFromStyle(CustomItem::ItemsStyle);
         static QString itemsNameFromStyle(CustomItem::ItemsStyle);
-        QPainterPath errorBarsPath();
 
 	public slots:
 		virtual void retransform();
@@ -94,13 +125,15 @@ class CustomItem : public WorksheetElement {
 
 	protected:
 		CustomItemPrivate* const d_ptr;
+        CustomItem(const QString &name, CustomItemPrivate *dd);
 
-	private:
+    private:
     	Q_DECLARE_PRIVATE(CustomItem)
 		void init();
 		void initActions();
 
 		QAction* visibilityAction;
+        QList<ErrorBarItem*> m_errorBarItemList;
 
 	signals:
 		friend class CustomItemSetPositionCmd;
@@ -114,14 +147,27 @@ class CustomItem : public WorksheetElement {
         friend class CustomItemSetItemsOpacityCmd;
         friend class CustomItemSetItemsBrushCmd;
         friend class CustomItemSetItemsPenCmd;
-        friend class CustomItemSetItemErrorBarCmd;
-        void itemErrorBarChanged(const CustomItem::ErrorBar&);
         void itemsStyleChanged(CustomItem::ItemsStyle);
         void itemsSizeChanged(qreal);
         void itemsRotationAngleChanged(qreal);
         void itemsOpacityChanged(qreal);
         void itemsBrushChanged(QBrush);
         void itemsPenChanged(const QPen&);
+
+        friend class CustomItemSetErrorBarSizeCmd;
+        friend class CustomItemSetErrorBarPenCmd;
+        friend class CustomItemSetErrorBarBrushCmd;
+        friend class CustomItemSetPlusDeltaXPosCmd;
+        friend class CustomItemSetMinusDeltaXPosCmd;
+        friend class CustomItemSetPlusDeltaYPosCmd;
+        friend class CustomItemSetMinusDeltaYPosCmd;
+        void plusDeltaXPosChanged(const QPointF&);
+        void minusDeltaXPosChanged(const QPointF&);
+        void plusDeltaYPosChanged(const QPointF&);
+        void minusDeltaYPosChanged(const QPointF&);
+        void errorBarSizeChanged(qreal);
+        void errorBarBrushChanged(QBrush);
+        void errorBarPenChanged(const QPen&);
 };
 
 #endif

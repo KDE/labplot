@@ -26,13 +26,10 @@
 #include "backend/lib/macros.h"
 #include <QGraphicsScene>
 
-class QGraphicsItem;
-class QRectF;
 class ImagePrivate;
 class ImageEditor;
-class CustomItem;
 class Segments;
-class Transform;
+class PlotCurve;
 
 class Image: public AbstractPart, public scripted {
 	Q_OBJECT
@@ -87,12 +84,10 @@ class Image: public AbstractPart, public scripted {
         void setSelectedInView(const bool);
         void setPlotImageType(const Image::PlotImageType&);
         void setSegmentVisible(bool);
-        void updateData(const CustomItem*);
 
         bool isLoaded;
         QImage originalPlotImage;
         QImage processedPlotImage;
-        Transform* m_transform;
         PlotImageType plotImageType;
         QGraphicsPixmapItem* m_magnificationWindow;
 
@@ -104,6 +99,8 @@ class Image: public AbstractPart, public scripted {
         BASIC_D_ACCESSOR_DECL(PointsType, plotPointsType, PlotPointsType)
         BASIC_D_ACCESSOR_DECL(int, pointSeparation, PointSeparation)
         BASIC_D_ACCESSOR_DECL(int, minSegmentLength, minSegmentLength)
+
+        POINTER_D_ACCESSOR_DECL(PlotCurve, activeCurve, ActiveCurve)
 
 		typedef ImagePrivate Private;
 
@@ -118,8 +115,9 @@ class Image: public AbstractPart, public scripted {
 
     private slots:
 		void handleAspectAdded(const AbstractAspect*);
-		void handleAspectAboutToBeRemoved(const AbstractAspect*);
+        void handleAspectAboutToBeRemoved(const AbstractAspect*);
 		void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+        void curveAboutToBeRemoved(const AbstractAspect*);
 
     signals:
 		void requestProjectContextMenu(QMenu*);
@@ -131,6 +129,8 @@ class Image: public AbstractPart, public scripted {
         void axisPointsChanged(const Image::ReferencePoints&);
         void settingsChanged(const Image::EditorSettings&);
         void minSegmentLengthChanged(const int);
+        void activeCurveChanged(const PlotCurve*);
+        friend class ImageSetActiveCurveCmd;
         friend class ImageSetFileNameCmd;
         friend class ImageSetRotationAngleCmd;
         friend class ImageSetPlotErrorsCmd;

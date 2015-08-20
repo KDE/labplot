@@ -23,6 +23,7 @@
 #include "CustomItemPrivate.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/core/PlotCurve.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -34,9 +35,93 @@
 #include <KConfigGroup>
 #include <KLocale>
 
+/**
+ * \class ErrorBarItem
+ * \brief A customizable error-bar for custom-item.
+ */
+
+ErrorBarItem::ErrorBarItem(CustomItem *parent, const ErrorBarType& type) : QGraphicsRectItem(parent->graphicsItem(), 0),
+     barLineItem(new QGraphicsLineItem(parent->graphicsItem(), 0)),
+     m_parentItem(parent),
+     m_type(type) {
+
+    setFlag(QGraphicsItem::ItemIsMovable);
+    setFlag(QGraphicsItem::ItemIsSelectable);
+    setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+    initRect();
+}
+
+void ErrorBarItem::initRect() {
+    QRectF xBarRect(-0.15, -0.5, 0.3, 1);
+    QRectF yBarRect(-0.5, -0.15, 1, 0.3);
+
+    if (m_type == PlusDeltaX || m_type == MinusDeltaX)
+        m_rect = xBarRect;
+    else
+        m_rect = yBarRect;
+
+    setRectSize(m_parentItem->errorBarSize());
+    setPen(m_parentItem->errorBarPen());
+    setBrush(m_parentItem->errorBarBrush());
+}
+
+void ErrorBarItem::setPosition(const QPointF& position) {
+    setPos(position);
+    barLineItem->setLine(0, 0, position.x(), position.y());
+}
+
+void ErrorBarItem::setRectSize(const qreal size) {
+    QMatrix matrix;
+    matrix.scale(size, size);
+    setRect(matrix.mapRect(m_rect));
+}
+
+void ErrorBarItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    if (m_type == PlusDeltaX)
+        m_parentItem->setPlusDeltaXPos(pos());
+    else if (m_type == MinusDeltaX)
+        m_parentItem->setMinusDeltaXPos(pos());
+    else if (m_type == PlusDeltaY)
+        m_parentItem->setPlusDeltaYPos(pos());
+    else if (m_type == MinusDeltaY)
+        m_parentItem->setMinusDeltaYPos(pos());
+
+    QGraphicsItem::mouseReleaseEvent(event);
+}
+
+QVariant ErrorBarItem::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
+    if (change == QGraphicsItem::ItemPositionChange) {
+        QPointF newPos = value.toPointF();
+        barLineItem->setLine(0, 0, newPos.x(), newPos.y());
+    }
+
+    return QGraphicsRectItem::itemChange(change, value);
+}
+
+/**
+ * \class Custom-Item
+ * \brief A customizable symbol supports error-bars.
+ *
+ * The custom-item is aligned relative to the specified position.
+ * The position can be either specified by mouse events or by providing the
+ * x- and y- coordinates in parent's coordinate system, or by specifying one
+ * of the predefined position flags (\ca HorizontalPosition, \ca VerticalPosition).
+ */
+
 CustomItem::CustomItem(const QString& name):WorksheetElement(name),
     d_ptr(new CustomItemPrivate(this)) {
+
     init();
+}
+
+CustomItem::CustomItem(const QString& name, CustomItemPrivate *dd):WorksheetElement(name), d_ptr(dd) {
+
+    init();
+}
+
+CustomItem::~CustomItem() {
+    //no need to delete the d-pointer here - it inherits from QGraphicsItem
+    //and is deleted during the cleanup in QGraphicsScene
 }
 
 void CustomItem::init() {
@@ -59,10 +144,18 @@ void CustomItem::init() {
     d->itemsPen.setStyle( (Qt::PenStyle)group.readEntry("ItemBorderStyle", (int)Qt::SolidLine) );
     d->itemsPen.setColor( group.readEntry("ItemBorderColor", QColor(Qt::red)) );
     d->itemsPen.setWidthF( group.readEntry("ItemBorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Point)) );
-    d->itemErrorBar.minusDeltaX = group.readEntry("MinusDeltaX", QPointF());
-    d->itemErrorBar.plusDeltaX = group.readEntry("PlusDeltaX", QPointF());
-    d->itemErrorBar.minusDeltaY = group.readEntry("MinusDeltaY", QPointF());
-    d->itemErrorBar.plusDeltaY = group.readEntry("PlusDeltaY", QPointF());
+    d->errorBarSize = group.readEntry("ErrorBarSize", Worksheet::convertToSceneUnits(8, Worksheet::Point));
+    d->errorBarBrush.setStyle( (Qt::BrushStyle)group.readEntry("ErrorBarFillingStyle", (int)Qt::NoBrush) );
+    d->errorBarBrush.setColor( group.readEntry("ErrorBarFillingColor", QColor(Qt::black)) );
+    d->errorBarPen.setStyle( (Qt::PenStyle)group.readEntry("ErrorBarBorderStyle", (int)Qt::SolidLine) );
+    d->errorBarPen.setColor( group.readEntry("ErrorBarBorderColor", QColor(Qt::black)) );
+    d->errorBarPen.setWidthF( group.readEntry("ErrorBarBorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Point)) );
+    d->plusDeltaXPos = group.readEntry("PlusDeltaXPos", QPointF(30, 0));
+    d->minusDeltaXPos = group.readEntry("MinusDeltaXPos", QPointF(-30, 0));
+    d->plusDeltaYPos = group.readEntry("PlusDeltaYPos", QPointF(0, -30));
+    d->minusDeltaYPos = group.readEntry("MinusDeltaYPos", QPointF(0, 30));
+    d->xSymmetricError = group.readEntry("XSymmetricError", false);
+    d->ySymmetricError = group.readEntry("YSymmetricError", false);
     this->initActions();
 }
 
@@ -73,9 +166,57 @@ void CustomItem::initActions() {
     connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 }
 
-CustomItem::~CustomItem() {
-    //no need to delete the d-pointer here - it inherits from QGraphicsItem
-    //and is deleted during the cleanup in QGraphicsScene
+void CustomItem::initErrorBar(const Image::Errors& errors) {
+    m_errorBarItemList.clear();
+    if (errors.x != Image::NoError) {
+        setXSymmetricError(errors.x == Image::SymmetricError);
+
+        ErrorBarItem* plusDeltaXItem = new ErrorBarItem(this, ErrorBarItem::PlusDeltaX);
+        plusDeltaXItem->setPosition(plusDeltaXPos());
+        connect(this, SIGNAL(plusDeltaXPosChanged(QPointF)), plusDeltaXItem, SLOT(setPosition(QPointF)));
+
+        ErrorBarItem* minusDeltaXItem = new ErrorBarItem(this, ErrorBarItem::MinusDeltaX);
+        minusDeltaXItem->setPosition(minusDeltaXPos());
+        connect(this, SIGNAL(minusDeltaXPosChanged(QPointF)), minusDeltaXItem, SLOT(setPosition(QPointF)));
+
+        m_errorBarItemList<<plusDeltaXItem<<minusDeltaXItem;
+    }
+
+    if (errors.y != Image::NoError) {
+        setYSymmetricError(errors.y == Image::SymmetricError);
+
+        ErrorBarItem* plusDeltaYItem = new ErrorBarItem(this, ErrorBarItem::PlusDeltaY);
+        plusDeltaYItem->setPosition(plusDeltaYPos());
+        connect(this, SIGNAL(plusDeltaYPosChanged(QPointF)), plusDeltaYItem, SLOT(setPosition(QPointF)));
+
+        ErrorBarItem* minusDeltaYItem = new ErrorBarItem(this, ErrorBarItem::MinusDeltaY);
+        minusDeltaYItem->setPosition(minusDeltaYPos());
+        connect(this, SIGNAL(minusDeltaYPosChanged(QPointF)), minusDeltaYItem, SLOT(setPosition(QPointF)));
+
+        m_errorBarItemList<<plusDeltaYItem<<minusDeltaYItem;
+    }
+}
+
+/*!
+    Returns an icon to be used in the project explorer.
+*/
+QIcon CustomItem::icon() const{
+    return  KIcon("draw-cross");
+}
+
+QMenu* CustomItem::createContextMenu(){
+    QMenu *menu = WorksheetElement::createContextMenu();
+
+#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+    QAction* firstAction = menu->actions().first();
+#else
+    QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
+#endif
+
+    visibilityAction->setChecked(isVisible());
+    menu->insertAction(firstAction, visibilityAction);
+
+    return menu;
 }
 
 QGraphicsItem* CustomItem::graphicsItem() const {
@@ -101,37 +242,26 @@ void CustomItem::handlePageResize(double horizontalRatio, double verticalRatio) 
     d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
 }
 
-/*!
-    Returns an icon to be used in the project explorer.
-*/
-QIcon CustomItem::icon() const{
-    return  KIcon("");
-}
-
-QMenu* CustomItem::createContextMenu(){
-    QMenu *menu = WorksheetElement::createContextMenu();
-
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-    QAction* firstAction = menu->actions().first();
-#else
-    QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
-#endif
-
-    visibilityAction->setChecked(isVisible());
-    menu->insertAction(firstAction, visibilityAction);
-
-    return menu;
-}
-
 /* ============================ getter methods ================= */
+//item
 CLASS_SHARED_D_READER_IMPL(CustomItem, CustomItem::PositionWrapper, position, position)
-CLASS_SHARED_D_READER_IMPL(CustomItem, CustomItem::ErrorBar, itemErrorBar, itemErrorBar)
 BASIC_SHARED_D_READER_IMPL(CustomItem, CustomItem::ItemsStyle, itemsStyle, itemsStyle)
 BASIC_SHARED_D_READER_IMPL(CustomItem, qreal, itemsOpacity, itemsOpacity)
 BASIC_SHARED_D_READER_IMPL(CustomItem, qreal, itemsRotationAngle, itemsRotationAngle)
 BASIC_SHARED_D_READER_IMPL(CustomItem, qreal, itemsSize, itemsSize)
 CLASS_SHARED_D_READER_IMPL(CustomItem, QBrush, itemsBrush, itemsBrush)
 CLASS_SHARED_D_READER_IMPL(CustomItem, QPen, itemsPen, itemsPen)
+
+//error-bar
+BASIC_SHARED_D_READER_IMPL(CustomItem, qreal, errorBarSize, errorBarSize)
+CLASS_SHARED_D_READER_IMPL(CustomItem, QBrush, errorBarBrush, errorBarBrush)
+CLASS_SHARED_D_READER_IMPL(CustomItem, QPen, errorBarPen, errorBarPen)
+CLASS_SHARED_D_READER_IMPL(CustomItem, QPointF, plusDeltaXPos, plusDeltaXPos)
+CLASS_SHARED_D_READER_IMPL(CustomItem, QPointF, minusDeltaXPos, minusDeltaXPos)
+CLASS_SHARED_D_READER_IMPL(CustomItem, QPointF, plusDeltaYPos, plusDeltaYPos)
+CLASS_SHARED_D_READER_IMPL(CustomItem, QPointF, minusDeltaYPos, minusDeltaYPos)
+BASIC_SHARED_D_READER_IMPL(CustomItem, bool, xSymmetricError, xSymmetricError)
+BASIC_SHARED_D_READER_IMPL(CustomItem, bool, ySymmetricError, ySymmetricError)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(CustomItem, SetItemsStyle, CustomItem::ItemsStyle, itemsStyle, retransform)
@@ -179,15 +309,100 @@ void CustomItem::setItemsOpacity(qreal opacity) {
 STD_SETTER_CMD_IMPL_F_S(CustomItem, SetPosition, CustomItem::PositionWrapper, position, retransform)
 void CustomItem::setPosition(const PositionWrapper& pos) {
     Q_D(CustomItem);
-    if (pos.point!=d->position.point || pos.horizontalPosition!=d->position.horizontalPosition || pos.verticalPosition!=d->position.verticalPosition)
+    if (pos.point!=d->position.point || pos.horizontalPosition!=d->position.horizontalPosition
+            || pos.verticalPosition!=d->position.verticalPosition)
         exec(new CustomItemSetPositionCmd(d, pos, i18n("%1: set position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetItemErrorBar, CustomItem::ErrorBar, itemErrorBar, retransform)
-void CustomItem::setItemErrorBar(const ErrorBar& error) {
+STD_SETTER_CMD_IMPL_F_S(CustomItem, SetErrorBarSize, qreal, errorBarSize, retransformErrorBar)
+void CustomItem::setErrorBarSize(qreal size) {
     Q_D(CustomItem);
-    if (memcmp(&error, &d->itemErrorBar, sizeof(error)) != 0)
-        exec(new CustomItemSetItemErrorBarCmd(d, error, i18n("%1: set error")));
+    if (size != d->errorBarSize)
+        exec(new CustomItemSetErrorBarSizeCmd(d, size, i18n("%1: set error bar size")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CustomItem, SetErrorBarBrush, QBrush, errorBarBrush, retransformErrorBar)
+void CustomItem::setErrorBarBrush(const QBrush &brush) {
+    Q_D(CustomItem);
+    if (brush != d->errorBarBrush)
+        exec(new CustomItemSetErrorBarBrushCmd(d, brush, i18n("%1: set error bar filling")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CustomItem, SetErrorBarPen, QPen, errorBarPen, retransformErrorBar)
+void CustomItem::setErrorBarPen(const QPen &pen) {
+    Q_D(CustomItem);
+    if (pen != d->errorBarPen)
+        exec(new CustomItemSetErrorBarPenCmd(d, pen, i18n("%1: set error bar outline style")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CustomItem, SetPlusDeltaXPos, QPointF, plusDeltaXPos, updateData)
+void CustomItem::setPlusDeltaXPos(const QPointF& pos) {
+    Q_D(CustomItem);
+    if ( pos != d->plusDeltaXPos ) {
+        if (d->xSymmetricError) {
+            beginMacro(i18n("%1: set +delta X position", name()));
+            exec(new CustomItemSetPlusDeltaXPosCmd(d, pos, i18n("%1: set +delta X position")));
+            setMinusDeltaXPos(QPointF(-qAbs(pos.x()), pos.y()));
+            endMacro();
+        } else {
+            exec(new CustomItemSetPlusDeltaXPosCmd(d, pos, i18n("%1: set +delta X position")));
+        }
+    }
+}
+
+STD_SETTER_CMD_IMPL_F_S(CustomItem, SetMinusDeltaXPos, QPointF, minusDeltaXPos, updateData)
+void CustomItem::setMinusDeltaXPos(const QPointF& pos) {
+    Q_D(CustomItem);
+    if ( pos != d->minusDeltaXPos ) {
+        if (d->xSymmetricError) {
+            beginMacro(i18n("%1: set -delta X position", name()));
+            exec(new CustomItemSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta X position")));
+            setPlusDeltaXPos(QPointF(qAbs(pos.x()), pos.y()));
+            endMacro();
+        } else {
+            exec(new CustomItemSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta X position")));
+        }
+    }
+}
+
+STD_SETTER_CMD_IMPL_F_S(CustomItem, SetPlusDeltaYPos, QPointF, plusDeltaYPos, updateData)
+void CustomItem::setPlusDeltaYPos(const QPointF& pos) {
+    Q_D(CustomItem);
+    if ( pos != d->plusDeltaYPos ) {
+        if (d->ySymmetricError) {
+            beginMacro(i18n("%1: set +delta Y position", name()));
+            exec(new CustomItemSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta Y position")));
+            setMinusDeltaYPos(QPointF(pos.x(), qAbs(pos.y())));
+            endMacro();
+        } else {
+            exec(new CustomItemSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta Y position")));
+        }
+    }
+}
+
+STD_SETTER_CMD_IMPL_F_S(CustomItem, SetMinusDeltaYPos, QPointF, minusDeltaYPos, updateData)
+void CustomItem::setMinusDeltaYPos(const QPointF& pos) {
+    Q_D(CustomItem);
+    if ( pos != d->minusDeltaYPos ) {
+        if (d->ySymmetricError) {
+            beginMacro(i18n("%1: set -delta Y position", name()));
+            exec(new CustomItemSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta Y position")));
+            setPlusDeltaYPos(QPointF(pos.x(), -qAbs(pos.y())));
+            endMacro();
+        } else {
+            exec(new CustomItemSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta Y position")));
+        }
+    }
+}
+
+void CustomItem::setXSymmetricError(const bool value) {
+    Q_D(CustomItem);
+    d->xSymmetricError = value;
+}
+
+void CustomItem::setYSymmetricError(const bool value) {
+    Q_D(CustomItem);
+    d->ySymmetricError = value;
 }
 
 QPainterPath CustomItem::itemsPathFromStyle(CustomItem::ItemsStyle style) {
@@ -299,20 +514,6 @@ QString CustomItem::itemsNameFromStyle(CustomItem::ItemsStyle style) {
     return name;
 }
 
-QPainterPath CustomItem::errorBarsPath() {
-    Q_D(CustomItem);
-
-    QPainterPath path;
-//    if (!itemErrorBar().minusDeltaX.isNull() || !itemErrorBar().plusDeltaX.isNull()) {
-//    }
-
-//    if (!itemErrorBar().minusDeltaY.isNull() || !itemErrorBar().plusDeltaY.isNull()) {
-//    }
-
-    return path;
-}
-
-
 /*!
     sets the position without undo/redo-stuff
 */
@@ -344,7 +545,6 @@ void CustomItem::suppressHoverEvents(bool on) {
     Q_D(CustomItem);
     d->m_suppressHoverEvents = on;
 }
-
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
@@ -363,6 +563,7 @@ CustomItemPrivate::CustomItemPrivate(CustomItem *owner)
           m_hovered(false),
           m_suppressHoverEvents(true),
           q(owner){
+
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
     setFlag(QGraphicsItem::ItemIsSelectable);
     setAcceptHoverEvents(true);
@@ -393,8 +594,6 @@ void CustomItemPrivate::retransform(){
     setPos(itemPos);
     suppressItemChangeEvent=false;
     QPainterPath path = CustomItem::itemsPathFromStyle(itemsStyle);
-    QPainterPath errorBar = q->errorBarsPath();
-    path.addPath(errorBar);
     boundingRectangle = path.boundingRect();
     recalcShapeAndBoundingRect();
 
@@ -436,6 +635,28 @@ void CustomItemPrivate::updatePosition(){
     }
 
     emit q->positionChanged(position);
+    updateData();
+}
+
+/*!
+  update color and size of all error-bar.
+*/
+void CustomItemPrivate::retransformErrorBar() {
+    foreach (ErrorBarItem* item, q->m_errorBarItemList) {
+        if (item) {
+            item->setBrush(errorBarBrush);
+            item->setPen(errorBarPen);
+            item->setRectSize(errorBarSize);
+        }
+    }
+}
+
+/*!
+  update datasheet on any change in position of custom-item or it's error-bar.
+*/
+void CustomItemPrivate::updateData() {
+    PlotCurve* curve = dynamic_cast<PlotCurve*>(q->parentAspect());
+    curve->updateData(q);
 }
 
 bool CustomItemPrivate::swapVisible(bool on){
@@ -480,7 +701,6 @@ void CustomItemPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     Q_UNUSED(widget)
 
     QPainterPath path = CustomItem::itemsPathFromStyle(itemsStyle);
-    QPainterPath errorBar = q->errorBarsPath();
     QTransform trafo;
     trafo.scale(itemsSize, itemsSize);
     trafo.scale(scaleFactor, scaleFactor);
@@ -494,7 +714,6 @@ void CustomItemPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     painter->setPen(itemsPen);
     painter->setBrush(itemsBrush);
     painter->setOpacity(itemsOpacity);
-    painter->drawPath(errorBar);
     painter->drawPath(path);
     painter->restore();
 
@@ -511,7 +730,6 @@ void CustomItemPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem 
         painter->setOpacity(q->selectedOpacity);
         painter->drawPath(itemShape);
     }
-
 }
 
 QVariant CustomItemPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
@@ -597,6 +815,22 @@ void CustomItem::save(QXmlStreamWriter* writer) const{
     WRITE_QPEN(d->itemsPen);
     writer->writeEndElement();
 
+    writer->writeStartElement( "errorBar" );
+    writer->writeAttribute( "errorBarSize", QString::number(d->errorBarSize) );
+    WRITE_QBRUSH(d->errorBarBrush);
+    WRITE_QPEN(d->errorBarPen);
+    writer->writeAttribute( "plusDeltaXPos_x", QString::number(d->plusDeltaXPos.x()) );
+    writer->writeAttribute( "plusDeltaXPos_y", QString::number(d->plusDeltaXPos.y()) );
+    writer->writeAttribute( "minusDeltaXPos_x", QString::number(d->minusDeltaXPos.x()) );
+    writer->writeAttribute( "minusDeltaXPos_y", QString::number(d->minusDeltaXPos.y()) );
+    writer->writeAttribute( "plusDeltaYPos_x", QString::number(d->plusDeltaYPos.x()) );
+    writer->writeAttribute( "plusDeltaYPos_y", QString::number(d->plusDeltaYPos.y()) );
+    writer->writeAttribute( "minusDeltaYPos_x", QString::number(d->minusDeltaYPos.x()) );
+    writer->writeAttribute( "minusDeltaYPos_y", QString::number(d->minusDeltaYPos.y()) );
+    writer->writeAttribute( "xSymmetricError", QString::number(d->xSymmetricError) );
+    writer->writeAttribute( "ySymmetricError", QString::number(d->ySymmetricError) );
+    writer->writeEndElement();
+
     writer->writeEndElement(); // close "CustomItem" section
 }
 
@@ -605,7 +839,7 @@ bool CustomItem::load(XmlStreamReader* reader){
     Q_D(CustomItem);
 
    if(!reader->isStartElement() || reader->name() != "customItem"){
-        reader->raiseError(i18n("no CustomItem element found"));
+        reader->raiseError(i18n("no custom-item element found"));
         return false;
     }
 
@@ -658,7 +892,79 @@ bool CustomItem::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'visible'"));
             else
                 d->setVisible(str.toInt());
-        }else if (reader->name() == "properties"){
+        } else if (reader->name() == "errorBar"){
+            attribs = reader->attributes();
+
+            READ_QBRUSH(d->errorBarBrush);
+            READ_QPEN(d->errorBarPen);
+
+            str = attribs.value("plusDeltaXPos_x").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'plusDeltaXPos_x'"));
+            else
+                d->plusDeltaXPos.setX(str.toDouble());
+
+            str = attribs.value("plusDeltaXPos_y").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'plusDeltaXPos_y'"));
+            else
+                d->plusDeltaXPos.setY(str.toDouble());
+
+            str = attribs.value("minusDeltaXPos_x").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'minusDeltaXPos_x'"));
+            else
+                d->minusDeltaXPos.setX(str.toDouble());
+
+            str = attribs.value("minusDeltaXPos_y").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'minusDeltaXPos_y'"));
+            else
+                d->minusDeltaXPos.setY(str.toDouble());
+
+            str = attribs.value("plusDeltaYPos_x").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'plusDeltaYPos_x'"));
+            else
+                d->plusDeltaYPos.setX(str.toDouble());
+
+            str = attribs.value("plusDeltaYPos_y").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'plusDeltaYPos_y'"));
+            else
+                d->plusDeltaYPos.setY(str.toDouble());
+
+            str = attribs.value("minusDeltaYPos_x").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'minusDeltaYPos_x'"));
+            else
+                d->minusDeltaYPos.setX(str.toDouble());
+
+            str = attribs.value("minusDeltaYPos_y").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'minusDeltaYPos_y'"));
+            else
+                d->minusDeltaYPos.setY(str.toDouble());
+
+            str = attribs.value("xSymmetricError").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'xSymmetricError'"));
+            else
+                d->xSymmetricError = str.toInt();
+
+            str = attribs.value("ySymmetricError").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'ySymmetricError'"));
+            else
+                d->ySymmetricError = str.toInt();
+
+            str = attribs.value("errorBarSize").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'errorBarSize'"));
+            else
+                d->errorBarSize = str.toDouble();
+
+        } else if (reader->name() == "properties"){
             attribs = reader->attributes();
 
             str = attribs.value("itemsStyle").toString();
@@ -687,13 +993,12 @@ bool CustomItem::load(XmlStreamReader* reader){
 
             READ_QBRUSH(d->itemsBrush);
             READ_QPEN(d->itemsPen);
-        }else{ // unknown element
+        } else { // unknown element
             reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
             if (!reader->skipToEndElement()) return false;
         }
     }
-    retransform();
 
+    retransform();
     return true;
 }
-

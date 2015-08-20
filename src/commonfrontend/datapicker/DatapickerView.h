@@ -1,4 +1,3 @@
-
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -29,8 +28,7 @@ class QAction;
 class QMenu;
 class QPrinter;
 class QToolBar;
-class QTabWidget;
-
+class TabWidget;
 
 class DatapickerView : public QWidget {
     Q_OBJECT
@@ -42,7 +40,7 @@ class DatapickerView : public QWidget {
         int currentIndex() const;
 
     private:
-        QTabWidget* m_tabWidget;
+        TabWidget* m_tabWidget;
         Datapicker* m_datapicker;
         int lastSelectedIndex;
         bool m_initializing;
@@ -51,8 +49,11 @@ class DatapickerView : public QWidget {
         void showTabContextMenu(const QPoint&);
         void itemSelected(int);
         void tabChanged(int);
+        void tabMoved(int,int);
+        void handleDescriptionChanged(const AbstractAspect*);
         void handleAspectAdded(const AbstractAspect*);
         void handleAspectAboutToBeRemoved(const AbstractAspect*);
+
 };
 
 #endif

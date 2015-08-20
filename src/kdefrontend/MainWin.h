@@ -223,7 +223,7 @@ private slots:
 
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
-	void handleAspectRemoved(const AbstractAspect* parent);
+    void handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*);
 	void handleCurrentAspectChanged(AbstractAspect* );
 	void handleCurrentSubWindowChanged(QMdiSubWindow*);
 	void handleShowSubWindowRequested();

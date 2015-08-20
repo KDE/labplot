@@ -97,7 +97,8 @@ void AbstractPart::deleteMdiSubWindow() {
 void AbstractPart::deleteView() const {
     //if the parent is a Workbook or Datapicker, the actual view was already deleted when QTabWidget was deleted.
 	//here just set the pointer to 0.
-    if (dynamic_cast<const Workbook*>(parentAspect()) || dynamic_cast<const Datapicker*>(parentAspect())) {
+    if (dynamic_cast<const Workbook*>(parentAspect()) || dynamic_cast<const Datapicker*>(parentAspect())
+            || dynamic_cast<const Datapicker*>(parentAspect()->parentAspect())) {
 		m_view = 0;
 		return;
 	}

@@ -18,47 +18,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef DATAPICKER_H
-#define DATAPICKER_H
+#ifndef PLOTCURVEPRIVATE_H
+#define PLOTCURVEPRIVATE_H
 
-#include "backend/core/AbstractPart.h"
-#include "backend/core/AbstractScriptingEngine.h"
+class PlotCurvePrivate {
+	public:
+        explicit PlotCurvePrivate() {};
 
-class Spreadsheet;
-class Image;
-class QXmlStreamWriter;
-class XmlStreamReader;
-
-class Datapicker : public AbstractPart, public scripted {
-    Q_OBJECT
-
-    public:
-        Datapicker(AbstractScriptingEngine* engine, const QString& name);
-
-        void initDefault();
-        virtual QIcon icon() const;
-        virtual QMenu* createContextMenu();
-        virtual QWidget* view() const;
-
-        Spreadsheet* currentSpreadsheet() const;
-        Image* currentImage() const;
-        void setChildSelectedInView(int index, bool selected);
-
-        virtual void save(QXmlStreamWriter*) const;
-        virtual bool load(XmlStreamReader*);
-
-        Image* m_image;
-
-    public slots:
-        virtual void childSelected(const AbstractAspect*);
-        void handleChildAspectAdded(const AbstractAspect*);
-
-    private slots:
-        virtual void childDeselected(const AbstractAspect*);
-
-    signals:
-        void datapickerItemSelected(int);
-        void childAspectAdded(const AbstractAspect*);
+        Image::Errors curveErrorTypes;
+        bool visible;
+		
+        AbstractColumn* posXColumn;
+        QString posXColumnPath;
+        AbstractColumn* posYColumn;
+        QString posYColumnPath;
+        AbstractColumn* plusDeltaXColumn;
+        QString plusDeltaXColumnPath;
+        AbstractColumn* minusDeltaXColumn;
+        QString minusDeltaXColumnPath;
+        AbstractColumn* plusDeltaYColumn;
+        QString plusDeltaYColumnPath;
+        AbstractColumn* minusDeltaYColumn;
+        QString minusDeltaYColumnPath;
 };
 
 #endif

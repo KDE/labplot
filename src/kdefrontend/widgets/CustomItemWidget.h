@@ -62,6 +62,9 @@ private slots:
     void borderColorChanged(const QColor&);
     void borderWidthChanged(double);
     void visibilityChanged(bool);
+    void errorBarFillingStyleChanged(int);
+    void errorBarFillingColorChanged(const QColor&);
+    void errorBarSizeChanged(double);
 
     void customItemPositionChanged(const CustomItem::PositionWrapper&);
     void customItemStyleChanged(CustomItem::ItemsStyle);
@@ -71,6 +74,8 @@ private slots:
     void customItemBrushChanged(QBrush);
     void customItemPenChanged(const QPen&);
     void customItemVisibleChanged(bool);
+    void customItemErrorBarSizeChanged(qreal);
+    void customItemErrorBarBrushChanged(QBrush);
 
     void loadConfigFromTemplate(KConfig&);
     void loadConfig(KConfig&);

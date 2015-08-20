@@ -1,4 +1,3 @@
-
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -23,23 +22,32 @@
 #include "backend/worksheet/Image.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/datapicker/DatapickerView.h"
+#include "backend/core/PlotCurve.h"
+#include "backend/worksheet/CustomItem.h"
 
 #include "KIcon"
 #include <KLocale>
 #include <QDebug>
 
+/**
+ * \class Datapicker
+ * \brief Top-level container for PlotCurve and Image.
+ * \ingroup backend
+ */
 Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name)
-    : AbstractPart(name), scripted(engine),
-      m_datasheet(0),
-      m_image(0),
-      positionXIndex(-1),
-      positionYIndex(-1),
-      plusDeltaXIndex(-1),
-      minusDeltaXIndex(-1),
-      plusDeltaYIndex(-1),
-      minusDeltaYIndex(-1) {
+    : AbstractPart(name), scripted(engine), m_image(0) {
 }
 
+void Datapicker::initDefault() {
+    m_image = new Image(0, i18n("image"));
+    setUndoAware(false);
+    addChild(m_image);
+    setUndoAware(true);
+}
+
+/*!
+    Returns an icon to be used in the project explorer.
+*/
 QIcon Datapicker::icon() const {
     return KIcon("color-picker-black");
 }
@@ -58,13 +66,6 @@ QWidget* Datapicker::view() const {
         m_view = new DatapickerView(const_cast<Datapicker*>(this));
     }
     return m_view;
-}
-
-void Datapicker::initDefault() {
-    m_image = new Image(0, i18n("Image"));
-    setUndoAware(false);
-    addChild(m_image);
-    setUndoAware(true);
 }
 
 Spreadsheet* Datapicker::currentSpreadsheet() const {
@@ -92,12 +93,17 @@ Image* Datapicker::currentImage() const {
 }
 
 /*!
-    this slot is called when a Datapicker child is selected in the project explorer.
-    emits \c DatapickerItemSelected() to forward this event to the \c DatapickerView
+    this slot is called when a datapicker child is selected in the project explorer.
+    emits \c datapickerItemSelected() to forward this event to the \c DatapickerView
     in order to select the corresponding tab.
  */
 void Datapicker::childSelected(const AbstractAspect* aspect){
-    int index = indexOfChild<AbstractAspect>(aspect);
+    int index;
+    if (aspect->parentAspect() == this)
+        index= indexOfChild<AbstractAspect>(aspect);
+    else
+        index = indexOfChild<AbstractAspect>(aspect->parentAspect());
+
     emit datapickerItemSelected(index);
 }
 
@@ -106,11 +112,10 @@ void Datapicker::childSelected(const AbstractAspect* aspect){
  */
 void Datapicker::childDeselected(const AbstractAspect* aspect){
     Q_UNUSED(aspect);
-    //TODO: do we need this slot?
 }
 
 /*!
- *  Emits the signal to select or to deselect the Datapicker item (spreadsheet or image) with the index \c index
+ *  Emits the signal to select or to deselect the datapicker item (spreadsheet or image) with the index \c index
  *  in the project explorer, if \c selected=true or \c selected=false, respectively.
  *  The signal is handled in \c AspectTreeModel and forwarded to the tree view in \c ProjectExplorer.
  *  This function is called in \c DatapickerView when the current tab was changed
@@ -120,8 +125,8 @@ void Datapicker::setChildSelectedInView(int index, bool selected){
     if (selected) {
         emit childAspectSelectedInView(aspect);
 
-        //deselect the Datapicker in the project explorer, if a child (spreadsheet or image) was selected.
-        //prevents unwanted multiple selection with Datapicker if it was selected before.
+        //deselect the datapicker in the project explorer, if a child (spreadsheet or image) was selected.
+        //prevents unwanted multiple selection with datapicker if it was selected before.
         emit childAspectDeselectedInView(this);
     } else {
         emit childAspectDeselectedInView(aspect);
@@ -132,89 +137,10 @@ void Datapicker::setChildSelectedInView(int index, bool selected){
     }
 }
 
-void Datapicker::addDataToSheet(double data, int row, const DataColumnType& type) {
-    if (indexOfChild<Spreadsheet>(m_datasheet) == -1)
-        addDatasheet();
-
-    m_datasheet->setUndoAware(false);
-    int *index = columnIndexFromType(type);
-    Column* column;
-    if (*index == -1 || m_datasheet->columnCount() <= *index) {
-        column = new Column(columnNameFromType(type), AbstractColumn::Numeric);
-        column->setPlotDesignation(AbstractColumn::Y);
-        column->insertRows(0, m_datasheet->rowCount());
-        m_datasheet->addChild(column);
-        *index = m_datasheet->indexOfChild<Column>(column);
-    } else {
-        column = m_datasheet->child<Column>(*index);
-    }
-
-    column->setValueAt(row, data);
-    m_datasheet->setUndoAware(true);
+void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
+    emit childAspectAdded(aspect);
 }
 
-QString Datapicker::columnNameFromType(Datapicker::DataColumnType type) {
-    QString name;
-    if (type == Datapicker::PositionX)
-        name = i18n("x");
-    else if (type == Datapicker::PositionY)
-        name = i18n("y");
-    else if (type == Datapicker::PlusDeltaX)
-        name = i18n("+delta_x");
-    else if (type == Datapicker::MinusDeltaX)
-        name = i18n("-delta_x");
-    else if (type == Datapicker::PlusDeltaY)
-        name = i18n("+delta_y");
-    else if (type == Datapicker::MinusDeltaY)
-        name = i18n("-delta_y");
-
-    return name;
-}
-
-int *Datapicker::columnIndexFromType(Datapicker::DataColumnType type) {
-    int *index;
-    if (type == Datapicker::PositionX)
-        index = &positionXIndex;
-    else if (type == Datapicker::PositionY)
-        index = &positionYIndex;
-    else if (type == Datapicker::PlusDeltaX)
-        index = &plusDeltaXIndex;
-    else if (type == Datapicker::MinusDeltaX)
-        index = &minusDeltaXIndex;
-    else if (type == Datapicker::PlusDeltaY)
-        index = &plusDeltaYIndex;
-    else
-        index = &minusDeltaYIndex;
-
-    return index;
-}
-
-void Datapicker::addDatasheet() {
-    m_datasheet = new Spreadsheet(0, i18n("Data"));
-    m_datasheet->setUndoAware(false);
-    m_datasheet->column(0)->setName("x");
-    positionXIndex = 0;
-    m_datasheet->column(1)->setName("y");
-    positionYIndex = 1;
-    addChild(m_datasheet);
-    m_datasheet->setUndoAware(true);
-    connect(m_datasheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-            this, SLOT(handleColumnRemoved(const AbstractAspect*)));
-}
-
-void Datapicker::handleColumnRemoved(const AbstractAspect* aspect) {
-    const Column* column = qobject_cast<const Column*>(aspect);
-    if (column){
-        int removedIndex = m_datasheet->indexOfChild<Column>(column);
-        for(int i = PositionX; i <= MinusDeltaY; i++) {
-            int *index = columnIndexFromType(DataColumnType(i));
-            if (*index == removedIndex)
-                *index = -1;
-            else if (*index > removedIndex)
-                --*index;
-        }
-    }
-}
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -224,20 +150,12 @@ void Datapicker::save(QXmlStreamWriter* writer) const{
     writer->writeStartElement( "datapicker" );
     writeBasicAttributes(writer);
     writeCommentElement(writer);
-    writer->writeStartElement( "columnsIndex" );
-    writer->writeAttribute( "positionXIndex", QString::number(positionXIndex) );
-    writer->writeAttribute( "positionYIndex", QString::number(positionYIndex) );
-    writer->writeAttribute( "plusDeltaXIndex", QString::number(plusDeltaXIndex) );
-    writer->writeAttribute( "minusDeltaXIndex", QString::number(minusDeltaXIndex) );
-    writer->writeAttribute( "plusDeltaYIndex", QString::number(plusDeltaYIndex) );
-    writer->writeAttribute( "minusDeltaYIndex", QString::number(minusDeltaYIndex) );
-    writer->writeEndElement();
 
     //serialize all children
-    foreach(AbstractAspect* aspect, children<AbstractAspect>())
-        aspect->save(writer);
+    foreach(AbstractAspect* child, children<AbstractAspect>())
+        child->save(writer);
 
-    writer->writeEndElement(); // close "worksheet" section
+    writer->writeEndElement(); // close "datapicker" section
 }
 
 //! Load from XML
@@ -250,10 +168,6 @@ bool Datapicker::load(XmlStreamReader* reader){
     if (!readBasicAttributes(reader))
         return false;
 
-    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-    QXmlStreamAttributes attribs;
-    QString str;
-
     while (!reader->atEnd()){
         reader->readNext();
         if (reader->isEndElement() && reader->name() == "datapicker")
@@ -262,64 +176,30 @@ bool Datapicker::load(XmlStreamReader* reader){
         if (!reader->isStartElement())
             continue;
 
-		if (reader->name() == "comment") {
-            if (!readCommentElement(reader))
-				return false;
-        } else if (reader->name() == "columnsIndex") {
-            attribs = reader->attributes();
-
-            str = attribs.value("positionXIndex").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("positionXIndex"));
-            else
-                positionXIndex = str.toInt();
-
-            str = attribs.value("positionYIndex").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("positionYIndex"));
-            else
-                positionYIndex = str.toInt();
-
-            str = attribs.value("plusDeltaXIndex").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("plusDeltaXIndex"));
-            else
-                plusDeltaXIndex = str.toInt();
-
-            str = attribs.value("minusDeltaXIndex").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("minusDeltaXIndex"));
-            else
-                minusDeltaXIndex = str.toInt();
-
-            str = attribs.value("plusDeltaYIndex").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("plusDeltaYIndex"));
-            else
-                plusDeltaYIndex = str.toInt();
-
-            str = attribs.value("minusDeltaYIndex").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("minusDeltaYIndex"));
-            else
-                minusDeltaYIndex = str.toInt();
-        } else if(reader->name() == "spreadsheet"){
+        if(reader->name() == "spreadsheet") {
             Spreadsheet* spreadsheet = new Spreadsheet(0, "spreadsheet", true);
             if (!spreadsheet->load(reader)){
                 delete spreadsheet;
                 return false;
-            } else {
+            }else{
                 addChild(spreadsheet);
-                m_datasheet = spreadsheet;
             }
-        } else if (reader->name() == "image"){
-            Image* image = new Image(0, i18n("image"));
-            if (!image->load(reader)){
-                delete image;
+        } else if (reader->name() == "image") {
+            Image* plot = new Image(0, i18n("image"), true);
+            if (!plot->load(reader)){
+                delete plot;
                 return false;
             } else {
-                addChild(image);
-                m_image = image;
+                addChild(plot);
+                m_image = plot;
+            }
+        } else if (reader->name() == "plotCurve") {
+            PlotCurve* curve = new PlotCurve("");
+            if (!curve->load(reader)){
+                delete curve;
+                return false;
+            }else{
+                addChild(curve);
             }
         } else { // unknown element
             reader->raiseWarning(i18n("unknown datapicker element '%1'", reader->name().toString()));
@@ -327,5 +207,10 @@ bool Datapicker::load(XmlStreamReader* reader){
         }
     }
 
+    foreach (PlotCurve* curve, children<PlotCurve>()) {
+        foreach (CustomItem* item, curve->children<CustomItem>(IncludeHidden)) {
+            curve->handleAspectAdded(item);
+        }
+    }
     return true;
 }

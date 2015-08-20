@@ -27,16 +27,30 @@
 class CustomItem;
 class CustomItemWidget;
 class QxtSpanSlider;
+class TreeViewComboBox;
+class AspectTreeModel;
 
 class ImageWidget: public QWidget{
     Q_OBJECT
 
 public:
     explicit ImageWidget(QWidget *);
-
+    virtual ~ImageWidget();
 
     void setImages(QList<Image*>);
     void load();
+
+private:
+    Ui::ImageWidget ui;
+    void initConnections();
+    virtual void setModel();
+    void setModelIndexFromCurve(TreeViewComboBox*, const PlotCurve*);
+
+    AspectTreeModel* m_aspectTreeModel;
+    Image *m_image;
+    QList<Image*> m_imagesList;
+    bool m_initializing;
+    CustomItemWidget* customItemWidget;
 
     QxtSpanSlider* ssIntensity;
     QxtSpanSlider* ssForeground;
@@ -44,19 +58,7 @@ public:
     QxtSpanSlider* ssSaturation;
     QxtSpanSlider* ssValue;
 
-private:
-    Ui::ImageWidget ui;
-    Image *m_image;
-    QList<CustomItem*> m_itemsList;
-    QList<Image*> m_imagesList;
-    bool m_initializing;
-    CustomItemWidget* customItemWidget;
-
-    void initConnections();
-
-signals:
-    //delete it
-    void dataChanged(bool);
+    TreeViewComboBox* cbActiveCurve;
 
 private slots:
     void rotationChanged(double);
@@ -68,6 +70,7 @@ private slots:
     void selectFile();
     void graphTypeChanged();
     void logicalPositionChanged();
+    void activeCurveChanged(const QModelIndex&);
 
     void imageFileNameChanged(const QString&);
     void imageRotationAngleChanged(float);
@@ -75,7 +78,6 @@ private slots:
     void imageEditorSettingsChanged(const Image::EditorSettings&);
     void imageMinSegmentLengthChanged(const int);
     void updateCustomItemList();
-    void handleAspectAdded();
     void handleWidgetActions();
 
     void plotImageTypeChanged(int);

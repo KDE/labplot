@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>408</width>
-    <height>568</height>
+    <height>650</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="2">
+   <item row="0" column="0">
     <widget class="QLabel" name="lGeometry">
      <property name="font">
       <font>
@@ -34,7 +34,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1" colspan="2">
+   <item row="1" column="1">
     <widget class="KComboBox" name="cbPositionX">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -47,7 +47,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="3">
+   <item row="1" column="2">
     <widget class="QDoubleSpinBox" name="sbPositionX">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -85,14 +85,14 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1" colspan="2">
+   <item row="2" column="1">
     <widget class="KComboBox" name="cbPositionY">
      <property name="toolTip">
       <string>Vertical position relative to label's parent</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="3">
+   <item row="2" column="2">
     <widget class="QDoubleSpinBox" name="sbPositionY">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -121,7 +121,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1" colspan="2">
+   <item row="3" column="1">
     <widget class="KComboBox" name="cbStyle">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -138,7 +138,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1" colspan="2">
+   <item row="4" column="1">
     <widget class="QDoubleSpinBox" name="sbSize">
      <property name="prefix">
       <string/>
@@ -158,7 +158,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1" colspan="2">
+   <item row="5" column="1">
     <widget class="QSpinBox" name="sbRotation">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -193,7 +193,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1" colspan="2">
+   <item row="6" column="1">
     <widget class="QSpinBox" name="sbOpacity">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -241,7 +241,7 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="1" colspan="2">
+   <item row="8" column="1">
     <widget class="KComboBox" name="cbFillingStyle"/>
    </item>
    <item row="9" column="0">
@@ -281,7 +281,7 @@
      </property>
     </widget>
    </item>
-   <item row="11" column="1" colspan="2">
+   <item row="11" column="1">
     <widget class="KComboBox" name="cbBorderStyle"/>
    </item>
    <item row="12" column="0">
@@ -308,7 +308,7 @@
      </property>
     </widget>
    </item>
-   <item row="13" column="1" colspan="2">
+   <item row="13" column="1">
     <widget class="QDoubleSpinBox" name="sbBorderWidth">
      <property name="suffix">
       <string> pt</string>
@@ -318,7 +318,67 @@
      </property>
     </widget>
    </item>
-   <item row="14" column="2">
+   <item row="14" column="0">
+    <widget class="QLabel" name="lErrorBar">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Error Bar:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="0">
+    <widget class="QLabel" name="lErrorBarSize">
+     <property name="text">
+      <string>Size</string>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="1">
+    <widget class="QDoubleSpinBox" name="sbErrorBarSize">
+     <property name="prefix">
+      <string/>
+     </property>
+     <property name="suffix">
+      <string> pt</string>
+     </property>
+     <property name="singleStep">
+      <double>0.500000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="16" column="0">
+    <widget class="QLabel" name="lErrorBarFillingStyle">
+     <property name="text">
+      <string>Style</string>
+     </property>
+    </widget>
+   </item>
+   <item row="16" column="1">
+    <widget class="KComboBox" name="cbErrorBarFillingStyle"/>
+   </item>
+   <item row="17" column="0">
+    <widget class="QLabel" name="lErrorBarFillingColor">
+     <property name="text">
+      <string>Color</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="1">
+    <widget class="KColorButton" name="kcbErrorBarFillingColor">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="18" column="1">
     <spacer name="verticalSpacer_5">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -334,7 +394,7 @@
      </property>
     </spacer>
    </item>
-   <item row="15" column="0" colspan="2">
+   <item row="19" column="0">
     <widget class="QCheckBox" name="chbVisible">
      <property name="text">
       <string>visible</string>
@@ -345,14 +405,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-  </customwidget>
-  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

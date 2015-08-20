@@ -22,7 +22,6 @@
 #define IMAGEVIEW_H
 
 #include <QGraphicsView>
-#include "backend/worksheet/Image.h"
 
 class QMenu;
 class QToolBar;
@@ -30,7 +29,10 @@ class QToolButton;
 class QWheelEvent;
 
 class AbstractAspect;
+class Image;
 class WorksheetElement;
+class Transform;
+class CustomItem;
 
 class ImageView : public QGraphicsView {
     Q_OBJECT
@@ -44,10 +46,11 @@ class ImageView : public QGraphicsView {
         void exportToFile(const QString&, const ExportFormat, const int);
 
     private:
-        enum MouseMode{SelectAndEditMode, NavigationMode, ZoomSelectionMode, SelectionMode};
+        enum MouseMode{SelectAndEditMode, NavigationMode, ZoomSelectionMode, SelectAndMoveMode};
 
         void initActions();
         void initMenus();
+        void addAxisPoint(const QPointF&);
         void drawForeground(QPainter*, const QRectF&);
         void drawBackground(QPainter*, const QRectF&);
         void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect);
@@ -58,14 +61,13 @@ class ImageView : public QGraphicsView {
         void mousePressEvent(QMouseEvent*);
         void mouseReleaseEvent(QMouseEvent*);
         void mouseMoveEvent(QMouseEvent*);
-        CustomItem *addCustomItem(const QPointF&);
 
         Image* m_image;
+        Transform* m_transform;
         MouseMode m_mouseMode;
         bool m_selectionBandIsShown;
         QPoint m_selectionStart;
         QPoint m_selectionEnd;
-        QList<CustomItem*> m_childItems;
         int magnificationFactor;
 
         //Menus
@@ -90,7 +92,7 @@ class ImageView : public QGraphicsView {
         QAction* setCurvePointsAction;
         QAction* selectSegmentAction;
 
-        QAction* updateDatasheetAction;
+        QAction* addCurveAction;
 
         QAction* navigationModeAction;
         QAction* zoomSelectionModeAction;
@@ -121,7 +123,8 @@ class ImageView : public QGraphicsView {
         void changePointsType(QAction*);
         void handleImageActions();
         void updateBackground();
-        void updateDatasheet();
+        void addCurve();
+        void changeRotationAngle();
 
     signals:
         void statusInfo(const QString&);

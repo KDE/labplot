@@ -17,6 +17,8 @@ class ImagePrivate{
 		Image* const q;
 		QRectF pageRect;
 		QGraphicsScene* m_scene;
+        PlotCurve* activeCurve;
+        QString activeCurvePath;
 		float rotationAngle;
         QString fileName;
         int pointSeparation;

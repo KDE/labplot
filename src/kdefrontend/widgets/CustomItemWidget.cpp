@@ -65,6 +65,11 @@ CustomItemWidget::CustomItemWidget(QWidget *parent): QWidget(parent) {
 
     connect( ui.chbVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
+    //error bar
+    connect( ui.cbErrorBarFillingStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(errorBarFillingStyleChanged(int)) );
+    connect( ui.kcbErrorBarFillingColor, SIGNAL(changed(QColor)), this, SLOT(errorBarFillingColorChanged(QColor)) );
+    connect( ui.sbErrorBarSize, SIGNAL(valueChanged(double)), this, SLOT(errorBarSizeChanged(double)) );
+
     init();
 
 //     TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CustomItem);
@@ -97,6 +102,7 @@ void CustomItemWidget::init() {
         ui.cbStyle->addItem(QIcon(pm), CustomItem::itemsNameFromStyle(style));
     }
     GuiTools::updateBrushStyles(ui.cbFillingStyle, Qt::black);
+    GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, Qt::black);
     m_initializing = false;
 }
 
@@ -122,6 +128,8 @@ void CustomItemWidget::initConnections() {
     connect(m_item, SIGNAL(itemsBrushChanged(QBrush)), this, SLOT(customItemBrushChanged(QBrush)));
     connect(m_item, SIGNAL(itemsPenChanged(QPen)), this, SLOT(customItemPenChanged(QPen)));
     connect(m_item, SIGNAL(visibleChanged(bool)), this, SLOT(customItemVisibleChanged(bool)));
+    connect(m_item, SIGNAL(errorBarBrushChanged(QBrush)), this, SLOT(customItemErrorBarBrushChanged(QBrush)));
+    connect(m_item, SIGNAL(errorBarSizeChanged(qreal)), this, SLOT(customItemErrorBarSizeChanged(qreal)));
 }
 
 void CustomItemWidget::hidePositionWidgets() {
@@ -243,6 +251,16 @@ void CustomItemWidget::sizeChanged(double value) {
   m_item->endMacro();
 }
 
+void CustomItemWidget::errorBarSizeChanged(double value) {
+  if (m_initializing)
+    return;
+
+  m_item->beginMacro(i18n("%1 CustomItems: error bar size changed", m_itemList.count()));
+  foreach(CustomItem* item, m_itemList)
+    item->setErrorBarSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+  m_item->endMacro();
+}
+
 void CustomItemWidget::rotationChanged(int value) {
     if (m_initializing)
         return;
@@ -282,6 +300,24 @@ void CustomItemWidget::fillingStyleChanged(int index) {
 
 }
 
+void CustomItemWidget::errorBarFillingStyleChanged(int index) {
+  Qt::BrushStyle brushStyle = Qt::BrushStyle(index);
+  ui.kcbErrorBarFillingColor->setEnabled(!(brushStyle==Qt::NoBrush));
+
+  if (m_initializing)
+    return;
+
+  QBrush brush;
+  m_item->beginMacro(i18n("%1 CustomItems: Error Bar filling style changed", m_itemList.count()));
+  foreach(CustomItem* item, m_itemList){
+    brush = item->itemsBrush();
+    brush.setStyle(brushStyle);
+    item->setErrorBarBrush(brush);
+  }
+  m_item->endMacro();
+
+}
+
 void CustomItemWidget::fillingColorChanged(const QColor& color) {
   if (m_initializing)
     return;
@@ -297,6 +333,24 @@ void CustomItemWidget::fillingColorChanged(const QColor& color) {
 
   m_initializing = true;
   GuiTools::updateBrushStyles(ui.cbFillingStyle, color );
+  m_initializing = false;
+}
+
+void CustomItemWidget::errorBarFillingColorChanged(const QColor& color) {
+  if (m_initializing)
+    return;
+
+  QBrush brush;
+  m_item->beginMacro(i18n("%1 CustomItems: Error bar filling color changed", m_itemList.count()));
+  foreach(CustomItem* item, m_itemList){
+    brush=item->errorBarBrush();
+    brush.setColor(color);
+    item->setErrorBarBrush(brush);
+  }
+  m_item->endMacro();
+
+  m_initializing = true;
+  GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, color );
   m_initializing = false;
 }
 
@@ -390,6 +444,12 @@ void CustomItemWidget::customItemSizeChanged(qreal size) {
     m_initializing = false;
 }
 
+void CustomItemWidget::customItemErrorBarSizeChanged(qreal size) {
+    m_initializing = true;
+    ui.sbErrorBarSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
+    m_initializing = false;
+}
+
 void CustomItemWidget::customItemRotationAngleChanged(qreal angle) {
     m_initializing = true;
     ui.sbRotation->setValue(round(angle));
@@ -407,6 +467,14 @@ void CustomItemWidget::customItemBrushChanged(QBrush brush) {
     ui.cbFillingStyle->setCurrentIndex((int) brush.style());
     ui.kcbFillingColor->setColor(brush.color());
     GuiTools::updateBrushStyles(ui.cbFillingStyle, brush.color());
+    m_initializing = false;
+}
+
+void CustomItemWidget::customItemErrorBarBrushChanged(QBrush brush) {
+    m_initializing = true;
+    ui.cbErrorBarFillingStyle->setCurrentIndex((int) brush.style());
+    ui.kcbErrorBarFillingColor->setColor(brush.color());
+    GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, brush.color());
     m_initializing = false;
 }
 
@@ -452,6 +520,10 @@ void CustomItemWidget::load() {
 
     ui.chbVisible->setChecked( m_item->isVisible() );
 
+    ui.cbErrorBarFillingStyle->setCurrentIndex( (int) m_item->errorBarBrush().style() );
+    ui.kcbErrorBarFillingColor->setColor(  m_item->errorBarBrush().color() );
+    ui.sbErrorBarSize->setValue( Worksheet::convertFromSceneUnits(m_item->errorBarSize(), Worksheet::Point) );
+
     m_initializing = false;
 }
 
@@ -488,9 +560,13 @@ void CustomItemWidget::loadConfig(KConfig& config) {
     ui.cbBorderStyle->setCurrentIndex( group.readEntry("ItemBorderStyle", (int) m_item->itemsPen().style()) );
     ui.kcbBorderColor->setColor( group.readEntry("ItemBorderColor", m_item->itemsPen().color()) );
     ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ItemBorderWidth",m_item->itemsPen().widthF()), Worksheet::Point) );
+    ui.cbErrorBarFillingStyle->setCurrentIndex( group.readEntry("ErrorBarFillingStyle", (int) m_item->errorBarBrush().style()) );
+    ui.kcbErrorBarFillingColor->setColor(  group.readEntry("ErrorBarFillingColor", m_item->errorBarBrush().color()) );
+    ui.sbErrorBarSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarSize", m_item->errorBarSize()), Worksheet::Point) );
 
     m_initializing=true;
     GuiTools::updateBrushStyles(ui.cbFillingStyle, ui.kcbFillingColor->color());
+    GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, ui.kcbErrorBarFillingColor->color());
     GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
     m_initializing=false;
 }
@@ -507,6 +583,9 @@ void CustomItemWidget::saveConfig(KConfig& config){
     group.writeEntry("ItemBorderStyle", ui.cbBorderStyle->currentIndex());
     group.writeEntry("ItemBorderColor", ui.kcbBorderColor->color());
     group.writeEntry("ItemBorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(),Worksheet::Point));
+    group.writeEntry("ErrorBarFillingStyle", ui.cbErrorBarFillingStyle->currentIndex());
+    group.writeEntry("ErrorBarFillingColor", ui.kcbErrorBarFillingColor->color());
+    group.writeEntry("ErrorBarSize", Worksheet::convertToSceneUnits(ui.sbErrorBarSize->value(),Worksheet::Point));
 
     config.sync();
 }

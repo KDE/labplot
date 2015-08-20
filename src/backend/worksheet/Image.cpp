@@ -27,24 +27,30 @@
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/datapicker/ImageView.h"
 #include "backend/worksheet/Segments.h"
-#include "backend/core/Datapicker.h"
-#include "backend/core/Transform.h"
+#include "backend/core/PlotCurve.h"
 
 #include <QDesktopWidget>
 #include <QMenu>
-#include "KIcon"
+
+#include <KIcon>
 #include <KConfigGroup>
 #include <KLocale>
 
-
+/**
+ * \class Image
+ * \brief container to open image/plot.
+ *
+ * Top-level container for CustomItem.
+ *
+ * * \ingroup datapicker
+ */
 Image::Image(AbstractScriptingEngine* engine, const QString& name, bool loading)
     : AbstractPart(name), scripted(engine), d(new ImagePrivate(this)),
       plotImageType(Image::OriginalImage),
       isLoaded(false),
       m_segments(new Segments(this)),
-      m_transform(new Transform()),
       m_magnificationWindow(0),
-      m_editor(new ImageEditor()){
+      m_editor(new ImageEditor()) {
 
     connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
             this, SLOT(handleAspectAdded(const AbstractAspect*)));
@@ -58,6 +64,8 @@ Image::Image(AbstractScriptingEngine* engine, const QString& name, bool loading)
 }
 
 Image::~Image() {
+    delete m_segments;
+    delete m_editor;
     delete d;
 }
 
@@ -83,18 +91,31 @@ void Image::init() {
     d->plotErrors.x = (Image::ErrorType) group.readEntry("PlotErrorTypeX", (int) Image::NoError);
     d->plotErrors.y = (Image::ErrorType) group.readEntry("PlotErrorTypeY", (int) Image::NoError);
     d->plotPointsType = (Image::PointsType) group.readEntry("PlotPointsType", (int) Image::AxisPoints);
+    d->activeCurve = NULL;
 }
 
+
+/*!
+    Returns an icon to be used in the project explorer.
+*/
 QIcon Image::icon() const {
     return KIcon("image-x-generic");
 }
 
+/*!
+    Return a new context menu
+*/
 QMenu* Image::createContextMenu() {
     QMenu* menu = new QMenu(0);
     emit requestProjectContextMenu(menu);
     return menu;
 }
 
+//! Construct a primary view on me.
+/**
+ * This method may be called multiple times during the life time of an Aspect, or it might not get
+ * called at all. Aspects must not depend on the existence of a view for their operation.
+ */
 QWidget* Image::view() const {
     if (!m_view) {
         m_view = new ImageView(const_cast<Image *>(this));
@@ -103,21 +124,33 @@ QWidget* Image::view() const {
     return m_view;
 }
 
-
-
 void Image::handleAspectAdded(const AbstractAspect* aspect) {
-    const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
-    if (addedElement) {
-        if (aspect->parentAspect() == this) {
-            QGraphicsItem *item = addedElement->graphicsItem();
-            Q_ASSERT(item != NULL);
-            d->m_scene->addItem(item);
+    const CustomItem* addedItem = qobject_cast<const CustomItem*>(aspect);
+    if (addedItem && addedItem->parentAspect() == this) {
+        QGraphicsItem *graphicsItem = addedItem->graphicsItem();
+        Q_ASSERT(graphicsItem != NULL);
+        d->m_scene->addItem(graphicsItem);
 
-            qreal zVal = 0;
-            QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
-            foreach(WorksheetElement *elem, childElements) {
-                elem->graphicsItem()->setZValue(zVal++);
-            }
+        qreal zVal = 0;
+        QList<CustomItem*> childItems = children<CustomItem>(IncludeHidden);\
+        foreach(CustomItem *item, childItems) {
+            item->graphicsItem()->setZValue(zVal++);
+        }
+
+        //set properties of added custom-item same as previous items
+        if (childItems.count() > 1) {
+            CustomItem* m_item = childItems.first();
+            CustomItem* newAddedItem = childItems.last();
+            newAddedItem->setUndoAware(false);
+            newAddedItem->setItemsBrush(m_item->itemsBrush());
+            newAddedItem->setItemsOpacity(m_item->itemsOpacity());
+            newAddedItem->setItemsPen(m_item->itemsPen());
+            newAddedItem->setItemsRotationAngle(m_item->itemsRotationAngle());
+            newAddedItem->setItemsSize(m_item->itemsSize());
+            newAddedItem->setItemsStyle(m_item->itemsStyle());
+            newAddedItem->setErrorBarBrush(m_item->errorBarBrush());
+            newAddedItem->setErrorBarSize(m_item->errorBarSize());
+            newAddedItem->setUndoAware(true);
         }
     }
 }
@@ -137,6 +170,19 @@ void Image::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspe
     Q_UNUSED(child);
 }
 
+void Image::curveAboutToBeRemoved(const AbstractAspect* aspect) {
+    if (aspect == d->activeCurve) {
+        d->activeCurve = NULL;
+        update();
+    }
+}
+
+/*!
+    Selects or deselects the Datapicker/Image in the project explorer.
+    This function is called in \c ImageView.
+    The Image gets deselected if there are selected items in the view,
+    and selected if there are no selected items in the view.
+*/
 void Image::setSelectedInView(const bool b) {
     if (b)
         emit childAspectSelectedInView(this);
@@ -197,38 +243,6 @@ void Image::initSceneParameters() {
     setPlotPointsType(plotPointsType);
 }
 
-void Image::updateData(const CustomItem *item) {
-    Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
-    int row = indexOfChild<CustomItem>(item ,AbstractAspect::IncludeHidden) - 3;
-
-    QPointF data;
-    if (datapicker) {
-        data = m_transform->mapSceneToLogical(item->position().point, axisPoints());
-        datapicker->addDataToSheet(data.x(), row, Datapicker::PositionX);
-        datapicker->addDataToSheet(data.y(), row, Datapicker::PositionY);
-
-        if (plotErrors().x != Image::NoError) {
-            data = m_transform->mapSceneLengthToLogical(QPointF(item->itemErrorBar().plusDeltaX.x(), 0), axisPoints());
-            datapicker->addDataToSheet(qAbs(data.x()), row, Datapicker::PlusDeltaX);
-
-            if (plotErrors().x == Image::AsymmetricError) {
-                data = m_transform->mapSceneLengthToLogical(QPointF(item->itemErrorBar().minusDeltaX.x(), 0), axisPoints());
-                datapicker->addDataToSheet(qAbs(data.x()), row, Datapicker::MinusDeltaX);
-            }
-        }
-
-        if (plotErrors().y != Image::NoError) {
-            data = m_transform->mapSceneLengthToLogical(QPointF(0, item->itemErrorBar().plusDeltaY.y()), axisPoints());
-            datapicker->addDataToSheet(qAbs(data.y()), row, Datapicker::PlusDeltaY);
-
-            if (plotErrors().y == Image::AsymmetricError) {
-                data = m_transform->mapSceneLengthToLogical(QPointF(0, item->itemErrorBar().minusDeltaY.y()), axisPoints());
-                datapicker->addDataToSheet(qAbs(data.y()), row, Datapicker::MinusDeltaY);
-            }
-        }
-    }
-}
-
 /* =============================== getter methods for background options ================================= */
 CLASS_D_READER_IMPL(Image, QString, fileName, fileName)
 CLASS_D_READER_IMPL(Image, Image::ReferencePoints, axisPoints, axisPoints)
@@ -238,7 +252,7 @@ BASIC_D_READER_IMPL(Image, Image::Errors, plotErrors, plotErrors)
 BASIC_D_READER_IMPL(Image, Image::PointsType, plotPointsType, plotPointsType)
 BASIC_D_READER_IMPL(Image, int, pointSeparation, pointSeparation)
 BASIC_D_READER_IMPL(Image, int, minSegmentLength, minSegmentLength)
-
+BASIC_D_READER_IMPL(Image, PlotCurve*, activeCurve, activeCurve)
 /* ============================ setter methods and undo commands  for background options  ================= */
 STD_SETTER_CMD_IMPL_F_S(Image, SetFileName, QString, fileName, updateFileName)
 void Image::setFileName(const QString& fileName) {
@@ -249,7 +263,7 @@ void Image::setFileName(const QString& fileName) {
     }
 }
 
-STD_SETTER_CMD_IMPL_F_S(Image, SetRotationAngle, float, rotationAngle, update)
+STD_SETTER_CMD_IMPL_S(Image, SetRotationAngle, float, rotationAngle)
 void Image::setRotationAngle(float angle) {
     if (angle != d->rotationAngle)
         exec(new ImageSetRotationAngleCmd(d, angle, i18n("%1: set rotation angle")));
@@ -279,9 +293,20 @@ void Image::setminSegmentLength(const int value) {
         exec(new ImageSetMinSegmentLengthCmd(d, value, i18n("%1: set minimum segment length")));        ;
 }
 
+STD_SETTER_CMD_IMPL_F_S(Image, SetActiveCurve, PlotCurve*, activeCurve, update)
+void Image::setActiveCurve(PlotCurve* curve) {
+    if (curve != d->activeCurve) {
+        exec(new ImageSetActiveCurveCmd(d, curve, i18n("%1: set active curve")));
+        if (curve != NULL) {
+            connect(curve->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+                    this, SLOT(curveAboutToBeRemoved(const AbstractAspect*)));
+        }
+    }
+}
+
 void Image::setPrinting(bool on) const {
-    QList<CustomItem*> childElements = children<CustomItem>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-    foreach(CustomItem* elem, childElements)
+    QList<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+    foreach(WorksheetElement* elem, childElements)
         elem->setPrinting(on);
 }
 
@@ -343,10 +368,9 @@ ImagePrivate::~ImagePrivate() {
 
 void ImagePrivate::updateFileName() {
     WAIT_CURSOR;
-    QList<CustomItem*> childItemList = q->children<CustomItem>(AbstractAspect::IncludeHidden);
-    if (childItemList.count()) {
-        foreach(CustomItem* item, childItemList)
-            item->remove();
+    QList<AbstractAspect*> children = q->children<AbstractAspect>(AbstractAspect::IncludeHidden);
+    if (children.count()) {
+        q->removeAllChildren();
     }
 
     q->isLoaded = false;
@@ -414,9 +438,9 @@ void Image::save(QXmlStreamWriter* writer) const {
     writer->writeEndElement();
 
     //serialize all children
-    QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
-    foreach(WorksheetElement *elem, childElements)
-        elem->save(writer);
+    QList<AbstractAspect *> childrenAspect = children<AbstractAspect>(IncludeHidden);
+    foreach(AbstractAspect *child, childrenAspect)
+        child->save(writer);
 
     writer->writeEndElement();
 }
@@ -652,6 +676,7 @@ bool Image::load(XmlStreamReader* reader) {
         }
     }
 
+    d->activeCurve = NULL;
     d->uploadImage(d->fileName);
     update();
     return true;

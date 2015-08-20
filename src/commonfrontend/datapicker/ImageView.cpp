@@ -23,8 +23,9 @@
 #include "backend/worksheet/CustomItem.h"
 #include "backend/core/Datapicker.h"
 #include "backend/core/Transform.h"
+#include "backend/core/PlotCurve.h"
+#include "backend/worksheet/Image.h"
 
-#include <QApplication>
 #include <QMenu>
 #include <QToolBar>
 #include <QDesktopWidget>
@@ -33,17 +34,23 @@
 #include <QSvgGenerator>
 #include <QImage>
 #include <QToolButton>
-#include <QDebug>
-#include <QMessageBox>
-#include <QGraphicsOpacityEffect>
-#include <QTimeLine>
+#include <QApplication>
 
 #include <KAction>
 #include <KLocale>
-#include <KMessageBox>
 
+/**
+ * \class ImageView
+ * \brief Datapicker/Image view
+ */
+
+/*!
+  Constructur of the class.
+  Creates a view for the Image \c image and initializes the internal model.
+*/
 ImageView::ImageView(Image* image) : QGraphicsView(),
     m_image(image),
+    m_transform(new Transform()),
     m_mouseMode(SelectAndEditMode),
     m_selectionBandIsShown(false),
     magnificationFactor(0),
@@ -65,17 +72,21 @@ ImageView::ImageView(Image* image) : QGraphicsView(),
     initActions();
     initMenus();
     selectAndEditModeAction->setChecked(true);
+    setInteractive(false);
 
     changeZoom(zoomOriginAction);
     currentZoomAction=zoomInViewAction;
     handleImageActions();
+    changeRotationAngle();
 
     //signal/slot connections
-    connect(m_image, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
-    connect(m_image, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
-    connect(m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleImageActions()));
-    connect(m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
+    connect( m_image, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)) );
+    connect( m_image, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
+    connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleImageActions()));
+    connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
             this, SLOT(handleImageActions()) );
+    connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(changeRotationAngle()) );
+    connect( m_image, SIGNAL(activeCurveChanged(const PlotCurve*)), this, SLOT(handleImageActions()) );
 }
 
 void ImageView::initActions() {
@@ -120,7 +131,7 @@ void ImageView::initActions() {
     selectSegmentAction = new KAction(KIcon("xy-curve-segments"), i18n("Select Curve Segments"), plotPointsTypeActionGroup);
     selectSegmentAction->setCheckable(true);
 
-    updateDatasheetAction = new KAction(KIcon("view-refresh"), i18n("Update Datasheet"), this);
+    addCurveAction = new KAction(KIcon("xy-curve"), i18n("Add Curve"), this);
 
     shiftLeftAction = new KAction(KIcon("shift-left-x"), i18n("Shift Left"), navigationActionGroup);
     shiftLeftAction->setShortcut(Qt::Key_Right);
@@ -153,7 +164,7 @@ void ImageView::initActions() {
     connect( mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)) );
     connect( zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)) );
     connect( plotPointsTypeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changePointsType(QAction*)) );
-    connect( updateDatasheetAction, SIGNAL(triggered()), this, SLOT(updateDatasheet()) );
+    connect( addCurveAction, SIGNAL(triggered()), this, SLOT(addCurve()) );
     connect( navigationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeSelectedItemsPosition(QAction*)) );
     connect( magnificationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(magnificationChanged(QAction*)) );
 }
@@ -197,6 +208,13 @@ void ImageView::initMenus() {
     m_magnificationMenu->addAction(fiveTimesMagnificationAction);
 }
 
+/*!
+ * Populates the menu \c menu with the image and image-view relevant actions.
+ * The menu is used
+ *   - as the context menu in ImageView
+ *   - as the "datapicker menu" in the main menu-bar (called form MainWin)
+ *   - as a part of the image context menu in project explorer
+ */
 void ImageView::createContextMenu(QMenu* menu) const {
     Q_ASSERT(menu);
 
@@ -213,7 +231,7 @@ void ImageView::createContextMenu(QMenu* menu) const {
     menu->insertSeparator(firstAction);
     menu->insertMenu(firstAction, m_viewImageMenu);
     menu->insertSeparator(firstAction);
-    menu->insertAction(firstAction, updateDatasheetAction);
+    menu->insertAction(firstAction, addCurveAction);
     menu->insertSeparator(firstAction);
     menu->insertMenu(firstAction, m_navigationMenu);
     menu->insertSeparator(firstAction);
@@ -230,7 +248,7 @@ void ImageView::fillToolBar(QToolBar* toolBar) {
     toolBar->addAction(setCurvePointsAction);
     toolBar->addAction(selectSegmentAction);
     toolBar->addSeparator();
-    toolBar->addAction(updateDatasheetAction);
+    toolBar->addAction(addCurveAction);
     tbZoom = new QToolButton(toolBar);
     tbZoom->setPopupMode(QToolButton::MenuButtonPopup);
     tbZoom->setMenu(m_zoomMenu);
@@ -288,7 +306,6 @@ void ImageView::drawBackground(QPainter* painter, const QRectF& rect) {
     // canvas
     if (m_image->isLoaded) {
         painter->translate(sceneRect().width()/2, sceneRect().height()/2);
-        painter->rotate(-m_image->rotationAngle());
         painter->translate(-sceneRect().width()/2, -sceneRect().height()/2);
 
         if (m_image->plotImageType == Image::OriginalImage) {
@@ -305,14 +322,6 @@ void ImageView::drawBackground(QPainter* painter, const QRectF& rect) {
 
     invalidateScene(rect, QGraphicsScene::BackgroundLayer);
     painter->restore();
-}
-
-CustomItem *ImageView::addCustomItem(const QPointF& position) {
-    CustomItem* item = new CustomItem(i18n("item"));
-    item->setPosition(position);
-    item->setHidden(true);
-    m_image->addChild(item);
-    return item;
 }
 
 //##############################################################################
@@ -335,67 +344,27 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
         m_selectionBandIsShown = true;
     }
 
+    //prevent the deselection of items when context menu event
+    //was triggered (right button click)
     if (event->button() != Qt::LeftButton) {
         event->accept();
         return;
     }
 
-    if ( m_mouseMode == SelectAndEditMode && m_image->isLoaded ) {
-        CustomItem* lastCurvePoint;
-        QPointF eventPos = mapToScene(event->pos());
-        if (m_image->plotPointsType() == Image::AxisPoints && m_childItems.count() < 3) {
-            addCustomItem(eventPos);
-
-            Image::ReferencePoints points = m_image->axisPoints();
-            points.scenePos[m_childItems.count() - 1].setX(eventPos.x());
-            points.scenePos[m_childItems.count() - 1].setY(eventPos.y());
-            m_image->setUndoAware(false);
-            m_image->setAxisPoints(points);
-            m_image->setUndoAware(true);
+    QPointF eventPos = mapToScene(event->pos());
+    if ( m_mouseMode == SelectAndEditMode && m_image->isLoaded && sceneRect().contains(eventPos)) {
+        if (m_image->plotPointsType() == Image::AxisPoints) {
+            addAxisPoint(eventPos);
         } else if (m_image->plotPointsType() == Image::CurvePoints) {
-            m_image->beginMacro(i18n("%1: add new curve point.", m_image->name()));
-
-            if (m_childItems.count() == 3) {
-                lastCurvePoint = addCustomItem(eventPos);
-            } else {
-                lastCurvePoint = m_childItems.last();
-                CustomItem::ErrorBar errorBar = lastCurvePoint->itemErrorBar();
-                QPointF errorSpan = eventPos - lastCurvePoint->position().point;
-
-                if (m_image->plotErrors().x == Image::AsymmetricError && errorBar.minusDeltaX.isNull()) {
-                    if (errorBar.plusDeltaX.isNull())
-                        errorBar.plusDeltaX = errorSpan;
-                    else
-                        errorBar.minusDeltaX = errorSpan;
-
-                    lastCurvePoint->setItemErrorBar(errorBar);
-                } else if (m_image->plotErrors().x == Image::SymmetricError && errorBar.plusDeltaX.isNull()) {
-                    errorBar.plusDeltaX = errorSpan;
-                    errorBar.minusDeltaX = errorSpan;
-
-                    lastCurvePoint->setItemErrorBar(errorBar);
-                } else if (m_image->plotErrors().y == Image::AsymmetricError && errorBar.minusDeltaY.isNull()) {
-                    if (errorBar.plusDeltaY.isNull())
-                        errorBar.plusDeltaY = errorSpan;
-                    else
-                        errorBar.minusDeltaY = errorSpan;
-
-                    lastCurvePoint->setItemErrorBar(errorBar);
-                } else if (m_image->plotErrors().y == Image::SymmetricError && errorBar.plusDeltaY.isNull()) {
-                    errorBar.plusDeltaY = errorSpan;
-                    errorBar.minusDeltaY = errorSpan;
-
-                    lastCurvePoint->setItemErrorBar(errorBar);
-                } else {
-                    lastCurvePoint = addCustomItem(eventPos);
-                }
-            }
-
-            m_image->updateData(lastCurvePoint);
-            m_image->endMacro();
+            if (m_image->activeCurve())
+                m_image->activeCurve()->addCustomItem(eventPos);
         }
     }
 
+    // select the datapicker/image in the project explorer if the view was clicked
+    // and there is no selection currently. We need this for the case when
+    // there is a single datapicker/image in the project and we change from the project-node
+    // in the project explorer to the datapicker/image-node by clicking the view.
     if ( scene()->selectedItems().empty() )
         m_image->setSelectedInView(true);
 
@@ -412,6 +381,7 @@ void ImageView::mouseReleaseEvent(QMouseEvent* event) {
         if ( abs(m_selectionEnd.x()-m_selectionStart.x())>20 && abs(m_selectionEnd.y()-m_selectionStart.y())>20 )
             fitInView(mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect(), Qt::KeepAspectRatio);
     }
+
     QGraphicsView::mouseReleaseEvent(event);
 }
 
@@ -429,7 +399,7 @@ void ImageView::mouseMoveEvent(QMouseEvent* event) {
     QPointF pos = mapToScene(event->pos());
 
     if (m_image->plotPointsType() == Image::CurvePoints) {
-        QPointF logicalPos = m_image->m_transform->mapSceneToLogical(pos, m_image->axisPoints());
+        QPointF logicalPos = m_transform->mapSceneToLogical(pos, m_image->axisPoints());
         QString xLabel = "x";
         QString yLabel = "y";
         if (m_image->axisPoints().type == Image::PolarInDegree){
@@ -467,6 +437,7 @@ void ImageView::mouseMoveEvent(QMouseEvent* event) {
 
 void ImageView::contextMenuEvent(QContextMenuEvent* e) {
     Q_UNUSED(e);
+    //no need to propagate the event to the scene and graphics items
     QMenu *menu = new QMenu(this);
     this->createContextMenu(menu);
     menu->exec(QCursor::pos());
@@ -478,7 +449,8 @@ void ImageView::contextMenuEvent(QContextMenuEvent* e) {
 void ImageView::changePointsType(QAction* action) {
     if (action==setAxisPointsAction) {
         //clear image
-        if (!m_childItems.isEmpty())
+        int childCount = m_image->childCount<CustomItem>(AbstractAspect::IncludeHidden);
+        if (childCount)
             m_image->removeAllChildren();
         m_image->setPlotPointsType(Image::AxisPoints);
         m_image->setSegmentVisible(false);
@@ -528,24 +500,30 @@ void ImageView::changeSelectedItemsPosition(QAction* action) {
         shift.setY(1);
 
     m_image->beginMacro(i18n("%1: change position of selected CustomItems.", m_image->name()));
-    foreach (CustomItem* item, m_childItems) {
+    QList<CustomItem*> axisPointsItems = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
+    foreach (CustomItem* item, axisPointsItems) {
         if (!item->graphicsItem()->isSelected())
             continue;
 
         item->setPosition(item->position().point + shift);
 
         int itemIndex = m_image->indexOfChild<CustomItem>(item , AbstractAspect::IncludeHidden);
-        if (itemIndex > 2) {
-            m_image->updateData(item);
-        } else {
-            Image::ReferencePoints points = m_image->axisPoints();
-            points.scenePos[itemIndex].setX(item->position().point.x());
-            points.scenePos[itemIndex].setY(item->position().point.y());
-            m_image->setUndoAware(false);
-            m_image->setAxisPoints(points);
-            m_image->setUndoAware(true);
+        Image::ReferencePoints points = m_image->axisPoints();
+        points.scenePos[itemIndex].setX(item->position().point.x());
+        points.scenePos[itemIndex].setY(item->position().point.y());
+        m_image->setUndoAware(false);
+        m_image->setAxisPoints(points);
+        m_image->setUndoAware(true);
+    }
+
+    foreach (PlotCurve* curve, m_image->parentAspect()->children<PlotCurve>()) {
+        foreach (CustomItem* item, curve->children<CustomItem>(AbstractAspect::IncludeHidden)) {
+            if (!item->graphicsItem()->isSelected())
+                continue;
+            item->setPosition(item->position().point + shift);
         }
     }
+
     m_image->endMacro();
 }
 
@@ -563,7 +541,7 @@ void ImageView::mouseModeChanged(QAction* action) {
         setInteractive(false);
         setDragMode(QGraphicsView::NoDrag);
     } else {
-        m_mouseMode = SelectionMode;
+        m_mouseMode = SelectAndMoveMode;
         setInteractive(true);
         setDragMode(QGraphicsView::NoDrag);
     }
@@ -668,48 +646,79 @@ void ImageView::updateBackground() {
     handleImageActions();
 }
 
-void ImageView::updateDatasheet() {
-    if (m_childItems.count() > 3)
-        foreach(CustomItem* item, m_childItems) {
-            if (m_image->indexOfChild<CustomItem>(item ,AbstractAspect::IncludeHidden) > 2)
-                m_image->updateData(item);
-        }
+void ImageView::addCurve() {
+    m_image->beginMacro(i18n("%1: add new curve.", m_image->name()));
+    Datapicker* datapicker = dynamic_cast<Datapicker*>(m_image->parentAspect());
+    Q_ASSERT(datapicker);
+    PlotCurve* curve = new PlotCurve(i18n("Curve"));
+    datapicker->addChild(curve);
+    m_image->setActiveCurve(curve);
+    curve->setCurveErrorTypes(m_image->plotErrors());
+    m_image->endMacro();
+}
+
+void ImageView::addAxisPoint(const QPointF& pos) {
+    QList<CustomItem*> childItems = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
+    if (childItems.count() > 2)
+        return;
+
+    CustomItem* newItem = new CustomItem(i18n("Curve Point"));
+    newItem->setPosition(pos);
+    newItem->setHidden(true);
+
+    if (!childItems.isEmpty()) {
+        CustomItem* m_item = childItems.first();
+        newItem->setUndoAware(false);
+        newItem->setItemsBrush(m_item->itemsBrush());
+        newItem->setItemsOpacity(m_item->itemsOpacity());
+        newItem->setItemsPen(m_item->itemsPen());
+        newItem->setItemsRotationAngle(m_item->itemsRotationAngle());
+        newItem->setItemsSize(m_item->itemsSize());
+        newItem->setItemsStyle(m_item->itemsStyle());
+        newItem->setUndoAware(true);
+    }
+
+    m_image->addChild(newItem);
+
+    Image::ReferencePoints points = m_image->axisPoints();
+    points.scenePos[childItems.count()].setX(pos.x());
+    points.scenePos[childItems.count()].setY(pos.y());
+    m_image->setUndoAware(false);
+    m_image->setAxisPoints(points);
+    m_image->setUndoAware(true);
+}
+
+void ImageView::changeRotationAngle() {
+    this->rotate(-m_image->rotationAngle());
+    updateBackground();
 }
 
 void ImageView::handleImageActions() {
-    m_childItems = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
+    int axisPointsCount = m_image->childCount<CustomItem>(AbstractAspect::IncludeHidden);
 
     if (m_image->isLoaded) {
-        if (m_childItems.count() > 2) {
-            setCurvePointsAction->setEnabled(true);
-            selectSegmentAction->setEnabled(true);
-        } else {
-            setCurvePointsAction->setEnabled(false);
-            selectSegmentAction->setEnabled(false);
+        setCurvePointsAction->setEnabled(false);
+        selectSegmentAction->setEnabled(false);
+        setAxisPointsAction->setEnabled(true);
+        addCurveAction->setEnabled(true);
 
+        if (axisPointsCount > 2) {
+            if (m_image->activeCurve()) {
+                setCurvePointsAction->setEnabled(true);
+                selectSegmentAction->setEnabled(true);
+            }
+        } else {
             if (m_image->plotPointsType() != Image::AxisPoints) {
                 m_image->setUndoAware(false);
                 m_image->setPlotPointsType(Image::AxisPoints);
                 m_image->setUndoAware(true);
             }
         }
-        setAxisPointsAction->setEnabled(true);
     } else {
         setAxisPointsAction->setEnabled(false);
         setCurvePointsAction->setEnabled(false);
         selectSegmentAction->setEnabled(false);
-    }
-
-    if (!m_childItems.isEmpty()) {
-        shiftRightAction->setEnabled(true);
-        shiftLeftAction->setEnabled(true);
-        shiftUpAction->setEnabled(true);
-        shiftDownAction->setEnabled(true);
-    } else {
-        shiftRightAction->setEnabled(false);
-        shiftLeftAction->setEnabled(false);
-        shiftUpAction->setEnabled(false);
-        shiftDownAction->setEnabled(false);
+        addCurveAction->setEnabled(false);
     }
 
     setAxisPointsAction->setChecked(m_image->plotPointsType() == Image::AxisPoints);

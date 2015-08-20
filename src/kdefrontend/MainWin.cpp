@@ -663,7 +663,7 @@ bool MainWin::newProject(){
 
 	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-			this, SLOT(handleAspectRemoved(const AbstractAspect*)));
+            this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
 	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 			this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(m_project, SIGNAL(statusInfo(QString)), statusBar(), SLOT(showMessage(QString)));
@@ -1248,8 +1248,11 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	}
 }
 
-void MainWin::handleAspectRemoved(const AbstractAspect *parent){
-	m_projectExplorer->setCurrentAspect(parent);
+void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAspect* before,const AbstractAspect* aspect){
+    Q_UNUSED(before)
+
+    if (!aspect->hidden())
+        m_projectExplorer->setCurrentAspect(parent);
 }
 
 void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){
@@ -1257,7 +1260,11 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){
 	if (!part) return;
 
 	const Workbook* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
-	if (!workbook) {
+    const Datapicker* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
+    if (!datapicker)
+        datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect()->parentAspect());
+
+    if (!workbook && !datapicker) {
 		PartMdiView* win = part->mdiSubWindow();
 		if (win)
 			m_mdiArea->removeSubWindow(win);
@@ -1299,6 +1306,9 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 		//for aspects being children of a Workbook, we show workbook's window, otherwise the window of the selected part
 		const Workbook* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
         const Datapicker* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
+        if (!datapicker)
+            datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect()->parentAspect());
+
         if (workbook)
             win = workbook->mdiSubWindow();
         else if (datapicker)
@@ -1322,6 +1332,9 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 			if (parent->parentAspect()) {
 				Workbook* workbook = dynamic_cast<Workbook*>(parent->parentAspect());
                 Datapicker* datapicker = dynamic_cast<Datapicker*>(parent->parentAspect());
+                if (!datapicker)
+                    datapicker = dynamic_cast<Datapicker*>(parent->parentAspect()->parentAspect());
+
 				if (workbook) {
 					workbook->childSelected(parent);
                 } else if (datapicker) {
