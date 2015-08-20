@@ -53,7 +53,7 @@ int main (int argc, char *argv[]) {
 	aboutData.addAuthor(i18n("Alexander Semke"), i18n("developer"), "alexander.semke@web.de", 0);
 	aboutData.addAuthor(i18n("Andreas Kainz"), i18n("icon designer"), "kainz.a@gmail.com", 0);
 	aboutData.addCredit(i18n("Yuri Chornoivan"), i18n("Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", 0);
-	aboutData.addCredit(i18n("Garvit Khatru"), i18n("Porting LabPlot2 to KF5 and Integration with LabPlot2"), "garvitdelhi@gmail.com", 0);
+	aboutData.addCredit(i18n("Garvit Khatri"), i18n("Porting LabPlot2 to KF5 and Integration with Cantor"), "garvitdelhi@gmail.com", 0);
 	KAboutData::setApplicationData(aboutData);
 
 
