@@ -72,7 +72,7 @@ ImageView::ImageView(Image* image) : QGraphicsView(),
     initActions();
     initMenus();
     selectAndEditModeAction->setChecked(true);
-    setInteractive(false);
+    setInteractive(true);
 
     changeZoom(zoomOriginAction);
     currentZoomAction=zoomInViewAction;
