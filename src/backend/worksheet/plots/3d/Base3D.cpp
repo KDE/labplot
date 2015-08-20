@@ -325,9 +325,9 @@ BoundingBox Base3DPrivate::systemBounds() const {
 				continue;
 
 			const double* actorBounds = actor->GetBounds();
-			if (actorBounds[0] < actorBounds[1]
-					&& actorBounds[2] < actorBounds[3]
-					&& actorBounds[4] < actorBounds[5])
+			if (actorBounds[0] <= actorBounds[1]
+					&& actorBounds[2] <= actorBounds[3]
+					&& actorBounds[4] <= actorBounds[5])
 				bb.AddBounds(actorBounds);
 		}
 	} else {

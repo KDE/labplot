@@ -34,6 +34,8 @@
 
 #include <QColor>
 
+class vtkCubeAxesActor;
+
 struct AxesPrivate : public Base3DPrivate {
 		Axes* const q;
 
@@ -54,6 +56,8 @@ struct AxesPrivate : public Base3DPrivate {
 		// Update methods
 		void objectScaled(vtkActor* actor) const;
 		void updateBounds(vtkActor* actor) const;
+		void updateLabels(const BoundingBox& bounds, vtkCubeAxesActor* cubeAxes) const;
+		void makeCube(BoundingBox& bounds) const;
 };
 
 #endif
