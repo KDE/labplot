@@ -120,70 +120,72 @@ AxesPrivate::~AxesPrivate() {
 }
 
 namespace {
-	void addLabels(double init, double delta, int numIter, vtkStringArray* labels, double (*scaleFunction)(double)) {
+	void addLabels(double init, double delta, int numIter,
+			vtkStringArray* labels, double factor) {
 		for (int i = 0; i < numIter; ++i) {
-			const double scaledLabel = scaleFunction(init + i * delta);
+			const double scaledLabel = std::pow(factor, init + i * delta);
 			labels->InsertValue(i, QString::number(scaledLabel, 'g', 2).toAscii());
 		}
+	}
+
+	double scaleFactor(Plot3D::Scaling scale) {
+		if (scale == Plot3D::Scaling_Log10)
+			return 10;
+		if (scale == Plot3D::Scaling_Log2)
+			return 2;
+		return M_E;
 	}
 }
 
 void AxesPrivate::objectScaled(vtkActor* actor) const {
+	qDebug() << Q_FUNC_INFO << __LINE__ << name();
 	vtkCubeAxesActor* cubeAxes = dynamic_cast<vtkCubeAxesActor*>(actor);
 	BoundingBox bounds = systemBounds();
+	qDebug() << Q_FUNC_INFO << "System bounds:" << bounds.xMin() << bounds.xMax()
+			<< bounds.yMin() << bounds.yMax()
+			<< bounds.zMin() << bounds.zMax();
 	if (xScaling != Plot3D::Scaling_Linear) {
+		qDebug() << "Scale X Axes";
 		if (bounds.xMin() < 0.00000001)
 			bounds.setXMin(0.00000001);
 		const int numXValues = 3;
 		const double dx = (bounds.xMax() - bounds.xMin()) / (numXValues - 1);
 		vtkSmartPointer<vtkStringArray> labels = vtkSmartPointer<vtkStringArray>::New();
 
-		if (xScaling == Plot3D::Scaling_Log10)
-			addLabels(bounds.xMin(), dx, numXValues, labels, log10);
-		else if (xScaling == Plot3D::Scaling_Log2)
-			addLabels(bounds.xMin(), dx, numXValues, labels, log2);
-		else if (xScaling == Plot3D::Scaling_Ln)
-			addLabels(bounds.xMin(), dx, numXValues, labels, log);
+		addLabels(bounds.xMin(), dx, numXValues, labels, scaleFactor(xScaling));
 
 		cubeAxes->SetAxisLabels(0, labels);
 	} else
 		cubeAxes->SetAxisLabels(0, 0);
 
 	if (yScaling != Plot3D::Scaling_Linear) {
+		qDebug() << "Scale Y Axes";
 		if (bounds.yMin() < 0.00000001)
 			bounds.setYMin(0.00000001);
 		const int numYValues = 3;
 		const double dy = (bounds.yMax() - bounds.yMin()) / (numYValues - 1);
 		vtkSmartPointer<vtkStringArray> labels = vtkSmartPointer<vtkStringArray>::New();
 
-		if (yScaling == Plot3D::Scaling_Log10)
-			addLabels(bounds.yMin(), dy, numYValues, labels, log10);
-		else if (yScaling == Plot3D::Scaling_Log2)
-			addLabels(bounds.yMin(), dy, numYValues, labels, log2);
-		else if (yScaling == Plot3D::Scaling_Ln)
-			addLabels(bounds.yMin(), dy, numYValues, labels, log);
+		addLabels(bounds.yMin(), dy, numYValues, labels, scaleFactor(yScaling));
 
 		cubeAxes->SetAxisLabels(1, labels);
 	} else
 		cubeAxes->SetAxisLabels(1, 0);
 
 	if (zScaling != Plot3D::Scaling_Linear) {
+		qDebug() << "Scale Z Axes";
 		if (bounds.zMin() < 0.00000001)
 			bounds.setZMin(0.00000001);
 		const int numZValues = 3;
 		const double dz = (bounds.zMax() - bounds.zMin()) / (numZValues - 1);
 		vtkSmartPointer<vtkStringArray> labels = vtkSmartPointer<vtkStringArray>::New();
 
-		if (zScaling == Plot3D::Scaling_Log10)
-			addLabels(bounds.zMin(), dz, numZValues, labels, log10);
-		else if (zScaling == Plot3D::Scaling_Log2)
-			addLabels(bounds.zMin(), dz, numZValues, labels, log2);
-		else if (zScaling == Plot3D::Scaling_Ln)
-			addLabels(bounds.zMin(), dz, numZValues, labels, log);
+		addLabels(bounds.zMin(), dz, numZValues, labels, scaleFactor(zScaling));
 
 		cubeAxes->SetAxisLabels(2, labels);
 	} else
 		cubeAxes->SetAxisLabels(2, 0);
+	cubeAxes->SetRebuildAxes(true);
 }
 
 void AxesPrivate::updateBounds(vtkActor* actor) const {
@@ -213,6 +215,7 @@ void AxesPrivate::modifyActor(vtkRenderer* renderer, vtkActor* actor) const {
 	axes->SetYTitle(yLabel.toAscii());
 	axes->SetZTitle(zLabel.toAscii());
 
+	//axes->SetLabelScaling(false, 0, 0, 0);
 	axes->SetScreenSize(fontSize);
 	axes->DrawXGridlinesOn();
 	axes->DrawYGridlinesOn();
@@ -232,7 +235,6 @@ void AxesPrivate::modifyActor(vtkRenderer* renderer, vtkActor* actor) const {
 
 	axes->SetFlyModeToOuterEdges();
 
-	axes->PickableOn();
 	axes->SetGridLineLocation(2);
 
 	double colors[][3] = {

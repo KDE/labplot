@@ -76,6 +76,7 @@ void Base3D::setRenderer(vtkRenderer* renderer) {
 void Base3D::setRanges(const BoundingBox& bounds) {
 	Q_D(Base3D);
 	d->ranges = bounds;
+	qDebug() << Q_FUNC_INFO;
 	d->updateRanges();
 }
 
@@ -226,6 +227,7 @@ void Base3DPrivate::notify(bool notify) {
 void Base3DPrivate::updateRanges(bool needNotify) {
 	if (!isInitialized() || !polyData) {
 		rangedPolyData = polyData;
+		updateScaling(needNotify);
 		return;
 	}
 
@@ -269,8 +271,11 @@ void Base3DPrivate::updateRanges(bool needNotify) {
 }
 
 void Base3DPrivate::updateScaling(bool needNotify) {
+	qDebug() << Q_FUNC_INFO << __LINE__ << name();
 	if (!isInitialized())
 		return;
+
+	qDebug() << Q_FUNC_INFO << __LINE__ << name();
 
 	objectScaled(actor);
 	if (rangedPolyData.GetPointer() == 0 || rangedPolyData->GetNumberOfCells() == 0) {
@@ -319,7 +324,11 @@ BoundingBox Base3DPrivate::systemBounds() const {
 			if (actor == this->actor.GetPointer())
 				continue;
 
-			bb.AddBounds(actor->GetBounds());
+			const double* actorBounds = actor->GetBounds();
+			if (actorBounds[0] < actorBounds[1]
+					&& actorBounds[2] < actorBounds[3]
+					&& actorBounds[4] < actorBounds[5])
+				bb.AddBounds(actorBounds);
 		}
 	} else {
 		bb.SetBounds(-1, 1, -1, 1, -1, 1);

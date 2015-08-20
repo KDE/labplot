@@ -882,11 +882,6 @@ void Plot3DPrivate::init() {
 	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
 	backgroundRenderer->AddActor(backgroundImageActor);
 
-	if (axes) {
-		axes->setRenderer(renderer);
-		q->configureAspect(axes);
-	}
-
 	qDebug() << Q_FUNC_INFO << __LINE__;
 
 	foreach(Surface3D* surface, surfaces) {
@@ -897,6 +892,11 @@ void Plot3DPrivate::init() {
 	foreach(Curve3D* curve, curves) {
 		curve->setRenderer(renderer);
 		q->configureAspect(curve);
+	}
+
+	if (axes) {
+		axes->setRenderer(renderer);
+		q->configureAspect(axes);
 	}
 }
 
@@ -988,6 +988,7 @@ void Plot3DPrivate::updateRanges(bool notify) {
 		curve->setRanges(ranges);
 	}
 
+	axes->setRanges(ranges);
 	axes->updateBounds();
 	if (notify)
 		emit q->parametersChanged();
