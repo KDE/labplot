@@ -68,7 +68,7 @@ void Base3D::setRenderer(vtkRenderer* renderer) {
 	Q_D(Base3D);
 	d->renderer = renderer;
 	if (renderer) {
-		d->renderer->AddViewProp(d->actor);
+		d->renderer->AddActor(d->actor);
 		d->update();
 	}
 }
@@ -162,7 +162,7 @@ bool Base3D::isVisible() const {
 
 void Base3D::remove() {
 	Q_D(Base3D);
-	d->renderer->RemoveViewProp(d->actor);
+	d->renderer->RemoveActor(d->actor);
 	emit removed();
 	AbstractAspect::remove();
 }
@@ -180,11 +180,11 @@ Base3DPrivate::Base3DPrivate(const QString& name, Base3D* baseParent, vtkActor* 
 	: xScaling(Plot3D::Scaling_Linear)
 	, yScaling(Plot3D::Scaling_Linear)
 	, zScaling(Plot3D::Scaling_Linear)
+	, renderer(0)
 	, baseParent(baseParent)
 	, aspectName(name)
 	, isHighlighted(false)
 	, isSelected(false)
-	, renderer(0)
 	, actor(actor == 0 ? vtkActor::New() : actor)
 	, property(vtkProperty::New()){
 }
@@ -314,7 +314,7 @@ void Base3DPrivate::update() {
 }
 
 BoundingBox Base3DPrivate::systemBounds() const {
-	vtkPropCollection* actors = renderer->GetViewProps();
+	vtkActorCollection* actors = renderer->GetActors();
 	actors->InitTraversal();
 
 	BoundingBox bb;

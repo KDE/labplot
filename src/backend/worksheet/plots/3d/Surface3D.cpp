@@ -57,6 +57,7 @@
 #include <vtkAlgorithm.h>
 #include <vtkDecimatePro.h>
 #include <vtkNew.h>
+#include <vtkRenderer.h>
 
 Surface3D::Surface3D()
 	: Base3D(new Surface3DPrivate(i18n("Surface"), this)) {
@@ -289,6 +290,9 @@ Surface3DPrivate::Surface3DPrivate(const QString& name, Surface3D *parent)
 	, showXYProjection(false)
 	, showXZProjection(false)
 	, showYZProjection(false)
+	, xyProjection(vtkActor::New())
+	, xzProjection(vtkActor::New())
+	, yzProjection(vtkActor::New())
 	// Matrix properties
 	, matrix(0)
 	// Spreadsheet properties
@@ -298,13 +302,74 @@ Surface3DPrivate::Surface3DPrivate(const QString& name, Surface3D *parent)
 	, firstNode(0)
 	, secondNode(0)
 	, thirdNode(0){
+
+	xyProjection->GetProperty()->SetLineWidth(5);
+	xzProjection->GetProperty()->SetLineWidth(5);
+	yzProjection->GetProperty()->SetLineWidth(5);
 }
 
 Surface3DPrivate::~Surface3DPrivate() {
+	renderer->RemoveActor(xyProjection);
+	renderer->RemoveActor(xzProjection);
+	renderer->RemoveActor(yzProjection);
 }
 
 vtkSmartPointer<vtkPolyData> Surface3DPrivate::createData() const {
 	vtkSmartPointer<vtkPolyData> data = generateData();
+
+	if (data && data->GetNumberOfCells() > 0) {
+		BoundingBox bounds = systemBounds();
+		bounds.AddBounds(data->GetBounds());
+		int flag = static_cast<int>(showYZProjection);
+		flag |= static_cast<int>(showXZProjection) << 1;
+		flag |= static_cast<int>(showXYProjection) << 2;
+		for (int i = 0; i < 3; ++i) {
+			if ((flag & (1 << i)) == 0) {
+				if (i == 0)
+					renderer->RemoveViewProp(xyProjection);
+				else if (i == 1)
+					renderer->RemoveViewProp(xzProjection);
+				else
+					renderer->RemoveViewProp(yzProjection);
+				continue;
+			}
+
+			vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
+			points->DeepCopy(data->GetPoints());
+			double point[3];
+			const double beginPoint = bounds.getBounds()[i * 2];
+			qDebug() << Q_FUNC_INFO << "begin point" << beginPoint;
+			for (vtkIdType j = 0; j < points->GetNumberOfPoints(); ++j) {
+				// TODO: Temporary. Move to the beginning of BB
+				points->GetPoint(j, point);
+				point[i] = beginPoint;
+				points->SetPoint(j, point);
+			}
+
+			vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
+			polydata->SetPoints(points);
+			polydata->SetPolys(data->GetPolys());
+			qDebug() << Q_FUNC_INFO << "Number of polys" << polydata->GetNumberOfPolys();
+			polydata = extractEdges(polydata);
+
+			vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+			mapper->SetInputData(polydata);
+
+			if (i == 0) {
+				qDebug() << Q_FUNC_INFO << "Show XY Projecion";
+				xyProjection->SetMapper(mapper);
+				renderer->AddViewProp(xyProjection);
+			} else if (i == 1) {
+				qDebug() << Q_FUNC_INFO << "Show XZ Projecion";
+				xzProjection->SetMapper(mapper);
+				renderer->AddViewProp(xzProjection);
+			} else {
+				qDebug() << Q_FUNC_INFO << "Show YZ Projecion";
+				yzProjection->SetMapper(mapper);
+				renderer->AddViewProp(yzProjection);
+			}
+		}
+	}
 
 	if (visualizationType == Surface3D::Surface3D::VisualizationType_Wireframe)
 		data = extractEdges(data);

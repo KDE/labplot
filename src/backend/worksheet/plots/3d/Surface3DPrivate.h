@@ -50,6 +50,9 @@ struct Surface3DPrivate : public Base3DPrivate {
 	bool showXYProjection;
 	bool showXZProjection;
 	bool showYZProjection;
+	vtkSmartPointer<vtkActor> xyProjection;
+	vtkSmartPointer<vtkActor> xzProjection;
+	vtkSmartPointer<vtkActor> yzProjection;
 
 	// Matrix properties
 	const Matrix* matrix;

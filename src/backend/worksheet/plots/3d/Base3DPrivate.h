@@ -84,6 +84,7 @@ protected:
 	Plot3D::Scaling zScaling;
 	BoundingBox boundingBox;
 	BoundingBox ranges;
+	vtkSmartPointer<vtkRenderer> renderer;
 
 private:
 	Base3D * const baseParent;
@@ -93,7 +94,6 @@ private:
 	vtkSmartPointer<vtkPolyData> polyData;
 	vtkSmartPointer<vtkPolyData> rangedPolyData;
 	vtkSmartPointer<vtkPolyData> scaledPolyData;
-	vtkSmartPointer<vtkRenderer> renderer;
 	vtkSmartPointer<vtkActor> actor;
 	vtkSmartPointer<vtkProperty> property;
 };
