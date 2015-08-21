@@ -1,4 +1,12 @@
 /***************************************************************************
+    File                 : DatapickerView.h
+    Project              : LabPlot
+    Description          : View class for Datapicker
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+
+ ***************************************************************************/
+/***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *

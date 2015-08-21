@@ -30,7 +30,7 @@
 #include "backend/core/AbstractPart.h"
 #include "commonfrontend/core/PartMdiView.h"
 #include "backend/core/Workbook.h"
-#include "backend/core/Datapicker.h"
+#include "backend/datapicker/Datapicker.h"
 #include <QMenu>
 #include <QStyle>
 

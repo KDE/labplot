@@ -1,4 +1,10 @@
-
+/***************************************************************************
+    File                 : ImageEditor.cpp
+    Project              : LabPlot
+    Description          : Edit Image on the basis of input color attributes
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+ ***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *

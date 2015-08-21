@@ -1,4 +1,10 @@
-
+/***************************************************************************
+    File                 : Segment.cpp
+    Project              : LabPlot
+    Description          : Graphics-item for curve of Datapicker
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+ ***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -20,10 +26,10 @@
 
 #include "Segment.h"
 #include "SegmentPrivate.h"
-#include "backend/worksheet/Image.h"
-#include "backend/worksheet/CustomItem.h"
+#include "backend/datapicker/Image.h"
+#include "backend/datapicker/CustomItem.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/core/PlotCurve.h"
+#include "backend/datapicker/DataPickerCurve.h"
 
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>

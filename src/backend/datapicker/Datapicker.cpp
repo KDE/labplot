@@ -1,4 +1,12 @@
 /***************************************************************************
+    File                 : Datapicker.cpp
+    Project              : LabPlot
+    Description          : Aspect providing a container for storing image and data
+                           in form of worksheet and spreadsheets
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+ ***************************************************************************/
+/***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
@@ -19,11 +27,11 @@
 
 #include "Datapicker.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/Image.h"
+#include "backend/datapicker/Image.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/datapicker/DatapickerView.h"
-#include "backend/core/PlotCurve.h"
-#include "backend/worksheet/CustomItem.h"
+#include "backend/datapicker/DataPickerCurve.h"
+#include "backend/datapicker/CustomItem.h"
 
 #include "KIcon"
 #include <KLocale>
@@ -31,7 +39,7 @@
 
 /**
  * \class Datapicker
- * \brief Top-level container for PlotCurve and Image.
+ * \brief Top-level container for DataPickerCurve and Image.
  * \ingroup backend
  */
 Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name)
@@ -193,8 +201,8 @@ bool Datapicker::load(XmlStreamReader* reader){
                 addChild(plot);
                 m_image = plot;
             }
-        } else if (reader->name() == "plotCurve") {
-            PlotCurve* curve = new PlotCurve("");
+        } else if (reader->name() == "dataPickerCurve") {
+            DataPickerCurve* curve = new DataPickerCurve("");
             if (!curve->load(reader)){
                 delete curve;
                 return false;
@@ -207,7 +215,7 @@ bool Datapicker::load(XmlStreamReader* reader){
         }
     }
 
-    foreach (PlotCurve* curve, children<PlotCurve>()) {
+    foreach (DataPickerCurve* curve, children<DataPickerCurve>()) {
         foreach (CustomItem* item, curve->children<CustomItem>(IncludeHidden)) {
             curve->handleAspectAdded(item);
         }

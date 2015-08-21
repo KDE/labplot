@@ -1,4 +1,10 @@
-
+/***************************************************************************
+    File                 : CustomItem.h
+    Project              : LabPlot
+    Description          : Graphic Item for coordinate points of Datapicker
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+ ***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -26,7 +32,7 @@
 #include <QPen>
 
 #include "backend/lib/macros.h"
-#include "backend/worksheet/Image.h"
+#include "backend/datapicker/Image.h"
 #include "backend/worksheet/WorksheetElement.h"
 
 class CustomItem;

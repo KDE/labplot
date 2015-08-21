@@ -17,7 +17,7 @@ class ImagePrivate{
 		Image* const q;
 		QRectF pageRect;
 		QGraphicsScene* m_scene;
-        PlotCurve* activeCurve;
+        DataPickerCurve* activeCurve;
         QString activeCurvePath;
 		float rotationAngle;
         QString fileName;

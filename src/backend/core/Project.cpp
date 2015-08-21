@@ -32,7 +32,7 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/core/PlotCurve.h"
+#include "backend/datapicker/DataPickerCurve.h"
 
 #include <QUndoStack>
 #include <QMenu>
@@ -279,7 +279,7 @@ bool Project::load(XmlStreamReader* reader) {
 			//restore the pointer to the data sets (columns) in xy-curves etc.
 			QList<AbstractAspect*> curves = children("XYCurve", AbstractAspect::Recursive);
 			QList<AbstractAspect*> axes = children("Axes", AbstractAspect::Recursive);
-            QList<AbstractAspect*> plotCurves = children("PlotCurve", AbstractAspect::Recursive);
+            QList<AbstractAspect*> dataPickerCurves = children("DataPickerCurve", AbstractAspect::Recursive);
 			if (curves.size()!=0 || axes.size()!=0) {
 				QList<AbstractAspect*> columns = children("Column", AbstractAspect::Recursive);
 
@@ -322,16 +322,16 @@ bool Project::load(XmlStreamReader* reader) {
 					RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
 				}
 
-                foreach (AbstractAspect* aspect, plotCurves) {
-                    PlotCurve* plotCurve = dynamic_cast<PlotCurve*>(aspect);
-                    if (!plotCurve) continue;
+                foreach (AbstractAspect* aspect, dataPickerCurves) {
+                    DataPickerCurve* dataPickerCurve = dynamic_cast<DataPickerCurve*>(aspect);
+                    if (!dataPickerCurve) continue;
 
-                    RESTORE_COLUMN_POINTER(plotCurve, posXColumn, PosXColumn);
-                    RESTORE_COLUMN_POINTER(plotCurve, posYColumn, PosYColumn);
-                    RESTORE_COLUMN_POINTER(plotCurve, plusDeltaXColumn, PlusDeltaXColumn);
-                    RESTORE_COLUMN_POINTER(plotCurve, minusDeltaXColumn, MinusDeltaXColumn);
-                    RESTORE_COLUMN_POINTER(plotCurve, plusDeltaYColumn, PlusDeltaYColumn);
-                    RESTORE_COLUMN_POINTER(plotCurve, minusDeltaYColumn, MinusDeltaYColumn);
+                    RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
+                    RESTORE_COLUMN_POINTER(dataPickerCurve, posYColumn, PosYColumn);
+                    RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaXColumn, PlusDeltaXColumn);
+                    RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaXColumn, MinusDeltaXColumn);
+                    RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
+                    RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
                 }
 			}
 		} else {// no project element

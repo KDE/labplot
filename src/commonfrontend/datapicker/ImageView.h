@@ -1,4 +1,11 @@
+/***************************************************************************
+    File                 : ImageView.h
+    Project              : LabPlot
+    Description          : Image view for datapicker
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
 
+ ***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -33,6 +40,7 @@ class Image;
 class WorksheetElement;
 class Transform;
 class CustomItem;
+class QActionGroup;
 
 class ImageView : public QGraphicsView {
     Q_OBJECT
@@ -76,6 +84,8 @@ class ImageView : public QGraphicsView {
         QMenu* m_viewImageMenu;
         QMenu* m_navigationMenu;
         QMenu* m_magnificationMenu;
+        QMenu* m_curveMenu;
+        QMenu* m_activeCurveMenu;
 
 
         QToolButton* tbZoom;
@@ -93,6 +103,7 @@ class ImageView : public QGraphicsView {
         QAction* selectSegmentAction;
 
         QAction* addCurveAction;
+        QActionGroup* m_activeCurveActionGroup;
 
         QAction* navigationModeAction;
         QAction* zoomSelectionModeAction;
@@ -121,6 +132,7 @@ class ImageView : public QGraphicsView {
         void changeZoom(QAction*);
         void changeSelectedItemsPosition(QAction*);
         void changePointsType(QAction*);
+        void activeCurveChanged(QAction*);
         void handleImageActions();
         void updateBackground();
         void addCurve();

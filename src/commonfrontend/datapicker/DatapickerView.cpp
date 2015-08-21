@@ -1,4 +1,12 @@
 /***************************************************************************
+    File                 : DatapickerView.cpp
+    Project              : LabPlot
+    Description          : View class for Datapicker
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+
+ ***************************************************************************/
+/***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
@@ -20,10 +28,10 @@
 #include "DatapickerView.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractPart.h"
-#include "backend/core/Datapicker.h"
+#include "backend/datapicker/Datapicker.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/Image.h"
+#include "backend/datapicker/Image.h"
 #include "commonfrontend/workbook/WorkbookView.h"
 
 #include <QTabWidget>

@@ -1,4 +1,10 @@
-
+/***************************************************************************
+    File                 : ImageEditor.h
+    Project              : LabPlot
+    Description          : Edit Image on the basis of input color attributes
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+ ***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -18,40 +24,46 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SEGMENTS_H
-#define SEGMENTS_H
+#ifndef IMAGEEDITOR_H
+#define IMAGEEDITOR_H
 
+#include <QColor>
 #include <QList>
 
-class ImageEditor;
-class QImage;
-class QLine;
-class Image;
-class Segment;
+#include <backend/datapicker/Image.h>
 
-class Segments {
+class ImageEditor {
+    public:
 
-	public:
-        Segments(Image*);
-		~Segments();
-		
-        QList<Segment*> segments;
-        void makeSegments(QImage&);
-        void clearSegments();
-        void setSegmentsVisible(bool);
+        ImageEditor();
+        ~ImageEditor();
+
+        int colorAttributeMax(Image::ColorAttributes) const;
+
+        QRgb backgroundColor(const QImage*);
+
+        bool colorCompare(QRgb color1, QRgb color2);
+
+        int discretizeValueNotForeground(int, int, Image::ColorAttributes) const;
+        int discretizeValueForeground(int, int, int, int, int) const;
+
+        void discretize(QImage*, QImage*, Image::EditorSettings);
+
+        bool pixelIsOn(int, Image::EditorSettings) const;
+        bool processedPixelIsOn(const QImage&, int, int) const;
 
     private:
-        Image* m_image;
 
-		void loadBool(const ImageEditor*, bool*, QImage*, int);
-        void loadSegment(Segment**, int);
-		int adjacentRuns(bool*, int, int, int);
-        Segment *adjacentSegment(Segment**, int, int, int);
-        int adjacentSegments(Segment**, int, int, int);
-        void matchRunsToSegments(int, int, bool*, Segment**, bool*, Segment**, bool*);
-        void finishRun(bool*, bool*, Segment**, Segment**, int, int, int, int);
-		void scrollBool(bool*, bool*, int);
-        void scrollSegment(Segment**, Segment**, int);
-        void removeUnneededLines(Segment**, Segment**, int);
+        struct ColorEntry {
+            QColor color;
+            int count;
+        };
+
+        typedef QList<ColorEntry> ColorList;
+
+        QImage* m_originalImage;
+        bool pixelIsOn(int, int, int) const;
 };
-#endif
+
+
+#endif // IMAGEEDITOR_H

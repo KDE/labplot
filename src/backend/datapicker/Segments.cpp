@@ -1,4 +1,10 @@
-
+/***************************************************************************
+    File                 : Segments.cpp
+    Project              : LabPlot
+    Description          : Contain Methods to trace curve of image/plot
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+ ***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -19,8 +25,8 @@
  ***************************************************************************/
 
 #include "Segments.h"
-#include "backend/worksheet/Segment.h"
-#include "backend/core/ImageEditor.h"
+#include "backend/datapicker/Segment.h"
+#include "backend/datapicker/ImageEditor.h"
 
 #include <QImage>
 #include <QLine>

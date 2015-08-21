@@ -1,4 +1,10 @@
-
+/***************************************************************************
+    File                 : Segment.h
+    Project              : LabPlot
+    Description          : Graphics-item for curve of Datapicker
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+ ***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *

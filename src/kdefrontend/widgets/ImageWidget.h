@@ -1,4 +1,11 @@
+/***************************************************************************
+    File                 : ImageWidget.h
+    Project              : LabPlot
+    Description          : widget for datapicker properties
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
 
+ ***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -22,7 +29,7 @@
 #define IMAGEWIDGET_H
 
 #include "ui_imagewidget.h"
-#include "backend/worksheet/Image.h"
+#include "backend/datapicker/Image.h"
 
 class CustomItem;
 class CustomItemWidget;
@@ -44,7 +51,7 @@ private:
     Ui::ImageWidget ui;
     void initConnections();
     virtual void setModel();
-    void setModelIndexFromCurve(TreeViewComboBox*, const PlotCurve*);
+    void setModelIndexFromCurve(TreeViewComboBox*, const DataPickerCurve*);
 
     AspectTreeModel* m_aspectTreeModel;
     Image *m_image;
@@ -77,8 +84,10 @@ private slots:
     void imageAxisPointsChanged(const Image::ReferencePoints&);
     void imageEditorSettingsChanged(const Image::EditorSettings&);
     void imageMinSegmentLengthChanged(const int);
+    void imageActiveCurveChanged();
     void updateCustomItemList();
     void handleWidgetActions();
+    void handleCurveAspectChanged();
 
     void plotImageTypeChanged(int);
     void plotErrorsChanged(Image::Errors);

@@ -1,4 +1,11 @@
+/***************************************************************************
+    File                 : ImageWidget.cpp
+    Project              : LabPlot
+    Description          : widget for datapicker properties
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
 
+ ***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -19,12 +26,12 @@
  ***************************************************************************/
 
 #include "ImageWidget.h"
-#include "backend/worksheet/CustomItem.h"
+#include "backend/datapicker/CustomItem.h"
 #include "kdefrontend/widgets/CustomItemWidget.h"
 #include "commonfrontend/widgets/qxtspanslider.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "backend/core/AspectTreeModel.h"
-#include "backend/core/PlotCurve.h"
+#include "backend/datapicker/DataPickerCurve.h"
 
 #include <QGridLayout>
 #include <QRadioButton>
@@ -50,7 +57,7 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent), m_aspectTreeModel(0)
 
     QGridLayout* generalTabLayout = static_cast<QGridLayout*>(ui.tGeneral->layout());
     cbActiveCurve = new TreeViewComboBox(ui.tGeneral);
-    generalTabLayout->addWidget(cbActiveCurve, 4, 2, 1, 6);
+    generalTabLayout->addWidget(cbActiveCurve, 10, 2, 1, 6);
 
     QGridLayout* editTabLayout = static_cast<QGridLayout*>(ui.tEdit->layout());
     editTabLayout->setContentsMargins(2,2,2,2);
@@ -141,6 +148,7 @@ void ImageWidget::setImages(QList<Image*> list) {
     this->load();
     initConnections();
     handleWidgetActions();
+    handleCurveAspectChanged();
 }
 
 void ImageWidget::initConnections() {
@@ -152,7 +160,10 @@ void ImageWidget::initConnections() {
     connect( m_image, SIGNAL(axisPointsChanged(Image::ReferencePoints)), this, SLOT(imageAxisPointsChanged(Image::ReferencePoints)) );
     connect( m_image, SIGNAL(settingsChanged(Image::EditorSettings)), this, SLOT(imageEditorSettingsChanged(Image::EditorSettings)) );
     connect( m_image, SIGNAL(minSegmentLengthChanged(int)), this, SLOT(imageMinSegmentLengthChanged(int)) );
-    connect( m_image, SIGNAL(activeCurveChanged(const PlotCurve*)), this, SLOT(updateCustomItemList()) );
+    connect( m_image, SIGNAL(activeCurveChanged(const DataPickerCurve*)), this, SLOT(imageActiveCurveChanged()) );
+    connect( m_image->parentAspect(), SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleCurveAspectChanged()) );
+    connect( m_image->parentAspect(), SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*))
+             , this, SLOT(handleCurveAspectChanged()) );
     if (m_image->activeCurve())
         connect( m_image->activeCurve(), SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(updateCustomItemList()) );
 }
@@ -160,11 +171,11 @@ void ImageWidget::initConnections() {
 
 void ImageWidget::setModel() {
     QList<const char*>  list;
-    list<<"Datapicker"<<"Image"<<"PlotCurve";
+    list<<"Datapicker"<<"Image"<<"DataPickerCurve";
     cbActiveCurve->setTopLevelClasses(list);
 
     list.clear();
-    list<<"PlotCurve";
+    list<<"DataPickerCurve";
     m_aspectTreeModel->setSelectableAspects(list);
     cbActiveCurve->setSelectableClasses(list);
     cbActiveCurve->setModel(m_aspectTreeModel);
@@ -198,6 +209,17 @@ void ImageWidget::handleWidgetActions() {
     }
 
     updateCustomItemList();
+}
+
+void ImageWidget::handleCurveAspectChanged() {
+    QList<DataPickerCurve*> curveList = m_image->parentAspect()->children<DataPickerCurve>();
+    if (curveList.isEmpty()) {
+        cbActiveCurve->setVisible(false);
+        ui.lActiveCurve->setVisible(false);
+    } else {
+        cbActiveCurve->setVisible(true);
+        ui.lActiveCurve->setVisible(true);
+    }
 }
 
 //**********************************************************
@@ -268,7 +290,7 @@ void ImageWidget::activeCurveChanged(const QModelIndex& index) {
         return;
 
     AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-    PlotCurve* curve = dynamic_cast<PlotCurve*>(aspect);
+    DataPickerCurve* curve = dynamic_cast<DataPickerCurve*>(aspect);
 
     foreach(Image* image, m_imagesList)
         image->setActiveCurve(curve);
@@ -429,7 +451,7 @@ void ImageWidget::pointSeparationChanged(int value) {
         image->setPointSeparation(value);
 }
 
-void ImageWidget::setModelIndexFromCurve(TreeViewComboBox* cb, const PlotCurve* curve){
+void ImageWidget::setModelIndexFromCurve(TreeViewComboBox* cb, const DataPickerCurve* curve){
     if (curve)
         cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(curve));
     else
@@ -481,6 +503,14 @@ void ImageWidget::imageMinSegmentLengthChanged(const int value) {
     m_initializing = true;
     ui.sbMinSegmentLength->setValue(value);
     m_initializing = false;
+}
+
+void ImageWidget::imageActiveCurveChanged() {
+    m_initializing = true;
+    this->setModelIndexFromCurve(cbActiveCurve, m_image->activeCurve());
+    m_initializing = false;
+
+    updateCustomItemList();
 }
 
 void ImageWidget::plotErrorsChanged(Image::Errors errors){

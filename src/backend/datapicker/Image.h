@@ -1,4 +1,10 @@
-
+/***************************************************************************
+    File                 : Image.h
+    Project              : LabPlot
+    Description          : Worksheet for Datapicker
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+ ***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -29,7 +35,7 @@
 class ImagePrivate;
 class ImageEditor;
 class Segments;
-class PlotCurve;
+class DataPickerCurve;
 
 class Image: public AbstractPart, public scripted {
 	Q_OBJECT
@@ -100,7 +106,7 @@ class Image: public AbstractPart, public scripted {
         BASIC_D_ACCESSOR_DECL(int, pointSeparation, PointSeparation)
         BASIC_D_ACCESSOR_DECL(int, minSegmentLength, minSegmentLength)
 
-        POINTER_D_ACCESSOR_DECL(PlotCurve, activeCurve, ActiveCurve)
+        POINTER_D_ACCESSOR_DECL(DataPickerCurve, activeCurve, ActiveCurve)
 
 		typedef ImagePrivate Private;
 
@@ -129,7 +135,7 @@ class Image: public AbstractPart, public scripted {
         void axisPointsChanged(const Image::ReferencePoints&);
         void settingsChanged(const Image::EditorSettings&);
         void minSegmentLengthChanged(const int);
-        void activeCurveChanged(const PlotCurve*);
+        void activeCurveChanged(const DataPickerCurve*);
         friend class ImageSetActiveCurveCmd;
         friend class ImageSetFileNameCmd;
         friend class ImageSetRotationAngleCmd;

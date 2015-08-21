@@ -18,12 +18,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PLOTCURVEPRIVATE_H
-#define PLOTCURVEPRIVATE_H
+#ifndef DATAPICKERCURVEPRIVATE_H
+#define DATAPICKERCURVEPRIVATE_H
 
-class PlotCurvePrivate {
+class DataPickerCurvePrivate {
 	public:
-        explicit PlotCurvePrivate() {};
+        explicit DataPickerCurvePrivate() {};
 
         Image::Errors curveErrorTypes;
         bool visible;

@@ -1,4 +1,10 @@
-
+/***************************************************************************
+    File                 : CustomItem.cpp
+    Project              : LabPlot
+    Description          : Graphic Item for coordinate points of Datapicker
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+ ***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -19,11 +25,11 @@
  ***************************************************************************/
 
 #include "CustomItem.h"
-#include "Worksheet.h"
+#include "backend/worksheet/Worksheet.h"
 #include "CustomItemPrivate.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/core/PlotCurve.h"
+#include "backend/datapicker/DataPickerCurve.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -655,7 +661,7 @@ void CustomItemPrivate::retransformErrorBar() {
   update datasheet on any change in position of custom-item or it's error-bar.
 */
 void CustomItemPrivate::updateData() {
-    PlotCurve* curve = dynamic_cast<PlotCurve*>(q->parentAspect());
+    DataPickerCurve* curve = dynamic_cast<DataPickerCurve*>(q->parentAspect());
     curve->updateData(q);
 }
 

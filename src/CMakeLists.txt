@@ -157,14 +157,14 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
-	${BACKEND_DIR}/worksheet/CustomItem.cpp
-	${BACKEND_DIR}/worksheet/Image.cpp
-	${BACKEND_DIR}/core/Datapicker.cpp
-	${BACKEND_DIR}/core/Transform.cpp
-        ${BACKEND_DIR}/core/ImageEditor.cpp
-       	${BACKEND_DIR}/worksheet/Segment.cpp
-        ${BACKEND_DIR}/worksheet/Segments.cpp
-        ${BACKEND_DIR}/core/PlotCurve.cpp
+	${BACKEND_DIR}/datapicker/CustomItem.cpp
+	${BACKEND_DIR}/datapicker/Image.cpp
+	${BACKEND_DIR}/datapicker/Datapicker.cpp
+	${BACKEND_DIR}/datapicker/Transform.cpp
+        ${BACKEND_DIR}/datapicker/ImageEditor.cpp
+       	${BACKEND_DIR}/datapicker/Segment.cpp
+        ${BACKEND_DIR}/datapicker/Segments.cpp
+        ${BACKEND_DIR}/datapicker/DataPickerCurve.cpp
 )
 
 set(COMMONFRONTEND_SOURCES

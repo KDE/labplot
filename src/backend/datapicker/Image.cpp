@@ -1,4 +1,10 @@
-
+/***************************************************************************
+    File                 : Image.cpp
+    Project              : LabPlot
+    Description          : Worksheet for Datapicker
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+ ***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -20,14 +26,14 @@
 
 #include "Image.h"
 #include "ImagePrivate.h"
-#include "backend/core/ImageEditor.h"
+#include "backend/datapicker/ImageEditor.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/worksheet/CustomItem.h"
+#include "backend/datapicker/CustomItem.h"
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/datapicker/ImageView.h"
-#include "backend/worksheet/Segments.h"
-#include "backend/core/PlotCurve.h"
+#include "backend/datapicker/Segments.h"
+#include "backend/datapicker/DataPickerCurve.h"
 
 #include <QDesktopWidget>
 #include <QMenu>
@@ -252,7 +258,7 @@ BASIC_D_READER_IMPL(Image, Image::Errors, plotErrors, plotErrors)
 BASIC_D_READER_IMPL(Image, Image::PointsType, plotPointsType, plotPointsType)
 BASIC_D_READER_IMPL(Image, int, pointSeparation, pointSeparation)
 BASIC_D_READER_IMPL(Image, int, minSegmentLength, minSegmentLength)
-BASIC_D_READER_IMPL(Image, PlotCurve*, activeCurve, activeCurve)
+BASIC_D_READER_IMPL(Image, DataPickerCurve*, activeCurve, activeCurve)
 /* ============================ setter methods and undo commands  for background options  ================= */
 STD_SETTER_CMD_IMPL_F_S(Image, SetFileName, QString, fileName, updateFileName)
 void Image::setFileName(const QString& fileName) {
@@ -293,8 +299,8 @@ void Image::setminSegmentLength(const int value) {
         exec(new ImageSetMinSegmentLengthCmd(d, value, i18n("%1: set minimum segment length")));        ;
 }
 
-STD_SETTER_CMD_IMPL_F_S(Image, SetActiveCurve, PlotCurve*, activeCurve, update)
-void Image::setActiveCurve(PlotCurve* curve) {
+STD_SETTER_CMD_IMPL_F_S(Image, SetActiveCurve, DataPickerCurve*, activeCurve, update)
+void Image::setActiveCurve(DataPickerCurve* curve) {
     if (curve != d->activeCurve) {
         exec(new ImageSetActiveCurveCmd(d, curve, i18n("%1: set active curve")));
         if (curve != NULL) {

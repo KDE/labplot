@@ -1,4 +1,11 @@
+/***************************************************************************
+    File                 : CustomItemWidget.h
+    Project              : LabPlot
+    Description          : widget for Custom-Item properties
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
 
+ ***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -22,7 +29,7 @@
 #define CUSTOMITEMWIDGET_H
 
 #include "ui_customitemwidget.h"
-#include "backend/worksheet/CustomItem.h"
+#include "backend/datapicker/CustomItem.h"
 
 class CustomItemWidget: public QWidget{
 	Q_OBJECT

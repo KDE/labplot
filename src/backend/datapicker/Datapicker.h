@@ -1,4 +1,11 @@
-
+/***************************************************************************
+    File                 : Datapicker.h
+    Project              : LabPlot
+    Description          : Aspect providing a container for storing image and data
+                           in form of worksheet and spreadsheets
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+ ***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *

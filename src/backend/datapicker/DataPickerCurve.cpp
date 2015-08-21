@@ -1,10 +1,37 @@
-#include "PlotCurve.h"
+/***************************************************************************
+    File                 : DataPickerCurve.cpp
+    Project              : LabPlot
+    Description          : container for Curve-Point and Datasheet/Spreadsheet
+                           of datapicker
+    --------------------------------------------------------------------
+    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+ ***************************************************************************/
+/***************************************************************************
+ *                                                                         *
+ *  This program is free software; you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation; either version 2 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the Free Software           *
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
+ *   Boston, MA  02110-1301  USA                                           *
+ *                                                                         *
+ ***************************************************************************/
+
+#include "DataPickerCurve.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/worksheet/CustomItem.h"
-#include "backend/core/Transform.h"
-#include "backend/core/Datapicker.h"
+#include "backend/datapicker/CustomItem.h"
+#include "backend/datapicker/Transform.h"
+#include "backend/datapicker/Datapicker.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/core/PlotCurvePrivate.h"
+#include "backend/datapicker/DataPickerCurvePrivate.h"
 
 #include <QMenu>
 
@@ -14,12 +41,12 @@
 #include <KConfigGroup>
 
 /**
- * \class PlotCurve
+ * \class DataPickerCurve
  * \brief Top-level container for Curve-Point and Datasheet/Spreadsheet of datapicker.
  * \ingroup backend
  */
 
-PlotCurve::PlotCurve(const QString &name) : AbstractAspect(name), d_ptr(new PlotCurvePrivate()) {
+DataPickerCurve::DataPickerCurve(const QString &name) : AbstractAspect(name), d_ptr(new DataPickerCurvePrivate()) {
 
     connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
             this, SLOT(handleAspectAdded(const AbstractAspect*)));
@@ -29,7 +56,7 @@ PlotCurve::PlotCurve(const QString &name) : AbstractAspect(name), d_ptr(new Plot
     init();
 }
 
-PlotCurve::PlotCurve(const QString &name, PlotCurvePrivate *dd) : AbstractAspect(name), d_ptr(dd) {
+DataPickerCurve::DataPickerCurve(const QString &name, DataPickerCurvePrivate *dd) : AbstractAspect(name), d_ptr(dd) {
 
     connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
             this, SLOT(handleAspectAdded(const AbstractAspect*)));
@@ -39,15 +66,15 @@ PlotCurve::PlotCurve(const QString &name, PlotCurvePrivate *dd) : AbstractAspect
     init();
 }
 
-PlotCurve::~PlotCurve() {
+DataPickerCurve::~DataPickerCurve() {
 }
 
-void PlotCurve::init() {
-    Q_D(PlotCurve);
+void DataPickerCurve::init() {
+    Q_D(DataPickerCurve);
 
     KConfig config;
     KConfigGroup group;
-    group = config.group("PlotCurve");
+    group = config.group("DataPickerCurve");
     d->posXColumn = NULL;
     d->posYColumn = NULL;
     d->plusDeltaXColumn = NULL;
@@ -61,7 +88,7 @@ void PlotCurve::init() {
     this->initAction();
 }
 
-void PlotCurve::initAction() {
+void DataPickerCurve::initAction() {
     visibilityAction = new QAction(i18n("visible"), this);
     visibilityAction->setCheckable(true);
     connect( visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()) );
@@ -73,14 +100,14 @@ void PlotCurve::initAction() {
 /*!
     Returns an icon to be used in the project explorer.
 */
-QIcon PlotCurve::icon() const {
+QIcon DataPickerCurve::icon() const {
     return  KIcon("xy-curve");
 }
 
 /*!
     Return a new context menu
 */
-QMenu* PlotCurve::createContextMenu() {
+QMenu* DataPickerCurve::createContextMenu() {
     QMenu *menu = AbstractAspect::createContextMenu();
     Q_ASSERT(menu);
 
@@ -95,7 +122,7 @@ QMenu* PlotCurve::createContextMenu() {
     return menu;
 }
 
-void PlotCurve::handleAspectAdded(const AbstractAspect* aspect) {
+void DataPickerCurve::handleAspectAdded(const AbstractAspect* aspect) {
     Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
     if (!datapicker)
         return;
@@ -117,7 +144,7 @@ void PlotCurve::handleAspectAdded(const AbstractAspect* aspect) {
     }
 }
 
-void PlotCurve::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
+void DataPickerCurve::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
     Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
     if (!datapicker)
         return;
@@ -131,7 +158,7 @@ void PlotCurve::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
     }
 }
 
-Column* PlotCurve::appendColumn(const QString& name, Spreadsheet* datasheet) {
+Column* DataPickerCurve::appendColumn(const QString& name, Spreadsheet* datasheet) {
     Column* col = new Column(i18n("Column"), AbstractColumn::Numeric);
     col->setPlotDesignation(AbstractColumn::Y);
     col->insertRows(0, datasheet->rowCount());
@@ -141,7 +168,7 @@ Column* PlotCurve::appendColumn(const QString& name, Spreadsheet* datasheet) {
     return col;
 }
 
-void PlotCurve::addCustomItem(const QPointF& position) {
+void DataPickerCurve::addCustomItem(const QPointF& position) {
     QList<CustomItem*> childItems = children<CustomItem>(IncludeHidden);
 
     CustomItem* newItem = new CustomItem(i18n("Curve Point"));
@@ -171,26 +198,26 @@ void PlotCurve::addCustomItem(const QPointF& position) {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(PlotCurve, bool, visible, visible)
-BASIC_SHARED_D_READER_IMPL(PlotCurve, Image::Errors, curveErrorTypes, curveErrorTypes)
-BASIC_SHARED_D_READER_IMPL(PlotCurve, AbstractColumn*, posXColumn, posXColumn)
-QString& PlotCurve::posXColumnPath() const { return d_ptr->posXColumnPath; }
-BASIC_SHARED_D_READER_IMPL(PlotCurve, AbstractColumn*, posYColumn, posYColumn)
-QString& PlotCurve::posYColumnPath() const { return d_ptr->posYColumnPath; }
-BASIC_SHARED_D_READER_IMPL(PlotCurve, AbstractColumn*, plusDeltaXColumn, plusDeltaXColumn)
-QString& PlotCurve::plusDeltaXColumnPath() const { return d_ptr->plusDeltaXColumnPath; }
-BASIC_SHARED_D_READER_IMPL(PlotCurve, AbstractColumn*, minusDeltaXColumn, minusDeltaXColumn)
-QString& PlotCurve::minusDeltaXColumnPath() const { return d_ptr->minusDeltaXColumnPath; }
-BASIC_SHARED_D_READER_IMPL(PlotCurve, AbstractColumn*, plusDeltaYColumn, plusDeltaYColumn)
-QString& PlotCurve::plusDeltaYColumnPath() const { return d_ptr->plusDeltaYColumnPath; }
-BASIC_SHARED_D_READER_IMPL(PlotCurve, AbstractColumn*, minusDeltaYColumn, minusDeltaYColumn)
-QString& PlotCurve::minusDeltaYColumnPath() const { return d_ptr->minusDeltaYColumnPath; }
+BASIC_SHARED_D_READER_IMPL(DataPickerCurve, bool, visible, visible)
+BASIC_SHARED_D_READER_IMPL(DataPickerCurve, Image::Errors, curveErrorTypes, curveErrorTypes)
+BASIC_SHARED_D_READER_IMPL(DataPickerCurve, AbstractColumn*, posXColumn, posXColumn)
+QString& DataPickerCurve::posXColumnPath() const { return d_ptr->posXColumnPath; }
+BASIC_SHARED_D_READER_IMPL(DataPickerCurve, AbstractColumn*, posYColumn, posYColumn)
+QString& DataPickerCurve::posYColumnPath() const { return d_ptr->posYColumnPath; }
+BASIC_SHARED_D_READER_IMPL(DataPickerCurve, AbstractColumn*, plusDeltaXColumn, plusDeltaXColumn)
+QString& DataPickerCurve::plusDeltaXColumnPath() const { return d_ptr->plusDeltaXColumnPath; }
+BASIC_SHARED_D_READER_IMPL(DataPickerCurve, AbstractColumn*, minusDeltaXColumn, minusDeltaXColumn)
+QString& DataPickerCurve::minusDeltaXColumnPath() const { return d_ptr->minusDeltaXColumnPath; }
+BASIC_SHARED_D_READER_IMPL(DataPickerCurve, AbstractColumn*, plusDeltaYColumn, plusDeltaYColumn)
+QString& DataPickerCurve::plusDeltaYColumnPath() const { return d_ptr->plusDeltaYColumnPath; }
+BASIC_SHARED_D_READER_IMPL(DataPickerCurve, AbstractColumn*, minusDeltaYColumn, minusDeltaYColumn)
+QString& DataPickerCurve::minusDeltaYColumnPath() const { return d_ptr->minusDeltaYColumnPath; }
 
 //##############################################################################
 //#########################  setter methods  ###################################
 //##############################################################################
-void PlotCurve::setVisible(const bool on) {
-    Q_D(PlotCurve);
+void DataPickerCurve::setVisible(const bool on) {
+    Q_D(DataPickerCurve);
 
     if (on != d->visible) {
         d->visible = on;
@@ -206,8 +233,8 @@ void PlotCurve::setVisible(const bool on) {
     }
 }
 
-void PlotCurve::setCurveErrorTypes(const Image::Errors errors) {
-    Q_D(PlotCurve);
+void DataPickerCurve::setCurveErrorTypes(const Image::Errors errors) {
+    Q_D(DataPickerCurve);
 
     d->curveErrorTypes = errors;
 
@@ -235,48 +262,48 @@ void PlotCurve::setCurveErrorTypes(const Image::Errors errors) {
     }
 }
 
-void PlotCurve::setPosXColumn(AbstractColumn* column) {
-    Q_D(PlotCurve);
+void DataPickerCurve::setPosXColumn(AbstractColumn* column) {
+    Q_D(DataPickerCurve);
     d->posXColumn = column;
 }
 
-void PlotCurve::setPosYColumn(AbstractColumn* column) {
-    Q_D(PlotCurve);
+void DataPickerCurve::setPosYColumn(AbstractColumn* column) {
+    Q_D(DataPickerCurve);
     d->posYColumn = column;
 }
 
-void PlotCurve::setPlusDeltaXColumn(AbstractColumn* column) {
-    Q_D(PlotCurve);
+void DataPickerCurve::setPlusDeltaXColumn(AbstractColumn* column) {
+    Q_D(DataPickerCurve);
     d->plusDeltaXColumn = column;
 }
 
-void PlotCurve::setMinusDeltaXColumn(AbstractColumn* column) {
-    Q_D(PlotCurve);
+void DataPickerCurve::setMinusDeltaXColumn(AbstractColumn* column) {
+    Q_D(DataPickerCurve);
     d->minusDeltaXColumn = column;
 }
 
-void PlotCurve::setPlusDeltaYColumn(AbstractColumn* column) {
-    Q_D(PlotCurve);
+void DataPickerCurve::setPlusDeltaYColumn(AbstractColumn* column) {
+    Q_D(DataPickerCurve);
     d->plusDeltaYColumn = column;
 }
 
-void PlotCurve::setMinusDeltaYColumn(AbstractColumn* column) {
-    Q_D(PlotCurve);
+void DataPickerCurve::setMinusDeltaYColumn(AbstractColumn* column) {
+    Q_D(DataPickerCurve);
     d->minusDeltaYColumn = column;
 }
 
-void PlotCurve::setPrinting(bool on) {
+void DataPickerCurve::setPrinting(bool on) {
     foreach (WorksheetElement* elem, children<WorksheetElement>(IncludeHidden))
         elem->setPrinting(on);
 }
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void PlotCurve::visibilityChanged() {
+void DataPickerCurve::visibilityChanged() {
     this->setVisible(!visible());
 }
 
-void PlotCurve::updateDatasheet() {
+void DataPickerCurve::updateDatasheet() {
     beginMacro(i18n("%1:update datasheet", name()));
 
     foreach (CustomItem* item, children<CustomItem>(IncludeHidden))
@@ -291,8 +318,8 @@ void PlotCurve::updateDatasheet() {
     of curve-point or its error-bar so keep it undo unaware
     no need to create extra entry in undo stack
 */
-void PlotCurve::updateData(const CustomItem* item) {
-    Q_D(PlotCurve);
+void DataPickerCurve::updateData(const CustomItem* item) {
+    Q_D(DataPickerCurve);
     Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
     if (!datapicker)
         return;
@@ -347,10 +374,10 @@ void PlotCurve::updateData(const CustomItem* item) {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void PlotCurve::save(QXmlStreamWriter* writer) const{
-    Q_D(const PlotCurve);
+void DataPickerCurve::save(QXmlStreamWriter* writer) const{
+    Q_D(const DataPickerCurve);
 
-    writer->writeStartElement( "plotCurve" );
+    writer->writeStartElement( "dataPickerCurve" );
     writeBasicAttributes(writer);
     writeCommentElement(writer);
 
@@ -376,10 +403,10 @@ void PlotCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool PlotCurve::load(XmlStreamReader* reader) {
-    Q_D(PlotCurve);
+bool DataPickerCurve::load(XmlStreamReader* reader) {
+    Q_D(DataPickerCurve);
 
-    if(!reader->isStartElement() || reader->name() != "plotCurve") {
+    if(!reader->isStartElement() || reader->name() != "dataPickerCurve") {
         reader->raiseError(i18n("no image element found"));
         return false;
     }
@@ -393,7 +420,7 @@ bool PlotCurve::load(XmlStreamReader* reader) {
 
     while (!reader->atEnd()) {
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "plotCurve")
+        if (reader->isEndElement() && reader->name() == "dataPickerCurve")
             break;
 
         if (!reader->isStartElement())

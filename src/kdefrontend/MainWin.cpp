@@ -37,8 +37,8 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/FileDataSource.h"
-#include "backend/core/Datapicker.h"
-#include "backend/worksheet/Image.h"
+#include "backend/datapicker/Datapicker.h"
+#include "backend/datapicker/Image.h"
 
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/matrix/MatrixView.h"
