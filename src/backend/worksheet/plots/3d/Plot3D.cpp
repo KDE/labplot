@@ -349,6 +349,8 @@ void Plot3D::initActions() {
 	//"add new" actions
 	addCurveAction = new KAction(KIcon("3d-curve"), i18n("3D-curve"), this);
 	addEquationCurveAction = new KAction(KIcon("3d-equation-curve"), i18n("3D-curve from a mathematical equation"), this);
+	// TODO: Implement
+	addEquationCurveAction->setVisible(false);
 	addSurfaceAction = new KAction(KIcon("3d-surface"), i18n("3D-surface"), this);
 	addAxesAction = new KAction(KIcon("axis-horizontal"), i18n("Axes"), this);
 	if (d->axes)
@@ -363,7 +365,7 @@ void Plot3D::initActions() {
 	scaleAutoAction = new KAction(KIcon("auto-scale-all"), i18n("auto scale"), this);
 	scaleAutoXAction = new KAction(KIcon("auto-scale-x"), i18n("auto scale X"), this);
 	scaleAutoYAction = new KAction(KIcon("auto-scale-y"), i18n("auto scale Y"), this);
-	scaleAutoZAction = new KAction(KIcon("auto-scale-z"), i18n("auto scale Z"), this);
+	scaleAutoZAction = new KAction(KIcon("auto-scale-y"), i18n("auto scale Z"), this);
 	zoomInAction = new KAction(KIcon("zoom-in"), i18n("zoom in"), this);
 	zoomOutAction = new KAction(KIcon("zoom-out"), i18n("zoom out"), this);
 	zoomInXAction = new KAction(KIcon("zoom-in-x"), i18n("zoom in X"), this);
@@ -376,8 +378,8 @@ void Plot3D::initActions() {
 	shiftRightXAction = new KAction(KIcon("shift-right-x"), i18n("shift right X"), this);
 	shiftUpYAction = new KAction(KIcon("shift-up-y"), i18n("shift up Y"), this);
 	shiftDownYAction = new KAction(KIcon("shift-down-y"), i18n("shift down Y"), this);
-	shiftUpZAction = new KAction(KIcon("shift-up-z"), i18n("shift up Z"), this);
-	shiftDownZAction = new KAction(KIcon("shift-down-z"), i18n("shift down Z"), this);
+	shiftUpZAction = new KAction(KIcon("shift-up-y"), i18n("shift up Z"), this);
+	shiftDownZAction = new KAction(KIcon("shift-down-y"), i18n("shift down Z"), this);
 
 	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(autoScale()));
 	connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(autoScaleX()));
@@ -611,7 +613,8 @@ QMenu* Plot3D::createContextMenu(){
 
 	menu->insertMenu(firstAction, addNewMenu);
 	menu->insertMenu(firstAction, zoomMenu);
-	menu->insertMenu(firstAction, rotateMenu);
+	// TODO: Implement
+	// menu->insertMenu(firstAction, rotateMenu);
 	menu->insertSeparator(firstAction);
 
 	return menu;
@@ -952,6 +955,15 @@ void Plot3DPrivate::updateXScaling() {
 	}
 
 	axes->setXScaling(xScaling);
+	foreach (Surface3D* surface, surfaces) {
+		surface->refresh();
+	}
+
+	foreach (Curve3D* curve, curves) {
+		curve->refresh();
+	}
+	resetCamera();
+	vtkItem->refresh();
 }
 
 void Plot3DPrivate::updateYScaling() {
@@ -964,6 +976,16 @@ void Plot3DPrivate::updateYScaling() {
 	}
 
 	axes->setYScaling(yScaling);
+	foreach (Surface3D* surface, surfaces) {
+		surface->refresh();
+	}
+
+	foreach (Curve3D* curve, curves) {
+		curve->refresh();
+	}
+	resetCamera();
+	vtkItem->refresh();
+
 }
 
 void Plot3DPrivate::updateZScaling() {
@@ -976,6 +998,15 @@ void Plot3DPrivate::updateZScaling() {
 	}
 
 	axes->setZScaling(zScaling);
+	foreach (Surface3D* surface, surfaces) {
+		surface->refresh();
+	}
+
+	foreach (Curve3D* curve, curves) {
+		curve->refresh();
+	}
+	resetCamera();
+	vtkItem->refresh();
 }
 
 void Plot3DPrivate::updateRanges(bool notify) {
@@ -990,6 +1021,7 @@ void Plot3DPrivate::updateRanges(bool notify) {
 
 	axes->setRanges(ranges);
 	axes->updateBounds();
+
 	if (notify)
 		emit q->parametersChanged();
 }

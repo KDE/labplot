@@ -69,6 +69,7 @@ void Base3D::setRenderer(vtkRenderer* renderer) {
 	d->renderer = renderer;
 	if (renderer) {
 		d->renderer->AddActor(d->actor);
+		d->actors.insert(d->actor);
 		d->update();
 	}
 }
@@ -163,6 +164,7 @@ bool Base3D::isVisible() const {
 void Base3D::remove() {
 	Q_D(Base3D);
 	d->renderer->RemoveActor(d->actor);
+	d->actors.remove(d->actor);
 	emit removed();
 	AbstractAspect::remove();
 }
@@ -174,7 +176,15 @@ void Base3D::recover() {
 	}
 }
 
+void Base3D::refresh() {
+	Q_D(Base3D);
+	if (d->scaledPolyData)
+		d->modifyScaledData(d->scaledPolyData);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
+
+QSet<vtkActor*> Base3DPrivate::actors = QSet<vtkActor*>();
 
 Base3DPrivate::Base3DPrivate(const QString& name, Base3D* baseParent, vtkActor* actor)
 	: xScaling(Plot3D::Scaling_Linear)
@@ -284,9 +294,27 @@ void Base3DPrivate::updateScaling(bool needNotify) {
 		scaledPolyData = scale(rangedPolyData);
 	}
 
+	modifyScaledData(scaledPolyData);
+
 	// Maps scaledPolyData to actor
 	mapData(scaledPolyData);
 	notify(needNotify);
+}
+
+void Base3DPrivate::makeCube(BoundingBox& bounds) const {
+	double center[3];
+	bounds.GetCenter(center);
+	const double halfMaxLength = std::abs(bounds.GetMaxLength()) / 2;
+	bounds.setXMin(center[0] - halfMaxLength);
+	bounds.setXMax(center[0] + halfMaxLength);
+	bounds.setYMin(center[1] - halfMaxLength);
+	bounds.setYMax(center[1] + halfMaxLength);
+	bounds.setZMin(center[2] - halfMaxLength);
+	bounds.setZMax(center[2] + halfMaxLength);
+}
+
+void Base3DPrivate::modifyScaledData(vtkPolyData* polyData) const {
+	Q_UNUSED(polyData);
 }
 
 void Base3DPrivate::update() {
@@ -319,9 +347,9 @@ BoundingBox Base3DPrivate::systemBounds() const {
 
 	BoundingBox bb;
 	if (actors->GetNumberOfItems() > 1) {
-		vtkProp* actor = 0;
-		while ((actor = actors->GetNextProp()) != 0) {
-			if (actor == this->actor.GetPointer())
+		vtkActor* actor = 0;
+		while ((actor = actors->GetNextActor()) != 0) {
+			if (actor == this->actor.GetPointer() || !this->actors.contains(actor))
 				continue;
 
 			const double* actorBounds = actor->GetBounds();

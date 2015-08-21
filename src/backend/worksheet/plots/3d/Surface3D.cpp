@@ -303,9 +303,9 @@ Surface3DPrivate::Surface3DPrivate(const QString& name, Surface3D *parent)
 	, secondNode(0)
 	, thirdNode(0){
 
-	xyProjection->GetProperty()->SetLineWidth(5);
-	xzProjection->GetProperty()->SetLineWidth(5);
-	yzProjection->GetProperty()->SetLineWidth(5);
+	xyProjection->GetProperty()->SetLineWidth(3);
+	xzProjection->GetProperty()->SetLineWidth(3);
+	yzProjection->GetProperty()->SetLineWidth(3);
 }
 
 Surface3DPrivate::~Surface3DPrivate() {
@@ -314,12 +314,11 @@ Surface3DPrivate::~Surface3DPrivate() {
 	renderer->RemoveActor(yzProjection);
 }
 
-vtkSmartPointer<vtkPolyData> Surface3DPrivate::createData() const {
-	vtkSmartPointer<vtkPolyData> data = generateData();
-
+void Surface3DPrivate::modifyScaledData(vtkPolyData* data) const {
 	if (data && data->GetNumberOfCells() > 0) {
 		BoundingBox bounds = systemBounds();
 		bounds.AddBounds(data->GetBounds());
+		makeCube(bounds);
 		int flag = static_cast<int>(showYZProjection);
 		flag |= static_cast<int>(showXZProjection) << 1;
 		flag |= static_cast<int>(showXYProjection) << 2;
@@ -369,7 +368,15 @@ vtkSmartPointer<vtkPolyData> Surface3DPrivate::createData() const {
 				renderer->AddViewProp(yzProjection);
 			}
 		}
+	} else {
+		renderer->RemoveViewProp(xyProjection);
+		renderer->RemoveViewProp(xzProjection);
+		renderer->RemoveViewProp(yzProjection);
 	}
+}
+
+vtkSmartPointer<vtkPolyData> Surface3DPrivate::createData() const {
+	vtkSmartPointer<vtkPolyData> data = generateData();
 
 	if (visualizationType == Surface3D::Surface3D::VisualizationType_Wireframe)
 		data = extractEdges(data);
@@ -389,6 +396,16 @@ void Surface3DPrivate::modifyActor(vtkRenderer* renderer, vtkActor* actor) const
 	} else {
 		actor->SetProperty(vtkProperty::New());
 	}
+
+	vtkProperty* prop = xyProjection->GetProperty();
+	prop->SetColor(0, 0, 0);
+	prop = xzProjection->GetProperty();
+	prop->SetColor(0, 0, 0);
+	prop = yzProjection->GetProperty();
+	prop->SetColor(0, 0, 0);
+
+	if (visualizationType == Surface3D::Surface3D::VisualizationType_Wireframe)
+		actor->GetProperty()->SetLineWidth(5);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

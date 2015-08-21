@@ -191,18 +191,6 @@ void AxesPrivate::updateLabels(const BoundingBox& bounds, vtkCubeAxesActor* cube
 	cubeAxes->SetAxisLabels(2, labels);
 }
 
-void AxesPrivate::makeCube(BoundingBox& bounds) const {
-	double center[3];
-	bounds.GetCenter(center);
-	const double halfMaxLength = std::abs(bounds.GetMaxLength()) / 2;
-	bounds.setXMin(center[0] - halfMaxLength);
-	bounds.setXMax(center[0] + halfMaxLength);
-	bounds.setYMin(center[1] - halfMaxLength);
-	bounds.setYMax(center[1] + halfMaxLength);
-	bounds.setZMin(center[2] - halfMaxLength);
-	bounds.setZMax(center[2] + halfMaxLength);
-}
-
 void AxesPrivate::objectScaled(vtkActor* actor) const {
 	BoundingBox bounds = systemBounds();
 	makeCube(bounds);

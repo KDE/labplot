@@ -32,6 +32,8 @@
 #include "Plot3D.h"
 #include "BoundingBox.h"
 
+#include <QSet>
+
 #include <vtkSmartPointer.h>
 
 class vtkActor;
@@ -39,6 +41,10 @@ class vtkProperty;
 class vtkRenderer;
 class vtkPolyData;
 class vtkPropCollection;
+
+inline uint qHash(vtkActor* actor) {
+	return qHash((ulong)(actor));
+}
 
 class Base3D;
 class Base3DPrivate {
@@ -64,6 +70,7 @@ public:
 
 protected:
 	virtual void objectScaled(vtkActor* actor) const;
+	virtual void modifyScaledData(vtkPolyData* polyData) const;
 	virtual void updateBounds(vtkActor* actor) const;
 	// Scales coordinates. Returns a new instance of vtkPolyData
 	vtkSmartPointer<vtkPolyData> scale(vtkPolyData* data);
@@ -72,6 +79,7 @@ protected:
 	// Returns a bounding box of the current 3d object
 	BoundingBox bounds() const;
 	bool isInitialized() const;
+	void makeCube(BoundingBox& bounds) const;
 
 private:
 	void mapData(vtkPolyData* data);
@@ -96,6 +104,7 @@ private:
 	vtkSmartPointer<vtkPolyData> scaledPolyData;
 	vtkSmartPointer<vtkActor> actor;
 	vtkSmartPointer<vtkProperty> property;
+	static QSet<vtkActor*> actors;
 };
 
 #endif
