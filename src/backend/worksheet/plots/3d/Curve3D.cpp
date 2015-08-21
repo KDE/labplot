@@ -223,6 +223,7 @@ vtkSmartPointer<vtkPolyData> Curve3DPrivate::createData() const {
 		glyph3D->Update();
 		pdata = glyph3D->GetOutput();
 	}
+	qDebug() << Q_FUNC_INFO << pdata->GetBounds()[0] << pdata->GetBounds()[1];
 
 	return pdata;
 }

@@ -44,6 +44,13 @@ Curve3DDock::Curve3DDock(QWidget* parent)
 	, aspectTreeModel(0)
 	, m_initializing(false) {
 	ui.setupUi(this);
+	// TODO: Implement
+	ui.tabWidget->removeTab(1);
+	ui.tabWidget->removeTab(1);
+	ui.tabWidget->removeTab(1);
+	ui.tabLine->setVisible(false);
+	ui.tabSymbol->setVisible(false);
+	ui.tabErrorBars->setVisible(false);
 
 	QList<const char*>  list;
 	list << "Folder" << "Workbook" << "Spreadsheet" << "FileDataSource" << "Column";
