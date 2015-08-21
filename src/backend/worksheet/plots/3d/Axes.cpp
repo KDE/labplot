@@ -302,6 +302,9 @@ void Axes::save(QXmlStreamWriter* writer) const {
 	Q_D(const Axes);
 
 	writer->writeStartElement("axes");
+		writer->writeAttribute("formatX", QString::number(d->formatX));
+		writer->writeAttribute("formatY", QString::number(d->formatY));
+		writer->writeAttribute("formatZ", QString::number(d->formatZ));
 		writer->writeAttribute("fontSize", QString::number(d->fontSize));
 		writer->writeAttribute("xLabelColor", d->xLabelColor.name());
 		writer->writeAttribute("yLabelColor", d->yLabelColor.name());
@@ -316,6 +319,9 @@ bool Axes::load(XmlStreamReader* reader) {
 
 	const QXmlStreamAttributes& attribs = reader->attributes();
 	XmlAttributeReader attributeReader(reader, attribs);
+	attributeReader.checkAndLoadAttribute("formatX", d->formatX);
+	attributeReader.checkAndLoadAttribute("formatY", d->formatY);
+	attributeReader.checkAndLoadAttribute("formatZ", d->formatZ);
 	attributeReader.checkAndLoadAttribute("fontSize", d->fontSize);
 	attributeReader.checkAndLoadAttribute("xLabelColor", d->xLabelColor);
 	attributeReader.checkAndLoadAttribute("yLabelColor", d->yLabelColor);

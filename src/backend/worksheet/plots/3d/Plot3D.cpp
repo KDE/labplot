@@ -1151,6 +1151,12 @@ void Plot3D::save(QXmlStreamWriter* writer) const {
 		writeCommentElement(writer);
 
 		writer->writeStartElement("general");
+			writer->writeAttribute("xMinRange", QString::number(d->ranges.xMin()));
+			writer->writeAttribute("xMaxRange", QString::number(d->ranges.xMax()));
+			writer->writeAttribute("yMinRange", QString::number(d->ranges.yMin()));
+			writer->writeAttribute("yMaxRange", QString::number(d->ranges.yMax()));
+			writer->writeAttribute("zMinRange", QString::number(d->ranges.zMin()));
+			writer->writeAttribute("zMaxRange", QString::number(d->ranges.zMax()));
 			writer->writeAttribute("xScaling", QString::number(d->xScaling));
 			writer->writeAttribute("yScaling", QString::number(d->yScaling));
 			writer->writeAttribute("zScaling", QString::number(d->zScaling));
@@ -1220,6 +1226,25 @@ bool Plot3D::load(XmlStreamReader* reader) {
 			attributeReader.checkAndLoadAttribute("xScaling", d->xScaling);
 			attributeReader.checkAndLoadAttribute("yScaling", d->yScaling);
 			attributeReader.checkAndLoadAttribute("zScaling", d->zScaling);
+			double value = VTK_DOUBLE_MAX;
+			attributeReader.checkAndLoadAttribute("xMinRange", value);
+			d->ranges.setXMin(value);
+			value = VTK_DOUBLE_MAX;
+			attributeReader.checkAndLoadAttribute("yMinRange", value);
+			d->ranges.setYMin(value);
+			value = VTK_DOUBLE_MAX;
+			attributeReader.checkAndLoadAttribute("zMinRange", value);
+			d->ranges.setZMin(value);
+
+			value = VTK_DOUBLE_MIN;
+			attributeReader.checkAndLoadAttribute("xMaxRange", value);
+			d->ranges.setXMax(value);
+			value = VTK_DOUBLE_MIN;
+			attributeReader.checkAndLoadAttribute("yMaxRange", value);
+			d->ranges.setYMax(value);
+			value = VTK_DOUBLE_MIN;
+			attributeReader.checkAndLoadAttribute("zMaxRange", value);
+			d->ranges.setZMax(value);
 		}else if(sectionName == "axes"){
 			qDebug() << Q_FUNC_INFO << "Load axes";
 			if (!d->axes) {
