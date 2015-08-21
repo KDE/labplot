@@ -69,6 +69,9 @@ void Axes::updateBounds() {
 //##########################  getter methods  ##################################
 //##############################################################################
 
+BASIC_SHARED_D_READER_IMPL(Axes, Axes::Format, formatX, formatX)
+BASIC_SHARED_D_READER_IMPL(Axes, Axes::Format, formatY, formatY)
+BASIC_SHARED_D_READER_IMPL(Axes, Axes::Format, formatZ, formatZ)
 BASIC_SHARED_D_READER_IMPL(Axes, int, fontSize, fontSize)
 BASIC_SHARED_D_READER_IMPL(Axes, QColor, xLabelColor, xLabelColor)
 BASIC_SHARED_D_READER_IMPL(Axes, QColor, yLabelColor, yLabelColor)
@@ -80,6 +83,15 @@ BASIC_SHARED_D_READER_IMPL(Axes, QString, zLabel, zLabel)
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
+
+STD_SETTER_CMD_IMPL_F_S(Axes, SetFormatX, Axes::Format, formatX, update)
+STD_SETTER_IMPL(Axes, FormatX, Axes::Format, formatX, "%1: format x changed")
+
+STD_SETTER_CMD_IMPL_F_S(Axes, SetFormatY, Axes::Format, formatY, update)
+STD_SETTER_IMPL(Axes, FormatY, Axes::Format, formatY, "%1: format y changed")
+
+STD_SETTER_CMD_IMPL_F_S(Axes, SetFormatZ, Axes::Format, formatZ, update)
+STD_SETTER_IMPL(Axes, FormatZ, Axes::Format, formatZ, "%1: format z changed")
 
 STD_SETTER_CMD_IMPL_F_S(Axes, SetFontSize, int, fontSize, update)
 STD_SETTER_IMPL(Axes, FontSize, int, fontSize, "%1: axes font size changed")
@@ -107,6 +119,9 @@ STD_SETTER_IMPL(Axes, ZLabel, const QString&, zLabel, "%1: axes Z label changed"
 AxesPrivate::AxesPrivate(const QString& name, Axes* parent)
 	: Base3DPrivate(name, parent, vtkCubeAxesActor::New())
 	, q(parent)
+	, formatX(Axes::Format_Decimal)
+	, formatY(Axes::Format_Decimal)
+	, formatZ(Axes::Format_Decimal)
 	, fontSize(32)
 	, xLabelColor(Qt::red)
 	, yLabelColor(Qt::green)
@@ -120,12 +135,25 @@ AxesPrivate::~AxesPrivate() {
 }
 
 namespace {
+	QString numToString(double num, Axes::Format format) {
+		if (format == Axes::Format_Decimal)
+			return QString::number(num, 'f', 2);
+		if (format == Axes::Format_Scientific)
+			return QString::number(num, 'e', 1);
+		if (format == Axes::Format_PowerOf10)
+			return QString("10^") + QString::number(log10(num), 'f', 2);
+		if (format == Axes::Format_PowerOf2)
+			return QString("2^") + QString::number(log2(num), 'f', 2);
+		if (format == Axes::Format_PowerOfE)
+			return QString("e^") + QString::number(log(num), 'f', 2);
+		return QString::number(num / M_PI, 'f', 2) + QString("Pi");
+	}
 	void addLabels(double init, double delta, int numIter,
-			vtkStringArray* labels, double factor) {
+			vtkStringArray* labels, double factor, Axes::Format format) {
 		if (factor != 0) {
 			for (int i = 0; i < numIter; ++i) {
 				const double scaledLabel = std::pow(factor, init + i * delta);
-				labels->InsertValue(i, QString::number(scaledLabel, 'f', 2).toAscii());
+				labels->InsertValue(i, numToString(scaledLabel, format).toAscii());
 			}
 
 			for (int i = numIter; i > 0; --i) {
@@ -135,7 +163,7 @@ namespace {
 		} else {
 			for (int i = 0; i < numIter; ++i) {
 				const double scaledLabel = init + i * delta;
-				labels->InsertValue(i, QString::number(scaledLabel, 'f', 2).toAscii());
+				labels->InsertValue(i, numToString(scaledLabel, format).toAscii());
 			}
 		}
 	}
@@ -164,7 +192,7 @@ void AxesPrivate::updateLabels(const BoundingBox& bounds, vtkCubeAxesActor* cube
 	const double dx = (bounds.xMax() - bounds.xMin()) / (numXValues - 1);
 	vtkSmartPointer<vtkStringArray> labels = vtkSmartPointer<vtkStringArray>::New();
 
-	addLabels(bounds.xMin(), dx, numXValues, labels, scaleFactor(xScaling));
+	addLabels(bounds.xMin(), dx, numXValues, labels, scaleFactor(xScaling), formatX);
 
 	cubeAxes->SetAxisLabels(0, labels);
 
@@ -175,7 +203,7 @@ void AxesPrivate::updateLabels(const BoundingBox& bounds, vtkCubeAxesActor* cube
 	const double dy = (bounds.yMax() - bounds.yMin()) / (numYValues - 1);
 	labels = vtkSmartPointer<vtkStringArray>::New();
 
-	addLabels(bounds.yMin(), dy, numYValues, labels, scaleFactor(yScaling));
+	addLabels(bounds.yMin(), dy, numYValues, labels, scaleFactor(yScaling), formatY);
 
 	cubeAxes->SetAxisLabels(1, labels);
 
@@ -186,7 +214,7 @@ void AxesPrivate::updateLabels(const BoundingBox& bounds, vtkCubeAxesActor* cube
 	const double dz = (bounds.zMax() - bounds.zMin()) / (numZValues - 1);
 	labels = vtkSmartPointer<vtkStringArray>::New();
 
-	addLabels(bounds.zMin(), dz, numZValues, labels, scaleFactor(zScaling));
+	addLabels(bounds.zMin(), dz, numZValues, labels, scaleFactor(zScaling), formatZ);
 
 	cubeAxes->SetAxisLabels(2, labels);
 }

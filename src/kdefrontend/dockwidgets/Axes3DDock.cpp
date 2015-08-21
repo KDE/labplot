@@ -39,6 +39,9 @@ Axes3DDock::Axes3DDock(QWidget* parent)
 	retranslateUi();
 
 	// Axes
+	recorder.connect(ui.cbXLabelFormat, SIGNAL(currentIndexChanged(int)), SLOT(onFormatXChanged(int)));
+	recorder.connect(ui.cbYLabelFormat, SIGNAL(currentIndexChanged(int)), SLOT(onFormatYChanged(int)));
+	recorder.connect(ui.cbZLabelFormat, SIGNAL(currentIndexChanged(int)), SLOT(onFormatZChanged(int)));
 	recorder.connect(ui.cbLabelFontSize, SIGNAL(valueChanged(int)), SLOT(onLabelFontChanged(int)));
 	recorder.connect(ui.cbXLabelColor, SIGNAL(changed(const QColor&)), SLOT(onLabelColorChanged(const QColor&)));
 	recorder.connect(ui.cbYLabelColor, SIGNAL(changed(const QColor&)), SLOT(onLabelColorChanged(const QColor&)));
@@ -50,6 +53,16 @@ Axes3DDock::Axes3DDock(QWidget* parent)
 }
 
 void Axes3DDock::retranslateUi() {
+	QVector<QComboBox*> labelFormats;
+	labelFormats << ui.cbXLabelFormat << ui.cbYLabelFormat << ui.cbZLabelFormat;
+	foreach(QComboBox* cb, labelFormats) {
+		cb->insertItem(Axes::Format_Decimal, i18n("Decimal notation"));
+		cb->insertItem(Axes::Format_Scientific, i18n("Scientific notation"));
+		cb->insertItem(Axes::Format_PowerOf10, i18n("Powers of 10"));
+		cb->insertItem(Axes::Format_PowerOf2, i18n("Powers of 2"));
+		cb->insertItem(Axes::Format_PowerOfE, i18n("Powers of e"));
+		cb->insertItem(Axes::Format_MultiplierOfPi, i18n("Multiplier of \u03C0"));
+	}
 }
 
 void Axes3DDock::setAxes(Axes *axes) {
@@ -58,6 +71,9 @@ void Axes3DDock::setAxes(Axes *axes) {
 	{
 	const SignalBlocker blocker(recorder.children());
 	ui.chkVisible->setChecked(axes->isVisible());
+	formatXChanged(axes->formatX());
+	formatYChanged(axes->formatY());
+	formatZChanged(axes->formatZ());
 	fontSizeChanged(axes->fontSize());
 	xLabelColorChanged(axes->xLabelColor());
 	yLabelColorChanged(axes->yLabelColor());
@@ -67,6 +83,9 @@ void Axes3DDock::setAxes(Axes *axes) {
 	zLabelChanged(axes->zLabel());
 	}
 
+	connect(axes, SIGNAL(formatXChanged(Axes::Format)), SLOT(formatXChanged(Axes::Format)));
+	connect(axes, SIGNAL(formatYChanged(Axes::Format)), SLOT(formatYChanged(Axes::Format)));
+	connect(axes, SIGNAL(formatZChanged(Axes::Format)), SLOT(formatZChanged(Axes::Format)));
 	connect(axes, SIGNAL(fontSizeChanged(int)), SLOT(fontSizeChanged(int)));
 	connect(axes, SIGNAL(xLabelColorChanged(const QColor&)), SLOT(xLabelColorChanged(const QColor&)));
 	connect(axes, SIGNAL(yLabelColorChanged(const QColor&)), SLOT(yLabelColorChanged(const QColor&)));
@@ -74,6 +93,21 @@ void Axes3DDock::setAxes(Axes *axes) {
 	connect(axes, SIGNAL(xLabelChanged(const QString&)), SLOT(xLabelChanged(const QString&)));
 	connect(axes, SIGNAL(yLabelChanged(const QString&)), SLOT(yLabelChanged(const QString&)));
 	connect(axes, SIGNAL(zLabelChanged(const QString&)), SLOT(zLabelChanged(const QString&)));
+}
+
+void Axes3DDock::onFormatXChanged(int index) {
+	const Lock lock(m_initializing);
+	axes->setFormatX(static_cast<Axes::Format>(index));
+}
+
+void Axes3DDock::onFormatYChanged(int index) {
+	const Lock lock(m_initializing);
+	axes->setFormatY(static_cast<Axes::Format>(index));
+}
+
+void Axes3DDock::onFormatZChanged(int index) {
+	const Lock lock(m_initializing);
+	axes->setFormatZ(static_cast<Axes::Format>(index));
 }
 
 void Axes3DDock::onLabelFontChanged(int size) {
@@ -108,6 +142,24 @@ void Axes3DDock::onLabelChanged(const QString& label) {
 void Axes3DDock::onVisibilityChanged(bool visibility) {
 	const Lock lock(m_initializing);
 	axes->show(visibility);
+}
+
+void Axes3DDock::formatXChanged(Axes::Format index) {
+	if (m_initializing)
+		return;
+	ui.cbXLabelFormat->setCurrentIndex(index);
+}
+
+void Axes3DDock::formatYChanged(Axes::Format index) {
+	if (m_initializing)
+		return;
+	ui.cbYLabelFormat->setCurrentIndex(index);
+}
+
+void Axes3DDock::formatZChanged(Axes::Format index) {
+	if (m_initializing)
+		return;
+	ui.cbZLabelFormat->setCurrentIndex(index);
 }
 
 void Axes3DDock::fontSizeChanged(int value){

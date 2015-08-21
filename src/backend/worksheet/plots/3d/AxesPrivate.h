@@ -39,6 +39,9 @@ class vtkCubeAxesActor;
 struct AxesPrivate : public Base3DPrivate {
 		Axes* const q;
 
+		Axes::Format formatX;
+		Axes::Format formatY;
+		Axes::Format formatZ;
 		int fontSize;
 		QColor xLabelColor;
 		QColor yLabelColor;

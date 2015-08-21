@@ -40,6 +40,15 @@ class Axes : public Base3D {
 		Q_DECLARE_PRIVATE(Axes)
 		Q_DISABLE_COPY(Axes)
 	public:
+		enum Format {
+			Format_Decimal,
+			Format_Scientific,
+			Format_PowerOf10,
+			Format_PowerOf2,
+			Format_PowerOfE,
+			Format_MultiplierOfPi
+		};
+
 		Axes();
 		~Axes();
 
@@ -47,6 +56,10 @@ class Axes : public Base3D {
 		virtual bool load(XmlStreamReader*);
 
 		QIcon icon() const;
+
+		BASIC_D_ACCESSOR_DECL(Format, formatX, FormatX)
+		BASIC_D_ACCESSOR_DECL(Format, formatY, FormatY)
+		BASIC_D_ACCESSOR_DECL(Format, formatZ, FormatZ)
 
 		BASIC_D_ACCESSOR_DECL(int, fontSize, FontSize)
 		CLASS_D_ACCESSOR_DECL(QColor, xLabelColor, XLabelColor)
@@ -63,6 +76,9 @@ class Axes : public Base3D {
 		void updateBounds();
 
 	signals:
+		friend class AxesSetFormatXCmd;
+		friend class AxesSetFormatYCmd;
+		friend class AxesSetFormatZCmd;
 		friend class AxesSetFontSizeCmd;
 		friend class AxesSetXLabelColorCmd;
 		friend class AxesSetYLabelColorCmd;
@@ -70,6 +86,9 @@ class Axes : public Base3D {
 		friend class AxesSetXLabelCmd;
 		friend class AxesSetYLabelCmd;
 		friend class AxesSetZLabelCmd;
+		void formatXChanged(Axes::Format);
+		void formatYChanged(Axes::Format);
+		void formatZChanged(Axes::Format);
 		void fontSizeChanged(int);
 		void xLabelColorChanged(const QColor&);
 		void yLabelColorChanged(const QColor&);
