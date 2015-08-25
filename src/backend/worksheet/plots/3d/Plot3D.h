@@ -184,7 +184,7 @@ class Plot3D : public AbstractPlot {
 
 	signals:
 		friend class Plot3DSetRectCmd;
-		void rectChanged(QRectF&);
+		void rectChanged(const QRectF&);
 
 		// General
 		friend class Plot3DSetXScalingCmd;
