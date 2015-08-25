@@ -74,7 +74,6 @@ class Plot3DPrivate : public AbstractPlotPrivate{
 		QGLContext* context;
 		VTKGraphicsItem *vtkItem;
 		bool isInitialized;
-		bool rectSet;
 		BoundingBox bounds;
 		BoundingBox ranges;
 

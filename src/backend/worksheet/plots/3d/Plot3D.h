@@ -179,8 +179,13 @@ class Plot3D : public AbstractPlot {
 		void onObjectHovered(vtkProp*);
 		void onParametersChanged();
 		void updateBounds();
+		//SLOTs for changes triggered via QActions in the context menu
+		void onVisibilityChanged();
 
 	signals:
+		friend class Plot3DSetRectCmd;
+		void rectChanged(QRectF&);
+
 		// General
 		friend class Plot3DSetXScalingCmd;
 		friend class Plot3DSetYScalingCmd;

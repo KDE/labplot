@@ -113,12 +113,14 @@ void Plot3D::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void Plot3D::init(bool transform){
+	qDebug() << Q_FUNC_INFO << "Init function called";
 	Q_D(Plot3D);
 	if (d->isInitialized)
 		return;
 
-	if (!d->rectSet || d->context == 0)
+	if (d->context == 0)
 		return;
+	qDebug() << Q_FUNC_INFO << "Init";
 
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
@@ -413,7 +415,12 @@ void Plot3D::initActions() {
 	//visibility action
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
-// 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+ 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(onVisibilityChanged()));
+}
+
+void Plot3D::onVisibilityChanged(){
+	Q_D(Plot3D);
+	setVisible(!d->isVisible());
 }
 
 void Plot3D::autoScale() {
@@ -620,14 +627,6 @@ QMenu* Plot3D::createContextMenu(){
 	return menu;
 }
 
-void Plot3D::setRect(const QRectF &rect){
-	Q_D(Plot3D);
-	d->rect = rect;
-	d->rectSet = true;
-
-	retransform();
-}
-
 void Plot3D::retransform() {
 	Q_D(Plot3D);
 	if (d->context == 0)
@@ -671,6 +670,10 @@ BASIC_SHARED_D_READER_IMPL(Plot3D, double, coneAngle, coneAngle)
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
+// Geometry and data ranges
+STD_SETTER_CMD_IMPL_F_S(Plot3D, SetRect, QRectF, rect, retransform)
+STD_SETTER_IMPL(Plot3D, Rect, const QRectF&, rect, "%1: set geometry rect");
+
 // General
 STD_SETTER_CMD_IMPL_F_S(Plot3D, SetXScaling, Plot3D::Scaling, xScaling, updateXScaling)
 STD_SETTER_IMPL(Plot3D, XScaling, Plot3D::Scaling, xScaling, "%1: X axis scaling changed")
@@ -741,7 +744,6 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	, context(0)
 	, vtkItem(0)
 	, isInitialized(false)
-	, rectSet(false)
 	, axes(0)
 	, xScaling(Plot3D::Scaling_Linear)
 	, yScaling(Plot3D::Scaling_Linear)
@@ -768,6 +770,13 @@ Plot3DPrivate::Plot3DPrivate(Plot3D* owner)
 	backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
 	backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
 	backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
+
+	//Geometry, specify the plot rect in scene coordinates.
+	const float x = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
+	const float y = Worksheet::convertToSceneUnits(2, Worksheet::Centimeter);
+	const float w = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
+	const float h = Worksheet::convertToSceneUnits(10, Worksheet::Centimeter);
+	rect = QRectF(x,y,w,h);
 }
 
 Plot3DPrivate::~Plot3DPrivate() {
@@ -915,6 +924,9 @@ void Plot3DPrivate::setupCamera() {
 }
 
 void Plot3DPrivate::retransform() {
+	if (!isInitialized)
+		return;
+
 	prepareGeometryChange();
 	const double halfWidth = rect.width() / 2;
 	const double halfHeight = rect.height() / 2;
