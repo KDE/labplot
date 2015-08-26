@@ -163,7 +163,7 @@ Curve3DPrivate::Curve3DPrivate(const QString& name, Curve3D* parent)
 	, xColumn(0)
 	, yColumn(0)
 	, zColumn(0)
-	, pointRadius(20.0)
+	, pointRadius(0.05)
 	, showEdges(true)
 	, isClosed(false) {
 }
