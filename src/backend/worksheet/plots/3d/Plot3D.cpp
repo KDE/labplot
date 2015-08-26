@@ -178,7 +178,8 @@ void Plot3D::configureAspect(AbstractAspect* aspect) {
 
 void Plot3D::onParametersChanged() {
 	Q_D(Plot3D);
-	d->axes->updateBounds();
+	if (d->axes)
+		d->axes->updateBounds();
 	d->resetCamera();
 	d->vtkItem->refresh();
 }
