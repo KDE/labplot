@@ -269,7 +269,8 @@ void Plot3D::onObjectClicked(vtkProp* object) {
 		foreach(Curve3D* curve, d->curves) {
 			curve->select(false);
 		}
-		d->axes->select(false);
+		if (d->axes)
+			d->axes->select(false);
 	} else {
 		foreach(Surface3D* surface, d->surfaces) {
 			if (*surface == object) {
@@ -290,12 +291,14 @@ void Plot3D::onObjectClicked(vtkProp* object) {
 				curve->select(false);
 			}
 		}
-		if (*d->axes == object) {
-			qDebug() << Q_FUNC_INFO << "Axes clicked";
-			emit currentAspectChanged(d->axes);
-			d->axes->select(true);
-		} else {
-			d->axes->select(false);
+		if (d->axes) {
+			if (*d->axes == object) {
+				qDebug() << Q_FUNC_INFO << "Axes clicked";
+				emit currentAspectChanged(d->axes);
+				d->axes->select(true);
+			} else {
+				d->axes->select(false);
+			}
 		}
 	}
 	d->vtkItem->refresh();
@@ -788,6 +791,7 @@ Plot3DPrivate::~Plot3DPrivate() {
 
 void Plot3DPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	Q_UNUSED(event);
+	emit q->currentAspectChanged(q);
 }
 
 void Plot3DPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
@@ -822,19 +826,25 @@ void Plot3DPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
 	if (!q->isVisible())
 		return;
 
+	const double halfWidth = rect.width() / 2;
+	const double halfHeight = rect.height() / 2;
+
 	if (m_printing){
 		vtkSmartPointer<vtkWindowToImageFilter> wti = vtkSmartPointer<vtkWindowToImageFilter>::New();
 		wti->SetInput(vtkItem->GetRenderWindow());
 		wti->Update();
 		vtkSmartPointer<vtkImageData> image = wti->GetOutput();
 		const QPixmap pixmap(QPixmap::fromImage(vtkImageDataToQImage(image)));
-		const double halfWidth = rect.width() / 2;
-		const double halfHeight = rect.height() / 2;
 		painter->drawPixmap(-halfWidth, -halfHeight, pixmap);
-		painter->setPen(QPen(Qt::black));
+		painter->setPen(QPen(Qt::black, 5));
 		painter->drawRect(-halfWidth, -halfHeight, rect.width(), rect.height());
-	} else
+	} else {
+		painter->save();
+		painter->setPen(QPen(Qt::black, 5));
+		painter->drawRect(-halfWidth, -halfHeight, rect.width(), rect.height());
+		painter->restore();
 		AbstractPlotPrivate::paint(painter, option, widget);
+	}
 }
 
 void Plot3DPrivate::updateLight(bool notify) {
