@@ -1045,7 +1045,11 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 	if (!win)
 		return 0;
 
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	PartMdiView* partView = dynamic_cast<PartMdiView*>(win);
+	if (!partView)
+		return 0;
+
+	AbstractPart* part = partView->part();
 	Q_ASSERT(part);
 	Spreadsheet* spreadsheet = 0;
 	Workbook* workbook = dynamic_cast<Workbook*>(part);
@@ -1078,7 +1082,11 @@ Matrix* MainWin::activeMatrix() const{
 	if (!win)
 		return 0;
 
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	PartMdiView* partView = dynamic_cast<PartMdiView*>(win);
+	if (!partView)
+		return 0;
+
+	AbstractPart* part = partView->part();
 	Q_ASSERT(part);
 	Matrix* matrix = 0;
 	Workbook* workbook = dynamic_cast<Workbook*>(part);
@@ -1106,7 +1114,10 @@ Worksheet* MainWin::activeWorksheet() const{
 	if (!win)
 		return 0;
 
-	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	PartMdiView* partView = dynamic_cast<PartMdiView*>(win);
+	if (!partView)
+		return 0;
+	AbstractPart* part = partView->part();
 	Q_ASSERT(part);
 	return dynamic_cast<Worksheet*>(part);
 }
