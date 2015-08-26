@@ -134,6 +134,7 @@ class ImageView : public QGraphicsView {
         void changePointsType(QAction*);
         void activeCurveChanged(QAction*);
         void handleImageActions();
+        void handleActiveCurveChanged();
         void updateBackground();
         void addCurve();
         void changeRotationAngle();

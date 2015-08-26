@@ -58,13 +58,6 @@ Image::Image(AbstractScriptingEngine* engine, const QString& name, bool loading)
       m_magnificationWindow(0),
       m_editor(new ImageEditor()) {
 
-    connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
-            this, SLOT(handleAspectAdded(const AbstractAspect*)));
-    connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-            this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
-    connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-            this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)) );
-
     if (!loading)
         init();
 }
@@ -128,52 +121,6 @@ QWidget* Image::view() const {
         connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
     }
     return m_view;
-}
-
-void Image::handleAspectAdded(const AbstractAspect* aspect) {
-    const CustomItem* addedItem = qobject_cast<const CustomItem*>(aspect);
-    if (addedItem && addedItem->parentAspect() == this) {
-        QGraphicsItem *graphicsItem = addedItem->graphicsItem();
-        Q_ASSERT(graphicsItem != NULL);
-        d->m_scene->addItem(graphicsItem);
-
-        qreal zVal = 0;
-        QList<CustomItem*> childItems = children<CustomItem>(IncludeHidden);\
-        foreach(CustomItem *item, childItems) {
-            item->graphicsItem()->setZValue(zVal++);
-        }
-
-        //set properties of added custom-item same as previous items
-        if (childItems.count() > 1) {
-            CustomItem* m_item = childItems.first();
-            CustomItem* newAddedItem = childItems.last();
-            newAddedItem->setUndoAware(false);
-            newAddedItem->setItemsBrush(m_item->itemsBrush());
-            newAddedItem->setItemsOpacity(m_item->itemsOpacity());
-            newAddedItem->setItemsPen(m_item->itemsPen());
-            newAddedItem->setItemsRotationAngle(m_item->itemsRotationAngle());
-            newAddedItem->setItemsSize(m_item->itemsSize());
-            newAddedItem->setItemsStyle(m_item->itemsStyle());
-            newAddedItem->setErrorBarBrush(m_item->errorBarBrush());
-            newAddedItem->setErrorBarSize(m_item->errorBarSize());
-            newAddedItem->setUndoAware(true);
-        }
-    }
-}
-
-void Image::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-    const WorksheetElement *removedElement = qobject_cast<const WorksheetElement*>(aspect);
-    if (removedElement) {
-        QGraphicsItem *item = removedElement->graphicsItem();
-        Q_ASSERT(item != NULL);
-        d->m_scene->removeItem(item);
-    }
-}
-
-void Image::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child){
-    Q_UNUSED(parent);
-    Q_UNUSED(before);
-    Q_UNUSED(child);
 }
 
 void Image::curveAboutToBeRemoved(const AbstractAspect* aspect) {
@@ -303,10 +250,6 @@ STD_SETTER_CMD_IMPL_F_S(Image, SetActiveCurve, DataPickerCurve*, activeCurve, up
 void Image::setActiveCurve(DataPickerCurve* curve) {
     if (curve != d->activeCurve) {
         exec(new ImageSetActiveCurveCmd(d, curve, i18n("%1: set active curve")));
-        if (curve != NULL) {
-            connect(curve->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-                    this, SLOT(curveAboutToBeRemoved(const AbstractAspect*)));
-        }
     }
 }
 

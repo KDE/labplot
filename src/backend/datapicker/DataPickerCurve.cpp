@@ -48,20 +48,10 @@
 
 DataPickerCurve::DataPickerCurve(const QString &name) : AbstractAspect(name), d_ptr(new DataPickerCurvePrivate()) {
 
-    connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
-            this, SLOT(handleAspectAdded(const AbstractAspect*)));
-    connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-            this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
-
     init();
 }
 
 DataPickerCurve::DataPickerCurve(const QString &name, DataPickerCurvePrivate *dd) : AbstractAspect(name), d_ptr(dd) {
-
-    connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
-            this, SLOT(handleAspectAdded(const AbstractAspect*)));
-    connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-            this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 
     init();
 }
@@ -120,42 +110,6 @@ QMenu* DataPickerCurve::createContextMenu() {
     menu->insertAction(firstAction, updateDatasheetAction);
 
     return menu;
-}
-
-void DataPickerCurve::handleAspectAdded(const AbstractAspect* aspect) {
-    Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
-    if (!datapicker)
-        return;
-    Q_ASSERT(datapicker->m_image);
-
-    const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
-    if (addedElement) {
-        QGraphicsItem *graphicsItem = addedElement->graphicsItem();
-        Q_ASSERT(graphicsItem != NULL);
-        datapicker->m_image->scene()->addItem(graphicsItem);
-
-        qreal zVal = 0;
-        QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
-        foreach(WorksheetElement *elem, childElements)
-            elem->graphicsItem()->setZValue(zVal++);
-
-    } else {
-        datapicker->handleChildAspectAdded(aspect);
-    }
-}
-
-void DataPickerCurve::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-    Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
-    if (!datapicker)
-        return;
-    Q_ASSERT(datapicker->m_image);
-
-    const WorksheetElement *removedElement = qobject_cast<const WorksheetElement*>(aspect);
-    if (removedElement) {
-        QGraphicsItem *item = removedElement->graphicsItem();
-        Q_ASSERT(item != NULL);
-        datapicker->m_image->scene()->removeItem(item);
-    }
 }
 
 Column* DataPickerCurve::appendColumn(const QString& name, Spreadsheet* datasheet) {

@@ -44,6 +44,12 @@
  */
 Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name)
     : AbstractPart(name), scripted(engine), m_image(0) {
+
+    connect( this, SIGNAL(aspectAdded(const AbstractAspect*)),
+             this, SLOT(handleChildAspectAdded(const AbstractAspect*)) );
+    connect( this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+             this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)) );
+
 }
 
 void Datapicker::initDefault() {
@@ -145,8 +151,58 @@ void Datapicker::setChildSelectedInView(int index, bool selected){
     }
 }
 
+void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
+    connect( aspect, SIGNAL(aspectAdded(const AbstractAspect*)),
+            this, SLOT(handleChildAspectAdded(const AbstractAspect*)) );
+    connect( aspect, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
+            this, SLOT(handleChildAspectAboutToBeRemoved(const AbstractAspect*)) );
+}
+
+void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
+    const DataPickerCurve* curve = qobject_cast<const DataPickerCurve*>(aspect);
+    if (curve) {
+        //clear scene
+        QList<WorksheetElement *> childElements = curve->children<WorksheetElement>(IncludeHidden);
+        foreach(WorksheetElement *elem, childElements) {
+            handleChildAspectAboutToBeRemoved(elem);
+        }
+
+        m_image->curveAboutToBeRemoved(curve);
+    }
+}
+
 void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
+    const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
+    if (addedElement) {
+        QGraphicsItem *item = addedElement->graphicsItem();
+        Q_ASSERT(item != NULL);
+        Q_ASSERT(m_image != NULL);
+        m_image->scene()->addItem(item);
+
+        qreal zVal = 0;
+        QList<WorksheetElement *> childElements = m_image->children<WorksheetElement>(IncludeHidden);
+        foreach(WorksheetElement *elem, childElements) {
+            elem->graphicsItem()->setZValue(zVal++);
+        }
+
+        foreach (DataPickerCurve* curve, children<DataPickerCurve>()) {
+            foreach (WorksheetElement* elem, curve->children<WorksheetElement>(IncludeHidden)) {
+                elem->graphicsItem()->setZValue(zVal++);
+            }
+        }
+    }
+
     emit childAspectAdded(aspect);
+}
+
+void Datapicker::handleChildAspectAboutToBeRemoved(const AbstractAspect* aspect) {
+    const WorksheetElement *removedElement = qobject_cast<const WorksheetElement*>(aspect);
+    if (removedElement) {
+        QGraphicsItem *item = removedElement->graphicsItem();
+        Q_ASSERT(item != NULL);
+        Q_ASSERT(m_image != NULL);
+        m_image->scene()->removeItem(item);
+    }
 }
 
 //##############################################################################
@@ -215,10 +271,11 @@ bool Datapicker::load(XmlStreamReader* reader){
         }
     }
 
-    foreach (DataPickerCurve* curve, children<DataPickerCurve>()) {
-        foreach (CustomItem* item, curve->children<CustomItem>(IncludeHidden)) {
-            curve->handleAspectAdded(item);
+    foreach (AbstractAspect* aspect, children<AbstractAspect>()) {
+        foreach (WorksheetElement* elem, aspect->children<WorksheetElement>(IncludeHidden)) {
+            handleChildAspectAdded(elem);
         }
     }
+
     return true;
 }

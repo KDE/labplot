@@ -84,16 +84,25 @@ ImageView::ImageView(Image* image) : QGraphicsView(),
     changeZoom(zoomOriginAction);
     currentZoomAction=zoomInViewAction;
     handleImageActions();
+    handleActiveCurveChanged();
     changeRotationAngle();
 
     //signal/slot connections
+    //for general actions
     connect( m_image, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)) );
     connect( m_image, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
     connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleImageActions()));
     connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
             this, SLOT(handleImageActions()) );
     connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(changeRotationAngle()) );
-    connect( m_image, SIGNAL(activeCurveChanged(const DataPickerCurve*)), this, SLOT(handleImageActions()) );
+
+    //for curve actions
+    connect( m_image, SIGNAL(activeCurveChanged(const DataPickerCurve*)),
+             this, SLOT(handleActiveCurveChanged()) );
+    connect( m_image->parentAspect(), SIGNAL(aspectAdded(const AbstractAspect*)),
+             this, SLOT(handleActiveCurveChanged()) );
+    connect( m_image->parentAspect(), SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
+             this, SLOT(handleActiveCurveChanged()) );
 }
 
 void ImageView::initActions() {
@@ -722,6 +731,25 @@ void ImageView::changeRotationAngle() {
     updateBackground();
 }
 
+void ImageView::handleActiveCurveChanged() {
+    //update m_activeCurveMenu
+    QList<DataPickerCurve*> curveList = m_image->parentAspect()->children<DataPickerCurve>();
+    if (curveList.isEmpty()) {
+        m_activeCurveMenu->setEnabled(false);
+        return;
+    } else {
+        m_activeCurveMenu->setEnabled(true);
+    }
+
+    m_activeCurveMenu->clear();
+    foreach (DataPickerCurve* curve, curveList) {
+        QAction* action = new KAction(KIcon(""), curve->name(), m_activeCurveActionGroup);
+        action->setCheckable(true);
+        action->setChecked(m_image->activeCurve() == curve);
+        m_activeCurveMenu->addAction(action);
+    }
+}
+
 void ImageView::handleImageActions() {
     int axisPointsCount = m_image->childCount<CustomItem>(AbstractAspect::IncludeHidden);
 
@@ -753,21 +781,4 @@ void ImageView::handleImageActions() {
     setAxisPointsAction->setChecked(m_image->plotPointsType() == Image::AxisPoints);
     setCurvePointsAction->setChecked(m_image->plotPointsType() == Image::CurvePoints);
     selectSegmentAction->setChecked(m_image->plotPointsType() == Image::SegmentPoints);
-
-    //update m_activeCurveMenu
-    QList<DataPickerCurve*> curveList = m_image->parentAspect()->children<DataPickerCurve>();
-    if (curveList.isEmpty()) {
-        m_activeCurveMenu->setEnabled(false);
-        return;
-    } else {
-        m_activeCurveMenu->setEnabled(true);
-    }
-
-    m_activeCurveMenu->clear();
-    foreach (DataPickerCurve* curve, curveList) {
-        QAction* action = new KAction(KIcon(""), curve->name(), m_activeCurveActionGroup);
-        action->setCheckable(true);
-        action->setChecked(m_image->activeCurve() == curve);
-        m_activeCurveMenu->addAction(action);
-    }
 }

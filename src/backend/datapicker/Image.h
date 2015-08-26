@@ -90,6 +90,7 @@ class Image: public AbstractPart, public scripted {
         void setSelectedInView(const bool);
         void setPlotImageType(const Image::PlotImageType&);
         void setSegmentVisible(bool);
+        void curveAboutToBeRemoved(const AbstractAspect*);
 
         bool isLoaded;
         QImage originalPlotImage;
@@ -105,7 +106,6 @@ class Image: public AbstractPart, public scripted {
         BASIC_D_ACCESSOR_DECL(PointsType, plotPointsType, PlotPointsType)
         BASIC_D_ACCESSOR_DECL(int, pointSeparation, PointSeparation)
         BASIC_D_ACCESSOR_DECL(int, minSegmentLength, minSegmentLength)
-
         POINTER_D_ACCESSOR_DECL(DataPickerCurve, activeCurve, ActiveCurve)
 
 		typedef ImagePrivate Private;
@@ -118,12 +118,6 @@ class Image: public AbstractPart, public scripted {
 		friend class ImagePrivate;
         Segments* m_segments;
         ImageEditor* m_editor;
-
-    private slots:
-		void handleAspectAdded(const AbstractAspect*);
-        void handleAspectAboutToBeRemoved(const AbstractAspect*);
-		void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
-        void curveAboutToBeRemoved(const AbstractAspect*);
 
     signals:
 		void requestProjectContextMenu(QMenu*);

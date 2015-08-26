@@ -79,11 +79,9 @@ class DataPickerCurve: public AbstractAspect {
     private slots:
         void visibilityChanged();
         void updateDatasheet();
-        void handleAspectAboutToBeRemoved(const AbstractAspect*);
 
     public slots:
         void updateData(const CustomItem*);
-        void handleAspectAdded(const AbstractAspect*);
 
     private:
         Q_DECLARE_PRIVATE(DataPickerCurve)
