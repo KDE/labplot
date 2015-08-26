@@ -58,7 +58,7 @@ class Plot3DPrivate : public AbstractPlotPrivate{
 
 		void resetCamera();
 
-		virtual void retransform();
+		void retransform();
 		void updateRanges(bool notify = true);
 		void updateLight(bool notify = true);
 		void updateBackground(bool notify = true);
@@ -68,7 +68,7 @@ class Plot3DPrivate : public AbstractPlotPrivate{
 		void setupCamera();
 		void mousePressEvent(QGraphicsSceneMouseEvent* event);
 		void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
+		void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 
 		Plot3D* const q;
 		QGLContext* context;

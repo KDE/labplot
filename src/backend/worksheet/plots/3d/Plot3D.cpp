@@ -812,7 +812,7 @@ namespace {
 	}
 }
 
-void Plot3DPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+void Plot3DPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 	if (!q->isVisible())
@@ -829,7 +829,8 @@ void Plot3DPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 		painter->drawPixmap(-halfWidth, -halfHeight, pixmap);
 		painter->setPen(QPen(Qt::black));
 		painter->drawRect(-halfWidth, -halfHeight, rect.width(), rect.height());
-	}
+	} else
+		AbstractPlotPrivate::paint(painter, option, widget);
 }
 
 void Plot3DPrivate::updateLight(bool notify) {
