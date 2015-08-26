@@ -310,16 +310,20 @@ void Plot3D::onObjectHovered(vtkProp* object) {
 
 		foreach(Curve3D* curve, d->curves)
 			curve->highlight(false);
-		d->axes->highlight(false);
+		if (d->axes)
+			d->axes->highlight(false);
 	} else {
 		foreach(Surface3D* surface, d->surfaces)
 			surface->highlight(*surface == object);
 
 		foreach(Curve3D* curve, d->curves)
 			curve->highlight(*curve == object);
-		if (*d->axes == object)
-			qDebug() << Q_FUNC_INFO << "Axes hovered";
-		d->axes->highlight(*d->axes == object);
+
+		if (d->axes) {
+			if (*d->axes == object)
+				qDebug() << Q_FUNC_INFO << "Axes hovered";
+			d->axes->highlight(*d->axes == object);
+		}
 	}
 
 	d->vtkItem->refresh();
