@@ -4,7 +4,7 @@
     Description          : Spreadsheet with a MxN matrix data model
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008-2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
 
@@ -101,7 +101,7 @@ void Matrix::init() {
   Returns an icon to be used for decorating my views.
   */
 QIcon Matrix::icon() const {
-	return KIcon("table");
+	return KIcon("matrix");
 }
 
 /*!

@@ -324,7 +324,7 @@ void ImportFileDialog::newDataContainer(QAction* action){
 			aspect = new Workbook(0, name);
 		else if(actionIndex == 1)
 			aspect = new Spreadsheet(0, name);
-		else if(actionIndex == 2)
+		else
 			aspect = new Matrix(0, name);
 
 		m_mainWin->addAspectToProject(aspect);

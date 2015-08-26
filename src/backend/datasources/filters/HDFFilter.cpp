@@ -869,7 +869,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 
 	//check for hard link
 	H5G_stat_t statbuf;
-	status = H5Gget_objinfo(gid, ".", TRUE, &statbuf);
+	status = H5Gget_objinfo(gid, ".", true, &statbuf);
 	handleError(status,"H5Gget_objinfo");
 	if (statbuf.nlink > 1) {
 		if(multiLinkList.contains(statbuf.objno[0])) {

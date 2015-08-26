@@ -1154,6 +1154,13 @@ void WorksheetView::selectionChanged(){
 	if (items.size() == 0 && invisibleDeselected == false){
 		//no items selected -> select the worksheet again.
 		m_worksheet->setSelectedInView(true);
+
+		//if one of the "zoom&select" plot mouse modes was selected before, activate the default "selection mode" again
+		//since no plots are selected now.
+		if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode!= CartesianPlot::SelectionMode) {
+			cartesianPlotSelectionModeAction->setChecked(true);
+			cartesianPlotMouseModeChanged(cartesianPlotSelectionModeAction);
+		}
 	}else{
 		foreach (const QGraphicsItem* item, items)
 			m_worksheet->setItemSelectedInView(item, true);

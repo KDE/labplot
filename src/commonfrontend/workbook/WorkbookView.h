@@ -43,7 +43,7 @@ class QToolBar;
 class TabWidget : public QTabWidget {
 	Q_OBJECT
 	public:
-		TabWidget(QWidget* parent) : QTabWidget(parent) {
+		explicit TabWidget(QWidget* parent) : QTabWidget(parent) {
 			connect(tabBar(),SIGNAL(tabMoved(int,int)),this, SIGNAL(tabMoved(int,int)));
 		}
 

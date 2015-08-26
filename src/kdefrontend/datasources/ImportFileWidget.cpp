@@ -691,6 +691,8 @@ void ImportFileWidget::headerChanged(int state) {
 }
 
 void ImportFileWidget::refreshPreview(){
+	WAIT_CURSOR;
+
 	QString fileName = ui.kleFileName->text();
 	if ( fileName.left(1) != QDir::separator() )
 	    fileName = QDir::homePath() + QDir::separator() + fileName;
@@ -768,4 +770,6 @@ void ImportFileWidget::refreshPreview(){
 
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	}
+
+	RESET_CURSOR;
 }

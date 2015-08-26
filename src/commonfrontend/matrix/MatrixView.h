@@ -45,7 +45,7 @@ class MatrixView : public QWidget {
     Q_OBJECT
 
 	public:
-		MatrixView(Matrix*);
+		explicit MatrixView(Matrix*);
 		virtual ~MatrixView();
 
 		MatrixModel* model() const;

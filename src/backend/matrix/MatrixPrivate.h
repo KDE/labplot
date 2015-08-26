@@ -4,7 +4,7 @@
     Description          : Private members of Matrix.
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008-2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
 
@@ -34,7 +34,7 @@
 
 class MatrixPrivate {
 	public:
-		MatrixPrivate(Matrix*);
+		explicit MatrixPrivate(Matrix*);
 
 		void insertColumns(int before, int count);
 		void removeColumns(int first, int count);

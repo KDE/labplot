@@ -49,7 +49,6 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QMimeData>
-#include <QInputDialog>
 #include <QDebug>
 
 #include <KLocale>
@@ -722,31 +721,41 @@ void MatrixView::clearSelectedCells() {
 }
 
 void MatrixView::updateImage() {
+	WAIT_CURSOR;
 	m_image = QImage(m_matrix->columnCount(), m_matrix->rowCount(), QImage::Format_ARGB32);
 
-	//TODO: use faster QImage::scanLine()-method here
-
 	//find min/max value
+	QTime timer;
+	timer.start();
 	double dmax= -DBL_MAX, dmin= DBL_MAX;
 	const QVector<QVector<double> >& matrixData = m_matrix->data();
-	for (int col=0; col<m_matrix->columnCount(); ++col) {
-		for (int row=0; row<m_matrix->rowCount(); ++row) {
-			double value = matrixData[col][row];
+	const int width = m_matrix->columnCount();
+	const int height = m_matrix->rowCount();
+	for (int col=0; col<width; ++col) {
+		for (int row=0; row<height; ++row) {
+			const double value = matrixData[col][row];
 			if (dmax<value) dmax=value;
 			if (dmin>value) dmin=value;
 		}
 	}
+	qDebug()<<"min/max determined in " << (float)timer.elapsed()/1000 << "s";
 
-	for (int col=0; col<m_matrix->columnCount(); ++col) {
-		for (int row=0; row<m_matrix->rowCount(); ++row) {
-			int gray = 255.0*(matrixData[col][row]-dmin)/(dmax-dmin);
-			m_image.setPixel(col, row, QColor(gray, gray, gray).rgb());
+	//update the image
+	timer.start();
+	const double scaleFactor = 255.0/(dmax-dmin);
+	for (int row=0; row<height; ++row) {
+		QRgb* line = (QRgb*)m_image.scanLine(row);
+		for (int col=0; col<width; ++col) {
+			const int gray = (matrixData[col][row]-dmin)*scaleFactor;
+			line[col] = qRgb(gray, gray, gray);
 		}
 	}
+	qDebug()<<"image updated in " << (float)timer.elapsed()/1000 << "s";
 
-	m_imageLabel->resize(m_matrix->columnCount(), m_matrix->rowCount());
+	m_imageLabel->resize(width, height);
 	m_imageLabel->setPixmap(QPixmap::fromImage(m_image));
 	m_imageIsDirty = false;
+	RESET_CURSOR;
 }
 
 //############################# matrix related slots ###########################
