@@ -331,6 +331,9 @@ void ImagePrivate::updateFileName() {
             q->initSceneParameters();
             fileName = address;
         }
+    } else {
+        //hide segments if they are visible
+        q->m_segments->setSegmentsVisible(false);
     }
 
     update();
