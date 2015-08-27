@@ -254,7 +254,7 @@ void Image::setActiveCurve(DataPickerCurve* curve) {
 }
 
 void Image::setPrinting(bool on) const {
-    QList<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+    QList<WorksheetElement*> childElements = parentAspect()->children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
     foreach(WorksheetElement* elem, childElements)
         elem->setPrinting(on);
 }
@@ -317,9 +317,10 @@ ImagePrivate::~ImagePrivate() {
 
 void ImagePrivate::updateFileName() {
     WAIT_CURSOR;
-    QList<AbstractAspect*> children = q->children<AbstractAspect>(AbstractAspect::IncludeHidden);
-    if (children.count()) {
-        q->removeAllChildren();
+    QList<WorksheetElement*> childElements = q->parentAspect()->children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+    if (childElements.count()) {
+        foreach(WorksheetElement* elem, childElements)
+            elem->remove();
     }
 
     q->isLoaded = false;
