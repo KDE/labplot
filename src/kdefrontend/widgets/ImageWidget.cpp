@@ -164,8 +164,12 @@ void ImageWidget::initConnections() {
     connect( m_image->parentAspect(), SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleCurveAspectChanged()) );
     connect( m_image->parentAspect(), SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*))
              , this, SLOT(handleCurveAspectChanged()) );
-    if (m_image->activeCurve())
+
+    if (m_image->activeCurve()) {
         connect( m_image->activeCurve(), SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(updateCustomItemList()) );
+        connect( m_image->activeCurve(), SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
+                 this, SLOT(updateCustomItemList()) );
+    }
 }
 
 
