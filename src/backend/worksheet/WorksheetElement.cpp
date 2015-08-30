@@ -29,6 +29,7 @@
 
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
 
 #include <QMenu>
 #include <KLocale>
@@ -44,13 +45,11 @@ float WorksheetElement::selectedOpacity = 0.3;
  *
  */
 WorksheetElement::WorksheetElement(const QString &name) : AbstractAspect(name) {
-
 	m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
 	m_moveBehindMenu = new QMenu(i18n("Move &behind"));
 	m_moveInFrontOfMenu = new QMenu(i18n("Move in &front of"));
 	m_drawingOrderMenu->addMenu(m_moveBehindMenu);
 	m_drawingOrderMenu->addMenu(m_moveInFrontOfMenu);
-
 
 	connect(m_moveBehindMenu, SIGNAL(aboutToShow()), this, SLOT(prepareMoveBehindMenu()));
 	connect(m_moveInFrontOfMenu, SIGNAL(aboutToShow()), this, SLOT(prepareMoveInFrontOfMenu()));
@@ -107,14 +106,6 @@ bool WorksheetElement::isFullyVisible() const {
  */
 
 /**
- * \fn AbstractCoordinateSystem *WorksheetElement::coordinateSystem() const
- * \brief Return the current coordinate system (can be NULL which means don't transform).
- *
- * The standard implementation looks for the first ancestor within the worksheet which
- * inherits AbstractCoordinateSystem.
- */
-
-/**
     This does exactly what Qt internally does to creates a shape from a painter path.
 */
 QPainterPath WorksheetElement::shapeFromPath(const QPainterPath &path, const QPen &pen) {
@@ -139,12 +130,14 @@ QPainterPath WorksheetElement::shapeFromPath(const QPainterPath &path, const QPe
 
 QMenu *WorksheetElement::createContextMenu() {
 	QMenu *menu = AbstractAspect::createContextMenu();
-    if (parentAspect()->childCount<WorksheetElement>()>1){
-		menu->addSeparator();
-		menu->addMenu(m_drawingOrderMenu);
-		menu->addSeparator();
-	}
 
+	if (!dynamic_cast<Axis*>(this)) {
+		if (parentAspect()->childCount<WorksheetElement>()>1){
+			menu->addSeparator();
+			menu->addMenu(m_drawingOrderMenu);
+			menu->addSeparator();
+		}
+	}
 	return menu;
 }
 
@@ -153,8 +146,8 @@ void WorksheetElement::prepareMoveBehindMenu() {
 	AbstractAspect *parent = parentAspect();
 	if (parent) {
 		QList<WorksheetElement *> childElements = parent->children<WorksheetElement>();
-		foreach(WorksheetElement *elem, childElements) {
-			if (elem != this) {
+		foreach(const WorksheetElement *elem, childElements) {
+			if (elem != this && !dynamic_cast<const Axis*>(elem)) {
 				QAction *action = m_moveBehindMenu->addAction(elem->name());
 				action->setData(parent->indexOfChild<WorksheetElement>(elem));
 			}
@@ -167,8 +160,8 @@ void WorksheetElement::prepareMoveInFrontOfMenu() {
 	AbstractAspect *parent = parentAspect();
 	if (parent) {
 		QList<WorksheetElement *> childElements = parent->children<WorksheetElement>();
-		foreach(WorksheetElement *elem, childElements) {
-			if (elem != this) {
+		foreach(const WorksheetElement *elem, childElements) {
+			if (elem != this && !dynamic_cast<const Axis*>(elem)) {
 				QAction *action = m_moveInFrontOfMenu->addAction(elem->name());
 				action->setData(parent->indexOfChild<WorksheetElement>(elem));
 			}
