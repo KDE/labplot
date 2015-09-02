@@ -117,6 +117,7 @@ void MouseInteractor::OnMouseMove() {
 	vtkProp* object = getPickedObject(pos);
 	if (object == 0) {
 		if (axes && isAxesPicked(pos)) {
+			vtkInteractorStyleTrackballCamera::OnMouseMove();
 			if (axes != prevHovered) {
 				prevHovered = axes;
 				emit broadcaster.axesHovered();
@@ -126,6 +127,7 @@ void MouseInteractor::OnMouseMove() {
 			vtkInteractorStyleTrackballCamera::OnMouseMove();
 	}
 
+	vtkInteractorStyleTrackballCamera::OnMouseMove();
 	if (object != prevHovered) {
 		prevHovered = object;
 		emit broadcaster.objectHovered(object);
@@ -138,6 +140,7 @@ void MouseInteractor::OnLeftButtonDown() {
 	vtkProp* object = getPickedObject();
 	if (object == 0) {
 		if (axes && isAxesPicked(pos)) {
+			vtkInteractorStyleTrackballCamera::OnLeftButtonDown();
 			if (axes != prevClicked) {
 				prevClicked = axes;
 				emit broadcaster.axesClicked();
@@ -146,6 +149,7 @@ void MouseInteractor::OnLeftButtonDown() {
 		} else
 			vtkInteractorStyleTrackballCamera::OnLeftButtonDown();
 	}
+	vtkInteractorStyleTrackballCamera::OnLeftButtonDown();
 	if (object != prevClicked) {
 		prevClicked = object;
 		emit broadcaster.objectClicked(object);
