@@ -125,13 +125,11 @@ void Plot3D::init(bool transform){
 	m_plotArea = new PlotArea(name() + " plot area");
 	addChild(m_plotArea);
 
-	//light
+	initActions();
 
 	d->init();
-
 	d->isInitialized = true;
 
-	initActions();
 	initMenus();
 
 	if (transform)
@@ -214,15 +212,20 @@ void Plot3D::addCurve() {
 		d->axes->updateBounds();
 }
 
-void Plot3D::addAxes() {
+void Plot3D::setupAxes() {
 	Q_D(Plot3D);
-	d->axes = new Axes;
 	d->axes->setRenderer(d->renderer);
 	configureAspect(d->axes);
 	d->axes->updateBounds();
-	d->resetCamera();
-	d->vtkItem->refresh();
+	d->interactor->setAxes(d->axes);
 	addAxesAction->setEnabled(false);
+	d->resetCamera();
+}
+
+void Plot3D::addAxes() {
+	Q_D(Plot3D);
+	d->axes = new Axes;
+	setupAxes();
 }
 
 void Plot3D::onItemRemoved() {
@@ -253,7 +256,23 @@ void Plot3D::onItemRemoved() {
 		qDebug() << "Remove axes";
 		d->axes = 0;
 		addAxesAction->setEnabled(true);
+		d->interactor->setAxes(0);
 		return;
+	}
+}
+
+void Plot3D::onAxesClicked() {
+	qDebug() << Q_FUNC_INFO;
+	Q_D(Plot3D);
+	emit currentAspectChanged(d->axes);
+}
+
+void Plot3D::onAxesHovered() {
+	qDebug() << Q_FUNC_INFO;
+	Q_D(Plot3D);
+	if (d->axes) {
+		d->axes->highlight(true);
+		d->vtkItem->refresh();
 	}
 }
 
@@ -277,7 +296,6 @@ void Plot3D::onObjectClicked(vtkProp* object) {
 			if (*surface == object) {
 				qDebug() << Q_FUNC_INFO << "Surface clicked" << surface->name();
 				emit currentAspectChanged(surface);
-				surface->select(true);
 			} else {
 				surface->select(false);
 			}
@@ -287,22 +305,13 @@ void Plot3D::onObjectClicked(vtkProp* object) {
 			if (*curve == object) {
 				qDebug() << Q_FUNC_INFO << "Curve clicked" << curve->name();
 				emit currentAspectChanged(curve);
-				curve->select(true);
 			} else {
 				curve->select(false);
 			}
 		}
-		if (d->axes) {
-			if (*d->axes == object) {
-				qDebug() << Q_FUNC_INFO << "Axes clicked";
-				emit currentAspectChanged(d->axes);
-				d->axes->select(true);
-			} else {
-				d->axes->select(false);
-			}
-		}
+		if (d->axes && *d->axes != object)
+			d->axes->select(false);
 	}
-	d->vtkItem->refresh();
 }
 
 void Plot3D::onObjectHovered(vtkProp* object) {
@@ -323,11 +332,8 @@ void Plot3D::onObjectHovered(vtkProp* object) {
 		foreach(Curve3D* curve, d->curves)
 			curve->highlight(*curve == object);
 
-		if (d->axes) {
-			if (*d->axes == object)
-				qDebug() << Q_FUNC_INFO << "Axes hovered";
-			d->axes->highlight(*d->axes == object);
-		}
+		if (d->axes && *d->axes != object)
+			d->axes->highlight(false);
 	}
 
 	d->vtkItem->refresh();
@@ -899,11 +905,13 @@ void Plot3DPrivate::init() {
 	renderer->SetLayer(1);
 	backgroundRenderer->InteractiveOff();
 
-	vtkSmartPointer<MouseInteractor> style = vtkSmartPointer<MouseInteractor>::New();
-	style->SetDefaultRenderer(renderer);
-	q->connect(&style->broadcaster, SIGNAL(objectClicked(vtkProp*)), SLOT(onObjectClicked(vtkProp*)));
-	q->connect(&style->broadcaster, SIGNAL(objectHovered(vtkProp*)), SLOT(onObjectHovered(vtkProp*)));
-	renderWindow->GetInteractor()->SetInteractorStyle(style);
+	interactor = vtkSmartPointer<MouseInteractor>::New();
+	interactor->SetDefaultRenderer(renderer);
+	q->connect(&interactor->broadcaster, SIGNAL(objectClicked(vtkProp*)), SLOT(onObjectClicked(vtkProp*)));
+	q->connect(&interactor->broadcaster, SIGNAL(objectHovered(vtkProp*)), SLOT(onObjectHovered(vtkProp*)));
+	q->connect(&interactor->broadcaster, SIGNAL(axesClicked()), SLOT(onAxesClicked()));
+	q->connect(&interactor->broadcaster, SIGNAL(axesHovered()), SLOT(onAxesHovered()));
+	renderWindow->GetInteractor()->SetInteractorStyle(interactor);
 
 	initLights();
 
@@ -922,10 +930,8 @@ void Plot3DPrivate::init() {
 		q->configureAspect(curve);
 	}
 
-	if (axes) {
-		axes->setRenderer(renderer);
-		q->configureAspect(axes);
-	}
+	if (axes)
+		q->setupAxes();
 }
 
 void Plot3DPrivate::setupCamera() {

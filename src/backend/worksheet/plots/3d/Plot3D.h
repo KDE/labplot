@@ -169,6 +169,9 @@ class Plot3D : public AbstractPlot {
 		void childDeselected(const AbstractAspect*);
 		void handleAspectAdded(const AbstractAspect*);
 
+	private:
+		void setupAxes();
+
 	private slots:
 		void addSurface();
 		void addCurve();
@@ -177,6 +180,8 @@ class Plot3D : public AbstractPlot {
 		void onItemRemoved();
 		void onObjectClicked(vtkProp*);
 		void onObjectHovered(vtkProp*);
+		void onAxesClicked();
+		void onAxesHovered();
 		void onParametersChanged();
 		void updateBounds();
 		//SLOTs for changes triggered via QActions in the context menu

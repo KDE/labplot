@@ -12,12 +12,14 @@ include(KDE4Defaults)
 find_package(VTK REQUIRED)
 include(${VTK_USE_FILE})
 
+find_package(Boost 1.47 REQUIRED)
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fpermissive -fno-omit-frame-pointer -fstack-protector -fno-exceptions")
 
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
 
 get_filename_component(VTK_INSTALL_PREFIXX "${CMAKE_CURRENT_LIST_FILE}" PATH)
-include_directories(${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${VTK_INCLUDE_DIRS})
+include_directories(${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${VTK_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
 
 # Temporary solution for the VTK bug #15065 http://www.paraview.org/Bug/view.php?id=15065
 # The patch is only available for the 6.2.0 version https://gitlab.kitware.com/vtk/vtk/commit/ab4dc579c340167b6b3ae6cd82b3fd645642796a

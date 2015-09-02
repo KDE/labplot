@@ -34,6 +34,7 @@
 
 #include <QSet>
 
+#include <vtkNew.h>
 #include <vtkSmartPointer.h>
 
 class vtkActor;
@@ -81,6 +82,11 @@ protected:
 	bool isInitialized() const;
 	void makeCube(BoundingBox& bounds) const;
 
+	virtual void saveProperties(vtkActor* actor);
+	virtual void restoreProperties(vtkActor* actor);
+	virtual void select(vtkActor* actor);
+	virtual void highlight(vtkActor* actor);
+
 private:
 	void mapData(vtkPolyData* data);
 	static void scale(vtkPolyData* data, double (*scaleX)(double),  double (*scaleY)(double),  double (*scaleZ)(double));
@@ -103,7 +109,7 @@ private:
 	vtkSmartPointer<vtkPolyData> rangedPolyData;
 	vtkSmartPointer<vtkPolyData> scaledPolyData;
 	vtkSmartPointer<vtkActor> actor;
-	vtkSmartPointer<vtkProperty> property;
+	vtkNew<vtkProperty> property;
 	static QSet<vtkActor*> actors;
 };
 

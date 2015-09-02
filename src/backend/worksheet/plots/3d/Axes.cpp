@@ -245,6 +245,46 @@ void AxesPrivate::updateBounds(vtkActor* actor) const {
 	updateLabels(bounds, cubeAxes);
 }
 
+void AxesPrivate::saveProperties(vtkActor*) {
+}
+
+void AxesPrivate::restoreProperties(vtkActor* actor) {
+	vtkCubeAxesActor* axes = dynamic_cast<vtkCubeAxesActor*>(actor);
+	Q_ASSERT(axes != 0);
+	axes->GetXAxesLinesProperty()->SetColor(1.0, 1.0, 1.0);
+	axes->GetYAxesLinesProperty()->SetColor(1.0, 1.0, 1.0);
+	axes->GetZAxesLinesProperty()->SetColor(1.0, 1.0, 1.0);
+
+	axes->GetXAxesLinesProperty()->SetLineWidth(5);
+	axes->GetYAxesLinesProperty()->SetLineWidth(5);
+	axes->GetZAxesLinesProperty()->SetLineWidth(5);
+}
+
+void AxesPrivate::select(vtkActor* actor) {
+	vtkCubeAxesActor* axes = dynamic_cast<vtkCubeAxesActor*>(actor);
+	Q_ASSERT(axes != 0);
+	axes->GetXAxesLinesProperty()->SetColor(1.0, 0.0, 0.0);
+	axes->GetYAxesLinesProperty()->SetColor(1.0, 0.0, 0.0);
+	axes->GetZAxesLinesProperty()->SetColor(1.0, 0.0, 0.0);
+
+	axes->GetXAxesLinesProperty()->SetLineWidth(10);
+	axes->GetYAxesLinesProperty()->SetLineWidth(10);
+	axes->GetZAxesLinesProperty()->SetLineWidth(10);
+}
+
+void AxesPrivate::highlight(vtkActor* actor) {
+	qDebug() << Q_FUNC_INFO;
+	vtkCubeAxesActor* axes = dynamic_cast<vtkCubeAxesActor*>(actor);
+	Q_ASSERT(axes != 0);
+	axes->GetXAxesLinesProperty()->SetColor(1.0, 1.0, 0.0);
+	axes->GetYAxesLinesProperty()->SetColor(1.0, 1.0, 0.0);
+	axes->GetZAxesLinesProperty()->SetColor(1.0, 1.0, 0.0);
+
+	axes->GetXAxesLinesProperty()->SetLineWidth(10);
+	axes->GetYAxesLinesProperty()->SetLineWidth(10);
+	axes->GetZAxesLinesProperty()->SetLineWidth(10);
+}
+
 void AxesPrivate::modifyActor(vtkRenderer* renderer, vtkActor* actor) const {
 	vtkCubeAxesActor* axes = dynamic_cast<vtkCubeAxesActor*>(actor);
 	Q_ASSERT(axes != 0);

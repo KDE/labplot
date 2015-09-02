@@ -40,6 +40,7 @@
 class Axes;
 class Curve3D;
 class Surface3D;
+class MouseInteractor;
 
 class vtkImageActor;
 class vtkRenderer;
@@ -82,6 +83,7 @@ class Plot3DPrivate : public AbstractPlotPrivate{
 		QSet<Curve3D*> curves;
 
 		vtkSmartPointer<vtkRenderer> renderer;
+		vtkSmartPointer<MouseInteractor> interactor;
 		vtkSmartPointer<vtkRenderer> backgroundRenderer;
 		vtkSmartPointer<vtkImageActor> backgroundImageActor;
 		vtkSmartPointer<vtkLight> lightAbove;

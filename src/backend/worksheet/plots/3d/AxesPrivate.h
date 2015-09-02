@@ -60,6 +60,12 @@ struct AxesPrivate : public Base3DPrivate {
 		void objectScaled(vtkActor* actor) const;
 		void updateBounds(vtkActor* actor) const;
 		void updateLabels(const BoundingBox& bounds, vtkCubeAxesActor* cubeAxes) const;
+
+		void saveProperties(vtkActor* actor);
+		void restoreProperties(vtkActor* actor);
+		void select(vtkActor* actor);
+		void highlight(vtkActor* actor);
+
 };
 
 #endif

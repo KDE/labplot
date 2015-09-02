@@ -36,7 +36,7 @@ class BoundingBox : public vtkBoundingBox {
 	public:
 		inline BoundingBox()
 			: vtkBoundingBox() {}
-		inline BoundingBox(const double bounds[6]) : vtkBoundingBox(bounds) {}
+		inline BoundingBox(double bounds[6]) : vtkBoundingBox(bounds) {}
 		inline BoundingBox(double xMin, double xMax,
 				double yMin, double yMax,
 				double zMin, double zMax) : vtkBoundingBox(xMin, xMax, yMin, yMax, zMin, zMax) {}

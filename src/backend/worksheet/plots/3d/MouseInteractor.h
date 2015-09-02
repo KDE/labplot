@@ -33,7 +33,6 @@
 #include <vtkInteractorStyleTrackballCamera.h>
 
 class Axes;
-
 class vtkProp;
 class MouseInteractorBroadcaster : public QObject {
 		Q_OBJECT
@@ -41,6 +40,8 @@ class MouseInteractorBroadcaster : public QObject {
 	signals:
 		void objectHovered(vtkProp*);
 		void objectClicked(vtkProp*);
+		void axesHovered();
+		void axesClicked();
 };
 
 class MouseInteractor : public vtkInteractorStyleTrackballCamera {
@@ -48,6 +49,7 @@ class MouseInteractor : public vtkInteractorStyleTrackballCamera {
 		MouseInteractor();
 		static MouseInteractor* New();
 		vtkTypeMacro(MouseInteractor, vtkInteractorStyleTrackballCamera);
+		void setAxes(Axes* axes);
 
 		virtual void OnMouseMove();
 		virtual void OnLeftButtonDown();
@@ -56,10 +58,12 @@ class MouseInteractor : public vtkInteractorStyleTrackballCamera {
 
 	private:
 		vtkProp* getPickedObject(int* pos = 0);
+		bool isAxesPicked(int* pos);
 
 	private:
-		vtkProp* prevHovered;
-		vtkProp* prevClicked;
+		void* prevHovered;
+		void* prevClicked;
+		Axes* axes;
 };
 
 #endif

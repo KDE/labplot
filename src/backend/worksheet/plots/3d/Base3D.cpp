@@ -106,17 +106,14 @@ void Base3D::setZScaling(Plot3D::Scaling scaling) {
 
 void Base3D::highlight(bool pred) {
 	Q_D(Base3D);
-	vtkProperty *prop = d->actor->GetProperty();
 	if (pred && !d->isHighlighted) {
 		d->isHighlighted = true;
 		if (!d->isSelected)
-			d->property->DeepCopy(prop);
-		prop->SetColor(1.0, 1.0, 0.0);
-		prop->SetDiffuse(1.0);
-		prop->SetSpecular(0.0);
+			d->saveProperties(d->actor);
+		d->highlight(d->actor);
 	} else if (d->isHighlighted && !pred) {
 		d->isHighlighted = false;
-		prop->DeepCopy(d->property);
+		d->restoreProperties(d->actor);
 		if (d->isSelected) {
 			d->isSelected = false;
 			select(true);
@@ -126,18 +123,15 @@ void Base3D::highlight(bool pred) {
 
 void Base3D::select(bool pred) {
 	Q_D(Base3D);
-	vtkProperty *prop = d->actor->GetProperty();
 	if (pred && !d->isSelected) {
 		d->isSelected = true;
 		if (!d->isHighlighted)
-			d->property->DeepCopy(prop);
-		prop->SetColor(1.0, 0.0, 0.0);
-		prop->SetDiffuse(1.0);
-		prop->SetSpecular(0.0);
+			d->saveProperties(d->actor);
+		d->select(d->actor);
 	} else if (d->isSelected && !pred) {
 		d->isSelected = false;
 		d->isHighlighted = false;
-		prop->DeepCopy(d->property);
+		d->restoreProperties(d->actor);
 	}
 }
 
@@ -195,8 +189,7 @@ Base3DPrivate::Base3DPrivate(const QString& name, Base3D* baseParent, vtkActor* 
 	, aspectName(name)
 	, isHighlighted(false)
 	, isSelected(false)
-	, actor(actor == 0 ? vtkActor::New() : actor)
-	, property(vtkProperty::New()){
+	, actor(actor == 0 ? vtkActor::New() : actor) {
 }
 
 const QString& Base3DPrivate::name() const {
@@ -208,6 +201,28 @@ Base3DPrivate::~Base3DPrivate() {
 
 void Base3DPrivate::updateBounds() {
 	updateBounds(actor);
+}
+
+void Base3DPrivate::select(vtkActor* actor) {
+	vtkProperty* prop = actor->GetProperty();
+	prop->SetColor(1.0, 0.0, 0.0);
+	prop->SetDiffuse(1.0);
+	prop->SetSpecular(0.0);
+}
+
+void Base3DPrivate::highlight(vtkActor* actor) {
+	vtkProperty* prop = actor->GetProperty();
+	prop->SetColor(1.0, 1.0, 0.0);
+	prop->SetDiffuse(1.0);
+	prop->SetSpecular(0.0);
+}
+
+void Base3DPrivate::saveProperties(vtkActor* actor) {
+	property->DeepCopy(actor->GetProperty());
+}
+
+void Base3DPrivate::restoreProperties(vtkActor* actor) {
+	actor->GetProperty()->DeepCopy(property.Get());
 }
 
 vtkSmartPointer<vtkPolyData> Base3DPrivate::createData() const {
