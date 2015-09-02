@@ -39,8 +39,6 @@
 
 #include <KLocale>
 
-#include <float.h>
-
 /**
  * \class WorksheetElementContainer
  * \brief Worksheet element container - parent of multiple elements
@@ -148,18 +146,10 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 		connect(element, SIGNAL(unhovered()), this, SLOT(childUnhovered()));
 		element->graphicsItem()->setParentItem(d);
 
-		//set z-value according to the ordering of chidlred, axes are drawn at the very top.
-		if (dynamic_cast<const Axis*>(element)) {
-			element->graphicsItem()->setZValue(FLT_MAX);
-		} else {
-			qreal zVal = 0;
-			QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
-			foreach(WorksheetElement *elem, childElements) {
-				if (dynamic_cast<const Axis*>(elem))
-					continue;
-				elem->graphicsItem()->setZValue(zVal++);
-			}
-		}
+		qreal zVal = 0;
+		QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
+		foreach(WorksheetElement* elem, childElements)
+			elem->setZValue(zVal++);
 	}
 
 	d->recalcShapeAndBoundingRect();

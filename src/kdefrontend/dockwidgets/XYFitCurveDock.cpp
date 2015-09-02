@@ -38,7 +38,6 @@
 
 #include <QMenu>
 #include <QWidgetAction>
-#include <QDebug>
 
 /*!
   \class XYFitCurveDock
@@ -526,7 +525,6 @@ void XYFitCurveDock::recalculateClicked() {
 }
 
 void XYFitCurveDock::enableRecalculate() const {
-	qDebug()<<"XYFitCurveDock::enableRecalculate";
 	if (m_initializing)
 		return;
 

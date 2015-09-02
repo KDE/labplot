@@ -105,6 +105,10 @@ bool WorksheetElement::isFullyVisible() const {
  * the graphics item which represents the item is to be updated.
  */
 
+void WorksheetElement::setZValue(qreal value) {
+	graphicsItem()->setZValue(value);
+}
+
 /**
     This does exactly what Qt internally does to creates a shape from a painter path.
 */

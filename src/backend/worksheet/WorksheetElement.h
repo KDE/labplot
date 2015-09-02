@@ -46,7 +46,7 @@ class WorksheetElement: public AbstractAspect {
 		enum WorksheetElementName {NameCartesianPlot = 1};
 
 		virtual QGraphicsItem* graphicsItem() const = 0;
-
+		virtual void setZValue(qreal);
 		virtual void setVisible(bool on) = 0;
 		virtual bool isVisible() const = 0;
 		virtual bool isFullyVisible() const;
