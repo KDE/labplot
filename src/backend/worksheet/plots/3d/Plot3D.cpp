@@ -385,6 +385,8 @@ void Plot3D::updateBounds() {
 
 	if (bb != d->bounds) {
 		d->bounds = bb;
+		d->lightAbove->SetPosition(bb.xMax(), bb.yMax(), bb.zMax());
+		d->lightBelow->SetPosition(bb.xMin(), bb.yMin(), bb.zMin());
 		emit boundsChanged(bb);
 	}
 
@@ -828,7 +830,7 @@ Plot3DPrivate::~Plot3DPrivate() {
 
 void Plot3DPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	Q_UNUSED(event);
-	emit q->currentAspectChanged(q);
+	AbstractPlotPrivate::mousePressEvent(event);
 }
 
 void Plot3DPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
