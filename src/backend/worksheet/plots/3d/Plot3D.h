@@ -171,6 +171,8 @@ class Plot3D : public AbstractPlot {
 
 	private:
 		void setupAxes();
+		void deselectObjects();
+		void dehighlightObjects();
 
 	private slots:
 		void addSurface();

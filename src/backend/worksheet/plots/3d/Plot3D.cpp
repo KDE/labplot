@@ -264,24 +264,7 @@ void Plot3D::onItemRemoved() {
 void Plot3D::onAxesClicked() {
 	qDebug() << Q_FUNC_INFO;
 	Q_D(Plot3D);
-	emit currentAspectChanged(d->axes);
-}
-
-void Plot3D::onAxesHovered() {
-	qDebug() << Q_FUNC_INFO;
-	Q_D(Plot3D);
 	if (d->axes) {
-		d->axes->highlight(true);
-		d->vtkItem->refresh();
-	}
-}
-
-void Plot3D::onObjectClicked(vtkProp* object) {
-	Q_D(Plot3D);
-	if (object == 0) {
-		// Deselect all Plot3D children
-		qDebug() << Q_FUNC_INFO << "Deselect";
-		emit currentAspectChanged(this);
 		foreach(Surface3D* surface, d->surfaces) {
 			surface->select(false);
 		}
@@ -289,13 +272,65 @@ void Plot3D::onObjectClicked(vtkProp* object) {
 		foreach(Curve3D* curve, d->curves) {
 			curve->select(false);
 		}
-		if (d->axes)
-			d->axes->select(false);
+		emit currentAspectChanged(d->axes);
+		d->axes->select(true);
+	}
+}
+
+void Plot3D::onAxesHovered() {
+	qDebug() << Q_FUNC_INFO;
+	Q_D(Plot3D);
+	if (d->axes) {
+		foreach(Surface3D* surface, d->surfaces) {
+			surface->highlight(false);
+		}
+
+		foreach(Curve3D* curve, d->curves) {
+			curve->highlight(false);
+		}
+		d->axes->highlight(true);
+		d->vtkItem->refresh();
+	}
+}
+
+void Plot3D::deselectObjects() {
+	Q_D(Plot3D);
+	foreach(Surface3D* surface, d->surfaces) {
+		surface->select(false);
+	}
+
+	foreach(Curve3D* curve, d->curves) {
+		curve->select(false);
+	}
+	if (d->axes)
+		d->axes->select(false);
+}
+
+void Plot3D::dehighlightObjects() {
+	Q_D(Plot3D);
+	foreach(Surface3D* surface, d->surfaces)
+		surface->highlight(false);
+
+	foreach(Curve3D* curve, d->curves)
+		curve->highlight(false);
+
+	if (d->axes)
+		d->axes->highlight(false);
+}
+
+void Plot3D::onObjectClicked(vtkProp* object) {
+	Q_D(Plot3D);
+	if (object == 0) {
+		// Deselect all Plot3D children
+		qDebug() << Q_FUNC_INFO << "Deselect";
+		deselectObjects();
+		emit currentAspectChanged(this);
 	} else {
 		foreach(Surface3D* surface, d->surfaces) {
 			if (*surface == object) {
 				qDebug() << Q_FUNC_INFO << "Surface clicked" << surface->name();
 				emit currentAspectChanged(surface);
+				surface->select(true);
 			} else {
 				surface->select(false);
 			}
@@ -305,6 +340,7 @@ void Plot3D::onObjectClicked(vtkProp* object) {
 			if (*curve == object) {
 				qDebug() << Q_FUNC_INFO << "Curve clicked" << curve->name();
 				emit currentAspectChanged(curve);
+				curve->select(true);
 			} else {
 				curve->select(false);
 			}
@@ -318,13 +354,7 @@ void Plot3D::onObjectHovered(vtkProp* object) {
 	Q_D(Plot3D);
 
 	if (object == 0) {
-		foreach(Surface3D* surface, d->surfaces)
-			surface->highlight(false);
-
-		foreach(Curve3D* curve, d->curves)
-			curve->highlight(false);
-		if (d->axes)
-			d->axes->highlight(false);
+		dehighlightObjects();
 	} else {
 		foreach(Surface3D* surface, d->surfaces)
 			surface->highlight(*surface == object);
