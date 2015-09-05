@@ -1,22 +1,23 @@
 -----2.1-----
 New features:
-	* New Matrix view for handling matrix data
-	* Workbook - a new container for grouping several objects of type Spreadsheet and/or Matrix
-	* Import of binary, image, NetCDF and HDF data into spreadsheet or matrix
-	* Visual HDF and NetCDF parser to view content of files and import data sets
-	* Preview of all supported file types in import dialog
-	* Transparently import compressed data files
-	* In xy-curve the points may not be connected by the line if there are NANs in-between. This behaviour is controlled by the parameter "skip gaps"
-	* Multiplier of Pi format of the plot axis for periodical functions
-	* New operations on columns in Spreadsheet - reverse, drop values and mask values
-	* Formula used to generate the values in a column is stored and can be changed/adjust in the formula dialog afterwards
+	* New Matrix view for handling matrix data.
+	* Workbook - a new container for grouping several objects of type Spreadsheet and/or Matrix.
+	* Import of binary, image, NetCDF and HDF data into spreadsheet or matrix.
+	* Visual HDF and NetCDF parser to view content of files and import data sets.
+	* Preview of all supported file types in import dialog.
+	* Transparently import compressed data files.
+	* In xy-curve the points may not be connected by the line if there are NANs in-between. This behaviour is controlled by the parameter "skip gaps".
+	* Multiplier of Pi format of the plot axis for periodical functions.
+	* New operations on columns in Spreadsheet - reverse, drop values and mask values.
+	* Formula used to generate the values in a column is stored and can be changed/adjusted in the formula dialog afterwards.
 	* Curve filling: the area below, under, left to or right to the curve can be filled.
+	* Support for multiple variables in "Function Values"-dialog - new data in the spreadsheet can be calculated out of multiple columns.
 
 Performance improvements:
 	* Speeded up the creation of new columns during the import
 
 Bug fixes:
-	* Fixed the wrong behaviour when doing "zoom&select" in a plot and then deselecting the plot it was not possible anymore to select the plot again on the worksheet
+	* Fixed wrong behaviour when doing "zoom&select" in a plot and then deselecting the plot - it was not possible anymore to select the plot again on the worksheet.
 
 -----2.0.2-----
 New features:

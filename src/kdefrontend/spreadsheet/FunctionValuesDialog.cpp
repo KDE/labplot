@@ -252,34 +252,46 @@ void FunctionValuesDialog::generate() {
 									m_spreadsheet->name(),
 									m_columns.size()));
 
+	//determine variable names and the data vectors of the specified columns
+	QStringList vars;
+	QVector<QVector<double>*> xVectors;
+	QVector<Column*> xColumns;
+	int maxRowCount = m_spreadsheet->rowCount();
+	for (int i=0; i<m_variableNames.size(); ++i) {
+		vars << m_variableNames.at(i)->text().simplified();
 
-// 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbDataColumn->currentModelIndex().internalPointer());
-// 	if (!aspect)
-// 		return;
-//
-// 	Column* xColumn = dynamic_cast<Column*>(aspect);
-// 	Q_ASSERT(xColumn);
-//
-// 	if (m_spreadsheet->rowCount()<xColumn->rowCount())
-// 		m_spreadsheet->setRowCount(xColumn->rowCount());
-//
-// 	QVector<double>* xVector = static_cast<QVector<double>* >(xColumn->data());
-// 	ExpressionParser* parser = ExpressionParser::getInstance();
-// 	const QString& expression = ui.teEquation->toPlainText();
-//
-// 	QVector<double> new_data(m_spreadsheet->rowCount());
-//
-// 	//x-vector can be smaller then the y-vector. So, not all values in the y-vector might get initialized.
-// 	//->"clean" the y-vector first
-// 	for (int i=0; i<new_data.size(); ++i)
-// 		new_data[i] = NAN;
-//
-// 	parser->evaluateCartesian(expression, xVector, &new_data);
-//
-// 	foreach(Column* col, m_columns) {
-// 		col->setFormula(expression);
-// 		col->replaceValues(0, new_data);
-// 	}
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(m_variableDataColumns.at(i)->currentModelIndex().internalPointer());
+		Q_ASSERT(aspect);
+		Column* column = dynamic_cast<Column*>(aspect);
+		Q_ASSERT(column);
+		xColumns << column;
+		xVectors << static_cast<QVector<double>* >(column->data());
+
+		if (column->rowCount()>maxRowCount)
+			maxRowCount = column->rowCount();
+	}
+
+	//resize the spreadsheet if one of the data vectors from other spreadsheet(s) has more elements then the current spreadsheet.
+	if (m_spreadsheet->rowCount()<maxRowCount)
+		m_spreadsheet->setRowCount(maxRowCount);
+
+	//create new vector for storing the calculated values
+	//the vectors with the variable data can be smaller then the result vector. So, not all values in the result vector might get initialized.
+	//->"clean" the result vector first
+	QVector<double> new_data(maxRowCount);
+	for (int i=0; i<new_data.size(); ++i)
+		new_data[i] = NAN;
+
+	//evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
+	ExpressionParser* parser = ExpressionParser::getInstance();
+	const QString& expression = ui.teEquation->toPlainText();
+	parser->evaluateCartesian(expression, vars, xVectors, &new_data);
+
+	//set the new values and store the expression, variable names and the used data columns
+	foreach(Column* col, m_columns) {
+		col->setFormula(expression);
+		col->replaceValues(0, new_data);
+	}
 
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
