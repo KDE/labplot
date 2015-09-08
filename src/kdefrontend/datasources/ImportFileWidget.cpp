@@ -445,7 +445,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 			QString fileName = ui.kleFileName->text();
 			QFileInfo fileInfo(fileName);
-			QTreeWidgetItem *rootItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<fileInfo.baseName());
+			QTreeWidgetItem *rootItem = hdfOptionsWidget.twContent->invisibleRootItem();
 			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
 			filter->parse(fileName, rootItem);
 			hdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
@@ -461,7 +461,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 			QString fileName = ui.kleFileName->text();
 			QFileInfo fileInfo(fileName);
-			QTreeWidgetItem *rootItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<fileInfo.baseName());
+			QTreeWidgetItem *rootItem = netcdfOptionsWidget.twContent->invisibleRootItem();
 			NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 			filter->parse(fileName, rootItem);
 			netcdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
