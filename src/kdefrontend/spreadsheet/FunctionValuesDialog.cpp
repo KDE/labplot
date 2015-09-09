@@ -70,9 +70,6 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	ui.bAddVariable->setIcon(KIcon("list-add"));
 	ui.bAddVariable->setToolTip(i18n("Add new variable"));
 
-	addVariable();
-	m_variableNames[0]->setText("x");
-
 	setButtons( KDialog::Ok | KDialog::Cancel );
 	setButtonText(KDialog::Ok, i18n("&Generate"));
 	setButtonToolTip(KDialog::Ok, i18n("Generate function values"));
@@ -89,6 +86,35 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 void FunctionValuesDialog::setColumns(QList<Column*> list) {
 	m_columns = list;
 	ui.teEquation->setPlainText(m_columns.first()->formula());
+
+	const QStringList& variableNames = m_columns.first()->formulaVariableNames();
+	if (!variableNames.size()) {
+		//no formular was used for this column -> add the first variable "x"
+		addVariable();
+		m_variableNames[0]->setText("x");
+	} else {
+		//formula and variables are available
+		const QStringList& columnPathes = m_columns.first()->formulaVariableColumnPathes();
+
+		//add all available variables and select the corresponding columns
+		const QList<AbstractAspect*> columns = m_spreadsheet->project()->children("Column", AbstractAspect::Recursive);
+		for (int i=0; i<variableNames.size(); ++i) {
+			addVariable();
+			m_variableNames[i]->setText(variableNames.at(i));
+
+			foreach (const AbstractAspect* aspect, columns) {
+				if (aspect->path() == columnPathes.at(i)) {
+					const AbstractColumn* column = dynamic_cast<const AbstractColumn*>(aspect);
+					if (column)
+						m_variableDataColumns[i]->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
+					else
+						m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
+
+					break;
+				}
+			}
+		}
+	}
 }
 
 /*!
@@ -253,17 +279,19 @@ void FunctionValuesDialog::generate() {
 									m_columns.size()));
 
 	//determine variable names and the data vectors of the specified columns
-	QStringList vars;
+	QStringList variableNames;
+	QStringList columnPathes;
 	QVector<QVector<double>*> xVectors;
 	QVector<Column*> xColumns;
 	int maxRowCount = m_spreadsheet->rowCount();
 	for (int i=0; i<m_variableNames.size(); ++i) {
-		vars << m_variableNames.at(i)->text().simplified();
+		variableNames << m_variableNames.at(i)->text().simplified();
 
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(m_variableDataColumns.at(i)->currentModelIndex().internalPointer());
 		Q_ASSERT(aspect);
 		Column* column = dynamic_cast<Column*>(aspect);
 		Q_ASSERT(column);
+		columnPathes << column->path();
 		xColumns << column;
 		xVectors << static_cast<QVector<double>* >(column->data());
 
@@ -285,11 +313,11 @@ void FunctionValuesDialog::generate() {
 	//evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 	ExpressionParser* parser = ExpressionParser::getInstance();
 	const QString& expression = ui.teEquation->toPlainText();
-	parser->evaluateCartesian(expression, vars, xVectors, &new_data);
+	parser->evaluateCartesian(expression, variableNames, xVectors, &new_data);
 
 	//set the new values and store the expression, variable names and the used data columns
 	foreach(Column* col, m_columns) {
-		col->setFormula(expression);
+		col->setFormula(expression, variableNames, columnPathes);
 		col->replaceValues(0, new_data);
 	}
 

@@ -45,7 +45,6 @@
 #include "backend/core/datatypes/Month2DoubleFilter.h"
 #include <QString>
 #include <QStringList>
-#include <QtDebug>
 
 /**
  * \class Column::Private
@@ -865,10 +864,11 @@ QString Column::Private::formula() const {
 /**
  * \brief Sets the formula used to generate column values
  */
-void Column::Private::setFormula(QString f) {
-	m_formula = f;
+void Column::Private::setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes) {
+	m_formula = formula;
+	m_formulaVariableNames = variableNames;
+	m_formulaVariableColumnPathes = variableColumnPathes;
 }
-
 /**
  * \brief Return the formula associated with row 'row'
  */
@@ -876,6 +876,13 @@ QString Column::Private::formula(int row) const {
 	return m_formulas.value(row);
 }
 
+const QStringList& Column::Private::formulaVariableNames() const {
+	return m_formulaVariableNames;
+}
+
+const QStringList& Column::Private::formulaVariableColumnPathes() const {
+	return m_formulaVariableColumnPathes;
+}
 /**
  * \brief Return the intervals that have associated formulas
  *
@@ -1143,13 +1150,6 @@ void Column::Private::replaceValues(int first, const QVector<double>& new_values
  */
 IntervalAttribute<QString> Column::Private::formulaAttribute() const {
 	return m_formulas;
-}
-
-/**
- * \brief Replace the formula used to generate column values
- */
-void Column::Private::replaceFormula(QString formula) {
-	m_formula = formula;
 }
 
 /**

@@ -69,10 +69,11 @@ class Column::Private
 		void replaceData(void * data);
 		IntervalAttribute<QString> formulaAttribute() const;
 		void replaceFormulas(IntervalAttribute<QString> formulas);
-		void replaceFormula(QString);
 
 		QString formula() const;
-		void setFormula(QString);
+		const QStringList& formulaVariableNames() const;
+		const QStringList& formulaVariableColumnPathes() const;
+		void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
 
 		QString formula(int row) const;
 		QList< Interval<int> > formulaIntervals() const;
@@ -100,6 +101,8 @@ class Column::Private
 		AbstractSimpleFilter* m_input_filter;
 		AbstractSimpleFilter* m_output_filter;
 		QString m_formula;
+		QStringList m_formulaVariableNames;
+		QStringList m_formulaVariableColumnPathes;
 		IntervalAttribute<QString> m_formulas;
 		AbstractColumn::PlotDesignation m_plot_designation;
 		int m_width;

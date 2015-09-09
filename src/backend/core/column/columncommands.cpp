@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
 						   (C) 2010 by Knut Franke (knut.franke@gmx.de)
-						   (C) 2013-2014 by Alexander Semke (alexander.semke@web.de)
+						   (C) 2013-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -723,6 +723,31 @@ void ColumnClearCmd::undo()
 
 
 /** ***************************************************************************
+ * \class ColumSetGlobalFormulaCmd
+ * \brief Set the formula for the entire column (global formula)
+ ** ***************************************************************************/
+ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(Column::Private* col, const QString& formula, const QStringList& variableNames, const QStringList& variableColumns)
+: QUndoCommand(), m_col(col), m_newFormula(formula), m_newVariableNames(variableNames), m_newVariableColumnPathes(variableColumns), m_copied(false) {
+	setText(i18n("%1: set formula", col->name()));
+}
+
+void ColumnSetGlobalFormulaCmd::redo() {
+	if(!m_copied) {
+		m_formula = m_col->formula();
+		m_variableNames = m_col->formulaVariableNames();
+		m_variableColumnPathes = m_col->formulaVariableColumnPathes();
+		m_copied = true;
+	}
+
+	m_col->setFormula(m_newFormula, m_newVariableNames, m_newVariableColumnPathes);
+}
+
+void ColumnSetGlobalFormulaCmd::undo() {
+	m_col->setFormula(m_formula, m_variableNames, m_variableColumnPathes);
+}
+
+
+/** ***************************************************************************
  * \class ColumSetFormulaCmd
  * \brief Set the formula for a given interval
  ** ***************************************************************************/
@@ -755,43 +780,26 @@ void ColumnClearCmd::undo()
 /**
  * \brief Ctor
  */
-ColumnSetFormulaCmd::ColumnSetFormulaCmd(Column::Private * col, Interval<int> interval, const QString& formula, QUndoCommand * parent )
-: QUndoCommand( parent ), m_col(col), m_interval(interval), m_newFormula(formula), m_copied(false), m_global(true)
+ColumnSetFormulaCmd::ColumnSetFormulaCmd(Column::Private * col, Interval<int> interval, const QString& formula, QUndoCommand* parent)
+: QUndoCommand( parent ), m_col(col), m_interval(interval), m_newFormula(formula), m_copied(false)
 {
 	setText(i18n("%1: set cell formula", col->name()));
 }
 
-ColumnSetFormulaCmd::ColumnSetFormulaCmd(Column::Private* col, const QString& formula)
-: QUndoCommand(), m_col(col), m_newFormula(formula), m_copied(false), m_global(true) {
-	setText(i18n("%1: set formula", col->name()));
-}
 
-/**
- * \brief Execute the command
- */
 void ColumnSetFormulaCmd::redo() {
 	if(!m_copied) {
 		m_formulas = m_col->formulaAttribute();
 		m_copied = true;
 	}
 
-	if (m_global) {
-		m_oldFormula = m_col->formula();
-		m_col->setFormula(m_newFormula);
-	} else {
-		m_col->setFormula(m_interval, m_newFormula);
-	}
+	m_col->setFormula(m_interval, m_newFormula);
 }
 
-/**
- * \brief Undo the command
- */
 void ColumnSetFormulaCmd::undo() {
-	if (m_global){
-		m_col->replaceFormula(m_oldFormula);
-	}else
-		m_col->replaceFormulas(m_formulas);
+	m_col->replaceFormulas(m_formulas);
 }
+
 
 /** ***************************************************************************
  * \class ColumnClearFormulasCmd

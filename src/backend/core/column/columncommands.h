@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2010 by Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -180,11 +181,29 @@ private:
 
 };
 
+class ColumnSetGlobalFormulaCmd : public QUndoCommand {
+public:
+	explicit ColumnSetGlobalFormulaCmd(Column::Private* col, const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
+
+	virtual void redo();
+	virtual void undo();
+
+private:
+	Column::Private* m_col;
+	QString m_formula;
+	QStringList m_variableNames;
+	QStringList m_variableColumnPathes;
+	QString m_newFormula;
+	QStringList m_newVariableNames;
+	QStringList m_newVariableColumnPathes;
+	bool m_copied;
+};
+
+
 class ColumnSetFormulaCmd : public QUndoCommand
 {
 public:
 	explicit ColumnSetFormulaCmd(Column::Private * col, Interval<int> interval, const QString& formula, QUndoCommand * parent = 0 );
-	explicit ColumnSetFormulaCmd(Column::Private* col, const QString& formula);
 
 	virtual void redo();
 	virtual void undo();
@@ -196,7 +215,6 @@ private:
 	QString m_newFormula;
 	IntervalAttribute<QString> m_formulas;
 	bool m_copied;
-	bool m_global;
 };
 
 class ColumnClearFormulasCmd : public QUndoCommand

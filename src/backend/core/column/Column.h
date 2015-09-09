@@ -68,8 +68,10 @@ class Column : public AbstractColumn
 		AbstractSimpleFilter *outputFilter() const;
 		ColumnStringIO *asStringColumn() const;
 
+		void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
 		QString formula() const;
-		void setFormula(QString);
+		const QStringList& formulaVariableNames() const;
+		const QStringList& formulaVariableColumnPathes() const;
 
 		QString formula(int row) const;
 		QList< Interval<int> > formulaIntervals() const;
