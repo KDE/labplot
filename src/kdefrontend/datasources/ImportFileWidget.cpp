@@ -557,6 +557,9 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		qDebug()<<"unknown file type!";
 	}
 
+	hdfOptionsWidget.twContent->clear();
+	netcdfOptionsWidget.twContent->clear();
+
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
 	ui.cbFilter->clear();
 	ui.cbFilter->addItem( i18n("Automatic") );
