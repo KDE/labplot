@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : columncommands.cpp
     Project              : AbstractColumn
-    Description          : Commands to be called by Column to modify Column::Private
+    Description          : Commands to be called by Column to modify ColumnPrivate
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
 						   (C) 2010 by Knut Franke (knut.franke@gmx.de)
@@ -96,7 +96,7 @@
 /**
  * \brief Ctor
  */
-ColumnSetModeCmd::ColumnSetModeCmd(Column::Private * col, AbstractColumn::ColumnMode mode, QUndoCommand * parent )
+ColumnSetModeCmd::ColumnSetModeCmd(ColumnPrivate * col, AbstractColumn::ColumnMode mode, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_mode(mode)
 {
 	setText(i18n("%1: change column type", col->name()));
@@ -206,15 +206,15 @@ void ColumnSetModeCmd::undo()
  * \var ColumnFullCopyCmd::m_backup_owner
  * \brief A dummy owner for the backup column
  *
- * This is needed because a Column::Private must have an owner. We want access
- * to the Column::Private object to access its data pointer for fast data
+ * This is needed because a ColumnPrivate must have an owner. We want access
+ * to the ColumnPrivate object to access its data pointer for fast data
  * replacement without too much copying.
  */
 
 /**
  * \brief Ctor
  */
-ColumnFullCopyCmd::ColumnFullCopyCmd(Column::Private * col, const AbstractColumn * src, QUndoCommand * parent )
+ColumnFullCopyCmd::ColumnFullCopyCmd(ColumnPrivate * col, const AbstractColumn * src, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_src(src), m_backup(0), m_backup_owner(0)
 {
 	setText(i18n("%1: change cell values", col->name()));
@@ -237,7 +237,7 @@ void ColumnFullCopyCmd::redo()
 	if(m_backup == 0)
 	{
 		m_backup_owner = new Column("temp", m_src->columnMode());
-		m_backup = new Column::Private(m_backup_owner, m_src->columnMode());
+		m_backup = new ColumnPrivate(m_backup_owner, m_src->columnMode());
 		m_backup->copy(m_col);
 		m_col->copy(m_src);
 	}
@@ -290,8 +290,8 @@ void ColumnFullCopyCmd::undo()
  * \var ColumnPartialCopyCmd::m_col_backup_owner
  * \brief A dummy owner for the backup column
  *
- * This is needed because a Column::Private must have an owner and
- * we must have a Column::Private object as backup.
+ * This is needed because a ColumnPrivate must have an owner and
+ * we must have a ColumnPrivate object as backup.
  * Using a Column object as backup would lead to an inifinite loop.
  */
 
@@ -299,8 +299,8 @@ void ColumnFullCopyCmd::undo()
  * \var ColumnPartialCopyCmd::m_src_backup_owner
  * \brief A dummy owner for the source backup column
  *
- * This is needed because a Column::Private must have an owner and
- * we must have a Column::Private object as backup.
+ * This is needed because a ColumnPrivate must have an owner and
+ * we must have a ColumnPrivate object as backup.
  * Using a Column object as backup would lead to an inifinite loop.
  */
 
@@ -327,7 +327,7 @@ void ColumnFullCopyCmd::undo()
 /**
  * \brief Ctor
  */
-ColumnPartialCopyCmd::ColumnPartialCopyCmd(Column::Private * col, const AbstractColumn * src, int src_start, int dest_start, int num_rows, QUndoCommand * parent )
+ColumnPartialCopyCmd::ColumnPartialCopyCmd(ColumnPrivate * col, const AbstractColumn * src, int src_start, int dest_start, int num_rows, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_src(src), m_col_backup(0), m_src_backup(0), m_col_backup_owner(0), m_src_backup_owner(0), m_src_start(src_start), m_dest_start(dest_start), m_num_rows(num_rows)
 {
 	setText(i18n("%1: change cell values", col->name()));
@@ -353,10 +353,10 @@ void ColumnPartialCopyCmd::redo()
 	{
 		// copy the relevant rows of source and destination column into backup columns
 		m_src_backup_owner = new Column("temp", m_col->columnMode());
-		m_src_backup = new Column::Private(m_src_backup_owner, m_col->columnMode());
+		m_src_backup = new ColumnPrivate(m_src_backup_owner, m_col->columnMode());
 		m_src_backup->copy(m_src, m_src_start, 0, m_num_rows);
 		m_col_backup_owner = new Column("temp", m_col->columnMode());
-		m_col_backup = new Column::Private(m_col_backup_owner, m_col->columnMode());
+		m_col_backup = new ColumnPrivate(m_col_backup_owner, m_col->columnMode());
 		m_col_backup->copy(m_col, m_dest_start, 0, m_num_rows);
 		m_old_row_count = m_col->rowCount();
 	}
@@ -386,7 +386,7 @@ void ColumnPartialCopyCmd::undo()
 /**
  * \brief Ctor
  */
-ColumnInsertRowsCmd::ColumnInsertRowsCmd(Column::Private * col, int before, int count, QUndoCommand * parent )
+ColumnInsertRowsCmd::ColumnInsertRowsCmd(ColumnPrivate * col, int before, int count, QUndoCommand * parent )
 : QUndoCommand(parent), m_col(col), m_before(before), m_count(count)
 {
 }
@@ -443,8 +443,8 @@ void ColumnInsertRowsCmd::undo()
  * \var ColumnRemoveRowsCmd::m_backup_owner
  * \brief A dummy owner for the backup column
  *
- * This is needed because a Column::Private must have an owner. We want access
- * to the Column::Private object to access its data pointer for fast data
+ * This is needed because a ColumnPrivate must have an owner. We want access
+ * to the ColumnPrivate object to access its data pointer for fast data
  * replacement without too much copying.
  */
 
@@ -456,7 +456,7 @@ void ColumnInsertRowsCmd::undo()
 /**
  * \brief Ctor
  */
-ColumnRemoveRowsCmd::ColumnRemoveRowsCmd(Column::Private * col, int first, int count, QUndoCommand * parent )
+ColumnRemoveRowsCmd::ColumnRemoveRowsCmd(ColumnPrivate * col, int first, int count, QUndoCommand * parent )
 : QUndoCommand(parent), m_col(col), m_first(first), m_count(count), m_backup(0)
 {
 }
@@ -486,7 +486,7 @@ void ColumnRemoveRowsCmd::redo()
 
 		m_old_size = m_col->rowCount();
 		m_backup_owner = new Column("temp", m_col->columnMode());
-		m_backup = new Column::Private(m_backup_owner, m_col->columnMode());
+		m_backup = new ColumnPrivate(m_backup_owner, m_col->columnMode());
 		m_backup->copy(m_col, m_first, 0, m_data_row_count);
 		m_formulas = m_col->formulaAttribute();
 	}
@@ -527,7 +527,7 @@ void ColumnRemoveRowsCmd::undo()
 /**
  * \brief Ctor
  */
-ColumnSetPlotDesignationCmd::ColumnSetPlotDesignationCmd( Column::Private * col, AbstractColumn::PlotDesignation pd , QUndoCommand * parent )
+ColumnSetPlotDesignationCmd::ColumnSetPlotDesignationCmd( ColumnPrivate * col, AbstractColumn::PlotDesignation pd , QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_new_pd(pd)
 {
 	setText(i18n("%1: set plot designation", col->name()));
@@ -570,7 +570,7 @@ void ColumnSetPlotDesignationCmd::undo()
 /**
  * \brief Ctor
  */
-ColumnSetWidthCmd::ColumnSetWidthCmd( Column::Private * col, int new_value , QUndoCommand * parent )
+ColumnSetWidthCmd::ColumnSetWidthCmd( ColumnPrivate * col, int new_value , QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_other_value(new_value)
 {
 	setText(i18n("%1: set width", col->name()));
@@ -629,7 +629,7 @@ void ColumnSetWidthCmd::undo()
 /**
  * \brief Ctor
  */
-ColumnClearCmd::ColumnClearCmd(Column::Private * col, QUndoCommand * parent )
+ColumnClearCmd::ColumnClearCmd(ColumnPrivate * col, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col)
 {
 	setText(i18n("%1: clear column", col->name()));
@@ -726,7 +726,7 @@ void ColumnClearCmd::undo()
  * \class ColumSetGlobalFormulaCmd
  * \brief Set the formula for the entire column (global formula)
  ** ***************************************************************************/
-ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(Column::Private* col, const QString& formula, const QStringList& variableNames, const QStringList& variableColumns)
+ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col, const QString& formula, const QStringList& variableNames, const QStringList& variableColumns)
 : QUndoCommand(), m_col(col), m_newFormula(formula), m_newVariableNames(variableNames), m_newVariableColumnPathes(variableColumns), m_copied(false) {
 	setText(i18n("%1: set formula", col->name()));
 }
@@ -780,7 +780,7 @@ void ColumnSetGlobalFormulaCmd::undo() {
 /**
  * \brief Ctor
  */
-ColumnSetFormulaCmd::ColumnSetFormulaCmd(Column::Private * col, Interval<int> interval, const QString& formula, QUndoCommand* parent)
+ColumnSetFormulaCmd::ColumnSetFormulaCmd(ColumnPrivate * col, Interval<int> interval, const QString& formula, QUndoCommand* parent)
 : QUndoCommand( parent ), m_col(col), m_interval(interval), m_newFormula(formula), m_copied(false)
 {
 	setText(i18n("%1: set cell formula", col->name()));
@@ -824,7 +824,7 @@ void ColumnSetFormulaCmd::undo() {
 /**
  * \brief Ctor
  */
-ColumnClearFormulasCmd::ColumnClearFormulasCmd(Column::Private * col, QUndoCommand * parent )
+ColumnClearFormulasCmd::ColumnClearFormulasCmd(ColumnPrivate * col, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col)
 {
 	setText(i18n("%1: clear all formulas", col->name()));
@@ -892,7 +892,7 @@ void ColumnClearFormulasCmd::undo()
 /**
  * \brief Ctor
  */
-ColumnSetTextCmd::ColumnSetTextCmd(Column::Private * col, int row, const QString& new_value, QUndoCommand * parent )
+ColumnSetTextCmd::ColumnSetTextCmd(ColumnPrivate * col, int row, const QString& new_value, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_row(row), m_new_value(new_value)
 {
 	setText(i18n("%1: set text for row %2", col->name(), row));
@@ -958,7 +958,7 @@ void ColumnSetTextCmd::undo()
 /**
  * \brief Ctor
  */
-ColumnSetValueCmd::ColumnSetValueCmd(Column::Private * col, int row, double new_value, QUndoCommand * parent )
+ColumnSetValueCmd::ColumnSetValueCmd(ColumnPrivate * col, int row, double new_value, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_row(row), m_new_value(new_value)
 {
 	setText(i18n("%1: set value for row %2", col->name(), row));
@@ -1024,7 +1024,7 @@ void ColumnSetValueCmd::undo()
 /**
  * \brief Ctor
  */
-ColumnSetDateTimeCmd::ColumnSetDateTimeCmd(Column::Private * col, int row, const QDateTime& new_value, QUndoCommand * parent )
+ColumnSetDateTimeCmd::ColumnSetDateTimeCmd(ColumnPrivate * col, int row, const QDateTime& new_value, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_row(row), m_new_value(new_value)
 {
 	setText(i18n("%1: set value for row %2", col->name(), row));
@@ -1095,7 +1095,7 @@ void ColumnSetDateTimeCmd::undo()
 /**
  * \brief Ctor
  */
-ColumnReplaceTextsCmd::ColumnReplaceTextsCmd(Column::Private * col, int first, const QStringList& new_values, QUndoCommand * parent )
+ColumnReplaceTextsCmd::ColumnReplaceTextsCmd(ColumnPrivate * col, int first, const QStringList& new_values, QUndoCommand * parent )
  : QUndoCommand( parent ), m_col(col), m_first(first), m_new_values(new_values)
 {
 	setText(i18n("%1: replace the texts for rows %2 to %3", col->name(), first, first + new_values.count() -1));
@@ -1171,7 +1171,7 @@ void ColumnReplaceTextsCmd::undo()
 /**
  * \brief Ctor
  */
-ColumnReplaceValuesCmd::ColumnReplaceValuesCmd(Column::Private * col, int first, const QVector<double>& new_values, QUndoCommand * parent )
+ColumnReplaceValuesCmd::ColumnReplaceValuesCmd(ColumnPrivate * col, int first, const QVector<double>& new_values, QUndoCommand * parent )
  : QUndoCommand( parent ), m_col(col), m_first(first), m_new_values(new_values)
 {
 	setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() -1));
@@ -1247,7 +1247,7 @@ void ColumnReplaceValuesCmd::undo()
 /**
  * \brief Ctor
  */
-ColumnReplaceDateTimesCmd::ColumnReplaceDateTimesCmd(Column::Private * col, int first, const QList<QDateTime>& new_values, QUndoCommand * parent )
+ColumnReplaceDateTimesCmd::ColumnReplaceDateTimesCmd(ColumnPrivate * col, int first, const QList<QDateTime>& new_values, QUndoCommand * parent )
  : QUndoCommand( parent ), m_col(col), m_first(first), m_new_values(new_values)
 {
 	setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() -1));

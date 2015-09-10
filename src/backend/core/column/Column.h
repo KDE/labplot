@@ -4,7 +4,7 @@
     Description          : Aspect that manages a column
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2013-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -33,17 +33,15 @@
 #include "backend/core/AbstractSimpleFilter.h"
 #include "backend/lib/XmlStreamReader.h"
 
-class QString;
-
+// class QString;
 class ColumnStringIO;
+class ColumnPrivate;
 
-class Column : public AbstractColumn
-{
+class Column : public AbstractColumn {
 	Q_OBJECT
 
 	public:
-		class Private;
-		friend class Private;
+		friend class ColumnPrivate;
 
 		Column(const QString& name, AbstractColumn::ColumnMode mode);
 		Column(const QString& name, QVector<double> data);
@@ -96,8 +94,9 @@ class Column : public AbstractColumn
 		void setChanged();
 		void setSuppressDataChangedSignal(bool);
 
-		void save(QXmlStreamWriter * writer) const;
-		bool load(XmlStreamReader * reader);
+		void save(QXmlStreamWriter*) const;
+		bool load(XmlStreamReader*);
+
 	private:
 		bool XmlReadInputFilter(XmlStreamReader * reader);
 		bool XmlReadOutputFilter(XmlStreamReader * reader);
@@ -110,7 +109,7 @@ class Column : public AbstractColumn
 		static QString enumValueToString(int key, const QString& enum_name);
 		static int enumStringToValue(const QString& string, const QString& enum_name);
 
-		Private* m_column_private;
+		ColumnPrivate* m_column_private;
 		ColumnStringIO* m_string_io;
 		bool m_suppressDataChangedSignal;
 
@@ -124,8 +123,7 @@ class Column : public AbstractColumn
 		void handleFormatChange();
 };
 
-class ColumnStringIO : public AbstractColumn
-{
+class ColumnStringIO : public AbstractColumn {
 	Q_OBJECT
 
 	public:

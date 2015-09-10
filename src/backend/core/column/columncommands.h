@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : columncommands.h
     Project              : LabPlot
-    Description          : Commands to be called by Column to modify Column::Private
+    Description          : Commands to be called by Column to modify ColumnPrivate
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2010 by Knut Franke (knut.franke@gmx.de)
@@ -43,14 +43,14 @@ class AbstractSimpleFilter;
 class ColumnSetModeCmd : public QUndoCommand
 {
 public:
-	explicit ColumnSetModeCmd(Column::Private * col, AbstractColumn::ColumnMode mode, QUndoCommand * parent = 0 );
+	explicit ColumnSetModeCmd(ColumnPrivate* col, AbstractColumn::ColumnMode mode, QUndoCommand* parent = 0);
 	~ColumnSetModeCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	AbstractColumn::ColumnMode m_old_mode;
 	AbstractColumn::ColumnMode m_mode;
 	void * m_old_data;
@@ -66,16 +66,16 @@ private:
 class ColumnFullCopyCmd : public QUndoCommand
 {
 public:
-	explicit ColumnFullCopyCmd(Column::Private * col, const AbstractColumn * src, QUndoCommand * parent = 0 );
+	explicit ColumnFullCopyCmd(ColumnPrivate* col, const AbstractColumn* src, QUndoCommand* parent = 0);
 	~ColumnFullCopyCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	const AbstractColumn * m_src;
-	Column::Private * m_backup;
+	ColumnPrivate* m_backup;
 	Column * m_backup_owner;
 
 };
@@ -83,17 +83,17 @@ private:
 class ColumnPartialCopyCmd : public QUndoCommand
 {
 public:
-	explicit ColumnPartialCopyCmd(Column::Private * col, const AbstractColumn * src, int src_start, int dest_start, int num_rows, QUndoCommand * parent = 0 );
+	explicit ColumnPartialCopyCmd(ColumnPrivate* col, const AbstractColumn* src, int src_start, int dest_start, int num_rows, QUndoCommand* parent = 0);
 	~ColumnPartialCopyCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	const AbstractColumn * m_src;
-	Column::Private * m_col_backup;
-	Column::Private * m_src_backup;
+	ColumnPrivate* m_col_backup;
+	ColumnPrivate* m_src_backup;
 	Column * m_col_backup_owner;
 	Column * m_src_backup_owner;
 	int m_src_start;
@@ -105,32 +105,32 @@ private:
 class ColumnInsertRowsCmd : public QUndoCommand
 {
 public:
-	explicit ColumnInsertRowsCmd(Column::Private * col, int before, int count, QUndoCommand * parent = 0 );
+	explicit ColumnInsertRowsCmd(ColumnPrivate* col, int before, int count, QUndoCommand* parent = 0);
 	~ColumnInsertRowsCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	int m_before, m_count;
 };
 
 class ColumnRemoveRowsCmd : public QUndoCommand
 {
 public:
-	explicit ColumnRemoveRowsCmd(Column::Private * col, int first, int count, QUndoCommand * parent = 0 );
+	explicit ColumnRemoveRowsCmd(ColumnPrivate* col, int first, int count, QUndoCommand* parent = 0);
 	~ColumnRemoveRowsCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	int m_first, m_count;
 	int m_data_row_count;
 	int m_old_size;
-	Column::Private * m_backup;
+	ColumnPrivate* m_backup;
 	Column * m_backup_owner;
 	IntervalAttribute<QString> m_formulas;
 };
@@ -138,14 +138,14 @@ private:
 class ColumnSetPlotDesignationCmd : public QUndoCommand
 {
 public:
-	explicit ColumnSetPlotDesignationCmd(Column::Private * col, AbstractColumn::PlotDesignation pd, QUndoCommand * parent = 0 );
+	explicit ColumnSetPlotDesignationCmd(ColumnPrivate* col, AbstractColumn::PlotDesignation pd, QUndoCommand* parent = 0);
 	~ColumnSetPlotDesignationCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	AbstractColumn::PlotDesignation m_new_pd;
 	AbstractColumn::PlotDesignation m_old_pd;
 };
@@ -153,28 +153,28 @@ private:
 class ColumnSetWidthCmd : public QUndoCommand
 {
 public:
-	explicit ColumnSetWidthCmd(Column::Private * col, int new_value, QUndoCommand * parent = 0 );
+	explicit ColumnSetWidthCmd(ColumnPrivate* col, int new_value, QUndoCommand* parent = 0);
 	~ColumnSetWidthCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	int m_other_value;
 };
 
 class ColumnClearCmd : public QUndoCommand
 {
 public:
-	explicit ColumnClearCmd(Column::Private * col, QUndoCommand * parent = 0 );
+	explicit ColumnClearCmd(ColumnPrivate* col, QUndoCommand* parent = 0);
 	~ColumnClearCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	void * m_data;
 	void * m_empty_data;
 	bool m_undone;
@@ -183,13 +183,13 @@ private:
 
 class ColumnSetGlobalFormulaCmd : public QUndoCommand {
 public:
-	explicit ColumnSetGlobalFormulaCmd(Column::Private* col, const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
+	explicit ColumnSetGlobalFormulaCmd(ColumnPrivate* col, const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private* m_col;
+	ColumnPrivate* m_col;
 	QString m_formula;
 	QStringList m_variableNames;
 	QStringList m_variableColumnPathes;
@@ -203,13 +203,13 @@ private:
 class ColumnSetFormulaCmd : public QUndoCommand
 {
 public:
-	explicit ColumnSetFormulaCmd(Column::Private * col, Interval<int> interval, const QString& formula, QUndoCommand * parent = 0 );
+	explicit ColumnSetFormulaCmd(ColumnPrivate* col, Interval<int> interval, const QString& formula, QUndoCommand* parent = 0);
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	Interval<int> m_interval;
 	QString m_oldFormula;
 	QString m_newFormula;
@@ -220,14 +220,14 @@ private:
 class ColumnClearFormulasCmd : public QUndoCommand
 {
 public:
-	explicit ColumnClearFormulasCmd(Column::Private * col, QUndoCommand * parent = 0 );
+	explicit ColumnClearFormulasCmd(ColumnPrivate* col, QUndoCommand* parent = 0);
 	~ColumnClearFormulasCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	IntervalAttribute<QString> m_formulas;
 	bool m_copied;
 
@@ -236,14 +236,14 @@ private:
 class ColumnSetTextCmd : public QUndoCommand
 {
 public:
-	explicit ColumnSetTextCmd(Column::Private * col, int row, const QString& new_value, QUndoCommand * parent = 0 );
+	explicit ColumnSetTextCmd(ColumnPrivate* col, int row, const QString& new_value, QUndoCommand* parent = 0);
 	~ColumnSetTextCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	int m_row;
 	QString m_new_value;
 	QString m_old_value;
@@ -253,14 +253,14 @@ private:
 class ColumnSetValueCmd : public QUndoCommand
 {
 public:
-	explicit ColumnSetValueCmd(Column::Private * col, int row, double new_value, QUndoCommand * parent = 0 );
+	explicit ColumnSetValueCmd(ColumnPrivate* col, int row, double new_value, QUndoCommand* parent = 0);
 	~ColumnSetValueCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	int m_row;
 	double m_new_value;
 	double m_old_value;
@@ -270,14 +270,14 @@ private:
 class ColumnSetDateTimeCmd : public QUndoCommand
 {
 public:
-	explicit ColumnSetDateTimeCmd(Column::Private * col, int row, const QDateTime& new_value, QUndoCommand * parent = 0 );
+	explicit ColumnSetDateTimeCmd(ColumnPrivate* col, int row, const QDateTime& new_value, QUndoCommand* parent = 0);
 	~ColumnSetDateTimeCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	int m_row;
 	QDateTime m_new_value;
 	QDateTime m_old_value;
@@ -287,14 +287,14 @@ private:
 class ColumnReplaceTextsCmd : public QUndoCommand
 {
 public:
-	explicit ColumnReplaceTextsCmd(Column::Private * col, int first, const QStringList& new_values, QUndoCommand * parent = 0 );
+	explicit ColumnReplaceTextsCmd(ColumnPrivate* col, int first, const QStringList& new_values, QUndoCommand* parent = 0);
 	~ColumnReplaceTextsCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	int m_first;
 	QStringList m_new_values;
 	QStringList m_old_values;
@@ -305,14 +305,14 @@ private:
 class ColumnReplaceValuesCmd : public QUndoCommand
 {
 public:
-	explicit ColumnReplaceValuesCmd(Column::Private * col, int first, const QVector<double>& new_values, QUndoCommand * parent = 0 );
+	explicit ColumnReplaceValuesCmd(ColumnPrivate* col, int first, const QVector<double>& new_values, QUndoCommand* parent = 0);
 	~ColumnReplaceValuesCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	int m_first;
 	QVector<double> m_new_values;
 	QVector<double> m_old_values;
@@ -323,14 +323,14 @@ private:
 class ColumnReplaceDateTimesCmd : public QUndoCommand
 {
 public:
-	explicit ColumnReplaceDateTimesCmd(Column::Private * col, int first, const QList<QDateTime>& new_values, QUndoCommand * parent = 0 );
+	explicit ColumnReplaceDateTimesCmd(ColumnPrivate* col, int first, const QList<QDateTime>& new_values, QUndoCommand* parent = 0);
 	~ColumnReplaceDateTimesCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	Column::Private * m_col;
+	ColumnPrivate* m_col;
 	int m_first;
 	QList<QDateTime> m_new_values;
 	QList<QDateTime> m_old_values;
