@@ -172,8 +172,12 @@ Curve3DPrivate::~Curve3DPrivate() {
 }
 
 vtkSmartPointer<vtkPolyData> Curve3DPrivate::createData() const {
-	if (xColumn == 0 || yColumn == 0 || zColumn == 0)
+	if (xColumn == 0 || yColumn == 0 || zColumn == 0) {
+		qDebug() << Q_FUNC_INFO << q->name() << "Columns have not been set";
 		return 0;
+	}
+
+	qDebug() << Q_FUNC_INFO << q->name() << "Columns have been set";
 
 	vtkSmartPointer<vtkPolyData> pdata = vtkSmartPointer<vtkPolyData>::New();
 	
@@ -223,7 +227,6 @@ vtkSmartPointer<vtkPolyData> Curve3DPrivate::createData() const {
 		glyph3D->Update();
 		pdata = glyph3D->GetOutput();
 	}
-	qDebug() << Q_FUNC_INFO << pdata->GetBounds()[0] << pdata->GetBounds()[1];
 
 	return pdata;
 }

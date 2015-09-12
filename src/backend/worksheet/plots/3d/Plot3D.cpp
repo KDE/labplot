@@ -113,7 +113,6 @@ void Plot3D::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void Plot3D::init(bool transform){
-	qDebug() << Q_FUNC_INFO << "Init function called";
 	Q_D(Plot3D);
 	if (d->isInitialized)
 		return;
@@ -216,10 +215,8 @@ void Plot3D::setupAxes() {
 	Q_D(Plot3D);
 	d->axes->setRenderer(d->renderer);
 	configureAspect(d->axes);
-	d->axes->updateBounds();
 	d->interactor->setAxes(d->axes);
 	addAxesAction->setEnabled(false);
-	d->resetCamera();
 }
 
 void Plot3D::addAxes() {
@@ -950,8 +947,6 @@ void Plot3DPrivate::init() {
 	backgroundImageActor = vtkSmartPointer<vtkImageActor>::New();
 	backgroundRenderer->AddActor(backgroundImageActor);
 
-	qDebug() << Q_FUNC_INFO << __LINE__;
-
 	foreach(Surface3D* surface, surfaces) {
 		surface->setRenderer(renderer);
 		q->configureAspect(surface);
@@ -962,8 +957,10 @@ void Plot3DPrivate::init() {
 		q->configureAspect(curve);
 	}
 
-	if (axes)
+	if (axes) {
+		qDebug() << Q_FUNC_INFO << "Setup axes";
 		q->setupAxes();
+	}
 }
 
 void Plot3DPrivate::setupCamera() {
@@ -998,14 +995,13 @@ void Plot3DPrivate::retransform() {
 		setupCamera();
 		updateBackground(false);
 		updateLight();
-
-		resetCamera();
 	}
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 }
 
 void Plot3DPrivate::resetCamera() {
+	qDebug() << Q_FUNC_INFO;
 	renderer->ResetCamera();
 	renderer->GetActiveCamera()->Azimuth(15);
 }
@@ -1319,17 +1315,17 @@ bool Plot3D::load(XmlStreamReader* reader) {
 					return false;
 			}
 		}else if(sectionName == "surface3d"){
-			qDebug() << Q_FUNC_INFO << "Load surface";
 			Surface3D* newSurface = new Surface3D();
 			newSurface->load(reader);
+			qDebug() << Q_FUNC_INFO << "Load surface" << newSurface->name();
 			// Scaling has been already initialized in the general section
 			newSurface->setXScaling(d->xScaling);
 			newSurface->setYScaling(d->yScaling);
 			newSurface->setZScaling(d->zScaling);
 			d->surfaces.insert(newSurface);
 		}else if(sectionName == "curve3d"){
-			qDebug() << Q_FUNC_INFO << "Load curve";
 			Curve3D* newCurve = new Curve3D();
+			qDebug() << Q_FUNC_INFO << "Load curve" << newCurve->name();
 			newCurve->load(reader);
 			newCurve->setXScaling(d->xScaling);
 			newCurve->setYScaling(d->yScaling);

@@ -185,12 +185,10 @@ namespace {
 }
 
 void AxesPrivate::updateLabels(const BoundingBox& bounds, vtkCubeAxesActor* cubeAxes) const {
-	qDebug() << "Scale X Axes";
 	// const int numXValues = calculateNumIter(bounds.GetLength(0), bounds.GetMaxLength());
 	int numXValues = 6;
 	if (formatX != Axes::Format_Decimal)
 		numXValues = 4;
-	qDebug() << "Num X Values:" << numXValues;
 	const double dx = (bounds.xMax() - bounds.xMin()) / (numXValues - 1);
 	vtkSmartPointer<vtkStringArray> labels = vtkSmartPointer<vtkStringArray>::New();
 
@@ -198,12 +196,10 @@ void AxesPrivate::updateLabels(const BoundingBox& bounds, vtkCubeAxesActor* cube
 
 	cubeAxes->SetAxisLabels(0, labels);
 
-	qDebug() << "Scale Y Axes";
 	//const int numYValues = calculateNumIter(bounds.GetLength(1), bounds.GetMaxLength());
 	int numYValues = 6;
 	if (formatY != Axes::Format_Decimal)
 		numYValues = 4;
-	qDebug() << "Num Y Values:" << numYValues;
 	const double dy = (bounds.yMax() - bounds.yMin()) / (numYValues - 1);
 	labels = vtkSmartPointer<vtkStringArray>::New();
 
@@ -211,12 +207,10 @@ void AxesPrivate::updateLabels(const BoundingBox& bounds, vtkCubeAxesActor* cube
 
 	cubeAxes->SetAxisLabels(1, labels);
 
-	qDebug() << "Scale Z Axes";
 	//const int numZValues = calculateNumIter(bounds.GetLength(2), bounds.GetMaxLength());
 	int numZValues = 6;
 	if (formatZ != Axes::Format_Decimal)
 		numZValues = 4;
-	qDebug() << "Num Z Values:" << numZValues;
 	const double dz = (bounds.zMax() - bounds.zMin()) / (numZValues - 1);
 	labels = vtkSmartPointer<vtkStringArray>::New();
 
@@ -237,6 +231,10 @@ void AxesPrivate::updateBounds(vtkActor* actor) const {
 		return;
 
 	BoundingBox bounds = systemBounds();
+	qDebug() << Q_FUNC_INFO << "Bounds: "
+		<< "[(" << bounds.xMin() << "," << bounds.xMax() << "), ("
+		<< bounds.yMin() << "," << bounds.yMax() << "), ("
+		<< bounds.zMin() << "," << bounds.zMax() << ")]";
 	makeCube(bounds);
 	vtkCubeAxesActor* cubeAxes = dynamic_cast<vtkCubeAxesActor*>(actor);
 

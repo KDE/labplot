@@ -488,6 +488,7 @@ namespace {
 }
 
 vtkSmartPointer<vtkPolyData> Surface3DPrivate::generateDemoData() const {
+	qDebug() << Q_FUNC_INFO << q->name();
 	vtkSmartPointer<vtkSphereSource> sphereSource = vtkSmartPointer<vtkSphereSource>::New();
 	sphereSource->Update();
 	return vtkSmartPointer<vtkPolyData>(sphereSource->GetOutput());
@@ -517,11 +518,11 @@ namespace {
 
 vtkSmartPointer<vtkPolyData> Surface3DPrivate::generateMatrixData() const {
 	if (!matrix) {
-		qDebug() << "Matrix has not been set";
+		qDebug() << Q_FUNC_INFO << q->name() << "Matrix has not been set";
 		return vtkSmartPointer<vtkPolyData>();
 	}
 
-	qDebug() << Q_FUNC_INFO << "Triangles rendering";
+	qDebug() << Q_FUNC_INFO << q->name() << "Matrix has been set!";
 	vtkSmartPointer<vtkCellArray> triangles = vtkSmartPointer<vtkCellArray>::New();
 	vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
 
@@ -558,7 +559,6 @@ vtkSmartPointer<vtkPolyData> Surface3DPrivate::generateSpreadsheetData() const {
 		return vtkSmartPointer<vtkPolyData>();
 	}
 
-	qDebug() << Q_FUNC_INFO << "Triangles rendering";
 	vtkSmartPointer<vtkCellArray> triangles = vtkSmartPointer<vtkCellArray>::New();
 	vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
 

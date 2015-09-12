@@ -296,17 +296,23 @@ void Base3DPrivate::updateRanges(bool needNotify) {
 }
 
 void Base3DPrivate::updateScaling(bool needNotify) {
-	qDebug() << Q_FUNC_INFO << __LINE__ << name();
 	if (!isInitialized())
 		return;
-
-	qDebug() << Q_FUNC_INFO << __LINE__ << name();
 
 	objectScaled(actor);
 	if (rangedPolyData.GetPointer() == 0 || rangedPolyData->GetNumberOfCells() == 0) {
 		scaledPolyData = rangedPolyData;
 	} else {
 		scaledPolyData = scale(rangedPolyData);
+	}
+
+	if (scaledPolyData) {
+		double bounds[6];
+		scaledPolyData->GetBounds(bounds);
+		qDebug() << Q_FUNC_INFO << baseParent->name() << "Scaled poly data:"
+				<< "[(" << bounds[0] << "," << bounds[1] << "), ("
+				<< bounds[2] << "," << bounds[3] << "), ("
+				<< bounds[4] << "," << bounds[5] << ")]";
 	}
 
 	modifyScaledData(scaledPolyData);
@@ -335,6 +341,8 @@ void Base3DPrivate::modifyScaledData(vtkPolyData* polyData) const {
 void Base3DPrivate::update() {
 	if (!isInitialized())
 		return;
+
+	qDebug() << Q_FUNC_INFO << baseParent->name();
 
 	polyData = createData();
 	if (polyData) {
@@ -368,14 +376,13 @@ BoundingBox Base3DPrivate::systemBounds() const {
 				continue;
 
 			const double* actorBounds = actor->GetBounds();
-			if (actorBounds[0] <= actorBounds[1]
-					&& actorBounds[2] <= actorBounds[3]
-					&& actorBounds[4] <= actorBounds[5])
+			if (actorBounds[0] <= actorBounds[1])
 				bb.AddBounds(actorBounds);
 		}
-	} else {
-		bb.SetBounds(-1, 1, -1, 1, -1, 1);
 	}
+	if (bb.xMin() > bb.xMax())
+		bb.SetBounds(-1, 1, -1, 1, -1, 1);
+
 	return bb;
 }
 
