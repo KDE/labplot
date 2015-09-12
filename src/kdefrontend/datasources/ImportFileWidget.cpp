@@ -42,6 +42,7 @@ Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 #include <QTextStream>
 #include <KUrlCompletion>
 #include <QDebug>
+#include <QTimer>
 
 #include <kfilterdev.h>
 
@@ -140,6 +141,15 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
+	//TODO: implement save/load of user-defined settings later and activate these buttons again
+	ui.bSaveFilter->hide();
+	ui.bManageFilters->hide();
+
+	//defer the loading of settings a bit in order to show the dialog prior to blocking the GUI in refreshPreview()
+	QTimer::singleShot( 100, this, SLOT(loadSettings()) );
+}
+
+void ImportFileWidget::loadSettings() {
 	//load last used settings
 	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
 
@@ -178,10 +188,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
 	ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
 	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
-
-	//TODO: implement save/load of user-defined settings later and activate these buttons again
-	ui.bSaveFilter->hide();
-	ui.bManageFilters->hide();
 }
 
 ImportFileWidget::~ImportFileWidget() {

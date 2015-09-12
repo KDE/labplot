@@ -36,7 +36,7 @@
 
 #include <QMetaEnum>
 #include <QThreadPool>
-#include <QDebug>
+
 #include <KIcon>
 #include <KLocale>
 

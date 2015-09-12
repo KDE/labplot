@@ -33,7 +33,6 @@
 #include "backend/core/AbstractSimpleFilter.h"
 #include "backend/lib/XmlStreamReader.h"
 
-// class QString;
 class ColumnStringIO;
 class ColumnPrivate;
 
