@@ -137,7 +137,7 @@ void MatrixView::initActions() {
 	// matrix related actions
 	QActionGroup* viewActionGroup = new QActionGroup(this);
 	viewActionGroup->setExclusive(true);
-	action_data_view = new KAction(KIcon(""), i18n("Data"), viewActionGroup);
+	action_data_view = new KAction(KIcon("matrix"), i18n("Data"), viewActionGroup);
 	action_data_view->setCheckable(true);
 	action_data_view->setChecked(true);
 	action_image_view = new KAction(KIcon("image-x-generic"), i18n("Image"), viewActionGroup);
