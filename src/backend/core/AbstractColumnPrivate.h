@@ -35,7 +35,7 @@
 
 class AbstractColumnPrivate {
 	public:
-		AbstractColumnPrivate(AbstractColumn *owner);
+		explicit AbstractColumnPrivate(AbstractColumn *owner);
 		AbstractColumn *owner() { return m_owner; }
 
 		QString name() const { return m_owner->name(); }
