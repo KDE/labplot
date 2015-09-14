@@ -101,7 +101,7 @@ void Matrix::init() {
   Returns an icon to be used for decorating my views.
   */
 QIcon Matrix::icon() const {
-	return KIcon("matrix");
+	return KIcon("labplot-matrix");
 }
 
 /*!

@@ -56,7 +56,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	ui.setupUi(mainWidget);
 	setMainWidget(mainWidget);
 
-	ui.tbConstants->setIcon( KIcon("format-text-symbol") );
+	ui.tbConstants->setIcon( KIcon("labplot-format-text-symbol") );
 	ui.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
 
 	ui.teEquation->setFocus();

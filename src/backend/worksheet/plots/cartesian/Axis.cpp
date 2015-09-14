@@ -295,9 +295,9 @@ QIcon Axis::icon() const{
 	Q_D(const Axis);
 	QIcon ico;
 	if (d->orientation == Axis::AxisHorizontal)
-		ico = KIcon("axis-horizontal");
+		ico = KIcon("labplot-axis-horizontal");
 	else
-		ico = KIcon("axis-vertical");
+		ico = KIcon("labplot-axis-vertical");
 
 	return ico;
 }

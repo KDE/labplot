@@ -65,10 +65,10 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_dateTimeMenu(new K
 	ui.tbFontStrikeOut->setIcon( KIcon("format-text-strikethrough") );
 	ui.tbFontSuperScript->setIcon( KIcon("format-text-superscript") );
 	ui.tbFontSubScript->setIcon( KIcon("format-text-subscript") );
-	ui.tbSymbols->setIcon( KIcon("format-text-symbol") );
+	ui.tbSymbols->setIcon( KIcon("labplot-format-text-symbol") );
 	ui.tbDateTime->setIcon( KIcon("chronometer") );
 	ui.tbTexUsed->setIconSize(QSize(20, 20));
-	ui.tbTexUsed->setIcon( KIcon("TeX_logo") );
+	ui.tbTexUsed->setIcon( KIcon("labplot-TeX-logo") );
 
 	//Positioning and alignment
 	ui.cbPositionX->addItem(i18n("left"));

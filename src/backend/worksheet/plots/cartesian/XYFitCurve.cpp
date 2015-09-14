@@ -83,7 +83,7 @@ void XYFitCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYFitCurve::icon() const {
-	return KIcon("xy-fit-curve");
+	return KIcon("labplot-xy-fit-curve");
 }
 
 //##############################################################################

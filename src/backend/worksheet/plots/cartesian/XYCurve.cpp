@@ -169,7 +169,7 @@ QMenu* XYCurve::createContextMenu(){
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYCurve::icon() const{
-	return KIcon("xy-curve");
+	return KIcon("labplot-xy-curve");
 }
 
 QGraphicsItem* XYCurve::graphicsItem() const{

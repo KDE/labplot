@@ -151,7 +151,7 @@ void WorksheetView::initActions(){
 	zoomFitSelectionAction = new KAction(i18n("Fit to selection"), zoomActionGroup);
 
 	// Mouse mode actions
-	selectionModeAction = new KAction(KIcon("cursor-arrow"), i18n("Select and Edit"), mouseModeActionGroup);
+	selectionModeAction = new KAction(KIcon("labplot-cursor-arrow"), i18n("Select and Edit"), mouseModeActionGroup);
 	selectionModeAction->setCheckable(true);
 
 	navigationModeAction = new KAction(KIcon("input-mouse"), i18n("Navigate"), mouseModeActionGroup);
@@ -165,26 +165,26 @@ void WorksheetView::initActions(){
 // 	selectionModeAction->setCheckable(true);
 
 	//"Add new" related actions
-	addCartesianPlot1Action = new KAction(KIcon("cartesian-plot-four-axes"), i18n("box plot, four axes"), addNewActionGroup);
-	addCartesianPlot2Action = new KAction(KIcon("cartesian-plot-two-axes"), i18n("box plot, two axes"), addNewActionGroup);
-	addCartesianPlot3Action = new KAction(KIcon("cartesian-plot-two-axes-centered"), i18n("two axes, centered"), addNewActionGroup);
-	addCartesianPlot4Action = new KAction(KIcon("cartesian-plot-two-axes-centered-origin"), i18n("two axes, crossing at origin"), addNewActionGroup);
+	addCartesianPlot1Action = new KAction(KIcon("labplot-xy-plot-four-axes"), i18n("box plot, four axes"), addNewActionGroup);
+	addCartesianPlot2Action = new KAction(KIcon("labplot-xy-plot-two-axes"), i18n("box plot, two axes"), addNewActionGroup);
+	addCartesianPlot3Action = new KAction(KIcon("labplot-xy-plot-two-axes-centered"), i18n("two axes, centered"), addNewActionGroup);
+	addCartesianPlot4Action = new KAction(KIcon("labplot-xy-plot-two-axes-centered-origin"), i18n("two axes, crossing at origin"), addNewActionGroup);
 	addTextLabelAction = new KAction(KIcon("draw-text"), i18n("text label"), addNewActionGroup);
 
 	//Layout actions
-	verticalLayoutAction = new KAction(KIcon("editvlayout"), i18n("Vertical layout"), layoutActionGroup);
+	verticalLayoutAction = new KAction(KIcon("labplot-editvlayout"), i18n("Vertical layout"), layoutActionGroup);
 	verticalLayoutAction->setObjectName("verticalLayoutAction");
 	verticalLayoutAction->setCheckable(true);
 
-	horizontalLayoutAction = new KAction(KIcon("edithlayout"), i18n("Horizontal layout"), layoutActionGroup);
+	horizontalLayoutAction = new KAction(KIcon("labplot-edithlayout"), i18n("Horizontal layout"), layoutActionGroup);
 	horizontalLayoutAction->setObjectName("horizontalLayoutAction");
 	horizontalLayoutAction->setCheckable(true);
 
-	gridLayoutAction = new KAction(KIcon("editgrid"), i18n("Grid layout"), layoutActionGroup);
+	gridLayoutAction = new KAction(KIcon("labplot-editgrid"), i18n("Grid layout"), layoutActionGroup);
 	gridLayoutAction->setObjectName("gridLayoutAction");
 	gridLayoutAction->setCheckable(true);
 
-	breakLayoutAction = new KAction(KIcon("editbreaklayout"), i18n("Break layout"), layoutActionGroup);
+	breakLayoutAction = new KAction(KIcon("labplot-editbreaklayout"), i18n("Break layout"), layoutActionGroup);
 	breakLayoutAction->setObjectName("breakLayoutAction");
 	breakLayoutAction->setEnabled(false);
 
@@ -241,27 +241,27 @@ void WorksheetView::initActions(){
 
 	QActionGroup* cartesianPlotMouseModeActionGroup = new QActionGroup(this);
 	cartesianPlotMouseModeActionGroup->setExclusive(true);
-	cartesianPlotSelectionModeAction = new KAction(KIcon("cursor-arrow"), i18n("Select and edit"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotSelectionModeAction = new KAction(KIcon("labplot-cursor-arrow"), i18n("Select and edit"), cartesianPlotMouseModeActionGroup);
 	cartesianPlotSelectionModeAction->setCheckable(true);
 	cartesianPlotSelectionModeAction->setChecked(true);
 
-	cartesianPlotZoomSelectionModeAction = new KAction(KIcon("zoom-select"), i18n("Select region and zoom in"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotZoomSelectionModeAction = new KAction(KIcon("labplot-zoom-select"), i18n("Select region and zoom in"), cartesianPlotMouseModeActionGroup);
 	cartesianPlotZoomSelectionModeAction->setCheckable(true);
 
-	cartesianPlotZoomXSelectionModeAction = new KAction(KIcon("zoom-select-x"), i18n("Select x-region and zoom in"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotZoomXSelectionModeAction = new KAction(KIcon("labplot-zoom-select-x"), i18n("Select x-region and zoom in"), cartesianPlotMouseModeActionGroup);
 	cartesianPlotZoomXSelectionModeAction->setCheckable(true);
 
-	cartesianPlotZoomYSelectionModeAction = new KAction(KIcon("zoom-select-y"), i18n("Select y-region and zoom in"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotZoomYSelectionModeAction = new KAction(KIcon("labplot-zoom-select-y"), i18n("Select y-region and zoom in"), cartesianPlotMouseModeActionGroup);
 	cartesianPlotZoomYSelectionModeAction->setCheckable(true);
 
 	connect(cartesianPlotMouseModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotMouseModeChanged(QAction*)));
 
-	addCurveAction = new KAction(KIcon("xy-curve"), i18n("xy-curve"), this);
-	addEquationCurveAction = new KAction(KIcon("xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
-	addFitCurveAction = new KAction(KIcon("xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
+	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("xy-curve"), this);
+	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
+	addFitCurveAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
 	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
-	addHorizontalAxisAction = new KAction(KIcon("axis-horizontal"), i18n("horizontal axis"), this);
-	addVerticalAxisAction = new KAction(KIcon("axis-vertical"), i18n("vertical axis"), this);
+	addHorizontalAxisAction = new KAction(KIcon("labplot-axis-horizontal"), i18n("horizontal axis"), this);
+	addVerticalAxisAction = new KAction(KIcon("labplot-axis-vertical"), i18n("vertical axis"), this);
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
@@ -271,31 +271,31 @@ void WorksheetView::initActions(){
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
 
 	QActionGroup* cartesianPlotNavigationGroup = new QActionGroup(this);
-	scaleAutoAction = new KAction(KIcon("auto-scale-all"), i18n("auto scale"), cartesianPlotNavigationGroup);
+	scaleAutoAction = new KAction(KIcon("labplot-auto-scale-all"), i18n("auto scale"), cartesianPlotNavigationGroup);
 	scaleAutoAction->setData(CartesianPlot::ScaleAuto);
-	scaleAutoXAction = new KAction(KIcon("auto-scale-x"), i18n("auto scale X"), cartesianPlotNavigationGroup);
+	scaleAutoXAction = new KAction(KIcon("labplot-auto-scale-x"), i18n("auto scale X"), cartesianPlotNavigationGroup);
 	scaleAutoXAction->setData(CartesianPlot::ScaleAutoX);
-	scaleAutoYAction = new KAction(KIcon("auto-scale-y"), i18n("auto scale Y"), cartesianPlotNavigationGroup);
+	scaleAutoYAction = new KAction(KIcon("labplot-auto-scale-y"), i18n("auto scale Y"), cartesianPlotNavigationGroup);
 	scaleAutoYAction->setData(CartesianPlot::ScaleAutoY);
 	zoomInAction = new KAction(KIcon("zoom-in"), i18n("zoom in"), cartesianPlotNavigationGroup);
 	zoomInAction->setData(CartesianPlot::ZoomIn);
 	zoomOutAction = new KAction(KIcon("zoom-out"), i18n("zoom out"), cartesianPlotNavigationGroup);
 	zoomOutAction->setData(CartesianPlot::ZoomOut);
-	zoomInXAction = new KAction(KIcon("zoom-in-x"), i18n("zoom in X"), cartesianPlotNavigationGroup);
+	zoomInXAction = new KAction(KIcon("labplot-zoom-in-x"), i18n("zoom in X"), cartesianPlotNavigationGroup);
 	zoomInXAction->setData(CartesianPlot::ZoomInX);
-	zoomOutXAction = new KAction(KIcon("zoom-out-x"), i18n("zoom out X"), cartesianPlotNavigationGroup);
+	zoomOutXAction = new KAction(KIcon("labplot-zoom-out-x"), i18n("zoom out X"), cartesianPlotNavigationGroup);
 	zoomOutXAction->setData(CartesianPlot::ZoomOutX);
-	zoomInYAction = new KAction(KIcon("zoom-in-y"), i18n("zoom in Y"), cartesianPlotNavigationGroup);
+	zoomInYAction = new KAction(KIcon("labplot-zoom-in-y"), i18n("zoom in Y"), cartesianPlotNavigationGroup);
 	zoomInYAction->setData(CartesianPlot::ZoomInY);
-	zoomOutYAction = new KAction(KIcon("zoom-out-y"), i18n("zoom out Y"), cartesianPlotNavigationGroup);
+	zoomOutYAction = new KAction(KIcon("labplot-zoom-out-y"), i18n("zoom out Y"), cartesianPlotNavigationGroup);
 	zoomOutYAction->setData(CartesianPlot::ZoomOutY);
-    shiftLeftXAction = new KAction(KIcon("shift-left-x"), i18n("shift left X"), cartesianPlotNavigationGroup);
+    shiftLeftXAction = new KAction(KIcon("labplot-shift-left-x"), i18n("shift left X"), cartesianPlotNavigationGroup);
 	shiftLeftXAction->setData(CartesianPlot::ShiftLeftX);
-	shiftRightXAction = new KAction(KIcon("shift-right-x"), i18n("shift right X"), cartesianPlotNavigationGroup);
+	shiftRightXAction = new KAction(KIcon("labplot-shift-right-x"), i18n("shift right X"), cartesianPlotNavigationGroup);
 	shiftRightXAction->setData(CartesianPlot::ShiftRightX);
-	shiftUpYAction = new KAction(KIcon("shift-up-y"), i18n("shift up Y"), cartesianPlotNavigationGroup);
+	shiftUpYAction = new KAction(KIcon("labplot-shift-up-y"), i18n("shift up Y"), cartesianPlotNavigationGroup);
 	shiftUpYAction->setData(CartesianPlot::ShiftUpY);
-	shiftDownYAction = new KAction(KIcon("shift-down-y"), i18n("shift down Y"), cartesianPlotNavigationGroup);
+	shiftDownYAction = new KAction(KIcon("labplot-shift-down-y"), i18n("shift down Y"), cartesianPlotNavigationGroup);
 	shiftDownYAction->setData(CartesianPlot::ShiftDownY);
 
 	connect(cartesianPlotNavigationGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotNavigationChanged(QAction*)));
