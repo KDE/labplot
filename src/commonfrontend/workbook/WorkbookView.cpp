@@ -88,6 +88,9 @@ WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
 }
 
 WorkbookView::~WorkbookView() {
+	//no need to react on currentChanged() in TabWidget when views are deleted
+	disconnect(m_tabWidget, 0, 0, 0);
+
 	//delete all children views here, its own view will be deleted in ~AbstractPart()
 	foreach(const AbstractPart* part, m_workbook->children<AbstractPart>())
 		part->deleteView();
