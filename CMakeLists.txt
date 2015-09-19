@@ -17,6 +17,7 @@ set(BUILD_SHARED_LIBS true)
 #set(_GNU_SOURCE true)
 add_definitions(-fvisibility=default)
 
+cmake_policy(SET CMP0002 OLD)
 
 ### GSL ######################################
 FIND_LIBRARY(GSL_LIBRARIES gsl
