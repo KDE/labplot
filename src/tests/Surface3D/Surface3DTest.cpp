@@ -27,7 +27,6 @@
  ***************************************************************************/
 #include "Surface3DTest.h"
 #include "backend/worksheet/plots/3d/Surface3D.h"
-#include "backend/worksheet/plots/3d/DataHandlers.h"
 #include "backend/core/Project.h"
 
 #include <QtTest>
@@ -37,6 +36,7 @@
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkProperty.h>
+#include <vtkSmartPointer.h>
 
 Surface3DTest::Surface3DTest() {
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
@@ -45,7 +45,8 @@ Surface3DTest::Surface3DTest() {
 void Surface3DTest::test_solidColorFilling() {
 	Project project;
 	vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
-	Surface3D *surf = new Surface3D(renderer);
+	Surface3D *surf = new Surface3D;
+	surf->setRenderer(renderer);
 	project.addChild(surf);
 	surf->setColorFilling(Surface3D::ColorFilling_SolidColor);
 	const QColor red(Qt::red);

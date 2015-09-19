@@ -31,6 +31,5 @@ function(CREATE_TEST TEST_NAME)
 	add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
 endfunction()
 
-add_subdirectory(Surface3DDock)
 add_subdirectory(Surface3D)
 add_subdirectory(Axes3D)

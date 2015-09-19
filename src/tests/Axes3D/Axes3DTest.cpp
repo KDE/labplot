@@ -36,6 +36,7 @@
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkProperty.h>
+#include <vtkSmartPointer.h>
 
 Axes3DTest::Axes3DTest() {
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
@@ -44,9 +45,9 @@ Axes3DTest::Axes3DTest() {
 void Axes3DTest::test_fontSize() {
 	Project project;
 	vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
-	Axes *axes = new Axes(renderer);
+	Axes *axes = new Axes;
+	axes->setRenderer(renderer);
 	project.addChild(axes);
-	axes->setType(Axes::AxesType_Cube);
 	axes->setFontSize(10);
 	axes->show(true);
 
