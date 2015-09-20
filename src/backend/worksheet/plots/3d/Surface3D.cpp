@@ -325,9 +325,9 @@ void Surface3DPrivate::modifyScaledData(vtkPolyData* data) const {
 		flag |= static_cast<int>(showXZProjection) << 1;
 		flag |= static_cast<int>(showXYProjection) << 2;
 
-        vtkNew<vtkCamera> camera;
+		vtkNew<vtkCamera> camera;
 		vtkCamera* activeCamera = renderer->GetActiveCamera();
-        camera->DeepCopy(renderer->GetActiveCamera());
+		camera->DeepCopy(renderer->GetActiveCamera());
 		for (int i = 0; i < 3; ++i) {
 			if ((flag & (1 << i)) == 0) {
 				if (i == 0)
