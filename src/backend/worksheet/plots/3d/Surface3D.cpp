@@ -58,6 +58,8 @@
 #include <vtkDecimatePro.h>
 #include <vtkNew.h>
 #include <vtkRenderer.h>
+#include <vtkPolyDataSilhouette.h>
+#include <vtkCamera.h>
 
 Surface3D::Surface3D()
 	: Base3D(new Surface3DPrivate(i18n("Surface"), this)) {
@@ -322,6 +324,10 @@ void Surface3DPrivate::modifyScaledData(vtkPolyData* data) const {
 		int flag = static_cast<int>(showYZProjection);
 		flag |= static_cast<int>(showXZProjection) << 1;
 		flag |= static_cast<int>(showXYProjection) << 2;
+
+        vtkNew<vtkCamera> camera;
+		vtkCamera* activeCamera = renderer->GetActiveCamera();
+        camera->DeepCopy(renderer->GetActiveCamera());
 		for (int i = 0; i < 3; ++i) {
 			if ((flag & (1 << i)) == 0) {
 				if (i == 0)
@@ -333,13 +339,30 @@ void Surface3DPrivate::modifyScaledData(vtkPolyData* data) const {
 				continue;
 			}
 
+			double position[] = {bounds.xMin(), bounds.yMin(), bounds.zMin()};
+			double focalPoint[] = {0, 0, 0};
+			position[i] *= 1000;
+			focalPoint[i] = 1;
+
+			activeCamera->SetPosition(position);
+			activeCamera->SetFocalPoint(focalPoint);
+			activeCamera->ParallelProjectionOn();
+
+			vtkNew<vtkPolyDataSilhouette> silhouette;
+			silhouette->SetInputData(data);
+			silhouette->SetCamera(activeCamera);
+			silhouette->BorderEdgesOn();
+			silhouette->SetEnableFeatureAngle(0);
+			silhouette->Update();
+
 			vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
-			points->DeepCopy(data->GetPoints());
+			points->DeepCopy(silhouette->GetOutput()->GetPoints());
+			vtkSmartPointer<vtkCellArray> lines = vtkSmartPointer<vtkCellArray>::New();
+			lines->DeepCopy(silhouette->GetOutput()->GetLines());
+
 			double point[3];
 			const double beginPoint = bounds.getBounds()[i * 2];
-			qDebug() << Q_FUNC_INFO << "begin point" << beginPoint;
 			for (vtkIdType j = 0; j < points->GetNumberOfPoints(); ++j) {
-				// TODO: Temporary. Move to the beginning of BB
 				points->GetPoint(j, point);
 				point[i] = beginPoint;
 				points->SetPoint(j, point);
@@ -347,9 +370,7 @@ void Surface3DPrivate::modifyScaledData(vtkPolyData* data) const {
 
 			vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
 			polydata->SetPoints(points);
-			polydata->SetPolys(data->GetPolys());
-			qDebug() << Q_FUNC_INFO << "Number of polys" << polydata->GetNumberOfPolys();
-			polydata = extractEdges(polydata);
+			polydata->SetLines(lines);
 
 			vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 			mapper->SetInputData(polydata);
@@ -368,6 +389,8 @@ void Surface3DPrivate::modifyScaledData(vtkPolyData* data) const {
 				renderer->AddViewProp(yzProjection);
 			}
 		}
+
+		renderer->GetActiveCamera()->DeepCopy(camera.Get());
 	} else {
 		renderer->RemoveViewProp(xyProjection);
 		renderer->RemoveViewProp(xzProjection);
