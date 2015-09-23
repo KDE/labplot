@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : abstractcolumncommands.cpp
     Project              : LabPlot
-    Description          : Commands to be called by AbstractColumn to modify AbstractColumn::Private
+    Description          : Commands to be called by AbstractColumn to modify AbstractColumnPrivate
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net)
 	Copyright            : (C) 2010 Knut Franke (knut.franke@gmx.de)
@@ -53,7 +53,7 @@
 /**
  * \brief Ctor
  */
-AbstractColumnClearMasksCmd::AbstractColumnClearMasksCmd(AbstractColumn::Private * col, QUndoCommand * parent )
+AbstractColumnClearMasksCmd::AbstractColumnClearMasksCmd(AbstractColumnPrivate* col, QUndoCommand* parent)
 : QUndoCommand( parent ), m_col(col)
 {
 	setText(i18n("%1: clear masks", col->name()));
@@ -123,7 +123,7 @@ void AbstractColumnClearMasksCmd::undo()
 /**
  * \brief Ctor
  */
-AbstractColumnSetMaskedCmd::AbstractColumnSetMaskedCmd(AbstractColumn::Private * col, Interval<int> interval, bool masked, QUndoCommand * parent )
+AbstractColumnSetMaskedCmd::AbstractColumnSetMaskedCmd(AbstractColumnPrivate * col, Interval<int> interval, bool masked, QUndoCommand * parent )
 : QUndoCommand( parent ), m_col(col), m_interval(interval), m_masked(masked)
 {
 	if(masked)

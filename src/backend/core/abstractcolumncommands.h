@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : abstractcolumncommands.h
     Project              : LabPlot
-    Description          : Commands to be called by AbstractColumn to modify AbstractColumn::Private
+    Description          : Commands to be called by AbstractColumn to modify AbstractColumnPrivate
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net)
 	Copyright            : (C) 2010 Knut Franke (knut.franke@gmx.de)
@@ -35,14 +35,14 @@
 
 class AbstractColumnClearMasksCmd : public QUndoCommand {
 public:
-	explicit AbstractColumnClearMasksCmd(AbstractColumn::Private *col, QUndoCommand *parent = 0);
+	explicit AbstractColumnClearMasksCmd(AbstractColumnPrivate *col, QUndoCommand *parent = 0);
 	~AbstractColumnClearMasksCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	AbstractColumn::Private *m_col;
+	AbstractColumnPrivate *m_col;
 	IntervalAttribute<bool> m_masking;
 	bool m_copied;
 
@@ -51,14 +51,14 @@ private:
 class AbstractColumnSetMaskedCmd : public QUndoCommand
 {
 public:
-	explicit AbstractColumnSetMaskedCmd(AbstractColumn::Private * col, Interval<int> interval, bool masked, QUndoCommand * parent = 0 );
+	explicit AbstractColumnSetMaskedCmd(AbstractColumnPrivate * col, Interval<int> interval, bool masked, QUndoCommand * parent = 0 );
 	~AbstractColumnSetMaskedCmd();
 
 	virtual void redo();
 	virtual void undo();
 
 private:
-	AbstractColumn::Private * m_col;
+	AbstractColumnPrivate * m_col;
 	Interval<int> m_interval;
 	bool m_masked;
 	IntervalAttribute<bool> m_masking;
@@ -76,7 +76,7 @@ public:
 	virtual void undo();
 
 protected:
-	AbstractColumn::Private * m_col;
+	AbstractColumnPrivate * m_col;
 	int m_before;
 	int m_count;
 };
@@ -91,7 +91,7 @@ public:
 	virtual void undo();
 
 protected:
-	AbstractColumn::Private * m_col;
+	AbstractColumnPrivate * m_col;
 	int m_first;
 	int m_count;
 	IntervalAttribute<bool> m_masking;

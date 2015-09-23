@@ -213,21 +213,21 @@ void MainWin::initActions() {
 	KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
 
 	//New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
-	m_newWorkbookAction = new KAction(KIcon("tab-new-background"),i18n("Workbook"),this);
+	m_newWorkbookAction = new KAction(KIcon("labplot-workbook"),i18n("Workbook"),this);
 	actionCollection()->addAction("new_workbook", m_newWorkbookAction);
 	connect(m_newWorkbookAction, SIGNAL(triggered()),SLOT(newWorkbook()));
 
-	m_newSpreadsheetAction = new KAction(KIcon("insert-table"),i18n("Spreadsheet"),this);
+	m_newSpreadsheetAction = new KAction(KIcon("labplot-spreadsheet"),i18n("Spreadsheet"),this);
 // 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new_spreadsheet", m_newSpreadsheetAction);
 	connect(m_newSpreadsheetAction, SIGNAL(triggered()),SLOT(newSpreadsheet()));
 
-	m_newMatrixAction = new KAction(KIcon("resource-calendar-insert"),i18n("Matrix"),this);
+	m_newMatrixAction = new KAction(KIcon("labplot-matrix"),i18n("Matrix"),this);
 // 	m_newMatrixAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new_matrix", m_newMatrixAction);
 	connect(m_newMatrixAction, SIGNAL(triggered()),SLOT(newMatrix()));
 
-	m_newWorksheetAction= new KAction(KIcon("archive-insert"),i18n("Worksheet"),this);
+	m_newWorksheetAction= new KAction(KIcon("labplot-worksheet"),i18n("Worksheet"),this);
 // 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
 	actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
 	connect(m_newWorksheetAction, SIGNAL(triggered()), SLOT(newWorksheet()));

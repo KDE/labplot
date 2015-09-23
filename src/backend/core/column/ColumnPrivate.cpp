@@ -45,17 +45,16 @@
 #include "backend/core/datatypes/Month2DoubleFilter.h"
 #include <QString>
 #include <QStringList>
-#include <QtDebug>
 
 /**
- * \class Column::Private
+ * \class ColumnPrivate
  * \brief Private data class of Column
  *
  * The writing interface defined here is only to be used by column commands and Column contructors.
  */
 
 /**
- * \var Column::Private::m_column_mode
+ * \var ColumnPrivate::m_column_mode
  * \brief The column mode
  *
  * The column mode specifies how to interpret
@@ -63,7 +62,7 @@
  */
 
 /**
- * \var Column::Private::m_data
+ * \var ColumnPrivate::m_data
  * \brief Pointer to the data vector
  *
  * This will point to a QVector<double>, QStringList or
@@ -71,37 +70,37 @@
  */
 
 /**
- * \var Column::Private::m_input_filter
+ * \var ColumnPrivate::m_input_filter
  * \brief The input filter (for string -> data type conversion)
  */
 
 /**
- * \var Column::Private::m_output_filter
+ * \var ColumnPrivate::m_output_filter
  * \brief The output filter (for data type -> string conversion)
  */
 
 /**
- * \var Column::Private::m_plot_designation
+ * \var ColumnPrivate::m_plot_designation
  * \brief The plot designation
  */
 
 /**
- * \var Column::Private::m_width
+ * \var ColumnPrivate::m_width
  * \brief Width to be used by views
  */
 
 /**
- * \var Column::Private::m_owner
+ * \var ColumnPrivate::m_owner
  * \brief The owner column
  */
 
 /**
  * \brief Ctor
  */
-Column::Private::Private(Column * owner, AbstractColumn::ColumnMode mode)
+ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
  : m_owner(owner)
 {
-	Q_ASSERT(owner != 0); // a Column::Private without owner is not allowed
+	Q_ASSERT(owner != 0); // a ColumnPrivate without owner is not allowed
 					      // because the owner must become the parent aspect of the input and output filters
 	m_column_mode = mode;
 	switch(mode)
@@ -151,7 +150,7 @@ Column::Private::Private(Column * owner, AbstractColumn::ColumnMode mode)
 /**
  * \brief Special ctor (to be called from Column only!)
  */
-Column::Private::Private(Column * owner, AbstractColumn::ColumnMode mode, void * data)
+ColumnPrivate::ColumnPrivate(Column * owner, AbstractColumn::ColumnMode mode, void * data)
 	: m_owner(owner)
 {
 	m_column_mode = mode;
@@ -199,7 +198,7 @@ Column::Private::Private(Column * owner, AbstractColumn::ColumnMode mode, void *
 /**
  * \brief Dtor
  */
-Column::Private::~Private()
+ColumnPrivate::~ColumnPrivate()
 {
 	if (!m_data) return;
 
@@ -227,7 +226,7 @@ Column::Private::~Private()
  * by plots. The column mode specifies how to interpret
  * the values in the column additional to the data type.
  */
-AbstractColumn::ColumnMode Column::Private::columnMode() const {
+AbstractColumn::ColumnMode ColumnPrivate::columnMode() const {
 	return m_column_mode;
 }
 
@@ -239,7 +238,7 @@ AbstractColumn::ColumnMode Column::Private::columnMode() const {
  * Remark: setting the mode back to undefined (the
  * initial value) is not supported.
  */
-void Column::Private::setColumnMode(AbstractColumn::ColumnMode mode)
+void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode)
 {
 	if (mode == m_column_mode) return;
 
@@ -411,7 +410,7 @@ void Column::Private::setColumnMode(AbstractColumn::ColumnMode mode)
  *
  * Replace column mode, data type, data pointer and filters directly
  */
-void Column::Private::replaceModeData(AbstractColumn::ColumnMode mode, void * data,
+void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void * data,
 	AbstractSimpleFilter * in_filter, AbstractSimpleFilter * out_filter)
 {
 	emit m_owner->modeAboutToChange(m_owner);
@@ -464,7 +463,7 @@ void Column::Private::replaceModeData(AbstractColumn::ColumnMode mode, void * da
 /**
  * \brief Replace data pointer
  */
-void Column::Private::replaceData(void * data)
+void ColumnPrivate::replaceData(void * data)
 {
 	emit m_owner->dataAboutToChange(m_owner);
 	m_data = data;
@@ -479,7 +478,7 @@ void Column::Private::replaceData(void * data)
  * of 'other' is not the same as the type of 'this'.
  * Use a filter to convert a column to another type.
  */
-bool Column::Private::copy(const AbstractColumn * other)
+bool ColumnPrivate::copy(const AbstractColumn * other)
 {
 	if (other->columnMode() != columnMode()) return false;
 	int num_rows = other->rowCount();
@@ -528,7 +527,7 @@ bool Column::Private::copy(const AbstractColumn * other)
  * \param dest_start first row to copy in
  * \param num_rows the number of rows to copy
  */
-bool Column::Private::copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows)
+bool ColumnPrivate::copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows)
 {
 	if (source->columnMode() != m_column_mode) return false;
 	if (num_rows == 0) return true;
@@ -571,7 +570,7 @@ bool Column::Private::copy(const AbstractColumn * source, int source_start, int 
  * of 'other' is not the same as the type of 'this'.
  * Use a filter to convert a column to another type.
  */
-bool Column::Private::copy(const Private * other)
+bool ColumnPrivate::copy(const ColumnPrivate * other)
 {
 	if (other->columnMode() != m_column_mode) return false;
 	int num_rows = other->rowCount();
@@ -620,7 +619,7 @@ bool Column::Private::copy(const Private * other)
  * \param dest_start first row to copy in
  * \param num_rows the number of rows to copy
  */
-bool Column::Private::copy(const Private * source, int source_start, int dest_start, int num_rows)
+bool ColumnPrivate::copy(const ColumnPrivate * source, int source_start, int dest_start, int num_rows)
 {
 	if (source->columnMode() != m_column_mode) return false;
 	if (num_rows == 0) return true;
@@ -663,7 +662,7 @@ bool Column::Private::copy(const Private * source, int source_start, int dest_st
  * Rows beyond this can be masked etc. but should be ignored by filters,
  * plots etc.
  */
-int Column::Private::rowCount() const
+int ColumnPrivate::rowCount() const
 {
 	switch(m_column_mode) {
 		case AbstractColumn::Numeric:
@@ -689,7 +688,7 @@ int Column::Private::rowCount() const
  * with values AbstractColumn::dataChanged()
  * must be emitted.
  */
-void Column::Private::resizeTo(int new_size)
+void ColumnPrivate::resizeTo(int new_size)
 {
 	int old_size = rowCount();
 	if (new_size == old_size) return;
@@ -733,7 +732,7 @@ void Column::Private::resizeTo(int new_size)
 /**
  * \brief Insert some empty (or initialized with zero) rows
  */
-void Column::Private::insertRows(int before, int count)
+void ColumnPrivate::insertRows(int before, int count)
 {
 	if (count == 0) return;
 
@@ -761,7 +760,7 @@ void Column::Private::insertRows(int before, int count)
 /**
  * \brief Remove 'count' rows starting from row 'first'
  */
-void Column::Private::removeRows(int first, int count)
+void ColumnPrivate::removeRows(int first, int count)
 {
 	if (count == 0) return;
 
@@ -792,21 +791,21 @@ void Column::Private::removeRows(int first, int count)
 }
 
 //! Return the column name
-QString Column::Private::name() const {
+QString ColumnPrivate::name() const {
 	return m_owner->name();
 }
 
 /**
  * \brief Return the column plot designation
  */
-AbstractColumn::PlotDesignation Column::Private::plotDesignation() const {
+AbstractColumn::PlotDesignation ColumnPrivate::plotDesignation() const {
 	return m_plot_designation;
 }
 
 /**
  * \brief Set the column plot designation
  */
-void Column::Private::setPlotDesignation(AbstractColumn::PlotDesignation pd)
+void ColumnPrivate::setPlotDesignation(AbstractColumn::PlotDesignation pd)
 {
 	emit m_owner->plotDesignationAboutToChange(m_owner);
 	m_plot_designation = pd;
@@ -816,14 +815,14 @@ void Column::Private::setPlotDesignation(AbstractColumn::PlotDesignation pd)
 /**
  * \brief Get width
  */
-int Column::Private::width() const {
+int ColumnPrivate::width() const {
 	return m_width;
 }
 
 /**
  * \brief Set width
  */
-void Column::Private::setWidth(int value)
+void ColumnPrivate::setWidth(int value)
 {
 	emit m_owner->widthAboutToChange(m_owner);
 	m_width = value;
@@ -833,21 +832,21 @@ void Column::Private::setWidth(int value)
 /**
  * \brief Return the data pointer
  */
-void *Column::Private::dataPointer() const {
+void *ColumnPrivate::dataPointer() const {
 	return m_data;
 }
 
 /**
  * \brief Return the input filter (for string -> data type conversion)
  */
-AbstractSimpleFilter *Column::Private::inputFilter() const {
+AbstractSimpleFilter *ColumnPrivate::inputFilter() const {
 	return m_input_filter;
 }
 
 /**
  * \brief Return the output filter (for data type -> string  conversion)
  */
-AbstractSimpleFilter *Column::Private::outputFilter() const {
+AbstractSimpleFilter *ColumnPrivate::outputFilter() const {
 	return m_output_filter;
 }
 
@@ -858,24 +857,32 @@ AbstractSimpleFilter *Column::Private::outputFilter() const {
 /**
  * \brief Return the formula last used to generate data for the column
  */
-QString Column::Private::formula() const {
+QString ColumnPrivate::formula() const {
 	return m_formula;
 }
 
 /**
  * \brief Sets the formula used to generate column values
  */
-void Column::Private::setFormula(QString f) {
-	m_formula = f;
+void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes) {
+	m_formula = formula;
+	m_formulaVariableNames = variableNames;
+	m_formulaVariableColumnPathes = variableColumnPathes;
 }
-
 /**
  * \brief Return the formula associated with row 'row'
  */
-QString Column::Private::formula(int row) const {
+QString ColumnPrivate::formula(int row) const {
 	return m_formulas.value(row);
 }
 
+const QStringList& ColumnPrivate::formulaVariableNames() const {
+	return m_formulaVariableNames;
+}
+
+const QStringList& ColumnPrivate::formulaVariableColumnPathes() const {
+	return m_formulaVariableColumnPathes;
+}
 /**
  * \brief Return the intervals that have associated formulas
  *
@@ -889,14 +896,14 @@ QString Column::Private::formula(int row) const {
  * 	list << QString(interval.toString() + ": " + my_column.formula(interval.start()));
  * \endcode
  */
-QList< Interval<int> > Column::Private::formulaIntervals() const {
+QList< Interval<int> > ColumnPrivate::formulaIntervals() const {
 	return m_formulas.intervals();
 }
 
 /**
  * \brief Set a formula string for an interval of rows
  */
-void Column::Private::setFormula(Interval<int> i, QString formula)
+void ColumnPrivate::setFormula(Interval<int> i, QString formula)
 {
 	m_formulas.setValue(i, formula);
 }
@@ -904,7 +911,7 @@ void Column::Private::setFormula(Interval<int> i, QString formula)
 /**
  * \brief Overloaded function for convenience
  */
-void Column::Private::setFormula(int row, QString formula)
+void ColumnPrivate::setFormula(int row, QString formula)
 {
 	setFormula(Interval<int>(row,row), formula);
 }
@@ -912,7 +919,7 @@ void Column::Private::setFormula(int row, QString formula)
 /**
  * \brief Clear all formulas
  */
-void Column::Private::clearFormulas()
+void ColumnPrivate::clearFormulas()
 {
 	m_formulas.clear();
 }
@@ -931,7 +938,7 @@ void Column::Private::clearFormulas()
  *
  * Use this only when columnMode() is Text
  */
-QString Column::Private::textAt(int row) const
+QString ColumnPrivate::textAt(int row) const
 {
 	if (m_column_mode != AbstractColumn::Text) return QString();
 	return static_cast< QStringList* >(m_data)->value(row);
@@ -942,7 +949,7 @@ QString Column::Private::textAt(int row) const
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-QDate Column::Private::dateAt(int row) const
+QDate ColumnPrivate::dateAt(int row) const
 {
 	return dateTimeAt(row).date();
 }
@@ -952,7 +959,7 @@ QDate Column::Private::dateAt(int row) const
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-QTime Column::Private::timeAt(int row) const
+QTime ColumnPrivate::timeAt(int row) const
 {
 	return dateTimeAt(row).time();
 }
@@ -962,7 +969,7 @@ QTime Column::Private::timeAt(int row) const
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-QDateTime Column::Private::dateTimeAt(int row) const
+QDateTime ColumnPrivate::dateTimeAt(int row) const
 {
 	if (m_column_mode != AbstractColumn::DateTime &&
 			m_column_mode != AbstractColumn::Month &&
@@ -974,7 +981,7 @@ QDateTime Column::Private::dateTimeAt(int row) const
 /**
  * \brief Return the double value in row 'row'
  */
-double Column::Private::valueAt(int row) const
+double ColumnPrivate::valueAt(int row) const
 {
 	if (m_column_mode != AbstractColumn::Numeric) return NAN;
 	return static_cast< QVector<double>* >(m_data)->value(row, NAN);
@@ -985,7 +992,7 @@ double Column::Private::valueAt(int row) const
  *
  * Use this only when columnMode() is Text
  */
-void Column::Private::setTextAt(int row, const QString& new_value)
+void ColumnPrivate::setTextAt(int row, const QString& new_value)
 {
 	if (m_column_mode != AbstractColumn::Text) return;
 
@@ -1003,7 +1010,7 @@ void Column::Private::setTextAt(int row, const QString& new_value)
  *
  * Use this only when columnMode() is Text
  */
-void Column::Private::replaceTexts(int first, const QStringList& new_values)
+void ColumnPrivate::replaceTexts(int first, const QStringList& new_values)
 {
 	if (m_column_mode != AbstractColumn::Text) return;
 
@@ -1024,7 +1031,7 @@ void Column::Private::replaceTexts(int first, const QStringList& new_values)
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void Column::Private::setDateAt(int row, const QDate& new_value)
+void ColumnPrivate::setDateAt(int row, const QDate& new_value)
 {
 	if (m_column_mode != AbstractColumn::DateTime &&
 			m_column_mode != AbstractColumn::Month &&
@@ -1039,7 +1046,7 @@ void Column::Private::setDateAt(int row, const QDate& new_value)
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void Column::Private::setTimeAt(int row, const QTime& new_value)
+void ColumnPrivate::setTimeAt(int row, const QTime& new_value)
 {
 	if (m_column_mode != AbstractColumn::DateTime &&
 			m_column_mode != AbstractColumn::Month &&
@@ -1054,7 +1061,7 @@ void Column::Private::setTimeAt(int row, const QTime& new_value)
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void Column::Private::setDateTimeAt(int row, const QDateTime& new_value)
+void ColumnPrivate::setDateTimeAt(int row, const QDateTime& new_value)
 {
 	if (m_column_mode != AbstractColumn::DateTime &&
 			m_column_mode != AbstractColumn::Month &&
@@ -1075,7 +1082,7 @@ void Column::Private::setDateTimeAt(int row, const QDateTime& new_value)
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void Column::Private::replaceDateTimes(int first, const QList<QDateTime>& new_values)
+void ColumnPrivate::replaceDateTimes(int first, const QList<QDateTime>& new_values)
 {
 	if (m_column_mode != AbstractColumn::DateTime &&
 			m_column_mode != AbstractColumn::Month &&
@@ -1099,7 +1106,7 @@ void Column::Private::replaceDateTimes(int first, const QList<QDateTime>& new_va
  *
  * Use this only when columnMode() is Numeric
  */
-void Column::Private::setValueAt(int row, double new_value)
+void ColumnPrivate::setValueAt(int row, double new_value)
 {
 	if (m_column_mode != AbstractColumn::Numeric) return;
 
@@ -1117,7 +1124,7 @@ void Column::Private::setValueAt(int row, double new_value)
  *
  * Use this only when columnMode() is Numeric
  */
-void Column::Private::replaceValues(int first, const QVector<double>& new_values)
+void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values)
 {
 	if (m_column_mode != AbstractColumn::Numeric) return;
 
@@ -1141,21 +1148,14 @@ void Column::Private::replaceValues(int first, const QVector<double>& new_values
 /**
  * \brief Return the interval attribute representing the formula strings
  */
-IntervalAttribute<QString> Column::Private::formulaAttribute() const {
+IntervalAttribute<QString> ColumnPrivate::formulaAttribute() const {
 	return m_formulas;
-}
-
-/**
- * \brief Replace the formula used to generate column values
- */
-void Column::Private::replaceFormula(QString formula) {
-	m_formula = formula;
 }
 
 /**
  * \brief Replace the interval attribute for the formula strings
  */
-void Column::Private::replaceFormulas(IntervalAttribute<QString> formulas)
+void ColumnPrivate::replaceFormulas(IntervalAttribute<QString> formulas)
 {
 	m_formulas = formulas;
 }

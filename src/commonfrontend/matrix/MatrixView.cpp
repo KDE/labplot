@@ -137,7 +137,7 @@ void MatrixView::initActions() {
 	// matrix related actions
 	QActionGroup* viewActionGroup = new QActionGroup(this);
 	viewActionGroup->setExclusive(true);
-	action_data_view = new KAction(KIcon(""), i18n("Data"), viewActionGroup);
+	action_data_view = new KAction(KIcon("labplot-matrix"), i18n("Data"), viewActionGroup);
 	action_data_view->setCheckable(true);
 	action_data_view->setChecked(true);
 	action_image_view = new KAction(KIcon("image-x-generic"), i18n("Image"), viewActionGroup);
@@ -327,8 +327,8 @@ void MatrixView::adjustHeaders() {
 	QHeaderView* h_header = m_tableView->horizontalHeader();
 	QHeaderView* v_header = m_tableView->verticalHeader();
 
-	disconnect(v_header, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleVerticalSectionResized(int, int, int)));
-	disconnect(h_header, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
+	disconnect(v_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleVerticalSectionResized(int,int,int)));
+	disconnect(h_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
 
 	int cols = m_matrix->columnCount();
 	for (int i=0; i<cols; i++)
@@ -337,8 +337,8 @@ void MatrixView::adjustHeaders() {
 	for (int i=0; i<rows; i++)
 		v_header->resizeSection(i, m_matrix->rowHeight(i));
 
-	connect(v_header, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleVerticalSectionResized(int, int, int)));
-	connect(h_header, SIGNAL(sectionResized(int, int, int)), this, SLOT(handleHorizontalSectionResized(int, int, int)));
+	connect(v_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleVerticalSectionResized(int,int,int)));
+	connect(h_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
 }
 
 void MatrixView::setRowHeight(int row, int height) {

@@ -96,17 +96,16 @@ class AbstractAspect : public QObject {
 			return NULL;
 		}
 
-		//TODO: recursive flag doesn't work! How should it work with templates?!?
 		template <class T> QList<T*> children(const ChildIndexFlags& flags=0) const {
 			QList<T*> result;
 			foreach (AbstractAspect* child, rawChildren()) {
 				if (flags & IncludeHidden || !child->hidden()) {
 					T* i = qobject_cast<T*>(child);
-					if (i) {
+					if (i)
 						result << i;
-						if (flags & Recursive)
-							result << i->template children<T>(flags);
-					}
+
+					if (flags & Recursive)
+						result << child->template children<T>(flags);
 				}
 			}
 			return result;

@@ -139,7 +139,7 @@ float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit 
 
 //! Return an icon to be used for decorating my views.
 QIcon Worksheet::icon() const {
-	return KIcon("office-chart-area");
+	return KIcon("labplot-worksheet");
 }
 
 //! Return a new context menu.

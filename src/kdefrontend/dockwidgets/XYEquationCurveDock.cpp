@@ -75,10 +75,10 @@ void XYEquationCurveDock::setupGeneral() {
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
-	uiGeneralTab.tbConstants1->setIcon( KIcon("format-text-symbol") );
+	uiGeneralTab.tbConstants1->setIcon( KIcon("labplot-format-text-symbol") );
 	uiGeneralTab.tbFunctions1->setIcon( KIcon("preferences-desktop-font") );
 
-	uiGeneralTab.tbConstants2->setIcon( KIcon("format-text-symbol") );
+	uiGeneralTab.tbConstants2->setIcon( KIcon("labplot-format-text-symbol") );
 	uiGeneralTab.tbFunctions2->setIcon( KIcon("preferences-desktop-font") );
 
 	uiGeneralTab.cbType->addItem(i18n("cartesian"));

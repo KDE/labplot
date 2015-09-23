@@ -29,7 +29,7 @@ foreach(dir ${dirs})
 endforeach()
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION=\"2.0.2\")
+add_definitions (-DLVERSION=\"2.1.0-RC1\")
 # add_definitions (-DLDEBUG='1')
 # needed for qt_plugin_instance_scidavis_standardcurvesymbolfactory()
 add_definitions(-D QT_STATICPLUGIN )
@@ -38,6 +38,7 @@ set(BUILD_SHARED_LIBS true)
 #set(_GNU_SOURCE true)
 add_definitions(-fvisibility=default)
 
+cmake_policy(SET CMP0002 OLD)
 
 ### GSL ######################################
 FIND_LIBRARY(GSL_LIBRARIES gsl

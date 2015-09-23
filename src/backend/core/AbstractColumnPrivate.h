@@ -33,9 +33,9 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"
 
-class AbstractColumn::Private {
+class AbstractColumnPrivate {
 	public:
-		Private(AbstractColumn *owner);
+		explicit AbstractColumnPrivate(AbstractColumn *owner);
 		AbstractColumn *owner() { return m_owner; }
 
 		QString name() const { return m_owner->name(); }
