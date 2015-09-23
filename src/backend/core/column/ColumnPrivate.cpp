@@ -98,8 +98,7 @@
  * \brief Ctor
  */
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
- : m_owner(owner)
-{
+ : m_owner(owner) {
 	Q_ASSERT(owner != 0); // a ColumnPrivate without owner is not allowed
 					      // because the owner must become the parent aspect of the input and output filters
 	m_column_mode = mode;
@@ -151,8 +150,7 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
  * \brief Special ctor (to be called from Column only!)
  */
 ColumnPrivate::ColumnPrivate(Column * owner, AbstractColumn::ColumnMode mode, void * data)
-	: m_owner(owner)
-{
+	: m_owner(owner) {
 	m_column_mode = mode;
 	m_data = data;
 
@@ -198,8 +196,7 @@ ColumnPrivate::ColumnPrivate(Column * owner, AbstractColumn::ColumnMode mode, vo
 /**
  * \brief Dtor
  */
-ColumnPrivate::~ColumnPrivate()
-{
+ColumnPrivate::~ColumnPrivate() {
 	if (!m_data) return;
 
 	switch(m_column_mode) {
@@ -238,8 +235,7 @@ AbstractColumn::ColumnMode ColumnPrivate::columnMode() const {
  * Remark: setting the mode back to undefined (the
  * initial value) is not supported.
  */
-void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode)
-{
+void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	if (mode == m_column_mode) return;
 
 	void * old_data = m_data;
@@ -411,8 +407,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode)
  * Replace column mode, data type, data pointer and filters directly
  */
 void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void * data,
-	AbstractSimpleFilter * in_filter, AbstractSimpleFilter * out_filter)
-{
+	AbstractSimpleFilter * in_filter, AbstractSimpleFilter * out_filter) {
 	emit m_owner->modeAboutToChange(m_owner);
 	// disconnect formatChanged()
 	switch(m_column_mode)
@@ -463,8 +458,7 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void * data
 /**
  * \brief Replace data pointer
  */
-void ColumnPrivate::replaceData(void * data)
-{
+void ColumnPrivate::replaceData(void * data) {
 	emit m_owner->dataAboutToChange(m_owner);
 	m_data = data;
 	if (!m_owner->m_suppressDataChangedSignal)
@@ -478,8 +472,7 @@ void ColumnPrivate::replaceData(void * data)
  * of 'other' is not the same as the type of 'this'.
  * Use a filter to convert a column to another type.
  */
-bool ColumnPrivate::copy(const AbstractColumn * other)
-{
+bool ColumnPrivate::copy(const AbstractColumn * other) {
 	if (other->columnMode() != columnMode()) return false;
 	int num_rows = other->rowCount();
 
@@ -527,8 +520,7 @@ bool ColumnPrivate::copy(const AbstractColumn * other)
  * \param dest_start first row to copy in
  * \param num_rows the number of rows to copy
  */
-bool ColumnPrivate::copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows)
-{
+bool ColumnPrivate::copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows) {
 	if (source->columnMode() != m_column_mode) return false;
 	if (num_rows == 0) return true;
 
@@ -570,8 +562,7 @@ bool ColumnPrivate::copy(const AbstractColumn * source, int source_start, int de
  * of 'other' is not the same as the type of 'this'.
  * Use a filter to convert a column to another type.
  */
-bool ColumnPrivate::copy(const ColumnPrivate * other)
-{
+bool ColumnPrivate::copy(const ColumnPrivate * other) {
 	if (other->columnMode() != m_column_mode) return false;
 	int num_rows = other->rowCount();
 
@@ -619,8 +610,7 @@ bool ColumnPrivate::copy(const ColumnPrivate * other)
  * \param dest_start first row to copy in
  * \param num_rows the number of rows to copy
  */
-bool ColumnPrivate::copy(const ColumnPrivate * source, int source_start, int dest_start, int num_rows)
-{
+bool ColumnPrivate::copy(const ColumnPrivate * source, int source_start, int dest_start, int num_rows) {
 	if (source->columnMode() != m_column_mode) return false;
 	if (num_rows == 0) return true;
 
@@ -662,8 +652,7 @@ bool ColumnPrivate::copy(const ColumnPrivate * source, int source_start, int des
  * Rows beyond this can be masked etc. but should be ignored by filters,
  * plots etc.
  */
-int ColumnPrivate::rowCount() const
-{
+int ColumnPrivate::rowCount() const {
 	switch(m_column_mode) {
 		case AbstractColumn::Numeric:
 			return static_cast< QVector<double>* >(m_data)->size();
@@ -688,8 +677,7 @@ int ColumnPrivate::rowCount() const
  * with values AbstractColumn::dataChanged()
  * must be emitted.
  */
-void ColumnPrivate::resizeTo(int new_size)
-{
+void ColumnPrivate::resizeTo(int new_size) {
 	int old_size = rowCount();
 	if (new_size == old_size) return;
 
@@ -732,8 +720,7 @@ void ColumnPrivate::resizeTo(int new_size)
 /**
  * \brief Insert some empty (or initialized with zero) rows
  */
-void ColumnPrivate::insertRows(int before, int count)
-{
+void ColumnPrivate::insertRows(int before, int count) {
 	if (count == 0) return;
 
 	m_formulas.insertRows(before, count);
@@ -760,8 +747,7 @@ void ColumnPrivate::insertRows(int before, int count)
 /**
  * \brief Remove 'count' rows starting from row 'first'
  */
-void ColumnPrivate::removeRows(int first, int count)
-{
+void ColumnPrivate::removeRows(int first, int count) {
 	if (count == 0) return;
 
 	m_formulas.removeRows(first, count);
@@ -805,8 +791,7 @@ AbstractColumn::PlotDesignation ColumnPrivate::plotDesignation() const {
 /**
  * \brief Set the column plot designation
  */
-void ColumnPrivate::setPlotDesignation(AbstractColumn::PlotDesignation pd)
-{
+void ColumnPrivate::setPlotDesignation(AbstractColumn::PlotDesignation pd) {
 	emit m_owner->plotDesignationAboutToChange(m_owner);
 	m_plot_designation = pd;
 	emit m_owner->plotDesignationChanged(m_owner);
@@ -822,8 +807,7 @@ int ColumnPrivate::width() const {
 /**
  * \brief Set width
  */
-void ColumnPrivate::setWidth(int value)
-{
+void ColumnPrivate::setWidth(int value) {
 	emit m_owner->widthAboutToChange(m_owner);
 	m_width = value;
 	emit m_owner->widthChanged(m_owner);

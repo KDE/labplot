@@ -1103,8 +1103,8 @@ void AxisPrivate::retransformTicks(){
 	}
 
 	//determine the spacing for the major ticks
-	double majorTicksSpacing;
-	int tmpMajorTicksNumber;
+	double majorTicksSpacing=0;
+	int tmpMajorTicksNumber=0;
 	if (majorTicksType == Axis::TicksTotalNumber) {
 		//the total number of the major ticks is given - > determine the spacing
 		tmpMajorTicksNumber = majorTicksNumber;

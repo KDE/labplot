@@ -353,8 +353,6 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 		return filter;
 	}
-	default:
-		qDebug()<<"Unknown file type!";
 	}
 
 	return 0;

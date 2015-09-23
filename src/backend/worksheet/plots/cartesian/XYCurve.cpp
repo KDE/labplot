@@ -941,8 +941,6 @@ void XYCurvePrivate::retransform(){
 				case AbstractColumn::Day:
 					//TODO
 					break;
-				default:
-					break;
 			}
 
 			switch(yColMode) {
@@ -955,8 +953,6 @@ void XYCurvePrivate::retransform(){
 				case AbstractColumn::Month:
 				case AbstractColumn::Day:
 					//TODO
-					break;
-				default:
 					break;
 			}
 			symbolPointsLogical.append(tempPoint);
@@ -1375,8 +1371,6 @@ void XYCurvePrivate::updateValues(){
 				case AbstractColumn::Day:
 					//TODO
 					break;
-				default:
-					break;
 			}
 		}
 	  }
@@ -1426,8 +1420,6 @@ void XYCurvePrivate::updateValues(){
 		}
 		break;
 	  }
-	  default:
-	  break;
 	}
 
 	QTransform trafo;
@@ -1487,7 +1479,7 @@ void XYCurvePrivate::updateFilling() {
 	const QPointF& first = symbolPointsLogical.at(0); //first point of the curve, may not be visible currently
 	const QPointF& last = symbolPointsLogical.at(symbolPointsLogical.size()-1);//first point of the curve, may not be visible currently
 	QPointF edge;
-	float xEnd, yEnd;
+	float xEnd=0, yEnd=0;
 	if (fillingPosition == XYCurve::FillingAbove) {
 		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()));
 

@@ -568,8 +568,8 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 				painter->setBrush(QBrush(radialGrad));
 				break;
 			}
-			default:
-				painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
+			//default:
+			//	painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
 		}
 		painter->drawRect(scene_rect);
 	}else if (m_worksheet->backgroundType() == PlotArea::Image){
@@ -598,8 +598,8 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 				case PlotArea::CenterTiled:
 					painter->drawTiledPixmap(scene_rect,pix,QPoint(scene_rect.size().width()/2,scene_rect.size().height()/2));
 					break;
-				default:
-					painter->drawPixmap(scene_rect.topLeft(),pix);
+				//default:
+				//	painter->drawPixmap(scene_rect.topLeft(),pix);
 			}
 		}
 	}else if (m_worksheet->backgroundType() == PlotArea::Pattern){

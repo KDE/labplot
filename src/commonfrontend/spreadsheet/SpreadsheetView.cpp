@@ -1653,7 +1653,8 @@ void SpreadsheetView::print(QPrinter* printer) const{
 	//Paint the horizontal header first
 	painter.setFont(hHeader->font());
 	QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();
-	QRect br = painter.boundingRect(br, Qt::AlignCenter, headerString);
+	QRect br;
+	br = painter.boundingRect(br, Qt::AlignCenter, headerString);
 	painter.drawLine(right, height, right, height+br.height());
 	QRect tr(br);
 
