@@ -2009,7 +2009,7 @@ bool Axis::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->lineOpacity = str.toInt();
+                d->lineOpacity = str.toDouble();
 
 			str = attribs.value("arrowType").toString();
             if(str.isEmpty())
@@ -2069,7 +2069,7 @@ bool Axis::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->majorTicksOpacity = str.toInt();
+                d->majorTicksOpacity = str.toDouble();
 		}else if (reader->name() == "minorTicks"){
 			attribs = reader->attributes();
 
@@ -2111,7 +2111,7 @@ bool Axis::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->minorTicksOpacity = str.toInt();
+                d->minorTicksOpacity = str.toDouble();
 		}else if (reader->name() == "labels"){
 			attribs = reader->attributes();
 
@@ -2162,7 +2162,7 @@ bool Axis::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->labelsOpacity = str.toInt();
+                d->labelsOpacity = str.toDouble();
 		}else if (reader->name() == "majorGrid"){
 			attribs = reader->attributes();
 
@@ -2172,7 +2172,7 @@ bool Axis::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->majorGridOpacity = str.toInt();
+                d->majorGridOpacity = str.toDouble();
 		}else if (reader->name() == "minorGrid"){
 			attribs = reader->attributes();
 
@@ -2182,7 +2182,7 @@ bool Axis::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->minorGridOpacity = str.toInt();
+                d->minorGridOpacity = str.toDouble();
         }else{ // unknown element
             reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
             if (!reader->skipToEndElement()) return false;

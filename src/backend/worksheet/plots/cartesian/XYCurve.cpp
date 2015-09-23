@@ -2444,7 +2444,7 @@ bool XYCurve::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->valuesOpacity = str.toInt();
+                d->valuesOpacity = str.toDouble();
 
 			//don't produce any warning if no prefix or suffix is set (empty string is allowd here in xml)
 			d->valuesPrefix = attribs.value("prefix").toString();
