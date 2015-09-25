@@ -609,8 +609,11 @@ bool MainWin::newProject(){
 		m_propertiesDock->setWindowTitle(i18n("Properties"));
 		addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
 
-		stackedWidget = new QStackedWidget(m_propertiesDock);
-		m_propertiesDock->setWidget(stackedWidget);
+		QScrollArea* sa = new QScrollArea(m_propertiesDock);
+		stackedWidget = new QStackedWidget(sa);
+		sa->setWidget(stackedWidget);
+		sa->setWidgetResizable(true);
+		m_propertiesDock->setWidget(sa);
 
 		//GUI-observer;
 		m_guiObserver = new GuiObserver(this);
