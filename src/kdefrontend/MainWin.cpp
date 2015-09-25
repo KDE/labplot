@@ -1124,6 +1124,9 @@ void MainWin::projectChanged(){
 }
 
 void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win){
+	if (!win)
+		return;
+
 	PartMdiView *view = qobject_cast<PartMdiView*>(win);
 	if (!view) {
 		updateGUI();
