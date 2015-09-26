@@ -37,8 +37,6 @@
 
 #include <QStackedWidget>
 #include <QTableView>
-#include <QHeaderView>
-#include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QShortcut>
 #include <QMenu>
@@ -46,7 +44,6 @@
 #include <QPrinter>
 #include <QScrollArea>
 #include <QInputDialog>
-#include <QApplication>
 #include <QClipboard>
 #include <QMimeData>
 #include <QDebug>
@@ -198,8 +195,6 @@ void MatrixView::connectActions() {
 	connect(action_fill_const, SIGNAL(triggered()), this, SLOT(fillWithConstValues()));
 
 	connect(action_go_to_cell, SIGNAL(triggered()), this, SLOT(goToCell()));
-// 	connect(action_edit_format, SIGNAL(triggered()), this, SLOT(editFormat()));
-	//connect(action_import_image, SIGNAL(triggered()), this, SLOT(importImageDialog()));
 	//connect(action_duplicate, SIGNAL(triggered()), this, SLOT(duplicate()));
 	connect(action_clear_matrix, SIGNAL(triggered()), m_matrix, SLOT(clear()));
 	connect(action_transpose, SIGNAL(triggered()), m_matrix, SLOT(transpose()));
@@ -221,7 +216,7 @@ void MatrixView::connectActions() {
 
 void MatrixView::initMenus() {
 	//selection menu
-	m_selectionMenu = new QMenu();
+	m_selectionMenu = new QMenu(i18n("Selection"));
 	m_selectionMenu->addAction(action_cut_selection);
 	m_selectionMenu->addAction(action_copy_selection);
 	m_selectionMenu->addAction(action_paste_into_selection);
@@ -242,6 +237,9 @@ void MatrixView::initMenus() {
 	//matrix menu
 	m_matrixMenu = new QMenu();
 
+	m_matrixMenu->addMenu(m_selectionMenu);
+	m_matrixMenu->addSeparator();
+
 	QMenu* submenu = new QMenu(i18n("Generate Data"));
 	submenu->addAction(action_fill_const);
 	submenu->addAction(action_fill_function);
@@ -257,7 +255,6 @@ void MatrixView::initMenus() {
 	m_matrixMenu->addAction(action_select_all);
 	m_matrixMenu->addAction(action_clear_matrix);
 	m_matrixMenu->addSeparator();
-// 	m_matrixMenu->addAction(action_edit_format);
 
 	m_matrixMenu->addAction(action_transpose);
 	m_matrixMenu->addAction(action_mirror_horizontally);
@@ -291,6 +288,9 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
 
+	menu->insertMenu(firstAction, m_selectionMenu);
+	menu->insertSeparator(firstAction);
+
 	QMenu* submenu = new QMenu(i18n("Generate Data"));
 	submenu->addAction(action_fill_const);
 	submenu->addAction(action_fill_function);
@@ -311,8 +311,6 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	menu->insertAction(firstAction, action_mirror_vertically);
 	menu->insertSeparator(firstAction);
 // 	menu->insertAction(firstAction, action_duplicate);
-// 	menu->insertAction(firstAction, action_import_image);
-// 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_headerFormatMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_go_to_cell);
@@ -641,9 +639,12 @@ void MatrixView::copySelection() {
 void MatrixView::pasteIntoSelection() {
 	if(m_matrix->columnCount() < 1 || m_matrix->rowCount() < 1) return;
 
+	const QMimeData* mime_data = QApplication::clipboard()->mimeData();
+	if(!mime_data->hasFormat("text/plain"))
+		return;
+
 	WAIT_CURSOR;
 	m_matrix->beginMacro(i18n("%1: paste from clipboard", m_matrix->name()));
-	const QMimeData * mime_data = QApplication::clipboard()->mimeData();
 
 	int first_col = firstSelectedColumn(false);
 	int last_col = lastSelectedColumn(false);
@@ -653,71 +654,74 @@ void MatrixView::pasteIntoSelection() {
 	int input_col_count = 0;
 	int rows, cols;
 
-	if(mime_data->hasFormat("text/plain")) 	{
-		QString input_str = QString(mime_data->data("text/plain"));
-		QList< QStringList > cell_texts;
-		QStringList input_rows(input_str.split('\n'));
-		input_row_count = input_rows.count();
-		input_col_count = 0;
-		for(int i=0; i<input_row_count; i++) 		{
-			cell_texts.append(input_rows.at(i).split('\t'));
-			if(cell_texts.at(i).count() > input_col_count) input_col_count = cell_texts.at(i).count();
-		}
+	QString input_str = QString(mime_data->data("text/plain"));
+	QList< QStringList > cell_texts;
+	QStringList input_rows(input_str.split('\n'));
+	input_row_count = input_rows.count();
+	input_col_count = 0;
+	for(int i=0; i<input_row_count; i++) {
+		cell_texts.append(input_rows.at(i).split('\t'));
+		if(cell_texts.at(i).count() > input_col_count) input_col_count = cell_texts.at(i).count();
+	}
 
-		if( (first_col == -1 || first_row == -1) ||
-			(last_row == first_row && last_col == first_col) )
-		// if the is no selection or only one cell selected, the
-		// selection will be expanded to the needed size from the current cell
-		{
-			int current_row, current_col;
-			getCurrentCell(&current_row, &current_col);
-			if(current_row == -1) current_row = 0;
-			if(current_col == -1) current_col = 0;
-			setCellSelected(current_row, current_col);
-			first_col = current_col;
-			first_row = current_row;
-			last_row = first_row + input_row_count -1;
-			last_col = first_col + input_col_count -1;
-			// resize the matrix if necessary
-			if(last_col >= m_matrix->columnCount())
-				m_matrix->appendColumns(last_col+1-m_matrix->columnCount());
-			if(last_row >= m_matrix->rowCount())
-				m_matrix->appendRows(last_row+1-m_matrix->rowCount());
-			// select the rectangle to be pasted in
-			setCellsSelected(first_row, first_col, last_row, last_col);
-		}
+	// if the is no selection or only one cell selected, the
+	// selection will be expanded to the needed size from the current cell
+	if( (first_col == -1 || first_row == -1) ||
+		(last_row == first_row && last_col == first_col) ) {
+		int current_row, current_col;
+		getCurrentCell(&current_row, &current_col);
+		if(current_row == -1) current_row = 0;
+		if(current_col == -1) current_col = 0;
+		setCellSelected(current_row, current_col);
+		first_col = current_col;
+		first_row = current_row;
+		last_row = first_row + input_row_count -1;
+		last_col = first_col + input_col_count -1;
+		// resize the matrix if necessary
+		if(last_col >= m_matrix->columnCount())
+			m_matrix->appendColumns(last_col+1-m_matrix->columnCount());
+		if(last_row >= m_matrix->rowCount())
+			m_matrix->appendRows(last_row+1-m_matrix->rowCount());
+		// select the rectangle to be pasted in
+		setCellsSelected(first_row, first_col, last_row, last_col);
+	}
 
-		rows = last_row - first_row + 1;
-		cols = last_col - first_col + 1;
-		for(int r=0; r<rows && r<input_row_count; r++) {
-			for(int c=0; c<cols && c<input_col_count; c++) {
-				if(isCellSelected(first_row + r, first_col + c) && (c < cell_texts.at(r).count()) ) {
-					m_matrix->setCell(first_row + r, first_col + c, cell_texts.at(r).at(c).toDouble());
-				}
+	rows = last_row - first_row + 1;
+	cols = last_col - first_col + 1;
+	for(int r=0; r<rows && r<input_row_count; r++) {
+		for(int c=0; c<cols && c<input_col_count; c++) {
+			if(isCellSelected(first_row + r, first_col + c) && (c < cell_texts.at(r).count()) ) {
+				m_matrix->setCell(first_row + r, first_col + c, cell_texts.at(r).at(c).toDouble());
 			}
 		}
 	}
+
 	m_matrix->endMacro();
 	RESET_CURSOR;
 }
 
-//TODO
 void MatrixView::clearSelectedCells() {
-// 	int first_row = firstSelectedRow();
-// 	int last_row = lastSelectedRow();
-// 	if( first_row < 0 ) return;
-// 	int first_col = firstSelectedColumn();
-// 	int last_col = lastSelectedColumn();
-// 	if( first_col < 0 ) return;
-//
-// 	WAIT_CURSOR;
-// 	m_matrix->beginMacro(i18n("%1: clear selected cell(s)", m_matrix->name()));
-// 	for(int i=first_row; i<=last_row; i++)
-// 		for(int j=first_col; j<=last_col; j++)
-// 			if(isCellSelected(i, j))
-// 				exec(new MatrixSetCellValueCmd(d, i, j, 0.0));
-// 	m_matrix->endMacro();
-// 	RESET_CURSOR;
+	int first_row = firstSelectedRow();
+	if(first_row<0)
+		return;
+
+	int first_col = firstSelectedColumn();
+	if(first_col<0)
+		return;
+
+	int last_row = lastSelectedRow();
+	int last_col = lastSelectedColumn();
+
+	WAIT_CURSOR;
+	m_matrix->beginMacro(i18n("%1: clear selected cell(s)", m_matrix->name()));
+	for(int i=first_row; i<=last_row; i++) {
+		for(int j=first_col; j<=last_col; j++) {
+			if(isCellSelected(i, j))
+				m_matrix->clearCell(i, j);
+		}
+	}
+	m_matrix->endMacro();
+	RESET_CURSOR;
 }
 
 void MatrixView::updateImage() {
@@ -725,8 +729,8 @@ void MatrixView::updateImage() {
 	m_image = QImage(m_matrix->columnCount(), m_matrix->rowCount(), QImage::Format_ARGB32);
 
 	//find min/max value
-	QTime timer;
-	timer.start();
+// 	QTime timer;
+// 	timer.start();
 	double dmax= -DBL_MAX, dmin= DBL_MAX;
 	const QVector<QVector<double> >& matrixData = m_matrix->data();
 	const int width = m_matrix->columnCount();
@@ -738,10 +742,10 @@ void MatrixView::updateImage() {
 			if (dmin>value) dmin=value;
 		}
 	}
-	qDebug()<<"min/max determined in " << (float)timer.elapsed()/1000 << "s";
+// 	qDebug()<<"min/max determined in " << (float)timer.elapsed()/1000 << "s";
 
 	//update the image
-	timer.start();
+// 	timer.start();
 	const double scaleFactor = 255.0/(dmax-dmin);
 	for (int row=0; row<height; ++row) {
 		QRgb* line = (QRgb*)m_image.scanLine(row);
@@ -750,7 +754,7 @@ void MatrixView::updateImage() {
 			line[col] = qRgb(gray, gray, gray);
 		}
 	}
-	qDebug()<<"image updated in " << (float)timer.elapsed()/1000 << "s";
+// 	qDebug()<<"image updated in " << (float)timer.elapsed()/1000 << "s";
 
 	m_imageLabel->resize(width, height);
 	m_imageLabel->setPixmap(QPixmap::fromImage(m_image));
@@ -829,13 +833,14 @@ void MatrixView::removeSelectedColumns() {
 }
 
 void MatrixView::clearSelectedColumns() {
-// 	WAIT_CURSOR;
-// 	beginMacro(i18n("%1: clear selected column(s)", name()));
-// 	for(int i=0; i<columnCount(); i++)
-// 		if(isColumnSelected(i, false))
-// 			exec(new MatrixClearColumnCmd(d, i));
-// 	endMacro();
-// 	RESET_CURSOR;
+	WAIT_CURSOR;
+	m_matrix->beginMacro(i18n("%1: clear selected column(s)", m_matrix->name()));
+	for(int i=0; i<m_matrix->columnCount(); i++) {
+		if(isColumnSelected(i, false))
+			m_matrix->clearColumn(i);
+	}
+	m_matrix->endMacro();
+	RESET_CURSOR;
 }
 
 //############################## rows related slots ############################
@@ -883,21 +888,19 @@ void MatrixView::removeSelectedRows() {
 }
 
 void MatrixView::clearSelectedRows() {
-// 	int first = firstSelectedRow();
-// 	int last = lastSelectedRow();
-// 	if( first < 0 ) return;
-//
-// 	WAIT_CURSOR;
-// 	m_matrix->beginMacro(i18n("%1: clear selected rows(s)", m_matrix->name()));
-// 	for(int i=first; i<=last; i++) {
-// 		if(isRowSelected(i))
-// 			for(int j=0; j<m_matrix->columnCount(); j++)
-// 				exec(new MatrixSetCellValueCmd(d, i, j, 0.0));
-// 	}
-// 	m_matrix->endMacro();
-// 	RESET_CURSOR;
-}
+	int first = firstSelectedRow();
+	int last = lastSelectedRow();
+	if( first < 0 ) return;
 
+	WAIT_CURSOR;
+	m_matrix->beginMacro(i18n("%1: clear selected rows(s)", m_matrix->name()));
+	for(int i=first; i<=last; i++) {
+		if(isRowSelected(i))
+			m_matrix->clearRow(i);
+	}
+	m_matrix->endMacro();
+	RESET_CURSOR;
+}
 
 /*!
   prints the complete matrix to \c printer.

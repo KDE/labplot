@@ -102,10 +102,8 @@ class MatrixView : public QWidget {
 		QAction* action_select_all;
 		QAction* action_clear_matrix;
 		QAction* action_go_to_cell;
-		QAction* action_edit_format;
 		QAction* action_set_formula;
 		QAction* action_recalculate;
-		QAction* action_import_image;
 		QAction* action_duplicate;
 		QAction* action_transpose;
 		QAction* action_mirror_vertically;
