@@ -112,7 +112,6 @@ void MatrixView::init() {
 	m_stackedWidget->addWidget(area);
 	area->setWidget(m_imageLabel);
 
-
 	//SLOTs
 	connect(m_matrix, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 	connect(m_model, SIGNAL(changed()), this, SLOT(matrixDataChanged()));
@@ -121,6 +120,8 @@ void MatrixView::init() {
 	QShortcut* sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
 	connect(sel_all, SIGNAL(activated()), m_tableView, SLOT(selectAll()));
 
+	//TODO: add shortcuts for copy&paste,
+	//for a single shortcut we need to descriminate between copy&paste for columns, rows or selected cells.
 }
 
 void MatrixView::initActions() {
@@ -149,9 +150,7 @@ void MatrixView::initActions() {
 	action_transpose = new KAction(i18n("&Transpose"), this);
 	action_mirror_horizontally = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
 	action_mirror_vertically = new KAction(KIcon("object-flip-vertical"), i18n("Mirror &Vertically"), this);
-// 	action_import_image = new QAction(i18nc("import image as matrix", "&Import image"), this);
 // 	action_duplicate = new QAction(i18nc("duplicate matrix", "&Duplicate"), this);
-// 	action_edit_format = new QAction(i18n("Display &Format"), this);
 
 	QActionGroup* headerFormatActionGroup = new QActionGroup(this);
 	headerFormatActionGroup->setExclusive(true);

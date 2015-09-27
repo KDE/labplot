@@ -1109,7 +1109,8 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars){
 	for (int i=0; i<vars.size(); ++i)
 		assign_variable(vars.at(i).toLocal8Bit().data(), 0);
 
-	char* data = expr.toLocal8Bit().data();
+	QByteArray funcba = expr.toLocal8Bit();
+	const char* data = funcba.data();
 	gsl_set_error_handler_off();
 	parse(data);
 	return !(parse_errors()>0);
