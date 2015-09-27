@@ -262,15 +262,8 @@ void Plot3D::onAxesClicked() {
 	qDebug() << Q_FUNC_INFO;
 	Q_D(Plot3D);
 	if (d->axes) {
-		foreach(Surface3D* surface, d->surfaces) {
-			surface->select(false);
-		}
-
-		foreach(Curve3D* curve, d->curves) {
-			curve->select(false);
-		}
+		deselectObjects();
 		emit currentAspectChanged(d->axes);
-		d->axes->select(true);
 	}
 }
 
