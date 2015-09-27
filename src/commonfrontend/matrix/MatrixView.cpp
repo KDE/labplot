@@ -358,7 +358,7 @@ int MatrixView::columnWidth(int col) const {
 	Returns how many columns are selected.
 	If full is true, this function only returns the number of fully selected columns.
 */
-int MatrixView::selectedColumnCount(bool full) {
+int MatrixView::selectedColumnCount(bool full) const {
 	int count = 0;
 	int cols = m_matrix->columnCount();
 	for (int i=0; i<cols; i++)
@@ -370,7 +370,7 @@ int MatrixView::selectedColumnCount(bool full) {
 	Returns true if column 'col' is selected; otherwise false.
 	If full is true, this function only returns true if the whole column is selected.
 */
-bool MatrixView::isColumnSelected(int col, bool full) {
+bool MatrixView::isColumnSelected(int col, bool full) const {
 	if(full)
 		return m_tableView->selectionModel()->isColumnSelected(col, QModelIndex());
 	else
@@ -381,7 +381,7 @@ bool MatrixView::isColumnSelected(int col, bool full) {
 	Return how many rows are (at least partly) selected
 	If full is true, this function only returns the number of fully selected rows.
 */
-int MatrixView::selectedRowCount(bool full) {
+int MatrixView::selectedRowCount(bool full) const {
 	int count = 0;
 	int rows = m_matrix->rowCount();
 	for (int i=0; i<rows; i++)
@@ -393,7 +393,7 @@ int MatrixView::selectedRowCount(bool full) {
 	Returns true if row \c row is selected; otherwise false
 	If full is true, this function only returns true if the whole row is selected.
 */
-bool MatrixView::isRowSelected(int row, bool full) {
+bool MatrixView::isRowSelected(int row, bool full) const {
 	if(full)
 		return m_tableView->selectionModel()->isRowSelected(row, QModelIndex());
 	else
@@ -404,7 +404,7 @@ bool MatrixView::isRowSelected(int row, bool full) {
 	Return the index of the first selected column.
 	If full is true, this function only looks for fully selected columns.
 */
-int MatrixView::firstSelectedColumn(bool full) {
+int MatrixView::firstSelectedColumn(bool full) const {
 	int cols = m_matrix->columnCount();
 	for (int i=0; i<cols; i++)
 	{
@@ -418,7 +418,7 @@ int MatrixView::firstSelectedColumn(bool full) {
 	Return the index of the last selected column
 	If full is true, this function only looks for fully selected columns.
 */
-int MatrixView::lastSelectedColumn(bool full) {
+int MatrixView::lastSelectedColumn(bool full) const {
 	int cols = m_matrix->columnCount();
 	for(int i=cols-1; i>=0; i--)
 		if(isColumnSelected(i, full)) return i;
@@ -430,7 +430,7 @@ int MatrixView::lastSelectedColumn(bool full) {
 	Return the index of the first selected row.
 	If full is true, this function only looks for fully selected rows.
 */
-int MatrixView::firstSelectedRow(bool full) {
+int MatrixView::firstSelectedRow(bool full) const {
 	int rows = m_matrix->rowCount();
 	for (int i=0; i<rows; i++) 	{
 		if(isRowSelected(i, full))
@@ -443,7 +443,7 @@ int MatrixView::firstSelectedRow(bool full) {
 	Return the index of the last selected row
 	If full is true, this function only looks for fully selected rows.
 */
-int MatrixView::lastSelectedRow(bool full) {
+int MatrixView::lastSelectedRow(bool full) const {
 	int rows = m_matrix->rowCount();
 	for(int i=rows-1; i>=0; i--)
 		if(isRowSelected(i, full)) return i;
@@ -451,7 +451,7 @@ int MatrixView::lastSelectedRow(bool full) {
 	return -2;
 }
 
-bool MatrixView::isCellSelected(int row, int col) {
+bool MatrixView::isCellSelected(int row, int col) const {
 	if(row < 0 || col < 0 || row >= m_matrix->rowCount() || col >= m_matrix->columnCount()) return false;
 
 	return m_tableView->selectionModel()->isSelected(m_model->index(row, col));
@@ -470,7 +470,7 @@ void MatrixView::setCellsSelected(int first_row, int first_col, int last_row, in
 /*!
 	Determine the current cell (-1 if no cell is designated as the current)
 */
-void MatrixView::getCurrentCell(int* row, int* col) {
+void MatrixView::getCurrentCell(int* row, int* col) const {
 	QModelIndex index = m_tableView->selectionModel()->currentIndex();
 	if(index.isValid()) {
 		*row = index.row();
