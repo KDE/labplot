@@ -147,9 +147,9 @@ void ImportFileDialog::setModel(QAbstractItemModel* model) {
 
 	//menu for new data container
 	m_newDataContainerMenu = new KMenu(this);
-	m_newDataContainerMenu->addAction( KIcon("workbook"), i18n("new Workbook") );
-	m_newDataContainerMenu->addAction( KIcon("spreadsheet"), i18n("new Spreadsheet") );
-	m_newDataContainerMenu->addAction( KIcon("matrix"), i18n("new Matrix") );
+	m_newDataContainerMenu->addAction( KIcon("labplot-workbook-new"), i18n("new Workbook") );
+	m_newDataContainerMenu->addAction( KIcon("labplot-spreadsheet-new"), i18n("new Spreadsheet") );
+	m_newDataContainerMenu->addAction( KIcon("labplot-matrix-new"), i18n("new Matrix") );
 
 	//ok is only available if a valid spreadsheet was selected
 	enableButtonOk(false);
