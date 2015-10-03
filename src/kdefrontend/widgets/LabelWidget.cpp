@@ -59,17 +59,17 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_dateTimeMenu(new Q
     layout->setVerticalSpacing(2);
     ui.kcbFontColor->setColor(Qt::black); // default color
 
-    //Icons
-    ui.tbFontBold->setIcon( QIcon::fromTheme("format-text-bold") );
-    ui.tbFontItalic->setIcon( QIcon::fromTheme("format-text-italic") );
-    ui.tbFontUnderline->setIcon( QIcon::fromTheme("format-text-underline") );
-    ui.tbFontStrikeOut->setIcon( QIcon::fromTheme("format-text-strikethrough") );
-    ui.tbFontSuperScript->setIcon( QIcon::fromTheme("format-text-superscript") );
-    ui.tbFontSubScript->setIcon( QIcon::fromTheme("format-text-subscript") );
-    ui.tbSymbols->setIcon( QIcon::fromTheme("format-text-symbol") );
-    ui.tbDateTime->setIcon( QIcon::fromTheme("chronometer") );
-    ui.tbTexUsed->setIconSize(QSize(20, 20));
-    ui.tbTexUsed->setIcon( QIcon::fromTheme("TeX_logo") );
+	//Icons
+	ui.tbFontBold->setIcon( QIcon::fromTheme("format-text-bold") );
+	ui.tbFontItalic->setIcon( QIcon::fromTheme("format-text-italic") );
+	ui.tbFontUnderline->setIcon( QIcon::fromTheme("format-text-underline") );
+	ui.tbFontStrikeOut->setIcon( QIcon::fromTheme("format-text-strikethrough") );
+	ui.tbFontSuperScript->setIcon( QIcon::fromTheme("format-text-superscript") );
+	ui.tbFontSubScript->setIcon( QIcon::fromTheme("format-text-subscript") );
+	ui.tbSymbols->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
+	ui.tbDateTime->setIcon( QIcon::fromTheme("chronometer") );
+	ui.tbTexUsed->setIconSize(QSize(20, 20));
+	ui.tbTexUsed->setIcon( QIcon::fromTheme("labplot-TeX-logo") );
 
     //Positioning and alignment
     ui.cbPositionX->addItem(i18n("left"));

@@ -32,6 +32,7 @@
 
 #include "backend/core/AbstractAspect.h"
 
+class AbstractColumnPrivate;
 class AbstractSimpleFilter;
 class QStringList;
 class QString;
@@ -65,8 +66,6 @@ class AbstractColumn : public AbstractAspect
 			DateTime = 6
 			// 2 and 3 are skipped to avoid problems with old obsolete values
 		};
-
-		class Private;
 
 		explicit AbstractColumn(const QString& name);
 		virtual ~AbstractColumn() { aboutToBeDestroyed(this);}
@@ -140,7 +139,7 @@ class AbstractColumn : public AbstractAspect
 		virtual void handleRowRemoval(int first, int count);
 
 	private:
-		Private *m_abstract_column_private;
+		AbstractColumnPrivate* m_abstract_column_private;
 
 		friend class AbstractColumnRemoveRowsCmd;
 		friend class AbstractColumnInsertRowsCmd;

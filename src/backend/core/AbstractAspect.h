@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 by Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2007-2010 by Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
     Description          : Base class for all objects in a Project.
 
  ***************************************************************************/
@@ -77,8 +77,10 @@ class AbstractAspect : public QObject {
 		Folder* folder();
 		bool isDescendantOf(AbstractAspect* other);
 		void addChild(AbstractAspect*);
+		void addChildFast(AbstractAspect*);
 		QList<AbstractAspect*> children(const char* className, const ChildIndexFlags& flags=0);
 		void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
+		void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);
 		void reparent(AbstractAspect* newParent, int newIndex=-1);
 		void removeChild(AbstractAspect*);
 		void removeAllChildren();
@@ -94,17 +96,16 @@ class AbstractAspect : public QObject {
 			return NULL;
 		}
 
-		//TODO: recursive flag doesn't work! How should it work with templates?!?
 		template <class T> QList<T*> children(const ChildIndexFlags& flags=0) const {
 			QList<T*> result;
 			foreach (AbstractAspect* child, rawChildren()) {
 				if (flags & IncludeHidden || !child->hidden()) {
 					T* i = qobject_cast<T*>(child);
-					if (i) {
+					if (i)
 						result << i;
-						if (flags & Recursive)
-							result << i->template children<T>(flags);
-					}
+
+					if (flags & Recursive)
+						result << child->template children<T>(flags);
 				}
 			}
 			return result;

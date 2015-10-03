@@ -4,7 +4,7 @@
     Description          : import file data widget
     --------------------------------------------------------------------
     Copyright            : (C) 2009 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -78,6 +78,10 @@ private slots:
 	void selectFile();
  	void fileInfoDialog();
 	void refreshPreview();
+	void loadSettings();
+
+signals:
+	void fileNameChanged();
 };
 
 #endif

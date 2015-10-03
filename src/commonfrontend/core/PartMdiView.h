@@ -39,7 +39,7 @@ class PartMdiView : public QMdiSubWindow {
 	Q_OBJECT
 
 	public:
-		PartMdiView(AbstractPart* part);
+		explicit PartMdiView(AbstractPart* part);
 		AbstractPart* part() const;
 
 	private:

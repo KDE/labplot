@@ -45,14 +45,68 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsSceneHoverEvent>
 
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include "kdefrontend/GuiTools.h"
 #include <KConfigGroup>
 #include <QIcon>
 #include <KLocale>
-#endif
 
 #include <math.h>
+#include <float.h>
+
+/**
+ * \class AxisGrid
+ * \brief Helper class to get the axis grid drawn with the z-Value=0.
+ *
+ * The painting of the grid lines is separated from the painting of the axis itself.
+ * This allows to use a different z-values for the grid lines (z=0, drawn below all other objects )
+ * and for the axis (z=FLT_MAX, drawn on top of all other objects)
+ *
+ *  \ingroup worksheet
+ */
+class AxisGrid : public QGraphicsItem {
+	public:
+		AxisGrid(AxisPrivate* a) {
+			axis = a;
+			setFlag(QGraphicsItem::ItemIsSelectable, false);
+			setFlag(QGraphicsItem::ItemIsFocusable, false);
+			setAcceptHoverEvents(false);
+		}
+
+		QRectF boundingRect() const {
+			QPainterPath gridShape;
+			gridShape.addPath(WorksheetElement::shapeFromPath(axis->majorGridPath, axis->majorGridPen));
+			gridShape.addPath(WorksheetElement::shapeFromPath(axis->minorGridPath, axis->minorGridPen));
+			QRectF boundingRectangle = gridShape.boundingRect();
+			return boundingRectangle;
+		}
+
+		void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
+			Q_UNUSED(option)
+			Q_UNUSED(widget)
+
+			if (!axis->isVisible()) return;
+			if (axis->linePath.isEmpty()) return;
+
+			//draw major grid
+			if (axis->majorGridPen.style() != Qt::NoPen){
+				painter->setOpacity(axis->majorGridOpacity);
+				painter->setPen(axis->majorGridPen);
+				painter->setBrush(Qt::NoBrush);
+				painter->drawPath(axis->majorGridPath);
+			}
+
+			//draw minor grid
+			if (axis->minorGridPen.style() != Qt::NoPen){
+				painter->setOpacity(axis->minorGridOpacity);
+				painter->setPen(axis->minorGridPen);
+				painter->setBrush(Qt::NoBrush);
+				painter->drawPath(axis->minorGridPath);
+			}
+		}
+
+	private:
+		AxisPrivate* axis;
+};
 
 /**
  * \class Axis
@@ -208,13 +262,8 @@ void Axis::initMenus(){
 
 QMenu* Axis::createContextMenu(){
 	Q_D(const Axis);
-	QMenu *menu = WorksheetElement::createContextMenu();
-
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	QAction* firstAction = menu->actions().first();
-#else
+	QMenu* menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
-#endif
 
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
@@ -244,13 +293,12 @@ QMenu* Axis::createContextMenu(){
 */
 QIcon Axis::icon() const{
 	Q_D(const Axis);
-    QIcon ico;
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+	QIcon ico;
 	if (d->orientation == Axis::AxisHorizontal)
-        ico = QIcon::fromTheme("axis-horizontal");
+		ico = QIcon::fromTheme("labplot-axis-horizontal");
 	else
-        ico = QIcon::fromTheme("axis-vertical");
-#endif
+		ico = QIcon::fromTheme("labplot-axis-vertical");
+
 	return ico;
 }
 
@@ -269,6 +317,17 @@ Axis::~Axis() {
 
 QGraphicsItem *Axis::graphicsItem() const {
 	return d_ptr;
+}
+
+/*!
+ * overrides the implementation in WorkhseetElement and sets the z-value to the maximal possible,
+ * axes are drawn on top of all other object in the plot.
+ */
+void Axis::setZValue(qreal) {
+	Q_D(Axis);
+	d->setZValue(FLT_MAX);
+	d->gridItem->setParentItem(d->parentItem());
+	d->gridItem->setZValue(0);
 }
 
 void Axis::retransform() {
@@ -807,7 +866,7 @@ void Axis::visibilityChanged(){
 //################### Private implementation ##########################
 //#####################################################################
 AxisPrivate::AxisPrivate(Axis *owner) : m_plot(0), m_cSystem(0), m_printing(false), m_hovered(false),
-	majorTicksColumn(0), minorTicksColumn(0), q(owner){
+	majorTicksColumn(0), minorTicksColumn(0), gridItem(new AxisGrid(this)), q(owner) {
 
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
@@ -1044,8 +1103,8 @@ void AxisPrivate::retransformTicks(){
 	}
 
 	//determine the spacing for the major ticks
-	double majorTicksSpacing;
-	int tmpMajorTicksNumber;
+	double majorTicksSpacing=0;
+	int tmpMajorTicksNumber=0;
 	if (majorTicksType == Axis::TicksTotalNumber) {
 		//the total number of the major ticks is given - > determine the spacing
 		tmpMajorTicksNumber = majorTicksNumber;
@@ -1113,7 +1172,7 @@ void AxisPrivate::retransformTicks(){
 	QPointF endPoint;
 	qreal majorTickPos;
 	qreal minorTickPos;
-	qreal nextMajorTickPos;
+	qreal nextMajorTickPos = 0.0;
 	int xDirection = m_cSystem->xDirection();
 	int yDirection = m_cSystem->yDirection();
 	float middleX = m_plot->xMin() + (m_plot->xMax() - m_plot->xMin())/2;
@@ -1594,10 +1653,10 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		title->setPositionInvalid(false);
 	}
 
-	axisShapeWithoutGrids = WorksheetElement::shapeFromPath(linePath, linePen);
-	axisShapeWithoutGrids.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
-	axisShapeWithoutGrids.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
-	axisShapeWithoutGrids.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
+	axisShape = WorksheetElement::shapeFromPath(linePath, linePen);
+	axisShape.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
+	axisShape.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
+	axisShape.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
 
 	QPainterPath  tickLabelsPath = QPainterPath();
 	if (labelsPosition != Axis::NoLabels){
@@ -1622,7 +1681,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 			tickLabelsPath.addPath(WorksheetElement::shapeFromPath(tempPath, linePen));
 		}
-		axisShapeWithoutGrids.addPath(WorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
+		axisShape.addPath(WorksheetElement::shapeFromPath(tickLabelsPath, QPen()));
 	}
 
 	//add title label, if available
@@ -1640,12 +1699,9 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			title->setPosition( QPointF( rect.topLeft().x() - offset, (rect.topLeft().y() + rect.bottomLeft().y())/2 ) );
 		}
 
-		axisShapeWithoutGrids.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
+		axisShape.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 	}
 
-	axisShape = axisShapeWithoutGrids;
-	axisShape.addPath(WorksheetElement::shapeFromPath(majorGridPath, majorGridPen));
-	axisShape.addPath(WorksheetElement::shapeFromPath(minorGridPath, minorGridPen));
 	boundingRectangle = axisShape.boundingRect();
 
 	//if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
@@ -1678,22 +1734,6 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		//draw the arrow
 		if (arrowType != Axis::NoArrow)
 			painter->drawPath(arrowPath);
-	}
-
-  	//draw major grid
-	if (majorGridPen.style() != Qt::NoPen){
-		painter->setOpacity(majorGridOpacity);
-		painter->setPen(majorGridPen);
-		painter->setBrush(Qt::NoBrush);
-		painter->drawPath(majorGridPath);
-	}
-
-	//draw minor grid
-	if (minorGridPen.style() != Qt::NoPen){
-		painter->setOpacity(minorGridOpacity);
-		painter->setPen(minorGridPen);
-		painter->setBrush(Qt::NoBrush);
-		painter->drawPath(minorGridPath);
 	}
 
 	//draw the major ticks
@@ -1740,13 +1780,13 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 	if (m_hovered && !isSelected() && !m_printing){
 		painter->setPen(q->hoveredPen);
 		painter->setOpacity(q->hoveredOpacity);
-		painter->drawPath(axisShapeWithoutGrids);
+		painter->drawPath(axisShape);
 	}
 
 	if (isSelected() && !m_printing){
 		painter->setPen(q->selectedPen);
 		painter->setOpacity(q->selectedOpacity);
-		painter->drawPath(axisShapeWithoutGrids);
+		painter->drawPath(axisShape);
 	}
 }
 
@@ -1758,7 +1798,7 @@ void AxisPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	if (!isSelected()) {
 		m_hovered = true;
 		q->hovered();
-		update(axisShapeWithoutGrids.boundingRect());
+		update(axisShape.boundingRect());
 	}
 }
 
@@ -1766,7 +1806,7 @@ void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	if (m_hovered) {
 		m_hovered = false;
 		q->unhovered();
-		update(axisShapeWithoutGrids.boundingRect());
+		update(axisShape.boundingRect());
 	}
 }
 
@@ -1969,7 +2009,7 @@ bool Axis::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->lineOpacity = str.toInt();
+                d->lineOpacity = str.toDouble();
 
 			str = attribs.value("arrowType").toString();
             if(str.isEmpty())
@@ -2029,7 +2069,7 @@ bool Axis::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->majorTicksOpacity = str.toInt();
+                d->majorTicksOpacity = str.toDouble();
 		}else if (reader->name() == "minorTicks"){
 			attribs = reader->attributes();
 
@@ -2071,7 +2111,7 @@ bool Axis::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->minorTicksOpacity = str.toInt();
+                d->minorTicksOpacity = str.toDouble();
 		}else if (reader->name() == "labels"){
 			attribs = reader->attributes();
 
@@ -2122,7 +2162,7 @@ bool Axis::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->labelsOpacity = str.toInt();
+                d->labelsOpacity = str.toDouble();
 		}else if (reader->name() == "majorGrid"){
 			attribs = reader->attributes();
 
@@ -2132,7 +2172,7 @@ bool Axis::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->majorGridOpacity = str.toInt();
+                d->majorGridOpacity = str.toDouble();
 		}else if (reader->name() == "minorGrid"){
 			attribs = reader->attributes();
 
@@ -2142,7 +2182,7 @@ bool Axis::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->minorGridOpacity = str.toInt();
+                d->minorGridOpacity = str.toDouble();
         }else{ // unknown element
             reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
             if (!reader->skipToEndElement()) return false;

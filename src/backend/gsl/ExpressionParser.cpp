@@ -1109,7 +1109,8 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars){
 	for (int i=0; i<vars.size(); ++i)
 		assign_variable(vars.at(i).toLocal8Bit().data(), 0);
 
-	char* data = expr.toLocal8Bit().data();
+	QByteArray funcba = expr.toLocal8Bit();
+	const char* data = funcba.data();
 	gsl_set_error_handler_off();
 	parse(data);
 	return !(parse_errors()>0);
@@ -1187,6 +1188,53 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	for(int i = 0; i < xVector->count(); i++) {
 		x = xVector->at(i);
 		assign_variable(xVar,x);
+		y = parse(func);
+
+		if(parse_errors()>0)
+			return false;
+
+		if (finite(y))
+			(*yVector)[i] = y;
+		else
+			(*yVector)[i] = NAN;
+	}
+
+	return true;
+}
+
+
+/*!
+	evaluates multivariate function y=f(x_1, x_2, ...).
+	Variable names (x_1, x_2, ...) are stored in \c vars.
+	Data is stored in \c dataVectors.
+ */
+bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector) {
+	Q_ASSERT(vars.size()==xVectors.size());
+	QByteArray funcba = expr.toLocal8Bit();
+	const char* func = funcba.data();
+	double y, varValue;
+	QString varName;
+
+	gsl_set_error_handler_off();
+
+	bool stop = false;
+	for(int i = 0; i < yVector->size(); i++) {
+		//stop iterating over i if one of the x-vectors has no elements anymore.
+		for (int n=0; n<xVectors.size(); ++n) {
+			if (i==xVectors.at(n)->size()) {
+				stop = true;
+				break;
+			}
+		}
+		if (stop)
+			break;
+
+		for (int n=0; n<vars.size(); ++n) {
+			varName = vars.at(n);
+			varValue = xVectors.at(n)->at(i);
+			assign_variable(varName.toLocal8Bit().data(), varValue);
+		}
+
 		y = parse(func);
 
 		if(parse_errors()>0)

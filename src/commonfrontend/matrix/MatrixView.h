@@ -46,7 +46,7 @@ class MatrixView : public QWidget {
     Q_OBJECT
 
 	public:
-		MatrixView(Matrix*);
+		explicit MatrixView(Matrix*);
 		virtual ~MatrixView();
 
 		MatrixModel* model() const;
@@ -55,18 +55,18 @@ class MatrixView : public QWidget {
 		int rowHeight(int row) const;
 		int columnWidth(int col) const;
 
-		int selectedColumnCount(bool full = false);
-		bool isColumnSelected(int col, bool full = false);
-		int selectedRowCount(bool full = false);
-		bool isRowSelected(int row, bool full = false);
-		int firstSelectedColumn(bool full = false);
-		int lastSelectedColumn(bool full = false);
-		int firstSelectedRow(bool full = false);
-		int lastSelectedRow(bool full = false);
-		bool isCellSelected(int row, int col);
+		int selectedColumnCount(bool full = false) const;
+		bool isColumnSelected(int col, bool full = false) const;
+		int selectedRowCount(bool full = false) const;
+		bool isRowSelected(int row, bool full = false) const;
+		int firstSelectedColumn(bool full = false) const;
+		int lastSelectedColumn(bool full = false) const;
+		int firstSelectedRow(bool full = false) const;
+		int lastSelectedRow(bool full = false) const;
+		bool isCellSelected(int row, int col) const;
 		void setCellSelected(int row, int col);
 		void setCellsSelected(int first_row, int first_col, int last_row, int last_col);
-		void getCurrentCell(int* row, int* col);
+		void getCurrentCell(int* row, int* col) const;
 
 		void adjustHeaders();
 		void exportToFile(const QString& path, const QString& separator) const;
@@ -103,10 +103,8 @@ class MatrixView : public QWidget {
 		QAction* action_select_all;
 		QAction* action_clear_matrix;
 		QAction* action_go_to_cell;
-		QAction* action_edit_format;
 		QAction* action_set_formula;
 		QAction* action_recalculate;
-		QAction* action_import_image;
 		QAction* action_duplicate;
 		QAction* action_transpose;
 		QAction* action_mirror_vertically;

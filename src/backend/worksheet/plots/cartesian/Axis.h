@@ -64,7 +64,9 @@ class Axis: public WorksheetElement {
 
         virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
-		virtual QGraphicsItem *graphicsItem() const;
+
+		virtual QGraphicsItem* graphicsItem() const;
+		virtual void setZValue(qreal);
 
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);

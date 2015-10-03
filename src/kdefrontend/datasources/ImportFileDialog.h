@@ -47,38 +47,38 @@ class QGroupBox;
 class QToolButton;
 
 class ImportFileDialog: public KDialog {
-  Q_OBJECT
+	Q_OBJECT
 
-  public:
-	explicit ImportFileDialog(MainWin*, bool fileDataSource = false);
-	~ImportFileDialog();
+	public:
+		explicit ImportFileDialog(MainWin*, bool fileDataSource = false);
+		~ImportFileDialog();
 
-	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
-	void importTo(QStatusBar*) const;
-	void setCurrentIndex(const QModelIndex&);
+		void importToFileDataSource(FileDataSource*, QStatusBar*) const;
+		void importTo(QStatusBar*) const;
+		void setCurrentIndex(const QModelIndex&);
 
-  private:
-	void setModel(QAbstractItemModel*);
+	private:
+		void setModel(QAbstractItemModel*);
 
-	MainWin* m_mainWin;
-	QVBoxLayout* vLayout;
-	ImportFileWidget* importFileWidget;
-	QGroupBox* frameAddTo;
-	TreeViewComboBox* cbAddTo;
-	QLabel* lPosition;
-	QComboBox* cbPosition;
-	QPushButton* bNewSpreadsheet;
-	QPushButton* bNewMatrix;
-	QPushButton* bNewWorkbook;
-	QToolButton* tbNewDataContainer;
-	bool m_optionsShown;
-	QMenu* m_newDataContainerMenu;
+		MainWin* m_mainWin;
+		QVBoxLayout* vLayout;
+		ImportFileWidget* importFileWidget;
+		QGroupBox* frameAddTo;
+		TreeViewComboBox* cbAddTo;
+		QLabel* lPosition;
+		QComboBox* cbPosition;
+		QPushButton* bNewSpreadsheet;
+		QPushButton* bNewMatrix;
+		QPushButton* bNewWorkbook;
+		QToolButton* tbNewDataContainer;
+		bool m_optionsShown;
+		QMenu* m_newDataContainerMenu;
 
-  private slots:
-	void toggleOptions();
-	void currentAddToIndexChanged(QModelIndex);
-	void newDataContainerMenu();
-	void newDataContainer(QAction*);
+	private slots:
+		void toggleOptions();
+		void newDataContainerMenu();
+		void newDataContainer(QAction*);
+		void checkOkButton();
 };
 
 #endif //IMPORTFILEDIALOG_H

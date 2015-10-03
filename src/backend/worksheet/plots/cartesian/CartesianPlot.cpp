@@ -341,12 +341,12 @@ void CartesianPlot::initDefault(Type type){
 
 void CartesianPlot::initActions(){
 	//"add new" actions
-    addCurveAction = new QAction(QIcon::fromTheme("xy-curve"), i18n("xy-curve"), this);
-    addEquationCurveAction = new QAction(QIcon::fromTheme("xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
-    addFitCurveAction = new QAction(QIcon::fromTheme("xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
-    addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("legend"), this);
-    addHorizontalAxisAction = new QAction(QIcon::fromTheme("axis-horizontal"), i18n("horizontal axis"), this);
-    addVerticalAxisAction = new QAction(QIcon::fromTheme("axis-vertical"), i18n("vertical axis"), this);
+	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), this);
+	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
+	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
+	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("legend"), this);
+	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("horizontal axis"), this);
+	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("vertical axis"), this);
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
@@ -356,19 +356,19 @@ void CartesianPlot::initActions(){
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
 
 	//zoom/navigate actions
-    scaleAutoAction = new QAction(QIcon::fromTheme("auto-scale-all"), i18n("auto scale"), this);
-    scaleAutoXAction = new QAction(QIcon::fromTheme("auto-scale-x"), i18n("auto scale X"), this);
-    scaleAutoYAction = new QAction(QIcon::fromTheme("auto-scale-y"), i18n("auto scale Y"), this);
-    zoomInAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("zoom in"), this);
-    zoomOutAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("zoom out"), this);
-    zoomInXAction = new QAction(QIcon::fromTheme("zoom-in-x"), i18n("zoom in X"), this);
-    zoomOutXAction = new QAction(QIcon::fromTheme("zoom-out-x"), i18n("zoom out X"), this);
-    zoomInYAction = new QAction(QIcon::fromTheme("zoom-in-y"), i18n("zoom in Y"), this);
-    zoomOutYAction = new QAction(QIcon::fromTheme("zoom-out-y"), i18n("zoom out Y"), this);
-    shiftLeftXAction = new QAction(QIcon::fromTheme("shift-left-x"), i18n("shift left X"), this);
-    shiftRightXAction = new QAction(QIcon::fromTheme("shift-right-x"), i18n("shift right X"), this);
-    shiftUpYAction = new QAction(QIcon::fromTheme("shift-up-y"), i18n("shift up Y"), this);
-    shiftDownYAction = new QAction(QIcon::fromTheme("shift-down-y"), i18n("shift down Y"), this);
+	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("auto scale"), this);
+	scaleAutoXAction = new QAction(QIcon::fromTheme("labplot-auto-scale-x"), i18n("auto scale X"), this);
+	scaleAutoYAction = new QAction(QIcon::fromTheme("labplot-auto-scale-y"), i18n("auto scale Y"), this);
+	zoomInAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("zoom in"), this);
+	zoomOutAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("zoom out"), this);
+	zoomInXAction = new QAction(QIcon::fromTheme("labplot-zoom-in-x"), i18n("zoom in X"), this);
+	zoomOutXAction = new QAction(QIcon::fromTheme("labplot-zoom-out-x"), i18n("zoom out X"), this);
+	zoomInYAction = new QAction(QIcon::fromTheme("labplot-zoom-in-y"), i18n("zoom in Y"), this);
+	zoomOutYAction = new QAction(QIcon::fromTheme("labplot-zoom-out-y"), i18n("zoom out Y"), this);
+    shiftLeftXAction = new QAction(QIcon::fromTheme("labplot-shift-left-x"), i18n("shift left X"), this);
+	shiftRightXAction = new QAction(QIcon::fromTheme("labplot-shift-right-x"), i18n("shift right X"), this);
+	shiftUpYAction = new QAction(QIcon::fromTheme("labplot-shift-up-y"), i18n("shift up Y"), this);
+	shiftDownYAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("shift down Y"), this);
 
 	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(scaleAuto()));
 	connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(scaleAutoX()));

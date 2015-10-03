@@ -598,7 +598,7 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
   Returns an icon to be used for decorating my views.
   */
 QIcon Spreadsheet::icon() const {
-    return QIcon::fromTheme("x-office-spreadsheet"); // or QIcon("table");
+	return QIcon::fromTheme("labplot-spreadsheet");
 }
 
 /*!

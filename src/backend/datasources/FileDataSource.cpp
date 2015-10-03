@@ -1,9 +1,9 @@
 /***************************************************************************
 File		: FileDataSource.cpp
-Project		: LabPlot/SciDAVis
+Project		: LabPlot
 Description	: Represents file data source
 --------------------------------------------------------------------
-Copyright	: (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+Copyright	: (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 
@@ -37,16 +37,10 @@ Copyright	: (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
 #include <QDir>
 #include <QMenu>
 #include <QFileSystemWatcher>
-#include <QDebug>
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include <QIcon>
-#include <QAction>
-#else
 #include <QIcon>
 #include <KAction>
 #include <KLocale>
-#endif
 
 /*!
   \class FileDataSource
@@ -159,34 +153,27 @@ bool FileDataSource::isFileLinked() const{
 
 
 QIcon FileDataSource::icon() const{
-    QIcon icon;
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
+	QIcon icon;
 	if (m_fileType == FileDataSource::Ascii)
 		icon = QIcon::fromTheme("text-plain");
 	else if (m_fileType == FileDataSource::Binary)
 		icon = QIcon::fromTheme("application-octet-stream");
 	else if (m_fileType == FileDataSource::Image)
 		icon = QIcon::fromTheme("image-x-generic");
-	else if (m_fileType == FileDataSource::Sound)
-		icon = QIcon::fromTheme("audio-x-generic");
 	// TODO: HDF, NetCDF
-#endif
+
 	return icon;
 }
 
 QMenu* FileDataSource::createContextMenu(){
 	QMenu* menu = AbstractPart::createContextMenu();
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	QAction* firstAction = menu->actions().first();
-#else
 	QAction* firstAction = 0;
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
-#endif
 
 	if (!m_fileWatched)
 		menu->insertAction(firstAction, m_reloadAction);

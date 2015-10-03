@@ -565,19 +565,23 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 
 		if(dataSource != NULL)
 			columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
-		double* data = (double *)malloc(actualRows*sizeof(double));
+
+		double* data = 0;
+		if (dataSource)
+			data = dataPointers[0]->data();
+		else
+			data = (double *)malloc(actualRows*sizeof(double));
+
 		size_t start=startRow-1, count=actualRows;
 		status = nc_get_vara_double(ncid, varid, &start, &count, data);
 		handleError(status,"nc_get_vara_double");
-		for(int i=0;i<actualRows;i++) {
-			if(dataSource != NULL) {
-				dataPointers[0]->operator[](i) = data[i];
-			}
-			else
-				dataString<<QString::number(data[i])<<"\n";
-		}
-		free(data);
 
+		if (!dataSource) {
+			for(int i=0;i<actualRows;i++) {
+				dataString<<QString::number(data[i])<<"\n";
+			}
+			free(data);
+		}
 		break;
 	}
 	case 2: {
@@ -621,6 +625,7 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 					dataString<<QString::number(static_cast<double>(data[i][j]))<<" ";
 			}
 			dataString<<"\n";
+			emit q->completed(100*i/actualRows);
 		}
 		free(data[0]);
 		free(data);

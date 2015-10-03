@@ -41,7 +41,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 int main (int argc, char *argv[]) {
-	KAboutData aboutData( QStringLiteral("labplot2"), QString("LabPlot2"),
+	KAboutData aboutData( QStringLiteral("labplot2"), QString("labplot2"),
 				LVERSION,
 				i18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
 				KAboutLicense::GPL,

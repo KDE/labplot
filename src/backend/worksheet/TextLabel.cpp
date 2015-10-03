@@ -164,12 +164,7 @@ QIcon TextLabel::icon() const{
 
 QMenu* TextLabel::createContextMenu(){
 	QMenu *menu = WorksheetElement::createContextMenu();
-
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	QAction* firstAction = menu->actions().first();
-#else
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
-#endif
 
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);

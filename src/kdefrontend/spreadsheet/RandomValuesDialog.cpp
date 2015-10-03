@@ -383,7 +383,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.lFunc->setText("p(k)=");
 		ui.lParameter1->setText("n1=");
 		ui.lParameter2->setText("n2=");
-		ui.lParameter2->setText("t=");
+		ui.lParameter3->setText("t=");
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("2.0");
 		ui.kleParameter3->setText("3.0");

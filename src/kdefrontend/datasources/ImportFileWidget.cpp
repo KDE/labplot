@@ -4,7 +4,7 @@ Project              : LabPlot
 Description          : import file data widget
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
-Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 
@@ -44,6 +44,7 @@ Copyright            : (C) 2009-2012 Alexander Semke (alexander.semke@web.de)
 #include <KLocalizedString>
  #include <KSharedConfig>
 #include <QDebug>
+#include <QTimer>
 
 #include <kfilterdev.h>
 
@@ -109,6 +110,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	twPreview = new QTableWidget(ui.tePreview);
 	twPreview->horizontalHeader()->hide();
 	twPreview->verticalHeader()->hide();
+	twPreview->setEditTriggers(QTableWidget::NoEditTriggers);
 	QHBoxLayout* layout = new QHBoxLayout;
 	layout->addWidget(twPreview);
 	ui.tePreview->setLayout(layout);
@@ -141,6 +143,15 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
+	//TODO: implement save/load of user-defined settings later and activate these buttons again
+	ui.bSaveFilter->hide();
+	ui.bManageFilters->hide();
+
+	//defer the loading of settings a bit in order to show the dialog prior to blocking the GUI in refreshPreview()
+	QTimer::singleShot( 100, this, SLOT(loadSettings()) );
+}
+
+void ImportFileWidget::loadSettings() {
 	//load last used settings
     KConfigGroup conf(KSharedConfig::openConfig(),"Import");
 
@@ -179,10 +190,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
 	ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
 	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
-
-	//TODO: implement save/load of user-defined settings later and activate these buttons again
-	ui.bSaveFilter->hide();
-	ui.bManageFilters->hide();
 }
 
 ImportFileWidget::~ImportFileWidget() {
@@ -269,7 +276,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	case FileDataSource::Ascii: {
 		 //TODO use auto_ptr
 		AsciiFilter* filter = new AsciiFilter();
-	
+
 		if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
 			filter->setAutoModeEnabled(true);
 		} else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
@@ -321,7 +328,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 		filter->setEndRow( ui.sbEndRow->value() );
 		filter->setStartColumn( ui.sbStartColumn->value() );
 		filter->setEndColumn( ui.sbEndColumn->value() );
-		
+
 		return filter;
 	}
 	case FileDataSource::HDF: {
@@ -348,8 +355,6 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 		return filter;
 	}
-	default: 
-		qDebug()<<"Unknown file type!";	
 	}
 
 	return 0;
@@ -396,7 +401,7 @@ void ImportFileWidget::selectFile() {
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
 	QString fileName=name;
-	if ( fileName.left(1)!=QDir::separator()) {
+	if ( !fileName.isEmpty() && fileName.left(1)!=QDir::separator()) {
 		fileName=QDir::homePath() + QDir::separator() + fileName;
 	}
 
@@ -409,9 +414,11 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	ui.kleSourceName->setEnabled(fileExists);
 	ui.chbWatchFile->setEnabled(fileExists);
 	ui.chbLinkFile->setEnabled(fileExists);
-
-	if ( !fileExists )
+	if ( !fileExists ) {
+		refreshPreview();
+		emit fileNameChanged();
 		return;
+	}
 
 	//check, if we can guess the file type by content
 	QProcess *proc = new QProcess(this);
@@ -444,7 +451,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 			QString fileName = ui.kleFileName->text();
 			QFileInfo fileInfo(fileName);
-			QTreeWidgetItem *rootItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<fileInfo.baseName());
+			QTreeWidgetItem *rootItem = hdfOptionsWidget.twContent->invisibleRootItem();
 			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
 			filter->parse(fileName, rootItem);
 			hdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
@@ -460,14 +467,14 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 			QString fileName = ui.kleFileName->text();
 			QFileInfo fileInfo(fileName);
-			QTreeWidgetItem *rootItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<fileInfo.baseName());
+			QTreeWidgetItem *rootItem = netcdfOptionsWidget.twContent->invisibleRootItem();
 			NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 			filter->parse(fileName, rootItem);
 			netcdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
 			netcdfOptionsWidget.twContent->expandAll();
 			netcdfOptionsWidget.twContent->resizeColumnToContents(0);
 			netcdfOptionsWidget.twContent->resizeColumnToContents(2);
-			
+
 		} else {
 			debug="probably BINARY file";
 			ui.cbFileType->setCurrentIndex(FileDataSource::Binary);
@@ -478,6 +485,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 #endif
 
 	refreshPreview();
+	emit fileNameChanged();
 }
 
 /*!
@@ -510,8 +518,12 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	//default
 	ui.lFilter->show();
 	ui.cbFilter->show();
-	ui.tabWidget->setTabText(0,i18n("Data format"));
-	ui.tabWidget->insertTab(1,ui.tabDataPreview,i18n("Preview"));
+
+	//if we switch from netCDF-format (only two tabs available), add the data preview-tab again
+	if (ui.tabWidget->count() == 2) {
+		ui.tabWidget->setTabText(0,i18n("Data format"));
+		ui.tabWidget->insertTab(1,ui.tabDataPreview,i18n("Preview"));
+	}
 	ui.lPreviewLines->show();
 	ui.sbPreviewLines->show();
 	ui.lStartColumn->show();
@@ -539,7 +551,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.tabWidget->removeTab(1);
 		ui.tabWidget->setCurrentIndex(0);
 		break;
-	}	
+	}
 	case FileDataSource::Image: {
 		ui.lPreviewLines->hide();
 		ui.sbPreviewLines->hide();
@@ -550,6 +562,9 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	default:
 		qDebug()<<"unknown file type!";
 	}
+
+	hdfOptionsWidget.twContent->clear();
+	netcdfOptionsWidget.twContent->clear();
 
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
 	ui.cbFilter->clear();
@@ -685,23 +700,36 @@ void ImportFileWidget::headerChanged(int state) {
 }
 
 void ImportFileWidget::refreshPreview(){
+	WAIT_CURSOR;
+
 	QString fileName = ui.kleFileName->text();
 	if ( fileName.left(1) != QDir::separator() )
 	    fileName = QDir::homePath() + QDir::separator() + fileName;
 
 	QString importedText;
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
+
+	// generic table widget
+	if(fileType == FileDataSource::Ascii || fileType == FileDataSource::Binary)
+		twPreview->show();
+	else
+		twPreview->hide();
+
 	int lines = ui.sbPreviewLines->value();
 
 	QTableWidget *tmpTableWidget=0;
 	switch (fileType) {
 	case FileDataSource::Ascii: {
+		ui.tePreview->clear();
+
 		AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
 		importedText = filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
 		tmpTableWidget = twPreview;
 		break;
 	}
 	case FileDataSource::Binary: {
+		ui.tePreview->clear();
+
 		BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
 		importedText = filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
 		tmpTableWidget = twPreview;
@@ -713,7 +741,7 @@ void ImportFileWidget::refreshPreview(){
 		QImage image(fileName);
 		QTextCursor cursor = ui.tePreview->textCursor();
 		cursor.insertImage(image);
-		break;
+		return;
 	}
 	case FileDataSource::HDF: {
 		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
@@ -729,13 +757,10 @@ void ImportFileWidget::refreshPreview(){
 		tmpTableWidget = netcdfOptionsWidget.twPreview;
 		break;
 	}
-	default:
-		importedText += "Unknown file type";
-		ui.tePreview->setPlainText(importedText);
 	}
 
 	// fill the table widget
-	if(fileType == FileDataSource::Ascii || fileType == FileDataSource::Binary || fileType == FileDataSource::HDF || fileType == FileDataSource::NETCDF ) {
+	if( !importedText.isEmpty() ) {
 		tmpTableWidget->clear();
 
 		QStringList lineStrings = importedText.split("\n");
@@ -755,9 +780,5 @@ void ImportFileWidget::refreshPreview(){
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	}
 
-	// generic table widget
-	if(fileType == FileDataSource::Ascii || fileType == FileDataSource::Binary)
-		twPreview->show();
-	else
-		twPreview->hide();
+	RESET_CURSOR;
 }

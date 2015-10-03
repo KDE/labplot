@@ -38,7 +38,6 @@
 
 #include <QMenu>
 #include <QWidgetAction>
-#include <QDebug>
 #include <KLocalizedString>
 /*!
   \class XYFitCurveDock
@@ -90,9 +89,9 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbModel->addItem(i18n("Maxwell-Boltzmann"));
 	uiGeneralTab.cbModel->addItem(i18n("Custom"));
 
-    uiGeneralTab.tbConstants->setIcon( QIcon::fromTheme("format-text-symbol") );
-    uiGeneralTab.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
-    uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	uiGeneralTab.tbConstants->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
+	uiGeneralTab.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -526,7 +525,6 @@ void XYFitCurveDock::recalculateClicked() {
 }
 
 void XYFitCurveDock::enableRecalculate() const {
-	qDebug()<<"XYFitCurveDock::enableRecalculate";
 	if (m_initializing)
 		return;
 

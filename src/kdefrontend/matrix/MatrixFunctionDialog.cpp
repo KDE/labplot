@@ -52,7 +52,7 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent, Qt::WFlag
 	ui.setupUi(mainWidget);
 	setMainWidget( mainWidget );
 
-	ui.tbConstants->setIcon( QIcon::fromTheme("format-text-symbol") );
+	ui.tbConstants->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
 	ui.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
 
 	QStringList vars;
@@ -129,7 +129,10 @@ void MatrixFunctionDialog::insertConstant(const QString& str) {
 void MatrixFunctionDialog::generate() {
 	WAIT_CURSOR;
 
-	QVector<QVector<double> >& matrixData = m_matrix->data();
+	m_matrix->beginMacro(i18n("%1: fill matrix with function values", m_matrix->name()) );
+
+
+	QVector<QVector<double> > new_data = m_matrix->data();
 
 	QByteArray funcba = ui.teEquation->toPlainText().toLocal8Bit();
 	char* func = funcba.data();
@@ -153,7 +156,7 @@ void MatrixFunctionDialog::generate() {
 			assign_variable(varX, x);
 			assign_variable(varY, y);
 			double z = parse(func);
-			matrixData[col][row] = z;
+			new_data[col][row] = z;
 			y += yStep;
 		}
 		y = m_matrix->yStart();
@@ -161,6 +164,8 @@ void MatrixFunctionDialog::generate() {
 	}
 
 	m_matrix->setFormula(ui.teEquation->toPlainText());
+	m_matrix->setData(new_data);
 
+	m_matrix->endMacro();
 	RESET_CURSOR;
 }

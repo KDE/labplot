@@ -41,12 +41,11 @@
 #include <QApplication>
 #include <QXmlStreamWriter>
 
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <QIcon>
 #include <KAction>
 #include <KStandardAction>
 #include <QMenu>
-#endif
+
 /**
  * \class AbstractAspect
  * \brief Base class of all persistent objects in a Project.
@@ -304,14 +303,6 @@ QIcon AbstractAspect::icon() const {
  * The caller takes ownership of the menu.
  */
 QMenu* AbstractAspect::createContextMenu() {
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	QMenu* menu = new QMenu();
-	QAction *action;
-	const QStyle *widget_style = qApp->style();
-	action = menu->addAction(QObject::i18n("&Remove"), this, SLOT(remove()));
-	action->setIcon(widget_style->standardIcon(QStyle::SP_TrashIcon));
-	return menu;
-#else
     QMenu* menu = new QMenu();
     menu->addSection(this->name());
 	//TODO: activate this again when the functionality is implemented
@@ -322,7 +313,6 @@ QMenu* AbstractAspect::createContextMenu() {
     menu->addAction(QIcon::fromTheme("edit-rename"), i18n("Rename"), this, SIGNAL(renameRequested()));
     menu->addAction(QIcon::fromTheme("edit-delete"), i18n("Delete"), this, SLOT(remove()));
 	return menu;
-#endif
 }
 
 /**
@@ -395,6 +385,15 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 }
 
 /**
+ * \brief Add the given Aspect to my list of children without any checks and without putting this step onto the undo-stack
+ */
+void AbstractAspect::addChildFast(AbstractAspect* child) {
+	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
+	connect(child, SIGNAL(deselected(const AbstractAspect*)), this, SLOT(childDeselected(const AbstractAspect*)));
+	m_aspect_private->insertChild(m_aspect_private->m_children.count(), child);
+}
+
+/**
  * \brief Insert the given Aspect at a specific position in my list of children.
  */
 void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* before) {
@@ -412,6 +411,19 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 
 	exec(new AspectChildAddCmd(m_aspect_private, child, index));
 	endMacro();
+}
+
+/**
+ * \brief Insert the given Aspect at a specific position in my list of children.without any checks and without putting this step onto the undo-stack
+ */
+void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before) {
+	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
+	connect(child, SIGNAL(deselected(const AbstractAspect*)), this, SLOT(childDeselected(const AbstractAspect*)));
+
+	int index = m_aspect_private->indexOfChild(before);
+	if (index == -1)
+		index = m_aspect_private->m_children.count();
+	m_aspect_private->insertChild(index, child);
 }
 
 /**
