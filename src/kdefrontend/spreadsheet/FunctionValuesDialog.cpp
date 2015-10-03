@@ -68,7 +68,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	m_aspectTreeModel = std::auto_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
 	m_aspectTreeModel->setSelectableAspects(m_selectableClasses);
 
-	ui.bAddVariable->setIcon(KIcon("list-add"));
+    ui.bAddVariable->setIcon(QIcon::fromTheme("list-add"));
 	ui.bAddVariable->setToolTip(i18n("Add new variable"));
 
 	setButtons( KDialog::Ok | KDialog::Cancel );
@@ -217,7 +217,7 @@ void FunctionValuesDialog::addVariable() {
 	//add delete-button for the just added variable
 	if (row!=0) {
 		QToolButton* b = new QToolButton();
-		b->setIcon(KIcon("list-remove"));
+        b->setIcon(QIcon::fromTheme("list-remove"));
 		b->setToolTip(i18n("Delete variable"));
 		layout->addWidget(b, row, 3, 1, 1);
 		m_variableDeleteButtons<<b;
