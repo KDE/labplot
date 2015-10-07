@@ -200,7 +200,7 @@ void MainWin::initActions() {
 	//add some standard actions
 	action = KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
 	action = KStandardAction::open(this, SLOT(openProject()),actionCollection());
-	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(KUrl)),actionCollection());
+	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(QUrl)),actionCollection());
 	m_closeAction = KStandardAction::close(this, SLOT(closeProject()),actionCollection());
 	m_saveAction = KStandardAction::save(this, SLOT(saveProject()),actionCollection());
 	m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveProjectAs()),actionCollection());
