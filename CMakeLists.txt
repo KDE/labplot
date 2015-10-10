@@ -1,6 +1,13 @@
 project(labplot2)
-cmake_minimum_required(VERSION 2.8.10) 
+cmake_minimum_required(VERSION 2.8.12)
+
+find_package(ECM 1.3.0 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+
 find_package(KDE4 REQUIRED)
+
+include(ECMInstallIcons)
+include(KDEInstallDirs)
 include(KDE4Defaults)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions")
@@ -15,6 +22,7 @@ set(BUILD_SHARED_LIBS true)
 add_definitions(-fvisibility=default)
 
 cmake_policy(SET CMP0002 OLD)
+cmake_policy(SET CMP0063 NEW)
 
 ### GSL ######################################
 FIND_LIBRARY(GSL_LIBRARIES gsl
