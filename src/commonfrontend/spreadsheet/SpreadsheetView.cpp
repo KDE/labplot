@@ -981,48 +981,51 @@ void SpreadsheetView::unmaskSelection(){
 // }
 
 void SpreadsheetView::fillSelectedCellsWithRowNumbers(){
-    if (selectedColumnCount() < 1) return;
-    int first = firstSelectedRow();
-    int last = lastSelectedRow();
-    if ( first < 0 ) return;
+	if (selectedColumnCount() < 1) return;
+	int first = firstSelectedRow();
+	int last = lastSelectedRow();
+	if ( first < 0 ) return;
 
-    WAIT_CURSOR;
-    m_spreadsheet->beginMacro(i18n("%1: fill cells with row numbers", m_spreadsheet->name()));
-    foreach(Column* col_ptr, selectedColumns()) {
-        int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
-        col_ptr->setSuppressDataChangedSignal(true);
-        switch (col_ptr->columnMode()) {
-            case AbstractColumn::Numeric:
-                {
-                    QVector<double> results(last-first+1);
-                    for (int row=first; row<=last; row++)
-                        if(isCellSelected(row, col))
-                            results[row-first] = row+1;
-                        else
-                            results[row-first] = col_ptr->valueAt(row);
-                    col_ptr->replaceValues(first, results);
-                    break;
-                }
-            case AbstractColumn::Text:
-                {
-                    QStringList results;
-                    for (int row=first; row<=last; row++)
-                        if (isCellSelected(row, col))
-                            results << QString::number(row+1);
-                        else
-                            results << col_ptr->textAt(row);
-                    col_ptr->replaceTexts(first, results);
-                    break;
-                }
-            //TODO: handle other modes
-            default: break;
-        }
+	WAIT_CURSOR;
+	m_spreadsheet->beginMacro(i18n("%1: fill cells with row numbers", m_spreadsheet->name()));
+	foreach(Column* col_ptr, selectedColumns()) {
+		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
+		col_ptr->setSuppressDataChangedSignal(true);
+		switch (col_ptr->columnMode()) {
+			case AbstractColumn::Numeric:
+				{
+					QVector<double> results(last-first+1);
+					for (int row=first; row<=last; row++)
+						if(isCellSelected(row, col))
+							results[row-first] = row+1;
+						else
+							results[row-first] = col_ptr->valueAt(row);
+					col_ptr->replaceValues(first, results);
+					break;
+				}
+			case AbstractColumn::Text:
+				{
+					QStringList results;
+					for (int row=first; row<=last; row++)
+						if (isCellSelected(row, col))
+							results << QString::number(row+1);
+						else
+							results << col_ptr->textAt(row);
+					col_ptr->replaceTexts(first, results);
+					break;
+				}
+			//TODO: handle other modes
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
+				break;
+		}
 
-        col_ptr->setSuppressDataChangedSignal(false);
-        col_ptr->setChanged();
-    }
-    m_spreadsheet->endMacro();
-    RESET_CURSOR;
+		col_ptr->setSuppressDataChangedSignal(false);
+		col_ptr->setChanged();
+	}
+	m_spreadsheet->endMacro();
+	RESET_CURSOR;
 }
 
 void SpreadsheetView::fillSelectedCellsWithRandomNumbers(){
@@ -1112,67 +1115,69 @@ void SpreadsheetView::fillWithFunctionValues() {
 }
 
 void SpreadsheetView::fillSelectedCellsWithConstValues(){
-    if (selectedColumnCount() < 1) return;
-    int first = firstSelectedRow();
-    int last = lastSelectedRow();
-    if ( first < 0 )
-        return;
+	if (selectedColumnCount() < 1) return;
+	int first = firstSelectedRow();
+	int last = lastSelectedRow();
+	if ( first < 0 )
+		return;
 
-    bool doubleOk = false;
-    bool stringOk = false;
-    double doubleValue = 0;
-    QString stringValue;
+	bool doubleOk = false;
+	bool stringOk = false;
+	double doubleValue = 0;
+	QString stringValue;
 
-    m_spreadsheet->beginMacro(i18n("%1: fill cells with const values", m_spreadsheet->name()));
-    foreach(Column* col_ptr, selectedColumns()) {
-        int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
-        col_ptr->setSuppressDataChangedSignal(true);
-        switch (col_ptr->columnMode()) {
-            case AbstractColumn::Numeric: {
-                if (!doubleOk)
-                    doubleValue = QInputDialog::getDouble(this, i18n("Fill the selection with constant value"),
-                                                            i18n("Value"), 0, -2147483647, 2147483647, 6, &doubleOk);
-                if (doubleOk) {
-                    WAIT_CURSOR;
-                    QVector<double> results(last-first+1);
-                    for (int row=first; row<=last; row++) {
-                        if(isCellSelected(row, col))
-                            results[row-first] = doubleValue;
-                        else
-                            results[row-first] = col_ptr->valueAt(row);
-                    }
-                    col_ptr->replaceValues(first, results);
-                    RESET_CURSOR;
-                }
-                break;
-            }
-            case AbstractColumn::Text: {
-                if (!stringOk)
-                    stringValue = QInputDialog::getText(this, i18n("Fill the selection with constant value"),
-                                                            i18n("Value"), QLineEdit::Normal, 0, &stringOk);
-                if (stringOk && !stringValue.isEmpty()) {
-                    WAIT_CURSOR;
-                    QStringList results;
-                    for (int row=first; row<=last; row++) {
-                        if (isCellSelected(row, col))
-                            results << stringValue;
-                        else
-                            results << col_ptr->textAt(row);
-                    }
-                    col_ptr->replaceTexts(first, results);
-                    RESET_CURSOR;
-                }
-                break;
-                }
-            //TODO: handle other modes
-            default:
-                break;
-        }
+	m_spreadsheet->beginMacro(i18n("%1: fill cells with const values", m_spreadsheet->name()));
+	foreach(Column* col_ptr, selectedColumns()) {
+		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
+		col_ptr->setSuppressDataChangedSignal(true);
+		switch (col_ptr->columnMode()) {
+			case AbstractColumn::Numeric: {
+				if (!doubleOk)
+					doubleValue = QInputDialog::getDouble(this, i18n("Fill the selection with constant value"),
+															i18n("Value"), 0, -2147483647, 2147483647, 6, &doubleOk);
+				if (doubleOk) {
+					WAIT_CURSOR;
+					QVector<double> results(last-first+1);
+					for (int row=first; row<=last; row++) {
+						if(isCellSelected(row, col))
+							results[row-first] = doubleValue;
+						else
+							results[row-first] = col_ptr->valueAt(row);
+					}
+					col_ptr->replaceValues(first, results);
+					RESET_CURSOR;
+				}
+				break;
+			}
+			case AbstractColumn::Text: {
+				if (!stringOk)
+					stringValue = QInputDialog::getText(this, i18n("Fill the selection with constant value"),
+															i18n("Value"), QLineEdit::Normal, 0, &stringOk);
+				if (stringOk && !stringValue.isEmpty()) {
+					WAIT_CURSOR;
+					QStringList results;
+					for (int row=first; row<=last; row++) {
+						if (isCellSelected(row, col))
+							results << stringValue;
+						else
+							results << col_ptr->textAt(row);
+					}
+					col_ptr->replaceTexts(first, results);
+					RESET_CURSOR;
+				}
+				break;
+				}
+			//TODO: handle other modes
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
+				break;
+		}
 
-        col_ptr->setSuppressDataChangedSignal(false);
-        col_ptr->setChanged();
-    }
-    m_spreadsheet->endMacro();
+		col_ptr->setSuppressDataChangedSignal(false);
+		col_ptr->setChanged();
+	}
+	m_spreadsheet->endMacro();
 }
 
 /*!

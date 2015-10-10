@@ -410,19 +410,18 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void * data
 	AbstractSimpleFilter * in_filter, AbstractSimpleFilter * out_filter) {
 	emit m_owner->modeAboutToChange(m_owner);
 	// disconnect formatChanged()
-	switch(m_column_mode)
-	{
+	switch(m_column_mode) {
 		case AbstractColumn::Numeric:
 			disconnect(static_cast<Double2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
 				m_owner, SLOT(handleFormatChange()));
+			break;
+		case AbstractColumn::Text:
 			break;
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 			disconnect(static_cast<DateTime2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
 				m_owner, SLOT(handleFormatChange()));
-			break;
-		default:
 			break;
 	}
 
@@ -442,13 +441,13 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void * data
 			connect(static_cast<Double2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
 				m_owner, SLOT(handleFormatChange()));
 			break;
+		case AbstractColumn::Text:
+			break;
 		case AbstractColumn::DateTime:
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 			connect(static_cast<DateTime2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
 				m_owner, SLOT(handleFormatChange()));
-			break;
-		default:
 			break;
 	}
 
