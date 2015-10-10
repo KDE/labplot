@@ -407,6 +407,7 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_printPreviewAction->setEnabled(!b);
 	m_importAction->setEnabled(!b);
 	m_exportAction->setEnabled(!b);
+	m_newWorkbookAction->setEnabled(!b);
 	m_newSpreadsheetAction->setEnabled(!b);
 	m_newMatrixAction->setEnabled(!b);
 	m_newWorksheetAction->setEnabled(!b);
