@@ -1014,7 +1014,10 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers(){
 					break;
 				}
 			//TODO: handle other modes
-			default: break;
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
+				break;
 		}
 
 		col_ptr->setSuppressDataChangedSignal(false);
@@ -1164,7 +1167,9 @@ void SpreadsheetView::fillSelectedCellsWithConstValues(){
 				break;
 				}
 			//TODO: handle other modes
-			default:
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
 				break;
 		}
 
