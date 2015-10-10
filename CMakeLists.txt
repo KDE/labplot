@@ -147,4 +147,4 @@ add_subdirectory(src)
 add_subdirectory(doc)
 
 install(FILES labplot.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
-feature_summary(WHAT ALL GSL_LIBRARIES FATAL_ON_MISSING_REQUIRED_PACKAGES)
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
