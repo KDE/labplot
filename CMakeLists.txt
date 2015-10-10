@@ -24,10 +24,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wundef -Wpointer-arith -W
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION="2.1.0-RC2")
+add_definitions (-DLVERSION=\"2.1.0\")
 # add_definitions (-DLDEBUG='1')
 set(BUILD_SHARED_LIBS true)
-#set(_GNU_SOURCE true)
 add_definitions(-fvisibility=default)
 
 cmake_policy(SET CMP0002 OLD)
@@ -116,33 +115,7 @@ IF (NETCDF_FOUND)
 ELSE (NETCDF_FOUND)
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library not found.")
 ENDIF (NETCDF_FOUND)
-  
-# ### CDF #####################################
-# FIND_LIBRARY(CDF_LIBRARY
-#   NAMES cdf
-# )
-# IF(CDF_LIBRARY)
-# MESSAGE ("-- Found CDF library: ${CDF_LIBRARY}")
-# add_definitions (-DHAVE_CDF)
-# ELSE(CDF_LIBRARY)
-# MESSAGE ("-- CDF library NOT FOUND!")
-# SET(CDF_LIBRARY "")
-# ENDIF(CDF_LIBRARY)
-# 
-# ### OPJ #####################################
-# FIND_LIBRARY(OPJ_LIBRARY
-#   NAMES origin
-# )
-# IF(OPJ_LIBRARY)
-# MESSAGE ("-- Found liborigin library: ${OPJ_LIBRARY}")
-# ELSE(OPJ_LIBRARY)
-# MESSAGE ("-- System OPJ library not found! Using included version.")
-# add_subdirectory(liborigin)
-# SET(OPJ_LIBRARY "-llabplot_origin")
-# # for FilterOPJ to find OPJFile.h
-# INCLUDE_DIRECTORIES(liborigin)
-# ENDIF(OPJ_LIBRARY)
-# ##############################################
+
 add_subdirectory(icons)
 add_subdirectory(src)
 add_subdirectory(doc)
