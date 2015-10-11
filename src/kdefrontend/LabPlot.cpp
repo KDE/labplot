@@ -45,7 +45,7 @@ int main (int argc, char *argv[]) {
 				LVERSION,
 				i18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
 				KAboutLicense::GPL,
-				i18n("(c) 2007-2014"),
+				i18n("(c) 2007-2015"),
 				QString(),
 				QStringLiteral("http://www.labplot.sourceforge.net"));
 
