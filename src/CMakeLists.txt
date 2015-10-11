@@ -188,6 +188,7 @@ target_link_libraries(labplot2 KF5::KDELibs4Support KF5::Archive Qt5::Svg KF5::W
 ############## installation ################################
 
 install(TARGETS labplot2 DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(FILES ${KDEFRONTEND_DIR}/labplot2ui.rc DESTINATION  ${KXMLGUI_INSTALL_DIR}/${PROJECT_NAME})
 install(FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png DESTINATION  ${DATA_INSTALL_DIR}/${PROJECT_NAME})
 install(PROGRAMS labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )

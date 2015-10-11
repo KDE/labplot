@@ -120,5 +120,5 @@ add_subdirectory(icons)
 add_subdirectory(src)
 add_subdirectory(doc)
 
-install(FILES labplot.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
+install(FILES org.kde.labplot.appdata.xml DESTINATION ${KDE_INSTALL_DATAROOTDIR}/appdata/)
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
