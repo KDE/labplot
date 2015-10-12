@@ -741,6 +741,7 @@ void ImportFileWidget::refreshPreview(){
 		QImage image(fileName);
 		QTextCursor cursor = ui.tePreview->textCursor();
 		cursor.insertImage(image);
+		RESET_CURSOR;
 		return;
 	}
 	case FileDataSource::HDF: {
