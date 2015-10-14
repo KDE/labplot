@@ -127,7 +127,7 @@ void ImageView::initActions() {
     zoomFitPageWidthAction = new KAction(KIcon("zoom-fit-width"), i18n("Fit to width"), zoomActionGroup);
 
     // Mouse mode actions
-    selectAndEditModeAction = new KAction(KIcon("cursor-arrow"), i18n("Select and Edit"), mouseModeActionGroup);
+    selectAndEditModeAction = new KAction(KIcon("labplot-cursor-arrow"), i18n("Select and Edit"), mouseModeActionGroup);
     selectAndEditModeAction->setCheckable(true);
 
     navigationModeAction = new KAction(KIcon("input-mouse"), i18n("Navigate"), mouseModeActionGroup);
@@ -136,7 +136,7 @@ void ImageView::initActions() {
     zoomSelectionModeAction = new KAction(KIcon("page-zoom"), i18n("Select and Zoom"), mouseModeActionGroup);
     zoomSelectionModeAction->setCheckable(true);
 
-    selectAndMoveModeAction = new KAction(KIcon("cursor-arrow"), i18n("Select and Move"), mouseModeActionGroup);
+    selectAndMoveModeAction = new KAction(KIcon("labplot-cursor-arrow"), i18n("Select and Move"), mouseModeActionGroup);
     selectAndMoveModeAction->setCheckable(true);
 
     setAxisPointsAction = new KAction(KIcon("labplot-plot-axis-points"), i18n("Set Axis Points"), plotPointsTypeActionGroup);

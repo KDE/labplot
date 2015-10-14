@@ -18,6 +18,7 @@ sc-apps-labplot-editvlayout.svg
 sc-apps-labplot-format-text-symbol.svg
 sc-apps-labplot-matrix-new.svg
 sc-apps-labplot-matrix.svg
+sc-apps-labplot-plot-axis-points.svg
 sc-apps-labplot-shift-down-y.svg
 sc-apps-labplot-shift-left-x.svg
 sc-apps-labplot-shift-right-x.svg
