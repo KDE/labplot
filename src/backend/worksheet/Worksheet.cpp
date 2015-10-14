@@ -106,7 +106,7 @@ void Worksheet::init() {
  */
 float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit unit){
 	switch (unit){
-    case Worksheet::Millimeter:
+	case Worksheet::Millimeter:
 		return value*10.0;
 	case Worksheet::Centimeter:
 		return value*100.0;
@@ -115,7 +115,8 @@ float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit un
 	case Worksheet::Point:
 		return value*25.4/72.*10.;
 	}
-	return value;
+
+	return 0;
 }
 
 /*!
@@ -123,7 +124,7 @@ float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit un
  */
 float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit unit){
 	switch (unit){
-    case Worksheet::Millimeter:
+	case Worksheet::Millimeter:
 		return value/10.0;
 	case Worksheet::Centimeter:
 		return value/100.0;
@@ -132,12 +133,13 @@ float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit 
 	case Worksheet::Point:
 		return value/25.4/10.*72.;
 	}
-	return value;
+
+	return 0;
 }
 
 //! Return an icon to be used for decorating my views.
 QIcon Worksheet::icon() const {
-	return KIcon("office-chart-area");
+	return KIcon("labplot-worksheet");
 }
 
 //! Return a new context menu.

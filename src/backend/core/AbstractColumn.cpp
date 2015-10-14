@@ -86,7 +86,7 @@
  * \param name the column name (= aspect name)
  */
 AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name),
-	m_abstract_column_private( new Private(this) ) {
+	m_abstract_column_private( new AbstractColumnPrivate(this) ) {
 
 }
 

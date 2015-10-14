@@ -4,7 +4,7 @@
     Description          : Aspect that manages a column
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -63,7 +63,7 @@
  * \param mode initial column mode
  */
 Column::Column(const QString& name, AbstractColumn::ColumnMode mode)
- : AbstractColumn(name), m_column_private( new Private(this, mode) )
+ : AbstractColumn(name), m_column_private( new ColumnPrivate(this, mode) )
 {
 	init();
 }
@@ -75,7 +75,7 @@ Column::Column(const QString& name, AbstractColumn::ColumnMode mode)
  * \param data initial data vector
  */
 Column::Column(const QString& name, QVector<double> data)
- : AbstractColumn(name), m_column_private( new Private(this, AbstractColumn::Numeric, new QVector<double>(data)) )
+ : AbstractColumn(name), m_column_private( new ColumnPrivate(this, AbstractColumn::Numeric, new QVector<double>(data)) )
 {
 	init();
 }
@@ -87,7 +87,7 @@ Column::Column(const QString& name, QVector<double> data)
  * \param data initial data vector
  */
 Column::Column(const QString& name, QStringList data)
- : AbstractColumn(name), m_column_private( new Private(this, AbstractColumn::Text, new QStringList(data)))
+ : AbstractColumn(name), m_column_private( new ColumnPrivate(this, AbstractColumn::Text, new QStringList(data)))
 {
 	init();
 }
@@ -99,7 +99,7 @@ Column::Column(const QString& name, QStringList data)
  * \param data initial data vector
  */
 Column::Column(const QString& name, QList<QDateTime> data)
- : AbstractColumn(name), m_column_private( new Private(this, AbstractColumn::DateTime, new QList<QDateTime>(data)) )
+ : AbstractColumn(name), m_column_private( new ColumnPrivate(this, AbstractColumn::DateTime, new QList<QDateTime>(data)) )
 {
 	init();
 }
@@ -264,15 +264,23 @@ void Column::clear()
 /**
  * \brief Returns the formula used to generate column values
  */
-QString Column::formula() const {
+QString Column:: formula() const {
 	return m_column_private->formula();
+}
+
+const QStringList& Column::formulaVariableNames() const {
+	return m_column_private->formulaVariableNames();
+}
+
+const QStringList& Column::formulaVariableColumnPathes() const {
+	return m_column_private->formulaVariableColumnPathes();
 }
 
 /**
  * \brief Sets the formula used to generate column values
  */
-void Column::setFormula(QString formula) {
-	exec(new ColumnSetFormulaCmd(m_column_private, formula));
+void Column::setFormula(const QString& formula, const QStringList& variableNames, const QStringList& columnPathes) {
+	exec(new ColumnSetGlobalFormulaCmd(m_column_private, formula, variableNames, columnPathes));
 }
 
 /**
@@ -490,7 +498,26 @@ void Column::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("mode", enumValueToString(columnMode(), "ColumnMode"));
 	writer->writeAttribute("plot_designation", enumValueToString(plotDesignation(), "PlotDesignation"));
 	writer->writeAttribute("width", QString::number(width()));
-	writer->writeAttribute("formula", formula());
+
+	//save the formula used to generate column values, if available
+	if (!formula().isEmpty() ) {
+		writer->writeStartElement("formula");
+		writer->writeTextElement("text", formula());
+
+		writer->writeStartElement("variableNames");
+		for (int i=0; i<formulaVariableNames().size(); ++i) {
+			writer->writeTextElement("name", formulaVariableNames().at(i));
+		}
+		writer->writeEndElement();
+
+		writer->writeStartElement("columnPathes");
+		for (int i=0; i<formulaVariableColumnPathes().size(); ++i) {
+			writer->writeTextElement("path", formulaVariableColumnPathes().at(i));
+		}
+		writer->writeEndElement();
+
+		writer->writeEndElement();
+	}
 
 	writeCommentElement(writer);
 
@@ -502,22 +529,23 @@ void Column::save(QXmlStreamWriter* writer) const {
 	m_column_private->outputFilter()->save(writer);
 	writer->writeEndElement();
 
-	XmlWriteMask(writer);
-	QList< Interval<int> > formulas = formulaIntervals();
-	foreach(const Interval<int>& interval, formulas) {
-		writer->writeStartElement("formula");
-		writer->writeAttribute("start_row", QString::number(interval.start()));
-		writer->writeAttribute("end_row", QString::number(interval.end()));
-		writer->writeCharacters(formula(interval.start()));
-		writer->writeEndElement();
-	}
+	//TODO: formula in cells is not implemented yet
+// 	XmlWriteMask(writer);
+// 	QList< Interval<int> > formulas = formulaIntervals();
+// 	foreach(const Interval<int>& interval, formulas) {
+// 		writer->writeStartElement("formula");
+// 		writer->writeAttribute("start_row", QString::number(interval.start()));
+// 		writer->writeAttribute("end_row", QString::number(interval.end()));
+// 		writer->writeCharacters(formula(interval.start()));
+// 		writer->writeEndElement();
+// 	}
 
 	int i;
 	switch(columnMode()) {
 		case AbstractColumn::Numeric:
 			{
-				const char * data = reinterpret_cast<const char*>(
-						static_cast< QVector<double>* >(m_column_private->dataPointer())->constData());
+				const char* data = reinterpret_cast<const char*>(
+				static_cast< QVector<double>* >(m_column_private->dataPointer())->constData());
 				int size = m_column_private->rowCount()*sizeof(double);
 				writer->writeCharacters(QByteArray::fromRawData(data,size).toBase64());
 				break;
@@ -551,7 +579,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 
 class DecodeColumnTask : public QRunnable {
 	public:
-		DecodeColumnTask(Column::Private* priv, const QString& content) { m_private =priv; m_content = content;};
+		DecodeColumnTask(ColumnPrivate* priv, const QString& content) { m_private =priv; m_content = content;};
 		void run() {
 			QByteArray bytes = QByteArray::fromBase64(m_content.toAscii());
 			QVector<double> * data = new QVector<double>(bytes.size()/sizeof(double));
@@ -560,17 +588,15 @@ class DecodeColumnTask : public QRunnable {
 		}
 
 	private:
-		Column::Private* m_private;
+		ColumnPrivate* m_private;
 		QString m_content;
 };
 
 /**
  * \brief Load the column from XML
  */
-bool Column::load(XmlStreamReader * reader)
-{
-	if(reader->isStartElement() && reader->name() == "column")
-	{
+bool Column::load(XmlStreamReader* reader) {
+	if(reader->isStartElement() && reader->name() == "column") {
 		if (!readBasicAttributes(reader)) return false;
 
 		QXmlStreamAttributes attribs = reader->attributes();
@@ -578,14 +604,13 @@ bool Column::load(XmlStreamReader * reader)
 
 		// read mode
 		str = attribs.value(reader->namespaceUri().toString(), "mode").toString();
-		if(str.isEmpty())
-		{
+		if(str.isEmpty()) {
 			reader->raiseError(i18n("column mode missing"));
 			return false;
 		}
+
 		int mode_code = enumStringToValue(str, "ColumnMode");
-		if(mode_code == -1)
-		{
+		if(mode_code == -1) {
 			reader->raiseError(i18n("column mode invalid"));
 			return false;
 		}
@@ -594,15 +619,14 @@ bool Column::load(XmlStreamReader * reader)
 		// read plot designation
 		str = attribs.value(reader->namespaceUri().toString(), "plot_designation").toString();
 		int pd_code = enumStringToValue(str, "PlotDesignation");
-		if(str.isEmpty())
+		if(str.isEmpty()) {
 			setPlotDesignation(AbstractColumn::noDesignation);
-		else if(pd_code == -1)
-		{
+		} else if(pd_code == -1) {
 			reader->raiseError(i18n("column plot designation invalid"));
 			return false;
-		}
-		else
+		} else {
 			setPlotDesignation((AbstractColumn::PlotDesignation)pd_code);
+		}
 
 		bool ok;
 		int width = attribs.value(reader->namespaceUri().toString(), "width").toString().toInt(&ok);
@@ -613,22 +637,19 @@ bool Column::load(XmlStreamReader * reader)
 			return false;
 		}
 
-		setFormula(attribs.value(reader->namespaceUri().toString(), "formula").toString());
+// 		setComment("");
+// 		if (rowCount() > 0)
+// 			removeRows(0, rowCount());
+// 		clearMasks();
+// 		clearFormulas();
 
-		setComment("");
-		if (rowCount() > 0)
-			removeRows(0, rowCount());
-		clearMasks();
-		clearFormulas();
 		// read child elements
-		while (!reader->atEnd())
-		{
+		while (!reader->atEnd()) {
 			reader->readNext();
 
 			if (reader->isEndElement()) break;
 
-			if (reader->isStartElement())
-			{
+			if (reader->isStartElement()) {
 				bool ret_val = true;
 				if (reader->name() == "comment")
 					ret_val = readCommentElement(reader);
@@ -692,23 +713,55 @@ bool Column::XmlReadOutputFilter(XmlStreamReader * reader)
 /**
  * \brief Read XML formula element
  */
-bool Column::XmlReadFormula(XmlStreamReader * reader)
-{
-	Q_ASSERT(reader->isStartElement() && reader->name() == "formula");
+bool Column::XmlReadFormula(XmlStreamReader* reader) {
+	QString formula;
+	QStringList variableNames;
+	QStringList columnPathes;
+	while (reader->readNext()) {
+		if (reader->isEndElement()) break;
 
-	bool ok1, ok2;
-	int start, end;
-	start = reader->readAttributeInt("start_row", &ok1);
-	end = reader->readAttributeInt("end_row", &ok2);
-	if(!ok1 || !ok2)
-	{
-		reader->raiseError(i18n("invalid or missing start or end row"));
-		return false;
+		if (reader->name() == "text") {
+			formula = reader->readElementText();
+		} else if (reader->name() == "variableNames") {
+			while (reader->readNext()) {
+				if (reader->name() == "variableNames" && reader->isEndElement()) break;
+
+				if (reader->isStartElement())
+					variableNames << reader->readElementText();
+			}
+		} else if (reader->name() == "columnPathes") {
+			while (reader->readNext()) {
+				if (reader->name() == "columnPathes" && reader->isEndElement()) break;
+
+				if (reader->isStartElement())
+					columnPathes << reader->readElementText();
+			}
+		}
 	}
-	setFormula(Interval<int>(start,end), reader->readElementText());
-
+	setFormula(formula, variableNames, columnPathes);
 	return true;
 }
+
+
+//TODO: read cell formula, not implemented yet
+// bool Column::XmlReadFormula(XmlStreamReader * reader)
+// {
+// 	Q_ASSERT(reader->isStartElement() && reader->name() == "formula");
+//
+// 	bool ok1, ok2;
+// 	int start, end;
+// 	start = reader->readAttributeInt("start_row", &ok1);
+// 	end = reader->readAttributeInt("end_row", &ok2);
+// 	if(!ok1 || !ok2)
+// 	{
+// 		reader->raiseError(i18n("invalid or missing start or end row"));
+// 		return false;
+// 	}
+// 	setFormula(Interval<int>(start,end), reader->readElementText());
+//
+// 	return true;
+// }
+
 
 /**
  * \brief Read XML row element

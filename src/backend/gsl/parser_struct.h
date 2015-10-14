@@ -37,11 +37,11 @@ struct con {
 
 struct func {
 	char const *name;
-#ifdef HAVE_SOLARIS
+/*#ifdef HAVE_SOLARIS
 	double (*fnct)(double);
-#else
+#else*/
 	double (*fnct)();
-#endif
+/*#endif*/
 };
 
 #endif /* PARSER_STRUCT_H */

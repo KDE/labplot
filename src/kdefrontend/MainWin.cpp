@@ -214,7 +214,7 @@ void MainWin::initActions() {
 	KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
 
 	//New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
-	m_newWorkbookAction = new KAction(KIcon("tab-new-background"),i18n("Workbook"),this);
+	m_newWorkbookAction = new KAction(KIcon("labplot-workbook-new"),i18n("Workbook"),this);
 	actionCollection()->addAction("new_workbook", m_newWorkbookAction);
 	connect(m_newWorkbookAction, SIGNAL(triggered()),SLOT(newWorkbook()));
 
@@ -222,17 +222,17 @@ void MainWin::initActions() {
     actionCollection()->addAction("new_datapicker", m_newDatapickerAction);
     connect(m_newDatapickerAction, SIGNAL(triggered()),SLOT(newDatapicker()));
 
-	m_newSpreadsheetAction = new KAction(KIcon("insert-table"),i18n("Spreadsheet"),this);
+	m_newSpreadsheetAction = new KAction(KIcon("labplot-spreadsheet-new"),i18n("Spreadsheet"),this);
 // 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new_spreadsheet", m_newSpreadsheetAction);
 	connect(m_newSpreadsheetAction, SIGNAL(triggered()),SLOT(newSpreadsheet()));
 
-	m_newMatrixAction = new KAction(KIcon("resource-calendar-insert"),i18n("Matrix"),this);
+	m_newMatrixAction = new KAction(KIcon("labplot-matrix-new"),i18n("Matrix"),this);
 // 	m_newMatrixAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new_matrix", m_newMatrixAction);
 	connect(m_newMatrixAction, SIGNAL(triggered()),SLOT(newMatrix()));
 
-	m_newWorksheetAction= new KAction(KIcon("archive-insert"),i18n("Worksheet"),this);
+	m_newWorksheetAction= new KAction(KIcon("labplot-worksheet-new"),i18n("Worksheet"),this);
 // 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
 	actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
 	connect(m_newWorksheetAction, SIGNAL(triggered()), SLOT(newWorksheet()));
@@ -417,6 +417,7 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_printPreviewAction->setEnabled(!b);
 	m_importAction->setEnabled(!b);
 	m_exportAction->setEnabled(!b);
+	m_newWorkbookAction->setEnabled(!b);
 	m_newSpreadsheetAction->setEnabled(!b);
 	m_newMatrixAction->setEnabled(!b);
 	m_newWorksheetAction->setEnabled(!b);
@@ -646,8 +647,11 @@ bool MainWin::newProject(){
 		m_propertiesDock->setWindowTitle(i18n("Properties"));
 		addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
 
-		stackedWidget = new QStackedWidget(m_propertiesDock);
-		m_propertiesDock->setWidget(stackedWidget);
+		QScrollArea* sa = new QScrollArea(m_propertiesDock);
+		stackedWidget = new QStackedWidget(sa);
+		sa->setWidget(stackedWidget);
+		sa->setWidgetResizable(true);
+		m_propertiesDock->setWidget(sa);
 
 		//GUI-observer;
 		m_guiObserver = new GuiObserver(this);
@@ -1218,6 +1222,9 @@ void MainWin::projectChanged(){
 }
 
 void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win){
+	if (!win)
+		return;
+
 	PartMdiView *view = qobject_cast<PartMdiView*>(win);
 	if (!view) {
 		updateGUI();

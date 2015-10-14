@@ -28,11 +28,10 @@
  ***************************************************************************/
 #include "TeXRenderer.h"
 
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KTempDir>
 #include <KProcess>
 #include <KDebug>
-#endif
+
 #include <QDir>
 #include <QTemporaryFile>
 #include <QTextStream>

@@ -1,9 +1,9 @@
 /***************************************************************************
 File		: FileDataSource.cpp
-Project		: LabPlot/SciDAVis
+Project		: LabPlot
 Description	: Represents file data source
 --------------------------------------------------------------------
-Copyright	: (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+Copyright	: (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 
@@ -37,16 +37,10 @@ Copyright	: (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
 #include <QDir>
 #include <QMenu>
 #include <QFileSystemWatcher>
-#include <QDebug>
 
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-#include <QIcon>
-#include <QAction>
-#else
 #include <KIcon>
 #include <KAction>
 #include <KLocale>
-#endif
 
 /*!
   \class FileDataSource

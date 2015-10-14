@@ -78,6 +78,7 @@ private slots:
 	void selectFile();
  	void fileInfoDialog();
 	void refreshPreview();
+	void loadSettings();
 
 signals:
 	void fileNameChanged();

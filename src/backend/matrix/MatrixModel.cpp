@@ -45,24 +45,24 @@
 	\ingroup backend
 */
 MatrixModel::MatrixModel(Matrix* matrix) : QAbstractItemModel(0), m_matrix(matrix), m_suppressDataChangedSignal(false) {
-	connect(m_matrix, SIGNAL(columnsAboutToBeInserted(int, int)),
-			this, SLOT(handleColumnsAboutToBeInserted(int, int)));
-	connect(m_matrix, SIGNAL(columnsInserted(int, int)),
-			this, SLOT(handleColumnsInserted(int, int)));
-	connect(m_matrix, SIGNAL(columnsAboutToBeRemoved(int, int)),
-			this, SLOT(handleColumnsAboutToBeRemoved(int, int)));
-	connect(m_matrix, SIGNAL(columnsRemoved(int, int)),
-			this, SLOT(handleColumnsRemoved(int, int)));
-	connect(m_matrix, SIGNAL(rowsAboutToBeInserted(int, int)),
-			this, SLOT(handleRowsAboutToBeInserted(int, int)));
-	connect(m_matrix, SIGNAL(rowsInserted(int, int)),
-			this, SLOT(handleRowsInserted(int, int)));
-	connect(m_matrix, SIGNAL(rowsAboutToBeRemoved(int, int)),
-			this, SLOT(handleRowsAboutToBeRemoved(int, int)));
-	connect(m_matrix, SIGNAL(rowsRemoved(int, int)),
-			this, SLOT(handleRowsRemoved(int, int)));
-	connect(m_matrix, SIGNAL(dataChanged(int, int, int, int)),
-			this, SLOT(handleDataChanged(int, int, int, int)));
+	connect(m_matrix, SIGNAL(columnsAboutToBeInserted(int,int)),
+			this, SLOT(handleColumnsAboutToBeInserted(int,int)));
+	connect(m_matrix, SIGNAL(columnsInserted(int,int)),
+			this, SLOT(handleColumnsInserted(int,int)));
+	connect(m_matrix, SIGNAL(columnsAboutToBeRemoved(int,int)),
+			this, SLOT(handleColumnsAboutToBeRemoved(int,int)));
+	connect(m_matrix, SIGNAL(columnsRemoved(int,int)),
+			this, SLOT(handleColumnsRemoved(int,int)));
+	connect(m_matrix, SIGNAL(rowsAboutToBeInserted(int,int)),
+			this, SLOT(handleRowsAboutToBeInserted(int,int)));
+	connect(m_matrix, SIGNAL(rowsInserted(int,int)),
+			this, SLOT(handleRowsInserted(int,int)));
+	connect(m_matrix, SIGNAL(rowsAboutToBeRemoved(int,int)),
+			this, SLOT(handleRowsAboutToBeRemoved(int,int)));
+	connect(m_matrix, SIGNAL(rowsRemoved(int,int)),
+			this, SLOT(handleRowsRemoved(int,int)));
+	connect(m_matrix, SIGNAL(dataChanged(int,int,int,int)),
+			this, SLOT(handleDataChanged(int,int,int,int)));
 	connect(m_matrix, SIGNAL(coordinatesChanged()),
 			this, SLOT(handleCoordinatesChanged()));
 	connect(m_matrix, SIGNAL(numericFormatChanged(char)), this, SLOT(handleFormatChanged()));
