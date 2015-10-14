@@ -32,10 +32,6 @@
 
 class AbstractAspect;
 class Datapicker;
-class QAction;
-class QMenu;
-class QPrinter;
-class QToolBar;
 class TabWidget;
 
 class DatapickerView : public QWidget {
@@ -61,7 +57,6 @@ class DatapickerView : public QWidget {
         void handleDescriptionChanged(const AbstractAspect*);
         void handleAspectAdded(const AbstractAspect*);
         void handleAspectAboutToBeRemoved(const AbstractAspect*);
-
 };
 
 #endif

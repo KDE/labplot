@@ -88,6 +88,7 @@ CustomItemWidget::CustomItemWidget(QWidget *parent): QWidget(parent) {
 }
 
 void CustomItemWidget::init() {
+	m_initializing = true;
     GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 
     QPainter pa;
