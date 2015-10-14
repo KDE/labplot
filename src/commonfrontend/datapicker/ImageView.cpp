@@ -139,43 +139,43 @@ void ImageView::initActions() {
     selectAndMoveModeAction = new KAction(KIcon("cursor-arrow"), i18n("Select and Move"), mouseModeActionGroup);
     selectAndMoveModeAction->setCheckable(true);
 
-    setAxisPointsAction = new KAction(KIcon("plot-axis-points"), i18n("Set Axis Points"), plotPointsTypeActionGroup);
+    setAxisPointsAction = new KAction(KIcon("labplot-plot-axis-points"), i18n("Set Axis Points"), plotPointsTypeActionGroup);
     setAxisPointsAction->setCheckable(true);
 
-    setCurvePointsAction = new KAction(KIcon("xy-curve-points"), i18n("Set Curve Points"), plotPointsTypeActionGroup);
+    setCurvePointsAction = new KAction(KIcon("labplot-xy-curve-points"), i18n("Set Curve Points"), plotPointsTypeActionGroup);
     setCurvePointsAction->setCheckable(true);
 
-    selectSegmentAction = new KAction(KIcon("xy-curve-segments"), i18n("Select Curve Segments"), plotPointsTypeActionGroup);
+    selectSegmentAction = new KAction(KIcon("labplot-xy-curve-segments"), i18n("Select Curve Segments"), plotPointsTypeActionGroup);
     selectSegmentAction->setCheckable(true);
 
-    addCurveAction = new KAction(KIcon("xy-curve"), i18n("New Curve"), this);
+    addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("New Curve"), this);
 
-    shiftLeftAction = new KAction(KIcon("shift-left-x"), i18n("Shift Left"), navigationActionGroup);
+    shiftLeftAction = new KAction(KIcon("labplot-shift-left-x"), i18n("Shift Left"), navigationActionGroup);
     shiftLeftAction->setShortcut(Qt::Key_Right);
 
-    shiftRightAction = new KAction(KIcon("shift-right-x"), i18n("Shift Right"), navigationActionGroup);
+    shiftRightAction = new KAction(KIcon("labplot-shift-right-x"), i18n("Shift Right"), navigationActionGroup);
     shiftRightAction->setShortcut(Qt::Key_Left);
 
-    shiftUpAction = new KAction(KIcon("shift-down-y"), i18n("Shift Up"), navigationActionGroup);
+    shiftUpAction = new KAction(KIcon("labplot-shift-down-y"), i18n("Shift Up"), navigationActionGroup);
     shiftUpAction->setShortcut(Qt::Key_Up);
 
-    shiftDownAction = new KAction(KIcon("shift-up-y"), i18n("Shift Down"), navigationActionGroup);
+    shiftDownAction = new KAction(KIcon("labplot-shift-up-y"), i18n("Shift Down"), navigationActionGroup);
     shiftDownAction->setShortcut(Qt::Key_Down);
 
-    noMagnificationAction = new KAction(KIcon("1-to-1-zoom"), i18n("No Magnification"), magnificationActionGroup);
+    noMagnificationAction = new KAction(KIcon("labplot-1-to-1-zoom"), i18n("No Magnification"), magnificationActionGroup);
     noMagnificationAction->setCheckable(true);
     noMagnificationAction->setChecked(true);
 
-    twoTimesMagnificationAction = new KAction(KIcon("1-to-2-zoom"), i18n("2x Magnification"), magnificationActionGroup);
+    twoTimesMagnificationAction = new KAction(KIcon("labplot-1-to-2-zoom"), i18n("2x Magnification"), magnificationActionGroup);
     twoTimesMagnificationAction->setCheckable(true);
 
-    threeTimesMagnificationAction = new KAction(KIcon("1-to-3-zoom"), i18n("3x Magnification"), magnificationActionGroup);
+    threeTimesMagnificationAction = new KAction(KIcon("labplot-1-to-3-zoom"), i18n("3x Magnification"), magnificationActionGroup);
     threeTimesMagnificationAction->setCheckable(true);
 
-    fourTimesMagnificationAction = new KAction(KIcon("1-to-4-zoom"), i18n("4x Magnification"), magnificationActionGroup);
+    fourTimesMagnificationAction = new KAction(KIcon("labplot-1-to-4-zoom"), i18n("4x Magnification"), magnificationActionGroup);
     fourTimesMagnificationAction->setCheckable(true);
 
-    fiveTimesMagnificationAction = new KAction(KIcon("1-to-5-zoom"), i18n("5x Magnification"), magnificationActionGroup);
+    fiveTimesMagnificationAction = new KAction(KIcon("labplot-1-to-5-zoom"), i18n("5x Magnification"), magnificationActionGroup);
     fiveTimesMagnificationAction->setCheckable(true);
 
     connect( mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)) );
