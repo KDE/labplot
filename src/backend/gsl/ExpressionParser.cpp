@@ -1140,7 +1140,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 			return false;
 
 		(*xVector)[i] = x;
-		if (isfinite(y))
+		if (std::isfinite(y))
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;
@@ -1169,7 +1169,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 			return false;
 
 		(*xVector)[i] = x;
-		if (isfinite(y))
+		if (std::isfinite(y))
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;
@@ -1193,7 +1193,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 		if(parse_errors()>0)
 			return false;
 
-		if (isfinite(y))
+		if (std::isfinite(y))
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;
@@ -1240,7 +1240,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		if(parse_errors()>0)
 			return false;
 
-		if (isfinite(y))
+		if (std::isfinite(y))
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;
@@ -1267,7 +1267,7 @@ bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, co
 		if(parse_errors()>0)
 			return false;
 
-		if (isfinite(r)) {
+		if (std::isfinite(r)) {
 			(*xVector)[i] = r*cos(phi);
 			(*yVector)[i] = r*sin(phi);
 		} else {
@@ -1299,7 +1299,7 @@ bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& e
 		if(parse_errors()>0)
 			return false;
 
-		if (isfinite(x))
+		if (std::isfinite(x))
 			(*xVector)[i] = x;
 		else
 			(*xVector)[i] = NAN;
@@ -1308,7 +1308,7 @@ bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& e
 		if(parse_errors()>0)
 			return false;
 
-		if (isfinite(y))
+		if (std::isfinite(y))
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;
