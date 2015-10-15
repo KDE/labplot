@@ -1012,7 +1012,6 @@ void MainWin::newWorkbook(){
 void MainWin::newDatapicker(){
     Datapicker* datapicker = new Datapicker(0, i18n("Datapicker"));
     this->addAspectToProject(datapicker);
-    datapicker->initDefault();
 }
 /*!
 	adds a new Spreadsheet to the project.

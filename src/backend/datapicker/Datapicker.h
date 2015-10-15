@@ -5,6 +5,8 @@
                            in form of worksheet and spreadsheets
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -40,9 +42,8 @@ class Datapicker : public AbstractPart, public scripted {
     Q_OBJECT
 
     public:
-        Datapicker(AbstractScriptingEngine* engine, const QString& name);
+        Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading = false);
 
-        void initDefault();
         virtual QIcon icon() const;
         virtual QMenu* createContextMenu();
         virtual QWidget* view() const;
@@ -57,6 +58,9 @@ class Datapicker : public AbstractPart, public scripted {
 
     public slots:
         virtual void childSelected(const AbstractAspect*);
+
+	private:
+        void init();
 
     private slots:
         virtual void childDeselected(const AbstractAspect*);

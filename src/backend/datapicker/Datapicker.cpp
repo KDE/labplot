@@ -5,6 +5,8 @@
                            in form of worksheet and spreadsheets
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -35,14 +37,14 @@
 
 #include "KIcon"
 #include <KLocale>
-#include <QDebug>
+// #include <QDebug>
 
 /**
  * \class Datapicker
  * \brief Top-level container for DataPickerCurve and Image.
  * \ingroup backend
  */
-Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name)
+Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading)
     : AbstractPart(name), scripted(engine), m_image(0) {
 
     connect( this, SIGNAL(aspectAdded(const AbstractAspect*)),
@@ -50,9 +52,12 @@ Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name)
     connect( this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
              this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)) );
 
+	if (!loading)
+		init();
+
 }
 
-void Datapicker::initDefault() {
+void Datapicker::init() {
     m_image = new Image(0, i18n("image"));
     setUndoAware(false);
     addChild(m_image);
