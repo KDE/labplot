@@ -245,12 +245,12 @@ void MainWin::initActions() {
 // 	actionCollection()->addAction("new_database_datasource", m_newSqlDataSourceAction);
 // 	connect(m_newSqlDataSourceAction, SIGNAL(triggered()), this, SLOT(newSqlDataSourceActionTriggered()));
 
-	m_importAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Import"), this);
+	m_importAction = new QAction(QIcon::fromTheme("document-import"), i18n("Import"), this);
 	m_importAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I);
 	actionCollection()->addAction("import", m_importAction);
 	connect(m_importAction, SIGNAL(triggered()),SLOT(importFileDialog()));
 
-	m_exportAction = new QAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this);
+	m_exportAction = new QAction(QIcon::fromTheme("document-export"), i18n("Export"), this);
 	m_exportAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E);
 	actionCollection()->addAction("export", m_exportAction);
 	connect(m_exportAction, SIGNAL(triggered()),SLOT(exportDialog()));
