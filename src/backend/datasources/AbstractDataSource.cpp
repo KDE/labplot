@@ -65,20 +65,20 @@ int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList 
 
 	int columnOffset=0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
 
-	Column * newColumn;
+	Column* newColumn = 0;
         if (mode==AbstractFileFilter::Append){
                 columnOffset=childCount<Column>();
                 for ( int n=0; n<cols; n++ ){
                         newColumn = new Column(colNameList.at(n), AbstractColumn::Numeric);
                         newColumn->setUndoAware(false);
-                        addChild(newColumn);
+                        addChildFast(newColumn);
                 }
 	}else if (mode==AbstractFileFilter::Prepend){
                 Column* firstColumn = child<Column>(0);
                 for ( int n=0; n<cols; n++ ){
                         newColumn = new Column(colNameList.at(n), AbstractColumn::Numeric);
                         newColumn->setUndoAware(false);
-                        insertChildBefore(newColumn, firstColumn);
+                        insertChildBeforeFast(newColumn, firstColumn);
                 }
         }else if (mode==AbstractFileFilter::Replace){
                 //replace completely the previous content of the data source with the content to be imported.
@@ -111,10 +111,16 @@ int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList 
                         for(int i=columns; i < cols; i++) {
                                 newColumn = new Column(colNameList.at(i), AbstractColumn::Numeric);
                                 newColumn->setUndoAware(false);
-                                addChild(newColumn);
+                                addChildFast(newColumn);
                                 child<Column>(i)->setSuppressDataChangedSignal(true);
                         }
                 }
+	}
+
+	if (newColumn) {
+		//notify the model about newly created objects, it's sufficient to do it once for the last child
+		emit aspectAboutToBeAdded(this, 0, newColumn);
+		emit aspectAdded(newColumn);
 	}
 
 	return columnOffset;
@@ -129,7 +135,6 @@ int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, Abstract
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(this);
 	if(spreadsheet) {
 		columnOffset = this->resize(mode,QStringList(),actualCols);
-		//qDebug()<<"column offset"<<columnOffset;
 
 		// resize the spreadsheet
 		if (mode==AbstractFileFilter::Replace) {
@@ -152,6 +157,7 @@ int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, Abstract
 	Matrix* matrix = dynamic_cast<Matrix*>(this);
 	if (matrix) {
 		matrix->setSuppressDataChangedSignal(true);
+
 		// resize the matrix
 		if (mode==AbstractFileFilter::Replace) {
 			matrix->clear();

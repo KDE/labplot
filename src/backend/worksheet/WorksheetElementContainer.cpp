@@ -28,10 +28,10 @@
 
 #include "backend/worksheet/WorksheetElementContainer.h"
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-#include <QtDebug>
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
@@ -144,15 +144,12 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 	if (element && (aspect->parentAspect() == this)) {
 		connect(element, SIGNAL(hovered()), this, SLOT(childHovered()));
 		connect(element, SIGNAL(unhovered()), this, SLOT(childUnhovered()));
-		QGraphicsItem *item = element->graphicsItem();
-		Q_ASSERT(item != NULL);
-		item->setParentItem(d);
+		element->graphicsItem()->setParentItem(d);
 
 		qreal zVal = 0;
 		QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
-		foreach(WorksheetElement *elem, childElements) {
-			elem->graphicsItem()->setZValue(zVal++);
-		}
+		foreach(WorksheetElement* elem, childElements)
+			elem->setZValue(zVal++);
 	}
 
 	d->recalcShapeAndBoundingRect();

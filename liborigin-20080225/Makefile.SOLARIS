@@ -1,8 +1,0 @@
-all : opj2dat
-
-opj2dat: opj2dat.cpp OPJFile.cpp OPJFile.h
-	c++ -o opj2dat opj2dat.cpp OPJFile.cpp
-
-clean :
-	rm -f *~ *.o *.lo opj2dat
-	rm -rf .deps .libs

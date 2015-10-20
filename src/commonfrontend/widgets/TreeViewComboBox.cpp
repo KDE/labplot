@@ -172,7 +172,9 @@ void TreeViewComboBox::treeViewIndexActivated( const QModelIndex & index){
 		}
 	}
 
-	QComboBox::setCurrentIndex(-1);
+	m_treeView.setCurrentIndex(QModelIndex());
+	setCurrentIndex(0);
+	QComboBox::setItemText(0, "");
 	emit currentModelIndexChanged(QModelIndex());
 	m_treeView.hide();
 }

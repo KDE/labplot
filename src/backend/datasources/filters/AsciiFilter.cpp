@@ -121,12 +121,11 @@ int AsciiFilter::columnNumber(const QString & fileName){
 	QString line;
 	QStringList lineStringList;
 
-	QIODevice *device = KFilterDev::deviceForFile(fileName);
-	if (!device->open(QIODevice::ReadOnly))
+	KFilterDev device(fileName);
+	if (!device.open(QIODevice::ReadOnly))
 		return 0;
 
-	QTextStream in(device);
-	line = in.readLine();
+	line = device.readLine();
 	lineStringList = line.split( QRegExp("\\s+")); //TODO
 	return lineStringList.size();
 }
@@ -137,14 +136,13 @@ int AsciiFilter::columnNumber(const QString & fileName){
 */
 long AsciiFilter::lineNumber(const QString & fileName){
 	//TODO: compare the speed of this function with the speed of wc from GNU-coreutils.
-	QIODevice *device = KFilterDev::deviceForFile(fileName);
-	if (!device->open(QIODevice::ReadOnly))
+	KFilterDev device(fileName);
+	if (!device.open(QIODevice::ReadOnly))
 		return 0;
 
-	QTextStream in(device);
 	long rows=0;
-	while (!in.atEnd()){
-		in.readLine();
+	while (!device.atEnd()){
+		device.readLine();
 		rows++;
 	}
 
@@ -271,11 +269,9 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
 QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines){
 	QStringList dataString;
 
-	QIODevice *device = KFilterDev::deviceForFile(fileName);
-	if (!device->open(QIODevice::ReadOnly))
-		return i18n("could not open file for reading");
-
-	QTextStream in(device);
+	KFilterDev device(fileName);
+	if (!device.open(QIODevice::ReadOnly))
+		return QString();
 
 	//TODO implement
 	// if (transposed)
@@ -285,7 +281,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	for (int i=0; i<startRow-1; i++){
         //if the number of rows to skip is bigger then the actual number
 		//of the rows in the file, then quit the function.
-		if( in.atEnd() ) {
+		if( device.atEnd() ) {
 			if (mode==AbstractFileFilter::Replace) {
 				//file with no data to be imported. In replace-mode clear the data source
 				if(dataSource != NULL)
@@ -294,13 +290,13 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 			return QString();
 		}
 
-		in.readLine();
+		device.readLine();
 	}
 
 	//parse the first row:
 	//use the first row to determine the number of columns,
 	//create the columns and use (optionaly) the first row to name them
-	if( in.atEnd() ) {
+	if( device.atEnd() ) {
 		if (mode==AbstractFileFilter::Replace) {
 			//file with no data to be imported. In replace-mode clear the data source
 			if(dataSource != NULL)
@@ -309,7 +305,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 		return QString();
 	}
 
-	QString line = in.readLine();
+	QString line = device.readLine();
 	if( simplifyWhitespacesEnabled)
 		line = line.simplified();
 
@@ -412,7 +408,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 
 	//Read the remainder of the file.
 	for (int i=currentRow; i<qMin(lines,actualRows); i++){
-		line = in.readLine();
+		line = device.readLine();
 
 		if(simplifyWhitespacesEnabled)
 			line = line.simplified();
@@ -501,7 +497,6 @@ void AsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dat
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
-
 /*!
   Saves as XML.
  */
@@ -605,5 +600,3 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 
 	return true;
 }
-
-// Q_EXPORT_PLUGIN2(ioasciifilter, AsciiFilter)

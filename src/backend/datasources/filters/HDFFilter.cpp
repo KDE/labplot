@@ -869,7 +869,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 
 	//check for hard link
 	H5G_stat_t statbuf;
-	status = H5Gget_objinfo(gid, ".", TRUE, &statbuf);
+	status = H5Gget_objinfo(gid, ".", true, &statbuf);
 	handleError(status,"H5Gget_objinfo");
 	if (statbuf.nlink > 1) {
 		if(multiLinkList.contains(statbuf.objno[0])) {
@@ -1003,6 +1003,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	handleError((int)dataspace,"H5Dget_space");
 	int rank = H5Sget_simple_extent_ndims(dataspace);
 	handleError(rank,"H5Dget_simple_extent_ndims");
+#ifdef QT_DEBUG
+	qDebug()<<" rank ="<<rank;
+#endif
 
 	int columnOffset = 0;	// offset to import data
 	int actualRows=0, actualCols=0;	// rows and cols to read
@@ -1053,8 +1056,6 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 #endif
 		if(dataSource != NULL)
 			columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
-		else
-			dataPointers[0]=NULL;
 
 		switch(dclass) {
 		case H5T_STRING: {

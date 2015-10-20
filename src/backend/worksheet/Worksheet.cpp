@@ -115,7 +115,8 @@ float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit un
 	case Worksheet::Point:
 		return value*25.4/72.*10.;
 	}
-	return value;
+
+	return 0;
 }
 
 /*!
@@ -132,12 +133,13 @@ float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit 
 	case Worksheet::Point:
 		return value/25.4/10.*72.;
 	}
-	return value;
+
+	return 0;
 }
 
 //! Return an icon to be used for decorating my views.
 QIcon Worksheet::icon() const {
-	return QIcon::fromTheme("office-chart-area");
+	return QIcon::fromTheme("labplot-worksheet");
 }
 
 //! Return a new context menu.

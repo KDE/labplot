@@ -47,7 +47,7 @@ Workbook::Workbook(AbstractScriptingEngine* engine, const QString& name)
 }
 
 QIcon Workbook::icon() const {
-	return KIcon("tab-duplicate");
+    return QIcon::fromTheme("labplot-workbook");
 }
 
 /*!

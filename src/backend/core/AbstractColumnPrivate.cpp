@@ -30,14 +30,14 @@
 #include "AbstractColumnPrivate.h"
 
 /**
- * \class AbstractColumn::Private
+ * \class AbstractColumnPrivate
  * \brief Private data class of AbstractColumn
  */
 
 /**
  * \brief Ctor
  */
-AbstractColumn::Private::Private(AbstractColumn *owner) : m_owner(owner) {
+AbstractColumnPrivate::AbstractColumnPrivate(AbstractColumn *owner) : m_owner(owner) {
 	Q_CHECK_PTR(m_owner);
 }
 

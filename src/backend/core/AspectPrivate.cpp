@@ -28,7 +28,6 @@
  ***************************************************************************/
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectPrivate.h"
-#include <QRegExp>
 #include <QStringList>
 
 /**
@@ -55,9 +54,9 @@ void AbstractAspect::Private::insertChild(int index, AbstractAspect* child)
 	// Can't handle this case here since two undo commands have to be created.
 	Q_ASSERT(child->m_aspect_private->m_parent == 0);
 	child->m_aspect_private->m_parent = m_owner;
-	connect(child, SIGNAL(aspectDescriptionAboutToChange(const AbstractAspect*)), 
+	connect(child, SIGNAL(aspectDescriptionAboutToChange(const AbstractAspect*)),
 			m_owner, SIGNAL(aspectDescriptionAboutToChange(const AbstractAspect*)));
-	connect(child, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), 
+	connect(child, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
 			m_owner, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)));
 	connect(child, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
 			m_owner, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));

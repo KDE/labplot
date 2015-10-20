@@ -35,6 +35,7 @@
 
 class QGraphicsSceneHoverEvent;
 
+class AxisGrid;
 class CartesianPlot;
 class AbstractCoordinateSystem;
 class CartesianCoordinateSystem;
@@ -112,6 +113,7 @@ class AxisPrivate: public QGraphicsItem {
 		QList<QString> tickLabelStrings; //!< the actual text of the major tick labels
 
 		//Grid
+		AxisGrid* gridItem;
 		QPen majorGridPen;
 		qreal majorGridOpacity;
 		QPen minorGridPen;
@@ -125,7 +127,6 @@ class AxisPrivate: public QGraphicsItem {
 		QPainterPath minorGridPath;
 		QRectF boundingRectangle;
 		QPainterPath axisShape;
-		QPainterPath axisShapeWithoutGrids;
 
 		QString name() const;
 		virtual QRectF boundingRect() const;

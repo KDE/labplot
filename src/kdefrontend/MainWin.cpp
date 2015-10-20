@@ -214,21 +214,21 @@ void MainWin::initActions() {
 	m_printPreviewAction = KStandardAction::printPreview(this, SLOT(printPreview()),actionCollection());
 	KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
 	//New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
-	m_newWorkbookAction = new QAction(QIcon::fromTheme("tab-new-background"),i18n("Workbook"),this);
+	m_newWorkbookAction = new QAction(QIcon::fromTheme("labplot-workbook-new"),i18n("Workbook"),this);
 	actionCollection()->addAction("new_workbook", m_newWorkbookAction);
 	connect(m_newWorkbookAction, SIGNAL(triggered()),SLOT(newWorkbook()));
 
-	m_newSpreadsheetAction = new QAction(QIcon::fromTheme("insert-table"),i18n("Spreadsheet"),this);
+	m_newSpreadsheetAction = new QAction(QIcon::fromTheme("labplot-spreadsheet-new"),i18n("Spreadsheet"),this);
 // 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new_spreadsheet", m_newSpreadsheetAction);
 	connect(m_newSpreadsheetAction, SIGNAL(triggered()),SLOT(newSpreadsheet()));
 
-	m_newMatrixAction = new QAction(QIcon::fromTheme("resource-calendar-insert"),i18n("Matrix"),this);
+	m_newMatrixAction = new QAction(QIcon::fromTheme("labplot-matrix-new"),i18n("Matrix"),this);
 // 	m_newMatrixAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new_matrix", m_newMatrixAction);
 	connect(m_newMatrixAction, SIGNAL(triggered()),SLOT(newMatrix()));
 
-	m_newWorksheetAction= new QAction(QIcon::fromTheme("archive-insert"),i18n("Worksheet"),this);
+	m_newWorksheetAction= new QAction(QIcon::fromTheme("labplot-worksheet-new"),i18n("Worksheet"),this);
 // 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
 	actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
 	connect(m_newWorksheetAction, SIGNAL(triggered()), SLOT(newWorksheet()));
@@ -251,12 +251,12 @@ void MainWin::initActions() {
 // 	actionCollection()->addAction("new_database_datasource", m_newSqlDataSourceAction);
 // 	connect(m_newSqlDataSourceAction, SIGNAL(triggered()), this, SLOT(newSqlDataSourceActionTriggered()));
 
-	m_importAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("Import"), this);
+	m_importAction = new QAction(QIcon::fromTheme("document-import"), i18n("Import"), this);
 	actionCollection()->setDefaultShortcut(m_importAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
 	actionCollection()->addAction("import", m_importAction);
 	connect(m_importAction, SIGNAL(triggered()),SLOT(importFileDialog()));
 
-	m_exportAction = new QAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this);
+	m_exportAction = new QAction(QIcon::fromTheme("document-export"), i18n("Export"), this);
 	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL+Qt::SHIFT+Qt::Key_E);
 	actionCollection()->addAction("export", m_exportAction);
 	connect(m_exportAction, SIGNAL(triggered()),SLOT(exportDialog()));
@@ -442,6 +442,7 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_printPreviewAction->setEnabled(!b);
 	m_importAction->setEnabled(!b);
 	m_exportAction->setEnabled(!b);
+	m_newWorkbookAction->setEnabled(!b);
 	m_newSpreadsheetAction->setEnabled(!b);
 	m_newMatrixAction->setEnabled(!b);
 	m_newWorksheetAction->setEnabled(!b);
@@ -663,8 +664,11 @@ bool MainWin::newProject(){
 		m_propertiesDock->setWindowTitle(i18n("Properties"));
 		addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
 
-		stackedWidget = new QStackedWidget(m_propertiesDock);
-		m_propertiesDock->setWidget(stackedWidget);
+		QScrollArea* sa = new QScrollArea(m_propertiesDock);
+		stackedWidget = new QStackedWidget(sa);
+		sa->setWidget(stackedWidget);
+		sa->setWidgetResizable(true);
+		m_propertiesDock->setWidget(sa);
 
 		//GUI-observer;
 		m_guiObserver = new GuiObserver(this);
@@ -1209,6 +1213,9 @@ void MainWin::projectChanged(){
 }
 
 void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win){
+	if (!win)
+		return;
+
 	PartMdiView *view = qobject_cast<PartMdiView*>(win);
 	if (!view) {
 		updateGUI();

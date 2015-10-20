@@ -4,7 +4,7 @@
     Description          : Spreadsheet with a MxN matrix data model
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008-2009 Tilman Benkert (thzs*gmx.net)
+    Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
 
@@ -60,6 +60,7 @@ class Matrix : public AbstractDataSource {
 		CLASS_D_ACCESSOR_DECL(QString, formula, Formula)
 
 		QVector<QVector<double> >& data() const;
+		void setData(const QVector<QVector<double> >&);
 		void setSuppressDataChangedSignal(bool);
 		void setChanged();
 
@@ -77,18 +78,23 @@ class Matrix : public AbstractDataSource {
 		void insertColumns(int before, int count);
 		void appendColumns(int count);
 		void removeColumns(int first, int count);
+		void clearColumn(int);
+
 		void insertRows(int before, int count);
 		void appendRows(int count);
 		void removeRows(int first, int count);
+		void clearRow(int);
 
 		double cell(int row, int col) const;
-		void setCell(int row, int col, double value );
+		QString text(int row, int col);
+		void setCell(int row, int col, double value);
+		void clearCell(int row, int col);
+
 		QVector<double> columnCells(int col, int first_row, int last_row);
 		void setColumnCells(int col, int first_row, int last_row, const QVector<double>& values);
 		QVector<double> rowCells(int row, int first_column, int last_column);
 		void setRowCells(int row, int first_column, int last_column, const QVector<double>& values);
 
-		QString text(int row, int col);
 		void copy(Matrix* other);
 
 		virtual void save(QXmlStreamWriter*) const;
@@ -118,7 +124,6 @@ class Matrix : public AbstractDataSource {
 		void rowsRemoved(int first, int count);
 		void dataChanged(int top, int left, int bottom, int right);
 		void coordinatesChanged();
-		void formulaChanged();
 
 		friend class MatrixInsertRowsCmd;
 		friend class MatrixRemoveRowsCmd;

@@ -76,10 +76,10 @@ void XYEquationCurveDock::setupGeneral() {
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
-	uiGeneralTab.tbConstants1->setIcon( QIcon::fromTheme("format-text-symbol") );
+	uiGeneralTab.tbConstants1->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
 	uiGeneralTab.tbFunctions1->setIcon( QIcon::fromTheme("preferences-desktop-font") );
 
-	uiGeneralTab.tbConstants2->setIcon( QIcon::fromTheme("format-text-symbol") );
+	uiGeneralTab.tbConstants2->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
 	uiGeneralTab.tbFunctions2->setIcon( QIcon::fromTheme("preferences-desktop-font") );
 
 	uiGeneralTab.cbType->addItem(i18n("cartesian"));

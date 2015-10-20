@@ -88,7 +88,7 @@ void XYEquationCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYEquationCurve::icon() const {
-	return QIcon::fromTheme("xy-equation-curve");
+	return QIcon::fromTheme("labplot-xy-equation-curve");
 }
 
 //##############################################################################

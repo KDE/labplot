@@ -752,6 +752,8 @@ void XYCurveDock::showValuesColumnFormat(const Column* column){
 		  ui.sbValuesPrecision->setValue(filter->numDigits());
 		  break;
 		}
+		case AbstractColumn::Text:
+			break;
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
@@ -759,8 +761,6 @@ void XYCurveDock::showValuesColumnFormat(const Column* column){
 				ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
 				break;
 			}
-		default:
-			break;
 	}
   }
 }
