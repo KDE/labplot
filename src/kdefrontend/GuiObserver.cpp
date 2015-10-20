@@ -305,7 +305,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->projectDock);
 	}else if (className=="CantorWorksheet"){
-
+		#ifdef HAVE_CANTOR_LIBS
 		if (!mainWindow->cantorWorksheetDock){
 			mainWindow->cantorWorksheetDock = new CantorWorksheetDock(mainWindow->stackedWidget);
 			connect(mainWindow->cantorWorksheetDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
@@ -324,7 +324,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		mainWindow->cantorWorksheetDock->setCantorWorksheets(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->cantorWorksheetDock);
-
+		#endif
 	}else{
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
 		if (mainWindow->stackedWidget->currentWidget())

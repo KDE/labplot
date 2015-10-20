@@ -36,7 +36,6 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYFitCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
-	${KDEFRONTEND_DIR}/dockwidgets/CantorWorksheetDock.cpp
 	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/EquidistantValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/ExportSpreadsheetDialog.cpp
@@ -80,7 +79,6 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyfitcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyequationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
-	${KDEFRONTEND_DIR}/ui/dockwidgets/cantorworksheetdock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/exportspreadsheetwidget.ui
@@ -156,8 +154,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
-	${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp
-	${BACKEND_DIR}/cantorWorksheet/CantorWorksheet.cpp
 )
 
 set(COMMONFRONTEND_SOURCES
@@ -171,15 +167,25 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
 	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
-	${COMMONFRONTEND_DIR}/cantorWorksheet/CantorWorksheetView.cpp
 )
 
-set(CANTOR_SOURCES
-	${CANTOR_DIR}/panelplugin.cp
-	${CANTOR_DIR}/panelpluginhandler.cpp
-	${CANTOR_DIR}/cantor_export.cpp
-	${CANTOR_DIR}/cantor_part.cpp
-)
+IF (${CANTOR_LIBS_FOUND})
+	set(CANTOR_SOURCES
+		${KDEFRONTEND_DIR}/ui/dockwidgets/cantorworksheetdock.ui
+		${KDEFRONTEND_DIR}/dockwidgets/CantorWorksheetDock.cpp
+		${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp
+		${BACKEND_DIR}/cantorWorksheet/CantorWorksheet.cpp
+		${COMMONFRONTEND_DIR}/cantorWorksheet/CantorWorksheetView.cpp
+		${CANTOR_DIR}/panelplugin.cpp
+		${CANTOR_DIR}/panelpluginhandler.cpp
+		${CANTOR_DIR}/cantor_export.h
+		${CANTOR_DIR}/cantor_part.cpp
+	)
+ELSE (${CANTOR_LIBS_FOUND})
+	set(CANTOR_SOURCES "")
+ENDIF (${CANTOR_LIBS_FOUND})
+
+MESSAGE (STATUS "Here it is ${CANTOR_SOURCES}")
 
 set(TOOLS_SOURCES
 	${TOOLS_DIR}/TeXRenderer.cpp
@@ -194,7 +200,7 @@ add_subdirectory( pics/gsl_distributions )
 set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 INCLUDE_DIRECTORIES(. ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/..)
 qt5_wrap_ui(LABPLOT_SRCS ${UI_SOURCES})
-add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
+add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
 target_link_libraries(labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${CANTOR_LIBS} ${HDF5_LIBRARY} ${NETCDF_LIBRARY})
 # ${OPJ_LIBRARY}
 

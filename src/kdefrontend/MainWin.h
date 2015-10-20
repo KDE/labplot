@@ -40,7 +40,6 @@ class Project;
 class Worksheet;
 class Workbook;
 class Spreadsheet;
-class CantorWorksheet;
 class Matrix;
 class GuiObserver;
 class AxisDock;
@@ -54,9 +53,13 @@ class XYCurveDock;
 class XYEquationCurveDock;
 class XYFitCurveDock;
 class WorksheetDock;
-class CantorWorksheetDock;
 class LabelWidget;
 class ImportFileDialog;
+
+#ifdef HAVE_CANTOR_LIBS
+class CantorWorksheet;
+class CantorWorksheetDock;
+#endif
 
 class QDockWidget;
 class QStackedWidget;
@@ -139,11 +142,18 @@ private:
 	QAction* m_visibilityAllAction;
 	QAction* m_toggleProjectExplorerDockAction;
 	QAction* m_togglePropertiesDockAction;
-
+	
+	//cantor
+	#ifdef HAVE_CANTOR_LIBS
+	QMenu* m_newCantorWorksheetMenu;
+	CantorWorksheetDock* cantorWorksheetDock;
+	CantorWorksheet* activeCantorWorksheet() const;
+	CantorWorksheetDock* cantorWorksheetDock;
+	#endif
+	
 	//Menus
 	QMenu* m_visibilityMenu;
 	QMenu* m_newMenu;
-	QMenu* m_newCantorWorksheetMenu;
 
 	//Docks
 	QStackedWidget* stackedWidget;
@@ -158,7 +168,6 @@ private:
 	XYEquationCurveDock* xyEquationCurveDock;
 	XYFitCurveDock* xyFitCurveDock;
 	WorksheetDock* worksheetDock;
-	CantorWorksheetDock* cantorWorksheetDock;
 	LabelWidget* textLabelDock;
 
 	bool openXML(QIODevice*);
@@ -174,7 +183,6 @@ private:
 	Spreadsheet* activeSpreadsheet() const;
 	Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
-	CantorWorksheet* activeCantorWorksheet() const;
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver;
@@ -203,11 +211,15 @@ private slots:
 	void exportDialog();
 	void settingsDialog();
 	void projectChanged();
+	
+	//Cantor
+	#ifdef HAVE_CANTOR_LIBS
+	void newCantorWorksheet(QAction* action);
+	#endif
 
 	void newFolder();
 	void newWorkbook();
 	void newSpreadsheet();
-	void newCantorWorksheet(QAction* action);
 	void newMatrix();
 	void newWorksheet();
 	//TODO: void newScript();

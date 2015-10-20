@@ -42,11 +42,6 @@ FIND_LIBRARY (GSL_CBLAS_LIBRARIES gslcblas
 	/usr/lib
 	/usr/local/lib
 )
-FIND_LIBRARY (CANTOR_LIBS cantorlibs
-	PATHS
-	/usr/lib
-	/usr/local/lib
-)
 FIND_PATH (GSL_INCLUDE_DIR gsl_multimin.h
 	/usr/include/gsl
 	/usr/local/include/gsl
@@ -56,11 +51,25 @@ FIND_PROGRAM (GSL_CONFIG gsl-config
 	/usr/local/bin
 )
 
-IF(CANTOR_LIBS) 
-	MESSAGE (STATUS "Found CANTOR LIBS Library")
-ELSE (GSL_FOUND)
-	MESSAGE (FATAL_ERROR "cantorlibs Library not found.")
+### Cantorlibs #####################################
+FIND_LIBRARY (CANTOR_LIBS cantorlibs
+	PATHS
+	/usr/lib
+	/usr/local/lib
+)
+IF (CANTOR_LIBS)
+	SET (CANTOR_LIBS_FOUND TRUE)
+ELSE (CANTOR_LIBS)
+	SET (CANTOR_LIBS_FOUND FALSE)
+	SET (CANTOR_LIBS "")
 ENDIF (CANTOR_LIBS)
+IF (CANTOR_LIBS_FOUND)
+	MESSAGE (STATUS "Found CantorLibs ${CANTOR_LIBS}")
+	add_definitions (-DHAVE_CANTOR_LIBS)
+ELSE (CANTOR_LIBS_FOUND)
+	MESSAGE (STATUS "CantorLibs not found.")
+ENDIF (CANTOR_LIBS_FOUND)
+
 
 IF (GSL_CONFIG)
 	EXEC_PROGRAM (${GSL_CONFIG} ARGS "--version" OUTPUT_VARIABLE gsl_version)

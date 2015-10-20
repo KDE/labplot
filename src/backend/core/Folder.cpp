@@ -169,6 +169,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 		addChild(worksheet);
 		loaded = true;
 	}else if (element_name == "cantorWorksheet"){
+		#ifdef HAVE_CANTOR_LIBS
 		CantorWorksheet * cantorWorksheet = new CantorWorksheet(0, QLatin1String("null"), true);
 		if (!cantorWorksheet->load(reader)){
 			delete cantorWorksheet;
@@ -177,6 +178,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 		cantorWorksheet->setUndoAware(false);
 		addChild(cantorWorksheet);
 		loaded = true;
+		#endif
 	} else if (element_name == "fileDataSource") {
 		FileDataSource* fileDataSource = new FileDataSource(0, "", true);
 		if (!fileDataSource->load(reader)){

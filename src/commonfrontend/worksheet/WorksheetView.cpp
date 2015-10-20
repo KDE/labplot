@@ -238,8 +238,9 @@ void WorksheetView::initActions(){
 	cartesianPlotApplyToAllAction = new QAction(i18n("all plots"), cartesianPlotActionModeActionGroup);
 	cartesianPlotApplyToAllAction->setCheckable(true);
 	connect(cartesianPlotActionModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotActionModeChanged(QAction*)));
-
-	cartesianPlotSelectionModeAction = new QAction(QIcon::fromTheme("cursor-arrow"), i18n("Select and edit"), cartesianPlotMouseModeActionGroup);
+	
+	QActionGroup* cartesianPlotMouseModeActionGroup = new QActionGroup(this);
+	cartesianPlotMouseModeActionGroup->setExclusive(true);
 	cartesianPlotSelectionModeAction = new QAction(QIcon::fromTheme("labplot-cursor-arrow"), i18n("Select and edit"), cartesianPlotMouseModeActionGroup);
 	cartesianPlotSelectionModeAction->setCheckable(true);
 	cartesianPlotSelectionModeAction->setChecked(true);

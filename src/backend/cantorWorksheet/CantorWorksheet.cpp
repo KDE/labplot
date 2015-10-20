@@ -25,7 +25,7 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-
+#ifdef HAVE_CANTOR_LIBS
 #include "CantorWorksheet.h"
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 #include "VariableParser.h"
@@ -236,3 +236,4 @@ bool CantorWorksheet::load(XmlStreamReader* reader){
 	}
 	return true;
 }
+#endif

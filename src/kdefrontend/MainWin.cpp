@@ -77,8 +77,9 @@
 #include <KLocalizedString>
 #include <KFilterDev>
 
+#ifdef HAVE_CANTOR_LIBS
 #include <cantor/backend.h>
-
+#endif
  /*!
 	\class MainWin
 	\brief Main application window.
@@ -107,12 +108,14 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	columnDock(0),
 	matrixDock(0),
 	spreadsheetDock(0),
-	cantorWorksheetDock(0),
 	projectDock(0),
 	xyCurveDock(0),
 	xyEquationCurveDock(0),
 	xyFitCurveDock(0),
 	worksheetDock(0),
+	#ifdef HAVE_CANTOR_LIBS
+	cantorWorksheetDock(0),
+	#endif
 	textLabelDock(0){
 
 // 	QTimer::singleShot( 0, this, SLOT(initGUI(filename)) );  //TODO doesn't work anymore
@@ -358,6 +361,7 @@ void MainWin::initMenus(){
 	m_newMenu->addAction(m_newFileDataSourceAction);
 	m_newMenu->addSeparator();
 
+	#ifdef HAVE_CANTOR_LIBS
 	//"Adding Cantor backends to menue and context menu"
 	QStringList m_availableBackend = Cantor::Backend::listAvailableBackends();
 	if(m_availableBackend.count() > 0) {
@@ -386,7 +390,8 @@ void MainWin::initMenus(){
 			close();
 			break;
 		}
-    }
+	}
+	#endif
 // 	m_newMenu->addAction(m_newSqlDataSourceAction);
 
 	//menu subwindow visibility policy
@@ -593,7 +598,7 @@ void MainWin::updateGUI() {
 	}else{
 		factory->container("matrix", this)->setEnabled(false);
 	}
-
+	#ifdef HAVE_CANTOR_LIBS
 	CantorWorksheet* cantorworksheet = this->activeCantorWorksheet();
 	if(cantorworksheet) {
 		// enable Cantor Worksheet related menues
@@ -610,6 +615,7 @@ void MainWin::updateGUI() {
 		//no cantor worksheet selected -> deactivate cantor worksheet related menus
 		factory->container("casWorksheet", this)->setEnabled(false);
 	}
+	#endif
 }
 
 /*!
@@ -970,11 +976,13 @@ void MainWin::print(){
 		return;
 	}
 
+	#ifdef HAVE_CANTOR_LIBS
 	CantorWorksheet *c = this->activeCantorWorksheet();
 	if(c!=0) {
 		c->part()->action("file_print")->trigger();
 		return;
 	}
+	#endif
 }
 
 void MainWin::printPreview(){
@@ -1008,12 +1016,14 @@ void MainWin::printPreview(){
 		return;
 	}
 	
+	#ifdef HAVE_CANTOR_LIBS
 	//CantorWorksheet
 	CantorWorksheet* c=this->activeCantorWorksheet();
 	if(c!=0) {
 		c->part()->action("file_print_preview")->trigger();
 		return;
 	}
+	#endif
 }
 
 /**************************************************************************************/
@@ -1133,15 +1143,6 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 	return spreadsheet;
 }
 
-/*
-    adds a new Cantor Spreadsheet to the project.
-*/
-void MainWin::newCantorWorksheet(QAction* action) {
-	CantorWorksheet* cantorworksheet = new CantorWorksheet(0, action->data().toString());
-	cantorworksheet->setUndoAware(false);
-	this->addAspectToProject(cantorworksheet);
-}
-
 /*!
 	returns a pointer to a \c Matrix object, if the currently active Mdi-Subwindow
 	or if the currently selected tab in a \c WorkbookView is a \c MatrixView
@@ -1185,6 +1186,17 @@ Worksheet* MainWin::activeWorksheet() const{
 	return dynamic_cast<Worksheet*>(part);
 }
 
+#ifdef HAVE_CANTOR_LIBS
+
+/*
+    adds a new Cantor Spreadsheet to the project.
+*/
+void MainWin::newCantorWorksheet(QAction* action) {
+	CantorWorksheet* cantorworksheet = new CantorWorksheet(0, action->data().toString());
+	cantorworksheet->setUndoAware(false);
+	this->addAspectToProject(cantorworksheet);
+}
+
 /********************************************************************************/
 /*!
     returns a pointer to a CantorWorksheet-object, if the currently active Mdi-Subwindow is \a CantorWorksheetView
@@ -1199,7 +1211,7 @@ CantorWorksheet* MainWin::activeCantorWorksheet() const{
     Q_ASSERT(part);
     return dynamic_cast<CantorWorksheet*>(part);
 }
-
+#endif
 
 /*!
 	called if there were changes in the project.

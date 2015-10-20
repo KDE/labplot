@@ -25,7 +25,7 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-
+#ifdef HAVE_CANTOR_LIBS
 #ifndef CANTORWORKSHEETVIEW_H
 #define CANTORWORKSHEETVIEW_H
 
@@ -92,3 +92,4 @@ class CantorWorksheetView : public QWidget {
 };
 
 #endif // CANTORWORKSHEETVIEW_H
+#endif
