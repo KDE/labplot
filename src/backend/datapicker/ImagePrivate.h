@@ -12,13 +12,10 @@ class ImagePrivate{
 		
 		Image::ReferencePoints axisPoints;
 		Image::EditorSettings settings;
-		Image::Errors plotErrors;
 		Image::PointsType plotPointsType;
 		Image* const q;
 		QRectF pageRect;
 		QGraphicsScene* m_scene;
-        DataPickerCurve* activeCurve;
-        QString activeCurvePath;
 		float rotationAngle;
         QString fileName;
         int pointSeparation;

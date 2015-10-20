@@ -38,6 +38,9 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/core/Project.h"
+#include "backend/datapicker/CustomItem.h"
+#include "backend/datapicker/Image.h"
+#include "backend/datapicker/DataPickerCurve.h"
 #include "commonfrontend/ProjectExplorer.h"
 #include "kdefrontend/MainWin.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
@@ -54,6 +57,7 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/widgets/ImageWidget.h"
 #include "kdefrontend/widgets/CustomItemWidget.h"
+#include "kdefrontend/widgets/DatapickerCurveWidget.h"
 
 #include <kstatusbar.h>
 
@@ -291,6 +295,21 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->textLabelDock->setLabels(list);
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->textLabelDock);
+  }else if (className=="DataPickerCurve"){
+      mainWindow->m_propertiesDock->setWindowTitle(i18n("DatapickerCurve properties"));
+
+      if (!mainWindow->datapickerCurveDock){
+        mainWindow->datapickerCurveDock = new DatapickerCurveWidget(mainWindow->stackedWidget);
+        mainWindow->stackedWidget->addWidget(mainWindow->datapickerCurveDock);
+      }
+
+      QList<DataPickerCurve*> list;
+      foreach(aspect, selectedAspects){
+        list<<qobject_cast<DataPickerCurve*>(aspect);
+      }
+      mainWindow->datapickerCurveDock->setCurves(list);
+
+      mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerCurveDock);
   }else if (className=="Image"){
       mainWindow->m_propertiesDock->setWindowTitle(i18n("Image properties"));
 
@@ -306,7 +325,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
       mainWindow->imageDock->setImages(list);
 
       mainWindow->stackedWidget->setCurrentWidget(mainWindow->imageDock);
-    }else if (className=="CustomItem"){
+  }else if (className=="CustomItem"){
       mainWindow->m_propertiesDock->setWindowTitle(i18n("CustomItem properties"));
 
       if (!mainWindow->customItemDock){
@@ -321,7 +340,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
       mainWindow->customItemDock->setCustomItems(list);
 
       mainWindow->stackedWidget->setCurrentWidget(mainWindow->customItemDock);
-    }else if (className=="Project"){
+  }else if (className=="Project"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Project properties"));
 
 	if (!mainWindow->projectDock){

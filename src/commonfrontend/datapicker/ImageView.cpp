@@ -84,7 +84,6 @@ ImageView::ImageView(Image* image) : QGraphicsView(),
     changeZoom(zoomOriginAction);
     currentZoomAction=zoomInViewAction;
     handleImageActions();
-    handleActiveCurveChanged();
     changeRotationAngle();
 
     //signal/slot connections
@@ -95,14 +94,6 @@ ImageView::ImageView(Image* image) : QGraphicsView(),
     connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
             this, SLOT(handleImageActions()) );
     connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(changeRotationAngle()) );
-
-    //for curve actions
-    connect( m_image, SIGNAL(activeCurveChanged(const DataPickerCurve*)),
-             this, SLOT(handleActiveCurveChanged()) );
-    connect( m_image->parentAspect(), SIGNAL(aspectAdded(const AbstractAspect*)),
-             this, SLOT(handleActiveCurveChanged()) );
-    connect( m_image->parentAspect(), SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-             this, SLOT(handleActiveCurveChanged()) );
 }
 
 void ImageView::initActions() {
@@ -111,7 +102,6 @@ void ImageView::initActions() {
     QActionGroup* plotPointsTypeActionGroup = new QActionGroup(this);
     QActionGroup* navigationActionGroup = new QActionGroup(this);
     QActionGroup* magnificationActionGroup = new QActionGroup(this);
-    m_activeCurveActionGroup = new QActionGroup(this);
 
     //Zoom actions
     zoomInViewAction = new KAction(KIcon("zoom-in"), i18n("Zoom in"), zoomActionGroup);
@@ -184,7 +174,6 @@ void ImageView::initActions() {
     connect( addCurveAction, SIGNAL(triggered()), this, SLOT(addCurve()) );
     connect( navigationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeSelectedItemsPosition(QAction*)) );
     connect( magnificationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(magnificationChanged(QAction*)) );
-    connect( m_activeCurveActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(activeCurveChanged(QAction*)) );
 }
 
 void ImageView::initMenus() {
@@ -224,13 +213,6 @@ void ImageView::initMenus() {
     m_magnificationMenu->addAction(threeTimesMagnificationAction);
     m_magnificationMenu->addAction(fourTimesMagnificationAction);
     m_magnificationMenu->addAction(fiveTimesMagnificationAction);
-
-    m_activeCurveMenu = new QMenu(i18n("Active Curve"));
-
-    m_curveMenu = new QMenu(i18n("Curves"));
-    m_curveMenu->addAction(addCurveAction);
-    m_curveMenu->addSeparator();
-    m_curveMenu->addMenu(m_activeCurveMenu);
 }
 
 /*!
@@ -256,7 +238,7 @@ void ImageView::createContextMenu(QMenu* menu) const {
     menu->insertSeparator(firstAction);
     menu->insertMenu(firstAction, m_viewImageMenu);
     menu->insertSeparator(firstAction);
-    menu->insertMenu(firstAction, m_curveMenu);
+    menu->insertAction(firstAction, addCurveAction);
     menu->insertSeparator(firstAction);
     menu->insertMenu(firstAction, m_navigationMenu);
     menu->insertSeparator(firstAction);
@@ -376,21 +358,25 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
         return;
     }
 
+    Datapicker* datapicker = dynamic_cast<Datapicker*>(m_image->parentAspect());
+    Q_ASSERT(datapicker);
     QPointF eventPos = mapToScene(event->pos());
-    if ( m_mouseMode == SelectAndEditMode && m_image->isLoaded && sceneRect().contains(eventPos)) {
+    if ( m_mouseMode == SelectAndEditMode && m_image->isLoaded &&
+         sceneRect().contains(eventPos) && !datapicker->activeCurve ) {
         if (m_image->plotPointsType() == Image::AxisPoints) {
             addAxisPoint(eventPos);
         } else if (m_image->plotPointsType() == Image::CurvePoints) {
-            if (m_image->activeCurve())
-                m_image->activeCurve()->addCustomItem(eventPos);
+            if (datapicker->activeCurve)
+                datapicker->activeCurve->addCurvePoint(eventPos);
         }
     }
 
-    // select the datapicker/image in the project explorer if the view was clicked
-    // and there is no selection currently. We need this for the case when
-    // there is a single datapicker/image in the project and we change from the project-node
-    // in the project explorer to the datapicker/image-node by clicking the view.
-    if ( scene()->selectedItems().empty() )
+    // select the datapicker/image in the project explorer if the view was clicked.
+    // We change from the project-node in the project explorer to the datapicker/image
+    // or datapicker/curve(active-curve) node by clicking the view.
+    if (datapicker->activeCurve)
+        datapicker->activeCurve->setSelectedInView(true);
+    else
         m_image->setSelectedInView(true);
 
     QGraphicsView::mousePressEvent(event);
@@ -424,17 +410,22 @@ void ImageView::mouseMoveEvent(QMouseEvent* event) {
     QPointF pos = mapToScene(event->pos());
 
     if (m_image->plotPointsType() == Image::CurvePoints) {
-        QPointF logicalPos = m_transform->mapSceneToLogical(pos, m_image->axisPoints());
-        QString xLabel = "x";
-        QString yLabel = "y";
-        if (m_image->axisPoints().type == Image::PolarInDegree){
-            xLabel = "r";
-            yLabel = "y(deg)";
-        } else if (m_image->axisPoints().type == Image::PolarInRadians) {
-            xLabel = "r";
-            yLabel = "y(rad)";
+        QVector3D logicalPos = m_transform->mapSceneToLogical(pos, m_image->axisPoints());
+        if (m_image->axisPoints().type == Image::Ternary) {
+            emit statusInfo( "a =" + QString::number(logicalPos.x()) + ", b =" + QString::number(logicalPos.y()) + ", c =" + QString::number(logicalPos.z()));
+        } else {
+            QString xLabel = "x";
+            QString yLabel = "y";
+            if (m_image->axisPoints().type == Image::PolarInDegree){
+                xLabel = "r";
+                yLabel = "y(deg)";
+            } else if (m_image->axisPoints().type == Image::PolarInRadians) {
+                xLabel = "r";
+                yLabel = "y(rad)";
+            }
+
+            emit statusInfo( xLabel + "=" + QString::number(logicalPos.x()) + ", " + yLabel + "=" + QString::number(logicalPos.y()) );
         }
-        emit statusInfo( xLabel + "=" + QString::number(logicalPos.x()) + ", " + yLabel + "=" + QString::number(logicalPos.y()) );
     }
 
     if ( magnificationFactor && m_image->isLoaded && sceneRect().contains(pos)
@@ -488,19 +479,6 @@ void ImageView::changePointsType(QAction* action) {
     }
 }
 
-void ImageView::activeCurveChanged(QAction* newAction) {
-    //find the index of curve from index of action
-    int index = 0;
-    QList<DataPickerCurve*> curveList = m_image->parentAspect()->children<DataPickerCurve>();
-    foreach (QAction* action, m_activeCurveMenu->actions()) {
-        if (action == newAction) {
-            m_image->setActiveCurve(curveList.at(index));
-            break;
-        }
-        index++;
-    }
-}
-
 void ImageView::changeZoom(QAction* action) {
     if (action==zoomInViewAction) {
         scale(1.2, 1.2);
@@ -543,7 +521,9 @@ void ImageView::changeSelectedItemsPosition(QAction* action) {
         if (!item->graphicsItem()->isSelected())
             continue;
 
-        item->setPosition(item->position().point + shift);
+        CustomItem::PositionWrapper newPos = item->position();
+        newPos.point = newPos.point + shift;
+        item->setPosition(newPos);
 
         int itemIndex = m_image->indexOfChild<CustomItem>(item , AbstractAspect::IncludeHidden);
         Image::ReferencePoints points = m_image->axisPoints();
@@ -558,7 +538,10 @@ void ImageView::changeSelectedItemsPosition(QAction* action) {
         foreach (CustomItem* item, curve->children<CustomItem>(AbstractAspect::IncludeHidden)) {
             if (!item->graphicsItem()->isSelected())
                 continue;
-            item->setPosition(item->position().point + shift);
+
+            CustomItem::PositionWrapper newPos = item->position();
+            newPos.point = newPos.point + shift;
+            item->setPosition(newPos);
         }
     }
 
@@ -690,8 +673,7 @@ void ImageView::addCurve() {
     Q_ASSERT(datapicker);
     DataPickerCurve* curve = new DataPickerCurve(i18n("Curve"));
     datapicker->addChild(curve);
-    m_image->setActiveCurve(curve);
-    curve->setCurveErrorTypes(m_image->plotErrors());
+    curve->addDatasheet(m_image->axisPoints().type);
     m_image->endMacro();
 }
 
@@ -700,7 +682,7 @@ void ImageView::addAxisPoint(const QPointF& pos) {
     if (childItems.count() > 2)
         return;
 
-    CustomItem* newItem = new CustomItem(i18n("Curve Point"));
+    CustomItem* newItem = new CustomItem(i18n("Axis Point"));
     newItem->setPosition(pos);
     newItem->setHidden(true);
 
@@ -731,39 +713,21 @@ void ImageView::changeRotationAngle() {
     updateBackground();
 }
 
-void ImageView::handleActiveCurveChanged() {
-    //update m_activeCurveMenu
-    QList<DataPickerCurve*> curveList = m_image->parentAspect()->children<DataPickerCurve>();
-    if (curveList.isEmpty()) {
-        m_activeCurveMenu->setEnabled(false);
-        return;
-    } else {
-        m_activeCurveMenu->setEnabled(true);
-    }
-
-    m_activeCurveMenu->clear();
-    foreach (DataPickerCurve* curve, curveList) {
-        QAction* action = new KAction(KIcon(""), curve->name(), m_activeCurveActionGroup);
-        action->setCheckable(true);
-        action->setChecked(m_image->activeCurve() == curve);
-        m_activeCurveMenu->addAction(action);
-    }
-}
-
 void ImageView::handleImageActions() {
     int axisPointsCount = m_image->childCount<CustomItem>(AbstractAspect::IncludeHidden);
 
+    setCurvePointsAction->setEnabled(false);
+    selectSegmentAction->setEnabled(false);
+    addCurveAction->setEnabled(false);
+    setAxisPointsAction->setEnabled(false);
+
     if (m_image->isLoaded) {
-        setCurvePointsAction->setEnabled(false);
-        selectSegmentAction->setEnabled(false);
         setAxisPointsAction->setEnabled(true);
         addCurveAction->setEnabled(true);
 
         if (axisPointsCount > 2) {
-            if (m_image->activeCurve()) {
-                setCurvePointsAction->setEnabled(true);
-                selectSegmentAction->setEnabled(true);
-            }
+            setCurvePointsAction->setEnabled(true);
+            selectSegmentAction->setEnabled(true);
         } else {
             if (m_image->plotPointsType() != Image::AxisPoints) {
                 m_image->setUndoAware(false);
@@ -771,11 +735,6 @@ void ImageView::handleImageActions() {
                 m_image->setUndoAware(true);
             }
         }
-    } else {
-        setAxisPointsAction->setEnabled(false);
-        setCurvePointsAction->setEnabled(false);
-        selectSegmentAction->setEnabled(false);
-        addCurveAction->setEnabled(false);
     }
 
     setAxisPointsAction->setChecked(m_image->plotPointsType() == Image::AxisPoints);

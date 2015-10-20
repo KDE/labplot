@@ -25,66 +25,40 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMAGEWIDGET_H
-#define IMAGEWIDGET_H
 
-#include "ui_imagewidget.h"
-#include "backend/datapicker/Image.h"
+#ifndef DATAPICKERCURVEWIDGET_H
+#define DATAPICKERCURVEWIDGET_H
 
-class CustomItem;
+#include "ui_datapickercurvewidget.h"
+#include "backend/datapicker/DataPickerCurve.h"
+
 class CustomItemWidget;
-class QxtSpanSlider;
 
-class ImageWidget: public QWidget{
+class DatapickerCurveWidget : public QWidget {
     Q_OBJECT
 
-public:
-    explicit ImageWidget(QWidget *);
-    virtual ~ImageWidget();
+    public:
+        explicit DatapickerCurveWidget(QWidget*);
+        ~DatapickerCurveWidget();
 
-    void setImages(QList<Image*>);
-    void load();
+        void setCurves(QList<DataPickerCurve*>);
+        void load();
 
-private:
-    Ui::ImageWidget ui;
-    void initConnections();
+    private:
+        Ui::DatapickerCurveWidget ui;
+        void initConnections();
 
-    Image *m_image;
-    QList<Image*> m_imagesList;
-    bool m_initializing;
-    CustomItemWidget* customItemWidget;
+        DataPickerCurve* m_curve;
+        QList<DataPickerCurve*> m_curveList;
+        CustomItemWidget* customItemWidget;
+        bool m_initializing;
+        bool m_suppressTypeChange;
 
-    QxtSpanSlider* ssIntensity;
-    QxtSpanSlider* ssForeground;
-    QxtSpanSlider* ssHue;
-    QxtSpanSlider* ssSaturation;
-    QxtSpanSlider* ssValue;
-
-private slots:
-    void rotationChanged(double);
-    void fileNameChanged();
-    void minSegmentLengthChanged(int);
-    void pointSeparationChanged(int);
-    void selectFile();
-    void graphTypeChanged();
-    void ternaryScaleChanged(double);
-    void logicalPositionChanged();
-
-    void imageFileNameChanged(const QString&);
-    void imageRotationAngleChanged(float);
-    void imageAxisPointsChanged(const Image::ReferencePoints&);
-    void imageEditorSettingsChanged(const Image::EditorSettings&);
-    void imageMinSegmentLengthChanged(const int);
-    void updateCustomItemList();
-    void handleWidgetActions();
-
-    void plotImageTypeChanged(int);
-    void intensitySpanChanged(int, int);
-    void foregroundSpanChanged(int, int);
-    void hueSpanChanged(int, int);
-    void saturationSpanChanged(int, int);
-    void valueSpanChanged(int, int);
-    void rbClicked();
+    private slots:
+        void updateCustomItemList();
+        void xErrorTypeChanged(int);
+        void yErrorTypeChanged(int);
+        void curveErrorsChanged(DataPickerCurve::Errors);
 };
 
-#endif //IMAGEWIDGET_H
+#endif // DATAPICKERCURVEWIDGET_H

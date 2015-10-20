@@ -31,11 +31,11 @@
 #include "backend/core/AbstractScriptingEngine.h"
 #include "backend/lib/macros.h"
 #include <QGraphicsScene>
+#include <QVector3D>
 
 class ImagePrivate;
 class ImageEditor;
 class Segments;
-class DataPickerCurve;
 
 class Image: public AbstractPart, public scripted {
 	Q_OBJECT
@@ -44,21 +44,16 @@ class Image: public AbstractPart, public scripted {
 		Image(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
         ~Image();
 
-        enum GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY};
+        enum GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary};
         enum ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
         enum PlotImageType { OriginalImage, ProcessedImage };
         enum PointsType { AxisPoints, CurvePoints, SegmentPoints };
-        enum ErrorType { NoError, SymmetricError, AsymmetricError };
 
         struct ReferencePoints {
             GraphType type;
             QPointF scenePos[3];
-            QPointF logicalPos[3];
-        };
-
-        struct Errors {
-            ErrorType x;
-            ErrorType y;
+            QVector3D logicalPos[3];
+            double ternaryScale;
         };
 
         struct EditorSettings {
@@ -90,7 +85,6 @@ class Image: public AbstractPart, public scripted {
         void setSelectedInView(const bool);
         void setPlotImageType(const Image::PlotImageType&);
         void setSegmentVisible(bool);
-        void curveAboutToBeRemoved(const AbstractAspect*);
 
         bool isLoaded;
         QImage originalPlotImage;
@@ -102,11 +96,9 @@ class Image: public AbstractPart, public scripted {
         CLASS_D_ACCESSOR_DECL(Image::ReferencePoints, axisPoints, AxisPoints)
         CLASS_D_ACCESSOR_DECL(Image::EditorSettings, settings, Settings)
         BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle)
-        BASIC_D_ACCESSOR_DECL(Errors, plotErrors, PlotErrors)
         BASIC_D_ACCESSOR_DECL(PointsType, plotPointsType, PlotPointsType)
         BASIC_D_ACCESSOR_DECL(int, pointSeparation, PointSeparation)
         BASIC_D_ACCESSOR_DECL(int, minSegmentLength, minSegmentLength)
-        POINTER_D_ACCESSOR_DECL(DataPickerCurve, activeCurve, ActiveCurve)
 
 		typedef ImagePrivate Private;
 
@@ -125,15 +117,11 @@ class Image: public AbstractPart, public scripted {
 
         void fileNameChanged(const QString&);
         void rotationAngleChanged(float);
-        void plotErrorsChanged(const Image::Errors&);
         void axisPointsChanged(const Image::ReferencePoints&);
         void settingsChanged(const Image::EditorSettings&);
         void minSegmentLengthChanged(const int);
-        void activeCurveChanged(const DataPickerCurve*);
-        friend class ImageSetActiveCurveCmd;
         friend class ImageSetFileNameCmd;
         friend class ImageSetRotationAngleCmd;
-        friend class ImageSetPlotErrorsCmd;
         friend class ImageSetAxisPointsCmd;
         friend class ImageSetSettingsCmd;
         friend class ImageSetMinSegmentLengthCmd;

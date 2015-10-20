@@ -28,8 +28,9 @@
 #ifndef DATAPICKERCURVE_H
 #define DATAPICKERCURVE_H
 
-#include "backend/datapicker/Image.h"
 #include "backend/core/AbstractAspect.h"
+#include "backend/lib/macros.h"
+#include "backend/datapicker/Image.h"
 
 class CustomItem;
 class QAction;
@@ -45,19 +46,28 @@ class DataPickerCurve: public AbstractAspect {
         explicit DataPickerCurve(const QString&);
         virtual ~DataPickerCurve();
 
+        enum ErrorType { NoError, SymmetricError, AsymmetricError };
+        struct Errors {
+            ErrorType x;
+            ErrorType y;
+        };
+
         virtual QIcon icon() const;
         virtual QMenu* createContextMenu();
         void setPrinting(bool);
+        void setSelectedInView(const bool);
+        void addDatasheet(const Image::GraphType&);
+        void updateData(const CustomItem*);
 
-        void addCustomItem(const QPointF&);
+        void addCurvePoint(const QPointF&);
 
-        BASIC_D_ACCESSOR_DECL(bool, visible, Visible)
-        BASIC_D_ACCESSOR_DECL(Image::Errors, curveErrorTypes, CurveErrorTypes)
-
+        BASIC_D_ACCESSOR_DECL(Errors, curveErrorTypes, CurveErrorTypes)
         POINTER_D_ACCESSOR_DECL(AbstractColumn, posXColumn, PosXColumn)
         QString& posXColumnPath() const;
         POINTER_D_ACCESSOR_DECL(AbstractColumn, posYColumn, PosYColumn)
         QString& posYColumnPath() const;
+        POINTER_D_ACCESSOR_DECL(AbstractColumn, posZColumn, PosZColumn)
+        QString& posZColumnPath() const;
         POINTER_D_ACCESSOR_DECL(AbstractColumn, plusDeltaXColumn, PlusDeltaXColumn)
         QString& plusDeltaXColumnPath() const;
         POINTER_D_ACCESSOR_DECL(AbstractColumn, minusDeltaXColumn, MinusDeltaXColumn)
@@ -77,11 +87,7 @@ class DataPickerCurve: public AbstractAspect {
         DataPickerCurvePrivate* const d_ptr;
 
     private slots:
-        void visibilityChanged();
         void updateDatasheet();
-
-    public slots:
-        void updateData(const CustomItem*);
 
     private:
         Q_DECLARE_PRIVATE(DataPickerCurve)
@@ -89,7 +95,26 @@ class DataPickerCurve: public AbstractAspect {
         void initAction();
         Column *appendColumn(const QString&, Spreadsheet*);
 
-        QAction* visibilityAction;
+        Spreadsheet* m_datasheet;
         QAction* updateDatasheetAction;
+
+    signals:
+        void curveErrorTypesChanged(const DataPickerCurve::Errors&);
+        void posXColumnChanged(const AbstractColumn*);
+        void posYColumnChanged(const AbstractColumn*);
+        void posZColumnChanged(const AbstractColumn*);
+        void plusDeltaXColumnChanged(const AbstractColumn*);
+        void minusDeltaXColumnChanged(const AbstractColumn*);
+        void plusDeltaYColumnChanged(const AbstractColumn*);
+        void minusDeltaYColumnChanged(const AbstractColumn*);
+        friend class DataPickerCurveSetCurveErrorTypesCmd;
+        friend class DataPickerCurveSetPosXColumnCmd;
+        friend class DataPickerCurveSetPosYColumnCmd;
+        friend class DataPickerCurveSetPosZColumnCmd;
+        friend class DataPickerCurveSetPlusDeltaXColumnCmd;
+        friend class DataPickerCurveSetMinusDeltaXColumnCmd;
+        friend class DataPickerCurveSetPlusDeltaYColumnCmd;
+        friend class DataPickerCurveSetMinusDeltaYColumnCmd;
+
 };
 #endif // DATAPICKERCURVE_H

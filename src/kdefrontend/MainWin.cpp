@@ -112,7 +112,8 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	worksheetDock(0),
     textLabelDock(0),
     imageDock(0),
-    customItemDock(0){
+    customItemDock(0),
+    datapickerCurveDock(0){
 
 // 	QTimer::singleShot( 0, this, SLOT(initGUI(filename)) );  //TODO doesn't work anymore
 	initGUI(filename);
@@ -1178,15 +1179,9 @@ Image* MainWin::activeImage() const{
     Q_ASSERT(part);
     Image* image = 0;
     Datapicker* datapicker = dynamic_cast<Datapicker*>(part);
-    if (datapicker) {
+    if (datapicker)
         image = datapicker->currentImage();
-        if (!image) {
-            //potentially, the matrix was not selected in Datapicker yet since the selection in project explorer
-            //arrives in Datapicker's slot later than in this function
-            //->check whether we have a matrix currently selected in the project explorer
-            image = dynamic_cast<Image*>(m_currentAspect);
-        }
-    }
+
     return image;
 }
 

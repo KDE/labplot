@@ -52,6 +52,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/LabelWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ImageWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/CustomItemWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/DatapickerCurveWidget.cpp
 )
 
 set(UI_SOURCES
@@ -89,6 +90,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/customitemwidget.ui
 	${KDEFRONTEND_DIR}/ui/imagewidget.ui
+        ${KDEFRONTEND_DIR}/ui/datapickercurvewidget.ui
 )
 
 set(BACKEND_SOURCES

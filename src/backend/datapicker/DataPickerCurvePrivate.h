@@ -22,16 +22,19 @@
 #define DATAPICKERCURVEPRIVATE_H
 
 class DataPickerCurvePrivate {
-	public:
-        explicit DataPickerCurvePrivate() {};
+    public:
+        explicit DataPickerCurvePrivate(DataPickerCurve* curve) : q(curve) {};
 
-        Image::Errors curveErrorTypes;
-        bool visible;
+        QString name() const { return q->name(); };
+        DataPickerCurve* const q;
+        DataPickerCurve::Errors curveErrorTypes;
 		
         AbstractColumn* posXColumn;
         QString posXColumnPath;
         AbstractColumn* posYColumn;
         QString posYColumnPath;
+        AbstractColumn* posZColumn;
+        QString posZColumnPath;
         AbstractColumn* plusDeltaXColumn;
         QString plusDeltaXColumnPath;
         AbstractColumn* minusDeltaXColumn;

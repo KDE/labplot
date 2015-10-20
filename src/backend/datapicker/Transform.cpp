@@ -33,61 +33,67 @@
 Transform::Transform() {
 }
 
-bool Transform::mapTypeToCartesian() {
-    if (m_points.type == Image::LogarithmicX) {
+bool Transform::mapTypeToCartesian(const Image::ReferencePoints& axisPoints) {
+    if (axisPoints.type == Image::LogarithmicX) {
         for(int i=0;i<3;i++){
-            if (m_points.logicalPos[i].x() <= 0)
+            if (axisPoints.logicalPos[i].x() <= 0)
                 return false;
-            x[i] = log(m_points.logicalPos[i].x());
-            y[i] = m_points.logicalPos[i].y();
-            X[i] = m_points.scenePos[i].x();
-            Y[i] = m_points.scenePos[i].y();
+            x[i] = log(axisPoints.logicalPos[i].x());
+            y[i] = axisPoints.logicalPos[i].y();
+            X[i] = axisPoints.scenePos[i].x();
+            Y[i] = axisPoints.scenePos[i].y();
         }
-    } else if (m_points.type == Image::LogarithmicY) {
+    } else if (axisPoints.type == Image::LogarithmicY) {
         for(int i=0;i<3;i++){
-            if (m_points.logicalPos[i].y() <= 0)
+            if (axisPoints.logicalPos[i].y() <= 0)
                 return false;
-            x[i] = m_points.logicalPos[i].x();
-            y[i] = log(m_points.logicalPos[i].y());
-            X[i] = m_points.scenePos[i].x();
-            Y[i] = m_points.scenePos[i].y();
+            x[i] = axisPoints.logicalPos[i].x();
+            y[i] = log(axisPoints.logicalPos[i].y());
+            X[i] = axisPoints.scenePos[i].x();
+            Y[i] = axisPoints.scenePos[i].y();
         }
-    } else if (m_points.type == Image::PolarInDegree) {
+    } else if (axisPoints.type == Image::PolarInDegree) {
         for(int i=0;i<3;i++){
-            if (m_points.logicalPos[i].x() < 0)
+            if (axisPoints.logicalPos[i].x() < 0)
                 return false;
-            x[i] = m_points.logicalPos[i].x()*cos(m_points.logicalPos[i].y()*PI / 180.0);
-            y[i] = m_points.logicalPos[i].x()*sin(m_points.logicalPos[i].y()*PI / 180.0);
-            X[i] = m_points.scenePos[i].x();
-            Y[i] = m_points.scenePos[i].y();
+            x[i] = axisPoints.logicalPos[i].x()*cos(axisPoints.logicalPos[i].y()*PI / 180.0);
+            y[i] = axisPoints.logicalPos[i].x()*sin(axisPoints.logicalPos[i].y()*PI / 180.0);
+            X[i] = axisPoints.scenePos[i].x();
+            Y[i] = axisPoints.scenePos[i].y();
         }
-    } else if (m_points.type == Image::PolarInRadians) {
+    } else if (axisPoints.type == Image::PolarInRadians) {
         for(int i=0;i<3;i++){
-            if (m_points.logicalPos[i].x() < 0)
+            if (axisPoints.logicalPos[i].x() < 0)
                 return false;
-            x[i] = m_points.logicalPos[i].x()*cos(m_points.logicalPos[i].y());
-            y[i] = m_points.logicalPos[i].x()*sin(m_points.logicalPos[i].y());
-            X[i] = m_points.scenePos[i].x();
-            Y[i] = m_points.scenePos[i].y();
+            x[i] = axisPoints.logicalPos[i].x()*cos(axisPoints.logicalPos[i].y());
+            y[i] = axisPoints.logicalPos[i].x()*sin(axisPoints.logicalPos[i].y());
+            X[i] = axisPoints.scenePos[i].x();
+            Y[i] = axisPoints.scenePos[i].y();
+        }
+    } else if (axisPoints.type == Image::Ternary) {
+        for(int i=0;i<3;i++){
+            x[i] = (2*axisPoints.logicalPos[i].y() + axisPoints.logicalPos[i].z())/(2*axisPoints.ternaryScale);
+            y[i] = (sqrt(3)*axisPoints.logicalPos[i].z())/(2*axisPoints.ternaryScale);
+            X[i] = axisPoints.scenePos[i].x();
+            Y[i] = axisPoints.scenePos[i].y();
         }
     } else {
         for(int i=0;i<3;i++){
-            x[i] = m_points.logicalPos[i].x();
-            y[i] = m_points.logicalPos[i].y();
-            X[i] = m_points.scenePos[i].x();
-            Y[i] = m_points.scenePos[i].y();
+            x[i] = axisPoints.logicalPos[i].x();
+            y[i] = axisPoints.logicalPos[i].y();
+            X[i] = axisPoints.scenePos[i].x();
+            Y[i] = axisPoints.scenePos[i].y();
         }
     }
+
     return true;
 }
 
-QPointF Transform::mapSceneToLogical(const QPointF& scenePoint, const Image::ReferencePoints& axisPoints) {
-    m_points = axisPoints;
-
+QVector3D Transform::mapSceneToLogical(const QPointF& scenePoint, const Image::ReferencePoints& axisPoints) {
     X[3] = scenePoint.x();
     Y[3] = scenePoint.y();
 
-    if (mapTypeToCartesian()){
+    if (mapTypeToCartesian(axisPoints)){
         double tan;
         double sin;
         double cos;
@@ -113,30 +119,35 @@ QPointF Transform::mapSceneToLogical(const QPointF& scenePoint, const Image::Ref
         }
         x[3] = x[0] + (((X[3] - X[0])*cos - (Y[3] - Y[0])*sin)*scaleOfX);
         y[3] = y[0] + (((X[3] - X[0])*sin + (Y[3] - Y[0])*cos)*scaleOfY);
-        return mapCartesianToType(QPointF(x[3], y[3]));
+        return mapCartesianToType(QPointF(x[3], y[3]), axisPoints);
     }
-    return QPointF();
+    return QVector3D();
 }
 
-QPointF Transform::mapSceneLengthToLogical(const QPointF& errorSpan, const Image::ReferencePoints& axisPoints) {
+QVector3D Transform::mapSceneLengthToLogical(const QPointF& errorSpan, const Image::ReferencePoints& axisPoints) {
     return mapSceneToLogical(errorSpan, axisPoints) - mapSceneToLogical(QPointF(0,0), axisPoints);
 }
 
-QPointF Transform::mapCartesianToType(const QPointF& point){
-    if (m_points.type == Image::LogarithmicX) {
-        return QPointF(exp(point.x()), point.y());
-    } else if (m_points.type == Image::LogarithmicY) {
-        return QPointF(point.x(), exp(point.y()));
-    } else if (m_points.type == Image::PolarInDegree) {
+QVector3D Transform::mapCartesianToType(const QPointF& point, const Image::ReferencePoints &axisPoints) const {
+    if (axisPoints.type == Image::LogarithmicX) {
+        return QVector3D(exp(point.x()), point.y(), 0);
+    } else if (axisPoints.type == Image::LogarithmicY) {
+        return QVector3D(point.x(), exp(point.y()), 0);
+    } else if (axisPoints.type == Image::PolarInDegree) {
         double r = sqrt(point.x()*point.x() + point.y()*point.y());
         double angle = atan(point.y()*180/(point.x()*PI));
-        return QPointF(r, angle);
-    } else if (m_points.type == Image::PolarInRadians) {
+        return QVector3D(r, angle, 0);
+    } else if (axisPoints.type == Image::PolarInRadians) {
         double r = sqrt(point.x()*point.x() + point.y()*point.y());
         double angle = atan(point.y()/point.x());
-        return QPointF(r, angle);
+        return QVector3D(r, angle, 0);
+    } else if (axisPoints.type == Image::Ternary) {
+        double c = (point.y()*2*axisPoints.ternaryScale)/sqrt(3);
+        double b = (point.x()*2*axisPoints.ternaryScale - c)/2;
+        double a = axisPoints.ternaryScale - b - c;
+        return QVector3D(a, b, c);
     } else {
-        return point;
+        return QVector3D(point.x(), point.y(), 0);
     }
 }
 

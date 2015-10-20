@@ -33,6 +33,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/datapicker/Image.h"
 #include "commonfrontend/workbook/WorkbookView.h"
+#include "backend/datapicker/DataPickerCurve.h"
 
 #include <QTabWidget>
 #include <QHBoxLayout>
@@ -57,7 +58,7 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
     m_tabWidget->setTabShape(QTabWidget::Rounded);
     m_tabWidget->setMovable(true);
     m_tabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-    m_tabWidget->setMinimumSize(200, 200);
+    m_tabWidget->setMinimumSize(600, 600);
 
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->setContentsMargins(0,0,0,0);
@@ -117,6 +118,11 @@ void DatapickerView::tabChanged(int index) {
     if (index==-1)
         return;
 
+    QList<const AbstractPart*> childParts = m_datapicker->children<const AbstractPart>(AbstractAspect::Recursive);
+    const AbstractPart* part = childParts.at(index);
+    QList<const AbstractAspect*> allChildren = m_datapicker->children<const AbstractAspect>(AbstractAspect::Recursive);
+    index = allChildren.indexOf(part);
+
     m_datapicker->setChildSelectedInView(lastSelectedIndex, false);
     m_datapicker->setChildSelectedInView(index, true);
     lastSelectedIndex = index;
@@ -139,7 +145,9 @@ void DatapickerView::tabMoved(int from, int to) {
 }
 
 void DatapickerView::itemSelected(int index) {
+    m_initializing = true;
     m_tabWidget->setCurrentIndex(index);
+    m_initializing = false;
 }
 
 void DatapickerView::showTabContextMenu(const QPoint& point) {
@@ -175,10 +183,12 @@ void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
         return;
 
     int index;
-    if (aspect->parentAspect() == m_datapicker)
+    if (aspect->parentAspect() == m_datapicker) {
         index= m_datapicker->indexOfChild<AbstractAspect>(aspect);
-    else
-        index = m_datapicker->indexOfChild<AbstractAspect>(aspect->parentAspect());
+    } else {
+        const DataPickerCurve* curve = aspect->ancestor<const DataPickerCurve>();
+        index= m_datapicker->indexOfChild<AbstractAspect>(curve);
+    }
 
     m_tabWidget->insertTab(index, part->view(), aspect->name());
     m_tabWidget->setCurrentIndex(index);
@@ -187,15 +197,17 @@ void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void DatapickerView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-    int index;
-    if (aspect->parentAspect() == m_datapicker) {
-        index= m_datapicker->indexOfChild<AbstractAspect>(aspect);
-    } else {
-        const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
-        if (!part)
-            return;
+    const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
+    const DataPickerCurve* curve = dynamic_cast<const DataPickerCurve*>(aspect);
+    if (!curve && !part)
+        return;
 
-        index = m_datapicker->indexOfChild<AbstractAspect>(aspect->parentAspect());
+    int index;
+    if (curve && aspect->parentAspect() == m_datapicker) {
+        index= m_datapicker->indexOfChild<AbstractAspect>(aspect);
+    } else if (part) {
+        const DataPickerCurve* curve = aspect->ancestor<const DataPickerCurve>();
+        index= m_datapicker->indexOfChild<AbstractAspect>(curve);
     }
 
     m_tabWidget->removeTab(index);

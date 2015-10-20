@@ -29,9 +29,6 @@
 #include "backend/datapicker/CustomItem.h"
 #include "kdefrontend/widgets/CustomItemWidget.h"
 #include "commonfrontend/widgets/qxtspanslider.h"
-#include "commonfrontend/widgets/TreeViewComboBox.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/datapicker/DataPickerCurve.h"
 
 #include <QGridLayout>
 #include <QRadioButton>
@@ -41,7 +38,7 @@
 #include <QDir>
 
 
-ImageWidget::ImageWidget(QWidget *parent): QWidget(parent), m_aspectTreeModel(0) {
+ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     ui.setupUi(this);
 
     QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tSymbol);
@@ -54,10 +51,6 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent), m_aspectTreeModel(0)
 
     KUrlCompletion *comp = new KUrlCompletion();
     ui.kleFileName->setCompletionObject(comp);
-
-    QGridLayout* generalTabLayout = static_cast<QGridLayout*>(ui.tGeneral->layout());
-    cbActiveCurve = new TreeViewComboBox(ui.tGeneral);
-    generalTabLayout->addWidget(cbActiveCurve, 10, 2, 1, 6);
 
     QGridLayout* editTabLayout = static_cast<QGridLayout*>(ui.tEdit->layout());
     editTabLayout->setContentsMargins(2,2,2,2);
@@ -89,17 +82,19 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent), m_aspectTreeModel(0)
     ui.cbGraphType->addItem(i18n("Polar (x, y(rad))"));
     ui.cbGraphType->addItem(i18n("Logarithmic (ln(x), y)"));
     ui.cbGraphType->addItem(i18n("Logarithmic (x, ln(y))"));
+    ui.cbGraphType->addItem(i18n("Ternary (x, y, z)"));
+
+    ui.lTernaryScale->setHidden(true);
+    ui.sbTernaryScale->setHidden(true);
+    ui.lPoisitionZ1->setHidden(true);
+    ui.lPoisitionZ2->setHidden(true);
+    ui.lPoisitionZ3->setHidden(true);
+    ui.sbPoisitionZ1->setHidden(true);
+    ui.sbPoisitionZ2->setHidden(true);
+    ui.sbPoisitionZ3->setHidden(true);
 
     ui.cbPlotImageType->addItem(i18n("Original Image"));
     ui.cbPlotImageType->addItem(i18n("Processed Image"));
-
-    ui.cbXErrorType->addItem(i18n("No Error"));
-    ui.cbXErrorType->addItem(i18n("symmetric"));
-    ui.cbXErrorType->addItem(i18n("asymmetric"));
-
-    ui.cbYErrorType->addItem(i18n("No Error"));
-    ui.cbYErrorType->addItem(i18n("symmetric"));
-    ui.cbYErrorType->addItem(i18n("asymmetric"));
 
     //SLOTS
     // geometry
@@ -108,8 +103,6 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent), m_aspectTreeModel(0)
     connect( ui.kleFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
     connect( ui.kleFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
     connect( ui.cbPlotImageType, SIGNAL(currentIndexChanged(int)), this, SLOT(plotImageTypeChanged(int)) );
-    connect( ui.cbXErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(xErrorTypeChanged(int)) );
-    connect( ui.cbYErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(yErrorTypeChanged(int)) );
     connect( ssIntensity, SIGNAL(spanChanged(int,int)), this, SLOT(intensitySpanChanged(int,int)) );
     connect( ssForeground, SIGNAL(spanChanged(int,int)), this, SLOT(foregroundSpanChanged(int,int)) );
     connect( ssHue, SIGNAL(spanChanged(int,int)), this, SLOT(hueSpanChanged(int,int)) );
@@ -122,33 +115,30 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent), m_aspectTreeModel(0)
     connect( ui.rbValue, SIGNAL(clicked()), this, SLOT(rbClicked()) );
     connect( ui.sbMinSegmentLength, SIGNAL(valueChanged(int)), this, SLOT(minSegmentLengthChanged(int)) );
     connect( ui.sbPointSeparation, SIGNAL(valueChanged(int)), this, SLOT(pointSeparationChanged(int)) );
-    connect( cbActiveCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(activeCurveChanged(QModelIndex)) );
 
     //axis point
     connect( ui.cbGraphType, SIGNAL(currentIndexChanged(int)), this, SLOT(graphTypeChanged()) );
+    connect( ui.sbTernaryScale, SIGNAL(valueChanged(double)), this, SLOT(ternaryScaleChanged(double)) );
     connect( ui.sbPoisitionX1, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
     connect( ui.sbPoisitionY1, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
     connect( ui.sbPoisitionX2, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
     connect( ui.sbPoisitionY2, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
     connect( ui.sbPoisitionX3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
     connect( ui.sbPoisitionY3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+    connect( ui.sbPoisitionZ1, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+    connect( ui.sbPoisitionZ2, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
+    connect( ui.sbPoisitionZ3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
 }
 
 ImageWidget::~ImageWidget() {
-    if (m_aspectTreeModel)
-        delete m_aspectTreeModel;
 }
 
 void ImageWidget::setImages(QList<Image*> list) {
     m_imagesList = list;
     m_image = list.first();
-    Q_ASSERT(m_image);
-    m_aspectTreeModel = new AspectTreeModel(m_image->parentAspect());
-    setModel();
     this->load();
     initConnections();
     handleWidgetActions();
-    handleCurveAspectChanged();
 }
 
 void ImageWidget::initConnections() {
@@ -160,39 +150,13 @@ void ImageWidget::initConnections() {
     connect( m_image, SIGNAL(axisPointsChanged(Image::ReferencePoints)), this, SLOT(imageAxisPointsChanged(Image::ReferencePoints)) );
     connect( m_image, SIGNAL(settingsChanged(Image::EditorSettings)), this, SLOT(imageEditorSettingsChanged(Image::EditorSettings)) );
     connect( m_image, SIGNAL(minSegmentLengthChanged(int)), this, SLOT(imageMinSegmentLengthChanged(int)) );
-    connect( m_image, SIGNAL(activeCurveChanged(const DataPickerCurve*)), this, SLOT(imageActiveCurveChanged()) );
-    connect( m_image->parentAspect(), SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleCurveAspectChanged()) );
-    connect( m_image->parentAspect(), SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*))
-             , this, SLOT(handleCurveAspectChanged()) );
-
-    if (m_image->activeCurve()) {
-        connect( m_image->activeCurve(), SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(updateCustomItemList()) );
-        connect( m_image->activeCurve(), SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-                 this, SLOT(updateCustomItemList()) );
-    }
 }
-
-
-void ImageWidget::setModel() {
-    QList<const char*>  list;
-    list<<"Datapicker"<<"Image"<<"DataPickerCurve";
-    cbActiveCurve->setTopLevelClasses(list);
-
-    list.clear();
-    list<<"DataPickerCurve";
-    m_aspectTreeModel->setSelectableAspects(list);
-    cbActiveCurve->setSelectableClasses(list);
-    cbActiveCurve->setModel(m_aspectTreeModel);
-}
-
 
 void ImageWidget::handleWidgetActions() {
     QString fileName =  ui.kleFileName->text().trimmed();
     if (!fileName.isEmpty()) {
         ui.tEdit->setEnabled(true);
         ui.cbGraphType->setEnabled(true);
-        ui.cbXErrorType->setEnabled(true);
-        ui.cbYErrorType->setEnabled(true);
         ui.sbPoisitionX1->setEnabled(true);
         ui.sbPoisitionX2->setEnabled(true);
         ui.sbPoisitionX3->setEnabled(true);
@@ -202,8 +166,6 @@ void ImageWidget::handleWidgetActions() {
     } else {
         ui.tEdit->setEnabled(false);
         ui.cbGraphType->setEnabled(false);
-        ui.cbXErrorType->setEnabled(false);
-        ui.cbYErrorType->setEnabled(false);
         ui.sbPoisitionX1->setEnabled(false);
         ui.sbPoisitionX2->setEnabled(false);
         ui.sbPoisitionX3->setEnabled(false);
@@ -213,17 +175,6 @@ void ImageWidget::handleWidgetActions() {
     }
 
     updateCustomItemList();
-}
-
-void ImageWidget::handleCurveAspectChanged() {
-    QList<DataPickerCurve*> curveList = m_image->parentAspect()->children<DataPickerCurve>();
-    if (curveList.isEmpty()) {
-        cbActiveCurve->setVisible(false);
-        ui.lActiveCurve->setVisible(false);
-    } else {
-        cbActiveCurve->setVisible(true);
-        ui.lActiveCurve->setVisible(true);
-    }
 }
 
 //**********************************************************
@@ -269,6 +220,37 @@ void ImageWidget::graphTypeChanged() {
     Image::ReferencePoints points = m_image->axisPoints();
     points.type = Image::GraphType(ui.cbGraphType->currentIndex());
 
+    if (points.type != Image::Ternary) {
+        ui.lTernaryScale->setHidden(true);
+        ui.sbTernaryScale->setHidden(true);
+        ui.lPoisitionZ1->setHidden(true);
+        ui.lPoisitionZ2->setHidden(true);
+        ui.lPoisitionZ3->setHidden(true);
+        ui.sbPoisitionZ1->setHidden(true);
+        ui.sbPoisitionZ2->setHidden(true);
+        ui.sbPoisitionZ3->setHidden(true);
+    } else {
+        ui.lTernaryScale->setHidden(false);
+        ui.sbTernaryScale->setHidden(false);
+        ui.lPoisitionZ1->setHidden(false);
+        ui.lPoisitionZ2->setHidden(false);
+        ui.lPoisitionZ3->setHidden(false);
+        ui.sbPoisitionZ1->setHidden(false);
+        ui.sbPoisitionZ2->setHidden(false);
+        ui.sbPoisitionZ3->setHidden(false);
+    }
+
+    foreach(Image* image, m_imagesList)
+        image->setAxisPoints(points);
+}
+
+void ImageWidget::ternaryScaleChanged(double value) {
+    if (m_initializing)
+        return;
+
+    Image::ReferencePoints points = m_image->axisPoints();
+    points.ternaryScale = value;
+
     foreach(Image* image, m_imagesList)
         image->setAxisPoints(points);
 }
@@ -284,20 +266,12 @@ void ImageWidget::logicalPositionChanged() {
     points.logicalPos[1].setY(ui.sbPoisitionY2->value());
     points.logicalPos[2].setX(ui.sbPoisitionX3->value());
     points.logicalPos[2].setY(ui.sbPoisitionY3->value());
+    points.logicalPos[0].setZ(ui.sbPoisitionZ1->value());
+    points.logicalPos[1].setZ(ui.sbPoisitionZ2->value());
+    points.logicalPos[2].setZ(ui.sbPoisitionZ3->value());
 
     foreach(Image* image, m_imagesList)
         image->setAxisPoints(points);
-}
-
-void ImageWidget::activeCurveChanged(const QModelIndex& index) {
-    if (m_initializing)
-        return;
-
-    AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-    DataPickerCurve* curve = dynamic_cast<DataPickerCurve*>(aspect);
-
-    foreach(Image* image, m_imagesList)
-        image->setActiveCurve(curve);
 }
 
 void ImageWidget::rotationChanged(double value){
@@ -307,7 +281,6 @@ void ImageWidget::rotationChanged(double value){
     foreach(Image* image, m_imagesList)
         image->setRotationAngle(value);
 }
-
 
 void ImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit) {
     if (m_initializing)
@@ -418,27 +391,6 @@ void ImageWidget::plotImageTypeChanged(int index) {
         image->setPlotImageType(Image::PlotImageType(index));
 }
 
-void ImageWidget::xErrorTypeChanged(int index) {
-    if (m_initializing)
-        return;
-    Image::Errors errors = m_image->plotErrors();
-    errors.x = Image::ErrorType(index);
-
-    foreach(Image* image, m_imagesList)
-        image->setPlotErrors(errors);
-}
-
-void ImageWidget::yErrorTypeChanged(int index) {
-    if (m_initializing)
-        return;
-
-    Image::Errors errors = m_image->plotErrors();
-    errors.y = Image::ErrorType(index);
-
-    foreach(Image* image, m_imagesList)
-        image->setPlotErrors(errors);
-}
-
 void ImageWidget::minSegmentLengthChanged(int value) {
     if (m_initializing)
         return;
@@ -453,13 +405,6 @@ void ImageWidget::pointSeparationChanged(int value) {
 
     foreach(Image* image, m_imagesList)
         image->setPointSeparation(value);
-}
-
-void ImageWidget::setModelIndexFromCurve(TreeViewComboBox* cb, const DataPickerCurve* curve){
-    if (curve)
-        cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(curve));
-    else
-        cb->setCurrentModelIndex(QModelIndex());
 }
 //*********************************************************
 //****** SLOTs for changes triggered in Image *********
@@ -479,12 +424,16 @@ void ImageWidget::imageRotationAngleChanged(float angle){
 void ImageWidget::imageAxisPointsChanged(const Image::ReferencePoints& axisPoints) {
     m_initializing = true;
     ui.cbGraphType->setCurrentIndex((int) axisPoints.type);
+    ui.sbTernaryScale->setValue(axisPoints.ternaryScale);
     ui.sbPoisitionX1->setValue(axisPoints.logicalPos[0].x());
     ui.sbPoisitionY1->setValue(axisPoints.logicalPos[0].y());
     ui.sbPoisitionX2->setValue(axisPoints.logicalPos[1].x());
     ui.sbPoisitionY2->setValue(axisPoints.logicalPos[1].y());
     ui.sbPoisitionX3->setValue(axisPoints.logicalPos[2].x());
     ui.sbPoisitionY3->setValue(axisPoints.logicalPos[2].y());
+    ui.sbPoisitionZ1->setValue(axisPoints.logicalPos[0].z());
+    ui.sbPoisitionZ2->setValue(axisPoints.logicalPos[1].z());
+    ui.sbPoisitionZ3->setValue(axisPoints.logicalPos[2].z());
     m_initializing = false;
 }
 
@@ -509,28 +458,9 @@ void ImageWidget::imageMinSegmentLengthChanged(const int value) {
     m_initializing = false;
 }
 
-void ImageWidget::imageActiveCurveChanged() {
-    m_initializing = true;
-    this->setModelIndexFromCurve(cbActiveCurve, m_image->activeCurve());
-    m_initializing = false;
-
-    updateCustomItemList();
-}
-
-void ImageWidget::plotErrorsChanged(Image::Errors errors){
-    m_initializing = true;
-    ui.cbXErrorType->setCurrentIndex((int) errors.x);
-    ui.cbYErrorType->setCurrentIndex((int) errors.y);
-    m_initializing = false;
-}
-
 void ImageWidget::updateCustomItemList() {
     QList<CustomItem*> itemsList;
-    if (m_image->activeCurve())
-        itemsList = m_image->activeCurve()->children<CustomItem>(AbstractAspect::IncludeHidden);
-    else
-        itemsList = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
-
+    itemsList = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
     customItemWidget->setCustomItems(itemsList);
 }
 //**********************************************************
@@ -543,15 +473,17 @@ void ImageWidget::load() {
     m_initializing = true;
     ui.kleFileName->setText( m_image->fileName() );
     ui.cbGraphType->setCurrentIndex((int) m_image->axisPoints().type);
+    ui.sbTernaryScale->setValue(m_image->axisPoints().ternaryScale);
     ui.sbPoisitionX1->setValue(m_image->axisPoints().logicalPos[0].x());
     ui.sbPoisitionY1->setValue(m_image->axisPoints().logicalPos[0].y());
     ui.sbPoisitionX2->setValue(m_image->axisPoints().logicalPos[1].x());
     ui.sbPoisitionY2->setValue(m_image->axisPoints().logicalPos[1].y());
     ui.sbPoisitionX3->setValue(m_image->axisPoints().logicalPos[2].x());
     ui.sbPoisitionY3->setValue(m_image->axisPoints().logicalPos[2].y());
+    ui.sbPoisitionZ1->setValue(m_image->axisPoints().logicalPos[0].z());
+    ui.sbPoisitionZ2->setValue(m_image->axisPoints().logicalPos[1].z());
+    ui.sbPoisitionZ3->setValue(m_image->axisPoints().logicalPos[2].z());
     ui.cbPlotImageType->setCurrentIndex((int) m_image->plotImageType);
-    ui.cbXErrorType->setCurrentIndex((int) m_image->plotErrors().x);
-    ui.cbYErrorType->setCurrentIndex((int) m_image->plotErrors().y);
     ssIntensity->setSpan(m_image->settings().intensityThresholdLow, m_image->settings().intensityThresholdHigh);
     ssForeground->setSpan(m_image->settings().foregroundThresholdLow, m_image->settings().foregroundThresholdHigh);
     ssHue->setSpan(m_image->settings().hueThresholdLow, m_image->settings().hueThresholdHigh);
@@ -564,6 +496,5 @@ void ImageWidget::load() {
     ui.rbValue->setChecked(m_image->settings().type == Image::Value);
     ui.sbPointSeparation->setValue(m_image->pointSeparation());
     ui.sbMinSegmentLength->setValue(m_image->minSegmentLength());
-    this->setModelIndexFromCurve(cbActiveCurve, m_image->activeCurve());
     m_initializing = false;
 }

@@ -59,6 +59,7 @@ class LabelWidget;
 class ImportFileDialog;
 class ImageWidget;
 class CustomItemWidget;
+class DatapickerCurveWidget;
 
 class QDockWidget;
 class QStackedWidget;
@@ -162,6 +163,7 @@ private:
 	LabelWidget* textLabelDock;
     ImageWidget* imageDock;
     CustomItemWidget* customItemDock;
+    DatapickerCurveWidget* datapickerCurveDock;
 
 	bool openXML(QIODevice*);
 

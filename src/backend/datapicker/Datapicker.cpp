@@ -31,7 +31,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/datapicker/DatapickerView.h"
 #include "backend/datapicker/DataPickerCurve.h"
-#include "backend/datapicker/CustomItem.h"
+#include "backend/datapicker/Transform.h"
 
 #include "KIcon"
 #include <KLocale>
@@ -43,13 +43,12 @@
  * \ingroup backend
  */
 Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name)
-    : AbstractPart(name), scripted(engine), m_image(0) {
+    : AbstractPart(name), scripted(engine), m_image(0), activeCurve(0), m_transform(new Transform()) {
 
     connect( this, SIGNAL(aspectAdded(const AbstractAspect*)),
-             this, SLOT(handleAspectAdded(const AbstractAspect*)) );
+             this, SLOT(handleChildAspectAdded(const AbstractAspect*)) );
     connect( this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
              this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)) );
-
 }
 
 void Datapicker::initDefault() {
@@ -111,12 +110,23 @@ Image* Datapicker::currentImage() const {
     emits \c datapickerItemSelected() to forward this event to the \c DatapickerView
     in order to select the corresponding tab.
  */
-void Datapicker::childSelected(const AbstractAspect* aspect){
-    int index;
-    if (aspect->parentAspect() == this)
-        index= indexOfChild<AbstractAspect>(aspect);
-    else
-        index = indexOfChild<AbstractAspect>(aspect->parentAspect());
+void Datapicker::childSelected(const AbstractAspect* aspect) {
+    activeCurve = dynamic_cast<DataPickerCurve*>(const_cast<AbstractAspect*>(aspect));
+    const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
+    if (!part && !activeCurve)
+        return;
+
+    int index = -1;
+    if (activeCurve) {
+        index = indexOfChild<AbstractAspect>(m_image);
+    } else if (part) {
+        if (aspect->parentAspect() == this) {
+            index = indexOfChild<AbstractAspect>(aspect);
+        } else {
+            const DataPickerCurve* curve = aspect->ancestor<const DataPickerCurve>();
+            index= indexOfChild<AbstractAspect>(curve);
+        }
+    }
 
     emit datapickerItemSelected(index);
 }
@@ -135,7 +145,8 @@ void Datapicker::childDeselected(const AbstractAspect* aspect){
  *  This function is called in \c DatapickerView when the current tab was changed
  */
 void Datapicker::setChildSelectedInView(int index, bool selected){
-    AbstractAspect* aspect = child<AbstractAspect>(index);
+    QList<const AbstractAspect*> allChildren = children<const AbstractAspect>(AbstractAspect::Recursive);
+    const AbstractAspect* aspect = allChildren.at(index);
     if (selected) {
         emit childAspectSelectedInView(aspect);
 
@@ -146,16 +157,18 @@ void Datapicker::setChildSelectedInView(int index, bool selected){
         emit childAspectDeselectedInView(aspect);
 
         //deselect also all children that were potentially selected before (columns of a spreadsheet)
-        foreach(AbstractAspect* child, aspect->children<AbstractAspect>())
+        foreach(const AbstractAspect* child, aspect->children<const AbstractAspect>())
             emit childAspectDeselectedInView(child);
     }
 }
 
-void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
-    connect( aspect, SIGNAL(aspectAdded(const AbstractAspect*)),
-            this, SLOT(handleChildAspectAdded(const AbstractAspect*)) );
-    connect( aspect, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-            this, SLOT(handleChildAspectAboutToBeRemoved(const AbstractAspect*)) );
+QVector3D Datapicker::mapSceneToLogical(const QPointF& point) const {
+    return m_transform->mapSceneToLogical(point, m_image->axisPoints());
+}
+
+
+QVector3D Datapicker::mapSceneLengthToLogical(const QPointF& point) const {
+    return m_transform->mapSceneLengthToLogical(point, m_image->axisPoints());
 }
 
 void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
@@ -166,8 +179,8 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
         foreach(WorksheetElement *elem, childElements) {
             handleChildAspectAboutToBeRemoved(elem);
         }
-
-        m_image->curveAboutToBeRemoved(curve);
+    } else {
+        handleChildAspectAboutToBeRemoved(aspect);
     }
 }
 
@@ -240,15 +253,7 @@ bool Datapicker::load(XmlStreamReader* reader){
         if (!reader->isStartElement())
             continue;
 
-        if(reader->name() == "spreadsheet") {
-            Spreadsheet* spreadsheet = new Spreadsheet(0, "spreadsheet", true);
-            if (!spreadsheet->load(reader)){
-                delete spreadsheet;
-                return false;
-            }else{
-                addChild(spreadsheet);
-            }
-        } else if (reader->name() == "image") {
+        if (reader->name() == "image") {
             Image* plot = new Image(0, i18n("image"), true);
             if (!plot->load(reader)){
                 delete plot;

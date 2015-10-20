@@ -172,10 +172,10 @@ void CustomItem::initActions() {
     connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 }
 
-void CustomItem::initErrorBar(const Image::Errors& errors) {
+void CustomItem::initErrorBar(const DataPickerCurve::Errors& errors) {
     m_errorBarItemList.clear();
-    if (errors.x != Image::NoError) {
-        setXSymmetricError(errors.x == Image::SymmetricError);
+    if (errors.x != DataPickerCurve::NoError) {
+        setXSymmetricError(errors.x == DataPickerCurve::SymmetricError);
 
         ErrorBarItem* plusDeltaXItem = new ErrorBarItem(this, ErrorBarItem::PlusDeltaX);
         plusDeltaXItem->setPosition(plusDeltaXPos());
@@ -188,8 +188,8 @@ void CustomItem::initErrorBar(const Image::Errors& errors) {
         m_errorBarItemList<<plusDeltaXItem<<minusDeltaXItem;
     }
 
-    if (errors.y != Image::NoError) {
-        setYSymmetricError(errors.y == Image::SymmetricError);
+    if (errors.y != DataPickerCurve::NoError) {
+        setYSymmetricError(errors.y == DataPickerCurve::SymmetricError);
 
         ErrorBarItem* plusDeltaYItem = new ErrorBarItem(this, ErrorBarItem::PlusDeltaY);
         plusDeltaYItem->setPosition(plusDeltaYPos());
@@ -235,7 +235,7 @@ void CustomItem::setParentGraphicsItem(QGraphicsItem* item) {
     d->updatePosition();
 }
 
-void CustomItem::retransform(){
+void CustomItem::retransform() {
     Q_D(CustomItem);
     d->retransform();
 }
@@ -345,14 +345,14 @@ STD_SETTER_CMD_IMPL_F_S(CustomItem, SetPlusDeltaXPos, QPointF, plusDeltaXPos, up
 void CustomItem::setPlusDeltaXPos(const QPointF& pos) {
     Q_D(CustomItem);
     if ( pos != d->plusDeltaXPos ) {
+        beginMacro(i18n("%1: set +delta_X position", name()));
         if (d->xSymmetricError) {
-            beginMacro(i18n("%1: set +delta X position", name()));
             exec(new CustomItemSetPlusDeltaXPosCmd(d, pos, i18n("%1: set +delta X position")));
             setMinusDeltaXPos(QPointF(-qAbs(pos.x()), pos.y()));
-            endMacro();
         } else {
             exec(new CustomItemSetPlusDeltaXPosCmd(d, pos, i18n("%1: set +delta X position")));
         }
+        endMacro();
     }
 }
 
@@ -360,14 +360,14 @@ STD_SETTER_CMD_IMPL_F_S(CustomItem, SetMinusDeltaXPos, QPointF, minusDeltaXPos, 
 void CustomItem::setMinusDeltaXPos(const QPointF& pos) {
     Q_D(CustomItem);
     if ( pos != d->minusDeltaXPos ) {
+        beginMacro(i18n("%1: set -delta_X position", name()));
         if (d->xSymmetricError) {
-            beginMacro(i18n("%1: set -delta X position", name()));
             exec(new CustomItemSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta X position")));
             setPlusDeltaXPos(QPointF(qAbs(pos.x()), pos.y()));
-            endMacro();
         } else {
             exec(new CustomItemSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta X position")));
         }
+        endMacro();
     }
 }
 
@@ -375,14 +375,14 @@ STD_SETTER_CMD_IMPL_F_S(CustomItem, SetPlusDeltaYPos, QPointF, plusDeltaYPos, up
 void CustomItem::setPlusDeltaYPos(const QPointF& pos) {
     Q_D(CustomItem);
     if ( pos != d->plusDeltaYPos ) {
+        beginMacro(i18n("%1: set +delta Y position", name()));
         if (d->ySymmetricError) {
-            beginMacro(i18n("%1: set +delta Y position", name()));
             exec(new CustomItemSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta Y position")));
             setMinusDeltaYPos(QPointF(pos.x(), qAbs(pos.y())));
-            endMacro();
         } else {
             exec(new CustomItemSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta Y position")));
         }
+        endMacro();
     }
 }
 
@@ -390,14 +390,14 @@ STD_SETTER_CMD_IMPL_F_S(CustomItem, SetMinusDeltaYPos, QPointF, minusDeltaYPos, 
 void CustomItem::setMinusDeltaYPos(const QPointF& pos) {
     Q_D(CustomItem);
     if ( pos != d->minusDeltaYPos ) {
+        beginMacro(i18n("%1: set -delta Y position", name()));
         if (d->ySymmetricError) {
-            beginMacro(i18n("%1: set -delta Y position", name()));
             exec(new CustomItemSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta Y position")));
             setPlusDeltaYPos(QPointF(pos.x(), -qAbs(pos.y())));
-            endMacro();
         } else {
             exec(new CustomItemSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta Y position")));
         }
+        endMacro();
     }
 }
 
@@ -527,7 +527,7 @@ void CustomItem::setPosition(const QPointF& point) {
     Q_D(CustomItem);
     if (point != d->position.point){
         d->position.point = point;
-        retransform();
+        d->retransform();
     }
 }
 
@@ -602,6 +602,7 @@ void CustomItemPrivate::retransform(){
     QPainterPath path = CustomItem::itemsPathFromStyle(itemsStyle);
     boundingRectangle = path.boundingRect();
     recalcShapeAndBoundingRect();
+    updateData();
 
     emit(q->changed());
 }
@@ -641,7 +642,6 @@ void CustomItemPrivate::updatePosition(){
     }
 
     emit q->positionChanged(position);
-    updateData();
 }
 
 /*!
@@ -662,7 +662,8 @@ void CustomItemPrivate::retransformErrorBar() {
 */
 void CustomItemPrivate::updateData() {
     DataPickerCurve* curve = dynamic_cast<DataPickerCurve*>(q->parentAspect());
-    curve->updateData(q);
+    if (curve)
+        curve->updateData(q);
 }
 
 bool CustomItemPrivate::swapVisible(bool on){

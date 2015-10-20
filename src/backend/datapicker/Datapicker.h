@@ -32,9 +32,13 @@
 #include "backend/core/AbstractScriptingEngine.h"
 
 class Spreadsheet;
+class DataPickerCurve;
 class Image;
 class QXmlStreamWriter;
 class XmlStreamReader;
+class Transform;
+class QPointF;
+class QVector3D;
 
 class Datapicker : public AbstractPart, public scripted {
     Q_OBJECT
@@ -47,10 +51,12 @@ class Datapicker : public AbstractPart, public scripted {
         virtual QMenu* createContextMenu();
         virtual QWidget* view() const;
 
-        Image* m_image;
+        DataPickerCurve* activeCurve;
         Spreadsheet* currentSpreadsheet() const;
         Image* currentImage() const;
         void setChildSelectedInView(int index, bool selected);
+        QVector3D mapSceneToLogical(const QPointF&) const;
+        QVector3D mapSceneLengthToLogical(const QPointF&) const;
 
         virtual void save(QXmlStreamWriter*) const;
         virtual bool load(XmlStreamReader*);
@@ -58,11 +64,14 @@ class Datapicker : public AbstractPart, public scripted {
     public slots:
         virtual void childSelected(const AbstractAspect*);
 
+    private:
+        Transform* m_transform;
+        Image* m_image;
+
     private slots:
         virtual void childDeselected(const AbstractAspect*);
         void handleChildAspectAboutToBeRemoved(const AbstractAspect*);
         void handleChildAspectAdded(const AbstractAspect*);
-        void handleAspectAdded(const AbstractAspect*);
         void handleAspectAboutToBeRemoved(const AbstractAspect*);
 
     signals:

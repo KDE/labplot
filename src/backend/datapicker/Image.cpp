@@ -33,7 +33,6 @@
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/datapicker/ImageView.h"
 #include "backend/datapicker/Segments.h"
-#include "backend/datapicker/DataPickerCurve.h"
 
 #include <QDesktopWidget>
 #include <QMenu>
@@ -76,6 +75,7 @@ void Image::init() {
     d->minSegmentLength = group.readEntry("MinSegmentLength", 30);
     d->pointSeparation = group.readEntry("PointSeparation", 30);
     d->axisPoints.type = (Image::GraphType) group.readEntry("GraphType", (int) Image::Cartesian);
+    d->axisPoints.ternaryScale = group.readEntry("TernaryScale", 1);
     d->settings.type = (Image::ColorAttributes) group.readEntry("ColorAttributesType", (int) Image::Intensity);
     d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", 10);
     d->settings.foregroundThresholdLow = group.readEntry("ForegroundThresholdLow", 0);
@@ -87,10 +87,7 @@ void Image::init() {
     d->settings.saturationThresholdLow = group.readEntry("SaturationThresholdLow", 50);
     d->settings.valueThresholdHigh = group.readEntry("ValueThresholdHigh", 50);
     d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", 0);
-    d->plotErrors.x = (Image::ErrorType) group.readEntry("PlotErrorTypeX", (int) Image::NoError);
-    d->plotErrors.y = (Image::ErrorType) group.readEntry("PlotErrorTypeY", (int) Image::NoError);
     d->plotPointsType = (Image::PointsType) group.readEntry("PlotPointsType", (int) Image::AxisPoints);
-    d->activeCurve = NULL;
 }
 
 
@@ -121,13 +118,6 @@ QWidget* Image::view() const {
         connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
     }
     return m_view;
-}
-
-void Image::curveAboutToBeRemoved(const AbstractAspect* aspect) {
-    if (aspect == d->activeCurve) {
-        d->activeCurve = NULL;
-        update();
-    }
 }
 
 /*!
@@ -170,6 +160,7 @@ void Image::initSceneParameters() {
     setPointSeparation(30);
 
     ReferencePoints axisPoints;
+    axisPoints.ternaryScale = 1;
     axisPoints.type = Image::Cartesian;
     setAxisPoints(axisPoints);
 
@@ -187,11 +178,6 @@ void Image::initSceneParameters() {
     settings.valueThresholdLow = 0;
     setSettings(settings);
 
-    Errors plotErrors;
-    plotErrors.x = Image::NoError;
-    plotErrors.y = Image::NoError;
-    setPlotErrors(plotErrors);
-
     PointsType plotPointsType = Image::AxisPoints;
     setPlotPointsType(plotPointsType);
 }
@@ -201,11 +187,9 @@ CLASS_D_READER_IMPL(Image, QString, fileName, fileName)
 CLASS_D_READER_IMPL(Image, Image::ReferencePoints, axisPoints, axisPoints)
 CLASS_D_READER_IMPL(Image, Image::EditorSettings, settings, settings)
 BASIC_D_READER_IMPL(Image, float, rotationAngle, rotationAngle)
-BASIC_D_READER_IMPL(Image, Image::Errors, plotErrors, plotErrors)
 BASIC_D_READER_IMPL(Image, Image::PointsType, plotPointsType, plotPointsType)
 BASIC_D_READER_IMPL(Image, int, pointSeparation, pointSeparation)
 BASIC_D_READER_IMPL(Image, int, minSegmentLength, minSegmentLength)
-BASIC_D_READER_IMPL(Image, DataPickerCurve*, activeCurve, activeCurve)
 /* ============================ setter methods and undo commands  for background options  ================= */
 STD_SETTER_CMD_IMPL_F_S(Image, SetFileName, QString, fileName, updateFileName)
 void Image::setFileName(const QString& fileName) {
@@ -220,12 +204,6 @@ STD_SETTER_CMD_IMPL_S(Image, SetRotationAngle, float, rotationAngle)
 void Image::setRotationAngle(float angle) {
     if (angle != d->rotationAngle)
         exec(new ImageSetRotationAngleCmd(d, angle, i18n("%1: set rotation angle")));
-}
-
-STD_SETTER_CMD_IMPL_S(Image, SetPlotErrors, Image::Errors, plotErrors)
-void Image::setPlotErrors(const Errors types) {
-    if (types.x != d->plotErrors.x || types.y != d->plotErrors.y)
-        exec(new ImageSetPlotErrorsCmd(d, types, i18n("%1: set Error Type")));
 }
 
 STD_SETTER_CMD_IMPL_S(Image, SetAxisPoints, Image::ReferencePoints, axisPoints)
@@ -244,13 +222,6 @@ STD_SETTER_CMD_IMPL_F_S(Image, SetMinSegmentLength, int, minSegmentLength, makeS
 void Image::setminSegmentLength(const int value) {
     if (d->minSegmentLength != value)
         exec(new ImageSetMinSegmentLengthCmd(d, value, i18n("%1: set minimum segment length")));        ;
-}
-
-STD_SETTER_CMD_IMPL_F_S(Image, SetActiveCurve, DataPickerCurve*, activeCurve, update)
-void Image::setActiveCurve(DataPickerCurve* curve) {
-    if (curve != d->activeCurve) {
-        exec(new ImageSetActiveCurveCmd(d, curve, i18n("%1: set active curve")));
-    }
 }
 
 void Image::setPrinting(bool on) const {
@@ -351,19 +322,21 @@ void Image::save(QXmlStreamWriter* writer) const {
     //general properties
     writer->writeStartElement( "general" );
     writer->writeAttribute( "fileName", d->fileName );
-    writer->writeAttribute( "plotErrorTypeX", QString::number(d->plotErrors.x) );
-    writer->writeAttribute( "plotErrorTypeY", QString::number(d->plotErrors.y) );
     writer->writeAttribute( "plotPointsType", QString::number(d->plotPointsType) );
     writer->writeEndElement();
 
     writer->writeStartElement( "axisPoint" );
     writer->writeAttribute( "graphType", QString::number(d->axisPoints.type) );
+    writer->writeAttribute( "ternaryScale", QString::number(d->axisPoints.ternaryScale) );
     writer->writeAttribute( "axisPointLogicalX1", QString::number(d->axisPoints.logicalPos[0].x()) );
     writer->writeAttribute( "axisPointLogicalY1", QString::number(d->axisPoints.logicalPos[0].y()) );
     writer->writeAttribute( "axisPointLogicalX2", QString::number(d->axisPoints.logicalPos[1].x()) );
     writer->writeAttribute( "axisPointLogicalY2", QString::number(d->axisPoints.logicalPos[1].y()) );
     writer->writeAttribute( "axisPointLogicalX3", QString::number(d->axisPoints.logicalPos[2].x()) );
     writer->writeAttribute( "axisPointLogicalY3", QString::number(d->axisPoints.logicalPos[2].y()) );
+    writer->writeAttribute( "axisPointLogicalZ1", QString::number(d->axisPoints.logicalPos[0].z()) );
+    writer->writeAttribute( "axisPointLogicalZ2", QString::number(d->axisPoints.logicalPos[1].z()) );
+    writer->writeAttribute( "axisPointLogicalZ3", QString::number(d->axisPoints.logicalPos[2].z()) );
     writer->writeAttribute( "axisPointSceneX1", QString::number(d->axisPoints.scenePos[0].x()) );
     writer->writeAttribute( "axisPointSceneY1", QString::number(d->axisPoints.scenePos[0].y()) );
     writer->writeAttribute( "axisPointSceneX2", QString::number(d->axisPoints.scenePos[1].x()) );
@@ -428,18 +401,6 @@ bool Image::load(XmlStreamReader* reader) {
             str = attribs.value("fileName").toString();
             d->fileName = str;
 
-            str = attribs.value("plotErrorTypeX").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("plotErrorTypeX"));
-            else
-                d->plotErrors.x = Image::ErrorType(str.toInt());
-
-            str = attribs.value("plotErrorTypeY").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("plotErrorTypeY"));
-            else
-                d->plotErrors.y = Image::ErrorType(str.toInt());
-
             str = attribs.value("plotPointsType").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("plotPointsType"));
@@ -455,6 +416,12 @@ bool Image::load(XmlStreamReader* reader) {
             else
                 d->axisPoints.type = Image::GraphType(str.toInt());
 
+            str = attribs.value("ternaryScale").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("ternaryScale"));
+            else
+                d->axisPoints.ternaryScale = str.toDouble();
+
             str = attribs.value("axisPointLogicalX1").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("axisPointLogicalX1"));
@@ -466,6 +433,12 @@ bool Image::load(XmlStreamReader* reader) {
                 reader->raiseWarning(attributeWarning.arg("axisPointLogicalY1"));
             else
                 d->axisPoints.logicalPos[0].setY(str.toDouble());
+
+            str = attribs.value("axisPointLogicalZ1").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("axisPointLogicalZ1"));
+            else
+                d->axisPoints.logicalPos[0].setZ(str.toDouble());
 
             str = attribs.value("axisPointLogicalX2").toString();
             if(str.isEmpty())
@@ -479,6 +452,12 @@ bool Image::load(XmlStreamReader* reader) {
             else
                 d->axisPoints.logicalPos[1].setY(str.toDouble());
 
+            str = attribs.value("axisPointLogicalZ2").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("axisPointLogicalZ2"));
+            else
+                d->axisPoints.logicalPos[1].setZ(str.toDouble());
+
             str = attribs.value("axisPointLogicalX3").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("axisPointLogicalX3"));
@@ -490,6 +469,12 @@ bool Image::load(XmlStreamReader* reader) {
                 reader->raiseWarning(attributeWarning.arg("axisPointLogicalY3"));
             else
                 d->axisPoints.logicalPos[2].setY(str.toDouble());
+
+            str = attribs.value("axisPointLogicalZ3").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("axisPointLogicalZ3"));
+            else
+                d->axisPoints.logicalPos[2].setZ(str.toDouble());
 
             str = attribs.value("axisPointSceneX1").toString();
             if(str.isEmpty())
@@ -629,7 +614,6 @@ bool Image::load(XmlStreamReader* reader) {
         }
     }
 
-    d->activeCurve = NULL;
     d->uploadImage(d->fileName);
     update();
     return true;

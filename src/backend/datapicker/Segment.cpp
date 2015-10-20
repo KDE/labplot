@@ -30,6 +30,7 @@
 #include "backend/datapicker/CustomItem.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datapicker/DataPickerCurve.h"
+#include "backend/datapicker/Datapicker.h"
 
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
@@ -173,30 +174,33 @@ void SegmentPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 }
 
 QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
-    if ( change == QGraphicsItem::ItemSelectedChange && value == true && q->m_image->activeCurve()) {
-        int count = 0;
-        q->m_image->beginMacro(i18n("%1:draw points over segment", q->m_image->name()));
-        foreach (QLine* line, q->path) {
-            int l = (line->y1() > line->y2())?line->y2():line->y1();
-            int h = (line->y1() > line->y2())?line->y1():line->y2();
+    if ( change == QGraphicsItem::ItemSelectedChange && value == true ) {
+        Datapicker* datapicker = dynamic_cast<Datapicker*>(q->m_image->parentAspect());
+        Q_ASSERT(datapicker);
+        if (datapicker->activeCurve) {
+            int count = 0;
+            datapicker->activeCurve->beginMacro(i18n("%1:draw points over segment", datapicker->activeCurve->name()));
+            foreach (QLine* line, q->path) {
+                int l = (line->y1() > line->y2())?line->y2():line->y1();
+                int h = (line->y1() > line->y2())?line->y1():line->y2();
 
-            for (int i = l; i <= h; i++) {
-                if (count%q->m_image->pointSeparation() == 0) {
-                    bool positionUsed = false;
-                    QList<CustomItem*> imageItemsList = q->m_image->activeCurve()->children<CustomItem>(AbstractAspect::IncludeHidden);
-                    foreach (CustomItem* item, imageItemsList) {
-                        if ( item->position().point == QPoint(line->x1(), i)*scaleFactor )
-                            positionUsed = true;
+                for (int i = l; i <= h; i++) {
+                    if (count%q->m_image->pointSeparation() == 0) {
+                        bool positionUsed = false;
+                        QList<CustomItem*> imageItemsList = datapicker->activeCurve->children<CustomItem>(AbstractAspect::IncludeHidden);
+                        foreach (CustomItem* item, imageItemsList) {
+                            if ( item->position().point == QPoint(line->x1(), i)*scaleFactor )
+                                positionUsed = true;
+                        }
+
+                        if (!positionUsed)
+                            datapicker->activeCurve->addCurvePoint(QPoint(line->x1(), i)*scaleFactor);
                     }
-
-                    if (!positionUsed)
-                        q->m_image->activeCurve()->addCustomItem(QPoint(line->x1(), i)*scaleFactor);
+                    count++;
                 }
-                count++;
             }
+            datapicker->activeCurve->endMacro();
         }
-
-        q->m_image->endMacro();
     }
 
     return QGraphicsItem::itemChange(change, value);
