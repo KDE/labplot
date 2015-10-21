@@ -361,14 +361,11 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
     Datapicker* datapicker = dynamic_cast<Datapicker*>(m_image->parentAspect());
     Q_ASSERT(datapicker);
     QPointF eventPos = mapToScene(event->pos());
-    if ( m_mouseMode == SelectAndEditMode && m_image->isLoaded &&
-         sceneRect().contains(eventPos) && !datapicker->activeCurve ) {
-        if (m_image->plotPointsType() == Image::AxisPoints) {
+    if ( m_mouseMode == SelectAndEditMode && m_image->isLoaded && sceneRect().contains(eventPos) ) {
+        if (m_image->plotPointsType() == Image::AxisPoints && !datapicker->activeCurve )
             addAxisPoint(eventPos);
-        } else if (m_image->plotPointsType() == Image::CurvePoints) {
-            if (datapicker->activeCurve)
-                datapicker->activeCurve->addCurvePoint(eventPos);
-        }
+        else if (m_image->plotPointsType() == Image::CurvePoints && datapicker->activeCurve)
+            datapicker->activeCurve->addCurvePoint(eventPos);
     }
 
     // select the datapicker/image in the project explorer if the view was clicked.

@@ -1250,10 +1250,7 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAspect* before,const AbstractAspect* aspect){
-    Q_UNUSED(before)
-
-    if (!aspect->hidden())
-        m_projectExplorer->setCurrentAspect(parent);
+    m_projectExplorer->setCurrentAspect(parent);
 }
 
 void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){

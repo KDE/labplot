@@ -45,7 +45,7 @@
  * \ingroup backend
  */
 Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading)
-    : AbstractPart(name), scripted(engine), m_image(0) {
+    : AbstractPart(name), scripted(engine), m_image(0), activeCurve(0), m_transform(new Transform()) {
 
     connect( this, SIGNAL(aspectAdded(const AbstractAspect*)),
              this, SLOT(handleChildAspectAdded(const AbstractAspect*)) );

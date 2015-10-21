@@ -317,8 +317,7 @@ void DataPickerCurve::updateData(const CustomItem* item) {
         return;
 
     int row = indexOfChild<CustomItem>(item ,AbstractAspect::IncludeHidden);
-    QVector3D data;
-    data = datapicker->mapSceneToLogical(item->position().point);
+    QVector3D data = datapicker->mapSceneToLogical(item->position().point);
 
     if(d->posXColumn)
         d->posXColumn->setValueAt(row, data.x());
