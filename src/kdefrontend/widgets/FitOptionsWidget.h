@@ -26,7 +26,7 @@
  *                                                                         *
  ***************************************************************************/
 #ifndef FITOPTIONSWIDGET_H
-#define FITOPTIONSSWIDGET_H
+#define FITOPTIONSWIDGET_H
 
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "ui_fitoptionswidget.h"
