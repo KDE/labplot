@@ -108,12 +108,10 @@ Project::Project() : Folder(i18n("Project")), d(new Private()) {
 	d->loading = false;
 	d->changed = false;
 
-#ifndef SUPPRESS_SCRIPTING_INIT
 	// TODO: intelligent engine choosing
-	Q_ASSERT(ScriptingEngineManager::instance()->engineNames().size() > 0);
-	QString engine_name = ScriptingEngineManager::instance()->engineNames()[0];
-	d->scriptingEngine = ScriptingEngineManager::instance()->engine(engine_name);
-#endif
+// 	Q_ASSERT(ScriptingEngineManager::instance()->engineNames().size() > 0);
+// 	QString engine_name = ScriptingEngineManager::instance()->engineNames()[0];
+// 	d->scriptingEngine = ScriptingEngineManager::instance()->engine(engine_name);
 
 	connect(this, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(descriptionChanged(const AbstractAspect*)));
 }

@@ -150,6 +150,8 @@ void ColumnDock::setColumns(QList<Column*> list){
 			ui.sbPrecision->setValue(filter->numDigits());
 			break;
 		}
+		case AbstractColumn::Text:
+			break;
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
@@ -157,8 +159,6 @@ void ColumnDock::setColumns(QList<Column*> list){
 			ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->format()));
 			break;
 		}
-		default:
-			break;
 	}
 
 	ui.cbPlotDesignation->setCurrentIndex( int(m_column->plotDesignation()) );
@@ -416,6 +416,8 @@ void ColumnDock::columnFormatChanged() {
                         ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->numericFormat()));
                         break;
                 }
+				case AbstractColumn::Text:
+					break;
                 case AbstractColumn::Month:
                 case AbstractColumn::Day:
                 case AbstractColumn::DateTime: {
@@ -423,8 +425,6 @@ void ColumnDock::columnFormatChanged() {
                         ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(filter->format()));
                         break;
                 }
-                default:
-                        break;
         }
         m_initializing = false;
 }

@@ -31,11 +31,11 @@
 #include "matrixcommands.h"
 #include "backend/matrix/MatrixModel.h"
 #include "backend/core/Folder.h"
+#include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/matrix/MatrixView.h"
-#include "backend/lib/commandtemplates.h"
 
-#include <QDebug>
+#include <QLocale>
 
 #include <KIcon>
 #include <KLocale>
@@ -101,7 +101,7 @@ void Matrix::init() {
   Returns an icon to be used for decorating my views.
   */
 QIcon Matrix::icon() const {
-	return KIcon("matrix");
+	return KIcon("labplot-matrix");
 }
 
 /*!
@@ -225,6 +225,7 @@ void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
 	reinterpret_cast<MatrixView*>(m_view)->model()->updateHeader();
 }
 
+//columns
 void Matrix::insertColumns(int before, int count) {
 	if( count < 1 || before < 0 || before > columnCount()) return;
 	WAIT_CURSOR;
@@ -247,15 +248,11 @@ void Matrix::removeColumns(int first, int count) {
 	RESET_CURSOR;
 }
 
-void Matrix::removeRows(int first, int count) {
-	if( count < 1 || first < 0 || first+count > rowCount()) return;
-	WAIT_CURSOR;
-	beginMacro(i18np("%1: remove %2 row", "%1: remove %2 rows", name(), count));
-	exec(new MatrixRemoveRowsCmd(d, first, count));
-	endMacro();
-	RESET_CURSOR;
+void Matrix::clearColumn(int c) {
+	exec(new MatrixClearColumnCmd(d, c));
 }
 
+//rows
 void Matrix::insertRows(int before, int count) {
 	if( count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
@@ -267,6 +264,40 @@ void Matrix::insertRows(int before, int count) {
 
 void Matrix::appendRows(int count) {
 	insertRows(rowCount(), count);
+}
+
+void Matrix::removeRows(int first, int count) {
+	if( count < 1 || first < 0 || first+count > rowCount()) return;
+	WAIT_CURSOR;
+	beginMacro(i18np("%1: remove %2 row", "%1: remove %2 rows", name(), count));
+	exec(new MatrixRemoveRowsCmd(d, first, count));
+	endMacro();
+	RESET_CURSOR;
+}
+void Matrix::clearRow(int r) {
+	for(int c=0; c<columnCount(); ++c)
+		exec(new MatrixSetCellValueCmd(d, r, c, 0.0));
+}
+
+//cell
+double Matrix::cell(int row, int col) const {
+	return d->cell(row, col);
+}
+
+//! Return the text displayed in the given cell
+QString Matrix::text(int row, int col) {
+	return QLocale().toString(cell(row,col), d->numericFormat, d->precision);
+}
+
+//! Set the value of the cell
+void Matrix::setCell(int row, int col, double value) {
+	if(row < 0 || row >= rowCount()) return;
+	if(col < 0 || col >= columnCount()) return;
+	exec(new MatrixSetCellValueCmd(d, row, col, value));
+}
+
+void Matrix::clearCell(int row, int col) {
+	exec(new MatrixSetCellValueCmd(d, row, col, 0.0));
 }
 
 void Matrix::setDimensions(int rows, int cols) {
@@ -285,11 +316,6 @@ void Matrix::setDimensions(int rows, int cols) {
 		exec(new MatrixRemoveRowsCmd(d, rowCount()+row_diff, -row_diff));
 	endMacro();
 	RESET_CURSOR;
-}
-
-//! Return the value in the given cell
-double Matrix::cell(int row, int col) const {
-	return d->cell(row, col);
 }
 
 void Matrix::copy(Matrix* other) {
@@ -316,18 +342,6 @@ void Matrix::copy(Matrix* other) {
 	RESET_CURSOR;
 }
 
-
-//! Return the text displayed in the given cell
-QString Matrix::text(int row, int col) {
-	return QLocale().toString(cell(row,col), d->numericFormat, d->precision);
-}
-
-//! Set the value of the cell
-void Matrix::setCell(int row, int col, double value) {
-	if(row < 0 || row >= rowCount()) return;
-	if(col < 0 || col >= columnCount()) return;
-	exec(new MatrixSetCellValueCmd(d, row, col, value));
-}
 
 //! Duplicate the matrix inside its folder
 void Matrix::duplicate() {

@@ -1,10 +1,10 @@
 /***************************************************************************
     File                 : ColumnPrivate.h
-    Project              : AbstractColumn
+    Project              : LabPlot
     Description          : Private data class of Column
     --------------------------------------------------------------------
-    Copyright            : (C) 2007,2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
+	Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -34,14 +34,15 @@
 #include "backend/core/column/Column.h"
 
 class AbstractSimpleFilter;
-class QString;
+// class QString;
 
-class Column::Private
-{
+class ColumnPrivate: QObject {
+	Q_OBJECT
+
 	public:
-		Private(Column * owner, AbstractColumn::ColumnMode mode);
-		~Private();
-		Private(Column * owner, AbstractColumn::ColumnMode mode, void * data);
+		ColumnPrivate(Column * owner, AbstractColumn::ColumnMode mode);
+		~ColumnPrivate();
+		ColumnPrivate(Column * owner, AbstractColumn::ColumnMode mode, void * data);
 
 		Column *owner() { return m_owner; }
 
@@ -50,8 +51,8 @@ class Column::Private
 
 		bool copy(const AbstractColumn * other);
 		bool copy(const AbstractColumn * source, int source_start, int dest_start, int num_rows);
-		bool copy(const Private * other);
-		bool copy(const Private * source, int source_start, int dest_start, int num_rows);
+		bool copy(const ColumnPrivate * other);
+		bool copy(const ColumnPrivate * source, int source_start, int dest_start, int num_rows);
 		int rowCount() const;
 		void resizeTo(int new_size);
 		void insertRows(int before, int count);
@@ -69,10 +70,11 @@ class Column::Private
 		void replaceData(void * data);
 		IntervalAttribute<QString> formulaAttribute() const;
 		void replaceFormulas(IntervalAttribute<QString> formulas);
-		void replaceFormula(QString);
 
 		QString formula() const;
-		void setFormula(QString);
+		const QStringList& formulaVariableNames() const;
+		const QStringList& formulaVariableColumnPathes() const;
+		void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPathes);
 
 		QString formula(int row) const;
 		QList< Interval<int> > formulaIntervals() const;
@@ -100,6 +102,8 @@ class Column::Private
 		AbstractSimpleFilter* m_input_filter;
 		AbstractSimpleFilter* m_output_filter;
 		QString m_formula;
+		QStringList m_formulaVariableNames;
+		QStringList m_formulaVariableColumnPathes;
 		IntervalAttribute<QString> m_formulas;
 		AbstractColumn::PlotDesignation m_plot_designation;
 		int m_width;

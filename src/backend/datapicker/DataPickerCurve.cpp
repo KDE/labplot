@@ -88,7 +88,7 @@ void DataPickerCurve::initAction() {
     Returns an icon to be used in the project explorer.
 */
 QIcon DataPickerCurve::icon() const {
-    return  KIcon("xy-curve");
+    return  KIcon("labplot-xy-curve");
 }
 
 /*!

@@ -177,7 +177,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 		addChild(fileDataSource);
 		loaded = true;
 	} else if (element_name == "datapicker") {
-		Datapicker* datapicker = new Datapicker(0, "");
+		Datapicker* datapicker = new Datapicker(0, "", true);
 		if (!datapicker->load(reader)){
 			delete datapicker;
 			return false;

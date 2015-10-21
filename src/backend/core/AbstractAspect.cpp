@@ -41,12 +41,11 @@
 #include <QApplication>
 #include <QXmlStreamWriter>
 
-#ifndef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
 #include <KIcon>
 #include <KAction>
 #include <KStandardAction>
 #include <KMenu>
-#endif
+
 /**
  * \class AbstractAspect
  * \brief Base class of all persistent objects in a Project.
@@ -304,14 +303,6 @@ QIcon AbstractAspect::icon() const {
  * The caller takes ownership of the menu.
  */
 QMenu* AbstractAspect::createContextMenu() {
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	QMenu* menu = new QMenu();
-	QAction *action;
-	const QStyle *widget_style = qApp->style();
-	action = menu->addAction(QObject::i18n("&Remove"), this, SLOT(remove()));
-	action->setIcon(widget_style->standardIcon(QStyle::SP_TrashIcon));
-	return menu;
-#else
 	KMenu* menu = new KMenu();
 	menu->addTitle(this->name());
 	//TODO: activate this again when the functionality is implemented
@@ -322,7 +313,6 @@ QMenu* AbstractAspect::createContextMenu() {
 	menu->addAction(QIcon(KIcon("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
 	menu->addAction(QIcon(KIcon("edit-delete")), i18n("Delete"), this, SLOT(remove()));
 	return menu;
-#endif
 }
 
 /**

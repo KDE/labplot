@@ -26,8 +26,6 @@
  ***************************************************************************/
 
 #include "DatapickerView.h"
-#include "backend/core/AbstractAspect.h"
-#include "backend/core/AbstractPart.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -38,7 +36,6 @@
 #include <QTabWidget>
 #include <QHBoxLayout>
 #include <QMenu>
-#include <QDebug>
 
 #include <KAction>
 #include <KLocale>

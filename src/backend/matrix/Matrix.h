@@ -78,18 +78,23 @@ class Matrix : public AbstractDataSource {
 		void insertColumns(int before, int count);
 		void appendColumns(int count);
 		void removeColumns(int first, int count);
+		void clearColumn(int);
+
 		void insertRows(int before, int count);
 		void appendRows(int count);
 		void removeRows(int first, int count);
+		void clearRow(int);
 
 		double cell(int row, int col) const;
-		void setCell(int row, int col, double value );
+		QString text(int row, int col);
+		void setCell(int row, int col, double value);
+		void clearCell(int row, int col);
+
 		QVector<double> columnCells(int col, int first_row, int last_row);
 		void setColumnCells(int col, int first_row, int last_row, const QVector<double>& values);
 		QVector<double> rowCells(int row, int first_column, int last_column);
 		void setRowCells(int row, int first_column, int last_column, const QVector<double>& values);
 
-		QString text(int row, int col);
 		void copy(Matrix* other);
 
 		virtual void save(QXmlStreamWriter*) const;

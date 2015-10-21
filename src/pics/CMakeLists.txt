@@ -1,7 +1,51 @@
-FILE(GLOB pngs "${CMAKE_CURRENT_SOURCE_DIR}/*.png")
-install(FILES ${pngs} DESTINATION ${DATA_INSTALL_DIR}/${PROJECT_NAME}/pics )
-
-FILE(GLOB svgs "${CMAKE_CURRENT_SOURCE_DIR}/*.svg")
-install(FILES ${svgs} DESTINATION ${DATA_INSTALL_DIR}/${PROJECT_NAME}/pics )
-
-kde4_update_iconcache()
+ecm_install_icons(
+ICONS
+sc-apps-labplot-1-to-1-zoom.svg
+sc-apps-labplot-1-to-2-zoom.svg
+sc-apps-labplot-1-to-3-zoom.svg
+sc-apps-labplot-1-to-4-zoom.svg
+sc-apps-labplot-1-to-5-zoom.svg
+sc-apps-labplot-auto-scale-all.svg
+sc-apps-labplot-auto-scale-x.svg
+sc-apps-labplot-auto-scale-y.svg
+sc-apps-labplot-axis-horizontal.svg
+sc-apps-labplot-axis-vertical.svg
+sc-apps-labplot-cursor-arrow.svg
+sc-apps-labplot-editbreaklayout.svg
+sc-apps-labplot-editgrid.svg
+sc-apps-labplot-edithlayout.svg
+sc-apps-labplot-editvlayout.svg
+sc-apps-labplot-format-text-symbol.svg
+sc-apps-labplot-matrix-new.svg
+sc-apps-labplot-matrix.svg
+sc-apps-labplot-plot-axis-points.svg
+sc-apps-labplot-shift-down-y.svg
+sc-apps-labplot-shift-left-x.svg
+sc-apps-labplot-shift-right-x.svg
+sc-apps-labplot-shift-up-y.svg
+sc-apps-labplot-spreadsheet-new.svg
+sc-apps-labplot-spreadsheet.svg
+sc-apps-labplot-TeX-logo.svg
+sc-apps-labplot-transform-move.svg
+sc-apps-labplot-workbook-new.svg
+sc-apps-labplot-workbook.svg
+sc-apps-labplot-worksheet-new.svg
+sc-apps-labplot-worksheet.svg
+sc-apps-labplot-xy-curve-points.svg
+sc-apps-labplot-xy-curve-segments.svg
+sc-apps-labplot-xy-curve.svg
+sc-apps-labplot-xy-equation-curve.svg
+sc-apps-labplot-xy-fit-curve.svg
+sc-apps-labplot-xy-plot-four-axes.svg
+sc-apps-labplot-xy-plot-two-axes-centered-origin.svg
+sc-apps-labplot-xy-plot-two-axes-centered.svg
+sc-apps-labplot-xy-plot-two-axes.svg
+sc-apps-labplot-zoom-in-x.svg
+sc-apps-labplot-zoom-in-y.svg
+sc-apps-labplot-zoom-out-x.svg
+sc-apps-labplot-zoom-out-y.svg
+sc-apps-labplot-zoom-select.svg
+sc-apps-labplot-zoom-select-x.svg
+sc-apps-labplot-zoom-select-y.svg
+DESTINATION ${KDE_INSTALL_ICONDIR}
+THEME hicolor)

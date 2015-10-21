@@ -39,11 +39,11 @@
 #include <ctype.h>
 
 /* Functions type.                                   */
-#ifdef HAVE_SOLARIS
+/*#ifdef HAVE_SOLARIS
 typedef double (*func_t) (double);
-#else
+#else*/
 typedef double (*func_t) ();
-#endif
+/*#endif*/
 
 /* Data type for links in the chain of symbols.      */
 struct symrec {

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dialog for generating values from a mathematical function
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -47,10 +47,16 @@ class FunctionValuesDialog : public KDialog{
 
 	private:
 		Ui::FunctionValuesWidget ui;
-		TreeViewComboBox* cbXDataColumn;
 		QList<Column*> m_columns;
 		Spreadsheet* m_spreadsheet;
 		std::auto_ptr<AspectTreeModel> m_aspectTreeModel;
+		QList<const char*>  m_topLevelClasses;
+		QList<const char*>  m_selectableClasses;
+
+		QList<QLineEdit*> m_variableNames;
+		QList<QLabel*> m_variableLabels;
+		QList<TreeViewComboBox*> m_variableDataColumns;
+		QList<QToolButton*> m_variableDeleteButtons;
 
 	private slots:
 		void generate();
@@ -59,6 +65,9 @@ class FunctionValuesDialog : public KDialog{
 		void showFunctions();
 		void insertFunction(const QString&);
 		void insertConstant(const QString&);
+		void addVariable();
+		void deleteVariable();
+		void variableNameChanged();
 };
 
 #endif

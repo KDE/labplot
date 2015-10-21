@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : XmlStreamReader.h
-    Project              : SciDAVis
-    Description          : XML stream parser that supports errors as well as warnings
+    Project           : LabPlot
+    Description    : XML stream parser that supports errors as well as warnings
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 Tilman Benkert (thzs*gmx.net)
-                           (replace * with @ in the email addresses) 
-                           
+    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,6 +25,7 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+
 #ifndef XML_STREAM_READER_H
 #define XML_STREAM_READER_H
 
@@ -34,12 +34,7 @@
 #include <QStringList>
 #include "backend/lib/macros.h"
 
-//! XML stream parser that supports errors as well as warnings
-/**
- * This class also adds line and column numbers to the error message.
- */
-class XmlStreamReader : public QXmlStreamReader
-{
+class XmlStreamReader : public QXmlStreamReader {
 	public:
 		XmlStreamReader();
 		explicit XmlStreamReader(QIODevice* device);
@@ -56,28 +51,10 @@ class XmlStreamReader : public QXmlStreamReader
 		CLASS_ACCESSOR(QString, m_warning_prefix, warningPrefix, WarningPrefix);
 		CLASS_ACCESSOR(QString, m_warning_postfix, warningPostfix, WarningPostfix);
 
-		//! Go to the next start or end element tag
-		/**
-		 *	If the end of the document is reached, an error is raised.
-		 *
-		 * \return false if end of document reached, otherwise true
-		 */
+
 		bool skipToNextTag();
-		//! Go to the end element tag of the current element
-		/**
-		 *	If the end of the document is reached, an error is raised.
-		 *
-		 * \return false if end of document reached, otherwise true
-		 */
 		bool skipToEndElement();
-		
-		//! Read an XML attribute and convert it to int
-		/**
-		 * \param name attribute name
-		 * \param ok pointer to report back whether the attribute value could be determined (may be NULL)
-		 * \return the attriute value if found and converted, otherwise zero (in this case *ok is false)
-		 */
-		int readAttributeInt(const QString & name, bool * ok);
+		int readAttributeInt(const QString& name, bool* ok);
 
 	private:
 		QStringList m_warnings;

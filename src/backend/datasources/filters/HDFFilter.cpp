@@ -1003,6 +1003,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	handleError((int)dataspace,"H5Dget_space");
 	int rank = H5Sget_simple_extent_ndims(dataspace);
 	handleError(rank,"H5Dget_simple_extent_ndims");
+#ifdef QT_DEBUG
+	qDebug()<<" rank ="<<rank;
+#endif
 
 	int columnOffset = 0;	// offset to import data
 	int actualRows=0, actualCols=0;	// rows and cols to read
@@ -1053,8 +1056,6 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 #endif
 		if(dataSource != NULL)
 			columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
-		else
-			dataPointers[0]=NULL;
 
 		switch(dclass) {
 		case H5T_STRING: {
