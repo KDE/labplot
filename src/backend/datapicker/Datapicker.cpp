@@ -209,8 +209,6 @@ void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
             }
         }
     }
-
-    emit childAspectAdded(aspect);
 }
 
 void Datapicker::handleChildAspectAboutToBeRemoved(const AbstractAspect* aspect) {

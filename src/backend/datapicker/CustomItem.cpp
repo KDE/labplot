@@ -610,11 +610,11 @@ void CustomItemPrivate::retransform(){
 /*!
     calculates the position of the item, when the position relative to the parent was specified (left, right, etc.)
 */
-void CustomItemPrivate::updatePosition(){
+void CustomItemPrivate::updatePosition() {
     //determine the parent item
     QRectF parentRect;
     QGraphicsItem* parent = parentItem();
-    if (parent){
+    if (parent) {
         parentRect = parent->boundingRect();
     } else {
         if (!scene())
@@ -623,7 +623,7 @@ void CustomItemPrivate::updatePosition(){
         parentRect = scene()->sceneRect();
     }
 
-    if (position.horizontalPosition != CustomItem::hPositionCustom){
+    if (position.horizontalPosition != CustomItem::hPositionCustom) {
         if (position.horizontalPosition == CustomItem::hPositionLeft)
             position.point.setX( parentRect.x() );
         else if (position.horizontalPosition == CustomItem::hPositionCenter)
@@ -632,7 +632,7 @@ void CustomItemPrivate::updatePosition(){
             position.point.setX( parentRect.x() + parentRect.width() );
     }
 
-    if (position.verticalPosition != CustomItem::vPositionCustom){
+    if (position.verticalPosition != CustomItem::vPositionCustom) {
         if (position.verticalPosition == CustomItem::vPositionTop)
             position.point.setY( parentRect.y() );
         else if (position.verticalPosition == CustomItem::vPositionCenter)
@@ -691,7 +691,7 @@ QPainterPath CustomItemPrivate::shape() const{
 /*!
   recalculates the outer bounds and the shape of the item.
 */
-void CustomItemPrivate::recalcShapeAndBoundingRect(){
+void CustomItemPrivate::recalcShapeAndBoundingRect() {
     prepareGeometryChange();
 
     QMatrix matrix;

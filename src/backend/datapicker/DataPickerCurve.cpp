@@ -206,26 +206,29 @@ void DataPickerCurve::setCurveErrorTypes(const DataPickerCurve::Errors errors) {
     if (d->curveErrorTypes.x != errors.x || d->curveErrorTypes.y != errors.y) {
         beginMacro(i18n("%1: set xy-error type", name()));
         exec(new DataPickerCurveSetCurveErrorTypesCmd(d, errors, i18n("%1: set xy-error type")));
-//        m_datasheet->setSelected(true);
 
-        if (errors.x != NoError) {
-            if (!d->plusDeltaXColumn)
-                setPlusDeltaXColumn(appendColumn(i18n("+delta_x"), m_datasheet));
+        if ( errors.x != NoError && !d->plusDeltaXColumn )
+            setPlusDeltaXColumn(appendColumn(i18n("+delta_x"), m_datasheet));
+        else if ( d->plusDeltaXColumn && errors.x == NoError )
+            d->plusDeltaXColumn->remove();
 
-            if (errors.x == AsymmetricError && !d->minusDeltaXColumn)
-                setMinusDeltaXColumn(appendColumn(i18n("-delta_x"), m_datasheet));
-        }
+        if ( errors.x == AsymmetricError && !d->minusDeltaXColumn )
+            setMinusDeltaXColumn(appendColumn(i18n("-delta_x"), m_datasheet));
+        else if ( d->minusDeltaXColumn && errors.x != AsymmetricError )
+            d->minusDeltaXColumn->remove();
 
-        if (errors.y != NoError) {
-            if (!d->plusDeltaYColumn)
-                setPlusDeltaYColumn(appendColumn(i18n("+delta_y"), m_datasheet));
+        if ( errors.y != NoError && !d->plusDeltaYColumn )
+            setPlusDeltaYColumn(appendColumn(i18n("+delta_y"), m_datasheet));
+        else if ( d->plusDeltaYColumn && errors.y == NoError )
+            d->plusDeltaYColumn->remove();
 
-            if (errors.y == AsymmetricError && !d->minusDeltaYColumn)
-                setMinusDeltaYColumn(appendColumn(i18n("-delta_y"), m_datasheet));
-        }
+        if ( errors.y == AsymmetricError && !d->minusDeltaYColumn )
+            setMinusDeltaYColumn(appendColumn(i18n("-delta_y"), m_datasheet));
+        else if ( d->minusDeltaYColumn && errors.y != AsymmetricError )
+            d->minusDeltaYColumn->remove();
+
         endMacro();
     }
-//    this->setSelected(true);
 }
 
 STD_SETTER_CMD_IMPL_S(DataPickerCurve, SetPosXColumn, AbstractColumn*, posXColumn)

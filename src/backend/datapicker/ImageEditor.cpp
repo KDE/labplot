@@ -25,7 +25,6 @@
  ***************************************************************************/
 
 #include "ImageEditor.h"
-
 #include "math.h"
 
 ImageEditor::ImageEditor() {
