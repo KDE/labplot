@@ -107,6 +107,10 @@ QMenu* Image::createContextMenu() {
     return menu;
 }
 
+void Image::createContextMenu(QMenu* menu) {
+    emit requestProjectContextMenu(menu);
+}
+
 //! Construct a primary view on me.
 /**
  * This method may be called multiple times during the life time of an Aspect, or it might not get

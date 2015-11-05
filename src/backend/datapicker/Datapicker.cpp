@@ -37,7 +37,6 @@
 
 #include "KIcon"
 #include <KLocale>
-// #include <QDebug>
 
 /**
  * \class Datapicker
@@ -45,7 +44,7 @@
  * \ingroup backend
  */
 Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading)
-    : AbstractPart(name), scripted(engine), m_image(0), activeCurve(0), m_transform(new Transform()) {
+    : AbstractPart(name), scripted(engine), activeCurve(0), m_transform(new Transform()), m_image(0) {
 
     connect( this, SIGNAL(aspectAdded(const AbstractAspect*)),
              this, SLOT(handleChildAspectAdded(const AbstractAspect*)) );
@@ -57,7 +56,8 @@ Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name, con
 }
 
 void Datapicker::init() {
-    m_image = new Image(0, i18n("image"));
+    m_image = new Image(0, i18n("Plot"));
+    m_image->setHidden(true);
     setUndoAware(false);
     addChild(m_image);
     setUndoAware(true);
@@ -74,8 +74,9 @@ QIcon Datapicker::icon() const {
  * Returns a new context menu. The caller takes ownership of the menu.
  */
 QMenu* Datapicker::createContextMenu() {
-    QMenu *menu = AbstractPart::createContextMenu();
+    QMenu* menu = AbstractPart::createContextMenu();
     Q_ASSERT(menu);
+    m_image->createContextMenu(menu);
     return menu;
 }
 
@@ -110,6 +111,10 @@ Image* Datapicker::currentImage() const {
     return 0;
 }
 
+Image* Datapicker::image() const {
+	return m_image;
+}
+
 /*!
     this slot is called when a datapicker child is selected in the project explorer.
     emits \c datapickerItemSelected() to forward this event to the \c DatapickerView
@@ -117,20 +122,15 @@ Image* Datapicker::currentImage() const {
  */
 void Datapicker::childSelected(const AbstractAspect* aspect) {
     activeCurve = dynamic_cast<DataPickerCurve*>(const_cast<AbstractAspect*>(aspect));
-    const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
-    if (!part && !activeCurve)
-        return;
 
     int index = -1;
     if (activeCurve) {
-        index = indexOfChild<AbstractAspect>(m_image);
-    } else if (part) {
-        if (aspect->parentAspect() == this) {
-            index = indexOfChild<AbstractAspect>(aspect);
-        } else {
-            const DataPickerCurve* curve = aspect->ancestor<const DataPickerCurve>();
-            index= indexOfChild<AbstractAspect>(curve);
-        }
+        //if one of the curves is currently selected, select the image with the plot (the very first child)
+        index = 0;
+    } else {
+	const DataPickerCurve* curve = aspect->ancestor<const DataPickerCurve>();
+        index= indexOfChild<AbstractAspect>(curve);
+		++index; //+1 because of the hidden plot image being the first child and shown in the first tab in the view
     }
 
     emit datapickerItemSelected(index);
@@ -150,7 +150,17 @@ void Datapicker::childDeselected(const AbstractAspect* aspect){
  *  This function is called in \c DatapickerView when the current tab was changed
  */
 void Datapicker::setChildSelectedInView(int index, bool selected){
-    QList<const AbstractAspect*> allChildren = children<const AbstractAspect>(AbstractAspect::Recursive);
+	//select the datapicker itself if the first item (plot image) was selected in the view
+	if (index==0) {
+		if (selected)
+			emit childAspectSelectedInView(this);
+		else
+			emit childAspectDeselectedInView(this);
+
+		return;
+	}
+
+    QList<const AbstractAspect*> allChildren = children<const AbstractAspect>(AbstractAspect::Recursive|AbstractAspect::IncludeHidden);
     const AbstractAspect* aspect = allChildren.at(index);
     if (selected) {
         emit childAspectSelectedInView(aspect);
@@ -257,11 +267,12 @@ bool Datapicker::load(XmlStreamReader* reader){
             continue;
 
         if (reader->name() == "image") {
-            Image* plot = new Image(0, i18n("image"), true);
+            Image* plot = new Image(0, i18n("Plot"), true);
             if (!plot->load(reader)){
                 delete plot;
                 return false;
             } else {
+				plot->setHidden(true);
                 addChild(plot);
                 m_image = plot;
             }

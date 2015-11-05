@@ -53,7 +53,7 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 
     m_tabWidget->setTabPosition(QTabWidget::South);
     m_tabWidget->setTabShape(QTabWidget::Rounded);
-    m_tabWidget->setMovable(true);
+//     m_tabWidget->setMovable(true);
     m_tabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     m_tabWidget->setMinimumSize(600, 600);
 
@@ -63,7 +63,7 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 
     //add tab for each children view
     m_initializing = true;
-    foreach(const AbstractAspect* aspect, m_datapicker->children<AbstractAspect>()){
+    foreach(const AbstractAspect* aspect, m_datapicker->children<AbstractAspect>(AbstractAspect::IncludeHidden)){
         handleAspectAdded(aspect);
         foreach(const AbstractAspect* aspect, aspect->children<AbstractAspect>()){
             handleAspectAdded(aspect);
@@ -115,9 +115,9 @@ void DatapickerView::tabChanged(int index) {
     if (index==-1)
         return;
 
-    QList<const AbstractPart*> childParts = m_datapicker->children<const AbstractPart>(AbstractAspect::Recursive);
+    QList<const AbstractPart*> childParts = m_datapicker->children<const AbstractPart>(AbstractAspect::Recursive|AbstractAspect::IncludeHidden);
     const AbstractPart* part = childParts.at(index);
-    QList<const AbstractAspect*> allChildren = m_datapicker->children<const AbstractAspect>(AbstractAspect::Recursive);
+    QList<const AbstractAspect*> allChildren = m_datapicker->children<const AbstractAspect>(AbstractAspect::Recursive|AbstractAspect::IncludeHidden);
     index = allChildren.indexOf(part);
 
     m_datapicker->setChildSelectedInView(lastSelectedIndex, false);
@@ -149,7 +149,7 @@ void DatapickerView::itemSelected(int index) {
 
 void DatapickerView::showTabContextMenu(const QPoint& point) {
     QMenu* menu = 0;
-    AbstractAspect* aspect = m_datapicker->child<AbstractAspect>(m_tabWidget->currentIndex());
+    AbstractAspect* aspect = m_datapicker->child<AbstractAspect>(m_tabWidget->currentIndex(), AbstractAspect::IncludeHidden);
     Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
     if (spreadsheet) {
         menu = spreadsheet->createContextMenu();
@@ -185,9 +185,15 @@ void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
     } else {
         const DataPickerCurve* curve = aspect->ancestor<const DataPickerCurve>();
         index= m_datapicker->indexOfChild<AbstractAspect>(curve);
+		++index;
     }
 
-    m_tabWidget->insertTab(index, part->view(), aspect->name());
+	QString name = aspect->name();
+	if (dynamic_cast<const Spreadsheet*>(aspect))
+		name = aspect->parentAspect()->name() + ": " + name;
+	//TODO: react on curve name changes, adjust the tab name accordingly
+
+    m_tabWidget->insertTab(index, part->view(), name);
     m_tabWidget->setCurrentIndex(index);
     m_tabWidget->setTabIcon(m_tabWidget->count(), aspect->icon());
     this->tabChanged(index);

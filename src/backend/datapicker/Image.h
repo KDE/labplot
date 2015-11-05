@@ -1,4 +1,4 @@
-/***************************************************************************
+  /***************************************************************************
     File                 : Image.h
     Project              : LabPlot
     Description          : Worksheet for Datapicker
@@ -72,6 +72,7 @@ class Image: public AbstractPart, public scripted {
 
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
+		void createContextMenu(QMenu*);
 		virtual QWidget* view() const;
 
 		virtual void save(QXmlStreamWriter*) const;

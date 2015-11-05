@@ -39,6 +39,7 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/core/Project.h"
 #include "backend/datapicker/CustomItem.h"
+#include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/Image.h"
 #include "backend/datapicker/DataPickerCurve.h"
 #include "commonfrontend/ProjectExplorer.h"
@@ -310,8 +311,8 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
       mainWindow->datapickerCurveDock->setCurves(list);
 
       mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerCurveDock);
-  }else if (className=="Image"){
-      mainWindow->m_propertiesDock->setWindowTitle(i18n("Image properties"));
+  }else if (className=="Datapicker"){
+      mainWindow->m_propertiesDock->setWindowTitle(i18n("Datapicker properties"));
 
       if (!mainWindow->imageDock){
         mainWindow->imageDock = new ImageWidget(mainWindow->stackedWidget);
@@ -320,7 +321,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
       QList<Image*> list;
       foreach(aspect, selectedAspects){
-        list<<qobject_cast<Image*>(aspect);
+        list<<qobject_cast<Datapicker*>(aspect)->image();
       }
       mainWindow->imageDock->setImages(list);
 
