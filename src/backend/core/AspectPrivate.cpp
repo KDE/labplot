@@ -70,8 +70,10 @@ void AbstractAspect::Private::insertChild(int index, AbstractAspect* child)
 			m_owner, SIGNAL(aspectHiddenAboutToChange(const AbstractAspect*)));
 	connect(child, SIGNAL(aspectHiddenChanged(const AbstractAspect*)),
 			m_owner, SIGNAL(aspectHiddenChanged(const AbstractAspect*)));
-	connect(child, SIGNAL(statusInfo(QString)),
-			m_owner, SIGNAL(statusInfo(QString)));
+	connect(child, SIGNAL(statusInfo(QString)), m_owner, SIGNAL(statusInfo(QString)));
+
+	connect(child, SIGNAL(selected(const AbstractAspect*)), m_owner, SLOT(childSelected(const AbstractAspect*)));
+	connect(child, SIGNAL(deselected(const AbstractAspect*)), m_owner, SLOT(childDeselected(const AbstractAspect*)));
 }
 
 int AbstractAspect::Private::indexOfChild(const AbstractAspect *child) const
