@@ -1185,6 +1185,7 @@ void CartesianPlot::visibilityChanged(){
 //#####################################################################
 CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner)
 	: AbstractPlotPrivate(owner), q(owner), curvesXMinMaxIsDirty(false), curvesYMinMaxIsDirty(false),
+	curvesXMin(INFINITY), curvesXMax(-INFINITY), curvesYMin(INFINITY), curvesYMax(-INFINITY),
 	suppressRetransform(false), m_printing(false), m_selectionBandIsShown(false), cSystem(0),
 	mouseMode(CartesianPlot::SelectionMode){
 	setData(0, WorksheetElement::NameCartesianPlot);
