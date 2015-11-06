@@ -508,16 +508,47 @@ void CartesianPlot::setRect(const QRectF& rect){
 		exec(new CartesianPlotSetRectCmd(d, rect, i18n("%1: set geometry rect")));
 }
 
-//TODO: provide an undo-aware version
-// STD_SETTER_CMD_IMPL_F(CartesianPlot, SetAutoScaleX, bool, autoScaleX, retransformScales)
+class CartesianPlotSetAutoScaleXCmd : public QUndoCommand {
+	public:
+		CartesianPlotSetAutoScaleXCmd(CartesianPlotPrivate* private_obj, bool autoScale) {
+			m_private = private_obj;
+			m_autoScale = autoScale;
+			setText(i18n("%1: change x-range auto scaling", m_private->name()));
+		};
+
+		virtual void redo() {
+			m_autoScaleOld = m_private->autoScaleX;
+			if (m_autoScale) {
+				m_minOld = m_private->xMin;
+				m_maxOld = m_private->xMax;
+				m_private->q->scaleAutoX();
+			}
+			m_private->autoScaleX = m_autoScale;
+			emit m_private->q->xAutoScaleChanged(m_autoScale);
+		};
+
+		virtual void undo() {
+			if (!m_autoScaleOld) {
+				m_private->xMin = m_minOld;
+				m_private->xMax = m_maxOld;
+				m_private->retransformScales();
+			}
+			m_private->autoScaleX = m_autoScaleOld;
+			emit m_private->q->xAutoScaleChanged(m_autoScaleOld);
+		}
+
+	private:
+		CartesianPlotPrivate* m_private;
+		bool m_autoScale;
+		bool m_autoScaleOld;
+		float m_minOld;
+		float m_maxOld;
+};
+
 void CartesianPlot::setAutoScaleX(bool autoScaleX){
 	Q_D(CartesianPlot);
-	if (autoScaleX != d->autoScaleX){
-// 		exec(new CartesianPlotSetAutoScaleXCmd(d, autoScaleX, i18n("%1: change auto scale x")));
-		d->autoScaleX = autoScaleX;
-		if (autoScaleX)
-			this->scaleAutoX();
-	}
+	if (autoScaleX != d->autoScaleX)
+		exec(new CartesianPlotSetAutoScaleXCmd(d, autoScaleX));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXMin, float, xMin, retransformScales)
@@ -548,17 +579,47 @@ void CartesianPlot::setXScaleBreakings(const ScaleBreakings& breakings) {
 	exec(new CartesianPlotSetXScaleBreakingsCmd(d, breakings, i18n("%1: set x-scale breakings")));
 }
 
+class CartesianPlotSetAutoScaleYCmd : public QUndoCommand {
+	public:
+		CartesianPlotSetAutoScaleYCmd(CartesianPlotPrivate* private_obj, bool autoScale) {
+			m_private = private_obj;
+			m_autoScale = autoScale;
+			setText(i18n("%1: change y-range auto scaling", m_private->name()));
+		};
 
-//TODO: provide an undo-aware version
-// STD_SETTER_CMD_IMPL_F(CartesianPlot, SetAutoScaleY, bool, autoScaleY, retransformScales)
+		virtual void redo() {
+			m_autoScaleOld = m_private->autoScaleY;
+			if (m_autoScale) {
+				m_minOld = m_private->yMin;
+				m_maxOld = m_private->yMax;
+				m_private->q->scaleAutoY();
+			}
+			m_private->autoScaleY = m_autoScale;
+			emit m_private->q->yAutoScaleChanged(m_autoScale);
+		};
+
+		virtual void undo() {
+			if (!m_autoScaleOld) {
+				m_private->yMin = m_minOld;
+				m_private->yMax = m_maxOld;
+				m_private->retransformScales();
+			}
+			m_private->autoScaleY = m_autoScaleOld;
+			emit m_private->q->yAutoScaleChanged(m_autoScaleOld);
+		}
+
+	private:
+		CartesianPlotPrivate* m_private;
+		bool m_autoScale;
+		bool m_autoScaleOld;
+		float m_minOld;
+		float m_maxOld;
+};
+
 void CartesianPlot::setAutoScaleY(bool autoScaleY){
 	Q_D(CartesianPlot);
-	if (autoScaleY != d->autoScaleY){
-// 		exec(new CartesianPlotSetAutoScaleYCmd(d, autoScaleY, i18n("%1: change auto scale y")));
-		d->autoScaleY = autoScaleY;
-		if (autoScaleY)
-			this->scaleAutoY();
-	}
+	if (autoScaleY != d->autoScaleY)
+		exec(new CartesianPlotSetAutoScaleYCmd(d, autoScaleY));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYMin, float, yMin, retransformScales);
