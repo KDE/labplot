@@ -4,6 +4,7 @@
     Description          : View class for Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -32,6 +33,7 @@
 #include "backend/datapicker/Image.h"
 #include "commonfrontend/workbook/WorkbookView.h"
 #include "backend/datapicker/DataPickerCurve.h"
+#include "commonfrontend/datapicker/ImageView.h"
 
 #include <QTabWidget>
 #include <QHBoxLayout>
@@ -85,7 +87,7 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 
 DatapickerView::~DatapickerView() {
     //delete all children views here, its own view will be deleted in ~AbstractPart()
-    foreach(const AbstractAspect* aspect, m_datapicker->children<AbstractAspect>()) {
+    foreach(const AbstractAspect* aspect, m_datapicker->children<AbstractAspect>(AbstractAspect::IncludeHidden)) {
         foreach(const AbstractAspect* aspect, aspect->children<AbstractAspect>()) {
             const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
             if (part)
@@ -95,6 +97,16 @@ DatapickerView::~DatapickerView() {
         if (part)
             part->deleteView();
     }
+}
+
+void DatapickerView::fillToolBar(QToolBar* toolBar){
+	ImageView* view = dynamic_cast<ImageView*>(m_datapicker->image()->view());
+	view->fillToolBar(toolBar);
+}
+
+void DatapickerView::createContextMenu(QMenu* menu) const {
+	Q_ASSERT(menu);
+	m_datapicker->image()->createContextMenu(menu);
 }
 
 int DatapickerView::currentIndex() const {

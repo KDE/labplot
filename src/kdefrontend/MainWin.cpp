@@ -38,13 +38,12 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datapicker/Datapicker.h"
-#include "backend/datapicker/Image.h"
 
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/matrix/MatrixView.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
-#include "commonfrontend/datapicker/ImageView.h"
+#include "commonfrontend/datapicker/DatapickerView.h"
 
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
@@ -573,11 +572,11 @@ void MainWin::updateGUI() {
 		factory->container("matrix", this)->setEnabled(false);
 	}
 
-    const  Image* image = this->activeImage();
-    if (image){
+    const Datapicker* datapicker = this->activeDatapicker();
+    if (datapicker){
         factory->container("datapicker", this)->setEnabled(true);
         //populate datapicker-menu
-        ImageView* view=qobject_cast<ImageView*>(image->view());
+        DatapickerView* view=qobject_cast<DatapickerView*>(datapicker->view());
         QMenu* menu=qobject_cast<QMenu*>(factory->container("datapicker", this));
         menu->clear();
         view->createContextMenu(menu);
@@ -1166,26 +1165,6 @@ Matrix* MainWin::activeMatrix() const{
 	}
 
 	return matrix;
-}
-
-/*!
-    returns a pointer to a \c Matrix object, if the currently active Mdi-Subwindow
-    or if the currently selected tab in a \c DatapickerView is a \c MatrixView
-    Otherwise returns \c 0.
-*/
-Image* MainWin::activeImage() const{
-    QMdiSubWindow* win = m_mdiArea->currentSubWindow();
-    if (!win)
-        return 0;
-
-    AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-    Q_ASSERT(part);
-    Image* image = 0;
-    Datapicker* datapicker = dynamic_cast<Datapicker*>(part);
-    if (datapicker)
-        image = datapicker->currentImage();
-
-    return image;
 }
 
 /*!

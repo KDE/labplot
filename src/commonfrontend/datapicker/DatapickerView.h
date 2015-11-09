@@ -4,6 +4,7 @@
     Description          : View class for Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -34,6 +35,9 @@ class AbstractAspect;
 class Datapicker;
 class TabWidget;
 
+class QMenu;
+class QToolBar;
+
 class DatapickerView : public QWidget {
     Q_OBJECT
 
@@ -41,6 +45,8 @@ class DatapickerView : public QWidget {
         explicit DatapickerView(Datapicker*);
         virtual ~DatapickerView();
 
+		void createContextMenu(QMenu*) const;
+		void fillToolBar(QToolBar*);
         int currentIndex() const;
 
     private:

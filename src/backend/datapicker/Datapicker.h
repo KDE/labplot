@@ -54,8 +54,7 @@ class Datapicker : public AbstractPart, public scripted {
 
         DataPickerCurve* activeCurve;
         Spreadsheet* currentSpreadsheet() const;
-        Image* currentImage() const;
-	Image* image() const;
+		Image* image() const;
         void setChildSelectedInView(int index, bool selected);
         QVector3D mapSceneToLogical(const QPointF&) const;
         QVector3D mapSceneLengthToLogical(const QPointF&) const;

@@ -99,18 +99,6 @@ Spreadsheet* Datapicker::currentSpreadsheet() const {
     return 0;
 }
 
-Image* Datapicker::currentImage() const {
-    if (!m_view)
-        return 0;
-
-    int index = reinterpret_cast<const DatapickerView*>(m_view)->currentIndex();
-    if(index != -1) {
-        AbstractAspect* aspect = child<AbstractAspect>(index);
-        return dynamic_cast<Image*>(aspect);
-    }
-    return 0;
-}
-
 Image* Datapicker::image() const {
 	return m_image;
 }

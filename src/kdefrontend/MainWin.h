@@ -179,8 +179,6 @@ private:
 	Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
     Datapicker* activeDatapicker() const;
-    Image* activeImage() const;
-
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver;
