@@ -160,7 +160,7 @@ void Project::setChanged(const bool value) {
 	if (d->loading)
 		return;
 
-	if ( value && !d->changed )
+	if (value)
 		emit changed();
 
 	d->changed = value;

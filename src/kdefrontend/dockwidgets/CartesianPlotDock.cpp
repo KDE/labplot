@@ -267,9 +267,11 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	//SIGNALs/SLOTs
 	connect( m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(plotDescriptionChanged(const AbstractAspect*)) );
 	connect( m_plot, SIGNAL(rectChanged(QRectF&)), this, SLOT(plotRectChanged(QRectF&)) );
+	connect( m_plot, SIGNAL(xAutoScaleChanged(bool)), this, SLOT(plotXAutoScaleChanged(bool)) );
 	connect( m_plot, SIGNAL(xMinChanged(float)), this, SLOT(plotXMinChanged(float)) );
 	connect( m_plot, SIGNAL(xMaxChanged(float)), this, SLOT(plotXMaxChanged(float)) );
 	connect( m_plot, SIGNAL(xScaleChanged(int)), this, SLOT(plotXScaleChanged(int)) );
+	connect( m_plot, SIGNAL(yAutoScaleChanged(bool)), this, SLOT(plotYAutoScaleChanged(bool)) );
 	connect( m_plot, SIGNAL(yMinChanged(float)), this, SLOT(plotYMinChanged(float)) );
 	connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
 	connect( m_plot, SIGNAL(yScaleChanged(int)), this, SLOT(plotYScaleChanged(int)) );
@@ -879,6 +881,12 @@ void CartesianPlotDock::plotRectChanged(QRectF& rect){
 	m_initializing = false;
 }
 
+void CartesianPlotDock::plotXAutoScaleChanged(bool value) {
+	m_initializing = true;
+	ui.chkAutoScaleX->setChecked(value);
+	m_initializing = false;
+}
+
 void CartesianPlotDock::plotXMinChanged(float value){
 	m_initializing = true;
 	ui.kleXMin->setText( QString::number(value) );
@@ -894,6 +902,13 @@ void CartesianPlotDock::plotXMaxChanged(float value){
 void CartesianPlotDock::plotXScaleChanged(int scale){
 	m_initializing = true;
 	ui.cbXScaling->setCurrentIndex( scale );
+	m_initializing = false;
+}
+
+
+void CartesianPlotDock::plotYAutoScaleChanged(bool value) {
+	m_initializing = true;
+	ui.chkAutoScaleY->setChecked(value);
 	m_initializing = false;
 }
 
