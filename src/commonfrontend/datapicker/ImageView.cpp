@@ -4,6 +4,7 @@
     Description          : Image view for datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+	Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -100,8 +101,8 @@ void ImageView::initActions() {
     QActionGroup* zoomActionGroup = new QActionGroup(this);
     QActionGroup* mouseModeActionGroup = new QActionGroup(this);
     QActionGroup* plotPointsTypeActionGroup = new QActionGroup(this);
-    QActionGroup* navigationActionGroup = new QActionGroup(this);
-    QActionGroup* magnificationActionGroup = new QActionGroup(this);
+    navigationActionGroup = new QActionGroup(this);
+    magnificationActionGroup = new QActionGroup(this);
 
     //Zoom actions
     zoomInViewAction = new KAction(KIcon("zoom-in"), i18n("Zoom in"), zoomActionGroup);
@@ -177,7 +178,6 @@ void ImageView::initActions() {
 }
 
 void ImageView::initMenus() {
-
     m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"));
     m_viewMouseModeMenu->setIcon(KIcon("input-mouse"));
     m_viewMouseModeMenu->addAction(selectAndEditModeAction);
@@ -246,31 +246,37 @@ void ImageView::createContextMenu(QMenu* menu) const {
 
 void ImageView::fillToolBar(QToolBar* toolBar) {
     toolBar->addSeparator();
-    toolBar->addAction(selectAndEditModeAction);
-    toolBar->addAction(navigationModeAction);
-    toolBar->addAction(zoomSelectionModeAction);
-    toolBar->addAction(selectAndMoveModeAction);
-    toolBar->addSeparator();
     toolBar->addAction(setAxisPointsAction);
     toolBar->addAction(setCurvePointsAction);
     toolBar->addAction(selectSegmentAction);
+
     toolBar->addSeparator();
     toolBar->addAction(addCurveAction);
-    tbZoom = new QToolButton(toolBar);
-    tbZoom->setPopupMode(QToolButton::MenuButtonPopup);
-    tbZoom->setMenu(m_zoomMenu);
-    tbZoom->setDefaultAction(currentZoomAction);
-    toolBar->addWidget(tbZoom);
+
+    toolBar->addSeparator();
     toolBar->addAction(noMagnificationAction);
     toolBar->addAction(twoTimesMagnificationAction);
     toolBar->addAction(threeTimesMagnificationAction);
     toolBar->addAction(fourTimesMagnificationAction);
     toolBar->addAction(fiveTimesMagnificationAction);
+
     toolBar->addSeparator();
     toolBar->addAction(shiftRightAction);
     toolBar->addAction(shiftLeftAction);
     toolBar->addAction(shiftUpAction);
     toolBar->addAction(shiftDownAction);
+
+    toolBar->addSeparator();
+    toolBar->addAction(selectAndEditModeAction);
+    toolBar->addAction(navigationModeAction);
+    toolBar->addAction(zoomSelectionModeAction);
+    toolBar->addAction(selectAndMoveModeAction);
+
+    tbZoom = new QToolButton(toolBar);
+    tbZoom->setPopupMode(QToolButton::MenuButtonPopup);
+    tbZoom->setMenu(m_zoomMenu);
+    tbZoom->setDefaultAction(currentZoomAction);
+    toolBar->addWidget(tbZoom);
 }
 
 void ImageView::setScene(QGraphicsScene* scene) {
@@ -394,10 +400,14 @@ void ImageView::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 void ImageView::mouseMoveEvent(QMouseEvent* event) {
-    if ( m_mouseMode == SelectAndEditMode || m_mouseMode == ZoomSelectionMode )
-        setCursor(Qt::CrossCursor);
-    else
+    if ( m_mouseMode == SelectAndEditMode || m_mouseMode == ZoomSelectionMode ) {
+		if (m_image->isLoaded)
+			setCursor(Qt::CrossCursor);
+		else
+			setCursor(Qt::ArrowCursor);
+	} else {
         setCursor(Qt::ArrowCursor);
+	}
 
     if (m_selectionBandIsShown) {
         m_selectionEnd = event->pos();
@@ -437,6 +447,9 @@ void ImageView::mouseMoveEvent(QMouseEvent* event) {
         imageSection = imageSection.copy(pos.x() - size/2, pos.y() - size/2, size, size);
         imageSection = imageSection.scaled(size*magnificationFactor, size*magnificationFactor, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         imageSection = imageSection.copy(imageSection.width()/2 - size/2, imageSection.height()/2 - size/2, size, size);
+		QPainter painter(&imageSection);
+		painter.setPen(QPen(Qt::lightGray, 2));
+		painter.drawRect(imageSection.rect());
 
         m_image->m_magnificationWindow->setVisible(true);
         m_image->m_magnificationWindow->setPixmap(QPixmap::fromImage(imageSection));
@@ -706,35 +719,47 @@ void ImageView::addAxisPoint(const QPointF& pos) {
 }
 
 void ImageView::changeRotationAngle() {
+	resetMatrix();
     this->rotate(-m_image->rotationAngle());
     updateBackground();
 }
 
 void ImageView::handleImageActions() {
-    int axisPointsCount = m_image->childCount<CustomItem>(AbstractAspect::IncludeHidden);
-
-    setCurvePointsAction->setEnabled(false);
-    selectSegmentAction->setEnabled(false);
-    addCurveAction->setEnabled(false);
-    setAxisPointsAction->setEnabled(false);
-
     if (m_image->isLoaded) {
+		navigationActionGroup->setEnabled(true);
+		magnificationActionGroup->setEnabled(true);
         setAxisPointsAction->setEnabled(true);
-        addCurveAction->setEnabled(true);
 
-        if (axisPointsCount > 2) {
+		int pointsCount = m_image->childCount<CustomItem>(AbstractAspect::IncludeHidden);
+		if (pointsCount>0)
+			navigationActionGroup->setEnabled(true);
+		else
+			navigationActionGroup->setEnabled(false);
+
+        if (pointsCount > 2) {
+			addCurveAction->setEnabled(true);
             setCurvePointsAction->setEnabled(true);
             selectSegmentAction->setEnabled(true);
         } else {
+			addCurveAction->setEnabled(false);
+            setCurvePointsAction->setEnabled(false);
+            selectSegmentAction->setEnabled(false);
             if (m_image->plotPointsType() != Image::AxisPoints) {
                 m_image->setUndoAware(false);
                 m_image->setPlotPointsType(Image::AxisPoints);
                 m_image->setUndoAware(true);
             }
         }
-    }
 
-    setAxisPointsAction->setChecked(m_image->plotPointsType() == Image::AxisPoints);
-    setCurvePointsAction->setChecked(m_image->plotPointsType() == Image::CurvePoints);
-    selectSegmentAction->setChecked(m_image->plotPointsType() == Image::SegmentPoints);
+		setAxisPointsAction->setChecked(m_image->plotPointsType() == Image::AxisPoints);
+		setCurvePointsAction->setChecked(m_image->plotPointsType() == Image::CurvePoints);
+		selectSegmentAction->setChecked(m_image->plotPointsType() == Image::SegmentPoints);
+    } else {
+		navigationActionGroup->setEnabled(false);
+		magnificationActionGroup->setEnabled(false);
+		setAxisPointsAction->setEnabled(false);
+		addCurveAction->setEnabled(false);
+		setCurvePointsAction->setEnabled(false);
+		selectSegmentAction->setEnabled(false);
+	}
 }

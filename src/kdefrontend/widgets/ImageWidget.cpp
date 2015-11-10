@@ -4,6 +4,7 @@
     Description          : widget for datapicker properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -59,23 +60,23 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
 
     ssIntensity = new QxtSpanSlider(Qt::Horizontal,ui.tEdit);
     ssIntensity->setRange(0, 100);
-    editTabLayout->addWidget(ssIntensity, 1, 1);
+    editTabLayout->addWidget(ssIntensity, 2, 3);
 
     ssForeground = new QxtSpanSlider(Qt::Horizontal,ui.tEdit);
     ssForeground->setRange(0, 100);
-    editTabLayout->addWidget(ssForeground, 2, 1);
+    editTabLayout->addWidget(ssForeground, 3, 3);
 
     ssHue = new QxtSpanSlider(Qt::Horizontal,ui.tEdit);
     ssHue->setRange(0, 360);
-    editTabLayout->addWidget(ssHue, 3, 1);
+    editTabLayout->addWidget(ssHue, 4, 3);
 
     ssSaturation = new QxtSpanSlider(Qt::Horizontal,ui.tEdit);
     ssSaturation->setRange(0,100);
-    editTabLayout->addWidget(ssSaturation, 4, 1);
+    editTabLayout->addWidget(ssSaturation, 5, 3);
 
     ssValue = new QxtSpanSlider(Qt::Horizontal,ui.tEdit);
     ssValue->setRange(0,100);
-    editTabLayout->addWidget(ssValue, 5, 1);
+    editTabLayout->addWidget(ssValue, 6, 3);
 
     ui.cbGraphType->addItem(i18n("Cartesian (x, y)"));
     ui.cbGraphType->addItem(i18n("Polar (x, y°)"));
@@ -93,8 +94,8 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     ui.sbPoisitionZ2->setHidden(true);
     ui.sbPoisitionZ3->setHidden(true);
 
-    ui.cbPlotImageType->addItem(i18n("Original Image"));
-    ui.cbPlotImageType->addItem(i18n("Processed Image"));
+    ui.cbPlotImageType->addItem(i18n("Original"));
+    ui.cbPlotImageType->addItem(i18n("Processed"));
 
     //SLOTS
     // geometry
