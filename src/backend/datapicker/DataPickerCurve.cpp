@@ -207,25 +207,33 @@ void DataPickerCurve::setCurveErrorTypes(const DataPickerCurve::Errors errors) {
         beginMacro(i18n("%1: set xy-error type", name()));
         exec(new DataPickerCurveSetCurveErrorTypesCmd(d, errors, i18n("%1: set xy-error type")));
 
-        if ( errors.x != NoError && !d->plusDeltaXColumn )
+        if ( errors.x != NoError && !d->plusDeltaXColumn ) {
             setPlusDeltaXColumn(appendColumn(i18n("+delta_x"), m_datasheet));
-        else if ( d->plusDeltaXColumn && errors.x == NoError )
+        } else if ( d->plusDeltaXColumn && errors.x == NoError ) {
             d->plusDeltaXColumn->remove();
+            d->plusDeltaXColumn = 0;
+        }
 
-        if ( errors.x == AsymmetricError && !d->minusDeltaXColumn )
+        if ( errors.x == AsymmetricError && !d->minusDeltaXColumn ) {
             setMinusDeltaXColumn(appendColumn(i18n("-delta_x"), m_datasheet));
-        else if ( d->minusDeltaXColumn && errors.x != AsymmetricError )
+        } else if ( d->minusDeltaXColumn && errors.x != AsymmetricError ) {
             d->minusDeltaXColumn->remove();
+            d->minusDeltaXColumn = 0;
+        }
 
-        if ( errors.y != NoError && !d->plusDeltaYColumn )
+        if ( errors.y != NoError && !d->plusDeltaYColumn ) {
             setPlusDeltaYColumn(appendColumn(i18n("+delta_y"), m_datasheet));
-        else if ( d->plusDeltaYColumn && errors.y == NoError )
+        } else if ( d->plusDeltaYColumn && errors.y == NoError ) {
             d->plusDeltaYColumn->remove();
+            d->plusDeltaYColumn = 0;
+        }
 
-        if ( errors.y == AsymmetricError && !d->minusDeltaYColumn )
+        if ( errors.y == AsymmetricError && !d->minusDeltaYColumn ) {
             setMinusDeltaYColumn(appendColumn(i18n("-delta_y"), m_datasheet));
-        else if ( d->minusDeltaYColumn && errors.y != AsymmetricError )
+        } else if ( d->minusDeltaYColumn && errors.y != AsymmetricError ) {
             d->minusDeltaYColumn->remove();
+            d->minusDeltaYColumn = 0;
+        }
 
         endMacro();
     }

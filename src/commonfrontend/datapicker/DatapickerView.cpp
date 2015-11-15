@@ -178,9 +178,9 @@ void DatapickerView::showTabContextMenu(const QPoint& point) {
 void DatapickerView::handleDescriptionChanged(const AbstractAspect* aspect) {
     int index;
     if (aspect->parentAspect() == m_datapicker)
-        index= m_datapicker->indexOfChild<AbstractAspect>(aspect);
+        index= m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
     else
-        index = m_datapicker->indexOfChild<AbstractAspect>(aspect->parentAspect());
+        index = m_datapicker->indexOfChild<AbstractAspect>(aspect->parentAspect(), AbstractAspect::IncludeHidden);
 
     if (index != -1 && index<m_tabWidget->count())
         m_tabWidget->setTabText(index, aspect->name());
@@ -193,11 +193,10 @@ void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
 
     int index;
     if (aspect->parentAspect() == m_datapicker) {
-        index= m_datapicker->indexOfChild<AbstractAspect>(aspect);
+        index= m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
     } else {
         const DataPickerCurve* curve = aspect->ancestor<const DataPickerCurve>();
-        index= m_datapicker->indexOfChild<AbstractAspect>(curve);
-		++index;
+        index= m_datapicker->indexOfChild<AbstractAspect>(curve, AbstractAspect::IncludeHidden);
     }
 
 	QString name = aspect->name();
@@ -219,10 +218,10 @@ void DatapickerView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) 
 
     int index;
     if (curve && aspect->parentAspect() == m_datapicker) {
-        index= m_datapicker->indexOfChild<AbstractAspect>(aspect);
+        index= m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
     } else if (part) {
         const DataPickerCurve* curve = aspect->ancestor<const DataPickerCurve>();
-        index= m_datapicker->indexOfChild<AbstractAspect>(curve);
+        index= m_datapicker->indexOfChild<AbstractAspect>(curve, AbstractAspect::IncludeHidden);
     }
 
     m_tabWidget->removeTab(index);

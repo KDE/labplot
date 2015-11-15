@@ -368,9 +368,9 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
     Q_ASSERT(datapicker);
     QPointF eventPos = mapToScene(event->pos());
     if ( m_mouseMode == SelectAndEditMode && m_image->isLoaded && sceneRect().contains(eventPos) ) {
-        if (m_image->plotPointsType() == Image::AxisPoints && !datapicker->activeCurve )
+        if ( m_image->plotPointsType() == Image::AxisPoints )
             addAxisPoint(eventPos);
-        else if (m_image->plotPointsType() == Image::CurvePoints && datapicker->activeCurve)
+        else if ( m_image->plotPointsType() == Image::CurvePoints && datapicker->activeCurve )
             datapicker->activeCurve->addCurvePoint(eventPos);
     }
 

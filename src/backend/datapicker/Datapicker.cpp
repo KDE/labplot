@@ -230,7 +230,7 @@ void Datapicker::save(QXmlStreamWriter* writer) const{
     writeCommentElement(writer);
 
     //serialize all children
-    foreach(AbstractAspect* child, children<AbstractAspect>())
+    foreach(AbstractAspect* child, children<AbstractAspect>(IncludeHidden))
         child->save(writer);
 
     writer->writeEndElement(); // close "datapicker" section
@@ -278,7 +278,7 @@ bool Datapicker::load(XmlStreamReader* reader){
         }
     }
 
-    foreach (AbstractAspect* aspect, children<AbstractAspect>()) {
+    foreach (AbstractAspect* aspect, children<AbstractAspect>(IncludeHidden)) {
         foreach (WorksheetElement* elem, aspect->children<WorksheetElement>(IncludeHidden)) {
             handleChildAspectAdded(elem);
         }
