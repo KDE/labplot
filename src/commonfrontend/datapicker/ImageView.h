@@ -106,11 +106,13 @@ class ImageView : public QGraphicsView {
         QAction* selectAndEditModeAction;
         QAction* selectAndMoveModeAction;
 
+        QActionGroup* navigationActionGroup;
         QAction* shiftLeftAction;
         QAction* shiftRightAction;
         QAction* shiftDownAction;
         QAction* shiftUpAction;
 
+        QActionGroup* magnificationActionGroup;
         QAction* noMagnificationAction;
         QAction* twoTimesMagnificationAction;
         QAction* threeTimesMagnificationAction;
