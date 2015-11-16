@@ -77,6 +77,7 @@ class ImageView : public QGraphicsView {
         QPoint m_selectionStart;
         QPoint m_selectionEnd;
         int magnificationFactor;
+        float m_rotationAngle;
 
         //Menus
         QMenu* m_zoomMenu;

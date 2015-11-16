@@ -62,6 +62,7 @@ ImageView::ImageView(Image* image) : QGraphicsView(),
     m_mouseMode(SelectAndEditMode),
     m_selectionBandIsShown(false),
     magnificationFactor(0),
+    m_rotationAngle(0),
     tbZoom(0) {
 
     setScene(m_image->scene());
@@ -719,8 +720,9 @@ void ImageView::addAxisPoint(const QPointF& pos) {
 }
 
 void ImageView::changeRotationAngle() {
-	resetMatrix();
+    this->rotate(m_rotationAngle);
     this->rotate(-m_image->rotationAngle());
+    m_rotationAngle = m_image->rotationAngle();
     updateBackground();
 }
 
