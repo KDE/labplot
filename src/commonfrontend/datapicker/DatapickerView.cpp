@@ -38,7 +38,6 @@
 #include <QTabWidget>
 #include <QHBoxLayout>
 #include <QMenu>
-
 #include <KAction>
 #include <KLocale>
 
@@ -205,9 +204,7 @@ void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
 	//TODO: react on curve name changes, adjust the tab name accordingly
 
     m_tabWidget->insertTab(index, part->view(), name);
-    m_tabWidget->setCurrentIndex(index);
     m_tabWidget->setTabIcon(m_tabWidget->count(), aspect->icon());
-    this->tabChanged(index);
 }
 
 void DatapickerView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
@@ -223,6 +220,6 @@ void DatapickerView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) 
         const DataPickerCurve* curve = aspect->ancestor<const DataPickerCurve>();
         index= m_datapicker->indexOfChild<AbstractAspect>(curve, AbstractAspect::IncludeHidden);
     }
-
+	++index; //+1 because of the first tab being reserved for the plot image
     m_tabWidget->removeTab(index);
 }
