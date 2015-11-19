@@ -138,18 +138,26 @@ void Datapicker::childDeselected(const AbstractAspect* aspect){
  *  This function is called in \c DatapickerView when the current tab was changed
  */
 void Datapicker::setChildSelectedInView(int index, bool selected){
-	//select the datapicker itself if the first item (plot image) was selected in the view
+	//select/deselect the datapicker itself if the first tab "representing" the plot image and the curves was selected in the view
 	if (index==0) {
-		if (selected)
+		if (selected) {
 			emit childAspectSelectedInView(this);
-		else
+		} else {
 			emit childAspectDeselectedInView(this);
+
+			//deselect also all curves (they don't have any tab index in the view) that were potentially selected before
+			foreach(const DataPickerCurve* curve, children<const DataPickerCurve>())
+				emit childAspectDeselectedInView(curve);
+		}
 
 		return;
 	}
 
-    QList<const AbstractAspect*> allChildren = children<const AbstractAspect>(AbstractAspect::Recursive|AbstractAspect::IncludeHidden);
-    const AbstractAspect* aspect = allChildren.at(index);
+	--index; //-1 because of the first tab in the view being reserved for the plot image and curves
+
+	//select/deselect the data spreadhseets
+	QList<const Spreadsheet*> spreadsheets = children<const Spreadsheet>(AbstractAspect::Recursive);
+    const AbstractAspect* aspect = spreadsheets.at(index);
     if (selected) {
         emit childAspectSelectedInView(aspect);
 

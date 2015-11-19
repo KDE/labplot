@@ -126,11 +126,6 @@ void DatapickerView::tabChanged(int index) {
     if (index==-1)
         return;
 
-    QList<const AbstractPart*> childParts = m_datapicker->children<const AbstractPart>(AbstractAspect::Recursive|AbstractAspect::IncludeHidden);
-    const AbstractPart* part = childParts.at(index);
-    QList<const AbstractAspect*> allChildren = m_datapicker->children<const AbstractAspect>(AbstractAspect::Recursive|AbstractAspect::IncludeHidden);
-    index = allChildren.indexOf(part);
-
     m_datapicker->setChildSelectedInView(lastSelectedIndex, false);
     m_datapicker->setChildSelectedInView(index, true);
     lastSelectedIndex = index;
@@ -153,9 +148,9 @@ void DatapickerView::tabMoved(int from, int to) {
 }
 
 void DatapickerView::itemSelected(int index) {
-    m_initializing = true;
+//     m_initializing = true;
     m_tabWidget->setCurrentIndex(index);
-    m_initializing = false;
+//     m_initializing = false;
 }
 
 void DatapickerView::showTabContextMenu(const QPoint& point) {
