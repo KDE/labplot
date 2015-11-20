@@ -4,6 +4,7 @@
     Description          : widget for datapicker properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -55,9 +56,15 @@ class DatapickerCurveWidget : public QWidget {
         bool m_suppressTypeChange;
 
     private slots:
+        //SLOTs for changes triggered in AxisDock
+        void nameChanged();
+        void commentChanged();
         void updateCustomItemList();
         void xErrorTypeChanged(int);
         void yErrorTypeChanged(int);
+
+        //SLOTs for changes triggered in Axis
+        void curveDescriptionChanged(const AbstractAspect*);
         void curveErrorsChanged(DataPickerCurve::Errors);
 };
 

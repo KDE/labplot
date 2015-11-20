@@ -4,6 +4,7 @@
     Description          : widget for datapicker properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -29,7 +30,7 @@
 #include "backend/datapicker/CustomItem.h"
 #include "kdefrontend/widgets/CustomItemWidget.h"
 
-#include <QGridLayout>
+#include <QHBoxLayout>
 
 DatapickerCurveWidget::DatapickerCurveWidget(QWidget *parent) : QWidget(parent), m_suppressTypeChange(false) {
     ui.setupUi(this);
@@ -47,6 +48,8 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget *parent) : QWidget(parent),
     ui.cbYErrorType->addItem(i18n("symmetric"));
     ui.cbYErrorType->addItem(i18n("asymmetric"));
 
+	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
+	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
     connect( ui.cbXErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(xErrorTypeChanged(int)) );
     connect( ui.cbYErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(yErrorTypeChanged(int)) );
 }
@@ -60,16 +63,52 @@ void DatapickerCurveWidget::setCurves(QList<DataPickerCurve*> list) {
 
     m_curveList = list;
     m_curve = list.first();
+
+	if (list.size()==1){
+		ui.lName->setEnabled(true);
+		ui.leName->setEnabled(true);
+		ui.lComment->setEnabled(true);
+		ui.leComment->setEnabled(true);
+		ui.leName->setText(m_curve->name());
+		ui.leComment->setText(m_curve->comment());
+	}else{
+		ui.lName->setEnabled(false);
+		ui.leName->setEnabled(false);
+		ui.lComment->setEnabled(false);
+		ui.leComment->setEnabled(false);
+		ui.leName->setText("");
+		ui.leComment->setText("");
+	}
+
     load();
     initConnections();
     updateCustomItemList();
 }
 
 void DatapickerCurveWidget::initConnections() {
+	connect( m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
     connect( m_curve, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
              this, SLOT(updateCustomItemList()) );
     connect( m_curve, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(updateCustomItemList()) );
     connect( m_curve, SIGNAL(curveErrorTypesChanged(DataPickerCurve::Errors)), this, SLOT(curveErrorsChanged(DataPickerCurve::Errors)) );
+}
+
+//*************************************************************
+//**** SLOTs for changes triggered in DatapickerCurveWidget ***
+//*************************************************************
+//"General"-tab
+void DatapickerCurveWidget::nameChanged(){
+    if (m_initializing)
+        return;
+
+    m_curve->setName(ui.leName->text());
+}
+
+void DatapickerCurveWidget::commentChanged(){
+    if (m_initializing)
+        return;
+
+    m_curve->setComment(ui.leComment->text());
 }
 
 void DatapickerCurveWidget::xErrorTypeChanged(int index) {
@@ -94,13 +133,6 @@ void DatapickerCurveWidget::yErrorTypeChanged(int index) {
         curve->setCurveErrorTypes(errors);
 }
 
-void DatapickerCurveWidget::curveErrorsChanged(DataPickerCurve::Errors errors){
-    m_initializing = true;
-    ui.cbXErrorType->setCurrentIndex((int) errors.x);
-    ui.cbYErrorType->setCurrentIndex((int) errors.y);
-    m_initializing = false;
-}
-
 void DatapickerCurveWidget::updateCustomItemList() {
     QList<CustomItem*> itemsList = m_curve->children<CustomItem>(AbstractAspect::IncludeHidden);
     customItemWidget->setCustomItems(itemsList);
@@ -113,6 +145,29 @@ void DatapickerCurveWidget::updateCustomItemList() {
         ui.cbYErrorType->setEnabled(false);
         m_suppressTypeChange = true;
     }
+}
+
+//*************************************************************
+//******** SLOTs for changes triggered in DatapickerCurve *****
+//*************************************************************
+void DatapickerCurveWidget::curveDescriptionChanged(const AbstractAspect* aspect) {
+	if (m_curve != aspect)
+		return;
+
+	m_initializing = true;
+	if (aspect->name() != ui.leName->text()) {
+		ui.leName->setText(aspect->name());
+	} else if (aspect->comment() != ui.leComment->text()) {
+		ui.leComment->setText(aspect->comment());
+	}
+	m_initializing = false;
+}
+
+void DatapickerCurveWidget::curveErrorsChanged(DataPickerCurve::Errors errors){
+    m_initializing = true;
+    ui.cbXErrorType->setCurrentIndex((int) errors.x);
+    ui.cbYErrorType->setCurrentIndex((int) errors.y);
+    m_initializing = false;
 }
 
 //**********************************************************
