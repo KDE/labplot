@@ -170,14 +170,20 @@ void DatapickerView::showTabContextMenu(const QPoint& point) {
 }
 
 void DatapickerView::handleDescriptionChanged(const AbstractAspect* aspect) {
-    int index;
-    if (aspect->parentAspect() == m_datapicker)
+    int index = -1;
+	QString name;
+    if (aspect->parentAspect() == m_datapicker) {
+		//datapicker curve was renamed
         index= m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
-    else
+		name = aspect->name() + ": " + aspect->children<Spreadsheet>().first()->name();
+	} else {
+		//data spreadsheet was renamed or one of its columns, which is not relevant here
         index = m_datapicker->indexOfChild<AbstractAspect>(aspect->parentAspect(), AbstractAspect::IncludeHidden);
+		name = aspect->parentAspect()->name() + ": " + aspect->name();
+	}
 
-    if (index != -1 && index<m_tabWidget->count())
-        m_tabWidget->setTabText(index, aspect->name());
+	if (index != -1)
+        m_tabWidget->setTabText(index, name);
 }
 
 void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
@@ -196,7 +202,6 @@ void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
 	QString name = aspect->name();
 	if (dynamic_cast<const Spreadsheet*>(aspect))
 		name = aspect->parentAspect()->name() + ": " + name;
-	//TODO: react on curve name changes, adjust the tab name accordingly
 
     m_tabWidget->insertTab(index, part->view(), name);
     m_tabWidget->setTabIcon(m_tabWidget->count(), aspect->icon());

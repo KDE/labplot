@@ -4,6 +4,7 @@
     Description          : widget for datapicker properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -35,12 +36,11 @@ class CustomItem;
 class CustomItemWidget;
 class QxtSpanSlider;
 
-class ImageWidget: public QWidget{
+class ImageWidget : public QWidget {
     Q_OBJECT
 
 public:
-    explicit ImageWidget(QWidget *);
-    virtual ~ImageWidget();
+    explicit ImageWidget(QWidget*);
 
     void setImages(QList<Image*>);
     void load();
@@ -49,7 +49,7 @@ private:
     Ui::ImageWidget ui;
     void initConnections();
 
-    Image *m_image;
+    Image* m_image;
     QList<Image*> m_imagesList;
     bool m_initializing;
     CustomItemWidget* customItemWidget;
@@ -61,15 +61,31 @@ private:
     QxtSpanSlider* ssValue;
 
 private slots:
-    void rotationChanged(double);
+    //SLOTs for changes triggered in ImageWidget
+    //"General"-tab
+    void nameChanged();
+    void commentChanged();
     void fileNameChanged();
+    void selectFile();
+    void plotImageTypeChanged(int);
+
+    //"Edit image"-tab
+    void rotationChanged(double);
+    void intensitySpanChanged(int, int);
+    void foregroundSpanChanged(int, int);
+    void hueSpanChanged(int, int);
+    void saturationSpanChanged(int, int);
+    void valueSpanChanged(int, int);
+    void rbClicked();
+
     void minSegmentLengthChanged(int);
     void pointSeparationChanged(int);
-    void selectFile();
     void graphTypeChanged();
     void ternaryScaleChanged(double);
     void logicalPositionChanged();
 
+    //SLOTs for changes triggered in ImageWidget
+    void imageDescriptionChanged(const AbstractAspect*);
     void imageFileNameChanged(const QString&);
     void imageRotationAngleChanged(float);
     void imageAxisPointsChanged(const Image::ReferencePoints&);
@@ -77,14 +93,6 @@ private slots:
     void imageMinSegmentLengthChanged(const int);
     void updateCustomItemList();
     void handleWidgetActions();
-
-    void plotImageTypeChanged(int);
-    void intensitySpanChanged(int, int);
-    void foregroundSpanChanged(int, int);
-    void hueSpanChanged(int, int);
-    void saturationSpanChanged(int, int);
-    void valueSpanChanged(int, int);
-    void rbClicked();
 };
 
 #endif //IMAGEWIDGET_H

@@ -31,9 +31,6 @@
 #include "kdefrontend/widgets/CustomItemWidget.h"
 #include "commonfrontend/widgets/qxtspanslider.h"
 
-#include <QGridLayout>
-#include <QRadioButton>
-#include <QDoubleSpinBox>
 #include <KUrlCompletion>
 #include <QFileDialog>
 #include <QDir>
@@ -98,12 +95,16 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     ui.cbPlotImageType->addItem(i18n("Processed"));
 
     //SLOTS
-    // geometry
-    connect( ui.sbRotation, SIGNAL(valueChanged(double)), this, SLOT(rotationChanged(double)) );
+    //general
+    connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
+    connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
     connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
     connect( ui.kleFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
     connect( ui.kleFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
     connect( ui.cbPlotImageType, SIGNAL(currentIndexChanged(int)), this, SLOT(plotImageTypeChanged(int)) );
+
+    // edit image
+    connect( ui.sbRotation, SIGNAL(valueChanged(double)), this, SLOT(rotationChanged(double)) );
     connect( ssIntensity, SIGNAL(spanChanged(int,int)), this, SLOT(intensitySpanChanged(int,int)) );
     connect( ssForeground, SIGNAL(spanChanged(int,int)), this, SLOT(foregroundSpanChanged(int,int)) );
     connect( ssHue, SIGNAL(spanChanged(int,int)), this, SLOT(hueSpanChanged(int,int)) );
@@ -131,18 +132,33 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     connect( ui.sbPoisitionZ3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
 }
 
-ImageWidget::~ImageWidget() {
-}
-
 void ImageWidget::setImages(QList<Image*> list) {
     m_imagesList = list;
     m_image = list.first();
+
+	if (list.size()==1){
+		ui.lName->setEnabled(true);
+		ui.leName->setEnabled(true);
+		ui.lComment->setEnabled(true);
+		ui.leComment->setEnabled(true);
+		ui.leName->setText(m_image->parentAspect()->name());
+		ui.leComment->setText(m_image->parentAspect()->comment());
+	}else{
+		ui.lName->setEnabled(false);
+		ui.leName->setEnabled(false);
+		ui.lComment->setEnabled(false);
+		ui.leComment->setEnabled(false);
+		ui.leName->setText("");
+		ui.leComment->setText("");
+	}
+
     this->load();
     initConnections();
     handleWidgetActions();
 }
 
 void ImageWidget::initConnections() {
+	connect( m_image->parentAspect(), SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(imageDescriptionChanged(const AbstractAspect*)));
     connect( m_image, SIGNAL(fileNameChanged(QString)), this, SLOT(imageFileNameChanged(QString)) );
     connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(imageRotationAngleChanged(float)) );
     connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
@@ -181,6 +197,21 @@ void ImageWidget::handleWidgetActions() {
 //**********************************************************
 //****** SLOTs for changes triggered in ImageWidget ********
 //**********************************************************
+//"General"-tab
+void ImageWidget::nameChanged() {
+    if (m_initializing)
+        return;
+
+    m_image->parentAspect()->setName(ui.leName->text());
+}
+
+void ImageWidget::commentChanged() {
+    if (m_initializing)
+        return;
+
+    m_image->parentAspect()->setComment(ui.leComment->text());
+}
+
 void ImageWidget::selectFile() {
     KConfigGroup conf(KSharedConfig::openConfig(), "ImageWidget");
     QString dir = conf.readEntry("LastImageDir", "");
@@ -407,9 +438,26 @@ void ImageWidget::pointSeparationChanged(int value) {
     foreach(Image* image, m_imagesList)
         image->setPointSeparation(value);
 }
+
 //*********************************************************
-//****** SLOTs for changes triggered in Image *********
+//******** SLOTs for changes triggered in Image ***********
 //*********************************************************
+/*!
+    called when the name or comment of image's parent (datapicker) was changed.
+ */
+void ImageWidget::imageDescriptionChanged(const AbstractAspect* aspect) {
+	if (m_image->parentAspect() != aspect)
+		return;
+
+	m_initializing = true;
+	if (aspect->name() != ui.leName->text()) {
+		ui.leName->setText(aspect->name());
+	} else if (aspect->comment() != ui.leComment->text()) {
+		ui.leComment->setText(aspect->comment());
+	}
+	m_initializing = false;
+}
+
 void ImageWidget::imageFileNameChanged(const QString& name) {
     m_initializing = true;
     ui.kleFileName->setText(name);
@@ -464,6 +512,7 @@ void ImageWidget::updateCustomItemList() {
     itemsList = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
     customItemWidget->setCustomItems(itemsList);
 }
+
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
