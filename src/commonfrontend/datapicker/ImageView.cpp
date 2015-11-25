@@ -289,7 +289,7 @@ void ImageView::drawForeground(QPainter* painter, const QRectF& rect) {
     if (m_mouseMode==ZoomSelectionMode && m_selectionBandIsShown) {
         painter->save();
         const QRectF& selRect = mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect();
-        painter->setPen(QPen(Qt::black, 5));
+        painter->setPen(QPen(Qt::black, 5/transform().m11()));
         painter->drawRect(selRect);
         painter->setBrush(Qt::blue);
         painter->setOpacity(0.2);
@@ -353,16 +353,16 @@ void ImageView::wheelEvent(QWheelEvent *event) {
 }
 
 void ImageView::mousePressEvent(QMouseEvent* event) {
-    if (m_mouseMode == ZoomSelectionMode) {
-        m_selectionStart = event->pos();
-        m_selectionBandIsShown = true;
-    }
-
     //prevent the deselection of items when context menu event
     //was triggered (right button click)
-    if (event->button() != Qt::LeftButton) {
+    if (event->button() == Qt::RightButton) {
         event->accept();
         return;
+    }
+
+    if (event->button() == Qt::LeftButton && m_mouseMode == ZoomSelectionMode) {
+        m_selectionStart = event->pos();
+        m_selectionBandIsShown = true;
     }
 
     Datapicker* datapicker = dynamic_cast<Datapicker*>(m_image->parentAspect());
@@ -387,7 +387,7 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
 }
 
 void ImageView::mouseReleaseEvent(QMouseEvent* event) {
-    if (m_mouseMode == ZoomSelectionMode) {
+    if (event->button() == Qt::LeftButton && m_mouseMode == ZoomSelectionMode) {
         m_selectionBandIsShown = false;
         viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
 
@@ -411,8 +411,15 @@ void ImageView::mouseMoveEvent(QMouseEvent* event) {
 	}
 
     if (m_selectionBandIsShown) {
-        m_selectionEnd = event->pos();
-        viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
+		QRect rect = QRect(m_selectionStart, m_selectionEnd).normalized();
+		m_selectionEnd = event->pos();
+		rect = rect.united(QRect(m_selectionStart, m_selectionEnd).normalized());
+		int penWidth = 5/transform().m11();
+		rect.setX(rect.x()-penWidth);
+		rect.setY(rect.y()-penWidth);
+		rect.setHeight(rect.height()+2*penWidth);
+		rect.setWidth(rect.width()+2*penWidth);
+		viewport()->repaint(rect);
     }
 
     QPointF pos = mapToScene(event->pos());
