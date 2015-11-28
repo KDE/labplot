@@ -319,9 +319,6 @@ void ImageView::drawBackground(QPainter* painter, const QRectF& rect) {
 
     // canvas
     if (m_image->isLoaded) {
-        painter->translate(sceneRect().width()/2, sceneRect().height()/2);
-        painter->translate(-sceneRect().width()/2, -sceneRect().height()/2);
-
         if (m_image->plotImageType == Image::OriginalImage) {
             QImage todraw = m_image->originalPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
             painter->drawImage(scene_rect.topLeft(), todraw);
@@ -363,6 +360,7 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton && m_mouseMode == ZoomSelectionMode) {
         m_selectionStart = event->pos();
         m_selectionBandIsShown = true;
+		return;
     }
 
     Datapicker* datapicker = dynamic_cast<Datapicker*>(m_image->parentAspect());
@@ -371,17 +369,13 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
     if ( m_mouseMode == SelectAndEditMode && m_image->isLoaded && sceneRect().contains(eventPos) ) {
         if ( m_image->plotPointsType() == Image::AxisPoints )
             addAxisPoint(eventPos);
-        else if ( m_image->plotPointsType() == Image::CurvePoints && datapicker->activeCurve )
-            datapicker->activeCurve->addCurvePoint(eventPos);
+        else if ( m_image->plotPointsType() == Image::CurvePoints && datapicker->activeCurve() )
+            datapicker->activeCurve()->addCurvePoint(eventPos);
     }
 
-    // select the datapicker/image in the project explorer if the view was clicked.
-    // We change from the project-node in the project explorer to the datapicker/image
-    // or datapicker/curve(active-curve) node by clicking the view.
-    if (datapicker->activeCurve)
-        datapicker->activeCurve->setSelectedInView(true);
-    else
-        m_image->setSelectedInView(true);
+    // make sure the datapicker (or its currently active curve) is selected in the project explorer if the view was clicked.
+    // We need this for the case when we change from the project-node in the project explorer to the datapicker node by clicking the view.
+	datapicker->setSelectedInView(true);
 
     QGraphicsView::mousePressEvent(event);
 }
@@ -410,6 +404,7 @@ void ImageView::mouseMoveEvent(QMouseEvent* event) {
         setCursor(Qt::ArrowCursor);
 	}
 
+	//show the selection band
     if (m_selectionBandIsShown) {
 		QRect rect = QRect(m_selectionStart, m_selectionEnd).normalized();
 		m_selectionEnd = event->pos();
@@ -420,10 +415,12 @@ void ImageView::mouseMoveEvent(QMouseEvent* event) {
 		rect.setHeight(rect.height()+2*penWidth);
 		rect.setWidth(rect.width()+2*penWidth);
 		viewport()->repaint(rect);
+		return;
     }
 
     QPointF pos = mapToScene(event->pos());
 
+	//show the current coordinates under the mouse cursor in the status bar
     if (m_image->plotPointsType() == Image::CurvePoints) {
         QVector3D logicalPos = m_transform->mapSceneToLogical(pos, m_image->axisPoints());
         if (m_image->axisPoints().type == Image::Ternary) {
@@ -443,20 +440,22 @@ void ImageView::mouseMoveEvent(QMouseEvent* event) {
         }
     }
 
-    if ( magnificationFactor && m_image->isLoaded && sceneRect().contains(pos)
+    //show the magnification window
+    if ( magnificationFactor && m_mouseMode == SelectAndEditMode && m_image->isLoaded && sceneRect().contains(pos)
          && m_image->plotPointsType() != Image::SegmentPoints ) {
+
         if (!m_image->m_magnificationWindow) {
             m_image->m_magnificationWindow = new QGraphicsPixmapItem(0, scene());
             m_image->m_magnificationWindow->setZValue(-1);
         }
 
-        int size = 100;
+        int size = 200/transform().m11();
         QImage imageSection = m_image->originalPlotImage.scaled(scene()->width(), scene()->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         imageSection = imageSection.copy(pos.x() - size/2, pos.y() - size/2, size, size);
         imageSection = imageSection.scaled(size*magnificationFactor, size*magnificationFactor, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         imageSection = imageSection.copy(imageSection.width()/2 - size/2, imageSection.height()/2 - size/2, size, size);
 		QPainter painter(&imageSection);
-		painter.setPen(QPen(Qt::lightGray, 2));
+		painter.setPen(QPen(Qt::lightGray, 2/transform().m11()));
 		painter.drawRect(imageSection.rect());
 
         m_image->m_magnificationWindow->setVisible(true);
@@ -599,92 +598,6 @@ void ImageView::magnificationChanged(QAction* action) {
         magnificationFactor = 5;
 }
 
-void ImageView::exportToFile(const QString& path, const ExportFormat format, const int resolution) {
-    QRectF sourceRect;
-    sourceRect = scene()->sceneRect();
-
-    //print
-    if (format==ImageView::Pdf || format==ImageView::Eps) {
-        QPrinter printer(QPrinter::HighResolution);
-        if (format==ImageView::Pdf)
-            printer.setOutputFormat(QPrinter::PdfFormat);
-        else
-            printer.setOutputFormat(QPrinter::PostScriptFormat);
-
-        printer.setOutputFileName(path);
-        int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
-        int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
-        printer.setPaperSize( QSizeF(w, h), QPrinter::Millimeter);
-        printer.setPageMargins(0,0,0,0, QPrinter::Millimeter);
-        printer.setPrintRange(QPrinter::PageRange);
-        printer.setCreator( QString("LabPlot ") + LVERSION );
-
-        QPainter painter(&printer);
-        painter.setRenderHint(QPainter::Antialiasing);
-        QRectF targetRect(0, 0, painter.device()->width(),painter.device()->height());
-        painter.begin(&printer);
-        exportPaint(&painter, targetRect, sourceRect);
-        painter.end();
-    } else if (format==ImageView::Svg) {
-        QSvgGenerator generator;
-        generator.setFileName(path);
-        int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
-        int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
-        w = w*QApplication::desktop()->physicalDpiX()/25.4;
-        h = h*QApplication::desktop()->physicalDpiY()/25.4;
-
-        generator.setSize(QSize(w, h));
-        QRectF targetRect(0, 0, w, h);
-        generator.setViewBox(targetRect);
-
-        QPainter painter;
-        painter.begin(&generator);
-        exportPaint(&painter, targetRect, sourceRect);
-        painter.end();
-    } else {
-        //PNG
-        //TODO add all formats supported by Qt in QImage
-        int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
-        int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
-        w = w*resolution/25.4;
-        h = h*resolution/25.4;
-        QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
-        image.fill(Qt::transparent);
-        QRectF targetRect(0, 0, w, h);
-
-        QPainter painter;
-        painter.begin(&image);
-        painter.setRenderHint(QPainter::Antialiasing);
-        exportPaint(&painter, targetRect, sourceRect);
-        painter.end();
-
-        image.save(path, "png");
-    }
-}
-
-void ImageView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect) {
-    painter->save();
-    painter->scale(targetRect.width()/sourceRect.width(), targetRect.height()/sourceRect.height());
-    drawBackground(painter, sourceRect);
-    painter->restore();
-    m_image->setPrinting(true);
-    scene()->render(painter, QRectF(), sourceRect);
-    m_image->setPrinting(false);
-}
-
-void ImageView::print(QPrinter* printer) const {
-    m_image->setPrinting(true);
-    QPainter painter(printer);
-    painter.setRenderHint(QPainter::Antialiasing);
-    scene()->render(&painter);
-    m_image->setPrinting(false);
-}
-
-void ImageView::updateBackground() {
-    invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer);
-    handleImageActions();
-}
-
 void ImageView::addCurve() {
     m_image->beginMacro(i18n("%1: add new curve.", m_image->name()));
     Datapicker* datapicker = dynamic_cast<Datapicker*>(m_image->parentAspect());
@@ -771,4 +684,90 @@ void ImageView::handleImageActions() {
 		setCurvePointsAction->setEnabled(false);
 		selectSegmentAction->setEnabled(false);
 	}
+}
+
+void ImageView::exportToFile(const QString& path, const ExportFormat format, const int resolution) {
+    QRectF sourceRect;
+    sourceRect = scene()->sceneRect();
+
+    //print
+    if (format==ImageView::Pdf || format==ImageView::Eps) {
+        QPrinter printer(QPrinter::HighResolution);
+        if (format==ImageView::Pdf)
+            printer.setOutputFormat(QPrinter::PdfFormat);
+        else
+            printer.setOutputFormat(QPrinter::PostScriptFormat);
+
+        printer.setOutputFileName(path);
+        int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
+        int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+        printer.setPaperSize( QSizeF(w, h), QPrinter::Millimeter);
+        printer.setPageMargins(0,0,0,0, QPrinter::Millimeter);
+        printer.setPrintRange(QPrinter::PageRange);
+        printer.setCreator( QString("LabPlot ") + LVERSION );
+
+        QPainter painter(&printer);
+        painter.setRenderHint(QPainter::Antialiasing);
+        QRectF targetRect(0, 0, painter.device()->width(),painter.device()->height());
+        painter.begin(&printer);
+        exportPaint(&painter, targetRect, sourceRect);
+        painter.end();
+    } else if (format==ImageView::Svg) {
+        QSvgGenerator generator;
+        generator.setFileName(path);
+        int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
+        int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+        w = w*QApplication::desktop()->physicalDpiX()/25.4;
+        h = h*QApplication::desktop()->physicalDpiY()/25.4;
+
+        generator.setSize(QSize(w, h));
+        QRectF targetRect(0, 0, w, h);
+        generator.setViewBox(targetRect);
+
+        QPainter painter;
+        painter.begin(&generator);
+        exportPaint(&painter, targetRect, sourceRect);
+        painter.end();
+    } else {
+        //PNG
+        //TODO add all formats supported by Qt in QImage
+        int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
+        int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+        w = w*resolution/25.4;
+        h = h*resolution/25.4;
+        QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
+        image.fill(Qt::transparent);
+        QRectF targetRect(0, 0, w, h);
+
+        QPainter painter;
+        painter.begin(&image);
+        painter.setRenderHint(QPainter::Antialiasing);
+        exportPaint(&painter, targetRect, sourceRect);
+        painter.end();
+
+        image.save(path, "png");
+    }
+}
+
+void ImageView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect) {
+    painter->save();
+    painter->scale(targetRect.width()/sourceRect.width(), targetRect.height()/sourceRect.height());
+    drawBackground(painter, sourceRect);
+    painter->restore();
+    m_image->setPrinting(true);
+    scene()->render(painter, QRectF(), sourceRect);
+    m_image->setPrinting(false);
+}
+
+void ImageView::print(QPrinter* printer) const {
+    m_image->setPrinting(true);
+    QPainter painter(printer);
+    painter.setRenderHint(QPainter::Antialiasing);
+    scene()->render(&painter);
+    m_image->setPrinting(false);
+}
+
+void ImageView::updateBackground() {
+    invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer);
+    handleImageActions(); //TODO
 }

@@ -44,7 +44,7 @@
  * \ingroup backend
  */
 Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading)
-    : AbstractPart(name), scripted(engine), activeCurve(0), m_transform(new Transform()), m_image(0) {
+    : AbstractPart(name), scripted(engine), m_activeCurve(0), m_transform(new Transform()), m_image(0) {
 
     connect( this, SIGNAL(aspectAdded(const AbstractAspect*)),
              this, SLOT(handleChildAspectAdded(const AbstractAspect*)) );
@@ -61,6 +61,8 @@ void Datapicker::init() {
     setUndoAware(false);
     addChild(m_image);
     setUndoAware(true);
+
+	connect(m_image, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 }
 
 /*!
@@ -87,6 +89,10 @@ QWidget* Datapicker::view() const {
     return m_view;
 }
 
+DataPickerCurve* Datapicker::activeCurve() {
+	return m_activeCurve;
+}
+
 Spreadsheet* Datapicker::currentSpreadsheet() const {
     if (!m_view)
         return 0;
@@ -109,10 +115,10 @@ Image* Datapicker::image() const {
     in order to select the corresponding tab.
  */
 void Datapicker::childSelected(const AbstractAspect* aspect) {
-    activeCurve = dynamic_cast<DataPickerCurve*>(const_cast<AbstractAspect*>(aspect));
+    m_activeCurve = dynamic_cast<DataPickerCurve*>(const_cast<AbstractAspect*>(aspect));
 
     int index = -1;
-    if (activeCurve) {
+    if (m_activeCurve) {
         //if one of the curves is currently selected, select the image with the plot (the very first child)
         index = 0;
     } else {
@@ -171,6 +177,18 @@ void Datapicker::setChildSelectedInView(int index, bool selected){
         foreach(const AbstractAspect* child, aspect->children<const AbstractAspect>())
             emit childAspectDeselectedInView(child);
     }
+}
+
+/*!
+	Selects or deselects the datapicker or its current active curve in the project explorer.
+	This function is called in \c ImageView.
+*/
+void Datapicker::setSelectedInView(const bool b){
+	//TODO: select the current active curve, if there is one.
+	if (b)
+		emit childAspectSelectedInView(this);
+	else
+		emit childAspectDeselectedInView(this);
 }
 
 QVector3D Datapicker::mapSceneToLogical(const QPointF& point) const {

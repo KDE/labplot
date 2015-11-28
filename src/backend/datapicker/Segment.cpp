@@ -177,9 +177,9 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
     if ( change == QGraphicsItem::ItemSelectedChange && value == true ) {
         Datapicker* datapicker = dynamic_cast<Datapicker*>(q->m_image->parentAspect());
         Q_ASSERT(datapicker);
-        if (datapicker->activeCurve) {
+        if (datapicker->activeCurve()) {
             int count = 0;
-            datapicker->activeCurve->beginMacro(i18n("%1:draw points over segment", datapicker->activeCurve->name()));
+            datapicker->activeCurve()->beginMacro(i18n("%1:draw points over segment", datapicker->activeCurve()->name()));
             foreach (QLine* line, q->path) {
                 int l = (line->y1() > line->y2())?line->y2():line->y1();
                 int h = (line->y1() > line->y2())?line->y1():line->y2();
@@ -187,19 +187,19 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
                 for (int i = l; i <= h; i++) {
                     if (count%q->m_image->pointSeparation() == 0) {
                         bool positionUsed = false;
-                        QList<CustomItem*> imageItemsList = datapicker->activeCurve->children<CustomItem>(AbstractAspect::IncludeHidden);
+                        QList<CustomItem*> imageItemsList = datapicker->activeCurve()->children<CustomItem>(AbstractAspect::IncludeHidden);
                         foreach (CustomItem* item, imageItemsList) {
                             if ( item->position().point == QPoint(line->x1(), i)*scaleFactor )
                                 positionUsed = true;
                         }
 
                         if (!positionUsed)
-                            datapicker->activeCurve->addCurvePoint(QPoint(line->x1(), i)*scaleFactor);
+                            datapicker->activeCurve()->addCurvePoint(QPoint(line->x1(), i)*scaleFactor);
                     }
                     count++;
                 }
             }
-            datapicker->activeCurve->endMacro();
+            datapicker->activeCurve()->endMacro();
         }
     }
 

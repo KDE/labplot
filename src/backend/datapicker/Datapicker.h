@@ -5,7 +5,7 @@
                            in form of worksheet and spreadsheets
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -52,10 +52,13 @@ class Datapicker : public AbstractPart, public scripted {
         virtual QMenu* createContextMenu();
         virtual QWidget* view() const;
 
-        DataPickerCurve* activeCurve;
+        DataPickerCurve* activeCurve();
         Spreadsheet* currentSpreadsheet() const;
 		Image* image() const;
+
         void setChildSelectedInView(int index, bool selected);
+		void setSelectedInView(const bool);
+
         QVector3D mapSceneToLogical(const QPointF&) const;
         QVector3D mapSceneLengthToLogical(const QPointF&) const;
 
@@ -66,6 +69,7 @@ class Datapicker : public AbstractPart, public scripted {
         virtual void childSelected(const AbstractAspect*);
 
     private:
+		DataPickerCurve* m_activeCurve;
         Transform* m_transform;
         Image* m_image;
         void init();
