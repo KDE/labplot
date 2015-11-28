@@ -176,10 +176,6 @@ IF (${CANTOR_LIBS_FOUND})
 		${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp
 		${BACKEND_DIR}/cantorWorksheet/CantorWorksheet.cpp
 		${COMMONFRONTEND_DIR}/cantorWorksheet/CantorWorksheetView.cpp
-		${CANTOR_DIR}/panelplugin.cpp
-		${CANTOR_DIR}/panelpluginhandler.cpp
-		${CANTOR_DIR}/cantor_export.h
-		${CANTOR_DIR}/cantor_part.cpp
 	)
 ELSE (${CANTOR_LIBS_FOUND})
 	set(CANTOR_SOURCES "")

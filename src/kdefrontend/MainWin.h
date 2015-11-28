@@ -148,7 +148,6 @@ private:
 	QMenu* m_newCantorWorksheetMenu;
 	CantorWorksheetDock* cantorWorksheetDock;
 	CantorWorksheet* activeCantorWorksheet() const;
-	CantorWorksheetDock* cantorWorksheetDock;
 	#endif
 	
 	//Menus

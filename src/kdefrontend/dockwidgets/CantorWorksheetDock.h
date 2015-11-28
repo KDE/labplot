@@ -25,7 +25,7 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifdef DHAVE_CANTOR_LIBS
+#ifdef HAVE_CANTOR_LIBS
 #ifndef CANTORWORKSHEETDOCK_H
 #define CANTORWORKSHEETDOCK_H
 
