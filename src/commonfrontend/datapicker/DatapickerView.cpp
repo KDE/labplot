@@ -148,9 +148,9 @@ void DatapickerView::tabMoved(int from, int to) {
 }
 
 void DatapickerView::itemSelected(int index) {
-//     m_initializing = true;
+	m_initializing = true;
     m_tabWidget->setCurrentIndex(index);
-//     m_initializing = false;
+	m_initializing = false;
 }
 
 void DatapickerView::showTabContextMenu(const QPoint& point) {

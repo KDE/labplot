@@ -107,12 +107,12 @@ QMenu* DataPickerCurve::createContextMenu() {
     return menu;
 }
 
-Column* DataPickerCurve::appendColumn(const QString& name, Spreadsheet* datasheet) {
+Column* DataPickerCurve::appendColumn(const QString& name) {
     Column* col = new Column(i18n("Column"), AbstractColumn::Numeric);
     col->setPlotDesignation(AbstractColumn::Y);
-    col->insertRows(0, datasheet->rowCount());
+    col->insertRows(0, m_datasheet->rowCount());
     col->setName(name);
-    datasheet->addChild(col);
+    m_datasheet->addChild(col);
 
     return col;
 }
@@ -191,7 +191,7 @@ void DataPickerCurve::addDatasheet(const Image::GraphType& type) {
     }
 
     if (type == Image::Ternary)
-        d->posZColumn = appendColumn(i18n("c"), m_datasheet);
+        d->posZColumn = appendColumn(i18n("c"));
 
     d->posXColumn = m_datasheet->column(0);
     d->posXColumn->setName(xLabel);
@@ -208,28 +208,28 @@ void DataPickerCurve::setCurveErrorTypes(const DataPickerCurve::Errors errors) {
         exec(new DataPickerCurveSetCurveErrorTypesCmd(d, errors, i18n("%1: set xy-error type")));
 
         if ( errors.x != NoError && !d->plusDeltaXColumn ) {
-            setPlusDeltaXColumn(appendColumn(i18n("+delta_x"), m_datasheet));
+            setPlusDeltaXColumn(appendColumn(i18n("+delta_x")));
         } else if ( d->plusDeltaXColumn && errors.x == NoError ) {
             d->plusDeltaXColumn->remove();
             d->plusDeltaXColumn = 0;
         }
 
         if ( errors.x == AsymmetricError && !d->minusDeltaXColumn ) {
-            setMinusDeltaXColumn(appendColumn(i18n("-delta_x"), m_datasheet));
+            setMinusDeltaXColumn(appendColumn(i18n("-delta_x")));
         } else if ( d->minusDeltaXColumn && errors.x != AsymmetricError ) {
             d->minusDeltaXColumn->remove();
             d->minusDeltaXColumn = 0;
         }
 
         if ( errors.y != NoError && !d->plusDeltaYColumn ) {
-            setPlusDeltaYColumn(appendColumn(i18n("+delta_y"), m_datasheet));
+            setPlusDeltaYColumn(appendColumn(i18n("+delta_y")));
         } else if ( d->plusDeltaYColumn && errors.y == NoError ) {
             d->plusDeltaYColumn->remove();
             d->plusDeltaYColumn = 0;
         }
 
         if ( errors.y == AsymmetricError && !d->minusDeltaYColumn ) {
-            setMinusDeltaYColumn(appendColumn(i18n("-delta_y"), m_datasheet));
+            setMinusDeltaYColumn(appendColumn(i18n("-delta_y")));
         } else if ( d->minusDeltaYColumn && errors.y != AsymmetricError ) {
             d->minusDeltaYColumn->remove();
             d->minusDeltaYColumn = 0;

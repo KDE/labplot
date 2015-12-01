@@ -122,7 +122,7 @@ void Datapicker::childSelected(const AbstractAspect* aspect) {
         //if one of the curves is currently selected, select the image with the plot (the very first child)
         index = 0;
     } else {
-	const DataPickerCurve* curve = aspect->ancestor<const DataPickerCurve>();
+		const DataPickerCurve* curve = aspect->ancestor<const DataPickerCurve>();
         index= indexOfChild<AbstractAspect>(curve);
 		++index; //+1 because of the hidden plot image being the first child and shown in the first tab in the view
     }

@@ -93,7 +93,7 @@ class DataPickerCurve: public AbstractAspect {
         Q_DECLARE_PRIVATE(DataPickerCurve)
         void init();
         void initAction();
-        Column *appendColumn(const QString&, Spreadsheet*);
+        Column* appendColumn(const QString&);
 
         Spreadsheet* m_datasheet;
         QAction* updateDatasheetAction;
