@@ -367,10 +367,13 @@ void ImageView::mousePressEvent(QMouseEvent* event) {
     Q_ASSERT(datapicker);
     QPointF eventPos = mapToScene(event->pos());
     if ( m_mouseMode == SelectAndEditMode && m_image->isLoaded && sceneRect().contains(eventPos) ) {
-        if ( m_image->plotPointsType() == Image::AxisPoints )
-            addAxisPoint(eventPos);
-        else if ( m_image->plotPointsType() == Image::CurvePoints && datapicker->activeCurve() )
-            datapicker->activeCurve()->addCurvePoint(eventPos);
+        if ( m_image->plotPointsType() == Image::AxisPoints ) {
+            int childCount = m_image->childCount<CustomItem>(AbstractAspect::IncludeHidden);
+            if (childCount < 3)
+                datapicker->addNewPoint(eventPos, m_image);
+        } else if ( m_image->plotPointsType() == Image::CurvePoints && datapicker->activeCurve() ) {
+            datapicker->addNewPoint(eventPos, datapicker->activeCurve());
+        }
     }
 
     // make sure the datapicker (or its currently active curve) is selected in the project explorer if the view was clicked.
@@ -505,17 +508,23 @@ void ImageView::changeZoom(QAction* action) {
         static const float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
         static const float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
         setTransform(QTransform::fromScale(hscale, vscale));
+        m_rotationAngle = 0;
     } else if (action==zoomFitPageWidthAction) {
         float scaleFactor = viewport()->width()/scene()->sceneRect().width();
         setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
+        m_rotationAngle = 0;
     } else if (action==zoomFitPageHeightAction) {
         float scaleFactor = viewport()->height()/scene()->sceneRect().height();
         setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
+        m_rotationAngle = 0;
     }
 
     currentZoomAction=action;
     if (tbZoom)
         tbZoom->setDefaultAction(action);
+
+    //change and set angle if tranform reset
+    changeRotationAngle();
 }
 
 void ImageView::changeSelectedItemsPosition(QAction* action) {
@@ -599,44 +608,13 @@ void ImageView::magnificationChanged(QAction* action) {
 }
 
 void ImageView::addCurve() {
-    m_image->beginMacro(i18n("%1: add new curve.", m_image->name()));
     Datapicker* datapicker = dynamic_cast<Datapicker*>(m_image->parentAspect());
     Q_ASSERT(datapicker);
+    datapicker->beginMacro(i18n("%1: add new curve.", datapicker->name()));
     DataPickerCurve* curve = new DataPickerCurve(i18n("Curve"));
     datapicker->addChild(curve);
     curve->addDatasheet(m_image->axisPoints().type);
-    m_image->endMacro();
-}
-
-void ImageView::addAxisPoint(const QPointF& pos) {
-    QList<CustomItem*> childItems = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
-    if (childItems.count() > 2)
-        return;
-
-    CustomItem* newItem = new CustomItem(i18n("Axis Point"));
-    newItem->setPosition(pos);
-    newItem->setHidden(true);
-
-    if (!childItems.isEmpty()) {
-        CustomItem* m_item = childItems.first();
-        newItem->setUndoAware(false);
-        newItem->setItemsBrush(m_item->itemsBrush());
-        newItem->setItemsOpacity(m_item->itemsOpacity());
-        newItem->setItemsPen(m_item->itemsPen());
-        newItem->setItemsRotationAngle(m_item->itemsRotationAngle());
-        newItem->setItemsSize(m_item->itemsSize());
-        newItem->setItemsStyle(m_item->itemsStyle());
-        newItem->setUndoAware(true);
-    }
-
-    m_image->addChild(newItem);
-
-    Image::ReferencePoints points = m_image->axisPoints();
-    points.scenePos[childItems.count()].setX(pos.x());
-    points.scenePos[childItems.count()].setY(pos.y());
-    m_image->setUndoAware(false);
-    m_image->setAxisPoints(points);
-    m_image->setUndoAware(true);
+    datapicker->endMacro();
 }
 
 void ImageView::changeRotationAngle() {

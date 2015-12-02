@@ -194,7 +194,7 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
                         }
 
                         if (!positionUsed)
-                            datapicker->activeCurve()->addCurvePoint(QPoint(line->x1(), i)*scaleFactor);
+                            datapicker->addNewPoint(QPoint(line->x1(), i)*scaleFactor, datapicker->activeCurve());
                     }
                     count++;
                 }

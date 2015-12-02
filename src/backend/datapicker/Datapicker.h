@@ -58,6 +58,7 @@ class Datapicker : public AbstractPart, public scripted {
 
         void setChildSelectedInView(int index, bool selected);
 		void setSelectedInView(const bool);
+        void addNewPoint(const QPointF&, AbstractAspect*);
 
         QVector3D mapSceneToLogical(const QPointF&) const;
         QVector3D mapSceneLengthToLogical(const QPointF&) const;

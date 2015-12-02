@@ -59,8 +59,6 @@ class DataPickerCurve: public AbstractAspect {
         void addDatasheet(const Image::GraphType&);
         void updateData(const CustomItem*);
 
-        void addCurvePoint(const QPointF&);
-
         BASIC_D_ACCESSOR_DECL(Errors, curveErrorTypes, CurveErrorTypes)
         POINTER_D_ACCESSOR_DECL(AbstractColumn, posXColumn, PosXColumn)
         QString& posXColumnPath() const;

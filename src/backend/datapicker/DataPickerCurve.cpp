@@ -116,36 +116,6 @@ Column* DataPickerCurve::appendColumn(const QString& name) {
 
     return col;
 }
-
-void DataPickerCurve::addCurvePoint(const QPointF& position) {
-    QList<CustomItem*> childItems = children<CustomItem>(IncludeHidden);
-    if (childItems.isEmpty())
-        beginMacro(i18n("%1:add Curve Point", name()));
-    else
-        beginMacro(i18n("%1:add Curve Point %2", name(), childItems.count()));
-
-    CustomItem* newItem = new CustomItem(i18n("Curve Point"));
-    newItem->setPosition(position);
-    newItem->setHidden(true);
-    newItem->initErrorBar(curveErrorTypes());
-    //set properties of added custom-item same as previous items
-    if (!childItems.isEmpty()) {
-        CustomItem* m_item = childItems.first();
-        newItem->setItemsBrush(m_item->itemsBrush());
-        newItem->setItemsOpacity(m_item->itemsOpacity());
-        newItem->setItemsPen(m_item->itemsPen());
-        newItem->setItemsRotationAngle(m_item->itemsRotationAngle());
-        newItem->setItemsSize(m_item->itemsSize());
-        newItem->setItemsStyle(m_item->itemsStyle());
-        newItem->setErrorBarBrush(m_item->errorBarBrush());
-        newItem->setErrorBarSize(m_item->errorBarSize());
-        newItem->setErrorBarPen(m_item->errorBarPen());
-    }
-
-    addChild(newItem);
-    updateData(newItem);
-    endMacro();
-}
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
