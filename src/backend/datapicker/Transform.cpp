@@ -2,7 +2,7 @@
     File                 : Transform.cpp
     Project              : LabPlot
     Description          : transformation for mapping between scene and
-                           logical coordinates of image
+                           logical coordinates of Datapicker-image
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
  ***************************************************************************/
@@ -33,8 +33,8 @@
 Transform::Transform() {
 }
 
-bool Transform::mapTypeToCartesian(const Image::ReferencePoints& axisPoints) {
-    if (axisPoints.type == Image::LogarithmicX) {
+bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisPoints) {
+    if (axisPoints.type == DatapickerImage::LogarithmicX) {
         for(int i=0;i<3;i++){
             if (axisPoints.logicalPos[i].x() <= 0)
                 return false;
@@ -43,7 +43,7 @@ bool Transform::mapTypeToCartesian(const Image::ReferencePoints& axisPoints) {
             X[i] = axisPoints.scenePos[i].x();
             Y[i] = axisPoints.scenePos[i].y();
         }
-    } else if (axisPoints.type == Image::LogarithmicY) {
+    } else if (axisPoints.type == DatapickerImage::LogarithmicY) {
         for(int i=0;i<3;i++){
             if (axisPoints.logicalPos[i].y() <= 0)
                 return false;
@@ -52,7 +52,7 @@ bool Transform::mapTypeToCartesian(const Image::ReferencePoints& axisPoints) {
             X[i] = axisPoints.scenePos[i].x();
             Y[i] = axisPoints.scenePos[i].y();
         }
-    } else if (axisPoints.type == Image::PolarInDegree) {
+    } else if (axisPoints.type == DatapickerImage::PolarInDegree) {
         for(int i=0;i<3;i++){
             if (axisPoints.logicalPos[i].x() < 0)
                 return false;
@@ -61,7 +61,7 @@ bool Transform::mapTypeToCartesian(const Image::ReferencePoints& axisPoints) {
             X[i] = axisPoints.scenePos[i].x();
             Y[i] = axisPoints.scenePos[i].y();
         }
-    } else if (axisPoints.type == Image::PolarInRadians) {
+    } else if (axisPoints.type == DatapickerImage::PolarInRadians) {
         for(int i=0;i<3;i++){
             if (axisPoints.logicalPos[i].x() < 0)
                 return false;
@@ -70,7 +70,7 @@ bool Transform::mapTypeToCartesian(const Image::ReferencePoints& axisPoints) {
             X[i] = axisPoints.scenePos[i].x();
             Y[i] = axisPoints.scenePos[i].y();
         }
-    } else if (axisPoints.type == Image::Ternary) {
+    } else if (axisPoints.type == DatapickerImage::Ternary) {
         for(int i=0;i<3;i++){
             x[i] = (2*axisPoints.logicalPos[i].y() + axisPoints.logicalPos[i].z())/(2*axisPoints.ternaryScale);
             y[i] = (sqrt(3)*axisPoints.logicalPos[i].z())/(2*axisPoints.ternaryScale);
@@ -89,7 +89,7 @@ bool Transform::mapTypeToCartesian(const Image::ReferencePoints& axisPoints) {
     return true;
 }
 
-QVector3D Transform::mapSceneToLogical(const QPointF& scenePoint, const Image::ReferencePoints& axisPoints) {
+QVector3D Transform::mapSceneToLogical(const QPointF& scenePoint, const DatapickerImage::ReferencePoints& axisPoints) {
     X[3] = scenePoint.x();
     Y[3] = scenePoint.y();
 
@@ -127,24 +127,24 @@ QVector3D Transform::mapSceneToLogical(const QPointF& scenePoint, const Image::R
     return QVector3D();
 }
 
-QVector3D Transform::mapSceneLengthToLogical(const QPointF& errorSpan, const Image::ReferencePoints& axisPoints) {
+QVector3D Transform::mapSceneLengthToLogical(const QPointF& errorSpan, const DatapickerImage::ReferencePoints& axisPoints) {
     return mapSceneToLogical(errorSpan, axisPoints) - mapSceneToLogical(QPointF(0,0), axisPoints);
 }
 
-QVector3D Transform::mapCartesianToType(const QPointF& point, const Image::ReferencePoints &axisPoints) const {
-    if (axisPoints.type == Image::LogarithmicX) {
+QVector3D Transform::mapCartesianToType(const QPointF& point, const DatapickerImage::ReferencePoints &axisPoints) const {
+    if (axisPoints.type == DatapickerImage::LogarithmicX) {
         return QVector3D(exp(point.x()), point.y(), 0);
-    } else if (axisPoints.type == Image::LogarithmicY) {
+    } else if (axisPoints.type == DatapickerImage::LogarithmicY) {
         return QVector3D(point.x(), exp(point.y()), 0);
-    } else if (axisPoints.type == Image::PolarInDegree) {
+    } else if (axisPoints.type == DatapickerImage::PolarInDegree) {
         double r = sqrt(point.x()*point.x() + point.y()*point.y());
         double angle = atan(point.y()*180/(point.x()*PI));
         return QVector3D(r, angle, 0);
-    } else if (axisPoints.type == Image::PolarInRadians) {
+    } else if (axisPoints.type == DatapickerImage::PolarInRadians) {
         double r = sqrt(point.x()*point.x() + point.y()*point.y());
         double angle = atan(point.y()/point.x());
         return QVector3D(r, angle, 0);
-    } else if (axisPoints.type == Image::Ternary) {
+    } else if (axisPoints.type == DatapickerImage::Ternary) {
         double c = (point.y()*2*axisPoints.ternaryScale)/sqrt(3);
         double b = (point.x()*2*axisPoints.ternaryScale - c)/2;
         double a = axisPoints.ternaryScale - b - c;

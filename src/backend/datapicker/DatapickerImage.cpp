@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : Image.cpp
+    File                 : DatapickerImage.cpp
     Project              : LabPlot
     Description          : Worksheet for Datapicker
     --------------------------------------------------------------------
@@ -24,14 +24,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "Image.h"
-#include "ImagePrivate.h"
+#include "DatapickerImage.h"
+#include "DatapickerImagePrivate.h"
 #include "backend/datapicker/ImageEditor.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/datapicker/CustomItem.h"
 #include "backend/worksheet/Worksheet.h"
-#include "commonfrontend/datapicker/ImageView.h"
+#include "commonfrontend/datapicker/DatapickerImageView.h"
 #include "backend/datapicker/Segments.h"
 
 #include <QDesktopWidget>
@@ -42,16 +42,16 @@
 #include <KLocale>
 
 /**
- * \class Image
+ * \class DatapickerImage
  * \brief container to open image/plot.
  *
  * Top-level container for CustomItem.
  *
  * * \ingroup datapicker
  */
-Image::Image(AbstractScriptingEngine* engine, const QString& name, bool loading)
-    : AbstractPart(name), scripted(engine), d(new ImagePrivate(this)),
-      plotImageType(Image::OriginalImage),
+DatapickerImage::DatapickerImage(AbstractScriptingEngine* engine, const QString& name, bool loading)
+    : AbstractPart(name), scripted(engine), d(new DatapickerImagePrivate(this)),
+      plotImageType(DatapickerImage::OriginalImage),
       isLoaded(false),
       m_segments(new Segments(this)),
       m_magnificationWindow(0),
@@ -61,22 +61,22 @@ Image::Image(AbstractScriptingEngine* engine, const QString& name, bool loading)
         init();
 }
 
-Image::~Image() {
+DatapickerImage::~DatapickerImage() {
     delete m_segments;
     delete m_editor;
     delete d;
 }
 
-void Image::init() {
+void DatapickerImage::init() {
     KConfig config;
-    KConfigGroup group = config.group( "Image" );
+    KConfigGroup group = config.group( "DatapickerImage" );
     d->fileName = group.readEntry("FileName", QString());
     d->rotationAngle = group.readEntry("RotationAngle", 0.0);
     d->minSegmentLength = group.readEntry("MinSegmentLength", 30);
     d->pointSeparation = group.readEntry("PointSeparation", 30);
-    d->axisPoints.type = (Image::GraphType) group.readEntry("GraphType", (int) Image::Cartesian);
+    d->axisPoints.type = (DatapickerImage::GraphType) group.readEntry("GraphType", (int) DatapickerImage::Cartesian);
     d->axisPoints.ternaryScale = group.readEntry("TernaryScale", 1);
-    d->settings.type = (Image::ColorAttributes) group.readEntry("ColorAttributesType", (int) Image::Intensity);
+    d->settings.type = (DatapickerImage::ColorAttributes) group.readEntry("ColorAttributesType", (int) DatapickerImage::Intensity);
     d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", 10);
     d->settings.foregroundThresholdLow = group.readEntry("ForegroundThresholdLow", 0);
     d->settings.hueThresholdHigh = group.readEntry("HueThresholdHigh", 360);
@@ -87,27 +87,27 @@ void Image::init() {
     d->settings.saturationThresholdLow = group.readEntry("SaturationThresholdLow", 50);
     d->settings.valueThresholdHigh = group.readEntry("ValueThresholdHigh", 50);
     d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", 0);
-    d->plotPointsType = (Image::PointsType) group.readEntry("PlotPointsType", (int) Image::AxisPoints);
+    d->plotPointsType = (DatapickerImage::PointsType) group.readEntry("PlotPointsType", (int) DatapickerImage::AxisPoints);
 }
 
 
 /*!
     Returns an icon to be used in the project explorer.
 */
-QIcon Image::icon() const {
+QIcon DatapickerImage::icon() const {
     return KIcon("image-x-generic");
 }
 
 /*!
     Return a new context menu
 */
-QMenu* Image::createContextMenu() {
+QMenu* DatapickerImage::createContextMenu() {
     QMenu* menu = new QMenu(0);
     emit requestProjectContextMenu(menu);
     return menu;
 }
 
-void Image::createContextMenu(QMenu* menu) {
+void DatapickerImage::createContextMenu(QMenu* menu) {
     emit requestProjectContextMenu(menu);
 }
 
@@ -116,60 +116,60 @@ void Image::createContextMenu(QMenu* menu) {
  * This method may be called multiple times during the life time of an Aspect, or it might not get
  * called at all. Aspects must not depend on the existence of a view for their operation.
  */
-QWidget* Image::view() const {
+QWidget* DatapickerImage::view() const {
     if (!m_view) {
-        m_view = new ImageView(const_cast<Image *>(this));
+        m_view = new DatapickerImageView(const_cast<DatapickerImage *>(this));
         connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
     }
     return m_view;
 }
 
 /*!
-    Selects or deselects the Datapicker/Image in the project explorer.
-    This function is called in \c ImageView.
-    The Image gets deselected if there are selected items in the view,
+    Selects or deselects the Datapicker/DatapickerImage in the project explorer.
+    This function is called in \c DatapickerImageView.
+    The DatapickerImage gets deselected if there are selected items in the view,
     and selected if there are no selected items in the view.
 */
-void Image::setSelectedInView(const bool b) {
+void DatapickerImage::setSelectedInView(const bool b) {
     if (b)
         emit childAspectSelectedInView(this);
     else
         emit childAspectDeselectedInView(this);
 }
 
-QGraphicsScene *Image::scene() const {
+QGraphicsScene *DatapickerImage::scene() const {
     return d->m_scene;
 }
 
-QRectF Image::pageRect() const {
+QRectF DatapickerImage::pageRect() const {
     return d->m_scene->sceneRect();
 }
 
-void Image::update() {
+void DatapickerImage::update() {
     emit requestUpdate();
 }
 
-void Image::setPlotImageType(const Image::PlotImageType& type) {
+void DatapickerImage::setPlotImageType(const DatapickerImage::PlotImageType& type) {
     plotImageType = type;
     emit requestUpdate();
 }
 
-void Image::setSegmentVisible(bool on) {
+void DatapickerImage::setSegmentVisible(bool on) {
     m_segments->setSegmentsVisible(on);
 }
 
-void Image::initSceneParameters() {
+void DatapickerImage::initSceneParameters() {
     setRotationAngle(0.0);
     setminSegmentLength(30);
     setPointSeparation(30);
 
     ReferencePoints axisPoints;
     axisPoints.ternaryScale = 1;
-    axisPoints.type = Image::Cartesian;
+    axisPoints.type = DatapickerImage::Cartesian;
     setAxisPoints(axisPoints);
 
     EditorSettings settings;
-    settings.type = Image::Intensity;
+    settings.type = DatapickerImage::Intensity;
     settings.foregroundThresholdHigh = 10;
     settings.foregroundThresholdLow = 0;
     settings.hueThresholdHigh = 360;
@@ -182,79 +182,79 @@ void Image::initSceneParameters() {
     settings.valueThresholdLow = 0;
     setSettings(settings);
 
-    PointsType plotPointsType = Image::AxisPoints;
+    PointsType plotPointsType = DatapickerImage::AxisPoints;
     setPlotPointsType(plotPointsType);
 }
 
 /* =============================== getter methods for background options ================================= */
-CLASS_D_READER_IMPL(Image, QString, fileName, fileName)
-CLASS_D_READER_IMPL(Image, Image::ReferencePoints, axisPoints, axisPoints)
-CLASS_D_READER_IMPL(Image, Image::EditorSettings, settings, settings)
-BASIC_D_READER_IMPL(Image, float, rotationAngle, rotationAngle)
-BASIC_D_READER_IMPL(Image, Image::PointsType, plotPointsType, plotPointsType)
-BASIC_D_READER_IMPL(Image, int, pointSeparation, pointSeparation)
-BASIC_D_READER_IMPL(Image, int, minSegmentLength, minSegmentLength)
+CLASS_D_READER_IMPL(DatapickerImage, QString, fileName, fileName)
+CLASS_D_READER_IMPL(DatapickerImage, DatapickerImage::ReferencePoints, axisPoints, axisPoints)
+CLASS_D_READER_IMPL(DatapickerImage, DatapickerImage::EditorSettings, settings, settings)
+BASIC_D_READER_IMPL(DatapickerImage, float, rotationAngle, rotationAngle)
+BASIC_D_READER_IMPL(DatapickerImage, DatapickerImage::PointsType, plotPointsType, plotPointsType)
+BASIC_D_READER_IMPL(DatapickerImage, int, pointSeparation, pointSeparation)
+BASIC_D_READER_IMPL(DatapickerImage, int, minSegmentLength, minSegmentLength)
 /* ============================ setter methods and undo commands  for background options  ================= */
-STD_SETTER_CMD_IMPL_F_S(Image, SetFileName, QString, fileName, updateFileName)
-void Image::setFileName(const QString& fileName) {
+STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetFileName, QString, fileName, updateFileName)
+void DatapickerImage::setFileName(const QString& fileName) {
     if (fileName!= d->fileName) {
         beginMacro(i18n("%1: upload new image", name()));
-        exec(new ImageSetFileNameCmd(d, fileName, i18n("%1: upload image")));
+        exec(new DatapickerImageSetFileNameCmd(d, fileName, i18n("%1: upload image")));
         endMacro();
     }
 }
 
-STD_SETTER_CMD_IMPL_S(Image, SetRotationAngle, float, rotationAngle)
-void Image::setRotationAngle(float angle) {
+STD_SETTER_CMD_IMPL_S(DatapickerImage, SetRotationAngle, float, rotationAngle)
+void DatapickerImage::setRotationAngle(float angle) {
     if (angle != d->rotationAngle)
-        exec(new ImageSetRotationAngleCmd(d, angle, i18n("%1: set rotation angle")));
+        exec(new DatapickerImageSetRotationAngleCmd(d, angle, i18n("%1: set rotation angle")));
 }
 
-STD_SETTER_CMD_IMPL_S(Image, SetAxisPoints, Image::ReferencePoints, axisPoints)
-void Image::setAxisPoints(const Image::ReferencePoints& points) {
+STD_SETTER_CMD_IMPL_S(DatapickerImage, SetAxisPoints, DatapickerImage::ReferencePoints, axisPoints)
+void DatapickerImage::setAxisPoints(const DatapickerImage::ReferencePoints& points) {
     if (memcmp(&points, &d->axisPoints, sizeof(points)) != 0)
-        exec(new ImageSetAxisPointsCmd(d, points, i18n("%1: set Axis points")));
+        exec(new DatapickerImageSetAxisPointsCmd(d, points, i18n("%1: set Axis points")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Image, SetSettings, Image::EditorSettings, settings, discretize)
-void Image::setSettings(const Image::EditorSettings& editorSettings) {
+STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetSettings, DatapickerImage::EditorSettings, settings, discretize)
+void DatapickerImage::setSettings(const DatapickerImage::EditorSettings& editorSettings) {
     if (memcmp(&editorSettings, &d->settings, sizeof(editorSettings)) != 0)
-        exec(new ImageSetSettingsCmd(d, editorSettings, i18n("%1: set editor settings")));
+        exec(new DatapickerImageSetSettingsCmd(d, editorSettings, i18n("%1: set editor settings")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Image, SetMinSegmentLength, int, minSegmentLength, makeSegments)
-void Image::setminSegmentLength(const int value) {
+STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetMinSegmentLength, int, minSegmentLength, makeSegments)
+void DatapickerImage::setminSegmentLength(const int value) {
     if (d->minSegmentLength != value)
-        exec(new ImageSetMinSegmentLengthCmd(d, value, i18n("%1: set minimum segment length")));        ;
+        exec(new DatapickerImageSetMinSegmentLengthCmd(d, value, i18n("%1: set minimum segment length")));        ;
 }
 
-void Image::setPrinting(bool on) const {
+void DatapickerImage::setPrinting(bool on) const {
     QList<WorksheetElement*> childElements = parentAspect()->children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
     foreach(WorksheetElement* elem, childElements)
         elem->setPrinting(on);
 }
 
-void Image::setPlotPointsType(const PointsType pointsType) {
+void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
     d->plotPointsType = pointsType;
 }
 
-void Image::setPointSeparation(const int value) {
+void DatapickerImage::setPointSeparation(const int value) {
     d->pointSeparation = value;
 }
 
 //##############################################################################
 //######################  Private implementation ###############################
 //##############################################################################
-ImagePrivate::ImagePrivate(Image *owner):q(owner),
+DatapickerImagePrivate::DatapickerImagePrivate(DatapickerImage *owner):q(owner),
     pageRect(0, 0, 1500, 1500),
     m_scene(new QGraphicsScene(pageRect)) {
 }
 
-QString ImagePrivate::name() const {
+QString DatapickerImagePrivate::name() const {
     return q->name();
 }
 
-bool ImagePrivate::uploadImage(const QString& address) {
+bool DatapickerImagePrivate::uploadImage(const QString& address) {
     bool rc = q->originalPlotImage.load(address);
     if (rc) {
         q->processedPlotImage = q->originalPlotImage;
@@ -269,28 +269,28 @@ bool ImagePrivate::uploadImage(const QString& address) {
     return rc;
 }
 
-void ImagePrivate::update() {
+void DatapickerImagePrivate::update() {
     q->update();
 }
 
-void ImagePrivate::discretize() {
+void DatapickerImagePrivate::discretize() {
     q->m_editor->discretize(&q->processedPlotImage, &q->originalPlotImage, settings);
     //update segments
     makeSegments();
 }
 
-void ImagePrivate::makeSegments() {
+void DatapickerImagePrivate::makeSegments() {
     q->m_segments->makeSegments(q->processedPlotImage);
-    if (plotPointsType == Image::SegmentPoints)
+    if (plotPointsType == DatapickerImage::SegmentPoints)
         q->m_segments->setSegmentsVisible(true);
     update();
 }
 
-ImagePrivate::~ImagePrivate() {
+DatapickerImagePrivate::~DatapickerImagePrivate() {
     delete m_scene;
 }
 
-void ImagePrivate::updateFileName() {
+void DatapickerImagePrivate::updateFileName() {
     WAIT_CURSOR;
     QList<WorksheetElement*> childElements = q->parentAspect()->children<WorksheetElement>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
     if (childElements.count()) {
@@ -319,8 +319,8 @@ void ImagePrivate::updateFileName() {
 //##############################################################################
 
 //! Save as XML
-void Image::save(QXmlStreamWriter* writer) const {
-    writer->writeStartElement( "image" );
+void DatapickerImage::save(QXmlStreamWriter* writer) const {
+    writer->writeStartElement( "datapickerImage" );
     writeBasicAttributes(writer);
     writeCommentElement(writer);
     //general properties
@@ -376,8 +376,8 @@ void Image::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool Image::load(XmlStreamReader* reader) {
-    if(!reader->isStartElement() || reader->name() != "image") {
+bool DatapickerImage::load(XmlStreamReader* reader) {
+    if(!reader->isStartElement() || reader->name() != "datapickerImage") {
         reader->raiseError(i18n("no image element found"));
         return false;
     }
@@ -391,7 +391,7 @@ bool Image::load(XmlStreamReader* reader) {
 
     while (!reader->atEnd()){
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "image")
+        if (reader->isEndElement() && reader->name() == "datapickerImage")
             break;
 
         if (!reader->isStartElement())
@@ -409,7 +409,7 @@ bool Image::load(XmlStreamReader* reader) {
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("plotPointsType"));
             else
-                d->plotPointsType = Image::PointsType(str.toInt());
+                d->plotPointsType = DatapickerImage::PointsType(str.toInt());
 
         } else if (reader->name() == "axisPoint") {
             attribs = reader->attributes();
@@ -418,7 +418,7 @@ bool Image::load(XmlStreamReader* reader) {
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("graphType"));
             else
-                d->axisPoints.type = Image::GraphType(str.toInt());
+                d->axisPoints.type = DatapickerImage::GraphType(str.toInt());
 
             str = attribs.value("ternaryScale").toString();
             if(str.isEmpty())
@@ -541,7 +541,7 @@ bool Image::load(XmlStreamReader* reader) {
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("colorAttributesType"));
             else
-                d->settings.type = Image::ColorAttributes(str.toInt());
+                d->settings.type = DatapickerImage::ColorAttributes(str.toInt());
 
             str = attribs.value("foregroundThresholdHigh").toString();
             if(str.isEmpty())

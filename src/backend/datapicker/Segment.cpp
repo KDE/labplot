@@ -26,7 +26,7 @@
 
 #include "Segment.h"
 #include "SegmentPrivate.h"
-#include "backend/datapicker/Image.h"
+#include "backend/datapicker/DatapickerImage.h"
 #include "backend/datapicker/CustomItem.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datapicker/DataPickerCurve.h"
@@ -43,7 +43,7 @@
  * \brief graphics-item class for curve-segment
  */
 
-Segment::Segment(Image* image): d_ptr(new SegmentPrivate(this)),
+Segment::Segment(DatapickerImage* image): d_ptr(new SegmentPrivate(this)),
     m_image(image), length(0) {
     m_image->scene()->addItem(this->graphicsItem());
     init();

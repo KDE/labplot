@@ -30,10 +30,10 @@
 #include "backend/datapicker/Datapicker.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/datapicker/Image.h"
+#include "backend/datapicker/DatapickerImage.h"
 #include "commonfrontend/workbook/WorkbookView.h"
 #include "backend/datapicker/DataPickerCurve.h"
-#include "commonfrontend/datapicker/ImageView.h"
+#include "commonfrontend/datapicker/DatapickerImageView.h"
 
 #include <QTabWidget>
 #include <QHBoxLayout>
@@ -99,7 +99,7 @@ DatapickerView::~DatapickerView() {
 }
 
 void DatapickerView::fillToolBar(QToolBar* toolBar){
-	ImageView* view = dynamic_cast<ImageView*>(m_datapicker->image()->view());
+    DatapickerImageView* view = dynamic_cast<DatapickerImageView*>(m_datapicker->image()->view());
 	view->fillToolBar(toolBar);
 }
 
@@ -117,7 +117,7 @@ int DatapickerView::currentIndex() const {
 //##############################################################################
 /*!
   called when the current tab was changed. Propagates the selection of \c Spreadsheet
-  or of a \c Image object to \c Datapicker.
+  or of a \c DatapickerImage object to \c Datapicker.
 */
 void DatapickerView::tabChanged(int index) {
     if (m_initializing)
@@ -160,7 +160,7 @@ void DatapickerView::showTabContextMenu(const QPoint& point) {
     if (spreadsheet) {
         menu = spreadsheet->createContextMenu();
     } else {
-        Image* image = dynamic_cast<Image*>(aspect);
+        DatapickerImage* image = dynamic_cast<DatapickerImage*>(aspect);
         if (image)
             menu = image->createContextMenu();
     }

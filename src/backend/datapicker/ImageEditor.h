@@ -30,7 +30,7 @@
 #include <QColor>
 #include <QList>
 
-#include <backend/datapicker/Image.h>
+#include <backend/datapicker/DatapickerImage.h>
 
 class ImageEditor {
     public:
@@ -38,18 +38,18 @@ class ImageEditor {
         ImageEditor();
         ~ImageEditor();
 
-        int colorAttributeMax(Image::ColorAttributes) const;
+        int colorAttributeMax(DatapickerImage::ColorAttributes) const;
 
         QRgb backgroundColor(const QImage*);
 
         bool colorCompare(QRgb color1, QRgb color2);
 
-        int discretizeValueNotForeground(int, int, Image::ColorAttributes) const;
+        int discretizeValueNotForeground(int, int, DatapickerImage::ColorAttributes) const;
         int discretizeValueForeground(int, int, int, int, int) const;
 
-        void discretize(QImage*, QImage*, Image::EditorSettings);
+        void discretize(QImage*, QImage*, DatapickerImage::EditorSettings);
 
-        bool pixelIsOn(int, Image::EditorSettings) const;
+        bool pixelIsOn(int, DatapickerImage::EditorSettings) const;
         bool processedPixelIsOn(const QImage&, int, int) const;
 
     private:

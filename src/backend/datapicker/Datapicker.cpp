@@ -29,7 +29,7 @@
 
 #include "Datapicker.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/datapicker/Image.h"
+#include "backend/datapicker/DatapickerImage.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/datapicker/DatapickerView.h"
 #include "backend/datapicker/DataPickerCurve.h"
@@ -41,7 +41,7 @@
 
 /**
  * \class Datapicker
- * \brief Top-level container for DataPickerCurve and Image.
+ * \brief Top-level container for DataPickerCurve and DatapickerImage.
  * \ingroup backend
  */
 Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading)
@@ -57,7 +57,7 @@ Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name, con
 }
 
 void Datapicker::init() {
-    m_image = new Image(0, i18n("Plot"));
+    m_image = new DatapickerImage(0, i18n("Plot"));
     m_image->setHidden(true);
     setUndoAware(false);
     addChild(m_image);
@@ -106,7 +106,7 @@ Spreadsheet* Datapicker::currentSpreadsheet() const {
     return 0;
 }
 
-Image* Datapicker::image() const {
+DatapickerImage* Datapicker::image() const {
 	return m_image;
 }
 
@@ -182,7 +182,7 @@ void Datapicker::setChildSelectedInView(int index, bool selected){
 
 /*!
 	Selects or deselects the datapicker or its current active curve in the project explorer.
-	This function is called in \c ImageView.
+    This function is called in \c DatapickerImageView.
 */
 void Datapicker::setSelectedInView(const bool b){
 	//TODO: select the current active curve, if there is one.
@@ -221,7 +221,7 @@ void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
 
     DataPickerCurve* dataPickerCurve = dynamic_cast<DataPickerCurve*>(parentAspect);
     if (m_image == parentAspect) {
-        Image::ReferencePoints points = m_image->axisPoints();
+        DatapickerImage::ReferencePoints points = m_image->axisPoints();
         points.scenePos[childPoints.count()].setX(pos.x());
         points.scenePos[childPoints.count()].setY(pos.y());
         m_image->setAxisPoints(points);
@@ -322,8 +322,8 @@ bool Datapicker::load(XmlStreamReader* reader){
         if (!reader->isStartElement())
             continue;
 
-        if (reader->name() == "image") {
-            Image* plot = new Image(0, i18n("Plot"), true);
+        if (reader->name() == "datapickerImage") {
+            DatapickerImage* plot = new DatapickerImage(0, i18n("Plot"), true);
             if (!plot->load(reader)){
                 delete plot;
                 return false;

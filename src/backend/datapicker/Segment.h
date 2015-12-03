@@ -33,11 +33,11 @@ class QGraphicsItem;
 class QLine;
 
 class SegmentPrivate;
-class Image;
+class DatapickerImage;
 
 class Segment {
 	public:
-        explicit Segment(Image*);
+        explicit Segment(DatapickerImage*);
 		~Segment();
 
         QList<QLine*> path;
@@ -59,7 +59,7 @@ class Segment {
 	private:
     	Q_DECLARE_PRIVATE(Segment)
         void init();
-        Image* m_image;
+        DatapickerImage* m_image;
 };
 
 #endif

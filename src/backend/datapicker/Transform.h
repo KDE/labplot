@@ -2,7 +2,7 @@
     File                 : Transform.h
     Project              : LabPlot
     Description          : transformation for mapping between scene and
-                           logical coordinates of image
+                           logical coordinates of Datapicker-image
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
  ***************************************************************************/
@@ -28,17 +28,17 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-#include "backend/datapicker/Image.h"
+#include "backend/datapicker/DatapickerImage.h"
 
 class Transform {
     public:
         Transform();
-        QVector3D mapSceneToLogical(const QPointF&,const Image::ReferencePoints&);
-        QVector3D mapSceneLengthToLogical(const QPointF&,const Image::ReferencePoints&);
+        QVector3D mapSceneToLogical(const QPointF&,const DatapickerImage::ReferencePoints&);
+        QVector3D mapSceneLengthToLogical(const QPointF&,const DatapickerImage::ReferencePoints&);
 
     private:
-        bool mapTypeToCartesian(const Image::ReferencePoints&);
-        QVector3D mapCartesianToType(const QPointF&, const Image::ReferencePoints&) const;
+        bool mapTypeToCartesian(const DatapickerImage::ReferencePoints&);
+        QVector3D mapCartesianToType(const QPointF&, const DatapickerImage::ReferencePoints&) const;
 
         //logical coordinates
         double x[4];

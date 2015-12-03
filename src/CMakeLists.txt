@@ -160,7 +160,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 	${BACKEND_DIR}/datapicker/CustomItem.cpp
-	${BACKEND_DIR}/datapicker/Image.cpp
+        ${BACKEND_DIR}/datapicker/DatapickerImage.cpp
 	${BACKEND_DIR}/datapicker/Datapicker.cpp
 	${BACKEND_DIR}/datapicker/Transform.cpp
         ${BACKEND_DIR}/datapicker/ImageEditor.cpp
@@ -182,7 +182,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
 	${COMMONFRONTEND_DIR}/widgets/qxtspanslider.cpp
 	${COMMONFRONTEND_DIR}/datapicker/DatapickerView.cpp
-	${COMMONFRONTEND_DIR}/datapicker/ImageView.cpp
+        ${COMMONFRONTEND_DIR}/datapicker/DatapickerImageView.cpp
 )
 
 set(TOOLS_SOURCES

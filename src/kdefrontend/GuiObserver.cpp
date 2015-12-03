@@ -40,7 +40,7 @@
 #include "backend/core/Project.h"
 #include "backend/datapicker/CustomItem.h"
 #include "backend/datapicker/Datapicker.h"
-#include "backend/datapicker/Image.h"
+#include "backend/datapicker/DatapickerImage.h"
 #include "backend/datapicker/DataPickerCurve.h"
 #include "commonfrontend/ProjectExplorer.h"
 #include "kdefrontend/MainWin.h"
@@ -314,18 +314,18 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
   }else if (className=="Datapicker"){
       mainWindow->m_propertiesDock->setWindowTitle(i18n("Datapicker properties"));
 
-      if (!mainWindow->imageDock){
-        mainWindow->imageDock = new ImageWidget(mainWindow->stackedWidget);
-        mainWindow->stackedWidget->addWidget(mainWindow->imageDock);
+      if (!mainWindow->datapickerImageDock){
+        mainWindow->datapickerImageDock = new ImageWidget(mainWindow->stackedWidget);
+        mainWindow->stackedWidget->addWidget(mainWindow->datapickerImageDock);
       }
 
-      QList<Image*> list;
+      QList<DatapickerImage*> list;
       foreach(aspect, selectedAspects){
         list<<qobject_cast<Datapicker*>(aspect)->image();
       }
-      mainWindow->imageDock->setImages(list);
+      mainWindow->datapickerImageDock->setImages(list);
 
-      mainWindow->stackedWidget->setCurrentWidget(mainWindow->imageDock);
+      mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerImageDock);
   }else if (className=="CustomItem"){
       mainWindow->m_propertiesDock->setWindowTitle(i18n("CustomItem properties"));
 

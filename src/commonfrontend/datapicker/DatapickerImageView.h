@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : ImageView.h
+    File                 : DatapickerImageView.h
     Project              : LabPlot
-    Description          : Image view for datapicker
+    Description          : DatapickerImage view for datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
 
@@ -25,8 +25,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMAGEVIEW_H
-#define IMAGEVIEW_H
+#ifndef DATAPICKERIMAGEVIEW_H
+#define DATAPICKERIMAGEVIEW_H
 
 #include <QGraphicsView>
 
@@ -36,17 +36,17 @@ class QToolButton;
 class QWheelEvent;
 
 class AbstractAspect;
-class Image;
+class DatapickerImage;
 class WorksheetElement;
 class Transform;
 class CustomItem;
 class QActionGroup;
 
-class ImageView : public QGraphicsView {
+class DatapickerImageView : public QGraphicsView {
     Q_OBJECT
 
     public:
-        explicit ImageView(Image* image);
+        explicit DatapickerImageView(DatapickerImage* image);
 
         enum ExportFormat{Pdf, Eps, Svg, Png};
 
@@ -69,7 +69,7 @@ class ImageView : public QGraphicsView {
         void mouseReleaseEvent(QMouseEvent*);
         void mouseMoveEvent(QMouseEvent*);
 
-        Image* m_image;
+        DatapickerImage* m_image;
         Transform* m_transform;
         MouseMode m_mouseMode;
         bool m_selectionBandIsShown;

@@ -30,7 +30,7 @@
 
 #include "backend/core/AbstractAspect.h"
 #include "backend/lib/macros.h"
-#include "backend/datapicker/Image.h"
+#include "backend/datapicker/DatapickerImage.h"
 
 class CustomItem;
 class QAction;
@@ -56,7 +56,7 @@ class DataPickerCurve: public AbstractAspect {
         virtual QMenu* createContextMenu();
         void setPrinting(bool);
         void setSelectedInView(const bool);
-        void addDatasheet(const Image::GraphType&);
+        void addDatasheet(const DatapickerImage::GraphType&);
         void updateData(const CustomItem*);
 
         BASIC_D_ACCESSOR_DECL(Errors, curveErrorTypes, CurveErrorTypes)

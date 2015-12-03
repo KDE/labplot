@@ -35,7 +35,7 @@
 
 class Spreadsheet;
 class DataPickerCurve;
-class Image;
+class DatapickerImage;
 class QXmlStreamWriter;
 class XmlStreamReader;
 class Transform;
@@ -54,7 +54,7 @@ class Datapicker : public AbstractPart, public scripted {
 
         DataPickerCurve* activeCurve();
         Spreadsheet* currentSpreadsheet() const;
-		Image* image() const;
+        DatapickerImage* image() const;
 
         void setChildSelectedInView(int index, bool selected);
 		void setSelectedInView(const bool);
@@ -72,7 +72,7 @@ class Datapicker : public AbstractPart, public scripted {
     private:
 		DataPickerCurve* m_activeCurve;
         Transform* m_transform;
-        Image* m_image;
+        DatapickerImage* m_image;
         void init();
 
     private slots:

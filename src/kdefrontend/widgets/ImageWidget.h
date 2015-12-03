@@ -30,7 +30,7 @@
 #define IMAGEWIDGET_H
 
 #include "ui_imagewidget.h"
-#include "backend/datapicker/Image.h"
+#include "backend/datapicker/DatapickerImage.h"
 
 class CustomItem;
 class CustomItemWidget;
@@ -42,15 +42,15 @@ class ImageWidget : public QWidget {
 public:
     explicit ImageWidget(QWidget*);
 
-    void setImages(QList<Image*>);
+    void setImages(QList<DatapickerImage*>);
     void load();
 
 private:
     Ui::ImageWidget ui;
     void initConnections();
 
-    Image* m_image;
-    QList<Image*> m_imagesList;
+    DatapickerImage* m_image;
+    QList<DatapickerImage*> m_imagesList;
     bool m_initializing;
     CustomItemWidget* customItemWidget;
 
@@ -88,8 +88,8 @@ private slots:
     void imageDescriptionChanged(const AbstractAspect*);
     void imageFileNameChanged(const QString&);
     void imageRotationAngleChanged(float);
-    void imageAxisPointsChanged(const Image::ReferencePoints&);
-    void imageEditorSettingsChanged(const Image::EditorSettings&);
+    void imageAxisPointsChanged(const DatapickerImage::ReferencePoints&);
+    void imageEditorSettingsChanged(const DatapickerImage::EditorSettings&);
     void imageMinSegmentLengthChanged(const int);
     void updateCustomItemList();
     void handleWidgetActions();

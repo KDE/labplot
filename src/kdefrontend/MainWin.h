@@ -161,7 +161,7 @@ private:
 	XYFitCurveDock* xyFitCurveDock;
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
-    ImageWidget* imageDock;
+    ImageWidget* datapickerImageDock;
     CustomItemWidget* customItemDock;
     DatapickerCurveWidget* datapickerCurveDock;
 

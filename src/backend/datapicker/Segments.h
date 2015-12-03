@@ -32,13 +32,13 @@
 class ImageEditor;
 class QImage;
 class QLine;
-class Image;
+class DatapickerImage;
 class Segment;
 
 class Segments {
 
 	public:
-        Segments(Image*);
+        Segments(DatapickerImage*);
 		~Segments();
 		
         QList<Segment*> segments;
@@ -47,7 +47,7 @@ class Segments {
         void setSegmentsVisible(bool);
 
     private:
-        Image* m_image;
+        DatapickerImage* m_image;
 
 		void loadBool(const ImageEditor*, bool*, QImage*, int);
         void loadSegment(Segment**, int);

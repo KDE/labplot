@@ -1,5 +1,5 @@
   /***************************************************************************
-    File                 : Image.h
+    File                 : DatapickerImage.h
     Project              : LabPlot
     Description          : Worksheet for Datapicker
     --------------------------------------------------------------------
@@ -24,8 +24,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMAGE_H
-#define IMAGE_H
+#ifndef DATAPICKERIMAGE_H
+#define DATAPICKERIMAGE_H
 
 #include "backend/core/AbstractPart.h"
 #include "backend/core/AbstractScriptingEngine.h"
@@ -33,16 +33,16 @@
 #include <QGraphicsScene>
 #include <QVector3D>
 
-class ImagePrivate;
+class DatapickerImagePrivate;
 class ImageEditor;
 class Segments;
 
-class Image: public AbstractPart, public scripted {
+class DatapickerImage: public AbstractPart, public scripted {
 	Q_OBJECT
 
 	public:
-		Image(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
-        ~Image();
+        DatapickerImage(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
+        ~DatapickerImage();
 
         enum GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary};
         enum ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
@@ -84,7 +84,7 @@ class Image: public AbstractPart, public scripted {
 		void update();
 		void setPrinting(bool) const;
         void setSelectedInView(const bool);
-        void setPlotImageType(const Image::PlotImageType&);
+        void setPlotImageType(const DatapickerImage::PlotImageType&);
         void setSegmentVisible(bool);
 
         bool isLoaded;
@@ -94,21 +94,21 @@ class Image: public AbstractPart, public scripted {
         QGraphicsPixmapItem* m_magnificationWindow;
 
         CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
-        CLASS_D_ACCESSOR_DECL(Image::ReferencePoints, axisPoints, AxisPoints)
-        CLASS_D_ACCESSOR_DECL(Image::EditorSettings, settings, Settings)
+        CLASS_D_ACCESSOR_DECL(DatapickerImage::ReferencePoints, axisPoints, AxisPoints)
+        CLASS_D_ACCESSOR_DECL(DatapickerImage::EditorSettings, settings, Settings)
         BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle)
         BASIC_D_ACCESSOR_DECL(PointsType, plotPointsType, PlotPointsType)
         BASIC_D_ACCESSOR_DECL(int, pointSeparation, PointSeparation)
         BASIC_D_ACCESSOR_DECL(int, minSegmentLength, minSegmentLength)
 
-		typedef ImagePrivate Private;
+        typedef DatapickerImagePrivate Private;
 
     private:
 		void init();
         void initSceneParameters();
 
-		ImagePrivate* const d;
-		friend class ImagePrivate;
+        DatapickerImagePrivate* const d;
+        friend class DatapickerImagePrivate;
         Segments* m_segments;
         ImageEditor* m_editor;
 
@@ -118,13 +118,13 @@ class Image: public AbstractPart, public scripted {
 
         void fileNameChanged(const QString&);
         void rotationAngleChanged(float);
-        void axisPointsChanged(const Image::ReferencePoints&);
-        void settingsChanged(const Image::EditorSettings&);
+        void axisPointsChanged(const DatapickerImage::ReferencePoints&);
+        void settingsChanged(const DatapickerImage::EditorSettings&);
         void minSegmentLengthChanged(const int);
-        friend class ImageSetFileNameCmd;
-        friend class ImageSetRotationAngleCmd;
-        friend class ImageSetAxisPointsCmd;
-        friend class ImageSetSettingsCmd;
-        friend class ImageSetMinSegmentLengthCmd;
+        friend class DatapickerImageSetFileNameCmd;
+        friend class DatapickerImageSetRotationAngleCmd;
+        friend class DatapickerImageSetAxisPointsCmd;
+        friend class DatapickerImageSetSettingsCmd;
+        friend class DatapickerImageSetMinSegmentLengthCmd;
 };
 #endif

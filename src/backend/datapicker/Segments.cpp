@@ -43,7 +43,7 @@
  * * \ingroup datapicker
  */
 
-Segments::Segments(Image* image): m_image(image) {
+Segments::Segments(DatapickerImage* image): m_image(image) {
 }
 
 Segments::~Segments() {

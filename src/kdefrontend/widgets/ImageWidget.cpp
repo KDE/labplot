@@ -132,7 +132,7 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     connect( ui.sbPoisitionZ3, SIGNAL(valueChanged(double)), this, SLOT(logicalPositionChanged()) );
 }
 
-void ImageWidget::setImages(QList<Image*> list) {
+void ImageWidget::setImages(QList<DatapickerImage*> list) {
     m_imagesList = list;
     m_image = list.first();
 
@@ -164,8 +164,8 @@ void ImageWidget::initConnections() {
     connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
              this,SLOT(updateCustomItemList()) );
     connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(updateCustomItemList()) );
-    connect( m_image, SIGNAL(axisPointsChanged(Image::ReferencePoints)), this, SLOT(imageAxisPointsChanged(Image::ReferencePoints)) );
-    connect( m_image, SIGNAL(settingsChanged(Image::EditorSettings)), this, SLOT(imageEditorSettingsChanged(Image::EditorSettings)) );
+    connect( m_image, SIGNAL(axisPointsChanged(DatapickerImage::ReferencePoints)), this, SLOT(imageAxisPointsChanged(DatapickerImage::ReferencePoints)) );
+    connect( m_image, SIGNAL(settingsChanged(DatapickerImage::EditorSettings)), this, SLOT(imageEditorSettingsChanged(DatapickerImage::EditorSettings)) );
     connect( m_image, SIGNAL(minSegmentLengthChanged(int)), this, SLOT(imageMinSegmentLengthChanged(int)) );
 }
 
@@ -229,7 +229,7 @@ void ImageWidget::selectFile() {
     ui.kleFileName->setText( path );
     handleWidgetActions();
 
-    foreach(Image* image, m_imagesList)
+    foreach(DatapickerImage* image, m_imagesList)
         image->setFileName(path);
 }
 
@@ -240,7 +240,7 @@ void ImageWidget::fileNameChanged(){
     handleWidgetActions();
 
     QString fileName = ui.kleFileName->text();
-    foreach(Image* image, m_imagesList){
+    foreach(DatapickerImage* image, m_imagesList){
         image->setFileName(fileName);
     }
 }
@@ -249,10 +249,10 @@ void ImageWidget::graphTypeChanged() {
     if (m_initializing)
         return;
 
-    Image::ReferencePoints points = m_image->axisPoints();
-    points.type = Image::GraphType(ui.cbGraphType->currentIndex());
+    DatapickerImage::ReferencePoints points = m_image->axisPoints();
+    points.type = DatapickerImage::GraphType(ui.cbGraphType->currentIndex());
 
-    if (points.type != Image::Ternary) {
+    if (points.type != DatapickerImage::Ternary) {
         ui.lTernaryScale->setHidden(true);
         ui.sbTernaryScale->setHidden(true);
         ui.lPoisitionZ1->setHidden(true);
@@ -272,7 +272,7 @@ void ImageWidget::graphTypeChanged() {
         ui.sbPoisitionZ3->setHidden(false);
     }
 
-    foreach(Image* image, m_imagesList)
+    foreach(DatapickerImage* image, m_imagesList)
         image->setAxisPoints(points);
 }
 
@@ -280,10 +280,10 @@ void ImageWidget::ternaryScaleChanged(double value) {
     if (m_initializing)
         return;
 
-    Image::ReferencePoints points = m_image->axisPoints();
+    DatapickerImage::ReferencePoints points = m_image->axisPoints();
     points.ternaryScale = value;
 
-    foreach(Image* image, m_imagesList)
+    foreach(DatapickerImage* image, m_imagesList)
         image->setAxisPoints(points);
 }
 
@@ -291,7 +291,7 @@ void ImageWidget::logicalPositionChanged() {
     if (m_initializing)
         return;
 
-    Image::ReferencePoints points = m_image->axisPoints();
+    DatapickerImage::ReferencePoints points = m_image->axisPoints();
     points.logicalPos[0].setX(ui.sbPoisitionX1->value());
     points.logicalPos[0].setY(ui.sbPoisitionY1->value());
     points.logicalPos[1].setX(ui.sbPoisitionX2->value());
@@ -302,7 +302,7 @@ void ImageWidget::logicalPositionChanged() {
     points.logicalPos[1].setZ(ui.sbPoisitionZ2->value());
     points.logicalPos[2].setZ(ui.sbPoisitionZ3->value());
 
-    foreach(Image* image, m_imagesList)
+    foreach(DatapickerImage* image, m_imagesList)
         image->setAxisPoints(points);
 }
 
@@ -310,7 +310,7 @@ void ImageWidget::rotationChanged(double value){
     if (m_initializing)
         return;
 
-    foreach(Image* image, m_imagesList)
+    foreach(DatapickerImage* image, m_imagesList)
         image->setRotationAngle(value);
 }
 
@@ -322,11 +322,11 @@ void ImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit) {
     ui.rbIntensity->setChecked(true);
     m_initializing = false;
 
-    Image::EditorSettings settings = m_image->settings();
-    settings.type = Image::Intensity;
+    DatapickerImage::EditorSettings settings = m_image->settings();
+    settings.type = DatapickerImage::Intensity;
     settings.intensityThresholdHigh = upperLimit;
     settings.intensityThresholdLow = lowerLimit;
-    foreach(Image* image, m_imagesList)
+    foreach(DatapickerImage* image, m_imagesList)
         image->setSettings(settings);
 }
 
@@ -338,11 +338,11 @@ void ImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit) {
     ui.rbForeground->setChecked(true);
     m_initializing = false;
 
-    Image::EditorSettings settings = m_image->settings();
-    settings.type = Image::Foreground;
+    DatapickerImage::EditorSettings settings = m_image->settings();
+    settings.type = DatapickerImage::Foreground;
     settings.foregroundThresholdHigh = upperLimit;
     settings.foregroundThresholdLow = lowerLimit;
-    foreach(Image* image, m_imagesList)
+    foreach(DatapickerImage* image, m_imagesList)
         image->setSettings(settings);
 }
 
@@ -354,11 +354,11 @@ void ImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
     ui.rbHue->setChecked(true);
     m_initializing = false;
 
-    Image::EditorSettings settings = m_image->settings();
-    settings.type = Image::Hue;
+    DatapickerImage::EditorSettings settings = m_image->settings();
+    settings.type = DatapickerImage::Hue;
     settings.hueThresholdHigh = upperLimit;
     settings.hueThresholdLow = lowerLimit;
-    foreach(Image* image, m_imagesList)
+    foreach(DatapickerImage* image, m_imagesList)
         image->setSettings(settings);
 }
 
@@ -370,11 +370,11 @@ void ImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit) {
     ui.rbSaturation->setChecked(true);
     m_initializing = false;
 
-    Image::EditorSettings settings = m_image->settings();
-    settings.type = Image::Saturation;
+    DatapickerImage::EditorSettings settings = m_image->settings();
+    settings.type = DatapickerImage::Saturation;
     settings.saturationThresholdHigh = upperLimit;
     settings.saturationThresholdLow = lowerLimit;
-    foreach(Image* image, m_imagesList)
+    foreach(DatapickerImage* image, m_imagesList)
         image->setSettings(settings);
 }
 
@@ -386,11 +386,11 @@ void ImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
     ui.rbValue->setChecked(true);
     m_initializing = false;
 
-    Image::EditorSettings settings = m_image->settings();
-    settings.type = Image::Value;
+    DatapickerImage::EditorSettings settings = m_image->settings();
+    settings.type = DatapickerImage::Value;
     settings.valueThresholdHigh = upperLimit;
     settings.valueThresholdLow = lowerLimit;
-    foreach(Image* image, m_imagesList)
+    foreach(DatapickerImage* image, m_imagesList)
         image->setSettings(settings);
 }
 
@@ -398,20 +398,20 @@ void ImageWidget::rbClicked() {
     if (m_initializing)
         return;
 
-    Image::EditorSettings settings = m_image->settings();
+    DatapickerImage::EditorSettings settings = m_image->settings();
     if (ui.rbIntensity->isChecked()) {
-        settings.type = Image::Intensity;
+        settings.type = DatapickerImage::Intensity;
     } else if (ui.rbForeground->isChecked()) {
-        settings.type = Image::Foreground;
+        settings.type = DatapickerImage::Foreground;
     } else if (ui.rbHue->isChecked()) {
-        settings.type = Image::Hue;
+        settings.type = DatapickerImage::Hue;
     } else if (ui.rbSaturation->isChecked()) {
-        settings.type = Image::Saturation;
+        settings.type = DatapickerImage::Saturation;
     } else {
-        settings.type = Image::Value;
+        settings.type = DatapickerImage::Value;
     }
 
-    foreach(Image* image, m_imagesList)
+    foreach(DatapickerImage* image, m_imagesList)
         image->setSettings(settings);
 }
 
@@ -419,15 +419,15 @@ void ImageWidget::plotImageTypeChanged(int index) {
     if (m_initializing)
         return;
 
-    foreach(Image* image, m_imagesList)
-        image->setPlotImageType(Image::PlotImageType(index));
+    foreach(DatapickerImage* image, m_imagesList)
+        image->setPlotImageType(DatapickerImage::PlotImageType(index));
 }
 
 void ImageWidget::minSegmentLengthChanged(int value) {
     if (m_initializing)
         return;
 
-    foreach(Image* image, m_imagesList)
+    foreach(DatapickerImage* image, m_imagesList)
         image->setminSegmentLength(value);
 }
 
@@ -435,12 +435,12 @@ void ImageWidget::pointSeparationChanged(int value) {
     if (m_initializing)
         return;
 
-    foreach(Image* image, m_imagesList)
+    foreach(DatapickerImage* image, m_imagesList)
         image->setPointSeparation(value);
 }
 
 //*********************************************************
-//******** SLOTs for changes triggered in Image ***********
+//******** SLOTs for changes triggered in DatapickerImage ***********
 //*********************************************************
 /*!
     called when the name or comment of image's parent (datapicker) was changed.
@@ -470,7 +470,7 @@ void ImageWidget::imageRotationAngleChanged(float angle){
     m_initializing = false;
 }
 
-void ImageWidget::imageAxisPointsChanged(const Image::ReferencePoints& axisPoints) {
+void ImageWidget::imageAxisPointsChanged(const DatapickerImage::ReferencePoints& axisPoints) {
     m_initializing = true;
     ui.cbGraphType->setCurrentIndex((int) axisPoints.type);
     ui.sbTernaryScale->setValue(axisPoints.ternaryScale);
@@ -486,18 +486,18 @@ void ImageWidget::imageAxisPointsChanged(const Image::ReferencePoints& axisPoint
     m_initializing = false;
 }
 
-void ImageWidget::imageEditorSettingsChanged(const Image::EditorSettings& settings) {
+void ImageWidget::imageEditorSettingsChanged(const DatapickerImage::EditorSettings& settings) {
     m_initializing = true;
     ssIntensity->setSpan(settings.intensityThresholdLow, settings.intensityThresholdHigh);
     ssForeground->setSpan(m_image->settings().foregroundThresholdLow, settings.foregroundThresholdHigh);
     ssHue->setSpan(settings.hueThresholdLow, settings.hueThresholdHigh);
     ssSaturation->setSpan(settings.saturationThresholdLow, settings.saturationThresholdHigh);
     ssValue->setSpan(settings.valueThresholdLow, settings.valueThresholdHigh);
-    ui.rbIntensity->setChecked(settings.type == Image::Intensity);
-    ui.rbForeground->setChecked(settings.type == Image::Foreground);
-    ui.rbHue->setChecked(settings.type == Image::Hue);
-    ui.rbSaturation->setChecked(settings.type == Image::Saturation);
-    ui.rbValue->setChecked(settings.type == Image::Value);
+    ui.rbIntensity->setChecked(settings.type == DatapickerImage::Intensity);
+    ui.rbForeground->setChecked(settings.type == DatapickerImage::Foreground);
+    ui.rbHue->setChecked(settings.type == DatapickerImage::Hue);
+    ui.rbSaturation->setChecked(settings.type == DatapickerImage::Saturation);
+    ui.rbValue->setChecked(settings.type == DatapickerImage::Value);
     m_initializing = false;
 }
 
@@ -539,11 +539,11 @@ void ImageWidget::load() {
     ssHue->setSpan(m_image->settings().hueThresholdLow, m_image->settings().hueThresholdHigh);
     ssSaturation->setSpan(m_image->settings().saturationThresholdLow, m_image->settings().saturationThresholdHigh);
     ssValue->setSpan(m_image->settings().valueThresholdLow, m_image->settings().valueThresholdHigh);
-    ui.rbIntensity->setChecked(m_image->settings().type == Image::Intensity);
-    ui.rbForeground->setChecked(m_image->settings().type == Image::Foreground);
-    ui.rbHue->setChecked(m_image->settings().type == Image::Hue);
-    ui.rbSaturation->setChecked(m_image->settings().type == Image::Saturation);
-    ui.rbValue->setChecked(m_image->settings().type == Image::Value);
+    ui.rbIntensity->setChecked(m_image->settings().type == DatapickerImage::Intensity);
+    ui.rbForeground->setChecked(m_image->settings().type == DatapickerImage::Foreground);
+    ui.rbHue->setChecked(m_image->settings().type == DatapickerImage::Hue);
+    ui.rbSaturation->setChecked(m_image->settings().type == DatapickerImage::Saturation);
+    ui.rbValue->setChecked(m_image->settings().type == DatapickerImage::Value);
     ui.sbPointSeparation->setValue(m_image->pointSeparation());
     ui.sbMinSegmentLength->setValue(m_image->minSegmentLength());
     m_initializing = false;

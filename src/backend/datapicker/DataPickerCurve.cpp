@@ -138,7 +138,7 @@ QString& DataPickerCurve::minusDeltaYColumnPath() const { return d_ptr->minusDel
 //##############################################################################
 //#########################  setter methods  ###################################
 //##############################################################################
-void DataPickerCurve::addDatasheet(const Image::GraphType& type) {
+void DataPickerCurve::addDatasheet(const DatapickerImage::GraphType& type) {
     Q_D(DataPickerCurve);
 
     m_datasheet = new Spreadsheet(0, i18n("Data"));
@@ -146,21 +146,21 @@ void DataPickerCurve::addDatasheet(const Image::GraphType& type) {
     QString xLabel = "x";
     QString yLabel = "y";
 
-    if (type == Image::PolarInDegree) {
+    if (type == DatapickerImage::PolarInDegree) {
         xLabel = "r";
         yLabel = "y(deg)";
-    } else if (type == Image::PolarInRadians) {
+    } else if (type == DatapickerImage::PolarInRadians) {
         xLabel = "r";
         yLabel = "y(rad)";
-    } else if (type == Image::LogarithmicX) {
+    } else if (type == DatapickerImage::LogarithmicX) {
         xLabel = "log(x)";
         yLabel = "y";
-    } else if (type == Image::LogarithmicY) {
+    } else if (type == DatapickerImage::LogarithmicY) {
         xLabel = "x";
         yLabel = "log(y)";
     }
 
-    if (type == Image::Ternary)
+    if (type == DatapickerImage::Ternary)
         d->posZColumn = appendColumn(i18n("c"));
 
     d->posXColumn = m_datasheet->column(0);
@@ -265,7 +265,7 @@ void DataPickerCurve::setPrinting(bool on) {
 
 /*!
     Selects or deselects the Datapicker/Curve in the project explorer.
-    This function is called in \c ImageView.
+    This function is called in \c DatapickerImageView.
 */
 void DataPickerCurve::setSelectedInView(const bool b) {
     if (b)
@@ -366,7 +366,7 @@ bool DataPickerCurve::load(XmlStreamReader* reader) {
     Q_D(DataPickerCurve);
 
     if(!reader->isStartElement() || reader->name() != "dataPickerCurve") {
-        reader->raiseError(i18n("no image element found"));
+        reader->raiseError(i18n("no dataPicker curve element found"));
         return false;
     }
 
