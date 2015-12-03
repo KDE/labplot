@@ -251,6 +251,11 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
         foreach(WorksheetElement *elem, childElements) {
             handleChildAspectAboutToBeRemoved(elem);
         }
+
+        if (curve==m_activeCurve) {
+			m_activeCurve = 0;
+			emit statusInfo("");
+		}
     } else {
         handleChildAspectAboutToBeRemoved(aspect);
     }
