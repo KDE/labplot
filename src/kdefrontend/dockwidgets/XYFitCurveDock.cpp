@@ -430,8 +430,10 @@ void XYFitCurveDock::updateModelEquation() {
 
 	//resize the vector for the start values and set the elements to 1.0
 	//in case a custom model is used, do nothing, we take over the previous values
-	//when initalizing, don't do anything - we use start values already available
-	if (m_fitData.modelType!=XYFitCurve::Custom && !m_initializing) {
+	//when initalizing, don't do anything - we use start values already
+	//available - unless there's no values available
+	if (m_fitData.modelType!=XYFitCurve::Custom &&
+            !(m_initializing && m_fitData.paramNames.size() == m_fitData.paramStartValues.size())) {
 		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
 		for (int i=0; i<m_fitData.paramStartValues.size(); ++i)
 			m_fitData.paramStartValues[i] = 1.0;
