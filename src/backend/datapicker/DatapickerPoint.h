@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : CustomItem.h
+    File                 : DatapickerPoint.h
     Project              : LabPlot
     Description          : Graphic Item for coordinate points of Datapicker
     --------------------------------------------------------------------
@@ -24,8 +24,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CUSTOMITEM_H
-#define CUSTOMITEM_H
+#ifndef DATAPICKERPOINT_H
+#define DATAPICKERPOINT_H
 
 #include <QObject>
 #include <QBrush>
@@ -35,7 +35,7 @@
 #include "backend/datapicker/DataPickerCurve.h"
 #include "backend/worksheet/WorksheetElement.h"
 
-class CustomItem;
+class DatapickerPoint;
 
 class ErrorBarItem : public QObject, public QGraphicsRectItem {
     Q_OBJECT
@@ -43,7 +43,7 @@ class ErrorBarItem : public QObject, public QGraphicsRectItem {
     public:
         enum ErrorBarType { PlusDeltaX, MinusDeltaX, PlusDeltaY, MinusDeltaY};
 
-        explicit ErrorBarItem(CustomItem* parent = 0, const ErrorBarType& type = PlusDeltaX);
+        explicit ErrorBarItem(DatapickerPoint* parent = 0, const ErrorBarType& type = PlusDeltaX);
 
         virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
         void setRectSize(const qreal);
@@ -57,17 +57,17 @@ class ErrorBarItem : public QObject, public QGraphicsRectItem {
         QGraphicsLineItem* barLineItem;
         QRectF m_rect;
         ErrorBarType m_type;
-        CustomItem* m_parentItem;
+        DatapickerPoint* m_parentItem;
 };
 
-class CustomItemPrivate;
-class CustomItem : public WorksheetElement {
+class DatapickerPointPrivate;
+class DatapickerPoint : public WorksheetElement {
     Q_OBJECT
 
 	public:
         enum HorizontalPosition { hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom };
         enum VerticalPosition { vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom };
-        enum ItemsStyle {Circle, Square, EquilateralTriangle, RightTriangle, Bar, PeakedBar,
+        enum PointsStyle {Circle, Square, EquilateralTriangle, RightTriangle, Bar, PeakedBar,
                         SkewedBar, Diamond, Lozenge, Tie, TinyTie, Plus, Boomerang, SmallBoomerang,
                         Star4, Star5, Line, Cross };
 
@@ -77,8 +77,8 @@ class CustomItem : public WorksheetElement {
 			VerticalPosition   verticalPosition;
 		};
 
-		explicit CustomItem(const QString& name );
-		~CustomItem();
+        explicit DatapickerPoint(const QString& name );
+        ~DatapickerPoint();
 
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
@@ -93,12 +93,12 @@ class CustomItem : public WorksheetElement {
         CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
         void setPosition(const QPointF&);
 
-        BASIC_D_ACCESSOR_DECL(ItemsStyle, itemsStyle, ItemsStyle)
-        BASIC_D_ACCESSOR_DECL(qreal, itemsOpacity, ItemsOpacity)
-        BASIC_D_ACCESSOR_DECL(qreal, itemsRotationAngle, ItemsRotationAngle)
-        BASIC_D_ACCESSOR_DECL(qreal, itemsSize, ItemsSize)
-        CLASS_D_ACCESSOR_DECL(QBrush, itemsBrush, ItemsBrush)
-        CLASS_D_ACCESSOR_DECL(QPen, itemsPen, ItemsPen)
+        BASIC_D_ACCESSOR_DECL(PointsStyle, style, Style)
+        BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
+        BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
+        BASIC_D_ACCESSOR_DECL(qreal, size, Size)
+        CLASS_D_ACCESSOR_DECL(QBrush, brush, Brush)
+        CLASS_D_ACCESSOR_DECL(QPen, pen, Pen)
 
         BASIC_D_ACCESSOR_DECL(qreal, errorBarSize, ErrorBarSize)
         CLASS_D_ACCESSOR_DECL(QBrush, errorBarBrush, ErrorBarBrush)
@@ -117,10 +117,10 @@ class CustomItem : public WorksheetElement {
 		virtual void setPrinting(bool);
         void suppressHoverEvents(bool);
 
-		typedef CustomItemPrivate Private;
+        typedef DatapickerPointPrivate Private;
 
-        static QPainterPath itemsPathFromStyle(CustomItem::ItemsStyle);
-        static QString itemsNameFromStyle(CustomItem::ItemsStyle);
+        static QPainterPath pointPathFromStyle(DatapickerPoint::PointsStyle);
+        static QString pointNameFromStyle(DatapickerPoint::PointsStyle);
 
 	public slots:
 		virtual void retransform();
@@ -130,11 +130,11 @@ class CustomItem : public WorksheetElement {
 		void visibilityChanged();
 
 	protected:
-		CustomItemPrivate* const d_ptr;
-        CustomItem(const QString &name, CustomItemPrivate *dd);
+        DatapickerPointPrivate* const d_ptr;
+        DatapickerPoint(const QString &name, DatapickerPointPrivate *dd);
 
     private:
-    	Q_DECLARE_PRIVATE(CustomItem)
+        Q_DECLARE_PRIVATE(DatapickerPoint)
 		void init();
 		void initActions();
 
@@ -142,31 +142,31 @@ class CustomItem : public WorksheetElement {
         QList<ErrorBarItem*> m_errorBarItemList;
 
 	signals:
-		friend class CustomItemSetPositionCmd;
-		void positionChanged(const CustomItem::PositionWrapper&);
+        friend class DatapickerPointSetPositionCmd;
+        void positionChanged(const DatapickerPoint::PositionWrapper&);
 		void visibleChanged(bool);
         void changed();
 
-        friend class CustomItemSetItemsStyleCmd;
-        friend class CustomItemSetItemsSizeCmd;
-        friend class CustomItemSetItemsRotationAngleCmd;
-        friend class CustomItemSetItemsOpacityCmd;
-        friend class CustomItemSetItemsBrushCmd;
-        friend class CustomItemSetItemsPenCmd;
-        void itemsStyleChanged(CustomItem::ItemsStyle);
-        void itemsSizeChanged(qreal);
-        void itemsRotationAngleChanged(qreal);
-        void itemsOpacityChanged(qreal);
-        void itemsBrushChanged(QBrush);
-        void itemsPenChanged(const QPen&);
+        friend class DatapickerPointSetStyleCmd;
+        friend class DatapickerPointSetSizeCmd;
+        friend class DatapickerPointSetRotationAngleCmd;
+        friend class DatapickerPointSetOpacityCmd;
+        friend class DatapickerPointSetBrushCmd;
+        friend class DatapickerPointSetPenCmd;
+        void styleChanged(DatapickerPoint::PointsStyle);
+        void sizeChanged(qreal);
+        void rotationAngleChanged(qreal);
+        void opacityChanged(qreal);
+        void brushChanged(QBrush);
+        void penChanged(const QPen&);
 
-        friend class CustomItemSetErrorBarSizeCmd;
-        friend class CustomItemSetErrorBarPenCmd;
-        friend class CustomItemSetErrorBarBrushCmd;
-        friend class CustomItemSetPlusDeltaXPosCmd;
-        friend class CustomItemSetMinusDeltaXPosCmd;
-        friend class CustomItemSetPlusDeltaYPosCmd;
-        friend class CustomItemSetMinusDeltaYPosCmd;
+        friend class DatapickerPointSetErrorBarSizeCmd;
+        friend class DatapickerPointSetErrorBarPenCmd;
+        friend class DatapickerPointSetErrorBarBrushCmd;
+        friend class DatapickerPointSetPlusDeltaXPosCmd;
+        friend class DatapickerPointSetMinusDeltaXPosCmd;
+        friend class DatapickerPointSetPlusDeltaYPosCmd;
+        friend class DatapickerPointSetMinusDeltaYPosCmd;
         void plusDeltaXPosChanged(const QPointF&);
         void minusDeltaXPosChanged(const QPointF&);
         void plusDeltaYPosChanged(const QPointF&);

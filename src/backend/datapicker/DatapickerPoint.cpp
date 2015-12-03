@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : CustomItem.cpp
+    File                 : DatapickerPoint.cpp
     Project              : LabPlot
     Description          : Graphic Item for coordinate points of Datapicker
     --------------------------------------------------------------------
@@ -24,9 +24,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "CustomItem.h"
+#include "DatapickerPoint.h"
 #include "backend/worksheet/Worksheet.h"
-#include "CustomItemPrivate.h"
+#include "DatapickerPointPrivate.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/datapicker/DataPickerCurve.h"
@@ -43,10 +43,10 @@
 
 /**
  * \class ErrorBarItem
- * \brief A customizable error-bar for custom-item.
+ * \brief A customizable error-bar for DatapickerPoint.
  */
 
-ErrorBarItem::ErrorBarItem(CustomItem *parent, const ErrorBarType& type) : QGraphicsRectItem(parent->graphicsItem(), 0),
+ErrorBarItem::ErrorBarItem(DatapickerPoint *parent, const ErrorBarType& type) : QGraphicsRectItem(parent->graphicsItem(), 0),
      barLineItem(new QGraphicsLineItem(parent->graphicsItem(), 0)),
      m_parentItem(parent),
      m_type(type) {
@@ -105,51 +105,51 @@ QVariant ErrorBarItem::itemChange(QGraphicsItem::GraphicsItemChange change, cons
 }
 
 /**
- * \class Custom-Item
+ * \class Datapicker-Point
  * \brief A customizable symbol supports error-bars.
  *
- * The custom-item is aligned relative to the specified position.
+ * The datapicker-Point is aligned relative to the specified position.
  * The position can be either specified by mouse events or by providing the
  * x- and y- coordinates in parent's coordinate system, or by specifying one
  * of the predefined position flags (\ca HorizontalPosition, \ca VerticalPosition).
  */
 
-CustomItem::CustomItem(const QString& name):WorksheetElement(name),
-    d_ptr(new CustomItemPrivate(this)) {
+DatapickerPoint::DatapickerPoint(const QString& name):WorksheetElement(name),
+    d_ptr(new DatapickerPointPrivate(this)) {
 
     init();
 }
 
-CustomItem::CustomItem(const QString& name, CustomItemPrivate *dd):WorksheetElement(name), d_ptr(dd) {
+DatapickerPoint::DatapickerPoint(const QString& name, DatapickerPointPrivate *dd):WorksheetElement(name), d_ptr(dd) {
 
     init();
 }
 
-CustomItem::~CustomItem() {
+DatapickerPoint::~DatapickerPoint() {
     //no need to delete the d-pointer here - it inherits from QGraphicsItem
     //and is deleted during the cleanup in QGraphicsScene
 }
 
-void CustomItem::init() {
-    Q_D(CustomItem);
+void DatapickerPoint::init() {
+    Q_D(DatapickerPoint);
 
     KConfig config;
     KConfigGroup group;
-    group = config.group("CustomItem");
-    d->position.horizontalPosition = (HorizontalPosition) group.readEntry("PositionX", (int)CustomItem::hPositionCustom);
-    d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int) CustomItem::vPositionCustom);
+    group = config.group("DatapickerPoint");
+    d->position.horizontalPosition = (HorizontalPosition) group.readEntry("PositionX", (int)DatapickerPoint::hPositionCustom);
+    d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int) DatapickerPoint::vPositionCustom);
     d->position.point.setX( group.readEntry("PositionXValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
     d->position.point.setY( group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
     d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
-    d->itemsStyle = (CustomItem::ItemsStyle)group.readEntry("ItemStyle", (int)CustomItem::Cross);
-    d->itemsSize = group.readEntry("ItemSize", Worksheet::convertToSceneUnits(2, Worksheet::Point));
-    d->itemsRotationAngle = group.readEntry("ItemRotation", 0.0);
-    d->itemsOpacity = group.readEntry("ItemOpacity", 1.0);
-    d->itemsBrush.setStyle( (Qt::BrushStyle)group.readEntry("ItemFillingStyle", (int)Qt::NoBrush) );
-    d->itemsBrush.setColor( group.readEntry("ItemFillingColor", QColor(Qt::black)) );
-    d->itemsPen.setStyle( (Qt::PenStyle)group.readEntry("ItemBorderStyle", (int)Qt::SolidLine) );
-    d->itemsPen.setColor( group.readEntry("ItemBorderColor", QColor(Qt::red)) );
-    d->itemsPen.setWidthF( group.readEntry("ItemBorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Point)) );
+    d->style = (DatapickerPoint::PointsStyle)group.readEntry("Style", (int)DatapickerPoint::Cross);
+    d->size = group.readEntry("Size", Worksheet::convertToSceneUnits(2, Worksheet::Point));
+    d->rotationAngle = group.readEntry("Rotation", 0.0);
+    d->opacity = group.readEntry("Opacity", 1.0);
+    d->brush.setStyle( (Qt::BrushStyle)group.readEntry("FillingStyle", (int)Qt::NoBrush) );
+    d->brush.setColor( group.readEntry("FillingColor", QColor(Qt::black)) );
+    d->pen.setStyle( (Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine) );
+    d->pen.setColor( group.readEntry("BorderColor", QColor(Qt::red)) );
+    d->pen.setWidthF( group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Point)) );
     d->errorBarSize = group.readEntry("ErrorBarSize", Worksheet::convertToSceneUnits(8, Worksheet::Point));
     d->errorBarBrush.setStyle( (Qt::BrushStyle)group.readEntry("ErrorBarFillingStyle", (int)Qt::NoBrush) );
     d->errorBarBrush.setColor( group.readEntry("ErrorBarFillingColor", QColor(Qt::black)) );
@@ -165,14 +165,14 @@ void CustomItem::init() {
     this->initActions();
 }
 
-void CustomItem::initActions() {
-    Q_D(CustomItem);
+void DatapickerPoint::initActions() {
+    Q_D(DatapickerPoint);
     visibilityAction = new QAction(i18n("visible"), this);
     visibilityAction->setCheckable(true);
     connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 }
 
-void CustomItem::initErrorBar(const DataPickerCurve::Errors& errors) {
+void DatapickerPoint::initErrorBar(const DataPickerCurve::Errors& errors) {
     m_errorBarItemList.clear();
     if (errors.x != DataPickerCurve::NoError) {
         setXSymmetricError(errors.x == DataPickerCurve::SymmetricError);
@@ -206,11 +206,11 @@ void CustomItem::initErrorBar(const DataPickerCurve::Errors& errors) {
 /*!
     Returns an icon to be used in the project explorer.
 */
-QIcon CustomItem::icon() const{
+QIcon DatapickerPoint::icon() const{
     return  KIcon("draw-cross");
 }
 
-QMenu* CustomItem::createContextMenu(){
+QMenu* DatapickerPoint::createContextMenu(){
     QMenu* menu = WorksheetElement::createContextMenu();
     QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
     visibilityAction->setChecked(isVisible());
@@ -219,250 +219,250 @@ QMenu* CustomItem::createContextMenu(){
     return menu;
 }
 
-QGraphicsItem* CustomItem::graphicsItem() const {
+QGraphicsItem* DatapickerPoint::graphicsItem() const {
     return d_ptr;
 }
 
-void CustomItem::setParentGraphicsItem(QGraphicsItem* item) {
-    Q_D(CustomItem);
+void DatapickerPoint::setParentGraphicsItem(QGraphicsItem* item) {
+    Q_D(DatapickerPoint);
     d->setParentItem(item);
     d->updatePosition();
 }
 
-void CustomItem::retransform() {
-    Q_D(CustomItem);
+void DatapickerPoint::retransform() {
+    Q_D(DatapickerPoint);
     d->retransform();
 }
 
-void CustomItem::handlePageResize(double horizontalRatio, double verticalRatio) {
+void DatapickerPoint::handlePageResize(double horizontalRatio, double verticalRatio) {
     Q_UNUSED(horizontalRatio);
     Q_UNUSED(verticalRatio);
 
-    Q_D(CustomItem);
+    Q_D(DatapickerPoint);
     d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
 }
 
 /* ============================ getter methods ================= */
-//item
-CLASS_SHARED_D_READER_IMPL(CustomItem, CustomItem::PositionWrapper, position, position)
-BASIC_SHARED_D_READER_IMPL(CustomItem, CustomItem::ItemsStyle, itemsStyle, itemsStyle)
-BASIC_SHARED_D_READER_IMPL(CustomItem, qreal, itemsOpacity, itemsOpacity)
-BASIC_SHARED_D_READER_IMPL(CustomItem, qreal, itemsRotationAngle, itemsRotationAngle)
-BASIC_SHARED_D_READER_IMPL(CustomItem, qreal, itemsSize, itemsSize)
-CLASS_SHARED_D_READER_IMPL(CustomItem, QBrush, itemsBrush, itemsBrush)
-CLASS_SHARED_D_READER_IMPL(CustomItem, QPen, itemsPen, itemsPen)
+//point
+CLASS_SHARED_D_READER_IMPL(DatapickerPoint, DatapickerPoint::PositionWrapper, position, position)
+BASIC_SHARED_D_READER_IMPL(DatapickerPoint, DatapickerPoint::PointsStyle, style, style)
+BASIC_SHARED_D_READER_IMPL(DatapickerPoint, qreal, opacity, opacity)
+BASIC_SHARED_D_READER_IMPL(DatapickerPoint, qreal, rotationAngle, rotationAngle)
+BASIC_SHARED_D_READER_IMPL(DatapickerPoint, qreal, size, size)
+CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QBrush, brush, brush)
+CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPen, pen, pen)
 
 //error-bar
-BASIC_SHARED_D_READER_IMPL(CustomItem, qreal, errorBarSize, errorBarSize)
-CLASS_SHARED_D_READER_IMPL(CustomItem, QBrush, errorBarBrush, errorBarBrush)
-CLASS_SHARED_D_READER_IMPL(CustomItem, QPen, errorBarPen, errorBarPen)
-CLASS_SHARED_D_READER_IMPL(CustomItem, QPointF, plusDeltaXPos, plusDeltaXPos)
-CLASS_SHARED_D_READER_IMPL(CustomItem, QPointF, minusDeltaXPos, minusDeltaXPos)
-CLASS_SHARED_D_READER_IMPL(CustomItem, QPointF, plusDeltaYPos, plusDeltaYPos)
-CLASS_SHARED_D_READER_IMPL(CustomItem, QPointF, minusDeltaYPos, minusDeltaYPos)
-BASIC_SHARED_D_READER_IMPL(CustomItem, bool, xSymmetricError, xSymmetricError)
-BASIC_SHARED_D_READER_IMPL(CustomItem, bool, ySymmetricError, ySymmetricError)
+BASIC_SHARED_D_READER_IMPL(DatapickerPoint, qreal, errorBarSize, errorBarSize)
+CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QBrush, errorBarBrush, errorBarBrush)
+CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPen, errorBarPen, errorBarPen)
+CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPointF, plusDeltaXPos, plusDeltaXPos)
+CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPointF, minusDeltaXPos, minusDeltaXPos)
+CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPointF, plusDeltaYPos, plusDeltaYPos)
+CLASS_SHARED_D_READER_IMPL(DatapickerPoint, QPointF, minusDeltaYPos, minusDeltaYPos)
+BASIC_SHARED_D_READER_IMPL(DatapickerPoint, bool, xSymmetricError, xSymmetricError)
+BASIC_SHARED_D_READER_IMPL(DatapickerPoint, bool, ySymmetricError, ySymmetricError)
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetItemsStyle, CustomItem::ItemsStyle, itemsStyle, retransform)
-void CustomItem::setItemsStyle(CustomItem::ItemsStyle style) {
-    Q_D(CustomItem);
-    if (style != d->itemsStyle)
-        exec(new CustomItemSetItemsStyleCmd(d, style, i18n("%1: set item style")));
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetStyle, DatapickerPoint::PointsStyle, style, retransform)
+void DatapickerPoint::setStyle(DatapickerPoint::PointsStyle newStyle) {
+    Q_D(DatapickerPoint);
+    if (newStyle != d->style)
+        exec(new DatapickerPointSetStyleCmd(d, newStyle, i18n("%1: set point's style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetItemsSize, qreal, itemsSize, retransform)
-void CustomItem::setItemsSize(qreal size) {
-    Q_D(CustomItem);
-    if (!qFuzzyCompare(1 + size, 1 + d->itemsSize))
-        exec(new CustomItemSetItemsSizeCmd(d, size, i18n("%1: set item size")));
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetSize, qreal, size, retransform)
+void DatapickerPoint::setSize(qreal value) {
+    Q_D(DatapickerPoint);
+    if (!qFuzzyCompare(1 + value, 1 + d->size))
+        exec(new DatapickerPointSetSizeCmd(d, value, i18n("%1: set point's size")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetItemsRotationAngle, qreal, itemsRotationAngle, recalcShapeAndBoundingRect)
-void CustomItem::setItemsRotationAngle(qreal angle) {
-    Q_D(CustomItem);
-    if (!qFuzzyCompare(1 + angle, 1 + d->itemsRotationAngle))
-        exec(new CustomItemSetItemsRotationAngleCmd(d, angle, i18n("%1: rotate items")));
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetRotationAngle, qreal, rotationAngle, recalcShapeAndBoundingRect)
+void DatapickerPoint::setRotationAngle(qreal angle) {
+    Q_D(DatapickerPoint);
+    if (!qFuzzyCompare(1 + angle, 1 + d->rotationAngle))
+        exec(new DatapickerPointSetRotationAngleCmd(d, angle, i18n("%1: rotate point")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetItemsBrush, QBrush, itemsBrush, retransform)
-void CustomItem::setItemsBrush(const QBrush &brush) {
-    Q_D(CustomItem);
-    if (brush != d->itemsBrush)
-        exec(new CustomItemSetItemsBrushCmd(d, brush, i18n("%1: set item filling")));
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetBrush, QBrush, brush, retransform)
+void DatapickerPoint::setBrush(const QBrush& newBrush) {
+    Q_D(DatapickerPoint);
+    if (newBrush != d->brush)
+        exec(new DatapickerPointSetBrushCmd(d, newBrush, i18n("%1: set point's filling")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetItemsPen, QPen, itemsPen, retransform)
-void CustomItem::setItemsPen(const QPen &pen) {
-    Q_D(CustomItem);
-    if (pen != d->itemsPen)
-        exec(new CustomItemSetItemsPenCmd(d, pen, i18n("%1: set outline style")));
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPen, QPen, pen, retransform)
+void DatapickerPoint::setPen(const QPen &newPen) {
+    Q_D(DatapickerPoint);
+    if (newPen != d->pen)
+        exec(new DatapickerPointSetPenCmd(d, newPen, i18n("%1: set outline style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetItemsOpacity, qreal, itemsOpacity, retransform)
-void CustomItem::setItemsOpacity(qreal opacity) {
-    Q_D(CustomItem);
-    if (opacity != d->itemsOpacity)
-        exec(new CustomItemSetItemsOpacityCmd(d, opacity, i18n("%1: set items opacity")));
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetOpacity, qreal, opacity, retransform)
+void DatapickerPoint::setOpacity(qreal newOpacity) {
+    Q_D(DatapickerPoint);
+    if (newOpacity != d->opacity)
+        exec(new DatapickerPointSetOpacityCmd(d, newOpacity, i18n("%1: set point's opacity")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetPosition, CustomItem::PositionWrapper, position, retransform)
-void CustomItem::setPosition(const PositionWrapper& pos) {
-    Q_D(CustomItem);
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPosition, DatapickerPoint::PositionWrapper, position, retransform)
+void DatapickerPoint::setPosition(const PositionWrapper& pos) {
+    Q_D(DatapickerPoint);
     if (pos.point!=d->position.point || pos.horizontalPosition!=d->position.horizontalPosition
             || pos.verticalPosition!=d->position.verticalPosition)
-        exec(new CustomItemSetPositionCmd(d, pos, i18n("%1: set position")));
+        exec(new DatapickerPointSetPositionCmd(d, pos, i18n("%1: set position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetErrorBarSize, qreal, errorBarSize, retransformErrorBar)
-void CustomItem::setErrorBarSize(qreal size) {
-    Q_D(CustomItem);
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetErrorBarSize, qreal, errorBarSize, retransformErrorBar)
+void DatapickerPoint::setErrorBarSize(qreal size) {
+    Q_D(DatapickerPoint);
     if (size != d->errorBarSize)
-        exec(new CustomItemSetErrorBarSizeCmd(d, size, i18n("%1: set error bar size")));
+        exec(new DatapickerPointSetErrorBarSizeCmd(d, size, i18n("%1: set error bar size")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetErrorBarBrush, QBrush, errorBarBrush, retransformErrorBar)
-void CustomItem::setErrorBarBrush(const QBrush &brush) {
-    Q_D(CustomItem);
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetErrorBarBrush, QBrush, errorBarBrush, retransformErrorBar)
+void DatapickerPoint::setErrorBarBrush(const QBrush &brush) {
+    Q_D(DatapickerPoint);
     if (brush != d->errorBarBrush)
-        exec(new CustomItemSetErrorBarBrushCmd(d, brush, i18n("%1: set error bar filling")));
+        exec(new DatapickerPointSetErrorBarBrushCmd(d, brush, i18n("%1: set error bar filling")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetErrorBarPen, QPen, errorBarPen, retransformErrorBar)
-void CustomItem::setErrorBarPen(const QPen &pen) {
-    Q_D(CustomItem);
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetErrorBarPen, QPen, errorBarPen, retransformErrorBar)
+void DatapickerPoint::setErrorBarPen(const QPen &pen) {
+    Q_D(DatapickerPoint);
     if (pen != d->errorBarPen)
-        exec(new CustomItemSetErrorBarPenCmd(d, pen, i18n("%1: set error bar outline style")));
+        exec(new DatapickerPointSetErrorBarPenCmd(d, pen, i18n("%1: set error bar outline style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetPlusDeltaXPos, QPointF, plusDeltaXPos, updateData)
-void CustomItem::setPlusDeltaXPos(const QPointF& pos) {
-    Q_D(CustomItem);
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaXPos, QPointF, plusDeltaXPos, updateData)
+void DatapickerPoint::setPlusDeltaXPos(const QPointF& pos) {
+    Q_D(DatapickerPoint);
     if ( pos != d->plusDeltaXPos ) {
         beginMacro(i18n("%1: set +delta_X position", name()));
         if (d->xSymmetricError) {
-            exec(new CustomItemSetPlusDeltaXPosCmd(d, pos, i18n("%1: set +delta X position")));
+            exec(new DatapickerPointSetPlusDeltaXPosCmd(d, pos, i18n("%1: set +delta X position")));
             setMinusDeltaXPos(QPointF(-qAbs(pos.x()), pos.y()));
         } else {
-            exec(new CustomItemSetPlusDeltaXPosCmd(d, pos, i18n("%1: set +delta X position")));
+            exec(new DatapickerPointSetPlusDeltaXPosCmd(d, pos, i18n("%1: set +delta X position")));
         }
         endMacro();
     }
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetMinusDeltaXPos, QPointF, minusDeltaXPos, updateData)
-void CustomItem::setMinusDeltaXPos(const QPointF& pos) {
-    Q_D(CustomItem);
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaXPos, QPointF, minusDeltaXPos, updateData)
+void DatapickerPoint::setMinusDeltaXPos(const QPointF& pos) {
+    Q_D(DatapickerPoint);
     if ( pos != d->minusDeltaXPos ) {
         beginMacro(i18n("%1: set -delta_X position", name()));
         if (d->xSymmetricError) {
-            exec(new CustomItemSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta X position")));
+            exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta X position")));
             setPlusDeltaXPos(QPointF(qAbs(pos.x()), pos.y()));
         } else {
-            exec(new CustomItemSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta X position")));
+            exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta X position")));
         }
         endMacro();
     }
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetPlusDeltaYPos, QPointF, plusDeltaYPos, updateData)
-void CustomItem::setPlusDeltaYPos(const QPointF& pos) {
-    Q_D(CustomItem);
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaYPos, QPointF, plusDeltaYPos, updateData)
+void DatapickerPoint::setPlusDeltaYPos(const QPointF& pos) {
+    Q_D(DatapickerPoint);
     if ( pos != d->plusDeltaYPos ) {
         beginMacro(i18n("%1: set +delta Y position", name()));
         if (d->ySymmetricError) {
-            exec(new CustomItemSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta Y position")));
+            exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta Y position")));
             setMinusDeltaYPos(QPointF(pos.x(), qAbs(pos.y())));
         } else {
-            exec(new CustomItemSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta Y position")));
+            exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta Y position")));
         }
         endMacro();
     }
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomItem, SetMinusDeltaYPos, QPointF, minusDeltaYPos, updateData)
-void CustomItem::setMinusDeltaYPos(const QPointF& pos) {
-    Q_D(CustomItem);
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaYPos, QPointF, minusDeltaYPos, updateData)
+void DatapickerPoint::setMinusDeltaYPos(const QPointF& pos) {
+    Q_D(DatapickerPoint);
     if ( pos != d->minusDeltaYPos ) {
         beginMacro(i18n("%1: set -delta Y position", name()));
         if (d->ySymmetricError) {
-            exec(new CustomItemSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta Y position")));
+            exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta Y position")));
             setPlusDeltaYPos(QPointF(pos.x(), -qAbs(pos.y())));
         } else {
-            exec(new CustomItemSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta Y position")));
+            exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta Y position")));
         }
         endMacro();
     }
 }
 
-void CustomItem::setXSymmetricError(const bool value) {
-    Q_D(CustomItem);
-    d->xSymmetricError = value;
+void DatapickerPoint::setXSymmetricError(const bool on) {
+    Q_D(DatapickerPoint);
+    d->xSymmetricError = on;
 }
 
-void CustomItem::setYSymmetricError(const bool value) {
-    Q_D(CustomItem);
-    d->ySymmetricError = value;
+void DatapickerPoint::setYSymmetricError(const bool on) {
+    Q_D(DatapickerPoint);
+    d->ySymmetricError = on;
 }
 
-QPainterPath CustomItem::itemsPathFromStyle(CustomItem::ItemsStyle style) {
+QPainterPath DatapickerPoint::pointPathFromStyle(DatapickerPoint::PointsStyle style) {
     QPainterPath path;
     QPolygonF polygon;
-    if (style == CustomItem::Circle) {
+    if (style == DatapickerPoint::Circle) {
         path.addEllipse(QPoint(0,0), 0.5, 0.5);
-    } else if (style == CustomItem::Square) {
+    } else if (style == DatapickerPoint::Square) {
         path.addRect(QRectF(- 0.5, -0.5, 1.0, 1.0));
-    } else if (style == CustomItem::EquilateralTriangle) {
+    } else if (style == DatapickerPoint::EquilateralTriangle) {
         polygon<<QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5);
         path.addPolygon(polygon);
-    } else if (style == CustomItem::RightTriangle) {
+    } else if (style == DatapickerPoint::RightTriangle) {
         polygon<<QPointF(-0.5, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5)<<QPointF(-0.5, -0.5);
         path.addPolygon(polygon);
-    } else if (style == CustomItem::Bar) {
+    } else if (style == DatapickerPoint::Bar) {
         path.addRect(QRectF(- 0.5, -0.2, 1.0, 0.4));
-    } else if (style == CustomItem::PeakedBar) {
+    } else if (style == DatapickerPoint::PeakedBar) {
         polygon<<QPointF(-0.5, 0)<<QPointF(-0.3, -0.2)<<QPointF(0.3, -0.2)<<QPointF(0.5, 0)
                 <<QPointF(0.3, 0.2)<<QPointF(-0.3, 0.2)<<QPointF(-0.5, 0);
         path.addPolygon(polygon);
-    } else if (style == CustomItem::SkewedBar) {
+    } else if (style == DatapickerPoint::SkewedBar) {
         polygon<<QPointF(-0.5, 0.2)<<QPointF(-0.2, -0.2)<<QPointF(0.5, -0.2)<<QPointF(0.2, 0.2)<<QPointF(-0.5, 0.2);
         path.addPolygon(polygon);
-    } else if (style == CustomItem::Diamond) {
+    } else if (style == DatapickerPoint::Diamond) {
         polygon<<QPointF(-0.5, 0)<<QPointF(0, -0.5)<<QPointF(0.5, 0)<<QPointF(0, 0.5)<<QPointF(-0.5, 0);
         path.addPolygon(polygon);
-    } else if (style == CustomItem::Lozenge) {
+    } else if (style == DatapickerPoint::Lozenge) {
         polygon<<QPointF(-0.25, 0)<<QPointF(0, -0.5)<<QPointF(0.25, 0)<<QPointF(0, 0.5)<<QPointF(-0.25, 0);
         path.addPolygon(polygon);
-    } else if (style == CustomItem::Tie) {
+    } else if (style == DatapickerPoint::Tie) {
         polygon<<QPointF(-0.5, -0.5)<<QPointF(0.5, -0.5)<<QPointF(-0.5, 0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, -0.5);
         path.addPolygon(polygon);
-    } else if (style == CustomItem::TinyTie) {
+    } else if (style == DatapickerPoint::TinyTie) {
         polygon<<QPointF(-0.2, -0.5)<<QPointF(0.2, -0.5)<<QPointF(-0.2, 0.5)<<QPointF(0.2, 0.5)<<QPointF(-0.2, -0.5);
         path.addPolygon(polygon);
-    } else if (style == CustomItem::Plus) {
+    } else if (style == DatapickerPoint::Plus) {
         polygon<<QPointF(-0.2, -0.5)<<QPointF(0.2, -0.5)<<QPointF(0.2, -0.2)<<QPointF(0.5, -0.2)<<QPointF(0.5, 0.2)
                 <<QPointF(0.2, 0.2)<<QPointF(0.2, 0.5)<<QPointF(-0.2, 0.5)<<QPointF(-0.2, 0.2)<<QPointF(-0.5, 0.2)
                 <<QPointF(-0.5, -0.2)<<QPointF(-0.2, -0.2)<<QPointF(-0.2, -0.5);
         path.addPolygon(polygon);
-    } else if (style == CustomItem::Boomerang) {
+    } else if (style == DatapickerPoint::Boomerang) {
         polygon<<QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(0, 0)<<QPointF(-0.5, 0.5);
         path.addPolygon(polygon);
-    } else if (style == CustomItem::SmallBoomerang) {
+    } else if (style == DatapickerPoint::SmallBoomerang) {
         polygon<<QPointF(-0.3, 0.5)<<QPointF(0, -0.5)<<QPointF(0.3, 0.5)<<QPointF(0, 0)<<QPointF(-0.3, 0.5);
         path.addPolygon(polygon);
-    } else if (style == CustomItem::Star4) {
+    } else if (style == DatapickerPoint::Star4) {
         polygon<<QPointF(-0.5, 0)<<QPointF(-0.1, -0.1)<<QPointF(0, -0.5)<<QPointF(0.1, -0.1)<<QPointF(0.5, 0)
                 <<QPointF(0.1, 0.1)<<QPointF(0, 0.5)<<QPointF(-0.1, 0.1)<<QPointF(-0.5, 0);
         path.addPolygon(polygon);
-    } else if (style == CustomItem::Star5) {
+    } else if (style == DatapickerPoint::Star5) {
         polygon<<QPointF(-0.5, 0)<<QPointF(-0.1, -0.1)<<QPointF(0, -0.5)<<QPointF(0.1, -0.1)<<QPointF(0.5, 0)
                 <<QPointF(0.1, 0.1)<<QPointF(0.5, 0.5)<<QPointF(0, 0.2)<<QPointF(-0.5, 0.5)
                 <<QPointF(-0.1, 0.1)<<QPointF(-0.5, 0);
         path.addPolygon(polygon);
-    } else if (style == CustomItem::Line) {
+    } else if (style == DatapickerPoint::Line) {
         path = QPainterPath(QPointF(0, -0.5));
         path.lineTo(0, 0.5);
-    } else if (style == CustomItem::Cross) {
+    } else if (style == DatapickerPoint::Cross) {
         path = QPainterPath(QPointF(0, -0.5));
         path.lineTo(0, 0.5);
         path.moveTo(-0.5, 0);
@@ -472,43 +472,43 @@ QPainterPath CustomItem::itemsPathFromStyle(CustomItem::ItemsStyle style) {
     return path;
 }
 
-QString CustomItem::itemsNameFromStyle(CustomItem::ItemsStyle style) {
+QString DatapickerPoint::pointNameFromStyle(DatapickerPoint::PointsStyle style) {
     QString name;
-    if (style == CustomItem::Circle)
+    if (style == DatapickerPoint::Circle)
         name = i18n("circle");
-    else if (style == CustomItem::Square)
+    else if (style == DatapickerPoint::Square)
         name = i18n("square");
-    else if (style == CustomItem::EquilateralTriangle)
+    else if (style == DatapickerPoint::EquilateralTriangle)
         name = i18n("equilateral triangle");
-    else if (style == CustomItem::RightTriangle)
+    else if (style == DatapickerPoint::RightTriangle)
         name = i18n("right triangle");
-    else if (style == CustomItem::Bar)
+    else if (style == DatapickerPoint::Bar)
         name = i18n("bar");
-    else if (style == CustomItem::PeakedBar)
+    else if (style == DatapickerPoint::PeakedBar)
         name = i18n("peaked bar");
-    else if (style == CustomItem::SkewedBar)
+    else if (style == DatapickerPoint::SkewedBar)
         name = i18n("skewed bar");
-    else if (style == CustomItem::Diamond)
+    else if (style == DatapickerPoint::Diamond)
         name = i18n("diamond");
-    else if (style == CustomItem::Lozenge)
+    else if (style == DatapickerPoint::Lozenge)
         name = i18n("lozenge");
-    else if (style == CustomItem::Tie)
+    else if (style == DatapickerPoint::Tie)
         name = i18n("tie");
-    else if (style == CustomItem::TinyTie)
+    else if (style == DatapickerPoint::TinyTie)
         name = i18n("tiny tie");
-    else if (style == CustomItem::Plus)
+    else if (style == DatapickerPoint::Plus)
         name = i18n("plus");
-    else if (style == CustomItem::Boomerang)
+    else if (style == DatapickerPoint::Boomerang)
         name = i18n("boomerang");
-    else if (style == CustomItem::SmallBoomerang)
+    else if (style == DatapickerPoint::SmallBoomerang)
         name = i18n("small boomerang");
-    else if (style == CustomItem::Star4)
+    else if (style == DatapickerPoint::Star4)
         name = i18n("star4");
-    else if (style == CustomItem::Star5)
+    else if (style == DatapickerPoint::Star5)
         name = i18n("star5");
-    else if (style == CustomItem::Line)
+    else if (style == DatapickerPoint::Line)
         name = i18n("line");
-    else if (style == CustomItem::Cross)
+    else if (style == DatapickerPoint::Cross)
         name = i18n("cross");
 
     return name;
@@ -517,47 +517,47 @@ QString CustomItem::itemsNameFromStyle(CustomItem::ItemsStyle style) {
 /*!
     sets the position without undo/redo-stuff
 */
-void CustomItem::setPosition(const QPointF& point) {
-    Q_D(CustomItem);
+void DatapickerPoint::setPosition(const QPointF& point) {
+    Q_D(DatapickerPoint);
     if (point != d->position.point){
         d->position.point = point;
         d->retransform();
     }
 }
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL_F(CustomItem, SetVisible, bool, swapVisible, retransform);
-void CustomItem::setVisible(bool on) {
-    Q_D(CustomItem);
-    exec(new CustomItemSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
+STD_SWAP_METHOD_SETTER_CMD_IMPL_F(DatapickerPoint, SetVisible, bool, swapVisible, retransform);
+void DatapickerPoint::setVisible(bool on) {
+    Q_D(DatapickerPoint);
+    exec(new DatapickerPointSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
 }
 
-bool CustomItem::isVisible() const {
-    Q_D(const CustomItem);
+bool DatapickerPoint::isVisible() const {
+    Q_D(const DatapickerPoint);
     return d->isVisible();
 }
 
-void CustomItem::setPrinting(bool on) {
-    Q_D(CustomItem);
+void DatapickerPoint::setPrinting(bool on) {
+    Q_D(DatapickerPoint);
     d->m_printing = on;
 }
 
-void CustomItem::suppressHoverEvents(bool on) {
-    Q_D(CustomItem);
+void DatapickerPoint::suppressHoverEvents(bool on) {
+    Q_D(DatapickerPoint);
     d->m_suppressHoverEvents = on;
 }
 
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void CustomItem::visibilityChanged() {
-    Q_D(const CustomItem);
+void DatapickerPoint::visibilityChanged() {
+    Q_D(const DatapickerPoint);
     this->setVisible(!d->isVisible());
 }
 
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-CustomItemPrivate::CustomItemPrivate(CustomItem *owner)
+DatapickerPointPrivate::DatapickerPointPrivate(DatapickerPoint *owner)
         : suppressItemChangeEvent(false),
           suppressRetransform(false),
           m_printing(false),
@@ -570,19 +570,19 @@ CustomItemPrivate::CustomItemPrivate(CustomItem *owner)
     setAcceptHoverEvents(true);
 }
 
-QString CustomItemPrivate::name() const{
+QString DatapickerPointPrivate::name() const{
     return q->name();
 }
 
 /*!
-    calculates the position and the bounding box of the item. Called on geometry or properties changes.
+    calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
  */
-void CustomItemPrivate::retransform(){
+void DatapickerPointPrivate::retransform(){
     if (suppressRetransform)
         return;
 
-    if (position.horizontalPosition != CustomItem::hPositionCustom
-        || position.verticalPosition != CustomItem::vPositionCustom)
+    if (position.horizontalPosition != DatapickerPoint::hPositionCustom
+        || position.verticalPosition != DatapickerPoint::vPositionCustom)
         updatePosition();
 
     float x = position.point.x();
@@ -594,7 +594,7 @@ void CustomItemPrivate::retransform(){
     suppressItemChangeEvent=true;
     setPos(itemPos);
     suppressItemChangeEvent=false;
-    QPainterPath path = CustomItem::itemsPathFromStyle(itemsStyle);
+    QPainterPath path = DatapickerPoint::pointPathFromStyle(style);
     boundingRectangle = path.boundingRect();
     recalcShapeAndBoundingRect();
     updateData();
@@ -605,7 +605,7 @@ void CustomItemPrivate::retransform(){
 /*!
     calculates the position of the item, when the position relative to the parent was specified (left, right, etc.)
 */
-void CustomItemPrivate::updatePosition() {
+void DatapickerPointPrivate::updatePosition() {
     //determine the parent item
     QRectF parentRect;
     QGraphicsItem* parent = parentItem();
@@ -618,21 +618,21 @@ void CustomItemPrivate::updatePosition() {
         parentRect = scene()->sceneRect();
     }
 
-    if (position.horizontalPosition != CustomItem::hPositionCustom) {
-        if (position.horizontalPosition == CustomItem::hPositionLeft)
+    if (position.horizontalPosition != DatapickerPoint::hPositionCustom) {
+        if (position.horizontalPosition == DatapickerPoint::hPositionLeft)
             position.point.setX( parentRect.x() );
-        else if (position.horizontalPosition == CustomItem::hPositionCenter)
+        else if (position.horizontalPosition == DatapickerPoint::hPositionCenter)
             position.point.setX( parentRect.x() + parentRect.width()/2 );
-        else if (position.horizontalPosition == CustomItem::hPositionRight)
+        else if (position.horizontalPosition == DatapickerPoint::hPositionRight)
             position.point.setX( parentRect.x() + parentRect.width() );
     }
 
-    if (position.verticalPosition != CustomItem::vPositionCustom) {
-        if (position.verticalPosition == CustomItem::vPositionTop)
+    if (position.verticalPosition != DatapickerPoint::vPositionCustom) {
+        if (position.verticalPosition == DatapickerPoint::vPositionTop)
             position.point.setY( parentRect.y() );
-        else if (position.verticalPosition == CustomItem::vPositionCenter)
+        else if (position.verticalPosition == DatapickerPoint::vPositionCenter)
             position.point.setY( parentRect.y() + parentRect.height()/2 );
-        else if (position.verticalPosition == CustomItem::vPositionBottom)
+        else if (position.verticalPosition == DatapickerPoint::vPositionBottom)
             position.point.setY( parentRect.y() + parentRect.height() );
     }
 
@@ -642,7 +642,7 @@ void CustomItemPrivate::updatePosition() {
 /*!
   update color and size of all error-bar.
 */
-void CustomItemPrivate::retransformErrorBar() {
+void DatapickerPointPrivate::retransformErrorBar() {
     foreach (ErrorBarItem* item, q->m_errorBarItemList) {
         if (item) {
             item->setBrush(errorBarBrush);
@@ -653,15 +653,15 @@ void CustomItemPrivate::retransformErrorBar() {
 }
 
 /*!
-  update datasheet on any change in position of custom-item or it's error-bar.
+  update datasheet on any change in position of Datapicker-Point or it's error-bar.
 */
-void CustomItemPrivate::updateData() {
+void DatapickerPointPrivate::updateData() {
     DataPickerCurve* curve = dynamic_cast<DataPickerCurve*>(q->parentAspect());
     if (curve)
         curve->updateData(q);
 }
 
-bool CustomItemPrivate::swapVisible(bool on){
+bool DatapickerPointPrivate::swapVisible(bool on){
     bool oldValue = isVisible();
     setVisible(on);
     emit q->changed();
@@ -672,50 +672,50 @@ bool CustomItemPrivate::swapVisible(bool on){
 /*!
     Returns the outer bounds of the item as a rectangle.
  */
-QRectF CustomItemPrivate::boundingRect() const{
+QRectF DatapickerPointPrivate::boundingRect() const{
     return transformedBoundingRectangle;
 }
 
 /*!
     Returns the shape of this item as a QPainterPath in local coordinates.
 */
-QPainterPath CustomItemPrivate::shape() const{
+QPainterPath DatapickerPointPrivate::shape() const{
     return itemShape;
 }
 
 /*!
   recalculates the outer bounds and the shape of the item.
 */
-void CustomItemPrivate::recalcShapeAndBoundingRect() {
+void DatapickerPointPrivate::recalcShapeAndBoundingRect() {
     prepareGeometryChange();
 
     QMatrix matrix;
-    matrix.scale(itemsSize, itemsSize);
-    matrix.rotate(-itemsRotationAngle);
+    matrix.scale(size, size);
+    matrix.rotate(-rotationAngle);
     matrix.scale(scaleFactor,scaleFactor);
     transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
     itemShape = QPainterPath();
     itemShape.addRect(transformedBoundingRectangle);
 }
 
-void CustomItemPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
+void DatapickerPointPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-    QPainterPath path = CustomItem::itemsPathFromStyle(itemsStyle);
+    QPainterPath path = DatapickerPoint::pointPathFromStyle(style);
     QTransform trafo;
-    trafo.scale(itemsSize, itemsSize);
+    trafo.scale(size, size);
     trafo.scale(scaleFactor, scaleFactor);
     path = trafo.map(path);
     trafo.reset();
-    if (itemsRotationAngle != 0) {
-        trafo.rotate(-itemsRotationAngle);
+    if (rotationAngle != 0) {
+        trafo.rotate(-rotationAngle);
         path = trafo.map(path);
     }
     painter->save();
-    painter->setPen(itemsPen);
-    painter->setBrush(itemsBrush);
-    painter->setOpacity(itemsOpacity);
+    painter->setPen(pen);
+    painter->setBrush(brush);
+    painter->setOpacity(opacity);
     painter->drawPath(path);
     painter->restore();
 
@@ -734,15 +734,15 @@ void CustomItemPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     }
 }
 
-QVariant CustomItemPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
+QVariant DatapickerPointPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
     if (suppressItemChangeEvent)
         return value;
 
     if (change == QGraphicsItem::ItemPositionChange) {
-        CustomItem::PositionWrapper tempPosition;
+        DatapickerPoint::PositionWrapper tempPosition;
         tempPosition.point = value.toPointF();
-        tempPosition.horizontalPosition = CustomItem::hPositionCustom;
-        tempPosition.verticalPosition = CustomItem::vPositionCustom;
+        tempPosition.horizontalPosition = DatapickerPoint::hPositionCustom;
+        tempPosition.verticalPosition = DatapickerPoint::vPositionCustom;
 
         //emit the signals in order to notify the UI.
         //we don't set the position related member variables during the mouse movements.
@@ -752,15 +752,15 @@ QVariant CustomItemPrivate::itemChange(GraphicsItemChange change, const QVariant
     return QGraphicsItem::itemChange(change, value);
 }
 
-void CustomItemPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+void DatapickerPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
     QPointF point = pos();
     if (abs(point.x()-position.point.x())>20 && qAbs(point.y()-position.point.y())>20 ) {
         //position was changed -> set the position related member variables
         suppressRetransform = true;
-        CustomItem::PositionWrapper tempPosition;
+        DatapickerPoint::PositionWrapper tempPosition;
         tempPosition.point = point;
-        tempPosition.horizontalPosition = CustomItem::hPositionCustom;
-        tempPosition.verticalPosition = CustomItem::vPositionCustom;
+        tempPosition.horizontalPosition = DatapickerPoint::hPositionCustom;
+        tempPosition.verticalPosition = DatapickerPoint::vPositionCustom;
         q->setPosition(tempPosition);
         suppressRetransform = false;
     }
@@ -768,11 +768,11 @@ void CustomItemPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
     QGraphicsItem::mouseReleaseEvent(event);
 }
 
-void CustomItemPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
+void DatapickerPointPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
     q->createContextMenu()->exec(event->screenPos());
 }
 
-void CustomItemPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
+void DatapickerPointPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
     if (!isSelected()) {
         m_hovered = true;
         q->hovered();
@@ -780,7 +780,7 @@ void CustomItemPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
     }
 }
 
-void CustomItemPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
+void DatapickerPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
     if (m_hovered) {
         m_hovered = false;
         q->unhovered();
@@ -792,10 +792,10 @@ void CustomItemPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void CustomItem::save(QXmlStreamWriter* writer) const{
-    Q_D(const CustomItem);
+void DatapickerPoint::save(QXmlStreamWriter* writer) const{
+    Q_D(const DatapickerPoint);
 
-    writer->writeStartElement( "customItem" );
+    writer->writeStartElement( "datapickerPoint" );
     writeBasicAttributes(writer);
     writeCommentElement(writer);
 
@@ -809,12 +809,12 @@ void CustomItem::save(QXmlStreamWriter* writer) const{
     writer->writeEndElement();
 
     writer->writeStartElement( "properties" );
-    writer->writeAttribute( "itemsStyle", QString::number(d->itemsStyle) );
-    writer->writeAttribute( "opacity", QString::number(d->itemsOpacity) );
-    writer->writeAttribute( "rotation", QString::number(d->itemsRotationAngle) );
-    writer->writeAttribute( "size", QString::number(d->itemsSize) );
-    WRITE_QBRUSH(d->itemsBrush);
-    WRITE_QPEN(d->itemsPen);
+    writer->writeAttribute( "style", QString::number(d->style) );
+    writer->writeAttribute( "opacity", QString::number(d->opacity) );
+    writer->writeAttribute( "rotation", QString::number(d->rotationAngle) );
+    writer->writeAttribute( "size", QString::number(d->size) );
+    WRITE_QBRUSH(d->brush);
+    WRITE_QPEN(d->pen);
     writer->writeEndElement();
 
     writer->writeStartElement( "errorBar" );
@@ -833,15 +833,15 @@ void CustomItem::save(QXmlStreamWriter* writer) const{
     writer->writeAttribute( "ySymmetricError", QString::number(d->ySymmetricError) );
     writer->writeEndElement();
 
-    writer->writeEndElement(); // close "CustomItem" section
+    writer->writeEndElement(); // close "DatapickerPoint" section
 }
 
 //! Load from XML
-bool CustomItem::load(XmlStreamReader* reader){
-    Q_D(CustomItem);
+bool DatapickerPoint::load(XmlStreamReader* reader){
+    Q_D(DatapickerPoint);
 
-   if(!reader->isStartElement() || reader->name() != "customItem"){
-        reader->raiseError(i18n("no custom-item element found"));
+   if(!reader->isStartElement() || reader->name() != "datapickerPoint"){
+        reader->raiseError(i18n("no datapicker-Point element found"));
         return false;
     }
 
@@ -854,7 +854,7 @@ bool CustomItem::load(XmlStreamReader* reader){
 
     while (!reader->atEnd()){
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "customItem")
+        if (reader->isEndElement() && reader->name() == "datapickerPoint")
             break;
 
         if (!reader->isStartElement())
@@ -881,13 +881,13 @@ bool CustomItem::load(XmlStreamReader* reader){
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'horizontalPosition'"));
             else
-                d->position.horizontalPosition = (CustomItem::HorizontalPosition)str.toInt();
+                d->position.horizontalPosition = (DatapickerPoint::HorizontalPosition)str.toInt();
 
             str = attribs.value("verticalPosition").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'verticalPosition'"));
             else
-                d->position.verticalPosition = (CustomItem::VerticalPosition)str.toInt();
+                d->position.verticalPosition = (DatapickerPoint::VerticalPosition)str.toInt();
 
             str = attribs.value("visible").toString();
             if(str.isEmpty())
@@ -969,32 +969,32 @@ bool CustomItem::load(XmlStreamReader* reader){
         } else if (reader->name() == "properties"){
             attribs = reader->attributes();
 
-            str = attribs.value("itemsStyle").toString();
+            str = attribs.value("style").toString();
             if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'itemsStyle'"));
+                reader->raiseWarning(attributeWarning.arg("'style'"));
             else
-                d->itemsStyle = (CustomItem::ItemsStyle)str.toInt();
+                d->style = (DatapickerPoint::PointsStyle)str.toInt();
 
             str = attribs.value("opacity").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'opacity'"));
             else
-                d->itemsOpacity = str.toDouble();
+                d->opacity = str.toDouble();
 
             str = attribs.value("rotation").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'rotation'"));
             else
-                d->itemsRotationAngle = str.toDouble();
+                d->rotationAngle = str.toDouble();
 
             str = attribs.value("size").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'size'"));
             else
-                d->itemsSize = str.toDouble();
+                d->size = str.toDouble();
 
-            READ_QBRUSH(d->itemsBrush);
-            READ_QPEN(d->itemsPen);
+            READ_QBRUSH(d->brush);
+            READ_QPEN(d->pen);
         } else { // unknown element
             reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
             if (!reader->skipToEndElement()) return false;

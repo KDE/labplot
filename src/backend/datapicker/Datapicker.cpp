@@ -34,7 +34,7 @@
 #include "commonfrontend/datapicker/DatapickerView.h"
 #include "backend/datapicker/DataPickerCurve.h"
 #include "backend/datapicker/Transform.h"
-#include "backend/datapicker/CustomItem.h"
+#include "backend/datapicker/DatapickerPoint.h"
 
 #include "KIcon"
 #include <KLocale>
@@ -194,27 +194,27 @@ void Datapicker::setSelectedInView(const bool b){
 }
 
 void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
-    QList<CustomItem*> childPoints = parentAspect->children<CustomItem>(AbstractAspect::IncludeHidden);
+    QList<DatapickerPoint*> childPoints = parentAspect->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
     if (childPoints.isEmpty())
         beginMacro(i18n("%1:add new point", parentAspect->name()));
     else
         beginMacro(i18n("%1:add new point %2", parentAspect->name(), childPoints.count()));
 
-    CustomItem* newPoint = new CustomItem(i18n("%1 Point", parentAspect->name()));
+    DatapickerPoint* newPoint = new DatapickerPoint(i18n("%1 Point", parentAspect->name()));
     newPoint->setPosition(pos);
-    newPoint->setItemsRotationAngle(-m_image->rotationAngle());
+    newPoint->setRotationAngle(-m_image->rotationAngle());
     newPoint->setHidden(true);
     parentAspect->addChild(newPoint);
 
-    //set properties of added custom-item same as previous items
+    //set properties of added Datapicker-Point same as previous points
     if (!childPoints.isEmpty()) {
-        CustomItem* oldPoint = childPoints.first();
-        newPoint->setItemsBrush(oldPoint->itemsBrush());
-        newPoint->setItemsOpacity(oldPoint->itemsOpacity());
-        newPoint->setItemsPen(oldPoint->itemsPen());
-        newPoint->setItemsRotationAngle(oldPoint->itemsRotationAngle());
-        newPoint->setItemsSize(oldPoint->itemsSize());
-        newPoint->setItemsStyle(oldPoint->itemsStyle());
+        DatapickerPoint* oldPoint = childPoints.first();
+        newPoint->setBrush(oldPoint->brush());
+        newPoint->setOpacity(oldPoint->opacity());
+        newPoint->setPen(oldPoint->pen());
+        newPoint->setRotationAngle(oldPoint->rotationAngle());
+        newPoint->setSize(oldPoint->size());
+        newPoint->setStyle(oldPoint->style());
         newPoint->setErrorBarBrush(oldPoint->errorBarBrush());
         newPoint->setErrorBarSize(oldPoint->errorBarSize());
         newPoint->setErrorBarPen(oldPoint->errorBarPen());

@@ -565,38 +565,35 @@
         </spacer>
        </item>
        <item row="2" column="0">
-        <widget class="QRadioButton" name="rbIntensity">
+        <widget class="QLabel" name="lIntensity">
          <property name="text">
           <string>Intensity</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
          </property>
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QRadioButton" name="rbForeground">
+        <widget class="QLabel" name="lForeground">
          <property name="text">
           <string>Foreground</string>
          </property>
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QRadioButton" name="rbHue">
+        <widget class="QLabel" name="lHue">
          <property name="text">
           <string>Hue</string>
          </property>
         </widget>
        </item>
        <item row="5" column="0">
-        <widget class="QRadioButton" name="rbSaturation">
+        <widget class="QLabel" name="lSaturation">
          <property name="text">
           <string>Saturation</string>
          </property>
         </widget>
        </item>
        <item row="6" column="0">
-        <widget class="QRadioButton" name="rbValue">
+        <widget class="QLabel" name="lValue">
          <property name="text">
           <string>Value</string>
          </property>
@@ -774,11 +771,11 @@
   <tabstop>sbPoisitionX3</tabstop>
   <tabstop>sbPoisitionY3</tabstop>
   <tabstop>cbPlotImageType</tabstop>
-  <tabstop>rbIntensity</tabstop>
-  <tabstop>rbForeground</tabstop>
-  <tabstop>rbHue</tabstop>
-  <tabstop>rbSaturation</tabstop>
-  <tabstop>rbValue</tabstop>
+  <tabstop>lIntensity</tabstop>
+  <tabstop>lForeground</tabstop>
+  <tabstop>lHue</tabstop>
+  <tabstop>lSaturation</tabstop>
+  <tabstop>lValue</tabstop>
   <tabstop>sbRotation</tabstop>
  </tabstops>
  <resources/>

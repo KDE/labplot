@@ -32,7 +32,7 @@
 #include "backend/lib/macros.h"
 #include "backend/datapicker/DatapickerImage.h"
 
-class CustomItem;
+class DatapickerPoint;
 class QAction;
 class DataPickerCurvePrivate;
 class Column;
@@ -57,7 +57,7 @@ class DataPickerCurve: public AbstractAspect {
         void setPrinting(bool);
         void setSelectedInView(const bool);
         void addDatasheet(const DatapickerImage::GraphType&);
-        void updateData(const CustomItem*);
+        void updateData(const DatapickerPoint*);
 
         BASIC_D_ACCESSOR_DECL(Errors, curveErrorTypes, CurveErrorTypes)
         POINTER_D_ACCESSOR_DECL(AbstractColumn, posXColumn, PosXColumn)

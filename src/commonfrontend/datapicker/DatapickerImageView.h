@@ -40,7 +40,6 @@ class DatapickerImage;
 class Datapicker;
 class WorksheetElement;
 class Transform;
-class CustomItem;
 class QActionGroup;
 
 class DatapickerImageView : public QGraphicsView {

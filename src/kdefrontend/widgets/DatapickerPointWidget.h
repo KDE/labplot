@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : CustomItemWidget.h
+    File                 : DatapickerPointWidget.h
     Project              : LabPlot
-    Description          : widget for Custom-Item properties
+    Description          : widget for Datapicker-Point properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
 
@@ -25,27 +25,27 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CUSTOMITEMWIDGET_H
-#define CUSTOMITEMWIDGET_H
+#ifndef DATAPICKERPOINTWIDGET_H
+#define DATAPICKERPOINTWIDGET_H
 
-#include "ui_customitemwidget.h"
-#include "backend/datapicker/CustomItem.h"
+#include "ui_datapickerpointwidget.h"
+#include "backend/datapicker/DatapickerPoint.h"
 
-class CustomItemWidget: public QWidget{
+class DatapickerPointWidget: public QWidget{
 	Q_OBJECT
 
 public:
-    explicit CustomItemWidget(QWidget *);
+    explicit DatapickerPointWidget(QWidget *);
 
-    void setCustomItems(QList<CustomItem*>);
+    void setDatapickerPoints(QList<DatapickerPoint*>);
 	void load();
 
     void hidePositionWidgets();
 
 private:
-	Ui::CustomItemWidget ui;
-	CustomItem *m_item;
-    QList<CustomItem*> m_itemList;
+    Ui::DatapickerPointWidget ui;
+    DatapickerPoint *m_point;
+    QList<DatapickerPoint*> m_pointsList;
 	bool m_initializing;
 
     void init();
@@ -73,16 +73,16 @@ private slots:
     void errorBarFillingColorChanged(const QColor&);
     void errorBarSizeChanged(double);
 
-    void customItemPositionChanged(const CustomItem::PositionWrapper&);
-    void customItemStyleChanged(CustomItem::ItemsStyle);
-    void customItemSizeChanged(qreal);
-    void customItemRotationAngleChanged(qreal);
-    void customItemOpacityChanged(qreal);
-    void customItemBrushChanged(QBrush);
-    void customItemPenChanged(const QPen&);
-    void customItemVisibleChanged(bool);
-    void customItemErrorBarSizeChanged(qreal);
-    void customItemErrorBarBrushChanged(QBrush);
+    void pointPositionChanged(const DatapickerPoint::PositionWrapper&);
+    void pointStyleChanged(DatapickerPoint::PointsStyle);
+    void pointSizeChanged(qreal);
+    void pointRotationAngleChanged(qreal);
+    void pointOpacityChanged(qreal);
+    void pointBrushChanged(QBrush);
+    void pointPenChanged(const QPen&);
+    void pointVisibleChanged(bool);
+    void pointErrorBarSizeChanged(qreal);
+    void pointErrorBarBrushChanged(QBrush);
 
     void loadConfigFromTemplate(KConfig&);
     void loadConfig(KConfig&);

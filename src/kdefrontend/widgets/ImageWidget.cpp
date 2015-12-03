@@ -27,8 +27,8 @@
  ***************************************************************************/
 
 #include "ImageWidget.h"
-#include "backend/datapicker/CustomItem.h"
-#include "kdefrontend/widgets/CustomItemWidget.h"
+#include "backend/datapicker/DatapickerPoint.h"
+#include "kdefrontend/widgets/DatapickerPointWidget.h"
 #include "commonfrontend/widgets/qxtspanslider.h"
 
 #include <KUrlCompletion>
@@ -40,9 +40,9 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     ui.setupUi(this);
 
     QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tSymbol);
-    customItemWidget = new CustomItemWidget(ui.tSymbol);
-    hboxLayout->addWidget(customItemWidget);
-    customItemWidget->hidePositionWidgets();
+    datapickerPointWidget = new DatapickerPointWidget(ui.tSymbol);
+    hboxLayout->addWidget(datapickerPointWidget);
+    datapickerPointWidget->hidePositionWidgets();
 
     ui.kleFileName->setClearButtonShown(true);
     ui.bOpen->setIcon( KIcon("document-open") );
@@ -110,11 +110,6 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     connect( ssHue, SIGNAL(spanChanged(int,int)), this, SLOT(hueSpanChanged(int,int)) );
     connect( ssSaturation, SIGNAL(spanChanged(int,int)), this, SLOT(saturationSpanChanged(int,int)) );
     connect( ssValue, SIGNAL(spanChanged(int,int)), this, SLOT(valueSpanChanged(int,int)) );
-    connect( ui.rbIntensity, SIGNAL(clicked()), this, SLOT(rbClicked()) );
-    connect( ui.rbForeground, SIGNAL(clicked()), this, SLOT(rbClicked()) );
-    connect( ui.rbHue, SIGNAL(clicked()), this, SLOT(rbClicked()) );
-    connect( ui.rbSaturation, SIGNAL(clicked()), this, SLOT(rbClicked()) );
-    connect( ui.rbValue, SIGNAL(clicked()), this, SLOT(rbClicked()) );
     connect( ui.sbMinSegmentLength, SIGNAL(valueChanged(int)), this, SLOT(minSegmentLengthChanged(int)) );
     connect( ui.sbPointSeparation, SIGNAL(valueChanged(int)), this, SLOT(pointSeparationChanged(int)) );
 
@@ -155,6 +150,7 @@ void ImageWidget::setImages(QList<DatapickerImage*> list) {
     this->load();
     initConnections();
     handleWidgetActions();
+    updateDatapickerPointList();
 }
 
 void ImageWidget::initConnections() {
@@ -162,8 +158,8 @@ void ImageWidget::initConnections() {
     connect( m_image, SIGNAL(fileNameChanged(QString)), this, SLOT(imageFileNameChanged(QString)) );
     connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(imageRotationAngleChanged(float)) );
     connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-             this,SLOT(updateCustomItemList()) );
-    connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(updateCustomItemList()) );
+             this,SLOT(updateDatapickerPointList()) );
+    connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(updateDatapickerPointList()) );
     connect( m_image, SIGNAL(axisPointsChanged(DatapickerImage::ReferencePoints)), this, SLOT(imageAxisPointsChanged(DatapickerImage::ReferencePoints)) );
     connect( m_image, SIGNAL(settingsChanged(DatapickerImage::EditorSettings)), this, SLOT(imageEditorSettingsChanged(DatapickerImage::EditorSettings)) );
     connect( m_image, SIGNAL(minSegmentLengthChanged(int)), this, SLOT(imageMinSegmentLengthChanged(int)) );
@@ -190,8 +186,6 @@ void ImageWidget::handleWidgetActions() {
         ui.sbPoisitionY2->setEnabled(false);
         ui.sbPoisitionY3->setEnabled(false);
     }
-
-    updateCustomItemList();
 }
 
 //**********************************************************
@@ -318,10 +312,6 @@ void ImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit) {
     if (m_initializing)
         return;
 
-    m_initializing = true;
-    ui.rbIntensity->setChecked(true);
-    m_initializing = false;
-
     DatapickerImage::EditorSettings settings = m_image->settings();
     settings.type = DatapickerImage::Intensity;
     settings.intensityThresholdHigh = upperLimit;
@@ -333,10 +323,6 @@ void ImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit) {
 void ImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit) {
     if (m_initializing)
         return;
-
-    m_initializing = true;
-    ui.rbForeground->setChecked(true);
-    m_initializing = false;
 
     DatapickerImage::EditorSettings settings = m_image->settings();
     settings.type = DatapickerImage::Foreground;
@@ -350,10 +336,6 @@ void ImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
     if (m_initializing)
         return;
 
-    m_initializing = true;
-    ui.rbHue->setChecked(true);
-    m_initializing = false;
-
     DatapickerImage::EditorSettings settings = m_image->settings();
     settings.type = DatapickerImage::Hue;
     settings.hueThresholdHigh = upperLimit;
@@ -365,10 +347,6 @@ void ImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
 void ImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit) {
     if (m_initializing)
         return;
-
-    m_initializing = true;
-    ui.rbSaturation->setChecked(true);
-    m_initializing = false;
 
     DatapickerImage::EditorSettings settings = m_image->settings();
     settings.type = DatapickerImage::Saturation;
@@ -382,35 +360,10 @@ void ImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
     if (m_initializing)
         return;
 
-    m_initializing = true;
-    ui.rbValue->setChecked(true);
-    m_initializing = false;
-
     DatapickerImage::EditorSettings settings = m_image->settings();
     settings.type = DatapickerImage::Value;
     settings.valueThresholdHigh = upperLimit;
     settings.valueThresholdLow = lowerLimit;
-    foreach(DatapickerImage* image, m_imagesList)
-        image->setSettings(settings);
-}
-
-void ImageWidget::rbClicked() {
-    if (m_initializing)
-        return;
-
-    DatapickerImage::EditorSettings settings = m_image->settings();
-    if (ui.rbIntensity->isChecked()) {
-        settings.type = DatapickerImage::Intensity;
-    } else if (ui.rbForeground->isChecked()) {
-        settings.type = DatapickerImage::Foreground;
-    } else if (ui.rbHue->isChecked()) {
-        settings.type = DatapickerImage::Hue;
-    } else if (ui.rbSaturation->isChecked()) {
-        settings.type = DatapickerImage::Saturation;
-    } else {
-        settings.type = DatapickerImage::Value;
-    }
-
     foreach(DatapickerImage* image, m_imagesList)
         image->setSettings(settings);
 }
@@ -493,11 +446,6 @@ void ImageWidget::imageEditorSettingsChanged(const DatapickerImage::EditorSettin
     ssHue->setSpan(settings.hueThresholdLow, settings.hueThresholdHigh);
     ssSaturation->setSpan(settings.saturationThresholdLow, settings.saturationThresholdHigh);
     ssValue->setSpan(settings.valueThresholdLow, settings.valueThresholdHigh);
-    ui.rbIntensity->setChecked(settings.type == DatapickerImage::Intensity);
-    ui.rbForeground->setChecked(settings.type == DatapickerImage::Foreground);
-    ui.rbHue->setChecked(settings.type == DatapickerImage::Hue);
-    ui.rbSaturation->setChecked(settings.type == DatapickerImage::Saturation);
-    ui.rbValue->setChecked(settings.type == DatapickerImage::Value);
     m_initializing = false;
 }
 
@@ -507,10 +455,10 @@ void ImageWidget::imageMinSegmentLengthChanged(const int value) {
     m_initializing = false;
 }
 
-void ImageWidget::updateCustomItemList() {
-    QList<CustomItem*> itemsList;
-    itemsList = m_image->children<CustomItem>(AbstractAspect::IncludeHidden);
-    customItemWidget->setCustomItems(itemsList);
+void ImageWidget::updateDatapickerPointList() {
+    QList<DatapickerPoint*> pointsList;
+    pointsList = m_image->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+    datapickerPointWidget->setDatapickerPoints(pointsList);
 }
 
 //**********************************************************
@@ -539,11 +487,6 @@ void ImageWidget::load() {
     ssHue->setSpan(m_image->settings().hueThresholdLow, m_image->settings().hueThresholdHigh);
     ssSaturation->setSpan(m_image->settings().saturationThresholdLow, m_image->settings().saturationThresholdHigh);
     ssValue->setSpan(m_image->settings().valueThresholdLow, m_image->settings().valueThresholdHigh);
-    ui.rbIntensity->setChecked(m_image->settings().type == DatapickerImage::Intensity);
-    ui.rbForeground->setChecked(m_image->settings().type == DatapickerImage::Foreground);
-    ui.rbHue->setChecked(m_image->settings().type == DatapickerImage::Hue);
-    ui.rbSaturation->setChecked(m_image->settings().type == DatapickerImage::Saturation);
-    ui.rbValue->setChecked(m_image->settings().type == DatapickerImage::Value);
     ui.sbPointSeparation->setValue(m_image->pointSeparation());
     ui.sbMinSegmentLength->setValue(m_image->minSegmentLength());
     m_initializing = false;

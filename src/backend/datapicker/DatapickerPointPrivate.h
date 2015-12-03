@@ -1,6 +1,7 @@
 /***************************************************************************
-    File                 : SegmentPrivate.h
+    File                 : DatapickerPointPrivate.h
     Project              : LabPlot
+    Description          : Graphic Item for coordinate points of Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
  ***************************************************************************/
@@ -24,35 +25,67 @@
  ***************************************************************************/
 
 
-#ifndef SEGMENTPRIVATE_H
-#define SEGMENTPRIVATE_H
+#ifndef DATAPICKERPOINTPRIVATE_H
+#define DATAPICKERPOINTPRIVATE_H
 
 #include <QGraphicsItem>
 
-
-class SegmentPrivate: public QGraphicsItem {
+class DatapickerPointPrivate: public QGraphicsItem {
 	public:
-		explicit SegmentPrivate(Segment*);
+        explicit DatapickerPointPrivate(DatapickerPoint*);
 
+		float scaleFactor;
+
+        QPointF plusDeltaXPos;
+        QPointF minusDeltaXPos;
+        QPointF plusDeltaYPos;
+        QPointF minusDeltaYPos;
+
+        DatapickerPoint::PositionWrapper position;
+
+		QString name() const;
 		void retransform();
+		bool swapVisible(bool on);
 		virtual void recalcShapeAndBoundingRect();
+		void updatePosition();
+        void updateData();
+        void retransformErrorBar();
 
-        double scaleFactor;
-        bool m_hovered;
-        QPainterPath linePath;
-		QRectF boundingRectangle; 
-		QRectF transformedBoundingRectangle;
+		bool suppressItemChangeEvent;
+		bool suppressRetransform;
+		bool m_printing;
+		bool m_hovered;
+		bool m_suppressHoverEvents;
+		
+        qreal rotationAngle;
+        QRectF boundingRectangle;
+        QRectF transformedBoundingRectangle;
+        DatapickerPoint::PointsStyle style;
+        QBrush brush;
+        QPen pen;
+        qreal opacity;
+        qreal size;
         QPainterPath itemShape;
 
+        QBrush errorBarBrush;
+        QPen errorBarPen;
+        qreal errorBarSize;
+        bool xSymmetricError;
+        bool ySymmetricError;
+
+		//reimplemented from QGraphicsItem
 		virtual QRectF boundingRect() const;
  		virtual QPainterPath shape() const;
 		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
-		Segment* const q;
+		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
-    private:
+        DatapickerPoint* const q;
+
+	private:
+		virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
 		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
-        virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 };
 
 #endif

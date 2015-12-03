@@ -33,7 +33,7 @@
 #include "ui_datapickercurvewidget.h"
 #include "backend/datapicker/DataPickerCurve.h"
 
-class CustomItemWidget;
+class DatapickerPointWidget;
 
 class DatapickerCurveWidget : public QWidget {
     Q_OBJECT
@@ -51,7 +51,7 @@ class DatapickerCurveWidget : public QWidget {
 
         DataPickerCurve* m_curve;
         QList<DataPickerCurve*> m_curveList;
-        CustomItemWidget* customItemWidget;
+        DatapickerPointWidget* datapickerPointWidget;
         bool m_initializing;
         bool m_suppressTypeChange;
 
@@ -59,7 +59,7 @@ class DatapickerCurveWidget : public QWidget {
         //SLOTs for changes triggered in AxisDock
         void nameChanged();
         void commentChanged();
-        void updateCustomItemList();
+        void updateDatapickerPointList();
         void xErrorTypeChanged(int);
         void yErrorTypeChanged(int);
 

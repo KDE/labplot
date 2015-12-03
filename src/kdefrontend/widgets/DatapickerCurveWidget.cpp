@@ -27,8 +27,8 @@
  ***************************************************************************/
 
 #include "DatapickerCurveWidget.h"
-#include "backend/datapicker/CustomItem.h"
-#include "kdefrontend/widgets/CustomItemWidget.h"
+#include "backend/datapicker/DatapickerPoint.h"
+#include "kdefrontend/widgets/DatapickerPointWidget.h"
 
 #include <QHBoxLayout>
 
@@ -36,9 +36,9 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget *parent) : QWidget(parent),
     ui.setupUi(this);
 
     QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tSymbols);
-    customItemWidget = new CustomItemWidget(ui.tSymbols);
-    hboxLayout->addWidget(customItemWidget);
-    customItemWidget->hidePositionWidgets();
+    datapickerPointWidget = new DatapickerPointWidget(ui.tSymbols);
+    hboxLayout->addWidget(datapickerPointWidget);
+    datapickerPointWidget->hidePositionWidgets();
 
     ui.cbXErrorType->addItem(i18n("No Error"));
     ui.cbXErrorType->addItem(i18n("symmetric"));
@@ -82,14 +82,14 @@ void DatapickerCurveWidget::setCurves(QList<DataPickerCurve*> list) {
 
     load();
     initConnections();
-    updateCustomItemList();
+    updateDatapickerPointList();
 }
 
 void DatapickerCurveWidget::initConnections() {
 	connect( m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
     connect( m_curve, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-             this, SLOT(updateCustomItemList()) );
-    connect( m_curve, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(updateCustomItemList()) );
+             this, SLOT(updateDatapickerPointList()) );
+    connect( m_curve, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(updateDatapickerPointList()) );
     connect( m_curve, SIGNAL(curveErrorTypesChanged(DataPickerCurve::Errors)), this, SLOT(curveErrorsChanged(DataPickerCurve::Errors)) );
 }
 
@@ -133,10 +133,10 @@ void DatapickerCurveWidget::yErrorTypeChanged(int index) {
         curve->setCurveErrorTypes(errors);
 }
 
-void DatapickerCurveWidget::updateCustomItemList() {
-    QList<CustomItem*> itemsList = m_curve->children<CustomItem>(AbstractAspect::IncludeHidden);
-    customItemWidget->setCustomItems(itemsList);
-    if (itemsList.isEmpty()) {
+void DatapickerCurveWidget::updateDatapickerPointList() {
+    QList<DatapickerPoint*> pointsList = m_curve->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+    datapickerPointWidget->setDatapickerPoints(pointsList);
+    if (pointsList.isEmpty()) {
         ui.cbXErrorType->setEnabled(true);
         ui.cbYErrorType->setEnabled(true);
         m_suppressTypeChange = false;

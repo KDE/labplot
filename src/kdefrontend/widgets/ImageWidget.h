@@ -32,8 +32,7 @@
 #include "ui_imagewidget.h"
 #include "backend/datapicker/DatapickerImage.h"
 
-class CustomItem;
-class CustomItemWidget;
+class DatapickerPointWidget;
 class QxtSpanSlider;
 
 class ImageWidget : public QWidget {
@@ -52,7 +51,7 @@ private:
     DatapickerImage* m_image;
     QList<DatapickerImage*> m_imagesList;
     bool m_initializing;
-    CustomItemWidget* customItemWidget;
+    DatapickerPointWidget* datapickerPointWidget;
 
     QxtSpanSlider* ssIntensity;
     QxtSpanSlider* ssForeground;
@@ -76,7 +75,6 @@ private slots:
     void hueSpanChanged(int, int);
     void saturationSpanChanged(int, int);
     void valueSpanChanged(int, int);
-    void rbClicked();
 
     void minSegmentLengthChanged(int);
     void pointSeparationChanged(int);
@@ -91,7 +89,7 @@ private slots:
     void imageAxisPointsChanged(const DatapickerImage::ReferencePoints&);
     void imageEditorSettingsChanged(const DatapickerImage::EditorSettings&);
     void imageMinSegmentLengthChanged(const int);
-    void updateCustomItemList();
+    void updateDatapickerPointList();
     void handleWidgetActions();
 };
 

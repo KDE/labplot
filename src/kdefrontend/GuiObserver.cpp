@@ -38,7 +38,7 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/core/Project.h"
-#include "backend/datapicker/CustomItem.h"
+#include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/DatapickerImage.h"
 #include "backend/datapicker/DataPickerCurve.h"
@@ -57,7 +57,7 @@
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/widgets/ImageWidget.h"
-#include "kdefrontend/widgets/CustomItemWidget.h"
+#include "kdefrontend/widgets/DatapickerPointWidget.h"
 #include "kdefrontend/widgets/DatapickerCurveWidget.h"
 
 #include <kstatusbar.h>
@@ -326,21 +326,21 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
       mainWindow->datapickerImageDock->setImages(list);
 
       mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerImageDock);
-  }else if (className=="CustomItem"){
-      mainWindow->m_propertiesDock->setWindowTitle(i18n("CustomItem properties"));
+  }else if (className=="DatapickerPoint"){
+      mainWindow->m_propertiesDock->setWindowTitle(i18n("DatapickerPoint properties"));
 
-      if (!mainWindow->customItemDock){
-        mainWindow->customItemDock = new CustomItemWidget(mainWindow->stackedWidget);
-        mainWindow->stackedWidget->addWidget(mainWindow->customItemDock);
+      if (!mainWindow->datapickerPointDock){
+        mainWindow->datapickerPointDock = new DatapickerPointWidget(mainWindow->stackedWidget);
+        mainWindow->stackedWidget->addWidget(mainWindow->datapickerPointDock);
       }
 
-      QList<CustomItem*> list;
+      QList<DatapickerPoint*> list;
       foreach(aspect, selectedAspects){
-        list<<qobject_cast<CustomItem*>(aspect);
+        list<<qobject_cast<DatapickerPoint*>(aspect);
       }
-      mainWindow->customItemDock->setCustomItems(list);
+      mainWindow->datapickerPointDock->setDatapickerPoints(list);
 
-      mainWindow->stackedWidget->setCurrentWidget(mainWindow->customItemDock);
+      mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerPointDock);
   }else if (className=="Project"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Project properties"));
 

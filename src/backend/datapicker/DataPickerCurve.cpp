@@ -28,7 +28,7 @@
 #include "DataPickerCurve.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/datapicker/CustomItem.h"
+#include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/datapicker/DataPickerCurvePrivate.h"
@@ -279,26 +279,26 @@ void DataPickerCurve::setSelectedInView(const bool b) {
 void DataPickerCurve::updateDatasheet() {
     beginMacro(i18n("%1:update datasheet", name()));
 
-    foreach (CustomItem* item, children<CustomItem>(IncludeHidden))
-        updateData(item);
+    foreach (DatapickerPoint* point, children<DatapickerPoint>(IncludeHidden))
+        updateData(point);
 
     endMacro();
 }
 
 /*!
-    Update datasheet for corresponding custom-item(curve-point),
+    Update datasheet for corresponding curve-point,
     it is called every time whenever there is any change in position
     of curve-point or its error-bar so keep it undo unaware
     no need to create extra entry in undo stack
 */
-void DataPickerCurve::updateData(const CustomItem* item) {
+void DataPickerCurve::updateData(const DatapickerPoint* point) {
     Q_D(DataPickerCurve);
     Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
     if (!datapicker)
         return;
 
-    int row = indexOfChild<CustomItem>(item ,AbstractAspect::IncludeHidden);
-    QVector3D data = datapicker->mapSceneToLogical(item->position().point);
+    int row = indexOfChild<DatapickerPoint>(point ,AbstractAspect::IncludeHidden);
+    QVector3D data = datapicker->mapSceneToLogical(point->position().point);
 
     if(d->posXColumn)
         d->posXColumn->setValueAt(row, data.x());
@@ -310,22 +310,22 @@ void DataPickerCurve::updateData(const CustomItem* item) {
         d->posZColumn->setValueAt(row, data.y());
 
     if (d->plusDeltaXColumn) {
-        data = datapicker->mapSceneLengthToLogical(QPointF(item->plusDeltaXPos().x(), 0));
+        data = datapicker->mapSceneLengthToLogical(QPointF(point->plusDeltaXPos().x(), 0));
         d->plusDeltaXColumn->setValueAt(row, qAbs(data.x()));
     }
 
     if (d->minusDeltaXColumn) {
-        data = datapicker->mapSceneLengthToLogical(QPointF(item->minusDeltaXPos().x(), 0));
+        data = datapicker->mapSceneLengthToLogical(QPointF(point->minusDeltaXPos().x(), 0));
         d->minusDeltaXColumn->setValueAt(row, qAbs(data.x()));
     }
 
     if (d->plusDeltaYColumn) {
-        data = datapicker->mapSceneLengthToLogical(QPointF(0, item->plusDeltaYPos().y()));
+        data = datapicker->mapSceneLengthToLogical(QPointF(0, point->plusDeltaYPos().y()));
         d->plusDeltaYColumn->setValueAt(row, qAbs(data.y()));
     }
 
     if (d->minusDeltaYColumn) {
-        data = datapicker->mapSceneLengthToLogical(QPointF(0, item->minusDeltaYPos().y()));
+        data = datapicker->mapSceneLengthToLogical(QPointF(0, point->minusDeltaYPos().y()));
         d->minusDeltaYColumn->setValueAt(row, qAbs(data.y()));
     }
 }
@@ -410,8 +410,8 @@ bool DataPickerCurve::load(XmlStreamReader* reader) {
             READ_COLUMN(plusDeltaYColumn);
             READ_COLUMN(minusDeltaYColumn);
 
-        } else if (reader->name() == "customItem") {
-            CustomItem* curvePoint = new CustomItem("");
+        } else if (reader->name() == "datapickerPoint") {
+            DatapickerPoint* curvePoint = new DatapickerPoint("");
             curvePoint->setHidden(true);
             if (!curvePoint->load(reader)){
                 delete curvePoint;
