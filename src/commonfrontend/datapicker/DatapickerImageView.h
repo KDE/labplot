@@ -37,6 +37,7 @@ class QWheelEvent;
 
 class AbstractAspect;
 class DatapickerImage;
+class Datapicker;
 class WorksheetElement;
 class Transform;
 class CustomItem;
@@ -70,6 +71,7 @@ class DatapickerImageView : public QGraphicsView {
         void mouseMoveEvent(QMouseEvent*);
 
         DatapickerImage* m_image;
+		Datapicker* m_datapicker;
         Transform* m_transform;
         MouseMode m_mouseMode;
         bool m_selectionBandIsShown;

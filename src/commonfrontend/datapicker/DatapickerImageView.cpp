@@ -58,6 +58,7 @@
 */
 DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView(),
     m_image(image),
+    m_datapicker(dynamic_cast<Datapicker*>(m_image->parentAspect())),
     m_transform(new Transform()),
     m_mouseMode(SelectAndEditMode),
     m_selectionBandIsShown(false),
@@ -363,22 +364,20 @@ void DatapickerImageView::mousePressEvent(QMouseEvent* event) {
 		return;
     }
 
-    Datapicker* datapicker = dynamic_cast<Datapicker*>(m_image->parentAspect());
-    Q_ASSERT(datapicker);
     QPointF eventPos = mapToScene(event->pos());
     if ( m_mouseMode == SelectAndEditMode && m_image->isLoaded && sceneRect().contains(eventPos) ) {
         if ( m_image->plotPointsType() == DatapickerImage::AxisPoints ) {
             int childCount = m_image->childCount<CustomItem>(AbstractAspect::IncludeHidden);
             if (childCount < 3)
-                datapicker->addNewPoint(eventPos, m_image);
-        } else if ( m_image->plotPointsType() == DatapickerImage::CurvePoints && datapicker->activeCurve() ) {
-            datapicker->addNewPoint(eventPos, datapicker->activeCurve());
+                m_datapicker->addNewPoint(eventPos, m_image);
+        } else if ( m_image->plotPointsType() == DatapickerImage::CurvePoints && m_datapicker->activeCurve() ) {
+            m_datapicker->addNewPoint(eventPos, m_datapicker->activeCurve());
         }
     }
 
     // make sure the datapicker (or its currently active curve) is selected in the project explorer if the view was clicked.
     // We need this for the case when we change from the project-node in the project explorer to the datapicker node by clicking the view.
-	datapicker->setSelectedInView(true);
+	m_datapicker->setSelectedInView(true);
 
     QGraphicsView::mousePressEvent(event);
 }
@@ -439,7 +438,11 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
                 yLabel = "y(rad)";
             }
 
-            emit statusInfo( xLabel + "=" + QString::number(logicalPos.x()) + ", " + yLabel + "=" + QString::number(logicalPos.y()) );
+			if (m_datapicker->activeCurve()) {
+				QString statusText = m_datapicker->name() + ", " + i18n("active curve") + " \"" + m_datapicker->activeCurve()->name() + "\"";
+				statusText += ": " +  xLabel + "=" + QString::number(logicalPos.x()) + ", " + yLabel + "=" + QString::number(logicalPos.y());
+				emit statusInfo(statusText);
+			}
         }
     }
 
@@ -608,13 +611,11 @@ void DatapickerImageView::magnificationChanged(QAction* action) {
 }
 
 void DatapickerImageView::addCurve() {
-    Datapicker* datapicker = dynamic_cast<Datapicker*>(m_image->parentAspect());
-    Q_ASSERT(datapicker);
-    datapicker->beginMacro(i18n("%1: add new curve.", datapicker->name()));
+    m_datapicker->beginMacro(i18n("%1: add new curve.", m_datapicker->name()));
     DataPickerCurve* curve = new DataPickerCurve(i18n("Curve"));
-    datapicker->addChild(curve);
+    m_datapicker->addChild(curve);
     curve->addDatasheet(m_image->axisPoints().type);
-    datapicker->endMacro();
+    m_datapicker->endMacro();
 }
 
 void DatapickerImageView::changeRotationAngle() {

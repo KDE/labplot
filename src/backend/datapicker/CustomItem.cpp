@@ -211,14 +211,8 @@ QIcon CustomItem::icon() const{
 }
 
 QMenu* CustomItem::createContextMenu(){
-    QMenu *menu = WorksheetElement::createContextMenu();
-
-#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-    QAction* firstAction = menu->actions().first();
-#else
+    QMenu* menu = WorksheetElement::createContextMenu();
     QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
-#endif
-
     visibilityAction->setChecked(isVisible());
     menu->insertAction(firstAction, visibilityAction);
 
@@ -551,6 +545,7 @@ void CustomItem::suppressHoverEvents(bool on) {
     Q_D(CustomItem);
     d->m_suppressHoverEvents = on;
 }
+
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
