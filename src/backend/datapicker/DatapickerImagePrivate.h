@@ -22,7 +22,6 @@ class DatapickerImagePrivate{
         int minSegmentLength;
 
 		QString name() const;
-		void update();
 		void updateFileName();
         void discretize();
         void makeSegments();
