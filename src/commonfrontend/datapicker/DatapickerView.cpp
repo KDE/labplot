@@ -32,7 +32,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/datapicker/DatapickerImage.h"
 #include "commonfrontend/workbook/WorkbookView.h"
-#include "backend/datapicker/DataPickerCurve.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include "commonfrontend/datapicker/DatapickerImageView.h"
 
 #include <QTabWidget>
@@ -195,7 +195,7 @@ void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
     if (aspect->parentAspect() == m_datapicker) {
         index= m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
     } else {
-        const DataPickerCurve* curve = aspect->ancestor<const DataPickerCurve>();
+        const DatapickerCurve* curve = aspect->ancestor<const DatapickerCurve>();
         index= m_datapicker->indexOfChild<AbstractAspect>(curve, AbstractAspect::IncludeHidden);
     }
 
@@ -208,7 +208,7 @@ void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void DatapickerView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-    const DataPickerCurve* curve = dynamic_cast<const DataPickerCurve*>(aspect);
+    const DatapickerCurve* curve = dynamic_cast<const DatapickerCurve*>(aspect);
     if (curve) {
 		int index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
 		m_tabWidget->removeTab(index);

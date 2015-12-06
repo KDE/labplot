@@ -29,7 +29,7 @@
 #include "DatapickerPointPrivate.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/datapicker/DataPickerCurve.h"
+#include "backend/datapicker/DatapickerCurve.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -172,10 +172,10 @@ void DatapickerPoint::initActions() {
     connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 }
 
-void DatapickerPoint::initErrorBar(const DataPickerCurve::Errors& errors) {
+void DatapickerPoint::initErrorBar(const DatapickerCurve::Errors& errors) {
     m_errorBarItemList.clear();
-    if (errors.x != DataPickerCurve::NoError) {
-        setXSymmetricError(errors.x == DataPickerCurve::SymmetricError);
+    if (errors.x != DatapickerCurve::NoError) {
+        setXSymmetricError(errors.x == DatapickerCurve::SymmetricError);
 
         ErrorBarItem* plusDeltaXItem = new ErrorBarItem(this, ErrorBarItem::PlusDeltaX);
         plusDeltaXItem->setPosition(plusDeltaXPos());
@@ -188,8 +188,8 @@ void DatapickerPoint::initErrorBar(const DataPickerCurve::Errors& errors) {
         m_errorBarItemList<<plusDeltaXItem<<minusDeltaXItem;
     }
 
-    if (errors.y != DataPickerCurve::NoError) {
-        setYSymmetricError(errors.y == DataPickerCurve::SymmetricError);
+    if (errors.y != DatapickerCurve::NoError) {
+        setYSymmetricError(errors.y == DatapickerCurve::SymmetricError);
 
         ErrorBarItem* plusDeltaYItem = new ErrorBarItem(this, ErrorBarItem::PlusDeltaY);
         plusDeltaYItem->setPosition(plusDeltaYPos());
@@ -656,7 +656,7 @@ void DatapickerPointPrivate::retransformErrorBar() {
   update datasheet on any change in position of Datapicker-Point or it's error-bar.
 */
 void DatapickerPointPrivate::updateData() {
-    DataPickerCurve* curve = dynamic_cast<DataPickerCurve*>(q->parentAspect());
+    DatapickerCurve* curve = dynamic_cast<DatapickerCurve*>(q->parentAspect());
     if (curve)
         curve->updateData(q);
 }

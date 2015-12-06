@@ -32,7 +32,7 @@
 #include <QPen>
 
 #include "backend/lib/macros.h"
-#include "backend/datapicker/DataPickerCurve.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/worksheet/WorksheetElement.h"
 
 class DatapickerPoint;
@@ -85,7 +85,7 @@ class DatapickerPoint : public WorksheetElement {
 		virtual QGraphicsItem *graphicsItem() const;
 		void setParentGraphicsItem(QGraphicsItem*);
 
-        void initErrorBar(const DataPickerCurve::Errors&);
+        void initErrorBar(const DatapickerCurve::Errors&);
 
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);

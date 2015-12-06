@@ -166,7 +166,7 @@ set(BACKEND_SOURCES
         ${BACKEND_DIR}/datapicker/ImageEditor.cpp
        	${BACKEND_DIR}/datapicker/Segment.cpp
         ${BACKEND_DIR}/datapicker/Segments.cpp
-        ${BACKEND_DIR}/datapicker/DataPickerCurve.cpp
+        ${BACKEND_DIR}/datapicker/DatapickerCurve.cpp
 )
 
 set(COMMONFRONTEND_SOURCES

@@ -34,7 +34,7 @@
 #include "backend/core/AbstractScriptingEngine.h"
 
 class Spreadsheet;
-class DataPickerCurve;
+class DatapickerCurve;
 class DatapickerImage;
 class QXmlStreamWriter;
 class XmlStreamReader;
@@ -52,7 +52,7 @@ class Datapicker : public AbstractPart, public scripted {
         virtual QMenu* createContextMenu();
         virtual QWidget* view() const;
 
-        DataPickerCurve* activeCurve();
+        DatapickerCurve* activeCurve();
         Spreadsheet* currentSpreadsheet() const;
         DatapickerImage* image() const;
 
@@ -70,7 +70,7 @@ class Datapicker : public AbstractPart, public scripted {
         virtual void childSelected(const AbstractAspect*);
 
     private:
-		DataPickerCurve* m_activeCurve;
+        DatapickerCurve* m_activeCurve;
         Transform* m_transform;
         DatapickerImage* m_image;
         void init();

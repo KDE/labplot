@@ -31,7 +31,7 @@
 #define DATAPICKERCURVEWIDGET_H
 
 #include "ui_datapickercurvewidget.h"
-#include "backend/datapicker/DataPickerCurve.h"
+#include "backend/datapicker/DatapickerCurve.h"
 
 class DatapickerPointWidget;
 
@@ -42,15 +42,15 @@ class DatapickerCurveWidget : public QWidget {
         explicit DatapickerCurveWidget(QWidget*);
         ~DatapickerCurveWidget();
 
-        void setCurves(QList<DataPickerCurve*>);
+        void setCurves(QList<DatapickerCurve*>);
         void load();
 
     private:
         Ui::DatapickerCurveWidget ui;
         void initConnections();
 
-        DataPickerCurve* m_curve;
-        QList<DataPickerCurve*> m_curveList;
+        DatapickerCurve* m_curve;
+        QList<DatapickerCurve*> m_curveList;
         DatapickerPointWidget* datapickerPointWidget;
         bool m_initializing;
         bool m_suppressTypeChange;
@@ -65,7 +65,7 @@ class DatapickerCurveWidget : public QWidget {
 
         //SLOTs for changes triggered in Axis
         void curveDescriptionChanged(const AbstractAspect*);
-        void curveErrorsChanged(DataPickerCurve::Errors);
+        void curveErrorsChanged(DatapickerCurve::Errors);
 };
 
 #endif // DATAPICKERCURVEWIDGET_H

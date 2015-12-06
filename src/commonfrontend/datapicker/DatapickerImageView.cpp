@@ -31,7 +31,7 @@
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/Transform.h"
-#include "backend/datapicker/DataPickerCurve.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/datapicker/DatapickerImage.h"
 
 #include <QMenu>
@@ -563,7 +563,7 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
         m_image->setUndoAware(true);
     }
 
-    foreach (DataPickerCurve* curve, m_image->parentAspect()->children<DataPickerCurve>()) {
+    foreach (DatapickerCurve* curve, m_image->parentAspect()->children<DatapickerCurve>()) {
         foreach (DatapickerPoint* point, curve->children<DatapickerPoint>(AbstractAspect::IncludeHidden)) {
             if (!point->graphicsItem()->isSelected())
                 continue;
@@ -612,7 +612,7 @@ void DatapickerImageView::magnificationChanged(QAction* action) {
 
 void DatapickerImageView::addCurve() {
     m_datapicker->beginMacro(i18n("%1: add new curve.", m_datapicker->name()));
-    DataPickerCurve* curve = new DataPickerCurve(i18n("Curve"));
+    DatapickerCurve* curve = new DatapickerCurve(i18n("Curve"));
     m_datapicker->addChild(curve);
     curve->addDatasheet(m_image->axisPoints().type);
     m_datapicker->endMacro();

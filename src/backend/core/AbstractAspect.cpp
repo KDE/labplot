@@ -32,7 +32,7 @@
 #include "backend/core/aspectcommands.h"
 #include "backend/core/Project.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/datapicker/DataPickerCurve.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/PropertyChangeCommand.h"
@@ -309,7 +309,7 @@ QMenu* AbstractAspect::createContextMenu() {
 	menu->addAction(QIcon(KIcon("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
 
 	//don't allow to delete data spreadsheets in the datapicker curves
-	if ( !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DataPickerCurve*>(this->parentAspect())) )
+    if ( !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect())) )
 		menu->addAction(QIcon(KIcon("edit-delete")), i18n("Delete"), this, SLOT(remove()));
 
 	return menu;

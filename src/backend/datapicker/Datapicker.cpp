@@ -32,7 +32,7 @@
 #include "backend/datapicker/DatapickerImage.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/datapicker/DatapickerView.h"
-#include "backend/datapicker/DataPickerCurve.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/datapicker/Transform.h"
 #include "backend/datapicker/DatapickerPoint.h"
 
@@ -41,7 +41,7 @@
 
 /**
  * \class Datapicker
- * \brief Top-level container for DataPickerCurve and DatapickerImage.
+ * \brief Top-level container for DatapickerCurve and DatapickerImage.
  * \ingroup backend
  */
 Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading)
@@ -90,7 +90,7 @@ QWidget* Datapicker::view() const {
     return m_view;
 }
 
-DataPickerCurve* Datapicker::activeCurve() {
+DatapickerCurve* Datapicker::activeCurve() {
 	return m_activeCurve;
 }
 
@@ -116,7 +116,7 @@ DatapickerImage* Datapicker::image() const {
     in order to select the corresponding tab.
  */
 void Datapicker::childSelected(const AbstractAspect* aspect) {
-    m_activeCurve = dynamic_cast<DataPickerCurve*>(const_cast<AbstractAspect*>(aspect));
+    m_activeCurve = dynamic_cast<DatapickerCurve*>(const_cast<AbstractAspect*>(aspect));
 
     int index = -1;
     if (m_activeCurve) {
@@ -124,7 +124,7 @@ void Datapicker::childSelected(const AbstractAspect* aspect) {
         index = 0;
 		emit statusInfo(this->name() + ", " + i18n("active curve") + " \"" + m_activeCurve->name() + "\"");
     } else {
-		const DataPickerCurve* curve = aspect->ancestor<const DataPickerCurve>();
+        const DatapickerCurve* curve = aspect->ancestor<const DatapickerCurve>();
         index= indexOfChild<AbstractAspect>(curve);
 		++index; //+1 because of the hidden plot image being the first child and shown in the first tab in the view
     }
@@ -154,7 +154,7 @@ void Datapicker::setChildSelectedInView(int index, bool selected){
 			emit childAspectDeselectedInView(this);
 
 			//deselect also all curves (they don't have any tab index in the view) that were potentially selected before
-			foreach(const DataPickerCurve* curve, children<const DataPickerCurve>())
+            foreach(const DatapickerCurve* curve, children<const DatapickerCurve>())
 				emit childAspectDeselectedInView(curve);
 		}
 
@@ -219,15 +219,15 @@ void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
         newPoint->setErrorBarPen(oldPoint->errorBarPen());
     }
 
-    DataPickerCurve* dataPickerCurve = dynamic_cast<DataPickerCurve*>(parentAspect);
+    DatapickerCurve* datapickerCurve = dynamic_cast<DatapickerCurve*>(parentAspect);
     if (m_image == parentAspect) {
         DatapickerImage::ReferencePoints points = m_image->axisPoints();
         points.scenePos[childPoints.count()].setX(pos.x());
         points.scenePos[childPoints.count()].setY(pos.y());
         m_image->setAxisPoints(points);
-    } else if (dataPickerCurve) {
-        newPoint->initErrorBar(dataPickerCurve->curveErrorTypes());
-        dataPickerCurve->updateData(newPoint);
+    } else if (datapickerCurve) {
+        newPoint->initErrorBar(datapickerCurve->curveErrorTypes());
+        datapickerCurve->updateData(newPoint);
     }
 
     endMacro();
@@ -243,7 +243,7 @@ QVector3D Datapicker::mapSceneLengthToLogical(const QPointF& point) const {
 }
 
 void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-    const DataPickerCurve* curve = qobject_cast<const DataPickerCurve*>(aspect);
+    const DatapickerCurve* curve = qobject_cast<const DatapickerCurve*>(aspect);
     if (curve) {
         //clear scene
         QList<WorksheetElement *> childElements = curve->children<WorksheetElement>(IncludeHidden);
@@ -274,7 +274,7 @@ void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
             elem->graphicsItem()->setZValue(zVal++);
         }
 
-        foreach (DataPickerCurve* curve, children<DataPickerCurve>()) {
+        foreach (DatapickerCurve* curve, children<DatapickerCurve>()) {
             foreach (WorksheetElement* elem, curve->children<WorksheetElement>(IncludeHidden)) {
                 elem->graphicsItem()->setZValue(zVal++);
             }
@@ -337,8 +337,8 @@ bool Datapicker::load(XmlStreamReader* reader){
                 addChild(plot);
                 m_image = plot;
             }
-        } else if (reader->name() == "dataPickerCurve") {
-            DataPickerCurve* curve = new DataPickerCurve("");
+        } else if (reader->name() == "datapickerCurve") {
+            DatapickerCurve* curve = new DatapickerCurve("");
             if (!curve->load(reader)){
                 delete curve;
                 return false;

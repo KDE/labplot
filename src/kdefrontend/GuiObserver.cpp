@@ -41,7 +41,7 @@
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/DatapickerImage.h"
-#include "backend/datapicker/DataPickerCurve.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include "commonfrontend/ProjectExplorer.h"
 #include "kdefrontend/MainWin.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
@@ -296,7 +296,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->textLabelDock->setLabels(list);
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->textLabelDock);
-  }else if (className=="DataPickerCurve"){
+  }else if (className=="DatapickerCurve"){
       mainWindow->m_propertiesDock->setWindowTitle(i18n("DatapickerCurve properties"));
 
       if (!mainWindow->datapickerCurveDock){
@@ -304,9 +304,9 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
         mainWindow->stackedWidget->addWidget(mainWindow->datapickerCurveDock);
       }
 
-      QList<DataPickerCurve*> list;
+      QList<DatapickerCurve*> list;
       foreach(aspect, selectedAspects){
-        list<<qobject_cast<DataPickerCurve*>(aspect);
+        list<<qobject_cast<DatapickerCurve*>(aspect);
       }
       mainWindow->datapickerCurveDock->setCurves(list);
 

@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : DataPickerCurve.cpp
+    File                 : DatapickerCurve.cpp
     Project              : LabPlot
     Description          : container for Curve-Point and Datasheet/Spreadsheet
                            of datapicker
@@ -25,13 +25,13 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "DataPickerCurve.h"
+#include "DatapickerCurve.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/datapicker/DataPickerCurvePrivate.h"
+#include "backend/datapicker/DatapickerCurvePrivate.h"
 
 #include <QMenu>
 #include <QVector3D>
@@ -42,30 +42,30 @@
 #include <KConfigGroup>
 
 /**
- * \class DataPickerCurve
+ * \class DatapickerCurve
  * \brief Top-level container for Curve-Point and Datasheet/Spreadsheet of datapicker.
  * \ingroup backend
  */
 
-DataPickerCurve::DataPickerCurve(const QString &name) : AbstractAspect(name), d_ptr(new DataPickerCurvePrivate(this)) {
+DatapickerCurve::DatapickerCurve(const QString &name) : AbstractAspect(name), d_ptr(new DatapickerCurvePrivate(this)) {
 
     init();
 }
 
-DataPickerCurve::DataPickerCurve(const QString &name, DataPickerCurvePrivate *dd) : AbstractAspect(name), d_ptr(dd) {
+DatapickerCurve::DatapickerCurve(const QString &name, DatapickerCurvePrivate *dd) : AbstractAspect(name), d_ptr(dd) {
 
     init();
 }
 
-DataPickerCurve::~DataPickerCurve() {
+DatapickerCurve::~DatapickerCurve() {
 }
 
-void DataPickerCurve::init() {
-    Q_D(DataPickerCurve);
+void DatapickerCurve::init() {
+    Q_D(DatapickerCurve);
 
     KConfig config;
     KConfigGroup group;
-    group = config.group("DataPickerCurve");
+    group = config.group("DatapickerCurve");
     d->posXColumn = NULL;
     d->posYColumn = NULL;
     d->posZColumn = NULL;
@@ -79,7 +79,7 @@ void DataPickerCurve::init() {
     this->initAction();
 }
 
-void DataPickerCurve::initAction() {
+void DatapickerCurve::initAction() {
     updateDatasheetAction = new KAction(KIcon("view-refresh"), i18n("Update Spreadsheet"), this);
     connect( updateDatasheetAction, SIGNAL(triggered()), this, SLOT(updateDatasheet()) );
 }
@@ -87,14 +87,14 @@ void DataPickerCurve::initAction() {
 /*!
     Returns an icon to be used in the project explorer.
 */
-QIcon DataPickerCurve::icon() const {
+QIcon DatapickerCurve::icon() const {
     return  KIcon("labplot-xy-curve");
 }
 
 /*!
     Return a new context menu
 */
-QMenu* DataPickerCurve::createContextMenu() {
+QMenu* DatapickerCurve::createContextMenu() {
     QMenu *menu = AbstractAspect::createContextMenu();
     Q_ASSERT(menu);
 
@@ -107,7 +107,7 @@ QMenu* DataPickerCurve::createContextMenu() {
     return menu;
 }
 
-Column* DataPickerCurve::appendColumn(const QString& name) {
+Column* DatapickerCurve::appendColumn(const QString& name) {
     Column* col = new Column(i18n("Column"), AbstractColumn::Numeric);
     col->setPlotDesignation(AbstractColumn::Y);
     col->insertRows(0, m_datasheet->rowCount());
@@ -119,27 +119,27 @@ Column* DataPickerCurve::appendColumn(const QString& name) {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(DataPickerCurve, DataPickerCurve::Errors, curveErrorTypes, curveErrorTypes)
-BASIC_SHARED_D_READER_IMPL(DataPickerCurve, AbstractColumn*, posXColumn, posXColumn)
-QString& DataPickerCurve::posXColumnPath() const { return d_ptr->posXColumnPath; }
-BASIC_SHARED_D_READER_IMPL(DataPickerCurve, AbstractColumn*, posYColumn, posYColumn)
-QString& DataPickerCurve::posYColumnPath() const { return d_ptr->posYColumnPath; }
-BASIC_SHARED_D_READER_IMPL(DataPickerCurve, AbstractColumn*, posZColumn, posZColumn)
-QString& DataPickerCurve::posZColumnPath() const { return d_ptr->posZColumnPath; }
-BASIC_SHARED_D_READER_IMPL(DataPickerCurve, AbstractColumn*, plusDeltaXColumn, plusDeltaXColumn)
-QString& DataPickerCurve::plusDeltaXColumnPath() const { return d_ptr->plusDeltaXColumnPath; }
-BASIC_SHARED_D_READER_IMPL(DataPickerCurve, AbstractColumn*, minusDeltaXColumn, minusDeltaXColumn)
-QString& DataPickerCurve::minusDeltaXColumnPath() const { return d_ptr->minusDeltaXColumnPath; }
-BASIC_SHARED_D_READER_IMPL(DataPickerCurve, AbstractColumn*, plusDeltaYColumn, plusDeltaYColumn)
-QString& DataPickerCurve::plusDeltaYColumnPath() const { return d_ptr->plusDeltaYColumnPath; }
-BASIC_SHARED_D_READER_IMPL(DataPickerCurve, AbstractColumn*, minusDeltaYColumn, minusDeltaYColumn)
-QString& DataPickerCurve::minusDeltaYColumnPath() const { return d_ptr->minusDeltaYColumnPath; }
+BASIC_SHARED_D_READER_IMPL(DatapickerCurve, DatapickerCurve::Errors, curveErrorTypes, curveErrorTypes)
+BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, posXColumn, posXColumn)
+QString& DatapickerCurve::posXColumnPath() const { return d_ptr->posXColumnPath; }
+BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, posYColumn, posYColumn)
+QString& DatapickerCurve::posYColumnPath() const { return d_ptr->posYColumnPath; }
+BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, posZColumn, posZColumn)
+QString& DatapickerCurve::posZColumnPath() const { return d_ptr->posZColumnPath; }
+BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, plusDeltaXColumn, plusDeltaXColumn)
+QString& DatapickerCurve::plusDeltaXColumnPath() const { return d_ptr->plusDeltaXColumnPath; }
+BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, minusDeltaXColumn, minusDeltaXColumn)
+QString& DatapickerCurve::minusDeltaXColumnPath() const { return d_ptr->minusDeltaXColumnPath; }
+BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, plusDeltaYColumn, plusDeltaYColumn)
+QString& DatapickerCurve::plusDeltaYColumnPath() const { return d_ptr->plusDeltaYColumnPath; }
+BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, minusDeltaYColumn, minusDeltaYColumn)
+QString& DatapickerCurve::minusDeltaYColumnPath() const { return d_ptr->minusDeltaYColumnPath; }
 
 //##############################################################################
 //#########################  setter methods  ###################################
 //##############################################################################
-void DataPickerCurve::addDatasheet(const DatapickerImage::GraphType& type) {
-    Q_D(DataPickerCurve);
+void DatapickerCurve::addDatasheet(const DatapickerImage::GraphType& type) {
+    Q_D(DatapickerCurve);
 
     m_datasheet = new Spreadsheet(0, i18n("Data"));
     addChild(m_datasheet);
@@ -170,12 +170,12 @@ void DataPickerCurve::addDatasheet(const DatapickerImage::GraphType& type) {
     d->posYColumn->setName(yLabel);
 }
 
-STD_SETTER_CMD_IMPL_S(DataPickerCurve, SetCurveErrorTypes, DataPickerCurve::Errors, curveErrorTypes)
-void DataPickerCurve::setCurveErrorTypes(const DataPickerCurve::Errors errors) {
-    Q_D(DataPickerCurve);
+STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetCurveErrorTypes, DatapickerCurve::Errors, curveErrorTypes)
+void DatapickerCurve::setCurveErrorTypes(const DatapickerCurve::Errors errors) {
+    Q_D(DatapickerCurve);
     if (d->curveErrorTypes.x != errors.x || d->curveErrorTypes.y != errors.y) {
         beginMacro(i18n("%1: set xy-error type", name()));
-        exec(new DataPickerCurveSetCurveErrorTypesCmd(d, errors, i18n("%1: set xy-error type")));
+        exec(new DatapickerCurveSetCurveErrorTypesCmd(d, errors, i18n("%1: set xy-error type")));
 
         if ( errors.x != NoError && !d->plusDeltaXColumn ) {
             setPlusDeltaXColumn(appendColumn(i18n("+delta_x")));
@@ -209,56 +209,56 @@ void DataPickerCurve::setCurveErrorTypes(const DataPickerCurve::Errors errors) {
     }
 }
 
-STD_SETTER_CMD_IMPL_S(DataPickerCurve, SetPosXColumn, AbstractColumn*, posXColumn)
-void DataPickerCurve::setPosXColumn(AbstractColumn* column) {
-    Q_D(DataPickerCurve);
+STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetPosXColumn, AbstractColumn*, posXColumn)
+void DatapickerCurve::setPosXColumn(AbstractColumn* column) {
+    Q_D(DatapickerCurve);
     if (d->posXColumn != column)
-        exec(new DataPickerCurveSetPosXColumnCmd(d, column, i18n("%1: set position X column")));
+        exec(new DatapickerCurveSetPosXColumnCmd(d, column, i18n("%1: set position X column")));
 }
 
-STD_SETTER_CMD_IMPL_S(DataPickerCurve, SetPosYColumn, AbstractColumn*, posYColumn)
-void DataPickerCurve::setPosYColumn(AbstractColumn* column) {
-    Q_D(DataPickerCurve);
+STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetPosYColumn, AbstractColumn*, posYColumn)
+void DatapickerCurve::setPosYColumn(AbstractColumn* column) {
+    Q_D(DatapickerCurve);
     if (d->posYColumn != column)
-        exec(new DataPickerCurveSetPosYColumnCmd(d, column, i18n("%1: set position Y column")));
+        exec(new DatapickerCurveSetPosYColumnCmd(d, column, i18n("%1: set position Y column")));
 }
 
-STD_SETTER_CMD_IMPL_S(DataPickerCurve, SetPosZColumn, AbstractColumn*, posZColumn)
-void DataPickerCurve::setPosZColumn(AbstractColumn* column) {
-    Q_D(DataPickerCurve);
+STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetPosZColumn, AbstractColumn*, posZColumn)
+void DatapickerCurve::setPosZColumn(AbstractColumn* column) {
+    Q_D(DatapickerCurve);
     if (d->posZColumn != column)
-        exec(new DataPickerCurveSetPosZColumnCmd(d, column, i18n("%1: set position Z column")));
+        exec(new DatapickerCurveSetPosZColumnCmd(d, column, i18n("%1: set position Z column")));
 }
 
-STD_SETTER_CMD_IMPL_S(DataPickerCurve, SetPlusDeltaXColumn, AbstractColumn*, plusDeltaXColumn)
-void DataPickerCurve::setPlusDeltaXColumn(AbstractColumn* column) {
-    Q_D(DataPickerCurve);
+STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetPlusDeltaXColumn, AbstractColumn*, plusDeltaXColumn)
+void DatapickerCurve::setPlusDeltaXColumn(AbstractColumn* column) {
+    Q_D(DatapickerCurve);
     if (d->plusDeltaXColumn != column)
-        exec(new DataPickerCurveSetPlusDeltaXColumnCmd(d, column, i18n("%1: set +delta_X column")));
+        exec(new DatapickerCurveSetPlusDeltaXColumnCmd(d, column, i18n("%1: set +delta_X column")));
 }
 
-STD_SETTER_CMD_IMPL_S(DataPickerCurve, SetMinusDeltaXColumn, AbstractColumn*, minusDeltaXColumn)
-void DataPickerCurve::setMinusDeltaXColumn(AbstractColumn* column) {
-    Q_D(DataPickerCurve);
+STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetMinusDeltaXColumn, AbstractColumn*, minusDeltaXColumn)
+void DatapickerCurve::setMinusDeltaXColumn(AbstractColumn* column) {
+    Q_D(DatapickerCurve);
     if (d->minusDeltaXColumn != column)
-        exec(new DataPickerCurveSetMinusDeltaXColumnCmd(d, column, i18n("%1: set -delta_X column")));
+        exec(new DatapickerCurveSetMinusDeltaXColumnCmd(d, column, i18n("%1: set -delta_X column")));
 }
 
-STD_SETTER_CMD_IMPL_S(DataPickerCurve, SetPlusDeltaYColumn, AbstractColumn*, plusDeltaYColumn)
-void DataPickerCurve::setPlusDeltaYColumn(AbstractColumn* column) {
-    Q_D(DataPickerCurve);
+STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetPlusDeltaYColumn, AbstractColumn*, plusDeltaYColumn)
+void DatapickerCurve::setPlusDeltaYColumn(AbstractColumn* column) {
+    Q_D(DatapickerCurve);
     if (d->plusDeltaYColumn != column)
-        exec(new DataPickerCurveSetPlusDeltaYColumnCmd(d, column, i18n("%1: set +delta_Y column")));
+        exec(new DatapickerCurveSetPlusDeltaYColumnCmd(d, column, i18n("%1: set +delta_Y column")));
 }
 
-STD_SETTER_CMD_IMPL_S(DataPickerCurve, SetMinusDeltaYColumn, AbstractColumn*, minusDeltaYColumn)
-void DataPickerCurve::setMinusDeltaYColumn(AbstractColumn* column) {
-    Q_D(DataPickerCurve);
+STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetMinusDeltaYColumn, AbstractColumn*, minusDeltaYColumn)
+void DatapickerCurve::setMinusDeltaYColumn(AbstractColumn* column) {
+    Q_D(DatapickerCurve);
     if (d->minusDeltaYColumn != column)
-        exec(new DataPickerCurveSetMinusDeltaYColumnCmd(d, column, i18n("%1: set -delta_Y column")));
+        exec(new DatapickerCurveSetMinusDeltaYColumnCmd(d, column, i18n("%1: set -delta_Y column")));
 }
 
-void DataPickerCurve::setPrinting(bool on) {
+void DatapickerCurve::setPrinting(bool on) {
     foreach (WorksheetElement* elem, children<WorksheetElement>(IncludeHidden))
         elem->setPrinting(on);
 }
@@ -267,7 +267,7 @@ void DataPickerCurve::setPrinting(bool on) {
     Selects or deselects the Datapicker/Curve in the project explorer.
     This function is called in \c DatapickerImageView.
 */
-void DataPickerCurve::setSelectedInView(const bool b) {
+void DatapickerCurve::setSelectedInView(const bool b) {
     if (b)
         emit childAspectSelectedInView(this);
     else
@@ -276,7 +276,7 @@ void DataPickerCurve::setSelectedInView(const bool b) {
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void DataPickerCurve::updateDatasheet() {
+void DatapickerCurve::updateDatasheet() {
     beginMacro(i18n("%1:update datasheet", name()));
 
     foreach (DatapickerPoint* point, children<DatapickerPoint>(IncludeHidden))
@@ -291,8 +291,8 @@ void DataPickerCurve::updateDatasheet() {
     of curve-point or its error-bar so keep it undo unaware
     no need to create extra entry in undo stack
 */
-void DataPickerCurve::updateData(const DatapickerPoint* point) {
-    Q_D(DataPickerCurve);
+void DatapickerCurve::updateData(const DatapickerPoint* point) {
+    Q_D(DatapickerCurve);
     Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
     if (!datapicker)
         return;
@@ -333,10 +333,10 @@ void DataPickerCurve::updateData(const DatapickerPoint* point) {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void DataPickerCurve::save(QXmlStreamWriter* writer) const{
-    Q_D(const DataPickerCurve);
+void DatapickerCurve::save(QXmlStreamWriter* writer) const{
+    Q_D(const DatapickerCurve);
 
-    writer->writeStartElement( "dataPickerCurve" );
+    writer->writeStartElement( "datapickerCurve" );
     writeBasicAttributes(writer);
     writeCommentElement(writer);
 
@@ -362,10 +362,10 @@ void DataPickerCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool DataPickerCurve::load(XmlStreamReader* reader) {
-    Q_D(DataPickerCurve);
+bool DatapickerCurve::load(XmlStreamReader* reader) {
+    Q_D(DatapickerCurve);
 
-    if(!reader->isStartElement() || reader->name() != "dataPickerCurve") {
+    if(!reader->isStartElement() || reader->name() != "datapickerCurve") {
         reader->raiseError(i18n("no dataPicker curve element found"));
         return false;
     }
@@ -379,7 +379,7 @@ bool DataPickerCurve::load(XmlStreamReader* reader) {
 
     while (!reader->atEnd()) {
         reader->readNext();
-        if (reader->isEndElement() && reader->name() == "dataPickerCurve")
+        if (reader->isEndElement() && reader->name() == "datapickerCurve")
             break;
 
         if (!reader->isStartElement())

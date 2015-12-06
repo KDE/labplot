@@ -32,7 +32,7 @@
 #include "backend/core/Workbook.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/datapicker/DataPickerCurve.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include <QMenu>
 #include <QStyle>
 
@@ -144,7 +144,7 @@ QMenu* AbstractPart::createContextMenu(){
 		}
 	} else {
 		//data spreadsheets in the datapicker curves cannot be hidden/minimized, don't show this menu entry
-		if ( !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DataPickerCurve*>(this->parentAspect())) )
+        if ( !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect())) )
 			menu->addAction(i18n("Show"), this, SIGNAL(showRequested()));
 	}
 

@@ -271,7 +271,7 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect){
 
 
 	//don't do anything for newly added data spreadsheets of data picker curves
-	if (aspect->inherits("Spreadsheet") && aspect->parentAspect()->inherits("DataPickerCurve"))
+    if (aspect->inherits("Spreadsheet") && aspect->parentAspect()->inherits("DatapickerCurve"))
 		return;
 
 	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());

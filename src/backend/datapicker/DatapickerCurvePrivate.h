@@ -27,13 +27,13 @@
 #ifndef DATAPICKERCURVEPRIVATE_H
 #define DATAPICKERCURVEPRIVATE_H
 
-class DataPickerCurvePrivate {
+class DatapickerCurvePrivate {
     public:
-        explicit DataPickerCurvePrivate(DataPickerCurve* curve) : q(curve) {};
+        explicit DatapickerCurvePrivate(DatapickerCurve* curve) : q(curve) {};
 
         QString name() const { return q->name(); };
-        DataPickerCurve* const q;
-        DataPickerCurve::Errors curveErrorTypes;
+        DatapickerCurve* const q;
+        DatapickerCurve::Errors curveErrorTypes;
 		
         AbstractColumn* posXColumn;
         QString posXColumnPath;

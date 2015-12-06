@@ -57,7 +57,7 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget *parent) : QWidget(parent),
 DatapickerCurveWidget::~DatapickerCurveWidget(){
 }
 
-void DatapickerCurveWidget::setCurves(QList<DataPickerCurve*> list) {
+void DatapickerCurveWidget::setCurves(QList<DatapickerCurve*> list) {
     if (list.isEmpty())
         return;
 
@@ -90,7 +90,7 @@ void DatapickerCurveWidget::initConnections() {
     connect( m_curve, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
              this, SLOT(updateDatapickerPointList()) );
     connect( m_curve, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(updateDatapickerPointList()) );
-    connect( m_curve, SIGNAL(curveErrorTypesChanged(DataPickerCurve::Errors)), this, SLOT(curveErrorsChanged(DataPickerCurve::Errors)) );
+    connect( m_curve, SIGNAL(curveErrorTypesChanged(DatapickerCurve::Errors)), this, SLOT(curveErrorsChanged(DatapickerCurve::Errors)) );
 }
 
 //*************************************************************
@@ -115,10 +115,10 @@ void DatapickerCurveWidget::xErrorTypeChanged(int index) {
     if (m_initializing || m_suppressTypeChange)
         return;
 
-    DataPickerCurve::Errors errors = m_curve->curveErrorTypes();
-    errors.x = DataPickerCurve::ErrorType(index);
+    DatapickerCurve::Errors errors = m_curve->curveErrorTypes();
+    errors.x = DatapickerCurve::ErrorType(index);
 
-    foreach(DataPickerCurve* curve, m_curveList)
+    foreach(DatapickerCurve* curve, m_curveList)
         curve->setCurveErrorTypes(errors);
 }
 
@@ -126,10 +126,10 @@ void DatapickerCurveWidget::yErrorTypeChanged(int index) {
     if (m_initializing || m_suppressTypeChange)
         return;
 
-    DataPickerCurve::Errors errors = m_curve->curveErrorTypes();
-    errors.y = DataPickerCurve::ErrorType(index);
+    DatapickerCurve::Errors errors = m_curve->curveErrorTypes();
+    errors.y = DatapickerCurve::ErrorType(index);
 
-    foreach(DataPickerCurve* curve, m_curveList)
+    foreach(DatapickerCurve* curve, m_curveList)
         curve->setCurveErrorTypes(errors);
 }
 
@@ -163,7 +163,7 @@ void DatapickerCurveWidget::curveDescriptionChanged(const AbstractAspect* aspect
 	m_initializing = false;
 }
 
-void DatapickerCurveWidget::curveErrorsChanged(DataPickerCurve::Errors errors){
+void DatapickerCurveWidget::curveErrorsChanged(DatapickerCurve::Errors errors){
     m_initializing = true;
     ui.cbXErrorType->setCurrentIndex((int) errors.x);
     ui.cbYErrorType->setCurrentIndex((int) errors.y);

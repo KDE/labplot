@@ -29,7 +29,7 @@
 #include "backend/datapicker/DatapickerImage.h"
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/datapicker/DataPickerCurve.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/datapicker/Datapicker.h"
 
 #include <QPainter>

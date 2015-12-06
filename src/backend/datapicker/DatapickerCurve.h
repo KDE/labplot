@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : DataPickerCurve.h
+    File                 : DatapickerCurve.h
     Project              : LabPlot
     Description          : container for Curve-Point and Datasheet/Spreadsheet
                            of datapicker
@@ -34,17 +34,17 @@
 
 class DatapickerPoint;
 class QAction;
-class DataPickerCurvePrivate;
+class DatapickerCurvePrivate;
 class Column;
 class Spreadsheet;
 class AbstractColumn;
 
-class DataPickerCurve: public AbstractAspect {
+class DatapickerCurve: public AbstractAspect {
     Q_OBJECT
 
     public:
-        explicit DataPickerCurve(const QString&);
-        virtual ~DataPickerCurve();
+        explicit DatapickerCurve(const QString&);
+        virtual ~DatapickerCurve();
 
         enum ErrorType { NoError, SymmetricError, AsymmetricError };
         struct Errors {
@@ -78,17 +78,17 @@ class DataPickerCurve: public AbstractAspect {
         virtual void save(QXmlStreamWriter*) const;
         virtual bool load(XmlStreamReader*);
 
-        typedef DataPickerCurvePrivate Private;
+        typedef DatapickerCurvePrivate Private;
 
     protected:
-        DataPickerCurve(const QString& name, DataPickerCurvePrivate* dd);
-        DataPickerCurvePrivate* const d_ptr;
+        DatapickerCurve(const QString& name, DatapickerCurvePrivate* dd);
+        DatapickerCurvePrivate* const d_ptr;
 
     private slots:
         void updateDatasheet();
 
     private:
-        Q_DECLARE_PRIVATE(DataPickerCurve)
+        Q_DECLARE_PRIVATE(DatapickerCurve)
         void init();
         void initAction();
         Column* appendColumn(const QString&);
@@ -97,7 +97,7 @@ class DataPickerCurve: public AbstractAspect {
         QAction* updateDatasheetAction;
 
     signals:
-        void curveErrorTypesChanged(const DataPickerCurve::Errors&);
+        void curveErrorTypesChanged(const DatapickerCurve::Errors&);
         void posXColumnChanged(const AbstractColumn*);
         void posYColumnChanged(const AbstractColumn*);
         void posZColumnChanged(const AbstractColumn*);
@@ -105,14 +105,14 @@ class DataPickerCurve: public AbstractAspect {
         void minusDeltaXColumnChanged(const AbstractColumn*);
         void plusDeltaYColumnChanged(const AbstractColumn*);
         void minusDeltaYColumnChanged(const AbstractColumn*);
-        friend class DataPickerCurveSetCurveErrorTypesCmd;
-        friend class DataPickerCurveSetPosXColumnCmd;
-        friend class DataPickerCurveSetPosYColumnCmd;
-        friend class DataPickerCurveSetPosZColumnCmd;
-        friend class DataPickerCurveSetPlusDeltaXColumnCmd;
-        friend class DataPickerCurveSetMinusDeltaXColumnCmd;
-        friend class DataPickerCurveSetPlusDeltaYColumnCmd;
-        friend class DataPickerCurveSetMinusDeltaYColumnCmd;
+        friend class DatapickerCurveSetCurveErrorTypesCmd;
+        friend class DatapickerCurveSetPosXColumnCmd;
+        friend class DatapickerCurveSetPosYColumnCmd;
+        friend class DatapickerCurveSetPosZColumnCmd;
+        friend class DatapickerCurveSetPlusDeltaXColumnCmd;
+        friend class DatapickerCurveSetMinusDeltaXColumnCmd;
+        friend class DatapickerCurveSetPlusDeltaYColumnCmd;
+        friend class DatapickerCurveSetMinusDeltaYColumnCmd;
 
 };
 #endif // DATAPICKERCURVE_H
