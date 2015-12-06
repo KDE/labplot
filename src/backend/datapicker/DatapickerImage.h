@@ -113,6 +113,7 @@ class DatapickerImage: public AbstractPart, public scripted {
 
     signals:
 		void requestProjectContextMenu(QMenu*);
+		void requestUpdate();
 
         void fileNameChanged(const QString&);
         void rotationAngleChanged(float);

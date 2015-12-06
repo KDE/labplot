@@ -274,6 +274,7 @@ void DatapickerImagePrivate::makeSegments() {
     q->m_segments->makeSegments(q->processedPlotImage);
     if (plotPointsType == DatapickerImage::SegmentPoints)
         q->m_segments->setSegmentsVisible(true);
+	emit q->requestUpdate();
 }
 
 DatapickerImagePrivate::~DatapickerImagePrivate() {
