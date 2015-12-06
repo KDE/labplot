@@ -208,18 +208,9 @@ void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void DatapickerView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-    const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
     const DataPickerCurve* curve = dynamic_cast<const DataPickerCurve*>(aspect);
-    if (!curve && !part)
-        return;
-
-    int index;
-    if (curve && aspect->parentAspect() == m_datapicker) {
-        index= m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
-    } else if (part) {
-        const DataPickerCurve* curve = aspect->ancestor<const DataPickerCurve>();
-        index= m_datapicker->indexOfChild<AbstractAspect>(curve, AbstractAspect::IncludeHidden);
-    }
-	++index; //+1 because of the first tab being reserved for the plot image
-    m_tabWidget->removeTab(index);
+    if (curve) {
+		int index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
+		m_tabWidget->removeTab(index);
+	}
 }

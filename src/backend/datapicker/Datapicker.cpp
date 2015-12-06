@@ -186,7 +186,6 @@ void Datapicker::setChildSelectedInView(int index, bool selected){
     This function is called in \c DatapickerImageView.
 */
 void Datapicker::setSelectedInView(const bool b){
-	//TODO: select the current active curve, if there is one.
 	if (b)
 		emit childAspectSelectedInView(this);
 	else

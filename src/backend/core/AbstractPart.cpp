@@ -31,6 +31,8 @@
 #include "commonfrontend/core/PartMdiView.h"
 #include "backend/core/Workbook.h"
 #include "backend/datapicker/Datapicker.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/datapicker/DataPickerCurve.h"
 #include <QMenu>
 #include <QStyle>
 
@@ -141,7 +143,9 @@ QMenu* AbstractPart::createContextMenu(){
 			action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMaxButton));
 		}
 	} else {
-		menu->addAction(i18n("Show"), this, SIGNAL(showRequested()));
+		//data spreadsheets in the datapicker curves cannot be hidden/minimized, don't show this menu entry
+		if ( !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DataPickerCurve*>(this->parentAspect())) )
+			menu->addAction(i18n("Show"), this, SIGNAL(showRequested()));
 	}
 
 	return menu;

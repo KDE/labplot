@@ -93,8 +93,8 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView
     //for general actions
     connect( m_image, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)) );
     connect( m_image, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
-    connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleImageActions()));
-    connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
+    connect( m_datapicker, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleImageActions()));
+    connect( m_datapicker, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
             this, SLOT(handleImageActions()) );
     connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(changeRotationAngle()) );
 }
@@ -639,8 +639,13 @@ void DatapickerImageView::handleImageActions() {
 
         if (pointsCount > 2) {
 			addCurveAction->setEnabled(true);
-            setCurvePointsAction->setEnabled(true);
-            selectSegmentAction->setEnabled(true);
+			if (m_datapicker->activeCurve()) {
+				setCurvePointsAction->setEnabled(true);
+				selectSegmentAction->setEnabled(true);
+			} else {
+				setCurvePointsAction->setEnabled(false);
+				selectSegmentAction->setEnabled(false);
+			}
         } else {
 			addCurveAction->setEnabled(false);
             setCurvePointsAction->setEnabled(false);
@@ -748,5 +753,4 @@ void DatapickerImageView::print(QPrinter* printer) const {
 
 void DatapickerImageView::updateBackground() {
     invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer);
-    handleImageActions(); //TODO
 }

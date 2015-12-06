@@ -145,13 +145,8 @@ QRectF DatapickerImage::pageRect() const {
     return d->m_scene->sceneRect();
 }
 
-void DatapickerImage::update() {
-    emit requestUpdate();
-}
-
 void DatapickerImage::setPlotImageType(const DatapickerImage::PlotImageType& type) {
     plotImageType = type;
-    emit requestUpdate();
 }
 
 void DatapickerImage::setSegmentVisible(bool on) {
@@ -269,10 +264,6 @@ bool DatapickerImagePrivate::uploadImage(const QString& address) {
     return rc;
 }
 
-void DatapickerImagePrivate::update() {
-    q->update();
-}
-
 void DatapickerImagePrivate::discretize() {
     q->m_editor->discretize(&q->processedPlotImage, &q->originalPlotImage, settings);
     //update segments
@@ -283,7 +274,6 @@ void DatapickerImagePrivate::makeSegments() {
     q->m_segments->makeSegments(q->processedPlotImage);
     if (plotPointsType == DatapickerImage::SegmentPoints)
         q->m_segments->setSegmentsVisible(true);
-    update();
 }
 
 DatapickerImagePrivate::~DatapickerImagePrivate() {
@@ -311,7 +301,6 @@ void DatapickerImagePrivate::updateFileName() {
         q->m_segments->setSegmentsVisible(false);
     }
 
-    update();
     RESET_CURSOR;
 }
 //##############################################################################
@@ -619,6 +608,5 @@ bool DatapickerImage::load(XmlStreamReader* reader) {
     }
 
     d->uploadImage(d->fileName);
-    update();
     return true;
 }

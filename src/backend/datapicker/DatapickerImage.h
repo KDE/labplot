@@ -81,7 +81,6 @@ class DatapickerImage: public AbstractPart, public scripted {
 		QRectF pageRect() const;
 		void setPageRect(const QRectF&);
 		QGraphicsScene *scene() const;
-		void update();
 		void setPrinting(bool) const;
         void setSelectedInView(const bool);
         void setPlotImageType(const DatapickerImage::PlotImageType&);
@@ -114,7 +113,6 @@ class DatapickerImage: public AbstractPart, public scripted {
 
     signals:
 		void requestProjectContextMenu(QMenu*);
-		void requestUpdate();
 
         void fileNameChanged(const QString&);
         void rotationAngleChanged(float);
