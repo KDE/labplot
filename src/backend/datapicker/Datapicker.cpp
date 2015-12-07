@@ -36,6 +36,7 @@
 #include "backend/datapicker/Transform.h"
 #include "backend/datapicker/DatapickerPoint.h"
 
+#include <QGraphicsScene>
 #include "KIcon"
 #include <KLocale>
 

@@ -53,13 +53,13 @@ class Segment {
 
 		typedef SegmentPrivate Private;
 
-	protected:
-		SegmentPrivate* const d_ptr;
-
 	private:
     	Q_DECLARE_PRIVATE(Segment)
         void init();
         DatapickerImage* m_image;
+
+	protected:
+		SegmentPrivate* const d_ptr;
 };
 
 #endif

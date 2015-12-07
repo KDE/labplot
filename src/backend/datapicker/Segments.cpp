@@ -28,6 +28,7 @@
 #include "backend/datapicker/Segment.h"
 #include "backend/datapicker/ImageEditor.h"
 
+#include <QGraphicsScene>
 #include <QImage>
 #include <QLine>
 

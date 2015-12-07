@@ -35,6 +35,7 @@
 #include "backend/datapicker/Segments.h"
 
 #include <QDesktopWidget>
+#include <QGraphicsScene>
 #include <QMenu>
 
 #include <KIcon>
@@ -50,11 +51,12 @@
  * * \ingroup datapicker
  */
 DatapickerImage::DatapickerImage(AbstractScriptingEngine* engine, const QString& name, bool loading)
-    : AbstractPart(name), scripted(engine), d(new DatapickerImagePrivate(this)),
+    : AbstractPart(name), scripted(engine),
       plotImageType(DatapickerImage::OriginalImage),
       isLoaded(false),
       m_segments(new Segments(this)),
       m_magnificationWindow(0),
+      d(new DatapickerImagePrivate(this)),
       m_editor(new ImageEditor()) {
 
     if (!loading)

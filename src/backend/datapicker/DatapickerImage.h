@@ -30,12 +30,15 @@
 #include "backend/core/AbstractPart.h"
 #include "backend/core/AbstractScriptingEngine.h"
 #include "backend/lib/macros.h"
-#include <QGraphicsScene>
+#include <QImage>
 #include <QVector3D>
 
 class DatapickerImagePrivate;
 class ImageEditor;
 class Segments;
+
+class QGraphicsScene;
+class QGraphicsPixmapItem;
 
 class DatapickerImage: public AbstractPart, public scripted {
 	Q_OBJECT

@@ -29,10 +29,10 @@
 #include "backend/datapicker/DatapickerImage.h"
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/datapicker/Datapicker.h"
 
 #include <QPainter>
+#include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QDesktopWidget>
 
@@ -43,8 +43,8 @@
  * \brief graphics-item class for curve-segment
  */
 
-Segment::Segment(DatapickerImage* image): d_ptr(new SegmentPrivate(this)),
-    m_image(image), length(0) {
+Segment::Segment(DatapickerImage* image):
+    length(0), m_image(image), d_ptr(new SegmentPrivate(this)) {
     m_image->scene()->addItem(this->graphicsItem());
     init();
 }
@@ -187,7 +187,7 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
                 for (int i = l; i <= h; i++) {
                     if (count%q->m_image->pointSeparation() == 0) {
                         bool positionUsed = false;
-                        QList<DatapickerPoint*> curvePointsList = datapicker->activeCurve()->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+                        const QList<DatapickerPoint*> curvePointsList = datapicker->activeCurve()->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
                         foreach (DatapickerPoint* point, curvePointsList) {
                             if ( point->position().point == QPoint(line->x1(), i)*scaleFactor )
                                 positionUsed = true;

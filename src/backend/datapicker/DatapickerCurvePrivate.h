@@ -34,7 +34,7 @@ class DatapickerCurvePrivate {
         QString name() const { return q->name(); };
         DatapickerCurve* const q;
         DatapickerCurve::Errors curveErrorTypes;
-		
+
         AbstractColumn* posXColumn;
         QString posXColumnPath;
         AbstractColumn* posYColumn;

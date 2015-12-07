@@ -26,12 +26,12 @@
  ***************************************************************************/
 
 #include "DatapickerCurve.h"
+#include "backend/datapicker/DatapickerCurvePrivate.h"
+#include "backend/datapicker/Datapicker.h"
+#include "backend/datapicker/DatapickerPoint.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/datapicker/DatapickerPoint.h"
-#include "backend/datapicker/Datapicker.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/datapicker/DatapickerCurvePrivate.h"
 
 #include <QMenu>
 #include <QVector3D>
@@ -109,7 +109,6 @@ QMenu* DatapickerCurve::createContextMenu() {
 
 Column* DatapickerCurve::appendColumn(const QString& name) {
     Column* col = new Column(i18n("Column"), AbstractColumn::Numeric);
-    col->setPlotDesignation(AbstractColumn::Y);
     col->insertRows(0, m_datasheet->rowCount());
     col->setName(name);
     m_datasheet->addChild(col);
@@ -277,7 +276,7 @@ void DatapickerCurve::setSelectedInView(const bool b) {
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
 void DatapickerCurve::updateDatasheet() {
-    beginMacro(i18n("%1:update datasheet", name()));
+    beginMacro(i18n("%1: update datasheet", name()));
 
     foreach (DatapickerPoint* point, children<DatapickerPoint>(IncludeHidden))
         updateData(point);
@@ -329,6 +328,7 @@ void DatapickerCurve::updateData(const DatapickerPoint* point) {
         d->minusDeltaYColumn->setValueAt(row, qAbs(data.y()));
     }
 }
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
