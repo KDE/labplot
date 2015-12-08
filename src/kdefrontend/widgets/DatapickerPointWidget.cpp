@@ -78,13 +78,6 @@ DatapickerPointWidget::DatapickerPointWidget(QWidget *parent): QWidget(parent) {
 	connect( ui.sbErrorBarSize, SIGNAL(valueChanged(double)), this, SLOT(errorBarSizeChanged(double)) );
 
 	init();
-
-//     TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::DatapickerPoint);
-//     ui.gridLayout->addWidget(templateHandler);
-//     templateHandler->show();
-//     connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-//     connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
-//     connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 }
 
 void DatapickerPointWidget::init() {
@@ -129,7 +122,7 @@ void DatapickerPointWidget::setDatapickerPoints(QList<DatapickerPoint*> list) {
 void DatapickerPointWidget::initConnections() {
 	connect(m_point, SIGNAL(positionChanged(DatapickerPoint::PositionWrapper)),
 	        this, SLOT(pointPositionChanged(DatapickerPoint::PositionWrapper)));
-	connect(m_point, SIGNAL(styleChanged(DatapickerPoint::PointsStyle)), this, SLOT(pointStyleChanged(DatapickerPoint::PointsStyle)));
+	connect(m_point, SIGNAL(pointStyleChanged(DatapickerPoint::PointsStyle)), this, SLOT(pointStyleChanged(DatapickerPoint::PointsStyle)));
 	connect(m_point, SIGNAL(sizeChanged(qreal)), this, SLOT(pointSizeChanged(qreal)));
 	connect(m_point, SIGNAL(rotationAngleChanged(qreal)), this, SLOT(pointRotationAngleChanged(qreal)));
 	connect(m_point, SIGNAL(opacityChanged(qreal)), this, SLOT(pointOpacityChanged(qreal)));
@@ -427,6 +420,7 @@ void DatapickerPointWidget::visibilityChanged(bool state) {
 		point->setVisible(state);
 	m_point->endMacro();
 }
+
 //*********************************************************
 //****** SLOTs for changes triggered in DatapickerPoint *********
 //*********************************************************
@@ -534,7 +528,6 @@ void DatapickerPointWidget::load() {
 
 	m_initializing = false;
 }
-
 
 void DatapickerPointWidget::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name

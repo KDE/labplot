@@ -496,7 +496,7 @@
        <item row="12" column="0" colspan="3">
         <widget class="QLabel" name="lTernaryScale">
          <property name="text">
-          <string>Scale(x+y+z)</string>
+          <string>x+y+z=</string>
          </property>
         </widget>
        </item>

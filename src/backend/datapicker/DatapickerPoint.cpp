@@ -48,8 +48,8 @@
 
 ErrorBarItem::ErrorBarItem(DatapickerPoint *parent, const ErrorBarType& type) : QGraphicsRectItem(parent->graphicsItem(), 0),
 	barLineItem(new QGraphicsLineItem(parent->graphicsItem(), 0)),
-	m_parentItem(parent),
-	m_type(type) {
+	m_type(type),
+	m_parentItem(parent) {
 
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
