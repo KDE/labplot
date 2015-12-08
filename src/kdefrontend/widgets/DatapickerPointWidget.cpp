@@ -245,7 +245,7 @@ void DatapickerPointWidget::styleChanged(int index) {
 
 	m_point->beginMacro(i18n("%1 DatapickerPoints: style changed", m_pointsList.count()));
 	foreach(DatapickerPoint* point, m_pointsList)
-		point->setStyle(style);
+		point->setPointStyle(style);
 	m_point->endMacro();
 }
 
@@ -514,7 +514,7 @@ void DatapickerPointWidget::load() {
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_point->position().point.x(),Worksheet::Centimeter) );
 	ui.cbPositionY->setCurrentIndex( (int) m_point->position().verticalPosition );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_point->position().point.y(),Worksheet::Centimeter) );
-	ui.cbStyle->setCurrentIndex( (int)m_point->style() );
+	ui.cbStyle->setCurrentIndex( (int)m_point->pointStyle() );
 	ui.sbSize->setValue( Worksheet::convertFromSceneUnits(m_point->size(), Worksheet::Point) );
 	ui.sbRotation->setValue( m_point->rotationAngle() );
 	ui.sbOpacity->setValue( round(m_point->opacity()*100.0) );
@@ -558,7 +558,7 @@ void DatapickerPointWidget::loadConfigFromTemplate(KConfig& config) {
 
 void DatapickerPointWidget::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group( "DatapickerPoint" );
-	ui.cbStyle->setCurrentIndex( group.readEntry("Style", (int)m_point->style()) );
+	ui.cbStyle->setCurrentIndex( group.readEntry("Style", (int)m_point->pointStyle()) );
 	ui.sbSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("Size", m_point->size()), Worksheet::Point) );
 	ui.sbRotation->setValue( group.readEntry("Rotation", m_point->rotationAngle()) );
 	ui.sbOpacity->setValue( round(group.readEntry("Opacity", m_point->opacity())*100.0) );
@@ -580,7 +580,7 @@ void DatapickerPointWidget::loadConfig(KConfig& config) {
 
 void DatapickerPointWidget::saveConfig(KConfig& config) {
 	KConfigGroup group = config.group( "DatapickerPoint" );
-	group.writeEntry("Style", ui.cbStyle->currentText());
+	group.writeEntry("PointStyle", ui.cbStyle->currentText());
 	group.writeEntry("Size", Worksheet::convertToSceneUnits(ui.sbSize->value(),Worksheet::Point));
 	group.writeEntry("Rotation", ui.sbRotation->value());
 	group.writeEntry("Opacity", ui.sbOpacity->value()/100 );

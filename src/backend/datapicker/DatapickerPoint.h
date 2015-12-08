@@ -94,7 +94,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
 	void setPosition(const QPointF&);
 
-	BASIC_D_ACCESSOR_DECL(PointsStyle, style, Style)
+	BASIC_D_ACCESSOR_DECL(PointsStyle, pointStyle, PointStyle)
 	BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 	BASIC_D_ACCESSOR_DECL(qreal, size, Size)
@@ -148,13 +148,13 @@ signals:
 	void visibleChanged(bool);
 	void changed();
 
-	friend class DatapickerPointSetStyleCmd;
+	friend class DatapickerPointSetPointStyleCmd;
 	friend class DatapickerPointSetSizeCmd;
 	friend class DatapickerPointSetRotationAngleCmd;
 	friend class DatapickerPointSetOpacityCmd;
 	friend class DatapickerPointSetBrushCmd;
 	friend class DatapickerPointSetPenCmd;
-	void styleChanged(DatapickerPoint::PointsStyle);
+	void pointStyleChanged(DatapickerPoint::PointsStyle);
 	void sizeChanged(qreal);
 	void rotationAngleChanged(qreal);
 	void opacityChanged(qreal);

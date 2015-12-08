@@ -214,7 +214,7 @@ void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
 		newPoint->setPen(oldPoint->pen());
 		newPoint->setRotationAngle(oldPoint->rotationAngle());
 		newPoint->setSize(oldPoint->size());
-		newPoint->setStyle(oldPoint->style());
+		newPoint->setPointStyle(oldPoint->pointStyle());
 		newPoint->setErrorBarBrush(oldPoint->errorBarBrush());
 		newPoint->setErrorBarSize(oldPoint->errorBarSize());
 		newPoint->setErrorBarPen(oldPoint->errorBarPen());

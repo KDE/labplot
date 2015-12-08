@@ -60,7 +60,7 @@ public:
 	qreal rotationAngle;
 	QRectF boundingRectangle;
 	QRectF transformedBoundingRectangle;
-	DatapickerPoint::PointsStyle style;
+	DatapickerPoint::PointsStyle pointStyle;
 	QBrush brush;
 	QPen pen;
 	qreal opacity;

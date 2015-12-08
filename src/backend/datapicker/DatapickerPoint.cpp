@@ -141,7 +141,7 @@ void DatapickerPoint::init() {
 	d->position.point.setX( group.readEntry("PositionXValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
 	d->position.point.setY( group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter)) );
 	d->scaleFactor = Worksheet::convertToSceneUnits(1, Worksheet::Point);
-	d->style = (DatapickerPoint::PointsStyle)group.readEntry("Style", (int)DatapickerPoint::Cross);
+	d->pointStyle = (DatapickerPoint::PointsStyle)group.readEntry("PointStyle", (int)DatapickerPoint::Cross);
 	d->size = group.readEntry("Size", Worksheet::convertToSceneUnits(2, Worksheet::Point));
 	d->rotationAngle = group.readEntry("Rotation", 0.0);
 	d->opacity = group.readEntry("Opacity", 1.0);
@@ -245,7 +245,7 @@ void DatapickerPoint::handlePageResize(double horizontalRatio, double verticalRa
 /* ============================ getter methods ================= */
 //point
 CLASS_SHARED_D_READER_IMPL(DatapickerPoint, DatapickerPoint::PositionWrapper, position, position)
-BASIC_SHARED_D_READER_IMPL(DatapickerPoint, DatapickerPoint::PointsStyle, style, style)
+BASIC_SHARED_D_READER_IMPL(DatapickerPoint, DatapickerPoint::PointsStyle, pointStyle, pointStyle)
 BASIC_SHARED_D_READER_IMPL(DatapickerPoint, qreal, opacity, opacity)
 BASIC_SHARED_D_READER_IMPL(DatapickerPoint, qreal, rotationAngle, rotationAngle)
 BASIC_SHARED_D_READER_IMPL(DatapickerPoint, qreal, size, size)
@@ -264,11 +264,11 @@ BASIC_SHARED_D_READER_IMPL(DatapickerPoint, bool, xSymmetricError, xSymmetricErr
 BASIC_SHARED_D_READER_IMPL(DatapickerPoint, bool, ySymmetricError, ySymmetricError)
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetStyle, DatapickerPoint::PointsStyle, style, retransform)
-void DatapickerPoint::setStyle(DatapickerPoint::PointsStyle newStyle) {
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPointStyle, DatapickerPoint::PointsStyle, pointStyle, retransform)
+void DatapickerPoint::setPointStyle(DatapickerPoint::PointsStyle newStyle) {
 	Q_D(DatapickerPoint);
-	if (newStyle != d->style)
-		exec(new DatapickerPointSetStyleCmd(d, newStyle, i18n("%1: set point's style")));
+	if (newStyle != d->pointStyle)
+		exec(new DatapickerPointSetPointStyleCmd(d, newStyle, i18n("%1: set point's style")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetSize, qreal, size, retransform)
@@ -594,7 +594,7 @@ void DatapickerPointPrivate::retransform() {
 	suppressItemChangeEvent=true;
 	setPos(itemPos);
 	suppressItemChangeEvent=false;
-	QPainterPath path = DatapickerPoint::pointPathFromStyle(style);
+	QPainterPath path = DatapickerPoint::pointPathFromStyle(pointStyle);
 	boundingRectangle = path.boundingRect();
 	recalcShapeAndBoundingRect();
 	updateData();
@@ -702,7 +702,7 @@ void DatapickerPointPrivate::paint(QPainter *painter, const QStyleOptionGraphics
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
-	QPainterPath path = DatapickerPoint::pointPathFromStyle(style);
+	QPainterPath path = DatapickerPoint::pointPathFromStyle(pointStyle);
 	QTransform trafo;
 	trafo.scale(size, size);
 	trafo.scale(scaleFactor, scaleFactor);
@@ -809,7 +809,7 @@ void DatapickerPoint::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	writer->writeStartElement( "properties" );
-	writer->writeAttribute( "style", QString::number(d->style) );
+	writer->writeAttribute( "pointStyle", QString::number(d->pointStyle) );
 	writer->writeAttribute( "opacity", QString::number(d->opacity) );
 	writer->writeAttribute( "rotation", QString::number(d->rotationAngle) );
 	writer->writeAttribute( "size", QString::number(d->size) );
@@ -969,11 +969,11 @@ bool DatapickerPoint::load(XmlStreamReader* reader) {
 		} else if (reader->name() == "properties") {
 			attribs = reader->attributes();
 
-			str = attribs.value("style").toString();
+			str = attribs.value("pointStyle").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'style'"));
+				reader->raiseWarning(attributeWarning.arg("'pointStyle'"));
 			else
-				d->style = (DatapickerPoint::PointsStyle)str.toInt();
+				d->pointStyle = (DatapickerPoint::PointsStyle)str.toInt();
 
 			str = attribs.value("opacity").toString();
 			if(str.isEmpty())
