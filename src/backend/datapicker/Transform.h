@@ -31,22 +31,22 @@
 #include "backend/datapicker/DatapickerImage.h"
 
 class Transform {
-    public:
-        Transform();
-        QVector3D mapSceneToLogical(const QPointF&,const DatapickerImage::ReferencePoints&);
-        QVector3D mapSceneLengthToLogical(const QPointF&,const DatapickerImage::ReferencePoints&);
+public:
+	Transform();
+	QVector3D mapSceneToLogical(const QPointF&,const DatapickerImage::ReferencePoints&);
+	QVector3D mapSceneLengthToLogical(const QPointF&,const DatapickerImage::ReferencePoints&);
 
-    private:
-        bool mapTypeToCartesian(const DatapickerImage::ReferencePoints&);
-        QVector3D mapCartesianToType(const QPointF&, const DatapickerImage::ReferencePoints&) const;
+private:
+	bool mapTypeToCartesian(const DatapickerImage::ReferencePoints&);
+	QVector3D mapCartesianToType(const QPointF&, const DatapickerImage::ReferencePoints&) const;
 
-        //logical coordinates
-        double x[4];
-        double y[4];
+	//logical coordinates
+	double x[4];
+	double y[4];
 
-        //Scene coordinates
-        double X[4];
-        double Y[4];
+	//Scene coordinates
+	double X[4];
+	double Y[4];
 
 };
 

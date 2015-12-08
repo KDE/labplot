@@ -43,47 +43,47 @@ class QPointF;
 class QVector3D;
 
 class Datapicker : public AbstractPart, public scripted {
-    Q_OBJECT
+	Q_OBJECT
 
-    public:
-        Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading = false);
+public:
+	Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading = false);
 
-        virtual QIcon icon() const;
-        virtual QMenu* createContextMenu();
-        virtual QWidget* view() const;
+	virtual QIcon icon() const;
+	virtual QMenu* createContextMenu();
+	virtual QWidget* view() const;
 
-        DatapickerCurve* activeCurve();
-        Spreadsheet* currentSpreadsheet() const;
-        DatapickerImage* image() const;
+	DatapickerCurve* activeCurve();
+	Spreadsheet* currentSpreadsheet() const;
+	DatapickerImage* image() const;
 
-        void setChildSelectedInView(int index, bool selected);
-		void setSelectedInView(const bool);
-        void addNewPoint(const QPointF&, AbstractAspect*);
+	void setChildSelectedInView(int index, bool selected);
+	void setSelectedInView(const bool);
+	void addNewPoint(const QPointF&, AbstractAspect*);
 
-        QVector3D mapSceneToLogical(const QPointF&) const;
-        QVector3D mapSceneLengthToLogical(const QPointF&) const;
+	QVector3D mapSceneToLogical(const QPointF&) const;
+	QVector3D mapSceneLengthToLogical(const QPointF&) const;
 
-        virtual void save(QXmlStreamWriter*) const;
-        virtual bool load(XmlStreamReader*);
+	virtual void save(QXmlStreamWriter*) const;
+	virtual bool load(XmlStreamReader*);
 
-    public slots:
-        virtual void childSelected(const AbstractAspect*);
+public slots:
+	virtual void childSelected(const AbstractAspect*);
 
-    private:
-        DatapickerCurve* m_activeCurve;
-        Transform* m_transform;
-        DatapickerImage* m_image;
-        void init();
+private:
+	DatapickerCurve* m_activeCurve;
+	Transform* m_transform;
+	DatapickerImage* m_image;
+	void init();
 
-    private slots:
-        virtual void childDeselected(const AbstractAspect*);
-        void handleChildAspectAboutToBeRemoved(const AbstractAspect*);
-        void handleChildAspectAdded(const AbstractAspect*);
-        void handleAspectAboutToBeRemoved(const AbstractAspect*);
+private slots:
+	virtual void childDeselected(const AbstractAspect*);
+	void handleChildAspectAboutToBeRemoved(const AbstractAspect*);
+	void handleChildAspectAdded(const AbstractAspect*);
+	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 
-    signals:
-        void datapickerItemSelected(int);
-        void childAspectAdded(const AbstractAspect*);
+signals:
+	void datapickerItemSelected(int);
+	void childAspectAdded(const AbstractAspect*);
 };
 
 #endif

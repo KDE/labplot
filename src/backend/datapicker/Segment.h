@@ -36,30 +36,30 @@ class SegmentPrivate;
 class DatapickerImage;
 
 class Segment {
-	public:
-        explicit Segment(DatapickerImage*);
-		~Segment();
+public:
+	explicit Segment(DatapickerImage*);
+	~Segment();
 
-        QList<QLine*> path;
-        int yLast;
-        int length;
+	QList<QLine*> path;
+	int yLast;
+	int length;
 
-        QGraphicsItem *graphicsItem() const;
-		void setParentGraphicsItem(QGraphicsItem*);
+	QGraphicsItem *graphicsItem() const;
+	void setParentGraphicsItem(QGraphicsItem*);
 
-        bool isVisible() const;
-        void setVisible(bool);
-        void retransform();
+	bool isVisible() const;
+	void setVisible(bool);
+	void retransform();
 
-		typedef SegmentPrivate Private;
+	typedef SegmentPrivate Private;
 
-	private:
-    	Q_DECLARE_PRIVATE(Segment)
-        void init();
-        DatapickerImage* m_image;
+private:
+	Q_DECLARE_PRIVATE(Segment)
+	void init();
+	DatapickerImage* m_image;
 
-	protected:
-		SegmentPrivate* const d_ptr;
+protected:
+	SegmentPrivate* const d_ptr;
 };
 
 #endif

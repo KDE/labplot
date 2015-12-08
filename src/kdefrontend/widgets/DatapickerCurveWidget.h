@@ -36,36 +36,36 @@
 class DatapickerPointWidget;
 
 class DatapickerCurveWidget : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
-    public:
-        explicit DatapickerCurveWidget(QWidget*);
-        ~DatapickerCurveWidget();
+public:
+	explicit DatapickerCurveWidget(QWidget*);
+	~DatapickerCurveWidget();
 
-        void setCurves(QList<DatapickerCurve*>);
-        void load();
+	void setCurves(QList<DatapickerCurve*>);
+	void load();
 
-    private:
-        Ui::DatapickerCurveWidget ui;
-        void initConnections();
+private:
+	Ui::DatapickerCurveWidget ui;
+	void initConnections();
 
-        DatapickerCurve* m_curve;
-        QList<DatapickerCurve*> m_curveList;
-        DatapickerPointWidget* datapickerPointWidget;
-        bool m_initializing;
-        bool m_suppressTypeChange;
+	DatapickerCurve* m_curve;
+	QList<DatapickerCurve*> m_curveList;
+	DatapickerPointWidget* datapickerPointWidget;
+	bool m_initializing;
+	bool m_suppressTypeChange;
 
-    private slots:
-        //SLOTs for changes triggered in AxisDock
-        void nameChanged();
-        void commentChanged();
-        void updateDatapickerPointList();
-        void xErrorTypeChanged(int);
-        void yErrorTypeChanged(int);
+private slots:
+	//SLOTs for changes triggered in AxisDock
+	void nameChanged();
+	void commentChanged();
+	void updateDatapickerPointList();
+	void xErrorTypeChanged(int);
+	void yErrorTypeChanged(int);
 
-        //SLOTs for changes triggered in Axis
-        void curveDescriptionChanged(const AbstractAspect*);
-        void curveErrorsChanged(DatapickerCurve::Errors);
+	//SLOTs for changes triggered in Axis
+	void curveDescriptionChanged(const AbstractAspect*);
+	void curveErrorsChanged(DatapickerCurve::Errors);
 };
 
 #endif // DATAPICKERCURVEWIDGET_H

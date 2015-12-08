@@ -31,61 +31,61 @@
 #include <QGraphicsItem>
 
 class DatapickerPointPrivate: public QGraphicsItem {
-	public:
-        explicit DatapickerPointPrivate(DatapickerPoint*);
+public:
+	explicit DatapickerPointPrivate(DatapickerPoint*);
 
-		float scaleFactor;
+	float scaleFactor;
 
-        QPointF plusDeltaXPos;
-        QPointF minusDeltaXPos;
-        QPointF plusDeltaYPos;
-        QPointF minusDeltaYPos;
+	QPointF plusDeltaXPos;
+	QPointF minusDeltaXPos;
+	QPointF plusDeltaYPos;
+	QPointF minusDeltaYPos;
 
-        DatapickerPoint::PositionWrapper position;
+	DatapickerPoint::PositionWrapper position;
 
-		QString name() const;
-		void retransform();
-		bool swapVisible(bool on);
-		virtual void recalcShapeAndBoundingRect();
-		void updatePosition();
-        void updateData();
-        void retransformErrorBar();
+	QString name() const;
+	void retransform();
+	bool swapVisible(bool on);
+	virtual void recalcShapeAndBoundingRect();
+	void updatePosition();
+	void updateData();
+	void retransformErrorBar();
 
-		bool suppressItemChangeEvent;
-		bool suppressRetransform;
-		bool m_printing;
-		bool m_hovered;
-		bool m_suppressHoverEvents;
-		
-        qreal rotationAngle;
-        QRectF boundingRectangle;
-        QRectF transformedBoundingRectangle;
-        DatapickerPoint::PointsStyle style;
-        QBrush brush;
-        QPen pen;
-        qreal opacity;
-        qreal size;
-        QPainterPath itemShape;
+	bool suppressItemChangeEvent;
+	bool suppressRetransform;
+	bool m_printing;
+	bool m_hovered;
+	bool m_suppressHoverEvents;
 
-        QBrush errorBarBrush;
-        QPen errorBarPen;
-        qreal errorBarSize;
-        bool xSymmetricError;
-        bool ySymmetricError;
+	qreal rotationAngle;
+	QRectF boundingRectangle;
+	QRectF transformedBoundingRectangle;
+	DatapickerPoint::PointsStyle style;
+	QBrush brush;
+	QPen pen;
+	qreal opacity;
+	qreal size;
+	QPainterPath itemShape;
 
-		//reimplemented from QGraphicsItem
-		virtual QRectF boundingRect() const;
- 		virtual QPainterPath shape() const;
-		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
-		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+	QBrush errorBarBrush;
+	QPen errorBarPen;
+	qreal errorBarSize;
+	bool xSymmetricError;
+	bool ySymmetricError;
 
-        DatapickerPoint* const q;
+	//reimplemented from QGraphicsItem
+	virtual QRectF boundingRect() const;
+	virtual QPainterPath shape() const;
+	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
+	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
-	private:
-		virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
-		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
-		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
-		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
+	DatapickerPoint* const q;
+
+private:
+	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
+	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
 };
 
 #endif

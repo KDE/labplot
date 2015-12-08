@@ -36,61 +36,61 @@ class DatapickerPointWidget;
 class QxtSpanSlider;
 
 class ImageWidget : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit ImageWidget(QWidget*);
+	explicit ImageWidget(QWidget*);
 
-    void setImages(QList<DatapickerImage*>);
-    void load();
+	void setImages(QList<DatapickerImage*>);
+	void load();
 
 private:
-    Ui::ImageWidget ui;
-    void initConnections();
+	Ui::ImageWidget ui;
+	void initConnections();
 
-    DatapickerImage* m_image;
-    QList<DatapickerImage*> m_imagesList;
-    bool m_initializing;
-    DatapickerPointWidget* datapickerPointWidget;
+	DatapickerImage* m_image;
+	QList<DatapickerImage*> m_imagesList;
+	bool m_initializing;
+	DatapickerPointWidget* datapickerPointWidget;
 
-    QxtSpanSlider* ssIntensity;
-    QxtSpanSlider* ssForeground;
-    QxtSpanSlider* ssHue;
-    QxtSpanSlider* ssSaturation;
-    QxtSpanSlider* ssValue;
+	QxtSpanSlider* ssIntensity;
+	QxtSpanSlider* ssForeground;
+	QxtSpanSlider* ssHue;
+	QxtSpanSlider* ssSaturation;
+	QxtSpanSlider* ssValue;
 
 private slots:
-    //SLOTs for changes triggered in ImageWidget
-    //"General"-tab
-    void nameChanged();
-    void commentChanged();
-    void fileNameChanged();
-    void selectFile();
-    void plotImageTypeChanged(int);
+	//SLOTs for changes triggered in ImageWidget
+	//"General"-tab
+	void nameChanged();
+	void commentChanged();
+	void fileNameChanged();
+	void selectFile();
+	void plotImageTypeChanged(int);
 
-    //"Edit image"-tab
-    void rotationChanged(double);
-    void intensitySpanChanged(int, int);
-    void foregroundSpanChanged(int, int);
-    void hueSpanChanged(int, int);
-    void saturationSpanChanged(int, int);
-    void valueSpanChanged(int, int);
+	//"Edit image"-tab
+	void rotationChanged(double);
+	void intensitySpanChanged(int, int);
+	void foregroundSpanChanged(int, int);
+	void hueSpanChanged(int, int);
+	void saturationSpanChanged(int, int);
+	void valueSpanChanged(int, int);
 
-    void minSegmentLengthChanged(int);
-    void pointSeparationChanged(int);
-    void graphTypeChanged();
-    void ternaryScaleChanged(double);
-    void logicalPositionChanged();
+	void minSegmentLengthChanged(int);
+	void pointSeparationChanged(int);
+	void graphTypeChanged();
+	void ternaryScaleChanged(double);
+	void logicalPositionChanged();
 
-    //SLOTs for changes triggered in ImageWidget
-    void imageDescriptionChanged(const AbstractAspect*);
-    void imageFileNameChanged(const QString&);
-    void imageRotationAngleChanged(float);
-    void imageAxisPointsChanged(const DatapickerImage::ReferencePoints&);
-    void imageEditorSettingsChanged(const DatapickerImage::EditorSettings&);
-    void imageMinSegmentLengthChanged(const int);
-    void updateDatapickerPointList();
-    void handleWidgetActions();
+	//SLOTs for changes triggered in ImageWidget
+	void imageDescriptionChanged(const AbstractAspect*);
+	void imageFileNameChanged(const QString&);
+	void imageRotationAngleChanged(float);
+	void imageAxisPointsChanged(const DatapickerImage::ReferencePoints&);
+	void imageEditorSettingsChanged(const DatapickerImage::EditorSettings&);
+	void imageMinSegmentLengthChanged(const int);
+	void updateDatapickerPointList();
+	void handleWidgetActions();
 };
 
 #endif //IMAGEWIDGET_H

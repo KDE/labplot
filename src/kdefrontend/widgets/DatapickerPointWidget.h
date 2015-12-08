@@ -31,24 +31,24 @@
 #include "ui_datapickerpointwidget.h"
 #include "backend/datapicker/DatapickerPoint.h"
 
-class DatapickerPointWidget: public QWidget{
+class DatapickerPointWidget: public QWidget {
 	Q_OBJECT
 
 public:
-    explicit DatapickerPointWidget(QWidget *);
+	explicit DatapickerPointWidget(QWidget *);
 
-    void setDatapickerPoints(QList<DatapickerPoint*>);
+	void setDatapickerPoints(QList<DatapickerPoint*>);
 	void load();
 
-    void hidePositionWidgets();
+	void hidePositionWidgets();
 
 private:
-    Ui::DatapickerPointWidget ui;
-    DatapickerPoint *m_point;
-    QList<DatapickerPoint*> m_pointsList;
+	Ui::DatapickerPointWidget ui;
+	DatapickerPoint *m_point;
+	QList<DatapickerPoint*> m_pointsList;
 	bool m_initializing;
 
-    void init();
+	void init();
 	void initConnections();
 
 signals:
@@ -59,34 +59,34 @@ private slots:
 	void positionYChanged(int);
 	void customPositionXChanged(double);
 	void customPositionYChanged(double);
-    void styleChanged(int);
-    void sizeChanged(double);
-    void rotationChanged(int);
-    void opacityChanged(int);
-    void fillingStyleChanged(int);
-    void fillingColorChanged(const QColor&);
-    void borderStyleChanged(int);
-    void borderColorChanged(const QColor&);
-    void borderWidthChanged(double);
-    void visibilityChanged(bool);
-    void errorBarFillingStyleChanged(int);
-    void errorBarFillingColorChanged(const QColor&);
-    void errorBarSizeChanged(double);
+	void styleChanged(int);
+	void sizeChanged(double);
+	void rotationChanged(int);
+	void opacityChanged(int);
+	void fillingStyleChanged(int);
+	void fillingColorChanged(const QColor&);
+	void borderStyleChanged(int);
+	void borderColorChanged(const QColor&);
+	void borderWidthChanged(double);
+	void visibilityChanged(bool);
+	void errorBarFillingStyleChanged(int);
+	void errorBarFillingColorChanged(const QColor&);
+	void errorBarSizeChanged(double);
 
-    void pointPositionChanged(const DatapickerPoint::PositionWrapper&);
-    void pointStyleChanged(DatapickerPoint::PointsStyle);
-    void pointSizeChanged(qreal);
-    void pointRotationAngleChanged(qreal);
-    void pointOpacityChanged(qreal);
-    void pointBrushChanged(QBrush);
-    void pointPenChanged(const QPen&);
-    void pointVisibleChanged(bool);
-    void pointErrorBarSizeChanged(qreal);
-    void pointErrorBarBrushChanged(QBrush);
+	void pointPositionChanged(const DatapickerPoint::PositionWrapper&);
+	void pointStyleChanged(DatapickerPoint::PointsStyle);
+	void pointSizeChanged(qreal);
+	void pointRotationAngleChanged(qreal);
+	void pointOpacityChanged(qreal);
+	void pointBrushChanged(QBrush);
+	void pointPenChanged(const QPen&);
+	void pointVisibleChanged(bool);
+	void pointErrorBarSizeChanged(qreal);
+	void pointErrorBarBrushChanged(QBrush);
 
-    void loadConfigFromTemplate(KConfig&);
-    void loadConfig(KConfig&);
-    void saveConfig(KConfig&);
+	void loadConfigFromTemplate(KConfig&);
+	void loadConfig(KConfig&);
+	void saveConfig(KConfig&);
 };
 
 #endif

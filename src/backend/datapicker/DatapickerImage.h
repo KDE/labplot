@@ -1,10 +1,10 @@
-  /***************************************************************************
-    File                 : DatapickerImage.h
-    Project              : LabPlot
-    Description          : Worksheet for Datapicker
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
- ***************************************************************************/
+/***************************************************************************
+  File                 : DatapickerImage.h
+  Project              : LabPlot
+  Description          : Worksheet for Datapicker
+  --------------------------------------------------------------------
+  Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+***************************************************************************/
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -43,90 +43,90 @@ class QGraphicsPixmapItem;
 class DatapickerImage: public AbstractPart, public scripted {
 	Q_OBJECT
 
-	public:
-        DatapickerImage(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
-        ~DatapickerImage();
+public:
+	DatapickerImage(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
+	~DatapickerImage();
 
-        enum GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary};
-        enum ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
-        enum PlotImageType { OriginalImage, ProcessedImage };
-        enum PointsType { AxisPoints, CurvePoints, SegmentPoints };
+	enum GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary};
+	enum ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
+	enum PlotImageType { OriginalImage, ProcessedImage };
+	enum PointsType { AxisPoints, CurvePoints, SegmentPoints };
 
-        struct ReferencePoints {
-            GraphType type;
-            QPointF scenePos[3];
-            QVector3D logicalPos[3];
-            double ternaryScale;
-        };
+	struct ReferencePoints {
+		GraphType type;
+		QPointF scenePos[3];
+		QVector3D logicalPos[3];
+		double ternaryScale;
+	};
 
-        struct EditorSettings {
-          ColorAttributes type;
-          int intensityThresholdLow;
-          int intensityThresholdHigh;
-          int foregroundThresholdLow;
-          int foregroundThresholdHigh;
-          int hueThresholdLow;
-          int hueThresholdHigh;
-          int saturationThresholdLow;
-          int saturationThresholdHigh;
-          int valueThresholdLow;
-          int valueThresholdHigh;
-        };
+	struct EditorSettings {
+		ColorAttributes type;
+		int intensityThresholdLow;
+		int intensityThresholdHigh;
+		int foregroundThresholdLow;
+		int foregroundThresholdHigh;
+		int hueThresholdLow;
+		int hueThresholdHigh;
+		int saturationThresholdLow;
+		int saturationThresholdHigh;
+		int valueThresholdLow;
+		int valueThresholdHigh;
+	};
 
-		virtual QIcon icon() const;
-		virtual QMenu* createContextMenu();
-		void createContextMenu(QMenu*);
-		virtual QWidget* view() const;
+	virtual QIcon icon() const;
+	virtual QMenu* createContextMenu();
+	void createContextMenu(QMenu*);
+	virtual QWidget* view() const;
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+	virtual void save(QXmlStreamWriter*) const;
+	virtual bool load(XmlStreamReader*);
 
-		QRectF pageRect() const;
-		void setPageRect(const QRectF&);
-		QGraphicsScene *scene() const;
-		void setPrinting(bool) const;
-        void setSelectedInView(const bool);
-        void setPlotImageType(const DatapickerImage::PlotImageType&);
-        void setSegmentVisible(bool);
+	QRectF pageRect() const;
+	void setPageRect(const QRectF&);
+	QGraphicsScene *scene() const;
+	void setPrinting(bool) const;
+	void setSelectedInView(const bool);
+	void setPlotImageType(const DatapickerImage::PlotImageType&);
+	void setSegmentVisible(bool);
 
-        bool isLoaded;
-        QImage originalPlotImage;
-        QImage processedPlotImage;
-        PlotImageType plotImageType;
-        QGraphicsPixmapItem* m_magnificationWindow;
+	bool isLoaded;
+	QImage originalPlotImage;
+	QImage processedPlotImage;
+	PlotImageType plotImageType;
+	QGraphicsPixmapItem* m_magnificationWindow;
 
-        CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
-        CLASS_D_ACCESSOR_DECL(DatapickerImage::ReferencePoints, axisPoints, AxisPoints)
-        CLASS_D_ACCESSOR_DECL(DatapickerImage::EditorSettings, settings, Settings)
-        BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle)
-        BASIC_D_ACCESSOR_DECL(PointsType, plotPointsType, PlotPointsType)
-        BASIC_D_ACCESSOR_DECL(int, pointSeparation, PointSeparation)
-        BASIC_D_ACCESSOR_DECL(int, minSegmentLength, minSegmentLength)
+	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
+	CLASS_D_ACCESSOR_DECL(DatapickerImage::ReferencePoints, axisPoints, AxisPoints)
+	CLASS_D_ACCESSOR_DECL(DatapickerImage::EditorSettings, settings, Settings)
+	BASIC_D_ACCESSOR_DECL(float, rotationAngle, RotationAngle)
+	BASIC_D_ACCESSOR_DECL(PointsType, plotPointsType, PlotPointsType)
+	BASIC_D_ACCESSOR_DECL(int, pointSeparation, PointSeparation)
+	BASIC_D_ACCESSOR_DECL(int, minSegmentLength, minSegmentLength)
 
-        typedef DatapickerImagePrivate Private;
+	typedef DatapickerImagePrivate Private;
 
-    private:
-		void init();
-        void initSceneParameters();
+private:
+	void init();
+	void initSceneParameters();
 
-        DatapickerImagePrivate* const d;
-        friend class DatapickerImagePrivate;
-        Segments* m_segments;
-        ImageEditor* m_editor;
+	DatapickerImagePrivate* const d;
+	friend class DatapickerImagePrivate;
+	Segments* m_segments;
+	ImageEditor* m_editor;
 
-    signals:
-		void requestProjectContextMenu(QMenu*);
-		void requestUpdate();
+signals:
+	void requestProjectContextMenu(QMenu*);
+	void requestUpdate();
 
-        void fileNameChanged(const QString&);
-        void rotationAngleChanged(float);
-        void axisPointsChanged(const DatapickerImage::ReferencePoints&);
-        void settingsChanged(const DatapickerImage::EditorSettings&);
-        void minSegmentLengthChanged(const int);
-        friend class DatapickerImageSetFileNameCmd;
-        friend class DatapickerImageSetRotationAngleCmd;
-        friend class DatapickerImageSetAxisPointsCmd;
-        friend class DatapickerImageSetSettingsCmd;
-        friend class DatapickerImageSetMinSegmentLengthCmd;
+	void fileNameChanged(const QString&);
+	void rotationAngleChanged(float);
+	void axisPointsChanged(const DatapickerImage::ReferencePoints&);
+	void settingsChanged(const DatapickerImage::EditorSettings&);
+	void minSegmentLengthChanged(const int);
+	friend class DatapickerImageSetFileNameCmd;
+	friend class DatapickerImageSetRotationAngleCmd;
+	friend class DatapickerImageSetAxisPointsCmd;
+	friend class DatapickerImageSetSettingsCmd;
+	friend class DatapickerImageSetMinSegmentLengthCmd;
 };
 #endif

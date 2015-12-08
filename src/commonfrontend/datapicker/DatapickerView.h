@@ -39,30 +39,30 @@ class QMenu;
 class QToolBar;
 
 class DatapickerView : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
-    public:
-        explicit DatapickerView(Datapicker*);
-        virtual ~DatapickerView();
+public:
+	explicit DatapickerView(Datapicker*);
+	virtual ~DatapickerView();
 
-		void createContextMenu(QMenu*) const;
-		void fillToolBar(QToolBar*);
-        int currentIndex() const;
+	void createContextMenu(QMenu*) const;
+	void fillToolBar(QToolBar*);
+	int currentIndex() const;
 
-    private:
-        TabWidget* m_tabWidget;
-        Datapicker* m_datapicker;
-        int lastSelectedIndex;
-        bool m_initializing;
+private:
+	TabWidget* m_tabWidget;
+	Datapicker* m_datapicker;
+	int lastSelectedIndex;
+	bool m_initializing;
 
-    private  slots:
-        void showTabContextMenu(const QPoint&);
-        void itemSelected(int);
-        void tabChanged(int);
-        void tabMoved(int,int);
-        void handleDescriptionChanged(const AbstractAspect*);
-        void handleAspectAdded(const AbstractAspect*);
-        void handleAspectAboutToBeRemoved(const AbstractAspect*);
+private  slots:
+	void showTabContextMenu(const QPoint&);
+	void itemSelected(int);
+	void tabChanged(int);
+	void tabMoved(int,int);
+	void handleDescriptionChanged(const AbstractAspect*);
+	void handleAspectAdded(const AbstractAspect*);
+	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 };
 
 #endif

@@ -28,27 +28,29 @@
 #define DATAPICKERCURVEPRIVATE_H
 
 class DatapickerCurvePrivate {
-    public:
-        explicit DatapickerCurvePrivate(DatapickerCurve* curve) : q(curve) {};
+public:
+	explicit DatapickerCurvePrivate(DatapickerCurve* curve) : q(curve) {};
 
-        QString name() const { return q->name(); };
-        DatapickerCurve* const q;
-        DatapickerCurve::Errors curveErrorTypes;
+	QString name() const {
+		return q->name();
+	};
+	DatapickerCurve* const q;
+	DatapickerCurve::Errors curveErrorTypes;
 
-        AbstractColumn* posXColumn;
-        QString posXColumnPath;
-        AbstractColumn* posYColumn;
-        QString posYColumnPath;
-        AbstractColumn* posZColumn;
-        QString posZColumnPath;
-        AbstractColumn* plusDeltaXColumn;
-        QString plusDeltaXColumnPath;
-        AbstractColumn* minusDeltaXColumn;
-        QString minusDeltaXColumnPath;
-        AbstractColumn* plusDeltaYColumn;
-        QString plusDeltaYColumnPath;
-        AbstractColumn* minusDeltaYColumn;
-        QString minusDeltaYColumnPath;
+	AbstractColumn* posXColumn;
+	QString posXColumnPath;
+	AbstractColumn* posYColumn;
+	QString posYColumnPath;
+	AbstractColumn* posZColumn;
+	QString posZColumnPath;
+	AbstractColumn* plusDeltaXColumn;
+	QString plusDeltaXColumnPath;
+	AbstractColumn* minusDeltaXColumn;
+	QString minusDeltaXColumnPath;
+	AbstractColumn* plusDeltaYColumn;
+	QString plusDeltaYColumnPath;
+	AbstractColumn* minusDeltaYColumn;
+	QString minusDeltaYColumnPath;
 };
 
 #endif

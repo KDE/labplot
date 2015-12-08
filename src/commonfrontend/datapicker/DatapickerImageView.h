@@ -43,101 +43,101 @@ class Transform;
 class QActionGroup;
 
 class DatapickerImageView : public QGraphicsView {
-    Q_OBJECT
+	Q_OBJECT
 
-    public:
-        explicit DatapickerImageView(DatapickerImage* image);
+public:
+	explicit DatapickerImageView(DatapickerImage* image);
 
-        enum ExportFormat{Pdf, Eps, Svg, Png};
+	enum ExportFormat {Pdf, Eps, Svg, Png};
 
-        void setScene(QGraphicsScene*);
-        void exportToFile(const QString&, const ExportFormat, const int);
+	void setScene(QGraphicsScene*);
+	void exportToFile(const QString&, const ExportFormat, const int);
 
-    private:
-        enum MouseMode{SelectAndEditMode, NavigationMode, ZoomSelectionMode, SelectAndMoveMode};
+private:
+	enum MouseMode {SelectAndEditMode, NavigationMode, ZoomSelectionMode, SelectAndMoveMode};
 
-        void initActions();
-        void initMenus();
-        void drawForeground(QPainter*, const QRectF&);
-        void drawBackground(QPainter*, const QRectF&);
-        void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect);
+	void initActions();
+	void initMenus();
+	void drawForeground(QPainter*, const QRectF&);
+	void drawBackground(QPainter*, const QRectF&);
+	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect);
 
-        //events
-        void contextMenuEvent(QContextMenuEvent*);
-        void wheelEvent(QWheelEvent*);
-        void mousePressEvent(QMouseEvent*);
-        void mouseReleaseEvent(QMouseEvent*);
-        void mouseMoveEvent(QMouseEvent*);
+	//events
+	void contextMenuEvent(QContextMenuEvent*);
+	void wheelEvent(QWheelEvent*);
+	void mousePressEvent(QMouseEvent*);
+	void mouseReleaseEvent(QMouseEvent*);
+	void mouseMoveEvent(QMouseEvent*);
 
-        DatapickerImage* m_image;
-		Datapicker* m_datapicker;
-        Transform* m_transform;
-        MouseMode m_mouseMode;
-        bool m_selectionBandIsShown;
-        QPoint m_selectionStart;
-        QPoint m_selectionEnd;
-        int magnificationFactor;
-        float m_rotationAngle;
+	DatapickerImage* m_image;
+	Datapicker* m_datapicker;
+	Transform* m_transform;
+	MouseMode m_mouseMode;
+	bool m_selectionBandIsShown;
+	QPoint m_selectionStart;
+	QPoint m_selectionEnd;
+	int magnificationFactor;
+	float m_rotationAngle;
 
-        //Menus
-        QMenu* m_zoomMenu;
-        QMenu* m_viewMouseModeMenu;
-        QMenu* m_viewImageMenu;
-        QMenu* m_navigationMenu;
-        QMenu* m_magnificationMenu;
+	//Menus
+	QMenu* m_zoomMenu;
+	QMenu* m_viewMouseModeMenu;
+	QMenu* m_viewImageMenu;
+	QMenu* m_navigationMenu;
+	QMenu* m_magnificationMenu;
 
-        QToolButton* tbZoom;
-        QAction* currentZoomAction;
+	QToolButton* tbZoom;
+	QAction* currentZoomAction;
 
-        //Actions
-        QAction* zoomInViewAction;
-        QAction* zoomOutViewAction;
-        QAction* zoomOriginAction;
-        QAction* zoomFitPageHeightAction;
-        QAction* zoomFitPageWidthAction;
+	//Actions
+	QAction* zoomInViewAction;
+	QAction* zoomOutViewAction;
+	QAction* zoomOriginAction;
+	QAction* zoomFitPageHeightAction;
+	QAction* zoomFitPageWidthAction;
 
-        QAction* setAxisPointsAction;
-        QAction* setCurvePointsAction;
-        QAction* selectSegmentAction;
+	QAction* setAxisPointsAction;
+	QAction* setCurvePointsAction;
+	QAction* selectSegmentAction;
 
-        QAction* addCurveAction;
+	QAction* addCurveAction;
 
-        QAction* navigationModeAction;
-        QAction* zoomSelectionModeAction;
-        QAction* selectAndEditModeAction;
-        QAction* selectAndMoveModeAction;
+	QAction* navigationModeAction;
+	QAction* zoomSelectionModeAction;
+	QAction* selectAndEditModeAction;
+	QAction* selectAndMoveModeAction;
 
-        QActionGroup* navigationActionGroup;
-        QAction* shiftLeftAction;
-        QAction* shiftRightAction;
-        QAction* shiftDownAction;
-        QAction* shiftUpAction;
+	QActionGroup* navigationActionGroup;
+	QAction* shiftLeftAction;
+	QAction* shiftRightAction;
+	QAction* shiftDownAction;
+	QAction* shiftUpAction;
 
-        QActionGroup* magnificationActionGroup;
-        QAction* noMagnificationAction;
-        QAction* twoTimesMagnificationAction;
-        QAction* threeTimesMagnificationAction;
-        QAction* fourTimesMagnificationAction;
-        QAction* fiveTimesMagnificationAction;
+	QActionGroup* magnificationActionGroup;
+	QAction* noMagnificationAction;
+	QAction* twoTimesMagnificationAction;
+	QAction* threeTimesMagnificationAction;
+	QAction* fourTimesMagnificationAction;
+	QAction* fiveTimesMagnificationAction;
 
-    public slots:
-        void createContextMenu(QMenu*) const;
-        void fillToolBar(QToolBar*);
-        void print(QPrinter*) const;
+public slots:
+	void createContextMenu(QMenu*) const;
+	void fillToolBar(QToolBar*);
+	void print(QPrinter*) const;
 
-    private slots:
-        void mouseModeChanged(QAction*);
-        void magnificationChanged(QAction*);
-        void changeZoom(QAction*);
-        void changeSelectedItemsPosition(QAction*);
-        void changePointsType(QAction*);
-        void handleImageActions();
-        void updateBackground();
-        void addCurve();
-        void changeRotationAngle();
+private slots:
+	void mouseModeChanged(QAction*);
+	void magnificationChanged(QAction*);
+	void changeZoom(QAction*);
+	void changeSelectedItemsPosition(QAction*);
+	void changePointsType(QAction*);
+	void handleImageActions();
+	void updateBackground();
+	void addCurve();
+	void changeRotationAngle();
 
-    signals:
-        void statusInfo(const QString&);
+signals:
+	void statusInfo(const QString&);
 };
 
 #endif
