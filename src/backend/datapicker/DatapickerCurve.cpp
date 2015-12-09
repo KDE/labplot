@@ -313,33 +313,50 @@ void DatapickerCurve::updateData(const DatapickerPoint* point) {
 	int row = indexOfChild<DatapickerPoint>(point ,AbstractAspect::IncludeHidden);
 	QVector3D data = datapicker->mapSceneToLogical(point->position().point);
 
-	if(d->posXColumn)
+	if(d->posXColumn) {
+		d->posXColumn->setUndoAware(false);
 		d->posXColumn->setValueAt(row, data.x());
+		d->posXColumn->setUndoAware(true);
+	}
 
-	if(d->posYColumn)
+	if(d->posYColumn) {
+		d->posYColumn->setUndoAware(false);
 		d->posYColumn->setValueAt(row, data.y());
+		d->posYColumn->setUndoAware(true);
+	}
 
-	if(d->posZColumn)
+	if(d->posZColumn) {
+		d->posZColumn->setUndoAware(false);
 		d->posZColumn->setValueAt(row, data.y());
+		d->posZColumn->setUndoAware(true);
+	}
 
 	if (d->plusDeltaXColumn) {
 		data = datapicker->mapSceneLengthToLogical(QPointF(point->plusDeltaXPos().x(), 0));
+		d->plusDeltaXColumn->setUndoAware(false);
 		d->plusDeltaXColumn->setValueAt(row, qAbs(data.x()));
+		d->plusDeltaXColumn->setUndoAware(true);
 	}
 
 	if (d->minusDeltaXColumn) {
 		data = datapicker->mapSceneLengthToLogical(QPointF(point->minusDeltaXPos().x(), 0));
+		d->minusDeltaXColumn->setUndoAware(false);
 		d->minusDeltaXColumn->setValueAt(row, qAbs(data.x()));
+		d->minusDeltaXColumn->setUndoAware(true);
 	}
 
 	if (d->plusDeltaYColumn) {
 		data = datapicker->mapSceneLengthToLogical(QPointF(0, point->plusDeltaYPos().y()));
+		d->plusDeltaYColumn->setUndoAware(false);
 		d->plusDeltaYColumn->setValueAt(row, qAbs(data.y()));
+		d->plusDeltaYColumn->setUndoAware(true);
 	}
 
 	if (d->minusDeltaYColumn) {
 		data = datapicker->mapSceneLengthToLogical(QPointF(0, point->minusDeltaYPos().y()));
+		d->minusDeltaYColumn->setUndoAware(false);
 		d->minusDeltaYColumn->setValueAt(row, qAbs(data.y()));
+		d->minusDeltaYColumn->setUndoAware(true);
 	}
 }
 
