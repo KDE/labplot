@@ -377,7 +377,14 @@ void DatapickerImageView::mousePressEvent(QMouseEvent* event) {
 
 	// make sure the datapicker (or its currently active curve) is selected in the project explorer if the view was clicked.
 	// We need this for the case when we change from the project-node in the project explorer to the datapicker node by clicking the view.
-	m_datapicker->setSelectedInView(true);
+    if (m_datapicker->activeCurve() && m_image->plotPointsType() != DatapickerImage::AxisPoints) {
+        m_datapicker->setSelectedInView(false);
+        m_datapicker->activeCurve()->setSelectedInView(true);
+    } else {
+        if (m_datapicker->activeCurve())
+            m_datapicker->activeCurve()->setSelectedInView(false);
+        m_datapicker->setSelectedInView(true);
+    }
 
 	QGraphicsView::mousePressEvent(event);
 }
