@@ -28,7 +28,7 @@
 
 #include "commonfrontend/datapicker/DatapickerImageView.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/datapicker/DatapickerPoint.h"
+#include "backend/datapicker/CustomPoint.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/Transform.h"
 #include "backend/datapicker/DatapickerCurve.h"
@@ -367,7 +367,7 @@ void DatapickerImageView::mousePressEvent(QMouseEvent* event) {
 	QPointF eventPos = mapToScene(event->pos());
 	if ( m_mouseMode == SelectAndEditMode && m_image->isLoaded && sceneRect().contains(eventPos) ) {
 		if ( m_image->plotPointsType() == DatapickerImage::AxisPoints ) {
-			int childCount = m_image->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
+            int childCount = m_image->childCount<CustomPoint>(AbstractAspect::IncludeHidden);
 			if (childCount < 3)
 				m_datapicker->addNewPoint(eventPos, m_image);
 		} else if ( m_image->plotPointsType() == DatapickerImage::CurvePoints && m_datapicker->activeCurve() ) {
@@ -495,7 +495,7 @@ void DatapickerImageView::contextMenuEvent(QContextMenuEvent* e) {
 void DatapickerImageView::changePointsType(QAction* action) {
 	if (action==setAxisPointsAction) {
 		//clear image
-		int childCount = m_image->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
+        int childCount = m_image->childCount<CustomPoint>(AbstractAspect::IncludeHidden);
 		if (childCount)
 			m_image->removeAllChildren();
 		m_image->setPlotPointsType(DatapickerImage::AxisPoints);
@@ -551,17 +551,17 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 	else if (action == shiftDownAction)
 		shift.setY(1);
 
-	m_image->beginMacro(i18n("%1: change position of selected DatapickerPoints.", m_image->name()));
-	QList<DatapickerPoint*> axisPoints = m_image->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-	foreach (DatapickerPoint* point, axisPoints) {
+    m_image->beginMacro(i18n("%1: change position of selected CustomPoints.", m_image->name()));
+    QList<CustomPoint*> axisPoints = m_image->children<CustomPoint>(AbstractAspect::IncludeHidden);
+    foreach (CustomPoint* point, axisPoints) {
 		if (!point->graphicsItem()->isSelected())
 			continue;
 
-		DatapickerPoint::PositionWrapper newPos = point->position();
+        CustomPoint::PositionWrapper newPos = point->position();
 		newPos.point = newPos.point + shift;
 		point->setPosition(newPos);
 
-		int pointIndex = m_image->indexOfChild<DatapickerPoint>(point , AbstractAspect::IncludeHidden);
+        int pointIndex = m_image->indexOfChild<CustomPoint>(point , AbstractAspect::IncludeHidden);
 		DatapickerImage::ReferencePoints points = m_image->axisPoints();
 		points.scenePos[pointIndex].setX(point->position().point.x());
 		points.scenePos[pointIndex].setY(point->position().point.y());
@@ -571,11 +571,11 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 	}
 
 	foreach (DatapickerCurve* curve, m_image->parentAspect()->children<DatapickerCurve>()) {
-		foreach (DatapickerPoint* point, curve->children<DatapickerPoint>(AbstractAspect::IncludeHidden)) {
+        foreach (CustomPoint* point, curve->children<CustomPoint>(AbstractAspect::IncludeHidden)) {
 			if (!point->graphicsItem()->isSelected())
 				continue;
 
-			DatapickerPoint::PositionWrapper newPos = point->position();
+            CustomPoint::PositionWrapper newPos = point->position();
 			newPos.point = newPos.point + shift;
 			point->setPosition(newPos);
 		}
@@ -638,7 +638,7 @@ void DatapickerImageView::handleImageActions() {
 		magnificationActionGroup->setEnabled(true);
 		setAxisPointsAction->setEnabled(true);
 
-		int pointsCount = m_image->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
+        int pointsCount = m_image->childCount<CustomPoint>(AbstractAspect::IncludeHidden);
 		if (pointsCount>0)
 			navigationActionGroup->setEnabled(true);
 		else

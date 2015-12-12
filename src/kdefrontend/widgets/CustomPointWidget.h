@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : DatapickerPointWidget.h
+    File                 : CustomPointWidget.h
     Project              : LabPlot
     Description          : widget for Datapicker-Point properties
     --------------------------------------------------------------------
@@ -25,27 +25,27 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef DATAPICKERPOINTWIDGET_H
-#define DATAPICKERPOINTWIDGET_H
+#ifndef CUSTOMPOINTWIDGET_H
+#define CUSTOMPOINTWIDGET_H
 
-#include "ui_datapickerpointwidget.h"
-#include "backend/datapicker/DatapickerPoint.h"
+#include "ui_custompointwidget.h"
+#include "backend/datapicker/CustomPoint.h"
 
-class DatapickerPointWidget: public QWidget {
+class CustomPointWidget: public QWidget {
 	Q_OBJECT
 
 public:
-	explicit DatapickerPointWidget(QWidget *);
+    explicit CustomPointWidget(QWidget *);
 
-	void setDatapickerPoints(QList<DatapickerPoint*>);
+    void setCustomPoints(QList<CustomPoint*>);
 	void load();
 
 	void hidePositionWidgets();
 
 private:
-	Ui::DatapickerPointWidget ui;
-	DatapickerPoint *m_point;
-	QList<DatapickerPoint*> m_pointsList;
+    Ui::CustomPointWidget ui;
+    CustomPoint *m_point;
+    QList<CustomPoint*> m_pointsList;
 	bool m_initializing;
 
 	void init();
@@ -73,8 +73,8 @@ private slots:
 	void errorBarFillingColorChanged(const QColor&);
 	void errorBarSizeChanged(double);
 
-	void pointPositionChanged(const DatapickerPoint::PositionWrapper&);
-	void pointStyleChanged(DatapickerPoint::PointsStyle);
+    void pointPositionChanged(const CustomPoint::PositionWrapper&);
+    void pointStyleChanged(CustomPoint::PointsStyle);
 	void pointSizeChanged(qreal);
 	void pointRotationAngleChanged(qreal);
 	void pointOpacityChanged(qreal);

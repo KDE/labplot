@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : DatapickerPointWidget.cpp
+    File                 : CustomPointWidget.cpp
     Project              : LabPlot
     Description          : widget for Datapicker-Point properties
     --------------------------------------------------------------------
@@ -25,7 +25,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "DatapickerPointWidget.h"
+#include "CustomPointWidget.h"
 #include "backend/worksheet/Worksheet.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
@@ -37,7 +37,7 @@
 #include <QDir>
 
 
-DatapickerPointWidget::DatapickerPointWidget(QWidget *parent): QWidget(parent) {
+CustomPointWidget::CustomPointWidget(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
 
 	//Positioning
@@ -80,7 +80,7 @@ DatapickerPointWidget::DatapickerPointWidget(QWidget *parent): QWidget(parent) {
 	init();
 }
 
-void DatapickerPointWidget::init() {
+void CustomPointWidget::init() {
 	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 
@@ -92,22 +92,22 @@ void DatapickerPointWidget::init() {
 	QTransform trafo;
 	trafo.scale(15, 15);
 	for (int i=0; i<18; ++i) {
-		DatapickerPoint::PointsStyle style = (DatapickerPoint::PointsStyle)i;
+        CustomPoint::PointsStyle style = (CustomPoint::PointsStyle)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
 		pa.setPen( pen );
 		pa.setRenderHint(QPainter::Antialiasing);
 		pa.translate(iconSize/2,iconSize/2);
-		pa.drawPath(trafo.map(DatapickerPoint::pointPathFromStyle(style)));
+        pa.drawPath(trafo.map(CustomPoint::pointPathFromStyle(style)));
 		pa.end();
-		ui.cbStyle->addItem(QIcon(pm), DatapickerPoint::pointNameFromStyle(style));
+        ui.cbStyle->addItem(QIcon(pm), CustomPoint::pointNameFromStyle(style));
 	}
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, Qt::black);
 	GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, Qt::black);
 	m_initializing = false;
 }
 
-void DatapickerPointWidget::setDatapickerPoints(QList<DatapickerPoint*> list) {
+void CustomPointWidget::setCustomPoints(QList<CustomPoint*> list) {
 	if (!list.isEmpty()) {
 		this->setEnabled(true);
 		m_pointsList = list;
@@ -119,10 +119,10 @@ void DatapickerPointWidget::setDatapickerPoints(QList<DatapickerPoint*> list) {
 	}
 }
 
-void DatapickerPointWidget::initConnections() {
-	connect(m_point, SIGNAL(positionChanged(DatapickerPoint::PositionWrapper)),
-	        this, SLOT(pointPositionChanged(DatapickerPoint::PositionWrapper)));
-	connect(m_point, SIGNAL(pointStyleChanged(DatapickerPoint::PointsStyle)), this, SLOT(pointStyleChanged(DatapickerPoint::PointsStyle)));
+void CustomPointWidget::initConnections() {
+    connect(m_point, SIGNAL(positionChanged(CustomPoint::PositionWrapper)),
+            this, SLOT(pointPositionChanged(CustomPoint::PositionWrapper)));
+    connect(m_point, SIGNAL(pointStyleChanged(CustomPoint::PointsStyle)), this, SLOT(pointStyleChanged(CustomPoint::PointsStyle)));
 	connect(m_point, SIGNAL(sizeChanged(qreal)), this, SLOT(pointSizeChanged(qreal)));
 	connect(m_point, SIGNAL(rotationAngleChanged(qreal)), this, SLOT(pointRotationAngleChanged(qreal)));
 	connect(m_point, SIGNAL(opacityChanged(qreal)), this, SLOT(pointOpacityChanged(qreal)));
@@ -133,7 +133,7 @@ void DatapickerPointWidget::initConnections() {
 	connect(m_point, SIGNAL(errorBarSizeChanged(qreal)), this, SLOT(pointErrorBarSizeChanged(qreal)));
 }
 
-void DatapickerPointWidget::hidePositionWidgets() {
+void CustomPointWidget::hidePositionWidgets() {
 	ui.cbPositionX->hide();
 	ui.cbPositionY->hide();
 	ui.lPositionX->hide();
@@ -148,7 +148,7 @@ void DatapickerPointWidget::hidePositionWidgets() {
 /*!
     called when point's current horizontal position relative to its parent (left, center, right, custom ) is changed.
 */
-void DatapickerPointWidget::positionXChanged(int index) {
+void CustomPointWidget::positionXChanged(int index) {
 	//Enable/disable the spinbox for the x- coordinates if the "custom position" is selected/deselected
 	if ( index == ui.cbPositionX->count()-1 ) {
 		ui.sbPositionX->setEnabled(true);
@@ -159,10 +159,10 @@ void DatapickerPointWidget::positionXChanged(int index) {
 	if (m_initializing)
 		return;
 
-	DatapickerPoint::PositionWrapper position = m_point->position();
-	position.horizontalPosition = DatapickerPoint::HorizontalPosition(index);
-	m_point->beginMacro(i18n("%1 DatapickerPoints: changed", m_pointsList.count()));
-	foreach(DatapickerPoint* point, m_pointsList)
+    CustomPoint::PositionWrapper position = m_point->position();
+    position.horizontalPosition = CustomPoint::HorizontalPosition(index);
+    m_point->beginMacro(i18n("%1 CustomPoints: changed", m_pointsList.count()));
+    foreach(CustomPoint* point, m_pointsList)
 		point->setPosition(position);
 	m_point->endMacro();
 }
@@ -170,7 +170,7 @@ void DatapickerPointWidget::positionXChanged(int index) {
 /*!
     called when point's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
 */
-void DatapickerPointWidget::positionYChanged(int index) {
+void CustomPointWidget::positionYChanged(int index) {
 	//Enable/disable the spinbox for the y- oordinates if the "custom position" is selected/deselected
 	if ( index == ui.cbPositionY->count()-1 ) {
 		ui.sbPositionY->setEnabled(true);
@@ -181,46 +181,46 @@ void DatapickerPointWidget::positionYChanged(int index) {
 	if (m_initializing)
 		return;
 
-	DatapickerPoint::PositionWrapper position = m_point->position();
-	position.verticalPosition = DatapickerPoint::VerticalPosition(index);
-	m_point->beginMacro(i18n("%1 DatapickerPoints: changed", m_pointsList.count()));
+    CustomPoint::PositionWrapper position = m_point->position();
+    position.verticalPosition = CustomPoint::VerticalPosition(index);
+    m_point->beginMacro(i18n("%1 CustomPoints: changed", m_pointsList.count()));
 
-	foreach(DatapickerPoint* point, m_pointsList)
+    foreach(CustomPoint* point, m_pointsList)
 		point->setPosition(position);
 	m_point->endMacro();
 
 }
 
-void DatapickerPointWidget::customPositionXChanged(double value) {
+void CustomPointWidget::customPositionXChanged(double value) {
 	if (m_initializing)
 		return;
 
-	DatapickerPoint::PositionWrapper position = m_point->position();
+    CustomPoint::PositionWrapper position = m_point->position();
 	position.point.setX(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
-	m_point->beginMacro(i18n("%1 DatapickerPoints: changed", m_pointsList.count()));
+    m_point->beginMacro(i18n("%1 CustomPoints: changed", m_pointsList.count()));
 
-	foreach(DatapickerPoint* point, m_pointsList)
+    foreach(CustomPoint* point, m_pointsList)
 		point->setPosition(position);
 	m_point->endMacro();
 }
 
-void DatapickerPointWidget::customPositionYChanged(double value) {
+void CustomPointWidget::customPositionYChanged(double value) {
 	if (m_initializing)
 		return;
 
-	DatapickerPoint::PositionWrapper position = m_point->position();
+    CustomPoint::PositionWrapper position = m_point->position();
 	position.point.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
-	m_point->beginMacro(i18n("%1 DatapickerPoints: changed", m_pointsList.count()));
+    m_point->beginMacro(i18n("%1 CustomPoints: changed", m_pointsList.count()));
 
-	foreach(DatapickerPoint* point, m_pointsList)
+    foreach(CustomPoint* point, m_pointsList)
 		point->setPosition(position);
 	m_point->endMacro();
 }
 
-void DatapickerPointWidget::styleChanged(int index) {
-	DatapickerPoint::PointsStyle style = DatapickerPoint::PointsStyle(index);
+void CustomPointWidget::styleChanged(int index) {
+    CustomPoint::PointsStyle style = CustomPoint::PointsStyle(index);
 	//enable/disable the  filling options in the GUI depending on the currently selected points.
-	if (style!=DatapickerPoint::Line && style!=DatapickerPoint::Cross) {
+    if (style!=CustomPoint::Line && style!=CustomPoint::Cross) {
 		ui.cbFillingStyle->setEnabled(true);
 		bool noBrush = (Qt::BrushStyle(ui.cbFillingStyle->currentIndex())==Qt::NoBrush);
 		ui.kcbFillingColor->setEnabled(!noBrush);
@@ -236,54 +236,54 @@ void DatapickerPointWidget::styleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	m_point->beginMacro(i18n("%1 DatapickerPoints: style changed", m_pointsList.count()));
-	foreach(DatapickerPoint* point, m_pointsList)
+    m_point->beginMacro(i18n("%1 CustomPoints: style changed", m_pointsList.count()));
+    foreach(CustomPoint* point, m_pointsList)
 		point->setPointStyle(style);
 	m_point->endMacro();
 }
 
-void DatapickerPointWidget::sizeChanged(double value) {
+void CustomPointWidget::sizeChanged(double value) {
 	if (m_initializing)
 		return;
 
-	m_point->beginMacro(i18n("%1 DatapickerPoints: size changed", m_pointsList.count()));
-	foreach(DatapickerPoint* point, m_pointsList)
+    m_point->beginMacro(i18n("%1 CustomPoints: size changed", m_pointsList.count()));
+    foreach(CustomPoint* point, m_pointsList)
 		point->setSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 	m_point->endMacro();
 }
 
-void DatapickerPointWidget::errorBarSizeChanged(double value) {
+void CustomPointWidget::errorBarSizeChanged(double value) {
 	if (m_initializing)
 		return;
 
-	m_point->beginMacro(i18n("%1 DatapickerPoints: error bar size changed", m_pointsList.count()));
-	foreach(DatapickerPoint* point, m_pointsList)
+    m_point->beginMacro(i18n("%1 CustomPoints: error bar size changed", m_pointsList.count()));
+    foreach(CustomPoint* point, m_pointsList)
 		point->setErrorBarSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 	m_point->endMacro();
 }
 
-void DatapickerPointWidget::rotationChanged(int value) {
+void CustomPointWidget::rotationChanged(int value) {
 	if (m_initializing)
 		return;
 
-	m_point->beginMacro(i18n("%1 DatapickerPoints: rotation changed", m_pointsList.count()));
-	foreach(DatapickerPoint* point, m_pointsList)
+    m_point->beginMacro(i18n("%1 CustomPoints: rotation changed", m_pointsList.count()));
+    foreach(CustomPoint* point, m_pointsList)
 		point->setRotationAngle(value);
 	m_point->endMacro();
 }
 
-void DatapickerPointWidget::opacityChanged(int value) {
+void CustomPointWidget::opacityChanged(int value) {
 	if (m_initializing)
 		return;
 
 	qreal opacity = (float)value/100.;
-	m_point->beginMacro(i18n("%1 DatapickerPoints: opacity changed", m_pointsList.count()));
-	foreach(DatapickerPoint* point, m_pointsList)
+    m_point->beginMacro(i18n("%1 CustomPoints: opacity changed", m_pointsList.count()));
+    foreach(CustomPoint* point, m_pointsList)
 		point->setOpacity(opacity);
 	m_point->endMacro();
 }
 
-void DatapickerPointWidget::fillingStyleChanged(int index) {
+void CustomPointWidget::fillingStyleChanged(int index) {
 	Qt::BrushStyle brushStyle = Qt::BrushStyle(index);
 	ui.kcbFillingColor->setEnabled(!(brushStyle==Qt::NoBrush));
 
@@ -291,8 +291,8 @@ void DatapickerPointWidget::fillingStyleChanged(int index) {
 		return;
 
 	QBrush brush;
-	m_point->beginMacro(i18n("%1 DatapickerPoints: filling style changed", m_pointsList.count()));
-	foreach(DatapickerPoint* point, m_pointsList) {
+    m_point->beginMacro(i18n("%1 CustomPoints: filling style changed", m_pointsList.count()));
+    foreach(CustomPoint* point, m_pointsList) {
 		brush = point->brush();
 		brush.setStyle(brushStyle);
 		point->setBrush(brush);
@@ -301,7 +301,7 @@ void DatapickerPointWidget::fillingStyleChanged(int index) {
 
 }
 
-void DatapickerPointWidget::errorBarFillingStyleChanged(int index) {
+void CustomPointWidget::errorBarFillingStyleChanged(int index) {
 	Qt::BrushStyle brushStyle = Qt::BrushStyle(index);
 	ui.kcbErrorBarFillingColor->setEnabled(!(brushStyle==Qt::NoBrush));
 
@@ -309,8 +309,8 @@ void DatapickerPointWidget::errorBarFillingStyleChanged(int index) {
 		return;
 
 	QBrush brush;
-	m_point->beginMacro(i18n("%1 DatapickerPoints: Error Bar filling style changed", m_pointsList.count()));
-	foreach(DatapickerPoint* point, m_pointsList) {
+    m_point->beginMacro(i18n("%1 CustomPoints: Error Bar filling style changed", m_pointsList.count()));
+    foreach(CustomPoint* point, m_pointsList) {
 		brush = point->brush();
 		brush.setStyle(brushStyle);
 		point->setErrorBarBrush(brush);
@@ -319,13 +319,13 @@ void DatapickerPointWidget::errorBarFillingStyleChanged(int index) {
 
 }
 
-void DatapickerPointWidget::fillingColorChanged(const QColor& color) {
+void CustomPointWidget::fillingColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
 	QBrush brush;
-	m_point->beginMacro(i18n("%1 DatapickerPoints: filling color changed", m_pointsList.count()));
-	foreach(DatapickerPoint* point, m_pointsList) {
+    m_point->beginMacro(i18n("%1 CustomPoints: filling color changed", m_pointsList.count()));
+    foreach(CustomPoint* point, m_pointsList) {
 		brush = point->brush();
 		brush.setColor(color);
 		point->setBrush(brush);
@@ -337,13 +337,13 @@ void DatapickerPointWidget::fillingColorChanged(const QColor& color) {
 	m_initializing = false;
 }
 
-void DatapickerPointWidget::errorBarFillingColorChanged(const QColor& color) {
+void CustomPointWidget::errorBarFillingColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
 	QBrush brush;
-	m_point->beginMacro(i18n("%1 DatapickerPoints: Error bar filling color changed", m_pointsList.count()));
-	foreach(DatapickerPoint* point, m_pointsList) {
+    m_point->beginMacro(i18n("%1 CustomPoints: Error bar filling color changed", m_pointsList.count()));
+    foreach(CustomPoint* point, m_pointsList) {
 		brush = point->errorBarBrush();
 		brush.setColor(color);
 		point->setErrorBarBrush(brush);
@@ -355,7 +355,7 @@ void DatapickerPointWidget::errorBarFillingColorChanged(const QColor& color) {
 	m_initializing = false;
 }
 
-void DatapickerPointWidget::borderStyleChanged(int index) {
+void CustomPointWidget::borderStyleChanged(int index) {
 	Qt::PenStyle penStyle=Qt::PenStyle(index);
 
 	if ( penStyle == Qt::NoPen ) {
@@ -370,8 +370,8 @@ void DatapickerPointWidget::borderStyleChanged(int index) {
 		return;
 
 	QPen pen;
-	m_point->beginMacro(i18n("%1 DatapickerPoints: border style changed", m_pointsList.count()));
-	foreach(DatapickerPoint* point, m_pointsList) {
+    m_point->beginMacro(i18n("%1 CustomPoints: border style changed", m_pointsList.count()));
+    foreach(CustomPoint* point, m_pointsList) {
 		pen = point->pen();
 		pen.setStyle(penStyle);
 		point->setPen(pen);
@@ -379,13 +379,13 @@ void DatapickerPointWidget::borderStyleChanged(int index) {
 	m_point->endMacro();
 }
 
-void DatapickerPointWidget::borderColorChanged(const QColor& color) {
+void CustomPointWidget::borderColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
 	QPen pen;
-	m_point->beginMacro(i18n("%1 DatapickerPoints: border color changed", m_pointsList.count()));
-	foreach(DatapickerPoint* point, m_pointsList) {
+    m_point->beginMacro(i18n("%1 CustomPoints: border color changed", m_pointsList.count()));
+    foreach(CustomPoint* point, m_pointsList) {
 		pen = point->pen();
 		pen.setColor(color);
 		point->setPen(pen);
@@ -397,13 +397,13 @@ void DatapickerPointWidget::borderColorChanged(const QColor& color) {
 	m_initializing = false;
 }
 
-void DatapickerPointWidget::borderWidthChanged(double value) {
+void CustomPointWidget::borderWidthChanged(double value) {
 	if (m_initializing)
 		return;
 
 	QPen pen;
-	m_point->beginMacro(i18n("%1 DatapickerPoints: border width changed", m_pointsList.count()));
-	foreach(DatapickerPoint* point, m_pointsList) {
+    m_point->beginMacro(i18n("%1 CustomPoints: border width changed", m_pointsList.count()));
+    foreach(CustomPoint* point, m_pointsList) {
 		pen = point->pen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		point->setPen(pen);
@@ -411,21 +411,21 @@ void DatapickerPointWidget::borderWidthChanged(double value) {
 	m_point->endMacro();
 }
 
-void DatapickerPointWidget::visibilityChanged(bool state) {
+void CustomPointWidget::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
 
-	m_point->beginMacro(i18n("%1 DatapickerPoints: visibility changed", m_pointsList.count()));
-	foreach(DatapickerPoint* point, m_pointsList)
+    m_point->beginMacro(i18n("%1 CustomPoints: visibility changed", m_pointsList.count()));
+    foreach(CustomPoint* point, m_pointsList)
 		point->setVisible(state);
 	m_point->endMacro();
 }
 
 //*********************************************************
-//****** SLOTs for changes triggered in DatapickerPoint *********
+//****** SLOTs for changes triggered in CustomPoint *********
 //*********************************************************
 
-void DatapickerPointWidget::pointPositionChanged(const DatapickerPoint::PositionWrapper& position) {
+void CustomPointWidget::pointPositionChanged(const CustomPoint::PositionWrapper& position) {
 	m_initializing = true;
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), Worksheet::Centimeter) );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), Worksheet::Centimeter) );
@@ -434,37 +434,37 @@ void DatapickerPointWidget::pointPositionChanged(const DatapickerPoint::Position
 	m_initializing = false;
 }
 
-void DatapickerPointWidget::pointStyleChanged(DatapickerPoint::PointsStyle style) {
+void CustomPointWidget::pointStyleChanged(CustomPoint::PointsStyle style) {
 	m_initializing = true;
 	ui.cbStyle->setCurrentIndex((int)style);
 	m_initializing = false;
 }
 
-void DatapickerPointWidget::pointSizeChanged(qreal size) {
+void CustomPointWidget::pointSizeChanged(qreal size) {
 	m_initializing = true;
 	ui.sbSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
 	m_initializing = false;
 }
 
-void DatapickerPointWidget::pointErrorBarSizeChanged(qreal size) {
+void CustomPointWidget::pointErrorBarSizeChanged(qreal size) {
 	m_initializing = true;
 	ui.sbErrorBarSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
 	m_initializing = false;
 }
 
-void DatapickerPointWidget::pointRotationAngleChanged(qreal angle) {
+void CustomPointWidget::pointRotationAngleChanged(qreal angle) {
 	m_initializing = true;
 	ui.sbRotation->setValue(round(angle));
 	m_initializing = false;
 }
 
-void DatapickerPointWidget::pointOpacityChanged(qreal opacity) {
+void CustomPointWidget::pointOpacityChanged(qreal opacity) {
 	m_initializing = true;
 	ui.sbOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
 }
 
-void DatapickerPointWidget::pointBrushChanged(QBrush brush) {
+void CustomPointWidget::pointBrushChanged(QBrush brush) {
 	m_initializing = true;
 	ui.cbFillingStyle->setCurrentIndex((int) brush.style());
 	ui.kcbFillingColor->setColor(brush.color());
@@ -472,7 +472,7 @@ void DatapickerPointWidget::pointBrushChanged(QBrush brush) {
 	m_initializing = false;
 }
 
-void DatapickerPointWidget::pointErrorBarBrushChanged(QBrush brush) {
+void CustomPointWidget::pointErrorBarBrushChanged(QBrush brush) {
 	m_initializing = true;
 	ui.cbErrorBarFillingStyle->setCurrentIndex((int) brush.style());
 	ui.kcbErrorBarFillingColor->setColor(brush.color());
@@ -480,7 +480,7 @@ void DatapickerPointWidget::pointErrorBarBrushChanged(QBrush brush) {
 	m_initializing = false;
 }
 
-void DatapickerPointWidget::pointPenChanged(const QPen& pen) {
+void CustomPointWidget::pointPenChanged(const QPen& pen) {
 	m_initializing = true;
 	ui.cbBorderStyle->setCurrentIndex( (int) pen.style());
 	ui.kcbBorderColor->setColor( pen.color());
@@ -489,7 +489,7 @@ void DatapickerPointWidget::pointPenChanged(const QPen& pen) {
 	m_initializing = false;
 }
 
-void DatapickerPointWidget::pointVisibleChanged(bool on) {
+void CustomPointWidget::pointVisibleChanged(bool on) {
 	m_initializing = true;
 	ui.chbVisible->setChecked(on);
 	m_initializing = false;
@@ -498,7 +498,7 @@ void DatapickerPointWidget::pointVisibleChanged(bool on) {
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
-void DatapickerPointWidget::load() {
+void CustomPointWidget::load() {
 	if(m_point == NULL)
 		return;
 
@@ -529,7 +529,7 @@ void DatapickerPointWidget::load() {
 	m_initializing = false;
 }
 
-void DatapickerPointWidget::loadConfigFromTemplate(KConfig& config) {
+void CustomPointWidget::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
 	int index = config.name().lastIndexOf(QDir::separator());
@@ -549,8 +549,8 @@ void DatapickerPointWidget::loadConfigFromTemplate(KConfig& config) {
 	m_point->endMacro();
 }
 
-void DatapickerPointWidget::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group( "DatapickerPoint" );
+void CustomPointWidget::loadConfig(KConfig& config) {
+    KConfigGroup group = config.group( "CustomPoint" );
 	ui.cbStyle->setCurrentIndex( group.readEntry("Style", (int)m_point->pointStyle()) );
 	ui.sbSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("Size", m_point->size()), Worksheet::Point) );
 	ui.sbRotation->setValue( group.readEntry("Rotation", m_point->rotationAngle()) );
@@ -571,8 +571,8 @@ void DatapickerPointWidget::loadConfig(KConfig& config) {
 	m_initializing=false;
 }
 
-void DatapickerPointWidget::saveConfig(KConfig& config) {
-	KConfigGroup group = config.group( "DatapickerPoint" );
+void CustomPointWidget::saveConfig(KConfig& config) {
+    KConfigGroup group = config.group( "CustomPoint" );
 	group.writeEntry("PointStyle", ui.cbStyle->currentText());
 	group.writeEntry("Size", Worksheet::convertToSceneUnits(ui.sbSize->value(),Worksheet::Point));
 	group.writeEntry("Rotation", ui.sbRotation->value());

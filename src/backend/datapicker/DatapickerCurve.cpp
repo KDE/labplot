@@ -28,7 +28,7 @@
 #include "DatapickerCurve.h"
 #include "backend/datapicker/DatapickerCurvePrivate.h"
 #include "backend/datapicker/Datapicker.h"
-#include "backend/datapicker/DatapickerPoint.h"
+#include "backend/datapicker/CustomPoint.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -292,7 +292,7 @@ void DatapickerCurve::setSelectedInView(const bool b) {
 void DatapickerCurve::updateDatasheet() {
 	beginMacro(i18n("%1: update datasheet", name()));
 
-	foreach (DatapickerPoint* point, children<DatapickerPoint>(IncludeHidden))
+    foreach (CustomPoint* point, children<CustomPoint>(IncludeHidden))
 		updateData(point);
 
 	endMacro();
@@ -304,13 +304,13 @@ void DatapickerCurve::updateDatasheet() {
     of curve-point or its error-bar so keep it undo unaware
     no need to create extra entry in undo stack
 */
-void DatapickerCurve::updateData(const DatapickerPoint* point) {
+void DatapickerCurve::updateData(const CustomPoint* point) {
 	Q_D(DatapickerCurve);
 	Datapicker* datapicker = dynamic_cast<Datapicker*>(parentAspect());
 	if (!datapicker)
 		return;
 
-	int row = indexOfChild<DatapickerPoint>(point ,AbstractAspect::IncludeHidden);
+    int row = indexOfChild<CustomPoint>(point ,AbstractAspect::IncludeHidden);
 	QVector3D data = datapicker->mapSceneToLogical(point->position().point);
 
 	if(d->posXColumn) {
@@ -441,8 +441,8 @@ bool DatapickerCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(plusDeltaYColumn);
 			READ_COLUMN(minusDeltaYColumn);
 
-		} else if (reader->name() == "datapickerPoint") {
-			DatapickerPoint* curvePoint = new DatapickerPoint("");
+        } else if (reader->name() == "customPoint") {
+            CustomPoint* curvePoint = new CustomPoint("");
 			curvePoint->setHidden(true);
 			if (!curvePoint->load(reader)) {
 				delete curvePoint;

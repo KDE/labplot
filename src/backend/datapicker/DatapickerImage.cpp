@@ -29,7 +29,7 @@
 #include "backend/datapicker/ImageEditor.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/datapicker/DatapickerPoint.h"
+#include "backend/datapicker/CustomPoint.h"
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/datapicker/DatapickerImageView.h"
 #include "backend/datapicker/Segments.h"
@@ -46,7 +46,7 @@
  * \class DatapickerImage
  * \brief container to open image/plot.
  *
- * Top-level container for DatapickerPoint.
+ * Top-level container for CustomPoint.
  *
  * * \ingroup datapicker
  */
@@ -595,14 +595,14 @@ bool DatapickerImage::load(XmlStreamReader* reader) {
 			else
 				d->settings.valueThresholdLow = str.toInt();
 
-		} else if(reader->name() == "datapickerPoint") {
-			DatapickerPoint* datapickerPoint = new DatapickerPoint("");
-			datapickerPoint->setHidden(true);
-			if (!datapickerPoint->load(reader)) {
-				delete datapickerPoint;
+        } else if(reader->name() == "customPoint") {
+            CustomPoint* customPoint = new CustomPoint("");
+            customPoint->setHidden(true);
+            if (!customPoint->load(reader)) {
+                delete customPoint;
 				return false;
 			} else {
-				addChild(datapickerPoint);
+                addChild(customPoint);
 			}
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));

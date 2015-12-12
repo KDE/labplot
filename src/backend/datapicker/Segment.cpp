@@ -27,7 +27,7 @@
 #include "Segment.h"
 #include "SegmentPrivate.h"
 #include "backend/datapicker/DatapickerImage.h"
-#include "backend/datapicker/DatapickerPoint.h"
+#include "backend/datapicker/CustomPoint.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datapicker/Datapicker.h"
 
@@ -187,8 +187,8 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
 				for (int i = l; i <= h; i++) {
 					if (count%q->m_image->pointSeparation() == 0) {
 						bool positionUsed = false;
-						const QList<DatapickerPoint*> curvePointsList = datapicker->activeCurve()->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-						foreach (DatapickerPoint* point, curvePointsList) {
+                        const QList<CustomPoint*> curvePointsList = datapicker->activeCurve()->children<CustomPoint>(AbstractAspect::IncludeHidden);
+                        foreach (CustomPoint* point, curvePointsList) {
 							if ( point->position().point == QPoint(line->x1(), i)*scaleFactor )
 								positionUsed = true;
 						}

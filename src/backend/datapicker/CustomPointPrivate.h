@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : DatapickerPointPrivate.h
+    File                 : CustomPointPrivate.h
     Project              : LabPlot
     Description          : Graphic Item for coordinate points of Datapicker
     --------------------------------------------------------------------
@@ -25,14 +25,14 @@
  ***************************************************************************/
 
 
-#ifndef DATAPICKERPOINTPRIVATE_H
-#define DATAPICKERPOINTPRIVATE_H
+#ifndef CUSTOMPOINTPRIVATE_H
+#define CUSTOMPOINTPRIVATE_H
 
 #include <QGraphicsItem>
 
-class DatapickerPointPrivate: public QGraphicsItem {
+class CustomPointPrivate: public QGraphicsItem {
 public:
-	explicit DatapickerPointPrivate(DatapickerPoint*);
+    explicit CustomPointPrivate(CustomPoint*);
 
 	float scaleFactor;
 
@@ -41,7 +41,7 @@ public:
 	QPointF plusDeltaYPos;
 	QPointF minusDeltaYPos;
 
-	DatapickerPoint::PositionWrapper position;
+    CustomPoint::PositionWrapper position;
 
 	QString name() const;
 	void retransform();
@@ -60,7 +60,7 @@ public:
 	qreal rotationAngle;
 	QRectF boundingRectangle;
 	QRectF transformedBoundingRectangle;
-	DatapickerPoint::PointsStyle pointStyle;
+    CustomPoint::PointsStyle pointStyle;
 	QBrush brush;
 	QPen pen;
 	qreal opacity;
@@ -79,7 +79,7 @@ public:
 	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
-	DatapickerPoint* const q;
+    CustomPoint* const q;
 
 private:
 	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);

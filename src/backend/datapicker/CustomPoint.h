@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : DatapickerPoint.h
+    File                 : CustomPoint.h
     Project              : LabPlot
     Description          : Graphic Item for coordinate points of Datapicker
     --------------------------------------------------------------------
@@ -24,8 +24,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef DATAPICKERPOINT_H
-#define DATAPICKERPOINT_H
+#ifndef CUSTOMPOINT_H
+#define CUSTOMPOINT_H
 
 #include <QObject>
 #include <QBrush>
@@ -35,7 +35,7 @@
 #include "backend/datapicker/DatapickerCurve.h"
 #include "backend/worksheet/WorksheetElement.h"
 
-class DatapickerPoint;
+class CustomPoint;
 
 class ErrorBarItem : public QObject, public QGraphicsRectItem {
 	Q_OBJECT
@@ -43,7 +43,7 @@ class ErrorBarItem : public QObject, public QGraphicsRectItem {
 public:
 	enum ErrorBarType { PlusDeltaX, MinusDeltaX, PlusDeltaY, MinusDeltaY};
 
-	explicit ErrorBarItem(DatapickerPoint* parent = 0, const ErrorBarType& type = PlusDeltaX);
+    explicit ErrorBarItem(CustomPoint* parent = 0, const ErrorBarType& type = PlusDeltaX);
 
 	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 	void setRectSize(const qreal);
@@ -57,11 +57,11 @@ private:
 	QGraphicsLineItem* barLineItem;
 	QRectF m_rect;
 	ErrorBarType m_type;
-	DatapickerPoint* m_parentItem;
+    CustomPoint* m_parentItem;
 };
 
-class DatapickerPointPrivate;
-class DatapickerPoint : public WorksheetElement {
+class CustomPointPrivate;
+class CustomPoint : public WorksheetElement {
 	Q_OBJECT
 
 public:
@@ -78,8 +78,8 @@ public:
 		VerticalPosition   verticalPosition;
 	};
 
-	explicit DatapickerPoint(const QString& name );
-	~DatapickerPoint();
+    explicit CustomPoint(const QString& name );
+    ~CustomPoint();
 
 	virtual QIcon icon() const;
 	virtual QMenu* createContextMenu();
@@ -118,10 +118,10 @@ public:
 	virtual void setPrinting(bool);
 	void suppressHoverEvents(bool);
 
-	typedef DatapickerPointPrivate Private;
+    typedef CustomPointPrivate Private;
 
-	static QPainterPath pointPathFromStyle(DatapickerPoint::PointsStyle);
-	static QString pointNameFromStyle(DatapickerPoint::PointsStyle);
+    static QPainterPath pointPathFromStyle(CustomPoint::PointsStyle);
+    static QString pointNameFromStyle(CustomPoint::PointsStyle);
 
 public slots:
 	virtual void retransform();
@@ -131,11 +131,11 @@ private slots:
 	void visibilityChanged();
 
 protected:
-	DatapickerPointPrivate* const d_ptr;
-	DatapickerPoint(const QString &name, DatapickerPointPrivate *dd);
+    CustomPointPrivate* const d_ptr;
+    CustomPoint(const QString &name, CustomPointPrivate *dd);
 
 private:
-	Q_DECLARE_PRIVATE(DatapickerPoint)
+    Q_DECLARE_PRIVATE(CustomPoint)
 	void init();
 	void initActions();
 
@@ -143,31 +143,31 @@ private:
 	QList<ErrorBarItem*> m_errorBarItemList;
 
 signals:
-	friend class DatapickerPointSetPositionCmd;
-	void positionChanged(const DatapickerPoint::PositionWrapper&);
+    friend class CustomPointSetPositionCmd;
+    void positionChanged(const CustomPoint::PositionWrapper&);
 	void visibleChanged(bool);
 	void changed();
 
-	friend class DatapickerPointSetPointStyleCmd;
-	friend class DatapickerPointSetSizeCmd;
-	friend class DatapickerPointSetRotationAngleCmd;
-	friend class DatapickerPointSetOpacityCmd;
-	friend class DatapickerPointSetBrushCmd;
-	friend class DatapickerPointSetPenCmd;
-	void pointStyleChanged(DatapickerPoint::PointsStyle);
+    friend class CustomPointSetPointStyleCmd;
+    friend class CustomPointSetSizeCmd;
+    friend class CustomPointSetRotationAngleCmd;
+    friend class CustomPointSetOpacityCmd;
+    friend class CustomPointSetBrushCmd;
+    friend class CustomPointSetPenCmd;
+    void pointStyleChanged(CustomPoint::PointsStyle);
 	void sizeChanged(qreal);
 	void rotationAngleChanged(qreal);
 	void opacityChanged(qreal);
 	void brushChanged(QBrush);
 	void penChanged(const QPen&);
 
-	friend class DatapickerPointSetErrorBarSizeCmd;
-	friend class DatapickerPointSetErrorBarPenCmd;
-	friend class DatapickerPointSetErrorBarBrushCmd;
-	friend class DatapickerPointSetPlusDeltaXPosCmd;
-	friend class DatapickerPointSetMinusDeltaXPosCmd;
-	friend class DatapickerPointSetPlusDeltaYPosCmd;
-	friend class DatapickerPointSetMinusDeltaYPosCmd;
+    friend class CustomPointSetErrorBarSizeCmd;
+    friend class CustomPointSetErrorBarPenCmd;
+    friend class CustomPointSetErrorBarBrushCmd;
+    friend class CustomPointSetPlusDeltaXPosCmd;
+    friend class CustomPointSetMinusDeltaXPosCmd;
+    friend class CustomPointSetPlusDeltaYPosCmd;
+    friend class CustomPointSetMinusDeltaYPosCmd;
 	void plusDeltaXPosChanged(const QPointF&);
 	void minusDeltaXPosChanged(const QPointF&);
 	void plusDeltaYPosChanged(const QPointF&);

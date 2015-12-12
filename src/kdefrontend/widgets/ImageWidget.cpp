@@ -27,8 +27,8 @@
  ***************************************************************************/
 
 #include "ImageWidget.h"
-#include "backend/datapicker/DatapickerPoint.h"
-#include "kdefrontend/widgets/DatapickerPointWidget.h"
+#include "backend/datapicker/CustomPoint.h"
+#include "kdefrontend/widgets/CustomPointWidget.h"
 #include "commonfrontend/widgets/qxtspanslider.h"
 
 #include <KUrlCompletion>
@@ -40,9 +40,9 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
 
 	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tSymbol);
-	datapickerPointWidget = new DatapickerPointWidget(ui.tSymbol);
-	hboxLayout->addWidget(datapickerPointWidget);
-	datapickerPointWidget->hidePositionWidgets();
+    customPointWidget = new CustomPointWidget(ui.tSymbol);
+    hboxLayout->addWidget(customPointWidget);
+    customPointWidget->hidePositionWidgets();
 
 	ui.kleFileName->setClearButtonShown(true);
 	ui.bOpen->setIcon( KIcon("document-open") );
@@ -150,7 +150,7 @@ void ImageWidget::setImages(QList<DatapickerImage*> list) {
 	this->load();
 	initConnections();
 	handleWidgetActions();
-	updateDatapickerPointList();
+    updateCustomPointList();
 }
 
 void ImageWidget::initConnections() {
@@ -158,8 +158,8 @@ void ImageWidget::initConnections() {
 	connect( m_image, SIGNAL(fileNameChanged(QString)), this, SLOT(imageFileNameChanged(QString)) );
 	connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(imageRotationAngleChanged(float)) );
 	connect( m_image, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	         this,SLOT(updateDatapickerPointList()) );
-	connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(updateDatapickerPointList()) );
+             this,SLOT(updateCustomPointList()) );
+    connect( m_image, SIGNAL(aspectAdded(const AbstractAspect*)), this,SLOT(updateCustomPointList()) );
 	connect( m_image, SIGNAL(axisPointsChanged(DatapickerImage::ReferencePoints)), this, SLOT(imageAxisPointsChanged(DatapickerImage::ReferencePoints)) );
 	connect( m_image, SIGNAL(settingsChanged(DatapickerImage::EditorSettings)), this, SLOT(imageEditorSettingsChanged(DatapickerImage::EditorSettings)) );
 	connect( m_image, SIGNAL(minSegmentLengthChanged(int)), this, SLOT(imageMinSegmentLengthChanged(int)) );
@@ -455,10 +455,10 @@ void ImageWidget::imageMinSegmentLengthChanged(const int value) {
 	m_initializing = false;
 }
 
-void ImageWidget::updateDatapickerPointList() {
-	QList<DatapickerPoint*> pointsList;
-	pointsList = m_image->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-	datapickerPointWidget->setDatapickerPoints(pointsList);
+void ImageWidget::updateCustomPointList() {
+    QList<CustomPoint*> pointsList;
+    pointsList = m_image->children<CustomPoint>(AbstractAspect::IncludeHidden);
+    customPointWidget->setCustomPoints(pointsList);
 }
 
 //**********************************************************

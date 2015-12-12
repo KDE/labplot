@@ -34,7 +34,7 @@
 #include "commonfrontend/datapicker/DatapickerView.h"
 #include "backend/datapicker/DatapickerCurve.h"
 #include "backend/datapicker/Transform.h"
-#include "backend/datapicker/DatapickerPoint.h"
+#include "backend/datapicker/CustomPoint.h"
 
 #include <QGraphicsScene>
 #include "KIcon"
@@ -194,13 +194,13 @@ void Datapicker::setSelectedInView(const bool b) {
 }
 
 void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
-	QList<DatapickerPoint*> childPoints = parentAspect->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+    QList<CustomPoint*> childPoints = parentAspect->children<CustomPoint>(AbstractAspect::IncludeHidden);
 	if (childPoints.isEmpty())
 		beginMacro(i18n("%1:add new point", parentAspect->name()));
 	else
 		beginMacro(i18n("%1:add new point %2", parentAspect->name(), childPoints.count()));
 
-	DatapickerPoint* newPoint = new DatapickerPoint(i18n("%1 Point", parentAspect->name()));
+    CustomPoint* newPoint = new CustomPoint(i18n("%1 Point", parentAspect->name()));
 	newPoint->setPosition(pos);
 	newPoint->setRotationAngle(-m_image->rotationAngle());
 	newPoint->setHidden(true);
@@ -208,7 +208,7 @@ void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
 
 	//set properties of added Datapicker-Point same as previous points
 	if (!childPoints.isEmpty()) {
-		DatapickerPoint* oldPoint = childPoints.first();
+        CustomPoint* oldPoint = childPoints.first();
 		newPoint->setBrush(oldPoint->brush());
 		newPoint->setOpacity(oldPoint->opacity());
 		newPoint->setPen(oldPoint->pen());
