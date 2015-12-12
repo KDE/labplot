@@ -39,6 +39,8 @@ class ProjectExplorer;
 class Project;
 class Worksheet;
 class Workbook;
+class Datapicker;
+class Image;
 class Spreadsheet;
 class Matrix;
 class GuiObserver;
@@ -55,6 +57,9 @@ class XYFitCurveDock;
 class WorksheetDock;
 class LabelWidget;
 class ImportFileDialog;
+class ImageWidget;
+class DatapickerPointWidget;
+class DatapickerCurveWidget;
 
 class QDockWidget;
 class QStackedWidget;
@@ -110,6 +115,8 @@ private:
 	KAction* m_redoAction;
 	KAction* m_tileWindows;
 	KAction* m_cascadeWindows;
+    KAction* m_newDatapickerAction;
+
 
 	//toggling doch widgets
 	KAction* m_toggleProjectExplorerDockAction;
@@ -154,6 +161,9 @@ private:
 	XYFitCurveDock* xyFitCurveDock;
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
+    ImageWidget* datapickerImageDock;
+    DatapickerPointWidget* datapickerPointDock;
+    DatapickerCurveWidget* datapickerCurveDock;
 
 	bool openXML(QIODevice*);
 
@@ -168,6 +178,7 @@ private:
 	Spreadsheet* activeSpreadsheet() const;
 	Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
+    Datapicker* activeDatapicker() const;
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver;
@@ -202,6 +213,7 @@ private slots:
 	void newSpreadsheet();
 	void newMatrix();
 	void newWorksheet();
+    void newDatapicker();
 	//TODO: void newScript();
 	void newFileDataSourceActionTriggered();
 	void newSqlDataSourceActionTriggered();
@@ -211,7 +223,7 @@ private slots:
 
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
-	void handleAspectRemoved(const AbstractAspect* parent);
+    void handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*);
 	void handleCurrentAspectChanged(AbstractAspect* );
 	void handleCurrentSubWindowChanged(QMdiSubWindow*);
 	void handleShowSubWindowRequested();

@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 by Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2007-2010 by Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
     Description          : Base class for all objects in a Project.
  ***************************************************************************/
 
@@ -31,15 +31,11 @@
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/aspectcommands.h"
 #include "backend/core/Project.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/PropertyChangeCommand.h"
-
-#include <QIcon>
-#include <QMenu>
-#include <QStyle>
-#include <QApplication>
-#include <QXmlStreamWriter>
 
 #include <KIcon>
 #include <KAction>
@@ -311,7 +307,11 @@ QMenu* AbstractAspect::createContextMenu() {
 // 	menu->addAction(KStandardAction::paste(this));
 // 	menu->addSeparator();
 	menu->addAction(QIcon(KIcon("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
-	menu->addAction(QIcon(KIcon("edit-delete")), i18n("Delete"), this, SLOT(remove()));
+
+	//don't allow to delete data spreadsheets in the datapicker curves
+    if ( !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect())) )
+		menu->addAction(QIcon(KIcon("edit-delete")), i18n("Delete"), this, SLOT(remove()));
+
 	return menu;
 }
 

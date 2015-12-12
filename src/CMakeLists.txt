@@ -50,6 +50,9 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FitParametersWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/FunctionsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/LabelWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/ImageWidget.cpp
+        ${KDEFRONTEND_DIR}/widgets/DatapickerPointWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/DatapickerCurveWidget.cpp
 )
 
 set(UI_SOURCES
@@ -78,13 +81,16 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyfitcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyequationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
-	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
+        ${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/exportspreadsheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/dropvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
+        ${KDEFRONTEND_DIR}/ui/datapickerpointwidget.ui
+	${KDEFRONTEND_DIR}/ui/imagewidget.ui
+        ${KDEFRONTEND_DIR}/ui/datapickercurvewidget.ui
 )
 
 set(BACKEND_SOURCES
@@ -153,6 +159,14 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
+        ${BACKEND_DIR}/datapicker/DatapickerPoint.cpp
+        ${BACKEND_DIR}/datapicker/DatapickerImage.cpp
+	${BACKEND_DIR}/datapicker/Datapicker.cpp
+	${BACKEND_DIR}/datapicker/Transform.cpp
+        ${BACKEND_DIR}/datapicker/ImageEditor.cpp
+       	${BACKEND_DIR}/datapicker/Segment.cpp
+        ${BACKEND_DIR}/datapicker/Segments.cpp
+        ${BACKEND_DIR}/datapicker/DatapickerCurve.cpp
 )
 
 set(COMMONFRONTEND_SOURCES
@@ -166,6 +180,9 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
 	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
+	${COMMONFRONTEND_DIR}/widgets/qxtspanslider.cpp
+	${COMMONFRONTEND_DIR}/datapicker/DatapickerView.cpp
+        ${COMMONFRONTEND_DIR}/datapicker/DatapickerImageView.cpp
 )
 
 set(TOOLS_SOURCES

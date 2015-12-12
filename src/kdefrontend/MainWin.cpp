@@ -37,11 +37,13 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/FileDataSource.h"
+#include "backend/datapicker/Datapicker.h"
 
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/matrix/MatrixView.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include "commonfrontend/datapicker/DatapickerView.h"
 
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
@@ -107,7 +109,10 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	xyEquationCurveDock(0),
 	xyFitCurveDock(0),
 	worksheetDock(0),
-	textLabelDock(0){
+    textLabelDock(0),
+    datapickerImageDock(0),
+    datapickerPointDock(0),
+    datapickerCurveDock(0){
 
 // 	QTimer::singleShot( 0, this, SLOT(initGUI(filename)) );  //TODO doesn't work anymore
 	initGUI(filename);
@@ -212,6 +217,10 @@ void MainWin::initActions() {
 	m_newWorkbookAction = new KAction(KIcon("labplot-workbook-new"),i18n("Workbook"),this);
 	actionCollection()->addAction("new_workbook", m_newWorkbookAction);
 	connect(m_newWorkbookAction, SIGNAL(triggered()),SLOT(newWorkbook()));
+
+    m_newDatapickerAction = new KAction(KIcon("color-picker-black"),i18n("Datapicker"),this);
+    actionCollection()->addAction("new_datapicker", m_newDatapickerAction);
+    connect(m_newDatapickerAction, SIGNAL(triggered()),SLOT(newDatapicker()));
 
 	m_newSpreadsheetAction = new KAction(KIcon("labplot-spreadsheet-new"),i18n("Spreadsheet"),this);
 // 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
@@ -350,6 +359,7 @@ void MainWin::initMenus(){
 	m_newMenu->addAction(m_newSpreadsheetAction);
 	m_newMenu->addAction(m_newMatrixAction);
 	m_newMenu->addAction(m_newWorksheetAction);
+    m_newMenu->addAction(m_newDatapickerAction);
 	m_newMenu->addSeparator();
 	m_newMenu->addAction(m_newFileDataSourceAction);
 // 	m_newMenu->addAction(m_newSqlDataSourceAction);
@@ -411,6 +421,7 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_newSpreadsheetAction->setEnabled(!b);
 	m_newMatrixAction->setEnabled(!b);
 	m_newWorksheetAction->setEnabled(!b);
+    m_newDatapickerAction->setEnabled(!b);
 	m_closeAction->setEnabled(!b);
 	m_toggleProjectExplorerDockAction->setEnabled(!b);
 	m_togglePropertiesDockAction->setEnabled(!b);
@@ -418,10 +429,12 @@ void MainWin::updateGUIOnProjectChanges() {
 	if (!m_mdiArea->currentSubWindow()) {
 		factory->container("worksheet", this)->setEnabled(false);
 		factory->container("spreadsheet", this)->setEnabled(false);
+        factory->container("datapicker", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("spreadsheet_toolbar", this)->hide();
+        factory->container("datapicker_toolbar", this)->hide();
 	}
 
 	factory->container("new", this)->setEnabled(!b);
@@ -455,10 +468,12 @@ void MainWin::updateGUI() {
 	if (!m_mdiArea->currentSubWindow()) {
 		factory->container("worksheet", this)->setEnabled(false);
 		factory->container("spreadsheet", this)->setEnabled(false);
+        factory->container("datapicker", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("spreadsheet_toolbar", this)->hide();
+        factory->container("datapicker_toolbar", this)->hide();
 		return;
 	}
 
@@ -556,6 +571,28 @@ void MainWin::updateGUI() {
 	}else{
 		factory->container("matrix", this)->setEnabled(false);
 	}
+
+    const Datapicker* datapicker = this->activeDatapicker();
+    if (datapicker){
+        factory->container("datapicker", this)->setEnabled(true);
+        //populate datapicker-menu
+        DatapickerView* view=qobject_cast<DatapickerView*>(datapicker->view());
+        QMenu* menu=qobject_cast<QMenu*>(factory->container("datapicker", this));
+        menu->clear();
+        view->createContextMenu(menu);
+
+        //populate spreadsheet-toolbar
+        QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("datapicker_toolbar", this));
+        if (group.groupList().indexOf("Toolbar datapicker_toolbar")==-1)
+            toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
+
+        toolbar->setVisible(true);
+        toolbar->clear();
+        view->fillToolBar(toolbar);
+    }else{
+        factory->container("datapicker", this)->setEnabled(false);
+        factory->container("datapicker_toolbar", this)->setVisible(false);
+    }
 }
 
 /*!
@@ -630,7 +667,7 @@ bool MainWin::newProject(){
 
 	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-			this, SLOT(handleAspectRemoved(const AbstractAspect*)));
+            this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
 	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 			this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(m_project, SIGNAL(statusInfo(QString)), statusBar(), SLOT(showMessage(QString)));
@@ -970,6 +1007,13 @@ void MainWin::newWorkbook(){
 }
 
 /*!
+    adds a new Datapicker to the project.
+*/
+void MainWin::newDatapicker(){
+    Datapicker* datapicker = new Datapicker(0, i18n("Datapicker"));
+    this->addAspectToProject(datapicker);
+}
+/*!
 	adds a new Spreadsheet to the project.
 */
 void MainWin::newSpreadsheet(){
@@ -1036,6 +1080,19 @@ Workbook* MainWin::activeWorkbook() const {
 }
 
 /*!
+    returns a pointer to a Datapicker-object, if the currently active Mdi-Subwindow is \a DatapickerView.
+    Otherwise returns \a 0.
+*/
+Datapicker* MainWin::activeDatapicker() const {
+    QMdiSubWindow* win = m_mdiArea->currentSubWindow();
+    if (!win)
+        return 0;
+
+    AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+    Q_ASSERT(part);
+    return dynamic_cast<Datapicker*>(part);
+}
+/*!
 	returns a pointer to a \c Spreadsheet object, if the currently active Mdi-Subwindow
 	or if the currently selected tab in a \c WorkbookView is a \c SpreadsheetView
 	Otherwise returns \c 0.
@@ -1049,6 +1106,7 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 	Q_ASSERT(part);
 	Spreadsheet* spreadsheet = 0;
 	Workbook* workbook = dynamic_cast<Workbook*>(part);
+    Datapicker* datapicker = dynamic_cast<Datapicker*>(part);
 	if (workbook) {
 		spreadsheet = workbook->currentSpreadsheet();
 		if (!spreadsheet) {
@@ -1061,9 +1119,21 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 					spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parentAspect());
 			}
 		}
-	} else{
-		spreadsheet = dynamic_cast<Spreadsheet*>(part);
-	}
+    } else if (datapicker) {
+        spreadsheet = datapicker->currentSpreadsheet();
+        if (!spreadsheet) {
+            //potentially, the spreadsheet was not selected in datapicker yet since the selection in project explorer
+            //arrives in datapicker's slot later than in this function
+            //->check whether we have a spreadsheet or one of its columns currently selected in the project explorer
+            spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
+            if (!spreadsheet) {
+                if (m_currentAspect->parentAspect())
+                    spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parentAspect());
+            }
+        }
+    } else {
+        spreadsheet = dynamic_cast<Spreadsheet*>(part);
+    }
 
 	return spreadsheet;
 }
@@ -1158,8 +1228,8 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	}
 }
 
-void MainWin::handleAspectRemoved(const AbstractAspect *parent){
-	m_projectExplorer->setCurrentAspect(parent);
+void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAspect* before,const AbstractAspect* aspect){
+    m_projectExplorer->setCurrentAspect(parent);
 }
 
 void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){
@@ -1167,7 +1237,11 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect){
 	if (!part) return;
 
 	const Workbook* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
-	if (!workbook) {
+    const Datapicker* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
+    if (!datapicker)
+        datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect()->parentAspect());
+
+    if (!workbook && !datapicker) {
 		PartMdiView* win = part->mdiSubWindow();
 		if (win)
 			m_mdiArea->removeSubWindow(win);
@@ -1208,10 +1282,16 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 
 		//for aspects being children of a Workbook, we show workbook's window, otherwise the window of the selected part
 		const Workbook* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
-		if (workbook)
-			win = workbook->mdiSubWindow();
-		else
-			win = part->mdiSubWindow();
+        const Datapicker* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
+        if (!datapicker)
+            datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect()->parentAspect());
+
+        if (workbook)
+            win = workbook->mdiSubWindow();
+        else if (datapicker)
+            win = datapicker->mdiSubWindow();
+        else
+            win = part->mdiSubWindow();
 
 		if (m_mdiArea->subWindowList().indexOf(win) == -1) {
 			m_mdiArea->addSubWindow(win);
@@ -1228,9 +1308,15 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 			//we need to select the corresponding tab in WorkbookView too
 			if (parent->parentAspect()) {
 				Workbook* workbook = dynamic_cast<Workbook*>(parent->parentAspect());
+                Datapicker* datapicker = dynamic_cast<Datapicker*>(parent->parentAspect());
+                if (!datapicker)
+                    datapicker = dynamic_cast<Datapicker*>(parent->parentAspect()->parentAspect());
+
 				if (workbook) {
 					workbook->childSelected(parent);
-				}
+                } else if (datapicker) {
+                    datapicker->childSelected(parent);
+                }
 			}
 		}
 	}
