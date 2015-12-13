@@ -673,7 +673,7 @@
        <item row="11" column="0">
         <widget class="QLabel" name="lMinSegmentLength">
          <property name="text">
-          <string>Min. lenght</string>
+          <string>Min. length</string>
          </property>
         </widget>
        </item>

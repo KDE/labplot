@@ -179,7 +179,7 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
 		Q_ASSERT(datapicker);
 		if (datapicker->activeCurve()) {
 			int count = 0;
-			datapicker->activeCurve()->beginMacro(i18n("%1:draw points over segment", datapicker->activeCurve()->name()));
+			datapicker->activeCurve()->beginMacro(i18n("%1: draw points over segment", datapicker->activeCurve()->name()));
 			foreach (QLine* line, q->path) {
 				int l = (line->y1() > line->y2())?line->y2():line->y1();
 				int h = (line->y1() > line->y2())?line->y1():line->y2();

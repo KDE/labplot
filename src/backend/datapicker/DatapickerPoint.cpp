@@ -356,10 +356,10 @@ void DatapickerPoint::setMinusDeltaXPos(const QPointF& pos) {
 	if ( pos != d->minusDeltaXPos ) {
 		beginMacro(i18n("%1: set -delta_X position", name()));
 		if (d->xSymmetricError) {
-			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta X position")));
+			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta_X position")));
 			setPlusDeltaXPos(QPointF(qAbs(pos.x()), pos.y()));
 		} else {
-			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta X position")));
+			exec(new DatapickerPointSetMinusDeltaXPosCmd(d, pos, i18n("%1: set -delta_X position")));
 		}
 		endMacro();
 	}
@@ -369,12 +369,12 @@ STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaYPos, QPointF, plusDeltaYPo
 void DatapickerPoint::setPlusDeltaYPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if ( pos != d->plusDeltaYPos ) {
-		beginMacro(i18n("%1: set +delta Y position", name()));
+		beginMacro(i18n("%1: set +delta_Y position", name()));
 		if (d->ySymmetricError) {
-			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta Y position")));
+			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta_Y position")));
 			setMinusDeltaYPos(QPointF(pos.x(), qAbs(pos.y())));
 		} else {
-			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta Y position")));
+			exec(new DatapickerPointSetPlusDeltaYPosCmd(d, pos, i18n("%1: set +delta_Y position")));
 		}
 		endMacro();
 	}
@@ -384,12 +384,12 @@ STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaYPos, QPointF, minusDeltaY
 void DatapickerPoint::setMinusDeltaYPos(const QPointF& pos) {
 	Q_D(DatapickerPoint);
 	if ( pos != d->minusDeltaYPos ) {
-		beginMacro(i18n("%1: set -delta Y position", name()));
+		beginMacro(i18n("%1: set -delta_Y position", name()));
 		if (d->ySymmetricError) {
-			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta Y position")));
+			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta_Y position")));
 			setPlusDeltaYPos(QPointF(pos.x(), -qAbs(pos.y())));
 		} else {
-			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta Y position")));
+			exec(new DatapickerPointSetMinusDeltaYPosCmd(d, pos, i18n("%1: set -delta_Y position")));
 		}
 		endMacro();
 	}

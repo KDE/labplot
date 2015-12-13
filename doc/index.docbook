@@ -314,8 +314,8 @@ The additional options determining the import of the data are equivalent to thos
 <sect1 id="datapicker">
 <title>Datapicker</title>
 <para>
-The datapicker provides an area for showing an input image file of a graph and spreadsheet.Datapicker is use to trace curve over an input graphs and 
-converts them into number.
+The datapicker provides an area for showing an input image file of a graph and spreadsheet. Datapicker is use to trace curve over an input graphs and 
+converts them into numbers.
 </para>
 <para>
 Datapickers support any type of coordinate system (Cartesian, Logarithmic, Polar) and can either have a fixed size (a user defined size or one of the predefined sizes like A4, Letter etc.) or they can fill out the complete available area for the datapicker window. Multiple curve can be arranged on the datapicker with different kinds of error-bars.
@@ -337,7 +337,7 @@ accessed via the toolbar, main menu or the context menu of the datapicker in the
 </para>
 
 <para>
-  The ouput results of datapicker shown on <link linkend="spreadsheet">spreadsheets</link> can be <link linkend="exportdialog">exported</link> 
+  The output results of datapicker shown on <link linkend="spreadsheet">spreadsheets</link> can be <link linkend="exportdialog">exported</link> 
   to an external file.
 </para>
 </sect1>
@@ -696,7 +696,7 @@ The menu is only available when a datapicker object is selected on the <guilabel
 <sect1 id="symbols">
   <title>Symbols</title>
   <para>
-    Symbols are the points that can be drawn over image of datapicker.Symbols can be directly created by mouse
+    Symbols are the points that can be drawn over image of datapicker. Symbols can be directly created by mouse
      right click over the image. Symbols are mainly of two type with and without error-bar depending on the type of 
     <link linkend="datapickercurve">curve</link> they belong.
     </para>
