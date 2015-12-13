@@ -36,6 +36,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/core/Project.h"
 #include "backend/datapicker/DatapickerPoint.h"
@@ -54,6 +55,7 @@
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "kdefrontend/dockwidgets/XYEquationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFitCurveDock.h"
+#include "kdefrontend/dockwidgets/CustomPointDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/widgets/ImageWidget.h"
@@ -296,6 +298,21 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->textLabelDock->setLabels(list);
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->textLabelDock);
+  }else if (className=="CustomPoint"){
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Custom point properties"));
+
+	if (!mainWindow->customPointDock){
+	  mainWindow->customPointDock = new CustomPointDock(mainWindow->stackedWidget);
+	  mainWindow->stackedWidget->addWidget(mainWindow->customPointDock);
+	}
+
+	QList<CustomPoint*> list;
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<CustomPoint*>(aspect);
+	}
+	mainWindow->customPointDock->setPoints(list);
+
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->customPointDock);
   }else if (className=="DatapickerCurve"){
       mainWindow->m_propertiesDock->setWindowTitle(i18n("DatapickerCurve properties"));
 

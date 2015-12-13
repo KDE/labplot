@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : TemplateHandler.h
+    File                 : Symbol.h
     Project              : LabPlot
-    Description          : Widget for handling saving and loading of templates
+    Description          : Symbol
     --------------------------------------------------------------------
-	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-	Copyright            : (C) 2012-2013 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,50 +26,20 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TEMPLATEHANDLER_H
-#define TEMPLATEHANDLER_H
+#ifndef SYMBOL_H
+#define SYMBOL_H
 
-#include <QtGui/QWidget>
-class QHBoxLayout;
-class QToolButton;
-class QSpacerItem;
-class KConfig;
+#include <QPainterPath>
+#include <QString>
 
-class TemplateHandler : public QWidget{
-	Q_OBJECT
-
+class Symbol {
 	public:
-		enum ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, XYCurve, Axis, CustomPoint};
+		enum Style {NoSymbols, Circle, Square, EquilateralTriangle, RightTriangle, Bar, PeakedBar,
+                            SkewedBar, Diamond, Lozenge, Tie, TinyTie, Plus, Boomerang, SmallBoomerang,
+                            Star4, Star5, Line, Cross};
 
-		TemplateHandler(QWidget* parent, ClassName);
-
-	private:
-		void retranslateUi();
-
-		ClassName className;
-		QList<QString> dirNames;
-
-		QHBoxLayout *horizontalLayout;
-		QSpacerItem *horizontalSpacer;
-		QToolButton *tbLoad;
-		QToolButton *tbSave;
-		QToolButton *tbSaveDefault;
-		QSpacerItem *horizontalSpacer2;
-		QToolButton *tbCopy;
-		QToolButton *tbPaste;
-
-	private slots:
-		void loadMenu();
-		void saveMenu();
-		void loadMenuSelected(QAction*);
-		void saveMenuSelected(QAction*);
-		void saveNewSelected(const QString&);
-		void saveDefaults();
-
-	signals:
-		void loadConfigRequested(KConfig&);
-		void saveConfigRequested(KConfig&);
-		void info(const QString&);
+		static QPainterPath pathFromStyle(Symbol::Style);
+		static QString nameFromStyle(Symbol::Style);
 };
 
 #endif

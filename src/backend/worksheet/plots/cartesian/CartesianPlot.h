@@ -4,7 +4,7 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -111,6 +111,7 @@ class CartesianPlot:public AbstractPlot{
 		QAction* addHorizontalAxisAction;
 		QAction* addVerticalAxisAction;
  		QAction* addLegendAction;
+		QAction* addCustomPointAction;
 
 		QAction* scaleAutoXAction;
 		QAction* scaleAutoYAction;
@@ -138,6 +139,7 @@ class CartesianPlot:public AbstractPlot{
 		XYEquationCurve* addEquationCurve();
 		XYFitCurve* addFitCurve();
 		void addLegend();
+		void addCustomPoint();
 		void scaleAuto();
 		void scaleAutoX();
 		void scaleAutoY();

@@ -93,7 +93,6 @@ class XYCurvePrivate: public QGraphicsItem {
 		qreal symbolsOpacity;
 		qreal symbolsRotationAngle;
 		qreal symbolsSize;
-		qreal symbolsAspectRatio;
 
 		//values
 		XYCurve::ValuesType valuesType;

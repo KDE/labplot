@@ -27,6 +27,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/CustomPointDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/MatrixDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ProjectDock.cpp
@@ -73,6 +74,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/projectdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
@@ -155,6 +157,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp

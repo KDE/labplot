@@ -110,6 +110,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	xyFitCurveDock(0),
 	worksheetDock(0),
     textLabelDock(0),
+    customPointDock(0),
     datapickerImageDock(0),
     datapickerPointDock(0),
     datapickerCurveDock(0){

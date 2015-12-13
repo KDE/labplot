@@ -51,7 +51,6 @@
 #include <KIcon>
 #include <KConfig>
 #include <KConfigGroup>
-
 #include <KLocale>
 
 CartesianPlotLegend::CartesianPlotLegend(CartesianPlot* plot, const QString &name)

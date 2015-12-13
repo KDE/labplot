@@ -1,13 +1,11 @@
 /***************************************************************************
-    File                 : TemplateHandler.h
+    File                 : CustomPointPrivate.h
     Project              : LabPlot
-    Description          : Widget for handling saving and loading of templates
+    Description          : Custom user-defined point on the plot
     --------------------------------------------------------------------
-	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-	Copyright            : (C) 2012-2013 by Alexander Semke (alexander.semke@web.de)
-
+    Copyright            : (C) 2015 Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
-
 /***************************************************************************
  *                                                                         *
  *  This program is free software; you can redistribute it and/or modify   *
@@ -27,50 +25,59 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TEMPLATEHANDLER_H
-#define TEMPLATEHANDLER_H
 
-#include <QtGui/QWidget>
-class QHBoxLayout;
-class QToolButton;
-class QSpacerItem;
-class KConfig;
+#ifndef CUSTOMPOINTPRIVATE_H
+#define CUSTOMPOINTPRIVATE_H
 
-class TemplateHandler : public QWidget{
-	Q_OBJECT
+#include <QGraphicsItem>
 
+class CustomPointPrivate: public QGraphicsItem {
 	public:
-		enum ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, XYCurve, Axis, CustomPoint};
+		explicit CustomPointPrivate(CustomPoint*, const CartesianPlot*);
 
-		TemplateHandler(QWidget* parent, ClassName);
+		const CartesianPlot* plot;
+		QPointF position;
+		QPointF positionScene;
+
+		QString name() const;
+		void retransform();
+		bool swapVisible(bool on);
+		virtual void recalcShapeAndBoundingRect();
+		void updatePosition();
+		void updateData();
+
+		bool suppressItemChangeEvent;
+		bool suppressRetransform;
+		bool m_printing;
+		bool m_hovered;
+		bool m_suppressHoverEvents;
+
+		QRectF boundingRectangle;
+		QRectF transformedBoundingRectangle;
+
+		//symbol
+		Symbol::Style symbolStyle;
+		QBrush symbolBrush;
+		QPen symbolPen;
+		qreal symbolOpacity;
+		qreal symbolRotationAngle;
+		qreal symbolSize;
+
+		QPainterPath pointShape;
+
+		//reimplemented from QGraphicsItem
+		virtual QRectF boundingRect() const;
+		virtual QPainterPath shape() const;
+		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
+		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+
+		CustomPoint* const q;
 
 	private:
-		void retranslateUi();
-
-		ClassName className;
-		QList<QString> dirNames;
-
-		QHBoxLayout *horizontalLayout;
-		QSpacerItem *horizontalSpacer;
-		QToolButton *tbLoad;
-		QToolButton *tbSave;
-		QToolButton *tbSaveDefault;
-		QSpacerItem *horizontalSpacer2;
-		QToolButton *tbCopy;
-		QToolButton *tbPaste;
-
-	private slots:
-		void loadMenu();
-		void saveMenu();
-		void loadMenuSelected(QAction*);
-		void saveMenuSelected(QAction*);
-		void saveNewSelected(const QString&);
-		void saveDefaults();
-
-	signals:
-		void loadConfigRequested(KConfig&);
-		void saveConfigRequested(KConfig&);
-		void info(const QString&);
+		virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
+		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
 };
 
 #endif

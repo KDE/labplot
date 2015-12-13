@@ -34,6 +34,7 @@
 #include "XYFitCurve.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
+#include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 #include "backend/worksheet/Worksheet.h"
@@ -347,6 +348,7 @@ void CartesianPlot::initActions(){
 	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
 	addHorizontalAxisAction = new KAction(KIcon("labplot-axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new KAction(KIcon("labplot-axis-vertical"), i18n("vertical axis"), this);
+	addCustomPointAction = new KAction(KIcon("labplot-custom-point"), i18n("custom point"), this);
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
@@ -354,6 +356,7 @@ void CartesianPlot::initActions(){
 	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
+	connect(addCustomPointAction, SIGNAL(triggered()), SLOT(addCustomPoint()));
 
 	//zoom/navigate actions
 	scaleAutoAction = new KAction(KIcon("labplot-auto-scale-all"), i18n("auto scale"), this);
@@ -399,6 +402,8 @@ void CartesianPlot::initMenus(){
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addHorizontalAxisAction);
 	addNewMenu->addAction(addVerticalAxisAction);
+	addNewMenu->addSeparator();
+	addNewMenu->addAction(addCustomPointAction);
 
 	zoomMenu = new QMenu(i18n("Zoom"));
 	zoomMenu->addAction(scaleAutoAction);
@@ -704,6 +709,11 @@ void CartesianPlot::addLegend(){
 
 	//only one legend is allowed -> disable the action
 	addLegendAction->setEnabled(false);
+}
+
+void CartesianPlot::addCustomPoint() {
+	CustomPoint* point= new CustomPoint(this, "custom point");
+	this->addChild(point);
 }
 
 void CartesianPlot::childAdded(const AbstractAspect* child) {

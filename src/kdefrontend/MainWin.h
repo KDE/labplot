@@ -47,6 +47,7 @@ class GuiObserver;
 class AxisDock;
 class CartesianPlotDock;
 class CartesianPlotLegendDock;
+class CustomPointDock;
 class ColumnDock;
 class MatrixDock;
 class ProjectDock;
@@ -161,6 +162,7 @@ private:
 	XYFitCurveDock* xyFitCurveDock;
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
+	CustomPointDock* customPointDock;
     ImageWidget* datapickerImageDock;
     DatapickerPointWidget* datapickerPointDock;
     DatapickerCurveWidget* datapickerCurveDock;
