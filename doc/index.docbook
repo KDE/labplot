@@ -683,13 +683,13 @@ The menu is only available when a datapicker object is selected on the <guilabel
 <sect1 id="uploadimage">
   <title>Upload Image</title>
   <para>
-    Datapicker can be created inside a project via  "Add new" in the content menu of project/folder or in the main toolbar.
+    Datapicker can be created inside a project via  "Add new" in the context menu of project/folder or in the main toolbar.
     After that a new image can be added and can be changed via "Plot" in the corresponding dock widget.
   </para>
   <para>
-    After uploading image different zooming option can be used from the content menu/datapicker toolbar to change width and 
+    After uploading image different zooming options can be used from the context menu/datapicker toolbar to change width and 
     height of image. Image can also be rotated to an angle using "Rotation" in the "edit" section of dock widget. After this
-    user have to <link linkend="axispoint">set axis point</link>.
+    user have to <link linkend="axispoint">set axis points</link>.
   </para>
 </sect1>
   
@@ -697,7 +697,7 @@ The menu is only available when a datapicker object is selected on the <guilabel
   <title>Symbols</title>
   <para>
     Symbols are the points that can be drawn over image of datapicker. Symbols can be directly created by mouse
-     right click over the image. Symbols are mainly of two type with and without error-bar depending on the type of 
+     right click over the image. Symbols are mainly of two types, with and without error-bar depending on the type of 
     <link linkend="datapickercurve">curve</link> they belong.
     </para>
   <para>
@@ -710,46 +710,46 @@ The menu is only available when a datapicker object is selected on the <guilabel
   <title>Axis Points</title>
   <para>
     Axis Points are the set of three reference  <link linkend="symbols">points</link> over image of datapicker. These points 
-    can be set via "Set Axis Points" in the content menu of datapicker. After selecting points over image user have to update
-    their coordinate system type via "Plot Type" and logical positions via "Ref. Point" in the dock widget.
+    can be set via "Set Axis Points" in the context menu of datapicker. After selecting points over image user have to update
+    their coordinate system type via "Plot Type" and logical positions via "Ref. Points" in the dock widget.
   </para>
 </sect1>
 
 <sect1 id="datapickercurve">
   <title>Datapicker Curve</title>
   <para>
-    Datapicker-Curve can be created inside datapicker via "New Curve" in the content menu of datapicker. A curve can have 
-    different types of X and Y errors (No-error, symmetric, asymmetric) this depends on the type of errors dock widget 
+    Datapicker-Curve can be created inside datapicker via "New Curve" in the context menu of datapicker. A curve can have 
+    different types of X and Y errors (No-error, symmetric, asymmetric). This depends on the type of errors dock widget 
     of datapicker have at the point of creation.
     </para>
   <para>
-    Every curve contain all the curve <link linkend="symbols">points</link> (hidden) and  a spreadsheet that contains 
-    logical positions of all its curve points, and provide options to update spreadsheet and to toggle visibility 
-    of its curve points are in the content menu. Mode "Set Curve Point" in the content menu of datapicker should be 
-    selected in order to create curve points. 
+    Every curve object contains all the curve <link linkend="symbols">points</link> (hidden) and  a spreadsheet that contains 
+    logical positions of all its curve points, and provides options to update spreadsheet and to toggle visibility 
+    of its curve points using the context menu. Mode "Set Curve Points" in the context menu of datapicker should be 
+    selected in order to create curve points.
   </para>
   <para>
-    Multiple curve can be created for same datapicker the creation of curve points are always corresponding to the active  
-    curve of datapicker which can be changed via "Active Curve" option in the content menu and dock widget of datapicker.
-    Every curve of datapicker can have it's own symbol style that can be changed in the "Symbols" section of dock widget.
+    Multiple curve can be created for same datapicker. The created curve points always correspond to the active
+    curve of datapicker which can be changed via "Active Curve" option in the context menu and dock widget of datapicker.
+    Every curve of datapicker can have its own symbol style that can be changed in the "Symbols" section of dock widget.
   </para>
 </sect1>
 
 <sect1 id="curvesegments">
   <title>Curve Segments</title>
   <para>
-    Curve segment for datapicker can be created over image by switching mode to "Select Segments" in  the content menu of 
+    Curve segment for datapicker can be created over image by switching mode to "Select Curve Segments" in the context menu of
     datapicker. A segment is a selectable object over image which can be selected by mouse right click over it.
     </para>
   <para>
-    Segments are created by processing of image on the basis range of color attributes in order to automatically 
-    trace curves. To improve results these range and types of color attributes can be changed in the "edit" 
+    Segments are created by processing of image on the basis range of color attributes in order to automatically
+    trace curves. To improve results these range and types of color attributes can be changed in the "edit"
     section of dock-widget. Dock-widget also provides options to switch among processed image and original image,
     and to set the minimum possible length of segments.
   </para>
   <para>
     Once a segment is selected it will create curve points over it with a minimum specified distance among them.
-    The minimum specified distance among point can be changed in the dock widget of datapicker user might have 
+    The minimum specified distance among the points can be changed in the dock widget of datapicker. User might have
     to select the segments again in order to observe the changes.
   </para>
 </sect1>
