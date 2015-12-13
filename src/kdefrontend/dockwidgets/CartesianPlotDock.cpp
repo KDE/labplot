@@ -97,7 +97,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	//General
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
-	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
+	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( ui.sbLeft, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbTop, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
@@ -366,14 +366,12 @@ void CartesianPlotDock::commentChanged(){
   m_plot->setComment(ui.leComment->text());
 }
 
-void CartesianPlotDock::visibilityChanged(int state){
-  if (m_initializing)
-	return;
+void CartesianPlotDock::visibilityChanged(bool state){
+	if (m_initializing)
+		return;
 
-  bool b = (state==Qt::Checked);
-  foreach(CartesianPlot* plot, m_plotList){
-	plot->setVisible(b);
-  }
+	foreach(CartesianPlot* plot, m_plotList)
+		plot->setVisible(state);
 }
 
 void CartesianPlotDock::geometryChanged(){

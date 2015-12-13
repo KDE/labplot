@@ -59,7 +59,7 @@ class CustomPointDock : public QWidget {
 		void commentChanged();
 		void positionXChanged();
 		void positionYChanged();
-		void visibilityChanged(int);
+		void visibilityChanged(bool);
 
 		//Symbol-tab
 		void symbolStyleChanged(int);

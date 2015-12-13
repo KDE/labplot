@@ -707,7 +707,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 				//curve's error bars for x
 				float errorBarsSize = Worksheet::convertToSceneUnits(10, Worksheet::Point);
-				if (curve->symbolsStyle()!=XYCurve::NoSymbols && errorBarsSize<curve->symbolsSize()*1.4)
+				if (curve->symbolsStyle()!=Symbol::NoSymbols && errorBarsSize<curve->symbolsSize()*1.4)
 					errorBarsSize = curve->symbolsSize()*1.4;
 
 				switch(curve->errorBarsType()) {
@@ -745,12 +745,12 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			}
 
 			//curve's symbol
-			if (curve->symbolsStyle()!=XYCurve::NoSymbols){
+			if (curve->symbolsStyle()!=Symbol::NoSymbols){
 				painter->setOpacity(curve->symbolsOpacity());
 				painter->setBrush(curve->symbolsBrush());
 				painter->setPen(curve->symbolsPen());
 
-				QPainterPath path = XYCurve::symbolsPathFromStyle(curve->symbolsStyle());
+				QPainterPath path = Symbol::pathFromStyle(curve->symbolsStyle());
 				QTransform trafo;
 				trafo.scale(curve->symbolsSize(), curve->symbolsSize());
 				path = trafo.map(path);

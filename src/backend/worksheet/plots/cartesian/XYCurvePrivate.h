@@ -87,7 +87,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		qreal dropLineOpacity;
 
 		//symbols
-		XYCurve::SymbolsStyle symbolsStyle;
+		Symbol::Style symbolsStyle;
 		QBrush symbolsBrush;
 		QPen symbolsPen;
 		qreal symbolsOpacity;

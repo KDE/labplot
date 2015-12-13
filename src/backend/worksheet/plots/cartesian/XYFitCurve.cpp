@@ -72,7 +72,7 @@ void XYFitCurve::init() {
 
 	//TODO: read from the saved settings for XYFitCurve?
 	d->lineType = XYCurve::Line;
-	d->symbolsStyle = XYCurve::NoSymbols;
+	d->symbolsStyle = Symbol::NoSymbols;
 }
 
 void XYFitCurve::recalculate() {

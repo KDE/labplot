@@ -63,7 +63,7 @@ private slots:
 	//"General"-tab
 	void nameChanged();
 	void commentChanged();
-	void visibilityChanged(int);
+	void visibilityChanged(bool);
 	void geometryChanged();
 	void layoutChanged(Worksheet::Layout);
 

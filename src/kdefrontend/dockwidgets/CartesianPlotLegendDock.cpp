@@ -82,7 +82,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	//General
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
-	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
+	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( ui.kfrLabelFont, SIGNAL(fontSelected(QFont)), this, SLOT(labelFontChanged(QFont)) );
 	connect( ui.kcbLabelColor, SIGNAL(changed(QColor)), this, SLOT(labelColorChanged(QColor)) );
 	connect( ui.cbOrder, SIGNAL(currentIndexChanged(int)), this, SLOT(labelOrderChanged(int)) );
@@ -277,13 +277,12 @@ void CartesianPlotLegendDock::commentChanged() {
 	m_legend->setComment(ui.leComment->text());
 }
 
-void CartesianPlotLegendDock::visibilityChanged(int state) {
+void CartesianPlotLegendDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
 
-	bool b = (state==Qt::Checked);
 	foreach(CartesianPlotLegend* legend, m_legendList)
-		legend->setVisible(b);
+		legend->setVisible(state);
 }
 
 //General

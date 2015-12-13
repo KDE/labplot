@@ -50,7 +50,7 @@ CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent) {
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( ui.klePositionX, SIGNAL(returnPressed()), this, SLOT(positionXChanged()) );
 	connect( ui.klePositionY, SIGNAL(returnPressed()), this, SLOT(positionYChanged()) );
-	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
+	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	//Symbols
 	connect( ui.cbSymbolStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolStyleChanged(int)) );
@@ -158,7 +158,6 @@ void CustomPointDock::commentChanged(){
 	m_point->setComment(ui.leComment->text());
 }
 
-
 void CustomPointDock::positionXChanged() {
 	if (m_initializing)
 		return;
@@ -181,14 +180,13 @@ void CustomPointDock::positionYChanged() {
 		point->setPosition(pos);
 }
 
-void CustomPointDock::visibilityChanged(int state) {
+void CustomPointDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
 
-	bool b = (state==Qt::Checked);
 	m_point->beginMacro(i18n("%1 CustomPoints: visibility changed", m_pointsList.count()));
 	foreach(CustomPoint* point, m_pointsList)
-		point->setVisible(b);
+		point->setVisible(state);
 	m_point->endMacro();
 }
 

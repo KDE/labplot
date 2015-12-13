@@ -730,7 +730,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, SIGNAL(lineTypeChanged(XYCurve::LineType)), this, SLOT(updateLegend()));
 		connect(curve, SIGNAL(linePenChanged(QPen)), this, SLOT(updateLegend()));
 		connect(curve, SIGNAL(lineOpacityChanged(qreal)), this, SLOT(updateLegend()));
-		connect(curve, SIGNAL(symbolsStyleChanged(XYCurve::SymbolsStyle)), this, SLOT(updateLegend()));
+		connect(curve, SIGNAL(symbolsStyleChanged(Symbol::Style)), this, SLOT(updateLegend()));
 		connect(curve, SIGNAL(symbolsSizeChanged(qreal)), this, SLOT(updateLegend()));
 		connect(curve, SIGNAL(symbolsRotationAngleChanged(qreal)), this, SLOT(updateLegend()));
 		connect(curve, SIGNAL(symbolsOpacityChanged(qreal)), this, SLOT(updateLegend()));
