@@ -321,7 +321,7 @@ converts them into numbers.
 Datapickers support any type of coordinate system (Cartesian, Logarithmic, Polar) and can either have a fixed size (a user defined size or one of the predefined sizes like A4, Letter etc.) or they can fill out the complete available area for the datapicker window. Multiple curve can be arranged on the datapicker with different kinds of error-bars.
 </para>
 <para>
-Many properties of the datapicker like type of coordinate system, error-bars, size style and shape of points, and settings for image-editor can be 
+Many properties of the datapicker like type of coordinate system, error-bars, size, style and shape of points, and settings for image-editor can be 
 changed in the "Datapicker properties" panel.
 </para>
 
