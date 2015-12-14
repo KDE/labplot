@@ -36,6 +36,8 @@
 #include <QPainter>
 #include <QDir>
 
+#include <KLocale>
+#include <KConfigGroup>
 
 DatapickerPointWidget::DatapickerPointWidget(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);

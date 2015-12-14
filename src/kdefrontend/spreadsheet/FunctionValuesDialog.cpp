@@ -65,6 +65,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	m_topLevelClasses<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 	m_selectableClasses<<"Column";
 
+    // TODO - Change this to a modern smart pointer
 	m_aspectTreeModel = std::auto_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
 	m_aspectTreeModel->setSelectableAspects(m_selectableClasses);
 

@@ -31,6 +31,8 @@
 #include "ui_datapickerpointwidget.h"
 #include "backend/datapicker/DatapickerPoint.h"
 
+class KConfig;
+
 class DatapickerPointWidget: public QWidget {
 	Q_OBJECT
 

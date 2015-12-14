@@ -107,68 +107,68 @@ void DatapickerImageView::initActions() {
 	magnificationActionGroup = new QActionGroup(this);
 
 	//Zoom actions
-	zoomInViewAction = new KAction(KIcon("zoom-in"), i18n("Zoom in"), zoomActionGroup);
+    zoomInViewAction = new KAction(QIcon::fromTheme("zoom-in"), i18n("Zoom in"), zoomActionGroup);
 	zoomInViewAction->setShortcut(Qt::CTRL+Qt::Key_Plus);
 
-	zoomOutViewAction = new KAction(KIcon("zoom-out"), i18n("Zoom out"), zoomActionGroup);
+    zoomOutViewAction = new KAction(QIcon::fromTheme("zoom-out"), i18n("Zoom out"), zoomActionGroup);
 	zoomOutViewAction->setShortcut(Qt::CTRL+Qt::Key_Minus);
 
-	zoomOriginAction = new KAction(KIcon("zoom-original"), i18n("Original size"), zoomActionGroup);
+    zoomOriginAction = new KAction(QIcon::fromTheme("zoom-original"), i18n("Original size"), zoomActionGroup);
 	zoomOriginAction->setShortcut(Qt::CTRL+Qt::Key_1);
 
-	zoomFitPageHeightAction = new KAction(KIcon("zoom-fit-height"), i18n("Fit to height"), zoomActionGroup);
-	zoomFitPageWidthAction = new KAction(KIcon("zoom-fit-width"), i18n("Fit to width"), zoomActionGroup);
+    zoomFitPageHeightAction = new KAction(QIcon::fromTheme("zoom-fit-height"), i18n("Fit to height"), zoomActionGroup);
+    zoomFitPageWidthAction = new KAction(QIcon::fromTheme("zoom-fit-width"), i18n("Fit to width"), zoomActionGroup);
 
 	// Mouse mode actions
-	selectAndEditModeAction = new KAction(KIcon("labplot-cursor-arrow"), i18n("Select and Edit"), mouseModeActionGroup);
+    selectAndEditModeAction = new KAction(QIcon::fromTheme("labplot-cursor-arrow"), i18n("Select and Edit"), mouseModeActionGroup);
 	selectAndEditModeAction->setCheckable(true);
 
-	navigationModeAction = new KAction(KIcon("input-mouse"), i18n("Navigate"), mouseModeActionGroup);
+    navigationModeAction = new KAction(QIcon::fromTheme("input-mouse"), i18n("Navigate"), mouseModeActionGroup);
 	navigationModeAction->setCheckable(true);
 
-	zoomSelectionModeAction = new KAction(KIcon("page-zoom"), i18n("Select and Zoom"), mouseModeActionGroup);
+    zoomSelectionModeAction = new KAction(QIcon::fromTheme("page-zoom"), i18n("Select and Zoom"), mouseModeActionGroup);
 	zoomSelectionModeAction->setCheckable(true);
 
-	selectAndMoveModeAction = new KAction(KIcon("labplot-cursor-arrow"), i18n("Select and Move"), mouseModeActionGroup);
+    selectAndMoveModeAction = new KAction(QIcon::fromTheme("labplot-cursor-arrow"), i18n("Select and Move"), mouseModeActionGroup);
 	selectAndMoveModeAction->setCheckable(true);
 
-	setAxisPointsAction = new KAction(KIcon("labplot-plot-axis-points"), i18n("Set Axis Points"), plotPointsTypeActionGroup);
+    setAxisPointsAction = new KAction(QIcon::fromTheme("labplot-plot-axis-points"), i18n("Set Axis Points"), plotPointsTypeActionGroup);
 	setAxisPointsAction->setCheckable(true);
 
-	setCurvePointsAction = new KAction(KIcon("labplot-xy-curve-points"), i18n("Set Curve Points"), plotPointsTypeActionGroup);
+    setCurvePointsAction = new KAction(QIcon::fromTheme("labplot-xy-curve-points"), i18n("Set Curve Points"), plotPointsTypeActionGroup);
 	setCurvePointsAction->setCheckable(true);
 
-	selectSegmentAction = new KAction(KIcon("labplot-xy-curve-segments"), i18n("Select Curve Segments"), plotPointsTypeActionGroup);
+    selectSegmentAction = new KAction(QIcon::fromTheme("labplot-xy-curve-segments"), i18n("Select Curve Segments"), plotPointsTypeActionGroup);
 	selectSegmentAction->setCheckable(true);
 
-	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("New Curve"), this);
+    addCurveAction = new KAction(QIcon::fromTheme("labplot-xy-curve"), i18n("New Curve"), this);
 
-	shiftLeftAction = new KAction(KIcon("labplot-shift-left-x"), i18n("Shift Left"), navigationActionGroup);
+    shiftLeftAction = new KAction(QIcon::fromTheme("labplot-shift-left-x"), i18n("Shift Left"), navigationActionGroup);
 	shiftLeftAction->setShortcut(Qt::Key_Right);
 
-	shiftRightAction = new KAction(KIcon("labplot-shift-right-x"), i18n("Shift Right"), navigationActionGroup);
+    shiftRightAction = new KAction(QIcon::fromTheme("labplot-shift-right-x"), i18n("Shift Right"), navigationActionGroup);
 	shiftRightAction->setShortcut(Qt::Key_Left);
 
-	shiftUpAction = new KAction(KIcon("labplot-shift-down-y"), i18n("Shift Up"), navigationActionGroup);
+    shiftUpAction = new KAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("Shift Up"), navigationActionGroup);
 	shiftUpAction->setShortcut(Qt::Key_Up);
 
-	shiftDownAction = new KAction(KIcon("labplot-shift-up-y"), i18n("Shift Down"), navigationActionGroup);
+    shiftDownAction = new KAction(QIcon::fromTheme("labplot-shift-up-y"), i18n("Shift Down"), navigationActionGroup);
 	shiftDownAction->setShortcut(Qt::Key_Down);
 
-	noMagnificationAction = new KAction(KIcon("labplot-1-to-1-zoom"), i18n("No Magnification"), magnificationActionGroup);
+    noMagnificationAction = new KAction(QIcon::fromTheme("labplot-1-to-1-zoom"), i18n("No Magnification"), magnificationActionGroup);
 	noMagnificationAction->setCheckable(true);
 	noMagnificationAction->setChecked(true);
 
-	twoTimesMagnificationAction = new KAction(KIcon("labplot-1-to-2-zoom"), i18n("2x Magnification"), magnificationActionGroup);
+    twoTimesMagnificationAction = new KAction(QIcon::fromTheme("labplot-1-to-2-zoom"), i18n("2x Magnification"), magnificationActionGroup);
 	twoTimesMagnificationAction->setCheckable(true);
 
-	threeTimesMagnificationAction = new KAction(KIcon("labplot-1-to-3-zoom"), i18n("3x Magnification"), magnificationActionGroup);
+    threeTimesMagnificationAction = new KAction(QIcon::fromTheme("labplot-1-to-3-zoom"), i18n("3x Magnification"), magnificationActionGroup);
 	threeTimesMagnificationAction->setCheckable(true);
 
-	fourTimesMagnificationAction = new KAction(KIcon("labplot-1-to-4-zoom"), i18n("4x Magnification"), magnificationActionGroup);
+    fourTimesMagnificationAction = new KAction(QIcon::fromTheme("labplot-1-to-4-zoom"), i18n("4x Magnification"), magnificationActionGroup);
 	fourTimesMagnificationAction->setCheckable(true);
 
-	fiveTimesMagnificationAction = new KAction(KIcon("labplot-1-to-5-zoom"), i18n("5x Magnification"), magnificationActionGroup);
+    fiveTimesMagnificationAction = new KAction(QIcon::fromTheme("labplot-1-to-5-zoom"), i18n("5x Magnification"), magnificationActionGroup);
 	fiveTimesMagnificationAction->setCheckable(true);
 
 	connect( mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)) );
@@ -181,7 +181,7 @@ void DatapickerImageView::initActions() {
 
 void DatapickerImageView::initMenus() {
 	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"));
-	m_viewMouseModeMenu->setIcon(KIcon("input-mouse"));
+    m_viewMouseModeMenu->setIcon(QIcon::fromTheme("input-mouse"));
 	m_viewMouseModeMenu->addAction(selectAndEditModeAction);
 	m_viewMouseModeMenu->addAction(navigationModeAction);
 	m_viewMouseModeMenu->addAction(zoomSelectionModeAction);
@@ -194,7 +194,7 @@ void DatapickerImageView::initMenus() {
 	m_viewImageMenu->addAction(selectSegmentAction);
 
 	m_zoomMenu = new QMenu(i18n("Zoom"));
-	m_zoomMenu->setIcon(KIcon("zoom-draw"));
+    m_zoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
 	m_zoomMenu->addAction(zoomInViewAction);
 	m_zoomMenu->addAction(zoomOutViewAction);
 	m_zoomMenu->addAction(zoomOriginAction);
@@ -457,8 +457,10 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 	if ( magnificationFactor && m_mouseMode == SelectAndEditMode && m_image->isLoaded && sceneRect().contains(pos)
 	        && m_image->plotPointsType() != DatapickerImage::SegmentPoints ) {
 
-		if (!m_image->m_magnificationWindow) {
-			m_image->m_magnificationWindow = new QGraphicsPixmapItem(0, scene());
+        if (!m_image->m_magnificationWindow) {
+//            m_image->m_magnificationWindow = new QGraphicsPixmapItem(0, scene());
+            m_image->m_magnificationWindow = new QGraphicsPixmapItem;
+            scene()->addItem(m_image->m_magnificationWindow);
 			m_image->m_magnificationWindow->setZValue(-1);
 		}
 
@@ -687,7 +689,8 @@ void DatapickerImageView::exportToFile(const QString& path, const ExportFormat f
 		if (format==DatapickerImageView::Pdf)
 			printer.setOutputFormat(QPrinter::PdfFormat);
 		else
-			printer.setOutputFormat(QPrinter::PostScriptFormat);
+//			printer.setOutputFormat(QPrinter::PostScriptFormat);
+            printer.setOutputFormat(QPrinter::NativeFormat);
 
 		printer.setOutputFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);

@@ -394,8 +394,7 @@ void XYCurveDock::init(){
 		pa.translate(iconSize/2,iconSize/2);
 		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
 		pa.end();
-                ui.cbSymbolStyle->addItem(QIcon(pm), XYCurve::symbolsNameFromStyle(style));
-		//ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style)); // Origin/master version
+        ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style));
 	}
 
  	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);

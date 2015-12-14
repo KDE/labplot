@@ -32,6 +32,8 @@
 
 #include <QHBoxLayout>
 
+#include <KLocale>
+
 DatapickerCurveWidget::DatapickerCurveWidget(QWidget *parent) : QWidget(parent), m_suppressTypeChange(false) {
 	ui.setupUi(this);
 

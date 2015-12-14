@@ -42,6 +42,8 @@ class WorksheetElement;
 class Transform;
 class QActionGroup;
 
+class QPrinter;
+
 class DatapickerImageView : public QGraphicsView {
 	Q_OBJECT
 

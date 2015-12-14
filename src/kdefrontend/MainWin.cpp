@@ -583,7 +583,7 @@ void MainWin::updateGUI() {
         //populate spreadsheet-toolbar
         QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("datapicker_toolbar", this));
         if (group.groupList().indexOf("Toolbar datapicker_toolbar")==-1)
-            toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
+            toolbar->setToolButtonStyle(Qt::ToolButtonFollowStyle);
 
         toolbar->setVisible(true);
         toolbar->clear();

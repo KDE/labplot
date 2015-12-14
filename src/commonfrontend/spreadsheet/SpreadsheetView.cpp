@@ -1029,54 +1029,6 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers(){
 }
 
 void SpreadsheetView::fillSelectedCellsWithRandomNumbers(){
-	if (selectedColumnCount() < 1) return;
-	int first = firstSelectedRow();
-	int last = lastSelectedRow();
-	if ( first < 0 ) return;
-
-	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18n("%1: fill cells with random values", m_spreadsheet->name()));
-	qsrand(QTime::currentTime().msec());
-	foreach(Column* col_ptr, selectedColumns()) {
-		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
-		col_ptr->setSuppressDataChangedSignal(true);
-		switch (col_ptr->columnMode()) {
-			case AbstractColumn::Numeric:
-				{
-					QVector<double> results(last-first+1);
-					for (int row=first; row<=last; row++)
-						if (isCellSelected(row, col))
-							results[row-first] = double(qrand())/double(RAND_MAX);
-						else
-							results[row-first] = col_ptr->valueAt(row);
-					col_ptr->replaceValues(first, results);
-					break;
-				}
-			case AbstractColumn::Text:
-				{
-					QStringList results;
-					for (int row=first; row<=last; row++)
-						if (isCellSelected(row, col))
-							results << QString::number(double(qrand())/double(RAND_MAX));
-						else
-							results << col_ptr->textAt(row);
-					col_ptr->replaceTexts(first, results);
-					break;
-				}
-			case AbstractColumn::DateTime:
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
-				break;
-		}
-
-		col_ptr->setSuppressDataChangedSignal(false);
-		col_ptr->setChanged();
-	}
-	m_spreadsheet->endMacro();
-	RESET_CURSOR;
-}
-
-void SpreadsheetView::fillSelectedCellsWithRandomNumbers(){
     if (selectedColumnCount() < 1) return;
     int first = firstSelectedRow();
     int last = lastSelectedRow();

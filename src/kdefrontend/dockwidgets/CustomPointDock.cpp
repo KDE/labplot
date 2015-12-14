@@ -35,7 +35,9 @@
 
 #include <QPainter>
 #include <QDir>
-
+#include <KLocale>
+#include <KConfig>
+#include <KConfigGroup>
 
 CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);

@@ -35,6 +35,9 @@
 #include <QFileDialog>
 #include <QDir>
 
+#include <QIcon>
+#include <KLocale>
+#include <KConfigGroup>
 
 ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
@@ -45,7 +48,7 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
 	datapickerPointWidget->hidePositionWidgets();
 
 	ui.kleFileName->setClearButtonShown(true);
-	ui.bOpen->setIcon( KIcon("document-open") );
+    ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	KUrlCompletion *comp = new KUrlCompletion();
 	ui.kleFileName->setCompletionObject(comp);
