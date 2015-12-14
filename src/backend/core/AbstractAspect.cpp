@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 by Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2007-2010 by Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
     Description          : Base class for all objects in a Project.
  ***************************************************************************/
 
@@ -31,6 +31,8 @@
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/aspectcommands.h"
 #include "backend/core/Project.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/PropertyChangeCommand.h"
@@ -41,7 +43,6 @@
 #include <QApplication>
 #include <QXmlStreamWriter>
 
-#include <QIcon>
 #include <KAction>
 #include <KStandardAction>
 #include <QMenu>
@@ -310,8 +311,12 @@ QMenu* AbstractAspect::createContextMenu() {
 // 	menu->addAction(KStandardAction::copy(this));
 // 	menu->addAction(KStandardAction::paste(this));
 // 	menu->addSeparator();
-    menu->addAction(QIcon::fromTheme("edit-rename"), i18n("Rename"), this, SIGNAL(renameRequested()));
-    menu->addAction(QIcon::fromTheme("edit-delete"), i18n("Delete"), this, SLOT(remove()));
+	menu->addAction(QIcon(KIcon("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
+
+	//don't allow to delete data spreadsheets in the datapicker curves
+    if ( !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect())) )
+		menu->addAction(QIcon::fromTheme("edit-delete"), i18n("Delete"), this, SLOT(remove()));
+
 	return menu;
 }
 
@@ -377,9 +382,6 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 		child->setName(new_name);
 	}
 
-	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
-	connect(child, SIGNAL(deselected(const AbstractAspect*)), this, SLOT(childDeselected(const AbstractAspect*)));
-
 	exec(new AspectChildAddCmd(m_aspect_private, child, m_aspect_private->m_children.count()));
 	endMacro();
 }
@@ -388,8 +390,6 @@ void AbstractAspect::addChild(AbstractAspect* child) {
  * \brief Add the given Aspect to my list of children without any checks and without putting this step onto the undo-stack
  */
 void AbstractAspect::addChildFast(AbstractAspect* child) {
-	connect(child, SIGNAL(selected(const AbstractAspect*)), this, SLOT(childSelected(const AbstractAspect*)));
-	connect(child, SIGNAL(deselected(const AbstractAspect*)), this, SLOT(childDeselected(const AbstractAspect*)));
 	m_aspect_private->insertChild(m_aspect_private->m_children.count(), child);
 }
 

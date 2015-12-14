@@ -31,6 +31,7 @@
 #define XYCURVEDOCK_H
 
 #include "backend/core/AbstractColumn.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "ui_xycurvedock.h"
@@ -176,7 +177,7 @@ private slots:
 	void curveDropLineOpacityChanged(qreal);
 
 	//Symbol-Tab
-	void curveSymbolsStyleChanged(XYCurve::SymbolsStyle);
+	void curveSymbolsStyleChanged(Symbol::Style);
 	void curveSymbolsSizeChanged(qreal);
 	void curveSymbolsRotationAngleChanged(qreal);
 	void curveSymbolsOpacityChanged(qreal);

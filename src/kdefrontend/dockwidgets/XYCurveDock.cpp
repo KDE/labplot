@@ -387,14 +387,15 @@ void XYCurveDock::init(){
 
 	ui.cbSymbolStyle->addItem(i18n("none"));
 	for (int i=1; i<19; ++i) {
-		XYCurve::SymbolsStyle style = (XYCurve::SymbolsStyle)i;
+		Symbol::Style style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
 		pa.setRenderHint(QPainter::Antialiasing);
 		pa.translate(iconSize/2,iconSize/2);
-		pa.drawPath(trafo.map(XYCurve::symbolsPathFromStyle(style)));
+		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
 		pa.end();
-        ui.cbSymbolStyle->addItem(QIcon(pm), XYCurve::symbolsNameFromStyle(style));
+                ui.cbSymbolStyle->addItem(QIcon(pm), XYCurve::symbolsNameFromStyle(style));
+		//ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style)); // Origin/master version
 	}
 
  	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
@@ -481,7 +482,7 @@ void XYCurveDock::init(){
 
 void XYCurveDock::setModel() {
 	QList<const char*>  list;
-	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
+    list<<"Folder"<<"Workbook"<<"Datapicker"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);
 		cbYColumn->setTopLevelClasses(list);
@@ -609,7 +610,7 @@ void XYCurveDock::initTabs() {
 	connect(m_curve, SIGNAL(dropLineOpacityChanged(qreal)), this, SLOT(curveDropLineOpacityChanged(qreal)));
 
 	//Symbol-Tab
-	connect(m_curve, SIGNAL(symbolsStyleChanged(XYCurve::SymbolsStyle)), this, SLOT(curveSymbolsStyleChanged(XYCurve::SymbolsStyle)));
+	connect(m_curve, SIGNAL(symbolsStyleChanged(Symbol::Style)), this, SLOT(curveSymbolsStyleChanged(Symbol::Style)));
 	connect(m_curve, SIGNAL(symbolsSizeChanged(qreal)), this, SLOT(curveSymbolsSizeChanged(qreal)));
 	connect(m_curve, SIGNAL(symbolsRotationAngleChanged(qreal)), this, SLOT(curveSymbolsRotationAngleChanged(qreal)));
 	connect(m_curve, SIGNAL(symbolsOpacityChanged(qreal)), this, SLOT(curveSymbolsOpacityChanged(qreal)));
@@ -1020,9 +1021,9 @@ void XYCurveDock::dropLineOpacityChanged(int value){
 
 //"Symbol"-tab
 void XYCurveDock::symbolsStyleChanged(int index){
-  XYCurve::SymbolsStyle style = XYCurve::SymbolsStyle(index);
+  Symbol::Style style = Symbol::Style(index);
 
-  if (style==XYCurve::NoSymbols){
+  if (style==Symbol::NoSymbols){
 	ui.sbSymbolSize->setEnabled(false);
 	ui.sbSymbolRotation->setEnabled(false);
 	ui.sbSymbolOpacity->setEnabled(false);
@@ -1039,7 +1040,7 @@ void XYCurveDock::symbolsStyleChanged(int index){
 	ui.sbSymbolOpacity->setEnabled(true);
 
 	//enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
-	if (style!=XYCurve::SymbolsLine && style!=XYCurve::SymbolsCross) {
+	if (style!=Symbol::Line && style!=Symbol::Cross) {
 	  ui.cbSymbolFillingStyle->setEnabled(true);
 	  bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex())==Qt::NoBrush);
 	  ui.kcbSymbolFillingColor->setEnabled(!noBrush);
@@ -1792,7 +1793,7 @@ void XYCurveDock::curveDropLineOpacityChanged(qreal opacity) {
 }
 
 //Symbol-Tab
-void XYCurveDock::curveSymbolsStyleChanged(XYCurve::SymbolsStyle style) {
+void XYCurveDock::curveSymbolsStyleChanged(Symbol::Style style) {
 	m_initializing = true;
 	ui.cbSymbolStyle->setCurrentIndex((int)style);
 	m_initializing = false;

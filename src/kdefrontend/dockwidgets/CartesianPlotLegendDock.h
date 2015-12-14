@@ -63,7 +63,7 @@ private slots:
 	//"General"-tab
 	void nameChanged();
 	void commentChanged();
-	void visibilityChanged(int);
+	void visibilityChanged(bool);
 	void labelFontChanged(const QFont&);
 	void labelColorChanged(const QColor&);
 	void labelOrderChanged(int);

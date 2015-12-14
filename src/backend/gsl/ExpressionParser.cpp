@@ -1141,6 +1141,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 
 		(*xVector)[i] = x;
 		if (std::isfinite(y))
+		// if (isfinite(y)) // NOTE -> This is the master branch version
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;
@@ -1170,6 +1171,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 
 		(*xVector)[i] = x;
 		if (std::isfinite(y))
+		// if (isfinite(y)) // NOTE -> As above
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;
@@ -1194,6 +1196,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 			return false;
 
 		if (std::isfinite(y))
+		// if (isfinite(y)) // NOTE -> As above
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;
@@ -1241,6 +1244,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 			return false;
 
 		if (std::isfinite(y))
+		// if (isfinite(y)) // NOTE -> Again
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;
@@ -1268,6 +1272,7 @@ bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, co
 			return false;
 
 		if (std::isfinite(r)) {
+		// if (isfinite(r)) { // NOTE -> Some more
 			(*xVector)[i] = r*cos(phi);
 			(*yVector)[i] = r*sin(phi);
 		} else {
@@ -1300,6 +1305,7 @@ bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& e
 			return false;
 
 		if (std::isfinite(x))
+		// if (isfinite(x)) // NOTE -> Again
 			(*xVector)[i] = x;
 		else
 			(*xVector)[i] = NAN;
@@ -1309,6 +1315,7 @@ bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& e
 			return false;
 
 		if (std::isfinite(y))
+		// if (isfinite(y)) // NOTE -> Again
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;

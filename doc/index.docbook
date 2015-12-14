@@ -90,6 +90,8 @@ Features:
 <listitem><para>Definition of mathematical formulas is supported by syntax-highlighting and completion and by the list of thematicaly grouped mathematical and physical constants and functions</para></listitem>
 <listitem><para>Analysis of plotted data is supported by many zooming and navigation features</para></listitem>
 <listitem><para>Linear and non-linear fits to data, several fit-models are predefined and custom models with arbitrary number of parameters can be provided</para></listitem>
+<listitem><para>Datapicker for manual or fast automatic curve digitization mode of an image file showing a graph.</para></listitem>
+<listitem><para>Datapicker supports errorbar, zooming functions, and any type of coordinate system (Cartesian, Logarithmic, Polar).</para></listitem>
 </itemizedlist>
 </para>
 
@@ -306,6 +308,37 @@ It is possible to store the link to the external file in the project file only a
 </para>
 <para>
 The additional options determining the import of the data are equivalent to those provided in <link linkend="importdialog">Import Dialog</link>.
+</para>
+</sect1>
+
+<sect1 id="datapicker">
+<title>Datapicker</title>
+<para>
+The datapicker provides an area for showing an input image file of a graph and spreadsheet. Datapicker is use to trace curve over an input graphs and 
+converts them into numbers.
+</para>
+<para>
+Datapickers support any type of coordinate system (Cartesian, Logarithmic, Polar) and can either have a fixed size (a user defined size or one of the predefined sizes like A4, Letter etc.) or they can fill out the complete available area for the datapicker window. Multiple curve can be arranged on the datapicker with different kinds of error-bars.
+</para>
+<para>
+Many properties of the datapicker like type of coordinate system, error-bars, size, style and shape of points, and settings for image-editor can be 
+changed in the "Datapicker properties" panel.
+</para>
+
+<para>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+Different datapicker actions dealing with the creation of new curve, changing of the current mouse mode, navigation of points or zooming can be 
+accessed via the toolbar, main menu or the context menu of the datapicker in the <link linkend="project-explorer">project explorer</link>.
+</para>
+
+<para>
+  The output results of datapicker shown on <link linkend="spreadsheet">spreadsheets</link> can be <link linkend="exportdialog">exported</link> 
+  to an external file.
 </para>
 </sect1>
 
@@ -545,6 +578,13 @@ The menu is only available when a spreadsheet object is selected on the <guilabe
 </para>
 </sect1>
 
+<sect1 id="datapicker-menu">
+<title>The Datapicker Menu</title>
+<para>
+This menu contains all the items that can also be found in the context menu (right mouse) of a datapicker. 
+The menu is only available when a datapicker object is selected on the <guilabel>Project Explorer</guilabel> panel.
+</para>
+</sect1>
 
 <sect1 id="settings-menu">
 <title>The Settings Menu</title>
@@ -635,6 +675,85 @@ The menu is only available when a spreadsheet object is selected on the <guilabe
   </para>
 </sect1>
   
+</chapter>
+
+<chapter id="digitization">
+<title>Curve Tracing</title>
+
+<sect1 id="uploadimage">
+  <title>Upload Image</title>
+  <para>
+    Datapicker can be created inside a project via  "Add new" in the context menu of project/folder or in the main toolbar.
+    After that a new image can be added and can be changed via "Plot" in the corresponding dock widget.
+  </para>
+  <para>
+    After uploading image different zooming options can be used from the context menu/datapicker toolbar to change width and 
+    height of image. Image can also be rotated to an angle using "Rotation" in the "edit" section of dock widget. After this
+    user have to <link linkend="axispoint">set axis points</link>.
+  </para>
+</sect1>
+  
+<sect1 id="symbols">
+  <title>Symbols</title>
+  <para>
+    Symbols are the points that can be drawn over image of datapicker. Symbols can be directly created by mouse
+     right click over the image. Symbols are mainly of two types, with and without error-bar depending on the type of 
+    <link linkend="datapickercurve">curve</link> they belong.
+    </para>
+  <para>
+    Every curve of datapicker can have it's own symbol style that can be changed in the "Symbols" section of dock widget.
+    "SelectAndMove" mouse mode can be used to select multiple points/symbols and can be moved by using navigation keys.
+  </para>
+</sect1>
+
+<sect1 id="axispoint">
+  <title>Axis Points</title>
+  <para>
+    Axis Points are the set of three reference  <link linkend="symbols">points</link> over image of datapicker. These points 
+    can be set via "Set Axis Points" in the context menu of datapicker. After selecting points over image user have to update
+    their coordinate system type via "Plot Type" and logical positions via "Ref. Points" in the dock widget.
+  </para>
+</sect1>
+
+<sect1 id="datapickercurve">
+  <title>Datapicker Curve</title>
+  <para>
+    Datapicker-Curve can be created inside datapicker via "New Curve" in the context menu of datapicker. A curve can have 
+    different types of X and Y errors (No-error, symmetric, asymmetric). This depends on the type of errors dock widget 
+    of datapicker have at the point of creation.
+    </para>
+  <para>
+    Every curve object contains all the curve <link linkend="symbols">points</link> (hidden) and  a spreadsheet that contains 
+    logical positions of all its curve points, and provides options to update spreadsheet and to toggle visibility 
+    of its curve points using the context menu. Mode "Set Curve Points" in the context menu of datapicker should be 
+    selected in order to create curve points.
+  </para>
+  <para>
+    Multiple curve can be created for same datapicker. The created curve points always correspond to the active
+    curve of datapicker which can be changed via "Active Curve" option in the context menu and dock widget of datapicker.
+    Every curve of datapicker can have its own symbol style that can be changed in the "Symbols" section of dock widget.
+  </para>
+</sect1>
+
+<sect1 id="curvesegments">
+  <title>Curve Segments</title>
+  <para>
+    Curve segment for datapicker can be created over image by switching mode to "Select Curve Segments" in the context menu of
+    datapicker. A segment is a selectable object over image which can be selected by mouse right click over it.
+    </para>
+  <para>
+    Segments are created by processing of image on the basis range of color attributes in order to automatically
+    trace curves. To improve results these range and types of color attributes can be changed in the "edit"
+    section of dock-widget. Dock-widget also provides options to switch among processed image and original image,
+    and to set the minimum possible length of segments.
+  </para>
+  <para>
+    Once a segment is selected it will create curve points over it with a minimum specified distance among them.
+    The minimum specified distance among the points can be changed in the dock widget of datapicker. User might have
+    to select the segments again in order to observe the changes.
+  </para>
+</sect1>
+
 </chapter>
 
 <!-- TODO:

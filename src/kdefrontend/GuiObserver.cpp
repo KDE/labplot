@@ -36,8 +36,13 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/core/Project.h"
+#include "backend/datapicker/DatapickerPoint.h"
+#include "backend/datapicker/Datapicker.h"
+#include "backend/datapicker/DatapickerImage.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include "commonfrontend/ProjectExplorer.h"
 #include "kdefrontend/MainWin.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
@@ -50,8 +55,12 @@
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "kdefrontend/dockwidgets/XYEquationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFitCurveDock.h"
+#include "kdefrontend/dockwidgets/CustomPointDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #include "kdefrontend/widgets/LabelWidget.h"
+#include "kdefrontend/widgets/ImageWidget.h"
+#include "kdefrontend/widgets/DatapickerPointWidget.h"
+#include "kdefrontend/widgets/DatapickerCurveWidget.h"
 
 #include <kstatusbar.h>
 
@@ -291,6 +300,66 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->textLabelDock->setLabels(list);
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->textLabelDock);
+  }else if (className=="CustomPoint"){
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Custom point properties"));
+
+	if (!mainWindow->customPointDock){
+	  mainWindow->customPointDock = new CustomPointDock(mainWindow->stackedWidget);
+	  mainWindow->stackedWidget->addWidget(mainWindow->customPointDock);
+	}
+
+	QList<CustomPoint*> list;
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<CustomPoint*>(aspect);
+	}
+	mainWindow->customPointDock->setPoints(list);
+
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->customPointDock);
+  }else if (className=="DatapickerCurve"){
+      mainWindow->m_propertiesDock->setWindowTitle(i18n("DatapickerCurve properties"));
+
+      if (!mainWindow->datapickerCurveDock){
+        mainWindow->datapickerCurveDock = new DatapickerCurveWidget(mainWindow->stackedWidget);
+        mainWindow->stackedWidget->addWidget(mainWindow->datapickerCurveDock);
+      }
+
+      QList<DatapickerCurve*> list;
+      foreach(aspect, selectedAspects){
+        list<<qobject_cast<DatapickerCurve*>(aspect);
+      }
+      mainWindow->datapickerCurveDock->setCurves(list);
+
+      mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerCurveDock);
+  }else if (className=="Datapicker"){
+      mainWindow->m_propertiesDock->setWindowTitle(i18n("Datapicker properties"));
+
+      if (!mainWindow->datapickerImageDock){
+        mainWindow->datapickerImageDock = new ImageWidget(mainWindow->stackedWidget);
+        mainWindow->stackedWidget->addWidget(mainWindow->datapickerImageDock);
+      }
+
+      QList<DatapickerImage*> list;
+      foreach(aspect, selectedAspects){
+        list<<qobject_cast<Datapicker*>(aspect)->image();
+      }
+      mainWindow->datapickerImageDock->setImages(list);
+
+      mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerImageDock);
+  }else if (className=="DatapickerPoint"){
+      mainWindow->m_propertiesDock->setWindowTitle(i18n("DatapickerPoint properties"));
+
+      if (!mainWindow->datapickerPointDock){
+        mainWindow->datapickerPointDock = new DatapickerPointWidget(mainWindow->stackedWidget);
+        mainWindow->stackedWidget->addWidget(mainWindow->datapickerPointDock);
+      }
+
+      QList<DatapickerPoint*> list;
+      foreach(aspect, selectedAspects){
+        list<<qobject_cast<DatapickerPoint*>(aspect);
+      }
+      mainWindow->datapickerPointDock->setDatapickerPoints(list);
+
+      mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerPointDock);
   }else if (className=="Project"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Project properties"));
 

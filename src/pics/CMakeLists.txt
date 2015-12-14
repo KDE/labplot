@@ -1,5 +1,10 @@
 ecm_install_icons(
 ICONS
+sc-apps-labplot-1-to-1-zoom.svg
+sc-apps-labplot-1-to-2-zoom.svg
+sc-apps-labplot-1-to-3-zoom.svg
+sc-apps-labplot-1-to-4-zoom.svg
+sc-apps-labplot-1-to-5-zoom.svg
 sc-apps-labplot-auto-scale-all.svg
 sc-apps-labplot-auto-scale-x.svg
 sc-apps-labplot-auto-scale-y.svg
@@ -13,6 +18,7 @@ sc-apps-labplot-editvlayout.svg
 sc-apps-labplot-format-text-symbol.svg
 sc-apps-labplot-matrix-new.svg
 sc-apps-labplot-matrix.svg
+sc-apps-labplot-plot-axis-points.svg
 sc-apps-labplot-shift-down-y.svg
 sc-apps-labplot-shift-left-x.svg
 sc-apps-labplot-shift-right-x.svg
@@ -25,6 +31,8 @@ sc-apps-labplot-workbook-new.svg
 sc-apps-labplot-workbook.svg
 sc-apps-labplot-worksheet-new.svg
 sc-apps-labplot-worksheet.svg
+sc-apps-labplot-xy-curve-points.svg
+sc-apps-labplot-xy-curve-segments.svg
 sc-apps-labplot-xy-curve.svg
 sc-apps-labplot-xy-equation-curve.svg
 sc-apps-labplot-xy-fit-curve.svg

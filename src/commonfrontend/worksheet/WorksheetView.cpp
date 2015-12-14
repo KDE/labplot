@@ -493,7 +493,7 @@ void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
     if (m_mouseMode==ZoomSelectionMode && m_selectionBandIsShown) {
         painter->save();
         const QRectF& selRect = mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect();
-        painter->setPen(QPen(Qt::black, 5));
+        painter->setPen(QPen(Qt::black, 5/transform().m11()));
         painter->drawRect(selRect);
         painter->setBrush(Qt::blue);
         painter->setOpacity(0.2);
@@ -676,16 +676,16 @@ void WorksheetView::wheelEvent(QWheelEvent *event) {
 }
 
 void WorksheetView::mousePressEvent(QMouseEvent* event) {
-    if (m_mouseMode == ZoomSelectionMode) {
-        m_selectionStart = event->pos();
-        m_selectionBandIsShown = true;
-    }
-
     //prevent the deselection of items when context menu event
     //was triggered (right button click)
-    if (event->button() != Qt::LeftButton) {
+    if (event->button() == Qt::RightButton) {
         event->accept();
         return;
+    }
+    
+    if (event->button() == Qt::LeftButton && m_mouseMode == ZoomSelectionMode) {
+        m_selectionStart = event->pos();
+        m_selectionBandIsShown = true;
     }
 
     // select the worksheet in the project explorer if the view was clicked
@@ -699,7 +699,7 @@ void WorksheetView::mousePressEvent(QMouseEvent* event) {
 }
 
 void WorksheetView::mouseReleaseEvent(QMouseEvent* event) {
-    if (m_mouseMode == ZoomSelectionMode) {
+    if (event->button() == Qt::LeftButton && m_mouseMode == ZoomSelectionMode) {
         m_selectionBandIsShown = false;
         viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
 
@@ -713,34 +713,40 @@ void WorksheetView::mouseReleaseEvent(QMouseEvent* event) {
 
 void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
     if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode != CartesianPlot::SelectionMode ) {
-        //check whether there is a cartesian plot under the cursor
-        bool plot = false;
-        QGraphicsItem* item = itemAt(event->pos());
-        if (item) {
-            plot = item->data(0).toInt() == WorksheetElement::NameCartesianPlot;
-            if (!plot && item->parentItem())
-                plot = item->parentItem()->data(0).toInt() == WorksheetElement::NameCartesianPlot;
-        }
-
-        //set the cursor appearance according to the current mouse mode for the cartesian plots
-        if (plot) {
-            if (m_cartesianPlotMouseMode == CartesianPlot::ZoomSelectionMode) {
-                setCursor(Qt::CrossCursor);
-            } else if (m_cartesianPlotMouseMode == CartesianPlot::ZoomXSelectionMode) {
-                setCursor(Qt::SizeHorCursor);
-            } else if (m_cartesianPlotMouseMode == CartesianPlot::ZoomYSelectionMode) {
-                setCursor(Qt::SizeVerCursor);
+            //check whether there is a cartesian plot under the cursor
+            bool plot = false;
+            QGraphicsItem* item = itemAt(event->pos());
+            if (item) {
+                    plot = item->data(0).toInt() == WorksheetElement::NameCartesianPlot;
+                    if (!plot && item->parentItem())
+                            plot = item->parentItem()->data(0).toInt() == WorksheetElement::NameCartesianPlot;
             }
-        } else {
-            setCursor(Qt::ArrowCursor);
-        }
-    } else if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode == CartesianPlot::SelectionMode ) {
-        setCursor(Qt::ArrowCursor);
-    } else if (m_selectionBandIsShown) {
-        m_selectionEnd = event->pos();
-        viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
-    }
 
+            //set the cursor appearance according to the current mouse mode for the cartesian plots
+            if (plot) {
+                    if (m_cartesianPlotMouseMode == CartesianPlot::ZoomSelectionMode) {
+                            setCursor(Qt::CrossCursor);
+                    } else if (m_cartesianPlotMouseMode == CartesianPlot::ZoomXSelectionMode) {
+                            setCursor(Qt::SizeHorCursor);
+                    } else if (m_cartesianPlotMouseMode == CartesianPlot::ZoomYSelectionMode) {
+                            setCursor(Qt::SizeVerCursor);
+                    }
+            } else {
+                    setCursor(Qt::ArrowCursor);
+            }
+    } else if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode == CartesianPlot::SelectionMode ) {
+            setCursor(Qt::ArrowCursor);
+    } else if (m_selectionBandIsShown) {
+            QRect rect = QRect(m_selectionStart, m_selectionEnd).normalized();
+            m_selectionEnd = event->pos();
+            rect = rect.united(QRect(m_selectionStart, m_selectionEnd).normalized());
+            int penWidth = 5/transform().m11();
+            rect.setX(rect.x()-penWidth);
+            rect.setY(rect.y()-penWidth);
+            rect.setHeight(rect.height()+2*penWidth);
+            rect.setWidth(rect.width()+2*penWidth);
+            viewport()->repaint(rect);
+    }
     QGraphicsView::mouseMoveEvent(event);
 }
 

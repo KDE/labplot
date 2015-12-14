@@ -50,6 +50,7 @@
 */
 
 CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
+<<<<<<< HEAD
     m_initializing(false){
 
     ui.setupUi(this);
@@ -153,6 +154,111 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
     //Padding
     connect( ui.sbPaddingHorizontal, SIGNAL(valueChanged(double)), this, SLOT(horizontalPaddingChanged(double)) );
     connect( ui.sbPaddingVertical, SIGNAL(valueChanged(double)), this, SLOT(verticalPaddingChanged(double)) );
+=======
+	m_initializing(false){
+
+	ui.setupUi(this);
+
+	//"Coordinate system"-tab
+	ui.bAddXBreak->setIcon( KIcon("list-add") );
+	ui.bRemoveXBreak->setIcon( KIcon("list-remove") );
+	ui.cbXBreak->addItem("1");
+
+	ui.bAddYBreak->setIcon( KIcon("list-add") );
+	ui.bRemoveYBreak->setIcon( KIcon("list-remove") );
+	ui.cbYBreak->addItem("1");
+
+	//"Background"-tab
+	ui.kleBackgroundFileName->setClearButtonShown(true);
+	ui.bOpen->setIcon( KIcon("document-open") );
+
+	KUrlCompletion *comp = new KUrlCompletion();
+	ui.kleBackgroundFileName->setCompletionObject(comp);
+
+	//"Title"-tab
+	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
+ 	labelWidget=new LabelWidget(ui.tabTitle);
+	hboxLayout->addWidget(labelWidget);
+	hboxLayout->setContentsMargins(2,2,2,2);
+	hboxLayout->setSpacing(2);
+
+	//adjust layouts in the tabs
+	for (int i=0; i<ui.tabWidget->count(); ++i){
+		QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		if (!layout)
+			continue;
+
+		layout->setContentsMargins(2,2,2,2);
+		layout->setHorizontalSpacing(2);
+		layout->setVerticalSpacing(2);
+	}
+
+	//Validators
+	ui.leXBreakStart->setValidator( new QDoubleValidator(ui.leXBreakStart) );
+	ui.leXBreakEnd->setValidator( new QDoubleValidator(ui.leXBreakEnd) );
+	ui.leYBreakStart->setValidator( new QDoubleValidator(ui.leYBreakStart) );
+	ui.leYBreakEnd->setValidator( new QDoubleValidator(ui.leYBreakEnd) );
+
+	//SIGNAL/SLOT
+	//General
+	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
+	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( ui.sbLeft, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
+	connect( ui.sbTop, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
+	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
+	connect( ui.sbHeight, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
+
+	connect( ui.chkAutoScaleX, SIGNAL(stateChanged(int)), this, SLOT(autoScaleXChanged(int)) );
+	connect( ui.kleXMin, SIGNAL(returnPressed()), this, SLOT(xMinChanged()) );
+	connect( ui.kleXMax, SIGNAL(returnPressed()), this, SLOT(xMaxChanged()) );
+	connect( ui.cbXScaling, SIGNAL(currentIndexChanged(int)), this, SLOT(xScaleChanged(int)) );
+
+	connect( ui.chkAutoScaleY, SIGNAL(stateChanged(int)), this, SLOT(autoScaleYChanged(int)) );
+	connect( ui.kleYMin, SIGNAL(returnPressed()), this, SLOT(yMinChanged()) );
+	connect( ui.kleYMax, SIGNAL(returnPressed()), this, SLOT(yMaxChanged()) );
+	connect( ui.cbYScaling, SIGNAL(currentIndexChanged(int)), this, SLOT(yScaleChanged(int)) );
+
+	//Scale breakings
+	connect( ui.chkXBreak, SIGNAL(stateChanged(int)), this, SLOT(toggleXBreak(int)) );
+	connect( ui.bAddXBreak, SIGNAL(clicked()), this, SLOT(addXBreak()) );
+	connect( ui.bRemoveXBreak, SIGNAL(clicked()), this, SLOT(removeXBreak()) );
+	connect( ui.cbXBreak, SIGNAL(currentIndexChanged(int)), this, SLOT(currentXBreakChanged(int)) );
+	connect( ui.leXBreakStart, SIGNAL(returnPressed()), this, SLOT(xBreakStartChanged()) );
+	connect( ui.leXBreakEnd, SIGNAL(returnPressed()), this, SLOT(xBreakEndChanged()) );
+	connect( ui.sbXBreakPosition, SIGNAL(valueChanged(int)), this, SLOT(xBreakPositionChanged(int)) );
+
+	connect( ui.chkYBreak, SIGNAL(stateChanged(int)), this, SLOT(toggleYBreak(int)) );
+	connect( ui.bAddYBreak, SIGNAL(clicked()), this, SLOT(addYBreak()) );
+	connect( ui.bRemoveYBreak, SIGNAL(clicked()), this, SLOT(removeYBreak()) );
+	connect( ui.cbYBreak, SIGNAL(currentIndexChanged(int)), this, SLOT(currentYBreakChanged(int)) );
+	connect( ui.leYBreakStart, SIGNAL(returnPressed()), this, SLOT(yBreakStartChanged()) );
+	connect( ui.leYBreakEnd, SIGNAL(returnPressed()), this, SLOT(yBreakEndChanged()) );
+	connect( ui.sbYBreakPosition, SIGNAL(valueChanged(int)), this, SLOT(yBreakPositionChanged(int)) );
+
+	//Background
+	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
+	connect( ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundColorStyleChanged(int)) );
+	connect( ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundImageStyleChanged(int)) );
+	connect( ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundBrushStyleChanged(int)) );
+	connect(ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
+	connect( ui.kleBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
+	connect( ui.kleBackgroundFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
+	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed(QColor)), this, SLOT(backgroundFirstColorChanged(QColor)) );
+	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed(QColor)), this, SLOT(backgroundSecondColorChanged(QColor)) );
+	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
+
+	//Border
+	connect( ui.cbBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(borderStyleChanged(int)) );
+	connect( ui.kcbBorderColor, SIGNAL(changed(QColor)), this, SLOT(borderColorChanged(QColor)) );
+	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
+	connect( ui.sbBorderCornerRadius, SIGNAL(valueChanged(double)), this, SLOT(borderCornerRadiusChanged(double)) );
+	connect( ui.sbBorderOpacity, SIGNAL(valueChanged(int)), this, SLOT(borderOpacityChanged(int)) );
+
+	//Padding
+	connect( ui.sbPaddingHorizontal, SIGNAL(valueChanged(double)), this, SLOT(horizontalPaddingChanged(double)) );
+	connect( ui.sbPaddingVertical, SIGNAL(valueChanged(double)), this, SLOT(verticalPaddingChanged(double)) );
+>>>>>>> origin/master
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
 	ui.verticalLayout->addWidget(templateHandler);
@@ -271,9 +377,11 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
     connect( m_plot, SIGNAL(xMinChanged(float)), this, SLOT(plotXMinChanged(float)) );
     connect( m_plot, SIGNAL(xMaxChanged(float)), this, SLOT(plotXMaxChanged(float)) );
     connect( m_plot, SIGNAL(xScaleChanged(int)), this, SLOT(plotXScaleChanged(int)) );
+    connect( m_plot, SIGNAL(xAutoScaleChanged(bool)), this, SLOT(plotXAutoScaleChanged(bool)) );
     connect( m_plot, SIGNAL(yMinChanged(float)), this, SLOT(plotYMinChanged(float)) );
     connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
     connect( m_plot, SIGNAL(yScaleChanged(int)), this, SLOT(plotYScaleChanged(int)) );
+    connect( m_plot, SIGNAL(yAutoScaleChanged(bool)), this, SLOT(plotYAutoScaleChanged(bool)) );
     connect( m_plot, SIGNAL(xScaleBreakingsChanged(CartesianPlot::ScaleBreakings)), this, SLOT(plotXScaleBreakingChanged(CartesianPlot::ScaleBreakings)) );
     connect( m_plot, SIGNAL(yScaleBreakingsChanged(CartesianPlot::ScaleBreakings)), this, SLOT(plotYScaleBreakingChanged(CartesianPlot::ScaleBreakings)) );
     connect( m_plot, SIGNAL(visibleChanged(bool)), this, SLOT(plotVisibleChanged(bool)) );
@@ -365,14 +473,12 @@ void CartesianPlotDock::commentChanged(){
   m_plot->setComment(ui.leComment->text());
 }
 
-void CartesianPlotDock::visibilityChanged(int state){
-  if (m_initializing)
-    return;
+void CartesianPlotDock::visibilityChanged(bool state){
+    if (m_initializing)
+            return;
 
-  bool b = (state==Qt::Checked);
-  foreach(CartesianPlot* plot, m_plotList){
-    plot->setVisible(b);
-  }
+    foreach(CartesianPlot* plot, m_plotList)
+            plot->setVisible(state);
 }
 
 void CartesianPlotDock::geometryChanged(){
@@ -880,6 +986,12 @@ void CartesianPlotDock::plotRectChanged(QRectF& rect){
     m_initializing = false;
 }
 
+void CartesianPlotDock::plotXAutoScaleChanged(bool value) {
+	m_initializing = true;
+	ui.chkAutoScaleX->setChecked(value);
+	m_initializing = false;
+}
+
 void CartesianPlotDock::plotXMinChanged(float value){
     m_initializing = true;
     ui.kleXMin->setText( QString::number(value) );
@@ -896,6 +1008,13 @@ void CartesianPlotDock::plotXScaleChanged(int scale){
     m_initializing = true;
     ui.cbXScaling->setCurrentIndex( scale );
     m_initializing = false;
+}
+
+
+void CartesianPlotDock::plotYAutoScaleChanged(bool value) {
+	m_initializing = true;
+	ui.chkAutoScaleY->setChecked(value);
+	m_initializing = false;
 }
 
 void CartesianPlotDock::plotYMinChanged(float value){

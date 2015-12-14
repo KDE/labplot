@@ -73,7 +73,7 @@ private slots:
 	//"General"-tab
 	void nameChanged();
 	void commentChanged();
-	void visibilityChanged(int);
+	void visibilityChanged(bool);
 	void orientationChanged(int);
 	void positionChanged(int);
 	void positionChanged();

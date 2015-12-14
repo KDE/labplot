@@ -30,6 +30,7 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
+#include <gsl/gsl_version.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf.h>
 #include <gsl/gsl_randist.h>
@@ -87,7 +88,13 @@ double ellint_Pc(double x, double n) { return gsl_sf_ellint_Pcomp(x,n,MODE); }
 double ellint_F(double phi,double k) { return gsl_sf_ellint_F(phi,k,MODE); }
 double ellint_E(double phi,double k) { return gsl_sf_ellint_E(phi,k,MODE); }
 double ellint_P(double phi,double k,double n) { return gsl_sf_ellint_P(phi,k,n,MODE); }
-double ellint_D(double phi,double k,double n) { return gsl_sf_ellint_D(phi,k,n,MODE); }
+double ellint_D(double phi,double k) {
+#if GSL_MAJOR_VERSION >= 2
+	return gsl_sf_ellint_D(phi,k,MODE);
+#else
+	return gsl_sf_ellint_D(phi,k,0.0,MODE);
+#endif
+}
 double ellint_RC(double x,double y) { return gsl_sf_ellint_RC(x,y,MODE); }
 double ellint_RD(double x,double y,double z) { return gsl_sf_ellint_RD(x,y,z,MODE); }
 double ellint_RF(double x,double y,double z) { return gsl_sf_ellint_RF(x,y,z,MODE); }

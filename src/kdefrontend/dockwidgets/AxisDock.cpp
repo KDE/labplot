@@ -86,7 +86,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_aspectTreeModel(0), m_ini
 	//"General"-tab
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
-	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
+	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)) );
 	connect( ui.cbPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(positionChanged(int)) );
@@ -468,18 +468,12 @@ void AxisDock::commentChanged(){
   m_axis->setComment(ui.leComment->text());
 }
 
-void AxisDock::visibilityChanged(int state){
-  if (m_initializing)
+void AxisDock::visibilityChanged(bool state){
+	if (m_initializing)
 	return;
 
-  bool b;
-  if (state==Qt::Checked)
-	b=true;
-  else
-	b=false;
-
-  foreach(Axis* axis, m_axesList)
-	axis->setVisible(b);
+	foreach(Axis* axis, m_axesList)
+		axis->setVisible(state);
 }
 
 /*!

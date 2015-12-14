@@ -129,6 +129,9 @@ QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 
 QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+	if (section>m_spreadsheet->columnCount()-1)
+	  return QVariant();
+
 	switch(orientation) {
 		case Qt::Horizontal:
 			switch(role) {

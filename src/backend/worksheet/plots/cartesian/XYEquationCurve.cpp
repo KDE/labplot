@@ -71,7 +71,7 @@ void XYEquationCurve::init() {
 
 	//TODO: read from the saved settings for XYEquationCurve?
 	d->lineType = XYCurve::Line;
-	d->symbolsStyle = XYCurve::NoSymbols;
+	d->symbolsStyle = Symbol::NoSymbols;
 
 	setUndoAware(false);
 	setXColumn(d->xColumn);

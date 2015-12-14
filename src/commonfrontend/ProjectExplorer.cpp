@@ -1,10 +1,10 @@
 /***************************************************************************
     File                 : ProjectExplorer.cpp
-    Project              : Labplot2
+    Project              : LabPlot
     Description       	 : A tree view for displaying and editing an AspectTreeModel.
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2008 by Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2010-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -42,7 +42,6 @@
 #include <QLabel>
 #include <QHeaderView>
 #include <QSignalMapper>
-#include <QDebug>
 
 #include <KLineEdit>
 #include <KLocale>
@@ -158,7 +157,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event){
 		columnsMenu->addAction(showAllColumnsAction);
 		columnsMenu->addSeparator();
 		for (int i=0; i<list_showColumnActions.size(); i++)
-		columnsMenu->addAction(list_showColumnActions.at(i));
+			columnsMenu->addAction(list_showColumnActions.at(i));
 
 		//TODO
 		//Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
@@ -179,11 +178,9 @@ void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect){
 /*!
   Sets the \c model for the tree view to present.
 */
-void ProjectExplorer::setModel(QAbstractItemModel * model){
-	m_treeView->setModel(model);
+void ProjectExplorer::setModel(AspectTreeModel* treeModel){
+	m_treeView->setModel(treeModel);
 	m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
-
-	AspectTreeModel* treeModel = qobject_cast<AspectTreeModel*>(model);
 
 	connect(treeModel, SIGNAL(renameRequested(QModelIndex)), m_treeView, SLOT(edit(QModelIndex)));
 	connect(treeModel, SIGNAL(indexSelected(QModelIndex)), this, SLOT(selectIndex(QModelIndex)));
@@ -197,17 +194,24 @@ void ProjectExplorer::setModel(QAbstractItemModel * model){
 
 	//create action for showing/hiding the columns in the tree.
 	//this is done here since the number of columns is  not available in createActions() yet.
-	showColumnsSignalMapper = new QSignalMapper(this);
-	for (int i=0; i<m_treeView->model()->columnCount(); i++){
-	  QAction* showColumnAction =  new QAction(m_treeView->model()->headerData(i, Qt::Horizontal).toString(), this);
-	  showColumnAction->setCheckable(true);
-	  showColumnAction->setChecked(true);
-	  list_showColumnActions.append(showColumnAction);
+	if (list_showColumnActions.size()==0) {
+		showColumnsSignalMapper = new QSignalMapper(this);
+		for (int i=0; i<m_treeView->model()->columnCount(); i++){
+		QAction* showColumnAction =  new QAction(treeModel->headerData(i, Qt::Horizontal).toString(), this);
+		showColumnAction->setCheckable(true);
+		showColumnAction->setChecked(true);
+		list_showColumnActions.append(showColumnAction);
 
-	  connect(showColumnAction, SIGNAL(triggered(bool)), showColumnsSignalMapper, SLOT(map()));
-	  showColumnsSignalMapper->setMapping(showColumnAction, i);
+		connect(showColumnAction, SIGNAL(triggered(bool)), showColumnsSignalMapper, SLOT(map()));
+		showColumnsSignalMapper->setMapping(showColumnAction, i);
+		}
+		connect(showColumnsSignalMapper, SIGNAL(mapped(int)), this, SLOT(toggleColumn(int)));
+	} else {
+		for (int i=0; i<list_showColumnActions.size(); ++i) {
+			if (!list_showColumnActions.at(i)->isChecked())
+				m_treeView->hideColumn(i);
+		}
 	}
-	connect(showColumnsSignalMapper, SIGNAL(mapped(int)), this, SLOT(toggleColumn(int)));
 }
 
 void ProjectExplorer::setProject( const Project* project) {
@@ -222,17 +226,8 @@ QModelIndex ProjectExplorer::currentIndex() const{
 }
 
 /*!
-  Returns the model that this view is presenting.
-  \sa setModel()
-*/
-QAbstractItemModel* ProjectExplorer::model() const{
-	return m_treeView->model();
-}
-
-/*!
 	handles the contextmenu-event of the horizontal header in the tree view.
 	Provides a menu for selective showing and hiding of columns.
-	//TODO add i18n (and mayby some icons) for KDE.
 */
 bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 	QHeaderView* h = m_treeView->header();
@@ -272,6 +267,11 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect){
 
 	//don't do anything if hidden aspects were added
 	if (aspect->hidden())
+		return;
+
+
+	//don't do anything for newly added data spreadsheets of data picker curves
+    if (aspect->inherits("Spreadsheet") && aspect->parentAspect()->inherits("DatapickerCurve"))
 		return;
 
 	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
@@ -460,7 +460,6 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 	emit selectedAspectsChanged(selectedAspects);
 }
-
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
