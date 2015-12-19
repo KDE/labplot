@@ -228,6 +228,7 @@ CustomPointPrivate::CustomPointPrivate(CustomPoint* owner, const CartesianPlot* 
 	m_printing(false),
 	m_hovered(false),
 	m_suppressHoverEvents(true),
+	m_visible(true),
 	q(owner) {
 
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
@@ -249,11 +250,18 @@ void CustomPointPrivate::retransform() {
 
 	//calculate the point in the scene coordinates
 	const CartesianCoordinateSystem* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
-	positionScene = cSystem->mapLogicalToScene(position);
-
-	suppressItemChangeEvent=true;
-	setPos(positionScene);
-	suppressItemChangeEvent=false;
+	QList<QPointF> list, listScene;
+	list<<position;
+	listScene = cSystem->mapLogicalToScene(list, CartesianCoordinateSystem::DefaultMapping);
+	if (listScene.size()) {
+		m_visible = true;
+		positionScene = listScene.at(0);
+		suppressItemChangeEvent=true;
+		setPos(positionScene);
+		suppressItemChangeEvent=false;
+	} else {
+		m_visible = false;
+	}
 
 	recalcShapeAndBoundingRect();
 }
@@ -287,7 +295,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
 	pointShape = QPainterPath();
-	if (symbolStyle != Symbol::NoSymbols){
+	if (m_visible && symbolStyle != Symbol::NoSymbols){
 		QPainterPath path = Symbol::pathFromStyle(symbolStyle);
 
 		QTransform trafo;
@@ -307,6 +315,9 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
+
+	if (!m_visible)
+		return;
 
 	if (symbolStyle != Symbol::NoSymbols){
 		painter->setOpacity(symbolOpacity);
@@ -382,7 +393,7 @@ void CustomPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 void CustomPoint::save(QXmlStreamWriter* writer) const {
 	Q_D(const CustomPoint);
 
-	writer->writeStartElement("CustomPoint");
+	writer->writeStartElement("customPoint");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
@@ -395,7 +406,7 @@ void CustomPoint::save(QXmlStreamWriter* writer) const {
 
 	//Symbols
 	writer->writeStartElement("symbol");
-	writer->writeAttribute( "style", QString::number(d->symbolStyle) );
+	writer->writeAttribute( "symbolStyle", QString::number(d->symbolStyle) );
 	writer->writeAttribute( "opacity", QString::number(d->symbolOpacity) );
 	writer->writeAttribute( "rotation", QString::number(d->symbolRotationAngle) );
 	writer->writeAttribute( "size", QString::number(d->symbolSize) );
@@ -410,8 +421,8 @@ void CustomPoint::save(QXmlStreamWriter* writer) const {
 bool CustomPoint::load(XmlStreamReader* reader) {
 	Q_D(CustomPoint);
 
-	if(!reader->isStartElement() || reader->name() != "datapickerPoint") {
-		reader->raiseError(i18n("no datapicker-Point element found"));
+	if(!reader->isStartElement() || reader->name() != "customPoint") {
+		reader->raiseError(i18n("no custom point element found"));
 		return false;
 	}
 
@@ -424,7 +435,7 @@ bool CustomPoint::load(XmlStreamReader* reader) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "datapickerPoint")
+		if (reader->isEndElement() && reader->name() == "customPoint")
 			break;
 
 		if (!reader->isStartElement())
@@ -455,9 +466,9 @@ bool CustomPoint::load(XmlStreamReader* reader) {
 		} else if (reader->name() == "symbol") {
 			attribs = reader->attributes();
 
-			str = attribs.value("style").toString();
+			str = attribs.value("symbolStyle").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'style'"));
+				reader->raiseWarning(attributeWarning.arg("'symbolStyle'"));
 			else
 				d->symbolStyle = (Symbol::Style)str.toInt();
 

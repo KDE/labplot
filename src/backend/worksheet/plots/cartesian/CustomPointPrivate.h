@@ -51,6 +51,7 @@ class CustomPointPrivate: public QGraphicsItem {
 		bool m_printing;
 		bool m_hovered;
 		bool m_suppressHoverEvents;
+		bool m_visible; //point inside the plot (visible) or not
 
 		QRectF boundingRectangle;
 		QRectF transformedBoundingRectangle;
