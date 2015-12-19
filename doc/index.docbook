@@ -1788,13 +1788,13 @@ The standard way is to use <menuchoice><guimenu>File</guimenu><guimenuitem>Expor
 
 <qandaentry>
 <question>
-<para>I miss an important feature. What can i do?</para>
+<para>I miss an important feature. What can I do?</para>
 </question>
 <answer>
 <para>
 Please take a look at the TODO file in the documentation of &LabPlot;.
-Here all planed features are listed in more or
-less sorted order which i will implement in future releases of &LabPlot;.
+Here, all planned features are listed in more or
+less sorted order which I will implement in future releases of &LabPlot;.
 If you like to have additional
 features or like to have a listed feature soon, mail me your wishes and, if possible, send me
 example data or a short
@@ -1806,7 +1806,7 @@ of &LabPlot; :-)
 </qandaentry>
 
 <qandaentry><question>
-<para>Many Analysis functions are disabled. What can i do?</para>
+<para>Many Analysis functions are disabled. What can I do?</para>
 </question>
 <answer><para>
 It looks like your &LabPlot; package was compiled without GSL (&GNU; Scientific Library) support. &LabPlot; was designed to even work on systems that
