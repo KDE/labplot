@@ -65,6 +65,7 @@ class MatrixPrivate {
 		QVector< QVector<double> > matrixData;
 		QVector<int> rowHeights;//!< Row widths
 		QVector<int> columnWidths;//!< Columns widths
+		int defaultRowHeight;
 		Matrix::HeaderFormat headerFormat;
 		char numericFormat; //!< Format code for displaying numbers
 		int precision; //!< Number of significant digits

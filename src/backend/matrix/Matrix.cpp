@@ -1,3 +1,4 @@
+
 /***************************************************************************
     File                 : Matrix.cpp
     Project              : Matrix
@@ -35,6 +36,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/matrix/MatrixView.h"
 
+#include <QHeaderView>
 #include <QLocale>
 
 #include <KIcon>
@@ -151,11 +153,11 @@ void Matrix::setChanged() {
 }
 
 int Matrix::defaultRowHeight() const {
-	return 20;
+	return d->defaultRowHeight;
 }
 
 int Matrix::defaultColumnWidth() const {
-	return  100;
+	return d->defaultRowHeight*3;
 }
 
 //##############################################################################
@@ -468,6 +470,10 @@ void Matrix::mirrorVertically() {
 //##############################################################################
 
 MatrixPrivate::MatrixPrivate(Matrix* owner) : q(owner), columnCount(0), rowCount(0), suppressDataChange(false) {
+	QFont font;
+	font.setFamily(font.defaultFamily());
+	QFontMetrics fm(font);
+	defaultRowHeight = fm.height();
 }
 
 void MatrixPrivate::updateViewHeader() {
@@ -516,7 +522,7 @@ void MatrixPrivate::insertRows(int before, int count) {
 		for(int i=0; i<count; i++)
 			matrixData[col].insert(before+i, 0.0);
 	for(int i=0; i<count; i++)
-		rowHeights.insert(before+i, q->defaultRowHeight());
+		rowHeights.insert(before+i, defaultRowHeight);
 
 	rowCount += count;
 	emit q->rowsInserted(before, count);

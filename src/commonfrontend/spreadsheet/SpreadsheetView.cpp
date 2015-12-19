@@ -115,10 +115,12 @@ void SpreadsheetView::init(){
 	// vertical header
 	QHeaderView * v_header = m_tableView->verticalHeader();
 	v_header->setResizeMode(QHeaderView::Fixed);
-	v_header->setDefaultSectionSize(22);
+	QFont font;
+	font.setFamily(font.defaultFamily());
+	QFontMetrics fm(font);
+	v_header->setDefaultSectionSize(fm.height());
 	v_header->setMovable(false);
 	v_header->installEventFilter(this);
-
 
 	setFocusPolicy(Qt::StrongFocus);
 	setFocus();
