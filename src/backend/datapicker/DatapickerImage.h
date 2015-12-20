@@ -86,13 +86,15 @@ public:
 	QGraphicsScene *scene() const;
 	void setPrinting(bool) const;
 	void setSelectedInView(const bool);
-	void setPlotImageType(const DatapickerImage::PlotImageType&);
+
+	void setPlotImageType(const DatapickerImage::PlotImageType);
+	DatapickerImage::PlotImageType plotImageType();
+
 	void setSegmentVisible(bool);
 
 	bool isLoaded;
 	QImage originalPlotImage;
 	QImage processedPlotImage;
-	PlotImageType plotImageType;
 	QGraphicsPixmapItem* m_magnificationWindow;
 
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
