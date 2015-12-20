@@ -205,11 +205,6 @@ void CustomPoint::setPrinting(bool on) {
 	d->m_printing = on;
 }
 
-void CustomPoint::suppressHoverEvents(bool on) {
-	Q_D(CustomPoint);
-	d->m_suppressHoverEvents = on;
-}
-
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
@@ -227,7 +222,6 @@ CustomPointPrivate::CustomPointPrivate(CustomPoint* owner, const CartesianPlot* 
 	suppressRetransform(false),
 	m_printing(false),
 	m_hovered(false),
-	m_suppressHoverEvents(true),
 	m_visible(true),
 	q(owner) {
 
@@ -309,6 +303,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 		}
 
 		pointShape = trafo.map(path);
+		transformedBoundingRectangle = pointShape.boundingRect();
 	}
 }
 
@@ -326,12 +321,10 @@ void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 		painter->drawPath(pointShape);
 	}
 
-	if (!m_suppressHoverEvents) {
-		if (m_hovered && !isSelected() && !m_printing) {
-			painter->setPen(q->hoveredPen);
-			painter->setOpacity(q->hoveredOpacity);
-			painter->drawPath(pointShape);
-		}
+	if (m_hovered && !isSelected() && !m_printing) {
+		painter->setPen(q->hoveredPen);
+		painter->setOpacity(q->hoveredOpacity);
+		painter->drawPath(pointShape);
 	}
 
 	if (isSelected() && !m_printing) {
