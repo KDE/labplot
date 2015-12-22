@@ -38,7 +38,6 @@ class QWheelEvent;
 class AbstractAspect;
 class DatapickerImage;
 class Datapicker;
-class WorksheetElement;
 class Transform;
 class QActionGroup;
 

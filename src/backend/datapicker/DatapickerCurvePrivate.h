@@ -27,15 +27,29 @@
 #ifndef DATAPICKERCURVEPRIVATE_H
 #define DATAPICKERCURVEPRIVATE_H
 
+#include <QBrush>
+#include <QPen>
+
 class DatapickerCurvePrivate {
 public:
-	explicit DatapickerCurvePrivate(DatapickerCurve* curve) : q(curve) {};
+    explicit DatapickerCurvePrivate(DatapickerCurve* curve);
 
-	QString name() const {
-		return q->name();
-	};
+    QString name() const;
+
 	DatapickerCurve* const q;
+    void retransform();
+
 	DatapickerCurve::Errors curveErrorTypes;
+    qreal pointRotationAngle;
+    Symbol::Style pointStyle;
+    QBrush pointBrush;
+    QPen pointPen;
+    qreal pointOpacity;
+    qreal pointSize;
+    QBrush pointErrorBarBrush;
+    QPen pointErrorBarPen;
+    qreal pointErrorBarSize;
+    bool pointVisibility;
 
 	AbstractColumn* posXColumn;
 	QString posXColumnPath;

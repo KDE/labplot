@@ -202,23 +202,9 @@ void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
 
 	DatapickerPoint* newPoint = new DatapickerPoint(i18n("%1 Point", parentAspect->name()));
 	newPoint->setPosition(pos);
-	newPoint->setRotationAngle(-m_image->rotationAngle());
 	newPoint->setHidden(true);
 	parentAspect->addChild(newPoint);
-
-	//set properties of added Datapicker-Point same as previous points
-	if (!childPoints.isEmpty()) {
-		DatapickerPoint* oldPoint = childPoints.first();
-		newPoint->setBrush(oldPoint->brush());
-		newPoint->setOpacity(oldPoint->opacity());
-		newPoint->setPen(oldPoint->pen());
-		newPoint->setRotationAngle(oldPoint->rotationAngle());
-		newPoint->setSize(oldPoint->size());
-		newPoint->setPointStyle(oldPoint->pointStyle());
-		newPoint->setErrorBarBrush(oldPoint->errorBarBrush());
-		newPoint->setErrorBarSize(oldPoint->errorBarSize());
-		newPoint->setErrorBarPen(oldPoint->errorBarPen());
-	}
+    newPoint->retransform();
 
 	DatapickerCurve* datapickerCurve = dynamic_cast<DatapickerCurve*>(parentAspect);
 	if (m_image == parentAspect) {
@@ -247,9 +233,9 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const DatapickerCurve* curve = qobject_cast<const DatapickerCurve*>(aspect);
 	if (curve) {
 		//clear scene
-		QList<WorksheetElement *> childElements = curve->children<WorksheetElement>(IncludeHidden);
-		foreach(WorksheetElement *elem, childElements) {
-			handleChildAspectAboutToBeRemoved(elem);
+        QList<DatapickerPoint *> childPoints = curve->children<DatapickerPoint>(IncludeHidden);
+        foreach(DatapickerPoint *point, childPoints) {
+            handleChildAspectAboutToBeRemoved(point);
 		}
 
 		if (curve==m_activeCurve) {
@@ -262,31 +248,31 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 }
 
 void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
-	const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
-	if (addedElement) {
-		QGraphicsItem *item = addedElement->graphicsItem();
+    const DatapickerPoint* addedPoint = qobject_cast<const DatapickerPoint*>(aspect);
+    if (addedPoint) {
+        QGraphicsItem *item = addedPoint->graphicsItem();
 		Q_ASSERT(item != NULL);
 		Q_ASSERT(m_image != NULL);
 		m_image->scene()->addItem(item);
 
 		qreal zVal = 0;
-		QList<WorksheetElement *> childElements = m_image->children<WorksheetElement>(IncludeHidden);
-		foreach(WorksheetElement *elem, childElements) {
-			elem->graphicsItem()->setZValue(zVal++);
+        QList<DatapickerPoint *> childPoints = m_image->children<DatapickerPoint>(IncludeHidden);
+        foreach(DatapickerPoint *point, childPoints) {
+            point->graphicsItem()->setZValue(zVal++);
 		}
 
 		foreach (DatapickerCurve* curve, children<DatapickerCurve>()) {
-			foreach (WorksheetElement* elem, curve->children<WorksheetElement>(IncludeHidden)) {
-				elem->graphicsItem()->setZValue(zVal++);
+            foreach (DatapickerPoint* point, curve->children<DatapickerPoint>(IncludeHidden)) {
+                point->graphicsItem()->setZValue(zVal++);
 			}
 		}
 	}
 }
 
 void Datapicker::handleChildAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-	const WorksheetElement *removedElement = qobject_cast<const WorksheetElement*>(aspect);
-	if (removedElement) {
-		QGraphicsItem *item = removedElement->graphicsItem();
+    const DatapickerPoint *removedPoint = qobject_cast<const DatapickerPoint*>(aspect);
+    if (removedPoint) {
+        QGraphicsItem *item = removedPoint->graphicsItem();
 		Q_ASSERT(item != NULL);
 		Q_ASSERT(m_image != NULL);
 		m_image->scene()->removeItem(item);
@@ -353,8 +339,8 @@ bool Datapicker::load(XmlStreamReader* reader) {
 	}
 
 	foreach (AbstractAspect* aspect, children<AbstractAspect>(IncludeHidden)) {
-		foreach (WorksheetElement* elem, aspect->children<WorksheetElement>(IncludeHidden)) {
-			handleChildAspectAdded(elem);
+        foreach (DatapickerPoint* point, aspect->children<DatapickerPoint>(IncludeHidden)) {
+            handleChildAspectAdded(point);
 		}
 	}
 

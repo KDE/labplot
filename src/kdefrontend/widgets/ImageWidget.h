@@ -32,7 +32,6 @@
 #include "ui_imagewidget.h"
 #include "backend/datapicker/DatapickerImage.h"
 
-class DatapickerPointWidget;
 class QxtSpanSlider;
 
 class ImageWidget : public QWidget {
@@ -46,12 +45,12 @@ public:
 
 private:
 	Ui::ImageWidget ui;
+    void init();
 	void initConnections();
 
 	DatapickerImage* m_image;
 	QList<DatapickerImage*> m_imagesList;
 	bool m_initializing;
-	DatapickerPointWidget* datapickerPointWidget;
 
 	QxtSpanSlider* ssIntensity;
 	QxtSpanSlider* ssForeground;
@@ -82,6 +81,19 @@ private slots:
 	void ternaryScaleChanged(double);
 	void logicalPositionChanged();
 
+    //symbol propeties
+    void pointsStyleChanged(int);
+    void pointsSizeChanged(double);
+    void pointsRotationChanged(int);
+    void pointsOpacityChanged(int);
+    void pointsFillingStyleChanged(int);
+    void pointsFillingColorChanged(const QColor&);
+    void pointsBorderStyleChanged(int);
+    void pointsBorderColorChanged(const QColor&);
+    void pointsBorderWidthChanged(double);
+    void pointsVisibilityChanged(bool);
+
+
 	//SLOTs for changes triggered in ImageWidget
 	void imageDescriptionChanged(const AbstractAspect*);
 	void imageFileNameChanged(const QString&);
@@ -89,8 +101,16 @@ private slots:
 	void imageAxisPointsChanged(const DatapickerImage::ReferencePoints&);
 	void imageEditorSettingsChanged(const DatapickerImage::EditorSettings&);
 	void imageMinSegmentLengthChanged(const int);
-	void updateDatapickerPointList();
+    void updateSymbolWidgets();
 	void handleWidgetActions();
+    //symbol
+    void symbolStyleChanged(Symbol::Style);
+    void symbolSizeChanged(qreal);
+    void symbolRotationAngleChanged(qreal);
+    void symbolOpacityChanged(qreal);
+    void symbolBrushChanged(QBrush);
+    void symbolPenChanged(const QPen&);
+    void symbolVisibleChanged(bool);
 };
 
 #endif //IMAGEWIDGET_H

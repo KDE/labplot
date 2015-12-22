@@ -557,14 +557,14 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 		if (!point->graphicsItem()->isSelected())
 			continue;
 
-		DatapickerPoint::PositionWrapper newPos = point->position();
-		newPos.point = newPos.point + shift;
+        QPointF newPos = point->position();
+        newPos = newPos + shift;
 		point->setPosition(newPos);
 
 		int pointIndex = m_image->indexOfChild<DatapickerPoint>(point , AbstractAspect::IncludeHidden);
 		DatapickerImage::ReferencePoints points = m_image->axisPoints();
-		points.scenePos[pointIndex].setX(point->position().point.x());
-		points.scenePos[pointIndex].setY(point->position().point.y());
+        points.scenePos[pointIndex].setX(point->position().x());
+        points.scenePos[pointIndex].setY(point->position().y());
 		m_image->setUndoAware(false);
 		m_image->setAxisPoints(points);
 		m_image->setUndoAware(true);
@@ -575,8 +575,8 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 			if (!point->graphicsItem()->isSelected())
 				continue;
 
-			DatapickerPoint::PositionWrapper newPos = point->position();
-			newPos.point = newPos.point + shift;
+            QPointF newPos = point->position();
+            newPos = newPos + shift;
 			point->setPosition(newPos);
 		}
 	}

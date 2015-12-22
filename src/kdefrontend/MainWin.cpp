@@ -112,7 +112,6 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
     textLabelDock(0),
     customPointDock(0),
     datapickerImageDock(0),
-    datapickerPointDock(0),
     datapickerCurveDock(0){
 
 // 	QTimer::singleShot( 0, this, SLOT(initGUI(filename)) );  //TODO doesn't work anymore
