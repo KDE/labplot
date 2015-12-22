@@ -36,12 +36,10 @@ class CustomPointPrivate: public QGraphicsItem {
 		explicit CustomPointPrivate(CustomPoint*, const CartesianPlot*);
 
 		const CartesianPlot* plot;
-		QPointF position;
-		QPointF positionScene;
 
 		QString name() const;
 		void retransform();
-		bool swapVisible(bool on);
+		bool swapVisible(bool);
 		virtual void recalcShapeAndBoundingRect();
 		void updatePosition();
 		void updateData();
@@ -50,10 +48,14 @@ class CustomPointPrivate: public QGraphicsItem {
 		bool suppressRetransform;
 		bool m_printing;
 		bool m_hovered;
-		bool m_suppressHoverEvents;
+		bool m_visible; //point inside the plot (visible) or not
 
 		QRectF boundingRectangle;
 		QRectF transformedBoundingRectangle;
+		QPainterPath pointShape;
+
+		QPointF position; //position in plot coordinates
+		QPointF positionScene; //position in scene coordinatates
 
 		//symbol
 		Symbol::Style symbolStyle;
@@ -63,13 +65,11 @@ class CustomPointPrivate: public QGraphicsItem {
 		qreal symbolRotationAngle;
 		qreal symbolSize;
 
-		QPainterPath pointShape;
-
 		//reimplemented from QGraphicsItem
 		virtual QRectF boundingRect() const;
 		virtual QPainterPath shape() const;
 		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
-		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+		virtual QVariant itemChange(GraphicsItemChange change, const QVariant& value);
 
 		CustomPoint* const q;
 

@@ -65,7 +65,6 @@ class CustomPoint : public WorksheetElement {
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool);
-		void suppressHoverEvents(bool);
 
 		typedef CustomPointPrivate Private;
 

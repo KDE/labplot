@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2009 Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -114,6 +115,7 @@ class SpreadsheetModel : public QAbstractItemModel
 		QList<int> m_vertical_header_data;
 		//! Horizontal header data
 		QStringList m_horizontal_header_data;
+		int m_defaultHeaderHeight;
 };
 
 #endif

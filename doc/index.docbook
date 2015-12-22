@@ -72,7 +72,7 @@
 <chapter id="introduction">
 <title>Introduction</title>
 <para>
-&LabPlot; is a KDE-application for interactive graphing and analysis of scientific data. &LabPlot; provides an easy way to create, manage and edit plots.
+&LabPlot; is a &kde;-application for interactive graphing and analysis of scientific data. &LabPlot; provides an easy way to create, manage and edit plots.
 </para>
 
 <para>
@@ -178,7 +178,7 @@ Properties explorer is a dockable window and can be placed at an arbitrary place
 <title>Spreadsheet</title>
 <para>
 The spreadsheet is the main part of &LabPlot; when working with data and consists of columns.
-Column is the basic data set in LabPlot used for plotting and data analysis.
+Column is the basic data set in &LabPlot; used for plotting and data analysis.
 Every column of the spreadsheet is specified by its name and the type - numeric, text, month names, day names and date and time.
 Also, for each type different representation formats can be assigned like decimal or scientific format for numeric columns etc.
 </para>
@@ -199,7 +199,7 @@ Of course you can also <link linkend="exportdialog">export</link> the data in th
 
 <para>
 New data can be produced either by entering it manually in the spreadsheet or by generating the data according to a certain prescription.
-LabPlot provides 5 different methods to generate data, accessible via the context menu of the column:
+&LabPlot; provides 5 different methods to generate data, accessible via the context menu of the column:
 
 <itemizedlist>
 <listitem>
@@ -293,13 +293,13 @@ The results shown on the worksheet can be exported to different formats via the 
 <sect1 id="file_data_source">
 <title>File Data Source</title>
 <para>
-A file data source is very similar in spirit to a spreadsheet with imported data from an external file. The difference is that the imported data cannot be shown and edited in LabPlot after the import anymore. This can be sufficient e.g. if you only want to plot the data stemming from a calculation in an external program (and exported to an ASCII-file afterwards).
+A file data source is very similar in spirit to a spreadsheet with imported data from an external file. The difference is that the imported data cannot be shown and edited in &LabPlot; after the import anymore. This can be sufficient &eg; if you only want to plot the data stemming from a calculation in an external program (and exported to an ASCII-file afterwards).
 </para>
 <para>
 Since no spreadsheet has to be filled with the imported data, the import into a file data source is faster than into a spreadsheet which can be advantageously when dealing with big files.
 </para>
 <para>
-It is possible to store the link to the external file in the project file only and not its content. Each time the project file is opened in LabPlot, the content is read from the external file again. Also, it is possible to let LabPlot watch the file for changes - the content of the file data source is updated if the external file was changed.
+It is possible to store the link to the external file in the project file only and not its content. Each time the project file is opened in &LabPlot;, the content is read from the external file again. Also, it is possible to let &LabPlot; watch the file for changes - the content of the file data source is updated if the external file was changed.
 </para>
 <para>
 <screenshot><mediaobject><imageobject>
@@ -349,7 +349,7 @@ In the import dialog you can import data into one of the available spreadsheets 
 </para>
 <para>
 The name of the file containing the data to import has to be provided. The <guibutton>File Info</guibutton> button opens a dialog where some information about the selected file is shown. The type of the data can be specified - currently, only ASCII files containing several data sets (vectors) stored as columns are supported.
-The filter - automatic or custom - determines how the file has to be parsed. Selecting the filter "custom", several parameters like separating character etc. can be provided manually in this case.
+The filter - automatic or custom - determines how the file has to be parsed. Selecting the filter "custom", several parameters like separating character &etc; can be provided manually in this case.
 </para>
 <para>
 The start and end row to read can be customized using the <guilabel>Data portion to read</guilabel> tab. To read all data specify <userinput>-1</userinput> as an end row or column.
@@ -683,12 +683,12 @@ The menu is only available when a datapicker object is selected on the <guilabel
 <sect1 id="uploadimage">
   <title>Upload Image</title>
   <para>
-    Datapicker can be created inside a project via  "Add new" in the context menu of project/folder or in the main toolbar.
-    After that a new image can be added and can be changed via "Plot" in the corresponding dock widget.
+    Datapicker can be created inside a project via <guimenuitem>Add new</guimenuitem> in the context menu of project/folder or in the main toolbar.
+    After that a new image can be added and can be changed via <guilabel>Plot</guilabel> in the corresponding dock widget.
   </para>
   <para>
     After uploading image different zooming options can be used from the context menu/datapicker toolbar to change width and 
-    height of image. Image can also be rotated to an angle using "Rotation" in the "edit" section of dock widget. After this
+    height of image. Image can also be rotated to an angle using <guilabel>Rotation</guilabel> in the "edit" section of dock widget. After this
     user have to <link linkend="axispoint">set axis points</link>.
   </para>
 </sect1>
@@ -701,7 +701,7 @@ The menu is only available when a datapicker object is selected on the <guilabel
     <link linkend="datapickercurve">curve</link> they belong.
     </para>
   <para>
-    Every curve of datapicker can have it's own symbol style that can be changed in the "Symbols" section of dock widget.
+    Every curve of datapicker can have its own symbol style that can be changed in the <guilabel>Symbols</guilabel> section of dock widget.
     "SelectAndMove" mouse mode can be used to select multiple points/symbols and can be moved by using navigation keys.
   </para>
 </sect1>
@@ -710,35 +710,35 @@ The menu is only available when a datapicker object is selected on the <guilabel
   <title>Axis Points</title>
   <para>
     Axis Points are the set of three reference  <link linkend="symbols">points</link> over image of datapicker. These points 
-    can be set via "Set Axis Points" in the context menu of datapicker. After selecting points over image user have to update
-    their coordinate system type via "Plot Type" and logical positions via "Ref. Points" in the dock widget.
+    can be set via <guimenuitem>Set Axis Points</guimenuitem> in the context menu of datapicker. After selecting points over image user have to update
+    their coordinate system type via <guilabel>Plot Type</guilabel> and logical positions via <guilabel>Ref. Points</guilabel> in the dock widget.
   </para>
 </sect1>
 
 <sect1 id="datapickercurve">
   <title>Datapicker Curve</title>
   <para>
-    Datapicker-Curve can be created inside datapicker via "New Curve" in the context menu of datapicker. A curve can have 
+    Datapicker-Curve can be created inside datapicker via <guimenuitem>New Curve</guimenuitem> in the context menu of datapicker. A curve can have 
     different types of X and Y errors (No-error, symmetric, asymmetric). This depends on the type of errors dock widget 
     of datapicker have at the point of creation.
     </para>
   <para>
     Every curve object contains all the curve <link linkend="symbols">points</link> (hidden) and  a spreadsheet that contains 
     logical positions of all its curve points, and provides options to update spreadsheet and to toggle visibility 
-    of its curve points using the context menu. Mode "Set Curve Points" in the context menu of datapicker should be 
+    of its curve points using the context menu. Mode <guimenuitem>Set Curve Points</guimenuitem> in the context menu of datapicker should be 
     selected in order to create curve points.
   </para>
   <para>
     Multiple curve can be created for same datapicker. The created curve points always correspond to the active
-    curve of datapicker which can be changed via "Active Curve" option in the context menu and dock widget of datapicker.
-    Every curve of datapicker can have its own symbol style that can be changed in the "Symbols" section of dock widget.
+    curve of datapicker which can be changed via <guimenuitem>Active Curve</guimenuitem> option in the context menu and dock widget of datapicker.
+    Every curve of datapicker can have its own symbol style that can be changed in the <guilabel>Symbols</guilabel> section of dock widget.
   </para>
 </sect1>
 
 <sect1 id="curvesegments">
   <title>Curve Segments</title>
   <para>
-    Curve segment for datapicker can be created over image by switching mode to "Select Curve Segments" in the context menu of
+    Curve segment for datapicker can be created over image by switching mode to <guimenuitem>Select Curve Segments</guimenuitem> in the context menu of
     datapicker. A segment is a selectable object over image which can be selected by mouse right click over it.
     </para>
   <para>
@@ -1498,7 +1498,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
     </step>
     <step>
       <para>
-	Switch to the <guilabel>Line</guilabel> tab on the <guilabel>xy-equation-curve properties</guilabel> pane and choose <guimenuitem>cubic spline (natural)</guimenuitem> from the <guilabel>Type</guilabel> drop down list.
+	Switch to the <guilabel>Line</guilabel> tab on the <guilabel>xy-equation-curve properties</guilabel> pane and choose <guimenuitem>cubic spline (natural)</guimenuitem> from the <guilabel>Type</guilabel> drop down box.
       </para>
       <screenshot>
       <screeninfo>Choosing the line type</screeninfo>
@@ -1628,7 +1628,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
       </mediaobject>
       </screenshot>
       <para>
-	Select <guimenuitem>Automatic (g)</guimenuitem> from the <guilabel>Format</guilabel> drop down list on the <guilabel>Column properties</guilabel> right dock to enhance data presentation for the first column.
+	Select <guimenuitem>Automatic (g)</guimenuitem> from the <guilabel>Format</guilabel> drop down box on the <guilabel>Column properties</guilabel> right dock to enhance data presentation for the first column.
       </para>
     </step>
     <step>
@@ -1788,13 +1788,13 @@ The standard way is to use <menuchoice><guimenu>File</guimenu><guimenuitem>Expor
 
 <qandaentry>
 <question>
-<para>I miss an important feature. What can i do?</para>
+<para>I miss an important feature. What can I do?</para>
 </question>
 <answer>
 <para>
 Please take a look at the TODO file in the documentation of &LabPlot;.
-Here all planed features are listed in more or
-less sorted order which i will implement in future releases of &LabPlot;.
+Here, all planned features are listed in more or
+less sorted order which I will implement in future releases of &LabPlot;.
 If you like to have additional
 features or like to have a listed feature soon, mail me your wishes and, if possible, send me
 example data or a short
@@ -1806,7 +1806,7 @@ of &LabPlot; :-)
 </qandaentry>
 
 <qandaentry><question>
-<para>Many Analysis functions are disabled. What can i do?</para>
+<para>Many Analysis functions are disabled. What can I do?</para>
 </question>
 <answer><para>
 It looks like your &LabPlot; package was compiled without GSL (&GNU; Scientific Library) support. &LabPlot; was designed to even work on systems that

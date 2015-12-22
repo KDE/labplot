@@ -320,7 +320,7 @@ void DatapickerImageView::drawBackground(QPainter* painter, const QRectF& rect) 
 
 	// canvas
 	if (m_image->isLoaded) {
-		if (m_image->plotImageType == DatapickerImage::OriginalImage) {
+		if (m_image->plotImageType() == DatapickerImage::OriginalImage) {
 			QImage todraw = m_image->originalPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 			painter->drawImage(scene_rect.topLeft(), todraw);
 		} else {
@@ -462,8 +462,13 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 			m_image->m_magnificationWindow->setZValue(-1);
 		}
 
-		int size = 200/transform().m11();
-		QImage imageSection = m_image->originalPlotImage.scaled(scene()->width(), scene()->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+		int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
+		QImage imageSection;
+		if (m_image->plotImageType()==DatapickerImage::OriginalImage)
+			imageSection = m_image->originalPlotImage.scaled(scene()->width(), scene()->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+		else
+			imageSection = m_image->processedPlotImage.scaled(scene()->width(), scene()->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
 		imageSection = imageSection.copy(pos.x() - size/2, pos.y() - size/2, size, size);
 		imageSection = imageSection.scaled(size*magnificationFactor, size*magnificationFactor, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 		imageSection = imageSection.copy(imageSection.width()/2 - size/2, imageSection.height()/2 - size/2, size, size);

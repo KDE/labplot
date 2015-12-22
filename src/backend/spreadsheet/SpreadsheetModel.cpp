@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2009 Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -30,11 +31,10 @@
 #include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
-#include <QString>
-#include <QBrush>
+
 #include <QIcon>
-#include <QPixmap>
-#include <QDebug>
+#include <QFontMetrics>
+
 #include <KLocale>
 
 SpreadsheetModel::SpreadsheetModel(Spreadsheet * spreadsheet)
@@ -42,6 +42,11 @@ SpreadsheetModel::SpreadsheetModel(Spreadsheet * spreadsheet)
 {
 	updateVerticalHeader();
 	updateHorizontalHeader();
+
+	QFont font;
+	font.setFamily(font.defaultFamily());
+	QFontMetrics fm(font);
+	m_defaultHeaderHeight = fm.height()+5;
 
 	connect(m_spreadsheet, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
 			this, SLOT(handleAspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
@@ -144,7 +149,7 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 				case SpreadsheetModel::CommentRole:
 					return m_spreadsheet->child<Column>(section)->comment();
 				case Qt::SizeHintRole:
-					return QSize(m_spreadsheet->child<Column>(section)->width(), 20);
+					return QSize(m_spreadsheet->child<Column>(section)->width(), m_defaultHeaderHeight);
 			}
 		case Qt::Vertical:
 			switch(role) {
@@ -155,19 +160,6 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 	}
 	return QVariant();
 }
-
-/* TODO: unused function
-bool SpreadsheetModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
-{
-	if (orientation == Qt::Horizontal && role == Qt::SizeHintRole) {
-		m_spreadsheet->child<Column>(section)->setWidth(value.toSize().width());
-		emit headerDataChanged(Qt::Horizontal, section, section);
-	} else
-		QAbstractItemModel::setHeaderData(section, orientation, value, role);
-
-	return true;
-}
-*/
 
 int SpreadsheetModel::rowCount(const QModelIndex &parent) const
 {

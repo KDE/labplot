@@ -53,7 +53,6 @@
 DatapickerImage::DatapickerImage(AbstractScriptingEngine* engine, const QString& name, bool loading)
 	: AbstractPart(name), scripted(engine),
 	  isLoaded(false),
-	  plotImageType(DatapickerImage::OriginalImage),
 	  m_magnificationWindow(0),
 	  d(new DatapickerImagePrivate(this)),
 	  m_segments(new Segments(this)),
@@ -90,6 +89,7 @@ void DatapickerImage::init() {
 	d->settings.valueThresholdHigh = group.readEntry("ValueThresholdHigh", 50);
 	d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", 0);
 	d->plotPointsType = (DatapickerImage::PointsType) group.readEntry("PlotPointsType", (int) DatapickerImage::AxisPoints);
+    d->plotImageType = DatapickerImage::OriginalImage;
     // point properties
     d->pointStyle = (Symbol::Style)group.readEntry("PointStyle", (int)Symbol::Cross);
     d->pointSize = group.readEntry("Size", Worksheet::convertToSceneUnits(7, Worksheet::Point));
@@ -150,7 +150,7 @@ void DatapickerImage::setSelectedInView(const bool b) {
 		emit childAspectDeselectedInView(this);
 }
 
-QGraphicsScene *DatapickerImage::scene() const {
+QGraphicsScene* DatapickerImage::scene() const {
 	return d->m_scene;
 }
 
@@ -158,8 +158,13 @@ QRectF DatapickerImage::pageRect() const {
 	return d->m_scene->sceneRect();
 }
 
-void DatapickerImage::setPlotImageType(const DatapickerImage::PlotImageType& type) {
-	plotImageType = type;
+void DatapickerImage::setPlotImageType(const DatapickerImage::PlotImageType type) {
+	d->plotImageType = type;
+	emit requestUpdate();
+}
+
+DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
+	return d->plotImageType;
 }
 
 void DatapickerImage::setSegmentVisible(bool on) {
@@ -322,19 +327,22 @@ bool DatapickerImagePrivate::uploadImage(const QString& address) {
 	bool rc = q->originalPlotImage.load(address);
 	if (rc) {
 		q->processedPlotImage = q->originalPlotImage;
-		discretize();
+		if (plotImageType == DatapickerImage::ProcessedImage)
+			discretize();
 
 		//resize the screen
 		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Inch)/QApplication::desktop()->physicalDpiX();
 		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Inch)/QApplication::desktop()->physicalDpiX();
 		m_scene->setSceneRect(0, 0, w, h);
 		q->isLoaded = true;
+		emit q->requestUpdate();
 	}
 	return rc;
 }
 
 void DatapickerImagePrivate::discretize() {
 	q->m_editor->discretize(&q->processedPlotImage, &q->originalPlotImage, settings);
+
 	//update segments
 	makeSegments();
 }
@@ -343,6 +351,7 @@ void DatapickerImagePrivate::makeSegments() {
 	q->m_segments->makeSegments(q->processedPlotImage);
 	if (plotPointsType == DatapickerImage::SegmentPoints)
 		q->m_segments->setSegmentsVisible(true);
+
 	emit q->requestUpdate();
 }
 
