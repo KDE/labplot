@@ -34,6 +34,8 @@
 #include "backend/datapicker/DatapickerCurve.h"
 #include "backend/datapicker/DatapickerImage.h"
 
+#include <limits>
+
 #include <QMenu>
 #include <QToolBar>
 #include <QDesktopWidget>
@@ -459,26 +461,34 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 
 		if (!m_image->m_magnificationWindow) {
 			m_image->m_magnificationWindow = new QGraphicsPixmapItem(0, scene());
-			m_image->m_magnificationWindow->setZValue(-1);
+			m_image->m_magnificationWindow->setZValue(std::numeric_limits<int>::max());
 		}
 
-		int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
+		//copy the part of the image to be shown magnified
 		QImage imageSection;
 		if (m_image->plotImageType()==DatapickerImage::OriginalImage)
 			imageSection = m_image->originalPlotImage.scaled(scene()->width(), scene()->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 		else
 			imageSection = m_image->processedPlotImage.scaled(scene()->width(), scene()->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-		imageSection = imageSection.copy(pos.x() - size/2, pos.y() - size/2, size, size);
+		int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
+		imageSection = imageSection.copy(pos.x() - size/2, pos.x() - size/2, size, size);
 		imageSection = imageSection.scaled(size*magnificationFactor, size*magnificationFactor, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 		imageSection = imageSection.copy(imageSection.width()/2 - size/2, imageSection.height()/2 - size/2, size, size);
-		QPainter painter(&imageSection);
-		painter.setPen(QPen(Qt::lightGray, 2/transform().m11()));
-		painter.drawRect(imageSection.rect());
 
-		m_image->m_magnificationWindow->setVisible(true);
+		//draw the bounding rect
+		QPainter painter(&imageSection);
+		QPen pen = QPen(Qt::lightGray, 2/transform().m11());
+		painter.setPen(pen);
+		QRect rect = imageSection.rect();
+		rect.setWidth(rect.width()-pen.widthF()/2);
+		rect.setHeight(rect.height()-pen.widthF()/2);
+		painter.drawRect(rect);
+
+		//set the pixmap
 		m_image->m_magnificationWindow->setPixmap(QPixmap::fromImage(imageSection));
 		m_image->m_magnificationWindow->setPos(pos.x()- imageSection.width()/2, pos.y()- imageSection.height()/2);
+		m_image->m_magnificationWindow->setVisible(true);
 	} else if (m_image->m_magnificationWindow) {
 		m_image->m_magnificationWindow->setVisible(false);
 	}
