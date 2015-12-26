@@ -466,30 +466,28 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 			m_image->m_magnificationWindow->setZValue(std::numeric_limits<int>::max());
 		}
 
-		//copy the part of the image to be shown magnified
-		QImage imageSection;
-		if (m_image->plotImageType()==DatapickerImage::OriginalImage)
-			imageSection = m_image->originalPlotImage.scaled(scene()->width(), scene()->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-		else
-			imageSection = m_image->processedPlotImage.scaled(scene()->width(), scene()->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+		m_image->m_magnificationWindow->setVisible(false);
 
+		//copy the part of the view to be shown magnified
 		int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
-		imageSection = imageSection.copy(pos.x() - size/2, pos.x() - size/2, size, size);
-		imageSection = imageSection.scaled(size*magnificationFactor, size*magnificationFactor, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-		imageSection = imageSection.copy(imageSection.width()/2 - size/2, imageSection.height()/2 - size/2, size, size);
+		QRectF copyRect(pos.x() - size/2, pos.y() - size/2, size, size);
+		QPixmap px = QPixmap::grabWidget(this, mapFromScene(copyRect).boundingRect());
+		px = px.scaled(size*magnificationFactor, size*magnificationFactor, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+		px = px.copy(px.width()/2 - size/2, px.height()/2 - size/2, size, size);
 
 		//draw the bounding rect
-		QPainter painter(&imageSection);
+		QPainter painter(&px);
 		QPen pen = QPen(Qt::lightGray, 2/transform().m11());
 		painter.setPen(pen);
-		QRect rect = imageSection.rect();
+		QRect rect = px.rect();
 		rect.setWidth(rect.width()-pen.widthF()/2);
 		rect.setHeight(rect.height()-pen.widthF()/2);
 		painter.drawRect(rect);
 
 		//set the pixmap
-		m_image->m_magnificationWindow->setPixmap(QPixmap::fromImage(imageSection));
-		m_image->m_magnificationWindow->setPos(pos.x()- imageSection.width()/2, pos.y()- imageSection.height()/2);
+		m_image->m_magnificationWindow->setPixmap(px);
+		m_image->m_magnificationWindow->setPos(pos.x()- px.width()/2, pos.y()- px.height()/2);
+
 		m_image->m_magnificationWindow->setVisible(true);
 	} else if (m_image->m_magnificationWindow) {
 		m_image->m_magnificationWindow->setVisible(false);
