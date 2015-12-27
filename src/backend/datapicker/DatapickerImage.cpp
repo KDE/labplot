@@ -419,6 +419,7 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 
 	//editor and segment settings
 	writer->writeStartElement( "editorSettings" );
+	writer->writeAttribute( "plotImageType", QString::number(d->plotImageType) );
 	writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
 	writer->writeAttribute( "minSegmentLength", QString::number(d->minSegmentLength) );
 	writer->writeAttribute( "pointSeparation", QString::number(d->pointSeparation) );
@@ -597,6 +598,12 @@ bool DatapickerImage::load(XmlStreamReader* reader) {
 
 		} else if (reader->name() == "editorSettings") {
 			attribs = reader->attributes();
+
+			str = attribs.value("plotImageType").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("plotImageType"));
+			else
+				d->plotImageType = DatapickerImage::PlotImageType(str.toInt());
 
 			str = attribs.value("rotationAngle").toString();
 			if(str.isEmpty())

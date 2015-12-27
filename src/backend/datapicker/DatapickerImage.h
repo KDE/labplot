@@ -53,7 +53,7 @@ public:
 
 	enum GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary};
 	enum ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
-	enum PlotImageType { OriginalImage, ProcessedImage };
+	enum PlotImageType { NoImage, OriginalImage, ProcessedImage };
 	enum PointsType { AxisPoints, CurvePoints, SegmentPoints };
 
 	struct ReferencePoints {

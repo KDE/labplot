@@ -90,8 +90,9 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
 	ui.sbPoisitionZ2->setHidden(true);
 	ui.sbPoisitionZ3->setHidden(true);
 
-	ui.cbPlotImageType->addItem(i18n("Original"));
-	ui.cbPlotImageType->addItem(i18n("Processed"));
+	ui.cbPlotImageType->addItem(i18n("No Image"));
+	ui.cbPlotImageType->addItem(i18n("Original Image"));
+	ui.cbPlotImageType->addItem(i18n("Processed Image"));
 
 	//SLOTS
 	//general
