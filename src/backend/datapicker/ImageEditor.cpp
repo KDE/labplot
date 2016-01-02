@@ -73,7 +73,7 @@ void ImageEditor::discretize(QImage* plotImage, QImage* originalImage, Datapicke
 	qDebug() << "Pixmap updated in " << timer.elapsed() << "ms";
 }
 
-bool ImageEditor::processedPixelIsOn(const QImage& plotImage, int x, int y) const {
+bool ImageEditor::processedPixelIsOn(const QImage& plotImage, int x, int y) {
 	if ((x < 0) || (plotImage.width() <= x) || (y < 0) || (plotImage.height() <= y))
 		return false;
 

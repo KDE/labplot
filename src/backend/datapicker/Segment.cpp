@@ -33,7 +33,6 @@
 
 #include <QPainter>
 #include <QGraphicsScene>
-#include <QGraphicsSceneMouseEvent>
 #include <QDesktopWidget>
 
 #include <KLocale>
@@ -80,6 +79,7 @@ void Segment::setVisible(bool on) {
 	Q_D(Segment);
 	d->setVisible(on);
 }
+
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################

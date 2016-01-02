@@ -35,7 +35,7 @@
 class ImageEditor {
 	public:
 		void discretize(QImage*, QImage*, DatapickerImage::EditorSettings);
-		bool processedPixelIsOn(const QImage&, int, int) const;
+		static bool processedPixelIsOn(const QImage&, int, int);
 
 	private:
 		int colorAttributeMax(DatapickerImage::ColorAttributes) const;

@@ -90,8 +90,6 @@ public:
 	void setPlotImageType(const DatapickerImage::PlotImageType);
 	DatapickerImage::PlotImageType plotImageType();
 
-	void setSegmentVisible(bool);
-
 	bool isLoaded;
 	QImage originalPlotImage;
 	QImage processedPlotImage;

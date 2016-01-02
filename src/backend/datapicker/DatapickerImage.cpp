@@ -157,10 +157,6 @@ DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
 	return d->plotImageType;
 }
 
-void DatapickerImage::setSegmentVisible(bool on) {
-	m_segments->setSegmentsVisible(on);
-}
-
 void DatapickerImage::initSceneParameters() {
 	setRotationAngle(0.0);
 	setminSegmentLength(30);
@@ -239,6 +235,18 @@ void DatapickerImage::setPrinting(bool on) const {
 
 void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 	d->plotPointsType = pointsType;
+
+	if (pointsType == DatapickerImage::AxisPoints) {
+		//clear image
+		int childCount = this->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
+		if (childCount)
+			removeAllChildren();
+		m_segments->setSegmentsVisible(false);
+	} else if (pointsType==DatapickerImage::CurvePoints) {
+		m_segments->setSegmentsVisible(false);
+	} else if (pointsType==DatapickerImage::SegmentPoints) {
+		m_segments->setSegmentsVisible(true);
+	}
 }
 
 void DatapickerImage::setPointSeparation(const int value) {
@@ -277,15 +285,18 @@ bool DatapickerImagePrivate::uploadImage(const QString& address) {
 void DatapickerImagePrivate::discretize() {
 	q->m_editor->discretize(&q->processedPlotImage, &q->originalPlotImage, settings);
 
-	//update segments
-	makeSegments();
+	if (plotPointsType != DatapickerImage::SegmentPoints)
+		emit q->requestUpdate();
+	else
+		makeSegments();
 }
 
 void DatapickerImagePrivate::makeSegments() {
-	q->m_segments->makeSegments(q->processedPlotImage);
-	if (plotPointsType == DatapickerImage::SegmentPoints)
-		q->m_segments->setSegmentsVisible(true);
+	if (plotPointsType != DatapickerImage::SegmentPoints)
+		return;
 
+	q->m_segments->makeSegments(q->processedPlotImage);
+	q->m_segments->setSegmentsVisible(true);
 	emit q->requestUpdate();
 }
 
@@ -371,8 +382,8 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//serialize all children
-	QList<AbstractAspect *> childrenAspect = children<AbstractAspect>(IncludeHidden);
-	foreach(AbstractAspect *child, childrenAspect)
+	QList<AbstractAspect*> childrenAspect = children<AbstractAspect>(IncludeHidden);
+	foreach(AbstractAspect* child, childrenAspect)
 		child->save(writer);
 
 	writer->writeEndElement();

@@ -508,20 +508,12 @@ void DatapickerImageView::contextMenuEvent(QContextMenuEvent* e) {
 //####################################  SLOTs   ###############################
 //##############################################################################
 void DatapickerImageView::changePointsType(QAction* action) {
-	if (action==setAxisPointsAction) {
-		//clear image
-		int childCount = m_image->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
-		if (childCount)
-			m_image->removeAllChildren();
+	if (action==setAxisPointsAction)
 		m_image->setPlotPointsType(DatapickerImage::AxisPoints);
-		m_image->setSegmentVisible(false);
-	} else if (action==setCurvePointsAction) {
+	else if (action==setCurvePointsAction)
 		m_image->setPlotPointsType(DatapickerImage::CurvePoints);
-		m_image->setSegmentVisible(false);
-	} else if (action==selectSegmentAction) {
+	else if (action==selectSegmentAction)
 		m_image->setPlotPointsType(DatapickerImage::SegmentPoints);
-		m_image->setSegmentVisible(true);
-	}
 }
 
 void DatapickerImageView::changeZoom(QAction* action) {
