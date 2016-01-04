@@ -119,7 +119,15 @@ void SpreadsheetView::init(){
 	foreach(Column * col, m_spreadsheet->children<Column>())
 		m_horizontalHeader->resizeSection(i++, col->width());
 
-
+	// vertical header
+	QHeaderView * v_header = m_tableView->verticalHeader();
+	v_header->setResizeMode(QHeaderView::Fixed);
+	QFont font;
+	font.setFamily(font.defaultFamily());
+	QFontMetrics fm(font);
+	v_header->setDefaultSectionSize(fm.height());
+	v_header->setMovable(false);
+	v_header->installEventFilter(this);
 
 	setFocusPolicy(Qt::StrongFocus);
 	setFocus();

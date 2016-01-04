@@ -94,8 +94,9 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
 	ui.sbPoisitionZ2->setHidden(true);
 	ui.sbPoisitionZ3->setHidden(true);
 
-	ui.cbPlotImageType->addItem(i18n("Original"));
-	ui.cbPlotImageType->addItem(i18n("Processed"));
+	ui.cbPlotImageType->addItem(i18n("No Image"));
+	ui.cbPlotImageType->addItem(i18n("Original Image"));
+	ui.cbPlotImageType->addItem(i18n("Processed Image"));
 
 	//SLOTS
 	//general
@@ -104,9 +105,9 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
 	connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
 	connect( ui.kleFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
 	connect( ui.kleFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
-	connect( ui.cbPlotImageType, SIGNAL(currentIndexChanged(int)), this, SLOT(plotImageTypeChanged(int)) );
 
 	// edit image
+	connect( ui.cbPlotImageType, SIGNAL(currentIndexChanged(int)), this, SLOT(plotImageTypeChanged(int)) );
 	connect( ui.sbRotation, SIGNAL(valueChanged(double)), this, SLOT(rotationChanged(double)) );
 	connect( ssIntensity, SIGNAL(spanChanged(int,int)), this, SLOT(intensitySpanChanged(int,int)) );
 	connect( ssForeground, SIGNAL(spanChanged(int,int)), this, SLOT(foregroundSpanChanged(int,int)) );
@@ -484,7 +485,7 @@ void ImageWidget::load() {
 	ui.sbPoisitionZ1->setValue(m_image->axisPoints().logicalPos[0].z());
 	ui.sbPoisitionZ2->setValue(m_image->axisPoints().logicalPos[1].z());
 	ui.sbPoisitionZ3->setValue(m_image->axisPoints().logicalPos[2].z());
-	ui.cbPlotImageType->setCurrentIndex((int) m_image->plotImageType);
+	ui.cbPlotImageType->setCurrentIndex((int) m_image->plotImageType());
 	ssIntensity->setSpan(m_image->settings().intensityThresholdLow, m_image->settings().intensityThresholdHigh);
 	ssForeground->setSpan(m_image->settings().foregroundThresholdLow, m_image->settings().foregroundThresholdHigh);
 	ssHue->setSpan(m_image->settings().hueThresholdLow, m_image->settings().hueThresholdHigh);

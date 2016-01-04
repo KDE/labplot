@@ -35,7 +35,7 @@
 #include <QIcon>
 #include <QMenu>
 #include <QApplication>
-#include <QDebug>
+#include <QFontMetrics>
 
 #include <KLocale>
 
@@ -76,6 +76,11 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 	  m_folderSelectable(true),
 	  m_filterCaseSensitivity(Qt::CaseInsensitive),
 	  m_matchCompleteWord(false) {
+
+	QFont font;
+	font.setFamily(font.defaultFamily());
+	QFontMetrics fm(font);
+	m_defaultHeaderHeight = fm.height();
 
 	connect(m_root, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
 		this, SLOT(aspectDescriptionChanged(const AbstractAspect*)));
@@ -150,14 +155,15 @@ QVariant AspectTreeModel::headerData(int section, Qt::Orientation orientation, i
 				case 3: return i18n("Comment");
 				default: return QVariant();
 			}
-		case Qt::SizeHintRole:
+		case Qt::SizeHintRole: {
 			switch(section) {
-				case 0: return QSize(300,20);
-				case 1: return QSize(80,20);
-				case 2: return QSize(160,20);
-				case 3: return QSize(400,20);
+				case 0: return QSize(300, m_defaultHeaderHeight);
+				case 1: return QSize(80, m_defaultHeaderHeight);
+				case 2: return QSize(160, m_defaultHeaderHeight);
+				case 3: return QSize(400, m_defaultHeaderHeight);
 				default: return QVariant();
 			}
+		}
 		default:
 			return QVariant();
 	}

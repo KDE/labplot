@@ -49,7 +49,7 @@ public:
 
 	enum GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary};
 	enum ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
-	enum PlotImageType { OriginalImage, ProcessedImage };
+	enum PlotImageType { NoImage, OriginalImage, ProcessedImage };
 	enum PointsType { AxisPoints, CurvePoints, SegmentPoints };
 
 	struct ReferencePoints {
@@ -86,13 +86,13 @@ public:
 	QGraphicsScene *scene() const;
 	void setPrinting(bool) const;
 	void setSelectedInView(const bool);
-	void setPlotImageType(const DatapickerImage::PlotImageType&);
-	void setSegmentVisible(bool);
+
+	void setPlotImageType(const DatapickerImage::PlotImageType);
+	DatapickerImage::PlotImageType plotImageType();
 
 	bool isLoaded;
 	QImage originalPlotImage;
 	QImage processedPlotImage;
-	PlotImageType plotImageType;
 	QGraphicsPixmapItem* m_magnificationWindow;
 
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)

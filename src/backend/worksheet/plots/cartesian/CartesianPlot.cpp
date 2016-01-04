@@ -1870,6 +1870,14 @@ bool CartesianPlot::load(XmlStreamReader* reader){
                 addChild(m_legend);
 				addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
             }
+		}else if(reader->name() == "customPoint"){
+			CustomPoint* point = new CustomPoint(this, "");
+			if (!point->load(reader)){
+				delete point;
+				return false;
+			}else{
+				addChild(point);
+			}
         }else{ // unknown element
             reader->raiseWarning(i18n("unknown cartesianPlot element '%1'", reader->name().toString()));
             if (!reader->skipToEndElement()) return false;

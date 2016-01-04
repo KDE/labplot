@@ -33,36 +33,31 @@
 #include <backend/datapicker/DatapickerImage.h>
 
 class ImageEditor {
-public:
+	public:
+		void discretize(QImage*, QImage*, DatapickerImage::EditorSettings);
+		static bool processedPixelIsOn(const QImage&, int, int);
 
-	ImageEditor();
-	~ImageEditor();
+	private:
+		int colorAttributeMax(DatapickerImage::ColorAttributes) const;
 
-	int colorAttributeMax(DatapickerImage::ColorAttributes) const;
+		QRgb backgroundColor(const QImage*);
 
-	QRgb backgroundColor(const QImage*);
+		bool colorCompare(QRgb color1, QRgb color2) const;
 
-	bool colorCompare(QRgb color1, QRgb color2);
+		int discretizeValueNotForeground(int, int, DatapickerImage::ColorAttributes) const;
+		int discretizeValueForeground(int, int, int, int, int) const;
 
-	int discretizeValueNotForeground(int, int, DatapickerImage::ColorAttributes) const;
-	int discretizeValueForeground(int, int, int, int, int) const;
+		bool pixelIsOn(int, DatapickerImage::EditorSettings) const;
 
-	void discretize(QImage*, QImage*, DatapickerImage::EditorSettings);
+		struct ColorEntry {
+			QColor color;
+			int count;
+		};
 
-	bool pixelIsOn(int, DatapickerImage::EditorSettings) const;
-	bool processedPixelIsOn(const QImage&, int, int) const;
+		typedef QList<ColorEntry> ColorList;
 
-private:
-
-	struct ColorEntry {
-		QColor color;
-		int count;
-	};
-
-	typedef QList<ColorEntry> ColorList;
-
-	QImage* m_originalImage;
-	bool pixelIsOn(int, int, int) const;
+		QImage* m_originalImage;
+		bool pixelIsOn(int, int, int) const;
 };
 
 

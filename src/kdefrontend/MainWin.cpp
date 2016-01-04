@@ -153,7 +153,10 @@ void MainWin::initGUI(const QString& fileName){
 	setAttribute( Qt::WA_DeleteOnClose );
 
 	//make the status bar of a fixed size in order to avoid height changes when placing a ProgressBar there.
-	statusBar()->setFixedHeight(statusBar()->height());
+	QFont font;
+	font.setFamily(font.defaultFamily());
+	QFontMetrics fm(font);
+	statusBar()->setFixedHeight(fm.height());
 
 	//load recently used projects
 	m_recentProjectsAction->loadEntries( KSharedConfig::openConfig()->group("Recent Files") );

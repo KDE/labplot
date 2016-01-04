@@ -13,6 +13,8 @@ public:
 	DatapickerImage::ReferencePoints axisPoints;
 	DatapickerImage::EditorSettings settings;
 	DatapickerImage::PointsType plotPointsType;
+	DatapickerImage::PlotImageType plotImageType;
+
 	DatapickerImage* const q;
 	QRectF pageRect;
 	QGraphicsScene* m_scene;

@@ -30,7 +30,8 @@
 
 #include <QGraphicsScene>
 #include <QImage>
-#include <QLine>
+#include <QElapsedTimer>
+#include <QDebug>
 
 /**
  * \class Segments
@@ -47,18 +48,17 @@
 Segments::Segments(DatapickerImage* image): m_image(image) {
 }
 
-Segments::~Segments() {
-}
-
 /*!
     segments are built when the original image is loaded. they start out hidden
      and remain so until showSegments is called
 */
 void Segments::makeSegments(QImage &imageProcessed) {
+	QElapsedTimer timer;
+	timer.start();
 	clearSegments();
 
-	int width = imageProcessed.width();
-	int height = imageProcessed.height();
+	const int width = imageProcessed.width();
+	const int height = imageProcessed.height();
 
 	// for each new column of pixels, loop through the runs. a run is defined as
 	// one or more colored pixels that are all touching, with one uncolored pixel or the
@@ -80,19 +80,27 @@ void Segments::makeSegments(QImage &imageProcessed) {
 	Segment** currSegment = new Segment* [height];
 	loadSegment(lastSegment, height);
 
-	ImageEditor editor;
-	loadBool(&editor, lastBool, &imageProcessed, -1);
-	loadBool(&editor, currBool, &imageProcessed, 0);
-	loadBool(&editor, nextBool, &imageProcessed, 1);
+	//initialize one column of boolean flags using the pixels of the specified column
+	for (int y = 0; y < height; y++) {
+		lastBool[y] = false;
+		currBool[y] = ImageEditor::processedPixelIsOn(imageProcessed, 0, y);
+		nextBool[y] = ImageEditor::processedPixelIsOn(imageProcessed, 1, y);
+	}
 
 	for (int x = 0; x < width; x++) {
 		matchRunsToSegments(x, height, lastBool, lastSegment, currBool, currSegment, nextBool);
 
 		// get ready for next column
-		scrollBool(lastBool, currBool, height);
-		scrollBool(currBool, nextBool, height);
-		if (x + 1 < width)
-			loadBool(&editor, nextBool, &imageProcessed, x + 1);
+		for (int y = 0; y < height; y++) {
+			lastBool[y] = currBool[y];
+			currBool[y] = nextBool[y];
+		}
+
+		if (x + 1 < width) {
+			for (int y = 0; y < height; y++) {
+				nextBool[y] = ImageEditor::processedPixelIsOn(imageProcessed, x+1, y);
+			}
+		}
 		scrollSegment(lastSegment, currSegment, height);
 	}
 
@@ -101,14 +109,7 @@ void Segments::makeSegments(QImage &imageProcessed) {
 	delete[] nextBool;
 	delete[] lastSegment;
 	delete[] currSegment;
-}
-
-/*!
-  scroll the boolean flags of the right column into the left column
-*/
-void Segments::scrollBool(bool* left, bool* right, int height) {
-	for (int y = 0; y < height; y++)
-		left [y] = right [y];
+	qDebug() << "Made segments in " << timer.elapsed() << "ms";
 }
 
 /*!
@@ -171,18 +172,6 @@ void Segments::removeUnneededLines(Segment** lastSegment, Segment** currSegment,
 			}
 		}
 	}
-}
-
-/*!
-    initialize one column of boolean flags using the pixels of the specified column
-*/
-void Segments::loadBool(const ImageEditor* editor, bool* columnBool,
-                        QImage* image, int x) {
-	for (int y = 0; y < image->height(); y++)
-		if (x < 0)
-			columnBool [y] = false;
-		else
-			columnBool [y] = editor->processedPixelIsOn(*image, x, y);
 }
 
 /*!
