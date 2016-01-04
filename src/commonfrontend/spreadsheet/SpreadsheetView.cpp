@@ -109,12 +109,6 @@ void SpreadsheetView::init(){
 	connect(m_horizontalHeader, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
 	connect(m_horizontalHeader, SIGNAL(sectionClicked(int)), this, SLOT(columnClicked(int)) );
 
-    // vertical header
-    QHeaderView * v_header = m_tableView->verticalHeader();
-    v_header->setResizeMode(QHeaderView::Fixed);
-    v_header->setDefaultSectionSize(22);
-    v_header->setMovable(false);
-    v_header->installEventFilter(this);
 	int i=0;
 	foreach(Column * col, m_spreadsheet->children<Column>())
 		m_horizontalHeader->resizeSection(i++, col->width());
