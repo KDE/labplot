@@ -4,6 +4,8 @@
   Description          : Worksheet for Datapicker
   --------------------------------------------------------------------
   Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+  Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
+
 ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -117,6 +119,7 @@ private:
 signals:
 	void requestProjectContextMenu(QMenu*);
 	void requestUpdate();
+	void requestUpdateActions();
 
 	void fileNameChanged(const QString&);
 	void rotationAngleChanged(float);

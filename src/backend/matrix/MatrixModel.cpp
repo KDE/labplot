@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Matrix data model
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
@@ -203,6 +203,7 @@ QModelIndex MatrixModel::parent(const QModelIndex& child) const {
 }
 
 void MatrixModel::updateHeader() {
+	emit headerDataChanged(Qt::Horizontal, 0, m_matrix->columnCount());
 	emit headerDataChanged(Qt::Vertical, 0, m_matrix->rowCount());
 }
 

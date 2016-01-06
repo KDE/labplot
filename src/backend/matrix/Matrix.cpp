@@ -224,7 +224,7 @@ void Matrix::setPrecision(int precision) {
 //TODO: make this undoable?
 void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
 	d->headerFormat = format;
-	reinterpret_cast<MatrixView*>(m_view)->model()->updateHeader();
+	m_model->updateHeader();
 }
 
 //columns

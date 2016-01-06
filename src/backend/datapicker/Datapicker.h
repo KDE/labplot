@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : Datapicker.h
     Project              : LabPlot
-    Description          : Aspect providing a container for storing image and data
-                           in form of worksheet and spreadsheets
+    Description          : Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -83,7 +82,7 @@ private slots:
 
 signals:
 	void datapickerItemSelected(int);
-	void childAspectAdded(const AbstractAspect*);
+	void requestUpdateActions();
 };
 
 #endif

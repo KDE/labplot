@@ -910,7 +910,7 @@ void ExpressionParser::initConstants() {
 		m_constantsGroupIndex << 6;
 
 	// Printers Units
-	m_constantsNames << "length of 1 printer’s point [1/72 inch]";
+	m_constantsNames << "length of 1 printer's point [1/72 inch]";
 	m_constantsValues << QString::number(GSL_CONST_MKSA_POINT); m_constantsUnits << "m";
 	m_constantsNames << "length of 1 TeX point [1/72.27 inch]";
 	m_constantsValues << QString::number(GSL_CONST_MKSA_TEXPOINT); m_constantsUnits << "m";

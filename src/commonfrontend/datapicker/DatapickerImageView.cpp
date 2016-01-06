@@ -4,7 +4,7 @@
     Description          : DatapickerImage view for datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-	Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -88,6 +88,14 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView
 
 	changeZoom(zoomOriginAction);
 	currentZoomAction=zoomInViewAction;
+
+	if (m_image->plotPointsType() == DatapickerImage::AxisPoints)
+		setAxisPointsAction->setChecked(true);
+	else if (m_image->plotPointsType() == DatapickerImage::CurvePoints)
+		setCurvePointsAction->setChecked(true);
+	else
+		selectSegmentAction->setChecked(true);
+
 	handleImageActions();
 	changeRotationAngle();
 
@@ -95,9 +103,8 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView
 	//for general actions
 	connect( m_image, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)) );
 	connect( m_image, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
-	connect( m_datapicker, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleImageActions()));
-	connect( m_datapicker, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	         this, SLOT(handleImageActions()) );
+	connect( m_image, SIGNAL(requestUpdateActions()), this, SLOT(handleImageActions()) );
+	connect( m_datapicker, SIGNAL(requestUpdateActions()), this, SLOT(handleImageActions()) );
 	connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(changeRotationAngle()) );
 }
 
@@ -670,10 +677,6 @@ void DatapickerImageView::handleImageActions() {
 				m_image->setUndoAware(true);
 			}
 		}
-
-		setAxisPointsAction->setChecked(m_image->plotPointsType() == DatapickerImage::AxisPoints);
-		setCurvePointsAction->setChecked(m_image->plotPointsType() == DatapickerImage::CurvePoints);
-		selectSegmentAction->setChecked(m_image->plotPointsType() == DatapickerImage::SegmentPoints);
 	} else {
 		navigationActionGroup->setEnabled(false);
 		magnificationActionGroup->setEnabled(false);

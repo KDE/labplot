@@ -4,7 +4,7 @@
     Description          : View class for Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -77,7 +77,6 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 	connect(m_datapicker, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(m_datapicker, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)), this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(m_datapicker, SIGNAL(datapickerItemSelected(int)), this, SLOT(itemSelected(int)));
-	connect(m_datapicker, SIGNAL(childAspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
 
 	connect(m_tabWidget, SIGNAL(currentChanged(int)), SLOT(tabChanged(int)));
 	connect(m_tabWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTabContextMenu(QPoint)));

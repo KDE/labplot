@@ -4,6 +4,8 @@
     Description          : Worksheet for Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -278,6 +280,7 @@ bool DatapickerImagePrivate::uploadImage(const QString& address) {
 		m_scene->setSceneRect(0, 0, w, h);
 		q->isLoaded = true;
 		emit q->requestUpdate();
+		emit q->requestUpdateActions();
 	}
 	return rc;
 }
