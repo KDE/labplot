@@ -186,21 +186,22 @@ void DatapickerView::handleDescriptionChanged(const AbstractAspect* aspect) {
 }
 
 void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
-	const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
-	if (!part)
-		return;
-
 	int index;
-	if (aspect->parentAspect() == m_datapicker) {
-		index= m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
+	const AbstractPart* part;
+	QString name;
+	if (dynamic_cast<const DatapickerImage*>(aspect)) {
+		index = 0;
+		part = dynamic_cast<const AbstractPart*>(aspect);
+		name = aspect->name();
+	} else if (dynamic_cast<const DatapickerCurve*>(aspect)) {
+		index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::IncludeHidden);
+		const Spreadsheet* spreadsheet = dynamic_cast<const Spreadsheet*>(aspect->child<AbstractAspect>(0));
+		Q_ASSERT(spreadsheet);
+		part = dynamic_cast<const AbstractPart*>(spreadsheet);
+		name = aspect->name() + ": " + spreadsheet->name();
 	} else {
-		const DatapickerCurve* curve = aspect->ancestor<const DatapickerCurve>();
-		index= m_datapicker->indexOfChild<AbstractAspect>(curve, AbstractAspect::IncludeHidden);
+		return;
 	}
-
-	QString name = aspect->name();
-	if (dynamic_cast<const Spreadsheet*>(aspect))
-		name = aspect->parentAspect()->name() + ": " + name;
 
 	m_tabWidget->insertTab(index, part->view(), name);
 	m_tabWidget->setTabIcon(m_tabWidget->count(), aspect->icon());
