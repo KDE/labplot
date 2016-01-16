@@ -36,18 +36,14 @@ class ImageEditor {
 	public:
 		void discretize(QImage*, QImage*, DatapickerImage::EditorSettings);
 		bool processedPixelIsOn(const QImage&, int, int) const;
+        void findBackgroundColor(const QImage*);
 
 	private:
 		int colorAttributeMax(DatapickerImage::ColorAttributes) const;
-
-		QRgb backgroundColor(const QImage*);
-
 		bool colorCompare(QRgb color1, QRgb color2) const;
 
-		int discretizeValueNotForeground(int, int, DatapickerImage::ColorAttributes) const;
-		int discretizeValueForeground(int, int, int, int, int) const;
-
-		bool pixelIsOn(int, DatapickerImage::EditorSettings) const;
+        int discretizeValueForeground(int, int, DatapickerImage::ColorAttributes) const;
+        bool pixelIsOn(int, DatapickerImage::ColorAttributes, DatapickerImage::EditorSettings) const;
 
 		struct ColorEntry {
 			QColor color;
@@ -57,7 +53,13 @@ class ImageEditor {
 		typedef QList<ColorEntry> ColorList;
 
 		QImage* m_originalImage;
+        QColor m_background;
 		bool pixelIsOn(int, int, int) const;
+
+        int *intensityHistogram;
+        int *intensityHistogram;
+        int *intensityHistogram;
+        int *intensityHistogram;
 };
 
 

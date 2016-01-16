@@ -78,16 +78,16 @@ void DatapickerImage::init() {
 	d->axisPoints.type = (DatapickerImage::GraphType) group.readEntry("GraphType", (int) DatapickerImage::Cartesian);
 	d->axisPoints.ternaryScale = group.readEntry("TernaryScale", 1);
 	d->settings.type = (DatapickerImage::ColorAttributes) group.readEntry("ColorAttributesType", (int) DatapickerImage::Intensity);
-	d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", 10);
-	d->settings.foregroundThresholdLow = group.readEntry("ForegroundThresholdLow", 0);
+    d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", 90);
+    d->settings.foregroundThresholdLow = group.readEntry("ForegroundThresholdLow", 30);
 	d->settings.hueThresholdHigh = group.readEntry("HueThresholdHigh", 360);
-	d->settings.hueThresholdLow = group.readEntry("HueThresholdLow", 180);
-	d->settings.intensityThresholdHigh = group.readEntry("IntensityThresholdHigh", 50);
-	d->settings.intensityThresholdLow = group.readEntry("IntensityThresholdLow", 0);
+    d->settings.hueThresholdLow = group.readEntry("HueThresholdLow", 0);
+    d->settings.intensityThresholdHigh = group.readEntry("IntensityThresholdHigh", 100);
+    d->settings.intensityThresholdLow = group.readEntry("IntensityThresholdLow", 20);
 	d->settings.saturationThresholdHigh = group.readEntry("SaturationThresholdHigh", 100);
-	d->settings.saturationThresholdLow = group.readEntry("SaturationThresholdLow", 50);
-	d->settings.valueThresholdHigh = group.readEntry("ValueThresholdHigh", 50);
-	d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", 0);
+    d->settings.saturationThresholdLow = group.readEntry("SaturationThresholdLow", 30);
+    d->settings.valueThresholdHigh = group.readEntry("ValueThresholdHigh", 90);
+    d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", 30);
 	d->plotPointsType = (DatapickerImage::PointsType) group.readEntry("PlotPointsType", (int) DatapickerImage::AxisPoints);
     d->plotImageType = DatapickerImage::OriginalImage;
     // point properties
@@ -102,7 +102,6 @@ void DatapickerImage::init() {
     d->pointPen.setWidthF( group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Point)) );
     d->pointVisibility = group.readEntry("PointVisibility", true);
 }
-
 
 /*!
     Returns an icon to be used in the project explorer.
@@ -183,16 +182,16 @@ void DatapickerImage::initSceneParameters() {
 
 	EditorSettings settings;
 	settings.type = DatapickerImage::Intensity;
-	settings.foregroundThresholdHigh = 10;
-	settings.foregroundThresholdLow = 0;
+    settings.foregroundThresholdHigh = 90;
+    settings.foregroundThresholdLow = 30;
 	settings.hueThresholdHigh = 360;
-	settings.hueThresholdLow = 180;
-	settings.intensityThresholdHigh = 50;
-	settings.intensityThresholdLow = 0;
+    settings.hueThresholdLow = 0;
+    settings.intensityThresholdHigh = 100;
+    settings.intensityThresholdLow = 20;
 	settings.saturationThresholdHigh = 100;
-	settings.saturationThresholdLow = 50;
-	settings.valueThresholdHigh = 50;
-	settings.valueThresholdLow = 0;
+    settings.saturationThresholdLow = 30;
+    settings.valueThresholdHigh = 90;
+    settings.valueThresholdLow = 30;
 	setSettings(settings);
 
 	PointsType plotPointsType = DatapickerImage::AxisPoints;
@@ -327,8 +326,8 @@ bool DatapickerImagePrivate::uploadImage(const QString& address) {
 	bool rc = q->originalPlotImage.load(address);
 	if (rc) {
 		q->processedPlotImage = q->originalPlotImage;
-		if (plotImageType == DatapickerImage::ProcessedImage)
-			discretize();
+        q->m_editor->findBackgroundColor(&q->originalPlotImage);
+        discretize();
 
 		//resize the screen
 		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Inch)/QApplication::desktop()->physicalDpiX();
@@ -341,7 +340,7 @@ bool DatapickerImagePrivate::uploadImage(const QString& address) {
 }
 
 void DatapickerImagePrivate::discretize() {
-	q->m_editor->discretize(&q->processedPlotImage, &q->originalPlotImage, settings);
+    q->m_editor->discretize(&q->processedPlotImage, &q->originalPlotImage, settings);
 
 	//update segments
 	makeSegments();
@@ -360,7 +359,7 @@ DatapickerImagePrivate::~DatapickerImagePrivate() {
 }
 
 void DatapickerImagePrivate::updateFileName() {
-	WAIT_CURSOR;
+    WAIT_CURSOR;
     QList<DatapickerPoint*> childPoints = q->parentAspect()->children<DatapickerPoint>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
     if (childPoints.count()) {
         foreach(DatapickerPoint* point, childPoints)
@@ -380,7 +379,7 @@ void DatapickerImagePrivate::updateFileName() {
 		q->m_segments->setSegmentsVisible(false);
 	}
 
-	RESET_CURSOR;
+    RESET_CURSOR;
 }
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################

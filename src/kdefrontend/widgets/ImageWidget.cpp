@@ -31,14 +31,59 @@
 #include "commonfrontend/widgets/qxtspanslider.h"
 #include "kdefrontend/GuiTools.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include "math.h"
 
 #include <QPainter>
 #include <KUrlCompletion>
+#include <KStandardDirs>
 #include <QFileDialog>
 #include <QDir>
+#include <QGraphicsScene>
 
+HistogramView::HistogramView(QWidget* parent, int range) :
+    QGraphicsView(parent),
+    m_scene(new QGraphicsScene()),
+    maxValue(range) {
+
+    setFixedHeight(50);
+    setTransform(QTransform());
+    QRectF pageRect( 0, 0, 100, 10 );
+    m_scene->setSceneRect(pageRect);
+    setScene(m_scene);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    lowerSlider = new QGraphicsRectItem(pageRect, 0, m_scene);
+    lowerSlider->setPen(QPen(Qt::black, 0.5));
+    lowerSlider->setBrush(Qt::blue);
+    lowerSlider->setOpacity(0.2);
+
+    upperSlider = new QGraphicsRectItem(pageRect, 0, m_scene);
+    upperSlider->setPen(QPen(Qt::black, 0.5));
+    upperSlider->setBrush(Qt::blue);
+    upperSlider->setOpacity(0.2);
+}
+
+void HistogramView::setScalePixmap(const QString& file) {
+    QGraphicsPixmapItem* pixmap = new QGraphicsPixmapItem(QPixmap(file).scaled( 100, 2, Qt::IgnoreAspectRatio), 0, m_scene);
+    pixmap->setZValue(-1);
+    pixmap->setPos(0, 8);
+}
+
+void HistogramView::setSpan(int l, int h) {
+    l = l*100/maxValue;
+    h = h*100/maxValue;
+    lowerSlider->setPos(QPointF(l - 100, 0));
+    upperSlider->setPos(QPointF(h, 0));
+    invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer);
+}
+
+void HistogramView::resizeEvent(QResizeEvent *event) {
+    fitInView(m_scene->sceneRect(), Qt::IgnoreAspectRatio);
+    QGraphicsView::resizeEvent(event);
+}
 
 ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
@@ -54,25 +99,25 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
 	editTabLayout->setHorizontalSpacing(2);
 	editTabLayout->setVerticalSpacing(4);
 
-	ssIntensity = new QxtSpanSlider(Qt::Horizontal,ui.tEdit);
+    ssIntensity = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
 	ssIntensity->setRange(0, 100);
-	editTabLayout->addWidget(ssIntensity, 2, 3);
+    editTabLayout->addWidget(ssIntensity, 3, 3);
 
-	ssForeground = new QxtSpanSlider(Qt::Horizontal,ui.tEdit);
+    ssForeground = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
 	ssForeground->setRange(0, 100);
-	editTabLayout->addWidget(ssForeground, 3, 3);
+    editTabLayout->addWidget(ssForeground, 5, 3);
 
-	ssHue = new QxtSpanSlider(Qt::Horizontal,ui.tEdit);
+    ssHue = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
 	ssHue->setRange(0, 360);
-	editTabLayout->addWidget(ssHue, 4, 3);
+    editTabLayout->addWidget(ssHue, 7, 3);
 
-	ssSaturation = new QxtSpanSlider(Qt::Horizontal,ui.tEdit);
+    ssSaturation = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
 	ssSaturation->setRange(0,100);
-	editTabLayout->addWidget(ssSaturation, 5, 3);
+    editTabLayout->addWidget(ssSaturation, 9, 3);
 
-	ssValue = new QxtSpanSlider(Qt::Horizontal,ui.tEdit);
+    ssValue = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
 	ssValue->setRange(0,100);
-	editTabLayout->addWidget(ssValue, 6, 3);
+    editTabLayout->addWidget(ssValue, 11, 3);
 
 	ui.cbGraphType->addItem(i18n("Cartesian (x, y)"));
 	ui.cbGraphType->addItem(i18n("Polar (x, y°)"));
@@ -94,6 +139,36 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
 	ui.cbPlotImageType->addItem(i18n("Original Image"));
 	ui.cbPlotImageType->addItem(i18n("Processed Image"));
 
+    QString valueFile = KStandardDirs::locate("data", "labplot2/pics/colorchooser/colorchooser_value.xpm");
+    QString hueFile = KStandardDirs::locate("data", "labplot2/pics/colorchooser/colorchooser_hue.xpm");
+    QString saturationFile = KStandardDirs::locate("data", "labplot2/pics/colorchooser/colorchooser_saturation.xpm");
+
+    gvIntensity = new HistogramView(ui.tEdit, 100);
+    editTabLayout->addWidget(gvIntensity, 2, 3);
+    gvIntensity->setScalePixmap(valueFile);
+
+    gvForeground = new HistogramView(ui.tEdit, 100);
+    editTabLayout->addWidget(gvForeground, 4, 3);
+    gvForeground->setScalePixmap(valueFile);
+
+    gvHue = new HistogramView(ui.tEdit, 360);
+    editTabLayout->addWidget(gvHue, 6, 3);
+    gvHue->setScalePixmap(hueFile);
+
+    gvSaturation = new HistogramView(ui.tEdit, 100);
+    editTabLayout->addWidget(gvSaturation, 8, 3);
+    gvSaturation->setScalePixmap(saturationFile);
+
+    gvValue = new HistogramView(ui.tEdit, 100);
+    editTabLayout->addWidget(gvValue, 10,3);
+    gvValue->setScalePixmap(valueFile);
+
+    connect( ssIntensity, SIGNAL(spanSliderMoved(int,int)), gvIntensity, SLOT(setSpan(int,int)) );
+    connect( ssForeground, SIGNAL(spanSliderMoved(int,int)), gvForeground, SLOT(setSpan(int,int)) );
+    connect( ssHue, SIGNAL(spanSliderMoved(int,int)), gvHue, SLOT(setSpan(int,int)) );
+    connect( ssSaturation, SIGNAL(spanSliderMoved(int,int)), gvSaturation, SLOT(setSpan(int,int)) );
+    connect( ssValue, SIGNAL(spanSliderMoved(int,int)), gvValue, SLOT(setSpan(int,int)) );
+
 	//SLOTS
 	//general
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
@@ -105,11 +180,11 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
 	// edit image
 	connect( ui.cbPlotImageType, SIGNAL(currentIndexChanged(int)), this, SLOT(plotImageTypeChanged(int)) );
 	connect( ui.sbRotation, SIGNAL(valueChanged(double)), this, SLOT(rotationChanged(double)) );
-	connect( ssIntensity, SIGNAL(spanChanged(int,int)), this, SLOT(intensitySpanChanged(int,int)) );
-	connect( ssForeground, SIGNAL(spanChanged(int,int)), this, SLOT(foregroundSpanChanged(int,int)) );
-	connect( ssHue, SIGNAL(spanChanged(int,int)), this, SLOT(hueSpanChanged(int,int)) );
-	connect( ssSaturation, SIGNAL(spanChanged(int,int)), this, SLOT(saturationSpanChanged(int,int)) );
-	connect( ssValue, SIGNAL(spanChanged(int,int)), this, SLOT(valueSpanChanged(int,int)) );
+    connect( ssIntensity, SIGNAL(spanChanged(int,int)), this, SLOT(intensitySpanChanged(int,int)) );
+    connect( ssForeground, SIGNAL(spanChanged(int,int)), this, SLOT(foregroundSpanChanged(int,int)) );
+    connect( ssHue, SIGNAL(spanChanged(int,int)), this, SLOT(hueSpanChanged(int,int)) );
+    connect( ssSaturation, SIGNAL(spanChanged(int,int)), this, SLOT(saturationSpanChanged(int,int)) );
+    connect( ssValue, SIGNAL(spanChanged(int,int)), this, SLOT(valueSpanChanged(int,int)) );
 	connect( ui.sbMinSegmentLength, SIGNAL(valueChanged(int)), this, SLOT(minSegmentLengthChanged(int)) );
 	connect( ui.sbPointSeparation, SIGNAL(valueChanged(int)), this, SLOT(pointSeparationChanged(int)) );
 
@@ -632,10 +707,15 @@ void ImageWidget::imageAxisPointsChanged(const DatapickerImage::ReferencePoints&
 void ImageWidget::imageEditorSettingsChanged(const DatapickerImage::EditorSettings& settings) {
 	m_initializing = true;
 	ssIntensity->setSpan(settings.intensityThresholdLow, settings.intensityThresholdHigh);
-	ssForeground->setSpan(m_image->settings().foregroundThresholdLow, settings.foregroundThresholdHigh);
+    ssForeground->setSpan(settings.foregroundThresholdLow, settings.foregroundThresholdHigh);
 	ssHue->setSpan(settings.hueThresholdLow, settings.hueThresholdHigh);
 	ssSaturation->setSpan(settings.saturationThresholdLow, settings.saturationThresholdHigh);
 	ssValue->setSpan(settings.valueThresholdLow, settings.valueThresholdHigh);
+    gvIntensity->setSpan(settings.intensityThresholdLow, settings.intensityThresholdHigh);
+    gvForeground->setSpan(settings.foregroundThresholdLow, settings.foregroundThresholdHigh);
+    gvHue->setSpan(settings.hueThresholdLow, settings.hueThresholdHigh);
+    gvSaturation->setSpan(settings.saturationThresholdLow, settings.saturationThresholdHigh);
+    gvValue->setSpan(settings.valueThresholdLow, settings.valueThresholdHigh);
 	m_initializing = false;
 }
 
@@ -726,7 +806,12 @@ void ImageWidget::load() {
 	ssHue->setSpan(m_image->settings().hueThresholdLow, m_image->settings().hueThresholdHigh);
 	ssSaturation->setSpan(m_image->settings().saturationThresholdLow, m_image->settings().saturationThresholdHigh);
 	ssValue->setSpan(m_image->settings().valueThresholdLow, m_image->settings().valueThresholdHigh);
-	ui.sbPointSeparation->setValue(m_image->pointSeparation());
+    gvIntensity->setSpan(m_image->settings().intensityThresholdLow, m_image->settings().intensityThresholdHigh);
+    gvForeground->setSpan(m_image->settings().foregroundThresholdLow, m_image->settings().foregroundThresholdHigh);
+    gvHue->setSpan(m_image->settings().hueThresholdLow, m_image->settings().hueThresholdHigh);
+    gvSaturation->setSpan(m_image->settings().saturationThresholdLow, m_image->settings().saturationThresholdHigh);
+    gvValue->setSpan(m_image->settings().valueThresholdLow, m_image->settings().valueThresholdHigh);
+    ui.sbPointSeparation->setValue(m_image->pointSeparation());
 	ui.sbMinSegmentLength->setValue(m_image->minSegmentLength());
     ui.cbSymbolStyle->setCurrentIndex( (int)m_image->pointStyle() - 1 );
     ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_image->pointSize(), Worksheet::Point) );

@@ -29,10 +29,30 @@
 #ifndef IMAGEWIDGET_H
 #define IMAGEWIDGET_H
 
+#include <QGraphicsView>
+
 #include "ui_imagewidget.h"
 #include "backend/datapicker/DatapickerImage.h"
 
 class QxtSpanSlider;
+
+class HistogramView : public QGraphicsView {
+    Q_OBJECT
+
+public:
+    explicit HistogramView(QWidget*, int);
+    void setScalePixmap(const QString&);
+
+public slots:
+    void setSpan(int, int);
+
+private:
+    void resizeEvent(QResizeEvent *event);
+    QGraphicsRectItem* lowerSlider;
+    QGraphicsRectItem* upperSlider;
+    QGraphicsScene* m_scene;
+    int maxValue;
+};
 
 class ImageWidget : public QWidget {
 	Q_OBJECT
@@ -56,7 +76,13 @@ private:
 	QxtSpanSlider* ssForeground;
 	QxtSpanSlider* ssHue;
 	QxtSpanSlider* ssSaturation;
-	QxtSpanSlider* ssValue;
+    QxtSpanSlider* ssValue;
+
+    HistogramView* gvIntensity;
+    HistogramView* gvForeground;
+    HistogramView* gvHue;
+    HistogramView* gvSaturation;
+    HistogramView* gvValue;
 
 private slots:
 	//SLOTs for changes triggered in ImageWidget

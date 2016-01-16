@@ -34,43 +34,32 @@
  */
 void ImageEditor::discretize(QImage* plotImage, QImage* originalImage, DatapickerImage::EditorSettings settings) {
 	m_originalImage = originalImage;
-// 	static DatapickerImage::EditorSettings settingsLatest;
-// 	settingsLatest = settings;
-	QElapsedTimer timer;
-	timer.start();
-	if (settings.type == DatapickerImage::Foreground) {
-		const QColor background = backgroundColor(m_originalImage); //TODO: this result should be cached, no need to re-calculate it again unless the original image changes
-		const int rBg = background.red();
-		const int gBg = background.green();
-		const int bBg = background.blue();
-		for (int x = 0; x < plotImage->width(); x++) {
-			for (int y = 0; y < plotImage->height(); y++) {
-				const int value = discretizeValueForeground(x, y, rBg, gBg, bBg);
-				if (pixelIsOn(value, settings))
-					plotImage->setPixel(x, y, QColor(Qt::black).rgb());
-				else
-					plotImage->setPixel(x, y, QColor(Qt::white).rgb());
-			}
-// 			qApp->processEvents();
-// 			if (memcmp(&settings, &settingsLatest, sizeof(settingsLatest)) != 0)
-// 				break;
-		}
-	} else {
-		for (int x = 0; x < plotImage->width(); x++) {
-			for (int y = 0; y < plotImage->height(); y++) {
-				const int value = discretizeValueNotForeground(x, y, settings.type);
-				if (pixelIsOn(value, settings))
-					plotImage->setPixel(x, y, QColor(Qt::black).rgb());
-				else
-					plotImage->setPixel(x, y, QColor(Qt::white).rgb());
-			}
-// 			qApp->processEvents();
-// 			if (memcmp(&settings, &settingsLatest, sizeof(settingsLatest)) != 0)
-// 				break;
-		}
-	}
+//    int *bins = new int[colorAttributeMax(settings.type) + 1];
+//    for (int i = 0; i <= colorAttributeMax(settings.type); i++)
+//      bins [i] = 0;
 
-	qDebug() << "Pixmap updated in " << timer.elapsed() << "ms";
+    QElapsedTimer timer;
+    timer.start();
+    for (int x = 0; x < plotImage->width(); x++) {
+        for (int y = 0; y < plotImage->height(); y++) {
+            bool on = true;
+            int value;
+            DatapickerImage::ColorAttributes type;
+            for (int i = DatapickerImage::Intensity; i <= DatapickerImage::Value; i++) {
+                type = (DatapickerImage::ColorAttributes) i;
+                value = discretizeValueForeground(x, y, type);
+                if (!pixelIsOn(value, type, settings))
+                    on = false;
+            }
+
+            if (on)
+                plotImage->setPixel(x, y, QColor(Qt::black).rgb());
+            else
+                plotImage->setPixel(x, y, QColor(Qt::white).rgb());
+        }
+    }
+
+    qDebug() << "Pixmap updated in " << timer.elapsed() << "ms";
 }
 
 bool ImageEditor::processedPixelIsOn(const QImage& plotImage, int x, int y) const {
@@ -87,7 +76,7 @@ bool ImageEditor::processedPixelIsOn(const QImage& plotImage, int x, int y) cons
 //##############################################################################
 //#####################  private helper functions  #############################
 //##############################################################################
-QRgb ImageEditor::backgroundColor(const QImage* plotImage) {
+void ImageEditor::findBackgroundColor(const QImage* plotImage) {
 	QList<ColorEntry>::iterator itrC;
 	ColorList colors;
 	int x, y = 0;
@@ -118,7 +107,7 @@ QRgb ImageEditor::backgroundColor(const QImage* plotImage) {
 			cMax = (*itrC);
 	}
 
-	return cMax.color.rgb();
+    m_background = cMax.color.rgb();
 }
 
 int ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes type) const {
@@ -146,60 +135,48 @@ bool ImageEditor::colorCompare(QRgb color1, QRgb color2) const {
 	return (color1 & MASK) == (color2 & MASK);
 }
 
-int ImageEditor::discretizeValueForeground(int x, int y, int rBg, int gBg, int bBg) const {
-	int attributeMax = colorAttributeMax(DatapickerImage::Foreground);
-
-	const QColor color(m_originalImage->pixel(x,y));
-	const int r = color.red();
-	const int g = color.green();
-	const int b = color.blue();
-	const double distance = sqrt ((double) ((r - rBg) * (r - rBg) + (g - gBg) * (g - gBg) + (b - bBg) * (b - bBg)));
-	int value = (int) (distance * attributeMax / sqrt((double) (255 * 255 + 255 * 255 + 255 * 255)) + 0.5);
-
-	if (value < 0)
-		value = 0;
-	if (attributeMax < value)
-		value = attributeMax;
-
-	return value;
-}
-
-int ImageEditor::discretizeValueNotForeground(int x, int y, DatapickerImage::ColorAttributes type) const {
+int ImageEditor::discretizeValueForeground(int x, int y, DatapickerImage::ColorAttributes type) const {
 	const QColor color(m_originalImage->pixel(x,y));
 	const int attributeMax = colorAttributeMax(type);
 
-	// convert hue from 0 to 359, saturation from 0 to 255, value from 0 to 255
-	int value = 0;
-	switch (type) {
-		case DatapickerImage::None:
-			break;
-		case DatapickerImage::Intensity: {
-			const int r = color.red();
-			const int g = color.green();
-			const int b = color.blue();
-			const double intensity = sqrt ((double) (r * r + g * g + b * b));
-			value = (int) (intensity * attributeMax / sqrt((double) (255 * 255 + 255 * 255 + 255 * 255)) + 0.5);
-			break;
-		}
-		case DatapickerImage::Foreground:
-			break;
-		case DatapickerImage::Hue: {
-			const int h = color.hue();
-			value = h * attributeMax / 359;
-			break;
-		}
-		case DatapickerImage::Saturation: {
-			const int s = color.saturation();
-			value = s * attributeMax / 255;
-			break;
-		}
-		case DatapickerImage::Value:
-			const int v = color.value();
-			value = v * attributeMax / 255;
-			break;
-	}
+    // convert hue from 0 to 359, saturation from 0 to 255, value from 0 to 255
+    int value = 0;
+    switch (type) {
+        case DatapickerImage::None:
+            break;
+        case DatapickerImage::Intensity: {
+            const int r = color.red();
+            const int g = color.green();
+            const int b = color.blue();
+            const double intensity = sqrt ((double) (r * r + g * g + b * b));
+            value = (int) (intensity * attributeMax / sqrt((double) (255 * 255 + 255 * 255 + 255 * 255)) + 0.5);
+            break;
+        } case DatapickerImage::Foreground: {
+            const int r = color.red();
+            const int g = color.green();
+            const int b = color.blue();
+            const int rBg = m_background.red();
+            const int gBg = m_background.green();
+            const int bBg = m_background.blue();
+            const double distance = sqrt ((double) ((r - rBg) * (r - rBg) + (g - gBg) * (g - gBg) + (b - bBg) * (b - bBg)));
+            value = (int) (distance * attributeMax / sqrt((double) (255 * 255 + 255 * 255 + 255 * 255)) + 0.5);
+            break;
+        } case DatapickerImage::Hue: {
+            const int h = color.hue();
+            value = h * attributeMax / 359;
+            break;
+        } case DatapickerImage::Saturation: {
+            const int s = color.saturation();
+            value = s * attributeMax / 255;
+            break;
+        } case DatapickerImage::Value: {
+            const int v = color.value();
+            value = v * attributeMax / 255;
+            break;
+        }
+    }
 
-	if (value < 0)
+    if (value < 0)
 		value = 0;
 	if (attributeMax < value)
 		value = attributeMax;
@@ -214,20 +191,21 @@ bool ImageEditor::pixelIsOn(int value, int low, int high) const {
 		return ((low <= value) || (value <= high));
 }
 
-bool ImageEditor::pixelIsOn(int value, DatapickerImage::EditorSettings settings) const {
-	switch (settings.type) {
-		case DatapickerImage::None:
-			break;
-		case DatapickerImage::Intensity:
-			return pixelIsOn(value, settings.intensityThresholdLow, settings.intensityThresholdHigh);
-		case DatapickerImage::Foreground:
-			return pixelIsOn(value, settings.foregroundThresholdLow, settings.foregroundThresholdHigh);
-		case DatapickerImage::Hue:
-			return pixelIsOn(value, settings.hueThresholdLow, settings.hueThresholdHigh);
-		case DatapickerImage::Saturation:
-			return pixelIsOn(value, settings.saturationThresholdLow, settings.saturationThresholdHigh);
-		case DatapickerImage::Value:
-			return pixelIsOn(value, settings.valueThresholdLow, settings.valueThresholdHigh);
-	}
-	return false;
+bool ImageEditor::pixelIsOn( int value, DatapickerImage::ColorAttributes type,DatapickerImage::EditorSettings settings ) const {
+    switch (type) {
+        case DatapickerImage::None:
+            break;
+        case DatapickerImage::Intensity:
+            return pixelIsOn(value, settings.intensityThresholdLow, settings.intensityThresholdHigh);
+        case DatapickerImage::Foreground:
+            return pixelIsOn(value, settings.foregroundThresholdLow, settings.foregroundThresholdHigh);
+        case DatapickerImage::Hue:
+            return pixelIsOn(value, settings.hueThresholdLow, settings.hueThresholdHigh);
+        case DatapickerImage::Saturation:
+            return pixelIsOn(value, settings.saturationThresholdLow, settings.saturationThresholdHigh);
+        case DatapickerImage::Value:
+            return pixelIsOn(value, settings.valueThresholdLow, settings.valueThresholdHigh);
+    }
+
+    return false;
 }
