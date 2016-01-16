@@ -89,6 +89,8 @@ class WorksheetView : public QGraphicsView {
 	bool m_selectionBandIsShown;
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;
+	int magnificationFactor;
+	QGraphicsPixmapItem* m_magnificationWindow;
 	GridSettings m_gridSettings;
 	QList<QGraphicsItem*> m_selectedItems;
 	bool m_suppressSelectionChangedEvent;
@@ -100,6 +102,7 @@ class WorksheetView : public QGraphicsView {
 	QMenu* m_addNewMenu;
 	QMenu* m_addNewCartesianPlotMenu;
 	QMenu* m_zoomMenu;
+	QMenu* m_magnificationMenu;
 	QMenu* m_layoutMenu;
 	QMenu* m_gridMenu;
 	QMenu* m_viewMouseModeMenu;
@@ -111,7 +114,9 @@ class WorksheetView : public QGraphicsView {
 
 	QToolButton* tbNewCartesianPlot;
 	QToolButton* tbZoom;
+	QToolButton* tbMagnification;
 	QAction* currentZoomAction;
+	QAction* currentMagnificationAction;
 
 	//Actions
 	QAction* selectAllAction;
@@ -147,6 +152,12 @@ class WorksheetView : public QGraphicsView {
 	QAction* sparseDotGridAction;
 	QAction* customGridAction;
 	QAction* snapToGridAction;
+
+	QAction* noMagnificationAction;
+	QAction* twoTimesMagnificationAction;
+	QAction* threeTimesMagnificationAction;
+	QAction* fourTimesMagnificationAction;
+	QAction* fiveTimesMagnificationAction;
 
 	//Actions for cartesian plots
 	QAction* cartesianPlotApplyToSelectionAction;
@@ -193,6 +204,7 @@ class WorksheetView : public QGraphicsView {
 	void mouseModeChanged(QAction*);
 	void useViewSizeRequested();
 	void changeZoom(QAction*);
+	void magnificationChanged(QAction*);
 	void changeLayout(QAction*);
 	void changeGrid(QAction*);
 	void changeSnapToGrid();
