@@ -49,6 +49,8 @@
 #include <KLocale>
 #include <KMessageBox>
 
+#include <limits>
+
 /**
  * \class WorksheetView
  * \brief Worksheet view
@@ -64,6 +66,8 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_cartesianPlotActionMode(ApplyActionToSelection),
 	m_cartesianPlotMouseMode(CartesianPlot::SelectionMode),
 	m_selectionBandIsShown(false),
+	magnificationFactor(0),
+	m_magnificationWindow(0),
 	m_suppressSelectionChangedEvent(false),
 	lastAddedWorksheetElement(0),
 	m_fadeInTimeLine(0),
@@ -100,6 +104,8 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	changeZoom(zoomOriginAction);
 	currentZoomAction=zoomInViewAction;
 
+	currentMagnificationAction = noMagnificationAction;
+
 	//signal/slot connections
 	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 	connect(m_worksheet, SIGNAL(itemSelected(QGraphicsItem*)), this, SLOT(selectItem(QGraphicsItem*)) );
@@ -118,6 +124,7 @@ void WorksheetView::initActions(){
 	QActionGroup* layoutActionGroup = new QActionGroup(this);
 	QActionGroup* gridActionGroup = new QActionGroup(this);
 	gridActionGroup->setExclusive(true);
+	QActionGroup* magnificationActionGroup = new QActionGroup(this);
 
 	selectAllAction = new KAction(KIcon("edit-select-all"), i18n("Select all"), this);
 	selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
@@ -157,6 +164,23 @@ void WorksheetView::initActions(){
 
 	zoomSelectionModeAction = new KAction(KIcon("page-zoom"), i18n("Select and Zoom"), mouseModeActionGroup);
 	zoomSelectionModeAction->setCheckable(true);
+
+	//Magnification actions
+	noMagnificationAction = new KAction(KIcon("labplot-1-to-1-zoom"), i18n("No Magnification"), magnificationActionGroup);
+	noMagnificationAction->setCheckable(true);
+	noMagnificationAction->setChecked(true);
+
+	twoTimesMagnificationAction = new KAction(KIcon("labplot-1-to-2-zoom"), i18n("2x Magnification"), magnificationActionGroup);
+	twoTimesMagnificationAction->setCheckable(true);
+
+	threeTimesMagnificationAction = new KAction(KIcon("labplot-1-to-3-zoom"), i18n("3x Magnification"), magnificationActionGroup);
+	threeTimesMagnificationAction->setCheckable(true);
+
+	fourTimesMagnificationAction = new KAction(KIcon("labplot-1-to-4-zoom"), i18n("4x Magnification"), magnificationActionGroup);
+	fourTimesMagnificationAction->setCheckable(true);
+
+	fiveTimesMagnificationAction = new KAction(KIcon("labplot-1-to-5-zoom"), i18n("5x Magnification"), magnificationActionGroup);
+	fiveTimesMagnificationAction->setCheckable(true);
 
 	//TODO implement later "group selection action" where multiple objects can be selected by drawing a rectangular
 // 	selectionModeAction = new KAction(KIcon("select-rectangular"), i18n("Selection"), mouseModeActionGroup);
@@ -222,6 +246,7 @@ void WorksheetView::initActions(){
 	connect(addNewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
 	connect(mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)));
 	connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
+	connect(magnificationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(magnificationChanged(QAction*)));
 	connect(layoutActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeLayout(QAction*)));
 	connect(gridActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeGrid(QAction*)));
 	connect(snapToGridAction, SIGNAL(triggered()), this, SLOT(changeSnapToGrid()));
@@ -326,6 +351,14 @@ void WorksheetView::initMenus(){
 	m_zoomMenu->addAction(zoomFitPageWidthAction);
 	m_zoomMenu->addAction(zoomFitSelectionAction);
 
+	m_magnificationMenu = new QMenu(i18n("Magnification"));
+	m_zoomMenu->setIcon(KIcon("no-zoom"));
+	m_magnificationMenu->addAction(noMagnificationAction);
+	m_magnificationMenu->addAction(twoTimesMagnificationAction);
+	m_magnificationMenu->addAction(threeTimesMagnificationAction);
+	m_magnificationMenu->addAction(fourTimesMagnificationAction);
+	m_magnificationMenu->addAction(fiveTimesMagnificationAction);
+
 	m_layoutMenu = new QMenu(i18n("Layout"));
 	m_layoutMenu->addAction(verticalLayoutAction);
 	m_layoutMenu->addAction(horizontalLayoutAction);
@@ -420,6 +453,7 @@ void WorksheetView::createContextMenu(QMenu* menu) const {
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_viewMouseModeMenu);
 	menu->insertMenu(firstAction, m_zoomMenu);
+	menu->insertMenu(firstAction, m_magnificationMenu);
 	menu->insertMenu(firstAction, m_layoutMenu);
 	menu->insertMenu(firstAction, m_gridMenu);
 	menu->insertSeparator(firstAction);
@@ -451,6 +485,12 @@ void WorksheetView::fillToolBar(QToolBar* toolBar){
 	tbZoom->setMenu(m_zoomMenu);
 	tbZoom->setDefaultAction(currentZoomAction);
 	toolBar->addWidget(tbZoom);
+
+	tbMagnification = new QToolButton(toolBar);
+	tbMagnification->setPopupMode(QToolButton::MenuButtonPopup);
+	tbMagnification->setMenu(m_magnificationMenu);
+	tbMagnification->setDefaultAction(currentMagnificationAction);
+	toolBar->addWidget(tbMagnification);
 }
 
 void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
@@ -746,6 +786,41 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 		viewport()->repaint(rect);
 	}
 
+	//show the magnification window
+	if (magnificationFactor /*&& m_mouseMode == SelectAndEditMode*/) {
+		if (!m_magnificationWindow) {
+			m_magnificationWindow = new QGraphicsPixmapItem(0, scene());
+			m_magnificationWindow->setZValue(std::numeric_limits<int>::max());
+		}
+
+		m_magnificationWindow->setVisible(false);
+
+		//copy the part of the view to be shown magnified
+		QPointF pos = mapToScene(event->pos());
+		int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
+		QRectF copyRect(pos.x() - size/2, pos.y() - size/2, size, size);
+		QPixmap px = QPixmap::grabWidget(this, mapFromScene(copyRect).boundingRect());
+		px = px.scaled(size*magnificationFactor, size*magnificationFactor, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+		px = px.copy(px.width()/2 - size/2, px.height()/2 - size/2, size, size);
+
+		//draw the bounding rect
+		QPainter painter(&px);
+		QPen pen = QPen(Qt::lightGray, 2/transform().m11());
+		painter.setPen(pen);
+		QRect rect = px.rect();
+		rect.setWidth(rect.width()-pen.widthF()/2);
+		rect.setHeight(rect.height()-pen.widthF()/2);
+		painter.drawRect(rect);
+
+		//set the pixmap
+		m_magnificationWindow->setPixmap(px);
+		m_magnificationWindow->setPos(pos.x()- px.width()/2, pos.y()- px.height()/2);
+
+		m_magnificationWindow->setVisible(true);
+	} else if (m_magnificationWindow) {
+		m_magnificationWindow->setVisible(false);
+	}
+
 	QGraphicsView::mouseMoveEvent(event);
 }
 
@@ -815,6 +890,23 @@ void WorksheetView::changeZoom(QAction* action){
 	currentZoomAction=action;
 	if (tbZoom)
 		tbZoom->setDefaultAction(action);
+}
+
+void WorksheetView::magnificationChanged(QAction* action){
+	if (action==noMagnificationAction)
+		magnificationFactor = 0;
+	else if (action==twoTimesMagnificationAction)
+		magnificationFactor = 2;
+	else if (action==threeTimesMagnificationAction)
+		magnificationFactor = 3;
+	else if (action==fourTimesMagnificationAction)
+		magnificationFactor = 4;
+	else if (action==fiveTimesMagnificationAction)
+		magnificationFactor = 5;
+
+	currentMagnificationAction=action;
+	if (tbMagnification)
+		tbMagnification->setDefaultAction(action);
 }
 
 void WorksheetView::mouseModeChanged(QAction* action) {

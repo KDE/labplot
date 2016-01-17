@@ -1232,6 +1232,8 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAspect* before,const AbstractAspect* aspect){
+	Q_UNUSED(before);
+	Q_UNUSED(aspect);
     m_projectExplorer->setCurrentAspect(parent);
 }
 

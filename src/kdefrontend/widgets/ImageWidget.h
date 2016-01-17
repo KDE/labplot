@@ -42,16 +42,18 @@ class HistogramView : public QGraphicsView {
 public:
     explicit HistogramView(QWidget*, int);
     void setScalePixmap(const QString&);
+    int *bins;
 
 public slots:
     void setSpan(int, int);
 
 private:
     void resizeEvent(QResizeEvent *event);
+    void drawBackground(QPainter*, const QRectF&);
     QGraphicsRectItem* lowerSlider;
     QGraphicsRectItem* upperSlider;
     QGraphicsScene* m_scene;
-    int maxValue;
+    int m_range;
 };
 
 class ImageWidget : public QWidget {

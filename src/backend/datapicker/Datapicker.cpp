@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : Datapicker.cpp
     Project              : LabPlot
-    Description          : Aspect providing a container for storing image and data
-                           in form of worksheet and spreadsheets
+    Description          : Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -124,6 +123,7 @@ void Datapicker::childSelected(const AbstractAspect* aspect) {
 		//if one of the curves is currently selected, select the image with the plot (the very first child)
 		index = 0;
 		emit statusInfo(this->name() + ", " + i18n("active curve") + " \"" + m_activeCurve->name() + "\"");
+		emit requestUpdateActions();
 	} else {
 		const DatapickerCurve* curve = aspect->ancestor<const DatapickerCurve>();
 		index= indexOfChild<AbstractAspect>(curve);
@@ -218,6 +218,7 @@ void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
 	}
 
 	endMacro();
+	emit requestUpdateActions();
 }
 
 QVector3D Datapicker::mapSceneToLogical(const QPointF& point) const {
@@ -245,6 +246,8 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	} else {
 		handleChildAspectAboutToBeRemoved(aspect);
 	}
+
+	emit requestUpdateActions();
 }
 
 void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
@@ -267,6 +270,8 @@ void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
 			}
 		}
 	}
+
+	emit requestUpdateActions();
 }
 
 void Datapicker::handleChildAspectAboutToBeRemoved(const AbstractAspect* aspect) {

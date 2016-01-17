@@ -32,6 +32,7 @@
 #include "kdefrontend/GuiTools.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/datapicker/ImageEditor.h"
 
 #include "math.h"
 
@@ -45,15 +46,20 @@
 HistogramView::HistogramView(QWidget* parent, int range) :
     QGraphicsView(parent),
     m_scene(new QGraphicsScene()),
-    maxValue(range) {
+    m_range(range) {
 
-    setFixedHeight(50);
+    setFixedHeight(100);
     setTransform(QTransform());
-    QRectF pageRect( 0, 0, 100, 10 );
+    QRectF pageRect( 0, 0, 1000, 100 );
     m_scene->setSceneRect(pageRect);
     setScene(m_scene);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    //initialize bins
+    bins = new int[range + 1];
+    for (int i = 0; i <= range; i++)
+        bins [i] = 0;
 
     lowerSlider = new QGraphicsRectItem(pageRect, 0, m_scene);
     lowerSlider->setPen(QPen(Qt::black, 0.5));
@@ -67,15 +73,15 @@ HistogramView::HistogramView(QWidget* parent, int range) :
 }
 
 void HistogramView::setScalePixmap(const QString& file) {
-    QGraphicsPixmapItem* pixmap = new QGraphicsPixmapItem(QPixmap(file).scaled( 100, 2, Qt::IgnoreAspectRatio), 0, m_scene);
+    QGraphicsPixmapItem* pixmap = new QGraphicsPixmapItem(QPixmap(file).scaled( 1000, 20, Qt::IgnoreAspectRatio), 0, m_scene);
     pixmap->setZValue(-1);
-    pixmap->setPos(0, 8);
+    pixmap->setPos(0, 90);
 }
 
 void HistogramView::setSpan(int l, int h) {
-    l = l*100/maxValue;
-    h = h*100/maxValue;
-    lowerSlider->setPos(QPointF(l - 100, 0));
+    l = l*1000/m_range;
+    h = h*1000/m_range;
+    lowerSlider->setPos(QPointF(l - 1000, 0));
     upperSlider->setPos(QPointF(h, 0));
     invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer);
 }
@@ -83,6 +89,23 @@ void HistogramView::setSpan(int l, int h) {
 void HistogramView::resizeEvent(QResizeEvent *event) {
     fitInView(m_scene->sceneRect(), Qt::IgnoreAspectRatio);
     QGraphicsView::resizeEvent(event);
+}
+
+void HistogramView::drawBackground(QPainter* painter, const QRectF& rect) {
+    painter->save();
+    int max = 1;
+    for (int i = 0; i <= m_range; i++)
+        if (bins [i] > max)
+            max = bins [i];
+
+    // convert y-scale count to log scale so small counts are still visible
+    QPainterPath path(QPointF(0, (log(bins[0])*100/log(max))));
+    for (int i = 1; i <= m_range; i++)
+        path.lineTo(QPointF(i*1000/m_range, 80 - (log(bins[i])*80/log(max))));
+
+    painter->drawPath(path);
+    invalidateScene(rect, QGraphicsScene::BackgroundLayer);
+    painter->restore();
 }
 
 ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
@@ -143,23 +166,23 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
     QString hueFile = KStandardDirs::locate("data", "labplot2/pics/colorchooser/colorchooser_hue.xpm");
     QString saturationFile = KStandardDirs::locate("data", "labplot2/pics/colorchooser/colorchooser_saturation.xpm");
 
-    gvIntensity = new HistogramView(ui.tEdit, 100);
+    gvIntensity = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Intensity));
     editTabLayout->addWidget(gvIntensity, 2, 3);
     gvIntensity->setScalePixmap(valueFile);
 
-    gvForeground = new HistogramView(ui.tEdit, 100);
+    gvForeground = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Foreground));
     editTabLayout->addWidget(gvForeground, 4, 3);
     gvForeground->setScalePixmap(valueFile);
 
-    gvHue = new HistogramView(ui.tEdit, 360);
+    gvHue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Hue));
     editTabLayout->addWidget(gvHue, 6, 3);
     gvHue->setScalePixmap(hueFile);
 
-    gvSaturation = new HistogramView(ui.tEdit, 100);
+    gvSaturation = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Saturation));
     editTabLayout->addWidget(gvSaturation, 8, 3);
     gvSaturation->setScalePixmap(saturationFile);
 
-    gvValue = new HistogramView(ui.tEdit, 100);
+    gvValue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Value));
     editTabLayout->addWidget(gvValue, 10,3);
     gvValue->setScalePixmap(valueFile);
 
@@ -294,17 +317,24 @@ void ImageWidget::initConnections() {
 }
 
 void ImageWidget::handleWidgetActions() {
-	QString fileName =  ui.kleFileName->text().trimmed();
-	if (!fileName.isEmpty()) {
-		ui.tEdit->setEnabled(true);
-		ui.cbGraphType->setEnabled(true);
-		ui.sbPoisitionX1->setEnabled(true);
-		ui.sbPoisitionX2->setEnabled(true);
-		ui.sbPoisitionX3->setEnabled(true);
-		ui.sbPoisitionY1->setEnabled(true);
-		ui.sbPoisitionY2->setEnabled(true);
-		ui.sbPoisitionY3->setEnabled(true);
-	} else {
+    QString fileName =  ui.kleFileName->text().trimmed();
+    if (!fileName.isEmpty()) {
+        ui.tEdit->setEnabled(true);
+        ui.cbGraphType->setEnabled(true);
+        ui.sbPoisitionX1->setEnabled(true);
+        ui.sbPoisitionX2->setEnabled(true);
+        ui.sbPoisitionX3->setEnabled(true);
+        ui.sbPoisitionY1->setEnabled(true);
+        ui.sbPoisitionY2->setEnabled(true);
+        ui.sbPoisitionY3->setEnabled(true);
+
+        //upload histogram to view
+        gvIntensity->bins = m_image->intensityBins;
+        gvForeground->bins = m_image->foregroundBins;
+        gvHue->bins = m_image->hueBins;
+        gvSaturation->bins = m_image->saturationBins;
+        gvValue->bins = m_image->valueBins;
+    } else {
 		ui.tEdit->setEnabled(false);
 		ui.cbGraphType->setEnabled(false);
 		ui.sbPoisitionX1->setEnabled(false);
@@ -657,9 +687,9 @@ void ImageWidget::pointSeparationChanged(int value) {
 		image->setPointSeparation(value);
 }
 
-//*********************************************************
+//*******************************************************************
 //******** SLOTs for changes triggered in DatapickerImage ***********
-//*********************************************************
+//*******************************************************************
 /*!
     called when the name or comment of image's parent (datapicker) was changed.
  */
@@ -678,8 +708,8 @@ void ImageWidget::imageDescriptionChanged(const AbstractAspect* aspect) {
 
 void ImageWidget::imageFileNameChanged(const QString& name) {
 	m_initializing = true;
-	ui.kleFileName->setText(name);
-	m_initializing = false;
+    ui.kleFileName->setText(name);
+    m_initializing = false;
 }
 
 void ImageWidget::imageRotationAngleChanged(float angle) {

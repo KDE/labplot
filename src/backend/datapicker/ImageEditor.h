@@ -33,34 +33,23 @@
 #include <backend/datapicker/DatapickerImage.h>
 
 class ImageEditor {
-	public:
-		void discretize(QImage*, QImage*, DatapickerImage::EditorSettings);
-		bool processedPixelIsOn(const QImage&, int, int) const;
-        void findBackgroundColor(const QImage*);
+    public:
+        static void discretize(QImage*, QImage*, DatapickerImage::EditorSettings, QColor);
+        static bool processedPixelIsOn(const QImage&, int, int);
+        static QRgb findBackgroundColor(const QImage*);
+        static int colorAttributeMax(DatapickerImage::ColorAttributes);
+        static void uploadHistogram(int*, QImage*, QColor, DatapickerImage::ColorAttributes);
 
-	private:
-		int colorAttributeMax(DatapickerImage::ColorAttributes) const;
-		bool colorCompare(QRgb color1, QRgb color2) const;
+    private:
+        static bool colorCompare(QRgb color1, QRgb color2);
+        static int discretizeValueForeground(int, int, DatapickerImage::ColorAttributes, QColor, QImage*);
+        static bool pixelIsOn(int, DatapickerImage::ColorAttributes, DatapickerImage::EditorSettings);
+        static bool pixelIsOn(int, int, int);
 
-        int discretizeValueForeground(int, int, DatapickerImage::ColorAttributes) const;
-        bool pixelIsOn(int, DatapickerImage::ColorAttributes, DatapickerImage::EditorSettings) const;
-
-		struct ColorEntry {
-			QColor color;
-			int count;
-		};
-
-		typedef QList<ColorEntry> ColorList;
-
-		QImage* m_originalImage;
-        QColor m_background;
-		bool pixelIsOn(int, int, int) const;
-
-        int *intensityHistogram;
-        int *intensityHistogram;
-        int *intensityHistogram;
-        int *intensityHistogram;
+        struct ColorEntry {
+            QColor color;
+            int count;
+        };
+        typedef QList<ColorEntry> ColorList;
 };
-
-
 #endif // IMAGEEDITOR_H

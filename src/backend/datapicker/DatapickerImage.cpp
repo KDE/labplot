@@ -4,6 +4,8 @@
     Description          : Worksheet for Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -55,8 +57,12 @@ DatapickerImage::DatapickerImage(AbstractScriptingEngine* engine, const QString&
 	  isLoaded(false),
 	  m_magnificationWindow(0),
 	  d(new DatapickerImagePrivate(this)),
-	  m_segments(new Segments(this)),
-	  m_editor(new ImageEditor()) {
+      intensityBins( new int[ImageEditor::colorAttributeMax(Intensity) + 1]),
+      foregroundBins( new int[ImageEditor::colorAttributeMax(Foreground) + 1]),
+      hueBins( new int[ImageEditor::colorAttributeMax(Hue) + 1]),
+      saturationBins( new int[ImageEditor::colorAttributeMax(Saturation) + 1]),
+      valueBins( new int[ImageEditor::colorAttributeMax(Value) + 1]),
+      m_segments(new Segments(this)) {
 
 	if (!loading)
 		init();
@@ -64,7 +70,6 @@ DatapickerImage::DatapickerImage(AbstractScriptingEngine* engine, const QString&
 
 DatapickerImage::~DatapickerImage() {
 	delete m_segments;
-	delete m_editor;
 	delete d;
 }
 
@@ -163,11 +168,7 @@ void DatapickerImage::setPlotImageType(const DatapickerImage::PlotImageType type
 }
 
 DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
-	return d->plotImageType;
-}
-
-void DatapickerImage::setSegmentVisible(bool on) {
-	m_segments->setSegmentsVisible(on);
+    return d->plotImageType;
 }
 
 void DatapickerImage::initSceneParameters() {
@@ -298,6 +299,19 @@ void DatapickerImage::setPrinting(bool on) const {
 
 void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 	d->plotPointsType = pointsType;
+
+	if (pointsType == DatapickerImage::AxisPoints) {
+		//clear image
+		int childCount = this->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
+		if (childCount)
+			removeAllChildren();
+		m_segments->setSegmentsVisible(false);
+	} else if (pointsType==DatapickerImage::CurvePoints) {
+		m_segments->setSegmentsVisible(false);
+	} else if (pointsType==DatapickerImage::SegmentPoints) {
+        d->makeSegments();
+		m_segments->setSegmentsVisible(true);
+	}
 }
 
 void DatapickerImage::setPointSeparation(const int value) {
@@ -326,7 +340,13 @@ bool DatapickerImagePrivate::uploadImage(const QString& address) {
 	bool rc = q->originalPlotImage.load(address);
 	if (rc) {
 		q->processedPlotImage = q->originalPlotImage;
-        q->m_editor->findBackgroundColor(&q->originalPlotImage);
+        q->background = ImageEditor::findBackgroundColor(&q->originalPlotImage);
+        //upload Histogram
+        ImageEditor::uploadHistogram(q->intensityBins, &q->originalPlotImage, q->background, DatapickerImage::Intensity);
+        ImageEditor::uploadHistogram(q->foregroundBins, &q->originalPlotImage, q->background, DatapickerImage::Foreground);
+        ImageEditor::uploadHistogram(q->hueBins, &q->originalPlotImage, q->background, DatapickerImage::Hue);
+        ImageEditor::uploadHistogram(q->saturationBins, &q->originalPlotImage, q->background, DatapickerImage::Saturation);
+        ImageEditor::uploadHistogram(q->valueBins, &q->originalPlotImage, q->background, DatapickerImage::Value);
         discretize();
 
 		//resize the screen
@@ -335,22 +355,26 @@ bool DatapickerImagePrivate::uploadImage(const QString& address) {
 		m_scene->setSceneRect(0, 0, w, h);
 		q->isLoaded = true;
 		emit q->requestUpdate();
+		emit q->requestUpdateActions();
 	}
 	return rc;
 }
 
 void DatapickerImagePrivate::discretize() {
-    q->m_editor->discretize(&q->processedPlotImage, &q->originalPlotImage, settings);
+    ImageEditor::discretize(&q->processedPlotImage, &q->originalPlotImage, settings, q->background);
 
-	//update segments
-	makeSegments();
+	if (plotPointsType != DatapickerImage::SegmentPoints)
+		emit q->requestUpdate();
+	else
+		makeSegments();
 }
 
 void DatapickerImagePrivate::makeSegments() {
-	q->m_segments->makeSegments(q->processedPlotImage);
-	if (plotPointsType == DatapickerImage::SegmentPoints)
-		q->m_segments->setSegmentsVisible(true);
+	if (plotPointsType != DatapickerImage::SegmentPoints)
+		return;
 
+	q->m_segments->makeSegments(q->processedPlotImage);
+	q->m_segments->setSegmentsVisible(true);
 	emit q->requestUpdate();
 }
 
@@ -447,8 +471,8 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
     writer->writeEndElement();
 
 	//serialize all children
-	QList<AbstractAspect *> childrenAspect = children<AbstractAspect>(IncludeHidden);
-	foreach(AbstractAspect *child, childrenAspect)
+	QList<AbstractAspect*> childrenAspect = children<AbstractAspect>(IncludeHidden);
+	foreach(AbstractAspect* child, childrenAspect)
 		child->save(writer);
 
 	writer->writeEndElement();

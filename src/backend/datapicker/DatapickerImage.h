@@ -4,6 +4,8 @@
   Description          : Worksheet for Datapicker
   --------------------------------------------------------------------
   Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+  Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
+
 ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -94,11 +96,16 @@ public:
 	void setPlotImageType(const DatapickerImage::PlotImageType);
 	DatapickerImage::PlotImageType plotImageType();
 
-	void setSegmentVisible(bool);
-
 	bool isLoaded;
 	QImage originalPlotImage;
 	QImage processedPlotImage;
+    QColor background;
+    int *intensityBins;
+    int *foregroundBins;
+    int *saturationBins;
+    int *hueBins;
+    int *valueBins;
+
 	QGraphicsPixmapItem* m_magnificationWindow;
 
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
@@ -126,11 +133,11 @@ private:
 	DatapickerImagePrivate* const d;
 	friend class DatapickerImagePrivate;
 	Segments* m_segments;
-	ImageEditor* m_editor;
 
 signals:
 	void requestProjectContextMenu(QMenu*);
 	void requestUpdate();
+	void requestUpdateActions();
 
 	void fileNameChanged(const QString&);
 	void rotationAngleChanged(float);
