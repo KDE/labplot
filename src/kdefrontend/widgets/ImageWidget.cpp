@@ -48,7 +48,6 @@ HistogramView::HistogramView(QWidget* parent, int range) :
     m_scene(new QGraphicsScene()),
     m_range(range) {
 
-    setFixedHeight(100);
     setTransform(QTransform());
     QRectF pageRect( 0, 0, 1000, 100 );
     m_scene->setSceneRect(pageRect);
@@ -600,7 +599,6 @@ void ImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit) {
 		return;
 
 	DatapickerImage::EditorSettings settings = m_image->settings();
-	settings.type = DatapickerImage::Intensity;
 	settings.intensityThresholdHigh = upperLimit;
 	settings.intensityThresholdLow = lowerLimit;
 	foreach(DatapickerImage* image, m_imagesList)
@@ -612,7 +610,6 @@ void ImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit) {
 		return;
 
 	DatapickerImage::EditorSettings settings = m_image->settings();
-	settings.type = DatapickerImage::Foreground;
 	settings.foregroundThresholdHigh = upperLimit;
 	settings.foregroundThresholdLow = lowerLimit;
 	foreach(DatapickerImage* image, m_imagesList)
@@ -624,7 +621,6 @@ void ImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
 		return;
 
 	DatapickerImage::EditorSettings settings = m_image->settings();
-	settings.type = DatapickerImage::Hue;
 	settings.hueThresholdHigh = upperLimit;
 	settings.hueThresholdLow = lowerLimit;
 	foreach(DatapickerImage* image, m_imagesList)
@@ -636,7 +632,6 @@ void ImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit) {
 		return;
 
 	DatapickerImage::EditorSettings settings = m_image->settings();
-	settings.type = DatapickerImage::Saturation;
 	settings.saturationThresholdHigh = upperLimit;
 	settings.saturationThresholdLow = lowerLimit;
 	foreach(DatapickerImage* image, m_imagesList)
@@ -648,7 +643,6 @@ void ImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
 		return;
 
 	DatapickerImage::EditorSettings settings = m_image->settings();
-	settings.type = DatapickerImage::Value;
 	settings.valueThresholdHigh = upperLimit;
 	settings.valueThresholdLow = lowerLimit;
 	foreach(DatapickerImage* image, m_imagesList)

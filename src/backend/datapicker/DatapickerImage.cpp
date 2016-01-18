@@ -82,7 +82,6 @@ void DatapickerImage::init() {
 	d->pointSeparation = group.readEntry("PointSeparation", 30);
 	d->axisPoints.type = (DatapickerImage::GraphType) group.readEntry("GraphType", (int) DatapickerImage::Cartesian);
 	d->axisPoints.ternaryScale = group.readEntry("TernaryScale", 1);
-	d->settings.type = (DatapickerImage::ColorAttributes) group.readEntry("ColorAttributesType", (int) DatapickerImage::Intensity);
     d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", 90);
     d->settings.foregroundThresholdLow = group.readEntry("ForegroundThresholdLow", 30);
 	d->settings.hueThresholdHigh = group.readEntry("HueThresholdHigh", 360);
@@ -182,7 +181,6 @@ void DatapickerImage::initSceneParameters() {
 	setAxisPoints(axisPoints);
 
 	EditorSettings settings;
-	settings.type = DatapickerImage::Intensity;
     settings.foregroundThresholdHigh = 90;
     settings.foregroundThresholdLow = 30;
 	settings.hueThresholdHigh = 360;
@@ -446,7 +444,6 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
 	writer->writeAttribute( "minSegmentLength", QString::number(d->minSegmentLength) );
 	writer->writeAttribute( "pointSeparation", QString::number(d->pointSeparation) );
-	writer->writeAttribute( "colorAttributesType", QString::number(d->settings.type) );
 	writer->writeAttribute( "foregroundThresholdHigh", QString::number(d->settings.foregroundThresholdHigh) );
 	writer->writeAttribute( "foregroundThresholdLow", QString::number(d->settings.foregroundThresholdLow) );
 	writer->writeAttribute( "hueThresholdHigh", QString::number(d->settings.hueThresholdHigh) );
@@ -645,12 +642,6 @@ bool DatapickerImage::load(XmlStreamReader* reader) {
 				reader->raiseWarning(attributeWarning.arg("pointSeparation"));
 			else
 				d->pointSeparation = str.toInt();
-
-			str = attribs.value("colorAttributesType").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("colorAttributesType"));
-			else
-				d->settings.type = DatapickerImage::ColorAttributes(str.toInt());
 
 			str = attribs.value("foregroundThresholdHigh").toString();
 			if(str.isEmpty())

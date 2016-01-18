@@ -66,7 +66,6 @@ public:
 	};
 
 	struct EditorSettings {
-		ColorAttributes type;
 		int intensityThresholdLow;
 		int intensityThresholdHigh;
 		int foregroundThresholdLow;
