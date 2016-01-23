@@ -36,23 +36,29 @@ void ImageEditor::discretize(QImage* plotImage, QImage* originalImage,
                              DatapickerImage::EditorSettings settings, QColor background) {
 //    QElapsedTimer timer;
 //    timer.start();
-	for (int x = 0; x < plotImage->width(); x++) {
-		for (int y = 0; y < plotImage->height(); y++) {
+
+	static const QRgb white = QColor(Qt::white).rgb();
+	static const QRgb black = QColor(Qt::black).rgb();
+
+	for (int y=0; y<plotImage->height(); ++y) {
+		QRgb* line = (QRgb*)plotImage->scanLine(y);
+		for (int x=0; x<plotImage->width(); ++x) {
 			bool on = true;
-			int value;
 			DatapickerImage::ColorAttributes type;
 			for (int i = DatapickerImage::Intensity; i <= DatapickerImage::Value; i++) {
 				type = (DatapickerImage::ColorAttributes) i;
-				value = discretizeValueForeground(x, y, type, background, originalImage);
+				const int value = discretizeValueForeground(x, y, type, background, originalImage);
 
-				if (!pixelIsOn(value, type, settings))
+				if (!pixelIsOn(value, type, settings)) {
 					on = false;
+					break;
+				}
 			}
 
-			if (on)
-				plotImage->setPixel(x, y, QColor(Qt::black).rgb());
+			if (!on)
+				line[x] = white;
 			else
-				plotImage->setPixel(x, y, QColor(Qt::white).rgb());
+				line[x] = black;
 		}
 	}
 //    qDebug() << "Pixmap updated in " << timer.elapsed() << "ms";
