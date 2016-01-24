@@ -332,14 +332,19 @@ QString DatapickerImagePrivate::name() const {
 }
 
 void DatapickerImagePrivate::retransform() {
-	QList<DatapickerPoint *> childrenPoints = q->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-	foreach(DatapickerPoint *point, childrenPoints)
+	QList<DatapickerPoint*> childrenPoints = q->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	foreach(DatapickerPoint* point, childrenPoints)
 		point->retransform();
 }
 
 bool DatapickerImagePrivate::uploadImage(const QString& address) {
 	bool rc = q->originalPlotImage.load(address);
 	if (rc) {
+		//convert the image to 32bit-format if this is not the case yet
+		QImage::Format format = q->originalPlotImage.format();
+		if (format != QImage::Format_RGB32 && format != QImage::Format_ARGB32 && format != QImage::Format_ARGB32_Premultiplied)
+			q->originalPlotImage = q->originalPlotImage.convertToFormat(QImage::Format_RGB32);
+
 		q->processedPlotImage = q->originalPlotImage;
 		q->background = ImageEditor::findBackgroundColor(&q->originalPlotImage);
 		//upload Histogram
