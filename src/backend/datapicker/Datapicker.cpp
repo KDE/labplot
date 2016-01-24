@@ -48,7 +48,7 @@ Datapicker::Datapicker(AbstractScriptingEngine* engine, const QString& name, con
 	: AbstractPart(name), scripted(engine), m_activeCurve(0), m_transform(new Transform()), m_image(0) {
 
 	connect( this, SIGNAL(aspectAdded(const AbstractAspect*)),
-	         this, SLOT(handleChildAspectAdded(const AbstractAspect*)) );
+             this, SLOT(handleAspectAdded(const AbstractAspect*)) );
 	connect( this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 	         this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)) );
 
@@ -250,26 +250,28 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	emit requestUpdateActions();
 }
 
-void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
+void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
     const DatapickerPoint* addedPoint = qobject_cast<const DatapickerPoint*>(aspect);
+    const DatapickerCurve* curve = qobject_cast<const DatapickerCurve*>(aspect);
     if (addedPoint) {
-        QGraphicsItem *item = addedPoint->graphicsItem();
-		Q_ASSERT(item != NULL);
-		Q_ASSERT(m_image != NULL);
-		m_image->scene()->addItem(item);
+        handleChildAspectAdded(addedPoint);
+    } else if (curve) {
+        QList<DatapickerPoint *> childPoints = curve->children<DatapickerPoint>(IncludeHidden);
+        foreach(DatapickerPoint *point, childPoints)
+            handleChildAspectAdded(point);
+    }
 
-		qreal zVal = 0;
-        QList<DatapickerPoint *> childPoints = m_image->children<DatapickerPoint>(IncludeHidden);
-        foreach(DatapickerPoint *point, childPoints) {
+    qreal zVal = 0;
+    QList<DatapickerPoint *> childPoints = m_image->children<DatapickerPoint>(IncludeHidden);
+    foreach(DatapickerPoint *point, childPoints) {
+        point->graphicsItem()->setZValue(zVal++);
+    }
+
+    foreach (DatapickerCurve* curve, children<DatapickerCurve>()) {
+        foreach (DatapickerPoint* point, curve->children<DatapickerPoint>(IncludeHidden)) {
             point->graphicsItem()->setZValue(zVal++);
-		}
-
-		foreach (DatapickerCurve* curve, children<DatapickerCurve>()) {
-            foreach (DatapickerPoint* point, curve->children<DatapickerPoint>(IncludeHidden)) {
-                point->graphicsItem()->setZValue(zVal++);
-			}
-		}
-	}
+        }
+    }
 
 	emit requestUpdateActions();
 }
@@ -281,7 +283,17 @@ void Datapicker::handleChildAspectAboutToBeRemoved(const AbstractAspect* aspect)
 		Q_ASSERT(item != NULL);
 		Q_ASSERT(m_image != NULL);
 		m_image->scene()->removeItem(item);
-	}
+    }
+}
+
+void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
+    const DatapickerPoint* addedPoint = qobject_cast<const DatapickerPoint*>(aspect);
+    if (addedPoint) {
+        QGraphicsItem *item = addedPoint->graphicsItem();
+        Q_ASSERT(item != NULL);
+        Q_ASSERT(m_image != NULL);
+        m_image->scene()->addItem(item);
+    }
 }
 
 //##############################################################################
@@ -345,7 +357,7 @@ bool Datapicker::load(XmlStreamReader* reader) {
 
 	foreach (AbstractAspect* aspect, children<AbstractAspect>(IncludeHidden)) {
         foreach (DatapickerPoint* point, aspect->children<DatapickerPoint>(IncludeHidden)) {
-            handleChildAspectAdded(point);
+            handleAspectAdded(point);
 		}
 	}
 
