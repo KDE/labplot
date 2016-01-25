@@ -259,6 +259,8 @@ void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
         QList<DatapickerPoint *> childPoints = curve->children<DatapickerPoint>(IncludeHidden);
         foreach(DatapickerPoint *point, childPoints)
             handleChildAspectAdded(point);
+    } else {
+        return;
     }
 
     qreal zVal = 0;
