@@ -72,6 +72,8 @@ HistogramView::HistogramView(QWidget* parent, int range) :
 }
 
 void HistogramView::setScalePixmap(const QString& file) {
+    // scene rect is 1000*100 where upper 1000*80 is for histogram graph
+    // and lower 1000*20 is for histogram scale
     QGraphicsPixmapItem* pixmap = new QGraphicsPixmapItem(QPixmap(file).scaled( 1000, 20, Qt::IgnoreAspectRatio), 0, m_scene);
     pixmap->setZValue(-1);
     pixmap->setPos(0, 90);
@@ -98,9 +100,17 @@ void HistogramView::drawBackground(QPainter* painter, const QRectF& rect) {
             max = bins [i];
 
     // convert y-scale count to log scale so small counts are still visible
+    // scene rect is 1000*100 where upper 1000*80 is for histogram graph
+    // and lower 1000*20 is for histogram scale
     QPainterPath path(QPointF(0, (log(bins[0])*100/log(max))));
-    for (int i = 1; i <= m_range; i++)
-        path.lineTo(QPointF(i*1000/m_range, 80 - (log(bins[i])*80/log(max))));
+    for (int i = 1; i <= m_range; i++) {
+        int x = i*1000/m_range;
+        int y = 80;
+        if ( bins[i] > 1 )
+            y = 80 - (log(bins[i])*80/log(max));
+
+        path.lineTo(QPointF(x, y));
+    }
 
     painter->drawPath(path);
     invalidateScene(rect, QGraphicsScene::BackgroundLayer);
