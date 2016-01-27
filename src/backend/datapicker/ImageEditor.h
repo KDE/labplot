@@ -39,11 +39,11 @@ public:
 	static QRgb findBackgroundColor(const QImage*);
 	static int colorAttributeMax(DatapickerImage::ColorAttributes);
 	static void uploadHistogram(int*, QImage*, QColor, DatapickerImage::ColorAttributes);
+	static int discretizeValueForeground(int, int, DatapickerImage::ColorAttributes, QColor, QImage*);
+	static bool pixelIsOn(int, DatapickerImage::ColorAttributes, DatapickerImage::EditorSettings);
 
 private:
 	static bool colorCompare(QRgb color1, QRgb color2);
-	static int discretizeValueForeground(int, int, DatapickerImage::ColorAttributes, QColor, QImage*);
-	static bool pixelIsOn(int, DatapickerImage::ColorAttributes, DatapickerImage::EditorSettings);
 	static bool pixelIsOn(int, int, int);
 
 	struct ColorEntry {

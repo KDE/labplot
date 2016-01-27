@@ -4,6 +4,7 @@
     Description          : Edit Image on the basis of input color attributes
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015-2016 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -26,42 +27,80 @@
 
 #include "ImageEditor.h"
 #include "math.h"
+#include <QThreadPool>
 #include <QElapsedTimer>
-#include <QDebug>
+#include <QMutex>
+// #include <QDebug>
+
+static const QRgb white = QColor(Qt::white).rgb();
+static const QRgb black = QColor(Qt::black).rgb();
+QMutex mutex;
+
+class DiscretizeTask : public QRunnable {
+	public:
+		DiscretizeTask(int start, int end, QImage* plotImage, QImage* originalImage, DatapickerImage::EditorSettings settings, QColor background) {
+			m_start = start;
+			m_end = end;
+			m_plotImage = plotImage;
+			m_originalImage = originalImage;
+			m_settings = settings;
+			m_background = background;
+		};
+
+		void run() {
+			for (int y=m_start; y<m_end; ++y) {
+				mutex.lock();
+				QRgb* line = (QRgb*)m_plotImage->scanLine(y);
+				mutex.unlock();
+				for (int x=0; x<m_plotImage->width(); ++x) {
+					bool on = true;
+					DatapickerImage::ColorAttributes type;
+					for (int i = DatapickerImage::Intensity; i <= DatapickerImage::Value; i++) {
+						type = (DatapickerImage::ColorAttributes) i;
+						const int value = ImageEditor::discretizeValueForeground(x, y, type, m_background, m_originalImage);
+
+						if (!ImageEditor::pixelIsOn(value, type, m_settings)) {
+							on = false;
+							break;
+						}
+					}
+
+					if (!on)
+						line[x] = white;
+					else
+						line[x] = black;
+				}
+			}
+		}
+
+	private:
+		int m_start;
+		int m_end;
+		QImage* m_plotImage;
+		QImage* m_originalImage;
+		DatapickerImage::EditorSettings m_settings;
+		QColor m_background;
+};
 
 /*!
  *
  */
 void ImageEditor::discretize(QImage* plotImage, QImage* originalImage,
                              DatapickerImage::EditorSettings settings, QColor background) {
-//    QElapsedTimer timer;
-//    timer.start();
+// 	QElapsedTimer timer;
+// 	timer.start();
 
-	static const QRgb white = QColor(Qt::white).rgb();
-	static const QRgb black = QColor(Qt::black).rgb();
-
-	for (int y=0; y<plotImage->height(); ++y) {
-		QRgb* line = (QRgb*)plotImage->scanLine(y);
-		for (int x=0; x<plotImage->width(); ++x) {
-			bool on = true;
-			DatapickerImage::ColorAttributes type;
-			for (int i = DatapickerImage::Intensity; i <= DatapickerImage::Value; i++) {
-				type = (DatapickerImage::ColorAttributes) i;
-				const int value = discretizeValueForeground(x, y, type, background, originalImage);
-
-				if (!pixelIsOn(value, type, settings)) {
-					on = false;
-					break;
-				}
-			}
-
-			if (!on)
-				line[x] = white;
-			else
-				line[x] = black;
-		}
+	QThreadPool* pool = QThreadPool::globalInstance();
+	int range = ceil(double(plotImage->height())/pool->maxThreadCount());
+	for (int i=0; i<pool->maxThreadCount(); ++i) {
+		const int start = i*range;
+		int end = (i+1)*range;
+		if (end>plotImage->height()) end = plotImage->height();
+		DiscretizeTask* task = new DiscretizeTask(start, end, plotImage, originalImage, settings, background);
+		pool->start(task);
 	}
-//    qDebug() << "Pixmap updated in " << timer.elapsed() << "ms";
+	pool->waitForDone();
+// 	qDebug() << "Pixmap updated in " << timer.elapsed() << "ms";
 }
 
 bool ImageEditor::processedPixelIsOn(const QImage& plotImage, int x, int y) {
