@@ -353,8 +353,7 @@ bool DatapickerImagePrivate::uploadImage(const QString& address) {
 		ImageEditor::uploadHistogram(q->hueBins, &q->originalPlotImage, q->background, DatapickerImage::Hue);
 		ImageEditor::uploadHistogram(q->saturationBins, &q->originalPlotImage, q->background, DatapickerImage::Saturation);
 		ImageEditor::uploadHistogram(q->valueBins, &q->originalPlotImage, q->background, DatapickerImage::Value);
-		if (plotImageType == DatapickerImage::ProcessedImage)
-			discretize();
+		discretize();
 
 		//resize the screen
 		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Inch)/QApplication::desktop()->physicalDpiX();
@@ -368,6 +367,9 @@ bool DatapickerImagePrivate::uploadImage(const QString& address) {
 }
 
 void DatapickerImagePrivate::discretize() {
+	if (plotImageType != DatapickerImage::ProcessedImage)
+		return;
+
 	ImageEditor::discretize(&q->processedPlotImage, &q->originalPlotImage, settings, q->background);
 
 	if (plotPointsType != DatapickerImage::SegmentPoints)
