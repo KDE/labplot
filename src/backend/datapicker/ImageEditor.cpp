@@ -215,6 +215,8 @@ int ImageEditor::discretizeHue(int x, int y, const QImage* originalImage) {
 	const int h = color.hue();
 	int value = h * maxHue / 359;
 
+	if (value<0) //QColor::hue() can return -1
+		value = 0;
 	if (maxHue < value)
 		value = maxHue;
 
@@ -310,6 +312,8 @@ int ImageEditor::discretizeValueForeground(int x, int y, DatapickerImage::ColorA
 	case DatapickerImage::Hue: {
 		const int h = color.hue();
 		value = h * maxHue / 359;
+		if (value<0)
+			value = 0;
 		if (maxHue < value)
 			value = maxHue;
 		break;

@@ -69,6 +69,11 @@ DatapickerImage::DatapickerImage(AbstractScriptingEngine* engine, const QString&
 }
 
 DatapickerImage::~DatapickerImage() {
+	delete [] hueBins;
+	delete [] saturationBins;
+	delete [] valueBins;
+	delete [] intensityBins;
+	delete [] foregroundBins;
 	delete m_segments;
 	delete d;
 }
