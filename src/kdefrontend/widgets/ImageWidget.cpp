@@ -131,25 +131,30 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
 	editTabLayout->setHorizontalSpacing(2);
 	editTabLayout->setVerticalSpacing(4);
 
-	ssIntensity = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
-	ssIntensity->setRange(0, 100);
-	editTabLayout->addWidget(ssIntensity, 3, 3);
-
-	ssForeground = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
-	ssForeground->setRange(0, 100);
-	editTabLayout->addWidget(ssForeground, 5, 3);
-
 	ssHue = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
+	ssHue->setToolTip(i18n("Select the range for the hue.\nEverything outside of this range will be set to white."));
 	ssHue->setRange(0, 360);
-	editTabLayout->addWidget(ssHue, 7, 3);
+	editTabLayout->addWidget(ssHue, 3, 2);
 
 	ssSaturation = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
+	ssSaturation->setToolTip(i18n("Select the range for the saturation.\nEverything outside of this range will be set to white."));
 	ssSaturation->setRange(0,100);
-	editTabLayout->addWidget(ssSaturation, 9, 3);
+	editTabLayout->addWidget(ssSaturation, 5, 2);
 
 	ssValue = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
+	ssValue->setToolTip(i18n("Select the range for the value, the degree of lightness of the color.\nEverything outside of this range will be set to white."));
 	ssValue->setRange(0,100);
-	editTabLayout->addWidget(ssValue, 11, 3);
+	editTabLayout->addWidget(ssValue, 7, 2);
+
+	ssIntensity = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
+	ssIntensity->setToolTip(i18n("Select the range for the intensity.\nEverything outside of this range will be set to white."));
+	ssIntensity->setRange(0, 100);
+	editTabLayout->addWidget(ssIntensity, 9, 2);
+
+	ssForeground = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
+	ssForeground->setToolTip(i18n("Select the range for the colors that are not part of the background color.\nEverything outside of this range will be set to white."));
+	ssForeground->setRange(0, 100);
+	editTabLayout->addWidget(ssForeground, 11, 2);
 
 	ui.cbGraphType->addItem(i18n("Cartesian (x, y)"));
 	ui.cbGraphType->addItem(i18n("Polar (x, y°)"));
@@ -176,23 +181,28 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
 	QString saturationFile = KStandardDirs::locate("data", "labplot2/pics/colorchooser/colorchooser_saturation.xpm");
 
 	gvHue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Hue));
-	editTabLayout->addWidget(gvHue, 2, 3);
+	gvHue->setToolTip(i18n("Select the range for the hue.\nEverything outside of this range will be set to white."));
+	editTabLayout->addWidget(gvHue, 2, 2);
 	gvHue->setScalePixmap(hueFile);
 
 	gvSaturation = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Saturation));
-	editTabLayout->addWidget(gvSaturation, 4, 3);
+	gvSaturation->setToolTip(i18n("Select the range for the saturation.\nEverything outside of this range will be set to white."));
+	editTabLayout->addWidget(gvSaturation, 4, 2);
 	gvSaturation->setScalePixmap(saturationFile);
 
 	gvValue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Value));
-	editTabLayout->addWidget(gvValue, 6,3);
+	gvValue->setToolTip(i18n("Select the range for the value, the degree of lightness of the color.\nEverything outside of this range will be set to white."));
+	editTabLayout->addWidget(gvValue, 6,2);
 	gvValue->setScalePixmap(valueFile);
 
 	gvIntensity = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Intensity));
-	editTabLayout->addWidget(gvIntensity, 8, 3);
+	gvIntensity->setToolTip(i18n("Select the range for the intensity.\nEverything outside of this range will be set to white."));
+	editTabLayout->addWidget(gvIntensity, 8, 2);
 	gvIntensity->setScalePixmap(valueFile);
 
 	gvForeground = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Foreground));
-	editTabLayout->addWidget(gvForeground, 10, 3);
+	gvForeground->setToolTip(i18n("Select the range for the colors that are not part of the background color.\nEverything outside of this range will be set to white."));
+	editTabLayout->addWidget(gvForeground, 10, 2);
 	gvForeground->setScalePixmap(valueFile);
 
 	connect( ssIntensity, SIGNAL(spanSliderMoved(int,int)), gvIntensity, SLOT(setSpan(int,int)) );
@@ -322,36 +332,30 @@ void ImageWidget::initConnections() {
 	connect( m_image, SIGNAL(pointBrushChanged(QBrush)), this, SLOT(symbolBrushChanged(QBrush)) );
 	connect( m_image, SIGNAL(pointPenChanged(QPen)), this, SLOT(symbolPenChanged(QPen)) );
 	connect( m_image, SIGNAL(pointVisibilityChanged(bool)), this, SLOT(symbolVisibleChanged(bool)) );
-
 }
 
 void ImageWidget::handleWidgetActions() {
 	QString fileName =  ui.kleFileName->text().trimmed();
-	if (!fileName.isEmpty()) {
-		ui.tEdit->setEnabled(true);
-		ui.cbGraphType->setEnabled(true);
-		ui.sbPoisitionX1->setEnabled(true);
-		ui.sbPoisitionX2->setEnabled(true);
-		ui.sbPoisitionX3->setEnabled(true);
-		ui.sbPoisitionY1->setEnabled(true);
-		ui.sbPoisitionY2->setEnabled(true);
-		ui.sbPoisitionY3->setEnabled(true);
+	bool b = !fileName.isEmpty();
+	ui.tEdit->setEnabled(b);
+	ui.cbGraphType->setEnabled(b);
+	ui.sbRotation->setEnabled(b);
+	ui.sbPoisitionX1->setEnabled(b);
+	ui.sbPoisitionX2->setEnabled(b);
+	ui.sbPoisitionX3->setEnabled(b);
+	ui.sbPoisitionY1->setEnabled(b);
+	ui.sbPoisitionY2->setEnabled(b);
+	ui.sbPoisitionY3->setEnabled(b);
+	ui.sbMinSegmentLength->setEnabled(b);
+	ui.sbPointSeparation->setEnabled(b);
 
+	if (b) {
 		//upload histogram to view
 		gvIntensity->bins = m_image->intensityBins;
 		gvForeground->bins = m_image->foregroundBins;
 		gvHue->bins = m_image->hueBins;
 		gvSaturation->bins = m_image->saturationBins;
 		gvValue->bins = m_image->valueBins;
-	} else {
-		ui.tEdit->setEnabled(false);
-		ui.cbGraphType->setEnabled(false);
-		ui.sbPoisitionX1->setEnabled(false);
-		ui.sbPoisitionX2->setEnabled(false);
-		ui.sbPoisitionX3->setEnabled(false);
-		ui.sbPoisitionY1->setEnabled(false);
-		ui.sbPoisitionY2->setEnabled(false);
-		ui.sbPoisitionY3->setEnabled(false);
 	}
 }
 
