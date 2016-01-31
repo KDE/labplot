@@ -55,13 +55,13 @@
 DatapickerImage::DatapickerImage(AbstractScriptingEngine* engine, const QString& name, bool loading)
 	: AbstractPart(name), scripted(engine),
 	  isLoaded(false),
-	  m_magnificationWindow(0),
-	  d(new DatapickerImagePrivate(this)),
-	  intensityBins( new int[ImageEditor::colorAttributeMax(Intensity) + 1]),
 	  foregroundBins( new int[ImageEditor::colorAttributeMax(Foreground) + 1]),
 	  hueBins( new int[ImageEditor::colorAttributeMax(Hue) + 1]),
 	  saturationBins( new int[ImageEditor::colorAttributeMax(Saturation) + 1]),
 	  valueBins( new int[ImageEditor::colorAttributeMax(Value) + 1]),
+	  intensityBins( new int[ImageEditor::colorAttributeMax(Intensity) + 1]),
+	  m_magnificationWindow(0),
+	  d(new DatapickerImagePrivate(this)),
 	  m_segments(new Segments(this)) {
 
 	if (!loading)

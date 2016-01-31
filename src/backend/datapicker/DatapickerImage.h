@@ -99,11 +99,11 @@ public:
 	QImage originalPlotImage;
 	QImage processedPlotImage;
 	QColor background;
-	int *intensityBins;
 	int *foregroundBins;
-	int *saturationBins;
 	int *hueBins;
+	int *saturationBins;
 	int *valueBins;
+	int *intensityBins;
 
 	QGraphicsPixmapItem* m_magnificationWindow;
 
