@@ -92,6 +92,7 @@ QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 	switch(role)
 	{
 		case Qt::ToolTipRole:
+		{
 				if(!col_ptr->isValid(row)) {
 					QString s;
 					if(col_ptr->isMasked(row))
@@ -100,6 +101,7 @@ QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 						s = i18n("invalid cell (ignored in all operations)");
 					return QVariant(s);
 				}
+		}
 		case Qt::EditRole:
 				if(!m_formula_mode && !col_ptr->isValid(row))
 					return QVariant();
@@ -126,17 +128,12 @@ QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 		case Qt::DecorationRole:
 			if(m_formula_mode)
 				return QIcon(QPixmap(":/equals.png"));
-			break;
 	}
 
 	return QVariant();
 }
 
-QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-	if (section>m_spreadsheet->columnCount()-1)
-	  return QVariant();
-
+QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, int role) const {
 	switch(orientation) {
 		case Qt::Horizontal:
 			switch(role) {
@@ -151,6 +148,7 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 				case Qt::SizeHintRole:
 					return QSize(m_spreadsheet->child<Column>(section)->width(), m_defaultHeaderHeight);
 			}
+			break;
 		case Qt::Vertical:
 			switch(role) {
 				case Qt::DisplayRole:

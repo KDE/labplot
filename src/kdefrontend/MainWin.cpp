@@ -888,8 +888,7 @@ bool MainWin::save(const QString& fileName) {
 		ok = false;
 	}
 
-	if (file != 0)
-		delete file;
+	delete file;
 
 	RESET_CURSOR;
 	return ok;
