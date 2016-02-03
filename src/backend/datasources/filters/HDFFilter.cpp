@@ -252,6 +252,15 @@ QString HDFFilterPrivate::translateHDFClass(H5T_class_t c) {
         case H5T_VLEN:
 		dclass="VLEN";
                 break;
+	case H5T_TIME:
+		dclass="TIME";
+		break;
+	case H5T_NCLASSES:
+		dclass="NCLASSES";
+		break;
+	case H5T_NO_CLASS:
+		dclass="NOCLASS";
+		break;
         default:
 		dclass="UNKNOWN";
                 break;
@@ -650,8 +659,31 @@ QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 		H5T_cset_t cset = H5Tget_cset (tid);
 		handleError((int)cset,"H5Tget_cset");
 		switch(cset) {
-		case  H5T_CSET_ASCII:
+		case H5T_CSET_ASCII:
 			typeProps<<", ASCII";
+			break;
+		case H5T_CSET_ERROR:
+			typeProps<<", ERROR";
+			break;
+		case H5T_CSET_UTF8:
+			typeProps<<", UTF8";
+			break;
+		case H5T_CSET_RESERVED_2:
+		case H5T_CSET_RESERVED_3:
+		case H5T_CSET_RESERVED_4:
+		case H5T_CSET_RESERVED_5:
+		case H5T_CSET_RESERVED_6:
+		case H5T_CSET_RESERVED_7:
+		case H5T_CSET_RESERVED_8:
+		case H5T_CSET_RESERVED_9:
+		case H5T_CSET_RESERVED_10:
+		case H5T_CSET_RESERVED_11:
+		case H5T_CSET_RESERVED_12:
+		case H5T_CSET_RESERVED_13:
+		case H5T_CSET_RESERVED_14:
+		case H5T_CSET_RESERVED_15:
+			typeProps<<", RESERVED";
+			break;
 		default:
 			break;
 		}
@@ -666,6 +698,24 @@ QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 			break;
 		case H5T_STR_SPACEPAD:
 			typeProps<<" SPACEPAD";
+			break;
+		case H5T_STR_ERROR:
+			typeProps<<" ERROR";
+			break;
+		case H5T_STR_RESERVED_3:
+		case H5T_STR_RESERVED_4:
+		case H5T_STR_RESERVED_5:
+		case H5T_STR_RESERVED_6:
+		case H5T_STR_RESERVED_7:
+		case H5T_STR_RESERVED_8:
+		case H5T_STR_RESERVED_9:
+		case H5T_STR_RESERVED_10:
+		case H5T_STR_RESERVED_11:
+		case H5T_STR_RESERVED_12:
+		case H5T_STR_RESERVED_13:
+		case H5T_STR_RESERVED_14:
+		case H5T_STR_RESERVED_15:
+			typeProps<<" RESERVED";
 			break;
 		default:
 			break;
@@ -683,6 +733,35 @@ QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 		//TODO
 		break;
 	}
+	case H5T_INTEGER:
+		//TODO
+		break;
+	case H5T_FLOAT:
+		//TODO
+		break;
+	case H5T_TIME:
+		//TODO
+		break;
+	case H5T_BITFIELD:
+		//TODO
+		break;
+	case H5T_OPAQUE:
+		//TODO
+		break;
+	case H5T_REFERENCE:
+		//TODO
+		break;
+	case H5T_VLEN:
+		//TODO
+		break;
+	case H5T_ARRAY:
+		//TODO
+		break;
+	case H5T_NCLASSES:
+		//TODO
+		break;
+	case H5T_NO_CLASS:
+		break;
 	default:
 		break;
 	}
@@ -749,6 +828,12 @@ QStringList HDFFilterPrivate::readHDFPropertyList(hid_t pid) {
 	case H5D_ALLOC_TIME_LATE:
 		props<<" LATE";
 		break;
+	case H5D_ALLOC_TIME_DEFAULT:
+		props<<" DEFAULT";
+		break;
+	case H5D_ALLOC_TIME_ERROR:
+		props<<" ERROR";
+		break;
 	default:
 		props<<" unknown allocation policy";
 		break;
@@ -758,7 +843,7 @@ QStringList HDFFilterPrivate::readHDFPropertyList(hid_t pid) {
         H5D_fill_time_t ft;
 	status = H5Pget_fill_time(pid, &ft);
 	handleError(status,"H5Pget_fill_time");
-        switch ( ft ) {
+        switch (ft) {
 	case H5D_FILL_TIME_ALLOC:
 		props<<" ALLOW";
 		break;
@@ -768,8 +853,11 @@ QStringList HDFFilterPrivate::readHDFPropertyList(hid_t pid) {
 	case H5D_FILL_TIME_IFSET:
 		props<<" IFSET";
 		break;
+	case H5D_FILL_TIME_ERROR:
+		props<<" ERROR";
+		break;
 	default:
-		props<<" unknown";
+		props<<" Unknown";
 		break;
         }
 
