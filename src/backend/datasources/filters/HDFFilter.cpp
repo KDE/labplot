@@ -1118,12 +1118,24 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			free(data);
 			break;
 		}
-		default: {
+		case H5T_INTEGER:
+		case H5T_FLOAT:
+		case H5T_TIME:
+		case H5T_BITFIELD:
+		case H5T_OPAQUE:
+		case H5T_COMPOUND:
+		case H5T_REFERENCE:
+		case H5T_ENUM:
+		case H5T_VLEN:
+		case H5T_ARRAY:
+		case H5T_NO_CLASS:
+		case H5T_NCLASSES: {
 			dataString<<QString("rank = 0 not implemented yet for type ").replace(' ',QChar::Nbsp)<<translateHDFClass(dclass);
 			qDebug()<<dataString.join("");
 		}
+		default:
+			break;
 		}
-
 		break;
 	}
 	case 1: {
@@ -1224,10 +1236,20 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			dataString<<readHDFCompoundData1D(dataset,dtype,rows,lines,dataPointers);
 			break;
 		}
-		default: {
+		case H5T_TIME:
+		case H5T_BITFIELD:
+		case H5T_OPAQUE:
+		case H5T_REFERENCE:
+		case H5T_ENUM:
+		case H5T_VLEN:
+		case H5T_ARRAY:
+		case H5T_NO_CLASS:
+		case H5T_NCLASSES: {
 			dataString<<"rank = 1 not implemented yet for type "<<translateHDFClass(dclass);
 			qDebug()<<dataString.join("");
 		}
+		default:
+			break;
 		}
 		break;
 	}
@@ -1317,10 +1339,20 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			qDebug()<<dataString.join("");
 			break;
 		}
-		default: {
+		case H5T_TIME:
+		case H5T_BITFIELD:
+		case H5T_OPAQUE:
+		case H5T_REFERENCE:
+		case H5T_ENUM:
+		case H5T_VLEN:
+		case H5T_ARRAY:
+		case H5T_NO_CLASS:
+		case H5T_NCLASSES: {
 			dataString<<translateHDFClass(dclass)<<" data class not supported";
 			qDebug()<<dataString.join("");
 		}
+		default:
+			break;
 		}
 		break;
 	}
