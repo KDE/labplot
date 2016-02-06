@@ -46,13 +46,18 @@
 #include <QInputDialog>
 #include <QClipboard>
 #include <QMimeData>
-#include <QDebug>
+#include <QTextStream>
+#include <QThreadPool>
+#include <QMutex>
+// #include <QElapsedTimer>
+// #include <QDebug>
 
 #include <KLocale>
 #include <KAction>
 #include <KIcon>
 
 #include <float.h>
+#include "math.h"
 
 MatrixView::MatrixView(Matrix* matrix) : QWidget(),
 	m_stackedWidget(new QStackedWidget(this)),
@@ -105,6 +110,7 @@ void MatrixView::init() {
 	v_header->setDefaultSectionSize(m_matrix->defaultRowHeight());
 	v_header->installEventFilter(this);
 
+	//set the header sizes to the (potentially user customized) sizes stored in Matrix
 	adjustHeaders();
 
 	//image view
@@ -723,6 +729,38 @@ void MatrixView::clearSelectedCells() {
 	RESET_CURSOR;
 }
 
+
+QMutex mutex;
+class UpdateImageTask : public QRunnable {
+	public:
+		UpdateImageTask(int start, int end, QImage image, QVector<QVector<double> > matrixData, double scaleFactor, double min) : m_image(image), m_matrixData(matrixData) {
+			m_start = start;
+			m_end = end;
+			m_scaleFactor = scaleFactor;
+			m_min = min;
+		};
+
+		void run() {
+			for (int row=m_start; row<m_end; ++row) {
+				mutex.lock();
+				QRgb* line = (QRgb*)m_image.scanLine(row);
+				mutex.unlock();
+				for (int col=0; col<m_image.width(); ++col) {
+					const int gray = (m_matrixData[col][row]-m_min)*m_scaleFactor;
+					line[col] = qRgb(gray, gray, gray);
+				}
+			}
+		}
+
+	private:
+		int m_start;
+		int m_end;
+		QImage& m_image;
+		const QVector<QVector<double> >& m_matrixData;
+		double m_scaleFactor;
+		double m_min;
+};
+
 void MatrixView::updateImage() {
 	WAIT_CURSOR;
 	m_image = QImage(m_matrix->columnCount(), m_matrix->rowCount(), QImage::Format_ARGB32);
@@ -746,13 +784,16 @@ void MatrixView::updateImage() {
 	//update the image
 // 	timer.start();
 	const double scaleFactor = 255.0/(dmax-dmin);
-	for (int row=0; row<height; ++row) {
-		QRgb* line = (QRgb*)m_image.scanLine(row);
-		for (int col=0; col<width; ++col) {
-			const int gray = (matrixData[col][row]-dmin)*scaleFactor;
-			line[col] = qRgb(gray, gray, gray);
-		}
+	QThreadPool* pool = QThreadPool::globalInstance();
+	int range = ceil(double(m_image.height())/pool->maxThreadCount());
+	for (int i=0; i<pool->maxThreadCount(); ++i) {
+		const int start = i*range;
+		int end = (i+1)*range;
+		if (end>m_image.height()) end = m_image.height();
+		UpdateImageTask* task = new UpdateImageTask(start, end, m_image, matrixData, scaleFactor, dmin);
+		pool->start(task);
 	}
+	pool->waitForDone();
 // 	qDebug()<<"image updated in " << (float)timer.elapsed()/1000 << "s";
 
 	m_imageLabel->resize(width, height);

@@ -5,7 +5,7 @@ New features:
 	* Support GSL 2.x
 
 Performance improvements:
-	*
+	* Faster rendering of the image view of the matrix
 
 Bug fixes:
 	* BUG: 354744 - make setting of range auto scaling in CartesianPlot undo/redo-able.
