@@ -183,7 +183,7 @@ void DatapickerImage::initSceneParameters() {
 	setminSegmentLength(30);
 	setPointSeparation(30);
 
-	ReferencePoints axisPoints;
+    ReferencePoints axisPoints = d->axisPoints;
 	axisPoints.ternaryScale = 1;
 	axisPoints.type = DatapickerImage::Cartesian;
 	setAxisPoints(axisPoints);
