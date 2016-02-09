@@ -57,7 +57,7 @@
 #include "kdefrontend/dockwidgets/CustomPointDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #include "kdefrontend/widgets/LabelWidget.h"
-#include "kdefrontend/widgets/ImageWidget.h"
+#include "kdefrontend/widgets/DatapickerImageWidget.h"
 #include "kdefrontend/widgets/DatapickerCurveWidget.h"
 
 #include <kstatusbar.h>
@@ -330,7 +330,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
       mainWindow->m_propertiesDock->setWindowTitle(i18n("Datapicker properties"));
 
       if (!mainWindow->datapickerImageDock){
-        mainWindow->datapickerImageDock = new ImageWidget(mainWindow->stackedWidget);
+        mainWindow->datapickerImageDock = new DatapickerImageWidget(mainWindow->stackedWidget);
         mainWindow->stackedWidget->addWidget(mainWindow->datapickerImageDock);
       }
 

@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : ImageWidget.h
+    File                 : DatapickerImageWidget.h
     Project              : LabPlot
     Description          : widget for datapicker properties
     --------------------------------------------------------------------
@@ -26,12 +26,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMAGEWIDGET_H
-#define IMAGEWIDGET_H
+#ifndef DATAPICKERIMAGEWIDGET_H
+#define DATAPICKERIMAGEWIDGET_H
 
 #include <QGraphicsView>
 
-#include "ui_imagewidget.h"
+#include "ui_datapickerimagewidget.h"
 #include "backend/datapicker/DatapickerImage.h"
 
 class QxtSpanSlider;
@@ -56,17 +56,17 @@ private:
     int m_range;
 };
 
-class ImageWidget : public QWidget {
+class DatapickerImageWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit ImageWidget(QWidget*);
+    explicit DatapickerImageWidget(QWidget*);
 
 	void setImages(QList<DatapickerImage*>);
 	void load();
 
 private:
-	Ui::ImageWidget ui;
+    Ui::DatapickerImageWidget ui;
     void init();
 	void initConnections();
 
@@ -87,7 +87,7 @@ private:
     HistogramView* gvValue;
 
 private slots:
-	//SLOTs for changes triggered in ImageWidget
+    //SLOTs for changes triggered in DatapickerImageWidget
 	//"General"-tab
 	void nameChanged();
 	void commentChanged();
@@ -122,7 +122,7 @@ private slots:
     void pointsVisibilityChanged(bool);
 
 
-	//SLOTs for changes triggered in ImageWidget
+    //SLOTs for changes triggered in DatapickerImageWidget
 	void imageDescriptionChanged(const AbstractAspect*);
 	void imageFileNameChanged(const QString&);
 	void imageRotationAngleChanged(float);
@@ -141,4 +141,4 @@ private slots:
     void symbolVisibleChanged(bool);
 };
 
-#endif //IMAGEWIDGET_H
+#endif //DATAPICKERIMAGEWIDGET_H

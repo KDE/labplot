@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ImageWidget</class>
- <widget class="QWidget" name="ImageWidget">
+ <class>DatapickerImageWidget</class>
+ <widget class="QWidget" name="DatapickerImageWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

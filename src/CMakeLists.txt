@@ -51,7 +51,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FitParametersWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/FunctionsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/LabelWidget.cpp
-	${KDEFRONTEND_DIR}/widgets/ImageWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/DatapickerImageWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/DatapickerCurveWidget.cpp
 )
 
@@ -89,7 +89,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
-	${KDEFRONTEND_DIR}/ui/imagewidget.ui
+	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
         ${KDEFRONTEND_DIR}/ui/datapickercurvewidget.ui
 )
 

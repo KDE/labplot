@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : ImageWidget.cpp
+    File                 : DatapickerImageWidget.cpp
     Project              : LabPlot
     Description          : widget for datapicker properties
     --------------------------------------------------------------------
@@ -26,7 +26,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "ImageWidget.h"
+#include "DatapickerImageWidget.h"
 #include "backend/datapicker/DatapickerPoint.h"
 #include "commonfrontend/widgets/qxtspanslider.h"
 #include "kdefrontend/GuiTools.h"
@@ -117,7 +117,7 @@ void HistogramView::drawBackground(QPainter* painter, const QRectF& rect) {
 	painter->restore();
 }
 
-ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
+DatapickerImageWidget::DatapickerImageWidget(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
 
 	ui.kleFileName->setClearButtonShown(true);
@@ -263,7 +263,7 @@ ImageWidget::ImageWidget(QWidget *parent): QWidget(parent) {
 	init();
 }
 
-void ImageWidget::init() {
+void DatapickerImageWidget::init() {
 	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
 
@@ -289,7 +289,7 @@ void ImageWidget::init() {
 	m_initializing = false;
 }
 
-void ImageWidget::setImages(QList<DatapickerImage*> list) {
+void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 	m_imagesList = list;
 	m_image = list.first();
 
@@ -315,7 +315,7 @@ void ImageWidget::setImages(QList<DatapickerImage*> list) {
 	updateSymbolWidgets();
 }
 
-void ImageWidget::initConnections() {
+void DatapickerImageWidget::initConnections() {
 	connect( m_image->parentAspect(), SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(imageDescriptionChanged(const AbstractAspect*)));
 	connect( m_image, SIGNAL(fileNameChanged(QString)), this, SLOT(imageFileNameChanged(QString)) );
 	connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(imageRotationAngleChanged(float)) );
@@ -334,7 +334,7 @@ void ImageWidget::initConnections() {
 	connect( m_image, SIGNAL(pointVisibilityChanged(bool)), this, SLOT(symbolVisibleChanged(bool)) );
 }
 
-void ImageWidget::handleWidgetActions() {
+void DatapickerImageWidget::handleWidgetActions() {
 	QString fileName =  ui.kleFileName->text().trimmed();
 	bool b = !fileName.isEmpty();
 	ui.tEdit->setEnabled(b);
@@ -360,25 +360,25 @@ void ImageWidget::handleWidgetActions() {
 }
 
 //**********************************************************
-//****** SLOTs for changes triggered in ImageWidget ********
+//****** SLOTs for changes triggered in DatapickerImageWidget ********
 //**********************************************************
 //"General"-tab
-void ImageWidget::nameChanged() {
+void DatapickerImageWidget::nameChanged() {
 	if (m_initializing)
 		return;
 
 	m_image->parentAspect()->setName(ui.leName->text());
 }
 
-void ImageWidget::commentChanged() {
+void DatapickerImageWidget::commentChanged() {
 	if (m_initializing)
 		return;
 
 	m_image->parentAspect()->setComment(ui.leComment->text());
 }
 
-void ImageWidget::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImageWidget");
+void DatapickerImageWidget::selectFile() {
+    KConfigGroup conf(KSharedConfig::openConfig(), "DatapickerImageWidget");
 	QString dir = conf.readEntry("LastImageDir", "");
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
 	if (path.isEmpty())
@@ -398,7 +398,7 @@ void ImageWidget::selectFile() {
 		image->setFileName(path);
 }
 
-void ImageWidget::fileNameChanged() {
+void DatapickerImageWidget::fileNameChanged() {
 	if (m_initializing)
 		return;
 
@@ -410,7 +410,7 @@ void ImageWidget::fileNameChanged() {
 	}
 }
 
-void ImageWidget::graphTypeChanged() {
+void DatapickerImageWidget::graphTypeChanged() {
 	if (m_initializing)
 		return;
 
@@ -441,7 +441,7 @@ void ImageWidget::graphTypeChanged() {
 		image->setAxisPoints(points);
 }
 
-void ImageWidget::ternaryScaleChanged(double value) {
+void DatapickerImageWidget::ternaryScaleChanged(double value) {
 	if (m_initializing)
 		return;
 
@@ -452,7 +452,7 @@ void ImageWidget::ternaryScaleChanged(double value) {
 		image->setAxisPoints(points);
 }
 
-void ImageWidget::logicalPositionChanged() {
+void DatapickerImageWidget::logicalPositionChanged() {
 	if (m_initializing)
 		return;
 
@@ -471,7 +471,7 @@ void ImageWidget::logicalPositionChanged() {
 		image->setAxisPoints(points);
 }
 
-void ImageWidget::pointsStyleChanged(int index) {
+void DatapickerImageWidget::pointsStyleChanged(int index) {
 	Symbol::Style style = Symbol::Style(index + 1);
 	//enable/disable the  filling options in the GUI depending on the currently selected points.
 	if (style != Symbol::Line && style != Symbol::Cross) {
@@ -494,7 +494,7 @@ void ImageWidget::pointsStyleChanged(int index) {
 		image->setPointStyle(style);
 }
 
-void ImageWidget::pointsSizeChanged(double value) {
+void DatapickerImageWidget::pointsSizeChanged(double value) {
 	if (m_initializing)
 		return;
 
@@ -502,7 +502,7 @@ void ImageWidget::pointsSizeChanged(double value) {
 		image->setPointSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
-void ImageWidget::pointsRotationChanged(int value) {
+void DatapickerImageWidget::pointsRotationChanged(int value) {
 	if (m_initializing)
 		return;
 
@@ -510,7 +510,7 @@ void ImageWidget::pointsRotationChanged(int value) {
 		image->setPointRotationAngle(value);
 }
 
-void ImageWidget::pointsOpacityChanged(int value) {
+void DatapickerImageWidget::pointsOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
@@ -519,7 +519,7 @@ void ImageWidget::pointsOpacityChanged(int value) {
 		image->setPointOpacity(opacity);
 }
 
-void ImageWidget::pointsFillingStyleChanged(int index) {
+void DatapickerImageWidget::pointsFillingStyleChanged(int index) {
 	Qt::BrushStyle brushStyle = Qt::BrushStyle(index);
 	ui.kcbSymbolFillingColor->setEnabled(!(brushStyle==Qt::NoBrush));
 
@@ -534,7 +534,7 @@ void ImageWidget::pointsFillingStyleChanged(int index) {
 	}
 }
 
-void ImageWidget::pointsFillingColorChanged(const QColor& color) {
+void DatapickerImageWidget::pointsFillingColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
@@ -550,7 +550,7 @@ void ImageWidget::pointsFillingColorChanged(const QColor& color) {
 	m_initializing = false;
 }
 
-void ImageWidget::pointsBorderStyleChanged(int index) {
+void DatapickerImageWidget::pointsBorderStyleChanged(int index) {
 	Qt::PenStyle penStyle=Qt::PenStyle(index);
 
 	if ( penStyle == Qt::NoPen ) {
@@ -572,7 +572,7 @@ void ImageWidget::pointsBorderStyleChanged(int index) {
 	}
 }
 
-void ImageWidget::pointsBorderColorChanged(const QColor& color) {
+void DatapickerImageWidget::pointsBorderColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
@@ -588,7 +588,7 @@ void ImageWidget::pointsBorderColorChanged(const QColor& color) {
 	m_initializing = false;
 }
 
-void ImageWidget::pointsBorderWidthChanged(double value) {
+void DatapickerImageWidget::pointsBorderWidthChanged(double value) {
 	if (m_initializing)
 		return;
 
@@ -600,7 +600,7 @@ void ImageWidget::pointsBorderWidthChanged(double value) {
 	}
 }
 
-void ImageWidget::pointsVisibilityChanged(bool state) {
+void DatapickerImageWidget::pointsVisibilityChanged(bool state) {
 	if (m_initializing)
 		return;
 
@@ -608,7 +608,7 @@ void ImageWidget::pointsVisibilityChanged(bool state) {
 		image->setPointVisibility(state);
 }
 
-void ImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit) {
+void DatapickerImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit) {
 	if (m_initializing)
 		return;
 
@@ -619,7 +619,7 @@ void ImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit) {
 		image->setSettings(settings);
 }
 
-void ImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit) {
+void DatapickerImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit) {
 	if (m_initializing)
 		return;
 
@@ -630,7 +630,7 @@ void ImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit) {
 		image->setSettings(settings);
 }
 
-void ImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
+void DatapickerImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
 	if (m_initializing)
 		return;
 
@@ -641,7 +641,7 @@ void ImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
 		image->setSettings(settings);
 }
 
-void ImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit) {
+void DatapickerImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit) {
 	if (m_initializing)
 		return;
 
@@ -652,7 +652,7 @@ void ImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit) {
 		image->setSettings(settings);
 }
 
-void ImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
+void DatapickerImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
 	if (m_initializing)
 		return;
 
@@ -663,7 +663,7 @@ void ImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
 		image->setSettings(settings);
 }
 
-void ImageWidget::plotImageTypeChanged(int index) {
+void DatapickerImageWidget::plotImageTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
@@ -671,7 +671,7 @@ void ImageWidget::plotImageTypeChanged(int index) {
 		image->setPlotImageType(DatapickerImage::PlotImageType(index));
 }
 
-void ImageWidget::rotationChanged(double value) {
+void DatapickerImageWidget::rotationChanged(double value) {
 	if (m_initializing)
 		return;
 
@@ -679,7 +679,7 @@ void ImageWidget::rotationChanged(double value) {
 		image->setRotationAngle(value);
 }
 
-void ImageWidget::minSegmentLengthChanged(int value) {
+void DatapickerImageWidget::minSegmentLengthChanged(int value) {
 	if (m_initializing)
 		return;
 
@@ -687,7 +687,7 @@ void ImageWidget::minSegmentLengthChanged(int value) {
 		image->setminSegmentLength(value);
 }
 
-void ImageWidget::pointSeparationChanged(int value) {
+void DatapickerImageWidget::pointSeparationChanged(int value) {
 	if (m_initializing)
 		return;
 
@@ -701,7 +701,7 @@ void ImageWidget::pointSeparationChanged(int value) {
 /*!
     called when the name or comment of image's parent (datapicker) was changed.
  */
-void ImageWidget::imageDescriptionChanged(const AbstractAspect* aspect) {
+void DatapickerImageWidget::imageDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_image->parentAspect() != aspect)
 		return;
 
@@ -714,19 +714,19 @@ void ImageWidget::imageDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
-void ImageWidget::imageFileNameChanged(const QString& name) {
+void DatapickerImageWidget::imageFileNameChanged(const QString& name) {
 	m_initializing = true;
 	ui.kleFileName->setText(name);
 	m_initializing = false;
 }
 
-void ImageWidget::imageRotationAngleChanged(float angle) {
+void DatapickerImageWidget::imageRotationAngleChanged(float angle) {
 	m_initializing = true;
 	ui.sbRotation->setValue(angle);
 	m_initializing = false;
 }
 
-void ImageWidget::imageAxisPointsChanged(const DatapickerImage::ReferencePoints& axisPoints) {
+void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::ReferencePoints& axisPoints) {
 	m_initializing = true;
 	ui.cbGraphType->setCurrentIndex((int) axisPoints.type);
 	ui.sbTernaryScale->setValue(axisPoints.ternaryScale);
@@ -742,7 +742,7 @@ void ImageWidget::imageAxisPointsChanged(const DatapickerImage::ReferencePoints&
 	m_initializing = false;
 }
 
-void ImageWidget::imageEditorSettingsChanged(const DatapickerImage::EditorSettings& settings) {
+void DatapickerImageWidget::imageEditorSettingsChanged(const DatapickerImage::EditorSettings& settings) {
 	m_initializing = true;
 	ssIntensity->setSpan(settings.intensityThresholdLow, settings.intensityThresholdHigh);
 	ssForeground->setSpan(settings.foregroundThresholdLow, settings.foregroundThresholdHigh);
@@ -757,13 +757,13 @@ void ImageWidget::imageEditorSettingsChanged(const DatapickerImage::EditorSettin
 	m_initializing = false;
 }
 
-void ImageWidget::imageMinSegmentLengthChanged(const int value) {
+void DatapickerImageWidget::imageMinSegmentLengthChanged(const int value) {
 	m_initializing = true;
 	ui.sbMinSegmentLength->setValue(value);
 	m_initializing = false;
 }
 
-void ImageWidget::updateSymbolWidgets() {
+void DatapickerImageWidget::updateSymbolWidgets() {
 	int pointCount = m_image->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
 	if (pointCount)
 		ui.tSymbol->setEnabled(true);
@@ -771,31 +771,31 @@ void ImageWidget::updateSymbolWidgets() {
 		ui.tSymbol->setEnabled(false);
 }
 
-void ImageWidget::symbolStyleChanged(Symbol::Style style) {
+void DatapickerImageWidget::symbolStyleChanged(Symbol::Style style) {
 	m_initializing = true;
 	ui.cbSymbolStyle->setCurrentIndex((int)style - 1);
 	m_initializing = false;
 }
 
-void ImageWidget::symbolSizeChanged(qreal size) {
+void DatapickerImageWidget::symbolSizeChanged(qreal size) {
 	m_initializing = true;
 	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
 	m_initializing = false;
 }
 
-void ImageWidget::symbolRotationAngleChanged(qreal angle) {
+void DatapickerImageWidget::symbolRotationAngleChanged(qreal angle) {
 	m_initializing = true;
 	ui.sbSymbolRotation->setValue(round(angle));
 	m_initializing = false;
 }
 
-void ImageWidget::symbolOpacityChanged(qreal opacity) {
+void DatapickerImageWidget::symbolOpacityChanged(qreal opacity) {
 	m_initializing = true;
 	ui.sbSymbolOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
 }
 
-void ImageWidget::symbolBrushChanged(QBrush brush) {
+void DatapickerImageWidget::symbolBrushChanged(QBrush brush) {
 	m_initializing = true;
 	ui.cbSymbolFillingStyle->setCurrentIndex((int) brush.style());
 	ui.kcbSymbolFillingColor->setColor(brush.color());
@@ -803,7 +803,7 @@ void ImageWidget::symbolBrushChanged(QBrush brush) {
 	m_initializing = false;
 }
 
-void ImageWidget::symbolPenChanged(const QPen& pen) {
+void DatapickerImageWidget::symbolPenChanged(const QPen& pen) {
 	m_initializing = true;
 	ui.cbSymbolBorderStyle->setCurrentIndex( (int) pen.style());
 	ui.kcbSymbolBorderColor->setColor( pen.color());
@@ -812,7 +812,7 @@ void ImageWidget::symbolPenChanged(const QPen& pen) {
 	m_initializing = false;
 }
 
-void ImageWidget::symbolVisibleChanged(bool on) {
+void DatapickerImageWidget::symbolVisibleChanged(bool on) {
 	m_initializing = true;
 	ui.chbSymbolVisible->setChecked(on);
 	m_initializing = false;
@@ -821,7 +821,7 @@ void ImageWidget::symbolVisibleChanged(bool on) {
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
-void ImageWidget::load() {
+void DatapickerImageWidget::load() {
 	if(m_image == NULL)
 		return;
 

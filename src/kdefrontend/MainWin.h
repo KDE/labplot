@@ -58,7 +58,7 @@ class XYFitCurveDock;
 class WorksheetDock;
 class LabelWidget;
 class ImportFileDialog;
-class ImageWidget;
+class DatapickerImageWidget;
 class DatapickerCurveWidget;
 
 class QDockWidget;
@@ -162,7 +162,7 @@ private:
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
 	CustomPointDock* customPointDock;
-    ImageWidget* datapickerImageDock;
+    DatapickerImageWidget* datapickerImageDock;
     DatapickerCurveWidget* datapickerCurveDock;
 
 	bool openXML(QIODevice*);

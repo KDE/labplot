@@ -201,8 +201,8 @@ void DatapickerImage::initSceneParameters() {
 	settings.valueThresholdLow = 30;
 	setSettings(settings);
 
-	PointsType plotPointsType = DatapickerImage::AxisPoints;
-	setPlotPointsType(plotPointsType);
+    DatapickerImage::PointsType plotPointsType = DatapickerImage::AxisPoints;
+    setPlotPointsType(plotPointsType);
 }
 
 /* =============================== getter methods for background options ================================= */
@@ -365,8 +365,6 @@ bool DatapickerImagePrivate::uploadImage(const QString& address) {
 		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Inch)/QApplication::desktop()->physicalDpiX();
 		m_scene->setSceneRect(0, 0, w, h);
 		q->isLoaded = true;
-		emit q->requestUpdate();
-		emit q->requestUpdateActions();
 	}
 	return rc;
 }
@@ -398,12 +396,6 @@ DatapickerImagePrivate::~DatapickerImagePrivate() {
 
 void DatapickerImagePrivate::updateFileName() {
 	WAIT_CURSOR;
-	QList<DatapickerPoint*> childPoints = q->parentAspect()->children<DatapickerPoint>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
-	if (childPoints.count()) {
-		foreach(DatapickerPoint* point, childPoints)
-			point->remove();
-	}
-
 	q->isLoaded = false;
 	const QString& address = fileName.trimmed();
 
@@ -417,6 +409,14 @@ void DatapickerImagePrivate::updateFileName() {
 		q->m_segments->setSegmentsVisible(false);
 	}
 
+    QList<DatapickerPoint*> childPoints = q->parentAspect()->children<DatapickerPoint>(AbstractAspect::Recursive | AbstractAspect::IncludeHidden);
+    if (childPoints.count()) {
+        foreach(DatapickerPoint* point, childPoints)
+            point->remove();
+    }
+
+    emit q->requestUpdate();
+    emit q->requestUpdateActions();
 	RESET_CURSOR;
 }
 //##############################################################################
