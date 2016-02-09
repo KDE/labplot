@@ -33,7 +33,6 @@
 #include "ui_datapickercurvewidget.h"
 #include "backend/datapicker/DatapickerCurve.h"
 
-class DatapickerPointWidget;
 
 class DatapickerCurveWidget : public QWidget {
 	Q_OBJECT
@@ -47,25 +46,48 @@ public:
 
 private:
 	Ui::DatapickerCurveWidget ui;
+    void init();
 	void initConnections();
+    void hideErrorBarWidgets(bool);
 
 	DatapickerCurve* m_curve;
 	QList<DatapickerCurve*> m_curveList;
-	DatapickerPointWidget* datapickerPointWidget;
 	bool m_initializing;
 	bool m_suppressTypeChange;
 
 private slots:
-	//SLOTs for changes triggered in AxisDock
+    //SLOTs for changes triggered in DatapickerCurveDock
 	void nameChanged();
 	void commentChanged();
-	void updateDatapickerPointList();
+    void updateSymbolWidgets();
 	void xErrorTypeChanged(int);
 	void yErrorTypeChanged(int);
+    void styleChanged(int);
+    void sizeChanged(double);
+    void rotationChanged(int);
+    void opacityChanged(int);
+    void fillingStyleChanged(int);
+    void fillingColorChanged(const QColor&);
+    void borderStyleChanged(int);
+    void borderColorChanged(const QColor&);
+    void borderWidthChanged(double);
+    void visibilityChanged(bool);
+    void errorBarFillingStyleChanged(int);
+    void errorBarFillingColorChanged(const QColor&);
+    void errorBarSizeChanged(double);
 
-	//SLOTs for changes triggered in Axis
+    //SLOTs for changes triggered in DatapickerCurve
 	void curveDescriptionChanged(const AbstractAspect*);
 	void curveErrorsChanged(DatapickerCurve::Errors);
+    void symbolStyleChanged(Symbol::Style);
+    void symbolSizeChanged(qreal);
+    void symbolRotationAngleChanged(qreal);
+    void symbolOpacityChanged(qreal);
+    void symbolBrushChanged(QBrush);
+    void symbolPenChanged(const QPen&);
+    void symbolVisibleChanged(bool);
+    void symbolErrorBarSizeChanged(qreal);
+    void symbolErrorBarBrushChanged(QBrush);
 };
 
 #endif // DATAPICKERCURVEWIDGET_H

@@ -34,58 +34,42 @@ class DatapickerPointPrivate: public QGraphicsItem {
 public:
 	explicit DatapickerPointPrivate(DatapickerPoint*);
 
-	float scaleFactor;
-
-	QPointF plusDeltaXPos;
-	QPointF minusDeltaXPos;
-	QPointF plusDeltaYPos;
-	QPointF minusDeltaYPos;
-
-	DatapickerPoint::PositionWrapper position;
-
 	QString name() const;
 	void retransform();
-	bool swapVisible(bool on);
 	virtual void recalcShapeAndBoundingRect();
-	void updatePosition();
 	void updateData();
+    void updatePropeties();
 	void retransformErrorBar();
 
-	bool suppressItemChangeEvent;
-	bool suppressRetransform;
-	bool m_printing;
-	bool m_hovered;
-	bool m_suppressHoverEvents;
-
+    bool m_printing;
 	qreal rotationAngle;
+    QPointF position;
 	QRectF boundingRectangle;
 	QRectF transformedBoundingRectangle;
-	DatapickerPoint::PointsStyle pointStyle;
+    Symbol::Style pointStyle;
 	QBrush brush;
 	QPen pen;
 	qreal opacity;
 	qreal size;
 	QPainterPath itemShape;
 
+    QPointF plusDeltaXPos;
+    QPointF minusDeltaXPos;
+    QPointF plusDeltaYPos;
+    QPointF minusDeltaYPos;
 	QBrush errorBarBrush;
 	QPen errorBarPen;
 	qreal errorBarSize;
-	bool xSymmetricError;
-	bool ySymmetricError;
 
 	//reimplemented from QGraphicsItem
 	virtual QRectF boundingRect() const;
 	virtual QPainterPath shape() const;
 	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
-	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 	DatapickerPoint* const q;
 
 private:
 	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
-	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
-	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
-	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
 };
 
 #endif

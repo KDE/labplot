@@ -189,7 +189,7 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
 						bool positionUsed = false;
 						const QList<DatapickerPoint*> curvePointsList = datapicker->activeCurve()->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
 						foreach (DatapickerPoint* point, curvePointsList) {
-							if ( point->position().point == QPoint(line->x1(), i)*scaleFactor )
+                            if ( point->position() == QPoint(line->x1(), i)*scaleFactor )
 								positionUsed = true;
 						}
 

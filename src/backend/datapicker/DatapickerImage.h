@@ -32,8 +32,12 @@
 #include "backend/core/AbstractPart.h"
 #include "backend/core/AbstractScriptingEngine.h"
 #include "backend/lib/macros.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
+
 #include <QImage>
 #include <QVector3D>
+#include <QPen>
+#include <QBrush>
 
 class DatapickerImagePrivate;
 class ImageEditor;
@@ -62,7 +66,6 @@ public:
 	};
 
 	struct EditorSettings {
-		ColorAttributes type;
 		int intensityThresholdLow;
 		int intensityThresholdHigh;
 		int foregroundThresholdLow;
@@ -95,6 +98,13 @@ public:
 	bool isLoaded;
 	QImage originalPlotImage;
 	QImage processedPlotImage;
+	QColor background;
+	int *foregroundBins;
+	int *hueBins;
+	int *saturationBins;
+	int *valueBins;
+	int *intensityBins;
+
 	QGraphicsPixmapItem* m_magnificationWindow;
 
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
@@ -105,6 +115,14 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, pointSeparation, PointSeparation)
 	BASIC_D_ACCESSOR_DECL(int, minSegmentLength, minSegmentLength)
 
+	BASIC_D_ACCESSOR_DECL(Symbol::Style, pointStyle, PointStyle)
+	BASIC_D_ACCESSOR_DECL(qreal, pointOpacity, PointOpacity)
+	BASIC_D_ACCESSOR_DECL(qreal, pointRotationAngle, PointRotationAngle)
+	BASIC_D_ACCESSOR_DECL(qreal, pointSize, PointSize)
+	CLASS_D_ACCESSOR_DECL(QBrush, pointBrush, PointBrush)
+	CLASS_D_ACCESSOR_DECL(QPen, pointPen, PointPen)
+	BASIC_D_ACCESSOR_DECL(bool, pointVisibility, PointVisibility)
+
 	typedef DatapickerImagePrivate Private;
 
 private:
@@ -114,7 +132,6 @@ private:
 	DatapickerImagePrivate* const d;
 	friend class DatapickerImagePrivate;
 	Segments* m_segments;
-	ImageEditor* m_editor;
 
 signals:
 	void requestProjectContextMenu(QMenu*);
@@ -126,10 +143,25 @@ signals:
 	void axisPointsChanged(const DatapickerImage::ReferencePoints&);
 	void settingsChanged(const DatapickerImage::EditorSettings&);
 	void minSegmentLengthChanged(const int);
+	void pointStyleChanged(Symbol::Style);
+	void pointSizeChanged(qreal);
+	void pointRotationAngleChanged(qreal);
+	void pointOpacityChanged(qreal);
+	void pointBrushChanged(QBrush);
+	void pointPenChanged(const QPen&);
+	void pointVisibilityChanged(bool);
+
 	friend class DatapickerImageSetFileNameCmd;
 	friend class DatapickerImageSetRotationAngleCmd;
 	friend class DatapickerImageSetAxisPointsCmd;
 	friend class DatapickerImageSetSettingsCmd;
 	friend class DatapickerImageSetMinSegmentLengthCmd;
+	friend class DatapickerImageSetPointStyleCmd;
+	friend class DatapickerImageSetPointSizeCmd;
+	friend class DatapickerImageSetPointRotationAngleCmd;
+	friend class DatapickerImageSetPointOpacityCmd;
+	friend class DatapickerImageSetPointBrushCmd;
+	friend class DatapickerImageSetPointPenCmd;
+	friend class DatapickerImageSetPointVisibilityCmd;
 };
 #endif

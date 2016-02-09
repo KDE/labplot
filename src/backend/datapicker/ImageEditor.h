@@ -33,32 +33,29 @@
 #include <backend/datapicker/DatapickerImage.h>
 
 class ImageEditor {
-	public:
-		void discretize(QImage*, QImage*, DatapickerImage::EditorSettings);
-		static bool processedPixelIsOn(const QImage&, int, int);
+public:
+	static void discretize(QImage*, QImage*, DatapickerImage::EditorSettings, QColor);
+	static bool processedPixelIsOn(const QImage&, int, int);
+	static QRgb findBackgroundColor(const QImage*);
+	static int colorAttributeMax(DatapickerImage::ColorAttributes);
+	static void uploadHistogram(int*, QImage*, QColor, DatapickerImage::ColorAttributes);
+	static int discretizeValueForeground(int, int, DatapickerImage::ColorAttributes, const QColor, const QImage*);
+	static bool pixelIsOn(int, DatapickerImage::ColorAttributes, DatapickerImage::EditorSettings);
 
-	private:
-		int colorAttributeMax(DatapickerImage::ColorAttributes) const;
+	static int discretizeHue(int, int, const QImage*);
+	static int discretizeSaturation(int, int, const QImage*);
+	static int discretizeValue(int, int, const QImage*);
+	static int discretizeIntensity(int, int, const QImage*);
+	static int discretizeForeground(int, int, const QColor, const QImage*);
 
-		QRgb backgroundColor(const QImage*);
+private:
+	static bool colorCompare(QRgb color1, QRgb color2);
+	static bool pixelIsOn(int, int, int);
 
-		bool colorCompare(QRgb color1, QRgb color2) const;
-
-		int discretizeValueNotForeground(int, int, DatapickerImage::ColorAttributes) const;
-		int discretizeValueForeground(int, int, int, int, int) const;
-
-		bool pixelIsOn(int, DatapickerImage::EditorSettings) const;
-
-		struct ColorEntry {
-			QColor color;
-			int count;
-		};
-
-		typedef QList<ColorEntry> ColorList;
-
-		QImage* m_originalImage;
-		bool pixelIsOn(int, int, int) const;
+	struct ColorEntry {
+		QColor color;
+		int count;
+	};
+	typedef QList<ColorEntry> ColorList;
 };
-
-
 #endif // IMAGEEDITOR_H

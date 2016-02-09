@@ -72,13 +72,14 @@ private:
 	DatapickerCurve* m_activeCurve;
 	Transform* m_transform;
 	DatapickerImage* m_image;
-	void init();
+    void init();
+    void handleChildAspectAboutToBeRemoved(const AbstractAspect*);
+    void handleChildAspectAdded(const AbstractAspect*);
 
 private slots:
 	virtual void childDeselected(const AbstractAspect*);
-	void handleChildAspectAboutToBeRemoved(const AbstractAspect*);
-	void handleChildAspectAdded(const AbstractAspect*);
-	void handleAspectAboutToBeRemoved(const AbstractAspect*);
+    void handleAspectAdded(const AbstractAspect*);
+    void handleAspectAboutToBeRemoved(const AbstractAspect*);
 
 signals:
 	void datapickerItemSelected(int);

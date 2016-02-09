@@ -196,13 +196,12 @@ void DatapickerImageView::initMenus() {
 	m_viewMouseModeMenu->addAction(zoomSelectionModeAction);
 	m_viewMouseModeMenu->addAction(selectAndMoveModeAction);
 
-	m_viewImageMenu = new QMenu(i18n("Image Menu"));
-	//m_viewImageMenu->setIcon();
+	m_viewImageMenu = new QMenu(i18n("Data Entry Mode"));
 	m_viewImageMenu->addAction(setAxisPointsAction);
 	m_viewImageMenu->addAction(setCurvePointsAction);
 	m_viewImageMenu->addAction(selectSegmentAction);
 
-	m_zoomMenu = new QMenu(i18n("Zoom"));
+	m_zoomMenu = new QMenu(i18n("Zoom View"));
 	m_zoomMenu->setIcon(KIcon("zoom-draw"));
 	m_zoomMenu->addAction(zoomInViewAction);
 	m_zoomMenu->addAction(zoomOutViewAction);
@@ -210,15 +209,13 @@ void DatapickerImageView::initMenus() {
 	m_zoomMenu->addAction(zoomFitPageHeightAction);
 	m_zoomMenu->addAction(zoomFitPageWidthAction);
 
-	m_navigationMenu = new QMenu(i18n("Navigate Selected Items"));
-	//m_navigationMenu->setIcon();
+	m_navigationMenu = new QMenu(i18n("Move Last Point"));
 	m_navigationMenu->addAction(shiftLeftAction);
 	m_navigationMenu->addAction(shiftRightAction);
 	m_navigationMenu->addAction(shiftUpAction);
 	m_navigationMenu->addAction(shiftDownAction);
 
 	m_magnificationMenu = new QMenu(i18n("Magnification"));
-	//m_viewImageMenu->setIcon();
 	m_magnificationMenu->addAction(noMagnificationAction);
 	m_magnificationMenu->addAction(twoTimesMagnificationAction);
 	m_magnificationMenu->addAction(threeTimesMagnificationAction);
@@ -243,15 +240,15 @@ void DatapickerImageView::createContextMenu(QMenu* menu) const {
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
 
-	menu->insertMenu(firstAction, m_viewMouseModeMenu);
-	menu->insertMenu(firstAction, m_zoomMenu);
-	menu->insertMenu(firstAction, m_magnificationMenu);
-	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_viewImageMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, addCurveAction);
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_navigationMenu);
+	menu->insertSeparator(firstAction);
+	menu->insertMenu(firstAction, m_viewMouseModeMenu);
+	menu->insertMenu(firstAction, m_zoomMenu);
+	menu->insertMenu(firstAction, m_magnificationMenu);
 	menu->insertSeparator(firstAction);
 }
 
@@ -571,14 +568,14 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 		if (!point->graphicsItem()->isSelected())
 			continue;
 
-		DatapickerPoint::PositionWrapper newPos = point->position();
-		newPos.point = newPos.point + shift;
+        QPointF newPos = point->position();
+        newPos = newPos + shift;
 		point->setPosition(newPos);
 
 		int pointIndex = m_image->indexOfChild<DatapickerPoint>(point , AbstractAspect::IncludeHidden);
 		DatapickerImage::ReferencePoints points = m_image->axisPoints();
-		points.scenePos[pointIndex].setX(point->position().point.x());
-		points.scenePos[pointIndex].setY(point->position().point.y());
+        points.scenePos[pointIndex].setX(point->position().x());
+        points.scenePos[pointIndex].setY(point->position().y());
 		m_image->setUndoAware(false);
 		m_image->setAxisPoints(points);
 		m_image->setUndoAware(true);
@@ -589,8 +586,8 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 			if (!point->graphicsItem()->isSelected())
 				continue;
 
-			DatapickerPoint::PositionWrapper newPos = point->position();
-			newPos.point = newPos.point + shift;
+            QPointF newPos = point->position();
+            newPos = newPos + shift;
 			point->setPosition(newPos);
 		}
 	}

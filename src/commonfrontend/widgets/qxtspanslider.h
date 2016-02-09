@@ -53,6 +53,7 @@ signals:
     void spanChanged(int lower, int upper);
     void lowerValueChanged(int lower);
     void upperValueChanged(int upper);
+    void spanSliderMoved(int lower, int upper);
 
 protected:
     virtual void keyPressEvent(QKeyEvent* event);

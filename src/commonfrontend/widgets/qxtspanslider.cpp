@@ -465,6 +465,8 @@ void QxtSpanSlider::mousePressEvent(QMouseEvent* event)
  */
 void QxtSpanSlider::mouseMoveEvent(QMouseEvent* event)
 {
+    emit spanSliderMoved(qxt_d().lower, qxt_d().upper);
+
     if (qxt_d().lowerPressed != QStyle::SC_SliderHandle && qxt_d().upperPressed != QStyle::SC_SliderHandle)
     {
         event->ignore();
