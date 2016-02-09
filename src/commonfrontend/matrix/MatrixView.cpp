@@ -730,7 +730,6 @@ void MatrixView::clearSelectedCells() {
 }
 
 
-QMutex mutex;
 class UpdateImageTask : public QRunnable {
 	public:
 		UpdateImageTask(int start, int end, QImage image, QVector<QVector<double> > matrixData, double scaleFactor, double min) : m_image(image), m_matrixData(matrixData) {
@@ -753,6 +752,7 @@ class UpdateImageTask : public QRunnable {
 		}
 
 	private:
+		QMutex mutex;
 		int m_start;
 		int m_end;
 		QImage& m_image;
