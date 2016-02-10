@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : widget for datapicker properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2016 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -42,6 +42,7 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QGraphicsScene>
+#include <QImageReader>
 
 HistogramView::HistogramView(QWidget* parent, int range) :
 	QGraphicsView(parent),
@@ -380,7 +381,12 @@ void DatapickerImageWidget::commentChanged() {
 void DatapickerImageWidget::selectFile() {
     KConfigGroup conf(KSharedConfig::openConfig(), "DatapickerImageWidget");
 	QString dir = conf.readEntry("LastImageDir", "");
-	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
+	QString formats;
+	foreach(QByteArray format, QImageReader::supportedImageFormats()) {
+		QString f = "*." + QString(format.constData());
+		formats.isEmpty() ? formats+=f : formats+=" "+f;
+	}
+	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)").arg(formats));
 	if (path.isEmpty())
 		return; //cancel was clicked in the file-dialog
 
