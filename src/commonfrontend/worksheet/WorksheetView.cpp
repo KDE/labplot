@@ -352,7 +352,7 @@ void WorksheetView::initMenus(){
 	m_zoomMenu->addAction(zoomFitSelectionAction);
 
 	m_magnificationMenu = new QMenu(i18n("Magnification"));
-	m_zoomMenu->setIcon(KIcon("no-zoom"));
+	m_magnificationMenu->setIcon(KIcon("labplot-zoom"));
 	m_magnificationMenu->addAction(noMagnificationAction);
 	m_magnificationMenu->addAction(twoTimesMagnificationAction);
 	m_magnificationMenu->addAction(threeTimesMagnificationAction);
@@ -797,15 +797,15 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 
 		//copy the part of the view to be shown magnified
 		QPointF pos = mapToScene(event->pos());
-		int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
-		QRectF copyRect(pos.x() - size/2, pos.y() - size/2, size, size);
+		const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
+		const QRectF copyRect(pos.x() - size/2, pos.y() - size/2, size, size);
 		QPixmap px = QPixmap::grabWidget(this, mapFromScene(copyRect).boundingRect());
 		px = px.scaled(size*magnificationFactor, size*magnificationFactor, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 		px = px.copy(px.width()/2 - size/2, px.height()/2 - size/2, size, size);
 
 		//draw the bounding rect
 		QPainter painter(&px);
-		QPen pen = QPen(Qt::lightGray, 2/transform().m11());
+		const QPen pen = QPen(Qt::lightGray, 2/transform().m11());
 		painter.setPen(pen);
 		QRect rect = px.rect();
 		rect.setWidth(rect.width()-pen.widthF()/2);
