@@ -279,19 +279,15 @@ void WorksheetView::initActions(){
 
 	connect(cartesianPlotMouseModeActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotMouseModeChanged(QAction*)));
 
-	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("xy-curve"), this);
-	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
-	addFitCurveAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
+	QActionGroup* cartesianPlotAddNewActionGroup = new QActionGroup(this);
+	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);
+	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), cartesianPlotAddNewActionGroup);
+	addFitCurveAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), cartesianPlotAddNewActionGroup);
 	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
-	addHorizontalAxisAction = new KAction(KIcon("labplot-axis-horizontal"), i18n("horizontal axis"), this);
-	addVerticalAxisAction = new KAction(KIcon("labplot-axis-vertical"), i18n("vertical axis"), this);
-
-	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
-	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
-	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
-	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
-	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
-	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
+	addHorizontalAxisAction = new KAction(KIcon("labplot-axis-horizontal"), i18n("horizontal axis"), cartesianPlotAddNewActionGroup);
+	addVerticalAxisAction = new KAction(KIcon("labplot-axis-vertical"), i18n("vertical axis"), cartesianPlotAddNewActionGroup);
+	addCustomPointAction = new KAction(KIcon("draw-cross"), i18n("custom point"), cartesianPlotAddNewActionGroup);
+	connect(cartesianPlotAddNewActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotAddNew(QAction*)));
 
 	QActionGroup* cartesianPlotNavigationGroup = new QActionGroup(this);
 	scaleAutoAction = new KAction(KIcon("labplot-auto-scale-all"), i18n("auto scale"), cartesianPlotNavigationGroup);
@@ -399,6 +395,8 @@ void WorksheetView::initMenus(){
 	m_cartesianPlotAddNewMenu->addSeparator();
 	m_cartesianPlotAddNewMenu->addAction(addHorizontalAxisAction);
 	m_cartesianPlotAddNewMenu->addAction(addVerticalAxisAction);
+	m_cartesianPlotAddNewMenu->addSeparator();
+	m_cartesianPlotAddNewMenu->addAction(addCustomPointAction);
 
 	m_cartesianPlotZoomMenu = new QMenu(i18n("Zoom/Navigate"));
 	m_cartesianPlotZoomMenu->setIcon(KIcon("zoom-draw"));
@@ -1440,82 +1438,33 @@ void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
 	}
 }
 
-void WorksheetView::addCurve() {
+void WorksheetView::cartesianPlotAddNew(QAction* action) {
 	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
 		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
 			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-				plot->addCurve();
+				this->cartesinaPlotAdd(plot, action);
 		}
 	} else {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-			plot->addCurve();
-		}
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() )
+			this->cartesinaPlotAdd(plot, action);
 	}
 }
 
-void WorksheetView::addEquationCurve() {
-	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-				plot->addEquationCurve();
-		}
-	} else {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-			plot->addEquationCurve();
-		}
-	}
-}
-
-void WorksheetView::addFitCurve() {
-	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-				plot->addFitCurve();
-		}
-	} else {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-			plot->addFitCurve();
-		}
-	}
-}
-
-void WorksheetView::addLegend() {
-	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-				plot->addLegend();
-		}
-	} else {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-			plot->addLegend();
-		}
-	}
-}
-
-void WorksheetView::addHorizontalAxis() {
-	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-				plot->addHorizontalAxis();
-		}
-	} else {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-			plot->addHorizontalAxis();
-		}
-	}
-}
-
-void WorksheetView::addVerticalAxis() {
-	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-				plot->addVerticalAxis();
-		}
-	} else {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
-			plot->addVerticalAxis();
-		}
-	}
+void WorksheetView::cartesinaPlotAdd(CartesianPlot* plot, QAction* action) {
+	if (action==addCurveAction)
+		plot->addCurve();
+	else if (action==addEquationCurveAction)
+		plot->addEquationCurve();
+	else if (action==addFitCurveAction)
+		plot->addFitCurve();
+	else if (action==addLegendAction)
+		plot->addLegend();
+	else if (action==addHorizontalAxisAction)
+		plot->addHorizontalAxis();
+	else if (action==addVerticalAxisAction)
+		plot->addVerticalAxis();
+	else if (action==addCustomPointAction)
+		plot->addCustomPoint();
 }
 
 void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {

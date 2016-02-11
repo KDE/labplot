@@ -86,7 +86,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Plot</string>
+          <string>Plot:</string>
          </property>
         </widget>
        </item>
@@ -188,7 +188,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Ref. Points</string>
+          <string>Ref. Points:</string>
          </property>
         </widget>
        </item>

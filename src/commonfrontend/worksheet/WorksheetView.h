@@ -73,6 +73,7 @@ class WorksheetView : public QGraphicsView {
 	void drawForeground(QPainter*, const QRectF&);
 	void drawBackground(QPainter*, const QRectF&);
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
+	void cartesinaPlotAdd(CartesianPlot*, QAction*);
 
 	//events
 	void resizeEvent(QResizeEvent*);
@@ -173,6 +174,7 @@ class WorksheetView : public QGraphicsView {
 	QAction* addHorizontalAxisAction;
 	QAction* addVerticalAxisAction;
 	QAction* addLegendAction;
+	QAction* addCustomPointAction;
 
 	QAction* scaleAutoXAction;
 	QAction* scaleAutoYAction;
@@ -221,13 +223,8 @@ class WorksheetView : public QGraphicsView {
 	void cartesianPlotActionModeChanged(QAction*);
 	void cartesianPlotMouseModeChanged(QAction*);
 	void cartesianPlotNavigationChanged(QAction*);
+	void cartesianPlotAddNew(QAction*);
 	void handleCartesianPlotActions();
-	void addCurve();
-	void addEquationCurve();
-	void addFitCurve();
-	void addLegend();
-	void addHorizontalAxis();
-	void addVerticalAxis();
 
   signals:
 	void statusInfo(const QString&);
