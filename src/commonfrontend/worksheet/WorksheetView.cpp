@@ -1442,15 +1442,15 @@ void WorksheetView::cartesianPlotAddNew(QAction* action) {
 	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
 		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
 			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
-				this->cartesinaPlotAdd(plot, action);
+				this->cartesianPlotAdd(plot, action);
 		}
 	} else {
 		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() )
-			this->cartesinaPlotAdd(plot, action);
+			this->cartesianPlotAdd(plot, action);
 	}
 }
 
-void WorksheetView::cartesinaPlotAdd(CartesianPlot* plot, QAction* action) {
+void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 	if (action==addCurveAction)
 		plot->addCurve();
 	else if (action==addEquationCurveAction)

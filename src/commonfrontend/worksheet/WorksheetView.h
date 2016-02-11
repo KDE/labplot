@@ -73,7 +73,7 @@ class WorksheetView : public QGraphicsView {
 	void drawForeground(QPainter*, const QRectF&);
 	void drawBackground(QPainter*, const QRectF&);
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
-	void cartesinaPlotAdd(CartesianPlot*, QAction*);
+	void cartesianPlotAdd(CartesianPlot*, QAction*);
 
 	//events
 	void resizeEvent(QResizeEvent*);
