@@ -58,7 +58,7 @@
  */
 
 ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource) : KDialog(parent), m_mainWin(parent),
-	cbPosition(0), m_optionsShown(false), m_newDataContainerMenu(0) {
+	cbPosition(0), m_showOptions(false), m_newDataContainerMenu(0) {
 
 	QWidget* mainWidget = new QWidget(this);
 	vLayout = new QVBoxLayout(mainWidget);
@@ -79,13 +79,9 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource) : KDial
 	}
 
 	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
-	m_optionsShown = conf.readEntry("ShowOptions", false);
-	if (m_optionsShown){
-		setButtonText(KDialog::User1,i18n("Hide Options"));
-	} else {
-		setButtonText(KDialog::User1,i18n("Show Options"));
-	}
-	importFileWidget->showOptions(m_optionsShown);
+	m_showOptions = conf.readEntry("ShowOptions", false);
+	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
+	importFileWidget->showOptions(m_showOptions);
 
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 	connect(importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
@@ -97,7 +93,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource) : KDial
 
 ImportFileDialog::~ImportFileDialog(){
 	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
-	conf.writeEntry("ShowOptions", m_optionsShown);
+	conf.writeEntry("ShowOptions", m_showOptions);
 	if (cbPosition)
 		conf.writeEntry("Position", cbPosition->currentIndex());
 }
@@ -291,13 +287,9 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 }
 
 void ImportFileDialog::toggleOptions(){
-	importFileWidget->showOptions(!m_optionsShown);
-	m_optionsShown = !m_optionsShown;
-
-	if (m_optionsShown)
-		setButtonText(KDialog::User1,i18n("Hide Options"));
-	else
-		setButtonText(KDialog::User1,i18n("Show Options"));
+	importFileWidget->showOptions(!m_showOptions);
+	m_showOptions = !m_showOptions;
+	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
 
 	//resize the dialog
 	mainWidget()->resize(layout()->minimumSize());

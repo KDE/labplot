@@ -1554,7 +1554,7 @@ void MainWin::exportDialog(){
 			view->exportToFile(path, format, area, background, resolution);
 			RESET_CURSOR;
 		}
-
+		delete dlg;
 		return;
 	}
 
@@ -1573,7 +1573,7 @@ void MainWin::exportDialog(){
 			view->exportToFile(path, exportHeader, separator);
 			RESET_CURSOR;
 		}
-
+		delete dlg;
 		return;
 	}
 
@@ -1591,7 +1591,7 @@ void MainWin::exportDialog(){
 			view->exportToFile(path, separator);
 			RESET_CURSOR;
 		}
-
+		delete dlg;
 		return;
 	}
 }

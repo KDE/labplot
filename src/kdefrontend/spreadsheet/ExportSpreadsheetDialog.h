@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : export spreadsheet dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -31,30 +31,32 @@
 
 #include <KDialog>
 #include "ui_exportspreadsheetwidget.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
-class ExportSpreadsheetDialog: public KDialog{
-  Q_OBJECT
+class ExportSpreadsheetDialog: public KDialog {
+	Q_OBJECT
 
-  public:
-	explicit ExportSpreadsheetDialog(QWidget*);
-	QString path() const;
-	void setFileName(const QString&);
-	void setMatrixMode(bool);
-	bool exportHeader() const;
-	QString separator() const;
+	public:
+		explicit ExportSpreadsheetDialog(QWidget*);
+		virtual ~ExportSpreadsheetDialog();
 
-  private:
-	QWidget* mainWidget;
-	Ui::ExportSpreadsheetWidget ui;
+		QString path() const;
+		void setFileName(const QString&);
+		void setMatrixMode(bool);
+		bool exportHeader() const;
+		QString separator() const;
 
-  private slots:
-	void slotButtonClicked(int);
-	void okClicked();
-	void toggleOptions();
-	void selectFile();
-	void formatChanged(int);
-	void fileNameChanged(const QString&);
+	private:
+		QWidget* mainWidget;
+		Ui::ExportSpreadsheetWidget ui;
+		bool m_showOptions;
+
+	private slots:
+		void slotButtonClicked(int);
+		void okClicked();
+		void toggleOptions();
+		void selectFile();
+		void formatChanged(int);
+		void fileNameChanged(const QString&);
 };
 
 #endif
