@@ -411,9 +411,8 @@ void DatapickerImageWidget::fileNameChanged() {
 	handleWidgetActions();
 
 	QString fileName = ui.kleFileName->text();
-	foreach(DatapickerImage* image, m_imagesList) {
+	foreach(DatapickerImage* image, m_imagesList)
 		image->setFileName(fileName);
-	}
 }
 
 void DatapickerImageWidget::graphTypeChanged() {
