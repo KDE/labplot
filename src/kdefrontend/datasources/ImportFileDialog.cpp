@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import file data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -40,13 +40,12 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/MainWin.h"
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <KInputDialog>
 #include <QProgressBar>
 #include <QStatusBar>
 #include <QDir>
 #include <QInputDialog>
-#include <QToolButton>
 #include <KMenu>
 
 
@@ -78,24 +77,28 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource) : KDial
 		importFileWidget->hideDataSource();
 	}
 
-	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
-	m_showOptions = conf.readEntry("ShowOptions", false);
-	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
-	importFileWidget->showOptions(m_showOptions);
-
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 	connect(importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
 
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
 	setWindowIcon(KIcon("document-import-database"));
-	resize( QSize(500,0).expandedTo(minimumSize()) );
+
+	//restore saved settings
+	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
+	m_showOptions = conf.readEntry("ShowOptions", false);
+	m_showOptions ? setButtonText(KDialog::User1, i18n("Hide Options")) : setButtonText(KDialog::User1, i18n("Show Options"));
+	importFileWidget->showOptions(m_showOptions);
+	restoreDialogSize(conf);
 }
 
-ImportFileDialog::~ImportFileDialog(){
+ImportFileDialog::~ImportFileDialog() {
+	//save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
 	conf.writeEntry("ShowOptions", m_showOptions);
 	if (cbPosition)
 		conf.writeEntry("Position", cbPosition->currentIndex());
+
+	saveDialogSize(conf);
 }
 
 /*!
