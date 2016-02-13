@@ -44,7 +44,6 @@
 #include "backend/lib/commandtemplates.h"
 #include <math.h>
 
-#include <QDebug>
 #include <QMenu>
 #include <QToolBar>
 #include <QPainter>
@@ -348,7 +347,7 @@ void CartesianPlot::initActions(){
 	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
 	addHorizontalAxisAction = new KAction(KIcon("labplot-axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new KAction(KIcon("labplot-axis-vertical"), i18n("vertical axis"), this);
-	addCustomPointAction = new KAction(KIcon("labplot-custom-point"), i18n("custom point"), this);
+	addCustomPointAction = new KAction(KIcon("draw-cross"), i18n("custom point"), this);
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
