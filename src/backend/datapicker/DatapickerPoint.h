@@ -35,7 +35,6 @@
 #include "backend/lib/macros.h"
 #include "backend/datapicker/DatapickerCurve.h"
 #include <QGraphicsItem>
-#include <QPen>
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
 class DatapickerPoint;
