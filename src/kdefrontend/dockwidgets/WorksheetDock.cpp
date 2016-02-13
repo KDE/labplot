@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for worksheet properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2016 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -33,6 +33,7 @@
 
 #include <QPrinter>
 #include <QFileDialog>
+#include <QImageReader>
 #include <KUrlCompletion>
 
 #include <math.h>
@@ -638,7 +639,14 @@ void WorksheetDock::layoutColumnCountChanged(int count){
 void WorksheetDock::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "WorksheetDock");
 	QString dir = conf.readEntry("LastImageDir", "");
-    QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
+
+	QString formats;
+	foreach(QByteArray format, QImageReader::supportedImageFormats()) {
+		QString f = "*." + QString(format.constData());
+		formats.isEmpty() ? formats+=f : formats+=" "+f;
+	}
+
+	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)").arg(formats));
     if (path.isEmpty())
         return; //cancel was clicked in the file-dialog
 
