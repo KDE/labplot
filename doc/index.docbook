@@ -90,8 +90,7 @@ Features:
 <listitem><para>Definition of mathematical formulas is supported by syntax-highlighting and completion and by the list of thematicaly grouped mathematical and physical constants and functions</para></listitem>
 <listitem><para>Analysis of plotted data is supported by many zooming and navigation features</para></listitem>
 <listitem><para>Linear and non-linear fits to data, several fit-models are predefined and custom models with arbitrary number of parameters can be provided</para></listitem>
-<listitem><para>Datapicker for manual or fast automatic curve digitization mode of an image file showing a graph.</para></listitem>
-<listitem><para>Datapicker supports errorbar, zooming functions, and any type of coordinate system (Cartesian, Logarithmic, Polar).</para></listitem>
+<listitem><para>Datapicker for manual or (semi-)automatic data extraction from imported images containing plots and curves.</para></listitem>
 </itemizedlist>
 </para>
 
@@ -183,14 +182,15 @@ Every column of the spreadsheet is specified by its name and the type - numeric,
 Also, for each type different representation formats can be assigned like decimal or scientific format for numeric columns etc.
 </para>
 <para>
-You can mask certain data points in the spreadsheet (<menuchoice><guimenu>Selection</guimenu><guimenuitem>Mask Selection</guimenuitem></menuchoice> from the spreadsheet cell context menu).
+You can mask selected data points in the spreadsheet (<menuchoice><guimenu>Selection</guimenu><guimenuitem>Mask Selection</guimenuitem></menuchoice> from the spreadsheet cell context menu).
 Masked data is not plotted and is also excluded from data analysis functions like fitting etc.
-<!-- The masking of datapoints can be later influenced in the graph list dialog. -->
+Alternatively, you can mask or drop values in a column (<menuchoice><guimenu>Mask Values</guimenu></menuchoice> or <menuchoice><guimenu>Drop Values</guimenu></menuchoice> from the column context menu) by specifying a range.
+When specifying which values to mask or to drop, several operators (“equal to”, “greater then”, “lesser then”, etc.) are available.
+These operations can help to hide or to remove some outliers in the data set prior to, e.g., performing a fit to this data set.
 </para>
 <para>
 Any spreadsheet function can be reached via the context menu (&RMB; click).
 You can cut, copy and paste between spreadsheets, generate, normalize and sort data and finally make plots out of your data.
-Of course you can also <link linkend="exportdialog">export</link> the data in the spreadsheet to an external file.
 </para>
 
 <screenshot><mediaobject><imageobject>
@@ -243,8 +243,10 @@ against a distribution which is similar and known analytically.
 <para>
 Function values (for numeric columns only) - values are generated according to a mathematical function provided by the user, 
 a column (data set) containing the function arguments has to be provided.
+It is possible to define a multivariant function and to provide a data set (a column in a spreadsheet) for each of the variables.
+The corresponding dialog supports the creation of arbitrary number of variables.
 <screenshot><mediaobject><imageobject>
-      <imagedata fileref="spreadsheet_generate_function_values.png" format="PNG"/>
+      <imagedata fileref="spreadsheet_generate_multivariant_function_values.png" format="PNG"/>
 </imageobject></mediaobject></screenshot>
 </para>
 </listitem>
@@ -253,19 +255,62 @@ a column (data set) containing the function arguments has to be provided.
 
 </para>
 
+
 <para>
 Already existing data can be imported into a spreadsheet from external files via the <link linkend="importdialog">"Import Data" dialog</link>.
 Imported data will be stored in the project file. Changes on data, performed either in the spreadsheet or in the external file after the import, are not synchronized anymore.
 </para>
 
+<para>
+The data in the spreadsheet can be exported to an external file (see <link linkend="exportdialog">Export Dialog</link>).
+</para>
 </sect1>
 
+<sect1 id="matrix">
+<title>Matrix</title>
+<para>
+Matrix is another containter for matrix-like data. This container is presented like a table or, alternatively, as a two-dimensional greyscale image.
+The elements of such a table/matrix can be thought as being the Z-values, Z=Z(X,Y), with X and Y values being the row and column numbers, respectively.
+The transition from the row and column numbers to the logical coordinates is done via an explicit user-defined mapping of both representations.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="matrix.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+The matrix data can either be entered manually or via an import from an external file.
+Similar to the data generation for a column in a spreadsheet, the matrix can be filled with constant values or via a formula, too.
+The screenshot below shows the image view of a matrix together with the formula that was used to generate the matrix elements:
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="matrix_function_values.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+</sect1>
+
+
+<sect1 id="workbook">
+<title>Workbook</title>
+<para>
+Workbook helps the user to better organize and to group different data containers (Spreadsheet and Matrix).
+This object serves as the parent container for multiple Spreadsheet- and/or Matrix-objects and puts them together in a view with multiple tabs:
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="workbook.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+<para>
+With folders it is already possible to bring some structure in the <link linkend="project-explorer">Project Explorer</link> and to group together several related objects
+(spreadsheets with data stemming from text files of similar origin, red, green and blue values of an image imported into three different matrices, etc.).
+With Workbook the user has the possibility for another additional grouping.
+</para>
+
+</sect1>
 
 
 <sect1 id="worksheet">
 <title>Worksheet</title>
 <para>
-The worksheet is, besides the <link linkend="spreadsheet">spreadsheet</link>, the second central part of the application and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels etc.
+The worksheet is, besides the data containters <link linkend="spreadsheet">Spreadsheet</link> and <link linkend="matrix">Matrix</link>, another central part of the application and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels etc.
 </para>
 <para>
 Worksheets can either have a fixed size (a user defined size or one of the predefined sizes like A4, Letter etc.) or they can fill out the complete available area for the worksheet window. Multiple plots can be arranged on the worksheet in a vertical, horizontal or grid layouts.
@@ -311,42 +356,27 @@ The additional options determining the import of the data are equivalent to thos
 </para>
 </sect1>
 
-<sect1 id="datapicker">
-<title>Datapicker</title>
-<para>
-The datapicker provides an area for showing an input image file of a graph and spreadsheet. Datapicker is use to trace curve over an input graphs and 
-converts them into numbers.
-</para>
-<para>
-Datapickers support any type of coordinate system (Cartesian, Logarithmic, Polar) and can either have a fixed size (a user defined size or one of the predefined sizes like A4, Letter etc.) or they can fill out the complete available area for the datapicker window. Multiple curve can be arranged on the datapicker with different kinds of error-bars.
-</para>
-<para>
-Many properties of the datapicker like type of coordinate system, error-bars, size, style and shape of points, and settings for image-editor can be 
-changed in the "Datapicker properties" panel.
-</para>
-
-<para>
-<screenshot><mediaobject><imageobject>
-      <imagedata fileref="datapicker.png" format="PNG"/>
-</imageobject></mediaobject></screenshot>
-</para>
-
-<para>
-Different datapicker actions dealing with the creation of new curve, changing of the current mouse mode, navigation of points or zooming can be 
-accessed via the toolbar, main menu or the context menu of the datapicker in the <link linkend="project-explorer">project explorer</link>.
-</para>
-
-<para>
-  The output results of datapicker shown on <link linkend="spreadsheet">spreadsheets</link> can be <link linkend="exportdialog">exported</link> 
-  to an external file.
-</para>
-</sect1>
 
 <sect1 id="importdialog">
 <title>Import Dialog</title>
 <para>
-In the import dialog you can import data into one of the available spreadsheets in &LabPlot;.
+In the import dialog you can import data into one of the available spreadsheets or matrices in &LabPlot;.
+The supported data formats are
+<itemizedlist>
+<listitem><para>ASCII</para></listitem>
+<listitem><para>Binary</para></listitem>
+<listitem><para>Image</para></listitem>
+<listitem><para>NetCDF</para></listitem>
+<listitem><para>HDF5</para></listitem>
+</itemizedlist>
+Preview of all supported file types is available in the import dialog. For data formats with complex internal structures like NetCDF and HDF5, the content of the file is presented in a tree view that allows comfortable navigation through the file.
 </para>
+
+<para>
+Import of ascii and binary data compressed with gzip, bzip2 or xz can be done directly – the decompression happens transparently for the user.
+</para>
+
+
 <para>
 The name of the file containing the data to import has to be provided. The <guibutton>File Info</guibutton> button opens a dialog where some information about the selected file is shown. The type of the data can be specified - currently, only ASCII files containing several data sets (vectors) stored as columns are supported.
 The filter - automatic or custom - determines how the file has to be parsed. Selecting the filter "custom", several parameters like separating character &etc; can be provided manually in this case.
@@ -365,6 +395,7 @@ The start and end row to read can be customized using the <guilabel>Data portion
     </textobject>
   </mediaobject>
 </screenshot>
+
 </sect1>
 
 
@@ -391,6 +422,84 @@ The start and end row to read can be customized using the <guilabel>Data portion
 </imageobject></mediaobject></screenshot>
 </para>
 </sect1>
+
+
+<sect1 id="datapicker">
+<title>Datapicker</title>
+<para>
+Datapicker is a tool that allows you to easily extract data from image files. The process of extraction consists mainly out of the following steps:
+<itemizedlist>
+<listitem><para>Import an image containing plots and curves where you want to read the data points from.</para></listitem>
+<listitem><para>Select the plot type (cartesian, polar, etc.).</para></listitem>
+<listitem><para>Select tree reference points and provide values for them. With the help of these points the logical coordinate system is determined.</para></listitem>
+<listitem><para>Create a new datapicker curve and set the type of the error bars.</para></listitem>
+<listitem><para>Switch to the mouse mode "Set Curve Points" and start selecting points on the imported image - the coordinates for the selected points are determined and added to the spreadhseet "Data".</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+It is possible to add more then one datapicker curve. This is useful in case the imported image contains several curves that need to be digitized.
+The datapicker curve that is currently being selected in the <link linkend="project-explorer">Project Explorer </link> is the "active" one - points clicked on the datapicker image will be calculated and added to its data spreadhseet.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker_active_curve.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker_data_spreadsрeet.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+Calculated values are stored in different columns in data spreadsheets in the datapicker. These columns behave exactly the same like other columns
+in usual spreadsheets and can be directly used as source columns for curves in your own plots.
+</para>
+
+<para>
+Datapicker supports the process of the data extraction with several helpers. To place the points more precisely, a magnification glas with different magnification levels is available.
+Also, the last selected point can be shifted with the help of the navigation keys.
+Furthermore, when reading data points having error bars, datapicker automaticaly creates bars indicating the end points of the error bars.
+Those bars can be pulled with the mouse until the required length (the distance to the data point) is reached.
+</para>
+
+
+<para>
+The procedure for the extraction of data from an imported plot as described above is feasible when dealing with a limited number of points.
+In case the curves in the imported image are given as solid lines, the datapicker tool in &LabPlot; allows to read them (semi-)automatically.
+For this, after a new datapicker curve was added as described above, switch to the mouse mode "Select Curve Segments". The curves on the plot are recognized and highlighted.
+By clicking on a highlighted curve (or one of its segments), points along this curve are created.
+The length of a segment and the density of created points (separation between two points) are adjustable parameters.
+
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker_segments.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+In many cases the plot is not as simple as above (single black curve on white background) and contains grid lines, many curves of different color and thinness and a non-white background.
+In such a case the automatic detection fails (too many or no objects are highlighted). To help the datapicker to determine the curve(s) correctly, the user has to limit the allowed ranges in the HSV (or HSI) colour spaces.
+To subtract the non-white background it is possible to limit the range for the foreground colour, too.
+Internally, each pixel of the image is converted to black and white where only the points fitting into the user-defined ranges for hue, saturation, value, intensity and foreground are set to black.
+</para>
+
+<para>
+In the screenshots below, the blue curves in the original image were projected onto by having appropriately reduced the allowed ranges in the colour space (note the peak for blue in the histogram for the hue).
+The transformed black and white image contains only the curves the user is interested in and it is now an easy task for the datapicker to determine the curves and to place points on them.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker_segments_original_image.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker_segments_transformed_image.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker_segments_transformed_image_with_points.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+Similar to <link linkend="worksheet">Worksheet</link>, the currently visible area in the datapicker can be exported.
+The supported image formats as described in the section <link linkend="exportdialog">Export Dialog</link>.
+</para>
+</sect1>
+
 
 </chapter>
 
