@@ -185,8 +185,8 @@ Also, for each type different representation formats can be assigned like decima
 You can mask selected data points in the spreadsheet (<menuchoice><guimenu>Selection</guimenu><guimenuitem>Mask Selection</guimenuitem></menuchoice> from the spreadsheet cell context menu).
 Masked data is not plotted and is also excluded from data analysis functions like fitting etc.
 Alternatively, you can mask or drop values in a column (<menuchoice><guimenu>Mask Values</guimenu></menuchoice> or <menuchoice><guimenu>Drop Values</guimenu></menuchoice> from the column context menu) by specifying a range.
-When specifying which values to mask or to drop, several operators (“equal to”, “greater then”, “lesser then”, etc.) are available.
-These operations can help to hide or to remove some outliers in the data set prior to, e.g., performing a fit to this data set.
+When specifying which values to mask or to drop, several operators (“equal to”, “greater then”, “lesser then”, &etc;) are available.
+These operations can help to hide or to remove some outliners in the data set prior to, &eg;, performing a fit to this data set.
 </para>
 <para>
 Any spreadsheet function can be reached via the context menu (&RMB; click).
@@ -269,7 +269,7 @@ The data in the spreadsheet can be exported to an external file (see <link linke
 <sect1 id="matrix">
 <title>Matrix</title>
 <para>
-Matrix is another containter for matrix-like data. This container is presented like a table or, alternatively, as a two-dimensional greyscale image.
+Matrix is another container for matrix-like data. This container is presented like a table or, alternatively, as a two-dimensional greyscale image.
 The elements of such a table/matrix can be thought as being the Z-values, Z=Z(X,Y), with X and Y values being the row and column numbers, respectively.
 The transition from the row and column numbers to the logical coordinates is done via an explicit user-defined mapping of both representations.
 <screenshot><mediaobject><imageobject>
@@ -310,7 +310,7 @@ With Workbook the user has the possibility for another additional grouping.
 <sect1 id="worksheet">
 <title>Worksheet</title>
 <para>
-The worksheet is, besides the data containters <link linkend="spreadsheet">Spreadsheet</link> and <link linkend="matrix">Matrix</link>, another central part of the application and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels etc.
+The worksheet is, besides the data containers <link linkend="spreadsheet">Spreadsheet</link> and <link linkend="matrix">Matrix</link>, another central part of the application and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels etc.
 </para>
 <para>
 Worksheets can either have a fixed size (a user defined size or one of the predefined sizes like A4, Letter etc.) or they can fill out the complete available area for the worksheet window. Multiple plots can be arranged on the worksheet in a vertical, horizontal or grid layouts.
@@ -454,9 +454,9 @@ in usual spreadsheets and can be directly used as source columns for curves in y
 </para>
 
 <para>
-Datapicker supports the process of the data extraction with several helpers. To place the points more precisely, a magnification glas with different magnification levels is available.
+Datapicker supports the process of the data extraction with several helpers. To place the points more precisely, a magnification glass with different magnification levels is available.
 Also, the last selected point can be shifted with the help of the navigation keys.
-Furthermore, when reading data points having error bars, datapicker automaticaly creates bars indicating the end points of the error bars.
+Furthermore, when reading data points having error bars, datapicker automatically creates bars indicating the end points of the error bars.
 Those bars can be pulled with the mouse until the required length (the distance to the data point) is reached.
 </para>
 
