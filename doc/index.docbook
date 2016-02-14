@@ -185,8 +185,8 @@ Also, for each type different representation formats can be assigned like decima
 You can mask selected data points in the spreadsheet (<menuchoice><guimenu>Selection</guimenu><guimenuitem>Mask Selection</guimenuitem></menuchoice> from the spreadsheet cell context menu).
 Masked data is not plotted and is also excluded from data analysis functions like fitting etc.
 Alternatively, you can mask or drop values in a column (<menuchoice><guimenu>Mask Values</guimenu></menuchoice> or <menuchoice><guimenu>Drop Values</guimenu></menuchoice> from the column context menu) by specifying a range.
-When specifying which values to mask or to drop, several operators (“equal to”, “greater then”, “lesser then”, &etc;) are available.
-These operations can help to hide or to remove some outliners in the data set prior to, &eg;, performing a fit to this data set.
+When specifying which values to mask or to drop, several operators (“equal to”, “greater than”, “lesser than”, &etc;) are available.
+These operations can help to hide or to remove some outliers in the data set prior to, &eg;, performing a fit to this data set.
 </para>
 <para>
 Any spreadsheet function can be reached via the context menu (&RMB; click).
