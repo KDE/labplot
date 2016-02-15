@@ -99,9 +99,9 @@ Spreadsheet* Datapicker::currentSpreadsheet() const {
 		return 0;
 
 	int index = reinterpret_cast<const DatapickerView*>(m_view)->currentIndex();
-	if(index != -1) {
-		AbstractAspect* aspect = child<AbstractAspect>(index);
-		return dynamic_cast<Spreadsheet*>(aspect);
+	if(index>0) {
+		DatapickerCurve* curve = child<DatapickerCurve>(index-1);
+		return curve->child<Spreadsheet>(0);
 	}
 	return 0;
 }

@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : Segments.cpp
     Project              : LabPlot
-    Description          : Contain Methods to trace curve of image/plot
+    Description          : Contains methods to trace curve of image/plot
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
  ***************************************************************************/
