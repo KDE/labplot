@@ -43,6 +43,10 @@ class Spreadsheet : public AbstractDataSource {
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
+		virtual void exportView() const;
+		virtual void printView() const;
+		virtual void printPreview() const;
+
 		int columnCount() const;
 		int columnCount(AbstractColumn::PlotDesignation) const;
 		Column* column(int index) const;

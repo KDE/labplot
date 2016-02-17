@@ -35,9 +35,13 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/matrix/MatrixView.h"
+#include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 
 #include <QHeaderView>
 #include <QLocale>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
 
 #include <KIcon>
 #include <KLocale>
@@ -122,6 +126,40 @@ QWidget* Matrix::view() const {
 		m_view = view;
 	}
 	return m_view;
+}
+
+void Matrix::exportView() const {
+	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(m_view);
+	dlg->setFileName(name());
+	dlg->setMatrixMode(true);
+	if (dlg->exec()==QDialog::Accepted){
+		const QString path = dlg->path();
+		const QString separator = dlg->separator();
+
+		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
+		WAIT_CURSOR;
+		view->exportToFile(path, separator);
+		RESET_CURSOR;
+	}
+	delete dlg;
+}
+
+void Matrix::printView() const {
+	QPrinter printer;
+	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
+	dlg->setWindowTitle(i18n("Print Matrix"));
+	if (dlg->exec() == QDialog::Accepted) {
+		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
+		view->print(&printer);
+	}
+	delete dlg;
+}
+
+void Matrix::printPreview() const {
+	const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
+	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
+	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+	dlg->exec();
 }
 
 //##############################################################################

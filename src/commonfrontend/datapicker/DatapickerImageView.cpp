@@ -685,14 +685,14 @@ void DatapickerImageView::handleImageActions() {
 	}
 }
 
-void DatapickerImageView::exportToFile(const QString& path, const ExportFormat format, const int resolution) {
+void DatapickerImageView::exportToFile(const QString& path, const WorksheetView::ExportFormat format, const int resolution) {
 	QRectF sourceRect;
 	sourceRect = scene()->sceneRect();
 
 	//print
-	if (format==DatapickerImageView::Pdf || format==DatapickerImageView::Eps) {
+	if (format==WorksheetView::Pdf || format==WorksheetView::Eps) {
 		QPrinter printer(QPrinter::HighResolution);
-		if (format==DatapickerImageView::Pdf)
+		if (format==WorksheetView::Pdf)
 			printer.setOutputFormat(QPrinter::PdfFormat);
 		else
 			printer.setOutputFormat(QPrinter::PostScriptFormat);
@@ -711,7 +711,7 @@ void DatapickerImageView::exportToFile(const QString& path, const ExportFormat f
 		painter.begin(&printer);
 		exportPaint(&painter, targetRect, sourceRect);
 		painter.end();
-	} else if (format==DatapickerImageView::Svg) {
+	} else if (format==WorksheetView::Svg) {
 		QSvgGenerator generator;
 		generator.setFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);

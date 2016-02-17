@@ -90,6 +90,34 @@ QWidget* Datapicker::view() const {
 	return m_view;
 }
 
+
+void Datapicker::exportView() const {
+	Spreadsheet* s = currentSpreadsheet();
+	if (s) {
+		s->exportView();
+	} else {
+		m_image->exportView();
+	}
+}
+
+void Datapicker::printView() const {
+	Spreadsheet* s = currentSpreadsheet();
+	if (s) {
+		s->printView();
+	} else {
+		m_image->printView();
+	}
+}
+
+void Datapicker::printPreview() const {
+	Spreadsheet* s = currentSpreadsheet();
+	if (s) {
+		s->printPreview();
+	} else {
+		m_image->printPreview();
+	}
+}
+
 DatapickerCurve* Datapicker::activeCurve() {
 	return m_activeCurve;
 }
@@ -98,7 +126,7 @@ Spreadsheet* Datapicker::currentSpreadsheet() const {
 	if (!m_view)
 		return 0;
 
-	int index = reinterpret_cast<const DatapickerView*>(m_view)->currentIndex();
+	const int index = reinterpret_cast<const DatapickerView*>(m_view)->currentIndex();
 	if(index>0) {
 		DatapickerCurve* curve = child<DatapickerCurve>(index-1);
 		return curve->child<Spreadsheet>(0);

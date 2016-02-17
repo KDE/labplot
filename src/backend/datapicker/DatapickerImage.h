@@ -83,6 +83,10 @@ public:
 	void createContextMenu(QMenu*);
 	virtual QWidget* view() const;
 
+	virtual void exportView() const;
+	virtual void printView() const;
+	virtual void printPreview() const;
+
 	virtual void save(QXmlStreamWriter*) const;
 	virtual bool load(XmlStreamReader*);
 
