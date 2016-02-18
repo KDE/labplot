@@ -1033,7 +1033,7 @@ Datapicker* MainWin::activeDatapicker() const {
 	or if the currently selected tab in a \c WorkbookView is a \c SpreadsheetView
 	Otherwise returns \c 0.
 */
-Spreadsheet* MainWin::activeSpreadsheet() const{
+Spreadsheet* MainWin::activeSpreadsheet() const {
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
 	if (!win)
 		return 0;
@@ -1041,8 +1041,7 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
 	Spreadsheet* spreadsheet = 0;
-	Workbook* workbook = dynamic_cast<Workbook*>(part);
-    Datapicker* datapicker = dynamic_cast<Datapicker*>(part);
+	const Workbook* workbook = dynamic_cast<const Workbook*>(part);
 	if (workbook) {
 		spreadsheet = workbook->currentSpreadsheet();
 		if (!spreadsheet) {
@@ -1055,22 +1054,9 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 					spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parentAspect());
 			}
 		}
-    } else if (datapicker) {
-        spreadsheet = datapicker->currentSpreadsheet();
-		qDebug()<<"spreadsheet " << spreadsheet;
-        if (!spreadsheet) {
-            //potentially, the spreadsheet was not selected in datapicker yet since the selection in project explorer
-            //arrives in datapicker's slot later than in this function
-            //->check whether we have a spreadsheet or one of its columns currently selected in the project explorer
-            spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
-            if (!spreadsheet) {
-                if (m_currentAspect->parentAspect())
-                    spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parentAspect());
-            }
-        }
-    } else {
-        spreadsheet = dynamic_cast<Spreadsheet*>(part);
-    }
+	} else {
+		spreadsheet = dynamic_cast<Spreadsheet*>(part);
+	}
 
 	return spreadsheet;
 }
@@ -1158,6 +1144,7 @@ void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win){
 void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
+		//TODO: export, print and print preview should be handled in the views and not in MainWin.
 		connect(part, SIGNAL(exportRequested()), this, SLOT(exportDialog()));
 		connect(part, SIGNAL(printRequested()), this, SLOT(print()));
 		connect(part, SIGNAL(printPreviewRequested()), this, SLOT(printPreview()));
