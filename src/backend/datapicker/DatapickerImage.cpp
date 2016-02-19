@@ -347,8 +347,13 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 	if (pointsType == DatapickerImage::AxisPoints) {
 		//clear image
 		int childCount = this->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
-		if (childCount)
-			removeAllChildren();
+        if (childCount) {
+            beginMacro(i18n("%1: remove all axis points", name()));
+            QList<DatapickerPoint*> childrenPoints = children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+            foreach(DatapickerPoint* point, childrenPoints)
+                point->remove();
+            endMacro();
+        }
 		m_segments->setSegmentsVisible(false);
 	} else if (pointsType==DatapickerImage::CurvePoints) {
 		m_segments->setSegmentsVisible(false);

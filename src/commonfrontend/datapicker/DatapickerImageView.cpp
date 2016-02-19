@@ -759,11 +759,42 @@ void DatapickerImageView::exportPaint(QPainter* painter, const QRectF& targetRec
 }
 
 void DatapickerImageView::print(QPrinter* printer) const {
-	m_image->setPrinting(true);
-	QPainter painter(printer);
-	painter.setRenderHint(QPainter::Antialiasing);
-	scene()->render(&painter);
-	m_image->setPrinting(false);
+    const QRectF scene_rect = sceneRect();
+    int w = Worksheet::convertFromSceneUnits(scene_rect.width(), Worksheet::Millimeter);
+    int h = Worksheet::convertFromSceneUnits(scene_rect.height(), Worksheet::Millimeter);
+    printer->setPaperSize( QSizeF(w, h), QPrinter::Millimeter);
+    printer->setPageMargins(0,0,0,0, QPrinter::Millimeter);
+    printer->setPrintRange(QPrinter::PageRange);
+    printer->setCreator( QString("LabPlot ") + LVERSION );
+
+    QPainter painter(printer);
+    QRectF targetRect(0, 0, painter.device()->width(),painter.device()->height());
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.begin(printer);
+    painter.save();
+    painter.scale(targetRect.width()/scene_rect.width(), targetRect.height()/scene_rect.height());
+
+    // canvas
+    if (m_image->isLoaded) {
+        if (m_image->plotImageType() == DatapickerImage::OriginalImage) {
+            QImage todraw = m_image->originalPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            painter.drawImage(scene_rect.topLeft(), todraw);
+        } else if (m_image->plotImageType() == DatapickerImage::ProcessedImage) {
+            QImage todraw = m_image->processedPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            painter.drawImage(scene_rect.topLeft(), todraw);
+        } else {
+            painter.fillRect(scene_rect, Qt::white);
+        }
+    } else {
+        painter.setBrush(QBrush(Qt::gray));
+        painter.drawRect(scene_rect);
+    }
+
+    painter.restore();
+    m_image->setPrinting(true);
+    scene()->render(&painter, QRectF(), scene_rect);
+    m_image->setPrinting(false);
+    painter.end();
 }
 
 void DatapickerImageView::updateBackground() {
