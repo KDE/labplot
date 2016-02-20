@@ -83,9 +83,10 @@ void XYFourierFilterCurve::init() {
 /*!
 	Returns an icon to be used in the project explorer.
 */
-/*QIcon XYFitCurve::icon() const {
+QIcon XYFourierFilterCurve::icon() const {
+	//TODO: use own icon
 	return KIcon("labplot-xy-fit-curve");
-}*/
+}
 
 //##############################################################################
 //##########################  getter methods  ##################################

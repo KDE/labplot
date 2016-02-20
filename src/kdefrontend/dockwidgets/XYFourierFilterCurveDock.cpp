@@ -1,9 +1,9 @@
 /***************************************************************************
-    File             : XYFitCurveDock.h
+    File             : XYFourierFilterCurveDock.h
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
-    Description      : widget for editing properties of fit curves
+    Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Description      : widget for editing properties of Fourier filter curves
 
  ***************************************************************************/
 
@@ -26,20 +26,22 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "XYFitCurveDock.h"
+#include "XYFourierFilterCurveDock.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+//#include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
-#include "kdefrontend/widgets/ConstantsWidget.h"
+/*#include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
 #include "kdefrontend/widgets/FitOptionsWidget.h"
 #include "kdefrontend/widgets/FitParametersWidget.h"
-
+*/
 #include <QMenu>
 #include <QWidgetAction>
 
 /*!
-  \class XYFitCurveDock
+  \class XYFourierFilterCurveDock
+//TODO
   \brief  Provides a widget for editing the properties of the XYFitCurves
 		(2D-curves defined by a fit model) currently selected in
 		the project explorer.
@@ -52,14 +54,14 @@
   \ingroup kdefrontend
 */
 
-XYFitCurveDock::XYFitCurveDock(QWidget *parent): XYCurveDock(parent), m_fitCurve(0) {
+XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget *parent): XYCurveDock(parent), m_fourierFilterCurve(0) {
 
 }
 
 /*!
  * 	// Tab "General"
  */
-void XYFitCurveDock::setupGeneral() {
+/*void XYFitCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
@@ -179,12 +181,12 @@ void XYFitCurveDock::setModel() {
 	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
 	connect( cbWeightsColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(weightsColumnChanged(QModelIndex)) );
 	XYCurveDock::setModel();
-}
+}*/
 
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
-void XYFitCurveDock::setCurves(QList<XYCurve*> list){
+/*void XYFitCurveDock::setCurves(QList<XYCurve*> list){
 	m_initializing=true;
 	m_curvesList=list;
 	m_curve=list.first();
@@ -196,12 +198,12 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list){
 	initGeneralTab();
 	initTabs();
 	m_initializing=false;
-}
+}*/
 
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-void XYFitCurveDock::nameChanged(){
+/*void XYFitCurveDock::nameChanged(){
 	if (m_initializing)
 		return;
 
@@ -475,12 +477,12 @@ void XYFitCurveDock::showParameters() {
 
 	QPoint pos(-menu.sizeHint().width()+uiGeneralTab.pbParameters->width(),-menu.sizeHint().height());
 	menu.exec(uiGeneralTab.pbParameters->mapToGlobal(pos));
-}
+}*/
 
 /*!
  * called when parameter names and/or start values for the custom model were changed
  */
-void XYFitCurveDock::parametersChanged() {
+/*void XYFitCurveDock::parametersChanged() {
 	//parameter names were (probably) changed -> set the new names in EquationTextEdit
 	uiGeneralTab.teEquation->setVariables(m_fitData.paramNames);
 	enableRecalculate();
@@ -537,12 +539,12 @@ void XYFitCurveDock::enableRecalculate() const {
 		uiGeneralTab.pbRecalculate->setEnabled( data && uiGeneralTab.teEquation->isValid() );
 	else
 		uiGeneralTab.pbRecalculate->setEnabled(data);
-}
+}*/
 
 /*!
  * show the result and details of fit
  */
-void XYFitCurveDock::showFitResult() {
+/*void XYFitCurveDock::showFitResult() {
 	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
 	if (!fitResult.available) {
 		uiGeneralTab.teResult->clear();
@@ -591,13 +593,13 @@ void XYFitCurveDock::showFitResult() {
 // 		str += "<br>" + iterations.at(i);
 
 	uiGeneralTab.teResult->setText(str);
-}
+}*/
 
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 //General-Tab
-void XYFitCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
+/*void XYFitCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_curve != aspect)
 		return;
 
@@ -643,4 +645,4 @@ void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& data) {
 
 void XYFitCurveDock::dataChanged() {
 	this->enableRecalculate();
-}
+}*/

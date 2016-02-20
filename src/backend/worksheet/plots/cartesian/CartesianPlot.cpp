@@ -707,7 +707,7 @@ XYFitCurve* CartesianPlot::addFitCurve(){
 }*/
 
 XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve(){
-	XYFourierFilterCurve* curve = new XYFourierFilterCurve("fourier filter");
+	XYFourierFilterCurve* curve = new XYFourierFilterCurve("Fourier filter");
 	this->addChild(curve);
 	return curve;
 }
