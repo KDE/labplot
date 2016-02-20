@@ -166,20 +166,20 @@ void WorksheetView::initActions(){
 	zoomSelectionModeAction->setCheckable(true);
 
 	//Magnification actions
-	noMagnificationAction = new KAction(KIcon("labplot-1-to-1-zoom"), i18n("No Magnification"), magnificationActionGroup);
+	noMagnificationAction = new KAction(KIcon("labplot-1x-zoom"), i18n("No Magnification"), magnificationActionGroup);
 	noMagnificationAction->setCheckable(true);
 	noMagnificationAction->setChecked(true);
 
-	twoTimesMagnificationAction = new KAction(KIcon("labplot-1-to-2-zoom"), i18n("2x Magnification"), magnificationActionGroup);
+	twoTimesMagnificationAction = new KAction(KIcon("labplot-2x-zoom"), i18n("2x Magnification"), magnificationActionGroup);
 	twoTimesMagnificationAction->setCheckable(true);
 
-	threeTimesMagnificationAction = new KAction(KIcon("labplot-1-to-3-zoom"), i18n("3x Magnification"), magnificationActionGroup);
+	threeTimesMagnificationAction = new KAction(KIcon("labplot-3x-zoom"), i18n("3x Magnification"), magnificationActionGroup);
 	threeTimesMagnificationAction->setCheckable(true);
 
-	fourTimesMagnificationAction = new KAction(KIcon("labplot-1-to-4-zoom"), i18n("4x Magnification"), magnificationActionGroup);
+	fourTimesMagnificationAction = new KAction(KIcon("labplot-4x-zoom"), i18n("4x Magnification"), magnificationActionGroup);
 	fourTimesMagnificationAction->setCheckable(true);
 
-	fiveTimesMagnificationAction = new KAction(KIcon("labplot-1-to-5-zoom"), i18n("5x Magnification"), magnificationActionGroup);
+	fiveTimesMagnificationAction = new KAction(KIcon("labplot-5x-zoom"), i18n("5x Magnification"), magnificationActionGroup);
 	fiveTimesMagnificationAction->setCheckable(true);
 
 	//TODO implement later "group selection action" where multiple objects can be selected by drawing a rectangular

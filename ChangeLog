@@ -3,6 +3,7 @@ New features:
 	* Datapicker - tool for extracting curves and data points from imported images.
 	* Custom point on the plot with user-defined position and appearance.
 	* Support GSL 2.x
+	* Import and export dialogs save and restore their settings and sizes
 
 Performance improvements:
 	* Faster rendering of the image view of the matrix

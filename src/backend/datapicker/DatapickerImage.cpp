@@ -32,13 +32,17 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/datapicker/DatapickerPoint.h"
+#include "backend/datapicker/Segments.h"
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/datapicker/DatapickerImageView.h"
-#include "backend/datapicker/Segments.h"
+#include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 
 #include <QDesktopWidget>
 #include <QGraphicsScene>
 #include <QMenu>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
 
 #include <KIcon>
 #include <KConfigGroup>
@@ -145,6 +149,40 @@ QWidget* DatapickerImage::view() const {
 	return m_view;
 }
 
+void DatapickerImage::exportView() const {
+	ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
+	dlg->setFileName(name());
+	if (dlg->exec()==QDialog::Accepted){
+		const QString path = dlg->path();
+		const WorksheetView::ExportFormat format = dlg->exportFormat();
+		const int resolution = dlg->exportResolution();
+
+		DatapickerImageView* view = reinterpret_cast<DatapickerImageView*>(m_view);
+		WAIT_CURSOR;
+		view->exportToFile(path, format, resolution);
+		RESET_CURSOR;
+	}
+	delete dlg;
+}
+
+void DatapickerImage::printView() const {
+	QPrinter printer;
+	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
+	dlg->setWindowTitle(i18n("Print Datapicker Image"));
+	if (dlg->exec() == QDialog::Accepted) {
+		const DatapickerImageView* view = reinterpret_cast<const DatapickerImageView*>(m_view);
+		view->print(&printer);
+	}
+	delete dlg;
+}
+
+void DatapickerImage::printPreview() const {
+	const DatapickerImageView* view = reinterpret_cast<const DatapickerImageView*>(m_view);
+	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
+	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+	dlg->exec();
+}
+
 /*!
     Selects or deselects the Datapicker/DatapickerImage in the project explorer.
     This function is called in \c DatapickerImageView.
@@ -183,7 +221,7 @@ void DatapickerImage::initSceneParameters() {
 	setminSegmentLength(30);
 	setPointSeparation(30);
 
-	ReferencePoints axisPoints;
+    ReferencePoints axisPoints = d->axisPoints;
 	axisPoints.ternaryScale = 1;
 	axisPoints.type = DatapickerImage::Cartesian;
 	setAxisPoints(axisPoints);
@@ -309,8 +347,13 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 	if (pointsType == DatapickerImage::AxisPoints) {
 		//clear image
 		int childCount = this->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
-		if (childCount)
-			removeAllChildren();
+        if (childCount) {
+            beginMacro(i18n("%1: remove all axis points", name()));
+            QList<DatapickerPoint*> childrenPoints = children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+            foreach(DatapickerPoint* point, childrenPoints)
+                point->remove();
+            endMacro();
+        }
 		m_segments->setSegmentsVisible(false);
 	} else if (pointsType==DatapickerImage::CurvePoints) {
 		m_segments->setSegmentsVisible(false);

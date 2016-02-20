@@ -34,7 +34,12 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 #include <math.h>
+
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
 
 #include "KIcon"
 #include <KConfigGroup>
@@ -166,8 +171,43 @@ QWidget *Worksheet::view() const {
 	return m_view;
 }
 
+void Worksheet::exportView() const {
+	ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
+	dlg->setFileName(name());
+	if (dlg->exec()==QDialog::Accepted){
+		QString path = dlg->path();
+		const WorksheetView::ExportFormat format = dlg->exportFormat();
+		const WorksheetView::ExportArea area = dlg->exportArea();
+		const bool background = dlg->exportBackground();
+		const int resolution = dlg->exportResolution();
+
+		WorksheetView* view = reinterpret_cast<WorksheetView*>(m_view);
+		WAIT_CURSOR;
+		view->exportToFile(path, format, area, background, resolution);
+		RESET_CURSOR;
+	}
+	delete dlg;
+}
+
+void Worksheet::printView() const {
+	QPrinter printer;
+	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
+	dlg->setWindowTitle(i18n("Print Worksheet"));
+	if (dlg->exec() == QDialog::Accepted) {
+		const WorksheetView* view = reinterpret_cast<const WorksheetView*>(m_view);
+		view->print(&printer);
+	}
+	delete dlg;
+}
+
+void Worksheet::printPreview() const {
+	const WorksheetView* view = reinterpret_cast<const WorksheetView*>(m_view);
+	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
+	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+	dlg->exec();
+}
+
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
-// 	qDebug()<<"Worksheet::handleAspectAdded "<< aspect->name();
 	const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (addedElement) {
 		if (aspect->parentAspect() == this){

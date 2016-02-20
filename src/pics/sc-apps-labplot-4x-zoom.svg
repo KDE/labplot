@@ -8,10 +8,34 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.0"
    width="128"
    height="128"
-   id="svg1307">
+   id="svg1307"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="sc-apps-labplot-1-to-4-zoom.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1332"
+     inkscape:window-height="568"
+     id="namedview5368"
+     showgrid="false"
+     inkscape:zoom="1.84375"
+     inkscape:cx="64"
+     inkscape:cy="64"
+     inkscape:window-x="1162"
+     inkscape:window-y="790"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
   <defs
      id="defs1309">
     <linearGradient
@@ -2054,7 +2078,7 @@
             <dc:title>Oxygen team</dc:title>
           </cc:Agent>
         </dc:contributor>
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/LGPL/2.1/">
@@ -2210,14 +2234,21 @@
          style="fill:none;stroke:#000000;stroke-width:1.4069767px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     </g>
     <text
-       x="15.596825"
-       y="56.477482"
-       transform="scale(0.82358009,1.214211)"
+       x="23.26943"
+       y="60.197254"
+       transform="scale(0.93219238,1.0727399)"
        id="text3501"
        xml:space="preserve"
-       style="font-size:51.94929886px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"><tspan
-         x="15.596825"
-         y="56.477482"
-         id="tspan3503">1:3</tspan></text>
+       style="font-style:normal;font-weight:normal;font-size:52.49583054px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       sodipodi:linespacing="125%"><tspan
+         x="23.26943"
+         y="60.197254"
+         id="tspan3503">4x</tspan><tspan
+         x="23.26943"
+         y="60.197254"
+         id="tspan5370" /><tspan
+         x="23.26943"
+         y="60.197254"
+         id="tspan5372" /></text>
   </g>
 </svg>

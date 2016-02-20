@@ -2,8 +2,7 @@
     File                 : SettingsDialog.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2013 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
     Description          : general settings dialog
                            
  ***************************************************************************/
@@ -27,15 +26,9 @@
  *                                                                         *
  ***************************************************************************/
 #include "SettingsDialog.h"
-
-#include "MainWin.h"
 #include "SettingsGeneralPage.h"
-// #include "SettingsPrintingPage.h"
 
-#include <KLocale>
-#include <KPushButton>
-#include <kmessagebox.h>
-#include <KIcon>
+#include <KMessageBox>
 
 /**
  * \brief Settings dialog for Labplot.
@@ -43,12 +36,13 @@
  * Contains the pages for general settings and view settings.
  *
  */
-SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent){
+SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 	const QSize minSize = minimumSize();
 	setMinimumSize(QSize(512, minSize.height()));
 
 	setFaceType(List);
 	setCaption(i18n("Preferences"));
+	setWindowIcon(KIcon("preferences-other"));
 	setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Default);
 	setDefaultButton(KDialog::Ok);
 	enableButton(KDialog::Apply, false);
@@ -58,20 +52,16 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent){
 	generalFrame->setIcon(KIcon("system-run"));
 	connect(generalPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
 
-//     printingPage = new SettingsPrintingPage(mainWindow, this);
-//     KPageWidgetItem* printingFrame = addPage(printingPage, i18nc("@title:group", "Print"));
-//     printingFrame->setIcon(KIcon("document-print"));
-
-	const KConfigGroup dialogConfig = KGlobal::config()->group("SettingsDialog");
-	restoreDialogSize(dialogConfig);
+	KConfigGroup conf(KSharedConfig::openConfig(), "SettingsDialog");
+	restoreDialogSize(conf);
 }
 
-SettingsDialog::~SettingsDialog(){
-	KConfigGroup dialogConfig = KGlobal::config()->group("SettingsDialog");
-	saveDialogSize(dialogConfig);
+SettingsDialog::~SettingsDialog() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "SettingsDialog");
+	saveDialogSize(conf);
 }
 
-void SettingsDialog::slotButtonClicked(int button){
+void SettingsDialog::slotButtonClicked(int button) {
 	if ((button == KDialog::Ok) || (button == KDialog::Apply)) {
 		if (m_changed){
 			applySettings();
@@ -96,10 +86,9 @@ void SettingsDialog::changed() {
 	enableButton(KDialog::Apply, true);
 }
 
-void SettingsDialog::applySettings(){
+void SettingsDialog::applySettings() {
 	m_changed = false;
 	generalPage->applySettings();
-//     printingPage->applySettings();
 	KGlobal::config()->sync();	
 	emit settingsChanged();
 }
@@ -107,5 +96,4 @@ void SettingsDialog::applySettings(){
 void SettingsDialog::restoreDefaults(){
 	m_changed = false;
 	generalPage->restoreDefaults();
-//     printingPage->restoreDefaults();
 }

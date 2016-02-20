@@ -48,6 +48,9 @@ class AbstractPart : public AbstractAspect {
 		void deleteMdiSubWindow();
 
 		virtual QMenu* createContextMenu();
+		virtual void exportView() const = 0;
+		virtual void printView() const = 0;
+		virtual void printPreview() const = 0;
 
 	private:
 		mutable PartMdiView* m_mdiWindow;

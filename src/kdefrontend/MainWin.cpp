@@ -44,9 +44,8 @@
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "commonfrontend/datapicker/DatapickerView.h"
+#include "commonfrontend/datapicker/DatapickerImageView.h"
 
-#include "kdefrontend/worksheet/ExportWorksheetDialog.h"
-#include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 #include "kdefrontend/datasources/ImportFileDialog.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/HistoryDialog.h"
@@ -58,9 +57,6 @@
 #include <QDockWidget>
 #include <QStackedWidget>
 #include <QUndoStack>
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QPrintPreviewDialog>
 #include <QCloseEvent>
 #include <QElapsedTimer>
 #include <QDebug>
@@ -572,7 +568,7 @@ void MainWin::updateGUI() {
 	if (matrix){
 		factory->container("matrix", this)->setEnabled(true);
 
-		//populate spreadsheet-menu
+		//populate matrix-menu
 		MatrixView* view=qobject_cast<MatrixView*>(matrix->view());
 		QMenu* menu=qobject_cast<QMenu*>(factory->container("matrix", this));
 		menu->clear();
@@ -914,86 +910,23 @@ void MainWin::autoSaveProject() {
 /*!
 	prints the current sheet (worksheet, spreadsheet or matrix)
 */
-void MainWin::print(){
-	//Worksheet
-	Worksheet* w = this->activeWorksheet();
-	if (w!=0){ //worksheet
-		QPrinter printer;
-		QPrintDialog *dialog = new QPrintDialog(&printer, this);
-		dialog->setWindowTitle(i18n("Print Worksheet"));
-		if (dialog->exec() != QDialog::Accepted)
-			return;
-
-		WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
-		view->print(&printer);
-		statusBar()->showMessage(i18n("Worksheet printed"));
-
+void MainWin::print() {
+	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
+	if (!win)
 		return;
-	}
 
-	//Spreadsheet
-	Spreadsheet* s = this->activeSpreadsheet();
-	if (s) {
-		QPrinter printer;
-		QPrintDialog* dialog = new QPrintDialog(&printer, this);
-		dialog->setWindowTitle(i18n("Print Spreadsheet"));
-		if (dialog->exec() != QDialog::Accepted)
-			return;
-
-		SpreadsheetView* view = qobject_cast<SpreadsheetView*>(s->view());
-		view->print(&printer);
-		statusBar()->showMessage(i18n("Spreadsheet printed"));
-
-		return;
-	}
-
-	//Matrix
-	Matrix* m = this->activeMatrix();
-	if (m) {
-		QPrinter printer;
-		QPrintDialog* dialog = new QPrintDialog(&printer, this);
-		dialog->setWindowTitle(i18n("Print Matrix"));
-		if (dialog->exec() != QDialog::Accepted)
-			return;
-
-		MatrixView* view = qobject_cast<MatrixView*>(m->view());
-		view->print(&printer);
-		statusBar()->showMessage(i18n("Spreadsheet printed"));
-
-		return;
-	}
+	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	part->printView();
+	statusBar()->showMessage(i18n("%1 printed").arg(part->name()));
 }
 
 void MainWin::printPreview(){
-	//Worksheet
-	Worksheet* w = this->activeWorksheet();
-	if (w!=0){ //worksheet
-		WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
-		QPrintPreviewDialog* dialog = new QPrintPreviewDialog(this);
-		connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
-		dialog->exec();
+	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
+	if (!win)
 		return;
-	}
 
-	//Spreadsheet
-	Spreadsheet* s = this->activeSpreadsheet();
-	if (s!=0){
-		SpreadsheetView* view = qobject_cast<SpreadsheetView*>(s->view());
-		QPrintPreviewDialog* dialog = new QPrintPreviewDialog(this);
-		connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
-		dialog->exec();
-		return;
-	}
-
-	//Matrix
-	Matrix* m = this->activeMatrix();
-	if (m!=0){
-		MatrixView* view = qobject_cast<MatrixView*>(m->view());
-		QPrintPreviewDialog* dialog = new QPrintPreviewDialog(this);
-		connect(dialog, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
-		dialog->exec();
-		return;
-	}
+	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	part->printPreview();
 }
 
 /**************************************************************************************/
@@ -1100,12 +1033,13 @@ Datapicker* MainWin::activeDatapicker() const {
     Q_ASSERT(part);
     return dynamic_cast<Datapicker*>(part);
 }
+
 /*!
 	returns a pointer to a \c Spreadsheet object, if the currently active Mdi-Subwindow
 	or if the currently selected tab in a \c WorkbookView is a \c SpreadsheetView
 	Otherwise returns \c 0.
 */
-Spreadsheet* MainWin::activeSpreadsheet() const{
+Spreadsheet* MainWin::activeSpreadsheet() const {
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
 	if (!win)
 		return 0;
@@ -1113,8 +1047,7 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
 	Spreadsheet* spreadsheet = 0;
-	Workbook* workbook = dynamic_cast<Workbook*>(part);
-    Datapicker* datapicker = dynamic_cast<Datapicker*>(part);
+	const Workbook* workbook = dynamic_cast<const Workbook*>(part);
 	if (workbook) {
 		spreadsheet = workbook->currentSpreadsheet();
 		if (!spreadsheet) {
@@ -1127,21 +1060,9 @@ Spreadsheet* MainWin::activeSpreadsheet() const{
 					spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parentAspect());
 			}
 		}
-    } else if (datapicker) {
-        spreadsheet = datapicker->currentSpreadsheet();
-        if (!spreadsheet) {
-            //potentially, the spreadsheet was not selected in datapicker yet since the selection in project explorer
-            //arrives in datapicker's slot later than in this function
-            //->check whether we have a spreadsheet or one of its columns currently selected in the project explorer
-            spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
-            if (!spreadsheet) {
-                if (m_currentAspect->parentAspect())
-                    spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parentAspect());
-            }
-        }
-    } else {
-        spreadsheet = dynamic_cast<Spreadsheet*>(part);
-    }
+	} else {
+		spreadsheet = dynamic_cast<Spreadsheet*>(part);
+	}
 
 	return spreadsheet;
 }
@@ -1229,6 +1150,7 @@ void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win){
 void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	const AbstractPart* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
+		//TODO: export, print and print preview should be handled in the views and not in MainWin.
 		connect(part, SIGNAL(exportRequested()), this, SLOT(exportDialog()));
 		connect(part, SIGNAL(printRequested()), this, SLOT(print()));
 		connect(part, SIGNAL(printPreviewRequested()), this, SLOT(printPreview()));
@@ -1543,63 +1465,14 @@ void MainWin::importFileDialog(){
 /*!
 	opens the dialog for the export of the currently active worksheet, spreadsheet or matrix.
  */
-void MainWin::exportDialog(){
-	Worksheet* w=this->activeWorksheet();
-	if (w!=0){ //worksheet
-		ExportWorksheetDialog* dlg = new ExportWorksheetDialog(this);
-		dlg->setFileName(w->name());
-		if (dlg->exec()==QDialog::Accepted){
-			QString path = dlg->path();
-			WorksheetView::ExportFormat format = dlg->exportFormat();
-			WorksheetView::ExportArea area = dlg->exportArea();
-			bool background = dlg->exportBackground();
-			int resolution = dlg->exportResolution();
-
-			WorksheetView* view = qobject_cast<WorksheetView*>(w->view());
-			WAIT_CURSOR;
-			view->exportToFile(path, format, area, background, resolution);
-			RESET_CURSOR;
-		}
-
+void MainWin::exportDialog() {
+	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
+	if (!win)
 		return;
-	}
 
-
-	Spreadsheet* s = this->activeSpreadsheet();
-	if (s) {
-		ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(this);
-		dlg->setFileName(s->name());
-		if (dlg->exec()==QDialog::Accepted){
-			QString path = dlg->path();
-			const bool exportHeader = dlg->exportHeader();
-			QString separator = dlg->separator();
-
-			SpreadsheetView* view = qobject_cast<SpreadsheetView*>(s->view());
-			WAIT_CURSOR;
-			view->exportToFile(path, exportHeader, separator);
-			RESET_CURSOR;
-		}
-
-		return;
-	}
-
-	Matrix* m = this->activeMatrix();
-	if (m) {
-		ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(this);
-		dlg->setFileName(m->name());
-		dlg->setMatrixMode(true);
-		if (dlg->exec()==QDialog::Accepted){
-			QString path = dlg->path();
-			QString separator = dlg->separator();
-
-			MatrixView* view = qobject_cast<MatrixView*>(m->view());
-			WAIT_CURSOR;
-			view->exportToFile(path, separator);
-			RESET_CURSOR;
-		}
-
-		return;
-	}
+	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	part->exportView();
+	statusBar()->showMessage(i18n("%1 exported").arg(part->name()));
 }
 
 /*!

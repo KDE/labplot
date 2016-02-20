@@ -28,7 +28,7 @@
 #ifndef DATAPICKERIMAGEVIEW_H
 #define DATAPICKERIMAGEVIEW_H
 
-#include <QGraphicsView>
+#include "commonfrontend/worksheet/WorksheetView.h"
 
 class QMenu;
 class QToolBar;
@@ -47,10 +47,8 @@ class DatapickerImageView : public QGraphicsView {
 public:
 	explicit DatapickerImageView(DatapickerImage* image);
 
-	enum ExportFormat {Pdf, Eps, Svg, Png};
-
 	void setScene(QGraphicsScene*);
-	void exportToFile(const QString&, const ExportFormat, const int);
+	void exportToFile(const QString&, const WorksheetView::ExportFormat, const int);
 
 private:
 	enum MouseMode {SelectAndEditMode, NavigationMode, ZoomSelectionMode, SelectAndMoveMode};
