@@ -459,6 +459,14 @@ void WorksheetView::createContextMenu(QMenu* menu) const {
 	menu->insertSeparator(firstAction);
 }
 
+void WorksheetView::createAnalysisMenu(QMenu* menu) const {
+	Q_ASSERT(menu);
+
+	menu->addAction(addFitCurveAction);
+
+	//TODO: more to come
+}
+
 void WorksheetView::fillToolBar(QToolBar* toolBar){
 	toolBar->addSeparator();
 	tbNewCartesianPlot = new QToolButton(toolBar);

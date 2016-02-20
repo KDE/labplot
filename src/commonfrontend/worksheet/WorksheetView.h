@@ -192,6 +192,7 @@ class WorksheetView : public QGraphicsView {
 
   public slots:
 	void createContextMenu(QMenu*) const;
+	void createAnalysisMenu(QMenu*) const;
 	void fillToolBar(QToolBar*);
 	void fillCartesianPlotToolBar(QToolBar*);
 	void print(QPrinter*) const;

@@ -362,7 +362,7 @@ void MainWin::initMenus(){
 	m_newMenu->addAction(m_newSpreadsheetAction);
 	m_newMenu->addAction(m_newMatrixAction);
 	m_newMenu->addAction(m_newWorksheetAction);
-    m_newMenu->addAction(m_newDatapickerAction);
+	m_newMenu->addAction(m_newDatapickerAction);
 	m_newMenu->addSeparator();
 	m_newMenu->addAction(m_newFileDataSourceAction);
 // 	m_newMenu->addAction(m_newSqlDataSourceAction);
@@ -502,11 +502,16 @@ void MainWin::updateGUI() {
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
 
-		//populate worksheet-menu
+		//populate worksheet menu
 		WorksheetView* view=qobject_cast<WorksheetView*>(w->view());
 		QMenu* menu=qobject_cast<QMenu*>(factory->container("worksheet", this));
 		menu->clear();
 		view->createContextMenu(menu);
+
+		//populate analysis menu
+		menu=qobject_cast<QMenu*>(factory->container("analysis", this));
+		menu->clear();
+		view->createAnalysisMenu(menu);
 
 		//populate worksheet-toolbar
 		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("worksheet_toolbar", this));
@@ -516,8 +521,6 @@ void MainWin::updateGUI() {
 		toolbar->setVisible(true);
 		toolbar->clear();
 		view->fillToolBar(toolbar);
-
-		//TODO: populate analysis toolbar
 
 		//populate the toolbar for cartesian plots
 		toolbar=qobject_cast<QToolBar*>(factory->container("cartesian_plot_toolbar", this));
