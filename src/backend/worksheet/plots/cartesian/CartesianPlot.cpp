@@ -4,6 +4,7 @@
     Description          : Cartesian plot
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -32,6 +33,7 @@
 #include "XYCurve.h"
 #include "XYEquationCurve.h"
 #include "XYFitCurve.h"
+#include "XYFourierFilterCurve.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -123,7 +125,7 @@ void CartesianPlot::init(){
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-    graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
 }
 
 /*!
@@ -693,6 +695,19 @@ XYEquationCurve* CartesianPlot::addEquationCurve(){
 
 XYFitCurve* CartesianPlot::addFitCurve(){
 	XYFitCurve* curve = new XYFitCurve("fit");
+	this->addChild(curve);
+	return curve;
+}
+
+//TODO
+/*XYFFTCurve* CartesianPlot::addFFTCurve(){
+	XYFFTCurve* curve = new XYFFTCurve("fft");
+	this->addChild(curve);
+	return curve;
+}*/
+
+XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve(){
+	XYFourierFilterCurve* curve = new XYFourierFilterCurve("fourier filter");
 	this->addChild(curve);
 	return curve;
 }

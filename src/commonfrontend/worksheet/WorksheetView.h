@@ -112,6 +112,7 @@ class WorksheetView : public QGraphicsView {
 	QMenu* m_cartesianPlotAddNewMenu;
 	QMenu* m_cartesianPlotZoomMenu;
 	QMenu* m_cartesianPlotActionModeMenu;
+	QMenu* m_filterMenu;
 
 	QToolButton* tbNewCartesianPlot;
 	QToolButton* tbZoom;
@@ -175,6 +176,9 @@ class WorksheetView : public QGraphicsView {
 	QAction* addVerticalAxisAction;
 	QAction* addLegendAction;
 	QAction* addCustomPointAction;
+
+	QAction* addFFTAction;
+	QAction* addFourierFilterAction;
 
 	QAction* scaleAutoXAction;
 	QAction* scaleAutoYAction;

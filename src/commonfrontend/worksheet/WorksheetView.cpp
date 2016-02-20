@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -210,7 +211,7 @@ void WorksheetView::initActions(){
 	breakLayoutAction->setObjectName("breakLayoutAction");
 	breakLayoutAction->setEnabled(false);
 
-   //Grid actions
+	//Grid actions
 	noGridAction = new KAction(i18n("no grid"), gridActionGroup);
 	noGridAction->setObjectName("noGridAction");
 	noGridAction->setCheckable(true);
@@ -289,6 +290,10 @@ void WorksheetView::initActions(){
 	addCustomPointAction = new KAction(KIcon("draw-cross"), i18n("custom point"), cartesianPlotAddNewActionGroup);
 	connect(cartesianPlotAddNewActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotAddNew(QAction*)));
 
+	//TODO: own icons
+	addFFTAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("FFT"), cartesianPlotAddNewActionGroup);
+	addFourierFilterAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("Fourier Filter"), cartesianPlotAddNewActionGroup);
+
 	QActionGroup* cartesianPlotNavigationGroup = new QActionGroup(this);
 	scaleAutoAction = new KAction(KIcon("labplot-auto-scale-all"), i18n("auto scale"), cartesianPlotNavigationGroup);
 	scaleAutoAction->setData(CartesianPlot::ScaleAuto);
@@ -308,7 +313,7 @@ void WorksheetView::initActions(){
 	zoomInYAction->setData(CartesianPlot::ZoomInY);
 	zoomOutYAction = new KAction(KIcon("labplot-zoom-out-y"), i18n("zoom out Y"), cartesianPlotNavigationGroup);
 	zoomOutYAction->setData(CartesianPlot::ZoomOutY);
-    shiftLeftXAction = new KAction(KIcon("labplot-shift-left-x"), i18n("shift left X"), cartesianPlotNavigationGroup);
+	shiftLeftXAction = new KAction(KIcon("labplot-shift-left-x"), i18n("shift left X"), cartesianPlotNavigationGroup);
 	shiftLeftXAction->setData(CartesianPlot::ShiftLeftX);
 	shiftRightXAction = new KAction(KIcon("labplot-shift-right-x"), i18n("shift right X"), cartesianPlotNavigationGroup);
 	shiftRightXAction->setData(CartesianPlot::ShiftRightX);
@@ -428,6 +433,11 @@ void WorksheetView::initMenus(){
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotZoomMenu);
 	m_cartesianPlotMenu->addSeparator();
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotActionModeMenu);
+
+	m_filterMenu = new QMenu(i18n("Filter"));
+	//TODO: filter icon
+	m_filterMenu->setIcon(KIcon("zoom-draw"));
+	m_filterMenu->addAction(addFourierFilterAction);
 }
 
 /*!
@@ -463,6 +473,8 @@ void WorksheetView::createAnalysisMenu(QMenu* menu) const {
 	Q_ASSERT(menu);
 
 	menu->addAction(addFitCurveAction);
+	menu->addAction(addFFTAction);
+	menu->insertMenu(0,m_filterMenu);
 
 	//TODO: more to come
 }
@@ -1269,6 +1281,9 @@ void WorksheetView::handleCartesianPlotActions() {
 	addVerticalAxisAction->setEnabled(plot);
 	addLegendAction->setEnabled(plot);
 
+	addFFTAction->setEnabled(plot);
+	addFourierFilterAction->setEnabled(plot);
+
 	scaleAutoXAction->setEnabled(plot);
 	scaleAutoYAction->setEnabled(plot);
 	scaleAutoAction->setEnabled(plot);
@@ -1473,6 +1488,10 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addVerticalAxis();
 	else if (action==addCustomPointAction)
 		plot->addCustomPoint();
+//TODO	else if (action==addFFTAction)
+//		plot->addFFTCurve();
+	else if (action==addFourierFilterAction)
+		plot->addFourierFilterCurve();
 }
 
 void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {

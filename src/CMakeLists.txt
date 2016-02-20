@@ -33,8 +33,9 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/ProjectDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYCurveDock.cpp
-	${KDEFRONTEND_DIR}/dockwidgets/XYFitCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/XYFitCurveDock.cpp
+#	${KDEFRONTEND_DIR}/dockwidgets/XYFourierFilterCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
 	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/EquidistantValuesDialog.cpp
@@ -158,8 +159,9 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
-	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierFilterCurve.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
         ${BACKEND_DIR}/datapicker/DatapickerPoint.cpp
         ${BACKEND_DIR}/datapicker/DatapickerImage.cpp

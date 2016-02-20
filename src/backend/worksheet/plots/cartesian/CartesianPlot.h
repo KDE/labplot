@@ -38,6 +38,7 @@ class CartesianPlotLegend;
 class XYCurve;
 class XYEquationCurve;
 class XYFitCurve;
+class XYFourierFilterCurve;
 
 class CartesianPlot:public AbstractPlot{
 	Q_OBJECT
@@ -138,6 +139,7 @@ class CartesianPlot:public AbstractPlot{
 		XYCurve* addCurve();
 		XYEquationCurve* addEquationCurve();
 		XYFitCurve* addFitCurve();
+		XYFourierFilterCurve* addFourierFilterCurve();
 		void addLegend();
 		void addCustomPoint();
 		void scaleAuto();
