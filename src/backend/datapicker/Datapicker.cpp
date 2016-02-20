@@ -100,7 +100,7 @@ void Datapicker::exportView() const {
 	}
 }
 
-void Datapicker::printView() const {
+void Datapicker::printView() {
 	Spreadsheet* s = currentSpreadsheet();
 	if (s) {
 		s->printView();

@@ -56,7 +56,7 @@ class Worksheet: public AbstractPart, public scripted {
 		virtual QWidget* view() const;
 
 		virtual void exportView() const;
-		virtual void printView() const;
+		virtual void printView();
 		virtual void printPreview() const;
 
 		virtual void save(QXmlStreamWriter*) const;

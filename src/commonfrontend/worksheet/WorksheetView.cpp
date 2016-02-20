@@ -1366,10 +1366,11 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 	m_worksheet->setPrinting(false);
 }
 
-void WorksheetView::print(QPrinter* printer) const{
+void WorksheetView::print(QPrinter* printer) {
 	m_worksheet->setPrinting(true);
 	QPainter painter(printer);
 	painter.setRenderHint(QPainter::Antialiasing);
+	drawBackground(&painter, scene()->sceneRect());
 	scene()->render(&painter);
 	m_worksheet->setPrinting(false);
 }

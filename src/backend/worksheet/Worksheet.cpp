@@ -189,12 +189,12 @@ void Worksheet::exportView() const {
 	delete dlg;
 }
 
-void Worksheet::printView() const {
+void Worksheet::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18n("Print Worksheet"));
 	if (dlg->exec() == QDialog::Accepted) {
-		const WorksheetView* view = reinterpret_cast<const WorksheetView*>(m_view);
+		WorksheetView* view = reinterpret_cast<WorksheetView*>(m_view);
 		view->print(&printer);
 	}
 	delete dlg;

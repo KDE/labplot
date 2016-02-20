@@ -118,7 +118,7 @@ void Spreadsheet::exportView() const {
 	delete dlg;
 }
 
-void Spreadsheet::printView() const {
+void Spreadsheet::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, view());
 	dlg->setWindowTitle(i18n("Print Spreadsheet"));

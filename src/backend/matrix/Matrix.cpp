@@ -144,7 +144,7 @@ void Matrix::exportView() const {
 	delete dlg;
 }
 
-void Matrix::printView() const {
+void Matrix::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18n("Print Matrix"));

@@ -165,12 +165,12 @@ void DatapickerImage::exportView() const {
 	delete dlg;
 }
 
-void DatapickerImage::printView() const {
+void DatapickerImage::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18n("Print Datapicker Image"));
 	if (dlg->exec() == QDialog::Accepted) {
-		const DatapickerImageView* view = reinterpret_cast<const DatapickerImageView*>(m_view);
+		DatapickerImageView* view = reinterpret_cast<DatapickerImageView*>(m_view);
 		view->print(&printer);
 	}
 	delete dlg;

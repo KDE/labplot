@@ -79,7 +79,7 @@ void Workbook::exportView() const {
 	}
 }
 
-void Workbook::printView() const {
+void Workbook::printView() {
 	Spreadsheet* s = currentSpreadsheet();
 	if (s) {
 		s->printView();
