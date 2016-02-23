@@ -48,7 +48,6 @@
 #include <QInputDialog>
 #include <KMenu>
 
-
 /*!
 	\class ImportFileDialog
 	\brief Dialog for importing data from a file. Embeds \c ImportFileWidget and provides the standard buttons.
@@ -57,7 +56,7 @@
  */
 
 ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource) : KDialog(parent), m_mainWin(parent),
-	cbPosition(0), m_showOptions(false), m_newDataContainerMenu(0) {
+	cbAddTo(0), cbPosition(0), m_showOptions(false), m_newDataContainerMenu(0) {
 
 	QWidget* mainWidget = new QWidget(this);
 	vLayout = new QVBoxLayout(mainWidget);
@@ -335,15 +334,17 @@ void ImportFileDialog::newDataContainerMenu() {
 }
 
 void ImportFileDialog::checkOkButton() {
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
-	if (!aspect) {
-		enableButtonOk(false);
-		lPosition->setEnabled(false);
-		cbPosition->setEnabled(false);
-		return;
-	} else {
-		lPosition->setEnabled(true);
-		cbPosition->setEnabled(true);
+	if (cbAddTo) { //only check for the target container when no file data source is being added
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
+		if (!aspect) {
+			enableButtonOk(false);
+			lPosition->setEnabled(false);
+			cbPosition->setEnabled(false);
+			return;
+		} else {
+			lPosition->setEnabled(true);
+			cbPosition->setEnabled(true);
+		}
 	}
 
 	QString fileName = importFileWidget->fileName();
