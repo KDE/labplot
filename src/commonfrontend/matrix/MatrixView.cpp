@@ -50,7 +50,6 @@
 #include <QThreadPool>
 #include <QMutex>
 // #include <QElapsedTimer>
-// #include <QDebug>
 
 #include <KLocale>
 #include <KAction>
@@ -166,12 +165,6 @@ void MatrixView::initActions() {
 	action_header_format_2->setCheckable(true);
 	action_header_format_3= new QAction(i18n("Rows, Columns and xy-Values"), headerFormatActionGroup);
 	action_header_format_3->setCheckable(true);
-	if (m_matrix->headerFormat() == Matrix::HeaderRowsColumns)
-		action_header_format_1->setChecked(true);
-	else if (m_matrix->headerFormat() == Matrix::HeaderValues)
-		action_header_format_2->setChecked(true);
-	else
-		action_header_format_3->setChecked(true);
 	connect(headerFormatActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(headerFormatChanged(QAction*)));
 
 	// column related actions
@@ -317,6 +310,7 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	menu->insertSeparator(firstAction);
 // 	menu->insertAction(firstAction, action_duplicate);
 	menu->insertMenu(firstAction, m_headerFormatMenu);
+
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_go_to_cell);
 	menu->insertSeparator(firstAction);
@@ -326,6 +320,9 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	// Export
 }
 
+/*!
+	set the row and column size to the saved sizes.
+ */
 void MatrixView::adjustHeaders() {
 	QHeaderView* h_header = m_tableView->horizontalHeader();
 	QHeaderView* v_header = m_tableView->verticalHeader();
@@ -342,6 +339,23 @@ void MatrixView::adjustHeaders() {
 
 	connect(v_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleVerticalSectionResized(int,int,int)));
 	connect(h_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
+}
+
+/*!
+	Resizes the headers/columns to fit the new content. Called on changed of the header format in Matrix.
+*/
+void MatrixView::resizeHeaders() {
+	//hide and unhide the table view in order to trigger the refresh of the view and to get the new sizes
+	m_tableView->setVisible(false);
+	m_tableView->resizeColumnsToContents();
+	m_tableView->setVisible(true);
+
+	if (m_matrix->headerFormat() == Matrix::HeaderRowsColumns)
+		action_header_format_1->setChecked(true);
+	else if (m_matrix->headerFormat() == Matrix::HeaderValues)
+		action_header_format_2->setChecked(true);
+	else
+		action_header_format_3->setChecked(true);
 }
 
 void MatrixView::setRowHeight(int row, int height) {
@@ -827,6 +841,8 @@ void MatrixView::headerFormatChanged(QAction* action) {
 		m_matrix->setHeaderFormat(Matrix::HeaderValues);
 	else
 		m_matrix->setHeaderFormat(Matrix::HeaderRowsColumnsValues);
+
+	resizeHeaders();
 }
 
 //############################# column related slots ###########################

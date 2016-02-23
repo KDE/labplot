@@ -30,10 +30,8 @@
 #define MATRIXDOCK_H
 
 #include <QtGui/QWidget>
+#include "backend/matrix/Matrix.h"
 #include "ui_matrixdock.h"
-
-class Matrix;
-class AbstractAspect;
 
 class MatrixDock: public QWidget {
 	Q_OBJECT
@@ -81,6 +79,7 @@ private slots:
 
 	void matrixNumericFormatChanged(char);
 	void matrixPrecisionChanged(int);
+	void matrixHeaderFormatChanged(Matrix::HeaderFormat);
 
 	//save/load template
 	void loadConfigFromTemplate(KConfig&);

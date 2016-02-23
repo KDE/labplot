@@ -149,6 +149,7 @@ class Matrix : public AbstractDataSource {
 		friend class MatrixSetPrecisionCmd;
 		void numericFormatChanged(char);
 		void precisionChanged(int);
+		void headerFormatChanged(Matrix::HeaderFormat);
 
 	private:
 		void init();
