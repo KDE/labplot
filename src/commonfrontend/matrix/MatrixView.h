@@ -67,6 +67,7 @@ class MatrixView : public QWidget {
 		void setCellsSelected(int first_row, int first_col, int last_row, int last_col);
 		void getCurrentCell(int* row, int* col) const;
 
+		void resizeHeaders();
 		void adjustHeaders();
 		void exportToFile(const QString& path, const QString& separator) const;
 
