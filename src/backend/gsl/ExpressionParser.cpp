@@ -370,7 +370,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Pochhammer symbol");
         m_functionsNames << i18n("Logarithm of the Pochhammer symbol");
         m_functionsNames << i18n("Relative Pochhammer symbol");
-        m_functionsNames << i18n("Unnormalized incomplete gamma gunction");
+        m_functionsNames << i18n("Unnormalized incomplete gamma function");
         m_functionsNames << i18n("Normalized incomplete gamma function");
         m_functionsNames << i18n("Complementary normalized incomplete gamma function");
         m_functionsNames << i18n("Beta function");
@@ -784,9 +784,9 @@ void ExpressionParser::initConstants() {
 	//Fundamental constants
 	m_constantsNames << i18n("Speed of light");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_SPEED_OF_LIGHT); m_constantsUnits << "m / s";
-	m_constantsNames << i18n("Vaccuum permeability");
+	m_constantsNames << i18n("Vacuum permeability");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_VACUUM_PERMEABILITY); m_constantsUnits << "kg m / A^2 s^2";
-	m_constantsNames << i18n("Vaccuum permittivity");
+	m_constantsNames << i18n("Vacuum permittivity");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_VACUUM_PERMITTIVITY); m_constantsUnits << "A^2 s^4 / kg m^3";
 	m_constantsNames << i18n("Plank constant");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_PLANCKS_CONSTANT_H); m_constantsUnits << "kg m^2 / s";
@@ -796,13 +796,13 @@ void ExpressionParser::initConstants() {
 	m_constantsValues << QString::number(GSL_CONST_NUM_AVOGADRO); m_constantsUnits << "1 / mol";
 	m_constantsNames << i18n("Faraday");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_FARADAY); m_constantsUnits << "A s / mol";
-	m_constantsNames << i18n("Boltzman constant");
+	m_constantsNames << i18n("Boltzmann constant");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_BOLTZMANN); m_constantsUnits << "kg m^2 / K s^2";
 	m_constantsNames << i18n("Molar gas");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_MOLAR_GAS); m_constantsUnits << "kg m^2 / K mol s^2";
 	m_constantsNames << i18n("Standard gas volume");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_STANDARD_GAS_VOLUME); m_constantsUnits << "m^3 / mol";
-	m_constantsNames << i18n("Stefan-Boltzman constant");
+	m_constantsNames << i18n("Stefan-Boltzmann constant");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_STEFAN_BOLTZMANN_CONSTANT); m_constantsUnits << "kg / K^4 s^3";
 	m_constantsNames << i18n("Gauss");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_GAUSS); m_constantsUnits << "kg / A s^2";
