@@ -788,9 +788,9 @@ void ExpressionParser::initConstants() {
 	m_constantsValues << QString::number(GSL_CONST_MKSA_VACUUM_PERMEABILITY); m_constantsUnits << "kg m / A^2 s^2";
 	m_constantsNames << i18n("Vacuum permittivity");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_VACUUM_PERMITTIVITY); m_constantsUnits << "A^2 s^4 / kg m^3";
-	m_constantsNames << i18n("Plank constant");
+	m_constantsNames << i18n("Planck constant");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_PLANCKS_CONSTANT_H); m_constantsUnits << "kg m^2 / s";
-	m_constantsNames << i18n("Reduced Plank constant");
+	m_constantsNames << i18n("Reduced Planck constant");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_PLANCKS_CONSTANT_HBAR); m_constantsUnits << "kg m^2 / s";
 	m_constantsNames << i18n("Avogadro constant");
 	m_constantsValues << QString::number(GSL_CONST_NUM_AVOGADRO); m_constantsUnits << "1 / mol";
