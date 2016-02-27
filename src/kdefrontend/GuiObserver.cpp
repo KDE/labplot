@@ -39,7 +39,6 @@
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/core/Project.h"
-#include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/DatapickerImage.h"
 #include "backend/datapicker/DatapickerCurve.h"
@@ -58,8 +57,7 @@
 #include "kdefrontend/dockwidgets/CustomPointDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #include "kdefrontend/widgets/LabelWidget.h"
-#include "kdefrontend/widgets/ImageWidget.h"
-#include "kdefrontend/widgets/DatapickerPointWidget.h"
+#include "kdefrontend/widgets/DatapickerImageWidget.h"
 #include "kdefrontend/widgets/DatapickerCurveWidget.h"
 
 #include <kstatusbar.h>
@@ -334,7 +332,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
       mainWindow->m_propertiesDock->setWindowTitle(i18n("Datapicker properties"));
 
       if (!mainWindow->datapickerImageDock){
-        mainWindow->datapickerImageDock = new ImageWidget(mainWindow->stackedWidget);
+        mainWindow->datapickerImageDock = new DatapickerImageWidget(mainWindow->stackedWidget);
         mainWindow->stackedWidget->addWidget(mainWindow->datapickerImageDock);
       }
 
@@ -345,21 +343,6 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
       mainWindow->datapickerImageDock->setImages(list);
 
       mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerImageDock);
-  }else if (className=="DatapickerPoint"){
-      mainWindow->m_propertiesDock->setWindowTitle(i18n("DatapickerPoint properties"));
-
-      if (!mainWindow->datapickerPointDock){
-        mainWindow->datapickerPointDock = new DatapickerPointWidget(mainWindow->stackedWidget);
-        mainWindow->stackedWidget->addWidget(mainWindow->datapickerPointDock);
-      }
-
-      QList<DatapickerPoint*> list;
-      foreach(aspect, selectedAspects){
-        list<<qobject_cast<DatapickerPoint*>(aspect);
-      }
-      mainWindow->datapickerPointDock->setDatapickerPoints(list);
-
-      mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerPointDock);
   }else if (className=="Project"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Project properties"));
 

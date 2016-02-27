@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : Segments.cpp
     Project              : LabPlot
-    Description          : Contain Methods to trace curve of image/plot
+    Description          : Contains methods to trace curve of image/plot
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
  ***************************************************************************/
@@ -148,7 +148,6 @@ void Segments::matchRunsToSegments(int x, int height, bool* lastBool, Segment** 
 
 /*!
     remove unneeded lines belonging to segments that just finished in the previous column.
-    the results of this function are displayed in the debug spew of makeSegments
 */
 void Segments::removeUnneededLines(Segment** lastSegment, Segment** currSegment, int height) {
 	Segment* segLast = 0;

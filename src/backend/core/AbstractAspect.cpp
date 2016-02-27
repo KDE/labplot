@@ -447,7 +447,7 @@ void AbstractAspect::removeAllChildren() {
 	beginMacro(i18n("%1: remove all children.", name()));
 
 	QList<AbstractAspect*> children = rawChildren();
-	QList<AbstractAspect*>::iterator i = children.begin();
+	QList<AbstractAspect*>::const_iterator i = children.constBegin();
 	AbstractAspect *current = 0, *nextSibling = 0;
 	if (i != children.end()) {
 		current = *i;

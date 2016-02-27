@@ -2,7 +2,7 @@
     File                 : CartesianPlotLegendDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2016 by Alexander Semke (alexander.semke@web.de)
     Description          : widget for cartesian plot legend properties
 
  ***************************************************************************/
@@ -35,6 +35,7 @@
 
 #include <QDir>
 #include <QFileDialog>
+#include <QImageReader>
 #include <KUrlCompletion>
 #include <KLocalizedString>
 
@@ -514,7 +515,14 @@ void CartesianPlotLegendDock::backgroundSecondColorChanged(const QColor& c) {
 void CartesianPlotLegendDock::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "CartesianPlotLegendDock");
 	QString dir = conf.readEntry("LastImageDir", "");
-    QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
+
+	QString formats;
+	foreach(QByteArray format, QImageReader::supportedImageFormats()) {
+		QString f = "*." + QString(format.constData());
+		formats.isEmpty() ? formats+=f : formats+=" "+f;
+	}
+
+	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)").arg(formats));
     if (path.isEmpty())
         return; //cancel was clicked in the file-dialog
 

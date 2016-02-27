@@ -71,7 +71,7 @@ class ImportFileDialog: public KDialog {
 		QPushButton* bNewMatrix;
 		QPushButton* bNewWorkbook;
 		QToolButton* tbNewDataContainer;
-		bool m_optionsShown;
+		bool m_showOptions;
 		QMenu* m_newDataContainerMenu;
 
 	private slots:

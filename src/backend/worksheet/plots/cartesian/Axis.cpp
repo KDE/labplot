@@ -342,7 +342,7 @@ void Axis::handlePageResize(double horizontalRatio, double verticalRatio) {
 	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.0);
 	setLinePen(pen);
 
-	if (d->orientation & Axis::AxisHorizontal) {
+	if (d->orientation == Axis::AxisHorizontal) {
 		setMajorTicksLength(d->majorTicksLength * verticalRatio); // ticks are perpendicular to axis line -> verticalRatio relevant
 		setMinorTicksLength(d->minorTicksLength * verticalRatio);
 		//TODO setLabelsFontSize(d->labelsFontSize * verticalRatio);

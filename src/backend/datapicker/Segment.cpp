@@ -181,15 +181,15 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
 			int count = 0;
 			datapicker->activeCurve()->beginMacro(i18n("%1: draw points over segment", datapicker->activeCurve()->name()));
 			foreach (QLine* line, q->path) {
-				int l = (line->y1() > line->y2())?line->y2():line->y1();
-				int h = (line->y1() > line->y2())?line->y1():line->y2();
+				const int l = (line->y1() > line->y2())?line->y2():line->y1();
+				const int h = (line->y1() > line->y2())?line->y1():line->y2();
 
 				for (int i = l; i <= h; i++) {
 					if (count%q->m_image->pointSeparation() == 0) {
 						bool positionUsed = false;
 						const QList<DatapickerPoint*> curvePointsList = datapicker->activeCurve()->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
 						foreach (DatapickerPoint* point, curvePointsList) {
-							if ( point->position().point == QPoint(line->x1(), i)*scaleFactor )
+                            if ( point->position() == QPoint(line->x1(), i)*scaleFactor )
 								positionUsed = true;
 						}
 

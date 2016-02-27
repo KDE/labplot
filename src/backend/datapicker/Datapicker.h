@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : Datapicker.h
     Project              : LabPlot
-    Description          : Aspect providing a container for storing image and data
-                           in form of worksheet and spreadsheets
+    Description          : Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -45,45 +44,50 @@ class QVector3D;
 class Datapicker : public AbstractPart, public scripted {
 	Q_OBJECT
 
-public:
-	Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading = false);
+	public:
+		Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading = false);
 
-	virtual QIcon icon() const;
-	virtual QMenu* createContextMenu();
-	virtual QWidget* view() const;
+		virtual QIcon icon() const;
+		virtual QMenu* createContextMenu();
+		virtual QWidget* view() const;
 
-	DatapickerCurve* activeCurve();
-	Spreadsheet* currentSpreadsheet() const;
-	DatapickerImage* image() const;
+		virtual void exportView() const;
+		virtual void printView();
+		virtual void printPreview() const;
 
-	void setChildSelectedInView(int index, bool selected);
-	void setSelectedInView(const bool);
-	void addNewPoint(const QPointF&, AbstractAspect*);
+		DatapickerCurve* activeCurve();
+		Spreadsheet* currentSpreadsheet() const;
+		DatapickerImage* image() const;
 
-	QVector3D mapSceneToLogical(const QPointF&) const;
-	QVector3D mapSceneLengthToLogical(const QPointF&) const;
+		void setChildSelectedInView(int index, bool selected);
+		void setSelectedInView(const bool);
+		void addNewPoint(const QPointF&, AbstractAspect*);
 
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+		QVector3D mapSceneToLogical(const QPointF&) const;
+		QVector3D mapSceneLengthToLogical(const QPointF&) const;
 
-public slots:
-	virtual void childSelected(const AbstractAspect*);
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 
-private:
-	DatapickerCurve* m_activeCurve;
-	Transform* m_transform;
-	DatapickerImage* m_image;
-	void init();
+	public slots:
+		virtual void childSelected(const AbstractAspect*);
 
-private slots:
-	virtual void childDeselected(const AbstractAspect*);
-	void handleChildAspectAboutToBeRemoved(const AbstractAspect*);
-	void handleChildAspectAdded(const AbstractAspect*);
-	void handleAspectAboutToBeRemoved(const AbstractAspect*);
+	private:
+		DatapickerCurve* m_activeCurve;
+		Transform* m_transform;
+		DatapickerImage* m_image;
+		void init();
+		void handleChildAspectAboutToBeRemoved(const AbstractAspect*);
+		void handleChildAspectAdded(const AbstractAspect*);
 
-signals:
-	void datapickerItemSelected(int);
-	void childAspectAdded(const AbstractAspect*);
+	private slots:
+		virtual void childDeselected(const AbstractAspect*);
+		void handleAspectAdded(const AbstractAspect*);
+		void handleAspectAboutToBeRemoved(const AbstractAspect*);
+
+	signals:
+		void datapickerItemSelected(int);
+		void requestUpdateActions();
 };
 
 #endif

@@ -1,10 +1,10 @@
 ecm_install_icons(
 ICONS
-sc-apps-labplot-1-to-1-zoom.svg
-sc-apps-labplot-1-to-2-zoom.svg
-sc-apps-labplot-1-to-3-zoom.svg
-sc-apps-labplot-1-to-4-zoom.svg
-sc-apps-labplot-1-to-5-zoom.svg
+sc-apps-labplot-1x-zoom.svg
+sc-apps-labplot-2x-zoom.svg
+sc-apps-labplot-3x-zoom.svg
+sc-apps-labplot-4x-zoom.svg
+sc-apps-labplot-5x-zoom.svg
 sc-apps-labplot-auto-scale-all.svg
 sc-apps-labplot-auto-scale-x.svg
 sc-apps-labplot-auto-scale-y.svg
@@ -47,5 +47,6 @@ sc-apps-labplot-zoom-out-y.svg
 sc-apps-labplot-zoom-select.svg
 sc-apps-labplot-zoom-select-x.svg
 sc-apps-labplot-zoom-select-y.svg
+sc-apps-labplot-zoom.svg
 DESTINATION ${KDE_INSTALL_ICONDIR}
 THEME hicolor)

@@ -4,7 +4,7 @@
     Description       	 : A tree view for displaying and editing an AspectTreeModel.
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2008 by Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2016 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -88,6 +88,7 @@ class ProjectExplorer : public QWidget {
 		void toggleFilterMatchCompleteWord();
 		void toggleFilterWidgets();
 		void toggleFilterOptionsMenu(bool);
+		void resizeHeader();
 
 		void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 		void selectIndex(const QModelIndex&);

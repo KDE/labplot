@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : ImageWidget.h
+    File                 : DatapickerImageWidget.h
     Project              : LabPlot
     Description          : widget for datapicker properties
     --------------------------------------------------------------------
@@ -26,41 +26,68 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMAGEWIDGET_H
-#define IMAGEWIDGET_H
+#ifndef DATAPICKERIMAGEWIDGET_H
+#define DATAPICKERIMAGEWIDGET_H
 
-#include "ui_imagewidget.h"
+#include <QGraphicsView>
+
+#include "ui_datapickerimagewidget.h"
 #include "backend/datapicker/DatapickerImage.h"
 
-class DatapickerPointWidget;
 class QxtSpanSlider;
 
-class ImageWidget : public QWidget {
+class HistogramView : public QGraphicsView {
+    Q_OBJECT
+
+public:
+    explicit HistogramView(QWidget*, int);
+    void setScalePixmap(const QString&);
+    int *bins;
+
+public slots:
+    void setSpan(int, int);
+
+private:
+    void resizeEvent(QResizeEvent *event);
+    void drawBackground(QPainter*, const QRectF&);
+    QGraphicsRectItem* lowerSlider;
+    QGraphicsRectItem* upperSlider;
+    QGraphicsScene* m_scene;
+    int m_range;
+};
+
+class DatapickerImageWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit ImageWidget(QWidget*);
+    explicit DatapickerImageWidget(QWidget*);
 
 	void setImages(QList<DatapickerImage*>);
 	void load();
 
 private:
-	Ui::ImageWidget ui;
+    Ui::DatapickerImageWidget ui;
+    void init();
 	void initConnections();
 
 	DatapickerImage* m_image;
 	QList<DatapickerImage*> m_imagesList;
 	bool m_initializing;
-	DatapickerPointWidget* datapickerPointWidget;
 
 	QxtSpanSlider* ssIntensity;
 	QxtSpanSlider* ssForeground;
 	QxtSpanSlider* ssHue;
 	QxtSpanSlider* ssSaturation;
-	QxtSpanSlider* ssValue;
+    QxtSpanSlider* ssValue;
+
+    HistogramView* gvIntensity;
+    HistogramView* gvForeground;
+    HistogramView* gvHue;
+    HistogramView* gvSaturation;
+    HistogramView* gvValue;
 
 private slots:
-	//SLOTs for changes triggered in ImageWidget
+    //SLOTs for changes triggered in DatapickerImageWidget
 	//"General"-tab
 	void nameChanged();
 	void commentChanged();
@@ -82,15 +109,36 @@ private slots:
 	void ternaryScaleChanged(double);
 	void logicalPositionChanged();
 
-	//SLOTs for changes triggered in ImageWidget
+    //symbol propeties
+    void pointsStyleChanged(int);
+    void pointsSizeChanged(double);
+    void pointsRotationChanged(int);
+    void pointsOpacityChanged(int);
+    void pointsFillingStyleChanged(int);
+    void pointsFillingColorChanged(const QColor&);
+    void pointsBorderStyleChanged(int);
+    void pointsBorderColorChanged(const QColor&);
+    void pointsBorderWidthChanged(double);
+    void pointsVisibilityChanged(bool);
+
+
+    //SLOTs for changes triggered in DatapickerImageWidget
 	void imageDescriptionChanged(const AbstractAspect*);
 	void imageFileNameChanged(const QString&);
 	void imageRotationAngleChanged(float);
 	void imageAxisPointsChanged(const DatapickerImage::ReferencePoints&);
 	void imageEditorSettingsChanged(const DatapickerImage::EditorSettings&);
 	void imageMinSegmentLengthChanged(const int);
-	void updateDatapickerPointList();
+    void updateSymbolWidgets();
 	void handleWidgetActions();
+    //symbol
+    void symbolStyleChanged(Symbol::Style);
+    void symbolSizeChanged(qreal);
+    void symbolRotationAngleChanged(qreal);
+    void symbolOpacityChanged(qreal);
+    void symbolBrushChanged(QBrush);
+    void symbolPenChanged(const QPen&);
+    void symbolVisibleChanged(bool);
 };
 
-#endif //IMAGEWIDGET_H
+#endif //DATAPICKERIMAGEWIDGET_H

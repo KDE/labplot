@@ -92,6 +92,7 @@ QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 	switch(role)
 	{
 		case Qt::ToolTipRole:
+		{
 				if(!col_ptr->isValid(row)) {
 					QString s;
 					if(col_ptr->isMasked(row))
@@ -100,6 +101,7 @@ QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 						s = i18n("invalid cell (ignored in all operations)");
 					return QVariant(s);
 				}
+		}
 		case Qt::EditRole:
 				if(!m_formula_mode && !col_ptr->isValid(row))
 					return QVariant();
@@ -125,17 +127,15 @@ QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 			return QVariant(col_ptr->formula(row));
 		case Qt::DecorationRole:
 			if(m_formula_mode)
-                return QIcon(QPixmap(":/equals.png"));
-			break;
+				return QIcon(QPixmap(":/equals.png"));
 	}
 
 	return QVariant();
 }
 
-QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-	if (section>m_spreadsheet->columnCount()-1)
-	  return QVariant();
+QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, int role) const {
+	if ( (orientation==Qt::Horizontal && section>m_spreadsheet->columnCount()-1) || (orientation==Qt::Vertical && section>m_spreadsheet->rowCount()-1) )
+		return QVariant();
 
 	switch(orientation) {
 		case Qt::Horizontal:
@@ -151,6 +151,7 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 				case Qt::SizeHintRole:
 					return QSize(m_spreadsheet->child<Column>(section)->width(), m_defaultHeaderHeight);
 			}
+			break;
 		case Qt::Vertical:
 			switch(role) {
 				case Qt::DisplayRole:

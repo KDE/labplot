@@ -28,7 +28,7 @@
 #ifndef DATAPICKERIMAGEVIEW_H
 #define DATAPICKERIMAGEVIEW_H
 
-#include <QGraphicsView>
+#include "commonfrontend/worksheet/WorksheetView.h"
 
 class QMenu;
 class QToolBar;
@@ -38,7 +38,6 @@ class QWheelEvent;
 class AbstractAspect;
 class DatapickerImage;
 class Datapicker;
-class WorksheetElement;
 class Transform;
 class QActionGroup;
 
@@ -50,10 +49,8 @@ class DatapickerImageView : public QGraphicsView {
 public:
 	explicit DatapickerImageView(DatapickerImage* image);
 
-	enum ExportFormat {Pdf, Eps, Svg, Png};
-
 	void setScene(QGraphicsScene*);
-	void exportToFile(const QString&, const ExportFormat, const int);
+	void exportToFile(const QString&, const WorksheetView::ExportFormat, const int);
 
 private:
 	enum MouseMode {SelectAndEditMode, NavigationMode, ZoomSelectionMode, SelectAndMoveMode};
@@ -125,7 +122,7 @@ private:
 public slots:
 	void createContextMenu(QMenu*) const;
 	void fillToolBar(QToolBar*);
-	void print(QPrinter*) const;
+	void print(QPrinter*);
 
 private slots:
 	void mouseModeChanged(QAction*);

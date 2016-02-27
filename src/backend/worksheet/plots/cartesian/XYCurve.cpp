@@ -898,6 +898,8 @@ void XYCurvePrivate::updateLines(){
 	QPointF tempPoint1, tempPoint2;
 	QPointF curPoint, nextPoint;
 	switch(lineType){
+          case XYCurve::NoLine:
+		break;
 	  case XYCurve::Line:{
 		for (int i=0; i<count-1; i++){
 		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
@@ -1095,6 +1097,8 @@ void XYCurvePrivate::updateDropLines(){
 	xMin = plot->xMin();
 	yMin = plot->yMin();
 	switch(dropLineType){
+	  case XYCurve::NoDropLine:
+		break;
 	  case XYCurve::DropLineX:{
 		for(int i=0; i<symbolPointsLogical.size(); ++i){
 			if (!visiblePoints[i]) continue;

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : export worksheet dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -31,8 +31,6 @@
 #include <QFileDialog>
 #include <KUrlCompletion>
 #include <KMessageBox>
-#include <KPushButton>
-#include <QStringList>
 #include <QDesktopWidget>
 #include <KLocalizedString>
 #include <KSharedConfig>
@@ -47,7 +45,6 @@
 ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) {
 	mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
-	ui.gbOptions->hide();
 
 	KUrlCompletion *comp = new KUrlCompletion();
     ui.kleFileName->setCompletionObject(comp);
@@ -72,10 +69,9 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 	ui.cbResolution->addItem("600");
 	ui.cbResolution->setValidator(new QIntValidator(ui.cbResolution));
 
-	setMainWidget( mainWidget );
+	setMainWidget(mainWidget);
 
-	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
-	setButtonText(KDialog::User1,i18n("Options >>"));
+	setButtons(KDialog::Ok | KDialog::User1 | KDialog::Cancel);
 
 	connect( ui.cbFormat, SIGNAL(currentIndexChanged(int)), SLOT(formatChanged(int)) );
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
@@ -85,15 +81,30 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 	setCaption(i18n("Export worksheet"));
     setWindowIcon(QIcon::fromTheme("document-export-database"));
 
+	//restore saved setting
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
-	ui.cbFormat->setCurrentIndex(conf.readEntry("Format", "").toInt());
-	ui.cbExportArea->setCurrentIndex(conf.readEntry("Area", "").toInt());
-	ui.cbResolution->setCurrentIndex(conf.readEntry("Resolution", "").toInt());
-
-	resize( QSize(500,0).expandedTo(minimumSize()) );
+	ui.cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
+	ui.cbExportArea->setCurrentIndex(conf.readEntry("Area", 0));
+	ui.chkExportBackground->setChecked(conf.readEntry("Background", true));
+	ui.cbResolution->setCurrentIndex(conf.readEntry("Resolution", 0));
+	m_showOptions = conf.readEntry("ShowOptions", false);
+	ui.gbOptions->setVisible(m_showOptions);
+	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
+	restoreDialogSize(conf);
 }
 
-void ExportWorksheetDialog::setFileName(const QString& name){
+ExportWorksheetDialog::~ExportWorksheetDialog() {
+	//save current settings
+	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+	conf.writeEntry("Format", ui.cbFormat->currentIndex());
+	conf.writeEntry("Area", ui.cbExportArea->currentIndex());
+	conf.writeEntry("Background", ui.chkExportBackground->isChecked());
+	conf.writeEntry("Resolution", ui.cbResolution->currentIndex());
+	conf.writeEntry("ShowOptions", m_showOptions);
+	saveDialogSize(conf);
+}
+
+void ExportWorksheetDialog::setFileName(const QString& name) {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
 	QString dir = conf.readEntry("LastDir", "");
 	if (dir.isEmpty()) dir = QDir::homePath();
@@ -105,7 +116,7 @@ QString ExportWorksheetDialog::path() const{
 	return ui.kleFileName->text();
 }
 
-WorksheetView::ExportFormat ExportWorksheetDialog::exportFormat() const{
+WorksheetView::ExportFormat ExportWorksheetDialog::exportFormat() const {
 	int index = ui.cbFormat->currentIndex();
 
 	//we have a separator in the format combobox at the 4th position -> skip it
@@ -115,7 +126,7 @@ WorksheetView::ExportFormat ExportWorksheetDialog::exportFormat() const{
 	return WorksheetView::ExportFormat(index);
 }
 
-WorksheetView::ExportArea ExportWorksheetDialog::exportArea() const{
+WorksheetView::ExportArea ExportWorksheetDialog::exportArea() const {
 	return WorksheetView::ExportArea(ui.cbExportArea->currentIndex());
 }
 
@@ -139,12 +150,11 @@ void ExportWorksheetDialog::slotButtonClicked(int button) {
 }
 
 //SLOTS
-void ExportWorksheetDialog::okClicked(){
-	if ( QFile::exists(ui.kleFileName->text()) ){
+void ExportWorksheetDialog::okClicked() {
+	if ( QFile::exists(ui.kleFileName->text()) ) {
 		int r=KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
-		if (r==KMessageBox::No) {
+		if (r==KMessageBox::No)
 			return;
-		}
 	}
 
     KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
@@ -170,14 +180,10 @@ void ExportWorksheetDialog::okClicked(){
 /*!
 	Shows/hides the GroupBox with export options in this dialog.
 */
-void ExportWorksheetDialog::toggleOptions(){
-	if (ui.gbOptions->isVisible()){
-		ui.gbOptions->hide();
-		setButtonText(KDialog::User1,i18n("Options >>"));
-	}else{
-		ui.gbOptions->show();
-		setButtonText(KDialog::User1,i18n("Options <<"));
-	}
+void ExportWorksheetDialog::toggleOptions() {
+	m_showOptions = !m_showOptions;
+	ui.gbOptions->setVisible(m_showOptions);
+	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
 
 	//resize the dialog
 	mainWidget->resize(layout()->minimumSize());
@@ -207,7 +213,7 @@ void ExportWorksheetDialog::selectFile() {
 /*!
 	called when the output format was changed. Adjusts the extension for the specified file.
  */
-void ExportWorksheetDialog::formatChanged(int index){
+void ExportWorksheetDialog::formatChanged(int index) {
 	//we have a separator in the format combobox at the 4th posiiton -> skip it
 	if (index>3)
 		index --;
@@ -231,4 +237,3 @@ void ExportWorksheetDialog::formatChanged(int index){
 void ExportWorksheetDialog::fileNameChanged(const QString& name) {
 	enableButtonOk( !name.simplified().isEmpty() );
 }
-

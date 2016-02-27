@@ -23,7 +23,16 @@ public:
 	int pointSeparation;
 	int minSegmentLength;
 
+    qreal pointRotationAngle;
+    Symbol::Style pointStyle;
+    QBrush pointBrush;
+    QPen pointPen;
+    qreal pointOpacity;
+    qreal pointSize;
+    bool pointVisibility;
+
 	QString name() const;
+    void retransform();
 	void updateFileName();
 	void discretize();
 	void makeSegments();
