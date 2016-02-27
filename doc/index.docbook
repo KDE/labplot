@@ -433,13 +433,13 @@ Datapicker is a tool that allows you to easily extract data from image files. Th
 <listitem><para>Select the plot type (cartesian, polar, etc.).</para></listitem>
 <listitem><para>Select tree reference points and provide values for them. With the help of these points the logical coordinate system is determined.</para></listitem>
 <listitem><para>Create a new datapicker curve and set the type of the error bars.</para></listitem>
-<listitem><para>Switch to the mouse mode "Set Curve Points" and start selecting points on the imported image - the coordinates for the selected points are determined and added to the spreadhseet "Data".</para></listitem>
+<listitem><para>Switch to the mouse mode "Set Curve Points" and start selecting points on the imported image - the coordinates for the selected points are determined and added to the spreadsheet "Data".</para></listitem>
 </itemizedlist>
 </para>
 
 <para>
 It is possible to add more then one datapicker curve. This is useful in case the imported image contains several curves that need to be digitized.
-The datapicker curve that is currently being selected in the <link linkend="project-explorer">Project Explorer </link> is the "active" one - points clicked on the datapicker image will be calculated and added to its data spreadhseet.
+The datapicker curve that is currently being selected in the <link linkend="project-explorer">Project Explorer </link> is the "active" one - points clicked on the datapicker image will be calculated and added to its data spreadsheet.
 <screenshot><mediaobject><imageobject>
       <imagedata fileref="datapicker_active_curve.png" format="PNG"/>
 </imageobject></mediaobject></screenshot>
