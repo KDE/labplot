@@ -316,7 +316,7 @@ The worksheet is, besides the data containers <link linkend="spreadsheet">Spread
 Worksheets can either have a fixed size (a user defined size or one of the predefined sizes like A4, Letter etc.) or they can fill out the complete available area for the worksheet window. Multiple plots can be arranged on the worksheet in a vertical, horizontal or grid layouts.
 </para>
 <para>
-Many properties of the worksheet like size, background color and layout settings can be changed in the "Worksheet properties" pane.
+Many properties of the worksheet like size, background colour and layout settings can be changed in the "Worksheet properties" pane.
 </para>
 
 <para>
@@ -356,6 +356,74 @@ The additional options determining the import of the data are equivalent to thos
 </para>
 </sect1>
 
+
+<sect1 id="datapicker">
+<title>Datapicker</title>
+<para>
+Datapicker is a tool that allows you to easily extract data from image files. The process of extraction consists mainly out of the following steps:
+<itemizedlist>
+<listitem><para>Import an image containing plots and curves where you want to read the data points from.</para></listitem>
+<listitem><para>Select the plot type (cartesian, polar, etc.).</para></listitem>
+<listitem><para>Select tree reference points and provide values for them. With the help of these points the logical coordinate system is determined.</para></listitem>
+<listitem><para>Create a new datapicker curve and set the type of the error bars.</para></listitem>
+<listitem><para>Switch to the mouse mode "Set Curve Points" and start selecting points on the imported image - the coordinates for the selected points are determined and added to the spreadsheet "Data".</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+It is possible to add more then one datapicker curve. This is useful in case the imported image contains several curves that need to be digitized.
+The datapicker curve that is currently being selected in the <link linkend="project-explorer">Project Explorer </link> is the "active" one - points clicked on the datapicker image will be calculated and added to its data spreadsheet.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker_active_curve_data_spreadsheet.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+Calculated values are stored in different columns in data spreadsheets in the datapicker. These columns behave exactly the same like other columns
+in usual spreadsheets and can be directly used as source columns for curves in your own plots.
+</para>
+
+<para>
+Datapicker supports the process of the data extraction with several helpers. To place the points more precisely, a magnification glass with different magnification levels is available.
+Also, the last selected point can be shifted with the help of the navigation keys.
+Furthermore, when reading data points having error bars, datapicker automatically creates bars indicating the end points of the error bars.
+Those bars can be pulled with the mouse until the required length (the distance to the data point) is reached.
+</para>
+
+
+<para>
+The procedure for the extraction of data from an imported plot as described above is feasible when dealing with a limited number of points.
+In case the curves in the imported image are given as solid lines, the datapicker tool in &LabPlot; allows to read them (semi-)automatically.
+For this, after a new datapicker curve was added as described above, switch to the mouse mode "Select Curve Segments". The curves on the plot are recognized and highlighted.
+By clicking on a highlighted curve (or one of its segments), points along this curve are created.
+The length of a segment and the density of created points (separation between two points) are adjustable parameters.
+On the screenshots below, after switching to the segment mode all black lines were highlighted (green colour).
+In this specific case, the curve was recognized as a single segment and a single mouse-click on this segment is sufficient to digitize this curve and to automatically place points along the curve.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker_segments.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+In many cases the plot is not as simple as above (single black curve on white background) and contains grid lines, many curves of different colour and thinness and a non-white background.
+In such a case the automatic detection fails (too many or no objects are highlighted). To help the datapicker to determine the curve(s) correctly, the user has to limit the allowed ranges in the HSV (or HSI) colour spaces.
+To subtract the non-white background it is possible to limit the range for the foreground colour, too.
+Internally, each pixel of the image is converted to black and white where only the points fitting into the user-defined ranges for hue, saturation, value, intensity and foreground are set to black.
+</para>
+
+<para>
+On the screenshots below, the blue curves in the original image were projected onto by having appropriately reduced the allowed ranges in the colour space (note the peak for blue in the histogram for the hue).
+The transformed black and white image contains only the curves the user is interested in and it is now an easy task for the datapicker to determine the curves and to place points on them.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker_original_transformed_segments.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+Similar to <link linkend="worksheet">Worksheet</link>, the currently visible area in the datapicker can be exported.
+The supported image formats as described in the section <link linkend="exportdialog">Export Dialog</link>.
+</para>
+</sect1>
 
 <sect1 id="importdialog">
 <title>Import Dialog</title>
@@ -422,84 +490,6 @@ The start and end row to read can be customized using the <guilabel>Data portion
 </imageobject></mediaobject></screenshot>
 </para>
 </sect1>
-
-
-<sect1 id="datapicker">
-<title>Datapicker</title>
-<para>
-Datapicker is a tool that allows you to easily extract data from image files. The process of extraction consists mainly out of the following steps:
-<itemizedlist>
-<listitem><para>Import an image containing plots and curves where you want to read the data points from.</para></listitem>
-<listitem><para>Select the plot type (cartesian, polar, etc.).</para></listitem>
-<listitem><para>Select tree reference points and provide values for them. With the help of these points the logical coordinate system is determined.</para></listitem>
-<listitem><para>Create a new datapicker curve and set the type of the error bars.</para></listitem>
-<listitem><para>Switch to the mouse mode "Set Curve Points" and start selecting points on the imported image - the coordinates for the selected points are determined and added to the spreadsheet "Data".</para></listitem>
-</itemizedlist>
-</para>
-
-<para>
-It is possible to add more then one datapicker curve. This is useful in case the imported image contains several curves that need to be digitized.
-The datapicker curve that is currently being selected in the <link linkend="project-explorer">Project Explorer </link> is the "active" one - points clicked on the datapicker image will be calculated and added to its data spreadsheet.
-<screenshot><mediaobject><imageobject>
-      <imagedata fileref="datapicker_active_curve.png" format="PNG"/>
-</imageobject></mediaobject></screenshot>
-<screenshot><mediaobject><imageobject>
-      <imagedata fileref="datapicker_data_spreadsрeet.png" format="PNG"/>
-</imageobject></mediaobject></screenshot>
-</para>
-
-<para>
-Calculated values are stored in different columns in data spreadsheets in the datapicker. These columns behave exactly the same like other columns
-in usual spreadsheets and can be directly used as source columns for curves in your own plots.
-</para>
-
-<para>
-Datapicker supports the process of the data extraction with several helpers. To place the points more precisely, a magnification glass with different magnification levels is available.
-Also, the last selected point can be shifted with the help of the navigation keys.
-Furthermore, when reading data points having error bars, datapicker automatically creates bars indicating the end points of the error bars.
-Those bars can be pulled with the mouse until the required length (the distance to the data point) is reached.
-</para>
-
-
-<para>
-The procedure for the extraction of data from an imported plot as described above is feasible when dealing with a limited number of points.
-In case the curves in the imported image are given as solid lines, the datapicker tool in &LabPlot; allows to read them (semi-)automatically.
-For this, after a new datapicker curve was added as described above, switch to the mouse mode "Select Curve Segments". The curves on the plot are recognized and highlighted.
-By clicking on a highlighted curve (or one of its segments), points along this curve are created.
-The length of a segment and the density of created points (separation between two points) are adjustable parameters.
-
-<screenshot><mediaobject><imageobject>
-      <imagedata fileref="datapicker_segments.png" format="PNG"/>
-</imageobject></mediaobject></screenshot>
-</para>
-
-<para>
-In many cases the plot is not as simple as above (single black curve on white background) and contains grid lines, many curves of different color and thinness and a non-white background.
-In such a case the automatic detection fails (too many or no objects are highlighted). To help the datapicker to determine the curve(s) correctly, the user has to limit the allowed ranges in the HSV (or HSI) colour spaces.
-To subtract the non-white background it is possible to limit the range for the foreground colour, too.
-Internally, each pixel of the image is converted to black and white where only the points fitting into the user-defined ranges for hue, saturation, value, intensity and foreground are set to black.
-</para>
-
-<para>
-In the screenshots below, the blue curves in the original image were projected onto by having appropriately reduced the allowed ranges in the colour space (note the peak for blue in the histogram for the hue).
-The transformed black and white image contains only the curves the user is interested in and it is now an easy task for the datapicker to determine the curves and to place points on them.
-<screenshot><mediaobject><imageobject>
-      <imagedata fileref="datapicker_segments_original_image.png" format="PNG"/>
-</imageobject></mediaobject></screenshot>
-<screenshot><mediaobject><imageobject>
-      <imagedata fileref="datapicker_segments_transformed_image.png" format="PNG"/>
-</imageobject></mediaobject></screenshot>
-<screenshot><mediaobject><imageobject>
-      <imagedata fileref="datapicker_segments_transformed_image_with_points.png" format="PNG"/>
-</imageobject></mediaobject></screenshot>
-</para>
-
-<para>
-Similar to <link linkend="worksheet">Worksheet</link>, the currently visible area in the datapicker can be exported.
-The supported image formats as described in the section <link linkend="exportdialog">Export Dialog</link>.
-</para>
-</sect1>
-
 
 </chapter>
 
@@ -851,8 +841,8 @@ The menu is only available when a datapicker object is selected on the <guilabel
     datapicker. A segment is a selectable object over image which can be selected by mouse right click over it.
     </para>
   <para>
-    Segments are created by processing of image on the basis range of color attributes in order to automatically
-    trace curves. To improve results these range and types of color attributes can be changed in the "edit"
+    Segments are created by processing of image on the basis range of colour attributes in order to automatically
+    trace curves. To improve results these range and types of colour attributes can be changed in the "edit"
     section of dock-widget. Dock-widget also provides options to switch among processed image and original image,
     and to set the minimum possible length of segments.
   </para>
