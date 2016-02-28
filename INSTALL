@@ -1,13 +1,16 @@
-LabPlot requires
-	* CMake version 2.8.10 or higher
-	* Qt version 4.7 or higher
-	* GSL version 1.15 or higher
+To compile LabPlot following packages are required:
+	* CMake version 2.8.12 or higher
+	* ECM (extra cmake modules)
+	* KDE4 libraries (including the devel-package, libkde4-devel or similar)
+	* Qt version 4.7 or higher (including the devel-package, libqt4-devel or similar)
+	* GSL version 1.15 or higher (including the devel-package, gsl-devel or similar)
+
 optional
-	* HDF5 1.8 or higher
-	* NetCDF 3 or higher
+	* HDF5 version 1.8 or higher (including the devel-package, hdf5-devel or similar)
+	* NetCDF version 3 or higher (including the devel-package, netcdf-devel or similar)
 
 ===============================================================================
-To build LabPlot just execute
+To build LabPlot execute
 # ./compile
 
 Edit the compile script if you want to use options different from default ones.
