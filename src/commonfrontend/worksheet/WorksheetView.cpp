@@ -539,28 +539,7 @@ void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
 	QGraphicsView::drawForeground(painter, rect);
 }
 
-void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
-	painter->save();
-
-	//painter->setRenderHint(QPainter::Antialiasing);
-	QRectF scene_rect = sceneRect();
-
-	if (!m_worksheet->useViewSize()) {
-		// background
-		if (!scene_rect.contains(rect))
-			painter->fillRect(rect, Qt::lightGray);
-
-		//shadow
-		int shadowSize = scene_rect.width()*0.02;
-		QRectF rightShadowRect(scene_rect.right(), scene_rect.top() + shadowSize,
-											shadowSize, scene_rect.height());
-		QRectF bottomShadowRect(scene_rect.left() + shadowSize, scene_rect.bottom(),
-											scene_rect.width(), shadowSize);
-
-		painter->fillRect(rightShadowRect.intersected(rect), Qt::darkGray);
-		painter->fillRect(bottomShadowRect.intersected(rect), Qt::darkGray);
-	}
-
+void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_rect) {
 	// canvas
 	painter->setOpacity(m_worksheet->backgroundOpacity());
 	if (m_worksheet->backgroundType() == PlotArea::Color){
@@ -608,7 +587,7 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 			//	painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
 		}
 		painter->drawRect(scene_rect);
-	}else if (m_worksheet->backgroundType() == PlotArea::Image){
+	}else if (m_worksheet->backgroundType() == PlotArea::Image){	// background image
 		const QString& backgroundFileName = m_worksheet->backgroundFileName().trimmed();
 		if ( !backgroundFileName.isEmpty() ) {
 			QPixmap pix(backgroundFileName);
@@ -638,12 +617,12 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 				//	painter->drawPixmap(scene_rect.topLeft(),pix);
 			}
 		}
-	}else if (m_worksheet->backgroundType() == PlotArea::Pattern){
+	}else if (m_worksheet->backgroundType() == PlotArea::Pattern){	// background pattern
 		painter->setBrush(QBrush(m_worksheet->backgroundFirstColor(),m_worksheet->backgroundBrushStyle()));
 		painter->drawRect(scene_rect);
 	}
 
-  //grid
+	//grid
 	if (m_gridSettings.style != WorksheetView::NoGrid){
 		QColor c=m_gridSettings.color;
  		c.setAlphaF(m_gridSettings.opacity);
@@ -685,6 +664,29 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 			}
 		}
 	}
+}
+
+void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
+	painter->save();
+
+	//painter->setRenderHint(QPainter::Antialiasing);
+	QRectF scene_rect = sceneRect();
+
+	if (!m_worksheet->useViewSize()) {
+		// background
+		if (!scene_rect.contains(rect))
+			painter->fillRect(rect, Qt::lightGray);
+
+		//shadow
+		int shadowSize = scene_rect.width()*0.02;
+		QRectF rightShadowRect(scene_rect.right(), scene_rect.top() + shadowSize, shadowSize, scene_rect.height());
+		QRectF bottomShadowRect(scene_rect.left() + shadowSize, scene_rect.bottom(), scene_rect.width(), shadowSize);
+
+		painter->fillRect(rightShadowRect.intersected(rect), Qt::darkGray);
+		painter->fillRect(bottomShadowRect.intersected(rect), Qt::darkGray);
+	}
+
+	drawBackgroundItems(painter, scene_rect);
 
 	invalidateScene(rect, QGraphicsScene::BackgroundLayer);
 	painter->restore();
@@ -1276,8 +1278,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	shiftDownYAction->setEnabled(plot);
 }
 
-void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
-								 const ExportArea area, const bool background, const int resolution) {
+void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background, const int resolution) {
 	QRectF sourceRect;
 
 	//determine the rectangular to print
@@ -1370,7 +1371,11 @@ void WorksheetView::print(QPrinter* printer) {
 	m_worksheet->setPrinting(true);
 	QPainter painter(printer);
 	painter.setRenderHint(QPainter::Antialiasing);
-	drawBackground(&painter, scene()->sceneRect());
+	// draw background
+	QRectF page_rect = printer->pageRect();
+	page_rect.moveTo(0,0);
+	drawBackgroundItems(&painter, page_rect);
+	// draw scene
 	scene()->render(&painter);
 	m_worksheet->setPrinting(false);
 }
