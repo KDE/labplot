@@ -1373,8 +1373,13 @@ void WorksheetView::print(QPrinter* printer) {
 	painter.setRenderHint(QPainter::Antialiasing);
 	// draw background
 	QRectF page_rect = printer->pageRect();
-	page_rect.moveTo(0,0);
-	drawBackgroundItems(&painter, page_rect);
+	QRectF scene_rect = scene()->sceneRect();
+	//qDebug()<<"source (scene):"<<scene_rect;
+	//qDebug()<<"target (page):"<<page_rect;
+	float scale=qMax(scene_rect.width()/page_rect.width(),scene_rect.height()/page_rect.height());
+	//qDebug()<<"scale ="<<scale;
+	//qDebug()<<"background size ="<<scene_rect.width()/scale<<scene_rect.height()/scale;
+	drawBackgroundItems(&painter, QRectF(0,0,scene_rect.width()/scale,scene_rect.height()/scale));
 	// draw scene
 	scene()->render(&painter);
 	m_worksheet->setPrinting(false);
