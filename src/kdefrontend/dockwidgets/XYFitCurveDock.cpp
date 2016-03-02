@@ -53,7 +53,11 @@
   \ingroup kdefrontend
 */
 
-XYFitCurveDock::XYFitCurveDock(QWidget *parent): XYCurveDock(parent), m_fitCurve(0) {
+XYFitCurveDock::XYFitCurveDock(QWidget *parent): XYCurveDock(parent),
+	cbXDataColumn(0),
+	cbYDataColumn(0),
+	cbWeightsColumn(0),
+	m_fitCurve(0) {
 
 }
 

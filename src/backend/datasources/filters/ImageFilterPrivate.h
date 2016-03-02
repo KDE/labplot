@@ -47,8 +47,6 @@ class ImageFilterPrivate {
 		int startColumn;	// start column
 		int endColumn;		// end column
 
-		bool autoModeEnabled;
-
 	private:
 		void clearDataSource(AbstractDataSource*) const;
 };

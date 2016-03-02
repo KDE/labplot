@@ -50,7 +50,9 @@
 */
 
 CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
-	m_initializing(false){
+	m_plot(0),
+	labelWidget(0),
+	m_initializing(false) {
 
 	ui.setupUi(this);
 

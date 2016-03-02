@@ -51,7 +51,6 @@ class HDFFilterPrivate {
 		int endRow;
 		int startColumn;
 		int endColumn;
-		bool autoModeEnabled;
 
 	private:
 		const static int MAXNAMELENGTH=1024;

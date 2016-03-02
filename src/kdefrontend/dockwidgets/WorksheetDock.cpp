@@ -80,7 +80,7 @@ const float qt_paperSizes[numOfPaperSizes][2] = {
   \ingroup kdefrontend
 */
 
-WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
+WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0) {
 	ui.setupUi(this);
 
 	//Background-tab

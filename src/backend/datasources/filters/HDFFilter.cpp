@@ -137,13 +137,6 @@ int HDFFilter::endColumn() const{
 	return d->endColumn;
 }
 
-void HDFFilter::setAutoModeEnabled(bool b){
-	d->autoModeEnabled = b;
-}
-
-bool HDFFilter::isAutoModeEnabled() const{
-	return d->autoModeEnabled;
-}
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
@@ -1446,7 +1439,6 @@ void HDFFilterPrivate::write(const QString & fileName, AbstractDataSource* dataS
  */
 void HDFFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("hdfFilter");
-	writer->writeAttribute("autoMode", QString::number(d->autoModeEnabled) );
 	writer->writeEndElement();
 }
 
@@ -1461,13 +1453,5 @@ bool HDFFilter::load(XmlStreamReader* reader) {
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
-
-	// read attributes
-	QString str = attribs.value("autoMode").toString();
-	if(str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'autoMode'"));
-	else
-		d->autoModeEnabled = str.toInt();
-
 	return true;
 }

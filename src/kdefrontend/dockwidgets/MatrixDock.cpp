@@ -38,7 +38,7 @@
   \ingroup kdefrontend
 */
 
-MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_initializing(false) {
+MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_matrix(0), m_initializing(false) {
 	ui.setupUi(this);
 
 	ui.cbFormat->addItem(i18n("Decimal"), QVariant('f'));

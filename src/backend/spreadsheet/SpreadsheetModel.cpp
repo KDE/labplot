@@ -103,8 +103,10 @@ QVariant SpreadsheetModel::data(const QModelIndex &index, int role) const
 				}
 		}
 		case Qt::EditRole:
+		{
 				if(!m_formula_mode && !col_ptr->isValid(row))
 					return QVariant();
+		}
 		case Qt::DisplayRole:
 			{
 				if(m_formula_mode)
