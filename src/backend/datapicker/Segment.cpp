@@ -43,7 +43,7 @@
  */
 
 Segment::Segment(DatapickerImage* image):
-	length(0), m_image(image), d_ptr(new SegmentPrivate(this)) {
+	yLast(0), length(0), m_image(image), d_ptr(new SegmentPrivate(this)) {
 	m_image->scene()->addItem(this->graphicsItem());
 	init();
 }

@@ -58,7 +58,7 @@
 	\ingroup backend
 */
 Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)) {
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_model(0) {
 
 	//set initial number of rows and columns
 	appendColumns(cols);
@@ -69,7 +69,7 @@ Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QStrin
 }
 
 Matrix::Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)) {
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_model(0) {
 
 	if (!loading)
 		init();
@@ -80,8 +80,6 @@ Matrix::~Matrix() {
 }
 
 void Matrix::init() {
-	m_model = 0;
-
 	KConfig config;
 	KConfigGroup group = config.group("Matrix");
 
