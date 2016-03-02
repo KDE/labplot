@@ -46,6 +46,7 @@
 
 HistogramView::HistogramView(QWidget* parent, int range) :
 	QGraphicsView(parent),
+	bins(0),
 	m_scene(new QGraphicsScene()),
 	m_range(range) {
 
@@ -55,11 +56,6 @@ HistogramView::HistogramView(QWidget* parent, int range) :
 	setScene(m_scene);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-	//initialize bins
-	bins = new int[range + 1];
-	for (int i = 0; i <= range; i++)
-		bins [i] = 0;
 
 	lowerSlider = new QGraphicsRectItem(pageRect, 0, m_scene);
 	lowerSlider->setPen(QPen(Qt::black, 0.5));
@@ -94,7 +90,11 @@ void HistogramView::resizeEvent(QResizeEvent *event) {
 }
 
 void HistogramView::drawBackground(QPainter* painter, const QRectF& rect) {
+	if (!bins)
+		return;
+
 	painter->save();
+	painter->setRenderHint(QPainter::Antialiasing, true);
 	int max = 1;
 	for (int i = 0; i <= m_range; i++)
 		if (bins [i] > max)
