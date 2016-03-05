@@ -59,6 +59,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	ui.tbConstants->setIcon( KIcon("labplot-format-text-symbol") );
 	ui.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
 
+	ui.teEquation->setMaximumHeight(QLineEdit().sizeHint().height()*2);
 	ui.teEquation->setFocus();
 
 	m_topLevelClasses<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column";

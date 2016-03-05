@@ -58,6 +58,7 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent, Qt::WFlag
 	vars<<"x"<<"y";
 	ui.teEquation->setVariables(vars);
 	ui.teEquation->setFocus();
+	ui.teEquation->setMaximumHeight(QLineEdit().sizeHint().height()*2);
 
 	QString info = "[" + QString::number(m_matrix->xStart()) + ", " + QString::number(m_matrix->xEnd()) + "], " + QString::number(m_matrix->columnCount()) + " " + i18n("values");
 	ui.lXInfo->setText(info);
