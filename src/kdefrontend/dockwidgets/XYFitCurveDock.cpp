@@ -2,7 +2,7 @@
     File             : XYFitCurveDock.h
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright        : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
     Description      : widget for editing properties of fit curves
 
  ***************************************************************************/
@@ -69,9 +69,9 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.setupUi(generalTab);
 	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
-	  gridLayout->setContentsMargins(2,2,2,2);
-	  gridLayout->setHorizontalSpacing(2);
-	  gridLayout->setVerticalSpacing(2);
+		gridLayout->setContentsMargins(2,2,2,2);
+		gridLayout->setHorizontalSpacing(2);
+		gridLayout->setVerticalSpacing(2);
 	}
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
@@ -120,7 +120,7 @@ void XYFitCurveDock::setupGeneral() {
 
 void XYFitCurveDock::initGeneralTab() {
 	//if there are more then one curve in the list, disable the tab "general"
-	if (m_curvesList.size()==1){
+	if (m_curvesList.size()==1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
@@ -128,7 +128,7 @@ void XYFitCurveDock::initGeneralTab() {
 
 		uiGeneralTab.leName->setText(m_curve->name());
 		uiGeneralTab.leComment->setText(m_curve->comment());
-	}else {
+	} else {
 		uiGeneralTab.lName->setEnabled(false);
 		uiGeneralTab.leName->setEnabled(false);
 		uiGeneralTab.lComment->setEnabled(false);
@@ -167,12 +167,12 @@ void XYFitCurveDock::initGeneralTab() {
 
 void XYFitCurveDock::setModel() {
 	QList<const char*>  list;
-    list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Datapicker";
+	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Datapicker";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbWeightsColumn->setTopLevelClasses(list);
 
- 	list.clear();
+	list.clear();
 	list<<"Column";
 	cbXDataColumn->setSelectableClasses(list);
 	cbYDataColumn->setSelectableClasses(list);
@@ -191,7 +191,7 @@ void XYFitCurveDock::setModel() {
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
-void XYFitCurveDock::setCurves(QList<XYCurve*> list){
+void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing=true;
 	m_curvesList=list;
 	m_curve=list.first();
@@ -208,21 +208,21 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list){
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-void XYFitCurveDock::nameChanged(){
+void XYFitCurveDock::nameChanged() {
 	if (m_initializing)
 		return;
 
 	m_curve->setName(uiGeneralTab.leName->text());
 }
 
-void XYFitCurveDock::commentChanged(){
+void XYFitCurveDock::commentChanged() {
 	if (m_initializing)
 		return;
 
 	m_curve->setComment(uiGeneralTab.leComment->text());
 }
 
-void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index){
+void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
@@ -237,7 +237,7 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index){
 		dynamic_cast<XYFitCurve*>(curve)->setXDataColumn(column);
 }
 
-void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index){
+void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
@@ -252,7 +252,7 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index){
 		dynamic_cast<XYFitCurve*>(curve)->setYDataColumn(column);
 }
 
-void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index){
+void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
@@ -352,11 +352,11 @@ void XYFitCurveDock::updateModelEquation() {
 		eq = "a*exp(b*x)";
 		vars << "a" << "b";
 		m_fitData.paramNames << "a" << "b";
-		if (num==2){
+		if (num==2) {
 			eq += " + c*exp(d*x)";
 			vars << "c" << "d";
 			m_fitData.paramNames << "c" << "d";
-		} else if (num==3){
+		} else if (num==3) {
 			eq += " + c*exp(d*x) + e*exp(f*x)";
 			vars << "c" << "d" << "e" << "f";
 			m_fitData.paramNames << "c" << "d" << "e" << "f";
@@ -447,6 +447,7 @@ void XYFitCurveDock::showConstants() {
 
 	connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant(QString)));
 	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
+	connect(&constants, SIGNAL(canceled()), &menu, SLOT(close()));
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&constants);
@@ -461,6 +462,7 @@ void XYFitCurveDock::showFunctions() {
 	FunctionsWidget functions(&menu);
 	connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insertFunction(QString)));
 	connect(&functions, SIGNAL(functionSelected(QString)), &menu, SLOT(close()));
+	connect(&functions, SIGNAL(canceled()), &menu, SLOT(close()));
 
 	QWidgetAction* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&functions);
@@ -575,7 +577,7 @@ void XYFitCurveDock::showFitResult() {
 	str += "<b>Parameters:</b>";
 	for (int i=0; i<fitResult.paramValues.size(); i++) {
 		str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
-				  + QString::fromUtf8("\u2213") + QString::number(fitResult.errorValues.at(i));
+		       + QString::fromUtf8("\u2213") + QString::number(fitResult.errorValues.at(i));
 	}
 
 	str += "<br><br><b>Goodness of fit:</b><br>";
