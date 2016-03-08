@@ -174,8 +174,8 @@ void SegmentPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 }
 
 QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) {
-	if ( change == QGraphicsItem::ItemSelectedChange && value == true ) {
-		Datapicker* datapicker = dynamic_cast<Datapicker*>(q->m_image->parentAspect());
+    if ( change == QGraphicsItem::ItemSelectedChange && value == true ) {
+        Datapicker* datapicker = dynamic_cast<Datapicker*>(q->m_image->parentAspect());
 		Q_ASSERT(datapicker);
 		if (datapicker->activeCurve()) {
 			int count = 0;
@@ -200,7 +200,9 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
 				}
 			}
 			datapicker->activeCurve()->endMacro();
-		}
+        }
+        //no need to keep segment selected
+        return false;
 	}
 
 	return QGraphicsItem::itemChange(change, value);
