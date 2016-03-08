@@ -84,6 +84,7 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView
 	initActions();
 	initMenus();
 	selectAndEditModeAction->setChecked(true);
+    m_image->setSegmentsHoverEvent(true);
 	setInteractive(true);
 
 	changeZoom(zoomOriginAction);
@@ -600,19 +601,23 @@ void DatapickerImageView::mouseModeChanged(QAction* action) {
 	if (action==selectAndEditModeAction) {
 		m_mouseMode = SelectAndEditMode;
 		setInteractive(true);
-		setDragMode(QGraphicsView::NoDrag);
+        setDragMode(QGraphicsView::NoDrag);
+        m_image->setSegmentsHoverEvent(true);
 	} else if (action==navigationModeAction) {
 		m_mouseMode = NavigationMode;
 		setInteractive(false);
 		setDragMode(QGraphicsView::ScrollHandDrag);
+        m_image->setSegmentsHoverEvent(false);
 	} else if (action==zoomSelectionModeAction) {
 		m_mouseMode = ZoomSelectionMode;
 		setInteractive(false);
 		setDragMode(QGraphicsView::NoDrag);
+        m_image->setSegmentsHoverEvent(false);
 	} else {
 		m_mouseMode = SelectAndMoveMode;
 		setInteractive(true);
 		setDragMode(QGraphicsView::NoDrag);
+        m_image->setSegmentsHoverEvent(false);
 	}
 }
 
@@ -646,7 +651,6 @@ void DatapickerImageView::changeRotationAngle() {
 
 void DatapickerImageView::handleImageActions() {
 	if (m_image->isLoaded) {
-		navigationActionGroup->setEnabled(true);
 		magnificationActionGroup->setEnabled(true);
 		setAxisPointsAction->setEnabled(true);
 

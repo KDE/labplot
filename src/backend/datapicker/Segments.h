@@ -40,6 +40,7 @@ public:
 
 	void makeSegments(QImage&);
 	void setSegmentsVisible(bool);
+    void setAcceptHoverEvents(bool);
 
 private:
 	DatapickerImage* m_image;
