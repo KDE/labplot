@@ -179,7 +179,8 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
 		Q_ASSERT(datapicker);
 		if (datapicker->activeCurve()) {
 			int count = 0;
-			datapicker->activeCurve()->beginMacro(i18n("%1: draw points over segment", datapicker->activeCurve()->name()));
+            QList<QPointF> posList;
+            posList.clear();
 			foreach (QLine* line, q->path) {
 				const int l = (line->y1() > line->y2())?line->y2():line->y1();
 				const int h = (line->y1() > line->y2())?line->y1():line->y2();
@@ -194,13 +195,20 @@ QVariant SegmentPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, co
 						}
 
 						if (!positionUsed)
-							datapicker->addNewPoint(QPoint(line->x1(), i)*scaleFactor, datapicker->activeCurve());
+                            posList<<QPoint(line->x1(), i)*scaleFactor;
 					}
 					count++;
 				}
 			}
-			datapicker->activeCurve()->endMacro();
+
+            if (!posList.isEmpty()) {
+                datapicker->activeCurve()->beginMacro(i18n("%1: draw points over segment", datapicker->activeCurve()->name()));
+                foreach (QPointF pos, posList)
+                    datapicker->addNewPoint(pos, datapicker->activeCurve());
+                datapicker->activeCurve()->endMacro();
+            }
         }
+
         //no need to keep segment selected
         return false;
 	}
