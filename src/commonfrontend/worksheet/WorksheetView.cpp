@@ -73,7 +73,8 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_fadeInTimeLine(0),
 	m_fadeOutTimeLine(0),
 	tbNewCartesianPlot(0),
-	tbZoom(0) {
+    tbZoom(0),
+    tbMagnification(0) {
 
 	setScene(m_worksheet->scene());
 
@@ -798,10 +799,9 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 		//copy the part of the view to be shown magnified
 		QPointF pos = mapToScene(event->pos());
 		const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
-		const QRectF copyRect(pos.x() - size/2, pos.y() - size/2, size, size);
+        const QRectF copyRect(pos.x() - size/(2*magnificationFactor), pos.y() - size/(2*magnificationFactor), size/magnificationFactor, size/magnificationFactor);
 		QPixmap px = QPixmap::grabWidget(this, mapFromScene(copyRect).boundingRect());
-		px = px.scaled(size*magnificationFactor, size*magnificationFactor, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-		px = px.copy(px.width()/2 - size/2, px.height()/2 - size/2, size, size);
+        px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
 		//draw the bounding rect
 		QPainter painter(&px);
@@ -905,8 +905,8 @@ void WorksheetView::magnificationChanged(QAction* action){
 		magnificationFactor = 5;
 
 	currentMagnificationAction=action;
-	if (tbMagnification)
-		tbMagnification->setDefaultAction(action);
+    if (tbMagnification)
+        tbMagnification->setDefaultAction(action);
 }
 
 void WorksheetView::mouseModeChanged(QAction* action) {
