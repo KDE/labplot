@@ -95,6 +95,7 @@ public:
 	QGraphicsScene *scene() const;
 	void setPrinting(bool) const;
 	void setSelectedInView(const bool);
+    void setSegmentsHoverEvent(const bool);
 
 	void setPlotImageType(const DatapickerImage::PlotImageType);
 	DatapickerImage::PlotImageType plotImageType();

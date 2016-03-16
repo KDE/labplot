@@ -193,7 +193,11 @@ void DatapickerImage::setSelectedInView(const bool b) {
 	if (b)
 		emit childAspectSelectedInView(this);
 	else
-		emit childAspectDeselectedInView(this);
+        emit childAspectDeselectedInView(this);
+}
+
+void DatapickerImage::setSegmentsHoverEvent(const bool on) {
+    m_segments->setAcceptHoverEvents(on);
 }
 
 QGraphicsScene* DatapickerImage::scene() const {

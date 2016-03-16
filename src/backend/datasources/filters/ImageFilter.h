@@ -60,9 +60,6 @@ class ImageFilter : public AbstractFileFilter{
 	void setEndColumn(const int);
 	int endColumn() const;
 
-	void setAutoModeEnabled(const bool);
-	bool isAutoModeEnabled() const;
-
 	virtual void save(QXmlStreamWriter*) const;
 	virtual bool load(XmlStreamReader*);
   private:

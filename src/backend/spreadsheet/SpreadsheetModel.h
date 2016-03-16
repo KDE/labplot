@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2009 Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -39,83 +39,56 @@ class Spreadsheet;
 class AbstractAspect;
 class AbstractColumn;
 
-//! Model for the access to a Spreadsheet
-/**
-	This is a model in the sense of Qt4 model/view framework which is used
-	to access a Spreadsheet object from any of Qt4s view classes, typically a QTableView.
-	Its main purposes are translating Spreadsheet signals into QAbstractItemModel signals
-	and translating calls to the QAbstractItemModel read/write API into calls
-	in the public API of Spreadsheet. In many cases a pointer to the addressed column
-	is obtained by calling Spreadsheet::column() and the manipulation is done using the
-	public API of column.
-  */
-class SpreadsheetModel : public QAbstractItemModel
-{
+class SpreadsheetModel : public QAbstractItemModel {
 	Q_OBJECT
 
-	public:
-		//! Constructor
-		explicit SpreadsheetModel(Spreadsheet * spreadsheet);
-		//! Destructor
-		~SpreadsheetModel();
+public:
+	explicit SpreadsheetModel(Spreadsheet*);
 
-		//! Custom data roles used in addition to Qt::ItemDataRole
-		enum CustomDataRole {
-			MaskingRole = Qt::UserRole, //!< bool determining whether the cell is masked
-			FormulaRole = Qt::UserRole+1, //!< the cells formula
-			CommentRole = Qt::UserRole+2, //!< the column comment (for headerData())
-		};
+	enum CustomDataRole {
+		MaskingRole = Qt::UserRole, //!< bool determining whether the cell is masked
+		FormulaRole = Qt::UserRole+1, //!< the cells formula
+		CommentRole = Qt::UserRole+2, //!< the column comment (for headerData())
+	};
 
-		//! \name Overloaded functions from QAbstractItemModel
-		//@{
-		Qt::ItemFlags flags( const QModelIndex & index ) const;
-		QVariant data(const QModelIndex &index, int role) const;
-		QVariant headerData(int section, Qt::Orientation orientation,int role) const;
-		int rowCount(const QModelIndex &parent = QModelIndex()) const;
-		int columnCount(const QModelIndex & parent = QModelIndex()) const;
-		bool setData(const QModelIndex & index, const QVariant & value, int role);
-// 		bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole);
-		QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-		QModelIndex parent(const QModelIndex & child) const;
-		bool hasChildren (const QModelIndex & parent = QModelIndex() ) const;
-		//@}
+	Qt::ItemFlags flags( const QModelIndex & index ) const;
+	QVariant data(const QModelIndex& index, int role) const;
+	QVariant headerData(int section, Qt::Orientation orientation,int role) const;
+	int rowCount(const QModelIndex& parent = QModelIndex()) const;
+	int columnCount(const QModelIndex& parent = QModelIndex()) const;
+	bool setData(const QModelIndex& index, const QVariant& value, int role);
+	QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+	QModelIndex parent(const QModelIndex& child) const;
+	bool hasChildren (const QModelIndex& parent = QModelIndex() ) const;
 
-		Column * column(int index); // this is needed for the comment header view
+	Column* column(int index);
 
-		void activateFormulaMode(bool on);
-		bool formulaModeActive() const { return m_formula_mode; }
+	void activateFormulaMode(bool on);
+	bool formulaModeActive() const;
 
-	private slots:
-		//! \name Column insert/remove event handlers
-		//@{
-		void handleAspectAboutToBeAdded(const AbstractAspect * parent, const AbstractAspect * before, const AbstractAspect * child);
-		void handleAspectAdded(const AbstractAspect * aspect);
-		void handleAspectAboutToBeRemoved(const AbstractAspect * aspect);
-		void handleAspectRemoved(const AbstractAspect * parent, const AbstractAspect * before, const AbstractAspect * child);
-		//@}
-		//! \name Column event handlers
-		//@{
-		void handleDescriptionChange(const AbstractAspect * aspect);
-		void handleModeChange(const AbstractColumn * col);
-		void handlePlotDesignationChange(const AbstractColumn * col);
-		void handleDataChange(const AbstractColumn * col);
-		void handleRowsInserted(const AbstractColumn * col, int before, int count);
-		void handleRowsRemoved(const AbstractColumn * col, int first, int count);
-		//@}
+private slots:
+	void handleAspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	void handleAspectAdded(const AbstractAspect*);
+	void handleAspectAboutToBeRemoved(const AbstractAspect*);
+	void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 
-	protected:
-		void updateVerticalHeader();
-		void updateHorizontalHeader();
+	void handleDescriptionChange(const AbstractAspect*);
+	void handleModeChange(const AbstractColumn*);
+	void handlePlotDesignationChange(const AbstractColumn*);
+	void handleDataChange(const AbstractColumn*);
+	void handleRowsInserted(const AbstractColumn* col, int before, int count);
+	void handleRowsRemoved(const AbstractColumn* col, int first, int count);
 
-	private:
-		Spreadsheet * m_spreadsheet;
-		//! Toggle flag for formula mode
-		bool m_formula_mode;
-		//! Vertical header data
-		QList<int> m_vertical_header_data;
-		//! Horizontal header data
-		QStringList m_horizontal_header_data;
-		int m_defaultHeaderHeight;
+protected:
+	void updateVerticalHeader();
+	void updateHorizontalHeader();
+
+private:
+	Spreadsheet* m_spreadsheet;
+	bool m_formula_mode;
+	QList<int> m_vertical_header_data;
+	QStringList m_horizontal_header_data;
+	int m_defaultHeaderHeight;
 };
 
 #endif

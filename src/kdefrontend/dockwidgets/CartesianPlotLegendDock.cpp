@@ -49,6 +49,8 @@
 */
 
 CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(parent),
+	m_legend(0),
+	labelWidget(0),
 	m_initializing(false) {
 
 	ui.setupUi(this);

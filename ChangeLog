@@ -1,7 +1,8 @@
 -----2.2-----
 New features:
-	* Datapicker - tool for extracting curves and data points from imported images.
-	* Custom point on the plot with user-defined position and appearance.
+	* Datapicker - tool for extracting curves and data points from imported images
+	* Custom point on the plot with user-defined position and appearance
+	* Accept drag&drop events
 	* Support GSL 2.x
 	* Import and export dialogs save and restore their settings and sizes
 
@@ -9,11 +10,11 @@ Performance improvements:
 	* Faster rendering of the image view of the matrix
 
 Bug fixes:
-	* BUG: 354744 - make setting of range auto scaling in CartesianPlot undo/redo-able.
-	* Removed couple of hard coded sizes given in pixels for better user-experience on hidpi-displays.
-	* Fixes the bug with disabled undo/redo-actions in after the undo-history was cleared.
-	* Keep the information about the columns to be shown in the project explorer after project close.
-	* Fixed some bugs in painting of the selection band on the worksheet.
+	* BUG: 354744 - make setting of range auto scaling in CartesianPlot undo/redo-able
+	* Removed couple of hard coded sizes given in pixels for better user-experience on hidpi-displays
+	* Fixes the bug with disabled undo/redo-actions in after the undo-history was cleared
+	* Keep the information about the columns to be shown in the project explorer after project close
+	* Fixed some bugs in painting of the selection band on the worksheet
 
 -----2.1-----
 New features:

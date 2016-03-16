@@ -73,7 +73,8 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_fadeInTimeLine(0),
 	m_fadeOutTimeLine(0),
 	tbNewCartesianPlot(0),
-	tbZoom(0) {
+    tbZoom(0),
+    tbMagnification(0) {
 
     setScene(m_worksheet->scene());
 
@@ -539,28 +540,7 @@ void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
     QGraphicsView::drawForeground(painter, rect);
 }
 
-void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
-    painter->save();
-
-    //painter->setRenderHint(QPainter::Antialiasing);
-    QRectF scene_rect = sceneRect();
-
-    if (!m_worksheet->useViewSize()) {
-        // background
-        if (!scene_rect.contains(rect))
-            painter->fillRect(rect, Qt::lightGray);
-
-        //shadow
-        int shadowSize = scene_rect.width()*0.02;
-        QRectF rightShadowRect(scene_rect.right(), scene_rect.top() + shadowSize,
-                                            shadowSize, scene_rect.height());
-        QRectF bottomShadowRect(scene_rect.left() + shadowSize, scene_rect.bottom(),
-                                            scene_rect.width(), shadowSize);
-
-        painter->fillRect(rightShadowRect.intersected(rect), Qt::darkGray);
-        painter->fillRect(bottomShadowRect.intersected(rect), Qt::darkGray);
-    }
-
+void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_rect) {
 	// canvas
 	painter->setOpacity(m_worksheet->backgroundOpacity());
 	if (m_worksheet->backgroundType() == PlotArea::Color){
@@ -608,7 +588,7 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 			//	painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
 		}
 		painter->drawRect(scene_rect);
-	}else if (m_worksheet->backgroundType() == PlotArea::Image){
+	}else if (m_worksheet->backgroundType() == PlotArea::Image){	// background image
 		const QString& backgroundFileName = m_worksheet->backgroundFileName().trimmed();
 		if ( !backgroundFileName.isEmpty() ) {
 			QPixmap pix(backgroundFileName);
@@ -638,53 +618,76 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 				//	painter->drawPixmap(scene_rect.topLeft(),pix);
 			}
 		}
-	}else if (m_worksheet->backgroundType() == PlotArea::Pattern){
+	}else if (m_worksheet->backgroundType() == PlotArea::Pattern){	// background pattern
 		painter->setBrush(QBrush(m_worksheet->backgroundFirstColor(),m_worksheet->backgroundBrushStyle()));
 		painter->drawRect(scene_rect);
 	}
 
-  //grid
-    if (m_gridSettings.style != WorksheetView::NoGrid){
-        QColor c=m_gridSettings.color;
-        c.setAlphaF(m_gridSettings.opacity);
-        painter->setPen(c);
+	//grid
+	if (m_gridSettings.style != WorksheetView::NoGrid){
+		QColor c=m_gridSettings.color;
+ 		c.setAlphaF(m_gridSettings.opacity);
+		painter->setPen(c);
 
-        qreal x, y;
-        qreal left = scene_rect.left();
-        qreal right = scene_rect.right();
-        qreal top = scene_rect.top();
-        qreal bottom = scene_rect.bottom();
+		qreal x, y;
+		qreal left = scene_rect.left();
+		qreal right = scene_rect.right();
+		qreal top = scene_rect.top();
+		qreal bottom = scene_rect.bottom();
 
-        if (m_gridSettings.style==WorksheetView::LineGrid){
-            QLineF line;
+		if (m_gridSettings.style==WorksheetView::LineGrid){
+			QLineF line;
 
-            //horizontal lines
-            y = top + m_gridSettings.verticalSpacing;
-            while (y < bottom) {
-                line.setLine( left, y,  right, y );
-                painter->drawLine(line);
-                y += m_gridSettings.verticalSpacing;
-            }
+			//horizontal lines
+			y = top + m_gridSettings.verticalSpacing;
+			while (y < bottom) {
+				line.setLine( left, y,  right, y );
+				painter->drawLine(line);
+				y += m_gridSettings.verticalSpacing;
+			}
 
-            //vertical lines
-            x = left + m_gridSettings.horizontalSpacing;
-            while (x < right) {
-                line.setLine( x, top,  x, bottom );
-                painter->drawLine(line);
-                x += m_gridSettings.horizontalSpacing;
-            }
-        }else{ //DotGrid
-            y = top + m_gridSettings.verticalSpacing;
-            while (y < bottom){
-                x = left;// + m_gridSettings.horizontalSpacing;
-                while (x < right){
-                    x += m_gridSettings.horizontalSpacing;
-                    painter->drawPoint(x, y);
-                }
-                y += m_gridSettings.verticalSpacing;
-            }
-        }
-    }
+			//vertical lines
+			x = left + m_gridSettings.horizontalSpacing;
+			while (x < right) {
+				line.setLine( x, top,  x, bottom );
+				painter->drawLine(line);
+				x += m_gridSettings.horizontalSpacing;
+			}
+		}else{ //DotGrid
+			y = top + m_gridSettings.verticalSpacing;
+			while (y < bottom){
+				x = left;// + m_gridSettings.horizontalSpacing;
+				while (x < right){
+					x += m_gridSettings.horizontalSpacing;
+					painter->drawPoint(x, y);
+				}
+				y += m_gridSettings.verticalSpacing;
+			}
+		}
+	}
+}
+
+void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
+	painter->save();
+
+	//painter->setRenderHint(QPainter::Antialiasing);
+	QRectF scene_rect = sceneRect();
+
+	if (!m_worksheet->useViewSize()) {
+		// background
+		if (!scene_rect.contains(rect))
+			painter->fillRect(rect, Qt::lightGray);
+
+		//shadow
+		int shadowSize = scene_rect.width()*0.02;
+		QRectF rightShadowRect(scene_rect.right(), scene_rect.top() + shadowSize, shadowSize, scene_rect.height());
+		QRectF bottomShadowRect(scene_rect.left() + shadowSize, scene_rect.bottom(), scene_rect.width(), shadowSize);
+
+		painter->fillRect(rightShadowRect.intersected(rect), Qt::darkGray);
+		painter->fillRect(bottomShadowRect.intersected(rect), Qt::darkGray);
+	}
+
+	drawBackgroundItems(painter, scene_rect);
 
     invalidateScene(rect, QGraphicsScene::BackgroundLayer);
     painter->restore();
@@ -797,10 +800,10 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 		//copy the part of the view to be shown magnified
 		QPointF pos = mapToScene(event->pos());
 		const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
-		const QRectF copyRect(pos.x() - size/2, pos.y() - size/2, size, size);
+
+        const QRectF copyRect(pos.x() - size/(2*magnificationFactor), pos.y() - size/(2*magnificationFactor), size/magnificationFactor, size/magnificationFactor);
 		QPixmap px = QPixmap::grabWidget(this, mapFromScene(copyRect).boundingRect());
-		px = px.scaled(size*magnificationFactor, size*magnificationFactor, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-		px = px.copy(px.width()/2 - size/2, px.height()/2 - size/2, size, size);
+        px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
 		//draw the bounding rect
 		QPainter painter(&px);
@@ -824,15 +827,15 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 }
 
 void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
-    if ( !itemAt(e->pos()) ){
-        //no item under the cursor -> show the context menu for the worksheet
-        QMenu *menu = new QMenu(this);
-        this->createContextMenu(menu);
-        menu->exec(QCursor::pos());
-    }else{
-        //propagate the event to the scene and graphics items
-        QGraphicsView::contextMenuEvent(e);
-    }
+	if ( (m_magnificationWindow && items(e->pos()).size()==1) || !itemAt(e->pos()) ){
+		//no item or only the magnification window under the cursor -> show the context menu for the worksheet
+		QMenu *menu = new QMenu(this);
+		this->createContextMenu(menu);
+		menu->exec(QCursor::pos());
+	}else{
+		//propagate the event to the scene and graphics items
+		QGraphicsView::contextMenuEvent(e);
+	}
 }
 
 //##############################################################################
@@ -904,8 +907,8 @@ void WorksheetView::magnificationChanged(QAction* action){
 		magnificationFactor = 5;
 
 	currentMagnificationAction=action;
-	if (tbMagnification)
-		tbMagnification->setDefaultAction(action);
+    if (tbMagnification)
+        tbMagnification->setDefaultAction(action);
 }
 
 void WorksheetView::mouseModeChanged(QAction* action) {
@@ -1277,21 +1280,20 @@ void WorksheetView::handleCartesianPlotActions() {
     shiftDownYAction->setEnabled(plot);
 }
 
-void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
-                                 const ExportArea area, const bool background, const int resolution) {
-    QRectF sourceRect;
+void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background, const int resolution) {
+	QRectF sourceRect;
 
-    //determine the rectangular to print
-    if (area==WorksheetView::ExportBoundingBox){
-        sourceRect = scene()->itemsBoundingRect();
-    }else if (area==WorksheetView::ExportSelection){
-        //TODO doesn't work: rect = scene()->selectionArea().boundingRect();
-        foreach(QGraphicsItem* item, m_selectedItems) {
-            sourceRect = sourceRect.united( item->mapToScene(item->boundingRect()).boundingRect() );
-        }
-    }else{
-        sourceRect = scene()->sceneRect();
-    }
+	//determine the rectangular to print
+	if (area==WorksheetView::ExportBoundingBox){
+		sourceRect = scene()->itemsBoundingRect();
+	}else if (area==WorksheetView::ExportSelection){
+		//TODO doesn't work: rect = scene()->selectionArea().boundingRect();
+		foreach(QGraphicsItem* item, m_selectedItems) {
+			sourceRect = sourceRect.united( item->mapToScene(item->boundingRect()).boundingRect() );
+		}
+	}else{
+		sourceRect = scene()->sceneRect();
+	}
 
     //print
     if (format==WorksheetView::Pdf || format==WorksheetView::Eps){
@@ -1371,7 +1373,16 @@ void WorksheetView::print(QPrinter* printer) {
 	m_worksheet->setPrinting(true);
 	QPainter painter(printer);
 	painter.setRenderHint(QPainter::Antialiasing);
-	drawBackground(&painter, scene()->sceneRect());
+	// draw background
+	QRectF page_rect = printer->pageRect();
+	QRectF scene_rect = scene()->sceneRect();
+	//qDebug()<<"source (scene):"<<scene_rect;
+	//qDebug()<<"target (page):"<<page_rect;
+	float scale=qMax(scene_rect.width()/page_rect.width(),scene_rect.height()/page_rect.height());
+	//qDebug()<<"scale ="<<scale;
+	//qDebug()<<"background size ="<<scene_rect.width()/scale<<scene_rect.height()/scale;
+	drawBackgroundItems(&painter, QRectF(0,0,scene_rect.width()/scale,scene_rect.height()/scale));
+	// draw scene
 	scene()->render(&painter);
 	m_worksheet->setPrinting(false);
 }

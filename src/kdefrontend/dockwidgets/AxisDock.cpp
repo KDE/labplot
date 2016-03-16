@@ -51,7 +51,7 @@
   \ingroup kdefrontend
 */
 
-AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_aspectTreeModel(0), m_initializing(false) {
+AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(0), m_aspectTreeModel(0), m_dataChanged(0), m_initializing(false) {
 	ui.setupUi(this);
 
 	//"Title"-tab

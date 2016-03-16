@@ -47,7 +47,7 @@
   \ingroup kdefrontend
 */
 
-ColumnDock::ColumnDock(QWidget *parent): QWidget(parent){
+ColumnDock::ColumnDock(QWidget *parent): QWidget(parent), m_column(0), m_initializing(false) {
 	ui.setupUi(this);
 
 	dateStrings<<"yyyy-MM-dd";

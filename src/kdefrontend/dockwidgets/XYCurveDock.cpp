@@ -56,7 +56,12 @@
   \ingroup kdefrontend
 */
 
-XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYColumn(0), m_aspectTreeModel(0){
+XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent),
+	cbXColumn(0),
+	cbYColumn(0),
+	m_curve(0),
+	m_aspectTreeModel(0) {
+
 	ui.setupUi(this);
 
 	//Tab "Values"
@@ -481,7 +486,7 @@ void XYCurveDock::init(){
 
 void XYCurveDock::setModel() {
 	QList<const char*>  list;
-    list<<"Folder"<<"Workbook"<<"Datapicker"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
+    list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);
 		cbYColumn->setTopLevelClasses(list);

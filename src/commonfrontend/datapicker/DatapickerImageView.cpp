@@ -84,6 +84,7 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView
 	initActions();
 	initMenus();
 	selectAndEditModeAction->setChecked(true);
+    m_image->setSegmentsHoverEvent(true);
 	setInteractive(true);
 
 	changeZoom(zoomOriginAction);
@@ -477,10 +478,9 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 
 		//copy the part of the view to be shown magnified
 		const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
-		const QRectF copyRect(pos.x() - size/2, pos.y() - size/2, size, size);
+        const QRectF copyRect(pos.x() - size/(2*magnificationFactor), pos.y() - size/(2*magnificationFactor), size/magnificationFactor, size/magnificationFactor);
 		QPixmap px = QPixmap::grabWidget(this, mapFromScene(copyRect).boundingRect());
-		px = px.scaled(size*magnificationFactor, size*magnificationFactor, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-		px = px.copy(px.width()/2 - size/2, px.height()/2 - size/2, size, size);
+        px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
 		//draw the bounding rect
 		QPainter painter(&px);
@@ -602,19 +602,23 @@ void DatapickerImageView::mouseModeChanged(QAction* action) {
 	if (action==selectAndEditModeAction) {
 		m_mouseMode = SelectAndEditMode;
 		setInteractive(true);
-		setDragMode(QGraphicsView::NoDrag);
+        setDragMode(QGraphicsView::NoDrag);
+        m_image->setSegmentsHoverEvent(true);
 	} else if (action==navigationModeAction) {
 		m_mouseMode = NavigationMode;
 		setInteractive(false);
 		setDragMode(QGraphicsView::ScrollHandDrag);
+        m_image->setSegmentsHoverEvent(false);
 	} else if (action==zoomSelectionModeAction) {
 		m_mouseMode = ZoomSelectionMode;
 		setInteractive(false);
 		setDragMode(QGraphicsView::NoDrag);
+        m_image->setSegmentsHoverEvent(false);
 	} else {
 		m_mouseMode = SelectAndMoveMode;
 		setInteractive(true);
 		setDragMode(QGraphicsView::NoDrag);
+        m_image->setSegmentsHoverEvent(false);
 	}
 }
 
@@ -648,7 +652,6 @@ void DatapickerImageView::changeRotationAngle() {
 
 void DatapickerImageView::handleImageActions() {
 	if (m_image->isLoaded) {
-		navigationActionGroup->setEnabled(true);
 		magnificationActionGroup->setEnabled(true);
 		setAxisPointsAction->setEnabled(true);
 

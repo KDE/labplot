@@ -38,7 +38,7 @@
 #include <QKeyEvent>
 #include <QMenu>
 #include <QWidgetAction>
-#include <QScrollBar>
+
 #include <KLocalizedString>
 
 /*!
@@ -90,6 +90,11 @@ void XYEquationCurveDock::setupGeneral() {
     uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	uiGeneralTab.teEquation2->setExpressionType(XYEquationCurve::Parametric);
+
+	uiGeneralTab.teEquation1->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
+	uiGeneralTab.teEquation2->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
+	uiGeneralTab.teMin->setMaximumHeight(uiGeneralTab.leName->sizeHint().height());
+	uiGeneralTab.teMax->setMaximumHeight(uiGeneralTab.leName->sizeHint().height());
 
 	//Slots
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );

@@ -4,6 +4,7 @@ General information
 https://github.com/google/sanitizers/wiki
 http://clang.llvm.org/docs/index.html
 https://llvm.org/svn/llvm-project/compiler-rt/trunk/lib/asan/scripts/asan_symbolize.py
+http://developerblog.redhat.com/2014/10/16/gcc-undefined-behavior-sanitizer-ubsan/
 
 ###############################################################
 Address sanitizer

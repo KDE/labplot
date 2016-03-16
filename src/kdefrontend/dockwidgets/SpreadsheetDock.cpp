@@ -42,7 +42,7 @@
   \ingroup kdefrontend
 */
 
-SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent), m_initializing(false) {
+SpreadsheetDock::SpreadsheetDock(QWidget* parent): QWidget(parent), m_spreadsheet(0), m_initializing(false) {
 	ui.setupUi(this);
 
 	connect(ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()));
