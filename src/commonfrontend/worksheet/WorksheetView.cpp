@@ -799,6 +799,7 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 		//copy the part of the view to be shown magnified
 		QPointF pos = mapToScene(event->pos());
 		const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
+
         const QRectF copyRect(pos.x() - size/(2*magnificationFactor), pos.y() - size/(2*magnificationFactor), size/magnificationFactor, size/magnificationFactor);
 		QPixmap px = QPixmap::grabWidget(this, mapFromScene(copyRect).boundingRect());
         px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
@@ -825,8 +826,8 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 }
 
 void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
-	if ( !itemAt(e->pos()) ){
-		//no item under the cursor -> show the context menu for the worksheet
+	if ( (m_magnificationWindow && items(e->pos()).size()==1) || !itemAt(e->pos()) ){
+		//no item or only the magnification window under the cursor -> show the context menu for the worksheet
 		QMenu *menu = new QMenu(this);
 		this->createContextMenu(menu);
 		menu->exec(QCursor::pos());
