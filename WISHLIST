@@ -1,7 +1,7 @@
 This file contains old feature requests and wishes for labplot1.x.
 The following items will be adopted to the new code and implemented if they still make sense.
 For items where it is clear that they need to be implemented in the near feature, consider creating a feature 
-request ticket at sourceforge.
+request ticket at the KDE bug tracker or Phabricator.
 
 #####################
 Planned Features:
@@ -36,43 +36,26 @@ GUI/Application:
 	* Spreadsheet
 		* Selection like Kaleidagraph (Pascal)
 		* format in spreadsheet	(show as ..., convert isodate->double, double->isodate, ....)
-		U mark column if right clicked on header
-			-> too complicated
-	* animations
 I/O:
 ****
 	* reading multiple files from data dialog
 		-> also "same x column"
 	F support "indexed" matrix format
 	* IMPORT/EXPORT
-		* hdf5 IMPORT (see /sw/hdf5-1.6.1/doc/html/)
-			* import
-				* datatype	uchar, time
-			* export
-				* data type	time
-			-> examples : sp_Diagrams_20070626_093808.hdf,DAMARIS_data_pool_small.h5
-			* read other data types (string in compound, time, array)
 		* read date format "2000/12/24" ("Temperatur.dat")
 		* ignore columns
 		* multiple column files (NXY)	-> XYYYYY... / YYYYYYYY, X-index
 		* progress when exporting data
-		* only export selected region
+		* only export selected data
 
 drawing/ data manipulation:
 ***************************
-	* any formula as baseline
-		-> evaluate expression in baseline line edit
-	* Symbols
-		* more symbols : N types (...)
-		* more fills : 16 types (center, corner,...)
-		* character as symbols
+	* Spreadsheet
+		* Matrix operations on Spreadsheet: diagonalize, eigenvalues, invert, ...
+	* any mathematical formula as baseline
 	* move marker with mouse
 	* image profiling (vertical/horizontal profiles)
-	* Spreadsheet
-		* a function that generate a sequence of number in a specific column 
-		(if you know excel: you can write 1 2 3 in a column and then drag & drop to extend the sequence).
-		* values dialog : show number of parameter of selectable functions : fun1(,) fun2(,,)
-	* Plots :
+	* Plots:
 		* set drawing object relative to graph (fixed to axes)
 		* sqrt/x^2 scales
 			* data mode Plot.cc
@@ -88,7 +71,7 @@ drawing/ data manipulation:
 			* each box another color	-> Style::autocolor (good also for Symbols)
 			* grouped data	: a1b1c1d1,a2b2c2d2,...	+legend
 			* stacked data : a1b1c1,a2b2c2 + legend
-		* Surface plot :
+		* Surface plot:
 			* set z range ?
 			* custom contour level (Rudi)
 			* plot points and Delaunay triangulation
@@ -100,7 +83,7 @@ drawing/ data manipulation:
 			* select range to draw (dont draw other pixel)
 			* filled contour plot
 			* contour label
-			* third type : vector field plot, windbarbs	-> data format ?
+			* third type: vector field plot, windbarbs	-> data format ?
 			* test more than 1 graph
 			* read date/time matrix
 			* improve  legend (0..1)
@@ -116,71 +99,7 @@ drawing/ data manipulation:
 				ausschalte fehlt mir dort ein rahmen und die ticks [ohne labels])
 			* wenn ich aus einem xyz datensatz einen qwt3d plot mache. habe ich nur punkte
 				und keine moeglichkeit gefunden eine oberflaeche zu erhalten (uebersehe ich was?)
-		* QWT3D plot :
-			V BUG : QWT3D plot rescaled if mouse disabled
-			V BUG : QWT3D zoom doesn't work
-			V BUG : QWT3D plot moving legend+title doesn't work	
-			* bei dem QWT Plot wuerde mir z.B. die Moeglichkeit der Farb- oder
-				Radiusaenderungen der einzelnen Kugelobjekte sehr helfen (wiederum aktualisierbar).
-			* more analysis functions
-			* support two datasets ?
-			* Example datafile to import in a qwt 3d plot, that returns for me only a very
-			basic wireframe (the data is a time evolution of a concentration profile, so
-			(t,x,C(t,x))) in attachment.
-			* connect points in qwt plot
-				delaunay triangulation
-			F Surface/QWT plot :
-				* dens_indizes : 24x24x40 ?
-				* test dens_3d_in_one_row (after convert to matrix : howto ? )
-				* test irregular X-Y-Z data : data points ? / mesh grid ?
-			* legend box undefined (used for legend.inside() !)
-			* use Qwt3D::USERSCALE for log2,ln,sqrt ?
-			* custom plotstyle (boxes, etc.)
-			* vector plot
-			* speed mode
-			* animate plot (update data ?)
-			U base line ?
-			U show/hide (works with two graphs !)
-			U title : boxed, rotation, (richtext : greek, sub, super (?))
-			U legend: boxed, (minors, majors), tic font
-			U axes :
-				* fix log scale range
-				*log2/e/sqrt scale / range, scaling, shift
-				* label : boxed, rotation, gap (position) to axis
-				* richtext label(?) : color, greek, sub/super
-				* tics label format, precision, rotation, pre+suf, color, pos(in/out)
-				* grid style, color for every axis, width
-			U open dialogs with mouse double click
-				-> see qtiplot	 graph3D.cpp eventFilter
-					-> QWidget ?, mouse double click ?
-			U use actions toolbar : mag, pan, data, mask
-			U multiple graphs
-				U add function/data in qwt3d graphlist
-			U x-y-z data : not only points style : howto ?
-			U analysis functions (result ?)
-			U support errorbars (error plot ?)
-			U zoom in 3d data
-			U drawing objects (after freeze plot)
-			U multiplot with qwt3d plot (Plot::savePixmap() ???)
-				-> qwt 0.3.0 ?
-		* 3D plot :-> better use QWT3D plot
-			* x^2+sqrt scales
-			* y axes tic scale + rounding bug
-			* 3D error plots :
-				* DataDialog : "x-y-z-dz" (GRAPH4D : 3D error)
-				* plot in Plot3D.cc
-			* baseline 3d
-			* xy-region for 3d integration, fit, etc.
-			* convert 3d type to matrix (NX=64 & NY=1 -> NX=NY=8)
-			* connect type 3d data points in 3d plot
-			* 3d data -> set nx, ny
-			* 3d matrix display : use nx and ny
-			* correct boxes style
-				* change x,y actranges (not ranges !)
-			* known 3D bugs
-			* fill with colors (z-value,colorscale), contour (new style type ?)
-			* transparent filling (no hidden3d)
-		* Pie plot :
+		* Pie plot:
 			* explode segments
 			* segment legend
 			* brush
@@ -189,11 +108,11 @@ drawing/ data manipulation:
 			* tic label format, rotation
 			* axes dialog : from 0..1 (disable) ?
 			* make a legend from all points (1 - 12 %, 2 - 27 %, ...)
-		* Polar plot :
+		* Polar plot:
 			* coordinates
 			* plot minor tics, minor grid
 			* tic width/grid/border properties
-		* Ternary Plot :
+		* Ternary Plot:
 			* coordinates
 			* tic label precision + format
 			* 3 custom axes label
@@ -201,7 +120,7 @@ drawing/ data manipulation:
 			* tic width/grid/border properties
 			(* draw minor tics, grid)
 			(* use axis scale)
-		* More plot types :
+		* More plot types:
 			* support waterfall plot (see matlab)
 			* Pie3D plot
 			* Polar3D plot	(r,theta,phi)
@@ -212,7 +131,7 @@ drawing/ data manipulation:
 			* rose plot (polar histogram)	[-> wind directions]
 			* polar contour
 		* support x=f(y) plots (f(x)=sin(y))
-		* ArrangePlotDialog :
+		* ArrangePlotDialog:
 			* size+pos for nr = 9,10,11,12,13,14,15,16
 		* data over (structured-unstructured) meshes, like 
 			the ones generated in finite element modeling, 2D and 3D.
@@ -238,14 +157,14 @@ drawing/ data manipulation:
 		each other, with independent scaling on each axis.
 		: overlay two plots (x-y1+x-y2) with same x-axis
 		-> implement as QSA macro
-	Axes :
-		* axis tic label format :
+	Axes 
+		* axis tic label format:
 			* the settings of the tics are quite complicated :
 				* auoscale in axes dialog ?	-> change act range to active graph range ?
 			* hexadecimal, binary (000 001 010 011 100 101 110 111)
 			* degree (2:10'33'')
 		* (fast) flip x-y graph
-		* scales :
+		* scales:
 			* x^2	: -10..10 ?
 			* new 1/x,1/x^2 scales
 			* db axis scale (exp+log)
@@ -314,11 +233,6 @@ drawing/ data manipulation:
 		Crtl + Bild-Auf: Eine Fensterbreite nach links.
 		(bei gleichzeigigem Shift: Bereich zwische erster Position und letzter 
 		erreichter Position markieren
-		
-		Im Arbeitsblatt fehlt mir die Moeglichkeit Einzelelemente, wie
-		Achsenbeschriftung / Titel / Legende o.ae. als aktives Element
-		auszuwaehlen und dann mit den Cursortasten anstelle des Graphen zu 
-		verschieben (Crtl+Cursortasten: Pixelweise / bzw. fein verschieben)
 	* extract feature (see grace)
 
 ANALYSIS:
@@ -335,7 +249,7 @@ ANALYSIS:
 	* 2D histogram
 		* graph3d	 -> read 2d transform
 	* mask: average, smooth, compress, period, season, prune, hist, peak, diff, fft, interpol, convol, wavlet, hankel
-	* from spreadsheet : peak, regression, fft, convolution, wavelet
+	* from spreadsheet: peak, regression, fft, convolution, wavelet
 	* GraphM: period, seasonal, prune, peak, diff, int, interpol
 	* addon functions fresnel/tamu-anova/Whittaker+Rydberg ?
 	* Statistics
@@ -343,8 +257,6 @@ ANALYSIS:
 			* support box plots : F Can Labplot make boxed 2d plots? Like origin in win or kpl in linux?
 			I did not found this options in axes. If it is so, could you add this options in next version?
 			In scientific word such plots are always preferable.
-		* MatrixRListDialog : matrix operations : diagonalize, eigenvalues, invert, ...
-			* on Spreadsheet
 		* TestsRListDialog :
 			* more tests/ options
 				* check stat12b.pdf
@@ -379,7 +291,7 @@ ANALYSIS:
 		* logarithmic bins (see GSL docu)
 		* weighted: gsl_histogram_accumulate (h,x,weight)
 			-> weight what ?
-	* (de)convolution of two data sets :
+	* (de)convolution of two data sets:
 		* use fftw/fftw3 too
 		* use mixed radix fft 
 		* 2D convolution (using 2d fft)
@@ -389,5 +301,5 @@ ANALYSIS:
 		one equation, and only one curve: k1*x+k2*x^2+k3*x^.5+x^3=2
 		Origin has this feature to simplify the writing of very large equations.
 	* smooth Savitzky-Golay (point-wise polynomial fit/ see Numerical Recipes)
-	* image operations ?
-	* all selected graphs/cols ?
+	* image operations?
+	* all selected graphs/cols?
