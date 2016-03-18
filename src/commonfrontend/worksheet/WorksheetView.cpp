@@ -73,8 +73,8 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	m_fadeInTimeLine(0),
 	m_fadeOutTimeLine(0),
 	tbNewCartesianPlot(0),
-    tbZoom(0),
-    tbMagnification(0) {
+	tbZoom(0),
+	tbMagnification(0) {
 
 	setScene(m_worksheet->scene());
 
@@ -118,7 +118,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	connect(scene(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
 }
 
-void WorksheetView::initActions(){
+void WorksheetView::initActions() {
 	QActionGroup* addNewActionGroup = new QActionGroup(this);
 	QActionGroup* zoomActionGroup = new QActionGroup(this);
 	QActionGroup* mouseModeActionGroup = new QActionGroup(this);
@@ -211,7 +211,7 @@ void WorksheetView::initActions(){
 	breakLayoutAction->setObjectName("breakLayoutAction");
 	breakLayoutAction->setEnabled(false);
 
-   //Grid actions
+	//Grid actions
 	noGridAction = new KAction(i18n("no grid"), gridActionGroup);
 	noGridAction->setObjectName("noGridAction");
 	noGridAction->setCheckable(true);
@@ -309,7 +309,7 @@ void WorksheetView::initActions(){
 	zoomInYAction->setData(CartesianPlot::ZoomInY);
 	zoomOutYAction = new KAction(KIcon("labplot-zoom-out-y"), i18n("zoom out Y"), cartesianPlotNavigationGroup);
 	zoomOutYAction->setData(CartesianPlot::ZoomOutY);
-    shiftLeftXAction = new KAction(KIcon("labplot-shift-left-x"), i18n("shift left X"), cartesianPlotNavigationGroup);
+	shiftLeftXAction = new KAction(KIcon("labplot-shift-left-x"), i18n("shift left X"), cartesianPlotNavigationGroup);
 	shiftLeftXAction->setData(CartesianPlot::ShiftLeftX);
 	shiftRightXAction = new KAction(KIcon("labplot-shift-right-x"), i18n("shift right X"), cartesianPlotNavigationGroup);
 	shiftRightXAction->setData(CartesianPlot::ShiftRightX);
@@ -321,7 +321,7 @@ void WorksheetView::initActions(){
 	connect(cartesianPlotNavigationGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotNavigationChanged(QAction*)));
 }
 
-void WorksheetView::initMenus(){
+void WorksheetView::initMenus() {
 	m_addNewCartesianPlotMenu = new QMenu(i18n("xy-plot"));
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot1Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot2Action);
@@ -460,7 +460,7 @@ void WorksheetView::createContextMenu(QMenu* menu) const {
 	menu->insertSeparator(firstAction);
 }
 
-void WorksheetView::fillToolBar(QToolBar* toolBar){
+void WorksheetView::fillToolBar(QToolBar* toolBar) {
 	toolBar->addSeparator();
 	tbNewCartesianPlot = new QToolButton(toolBar);
 	tbNewCartesianPlot->setPopupMode(QToolButton::MenuButtonPopup);
@@ -522,8 +522,8 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 }
 
 void WorksheetView::setScene(QGraphicsScene* scene) {
-  QGraphicsView::setScene(scene);
-  setTransform(QTransform());
+	QGraphicsView::setScene(scene);
+	setTransform(QTransform());
 }
 
 void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
@@ -543,90 +543,90 @@ void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
 void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_rect) {
 	// canvas
 	painter->setOpacity(m_worksheet->backgroundOpacity());
-	if (m_worksheet->backgroundType() == PlotArea::Color){
-		switch (m_worksheet->backgroundColorStyle()){
-			case PlotArea::SingleColor:{
-				painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
-				break;
-			}
-			case PlotArea::HorizontalLinearGradient:{
-				QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.topRight());
-				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case PlotArea::VerticalLinearGradient:{
-				QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomLeft());
-				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case PlotArea::TopLeftDiagonalLinearGradient:{
-				QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomRight());
-				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case PlotArea::BottomLeftDiagonalLinearGradient:{
-				QLinearGradient linearGrad(scene_rect.bottomLeft(), scene_rect.topRight());
-				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case PlotArea::RadialGradient:{
-				QRadialGradient radialGrad(scene_rect.center(), scene_rect.width()/2);
-				radialGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-				radialGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
-				painter->setBrush(QBrush(radialGrad));
-				break;
-			}
+	if (m_worksheet->backgroundType() == PlotArea::Color) {
+		switch (m_worksheet->backgroundColorStyle()) {
+		case PlotArea::SingleColor: {
+			painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
+			break;
+		}
+		case PlotArea::HorizontalLinearGradient: {
+			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.topRight());
+			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
+			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+			painter->setBrush(QBrush(linearGrad));
+			break;
+		}
+		case PlotArea::VerticalLinearGradient: {
+			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomLeft());
+			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
+			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+			painter->setBrush(QBrush(linearGrad));
+			break;
+		}
+		case PlotArea::TopLeftDiagonalLinearGradient: {
+			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomRight());
+			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
+			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+			painter->setBrush(QBrush(linearGrad));
+			break;
+		}
+		case PlotArea::BottomLeftDiagonalLinearGradient: {
+			QLinearGradient linearGrad(scene_rect.bottomLeft(), scene_rect.topRight());
+			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
+			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+			painter->setBrush(QBrush(linearGrad));
+			break;
+		}
+		case PlotArea::RadialGradient: {
+			QRadialGradient radialGrad(scene_rect.center(), scene_rect.width()/2);
+			radialGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
+			radialGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+			painter->setBrush(QBrush(radialGrad));
+			break;
+		}
 			//default:
 			//	painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
 		}
 		painter->drawRect(scene_rect);
-	}else if (m_worksheet->backgroundType() == PlotArea::Image){	// background image
+	} else if (m_worksheet->backgroundType() == PlotArea::Image) {	// background image
 		const QString& backgroundFileName = m_worksheet->backgroundFileName().trimmed();
 		if ( !backgroundFileName.isEmpty() ) {
 			QPixmap pix(backgroundFileName);
-			switch (m_worksheet->backgroundImageStyle()){
-				case PlotArea::ScaledCropped:
-					pix = pix.scaled(scene_rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
-					painter->drawPixmap(scene_rect.topLeft(),pix);
-					break;
-				case PlotArea::Scaled:
-					pix = pix.scaled(scene_rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-					painter->drawPixmap(scene_rect.topLeft(),pix);
-					break;
-				case PlotArea::ScaledAspectRatio:
-					pix = pix.scaled(scene_rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-					painter->drawPixmap(scene_rect.topLeft(),pix);
-					break;
-				case PlotArea::Centered:
-					painter->drawPixmap(QPointF(scene_rect.center().x()-pix.size().width()/2,scene_rect.center().y()-pix.size().height()/2),pix);
-					break;
-				case PlotArea::Tiled:
-					painter->drawTiledPixmap(scene_rect,pix);
-					break;
-				case PlotArea::CenterTiled:
-					painter->drawTiledPixmap(scene_rect,pix,QPoint(scene_rect.size().width()/2,scene_rect.size().height()/2));
-					break;
+			switch (m_worksheet->backgroundImageStyle()) {
+			case PlotArea::ScaledCropped:
+				pix = pix.scaled(scene_rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
+				painter->drawPixmap(scene_rect.topLeft(),pix);
+				break;
+			case PlotArea::Scaled:
+				pix = pix.scaled(scene_rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+				painter->drawPixmap(scene_rect.topLeft(),pix);
+				break;
+			case PlotArea::ScaledAspectRatio:
+				pix = pix.scaled(scene_rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+				painter->drawPixmap(scene_rect.topLeft(),pix);
+				break;
+			case PlotArea::Centered:
+				painter->drawPixmap(QPointF(scene_rect.center().x()-pix.size().width()/2,scene_rect.center().y()-pix.size().height()/2),pix);
+				break;
+			case PlotArea::Tiled:
+				painter->drawTiledPixmap(scene_rect,pix);
+				break;
+			case PlotArea::CenterTiled:
+				painter->drawTiledPixmap(scene_rect,pix,QPoint(scene_rect.size().width()/2,scene_rect.size().height()/2));
+				break;
 				//default:
 				//	painter->drawPixmap(scene_rect.topLeft(),pix);
 			}
 		}
-	}else if (m_worksheet->backgroundType() == PlotArea::Pattern){	// background pattern
+	} else if (m_worksheet->backgroundType() == PlotArea::Pattern) {	// background pattern
 		painter->setBrush(QBrush(m_worksheet->backgroundFirstColor(),m_worksheet->backgroundBrushStyle()));
 		painter->drawRect(scene_rect);
 	}
 
 	//grid
-	if (m_gridSettings.style != WorksheetView::NoGrid){
+	if (m_gridSettings.style != WorksheetView::NoGrid) {
 		QColor c=m_gridSettings.color;
- 		c.setAlphaF(m_gridSettings.opacity);
+		c.setAlphaF(m_gridSettings.opacity);
 		painter->setPen(c);
 
 		qreal x, y;
@@ -635,7 +635,7 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 		qreal top = scene_rect.top();
 		qreal bottom = scene_rect.bottom();
 
-		if (m_gridSettings.style==WorksheetView::LineGrid){
+		if (m_gridSettings.style==WorksheetView::LineGrid) {
 			QLineF line;
 
 			//horizontal lines
@@ -653,11 +653,11 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 				painter->drawLine(line);
 				x += m_gridSettings.horizontalSpacing;
 			}
-		}else{ //DotGrid
+		} else { //DotGrid
 			y = top + m_gridSettings.verticalSpacing;
-			while (y < bottom){
+			while (y < bottom) {
 				x = left;// + m_gridSettings.horizontalSpacing;
-				while (x < right){
+				while (x < right) {
 					x += m_gridSettings.horizontalSpacing;
 					painter->drawPoint(x, y);
 				}
@@ -704,23 +704,23 @@ void WorksheetView::resizeEvent(QResizeEvent *event) {
 }
 
 void WorksheetView::wheelEvent(QWheelEvent *event) {
-  if (m_mouseMode == ZoomSelectionMode){
-	if (event->delta() > 0)
-		scale(1.2, 1.2);
-	else if (event->delta() < 0)
-		scale(1.0/1.2, 1.0/1.2);
-  }else{
-	QGraphicsView::wheelEvent(event);
-  }
+	if (m_mouseMode == ZoomSelectionMode) {
+		if (event->delta() > 0)
+			scale(1.2, 1.2);
+		else if (event->delta() < 0)
+			scale(1.0/1.2, 1.0/1.2);
+	} else {
+		QGraphicsView::wheelEvent(event);
+	}
 }
 
 void WorksheetView::mousePressEvent(QMouseEvent* event) {
 	//prevent the deselection of items when context menu event
 	//was triggered (right button click)
 	if (event->button() == Qt::RightButton) {
-        event->accept();
-        return;
-    }
+		event->accept();
+		return;
+	}
 
 	if (event->button() == Qt::LeftButton && m_mouseMode == ZoomSelectionMode) {
 		m_selectionStart = event->pos();
@@ -800,9 +800,9 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 		QPointF pos = mapToScene(event->pos());
 		const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
 
-        const QRectF copyRect(pos.x() - size/(2*magnificationFactor), pos.y() - size/(2*magnificationFactor), size/magnificationFactor, size/magnificationFactor);
+		const QRectF copyRect(pos.x() - size/(2*magnificationFactor), pos.y() - size/(2*magnificationFactor), size/magnificationFactor, size/magnificationFactor);
 		QPixmap px = QPixmap::grabWidget(this, mapFromScene(copyRect).boundingRect());
-        px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+		px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
 		//draw the bounding rect
 		QPainter painter(&px);
@@ -826,12 +826,12 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 }
 
 void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
-	if ( (m_magnificationWindow && items(e->pos()).size()==1) || !itemAt(e->pos()) ){
+	if ( (m_magnificationWindow && items(e->pos()).size()==1) || !itemAt(e->pos()) ) {
 		//no item or only the magnification window under the cursor -> show the context menu for the worksheet
 		QMenu *menu = new QMenu(this);
 		this->createContextMenu(menu);
 		menu->exec(QCursor::pos());
-	}else{
+	} else {
 		//propagate the event to the scene and graphics items
 		QGraphicsView::contextMenuEvent(e);
 	}
@@ -870,22 +870,22 @@ void WorksheetView::processResize() {
 	}
 }
 
-void WorksheetView::changeZoom(QAction* action){
-	if (action==zoomInViewAction){
+void WorksheetView::changeZoom(QAction* action) {
+	if (action==zoomInViewAction) {
 		scale(1.2, 1.2);
-	}else if (action==zoomOutViewAction){
+	} else if (action==zoomOutViewAction) {
 		scale(1.0/1.2, 1.0/1.2);
-	}else if (action==zoomOriginAction){
+	} else if (action==zoomOriginAction) {
 		static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
 		static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
 		setTransform(QTransform::fromScale(hscale, vscale));
-	}else if (action==zoomFitPageWidthAction){
+	} else if (action==zoomFitPageWidthAction) {
 		float scaleFactor = viewport()->width()/scene()->sceneRect().width();
 		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-	}else if (action==zoomFitPageHeightAction){
+	} else if (action==zoomFitPageHeightAction) {
 		float scaleFactor = viewport()->height()/scene()->sceneRect().height();
 		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-	}else if (action==zoomFitSelectionAction){
+	} else if (action==zoomFitSelectionAction) {
 		fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
 	}
 	currentZoomAction=action;
@@ -893,7 +893,7 @@ void WorksheetView::changeZoom(QAction* action){
 		tbZoom->setDefaultAction(action);
 }
 
-void WorksheetView::magnificationChanged(QAction* action){
+void WorksheetView::magnificationChanged(QAction* action) {
 	if (action==noMagnificationAction)
 		magnificationFactor = 0;
 	else if (action==twoTimesMagnificationAction)
@@ -906,8 +906,8 @@ void WorksheetView::magnificationChanged(QAction* action){
 		magnificationFactor = 5;
 
 	currentMagnificationAction=action;
-    if (tbMagnification)
-        tbMagnification->setDefaultAction(action);
+	if (tbMagnification)
+		tbMagnification->setDefaultAction(action);
 }
 
 void WorksheetView::mouseModeChanged(QAction* action) {
@@ -927,37 +927,37 @@ void WorksheetView::mouseModeChanged(QAction* action) {
 }
 
 //"Add new" related slots
-void WorksheetView::addNew(QAction* action){
+void WorksheetView::addNew(QAction* action) {
 	WorksheetElement* aspect = 0;
-	if ( action == addCartesianPlot1Action ){
+	if ( action == addCartesianPlot1Action ) {
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
 		plot->initDefault(CartesianPlot::FourAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
-	}else if ( action == addCartesianPlot2Action ){
+	} else if ( action == addCartesianPlot2Action ) {
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
 		plot->initDefault(CartesianPlot::TwoAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot2Action);
-	}else if ( action == addCartesianPlot3Action ){
+	} else if ( action == addCartesianPlot3Action ) {
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
 		plot->initDefault(CartesianPlot::TwoAxesCentered);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot3Action);
-	}else if ( action == addCartesianPlot4Action ){
+	} else if ( action == addCartesianPlot4Action ) {
 		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
 		plot->initDefault(CartesianPlot::TwoAxesCenteredZero);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
-	}else if ( action == addTextLabelAction ){
+	} else if ( action == addTextLabelAction ) {
 		TextLabel* l = new TextLabel(i18n("text label"));
 		l->setText(i18n("text label"));
 		aspect = l;
@@ -998,13 +998,13 @@ void WorksheetView::selectAllElements() {
 	//deselect all previously selected items since there can be some non top-level items belong them
 	m_suppressSelectionChangedEvent = true;
 	QList<QGraphicsItem*> items = scene()->selectedItems();
-	foreach ( QGraphicsItem* item , m_selectedItems ){
+	foreach ( QGraphicsItem* item , m_selectedItems ) {
 		m_worksheet->setItemSelectedInView(item, false);
 	}
 
 	//select top-level items
 	items = scene()->items();
-	foreach(QGraphicsItem* item, items){
+	foreach(QGraphicsItem* item, items) {
 		if (!item->parentItem())
 			item->setSelected(true);
 	}
@@ -1021,8 +1021,8 @@ void WorksheetView::deleteElement() {
 		return;
 
 	int rc = KMessageBox::warningYesNo( this,
-			i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", items.size()),
-			i18n("Delete selected objects"));
+	                                    i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", items.size()),
+	                                    i18n("Delete selected objects"));
 
 	if (rc==KMessageBox::No)
 		return;
@@ -1036,7 +1036,7 @@ void WorksheetView::deleteElement() {
 	m_suppressSelectionChangedEvent = false;
 }
 
-void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect){
+void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	lastAddedWorksheetElement = dynamic_cast<WorksheetElement*>(const_cast<AbstractAspect*>(aspect));
 	if (!lastAddedWorksheetElement)
 		return;
@@ -1044,19 +1044,19 @@ void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect){
 	//FIXME: fading-out doesn't work
 	//also, the following code collides with undo/redo of the deletion
 	//of a worksheet element (after redoing the element is not shown with the full opacity
-/*
-	if (!m_fadeOutTimeLine) {
-		m_fadeOutTimeLine = new QTimeLine(1000, this);
-		m_fadeOutTimeLine->setFrameRange(0, 100);
-		connect(m_fadeOutTimeLine, SIGNAL(valueChanged(qreal)), this, SLOT(fadeOut(qreal)));
-	}
+	/*
+		if (!m_fadeOutTimeLine) {
+			m_fadeOutTimeLine = new QTimeLine(1000, this);
+			m_fadeOutTimeLine->setFrameRange(0, 100);
+			connect(m_fadeOutTimeLine, SIGNAL(valueChanged(qreal)), this, SLOT(fadeOut(qreal)));
+		}
 
-	//if there is already an element fading out, stop the time line
-	if (m_fadeOutTimeLine->state() == QTimeLine::Running)
-		m_fadeOutTimeLine->stop();
+		//if there is already an element fading out, stop the time line
+		if (m_fadeOutTimeLine->state() == QTimeLine::Running)
+			m_fadeOutTimeLine->stop();
 
-	m_fadeOutTimeLine->start();
-*/
+		m_fadeOutTimeLine->start();
+	*/
 }
 
 void WorksheetView::fadeIn(qreal value) {
@@ -1075,8 +1075,8 @@ void WorksheetView::fadeOut(qreal value) {
  * called when one of the layout-actions in WorkseetView was triggered.
  * sets the layout in Worksheet and enables/disables the layout actions.
  */
-void WorksheetView::changeLayout(QAction* action){
-	if (action==breakLayoutAction){
+void WorksheetView::changeLayout(QAction* action) {
+	if (action==breakLayoutAction) {
 		verticalLayoutAction->setEnabled(true);
 		verticalLayoutAction->setChecked(false);
 
@@ -1089,56 +1089,56 @@ void WorksheetView::changeLayout(QAction* action){
 		breakLayoutAction->setEnabled(false);
 
 		m_worksheet->setLayout(Worksheet::NoLayout);
-	}else{
+	} else {
 		verticalLayoutAction->setEnabled(false);
 		horizontalLayoutAction->setEnabled(false);
 		gridLayoutAction->setEnabled(false);
 		breakLayoutAction->setEnabled(true);
 
-		if (action == verticalLayoutAction){
+		if (action == verticalLayoutAction) {
 			verticalLayoutAction->setChecked(true);
 			m_worksheet->setLayout(Worksheet::VerticalLayout);
-		}else if (action == horizontalLayoutAction){
+		} else if (action == horizontalLayoutAction) {
 			horizontalLayoutAction->setChecked(true);
 			m_worksheet->setLayout(Worksheet::HorizontalLayout);
-		}else{
+		} else {
 			gridLayoutAction->setChecked(true);
 			m_worksheet->setLayout(Worksheet::GridLayout);
 		}
 	}
 }
 
-void WorksheetView::changeGrid(QAction* action){
+void WorksheetView::changeGrid(QAction* action) {
 	QString name = action->objectName();
 
-	if (name == "noGridAction"){
+	if (name == "noGridAction") {
 		m_gridSettings.style = WorksheetView::NoGrid;
 		snapToGridAction->setEnabled(false);
-	}else if (name == "sparseLineGridAction"){
+	} else if (name == "sparseLineGridAction") {
 		m_gridSettings.style = WorksheetView::LineGrid;
 		m_gridSettings.color = Qt::gray;
 		m_gridSettings.opacity = 0.7;
 		m_gridSettings.horizontalSpacing = 15;
 		m_gridSettings.verticalSpacing = 15;
-	}else if (name == "denseLineGridAction"){
+	} else if (name == "denseLineGridAction") {
 		m_gridSettings.style = WorksheetView::LineGrid;
 		m_gridSettings.color = Qt::gray;
 		m_gridSettings.opacity = 0.7;
 		m_gridSettings.horizontalSpacing = 5;
 		m_gridSettings.verticalSpacing = 5;
-	}else if (name == "denseDotGridAction"){
+	} else if (name == "denseDotGridAction") {
 		m_gridSettings.style = WorksheetView::DotGrid;
 		m_gridSettings.color = Qt::black;
 		m_gridSettings.opacity = 0.7;
 		m_gridSettings.horizontalSpacing = 5;
 		m_gridSettings.verticalSpacing = 5;
-	}else if (name == "sparseDotGridAction"){
+	} else if (name == "sparseDotGridAction") {
 		m_gridSettings.style = WorksheetView::DotGrid;
 		m_gridSettings.color = Qt::black;
 		m_gridSettings.opacity = 0.7;
 		m_gridSettings.horizontalSpacing = 15;
 		m_gridSettings.verticalSpacing = 15;
-	}else if (name == "customGridAction"){
+	} else if (name == "customGridAction") {
 		GridDialog* dlg = new GridDialog(this);
 		if (dlg->exec() == QDialog::Accepted)
 			dlg->save(m_gridSettings);
@@ -1155,7 +1155,7 @@ void WorksheetView::changeGrid(QAction* action){
 }
 
 //TODO
-void WorksheetView::changeSnapToGrid(){
+void WorksheetView::changeSnapToGrid() {
 
 }
 
@@ -1164,7 +1164,7 @@ void WorksheetView::changeSnapToGrid(){
  * 	The selection in \c ProjectExplorer is forwarded to  \c Worksheet
  *  and is finally handled here.
  */
-void WorksheetView::selectItem(QGraphicsItem* item){
+void WorksheetView::selectItem(QGraphicsItem* item) {
 	m_suppressSelectionChangedEvent = true;
 	item->setSelected(true);
 	m_selectedItems<<item;
@@ -1177,7 +1177,7 @@ void WorksheetView::selectItem(QGraphicsItem* item){
  * 	The deselection in \c ProjectExplorer is forwarded to \c Worksheet
  *  and is finally handled here.
  */
-void WorksheetView::deselectItem(QGraphicsItem* item){
+void WorksheetView::deselectItem(QGraphicsItem* item) {
 	m_suppressSelectionChangedEvent = true;
 	item->setSelected(false);
 	m_selectedItems.removeOne(item);
@@ -1190,7 +1190,7 @@ void WorksheetView::deselectItem(QGraphicsItem* item){
  *   Determines which items were selected and deselected
  *  and forwards these changes to \c Worksheet
  */
-void WorksheetView::selectionChanged(){
+void WorksheetView::selectionChanged() {
 	if (m_suppressSelectionChangedEvent)
 		return;
 
@@ -1203,7 +1203,7 @@ void WorksheetView::selectionChanged(){
 	//check, whether the previously selected items were deselected now.
 	//Forward the deselection prior to the selection of new items
 	//in order to avoid the unwanted multiple selection in project explorer
-	foreach ( QGraphicsItem* item, m_selectedItems ){
+	foreach ( QGraphicsItem* item, m_selectedItems ) {
 		if ( items.indexOf(item) == -1 ) {
 			if (item->isVisible())
 				m_worksheet->setItemSelectedInView(item, false);
@@ -1213,7 +1213,7 @@ void WorksheetView::selectionChanged(){
 	}
 
 	//select new items
-	if (items.size() == 0 && invisibleDeselected == false){
+	if (items.size() == 0 && invisibleDeselected == false) {
 		//no items selected -> select the worksheet again.
 		m_worksheet->setSelectedInView(true);
 
@@ -1223,7 +1223,7 @@ void WorksheetView::selectionChanged(){
 			cartesianPlotSelectionModeAction->setChecked(true);
 			cartesianPlotMouseModeChanged(cartesianPlotSelectionModeAction);
 		}
-	}else{
+	} else {
 		foreach (const QGraphicsItem* item, items)
 			m_worksheet->setItemSelectedInView(item, true);
 
@@ -1283,19 +1283,19 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	QRectF sourceRect;
 
 	//determine the rectangular to print
-	if (area==WorksheetView::ExportBoundingBox){
+	if (area==WorksheetView::ExportBoundingBox) {
 		sourceRect = scene()->itemsBoundingRect();
-	}else if (area==WorksheetView::ExportSelection){
+	} else if (area==WorksheetView::ExportSelection) {
 		//TODO doesn't work: rect = scene()->selectionArea().boundingRect();
 		foreach(QGraphicsItem* item, m_selectedItems) {
 			sourceRect = sourceRect.united( item->mapToScene(item->boundingRect()).boundingRect() );
 		}
-	}else{
+	} else {
 		sourceRect = scene()->sceneRect();
 	}
 
 	//print
-	if (format==WorksheetView::Pdf || format==WorksheetView::Eps){
+	if (format==WorksheetView::Pdf || format==WorksheetView::Eps) {
 		QPrinter printer(QPrinter::HighResolution);
 		if (format==WorksheetView::Pdf)
 			printer.setOutputFormat(QPrinter::PdfFormat);
@@ -1316,7 +1316,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		painter.begin(&printer);
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
-	}else if (format==WorksheetView::Svg){
+	} else if (format==WorksheetView::Svg) {
 		QSvgGenerator generator;
 		generator.setFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
@@ -1332,7 +1332,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		painter.begin(&generator);
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
-	}else{
+	} else {
 		//PNG
 		//TODO add all formats supported by Qt in QImage
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
@@ -1386,7 +1386,7 @@ void WorksheetView::print(QPrinter* printer) {
 	m_worksheet->setPrinting(false);
 }
 
-void WorksheetView::updateBackground(){
+void WorksheetView::updateBackground() {
 	invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer);
 }
 
@@ -1395,7 +1395,7 @@ void WorksheetView::updateBackground(){
  * enables the corresponding action
  */
 void WorksheetView::layoutChanged(Worksheet::Layout layout) {
-	if (layout==Worksheet::NoLayout){
+	if (layout==Worksheet::NoLayout) {
 		verticalLayoutAction->setEnabled(true);
 		verticalLayoutAction->setChecked(false);
 
@@ -1406,7 +1406,7 @@ void WorksheetView::layoutChanged(Worksheet::Layout layout) {
 		gridLayoutAction->setChecked(false);
 
 		breakLayoutAction->setEnabled(false);
-	}else{
+	} else {
 		verticalLayoutAction->setEnabled(false);
 		horizontalLayoutAction->setEnabled(false);
 		gridLayoutAction->setEnabled(false);
@@ -1445,14 +1445,14 @@ void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
 		m_cartesianPlotMouseMode = CartesianPlot::ZoomYSelectionMode;
 	}
 
-	foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+	foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ) {
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 	}
 }
 
 void WorksheetView::cartesianPlotAddNew(QAction* action) {
 	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ) {
 			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
 				this->cartesianPlotAdd(plot, action);
 		}
@@ -1482,12 +1482,12 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 	CartesianPlot::NavigationOperation op = (CartesianPlot::NavigationOperation)action->data().toInt();
 	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ) {
 			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
 				plot->navigate(op);
 		}
 	} else {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ){
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ) {
 			plot->navigate(op);
 		}
 	}
