@@ -36,7 +36,7 @@ class Segment;
 class Segments {
 
 public:
-	Segments(DatapickerImage*);
+	explicit Segments(DatapickerImage*);
 
 	void makeSegments(QImage&);
 	void setSegmentsVisible(bool);

@@ -262,9 +262,9 @@ void FunctionValuesDialog::variableNameChanged() {
 	}
 
 	if (!text.isEmpty())
-		text = "f(" + text + ")";
+		text = "f(" + text + ')';
 	else
-		text = "f";
+		text = 'f';
 
 	ui.lFunction->setText(text);
 	ui.teEquation->setVariables(vars);

@@ -164,6 +164,7 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 				case Qt::SizeHintRole:
 					return QSize(m_spreadsheet->child<Column>(section)->width(), m_defaultHeaderHeight);
 			}
+			break;
 		case Qt::Vertical:
 			switch(role) {
 				case Qt::DisplayRole:
