@@ -5,9 +5,6 @@ request ticket at the KDE bug tracker or Phabricator.
 
 #####################
 Planned Features:
-	* parametric plot 
-		* (XY(t)). ( using scripting ? )
-		* from function  (y(t) vs x(t))
 	* multiple regions
 		* shown/ not shown in print
 		* with background color
@@ -17,12 +14,6 @@ Planned Features:
 			* 2d surface plot
 			* mask data with mouse (maskPlot)
 			* check mask in graphlist
-	* One thing i just missed is a search field for headers from a spreadsheet as
-		data source when adding a new graph.
-		I created a new empty graph/ 2D plot and started adding data to plot. Because
-		there are so many columns, it would help a lot if there would be some search
-		field to filter the columns with data to plot.
-		-> filter for spreadsheet column names in AddGraphDialog.cc
 	* data mode
 		* jump in data point steps (configure steps)
 			Worksheet::keyPressEvent()
@@ -287,10 +278,6 @@ ANALYSIS:
 		* gsl numerical integration
 		* weighted ?
 		* use the correct function if available	(checkbox) -> undefinite integral (?)
-	* histogram:
-		* logarithmic bins (see GSL docu)
-		* weighted: gsl_histogram_accumulate (h,x,weight)
-			-> weight what ?
 	* (de)convolution of two data sets:
 		* use fftw/fftw3 too
 		* use mixed radix fft 
