@@ -30,8 +30,8 @@
 
 #include <QGraphicsScene>
 #include <QImage>
-#include <QElapsedTimer>
-#include <QDebug>
+// #include <QElapsedTimer>
+// #include <QDebug>
 #include <QGraphicsItem>
 
 /**
@@ -54,8 +54,8 @@ Segments::Segments(DatapickerImage* image): m_image(image) {
      and remain so until showSegments is called
 */
 void Segments::makeSegments(QImage &imageProcessed) {
-	QElapsedTimer timer;
-	timer.start();
+// 	QElapsedTimer timer;
+// 	timer.start();
 	clearSegments();
 
 	const int width = imageProcessed.width();
@@ -110,7 +110,7 @@ void Segments::makeSegments(QImage &imageProcessed) {
 	delete[] nextBool;
 	delete[] lastSegment;
 	delete[] currSegment;
-	qDebug() << "Made segments in " << timer.elapsed() << "ms";
+// 	qDebug() << "Made segments in " << timer.elapsed() << "ms";
 }
 
 /*!
