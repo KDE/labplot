@@ -48,7 +48,7 @@ class Workbook : public AbstractPart, public scripted {
 		virtual QWidget* view() const;
 
 		virtual void exportView() const;
-		virtual void printView() const;
+		virtual void printView();
 		virtual void printPreview() const;
 
 		Spreadsheet* currentSpreadsheet() const;

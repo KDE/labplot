@@ -52,7 +52,6 @@ class NetCDFFilterPrivate {
 		int endRow;
 		int startColumn;
 		int endColumn;
-		bool autoModeEnabled;
 
 	private:
 		int status;

@@ -48,6 +48,8 @@
 */
 
 CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(parent),
+	m_legend(0),
+	labelWidget(0),
 	m_initializing(false) {
 
 	ui.setupUi(this);
@@ -516,9 +518,9 @@ void CartesianPlotLegendDock::selectFile() {
 	QString dir = conf.readEntry("LastImageDir", "");
 
 	QString formats;
-	foreach(QByteArray format, QImageReader::supportedImageFormats()) {
+	foreach(const QByteArray format, QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
-		formats.isEmpty() ? formats+=f : formats+=" "+f;
+		formats.isEmpty() ? formats+=f : formats+=' '+f;
 	}
 
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)").arg(formats));

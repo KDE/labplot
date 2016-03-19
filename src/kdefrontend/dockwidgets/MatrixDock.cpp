@@ -28,7 +28,6 @@
 
 #include "MatrixDock.h"
 #include "commonfrontend/matrix/MatrixView.h"
-#include "backend/matrix/Matrix.h"
 #include "kdefrontend/TemplateHandler.h"
 #include <QDir>
 
@@ -39,7 +38,7 @@
   \ingroup kdefrontend
 */
 
-MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_initializing(false) {
+MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_matrix(0), m_initializing(false) {
 	ui.setupUi(this);
 
 	ui.cbFormat->addItem(i18n("Decimal"), QVariant('f'));
@@ -117,6 +116,7 @@ void MatrixDock::setMatrices(QList<Matrix*> list){
 
 	connect(m_matrix, SIGNAL(numericFormatChanged(char)), this, SLOT(matrixNumericFormatChanged(char)));
 	connect(m_matrix, SIGNAL(precisionChanged(int)), this, SLOT(matrixPrecisionChanged(int)));
+	connect(m_matrix, SIGNAL(headerFormatChanged(Matrix::HeaderFormat)), this, SLOT(matrixHeaderFormatChanged(Matrix::HeaderFormat)));
 
 	m_initializing = false;
 }
@@ -292,6 +292,12 @@ void MatrixDock::matrixNumericFormatChanged(char format) {
 void MatrixDock::matrixPrecisionChanged(int precision) {
 	m_initializing = true;
 	ui.sbPrecision->setValue(precision);
+	m_initializing = false;
+}
+
+void MatrixDock::matrixHeaderFormatChanged(Matrix::HeaderFormat format) {
+	m_initializing = true;
+	ui.cbHeader->setCurrentIndex((int)format);
 	m_initializing = false;
 }
 

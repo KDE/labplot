@@ -165,12 +165,12 @@ void DatapickerImage::exportView() const {
 	delete dlg;
 }
 
-void DatapickerImage::printView() const {
+void DatapickerImage::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18n("Print Datapicker Image"));
 	if (dlg->exec() == QDialog::Accepted) {
-		const DatapickerImageView* view = reinterpret_cast<const DatapickerImageView*>(m_view);
+		DatapickerImageView* view = reinterpret_cast<DatapickerImageView*>(m_view);
 		view->print(&printer);
 	}
 	delete dlg;
@@ -193,7 +193,11 @@ void DatapickerImage::setSelectedInView(const bool b) {
 	if (b)
 		emit childAspectSelectedInView(this);
 	else
-		emit childAspectDeselectedInView(this);
+        emit childAspectDeselectedInView(this);
+}
+
+void DatapickerImage::setSegmentsHoverEvent(const bool on) {
+    m_segments->setAcceptHoverEvents(on);
 }
 
 QGraphicsScene* DatapickerImage::scene() const {

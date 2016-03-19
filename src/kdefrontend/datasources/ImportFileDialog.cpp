@@ -48,7 +48,6 @@
 #include <QInputDialog>
 #include <KMenu>
 
-
 /*!
 	\class ImportFileDialog
 	\brief Dialog for importing data from a file. Embeds \c ImportFileWidget and provides the standard buttons.
@@ -56,15 +55,15 @@
 	\ingroup kdefrontend
  */
 
-ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource) : KDialog(parent), m_mainWin(parent),
-	cbPosition(0), m_showOptions(false), m_newDataContainerMenu(0) {
+ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const QString& fileName) : KDialog(parent), m_mainWin(parent),
+	cbAddTo(0), cbPosition(0), m_showOptions(false), m_newDataContainerMenu(0) {
 
 	QWidget* mainWidget = new QWidget(this);
 	vLayout = new QVBoxLayout(mainWidget);
 	vLayout->setSpacing(0);
 	vLayout->setContentsMargins(0,0,0,0);
 
-	importFileWidget = new ImportFileWidget( mainWidget );
+	importFileWidget = new ImportFileWidget(mainWidget, fileName);
 	vLayout->addWidget(importFileWidget);
 	setMainWidget( mainWidget );
 
@@ -158,7 +157,7 @@ void ImportFileDialog::setModel(QAbstractItemModel* model) {
 	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
 }
 
-void ImportFileDialog::setCurrentIndex(const QModelIndex& index){
+void ImportFileDialog::setCurrentIndex(const QModelIndex& index) {
 	cbAddTo->setCurrentModelIndex(index);
 	this->checkOkButton();
 }
@@ -242,7 +241,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				start=offset;
 
 			// add additional sheets
-			for(int i=start;i<nrNames;i++) {
+			for(int i=start; i<nrNames; i++) {
 				Spreadsheet *spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
 				if(mode == AbstractFileFilter::Prepend)
 					workbook->insertChildBefore(spreadsheet,sheets[0]);
@@ -255,7 +254,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 			// import to sheets
 			sheets = workbook->children<AbstractAspect>();
-			for(int i=0;i<nrNames;i++) {
+			for(int i=0; i<nrNames; i++) {
 				if( fileType == FileDataSource::HDF)
 					((HDFFilter*) filter)->setCurrentDataSetName(names[i]);
 				else
@@ -289,7 +288,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	delete filter;
 }
 
-void ImportFileDialog::toggleOptions(){
+void ImportFileDialog::toggleOptions() {
 	importFileWidget->showOptions(!m_showOptions);
 	m_showOptions = !m_showOptions;
 	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
@@ -297,10 +296,10 @@ void ImportFileDialog::toggleOptions(){
 	//resize the dialog
 	mainWidget()->resize(layout()->minimumSize());
 	layout()->activate();
- 	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
+	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
 }
 
-void ImportFileDialog::newDataContainer(QAction* action){
+void ImportFileDialog::newDataContainer(QAction* action) {
 	QString path = importFileWidget->fileName();
 	QString name=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
 
@@ -335,15 +334,17 @@ void ImportFileDialog::newDataContainerMenu() {
 }
 
 void ImportFileDialog::checkOkButton() {
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
-	if (!aspect) {
-		enableButtonOk(false);
-		lPosition->setEnabled(false);
-		cbPosition->setEnabled(false);
-		return;
-	} else {
-		lPosition->setEnabled(true);
-		cbPosition->setEnabled(true);
+	if (cbAddTo) { //only check for the target container when no file data source is being added
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
+		if (!aspect) {
+			enableButtonOk(false);
+			lPosition->setEnabled(false);
+			cbPosition->setEnabled(false);
+			return;
+		} else {
+			lPosition->setEnabled(true);
+			cbPosition->setEnabled(true);
+		}
 	}
 
 	QString fileName = importFileWidget->fileName();

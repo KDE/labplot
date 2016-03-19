@@ -144,19 +144,12 @@ int NetCDFFilter::endColumn() const{
 	return d->endColumn;
 }
 
-void NetCDFFilter::setAutoModeEnabled(bool b){
-	d->autoModeEnabled = b;
-}
-
-bool NetCDFFilter::isAutoModeEnabled() const{
-	return d->autoModeEnabled;
-}
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
 
 NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) :
-	q(owner),startRow(1), endRow(-1),startColumn(1),endColumn(-1) {
+	q(owner),startRow(1), endRow(-1),startColumn(1),endColumn(-1), status(0) {
 }
 
 #ifdef HAVE_NETCDF
@@ -713,7 +706,6 @@ void NetCDFFilterPrivate::write(const QString & fileName, AbstractDataSource* da
  */
 void NetCDFFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("netcdfFilter");
-	writer->writeAttribute("autoMode", QString::number(d->autoModeEnabled) );
 	writer->writeEndElement();
 }
 
@@ -728,13 +720,5 @@ bool NetCDFFilter::load(XmlStreamReader* reader) {
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
-
-	// read attributes
-	QString str = attribs.value("autoMode").toString();
-	if(str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'autoMode'"));
-	else
-		d->autoModeEnabled = str.toInt();
-
 	return true;
 }

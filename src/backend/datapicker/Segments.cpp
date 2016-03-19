@@ -32,6 +32,7 @@
 #include <QImage>
 #include <QElapsedTimer>
 #include <QDebug>
+#include <QGraphicsItem>
 
 /**
  * \class Segments
@@ -193,7 +194,15 @@ void Segments::clearSegments() {
 */
 void Segments::setSegmentsVisible(bool on) {
 	foreach(Segment* seg, segments)
-		seg->setVisible(on);
+        seg->setVisible(on);
+}
+
+void Segments::setAcceptHoverEvents(bool on) {
+    foreach(Segment* seg, segments) {
+        QGraphicsItem *item = seg->graphicsItem();
+        item->setAcceptHoverEvents(on);
+        item->setFlag(QGraphicsItem::ItemIsSelectable, on);
+    }
 }
 
 /*!

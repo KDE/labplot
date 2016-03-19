@@ -36,10 +36,11 @@ class Segment;
 class Segments {
 
 public:
-	Segments(DatapickerImage*);
+	explicit Segments(DatapickerImage*);
 
 	void makeSegments(QImage&);
 	void setSegmentsVisible(bool);
+    void setAcceptHoverEvents(bool);
 
 private:
 	DatapickerImage* m_image;

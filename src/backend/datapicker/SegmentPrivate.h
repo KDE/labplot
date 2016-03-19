@@ -52,7 +52,7 @@ public:
 private:
 	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
 	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
-	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 };
 
 #endif

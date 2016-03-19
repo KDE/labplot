@@ -128,13 +128,6 @@ int ImageFilter::endColumn() const{
 	return d->endColumn;
 }
 
-void ImageFilter::setAutoModeEnabled(bool b){
-	d->autoModeEnabled = b;
-}
-
-bool ImageFilter::isAutoModeEnabled() const{
-	return d->autoModeEnabled;
-}
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################

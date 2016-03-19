@@ -49,7 +49,7 @@ class Matrix : public AbstractDataSource {
 		virtual QWidget* view() const;
 
 		virtual void exportView() const;
-		virtual void printView() const;
+		virtual void printView();
 		virtual void printPreview() const;
 
 		BASIC_D_ACCESSOR_DECL(int, rowCount, RowCount)
@@ -149,6 +149,7 @@ class Matrix : public AbstractDataSource {
 		friend class MatrixSetPrecisionCmd;
 		void numericFormatChanged(char);
 		void precisionChanged(int);
+		void headerFormatChanged(Matrix::HeaderFormat);
 
 	private:
 		void init();

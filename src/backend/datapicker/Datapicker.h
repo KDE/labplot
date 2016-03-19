@@ -45,14 +45,15 @@ class Datapicker : public AbstractPart, public scripted {
 	Q_OBJECT
 
 	public:
-		Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading = false);
+		explicit Datapicker(AbstractScriptingEngine* engine, const QString& name, const bool loading = false);
+		virtual ~Datapicker();
 
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
 		virtual void exportView() const;
-		virtual void printView() const;
+		virtual void printView();
 		virtual void printPreview() const;
 
 		DatapickerCurve* activeCurve();

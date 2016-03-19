@@ -45,12 +45,12 @@ class WorksheetElement;
 class WorksheetView : public QGraphicsView {
 	Q_OBJECT
 
-  public:
+public:
 	explicit WorksheetView(Worksheet* worksheet);
 
-	enum ExportFormat{Pdf, Eps, Svg, Png};
-	enum GridStyle{NoGrid, LineGrid, DotGrid};
-	enum ExportArea{ExportBoundingBox, ExportSelection, ExportWorksheet};
+	enum ExportFormat {Pdf, Eps, Svg, Png};
+	enum GridStyle {NoGrid, LineGrid, DotGrid};
+	enum ExportArea {ExportBoundingBox, ExportSelection, ExportWorksheet};
 
 	struct GridSettings {
 		GridStyle style;
@@ -63,15 +63,16 @@ class WorksheetView : public QGraphicsView {
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
 
-  private:
-	enum MouseMode{SelectionMode, NavigationMode, ZoomSelectionMode};
-	enum CartesianPlotActionMode{ApplyActionToSelection, ApplyActionToAll};
+private:
+	enum MouseMode {SelectionMode, NavigationMode, ZoomSelectionMode};
+	enum CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll};
 
 	void initActions();
 	void initMenus();
 	void processResize();
 	void drawForeground(QPainter*, const QRectF&);
 	void drawBackground(QPainter*, const QRectF&);
+	void drawBackgroundItems(QPainter*, const QRectF&);
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
 
@@ -194,15 +195,15 @@ class WorksheetView : public QGraphicsView {
 	QAction* shiftUpYAction;
 	QAction* shiftDownYAction;
 
-  public slots:
+public slots:
 	void createContextMenu(QMenu*) const;
 	void createAnalysisMenu(QMenu*) const;
 	void fillToolBar(QToolBar*);
 	void fillCartesianPlotToolBar(QToolBar*);
-	void print(QPrinter*) const;
+	void print(QPrinter*);
 	void selectItem(QGraphicsItem*);
 
-  private slots:
+private slots:
 	void addNew(QAction*);
 	void aspectAboutToBeRemoved(const AbstractAspect*);
 	void selectAllElements();
@@ -231,7 +232,7 @@ class WorksheetView : public QGraphicsView {
 	void cartesianPlotAddNew(QAction*);
 	void handleCartesianPlotActions();
 
-  signals:
+signals:
 	void statusInfo(const QString&);
 };
 

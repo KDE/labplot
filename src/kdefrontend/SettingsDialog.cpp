@@ -36,7 +36,7 @@
  * Contains the pages for general settings and view settings.
  *
  */
-SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
+SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent), m_changed(false) {
 	const QSize minSize = minimumSize();
 	setMinimumSize(QSize(512, minSize.height()));
 

@@ -49,7 +49,7 @@ class AbstractPart : public AbstractAspect {
 
 		virtual QMenu* createContextMenu();
 		virtual void exportView() const = 0;
-		virtual void printView() const = 0;
+		virtual void printView() = 0;
 		virtual void printPreview() const = 0;
 
 	private:

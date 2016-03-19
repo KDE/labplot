@@ -120,7 +120,7 @@ private:
 public slots:
 	void createContextMenu(QMenu*) const;
 	void fillToolBar(QToolBar*);
-	void print(QPrinter*) const;
+	void print(QPrinter*);
 
 private slots:
 	void mouseModeChanged(QAction*);

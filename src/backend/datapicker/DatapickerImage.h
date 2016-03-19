@@ -84,7 +84,7 @@ public:
 	virtual QWidget* view() const;
 
 	virtual void exportView() const;
-	virtual void printView() const;
+	virtual void printView();
 	virtual void printPreview() const;
 
 	virtual void save(QXmlStreamWriter*) const;
@@ -95,6 +95,7 @@ public:
 	QGraphicsScene *scene() const;
 	void setPrinting(bool) const;
 	void setSelectedInView(const bool);
+    void setSegmentsHoverEvent(const bool);
 
 	void setPlotImageType(const DatapickerImage::PlotImageType);
 	DatapickerImage::PlotImageType plotImageType();
