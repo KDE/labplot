@@ -567,9 +567,9 @@ void XYFitCurveDock::showFitResult() {
 
 	str += i18n("iterations") + ": " + QString::number(fitResult.iterations) + "<br>";
 	if (fitResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s").arg(QString::number(fitResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", fitResult.elapsedTime/1000) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms").arg(QString::number(fitResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + "<br>";
 
 	str += i18n("degrees of freedom") + ": " + QString::number(fitResult.dof) + "<br><br>";
 

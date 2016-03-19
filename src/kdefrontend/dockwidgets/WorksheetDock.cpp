@@ -646,7 +646,7 @@ void WorksheetDock::selectFile() {
 		formats.isEmpty() ? formats+=f : formats+=' '+f;
 	}
 
-	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)").arg(formats));
+	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
     if (path.isEmpty())
         return; //cancel was clicked in the file-dialog
 
