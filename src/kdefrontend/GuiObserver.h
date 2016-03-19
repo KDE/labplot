@@ -1,9 +1,9 @@
 /***************************************************************************
     File                 : GuiObserver.h
     Project              : LabPlot
-    Description 		 : GUI observer
+    Description 	 : GUI observer
     --------------------------------------------------------------------
-	Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright        : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 

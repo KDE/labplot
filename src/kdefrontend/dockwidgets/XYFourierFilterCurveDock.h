@@ -31,7 +31,7 @@
 
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
-//#include "ui_xyfourierfiltercurvedockgeneraltab.h"
+#include "ui_xyfourierfiltercurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
@@ -41,13 +41,13 @@ class XYFourierFilterCurveDock: public XYCurveDock {
 public:
 	explicit XYFourierFilterCurveDock(QWidget *parent);
 	void setCurves(QList<XYCurve*>);
-//	virtual void setupGeneral();
+	virtual void setupGeneral();
 
 private:
-//	virtual void initGeneralTab();
+	virtual void initGeneralTab();
 	void showFitResult();
 
-//	Ui::XYFitCurveDockGeneralTab uiGeneralTab;
+	Ui::XYFourierFilterCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
 	TreeViewComboBox* cbWeightsColumn;
@@ -63,9 +63,9 @@ protected:
 private slots:
 	//SLOTs for changes triggered in XYFourierFilterCurveDock
 	//general tab
-/*	void nameChanged();
+	void nameChanged();
 	void commentChanged();
-	void modelChanged(int);
+/*	void modelChanged(int);
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void weightsColumnChanged(const QModelIndex&);

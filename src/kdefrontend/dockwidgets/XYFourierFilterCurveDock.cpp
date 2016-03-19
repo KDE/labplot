@@ -42,7 +42,7 @@
 /*!
   \class XYFourierFilterCurveDock
 //TODO
-  \brief  Provides a widget for editing the properties of the XYFitCurves
+ \brief  Provides a widget for editing the properties of the XYFitCurves
 		(2D-curves defined by a fit model) currently selected in
 		the project explorer.
 
@@ -61,16 +61,17 @@ XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget *parent): XYCurveDock
 /*!
  * 	// Tab "General"
  */
-/*void XYFitCurveDock::setupGeneral() {
+void XYFourierFilterCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+//TODO
 	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 	  gridLayout->setContentsMargins(2,2,2,2);
 	  gridLayout->setHorizontalSpacing(2);
 	  gridLayout->setVerticalSpacing(2);
 	}
-
+/*
 	cbXDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbXDataColumn, 4, 4, 1, 2);
 
@@ -111,9 +112,10 @@ XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget *parent): XYCurveDock
 	connect( uiGeneralTab.pbParameters, SIGNAL(clicked()), this, SLOT(showParameters()) );
 	connect( uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
+*/
 }
 
-void XYFitCurveDock::initGeneralTab() {
+void XYFourierFilterCurveDock::initGeneralTab() {
 	//if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size()==1){
 		uiGeneralTab.lName->setEnabled(true);
@@ -134,9 +136,10 @@ void XYFitCurveDock::initGeneralTab() {
 	}
 
 	//show the properties of the first curve
-	m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
-	Q_ASSERT(m_fitCurve);
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_fitCurve->xDataColumn());
+	m_fourierFilterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
+	Q_ASSERT(m_fourierFilterCurve);
+//TODO
+/*	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_fitCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_fitCurve->yDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbWeightsColumn, m_fitCurve->weightsColumn());
 
@@ -158,8 +161,9 @@ void XYFitCurveDock::initGeneralTab() {
 	connect(m_fitCurve, SIGNAL(weightsColumnChanged(const AbstractColumn*)), this, SLOT(curveWeightsColumnChanged(const AbstractColumn*)));
 	connect(m_fitCurve, SIGNAL(fitDataChanged(XYFitCurve::FitData)), this, SLOT(curveFitDataChanged(XYFitCurve::FitData)));
 	connect(m_fitCurve, SIGNAL(sourceDataChangedSinceLastFit()), this, SLOT(enableRecalculate()));
+*/
 }
-
+/*
 void XYFitCurveDock::setModel() {
 	QList<const char*>  list;
     list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Datapicker";
@@ -186,37 +190,37 @@ void XYFitCurveDock::setModel() {
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
-/*void XYFitCurveDock::setCurves(QList<XYCurve*> list){
+void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list){
 	m_initializing=true;
 	m_curvesList=list;
 	m_curve=list.first();
-	m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
-	Q_ASSERT(m_fitCurve);
+	m_fourierFilterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
+	Q_ASSERT(m_fourierFilterCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
-	m_fitData = m_fitCurve->fitData();
+	//m_fitData = m_fitCurve->fitData();
 	initGeneralTab();
 	initTabs();
 	m_initializing=false;
-}*/
+}
 
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-/*void XYFitCurveDock::nameChanged(){
+void XYFourierFilterCurveDock::nameChanged(){
 	if (m_initializing)
 		return;
 
 	m_curve->setName(uiGeneralTab.leName->text());
 }
 
-void XYFitCurveDock::commentChanged(){
+void XYFourierFilterCurveDock::commentChanged(){
 	if (m_initializing)
 		return;
 
 	m_curve->setComment(uiGeneralTab.leComment->text());
 }
-
+/*
 void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index){
 	if (m_initializing)
 		return;
