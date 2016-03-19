@@ -257,12 +257,12 @@ void MainWin::initActions() {
 // 	connect(m_newSqlDataSourceAction, SIGNAL(triggered()), this, SLOT(newSqlDataSourceActionTriggered()));
 
 	m_importAction = new QAction(QIcon::fromTheme("document-import"), i18n("Import"), this);
-	m_importAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I);
+	actionCollection()->setDefaultShortcut(m_importAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
 	actionCollection()->addAction("import", m_importAction);
 	connect(m_importAction, SIGNAL(triggered()),SLOT(importFileDialog()));
 
 	m_exportAction = new QAction(QIcon::fromTheme("document-export"), i18n("Export"), this);
-	m_exportAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E);
+	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL+Qt::SHIFT+Qt::Key_E);
 	actionCollection()->addAction("export", m_exportAction);
 	connect(m_exportAction, SIGNAL(triggered()),SLOT(exportDialog()));
 
@@ -282,7 +282,7 @@ void MainWin::initActions() {
 
 	//Windows
 	action  = new QAction(i18n("Cl&ose"), this);
-	action->setShortcut(i18n("Ctrl+W"));
+	actionCollection()->setDefaultShortcut(action, i18n("Ctrl+W"));
 	action->setStatusTip(i18n("Close the active window"));
 	actionCollection()->addAction("close window", action);
 	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(closeActiveSubWindow()));
