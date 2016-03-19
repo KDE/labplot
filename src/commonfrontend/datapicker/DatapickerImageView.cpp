@@ -456,8 +456,8 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 			}
 
 			if (m_datapicker->activeCurve()) {
-				QString statusText = m_datapicker->name() + ", " + i18n("active curve") + " \"" + m_datapicker->activeCurve()->name() + "\"";
-				statusText += ": " +  xLabel + "=" + QString::number(logicalPos.x()) + ", " + yLabel + "=" + QString::number(logicalPos.y());
+				QString statusText = m_datapicker->name() + ", " + i18n("active curve") + " \"" + m_datapicker->activeCurve()->name() + '"';
+				statusText += ": " +  xLabel + '=' + QString::number(logicalPos.x()) + ", " + yLabel + '=' + QString::number(logicalPos.y());
 				emit statusInfo(statusText);
 			}
 		}

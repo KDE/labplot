@@ -594,7 +594,7 @@ void XYFitCurvePrivate::recalculate() {
 	if (n<np) {
 		fitResult.available = true;
 		fitResult.valid = false;
-		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).").arg(n).arg(np);
+		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).", n, np);
 		emit (q->dataChanged());
 		sourceDataChangedSinceLastFit = false;
 		return;

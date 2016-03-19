@@ -327,7 +327,7 @@ void QxtSpanSliderPrivate::updateRange(int min, int max)
 QxtSpanSlider::QxtSpanSlider(QWidget* parent) : QSlider(parent)
 {
     QXT_INIT_PRIVATE(QxtSpanSlider);
-    connect(this, SIGNAL(rangeChanged(int, int)), &qxt_d(), SLOT(updateRange(int, int)));
+    connect(this, SIGNAL(rangeChanged(int,int)), &qxt_d(), SLOT(updateRange(int,int)));
 }
 
 /*!
@@ -336,7 +336,7 @@ QxtSpanSlider::QxtSpanSlider(QWidget* parent) : QSlider(parent)
 QxtSpanSlider::QxtSpanSlider(Qt::Orientation orientation, QWidget* parent) : QSlider(orientation, parent)
 {
     QXT_INIT_PRIVATE(QxtSpanSlider);
-    connect(this, SIGNAL(rangeChanged(int, int)), &qxt_d(), SLOT(updateRange(int, int)));
+    connect(this, SIGNAL(rangeChanged(int,int)), &qxt_d(), SLOT(updateRange(int,int)));
 }
 
 /*!

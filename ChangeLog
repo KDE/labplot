@@ -15,6 +15,7 @@ Bug fixes:
 	* Fixes the bug with disabled undo/redo-actions in after the undo-history was cleared
 	* Keep the information about the columns to be shown in the project explorer after project close
 	* Fixed some bugs in painting of the selection band on the worksheet
+	* Allow to open gz- and bz2-compressed LabPlot project files on the command line interface
 
 -----2.1-----
 New features:

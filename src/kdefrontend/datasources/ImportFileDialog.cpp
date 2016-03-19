@@ -183,7 +183,7 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
 	QTime timer;
 	timer.start();
 	source->read();
-	statusBar->showMessage( i18n("File data source created in %1 seconds.").arg((float)timer.elapsed()/1000) );
+	statusBar->showMessage( i18n("File data source created in %1 seconds.", (float)timer.elapsed()/1000) );
 
 	QApplication::restoreOverrideCursor();
 	statusBar->removeWidget(progressBar);
@@ -283,7 +283,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		}
 
 	}
-	statusBar->showMessage( i18n("File %1 imported in %2 seconds.").arg(fileName).arg((float)timer.elapsed()/1000) );
+	statusBar->showMessage( i18n("File %1 imported in %2 seconds.", fileName, (float)timer.elapsed()/1000) );
 
 	QApplication::restoreOverrideCursor();
 	statusBar->removeWidget(progressBar);

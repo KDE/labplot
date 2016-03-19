@@ -4,7 +4,7 @@
     Description          : main function
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    Copyright            : (C) 2008-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -32,20 +32,18 @@
 #include <KLocalizedString>
 #include <QStandardPaths>
 #include <QSplashScreen>
-#include <QDebug>
 #include <KMessageBox>
 #include <QFile>
 
 #include "MainWin.h"
-#include "backend/core/Project.h"
-#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/core/AbstractColumn.h"
 
 int main (int argc, char *argv[]) {
 	KAboutData aboutData( QStringLiteral("labplot2"), QString("labplot2"),
 				LVERSION,
 				i18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
 				KAboutLicense::GPL,
-				i18n("(c) 2007-2015"),
+				i18n("(c) 2007-2016"),
 				QString(),
 				QStringLiteral("http://www.labplot.sourceforge.net"));
 
@@ -73,21 +71,22 @@ int main (int argc, char *argv[]) {
 	if (args.count() > 0)
 		filename = args[0];
 
-	if(!filename.isEmpty() ){
+	if(!filename.isEmpty() ) {
 		if ( !QFile::exists(filename)) {
 			if ( KMessageBox::warningContinueCancel( 0,
-													i18n( "Could not open file \'%1\'. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
-													i18n("Failed to open")) == KMessageBox::Cancel){
-			exit(-1);  //"Cancel" clicked -> exit the application
-			}else{
+			        i18n( "Could not open file \'%1\'. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
+			        i18n("Failed to open")) == KMessageBox::Cancel) {
+				exit(-1);  //"Cancel" clicked -> exit the application
+			} else {
 				filename=""; //Wrong file -> clear the file name and continue
 			}
-		}else if ( !(filename.contains(".lml") || filename.contains(".xml")) ){
+		} else if ( !(filename.contains(".lml", Qt::CaseInsensitive) || filename.contains(".lml.gz", Qt::CaseInsensitive)
+				  || filename.contains(".lml.bz2", Qt::CaseInsensitive) ) ) {
 			if ( KMessageBox::warningContinueCancel( 0,
-													i18n( "File \'%1\' doesn't contain any labplot data. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
-													i18n("Failed to open")) == KMessageBox::Cancel){
+			        i18n( "File \'%1\' doesn't contain any LabPlot data. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
+			        i18n("Failed to open")) == KMessageBox::Cancel) {
 				exit(-1); //"Cancel" clicked -> exit the application
-			}else{
+			} else {
 				filename=""; //Wrong file -> clear the file name and continue
 			}
 		}
@@ -96,18 +95,19 @@ int main (int argc, char *argv[]) {
 	QSplashScreen *splash=0;
 	if (parser.isSet("-splash")) {
 		QString file = QStandardPaths::locate(QStandardPaths::DataLocation, "splash.png");
-		QPixmap pixmap(file);
-		splash= new QSplashScreen(pixmap);
+		splash = new QSplashScreen(QPixmap(file));
 		splash->show();
 	}
 
 	// needed in order to have the signals triggered by SignallingUndoCommand
+	//TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 
-	MainWin* window = new MainWin(0,filename);
+	MainWin* window = new MainWin(0, filename);
 	window->show();
 	if(splash)
 		splash->finish(window);
+
 	return app.exec();
 }
