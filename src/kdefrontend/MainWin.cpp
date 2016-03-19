@@ -754,7 +754,7 @@ void MainWin::openProject(const QString& filename) {
 	updateGUI(); //there are most probably worksheets or spreadsheets in the open project -> update the GUI
 	m_saveAction->setEnabled(false);
 
-	statusBar()->showMessage( i18n("Project successfully opened (in %1 seconds).").arg((float)timer.elapsed()/1000) );
+	statusBar()->showMessage( i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed()/1000) );
 
 	if (m_autoSaveActive)
 		m_autoSaveTimer.start();
@@ -912,7 +912,7 @@ void MainWin::print() {
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	part->printView();
-	statusBar()->showMessage(i18n("%1 printed").arg(part->name()));
+	statusBar()->showMessage(i18n("%1 printed", part->name()));
 }
 
 void MainWin::printPreview() {
@@ -1479,7 +1479,7 @@ void MainWin::exportDialog() {
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	part->exportView();
-	statusBar()->showMessage(i18n("%1 exported").arg(part->name()));
+	statusBar()->showMessage(i18n("%1 exported", part->name()));
 }
 
 /*!
