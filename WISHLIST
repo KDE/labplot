@@ -53,43 +53,6 @@ drawing/ data manipulation:
 			* maglens/mask/pan zoom (Worksheet.cc)
 			* X/YCoordinate
 			* partRanges
-		* period or comma as decimal point (configure LabPlot)
-		* zoom-plot (extra plot as zoom of another plot)
-		* new plot type (Taylor diagrams) : Taylor_2001_JGR.pdf
-			If you want to improve a new graph type, for time series analysis of
-			the results of a model the best are the Taylor diagrams.
-		* improve bar charts (stacked, horizontal, ... )	-> see notes
-			* each box another color	-> Style::autocolor (good also for Symbols)
-			* grouped data	: a1b1c1d1,a2b2c2d2,...	+legend
-			* stacked data : a1b1c1,a2b2c2 + legend
-		* Surface plot:
-			* set z range ?
-			* custom contour level (Rudi)
-			* plot points and Delaunay triangulation
-			* reading x-y-z data	(gyrodata.dat)
-			* scaled values (z-Axis)
-				* logarithmic z-axis ? (legend)
-				(contour lines 1e0,1e1,1e2,1e3 )
-			* relative colorscale used ?
-			* select range to draw (dont draw other pixel)
-			* filled contour plot
-			* contour label
-			* third type: vector field plot, windbarbs	-> data format ?
-			* test more than 1 graph
-			* read date/time matrix
-			* improve  legend (0..1)
-				* KGradientSelector
-				* rbg vs hsv
-			* contoulinien glaettung einstellbar
-			* es waere gut min/max fuer z von hand angeben zu koennen. auf diese weise koennte
-				man z.b.  einen bereich farblich 'hochaufloesen' und alles ausserhalb mit der
-				min bzw. max farbe fuellen bsp: werte  0 bis 10
-				min fuer farbskala 4, max 6 > bei grey.map waere dann alles bis 4 weiss, alles 
-				ueber 6 schwarz ...
-			* x bzw. y achse auch auf der gegenueberliegenden seite (wenn ich die density
-				ausschalte fehlt mir dort ein rahmen und die ticks [ohne labels])
-			* wenn ich aus einem xyz datensatz einen qwt3d plot mache. habe ich nur punkte
-				und keine moeglichkeit gefunden eine oberflaeche zu erhalten (uebersehe ich was?)
 		* Pie plot:
 			* explode segments
 			* segment legend
@@ -99,10 +62,6 @@ drawing/ data manipulation:
 			* tic label format, rotation
 			* axes dialog : from 0..1 (disable) ?
 			* make a legend from all points (1 - 12 %, 2 - 27 %, ...)
-		* Polar plot:
-			* coordinates
-			* plot minor tics, minor grid
-			* tic width/grid/border properties
 		* Ternary Plot:
 			* coordinates
 			* tic label precision + format
