@@ -826,7 +826,7 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 }
 
 void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
-	if ( (m_magnificationWindow && items(e->pos()).size()==1) || !itemAt(e->pos()) ) {
+	if ( (m_magnificationWindow && m_magnificationWindow->isVisible() && items(e->pos()).size()==1) || !itemAt(e->pos()) ) {
 		//no item or only the magnification window under the cursor -> show the context menu for the worksheet
 		QMenu *menu = new QMenu(this);
 		this->createContextMenu(menu);
