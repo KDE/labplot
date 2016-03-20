@@ -34,28 +34,30 @@
 #include <QDesktopWidget>
 #include <KLocalizedString>
 #include <KSharedConfig>
+#include <QDebug>
 
 /*!
 	\class ExportWorksheetDialog
-	\brief Dialog for exporting a worksheet  to a file.
+	\brief Dialog for exporting a worksheet to a file.
 
 	\ingroup kdefrontend
 */
 
 ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) {
+	qDebug()<<"OK";
 	mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
 
 	KUrlCompletion *comp = new KUrlCompletion();
-    ui.kleFileName->setCompletionObject(comp);
+	ui.kleFileName->setCompletionObject(comp);
 
-    ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
+	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-    ui.cbFormat->addItem(QIcon::fromTheme("application-pdf"), "Portable data format (PDF)");
-    ui.cbFormat->addItem(QIcon::fromTheme("image-x-eps"), "Encapsulated PostScript (EPS)");
-    ui.cbFormat->addItem(QIcon::fromTheme("image-svg+xml"), "Scalable Vector Graphics (SVG)");
+	ui.cbFormat->addItem(QIcon::fromTheme("application-pdf"), "Portable data format (PDF)");
+	ui.cbFormat->addItem(QIcon::fromTheme("image-x-eps"), "Encapsulated PostScript (EPS)");
+	ui.cbFormat->addItem(QIcon::fromTheme("image-svg+xml"), "Scalable Vector Graphics (SVG)");
 	ui.cbFormat->insertSeparator(3);
-    ui.cbFormat->addItem(QIcon::fromTheme("image-x-generic"), "Portable Network Graphics (PNG)");
+	ui.cbFormat->addItem(QIcon::fromTheme("image-x-generic"), "Portable Network Graphics (PNG)");
 
 	ui.cbExportArea->addItem(i18n("Object's bounding box"));
 	ui.cbExportArea->addItem(i18n("Current selection"));
@@ -79,7 +81,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 
 	setCaption(i18n("Export worksheet"));
-    setWindowIcon(QIcon::fromTheme("document-export-database"));
+	setWindowIcon(QIcon::fromTheme("document-export-database"));
 
 	//restore saved setting
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
@@ -157,13 +159,13 @@ void ExportWorksheetDialog::okClicked() {
 			return;
 	}
 
-    KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
-    conf.writeEntry("Format", ui.cbFormat->currentIndex());
+	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+	conf.writeEntry("Format", ui.cbFormat->currentIndex());
 	conf.writeEntry("Area", ui.cbExportArea->currentIndex());
 	conf.writeEntry("Resolution", ui.cbResolution->currentIndex());
 
-    QString path = ui.kleFileName->text();
-    if (!path.isEmpty()) {
+	QString path = ui.kleFileName->text();
+	if (!path.isEmpty()) {
 		QString dir = conf.readEntry("LastDir", "");
 		ui.kleFileName->setText(path);
 		int pos = path.lastIndexOf(QDir::separator());

@@ -172,7 +172,13 @@ QWidget *Worksheet::view() const {
 }
 
 void Worksheet::exportView() const {
+	qDebug()<<"Worksheet::exportView()";
+	if(!m_view) {
+		return;
+	}
+	qDebug()<<"	OK before";
 	ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
+	qDebug()<<"	OK after";
 	dlg->setFileName(name());
 	if (dlg->exec()==QDialog::Accepted){
 		QString path = dlg->path();
