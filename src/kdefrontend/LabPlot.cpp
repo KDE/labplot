@@ -53,15 +53,13 @@ int main (int argc, char *argv[]) {
 	aboutData.addCredit(i18n("Yuri Chornoivan"), i18n("Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", 0);
 	KAboutData::setApplicationData(aboutData);
 
-
 	QApplication app(argc, argv);
-
 	QCommandLineParser parser;
 	QCommandLineOption nosplashOption("no-splash", i18n("disable splash screen"));
 	parser.addOption(nosplashOption);
 
 	parser.addPositionalArgument("+[file]", i18n( "open a project file"));
-	aboutData.addCredit(i18n("Yuri Chornoivan"), i18n("Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", 0);
+	//aboutData.addCredit(i18n("Yuri Chornoivan"), i18n("Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", 0);
 
 	aboutData.setupCommandLine(&parser);
 	parser.process(app);
