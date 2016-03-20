@@ -164,6 +164,7 @@ private slots:
 	void curveDescriptionChanged(const AbstractAspect*);
 	void curveXColumnChanged(const AbstractColumn*);
 	void curveYColumnChanged(const AbstractColumn*);
+	void curveVisibilityChanged(bool);
 
 	//Line-Tab
 	void curveLineTypeChanged(XYCurve::LineType);
