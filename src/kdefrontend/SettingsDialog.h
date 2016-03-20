@@ -44,12 +44,12 @@ public:
 private slots:
 	void changed();
 	void onOkButton();
-	void onApplyButton();
+//	void onApplyButton();
 	void onRestoreDefaultsButton();
 
 private:
 	bool m_changed;
-	QPushButton* applybutton;
+//	QPushButton* applybutton;
 	SettingsGeneralPage* generalPage;
 //     SettingsPrintingPage* printingPage;
 

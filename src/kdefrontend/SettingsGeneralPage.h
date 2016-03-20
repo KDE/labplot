@@ -33,13 +33,13 @@
 #include "ui_settingsgeneralpage.h"
 
 class SettingsGeneralPage : public SettingsPage {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit SettingsGeneralPage(QWidget* parent);
+	explicit SettingsGeneralPage(QWidget* parent);
 
-    virtual void applySettings();
-    virtual void restoreDefaults();
+	virtual void applySettings();
+	virtual void restoreDefaults();
 
 private:
 	Ui::SettingsGeneralPage ui;
@@ -50,7 +50,7 @@ private:
 
 private slots:
 	void interfaceChanged(int);
-    void changed();
+	void changed();
 
 signals:
 	void settingsChanged();
