@@ -722,7 +722,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
 		connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
 		connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
-		connect(curve, SIGNAL(visibilityChanged()), this, SLOT(curveVisibilityChanged()));
+		connect(curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged()));
 
 		//update the legend on changes of the name, line and symbol styles
 		connect(curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(updateLegend()));
