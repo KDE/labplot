@@ -54,7 +54,10 @@ int main (int argc, char *argv[]) {
 	KAboutData::setApplicationData(aboutData);
 
 	QApplication app(argc, argv);
+	QCoreApplication::setApplicationVersion(QLatin1String(LVERSION));
 	QCommandLineParser parser;
+	parser.addHelpOption();
+	parser.addVersionOption();
 	QCommandLineOption nosplashOption("no-splash", i18n("disable splash screen"));
 	parser.addOption(nosplashOption);
 
