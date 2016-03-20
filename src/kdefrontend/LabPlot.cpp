@@ -83,7 +83,7 @@ int main (int argc, char *argv[]) {
 	}
 
 	KSplashScreen* splash = 0;
-	if (args->isSet("-splash")) {
+	if (!args->isSet("no-splash")) {
 		QString file = KStandardDirs::locate("appdata", "splash.png");
 		splash = new KSplashScreen(QPixmap(file));
 		splash->show();
