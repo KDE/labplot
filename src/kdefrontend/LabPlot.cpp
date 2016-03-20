@@ -57,7 +57,7 @@ int main (int argc, char *argv[]) {
 	QApplication app(argc, argv);
 
 	QCommandLineParser parser;
-	QCommandLineOption nosplashOption("no-splash", i18n( "start in fullscreen mode"));
+	QCommandLineOption nosplashOption("no-splash", i18n("disable splash screen"));
 	parser.addOption(nosplashOption);
 
 	parser.addPositionalArgument("+[file]", i18n( "open a project file"));
@@ -93,7 +93,7 @@ int main (int argc, char *argv[]) {
 	}
 
 	QSplashScreen *splash=0;
-	if (parser.isSet("-splash")) {
+	if (!parser.isSet("no-splash")) {
 		QString file = QStandardPaths::locate(QStandardPaths::DataLocation, "splash.png");
 		splash = new QSplashScreen(QPixmap(file));
 		splash->show();
