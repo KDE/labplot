@@ -44,7 +44,6 @@
 */
 
 ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) {
-	qDebug()<<"OK";
 	mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
 
