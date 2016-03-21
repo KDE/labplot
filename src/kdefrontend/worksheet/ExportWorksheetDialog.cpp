@@ -53,7 +53,6 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) 
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	ui.cbFormat->addItem(QIcon::fromTheme("application-pdf"), "Portable data format (PDF)");
-	ui.cbFormat->addItem(QIcon::fromTheme("image-x-eps"), "Encapsulated PostScript (EPS)");
 	ui.cbFormat->addItem(QIcon::fromTheme("image-svg+xml"), "Scalable Vector Graphics (SVG)");
 	ui.cbFormat->insertSeparator(3);
 	ui.cbFormat->addItem(QIcon::fromTheme("image-x-generic"), "Portable Network Graphics (PNG)");
@@ -120,8 +119,8 @@ QString ExportWorksheetDialog::path() const{
 WorksheetView::ExportFormat ExportWorksheetDialog::exportFormat() const {
 	int index = ui.cbFormat->currentIndex();
 
-	//we have a separator in the format combobox at the 4th position -> skip it
-	if (index>3)
+	//we have a separator in the format combobox at the 3th position -> skip it
+	if (index>2)
 		index --;
 
 	return WorksheetView::ExportFormat(index);

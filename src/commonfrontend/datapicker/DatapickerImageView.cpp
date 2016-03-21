@@ -695,14 +695,9 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 	sourceRect = scene()->sceneRect();
 
 	//print
-	if (format==WorksheetView::Pdf || format==WorksheetView::Eps) {
+	if (format==WorksheetView::Pdf) {
 		QPrinter printer(QPrinter::HighResolution);
-		if (format==WorksheetView::Pdf)
-			printer.setOutputFormat(QPrinter::PdfFormat);
-		else
-//			printer.setOutputFormat(QPrinter::PostScriptFormat);
-            printer.setOutputFormat(QPrinter::NativeFormat);
-
+		printer.setOutputFormat(QPrinter::PdfFormat);
 		printer.setOutputFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);

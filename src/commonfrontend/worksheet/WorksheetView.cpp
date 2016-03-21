@@ -1296,13 +1296,9 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	}
 
 	//print
-	if (format==WorksheetView::Pdf || format==WorksheetView::Eps) {
+	if (format==WorksheetView::Pdf) {
 		QPrinter printer(QPrinter::HighResolution);
-		if (format==WorksheetView::Pdf)
-			printer.setOutputFormat(QPrinter::PdfFormat);
-		else
-// 			printer.setOutputFormat(QPrinter::PostScriptFormat);
-
+		printer.setOutputFormat(QPrinter::PdfFormat);
 		printer.setOutputFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
