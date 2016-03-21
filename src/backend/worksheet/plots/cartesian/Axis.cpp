@@ -880,7 +880,7 @@ QString AxisPrivate::name() const{
 bool AxisPrivate::swapVisible(bool on) {
 	bool oldValue = isVisible();
 	setVisible(on);
-        emit q->visibleChanged(on);
+	emit q->visibilityChanged(on);
 	return oldValue;
 }
 

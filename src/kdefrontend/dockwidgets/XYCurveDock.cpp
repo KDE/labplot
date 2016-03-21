@@ -579,6 +579,7 @@ void XYCurveDock::initGeneralTab(){
 	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
 	connect(m_curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(curveXColumnChanged(const AbstractColumn*)));
 	connect(m_curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(curveYColumnChanged(const AbstractColumn*)));
+	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
 }
 
 void XYCurveDock::initTabs() {
@@ -1745,6 +1746,12 @@ void XYCurveDock::curveXColumnChanged(const AbstractColumn* column) {
 void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	this->setModelIndexFromColumn(cbYColumn, column);
+	m_initializing = false;
+}
+
+void XYCurveDock::curveVisibilityChanged(bool on) {
+	m_initializing = true;
+	uiGeneralTab.chkVisible->setChecked(on);
 	m_initializing = false;
 }
 

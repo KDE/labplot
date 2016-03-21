@@ -399,7 +399,7 @@ void CartesianPlotLegend::setLayoutColumnCount(int count) {
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void CartesianPlotLegend::visibilityChanged(){
+void CartesianPlotLegend::visibilityChanged() {
 	Q_D(const CartesianPlotLegend);
 	this->setVisible(!d->isVisible());
 }
@@ -441,6 +441,7 @@ QPainterPath CartesianPlotLegendPrivate::shape() const {
 bool CartesianPlotLegendPrivate::swapVisible(bool on){
 	bool oldValue = isVisible();
 	setVisible(on);
+	emit q->visibilityChanged(on);
 	return oldValue;
 }
 

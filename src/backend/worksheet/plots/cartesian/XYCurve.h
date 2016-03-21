@@ -145,7 +145,7 @@ class XYCurve: public WorksheetElement {
 		void yErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
 
 		//SLOTs for changes triggered via QActions in the context menu
-		void curveVisibilityChanged();
+		void visibilityChanged();
 
 	protected:
 		XYCurve(const QString& name, XYCurvePrivate* dd);
@@ -163,7 +163,7 @@ class XYCurve: public WorksheetElement {
 		void dataChanged();
 		void xDataChanged();
 		void yDataChanged();
-		void visibilityChanged();
+		void visibilityChanged(bool);
 
 		friend class XYCurveSetXColumnCmd;
 		friend class XYCurveSetYColumnCmd;

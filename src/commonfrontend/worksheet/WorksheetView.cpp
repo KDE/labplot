@@ -196,46 +196,36 @@ void WorksheetView::initActions() {
 
 	//Layout actions
 	verticalLayoutAction = new QAction(QIcon::fromTheme("labplot-editvlayout"), i18n("Vertical layout"), layoutActionGroup);
-	verticalLayoutAction->setObjectName("verticalLayoutAction");
 	verticalLayoutAction->setCheckable(true);
 
 	horizontalLayoutAction = new QAction(QIcon::fromTheme("labplot-edithlayout"), i18n("Horizontal layout"), layoutActionGroup);
-	horizontalLayoutAction->setObjectName("horizontalLayoutAction");
 	horizontalLayoutAction->setCheckable(true);
 
 	gridLayoutAction = new QAction(QIcon::fromTheme("labplot-editgrid"), i18n("Grid layout"), layoutActionGroup);
-	gridLayoutAction->setObjectName("gridLayoutAction");
 	gridLayoutAction->setCheckable(true);
 
 	breakLayoutAction = new QAction(QIcon::fromTheme("labplot-editbreaklayout"), i18n("Break layout"), layoutActionGroup);
-	breakLayoutAction->setObjectName("breakLayoutAction");
 	breakLayoutAction->setEnabled(false);
 
 	//Grid actions
 	noGridAction = new QAction(i18n("no grid"), gridActionGroup);
-	noGridAction->setObjectName("noGridAction");
 	noGridAction->setCheckable(true);
 	noGridAction->setChecked(true);
 	noGridAction->setData(WorksheetView::NoGrid);
 
 	denseLineGridAction = new QAction(i18n("dense line grid"), gridActionGroup);
-	denseLineGridAction->setObjectName("denseLineGridAction");
 	denseLineGridAction->setCheckable(true);
 
 	sparseLineGridAction = new QAction(i18n("sparse line grid"), gridActionGroup);
-	sparseLineGridAction->setObjectName("sparseLineGridAction");
 	sparseLineGridAction->setCheckable(true);
 
 	denseDotGridAction = new QAction(i18n("dense dot grid"), gridActionGroup);
-	denseDotGridAction->setObjectName("denseDotGridAction");
 	denseDotGridAction->setCheckable(true);
 
 	sparseDotGridAction = new QAction(i18n("sparse dot grid"), gridActionGroup);
-	sparseDotGridAction->setObjectName("sparseDotGridAction");
 	sparseDotGridAction->setCheckable(true);
 
 	customGridAction = new QAction(i18n("custom grid"), gridActionGroup);
-	customGridAction->setObjectName("customGridAction");
 	customGridAction->setCheckable(true);
 
 	snapToGridAction = new QAction(i18n("snap to grid"), this);
@@ -1110,36 +1100,34 @@ void WorksheetView::changeLayout(QAction* action) {
 }
 
 void WorksheetView::changeGrid(QAction* action) {
-	QString name = action->objectName();
-
-	if (name == "noGridAction") {
+	if (action == noGridAction) {
 		m_gridSettings.style = WorksheetView::NoGrid;
 		snapToGridAction->setEnabled(false);
-	} else if (name == "sparseLineGridAction") {
+	} else if (action == sparseLineGridAction) {
 		m_gridSettings.style = WorksheetView::LineGrid;
 		m_gridSettings.color = Qt::gray;
 		m_gridSettings.opacity = 0.7;
 		m_gridSettings.horizontalSpacing = 15;
 		m_gridSettings.verticalSpacing = 15;
-	} else if (name == "denseLineGridAction") {
+	} else if (action == denseLineGridAction) {
 		m_gridSettings.style = WorksheetView::LineGrid;
 		m_gridSettings.color = Qt::gray;
 		m_gridSettings.opacity = 0.7;
 		m_gridSettings.horizontalSpacing = 5;
 		m_gridSettings.verticalSpacing = 5;
-	} else if (name == "denseDotGridAction") {
+	} else if (action == denseDotGridAction) {
 		m_gridSettings.style = WorksheetView::DotGrid;
 		m_gridSettings.color = Qt::black;
 		m_gridSettings.opacity = 0.7;
 		m_gridSettings.horizontalSpacing = 5;
 		m_gridSettings.verticalSpacing = 5;
-	} else if (name == "sparseDotGridAction") {
+	} else if (action == sparseDotGridAction) {
 		m_gridSettings.style = WorksheetView::DotGrid;
 		m_gridSettings.color = Qt::black;
 		m_gridSettings.opacity = 0.7;
 		m_gridSettings.horizontalSpacing = 15;
 		m_gridSettings.verticalSpacing = 15;
-	} else if (name == "customGridAction") {
+	} else if (action == customGridAction) {
 		GridDialog* dlg = new GridDialog(this);
 		if (dlg->exec() == QDialog::Accepted)
 			dlg->save(m_gridSettings);

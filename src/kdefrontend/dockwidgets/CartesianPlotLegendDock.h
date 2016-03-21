@@ -105,6 +105,7 @@ private slots:
 	void legendLabelOrderChanged(bool);
 	void legendLineSymbolWidthChanged(float);
 	void legendPositionChanged(const CartesianPlotLegend::PositionWrapper&);
+	void legendVisibilityChanged(bool);
 
 	void legendBackgroundTypeChanged(PlotArea::BackgroundType);
 	void legendBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);

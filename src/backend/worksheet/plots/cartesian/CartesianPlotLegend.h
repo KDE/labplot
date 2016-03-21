@@ -108,7 +108,6 @@ class CartesianPlotLegend: public WorksheetElement {
 		void initActions();
 
 		CartesianPlot* m_plot;
-
 		QAction* visibilityAction;
 
 	private slots:
@@ -164,6 +163,7 @@ class CartesianPlotLegend: public WorksheetElement {
 		void layoutColumnCountChanged(int);
 
 		void positionChanged(QPointF&);
+		void visibilityChanged(bool);
 };
 
 #endif

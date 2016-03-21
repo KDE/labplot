@@ -46,6 +46,17 @@ CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent) {
 	ui.klePositionX->setValidator( new QDoubleValidator(ui.klePositionX) );
 	ui.klePositionY->setValidator( new QDoubleValidator(ui.klePositionY) );
 
+	//adjust layouts in the tabs
+	for (int i=0; i<ui.tabWidget->count(); ++i){
+	  QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+	  if (!layout)
+		continue;
+
+	  layout->setContentsMargins(2,2,2,2);
+	  layout->setHorizontalSpacing(2);
+	  layout->setVerticalSpacing(2);
+	}
+
 	//SLOTS
 	//General
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );

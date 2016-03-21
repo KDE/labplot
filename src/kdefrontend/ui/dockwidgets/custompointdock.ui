@@ -156,7 +156,7 @@
          </property>
         </spacer>
        </item>
-       <item row="7" column="1" colspan="2">
+       <item row="7" column="0" colspan="3">
         <widget class="QCheckBox" name="chkVisible">
          <property name="text">
           <string>visible</string>
