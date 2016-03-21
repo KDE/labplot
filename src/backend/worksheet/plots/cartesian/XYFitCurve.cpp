@@ -49,7 +49,6 @@
 #include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
-#include <QDebug>
 
 XYFitCurve::XYFitCurve(const QString& name)
 		: XYCurve(name, new XYFitCurvePrivate(this)){
@@ -232,7 +231,6 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		printf("\n	Y[%d]=%g \n",i,Yi);
 */
 		if(parse_errors()>0) {
-			qDebug()<<"func_f: parse errors in parsing "<<func;
 			return GSL_EINVAL;
 		}
 

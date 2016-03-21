@@ -76,8 +76,6 @@
 #include <QAbstractItemView>
 #include <QScrollBar>
 
-
-
 /*!
   \class ExpressionTextEdit
   \brief  Provides a widget for for defining mathematical expressions
