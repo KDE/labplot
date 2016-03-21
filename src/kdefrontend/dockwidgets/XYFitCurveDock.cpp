@@ -308,7 +308,7 @@ void XYFitCurveDock::modelChanged(int index) {
 }
 
 void XYFitCurveDock::updateModelEquation() {
-	QStringList vars; //variables/parameters that are known in ExpressionTestEdit teEquation
+	QStringList vars; //variables/parameters that are known in ExpressionTextEdit teEquation
 	vars << "x";
 	QString eq;
 	m_fitData.modelType = (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
