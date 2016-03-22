@@ -254,9 +254,6 @@ QString HDFFilterPrivate::translateHDFClass(H5T_class_t c) {
 	case H5T_NO_CLASS:
 		dclass="NOCLASS";
 		break;
-        default:
-		dclass="UNKNOWN";
-                break;
         }
 	return dclass;
 }
@@ -677,8 +674,6 @@ QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 		case H5T_CSET_RESERVED_15:
 			typeProps<<", RESERVED";
 			break;
-		default:
-			break;
 		}
 		H5T_str_t strpad = H5Tget_strpad(tid);
 		handleError((int)strpad,"H5Tget_strpad");
@@ -709,8 +704,6 @@ QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 		case H5T_STR_RESERVED_14:
 		case H5T_STR_RESERVED_15:
 			typeProps<<" RESERVED";
-			break;
-		default:
 			break;
 		}
 		break;
@@ -754,8 +747,6 @@ QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 		//TODO
 		break;
 	case H5T_NO_CLASS:
-		break;
-	default:
 		break;
 	}
 
@@ -827,9 +818,6 @@ QStringList HDFFilterPrivate::readHDFPropertyList(hid_t pid) {
 	case H5D_ALLOC_TIME_ERROR:
 		props<<" ERROR";
 		break;
-	default:
-		props<<" unknown allocation policy";
-		break;
         }
 
 	props<<", FILL_TIME:";
@@ -848,9 +836,6 @@ QStringList HDFFilterPrivate::readHDFPropertyList(hid_t pid) {
 		break;
 	case H5D_FILL_TIME_ERROR:
 		props<<" ERROR";
-		break;
-	default:
-		props<<" Unknown";
 		break;
         }
 
