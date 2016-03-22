@@ -297,7 +297,11 @@ QStringList HDFFilterPrivate::readHDFData1D(hid_t dataset, hid_t type, int rows,
 
 	status = H5Dread(dataset, type, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
 	handleError(status,"H5Dread");
+	qDebug()<<"startRow="<<startRow;
+	qDebug()<<"endRow="<<endRow;
+	qDebug()<<"from/to"<<startRow-1<<qMin(endRow,lines+startRow-1);
 	for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+		qDebug()<<"Reading row"<<i;
 		if (dataPointer)
 			dataPointer->operator[](i-startRow+1) = data[i];
 		else
@@ -1039,7 +1043,7 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
 /*!
     reads the content of the date set in the file \c fileName to a string (for preview) or to the data source.
 */
-QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines){
+QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
 	QStringList dataString;
 
 	if(currentDataSetName.isEmpty())
@@ -1134,6 +1138,8 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 #endif
 		if(dataSource != NULL)
 			columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
+		else
+			dataPointers[0]=NULL;
 
 		switch(dclass) {
 		case H5T_STRING: {
