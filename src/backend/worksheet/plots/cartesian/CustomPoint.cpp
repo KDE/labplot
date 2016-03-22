@@ -91,7 +91,6 @@ void CustomPoint::init() {
 }
 
 void CustomPoint::initActions() {
-	Q_D(CustomPoint);
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));

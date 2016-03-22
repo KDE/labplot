@@ -197,7 +197,7 @@ private slots:
 	void axisMinorGridPenChanged(const QPen&);
 	void axisMinorGridOpacityChanged(qreal);
 
-	void axisVisibleChanged(bool);
+	void axisVisibilityChanged(bool);
 
 	//save/load template
 	void loadConfigFromTemplate(KConfig&);

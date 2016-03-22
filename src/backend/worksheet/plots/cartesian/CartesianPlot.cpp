@@ -737,7 +737,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
 		connect(curve, SIGNAL(xDataChanged()), this, SLOT(xDataChanged()));
 		connect(curve, SIGNAL(yDataChanged()), this, SLOT(yDataChanged()));
-		connect(curve, SIGNAL(visibilityChanged()), this, SLOT(curveVisibilityChanged()));
+		connect(curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged()));
 
 		//update the legend on changes of the name, line and symbol styles
 		connect(curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(updateLegend()));
@@ -1520,7 +1520,7 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		QGraphicsItem::mouseReleaseEvent(event);
 	} else if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
 		//don't zoom if very small region was selected, avoid occasional/unwanted zooming
-		if ( abs(m_selectionEnd.x()-m_selectionStart.x())<20 || abs(m_selectionEnd.y()-m_selectionStart.y())<20 ) {
+		if ( qAbs(m_selectionEnd.x()-m_selectionStart.x())<20 || qAbs(m_selectionEnd.y()-m_selectionStart.y())<20 ) {
 			m_selectionBandIsShown = false;
 			return;
 		}

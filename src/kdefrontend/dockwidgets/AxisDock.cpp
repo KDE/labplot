@@ -433,7 +433,7 @@ void AxisDock::setAxes(QList<Axis*> list){
 	connect(m_axis, SIGNAL(minorGridPenChanged(QPen)), this, SLOT(axisMinorGridPenChanged(QPen)));
 	connect(m_axis, SIGNAL(minorGridOpacityChanged(qreal)), this, SLOT(axisMinorGridOpacityChanged(qreal)));
 
-	connect(m_axis, SIGNAL(visibleChanged(bool)), this, SLOT(axisVisibleChanged(bool)));
+	connect(m_axis, SIGNAL(visibilityChanged(bool)), this, SLOT(axisVisibilityChanged(bool)));
 
   	m_initializing = false;
 }
@@ -1593,7 +1593,7 @@ void AxisDock::axisMinorGridOpacityChanged(qreal opacity) {
 	m_initializing = false;
 }
 
-void AxisDock::axisVisibleChanged(bool on){
+void AxisDock::axisVisibilityChanged(bool on){
 	m_initializing = true;
 	ui.chkVisible->setChecked(on);
 	m_initializing = false;
