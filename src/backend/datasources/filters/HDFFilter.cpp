@@ -297,11 +297,7 @@ QStringList HDFFilterPrivate::readHDFData1D(hid_t dataset, hid_t type, int rows,
 
 	status = H5Dread(dataset, type, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
 	handleError(status,"H5Dread");
-	qDebug()<<"startRow="<<startRow;
-	qDebug()<<"endRow="<<endRow;
-	qDebug()<<"from/to"<<startRow-1<<qMin(endRow,lines+startRow-1);
 	for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
-		qDebug()<<"Reading row"<<i;
 		if (dataPointer)
 			dataPointer->operator[](i-startRow+1) = data[i];
 		else
