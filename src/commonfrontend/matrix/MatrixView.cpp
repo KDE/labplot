@@ -746,7 +746,7 @@ void MatrixView::clearSelectedCells() {
 
 class UpdateImageTask : public QRunnable {
 	public:
-		UpdateImageTask(int start, int end, QImage image, QVector<QVector<double> > matrixData, double scaleFactor, double min) : m_image(image), m_matrixData(matrixData) {
+		UpdateImageTask(int start, int end, QImage& image, QVector<QVector<double> > matrixData, double scaleFactor, double min) : m_image(image), m_matrixData(matrixData) {
 			m_start = start;
 			m_end = end;
 			m_scaleFactor = scaleFactor;
