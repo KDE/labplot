@@ -35,10 +35,10 @@
 
 #include "XYFourierFilterCurve.h"
 #include "XYFourierFilterCurvePrivate.h"
-/*#include "backend/core/AbstractColumn.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/gsl/ExpressionParser.h"
+/*#include "backend/gsl/ExpressionParser.h"
 #include "backend/gsl/parser_extern.h"
 
 #include <gsl/gsl_blas.h>
@@ -57,7 +57,7 @@ XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
 }
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name, XYFourierFilterCurvePrivate* dd)
-		: XYCurve(name, dd){
+		: XYCurve(name, dd) {
 	init();
 }
 
@@ -91,9 +91,9 @@ QIcon XYFourierFilterCurve::icon() const {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-/*BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, xDataColumn, xDataColumn)
-BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, yDataColumn, yDataColumn)
-BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, weightsColumn, weightsColumn)
+BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, const AbstractColumn*, xDataColumn, xDataColumn)
+BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, const AbstractColumn*, yDataColumn, yDataColumn)
+/*BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, weightsColumn, weightsColumn)
 const QString& XYFitCurve::xDataColumnPath() const { Q_D(const XYFitCurve); return d->xDataColumnPath; }
 const QString& XYFitCurve::yDataColumnPath() const {	Q_D(const XYFitCurve); return d->yDataColumnPath; }
 const QString& XYFitCurve::weightsColumnPath() const { Q_D(const XYFitCurve);return d->weightsColumnPath; }
@@ -105,20 +105,20 @@ const XYFitCurve::FitResult& XYFitCurve::fitResult() const {
 	return d->fitResult;
 }
 
-bool XYFitCurve::isSourceDataChangedSinceLastFit() const {
-	Q_D(const XYFitCurve);
-	return d->sourceDataChangedSinceLastFit;
+bool XYFourierFilterCurve::isSourceDataChangedSinceLastFit() const {
+	Q_D(const XYFourierFilterCurve);
+	return d->sourceDataChangedSinceLastFilter;
 }
-
+*/
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_S(XYFitCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
-void XYFitCurve::setXDataColumn(const AbstractColumn* column) {
-	Q_D(XYFitCurve);
+STD_SETTER_CMD_IMPL_S(XYFourierFilterCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
+void XYFourierFilterCurve::setXDataColumn(const AbstractColumn* column) {
+	Q_D(XYFourierFilterCurve);
 	if (column != d->xDataColumn) {
-		exec(new XYFitCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		emit sourceDataChangedSinceLastFit();
+		exec(new XYFourierFilterCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
+		emit sourceDataChangedSinceLastFilter();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -126,25 +126,25 @@ void XYFitCurve::setXDataColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_S(XYFitCurve, SetYDataColumn, const AbstractColumn*, yDataColumn)
-void XYFitCurve::setYDataColumn(const AbstractColumn* column) {
-	Q_D(XYFitCurve);
+STD_SETTER_CMD_IMPL_S(XYFourierFilterCurve, SetYDataColumn, const AbstractColumn*, yDataColumn)
+void XYFourierFilterCurve::setYDataColumn(const AbstractColumn* column) {
+	Q_D(XYFourierFilterCurve);
 	if (column != d->yDataColumn) {
-		exec(new XYFitCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		emit sourceDataChangedSinceLastFit();
+		exec(new XYFourierFilterCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
+		emit sourceDataChangedSinceLastFilter();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
 		}
 	}
 }
-
+/*
 STD_SETTER_CMD_IMPL_S(XYFitCurve, SetWeightsColumn, const AbstractColumn*, weightsColumn)
 void XYFitCurve::setWeightsColumn(const AbstractColumn* column) {
 	Q_D(XYFitCurve);
 	if (column != d->weightsColumn) {
 		exec(new XYFitCurveSetWeightsColumnCmd(d, column, i18n("%1: assign weights")));
-		emit sourceDataChangedSinceLastFit();
+		emit sourceDataChangedSinceLastFilter();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -157,16 +157,15 @@ void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 	Q_D(XYFitCurve);
 	exec(new XYFitCurveSetFitDataCmd(d, fitData, i18n("%1: set fit options and perform the fit")));
 }
-
+*/
 //##############################################################################
 //################################## SLOTS ####################################
 //##############################################################################
-void XYFitCurve::handleSourceDataChanged() {
-	Q_D(XYFitCurve);
-	d->sourceDataChangedSinceLastFit = true;
-	emit sourceDataChangedSinceLastFit();
+void XYFourierFilterCurve::handleSourceDataChanged() {
+	Q_D(XYFourierFilterCurve);
+	d->sourceDataChangedSinceLastFilter = true;
+	emit sourceDataChangedSinceLastFilter();
 }
-*/
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
@@ -174,7 +173,7 @@ XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* o
 	xDataColumn(0), yDataColumn(0), weightsColumn(0),
 	xColumn(0), yColumn(0), residualsColumn(0),
 	xVector(0), yVector(0), residualsVector(0),
-	sourceDataChangedSinceLastFit(false),
+	sourceDataChangedSinceLastFilter(false),
 	q(owner)  {
 
 }
@@ -223,7 +222,7 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 
 	if (!xDataColumn || !yDataColumn) {
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFit = false;
+		sourceDataChangedSinceLastFilter = false;
 		return;
 	}
 
@@ -236,7 +235,7 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 		fitResult.valid = false;
 		fitResult.status = i18n("Model has no parameters.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFit = false;
+		sourceDataChangedSinceLastFilter = false;
 		return;
 	}
 
@@ -246,7 +245,7 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 		fitResult.valid = false;
 		fitResult.status = i18n("Number of x and y data points must be equal.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFit = false;
+		sourceDataChangedSinceLastFilter = false;
 		return;
 	}
 	if (weightsColumn) {
@@ -255,7 +254,7 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 			fitResult.valid = false;
 			fitResult.status = i18n("Not sufficient weight data points provided.");
 			emit (q->dataChanged());
-			sourceDataChangedSinceLastFit = false;
+			sourceDataChangedSinceLastFilter = false;
 			return;
 		}
 	}
@@ -296,7 +295,7 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 		fitResult.valid = false;
 		fitResult.status = i18n("No data points available.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFit = false;
+		sourceDataChangedSinceLastFilter = false;
 		return;
 	}
 
@@ -305,7 +304,7 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 		fitResult.valid = false;
 		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).").arg(n).arg(np);
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastFit = false;
+		sourceDataChangedSinceLastFilter = false;
 		return;
 	}
 
@@ -430,7 +429,7 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 
 	//redraw the curve
 	emit (q->dataChanged());
-	sourceDataChangedSinceLastFit = false;
+	sourceDataChangedSinceLastFilter = false;
 }*/
 
 /*!

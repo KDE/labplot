@@ -62,7 +62,7 @@ class XYFourierFilterCurvePrivate: public XYCurvePrivate {
 		QVector<double>* yVector;
 		QVector<double>* residualsVector;
 
-		bool sourceDataChangedSinceLastFit; //<! \c true if the data in the source columns (x, y, or weights) was changed, \c false otherwise
+		bool sourceDataChangedSinceLastFilter; //<! \c true if the data in the source columns (x, y, or weights) was changed, \c false otherwise
 
 		XYFourierFilterCurve* const q;
 

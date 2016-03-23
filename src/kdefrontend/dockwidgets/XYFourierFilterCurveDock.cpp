@@ -220,37 +220,37 @@ void XYFourierFilterCurveDock::commentChanged(){
 
 	m_curve->setComment(uiGeneralTab.leComment->text());
 }
+
+void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
+	if (m_initializing)
+		return;
+
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = 0;
+	if (aspect) {
+		column = dynamic_cast<AbstractColumn*>(aspect);
+		Q_ASSERT(column);
+	}
+
+	foreach(XYCurve* curve, m_curvesList)
+		dynamic_cast<XYFourierFilterCurve*>(curve)->setXDataColumn(column);
+}
+
+void XYFourierFilterCurveDock::yDataColumnChanged(const QModelIndex& index) {
+	if (m_initializing)
+		return;
+
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = 0;
+	if (aspect) {
+		column = dynamic_cast<AbstractColumn*>(aspect);
+		Q_ASSERT(column);
+	}
+
+	foreach(XYCurve* curve, m_curvesList)
+		dynamic_cast<XYFourierFilterCurve*>(curve)->setYDataColumn(column);
+}
 /*
-void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index){
-	if (m_initializing)
-		return;
-
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
-
-	foreach(XYCurve* curve, m_curvesList)
-		dynamic_cast<XYFitCurve*>(curve)->setXDataColumn(column);
-}
-
-void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index){
-	if (m_initializing)
-		return;
-
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
-
-	foreach(XYCurve* curve, m_curvesList)
-		dynamic_cast<XYFitCurve*>(curve)->setYDataColumn(column);
-}
-
 void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index){
 	if (m_initializing)
 		return;

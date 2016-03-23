@@ -88,10 +88,10 @@ class XYFourierFilterCurve: public XYCurve {
 		virtual QIcon icon() const;
 /*		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
-
+*/
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, weightsColumn, WeightsColumn)
+/*		POINTER_D_ACCESSOR_DECL(const AbstractColumn, weightsColumn, WeightsColumn)
 		const QString& xDataColumnPath() const;
 		const QString& yDataColumnPath() const;
 		const QString& weightsColumnPath() const;
@@ -111,20 +111,19 @@ class XYFourierFilterCurve: public XYCurve {
 		void init();
 
 	private slots:
-//		void handleSourceDataChanged();
+		void handleSourceDataChanged();
 
 	signals:
-/*		friend class XYFitCurveSetXDataColumnCmd;
-		friend class XYFitCurveSetYDataColumnCmd;
-		friend class XYFitCurveSetWeightsColumnCmd;
+		friend class XYFourierFilterCurveSetXDataColumnCmd;
+		friend class XYFourierFilterCurveSetYDataColumnCmd;
+//		friend class XYFitCurveSetWeightsColumnCmd;
 		void xDataColumnChanged(const AbstractColumn*);
 		void yDataColumnChanged(const AbstractColumn*);
-		void weightsColumnChanged(const AbstractColumn*);
+//		void weightsColumnChanged(const AbstractColumn*);
 
-		friend class XYFitCurveSetFitDataCmd;
-		void fitDataChanged(const XYFitCurve::FitData&);
-		void sourceDataChangedSinceLastFit();
-*/
+//		friend class XYFitCurveSetFitDataCmd;
+//		void fitDataChanged(const XYFitCurve::FitData&);
+		void sourceDataChangedSinceLastFilter();
 };
 
 #endif

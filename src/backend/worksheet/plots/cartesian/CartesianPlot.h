@@ -109,6 +109,7 @@ class CartesianPlot:public AbstractPlot{
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
 		QAction* addFitCurveAction;
+		QAction* addFourierFilterCurveAction;
 		QAction* addHorizontalAxisAction;
 		QAction* addVerticalAxisAction;
  		QAction* addLegendAction;
