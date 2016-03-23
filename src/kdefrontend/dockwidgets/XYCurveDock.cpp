@@ -55,6 +55,7 @@
 */
 
 XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent),
+	m_completion(new KUrlCompletion()),
 	cbXColumn(0),
 	cbYColumn(0),
 	m_curve(0),
@@ -72,8 +73,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent),
 	ui.kleFillingFileName->setClearButtonShown(true);
 	ui.bFillingOpen->setIcon( KIcon("document-open") );
 
-	KUrlCompletion *comp = new KUrlCompletion();
-	ui.kleFillingFileName->setCompletionObject(comp);
+	ui.kleFillingFileName->setCompletionObject(m_completion);
 
 	//Tab "Error bars"
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
@@ -187,6 +187,8 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent),
 XYCurveDock::~XYCurveDock() {
 	if (m_aspectTreeModel)
 		delete m_aspectTreeModel;
+
+	delete m_completion;
 }
 
 void XYCurveDock::setupGeneral() {

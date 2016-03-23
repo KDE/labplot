@@ -46,6 +46,7 @@ class DatapickerImageView : public QGraphicsView {
 
 public:
 	explicit DatapickerImageView(DatapickerImage* image);
+	~DatapickerImageView();
 
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const WorksheetView::ExportFormat, const int);
