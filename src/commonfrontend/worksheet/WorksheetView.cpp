@@ -312,24 +312,24 @@ void WorksheetView::initActions() {
 }
 
 void WorksheetView::initMenus() {
-	m_addNewCartesianPlotMenu = new QMenu(i18n("xy-plot"));
+	m_addNewCartesianPlotMenu = new QMenu(i18n("xy-plot"), this);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot1Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot2Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot3Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot4Action);
 
-	m_addNewMenu = new QMenu(i18n("Add new"));
+	m_addNewMenu = new QMenu(i18n("Add new"), this);
 	m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(QIcon::fromTheme("office-chart-line"));
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
 
-	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"));
+	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
 	m_viewMouseModeMenu->setIcon(QIcon::fromTheme("input-mouse"));
 	m_viewMouseModeMenu->addAction(selectionModeAction);
 	m_viewMouseModeMenu->addAction(navigationModeAction);
 	m_viewMouseModeMenu->addAction(zoomSelectionModeAction);
 
-	m_zoomMenu = new QMenu(i18n("Zoom"));
+	m_zoomMenu = new QMenu(i18n("Zoom"), this);
 	m_zoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
 	m_zoomMenu->addAction(zoomInViewAction);
 	m_zoomMenu->addAction(zoomOutViewAction);
@@ -338,7 +338,7 @@ void WorksheetView::initMenus() {
 	m_zoomMenu->addAction(zoomFitPageWidthAction);
 	m_zoomMenu->addAction(zoomFitSelectionAction);
 
-	m_magnificationMenu = new QMenu(i18n("Magnification"));
+	m_magnificationMenu = new QMenu(i18n("Magnification"), this);
 	m_magnificationMenu->setIcon(QIcon::fromTheme("labplot-zoom"));
 	m_magnificationMenu->addAction(noMagnificationAction);
 	m_magnificationMenu->addAction(twoTimesMagnificationAction);
@@ -346,14 +346,14 @@ void WorksheetView::initMenus() {
 	m_magnificationMenu->addAction(fourTimesMagnificationAction);
 	m_magnificationMenu->addAction(fiveTimesMagnificationAction);
 
-	m_layoutMenu = new QMenu(i18n("Layout"));
+	m_layoutMenu = new QMenu(i18n("Layout"), this);
 	m_layoutMenu->addAction(verticalLayoutAction);
 	m_layoutMenu->addAction(horizontalLayoutAction);
 	m_layoutMenu->addAction(gridLayoutAction);
 	m_layoutMenu->addSeparator();
 	m_layoutMenu->addAction(breakLayoutAction);
 
-	m_gridMenu = new QMenu(i18n("Grid"));
+	m_gridMenu = new QMenu(i18n("Grid"), this);
 	m_gridMenu->setIcon(QIcon::fromTheme("view-grid"));
 	m_gridMenu->addAction(noGridAction);
 	m_gridMenu->addSeparator();
@@ -368,9 +368,9 @@ void WorksheetView::initMenus() {
 // 	m_gridMenu->addSeparator();
 // 	m_gridMenu->addAction(snapToGridAction);
 
-	m_cartesianPlotMenu = new QMenu(i18n("Cartesian Plot"));
+	m_cartesianPlotMenu = new QMenu(i18n("Cartesian Plot"), this);
 
-	m_cartesianPlotMouseModeMenu = new QMenu(i18n("Mouse Mode"));
+	m_cartesianPlotMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
 	m_cartesianPlotMouseModeMenu->setIcon(QIcon::fromTheme("input-mouse"));
 	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotSelectionModeAction);
 	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotZoomSelectionModeAction);
@@ -378,7 +378,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotZoomYSelectionModeAction);
 	m_cartesianPlotMouseModeMenu->addSeparator();
 
-	m_cartesianPlotAddNewMenu = new QMenu(i18n("Add new"));
+	m_cartesianPlotAddNewMenu = new QMenu(i18n("Add new"), this);
 	m_cartesianPlotAddNewMenu->addAction(addCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addEquationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addFitCurveAction);
@@ -389,7 +389,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotAddNewMenu->addSeparator();
 	m_cartesianPlotAddNewMenu->addAction(addCustomPointAction);
 
-	m_cartesianPlotZoomMenu = new QMenu(i18n("Zoom/Navigate"));
+	m_cartesianPlotZoomMenu = new QMenu(i18n("Zoom/Navigate"), this);
 	m_cartesianPlotZoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
 	m_cartesianPlotZoomMenu->addAction(scaleAutoAction);
 	m_cartesianPlotZoomMenu->addAction(scaleAutoXAction);
@@ -410,7 +410,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotZoomMenu->addAction(shiftUpYAction);
 	m_cartesianPlotZoomMenu->addAction(shiftDownYAction);
 
-	m_cartesianPlotActionModeMenu = new QMenu(i18n("Apply actions to"));
+	m_cartesianPlotActionModeMenu = new QMenu(i18n("Apply actions to"), this);
 	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToSelectionAction);
 	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToAllAction);
 

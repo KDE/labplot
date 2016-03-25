@@ -42,7 +42,7 @@ class Column : public AbstractColumn {
 	public:
 		friend class ColumnPrivate;
 
-		Column(const QString& name, AbstractColumn::ColumnMode mode);
+		Column(const QString& name, AbstractColumn::ColumnMode mode = AbstractColumn::Numeric);
 		Column(const QString& name, QVector<double> data);
 		Column(const QString& name, QStringList data);
 		Column(const QString& name, QList<QDateTime> data);

@@ -51,7 +51,8 @@
 CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(parent),
 	m_legend(0),
 	labelWidget(0),
-	m_initializing(false) {
+	m_initializing(false),
+	m_completion(new KUrlCompletion()) {
 
 	ui.setupUi(this);
 
@@ -67,8 +68,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	ui.kleBackgroundFileName->setClearButtonShown(true);
     ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	KUrlCompletion *comp = new KUrlCompletion();
-	ui.kleBackgroundFileName->setCompletionObject(comp);
+	ui.kleBackgroundFileName->setCompletionObject(m_completion);
 
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i){
@@ -133,6 +133,10 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	init();
+}
+
+CartesianPlotLegendDock::~CartesianPlotLegendDock() {
+	delete m_completion;
 }
 
 void CartesianPlotLegendDock::init() {

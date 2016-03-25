@@ -54,6 +54,10 @@ DatapickerCurve::DatapickerCurve(const QString &name, DatapickerCurvePrivate *dd
 	init();
 }
 
+DatapickerCurve::~DatapickerCurve() {
+	delete d_ptr;
+}
+
 void DatapickerCurve::init() {
 	Q_D(DatapickerCurve);
 

@@ -75,6 +75,7 @@ CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd):Abst
 CartesianPlot::~CartesianPlot(){
 	delete m_coordinateSystem;
 	delete addNewMenu;
+	delete zoomMenu;
 
 	//don't need to delete objects added with addChild()
 
@@ -1505,7 +1506,7 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		QGraphicsItem::mouseReleaseEvent(event);
 	} else if (mouseMode == CartesianPlot::ZoomSelectionMode || mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode) {
 		//don't zoom if very small region was selected, avoid occasional/unwanted zooming
-		if ( abs(m_selectionEnd.x()-m_selectionStart.x())<20 || abs(m_selectionEnd.y()-m_selectionStart.y())<20 ) {
+		if ( qAbs(m_selectionEnd.x()-m_selectionStart.x())<20 || qAbs(m_selectionEnd.y()-m_selectionStart.y())<20 ) {
 			m_selectionBandIsShown = false;
 			return;
 		}

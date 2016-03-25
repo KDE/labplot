@@ -82,7 +82,7 @@ const float qt_paperSizes[numOfPaperSizes][2] = {
   \ingroup kdefrontend
 */
 
-WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0) {
+WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0), m_completion(new KUrlCompletion()) {
 	ui.setupUi(this);
 
 	//Background-tab
@@ -90,8 +90,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0) {
 	ui.kleBackgroundFileName->setClearButtonShown(true);
     ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	KUrlCompletion *comp = new KUrlCompletion();
-	ui.kleBackgroundFileName->setCompletionObject(comp);
+	ui.kleBackgroundFileName->setCompletionObject(m_completion);
 
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i){
@@ -145,6 +144,10 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0) {
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	this->retranslateUi();
+}
+
+WorksheetDock::~WorksheetDock() {
+	delete m_completion;
 }
 
 void WorksheetDock::setWorksheets(QList<Worksheet*> list){

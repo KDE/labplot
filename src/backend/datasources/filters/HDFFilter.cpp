@@ -254,9 +254,6 @@ QString HDFFilterPrivate::translateHDFClass(H5T_class_t c) {
 	case H5T_NO_CLASS:
 		dclass="NOCLASS";
 		break;
-        default:
-		dclass="UNKNOWN";
-                break;
         }
 	return dclass;
 }
@@ -331,25 +328,47 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 		if(dataPointer.size()>0)
 			dataP = dataPointer[m];
 
-		if(H5Tequal(mtype,H5T_STD_I8LE) || H5Tequal(mtype,H5T_STD_I8BE))
-			data[m]=readHDFData1D<char>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,lines,dataP);
-		else if(H5Tequal(mtype,H5T_STD_U8LE) || H5Tequal(mtype,H5T_STD_U8BE))
-			data[m]=readHDFData1D<unsigned char>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,lines,dataP);
-		else if(H5Tequal(mtype,H5T_STD_I16LE) || H5Tequal(mtype,H5T_STD_I16BE))
+		if(H5Tequal(mtype,H5T_STD_I8LE) || H5Tequal(mtype,H5T_STD_I8BE) || H5Tequal(mtype,H5T_NATIVE_CHAR)) {
+			switch(sizeof(H5T_NATIVE_CHAR)) {
+			case 1:
+				data[m]=readHDFData1D<char>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,lines,dataP);
+				break;
+			case 4:
+#ifdef QT_DEBUG
+				qDebug()<<"WARNING: size of H5T_NATIVE_CHAR = 4!";
+#endif
+				data[m]=readHDFData1D<int>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,lines,dataP);
+				break;
+			}
+		}
+		else if(H5Tequal(mtype,H5T_STD_U8LE) || H5Tequal(mtype,H5T_STD_U8BE) || H5Tequal(mtype,H5T_NATIVE_UCHAR)) {
+			switch(sizeof(H5T_NATIVE_UCHAR)) {
+			case 1:
+				data[m]=readHDFData1D<unsigned char>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,lines,dataP);
+				break;
+			case 4:
+#ifdef QT_DEBUG
+				qDebug()<<"WARNING: size of H5T_NATIVE_UCHAR = 4!";
+#endif
+				data[m]=readHDFData1D<unsigned int>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,lines,dataP);
+				break;
+			}
+		}
+		else if(H5Tequal(mtype,H5T_STD_I16LE) || H5Tequal(mtype,H5T_STD_I16BE) || H5Tequal(mtype,H5T_NATIVE_SHORT))
 			data[m]=readHDFData1D<short>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,lines,dataP);
-		else if(H5Tequal(mtype,H5T_STD_U16LE) || H5Tequal(mtype,H5T_STD_U16BE))
+		else if(H5Tequal(mtype,H5T_STD_U16LE) || H5Tequal(mtype,H5T_STD_U16BE) || H5Tequal(mtype,H5T_NATIVE_SHORT))
 			data[m]=readHDFData1D<unsigned short>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,lines,dataP);
-		else if(H5Tequal(mtype,H5T_STD_I32LE) || H5Tequal(mtype,H5T_STD_I32BE))
+		else if(H5Tequal(mtype,H5T_STD_I32LE) || H5Tequal(mtype,H5T_STD_I32BE) || H5Tequal(mtype,H5T_NATIVE_INT))
 			data[m]=readHDFData1D<int>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,lines,dataP);
-		else if(H5Tequal(mtype,H5T_STD_U32LE) || H5Tequal(mtype,H5T_STD_U32BE))
+		else if(H5Tequal(mtype,H5T_STD_U32LE) || H5Tequal(mtype,H5T_STD_U32BE) || H5Tequal(mtype,H5T_NATIVE_UINT))
 			data[m]=readHDFData1D<unsigned int>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,lines,dataP);
 		else if(H5Tequal(mtype,H5T_NATIVE_LONG))
 			data[m]=readHDFData1D<long>(dataset,ctype,rows,lines,dataP);
 		else if(H5Tequal(mtype,H5T_NATIVE_ULONG))
 			data[m]=readHDFData1D<unsigned long>(dataset,ctype,rows,lines,dataP);
-		else if(H5Tequal(mtype,H5T_STD_I64LE) || H5Tequal(mtype,H5T_STD_I64BE))
+		else if(H5Tequal(mtype,H5T_STD_I64LE) || H5Tequal(mtype,H5T_STD_I64BE) || H5Tequal(mtype,H5T_NATIVE_LLONG))
 			data[m]=readHDFData1D<long long>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,lines,dataP);
-		else if(H5Tequal(mtype,H5T_STD_U64LE) || H5Tequal(mtype,H5T_STD_U64BE))
+		else if(H5Tequal(mtype,H5T_STD_U64LE) || H5Tequal(mtype,H5T_STD_U64BE) || H5Tequal(mtype,H5T_NATIVE_ULLONG))
 			data[m]=readHDFData1D<unsigned long long>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,lines,dataP);
 		else if(H5Tequal(mtype,H5T_IEEE_F32LE) || H5Tequal(mtype,H5T_IEEE_F32BE))
 			data[m]=readHDFData1D<float>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,lines,dataP);
@@ -439,25 +458,41 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 		handleError(status,"H5Tinsert");
 
 		QVector< QVector<double>* > dummy;
-		if(H5Tequal(mtype,H5T_STD_I8LE) || H5Tequal(mtype,H5T_STD_I8BE))
-			data[m]=readHDFData2D<char>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,cols,lines,dummy);
-		else if(H5Tequal(mtype,H5T_STD_U8LE) || H5Tequal(mtype,H5T_STD_U8BE))
-			data[m]=readHDFData2D<unsigned char>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,cols,lines,dummy);
-		else if(H5Tequal(mtype,H5T_STD_I16LE) || H5Tequal(mtype,H5T_STD_I16BE))
+		if(H5Tequal(mtype,H5T_STD_I8LE) || H5Tequal(mtype,H5T_STD_I8BE) || H5Tequal(mtype,H5T_NATIVE_CHAR)) {
+			switch(sizeof(H5T_NATIVE_CHAR)) {
+			case 1:
+				data[m]=readHDFData2D<char>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,cols,lines,dummy);
+				break;
+			case 4:
+				data[m]=readHDFData2D<int>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,cols,lines,dummy);
+				break;
+			}
+		}
+		else if(H5Tequal(mtype,H5T_STD_U8LE) || H5Tequal(mtype,H5T_STD_U8BE) || H5Tequal(mtype,H5T_NATIVE_UCHAR)) {
+			switch(sizeof(H5T_NATIVE_CHAR)) {
+			case 1:
+				data[m]=readHDFData2D<unsigned char>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,cols,lines,dummy);
+				break;
+			case 4:
+				data[m]=readHDFData2D<unsigned int>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,cols,lines,dummy);
+				break;
+			}
+		}
+		else if(H5Tequal(mtype,H5T_STD_I16LE) || H5Tequal(mtype,H5T_STD_I16BE)|| H5Tequal(mtype,H5T_NATIVE_SHORT) )
 			data[m]=readHDFData2D<short>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,cols,lines,dummy);
-		else if(H5Tequal(mtype,H5T_STD_U16LE) || H5Tequal(mtype,H5T_STD_U16BE))
+		else if(H5Tequal(mtype,H5T_STD_U16LE) || H5Tequal(mtype,H5T_STD_U16BE) || H5Tequal(mtype,H5T_NATIVE_USHORT))
 			data[m]=readHDFData2D<unsigned short>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,cols,lines,dummy);
-		else if(H5Tequal(mtype,H5T_STD_I32LE) || H5Tequal(mtype,H5T_STD_I32BE))
+		else if(H5Tequal(mtype,H5T_STD_I32LE) || H5Tequal(mtype,H5T_STD_I32BE) || H5Tequal(mtype,H5T_NATIVE_INT))
 			data[m]=readHDFData2D<int>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,cols,lines,dummy);
-		else if(H5Tequal(mtype,H5T_STD_U32LE) || H5Tequal(mtype,H5T_STD_U32BE))
+		else if(H5Tequal(mtype,H5T_STD_U32LE) || H5Tequal(mtype,H5T_STD_U32BE) || H5Tequal(mtype,H5T_NATIVE_UINT))
 			data[m]=readHDFData2D<unsigned int>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,cols,lines,dummy);
 		else if(H5Tequal(mtype,H5T_NATIVE_LONG))
 			data[m]=readHDFData2D<long>(dataset,ctype,rows,cols,lines,dummy);
 		else if(H5Tequal(mtype,H5T_NATIVE_ULONG))
 			data[m]=readHDFData2D<unsigned long>(dataset,ctype,rows,cols,lines,dummy);
-		else if(H5Tequal(mtype,H5T_STD_I64LE) || H5Tequal(mtype,H5T_STD_I64BE))
+		else if(H5Tequal(mtype,H5T_STD_I64LE) || H5Tequal(mtype,H5T_STD_I64BE) || H5Tequal(mtype,H5T_NATIVE_LLONG))
 			data[m]=readHDFData2D<long long>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,cols,lines,dummy);
-		else if(H5Tequal(mtype,H5T_STD_U64LE) || H5Tequal(mtype,H5T_STD_U64BE))
+		else if(H5Tequal(mtype,H5T_STD_U64LE) || H5Tequal(mtype,H5T_STD_U64BE) || H5Tequal(mtype,H5T_NATIVE_ULLONG))
 			data[m]=readHDFData2D<unsigned long long>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,cols,lines,dummy);
 		else if(H5Tequal(mtype,H5T_IEEE_F32LE) || H5Tequal(mtype,H5T_IEEE_F32BE))
 			data[m]=readHDFData2D<float>(dataset,H5Tget_native_type(ctype,H5T_DIR_DEFAULT),rows,cols,lines,dummy);
@@ -528,32 +563,68 @@ QStringList HDFFilterPrivate::readHDFAttr(hid_t aid) {
 		status = H5Tclose(amem);
 		handleError(status,"H5Tclose");
 	}else if(aclass == H5T_INTEGER) {
-		if(H5Tequal(atype,H5T_STD_I8LE) || H5Tequal(atype,H5T_STD_I8BE)) {
-			char value;
-			status = H5Aread(aid, H5T_NATIVE_CHAR, &value);
-			handleError(status,"H5Aread");
-			attr<<"="<<QString::number(value);
-		} else if(H5Tequal(atype,H5T_STD_U8LE) || H5Tequal(atype,H5T_STD_U8BE)) {
-			unsigned char value;
-			status = H5Aread(aid, H5T_NATIVE_UCHAR, &value);
-			handleError(status,"H5Aread");
-			attr<<"="<<QString::number(value);
-		} else if(H5Tequal(atype,H5T_STD_I16LE) || H5Tequal(atype,H5T_STD_I16BE)) {
+		if(H5Tequal(atype,H5T_STD_I8LE) || H5Tequal(atype,H5T_STD_I8BE) || H5Tequal(atype, H5T_NATIVE_CHAR)) {
+			switch(sizeof(H5T_NATIVE_CHAR)) {
+			case 1: {
+				char value;
+				status = H5Aread(aid, H5T_NATIVE_CHAR, &value);
+				handleError(status,"H5Aread");
+				attr<<"="<<QString::number(value);
+				break;
+			}
+			case 4: {
+				int value;
+#ifdef QT_DEBUG
+				qDebug()<<"WARNING: size of H5T_NATIVE_CHAR = 4!";
+#endif
+				status = H5Aread(aid, H5T_NATIVE_CHAR, &value);
+				handleError(status,"H5Aread");
+				attr<<"="<<QString::number(value);
+				break;
+			}
+			default:
+				qDebug()<<"unknown size of H5T_NATIVE_CHAR:"<<sizeof(H5T_NATIVE_CHAR);
+				return QStringList("");
+			}
+		} else if(H5Tequal(atype,H5T_STD_U8LE) || H5Tequal(atype,H5T_STD_U8BE) || H5Tequal(atype, H5T_NATIVE_UCHAR)) {
+			switch(sizeof(H5T_NATIVE_UCHAR)) {
+			case 1: {
+				unsigned char value;
+				status = H5Aread(aid, H5T_NATIVE_UCHAR, &value);
+				handleError(status,"H5Aread");
+				attr<<"="<<QString::number(value);
+				break;
+			}
+			case 4: {
+				unsigned int value;
+#ifdef QT_DEBUG
+				qDebug()<<"WARNING: size of H5T_NATIVE_UCHAR = 4!";
+#endif
+				status = H5Aread(aid, H5T_NATIVE_UCHAR, &value);
+				handleError(status,"H5Aread");
+				attr<<"="<<QString::number(value);
+				break;
+			}
+			default:
+				qDebug()<<"unknown size of H5T_NATIVE_UCHAR:"<<sizeof(H5T_NATIVE_UCHAR);
+				return QStringList("");
+			}
+		} else if(H5Tequal(atype,H5T_STD_I16LE) || H5Tequal(atype,H5T_STD_I16BE) || H5Tequal(atype, H5T_NATIVE_SHORT)) {
 			short value;
 			status = H5Aread(aid, H5T_NATIVE_SHORT, &value);
 			handleError(status,"H5Aread");
 			attr<<"="<<QString::number(value);
-		} else if(H5Tequal(atype,H5T_STD_U16LE) || H5Tequal(atype,H5T_STD_U16BE)) {
+		} else if(H5Tequal(atype,H5T_STD_U16LE) || H5Tequal(atype,H5T_STD_U16BE) || H5Tequal(atype, H5T_NATIVE_USHORT)) {
 			unsigned short value;
 			status = H5Aread(aid, H5T_NATIVE_USHORT, &value);
 			handleError(status,"H5Aread");
 			attr<<"="<<QString::number(value);
-		} else if(H5Tequal(atype,H5T_STD_I32LE) || H5Tequal(atype,H5T_STD_I32BE)) {
+		} else if(H5Tequal(atype,H5T_STD_I32LE) || H5Tequal(atype,H5T_STD_I32BE) || H5Tequal(atype, H5T_NATIVE_INT)) {
 			int value;
 			status = H5Aread(aid, H5T_NATIVE_INT, &value);
 			handleError(status,"H5Aread");
 			attr<<"="<<QString::number(value);
-		} else if(H5Tequal(atype,H5T_STD_U32LE) || H5Tequal(atype,H5T_STD_U32BE)) {
+		} else if(H5Tequal(atype,H5T_STD_U32LE) || H5Tequal(atype,H5T_STD_U32BE) || H5Tequal(atype, H5T_NATIVE_UINT)) {
 			unsigned int value;
 			status = H5Aread(aid, H5T_NATIVE_UINT, &value);
 			handleError(status,"H5Aread");
@@ -568,12 +639,12 @@ QStringList HDFFilterPrivate::readHDFAttr(hid_t aid) {
 			status = H5Aread(aid, H5T_NATIVE_ULONG, &value);
 			handleError(status,"H5Aread");
 			attr<<"="<<QString::number(value);
-		} else if(H5Tequal(atype,H5T_STD_I64LE) || H5Tequal(atype,H5T_STD_I64BE)) {
+		} else if(H5Tequal(atype,H5T_STD_I64LE) || H5Tequal(atype,H5T_STD_I64BE) || H5Tequal(atype, H5T_NATIVE_LLONG)) {
 			long long value;
 			status = H5Aread(aid, H5T_NATIVE_LLONG, &value);
 			handleError(status,"H5Aread");
 			attr<<"="<<QString::number(value);
-		} else if(H5Tequal(atype,H5T_STD_U64LE) || H5Tequal(atype,H5T_STD_U64BE)) {
+		} else if(H5Tequal(atype,H5T_STD_U64LE) || H5Tequal(atype,H5T_STD_U64BE) || H5Tequal(atype, H5T_NATIVE_ULLONG)) {
 			unsigned long long value;
 			status = H5Aread(aid, H5T_NATIVE_ULLONG, &value);
 			handleError(status,"H5Aread");
@@ -677,8 +748,6 @@ QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 		case H5T_CSET_RESERVED_15:
 			typeProps<<", RESERVED";
 			break;
-		default:
-			break;
 		}
 		H5T_str_t strpad = H5Tget_strpad(tid);
 		handleError((int)strpad,"H5Tget_strpad");
@@ -709,8 +778,6 @@ QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 		case H5T_STR_RESERVED_14:
 		case H5T_STR_RESERVED_15:
 			typeProps<<" RESERVED";
-			break;
-		default:
 			break;
 		}
 		break;
@@ -754,8 +821,6 @@ QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 		//TODO
 		break;
 	case H5T_NO_CLASS:
-		break;
-	default:
 		break;
 	}
 
@@ -827,9 +892,6 @@ QStringList HDFFilterPrivate::readHDFPropertyList(hid_t pid) {
 	case H5D_ALLOC_TIME_ERROR:
 		props<<" ERROR";
 		break;
-	default:
-		props<<" unknown allocation policy";
-		break;
         }
 
 	props<<", FILL_TIME:";
@@ -848,9 +910,6 @@ QStringList HDFFilterPrivate::readHDFPropertyList(hid_t pid) {
 		break;
 	case H5D_FILL_TIME_ERROR:
 		props<<" ERROR";
-		break;
-	default:
-		props<<" Unknown";
 		break;
         }
 
@@ -882,7 +941,6 @@ void HDFFilterPrivate::scanHDFDataType(hid_t tid, char *dataSetName, QTreeWidget
 	dataTypeItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
 	dataTypeItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(dataTypeItem);
-
 }
 
 void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetItem* parentItem) {
@@ -1054,7 +1112,7 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
 /*!
     reads the content of the date set in the file \c fileName to a string (for preview) or to the data source.
 */
-QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines){
+QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
 	QStringList dataString;
 
 	if(currentDataSetName.isEmpty())
@@ -1091,7 +1149,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	int columnOffset = 0;	// offset to import data
 	int actualRows=0, actualCols=0;	// rows and cols to read
 
-	QVector<QVector<double>*> dataPointers;
+	QVector<QVector<double>*> dataPointers(0,NULL);
 	switch(rank) {
 	case 0: {
 		actualRows=1;
@@ -1173,25 +1231,47 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			break;
 		}
 		case H5T_INTEGER: {
-			if(H5Tequal(dtype,H5T_STD_I8LE) || H5Tequal(dtype,H5T_STD_I8BE))
-				dataString = readHDFData1D<char>(dataset, H5T_NATIVE_CHAR, rows, lines, dataPointers[0]);
-			else if(H5Tequal(dtype,H5T_STD_U8LE) || H5Tequal(dtype,H5T_STD_U8BE))
-				dataString = readHDFData1D<unsigned char>(dataset, H5T_NATIVE_UCHAR, rows, lines, dataPointers[0]);
-			else if(H5Tequal(dtype,H5T_STD_I16LE) || H5Tequal(dtype,H5T_STD_I16BE))
+			if(H5Tequal(dtype,H5T_STD_I8LE) || H5Tequal(dtype,H5T_STD_I8BE) || H5Tequal(dtype,H5T_NATIVE_CHAR)) {
+				switch(sizeof(H5T_NATIVE_CHAR)) {
+				case 1:
+					dataString = readHDFData1D<char>(dataset, H5T_NATIVE_CHAR, rows, lines, dataPointers[0]);
+					break;
+				case 4:
+#ifdef QT_DEBUG
+					qDebug()<<"WARNING: size of H5T_NATIVE_CHAR = 4!";
+#endif
+					dataString = readHDFData1D<int>(dataset, H5T_NATIVE_CHAR, rows, lines, dataPointers[0]);
+					break;
+				}
+			}
+			else if(H5Tequal(dtype,H5T_STD_U8LE) || H5Tequal(dtype,H5T_STD_U8BE) || H5Tequal(dtype,H5T_NATIVE_UCHAR)) {
+				switch(sizeof(H5T_NATIVE_UCHAR)) {
+				case 1:
+					dataString = readHDFData1D<unsigned char>(dataset, H5T_NATIVE_UCHAR, rows, lines, dataPointers[0]);
+					break;
+				case 4:
+#ifdef QT_DEBUG
+					qDebug()<<"WARNING: size of H5T_NATIVE_UCHAR = 4!";
+#endif
+					dataString = readHDFData1D<unsigned int>(dataset, H5T_NATIVE_UCHAR, rows, lines, dataPointers[0]);
+					break;
+				}
+			}
+			else if(H5Tequal(dtype,H5T_STD_I16LE) || H5Tequal(dtype,H5T_STD_I16BE) || H5Tequal(dtype,H5T_NATIVE_SHORT))
 				dataString = readHDFData1D<short>(dataset, H5T_NATIVE_SHORT, rows, lines, dataPointers[0]);
-			else if(H5Tequal(dtype,H5T_STD_U16LE) || H5Tequal(dtype,H5T_STD_U16BE))
+			else if(H5Tequal(dtype,H5T_STD_U16LE) || H5Tequal(dtype,H5T_STD_U16BE) || H5Tequal(dtype,H5T_NATIVE_USHORT))
 				dataString = readHDFData1D<unsigned short>(dataset, H5T_NATIVE_USHORT, rows, lines, dataPointers[0]);
-			else if(H5Tequal(dtype,H5T_STD_I32LE) || H5Tequal(dtype,H5T_STD_I32BE))
+			else if(H5Tequal(dtype,H5T_STD_I32LE) || H5Tequal(dtype,H5T_STD_I32BE) || H5Tequal(dtype,H5T_NATIVE_INT))
 				dataString = readHDFData1D<int>(dataset, H5T_NATIVE_INT, rows, lines, dataPointers[0]);
-			else if(H5Tequal(dtype,H5T_STD_U32LE) || H5Tequal(dtype,H5T_STD_U32BE))
+			else if(H5Tequal(dtype,H5T_STD_U32LE) || H5Tequal(dtype,H5T_STD_U32BE) || H5Tequal(dtype,H5T_NATIVE_UINT))
 				dataString = readHDFData1D<unsigned int>(dataset, H5T_NATIVE_UINT, rows, lines, dataPointers[0]);
 			else if(H5Tequal(dtype,H5T_NATIVE_LONG))
 				dataString = readHDFData1D<long>(dataset, H5T_NATIVE_LONG, rows, lines, dataPointers[0]);
 			else if(H5Tequal(dtype,H5T_NATIVE_ULONG))
 				dataString = readHDFData1D<unsigned long>(dataset, H5T_NATIVE_ULONG, rows, lines, dataPointers[0]);
-			else if(H5Tequal(dtype,H5T_STD_I64LE) || H5Tequal(dtype,H5T_STD_I64BE))
+			else if(H5Tequal(dtype,H5T_STD_I64LE) || H5Tequal(dtype,H5T_STD_I64BE) || H5Tequal(dtype,H5T_NATIVE_LLONG))
 				dataString = readHDFData1D<long long>(dataset, H5T_NATIVE_LLONG, rows, lines, dataPointers[0]);
-			else if(H5Tequal(dtype,H5T_STD_U64LE) || H5Tequal(dtype,H5T_STD_U64BE))
+			else if(H5Tequal(dtype,H5T_STD_U64LE) || H5Tequal(dtype,H5T_STD_U64BE) || H5Tequal(dtype,H5T_NATIVE_ULLONG))
 				dataString = readHDFData1D<unsigned long long>(dataset, H5T_NATIVE_ULLONG, rows, lines, dataPointers[0]);
 			else {
 				dataString<<"Unsupported integer type for rank=1";
@@ -1278,25 +1358,47 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		// read data
 		switch(dclass) {
 		case H5T_INTEGER: {
-			if(H5Tequal(dtype,H5T_STD_I8LE) || H5Tequal(dtype,H5T_STD_I8BE))
-				dataString = readHDFData2D<char>(dataset, H5T_NATIVE_CHAR, rows, cols, lines, dataPointers);
-			else if(H5Tequal(dtype,H5T_STD_U8LE) || H5Tequal(dtype,H5T_STD_U8BE))
-				dataString = readHDFData2D<unsigned char>(dataset, H5T_NATIVE_UCHAR, rows, cols, lines, dataPointers);
-			else if(H5Tequal(dtype,H5T_STD_I16LE) || H5Tequal(dtype,H5T_STD_I16BE))
+			if(H5Tequal(dtype,H5T_STD_I8LE) || H5Tequal(dtype,H5T_STD_I8BE) || H5Tequal(dtype,H5T_NATIVE_CHAR)) {
+				switch(sizeof(H5T_NATIVE_CHAR)) {
+				case 1:
+					dataString = readHDFData2D<char>(dataset, H5T_NATIVE_CHAR, rows, cols, lines, dataPointers);
+					break;
+				case 4:
+#ifdef QT_DEBUG
+					qDebug()<<"WARNING: size of H5T_NATIVE_CHAR = 4!";
+#endif
+					dataString = readHDFData2D<int>(dataset, H5T_NATIVE_CHAR, rows, cols, lines, dataPointers);
+					break;
+				}
+			}
+			else if(H5Tequal(dtype,H5T_STD_U8LE) || H5Tequal(dtype,H5T_STD_U8BE) || H5Tequal(dtype,H5T_NATIVE_UCHAR)) {
+				switch(sizeof(H5T_NATIVE_UCHAR)) {
+				case 1:
+					dataString = readHDFData2D<unsigned char>(dataset, H5T_NATIVE_UCHAR, rows, cols, lines, dataPointers);
+					break;
+				case 4:
+#ifdef QT_DEBUG
+					qDebug()<<"WARNING: size of H5T_NATIVE_UCHAR = 4!";
+#endif
+					dataString = readHDFData2D<unsigned int>(dataset, H5T_NATIVE_UCHAR, rows, cols, lines, dataPointers);
+					break;
+				}
+			}
+			else if(H5Tequal(dtype,H5T_STD_I16LE) || H5Tequal(dtype,H5T_STD_I16BE) || H5Tequal(dtype,H5T_NATIVE_SHORT))
 				dataString = readHDFData2D<short>(dataset, H5T_NATIVE_SHORT, rows, cols, lines, dataPointers);
-			else if(H5Tequal(dtype,H5T_STD_U16LE) || H5Tequal(dtype,H5T_STD_U16BE))
+			else if(H5Tequal(dtype,H5T_STD_U16LE) || H5Tequal(dtype,H5T_STD_U16BE) || H5Tequal(dtype,H5T_NATIVE_USHORT))
 				dataString = readHDFData2D<unsigned short>(dataset, H5T_NATIVE_USHORT, rows, cols, lines, dataPointers);
-			else if(H5Tequal(dtype,H5T_STD_I32LE) || H5Tequal(dtype,H5T_STD_I32BE))
+			else if(H5Tequal(dtype,H5T_STD_I32LE) || H5Tequal(dtype,H5T_STD_I32BE) || H5Tequal(dtype,H5T_NATIVE_INT))
 				dataString = readHDFData2D<int>(dataset, H5T_NATIVE_INT, rows, cols, lines, dataPointers);
-			else if(H5Tequal(dtype,H5T_STD_U32LE) || H5Tequal(dtype,H5T_STD_U32BE))
+			else if(H5Tequal(dtype,H5T_STD_U32LE) || H5Tequal(dtype,H5T_STD_U32BE) || H5Tequal(dtype,H5T_NATIVE_UINT))
 				dataString = readHDFData2D<unsigned int>(dataset, H5T_NATIVE_UINT, rows, cols, lines, dataPointers);
 			else if(H5Tequal(dtype,H5T_NATIVE_LONG))
 				dataString = readHDFData2D<long>(dataset, H5T_NATIVE_LONG, rows, cols, lines, dataPointers);
 			else if(H5Tequal(dtype,H5T_NATIVE_ULONG))
 				dataString = readHDFData2D<unsigned long>(dataset, H5T_NATIVE_ULONG, rows, cols, lines, dataPointers);
-			else if(H5Tequal(dtype,H5T_STD_I64LE) || H5Tequal(dtype,H5T_STD_I64BE))
+			else if(H5Tequal(dtype,H5T_STD_I64LE) || H5Tequal(dtype,H5T_STD_I64BE) || H5Tequal(dtype,H5T_NATIVE_LLONG))
 				dataString = readHDFData2D<long long>(dataset, H5T_NATIVE_LLONG, rows, cols, lines, dataPointers);
-			else if(H5Tequal(dtype,H5T_STD_U64LE) || H5Tequal(dtype,H5T_STD_U64BE))
+			else if(H5Tequal(dtype,H5T_STD_U64LE) || H5Tequal(dtype,H5T_STD_U64BE) || H5Tequal(dtype,H5T_NATIVE_ULLONG))
 				dataString = readHDFData2D<unsigned long long>(dataset, H5T_NATIVE_ULLONG, rows, cols, lines, dataPointers);
 			else {
 				dataString<<"Unsupported integer type for rank=2";

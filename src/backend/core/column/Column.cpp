@@ -614,7 +614,9 @@ bool Column::load(XmlStreamReader* reader) {
 			reader->raiseError(i18n("column mode invalid"));
 			return false;
 		}
-		setColumnMode((AbstractColumn::ColumnMode)mode_code);
+		AbstractColumn::ColumnMode mode = (AbstractColumn::ColumnMode)mode_code;
+		if (mode!=columnMode())
+			setColumnMode((AbstractColumn::ColumnMode)mode_code);
 
 		// read plot designation
 		str = attribs.value(reader->namespaceUri().toString(), "plot_designation").toString();

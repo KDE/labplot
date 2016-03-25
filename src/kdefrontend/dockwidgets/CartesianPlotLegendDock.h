@@ -2,7 +2,7 @@
     File                 : CartesianPlotLegendDock.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2016 Alexander Semke (alexander.semke@web.de)
     Description          : widget for cartesian legend legend properties
 
  ***************************************************************************/
@@ -36,12 +36,15 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 
 class LabelWidget;
+class KUrlCompletion;
 
 class CartesianPlotLegendDock : public QWidget {
 	Q_OBJECT
 
 public:
 	explicit CartesianPlotLegendDock(QWidget*);
+	~CartesianPlotLegendDock();
+
 	void setLegends(QList<CartesianPlotLegend*>);
 	void activateTitleTab() const;
 
@@ -51,6 +54,7 @@ private:
 	CartesianPlotLegend* m_legend;
 	LabelWidget* labelWidget;
 	bool m_initializing;
+	KUrlCompletion* m_completion;
 
 	void load();
 	void loadConfig(KConfig&);

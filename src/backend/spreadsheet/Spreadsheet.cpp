@@ -734,7 +734,7 @@ bool Spreadsheet::load(XmlStreamReader * reader)
 				}
 				else if(reader->name() == "column")
 				{
-					Column* column = new Column("", AbstractColumn::Text);
+					Column* column = new Column("");
 					if (!column->load(reader))
 					{
                         delete column;

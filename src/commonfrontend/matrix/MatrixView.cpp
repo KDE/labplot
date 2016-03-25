@@ -214,37 +214,37 @@ void MatrixView::connectActions() {
 
 void MatrixView::initMenus() {
 	//selection menu
-	m_selectionMenu = new QMenu(i18n("Selection"));
+	m_selectionMenu = new QMenu(i18n("Selection"), this);
 	m_selectionMenu->addAction(action_cut_selection);
 	m_selectionMenu->addAction(action_copy_selection);
 	m_selectionMenu->addAction(action_paste_into_selection);
 	m_selectionMenu->addAction(action_clear_selection);
 
 	//column menu
-	m_columnMenu = new QMenu();
+	m_columnMenu = new QMenu(this);
 	m_columnMenu->addAction(action_insert_columns);
 	m_columnMenu->addAction(action_remove_columns);
 	m_columnMenu->addAction(action_clear_columns);
 
 	//row menu
-	m_rowMenu = new QMenu();
+	m_rowMenu = new QMenu(this);
 	m_rowMenu->addAction(action_insert_rows);
 	m_rowMenu->addAction(action_remove_rows);
 	m_rowMenu->addAction(action_clear_rows);
 
 	//matrix menu
-	m_matrixMenu = new QMenu();
+	m_matrixMenu = new QMenu(this);
 
 	m_matrixMenu->addMenu(m_selectionMenu);
 	m_matrixMenu->addSeparator();
 
-	QMenu* submenu = new QMenu(i18n("Generate Data"));
+	QMenu* submenu = new QMenu(i18n("Generate Data"), this);
 	submenu->addAction(action_fill_const);
 	submenu->addAction(action_fill_function);
 	m_matrixMenu->addMenu(submenu);
 	m_matrixMenu->addSeparator();
 
-	submenu = new QMenu(i18n("View"));
+	submenu = new QMenu(i18n("View"), this);
 	submenu->addAction(action_data_view);
 	submenu->addAction(action_image_view);
 	m_matrixMenu->addMenu(submenu);
@@ -259,7 +259,7 @@ void MatrixView::initMenus() {
 	m_matrixMenu->addAction(action_mirror_vertically);
 	m_matrixMenu->addSeparator();
 
-	m_headerFormatMenu = new QMenu(i18n("Header format"));
+	m_headerFormatMenu = new QMenu(i18n("Header format"), this);
 	m_headerFormatMenu->addAction(action_header_format_1);
 	m_headerFormatMenu->addAction(action_header_format_2);
 	m_headerFormatMenu->addAction(action_header_format_3);
@@ -289,13 +289,13 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	menu->insertMenu(firstAction, m_selectionMenu);
 	menu->insertSeparator(firstAction);
 
-	QMenu* submenu = new QMenu(i18n("Generate Data"));
+	QMenu* submenu = new QMenu(i18n("Generate Data"), const_cast<MatrixView*>(this));
 	submenu->addAction(action_fill_const);
 	submenu->addAction(action_fill_function);
 	menu->insertMenu(firstAction, submenu);
 	menu->insertSeparator(firstAction);
 
-	submenu = new QMenu(i18n("View"));
+	submenu = new QMenu(i18n("View"), const_cast<MatrixView*>(this));
 	submenu->addAction(action_data_view);
 	submenu->addAction(action_image_view);
 	menu->insertMenu(firstAction, submenu);
@@ -746,7 +746,7 @@ void MatrixView::clearSelectedCells() {
 
 class UpdateImageTask : public QRunnable {
 	public:
-		UpdateImageTask(int start, int end, QImage image, QVector<QVector<double> > matrixData, double scaleFactor, double min) : m_image(image), m_matrixData(matrixData) {
+		UpdateImageTask(int start, int end, QImage& image, QVector<QVector<double> > matrixData, double scaleFactor, double min) : m_image(image), m_matrixData(matrixData) {
 			m_start = start;
 			m_end = end;
 			m_scaleFactor = scaleFactor;
