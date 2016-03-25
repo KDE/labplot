@@ -347,6 +347,7 @@ void CartesianPlot::initActions(){
 	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("xy-curve"), this);
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
 	addFitCurveAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
+	addFourierFilterCurveAction = new KAction(KIcon("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
 	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
 	addHorizontalAxisAction = new KAction(KIcon("labplot-axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new KAction(KIcon("labplot-axis-vertical"), i18n("vertical axis"), this);
@@ -355,6 +356,7 @@ void CartesianPlot::initActions(){
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
 	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addFourierFilterCurveAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
 	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
@@ -400,6 +402,7 @@ void CartesianPlot::initMenus(){
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addAction(addFitCurveAction);
+	addNewMenu->addAction(addFourierFilterCurveAction);
 	addNewMenu->addAction(addLegendAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addHorizontalAxisAction);
@@ -699,13 +702,6 @@ XYFitCurve* CartesianPlot::addFitCurve(){
 	this->addChild(curve);
 	return curve;
 }
-
-//TODO
-/*XYFFTCurve* CartesianPlot::addFFTCurve(){
-	XYFFTCurve* curve = new XYFFTCurve("fft");
-	this->addChild(curve);
-	return curve;
-}*/
 
 XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve(){
 	XYFourierFilterCurve* curve = new XYFourierFilterCurve("Fourier filter");
@@ -1870,13 +1866,19 @@ bool CartesianPlot::load(XmlStreamReader* reader){
 				removeChild(curve);
                 return false;
             }
-		}else if(reader->name() == "xyFitCurve"){
+		} else if(reader->name() == "xyFitCurve") {
 			XYFitCurve* curve = addFitCurve();
-            if (!curve->load(reader)){
+			if (!curve->load(reader)){
 				removeChild(curve);
-                return false;
-            }
-		}else if(reader->name() == "cartesianPlotLegend"){
+			return false;
+			}
+		} else if(reader->name() == "xyFourierFilterCurve") {
+			XYFourierFilterCurve* curve = addFourierFilterCurve();
+			if (!curve->load(reader)){
+				removeChild(curve);
+			return false;
+			}
+		} else if(reader->name() == "cartesianPlotLegend"){
             m_legend = new CartesianPlotLegend(this, "");
             if (!m_legend->load(reader)){
                 delete m_legend;

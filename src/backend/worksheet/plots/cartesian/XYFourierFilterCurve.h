@@ -86,9 +86,9 @@ class XYFourierFilterCurve: public XYCurve {
 
 //		void recalculate();
 		virtual QIcon icon() const;
-/*		virtual void save(QXmlStreamWriter*) const;
+		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
-*/
+
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
 /*		POINTER_D_ACCESSOR_DECL(const AbstractColumn, weightsColumn, WeightsColumn)

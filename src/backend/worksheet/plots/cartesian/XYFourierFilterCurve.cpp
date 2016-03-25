@@ -454,16 +454,16 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-/*void XYFitCurve::save(QXmlStreamWriter* writer) const{
-	Q_D(const XYFitCurve);
+void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
+	Q_D(const XYFourierFilterCurve);
 
-    writer->writeStartElement("xyFitCurve");
+	writer->writeStartElement("xyFourierFilterCurve");
 
 	//write xy-curve information
 	XYCurve::save(writer);
 
-	//write xy-fit-curve specific information
-
+	//write xy-fourier_filter-curve specific information
+/*
 	//fit data
 	writer->writeStartElement("fitData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
@@ -487,7 +487,7 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 		writer->writeTextElement("startValue", QString::number(d->fitData.paramStartValues.at(i)));
 	writer->writeEndElement();
 
-	writer->writeEndElement();
+	writer->writeEndElement();// fourierFilterData
 
 	//fit results (generated columns and goodness of the fit)
 	//sse = sum of squared errors (SSE) = residual sum of errors (RSS) = sum of sq. residuals (SSR) = \sum_i^n (Y_i-y_i)^2
@@ -531,100 +531,104 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 		d->yColumn->save(writer);
 		d->residualsColumn->save(writer);
 	}
+*/
 
-	writer->writeEndElement(); //"fitResult"
-	writer->writeEndElement(); //"xyFitCurve"
+	//writer->writeEndElement(); //"fitResult"
+	writer->writeEndElement(); //"xyFourierFilterCurve"
 }
 
 //! Load from XML
-bool XYFitCurve::load(XmlStreamReader* reader){
-	Q_D(XYFitCurve);
+bool XYFourierFilterCurve::load(XmlStreamReader* reader){
+	Q_D(XYFourierFilterCurve);
 
-    if(!reader->isStartElement() || reader->name() != "xyFitCurve"){
-        reader->raiseError(i18n("no xy fit curve element found"));
-        return false;
-    }
+	if(!reader->isStartElement() || reader->name() != "xyFourierFilterCurve"){
+		reader->raiseError(i18n("no xy Fourier filter curve element found"));
+		return false;
+	}
 
-    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-    QXmlStreamAttributes attribs;
-    QString str;
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QXmlStreamAttributes attribs;
+	QString str;
 
-    while (!reader->atEnd()){
-        reader->readNext();
-        if (reader->isEndElement() && reader->name() == "xyFitCurve")
-            break;
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == "xyFourierFilterCurve")
+			break;
 
-        if (!reader->isStartElement())
-            continue;
+		if (!reader->isStartElement())
+			continue;
 
 		if (reader->name() == "xyCurve") {
-            if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader) )
 				return false;
-		}else if (reader->name() == "fitData"){
+		} else if (reader->name() == "fitData") {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
-			READ_COLUMN(weightsColumn);
-
+			//READ_COLUMN(weightsColumn);
+/*
 			str = attribs.value("modelType").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'modelType'"));
-            else
-                d->fitData.modelType = (XYFitCurve::ModelType)str.toInt();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'modelType'"));
+			else
+				d->fitData.modelType = (XYFitCurve::ModelType)str.toInt();
 
 			str = attribs.value("weightsType").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'weightsType'"));
-            else
-                d->fitData.weightsType = (XYFitCurve::WeightsType)str.toInt();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'weightsType'"));
+			else
+				d->fitData.weightsType = (XYFitCurve::WeightsType)str.toInt();
 
 			str = attribs.value("degree").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'degree'"));
-            else
-                d->fitData.degree = str.toInt();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'degree'"));
+			else
+				d->fitData.degree = str.toInt();
 
 			str = attribs.value("model").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'model'"));
-            else
-                d->fitData.model = str;
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'model'"));
+			else
+				d->fitData.model = str;
 
 			str = attribs.value("maxIterations").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'maxIterations'"));
-            else
-                d->fitData.maxIterations = str.toInt();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'maxIterations'"));
+			else
+				d->fitData.maxIterations = str.toInt();
 
 			str = attribs.value("eps").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'eps'"));
-            else
-                d->fitData.eps = str.toDouble();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'eps'"));
+			else
+				d->fitData.eps = str.toDouble();
 
 			str = attribs.value("fittedPoints").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'fittedPoints'"));
-            else
-                d->fitData.fittedPoints = str.toInt();
-		} else if (reader->name() == "name"){
-			d->fitData.paramNames<<reader->readElementText();
-		} else if (reader->name() == "startValue"){
-			d->fitData.paramStartValues<<reader->readElementText().toDouble();
-		} else if (reader->name() == "value"){
-			d->fitResult.paramValues<<reader->readElementText().toDouble();
-		} else if (reader->name() == "error"){
-			d->fitResult.errorValues<<reader->readElementText().toDouble();
-		}else if (reader->name() == "fitResult"){
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'fittedPoints'"));
+			else
+				d->fitData.fittedPoints = str.toInt();
+*/
+		} else if (reader->name() == "name") {
+//			d->fitData.paramNames<<reader->readElementText();
+		} else if (reader->name() == "startValue") {
+//			d->fitData.paramStartValues<<reader->readElementText().toDouble();
+		} else if (reader->name() == "value") {
+//			d->fitResult.paramValues<<reader->readElementText().toDouble();
+		} else if (reader->name() == "error") {
+//			d->fitResult.errorValues<<reader->readElementText().toDouble();
+		} else if (reader->name() == "fitResult") {
+/*
 			attribs = reader->attributes();
 
 			str = attribs.value("available").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'available'"));
-            else
-                d->fitResult.available = str.toInt();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'available'"));
+			else
+				d->fitResult.available = str.toInt();
 
+// TODO: formatting
 			str = attribs.value("valid").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'valid'"));
@@ -708,8 +712,10 @@ bool XYFitCurve::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'solverOutput'"));
             else
                 d->fitResult.solverOutput = str;
+*/
 		} else if(reader->name() == "column") {
-			Column* column = new Column("", AbstractColumn::Numeric);
+
+		Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {
 				delete column;
 				return false;
@@ -718,11 +724,12 @@ bool XYFitCurve::load(XmlStreamReader* reader){
 				d->xColumn = column;
 			else if (column->name()=="y")
 				d->yColumn = column;
-			else if (column->name()=="residuals")
-				d->residualsColumn = column;
+			// else if (column->name()=="residuals")
+			//	d->residualsColumn = column;
 		}
 	}
 
+/*
 	if (d->xColumn) {
 		d->xColumn->setHidden(true);
 		addChild(d->xColumn);
@@ -730,17 +737,17 @@ bool XYFitCurve::load(XmlStreamReader* reader){
 		d->yColumn->setHidden(true);
 		addChild(d->yColumn);
 
-		addChild(d->residualsColumn);
+		//addChild(d->residualsColumn);
 
 		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
 		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
-		d->residualsVector = static_cast<QVector<double>* >(d->residualsColumn->data());
+		//d->residualsVector = static_cast<QVector<double>* >(d->residualsColumn->data());
 
 		setUndoAware(false);
 		XYCurve::d_ptr->xColumn = d->xColumn;
 		XYCurve::d_ptr->yColumn = d->yColumn;
 		setUndoAware(true);
 	}
-
+*/
 	return true;
-}*/
+}

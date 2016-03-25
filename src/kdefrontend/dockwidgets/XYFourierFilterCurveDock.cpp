@@ -71,40 +71,34 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	  gridLayout->setHorizontalSpacing(2);
 	  gridLayout->setVerticalSpacing(2);
 	}
-/*
+
 	cbXDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbXDataColumn, 4, 4, 1, 2);
 
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 4, 1, 2);
 
-	cbWeightsColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbWeightsColumn, 6, 4, 1, 2);
-
-	uiGeneralTab.cbModel->addItem(i18n("Polynomial"));
-	uiGeneralTab.cbModel->addItem(i18n("Power"));
-	uiGeneralTab.cbModel->addItem(i18n("Exponential"));
-	uiGeneralTab.cbModel->addItem(i18n("Inverse Exponential"));
-	uiGeneralTab.cbModel->addItem(i18n("Fourier"));
-	uiGeneralTab.cbModel->addItem(i18n("Gaussian"));
-	uiGeneralTab.cbModel->addItem(i18n("Lorentz (Cauchy)"));
-	uiGeneralTab.cbModel->addItem(i18n("Maxwell-Boltzmann"));
-	uiGeneralTab.cbModel->addItem(i18n("Custom"));
-
+	uiGeneralTab.cbType->addItem(i18n("Lowpass"));
+	uiGeneralTab.cbType->addItem(i18n("Highpass"));
+	uiGeneralTab.cbType->addItem(i18n("Bandpass"));
+	uiGeneralTab.cbType->addItem(i18n("Bandreject"));
+	uiGeneralTab.cbType->addItem(i18n("Threshold"));
+/*
 	uiGeneralTab.tbConstants->setIcon( KIcon("labplot-format-text-symbol") );
 	uiGeneralTab.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
-
+*/
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
+
 
 	//Slots
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-
-	connect( uiGeneralTab.cbModel, SIGNAL(currentIndexChanged(int)), this, SLOT(modelChanged(int)) );
+	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
+/*
 	connect( uiGeneralTab.sbDegree, SIGNAL(valueChanged(int)), this, SLOT(updateModelEquation()) );
 	connect( uiGeneralTab.teEquation, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()) );
 	connect( uiGeneralTab.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()) );
@@ -265,8 +259,9 @@ void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index){
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setWeightsColumn(column);
 }
-
-void XYFitCurveDock::modelChanged(int index) {
+*/
+void XYFourierFilterCurveDock::typeChanged(int index) {
+/*
 	XYFitCurve::ModelType type = (XYFitCurve::ModelType)index;
 	bool custom = (type==XYFitCurve::Custom);
 	uiGeneralTab.teEquation->setReadOnly(!custom);
@@ -304,8 +299,9 @@ void XYFitCurveDock::modelChanged(int index) {
 	}
 
 	this->updateModelEquation();
+*/
 }
-
+/*
 void XYFitCurveDock::updateModelEquation() {
 	QStringList vars; //variables/parameters that are known in ExpressionTestEdit teEquation
 	vars << "x";

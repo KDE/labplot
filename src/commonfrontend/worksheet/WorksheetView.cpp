@@ -275,6 +275,7 @@ void WorksheetView::initActions() {
 	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), cartesianPlotAddNewActionGroup);
 	addFitCurveAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), cartesianPlotAddNewActionGroup);
+	addFourierFilterCurveAction = new KAction(KIcon("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), cartesianPlotAddNewActionGroup);
 	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
 	addHorizontalAxisAction = new KAction(KIcon("labplot-axis-horizontal"), i18n("horizontal axis"), cartesianPlotAddNewActionGroup);
 	addVerticalAxisAction = new KAction(KIcon("labplot-axis-vertical"), i18n("vertical axis"), cartesianPlotAddNewActionGroup);
@@ -387,6 +388,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotAddNewMenu->addAction(addCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addEquationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addFitCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addFourierFilterCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addLegendAction);
 	m_cartesianPlotAddNewMenu->addSeparator();
 	m_cartesianPlotAddNewMenu->addAction(addHorizontalAxisAction);
@@ -1480,6 +1482,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addEquationCurve();
 	else if (action==addFitCurveAction)
 		plot->addFitCurve();
+	else if (action==addFourierFilterAction)
+		plot->addFourierFilterCurve();
 	else if (action==addLegendAction)
 		plot->addLegend();
 	else if (action==addHorizontalAxisAction)
@@ -1490,8 +1494,6 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addCustomPoint();
 //TODO	else if (action==addFFTAction)
 //		plot->addFFTCurve();
-	else if (action==addFourierFilterAction)
-		plot->addFourierFilterCurve();
 }
 
 void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
