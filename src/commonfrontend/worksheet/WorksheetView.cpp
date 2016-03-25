@@ -274,7 +274,7 @@ void WorksheetView::initActions() {
 	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), cartesianPlotAddNewActionGroup);
 	addFitCurveAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), cartesianPlotAddNewActionGroup);
-	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
+	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), cartesianPlotAddNewActionGroup);
 	addHorizontalAxisAction = new KAction(KIcon("labplot-axis-horizontal"), i18n("horizontal axis"), cartesianPlotAddNewActionGroup);
 	addVerticalAxisAction = new KAction(KIcon("labplot-axis-vertical"), i18n("vertical axis"), cartesianPlotAddNewActionGroup);
 	addCustomPointAction = new KAction(KIcon("draw-cross"), i18n("custom point"), cartesianPlotAddNewActionGroup);
