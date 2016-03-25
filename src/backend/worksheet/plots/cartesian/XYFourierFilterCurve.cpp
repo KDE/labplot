@@ -152,7 +152,7 @@ XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* o
 	xDataColumn(0), yDataColumn(0), weightsColumn(0),
 	xColumn(0), yColumn(0), residualsColumn(0),
 	xVector(0), yVector(0), residualsVector(0),
-	sourceDataChangedSinceLastFilter(false),
+	sourceDataChangedSinceLastFilter(true),
 	q(owner)  {
 
 }
@@ -166,46 +166,17 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 // see XYFitCurvePrivate
 
 void XYFourierFilterCurvePrivate::recalculate() {
-/*
+	qDebug()<<"XYFourierFilterCurvePrivate::recalculate()";
+
 	QElapsedTimer timer;
 	timer.start();
-
-	//create fit result columns if not available yet, clear them otherwise
-	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::Numeric);
-		yColumn = new Column("y", AbstractColumn::Numeric);
-		residualsColumn = new Column("residuals", AbstractColumn::Numeric);
-		xVector = static_cast<QVector<double>* >(xColumn->data());
-		yVector = static_cast<QVector<double>* >(yColumn->data());
-		residualsVector = static_cast<QVector<double>* >(residualsColumn->data());
-
-		xColumn->setHidden(true);
-		q->addChild(xColumn);
-
-		yColumn->setHidden(true);
-		q->addChild(yColumn);
-
-		q->addChild(residualsColumn);
-
-		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
-		q->setUndoAware(true);
-	} else {
-		xVector->clear();
-		yVector->clear();
-		residualsVector->clear();
-	}
-
-	// clear the previous result
-	fitResult = XYFitCurve::FitResult();
 
 	if (!xDataColumn || !yDataColumn) {
 		emit (q->dataChanged());
 		sourceDataChangedSinceLastFilter = false;
 		return;
 	}
-
+/*
 	//fit settings
 	int maxIters = fitData.maxIterations; //maximal number of iterations
 	float delta = fitData.eps; //fit tolerance
@@ -404,9 +375,9 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		xVector->clear();
 		yVector->clear();
 	}
-
-	fitResult.elapsedTime = timer.elapsed();
 */
+//	filterResult.elapsedTime = timer.elapsed();
+
 	//redraw the curve
 	emit (q->dataChanged());
 	sourceDataChangedSinceLastFilter = false;
@@ -443,14 +414,13 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
 	XYCurve::save(writer);
 
 	//write xy-fourier_filter-curve specific information
-/*
-	//fit data
-	writer->writeStartElement("fitData");
+
+	//filter data
+	writer->writeStartElement("filterData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
-	WRITE_COLUMN(d->weightsColumn, weightsColumn);
-	writer->writeAttribute( "modelType", QString::number(d->fitData.modelType) );
-	writer->writeAttribute( "weightsType", QString::number(d->fitData.weightsType) );
+	writer->writeAttribute( "filterType", QString::number(d->filterData.filterType) );
+/*	writer->writeAttribute( "weightsType", QString::number(d->fitData.weightsType) );
 	writer->writeAttribute( "degree", QString::number(d->fitData.degree) );
 	writer->writeAttribute( "model", d->fitData.model );
 	writer->writeAttribute( "maxIterations", QString::number(d->fitData.maxIterations) );
@@ -466,9 +436,9 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
 	for (int i=0; i<d->fitData.paramStartValues.size(); ++i)
 		writer->writeTextElement("startValue", QString::number(d->fitData.paramStartValues.at(i)));
 	writer->writeEndElement();
-
-	writer->writeEndElement();// fourierFilterData
-
+*/
+	writer->writeEndElement();// filterData
+/*
 	//fit results (generated columns and goodness of the fit)
 	//sse = sum of squared errors (SSE) = residual sum of errors (RSS) = sum of sq. residuals (SSR) = \sum_i^n (Y_i-y_i)^2
 	//mse = mean squared error = 1/n \sum_i^n  (Y_i-y_i)^2
@@ -541,19 +511,19 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 		if (reader->name() == "xyCurve") {
 			if ( !XYCurve::load(reader) )
 				return false;
-		} else if (reader->name() == "fitData") {
+		} else if (reader->name() == "filterData") {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
-			//READ_COLUMN(weightsColumn);
-/*
-			str = attribs.value("modelType").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'modelType'"));
-			else
-				d->fitData.modelType = (XYFitCurve::ModelType)str.toInt();
 
+			str = attribs.value("filterType").toString();
+			qDebug()<<"	type"<<str;
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'filterType'"));
+			else
+				d->filterData.filterType = (XYFourierFilterCurve::FilterType)str.toInt();
+/*
 			str = attribs.value("weightsType").toString();
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'weightsType'"));
@@ -694,8 +664,7 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
                 d->fitResult.solverOutput = str;
 */
 		} else if(reader->name() == "column") {
-
-		Column* column = new Column("", AbstractColumn::Numeric);
+			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {
 				delete column;
 				return false;
@@ -709,7 +678,6 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 		}
 	}
 
-/*
 	if (d->xColumn) {
 		d->xColumn->setHidden(true);
 		addChild(d->xColumn);
@@ -717,17 +685,14 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 		d->yColumn->setHidden(true);
 		addChild(d->yColumn);
 
-		//addChild(d->residualsColumn);
-
 		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
 		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
-		//d->residualsVector = static_cast<QVector<double>* >(d->residualsColumn->data());
 
 		setUndoAware(false);
 		XYCurve::d_ptr->xColumn = d->xColumn;
 		XYCurve::d_ptr->yColumn = d->yColumn;
 		setUndoAware(true);
 	}
-*/
+
 	return true;
 }

@@ -66,26 +66,21 @@ void XYFourierFilterCurveDock::setupGeneral() {
 
 	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
-	  gridLayout->setContentsMargins(2,2,2,2);
-	  gridLayout->setHorizontalSpacing(2);
-	  gridLayout->setVerticalSpacing(2);
+		gridLayout->setContentsMargins(2,2,2,2);
+		gridLayout->setHorizontalSpacing(2);
+		gridLayout->setVerticalSpacing(2);
 	}
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 4, 4, 1, 2);
-
+	gridLayout->addWidget(cbXDataColumn, 4, 1, 1, 2);
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 5, 4, 1, 2);
+	gridLayout->addWidget(cbYDataColumn, 5, 1, 1, 2);
 
 	uiGeneralTab.cbType->addItem(i18n("Low pass"));
 	uiGeneralTab.cbType->addItem(i18n("High pass"));
 	uiGeneralTab.cbType->addItem(i18n("Band pass"));
 	uiGeneralTab.cbType->addItem(i18n("Band reject"));
 	uiGeneralTab.cbType->addItem(i18n("Threshold"));
-/*
-	uiGeneralTab.tbConstants->setIcon( KIcon("labplot-format-text-symbol") );
-	uiGeneralTab.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
-*/
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
@@ -104,8 +99,8 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	connect( uiGeneralTab.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()) );
 	connect( uiGeneralTab.pbParameters, SIGNAL(clicked()), this, SLOT(showParameters()) );
 	connect( uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()) );
-	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 */
+	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
 
 void XYFourierFilterCurveDock::initGeneralTab() {
@@ -134,50 +129,44 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_filterCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_filterCurve->yDataColumn());
-/*
-	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
-	this->modelChanged(m_fitData.modelType);
 
-	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
-	this->showFitResult();
+	uiGeneralTab.cbType->setCurrentIndex(m_filterData.filterType);
+	this->typeChanged(m_filterData.filterType);
 
-	//enable the "recalculate"-button if the source data was changed since the last fit
-	uiGeneralTab.pbRecalculate->setEnabled(m_fitCurve->isSourceDataChangedSinceLastFit());
+//	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
+
+	//enable the "recalculate"-button if the source data was changed since the last filter
+	//uiGeneralTab.pbRecalculate->setEnabled(m_filterCurve->isSourceDataChangedSinceLastFilter());
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_fitCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_fitCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
-	connect(m_fitCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
-	connect(m_fitCurve, SIGNAL(weightsColumnChanged(const AbstractColumn*)), this, SLOT(curveWeightsColumnChanged(const AbstractColumn*)));
-	connect(m_fitCurve, SIGNAL(fitDataChanged(XYFitCurve::FitData)), this, SLOT(curveFitDataChanged(XYFitCurve::FitData)));
-	connect(m_fitCurve, SIGNAL(sourceDataChangedSinceLastFit()), this, SLOT(enableRecalculate()));
-*/
+	connect(m_filterCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_filterCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
+	connect(m_filterCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
+	connect(m_filterCurve, SIGNAL(filterDataChanged(XYFourierFilterCurve::FilterData)), this, SLOT(curveFilterDataChanged(XYFourierFilterCurve::FilterData)));
+	connect(m_filterCurve, SIGNAL(sourceDataChangedSinceLastFilter()), this, SLOT(enableRecalculate()));
+
 }
-/*
-void XYFitCurveDock::setModel() {
+
+void XYFourierFilterCurveDock::setModel() {
 	QList<const char*>  list;
-    list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Datapicker";
+	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Datapicker";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
-	cbWeightsColumn->setTopLevelClasses(list);
 
  	list.clear();
 	list<<"Column";
 	cbXDataColumn->setSelectableClasses(list);
 	cbYDataColumn->setSelectableClasses(list);
-	cbWeightsColumn->setSelectableClasses(list);
 
 	cbXDataColumn->setModel(m_aspectTreeModel);
 	cbYDataColumn->setModel(m_aspectTreeModel);
-	cbWeightsColumn->setModel(m_aspectTreeModel);
 
 	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
 	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
-	connect( cbWeightsColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(weightsColumnChanged(QModelIndex)) );
 	XYCurveDock::setModel();
-}*/
+}
 
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
@@ -242,22 +231,7 @@ void XYFourierFilterCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setYDataColumn(column);
 }
-/*
-void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index){
-	if (m_initializing)
-		return;
 
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
-
-	foreach(XYCurve* curve, m_curvesList)
-		dynamic_cast<XYFitCurve*>(curve)->setWeightsColumn(column);
-}
-*/
 void XYFourierFilterCurveDock::typeChanged(int index) {
 /*
 	XYFitCurve::ModelType type = (XYFitCurve::ModelType)index;
@@ -507,22 +481,21 @@ void XYFitCurveDock::insertFunction(const QString& str) {
 void XYFitCurveDock::insertConstant(const QString& str) {
 	uiGeneralTab.teEquation->insertPlainText(str);
 }
-
-void XYFitCurveDock::recalculateClicked() {
+*/
+void XYFourierFilterCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	m_fitData.degree = uiGeneralTab.sbDegree->value();
-	if (m_fitData.modelType==XYFitCurve::Custom) {
-		m_fitData.model = uiGeneralTab.teEquation->toPlainText();
-	}
+//	m_fitData.degree = uiGeneralTab.sbDegree->value();
+//	if (m_fitData.modelType==XYFitCurve::Custom) {
+//		m_fitData.model = uiGeneralTab.teEquation->toPlainText();
+//	}
 
 	foreach(XYCurve* curve, m_curvesList)
-		dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
+		dynamic_cast<XYFourierFilterCurve*>(curve)->setFilterData(m_filterData);
 
-	this->showFitResult();
-	uiGeneralTab.pbRecalculate->setEnabled(false);
+	//uiGeneralTab.pbRecalculate->setEnabled(false);
 	QApplication::restoreOverrideCursor();
 }
-*/
+
 void XYFourierFilterCurveDock::enableRecalculate() const {
 	if (m_initializing)
 		return;
@@ -623,17 +596,16 @@ void XYFourierFilterCurveDock::curveYDataColumnChanged(const AbstractColumn* col
 }
 
 void XYFourierFilterCurveDock::curveFilterDataChanged(const XYFourierFilterCurve::FilterData& data) {
-/*	m_initializing = true;
-	m_fitData = data;
-	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
-	this->modelChanged(m_fitData.modelType);
-	if (m_fitData.modelType == XYFitCurve::Custom)
-		uiGeneralTab.teEquation->setPlainText(m_fitData.model);
+	m_initializing = true;
+	m_filterData = data;
+	uiGeneralTab.cbType->setCurrentIndex(m_filterData.filterType);
+	this->typeChanged(m_filterData.filterType);
+//	if (m_filterData.filterType == XYFourierFilterCurve::Custom)
+//		uiGeneralTab.teEquation->setPlainText(m_fitData.model);
 
-	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
-	this->showFitResult();
+//	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
+//	this->showFitResult();
 	m_initializing = false;
-*/
 }
 
 void XYFourierFilterCurveDock::dataChanged() {

@@ -58,7 +58,7 @@ private:
 //	QList<double> parameterValues;
 
 protected:
-//	virtual void setModel();
+	virtual void setModel();
 
 private slots:
 	//SLOTs for changes triggered in XYFourierFilterCurveDock
@@ -76,9 +76,9 @@ private slots:
 	void showOptions();
 	void insertFunction(const QString&);
 	void insertConstant(const QString&);
-	void recalculateClicked();
-	void updateModelEquation();
-*/
+*/	void recalculateClicked();
+//	void updateModelEquation();
+
 	void enableRecalculate() const;
 
 	//SLOTs for changes triggered in XYCurve

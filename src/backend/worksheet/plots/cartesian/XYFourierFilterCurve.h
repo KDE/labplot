@@ -36,12 +36,12 @@ class XYFourierFilterCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum Type {LowPass, HighPass, BandPass, BandReject, Threshold};
+		enum FilterType {LowPass, HighPass, BandPass, BandReject, Threshold};
 
 		struct FilterData {
-			FilterData() : type(LowPass) {};
+			FilterData() : filterType(LowPass) {};
 
-			Type type;
+			FilterType filterType;
 			//int degree;
 		};
 
