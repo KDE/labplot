@@ -70,22 +70,21 @@ XYFourierFilterCurve::~XYFourierFilterCurve() {
 void XYFourierFilterCurve::init() {
 	Q_D(XYFourierFilterCurve);
 
-	//TODO: read from the saved settings for XYFitCurve?
+	//TODO: read from the saved settings for XYFourierFilterCurve?
 	d->lineType = XYCurve::Line;
 	d->symbolsStyle = Symbol::NoSymbols;
 }
 
-/*void XYFitCurve::recalculate() {
-	Q_D(XYFitCurve);
+void XYFourierFilterCurve::recalculate() {
+	Q_D(XYFourierFilterCurve);
 	d->recalculate();
-}*/
+}
 
 /*!
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYFourierFilterCurve::icon() const {
-	//TODO: use own icon
-	return KIcon("labplot-xy-fit-curve");
+	return KIcon("labplot-xy-fourier_filter-curve");
 }
 
 //##############################################################################
@@ -93,23 +92,16 @@ QIcon XYFourierFilterCurve::icon() const {
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, const AbstractColumn*, xDataColumn, xDataColumn)
 BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, const AbstractColumn*, yDataColumn, yDataColumn)
-/*BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, weightsColumn, weightsColumn)
-const QString& XYFitCurve::xDataColumnPath() const { Q_D(const XYFitCurve); return d->xDataColumnPath; }
-const QString& XYFitCurve::yDataColumnPath() const {	Q_D(const XYFitCurve); return d->yDataColumnPath; }
-const QString& XYFitCurve::weightsColumnPath() const { Q_D(const XYFitCurve);return d->weightsColumnPath; }
+const QString& XYFourierFilterCurve::xDataColumnPath() const { Q_D(const XYFourierFilterCurve); return d->xDataColumnPath; }
+const QString& XYFourierFilterCurve::yDataColumnPath() const { Q_D(const XYFourierFilterCurve); return d->yDataColumnPath; }
 
-BASIC_SHARED_D_READER_IMPL(XYFitCurve, XYFitCurve::FitData, fitData, fitData)
+BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, XYFourierFilterCurve::FilterData, filterData, filterData)
 
-const XYFitCurve::FitResult& XYFitCurve::fitResult() const {
-	Q_D(const XYFitCurve);
-	return d->fitResult;
-}
-
-bool XYFourierFilterCurve::isSourceDataChangedSinceLastFit() const {
+bool XYFourierFilterCurve::isSourceDataChangedSinceLastFilter() const {
 	Q_D(const XYFourierFilterCurve);
 	return d->sourceDataChangedSinceLastFilter;
 }
-*/
+
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
@@ -138,26 +130,13 @@ void XYFourierFilterCurve::setYDataColumn(const AbstractColumn* column) {
 		}
 	}
 }
-/*
-STD_SETTER_CMD_IMPL_S(XYFitCurve, SetWeightsColumn, const AbstractColumn*, weightsColumn)
-void XYFitCurve::setWeightsColumn(const AbstractColumn* column) {
-	Q_D(XYFitCurve);
-	if (column != d->weightsColumn) {
-		exec(new XYFitCurveSetWeightsColumnCmd(d, column, i18n("%1: assign weights")));
-		emit sourceDataChangedSinceLastFilter();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
-			//TODO disconnect on undo
-		}
-	}
+
+STD_SETTER_CMD_IMPL_F_S(XYFourierFilterCurve, SetFilterData, XYFourierFilterCurve::FilterData, filterData, recalculate);
+void XYFourierFilterCurve::setFilterData(const XYFourierFilterCurve::FilterData& filterData) {
+	Q_D(XYFourierFilterCurve);
+	exec(new XYFourierFilterCurveSetFilterDataCmd(d, filterData, i18n("%1: set filter options and perform the Fourier filter")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData, recalculate);
-void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
-	Q_D(XYFitCurve);
-	exec(new XYFitCurveSetFitDataCmd(d, fitData, i18n("%1: set fit options and perform the fit")));
-}
-*/
 //##############################################################################
 //################################## SLOTS ####################################
 //##############################################################################
@@ -186,7 +165,8 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 // ...
 // see XYFitCurvePrivate
 
-/*void XYFitCurvePrivate::recalculate() {
+void XYFourierFilterCurvePrivate::recalculate() {
+/*
 	QElapsedTimer timer;
 	timer.start();
 
@@ -426,11 +406,11 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 	}
 
 	fitResult.elapsedTime = timer.elapsed();
-
+*/
 	//redraw the curve
 	emit (q->dataChanged());
 	sourceDataChangedSinceLastFilter = false;
-}*/
+}
 
 /*!
  * writes out the current state of the solver \c s

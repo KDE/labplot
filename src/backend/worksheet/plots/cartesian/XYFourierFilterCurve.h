@@ -36,70 +36,32 @@ class XYFourierFilterCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		//enum ModelType {Polynomial, Power, Exponential, Inverse_Exponential, Fourier, Gaussian, Lorentz, Maxwell, Custom};
-		//enum WeightsType {WeightsFromColumn, WeightsFromErrorColumn};
+		enum Type {LowPass, HighPass, BandPass, BandReject, Threshold};
 
-		/*struct FitData {
-			FitData() : modelType(Polynomial),
-						weightsType(XYFitCurve::WeightsFromColumn),
-						degree(1),
-						maxIterations(500),
-						eps(1e-4),
-						fittedPoints(100) {};
+		struct FilterData {
+			FilterData() : type(LowPass) {};
 
-			ModelType modelType;
-			WeightsType weightsType;
-			int degree;
-			QString model;
-			QStringList paramNames;
-			QVector<double> paramStartValues;
-
-			int maxIterations;
-			double eps;
-			int fittedPoints;
+			Type type;
+			//int degree;
 		};
-
-		struct FitResult {
-			FitResult() : available(false), valid(false), iterations(0), elapsedTime(0), dof(0), sse(0), mse(0), rmse(0), mae(0), rms(0), rsd(0), rsquared(0), rsquaredAdj(0) {};
-
-			bool available;
-			bool valid;
-			QString status;
-			int iterations;
-			qint64 elapsedTime;
-			double dof; //degrees of freedom
-			double sse; //sum of squared errors (SSE) / residual sum of errors (RSS) / sum of sq. residuals (SSR) = \sum_i^n (Y_i-y_i)^2
-			double mse; //mean squared error = 1/n \sum_i^n  (Y_i-y_i)^2
-			double rmse; //root-mean squared error = \sqrt(mse)
-			double mae; //mean absolute error = \sum_i^n |Y_i-y_i|
-			double rms; //residual mean square = SSE/d.o.f.
-			double rsd; //residual standard deviation = sqrt(SSE/d.o.f)
-			double rsquared; //Coefficient of determination (R^2)
-			double rsquaredAdj; //Adjusted coefficient of determination (R^2)
-			QVector<double> paramValues;
-			QVector<double> errorValues;
-			QString solverOutput;
-		};*/
 
 		explicit XYFourierFilterCurve(const QString& name);
 		virtual ~XYFourierFilterCurve();
 
-//		void recalculate();
+		void recalculate();
 		virtual QIcon icon() const;
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
 
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
-/*		POINTER_D_ACCESSOR_DECL(const AbstractColumn, weightsColumn, WeightsColumn)
+
 		const QString& xDataColumnPath() const;
 		const QString& yDataColumnPath() const;
-		const QString& weightsColumnPath() const;
 
-		CLASS_D_ACCESSOR_DECL(FitData, fitData, FitData)
-		const FitResult& fitResult() const;
-		bool isSourceDataChangedSinceLastFit() const;
-*/
+		CLASS_D_ACCESSOR_DECL(FilterData, filterData, FilterData)
+		bool isSourceDataChangedSinceLastFilter() const;
+
 		typedef WorksheetElement BaseClass;
 		typedef XYFourierFilterCurvePrivate Private;
 
@@ -116,13 +78,11 @@ class XYFourierFilterCurve: public XYCurve {
 	signals:
 		friend class XYFourierFilterCurveSetXDataColumnCmd;
 		friend class XYFourierFilterCurveSetYDataColumnCmd;
-//		friend class XYFitCurveSetWeightsColumnCmd;
 		void xDataColumnChanged(const AbstractColumn*);
 		void yDataColumnChanged(const AbstractColumn*);
-//		void weightsColumnChanged(const AbstractColumn*);
 
-//		friend class XYFitCurveSetFitDataCmd;
-//		void fitDataChanged(const XYFitCurve::FitData&);
+		friend class XYFourierFilterCurveSetFilterDataCmd;
+		void filterDataChanged(const XYFourierFilterCurve::FilterData&);
 		void sourceDataChangedSinceLastFilter();
 };
 

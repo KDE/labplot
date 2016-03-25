@@ -45,15 +45,15 @@ public:
 
 private:
 	virtual void initGeneralTab();
-	void showFitResult();
+//	void showFitResult();
 
 	Ui::XYFourierFilterCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
 	TreeViewComboBox* cbWeightsColumn;
 
-	XYFourierFilterCurve* m_fourierFilterCurve;
-//	XYFitCurve::FitData m_fitData;
+	XYFourierFilterCurve* m_filterCurve;
+	XYFourierFilterCurve::FilterData m_filterData;
 //	QList<double> parameters;
 //	QList<double> parameterValues;
 
@@ -68,8 +68,7 @@ private slots:
 	void typeChanged(int);
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
-/*	void weightsColumnChanged(const QModelIndex&);
-
+/*
 	void showConstants();
 	void showFunctions();
 	void showParameters();
@@ -79,6 +78,7 @@ private slots:
 	void insertConstant(const QString&);
 	void recalculateClicked();
 	void updateModelEquation();
+*/
 	void enableRecalculate() const;
 
 	//SLOTs for changes triggered in XYCurve
@@ -86,10 +86,9 @@ private slots:
 	void curveDescriptionChanged(const AbstractAspect*);
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveYDataColumnChanged(const AbstractColumn*);
-	void curveWeightsColumnChanged(const AbstractColumn*);
-	void curveFitDataChanged(const XYFitCurve::FitData&);
+	void curveFilterDataChanged(const XYFourierFilterCurve::FilterData&);
 	void dataChanged();
-*/
+
 };
 
 #endif

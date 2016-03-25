@@ -42,7 +42,7 @@ class XYFourierFilterCurvePrivate: public XYCurvePrivate {
 		explicit XYFourierFilterCurvePrivate(XYFourierFilterCurve*);
 		~XYFourierFilterCurvePrivate();
 
-//		void recalculate();
+		void recalculate();
 
 		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be fitted
 		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be fitted
@@ -51,9 +51,7 @@ class XYFourierFilterCurvePrivate: public XYCurvePrivate {
 		QString yDataColumnPath;
 		QString weightsColumnPath;
 
-//		XYFitCurve::FitData fitData;
-//		XYFitCurve::FitResult fitResult;
-//		QStringList solverOutput;
+		XYFourierFilterCurve::FilterData filterData;
 
 		Column* xColumn; //<! column used internally for storing the x-values of the result fit curve
 		Column* yColumn; //<! column used internally for storing the y-values of the result fit curve

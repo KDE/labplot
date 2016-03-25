@@ -41,9 +41,8 @@
 
 /*!
   \class XYFourierFilterCurveDock
-//TODO
- \brief  Provides a widget for editing the properties of the XYFitCurves
-		(2D-curves defined by a fit model) currently selected in
+ \brief  Provides a widget for editing the properties of the XYFourierFilterCurves
+		(2D-curves defined by a Fourier filter) currently selected in
 		the project explorer.
 
   If more then one curves are set, the properties of the first column are shown.
@@ -54,7 +53,7 @@
   \ingroup kdefrontend
 */
 
-XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget *parent): XYCurveDock(parent), m_fourierFilterCurve(0) {
+XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget *parent): XYCurveDock(parent), m_filterCurve(0) {
 
 }
 
@@ -64,7 +63,7 @@ XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget *parent): XYCurveDock
 void XYFourierFilterCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
-//TODO
+
 	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 	  gridLayout->setContentsMargins(2,2,2,2);
@@ -78,20 +77,20 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 4, 1, 2);
 
-	uiGeneralTab.cbType->addItem(i18n("Lowpass"));
-	uiGeneralTab.cbType->addItem(i18n("Highpass"));
-	uiGeneralTab.cbType->addItem(i18n("Bandpass"));
-	uiGeneralTab.cbType->addItem(i18n("Bandreject"));
+	uiGeneralTab.cbType->addItem(i18n("Low pass"));
+	uiGeneralTab.cbType->addItem(i18n("High pass"));
+	uiGeneralTab.cbType->addItem(i18n("Band pass"));
+	uiGeneralTab.cbType->addItem(i18n("Band reject"));
 	uiGeneralTab.cbType->addItem(i18n("Threshold"));
 /*
 	uiGeneralTab.tbConstants->setIcon( KIcon("labplot-format-text-symbol") );
 	uiGeneralTab.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
-	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 */
+	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
+
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
-
 
 	//Slots
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
@@ -130,13 +129,12 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	}
 
 	//show the properties of the first curve
-	m_fourierFilterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
-	Q_ASSERT(m_fourierFilterCurve);
-//TODO
-/*	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_fitCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_fitCurve->yDataColumn());
-	XYCurveDock::setModelIndexFromColumn(cbWeightsColumn, m_fitCurve->weightsColumn());
+	m_filterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
+	Q_ASSERT(m_filterCurve);
 
+	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_filterCurve->xDataColumn());
+	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_filterCurve->yDataColumn());
+/*
 	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 	this->modelChanged(m_fitData.modelType);
 
@@ -188,8 +186,8 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list){
 	m_initializing=true;
 	m_curvesList=list;
 	m_curve=list.first();
-	m_fourierFilterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
-	Q_ASSERT(m_fourierFilterCurve);
+	m_filterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
+	Q_ASSERT(m_filterCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	//m_fitData = m_fitCurve->fitData();
@@ -524,8 +522,8 @@ void XYFitCurveDock::recalculateClicked() {
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	QApplication::restoreOverrideCursor();
 }
-
-void XYFitCurveDock::enableRecalculate() const {
+*/
+void XYFourierFilterCurveDock::enableRecalculate() const {
 	if (m_initializing)
 		return;
 
@@ -534,12 +532,12 @@ void XYFitCurveDock::enableRecalculate() const {
 	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 	bool data = (aspectX!=0 && aspectY!=0);
 
-	XYFitCurve::ModelType type = (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
-	if (type==XYFitCurve::Custom)
-		uiGeneralTab.pbRecalculate->setEnabled( data && uiGeneralTab.teEquation->isValid() );
-	else
-		uiGeneralTab.pbRecalculate->setEnabled(data);
-}*/
+//	XYFitCurve::ModelType type = (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
+//	if (type==XYFitCurve::Custom)
+//		uiGeneralTab.pbRecalculate->setEnabled( data && uiGeneralTab.teEquation->isValid() );
+//	else
+//		uiGeneralTab.pbRecalculate->setEnabled(data);
+}
 
 /*!
  * show the result and details of fit
@@ -599,7 +597,7 @@ void XYFitCurveDock::enableRecalculate() const {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 //General-Tab
-/*void XYFitCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
+void XYFourierFilterCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_curve != aspect)
 		return;
 
@@ -612,26 +610,20 @@ void XYFitCurveDock::enableRecalculate() const {
 	m_initializing = false;
 }
 
-void XYFitCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
+void XYFourierFilterCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, column);
 	m_initializing = false;
 }
 
-void XYFitCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
+void XYFourierFilterCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, column);
 	m_initializing = false;
 }
 
-void XYFitCurveDock::curveWeightsColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbWeightsColumn, column);
-	m_initializing = false;
-}
-
-void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& data) {
-	m_initializing = true;
+void XYFourierFilterCurveDock::curveFilterDataChanged(const XYFourierFilterCurve::FilterData& data) {
+/*	m_initializing = true;
 	m_fitData = data;
 	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 	this->modelChanged(m_fitData.modelType);
@@ -641,8 +633,9 @@ void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& data) {
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 	this->showFitResult();
 	m_initializing = false;
+*/
 }
 
-void XYFitCurveDock::dataChanged() {
+void XYFourierFilterCurveDock::dataChanged() {
 	this->enableRecalculate();
-}*/
+}
