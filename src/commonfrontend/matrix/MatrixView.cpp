@@ -289,13 +289,13 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	menu->insertMenu(firstAction, m_selectionMenu);
 	menu->insertSeparator(firstAction);
 
-	QMenu* submenu = new QMenu(i18n("Generate Data"));
+	QMenu* submenu = new QMenu(i18n("Generate Data"), const_cast<MatrixView*>(this));
 	submenu->addAction(action_fill_const);
 	submenu->addAction(action_fill_function);
 	menu->insertMenu(firstAction, submenu);
 	menu->insertSeparator(firstAction);
 
-	submenu = new QMenu(i18n("View"));
+	submenu = new QMenu(i18n("View"), const_cast<MatrixView*>(this));
 	submenu->addAction(action_data_view);
 	submenu->addAction(action_image_view);
 	menu->insertMenu(firstAction, submenu);
