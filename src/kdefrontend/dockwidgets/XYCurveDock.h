@@ -41,6 +41,7 @@ class XYCurve;
 class TreeViewComboBox;
 class AspectTreeModel;
 class Column;
+class KUrlCompletion;
 
 class XYCurveDock : public QWidget {
 	Q_OBJECT
@@ -54,7 +55,7 @@ public:
 
 private:
 	Ui::XYCurveDockGeneralTab uiGeneralTab;
-
+	KUrlCompletion* m_completion;
 	QStringList dateStrings;
 	QStringList timeStrings;
 

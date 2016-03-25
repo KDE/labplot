@@ -109,6 +109,10 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView
 	connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(changeRotationAngle()) );
 }
 
+DatapickerImageView::~DatapickerImageView() {
+	delete m_transform;
+}
+
 void DatapickerImageView::initActions() {
 	QActionGroup* zoomActionGroup = new QActionGroup(this);
 	QActionGroup* mouseModeActionGroup = new QActionGroup(this);
@@ -190,19 +194,19 @@ void DatapickerImageView::initActions() {
 }
 
 void DatapickerImageView::initMenus() {
-	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"));
+	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
 	m_viewMouseModeMenu->setIcon(KIcon("input-mouse"));
 	m_viewMouseModeMenu->addAction(selectAndEditModeAction);
 	m_viewMouseModeMenu->addAction(navigationModeAction);
 	m_viewMouseModeMenu->addAction(zoomSelectionModeAction);
 	m_viewMouseModeMenu->addAction(selectAndMoveModeAction);
 
-	m_viewImageMenu = new QMenu(i18n("Data Entry Mode"));
+	m_viewImageMenu = new QMenu(i18n("Data Entry Mode"), this);
 	m_viewImageMenu->addAction(setAxisPointsAction);
 	m_viewImageMenu->addAction(setCurvePointsAction);
 	m_viewImageMenu->addAction(selectSegmentAction);
 
-	m_zoomMenu = new QMenu(i18n("Zoom View"));
+	m_zoomMenu = new QMenu(i18n("Zoom View"), this);
 	m_zoomMenu->setIcon(KIcon("zoom-draw"));
 	m_zoomMenu->addAction(zoomInViewAction);
 	m_zoomMenu->addAction(zoomOutViewAction);
@@ -210,13 +214,13 @@ void DatapickerImageView::initMenus() {
 	m_zoomMenu->addAction(zoomFitPageHeightAction);
 	m_zoomMenu->addAction(zoomFitPageWidthAction);
 
-	m_navigationMenu = new QMenu(i18n("Move Last Point"));
+	m_navigationMenu = new QMenu(i18n("Move Last Point"), this);
 	m_navigationMenu->addAction(shiftLeftAction);
 	m_navigationMenu->addAction(shiftRightAction);
 	m_navigationMenu->addAction(shiftUpAction);
 	m_navigationMenu->addAction(shiftDownAction);
 
-	m_magnificationMenu = new QMenu(i18n("Magnification"));
+	m_magnificationMenu = new QMenu(i18n("Magnification"), this);
 	m_magnificationMenu->setIcon(KIcon("labplot-zoom"));
 	m_magnificationMenu->addAction(noMagnificationAction);
 	m_magnificationMenu->addAction(twoTimesMagnificationAction);

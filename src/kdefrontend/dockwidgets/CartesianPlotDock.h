@@ -36,12 +36,14 @@
 #include <QList>
 
 class LabelWidget;
+class KUrlCompletion;
 
 class CartesianPlotDock : public QWidget {
 	Q_OBJECT
 
 public:
 	explicit CartesianPlotDock(QWidget*);
+	~CartesianPlotDock();
 	void setPlots(QList<CartesianPlot*>);
 	void activateTitleTab();
 
@@ -51,6 +53,7 @@ private:
 	CartesianPlot* m_plot;
 	LabelWidget* labelWidget;
 	bool m_initializing;
+	KUrlCompletion* m_completion;
 
 	void load();
 	void loadConfig(KConfig&);

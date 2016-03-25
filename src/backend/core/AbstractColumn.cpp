@@ -90,6 +90,11 @@ AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name),
 
 }
 
+AbstractColumn::~AbstractColumn() {
+	aboutToBeDestroyed(this);
+	delete m_abstract_column_private;
+}
+
 /**
  * \fn bool AbstractColumn::isReadOnly() const
  * \brief Return whether the object is read-only

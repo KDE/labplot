@@ -68,7 +68,7 @@ class AbstractColumn : public AbstractAspect
 		};
 
 		explicit AbstractColumn(const QString& name);
-		virtual ~AbstractColumn() { aboutToBeDestroyed(this);}
+		virtual ~AbstractColumn();
 
 		virtual bool isReadOnly() const { return true; };
 		virtual ColumnMode columnMode() const = 0;

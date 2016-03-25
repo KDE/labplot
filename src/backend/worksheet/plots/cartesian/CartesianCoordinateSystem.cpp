@@ -224,13 +224,13 @@ CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createLogSca
 /* ============================================================================ */
 class CartesianCoordinateSystemPrivate{
 public:
-		CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner);
-		~CartesianCoordinateSystemPrivate();
+	CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner);
+	~CartesianCoordinateSystemPrivate();
 
-		CartesianCoordinateSystem* const q;
-		CartesianPlot* plot;
-		QList<CartesianCoordinateSystem::Scale*> xScales;
-		QList<CartesianCoordinateSystem::Scale*> yScales;
+	CartesianCoordinateSystem* const q;
+	CartesianPlot* plot;
+	QList<CartesianCoordinateSystem::Scale*> xScales;
+	QList<CartesianCoordinateSystem::Scale*> yScales;
 };
 
 CartesianCoordinateSystem::CartesianCoordinateSystem(CartesianPlot* plot)
@@ -660,6 +660,9 @@ int CartesianCoordinateSystem::yDirection() const{
 
 // TODO: design elegant, flexible and undo-aware API for changing scales
 bool CartesianCoordinateSystem::setXScales(const QList<Scale *> &scales) {
+	while (!d->xScales.isEmpty())
+		delete d->xScales.takeFirst();
+
 	d->xScales = scales;
 	return true; // TODO: check scales validity
 }
@@ -669,6 +672,9 @@ QList<CartesianCoordinateSystem::Scale *> CartesianCoordinateSystem::xScales() c
 }
 
 bool CartesianCoordinateSystem::setYScales(const QList<Scale *> &scales) {
+	while (!d->yScales.isEmpty())
+		delete d->yScales.takeFirst();
+
 	d->yScales = scales;
 	return true; // TODO: check scales validity
 }
@@ -739,7 +745,12 @@ CartesianCoordinateSystemPrivate::CartesianCoordinateSystemPrivate(CartesianCoor
 	:q(owner), plot(0){
 }
 
-CartesianCoordinateSystemPrivate::~CartesianCoordinateSystemPrivate(){
+CartesianCoordinateSystemPrivate::~CartesianCoordinateSystemPrivate() {
+	while (!xScales.isEmpty())
+		delete xScales.takeFirst();
+
+	while (!yScales.isEmpty())
+		delete yScales.takeFirst();
 }
 
 //##############################################################################

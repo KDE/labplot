@@ -45,6 +45,7 @@ class DatapickerCurve: public AbstractAspect {
 
 public:
 	explicit DatapickerCurve(const QString&);
+	~DatapickerCurve();
 
 	enum ErrorType { NoError, SymmetricError, AsymmetricError };
 	struct Errors {

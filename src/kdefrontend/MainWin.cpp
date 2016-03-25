@@ -109,7 +109,8 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	  textLabelDock(0),
 	  customPointDock(0),
 	  datapickerImageDock(0),
-	  datapickerCurveDock(0) {
+	  datapickerCurveDock(0),
+	  m_guiObserver(0) {
 
 // 	QTimer::singleShot( 0, this, SLOT(initGUI(filename)) );  //TODO doesn't work anymore
 	initGUI(filename);
@@ -129,6 +130,7 @@ MainWin::~MainWin() {
 		disconnect(m_project, 0, this, 0);
 		delete m_aspectTreeModel;
 		delete m_project;
+		delete m_guiObserver;
 	}
 }
 
@@ -353,7 +355,7 @@ void MainWin::initActions() {
 
 void MainWin::initMenus() {
 	//menu for adding new aspects
-	m_newMenu = new QMenu(i18n("Add new"));
+	m_newMenu = new QMenu(i18n("Add new"), this);
 	m_newMenu->setIcon(KIcon("document-new"));
 	m_newMenu->addAction(m_newFolderAction);
 	m_newMenu->addAction(m_newWorkbookAction);
@@ -366,7 +368,7 @@ void MainWin::initMenus() {
 // 	m_newMenu->addAction(m_newSqlDataSourceAction);
 
 	//menu subwindow visibility policy
-	m_visibilityMenu = new QMenu(i18n("Window visibility policy"));
+	m_visibilityMenu = new QMenu(i18n("Window visibility policy"), this);
 	m_visibilityMenu->setIcon(KIcon("window-duplicate"));
 	m_visibilityMenu ->addAction(m_visibilityFolderAction);
 	m_visibilityMenu ->addAction(m_visibilitySubfolderAction);

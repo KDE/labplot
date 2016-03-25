@@ -77,6 +77,7 @@ CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd):Abst
 CartesianPlot::~CartesianPlot(){
 	delete m_coordinateSystem;
 	delete addNewMenu;
+	delete zoomMenu;
 
 	//don't need to delete objects added with addChild()
 

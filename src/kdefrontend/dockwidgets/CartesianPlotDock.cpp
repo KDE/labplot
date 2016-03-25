@@ -52,7 +52,8 @@
 CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	m_plot(0),
 	labelWidget(0),
-	m_initializing(false) {
+	m_initializing(false),
+	m_completion(new KUrlCompletion()) {
 
 	ui.setupUi(this);
 
@@ -69,8 +70,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	ui.kleBackgroundFileName->setClearButtonShown(true);
 	ui.bOpen->setIcon( KIcon("document-open") );
 
-	KUrlCompletion *comp = new KUrlCompletion();
-	ui.kleBackgroundFileName->setCompletionObject(comp);
+	ui.kleBackgroundFileName->setCompletionObject(m_completion);
 
 	//"Title"-tab
 	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -167,6 +167,10 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 
 	//TODO: activate the tab again once the functionality is implemented
 	ui.tabWidget->removeTab(2);
+}
+
+CartesianPlotDock::~CartesianPlotDock() {
+	delete m_completion;
 }
 
 void CartesianPlotDock::init(){
