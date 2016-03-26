@@ -37,7 +37,6 @@
 #include <QMenu>
 #include <QGraphicsSceneMouseEvent>
 
-#include <KIcon>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
@@ -100,7 +99,7 @@ void CustomPoint::initActions() {
     Returns an icon to be used in the project explorer.
 */
 QIcon CustomPoint::icon() const {
-	return  KIcon("draw-cross");
+	return  QIcon::fromTheme("draw-cross");
 }
 
 QMenu* CustomPoint::createContextMenu() {

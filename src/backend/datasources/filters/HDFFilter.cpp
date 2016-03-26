@@ -33,9 +33,9 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #include <QFile>
 #include <QTextStream>
+#include <QIcon>
 #include <QDebug>
 #include <KLocale>
-#include <KIcon>
 
 /*!
 	\class HDFFilter
@@ -938,7 +938,7 @@ void HDFFilterPrivate::scanHDFDataType(hid_t tid, char *dataSetName, QTreeWidget
 	handleError(status,"H5Iget_name");
 
 	QTreeWidgetItem *dataTypeItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<"data type"<<typeProps.join("")<<attr);
-	dataTypeItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
+	dataTypeItem->setIcon(0,QIcon::fromTheme("accessories-calculator"));
 	dataTypeItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(dataTypeItem);
 }
@@ -986,7 +986,7 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 	dataSetProps<<", "<<readHDFPropertyList(pid).join("");
 
 	QTreeWidgetItem *dataSetItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(dataSetName)<<QString(link)<<"data set"<<dataSetProps.join("")<<attr);
-	dataSetItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
+	dataSetItem->setIcon(0,QIcon::fromTheme("x-office-spreadsheet"));
 	for(int i=0;i<dataSetItem->columnCount();i++)
 		dataSetItem->setBackground(i,QBrush(QColor(192,255,192)));
 	dataSetItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
@@ -999,7 +999,7 @@ void HDFFilterPrivate::scanHDFLink(hid_t gid, char *linkName, QTreeWidgetItem* p
 	handleError(status,"H5Gget_linkval");
 
 	QTreeWidgetItem *linkItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(linkName)<<" "<<"symbolic link"<<i18n("link to ")+QString(target));
-	linkItem->setIcon(0,QIcon(KIcon("emblem-symbolic-link")));
+	linkItem->setIcon(0,QIcon::fromTheme("emblem-symbolic-link"));
 	linkItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(linkItem);
 }
@@ -1013,7 +1013,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 	if (statbuf.nlink > 1) {
 		if(multiLinkList.contains(statbuf.objno[0])) {
 			QTreeWidgetItem *objectItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<" "<<"hard link");
-			objectItem->setIcon(0,QIcon(KIcon("link")));
+			objectItem->setIcon(0,QIcon::fromTheme("link"));
 			objectItem->setFlags(Qt::ItemIsEnabled);
                 	parentItem->addChild(objectItem);
 			return;
@@ -1032,7 +1032,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 	QString attr = scanHDFAttrs(gid).join(" ");
 
 	QTreeWidgetItem *groupItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(groupName)<<QString(link)<<"group"<<" "<<attr);
-	groupItem->setIcon(0,QIcon(KIcon("folder")));
+	groupItem->setIcon(0,QIcon::fromTheme("folder"));
 	groupItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(groupItem);
 

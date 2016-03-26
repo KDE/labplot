@@ -43,7 +43,6 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 
-#include <KIcon>
 #include <KLocale>
 #include <KConfigGroup>
 

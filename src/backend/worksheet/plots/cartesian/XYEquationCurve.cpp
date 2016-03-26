@@ -40,7 +40,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/gsl/ExpressionParser.h"
 
-#include <KIcon>
+#include <QIcon>
 #include <KLocale>
 
 XYEquationCurve::XYEquationCurve(const QString& name)
