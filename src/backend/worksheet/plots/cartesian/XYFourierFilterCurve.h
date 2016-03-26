@@ -42,7 +42,8 @@ class XYFourierFilterCurve: public XYCurve {
 			FilterData() : filterType(LowPass) {};
 
 			FilterType filterType;
-			//int degree;
+			double value;
+			double value2;
 		};
 
 		explicit XYFourierFilterCurve(const QString& name);

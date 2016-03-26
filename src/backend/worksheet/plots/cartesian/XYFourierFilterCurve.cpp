@@ -38,6 +38,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
+#include <cmath>	// isnan
 /*#include "backend/gsl/ExpressionParser.h"
 #include "backend/gsl/parser_extern.h"
 
@@ -176,46 +177,25 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		sourceDataChangedSinceLastFilter = false;
 		return;
 	}
-/*
-	//fit settings
-	int maxIters = fitData.maxIterations; //maximal number of iterations
-	float delta = fitData.eps; //fit tolerance
-	const unsigned int np = fitData.paramNames.size(); //number of fit parameters
-	if (np == 0) {
-		fitResult.available = true;
-		fitResult.valid = false;
-		fitResult.status = i18n("Model has no parameters.");
-		emit (q->dataChanged());
-		sourceDataChangedSinceLastFilter = false;
-		return;
-	}
+
+	//filter settings
+	double value = filterData.value; // (lower) value
+	double value2 = filterData.value2; // higher value (only band pass/reject)
 
 	//check column sizes
 	if (xDataColumn->rowCount()!=yDataColumn->rowCount()) {
-		fitResult.available = true;
-		fitResult.valid = false;
-		fitResult.status = i18n("Number of x and y data points must be equal.");
 		emit (q->dataChanged());
 		sourceDataChangedSinceLastFilter = false;
 		return;
-	}
-	if (weightsColumn) {
-		if (weightsColumn->rowCount()<xDataColumn->rowCount()) {
-			fitResult.available = true;
-			fitResult.valid = false;
-			fitResult.status = i18n("Not sufficient weight data points provided.");
-			emit (q->dataChanged());
-			sourceDataChangedSinceLastFilter = false;
-			return;
-		}
 	}
 
 	//copy all valid data point for the fit to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	QVector<double> sigmaVector;
+
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
-		//only copy those data where _all_ values (for x, y and sigma, if given) are valid
+		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!isnan(xDataColumn->valueAt(row)) && !isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
@@ -226,14 +206,6 @@ void XYFourierFilterCurvePrivate::recalculate() {
 				if (!isnan(weightsColumn->valueAt(row))) {
 					xdataVector.append(xDataColumn->valueAt(row));
 					ydataVector.append(yDataColumn->valueAt(row));
-
-					if (fitData.weightsType == XYFitCurve::WeightsFromColumn) {
-						//weights from a given column -> calculate the square root of the inverse (sigma = sqrt(1/weight))
-						sigmaVector.append( sqrt(1/weightsColumn->valueAt(row)) );
-					} else if (fitData.weightsType == XYFitCurve::WeightsFromErrorColumn) {
-						//weights from a given column with error bars (sigma = error)
-						sigmaVector.append( weightsColumn->valueAt(row) );
-					}
 				}
 			}
 		}
@@ -242,18 +214,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//number of data points to fit
 	unsigned int n = xdataVector.size();
 	if (n == 0) {
-		fitResult.available = true;
-		fitResult.valid = false;
-		fitResult.status = i18n("No data points available.");
-		emit (q->dataChanged());
-		sourceDataChangedSinceLastFilter = false;
-		return;
-	}
-
-	if (n<np) {
-		fitResult.available = true;
-		fitResult.valid = false;
-		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).").arg(n).arg(np);
+		//fitResult.status = i18n("No data points available.");
 		emit (q->dataChanged());
 		sourceDataChangedSinceLastFilter = false;
 		return;
@@ -261,121 +222,9 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
-	double* sigma = 0;
-	if (sigmaVector.size())
-		sigma = sigmaVector.data();
 
-	//function to fit
-	gsl_multifit_function_fdf f;
-	struct data params = {n, xdata, ydata, sigma, fitData.modelType, fitData.degree, &fitData.model, &fitData.paramNames};
-	f.f = &func_f;
-	f.df = &func_df;
-	f.fdf = &func_fdf;
-	f.n = n;
-	f.p = np;
-	f.params = &params;
+//TODO
 
-	//initialize the solver
-	const gsl_multifit_fdfsolver_type* T = gsl_multifit_fdfsolver_lmsder;
-	gsl_multifit_fdfsolver* s = gsl_multifit_fdfsolver_alloc (T, n, np);
-	double* x_init = fitData.paramStartValues.data();
-	gsl_vector_view x = gsl_vector_view_array (x_init, np);
-	gsl_multifit_fdfsolver_set (s, &f, &x.vector);
-
-	//iterate
-	int status;
-	int iter = 0;
-	fitResult.solverOutput.clear();
-	writeSolverState(s);
-	do {
-		iter++;
-		status = gsl_multifit_fdfsolver_iterate (s);
-		writeSolverState(s);
-		if (status) break;
-		status = gsl_multifit_test_delta (s->dx, s->x, delta, delta);
-	} while (status == GSL_CONTINUE && iter < maxIters);
-
-	//get the covariance matrix
-	gsl_matrix* covar = gsl_matrix_alloc (np, np);
-#if GSL_MAJOR_VERSION >=2
-	gsl_matrix *J=0;
-	gsl_multifit_fdfsolver_jac (s, J);
-	gsl_multifit_covar (J, 0.0, covar);
-#else
-	gsl_multifit_covar (s->J, 0.0, covar);
-#endif
-
-	//write the result
-	fitResult.available = true;
-	fitResult.valid = true;
-	fitResult.status = QString(gsl_strerror(status)); //TODO: add i18n
-	fitResult.iterations = iter;
-	fitResult.dof = n-np;
-
-	//calculate:
-	//residuals (Y_i-y_i)
-	//sse = sum of squared errors (SSE) = residual sum of errors (RSS) = sum of sq. residuals (SSR) = \sum_i^n (Y_i-y_i)^2
-	//mse = mean squared error = 1/n \sum_i^n  (Y_i-y_i)^2
-	//rmse = root-mean squared error = \sqrt(mse)
-	//mae = mean absolute error = \sum_i^n |Y_i-y_i|
-	//rms = residual mean square = sse/d.o.f.
-	//rsd = residual standard deviation = sqrt(rms)
-	//Coefficient of determination, R-squared = 1 - SSE/SSTOT with the total sum of squares SSTOT = \sum_i (y_i - ybar)^2 and ybar = 1/n \sum_i y_i
-	//Adjusted Coefficient of determination  adj. R-squared = 1 - (1-R-squared^2)*(n-1)/(n-np-1);
-
-	residualsVector->resize(n);
-	for (unsigned int i=0; i<n; ++i) {
-		residualsVector->data()[i] = gsl_vector_get(s->f, i);
-	}
-	residualsColumn->setChanged();
-
-	//gsl_blas_dnrm2() - computes the Euclidian norm (||x||_2 = \sqrt {\sum x_i^2}) of the vector with the elements (Yi - y[i])/sigma[i]
-	//gsl_blas_dasum() - computes the absolute sum \sum |x_i| of the elements of the vector with the elements (Yi - y[i])/sigma[i]
-	fitResult.sse = pow(gsl_blas_dnrm2(s->f), 2);
-	fitResult.mse = fitResult.sse/n;
-	fitResult.rmse = sqrt(fitResult.mse);
-	fitResult.mae = gsl_blas_dasum(s->f);
-	if (fitResult.dof!=0) {
-		fitResult.rms = fitResult.sse/fitResult.dof;
-		fitResult.rsd = sqrt(fitResult.rms);
-	}
-
-	//Coefficient of determination, R-squared
-	double ybar = 0; //mean value of the y-data
-	for (unsigned int i=0; i<n; ++i)
-		ybar += ydata[i];
-	ybar = ybar/n;
-	double sstot = 0;
-	for (unsigned int i=0; i<n; ++i)
-		sstot += pow(ydata[i]-ybar, 2);
-	fitResult.rsquared = 1 - fitResult.sse/sstot;
-	fitResult.rsquaredAdj = 1-(1-fitResult.rsquared*fitResult.rsquared)*(n-1)/(n-np-1);
-
-	//parameter values
-	double c = GSL_MIN_DBL(1, sqrt(fitResult.sse)); //limit error for poor fit
-	fitResult.paramValues.resize(np);
-	fitResult.errorValues.resize(np);
-	for (unsigned int i=0; i<np; i++) {
-		fitResult.paramValues[i] = gsl_vector_get(s->x, i);
-		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar,i,i));
-	}
-
-	//free resources
-	gsl_multifit_fdfsolver_free(s);
-	gsl_matrix_free(covar);
-
-	//calculate the fit function (vectors)
-	ExpressionParser* parser = ExpressionParser::getInstance();
-	double min = xDataColumn->minimum();
-	double max = xDataColumn->maximum();
-	xVector->resize(fitData.fittedPoints);
-	yVector->resize(fitData.fittedPoints);
-	bool rc = parser->evaluateCartesian(fitData.model, QString::number(min), QString::number(max), fitData.fittedPoints, xVector, yVector, fitData.paramNames, fitResult.paramValues);
-	if (!rc) {
-		xVector->clear();
-		yVector->clear();
-	}
-*/
 //	filterResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
