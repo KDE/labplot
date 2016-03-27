@@ -40,9 +40,8 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/gsl/ExpressionParser.h"
 
-#include <KIcon>
+#include <QIcon>
 #include <KLocale>
-#include <QDebug>
 
 XYEquationCurve::XYEquationCurve(const QString& name)
 		: XYCurve(name, new XYEquationCurvePrivate(this)){
@@ -71,7 +70,7 @@ void XYEquationCurve::init() {
 
 	//TODO: read from the saved settings for XYEquationCurve?
 	d->lineType = XYCurve::Line;
-	d->symbolsStyle = XYCurve::NoSymbols;
+	d->symbolsStyle = Symbol::NoSymbols;
 
 	setUndoAware(false);
 	setXColumn(d->xColumn);
@@ -128,7 +127,6 @@ XYEquationCurvePrivate::~XYEquationCurvePrivate() {
 }
 
 void XYEquationCurvePrivate::recalculate() {
-// 	qDebug()<<"XYEquationCurvePrivate::recalculate()";
 	//resize the vector if a new number of point to calculate was provided
 	if (equationData.count != xVector->size()) {
 		if (equationData.count>=1) {
@@ -183,7 +181,7 @@ void XYEquationCurvePrivate::recalculate() {
 void XYEquationCurve::save(QXmlStreamWriter* writer) const{
 	Q_D(const XYEquationCurve);
 
-    writer->writeStartElement( "xyEquationCurve" );
+	writer->writeStartElement( "xyEquationCurve" );
 
 	//write xy-curve information
 	XYCurve::save(writer);
@@ -205,34 +203,33 @@ void XYEquationCurve::save(QXmlStreamWriter* writer) const{
 bool XYEquationCurve::load(XmlStreamReader* reader){
 	Q_D(XYEquationCurve);
 
-    if(!reader->isStartElement() || reader->name() != "xyEquationCurve"){
-        reader->raiseError(i18n("no xy equation curve element found"));
-        return false;
-    }
+	if(!reader->isStartElement() || reader->name() != "xyEquationCurve"){
+		reader->raiseError(i18n("no xy equation curve element found"));
+		return false;
+	}
 
-    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-    QXmlStreamAttributes attribs;
-    QString str;
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QXmlStreamAttributes attribs;
+	QString str;
 
-    while (!reader->atEnd()){
-        reader->readNext();
-        if (reader->isEndElement() && reader->name() == "xyEquationCurve")
-            break;
+	while (!reader->atEnd()){
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == "xyEquationCurve")
+			break;
 
-        if (!reader->isStartElement())
-            continue;
+		if (!reader->isStartElement())
+			continue;
 
 		if (reader->name() == "xyCurve") {
-            if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader) )
 				return false;
-		}else if (reader->name() == "equationData"){
+		} else if (reader->name() == "equationData") {
 			attribs = reader->attributes();
-
 			str = attribs.value("type").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'type'"));
-            else
-                d->equationData.type = (XYEquationCurve::EquationType)str.toInt();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'type'"));
+			else
+				d->equationData.type = (XYEquationCurve::EquationType)str.toInt();
 
 			str = attribs.value("expression1").toString();
 			d->equationData.expression1 = str;

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : export worksheet dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -30,32 +30,36 @@
 #define EXPORTWORKSHEETDIALOG_H
 
 #include <KDialog>
+
 #include "ui_exportworksheetwidget.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 
-class ExportWorksheetDialog: public KDialog{
-  Q_OBJECT
+class ExportWorksheetDialog : public KDialog {
+	Q_OBJECT
 
-  public:
-	explicit ExportWorksheetDialog(QWidget*);
-	QString path() const;
-	void setFileName(const QString&);
-	WorksheetView::ExportFormat exportFormat() const;
-	WorksheetView::ExportArea exportArea() const;
-	bool exportBackground() const;
-	int exportResolution() const;
+	public:
+		explicit ExportWorksheetDialog(QWidget*);
+		virtual ~ExportWorksheetDialog();
 
-  private:
-	QWidget* mainWidget;
-	Ui::ExportWorksheetWidget ui;
+		QString path() const;
+		void setFileName(const QString&);
+		WorksheetView::ExportFormat exportFormat() const;
+		WorksheetView::ExportArea exportArea() const;
+		bool exportBackground() const;
+		int exportResolution() const;
 
-  private slots:
-	void slotButtonClicked(int);
-	void okClicked();
-	void toggleOptions();
-	void selectFile();
-	void formatChanged(int);
-	void fileNameChanged(const QString&);
+	private:
+		QWidget* mainWidget;
+		Ui::ExportWorksheetWidget ui;
+		bool m_showOptions;
+
+	private slots:
+		void slotButtonClicked(int);
+		void okClicked();
+		void toggleOptions();
+		void selectFile();
+		void formatChanged(int);
+		void fileNameChanged(const QString&);
 };
 
 #endif

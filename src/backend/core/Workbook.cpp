@@ -32,10 +32,9 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/workbook/WorkbookView.h"
+#include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 
-#include "KIcon"
 #include <KLocale>
-#include <QDebug>
 
 /**
  * \class Workbook
@@ -65,6 +64,39 @@ QWidget* Workbook::view() const {
 		m_view = new WorkbookView(const_cast<Workbook*>(this));
 	}
 	return m_view;
+}
+
+void Workbook::exportView() const {
+	Spreadsheet* s = currentSpreadsheet();
+	if (s) {
+		s->exportView();
+	} else {
+		Matrix* m = currentMatrix();
+		if (m)
+			m->exportView();
+	}
+}
+
+void Workbook::printView() {
+	Spreadsheet* s = currentSpreadsheet();
+	if (s) {
+		s->printView();
+	} else {
+		Matrix* m = currentMatrix();
+		if (m)
+			m->printView();
+	}
+}
+
+void Workbook::printPreview() const {
+	Spreadsheet* s = currentSpreadsheet();
+	if (s) {
+		s->printPreview();
+	} else {
+		Matrix* m = currentMatrix();
+		if (m)
+			m->printPreview();
+	}
 }
 
 Spreadsheet* Workbook::currentSpreadsheet() const {

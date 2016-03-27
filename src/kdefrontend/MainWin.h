@@ -39,12 +39,15 @@ class ProjectExplorer;
 class Project;
 class Worksheet;
 class Workbook;
+class Datapicker;
+class Image;
 class Spreadsheet;
 class Matrix;
 class GuiObserver;
 class AxisDock;
 class CartesianPlotDock;
 class CartesianPlotLegendDock;
+class CustomPointDock;
 class ColumnDock;
 class MatrixDock;
 class ProjectDock;
@@ -55,6 +58,8 @@ class XYFitCurveDock;
 class WorksheetDock;
 class LabelWidget;
 class ImportFileDialog;
+class DatapickerImageWidget;
+class DatapickerCurveWidget;
 
 #ifdef HAVE_CANTOR_LIBS
 class CantorWorksheet;
@@ -63,8 +68,10 @@ class CantorWorksheetDock;
 
 class QDockWidget;
 class QStackedWidget;
+class QDragEnterEvent;
+class QDropEvent;
 
-class MainWin : public KXmlGuiWindow{
+class MainWin : public KXmlGuiWindow {
 	Q_OBJECT
 
 public:
@@ -115,6 +122,7 @@ private:
 	QAction* m_redoAction;
 	QAction* m_tileWindows;
 	QAction* m_cascadeWindows;
+	QAction* m_newDatapickerAction;
 
 	//toggling doch widgets
 	QAction* m_toggleProjectExplorerDocQAction;
@@ -149,7 +157,7 @@ private:
 	CantorWorksheetDock* cantorWorksheetDock;
 	CantorWorksheet* activeCantorWorksheet() const;
 	#endif
-	
+
 	//Menus
 	QMenu* m_visibilityMenu;
 	QMenu* m_newMenu;
@@ -168,6 +176,9 @@ private:
 	XYFitCurveDock* xyFitCurveDock;
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
+	CustomPointDock* customPointDock;
+	DatapickerImageWidget* datapickerImageDock;
+	DatapickerCurveWidget* datapickerCurveDock;
 
 	bool openXML(QIODevice*);
 
@@ -176,15 +187,21 @@ private:
 	bool warnModified();
 	void activateSubWindowForAspect(const AbstractAspect*) const;
 	bool save(const QString&);
-	void closeEvent(QCloseEvent*);
+
 
 	Workbook* activeWorkbook() const;
 	Spreadsheet* activeSpreadsheet() const;
 	Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
+	Datapicker* activeDatapicker() const;
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver;
+
+protected:
+	void closeEvent(QCloseEvent*);
+	void dragEnterEvent(QDragEnterEvent*);
+	void dropEvent(QDropEvent*);
 
 private slots:
 	void initGUI(const QString&);
@@ -206,7 +223,7 @@ private slots:
 	void printPreview();
 
 	void historyDialog();
-	void importFileDialog();
+	void importFileDialog(const QString& fileName = QString());
 	void exportDialog();
 	void settingsDialog();
 	void projectChanged();
@@ -221,6 +238,7 @@ private slots:
 	void newSpreadsheet();
 	void newMatrix();
 	void newWorksheet();
+	void newDatapicker();
 	//TODO: void newScript();
 	void newFileDataSourceActionTriggered();
 	void newSqlDataSourceActionTriggered();
@@ -230,7 +248,7 @@ private slots:
 
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
-	void handleAspectRemoved(const AbstractAspect* parent);
+	void handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*);
 	void handleCurrentAspectChanged(AbstractAspect* );
 	void handleCurrentSubWindowChanged(QMdiSubWindow*);
 	void handleShowSubWindowRequested();

@@ -62,11 +62,13 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	ui.tbConstants->setIcon( QIcon::fromTheme("format-text-symbol") );
 	ui.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
 
+	ui.teEquation->setMaximumHeight(QLineEdit().sizeHint().height()*2);
 	ui.teEquation->setFocus();
 
 	m_topLevelClasses<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column";
 	m_selectableClasses<<"Column";
 
+    // TODO - Change this to a modern smart pointer
 	m_aspectTreeModel = std::auto_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
 	m_aspectTreeModel->setSelectableAspects(m_selectableClasses);
 
@@ -264,9 +266,9 @@ void FunctionValuesDialog::variableNameChanged() {
 	}
 
 	if (!text.isEmpty())
-		text = "f(" + text + ")";
+		text = "f(" + text + ')';
 	else
-		text = "f";
+		text = 'f';
 
 	ui.lFunction->setText(text);
 	ui.teEquation->setVariables(vars);

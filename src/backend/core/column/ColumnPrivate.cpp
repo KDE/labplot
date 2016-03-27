@@ -43,8 +43,7 @@
 #include "backend/core/datatypes/DateTime2DoubleFilter.h"
 #include "backend/core/datatypes/DayOfWeek2DoubleFilter.h"
 #include "backend/core/datatypes/Month2DoubleFilter.h"
-#include <QString>
-#include <QStringList>
+
 
 /**
  * \class ColumnPrivate
@@ -107,8 +106,6 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
 		case AbstractColumn::Numeric:
 			m_input_filter = new String2DoubleFilter();
 			m_output_filter = new Double2StringFilter();
-			connect(static_cast<Double2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
-				m_owner, SLOT(handleFormatChange()));
 			m_data = new QVector<double>();
 			break;
 		case AbstractColumn::Text:
@@ -119,27 +116,23 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
 		case AbstractColumn::DateTime:
 			m_input_filter = new String2DateTimeFilter();
 			m_output_filter = new DateTime2StringFilter();
-			connect(static_cast<DateTime2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
-				m_owner, SLOT(handleFormatChange()));
 			m_data = new QList<QDateTime>();
 			break;
 		case AbstractColumn::Month:
 			m_input_filter = new String2MonthFilter();
 			m_output_filter = new DateTime2StringFilter();
 			static_cast<DateTime2StringFilter *>(m_output_filter)->setFormat("MMMM");
-			connect(static_cast<DateTime2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
-				m_owner, SLOT(handleFormatChange()));
 			m_data = new QList<QDateTime>();
 			break;
 		case AbstractColumn::Day:
 			m_input_filter = new String2DayOfWeekFilter();
 			m_output_filter = new DateTime2StringFilter();
 			static_cast<DateTime2StringFilter *>(m_output_filter)->setFormat("dddd");
-			connect(static_cast<DateTime2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
-				m_owner, SLOT(handleFormatChange()));
 			m_data = new QList<QDateTime>();
 			break;
 	} // switch(mode)
+
+	connect(m_output_filter, SIGNAL(formatChanged()), m_owner, SLOT(handleFormatChange()));
 
 	m_plot_designation = AbstractColumn::noDesignation;
 	m_input_filter->setName("InputFilter");

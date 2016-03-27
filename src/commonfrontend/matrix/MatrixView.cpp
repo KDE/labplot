@@ -46,13 +46,17 @@
 #include <QInputDialog>
 #include <QClipboard>
 #include <QMimeData>
-#include <QDebug>
+#include <QTextStream>
+#include <QThreadPool>
+#include <QMutex>
+// #include <QElapsedTimer>
 
 #include <KLocale>
 #include <KAction>
 #include <QIcon>
 
 #include <float.h>
+#include "math.h"
 
 MatrixView::MatrixView(Matrix* matrix) : QWidget(),
 	m_stackedWidget(new QStackedWidget(this)),
@@ -105,6 +109,7 @@ void MatrixView::init() {
 	v_header->setDefaultSectionSize(m_matrix->defaultRowHeight());
 	v_header->installEventFilter(this);
 
+	//set the header sizes to the (potentially user customized) sizes stored in Matrix
 	adjustHeaders();
 
 	//image view
@@ -160,12 +165,6 @@ void MatrixView::initActions() {
 	action_header_format_2->setCheckable(true);
 	action_header_format_3= new QAction(i18n("Rows, Columns and xy-Values"), headerFormatActionGroup);
 	action_header_format_3->setCheckable(true);
-	if (m_matrix->headerFormat() == Matrix::HeaderRowsColumns)
-		action_header_format_1->setChecked(true);
-	else if (m_matrix->headerFormat() == Matrix::HeaderValues)
-		action_header_format_2->setChecked(true);
-	else
-		action_header_format_3->setChecked(true);
 	connect(headerFormatActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(headerFormatChanged(QAction*)));
 
 	// column related actions
@@ -215,37 +214,37 @@ void MatrixView::connectActions() {
 
 void MatrixView::initMenus() {
 	//selection menu
-	m_selectionMenu = new QMenu(i18n("Selection"));
+	m_selectionMenu = new QMenu(i18n("Selection"), this);
 	m_selectionMenu->addAction(action_cut_selection);
 	m_selectionMenu->addAction(action_copy_selection);
 	m_selectionMenu->addAction(action_paste_into_selection);
 	m_selectionMenu->addAction(action_clear_selection);
 
 	//column menu
-	m_columnMenu = new QMenu();
+	m_columnMenu = new QMenu(this);
 	m_columnMenu->addAction(action_insert_columns);
 	m_columnMenu->addAction(action_remove_columns);
 	m_columnMenu->addAction(action_clear_columns);
 
 	//row menu
-	m_rowMenu = new QMenu();
+	m_rowMenu = new QMenu(this);
 	m_rowMenu->addAction(action_insert_rows);
 	m_rowMenu->addAction(action_remove_rows);
 	m_rowMenu->addAction(action_clear_rows);
 
 	//matrix menu
-	m_matrixMenu = new QMenu();
+	m_matrixMenu = new QMenu(this);
 
 	m_matrixMenu->addMenu(m_selectionMenu);
 	m_matrixMenu->addSeparator();
 
-	QMenu* submenu = new QMenu(i18n("Generate Data"));
+	QMenu* submenu = new QMenu(i18n("Generate Data"), this);
 	submenu->addAction(action_fill_const);
 	submenu->addAction(action_fill_function);
 	m_matrixMenu->addMenu(submenu);
 	m_matrixMenu->addSeparator();
 
-	submenu = new QMenu(i18n("View"));
+	submenu = new QMenu(i18n("View"), this);
 	submenu->addAction(action_data_view);
 	submenu->addAction(action_image_view);
 	m_matrixMenu->addMenu(submenu);
@@ -260,7 +259,7 @@ void MatrixView::initMenus() {
 	m_matrixMenu->addAction(action_mirror_vertically);
 	m_matrixMenu->addSeparator();
 
-	m_headerFormatMenu = new QMenu(i18n("Header format"));
+	m_headerFormatMenu = new QMenu(i18n("Header format"), this);
 	m_headerFormatMenu->addAction(action_header_format_1);
 	m_headerFormatMenu->addAction(action_header_format_2);
 	m_headerFormatMenu->addAction(action_header_format_3);
@@ -290,13 +289,13 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	menu->insertMenu(firstAction, m_selectionMenu);
 	menu->insertSeparator(firstAction);
 
-	QMenu* submenu = new QMenu(i18n("Generate Data"));
+	QMenu* submenu = new QMenu(i18n("Generate Data"), const_cast<MatrixView*>(this));
 	submenu->addAction(action_fill_const);
 	submenu->addAction(action_fill_function);
 	menu->insertMenu(firstAction, submenu);
 	menu->insertSeparator(firstAction);
 
-	submenu = new QMenu(i18n("View"));
+	submenu = new QMenu(i18n("View"), const_cast<MatrixView*>(this));
 	submenu->addAction(action_data_view);
 	submenu->addAction(action_image_view);
 	menu->insertMenu(firstAction, submenu);
@@ -311,6 +310,7 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	menu->insertSeparator(firstAction);
 // 	menu->insertAction(firstAction, action_duplicate);
 	menu->insertMenu(firstAction, m_headerFormatMenu);
+
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_go_to_cell);
 	menu->insertSeparator(firstAction);
@@ -320,6 +320,9 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	// Export
 }
 
+/*!
+	set the row and column size to the saved sizes.
+ */
 void MatrixView::adjustHeaders() {
 	QHeaderView* h_header = m_tableView->horizontalHeader();
 	QHeaderView* v_header = m_tableView->verticalHeader();
@@ -336,6 +339,23 @@ void MatrixView::adjustHeaders() {
 
 	connect(v_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleVerticalSectionResized(int,int,int)));
 	connect(h_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
+}
+
+/*!
+	Resizes the headers/columns to fit the new content. Called on changed of the header format in Matrix.
+*/
+void MatrixView::resizeHeaders() {
+	//hide and unhide the table view in order to trigger the refresh of the view and to get the new sizes
+	m_tableView->setVisible(false);
+	m_tableView->resizeColumnsToContents();
+	m_tableView->setVisible(true);
+
+	if (m_matrix->headerFormat() == Matrix::HeaderRowsColumns)
+		action_header_format_1->setChecked(true);
+	else if (m_matrix->headerFormat() == Matrix::HeaderValues)
+		action_header_format_2->setChecked(true);
+	else
+		action_header_format_3->setChecked(true);
 }
 
 void MatrixView::setRowHeight(int row, int height) {
@@ -723,6 +743,38 @@ void MatrixView::clearSelectedCells() {
 	RESET_CURSOR;
 }
 
+
+class UpdateImageTask : public QRunnable {
+	public:
+		UpdateImageTask(int start, int end, QImage& image, QVector<QVector<double> > matrixData, double scaleFactor, double min) : m_image(image), m_matrixData(matrixData) {
+			m_start = start;
+			m_end = end;
+			m_scaleFactor = scaleFactor;
+			m_min = min;
+		};
+
+		void run() {
+			for (int row=m_start; row<m_end; ++row) {
+				mutex.lock();
+				QRgb* line = (QRgb*)m_image.scanLine(row);
+				mutex.unlock();
+				for (int col=0; col<m_image.width(); ++col) {
+					const int gray = (m_matrixData[col][row]-m_min)*m_scaleFactor;
+					line[col] = qRgb(gray, gray, gray);
+				}
+			}
+		}
+
+	private:
+		QMutex mutex;
+		int m_start;
+		int m_end;
+		QImage& m_image;
+		const QVector<QVector<double> >& m_matrixData;
+		double m_scaleFactor;
+		double m_min;
+};
+
 void MatrixView::updateImage() {
 	WAIT_CURSOR;
 	m_image = QImage(m_matrix->columnCount(), m_matrix->rowCount(), QImage::Format_ARGB32);
@@ -746,13 +798,16 @@ void MatrixView::updateImage() {
 	//update the image
 // 	timer.start();
 	const double scaleFactor = 255.0/(dmax-dmin);
-	for (int row=0; row<height; ++row) {
-		QRgb* line = (QRgb*)m_image.scanLine(row);
-		for (int col=0; col<width; ++col) {
-			const int gray = (matrixData[col][row]-dmin)*scaleFactor;
-			line[col] = qRgb(gray, gray, gray);
-		}
+	QThreadPool* pool = QThreadPool::globalInstance();
+	int range = ceil(double(m_image.height())/pool->maxThreadCount());
+	for (int i=0; i<pool->maxThreadCount(); ++i) {
+		const int start = i*range;
+		int end = (i+1)*range;
+		if (end>m_image.height()) end = m_image.height();
+		UpdateImageTask* task = new UpdateImageTask(start, end, m_image, matrixData, scaleFactor, dmin);
+		pool->start(task);
 	}
+	pool->waitForDone();
 // 	qDebug()<<"image updated in " << (float)timer.elapsed()/1000 << "s";
 
 	m_imageLabel->resize(width, height);
@@ -786,6 +841,8 @@ void MatrixView::headerFormatChanged(QAction* action) {
 		m_matrix->setHeaderFormat(Matrix::HeaderValues);
 	else
 		m_matrix->setHeaderFormat(Matrix::HeaderRowsColumnsValues);
+
+	resizeHeaders();
 }
 
 //############################# column related slots ###########################

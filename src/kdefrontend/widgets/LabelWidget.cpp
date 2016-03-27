@@ -48,7 +48,7 @@
  */
 
 // see legacy/LabelWidget.cpp
-LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_dateTimeMenu(new QMenu(this)) {
+LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_initializing(false), m_dateTimeMenu(new QMenu(this)) {
 	ui.setupUi(this);
 
 	m_dateTimeMenu->setSeparatorsCollapsible(false); //we don't want the first separator to be removed

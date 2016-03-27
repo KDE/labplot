@@ -14,6 +14,7 @@
 <Action name="new_spreadsheet" />
 <Action name="new_matrix" />
 <Action name="new_worksheet" />
+<Action name="new_datapicker" />
 <Separator/>
 <Action name="import" />
 <Action name="export" />
@@ -21,6 +22,10 @@
 
 <ToolBar name="worksheet_toolbar" >
 <text>Worksheet</text>
+</ToolBar>
+
+<ToolBar name="datapicker_toolbar" >
+<text>Datapicker</text>
 </ToolBar>
 
 <ToolBar name="spreadsheet_toolbar" >
@@ -42,6 +47,7 @@
 	<Action name="new_spreadsheet" />
 	<Action name="new_matrix" />
 	<Action name="new_worksheet" />
+	<Action name="new_datapicker" />
 	<Action name="new_script" />
 	<Action name="new_folder" />
 	<Separator/>
@@ -66,6 +72,7 @@
 <Menu name="matrix"><text>&amp;Matrix</text></Menu>
 <Menu name="worksheet"><text>&amp;Worksheet</text></Menu>
 <Menu name="casWorksheet"><text>&amp;CAS Worksheet</text></Menu>
+<Menu name="datapicker"><text>&amp;Datapicker</text></Menu>
 <!-- <Menu name="analysis"><text>&amp;Analysis</text></Menu> -->
 <!-- <Menu name="drawing"><text>&amp;Drawing</text></Menu> -->
 <!-- <Menu name="script"><text>&amp;Script</text></Menu> -->

@@ -37,12 +37,14 @@
 
 class Worksheet;
 class AbstractAspect;
+class KUrlCompletion;
 
 class WorksheetDock : public QWidget {
 	Q_OBJECT
 
 public:
 	explicit WorksheetDock(QWidget*);
+	~WorksheetDock();
 	void setWorksheets(QList<Worksheet*>);
 
 private:
@@ -50,6 +52,7 @@ private:
 	QList<Worksheet*> m_worksheetList;
 	Worksheet* m_worksheet;
 	bool m_initializing;
+	KUrlCompletion* m_completion;
 
 	void updatePaperSize();
 

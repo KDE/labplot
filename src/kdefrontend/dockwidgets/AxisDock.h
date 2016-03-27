@@ -73,7 +73,7 @@ private slots:
 	//"General"-tab
 	void nameChanged();
 	void commentChanged();
-	void visibilityChanged(int);
+	void visibilityChanged(bool);
 	void orientationChanged(int);
 	void positionChanged(int);
 	void positionChanged();
@@ -198,7 +198,7 @@ private slots:
 	void axisMinorGridPenChanged(const QPen&);
 	void axisMinorGridOpacityChanged(qreal);
 
-	void axisVisibleChanged(bool);
+	void axisVisibilityChanged(bool);
 
 	//save/load template
 	void loadConfigFromTemplate(KConfig&);

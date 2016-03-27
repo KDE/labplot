@@ -79,7 +79,7 @@
 <chapter id="introduction">
 <title>Introduction</title>
 <para>
-&LabPlot; is a KDE-application for interactive graphing and analysis of scientific data. &LabPlot; provides an easy way to create, manage and edit plots.
+&LabPlot; is a &kde;-application for interactive graphing and analysis of scientific data. &LabPlot; provides an easy way to create, manage and edit plots.
 </para>
 
 <para>
@@ -101,6 +101,7 @@ Features:
 <listitem><para>Nice Worksheet view for evaluating expressions</para></listitem>
 <listitem><para>Easy plugin based structure to add different Backends</para></listitem>
 <listitem><para>Plugin based assistant dialogs for common tasks (like integrating a function or entering a matrix)</para></listitem>
+<listitem><para>Datapicker for manual or (semi-)automatic data extraction from imported images containing plots and curves.</para></listitem>
 </itemizedlist>
 </para>
 
@@ -187,19 +188,20 @@ Properties explorer is a dockable window and can be placed at an arbitrary place
 <title>Spreadsheet</title>
 <para>
 The spreadsheet is the main part of &LabPlot; when working with data and consists of columns.
-Column is the basic data set in LabPlot used for plotting and data analysis.
+Column is the basic data set in &LabPlot; used for plotting and data analysis.
 Every column of the spreadsheet is specified by its name and the type - numeric, text, month names, day names and date and time.
 Also, for each type different representation formats can be assigned like decimal or scientific format for numeric columns etc.
 </para>
 <para>
-You can mask certain data points in the spreadsheet (<menuchoice><guimenu>Selection</guimenu><guimenuitem>Mask Selection</guimenuitem></menuchoice> from the spreadsheet cell context menu).
+You can mask selected data points in the spreadsheet (<menuchoice><guimenu>Selection</guimenu><guimenuitem>Mask Selection</guimenuitem></menuchoice> from the spreadsheet cell context menu).
 Masked data is not plotted and is also excluded from data analysis functions like fitting etc.
-<!-- The masking of datapoints can be later influenced in the graph list dialog. -->
+Alternatively, you can mask or drop values in a column (<menuchoice><guimenu>Mask Values</guimenu></menuchoice> or <menuchoice><guimenu>Drop Values</guimenu></menuchoice> from the column context menu) by specifying a range.
+When specifying which values to mask or to drop, several operators (“equal to”, “greater than”, “lesser than”, &etc;) are available.
+These operations can help to hide or to remove some outliers in the data set prior to, &eg;, performing a fit to this data set.
 </para>
 <para>
 Any spreadsheet function can be reached via the context menu (&RMB; click).
 You can cut, copy and paste between spreadsheets, generate, normalize and sort data and finally make plots out of your data.
-Of course you can also <link linkend="exportdialog">export</link> the data in the spreadsheet to an external file.
 </para>
 
 <screenshot><mediaobject><imageobject>
@@ -208,7 +210,7 @@ Of course you can also <link linkend="exportdialog">export</link> the data in th
 
 <para>
 New data can be produced either by entering it manually in the spreadsheet or by generating the data according to a certain prescription.
-LabPlot provides 5 different methods to generate data, accessible via the context menu of the column:
+&LabPlot; provides 5 different methods to generate data, accessible via the context menu of the column:
 
 <itemizedlist>
 <listitem>
@@ -252,8 +254,10 @@ against a distribution which is similar and known analytically.
 <para>
 Function values (for numeric columns only) - values are generated according to a mathematical function provided by the user, 
 a column (data set) containing the function arguments has to be provided.
+It is possible to define a multivariant function and to provide a data set (a column in a spreadsheet) for each of the variables.
+The corresponding dialog supports the creation of arbitrary number of variables.
 <screenshot><mediaobject><imageobject>
-      <imagedata fileref="spreadsheet_generate_function_values.png" format="PNG"/>
+      <imagedata fileref="spreadsheet_generate_multivariant_function_values.png" format="PNG"/>
 </imageobject></mediaobject></screenshot>
 </para>
 </listitem>
@@ -262,25 +266,68 @@ a column (data set) containing the function arguments has to be provided.
 
 </para>
 
+
 <para>
 Already existing data can be imported into a spreadsheet from external files via the <link linkend="importdialog">"Import Data" dialog</link>.
 Imported data will be stored in the project file. Changes on data, performed either in the spreadsheet or in the external file after the import, are not synchronized anymore.
 </para>
 
+<para>
+The data in the spreadsheet can be exported to an external file (see <link linkend="exportdialog">Export Dialog</link>).
+</para>
 </sect1>
 
+<sect1 id="matrix">
+<title>Matrix</title>
+<para>
+Matrix is another container for matrix-like data. This container is presented like a table or, alternatively, as a two-dimensional greyscale image.
+The elements of such a table/matrix can be thought as being the Z-values, Z=Z(X,Y), with X and Y values being the row and column numbers, respectively.
+The transition from the row and column numbers to the logical coordinates is done via an explicit user-defined mapping of both representations.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="matrix.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+The matrix data can either be entered manually or via an import from an external file.
+Similar to the data generation for a column in a spreadsheet, the matrix can be filled with constant values or via a formula, too.
+The screenshot below shows the image view of a matrix together with the formula that was used to generate the matrix elements:
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="matrix_function_values.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+</sect1>
+
+
+<sect1 id="workbook">
+<title>Workbook</title>
+<para>
+Workbook helps the user to better organize and to group different data containers (Spreadsheet and Matrix).
+This object serves as the parent container for multiple Spreadsheet- and/or Matrix-objects and puts them together in a view with multiple tabs:
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="workbook.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+<para>
+With folders it is already possible to bring some structure in the <link linkend="project-explorer">Project Explorer</link> and to group together several related objects
+(spreadsheets with data stemming from text files of similar origin, red, green and blue values of an image imported into three different matrices, etc.).
+With Workbook the user has the possibility for another additional grouping.
+</para>
+
+</sect1>
 
 
 <sect1 id="worksheet">
 <title>Worksheet</title>
 <para>
-The worksheet is, besides the <link linkend="spreadsheet">spreadsheet</link>, the second central part of the application and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels etc.
+The worksheet is, besides the data containers <link linkend="spreadsheet">Spreadsheet</link> and <link linkend="matrix">Matrix</link>, another central part of the application and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels etc.
 </para>
 <para>
 Worksheets can either have a fixed size (a user defined size or one of the predefined sizes like A4, Letter etc.) or they can fill out the complete available area for the worksheet window. Multiple plots can be arranged on the worksheet in a vertical, horizontal or grid layouts.
 </para>
 <para>
-Many properties of the worksheet like size, background color and layout settings can be changed in the "Worksheet properties" pane.
+Many properties of the worksheet like size, background colour and layout settings can be changed in the "Worksheet properties" pane.
 </para>
 
 <para>
@@ -454,13 +501,13 @@ to scientific programming.
 <sect1 id="file_data_source">
 <title>File Data Source</title>
 <para>
-A file data source is very similar in spirit to a spreadsheet with imported data from an external file. The difference is that the imported data cannot be shown and edited in LabPlot after the import anymore. This can be sufficient e.g. if you only want to plot the data stemming from a calculation in an external program (and exported to an ASCII-file afterwards).
+A file data source is very similar in spirit to a spreadsheet with imported data from an external file. The difference is that the imported data cannot be shown and edited in &LabPlot; after the import anymore. This can be sufficient &eg; if you only want to plot the data stemming from a calculation in an external program (and exported to an ASCII-file afterwards).
 </para>
 <para>
 Since no spreadsheet has to be filled with the imported data, the import into a file data source is faster than into a spreadsheet which can be advantageously when dealing with big files.
 </para>
 <para>
-It is possible to store the link to the external file in the project file only and not its content. Each time the project file is opened in LabPlot, the content is read from the external file again. Also, it is possible to let LabPlot watch the file for changes - the content of the file data source is updated if the external file was changed.
+It is possible to store the link to the external file in the project file only and not its content. Each time the project file is opened in &LabPlot;, the content is read from the external file again. Also, it is possible to let &LabPlot; watch the file for changes - the content of the file data source is updated if the external file was changed.
 </para>
 <para>
 <screenshot><mediaobject><imageobject>
@@ -472,14 +519,98 @@ The additional options determining the import of the data are equivalent to thos
 </para>
 </sect1>
 
+
+<sect1 id="datapicker">
+<title>Datapicker</title>
+<para>
+Datapicker is a tool that allows you to easily extract data from image files. The process of extraction consists mainly out of the following steps:
+<itemizedlist>
+<listitem><para>Import an image containing plots and curves where you want to read the data points from.</para></listitem>
+<listitem><para>Select the plot type (cartesian, polar, etc.).</para></listitem>
+<listitem><para>Select tree reference points and provide values for them. With the help of these points the logical coordinate system is determined.</para></listitem>
+<listitem><para>Create a new datapicker curve and set the type of the error bars.</para></listitem>
+<listitem><para>Switch to the mouse mode "Set Curve Points" and start selecting points on the imported image - the coordinates for the selected points are determined and added to the spreadsheet "Data".</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+It is possible to add more then one datapicker curve. This is useful in case the imported image contains several curves that need to be digitized.
+The datapicker curve that is currently being selected in the <link linkend="project-explorer">Project Explorer </link> is the "active" one - points clicked on the datapicker image will be calculated and added to its data spreadsheet.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker_active_curve_data_spreadsheet.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+Calculated values are stored in different columns in data spreadsheets in the datapicker. These columns behave exactly the same like other columns
+in usual spreadsheets and can be directly used as source columns for curves in your own plots.
+</para>
+
+<para>
+Datapicker supports the process of the data extraction with several helpers. To place the points more precisely, a magnification glass with different magnification levels is available.
+Also, the last selected point can be shifted with the help of the navigation keys.
+Furthermore, when reading data points having error bars, datapicker automatically creates bars indicating the end points of the error bars.
+Those bars can be pulled with the mouse until the required length (the distance to the data point) is reached.
+</para>
+
+
+<para>
+The procedure for the extraction of data from an imported plot as described above is feasible when dealing with a limited number of points.
+In case the curves in the imported image are given as solid lines, the datapicker tool in &LabPlot; allows to read them (semi-)automatically.
+For this, after a new datapicker curve was added as described above, switch to the mouse mode "Select Curve Segments". The curves on the plot are recognized and highlighted.
+By clicking on a highlighted curve (or one of its segments), points along this curve are created.
+The length of a segment and the density of created points (separation between two points) are adjustable parameters.
+On the screenshots below, after switching to the segment mode all black lines were highlighted (green colour).
+In this specific case, the curve was recognized as a single segment and a single mouse-click on this segment is sufficient to digitize this curve and to automatically place points along the curve.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker_segments.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+In many cases the plot is not as simple as above (single black curve on white background) and contains grid lines, many curves of different colour and thinness and a non-white background.
+In such a case the automatic detection fails (too many or no objects are highlighted). To help the datapicker to determine the curve(s) correctly, the user has to limit the allowed ranges in the HSV (or HSI) colour spaces.
+To subtract the non-white background it is possible to limit the range for the foreground colour, too.
+Internally, each pixel of the image is converted to black and white where only the points fitting into the user-defined ranges for hue, saturation, value, intensity and foreground are set to black.
+</para>
+
+<para>
+On the screenshots below, the blue curves in the original image were projected onto by having appropriately reduced the allowed ranges in the colour space (note the peak for blue in the histogram for the hue).
+The transformed black and white image contains only the curves the user is interested in and it is now an easy task for the datapicker to determine the curves and to place points on them.
+<screenshot><mediaobject><imageobject>
+      <imagedata fileref="datapicker_original_transformed_segments.png" format="PNG"/>
+</imageobject></mediaobject></screenshot>
+</para>
+
+<para>
+Similar to <link linkend="worksheet">Worksheet</link>, the currently visible area in the datapicker can be exported.
+The supported image formats as described in the section <link linkend="exportdialog">Export Dialog</link>.
+</para>
+</sect1>
+
 <sect1 id="importdialog">
 <title>Import Dialog</title>
 <para>
-In the import dialog you can import data into one of the available spreadsheets in &LabPlot;.
+In the import dialog you can import data into one of the available spreadsheets or matrices in &LabPlot;.
+The supported data formats are
+<itemizedlist>
+<listitem><para>ASCII</para></listitem>
+<listitem><para>Binary</para></listitem>
+<listitem><para>Image</para></listitem>
+<listitem><para>NetCDF</para></listitem>
+<listitem><para>HDF5</para></listitem>
+</itemizedlist>
+Preview of all supported file types is available in the import dialog. For data formats with complex internal structures like NetCDF and HDF5, the content of the file is presented in a tree view that allows comfortable navigation through the file.
 </para>
+
+<para>
+Import of ascii and binary data compressed with gzip, bzip2 or xz can be done directly – the decompression happens transparently for the user.
+</para>
+
+
 <para>
 The name of the file containing the data to import has to be provided. The <guibutton>File Info</guibutton> button opens a dialog where some information about the selected file is shown. The type of the data can be specified - currently, only ASCII files containing several data sets (vectors) stored as columns are supported.
-The filter - automatic or custom - determines how the file has to be parsed. Selecting the filter "custom", several parameters like separating character etc. can be provided manually in this case.
+The filter - automatic or custom - determines how the file has to be parsed. Selecting the filter "custom", several parameters like separating character &etc; can be provided manually in this case.
 </para>
 <para>
 The start and end row to read can be customized using the <guilabel>Data portion to read</guilabel> tab. To read all data specify <userinput>-1</userinput> as an end row or column.
@@ -495,6 +626,7 @@ The start and end row to read can be customized using the <guilabel>Data portion
     </textobject>
   </mediaobject>
 </screenshot>
+
 </sect1>
 
 
@@ -713,6 +845,11 @@ The menu is only available when a spreadsheet object is selected on the <guilabe
 <para>
 This menu contains all the items that can also be found in the context menu (right mouse) of a CAS worksheet.
 The menu is only available when a worksheet object is selected on the <guilabel>Project Explorer</guilabel> panel.
+<sect1 id="datapicker-menu">
+<title>The Datapicker Menu</title>
+<para>
+This menu contains all the items that can also be found in the context menu (right mouse) of a datapicker. 
+The menu is only available when a datapicker object is selected on the <guilabel>Project Explorer</guilabel> panel.
 </para>
 </sect1>
 
@@ -805,6 +942,85 @@ The menu is only available when a worksheet object is selected on the <guilabel>
   </para>
 </sect1>
   
+</chapter>
+
+<chapter id="digitization">
+<title>Curve Tracing</title>
+
+<sect1 id="uploadimage">
+  <title>Upload Image</title>
+  <para>
+    Datapicker can be created inside a project via <guimenuitem>Add new</guimenuitem> in the context menu of project/folder or in the main toolbar.
+    After that a new image can be added and can be changed via <guilabel>Plot</guilabel> in the corresponding dock widget.
+  </para>
+  <para>
+    After uploading image different zooming options can be used from the context menu/datapicker toolbar to change width and 
+    height of image. Image can also be rotated to an angle using <guilabel>Rotation</guilabel> in the "edit" section of dock widget. After this
+    user have to <link linkend="axispoint">set axis points</link>.
+  </para>
+</sect1>
+  
+<sect1 id="symbols">
+  <title>Symbols</title>
+  <para>
+    Symbols are the points that can be drawn over image of datapicker. Symbols can be directly created by mouse
+     right click over the image. Symbols are mainly of two types, with and without error-bar depending on the type of 
+    <link linkend="datapickercurve">curve</link> they belong.
+    </para>
+  <para>
+    Every curve of datapicker can have its own symbol style that can be changed in the <guilabel>Symbols</guilabel> section of dock widget.
+    "SelectAndMove" mouse mode can be used to select multiple points/symbols and can be moved by using navigation keys.
+  </para>
+</sect1>
+
+<sect1 id="axispoint">
+  <title>Axis Points</title>
+  <para>
+    Axis Points are the set of three reference  <link linkend="symbols">points</link> over image of datapicker. These points 
+    can be set via <guimenuitem>Set Axis Points</guimenuitem> in the context menu of datapicker. After selecting points over image user have to update
+    their coordinate system type via <guilabel>Plot Type</guilabel> and logical positions via <guilabel>Ref. Points</guilabel> in the dock widget.
+  </para>
+</sect1>
+
+<sect1 id="datapickercurve">
+  <title>Datapicker Curve</title>
+  <para>
+    Datapicker-Curve can be created inside datapicker via <guimenuitem>New Curve</guimenuitem> in the context menu of datapicker. A curve can have 
+    different types of X and Y errors (No-error, symmetric, asymmetric). This depends on the type of errors dock widget 
+    of datapicker have at the point of creation.
+    </para>
+  <para>
+    Every curve object contains all the curve <link linkend="symbols">points</link> (hidden) and  a spreadsheet that contains 
+    logical positions of all its curve points, and provides options to update spreadsheet and to toggle visibility 
+    of its curve points using the context menu. Mode <guimenuitem>Set Curve Points</guimenuitem> in the context menu of datapicker should be 
+    selected in order to create curve points.
+  </para>
+  <para>
+    Multiple curve can be created for same datapicker. The created curve points always correspond to the active
+    curve of datapicker which can be changed via <guimenuitem>Active Curve</guimenuitem> option in the context menu and dock widget of datapicker.
+    Every curve of datapicker can have its own symbol style that can be changed in the <guilabel>Symbols</guilabel> section of dock widget.
+  </para>
+</sect1>
+
+<sect1 id="curvesegments">
+  <title>Curve Segments</title>
+  <para>
+    Curve segment for datapicker can be created over image by switching mode to <guimenuitem>Select Curve Segments</guimenuitem> in the context menu of
+    datapicker. A segment is a selectable object over image which can be selected by mouse right click over it.
+    </para>
+  <para>
+    Segments are created by processing of image on the basis range of colour attributes in order to automatically
+    trace curves. To improve results these range and types of colour attributes can be changed in the "edit"
+    section of dock-widget. Dock-widget also provides options to switch among processed image and original image,
+    and to set the minimum possible length of segments.
+  </para>
+  <para>
+    Once a segment is selected it will create curve points over it with a minimum specified distance among them.
+    The minimum specified distance among the points can be changed in the dock widget of datapicker. User might have
+    to select the segments again in order to observe the changes.
+  </para>
+</sect1>
+
 </chapter>
 
 <!-- TODO:
@@ -1549,7 +1765,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
     </step>
     <step>
       <para>
-	Switch to the <guilabel>Line</guilabel> tab on the <guilabel>xy-equation-curve properties</guilabel> pane and choose <guimenuitem>cubic spline (natural)</guimenuitem> from the <guilabel>Type</guilabel> drop down list.
+	Switch to the <guilabel>Line</guilabel> tab on the <guilabel>xy-equation-curve properties</guilabel> pane and choose <guimenuitem>cubic spline (natural)</guimenuitem> from the <guilabel>Type</guilabel> drop down box.
       </para>
       <screenshot>
       <screeninfo>Choosing the line type</screeninfo>
@@ -1679,7 +1895,7 @@ data sources for the curves, add legends, export everything to pdf) would also h
       </mediaobject>
       </screenshot>
       <para>
-	Select <guimenuitem>Automatic (g)</guimenuitem> from the <guilabel>Format</guilabel> drop down list on the <guilabel>Column properties</guilabel> right dock to enhance data presentation for the first column.
+	Select <guimenuitem>Automatic (g)</guimenuitem> from the <guilabel>Format</guilabel> drop down box on the <guilabel>Column properties</guilabel> right dock to enhance data presentation for the first column.
       </para>
     </step>
     <step>
@@ -1839,13 +2055,13 @@ The standard way is to use <menuchoice><guimenu>File</guimenu><guimenuitem>Expor
 
 <qandaentry>
 <question>
-<para>I miss an important feature. What can i do?</para>
+<para>I miss an important feature. What can I do?</para>
 </question>
 <answer>
 <para>
 Please take a look at the TODO file in the documentation of &LabPlot;.
-Here all planed features are listed in more or
-less sorted order which i will implement in future releases of &LabPlot;.
+Here, all planned features are listed in more or
+less sorted order which I will implement in future releases of &LabPlot;.
 If you like to have additional
 features or like to have a listed feature soon, mail me your wishes and, if possible, send me
 example data or a short
@@ -1857,7 +2073,7 @@ of &LabPlot; :-)
 </qandaentry>
 
 <qandaentry><question>
-<para>Many Analysis functions are disabled. What can i do?</para>
+<para>Many Analysis functions are disabled. What can I do?</para>
 </question>
 <answer><para>
 It looks like your &LabPlot; package was compiled without GSL (&GNU; Scientific Library) support. &LabPlot; was designed to even work on systems that

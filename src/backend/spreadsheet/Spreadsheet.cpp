@@ -31,6 +31,11 @@
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/AbstractAspect.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
+
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
 
 #include <QIcon>
 #include <KConfigGroup>
@@ -86,8 +91,7 @@ void Spreadsheet::init() {
   This method may be called multiple times during the life time of an Aspect, or it might not get
   called at all. Aspects must not depend on the existence of a view for their operation.
 */
-QWidget *Spreadsheet::view() const
-{
+QWidget *Spreadsheet::view() const {
 	if (!m_view) {
 		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this));
 		KConfig config;
@@ -96,6 +100,40 @@ QWidget *Spreadsheet::view() const
 	}
 
 	return m_view;
+}
+
+void Spreadsheet::exportView() const {
+	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(view());
+	dlg->setFileName(name());
+	if (dlg->exec()==QDialog::Accepted){
+		const QString path = dlg->path();
+		const bool exportHeader = dlg->exportHeader();
+		const QString separator = dlg->separator();
+
+		const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
+		WAIT_CURSOR;
+		view->exportToFile(path, exportHeader, separator);
+		RESET_CURSOR;
+	}
+	delete dlg;
+}
+
+void Spreadsheet::printView() {
+	QPrinter printer;
+	QPrintDialog* dlg = new QPrintDialog(&printer, view());
+	dlg->setWindowTitle(i18n("Print Spreadsheet"));
+	if (dlg->exec() == QDialog::Accepted) {
+		const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
+		view->print(&printer);
+	}
+	delete dlg;
+}
+
+void Spreadsheet::printPreview() const {
+	const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
+	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
+	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+	dlg->exec();
 }
 
 /*!
@@ -696,7 +734,7 @@ bool Spreadsheet::load(XmlStreamReader * reader)
 				}
 				else if(reader->name() == "column")
 				{
-					Column* column = new Column("", AbstractColumn::Text);
+					Column* column = new Column("");
 					if (!column->load(reader))
 					{
                         delete column;

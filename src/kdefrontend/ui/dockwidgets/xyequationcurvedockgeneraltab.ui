@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>334</width>
-    <height>580</height>
+    <width>702</width>
+    <height>684</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
@@ -97,7 +97,7 @@
    <item row="5" column="4" colspan="2">
     <widget class="QFrame" name="frame">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -123,10 +123,16 @@
       </property>
       <item row="0" column="0" rowspan="3">
        <widget class="ExpressionTextEdit" name="teEquation1">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>50</height>
+          <height>16777215</height>
          </size>
         </property>
        </widget>
@@ -164,7 +170,7 @@
    <item row="6" column="4" colspan="2">
     <widget class="QFrame" name="frame_2">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -191,7 +197,7 @@
       <item row="0" column="0" rowspan="3">
        <widget class="ExpressionTextEdit" name="teEquation2">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -199,7 +205,7 @@
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>50</height>
+          <height>16777215</height>
          </size>
         </property>
        </widget>
@@ -261,7 +267,7 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>24</height>
+       <height>16777215</height>
       </size>
      </property>
      <property name="verticalScrollBarPolicy">
@@ -303,7 +309,7 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>24</height>
+       <height>16777215</height>
       </size>
      </property>
      <property name="verticalScrollBarPolicy">

@@ -35,6 +35,7 @@ Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/ImageFilter.h"
 
+#include <QTableWidget>
 #include <QInputDialog>
 #include <QDir>
 #include <QFileDialog>
@@ -55,7 +56,7 @@ Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
    \ingroup kdefrontend
 */
 
-ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
+ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : QWidget(parent), m_fileName(fileName) {
 	ui.setupUi(this);
 
 	KUrlCompletion *comp = new KUrlCompletion();
@@ -133,6 +134,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	ui.bManageFilters->setIcon( QIcon::fromTheme("configure") );
 	ui.bSaveFilter->setIcon( QIcon::fromTheme("document-save") );
 	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+	hdfOptionsWidget.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+	netcdfOptionsWidget.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
 
 	connect( ui.kleFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
@@ -142,6 +145,12 @@ ImportFileWidget::ImportFileWidget(QWidget* parent) : QWidget(parent) {
 	connect( ui.cbFileType, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChanged(int)) );
 	connect( ui.cbFilter, SIGNAL(activated(int)), SLOT(filterChanged(int)) );
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
+
+	connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
+	connect( hdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(hdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
+	connect( hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
+	connect( netcdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(netcdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
+	connect( hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
 	ui.bSaveFilter->hide();
@@ -157,7 +166,6 @@ void ImportFileWidget::loadSettings() {
 
 	//settings for data type specific widgets
 	// ascii data
-	connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
 	//TODO: check if this works (character gets currentItem?)
 	asciiOptionsWidget.cbCommentCharacter->setCurrentItem(conf.readEntry("CommentCharacter", "#"));
 	asciiOptionsWidget.cbSeparatingCharacter->setCurrentItem(conf.readEntry("SeparatingCharacter", "auto"));
@@ -176,20 +184,13 @@ void ImportFileWidget::loadSettings() {
 	// image data
 	imageOptionsWidget.cbImportFormat->setCurrentIndex(conf.readEntry("ImportFormat", 0));
 
-	// HDF data
-	hdfOptionsWidget.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
-	connect( hdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(hdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
-	connect( hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
-
-	// NetCDF data
-	netcdfOptionsWidget.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
-	connect( netcdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(netcdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
-	connect( hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
-
 	//general settings
 	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
-	ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
 	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
+	if (m_fileName.isEmpty())
+		ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
+	else
+		ui.kleFileName->setText(m_fileName);
 }
 
 ImportFileWidget::~ImportFileWidget() {
@@ -224,7 +225,7 @@ ImportFileWidget::~ImportFileWidget() {
 	// nothing
 }
 
-void ImportFileWidget::hideDataSource() const{
+void ImportFileWidget::hideDataSource() const {
 	ui.lSourceName->hide();
 	ui.kleSourceName->hide();
 	ui.chbWatchFile->hide();
@@ -236,7 +237,7 @@ void ImportFileWidget::showOptions(bool b) {
 	resize(layout()->minimumSize());
 }
 
-QString ImportFileWidget::fileName() const{
+QString ImportFileWidget::fileName() const {
 	return ui.kleFileName->text();
 }
 
@@ -259,14 +260,14 @@ void ImportFileWidget::saveSettings(FileDataSource* source) const {
 /*!
 	returns the currently used file type.
 */
-FileDataSource::FileType ImportFileWidget::currentFileType() const{
+FileDataSource::FileType ImportFileWidget::currentFileType() const {
 	return (FileDataSource::FileType)ui.cbFileType->currentIndex();
 }
 
 /*!
 	returns the currently used filter.
 */
-AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
+AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	//FileDataSource::FileType fileType = this->currentFileType();
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 
@@ -274,7 +275,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 
 	switch(fileType) {
 	case FileDataSource::Ascii: {
-		 //TODO use auto_ptr
+		//TODO use auto_ptr
 		AsciiFilter* filter = new AsciiFilter();
 
 		if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
@@ -303,16 +304,16 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const{
 	}
 	case FileDataSource::Binary: {
 		BinaryFilter* filter = new BinaryFilter();
- 		if ( ui.cbFilter->currentIndex()==0 ){	//"automatic"
+		if ( ui.cbFilter->currentIndex()==0 ) {	//"automatic"
 			filter->setAutoModeEnabled(true);
- 		}else if ( ui.cbFilter->currentIndex()==1 ){ //"custom"
+		} else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
 			filter->setAutoModeEnabled(false);
- 			filter->setVectors( binaryOptionsWidget.niVectors->value() );
- 			filter->setDataType( (BinaryFilter::DataType) binaryOptionsWidget.cbDataType->currentIndex() );
- 		}else{
+			filter->setVectors( binaryOptionsWidget.niVectors->value() );
+			filter->setDataType( (BinaryFilter::DataType) binaryOptionsWidget.cbDataType->currentIndex() );
+		} else {
 			//TODO: load filter settings
 // 			filter->setFilterName( ui.cbFilter->currentText() );
- 		}
+		}
 
 		filter->setStartRow( ui.sbStartRow->value() );
 		filter->setEndRow( ui.sbEndRow->value() );
@@ -428,7 +429,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 	QString debug;
 	if ( proc->waitForReadyRead(1000) == false ) {
-	    // 		kDebug()<<"ERROR: reading file type of file"<<ui.kleFileName->text()<<endl;
+		// 		kDebug()<<"ERROR: reading file type of file"<<ui.kleFileName->text()<<endl;
 	} else {
 		QString info = proc->readLine();
 		if (info.contains("compressed data")) {
@@ -491,11 +492,11 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 /*!
   saves the current filter settings
 */
-void ImportFileWidget::saveFilter(){
+void ImportFileWidget::saveFilter() {
 	bool ok;
 	QString text = QInputDialog::getText(this, i18n("Save Filter Settings as"),
-		i18n("Filter name:"), QLineEdit::Normal, i18n("new filter"), &ok);
-	if (ok && !text.isEmpty()){
+	                                     i18n("Filter name:"), QLineEdit::Normal, i18n("new filter"), &ok);
+	if (ok && !text.isEmpty()) {
 		//TODO
 		//AsciiFilter::saveFilter()
 	}
@@ -504,8 +505,8 @@ void ImportFileWidget::saveFilter(){
 /*!
   opens a dialog for managing all available predefined filters.
 */
-void ImportFileWidget::manageFilters(){
-  //TODO
+void ImportFileWidget::manageFilters() {
+	//TODO
 }
 
 /*!
@@ -597,7 +598,7 @@ const QStringList ImportFileWidget::selectedHDFNames() const {
 	QList<QTreeWidgetItem *> items = hdfOptionsWidget.twContent->selectedItems();
 
 	// the data link is saved in the second column
-	for(int i=0;i<items.size();i++)
+	for(int i=0; i<items.size(); i++)
 		names<<items[i]->data(1,Qt::DisplayRole).toString();
 
 	return names;
@@ -623,12 +624,12 @@ void ImportFileWidget::netcdfTreeWidgetItemSelected(QTreeWidgetItem* item, int c
 
 		QStringList lineStrings = importedText.split("\n");
 		netcdfOptionsWidget.twPreview->setRowCount(lineStrings.size());
-		for(int i=0;i<lineStrings.size();i++) {
+		for(int i=0; i<lineStrings.size(); i++) {
 			QStringList lineString = lineStrings[i].split(" ");
 			if(i==0)
 				netcdfOptionsWidget.twPreview->setColumnCount(lineString.size()-1);
 
-			for(int j=0;j<lineString.size();j++) {
+			for(int j=0; j<lineString.size(); j++) {
 				QTableWidgetItem* item = new QTableWidgetItem();
 				item->setText(lineString[j]);
 				netcdfOptionsWidget.twPreview->setItem(i,j,item);
@@ -646,7 +647,7 @@ const QStringList ImportFileWidget::selectedNetCDFNames() const {
 	QStringList names;
 	QList<QTreeWidgetItem *> items = netcdfOptionsWidget.twContent->selectedItems();
 
-	for(int i=0;i<items.size();i++)
+	for(int i=0; i<items.size(); i++)
 		names<<items[i]->data(0,Qt::DisplayRole).toString();
 
 	return names;
@@ -672,13 +673,13 @@ void ImportFileWidget::filterChanged(int index) {
 		return;
 	}
 
-	if (index==0){// "automatic"
+	if (index==0) { // "automatic"
 		ui.swOptions->setEnabled(false);
 		ui.bSaveFilter->setEnabled(false);
-	}else if (index==1) { //custom
+	} else if (index==1) { //custom
 		ui.swOptions->setEnabled(true);
 		ui.bSaveFilter->setEnabled(true);
-	}else{
+	} else {
 		// predefined filter settings were selected.
 		//load and show them in the GUI.
 		//TODO
@@ -690,21 +691,21 @@ void ImportFileWidget::filterChanged(int index) {
   Disables it otherwise.
 */
 void ImportFileWidget::headerChanged(int state) {
-	if (state==Qt::Checked){
-	    asciiOptionsWidget.kleVectorNames->setEnabled(false);
+	if (state==Qt::Checked) {
+		asciiOptionsWidget.kleVectorNames->setEnabled(false);
 		asciiOptionsWidget.lVectorNames->setEnabled(false);
-	}else{
-	    asciiOptionsWidget.kleVectorNames->setEnabled(true);
+	} else {
+		asciiOptionsWidget.kleVectorNames->setEnabled(true);
 		asciiOptionsWidget.lVectorNames->setEnabled(true);
 	}
 }
 
-void ImportFileWidget::refreshPreview(){
+void ImportFileWidget::refreshPreview() {
 	WAIT_CURSOR;
 
 	QString fileName = ui.kleFileName->text();
 	if ( fileName.left(1) != QDir::separator() )
-	    fileName = QDir::homePath() + QDir::separator() + fileName;
+		fileName = QDir::homePath() + QDir::separator() + fileName;
 
 	QString importedText;
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
@@ -741,6 +742,7 @@ void ImportFileWidget::refreshPreview(){
 		QImage image(fileName);
 		QTextCursor cursor = ui.tePreview->textCursor();
 		cursor.insertImage(image);
+		RESET_CURSOR;
 		return;
 	}
 	case FileDataSource::HDF: {
@@ -765,12 +767,12 @@ void ImportFileWidget::refreshPreview(){
 
 		QStringList lineStrings = importedText.split("\n");
 		tmpTableWidget->setRowCount(qMax(lineStrings.size()-1,1));
-		for(int i=0;i<lineStrings.size();i++) {
+		for(int i=0; i<lineStrings.size(); i++) {
 			QStringList lineString = lineStrings[i].split(" ");
 			if(i==0)
 				tmpTableWidget->setColumnCount(qMax(lineString.size()-1,1));
 
-			for(int j=0;j<lineString.size();j++) {
+			for(int j=0; j<lineString.size(); j++) {
 				QTableWidgetItem* item = new QTableWidgetItem();
 				item->setText(lineString[j]);
 				tmpTableWidget->setItem(i,j,item);

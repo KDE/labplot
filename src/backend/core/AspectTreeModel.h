@@ -76,6 +76,7 @@ class AspectTreeModel : public QAbstractItemModel{
 		AbstractAspect* m_root;
 		bool m_folderSelectable;
 		QList<const char*> m_selectableAspects;
+		int m_defaultHeaderHeight;
 
 		QString m_filterString;
 		Qt::CaseSensitivity m_filterCaseSensitivity;

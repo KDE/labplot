@@ -87,13 +87,12 @@ class XYCurvePrivate: public QGraphicsItem {
 		qreal dropLineOpacity;
 
 		//symbols
-		XYCurve::SymbolsStyle symbolsStyle;
+		Symbol::Style symbolsStyle;
 		QBrush symbolsBrush;
 		QPen symbolsPen;
 		qreal symbolsOpacity;
 		qreal symbolsRotationAngle;
 		qreal symbolsSize;
-		qreal symbolsAspectRatio;
 
 		//values
 		XYCurve::ValuesType valuesType;

@@ -35,7 +35,7 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <QTextStream>
 #include <QDebug>
 #include <KLocale>
-#include <KIcon>
+#include <QIcon>
 
 /*!
 	\class NetCDFFilter
@@ -144,19 +144,12 @@ int NetCDFFilter::endColumn() const{
 	return d->endColumn;
 }
 
-void NetCDFFilter::setAutoModeEnabled(bool b){
-	d->autoModeEnabled = b;
-}
-
-bool NetCDFFilter::isAutoModeEnabled() const{
-	return d->autoModeEnabled;
-}
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
 
 NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) :
-	q(owner),startRow(1), endRow(-1),startColumn(1),endColumn(-1) {
+	q(owner),startRow(1), endRow(-1),startColumn(1),endColumn(-1), status(0) {
 }
 
 #ifdef HAVE_NETCDF
@@ -356,7 +349,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 			QStringList props;
 			props<<translateDataType(type)<<" ("<<QString::number(len)<<")";
 			QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<typeName<<props.join("")<<valueString.join(", "));
-			attrItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
+			attrItem->setIcon(0,QIcon::fromTheme("accessories-calculator"));
 			attrItem->setFlags(Qt::ItemIsEnabled);
 			parentItem->addChild(attrItem);
 		}
@@ -385,7 +378,7 @@ void NetCDFFilterPrivate::scanDims(int ncid, int ndims, QTreeWidgetItem* parentI
 		if(i == ulid)
 			value="unlimited";
 		QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<"dimension"<<props.join("")<<value);
-		attrItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
+		attrItem->setIcon(0,QIcon::fromTheme("accessories-calculator"));
 		attrItem->setFlags(Qt::ItemIsEnabled);
 		parentItem->addChild(attrItem);
 	}
@@ -420,7 +413,7 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 		props<<")";
 
 		QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<"variable"<<props.join("")<<"");
-		varItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
+		varItem->setIcon(0,QIcon::fromTheme("x-office-spreadsheet"));
 		varItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		// highlight item
 		for(int c=0;c<varItem->columnCount();c++)
@@ -451,19 +444,19 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 #endif
 
 	QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString("Attributes"));
-	attrItem->setIcon(0,QIcon(KIcon("folder")));
+	attrItem->setIcon(0,QIcon::fromTheme("folder"));
 	attrItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(attrItem);
 	scanAttrs(ncid,NC_GLOBAL,-1,attrItem);
 
 	QTreeWidgetItem *dimItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString("Dimensions"));
-	dimItem->setIcon(0,QIcon(KIcon("folder")));
+	dimItem->setIcon(0,QIcon::fromTheme("folder"));
 	dimItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(dimItem);
 	scanDims(ncid,ndims,dimItem);
 
 	QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString("Variables"));
-	varItem->setIcon(0,QIcon(KIcon("folder")));
+	varItem->setIcon(0,QIcon::fromTheme("folder"));
 	varItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(varItem);
 	scanVars(ncid,nvars,varItem);
@@ -713,7 +706,6 @@ void NetCDFFilterPrivate::write(const QString & fileName, AbstractDataSource* da
  */
 void NetCDFFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("netcdfFilter");
-	writer->writeAttribute("autoMode", QString::number(d->autoModeEnabled) );
 	writer->writeEndElement();
 }
 
@@ -728,13 +720,5 @@ bool NetCDFFilter::load(XmlStreamReader* reader) {
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
-
-	// read attributes
-	QString str = attribs.value("autoMode").toString();
-	if(str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'autoMode'"));
-	else
-		d->autoModeEnabled = str.toInt();
-
 	return true;
 }

@@ -44,11 +44,11 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
+#include <gsl/gsl_version.h>
 
-#include <KIcon>
-#include <KLocale>
 #include <QElapsedTimer>
-#include <QDebug>
+#include <QIcon>
+#include <KLocale>
 
 XYFitCurve::XYFitCurve(const QString& name)
 		: XYCurve(name, new XYFitCurvePrivate(this)){
@@ -71,7 +71,7 @@ void XYFitCurve::init() {
 
 	//TODO: read from the saved settings for XYFitCurve?
 	d->lineType = XYCurve::Line;
-	d->symbolsStyle = XYCurve::NoSymbols;
+	d->symbolsStyle = Symbol::NoSymbols;
 }
 
 void XYFitCurve::recalculate() {
@@ -231,7 +231,6 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		printf("\n	Y[%d]=%g \n",i,Yi);
 */
 		if(parse_errors()>0) {
-			qDebug()<<"func_f: parse errors in parsing "<<func;
 			return GSL_EINVAL;
 		}
 
@@ -593,7 +592,7 @@ void XYFitCurvePrivate::recalculate() {
 	if (n<np) {
 		fitResult.available = true;
 		fitResult.valid = false;
-		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).").arg(n).arg(np);
+		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).", n, np);
 		emit (q->dataChanged());
 		sourceDataChangedSinceLastFit = false;
 		return;
@@ -637,8 +636,13 @@ void XYFitCurvePrivate::recalculate() {
 
 	//get the covariance matrix
 	gsl_matrix* covar = gsl_matrix_alloc (np, np);
+#if GSL_MAJOR_VERSION >=2
+	gsl_matrix *J=0;
+	gsl_multifit_fdfsolver_jac (s, J);
+	gsl_multifit_covar (J, 0.0, covar);
+#else
 	gsl_multifit_covar (s->J, 0.0, covar);
-
+#endif
 
 	//write the result
 	fitResult.available = true;

@@ -49,7 +49,9 @@ class String2DoubleFilter : public AbstractSimpleFilter
 			bool valid;
 			if (m_use_default_locale) // we need a new QLocale instance here in case the default changed since the last call
 				result = QLocale().toDouble(m_inputs.value(0)->textAt(row), &valid);
-			result = m_numeric_locale.toDouble(m_inputs.value(0)->textAt(row), &valid);
+			else
+				result = m_numeric_locale.toDouble(m_inputs.value(0)->textAt(row), &valid);
+
 			if (valid)
 				return result;
 			else

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : export spreadsheet dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -31,8 +31,6 @@
 #include <QFileDialog>
 #include <KUrlCompletion>
 #include <KMessageBox>
-#include <KPushButton>
-#include <QStringList>
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KSharedConfig>
@@ -75,7 +73,6 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	setMainWidget( mainWidget );
 
 	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
-	setButtonText(KDialog::User1,i18n("Options >>"));
 
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
 	connect( ui.kleFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
@@ -84,12 +81,25 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	setCaption(i18n("Export spreadsheet"));
 	setWindowIcon(QIcon::fromTheme("document-export-database"));
 
+	//restore saved settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	ui.cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui.chkExportHeader->setChecked(conf.readEntry("Header", true));
 	ui.cbSeparator->setCurrentItem(conf.readEntry("Separator", "TAB"));
+	m_showOptions = conf.readEntry("ShowOptions", false);
+	ui.gbOptions->setVisible(m_showOptions);
+	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
+	restoreDialogSize(conf);
+}
 
-	resize( QSize(500,0).expandedTo(minimumSize()) );
+ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
+	//save current settings
+	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+	conf.writeEntry("Format", ui.cbFormat->currentIndex());
+	conf.writeEntry("Header", ui.chkExportHeader->isChecked());
+	conf.writeEntry("Separator", ui.cbSeparator->currentIndex());
+	conf.writeEntry("ShowOptions", m_showOptions);
+	saveDialogSize(conf);
 }
 
 void ExportSpreadsheetDialog::setFileName(const QString& name){
@@ -158,15 +168,10 @@ void ExportSpreadsheetDialog::okClicked(){
 /*!
 	Shows/hides the GroupBox with export options in this dialog.
 */
-void ExportSpreadsheetDialog::toggleOptions(){
-	if (ui.gbOptions->isVisible()){
-		ui.gbOptions->hide();
-		setButtonText(KDialog::User1,i18n("Options >>"));
-	}else{
-		ui.gbOptions->show();
-		setButtonText(KDialog::User1,i18n("Options <<"));
-	}
-
+void ExportSpreadsheetDialog::toggleOptions() {
+	m_showOptions = !m_showOptions;
+	ui.gbOptions->setVisible(m_showOptions);
+	m_showOptions ? setButtonText(KDialog::User1, i18n("Hide Options")) : setButtonText(KDialog::User1, i18n("Show Options"));
 	//resize the dialog
 	mainWidget->resize(layout()->minimumSize());
 	layout()->activate();

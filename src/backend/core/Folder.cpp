@@ -29,6 +29,7 @@
  ***************************************************************************/
 
 #include "backend/core/Folder.h"
+#include "backend/datapicker/Datapicker.h"
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
 #include "backend/core/column/Column.h"
@@ -186,6 +187,14 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(fileDataSource);
+		loaded = true;
+	} else if (element_name == "datapicker") {
+		Datapicker* datapicker = new Datapicker(0, "", true);
+		if (!datapicker->load(reader)){
+			delete datapicker;
+			return false;
+		}
+		addChild(datapicker);
 		loaded = true;
 	}
 

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for cartesian plot properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -37,6 +37,7 @@
 #include <QTimer>
 #include <QDir>
 #include <QFileDialog>
+#include <QImageReader>
 #include <KUrlCompletion>
 #include <KLocalizedString>
 
@@ -50,7 +51,10 @@
 */
 
 CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
-	m_initializing(false){
+	m_plot(0),
+	labelWidget(0),
+	m_initializing(false),
+	m_completion(new KUrlCompletion()) {
 
 	ui.setupUi(this);
 
@@ -67,12 +71,11 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	ui.kleBackgroundFileName->setClearButtonShown(true);
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
-	KUrlCompletion *comp = new KUrlCompletion();
-	ui.kleBackgroundFileName->setCompletionObject(comp);
+	ui.kleBackgroundFileName->setCompletionObject(m_completion);
 
 	//"Title"-tab
 	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
-	labelWidget=new LabelWidget(ui.tabTitle);
+ 	labelWidget=new LabelWidget(ui.tabTitle);
 	hboxLayout->addWidget(labelWidget);
 	hboxLayout->setContentsMargins(2,2,2,2);
 	hboxLayout->setSpacing(2);
@@ -98,7 +101,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	//General
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
-	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
+	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( ui.sbLeft, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbTop, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
@@ -165,6 +168,10 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 
 	//TODO: activate the tab again once the functionality is implemented
 	ui.tabWidget->removeTab(2);
+}
+
+CartesianPlotDock::~CartesianPlotDock() {
+	delete m_completion;
 }
 
 void CartesianPlotDock::init(){
@@ -247,52 +254,54 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	}
 
 	//show the properties of the first plot
-	this->load();
+  	this->load();
 
-	//update active widgets
-	backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
+    //update active widgets
+    backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
 
-	//Deactivate the geometry related widgets, if the worksheet layout is active.
-	//Currently, a plot can only be a child of the worksheet itself, so we only need to ask the parent aspect (=worksheet).
-	//TODO redesign this, if the hierarchy will be changend in future (a plot is a child of a new object group/container or so)
-	Worksheet* w = dynamic_cast<Worksheet*>(m_plot->parentAspect());
-	if (w){
-		bool b = (w->layout()==Worksheet::NoLayout);
-		ui.sbTop->setEnabled(b);
-		ui.sbLeft->setEnabled(b);
-		ui.sbWidth->setEnabled(b);
-		ui.sbHeight->setEnabled(b);
-		connect(w, SIGNAL(layoutChanged(Worksheet::Layout)), this, SLOT(layoutChanged(Worksheet::Layout)));
-	}
+    //Deactivate the geometry related widgets, if the worksheet layout is active.
+    //Currently, a plot can only be a child of the worksheet itself, so we only need to ask the parent aspect (=worksheet).
+    //TODO redesign this, if the hierarchy will be changend in future (a plot is a child of a new object group/container or so)
+    Worksheet* w = dynamic_cast<Worksheet*>(m_plot->parentAspect());
+    if (w){
+        bool b = (w->layout()==Worksheet::NoLayout);
+        ui.sbTop->setEnabled(b);
+        ui.sbLeft->setEnabled(b);
+        ui.sbWidth->setEnabled(b);
+        ui.sbHeight->setEnabled(b);
+        connect(w, SIGNAL(layoutChanged(Worksheet::Layout)), this, SLOT(layoutChanged(Worksheet::Layout)));
+    }
 
-	//SIGNALs/SLOTs
-	connect( m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(plotDescriptionChanged(const AbstractAspect*)) );
-	connect( m_plot, SIGNAL(rectChanged(QRectF&)), this, SLOT(plotRectChanged(QRectF&)) );
-	connect( m_plot, SIGNAL(xMinChanged(float)), this, SLOT(plotXMinChanged(float)) );
-	connect( m_plot, SIGNAL(xMaxChanged(float)), this, SLOT(plotXMaxChanged(float)) );
-	connect( m_plot, SIGNAL(xScaleChanged(int)), this, SLOT(plotXScaleChanged(int)) );
-	connect( m_plot, SIGNAL(yMinChanged(float)), this, SLOT(plotYMinChanged(float)) );
-	connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
-	connect( m_plot, SIGNAL(yScaleChanged(int)), this, SLOT(plotYScaleChanged(int)) );
-	connect( m_plot, SIGNAL(xScaleBreakingsChanged(CartesianPlot::ScaleBreakings)), this, SLOT(plotXScaleBreakingChanged(CartesianPlot::ScaleBreakings)) );
-	connect( m_plot, SIGNAL(yScaleBreakingsChanged(CartesianPlot::ScaleBreakings)), this, SLOT(plotYScaleBreakingChanged(CartesianPlot::ScaleBreakings)) );
-	connect( m_plot, SIGNAL(visibleChanged(bool)), this, SLOT(plotVisibleChanged(bool)) );
+    //SIGNALs/SLOTs
+    connect( m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(plotDescriptionChanged(const AbstractAspect*)) );
+    connect( m_plot, SIGNAL(rectChanged(QRectF&)), this, SLOT(plotRectChanged(QRectF&)) );
+    connect( m_plot, SIGNAL(xMinChanged(float)), this, SLOT(plotXMinChanged(float)) );
+    connect( m_plot, SIGNAL(xMaxChanged(float)), this, SLOT(plotXMaxChanged(float)) );
+    connect( m_plot, SIGNAL(xScaleChanged(int)), this, SLOT(plotXScaleChanged(int)) );
+    connect( m_plot, SIGNAL(xAutoScaleChanged(bool)), this, SLOT(plotXAutoScaleChanged(bool)) );
+    connect( m_plot, SIGNAL(yMinChanged(float)), this, SLOT(plotYMinChanged(float)) );
+    connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
+    connect( m_plot, SIGNAL(yScaleChanged(int)), this, SLOT(plotYScaleChanged(int)) );
+    connect( m_plot, SIGNAL(yAutoScaleChanged(bool)), this, SLOT(plotYAutoScaleChanged(bool)) );
+    connect( m_plot, SIGNAL(xScaleBreakingsChanged(CartesianPlot::ScaleBreakings)), this, SLOT(plotXScaleBreakingChanged(CartesianPlot::ScaleBreakings)) );
+    connect( m_plot, SIGNAL(yScaleBreakingsChanged(CartesianPlot::ScaleBreakings)), this, SLOT(plotYScaleBreakingChanged(CartesianPlot::ScaleBreakings)) );
+    connect( m_plot, SIGNAL(visibleChanged(bool)), this, SLOT(plotVisibleChanged(bool)) );
 
-	// Plot Area
-	connect( m_plot->plotArea(), SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), this, SLOT(plotBackgroundTypeChanged(PlotArea::BackgroundType)) );
-	connect( m_plot->plotArea(), SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)), this, SLOT(plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)) );
-	connect( m_plot->plotArea(), SIGNAL(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)), this, SLOT(plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle)) );
-	connect( m_plot->plotArea(), SIGNAL(backgroundBrushStyleChanged(Qt::BrushStyle)), this, SLOT(plotBackgroundBrushStyleChanged(Qt::BrushStyle)) );
-	connect( m_plot->plotArea(), SIGNAL(backgroundFirstColorChanged(QColor&)), this, SLOT(plotBackgroundFirstColorChanged(QColor&)) );
-	connect( m_plot->plotArea(), SIGNAL(backgroundSecondColorChanged(QColor&)), this, SLOT(plotBackgroundSecondColorChanged(QColor&)) );
-	connect( m_plot->plotArea(), SIGNAL(backgroundFileNameChanged(QString&)), this, SLOT(plotBackgroundFileNameChanged(QString&)) );
-	connect( m_plot->plotArea(), SIGNAL(backgroundOpacityChanged(float)), this, SLOT(plotBackgroundOpacityChanged(float)) );
-	connect( m_plot->plotArea(), SIGNAL(borderPenChanged(QPen&)), this, SLOT(plotBorderPenChanged(QPen&)) );
-	connect( m_plot->plotArea(), SIGNAL(borderOpacityChanged(float)), this, SLOT(plotBorderOpacityChanged(float)) );
-	connect( m_plot, SIGNAL(horizontalPaddingChanged(float)), this, SLOT(plotHorizontalPaddingChanged(float)) );
-	connect( m_plot, SIGNAL(verticalPaddingChanged(float)), this, SLOT(plotVerticalPaddingChanged(float)) );
+    // Plot Area
+    connect( m_plot->plotArea(), SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), this, SLOT(plotBackgroundTypeChanged(PlotArea::BackgroundType)) );
+    connect( m_plot->plotArea(), SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)), this, SLOT(plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)) );
+    connect( m_plot->plotArea(), SIGNAL(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)), this, SLOT(plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle)) );
+    connect( m_plot->plotArea(), SIGNAL(backgroundBrushStyleChanged(Qt::BrushStyle)), this, SLOT(plotBackgroundBrushStyleChanged(Qt::BrushStyle)) );
+    connect( m_plot->plotArea(), SIGNAL(backgroundFirstColorChanged(QColor&)), this, SLOT(plotBackgroundFirstColorChanged(QColor&)) );
+    connect( m_plot->plotArea(), SIGNAL(backgroundSecondColorChanged(QColor&)), this, SLOT(plotBackgroundSecondColorChanged(QColor&)) );
+    connect( m_plot->plotArea(), SIGNAL(backgroundFileNameChanged(QString&)), this, SLOT(plotBackgroundFileNameChanged(QString&)) );
+    connect( m_plot->plotArea(), SIGNAL(backgroundOpacityChanged(float)), this, SLOT(plotBackgroundOpacityChanged(float)) );
+    connect( m_plot->plotArea(), SIGNAL(borderPenChanged(QPen&)), this, SLOT(plotBorderPenChanged(QPen&)) );
+    connect( m_plot->plotArea(), SIGNAL(borderOpacityChanged(float)), this, SLOT(plotBorderOpacityChanged(float)) );
+    connect( m_plot, SIGNAL(horizontalPaddingChanged(float)), this, SLOT(plotHorizontalPaddingChanged(float)) );
+    connect( m_plot, SIGNAL(verticalPaddingChanged(float)), this, SLOT(plotVerticalPaddingChanged(float)) );
 
-	m_initializing = false;
+    m_initializing = false;
 }
 
 void CartesianPlotDock::activateTitleTab(){
@@ -365,14 +374,12 @@ void CartesianPlotDock::commentChanged(){
 	m_plot->setComment(ui.leComment->text());
 }
 
-void CartesianPlotDock::visibilityChanged(int state){
-	if (m_initializing)
-		return;
+void CartesianPlotDock::visibilityChanged(bool state){
+    if (m_initializing)
+            return;
 
-	bool b = (state==Qt::Checked);
-	foreach(CartesianPlot* plot, m_plotList){
-		plot->setVisible(b);
-	}
+    foreach(CartesianPlot* plot, m_plotList)
+            plot->setVisible(state);
 }
 
 void CartesianPlotDock::geometryChanged(){
@@ -741,18 +748,25 @@ void CartesianPlotDock::backgroundSecondColorChanged(const QColor& c){
     opens a file dialog and lets the user select the image file.
 */
 void CartesianPlotDock::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "CartesianPlotDock");
-	QString dir = conf.readEntry("LastImageDir", "");
-	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
-	if (path.isEmpty())
-		return; //cancel was clicked in the file-dialog
+    KConfigGroup conf(KSharedConfig::openConfig(), "CartesianPlotDock");
+    QString dir = conf.readEntry("LastImageDir", "");
 
-	int pos = path.lastIndexOf(QDir::separator());
-	if (pos!=-1) {
-		QString newDir = path.left(pos);
-		if (newDir!=dir)
-			conf.writeEntry("LastImageDir", newDir);
+	QString formats;
+	foreach(const QByteArray format, QImageReader::supportedImageFormats()) {
+		QString f = "*." + QString(format.constData());
+		formats.isEmpty() ? formats+=f : formats+=' '+f;
 	}
+
+	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
+    if (path.isEmpty())
+        return; //cancel was clicked in the file-dialog
+
+    int pos = path.lastIndexOf(QDir::separator());
+    if (pos!=-1) {
+        QString newDir = path.left(pos);
+        if (newDir!=dir)
+            conf.writeEntry("LastImageDir", newDir);
+    }
 
 	ui.kleBackgroundFileName->setText( path );
 
@@ -880,6 +894,12 @@ void CartesianPlotDock::plotRectChanged(QRectF& rect){
 	m_initializing = false;
 }
 
+void CartesianPlotDock::plotXAutoScaleChanged(bool value) {
+	m_initializing = true;
+	ui.chkAutoScaleX->setChecked(value);
+	m_initializing = false;
+}
+
 void CartesianPlotDock::plotXMinChanged(float value){
 	m_initializing = true;
 	ui.kleXMin->setText( QString::number(value) );
@@ -895,6 +915,13 @@ void CartesianPlotDock::plotXMaxChanged(float value){
 void CartesianPlotDock::plotXScaleChanged(int scale){
 	m_initializing = true;
 	ui.cbXScaling->setCurrentIndex( scale );
+	m_initializing = false;
+}
+
+
+void CartesianPlotDock::plotYAutoScaleChanged(bool value) {
+	m_initializing = true;
+	ui.chkAutoScaleY->setChecked(value);
 	m_initializing = false;
 }
 
@@ -1207,3 +1234,4 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 
 	config.sync();
 }
+

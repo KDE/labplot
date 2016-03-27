@@ -37,12 +37,14 @@
 #include <KConfig>
 
 class LabelWidget;
+class KUrlCompletion;
 
 class CartesianPlotDock : public QWidget {
 	Q_OBJECT
 
 public:
 	explicit CartesianPlotDock(QWidget*);
+	~CartesianPlotDock();
 	void setPlots(QList<CartesianPlot*>);
 	void activateTitleTab();
 
@@ -52,6 +54,7 @@ private:
 	CartesianPlot* m_plot;
 	LabelWidget* labelWidget;
 	bool m_initializing;
+	KUrlCompletion* m_completion;
 
 	void load();
 	void loadConfig(KConfig&);
@@ -64,7 +67,7 @@ private slots:
 	//"General"-tab
 	void nameChanged();
 	void commentChanged();
-	void visibilityChanged(int);
+	void visibilityChanged(bool);
 	void geometryChanged();
 	void layoutChanged(Worksheet::Layout);
 
@@ -117,9 +120,11 @@ private slots:
 	//general
 	void plotDescriptionChanged(const AbstractAspect*);
 	void plotRectChanged(QRectF&);
+	void plotXAutoScaleChanged(bool);
 	void plotXMinChanged(float);
 	void plotXMaxChanged(float);
 	void plotXScaleChanged(int);
+	void plotYAutoScaleChanged(bool);
 	void plotYMinChanged(float);
 	void plotYMaxChanged(float);
 	void plotYScaleChanged(int);

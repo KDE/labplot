@@ -30,10 +30,12 @@
 #include "backend/core/AbstractPart.h"
 #include "commonfrontend/core/PartMdiView.h"
 #include "backend/core/Workbook.h"
+#include "backend/datapicker/Datapicker.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include <QMenu>
 #include <QStyle>
 
-#include <KIcon>
 #include <KLocale>
 
 /**
@@ -94,9 +96,10 @@ void AbstractPart::deleteMdiSubWindow() {
  * is closed (=deleted) in MainWindow. Makes sure that the view also gets deleted.
  */
 void AbstractPart::deleteView() const {
-	//if the parent is a Workbook, the actual view was already deleted when QTabWidget was deleted.
+    //if the parent is a Workbook or Datapicker, the actual view was already deleted when QTabWidget was deleted.
 	//here just set the pointer to 0.
-	if (dynamic_cast<const Workbook*>(parentAspect())) {
+    if (dynamic_cast<const Workbook*>(parentAspect()) || dynamic_cast<const Datapicker*>(parentAspect())
+            || dynamic_cast<const Datapicker*>(parentAspect()->parentAspect())) {
 		m_view = 0;
 		return;
 	}
@@ -139,7 +142,9 @@ QMenu* AbstractPart::createContextMenu(){
 			action_temp->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMaxButton));
 		}
 	} else {
-		menu->addAction(i18n("Show"), this, SIGNAL(showRequested()));
+		//data spreadsheets in the datapicker curves cannot be hidden/minimized, don't show this menu entry
+        if ( !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect())) )
+			menu->addAction(i18n("Show"), this, SIGNAL(showRequested()));
 	}
 
 	return menu;

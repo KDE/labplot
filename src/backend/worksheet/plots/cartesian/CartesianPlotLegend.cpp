@@ -48,10 +48,8 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 
-#include <KIcon>
 #include <KConfig>
 #include <KConfigGroup>
-
 #include <KLocale>
 
 CartesianPlotLegend::CartesianPlotLegend(CartesianPlot* plot, const QString &name)
@@ -400,7 +398,7 @@ void CartesianPlotLegend::setLayoutColumnCount(int count) {
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void CartesianPlotLegend::visibilityChanged(){
+void CartesianPlotLegend::visibilityChanged() {
 	Q_D(const CartesianPlotLegend);
 	this->setVisible(!d->isVisible());
 }
@@ -442,6 +440,7 @@ QPainterPath CartesianPlotLegendPrivate::shape() const {
 bool CartesianPlotLegendPrivate::swapVisible(bool on){
 	bool oldValue = isVisible();
 	setVisible(on);
+	emit q->visibilityChanged(on);
 	return oldValue;
 }
 
@@ -708,7 +707,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 				//curve's error bars for x
 				float errorBarsSize = Worksheet::convertToSceneUnits(10, Worksheet::Point);
-				if (curve->symbolsStyle()!=XYCurve::NoSymbols && errorBarsSize<curve->symbolsSize()*1.4)
+				if (curve->symbolsStyle()!=Symbol::NoSymbols && errorBarsSize<curve->symbolsSize()*1.4)
 					errorBarsSize = curve->symbolsSize()*1.4;
 
 				switch(curve->errorBarsType()) {
@@ -746,12 +745,12 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			}
 
 			//curve's symbol
-			if (curve->symbolsStyle()!=XYCurve::NoSymbols){
+			if (curve->symbolsStyle()!=Symbol::NoSymbols){
 				painter->setOpacity(curve->symbolsOpacity());
 				painter->setBrush(curve->symbolsBrush());
 				painter->setPen(curve->symbolsPen());
 
-				QPainterPath path = XYCurve::symbolsPathFromStyle(curve->symbolsStyle());
+				QPainterPath path = Symbol::pathFromStyle(curve->symbolsStyle());
 				QTransform trafo;
 				trafo.scale(curve->symbolsSize(), curve->symbolsSize());
 				path = trafo.map(path);

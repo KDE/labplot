@@ -1,10 +1,11 @@
+
 /***************************************************************************
     File                 : ProjectExplorer.cpp
-    Project              : Labplot2
+    Project              : LabPlot
     Description       	 : A tree view for displaying and editing an AspectTreeModel.
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2008 by Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2010-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -38,11 +39,10 @@
 #include <QContextMenuEvent>
 #include <QPushButton>
 #include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QLabel>
 #include <QHeaderView>
 #include <QSignalMapper>
-#include <QDebug>
+#include <QTimer>
 
 #include <KLineEdit>
 #include <KLocale>
@@ -61,7 +61,7 @@
 */
 
 ProjectExplorer::ProjectExplorer(QWidget* parent) {
-    Q_UNUSED(parent);
+	Q_UNUSED(parent);
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setSpacing(0);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -105,29 +105,29 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) {
 	connect(bFilterOptions, SIGNAL(toggled(bool)), this, SLOT(toggleFilterOptionsMenu(bool)));
 }
 
-void ProjectExplorer::createActions(){
-    caseSensitiveAction = new QAction(i18n("case sensitive"), this);
-    caseSensitiveAction->setCheckable(true);
-    caseSensitiveAction->setChecked(false);
-    connect(caseSensitiveAction, SIGNAL(triggered()), this, SLOT(toggleFilterCaseSensitivity()));
+void ProjectExplorer::createActions() {
+	caseSensitiveAction = new QAction(i18n("case sensitive"), this);
+	caseSensitiveAction->setCheckable(true);
+	caseSensitiveAction->setChecked(false);
+	connect(caseSensitiveAction, SIGNAL(triggered()), this, SLOT(toggleFilterCaseSensitivity()));
 
 	matchCompleteWordAction = new QAction(i18n("match complete word"), this);
-    matchCompleteWordAction->setCheckable(true);
-    matchCompleteWordAction->setChecked(false);
-    connect(matchCompleteWordAction, SIGNAL(triggered()), this, SLOT(toggleFilterMatchCompleteWord()));
+	matchCompleteWordAction->setCheckable(true);
+	matchCompleteWordAction->setChecked(false);
+	connect(matchCompleteWordAction, SIGNAL(triggered()), this, SLOT(toggleFilterMatchCompleteWord()));
 
-    expandTreeAction = new QAction(i18n("expand all"), this);
-    connect(expandTreeAction, SIGNAL(triggered()), m_treeView, SLOT(expandAll()));
+	expandTreeAction = new QAction(i18n("expand all"), this);
+	connect(expandTreeAction, SIGNAL(triggered()), m_treeView, SLOT(expandAll()));
 
 	collapseTreeAction = new QAction(i18n("collapse all"), this);
-    connect(collapseTreeAction, SIGNAL(triggered()), m_treeView, SLOT(collapseAll()));
+	connect(collapseTreeAction, SIGNAL(triggered()), m_treeView, SLOT(collapseAll()));
 
-    toggleFilterAction = new QAction(i18n("hide search/filter options"), this);
-    connect(toggleFilterAction, SIGNAL(triggered()), this, SLOT(toggleFilterWidgets()));
+	toggleFilterAction = new QAction(i18n("hide search/filter options"), this);
+	connect(toggleFilterAction, SIGNAL(triggered()), this, SLOT(toggleFilterWidgets()));
 
 	showAllColumnsAction = new QAction(i18n("show all"),this);
 	showAllColumnsAction->setCheckable(true);
-    showAllColumnsAction->setChecked(true);
+	showAllColumnsAction->setChecked(true);
 	showAllColumnsAction->setEnabled(false);
 	connect(showAllColumnsAction, SIGNAL(triggered()), this, SLOT(showAllColumns()));
 }
@@ -136,15 +136,15 @@ void ProjectExplorer::createActions(){
   shows the context menu in the tree. In addition to the context menu of the currently selected aspect,
   treeview specific options are added.
 */
-void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event){
+void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 	if(!m_treeView->model())
-	  return;
+		return;
 
 	QModelIndex index = m_treeView->indexAt(m_treeView->viewport()->mapFrom(this, event->pos()));
 	QVariant menu_value = m_treeView->model()->data(index, AspectTreeModel::ContextMenuRole);
 	QMenu *menu = static_cast<QMenu*>(menu_value.value<QWidget*>());
 
-	if (!menu){
+	if (!menu) {
 		menu = new QMenu();
 
 		menu->addSeparator()->setText(i18n("Tree options"));
@@ -158,7 +158,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event){
 		columnsMenu->addAction(showAllColumnsAction);
 		columnsMenu->addSeparator();
 		for (int i=0; i<list_showColumnActions.size(); i++)
-		columnsMenu->addAction(list_showColumnActions.at(i));
+			columnsMenu->addAction(list_showColumnActions.at(i));
 
 		//TODO
 		//Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
@@ -170,20 +170,17 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event){
 	delete menu;
 }
 
-void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect){
+void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect) {
 	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	if(tree_model)
-	  m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(aspect));
+		m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(aspect));
 }
 
 /*!
   Sets the \c model for the tree view to present.
 */
-void ProjectExplorer::setModel(QAbstractItemModel * model){
-	m_treeView->setModel(model);
-	m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
-
-	AspectTreeModel* treeModel = qobject_cast<AspectTreeModel*>(model);
+void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
+	m_treeView->setModel(treeModel);
 
 	connect(treeModel, SIGNAL(renameRequested(QModelIndex)), m_treeView, SLOT(edit(QModelIndex)));
 	connect(treeModel, SIGNAL(indexSelected(QModelIndex)), this, SLOT(selectIndex(QModelIndex)));
@@ -191,23 +188,32 @@ void ProjectExplorer::setModel(QAbstractItemModel * model){
 	connect(treeModel, SIGNAL(hiddenAspectSelected(const AbstractAspect*)), this, SIGNAL(hiddenAspectSelected(const AbstractAspect*)));
 
 	connect(m_treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-							this, SLOT(currentChanged(QModelIndex,QModelIndex)) );
+	        this, SLOT(currentChanged(QModelIndex,QModelIndex)) );
 	connect(m_treeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-					this, SLOT(selectionChanged(QItemSelection,QItemSelection)) );
+	        this, SLOT(selectionChanged(QItemSelection,QItemSelection)) );
 
 	//create action for showing/hiding the columns in the tree.
 	//this is done here since the number of columns is  not available in createActions() yet.
-	showColumnsSignalMapper = new QSignalMapper(this);
-	for (int i=0; i<m_treeView->model()->columnCount(); i++){
-	  QAction* showColumnAction =  new QAction(m_treeView->model()->headerData(i, Qt::Horizontal).toString(), this);
-	  showColumnAction->setCheckable(true);
-	  showColumnAction->setChecked(true);
-	  list_showColumnActions.append(showColumnAction);
+	if (list_showColumnActions.size()==0) {
+		showColumnsSignalMapper = new QSignalMapper(this);
+		for (int i=0; i<m_treeView->model()->columnCount(); i++) {
+			QAction* showColumnAction =  new QAction(treeModel->headerData(i, Qt::Horizontal).toString(), this);
+			showColumnAction->setCheckable(true);
+			showColumnAction->setChecked(true);
+			list_showColumnActions.append(showColumnAction);
 
-	  connect(showColumnAction, SIGNAL(triggered(bool)), showColumnsSignalMapper, SLOT(map()));
-	  showColumnsSignalMapper->setMapping(showColumnAction, i);
+			connect(showColumnAction, SIGNAL(triggered(bool)), showColumnsSignalMapper, SLOT(map()));
+			showColumnsSignalMapper->setMapping(showColumnAction, i);
+		}
+		connect(showColumnsSignalMapper, SIGNAL(mapped(int)), this, SLOT(toggleColumn(int)));
+	} else {
+		for (int i=0; i<list_showColumnActions.size(); ++i) {
+			if (!list_showColumnActions.at(i)->isChecked())
+				m_treeView->hideColumn(i);
+		}
 	}
-	connect(showColumnsSignalMapper, SIGNAL(mapped(int)), this, SLOT(toggleColumn(int)));
+
+	QTimer::singleShot(0, this, SLOT(resizeHeader()));
 }
 
 void ProjectExplorer::setProject( const Project* project) {
@@ -217,27 +223,18 @@ void ProjectExplorer::setProject( const Project* project) {
 	m_project = project;
 }
 
-QModelIndex ProjectExplorer::currentIndex() const{
-  return m_treeView->currentIndex();
-}
-
-/*!
-  Returns the model that this view is presenting.
-  \sa setModel()
-*/
-QAbstractItemModel* ProjectExplorer::model() const{
-	return m_treeView->model();
+QModelIndex ProjectExplorer::currentIndex() const {
+	return m_treeView->currentIndex();
 }
 
 /*!
 	handles the contextmenu-event of the horizontal header in the tree view.
 	Provides a menu for selective showing and hiding of columns.
-	//TODO add i18n (and mayby some icons) for KDE.
 */
-bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
+bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 	QHeaderView* h = m_treeView->header();
 	if (obj!=h)
-	  return QObject::eventFilter(obj, event);
+		return QObject::eventFilter(obj, event);
 
 	if (event->type() != QEvent::ContextMenu)
 		return QObject::eventFilter(obj, event);
@@ -250,7 +247,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
 	columnsMenu->addAction(showAllColumnsAction);
 	columnsMenu->addSeparator();
 	for (int i=0; i<list_showColumnActions.size(); i++)
-	   columnsMenu->addAction(list_showColumnActions.at(i));
+		columnsMenu->addAction(list_showColumnActions.at(i));
 
 	columnsMenu->exec(e->globalPos());
 	delete columnsMenu;
@@ -266,12 +263,17 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event){
   expand the aspect \c aspect (the tree index corresponding to it) in the tree view
   and makes it visible and selected. Called when a new aspect is added to the project.
  */
-void ProjectExplorer::aspectAdded(const AbstractAspect* aspect){
+void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 	if (m_project->isLoading())
 		return;
 
 	//don't do anything if hidden aspects were added
 	if (aspect->hidden())
+		return;
+
+
+	//don't do anything for newly added data spreadsheets of data picker curves
+	if (aspect->inherits("Spreadsheet") && aspect->parentAspect()->inherits("DatapickerCurve"))
 		return;
 
 	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
@@ -288,22 +290,23 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect){
 
 	m_treeView->scrollTo(index);
 	m_treeView->setCurrentIndex(index);
+	m_treeView->resizeColumnToContents(0);
 }
 
-void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous){
+void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous) {
 	Q_UNUSED(previous);
 	emit currentAspectChanged(static_cast<AbstractAspect*>(current.internalPointer()));
 }
 
-void ProjectExplorer::toggleColumn(int index){
+void ProjectExplorer::toggleColumn(int index) {
 	//determine the total number of checked column actions
 	int checked = 0;
-	foreach(QAction* action, list_showColumnActions){
+	foreach(QAction* action, list_showColumnActions) {
 		if (action->isChecked())
 			checked++;
 	}
 
-	if (list_showColumnActions.at(index)->isChecked()){
+	if (list_showColumnActions.at(index)->isChecked()) {
 		m_treeView->showColumn(index);
 		m_treeView->header()->resizeSection(0,0 );
 		m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
@@ -312,18 +315,18 @@ void ProjectExplorer::toggleColumn(int index){
 			action->setEnabled(true);
 
 		//deactivate the "show all column"-action, if all actions are checked
-		if ( checked == list_showColumnActions.size() ){
+		if ( checked == list_showColumnActions.size() ) {
 			showAllColumnsAction->setEnabled(false);
 			showAllColumnsAction->setChecked(true);
 		}
-	}else{
+	} else {
 		m_treeView->hideColumn(index);
 		showAllColumnsAction->setEnabled(true);
 		showAllColumnsAction->setChecked(false);
 
 		//if there is only one checked column-action, deactivated it.
 		//It should't be possible to hide all columns
-		if ( checked == 1 ){
+		if ( checked == 1 ) {
 			int i=0;
 			while( !list_showColumnActions.at(i)->isChecked() )
 				i++;
@@ -333,15 +336,15 @@ void ProjectExplorer::toggleColumn(int index){
 	}
 }
 
-void ProjectExplorer::showAllColumns(){
-	for (int i=0; i<m_treeView->model()->columnCount(); i++){
+void ProjectExplorer::showAllColumns() {
+	for (int i=0; i<m_treeView->model()->columnCount(); i++) {
 		m_treeView->showColumn(i);
 		m_treeView->header()->resizeSection(0,0 );
 		m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
 	}
 	showAllColumnsAction->setEnabled(false);
 
-	foreach(QAction* action, list_showColumnActions){
+	foreach(QAction* action, list_showColumnActions) {
 		action->setEnabled(true);
 		action->setChecked(true);
 	}
@@ -350,34 +353,38 @@ void ProjectExplorer::showAllColumns(){
 /*!
   shows/hides the frame with the search/filter widgets
 */
-void ProjectExplorer::toggleFilterWidgets(){
- 	if (frameFilter->isVisible()){
-	  frameFilter->hide();
-	  toggleFilterAction->setText(i18n("show search/filter options"));
-	}else{
-	  frameFilter->show();
-	  toggleFilterAction->setText(i18n("hide search/filter options"));
+void ProjectExplorer::toggleFilterWidgets() {
+	if (frameFilter->isVisible()) {
+		frameFilter->hide();
+		toggleFilterAction->setText(i18n("show search/filter options"));
+	} else {
+		frameFilter->show();
+		toggleFilterAction->setText(i18n("hide search/filter options"));
 	}
 }
 
 /*!
   toggles the menu for the filter/search options
 */
-void ProjectExplorer::toggleFilterOptionsMenu(bool checked){
-    if (checked){
-        QMenu menu;
-        menu.addAction(caseSensitiveAction);
+void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
+	if (checked) {
+		QMenu menu;
+		menu.addAction(caseSensitiveAction);
 		menu.addAction(matchCompleteWordAction);
-        connect(&menu, SIGNAL(aboutToHide()), bFilterOptions, SLOT(toggle()));
-        menu.exec(bFilterOptions->mapToGlobal(QPoint(0,bFilterOptions->height())));
-    }
+		connect(&menu, SIGNAL(aboutToHide()), bFilterOptions, SLOT(toggle()));
+		menu.exec(bFilterOptions->mapToGlobal(QPoint(0,bFilterOptions->height())));
+	}
+}
+
+void ProjectExplorer::resizeHeader() {
+	m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
 }
 
 /*!
   called when the filter/search text was changend.
 */
-void ProjectExplorer::filterTextChanged(const QString& text){
-    AspectTreeModel * model = qobject_cast<AspectTreeModel *>(m_treeView->model());
+void ProjectExplorer::filterTextChanged(const QString& text) {
+	AspectTreeModel * model = qobject_cast<AspectTreeModel *>(m_treeView->model());
 	if(!model)
 		return;
 
@@ -385,7 +392,7 @@ void ProjectExplorer::filterTextChanged(const QString& text){
 	m_treeView->update();
 }
 
-void ProjectExplorer::toggleFilterCaseSensitivity(){
+void ProjectExplorer::toggleFilterCaseSensitivity() {
 	AspectTreeModel * model = qobject_cast<AspectTreeModel *>(m_treeView->model());
 	if(!model)
 		return;
@@ -400,7 +407,7 @@ void ProjectExplorer::toggleFilterCaseSensitivity(){
 }
 
 
-void ProjectExplorer::toggleFilterMatchCompleteWord(){
+void ProjectExplorer::toggleFilterMatchCompleteWord() {
 	AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	if(!model)
 		return;
@@ -411,7 +418,7 @@ void ProjectExplorer::toggleFilterMatchCompleteWord(){
 	m_treeView->update();
 }
 
-void ProjectExplorer::selectIndex(const QModelIndex&  index){
+void ProjectExplorer::selectIndex(const QModelIndex&  index) {
 	if (m_project->isLoading())
 		return;
 
@@ -422,7 +429,7 @@ void ProjectExplorer::selectIndex(const QModelIndex&  index){
 	}
 }
 
-void ProjectExplorer::deselectIndex(const QModelIndex & index){
+void ProjectExplorer::deselectIndex(const QModelIndex & index) {
 	if (m_project->isLoading())
 		return;
 
@@ -430,7 +437,7 @@ void ProjectExplorer::deselectIndex(const QModelIndex & index){
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
 }
 
-void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected){
+void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) {
 	QModelIndex index;
 	QModelIndexList items;
 	AbstractAspect* aspect = 0;
@@ -438,14 +445,14 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	//there are four model indices in each row
 	//-> divide by 4 to obtain the number of selected rows (=aspects)
 	items = selected.indexes();
-	for (int i=0; i<items.size()/4; ++i){
+	for (int i=0; i<items.size()/4; ++i) {
 		index = items.at(i*4);
 		aspect = static_cast<AbstractAspect *>(index.internalPointer());
 		aspect->setSelected(true);
 	}
 
 	items = deselected.indexes();
-	for (int i=0; i<items.size()/4; ++i){
+	for (int i=0; i<items.size()/4; ++i) {
 		index = items.at(i*4);
 		aspect = static_cast<AbstractAspect *>(index.internalPointer());
 		aspect->setSelected(false);
@@ -453,7 +460,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 	items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
-	foreach(const QModelIndex& index,items){
+	foreach(const QModelIndex& index,items) {
 		aspect = static_cast<AbstractAspect *>(index.internalPointer());
 		selectedAspects<<aspect;
 	}
@@ -461,11 +468,10 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	emit selectedAspectsChanged(selectedAspects);
 }
 
-
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
-struct ViewState{
+struct ViewState {
 	Qt::WindowStates state;
 	QRect geometry;
 };
@@ -563,13 +569,13 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs;
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 
-    while (!reader->atEnd()){
-        reader->readNext();
-        if (reader->isEndElement() && reader->name() == "state")
-            break;
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == "state")
+			break;
 
-        if (!reader->isStartElement())
-            continue;
+		if (!reader->isStartElement())
+			continue;
 
 		if (reader->name() == "expanded") {
 			expandedItem = true;
@@ -600,7 +606,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 				//-> make the project item current in this case
 				currentIndex = model->modelIndexOfAspect(m_project);
 				continue;
-			}else if (row>=aspects.size())
+			} else if (row>=aspects.size())
 				continue;
 
 			const QModelIndex& index = model->modelIndexOfAspect(aspects.at(row));
