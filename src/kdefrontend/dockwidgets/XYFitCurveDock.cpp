@@ -37,6 +37,7 @@
 
 #include <QMenu>
 #include <QWidgetAction>
+#include <QDebug>
 
 /*!
   \class XYFitCurveDock
@@ -52,12 +53,8 @@
   \ingroup kdefrontend
 */
 
-XYFitCurveDock::XYFitCurveDock(QWidget *parent): XYCurveDock(parent),
-	cbXDataColumn(0),
-	cbYDataColumn(0),
-	cbWeightsColumn(0),
-	m_fitCurve(0) {
-
+XYFitCurveDock::XYFitCurveDock(QWidget *parent)
+	 : XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), cbWeightsColumn(0), m_fitCurve(0) {
 }
 
 /*!
@@ -140,6 +137,7 @@ void XYFitCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
 	Q_ASSERT(m_fitCurve);
+	qDebug()<<"	fit curve	x index="<<m_fitCurve->xDataColumn();
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_fitCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_fitCurve->yDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbWeightsColumn, m_fitCurve->weightsColumn());
@@ -222,6 +220,7 @@ void XYFitCurveDock::commentChanged() {
 }
 
 void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
+	qDebug()<<"XYFitCurveDock::xDataColumnChanged()";
 	if (m_initializing)
 		return;
 
@@ -621,6 +620,7 @@ void XYFitCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 }
 
 void XYFitCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
+	qDebug()<<"XYFitCurveDock::curveXDataColumnChanged()";
 	m_initializing = true;
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, column);
 	m_initializing = false;

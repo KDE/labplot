@@ -29,15 +29,11 @@
 #include "XYFourierFilterCurveDock.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
-//#include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
-/*#include "kdefrontend/widgets/ConstantsWidget.h"
-#include "kdefrontend/widgets/FunctionsWidget.h"
-#include "kdefrontend/widgets/FitOptionsWidget.h"
-#include "kdefrontend/widgets/FitParametersWidget.h"
-*/
 #include <QMenu>
 #include <QWidgetAction>
+#include <QDebug>
 
 /*!
   \class XYFourierFilterCurveDock
@@ -53,8 +49,8 @@
   \ingroup kdefrontend
 */
 
-XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget *parent): XYCurveDock(parent), m_filterCurve(0) {
-
+XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget *parent): 
+	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_filterCurve(0) {
 }
 
 /*!
@@ -81,6 +77,11 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	uiGeneralTab.cbType->addItem(i18n("Band pass"));
 	uiGeneralTab.cbType->addItem(i18n("Band reject"));
 	uiGeneralTab.cbType->addItem(i18n("Threshold"));
+
+	uiGeneralTab.cbUnit->addItem(i18n("Index"));
+	uiGeneralTab.cbUnit->addItem(i18n("Frequency (Hz)"));
+	uiGeneralTab.cbUnit->addItem(i18n("Wavelength"));
+	uiGeneralTab.cbUnit->addItem(i18n("Ratio"));
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
@@ -91,15 +92,13 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
-/*
-	connect( uiGeneralTab.sbDegree, SIGNAL(valueChanged(int)), this, SLOT(updateModelEquation()) );
-	connect( uiGeneralTab.teEquation, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()) );
-	connect( uiGeneralTab.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()) );
-	connect( uiGeneralTab.pbParameters, SIGNAL(clicked()), this, SLOT(showParameters()) );
-	connect( uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()) );
-*/
+//	connect( uiGeneralTab.cbForm, SIGNAL(currentIndexChanged(int)), this, SLOT(formChanged(int)) );
+//	connect( uiGeneralTab.cbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged(int)) );
+//	connect( uiGeneralTab.cbUnit2, SIGNAL(currentIndexChanged(int)), this, SLOT(unit2Changed(int)) );
+
+//	connect( uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
 
@@ -126,14 +125,22 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	m_filterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
 	Q_ASSERT(m_filterCurve);
-
+	qDebug()<<"	filter curve	x index="<<m_filterCurve->xDataColumn();
+	qDebug()<<"	init():	"<<m_filterCurve->xDataColumnPath();
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_filterCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_filterCurve->yDataColumn());
 
-	uiGeneralTab.cbType->setCurrentIndex(m_filterData.filterType);
-	this->typeChanged(m_filterData.filterType);
-
-//	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
+	uiGeneralTab.cbType->setCurrentIndex(m_filterData.type);
+	this->typeChanged(m_filterData.type);
+	uiGeneralTab.cbForm->setCurrentIndex(m_filterData.form);
+	this->formChanged(m_filterData.form);
+	uiGeneralTab.sbValue->setValue(m_filterData.value);
+	uiGeneralTab.cbUnit->setCurrentIndex(m_filterData.unit);
+	this->unitChanged(m_filterData.unit);
+	//uiGeneralTab.sbValue2->setValue(m_filterData.value2);
+	//uiGeneralTab.cbUnit2->setCurrentIndex(m_filterData.unit2);
+	//this->unit2Changed(m_filterData.unit2);
+	this->showFilterResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last filter
 	//uiGeneralTab.pbRecalculate->setEnabled(m_filterCurve->isSourceDataChangedSinceLastFilter());
@@ -146,7 +153,6 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	connect(m_filterCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
 	connect(m_filterCurve, SIGNAL(filterDataChanged(XYFourierFilterCurve::FilterData)), this, SLOT(curveFilterDataChanged(XYFourierFilterCurve::FilterData)));
 	connect(m_filterCurve, SIGNAL(sourceDataChangedSinceLastFilter()), this, SLOT(enableRecalculate()));
-
 }
 
 void XYFourierFilterCurveDock::setModel() {
@@ -171,7 +177,7 @@ void XYFourierFilterCurveDock::setModel() {
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
-void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list){
+void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing=true;
 	m_curvesList=list;
 	m_curve=list.first();
@@ -179,7 +185,7 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list){
 	Q_ASSERT(m_filterCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
-	//m_fitData = m_fitCurve->fitData();
+	m_filterData = m_filterCurve->filterData();
 	initGeneralTab();
 	initTabs();
 	m_initializing=false;
@@ -203,6 +209,7 @@ void XYFourierFilterCurveDock::commentChanged(){
 }
 
 void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
+	qDebug()<<"XYFitCurveDock::xDataColumnChanged()";
 	if (m_initializing)
 		return;
 
@@ -233,13 +240,14 @@ void XYFourierFilterCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYFourierFilterCurveDock::typeChanged(int index) {
-/*
-	XYFitCurve::ModelType type = (XYFitCurve::ModelType)index;
-	bool custom = (type==XYFitCurve::Custom);
-	uiGeneralTab.teEquation->setReadOnly(!custom);
-	uiGeneralTab.tbFunctions->setVisible(custom);
-	uiGeneralTab.tbConstants->setVisible(custom);
+	XYFourierFilterCurve::FilterType type = (XYFourierFilterCurve::FilterType)index;
+	m_filterData.type = (XYFourierFilterCurve::FilterType)uiGeneralTab.cbType->currentIndex();
 
+	if(type == XYFourierFilterCurve::LowPass) {
+		//TODO	
+	}
+	
+/*
 	if (type == XYFitCurve::Polynomial) {
 		uiGeneralTab.lDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setVisible(true);
@@ -269,225 +277,20 @@ void XYFourierFilterCurveDock::typeChanged(int index) {
 		uiGeneralTab.lDegree->setVisible(false);
 		uiGeneralTab.sbDegree->setVisible(false);
 	}
-
-	this->updateModelEquation();
 */
 }
-/*
-void XYFitCurveDock::updateModelEquation() {
-	QStringList vars; //variables/parameters that are known in ExpressionTestEdit teEquation
-	vars << "x";
-	QString eq;
-	m_fitData.modelType = (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
-	int num = uiGeneralTab.sbDegree->value();
 
-	if (m_fitData.modelType!=XYFitCurve::Custom)
-		m_fitData.paramNames.clear();
-
-	if (m_fitData.modelType == XYFitCurve::Polynomial) {
-		eq = "c0 + c1*x";
-		m_fitData.model = eq;
-		vars << "c0" << "c1";
-		m_fitData.paramNames << "c0" << "c1";
-		if (num==2) {
-			eq += " + c2*x^2";
-			m_fitData.model += " + c2*x^2";
-			vars << "c2";
-			m_fitData.paramNames << "c2";
-		} else if (num>2) {
-			QString numStr = QString::number(num);
-			eq += " + ... + c" + numStr + "*x^" + numStr;
-			vars << "c" + numStr << "...";
-			for (int i=2; i<=num; ++i) {
-				numStr = QString::number(i);
-				m_fitData.model += "+c" + numStr + "*x^" + numStr;
-				m_fitData.paramNames << "c"+numStr;
-			}
-		}
-	} else if (m_fitData.modelType == XYFitCurve::Power) {
-		if (num==1) {
-			eq = "a*x^b";
-			vars << "a" << "b";
-			m_fitData.paramNames << "a" << "b";
-		} else {
-			eq = "a + b*x^c";
-			vars << "a" << "b" << "c";
-			m_fitData.paramNames << "a" << "b" << "c";
-		}
-		m_fitData.model = eq;
-	} else if (m_fitData.modelType == XYFitCurve::Exponential) {
-		eq = "a*exp(b*x)";
-		vars << "a" << "b";
-		m_fitData.paramNames << "a" << "b";
-		if (num==2){
-			eq += " + c*exp(d*x)";
-			vars << "c" << "d";
-			m_fitData.paramNames << "c" << "d";
-		} else if (num==3){
-			eq += " + c*exp(d*x) + e*exp(f*x)";
-			vars << "c" << "d" << "e" << "f";
-			m_fitData.paramNames << "c" << "d" << "e" << "f";
-		}
-		m_fitData.model = eq;
-	} else if (m_fitData.modelType == XYFitCurve::Inverse_Exponential) {
-		eq = "a*(1-exp(b*x))+c";
-		m_fitData.model = eq;
-		vars << "a" << "b" << "c";
-		m_fitData.paramNames << "a" << "b" << "c";
-	} else if (m_fitData.modelType == XYFitCurve::Fourier) {
-		eq = "a0 + (a1*cos(w*x) + b1*sin(w*x))";
-		m_fitData.model = eq;
-		vars << "w" << "a0" << "a1" << "b1";
-		m_fitData.paramNames << "w" << "a0" << "a1" << "b1";
-		if (num==2) {
-			eq += " + (a2*cos(2*w*x) + b2*sin(2*w*x))";
-			m_fitData.model += " + (a2*cos(2*w*x) + b2*sin(2*w*x))";
-			vars << "a2" << "b2";
-			m_fitData.paramNames << "a2" << "b2";
-		} else if (num>2) {
-			QString numStr = QString::number(num);
-			eq += " + ... + (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
-			vars << "a"+numStr << "b"+numStr << "...";
-			for (int i=2; i<=num; ++i) {
-				numStr = QString::number(i);
-				m_fitData.model += "+ (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
-				m_fitData.paramNames << "a"+numStr << "b"+numStr;
-			}
-		}
-	} else if (m_fitData.modelType == XYFitCurve::Gaussian) {
-		eq = "a1*exp(-((x-b1)/c1)^2)";
-		m_fitData.model = eq;
-		vars << "a1" << "b1" << "c1";
-		m_fitData.paramNames << "a1" << "b1" << "c1";
-		if (num==2) {
-			eq += " + a2*exp(-((x-b2)/c2)^2)";
-			m_fitData.model += " + a2*exp(-((x-b2)/c2)^2)";
-			vars << "a2" << "b2" << "c2";
-			m_fitData.paramNames << "a2" << "b2" << "c2";
-		} else if (num==3) {
-			eq += " + a2*exp(-((x-b2)/c2)^2) + a3*exp(-((x-b3)/c3)^2)";
-			m_fitData.model += " + a2*exp(-((x-b2)/c2)^2) + a3*exp(-((x-b3)/c3)^2)";
-			vars << "a2" << "b2" << "c2" << "a3" << "b3" << "c3";
-			m_fitData.paramNames << "a2" << "b2" << "c2" << "a3" << "b3" << "c3";
-		} else if (num>3) {
-			QString numStr = QString::number(num);
-			eq += " + a2*exp(-((x-b2)/c2)^2) + ... + a" + numStr + "*exp(-((x-b" + numStr + ")/c" + numStr + ")^2)";
-			vars << "a2" << "b2" << "c2" << "a"+numStr << "b"+numStr << "c"+numStr << "...";
-			for (int i=2; i<=num; ++i) {
-				numStr = QString::number(i);
-				m_fitData.model += "+ a" + numStr + "*exp(-((x-b" + numStr + ")/c" + numStr + ")^2)";
-				m_fitData.paramNames << "a"+numStr << "b"+numStr << "c"+numStr;
-			}
-		}
-	} else if (m_fitData.modelType == XYFitCurve::Lorentz) {
-		eq = "1/pi*s/(s^2+(x-t)^2)";
-		m_fitData.model = eq;
-		vars << "s" << "t";
-		m_fitData.paramNames << "s" << "t";
-	} else if (m_fitData.modelType == XYFitCurve::Maxwell) {
-		eq = "sqrt(2/pi)*x^2*exp(-x^2/(2*a^2))/a^3";
-		m_fitData.model = eq;
-		vars << "a";
-		m_fitData.paramNames << "a";
-	} else if (m_fitData.modelType==XYFitCurve::Custom) {
-		//use the equation of the last selected predefined model or of the last available custom model
-		eq = m_fitData.model;
-		vars << m_fitData.paramNames;
-	}
-
-	//resize the vector for the start values and set the elements to 1.0
-	//in case a custom model is used, do nothing, we take over the previous values
-	//when initalizing, don't do anything - we use start values already available
-	if (m_fitData.modelType!=XYFitCurve::Custom && !m_initializing) {
-		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
-		for (int i=0; i<m_fitData.paramStartValues.size(); ++i)
-			m_fitData.paramStartValues[i] = 1.0;
-	}
-
-	uiGeneralTab.teEquation->setVariables(vars);
-	uiGeneralTab.teEquation->setText(eq);
+void XYFourierFilterCurveDock::formChanged(int index) {
+	//TODO
 }
 
-void XYFitCurveDock::showConstants() {
-	QMenu menu;
-	ConstantsWidget constants(&menu);
-
-	connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant(QString)));
-	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
-
-	QWidgetAction* widgetAction = new QWidgetAction(this);
-	widgetAction->setDefaultWidget(&constants);
-	menu.addAction(widgetAction);
-
-	QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbConstants->width(),-menu.sizeHint().height());
-	menu.exec(uiGeneralTab.tbConstants->mapToGlobal(pos));
+void XYFourierFilterCurveDock::unitChanged(int index) {
+	//TODO
 }
 
-void XYFitCurveDock::showFunctions() {
-	QMenu menu;
-	FunctionsWidget functions(&menu);
-	connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insertFunction(QString)));
-	connect(&functions, SIGNAL(functionSelected(QString)), &menu, SLOT(close()));
-
-	QWidgetAction* widgetAction = new QWidgetAction(this);
-	widgetAction->setDefaultWidget(&functions);
-	menu.addAction(widgetAction);
-
-	QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbFunctions->width(),-menu.sizeHint().height());
-	menu.exec(uiGeneralTab.tbFunctions->mapToGlobal(pos));
-}
-
-void XYFitCurveDock::showParameters() {
-	QMenu menu;
-	FitParametersWidget w(&menu, &m_fitData);
-	connect(&w, SIGNAL(finished()), &menu, SLOT(close()));
-	connect(&w, SIGNAL(parametersChanged()), this, SLOT(parametersChanged()));
-
-	QWidgetAction* widgetAction = new QWidgetAction(this);
-	widgetAction->setDefaultWidget(&w);
-	menu.addAction(widgetAction);
-
-	QPoint pos(-menu.sizeHint().width()+uiGeneralTab.pbParameters->width(),-menu.sizeHint().height());
-	menu.exec(uiGeneralTab.pbParameters->mapToGlobal(pos));
-}*/
-
-/*!
- * called when parameter names and/or start values for the custom model were changed
- */
-/*void XYFitCurveDock::parametersChanged() {
-	//parameter names were (probably) changed -> set the new names in EquationTextEdit
-	uiGeneralTab.teEquation->setVariables(m_fitData.paramNames);
-	enableRecalculate();
-}
-
-void XYFitCurveDock::showOptions() {
-	QMenu menu;
-	FitOptionsWidget w(&menu, &m_fitData);
-	connect(&w, SIGNAL(finished()), &menu, SLOT(close()));
-	connect(&w, SIGNAL(optionsChanged()), this, SLOT(enableRecalculate()));
-
-	QWidgetAction* widgetAction = new QWidgetAction(this);
-	widgetAction->setDefaultWidget(&w);
-	menu.addAction(widgetAction);
-
-	QPoint pos(-menu.sizeHint().width()+uiGeneralTab.pbParameters->width(),-menu.sizeHint().height());
-	menu.exec(uiGeneralTab.pbOptions->mapToGlobal(pos));
-}
-
-void XYFitCurveDock::insertFunction(const QString& str) {
-	uiGeneralTab.teEquation->insertPlainText(str + "(x)");
-}
-
-void XYFitCurveDock::insertConstant(const QString& str) {
-	uiGeneralTab.teEquation->insertPlainText(str);
-}
-*/
 void XYFourierFilterCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-//	m_fitData.degree = uiGeneralTab.sbDegree->value();
-//	if (m_fitData.modelType==XYFitCurve::Custom) {
-//		m_fitData.model = uiGeneralTab.teEquation->toPlainText();
-//	}
+	m_filterData.value = uiGeneralTab.sbValue->value();
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setFilterData(m_filterData);
@@ -501,9 +304,9 @@ void XYFourierFilterCurveDock::enableRecalculate() const {
 		return;
 
 	//no fitting possible without the x- and y-data
-	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-	bool data = (aspectX!=0 && aspectY!=0);
+//	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
+//	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
+//	bool data = (aspectX!=0 && aspectY!=0);
 
 //	XYFitCurve::ModelType type = (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
 //	if (type==XYFitCurve::Custom)
@@ -513,58 +316,32 @@ void XYFourierFilterCurveDock::enableRecalculate() const {
 }
 
 /*!
- * show the result and details of fit
+ * show the result and details of the filter
  */
-/*void XYFitCurveDock::showFitResult() {
-	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
-	if (!fitResult.available) {
+void XYFourierFilterCurveDock::showFilterResult() {
+	const XYFourierFilterCurve::FilterResult& filterResult = m_filterCurve->filterResult();
+	if (!filterResult.available) {
 		uiGeneralTab.teResult->clear();
 		return;
 	}
 
-	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
-	QString str = i18n("status") + ": " + fitResult.status + "<br>";
+	const XYFourierFilterCurve::FilterData& filterData = m_filterCurve->filterData();
+	QString str = i18n("status") + ": " + filterResult.status + "<br>";
 
-	if (!fitResult.valid) {
+	if (!filterResult.valid) {
 		uiGeneralTab.teResult->setText(str);
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	str += i18n("iterations") + ": " + QString::number(fitResult.iterations) + "<br>";
-	if (fitResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s").arg(QString::number(fitResult.elapsedTime/1000)) + "<br>";
+	if (filterResult.elapsedTime>1000)
+		str += i18n("calculation time: %1 s").arg(QString::number(filterResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms").arg(QString::number(fitResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms").arg(QString::number(filterResult.elapsedTime)) + "<br>";
 
-	str += i18n("degrees of freedom") + ": " + QString::number(fitResult.dof) + "<br><br>";
-
-	str += "<b>Parameters:</b>";
-	for (int i=0; i<fitResult.paramValues.size(); i++) {
-		str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
-				  + QString::fromUtf8("\u2213") + QString::number(fitResult.errorValues.at(i));
-	}
-
-	str += "<br><br><b>Goodness of fit:</b><br>";
-	str += i18n("sum of squared errors") + ": " + QString::number(fitResult.sse) + "<br>";
-	str += i18n("mean squared error") + ": " + QString::number(fitResult.mse) + "<br>";
-	str += i18n("root-mean squared error") + ": " + QString::number(fitResult.rmse) + "<br>";
-	str += i18n("mean absolute error") + ": " + QString::number(fitResult.mae) + "<br>";
-
-	if (fitResult.dof!=0) {
-		str += i18n("residual mean square") + ": " + QString::number(fitResult.rms) + "<br>";
-		str += i18n("residual standard deviation") + ": " + QString::number(fitResult.rsd) + "<br>";
-	}
-
-	str += i18n("coefficient of determination (R²)") + ": " + QString::number(fitResult.rsquared) + "<br>";
-	str += i18n("adj. coefficient of determination (R²)") + ": " + QString::number(fitResult.rsquaredAdj) + "<br>";
-// 	str += "<br><br>";
-//
-// 	QStringList iterations = fitResult.solverOutput.split(';');
-// 	for (int i=0; i<iterations.size(); ++i)
-// 		str += "<br>" + iterations.at(i);
+ 	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);
-}*/
+}
 
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
@@ -584,6 +361,7 @@ void XYFourierFilterCurveDock::curveDescriptionChanged(const AbstractAspect* asp
 }
 
 void XYFourierFilterCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
+	qDebug()<<"XYFourierFilterCurveDock::curveXDataColumnChanged()";
 	m_initializing = true;
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, column);
 	m_initializing = false;
@@ -598,13 +376,10 @@ void XYFourierFilterCurveDock::curveYDataColumnChanged(const AbstractColumn* col
 void XYFourierFilterCurveDock::curveFilterDataChanged(const XYFourierFilterCurve::FilterData& data) {
 	m_initializing = true;
 	m_filterData = data;
-	uiGeneralTab.cbType->setCurrentIndex(m_filterData.filterType);
-	this->typeChanged(m_filterData.filterType);
-//	if (m_filterData.filterType == XYFourierFilterCurve::Custom)
-//		uiGeneralTab.teEquation->setPlainText(m_fitData.model);
+	uiGeneralTab.cbType->setCurrentIndex(m_filterData.type);
+	this->typeChanged(m_filterData.type);
 
-//	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
-//	this->showFitResult();
+	this->showFilterResult();
 	m_initializing = false;
 }
 

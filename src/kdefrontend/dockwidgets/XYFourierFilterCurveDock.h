@@ -45,7 +45,7 @@ public:
 
 private:
 	virtual void initGeneralTab();
-//	void showFitResult();
+	void showFilterResult();
 
 	Ui::XYFourierFilterCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbXDataColumn;
@@ -54,8 +54,6 @@ private:
 
 	XYFourierFilterCurve* m_filterCurve;
 	XYFourierFilterCurve::FilterData m_filterData;
-//	QList<double> parameters;
-//	QList<double> parameterValues;
 
 protected:
 	virtual void setModel();
@@ -65,19 +63,15 @@ private slots:
 	//general tab
 	void nameChanged();
 	void commentChanged();
-	void typeChanged(int);
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
-/*
-	void showConstants();
-	void showFunctions();
-	void showParameters();
-	void parametersChanged();
-	void showOptions();
-	void insertFunction(const QString&);
-	void insertConstant(const QString&);
-*/	void recalculateClicked();
-//	void updateModelEquation();
+	void typeChanged(int);
+	void formChanged(int);
+	void unitChanged(int);
+//	void unit2Changed(int);
+
+//	void showOptions();
+	void recalculateClicked();
 
 	void enableRecalculate() const;
 

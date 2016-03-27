@@ -52,6 +52,7 @@ class XYFourierFilterCurvePrivate: public XYCurvePrivate {
 		QString weightsColumnPath;
 
 		XYFourierFilterCurve::FilterData filterData;
+		XYFourierFilterCurve::FilterResult filterResult;
 
 		Column* xColumn; //<! column used internally for storing the x-values of the result fit curve
 		Column* yColumn; //<! column used internally for storing the y-values of the result fit curve

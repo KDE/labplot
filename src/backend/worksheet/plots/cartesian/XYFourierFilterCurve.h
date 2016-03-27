@@ -36,14 +36,27 @@ class XYFourierFilterCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum FilterType {LowPass, HighPass, BandPass, BandReject, Threshold};
+		enum FilterType {LowPass, HighPass, BandPass, BandReject, Threshold};	//TODO
+		enum FilterForm {Ideal, Butterworth, Chebyshev};	// TODO
+		enum ValueUnit {Index, Hertz, Wavelength, Ratio};	// TODO
 
 		struct FilterData {
-			FilterData() : filterType(LowPass) {};
+			FilterData() : type(LowPass), form(Ideal), value(0), unit(Index), value2(0), unit2(Index) {};
 
-			FilterType filterType;
-			double value;
-			double value2;
+			FilterType type;
+			FilterForm form;
+			double value;		// (low) value
+			ValueUnit unit;		// (low) value unit
+			double value2;		// high value
+			ValueUnit unit2;	// high value unit
+		};
+		struct FilterResult {
+			FilterResult() : available(false), valid(false), elapsedTime(0) {};
+
+			bool available;
+			bool valid;
+			QString status;
+			qint64 elapsedTime;
 		};
 
 		explicit XYFourierFilterCurve(const QString& name);
@@ -56,11 +69,11 @@ class XYFourierFilterCurve: public XYCurve {
 
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
-
 		const QString& xDataColumnPath() const;
 		const QString& yDataColumnPath() const;
 
 		CLASS_D_ACCESSOR_DECL(FilterData, filterData, FilterData)
+		const FilterResult& filterResult() const;
 		bool isSourceDataChangedSinceLastFilter() const;
 
 		typedef WorksheetElement BaseClass;

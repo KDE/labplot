@@ -41,19 +41,18 @@
 #include <cmath>	// isnan
 /*#include "backend/gsl/ExpressionParser.h"
 #include "backend/gsl/parser_extern.h"
-
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_version.h>
 */
+//#include <gsl/gsl_version.h>
+#include <gsl/gsl_fft_real.h>
+#include <gsl/gsl_fft_halfcomplex.h>
+
 #include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
 #include <QDebug>
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
-		: XYCurve(name, new XYFourierFilterCurvePrivate(this)){
+		: XYCurve(name, new XYFourierFilterCurvePrivate(this)) {
 	init();
 }
 
@@ -98,6 +97,11 @@ const QString& XYFourierFilterCurve::yDataColumnPath() const { Q_D(const XYFouri
 
 BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, XYFourierFilterCurve::FilterData, filterData, filterData)
 
+const XYFourierFilterCurve::FilterResult& XYFourierFilterCurve::filterResult() const {
+	Q_D(const XYFourierFilterCurve);
+	return d->filterResult;
+}
+
 bool XYFourierFilterCurve::isSourceDataChangedSinceLastFilter() const {
 	Q_D(const XYFourierFilterCurve);
 	return d->sourceDataChangedSinceLastFilter;
@@ -108,6 +112,7 @@ bool XYFourierFilterCurve::isSourceDataChangedSinceLastFilter() const {
 //##############################################################################
 STD_SETTER_CMD_IMPL_S(XYFourierFilterCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
 void XYFourierFilterCurve::setXDataColumn(const AbstractColumn* column) {
+	qDebug()<<"XYFourierFilterCurve::setXDataColumn()";
 	Q_D(XYFourierFilterCurve);
 	if (column != d->xDataColumn) {
 		exec(new XYFourierFilterCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
@@ -150,9 +155,9 @@ void XYFourierFilterCurve::handleSourceDataChanged() {
 //######################### Private implementation #############################
 //##############################################################################
 XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* owner) : XYCurvePrivate(owner),
-	xDataColumn(0), yDataColumn(0), weightsColumn(0),
-	xColumn(0), yColumn(0), residualsColumn(0),
-	xVector(0), yVector(0), residualsVector(0),
+	xDataColumn(0), yDataColumn(0), 
+	xColumn(0), yColumn(0), 
+	xVector(0), yVector(0), 
 	sourceDataChangedSinceLastFilter(true),
 	q(owner)  {
 
@@ -172,6 +177,30 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
 
+	//create filter result columns if not available yet, clear them otherwise
+	if (!xColumn) {
+		xColumn = new Column("x", AbstractColumn::Numeric);
+		yColumn = new Column("y", AbstractColumn::Numeric);
+		xVector = static_cast<QVector<double>* >(xColumn->data());
+		yVector = static_cast<QVector<double>* >(yColumn->data());
+
+		xColumn->setHidden(true);
+		q->addChild(xColumn);
+		yColumn->setHidden(true);
+		q->addChild(yColumn);
+
+		q->setUndoAware(false);
+		q->setXColumn(xColumn);
+		q->setYColumn(yColumn);
+		q->setUndoAware(true);
+	} else {
+		xVector->clear();
+		yVector->clear();
+	}
+
+	// clear the previous result
+	filterResult = XYFourierFilterCurve::FilterResult();
+
 	if (!xDataColumn || !yDataColumn) {
 		emit (q->dataChanged());
 		sourceDataChangedSinceLastFilter = false;
@@ -181,9 +210,13 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//filter settings
 	double value = filterData.value; // (lower) value
 	double value2 = filterData.value2; // higher value (only band pass/reject)
+	qDebug()<<"values ="<<value<<value2;
 
 	//check column sizes
 	if (xDataColumn->rowCount()!=yDataColumn->rowCount()) {
+		filterResult.available = true;
+		filterResult.valid = false;
+		filterResult.status = i18n("Number of x and y data points must be equal.");
 		emit (q->dataChanged());
 		sourceDataChangedSinceLastFilter = false;
 		return;
@@ -192,63 +225,71 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//copy all valid data point for the fit to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	QVector<double> sigmaVector;
-
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!isnan(xDataColumn->valueAt(row)) && !isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
-			if (!weightsColumn) {
-				xdataVector.append(xDataColumn->valueAt(row));
-				ydataVector.append(yDataColumn->valueAt(row));
-			} else {
-				if (!isnan(weightsColumn->valueAt(row))) {
-					xdataVector.append(xDataColumn->valueAt(row));
-					ydataVector.append(yDataColumn->valueAt(row));
-				}
-			}
+			xdataVector.append(xDataColumn->valueAt(row));
+			ydataVector.append(yDataColumn->valueAt(row));
 		}
 	}
 
 	//number of data points to fit
-	unsigned int n = xdataVector.size();
+	unsigned int n = ydataVector.size();
 	if (n == 0) {
-		//fitResult.status = i18n("No data points available.");
+		filterResult.available = true;
+		filterResult.valid = false;
+		filterResult.status = i18n("No data points available.");
 		emit (q->dataChanged());
 		sourceDataChangedSinceLastFilter = false;
 		return;
 	}
 
-	double* xdata = xdataVector.data();
+	//double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
-//TODO
+///////////////////////////////////////////////////////////
 
-//	filterResult.elapsedTime = timer.elapsed();
+// Fourier transform
+	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc (n);
+	gsl_fft_real_wavetable *real = gsl_fft_real_wavetable_alloc (n);
+
+        gsl_fft_real_transform (ydata, 1, n, real, work);
+        gsl_fft_real_wavetable_free (real);
+
+//TODO: calculate filter
+	for (unsigned int i = value; i < n; i++)
+		ydata[i] = 0;
+
+// back transform
+	gsl_fft_halfcomplex_wavetable *hc = gsl_fft_halfcomplex_wavetable_alloc (n);
+	gsl_fft_halfcomplex_inverse (ydata, 1, n, hc, work);
+	gsl_fft_halfcomplex_wavetable_free (hc);
+	gsl_fft_real_workspace_free (work);
+
+	xVector->resize(n);
+	yVector->resize(n);
+	for (unsigned int i = 0; i < n; i++) {
+		(*xVector)[i] = xdataVector[i];
+		(*yVector)[i] = ydata[i];
+	}
+	qDebug()<<"OK";
+///////////////////////////////////////////////////////////
+
+//	for (unsigned int i = 0; i < n; i++) {
+//		qDebug()<<xdata[i]<<ydata[i];
+//	}
+	
+	//write the result
+	filterResult.available = true;
+	filterResult.valid = true;
+	filterResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
 	emit (q->dataChanged());
 	sourceDataChangedSinceLastFilter = false;
 }
-
-/*!
- * writes out the current state of the solver \c s
- */
-/*void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
-	QString state;
-
-	//current parameter values, semicolon separated
-	for (int i=0; i<fitData.paramNames.size(); ++i)
-		state += QString::number(gsl_vector_get(s->x, i)) + '\t';
-
-	//current value of the chi2-function
-	state += QString::number(pow(gsl_blas_dnrm2 (s->f),2));
-	state += ';';
-
-	fitResult.solverOutput += state;
-}*/
-
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
@@ -263,76 +304,32 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
 	XYCurve::save(writer);
 
 	//write xy-fourier_filter-curve specific information
-
 	//filter data
 	writer->writeStartElement("filterData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
-	writer->writeAttribute( "filterType", QString::number(d->filterData.filterType) );
-/*	writer->writeAttribute( "weightsType", QString::number(d->fitData.weightsType) );
-	writer->writeAttribute( "degree", QString::number(d->fitData.degree) );
-	writer->writeAttribute( "model", d->fitData.model );
-	writer->writeAttribute( "maxIterations", QString::number(d->fitData.maxIterations) );
-	writer->writeAttribute( "eps", QString::number(d->fitData.eps) );
-	writer->writeAttribute( "fittedPoints", QString::number(d->fitData.fittedPoints) );
-
-	writer->writeStartElement("paramNames");
-	for (int i=0; i<d->fitData.paramNames.size(); ++i)
-		writer->writeTextElement("name", d->fitData.paramNames.at(i));
-	writer->writeEndElement();
-
-	writer->writeStartElement("paramStartValues");
-	for (int i=0; i<d->fitData.paramStartValues.size(); ++i)
-		writer->writeTextElement("startValue", QString::number(d->fitData.paramStartValues.at(i)));
-	writer->writeEndElement();
-*/
+	writer->writeAttribute( "type", QString::number(d->filterData.type) );
+	writer->writeAttribute( "form", QString::number(d->filterData.form) );
+	writer->writeAttribute( "value", QString::number(d->filterData.value) );
+	writer->writeAttribute( "unit", QString::number(d->filterData.unit) );
+	writer->writeAttribute( "value2", QString::number(d->filterData.value2) );
+	writer->writeAttribute( "unit2", QString::number(d->filterData.unit2) );
 	writer->writeEndElement();// filterData
-/*
-	//fit results (generated columns and goodness of the fit)
-	//sse = sum of squared errors (SSE) = residual sum of errors (RSS) = sum of sq. residuals (SSR) = \sum_i^n (Y_i-y_i)^2
-	//mse = mean squared error = 1/n \sum_i^n  (Y_i-y_i)^2
-	//rmse = root-mean squared error = \sqrt(mse)
-	//mae = mean absolute error = \sum_i^n |Y_i-y_i|
-	//rms = residual mean square = sse/d.o.f.
-	//rsd = residual standard deviation = sqrt(rms)
-	//R-squared
-	//adjusted R-squared
-	writer->writeStartElement("fitResult");
-	writer->writeAttribute( "available", QString::number(d->fitResult.available) );
-	writer->writeAttribute( "valid", QString::number(d->fitResult.valid) );
-	writer->writeAttribute( "status", d->fitResult.status );
-	writer->writeAttribute( "iterations", QString::number(d->fitResult.iterations) );
-	writer->writeAttribute( "time", QString::number(d->fitResult.elapsedTime) );
-	writer->writeAttribute( "dof", QString::number(d->fitResult.dof) );
-	writer->writeAttribute( "sse", QString::number(d->fitResult.sse) );
-	writer->writeAttribute( "mse", QString::number(d->fitResult.mse) );
-	writer->writeAttribute( "rmse", QString::number(d->fitResult.rmse) );
-	writer->writeAttribute( "mae", QString::number(d->fitResult.mae) );
-	writer->writeAttribute( "rms", QString::number(d->fitResult.rms) );
-	writer->writeAttribute( "rsd", QString::number(d->fitResult.rsd) );
-	writer->writeAttribute( "rsquared", QString::number(d->fitResult.rsquared) );
-	writer->writeAttribute( "rsquaredAdj", QString::number(d->fitResult.rsquaredAdj) );
-	writer->writeAttribute( "solverOutput", d->fitResult.solverOutput );
 
-	writer->writeStartElement("paramValues");
-	for (int i=0; i<d->fitResult.paramValues.size(); ++i)
-		writer->writeTextElement("value", QString::number(d->fitResult.paramValues.at(i)));
-	writer->writeEndElement();
-
-	writer->writeStartElement("errorValues");
-	for (int i=0; i<d->fitResult.errorValues.size(); ++i)
-		writer->writeTextElement("error", QString::number(d->fitResult.errorValues.at(i)));
-	writer->writeEndElement();
+	//filter results (generated columns)
+	writer->writeStartElement("filterResult");
+	writer->writeAttribute( "available", QString::number(d->filterResult.available) );
+	writer->writeAttribute( "valid", QString::number(d->filterResult.valid) );
+	writer->writeAttribute( "status", d->filterResult.status );
+	writer->writeAttribute( "time", QString::number(d->filterResult.elapsedTime) );
 
 	//save calculated columns if available
 	if (d->xColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
-		d->residualsColumn->save(writer);
 	}
-*/
+	writer->writeEndElement(); //"filterResult"
 
-	//writer->writeEndElement(); //"fitResult"
 	writer->writeEndElement(); //"xyFourierFilterCurve"
 }
 
@@ -365,154 +362,72 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
+			qDebug()<<"	x column"<<xDataColumnPath();
 
-			str = attribs.value("filterType").toString();
-			qDebug()<<"	type"<<str;
+			str = attribs.value("type").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'filterType'"));
+				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
-				d->filterData.filterType = (XYFourierFilterCurve::FilterType)str.toInt();
-/*
-			str = attribs.value("weightsType").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'weightsType'"));
-			else
-				d->fitData.weightsType = (XYFitCurve::WeightsType)str.toInt();
+				d->filterData.type = (XYFourierFilterCurve::FilterType)str.toInt();
 
-			str = attribs.value("degree").toString();
+			str = attribs.value("form").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'degree'"));
+				reader->raiseWarning(attributeWarning.arg("'form'"));
 			else
-				d->fitData.degree = str.toInt();
+				d->filterData.form = (XYFourierFilterCurve::FilterForm)str.toInt();
 
-			str = attribs.value("model").toString();
+			str = attribs.value("value").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'model'"));
+				reader->raiseWarning(attributeWarning.arg("'value'"));
 			else
-				d->fitData.model = str;
+				d->filterData.value = str.toDouble();
 
-			str = attribs.value("maxIterations").toString();
+			str = attribs.value("unit").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'maxIterations'"));
+				reader->raiseWarning(attributeWarning.arg("'unit'"));
 			else
-				d->fitData.maxIterations = str.toInt();
+				d->filterData.unit = (XYFourierFilterCurve::ValueUnit)str.toInt();
 
-			str = attribs.value("eps").toString();
+			str = attribs.value("value2").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'eps'"));
+				reader->raiseWarning(attributeWarning.arg("'value2'"));
 			else
-				d->fitData.eps = str.toDouble();
+				d->filterData.value2 = str.toDouble();
 
-			str = attribs.value("fittedPoints").toString();
+			str = attribs.value("unit2").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'fittedPoints'"));
+				reader->raiseWarning(attributeWarning.arg("'unit2'"));
 			else
-				d->fitData.fittedPoints = str.toInt();
-*/
-		} else if (reader->name() == "name") {
-//			d->fitData.paramNames<<reader->readElementText();
-		} else if (reader->name() == "startValue") {
-//			d->fitData.paramStartValues<<reader->readElementText().toDouble();
-		} else if (reader->name() == "value") {
-//			d->fitResult.paramValues<<reader->readElementText().toDouble();
-		} else if (reader->name() == "error") {
-//			d->fitResult.errorValues<<reader->readElementText().toDouble();
-		} else if (reader->name() == "fitResult") {
-/*
+				d->filterData.unit2 = (XYFourierFilterCurve::ValueUnit)str.toInt();
+		} else if (reader->name() == "filterResult") {
+
 			attribs = reader->attributes();
 
 			str = attribs.value("available").toString();
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'available'"));
 			else
-				d->fitResult.available = str.toInt();
+				d->filterResult.available = str.toInt();
 
-// TODO: formatting
 			str = attribs.value("valid").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'valid'"));
-            else
-                d->fitResult.valid = str.toInt();
-
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'valid'"));
+			else
+				d->filterResult.valid = str.toInt();
+			
 			str = attribs.value("status").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'status'"));
-            else
-                d->fitResult.status = str;
-
-			str = attribs.value("iterations").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'iterations'"));
-            else
-                d->fitResult.iterations = str.toInt();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'status'"));
+			else
+				d->filterResult.status = str;
 
 			str = attribs.value("time").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'time'"));
-            else
-                d->fitResult.elapsedTime = str.toInt();
-
-			str = attribs.value("dof").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'dof'"));
-            else
-                d->fitResult.dof = str.toDouble();
-
-			str = attribs.value("sse").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'sse'"));
-            else
-                d->fitResult.sse = str.toDouble();
-
-			str = attribs.value("mse").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'mse'"));
-            else
-                d->fitResult.mse = str.toDouble();
-
-			str = attribs.value("rmse").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'rmse'"));
-            else
-                d->fitResult.rmse = str.toDouble();
-
-			str = attribs.value("mae").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'mae'"));
-            else
-                d->fitResult.mae = str.toDouble();
-
-			str = attribs.value("rms").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'rms'"));
-            else
-                d->fitResult.rms = str.toDouble();
-
-			str = attribs.value("rsd").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'rsd'"));
-            else
-                d->fitResult.rsd = str.toDouble();
-
-			str = attribs.value("rsquared").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'rsquared'"));
-            else
-                d->fitResult.rsquared = str.toDouble();
-
-			str = attribs.value("rsquaredAdj").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'rsquaredAdj'"));
-            else
-                d->fitResult.rsquaredAdj = str.toDouble();
-
-			str = attribs.value("solverOutput").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'solverOutput'"));
-            else
-                d->fitResult.solverOutput = str;
-*/
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'time'"));
+			else
+				d->filterResult.elapsedTime = str.toInt();
 		} else if(reader->name() == "column") {
+			qDebug()<<"	reading filter column";
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {
 				delete column;
@@ -522,12 +437,11 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 				d->xColumn = column;
 			else if (column->name()=="y")
 				d->yColumn = column;
-			// else if (column->name()=="residuals")
-			//	d->residualsColumn = column;
 		}
 	}
 
 	if (d->xColumn) {
+		qDebug()<<"	add filter columns";
 		d->xColumn->setHidden(true);
 		addChild(d->xColumn);
 

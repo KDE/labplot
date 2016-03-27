@@ -43,6 +43,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <KUrlCompletion>
+#include <QDebug>
 
 /*!
   \class XYCurveDock
@@ -772,10 +773,15 @@ void XYCurveDock::showValuesColumnFormat(const Column* column){
 }
 
 void XYCurveDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column){
-	if (column)
+	qDebug()<<"XYCurveDock::setModelIndexFromColumn()";
+	if (column) {
+		qDebug()<<"column. index="<<m_aspectTreeModel->modelIndexOfAspect(column);
 		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
-	else
+	}
+	else {
+		qDebug()<<" no column. index="<<QModelIndex();
 		cb->setCurrentModelIndex(QModelIndex());
+	}
 }
 
 //*************************************************************
