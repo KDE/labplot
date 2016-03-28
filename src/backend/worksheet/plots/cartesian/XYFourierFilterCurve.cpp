@@ -207,11 +207,6 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		return;
 	}
 
-	//filter settings
-	double value = filterData.value; // (lower) value
-	double value2 = filterData.value2; // higher value (only band pass/reject)
-	qDebug()<<"values ="<<value<<value2;
-
 	//check column sizes
 	if (xDataColumn->rowCount()!=yDataColumn->rowCount()) {
 		filterResult.available = true;
@@ -249,7 +244,20 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
+        double min = xDataColumn->minimum();
+        double max = xDataColumn->maximum();
+
+	// filter settings
+	XYFourierFilterCurve::FilterType type = filterData.type;
+	double cutoff = filterData.cutoff, cutoff2 = filterData.cutoff2;
+	XYFourierFilterCurve::CutoffUnit unit = filterData.unit, unit2 = filterData.unit2;
+#ifdef QT_DEBUG
+	qDebug()<<"cutoffs ="<<cutoff<<cutoff2;
+	qDebug()<<"unit ="<<unit<<unit2;
+#endif
 ///////////////////////////////////////////////////////////
+	//see http://www.originlab.com/doc/Origin-Help/2DFFT-Filter-Algorithm
+	// http://www.imagemet.com/WebHelp6/Default.htm#FourierAnalysis/Band_Filtering.htm
 
 // Fourier transform
 	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc (n);
@@ -258,9 +266,33 @@ void XYFourierFilterCurvePrivate::recalculate() {
         gsl_fft_real_transform (ydata, 1, n, real, work);
         gsl_fft_real_wavetable_free (real);
 
-//TODO: calculate filter
-	for (unsigned int i = value; i < n; i++)
-		ydata[i] = 0;
+	double cutindex=0, cutindex2=0;
+	switch(unit) {
+	case XYFourierFilterCurve::Frequency:
+		cutindex = cutoff*(max-min);
+		break;
+	case XYFourierFilterCurve::Fraction:
+		cutindex = cutoff*n;
+		break;
+	case XYFourierFilterCurve::Index:
+		cutindex = cutoff;
+	}
+
+
+// calculate filter
+	switch(filterData.type) {
+	case XYFourierFilterCurve::LowPass:
+		for (unsigned int i = cutindex; i < n; i++)
+			ydata[i] = 0;
+		break;
+	case XYFourierFilterCurve::HighPass:
+		for (unsigned int i = 0; i < cutindex; i++)
+			ydata[i] = 0;
+		break;
+//TODO: other types
+	default:
+		qDebug()<<"Filter type not supported!";
+	}
 
 // back transform
 	gsl_fft_halfcomplex_wavetable *hc = gsl_fft_halfcomplex_wavetable_alloc (n);
@@ -274,7 +306,6 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		(*xVector)[i] = xdataVector[i];
 		(*yVector)[i] = ydata[i];
 	}
-	qDebug()<<"OK";
 ///////////////////////////////////////////////////////////
 
 //	for (unsigned int i = 0; i < n; i++) {
@@ -310,9 +341,9 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "type", QString::number(d->filterData.type) );
 	writer->writeAttribute( "form", QString::number(d->filterData.form) );
-	writer->writeAttribute( "value", QString::number(d->filterData.value) );
+	writer->writeAttribute( "cutoff", QString::number(d->filterData.cutoff) );
 	writer->writeAttribute( "unit", QString::number(d->filterData.unit) );
-	writer->writeAttribute( "value2", QString::number(d->filterData.value2) );
+	writer->writeAttribute( "cutoff2", QString::number(d->filterData.cutoff2) );
 	writer->writeAttribute( "unit2", QString::number(d->filterData.unit2) );
 	writer->writeEndElement();// filterData
 
@@ -376,29 +407,29 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 			else
 				d->filterData.form = (XYFourierFilterCurve::FilterForm)str.toInt();
 
-			str = attribs.value("value").toString();
+			str = attribs.value("cutoff").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'value'"));
+				reader->raiseWarning(attributeWarning.arg("'cutoff'"));
 			else
-				d->filterData.value = str.toDouble();
+				d->filterData.cutoff = str.toDouble();
 
 			str = attribs.value("unit").toString();
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'unit'"));
 			else
-				d->filterData.unit = (XYFourierFilterCurve::ValueUnit)str.toInt();
+				d->filterData.unit = (XYFourierFilterCurve::CutoffUnit)str.toInt();
 
-			str = attribs.value("value2").toString();
+			str = attribs.value("cutoff2").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'value2'"));
+				reader->raiseWarning(attributeWarning.arg("'cutoff2'"));
 			else
-				d->filterData.value2 = str.toDouble();
+				d->filterData.cutoff2 = str.toDouble();
 
 			str = attribs.value("unit2").toString();
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'unit2'"));
 			else
-				d->filterData.unit2 = (XYFourierFilterCurve::ValueUnit)str.toInt();
+				d->filterData.unit2 = (XYFourierFilterCurve::CutoffUnit)str.toInt();
 		} else if (reader->name() == "filterResult") {
 
 			attribs = reader->attributes();

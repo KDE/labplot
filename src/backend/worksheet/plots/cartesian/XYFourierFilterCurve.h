@@ -37,18 +37,18 @@ class XYFourierFilterCurve: public XYCurve {
 
 	public:
 		enum FilterType {LowPass, HighPass, BandPass, BandReject, Threshold};	//TODO
-		enum FilterForm {Ideal, Butterworth, Chebyshev};	// TODO
-		enum ValueUnit {Index, Hertz, Wavelength, Ratio};	// TODO
+		enum FilterForm {Ideal, Butterworth, Bessel, Chebyshev};	// TODO
+		enum CutoffUnit {Frequency, Fraction, Index};	// Frequency=0..N/(xmax-xmin), Fraction=0..1, Index=0..N-1
 
 		struct FilterData {
-			FilterData() : type(LowPass), form(Ideal), value(0), unit(Index), value2(0), unit2(Index) {};
+			FilterData() : type(LowPass), form(Ideal), cutoff(0), unit(Index), cutoff2(0), unit2(Index) {};
 
 			FilterType type;
 			FilterForm form;
-			double value;		// (low) value
-			ValueUnit unit;		// (low) value unit
-			double value2;		// high value
-			ValueUnit unit2;	// high value unit
+			double cutoff;		// (low) cutoff
+			CutoffUnit unit;		// (low) value unit
+			double cutoff2;		// high cutoff
+			CutoffUnit unit2;	// high value unit
 		};
 		struct FilterResult {
 			FilterResult() : available(false), valid(false), elapsedTime(0) {};

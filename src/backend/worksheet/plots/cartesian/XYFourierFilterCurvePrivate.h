@@ -46,22 +46,18 @@ class XYFourierFilterCurvePrivate: public XYCurvePrivate {
 
 		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be fitted
 		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be fitted
-		const AbstractColumn* weightsColumn; //<! column storing the values for the weights to be used in the fit
 		QString xDataColumnPath;
 		QString yDataColumnPath;
-		QString weightsColumnPath;
 
 		XYFourierFilterCurve::FilterData filterData;
 		XYFourierFilterCurve::FilterResult filterResult;
 
 		Column* xColumn; //<! column used internally for storing the x-values of the result fit curve
 		Column* yColumn; //<! column used internally for storing the y-values of the result fit curve
-		Column* residualsColumn;
 		QVector<double>* xVector;
 		QVector<double>* yVector;
-		QVector<double>* residualsVector;
 
-		bool sourceDataChangedSinceLastFilter; //<! \c true if the data in the source columns (x, y, or weights) was changed, \c false otherwise
+		bool sourceDataChangedSinceLastFilter; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
 
 		XYFourierFilterCurve* const q;
 

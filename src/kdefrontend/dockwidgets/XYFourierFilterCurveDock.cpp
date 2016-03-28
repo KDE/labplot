@@ -78,10 +78,9 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	uiGeneralTab.cbType->addItem(i18n("Band reject"));
 	uiGeneralTab.cbType->addItem(i18n("Threshold"));
 
-	uiGeneralTab.cbUnit->addItem(i18n("Index"));
 	uiGeneralTab.cbUnit->addItem(i18n("Frequency (Hz)"));
-	uiGeneralTab.cbUnit->addItem(i18n("Wavelength"));
-	uiGeneralTab.cbUnit->addItem(i18n("Ratio"));
+	uiGeneralTab.cbUnit->addItem(i18n("Fraction"));
+	uiGeneralTab.cbUnit->addItem(i18n("Index"));
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
@@ -95,7 +94,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
 //	connect( uiGeneralTab.cbForm, SIGNAL(currentIndexChanged(int)), this, SLOT(formChanged(int)) );
-//	connect( uiGeneralTab.cbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged(int)) );
+	connect( uiGeneralTab.cbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged(int)) );
 //	connect( uiGeneralTab.cbUnit2, SIGNAL(currentIndexChanged(int)), this, SLOT(unit2Changed(int)) );
 
 //	connect( uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()) );
@@ -134,7 +133,7 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	this->typeChanged(m_filterData.type);
 	uiGeneralTab.cbForm->setCurrentIndex(m_filterData.form);
 	this->formChanged(m_filterData.form);
-	uiGeneralTab.sbValue->setValue(m_filterData.value);
+	uiGeneralTab.sbCutoff->setValue(m_filterData.cutoff);
 	uiGeneralTab.cbUnit->setCurrentIndex(m_filterData.unit);
 	this->unitChanged(m_filterData.unit);
 	//uiGeneralTab.sbValue2->setValue(m_filterData.value2);
@@ -243,10 +242,20 @@ void XYFourierFilterCurveDock::typeChanged(int index) {
 	XYFourierFilterCurve::FilterType type = (XYFourierFilterCurve::FilterType)index;
 	m_filterData.type = (XYFourierFilterCurve::FilterType)uiGeneralTab.cbType->currentIndex();
 
-	if(type == XYFourierFilterCurve::LowPass) {
-		//TODO	
+	switch(type) {
+	case XYFourierFilterCurve::LowPass:
+		uiGeneralTab.lCutoff2->setVisible(false);
+		uiGeneralTab.sbCutoff2->setVisible(false);
+		uiGeneralTab.cbUnit2->setVisible(false);
+		break;
+	case XYFourierFilterCurve::HighPass:
+		uiGeneralTab.lCutoff2->setVisible(false);
+		uiGeneralTab.sbCutoff2->setVisible(false);
+		uiGeneralTab.cbUnit2->setVisible(false);
+		break;
+	default:
+		break;
 	}
-	
 /*
 	if (type == XYFitCurve::Polynomial) {
 		uiGeneralTab.lDegree->setVisible(true);
@@ -285,12 +294,25 @@ void XYFourierFilterCurveDock::formChanged(int index) {
 }
 
 void XYFourierFilterCurveDock::unitChanged(int index) {
+	XYFourierFilterCurve::CutoffUnit unit = (XYFourierFilterCurve::CutoffUnit)index;
+	m_filterData.unit = (XYFourierFilterCurve::CutoffUnit)uiGeneralTab.cbUnit->currentIndex();
 	//TODO
+	switch(index) {
+	case XYFourierFilterCurve::Frequency:
+			// set limits and accurency of cutoff spinbox
+			break;
+	case XYFourierFilterCurve::Fraction:
+			// set limits and accurency of cutoff spinbox
+			break;
+	case XYFourierFilterCurve::Index:
+			// set limits and accurency of cutoff spinbox
+			break;
+	}
 }
 
 void XYFourierFilterCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	m_filterData.value = uiGeneralTab.sbValue->value();
+	m_filterData.cutoff = uiGeneralTab.sbCutoff->value();
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setFilterData(m_filterData);
