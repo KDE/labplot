@@ -31,6 +31,8 @@
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectTreeModel.h"
 #include <QHeaderView>
+#include <QDebug>
+#include <KLocalizedString>
 
 /*!
     \class TreeViewComboBox
@@ -45,13 +47,19 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent){
 	m_treeView.setSelectionMode(QAbstractItemView::SingleSelection);
 	m_treeView.setUniformRowHeights(true);
 
+    m_lineEdit.hide();
+    m_lineEdit.setPlaceholderText(i18n("Search/Filter Options"));
+    m_lineEdit.setParent(parent, Qt::Popup);
+    m_lineEdit.installEventFilter(this);
+
 	m_treeView.hide();
-	m_treeView.setParent(parent, Qt::Popup);
-	m_treeView.installEventFilter(this);
-	addItem("");
+    m_treeView.setParent(parent, Qt::Popup);
+    m_treeView.installEventFilter(this);
+    addItem("");
 	setCurrentIndex(0);
 
 	connect(&m_treeView, SIGNAL(activated(QModelIndex)), this, SLOT(treeViewIndexActivated(QModelIndex)) );
+    connect(&m_lineEdit, SIGNAL(textChanged(QString)), this, SLOT(lineEditTextEdited(QString)));
 }
 
 void TreeViewComboBox::setTopLevelClasses(QList<const char*> list) {
@@ -67,10 +75,10 @@ void TreeViewComboBox::setSelectableClasses(QList<const char*> list) {
 	Sets the \a model for the view to present.
 */
 void TreeViewComboBox::setModel(QAbstractItemModel *model){
-	m_treeView.setModel(model);
+    m_treeView.setModel(model);
 
 	//show only the first column in the combo box
-	for (int i=1; i<model->columnCount(); i++){
+    for (int i=1; i<model->columnCount(); i++){
 	  m_treeView.hideColumn(i);
 	}
 
@@ -105,13 +113,23 @@ void TreeViewComboBox::showPopup(){
 	if (!m_treeView.model() || !m_treeView.model()->hasChildren())
 		return;
 
-	QModelIndex root = m_treeView.model()->index(0,0);
+    QModelIndex root = m_treeView.model()->index(0,0);
 	showTopLevelOnly(root);
 
 	m_treeView.resize(this->width(), 150);
 	m_treeView.move(mapToGlobal( this->rect().bottomLeft() ));
-	m_treeView.setFocus();
+    m_treeView.setFocus();
 	m_treeView.show();
+
+    m_lineEdit.setMinimumWidth(this->width());
+    m_lineEdit.move(mapToGlobal( this->rect().topLeft() ));
+//    m_lineEdit.setFocus();
+    m_lineEdit.show();
+}
+
+void TreeViewComboBox::hidePopup() {
+    m_treeView.hide();
+    m_lineEdit.hide();
 }
 
 
@@ -147,11 +165,12 @@ void TreeViewComboBox::showTopLevelOnly(const QModelIndex & index){
 	catches the MouseButtonPress-event and hides the tree view on mouse clicking.
 */
 bool TreeViewComboBox::eventFilter(QObject *object, QEvent *event){
-	if (object==&m_treeView && event->type()==QEvent::MouseButtonPress){
+    if ( (object==&m_treeView || object==&m_lineEdit) && event->type()==QEvent::MouseButtonPress){
 		m_treeView.hide();
+        m_lineEdit.hide();
 		this->setFocus();
 		return true;
-	}
+    }
 	return false;
 }
 
@@ -177,4 +196,13 @@ void TreeViewComboBox::treeViewIndexActivated( const QModelIndex & index){
 	QComboBox::setItemText(0, "");
 	emit currentModelIndexChanged(QModelIndex());
 	m_treeView.hide();
+}
+
+void TreeViewComboBox::lineEditTextEdited(const QString &text) {
+    AspectTreeModel * model = qobject_cast<AspectTreeModel *>(m_treeView.model());
+    if(!model)
+        return;
+
+    model->setFilterString(text);
+    m_treeView.update();
 }

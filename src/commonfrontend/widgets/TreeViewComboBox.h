@@ -31,6 +31,7 @@
 #define TREEVIEWCOMBOBOX_H
 
 #include <QTreeView>
+#include <QLineEdit>
 #include <QComboBox>
 #include <QEvent>
 
@@ -48,16 +49,19 @@ public:
 	void setSelectableClasses(QList<const char*>);
 	QModelIndex currentModelIndex() const;
 	virtual void showPopup();
+    virtual void hidePopup();
 
 private:
+    QLineEdit m_lineEdit;
 	QTreeView m_treeView;
 	QList<const char*> m_topLevelClasses;
 	QList<const char*> m_selectableClasses;
-	void showTopLevelOnly(const QModelIndex & index);
+    void showTopLevelOnly(const QModelIndex & index);
 	bool eventFilter(QObject *obj, QEvent *event);
 
 private slots:
 	void treeViewIndexActivated(const QModelIndex&);
+    void lineEditTextEdited(const QString &);
 
 signals:
 	void currentModelIndexChanged(const QModelIndex&);
