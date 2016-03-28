@@ -27,16 +27,29 @@
  ***************************************************************************/
 #ifdef HAVE_CANTOR_LIBS
 #include "CantorWorksheet.h"
-#include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 #include "VariableParser.h"
+#include "backend/core/column/Column.h"
+#include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 
-#include <QDebug>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <QGraphicsView>
+#include <KParts/ReadWritePart>
+
+#include "cantor/cantor_part.h"
+#include <cantor/panelpluginhandler.h>
+#include <cantor/panelplugin.h>
+#include <cantor/session.h>
+#include <cantor/worksheetaccess.h>
 
 CantorWorksheet::CantorWorksheet(AbstractScriptingEngine* engine, const QString &name, bool loading)
-		: AbstractPart(name), scripted(engine), m_part(0), m_backendName(name){
+		: AbstractPart(name),
+		scripted(engine),
+		m_variableModel(0),
+		m_part(0),
+		m_session(0),
+		m_backendName(name),
+		m_worksheetAccess(0) {
+
 	if(!loading)
 		init();
 }

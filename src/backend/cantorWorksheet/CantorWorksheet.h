@@ -30,16 +30,22 @@
 #define CANTORWORKSHEET_H
 
 #include <backend/core/AbstractPart.h>
-#include <cantor/session.h>
-#include <cantor/panelpluginhandler.h>
-#include <cantor/panelplugin.h>
-#include <KParts/ReadWritePart>
 #include "backend/core/AbstractScriptingEngine.h"
-#include "backend/core/column/Column.h"
-#include "cantor/cantor_part.h"
-#include <cantor/worksheetaccess.h>
 
-class CantorWorksheet : public AbstractPart, public scripted{
+namespace Cantor {
+	class Session;
+	class PanelPlugin;
+	class WorksheetAccessInterface;
+}
+
+namespace KParts {
+	class ReadWritePart;
+}
+
+class QAbstractItemModel;
+class Column;
+
+class CantorWorksheet : public AbstractPart, public scripted {
 	Q_OBJECT
 
 	public:
