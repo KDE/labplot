@@ -378,10 +378,9 @@ void MainWin::initMenus() {
 	m_newMenu->addAction(m_newDatapickerAction);
 	m_newMenu->addSeparator();
 	m_newMenu->addAction(m_newFileDataSourceAction);
-	m_newMenu->addSeparator();
-
 
 #ifdef HAVE_CANTOR_LIBS
+	m_newMenu->addSeparator();
 	//"Adding Cantor backends to menue and context menu"
 	QStringList m_availableBackend = Cantor::Backend::listAvailableBackends();
 	if(m_availableBackend.count() > 0) {
@@ -408,6 +407,10 @@ void MainWin::initMenus() {
 			break;
 		}
 	}
+#else
+	delete this->guiFactory()->container("casWorksheet", this);
+	delete this->guiFactory()->container("new_casWorksheet", this);
+	delete this->guiFactory()->container("cantorworksheet_toolbar", this);
 #endif
 
 // 	m_newMenu->addAction(m_newSqlDataSourceAction);
@@ -479,12 +482,14 @@ void MainWin::updateGUIOnProjectChanges() {
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("datapicker", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
-		factory->container("casWorksheet", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("spreadsheet_toolbar", this)->hide();
-		factory->container("cantorworksheet_toolbar", this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
+#ifdef HAVE_CANTOR_LIBS
+		factory->container("casWorksheet", this)->setEnabled(false);
+		factory->container("cantorworksheet_toolbar", this)->hide();
+#endif
 	}
 
 	factory->container("new", this)->setEnabled(!b);
@@ -520,12 +525,14 @@ void MainWin::updateGUI() {
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("datapicker", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
-		factory->container("casWorksheet", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("spreadsheet_toolbar", this)->hide();
-		factory->container("cantorworksheet_toolbar", this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
+#ifdef HAVE_CANTOR_LIBS
+		factory->container("casWorksheet", this)->setEnabled(false);
+		factory->container("cantorworksheet_toolbar", this)->hide();
+#endif
 		return;
 	}
 
@@ -634,6 +641,9 @@ void MainWin::updateGUI() {
 		menu->clear();
 		view->createContextMenu(menu);
 		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("cantorworksheet_toolbar", this));
+		toolbar->setVisible(true);
+		toolbar->clear();
+		view->fillToolBar(toolbar);
 	} else {
 		//no cantor worksheet selected -> deactivate cantor worksheet related menus
 		factory->container("casWorksheet", this)->setEnabled(false);

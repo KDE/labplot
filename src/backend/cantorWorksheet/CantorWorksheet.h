@@ -4,6 +4,7 @@
     Description          : Aspect providing a Cantor Worksheets for Multiple backends
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Garvit Khatri (garvitdelhi@gmail.com)
+	Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -25,7 +26,6 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifdef HAVE_CANTOR_LIBS
 #ifndef CANTORWORKSHEET_H
 #define CANTORWORKSHEET_H
 
@@ -89,4 +89,3 @@ class CantorWorksheet : public AbstractPart, public scripted {
 };
 
 #endif // CANTORWORKSHEET_H
-#endif
