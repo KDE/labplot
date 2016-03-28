@@ -44,17 +44,24 @@ class CantorWorksheet : public AbstractPart, public scripted{
 
 	public:
 		CantorWorksheet(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
+
 		virtual QWidget* view() const;
 		virtual QMenu* createContextMenu();
 		virtual QIcon icon() const;
+
+		virtual void exportView() const;
+		virtual void printView();
+		virtual void printPreview() const;
+
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
+
 		QString backendName();
 		KParts::ReadWritePart* part();
 		QList<Cantor::PanelPlugin*> getPlugins();
 		Column* column(const QString &name) const;
 		Column* column(int &index) const;
 		int columnCount() const;
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
 
 	private slots:
 		void rowsInserted(const QModelIndex & parent, int first, int last);

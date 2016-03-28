@@ -177,6 +177,18 @@ QString CantorWorksheet::backendName() {
 	return this->m_backendName;
 }
 
+//TODO
+void CantorWorksheet::exportView() const {
+
+}
+
+void CantorWorksheet::printView() {
+
+}
+
+void CantorWorksheet::printPreview() const {
+
+}
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################

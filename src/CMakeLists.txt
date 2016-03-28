@@ -190,17 +190,16 @@ set(COMMONFRONTEND_SOURCES
 
 IF (${CANTOR_LIBS_FOUND})
 	set(CANTOR_SOURCES
-		${KDEFRONTEND_DIR}/ui/dockwidgets/cantorworksheetdock.ui
 		${KDEFRONTEND_DIR}/dockwidgets/CantorWorksheetDock.cpp
 		${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp
 		${BACKEND_DIR}/cantorWorksheet/CantorWorksheet.cpp
 		${COMMONFRONTEND_DIR}/cantorWorksheet/CantorWorksheetView.cpp
 	)
+	set(CANTOR_UI_SOURCES ${KDEFRONTEND_DIR}/ui/dockwidgets/cantorworksheetdock.ui)
+	set(UI_SOURCES ${UI_SOURCES} ${CANTOR_UI_SOURCES})
 ELSE (${CANTOR_LIBS_FOUND})
 	set(CANTOR_SOURCES "")
 ENDIF (${CANTOR_LIBS_FOUND})
-
-MESSAGE (STATUS "Here it is ${CANTOR_SOURCES}")
 
 set(TOOLS_SOURCES
 	${TOOLS_DIR}/TeXRenderer.cpp
