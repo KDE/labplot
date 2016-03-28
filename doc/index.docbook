@@ -845,6 +845,8 @@ The menu is only available when a spreadsheet object is selected on the <guilabe
 <para>
 This menu contains all the items that can also be found in the context menu (right mouse) of a CAS worksheet.
 The menu is only available when a worksheet object is selected on the <guilabel>Project Explorer</guilabel> panel.
+</para>
+</sect1>
 <sect1 id="datapicker-menu">
 <title>The Datapicker Menu</title>
 <para>
