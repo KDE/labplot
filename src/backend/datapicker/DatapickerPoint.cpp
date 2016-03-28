@@ -36,7 +36,6 @@
 #include <QMenu>
 #include <QGraphicsSceneMouseEvent>
 
-#include <KIcon>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>

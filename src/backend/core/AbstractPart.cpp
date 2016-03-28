@@ -36,7 +36,6 @@
 #include <QMenu>
 #include <QStyle>
 
-#include <KIcon>
 #include <KLocale>
 
 /**

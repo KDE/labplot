@@ -46,9 +46,9 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_version.h>
 
-#include <KIcon>
-#include <KLocale>
 #include <QElapsedTimer>
+#include <QIcon>
+#include <KLocale>
 
 XYFitCurve::XYFitCurve(const QString& name)
 		: XYCurve(name, new XYFitCurvePrivate(this)){

@@ -56,7 +56,6 @@
 #include <QtDebug>
 #include <QElapsedTimer>
 
-#include <KIcon>
 #include <KConfigGroup>
 #include <KLocale>
 

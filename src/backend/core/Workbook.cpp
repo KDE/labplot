@@ -34,9 +34,7 @@
 #include "commonfrontend/workbook/WorkbookView.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 
-#include "KIcon"
 #include <KLocale>
-#include <QDebug>
 
 /**
  * \class Workbook

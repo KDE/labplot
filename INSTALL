@@ -1,8 +1,8 @@
 To compile LabPlot following packages are required:
 	* CMake version 2.8.12 or higher
 	* ECM (extra cmake modules)
-	* KDE4 libraries (including the devel-package, libkde4-devel or similar)
-	* Qt version 4.7 or higher (including the devel-package, libqt4-devel or similar)
+	* KDE Frameworks 5.12.0 or higher (including the devel-package)
+	* Qt version 5.4.2 or higher (including the devel-package, libqt5-devel or similar)
 	* GSL version 1.15 or higher (including the devel-package, gsl-devel or similar)
 
 optional

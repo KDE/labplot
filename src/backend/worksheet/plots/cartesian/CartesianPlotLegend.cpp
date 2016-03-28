@@ -48,7 +48,6 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 
-#include <KIcon>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
