@@ -78,9 +78,15 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	uiGeneralTab.cbType->addItem(i18n("Band reject"));
 	uiGeneralTab.cbType->addItem(i18n("Threshold"));
 
+	uiGeneralTab.cbForm->addItem(i18n("Ideal"));
+	//uiGeneralTab.cbForm->addItem(i18n("Butterworth"));
+
 	uiGeneralTab.cbUnit->addItem(i18n("Frequency (Hz)"));
 	uiGeneralTab.cbUnit->addItem(i18n("Fraction"));
 	uiGeneralTab.cbUnit->addItem(i18n("Index"));
+	uiGeneralTab.cbUnit2->addItem(i18n("Frequency (Hz)"));
+	uiGeneralTab.cbUnit2->addItem(i18n("Fraction"));
+	uiGeneralTab.cbUnit2->addItem(i18n("Index"));
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
@@ -93,9 +99,9 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
-//	connect( uiGeneralTab.cbForm, SIGNAL(currentIndexChanged(int)), this, SLOT(formChanged(int)) );
+	connect( uiGeneralTab.cbForm, SIGNAL(currentIndexChanged(int)), this, SLOT(formChanged(int)) );
 	connect( uiGeneralTab.cbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged(int)) );
-//	connect( uiGeneralTab.cbUnit2, SIGNAL(currentIndexChanged(int)), this, SLOT(unit2Changed(int)) );
+	connect( uiGeneralTab.cbUnit2, SIGNAL(currentIndexChanged(int)), this, SLOT(unit2Changed(int)) );
 
 //	connect( uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
@@ -136,9 +142,9 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	uiGeneralTab.sbCutoff->setValue(m_filterData.cutoff);
 	uiGeneralTab.cbUnit->setCurrentIndex(m_filterData.unit);
 	this->unitChanged(m_filterData.unit);
-	//uiGeneralTab.sbValue2->setValue(m_filterData.value2);
-	//uiGeneralTab.cbUnit2->setCurrentIndex(m_filterData.unit2);
-	//this->unit2Changed(m_filterData.unit2);
+	uiGeneralTab.sbCutoff2->setValue(m_filterData.cutoff2);
+	uiGeneralTab.cbUnit2->setCurrentIndex(m_filterData.unit2);
+	this->unit2Changed(m_filterData.unit2);
 	this->showFilterResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last filter
@@ -244,49 +250,27 @@ void XYFourierFilterCurveDock::typeChanged(int index) {
 
 	switch(type) {
 	case XYFourierFilterCurve::LowPass:
-		uiGeneralTab.lCutoff2->setVisible(false);
-		uiGeneralTab.sbCutoff2->setVisible(false);
-		uiGeneralTab.cbUnit2->setVisible(false);
-		break;
 	case XYFourierFilterCurve::HighPass:
+		uiGeneralTab.lCutoff->setText(i18n("Cutoff"));
 		uiGeneralTab.lCutoff2->setVisible(false);
 		uiGeneralTab.sbCutoff2->setVisible(false);
 		uiGeneralTab.cbUnit2->setVisible(false);
 		break;
-	default:
+	case XYFourierFilterCurve::BandPass:
+	case XYFourierFilterCurve::BandReject:
+		uiGeneralTab.lCutoff2->setVisible(true);
+		uiGeneralTab.lCutoff->setText(i18n("Lower Cutoff"));
+		uiGeneralTab.lCutoff2->setText(i18n("Upper Cutoff"));
+		uiGeneralTab.sbCutoff2->setVisible(true);
+		uiGeneralTab.cbUnit2->setVisible(true);
+		break;
+	case XYFourierFilterCurve::Threshold:
+		uiGeneralTab.lCutoff->setText(i18n("Value"));
+		uiGeneralTab.lCutoff2->setVisible(false);
+		uiGeneralTab.sbCutoff2->setVisible(false);
+		uiGeneralTab.cbUnit2->setVisible(false);
 		break;
 	}
-/*
-	if (type == XYFitCurve::Polynomial) {
-		uiGeneralTab.lDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setMaximum(10);
-		uiGeneralTab.sbDegree->setValue(1);
-	} else if (type == XYFitCurve::Power) {
-		uiGeneralTab.lDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setMaximum(2);
-		uiGeneralTab.sbDegree->setValue(1);
-	} else if (type == XYFitCurve::Exponential) {
-		uiGeneralTab.lDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setMaximum(3);
-		uiGeneralTab.sbDegree->setValue(1);
-	} else if (type == XYFitCurve::Fourier) {
-		uiGeneralTab.lDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setMaximum(10);
-		uiGeneralTab.sbDegree->setValue(1);
-	} else if (type == XYFitCurve::Gaussian) {
-		uiGeneralTab.lDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setMaximum(10);
-		uiGeneralTab.sbDegree->setValue(1);
-	} else if (type == XYFitCurve::Lorentz || type == XYFitCurve::Maxwell || type == XYFitCurve::Inverse_Exponential || type == XYFitCurve::Custom) {
-		uiGeneralTab.lDegree->setVisible(false);
-		uiGeneralTab.sbDegree->setVisible(false);
-	}
-*/
 }
 
 void XYFourierFilterCurveDock::formChanged(int index) {
@@ -294,19 +278,59 @@ void XYFourierFilterCurveDock::formChanged(int index) {
 }
 
 void XYFourierFilterCurveDock::unitChanged(int index) {
-	XYFourierFilterCurve::CutoffUnit unit = (XYFourierFilterCurve::CutoffUnit)index;
+	//XYFourierFilterCurve::CutoffUnit unit = (XYFourierFilterCurve::CutoffUnit)index;
 	m_filterData.unit = (XYFourierFilterCurve::CutoffUnit)uiGeneralTab.cbUnit->currentIndex();
-	//TODO
+
+	int n = 0; 
+	double T = 1.0;
+	if(m_filterCurve->xDataColumn() != NULL) {
+		n = m_filterCurve->xDataColumn()->rowCount();
+        	T = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
+	}
 	switch(index) {
 	case XYFourierFilterCurve::Frequency:
-			// set limits and accurency of cutoff spinbox
-			break;
+		uiGeneralTab.sbCutoff->setDecimals(6);
+		uiGeneralTab.sbCutoff->setMaximum(1.0/T);
+		uiGeneralTab.sbCutoff->setSingleStep(0.01/T);
+		break;
 	case XYFourierFilterCurve::Fraction:
-			// set limits and accurency of cutoff spinbox
-			break;
+		uiGeneralTab.sbCutoff->setDecimals(6);
+		uiGeneralTab.sbCutoff->setMaximum(1.0);
+		uiGeneralTab.sbCutoff->setSingleStep(0.01);
+		break;
 	case XYFourierFilterCurve::Index:
-			// set limits and accurency of cutoff spinbox
-			break;
+		uiGeneralTab.sbCutoff->setDecimals(0);
+		uiGeneralTab.sbCutoff->setMaximum(n);
+		break;
+	}
+}
+
+void XYFourierFilterCurveDock::unit2Changed(int index) {
+	//XYFourierFilterCurve::CutoffUnit unit2 = (XYFourierFilterCurve::CutoffUnit)index;
+	m_filterData.unit2 = (XYFourierFilterCurve::CutoffUnit)uiGeneralTab.cbUnit2->currentIndex();
+
+	int n = 0; 
+	double T = 1.0;
+	if(m_filterCurve->xDataColumn() != NULL) {
+		n = m_filterCurve->xDataColumn()->rowCount();
+        	T = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
+	}
+
+	switch(index) {
+	case XYFourierFilterCurve::Frequency:
+		uiGeneralTab.sbCutoff2->setDecimals(6);
+		uiGeneralTab.sbCutoff2->setMaximum(1.0/T);
+		uiGeneralTab.sbCutoff2->setSingleStep(0.01/T);
+		break;
+	case XYFourierFilterCurve::Fraction:
+		uiGeneralTab.sbCutoff2->setDecimals(6);
+		uiGeneralTab.sbCutoff2->setMaximum(1.0);
+		uiGeneralTab.sbCutoff2->setSingleStep(0.01);
+		break;
+	case XYFourierFilterCurve::Index:
+		uiGeneralTab.sbCutoff2->setDecimals(0);
+		uiGeneralTab.sbCutoff2->setMaximum(n);
+		break;
 	}
 }
 

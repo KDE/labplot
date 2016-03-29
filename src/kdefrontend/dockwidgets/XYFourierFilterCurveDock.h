@@ -68,7 +68,7 @@ private slots:
 	void typeChanged(int);
 	void formChanged(int);
 	void unitChanged(int);
-//	void unit2Changed(int);
+	void unit2Changed(int);
 
 //	void showOptions();
 	void recalculateClicked();

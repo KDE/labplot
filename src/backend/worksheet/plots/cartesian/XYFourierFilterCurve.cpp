@@ -252,14 +252,12 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	double cutoff = filterData.cutoff, cutoff2 = filterData.cutoff2;
 	XYFourierFilterCurve::CutoffUnit unit = filterData.unit, unit2 = filterData.unit2;
 #ifdef QT_DEBUG
+	qDebug()<<"type ="<<type;
 	qDebug()<<"cutoffs ="<<cutoff<<cutoff2;
 	qDebug()<<"unit ="<<unit<<unit2;
 #endif
 ///////////////////////////////////////////////////////////
-	//see http://www.originlab.com/doc/Origin-Help/2DFFT-Filter-Algorithm
-	// http://www.imagemet.com/WebHelp6/Default.htm#FourierAnalysis/Band_Filtering.htm
-
-// Fourier transform
+	// 1. transform
 	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc (n);
 	gsl_fft_real_wavetable *real = gsl_fft_real_wavetable_alloc (n);
 
@@ -277,9 +275,19 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	case XYFourierFilterCurve::Index:
 		cutindex = cutoff;
 	}
+	switch(unit2) {
+	case XYFourierFilterCurve::Frequency:
+		cutindex2 = cutoff2*(max-min);
+		break;
+	case XYFourierFilterCurve::Fraction:
+		cutindex2 = cutoff2*n;
+		break;
+	case XYFourierFilterCurve::Index:
+		cutindex2 = cutoff2;
+	}
 
 
-// calculate filter
+	// 2. apply filter
 	switch(filterData.type) {
 	case XYFourierFilterCurve::LowPass:
 		for (unsigned int i = cutindex; i < n; i++)
@@ -289,12 +297,22 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		for (unsigned int i = 0; i < cutindex; i++)
 			ydata[i] = 0;
 		break;
-//TODO: other types
-	default:
-		qDebug()<<"Filter type not supported!";
+	case XYFourierFilterCurve::BandPass:
+		for (unsigned int i = 0; i < cutindex; i++)
+			ydata[i] = 0;
+		for (unsigned int i = cutindex2; i < n; i++)
+			ydata[i] = 0;
+		break;
+	case XYFourierFilterCurve::BandReject:
+		for (unsigned int i = cutindex; i < cutindex2; i++)
+			ydata[i] = 0;
+		break;
+	case XYFourierFilterCurve::Threshold:
+//TODO
+		qDebug()<<"Filter type 'Threshold' not supported yet!";
 	}
 
-// back transform
+	// 3. back transform
 	gsl_fft_halfcomplex_wavetable *hc = gsl_fft_halfcomplex_wavetable_alloc (n);
 	gsl_fft_halfcomplex_inverse (ydata, 1, n, hc, work);
 	gsl_fft_halfcomplex_wavetable_free (hc);
@@ -308,10 +326,6 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	}
 ///////////////////////////////////////////////////////////
 
-//	for (unsigned int i = 0; i < n; i++) {
-//		qDebug()<<xdata[i]<<ydata[i];
-//	}
-	
 	//write the result
 	filterResult.available = true;
 	filterResult.valid = true;
