@@ -113,13 +113,13 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	  xyEquationCurveDock(0),
 	  xyFitCurveDock(0),
 	  worksheetDock(0),
-	#ifdef HAVE_CANTOR_LIBS
-	cantorWorksheetDock(0),
-	#endif
 	  textLabelDock(0),
 	  customPointDock(0),
 	  datapickerImageDock(0),
 	  datapickerCurveDock(0),
+#ifdef HAVE_CANTOR_LIBS
+	cantorWorksheetDock(0),
+#endif
 	  m_guiObserver(0) {
 
 // 	QTimer::singleShot( 0, this, SLOT(initGUI(filename)) );  //TODO doesn't work anymore

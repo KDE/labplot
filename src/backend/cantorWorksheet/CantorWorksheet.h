@@ -33,13 +33,13 @@
 #include "backend/core/AbstractScriptingEngine.h"
 
 namespace Cantor {
-	class Session;
-	class PanelPlugin;
-	class WorksheetAccessInterface;
+class Session;
+class PanelPlugin;
+class WorksheetAccessInterface;
 }
 
 namespace KParts {
-	class ReadWritePart;
+class ReadWritePart;
 }
 
 class QAbstractItemModel;
@@ -48,44 +48,44 @@ class Column;
 class CantorWorksheet : public AbstractPart, public scripted {
 	Q_OBJECT
 
-	public:
-		CantorWorksheet(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
+public:
+	CantorWorksheet(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
 
-		virtual QWidget* view() const;
-		virtual QMenu* createContextMenu();
-		virtual QIcon icon() const;
+	virtual QWidget* view() const;
+	virtual QMenu* createContextMenu();
+	virtual QIcon icon() const;
 
-		virtual void exportView() const;
-		virtual void printView();
-		virtual void printPreview() const;
+	virtual void exportView() const;
+	virtual void printView();
+	virtual void printPreview() const;
 
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
+	virtual void save(QXmlStreamWriter*) const;
+	virtual bool load(XmlStreamReader*);
 
-		QString backendName();
-		KParts::ReadWritePart* part();
-		QList<Cantor::PanelPlugin*> getPlugins();
-		Column* column(const QString &name) const;
-		Column* column(int &index) const;
-		int columnCount() const;
+	QString backendName();
+	KParts::ReadWritePart* part();
+	QList<Cantor::PanelPlugin*> getPlugins();
 
-	private slots:
-		void rowsInserted(const QModelIndex & parent, int first, int last);
-		void rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last);
-		void modelReset();
-		void sessionChanged();
+private:
+	QString m_backendName;
+	Cantor::Session* m_session;
+	KParts::ReadWritePart* m_part;
+	QList<Cantor::PanelPlugin*> m_plugins;
+	QAbstractItemModel* m_variableModel;
+	Cantor::WorksheetAccessInterface* m_worksheetAccess;
 
-	signals:
-        void requestProjectContextMenu(QMenu*);
+	bool init(QByteArray* content = NULL);
+	Column* column(const QString &name) const;
+	Column* column(int &index) const;
 
-	private:
-		bool init(QByteArray* content = NULL);
-		KParts::ReadWritePart* m_part;
-		QList<Cantor::PanelPlugin*> m_plugins;
-		QAbstractItemModel* m_variableModel;
-		Cantor::Session* m_session;
-		QString m_backendName;
-		Cantor::WorksheetAccessInterface* m_worksheetAccess;
+private slots:
+	void rowsInserted(const QModelIndex & parent, int first, int last);
+	void rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last);
+	void modelReset();
+	void sessionChanged();
+
+signals:
+	void requestProjectContextMenu(QMenu*);
 };
 
 #endif // CANTORWORKSHEET_H

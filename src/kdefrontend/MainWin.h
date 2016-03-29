@@ -150,13 +150,6 @@ private:
 	QAction* m_visibilityAllAction;
 	QAction* m_toggleProjectExplorerDockAction;
 	QAction* m_togglePropertiesDockAction;
-	
-	//cantor
-	#ifdef HAVE_CANTOR_LIBS
-	QMenu* m_newCantorWorksheetMenu;
-	CantorWorksheetDock* cantorWorksheetDock;
-	CantorWorksheet* activeCantorWorksheet() const;
-	#endif
 
 	//Menus
 	QMenu* m_visibilityMenu;
@@ -194,6 +187,13 @@ private:
 	Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
 	Datapicker* activeDatapicker() const;
+
+	//cantor
+#ifdef HAVE_CANTOR_LIBS
+	QMenu* m_newCantorWorksheetMenu;
+	CantorWorksheetDock* cantorWorksheetDock;
+	CantorWorksheet* activeCantorWorksheet() const;
+#endif
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver;
