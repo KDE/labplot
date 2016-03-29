@@ -128,10 +128,14 @@ MainWin::~MainWin() {
 	if (m_project!=0) {
 		m_mdiArea->closeAllSubWindows();
 		disconnect(m_project, 0, this, 0);
-		delete m_aspectTreeModel;
 		delete m_project;
-		delete m_guiObserver;
 	}
+
+	if (m_aspectTreeModel)
+		delete m_aspectTreeModel;
+
+	if (m_guiObserver)
+		delete m_guiObserver;
 }
 
 AspectTreeModel* MainWin::model() const {
