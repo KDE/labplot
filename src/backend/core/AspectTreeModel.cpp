@@ -323,7 +323,7 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect *aspect, in
 }
 
 void AspectTreeModel::setFilterString(const QString & s){
-    m_filterString=s;
+	m_filterString=s;
 
 	QModelIndex  topLeft = this->index(0,0, QModelIndex());
 	QModelIndex  bottomRight =  this->index(this->rowCount()-1,3, QModelIndex());
@@ -331,7 +331,7 @@ void AspectTreeModel::setFilterString(const QString & s){
 }
 
 void AspectTreeModel::setFilterCaseSensitivity(Qt::CaseSensitivity cs){
-    m_filterCaseSensitivity = cs;
+	m_filterCaseSensitivity = cs;
 }
 
 void AspectTreeModel::setFilterMatchCompleteWord(bool b){
