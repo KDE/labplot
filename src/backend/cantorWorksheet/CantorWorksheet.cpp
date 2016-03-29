@@ -124,15 +124,17 @@ void CantorWorksheet::sessionChanged() {
 void CantorWorksheet::modelReset() {
 	qDebug() << "Model Reset";
 	for(int i = 0; i < childCount<Column>(); ++i) {
-		column(i)->remove();
+		child<Column>(i)->remove();
 	}
 }
 
 void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last) {
 	Q_UNUSED(parent)
 	for(int i = first; i <= last; ++i) {
-		QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
-		if(column(name)) column(name)->remove();
+		const QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
+		Column* column = child<Column>(name);
+		if(column)
+			column->remove();
 	}
 }
 
@@ -149,15 +151,6 @@ QIcon CantorWorksheet::icon() const {
 		return QIcon::fromTheme(m_session->backend()->icon());
 	return QIcon();
 }
-
-Column* CantorWorksheet::column(const QString &name) const{
-	return child<Column>(name);
-}
-
-Column* CantorWorksheet::column(int& index) const{
-	return child<Column>(index);
-}
-
 
 QWidget* CantorWorksheet::view() const {
 	if (!m_view) {
@@ -227,6 +220,7 @@ bool CantorWorksheet::load(XmlStreamReader* reader){
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
+	bool rc = false;
 
 	while (!reader->atEnd()){
 		reader->readNext();
@@ -246,11 +240,12 @@ bool CantorWorksheet::load(XmlStreamReader* reader){
 				reader->raiseWarning(attributeWarning.arg("'content'"));
 
 			QByteArray content = QByteArray::fromBase64(str.toAscii());
-			return init(&content);
+			rc = init(&content);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;
 		}
 	}
-	return true;
+
+	return rc;
 }

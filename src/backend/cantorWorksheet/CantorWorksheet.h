@@ -75,8 +75,6 @@ private:
 	Cantor::WorksheetAccessInterface* m_worksheetAccess;
 
 	bool init(QByteArray* content = NULL);
-	Column* column(const QString &name) const;
-	Column* column(int &index) const;
 
 private slots:
 	void rowsInserted(const QModelIndex & parent, int first, int last);
