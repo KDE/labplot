@@ -45,6 +45,7 @@
 //#include <gsl/gsl_version.h>
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_halfcomplex.h>
+#include <gsl/gsl_sf_pow_int.h>
 
 #include <KIcon>
 #include <KLocale>
@@ -286,30 +287,60 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		cutindex2 = cutoff2;
 	}
 
-
 	// 2. apply filter
 	switch(filterData.type) {
 	case XYFourierFilterCurve::LowPass:
-		for (unsigned int i = cutindex; i < n; i++)
-			ydata[i] = 0;
+		switch(filterData.form) {
+		case XYFourierFilterCurve::Ideal: 
+			for (unsigned int i = cutindex; i < n; i++)
+				ydata[i] = 0;
+			break;
+		case XYFourierFilterCurve::Butterworth:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i/cutindex,2));
+			break;
+		}
 		break;
 	case XYFourierFilterCurve::HighPass:
-		for (unsigned int i = 0; i < cutindex; i++)
-			ydata[i] = 0;
+		switch(filterData.form) {
+		case XYFourierFilterCurve::Ideal: 
+			for (unsigned int i = 0; i < cutindex; i++)
+				ydata[i] = 0;
+			break;
+		case XYFourierFilterCurve::Butterworth:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(cutindex/i,2));
+			break;
+		}
 		break;
 	case XYFourierFilterCurve::BandPass:
-		for (unsigned int i = 0; i < cutindex; i++)
-			ydata[i] = 0;
-		for (unsigned int i = cutindex2; i < n; i++)
-			ydata[i] = 0;
+		switch(filterData.form) {
+		case XYFourierFilterCurve::Ideal: 
+			for (unsigned int i = 0; i < cutindex; i++)
+				ydata[i] = 0;
+			for (unsigned int i = cutindex2; i < n; i++)
+				ydata[i] = 0;
+			break;
+		case XYFourierFilterCurve::Butterworth:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int((i*i-gsl_sf_pow_int(cutindex2+cutindex,2)/4.0)/i/(cutindex2-cutindex),2));
+			break;
+		}
 		break;
 	case XYFourierFilterCurve::BandReject:
-		for (unsigned int i = cutindex; i < cutindex2; i++)
-			ydata[i] = 0;
+		switch(filterData.form) {
+		case XYFourierFilterCurve::Ideal: 
+			for (unsigned int i = cutindex; i < cutindex2; i++)
+				ydata[i] = 0;
+			break;
+		case XYFourierFilterCurve::Butterworth:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i*(cutindex2-cutindex)/(i*i-gsl_sf_pow_int(cutindex2+cutindex,2)/4.0),2));
+			break;
+		}
 		break;
-	case XYFourierFilterCurve::Threshold:
-//TODO
-		qDebug()<<"Filter type 'Threshold' not supported yet!";
+// TODO
+//	case XYFourierFilterCurve::Threshold:
 	}
 
 	// 3. back transform

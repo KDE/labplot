@@ -79,7 +79,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	uiGeneralTab.cbType->addItem(i18n("Threshold"));
 
 	uiGeneralTab.cbForm->addItem(i18n("Ideal"));
-	//uiGeneralTab.cbForm->addItem(i18n("Butterworth"));
+	uiGeneralTab.cbForm->addItem(i18n("Butterworth"));
 
 	uiGeneralTab.cbUnit->addItem(i18n("Frequency (Hz)"));
 	uiGeneralTab.cbUnit->addItem(i18n("Fraction"));
@@ -227,6 +227,10 @@ void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setXDataColumn(column);
+
+	// update range of cutoff spin boxes (like a unit change)
+	unitChanged(uiGeneralTab.cbUnit->currentIndex());
+	unit2Changed(uiGeneralTab.cbUnit2->currentIndex());
 }
 
 void XYFourierFilterCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -264,16 +268,19 @@ void XYFourierFilterCurveDock::typeChanged(int index) {
 		uiGeneralTab.sbCutoff2->setVisible(true);
 		uiGeneralTab.cbUnit2->setVisible(true);
 		break;
-	case XYFourierFilterCurve::Threshold:
+/*	case XYFourierFilterCurve::Threshold:
 		uiGeneralTab.lCutoff->setText(i18n("Value"));
 		uiGeneralTab.lCutoff2->setVisible(false);
 		uiGeneralTab.sbCutoff2->setVisible(false);
 		uiGeneralTab.cbUnit2->setVisible(false);
-		break;
+*/
 	}
 }
 
 void XYFourierFilterCurveDock::formChanged(int index) {
+	XYFourierFilterCurve::FilterForm form = (XYFourierFilterCurve::FilterForm)index;
+	m_filterData.form = (XYFourierFilterCurve::FilterForm)uiGeneralTab.cbForm->currentIndex();
+
 	//TODO
 }
 
@@ -337,6 +344,7 @@ void XYFourierFilterCurveDock::unit2Changed(int index) {
 void XYFourierFilterCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	m_filterData.cutoff = uiGeneralTab.sbCutoff->value();
+	m_filterData.cutoff2 = uiGeneralTab.sbCutoff2->value();
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setFilterData(m_filterData);
