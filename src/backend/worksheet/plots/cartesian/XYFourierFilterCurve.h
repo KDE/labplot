@@ -41,12 +41,13 @@ class XYFourierFilterCurve: public XYCurve {
 		enum CutoffUnit {Frequency, Fraction, Index};	// Frequency=0..N/(xmax-xmin), Fraction=0..1, Index=0..N-1
 
 		struct FilterData {
-			FilterData() : type(LowPass), form(Ideal), cutoff(0), unit(Index), cutoff2(0), unit2(Index) {};
+			FilterData() : type(LowPass), form(Ideal), order(1), cutoff(0), unit(Index), cutoff2(0), unit2(Index) {};
 
 			FilterType type;
 			FilterForm form;
+			unsigned int order;
 			double cutoff;		// (low) cutoff
-			CutoffUnit unit;		// (low) value unit
+			CutoffUnit unit;	// (low) value unit
 			double cutoff2;		// high cutoff
 			CutoffUnit unit2;	// high value unit
 		};

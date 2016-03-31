@@ -67,6 +67,7 @@ private slots:
 	void yDataColumnChanged(const QModelIndex&);
 	void typeChanged(int);
 	void formChanged(int);
+	void orderChanged(int);
 	void unitChanged(int);
 	void unit2Changed(int);
 

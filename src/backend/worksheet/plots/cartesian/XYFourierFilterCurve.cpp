@@ -250,12 +250,15 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	// filter settings
 	XYFourierFilterCurve::FilterType type = filterData.type;
+	XYFourierFilterCurve::FilterForm form = filterData.form;
+	unsigned int order = filterData.order;
 	double cutoff = filterData.cutoff, cutoff2 = filterData.cutoff2;
 	XYFourierFilterCurve::CutoffUnit unit = filterData.unit, unit2 = filterData.unit2;
 #ifdef QT_DEBUG
-	qDebug()<<"type ="<<type;
+	qDebug()<<"type :"<<type;
+	qDebug()<<"form (order "<<order<<") :"<<form;
 	qDebug()<<"cutoffs ="<<cutoff<<cutoff2;
-	qDebug()<<"unit ="<<unit<<unit2;
+	qDebug()<<"unit :"<<unit<<unit2;
 #endif
 ///////////////////////////////////////////////////////////
 	// 1. transform
@@ -288,33 +291,33 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	}
 
 	// 2. apply filter
-	switch(filterData.type) {
+	switch(type) {
 	case XYFourierFilterCurve::LowPass:
-		switch(filterData.form) {
+		switch(form) {
 		case XYFourierFilterCurve::Ideal: 
 			for (unsigned int i = cutindex; i < n; i++)
 				ydata[i] = 0;
 			break;
 		case XYFourierFilterCurve::Butterworth:
 			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i/cutindex,2));
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i/cutindex,2*order));
 			break;
 		}
 		break;
 	case XYFourierFilterCurve::HighPass:
-		switch(filterData.form) {
+		switch(form) {
 		case XYFourierFilterCurve::Ideal: 
 			for (unsigned int i = 0; i < cutindex; i++)
 				ydata[i] = 0;
 			break;
 		case XYFourierFilterCurve::Butterworth:
 			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(cutindex/i,2));
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(cutindex/i,2*order));
 			break;
 		}
 		break;
 	case XYFourierFilterCurve::BandPass:
-		switch(filterData.form) {
+		switch(form) {
 		case XYFourierFilterCurve::Ideal: 
 			for (unsigned int i = 0; i < cutindex; i++)
 				ydata[i] = 0;
@@ -323,24 +326,24 @@ void XYFourierFilterCurvePrivate::recalculate() {
 			break;
 		case XYFourierFilterCurve::Butterworth:
 			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int((i*i-gsl_sf_pow_int(cutindex2+cutindex,2)/4.0)/i/(cutindex2-cutindex),2));
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int((i*i-gsl_sf_pow_int(cutindex2+cutindex,2)/4.0)/i/(cutindex2-cutindex),2*order));
 			break;
 		}
 		break;
 	case XYFourierFilterCurve::BandReject:
-		switch(filterData.form) {
+		switch(form) {
 		case XYFourierFilterCurve::Ideal: 
 			for (unsigned int i = cutindex; i < cutindex2; i++)
 				ydata[i] = 0;
 			break;
 		case XYFourierFilterCurve::Butterworth:
 			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i*(cutindex2-cutindex)/(i*i-gsl_sf_pow_int(cutindex2+cutindex,2)/4.0),2));
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i*(cutindex2-cutindex)/(i*i-gsl_sf_pow_int(cutindex2+cutindex,2)/4.0),2*order));
 			break;
 		}
 		break;
-// TODO
 //	case XYFourierFilterCurve::Threshold:
+// TODO
 	}
 
 	// 3. back transform
@@ -386,6 +389,7 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "type", QString::number(d->filterData.type) );
 	writer->writeAttribute( "form", QString::number(d->filterData.form) );
+	writer->writeAttribute( "order", QString::number(d->filterData.order) );
 	writer->writeAttribute( "cutoff", QString::number(d->filterData.cutoff) );
 	writer->writeAttribute( "unit", QString::number(d->filterData.unit) );
 	writer->writeAttribute( "cutoff2", QString::number(d->filterData.cutoff2) );
@@ -451,6 +455,12 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 				reader->raiseWarning(attributeWarning.arg("'form'"));
 			else
 				d->filterData.form = (XYFourierFilterCurve::FilterForm)str.toInt();
+
+			str = attribs.value("order").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'order'"));
+			else
+				d->filterData.order = str.toInt();
 
 			str = attribs.value("cutoff").toString();
 			if(str.isEmpty())

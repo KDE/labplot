@@ -6,19 +6,29 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>450</width>
-    <height>557</height>
+    <width>917</width>
+    <height>794</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="10" column="0">
+   <item row="8" column="1">
+    <widget class="KComboBox" name="cbType">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="0">
     <widget class="QLabel" name="lCutoff">
      <property name="text">
       <string>Cutoff</string>
      </property>
     </widget>
    </item>
-   <item row="15" column="0" rowspan="2" colspan="3">
+   <item row="19" column="0" rowspan="2" colspan="3">
     <widget class="Line" name="line_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -45,16 +55,6 @@
     <widget class="QLabel" name="lName">
      <property name="text">
       <string>Name</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="1" colspan="2">
-    <widget class="KComboBox" name="cbType">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
      </property>
     </widget>
    </item>
@@ -127,7 +127,7 @@
    <item row="0" column="1" colspan="2">
     <widget class="KLineEdit" name="leName"/>
    </item>
-   <item row="19" column="0">
+   <item row="23" column="0">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -143,7 +143,7 @@
      </property>
     </spacer>
    </item>
-   <item row="20" column="0">
+   <item row="24" column="0">
     <widget class="QCheckBox" name="chkVisible">
      <property name="text">
       <string>visible</string>
@@ -157,17 +157,17 @@
      </property>
     </widget>
    </item>
-   <item row="18" column="1">
+   <item row="22" column="1">
     <widget class="QPushButton" name="pbRecalculate">
      <property name="text">
       <string>Recalculate</string>
      </property>
     </widget>
    </item>
-   <item row="14" column="1">
+   <item row="18" column="1">
     <widget class="QTextEdit" name="teResult"/>
    </item>
-   <item row="14" column="0">
+   <item row="18" column="0">
     <widget class="QLabel" name="label">
      <property name="font">
       <font>
@@ -183,7 +183,7 @@
      </property>
     </widget>
    </item>
-   <item row="10" column="1" rowspan="2">
+   <item row="14" column="1" rowspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QDoubleSpinBox" name="sbCutoff">
@@ -211,23 +211,50 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="1">
-    <widget class="QComboBox" name="cbForm"/>
-   </item>
-   <item row="12" column="0">
+   <item row="16" column="0">
     <widget class="QLabel" name="lCutoff2">
      <property name="text">
       <string>Cutoff2</string>
      </property>
     </widget>
    </item>
-   <item row="12" column="1">
+   <item row="16" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QDoubleSpinBox" name="sbCutoff2"/>
      </item>
      <item>
       <widget class="QComboBox" name="cbUnit2"/>
+     </item>
+    </layout>
+   </item>
+   <item row="9" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QComboBox" name="cbForm"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="lOrder">
+       <property name="text">
+        <string>Order</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="sbOrder">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>10</number>
+       </property>
+       <property name="value">
+        <number>1</number>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
