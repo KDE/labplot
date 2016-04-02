@@ -36,6 +36,7 @@
 #include <QMenu>
 #include <QApplication>
 #include <QFontMetrics>
+#include <QDebug>
 
 #include <KLocale>
 
@@ -216,8 +217,14 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const{
 	if (m_selectableAspects.size() != 0){
 		foreach(const char * classString, m_selectableAspects){
 			if (aspect->inherits(classString)){
-			  result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-			  break;
+				result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+				if( index!=this->index(0,0,QModelIndex()) &&  !m_filterString.isEmpty() ) {
+					if (this->containsFilterString(aspect))
+						result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+					else
+						result &= ~Qt::ItemIsEnabled;
+				}
+				break;
 			}else{
 				result &= ~Qt::ItemIsEnabled;
 			}
@@ -324,7 +331,6 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect *aspect, in
 
 void AspectTreeModel::setFilterString(const QString & s){
 	m_filterString=s;
-
 	QModelIndex  topLeft = this->index(0,0, QModelIndex());
 	QModelIndex  bottomRight =  this->index(this->rowCount()-1,3, QModelIndex());
 	emit dataChanged(topLeft, bottomRight);
