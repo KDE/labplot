@@ -25,9 +25,9 @@
 #include <QObject>
 #include <KPluginInfo>
 
-#include "cantor/backend.h"
+#include <cantor/backend.h>
 
-#include "cantor_export.h"
+#include <cantor/cantor_export.h>
 
 namespace Cantor
 {
