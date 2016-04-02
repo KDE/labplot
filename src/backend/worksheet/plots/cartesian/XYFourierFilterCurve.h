@@ -37,7 +37,7 @@ class XYFourierFilterCurve: public XYCurve {
 
 	public:
 		enum FilterType {LowPass, HighPass, BandPass, BandReject};	// TODO: Threshold
-		enum FilterForm {Ideal, Butterworth};		// TODO: ChebyshevI, ChebyshevII, Gaussian, Bessel, etc.
+		enum FilterForm {Ideal, Butterworth, ChebyshevI, ChebyshevII};	// TODO: Gaussian, Bessel, etc.
 		enum CutoffUnit {Frequency, Fraction, Index};	// Frequency=0..N/(xmax-xmin), Fraction=0..1, Index=0..N-1
 
 		struct FilterData {

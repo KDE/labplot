@@ -32,6 +32,9 @@
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 
+#include <cmath>
+#include <QDebug>
+
 class XYFourierFilterCurve;
 class Column;
 
@@ -39,6 +42,18 @@ class XYFourierFilterCurvePrivate: public XYCurvePrivate {
 	public:
 		explicit XYFourierFilterCurvePrivate(XYFourierFilterCurve*);
 		~XYFourierFilterCurvePrivate();
+
+		double ChebyshevT(int n, double x) { 
+			if(x<0) {
+				qDebug()<<"	range error in ChebyshevT: x ="<<x;
+				return 0;
+			}	
+
+			if(x < 1.0)
+				return cos(n*acos(x));
+			else
+				return cosh(n*acosh(x));
+		}
 
 		void recalculate();
 

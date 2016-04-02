@@ -265,6 +265,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
         gsl_fft_real_transform (ydata, 1, n, real, work);
         gsl_fft_real_wavetable_free (real);
 
+	// calculate index
 	double cutindex=0, cutindex2=0;
 	switch(unit) {
 	case XYFourierFilterCurve::Frequency:
@@ -286,6 +287,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	case XYFourierFilterCurve::Index:
 		cutindex2 = cutoff2;
 	}
+	double centerindex=(cutindex2+cutindex)/2.;
+	int bandwidth=(cutindex2-cutindex);
 
 	// 2. apply filter
 	switch(type) {
@@ -299,6 +302,14 @@ void XYFourierFilterCurvePrivate::recalculate() {
 			for (unsigned int i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i/cutindex,2*order));
 			break;
+		case XYFourierFilterCurve::ChebyshevI:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(ChebyshevT(order,i/cutindex),2));
+			break;
+		case XYFourierFilterCurve::ChebyshevII:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(ChebyshevT(order,cutindex/i),2));
+			break;
 		}
 		break;
 	case XYFourierFilterCurve::HighPass:
@@ -310,6 +321,14 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		case XYFourierFilterCurve::Butterworth:
 			for (unsigned int i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(cutindex/i,2*order));
+			break;
+		case XYFourierFilterCurve::ChebyshevI:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(ChebyshevT(order,cutindex/i),2));
+			break;
+		case XYFourierFilterCurve::ChebyshevII:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(ChebyshevT(order,i/cutindex),2));
 			break;
 		}
 		break;
@@ -323,7 +342,15 @@ void XYFourierFilterCurvePrivate::recalculate() {
 			break;
 		case XYFourierFilterCurve::Butterworth:
 			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int((i*i-gsl_sf_pow_int(cutindex2+cutindex,2)/4.0)/i/(cutindex2-cutindex),2*order));
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int((i*i-centerindex*centerindex)/i/bandwidth,2*order));
+			break;
+		case XYFourierFilterCurve::ChebyshevI:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(ChebyshevT(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
+			break;
+		case XYFourierFilterCurve::ChebyshevII:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(ChebyshevT(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
 			break;
 		}
 		break;
@@ -335,12 +362,19 @@ void XYFourierFilterCurvePrivate::recalculate() {
 			break;
 		case XYFourierFilterCurve::Butterworth:
 			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i*(cutindex2-cutindex)/(i*i-gsl_sf_pow_int(cutindex2+cutindex,2)/4.0),2*order));
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i*bandwidth/(i*i-gsl_sf_pow_int(centerindex,2)),2*order));
+			break;
+		case XYFourierFilterCurve::ChebyshevI:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(ChebyshevT(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
+			break;
+		case XYFourierFilterCurve::ChebyshevII:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(ChebyshevT(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
 			break;
 		}
 		break;
-//	case XYFourierFilterCurve::Threshold:
-// TODO
+//TODO	case XYFourierFilterCurve::Threshold:
 	}
 
 	// 3. back transform
@@ -360,6 +394,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//write the result
 	filterResult.available = true;
 	filterResult.valid = true;
+	filterResult.status = i18n("OK");
 	filterResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve

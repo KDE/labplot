@@ -80,6 +80,8 @@ void XYFourierFilterCurveDock::setupGeneral() {
 
 	uiGeneralTab.cbForm->addItem(i18n("Ideal"));
 	uiGeneralTab.cbForm->addItem(i18n("Butterworth"));
+	uiGeneralTab.cbForm->addItem(i18n("Chebyshev type I"));
+	uiGeneralTab.cbForm->addItem(i18n("Chebyshev type II"));
 
 	uiGeneralTab.cbUnit->addItem(i18n("Frequency (Hz)"));
 	uiGeneralTab.cbUnit->addItem(i18n("Fraction"));
@@ -293,6 +295,8 @@ void XYFourierFilterCurveDock::formChanged(int index) {
 		uiGeneralTab.lOrder->setVisible(false);
 		break;
 	case XYFourierFilterCurve::Butterworth:
+	case XYFourierFilterCurve::ChebyshevI:
+	case XYFourierFilterCurve::ChebyshevII:
 		uiGeneralTab.sbOrder->setVisible(true);
 		uiGeneralTab.lOrder->setVisible(true);
 		break;
