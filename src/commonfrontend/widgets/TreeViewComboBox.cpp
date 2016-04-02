@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Provides a QTreeView in a QComboBox
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
@@ -31,8 +31,7 @@
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectTreeModel.h"
 #include <QHeaderView>
-#include <qlayout.h>
-#include <QDebug>
+#include <QLayout>
 #include <KLocalizedString>
 
 /*!
@@ -41,15 +40,16 @@
 
     \ingroup backend/widgets
 */
-
-
 TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent){
-	
+
 	m_layout = new QVBoxLayout;
 	m_treeView = new QTreeView;
 	m_lineEdit = new QLineEdit;
 	m_groupBox = new QGroupBox;
 	
+	m_layout->setContentsMargins(0, 0, 0, 0);
+	m_layout->setSpacing(0);
+
 	m_layout->addWidget(m_lineEdit);
 	m_layout->addWidget(m_treeView);
 	
@@ -62,7 +62,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent){
 	m_treeView->setSelectionMode(QAbstractItemView::SingleSelection);
 	m_treeView->setUniformRowHeights(true);
 	
-	m_lineEdit->setPlaceholderText(i18n("Search/Filter Options"));
+	m_lineEdit->setPlaceholderText(i18n("Search/Filter text"));
 	m_lineEdit->setFocus();
 
 	addItem("");
@@ -187,7 +187,6 @@ void TreeViewComboBox::treeViewIndexActivated( const QModelIndex & index){
 				QComboBox::setCurrentIndex(0);
 				QComboBox::setItemText(0, index.data().toString());
 				emit currentModelIndexChanged(index);
-// 				m_treeView->hide();
 				m_groupBox->hide();
 				return;
 			}
@@ -198,7 +197,6 @@ void TreeViewComboBox::treeViewIndexActivated( const QModelIndex & index){
 	setCurrentIndex(0);
 	QComboBox::setItemText(0, "");
 	emit currentModelIndexChanged(QModelIndex());
-// 	m_treeView->hide();
 	m_groupBox->hide();
 }
 
