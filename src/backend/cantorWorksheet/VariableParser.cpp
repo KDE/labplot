@@ -1,9 +1,10 @@
 /***************************************************************************
-    File                 : CantorWorksheet.cpp
+    File                 : VariableParser.h
     Project              : LabPlot
-    Description          : Aspect providing a Cantor Worksheets for Multiple backends
+    Description          : Variable parser for different CAS backends
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -28,39 +29,37 @@
 
 #include "VariableParser.h"
 
-VariableParser::VariableParser(const QString& name, const QString& value)
-	: m_backendName(name), m_string(value){
-	m_parsed = false;
-	qDebug() << "String is: " << m_string;
-	init();
-}
+#include <QStringList>
+#include <QTime>
+#include <QDebug>
 
-void VariableParser::init() {
-	if(m_backendName.compare(QString("Maxima"), Qt::CaseInsensitive) == 0) {
-		return parseMaximaValues();
-	}
-	else if(m_backendName.compare(QString("Python 3"), Qt::CaseInsensitive) == 0) {
-		return parsePythonValues();
-	}
-	else if(m_backendName.compare(QString("Python 2"), Qt::CaseInsensitive) == 0) {
-		return parsePythonValues();
-	}
-	else if(m_backendName.compare(QString("Sage"), Qt::CaseInsensitive) == 0) {
-		return parsePythonValues();
-	}
-	else if(m_backendName.compare(QString("R"), Qt::CaseInsensitive) == 0) {
-		return parseRValues();
-	}
+VariableParser::VariableParser(const QString& name, const QString& value)
+	: m_backendName(name), m_string(value), m_parsed(false) {
+
+	qDebug() << "Variable string is: " << m_string;
+
+	QTime t = QTime::currentTime();
+	if(m_backendName.compare(QString("Maxima"), Qt::CaseInsensitive) == 0)
+		parseMaximaValues();
+	else if(m_backendName.compare(QString("Python 3"), Qt::CaseInsensitive) == 0)
+		parsePythonValues();
+	else if(m_backendName.compare(QString("Python 2"), Qt::CaseInsensitive) == 0)
+		parsePythonValues();
+	else if(m_backendName.compare(QString("Sage"), Qt::CaseInsensitive) == 0)
+		parsePythonValues();
+	else if(m_backendName.compare(QString("R"), Qt::CaseInsensitive) == 0)
+		parseRValues();
+
+	qDebug() << "Time taken to parse: " << t.elapsed();
 }
 
 void VariableParser::parseMaximaValues() {
-	QTime t = QTime::currentTime();
-	QStringList valueStringList;
 	if(m_string.count(QString("[")) < 2) {
 		m_string = m_string.replace(QString("["), QString(""));
 		m_string = m_string.replace(QString("]"), QString(""));
 		m_string = m_string.trimmed();
-		valueStringList = m_string.split(',');
+
+		const QStringList valueStringList = m_string.split(',');
 		foreach(QString valueString, valueStringList) {
 			valueString = valueString.trimmed();
 			bool isNumber = false;
@@ -68,23 +67,23 @@ void VariableParser::parseMaximaValues() {
 			if(!isNumber) value = NAN;
 			m_values << value;
 		}
+
 		m_parsed = true;
-		qDebug() << "Time taken to parse: " << t.elapsed();
 	}
 }
 
 void VariableParser::parsePythonValues() {
-	QTime t = QTime::currentTime();
 	QStringList valueStringList;
-	qDebug() << "Variable is: " << m_string;
 	if(m_string.count(QString("[")) < 2 && m_string.count(QString("[")) > 0 && m_string.count(QString("(")) == 0) {
 		m_string = m_string.replace(QString("["), QString(""));
 		m_string = m_string.replace(QString("]"), QString(""));
 		m_string = m_string.trimmed();
+
 		if(m_string.count(QString(","))>1)
 			valueStringList = m_string.split(',');
 		else
 			valueStringList = m_string.split(' ');
+
 		foreach(QString valueString, valueStringList) {
 			valueString = valueString.trimmed();
 			bool isNumber = false;
@@ -92,17 +91,19 @@ void VariableParser::parsePythonValues() {
 			if(!isNumber) value = NAN;
 			m_values << value;
 		}
+
 		m_parsed = true;
-		qDebug() << "Time taken to parse: " << t.elapsed();
 	}
 	else if(m_string.count(QString("(")) < 2 && m_string.count(QString("[")) == 0) {
 		m_string = m_string.replace(QString("("), QString(""));
 		m_string = m_string.replace(QString(")"), QString(""));
 		m_string = m_string.trimmed();
+
 		if(m_string.count(QString(","))>1)
 			valueStringList = m_string.split(',');
 		else
 			valueStringList = m_string.split(' ');
+
 		foreach(QString valueString, valueStringList) {
 			valueString = valueString.trimmed();
 			bool isNumber = false;
@@ -110,19 +111,17 @@ void VariableParser::parsePythonValues() {
 			if(!isNumber) value = NAN;
 			m_values << value;
 		}
+
 		m_parsed = true;
-		qDebug() << "Time taken to parse: " << t.elapsed();
 	}
 }
 
 void VariableParser::parseRValues() {
-QTime t = QTime::currentTime();
-	QStringList valueStringList;
 	m_string = "[1] 1 2 3 4 5 6";
-	int index = m_string.indexOf("]");
 	m_string = m_string.remove( QRegExp("\\[.*\\]"));
 	m_string.trimmed();
-	valueStringList = m_string.split(' ');
+
+	const QStringList valueStringList = m_string.split(' ');
 	foreach(QString valueString, valueStringList) {
 		valueString = valueString.trimmed();
 		bool isNumber = false;
@@ -130,8 +129,8 @@ QTime t = QTime::currentTime();
 		if(!isNumber) value = NAN;
 		m_values << value;
 	}
+
 	m_parsed = true;
-	qDebug() << "Time taken to parse: " << t.elapsed();
 }
 
 bool VariableParser::isParsed() {

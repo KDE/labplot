@@ -35,6 +35,8 @@
 #include <KMessageBox>
 #include <KParts/ReadWritePart>
 
+#include <QDebug>
+
 #include "cantor/cantor_part.h"
 #include <cantor/panelpluginhandler.h>
 #include <cantor/panelplugin.h>
@@ -104,11 +106,11 @@ void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int las
 	for(int i = first; i <= last; ++i) {
 		const QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
 		const QString value = m_variableModel->data(m_variableModel->index(first, 1)).toString();
-// 		qDebug() << "Variable value: " << value;
 		VariableParser* parser = new VariableParser(m_backendName, value);
 		if(parser->isParsed()) {
 			Column * new_col = new Column(name, AbstractColumn::Numeric);
 			new_col->setUndoAware(false);
+			qDebug()<< "Adding " << parser->valuesCount() << "  " << parser->values();
 			new_col->insertRows(0, parser->valuesCount());
 			new_col->replaceValues(0, parser->values());
 			insertChildBefore(new_col, 0);

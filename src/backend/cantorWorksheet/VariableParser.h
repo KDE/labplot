@@ -1,9 +1,10 @@
 /***************************************************************************
-    File                 : CantorWorksheet.cpp
+    File                 : VariableParser.h
     Project              : LabPlot
-    Description          : Aspect providing a Cantor Worksheets for Multiple backends
+    Description          : Variable parser for different CAS backends
     --------------------------------------------------------------------
     Copyright            : (C) 2015 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,7 +30,8 @@
 #ifndef VARIABLEPARSER_H
 #define VARIABLEPARSER_H
 
-#include <QtCore>
+#include <QString>
+#include <QVector>
 
 class VariableParser {
 	public:
@@ -41,10 +43,9 @@ class VariableParser {
 	private:
 		QString m_backendName;
 		QString m_string;
-		QVector< double > m_values;
+		QVector<double> m_values;
 		bool m_parsed = false;
 		
-		void init();
 		void parseMaximaValues();
 		void parsePythonValues();
 		void parseRValues();
