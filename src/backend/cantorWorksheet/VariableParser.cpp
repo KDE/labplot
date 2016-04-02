@@ -30,15 +30,10 @@
 #include "VariableParser.h"
 
 #include <QStringList>
-#include <QTime>
-#include <QDebug>
 
 VariableParser::VariableParser(const QString& name, const QString& value)
 	: m_backendName(name), m_string(value), m_parsed(false) {
 
-	qDebug() << "Variable string is: " << m_string;
-
-	QTime t = QTime::currentTime();
 	if(m_backendName.compare(QString("Maxima"), Qt::CaseInsensitive) == 0)
 		parseMaximaValues();
 	else if(m_backendName.compare(QString("Python 3"), Qt::CaseInsensitive) == 0)
@@ -49,8 +44,6 @@ VariableParser::VariableParser(const QString& name, const QString& value)
 		parsePythonValues();
 	else if(m_backendName.compare(QString("R"), Qt::CaseInsensitive) == 0)
 		parseRValues();
-
-	qDebug() << "Time taken to parse: " << t.elapsed();
 }
 
 void VariableParser::parseMaximaValues() {
@@ -139,8 +132,4 @@ bool VariableParser::isParsed() {
 
 QVector< double > VariableParser::values() {
 	return m_values;
-}
-
-int VariableParser::valuesCount() {
-	return m_values.count();
 }

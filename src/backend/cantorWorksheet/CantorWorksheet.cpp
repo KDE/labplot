@@ -108,12 +108,8 @@ void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int las
 		const QString value = m_variableModel->data(m_variableModel->index(first, 1)).toString();
 		VariableParser* parser = new VariableParser(m_backendName, value);
 		if(parser->isParsed()) {
-			Column * new_col = new Column(name, AbstractColumn::Numeric);
-			new_col->setUndoAware(false);
-			qDebug()<< "Adding " << parser->valuesCount() << "  " << parser->values();
-			new_col->insertRows(0, parser->valuesCount());
-			new_col->replaceValues(0, parser->values());
-			insertChildBefore(new_col, 0);
+			Column* new_col = new Column(name, parser->values());
+			insertChildBefore(new_col, child<AbstractAspect>(i));
 		}
 		delete(parser);
     }

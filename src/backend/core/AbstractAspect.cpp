@@ -729,7 +729,8 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//the child column for calculated residuals
 	if (aspect->parentAspect() != 0
 		&& !aspect->parentAspect()->inherits("Folder")
-		&& !aspect->parentAspect()->inherits("XYFitCurve"))
+		&& !aspect->parentAspect()->inherits("XYFitCurve")
+		&& !aspect->parentAspect()->inherits("CantorWorksheet"))
 		emit aspect->parentAspect()->selected(aspect);
 }
 
@@ -740,7 +741,8 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	//the child column for calculated residuals
 	if (aspect->parentAspect() != 0
 		&& !aspect->parentAspect()->inherits("Folder")
-		&& !aspect->parentAspect()->inherits("XYFitCurve"))
+		&& !aspect->parentAspect()->inherits("XYFitCurve")
+		&& !aspect->parentAspect()->inherits("CantorWorksheet"))
 		emit aspect->parentAspect()->deselected(aspect);
 }
 
