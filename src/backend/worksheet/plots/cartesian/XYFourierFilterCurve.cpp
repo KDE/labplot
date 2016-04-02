@@ -113,7 +113,6 @@ bool XYFourierFilterCurve::isSourceDataChangedSinceLastFilter() const {
 //##############################################################################
 STD_SETTER_CMD_IMPL_S(XYFourierFilterCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
 void XYFourierFilterCurve::setXDataColumn(const AbstractColumn* column) {
-	qDebug()<<"XYFourierFilterCurve::setXDataColumn()";
 	Q_D(XYFourierFilterCurve);
 	if (column != d->xDataColumn) {
 		exec(new XYFourierFilterCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
@@ -159,7 +158,7 @@ XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* o
 	xDataColumn(0), yDataColumn(0), 
 	xColumn(0), yColumn(0), 
 	xVector(0), yVector(0), 
-	sourceDataChangedSinceLastFilter(true),
+	sourceDataChangedSinceLastFilter(false),
 	q(owner)  {
 
 }
@@ -173,8 +172,6 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 // see XYFitCurvePrivate
 
 void XYFourierFilterCurvePrivate::recalculate() {
-	qDebug()<<"XYFourierFilterCurvePrivate::recalculate()";
-
 	QElapsedTimer timer;
 	timer.start();
 
@@ -442,7 +439,6 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
-			qDebug()<<"	x column"<<xDataColumnPath();
 
 			str = attribs.value("type").toString();
 			if(str.isEmpty())
@@ -513,7 +509,6 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 			else
 				d->filterResult.elapsedTime = str.toInt();
 		} else if(reader->name() == "column") {
-			qDebug()<<"	reading filter column";
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {
 				delete column;
@@ -527,7 +522,6 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 	}
 
 	if (d->xColumn) {
-		qDebug()<<"	add filter columns";
 		d->xColumn->setHidden(true);
 		addChild(d->xColumn);
 

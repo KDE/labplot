@@ -35,8 +35,6 @@
 class XYFourierFilterCurve;
 class Column;
 
-//#include <gsl/gsl_multifit_nlin.h>
-
 class XYFourierFilterCurvePrivate: public XYCurvePrivate {
 	public:
 		explicit XYFourierFilterCurvePrivate(XYFourierFilterCurve*);
@@ -61,7 +59,7 @@ class XYFourierFilterCurvePrivate: public XYCurvePrivate {
 
 		XYFourierFilterCurve* const q;
 
-	private:
+//	private:
 //		void writeSolverState(gsl_multifit_fdfsolver* s);
 };
 

@@ -773,15 +773,10 @@ void XYCurveDock::showValuesColumnFormat(const Column* column){
 }
 
 void XYCurveDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column){
-	qDebug()<<"XYCurveDock::setModelIndexFromColumn()";
-	if (column) {
-		qDebug()<<"column. index="<<m_aspectTreeModel->modelIndexOfAspect(column);
+	if (column)
 		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
-	}
-	else {
-		qDebug()<<" no column. index="<<QModelIndex();
+	else
 		cb->setCurrentModelIndex(QModelIndex());
-	}
 }
 
 //*************************************************************

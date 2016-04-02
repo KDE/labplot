@@ -1000,7 +1000,6 @@ bool XYFitCurve::load(XmlStreamReader* reader){
             else
                 d->fitResult.solverOutput = str;
 		} else if(reader->name() == "column") {
-			qDebug()<<"	reading fit column";
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {
 				delete column;
@@ -1016,7 +1015,6 @@ bool XYFitCurve::load(XmlStreamReader* reader){
 	}
 
 	if (d->xColumn) {
-		qDebug()<<"	add fit columns";
 		d->xColumn->setHidden(true);
 		addChild(d->xColumn);
 
