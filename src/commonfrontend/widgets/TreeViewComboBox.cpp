@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Provides a QTreeView in a QComboBox
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
@@ -31,6 +31,8 @@
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectTreeModel.h"
 #include <QHeaderView>
+#include <QLayout>
+#include <KLocalizedString>
 
 /*!
     \class TreeViewComboBox
@@ -38,20 +40,36 @@
 
     \ingroup backend/widgets
 */
-
-
 TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent){
-	m_treeView.header()->hide();
-	m_treeView.setSelectionMode(QAbstractItemView::SingleSelection);
-	m_treeView.setUniformRowHeights(true);
 
-	m_treeView.hide();
-	m_treeView.setParent(parent, Qt::Popup);
-	m_treeView.installEventFilter(this);
+	m_layout = new QVBoxLayout;
+	m_treeView = new QTreeView;
+	m_lineEdit = new QLineEdit;
+	m_groupBox = new QGroupBox;
+	
+	m_layout->setContentsMargins(0, 0, 0, 0);
+	m_layout->setSpacing(0);
+
+	m_layout->addWidget(m_lineEdit);
+	m_layout->addWidget(m_treeView);
+	
+	m_groupBox->setLayout(m_layout);
+	m_groupBox->setParent(parent, Qt::Popup);
+	m_groupBox->hide();
+	m_groupBox->installEventFilter(this);
+	
+	m_treeView->header()->hide();
+	m_treeView->setSelectionMode(QAbstractItemView::SingleSelection);
+	m_treeView->setUniformRowHeights(true);
+	
+	m_lineEdit->setPlaceholderText(i18n("Search/Filter text"));
+	m_lineEdit->setFocus();
+
 	addItem("");
 	setCurrentIndex(0);
 
-	connect(&m_treeView, SIGNAL(activated(QModelIndex)), this, SLOT(treeViewIndexActivated(QModelIndex)) );
+	connect(m_treeView, SIGNAL(activated(QModelIndex)), this, SLOT(treeViewIndexActivated(QModelIndex)) );
+	connect(m_lineEdit, SIGNAL(textChanged(QString)), this, SLOT(lineEditTextEdited(QString)));
 }
 
 void TreeViewComboBox::setTopLevelClasses(QList<const char*> list) {
@@ -67,15 +85,15 @@ void TreeViewComboBox::setSelectableClasses(QList<const char*> list) {
 	Sets the \a model for the view to present.
 */
 void TreeViewComboBox::setModel(QAbstractItemModel *model){
-	m_treeView.setModel(model);
+	m_treeView->setModel(model);
 
 	//show only the first column in the combo box
 	for (int i=1; i<model->columnCount(); i++){
-	  m_treeView.hideColumn(i);
+	  m_treeView->hideColumn(i);
 	}
 
 	//Expand the complete tree in order to see everything in the first popup.
-	m_treeView.expandAll();
+	m_treeView->expandAll();
 }
 
 /*!
@@ -84,7 +102,7 @@ void TreeViewComboBox::setModel(QAbstractItemModel *model){
 */
 void TreeViewComboBox::setCurrentModelIndex(const QModelIndex& index){
 // 	view()->setCurrentIndex(index);
-	m_treeView.setCurrentIndex(index);
+	m_treeView->setCurrentIndex(index);
 	QComboBox::setItemText(0, index.data().toString());
 }
 
@@ -94,7 +112,7 @@ void TreeViewComboBox::setCurrentModelIndex(const QModelIndex& index){
 	\sa setCurrentModelIndex()
 */
 QModelIndex TreeViewComboBox::currentModelIndex() const{
-	return m_treeView.currentIndex();
+	return m_treeView->currentIndex();
 }
 
 /*!
@@ -102,16 +120,19 @@ QModelIndex TreeViewComboBox::currentModelIndex() const{
 	Triggers showTopLevelOnly() to show toplevel items only.
 */
 void TreeViewComboBox::showPopup(){
-	if (!m_treeView.model() || !m_treeView.model()->hasChildren())
+	if (!m_treeView->model() || !m_treeView->model()->hasChildren())
 		return;
 
-	QModelIndex root = m_treeView.model()->index(0,0);
+	QModelIndex root = m_treeView->model()->index(0,0);
 	showTopLevelOnly(root);
+	
+	m_groupBox->show();
+	m_groupBox->resize(this->width(), 250);
+	m_groupBox->move(mapToGlobal( this->rect().topLeft() ));
+}
 
-	m_treeView.resize(this->width(), 150);
-	m_treeView.move(mapToGlobal( this->rect().bottomLeft() ));
-	m_treeView.setFocus();
-	m_treeView.show();
+void TreeViewComboBox::hidePopup() {
+	m_groupBox->hide();
 }
 
 
@@ -139,7 +160,7 @@ void TreeViewComboBox::showTopLevelOnly(const QModelIndex & index){
 				}
 			}
 
-		m_treeView.setRowHidden(i, index, !isTopLevel);
+		m_treeView->setRowHidden(i, index, !isTopLevel);
 	}
 }
 
@@ -147,8 +168,8 @@ void TreeViewComboBox::showTopLevelOnly(const QModelIndex & index){
 	catches the MouseButtonPress-event and hides the tree view on mouse clicking.
 */
 bool TreeViewComboBox::eventFilter(QObject *object, QEvent *event){
-	if (object==&m_treeView && event->type()==QEvent::MouseButtonPress){
-		m_treeView.hide();
+	if ( (object==m_groupBox) && event->type()==QEvent::MouseButtonPress){
+		m_groupBox->hide();
 		this->setFocus();
 		return true;
 	}
@@ -166,15 +187,24 @@ void TreeViewComboBox::treeViewIndexActivated( const QModelIndex & index){
 				QComboBox::setCurrentIndex(0);
 				QComboBox::setItemText(0, index.data().toString());
 				emit currentModelIndexChanged(index);
-				m_treeView.hide();
+				m_groupBox->hide();
 				return;
 			}
 		}
 	}
 
-	m_treeView.setCurrentIndex(QModelIndex());
+	m_treeView->setCurrentIndex(QModelIndex());
 	setCurrentIndex(0);
 	QComboBox::setItemText(0, "");
 	emit currentModelIndexChanged(QModelIndex());
-	m_treeView.hide();
+	m_groupBox->hide();
+}
+
+void TreeViewComboBox::lineEditTextEdited(const QString &text) {
+	AspectTreeModel * model = qobject_cast<AspectTreeModel *>(m_treeView->model());
+	if(!model)
+		return;
+
+	model->setFilterString(text);
+	m_treeView->update();
 }

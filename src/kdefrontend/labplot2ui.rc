@@ -49,8 +49,6 @@
 	<Separator/>
 	<Action name="new_file_datasource" />
 	<Action name="new_database_datasource" />
-	<Separator/>
-	<Action name="new_project" />
 </Menu>
 <Action name="import" />
 <Action name="export" />

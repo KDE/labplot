@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=labplot2 -caption "%c" %i
+Exec=labplot2 -caption %c %i %f
 Icon=labplot2
 Name=LabPlot2
 Name[ast]=LabPlot2

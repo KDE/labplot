@@ -31,7 +31,10 @@
 #define TREEVIEWCOMBOBOX_H
 
 #include <QTreeView>
+#include <QLineEdit>
 #include <QComboBox>
+#include <QGroupBox>
+#include <QVBoxLayout>
 #include <QEvent>
 
 class AbstractAspect;
@@ -48,9 +51,13 @@ public:
 	void setSelectableClasses(QList<const char*>);
 	QModelIndex currentModelIndex() const;
 	virtual void showPopup();
+	virtual void hidePopup();
 
 private:
-	QTreeView m_treeView;
+	QGroupBox *m_groupBox;
+	QVBoxLayout *m_layout;
+	QLineEdit *m_lineEdit;
+	QTreeView *m_treeView;
 	QList<const char*> m_topLevelClasses;
 	QList<const char*> m_selectableClasses;
 	void showTopLevelOnly(const QModelIndex & index);
@@ -58,6 +65,7 @@ private:
 
 private slots:
 	void treeViewIndexActivated(const QModelIndex&);
+	void lineEditTextEdited(const QString &);
 
 signals:
 	void currentModelIndexChanged(const QModelIndex&);
