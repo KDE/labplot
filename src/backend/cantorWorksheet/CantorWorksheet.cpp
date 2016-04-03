@@ -35,6 +35,7 @@
 #include <KMessageBox>
 #include <KParts/ReadWritePart>
 
+#include <QAction>
 #include <QModelIndex>
 #include <QDebug>
 
@@ -181,11 +182,11 @@ void CantorWorksheet::exportView() const {
 }
 
 void CantorWorksheet::printView() {
-
+	m_part->action("file_print")->trigger();
 }
 
 void CantorWorksheet::printPreview() const {
-
+	m_part->action("file_print_preview")->trigger();
 }
 
 //##############################################################################
