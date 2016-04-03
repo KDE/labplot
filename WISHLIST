@@ -21,12 +21,8 @@ Planned Features:
 
 GUI/Application:
 ****************
-	* use/save predefined functions (in function dialog)
-		* load from Origin projects
+	* save/load predefined functions (in function dialog)
 	* use QLabel::setBuddy() for accels
-	* Spreadsheet
-		* Selection like Kaleidagraph (Pascal)
-		* format in spreadsheet	(show as ..., convert isodate->double, double->isodate, ....)
 I/O:
 ****
 	* reading multiple files from data dialog
@@ -42,17 +38,13 @@ I/O:
 drawing/ data manipulation:
 ***************************
 	* Spreadsheet
-		* Matrix operations on Spreadsheet: diagonalize, eigenvalues, invert, ...
+		* Matrix operations on Spreadsheet: invert, diagonalize, eigenvalues, ...
 	* any mathematical formula as baseline
 	* move marker with mouse
 	* image profiling (vertical/horizontal profiles)
 	* Plots:
 		* set drawing object relative to graph (fixed to axes)
 		* sqrt/x^2 scales
-			* data mode Plot.cc
-			* maglens/mask/pan zoom (Worksheet.cc)
-			* X/YCoordinate
-			* partRanges
 		* Pie plot:
 			* explode segments
 			* segment legend
@@ -81,8 +73,6 @@ drawing/ data manipulation:
 			* rose plot (polar histogram)	[-> wind directions]
 			* polar contour
 		* support x=f(y) plots (f(x)=sin(y))
-		* ArrangePlotDialog:
-			* size+pos for nr = 9,10,11,12,13,14,15,16
 		* data over (structured-unstructured) meshes, like 
 			the ones generated in finite element modeling, 2D and 3D.
 		* support for 2D/3D indexed data		-> CRD/
@@ -103,10 +93,6 @@ drawing/ data manipulation:
 			out (please correct me if I am wrong) that data is handled in the
 			physical space in LabPlot, only. The matrix data format makes it
 			impossible to assign each special point additional scalar values.
-	* A simple way to create x-y1-y2 plots where axes y1 and y2 are very different from 
-		each other, with independent scaling on each axis.
-		: overlay two plots (x-y1+x-y2) with same x-axis
-		-> implement as QSA macro
 	Axes 
 		* axis tic label format:
 			* the settings of the tics are quite complicated :
