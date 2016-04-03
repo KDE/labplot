@@ -5,6 +5,9 @@ sc-apps-labplot-2x-zoom.svg
 sc-apps-labplot-3x-zoom.svg
 sc-apps-labplot-4x-zoom.svg
 sc-apps-labplot-5x-zoom.svg
+sc-apps-labplot-3d-curve.svg
+sc-apps-labplot-3d-plot.svg
+sc-apps-labplot-3d-surface.svg
 sc-apps-labplot-auto-scale-all.svg
 sc-apps-labplot-auto-scale-x.svg
 sc-apps-labplot-auto-scale-y.svg
