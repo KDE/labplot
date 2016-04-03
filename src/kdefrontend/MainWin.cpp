@@ -282,7 +282,7 @@ void MainWin::initActions() {
 	connect(m_historyAction, SIGNAL(triggered()),SLOT(historyDialog()));
 
 	// Appearance
-	// Analysis
+	// Analysis: see WorksheetView.cpp
 	// Drawing
 	// Script
 

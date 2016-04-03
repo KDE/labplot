@@ -174,13 +174,11 @@ private:
 	QAction* addEquationCurveAction;
 	QAction* addFitCurveAction;
 	QAction* addFourierFilterCurveAction;
+//	QAction* addFFTAction;
 	QAction* addHorizontalAxisAction;
 	QAction* addVerticalAxisAction;
 	QAction* addLegendAction;
 	QAction* addCustomPointAction;
-
-	QAction* addFFTAction;
-	QAction* addFourierFilterAction;
 
 	QAction* scaleAutoXAction;
 	QAction* scaleAutoYAction;
@@ -195,6 +193,10 @@ private:
 	QAction* shiftRightXAction;
 	QAction* shiftUpYAction;
 	QAction* shiftDownYAction;
+
+	// filter menu
+	QAction* addFitAction;
+	QAction* addFourierFilterAction;
 
 public slots:
 	void createContextMenu(QMenu*) const;
