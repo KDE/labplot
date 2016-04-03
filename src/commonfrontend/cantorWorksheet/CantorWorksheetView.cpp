@@ -27,20 +27,15 @@
  ***************************************************************************/
 
 #include "CantorWorksheetView.h"
+#include "backend/cantorWorksheet/CantorWorksheet.h"
 
-#include <QIcon>
-#include <QAction>
-#include <QDebug>
-#include <QTableView>
-#include <QSizePolicy>
-#include <QPainter>
-#include <QPrintDialog>
+#include <QHBoxLayout>
+#include <QMenu>
+#include <QToolBar>
 
-#include <KLocalizedString>
-#include <KMessageBox>
 #include <KToggleAction>
-#include <cantor/backend.h>
-#include <cantor/extension.h>
+#include <KLocalizedString>
+#include <KParts/ReadWritePart>
 
 CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget(),
 	m_worksheet(worksheet) {
@@ -158,16 +153,13 @@ void CantorWorksheetView::initMenus() {
 void CantorWorksheetView::createContextMenu(QMenu* menu) const{
 	Q_ASSERT(menu);
 
-	#ifdef ACTIVATE_SCIDAVIS_SPECIFIC_CODE
-	QAction* firstAction = menu->actions().first();
-	#else
 	QAction* firstAction = 0;
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
-	#endif
+
 	menu->insertAction(firstAction, m_restartBackendAction);
 	menu->insertMenu(firstAction, m_worksheetMenu);
 	menu->insertMenu(firstAction, m_linearAlgebraMenu);

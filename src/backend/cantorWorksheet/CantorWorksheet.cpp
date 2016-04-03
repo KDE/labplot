@@ -35,6 +35,7 @@
 #include <KMessageBox>
 #include <KParts/ReadWritePart>
 
+#include <QModelIndex>
 #include <QDebug>
 
 #include "cantor/cantor_part.h"

@@ -25,28 +25,26 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifdef HAVE_CANTOR_LIBS
 #ifndef CANTORWORKSHEETVIEW_H
 #define CANTORWORKSHEETVIEW_H
 
 #include <QWidget>
-#include <QAction>
-#include <QMenu>
-#include <QToolBar>
-#include <QHBoxLayout>
-#include <QTableView>
-#include <QPrinter>
 
-#include "backend/cantorWorksheet/CantorWorksheet.h"
-#include <cantor/session.h>
-#include <KParts/ReadWritePart>
+class QAbstractItemModel;
+class QHBoxLayout;
+class QToolBar;
+class QMenu;
+
+class CantorWorksheet;
+namespace KParts {
+class ReadWritePart;
+}
 
 class CantorWorksheetView : public QWidget {
 	Q_OBJECT
     
 	public:
-		CantorWorksheetView(CantorWorksheet* cantorWorksheet);
-	
+		CantorWorksheetView(CantorWorksheet*);
 		~CantorWorksheetView();
 	
 	public slots:
@@ -92,4 +90,3 @@ class CantorWorksheetView : public QWidget {
 };
 
 #endif // CANTORWORKSHEETVIEW_H
-#endif
