@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for worksheet properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2016 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -33,6 +33,7 @@
 
 #include <QPrinter>
 #include <QFileDialog>
+#include <QImageReader>
 #include <KUrlCompletion>
 
 #include <math.h>
@@ -79,7 +80,7 @@ const float qt_paperSizes[numOfPaperSizes][2] = {
   \ingroup kdefrontend
 */
 
-WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
+WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0), m_completion(new KUrlCompletion()) {
 	ui.setupUi(this);
 
 	//Background-tab
@@ -87,8 +88,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	ui.kleBackgroundFileName->setClearButtonShown(true);
 	ui.bOpen->setIcon( KIcon("document-open") );
 
-	KUrlCompletion *comp = new KUrlCompletion();
-	ui.kleBackgroundFileName->setCompletionObject(comp);
+	ui.kleBackgroundFileName->setCompletionObject(m_completion);
 
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i){
@@ -142,6 +142,10 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent){
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	this->retranslateUi();
+}
+
+WorksheetDock::~WorksheetDock() {
+	delete m_completion;
 }
 
 void WorksheetDock::setWorksheets(QList<Worksheet*> list){
@@ -638,7 +642,14 @@ void WorksheetDock::layoutColumnCountChanged(int count){
 void WorksheetDock::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "WorksheetDock");
 	QString dir = conf.readEntry("LastImageDir", "");
-    QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
+
+	QString formats;
+	foreach(const QByteArray format, QImageReader::supportedImageFormats()) {
+		QString f = "*." + QString(format.constData());
+		formats.isEmpty() ? formats+=f : formats+=' '+f;
+	}
+
+	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
     if (path.isEmpty())
         return; //cancel was clicked in the file-dialog
 

@@ -115,10 +115,12 @@ void SpreadsheetView::init(){
 	// vertical header
 	QHeaderView * v_header = m_tableView->verticalHeader();
 	v_header->setResizeMode(QHeaderView::Fixed);
-	v_header->setDefaultSectionSize(22);
+	QFont font;
+	font.setFamily(font.defaultFamily());
+	QFontMetrics fm(font);
+	v_header->setDefaultSectionSize(fm.height());
 	v_header->setMovable(false);
 	v_header->installEventFilter(this);
-
 
 	setFocusPolicy(Qt::StrongFocus);
 	setFocus();
@@ -209,9 +211,9 @@ void SpreadsheetView::initActions(){
 
 void SpreadsheetView::initMenus(){
 	//Selection menu
-	m_selectionMenu = new QMenu(i18n("Selection"));
+	m_selectionMenu = new QMenu(i18n("Selection"), this);
 
-	QMenu * submenu = new QMenu(i18n("Fi&ll Selection with"));
+	QMenu * submenu = new QMenu(i18n("Fi&ll Selection with"), this);
 	submenu->addAction(action_fill_row_numbers);
 	submenu->addAction(action_fill_const);
 // 	submenu->addAction(action_fill_random);
@@ -236,7 +238,7 @@ void SpreadsheetView::initMenus(){
 	//TODO add plot menu to spreadsheet- and column-menu, like in scidavis, origin etc.
 
 	// Column menu
-	m_columnMenu = new QMenu();
+	m_columnMenu = new QMenu(this);
 
 // 	submenu = new QMenu(i18n("S&et Column As"));
 // 	submenu->addAction(action_set_as_x);
@@ -250,7 +252,7 @@ void SpreadsheetView::initMenus(){
 // 	m_columnMenu->addMenu(submenu);
 // 	m_columnMenu->addSeparator();
 
-	submenu = new QMenu(i18n("Generate Data"));
+	submenu = new QMenu(i18n("Generate Data"), this);
 	submenu->addAction(action_fill_row_numbers);
 	submenu->addAction(action_fill_const);
 // 	submenu->addAction(action_fill_random);
@@ -266,7 +268,7 @@ void SpreadsheetView::initMenus(){
 // 	m_columnMenu->addAction(action_join_columns);
 	m_columnMenu->addAction(action_normalize_columns);
 
-	submenu = new QMenu(i18n("Sort"));
+	submenu = new QMenu(i18n("Sort"), this);
 	submenu->setIcon(KIcon("view-sort-ascending"));
 	submenu->addAction(action_sort_asc_column);
 	submenu->addAction(action_sort_desc_column);
@@ -287,7 +289,7 @@ void SpreadsheetView::initMenus(){
 
 
 	//Spreadsheet menu
-	m_spreadsheetMenu = new QMenu();
+	m_spreadsheetMenu = new QMenu(this);
 // 	m_selectionMenu->setTitle(i18n("Fi&ll Selection with"));
 	m_spreadsheetMenu->addMenu(m_selectionMenu);
 	m_spreadsheetMenu->addAction(action_toggle_comments);
@@ -303,7 +305,7 @@ void SpreadsheetView::initMenus(){
 
 
 	//Row menu
-	m_rowMenu = new QMenu();
+	m_rowMenu = new QMenu(this);
 
 	m_rowMenu->addAction(action_insert_rows);
 	m_rowMenu->addAction(action_remove_rows);
@@ -311,7 +313,7 @@ void SpreadsheetView::initMenus(){
 	m_rowMenu->addAction(action_add_rows);
 	m_rowMenu->addSeparator();
 
-	submenu = new QMenu(i18n("Fi&ll Selection with"));
+	submenu = new QMenu(i18n("Fi&ll Selection with"), this);
 	submenu->addAction(action_fill_row_numbers);
 // 	submenu->addAction(action_fill_random);
 	submenu->addAction(action_fill_const);
@@ -1014,7 +1016,10 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers(){
 					break;
 				}
 			//TODO: handle other modes
-			default: break;
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
+				break;
 		}
 
 		col_ptr->setSuppressDataChangedSignal(false);
@@ -1164,7 +1169,9 @@ void SpreadsheetView::fillSelectedCellsWithConstValues(){
 				break;
 				}
 			//TODO: handle other modes
-			default:
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
 				break;
 		}
 
@@ -1653,7 +1660,8 @@ void SpreadsheetView::print(QPrinter* printer) const{
 	//Paint the horizontal header first
 	painter.setFont(hHeader->font());
 	QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();
-	QRect br = painter.boundingRect(br, Qt::AlignCenter, headerString);
+	QRect br;
+	br = painter.boundingRect(br, Qt::AlignCenter, headerString);
 	painter.drawLine(right, height, right, height+br.height());
 	QRect tr(br);
 

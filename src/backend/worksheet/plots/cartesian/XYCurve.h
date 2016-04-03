@@ -31,6 +31,7 @@
 #define XYCURVE_H
 
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/lib/macros.h"
 #include "backend/core/AbstractColumn.h"
@@ -46,9 +47,6 @@ class XYCurve: public WorksheetElement {
 		enum LineType {NoLine, Line, StartHorizontal, StartVertical, MidpointHorizontal, MidpointVertical, Segments2, Segments3,
 					   SplineCubicNatural, SplineCubicPeriodic, SplineAkimaNatural, SplineAkimaPeriodic};
 		enum DropLineType {NoDropLine, DropLineX, DropLineY, DropLineXY, DropLineXZeroBaseline, DropLineXMinBaseline, DropLineXMaxBaseline};
-		enum SymbolsStyle {NoSymbols, SymbolsCircle, SymbolsSquare, SymbolsEquilateralTriangle, SymbolsRightTriangle, SymbolsBar, SymbolsPeakedBar,
-						SymbolsSkewedBar, SymbolsDiamond, SymbolsLozenge, SymbolsTie, SymbolsTinyTie, SymbolsPlus, SymbolsBoomerang, SymbolsSmallBoomerang,
-						SymbolsStar4, SymbolsStar5, SymbolsLine, SymbolsCross};
 		enum ValuesType {NoValues, ValuesX, ValuesY, ValuesXY, ValuesXYBracketed, ValuesCustomColumn};
 		enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
 		enum ErrorType {NoError, SymmetricError, AsymmetricError};
@@ -79,7 +77,7 @@ class XYCurve: public WorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QPen, dropLinePen, DropLinePen)
 		BASIC_D_ACCESSOR_DECL(qreal, dropLineOpacity, DropLineOpacity)
 
-		BASIC_D_ACCESSOR_DECL(SymbolsStyle, symbolsStyle, SymbolsStyle)
+		BASIC_D_ACCESSOR_DECL(Symbol::Style, symbolsStyle, SymbolsStyle)
 		BASIC_D_ACCESSOR_DECL(qreal, symbolsOpacity, SymbolsOpacity)
 		BASIC_D_ACCESSOR_DECL(qreal, symbolsRotationAngle, SymbolsRotationAngle)
 		BASIC_D_ACCESSOR_DECL(qreal, symbolsSize, SymbolsSize)
@@ -127,8 +125,6 @@ class XYCurve: public WorksheetElement {
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool on);
 		void suppressRetransform(bool);
-		static QPainterPath symbolsPathFromStyle(XYCurve::SymbolsStyle);
-		static QString symbolsNameFromStyle(XYCurve::SymbolsStyle);
 
 		typedef WorksheetElement BaseClass;
 		typedef XYCurvePrivate Private;
@@ -149,7 +145,7 @@ class XYCurve: public WorksheetElement {
 		void yErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
 
 		//SLOTs for changes triggered via QActions in the context menu
-		void curveVisibilityChanged();
+		void visibilityChanged();
 
 	protected:
 		XYCurve(const QString& name, XYCurvePrivate* dd);
@@ -167,7 +163,7 @@ class XYCurve: public WorksheetElement {
 		void dataChanged();
 		void xDataChanged();
 		void yDataChanged();
-		void visibilityChanged();
+		void visibilityChanged(bool);
 
 		friend class XYCurveSetXColumnCmd;
 		friend class XYCurveSetYColumnCmd;
@@ -199,7 +195,7 @@ class XYCurve: public WorksheetElement {
 		friend class XYCurveSetSymbolsOpacityCmd;
 		friend class XYCurveSetSymbolsBrushCmd;
 		friend class XYCurveSetSymbolsPenCmd;
-		void symbolsStyleChanged(XYCurve::SymbolsStyle);
+		void symbolsStyleChanged(Symbol::Style);
 		void symbolsSizeChanged(qreal);
 		void symbolsRotationAngleChanged(qreal);
 		void symbolsOpacityChanged(qreal);

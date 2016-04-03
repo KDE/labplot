@@ -1,9 +1,10 @@
+
 /***************************************************************************
     File                 : CartesianPlot.h
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -110,6 +111,7 @@ class CartesianPlot:public AbstractPlot{
 		QAction* addHorizontalAxisAction;
 		QAction* addVerticalAxisAction;
  		QAction* addLegendAction;
+		QAction* addCustomPointAction;
 
 		QAction* scaleAutoXAction;
 		QAction* scaleAutoYAction;
@@ -137,6 +139,7 @@ class CartesianPlot:public AbstractPlot{
 		XYEquationCurve* addEquationCurve();
 		XYFitCurve* addFitCurve();
 		void addLegend();
+		void addCustomPoint();
 		void scaleAuto();
 		void scaleAutoX();
 		void scaleAutoY();
@@ -169,18 +172,22 @@ class CartesianPlot:public AbstractPlot{
 
 	signals:
 		friend class CartesianPlotSetRectCmd;
+		friend class CartesianPlotSetAutoScaleXCmd;
 		friend class CartesianPlotSetXMinCmd;
 		friend class CartesianPlotSetXMaxCmd;
 		friend class CartesianPlotSetXScaleCmd;
+		friend class CartesianPlotSetAutoScaleYCmd;
 		friend class CartesianPlotSetYMinCmd;
 		friend class CartesianPlotSetYMaxCmd;
 		friend class CartesianPlotSetYScaleCmd;
 		friend class CartesianPlotSetXScaleBreakingsCmd;
 		friend class CartesianPlotSetYScaleBreakingsCmd;
 		void rectChanged(QRectF&);
+		void xAutoScaleChanged(bool);
 		void xMinChanged(float);
 		void xMaxChanged(float);
 		void xScaleChanged(int);
+		void yAutoScaleChanged(bool);
 		void yMinChanged(float);
 		void yMaxChanged(float);
 		void yScaleChanged(int);

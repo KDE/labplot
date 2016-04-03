@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : ProjectExplorer.cpp
-    Project              : Labplot2
+    Project              : LabPlot
     Description       	 : A tree view for displaying and editing an AspectTreeModel.
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
     Copyright            : (C) 2007-2008 by Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2016 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -32,9 +31,9 @@
 #include <QWidget>
 
 class AbstractAspect;
+class AspectTreeModel;
 class Project;
 class XmlStreamReader;
-class QAbstractItemModel;
 class QFrame;
 class QLabel;
 class QLineEdit;
@@ -51,13 +50,10 @@ class ProjectExplorer : public QWidget {
 	public:
 		explicit ProjectExplorer(QWidget* parent = 0);
 
-		void setModel(QAbstractItemModel*);
+		void setCurrentAspect(const AbstractAspect*);
+		void setModel(AspectTreeModel*);
 		void setProject(const Project*);
 		QModelIndex currentIndex() const;
-		QAbstractItemModel* model() const;
-
-	public slots:
-		void setCurrentAspect(const AbstractAspect*);
 
 	private:
 		void createActions();
@@ -92,6 +88,7 @@ class ProjectExplorer : public QWidget {
 		void toggleFilterMatchCompleteWord();
 		void toggleFilterWidgets();
 		void toggleFilterOptionsMenu(bool);
+		void resizeHeader();
 
 		void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 		void selectIndex(const QModelIndex&);

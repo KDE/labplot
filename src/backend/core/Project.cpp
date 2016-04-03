@@ -35,6 +35,7 @@
 #include "backend/worksheet/plots/3d/Surface3D.h"
 #include "backend/worksheet/plots/3d/Curve3D.h"
 #include "backend/matrix/Matrix.h"
+#include "backend/datapicker/DatapickerCurve.h"
 
 #include <QUndoStack>
 #include <QMenu>
@@ -110,12 +111,10 @@ Project::Project() : Folder(i18n("Project")), d(new Private()) {
 	d->loading = false;
 	d->changed = false;
 
-#ifndef SUPPRESS_SCRIPTING_INIT
 	// TODO: intelligent engine choosing
-	Q_ASSERT(ScriptingEngineManager::instance()->engineNames().size() > 0);
-	QString engine_name = ScriptingEngineManager::instance()->engineNames()[0];
-	d->scriptingEngine = ScriptingEngineManager::instance()->engine(engine_name);
-#endif
+// 	Q_ASSERT(ScriptingEngineManager::instance()->engineNames().size() > 0);
+// 	QString engine_name = ScriptingEngineManager::instance()->engineNames()[0];
+// 	d->scriptingEngine = ScriptingEngineManager::instance()->engine(engine_name);
 
 	connect(this, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(descriptionChanged(const AbstractAspect*)));
 }
@@ -164,7 +163,7 @@ void Project::setChanged(const bool value) {
 	if (d->loading)
 		return;
 
-	if ( value && !d->changed )
+	if (value)
 		emit changed();
 
 	d->changed = value;
@@ -281,6 +280,7 @@ bool Project::load(XmlStreamReader* reader) {
 			//restore the pointer to the data sets (columns) in xy-curves etc.
 			QList<AbstractAspect*> curves = children("XYCurve", AbstractAspect::Recursive);
 			QList<AbstractAspect*> axes = children("Axes", AbstractAspect::Recursive);
+            QList<AbstractAspect*> dataPickerCurves = children("DatapickerCurve", AbstractAspect::Recursive);
 			QList<AbstractAspect*> surfaces = children("Surface3D", AbstractAspect::Recursive);
 			QList<AbstractAspect*> curves3d = children("Curve3D", AbstractAspect::Recursive);
 
@@ -352,6 +352,18 @@ bool Project::load(XmlStreamReader* reader) {
 					RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
 					RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
 				}
+
+                foreach (AbstractAspect* aspect, dataPickerCurves) {
+                    DatapickerCurve* dataPickerCurve = dynamic_cast<DatapickerCurve*>(aspect);
+                    if (!dataPickerCurve) continue;
+
+                    RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
+                    RESTORE_COLUMN_POINTER(dataPickerCurve, posYColumn, PosYColumn);
+                    RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaXColumn, PlusDeltaXColumn);
+                    RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaXColumn, MinusDeltaXColumn);
+                    RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
+                    RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
+                }
 			}
 		} else {// no project element
 			reader->raiseError(i18n("no project element found"));

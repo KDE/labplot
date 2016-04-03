@@ -215,6 +215,9 @@ void GuiTools::selectColorAction(QActionGroup* actionGroup, const QColor& color)
 
 QColor& GuiTools::colorFromAction(QActionGroup* actionGroup, QAction* action) {
 	int index = actionGroup->actions().indexOf(action);
+	if (index==-1 || index>=colorsCount)
+		index = 0;
+
 	return colors[index];
 }
 

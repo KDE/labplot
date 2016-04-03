@@ -33,7 +33,7 @@
 
 	\ingroup kdefrontend
  */
-FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData): QWidget(parent), m_fitData(fitData) {
+FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData): QWidget(parent), m_fitData(fitData), m_changed(false) {
 	ui.setupUi(this);
 	ui.pbApply->setIcon(KIcon("dialog-ok-apply"));
 	ui.pbCancel->setIcon(KIcon("dialog-cancel"));

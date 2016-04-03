@@ -36,16 +36,17 @@
 #include "ImageOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
 #include "backend/datasources/FileDataSource.h"
-#include <QTableWidget>
+
 
 class FileDataSource;
 class AbstractFileFilter;
+class QTableWidget;
 
-class ImportFileWidget : public QWidget{
-    Q_OBJECT
+class ImportFileWidget : public QWidget {
+	Q_OBJECT
 
 public:
-	explicit ImportFileWidget(QWidget*);
+	explicit ImportFileWidget(QWidget*, const QString& fileName = QString());
 	~ImportFileWidget();
 
 	void showOptions(bool);
@@ -64,7 +65,8 @@ private:
 	Ui::HDFOptionsWidget hdfOptionsWidget;
 	Ui::ImageOptionsWidget imageOptionsWidget;
 	Ui::NetCDFOptionsWidget netcdfOptionsWidget;
-	QTableWidget *twPreview;
+	QTableWidget* twPreview;
+	const QString& m_fileName;
 
 private slots:
 	void fileNameChanged(const QString&);
@@ -76,7 +78,7 @@ private slots:
 	void filterChanged(int);
 	void headerChanged(int);
 	void selectFile();
- 	void fileInfoDialog();
+	void fileInfoDialog();
 	void refreshPreview();
 	void loadSettings();
 

@@ -48,6 +48,10 @@ class Matrix : public AbstractDataSource {
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
+		virtual void exportView() const;
+		virtual void printView();
+		virtual void printPreview() const;
+
 		BASIC_D_ACCESSOR_DECL(int, rowCount, RowCount)
 		BASIC_D_ACCESSOR_DECL(int, columnCount, ColumnCount)
 		BASIC_D_ACCESSOR_DECL(double, xStart, XStart)
@@ -78,18 +82,23 @@ class Matrix : public AbstractDataSource {
 		void insertColumns(int before, int count);
 		void appendColumns(int count);
 		void removeColumns(int first, int count);
+		void clearColumn(int);
+
 		void insertRows(int before, int count);
 		void appendRows(int count);
 		void removeRows(int first, int count);
+		void clearRow(int);
 
 		double cell(int row, int col) const;
-		void setCell(int row, int col, double value );
+		QString text(int row, int col);
+		void setCell(int row, int col, double value);
+		void clearCell(int row, int col);
+
 		QVector<double> columnCells(int col, int first_row, int last_row);
 		void setColumnCells(int col, int first_row, int last_row, const QVector<double>& values);
 		QVector<double> rowCells(int row, int first_column, int last_column);
 		void setRowCells(int row, int first_column, int last_column, const QVector<double>& values);
 
-		QString text(int row, int col);
 		void copy(Matrix* other);
 
 		virtual void save(QXmlStreamWriter*) const;
@@ -140,6 +149,7 @@ class Matrix : public AbstractDataSource {
 		friend class MatrixSetPrecisionCmd;
 		void numericFormatChanged(char);
 		void precisionChanged(int);
+		void headerFormatChanged(Matrix::HeaderFormat);
 
 	private:
 		void init();

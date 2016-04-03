@@ -1,9 +1,10 @@
+
 /***************************************************************************
     File                 : Matrix.cpp
     Project              : Matrix
     Description          : Spreadsheet with a MxN matrix data model
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
@@ -31,11 +32,16 @@
 #include "matrixcommands.h"
 #include "backend/matrix/MatrixModel.h"
 #include "backend/core/Folder.h"
+#include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/matrix/MatrixView.h"
-#include "backend/lib/commandtemplates.h"
+#include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 
-#include <QDebug>
+#include <QHeaderView>
+#include <QLocale>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
 
 #include <KIcon>
 #include <KLocale>
@@ -52,7 +58,7 @@
 	\ingroup backend
 */
 Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QString& name)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)) {
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_model(0) {
 
 	//set initial number of rows and columns
 	appendColumns(cols);
@@ -63,7 +69,7 @@ Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QStrin
 }
 
 Matrix::Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading)
-	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)) {
+	: AbstractDataSource(engine, name), d(new MatrixPrivate(this)), m_model(0) {
 
 	if (!loading)
 		init();
@@ -74,8 +80,6 @@ Matrix::~Matrix() {
 }
 
 void Matrix::init() {
-	m_model = 0;
-
 	KConfig config;
 	KConfigGroup group = config.group("Matrix");
 
@@ -122,6 +126,40 @@ QWidget* Matrix::view() const {
 	return m_view;
 }
 
+void Matrix::exportView() const {
+	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(m_view);
+	dlg->setFileName(name());
+	dlg->setMatrixMode(true);
+	if (dlg->exec()==QDialog::Accepted) {
+		const QString path = dlg->path();
+		const QString separator = dlg->separator();
+
+		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
+		WAIT_CURSOR;
+		view->exportToFile(path, separator);
+		RESET_CURSOR;
+	}
+	delete dlg;
+}
+
+void Matrix::printView() {
+	QPrinter printer;
+	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
+	dlg->setWindowTitle(i18n("Print Matrix"));
+	if (dlg->exec() == QDialog::Accepted) {
+		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
+		view->print(&printer);
+	}
+	delete dlg;
+}
+
+void Matrix::printPreview() const {
+	const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
+	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
+	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+	dlg->exec();
+}
+
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
@@ -151,11 +189,11 @@ void Matrix::setChanged() {
 }
 
 int Matrix::defaultRowHeight() const {
-	return 20;
+	return d->defaultRowHeight;
 }
 
 int Matrix::defaultColumnWidth() const {
-	return  100;
+	return d->defaultRowHeight*3;
 }
 
 //##############################################################################
@@ -222,9 +260,15 @@ void Matrix::setPrecision(int precision) {
 //TODO: make this undoable?
 void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
 	d->headerFormat = format;
-	reinterpret_cast<MatrixView*>(m_view)->model()->updateHeader();
+	m_model->updateHeader();
+
+	if (m_view)
+		(reinterpret_cast<MatrixView*>(m_view))->resizeHeaders();
+
+	emit headerFormatChanged(format);
 }
 
+//columns
 void Matrix::insertColumns(int before, int count) {
 	if( count < 1 || before < 0 || before > columnCount()) return;
 	WAIT_CURSOR;
@@ -247,15 +291,11 @@ void Matrix::removeColumns(int first, int count) {
 	RESET_CURSOR;
 }
 
-void Matrix::removeRows(int first, int count) {
-	if( count < 1 || first < 0 || first+count > rowCount()) return;
-	WAIT_CURSOR;
-	beginMacro(i18np("%1: remove %2 row", "%1: remove %2 rows", name(), count));
-	exec(new MatrixRemoveRowsCmd(d, first, count));
-	endMacro();
-	RESET_CURSOR;
+void Matrix::clearColumn(int c) {
+	exec(new MatrixClearColumnCmd(d, c));
 }
 
+//rows
 void Matrix::insertRows(int before, int count) {
 	if( count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
@@ -267,6 +307,40 @@ void Matrix::insertRows(int before, int count) {
 
 void Matrix::appendRows(int count) {
 	insertRows(rowCount(), count);
+}
+
+void Matrix::removeRows(int first, int count) {
+	if( count < 1 || first < 0 || first+count > rowCount()) return;
+	WAIT_CURSOR;
+	beginMacro(i18np("%1: remove %2 row", "%1: remove %2 rows", name(), count));
+	exec(new MatrixRemoveRowsCmd(d, first, count));
+	endMacro();
+	RESET_CURSOR;
+}
+void Matrix::clearRow(int r) {
+	for(int c=0; c<columnCount(); ++c)
+		exec(new MatrixSetCellValueCmd(d, r, c, 0.0));
+}
+
+//cell
+double Matrix::cell(int row, int col) const {
+	return d->cell(row, col);
+}
+
+//! Return the text displayed in the given cell
+QString Matrix::text(int row, int col) {
+	return QLocale().toString(cell(row,col), d->numericFormat, d->precision);
+}
+
+//! Set the value of the cell
+void Matrix::setCell(int row, int col, double value) {
+	if(row < 0 || row >= rowCount()) return;
+	if(col < 0 || col >= columnCount()) return;
+	exec(new MatrixSetCellValueCmd(d, row, col, value));
+}
+
+void Matrix::clearCell(int row, int col) {
+	exec(new MatrixSetCellValueCmd(d, row, col, 0.0));
 }
 
 void Matrix::setDimensions(int rows, int cols) {
@@ -285,11 +359,6 @@ void Matrix::setDimensions(int rows, int cols) {
 		exec(new MatrixRemoveRowsCmd(d, rowCount()+row_diff, -row_diff));
 	endMacro();
 	RESET_CURSOR;
-}
-
-//! Return the value in the given cell
-double Matrix::cell(int row, int col) const {
-	return d->cell(row, col);
 }
 
 void Matrix::copy(Matrix* other) {
@@ -316,18 +385,6 @@ void Matrix::copy(Matrix* other) {
 	RESET_CURSOR;
 }
 
-
-//! Return the text displayed in the given cell
-QString Matrix::text(int row, int col) {
-	return QLocale().toString(cell(row,col), d->numericFormat, d->precision);
-}
-
-//! Set the value of the cell
-void Matrix::setCell(int row, int col, double value) {
-	if(row < 0 || row >= rowCount()) return;
-	if(col < 0 || col >= columnCount()) return;
-	exec(new MatrixSetCellValueCmd(d, row, col, value));
-}
 
 //! Duplicate the matrix inside its folder
 void Matrix::duplicate() {
@@ -454,6 +511,10 @@ void Matrix::mirrorVertically() {
 //##############################################################################
 
 MatrixPrivate::MatrixPrivate(Matrix* owner) : q(owner), columnCount(0), rowCount(0), suppressDataChange(false) {
+	QFont font;
+	font.setFamily(font.defaultFamily());
+	QFontMetrics fm(font);
+	defaultRowHeight = fm.height();
 }
 
 void MatrixPrivate::updateViewHeader() {
@@ -502,7 +563,7 @@ void MatrixPrivate::insertRows(int before, int count) {
 		for(int i=0; i<count; i++)
 			matrixData[col].insert(before+i, 0.0);
 	for(int i=0; i<count; i++)
-		rowHeights.insert(before+i, q->defaultRowHeight());
+		rowHeights.insert(before+i, defaultRowHeight);
 
 	rowCount += count;
 	emit q->rowsInserted(before, count);
@@ -659,26 +720,26 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 }
 
 bool Matrix::load(XmlStreamReader* reader) {
-	if(!reader->isStartElement() || reader->name() != "matrix"){
-        reader->raiseError(i18n("no matrix element found"));
-        return false;
-    }
+	if(!reader->isStartElement() || reader->name() != "matrix") {
+		reader->raiseError(i18n("no matrix element found"));
+		return false;
+	}
 
 	if (!readBasicAttributes(reader)) return false;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-    QXmlStreamAttributes attribs;
-    QString str;
+	QXmlStreamAttributes attribs;
+	QString str;
 
 	// read child elements
 	while (!reader->atEnd()) {
 		reader->readNext();
 
 		if (reader->isEndElement() && reader->name() == "matrix")
-            break;
+			break;
 
-        if (!reader->isStartElement())
-            continue;
+		if (!reader->isStartElement())
+			continue;
 
 
 		if (reader->name() == "comment") {
@@ -688,62 +749,62 @@ bool Matrix::load(XmlStreamReader* reader) {
 		} else if (reader->name() == "format") {
 			attribs = reader->attributes();
 
-            str = attribs.value("headerFormat").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'headerFormat'"));
-            else
-                d->headerFormat = Matrix::HeaderFormat(str.toInt());
+			str = attribs.value("headerFormat").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'headerFormat'"));
+			else
+				d->headerFormat = Matrix::HeaderFormat(str.toInt());
 
 			str = attribs.value("numericFormat").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'numericFormat'"));
-            else
-                d->numericFormat = *str.toLatin1().data();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'numericFormat'"));
+			else
+				d->numericFormat = *str.toLatin1().data();
 
-            str = attribs.value("precision").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'precision'"));
-            else
-                d->precision = str.toInt();
+			str = attribs.value("precision").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'precision'"));
+			else
+				d->precision = str.toInt();
 
 		} else if (reader->name() == "dimension") {
 			attribs = reader->attributes();
 
 			str = attribs.value("columns").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'columns'"));
-            else
-                d->columnCount = str.toInt();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'columns'"));
+			else
+				d->columnCount = str.toInt();
 
 			str = attribs.value("rows").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'rows'"));
-            else
-                d->rowCount = str.toInt();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'rows'"));
+			else
+				d->rowCount = str.toInt();
 
 			str = attribs.value("x_start").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'x_start'"));
-            else
-                d->xStart = str.toDouble();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'x_start'"));
+			else
+				d->xStart = str.toDouble();
 
 			str = attribs.value("x_end").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'x_end'"));
-            else
-                d->xEnd = str.toDouble();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'x_end'"));
+			else
+				d->xEnd = str.toDouble();
 
 			str = attribs.value("y_start").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'y_start'"));
-            else
-                d->yStart = str.toDouble();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'y_start'"));
+			else
+				d->yStart = str.toDouble();
 
 			str = attribs.value("y_end").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'y_end'"));
-            else
-                d->yEnd = str.toDouble();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'y_end'"));
+			else
+				d->yEnd = str.toDouble();
 		} else if (reader->name() == "row_heights") {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
@@ -769,11 +830,12 @@ bool Matrix::load(XmlStreamReader* reader) {
 			memcpy(column.data(), bytes.data(), count*sizeof(double));
 			d->matrixData.append(column);
 		} else { // unknown element
-            reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-            if (!reader->skipToEndElement())
+			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			if (!reader->skipToEndElement())
 				return false;
-        }
+		}
 	}
 
 	return true;
 }
+

@@ -30,6 +30,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/Axes3DDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/Surface3DDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/Curve3DDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/CustomPointDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/MatrixDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ProjectDock.cpp
@@ -54,6 +55,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FitParametersWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/FunctionsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/LabelWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/DatapickerImageWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/DatapickerCurveWidget.cpp
 )
 
 set(UI_SOURCES
@@ -74,6 +77,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/projectdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
@@ -87,6 +91,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/curve3ddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axes3ddock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
+        ${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/exportspreadsheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/dropvalueswidget.ui
@@ -94,6 +99,8 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/colormapselectorwidget.ui
+	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
+        ${KDEFRONTEND_DIR}/ui/datapickercurvewidget.ui
 )
 
 set(BACKEND_SOURCES
@@ -159,6 +166,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
@@ -170,6 +179,14 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/3d/Curve3D.cpp
 	${BACKEND_DIR}/worksheet/plots/3d/MouseInteractor.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
+        ${BACKEND_DIR}/datapicker/DatapickerPoint.cpp
+        ${BACKEND_DIR}/datapicker/DatapickerImage.cpp
+	${BACKEND_DIR}/datapicker/Datapicker.cpp
+	${BACKEND_DIR}/datapicker/Transform.cpp
+        ${BACKEND_DIR}/datapicker/ImageEditor.cpp
+       	${BACKEND_DIR}/datapicker/Segment.cpp
+        ${BACKEND_DIR}/datapicker/Segments.cpp
+        ${BACKEND_DIR}/datapicker/DatapickerCurve.cpp
 )
 
 set(COMMONFRONTEND_SOURCES
@@ -184,6 +201,9 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/core/PartMdiView.cpp
 	${COMMONFRONTEND_DIR}/widgets/ColorMapSelector.cpp
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
+	${COMMONFRONTEND_DIR}/widgets/qxtspanslider.cpp
+	${COMMONFRONTEND_DIR}/datapicker/DatapickerView.cpp
+        ${COMMONFRONTEND_DIR}/datapicker/DatapickerImageView.cpp
 )
 
 set(TOOLS_SOURCES
@@ -193,6 +213,7 @@ set(TOOLS_SOURCES
 
 add_subdirectory( pics )
 add_subdirectory( pics/gsl_distributions )
+add_subdirectory( pics/colorchooser )
 
 ##############################################################################
 # set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} parser/parser.tab.c)

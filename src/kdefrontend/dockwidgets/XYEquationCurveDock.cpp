@@ -38,7 +38,6 @@
 #include <QKeyEvent>
 #include <QMenu>
 #include <QWidgetAction>
-#include <QScrollBar>
 
 /*!
   \class XYEquationCurveDock
@@ -66,9 +65,9 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.setupUi(generalTab);
 	QGridLayout* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout ) {
-	  gridLayout->setContentsMargins(2,2,2,2);
-	  gridLayout->setHorizontalSpacing(2);
-	  gridLayout->setVerticalSpacing(2);
+		gridLayout->setContentsMargins(2,2,2,2);
+		gridLayout->setHorizontalSpacing(2);
+		gridLayout->setVerticalSpacing(2);
 	}
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
@@ -89,6 +88,11 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
 	uiGeneralTab.teEquation2->setExpressionType(XYEquationCurve::Parametric);
+
+	uiGeneralTab.teEquation1->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
+	uiGeneralTab.teEquation2->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
+	uiGeneralTab.teMin->setMaximumHeight(uiGeneralTab.leName->sizeHint().height());
+	uiGeneralTab.teMax->setMaximumHeight(uiGeneralTab.leName->sizeHint().height());
 
 	//Slots
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
@@ -111,7 +115,7 @@ void XYEquationCurveDock::setupGeneral() {
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
-void XYEquationCurveDock::setCurves(QList<XYCurve*> list){
+void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing=true;
 	m_curvesList=list;
 	m_curve=list.first();
@@ -150,12 +154,12 @@ void XYEquationCurveDock::initGeneralTab() {
 	Q_ASSERT(equationCurve);
 	const XYEquationCurve::EquationData& data = equationCurve->equationData();
 	uiGeneralTab.cbType->setCurrentIndex(data.type);
+	this->typeChanged(data.type);
 	uiGeneralTab.teEquation1->setText(data.expression1);
 	uiGeneralTab.teEquation2->setText(data.expression2);
 	uiGeneralTab.teMin->setText(data.min);
 	uiGeneralTab.teMax->setText(data.max);
 	uiGeneralTab.sbCount->setValue(data.count);
-	this->typeChanged(data.type);
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 

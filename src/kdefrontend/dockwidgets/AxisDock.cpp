@@ -50,7 +50,7 @@
   \ingroup kdefrontend
 */
 
-AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_aspectTreeModel(0), m_initializing(false) {
+AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_axis(0), m_aspectTreeModel(0), m_dataChanged(0), m_initializing(false) {
 	ui.setupUi(this);
 
 	//"Title"-tab
@@ -85,7 +85,7 @@ AxisDock::AxisDock(QWidget* parent):QWidget(parent), m_aspectTreeModel(0), m_ini
 	//"General"-tab
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
-	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
+	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)) );
 	connect( ui.cbPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(positionChanged(int)) );
@@ -433,7 +433,7 @@ void AxisDock::setAxes(QList<Axis*> list){
 	connect(m_axis, SIGNAL(minorGridPenChanged(QPen)), this, SLOT(axisMinorGridPenChanged(QPen)));
 	connect(m_axis, SIGNAL(minorGridOpacityChanged(qreal)), this, SLOT(axisMinorGridOpacityChanged(qreal)));
 
-	connect(m_axis, SIGNAL(visibleChanged(bool)), this, SLOT(axisVisibleChanged(bool)));
+	connect(m_axis, SIGNAL(visibilityChanged(bool)), this, SLOT(axisVisibilityChanged(bool)));
 
   	m_initializing = false;
 }
@@ -467,18 +467,12 @@ void AxisDock::commentChanged(){
   m_axis->setComment(ui.leComment->text());
 }
 
-void AxisDock::visibilityChanged(int state){
-  if (m_initializing)
+void AxisDock::visibilityChanged(bool state){
+	if (m_initializing)
 	return;
 
-  bool b;
-  if (state==Qt::Checked)
-	b=true;
-  else
-	b=false;
-
-  foreach(Axis* axis, m_axesList)
-	axis->setVisible(b);
+	foreach(Axis* axis, m_axesList)
+		axis->setVisible(state);
 }
 
 /*!
@@ -1599,7 +1593,7 @@ void AxisDock::axisMinorGridOpacityChanged(qreal opacity) {
 	m_initializing = false;
 }
 
-void AxisDock::axisVisibleChanged(bool on){
+void AxisDock::axisVisibilityChanged(bool on){
 	m_initializing = true;
 	ui.chkVisible->setChecked(on);
 	m_initializing = false;

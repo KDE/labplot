@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for cartesian plot properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -37,6 +37,7 @@
 #include <QTimer>
 #include <QDir>
 #include <QFileDialog>
+#include <QImageReader>
 #include <KUrlCompletion>
 
 #include <math.h>
@@ -49,7 +50,10 @@
 */
 
 CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
-	m_initializing(false){
+	m_plot(0),
+	labelWidget(0),
+	m_initializing(false),
+	m_completion(new KUrlCompletion()) {
 
 	ui.setupUi(this);
 
@@ -66,8 +70,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	ui.kleBackgroundFileName->setClearButtonShown(true);
 	ui.bOpen->setIcon( KIcon("document-open") );
 
-	KUrlCompletion *comp = new KUrlCompletion();
-	ui.kleBackgroundFileName->setCompletionObject(comp);
+	ui.kleBackgroundFileName->setCompletionObject(m_completion);
 
 	//"Title"-tab
 	QHBoxLayout* hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -97,7 +100,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	//General
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
-	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
+	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( ui.sbLeft, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbTop, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
 	connect( ui.sbWidth, SIGNAL(valueChanged(double)), this, SLOT(geometryChanged()) );
@@ -164,6 +167,10 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 
 	//TODO: activate the tab again once the functionality is implemented
 	ui.tabWidget->removeTab(2);
+}
+
+CartesianPlotDock::~CartesianPlotDock() {
+	delete m_completion;
 }
 
 void CartesianPlotDock::init(){
@@ -267,9 +274,11 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list){
 	//SIGNALs/SLOTs
 	connect( m_plot, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(plotDescriptionChanged(const AbstractAspect*)) );
 	connect( m_plot, SIGNAL(rectChanged(QRectF&)), this, SLOT(plotRectChanged(QRectF&)) );
+	connect( m_plot, SIGNAL(xAutoScaleChanged(bool)), this, SLOT(plotXAutoScaleChanged(bool)) );
 	connect( m_plot, SIGNAL(xMinChanged(float)), this, SLOT(plotXMinChanged(float)) );
 	connect( m_plot, SIGNAL(xMaxChanged(float)), this, SLOT(plotXMaxChanged(float)) );
 	connect( m_plot, SIGNAL(xScaleChanged(int)), this, SLOT(plotXScaleChanged(int)) );
+	connect( m_plot, SIGNAL(yAutoScaleChanged(bool)), this, SLOT(plotYAutoScaleChanged(bool)) );
 	connect( m_plot, SIGNAL(yMinChanged(float)), this, SLOT(plotYMinChanged(float)) );
 	connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
 	connect( m_plot, SIGNAL(yScaleChanged(int)), this, SLOT(plotYScaleChanged(int)) );
@@ -364,14 +373,12 @@ void CartesianPlotDock::commentChanged(){
   m_plot->setComment(ui.leComment->text());
 }
 
-void CartesianPlotDock::visibilityChanged(int state){
-  if (m_initializing)
-	return;
+void CartesianPlotDock::visibilityChanged(bool state){
+	if (m_initializing)
+		return;
 
-  bool b = (state==Qt::Checked);
-  foreach(CartesianPlot* plot, m_plotList){
-	plot->setVisible(b);
-  }
+	foreach(CartesianPlot* plot, m_plotList)
+		plot->setVisible(state);
 }
 
 void CartesianPlotDock::geometryChanged(){
@@ -742,7 +749,14 @@ void CartesianPlotDock::backgroundSecondColorChanged(const QColor& c){
 void CartesianPlotDock::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "CartesianPlotDock");
 	QString dir = conf.readEntry("LastImageDir", "");
-    QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
+
+	QString formats;
+	foreach(const QByteArray format, QImageReader::supportedImageFormats()) {
+		QString f = "*." + QString(format.constData());
+		formats.isEmpty() ? formats+=f : formats+=' '+f;
+	}
+
+	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
     if (path.isEmpty())
         return; //cancel was clicked in the file-dialog
 
@@ -879,6 +893,12 @@ void CartesianPlotDock::plotRectChanged(QRectF& rect){
 	m_initializing = false;
 }
 
+void CartesianPlotDock::plotXAutoScaleChanged(bool value) {
+	m_initializing = true;
+	ui.chkAutoScaleX->setChecked(value);
+	m_initializing = false;
+}
+
 void CartesianPlotDock::plotXMinChanged(float value){
 	m_initializing = true;
 	ui.kleXMin->setText( QString::number(value) );
@@ -894,6 +914,13 @@ void CartesianPlotDock::plotXMaxChanged(float value){
 void CartesianPlotDock::plotXScaleChanged(int scale){
 	m_initializing = true;
 	ui.cbXScaling->setCurrentIndex( scale );
+	m_initializing = false;
+}
+
+
+void CartesianPlotDock::plotYAutoScaleChanged(bool value) {
+	m_initializing = true;
+	ui.chkAutoScaleY->setChecked(value);
 	m_initializing = false;
 }
 
@@ -1206,3 +1233,4 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 
 	config.sync();
 }
+

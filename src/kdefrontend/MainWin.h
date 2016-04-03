@@ -39,6 +39,8 @@ class ProjectExplorer;
 class Project;
 class Worksheet;
 class Workbook;
+class Datapicker;
+class Image;
 class Spreadsheet;
 class Matrix;
 class GuiObserver;
@@ -49,6 +51,7 @@ class Axes3DDock;
 class Surface3DDock;
 class Curve3DDock;
 class CartesianPlotLegendDock;
+class CustomPointDock;
 class ColumnDock;
 class MatrixDock;
 class ProjectDock;
@@ -59,11 +62,15 @@ class XYFitCurveDock;
 class WorksheetDock;
 class LabelWidget;
 class ImportFileDialog;
+class DatapickerImageWidget;
+class DatapickerCurveWidget;
 
 class QDockWidget;
 class QStackedWidget;
+class QDragEnterEvent;
+class QDropEvent;
 
-class MainWin : public KXmlGuiWindow{
+class MainWin : public KXmlGuiWindow {
 	Q_OBJECT
 
 public:
@@ -114,6 +121,8 @@ private:
 	KAction* m_redoAction;
 	KAction* m_tileWindows;
 	KAction* m_cascadeWindows;
+	KAction* m_newDatapickerAction;
+
 
 	//toggling doch widgets
 	KAction* m_toggleProjectExplorerDockAction;
@@ -162,6 +171,9 @@ private:
 	XYFitCurveDock* xyFitCurveDock;
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
+	CustomPointDock* customPointDock;
+	DatapickerImageWidget* datapickerImageDock;
+	DatapickerCurveWidget* datapickerCurveDock;
 
 	bool openXML(QIODevice*);
 
@@ -170,15 +182,21 @@ private:
 	bool warnModified();
 	void activateSubWindowForAspect(const AbstractAspect*) const;
 	bool save(const QString&);
-	void closeEvent(QCloseEvent*);
+
 
 	Workbook* activeWorkbook() const;
 	Spreadsheet* activeSpreadsheet() const;
 	Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
+	Datapicker* activeDatapicker() const;
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver;
+
+protected:
+	void closeEvent(QCloseEvent*);
+	void dragEnterEvent(QDragEnterEvent*);
+	void dropEvent(QDropEvent*);
 
 private slots:
 	void initGUI(const QString&);
@@ -200,7 +218,7 @@ private slots:
 	void printPreview();
 
 	void historyDialog();
-	void importFileDialog();
+	void importFileDialog(const QString& fileName = QString());
 	void exportDialog();
 	void settingsDialog();
 	void projectChanged();
@@ -210,6 +228,7 @@ private slots:
 	void newSpreadsheet();
 	void newMatrix();
 	void newWorksheet();
+	void newDatapicker();
 	//TODO: void newScript();
 	void newFileDataSourceActionTriggered();
 	void newSqlDataSourceActionTriggered();
@@ -219,7 +238,7 @@ private slots:
 
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
-	void handleAspectRemoved(const AbstractAspect* parent);
+	void handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*);
 	void handleCurrentAspectChanged(AbstractAspect* );
 	void handleCurrentSubWindowChanged(QMdiSubWindow*);
 	void handleShowSubWindowRequested();

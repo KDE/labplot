@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Matrix data model
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
@@ -133,6 +133,7 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 					}
 					return QVariant(result);
 			}
+			break;
 		case Qt::Vertical:
 			switch(role) {
 				case Qt::DisplayRole:
@@ -156,9 +157,9 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 						double step = 0.0;
 						if (m_matrix->rowCount() > 1)
 							step = diff/double(m_matrix->rowCount()-1);
-							result += QLocale().toString(m_matrix->yStart()+double(section)*step,
-									m_matrix->numericFormat(), m_matrix->precision());
 
+						result += QLocale().toString(m_matrix->yStart()+double(section)*step,
+									m_matrix->numericFormat(), m_matrix->precision());
 						result += QString(")");
 					}
 					return QVariant(result);
@@ -203,6 +204,7 @@ QModelIndex MatrixModel::parent(const QModelIndex& child) const {
 }
 
 void MatrixModel::updateHeader() {
+	emit headerDataChanged(Qt::Horizontal, 0, m_matrix->columnCount());
 	emit headerDataChanged(Qt::Vertical, 0, m_matrix->rowCount());
 }
 

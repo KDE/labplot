@@ -1,9 +1,11 @@
 #!/bin/bash
 
-if ! [ -d build_debug ]; then
-	mkdir build_debug
+BUILDDIR=build_debug
+
+if [ ! -d $BUILDDIR ]; then
+	mkdir $BUILDDIR
 fi
 
-cd build_debug
+cd $BUILDDIR
 
-cmake .. -DCMAKE_BUILD_TYPE=DebugFull -DCMAKE_CXX_FLAGS="-Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions" -DCMAKE_INSTALL_PREFIX=/usr && make -j 4
+cmake .. -DCMAKE_BUILD_TYPE=DebugFull -DCMAKE_INSTALL_PREFIX=/usr && make -j 4

@@ -54,7 +54,13 @@
   \ingroup kdefrontend
 */
 
-XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYColumn(0), m_aspectTreeModel(0){
+XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent),
+	m_completion(new KUrlCompletion()),
+	cbXColumn(0),
+	cbYColumn(0),
+	m_curve(0),
+	m_aspectTreeModel(0) {
+
 	ui.setupUi(this);
 
 	//Tab "Values"
@@ -67,8 +73,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYCol
 	ui.kleFillingFileName->setClearButtonShown(true);
 	ui.bFillingOpen->setIcon( KIcon("document-open") );
 
-	KUrlCompletion *comp = new KUrlCompletion();
-	ui.kleFillingFileName->setCompletionObject(comp);
+	ui.kleFillingFileName->setCompletionObject(m_completion);
 
 	//Tab "Error bars"
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
@@ -182,6 +187,8 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent), cbXColumn(0), cbYCol
 XYCurveDock::~XYCurveDock() {
 	if (m_aspectTreeModel)
 		delete m_aspectTreeModel;
+
+	delete m_completion;
 }
 
 void XYCurveDock::setupGeneral() {
@@ -385,14 +392,14 @@ void XYCurveDock::init(){
 
 	ui.cbSymbolStyle->addItem(i18n("none"));
 	for (int i=1; i<19; ++i) {
-		XYCurve::SymbolsStyle style = (XYCurve::SymbolsStyle)i;
+		Symbol::Style style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
 		pa.setRenderHint(QPainter::Antialiasing);
 		pa.translate(iconSize/2,iconSize/2);
-		pa.drawPath(trafo.map(XYCurve::symbolsPathFromStyle(style)));
+		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
 		pa.end();
-		ui.cbSymbolStyle->addItem(QIcon(pm), XYCurve::symbolsNameFromStyle(style));
+		ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style));
 	}
 
  	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
@@ -479,7 +486,7 @@ void XYCurveDock::init(){
 
 void XYCurveDock::setModel() {
 	QList<const char*>  list;
-	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
+    list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);
 		cbYColumn->setTopLevelClasses(list);
@@ -572,6 +579,7 @@ void XYCurveDock::initGeneralTab(){
 	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
 	connect(m_curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(curveXColumnChanged(const AbstractColumn*)));
 	connect(m_curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(curveYColumnChanged(const AbstractColumn*)));
+	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
 }
 
 void XYCurveDock::initTabs() {
@@ -607,7 +615,7 @@ void XYCurveDock::initTabs() {
 	connect(m_curve, SIGNAL(dropLineOpacityChanged(qreal)), this, SLOT(curveDropLineOpacityChanged(qreal)));
 
 	//Symbol-Tab
-	connect(m_curve, SIGNAL(symbolsStyleChanged(XYCurve::SymbolsStyle)), this, SLOT(curveSymbolsStyleChanged(XYCurve::SymbolsStyle)));
+	connect(m_curve, SIGNAL(symbolsStyleChanged(Symbol::Style)), this, SLOT(curveSymbolsStyleChanged(Symbol::Style)));
 	connect(m_curve, SIGNAL(symbolsSizeChanged(qreal)), this, SLOT(curveSymbolsSizeChanged(qreal)));
 	connect(m_curve, SIGNAL(symbolsRotationAngleChanged(qreal)), this, SLOT(curveSymbolsRotationAngleChanged(qreal)));
 	connect(m_curve, SIGNAL(symbolsOpacityChanged(qreal)), this, SLOT(curveSymbolsOpacityChanged(qreal)));
@@ -750,6 +758,8 @@ void XYCurveDock::showValuesColumnFormat(const Column* column){
 		  ui.sbValuesPrecision->setValue(filter->numDigits());
 		  break;
 		}
+		case AbstractColumn::Text:
+			break;
 		case AbstractColumn::Month:
 		case AbstractColumn::Day:
 		case AbstractColumn::DateTime: {
@@ -757,8 +767,6 @@ void XYCurveDock::showValuesColumnFormat(const Column* column){
 				ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
 				break;
 			}
-		default:
-			break;
 	}
   }
 }
@@ -1018,9 +1026,9 @@ void XYCurveDock::dropLineOpacityChanged(int value){
 
 //"Symbol"-tab
 void XYCurveDock::symbolsStyleChanged(int index){
-  XYCurve::SymbolsStyle style = XYCurve::SymbolsStyle(index);
+  Symbol::Style style = Symbol::Style(index);
 
-  if (style==XYCurve::NoSymbols){
+  if (style==Symbol::NoSymbols){
 	ui.sbSymbolSize->setEnabled(false);
 	ui.sbSymbolRotation->setEnabled(false);
 	ui.sbSymbolOpacity->setEnabled(false);
@@ -1037,7 +1045,7 @@ void XYCurveDock::symbolsStyleChanged(int index){
 	ui.sbSymbolOpacity->setEnabled(true);
 
 	//enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
-	if (style!=XYCurve::SymbolsLine && style!=XYCurve::SymbolsCross) {
+	if (style!=Symbol::Line && style!=Symbol::Cross) {
 	  ui.cbSymbolFillingStyle->setEnabled(true);
 	  bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex())==Qt::NoBrush);
 	  ui.kcbSymbolFillingColor->setEnabled(!noBrush);
@@ -1741,6 +1749,12 @@ void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
 	m_initializing = false;
 }
 
+void XYCurveDock::curveVisibilityChanged(bool on) {
+	m_initializing = true;
+	uiGeneralTab.chkVisible->setChecked(on);
+	m_initializing = false;
+}
+
 //Line-Tab
 void XYCurveDock::curveLineTypeChanged(XYCurve::LineType type) {
 	m_initializing = true;
@@ -1790,7 +1804,7 @@ void XYCurveDock::curveDropLineOpacityChanged(qreal opacity) {
 }
 
 //Symbol-Tab
-void XYCurveDock::curveSymbolsStyleChanged(XYCurve::SymbolsStyle style) {
+void XYCurveDock::curveSymbolsStyleChanged(Symbol::Style style) {
 	m_initializing = true;
 	ui.cbSymbolStyle->setCurrentIndex((int)style);
 	m_initializing = false;

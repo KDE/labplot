@@ -1,12 +1,17 @@
 project(labplot2)
-cmake_minimum_required(VERSION 2.8.10) 
+cmake_minimum_required(VERSION 2.8.12)
+
+find_package(ECM 1.3.0 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 find_package(OpenGL)
 
 find_package(Qt4 REQUIRED QtCore QtGui QtOpenGL)
 include(${QT_USE_FILE})
-
 find_package(KDE4 REQUIRED)
+
+include(ECMInstallIcons)
+include(KDEInstallDirs)
 include(KDE4Defaults)
 
 find_package(VTK REQUIRED)
@@ -29,16 +34,13 @@ foreach(dir ${dirs})
 endforeach()
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION=\"2.1.0-RC1\")
+add_definitions (-DLVERSION=\"2.2.0\")
 # add_definitions (-DLDEBUG='1')
-# needed for qt_plugin_instance_scidavis_standardcurvesymbolfactory()
-add_definitions(-D QT_STATICPLUGIN )
-add_definitions(-DSUPPRESS_SCRIPTING_INIT)
 set(BUILD_SHARED_LIBS true)
-#set(_GNU_SOURCE true)
 add_definitions(-fvisibility=default)
 
 cmake_policy(SET CMP0002 OLD)
+#cmake_policy(SET CMP0063 NEW)
 
 ### GSL ######################################
 FIND_LIBRARY(GSL_LIBRARIES gsl
@@ -71,7 +73,7 @@ ENDIF (GSL_LIBRARIES AND GSL_CBLAS_LIBRARIES AND GSL_INCLUDE_DIR)
 
 IF (GSL_FOUND)
 	MESSAGE (STATUS "Found GNU Scientific Library ${GSL_VERSION}: ${GSL_INCLUDE_DIR} ${GSL_LIBRARIES};${GSL_CBLAS_LIBRARIES}")
-	add_definitions (-DHAVE_GSL=1)
+	add_definitions (-DHAVE_GSL)
 	# TODO : set version ?
 	add_definitions (-DGSL_VERSION=GSL_VERSION)
 ELSE (GSL_FOUND)
@@ -96,7 +98,7 @@ ELSE (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
 ENDIF (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
 IF (HDF5_FOUND)
 	MESSAGE (STATUS "Found Hierarchical Data Format (HDF) 5 Library: ${HDF5_INCLUDE_DIR} ${HDF5_LIBRARY}")
-	add_definitions (-DHAVE_HDF5=1)
+	add_definitions (-DHAVE_HDF5)
 ELSE (HDF5_FOUND)
 	MESSAGE (STATUS "Hierarchical Data Format (HDF) 5 Library not found.")
 ENDIF (HDF5_FOUND)
@@ -119,37 +121,11 @@ ELSE (NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
 ENDIF (NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
 IF (NETCDF_FOUND)
 	MESSAGE (STATUS "Found Network Common Data Format (NetCDF) Library: ${NETCDF_INCLUDE_DIR} ${NETCDF_LIBRARY}")
-	add_definitions (-DHAVE_NETCDF=1)
+	add_definitions (-DHAVE_NETCDF)
 ELSE (NETCDF_FOUND)
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library not found.")
 ENDIF (NETCDF_FOUND)
-  
-# ### CDF #####################################
-# FIND_LIBRARY(CDF_LIBRARY
-#   NAMES cdf
-# )
-# IF(CDF_LIBRARY)
-# MESSAGE ("-- Found CDF library: ${CDF_LIBRARY}")
-# add_definitions (-DHAVE_CDF=1)
-# ELSE(CDF_LIBRARY)
-# MESSAGE ("-- CDF library NOT FOUND!")
-# SET(CDF_LIBRARY "")
-# ENDIF(CDF_LIBRARY)
-# 
-# ### OPJ #####################################
-# FIND_LIBRARY(OPJ_LIBRARY
-#   NAMES origin
-# )
-# IF(OPJ_LIBRARY)
-# MESSAGE ("-- Found liborigin library: ${OPJ_LIBRARY}")
-# ELSE(OPJ_LIBRARY)
-# MESSAGE ("-- System OPJ library not found! Using included version.")
-# add_subdirectory(liborigin)
-# SET(OPJ_LIBRARY "-llabplot_origin")
-# # for FilterOPJ to find OPJFile.h
-# INCLUDE_DIRECTORIES(liborigin)
-# ENDIF(OPJ_LIBRARY)
-# ##############################################
+
 add_subdirectory(icons)
 add_subdirectory(src)
 add_subdirectory(doc)

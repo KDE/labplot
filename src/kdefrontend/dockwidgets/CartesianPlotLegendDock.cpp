@@ -2,7 +2,7 @@
     File                 : CartesianPlotLegendDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2016 by Alexander Semke (alexander.semke@web.de)
     Description          : widget for cartesian plot legend properties
 
  ***************************************************************************/
@@ -35,6 +35,7 @@
 
 #include <QDir>
 #include <QFileDialog>
+#include <QImageReader>
 #include <KUrlCompletion>
 
 #include <math.h>
@@ -47,7 +48,10 @@
 */
 
 CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(parent),
-	m_initializing(false) {
+	m_legend(0),
+	labelWidget(0),
+	m_initializing(false),
+	m_completion(new KUrlCompletion()) {
 
 	ui.setupUi(this);
 
@@ -63,8 +67,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	ui.kleBackgroundFileName->setClearButtonShown(true);
 	ui.bOpen->setIcon( KIcon("document-open") );
 
-	KUrlCompletion *comp = new KUrlCompletion();
-	ui.kleBackgroundFileName->setCompletionObject(comp);
+	ui.kleBackgroundFileName->setCompletionObject(m_completion);
 
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i){
@@ -82,7 +85,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	//General
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
-	connect( ui.chkVisible, SIGNAL(stateChanged(int)), this, SLOT(visibilityChanged(int)) );
+	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( ui.kfrLabelFont, SIGNAL(fontSelected(QFont)), this, SLOT(labelFontChanged(QFont)) );
 	connect( ui.kcbLabelColor, SIGNAL(changed(QColor)), this, SLOT(labelColorChanged(QColor)) );
 	connect( ui.cbOrder, SIGNAL(currentIndexChanged(int)), this, SLOT(labelOrderChanged(int)) );
@@ -129,6 +132,10 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	init();
+}
+
+CartesianPlotLegendDock::~CartesianPlotLegendDock() {
+	delete m_completion;
 }
 
 void CartesianPlotLegendDock::init() {
@@ -188,6 +195,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	connect( m_legend, SIGNAL(positionChanged(CartesianPlotLegend::PositionWrapper)),
 			 this, SLOT(legendPositionChanged(CartesianPlotLegend::PositionWrapper)) );
 	connect( m_legend, SIGNAL(lineSymbolWidthChanged(float)), this, SLOT(legendLineSymbolWidthChanged(float)) );
+	connect(m_legend, SIGNAL(visibilityChanged(bool)), this, SLOT(legendVisibilityChanged(bool)));
 
 	//background
 	connect( m_legend, SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), this, SLOT(legendBackgroundTypeChanged(PlotArea::BackgroundType)) );
@@ -210,8 +218,6 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	connect(m_legend,SIGNAL(layoutVerticalSpacingChanged(float)),this,SLOT(legendLayoutVerticalSpacingChanged(float)));
 	connect(m_legend,SIGNAL(layoutHorizontalSpacingChanged(float)),this,SLOT(legendLayoutHorizontalSpacingChanged(float)));
 	connect(m_legend,SIGNAL(layoutColumnCountChanged(int)),this,SLOT(legendLayoutColumnCountChanged(int)));
-
-	//layout
 
 	m_initializing = false;
 }
@@ -277,13 +283,12 @@ void CartesianPlotLegendDock::commentChanged() {
 	m_legend->setComment(ui.leComment->text());
 }
 
-void CartesianPlotLegendDock::visibilityChanged(int state) {
+void CartesianPlotLegendDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
 
-	bool b = (state==Qt::Checked);
 	foreach(CartesianPlotLegend* legend, m_legendList)
-		legend->setVisible(b);
+		legend->setVisible(state);
 }
 
 //General
@@ -514,7 +519,14 @@ void CartesianPlotLegendDock::backgroundSecondColorChanged(const QColor& c) {
 void CartesianPlotLegendDock::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "CartesianPlotLegendDock");
 	QString dir = conf.readEntry("LastImageDir", "");
-    QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
+
+	QString formats;
+	foreach(const QByteArray format, QImageReader::supportedImageFormats()) {
+		QString f = "*." + QString(format.constData());
+		formats.isEmpty() ? formats+=f : formats+=' '+f;
+	}
+
+	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
     if (path.isEmpty())
         return; //cancel was clicked in the file-dialog
 
@@ -722,6 +734,12 @@ void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::P
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), Worksheet::Centimeter) );
 	ui.cbPositionX->setCurrentIndex( position.horizontalPosition );
 	ui.cbPositionY->setCurrentIndex( position.verticalPosition );
+	m_initializing = false;
+}
+
+void CartesianPlotLegendDock::legendVisibilityChanged(bool on) {
+	m_initializing = true;
+	ui.chkVisible->setChecked(on);
 	m_initializing = false;
 }
 

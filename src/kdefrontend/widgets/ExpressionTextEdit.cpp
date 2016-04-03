@@ -76,8 +76,6 @@
 #include <QAbstractItemView>
 #include <QScrollBar>
 
-
-
 /*!
   \class ExpressionTextEdit
   \brief  Provides a widget for for defining mathematical expressions
@@ -97,7 +95,7 @@ ExpressionTextEdit::ExpressionTextEdit(QWidget *parent) : KTextEdit(parent),
 
 	setTabChangesFocus(true);
 
-	m_completer = new QCompleter(list);
+	m_completer = new QCompleter(list, this);
 	m_completer->setWidget(this);
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
 	m_completer->setCaseSensitivity(Qt::CaseInsensitive);

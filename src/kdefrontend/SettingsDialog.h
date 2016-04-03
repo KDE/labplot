@@ -2,8 +2,7 @@
     File                 : SettingsDialog.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2013 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
     Description          : general settings dialog
                            
  ***************************************************************************/
@@ -29,34 +28,32 @@
 #ifndef SETTINGSDIALOG_H
 #define SETTINGSDIALOG_H
 
-#include <kpagedialog.h>
+#include <KPageDialog>
 
 class SettingsGeneralPage;
-// class SettingsPrintingPage;
 
 class SettingsDialog : public KPageDialog {
-    Q_OBJECT
+	Q_OBJECT
 
-public:
-    explicit SettingsDialog(QWidget*);
-    virtual ~SettingsDialog();
+	public:
+		explicit SettingsDialog(QWidget*);
+		virtual ~SettingsDialog();
 
-private slots:
-	void changed();
+	private slots:
+		void changed();
 
-protected slots:
-    virtual void slotButtonClicked(int button);
+	protected slots:
+		virtual void slotButtonClicked(int button);
 
-private:
-	bool m_changed;
-    SettingsGeneralPage* generalPage;
-//     SettingsPrintingPage* printingPage;
+	private:
+		bool m_changed;
+		SettingsGeneralPage* generalPage;
 
-    void applySettings();
-    void restoreDefaults();
+		void applySettings();
+		void restoreDefaults();
 
-signals:
-	void settingsChanged();
+	signals:
+		void settingsChanged();
 };
 
 #endif

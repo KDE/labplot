@@ -35,7 +35,12 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 #include <math.h>
+
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
 
 #include "KIcon"
 #include <KConfigGroup>
@@ -108,7 +113,7 @@ void Worksheet::init() {
  */
 float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit unit){
 	switch (unit){
-    case Worksheet::Millimeter:
+	case Worksheet::Millimeter:
 		return value*10.0;
 	case Worksheet::Centimeter:
 		return value*100.0;
@@ -117,7 +122,8 @@ float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit un
 	case Worksheet::Point:
 		return value*25.4/72.*10.;
 	}
-	return value;
+
+	return 0;
 }
 
 /*!
@@ -125,7 +131,7 @@ float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit un
  */
 float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit unit){
 	switch (unit){
-    case Worksheet::Millimeter:
+	case Worksheet::Millimeter:
 		return value/10.0;
 	case Worksheet::Centimeter:
 		return value/100.0;
@@ -134,7 +140,8 @@ float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit 
 	case Worksheet::Point:
 		return value/25.4/10.*72.;
 	}
-	return value;
+
+	return 0;
 }
 
 //! Return an icon to be used for decorating my views.
@@ -166,8 +173,43 @@ QWidget *Worksheet::view() const {
 	return m_view;
 }
 
+void Worksheet::exportView() const {
+	ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
+	dlg->setFileName(name());
+	if (dlg->exec()==QDialog::Accepted){
+		QString path = dlg->path();
+		const WorksheetView::ExportFormat format = dlg->exportFormat();
+		const WorksheetView::ExportArea area = dlg->exportArea();
+		const bool background = dlg->exportBackground();
+		const int resolution = dlg->exportResolution();
+
+		WorksheetView* view = reinterpret_cast<WorksheetView*>(m_view);
+		WAIT_CURSOR;
+		view->exportToFile(path, format, area, background, resolution);
+		RESET_CURSOR;
+	}
+	delete dlg;
+}
+
+void Worksheet::printView() {
+	QPrinter printer;
+	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
+	dlg->setWindowTitle(i18n("Print Worksheet"));
+	if (dlg->exec() == QDialog::Accepted) {
+		WorksheetView* view = reinterpret_cast<WorksheetView*>(m_view);
+		view->print(&printer);
+	}
+	delete dlg;
+}
+
+void Worksheet::printPreview() const {
+	const WorksheetView* view = reinterpret_cast<const WorksheetView*>(m_view);
+	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
+	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+	dlg->exec();
+}
+
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
-// 	qDebug()<<"Worksheet::handleAspectAdded "<< aspect->name();
 	const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (addedElement) {
 		if (aspect->parentAspect() == this){

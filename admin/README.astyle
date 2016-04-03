@@ -1,0 +1,7 @@
+http://astyle.sourceforge.net/astyle.html
+
+Use the following astyle options to format your code:
+astyle --style=java --indent=tab --attach-namespaces --attach-classes --indent-switches --remove-brackets src/my_file.cpp
+
+
+optionally: --break-blocks

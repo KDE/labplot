@@ -40,7 +40,7 @@ class TemplateHandler : public QWidget{
 	Q_OBJECT
 
 	public:
-		enum ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, XYCurve, Axis, Curve3D, Surface3D};
+		enum ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, XYCurve, Axis, CustomPoint, Curve3D, Surface3D};
 
 		TemplateHandler(QWidget* parent, ClassName);
 

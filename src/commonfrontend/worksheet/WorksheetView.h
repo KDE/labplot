@@ -47,12 +47,12 @@ class WorksheetElement;
 class WorksheetView : public QGraphicsView {
 	Q_OBJECT
 
-  public:
+public:
 	explicit WorksheetView(Worksheet* worksheet);
 
-	enum ExportFormat{Pdf, Eps, Svg, Png};
-	enum GridStyle{NoGrid, LineGrid, DotGrid};
-	enum ExportArea{ExportBoundingBox, ExportSelection, ExportWorksheet};
+	enum ExportFormat {Pdf, Eps, Svg, Png};
+	enum GridStyle {NoGrid, LineGrid, DotGrid};
+	enum ExportArea {ExportBoundingBox, ExportSelection, ExportWorksheet};
 
 	struct GridSettings {
 		GridStyle style;
@@ -65,16 +65,18 @@ class WorksheetView : public QGraphicsView {
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
 
-  private:
-	enum MouseMode{SelectionMode, NavigationMode, ZoomSelectionMode};
-	enum CartesianPlotActionMode{ApplyActionToSelection, ApplyActionToAll};
+private:
+	enum MouseMode {SelectionMode, NavigationMode, ZoomSelectionMode};
+	enum CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll};
 
 	void initActions();
 	void initMenus();
 	void processResize();
 	void drawForeground(QPainter*, const QRectF&);
 	void drawBackground(QPainter*, const QRectF&);
+	void drawBackgroundItems(QPainter*, const QRectF&);
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
+	void cartesianPlotAdd(CartesianPlot*, QAction*);
 
 	//events
 	void resizeEvent(QResizeEvent*);
@@ -91,6 +93,8 @@ class WorksheetView : public QGraphicsView {
 	bool m_selectionBandIsShown;
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;
+	int magnificationFactor;
+	QGraphicsPixmapItem* m_magnificationWindow;
 	GridSettings m_gridSettings;
 	QList<QGraphicsItem*> m_selectedItems;
 	bool m_suppressSelectionChangedEvent;
@@ -102,6 +106,7 @@ class WorksheetView : public QGraphicsView {
 	QMenu* m_addNewMenu;
 	QMenu* m_addNewCartesianPlotMenu;
 	QMenu* m_zoomMenu;
+	QMenu* m_magnificationMenu;
 	QMenu* m_layoutMenu;
 	QMenu* m_gridMenu;
 	QMenu* m_viewMouseModeMenu;
@@ -113,7 +118,9 @@ class WorksheetView : public QGraphicsView {
 
 	QToolButton* tbNewCartesianPlot;
 	QToolButton* tbZoom;
+	QToolButton* tbMagnification;
 	QAction* currentZoomAction;
+	QAction* currentMagnificationAction;
 
 	//Actions
 	QAction* selectAllAction;
@@ -151,6 +158,12 @@ class WorksheetView : public QGraphicsView {
 	QAction* customGridAction;
 	QAction* snapToGridAction;
 
+	QAction* noMagnificationAction;
+	QAction* twoTimesMagnificationAction;
+	QAction* threeTimesMagnificationAction;
+	QAction* fourTimesMagnificationAction;
+	QAction* fiveTimesMagnificationAction;
+
 	//Actions for cartesian plots
 	QAction* cartesianPlotApplyToSelectionAction;
 	QAction* cartesianPlotApplyToAllAction;
@@ -165,6 +178,7 @@ class WorksheetView : public QGraphicsView {
 	QAction* addHorizontalAxisAction;
 	QAction* addVerticalAxisAction;
 	QAction* addLegendAction;
+	QAction* addCustomPointAction;
 
 	QAction* scaleAutoXAction;
 	QAction* scaleAutoYAction;
@@ -183,14 +197,14 @@ class WorksheetView : public QGraphicsView {
 	QGLContext* const glContext;
 	QVTKWidget2* vtkWidget;
 
-  public slots:
+public slots:
 	void createContextMenu(QMenu*) const;
 	void fillToolBar(QToolBar*);
 	void fillCartesianPlotToolBar(QToolBar*);
-	void print(QPrinter*) const;
+	void print(QPrinter*);
 	void selectItem(QGraphicsItem*);
 
-  private slots:
+private slots:
 	void addNew(QAction*);
 	void aspectAboutToBeRemoved(const AbstractAspect*);
 	void selectAllElements();
@@ -199,6 +213,7 @@ class WorksheetView : public QGraphicsView {
 	void mouseModeChanged(QAction*);
 	void useViewSizeRequested();
 	void changeZoom(QAction*);
+	void magnificationChanged(QAction*);
 	void changeLayout(QAction*);
 	void changeGrid(QAction*);
 	void changeSnapToGrid();
@@ -215,15 +230,10 @@ class WorksheetView : public QGraphicsView {
 	void cartesianPlotActionModeChanged(QAction*);
 	void cartesianPlotMouseModeChanged(QAction*);
 	void cartesianPlotNavigationChanged(QAction*);
+	void cartesianPlotAddNew(QAction*);
 	void handleCartesianPlotActions();
-	void addCurve();
-	void addEquationCurve();
-	void addFitCurve();
-	void addLegend();
-	void addHorizontalAxis();
-	void addVerticalAxis();
 
-  signals:
+signals:
 	void statusInfo(const QString&);
 };
 

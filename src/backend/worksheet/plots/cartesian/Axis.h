@@ -279,7 +279,7 @@ class Axis: public WorksheetElement {
 		void minorGridPenChanged(QPen);
 		void minorGridOpacityChanged(qreal);
 
-		void visibleChanged(bool);
+		void visibilityChanged(bool);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)

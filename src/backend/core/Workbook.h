@@ -47,6 +47,10 @@ class Workbook : public AbstractPart, public scripted {
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
+		virtual void exportView() const;
+		virtual void printView();
+		virtual void printPreview() const;
+
 		Spreadsheet* currentSpreadsheet() const;
 		Matrix* currentMatrix() const;
 		void setChildSelectedInView(int index, bool selected);

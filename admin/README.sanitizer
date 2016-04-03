@@ -1,0 +1,14 @@
+###############################################################
+General information
+###############################################################
+https://github.com/google/sanitizers/wiki
+http://clang.llvm.org/docs/index.html
+https://llvm.org/svn/llvm-project/compiler-rt/trunk/lib/asan/scripts/asan_symbolize.py
+http://developerblog.redhat.com/2014/10/16/gcc-undefined-behavior-sanitizer-ubsan/
+
+###############################################################
+Address sanitizer
+###############################################################
+1. add -fsanitize=address -fPIE to the compiler flags and re-compile
+2. ASAN_OPTIONS=symbolize=0 build_clang/src/labplot2 2> log.txt
+3. python admin/asan_symbolize.py / < log.txt | c++filt

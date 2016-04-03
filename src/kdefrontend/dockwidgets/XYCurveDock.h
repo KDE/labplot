@@ -31,6 +31,7 @@
 #define XYCURVEDOCK_H
 
 #include "backend/core/AbstractColumn.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "ui_xycurvedock.h"
@@ -40,6 +41,7 @@ class XYCurve;
 class TreeViewComboBox;
 class AspectTreeModel;
 class Column;
+class KUrlCompletion;
 
 class XYCurveDock : public QWidget {
 	Q_OBJECT
@@ -53,7 +55,7 @@ public:
 
 private:
 	Ui::XYCurveDockGeneralTab uiGeneralTab;
-
+	KUrlCompletion* m_completion;
 	QStringList dateStrings;
 	QStringList timeStrings;
 
@@ -163,6 +165,7 @@ private slots:
 	void curveDescriptionChanged(const AbstractAspect*);
 	void curveXColumnChanged(const AbstractColumn*);
 	void curveYColumnChanged(const AbstractColumn*);
+	void curveVisibilityChanged(bool);
 
 	//Line-Tab
 	void curveLineTypeChanged(XYCurve::LineType);
@@ -175,7 +178,7 @@ private slots:
 	void curveDropLineOpacityChanged(qreal);
 
 	//Symbol-Tab
-	void curveSymbolsStyleChanged(XYCurve::SymbolsStyle);
+	void curveSymbolsStyleChanged(Symbol::Style);
 	void curveSymbolsSizeChanged(qreal);
 	void curveSymbolsRotationAngleChanged(qreal);
 	void curveSymbolsOpacityChanged(qreal);
