@@ -104,6 +104,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	  xyCurveDock(0),
 	  xyEquationCurveDock(0),
 	  xyFitCurveDock(0),
+	  xyFourierFilterCurveDock(0),
 	  worksheetDock(0),
 	  textLabelDock(0),
 	  customPointDock(0),
@@ -281,7 +282,7 @@ void MainWin::initActions() {
 	connect(m_historyAction, SIGNAL(triggered()),SLOT(historyDialog()));
 
 	// Appearance
-	// Analysis
+	// Analysis: see WorksheetView.cpp
 	// Drawing
 	// Script
 
@@ -433,13 +434,14 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_togglePropertiesDockAction->setEnabled(!b);
 
 	if (!m_mdiArea->currentSubWindow()) {
-		factory->container("worksheet", this)->setEnabled(false);
 		factory->container("spreadsheet", this)->setEnabled(false);
-		factory->container("datapicker", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
+		factory->container("worksheet", this)->setEnabled(false);
+		factory->container("analysis", this)->setEnabled(false);
+		factory->container("datapicker", this)->setEnabled(false);
+		factory->container("spreadsheet_toolbar", this)->hide();
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
-		factory->container("spreadsheet_toolbar", this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 	}
 
@@ -472,13 +474,14 @@ void MainWin::updateGUI() {
 	}
 
 	if (!m_mdiArea->currentSubWindow()) {
-		factory->container("worksheet", this)->setEnabled(false);
 		factory->container("spreadsheet", this)->setEnabled(false);
-		factory->container("datapicker", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
+		factory->container("worksheet", this)->setEnabled(false);
+		factory->container("analysis", this)->setEnabled(false);
+		factory->container("datapicker", this)->setEnabled(false);
+		factory->container("spreadsheet_toolbar", this)->hide();
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
-		factory->container("spreadsheet_toolbar", this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 		return;
 	}
@@ -496,18 +499,23 @@ void MainWin::updateGUI() {
 	if (w!=0) {
 		//enable worksheet related menus
 		factory->container("worksheet", this)->setEnabled(true);
+ 		factory->container("analysis", this)->setEnabled(true);
 // 		factory->container("drawing", this)->setEnabled(true);
 
 		//disable spreadsheet and matrix related menus
 		factory->container("spreadsheet", this)->setEnabled(false);
-// 		factory->container("analysis", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
 
-		//populate worksheet-menu
+		//populate worksheet menu
 		WorksheetView* view=qobject_cast<WorksheetView*>(w->view());
 		QMenu* menu=qobject_cast<QMenu*>(factory->container("worksheet", this));
 		menu->clear();
 		view->createContextMenu(menu);
+
+		//populate analysis menu
+		menu=qobject_cast<QMenu*>(factory->container("analysis", this));
+		menu->clear();
+		view->createAnalysisMenu(menu);
 
 		//populate worksheet-toolbar
 		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("worksheet_toolbar", this));
@@ -531,7 +539,8 @@ void MainWin::updateGUI() {
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
 	} else {
 		factory->container("worksheet", this)->setEnabled(false);
-//  	factory->container("drawing", this)->setEnabled(false);
+ 		factory->container("analysis", this)->setEnabled(false);
+//		factory->container("drawing", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->setVisible(false);
 		factory->container("cartesian_plot_toolbar", this)->setVisible(false);
 
@@ -542,7 +551,6 @@ void MainWin::updateGUI() {
 	if (spreadsheet) {
 		//enable spreadsheet related menus
 		factory->container("spreadsheet", this)->setEnabled(true);
-// 		factory->container("analysis", this)->setEnabled(true);
 
 		//populate spreadsheet-menu
 		SpreadsheetView* view=qobject_cast<SpreadsheetView*>(spreadsheet->view());
@@ -561,7 +569,6 @@ void MainWin::updateGUI() {
 	} else {
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
-// 		factory->container("analysis", this)->setEnabled(false);
 	}
 
 	//Handle the Matrix-object

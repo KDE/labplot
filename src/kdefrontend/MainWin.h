@@ -55,6 +55,7 @@ class SpreadsheetDock;
 class XYCurveDock;
 class XYEquationCurveDock;
 class XYFitCurveDock;
+class XYFourierFilterCurveDock;
 class WorksheetDock;
 class LabelWidget;
 class ImportFileDialog;
@@ -161,6 +162,7 @@ private:
 	XYCurveDock* xyCurveDock;
 	XYEquationCurveDock* xyEquationCurveDock;
 	XYFitCurveDock* xyFitCurveDock;
+	XYFourierFilterCurveDock* xyFourierFilterCurveDock;
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
 	CustomPointDock* customPointDock;

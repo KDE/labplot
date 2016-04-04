@@ -29,7 +29,6 @@
 #include "XYFitCurveDock.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
-#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
@@ -38,6 +37,7 @@
 
 #include <QMenu>
 #include <QWidgetAction>
+#include <QDebug>
 
 /*!
   \class XYFitCurveDock
@@ -53,12 +53,8 @@
   \ingroup kdefrontend
 */
 
-XYFitCurveDock::XYFitCurveDock(QWidget *parent): XYCurveDock(parent),
-	cbXDataColumn(0),
-	cbYDataColumn(0),
-	cbWeightsColumn(0),
-	m_fitCurve(0) {
-
+XYFitCurveDock::XYFitCurveDock(QWidget *parent)
+	 : XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), cbWeightsColumn(0), m_fitCurve(0) {
 }
 
 /*!
