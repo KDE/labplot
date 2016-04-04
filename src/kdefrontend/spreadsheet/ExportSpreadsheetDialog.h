@@ -43,14 +43,31 @@ class ExportSpreadsheetDialog: public KDialog {
 		void setFileName(const QString&);
 		void setMatrixMode(bool);
 		bool exportHeader() const;
+        bool exportLatexHeader() const;
+        bool gridLines() const;
+        bool captions() const;
+        bool skipEmptyRows() const;
+        bool exportSelection() const;
+        bool entireSpreadheet() const;
+        bool matrixVerticalHeader() const;
+        bool matrixHorizontalHeader() const;
 		QString separator() const;
 
+        enum Format {
+            ASCII = 0,
+            Binary,
+            LaTeX
+        };
+
+        Format format() const;
 	private:
 		QWidget* mainWidget;
 		Ui::ExportSpreadsheetWidget ui;
 		bool m_showOptions;
+        Format m_format;
 
 	private slots:
+        void setFormat(Format format);
 		void slotButtonClicked(int);
 		void okClicked();
 		void toggleOptions();

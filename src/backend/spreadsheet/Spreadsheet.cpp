@@ -105,16 +105,26 @@ QWidget *Spreadsheet::view() const {
 void Spreadsheet::exportView() const {
 	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(view());
 	dlg->setFileName(name());
-	if (dlg->exec()==QDialog::Accepted){
-		const QString path = dlg->path();
-		const bool exportHeader = dlg->exportHeader();
-		const QString separator = dlg->separator();
-
-		const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
-		WAIT_CURSOR;
-		view->exportToFile(path, exportHeader, separator);
-		RESET_CURSOR;
-	}
+    if (dlg->exec()==QDialog::Accepted){
+        const QString path = dlg->path();
+        const bool exportHeader = dlg->exportHeader();
+        const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
+        WAIT_CURSOR;
+        if (dlg->format() == ExportSpreadsheetDialog::LaTeX){
+            const bool exportLatexHeader = dlg->exportLatexHeader();
+            const bool gridLines = dlg->gridLines();
+            const bool captions = dlg->captions();
+            const bool skipEmptyRows =dlg->skipEmptyRows();
+            const bool exportEntire = dlg->entireSpreadheet();
+            view->exportToLaTeX(path, exportHeader, gridLines, captions,
+                                exportLatexHeader, skipEmptyRows, exportEntire);
+        }
+        else {
+            const QString separator = dlg->separator();
+            view->exportToFile(path, exportHeader, separator);
+        }
+        RESET_CURSOR;
+    }
 	delete dlg;
 }
 

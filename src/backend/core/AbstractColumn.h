@@ -70,6 +70,26 @@ class AbstractColumn : public AbstractAspect
 		explicit AbstractColumn(const QString& name);
 		virtual ~AbstractColumn();
 
+        struct ColumnStatistics {
+            ColumnStatistics() {}
+            double minimum;
+            double maximum;
+            double arithmeticMean;
+            double geometricMean;
+            double harmonicMean;
+            double contraharmonicMean;
+            double variance;
+            double standardDeviation;
+            double meanDeviation;
+            double medianDeviation;
+            double medianAbsoluteDeviation;
+            double skewness;
+            double kurtosis;
+            double entropy;
+        };
+
+        ColumnStatistics m_statistics;
+        const ColumnStatistics& statistics() const;
 		virtual bool isReadOnly() const { return true; };
 		virtual ColumnMode columnMode() const = 0;
 		virtual void setColumnMode(AbstractColumn::ColumnMode);
@@ -115,7 +135,8 @@ class AbstractColumn : public AbstractAspect
 		virtual double valueAt(int row) const;
 		virtual void setValueAt(int row, double new_value);
 		virtual void replaceValues(int first, const QVector<double>& new_values);
-
+        virtual void setStatisticsAvailable(bool available);
+        virtual bool statisticsAvailable() const;
 	signals:
 		void plotDesignationAboutToChange(const AbstractColumn * source);
 		void plotDesignationChanged(const AbstractColumn * source);

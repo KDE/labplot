@@ -95,9 +95,12 @@ class ColumnPrivate: QObject {
 		double valueAt(int row) const;
 		void setValueAt(int row, double new_value);
 		void replaceValues(int first, const QVector<double>& new_values);
+        void setStatisticsAvailable(bool available);
+        bool statisticsAvailable() const;
 
 	private:
 		AbstractColumn::ColumnMode m_column_mode;
+        bool m_statisticsAvailable;
 		void * m_data;
 		AbstractSimpleFilter* m_input_filter;
 		AbstractSimpleFilter* m_output_filter;

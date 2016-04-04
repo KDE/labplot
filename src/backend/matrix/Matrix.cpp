@@ -130,15 +130,25 @@ void Matrix::exportView() const {
 	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(m_view);
 	dlg->setFileName(name());
 	dlg->setMatrixMode(true);
-	if (dlg->exec()==QDialog::Accepted) {
-		const QString path = dlg->path();
-		const QString separator = dlg->separator();
-
-		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
-		WAIT_CURSOR;
-		view->exportToFile(path, separator);
-		RESET_CURSOR;
-	}
+    if (dlg->exec()==QDialog::Accepted) {
+        const QString path = dlg->path();
+        const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
+        WAIT_CURSOR;
+        if (dlg->format() == ExportSpreadsheetDialog::LaTeX){
+            const bool verticalHeader = dlg->matrixVerticalHeader();
+            const bool horizontalHeader = dlg->matrixHorizontalHeader();
+            const bool latexHeader = dlg->exportHeader();
+            const bool gridLines = dlg->gridLines();
+            const bool entire = dlg->entireSpreadheet();
+            const bool captions = dlg->captions();
+            view->exportToLaTeX(path, verticalHeader, horizontalHeader,
+                                latexHeader, gridLines, entire, captions);
+        }else {
+            const QString separator = dlg->separator();
+            view->exportToFile(path, separator);
+        }
+        RESET_CURSOR;
+    }
 	delete dlg;
 }
 

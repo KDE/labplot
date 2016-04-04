@@ -61,6 +61,7 @@
 #include "kdefrontend/spreadsheet/RandomValuesDialog.h"
 #include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
 #include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
+#include "kdefrontend/spreadsheet/StatisticsDialog.h"
 
 #include <algorithm>
 
@@ -178,6 +179,7 @@ void SpreadsheetView::initActions(){
 	action_clear_masks = new KAction(KIcon("format-remove-node"), i18n("Clear Masks"), this);
 	action_sort_spreadsheet = new KAction(KIcon("view-sort-ascending"), i18n("&Sort Spreadsheet"), this);
 	action_go_to_cell = new KAction(KIcon("go-jump"), i18n("&Go to Cell"), this);
+    action_statistics_all_columns = new KAction(KIcon("view-statistics"), i18n("Statisti&cs"), this );
 
 	// column related actions
 	action_insert_columns = new KAction(KIcon("edit-table-insert-column-left"), i18n("&Insert Empty Columns"), this);
@@ -285,8 +287,8 @@ void SpreadsheetView::initMenus(){
 	m_columnMenu->addAction(action_toggle_comments);
 	m_columnMenu->addSeparator();
 
-// 	TODO: m_columnMenu->addAction(action_statistics_columns);
-
+    m_columnMenu->addAction(action_statistics_columns);
+    action_statistics_columns->setVisible(false);
 
 	//Spreadsheet menu
 	m_spreadsheetMenu = new QMenu(this);
@@ -302,7 +304,8 @@ void SpreadsheetView::initMenus(){
 	m_spreadsheetMenu->addAction(action_add_column);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_go_to_cell);
-
+    m_spreadsheetMenu->addAction(action_statistics_all_columns);
+    action_statistics_all_columns->setVisible(true);
 
 	//Row menu
 	m_rowMenu = new QMenu(this);
@@ -319,9 +322,9 @@ void SpreadsheetView::initMenus(){
 	submenu->addAction(action_fill_const);
 	m_rowMenu->addMenu(submenu);
 
-	//TODO
-// 	m_rowMenu->addSeparator();
-// 	m_rowMenu->addAction(action_statistics_rows);
+    m_rowMenu->addSeparator();
+    m_rowMenu->addAction(action_statistics_rows);
+    action_statistics_rows->setVisible(false);
 }
 
 void SpreadsheetView::connectActions(){
@@ -365,14 +368,15 @@ void SpreadsheetView::connectActions(){
 	connect(action_sort_columns, SIGNAL(triggered()), this, SLOT(sortSelectedColumns()));
 	connect(action_sort_asc_column, SIGNAL(triggered()), this, SLOT(sortColumnAscending()));
 	connect(action_sort_desc_column, SIGNAL(triggered()), this, SLOT(sortColumnDescending()));
-	connect(action_statistics_columns, SIGNAL(triggered()), this, SLOT(statisticsOnSelectedColumns()));
+    connect(action_statistics_columns, SIGNAL(triggered()), this, SLOT(showColumnStatistics()));
+    connect(action_statistics_all_columns, SIGNAL(triggered()), this, SLOT(showAllColumnsStatistics()));
 
-	connect(action_insert_rows, SIGNAL(triggered()), this, SLOT(insertEmptyRows()));
+    connect(action_insert_rows, SIGNAL(triggered()), this, SLOT(insertEmptyRows()));
 	connect(action_remove_rows, SIGNAL(triggered()), this, SLOT(removeSelectedRows()));
 	connect(action_clear_rows, SIGNAL(triggered()), this, SLOT(clearSelectedRows()));
 	connect(action_add_rows, SIGNAL(triggered()), this, SLOT(addRows()));
-	connect(action_statistics_rows, SIGNAL(triggered()), this, SLOT(statisticsOnSelectedRows()));
-	connect(action_toggle_comments, SIGNAL(triggered()), this, SLOT(toggleComments()));
+    connect(action_statistics_rows, SIGNAL(triggered()), this, SLOT(showRowStatistics()));
+    connect(action_toggle_comments, SIGNAL(triggered()), this, SLOT(toggleComments()));
 }
 
 void SpreadsheetView::fillToolBar(QToolBar* toolBar){
@@ -422,7 +426,8 @@ void SpreadsheetView::createContextMenu(QMenu* menu) const {
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_go_to_cell);
 	menu->insertSeparator(firstAction);
-
+    menu->insertAction(firstAction, action_statistics_all_columns);
+    menu->insertSeparator(firstAction);
 	// TODO
 	// Export to ASCII
 	//Export to latex
@@ -724,6 +729,14 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 		QContextMenuEvent *cm_event = static_cast<QContextMenuEvent*>(event);
 		QPoint global_pos = cm_event->globalPos();
 		if (watched == m_tableView->verticalHeader()){
+            bool onlyNumeric = true;
+            for(int i = 0; i < m_spreadsheet->columnCount();++i){
+                if (m_spreadsheet->column(i)->columnMode() != AbstractColumn::Numeric){
+                    onlyNumeric = false;
+                    break;
+                }
+            }
+            action_statistics_rows->setVisible(onlyNumeric);
 			m_rowMenu->exec(global_pos);
 		}else if (watched == m_horizontalHeader) {
 			int col = m_horizontalHeader->logicalIndexAt(cm_event->pos());
@@ -756,6 +769,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			action_fill_equidistant->setEnabled(numeric);
 			action_fill_random_nonuniform->setEnabled(numeric);
 			action_fill_function->setEnabled(numeric);
+            action_statistics_columns->setVisible(numeric);
 
 			m_columnMenu->exec(global_pos);
 		}else if (watched == this){
@@ -1389,14 +1403,43 @@ void SpreadsheetView::sortSelectedColumns(){
 }
 
 
-// TODO
-void SpreadsheetView::statisticsOnSelectedColumns(){
-// 	QMessageBox::information(0, "info", "not yet implemented");
+void SpreadsheetView::showAllColumnsStatistics(){
+    showColumnStatistics(true);
 }
 
-// TODO
-void SpreadsheetView::statisticsOnSelectedRows(){
-// 	QMessageBox::information(0, "info", "not yet implemented");
+void SpreadsheetView::showColumnStatistics(bool forAll){
+    QString dlgTitle(m_spreadsheet->name() + " column statistics");
+    StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
+
+    dlg->setAttribute(Qt::WA_DeleteOnClose);
+    if (!forAll){
+        dlg->setColumns(selectedColumns());
+    }
+    else if (forAll){
+        for(int col = 0; col < m_spreadsheet->columnCount(); ++col){
+            if (m_spreadsheet->column(col)->columnMode() == AbstractColumn::Numeric){
+                dlg->addColumn(m_spreadsheet->column(col));
+            }
+        }
+    }
+    dlg->show();
+}
+
+void SpreadsheetView::showRowStatistics(){
+    QString dlgTitle(m_spreadsheet->name() + " row statistics");
+    StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
+
+    for (int i = 0; i < m_spreadsheet->rowCount(); ++i){
+        if (isRowSelected(i)){
+            QVector<double> rowValues;
+            for (int j = 0; j < m_spreadsheet->columnCount(); ++j){
+                rowValues << m_spreadsheet->column(j)->valueAt(i);
+            }
+            dlg->addColumn(new Column(QString::number(i+1), rowValues));
+        }
+    }
+    dlg->setAttribute(Qt::WA_DeleteOnClose);
+    dlg->show();
 }
 
 /*!
@@ -1757,4 +1800,310 @@ void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader,
 		}
 		out << '\n';
 	}
+}
+
+void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeaders,
+                                    const bool gridLines, const bool captions, const bool latexHeaders,
+                                    const bool skipEmptyRows, const bool exportEntire) const
+{
+    QFile file(path);
+    if (!file.open(QFile::WriteOnly | QFile::Truncate)){
+        return;
+    }
+
+    QList<Column*> toExport;
+    int cols;
+    int totalRowCount = 0;
+    if (exportEntire){
+        cols = const_cast<SpreadsheetView*>(this)->m_spreadsheet->columnCount();
+        totalRowCount = m_spreadsheet->rowCount();
+        for (int col = 0; col < cols;++col){
+            toExport << m_spreadsheet->column(col);
+        }
+    }
+    else{
+        cols = const_cast<SpreadsheetView*>(this)->selectedColumnCount();
+        const int firtsSelectedCol = const_cast<SpreadsheetView*>(this)->firstSelectedColumn();
+        bool rowsCalculated = false;
+        for( int col = firtsSelectedCol; col < firtsSelectedCol + cols; ++col){
+            QStringList textData;
+            for (int row = 0; row < m_spreadsheet->rowCount(); ++row){
+                if(const_cast<SpreadsheetView*>(this)->isRowSelected(row)){
+                    textData << m_spreadsheet->column(col)->asStringColumn()->textAt(row);
+                    if (!rowsCalculated){
+                        totalRowCount++;
+                    }
+                }
+            }
+            if(!rowsCalculated)
+                rowsCalculated = true;
+            Column* column = new Column(m_spreadsheet->column(col)->name(), textData);
+            toExport << column;
+        }
+    }
+    int columnsStringSize = 0;
+    int columnsPerTable = 0;
+
+    for (int i = 0; i < cols; ++i){
+        columnsStringSize += toExport.at(i)->asStringColumn()->textAt(0).length();
+        if (!toExport.at(i)->isValid(0)){
+            columnsStringSize+=3;
+        }
+        if (columnsStringSize > 65){
+            break;
+        }
+        ++columnsPerTable;
+    }
+
+    const int tablesCount = cols / columnsPerTable;
+    const int remainingColumns = cols % columnsPerTable;
+
+    bool columnsSeparating = (cols > columnsPerTable);
+    QTextStream out(&file);
+
+    if (latexHeaders){
+        out << QLatin1String("\\documentclass[11pt,a4paper]{article} \n");
+        out << QLatin1String("\\usepackage{geometry} \n");
+        out << QLatin1String("\\usepackage{xcolor,colortbl} \n");
+        out << QLatin1String("\\extrafloats{1280} \n");
+        out << QLatin1String("\\definecolor{HeaderBgColor}{rgb}{0.81,0.81,0.81} \n");
+        out << QLatin1String("\\geometry{ \n");
+        out << QLatin1String("a4paper, \n");
+        out << QLatin1String("total={170mm,257mm}, \n");
+        out << QLatin1String("left=10mm, \n");
+        out << QLatin1String("top=10mm } \n");
+
+        out << QLatin1String("\\begin{document} \n");
+        out << QLatin1String("\\title{LabPlot Spreadsheet Export to \\LaTeX{} } \n");
+        out << QLatin1String("\\author{LabPlot} \n");
+        out << QLatin1String("\\date{\\today} \n");
+    }
+
+    QString endTabularTable ("\\end{tabular} \n \\end{table} \n");
+    QString tableCaption ("\\caption{"+ m_spreadsheet->name()+ "} \n");
+    QString beginTable ("\\begin{table}[ht] \n");
+
+    int rowCount = 0;
+    const int maxRows = 45;
+
+    if (columnsSeparating){
+        QVector<int> emptyRowIndices;
+        for (int table = 0; table < tablesCount; ++table){
+            QStringList textable;
+
+            textable << beginTable;
+            if (captions)
+                textable << tableCaption;
+            textable << QLatin1String("\\centering \n");
+            textable << QLatin1String("\\begin{tabular}{") << (gridLines ?QLatin1String("|") : QLatin1String(""));
+            for (int i = 0; i < columnsPerTable; ++i){
+                textable << ( gridLines ? QLatin1String(" c |") : QLatin1String(" c ") );
+            }
+            textable << QLatin1String("} \n");
+            if (gridLines)
+                textable << QLatin1String("\\hline \n");
+
+            if (exportHeaders){
+                if (latexHeaders)
+                    textable << QLatin1String("\\rowcolor{HeaderBgColor} \n");
+                for (int col = table*columnsPerTable; col < (table * columnsPerTable) + columnsPerTable; ++col){
+                    textable << toExport.at(col)->name();
+                    if (col != ((table * columnsPerTable)+ columnsPerTable)-1){
+                        textable << QLatin1String(" & ");
+                    }
+                }
+                textable << QLatin1String("\\\\ \n");
+                if (gridLines)
+                    textable << QLatin1String("\\hline \n");
+            }
+            foreach(const QString& s, textable){
+                out << s;
+            }
+
+            QStringList values;
+            for (int row = 0; row < totalRowCount; ++row){
+                values.clear();
+                bool notEmpty = false;
+                for (int col = table*columnsPerTable; col < (table * columnsPerTable) + columnsPerTable; ++col ){
+                    if (toExport.at(col)->isValid(row)){
+                        notEmpty = true;
+                        values << toExport.at(col)->asStringColumn()->textAt(row);
+                    }else{
+                        values << QLatin1String("-");
+                    }
+                    if (col != ((table * columnsPerTable)+ columnsPerTable)-1){
+                        values << QLatin1String(" & ");
+                    }
+                }
+                if (!notEmpty && skipEmptyRows){
+                    if (!emptyRowIndices.contains(row))
+                        emptyRowIndices << row;
+                }
+                if (emptyRowIndices.contains(row) && notEmpty){
+                    emptyRowIndices.remove(emptyRowIndices.indexOf(row));
+                }
+
+                if (notEmpty || !skipEmptyRows){
+                    foreach(const QString& s, values){
+                        out << s;
+                    }
+                    out << QLatin1String("\\\\ \n");
+                    if (gridLines)
+                        out << QLatin1String("\\hline \n");
+                    rowCount++;
+                    if (rowCount == maxRows){
+                        out << endTabularTable;
+                        out << QLatin1String("\\newpage \n");
+
+                        foreach(const QString& s, textable){
+                            out << s;
+                        }
+                        rowCount = 0;
+                    }
+                }
+            }
+            out << endTabularTable;
+        }
+
+        //new table for the remaining columns
+        QStringList remainingTable;
+        remainingTable << beginTable;
+        if (captions)
+            remainingTable << tableCaption;
+        remainingTable << QLatin1String("\\centering \n");
+        remainingTable << QLatin1String("\\begin{tabular}{") <<  (gridLines ? QLatin1String("|"):QLatin1String(""));
+        for (int c = 0; c < remainingColumns; ++c){
+            remainingTable << ( gridLines ? QLatin1String(" c |") : QLatin1String(" c ") );
+        }
+        remainingTable << QLatin1String("} \n");
+        if (gridLines)
+            remainingTable << QLatin1String("\\hline \n");
+        if (exportHeaders){
+            if(latexHeaders)
+                remainingTable << QLatin1String("\\rowcolor{HeaderBgColor} \n");
+            for (int col = 0; col < remainingColumns; ++col){
+                remainingTable << toExport.at(col + (tablesCount * columnsPerTable))->name();
+                if (col != remainingColumns-1){
+                    remainingTable << QLatin1String(" & ");
+                }
+            }
+            remainingTable << QLatin1String("\\\\ \n");
+            if (gridLines)
+                remainingTable << QLatin1String("\\hline \n");
+        }
+
+        foreach (const QString& s, remainingTable) {
+            out << s;
+        }
+
+        QStringList values;
+        for (int row = 0; row < totalRowCount; ++row){
+            values.clear();
+            bool notEmpty = false;
+            for (int col = 0; col < remainingColumns; ++col ){
+                if (toExport.at(col + (tablesCount * columnsPerTable))->isValid(row)){
+                    notEmpty = true;
+                    values << toExport.at(col + (tablesCount * columnsPerTable))->asStringColumn()->textAt(row);
+                }else{
+                    values << QLatin1String("-");
+                }
+                if (col != remainingColumns-1){
+                    values << QLatin1String(" & ");
+                }
+            }
+            if (!emptyRowIndices.contains(row) && !notEmpty){
+                notEmpty = true;
+            }
+            if (notEmpty || !skipEmptyRows){
+                foreach (const QString& s, values) {
+                    out << s;
+                }
+                out << QLatin1String("\\\\ \n");
+                if (gridLines)
+                    out << QLatin1String("\\hline \n");
+                rowCount++;
+                if (rowCount == maxRows){
+                    out << endTabularTable;
+                    out << QLatin1String("\\pagebreak[4] \n");
+
+                    foreach(const QString& s, remainingTable){
+                        out << s;
+                    }
+                    rowCount = 0;
+                }
+            }
+        }
+        out << endTabularTable;
+    }
+    else{
+        QStringList textable;
+        textable << beginTable;
+        if (captions)
+            textable << tableCaption;
+        textable << QLatin1String("\\centering \n");
+        textable << QLatin1String("\\begin{tabular}{") << (gridLines ? QLatin1String("|"):QLatin1String(""));
+        for (int c = 0; c < cols; ++c){
+            textable << ( gridLines ? QLatin1String(" c |") : QLatin1String(" c ") );
+        }
+        textable << QLatin1String("} \n");
+        if (gridLines)
+            textable << QLatin1String("\\hline \n");
+        if(exportHeaders){
+            if (latexHeaders)
+                textable << QLatin1String("\\rowcolor{HeaderBgColor} \n");
+            for (int col = 0; col < cols; ++col){
+                textable << toExport.at(col)->name();
+                if (col != cols-1){
+                    textable << QLatin1String(" & ");
+                }
+            }
+            textable << QLatin1String("\\\\ \n");
+            if (gridLines)
+                textable << QLatin1String("\\hline \n");
+        }
+
+        foreach (const QString& s, textable) {
+            out << s;
+        }
+        QStringList values;
+        for (int row = 0; row < totalRowCount; ++row){
+            values.clear();
+            bool notEmpty = false;
+
+            for (int col = 0; col < cols; ++col ){
+                if (toExport.at(col)->isValid(row)){
+                    notEmpty = true;
+                    values << toExport.at(col)->asStringColumn()->textAt(row);
+                }else{
+                    values << "-";
+                }
+                if (col != cols-1){
+                    values << " & ";
+                }
+            }
+
+            if (notEmpty || !skipEmptyRows){
+                foreach (const QString& s, values) {
+                    out << s;
+                }
+                out << QLatin1String("\\\\ \n");
+                if (gridLines)
+                    out << QLatin1String("\\hline \n");
+                rowCount++;
+                if (rowCount == maxRows){
+                    out << endTabularTable;
+                    out << QLatin1String("\\newpage \n");
+
+                    foreach (const QString& s, textable) {
+                        out << s;
+                    }
+                    rowCount = 0;
+                }
+            }
+        }
+        out << endTabularTable;
+    }
+    if (latexHeaders){
+        out << QLatin1String("\\end{document} \n");
+    }
 }

@@ -34,6 +34,10 @@
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 
+#include <gsl/gsl_statistics_double.h>
+#include <gsl/gsl_sort.h>
+#include <math.h>
+
 #include <QMetaEnum>
 #include <QThreadPool>
 
@@ -116,6 +120,7 @@ void Column::init() {
 	addChild(m_column_private->inputFilter());
 	addChild(m_column_private->outputFilter());
 	m_column_private->setWidth(120);
+    m_column_private->setStatisticsAvailable(false);
 
 	m_suppressDataChangedSignal = false;
 }
@@ -344,6 +349,7 @@ void Column::replaceTexts(int first, const QStringList& new_values)
  */
 void Column::setDateAt(int row, const QDate& new_value)
 {
+    setStatisticsAvailable(false);
 	setDateTimeAt(row, QDateTime(new_value, timeAt(row)));
 }
 
@@ -354,6 +360,7 @@ void Column::setDateAt(int row, const QDate& new_value)
  */
 void Column::setTimeAt(int row,const QTime& new_value)
 {
+    setStatisticsAvailable(false);
 	setDateTimeAt(row, QDateTime(dateAt(row), new_value));
 }
 
@@ -364,6 +371,7 @@ void Column::setTimeAt(int row,const QTime& new_value)
  */
 void Column::setDateTimeAt(int row, const QDateTime& new_value)
 {
+    setStatisticsAvailable(false);
 	exec(new ColumnSetDateTimeCmd(m_column_private, row, new_value));
 }
 
@@ -374,8 +382,10 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value)
  */
 void Column::replaceDateTimes(int first, const QList<QDateTime>& new_values)
 {
-	if (!new_values.isEmpty())
+    if (!new_values.isEmpty()){
+        setStatisticsAvailable(false);
 		exec(new ColumnReplaceDateTimesCmd(m_column_private, first, new_values));
+    }
 }
 
 /**
@@ -385,6 +395,7 @@ void Column::replaceDateTimes(int first, const QList<QDateTime>& new_values)
  */
 void Column::setValueAt(int row, double new_value)
 {
+    setStatisticsAvailable(false);
 	exec(new ColumnSetValueCmd(m_column_private, row, new_value));
 }
 
@@ -395,8 +406,114 @@ void Column::setValueAt(int row, double new_value)
  */
 void Column::replaceValues(int first, const QVector<double>& new_values)
 {
-	if (!new_values.isEmpty())
+    if (!new_values.isEmpty()){
+        setStatisticsAvailable(false);
 		exec(new ColumnReplaceValuesCmd(m_column_private, first, new_values));
+    }
+}
+
+void Column::setStatisticsAvailable(bool available)
+{
+    m_column_private->setStatisticsAvailable(available);
+}
+
+bool Column::statisticsAvailable() const
+{
+    return m_column_private->statisticsAvailable();
+}
+
+void Column::calculateStatistics(){
+
+    if (statisticsAvailable())
+    {
+        return;
+    }
+    m_statistics = ColumnStatistics();
+
+    QVector<double>* rowValues = reinterpret_cast<QVector<double>*>(data());
+
+    int notNanCount = 0;
+    double val;
+    for (int row = 0; row < rowValues->size(); row++) {
+        val = rowValues->value(row, NAN);
+        if (isnan(val) || isMasked(row))
+            continue;
+        ++notNanCount;
+    }
+    double* rowData = new double[notNanCount];
+    int idx = 0;
+    for(int row = 0; row < rowValues->size(); row++){
+        val = rowValues->value(row);
+        if (isnan(val)|| isMasked(row) )
+            continue;
+
+        rowData[idx] = rowValues->operator [](row);
+        idx++;
+    }
+
+    const size_t rowSize = notNanCount;
+    const size_t stride = 1;
+
+    m_statistics.minimum = gsl_stats_min(rowData, stride, rowSize);
+    m_statistics.maximum = gsl_stats_max(rowData, stride, rowSize);
+    m_statistics.arithmeticMean = gsl_stats_mean(rowData, stride, rowSize);
+    m_statistics.variance = gsl_stats_variance(rowData, stride, rowSize);
+    m_statistics.standardDeviation = gsl_stats_sd(rowData, stride, rowSize);
+    m_statistics.skewness = gsl_stats_skew(rowData, stride, rowSize);
+    m_statistics.kurtosis = gsl_stats_kurtosis(rowData, stride, rowSize);
+
+    double columnSum = 0.0;
+    double columnProduct = 1.0;
+    double columnSumNeg = 0.0;
+    double columnSumSquare = 0.0;
+    double columnSumMeanDeviation = 0.0;
+
+    QVector<double> absoluteMedianList;
+    absoluteMedianList.reserve(rowSize);
+
+    gsl_sort(rowData, stride, rowSize);
+    double median = gsl_stats_median_from_sorted_data(rowData, stride, rowSize);
+
+    QMap<double, int> frequencyOfValues;
+
+    double value;
+    for (int i = 0; i < rowValues->size(); ++i){
+        value = rowValues->value(i, NAN);
+        if (!isnan(value)){
+            value = rowValues->at(i);
+            if (frequencyOfValues.contains(value)){
+                frequencyOfValues.operator [](value)++;
+            }
+            else {
+                frequencyOfValues.insert(value, 1);
+            }
+            columnSum += value;
+            columnSumNeg += (1.0 / value);
+            columnSumSquare += pow(value, 2.0);
+            columnProduct *= value;
+            columnSumMeanDeviation += fabs( value - m_statistics.arithmeticMean );
+            absoluteMedianList[i] = fabs(value - median);
+        }
+    }
+
+    m_statistics.geometricMean = pow(columnProduct, 1.0 / notNanCount);
+    m_statistics.harmonicMean = 1.0 / ( (1.0 / notNanCount) * columnSumNeg );
+    m_statistics.contraharmonicMean = columnSumSquare / columnSum;
+    m_statistics.meanDeviation = (1.0 / notNanCount ) * columnSumMeanDeviation;
+    m_statistics.medianAbsoluteDeviation = gsl_stats_median_from_sorted_data(
+                                                                absoluteMedianList.constData(),
+                                                                stride,
+                                                                rowSize);
+    double entropy = 0.0;
+    QList<int> frequencyOfValuesValues = frequencyOfValues.values();
+    for (int i = 0; i < frequencyOfValuesValues.size(); ++i){
+        double frequencyNorm = static_cast<double>(frequencyOfValuesValues.at(i)) / rowSize;
+        entropy += (frequencyNorm * log2(frequencyNorm));
+    }
+
+    m_statistics.entropy = -entropy;
+
+    setStatisticsAvailable(true);
 }
 
 void* Column::data() const{

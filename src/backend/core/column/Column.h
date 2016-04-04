@@ -75,6 +75,7 @@ class Column : public AbstractColumn {
 		void setFormula(Interval<int> i, QString formula);
 		void setFormula(int row, QString formula);
 		void clearFormulas();
+        void calculateStatistics();
 
 		void* data() const;
 		QString textAt(int row) const;
@@ -92,7 +93,8 @@ class Column : public AbstractColumn {
 		virtual void replaceValues(int first, const QVector<double>& new_values);
 		void setChanged();
 		void setSuppressDataChangedSignal(bool);
-
+        void setStatisticsAvailable(bool available);
+        bool statisticsAvailable() const;
 		void save(QXmlStreamWriter*) const;
 		bool load(XmlStreamReader*);
 
