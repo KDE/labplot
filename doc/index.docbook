@@ -789,7 +789,7 @@ The menu is only available when a datapicker object is selected on the <guilabel
       arbitrary number of parameters can be provided -->
       Linear and non-linear curve fitting of data can be done with several predefined fit-models 
       (for instance polynomial, exponential, Gaussian or custom) to data consisting of x- and y-columns 
-      with an optional weigth column. With a custom model any function with unlimited number of parameters
+      with an optional weight column. With a custom model any function with unlimited number of parameters
       can be used for fitting. The options (number of iterations, tolerance, number of fitted points) can
       be used to optimize the fitting result which is displayed in the results text.
     </para>
