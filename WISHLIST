@@ -4,20 +4,6 @@ For items where it is clear that they need to be implemented in the near feature
 request ticket at the KDE bug tracker or Phabricator.
 
 #####################
-Planned Features:
-	* multiple regions
-		* shown/ not shown in print
-		* with background color
-	* mask matrix data
-			* mask single points
-			* check plotting from spreadsheet
-			* 2d surface plot
-			* mask data with mouse (maskPlot)
-			* check mask in graphlist
-	* data mode
-		* jump in data point steps (configure steps)
-			Worksheet::keyPressEvent()
-		* select plot for data mode
 I/O:
 ****
 	* reading multiple files from data dialog
@@ -30,15 +16,28 @@ I/O:
 		* progress when exporting data
 		* only export selected data
 
-drawing/ data manipulation:
+ANALYSIS:
+*********
+	* Statistics
+		* Box & Whisker plot
+			* support box plots: Can Labplot make boxed 2d plots? Like origin in win or kpl in linux?
+			I did not found this options in axes. If it is so, could you add this options in next version?
+			In scientific word such plots are always preferable.
+	* nonlinear fitting
+		* guess initial parameters
+		* Origin bietet auch die Moeglichkeit dass mehrere y-Spalten, die gefittet 
+			werden gemeinsame Parameter ("shared") haben koennen. (z.B. mehrere 
+			Messkurven, unter die man jeweils den gleichen untergrund fitten 
+			moechte.) - damit lassen sich im Prinzip die statistischen Fehler 
+			verringern. - Wie das allerdings im Algorithmus erreicht wird, weiss ich 
+			nicht. - Siehe Screenshot. "Origin-Fitting1.jpg"
+
+DRAWING/ DATA MANIPULATION:
 ***************************
-	* Spreadsheet
-		* Matrix operations on Spreadsheet: invert, diagonalize, eigenvalues, ...
 	* any mathematical formula as baseline
 	* move marker with mouse
 	* image profiling (vertical/horizontal profiles)
 	* Plots:
-		* set drawing object relative to graph (fixed to axes)
 		* sqrt/x^2 scales
 		* Pie plot:
 			* explode segments
@@ -166,67 +165,3 @@ drawing/ data manipulation:
 		erreichter Position markieren
 	* extract feature (see grace)
 
-ANALYSIS:
-*********
-	*  Analysis: approximation 
-		In the analysis menu, there is "interpolation", but it
-		is often desirable to have approximation instead.
-		Smoothing is not an alternative to a solid
-		approximation. A good approximation (for example, by an
-		exponential spline) can also be the tool to create
-		relatively noiseless derivatives - something currently
-		lacking, as far as I see. 
-	* curve discussion (root finding (GSL), local max/min, etc.)
-	* 2D histogram
-		* graph3d	 -> read 2d transform
-	* mask: average, smooth, compress, period, season, prune, hist, peak, diff, fft, interpol, convol, wavlet, hankel
-	* from spreadsheet: peak, regression, fft, convolution, wavelet
-	* GraphM: period, seasonal, prune, peak, diff, int, interpol
-	* addon functions fresnel/tamu-anova/Whittaker+Rydberg ?
-	* Statistics
-		* Box & Whisker plot
-			* support box plots : F Can Labplot make boxed 2d plots? Like origin in win or kpl in linux?
-			I did not found this options in axes. If it is so, could you add this options in next version?
-			In scientific word such plots are always preferable.
-		* TestsRListDialog :
-			* more tests/ options
-				* check stat12b.pdf
-					* binom, chisq
-				* check stat R package docu
-			* AnovaRListDialog.cc
-			* Survival Analysis
-	* check out KST plugins:
-		* periodigram (720 lines)
-		* cross spectrum (150+3500 lines)
-	* FFT
-		* inverse ( gsl_fft_complex_inverse/ fftw REDFT00,RODFT00, etc.)
-		* data window
-		// halflen (all values)
-		// amp_correction
-	* Noise:  matrix / 3d plot / image
-	* nonlinear fitting
-		* guess initial parameters
-		* Origin bietet auch die Moeglichkeit dass mehrere y-Spalten, die gefittet 
-			werden gemeinsame Parameter ("shared") haben koennen. (z.B. mehrere 
-			Messkurven, unter die man jeweils den gleichen untergrund fitten 
-			moechte.) - damit lassen sich im Prinzip die statistischen Fehler 
-			verringern. - Wie das allerdings im Algorithmus erreicht wird, weiss ich 
-			nicht. - Siehe Screenshot. "Origin-Fitting1.jpg"
-	* differences:		(dy(x))
-		* use gsl numeric differences
-	* integrate:
-		* gsl numerical integration
-		* weighted ?
-		* use the correct function if available	(checkbox) -> undefinite integral (?)
-	* (de)convolution of two data sets:
-		* use fftw/fftw3 too
-		* use mixed radix fft 
-		* 2D convolution (using 2d fft)
-	U simplify fit equation:
-		You insert 3 equations k1*x+y=2, y=k2*x^2+z, z=k3*x^.5+x^3
-		So, in the end if you replace y and z in the first equation, youll have only
-		one equation, and only one curve: k1*x+k2*x^2+k3*x^.5+x^3=2
-		Origin has this feature to simplify the writing of very large equations.
-	* smooth Savitzky-Golay (point-wise polynomial fit/ see Numerical Recipes)
-	* image operations?
-	* all selected graphs/cols?
