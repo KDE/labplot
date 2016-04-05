@@ -18,11 +18,6 @@ Planned Features:
 		* jump in data point steps (configure steps)
 			Worksheet::keyPressEvent()
 		* select plot for data mode
-
-GUI/Application:
-****************
-	* save/load predefined functions (in function dialog)
-	* use QLabel::setBuddy() for accels
 I/O:
 ****
 	* reading multiple files from data dialog
