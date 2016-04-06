@@ -30,12 +30,12 @@
 
 #include "ui_randomvalueswidget.h"
 #include <QMap>
-#include <KDialog>
+#include <QDialog>
 
 class Column;
 class Spreadsheet;
 
-class RandomValuesDialog : public KDialog{
+class RandomValuesDialog : public QDialog{
 	Q_OBJECT
 
 	public:

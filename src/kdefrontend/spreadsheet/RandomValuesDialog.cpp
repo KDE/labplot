@@ -34,6 +34,8 @@
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 #include <KLocalizedString>
+#include <QDialogButtonBox>
+#include <QPushButton>
 
 /*!
 	\class RandomValuesDialog
@@ -49,17 +51,26 @@ enum distribution {
 	NegativeBinomial, Pascal, Geometric, Hypergeometric, Logarithmic
 };
 
-RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : KDialog(parent, fl), m_spreadsheet(s) {
+RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl), m_spreadsheet(s) {
 
 	setWindowTitle(i18n("Random values"));
 
 	QWidget* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
-	setMainWidget( mainWidget );
+    QVBoxLayout layout;
+    layout.addWidget(mainWidget);
+    setLayout(&layout);
 
-	setButtons( KDialog::Ok | KDialog::Cancel );
-	setButtonText(KDialog::Ok, i18n("&Generate"));
-	setButtonToolTip(KDialog::Ok, i18n("Generate random values according to the selected distribution"));
+    //setButtons( KDialog::Ok | KDialog::Cancel );
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
+                                         | QDialogButtonBox::Cancel);
+
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    QPushButton *generate_button = new QPushButton(i18n("Generate"), this);
+    generate_button->setToolTip(i18n("Generate random values according to the selected distribution"));
+    buttonBox->addButton(generate_button, QDialogButtonBox::AcceptRole);
 
 	ui.cbDistribution->addItem(i18n("Gaussian Distribution"), Gaussian);
 // 	ui.cbDistribution->addItem(i18n("Gaussian Tail Distribution"));
@@ -395,21 +406,25 @@ void RandomValuesDialog::distributionChanged(int index) {
 
 void RandomValuesDialog::checkValues() {
 	if (ui.kleParameter1->text().simplified().isEmpty()) {
-		enableButton(KDialog::Ok, false);
+        QPushButton *ok_button = new QPushButton("&OK", this);
+        ok_button->setAutoDefault(false);
+      //  enableButton(QDialogButtonBox::Ok, false);
 		return;
 	}
 
 	if (ui.kleParameter2->isVisible() && ui.kleParameter2->text().simplified().isEmpty()) {
-		enableButton(KDialog::Ok, false);
-		return;
+        QPushButton *ok_button = new QPushButton("&OK", this);
+        ok_button->setAutoDefault(false);
+        return;
 	}
 
 	if (ui.kleParameter3->isVisible() && ui.kleParameter3->text().simplified().isEmpty()) {
-		enableButton(KDialog::Ok, false);
-		return;
+        QPushButton *ok_button = new QPushButton("&OK", this);
+        ok_button->setAutoDefault(false);
+        return;
 	}
-
-	enableButton(KDialog::Ok, true);
+    QPushButton *ok_button = new QPushButton("&OK", this);
+    ok_button->setAutoDefault(true);
 }
 
 void RandomValuesDialog::generate() {

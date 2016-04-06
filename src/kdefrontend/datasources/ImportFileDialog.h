@@ -31,6 +31,7 @@
 #define IMPORTFILEDIALOG_H
 
 #include <KDialog>
+#include <QMenu>
 
 class MainWin;
 class ImportFileWidget;

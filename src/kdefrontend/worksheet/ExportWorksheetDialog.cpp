@@ -35,6 +35,7 @@
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <QDebug>
+#include <QWidget>
 
 /*!
 	\class ExportWorksheetDialog
