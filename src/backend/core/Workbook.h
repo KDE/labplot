@@ -49,7 +49,7 @@ class Workbook : public AbstractPart, public scripted {
 
         virtual bool exportView() const;
         virtual bool printView();
-		virtual void printPreview() const;
+        virtual bool printPreview() const;
 
 		Spreadsheet* currentSpreadsheet() const;
 		Matrix* currentMatrix() const;

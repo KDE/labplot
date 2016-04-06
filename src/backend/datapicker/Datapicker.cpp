@@ -117,13 +117,15 @@ bool Datapicker::printView() {
     return ret;
 }
 
-void Datapicker::printPreview() const {
+bool Datapicker::printPreview() const {
 	Spreadsheet* s = currentSpreadsheet();
+    bool ret;
 	if (s) {
-		s->printPreview();
+        ret = s->printPreview();
 	} else {
-		m_image->printPreview();
+        ret = m_image->printPreview();
 	}
+    return ret;
 }
 
 DatapickerCurve* Datapicker::activeCurve() {

@@ -204,11 +204,11 @@ bool Worksheet::printView() {
     return ret;
 }
 
-void Worksheet::printPreview() const {
+bool Worksheet::printPreview() const {
 	const WorksheetView* view = reinterpret_cast<const WorksheetView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
-	dlg->exec();
+    return dlg->exec();
 }
 
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {

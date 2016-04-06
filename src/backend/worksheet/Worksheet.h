@@ -57,7 +57,7 @@ class Worksheet: public AbstractPart, public scripted {
 
         virtual bool exportView() const;
         virtual bool printView();
-		virtual void printPreview() const;
+        virtual bool printPreview() const;
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);

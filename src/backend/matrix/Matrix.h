@@ -50,7 +50,7 @@ class Matrix : public AbstractDataSource {
 
         virtual bool exportView() const;
         virtual bool printView();
-		virtual void printPreview() const;
+        virtual bool printPreview() const;
 
 		BASIC_D_ACCESSOR_DECL(int, rowCount, RowCount)
 		BASIC_D_ACCESSOR_DECL(int, columnCount, ColumnCount)

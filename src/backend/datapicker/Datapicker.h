@@ -54,7 +54,7 @@ class Datapicker : public AbstractPart, public scripted {
 
         virtual bool exportView() const;
         virtual bool printView();
-		virtual void printPreview() const;
+        virtual bool printPreview() const;
 
 		DatapickerCurve* activeCurve();
 		Spreadsheet* currentSpreadsheet() const;

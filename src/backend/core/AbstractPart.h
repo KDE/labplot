@@ -50,7 +50,7 @@ class AbstractPart : public AbstractAspect {
 		virtual QMenu* createContextMenu();
         virtual bool exportView() const = 0;
         virtual bool printView() = 0;
-		virtual void printPreview() const = 0;
+        virtual bool printPreview() const = 0;
 
 	private:
 		mutable PartMdiView* m_mdiWindow;

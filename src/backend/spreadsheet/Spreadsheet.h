@@ -45,7 +45,7 @@ class Spreadsheet : public AbstractDataSource {
 
         virtual bool exportView() const;
         virtual bool printView();
-		virtual void printPreview() const;
+        virtual bool printPreview() const;
 
 		int columnCount() const;
 		int columnCount(AbstractColumn::PlotDesignation) const;

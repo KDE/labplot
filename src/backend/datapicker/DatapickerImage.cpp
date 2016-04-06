@@ -180,11 +180,11 @@ bool DatapickerImage::printView() {
     return ret;
 }
 
-void DatapickerImage::printPreview() const {
+bool DatapickerImage::printPreview() const {
 	const DatapickerImageView* view = reinterpret_cast<const DatapickerImageView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
-	dlg->exec();
+    return dlg->exec();
 }
 
 /*!

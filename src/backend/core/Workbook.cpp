@@ -94,15 +94,17 @@ bool Workbook::printView() {
     return ret;
 }
 
-void Workbook::printPreview() const {
+bool Workbook::printPreview() const {
 	Spreadsheet* s = currentSpreadsheet();
+    bool ret = false;
 	if (s) {
-		s->printPreview();
+        ret = s->printPreview();
 	} else {
 		Matrix* m = currentMatrix();
 		if (m)
-			m->printPreview();
+            ret = m->printPreview();
 	}
+    return ret;
 }
 
 Spreadsheet* Workbook::currentSpreadsheet() const {

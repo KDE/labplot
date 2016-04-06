@@ -143,11 +143,11 @@ bool Spreadsheet::printView() {
     return ret;
 }
 
-void Spreadsheet::printPreview() const {
+bool Spreadsheet::printPreview() const {
 	const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
-	dlg->exec();
+    return dlg->exec();
 }
 
 /*!
