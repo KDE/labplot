@@ -49,16 +49,22 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 
 	textEditWidget.setReadOnly(true);
 	textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
-    QVBoxLayout layout;
-    layout.addWidget(&textEditWidget);
-    this->setLayout(&layout);
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-    setWindowIcon(QIcon::fromTheme("help-about"));
-    setWindowTitle(i18n("File info"));
- 	resize( QSize(500,300) );
+	QVBoxLayout *layout = new QVBoxLayout(this);
+	layout->addWidget(&textEditWidget);
+
+	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+
+	layout->addWidget(buttonBox);
+
+	setWindowIcon(QIcon::fromTheme("help-about"));
+	setWindowTitle(i18n("File info"));
+
+	setLayout(layout);
+
+	resize( QSize(500,300) );
 }
 
 void FileInfoDialog::setFiles(QStringList& files){

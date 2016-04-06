@@ -31,6 +31,7 @@
 #include "ui_randomvalueswidget.h"
 #include <QMap>
 #include <QDialog>
+#include <QPushButton>
 
 class Column;
 class Spreadsheet;
@@ -47,6 +48,7 @@ class RandomValuesDialog : public QDialog{
 		QList<Column*> m_columns;
 		Spreadsheet* m_spreadsheet;
 		QMap<int, QString> m_formulaPixs;
+		QPushButton *okButton;
 
 	private slots:
 		void generate();

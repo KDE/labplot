@@ -57,20 +57,16 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 
 	QWidget* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
-    QVBoxLayout layout;
-    layout.addWidget(mainWidget);
-    setLayout(&layout);
+	QVBoxLayout *layout = new QVBoxLayout(this);
 
-    //setButtons( KDialog::Ok | KDialog::Cancel );
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
-                                         | QDialogButtonBox::Cancel);
-
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-
-    QPushButton *generate_button = new QPushButton(i18n("Generate"), this);
-    generate_button->setToolTip(i18n("Generate random values according to the selected distribution"));
-    buttonBox->addButton(generate_button, QDialogButtonBox::AcceptRole);
+	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	okButton = buttonBox->button(QDialogButtonBox::Ok);
+	okButton->setDefault(true);
+	okButton->setToolTip(i18n("Generate random values according to the selected distribution"));
+	okButton->setText(i18n("&Generate"));
+	layout->addWidget(mainWidget);
+	layout->addWidget(buttonBox);
+	setLayout(layout);
 
 	ui.cbDistribution->addItem(i18n("Gaussian Distribution"), Gaussian);
 // 	ui.cbDistribution->addItem(i18n("Gaussian Tail Distribution"));
@@ -151,7 +147,9 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	connect( ui.kleParameter1, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
 	connect( ui.kleParameter2, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
 	connect( ui.kleParameter3, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
-	connect(this, SIGNAL(okClicked()), this, SLOT(generate()));
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(generate()));
+	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 
 	//Gaussian distribution as default
 	this->distributionChanged(0);
@@ -406,25 +404,22 @@ void RandomValuesDialog::distributionChanged(int index) {
 
 void RandomValuesDialog::checkValues() {
 	if (ui.kleParameter1->text().simplified().isEmpty()) {
-        QPushButton *ok_button = new QPushButton("&OK", this);
-        ok_button->setAutoDefault(false);
-      //  enableButton(QDialogButtonBox::Ok, false);
+		okButton->setEnabled(false);
 		return;
 	}
 
 	if (ui.kleParameter2->isVisible() && ui.kleParameter2->text().simplified().isEmpty()) {
-        QPushButton *ok_button = new QPushButton("&OK", this);
-        ok_button->setAutoDefault(false);
-        return;
+		okButton->setEnabled(false);
+		return;
 	}
 
 	if (ui.kleParameter3->isVisible() && ui.kleParameter3->text().simplified().isEmpty()) {
-        QPushButton *ok_button = new QPushButton("&OK", this);
-        ok_button->setAutoDefault(false);
-        return;
+		okButton->setEnabled(false);
+		return;
 	}
-    QPushButton *ok_button = new QPushButton("&OK", this);
-    ok_button->setAutoDefault(true);
+
+	okButton->setEnabled(true);
+	return;
 }
 
 void RandomValuesDialog::generate() {

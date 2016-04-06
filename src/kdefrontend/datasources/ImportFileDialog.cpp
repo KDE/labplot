@@ -66,8 +66,8 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 	vLayout->setContentsMargins(0,0,0,0);
 
 	importFileWidget = new ImportFileWidget(mainWidget, fileName);
-    vLayout->addWidget(importFileWidget);
-    setMainWidget( mainWidget );
+	vLayout->addWidget(importFileWidget);
+	setMainWidget( mainWidget );
 
 	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 

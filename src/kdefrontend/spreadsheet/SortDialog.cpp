@@ -47,7 +47,7 @@
 
 SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : QDialog( parent, fl ){
 
-    setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
+	setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
 	setWindowTitle(i18n("Sort columns"));
 	setSizeGripEnabled(true);
 
@@ -58,8 +58,8 @@ SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : QDialog( parent, fl )
 
 	layout->addWidget( new QLabel( i18n("Order")), 0, 0 );
 	cbOrdering = new QComboBox();
-    cbOrdering->addItem(QIcon::fromTheme("view-sort-ascending"), i18n("Ascending"));
-    cbOrdering->addItem(QIcon::fromTheme("view-sort-descending"), i18n("Descending"));
+	cbOrdering->addItem(QIcon::fromTheme("view-sort-ascending"), i18n("Ascending"));
+	cbOrdering->addItem(QIcon::fromTheme("view-sort-descending"), i18n("Descending"));
 	layout->addWidget(cbOrdering, 0, 1 );
 	
 	lblType = new QLabel(i18n("Sort columns"));
@@ -76,15 +76,21 @@ SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : QDialog( parent, fl )
 	layout->addWidget(cbColumns, 2, 1);
 	layout->setRowStretch(3, 1);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
+
+	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
                                          | QDialogButtonBox::Cancel);
 
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    buttonBox->button(QDialogButtonBox::Ok)->setText(i18n("Sort"));
+	buttonBox->button(QDialogButtonBox::Ok)->setText(i18n("Sort"));
 
-	connect(this, SIGNAL(okClicked()), this, SLOT(sort()));
-    connect( cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(changeType(int)));
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(sort()));
+	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+
+	layout->addWidget(buttonBox);
+
+	setLayout(layout);
+
+	connect( cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(changeType(int)));
 
 	this->resize(400,0);
 }
