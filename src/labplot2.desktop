@@ -83,4 +83,3 @@ MimeType=application/x-LabPlot-gzip;
 Categories=Qt;KDE;Education;Science;Physics;Math;
 X-DocPath=labplot2/index.html
 X-ServiceTypes=Browser/View
-X-KDE-Library=libLabPlot
