@@ -1491,8 +1491,9 @@ void MainWin::exportDialog() {
 		return;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-	part->exportView();
-	statusBar()->showMessage(i18n("%1 exported", part->name()));
+    if(part->exportView()){
+        statusBar()->showMessage(i18n("%1 exported", part->name()));
+    }
 }
 
 /*!

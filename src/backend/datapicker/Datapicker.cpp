@@ -95,22 +95,26 @@ QWidget* Datapicker::view() const {
 }
 
 
-void Datapicker::exportView() const {
+bool Datapicker::exportView() const {
 	Spreadsheet* s = currentSpreadsheet();
+    bool ret;
 	if (s) {
-		s->exportView();
+        ret = s->exportView();
 	} else {
-		m_image->exportView();
+        ret = m_image->exportView();
 	}
+    return ret;
 }
 
-void Datapicker::printView() {
+bool Datapicker::printView() {
 	Spreadsheet* s = currentSpreadsheet();
+    bool ret;
 	if (s) {
-		s->printView();
+        ret = s->printView();
 	} else {
-		m_image->printView();
+        ret = m_image->printView();
 	}
+    return ret;
 }
 
 void Datapicker::printPreview() const {

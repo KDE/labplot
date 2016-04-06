@@ -126,11 +126,12 @@ QWidget* Matrix::view() const {
 	return m_view;
 }
 
-void Matrix::exportView() const {
+bool Matrix::exportView() const {
 	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(m_view);
 	dlg->setFileName(name());
 	dlg->setMatrixMode(true);
-    if (dlg->exec()==QDialog::Accepted) {
+    bool ret;
+    if ((ret = dlg->exec()==QDialog::Accepted)) {
         const QString path = dlg->path();
         const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
         WAIT_CURSOR;
@@ -150,17 +151,20 @@ void Matrix::exportView() const {
         RESET_CURSOR;
     }
 	delete dlg;
+    return ret;
 }
 
-void Matrix::printView() {
+bool Matrix::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
+    bool ret;
 	dlg->setWindowTitle(i18n("Print Matrix"));
-	if (dlg->exec() == QDialog::Accepted) {
+    if ((ret = dlg->exec() == QDialog::Accepted)) {
 		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
 		view->print(&printer);
 	}
 	delete dlg;
+    return ret;
 }
 
 void Matrix::printPreview() const {

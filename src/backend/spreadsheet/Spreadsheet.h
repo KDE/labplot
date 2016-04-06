@@ -43,8 +43,8 @@ class Spreadsheet : public AbstractDataSource {
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
-		virtual void exportView() const;
-		virtual void printView();
+        virtual bool exportView() const;
+        virtual bool printView();
 		virtual void printPreview() const;
 
 		int columnCount() const;
@@ -72,6 +72,7 @@ class Spreadsheet : public AbstractDataSource {
 		// used from model to inform dock
 		void emitRowCountChanged() { emit rowCountChanged(rowCount()); }
 		void emitColumnCountChanged() { emit columnCountChanged(columnCount()); }
+        bool m_viewExported;
 
 	public slots:
 		void appendRows(int count);

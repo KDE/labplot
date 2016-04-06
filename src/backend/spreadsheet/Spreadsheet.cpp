@@ -102,10 +102,11 @@ QWidget *Spreadsheet::view() const {
 	return m_view;
 }
 
-void Spreadsheet::exportView() const {
+bool Spreadsheet::exportView() const {
 	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(view());
 	dlg->setFileName(name());
-    if (dlg->exec()==QDialog::Accepted){
+    bool ret;
+    if ((ret = dlg->exec()==QDialog::Accepted)){
         const QString path = dlg->path();
         const bool exportHeader = dlg->exportHeader();
         const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
@@ -126,17 +127,20 @@ void Spreadsheet::exportView() const {
         RESET_CURSOR;
     }
 	delete dlg;
+    return ret;
 }
 
-void Spreadsheet::printView() {
+bool Spreadsheet::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, view());
+    bool ret;
 	dlg->setWindowTitle(i18n("Print Spreadsheet"));
-	if (dlg->exec() == QDialog::Accepted) {
+    if ((ret = dlg->exec() == QDialog::Accepted)) {
 		const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
 		view->print(&printer);
 	}
 	delete dlg;
+    return ret;
 }
 
 void Spreadsheet::printPreview() const {

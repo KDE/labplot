@@ -149,10 +149,11 @@ QWidget* DatapickerImage::view() const {
 	return m_view;
 }
 
-void DatapickerImage::exportView() const {
+bool DatapickerImage::exportView() const {
 	ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
 	dlg->setFileName(name());
-	if (dlg->exec()==QDialog::Accepted){
+    bool ret;
+    if ( (ret = dlg->exec()==QDialog::Accepted)){
 		const QString path = dlg->path();
 		const WorksheetView::ExportFormat format = dlg->exportFormat();
 		const int resolution = dlg->exportResolution();
@@ -163,17 +164,20 @@ void DatapickerImage::exportView() const {
 		RESET_CURSOR;
 	}
 	delete dlg;
+    return ret;
 }
 
-void DatapickerImage::printView() {
+bool DatapickerImage::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
+    bool ret;
 	dlg->setWindowTitle(i18n("Print Datapicker Image"));
-	if (dlg->exec() == QDialog::Accepted) {
+    if ((ret = dlg->exec() == QDialog::Accepted)) {
 		DatapickerImageView* view = reinterpret_cast<DatapickerImageView*>(m_view);
 		view->print(&printer);
 	}
 	delete dlg;
+    return ret;
 }
 
 void DatapickerImage::printPreview() const {

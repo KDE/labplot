@@ -171,10 +171,11 @@ QWidget *Worksheet::view() const {
 	return m_view;
 }
 
-void Worksheet::exportView() const {
+bool Worksheet::exportView() const {
 	ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
 	dlg->setFileName(name());
-	if (dlg->exec()==QDialog::Accepted){
+    bool ret;
+    if ((ret = dlg->exec()==QDialog::Accepted)){
 		QString path = dlg->path();
 		const WorksheetView::ExportFormat format = dlg->exportFormat();
 		const WorksheetView::ExportArea area = dlg->exportArea();
@@ -187,17 +188,20 @@ void Worksheet::exportView() const {
 		RESET_CURSOR;
 	}
 	delete dlg;
+    return ret;
 }
 
-void Worksheet::printView() {
+bool Worksheet::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18n("Print Worksheet"));
-	if (dlg->exec() == QDialog::Accepted) {
+    bool ret;
+    if ((ret = dlg->exec() == QDialog::Accepted)) {
 		WorksheetView* view = reinterpret_cast<WorksheetView*>(m_view);
 		view->print(&printer);
 	}
 	delete dlg;
+    return ret;
 }
 
 void Worksheet::printPreview() const {

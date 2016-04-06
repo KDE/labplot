@@ -47,8 +47,8 @@ class Workbook : public AbstractPart, public scripted {
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
-		virtual void exportView() const;
-		virtual void printView();
+        virtual bool exportView() const;
+        virtual bool printView();
 		virtual void printPreview() const;
 
 		Spreadsheet* currentSpreadsheet() const;

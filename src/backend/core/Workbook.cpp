@@ -68,26 +68,30 @@ QWidget* Workbook::view() const {
 	return m_view;
 }
 
-void Workbook::exportView() const {
+bool Workbook::exportView() const {
 	Spreadsheet* s = currentSpreadsheet();
+    bool ret = false;
 	if (s) {
-		s->exportView();
+        ret = s->exportView();
 	} else {
 		Matrix* m = currentMatrix();
 		if (m)
-			m->exportView();
+            ret = m->exportView();
 	}
+    return ret;
 }
 
-void Workbook::printView() {
+bool Workbook::printView() {
 	Spreadsheet* s = currentSpreadsheet();
+    bool ret = false;
 	if (s) {
-		s->printView();
+        ret = s->printView();
 	} else {
 		Matrix* m = currentMatrix();
 		if (m)
-			m->printView();
+            ret = m->printView();
 	}
+    return ret;
 }
 
 void Workbook::printPreview() const {
