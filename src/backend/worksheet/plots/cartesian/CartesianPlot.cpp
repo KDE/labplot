@@ -34,6 +34,7 @@
 #include "XYEquationCurve.h"
 #include "XYFitCurve.h"
 #include "XYFourierFilterCurve.h"
+#include "XYInterpolationCurve.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -348,6 +349,7 @@ void CartesianPlot::initActions(){
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
 	addFitCurveAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
 	addFourierFilterCurveAction = new KAction(KIcon("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
+	addInterpolationCurveAction = new KAction(KIcon("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), this);
 	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
 	addHorizontalAxisAction = new KAction(KIcon("labplot-axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new KAction(KIcon("labplot-axis-vertical"), i18n("vertical axis"), this);
@@ -705,6 +707,12 @@ XYFitCurve* CartesianPlot::addFitCurve(){
 
 XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve(){
 	XYFourierFilterCurve* curve = new XYFourierFilterCurve("Fourier filter");
+	this->addChild(curve);
+	return curve;
+}
+
+XYInterpolationCurve* CartesianPlot::addInterpolationCurve(){
+	XYInterpolationCurve* curve = new XYInterpolationCurve("Interpolation");
 	this->addChild(curve);
 	return curve;
 }
@@ -1874,6 +1882,12 @@ bool CartesianPlot::load(XmlStreamReader* reader){
 			}
 		} else if(reader->name() == "xyFourierFilterCurve") {
 			XYFourierFilterCurve* curve = addFourierFilterCurve();
+			if (!curve->load(reader)){
+				removeChild(curve);
+			return false;
+			}
+		} else if(reader->name() == "xyInterpolationCurve") {
+			XYInterpolationCurve* curve = addInterpolationCurve();
 			if (!curve->load(reader)){
 				removeChild(curve);
 			return false;
