@@ -33,6 +33,7 @@
 #include <QHeaderView>
 #include <QLayout>
 #include <KLocalizedString>
+#include <KLineEdit>
 
 /*!
     \class TreeViewComboBox
@@ -44,7 +45,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent){
 
 	m_layout = new QVBoxLayout;
 	m_treeView = new QTreeView;
-	m_lineEdit = new QLineEdit;
+	m_lineEdit = new KLineEdit;
 	m_groupBox = new QGroupBox;
 	
 	m_layout->setContentsMargins(0, 0, 0, 0);
@@ -63,6 +64,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent):QComboBox(parent){
 	m_treeView->setUniformRowHeights(true);
 	
 	m_lineEdit->setPlaceholderText(i18n("Search/Filter text"));
+	qobject_cast<KLineEdit*>(m_lineEdit)->setClearButtonShown(true);
 	m_lineEdit->setFocus();
 
 	addItem("");
