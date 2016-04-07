@@ -16,6 +16,7 @@ public:
     void addColumn(Column* col);
 private:
     void addTabs();
+    const QString isNanValue(const double value);
     Ui::StatisticsDialog ui;
     QDialogButtonBox* m_okButton;
     QString m_htmlText;
