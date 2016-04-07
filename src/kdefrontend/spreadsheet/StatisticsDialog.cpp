@@ -1,10 +1,12 @@
 #include "StatisticsDialog.h"
 #include "backend/core/column/Column.h"
+#include "math.h"
 
 #include <QTextEdit>
 #include <QKeyEvent>
 #include <QDesktopWidget>
 #include <QVBoxLayout>
+#include <KPushButton>
 
 StatisticsDialog::StatisticsDialog(const QString & title, QWidget *parent) :
     QTabWidget(parent){
@@ -100,26 +102,29 @@ void StatisticsDialog::showEvent(QShowEvent * event){
     event->accept();
 }
 
+const QString StatisticsDialog::isNanValue(const double value){
+    return (isnan(value) ? "The value couldn't be calculated." : QString::number(value));
+}
+
 void StatisticsDialog::addTabs(){
     for (int i = 0; i < m_columns.size(); ++i){
         QTextEdit* textEdit = new QTextEdit;
         textEdit->setReadOnly(true);
-
         if (i == 0){
             m_columns[0]->calculateStatistics();
-            textEdit->setHtml(m_htmlText.arg(m_columns[0]->statistics().minimum).
-                    arg(m_columns[0]->statistics().maximum).
-                    arg(m_columns[0]->statistics().arithmeticMean).
-                    arg(m_columns[0]->statistics().geometricMean).
-                    arg(m_columns[0]->statistics().harmonicMean).
-                    arg(m_columns[0]->statistics().contraharmonicMean).
-                    arg(m_columns[0]->statistics().variance).
-                    arg(m_columns[0]->statistics().standardDeviation).
-                    arg(m_columns[0]->statistics().meanDeviation).
-                    arg(m_columns[0]->statistics().medianAbsoluteDeviation).
-                    arg(m_columns[0]->statistics().skewness).
-                    arg(m_columns[0]->statistics().kurtosis).
-                    arg(m_columns[0]->statistics().entropy));
+            textEdit->setHtml(m_htmlText.arg(isNanValue(m_columns[0]->statistics().minimum)).
+                    arg(isNanValue(m_columns[0]->statistics().maximum)).
+                    arg(isNanValue(m_columns[0]->statistics().arithmeticMean)).
+                    arg(isNanValue(m_columns[0]->statistics().geometricMean)).
+                    arg(isNanValue(m_columns[0]->statistics().harmonicMean)).
+                    arg(isNanValue(m_columns[0]->statistics().contraharmonicMean)).
+                    arg(isNanValue(m_columns[0]->statistics().variance)).
+                    arg(isNanValue(m_columns[0]->statistics().standardDeviation)).
+                    arg(isNanValue(m_columns[0]->statistics().meanDeviation)).
+                    arg(isNanValue(m_columns[0]->statistics().medianAbsoluteDeviation)).
+                    arg(isNanValue(m_columns[0]->statistics().skewness)).
+                    arg(isNanValue(m_columns[0]->statistics().kurtosis)).
+                    arg(isNanValue(m_columns[0]->statistics().entropy)));
         }
 
         QWidget* widget = new QWidget;
@@ -142,19 +147,19 @@ void StatisticsDialog::calculateStatisticsOnCurrentTab(int index){
         m_columns[index]->calculateStatistics();
         QTextEdit* textEdit = currentWidget()->findChild<QTextEdit*>();
 
-        textEdit->setHtml(m_htmlText.arg(m_columns[index]->statistics().minimum).
-                          arg(m_columns[index]->statistics().maximum).
-                          arg(m_columns[index]->statistics().arithmeticMean).
-                          arg(m_columns[index]->statistics().geometricMean).
-                          arg(m_columns[index]->statistics().harmonicMean).
-                          arg(m_columns[index]->statistics().contraharmonicMean).
-                          arg(m_columns[index]->statistics().variance).
-                          arg(m_columns[index]->statistics().standardDeviation).
-                          arg(m_columns[index]->statistics().meanDeviation).
-                          arg(m_columns[index]->statistics().medianAbsoluteDeviation).
-                          arg(m_columns[index]->statistics().skewness).
-                          arg(m_columns[index]->statistics().kurtosis).
-                          arg(m_columns[index]->statistics().entropy));
+        textEdit->setHtml(m_htmlText.arg(isNanValue(m_columns[index]->statistics().minimum)).
+                arg(isNanValue(m_columns[index]->statistics().maximum)).
+                arg(isNanValue(m_columns[index]->statistics().arithmeticMean)).
+                arg(isNanValue(m_columns[index]->statistics().geometricMean)).
+                arg(isNanValue(m_columns[index]->statistics().harmonicMean)).
+                arg(isNanValue(m_columns[index]->statistics().contraharmonicMean)).
+                arg(isNanValue(m_columns[index]->statistics().variance)).
+                arg(isNanValue(m_columns[index]->statistics().standardDeviation)).
+                arg(isNanValue(m_columns[index]->statistics().meanDeviation)).
+                arg(isNanValue(m_columns[index]->statistics().medianAbsoluteDeviation)).
+                arg(isNanValue(m_columns[index]->statistics().skewness)).
+                arg(isNanValue(m_columns[index]->statistics().kurtosis)).
+                arg(isNanValue(m_columns[index]->statistics().entropy)));
     }
 }
 
