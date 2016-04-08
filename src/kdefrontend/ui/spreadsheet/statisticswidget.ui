@@ -1,49 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>StatisticsDialog</class>
- <widget class="QTabWidget" name="StatisticsDialog">
-  <property name="enabled">
-   <bool>true</bool>
-  </property>
+ <widget class="QWidget" name="StatisticsDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>470</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Statistics</string>
+   <string>Form</string>
   </property>
-  <property name="tabPosition">
-   <enum>QTabWidget::North</enum>
-  </property>
-  <property name="tabShape">
-   <enum>QTabWidget::Rounded</enum>
-  </property>
-  <property name="currentIndex">
-   <number>1</number>
-  </property>
-  <property name="documentMode">
-   <bool>false</bool>
-  </property>
-  <widget class="QWidget" name="tab">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <attribute name="title">
-    <string>Tab 1</string>
-   </attribute>
-  </widget>
-  <widget class="QWidget" name="tab1">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <attribute name="title">
-    <string>Tab 2</string>
-   </attribute>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QTabWidget" name="tw_statisticsTabs">
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Tab 1</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Tab 2</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
