@@ -30,21 +30,26 @@
 #define XYINTERPOLATIONCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include <gsl/gsl_version.h>
 
 class XYInterpolationCurvePrivate;
 class XYInterpolationCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum InterpolationType {Linear,Polynomial};	// TODO:more
+#if GSL_MAJOR_VERSION >= 2
+		enum InterpolationType {Linear,Polynomial,CSpline,CSplinePeriodic,Akima,AkimaPeriodic,Steffen};	// TODO:more
+#else
+		enum InterpolationType {Linear,Polynomial,CSpline,CSplinePeriodic,Akima,AkimaPeriodic};	// TODO:more
+#endif
 		enum InterpolationEval {Function,Derivative,Derivative2,Integral};
 
 		struct InterpolationData {
-			InterpolationData() : type(Linear), npoints(1), evalute(Function) {};
+			InterpolationData() : type(Linear), evaluate(Function), npoints(100) {};
 
-			XYInterpolationCurve::InterpolationType type;	// type of interpolation
-			unsigned int npoints;			// nr. of points
-			InterpolationEval evalute;		// what to evaluate
+			XYInterpolationCurve::InterpolationType type;		// type of interpolation
+			XYInterpolationCurve::InterpolationEval evaluate;	// what to evaluate
+			unsigned int npoints;					// nr. of points
 		};
 		struct InterpolationResult {
 			InterpolationResult() : available(false), valid(false), elapsedTime(0) {};

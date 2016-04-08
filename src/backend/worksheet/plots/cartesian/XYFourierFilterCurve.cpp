@@ -252,7 +252,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	double cutoff = filterData.cutoff, cutoff2 = filterData.cutoff2;
 	XYFourierFilterCurve::CutoffUnit unit = filterData.unit, unit2 = filterData.unit2;
 #ifdef QT_DEBUG
-	qDebug()<<"type :"<<type;
+	qDebug()<<"type:"<<type;
 	qDebug()<<"form (order "<<order<<") :"<<form;
 	qDebug()<<"cutoffs ="<<cutoff<<cutoff2;
 	qDebug()<<"unit :"<<unit<<unit2;

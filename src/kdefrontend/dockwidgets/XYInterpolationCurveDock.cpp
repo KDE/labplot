@@ -72,23 +72,21 @@ void XYInterpolationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 1, 1, 2);
 
-	uiGeneralTab.cbType->addItem(i18n("Low pass"));
-	uiGeneralTab.cbType->addItem(i18n("High pass"));
-	uiGeneralTab.cbType->addItem(i18n("Band pass"));
-	uiGeneralTab.cbType->addItem(i18n("Band reject"));
-	uiGeneralTab.cbType->addItem(i18n("Threshold"));
+	uiGeneralTab.cbType->addItem(i18n("Linear"));
+	uiGeneralTab.cbType->addItem(i18n("Polynomial"));
+	uiGeneralTab.cbType->addItem(i18n("Cubic spline"));
+	uiGeneralTab.cbType->addItem(i18n("Cubic spline - periodic"));
+	uiGeneralTab.cbType->addItem(i18n("Akima spline"));
+	uiGeneralTab.cbType->addItem(i18n("Akima spline - periodic"));
+#if GSL_MAJOR_VERSION >= 2
+	uiGeneralTab.cbType->addItem(i18n("Steffen spline"));
+#endif
 
-	uiGeneralTab.cbForm->addItem(i18n("Ideal"));
-	uiGeneralTab.cbForm->addItem(i18n("Butterworth"));
-	uiGeneralTab.cbForm->addItem(i18n("Chebyshev type I"));
-	uiGeneralTab.cbForm->addItem(i18n("Chebyshev type II"));
+	uiGeneralTab.cbEval->addItem(i18n("Function"));
+	uiGeneralTab.cbEval->addItem(i18n("Derivative"));
+	uiGeneralTab.cbEval->addItem(i18n("Second derivative"));
+	uiGeneralTab.cbEval->addItem(i18n("Integral"));
 
-	uiGeneralTab.cbUnit->addItem(i18n("Frequency (Hz)"));
-	uiGeneralTab.cbUnit->addItem(i18n("Fraction"));
-	uiGeneralTab.cbUnit->addItem(i18n("Index"));
-	uiGeneralTab.cbUnit2->addItem(i18n("Frequency (Hz)"));
-	uiGeneralTab.cbUnit2->addItem(i18n("Fraction"));
-	uiGeneralTab.cbUnit2->addItem(i18n("Index"));
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
@@ -101,12 +99,8 @@ void XYInterpolationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
-	connect( uiGeneralTab.cbForm, SIGNAL(currentIndexChanged(int)), this, SLOT(formChanged(int)) );
-	connect( uiGeneralTab.sbOrder, SIGNAL(valueChanged(int)), this, SLOT(orderChanged(int)) );
-	connect( uiGeneralTab.sbCutoff, SIGNAL(valueChanged(double)), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.sbCutoff2, SIGNAL(valueChanged(double)), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.cbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged(int)) );
-	connect( uiGeneralTab.cbUnit2, SIGNAL(currentIndexChanged(int)), this, SLOT(unit2Changed(int)) );
+	connect( uiGeneralTab.cbEval, SIGNAL(currentIndexChanged(int)), this, SLOT(evaluateChanged(int)) );
+	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(int)), this, SLOT(numberOfPointsChanged(int)) );
 
 //	connect( uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
@@ -140,17 +134,8 @@ void XYInterpolationCurveDock::initGeneralTab() {
 
 	uiGeneralTab.cbType->setCurrentIndex(m_interpolationData.type);
 	this->typeChanged(m_interpolationData.type);
-	//uiGeneralTab.cbForm->setCurrentIndex(m_interpolationData.form);
-	//this->formChanged(m_interpolationData.form);
-	//uiGeneralTab.sbOrder->setValue(m_interpolationData.order);
-	//uiGeneralTab.cbUnit->setCurrentIndex(m_interpolationData.unit);
-	//this->unitChanged(m_interpolationData.unit);
-	// after unit has set
-	//uiGeneralTab.sbCutoff->setValue(m_interpolationData.cutoff);
-	//uiGeneralTab.cbUnit2->setCurrentIndex(m_interpolationData.unit2);
-	//this->unit2Changed(m_interpolationData.unit2);
-	// after unit has set
-	//uiGeneralTab.sbCutoff2->setValue(m_interpolationData.cutoff2);
+	uiGeneralTab.cbEval->setCurrentIndex(m_interpolationData.evaluate);
+	uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints);
 	this->showInterpolationResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last interpolation
@@ -262,95 +247,20 @@ void XYInterpolationCurveDock::typeChanged(int index) {
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-/*void XYInterpolationCurveDock::formChanged(int index) {
-	XYInterpolationCurve::InterpolationForm form = (XYInterpolationCurve::InterpolationForm)index;
-	m_interpolationData.form = (XYInterpolationCurve::InterpolationForm)uiGeneralTab.cbForm->currentIndex();
-
-	switch(form) {
-	case XYInterpolationCurve::Ideal:
-		uiGeneralTab.sbOrder->setVisible(false);
-		uiGeneralTab.lOrder->setVisible(false);
-		break;
-	case XYInterpolationCurve::Butterworth:
-	case XYInterpolationCurve::ChebyshevI:
-	case XYInterpolationCurve::ChebyshevII:
-		uiGeneralTab.sbOrder->setVisible(true);
-		uiGeneralTab.lOrder->setVisible(true);
-		break;
-	}
+void XYInterpolationCurveDock::evaluateChanged(int index) {
+	XYInterpolationCurve::InterpolationEval eval = (XYInterpolationCurve::InterpolationEval)index;
+	m_interpolationData.evaluate = (XYInterpolationCurve::InterpolationEval)uiGeneralTab.cbEval->currentIndex();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYInterpolationCurveDock::orderChanged(int index) {
+void XYInterpolationCurveDock::numberOfPointsChanged(int index) {
 	Q_UNUSED(index)
-	m_interpolationData.order = uiGeneralTab.sbOrder->value();
+	m_interpolationData.npoints = uiGeneralTab.sbPoints->value();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYInterpolationCurveDock::unitChanged(int index) {
-	XYInterpolationCurve::CutoffUnit unit = (XYInterpolationCurve::CutoffUnit)index;
-	m_interpolationData.unit = (XYInterpolationCurve::CutoffUnit)uiGeneralTab.cbUnit->currentIndex();
-
-	int n=100;
-	double T=1.0;
-	if(m_interpolationCurve->xDataColumn() != NULL) {
-		n = m_interpolationCurve->xDataColumn()->rowCount();
-		T = m_interpolationCurve->xDataColumn()->maximum() - m_interpolationCurve->xDataColumn()->minimum();
-	}
-	switch(unit) {
-	case XYInterpolationCurve::Frequency:
-		uiGeneralTab.sbCutoff->setDecimals(6);
-		uiGeneralTab.sbCutoff->setMaximum(1.0/T);
-		uiGeneralTab.sbCutoff->setSingleStep(0.01/T);
-		break;
-	case XYInterpolationCurve::Fraction:
-		uiGeneralTab.sbCutoff->setDecimals(6);
-		uiGeneralTab.sbCutoff->setMaximum(1.0);
-		uiGeneralTab.sbCutoff->setSingleStep(0.01);
-		break;
-	case XYInterpolationCurve::Index:
-		uiGeneralTab.sbCutoff->setDecimals(0);
-		uiGeneralTab.sbCutoff->setSingleStep(1);
-		uiGeneralTab.sbCutoff->setMaximum(n);
-		break;
-	}
-
-	uiGeneralTab.pbRecalculate->setEnabled(true);
-}
-
-void XYInterpolationCurveDock::unit2Changed(int index) {
-	XYInterpolationCurve::CutoffUnit unit2 = (XYInterpolationCurve::CutoffUnit)index;
-	m_interpolationData.unit2 = (XYInterpolationCurve::CutoffUnit)uiGeneralTab.cbUnit2->currentIndex();
-
-	int n=100;
-	double T=1.0;
-	if(m_interpolationCurve->xDataColumn() != NULL) {
-		n = m_interpolationCurve->xDataColumn()->rowCount();
-		T = m_interpolationCurve->xDataColumn()->maximum() - m_interpolationCurve->xDataColumn()->minimum();
-	}
-	switch(unit2) {
-	case XYInterpolationCurve::Frequency:
-		uiGeneralTab.sbCutoff2->setDecimals(6);
-		uiGeneralTab.sbCutoff2->setMaximum(1.0/T);
-		uiGeneralTab.sbCutoff2->setSingleStep(0.01/T);
-		break;
-	case XYInterpolationCurve::Fraction:
-		uiGeneralTab.sbCutoff2->setDecimals(6);
-		uiGeneralTab.sbCutoff2->setMaximum(1.0);
-		uiGeneralTab.sbCutoff2->setSingleStep(0.01);
-		break;
-	case XYInterpolationCurve::Index:
-		uiGeneralTab.sbCutoff2->setDecimals(0);
-		uiGeneralTab.sbCutoff2->setSingleStep(1);
-		uiGeneralTab.sbCutoff2->setMaximum(n);
-		break;
-	}
-
-	uiGeneralTab.pbRecalculate->setEnabled(true);
-}
-*/
 void XYInterpolationCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	//m_interpolationData.cutoff = uiGeneralTab.sbCutoff->value();

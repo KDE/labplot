@@ -42,10 +42,8 @@
 /*#include "backend/gsl/ExpressionParser.h"
 #include "backend/gsl/parser_extern.h"
 */
-//#include <gsl/gsl_version.h>
-#include <gsl/gsl_fft_real.h>
-#include <gsl/gsl_fft_halfcomplex.h>
-#include <gsl/gsl_sf_pow_int.h>
+#include <gsl/gsl_interp.h>
+#include <gsl/gsl_spline.h>
 
 #include <KIcon>
 #include <KLocale>
@@ -239,19 +237,68 @@ void XYInterpolationCurvePrivate::recalculate() {
 		return;
 	}
 
-	//double* xdata = xdataVector.data();
+	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
         double min = xDataColumn->minimum();
         double max = xDataColumn->maximum();
 
 	// interpolation settings
-//	unsigned int order = interpolationData.order;
+	XYInterpolationCurve::InterpolationType type = interpolationData.type;
+	XYInterpolationCurve::InterpolationEval evaluate = interpolationData.evaluate;
+	unsigned int npoints = interpolationData.npoints;
 #ifdef QT_DEBUG
-	//TODO
+	qDebug()<<"type:"<<type;
+	qDebug()<<"evaluate:"<<evaluate;
+	qDebug()<<"npoints ="<<npoints;
 #endif
 ///////////////////////////////////////////////////////////
-//TODO
+	//TODO: 
+	//	* check minimum number of points
+	//	* evaluate "evaluate"
+	//	* check Steffen spline with GSL 2.X
+
+	gsl_interp_accel *acc = gsl_interp_accel_alloc();
+	gsl_spline *spline=0;
+	switch(type) {
+	case XYInterpolationCurve::Linear:
+		spline = gsl_spline_alloc(gsl_interp_linear, n);
+		break;
+	case XYInterpolationCurve::Polynomial:
+		spline = gsl_spline_alloc(gsl_interp_polynomial, n);
+		break;
+	case XYInterpolationCurve::CSpline:
+		spline = gsl_spline_alloc(gsl_interp_cspline, n);
+		break;
+	case XYInterpolationCurve::CSplinePeriodic:
+		spline = gsl_spline_alloc(gsl_interp_cspline_periodic, n);
+		break;
+	case XYInterpolationCurve::Akima:
+		spline = gsl_spline_alloc(gsl_interp_akima, n);
+		break;
+	case XYInterpolationCurve::AkimaPeriodic:
+		spline = gsl_spline_alloc(gsl_interp_akima_periodic, n);
+		break;
+#if GSL_MAJOR_VERSION >= 2
+	case XYInterpolationCurve::Steffen:
+		spline = gsl_spline_alloc(gsl_interp_steffen, n);
+		break;
+#endif
+	}
+
+	gsl_spline_init (spline, xdata, ydata, n);
+
+	xVector->resize(npoints);
+	yVector->resize(npoints);
+	for (int i = 0; i<npoints; i++) {
+		double x = min + i*(max-min)/(npoints-1);
+		(*xVector)[i] = x;
+		(*yVector)[i] = gsl_spline_eval (spline, x, acc);
+	}
+
+	gsl_spline_free(spline);
+	gsl_interp_accel_free(acc);
+
 ///////////////////////////////////////////////////////////
 
 	//write the result
@@ -282,8 +329,9 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement("interpolationData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
-	//writer->writeAttribute( "order", QString::number(d->interpolationData.order) );
-	//writer->writeAttribute( "cutoff", QString::number(d->interpolationData.cutoff) );
+	writer->writeAttribute( "type", QString::number(d->interpolationData.type) );
+	writer->writeAttribute( "npoints", QString::number(d->interpolationData.npoints) );
+	writer->writeAttribute( "evaluate", QString::number(d->interpolationData.evaluate) );
 	writer->writeEndElement();// interpolationData
 
 	// interpolation results (generated columns)
@@ -333,12 +381,24 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader){
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-/*			str = attribs.value("order").toString();
+			str = attribs.value("type").toString();
 			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'order'"));
+				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
-				d->interpolationData.order = str.toInt();
-*/
+				d->interpolationData.type = (XYInterpolationCurve::InterpolationType) str.toInt();
+
+			str = attribs.value("npoints").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'npoints'"));
+			else
+				d->interpolationData.npoints = str.toInt();
+
+			str = attribs.value("evaluate").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'evaluate'"));
+			else
+				d->interpolationData.evaluate = (XYInterpolationCurve::InterpolationEval)str.toInt();
+
 		} else if (reader->name() == "interpolationResult") {
 
 			attribs = reader->attributes();
