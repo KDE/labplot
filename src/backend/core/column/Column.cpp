@@ -440,6 +440,12 @@ void Column::calculateStatistics(){
             continue;
         ++notNanCount;
     }
+
+	if (notNanCount == 0) {
+		setStatisticsAvailable(true);
+		return;
+	}
+
     double* rowData = new double[notNanCount];
     int idx = 0;
     for(int row = 0; row < rowValues->size(); row++){

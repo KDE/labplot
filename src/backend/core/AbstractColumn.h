@@ -31,6 +31,7 @@
 #define ABSTRACTCOLUMN_H
 
 #include "backend/core/AbstractAspect.h"
+#include <math.h>
 
 class AbstractColumnPrivate;
 class AbstractSimpleFilter;
@@ -71,7 +72,22 @@ class AbstractColumn : public AbstractAspect
 		virtual ~AbstractColumn();
 
         struct ColumnStatistics {
-            ColumnStatistics() {}
+            ColumnStatistics() {
+				minimum = NAN;
+				maximum = NAN;
+				arithmeticMean = NAN;
+				geometricMean = NAN;
+				harmonicMean = NAN;
+				contraharmonicMean = NAN;
+				variance = NAN;
+				standardDeviation = NAN;
+				meanDeviation = NAN;
+				medianDeviation = NAN;
+				medianAbsoluteDeviation = NAN;
+				skewness = NAN;
+				kurtosis = NAN;
+				entropy = NAN;
+			}
             double minimum;
             double maximum;
             double arithmeticMean;
@@ -90,6 +106,7 @@ class AbstractColumn : public AbstractAspect
 
         ColumnStatistics m_statistics;
         const ColumnStatistics& statistics() const;
+
 		virtual bool isReadOnly() const { return true; };
 		virtual ColumnMode columnMode() const = 0;
 		virtual void setColumnMode(AbstractColumn::ColumnMode);
