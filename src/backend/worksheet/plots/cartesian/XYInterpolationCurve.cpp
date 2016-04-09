@@ -38,10 +38,9 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
+
 #include <cmath>	// isnan
-/*#include "backend/gsl/ExpressionParser.h"
-#include "backend/gsl/parser_extern.h"
-*/
+#include <gsl_errno.h>
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_spline.h>
 
@@ -213,7 +212,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 		return;
 	}
 
-	//copy all valid data point for the fit to temporary vectors
+	//copy all valid data point for the interpolation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
@@ -228,10 +227,10 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	//number of data points to fit
 	unsigned int n = ydataVector.size();
-	if (n == 0) {
+	if (n < 2) {
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
-		interpolationResult.status = i18n("No data points available.");
+		interpolationResult.status = i18n("Not enough data points available.");
 		emit (q->dataChanged());
 		sourceDataChangedSinceLastInterpolation = false;
 		return;
@@ -253,9 +252,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 	qDebug()<<"npoints ="<<npoints;
 #endif
 ///////////////////////////////////////////////////////////
+	int status;
 	//TODO: 
-	//	* check minimum number of points
-	//	* evaluate "evaluate"
 	//	* check Steffen spline with GSL 2.X
 
 	gsl_interp_accel *acc = gsl_interp_accel_alloc();
@@ -279,21 +277,34 @@ void XYInterpolationCurvePrivate::recalculate() {
 	case XYInterpolationCurve::AkimaPeriodic:
 		spline = gsl_spline_alloc(gsl_interp_akima_periodic, n);
 		break;
-#if GSL_MAJOR_VERSION >= 2
 	case XYInterpolationCurve::Steffen:
+#if GSL_MAJOR_VERSION >= 2
 		spline = gsl_spline_alloc(gsl_interp_steffen, n);
-		break;
 #endif
+		break;
 	}
 
-	gsl_spline_init (spline, xdata, ydata, n);
+	status = gsl_spline_init (spline, xdata, ydata, n);
 
 	xVector->resize(npoints);
 	yVector->resize(npoints);
-	for (int i = 0; i<npoints; i++) {
+	for (unsigned int i = 0; i<npoints; i++) {
 		double x = min + i*(max-min)/(npoints-1);
 		(*xVector)[i] = x;
-		(*yVector)[i] = gsl_spline_eval (spline, x, acc);
+		switch(evaluate) {
+		case XYInterpolationCurve::Function:
+			(*yVector)[i] = gsl_spline_eval(spline, x, acc);
+			break;
+		case XYInterpolationCurve::Derivative:
+			(*yVector)[i] = gsl_spline_eval_deriv(spline, x, acc);
+			break;
+		case XYInterpolationCurve::Derivative2:
+			(*yVector)[i] = gsl_spline_eval_deriv2(spline, x, acc);
+			break;
+		case XYInterpolationCurve::Integral:
+			(*yVector)[i] = gsl_spline_eval_integ(spline, min, x, acc);
+			break;
+		}
 	}
 
 	gsl_spline_free(spline);
@@ -304,7 +315,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 	//write the result
 	interpolationResult.available = true;
 	interpolationResult.valid = true;
-	interpolationResult.status = i18n("OK");
+	interpolationResult.status = QString(gsl_strerror(status));;
 	interpolationResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve

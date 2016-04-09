@@ -1,5 +1,5 @@
 /***************************************************************************
-    File             : XYFourierFilterCurveDock.h
+    File             : XYFourierFilterCurveDock.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)

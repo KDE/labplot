@@ -38,11 +38,9 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
+
 #include <cmath>	// isnan
-/*#include "backend/gsl/ExpressionParser.h"
-#include "backend/gsl/parser_extern.h"
-*/
-//#include <gsl/gsl_version.h>
+#include <gsl_errno.h>
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_halfcomplex.h>
 #include <gsl/gsl_sf_pow_int.h>
@@ -215,7 +213,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		return;
 	}
 
-	//copy all valid data point for the fit to temporary vectors
+	//copy all valid data point for the filter to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
@@ -228,7 +226,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		}
 	}
 
-	//number of data points to fit
+	//number of data points to filter
 	unsigned int n = ydataVector.size();
 	if (n == 0) {
 		filterResult.available = true;
@@ -258,12 +256,13 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	qDebug()<<"unit :"<<unit<<unit2;
 #endif
 ///////////////////////////////////////////////////////////
+	int status;
 	// 1. transform
 	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc (n);
 	gsl_fft_real_wavetable *real = gsl_fft_real_wavetable_alloc (n);
 
-        gsl_fft_real_transform (ydata, 1, n, real, work);
-        gsl_fft_real_wavetable_free (real);
+        status = gsl_fft_real_transform(ydata, 1, n, real, work);
+        gsl_fft_real_wavetable_free(real);
 
 	// calculate index
 	double cutindex=0, cutindex2=0;
@@ -379,7 +378,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	// 3. back transform
 	gsl_fft_halfcomplex_wavetable *hc = gsl_fft_halfcomplex_wavetable_alloc (n);
-	gsl_fft_halfcomplex_inverse (ydata, 1, n, hc, work);
+	status = gsl_fft_halfcomplex_inverse(ydata, 1, n, hc, work);
 	gsl_fft_halfcomplex_wavetable_free (hc);
 	gsl_fft_real_workspace_free (work);
 
@@ -394,7 +393,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//write the result
 	filterResult.available = true;
 	filterResult.valid = true;
-	filterResult.status = i18n("OK");
+	filterResult.status = QString(gsl_strerror(status));;
 	filterResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve

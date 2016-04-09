@@ -37,11 +37,7 @@ class XYInterpolationCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-#if GSL_MAJOR_VERSION >= 2
 		enum InterpolationType {Linear,Polynomial,CSpline,CSplinePeriodic,Akima,AkimaPeriodic,Steffen};	// TODO:more
-#else
-		enum InterpolationType {Linear,Polynomial,CSpline,CSplinePeriodic,Akima,AkimaPeriodic};	// TODO:more
-#endif
 		enum InterpolationEval {Function,Derivative,Derivative2,Integral};
 
 		struct InterpolationData {

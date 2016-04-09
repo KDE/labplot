@@ -1,5 +1,5 @@
 /***************************************************************************
-    File             : XYFitCurveDock.h
+    File             : XYFitCurveDock.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)

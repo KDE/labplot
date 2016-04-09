@@ -1,5 +1,5 @@
 /***************************************************************************
-    File             : XYInterpolationCurveDock.h
+    File             : XYInterpolationCurveDock.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
@@ -33,6 +33,9 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include <QMenu>
 #include <QWidgetAction>
+#include <QStandardItemModel>
+#include <gsl_interp.h>	// gsl_interp types
+#include <cmath>        // isnan
 #include <QDebug>
 
 /*!
@@ -102,7 +105,6 @@ void XYInterpolationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.cbEval, SIGNAL(currentIndexChanged(int)), this, SLOT(evaluateChanged(int)) );
 	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(int)), this, SLOT(numberOfPointsChanged(int)) );
 
-//	connect( uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
 
@@ -131,6 +133,8 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	Q_ASSERT(m_interpolationCurve);
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_interpolationCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_interpolationCurve->yDataColumn());
+	// update list of selectable types
+	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
 	uiGeneralTab.cbType->setCurrentIndex(m_interpolationData.type);
 	this->typeChanged(m_interpolationData.type);
@@ -162,11 +166,12 @@ void XYInterpolationCurveDock::setModel() {
 	cbXDataColumn->setSelectableClasses(list);
 	cbYDataColumn->setSelectableClasses(list);
 
+	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
+	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
+
 	cbXDataColumn->setModel(m_aspectTreeModel);
 	cbYDataColumn->setModel(m_aspectTreeModel);
 
-	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
-	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
 	XYCurveDock::setModel();
 }
 
@@ -205,9 +210,6 @@ void XYInterpolationCurveDock::commentChanged(){
 }
 
 void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
-
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = 0;
 	if (aspect) {
@@ -218,9 +220,70 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setXDataColumn(column);
 
-	// update range of cutoff spin boxes (like a unit change)
-//	unitChanged(uiGeneralTab.cbUnit->currentIndex());
-//	unit2Changed(uiGeneralTab.cbUnit2->currentIndex());
+	// disable types that need more data points
+	if(column != 0) {
+		unsigned int n=0;
+		for(int row=0;row < column->rowCount();row++)
+			if (!isnan(column->valueAt(row)) && !column->isMasked(row)) 
+				n++;
+
+		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
+		QStandardItem* item = model->item(XYInterpolationCurve::Polynomial);
+		if(n < gsl_interp_type_min_size(gsl_interp_polynomial)) {
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+			if(uiGeneralTab.cbType->currentIndex() == XYInterpolationCurve::Polynomial)
+				uiGeneralTab.cbType->setCurrentIndex(0);
+		}
+		else
+			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+
+		item = model->item(XYInterpolationCurve::CSpline);
+		if(n < gsl_interp_type_min_size(gsl_interp_cspline)) {
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+			if(uiGeneralTab.cbType->currentIndex() == XYInterpolationCurve::CSpline)
+				uiGeneralTab.cbType->setCurrentIndex(0);
+		}
+		else
+			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+
+		item = model->item(XYInterpolationCurve::CSplinePeriodic);
+		if(n < gsl_interp_type_min_size(gsl_interp_cspline_periodic)) {
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+			if(uiGeneralTab.cbType->currentIndex() == XYInterpolationCurve::CSplinePeriodic)
+				uiGeneralTab.cbType->setCurrentIndex(0);
+		}
+		else
+			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+
+		item = model->item(XYInterpolationCurve::Akima);
+		if(n < gsl_interp_type_min_size(gsl_interp_akima)) {
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+			if(uiGeneralTab.cbType->currentIndex() == XYInterpolationCurve::Akima)
+				uiGeneralTab.cbType->setCurrentIndex(0);
+		}
+		else
+			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+
+		item = model->item(XYInterpolationCurve::AkimaPeriodic);
+		if(n < gsl_interp_type_min_size(gsl_interp_akima_periodic)) {
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+			if(uiGeneralTab.cbType->currentIndex() == XYInterpolationCurve::AkimaPeriodic)
+				uiGeneralTab.cbType->setCurrentIndex(0);
+		}
+		else
+			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+
+#if GSL_MAJOR_VERSION >= 2
+		item = model->item(XYInterpolationCurve::Steffen);
+		if(n < gsl_interp_type_min_size(gsl_interp_steffen)) {
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+			if(uiGeneralTab.cbType->currentIndex() == XYInterpolationCurve::Steffen)
+				uiGeneralTab.cbType->setCurrentIndex(0);
+		}
+		else
+			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+#endif
+	}
 }
 
 void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -239,16 +302,14 @@ void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYInterpolationCurveDock::typeChanged(int index) {
-	XYInterpolationCurve::InterpolationType type = (XYInterpolationCurve::InterpolationType)index;
+	//XYInterpolationCurve::InterpolationType type = (XYInterpolationCurve::InterpolationType)index;
 	m_interpolationData.type = (XYInterpolationCurve::InterpolationType)uiGeneralTab.cbType->currentIndex();
-
-	//TODO
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYInterpolationCurveDock::evaluateChanged(int index) {
-	XYInterpolationCurve::InterpolationEval eval = (XYInterpolationCurve::InterpolationEval)index;
+	//XYInterpolationCurve::InterpolationEval eval = (XYInterpolationCurve::InterpolationEval)index;
 	m_interpolationData.evaluate = (XYInterpolationCurve::InterpolationEval)uiGeneralTab.cbEval->currentIndex();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
