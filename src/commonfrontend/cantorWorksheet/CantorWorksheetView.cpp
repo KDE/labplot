@@ -40,7 +40,7 @@
 CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget(),
 	m_worksheet(worksheet) {
 
-	layout = new QHBoxLayout(this);
+	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
 	part = worksheet->part();
 	layout->addWidget(part->widget());
@@ -51,6 +51,8 @@ CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget()
 
 void CantorWorksheetView::initActions() {
 	QActionGroup* cantorActionGroup = new QActionGroup(this);
+	cantorActionGroup->setExclusive(false);
+
 	m_restartBackendAction = new QAction(QIcon::fromTheme("system-reboot"), i18n("Restart Backend"), cantorActionGroup);
 	m_restartBackendAction->setData("restart_backend");
 
@@ -58,11 +60,13 @@ void CantorWorksheetView::initActions() {
 	m_evaluateWorsheetAction->setData("evaluate_worksheet");
 
 	m_evaluateEntryAction = new QAction(i18n("Evaluate Entry"), cantorActionGroup);
-	m_evaluateEntryAction->setShortcut(Qt::CTRL + Qt::Key_Return);
+	m_evaluateEntryAction->setShortcut(Qt::SHIFT + Qt::Key_Return);
 	m_evaluateEntryAction->setData("evaluate_current");
 
 	m_insertCommandEntryAction = new QAction(i18n("Insert Command Entry"), cantorActionGroup);
 	m_insertCommandEntryAction->setData("insert_command_entry");
+	m_insertCommandEntryAction->setShortcut(Qt::CTRL + Qt::Key_Return);
+
 	m_insertTextEntryAction = new QAction(i18n("Insert Text Entry"), cantorActionGroup);
 	m_insertTextEntryAction->setData("insert_text_entry");
 
@@ -98,15 +102,19 @@ void CantorWorksheetView::initActions() {
 
 	m_zoomIn = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom in"), cantorActionGroup);
 	m_zoomIn->setData("view_zoom_in");
+	m_zoomIn->setShortcut(Qt::CTRL+Qt::Key_Plus);
 
 	m_zoomOut = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom out"), cantorActionGroup);
 	m_zoomOut->setData("view_zoom_out");
+	m_zoomOut->setShortcut(Qt::CTRL+Qt::Key_Minus);
 
 	m_find = new QAction(QIcon::fromTheme("edit-find"), i18n("Find"), cantorActionGroup);
 	m_find->setData("edit_find");
+	m_find->setShortcut(Qt::CTRL+Qt::Key_F);
 
 	m_replace = new QAction(QIcon::fromTheme("edit-replace"), i18n("Replace"), cantorActionGroup);
 	m_replace->setData("edit_replace");
+	m_replace->setShortcut(Qt::CTRL+Qt::Key_R);
 
 	m_completion = new KToggleAction(i18n("Completion"), cantorActionGroup);
 	m_completion->setChecked(true);
@@ -132,15 +140,22 @@ void CantorWorksheetView::initMenus() {
 	m_worksheetMenu->addAction(m_insertLatexEntryAction);
 	m_worksheetMenu->addAction(m_insertPageBreakAction);
 	m_worksheetMenu->addAction(m_removeCurrentEntryAction);
+
 	m_linearAlgebraMenu = new QMenu("Linear Algebra", part->widget());
 	m_linearAlgebraMenu->addAction(m_invertMattrixAction);
 	m_linearAlgebraMenu->addAction(m_createMattrixAction);
 	m_linearAlgebraMenu->addAction(m_computeEigenvectorsAction);
 	m_linearAlgebraMenu->addAction(m_computeEigenvaluesAction);
+
 	m_calculateMenu = new QMenu("Calculate", part->widget());
 	m_calculateMenu->addAction(m_solveEquationsAction);
 	m_calculateMenu->addAction(m_integrationAction);
 	m_calculateMenu->addAction(m_differentiationAction);
+
+	m_settingsMenu = new QMenu("Settings", part->widget());
+	m_settingsMenu->addAction(m_completion);
+	m_settingsMenu->addAction(m_lineNumbers);
+	m_settingsMenu->addAction(m_animateWorksheet);
 }
 
 /*!
@@ -160,20 +175,20 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) const{
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
 
-	menu->insertAction(firstAction, m_restartBackendAction);
 	menu->insertMenu(firstAction, m_worksheetMenu);
 	menu->insertMenu(firstAction, m_linearAlgebraMenu);
 	menu->insertMenu(firstAction, m_calculateMenu);
 	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, m_completion);
-	menu->insertAction(firstAction, m_lineNumbers);
-	menu->insertAction(firstAction, m_animateWorksheet);
-	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, m_zoomIn);
 	menu->insertAction(firstAction, m_zoomOut);
+	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, m_find);
 	menu->insertAction(firstAction, m_replace);
-	menu->insertAction(firstAction, m_find);
+	menu->insertSeparator(firstAction);
+	menu->insertMenu(firstAction, m_settingsMenu);
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, m_restartBackendAction);
+	menu->insertSeparator(firstAction);
 }
 
 void CantorWorksheetView::fillToolBar(QToolBar* toolbar) {

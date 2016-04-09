@@ -31,7 +31,6 @@
 #include <QWidget>
 
 class QAbstractItemModel;
-class QHBoxLayout;
 class QToolBar;
 class QMenu;
 
@@ -82,7 +81,7 @@ class CantorWorksheetView : public QWidget {
 		QMenu* m_worksheetMenu;
 		QMenu* m_linearAlgebraMenu;
 		QMenu* m_calculateMenu;
-		QHBoxLayout* layout;
+		QMenu* m_settingsMenu;
 		KParts::ReadWritePart* part;
 
 		void initActions();
