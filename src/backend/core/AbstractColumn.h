@@ -79,11 +79,12 @@ class AbstractColumn : public AbstractAspect
 				geometricMean = NAN;
 				harmonicMean = NAN;
 				contraharmonicMean = NAN;
+				median = NAN;
 				variance = NAN;
 				standardDeviation = NAN;
 				meanDeviation = NAN;
+				meanDeviationAroundMedian = NAN;
 				medianDeviation = NAN;
-				medianAbsoluteDeviation = NAN;
 				skewness = NAN;
 				kurtosis = NAN;
 				entropy = NAN;
@@ -94,11 +95,12 @@ class AbstractColumn : public AbstractAspect
             double geometricMean;
             double harmonicMean;
             double contraharmonicMean;
+			double median;
             double variance;
             double standardDeviation;
-            double meanDeviation;
-            double medianDeviation;
-            double medianAbsoluteDeviation;
+            double meanDeviation; // mean absolute deviation around mean
+			double meanDeviationAroundMedian; // mean absolute deviation around median
+            double medianDeviation; // median absolute deviation
             double skewness;
             double kurtosis;
             double entropy;

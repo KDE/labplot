@@ -49,6 +49,10 @@ StatisticsDialog::StatisticsDialog(const QString & title, QWidget *parent) :
                          "<td><b>Contraharmonic mean<b></td>"
                          "<td>%6</td>"
                          "</tr>"
+                         "<tr>"
+                         "<td><b>Median<b></td>"
+                         "<td>%7</td>"
+                         "</tr>"
                          "<tr></tr>"
                          "<tr>"
                          "<td colspan=2 align=center bgcolor=#D1D1D1><b><big>Dispersion measures</big></b></td>"
@@ -56,19 +60,23 @@ StatisticsDialog::StatisticsDialog(const QString & title, QWidget *parent) :
                          "<tr></tr>"
                          "<tr>"
                          "<td><b>Variance<b></td>"
-                         "<td>%7</td>"
-                         "</tr>"
-                         "<tr>"
-                         "<td><b>Standard deviation<b></td>"
                          "<td>%8</td>"
                          "</tr>"
                          "<tr>"
-                         "<td><b>Mean deviation<b></td>"
+                         "<td><b>Standard deviation<b></td>"
                          "<td>%9</td>"
                          "</tr>"
                          "<tr>"
-                         "<td><b>Median absolute deviation<b></td>"
+                         "<td><b>Mean absolute deviation around mean<b></td>"
                          "<td>%10</td>"
+                         "</tr>"
+                         "<tr>"
+                         "<td><b>Mean absolute deviation around median<b></td>"
+                         "<td>%11</td>"
+                         "</tr>"
+                         "<tr>"
+                         "<td><b>Median absolute deviation<b></td>"
+                         "<td>%12</td>"
                          "</tr>"
                          "<tr></tr>"
                          "<tr>"
@@ -77,15 +85,15 @@ StatisticsDialog::StatisticsDialog(const QString & title, QWidget *parent) :
                          "<tr></tr>"
                          "<tr>"
                          "<td><b>Skewness<b></td>"
-                         "<td>%11</td>"
+                         "<td>%13</td>"
                          "</tr>"
                          "<tr>"
                          "<td><b>Kurtosis<b></td>"
-                         "<td>%12</td>"
+                         "<td>%14</td>"
                          "</tr>"
                          "<tr>"
                          "<td><b>Entropy<b></td>"
-                         "<td>%13</td>"
+                         "<td>%15</td>"
                          "</tr>"
                          "</table>");
 
@@ -127,10 +135,12 @@ void StatisticsDialog::addTabs(){
                     arg(isNanValue(m_columns[0]->statistics().geometricMean)).
                     arg(isNanValue(m_columns[0]->statistics().harmonicMean)).
                     arg(isNanValue(m_columns[0]->statistics().contraharmonicMean)).
+					arg(isNanValue(m_columns[0]->statistics().median)).
                     arg(isNanValue(m_columns[0]->statistics().variance)).
                     arg(isNanValue(m_columns[0]->statistics().standardDeviation)).
                     arg(isNanValue(m_columns[0]->statistics().meanDeviation)).
-                    arg(isNanValue(m_columns[0]->statistics().medianAbsoluteDeviation)).
+					arg(isNanValue(m_columns[0]->statistics().meanDeviationAroundMedian)).
+                    arg(isNanValue(m_columns[0]->statistics().medianDeviation)).
                     arg(isNanValue(m_columns[0]->statistics().skewness)).
                     arg(isNanValue(m_columns[0]->statistics().kurtosis)).
                     arg(isNanValue(m_columns[0]->statistics().entropy)));
@@ -152,10 +162,12 @@ void StatisticsDialog::calculateStatisticsOnCurrentTab(int index){
             arg(isNanValue(m_columns[index]->statistics().geometricMean)).
             arg(isNanValue(m_columns[index]->statistics().harmonicMean)).
             arg(isNanValue(m_columns[index]->statistics().contraharmonicMean)).
+			arg(isNanValue(m_columns[index]->statistics().median)).
             arg(isNanValue(m_columns[index]->statistics().variance)).
             arg(isNanValue(m_columns[index]->statistics().standardDeviation)).
             arg(isNanValue(m_columns[index]->statistics().meanDeviation)).
-            arg(isNanValue(m_columns[index]->statistics().medianAbsoluteDeviation)).
+			arg(isNanValue(m_columns[index]->statistics().meanDeviationAroundMedian)).
+            arg(isNanValue(m_columns[index]->statistics().medianDeviation)).
             arg(isNanValue(m_columns[index]->statistics().skewness)).
             arg(isNanValue(m_columns[index]->statistics().kurtosis)).
             arg(isNanValue(m_columns[index]->statistics().entropy)));

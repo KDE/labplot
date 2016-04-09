@@ -422,12 +422,11 @@ bool Column::statisticsAvailable() const
     return m_column_private->statisticsAvailable();
 }
 
-void Column::calculateStatistics(){
+void Column::calculateStatistics() {
 
     if (statisticsAvailable())
-    {
         return;
-    }
+
     m_statistics = ColumnStatistics();
 
     QVector<double>* rowValues = reinterpret_cast<QVector<double>*>(data());
@@ -438,6 +437,7 @@ void Column::calculateStatistics(){
         val = rowValues->value(row, NAN);
         if (isnan(val) || isMasked(row))
             continue;
+
         ++notNanCount;
     }
 
@@ -450,7 +450,7 @@ void Column::calculateStatistics(){
     int idx = 0;
     for(int row = 0; row < rowValues->size(); row++){
         val = rowValues->value(row);
-        if (isnan(val)|| isMasked(row) )
+        if ( isnan(val) || isMasked(row) )
             continue;
 
         rowData[idx] = rowValues->operator [](row);
@@ -463,50 +463,50 @@ void Column::calculateStatistics(){
     m_statistics.minimum = gsl_stats_min(rowData, stride, rowSize);
     m_statistics.maximum = gsl_stats_max(rowData, stride, rowSize);
     m_statistics.arithmeticMean = gsl_stats_mean(rowData, stride, rowSize);
-    m_statistics.variance = gsl_stats_variance(rowData, stride, rowSize);
-    m_statistics.standardDeviation = gsl_stats_sd(rowData, stride, rowSize);
-    m_statistics.skewness = gsl_stats_skew(rowData, stride, rowSize);
-    m_statistics.kurtosis = gsl_stats_kurtosis(rowData, stride, rowSize);
+    m_statistics.variance = gsl_stats_variance_m(rowData, stride, rowSize, m_statistics.arithmeticMean);
+    m_statistics.standardDeviation = sqrt(m_statistics.variance);
+	m_statistics.skewness = gsl_stats_skew_m_sd(rowData, stride, rowSize, m_statistics.arithmeticMean, m_statistics.standardDeviation);
+    m_statistics.kurtosis = gsl_stats_kurtosis_m_sd(rowData, stride, rowSize, m_statistics.arithmeticMean, m_statistics.standardDeviation);
 
     double columnSum = 0.0;
     double columnProduct = 1.0;
     double columnSumNeg = 0.0;
     double columnSumSquare = 0.0;
     double columnSumMeanDeviation = 0.0;
-
+	double columnSumMedianDeviation = 0.0;
     QVector<double> absoluteMedianList;
     absoluteMedianList.reserve(rowSize);
 
     gsl_sort(rowData, stride, rowSize);
-    double median = gsl_stats_median_from_sorted_data(rowData, stride, rowSize);
+    m_statistics.median = gsl_stats_median_from_sorted_data(rowData, stride, rowSize);
 
     QMap<double, int> frequencyOfValues;
 
-    double value;
     for (int i = 0; i < rowValues->size(); ++i){
-        value = rowValues->value(i, NAN);
-        if (!isnan(value)){
-            value = rowValues->at(i);
-            if (frequencyOfValues.contains(value)){
-                frequencyOfValues.operator [](value)++;
-            }
-            else {
-                frequencyOfValues.insert(value, 1);
-            }
-            columnSum += value;
-            columnSumNeg += (1.0 / value);
-            columnSumSquare += pow(value, 2.0);
-            columnProduct *= value;
-            columnSumMeanDeviation += fabs( value - m_statistics.arithmeticMean );
-            absoluteMedianList[i] = fabs(value - median);
-        }
+		const double value = rowValues->at(i);
+		if ( isnan(value) || isMasked(i) )
+			continue;
+
+		if (frequencyOfValues.contains(value))
+			frequencyOfValues.operator [](value)++;
+		else
+			frequencyOfValues.insert(value, 1);
+
+		columnSum += value;
+		columnSumNeg += (1.0 / value);
+		columnSumSquare += pow(value, 2.0);
+		columnProduct *= value;
+		columnSumMeanDeviation += fabs( value - m_statistics.arithmeticMean );
+		absoluteMedianList[i] = fabs(value - m_statistics.median);
+		columnSumMedianDeviation += absoluteMedianList[i];
     }
 
     m_statistics.geometricMean = pow(columnProduct, 1.0 / notNanCount);
-    m_statistics.harmonicMean = 1.0 / ( (1.0 / notNanCount) * columnSumNeg );
+    m_statistics.harmonicMean = notNanCount / columnSumNeg;
     m_statistics.contraharmonicMean = columnSumSquare / columnSum;
-    m_statistics.meanDeviation = (1.0 / notNanCount ) * columnSumMeanDeviation;
-    m_statistics.medianAbsoluteDeviation = gsl_stats_median_from_sorted_data(
+    m_statistics.meanDeviation = columnSumMeanDeviation / notNanCount;
+	m_statistics.meanDeviationAroundMedian = columnSumMedianDeviation / notNanCount;
+    m_statistics.medianDeviation = gsl_stats_median_from_sorted_data(
                                                                 absoluteMedianList.constData(),
                                                                 stride,
                                                                 rowSize);
