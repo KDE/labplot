@@ -110,8 +110,18 @@ void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int las
 		const QString value = m_variableModel->data(m_variableModel->index(first, 1)).toString();
 		VariableParser* parser = new VariableParser(m_backendName, value);
 		if(parser->isParsed()) {
-			Column* new_col = new Column(name, parser->values());
-			insertChildBefore(new_col, child<AbstractAspect>(i));
+			Column* col = child<Column>(name);
+			if (col) {
+				col->replaceValues(0, parser->values());
+			} else {
+				col = new Column(name, parser->values());
+				addChild(col);
+
+				//TODO: Cantor currently ignores the order of variables in the worksheets
+				//and adds new variables at the last position in the model.
+				//Fix this in Cantor and switch to insertChildBefore here later.
+				//insertChildBefore(col, child<Column>(i));
+			}
 		}
 		delete(parser);
     }
@@ -122,13 +132,17 @@ void CantorWorksheet::sessionChanged() {
 }
 
 void CantorWorksheet::modelReset() {
-	qDebug() << "Model Reset";
 	for(int i = 0; i < childCount<Column>(); ++i) {
 		child<Column>(i)->remove();
 	}
 }
 
 void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last) {
+	//TODO: Cantor removes rows from the model even when the variable was changed only.
+	//We don't want this behaviour since this removes the columns from the datasource in the curve.
+	//We need to fix/change this in Cantor.
+	return;
+
 	Q_UNUSED(parent)
 	for(int i = first; i <= last; ++i) {
 		const QString name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
