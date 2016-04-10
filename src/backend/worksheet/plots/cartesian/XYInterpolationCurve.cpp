@@ -307,6 +307,14 @@ void XYInterpolationCurvePrivate::recalculate() {
 		}
 	}
 
+	// check values
+	for (unsigned int i = 0; i<npoints; i++) {
+		if((*yVector)[i] > XYInterpolationCurve::LIMIT_MAX)
+			(*yVector)[i] = XYInterpolationCurve::LIMIT_MAX;
+		else if((*yVector)[i] < XYInterpolationCurve::LIMIT_MIN)
+			(*yVector)[i] = XYInterpolationCurve::LIMIT_MIN;
+	}
+
 	gsl_spline_free(spline);
 	gsl_interp_accel_free(acc);
 

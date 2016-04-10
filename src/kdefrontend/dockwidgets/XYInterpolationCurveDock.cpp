@@ -229,7 +229,7 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
 		QStandardItem* item = model->item(XYInterpolationCurve::Polynomial);
-		if(n < gsl_interp_type_min_size(gsl_interp_polynomial)) {
+		if(n < gsl_interp_type_min_size(gsl_interp_polynomial) || n>100) {	// not good for many points
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 			if(uiGeneralTab.cbType->currentIndex() == XYInterpolationCurve::Polynomial)
 				uiGeneralTab.cbType->setCurrentIndex(0);
@@ -302,6 +302,7 @@ void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYInterpolationCurveDock::typeChanged(int index) {
+	Q_UNUSED(index);
 	//XYInterpolationCurve::InterpolationType type = (XYInterpolationCurve::InterpolationType)index;
 	m_interpolationData.type = (XYInterpolationCurve::InterpolationType)uiGeneralTab.cbType->currentIndex();
 
@@ -309,6 +310,7 @@ void XYInterpolationCurveDock::typeChanged(int index) {
 }
 
 void XYInterpolationCurveDock::evaluateChanged(int index) {
+	Q_UNUSED(index);
 	//XYInterpolationCurve::InterpolationEval eval = (XYInterpolationCurve::InterpolationEval)index;
 	m_interpolationData.evaluate = (XYInterpolationCurve::InterpolationEval)uiGeneralTab.cbEval->currentIndex();
 
