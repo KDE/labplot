@@ -54,7 +54,8 @@
 */
 
 XYEquationCurveDock::XYEquationCurveDock(QWidget *parent): XYCurveDock(parent), m_equationCurve(0) {
-
+	//remove the tab "Error bars"
+	ui.tabWidget->removeTab(5);
 }
 
 /*!

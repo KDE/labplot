@@ -54,6 +54,9 @@
 
 XYInterpolationCurveDock::XYInterpolationCurveDock(QWidget *parent): 
 	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_interpolationCurve(0) {
+
+	//remove the tab "Error bars"
+	ui.tabWidget->removeTab(5);
 }
 
 /*!

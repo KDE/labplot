@@ -51,6 +51,9 @@
 
 XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget *parent): 
 	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_filterCurve(0) {
+
+	//remove the tab "Error bars"
+	ui.tabWidget->removeTab(5);
 }
 
 /*!
