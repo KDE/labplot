@@ -797,7 +797,7 @@ The menu is only available when a datapicker object is selected on the <guilabel
 	<listitem><para>Steffen spline (needs GSL >= 2.0)</para></listitem>
       </itemizedlist>
     <para>
-	The interpolating function is calculated with the given number of data points an evaluated as:
+	The interpolating function is calculated with the given number of data points and evaluated as:
     </para>
       <itemizedlist>
 	<listitem><para>function</para></listitem>
