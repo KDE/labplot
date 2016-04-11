@@ -34,7 +34,6 @@
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 
-#include <gsl/gsl_statistics_double.h>
 #include <gsl/gsl_sort.h>
 #include <math.h>
 
@@ -433,92 +432,104 @@ void Column::calculateStatistics() {
 
     int notNanCount = 0;
     double val;
-    for (int row = 0; row < rowValues->size(); row++) {
+    double columnSum = 0.0;
+    double columnProduct = 1.0;
+    double columnSumNeg = 0.0;
+    double columnSumSquare = 0.0;
+    m_statistics.minimum = INFINITY;
+    m_statistics.maximum = -INFINITY;
+    QMap<double, int> frequencyOfValues;
+    QVector<double> rowData;
+    rowData.reserve(rowValues->size());
+    for (int row = 0; row < rowValues->size(); ++row) {
         val = rowValues->value(row, NAN);
         if (isnan(val) || isMasked(row))
             continue;
 
+        if (val < m_statistics.minimum){
+            m_statistics.minimum = val;
+        }
+        if (val > m_statistics.maximum){
+            m_statistics.maximum = val;
+        }
+        columnSum+= val;
+        columnSumNeg += (1.0 / val);
+        columnSumSquare += pow(val, 2.0);
+        columnProduct *= val;
+        if (frequencyOfValues.contains(val)){
+            frequencyOfValues.operator [](val)++;
+        }
+        else{
+            frequencyOfValues.insert(val, 1);
+        }
         ++notNanCount;
+        rowData.push_back(val);
     }
 
+    if (rowData.size() < rowValues->size()){
+        rowData.squeeze();
+    }
 	if (notNanCount == 0) {
 		setStatisticsAvailable(true);
 		return;
 	}
 
-    double* rowData = new double[notNanCount];
-    int idx = 0;
-    for(int row = 0; row < rowValues->size(); row++){
-        val = rowValues->value(row);
-        if ( isnan(val) || isMasked(row) )
-            continue;
-
-        rowData[idx] = rowValues->operator [](row);
-        idx++;
-    }
-
-    const size_t rowSize = notNanCount;
-    const size_t stride = 1;
-
-    m_statistics.minimum = gsl_stats_min(rowData, stride, rowSize);
-    m_statistics.maximum = gsl_stats_max(rowData, stride, rowSize);
-    m_statistics.arithmeticMean = gsl_stats_mean(rowData, stride, rowSize);
-    m_statistics.variance = gsl_stats_variance_m(rowData, stride, rowSize, m_statistics.arithmeticMean);
-    m_statistics.standardDeviation = sqrt(m_statistics.variance);
-	m_statistics.skewness = gsl_stats_skew_m_sd(rowData, stride, rowSize, m_statistics.arithmeticMean, m_statistics.standardDeviation);
-    m_statistics.kurtosis = gsl_stats_kurtosis_m_sd(rowData, stride, rowSize, m_statistics.arithmeticMean, m_statistics.standardDeviation);
-
-    double columnSum = 0.0;
-    double columnProduct = 1.0;
-    double columnSumNeg = 0.0;
-    double columnSumSquare = 0.0;
-    double columnSumMeanDeviation = 0.0;
-	double columnSumMedianDeviation = 0.0;
-    QVector<double> absoluteMedianList;
-    absoluteMedianList.reserve(rowSize);
-
-    gsl_sort(rowData, stride, rowSize);
-    m_statistics.median = gsl_stats_median_from_sorted_data(rowData, stride, rowSize);
-
-    QMap<double, int> frequencyOfValues;
-
-    for (int i = 0; i < rowValues->size(); ++i){
-		const double value = rowValues->at(i);
-		if ( isnan(value) || isMasked(i) )
-			continue;
-
-		if (frequencyOfValues.contains(value))
-			frequencyOfValues.operator [](value)++;
-		else
-			frequencyOfValues.insert(value, 1);
-
-		columnSum += value;
-		columnSumNeg += (1.0 / value);
-		columnSumSquare += pow(value, 2.0);
-		columnProduct *= value;
-		columnSumMeanDeviation += fabs( value - m_statistics.arithmeticMean );
-		absoluteMedianList[i] = fabs(value - m_statistics.median);
-		columnSumMedianDeviation += absoluteMedianList[i];
-    }
-
+    m_statistics.arithmeticMean = columnSum / notNanCount;
     m_statistics.geometricMean = pow(columnProduct, 1.0 / notNanCount);
     m_statistics.harmonicMean = notNanCount / columnSumNeg;
     m_statistics.contraharmonicMean = columnSumSquare / columnSum;
+
+    double columnSumVariance = 0;
+    double columnSumMeanDeviation = 0.0;
+    double columnSumMedianDeviation = 0.0;
+    double sumForCentralMoment_r3 = 0.0;
+    double sumForCentralMoment_r4 = 0.0;
+
+    gsl_sort(rowData.data(), 1, notNanCount);
+    m_statistics.median = (notNanCount % 2 ? rowData.at((notNanCount-1)/2) :
+                                             (rowData.at((notNanCount-1)/2) +
+                                              rowData.at(notNanCount/2))/2.0);
+    QVector<double> absoluteMedianList;
+    absoluteMedianList.reserve(notNanCount);
+    absoluteMedianList.resize(notNanCount);
+
+    int idx = 0;
+    for(int row = 0; row < rowValues->size(); ++row){
+        val = rowValues->value(row, NAN);
+        if ( isnan(val) || isMasked(row) )
+            continue;
+        columnSumVariance+= pow(val - m_statistics.arithmeticMean, 2.0);
+
+        sumForCentralMoment_r3 += pow(val - m_statistics.arithmeticMean, 3.0);
+        sumForCentralMoment_r4 += pow(val - m_statistics.arithmeticMean, 4.0);
+        columnSumMeanDeviation += fabs( val - m_statistics.arithmeticMean );
+
+        absoluteMedianList[idx] = fabs(val - m_statistics.median);
+        columnSumMedianDeviation += absoluteMedianList[idx];
+        idx++;
+    }
+
+    m_statistics.meanDeviationAroundMedian = columnSumMedianDeviation / notNanCount;
+    m_statistics.medianDeviation = (notNanCount % 2 ? absoluteMedianList.at((notNanCount-1)/2) :
+                                                      (absoluteMedianList.at((notNanCount-1)/2) + absoluteMedianList.at(notNanCount/2))/2.0);
+
+    double centralMoment_r3 = sumForCentralMoment_r3 / notNanCount;
+    double centralMoment_r4 = sumForCentralMoment_r4 / notNanCount;
+
+    m_statistics.variance = columnSumVariance / (notNanCount - 1);
+    m_statistics.standardDeviation = sqrt(m_statistics.variance);
+    m_statistics.skewness = centralMoment_r3 / pow(m_statistics.standardDeviation, 3.0);
+    m_statistics.kurtosis = (centralMoment_r4 / pow(m_statistics.standardDeviation, 4.0)) - 3;
     m_statistics.meanDeviation = columnSumMeanDeviation / notNanCount;
-	m_statistics.meanDeviationAroundMedian = columnSumMedianDeviation / notNanCount;
-    m_statistics.medianDeviation = gsl_stats_median_from_sorted_data(
-                                                                absoluteMedianList.constData(),
-                                                                stride,
-                                                                rowSize);
+
     double entropy = 0.0;
     QList<int> frequencyOfValuesValues = frequencyOfValues.values();
     for (int i = 0; i < frequencyOfValuesValues.size(); ++i){
-        double frequencyNorm = static_cast<double>(frequencyOfValuesValues.at(i)) / rowSize;
+        double frequencyNorm = static_cast<double>(frequencyOfValuesValues.at(i)) / notNanCount;
         entropy += (frequencyNorm * log2(frequencyNorm));
     }
 
     m_statistics.entropy = -entropy;
-
     setStatisticsAvailable(true);
 }
 

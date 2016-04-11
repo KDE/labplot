@@ -63,8 +63,8 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	ui.cbSeparator->addItem(";SPACE");
 	ui.cbSeparator->addItem(":SPACE");
 
-    ui.cbLaTeXExport->addItem("Export spreadsheet");
-    ui.cbLaTeXExport->addItem("Export selection");
+    ui.cbLaTeXExport->addItem(i18n("Export spreadsheet"));
+    ui.cbLaTeXExport->addItem(i18n("Export selection"));
 
     ui.gbMatrixOptions->setVisible(false);
 
@@ -134,7 +134,7 @@ void ExportSpreadsheetDialog::setMatrixMode(bool b) {
         ui.chkExportHeader->hide();
         ui.lEmptyRows->hide();
         ui.chkEmptyRows->hide();
-        ui.cbLaTeXExport->setItemText(0,"Export matrix");
+        ui.cbLaTeXExport->setItemText(0,i18n("Export matrix"));
         if (ui.cbFormat->currentIndex() == 2){
             ui.gbMatrixOptions->setVisible(true);
         }
@@ -273,13 +273,19 @@ void ExportSpreadsheetDialog::formatChanged(int index){
         ui.cbSeparator->hide();
         ui.lSeparator->hide();
         ui.gbLaTeXOptions->setVisible(true);
-        ui.gbMatrixOptions->setVisible(true);
+        if (!ui.lEmptyRows->isHidden()){
+            ui.gbMatrixOptions->setVisible(false);
+        }
+        else{
+            ui.gbMatrixOptions->setVisible(true);
+        }
     }
     else{
         ui.gbLaTeXOptions->setVisible(false);
-        ui.gbMatrixOptions->setVisible(false);
         ui.cbSeparator->setVisible(true);
         ui.lSeparator->setVisible(true);
+        ui.gbMatrixOptions->setVisible(false);
+
     }
     setFormat(static_cast<Format>(index));
 	ui.kleFileName->setText(path);

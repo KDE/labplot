@@ -22,77 +22,113 @@ StatisticsDialog::StatisticsDialog(const QString & title, QWidget *parent) :
 
     m_htmlText = QString("<table border=0 width=100%>"
                          "<tr>"
-                         "<td colspan=2 align=center bgcolor=#D1D1D1><b><big>Location measures</big><b></td>"
+                         "<td colspan=2 align=center bgcolor=#D1D1D1><b><big>"
+                         + i18n("Location measures")+
+                         "</big><b></td>"
                          "</tr>"
                          "<tr></tr>"
                          "<tr>"
-                         "<td width=38%><b>Minimum<b></td>"
+                         "<td width=70%><b>"
+                         + i18n("Minimum")+
+                         "<b></td>"
                          "<td>%1</td>"
                          "</tr>"
                          "<tr>"
-                         "<td><b>Maximum<b></td>"
+                         "<td><b>"
+                         + i18n("Maximum")+
+                         "<b></td>"
                          "<td>%2</td>"
                          "</tr>"
                          "<tr>"
-                         "<td><b>Arithmetic mean<b></td>"
+                         "<td><b>"
+                         + i18n("Arithmetic mean")+
+                         "<b></td>"
                          "<td>%3</td>"
                          "</tr>"
                          "<tr>"
-                         "<td><b>Geometric mean<b></td>"
+                         "<td><b>"
+                         + i18n("Geometric mean")+
+                         "<b></td>"
                          "<td>%4</td>"
                          "</tr>"
                          "<tr>"
-                         "<td><b>Harmonic mean<b></td>"
+                         "<td><b>"
+                         + i18n("Harmonic mean")+
+                         "<b></td>"
                          "<td>%5</td>"
                          "</tr>"
                          "<tr>"
-                         "<td><b>Contraharmonic mean<b></td>"
+                         "<td><b>"
+                         + i18n("Contraharmonic mean")+
+                         "<b></td>"
                          "<td>%6</td>"
                          "</tr>"
                          "<tr>"
-                         "<td><b>Median<b></td>"
+                         "<td><b>"
+                         + i18n("Median")+
+                         "<b></td>"
                          "<td>%7</td>"
                          "</tr>"
                          "<tr></tr>"
                          "<tr>"
-                         "<td colspan=2 align=center bgcolor=#D1D1D1><b><big>Dispersion measures</big></b></td>"
+                         "<td colspan=2 align=center bgcolor=#D1D1D1><b><big>"
+                         + i18n("Dispersion measures")+
+                         "</big></b></td>"
                          "</tr>"
                          "<tr></tr>"
                          "<tr>"
-                         "<td><b>Variance<b></td>"
+                         "<td><b>"
+                         + i18n("Variance")+
+                         "<b></td>"
                          "<td>%8</td>"
                          "</tr>"
                          "<tr>"
-                         "<td><b>Standard deviation<b></td>"
+                         "<td><b>"
+                         + i18n("Standard deviation")+
+                         "<b></td>"
                          "<td>%9</td>"
                          "</tr>"
                          "<tr>"
-                         "<td><b>Mean absolute deviation around mean<b></td>"
+                         "<td><b>"
+                         + i18n("Mean absolute deviation around mean")+
+                         "<b></td>"
                          "<td>%10</td>"
                          "</tr>"
                          "<tr>"
-                         "<td><b>Mean absolute deviation around median<b></td>"
+                         "<td><b>"
+                         + i18n("Mean absolute deviation around median")+
+                         "<b></td>"
                          "<td>%11</td>"
                          "</tr>"
                          "<tr>"
-                         "<td><b>Median absolute deviation<b></td>"
+                         "<td><b>"
+                         + i18n("Median absolute deviation")+
+                         "<b></td>"
                          "<td>%12</td>"
                          "</tr>"
                          "<tr></tr>"
                          "<tr>"
-                         "<td colspan=2 align=center bgcolor=#D1D1D1><b><big>Shape measures</big></b></td>"
+                         "<td colspan=2 align=center bgcolor=#D1D1D1><b><big>"
+                         + i18n("Shape measures")+
+                         "</big></b></td>"
                          "</tr>"
                          "<tr></tr>"
                          "<tr>"
-                         "<td><b>Skewness<b></td>"
+                         "<td><b>"
+                         + i18n("Skewness")+
+                         "<b></td>"
                          "<td>%13</td>"
                          "</tr>"
                          "<tr>"
-                         "<td><b>Kurtosis<b></td>"
+                         "<td><b>"
+                         + i18n("Kurtosis")+
+                         "<b></td>"
                          "<td>%14</td>"
                          "</tr>"
                          "<tr>"
-                         "<td><b>Entropy<b></td>"
+                         "<td><b>"
+                         + i18n("Entropy")+
+                         "<b></td>"
                          "<td>%15</td>"
                          "</tr>"
                          "</table>");
@@ -120,7 +156,7 @@ const QString StatisticsDialog::isNanValue(const double value){
 }
 
 QSize StatisticsDialog::sizeHint() const{
-    return QSize(430, 500);
+    return QSize(470, 520);
 }
 
 void StatisticsDialog::addTabs(){

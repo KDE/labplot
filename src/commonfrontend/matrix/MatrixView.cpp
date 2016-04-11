@@ -987,6 +987,7 @@ void MatrixView::print(QPrinter* printer) const {
 	int right = margin + vertHeaderWidth;
 
 	//Paint the horizontal header first
+    hHeader->font().pointSize();
 	painter.setFont(hHeader->font());
 	QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();
 	QRect br;
