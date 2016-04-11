@@ -253,8 +253,6 @@ void XYInterpolationCurvePrivate::recalculate() {
 #endif
 ///////////////////////////////////////////////////////////
 	int status;
-	//TODO: 
-	//	* check Steffen spline with GSL 2.X
 
 	gsl_interp_accel *acc = gsl_interp_accel_alloc();
 	gsl_spline *spline=0;

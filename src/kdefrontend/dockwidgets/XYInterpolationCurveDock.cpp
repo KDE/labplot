@@ -76,9 +76,9 @@ void XYInterpolationCurveDock::setupGeneral() {
 	}
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 4, 3, 1, 2);
+	gridLayout->addWidget(cbXDataColumn, 4, 2, 1, 2);
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
+	gridLayout->addWidget(cbYDataColumn, 5, 2, 1, 2);
 
 	uiGeneralTab.cbType->addItem(i18n("Linear"));
 	uiGeneralTab.cbType->addItem(i18n("Polynomial"));
