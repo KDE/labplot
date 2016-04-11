@@ -31,9 +31,9 @@
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
+
 #include <QMenu>
 #include <QWidgetAction>
-#include <QDebug>
 
 /*!
   \class XYFourierFilterCurveDock
@@ -71,9 +71,9 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	}
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 4, 1, 1, 2);
+	gridLayout->addWidget(cbXDataColumn, 4, 2, 1, 2);
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 5, 1, 1, 2);
+	gridLayout->addWidget(cbYDataColumn, 5, 2, 1, 2);
 
 	uiGeneralTab.cbType->addItem(i18n("Low pass"));
 	uiGeneralTab.cbType->addItem(i18n("High pass"));

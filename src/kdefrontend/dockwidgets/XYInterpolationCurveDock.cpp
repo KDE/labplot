@@ -31,12 +31,14 @@
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
+
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
+
 #include <gsl_interp.h>	// gsl_interp types
 #include <cmath>        // isnan
-#include <QDebug>
+
 
 /*!
   \class XYInterpolationCurveDock
@@ -74,9 +76,9 @@ void XYInterpolationCurveDock::setupGeneral() {
 	}
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 4, 1, 1, 2);
+	gridLayout->addWidget(cbXDataColumn, 4, 3, 1, 2);
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 5, 1, 1, 2);
+	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
 	uiGeneralTab.cbType->addItem(i18n("Linear"));
 	uiGeneralTab.cbType->addItem(i18n("Polynomial"));
