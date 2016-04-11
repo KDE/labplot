@@ -466,13 +466,14 @@ void Column::calculateStatistics() {
         rowData.push_back(val);
     }
 
-    if (rowData.size() < rowValues->size()){
-        rowData.squeeze();
-    }
 	if (notNanCount == 0) {
 		setStatisticsAvailable(true);
 		return;
 	}
+
+    if (rowData.size() < rowValues->size()){
+        rowData.squeeze();
+    }
 
     m_statistics.arithmeticMean = columnSum / notNanCount;
     m_statistics.geometricMean = pow(columnProduct, 1.0 / notNanCount);
