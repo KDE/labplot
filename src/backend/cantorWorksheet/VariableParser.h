@@ -48,6 +48,7 @@ class VariableParser {
 		void parseMaximaValues();
 		void parsePythonValues();
 		void parseRValues();
+		void parseValues(const QStringList&);
 };
 
 #endif // VARIABLEPARSER_H

@@ -53,15 +53,7 @@ void VariableParser::parseMaximaValues() {
 		m_string = m_string.trimmed();
 
 		const QStringList valueStringList = m_string.split(',');
-		foreach(QString valueString, valueStringList) {
-			valueString = valueString.trimmed();
-			bool isNumber = false;
-			double value = valueString.toDouble(&isNumber);
-			if(!isNumber) value = NAN;
-			m_values << value;
-		}
-
-		m_parsed = true;
+		parseValues(valueStringList);
 	}
 }
 
@@ -77,15 +69,7 @@ void VariableParser::parsePythonValues() {
 		else
 			valueStringList = m_string.split(' ');
 
-		foreach(QString valueString, valueStringList) {
-			valueString = valueString.trimmed();
-			bool isNumber = false;
-			double value = valueString.toDouble(&isNumber);
-			if(!isNumber) value = NAN;
-			m_values << value;
-		}
-
-		m_parsed = true;
+		parseValues(valueStringList);
 	}
 	else if(m_string.count(QString("(")) < 2 && m_string.count(QString("[")) == 0) {
 		m_string = m_string.replace(QString("("), QString(""));
@@ -97,15 +81,7 @@ void VariableParser::parsePythonValues() {
 		else
 			valueStringList = m_string.split(' ');
 
-		foreach(QString valueString, valueStringList) {
-			valueString = valueString.trimmed();
-			bool isNumber = false;
-			double value = valueString.toDouble(&isNumber);
-			if(!isNumber) value = NAN;
-			m_values << value;
-		}
-
-		m_parsed = true;
+		parseValues(valueStringList);
 	}
 }
 
@@ -115,15 +91,7 @@ void VariableParser::parseRValues() {
 	m_string.trimmed();
 
 	const QStringList valueStringList = m_string.split(' ');
-	foreach(QString valueString, valueStringList) {
-		valueString = valueString.trimmed();
-		bool isNumber = false;
-		double value = valueString.toDouble(&isNumber);
-		if(!isNumber) value = NAN;
-		m_values << value;
-	}
-
-	m_parsed = true;
+	parseValues(valueStringList);
 }
 
 bool VariableParser::isParsed() {
@@ -132,4 +100,21 @@ bool VariableParser::isParsed() {
 
 QVector< double > VariableParser::values() {
 	return m_values;
+}
+
+void VariableParser::parseValues(const QStringList& values) {
+	foreach(const QString& v, values) {
+		bool isNumber = false;
+		double value = v.trimmed().toDouble(&isNumber);
+
+		//accept the variable only if there is at least one numerical value in the array.
+		if(isNumber) {
+			if (!m_parsed)
+				m_parsed = true;
+		} else {
+			value = NAN;
+		}
+
+		m_values << value;
+	}
 }
