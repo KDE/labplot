@@ -11,7 +11,7 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="7" column="2">
+   <item row="6" column="3">
     <spacer name="verticalSpacer_4">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -27,7 +27,7 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="2">
+   <item row="2" column="3">
     <spacer name="verticalSpacer_3">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -90,7 +90,7 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="2" colspan="2">
+   <item row="8" column="3" colspan="2">
     <widget class="KComboBox" name="cbType">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -100,7 +100,7 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="2" colspan="2">
+   <item row="9" column="3" colspan="2">
     <widget class="QComboBox" name="cbEval"/>
    </item>
    <item row="10" column="0">
@@ -110,7 +110,7 @@
      </property>
     </widget>
    </item>
-   <item row="10" column="2" colspan="2">
+   <item row="10" column="3" colspan="2">
     <widget class="QSpinBox" name="sbPoints">
      <property name="minimum">
       <number>1</number>
@@ -123,17 +123,17 @@
      </property>
     </widget>
    </item>
-   <item row="14" column="0" colspan="4">
+   <item row="14" column="0" colspan="5">
     <widget class="Line" name="line_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="13" column="2" colspan="2">
+   <item row="13" column="3" colspan="2">
     <widget class="QTextEdit" name="teResult"/>
    </item>
-   <item row="15" column="2">
+   <item row="15" column="3">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -146,7 +146,7 @@
      </property>
     </spacer>
    </item>
-   <item row="15" column="3">
+   <item row="15" column="4">
     <widget class="QPushButton" name="pbRecalculate">
      <property name="text">
       <string>Recalculate</string>
@@ -196,7 +196,7 @@
      </property>
     </widget>
    </item>
-   <item row="16" column="2">
+   <item row="16" column="3">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -219,13 +219,13 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1" colspan="3">
+   <item row="1" column="2" colspan="3">
     <widget class="KLineEdit" name="leComment"/>
    </item>
-   <item row="0" column="1" colspan="3">
+   <item row="0" column="2" colspan="3">
     <widget class="KLineEdit" name="leName"/>
    </item>
-   <item row="11" column="2">
+   <item row="11" column="3">
     <spacer name="verticalSpacer_5">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -237,6 +237,22 @@
       <size>
        <width>214</width>
        <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="1">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>13</width>
+       <height>23</height>
       </size>
      </property>
     </spacer>
