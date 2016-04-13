@@ -442,7 +442,7 @@ void Column::calculateStatistics() {
     QVector<double> rowData;
     rowData.reserve(rowValues->size());
     for (int row = 0; row < rowValues->size(); ++row) {
-        val = rowValues->value(row, NAN);
+        val = rowValues->value(row);
         if (isnan(val) || isMasked(row))
             continue;
 
@@ -466,7 +466,7 @@ void Column::calculateStatistics() {
         rowData.push_back(val);
     }
 
-	if (notNanCount == 0) {
+    if (notNanCount == 0) {
 		setStatisticsAvailable(true);
 		return;
 	}
@@ -496,7 +496,7 @@ void Column::calculateStatistics() {
 
     int idx = 0;
     for(int row = 0; row < rowValues->size(); ++row){
-        val = rowValues->value(row, NAN);
+        val = rowValues->value(row);
         if ( isnan(val) || isMasked(row) )
             continue;
         columnSumVariance+= pow(val - m_statistics.arithmeticMean, 2.0);
@@ -517,10 +517,10 @@ void Column::calculateStatistics() {
     double centralMoment_r3 = sumForCentralMoment_r3 / notNanCount;
     double centralMoment_r4 = sumForCentralMoment_r4 / notNanCount;
 
-    m_statistics.variance = columnSumVariance / (notNanCount - 1);
+    m_statistics.variance = columnSumVariance / notNanCount;
     m_statistics.standardDeviation = sqrt(m_statistics.variance);
     m_statistics.skewness = centralMoment_r3 / pow(m_statistics.standardDeviation, 3.0);
-    m_statistics.kurtosis = (centralMoment_r4 / pow(m_statistics.standardDeviation, 4.0)) - 3;
+    m_statistics.kurtosis = (centralMoment_r4 / pow(m_statistics.standardDeviation, 4.0)) - 3.0;
     m_statistics.meanDeviation = columnSumMeanDeviation / notNanCount;
 
     double entropy = 0.0;

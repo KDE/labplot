@@ -152,11 +152,11 @@ void StatisticsDialog::showEvent(QShowEvent * event){
 }
 
 const QString StatisticsDialog::isNanValue(const double value){
-    return (isnan(value) ? i18n("The value couldn't be calculated.") : QString::number(value));
+    return (isnan(value) ? i18n("The value couldn't be calculated.") : QString::number(value,'g', 10));
 }
 
 QSize StatisticsDialog::sizeHint() const{
-    return QSize(470, 520);
+    return QSize(490, 520);
 }
 
 void StatisticsDialog::addTabs(){
@@ -181,7 +181,6 @@ void StatisticsDialog::addTabs(){
                     arg(isNanValue(m_columns[0]->statistics().kurtosis)).
                     arg(isNanValue(m_columns[0]->statistics().entropy)));
         }
-
         ui.tw_statisticsTabs->addTab(textEdit, m_columns[i]->name());
     }
 }
