@@ -35,6 +35,7 @@
 
 #include "XYInterpolationCurve.h"
 #include "XYInterpolationCurvePrivate.h"
+#include "CartesianCoordinateSystem.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
@@ -168,6 +169,26 @@ XYInterpolationCurvePrivate::~XYInterpolationCurvePrivate() {
 // ...
 // see XYFitCurvePrivate
 
+// calculates derivative of n points of xy-data. result in y
+void XYInterpolationCurvePrivate::deriv(double *x, double *y, unsigned n) {
+	double dy, oldy=0;
+	for(unsigned int i=0;i<n;i++) {
+		if(i==0)
+			dy = (y[i+1]-y[i])/(x[i+1]-x[i]);
+		else if(i==n-1)
+			y[i] = (y[i]-y[i-1])/(x[i]-x[i-1]);
+		else
+			dy = (y[i+1]-y[i-1])/(x[i+1]-x[i-1]);
+
+		if(i!=0)
+			y[i-1]=oldy;
+		oldy=dy;
+	}
+	
+//	for(unsigned int i=0;i<n;i++)
+//		printf("%g %g\n",x[i],y[i]);	
+}
+
 void XYInterpolationCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
@@ -239,8 +260,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
-        double min = xDataColumn->minimum();
-        double max = xDataColumn->maximum();
+	double min = xDataColumn->minimum();
+	double max = xDataColumn->maximum();
 
 	// interpolation settings
 	XYInterpolationCurve::InterpolationType type = interpolationData.type;
@@ -252,65 +273,142 @@ void XYInterpolationCurvePrivate::recalculate() {
 	qDebug()<<"npoints ="<<npoints;
 #endif
 ///////////////////////////////////////////////////////////
-	int status;
+	int status=0;
 
 	gsl_interp_accel *acc = gsl_interp_accel_alloc();
 	gsl_spline *spline=0;
 	switch(type) {
 	case XYInterpolationCurve::Linear:
 		spline = gsl_spline_alloc(gsl_interp_linear, n);
+		status = gsl_spline_init (spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::Polynomial:
 		spline = gsl_spline_alloc(gsl_interp_polynomial, n);
+		status = gsl_spline_init (spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::CSpline:
 		spline = gsl_spline_alloc(gsl_interp_cspline, n);
+		status = gsl_spline_init (spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::CSplinePeriodic:
 		spline = gsl_spline_alloc(gsl_interp_cspline_periodic, n);
+		status = gsl_spline_init (spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::Akima:
 		spline = gsl_spline_alloc(gsl_interp_akima, n);
+		status = gsl_spline_init (spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::AkimaPeriodic:
 		spline = gsl_spline_alloc(gsl_interp_akima_periodic, n);
+		status = gsl_spline_init (spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::Steffen:
 #if GSL_MAJOR_VERSION >= 2
 		spline = gsl_spline_alloc(gsl_interp_steffen, n);
+		status = gsl_spline_init (spline, xdata, ydata, n);
 #endif
+		break;
+	default:
 		break;
 	}
 
-	status = gsl_spline_init (spline, xdata, ydata, n);
-
 	xVector->resize(npoints);
 	yVector->resize(npoints);
+	int j=0;
 	for (unsigned int i = 0; i<npoints; i++) {
+		int a=0,b=n-1;
+
 		double x = min + i*(max-min)/(npoints-1);
 		(*xVector)[i] = x;
-		switch(evaluate) {
-		case XYInterpolationCurve::Function:
-			(*yVector)[i] = gsl_spline_eval(spline, x, acc);
+
+		// find interval
+		switch(type) {
+		case XYInterpolationCurve::Cosine:
+			// find interval
+			while(b-a>1) {
+				j=floor((a+b)/2.);
+				if(xdata[j]>x)
+					b=j;
+				else
+					a=j;
+			}
 			break;
-		case XYInterpolationCurve::Derivative:
-			(*yVector)[i] = gsl_spline_eval_deriv(spline, x, acc);
+		default:
 			break;
-		case XYInterpolationCurve::Derivative2:
-			(*yVector)[i] = gsl_spline_eval_deriv2(spline, x, acc);
+		}
+
+		// evaluate interpolation
+		double t;
+		switch(type) {
+		case XYInterpolationCurve::Linear:
+		case XYInterpolationCurve::Polynomial:
+		case XYInterpolationCurve::CSpline:
+		case XYInterpolationCurve::CSplinePeriodic:
+		case XYInterpolationCurve::Akima:
+		case XYInterpolationCurve::AkimaPeriodic:
+		case XYInterpolationCurve::Steffen:
+			switch(evaluate) {
+			case XYInterpolationCurve::Function:
+				(*yVector)[i] = gsl_spline_eval(spline, x, acc);
+				break;
+			case XYInterpolationCurve::Derivative:
+				(*yVector)[i] = gsl_spline_eval_deriv(spline, x, acc);
+				break;
+			case XYInterpolationCurve::Derivative2:
+				(*yVector)[i] = gsl_spline_eval_deriv2(spline, x, acc);
+				break;
+			case XYInterpolationCurve::Integral:
+				(*yVector)[i] = gsl_spline_eval_integ(spline, min, x, acc);
+				break;
+			}
 			break;
-		case XYInterpolationCurve::Integral:
-			(*yVector)[i] = gsl_spline_eval_integ(spline, min, x, acc);
+		case XYInterpolationCurve::Cosine:
+			t = (x-xdata[a])/(xdata[b]-xdata[a]);
+			t = (1.-cos(M_PI*t))/2.;
+			(*yVector)[i] =  ydata[a] + t*(ydata[b]-ydata[a]);
+			break;
+		case XYInterpolationCurve::Exponential:
+			//TODO
+			break;
+		case XYInterpolationCurve::Rational:
+			//TODO
+			break;
+		case XYInterpolationCurve::PCH:
+			//TODO
 			break;
 		}
 	}
 
+	// calculate "evaluate" option for own types
+	switch(type) {
+	case XYInterpolationCurve::Cosine:
+	case XYInterpolationCurve::Exponential:
+	case XYInterpolationCurve::Rational:
+	case XYInterpolationCurve::PCH:
+		switch(evaluate) {
+		case XYInterpolationCurve::Derivative:
+			deriv(xVector->data(), yVector->data(), npoints);
+			break;
+		case XYInterpolationCurve::Derivative2:
+			//TODO
+			break;
+		case XYInterpolationCurve::Integral:
+			//TODO
+			break;
+		default:
+			break;
+		}
+		break;
+	default:
+		break;
+	}
+
 	// check values
 	for (unsigned int i = 0; i<npoints; i++) {
-		if((*yVector)[i] > XYInterpolationCurve::LIMIT_MAX)
-			(*yVector)[i] = XYInterpolationCurve::LIMIT_MAX;
-		else if((*yVector)[i] < XYInterpolationCurve::LIMIT_MIN)
-			(*yVector)[i] = XYInterpolationCurve::LIMIT_MIN;
+		if((*yVector)[i] > CartesianCoordinateSystem::Scale::LIMIT_MAX)
+			(*yVector)[i] = CartesianCoordinateSystem::Scale::LIMIT_MAX;
+		else if((*yVector)[i] < CartesianCoordinateSystem::Scale::LIMIT_MIN)
+			(*yVector)[i] = CartesianCoordinateSystem::Scale::LIMIT_MIN;
 	}
 
 	gsl_spline_free(spline);

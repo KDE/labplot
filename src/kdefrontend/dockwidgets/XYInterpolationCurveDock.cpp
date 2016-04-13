@@ -89,6 +89,10 @@ void XYInterpolationCurveDock::setupGeneral() {
 #if GSL_MAJOR_VERSION >= 2
 	uiGeneralTab.cbType->addItem(i18n("Steffen spline"));
 #endif
+	uiGeneralTab.cbType->addItem(i18n("Cosine"));
+	uiGeneralTab.cbType->addItem(i18n("Exponential"));
+	uiGeneralTab.cbType->addItem(i18n("Rational functions"));
+	uiGeneralTab.cbType->addItem(i18n("Cubic Hermite"));
 
 	uiGeneralTab.cbEval->addItem(i18n("Function"));
 	uiGeneralTab.cbEval->addItem(i18n("Derivative"));
@@ -288,6 +292,7 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 #endif
+		//TODO: minimum/maximum for new types
 	}
 }
 
