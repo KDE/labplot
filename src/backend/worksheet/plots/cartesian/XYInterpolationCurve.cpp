@@ -174,7 +174,7 @@ void XYInterpolationCurvePrivate::deriv(double *x, double *y, unsigned n) {
 	double dy, oldy=0;
 	for(unsigned int i=0;i<n;i++) {
 		if(i==0)
-			dy = (y[i+1]-y[i])/(x[i+1]-x[i]);
+			dy = (y[1]-y[0])/(x[1]-x[0]);
 		else if(i==n-1)
 			y[i] = (y[i]-y[i-1])/(x[i]-x[i-1]);
 		else
@@ -187,6 +187,41 @@ void XYInterpolationCurvePrivate::deriv(double *x, double *y, unsigned n) {
 	
 //	for(unsigned int i=0;i<n;i++)
 //		printf("%g %g\n",x[i],y[i]);	
+}
+
+// calculates second derivative of n points of xy-data. result in y
+void XYInterpolationCurvePrivate::deriv2(double *x, double *y, unsigned n) {
+	double dx1, dx2, dy=0., oldy=0., oldoldy=0.;
+	for(unsigned int i=0;i<n;i++) {
+		// see http://websrv.cs.umt.edu/isis/index.php/Finite_differencing:_Introduction
+		if(i==0) {
+			dx1=x[1]-x[0];
+			dx2=x[2]-x[1];
+			dy = 2.*(dx1*y[2]-(dx1+dx2)*y[1]+dx2*y[0])/(dx1*dx2*(dx1+dx2));
+		}
+		else if(i==n-1) {
+			dx1=x[i-1]-x[i-2];
+			dx2=x[i]-x[i-1];
+			y[i] = 2.*(dx1*y[i]-(dx1+dx2)*y[i-1]+dx2*y[i-2])/(dx1*dx2*(dx1+dx2));
+			y[i-2]=oldoldy;
+		}
+		else {
+			dx1=x[i]-x[i-1];
+			dx2=x[i+1]-x[i];
+			dy = (dx1*y[i+1]-(dx1+dx2)*y[i]+dx2*y[i-1])/(dx1*dx2*(dx1+dx2));
+		}
+
+		// set value (attention if i==n-2)
+		if(i!=0 && i!= n-2)
+			y[i-1]=oldy;
+		if(i==n-2)
+			oldoldy=oldy;
+
+		oldy=dy;
+	}
+
+//	for(unsigned int i=0;i<n;i++)
+//		printf("%g %g\n",x[i],y[i]);
 }
 
 void XYInterpolationCurvePrivate::recalculate() {
@@ -314,7 +349,6 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	xVector->resize(npoints);
 	yVector->resize(npoints);
-	int j=0;
 	for (unsigned int i = 0; i<npoints; i++) {
 		int a=0,b=n-1;
 
@@ -322,9 +356,10 @@ void XYInterpolationCurvePrivate::recalculate() {
 		(*xVector)[i] = x;
 
 		// find interval
+		int j=0;
 		switch(type) {
 		case XYInterpolationCurve::Cosine:
-			// find interval
+		case XYInterpolationCurve::Exponential:
 			while(b-a>1) {
 				j=floor((a+b)/2.);
 				if(xdata[j]>x)
@@ -368,7 +403,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 			(*yVector)[i] =  ydata[a] + t*(ydata[b]-ydata[a]);
 			break;
 		case XYInterpolationCurve::Exponential:
-			//TODO
+			t = (x-xdata[a])/(xdata[b]-xdata[a]);
+			(*yVector)[i] = ydata[a]*pow(ydata[b]/ydata[a],t);
 			break;
 		case XYInterpolationCurve::Rational:
 			//TODO
@@ -390,7 +426,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 			deriv(xVector->data(), yVector->data(), npoints);
 			break;
 		case XYInterpolationCurve::Derivative2:
-			//TODO
+			deriv2(xVector->data(), yVector->data(), npoints);
 			break;
 		case XYInterpolationCurve::Integral:
 			//TODO
