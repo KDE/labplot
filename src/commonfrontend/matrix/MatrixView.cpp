@@ -970,91 +970,139 @@ void MatrixView::clearSelectedRows() {
 /*!
   prints the complete matrix to \c printer.
  */
+
 void MatrixView::print(QPrinter* printer) const {
-	QPainter painter (printer);
+    QPainter painter (printer);
 
-	int dpiy = printer->logicalDpiY();
-	const int margin = (int) ( (1/2.54)*dpiy ); // 1 cm margins
+    int dpiy = printer->logicalDpiY();
+    const int margin = (int) ( (1/2.54)*dpiy ); // 1 cm margins
 
-	QHeaderView* hHeader = m_tableView->horizontalHeader();
-	QHeaderView* vHeader = m_tableView->verticalHeader();
+    QHeaderView *hHeader = m_tableView->horizontalHeader();
+    QHeaderView *vHeader = m_tableView->verticalHeader();
+    const QVector<QVector<double> >& matrixData = m_matrix->data();
 
-	int rows = m_matrix->rowCount();
-	int cols = m_matrix->columnCount();
-	int height = margin;
-	int i;
-	int vertHeaderWidth = vHeader->width();
-	int right = margin + vertHeaderWidth;
+    int rows = m_matrix->rowCount();
+    int cols = m_matrix->columnCount();
+    int height = margin;
+    int i;
+    int vertHeaderWidth = vHeader->width();
+    int right = margin + vertHeaderWidth;
 
-	//Paint the horizontal header first
-    hHeader->font().pointSize();
-	painter.setFont(hHeader->font());
-	QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();
-	QRect br;
-	br = painter.boundingRect(br, Qt::AlignCenter, headerString);
-	painter.drawLine(right, height, right, height+br.height());
-	QRect tr(br);
+    int columnsPerTable = 0;
+    int headerStringWidth = 0;
+    int firstRowStringWidth = vertHeaderWidth;
+    bool tablesNeeded = false;
+    QVector<int> firstRowCeilSizes;
+    firstRowCeilSizes.reserve(matrixData[0].size());
+    firstRowCeilSizes.resize(matrixData[0].size());
+    QRect br;
 
-	int w;
-	for (i=0; i<cols; ++i) {
-		headerString = m_tableView->model()->headerData(i, Qt::Horizontal).toString();
-		w = m_tableView->columnWidth(i);
-		tr.setTopLeft(QPoint(right,height));
-		tr.setWidth(w);
-		tr.setHeight(br.height());
+    for(int ii = 0; ii < matrixData.size();++ii){
+        br = painter.boundingRect(br, Qt::AlignCenter,QString::number(matrixData[ii][0]) + '\t');
+        firstRowCeilSizes[ii] = br.width() > m_tableView->columnWidth(ii) ?
+                    br.width() : m_tableView->columnWidth(ii);
+    }
+    for (int col = 0; col < cols; ++col){
+        headerStringWidth += m_tableView->columnWidth(col);
+        br = painter.boundingRect(br, Qt::AlignCenter,QString::number(matrixData[col][0]) + '\t');
+        firstRowStringWidth += br.width();
+        if ((headerStringWidth >= printer->pageRect().width() -2*margin) ||
+                (firstRowStringWidth >= printer->pageRect().width() - 2*margin)){
+            tablesNeeded = true;
+            break;
+        }
+        columnsPerTable++;
+    }
 
-		painter.drawText(tr, Qt::AlignCenter, headerString);
-		right += w;
-		painter.drawLine(right, height, right, height+tr.height());
+    int tablesCount = cols / columnsPerTable;
+    int remainingColumns = cols % columnsPerTable;
 
-		if (right >= printer->pageRect().width()-2*margin )
-			break;
-	}
+    if (!tablesNeeded){
+        tablesCount = 1;
+        columnsPerTable = cols;
+    }
+    if (remainingColumns > 0){
+        tablesCount++;
+    }
+    for (int table = 0; table < tablesCount; ++table){
+        right = margin + vertHeaderWidth;
+        //Paint the horizontal header first
+        painter.setFont(hHeader->font());
+        QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();
+        QRect br;
+        br = painter.boundingRect(br, Qt::AlignCenter, headerString);
+        QRect tr(br);
+        if (table != 0){
+            height += tr.height();
+        }
+        painter.drawLine(right, height, right, height+br.height());
 
-	painter.drawLine(margin + vertHeaderWidth, height, right-1, height);//first horizontal line
-	height += tr.height();
-	painter.drawLine(margin, height, right-1, height);
+        int w;
+        i = table * columnsPerTable;
+        int toI = table * columnsPerTable + columnsPerTable;
+        if ((remainingColumns > 0) && (table == tablesCount-1)){
+            i = (tablesCount-1)*columnsPerTable;
+            toI = (tablesCount-1)* columnsPerTable + remainingColumns;
+        }
 
+        for (; i<toI; ++i) {
+            headerString = m_tableView->model()->headerData(i, Qt::Horizontal).toString();
+            w = /*m_tableView->columnWidth(i)*/ firstRowCeilSizes[i];
+            tr.setTopLeft(QPoint(right,height));
+            tr.setWidth(w);
+            tr.setHeight(br.height());
 
-	// print table values
-	const QVector<QVector<double> >& matrixData = m_matrix->data();
-	QString cellText;
-	for (i=0; i<rows; ++i) {
-		right = margin;
-		cellText = m_tableView->model()->headerData(i, Qt::Vertical).toString()+'\t';
-		tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
-		painter.drawLine(right, height, right, height+tr.height());
+            painter.drawText(tr, Qt::AlignCenter, headerString);
+            right += w;
+            painter.drawLine(right, height, right, height+tr.height());
 
-		br.setTopLeft(QPoint(right,height));
-		br.setWidth(vertHeaderWidth);
-		br.setHeight(tr.height());
-		painter.drawText(br, Qt::AlignCenter, cellText);
-		right += vertHeaderWidth;
-		painter.drawLine(right, height, right, height+tr.height());
+        }
+        //first horizontal line
+        painter.drawLine(margin + vertHeaderWidth, height, right-1, height);
+        height += tr.height();
+        painter.drawLine(margin, height, right-1, height);
 
-		for(int j=0;j<cols;j++){
-			int w = m_tableView->columnWidth(j);
-			cellText = QString::number(matrixData[j][i]) +'\t';
-			tr = painter.boundingRect(tr,Qt::AlignCenter,cellText);
-			br.setTopLeft(QPoint(right,height));
-			br.setWidth(w);
-			br.setHeight(tr.height());
-			painter.drawText(br, Qt::AlignCenter, cellText);
-			right += w;
-			painter.drawLine(right, height, right, height+tr.height());
+        // print table values
+        QString cellText;
+        for (i=0; i<rows; ++i) {
+            right = margin;
+            cellText = m_tableView->model()->headerData(i, Qt::Vertical).toString()+'\t';
+            tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
+            painter.drawLine(right, height, right, height+tr.height());
 
-			if (right >= printer->width()-2*margin )
-				break;
-		}
-		height += br.height();
-		painter.drawLine(margin, height, right-1, height);
+            br.setTopLeft(QPoint(right,height));
+            br.setWidth(vertHeaderWidth);
+            br.setHeight(tr.height());
+            painter.drawText(br, Qt::AlignCenter, cellText);
+            right += vertHeaderWidth;
+            painter.drawLine(right, height, right, height+tr.height());
+            int j = table * columnsPerTable;
+            int toJ = table * columnsPerTable + columnsPerTable;
+            if ((remainingColumns > 0) && (table == tablesCount-1)){
+                j = (tablesCount-1)*columnsPerTable;
+                toJ = (tablesCount-1)* columnsPerTable + remainingColumns;
+            }
+            for(;j< toJ;j++){
+                int w = /*m_tableView->columnWidth(j)*/ firstRowCeilSizes[j];
+                cellText = QString::number(matrixData[j][i]) + '\t';
+                tr = painter.boundingRect(tr,Qt::AlignCenter,cellText);
+                br.setTopLeft(QPoint(right,height));
+                br.setWidth(w);
+                br.setHeight(tr.height());
+                painter.drawText(br, Qt::AlignCenter, cellText);
+                right += w;
+                painter.drawLine(right, height, right, height+tr.height());
+            }
+            height += br.height();
+            painter.drawLine(margin, height, right-1, height);
 
-		if (height >= printer->height()-margin ){
-			printer->newPage();
-			height = margin;
-			painter.drawLine(margin, height, right, height);
-		}
-	}
+            if (height >= printer->height()-margin ){
+                printer->newPage();
+                height = margin;
+                painter.drawLine(margin, height, right, height);
+            }
+        }
+    }
 }
 
 void MatrixView::exportToFile(const QString& path, const QString& separator) const {

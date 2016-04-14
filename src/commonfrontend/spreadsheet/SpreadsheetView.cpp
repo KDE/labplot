@@ -1684,90 +1684,131 @@ void SpreadsheetView::columnClicked(int column){
 /*!
   prints the complete spreadsheet to \c printer.
  */
-void SpreadsheetView::print(QPrinter* printer) const{
-	QPainter painter (printer);
+ void SpreadsheetView::print(QPrinter* printer) const{
+     QPainter painter (printer);
 
-	int dpiy = printer->logicalDpiY();
-	const int margin = (int) ( (1/2.54)*dpiy ); // 1 cm margins
+     int dpiy = printer->logicalDpiY();
+     const int margin = (int) ( (1/2.54)*dpiy ); // 1 cm margins
 
-	QHeaderView *hHeader = m_tableView->horizontalHeader();
-	QHeaderView *vHeader = m_tableView->verticalHeader();
+     QHeaderView *hHeader = m_tableView->horizontalHeader();
+     QHeaderView *vHeader = m_tableView->verticalHeader();
 
-	int rows = m_spreadsheet->rowCount();
-	int cols = m_spreadsheet->columnCount();
-	int height = margin;
-	int i;
-	int vertHeaderWidth = vHeader->width();
-	int right = margin + vertHeaderWidth;
+     int rows = m_spreadsheet->rowCount();
+     int cols = m_spreadsheet->columnCount();
+     int height = margin;
+     int i;
+     int vertHeaderWidth = vHeader->width();
+     int right = margin + vertHeaderWidth;
 
-	//Paint the horizontal header first
-	painter.setFont(hHeader->font());
-	QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();
-	QRect br;
-	br = painter.boundingRect(br, Qt::AlignCenter, headerString);
-	painter.drawLine(right, height, right, height+br.height());
-	QRect tr(br);
+     int columnsPerTable = 0;
+     int headerStringWidth = 0;
+     int firstRowStringWidth = 0;
+     bool tablesNeeded = false;
+     for (int col = 0; col < cols; ++col){
+         headerStringWidth += m_tableView->columnWidth(col);
+         firstRowStringWidth += m_spreadsheet->column(col)->asStringColumn()->textAt(0).length();
+         if ((headerStringWidth >= printer->pageRect().width() -2*margin) ||
+                 (firstRowStringWidth >= printer->pageRect().width() - 2*margin)){
+            tablesNeeded = true;
+            break;
+         }
+         columnsPerTable++;
+     }
 
-	int w;
-	for (i=0; i<cols; ++i) {
-		headerString = m_tableView->model()->headerData(i, Qt::Horizontal).toString();
-		w = m_tableView->columnWidth(i);
-		tr.setTopLeft(QPoint(right,height));
-		tr.setWidth(w);
-		tr.setHeight(br.height());
+     int tablesCount = cols / columnsPerTable;
+     int remainingColumns = cols % columnsPerTable;
 
- 		painter.drawText(tr, Qt::AlignCenter, headerString);
-		right += w;
-		painter.drawLine(right, height, right, height+tr.height());
+     if (!tablesNeeded){
+         tablesCount = 1;
+         columnsPerTable = cols;
+     }
 
-		if (right >= printer->pageRect().width()-2*margin )
-			break;
-	}
+     if (remainingColumns > 0){
+        tablesCount++;
+     }
+     //Paint the horizontal header first
+     for (int table = 0; table < tablesCount; ++table){
+         right = margin + vertHeaderWidth;
 
-	painter.drawLine(margin + vertHeaderWidth, height, right-1, height);//first horizontal line
-	height += tr.height();
-	painter.drawLine(margin, height, right-1, height);
+         painter.setFont(hHeader->font());
+         QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();
+         QRect br;
+         br = painter.boundingRect(br, Qt::AlignCenter, headerString);
+         QRect tr(br);
+         if (table != 0){
+             height += tr.height();
+         }
+         painter.drawLine(right, height, right, height+br.height());
 
+         int w;
+         i = table * columnsPerTable;
+         int toI = table * columnsPerTable + columnsPerTable;
+         if ((remainingColumns > 0) && (table == tablesCount-1)){
+            i = (tablesCount-1)*columnsPerTable;
+            toI = (tablesCount-1)* columnsPerTable + remainingColumns;
+         }
 
-	// print table values
-	QString cellText;
-	for (i=0; i<rows; ++i) {
-		right = margin;
-		cellText = m_tableView->model()->headerData(i, Qt::Vertical).toString()+'\t';
-		tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
-		painter.drawLine(right, height, right, height+tr.height());
+         for (; i<toI; ++i) {
+             headerString = m_tableView->model()->headerData(i, Qt::Horizontal).toString();
+             w = m_tableView->columnWidth(i);
+             tr.setTopLeft(QPoint(right,height));
+             tr.setWidth(w);
+             tr.setHeight(br.height());
 
-		br.setTopLeft(QPoint(right,height));
-		br.setWidth(vertHeaderWidth);
-		br.setHeight(tr.height());
-		painter.drawText(br, Qt::AlignCenter, cellText);
-		right += vertHeaderWidth;
-		painter.drawLine(right, height, right, height+tr.height());
+             painter.drawText(tr, Qt::AlignCenter, headerString);
+             right += w;
+             painter.drawLine(right, height, right, height+tr.height());
 
-		for(int j=0;j<cols;j++){
-			int w = m_tableView->columnWidth(j);
-			cellText = m_spreadsheet->text(i,j)+'\t';
-			tr = painter.boundingRect(tr,Qt::AlignCenter,cellText);
-			br.setTopLeft(QPoint(right,height));
-			br.setWidth(w);
-			br.setHeight(tr.height());
-			painter.drawText(br, Qt::AlignCenter, cellText);
-			right += w;
-			painter.drawLine(right, height, right, height+tr.height());
+         }
 
-			if (right >= printer->width()-2*margin )
-				break;
-		}
-		height += br.height();
-		painter.drawLine(margin, height, right-1, height);
+         painter.drawLine(margin + vertHeaderWidth, height, right-1, height);//first horizontal line
+         height += tr.height();
+         painter.drawLine(margin, height, right-1, height);
 
-		if (height >= printer->height()-margin ){
-			printer->newPage();
-			height = margin;
-			painter.drawLine(margin, height, right, height);
-		}
-	}
-}
+         // print table values
+         QString cellText;
+         for (i=0; i<rows; ++i) {
+             right = margin;
+             cellText = m_tableView->model()->headerData(i, Qt::Vertical).toString()+'\t';
+             tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
+             painter.drawLine(right, height, right, height+tr.height());
+
+             br.setTopLeft(QPoint(right,height));
+             br.setWidth(vertHeaderWidth);
+             br.setHeight(tr.height());
+             painter.drawText(br, Qt::AlignCenter, cellText);
+             right += vertHeaderWidth;
+             painter.drawLine(right, height, right, height+tr.height());
+             int j = table * columnsPerTable;
+             int toJ = table * columnsPerTable + columnsPerTable;
+             if ((remainingColumns > 0) && (table == tablesCount-1)){
+                j = (tablesCount-1)*columnsPerTable;
+                toJ = (tablesCount-1)* columnsPerTable + remainingColumns;
+             }
+             for(;j< toJ;j++){
+                 int w = m_tableView->columnWidth(j);
+                 cellText = m_spreadsheet->column(j)->isValid(i) ? m_spreadsheet->text(i,j)+'\t':
+                                                                   QLatin1String("- \t");
+                 tr = painter.boundingRect(tr,Qt::AlignCenter,cellText);
+                 br.setTopLeft(QPoint(right,height));
+                 br.setWidth(w);
+                 br.setHeight(tr.height());
+                 painter.drawText(br, Qt::AlignCenter, cellText);
+                 right += w;
+                 painter.drawLine(right, height, right, height+tr.height());
+
+             }
+             height += br.height();
+             painter.drawLine(margin, height, right-1, height);
+
+             if (height >= printer->height()-margin ){
+                 printer->newPage();
+                 height = margin;
+                 painter.drawLine(margin, height, right, height);
+             }
+         }
+     }
+ }
 
 void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader, const QString& separator) const {
 	QFile file(path);
