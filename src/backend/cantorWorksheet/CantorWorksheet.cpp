@@ -213,9 +213,15 @@ void CantorWorksheet::save(QXmlStreamWriter* writer) const{
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
+	//general
+	writer->writeStartElement( "general" );
+	writer->writeAttribute( "backend_name", m_backendName);
+	//TODO: save worksheet settings
+	writer->writeEndElement();
+
 	//save the content of cantor's worksheet
 	QByteArray content = m_worksheetAccess->saveWorksheetToByteArray();
-	writer->writeStartElement("cantor");
+	writer->writeStartElement("worksheet");
 	writer->writeAttribute("content", content.toBase64());
 	writer->writeEndElement();
 
@@ -250,8 +256,15 @@ bool CantorWorksheet::load(XmlStreamReader* reader){
 			continue;
 
 		if (reader->name() == "comment"){
-			if (!readCommentElement(reader)) return false;
-		} else if (reader->name() == "cantor"){
+			if (!readCommentElement(reader))
+				return false;
+		} else if (reader->name() == "general"){
+			attribs = reader->attributes();
+
+			m_backendName = attribs.value("backend_name").toString().trimmed();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'backend_name'"));
+		} else if (reader->name() == "worksheet"){
 			attribs = reader->attributes();
 
 			str = attribs.value("content").toString().trimmed();
