@@ -213,11 +213,16 @@ void CantorWorksheet::save(QXmlStreamWriter* writer) const{
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//general
+	//save the content of cantor's worksheet
 	QByteArray content = m_worksheetAccess->saveWorksheetToByteArray();
 	writer->writeStartElement("cantor");
 	writer->writeAttribute("content", content.toBase64());
 	writer->writeEndElement();
+
+	//save columns(variables)
+	foreach (Column * col, children<Column>(IncludeHidden))
+		col->save(writer);
+
 	writer->writeEndElement(); // close "cantorWorksheet" section
 }
 
@@ -255,6 +260,13 @@ bool CantorWorksheet::load(XmlStreamReader* reader){
 
 			QByteArray content = QByteArray::fromBase64(str.toAscii());
 			rc = init(&content);
+		} else if(reader->name() == "column") {
+			Column* column = new Column("");
+			if (!column->load(reader)) {
+				delete column;
+				return false;
+			}
+			addChild(column);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;
