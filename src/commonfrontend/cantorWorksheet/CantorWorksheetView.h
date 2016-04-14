@@ -78,6 +78,7 @@ class CantorWorksheetView : public QWidget {
 		QAction* m_completion;
 		QAction* m_lineNumbers;
 		QAction* m_animateWorksheet;
+		QAction* m_latexTypesetting;
 		QMenu* m_worksheetMenu;
 		QMenu* m_linearAlgebraMenu;
 		QMenu* m_calculateMenu;

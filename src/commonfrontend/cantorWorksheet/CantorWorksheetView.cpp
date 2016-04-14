@@ -128,6 +128,10 @@ void CantorWorksheetView::initActions() {
 	m_animateWorksheet->setChecked(true);
 	m_animateWorksheet->setData("enable_animations");
 
+	m_latexTypesetting = new KToggleAction(i18n("Latex Typesetting"), cantorActionGroup);
+	m_latexTypesetting->setChecked(true);
+	m_latexTypesetting->setData("enable_typesetting");
+
 	connect(cantorActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(triggerCantorAction(QAction*)));
 }
 
@@ -156,6 +160,7 @@ void CantorWorksheetView::initMenus() {
 	m_settingsMenu->addAction(m_completion);
 	m_settingsMenu->addAction(m_lineNumbers);
 	m_settingsMenu->addAction(m_animateWorksheet);
+	m_settingsMenu->addAction(m_latexTypesetting);
 }
 
 /*!

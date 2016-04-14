@@ -29,6 +29,7 @@
 #include "CantorWorksheet.h"
 #include "VariableParser.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/Project.h"
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 
 #include <KLocalizedString>
@@ -115,6 +116,7 @@ void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int las
 				col->replaceValues(0, parser->values());
 			} else {
 				col = new Column(name, parser->values());
+				col->setUndoAware(false);
 				addChild(col);
 
 				//TODO: Cantor currently ignores the order of variables in the worksheets
@@ -122,7 +124,17 @@ void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int las
 				//Fix this in Cantor and switch to insertChildBefore here later.
 				//insertChildBefore(col, child<Column>(i));
 			}
+		} else {
+			Column* col = child<Column>(name);
+			if (col) {
+				//the already existing variable doesn't contain any numerical values -> remove it
+				removeChild(col);
+			} else {
+				//no numerical lists were changed, still need to set project to changed.
+				project()->setChanged(true);
+			}
 		}
+
 		delete(parser);
     }
 }
