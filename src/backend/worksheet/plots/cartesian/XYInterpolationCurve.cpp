@@ -224,6 +224,21 @@ void XYInterpolationCurvePrivate::deriv2(double *x, double *y, unsigned n) {
 //		printf("%g %g\n",x[i],y[i]);
 }
 
+// calculates integration of n points of xy-data. result in y
+void XYInterpolationCurvePrivate::integ(double *x, double *y, unsigned n) {
+	double vold=0.;
+	for(unsigned int i=0;i<n-1;i++) {
+		// trapezoidal rule
+		double v = (x[i+1]-x[i])*(y[i+1]+y[i])/2.;
+		if(i==0)
+			y[i]=vold;
+		else
+			y[i]=y[i-1]+vold;
+		vold=v;
+	}
+	y[n-1]=y[n-2]+vold;
+}
+
 void XYInterpolationCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
@@ -422,6 +437,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 	case XYInterpolationCurve::Rational:
 	case XYInterpolationCurve::PCH:
 		switch(evaluate) {
+		case XYInterpolationCurve::Function:
+			break;
 		case XYInterpolationCurve::Derivative:
 			deriv(xVector->data(), yVector->data(), npoints);
 			break;
@@ -429,9 +446,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 			deriv2(xVector->data(), yVector->data(), npoints);
 			break;
 		case XYInterpolationCurve::Integral:
-			//TODO
-			break;
-		default:
+			integ(xVector->data(), yVector->data(), npoints);
 			break;
 		}
 		break;
