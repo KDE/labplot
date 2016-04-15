@@ -1,3 +1,8 @@
+-----2.3-----
+New features:
+	* Interpolation and Fourier filter of 1d data
+	* Statistics on spreadsheets and matrices
+	* Export of spreadsheets and matrices to LaTeX tables
 -----2.2-----
 New features:
 	* Datapicker - tool for extracting curves and data points from imported images
@@ -5,8 +10,6 @@ New features:
 	* Accept drag&drop events
 	* Support GSL 2.x
 	* Import and export dialogs save and restore their settings and sizes
-	* Statistics on spreadsheets and matrices
-	* Export of spreadsheets and matrices to LaTeX tables
 
 Performance improvements:
 	* Faster rendering of the image view of the matrix
