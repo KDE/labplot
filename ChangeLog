@@ -5,6 +5,8 @@ New features:
 	* Accept drag&drop events
 	* Support GSL 2.x
 	* Import and export dialogs save and restore their settings and sizes
+	* Statistics on spreadsheets and matrices
+	* Export of spreadsheets and matrices to LaTeX tables
 
 Performance improvements:
 	* Faster rendering of the image view of the matrix

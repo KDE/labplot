@@ -7,21 +7,20 @@
 class Column;
 
 class StatisticsDialog : public KDialog {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    explicit StatisticsDialog(const QString&, QWidget *parent = 0);
-    void setColumns(const QList<Column*>& columns);
+	explicit StatisticsDialog(const QString&, QWidget *parent = 0);
+	void setColumns(const QList<Column*>& columns);
 
 private:
-    void addTabs();
-    const QString isNanValue(const double value);
-    Ui::StatisticsDialog ui;
-    QString m_htmlText;
-    QList<Column*> m_columns;
-    QSize sizeHint() const;
+	const QString isNanValue(const double value);
+	Ui::StatisticsDialog ui;
+	QString m_htmlText;
+	QList<Column*> m_columns;
+	QSize sizeHint() const;
 
 private slots:
-    void calculateStatisticsOnCurrentTab(int index);
+	void currentTabChanged(int index);
 };
 
 #endif
