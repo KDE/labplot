@@ -6,13 +6,11 @@
 
 class Column;
 
-class StatisticsDialog : public KDialog
-{
+class StatisticsDialog : public KDialog {
     Q_OBJECT
 public:
     explicit StatisticsDialog(const QString&, QWidget *parent = 0);
     void setColumns(const QList<Column*>& columns);
-    void addColumn(Column* col);
 
 private:
     void addTabs();
@@ -24,9 +22,6 @@ private:
 
 private slots:
     void calculateStatisticsOnCurrentTab(int index);
-protected:
-    void showEvent(QShowEvent*);
-    void keyPressEvent(QKeyEvent*);
 };
 
 #endif

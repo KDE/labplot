@@ -1415,12 +1415,13 @@ void SpreadsheetView::showColumnStatistics(bool forAll){
     if (!forAll){
         dlg->setColumns(selectedColumns());
     }
-    else if (forAll){
-        for(int col = 0; col < m_spreadsheet->columnCount(); ++col){
-            if (m_spreadsheet->column(col)->columnMode() == AbstractColumn::Numeric){
-                dlg->addColumn(m_spreadsheet->column(col));
-            }
-        }
+    else if (forAll) {
+		QList<Column*> list;
+		for(int col = 0; col < m_spreadsheet->columnCount(); ++col){
+			if (m_spreadsheet->column(col)->columnMode() == AbstractColumn::Numeric)
+				list << m_spreadsheet->column(col);
+		}
+		dlg->setColumns(list);
     }
     dlg->show();
 }
@@ -1429,15 +1430,17 @@ void SpreadsheetView::showRowStatistics(){
     QString dlgTitle(m_spreadsheet->name() + " row statistics");
     StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
 
+	QList<Column*> list;
     for (int i = 0; i < m_spreadsheet->rowCount(); ++i){
         if (isRowSelected(i)){
             QVector<double> rowValues;
             for (int j = 0; j < m_spreadsheet->columnCount(); ++j){
                 rowValues << m_spreadsheet->column(j)->valueAt(i);
             }
-            dlg->addColumn(new Column(QString::number(i+1), rowValues));
+            list << new Column(QString::number(i+1), rowValues);
         }
     }
+    dlg->setColumns(list);
     dlg->setAttribute(Qt::WA_DeleteOnClose);
     dlg->show();
 }

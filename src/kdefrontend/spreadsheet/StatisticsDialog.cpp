@@ -3,10 +3,9 @@
 #include "math.h"
 
 #include <QTextEdit>
-#include <QKeyEvent>
 #include <QDesktopWidget>
 
-StatisticsDialog::StatisticsDialog(const QString & title, QWidget *parent) :
+StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
     KDialog(parent){
 
     QWidget* mainWidget = new QWidget(this);
@@ -138,17 +137,18 @@ StatisticsDialog::StatisticsDialog(const QString & title, QWidget *parent) :
     connect(this, SIGNAL(okClicked()), this, SLOT(close()));
 }
 
-void StatisticsDialog::setColumns(const QList<Column *> &columns){
+void StatisticsDialog::setColumns(const QList<Column*>& columns){
+	if (!columns.size())
+		return;
+
     m_columns = columns;
-}
 
-void StatisticsDialog::addColumn(Column *col){
-    m_columns << col;
-}
-
-void StatisticsDialog::showEvent(QShowEvent * event){
-    addTabs();
-    KDialog::showEvent(event);
+    for (int i = 0; i < m_columns.size(); ++i){
+        QTextEdit* textEdit = new QTextEdit;
+        textEdit->setReadOnly(true);
+        ui.tw_statisticsTabs->addTab(textEdit, m_columns[i]->name());
+    }
+    calculateStatisticsOnCurrentTab(0);
 }
 
 const QString StatisticsDialog::isNanValue(const double value){
@@ -157,32 +157,6 @@ const QString StatisticsDialog::isNanValue(const double value){
 
 QSize StatisticsDialog::sizeHint() const{
     return QSize(490, 520);
-}
-
-void StatisticsDialog::addTabs(){
-    for (int i = 0; i < m_columns.size(); ++i){
-        QTextEdit* textEdit = new QTextEdit;
-        textEdit->setReadOnly(true);
-        if (i == 0){
-            m_columns[0]->calculateStatistics();
-            textEdit->setHtml(m_htmlText.arg(isNanValue(m_columns[0]->statistics().minimum)).
-                    arg(isNanValue(m_columns[0]->statistics().maximum)).
-                    arg(isNanValue(m_columns[0]->statistics().arithmeticMean)).
-                    arg(isNanValue(m_columns[0]->statistics().geometricMean)).
-                    arg(isNanValue(m_columns[0]->statistics().harmonicMean)).
-                    arg(isNanValue(m_columns[0]->statistics().contraharmonicMean)).
-					arg(isNanValue(m_columns[0]->statistics().median)).
-                    arg(isNanValue(m_columns[0]->statistics().variance)).
-                    arg(isNanValue(m_columns[0]->statistics().standardDeviation)).
-                    arg(isNanValue(m_columns[0]->statistics().meanDeviation)).
-					arg(isNanValue(m_columns[0]->statistics().meanDeviationAroundMedian)).
-                    arg(isNanValue(m_columns[0]->statistics().medianDeviation)).
-                    arg(isNanValue(m_columns[0]->statistics().skewness)).
-                    arg(isNanValue(m_columns[0]->statistics().kurtosis)).
-                    arg(isNanValue(m_columns[0]->statistics().entropy)));
-        }
-        ui.tw_statisticsTabs->addTab(textEdit, m_columns[i]->name());
-    }
 }
 
 void StatisticsDialog::calculateStatisticsOnCurrentTab(int index){
@@ -206,21 +180,4 @@ void StatisticsDialog::calculateStatisticsOnCurrentTab(int index){
             arg(isNanValue(m_columns[index]->statistics().skewness)).
             arg(isNanValue(m_columns[index]->statistics().kurtosis)).
             arg(isNanValue(m_columns[index]->statistics().entropy)));
-}
-
-void StatisticsDialog::keyPressEvent(QKeyEvent * event){
-    switch (event->key()) {
-    case Qt::Key_Escape:
-        this->close();
-        break;
-    case Qt::Key_Enter:
-        this->close();
-        break;
-    case Qt::Key_Return:
-        this->close();
-        break;
-    default:
-        KDialog::keyPressEvent(event);
-        break;
-    }
 }
