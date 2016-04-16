@@ -1377,19 +1377,23 @@ void SpreadsheetView::showAllColumnsStatistics() {
 void SpreadsheetView::showColumnStatistics(bool forAll) {
 	QString dlgTitle(m_spreadsheet->name() + " column statistics");
 	StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
+    QList<Column*> list;
 
 	dlg->setAttribute(Qt::WA_DeleteOnClose);
 	if (!forAll)
 		dlg->setColumns(selectedColumns());
 	else if (forAll) {
-		QList<Column*> list;
 		for(int col = 0; col < m_spreadsheet->columnCount(); ++col) {
 			if (m_spreadsheet->column(col)->columnMode() == AbstractColumn::Numeric)
 				list << m_spreadsheet->column(col);
 		}
 		dlg->setColumns(list);
 	}
-	dlg->show();
+    if (dlg->exec() == KDialog::Accepted){
+        if (forAll){
+            list.clear();
+        }
+    }
 }
 
 void SpreadsheetView::showRowStatistics() {
