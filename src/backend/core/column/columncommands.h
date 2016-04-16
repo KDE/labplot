@@ -106,7 +106,6 @@ class ColumnInsertRowsCmd : public QUndoCommand
 {
 public:
 	explicit ColumnInsertRowsCmd(ColumnPrivate* col, int before, int count, QUndoCommand* parent = 0);
-	~ColumnInsertRowsCmd();
 
 	virtual void redo();
 	virtual void undo();
@@ -139,7 +138,6 @@ class ColumnSetPlotDesignationCmd : public QUndoCommand
 {
 public:
 	explicit ColumnSetPlotDesignationCmd(ColumnPrivate* col, AbstractColumn::PlotDesignation pd, QUndoCommand* parent = 0);
-	~ColumnSetPlotDesignationCmd();
 
 	virtual void redo();
 	virtual void undo();
@@ -154,7 +152,6 @@ class ColumnSetWidthCmd : public QUndoCommand
 {
 public:
 	explicit ColumnSetWidthCmd(ColumnPrivate* col, int new_value, QUndoCommand* parent = 0);
-	~ColumnSetWidthCmd();
 
 	virtual void redo();
 	virtual void undo();
@@ -221,7 +218,6 @@ class ColumnClearFormulasCmd : public QUndoCommand
 {
 public:
 	explicit ColumnClearFormulasCmd(ColumnPrivate* col, QUndoCommand* parent = 0);
-	~ColumnClearFormulasCmd();
 
 	virtual void redo();
 	virtual void undo();
@@ -237,7 +233,6 @@ class ColumnSetTextCmd : public QUndoCommand
 {
 public:
 	explicit ColumnSetTextCmd(ColumnPrivate* col, int row, const QString& new_value, QUndoCommand* parent = 0);
-	~ColumnSetTextCmd();
 
 	virtual void redo();
 	virtual void undo();
@@ -254,7 +249,6 @@ class ColumnSetValueCmd : public QUndoCommand
 {
 public:
 	explicit ColumnSetValueCmd(ColumnPrivate* col, int row, double new_value, QUndoCommand* parent = 0);
-	~ColumnSetValueCmd();
 
 	virtual void redo();
 	virtual void undo();
@@ -271,7 +265,6 @@ class ColumnSetDateTimeCmd : public QUndoCommand
 {
 public:
 	explicit ColumnSetDateTimeCmd(ColumnPrivate* col, int row, const QDateTime& new_value, QUndoCommand* parent = 0);
-	~ColumnSetDateTimeCmd();
 
 	virtual void redo();
 	virtual void undo();
@@ -288,7 +281,6 @@ class ColumnReplaceTextsCmd : public QUndoCommand
 {
 public:
 	explicit ColumnReplaceTextsCmd(ColumnPrivate* col, int first, const QStringList& new_values, QUndoCommand* parent = 0);
-	~ColumnReplaceTextsCmd();
 
 	virtual void redo();
 	virtual void undo();
@@ -306,7 +298,6 @@ class ColumnReplaceValuesCmd : public QUndoCommand
 {
 public:
 	explicit ColumnReplaceValuesCmd(ColumnPrivate* col, int first, const QVector<double>& new_values, QUndoCommand* parent = 0);
-	~ColumnReplaceValuesCmd();
 
 	virtual void redo();
 	virtual void undo();
@@ -324,7 +315,6 @@ class ColumnReplaceDateTimesCmd : public QUndoCommand
 {
 public:
 	explicit ColumnReplaceDateTimesCmd(ColumnPrivate* col, int first, const QList<QDateTime>& new_values, QUndoCommand* parent = 0);
-	~ColumnReplaceDateTimesCmd();
 
 	virtual void redo();
 	virtual void undo();

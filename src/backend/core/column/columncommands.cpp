@@ -392,13 +392,6 @@ ColumnInsertRowsCmd::ColumnInsertRowsCmd(ColumnPrivate * col, int before, int co
 }
 
 /**
- * \brief Dtor
- */
-ColumnInsertRowsCmd::~ColumnInsertRowsCmd()
-{
-}
-
-/**
  * \brief Execute the command
  */
 void ColumnInsertRowsCmd::redo()
@@ -534,13 +527,6 @@ ColumnSetPlotDesignationCmd::ColumnSetPlotDesignationCmd( ColumnPrivate * col, A
 }
 
 /**
- * \brief Dtor
- */
-ColumnSetPlotDesignationCmd::~ColumnSetPlotDesignationCmd()
-{
-}
-
-/**
  * \brief Execute the command
  */
 void ColumnSetPlotDesignationCmd::redo()
@@ -574,13 +560,6 @@ ColumnSetWidthCmd::ColumnSetWidthCmd( ColumnPrivate * col, int new_value , QUndo
 : QUndoCommand( parent ), m_col(col), m_other_value(new_value)
 {
 	setText(i18n("%1: set width", col->name()));
-}
-
-/**
- * \brief Dtor
- */
-ColumnSetWidthCmd::~ColumnSetWidthCmd()
-{
 }
 
 /**
@@ -832,13 +811,6 @@ ColumnClearFormulasCmd::ColumnClearFormulasCmd(ColumnPrivate * col, QUndoCommand
 }
 
 /**
- * \brief Dtor
- */
-ColumnClearFormulasCmd::~ColumnClearFormulasCmd()
-{
-}
-
-/**
  * \brief Execute the command
  */
 void ColumnClearFormulasCmd::redo()
@@ -896,13 +868,6 @@ ColumnSetTextCmd::ColumnSetTextCmd(ColumnPrivate * col, int row, const QString& 
 : QUndoCommand( parent ), m_col(col), m_row(row), m_new_value(new_value)
 {
 	setText(i18n("%1: set text for row %2", col->name(), row));
-}
-
-/**
- * \brief Dtor
- */
-ColumnSetTextCmd::~ColumnSetTextCmd()
-{
 }
 
 /**
@@ -965,13 +930,6 @@ ColumnSetValueCmd::ColumnSetValueCmd(ColumnPrivate * col, int row, double new_va
 }
 
 /**
- * \brief Dtor
- */
-ColumnSetValueCmd::~ColumnSetValueCmd()
-{
-}
-
-/**
  * \brief Execute the command
  */
 void ColumnSetValueCmd::redo()
@@ -1028,13 +986,6 @@ ColumnSetDateTimeCmd::ColumnSetDateTimeCmd(ColumnPrivate * col, int row, const Q
 : QUndoCommand( parent ), m_col(col), m_row(row), m_new_value(new_value)
 {
 	setText(i18n("%1: set value for row %2", col->name(), row));
-}
-
-/**
- * \brief Dtor
- */
-ColumnSetDateTimeCmd::~ColumnSetDateTimeCmd()
-{
 }
 
 /**
@@ -1100,13 +1051,6 @@ ColumnReplaceTextsCmd::ColumnReplaceTextsCmd(ColumnPrivate * col, int first, con
 {
 	setText(i18n("%1: replace the texts for rows %2 to %3", col->name(), first, first + new_values.count() -1));
 	m_copied = false;
-}
-
-/**
- * \brief Dtor
- */
-ColumnReplaceTextsCmd::~ColumnReplaceTextsCmd()
-{
 }
 
 /**
@@ -1179,13 +1123,6 @@ ColumnReplaceValuesCmd::ColumnReplaceValuesCmd(ColumnPrivate * col, int first, c
 }
 
 /**
- * \brief Dtor
- */
-ColumnReplaceValuesCmd::~ColumnReplaceValuesCmd()
-{
-}
-
-/**
  * \brief Execute the command
  */
 void ColumnReplaceValuesCmd::redo()
@@ -1252,13 +1189,6 @@ ColumnReplaceDateTimesCmd::ColumnReplaceDateTimesCmd(ColumnPrivate * col, int fi
 {
 	setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() -1));
 	m_copied = false;
-}
-
-/**
- * \brief Dtor
- */
-ColumnReplaceDateTimesCmd::~ColumnReplaceDateTimesCmd()
-{
 }
 
 /**
