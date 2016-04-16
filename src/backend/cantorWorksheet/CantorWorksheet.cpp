@@ -125,18 +125,16 @@ void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int las
 				//insertChildBefore(col, child<Column>(i));
 			}
 		} else {
+			//the already existing variable doesn't contain any numerical values -> remove it
 			Column* col = child<Column>(name);
-			if (col) {
-				//the already existing variable doesn't contain any numerical values -> remove it
+			if (col)
 				removeChild(col);
-			} else {
-				//no numerical lists were changed, still need to set project to changed.
-				project()->setChanged(true);
-			}
 		}
 
 		delete(parser);
-    }
+	}
+
+	project()->setChanged(true);
 }
 
 void CantorWorksheet::sessionChanged() {
@@ -287,6 +285,7 @@ bool CantorWorksheet::load(XmlStreamReader* reader){
 			rc = init(&content);
 		} else if(reader->name() == "column") {
 			Column* column = new Column("");
+			column->setUndoAware(false);
 			if (!column->load(reader)) {
 				delete column;
 				return false;
