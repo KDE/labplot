@@ -1,19 +1,45 @@
+/***************************************************************************
+    File                 : StatisticsDialog.cpp
+    Project              : LabPlot
+    Description          : Dialog showing statistics for column values
+    --------------------------------------------------------------------
+    Copyright            : (C) 2016 by Fabian Kristof (f-kristof@hotmail.com)
+    Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
+
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *  This program is free software; you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation; either version 2 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the Free Software           *
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
+ *   Boston, MA  02110-1301  USA                                           *
+ *                                                                         *
+ ***************************************************************************/
+
 #include "StatisticsDialog.h"
 #include "backend/core/column/Column.h"
 #include "math.h"
 
 #include <QTextEdit>
-#include <QDesktopWidget>
+#include <QTabWidget>
+#include <KLocale>
 
 StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	KDialog(parent) {
 
-	QWidget* mainWidget = new QWidget(this);
-	ui.setupUi(mainWidget);
-	setMainWidget(mainWidget);
-
-	ui.tw_statisticsTabs->removeTab(0);
-	ui.tw_statisticsTabs->removeTab(0);
+	twStatistics = new QTabWidget(this);
+	setMainWidget(twStatistics);
 
 	setWindowTitle(title);
 	setButtons(KDialog::Ok);
@@ -132,8 +158,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	                     "</tr>"
 	                     "</table>");
 
-	move(QApplication::desktop()->screen()->rect().center() - rect().center());
-    connect(ui.tw_statisticsTabs, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
+    connect(twStatistics, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 	connect(this, SIGNAL(okClicked()), this, SLOT(close()));
 }
 
@@ -146,7 +171,7 @@ void StatisticsDialog::setColumns(const QList<Column*>& columns) {
 	for (int i = 0; i < m_columns.size(); ++i) {
 		QTextEdit* textEdit = new QTextEdit;
 		textEdit->setReadOnly(true);
-		ui.tw_statisticsTabs->addTab(textEdit, m_columns[i]->name());
+		twStatistics->addTab(textEdit, m_columns[i]->name());
 	}
     currentTabChanged(0);
 }
@@ -166,7 +191,7 @@ void StatisticsDialog::currentTabChanged(int index) {
 		m_columns[index]->calculateStatistics();
 		RESET_CURSOR;
 	}
-	QTextEdit* textEdit = static_cast<QTextEdit*>(ui.tw_statisticsTabs->currentWidget());
+	QTextEdit* textEdit = static_cast<QTextEdit*>(twStatistics->currentWidget());
 	textEdit->setHtml(m_htmlText.arg(isNanValue(m_columns[index]->statistics().minimum)).
 	                  arg(isNanValue(m_columns[index]->statistics().maximum)).
 	                  arg(isNanValue(m_columns[index]->statistics().arithmeticMean)).
