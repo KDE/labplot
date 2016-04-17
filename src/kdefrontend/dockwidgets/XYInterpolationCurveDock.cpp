@@ -57,6 +57,9 @@
 XYInterpolationCurveDock::XYInterpolationCurveDock(QWidget *parent): 
 	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_interpolationCurve(0) {
 
+	//hide the line connection type
+	ui.cbLineType->setDisabled(true);
+
 	//remove the tab "Error bars"
 	ui.tabWidget->removeTab(5);
 }
@@ -80,12 +83,12 @@ void XYInterpolationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
-	uiGeneralTab.cbType->addItem(i18n("Linear"));
-	uiGeneralTab.cbType->addItem(i18n("Polynomial"));
-	uiGeneralTab.cbType->addItem(i18n("Cubic spline"));
-	uiGeneralTab.cbType->addItem(i18n("Cubic spline - periodic"));
-	uiGeneralTab.cbType->addItem(i18n("Akima spline"));
-	uiGeneralTab.cbType->addItem(i18n("Akima spline - periodic"));
+	uiGeneralTab.cbType->addItem(i18n("linear"));
+	uiGeneralTab.cbType->addItem(i18n("polynomial"));
+	uiGeneralTab.cbType->addItem(i18n("cubic spline (natural)"));
+	uiGeneralTab.cbType->addItem(i18n("cubic spline (periodic)"));
+	uiGeneralTab.cbType->addItem(i18n("Akima-spline (natural)"));
+	uiGeneralTab.cbType->addItem(i18n("Akima-spline (periodic)"));
 #if GSL_MAJOR_VERSION >= 2
 	uiGeneralTab.cbType->addItem(i18n("Steffen spline"));
 #endif
@@ -195,6 +198,10 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 	initGeneralTab();
 	initTabs();
 	m_initializing=false;
+
+	//hide the "skip gaps" option after the curves were set
+	ui.lLineSkipGaps->hide();
+	ui.chkLineSkipGaps->hide();
 }
 
 //*************************************************************
