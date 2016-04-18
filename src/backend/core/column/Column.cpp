@@ -119,7 +119,7 @@ void Column::init() {
 	addChild(m_column_private->inputFilter());
 	addChild(m_column_private->outputFilter());
 	m_column_private->setWidth(120);
-    m_column_private->setStatisticsAvailable(false);
+    m_column_private->statisticsAvailable = false;
 
 	m_suppressDataChangedSignal = false;
 }
@@ -210,6 +210,8 @@ void Column::handleRowInsertion(int before, int count)
 	exec(new ColumnInsertRowsCmd(m_column_private, before, count));
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this);
+
+	setStatisticsAvailable(false);
 }
 
 /**
@@ -221,6 +223,8 @@ void Column::handleRowRemoval(int first, int count)
 	exec(new ColumnRemoveRowsCmd(m_column_private, first, count));
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this);
+
+	setStatisticsAvailable(false);
 }
 
 /**
@@ -411,22 +415,25 @@ void Column::replaceValues(int first, const QVector<double>& new_values)
     }
 }
 
-void Column::setStatisticsAvailable(bool available)
-{
-    m_column_private->setStatisticsAvailable(available);
+void Column::setStatisticsAvailable(bool available) {
+	m_column_private->statisticsAvailable = available;
 }
 
-bool Column::statisticsAvailable() const
-{
-    return m_column_private->statisticsAvailable();
+bool Column::statisticsAvailable() const {
+	return m_column_private->statisticsAvailable;
+}
+
+
+const Column::ColumnStatistics& Column::statistics() {
+	if (!statisticsAvailable())
+		calculateStatistics();
+
+    return m_column_private->statistics;
 }
 
 void Column::calculateStatistics() {
-
-    if (statisticsAvailable())
-        return;
-
-    m_statistics = ColumnStatistics();
+    m_column_private->statistics = ColumnStatistics();
+	ColumnStatistics& statistics = m_column_private->statistics;
 
     QVector<double>* rowValues = reinterpret_cast<QVector<double>*>(data());
 
@@ -436,8 +443,8 @@ void Column::calculateStatistics() {
     double columnProduct = 1.0;
     double columnSumNeg = 0.0;
     double columnSumSquare = 0.0;
-    m_statistics.minimum = INFINITY;
-    m_statistics.maximum = -INFINITY;
+    statistics.minimum = INFINITY;
+    statistics.maximum = -INFINITY;
     QMap<double, int> frequencyOfValues;
     QVector<double> rowData;
     rowData.reserve(rowValues->size());
@@ -446,11 +453,11 @@ void Column::calculateStatistics() {
         if (isnan(val) || isMasked(row))
             continue;
 
-        if (val < m_statistics.minimum){
-            m_statistics.minimum = val;
+        if (val < statistics.minimum){
+            statistics.minimum = val;
         }
-        if (val > m_statistics.maximum){
-            m_statistics.maximum = val;
+        if (val > statistics.maximum){
+            statistics.maximum = val;
         }
         columnSum+= val;
         columnSumNeg += (1.0 / val);
@@ -475,10 +482,10 @@ void Column::calculateStatistics() {
         rowData.squeeze();
     }
 
-    m_statistics.arithmeticMean = columnSum / notNanCount;
-    m_statistics.geometricMean = pow(columnProduct, 1.0 / notNanCount);
-    m_statistics.harmonicMean = notNanCount / columnSumNeg;
-    m_statistics.contraharmonicMean = columnSumSquare / columnSum;
+    statistics.arithmeticMean = columnSum / notNanCount;
+    statistics.geometricMean = pow(columnProduct, 1.0 / notNanCount);
+    statistics.harmonicMean = notNanCount / columnSumNeg;
+    statistics.contraharmonicMean = columnSumSquare / columnSum;
 
     double columnSumVariance = 0;
     double columnSumMeanDeviation = 0.0;
@@ -487,7 +494,7 @@ void Column::calculateStatistics() {
     double sumForCentralMoment_r4 = 0.0;
 
     gsl_sort(rowData.data(), 1, notNanCount);
-    m_statistics.median = (notNanCount % 2 ? rowData.at((notNanCount-1)/2) :
+    statistics.median = (notNanCount % 2 ? rowData.at((notNanCount-1)/2) :
                                              (rowData.at((notNanCount-1)/2) +
                                               rowData.at(notNanCount/2))/2.0);
     QVector<double> absoluteMedianList;
@@ -499,29 +506,29 @@ void Column::calculateStatistics() {
         val = rowValues->value(row);
         if ( isnan(val) || isMasked(row) )
             continue;
-        columnSumVariance+= pow(val - m_statistics.arithmeticMean, 2.0);
+        columnSumVariance+= pow(val - statistics.arithmeticMean, 2.0);
 
-        sumForCentralMoment_r3 += pow(val - m_statistics.arithmeticMean, 3.0);
-        sumForCentralMoment_r4 += pow(val - m_statistics.arithmeticMean, 4.0);
-        columnSumMeanDeviation += fabs( val - m_statistics.arithmeticMean );
+        sumForCentralMoment_r3 += pow(val - statistics.arithmeticMean, 3.0);
+        sumForCentralMoment_r4 += pow(val - statistics.arithmeticMean, 4.0);
+        columnSumMeanDeviation += fabs( val - statistics.arithmeticMean );
 
-        absoluteMedianList[idx] = fabs(val - m_statistics.median);
+        absoluteMedianList[idx] = fabs(val - statistics.median);
         columnSumMedianDeviation += absoluteMedianList[idx];
         idx++;
     }
 
-    m_statistics.meanDeviationAroundMedian = columnSumMedianDeviation / notNanCount;
-    m_statistics.medianDeviation = (notNanCount % 2 ? absoluteMedianList.at((notNanCount-1)/2) :
+    statistics.meanDeviationAroundMedian = columnSumMedianDeviation / notNanCount;
+    statistics.medianDeviation = (notNanCount % 2 ? absoluteMedianList.at((notNanCount-1)/2) :
                                                       (absoluteMedianList.at((notNanCount-1)/2) + absoluteMedianList.at(notNanCount/2))/2.0);
 
-    double centralMoment_r3 = sumForCentralMoment_r3 / notNanCount;
-    double centralMoment_r4 = sumForCentralMoment_r4 / notNanCount;
+    const double centralMoment_r3 = sumForCentralMoment_r3 / notNanCount;
+    const double centralMoment_r4 = sumForCentralMoment_r4 / notNanCount;
 
-    m_statistics.variance = columnSumVariance / notNanCount;
-    m_statistics.standardDeviation = sqrt(m_statistics.variance);
-    m_statistics.skewness = centralMoment_r3 / pow(m_statistics.standardDeviation, 3.0);
-    m_statistics.kurtosis = (centralMoment_r4 / pow(m_statistics.standardDeviation, 4.0)) - 3.0;
-    m_statistics.meanDeviation = columnSumMeanDeviation / notNanCount;
+    statistics.variance = columnSumVariance / notNanCount;
+    statistics.standardDeviation = sqrt(statistics.variance);
+    statistics.skewness = centralMoment_r3 / pow(statistics.standardDeviation, 3.0);
+    statistics.kurtosis = (centralMoment_r4 / pow(statistics.standardDeviation, 4.0)) - 3.0;
+    statistics.meanDeviation = columnSumMeanDeviation / notNanCount;
 
     double entropy = 0.0;
     QList<int> frequencyOfValuesValues = frequencyOfValues.values();
@@ -530,7 +537,7 @@ void Column::calculateStatistics() {
         entropy += (frequencyNorm * log2(frequencyNorm));
     }
 
-    m_statistics.entropy = -entropy;
+    statistics.entropy = -entropy;
     setStatisticsAvailable(true);
 }
 
@@ -593,6 +600,8 @@ double Column::valueAt(int row) const
 void Column::setChanged() {
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this);
+
+	setStatisticsAvailable(false);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1041,6 +1050,8 @@ void Column::handleFormatChange()
 	emit aspectDescriptionChanged(this); // the icon for the type changed
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this); // all cells must be repainted
+
+	setStatisticsAvailable(false);
 }
 
 

@@ -185,26 +185,24 @@ QSize StatisticsDialog::sizeHint() const {
 }
 
 void StatisticsDialog::currentTabChanged(int index) {
+	WAIT_CURSOR;
+	const Column::ColumnStatistics& statistics = m_columns[index]->statistics();
+	RESET_CURSOR;
 
-	if(!m_columns[index]->statisticsAvailable()) {
-		WAIT_CURSOR;
-		m_columns[index]->calculateStatistics();
-		RESET_CURSOR;
-	}
 	QTextEdit* textEdit = static_cast<QTextEdit*>(twStatistics->currentWidget());
-	textEdit->setHtml(m_htmlText.arg(isNanValue(m_columns[index]->statistics().minimum)).
-	                  arg(isNanValue(m_columns[index]->statistics().maximum)).
-	                  arg(isNanValue(m_columns[index]->statistics().arithmeticMean)).
-	                  arg(isNanValue(m_columns[index]->statistics().geometricMean)).
-	                  arg(isNanValue(m_columns[index]->statistics().harmonicMean)).
-	                  arg(isNanValue(m_columns[index]->statistics().contraharmonicMean)).
-	                  arg(isNanValue(m_columns[index]->statistics().median)).
-	                  arg(isNanValue(m_columns[index]->statistics().variance)).
-	                  arg(isNanValue(m_columns[index]->statistics().standardDeviation)).
-	                  arg(isNanValue(m_columns[index]->statistics().meanDeviation)).
-	                  arg(isNanValue(m_columns[index]->statistics().meanDeviationAroundMedian)).
-	                  arg(isNanValue(m_columns[index]->statistics().medianDeviation)).
-	                  arg(isNanValue(m_columns[index]->statistics().skewness)).
-	                  arg(isNanValue(m_columns[index]->statistics().kurtosis)).
-	                  arg(isNanValue(m_columns[index]->statistics().entropy)));
+	textEdit->setHtml(m_htmlText.arg(isNanValue(statistics.minimum)).
+	                  arg(isNanValue(statistics.maximum)).
+	                  arg(isNanValue(statistics.arithmeticMean)).
+	                  arg(isNanValue(statistics.geometricMean)).
+	                  arg(isNanValue(statistics.harmonicMean)).
+	                  arg(isNanValue(statistics.contraharmonicMean)).
+	                  arg(isNanValue(statistics.median)).
+	                  arg(isNanValue(statistics.variance)).
+	                  arg(isNanValue(statistics.standardDeviation)).
+	                  arg(isNanValue(statistics.meanDeviation)).
+	                  arg(isNanValue(statistics.meanDeviationAroundMedian)).
+	                  arg(isNanValue(statistics.medianDeviation)).
+	                  arg(isNanValue(statistics.skewness)).
+	                  arg(isNanValue(statistics.kurtosis)).
+	                  arg(isNanValue(statistics.entropy)));
 }

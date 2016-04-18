@@ -1017,16 +1017,6 @@ void ColumnPrivate::setDateAt(int row, const QDate& new_value)
 	setDateTimeAt(row, QDateTime(new_value, timeAt(row)));
 }
 
-void ColumnPrivate::setStatisticsAvailable(bool available)
-{
-    m_statisticsAvailable = available;
-}
-
-bool ColumnPrivate::statisticsAvailable() const
-{
-    return m_statisticsAvailable;
-}
-
 /**
  * \brief Set the content of row 'row'
  *

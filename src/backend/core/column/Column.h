@@ -40,6 +40,41 @@ class Column : public AbstractColumn {
 	Q_OBJECT
 
 	public:
+		struct ColumnStatistics {
+            ColumnStatistics() {
+				minimum = NAN;
+				maximum = NAN;
+				arithmeticMean = NAN;
+				geometricMean = NAN;
+				harmonicMean = NAN;
+				contraharmonicMean = NAN;
+				median = NAN;
+				variance = NAN;
+				standardDeviation = NAN;
+				meanDeviation = NAN;
+				meanDeviationAroundMedian = NAN;
+				medianDeviation = NAN;
+				skewness = NAN;
+				kurtosis = NAN;
+				entropy = NAN;
+			}
+			double minimum;
+			double maximum;
+			double arithmeticMean;
+			double geometricMean;
+			double harmonicMean;
+			double contraharmonicMean;
+			double median;
+			double variance;
+			double standardDeviation;
+			double meanDeviation; // mean absolute deviation around mean
+			double meanDeviationAroundMedian; // mean absolute deviation around median
+			double medianDeviation; // median absolute deviation
+			double skewness;
+			double kurtosis;
+			double entropy;
+        };
+
 		friend class ColumnPrivate;
 
 		Column(const QString& name, AbstractColumn::ColumnMode mode = AbstractColumn::Numeric);
@@ -75,8 +110,8 @@ class Column : public AbstractColumn {
 		void setFormula(Interval<int> i, QString formula);
 		void setFormula(int row, QString formula);
 		void clearFormulas();
-        void calculateStatistics();
 
+		const ColumnStatistics& statistics();
 		void* data() const;
 		QString textAt(int row) const;
 		void setTextAt(int row, const QString& new_value);
@@ -93,8 +128,7 @@ class Column : public AbstractColumn {
 		virtual void replaceValues(int first, const QVector<double>& new_values);
 		void setChanged();
 		void setSuppressDataChangedSignal(bool);
-        void setStatisticsAvailable(bool available);
-        bool statisticsAvailable() const;
+
 		void save(QXmlStreamWriter*) const;
 		bool load(XmlStreamReader*);
 
@@ -106,6 +140,10 @@ class Column : public AbstractColumn {
 
 		void handleRowInsertion(int before, int count);
 		void handleRowRemoval(int first, int count);
+
+		void calculateStatistics();
+		void setStatisticsAvailable(bool available);
+        bool statisticsAvailable() const;
 
 		static QString enumValueToString(int key, const QString& enum_name);
 		static int enumStringToValue(const QString& string, const QString& enum_name);

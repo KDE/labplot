@@ -71,44 +71,6 @@ class AbstractColumn : public AbstractAspect
 		explicit AbstractColumn(const QString& name);
 		virtual ~AbstractColumn();
 
-        struct ColumnStatistics {
-            ColumnStatistics() {
-				minimum = NAN;
-				maximum = NAN;
-				arithmeticMean = NAN;
-				geometricMean = NAN;
-				harmonicMean = NAN;
-				contraharmonicMean = NAN;
-				median = NAN;
-				variance = NAN;
-				standardDeviation = NAN;
-				meanDeviation = NAN;
-				meanDeviationAroundMedian = NAN;
-				medianDeviation = NAN;
-				skewness = NAN;
-				kurtosis = NAN;
-				entropy = NAN;
-			}
-            double minimum;
-            double maximum;
-            double arithmeticMean;
-            double geometricMean;
-            double harmonicMean;
-            double contraharmonicMean;
-			double median;
-            double variance;
-            double standardDeviation;
-            double meanDeviation; // mean absolute deviation around mean
-			double meanDeviationAroundMedian; // mean absolute deviation around median
-            double medianDeviation; // median absolute deviation
-            double skewness;
-            double kurtosis;
-            double entropy;
-        };
-
-        ColumnStatistics m_statistics;
-        const ColumnStatistics& statistics() const;
-
 		virtual bool isReadOnly() const { return true; };
 		virtual ColumnMode columnMode() const = 0;
 		virtual void setColumnMode(AbstractColumn::ColumnMode);
@@ -154,8 +116,7 @@ class AbstractColumn : public AbstractAspect
 		virtual double valueAt(int row) const;
 		virtual void setValueAt(int row, double new_value);
 		virtual void replaceValues(int first, const QVector<double>& new_values);
-        virtual void setStatisticsAvailable(bool available);
-        virtual bool statisticsAvailable() const;
+
 	signals:
 		void plotDesignationAboutToChange(const AbstractColumn * source);
 		void plotDesignationChanged(const AbstractColumn * source);
