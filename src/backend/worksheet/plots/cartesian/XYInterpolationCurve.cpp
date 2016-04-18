@@ -423,9 +423,11 @@ void XYInterpolationCurvePrivate::recalculate() {
 			break;
 		case XYInterpolationCurve::Rational:
 			//TODO
+			//(*yVector)[i] = 
 			break;
 		case XYInterpolationCurve::PCH:
 			//TODO
+			//(*yVector)[i] = 
 			break;
 		}
 	}
