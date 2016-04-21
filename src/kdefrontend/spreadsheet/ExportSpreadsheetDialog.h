@@ -30,6 +30,7 @@
 #define EXPORTSPREADSHEETDIALOG_H
 
 #include <KDialog>
+#include <KUrlCompletion>
 #include "ui_exportspreadsheetwidget.h"
 
 class ExportSpreadsheetDialog: public KDialog {
@@ -65,6 +66,7 @@ class ExportSpreadsheetDialog: public KDialog {
 		Ui::ExportSpreadsheetWidget ui;
 		bool m_showOptions;
         Format m_format;
+        KUrlCompletion *urlCompletion;
 
 	private slots:
         void setFormat(Format format);

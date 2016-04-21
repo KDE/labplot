@@ -29,7 +29,6 @@
 #include "ExportSpreadsheetDialog.h"
 
 #include <QFileDialog>
-#include <KUrlCompletion>
 #include <KMessageBox>
 
 /*!
@@ -39,13 +38,13 @@
 	\ingroup kdefrontend
 */
 
-ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(parent) {
+ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(parent),
+    urlCompletion(new KUrlCompletion) {
 	mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
 	ui.gbOptions->hide();
 
-	KUrlCompletion *comp = new KUrlCompletion();
-	ui.kleFileName->setCompletionObject(comp);
+    ui.kleFileName->setCompletionObject(urlCompletion);
 
 	ui.cbFormat->addItem("ASCII");
 	ui.cbFormat->addItem("Binary");
@@ -117,6 +116,7 @@ ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 	conf.writeEntry("MatrixHorizontalHeader", ui.chkMatrixHHeader->isChecked());
 
 	saveDialogSize(conf);
+    delete urlCompletion;
 }
 
 void ExportSpreadsheetDialog::setFileName(const QString& name) {
