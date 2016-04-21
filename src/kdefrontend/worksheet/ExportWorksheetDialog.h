@@ -30,6 +30,7 @@
 #define EXPORTWORKSHEETDIALOG_H
 
 #include <KDialog>
+#include <KUrlCompletion>
 
 #include "ui_exportworksheetwidget.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
@@ -51,6 +52,7 @@ class ExportWorksheetDialog : public KDialog {
 	private:
 		QWidget* mainWidget;
 		Ui::ExportWorksheetWidget ui;
+        KUrlCompletion* urlCompletion;
 		bool m_showOptions;
 
 	private slots:
