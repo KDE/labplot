@@ -2091,4 +2091,11 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 	}
 	if (latexHeaders)
 		out << QLatin1String("\\end{document} \n");
+
+    if (!exportEntire) {
+        qDeleteAll(toExport);
+        toExport.clear();
+    } else {
+        toExport.clear();
+    }
 }
