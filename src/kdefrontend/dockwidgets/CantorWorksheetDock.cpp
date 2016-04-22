@@ -40,6 +40,8 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): QWidget(parent), m_in
 	//General
 	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( ui.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+	connect( ui.evaluate_worksheet, SIGNAL(pressed()), this, SLOT(evaluateWorksheet()) );
+	connect( ui.restart_backend, SIGNAL(pressed()), this, SLOT(restartBackend()) );
 }
 
 /*!
@@ -94,6 +96,14 @@ void CantorWorksheetDock::commentChanged(){
 		return;
 
 	m_worksheet->setComment(ui.leComment->text());
+}
+
+void CantorWorksheetDock::evaluateWorksheet() {
+	m_worksheet->part()->action("evaluate_worksheet")->trigger();
+}
+
+void CantorWorksheetDock::restartBackend() {
+	m_worksheet->part()->action("restart_backend")->trigger();
 }
 
 

@@ -57,6 +57,8 @@ class CantorWorksheetDock : public QWidget {
 		//"General"-tab
 		void nameChanged();
 		void commentChanged();
+		void evaluateWorksheet();
+		void restartBackend();
 
 		//SLOTs for changes triggered in Worksheet
 		void worksheetDescriptionChanged(const AbstractAspect*);
