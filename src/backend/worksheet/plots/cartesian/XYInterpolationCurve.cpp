@@ -296,7 +296,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 		}
 	}
 
-	//number of data points to fit
+	//number of data points to interpolate
 	unsigned int n = ydataVector.size();
 	if (n < 2) {
 		interpolationResult.available = true;
