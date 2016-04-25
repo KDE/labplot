@@ -311,17 +311,43 @@
     </widget>
    </item>
    <item row="8" column="0">
-    <widget class="QLabel" name="lOffset">
+    <widget class="QLabel" name="lOffsetX">
      <property name="toolTip">
       <string>Distance to the axis tick labels</string>
      </property>
      <property name="text">
-      <string>Offset</string>
+      <string>Offset X</string>
      </property>
     </widget>
    </item>
    <item row="8" column="1">
-    <widget class="QDoubleSpinBox" name="sbOffset">
+    <widget class="QDoubleSpinBox" name="sbOffsetX">
+     <property name="toolTip">
+      <string>Distance to the axis tick labels</string>
+     </property>
+     <property name="suffix">
+      <string> pt</string>
+     </property>
+     <property name="minimum">
+      <double>-99.989999999999995</double>
+     </property>
+     <property name="singleStep">
+      <double>0.500000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="lOffsetY">
+     <property name="toolTip">
+      <string>Distance to the axis tick labels</string>
+     </property>
+     <property name="text">
+      <string>Offset Y</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="1">
+    <widget class="QDoubleSpinBox" name="sbOffsetY">
      <property name="toolTip">
       <string>Distance to the axis tick labels</string>
      </property>
