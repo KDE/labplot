@@ -29,7 +29,6 @@
 #include "ExportWorksheetDialog.h"
 
 #include <QFileDialog>
-#include <KUrlCompletion>
 #include <KMessageBox>
 #include <QDesktopWidget>
 #include <KLocalizedString>
@@ -44,12 +43,12 @@
 	\ingroup kdefrontend
 */
 
-ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent) {
+ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent),
+    urlCompletion(new KUrlCompletion){
 	mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
 
-	KUrlCompletion *comp = new KUrlCompletion();
-	ui.kleFileName->setCompletionObject(comp);
+    ui.kleFileName->setCompletionObject(urlCompletion);
 
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
@@ -103,6 +102,7 @@ ExportWorksheetDialog::~ExportWorksheetDialog() {
 	conf.writeEntry("Resolution", ui.cbResolution->currentIndex());
 	conf.writeEntry("ShowOptions", m_showOptions);
 	saveDialogSize(conf);
+    delete urlCompletion;
 }
 
 void ExportWorksheetDialog::setFileName(const QString& name) {

@@ -71,7 +71,9 @@ class MatrixView : public QWidget {
 		void resizeHeaders();
 		void adjustHeaders();
 		void exportToFile(const QString& path, const QString& separator) const;
-
+        void exportToLaTeX(const QString&, const bool verticalHeaders, const bool horizontalHeaders,
+                           const bool latexHeaders, const bool gridLines,
+                           const bool entire, const bool captions) const;
 	public slots:
 		void createContextMenu(QMenu*) const;
 		void print(QPrinter*) const;
@@ -119,11 +121,13 @@ class MatrixView : public QWidget {
 		QAction* action_remove_columns;
 		QAction* action_clear_columns;
 		QAction* action_add_columns;
+        QAction* action_statistics_columns;
 
 		QAction* action_insert_rows;
 		QAction* action_remove_rows;
 		QAction* action_clear_rows;
 		QAction* action_add_rows;
+        QAction* action_statistics_rows;
 
 		QAction* action_data_view;
 		QAction* action_image_view;
@@ -164,6 +168,9 @@ class MatrixView : public QWidget {
 		void insertEmptyRows();
 		void removeSelectedRows();
 		void clearSelectedRows();
+
+        void showColumnStatistics();
+        void showRowStatistics();
 };
 
 #endif

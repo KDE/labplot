@@ -1,3 +1,8 @@
+-----2.3-----
+New features:
+	* Interpolation and Fourier filter of 1d data
+	* Statistics on spreadsheets and matrices
+	* Export of spreadsheets and matrices to LaTeX tables
 -----2.2-----
 New features:
 	* Datapicker - tool for extracting curves and data points from imported images

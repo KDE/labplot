@@ -54,6 +54,8 @@
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "kdefrontend/dockwidgets/XYEquationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFitCurveDock.h"
+#include "kdefrontend/dockwidgets/XYFourierFilterCurveDock.h"
+#include "kdefrontend/dockwidgets/XYInterpolationCurveDock.h"
 #include "kdefrontend/dockwidgets/CustomPointDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #include "kdefrontend/widgets/LabelWidget.h"
@@ -283,6 +285,40 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->xyFitCurveDock->setCurves(list);
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyFitCurveDock);
+  }else if (className=="XYFourierFilterCurve"){
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-fourier_filter-curve properties"));
+
+	if (!mainWindow->xyFourierFilterCurveDock){
+	  mainWindow->xyFourierFilterCurveDock = new XYFourierFilterCurveDock(mainWindow->stackedWidget);
+	  mainWindow->xyFourierFilterCurveDock->setupGeneral();
+	  connect(mainWindow->xyFourierFilterCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+	  mainWindow->stackedWidget->addWidget(mainWindow->xyFourierFilterCurveDock);
+	}
+
+	QList<XYCurve*> list;
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<XYCurve*>(aspect);
+	}
+	mainWindow->xyFourierFilterCurveDock->setCurves(list);
+
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyFourierFilterCurveDock);
+  }else if (className=="XYInterpolationCurve"){
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-interpolation-curve properties"));
+
+	if (!mainWindow->xyInterpolationCurveDock){
+	  mainWindow->xyInterpolationCurveDock = new XYInterpolationCurveDock(mainWindow->stackedWidget);
+	  mainWindow->xyInterpolationCurveDock->setupGeneral();
+	  connect(mainWindow->xyInterpolationCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+	  mainWindow->stackedWidget->addWidget(mainWindow->xyInterpolationCurveDock);
+	}
+
+	QList<XYCurve*> list;
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<XYCurve*>(aspect);
+	}
+	mainWindow->xyInterpolationCurveDock->setCurves(list);
+
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyInterpolationCurveDock);
   }else if (className=="TextLabel"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Text label properties"));
 

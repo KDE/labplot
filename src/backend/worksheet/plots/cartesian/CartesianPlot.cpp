@@ -4,6 +4,7 @@
     Description          : Cartesian plot
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -32,6 +33,8 @@
 #include "XYCurve.h"
 #include "XYEquationCurve.h"
 #include "XYFitCurve.h"
+#include "XYFourierFilterCurve.h"
+#include "XYInterpolationCurve.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -42,7 +45,6 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include <math.h>
 
 #include <QMenu>
 #include <QToolBar>
@@ -96,8 +98,8 @@ void CartesianPlot::init(){
 	d->autoScaleY = true;
 	d->xScale = ScaleLinear;
 	d->yScale = ScaleLinear;
-	d->xScaleBreakingEnabled = false;
-	d->yScaleBreakingEnabled = false;
+	d->xRangeBreakingEnabled = false;
+	d->yRangeBreakingEnabled = false;
 
 	//the following factor determines the size of the offset between the min/max points of the curves
 	//and the coordinate system ranges, when doing auto scaling
@@ -124,7 +126,7 @@ void CartesianPlot::init(){
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-    graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
+	graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
 }
 
 /*!
@@ -345,6 +347,8 @@ void CartesianPlot::initActions(){
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
 	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
+	addFourierFilterCurveAction = QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
+	addInterpolationCurveAction = QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), this);
 	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("legend"), this);
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("vertical axis"), this);
@@ -353,6 +357,7 @@ void CartesianPlot::initActions(){
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
 	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addFourierFilterCurveAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
 	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
@@ -398,6 +403,7 @@ void CartesianPlot::initMenus(){
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addAction(addFitCurveAction);
+	addNewMenu->addAction(addFourierFilterCurveAction);
 	addNewMenu->addAction(addLegendAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addHorizontalAxisAction);
@@ -470,15 +476,15 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleX, autoScaleX)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMin, xMin)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, xMax, xMax)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::Scale, xScale, xScale)
-BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, xScaleBreakingEnabled, xScaleBreakingEnabled)
-CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::ScaleBreakings, xScaleBreakings, xScaleBreakings)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, xRangeBreakingEnabled, xRangeBreakingEnabled)
+CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, xRangeBreaks, xRangeBreaks)
 
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleY, autoScaleY)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMin, yMin)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, float, yMax, yMax)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::Scale, yScale, yScale)
-BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, yScaleBreakingEnabled, yScaleBreakingEnabled)
-CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::ScaleBreakings, yScaleBreakings, yScaleBreakings)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, yRangeBreakingEnabled, yRangeBreakingEnabled)
+CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, yRangeBreaks, yRangeBreaks)
 
 /*!
 	return the actual bounding rectangular of the plot (plot's rectangular minus padding)
@@ -577,11 +583,17 @@ void CartesianPlot::setXScale(Scale scale){
 		exec(new CartesianPlotSetXScaleCmd(d, scale, i18n("%1: set x scale")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXScaleBreakings, CartesianPlot::ScaleBreakings, xScaleBreakings, retransformScales);
-void CartesianPlot::setXScaleBreakings(const ScaleBreakings& breakings) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeBreakingEnabled, bool, xRangeBreakingEnabled, retransformScales)
+void CartesianPlot::setXRangeBreakingEnabled(bool enabled){
 	Q_D(CartesianPlot);
-	d->xScaleBreakings = breakings;
-	exec(new CartesianPlotSetXScaleBreakingsCmd(d, breakings, i18n("%1: set x-scale breakings")));
+	if (enabled != d->xRangeBreakingEnabled)
+		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, i18n("%1: x-scale breakings enabled")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeBreaks, CartesianPlot::RangeBreaks, xRangeBreaks, retransformScales);
+void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
+	Q_D(CartesianPlot);
+	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, i18n("%1: set x-scale breaks")));
 }
 
 class CartesianPlotSetAutoScaleYCmd : public QUndoCommand {
@@ -648,11 +660,10 @@ void CartesianPlot::setYScale(Scale scale){
 		exec(new CartesianPlotSetYScaleCmd(d, scale, i18n("%1: set y scale")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYScaleBreakings, CartesianPlot::ScaleBreakings, yScaleBreakings, retransformScales);
-void CartesianPlot::setYScaleBreakings(const ScaleBreakings& breakings) {
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeBreaks, CartesianPlot::RangeBreaks, yRangeBreaks, retransformScales);
+void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	Q_D(CartesianPlot);
-	d->yScaleBreakings = breakings;
-	exec(new CartesianPlotSetYScaleBreakingsCmd(d, breakings, i18n("%1: set y-scale breakings")));
+	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, i18n("%1: set y-scale breakings")));
 }
 
 //################################################################
@@ -694,6 +705,18 @@ XYEquationCurve* CartesianPlot::addEquationCurve(){
 
 XYFitCurve* CartesianPlot::addFitCurve(){
 	XYFitCurve* curve = new XYFitCurve("fit");
+	this->addChild(curve);
+	return curve;
+}
+
+XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve(){
+	XYFourierFilterCurve* curve = new XYFourierFilterCurve("Fourier filter");
+	this->addChild(curve);
+	return curve;
+}
+
+XYInterpolationCurve* CartesianPlot::addInterpolationCurve(){
+	XYInterpolationCurve* curve = new XYInterpolationCurve("Interpolation");
 	this->addChild(curve);
 	return curve;
 }
@@ -1242,8 +1265,15 @@ void CartesianPlotPrivate::retransformScales(){
 	if (xScale != CartesianPlot::ScaleLinear)
 		checkXRange();
 
+	//check where we have x-range breaks
+	bool hasValidBreak = false;
+	if (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty()) {
+		foreach(const CartesianPlot::RangeBreak& b, xRangeBreaks.list)
+			hasValidBreak = (b.start!=NAN && b.end!=NAN);
+	}
+
 	//create x-scales
-	if (xScaleBreakings.list.size()==0) {
+	if (!hasValidBreak) {
 		sceneStart = itemRect.x()+horizontalPadding;
 		sceneEnd = itemRect.x()+itemRect.width()-horizontalPadding;
 		logicalStart = xMin;
@@ -1252,13 +1282,27 @@ void CartesianPlotPrivate::retransformScales(){
 		//TODO: how should we handle the case sceneStart=sceneEnd
 		//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
 		if (sceneStart!=sceneEnd) {
-			Interval<double> interval (SCALE_MIN, SCALE_MAX);
+			Interval<double> interval(SCALE_MIN, SCALE_MAX);
 			scales << this->createScale(xScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
 		}
 	} else {
-		//TODO:
-// 		foreach(CartesianPlot::ScaleBreaking* breaking, xScaleBreakings) {
-// 		}
+		foreach(const CartesianPlot::RangeBreak& b, xRangeBreaks.list) {
+			sceneStart = itemRect.x()+horizontalPadding;
+			sceneEnd = itemRect.x()+itemRect.width()-horizontalPadding;
+			sceneEnd = sceneStart+(sceneEnd-sceneStart)*b.position;
+			logicalStart = xMin;
+			logicalEnd = b.start;
+
+			Interval<double> interval(SCALE_MIN, SCALE_MAX);
+			scales << this->createScale(xScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+
+			sceneStart = sceneEnd+50;
+			sceneEnd = itemRect.x()+itemRect.width()-horizontalPadding;
+			logicalStart = b.end;
+			logicalEnd = xMax;
+			Interval<double> interval2(SCALE_MIN, SCALE_MAX);
+			scales << this->createScale(xScale, interval2, sceneStart, sceneEnd, logicalStart, logicalEnd);
+		}
 	}
 
 	cSystem ->setXScales(scales);
@@ -1267,9 +1311,16 @@ void CartesianPlotPrivate::retransformScales(){
 	if (yScale != CartesianPlot::ScaleLinear)
 		checkYRange();
 
+	//check where we have y-range breaks
+	hasValidBreak = false;
+	if (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty()) {
+		foreach(const CartesianPlot::RangeBreak& b, yRangeBreaks.list)
+			hasValidBreak = (b.start!=NAN && b.end!=NAN);
+	}
+
 	//create y-scales
 	scales.clear();
-	if (yScaleBreakings.list.size()==0) {
+	if (!hasValidBreak) {
 		sceneStart = itemRect.y()+itemRect.height()-verticalPadding;
 		sceneEnd = itemRect.y()+verticalPadding;
 		logicalStart = yMin;
@@ -1277,9 +1328,23 @@ void CartesianPlotPrivate::retransformScales(){
 		Interval<double> interval (SCALE_MIN, SCALE_MAX);
 		scales << this->createScale(yScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	} else {
-		//TODO:
-// 		foreach(CartesianPlot::ScaleBreaking* breaking, xScaleBreakings) {
-// 		}
+		foreach(const CartesianPlot::RangeBreak& b, yRangeBreaks.list) {
+			sceneStart = itemRect.y()+itemRect.height()-verticalPadding;
+			sceneEnd = itemRect.y()+verticalPadding;
+			sceneEnd = sceneStart+(sceneEnd-sceneStart)*b.position;
+			logicalStart = yMin;
+			logicalEnd = b.start;
+
+			Interval<double> interval(SCALE_MIN, SCALE_MAX);
+			scales << this->createScale(yScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+
+			sceneStart = sceneEnd+50;
+			sceneEnd = itemRect.y()+verticalPadding;
+			logicalStart = b.end;
+			logicalEnd = yMax;
+			Interval<double> interval2(SCALE_MIN, SCALE_MAX);
+			scales << this->createScale(yScale, interval2, sceneStart, sceneEnd, logicalStart, logicalEnd);
+		}
 	}
 
 	cSystem ->setYScales(scales);
@@ -1656,10 +1721,10 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "verticalPadding", QString::number(d->verticalPadding) );
 	writer->writeEndElement();
 
-	//x-scale breakings
-	if (d->xScaleBreakings.list.size()) {
-		writer->writeStartElement("xScaleBreakings");
-		foreach(const ScaleBreaking& breaking, d->xScaleBreakings.list) {
+	//x-scale breaks
+	if (d->xRangeBreaks.list.size()) {
+		writer->writeStartElement("xRangeBreaks");
+		foreach(const RangeBreak& breaking, d->xRangeBreaks.list) {
 			writer->writeStartElement("item");
 			writer->writeAttribute("start", QString::number(breaking.start));
 			writer->writeAttribute("end", QString::number(breaking.end));
@@ -1671,10 +1736,10 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const{
 		writer->writeEndElement();
 	}
 
-	//y-scale breakings
-	if (d->yScaleBreakings.list.size()) {
-		writer->writeStartElement("yScaleBreakings");
-		foreach(const ScaleBreaking& breaking, d->yScaleBreakings.list) {
+	//y-scale breaks
+	if (d->yRangeBreaks.list.size()) {
+		writer->writeStartElement("yRangeBreaks");
+		foreach(const RangeBreak& breaking, d->yRangeBreaks.list) {
 			writer->writeStartElement("item");
 			writer->writeAttribute("start", QString::number(breaking.start));
 			writer->writeAttribute("end", QString::number(breaking.end));
@@ -1855,13 +1920,25 @@ bool CartesianPlot::load(XmlStreamReader* reader){
 				removeChild(curve);
                 return false;
             }
-		}else if(reader->name() == "xyFitCurve"){
+		} else if(reader->name() == "xyFitCurve") {
 			XYFitCurve* curve = addFitCurve();
-            if (!curve->load(reader)){
+			if (!curve->load(reader)){
 				removeChild(curve);
-                return false;
-            }
-		}else if(reader->name() == "cartesianPlotLegend"){
+			return false;
+			}
+		} else if(reader->name() == "xyFourierFilterCurve") {
+			XYFourierFilterCurve* curve = addFourierFilterCurve();
+			if (!curve->load(reader)){
+				removeChild(curve);
+			return false;
+			}
+		} else if(reader->name() == "xyInterpolationCurve") {
+			XYInterpolationCurve* curve = addInterpolationCurve();
+			if (!curve->load(reader)){
+				removeChild(curve);
+			return false;
+			}
+		} else if(reader->name() == "cartesianPlotLegend"){
             m_legend = new CartesianPlotLegend(this, "");
             if (!m_legend->load(reader)){
                 delete m_legend;

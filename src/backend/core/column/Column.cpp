@@ -34,6 +34,9 @@
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 
+#include <gsl/gsl_sort.h>
+#include <math.h>
+
 #include <QMetaEnum>
 #include <QThreadPool>
 #include <QIcon>
@@ -115,6 +118,7 @@ void Column::init() {
 	addChild(m_column_private->inputFilter());
 	addChild(m_column_private->outputFilter());
 	m_column_private->setWidth(120);
+    m_column_private->statisticsAvailable = false;
 
 	m_suppressDataChangedSignal = false;
 }
@@ -205,6 +209,8 @@ void Column::handleRowInsertion(int before, int count)
 	exec(new ColumnInsertRowsCmd(m_column_private, before, count));
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this);
+
+	setStatisticsAvailable(false);
 }
 
 /**
@@ -216,6 +222,8 @@ void Column::handleRowRemoval(int first, int count)
 	exec(new ColumnRemoveRowsCmd(m_column_private, first, count));
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this);
+
+	setStatisticsAvailable(false);
 }
 
 /**
@@ -343,6 +351,7 @@ void Column::replaceTexts(int first, const QStringList& new_values)
  */
 void Column::setDateAt(int row, const QDate& new_value)
 {
+    setStatisticsAvailable(false);
 	setDateTimeAt(row, QDateTime(new_value, timeAt(row)));
 }
 
@@ -353,6 +362,7 @@ void Column::setDateAt(int row, const QDate& new_value)
  */
 void Column::setTimeAt(int row,const QTime& new_value)
 {
+    setStatisticsAvailable(false);
 	setDateTimeAt(row, QDateTime(dateAt(row), new_value));
 }
 
@@ -363,6 +373,7 @@ void Column::setTimeAt(int row,const QTime& new_value)
  */
 void Column::setDateTimeAt(int row, const QDateTime& new_value)
 {
+    setStatisticsAvailable(false);
 	exec(new ColumnSetDateTimeCmd(m_column_private, row, new_value));
 }
 
@@ -373,8 +384,10 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value)
  */
 void Column::replaceDateTimes(int first, const QList<QDateTime>& new_values)
 {
-	if (!new_values.isEmpty())
+    if (!new_values.isEmpty()){
+        setStatisticsAvailable(false);
 		exec(new ColumnReplaceDateTimesCmd(m_column_private, first, new_values));
+    }
 }
 
 /**
@@ -384,6 +397,7 @@ void Column::replaceDateTimes(int first, const QList<QDateTime>& new_values)
  */
 void Column::setValueAt(int row, double new_value)
 {
+    setStatisticsAvailable(false);
 	exec(new ColumnSetValueCmd(m_column_private, row, new_value));
 }
 
@@ -394,8 +408,136 @@ void Column::setValueAt(int row, double new_value)
  */
 void Column::replaceValues(int first, const QVector<double>& new_values)
 {
-	if (!new_values.isEmpty())
+    if (!new_values.isEmpty()){
+        setStatisticsAvailable(false);
 		exec(new ColumnReplaceValuesCmd(m_column_private, first, new_values));
+    }
+}
+
+void Column::setStatisticsAvailable(bool available) {
+	m_column_private->statisticsAvailable = available;
+}
+
+bool Column::statisticsAvailable() const {
+	return m_column_private->statisticsAvailable;
+}
+
+
+const Column::ColumnStatistics& Column::statistics() {
+	if (!statisticsAvailable())
+		calculateStatistics();
+
+    return m_column_private->statistics;
+}
+
+void Column::calculateStatistics() {
+    m_column_private->statistics = ColumnStatistics();
+	ColumnStatistics& statistics = m_column_private->statistics;
+
+    QVector<double>* rowValues = reinterpret_cast<QVector<double>*>(data());
+
+    int notNanCount = 0;
+    double val;
+    double columnSum = 0.0;
+    double columnProduct = 1.0;
+    double columnSumNeg = 0.0;
+    double columnSumSquare = 0.0;
+    statistics.minimum = INFINITY;
+    statistics.maximum = -INFINITY;
+    QMap<double, int> frequencyOfValues;
+    QVector<double> rowData;
+    rowData.reserve(rowValues->size());
+    for (int row = 0; row < rowValues->size(); ++row) {
+        val = rowValues->value(row);
+        if (isnan(val) || isMasked(row))
+            continue;
+
+        if (val < statistics.minimum){
+            statistics.minimum = val;
+        }
+        if (val > statistics.maximum){
+            statistics.maximum = val;
+        }
+        columnSum+= val;
+        columnSumNeg += (1.0 / val);
+        columnSumSquare += pow(val, 2.0);
+        columnProduct *= val;
+        if (frequencyOfValues.contains(val)){
+            frequencyOfValues.operator [](val)++;
+        }
+        else{
+            frequencyOfValues.insert(val, 1);
+        }
+        ++notNanCount;
+        rowData.push_back(val);
+    }
+
+    if (notNanCount == 0) {
+		setStatisticsAvailable(true);
+		return;
+	}
+
+    if (rowData.size() < rowValues->size()){
+        rowData.squeeze();
+    }
+
+    statistics.arithmeticMean = columnSum / notNanCount;
+    statistics.geometricMean = pow(columnProduct, 1.0 / notNanCount);
+    statistics.harmonicMean = notNanCount / columnSumNeg;
+    statistics.contraharmonicMean = columnSumSquare / columnSum;
+
+    double columnSumVariance = 0;
+    double columnSumMeanDeviation = 0.0;
+    double columnSumMedianDeviation = 0.0;
+    double sumForCentralMoment_r3 = 0.0;
+    double sumForCentralMoment_r4 = 0.0;
+
+    gsl_sort(rowData.data(), 1, notNanCount);
+    statistics.median = (notNanCount % 2 ? rowData.at((notNanCount-1)/2) :
+                                             (rowData.at((notNanCount-1)/2) +
+                                              rowData.at(notNanCount/2))/2.0);
+    QVector<double> absoluteMedianList;
+    absoluteMedianList.reserve(notNanCount);
+    absoluteMedianList.resize(notNanCount);
+
+    int idx = 0;
+    for(int row = 0; row < rowValues->size(); ++row){
+        val = rowValues->value(row);
+        if ( isnan(val) || isMasked(row) )
+            continue;
+        columnSumVariance+= pow(val - statistics.arithmeticMean, 2.0);
+
+        sumForCentralMoment_r3 += pow(val - statistics.arithmeticMean, 3.0);
+        sumForCentralMoment_r4 += pow(val - statistics.arithmeticMean, 4.0);
+        columnSumMeanDeviation += fabs( val - statistics.arithmeticMean );
+
+        absoluteMedianList[idx] = fabs(val - statistics.median);
+        columnSumMedianDeviation += absoluteMedianList[idx];
+        idx++;
+    }
+
+    statistics.meanDeviationAroundMedian = columnSumMedianDeviation / notNanCount;
+    statistics.medianDeviation = (notNanCount % 2 ? absoluteMedianList.at((notNanCount-1)/2) :
+                                                      (absoluteMedianList.at((notNanCount-1)/2) + absoluteMedianList.at(notNanCount/2))/2.0);
+
+    const double centralMoment_r3 = sumForCentralMoment_r3 / notNanCount;
+    const double centralMoment_r4 = sumForCentralMoment_r4 / notNanCount;
+
+    statistics.variance = columnSumVariance / notNanCount;
+    statistics.standardDeviation = sqrt(statistics.variance);
+    statistics.skewness = centralMoment_r3 / pow(statistics.standardDeviation, 3.0);
+    statistics.kurtosis = (centralMoment_r4 / pow(statistics.standardDeviation, 4.0)) - 3.0;
+    statistics.meanDeviation = columnSumMeanDeviation / notNanCount;
+
+    double entropy = 0.0;
+    QList<int> frequencyOfValuesValues = frequencyOfValues.values();
+    for (int i = 0; i < frequencyOfValuesValues.size(); ++i){
+        double frequencyNorm = static_cast<double>(frequencyOfValuesValues.at(i)) / notNanCount;
+        entropy += (frequencyNorm * log2(frequencyNorm));
+    }
+
+    statistics.entropy = -entropy;
+    setStatisticsAvailable(true);
 }
 
 void* Column::data() const{
@@ -457,6 +599,8 @@ double Column::valueAt(int row) const
 void Column::setChanged() {
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this);
+
+	setStatisticsAvailable(false);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -905,6 +1049,8 @@ void Column::handleFormatChange()
 	emit aspectDescriptionChanged(this); // the icon for the type changed
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this); // all cells must be repainted
+
+	setStatisticsAvailable(false);
 }
 
 

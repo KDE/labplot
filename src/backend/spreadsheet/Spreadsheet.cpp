@@ -102,38 +102,52 @@ QWidget *Spreadsheet::view() const {
 	return m_view;
 }
 
-void Spreadsheet::exportView() const {
+bool Spreadsheet::exportView() const {
 	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(view());
 	dlg->setFileName(name());
-	if (dlg->exec()==QDialog::Accepted){
-		const QString path = dlg->path();
-		const bool exportHeader = dlg->exportHeader();
-		const QString separator = dlg->separator();
-
-		const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
-		WAIT_CURSOR;
-		view->exportToFile(path, exportHeader, separator);
-		RESET_CURSOR;
-	}
+    bool ret;
+    if ((ret = dlg->exec()==QDialog::Accepted)){
+        const QString path = dlg->path();
+        const bool exportHeader = dlg->exportHeader();
+        const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
+        WAIT_CURSOR;
+        if (dlg->format() == ExportSpreadsheetDialog::LaTeX){
+            const bool exportLatexHeader = dlg->exportLatexHeader();
+            const bool gridLines = dlg->gridLines();
+            const bool captions = dlg->captions();
+            const bool skipEmptyRows =dlg->skipEmptyRows();
+            const bool exportEntire = dlg->entireSpreadheet();
+            view->exportToLaTeX(path, exportHeader, gridLines, captions,
+                                exportLatexHeader, skipEmptyRows, exportEntire);
+        }
+        else {
+            const QString separator = dlg->separator();
+            view->exportToFile(path, exportHeader, separator);
+        }
+        RESET_CURSOR;
+    }
 	delete dlg;
+    return ret;
 }
 
-void Spreadsheet::printView() {
+bool Spreadsheet::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, view());
+    bool ret;
 	dlg->setWindowTitle(i18n("Print Spreadsheet"));
-	if (dlg->exec() == QDialog::Accepted) {
+    if ((ret = dlg->exec() == QDialog::Accepted)) {
 		const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
 		view->print(&printer);
 	}
 	delete dlg;
+    return ret;
 }
 
-void Spreadsheet::printPreview() const {
+bool Spreadsheet::printPreview() const {
 	const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
-	dlg->exec();
+    return dlg->exec();
 }
 
 /*!

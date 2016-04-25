@@ -71,54 +71,54 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_initializing(false
 	ui.tbTexUsed->setIconSize(QSize(20, 20));
 	ui.tbTexUsed->setIcon( QIcon::fromTheme("labplot-TeX-logo") );
 
-    //Positioning and alignment
-    ui.cbPositionX->addItem(i18n("left"));
-    ui.cbPositionX->addItem(i18n("center"));
-    ui.cbPositionX->addItem(i18n("right"));
-    ui.cbPositionX->addItem(i18n("custom"));
+	//Positioning and alignment
+	ui.cbPositionX->addItem(i18n("left"));
+	ui.cbPositionX->addItem(i18n("center"));
+	ui.cbPositionX->addItem(i18n("right"));
+	ui.cbPositionX->addItem(i18n("custom"));
 
-    ui.cbPositionY->addItem(i18n("top"));
-    ui.cbPositionY->addItem(i18n("center"));
-    ui.cbPositionY->addItem(i18n("bottom"));
-    ui.cbPositionY->addItem(i18n("custom"));
+	ui.cbPositionY->addItem(i18n("top"));
+	ui.cbPositionY->addItem(i18n("center"));
+	ui.cbPositionY->addItem(i18n("bottom"));
+	ui.cbPositionY->addItem(i18n("custom"));
 
-    ui.cbHorizontalAlignment->addItem(i18n("left"));
-    ui.cbHorizontalAlignment->addItem(i18n("center"));
-    ui.cbHorizontalAlignment->addItem(i18n("right"));
+	ui.cbHorizontalAlignment->addItem(i18n("left"));
+	ui.cbHorizontalAlignment->addItem(i18n("center"));
+	ui.cbHorizontalAlignment->addItem(i18n("right"));
 
-    ui.cbVerticalAlignment->addItem(i18n("top"));
-    ui.cbVerticalAlignment->addItem(i18n("center"));
-    ui.cbVerticalAlignment->addItem(i18n("bottom"));
+	ui.cbVerticalAlignment->addItem(i18n("top"));
+	ui.cbVerticalAlignment->addItem(i18n("center"));
+	ui.cbVerticalAlignment->addItem(i18n("bottom"));
 
-    //SLOTS
-    // text properties
-    connect(ui.tbTexUsed, SIGNAL(clicked(bool)), this, SLOT(teXUsedChanged(bool)) );
-    connect(ui.teLabel, SIGNAL(textChanged()), this, SLOT(textChanged()));
-    connect(ui.teLabel, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
-            this, SLOT(charFormatChanged(QTextCharFormat)));
-    connect(ui.kcbFontColor, SIGNAL(changed(QColor)), this, SLOT(fontColorChanged(QColor)));
-    connect(ui.tbFontBold, SIGNAL(clicked(bool)), this, SLOT(fontBoldChanged(bool)));
-    connect(ui.tbFontItalic, SIGNAL(clicked(bool)), this, SLOT(fontItalicChanged(bool)));
-    connect(ui.tbFontUnderline, SIGNAL(clicked(bool)), this, SLOT(fontUnderlineChanged(bool)));
-    connect(ui.tbFontStrikeOut, SIGNAL(clicked(bool)), this, SLOT(fontStrikeOutChanged(bool)));
-    connect(ui.tbFontSuperScript, SIGNAL(clicked(bool)), this, SLOT(fontSuperScriptChanged(bool)));
-    connect(ui.tbFontSubScript, SIGNAL(clicked(bool)), this, SLOT(fontSubScriptChanged(bool)));
-    connect(ui.tbSymbols, SIGNAL(clicked(bool)), this, SLOT(charMenu()));
-    connect(ui.tbDateTime, SIGNAL(clicked(bool)), this, SLOT(dateTimeMenu()));
-    connect(m_dateTimeMenu, SIGNAL(triggered(QAction*)), this, SLOT(insertDateTime(QAction*)) );
-    connect(ui.kfontRequester, SIGNAL(fontSelected(QFont)), this, SLOT(fontChanged(QFont)));
-    connect(ui.sbFontSize, SIGNAL(valueChanged(int)), this, SLOT(fontSizeChanged(int)) );
+	//SLOTS
+	// text properties
+	connect(ui.tbTexUsed, SIGNAL(clicked(bool)), this, SLOT(teXUsedChanged(bool)) );
+	connect(ui.teLabel, SIGNAL(textChanged()), this, SLOT(textChanged()));
+	connect(ui.teLabel, SIGNAL(currentCharFormatChanged(QTextCharFormat)),
+			this, SLOT(charFormatChanged(QTextCharFormat)));
+	connect(ui.kcbFontColor, SIGNAL(changed(QColor)), this, SLOT(fontColorChanged(QColor)));
+	connect(ui.tbFontBold, SIGNAL(clicked(bool)), this, SLOT(fontBoldChanged(bool)));
+	connect(ui.tbFontItalic, SIGNAL(clicked(bool)), this, SLOT(fontItalicChanged(bool)));
+	connect(ui.tbFontUnderline, SIGNAL(clicked(bool)), this, SLOT(fontUnderlineChanged(bool)));
+	connect(ui.tbFontStrikeOut, SIGNAL(clicked(bool)), this, SLOT(fontStrikeOutChanged(bool)));
+	connect(ui.tbFontSuperScript, SIGNAL(clicked(bool)), this, SLOT(fontSuperScriptChanged(bool)));
+	connect(ui.tbFontSubScript, SIGNAL(clicked(bool)), this, SLOT(fontSubScriptChanged(bool)));
+	connect(ui.tbSymbols, SIGNAL(clicked(bool)), this, SLOT(charMenu()));
+	connect(ui.tbDateTime, SIGNAL(clicked(bool)), this, SLOT(dateTimeMenu()));
+	connect(m_dateTimeMenu, SIGNAL(triggered(QAction*)), this, SLOT(insertDateTime(QAction*)) );
+	connect(ui.kfontRequester, SIGNAL(fontSelected(QFont)), this, SLOT(fontChanged(QFont)));
+	connect(ui.sbFontSize, SIGNAL(valueChanged(int)), this, SLOT(fontSizeChanged(int)) );
 
-    // geometry
-    connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
-    connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
-    connect( ui.sbPositionX, SIGNAL(valueChanged(double)), this, SLOT(customPositionXChanged(double)) );
-    connect( ui.sbPositionY, SIGNAL(valueChanged(double)), this, SLOT(customPositionYChanged(double)) );
-    connect( ui.cbHorizontalAlignment, SIGNAL(currentIndexChanged(int)), this, SLOT(horizontalAlignmentChanged(int)) );
-    connect( ui.cbVerticalAlignment, SIGNAL(currentIndexChanged(int)), this, SLOT(verticalAlignmentChanged(int)) );
-    connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
-    connect( ui.sbOffsetX, SIGNAL(valueChanged(double)), this, SLOT(offsetXChanged(double)) );
-    connect( ui.sbOffsetY, SIGNAL(valueChanged(double)), this, SLOT(offsetYChanged(double)) );
+	// geometry
+	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
+	connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
+	connect( ui.sbPositionX, SIGNAL(valueChanged(double)), this, SLOT(customPositionXChanged(double)) );
+	connect( ui.sbPositionY, SIGNAL(valueChanged(double)), this, SLOT(customPositionYChanged(double)) );
+	connect( ui.cbHorizontalAlignment, SIGNAL(currentIndexChanged(int)), this, SLOT(horizontalAlignmentChanged(int)) );
+	connect( ui.cbVerticalAlignment, SIGNAL(currentIndexChanged(int)), this, SLOT(verticalAlignmentChanged(int)) );
+	connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
+	connect( ui.sbOffsetX, SIGNAL(valueChanged(double)), this, SLOT(offsetXChanged(double)) );
+	connect( ui.sbOffsetY, SIGNAL(valueChanged(double)), this, SLOT(offsetYChanged(double)) );
 
 	connect( ui.chbVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
@@ -131,24 +131,24 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
     m_labelsList = labels;
     m_label = labels.first();
 
-    ui.lOffsetX->hide();
-    ui.lOffsetY->hide();
+	ui.lOffsetX->hide();
+	ui.lOffsetY->hide();
 
-    ui.sbOffsetX->hide();
-    ui.sbOffsetY->hide();
+	ui.sbOffsetX->hide();
+	ui.sbOffsetY->hide();
 
     this->load();
     initConnections();
 }
 
 void LabelWidget::setAxes(QList<Axis*> axes){
-    m_labelsList.clear();
-    foreach(Axis* axis, axes) {
-        m_labelsList.append(axis->title());
-        connect(axis, SIGNAL(titleOffsetXChanged(float)), this, SLOT(labelOffsetxChanged(float)) );
-        connect(axis, SIGNAL(titleOffsetYChanged(float)), this, SLOT(labelOffsetyChanged(float)) );
-        connect(axis->title(), SIGNAL(rotationAngleChanged(float)), this, SLOT(labelRotationAngleChanged(float)) );
-    }
+	m_labelsList.clear();
+	foreach(Axis* axis, axes) {
+		m_labelsList.append(axis->title());
+		connect(axis, SIGNAL(titleOffsetXChanged(float)), this, SLOT(labelOffsetxChanged(float)) );
+		connect(axis, SIGNAL(titleOffsetYChanged(float)), this, SLOT(labelOffsetyChanged(float)) );
+		connect(axis->title(), SIGNAL(rotationAngleChanged(float)), this, SLOT(labelRotationAngleChanged(float)) );
+	}
 
     m_axesList = axes;
     m_label = m_labelsList.first();
@@ -181,20 +181,20 @@ void LabelWidget::initConnections() {
  * and the rotation of the label are available.
  */
 void LabelWidget::setFixedLabelMode(const bool b){
-    ui.lPositionX->setVisible(!b);
-    ui.cbPositionX->setVisible(!b);
-    ui.sbPositionX->setVisible(!b);
-    ui.lPositionY->setVisible(!b);
-    ui.cbPositionY->setVisible(!b);
-    ui.sbPositionY->setVisible(!b);
-    ui.lHorizontalAlignment->setVisible(!b);
-    ui.cbHorizontalAlignment->setVisible(!b);
-    ui.lVerticalAlignment->setVisible(!b);
-    ui.cbVerticalAlignment->setVisible(!b);
-    ui.lOffsetX->setVisible(b);
-    ui.lOffsetY->setVisible(b);
-    ui.sbOffsetX->setVisible(b);
-    ui.sbOffsetY->setVisible(b);
+	ui.lPositionX->setVisible(!b);
+	ui.cbPositionX->setVisible(!b);
+	ui.sbPositionX->setVisible(!b);
+	ui.lPositionY->setVisible(!b);
+	ui.cbPositionY->setVisible(!b);
+	ui.sbPositionY->setVisible(!b);
+	ui.lHorizontalAlignment->setVisible(!b);
+	ui.cbHorizontalAlignment->setVisible(!b);
+	ui.lVerticalAlignment->setVisible(!b);
+	ui.cbVerticalAlignment->setVisible(!b);
+	ui.lOffsetX->setVisible(b);
+	ui.lOffsetY->setVisible(b);
+	ui.sbOffsetX->setVisible(b);
+	ui.sbOffsetY->setVisible(b);
 }
 
 /*!
@@ -202,23 +202,23 @@ void LabelWidget::setFixedLabelMode(const bool b){
  * Used when displaying legend's title label.
  */
 void LabelWidget::setNoGeometryMode(const bool b) {
-    ui.lGeometry->setVisible(!b);
-    ui.lPositionX->setVisible(!b);
-    ui.cbPositionX->setVisible(!b);
-    ui.sbPositionX->setVisible(!b);
-    ui.lPositionY->setVisible(!b);
-    ui.cbPositionY->setVisible(!b);
-    ui.sbPositionY->setVisible(!b);
-    ui.lHorizontalAlignment->setVisible(!b);
-    ui.cbHorizontalAlignment->setVisible(!b);
-    ui.lVerticalAlignment->setVisible(!b);
-    ui.cbVerticalAlignment->setVisible(!b);
-    ui.lOffsetX->setVisible(!b);
-    ui.lOffsetY->setVisible(!b);
-    ui.sbOffsetX->setVisible(!b);
-    ui.sbOffsetY->setVisible(!b);
-    ui.lRotation->setVisible(!b);
-    ui.sbRotation->setVisible(!b);
+	ui.lGeometry->setVisible(!b);
+	ui.lPositionX->setVisible(!b);
+	ui.cbPositionX->setVisible(!b);
+	ui.sbPositionX->setVisible(!b);
+	ui.lPositionY->setVisible(!b);
+	ui.cbPositionY->setVisible(!b);
+	ui.sbPositionY->setVisible(!b);
+	ui.lHorizontalAlignment->setVisible(!b);
+	ui.cbHorizontalAlignment->setVisible(!b);
+	ui.lVerticalAlignment->setVisible(!b);
+	ui.cbVerticalAlignment->setVisible(!b);
+	ui.lOffsetX->setVisible(!b);
+	ui.lOffsetY->setVisible(!b);
+	ui.sbOffsetX->setVisible(!b);
+	ui.sbOffsetY->setVisible(!b);
+	ui.lRotation->setVisible(!b);
+	ui.sbRotation->setVisible(!b);
 }
 
 //**********************************************************
@@ -523,19 +523,21 @@ void LabelWidget::rotationChanged(int value){
 }
 
 void LabelWidget::offsetXChanged(double value){
-    if (m_initializing)
-        return;
+	if (m_initializing)
+		return;
 
-    foreach(Axis* axis, m_axesList)
-        axis->setTitleOffsetX( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+	foreach(Axis* axis, m_axesList)
+		axis->setTitleOffsetX( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
+
 void LabelWidget::offsetYChanged(double value){
-    if (m_initializing)
-        return;
+	if (m_initializing)
+		return;
 
-    foreach(Axis* axis, m_axesList)
-        axis->setTitleOffsetY( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+	foreach(Axis* axis, m_axesList)
+		axis->setTitleOffsetY( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
+
 void LabelWidget::visibilityChanged(bool state){
     if (m_initializing)
         return;
@@ -597,15 +599,15 @@ void LabelWidget::labelVerticalAlignmentChanged(TextLabel::VerticalAlignment ind
 }
 
 void LabelWidget::labelOffsetxChanged(float offset){
-    m_initializing = true;
-    ui.sbOffsetX->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Point));
-    m_initializing = false;
+	m_initializing = true;
+	ui.sbOffsetX->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Point));
+	m_initializing = false;
 }
 
 void LabelWidget::labelOffsetyChanged(float offset){
-    m_initializing = true;
-    ui.sbOffsetY->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Point));
-    m_initializing = false;
+	m_initializing = true;
+	ui.sbOffsetY->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Point));
+	m_initializing = false;
 }
 
 void LabelWidget::labelRotationAngleChanged(float angle){
@@ -624,110 +626,109 @@ void LabelWidget::labelVisibleChanged(bool on){
 //******************** SETTINGS ****************************
 //**********************************************************
 void LabelWidget::load() {
-    if(m_label == NULL)
-        return;
+	if(m_label == NULL)
+		return;
 
-    m_initializing = true;
+	m_initializing = true;
 
-    ui.chbVisible->setChecked( m_label->isVisible() );
+	ui.chbVisible->setChecked( m_label->isVisible() );
 
-    //Text
-    ui.teLabel->setHtml( m_label->text().text );
-    ui.teLabel->selectAll();
-    ui.teLabel->setFocus();
-    ui.tbTexUsed->setChecked( (bool) m_label->text().teXUsed );
-    this->teXUsedChanged(m_label->text().teXUsed);
-    ui.sbFontSize->setValue( m_label->teXFontSize() );
-    if(m_label->text().teXUsed)
-        ui.kcbFontColor->setColor( m_label->teXFontColor() );
+	//Text
+	ui.teLabel->setHtml( m_label->text().text );
+	ui.teLabel->selectAll();
+	ui.teLabel->setFocus();
+	ui.tbTexUsed->setChecked( (bool) m_label->text().teXUsed );
+	this->teXUsedChanged(m_label->text().teXUsed);
+	ui.sbFontSize->setValue( m_label->teXFontSize() );
+	if(m_label->text().teXUsed)
+		ui.kcbFontColor->setColor( m_label->teXFontColor() );
 
-    //Set text format
-    ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);
-    ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
-    ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());
-    QTextCharFormat format = ui.teLabel->currentCharFormat();
-    ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
-    ui.tbFontSuperScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
-    ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
-    ui.kfontRequester->setFont(format.font());
+	//Set text format
+	ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);
+	ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
+	ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());
+	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
+	ui.tbFontSuperScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
+	ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
+	ui.kfontRequester->setFont(format.font());
 
-    // Geometry
-    ui.cbPositionX->setCurrentIndex( (int) m_label->position().horizontalPosition );
-    ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.x(),Worksheet::Centimeter) );
-    ui.cbPositionY->setCurrentIndex( (int) m_label->position().verticalPosition );
-    ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(),Worksheet::Centimeter) );
+	// Geometry
+	ui.cbPositionX->setCurrentIndex( (int) m_label->position().horizontalPosition );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.x(),Worksheet::Centimeter) );
+	ui.cbPositionY->setCurrentIndex( (int) m_label->position().verticalPosition );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(),Worksheet::Centimeter) );
 
-    if (m_axesList.size()){
-        ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetX(), Worksheet::Point) );
-        ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetY(), Worksheet::Point) );
-    }
-    ui.cbHorizontalAlignment->setCurrentIndex( (int) m_label->horizontalAlignment() );
-    ui.cbVerticalAlignment->setCurrentIndex( (int) m_label->verticalAlignment() );
-    ui.sbRotation->setValue( m_label->rotationAngle() );
+	if (m_axesList.size()){
+		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetX(), Worksheet::Point) );
+		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetY(), Worksheet::Point) );
+	}
+	ui.cbHorizontalAlignment->setCurrentIndex( (int) m_label->horizontalAlignment() );
+	ui.cbVerticalAlignment->setCurrentIndex( (int) m_label->verticalAlignment() );
+	ui.sbRotation->setValue( m_label->rotationAngle() );
 
-
-    m_initializing = false;
+	m_initializing = false;
 }
 
 void LabelWidget::loadConfig(KConfigGroup &group) {
-    if(m_label == NULL)
-        return;
+	if(m_label == NULL)
+		return;
 
-    m_initializing = true;
+	m_initializing = true;
 
-    ui.chbVisible->setChecked( group.readEntry("Visible", m_label->isVisible()) );
+	ui.chbVisible->setChecked( group.readEntry("Visible", m_label->isVisible()) );
 
-    //Text
-    ui.tbTexUsed->setChecked(group.readEntry("TeXUsed", (bool) m_label->text().teXUsed));
-    ui.sbFontSize->setValue( group.readEntry("TeXFontSize", m_label->teXFontSize()) );
-    if(m_label->text().teXUsed)
-        ui.kcbFontColor->setColor(group.readEntry("TeXFontColor", m_label->teXFontColor()));
+	//Text
+	ui.tbTexUsed->setChecked(group.readEntry("TeXUsed", (bool) m_label->text().teXUsed));
+	ui.sbFontSize->setValue( group.readEntry("TeXFontSize", m_label->teXFontSize()) );
+	if(m_label->text().teXUsed)
+		ui.kcbFontColor->setColor(group.readEntry("TeXFontColor", m_label->teXFontColor()));
 
-    //Set text format
-    ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);
-    ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
-    ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());
-    QTextCharFormat format = ui.teLabel->currentCharFormat();
-    ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
-    ui.tbFontSuperScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
-    ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
-    ui.kfontRequester->setFont(format.font());
+	//Set text format
+	ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);
+	ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
+	ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());
+	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
+	ui.tbFontSuperScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
+	ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
+	ui.kfontRequester->setFont(format.font());
 
-    // Geometry
-    ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_label->position().horizontalPosition ) );
-    ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_label->position().point.x()),Worksheet::Centimeter) );
-    ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_label->position().verticalPosition ) );
-    ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()),Worksheet::Centimeter) );
+	// Geometry
+	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_label->position().horizontalPosition ) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_label->position().point.x()),Worksheet::Centimeter) );
+	ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_label->position().verticalPosition ) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()),Worksheet::Centimeter) );
 
-    if (m_axesList.size())
-        {
+	if (m_axesList.size())
+		{
 		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetX", m_axesList.first()->titleOffsetX()), Worksheet::Point) );
 		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetY", m_axesList.first()->titleOffsetY()), Worksheet::Point) );
 	}
-    ui.cbHorizontalAlignment->setCurrentIndex( group.readEntry("HorizontalAlignment", (int) m_label->horizontalAlignment()) );
-    ui.cbVerticalAlignment->setCurrentIndex( group.readEntry("VerticalAlignment", (int) m_label->verticalAlignment()) );
-    ui.sbRotation->setValue( group.readEntry("Rotation", m_label->rotationAngle()) );
+	ui.cbHorizontalAlignment->setCurrentIndex( group.readEntry("HorizontalAlignment", (int) m_label->horizontalAlignment()) );
+	ui.cbVerticalAlignment->setCurrentIndex( group.readEntry("VerticalAlignment", (int) m_label->verticalAlignment()) );
+	ui.sbRotation->setValue( group.readEntry("Rotation", m_label->rotationAngle()) );
 
     m_initializing = false;
 }
 
 void LabelWidget::saveConfig(KConfigGroup &group) {
-    //Text
-    group.writeEntry("TeXUsed", ui.tbTexUsed->isChecked());
-    group.writeEntry("TeXFontColor", ui.kcbFontColor->color());
-    group.writeEntry("TeXFontSize", ui.sbFontSize->value());
+	//Text
+	group.writeEntry("TeXUsed", ui.tbTexUsed->isChecked());
+	group.writeEntry("TeXFontColor", ui.kcbFontColor->color());
+	group.writeEntry("TeXFontSize", ui.sbFontSize->value());
 
-    // Geometry
-    group.writeEntry("PositionX", ui.cbPositionX->currentIndex());
-    group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),Worksheet::Centimeter) );
-    group.writeEntry("PositionY", ui.cbPositionY->currentIndex());
-    group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),Worksheet::Centimeter) );
+	// Geometry
+	group.writeEntry("PositionX", ui.cbPositionX->currentIndex());
+	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),Worksheet::Centimeter) );
+	group.writeEntry("PositionY", ui.cbPositionY->currentIndex());
+	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),Worksheet::Centimeter) );
 
-    if (m_axesList.size()){
-        group.writeEntry("OffsetX",  Worksheet::convertToSceneUnits(ui.sbOffsetX->value(), Worksheet::Point) );
-	group.writeEntry("OffsetY",  Worksheet::convertToSceneUnits(ui.sbOffsetY->value(), Worksheet::Point) );
-    }
-    group.writeEntry("HorizontalAlignment", ui.cbHorizontalAlignment->currentIndex());
-    group.writeEntry("VerticalAlignment", ui.cbVerticalAlignment->currentIndex());
-    group.writeEntry("Rotation", ui.sbRotation->value());
+	if (m_axesList.size()){
+		group.writeEntry("OffsetX",  Worksheet::convertToSceneUnits(ui.sbOffsetX->value(), Worksheet::Point) );
+		group.writeEntry("OffsetY",  Worksheet::convertToSceneUnits(ui.sbOffsetY->value(), Worksheet::Point) );
+	}
+	group.writeEntry("HorizontalAlignment", ui.cbHorizontalAlignment->currentIndex());
+	group.writeEntry("VerticalAlignment", ui.cbVerticalAlignment->currentIndex());
+	group.writeEntry("Rotation", ui.sbRotation->value());
 }

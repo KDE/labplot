@@ -82,7 +82,7 @@ private slots:
 	void yScaleChanged(int);
 
 	//"Scale breaking"-tab
-	void toggleXBreak(int);
+	void toggleXBreak(bool);
 	void addXBreak();
 	void removeXBreak();
 	void currentXBreakChanged(int);
@@ -90,7 +90,7 @@ private slots:
 	void xBreakEndChanged();
 	void xBreakPositionChanged(int);
 
-	void toggleYBreak(int);
+	void toggleYBreak(bool);
 	void addYBreak();
 	void removeYBreak();
 	void currentYBreakChanged(int);
@@ -131,8 +131,8 @@ private slots:
 	void plotVisibleChanged(bool);
 
 	//scale breakings
-	void plotXScaleBreakingChanged(const CartesianPlot::ScaleBreakings&);
-	void plotYScaleBreakingChanged(const CartesianPlot::ScaleBreakings&);
+	void plotXRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
+	void plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 
 	//background
 	void plotBackgroundTypeChanged(PlotArea::BackgroundType);

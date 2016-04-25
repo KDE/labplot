@@ -13,7 +13,7 @@ include(KDEInstallDirs)
 include(KDECompilerSettings)
 include(KDECMakeSettings)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wunused -fno-omit-frame-pointer -fstack-protector -fno-exceptions")
 
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
@@ -25,6 +25,29 @@ add_definitions(-fvisibility=default)
 
 cmake_policy(SET CMP0002 OLD)
 #cmake_policy(SET CMP0063 NEW)
+
+### FFTW ######################################
+FIND_LIBRARY(FFTW_LIBRARIES fftw3
+	PATHS
+	/usr/lib
+	/usr/local/lib
+)
+FIND_PATH (FFTW_INCLUDE_DIR fftw3.h
+	/usr/include
+	/usr/local/include
+)
+IF (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
+	SET (FFTW_FOUND TRUE)
+ELSE (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
+	SET (FFTW_FOUND FALSE)
+ENDIF (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
+
+IF (FFTW_FOUND)
+	MESSAGE (STATUS "Found FFTW 3 Library: ${FFTW_INCLUDE_DIR} ${FFTW_LIBRARIES}")
+	#add_definitions (-DHAVE_GSL)
+ELSE (FFTW_FOUND)
+	MESSAGE (STATUS "FFTW 3 Library not found.")
+ENDIF (FFTW_FOUND)
 
 ### GSL ######################################
 FIND_LIBRARY(GSL_LIBRARIES gsl
@@ -87,7 +110,7 @@ ELSE (HDF5_FOUND)
 	MESSAGE (STATUS "Hierarchical Data Format (HDF) 5 Library not found.")
 ENDIF (HDF5_FOUND)
 
-# ### NETCDF #####################################
+### NETCDF #####################################
 FIND_LIBRARY(NETCDF_LIBRARY netcdf
 	PATHS
 	/usr/lib

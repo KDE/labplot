@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : GuiObserver.h
+    File                 : XYInterpolationCurvePrivate.h
     Project              : LabPlot
-    Description 	 : GUI observer
+    Description          : Private members of XYInterpolationCurve
     --------------------------------------------------------------------
-    Copyright        : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -25,28 +25,44 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef GUIOBSERVER_H
-#define GUIOBSERVER_H
 
-#include <QModelIndex>
-#include <QItemSelection>
-class MainWin;
-class AbstractAspect;
-class CartesianPlot;
+#ifndef XYINTERPOLATIONCURVEPRIVATE_H
+#define XYINTERPOLATIONCURVEPRIVATE_H
 
-class GuiObserver:public QObject {
-  Q_OBJECT
+#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 
-  public:
-	explicit GuiObserver(MainWin*);
+#include <QDebug>
 
-  private:
-	MainWin* mainWindow;
-	CartesianPlot* m_lastCartesianPlot;
+class XYInterpolationCurve;
+class Column;
 
-  private slots:
-	void selectedAspectsChanged(QList<AbstractAspect*>&);
-	void hiddenAspectSelected(const AbstractAspect*);
+class XYInterpolationCurvePrivate: public XYCurvePrivate {
+	public:
+		explicit XYInterpolationCurvePrivate(XYInterpolationCurve*);
+		~XYInterpolationCurvePrivate();
+
+		void recalculate();
+
+		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be interpolated
+		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be interpolated
+		QString xDataColumnPath;
+		QString yDataColumnPath;
+
+		XYInterpolationCurve::InterpolationData interpolationData;
+		XYInterpolationCurve::InterpolationResult interpolationResult;
+
+		Column* xColumn; //<! column used internally for storing the x-values of the result interpolation curve
+		Column* yColumn; //<! column used internally for storing the y-values of the result interpolation curve
+		QVector<double>* xVector;
+		QVector<double>* yVector;
+
+		bool sourceDataChangedSinceLastInterpolation; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
+
+		XYInterpolationCurve* const q;
+
+//	private:
+//		void writeSolverState(gsl_multifit_fdfsolver* s);
 };
 
 #endif

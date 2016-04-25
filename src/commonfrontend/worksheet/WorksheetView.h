@@ -114,6 +114,7 @@ private:
 	QMenu* m_cartesianPlotAddNewMenu;
 	QMenu* m_cartesianPlotZoomMenu;
 	QMenu* m_cartesianPlotActionModeMenu;
+	QMenu* m_filterMenu;
 
 	QToolButton* tbNewCartesianPlot;
 	QToolButton* tbZoom;
@@ -173,6 +174,8 @@ private:
 	QAction* addCurveAction;
 	QAction* addEquationCurveAction;
 	QAction* addFitCurveAction;
+	QAction* addFourierFilterCurveAction;
+	QAction* addInterpolationCurveAction;
 	QAction* addHorizontalAxisAction;
 	QAction* addVerticalAxisAction;
 	QAction* addLegendAction;
@@ -192,8 +195,14 @@ private:
 	QAction* shiftUpYAction;
 	QAction* shiftDownYAction;
 
+	// filter menu
+	QAction* addFitAction;
+	QAction* addFourierFilterAction;
+	QAction* addInterpolationAction;
+
 public slots:
 	void createContextMenu(QMenu*) const;
+	void createAnalysisMenu(QMenu*) const;
 	void fillToolBar(QToolBar*);
 	void fillCartesianPlotToolBar(QToolBar*);
 	void print(QPrinter*);

@@ -1,9 +1,10 @@
 /***************************************************************************
-    File                 : GuiObserver.h
+    File                 : StatisticsDialog.h
     Project              : LabPlot
-    Description 	 : GUI observer
+    Description          : Dialog showing statistics for column values
     --------------------------------------------------------------------
-    Copyright        : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 by Fabian Kristof (f-kristof@hotmail.com)
+    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -25,28 +26,31 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef GUIOBSERVER_H
-#define GUIOBSERVER_H
+#ifndef STATISTICSDIALOG_H
+#define STATISTICSDIALOG_H
 
-#include <QModelIndex>
-#include <QItemSelection>
-class MainWin;
-class AbstractAspect;
-class CartesianPlot;
+#include <KDialog>
 
-class GuiObserver:public QObject {
-  Q_OBJECT
+class Column;
+class QTabWidget;
 
-  public:
-	explicit GuiObserver(MainWin*);
+class StatisticsDialog : public KDialog {
+	Q_OBJECT
 
-  private:
-	MainWin* mainWindow;
-	CartesianPlot* m_lastCartesianPlot;
+public:
+	explicit StatisticsDialog(const QString&, QWidget *parent = 0);
+	void setColumns(const QList<Column*>& columns);
 
-  private slots:
-	void selectedAspectsChanged(QList<AbstractAspect*>&);
-	void hiddenAspectSelected(const AbstractAspect*);
+private:
+	const QString isNanValue(const double value);
+	QSize sizeHint() const;
+
+	QTabWidget* twStatistics;
+	QString m_htmlText;
+	QList<Column*> m_columns;
+
+private slots:
+	void currentTabChanged(int index);
 };
 
 #endif

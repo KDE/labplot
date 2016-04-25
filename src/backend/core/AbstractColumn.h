@@ -31,6 +31,7 @@
 #define ABSTRACTCOLUMN_H
 
 #include "backend/core/AbstractAspect.h"
+#include <math.h>
 
 class AbstractColumnPrivate;
 class AbstractSimpleFilter;

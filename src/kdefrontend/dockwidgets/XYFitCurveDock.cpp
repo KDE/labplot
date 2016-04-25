@@ -1,5 +1,5 @@
 /***************************************************************************
-    File             : XYFitCurveDock.h
+    File             : XYFitCurveDock.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
@@ -29,7 +29,6 @@
 #include "XYFitCurveDock.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
-#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
@@ -38,7 +37,8 @@
 
 #include <QMenu>
 #include <QWidgetAction>
-#include <KLocalizedString>
+#include <QDebug>
+
 /*!
   \class XYFitCurveDock
   \brief  Provides a widget for editing the properties of the XYFitCurves
@@ -53,12 +53,11 @@
   \ingroup kdefrontend
 */
 
-XYFitCurveDock::XYFitCurveDock(QWidget *parent): XYCurveDock(parent),
-	cbXDataColumn(0),
-	cbYDataColumn(0),
-	cbWeightsColumn(0),
-	m_fitCurve(0) {
+XYFitCurveDock::XYFitCurveDock(QWidget *parent)
+	 : XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), cbWeightsColumn(0), m_fitCurve(0) {
 
+	//remove the tab "Error bars"
+	ui.tabWidget->removeTab(5);
 }
 
 /*!
