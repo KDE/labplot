@@ -168,8 +168,8 @@ void CartesianPlot::initDefault(Type type){
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
 			axis->setMinorTicksNumber(1);
-			axis->setLabelsPosition(Axis::NoLabels);
-			axis->title()->setText(QString());
+			axis->setLabelsPosition(Axis::LabelsOut);
+			//axis->title()->setText(QString());
 
 			axis = new Axis("y axis 1", Axis::AxisVertical);
 			addChild(axis);
@@ -197,8 +197,8 @@ void CartesianPlot::initDefault(Type type){
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
 			axis->setMinorTicksNumber(1);
-			axis->setLabelsPosition(Axis::NoLabels);
-			axis->title()->setText(QString());
+			axis->setLabelsPosition(Axis::LabelsIn);
+			//axis->title()->setText(QString());
 
 			break;
 		}
@@ -249,7 +249,7 @@ void CartesianPlot::initDefault(Type type){
 
 			Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
 			addChild(axis);
-			axis->setPosition(Axis::AxisCentered);
+			axis->setPosition(Axis::AxisRight);
 			axis->setStart(-0.5);
 			axis->setEnd(0.5);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
@@ -261,7 +261,7 @@ void CartesianPlot::initDefault(Type type){
 
 			axis = new Axis("y axis 1", Axis::AxisVertical);
 			addChild(axis);
-			axis->setPosition(Axis::AxisCentered);
+			axis->setPosition(Axis::AxisLeft);
 			axis->setStart(-0.5);
 			axis->setEnd(0.5);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
