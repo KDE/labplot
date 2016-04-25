@@ -365,16 +365,17 @@ void XYInterpolationCurvePrivate::recalculate() {
 	xVector->resize(npoints);
 	yVector->resize(npoints);
 	for (unsigned int i = 0; i<npoints; i++) {
-		int a=0,b=n-1;
+		unsigned int a=0,b=n-1;
 
 		double x = min + i*(max-min)/(npoints-1);
 		(*xVector)[i] = x;
 
-		// find interval
+		// find index a,b for interval [x[a],x[b]] around x[i] using bisection
 		int j=0;
 		switch(type) {
 		case XYInterpolationCurve::Cosine:
 		case XYInterpolationCurve::Exponential:
+		case XYInterpolationCurve::PCH:
 			while(b-a>1) {
 				j=floor((a+b)/2.);
 				if(xdata[j]>x)
@@ -425,10 +426,24 @@ void XYInterpolationCurvePrivate::recalculate() {
 			//TODO
 			//(*yVector)[i] = 
 			break;
-		case XYInterpolationCurve::PCH:
-			//TODO
-			//(*yVector)[i] = 
+		case XYInterpolationCurve::PCH: {
+			t = (x-xdata[a])/(xdata[b]-xdata[a]);
+			double h1=2.*t*t*t-3.*t*t+1, h2=-2.*t*t*t+3.*t*t, h3=t*t*t-2*t*t+t, h4=t*t*t-t*t;
+			double m1=0.,m2=0.;
+			// finite differences
+			if(a==0)
+				m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+			else
+				m1=0.5*( (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) + (ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1]) );
+			if(b==n-1)
+				m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+			else
+				m2=0.5*( (ydata[b+1]-ydata[b])/(xdata[b+1]-xdata[b]) + (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) );
+			
+			// Hermite polynomial
+			(*yVector)[i] = ydata[a]*h1+ydata[b]*h2+(xdata[b]-xdata[a])*(m1*h3+m2*h4);
 			break;
+		}
 		}
 	}
 

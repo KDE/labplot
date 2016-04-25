@@ -94,6 +94,11 @@ void XYInterpolationCurveDock::setupGeneral() {
 	uiGeneralTab.cbType->addItem(i18n("Rational functions"));
 	uiGeneralTab.cbType->addItem(i18n("Cubic Hermite"));
 
+	uiGeneralTab.cbVariant->addItem(i18n("Finite differences"));
+	uiGeneralTab.cbVariant->addItem(i18n("Catmull-Rom"));
+	uiGeneralTab.cbVariant->addItem(i18n("cardinal"));
+	uiGeneralTab.cbVariant->addItem(i18n("Kochanek-Bartels"));
+
 	uiGeneralTab.cbEval->addItem(i18n("Function"));
 	uiGeneralTab.cbEval->addItem(i18n("Derivative"));
 	uiGeneralTab.cbEval->addItem(i18n("Second derivative"));
@@ -111,6 +116,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
+	//connect( uiGeneralTab.cbVariant, SIGNAL(currentIndexChanged(int)), this, SLOT(variantChanged(int)) );
 	connect( uiGeneralTab.cbEval, SIGNAL(currentIndexChanged(int)), this, SLOT(evaluateChanged(int)) );
 	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(int)), this, SLOT(numberOfPointsChanged(int)) );
 
@@ -292,7 +298,7 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 #endif
-		//TODO: minimum/maximum for new types
+		//TODO: minimum/maximum for own types
 	}
 }
 
@@ -312,9 +318,32 @@ void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYInterpolationCurveDock::typeChanged(int index) {
-	Q_UNUSED(index);
-	//XYInterpolationCurve::InterpolationType type = (XYInterpolationCurve::InterpolationType)index;
+	XYInterpolationCurve::InterpolationType type = (XYInterpolationCurve::InterpolationType)index;
 	m_interpolationData.type = (XYInterpolationCurve::InterpolationType)uiGeneralTab.cbType->currentIndex();
+
+	switch(type) {
+	case XYInterpolationCurve::PCH:
+		uiGeneralTab.lVariant->show();
+		uiGeneralTab.cbVariant->show();
+		uiGeneralTab.lParameter->show();
+		uiGeneralTab.lTension->show();
+		uiGeneralTab.sbTension->show();
+		uiGeneralTab.lContinuity->show();
+		uiGeneralTab.sbContinuity->show();
+		uiGeneralTab.lBias->show();
+		uiGeneralTab.sbBias->show();
+		break;
+	default:
+		uiGeneralTab.lVariant->hide();
+		uiGeneralTab.cbVariant->hide();
+		uiGeneralTab.lParameter->hide();
+		uiGeneralTab.lTension->hide();
+		uiGeneralTab.sbTension->hide();
+		uiGeneralTab.lContinuity->hide();
+		uiGeneralTab.sbContinuity->hide();
+		uiGeneralTab.lBias->hide();
+		uiGeneralTab.sbBias->hide();
+	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
