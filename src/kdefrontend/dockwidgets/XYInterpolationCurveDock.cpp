@@ -92,20 +92,20 @@ void XYInterpolationCurveDock::setupGeneral() {
 #if GSL_MAJOR_VERSION >= 2
 	uiGeneralTab.cbType->addItem(i18n("Steffen spline"));
 #endif
-	uiGeneralTab.cbType->addItem(i18n("Cosine"));
-	uiGeneralTab.cbType->addItem(i18n("Exponential"));
-	uiGeneralTab.cbType->addItem(i18n("Rational functions"));
-	uiGeneralTab.cbType->addItem(i18n("Cubic Hermite"));
+	uiGeneralTab.cbType->addItem(i18n("cosine"));
+	uiGeneralTab.cbType->addItem(i18n("exponential"));
+	uiGeneralTab.cbType->addItem(i18n("rational functions"));
+	uiGeneralTab.cbType->addItem(i18n("piecewise cubic Hermite (PCH)"));
 
-	uiGeneralTab.cbVariant->addItem(i18n("Finite differences"));
+	uiGeneralTab.cbVariant->addItem(i18n("finite differences"));
 	uiGeneralTab.cbVariant->addItem(i18n("Catmull-Rom"));
 	uiGeneralTab.cbVariant->addItem(i18n("cardinal"));
-	uiGeneralTab.cbVariant->addItem(i18n("Kochanek-Bartels"));
+	uiGeneralTab.cbVariant->addItem(i18n("Kochanek-Bartels (TCB)"));
 
-	uiGeneralTab.cbEval->addItem(i18n("Function"));
-	uiGeneralTab.cbEval->addItem(i18n("Derivative"));
-	uiGeneralTab.cbEval->addItem(i18n("Second derivative"));
-	uiGeneralTab.cbEval->addItem(i18n("Integral"));
+	uiGeneralTab.cbEval->addItem(i18n("function"));
+	uiGeneralTab.cbEval->addItem(i18n("derivative"));
+	uiGeneralTab.cbEval->addItem(i18n("second derivative"));
+	uiGeneralTab.cbEval->addItem(i18n("integral"));
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
