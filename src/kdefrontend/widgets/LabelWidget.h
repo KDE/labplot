@@ -91,7 +91,8 @@ private slots:
 	void horizontalAlignmentChanged(int);
 	void verticalAlignmentChanged(int);
 	void rotationChanged(int);
-	void offsetChanged(double);
+	void offsetXChanged(double);
+	void offsetYChanged(double);
 
 	void visibilityChanged(bool);
 
@@ -102,7 +103,8 @@ private slots:
 	void labelPositionChanged(const TextLabel::PositionWrapper&);
 	void labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment);
 	void labelVerticalAlignmentChanged(TextLabel::VerticalAlignment);
-	void labelOffsetChanged(float);
+	void labelOffsetxChanged(float);
+	void labelOffsetyChanged(float);
 	void labelRotationAngleChanged(float);
 	void labelVisibleChanged(bool);
 };

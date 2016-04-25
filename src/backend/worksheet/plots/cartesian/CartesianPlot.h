@@ -31,6 +31,7 @@
 #define CARTESIANPLOT_H
 
 #include "backend/worksheet/plots/AbstractPlot.h"
+#include <math.h>
 
 class QToolBar;
 class CartesianPlotPrivate;
@@ -50,23 +51,23 @@ class CartesianPlot:public AbstractPlot{
 
 		enum Scale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
 		enum Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
-		enum ScaleBreakingStyle {ScaleBreakingSimple, ScaleBreakingVertical, ScaleBreakingSloped};
+		enum RangeBreakStyle {RangeBreakSimple, RangeBreakVertical, RangeBreakSloped};
 		enum MouseMode {SelectionMode, ZoomSelectionMode, ZoomXSelectionMode, ZoomYSelectionMode};
 		enum NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
 									ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
 
-		struct ScaleBreaking {
-			ScaleBreaking() : start(0), end(0), position(0.5), isValid(true) {};
+		struct RangeBreak {
+			RangeBreak() : start(NAN), end(NAN), position(0.5), isValid(true) {};
 			float start;
 			float end;
 			float position;
-			ScaleBreakingStyle style;
+			RangeBreakStyle style;
 			bool isValid;
 		};
 
-		//simple wrapper for QList<ScaleBreaking> in order to get our macros working
-		struct ScaleBreakings {
-			QList<ScaleBreaking> list;
+		//simple wrapper for QList<RangeBreaking> in order to get our macros working
+		struct RangeBreaks {
+			QList<RangeBreak> list;
 		};
 
 		void initDefault(Type=FourAxes);
@@ -89,10 +90,10 @@ class CartesianPlot:public AbstractPlot{
 		BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
 		BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)
 		BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, yScale, YScale)
-		BASIC_D_ACCESSOR_DECL(bool, xScaleBreakingEnabled, XScaleBreakingEnabled)
-		BASIC_D_ACCESSOR_DECL(bool, yScaleBreakingEnabled, YScaleBreakingEnabled)
-		CLASS_D_ACCESSOR_DECL(ScaleBreakings, xScaleBreakings, XScaleBreakings);
-		CLASS_D_ACCESSOR_DECL(ScaleBreakings, yScaleBreakings, YScaleBreakings);
+		BASIC_D_ACCESSOR_DECL(bool, xRangeBreakingEnabled, XRangeBreakingEnabled)
+		BASIC_D_ACCESSOR_DECL(bool, yRangeBreakingEnabled, YRangeBreakingEnabled)
+		CLASS_D_ACCESSOR_DECL(RangeBreaks, xRangeBreaks, XRangeBreaks);
+		CLASS_D_ACCESSOR_DECL(RangeBreaks, yRangeBreaks, YRangeBreaks);
 
 		typedef CartesianPlot BaseClass;
 		typedef CartesianPlotPrivate Private;
@@ -186,8 +187,10 @@ class CartesianPlot:public AbstractPlot{
 		friend class CartesianPlotSetYMinCmd;
 		friend class CartesianPlotSetYMaxCmd;
 		friend class CartesianPlotSetYScaleCmd;
-		friend class CartesianPlotSetXScaleBreakingsCmd;
-		friend class CartesianPlotSetYScaleBreakingsCmd;
+		friend class CartesianPlotSetXRangeBreakingEnabledCmd;
+		friend class CartesianPlotSetYRangeBreakingEnabledCmd;
+		friend class CartesianPlotSetXRangeBreaksCmd;
+		friend class CartesianPlotSetYRangeBreaksCmd;
 		void rectChanged(QRectF&);
 		void xAutoScaleChanged(bool);
 		void xMinChanged(float);
@@ -197,8 +200,10 @@ class CartesianPlot:public AbstractPlot{
 		void yMinChanged(float);
 		void yMaxChanged(float);
 		void yScaleChanged(int);
-		void xScaleBreakingsChanged(const CartesianPlot::ScaleBreakings&);
-		void yScaleBreakingsChanged(const CartesianPlot::ScaleBreakings&);
+		void xRangeBreakingEnabledChanged(bool);
+		void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
+		void yRangeBreakingEnabledChanged(bool);
+		void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 };
 
 #endif

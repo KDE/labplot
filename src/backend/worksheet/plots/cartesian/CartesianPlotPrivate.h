@@ -33,10 +33,7 @@
 #include "CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 
-#include <QGraphicsSceneWheelEvent>
 #include <QGraphicsSceneMouseEvent>
-#include <QGraphicsItem>
-#include <QRubberBand>
 
 class CartesianPlotPrivate:public AbstractPlotPrivate{
     public:
@@ -64,10 +61,10 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		bool autoScaleX, autoScaleY;
 		float autoScaleOffsetFactor;
 		CartesianPlot::Scale xScale, yScale;
-		bool xScaleBreakingEnabled;
-		bool yScaleBreakingEnabled;
-		CartesianPlot::ScaleBreakings xScaleBreakings;
-		CartesianPlot::ScaleBreakings yScaleBreakings;
+		bool xRangeBreakingEnabled;
+		bool yRangeBreakingEnabled;
+		CartesianPlot::RangeBreaks xRangeBreaks;
+		CartesianPlot::RangeBreaks yRangeBreaks;
 
 		//cached values of minimum and maximum for all visible curves
 		bool curvesXMinMaxIsDirty, curvesYMinMaxIsDirty;

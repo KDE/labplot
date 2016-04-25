@@ -461,18 +461,6 @@ void AbstractColumn::replaceValues(int first, const QVector<double>& new_values)
 	Q_UNUSED(first) Q_UNUSED(new_values)
 }
 
-void AbstractColumn::setStatisticsAvailable(bool available){
-    Q_UNUSED(available)
-}
-
-bool AbstractColumn::statisticsAvailable() const {
-    return false;
-}
-
-const AbstractColumn::ColumnStatistics& AbstractColumn::statistics() const{
-    return m_statistics;
-}
-
 double AbstractColumn::minimum() const{
 	double val;
 	double min = INFINITY;
