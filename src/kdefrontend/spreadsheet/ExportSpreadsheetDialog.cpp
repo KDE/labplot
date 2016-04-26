@@ -132,15 +132,15 @@ void ExportSpreadsheetDialog::setMatrixMode(bool b) {
 		ui.chkExportHeader->hide();
 		ui.lEmptyRows->hide();
 		ui.chkEmptyRows->hide();
-        ui.chkMatrixHHeader->show();
-        ui.chkMatrixVHeader->show();
-        ui.lMatrixHHeader->show();
-        ui.lMatrixVHeader->show();
-        ui.lHeader->hide();
-        ui.chkHeaders->hide();
-        ui.cbLaTeXExport->setItemText(0,i18n("Export matrix"));
+		ui.chkMatrixHHeader->show();
+		ui.chkMatrixVHeader->show();
+		ui.lMatrixHHeader->show();
+		ui.lMatrixVHeader->show();
+		ui.lHeader->hide();
+		ui.chkHeaders->hide();
+		ui.cbLaTeXExport->setItemText(0,i18n("Export matrix"));
 
-        m_matrixMode = b;
+		m_matrixMode = b;
 	}
 }
 
@@ -268,57 +268,57 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	else
 		path=path.left(i) + extensions.at(index);
 
-    if (ui.cbFormat->currentIndex() == 2) {
+	if (ui.cbFormat->currentIndex() == 2) {
 		ui.cbSeparator->hide();
-        ui.lSeparator->hide();
+		ui.lSeparator->hide();
 
-        ui.chkCaptions->show();
-        ui.chkGridLines->show();;
-        ui.lExportArea->show();
-        ui.lGridLines->show();
-        ui.lCaptions->show();
-        ui.cbLaTeXExport->show();
+		ui.chkCaptions->show();
+		ui.chkGridLines->show();;
+		ui.lExportArea->show();
+		ui.lGridLines->show();
+		ui.lCaptions->show();
+		ui.cbLaTeXExport->show();
 
-        if (!m_matrixMode) {
-            ui.lHeader->show();
-            ui.chkHeaders->show();
-            ui.lEmptyRows->show();
-            ui.chkEmptyRows->show();
-        } else {
-            ui.lMatrixHHeader->show();
-            ui.lMatrixVHeader->show();
-            ui.chkMatrixHHeader->show();
-            ui.chkMatrixVHeader->show();
-        }
+		if (!m_matrixMode) {
+			ui.lHeader->show();
+			ui.chkHeaders->show();
+			ui.lEmptyRows->show();
+			ui.chkEmptyRows->show();
+		} else {
+			ui.lMatrixHHeader->show();
+			ui.lMatrixVHeader->show();
+			ui.chkMatrixHHeader->show();
+			ui.chkMatrixVHeader->show();
+		}
 
 	} else {
-        ui.cbSeparator->show();
-        ui.lSeparator->show();
+		ui.cbSeparator->show();
+		ui.lSeparator->show();
 
-        ui.chkCaptions->hide();
-        ui.chkEmptyRows->hide();
-        ui.chkGridLines->hide();;
-        ui.lEmptyRows->hide();
-        ui.lExportArea->hide();
-        ui.lGridLines->hide();
-        ui.lCaptions->hide();
-        ui.cbLaTeXExport->hide();
-        ui.lMatrixHHeader->hide();
-        ui.lMatrixVHeader->hide();
-        ui.chkMatrixHHeader->hide();
-        ui.chkMatrixVHeader->hide();
+		ui.chkCaptions->hide();
+		ui.chkEmptyRows->hide();
+		ui.chkGridLines->hide();;
+		ui.lEmptyRows->hide();
+		ui.lExportArea->hide();
+		ui.lGridLines->hide();
+		ui.lCaptions->hide();
+		ui.cbLaTeXExport->hide();
+		ui.lMatrixHHeader->hide();
+		ui.lMatrixVHeader->hide();
+		ui.chkMatrixHHeader->hide();
+		ui.chkMatrixVHeader->hide();
 
-        ui.lHeader->hide();
-        ui.chkHeaders->hide();
+		ui.lHeader->hide();
+		ui.chkHeaders->hide();
 	}
 
-    if (!m_matrixMode) {
-        ui.chkExportHeader->show();
-        ui.lExportHeader->show();
-    } else {
-        ui.chkExportHeader->hide();
-        ui.lExportHeader->hide();
-    }
+	if (!m_matrixMode) {
+		ui.chkExportHeader->show();
+		ui.lExportHeader->show();
+	} else {
+		ui.chkExportHeader->hide();
+		ui.lExportHeader->hide();
+	}
 
 	setFormat(static_cast<Format>(index));
 	ui.kleFileName->setText(path);
