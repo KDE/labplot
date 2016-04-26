@@ -79,11 +79,6 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	setCaption(i18n("Export spreadsheet"));
 	setWindowIcon(KIcon("document-export-database"));
 
-    ui.lMatrixHHeader->hide();
-    ui.lMatrixVHeader->hide();
-    ui.chkMatrixHHeader->hide();
-    ui.chkMatrixVHeader->hide();
-
 	//restore saved settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	ui.cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
