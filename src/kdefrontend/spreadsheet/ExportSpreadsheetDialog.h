@@ -65,6 +65,7 @@ class ExportSpreadsheetDialog: public KDialog {
 		QWidget* mainWidget;
 		Ui::ExportSpreadsheetWidget ui;
 		bool m_showOptions;
+        bool m_matrixMode;
         Format m_format;
         KUrlCompletion *urlCompletion;
 
