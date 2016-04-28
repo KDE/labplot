@@ -315,10 +315,15 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	// interpolation settings
 	XYInterpolationCurve::InterpolationType type = interpolationData.type;
+	XYInterpolationCurve::CubicHermiteVariant variant = interpolationData.variant;
+	double tension = interpolationData.tension;
+	double continuity = interpolationData.continuity;
+	double bias = interpolationData.bias;
 	XYInterpolationCurve::InterpolationEval evaluate = interpolationData.evaluate;
 	unsigned int npoints = interpolationData.npoints;
 #ifdef QT_DEBUG
 	qDebug()<<"type:"<<type;
+	qDebug()<<"cubic Hermite variant:"<<variant<<tension<<continuity<<bias;
 	qDebug()<<"evaluate:"<<evaluate;
 	qDebug()<<"npoints ="<<npoints;
 #endif
@@ -430,20 +435,63 @@ void XYInterpolationCurvePrivate::recalculate() {
 			t = (x-xdata[a])/(xdata[b]-xdata[a]);
 			double h1=2.*t*t*t-3.*t*t+1, h2=-2.*t*t*t+3.*t*t, h3=t*t*t-2*t*t+t, h4=t*t*t-t*t;
 			double m1=0.,m2=0.;
-			// finite differences
-			if(a==0)
-				m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
-			else
-				m1=0.5*( (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) + (ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1]) );
-			if(b==n-1)
-				m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
-			else
-				m2=0.5*( (ydata[b+1]-ydata[b])/(xdata[b+1]-xdata[b]) + (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) );
-			
+			switch(variant) {
+			case XYInterpolationCurve::FiniteDifference:
+				if(a==0)
+					m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m1=( (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) + (ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1]) )/2.;
+				if(b==n-1)
+					m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m2=( (ydata[b+1]-ydata[b])/(xdata[b+1]-xdata[b]) + (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) )/2.;
+
+				break;
+			case XYInterpolationCurve::CatmullRom:
+				if(a==0)
+					m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m1=(ydata[b]-ydata[a-1])/(xdata[b]-xdata[a-1]);
+				if(b==n-1)
+					m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m2=(ydata[b+1]-ydata[a])/(xdata[b+1]-xdata[a]);
+
+				break;
+			case XYInterpolationCurve::Cardinal:
+				if(a==0)
+					m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m1=(ydata[b]-ydata[a-1])/(xdata[b]-xdata[a-1]);
+				m1 *= (1.-tension);
+				if(b==n-1)
+					m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m2=(ydata[b+1]-ydata[a])/(xdata[b+1]-xdata[a]);
+				m2 *= (1.-tension);
+
+				break;
+			case XYInterpolationCurve::KochanekBartels:
+				if(a==0)
+					m1=(1.+continuity)*(1.-bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m1=( (1.-continuity)*(1.+bias)*(ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1]) 
+						+ (1.+continuity)*(1.-bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]) )/2.;
+				m1 *= (1.-tension);
+				if(b==n-1)
+					m2=(1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m2=( (1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]) 
+						+ (1.-continuity)*(1.-bias)*(ydata[b+1]-ydata[b])/(xdata[b+1]-xdata[b]) )/2.;
+				m2 *= (1.-tension);
+				
+				break;
+			}	
+
 			// Hermite polynomial
 			(*yVector)[i] = ydata[a]*h1+ydata[b]*h2+(xdata[b]-xdata[a])*(m1*h3+m2*h4);
-			break;
 		}
+			break;
 		}
 	}
 
@@ -513,6 +561,10 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "type", QString::number(d->interpolationData.type) );
+	writer->writeAttribute( "variant", QString::number(d->interpolationData.variant) );
+	writer->writeAttribute( "tension", QString::number(d->interpolationData.tension) );
+	writer->writeAttribute( "continuity", QString::number(d->interpolationData.continuity) );
+	writer->writeAttribute( "bias", QString::number(d->interpolationData.bias) );
 	writer->writeAttribute( "npoints", QString::number(d->interpolationData.npoints) );
 	writer->writeAttribute( "evaluate", QString::number(d->interpolationData.evaluate) );
 	writer->writeEndElement();// interpolationData
@@ -569,6 +621,30 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader){
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
 				d->interpolationData.type = (XYInterpolationCurve::InterpolationType) str.toInt();
+
+			str = attribs.value("variant").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'variant'"));
+			else
+				d->interpolationData.variant = (XYInterpolationCurve::CubicHermiteVariant) str.toInt();
+
+			str = attribs.value("tension").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'tension'"));
+			else
+				d->interpolationData.tension = str.toDouble();
+
+			str = attribs.value("continuity").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'continuity'"));
+			else
+				d->interpolationData.continuity = str.toDouble();
+
+			str = attribs.value("bias").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'bias'"));
+			else
+				d->interpolationData.bias = str.toDouble();
 
 			str = attribs.value("npoints").toString();
 			if(str.isEmpty())

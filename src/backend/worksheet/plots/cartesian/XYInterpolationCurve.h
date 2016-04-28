@@ -38,12 +38,15 @@ class XYInterpolationCurve: public XYCurve {
 
 	public:
 		enum InterpolationType {Linear,Polynomial,CSpline,CSplinePeriodic,Akima,AkimaPeriodic,Steffen,Cosine,Exponential,Rational,PCH};
+		enum CubicHermiteVariant {FiniteDifference,CatmullRom,Cardinal,KochanekBartels};
 		enum InterpolationEval {Function,Derivative,Derivative2,Integral};
 
 		struct InterpolationData {
-			InterpolationData() : type(Linear), evaluate(Function), npoints(100) {};
+			InterpolationData() : type(Linear), variant(FiniteDifference), tension(0.0), continuity(0.0), bias(0.0), evaluate(Function), npoints(100) {};
 
 			XYInterpolationCurve::InterpolationType type;		// type of interpolation
+			XYInterpolationCurve::CubicHermiteVariant variant;	// variant of cubic Hermite interpolation
+			double tension, continuity, bias;			// TCB values
 			XYInterpolationCurve::InterpolationEval evaluate;	// what to evaluate
 			unsigned int npoints;					// nr. of points
 		};

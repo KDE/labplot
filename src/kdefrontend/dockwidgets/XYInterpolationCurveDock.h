@@ -66,8 +66,12 @@ private slots:
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void typeChanged(int);
-	void evaluateChanged(int);
-	void numberOfPointsChanged(int);
+	void variantChanged(int);
+	void tensionChanged();
+	void continuityChanged();
+	void biasChanged();
+	void evaluateChanged();
+	void numberOfPointsChanged();
 
 //	void showOptions();
 	void recalculateClicked();
