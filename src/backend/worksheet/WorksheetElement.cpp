@@ -135,8 +135,15 @@ QPainterPath WorksheetElement::shapeFromPath(const QPainterPath &path, const QPe
 QMenu *WorksheetElement::createContextMenu() {
 	QMenu *menu = AbstractAspect::createContextMenu();
 
+	int count = 0;
+
 	if (!dynamic_cast<Axis*>(this)) {
-		if (parentAspect()->childCount<WorksheetElement>()>1){
+		foreach(WorksheetElement* ele, parentAspect()->children<WorksheetElement>()) {
+			if(!dynamic_cast<Axis*>(ele)) {
+				count++;
+			}
+		}
+		if (count>1){
 			menu->addSeparator();
 			menu->addMenu(m_drawingOrderMenu);
 			menu->addSeparator();
