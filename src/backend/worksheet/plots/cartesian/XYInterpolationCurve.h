@@ -39,8 +39,8 @@ class XYInterpolationCurve: public XYCurve {
 	public:
 		enum InterpolationType {Linear,Polynomial,CSpline,CSplinePeriodic,Akima,AkimaPeriodic,Steffen};	// TODO:more
 		enum InterpolationEval {Function,Derivative,Derivative2,Integral};
-		static const double LIMIT_MAX = 1e15;
-		static const double LIMIT_MIN = -1e15;
+		static constexpr double LIMIT_MAX = 1e15;
+		static constexpr double LIMIT_MIN = -1e15;
 
 		struct InterpolationData {
 			InterpolationData() : type(Linear), evaluate(Function), npoints(100) {};

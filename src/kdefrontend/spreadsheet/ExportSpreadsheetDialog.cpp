@@ -70,7 +70,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 
 	ui.gbMatrixOptions->setVisible(false);
 
-	ui.bOpen->setIcon( KIcon("document-open") );
+	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	setMainWidget( mainWidget );
 

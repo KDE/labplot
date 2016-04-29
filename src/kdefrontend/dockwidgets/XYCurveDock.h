@@ -37,6 +37,7 @@
 #include "ui_xycurvedock.h"
 #include "ui_xycurvedockgeneraltab.h"
 #include <KConfig>
+#include <KLocalizedString>
 
 class XYCurve;
 class TreeViewComboBox;

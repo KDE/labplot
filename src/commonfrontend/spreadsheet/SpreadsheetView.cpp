@@ -1136,8 +1136,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 					col_ptr->replaceValues(first, results);
 					RESET_CURSOR;
 				}
-				col_ptr->replaceValues(first, results);
-				RESET_CURSOR;
+				break;
 			}
 			case AbstractColumn::Text: {
 				if (!stringOk)

@@ -98,7 +98,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	uiGeneralTab.cbEval->addItem(i18n("Second derivative"));
 	uiGeneralTab.cbEval->addItem(i18n("Integral"));
 
-	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);

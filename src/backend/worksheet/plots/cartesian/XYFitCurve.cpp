@@ -48,6 +48,9 @@
 
 #include <QElapsedTimer>
 #include <QDebug>
+#include <QIcon>
+
+#include <KLocalizedString>
 
 XYFitCurve::XYFitCurve(const QString& name)
 		: XYCurve(name, new XYFitCurvePrivate(this)) {

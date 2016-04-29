@@ -92,7 +92,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	uiGeneralTab.cbUnit2->addItem(i18n("Frequency (Hz)"));
 	uiGeneralTab.cbUnit2->addItem(i18n("Fraction"));
 	uiGeneralTab.cbUnit2->addItem(i18n("Index"));
-	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);

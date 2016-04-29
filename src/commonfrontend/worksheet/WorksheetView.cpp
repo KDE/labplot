@@ -285,7 +285,7 @@ void WorksheetView::initActions() {
 
 	// Analysis menu
 	addInterpolationAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("Interpolation"), cartesianPlotAddNewActionGroup);
-	addFitAction = new QAction(QIcon::fromThemeKAction(KIcon("labplot-xy-fit-curve"), i18n("Data fitting"), cartesianPlotAddNewActionGroup);
+	addFitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Data fitting"), cartesianPlotAddNewActionGroup);
 	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("Fourier filter"), cartesianPlotAddNewActionGroup);
 
 	QActionGroup* cartesianPlotNavigationGroup = new QActionGroup(this);
@@ -433,7 +433,7 @@ void WorksheetView::initMenus() {
 
 	m_filterMenu = new QMenu(i18n("Filter"));
 	//TODO: filter icon
-	m_filterMenu->setIcon(KIcon("zoom-draw"));
+	m_filterMenu->setIcon(QIcon::fromTheme("zoom-draw"));
 	m_filterMenu->addAction(addFourierFilterAction);
 }
 

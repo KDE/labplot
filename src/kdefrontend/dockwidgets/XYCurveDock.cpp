@@ -43,6 +43,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <KUrlCompletion>
+#include <KConfigGroup>
 #include <QDebug>
 
 /*!
