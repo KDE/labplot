@@ -132,7 +132,7 @@ void CantorWorksheetView::initActions() {
 	m_latexTypesetting->setChecked(true);
 	m_latexTypesetting->setData("enable_typesetting");
 
-	m_showCompletion = new QAction(i18n("evaluate_current Completion"), cantorActionGroup);
+	m_showCompletion = new QAction(i18n("Syntax Completion"), cantorActionGroup);
 	m_showCompletion->setShortcut(Qt::CTRL + Qt::Key_Space);
 	m_showCompletion->setData("show_completion");
 
