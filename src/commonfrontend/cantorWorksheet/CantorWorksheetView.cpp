@@ -132,6 +132,10 @@ void CantorWorksheetView::initActions() {
 	m_latexTypesetting->setChecked(true);
 	m_latexTypesetting->setData("enable_typesetting");
 
+	m_showCompletion = new QAction(i18n("evaluate_current Completion"), cantorActionGroup);
+	m_showCompletion->setShortcut(Qt::CTRL + Qt::Key_Space);
+	m_showCompletion->setData("show_completion");
+
 	connect(cantorActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(triggerCantorAction(QAction*)));
 }
 
@@ -144,6 +148,7 @@ void CantorWorksheetView::initMenus() {
 	m_worksheetMenu->addAction(m_insertLatexEntryAction);
 	m_worksheetMenu->addAction(m_insertPageBreakAction);
 	m_worksheetMenu->addAction(m_removeCurrentEntryAction);
+	m_worksheetMenu->addAction(m_showCompletion);
 
 	m_linearAlgebraMenu = new QMenu("Linear Algebra", part->widget());
 	m_linearAlgebraMenu->addAction(m_invertMattrixAction);
