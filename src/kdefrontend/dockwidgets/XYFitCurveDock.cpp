@@ -90,6 +90,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbModel->addItem(i18n("Gaussian"));
 	uiGeneralTab.cbModel->addItem(i18n("Lorentz (Cauchy)"));
 	uiGeneralTab.cbModel->addItem(i18n("Maxwell-Boltzmann"));
+	uiGeneralTab.cbModel->addItem(i18n("Sigmoid"));
 	uiGeneralTab.cbModel->addItem(i18n("Custom"));
 
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
@@ -298,7 +299,11 @@ void XYFitCurveDock::modelChanged(int index) {
 		uiGeneralTab.sbDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setMaximum(10);
 		uiGeneralTab.sbDegree->setValue(1);
-	} else if (type == XYFitCurve::Lorentz || type == XYFitCurve::Maxwell || type == XYFitCurve::Inverse_Exponential || type == XYFitCurve::Custom) {
+	} else if (type == XYFitCurve::Lorentz
+		|| type == XYFitCurve::Maxwell
+		|| type == XYFitCurve::Inverse_Exponential
+		|| type == XYFitCurve::Sigmoid
+		|| type == XYFitCurve::Custom) {
 		uiGeneralTab.lDegree->setVisible(false);
 		uiGeneralTab.sbDegree->setVisible(false);
 	}
@@ -421,6 +426,11 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.model = eq;
 		vars << "a";
 		m_fitData.paramNames << "a";
+	} else if(m_fitData.modelType==XYFitCurve::Sigmoid) {
+		eq = "a/(1+exp(-b*(x-c)))";
+		m_fitData.model = eq;
+		vars << "a" << "b" << "c";
+		m_fitData.paramNames << "a" << "b" << "c";
 	} else if (m_fitData.modelType==XYFitCurve::Custom) {
 		//use the equation of the last selected predefined model or of the last available custom model
 		eq = m_fitData.model;
