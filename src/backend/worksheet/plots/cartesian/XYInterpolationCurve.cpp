@@ -41,7 +41,7 @@
 #include "backend/lib/commandtemplates.h"
 
 #include <cmath>	// isnan
-#include <values.h>	// DBL_MIN
+#include <cfloat>	// DBL_MIN
 #include <gsl_errno.h>
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_spline.h>
@@ -477,7 +477,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 			break;
 		case XYInterpolationCurve::PCH: {
 			t = (x-xdata[a])/(xdata[b]-xdata[a]);
-			double h1=2.*t*t*t-3.*t*t+1, h2=-2.*t*t*t+3.*t*t, h3=t*t*t-2*t*t+t, h4=t*t*t-t*t;
+			double t2=t*t, t3=t2*t;
+			double h1=2.*t3-3.*t2+1, h2=-2.*t3+3.*t2, h3=t3-2*t2+t, h4=t3-t2;
 			double m1=0.,m2=0.;
 			switch(variant) {
 			case XYInterpolationCurve::FiniteDifference:
