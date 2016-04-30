@@ -170,8 +170,8 @@ void CartesianPlot::initDefault(Type type){
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
 			axis->setMinorTicksNumber(1);
-			axis->setLabelsPosition(Axis::LabelsOut);
-			//axis->title()->setText(QString());
+			axis->setLabelsPosition(Axis::NoLabels);
+			axis->title()->setText(QString());
 
 			axis = new Axis("y axis 1", Axis::AxisVertical);
 			addChild(axis);
@@ -199,8 +199,8 @@ void CartesianPlot::initDefault(Type type){
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
 			axis->setMinorTicksNumber(1);
-			axis->setLabelsPosition(Axis::LabelsIn);
-			//axis->title()->setText(QString());
+			axis->setLabelsPosition(Axis::NoLabels);
+			axis->title()->setText(QString());
 
 			break;
 		}
@@ -251,11 +251,11 @@ void CartesianPlot::initDefault(Type type){
 
 			Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
 			addChild(axis);
-			axis->setPosition(Axis::AxisRight);
+			axis->setPosition(Axis::AxisCentered);
 			axis->setStart(-0.5);
 			axis->setEnd(0.5);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
-			axis->setMajorTicksNumber(10);
+			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::FilledArrowSmall);
@@ -263,11 +263,11 @@ void CartesianPlot::initDefault(Type type){
 
 			axis = new Axis("y axis 1", Axis::AxisVertical);
 			addChild(axis);
-			axis->setPosition(Axis::AxisLeft);
+			axis->setPosition(Axis::AxisCentered);
 			axis->setStart(-0.5);
 			axis->setEnd(0.5);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
-			axis->setMajorTicksNumber(10);
+			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::FilledArrowSmall);
