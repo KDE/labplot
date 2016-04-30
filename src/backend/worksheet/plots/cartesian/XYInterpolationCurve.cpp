@@ -41,6 +41,7 @@
 #include "backend/lib/commandtemplates.h"
 
 #include <cmath>	// isnan
+#include <values.h>	// DBL_MIN
 #include <gsl_errno.h>
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_spline.h>
@@ -239,6 +240,53 @@ void XYInterpolationCurvePrivate::integ(double *x, double *y, unsigned n) {
 	y[n-1]=y[n-2]+vold;
 }
 
+// calculates rational interpolation of n points of xy-data at xn using Burlisch-Stoer method. result in v (error dv)
+void XYInterpolationCurvePrivate::ratint(double *x, double *y, int n, double xn, double *v, double *dv) {
+	int i,j,a=0,b=n-1;
+	while(b-a>1) {	// find interval using bisection
+		j=floor((a+b)/2.);
+		if(x[j]>xn)
+			b=j;
+		else
+			a=j;
+	}
+
+	int ns=a;// nearest index
+	if(fabs(xn-x[a])>fabs(xn-x[b]))
+		ns=b;
+
+	if(xn==x[ns]) {	// exact point
+		*v=y[ns];
+		*dv=0;
+		return;
+	}
+
+	double *c = (double*)malloc(n*sizeof(double));
+	double *d = (double*)malloc(n*sizeof(double));
+	for(i=0;i<n;i++)
+		c[i]=d[i]=y[i];
+
+	*v=y[ns--];
+
+	double t,dd;
+	for(int m=1;m<n;m++) {
+		for(i=0;i<n-m;i++) {
+			t=(x[i]-xn)*d[i]/(x[i+m]-xn);
+			dd=t-c[i+1];
+			if(dd==0.0) // pole
+				dd+=DBL_MIN;
+			dd=(c[i+1]-d[i])/dd;
+			d[i]=c[i+1]*dd;
+			c[i]=t*dd;
+		}
+
+		*dv = (2*(ns+1) < (n-m) ? c[ns+1] : d[ns--]);
+		*v += *dv;
+	}
+
+	free(c);free(d);
+}
+
 void XYInterpolationCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
@@ -427,10 +475,6 @@ void XYInterpolationCurvePrivate::recalculate() {
 			t = (x-xdata[a])/(xdata[b]-xdata[a]);
 			(*yVector)[i] = ydata[a]*pow(ydata[b]/ydata[a],t);
 			break;
-		case XYInterpolationCurve::Rational:
-			//TODO
-			//(*yVector)[i] = 
-			break;
 		case XYInterpolationCurve::PCH: {
 			t = (x-xdata[a])/(xdata[b]-xdata[a]);
 			double h1=2.*t*t*t-3.*t*t+1, h2=-2.*t*t*t+3.*t*t, h3=t*t*t-2*t*t+t, h4=t*t*t-t*t;
@@ -492,6 +536,13 @@ void XYInterpolationCurvePrivate::recalculate() {
 			(*yVector)[i] = ydata[a]*h1+ydata[b]*h2+(xdata[b]-xdata[a])*(m1*h3+m2*h4);
 		}
 			break;
+		case XYInterpolationCurve::Rational: {
+			double v,dv;
+			ratint(xdata, ydata, n, x, &v, &dv);
+			(*yVector)[i] = v;
+			//TODO: use dv
+		}
+			break;
 		}
 	}
 
@@ -499,8 +550,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 	switch(type) {
 	case XYInterpolationCurve::Cosine:
 	case XYInterpolationCurve::Exponential:
-	case XYInterpolationCurve::Rational:
 	case XYInterpolationCurve::PCH:
+	case XYInterpolationCurve::Rational:
 		switch(evaluate) {
 		case XYInterpolationCurve::Function:
 			break;

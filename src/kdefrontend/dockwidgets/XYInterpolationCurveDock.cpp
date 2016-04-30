@@ -93,8 +93,8 @@ void XYInterpolationCurveDock::setupGeneral() {
 #endif
 	uiGeneralTab.cbType->addItem(i18n("cosine"));
 	uiGeneralTab.cbType->addItem(i18n("exponential"));
-	uiGeneralTab.cbType->addItem(i18n("rational functions"));
 	uiGeneralTab.cbType->addItem(i18n("piecewise cubic Hermite (PCH)"));
+	uiGeneralTab.cbType->addItem(i18n("rational functions"));
 
 	uiGeneralTab.cbVariant->addItem(i18n("finite differences"));
 	uiGeneralTab.cbVariant->addItem(i18n("Catmull-Rom"));

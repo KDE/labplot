@@ -37,7 +37,7 @@ class XYInterpolationCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum InterpolationType {Linear,Polynomial,CSpline,CSplinePeriodic,Akima,AkimaPeriodic,Steffen,Cosine,Exponential,Rational,PCH};
+		enum InterpolationType {Linear,Polynomial,CSpline,CSplinePeriodic,Akima,AkimaPeriodic,Steffen,Cosine,Exponential,PCH,Rational};
 		enum CubicHermiteVariant {FiniteDifference,CatmullRom,Cardinal,KochanekBartels};
 		enum InterpolationEval {Function,Derivative,Derivative2,Integral};
 
