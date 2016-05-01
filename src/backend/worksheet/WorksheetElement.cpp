@@ -29,6 +29,7 @@
 
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 
 #include <QMenu>
@@ -132,23 +133,34 @@ QPainterPath WorksheetElement::shapeFromPath(const QPainterPath &path, const QPe
     return p;
 }
 
-QMenu *WorksheetElement::createContextMenu() {
-	QMenu *menu = AbstractAspect::createContextMenu();
+QMenu* WorksheetElement::createContextMenu() {
+	QMenu* menu = AbstractAspect::createContextMenu();
 
-	int count = 0;
+	//add the sub-menu for the drawing order
 
-	if (!dynamic_cast<Axis*>(this)) {
-		foreach(WorksheetElement* ele, parentAspect()->children<WorksheetElement>()) {
-			if(!dynamic_cast<Axis*>(ele)) {
-				count++;
-			}
-		}
-		if (count>1){
-			menu->addSeparator();
-			menu->addMenu(m_drawingOrderMenu);
-			menu->addSeparator();
-		}
+	//don't add the drawing order menu for axes, they're always drawn on top of each other elements
+	if (dynamic_cast<Axis*>(this))
+		return menu;
+
+	//don't add the drawing order menu for plots that are placed in a worksheet with an active layout
+	if (dynamic_cast<AbstractPlot*>(this) ) {
+		const Worksheet* w = dynamic_cast<const Worksheet*>(this->parentAspect());
+		if (w && w->layout()!=Worksheet::NoLayout)
+			return menu;
 	}
+
+	//don't add the drawing order menu if the parent element has no other children
+	int children = 0;
+	foreach(WorksheetElement* ele, parentAspect()->children<WorksheetElement>()) {
+		if( !dynamic_cast<Axis*>(ele) )
+			children++;
+	}
+
+	if (children>1) {
+		menu->addSeparator();
+		menu->addMenu(m_drawingOrderMenu);
+	}
+
 	return menu;
 }
 

@@ -58,12 +58,11 @@ class CartesianPlot:public AbstractPlot{
 									ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
 
 		struct RangeBreak {
-			RangeBreak() : start(NAN), end(NAN), position(0.5), isValid(true) {};
+			RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakSloped) {};
 			float start;
 			float end;
 			float position;
 			RangeBreakStyle style;
-			bool isValid;
 		};
 
 		//simple wrapper for QList<RangeBreaking> in order to get our macros working
