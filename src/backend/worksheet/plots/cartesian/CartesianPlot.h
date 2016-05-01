@@ -38,9 +38,10 @@ class CartesianPlotPrivate;
 class CartesianPlotLegend;
 class XYCurve;
 class XYEquationCurve;
+class XYInterpolationCurve;
+class XYSmoothCurve;
 class XYFitCurve;
 class XYFourierFilterCurve;
-class XYInterpolationCurve;
 
 class CartesianPlot:public AbstractPlot{
 	Q_OBJECT
@@ -110,9 +111,10 @@ class CartesianPlot:public AbstractPlot{
 
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
+		QAction* addInterpolationCurveAction;
+		QAction* addSmoothCurveAction;
 		QAction* addFitCurveAction;
 		QAction* addFourierFilterCurveAction;
-		QAction* addInterpolationCurveAction;
 		QAction* addHorizontalAxisAction;
 		QAction* addVerticalAxisAction;
  		QAction* addLegendAction;
@@ -142,9 +144,10 @@ class CartesianPlot:public AbstractPlot{
 		void addVerticalAxis();
 		XYCurve* addCurve();
 		XYEquationCurve* addEquationCurve();
+		XYInterpolationCurve* addInterpolationCurve();
+		XYSmoothCurve* addSmoothCurve();
 		XYFitCurve* addFitCurve();
 		XYFourierFilterCurve* addFourierFilterCurve();
-		XYInterpolationCurve* addInterpolationCurve();
 		void addLegend();
 		void addCustomPoint();
 		void scaleAuto();

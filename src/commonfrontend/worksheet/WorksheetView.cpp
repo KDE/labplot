@@ -275,6 +275,7 @@ void WorksheetView::initActions() {
 	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), cartesianPlotAddNewActionGroup);
 	addInterpolationCurveAction = new KAction(KIcon("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), cartesianPlotAddNewActionGroup);
+	addSmoothCurveAction = new KAction(KIcon("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), cartesianPlotAddNewActionGroup);
 	addFitCurveAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), cartesianPlotAddNewActionGroup);
 	addFourierFilterCurveAction = new KAction(KIcon("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), cartesianPlotAddNewActionGroup);
 	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), cartesianPlotAddNewActionGroup);
@@ -285,6 +286,7 @@ void WorksheetView::initActions() {
 
 	// Analysis menu
 	addInterpolationAction = new KAction(KIcon("labplot-xy-interpolation-curve"), i18n("Interpolation"), cartesianPlotAddNewActionGroup);
+	addSmoothAction = new KAction(KIcon("labplot-xy-smooth-curve"), i18n("Smooth"), cartesianPlotAddNewActionGroup);
 	addFitAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("Data fitting"), cartesianPlotAddNewActionGroup);
 	addFourierFilterAction = new KAction(KIcon("labplot-xy-fourier_filter-curve"), i18n("Fourier filter"), cartesianPlotAddNewActionGroup);
 
@@ -391,6 +393,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotAddNewMenu->addAction(addCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addEquationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addInterpolationCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addSmoothCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addFitCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addFourierFilterCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addLegendAction);
@@ -471,6 +474,7 @@ void WorksheetView::createAnalysisMenu(QMenu* menu) const {
 	Q_ASSERT(menu);
 
 	menu->addAction(addInterpolationAction);
+	menu->addAction(addSmoothAction);
 	menu->addAction(addFitAction);
 	menu->addAction(addFourierFilterAction);
 	// Filter menu?
@@ -520,6 +524,7 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(addCurveAction);
 	toolBar->addAction(addEquationCurveAction);
 	toolBar->addAction(addInterpolationCurveAction);
+	toolBar->addAction(addSmoothCurveAction);
 	toolBar->addAction(addFitCurveAction);
 	toolBar->addAction(addFourierFilterCurveAction);
 	toolBar->addAction(addLegendAction);
@@ -1279,6 +1284,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	addCurveAction->setEnabled(plot);
 	addEquationCurveAction->setEnabled(plot);
 	addInterpolationCurveAction->setEnabled(plot);
+	addSmoothCurveAction->setEnabled(plot);
 	addFitCurveAction->setEnabled(plot);
 	addFourierFilterCurveAction->setEnabled(plot);
 	addHorizontalAxisAction->setEnabled(plot);
@@ -1302,6 +1308,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	// analysis functions
 	//m_filterMenu->setEnabled(plot);
 	addInterpolationAction->setEnabled(plot);
+	addSmoothAction->setEnabled(plot);
 	addFitAction->setEnabled(plot);
 	addFourierFilterAction->setEnabled(plot);
 }
@@ -1500,6 +1507,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addFourierFilterCurve();
 	else if (action==addInterpolationCurveAction)
 		plot->addInterpolationCurve();
+	else if (action==addSmoothCurveAction)
+		plot->addSmoothCurve();
 	else if (action==addLegendAction)
 		plot->addLegend();
 	else if (action==addHorizontalAxisAction)
@@ -1515,6 +1524,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addFourierFilterCurve();
 	else if (action==addInterpolationAction)
 		plot->addInterpolationCurve();
+	else if (action==addSmoothAction)
+		plot->addSmoothCurve();
 }
 
 void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {

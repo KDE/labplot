@@ -50,7 +50,6 @@ private:
 	Ui::XYFourierFilterCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
-	TreeViewComboBox* cbWeightsColumn;
 
 	XYFourierFilterCurve* m_filterCurve;
 	XYFourierFilterCurve::FilterData m_filterData;
