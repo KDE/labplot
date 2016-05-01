@@ -74,7 +74,7 @@ CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd):Abst
 	init();
 }
 
-CartesianPlot::~CartesianPlot(){
+CartesianPlot::~CartesianPlot() {
 	delete m_coordinateSystem;
 	delete addNewMenu;
 	delete zoomMenu;
@@ -88,7 +88,7 @@ CartesianPlot::~CartesianPlot(){
 /*!
 	initializes all member variables of \c CartesianPlot
 */
-void CartesianPlot::init(){
+void CartesianPlot::init() {
 	Q_D(CartesianPlot);
 
 	d->cSystem = new CartesianCoordinateSystem(this);;
@@ -121,7 +121,7 @@ void CartesianPlot::init(){
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(childAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-			this, SLOT(childRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
+	        this, SLOT(childRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -133,190 +133,190 @@ void CartesianPlot::init(){
 	initializes all children of \c CartesianPlot and
 	setups a default plot of type \c type with a plot title.
 */
-void CartesianPlot::initDefault(Type type){
+void CartesianPlot::initDefault(Type type) {
 	Q_D(CartesianPlot);
 
 	switch (type) {
-		case FourAxes:
-		{
-			d->xMin = 0;
-			d->xMax = 1;
-			d->yMin = 0;
-			d->yMax = 1;
+	case FourAxes:
+	{
+		d->xMin = 0;
+		d->xMax = 1;
+		d->yMin = 0;
+		d->yMax = 1;
 
-			//Axes
-			Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
-			addChild(axis);
-			axis->setPosition(Axis::AxisBottom);
-			axis->setStart(0);
-			axis->setEnd(1);
-			axis->setMajorTicksDirection(Axis::ticksIn);
-			axis->setMajorTicksNumber(6);
-			axis->setMinorTicksDirection(Axis::ticksIn);
-			axis->setMinorTicksNumber(1);
-			QPen pen = axis->majorGridPen();
-			pen.setStyle(Qt::SolidLine);
-			axis->setMajorGridPen(pen);
-			pen = axis->minorGridPen();
-			pen.setStyle(Qt::DotLine);
-			axis->setMinorGridPen(pen);
+		//Axes
+		Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
+		addChild(axis);
+		axis->setPosition(Axis::AxisBottom);
+		axis->setStart(0);
+		axis->setEnd(1);
+		axis->setMajorTicksDirection(Axis::ticksIn);
+		axis->setMajorTicksNumber(6);
+		axis->setMinorTicksDirection(Axis::ticksIn);
+		axis->setMinorTicksNumber(1);
+		QPen pen = axis->majorGridPen();
+		pen.setStyle(Qt::SolidLine);
+		axis->setMajorGridPen(pen);
+		pen = axis->minorGridPen();
+		pen.setStyle(Qt::DotLine);
+		axis->setMinorGridPen(pen);
 
-			axis = new Axis("x axis 2", Axis::AxisHorizontal);
-			addChild(axis);
-			axis->setPosition(Axis::AxisTop);
-			axis->setStart(0);
-			axis->setEnd(1);
-			axis->setMajorTicksDirection(Axis::ticksIn);
-			axis->setMajorTicksNumber(6);
-			axis->setMinorTicksDirection(Axis::ticksIn);
-			axis->setMinorTicksNumber(1);
-			axis->setLabelsPosition(Axis::NoLabels);
-			axis->title()->setText(QString());
+		axis = new Axis("x axis 2", Axis::AxisHorizontal);
+		addChild(axis);
+		axis->setPosition(Axis::AxisTop);
+		axis->setStart(0);
+		axis->setEnd(1);
+		axis->setMajorTicksDirection(Axis::ticksIn);
+		axis->setMajorTicksNumber(6);
+		axis->setMinorTicksDirection(Axis::ticksIn);
+		axis->setMinorTicksNumber(1);
+		axis->setLabelsPosition(Axis::NoLabels);
+		axis->title()->setText(QString());
 
-			axis = new Axis("y axis 1", Axis::AxisVertical);
-			addChild(axis);
-			axis->setPosition(Axis::AxisLeft);
-			axis->setStart(0);
-			axis->setEnd(1);
-			axis->setMajorTicksDirection(Axis::ticksIn);
-			axis->setMajorTicksNumber(6);
-			axis->setMinorTicksDirection(Axis::ticksIn);
-			axis->setMinorTicksNumber(1);
-			pen = axis->majorGridPen();
-			pen.setStyle(Qt::SolidLine);
-			axis->setMajorGridPen(pen);
-			pen = axis->minorGridPen();
-			pen.setStyle(Qt::DotLine);
-			axis->setMinorGridPen(pen);
+		axis = new Axis("y axis 1", Axis::AxisVertical);
+		addChild(axis);
+		axis->setPosition(Axis::AxisLeft);
+		axis->setStart(0);
+		axis->setEnd(1);
+		axis->setMajorTicksDirection(Axis::ticksIn);
+		axis->setMajorTicksNumber(6);
+		axis->setMinorTicksDirection(Axis::ticksIn);
+		axis->setMinorTicksNumber(1);
+		pen = axis->majorGridPen();
+		pen.setStyle(Qt::SolidLine);
+		axis->setMajorGridPen(pen);
+		pen = axis->minorGridPen();
+		pen.setStyle(Qt::DotLine);
+		axis->setMinorGridPen(pen);
 
-			axis = new Axis("y axis 2", Axis::AxisVertical);
-			addChild(axis);
-			axis->setPosition(Axis::AxisRight);
-			axis->setStart(0);
-			axis->setEnd(1);
-			axis->setOffset(1);
-			axis->setMajorTicksDirection(Axis::ticksIn);
-			axis->setMajorTicksNumber(6);
-			axis->setMinorTicksDirection(Axis::ticksIn);
-			axis->setMinorTicksNumber(1);
-			axis->setLabelsPosition(Axis::NoLabels);
-			axis->title()->setText(QString());
+		axis = new Axis("y axis 2", Axis::AxisVertical);
+		addChild(axis);
+		axis->setPosition(Axis::AxisRight);
+		axis->setStart(0);
+		axis->setEnd(1);
+		axis->setOffset(1);
+		axis->setMajorTicksDirection(Axis::ticksIn);
+		axis->setMajorTicksNumber(6);
+		axis->setMinorTicksDirection(Axis::ticksIn);
+		axis->setMinorTicksNumber(1);
+		axis->setLabelsPosition(Axis::NoLabels);
+		axis->title()->setText(QString());
 
-			break;
-		}
-		case TwoAxes:
-		{
-			d->xMin = 0;
-			d->xMax = 1;
-			d->yMin = 0;
-			d->yMax = 1;
+		break;
+	}
+	case TwoAxes:
+	{
+		d->xMin = 0;
+		d->xMax = 1;
+		d->yMin = 0;
+		d->yMax = 1;
 
-			Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
-			addChild(axis);
-			axis->setPosition(Axis::AxisBottom);
-			axis->setStart(0);
-			axis->setEnd(1);
-			axis->setMajorTicksDirection(Axis::ticksBoth);
-			axis->setMajorTicksNumber(6);
-			axis->setMinorTicksDirection(Axis::ticksBoth);
-			axis->setMinorTicksNumber(1);
-			axis->setArrowType(Axis::FilledArrowSmall);
+		Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
+		addChild(axis);
+		axis->setPosition(Axis::AxisBottom);
+		axis->setStart(0);
+		axis->setEnd(1);
+		axis->setMajorTicksDirection(Axis::ticksBoth);
+		axis->setMajorTicksNumber(6);
+		axis->setMinorTicksDirection(Axis::ticksBoth);
+		axis->setMinorTicksNumber(1);
+		axis->setArrowType(Axis::FilledArrowSmall);
 
-			axis = new Axis("y axis 1", Axis::AxisVertical);
-			addChild(axis);
-			axis->setPosition(Axis::AxisLeft);
-			axis->setStart(0);
-			axis->setEnd(1);
-			axis->setMajorTicksDirection(Axis::ticksBoth);
-			axis->setMajorTicksNumber(6);
-			axis->setMinorTicksDirection(Axis::ticksBoth);
-			axis->setMinorTicksNumber(1);
-			axis->setArrowType(Axis::FilledArrowSmall);
+		axis = new Axis("y axis 1", Axis::AxisVertical);
+		addChild(axis);
+		axis->setPosition(Axis::AxisLeft);
+		axis->setStart(0);
+		axis->setEnd(1);
+		axis->setMajorTicksDirection(Axis::ticksBoth);
+		axis->setMajorTicksNumber(6);
+		axis->setMinorTicksDirection(Axis::ticksBoth);
+		axis->setMinorTicksNumber(1);
+		axis->setArrowType(Axis::FilledArrowSmall);
 
-			break;
-		}
-		case TwoAxesCentered:
-		{
-			d->xMin = -0.5;
-			d->xMax = 0.5;
-			d->yMin = -0.5;
-			d->yMax = 0.5;
+		break;
+	}
+	case TwoAxesCentered:
+	{
+		d->xMin = -0.5;
+		d->xMax = 0.5;
+		d->yMin = -0.5;
+		d->yMax = 0.5;
 
-			d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
-			d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
+		d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
 
-			QPen pen = m_plotArea->borderPen();
-			pen.setStyle(Qt::NoPen);
-			m_plotArea->setBorderPen(pen);
+		QPen pen = m_plotArea->borderPen();
+		pen.setStyle(Qt::NoPen);
+		m_plotArea->setBorderPen(pen);
 
-			Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
-			addChild(axis);
-			axis->setPosition(Axis::AxisCentered);
-			axis->setStart(-0.5);
-			axis->setEnd(0.5);
-			axis->setMajorTicksDirection(Axis::ticksBoth);
-			axis->setMajorTicksNumber(6);
-			axis->setMinorTicksDirection(Axis::ticksBoth);
-			axis->setMinorTicksNumber(1);
-			axis->setArrowType(Axis::FilledArrowSmall);
-			axis->title()->setText(QString());
+		Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
+		addChild(axis);
+		axis->setPosition(Axis::AxisCentered);
+		axis->setStart(-0.5);
+		axis->setEnd(0.5);
+		axis->setMajorTicksDirection(Axis::ticksBoth);
+		axis->setMajorTicksNumber(6);
+		axis->setMinorTicksDirection(Axis::ticksBoth);
+		axis->setMinorTicksNumber(1);
+		axis->setArrowType(Axis::FilledArrowSmall);
+		axis->title()->setText(QString());
 
-			axis = new Axis("y axis 1", Axis::AxisVertical);
-			addChild(axis);
-			axis->setPosition(Axis::AxisCentered);
-			axis->setStart(-0.5);
-			axis->setEnd(0.5);
-			axis->setMajorTicksDirection(Axis::ticksBoth);
-			axis->setMajorTicksNumber(6);
-			axis->setMinorTicksDirection(Axis::ticksBoth);
-			axis->setMinorTicksNumber(1);
-			axis->setArrowType(Axis::FilledArrowSmall);
-			axis->title()->setText(QString());
+		axis = new Axis("y axis 1", Axis::AxisVertical);
+		addChild(axis);
+		axis->setPosition(Axis::AxisCentered);
+		axis->setStart(-0.5);
+		axis->setEnd(0.5);
+		axis->setMajorTicksDirection(Axis::ticksBoth);
+		axis->setMajorTicksNumber(6);
+		axis->setMinorTicksDirection(Axis::ticksBoth);
+		axis->setMinorTicksNumber(1);
+		axis->setArrowType(Axis::FilledArrowSmall);
+		axis->title()->setText(QString());
 
-			break;
-		}
-		case TwoAxesCenteredZero:
-		{
-			d->xMin = -0.5;
-			d->xMax = 0.5;
-			d->yMin = -0.5;
-			d->yMax = 0.5;
+		break;
+	}
+	case TwoAxesCenteredZero:
+	{
+		d->xMin = -0.5;
+		d->xMax = 0.5;
+		d->yMin = -0.5;
+		d->yMax = 0.5;
 
-			d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
-			d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
+		d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Centimeter);
 
-			QPen pen = m_plotArea->borderPen();
-			pen.setStyle(Qt::NoPen);
-			m_plotArea->setBorderPen(pen);
+		QPen pen = m_plotArea->borderPen();
+		pen.setStyle(Qt::NoPen);
+		m_plotArea->setBorderPen(pen);
 
-			Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
-			addChild(axis);
-			axis->setPosition(Axis::AxisCustom);
-			axis->setOffset(0);
-			axis->setStart(-0.5);
-			axis->setEnd(0.5);
-			axis->setMajorTicksDirection(Axis::ticksBoth);
-			axis->setMajorTicksNumber(6);
-			axis->setMinorTicksDirection(Axis::ticksBoth);
-			axis->setMinorTicksNumber(1);
-			axis->setArrowType(Axis::FilledArrowSmall);
-			axis->title()->setText(QString());
+		Axis *axis = new Axis("x axis 1", Axis::AxisHorizontal);
+		addChild(axis);
+		axis->setPosition(Axis::AxisCustom);
+		axis->setOffset(0);
+		axis->setStart(-0.5);
+		axis->setEnd(0.5);
+		axis->setMajorTicksDirection(Axis::ticksBoth);
+		axis->setMajorTicksNumber(6);
+		axis->setMinorTicksDirection(Axis::ticksBoth);
+		axis->setMinorTicksNumber(1);
+		axis->setArrowType(Axis::FilledArrowSmall);
+		axis->title()->setText(QString());
 
-			axis = new Axis("y axis 1", Axis::AxisVertical);
-			addChild(axis);
-			axis->setPosition(Axis::AxisCustom);
-			axis->setOffset(0);
-			axis->setStart(-0.5);
-			axis->setEnd(0.5);
-			axis->setMajorTicksDirection(Axis::ticksBoth);
-			axis->setMajorTicksNumber(6);
-			axis->setMinorTicksDirection(Axis::ticksBoth);
-			axis->setMinorTicksNumber(1);
-			axis->setArrowType(Axis::FilledArrowSmall);
-			axis->title()->setText(QString());
+		axis = new Axis("y axis 1", Axis::AxisVertical);
+		addChild(axis);
+		axis->setPosition(Axis::AxisCustom);
+		axis->setOffset(0);
+		axis->setStart(-0.5);
+		axis->setEnd(0.5);
+		axis->setMajorTicksDirection(Axis::ticksBoth);
+		axis->setMajorTicksNumber(6);
+		axis->setMinorTicksDirection(Axis::ticksBoth);
+		axis->setMinorTicksNumber(1);
+		axis->setArrowType(Axis::FilledArrowSmall);
+		axis->title()->setText(QString());
 
-			break;
-		}
+		break;
+	}
 	}
 
 	d->xMinPrev = d->xMin;
@@ -325,7 +325,7 @@ void CartesianPlot::initDefault(Type type){
 	d->yMaxPrev = d->yMax;
 
 	//Plot title
- 	m_title = new TextLabel(this->name(), TextLabel::PlotTitle);
+	m_title = new TextLabel(this->name(), TextLabel::PlotTitle);
 	addChild(m_title);
 	m_title->setHidden(true);
 	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
@@ -342,7 +342,7 @@ void CartesianPlot::initDefault(Type type){
 	d->retransform();
 }
 
-void CartesianPlot::initActions(){
+void CartesianPlot::initActions() {
 	//"add new" actions
 	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("xy-curve"), this);
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
@@ -373,7 +373,7 @@ void CartesianPlot::initActions(){
 	zoomOutXAction = new KAction(KIcon("labplot-zoom-out-x"), i18n("zoom out X"), this);
 	zoomInYAction = new KAction(KIcon("labplot-zoom-in-y"), i18n("zoom in Y"), this);
 	zoomOutYAction = new KAction(KIcon("labplot-zoom-out-y"), i18n("zoom out Y"), this);
-    shiftLeftXAction = new KAction(KIcon("labplot-shift-left-x"), i18n("shift left X"), this);
+	shiftLeftXAction = new KAction(KIcon("labplot-shift-left-x"), i18n("shift left X"), this);
 	shiftRightXAction = new KAction(KIcon("labplot-shift-right-x"), i18n("shift right X"), this);
 	shiftUpYAction = new KAction(KIcon("labplot-shift-up-y"), i18n("shift up Y"), this);
 	shiftDownYAction = new KAction(KIcon("labplot-shift-down-y"), i18n("shift down Y"), this);
@@ -398,7 +398,7 @@ void CartesianPlot::initActions(){
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 }
 
-void CartesianPlot::initMenus(){
+void CartesianPlot::initMenus() {
 	addNewMenu = new QMenu(i18n("Add new"));
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
@@ -432,7 +432,7 @@ void CartesianPlot::initMenus(){
 	zoomMenu->addAction(shiftDownYAction);
 }
 
-QMenu* CartesianPlot::createContextMenu(){
+QMenu* CartesianPlot::createContextMenu() {
 	QMenu* menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1);
 
@@ -449,7 +449,7 @@ QMenu* CartesianPlot::createContextMenu(){
 /*!
 	Returns an icon to be used in the project explorer.
 */
-QIcon CartesianPlot::icon() const{
+QIcon CartesianPlot::icon() const {
 	return KIcon("office-chart-line");
 }
 
@@ -513,78 +513,78 @@ CartesianPlot::MouseMode CartesianPlot::mouseMode() const {
 	set the rectangular, defined in scene coordinates
  */
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRect, QRectF, rect, retransform)
-void CartesianPlot::setRect(const QRectF& rect){
+void CartesianPlot::setRect(const QRectF& rect) {
 	Q_D(CartesianPlot);
 	if (rect != d->rect)
 		exec(new CartesianPlotSetRectCmd(d, rect, i18n("%1: set geometry rect")));
 }
 
 class CartesianPlotSetAutoScaleXCmd : public QUndoCommand {
-	public:
-		CartesianPlotSetAutoScaleXCmd(CartesianPlotPrivate* private_obj, bool autoScale) {
-			m_private = private_obj;
-			m_autoScale = autoScale;
-			setText(i18n("%1: change x-range auto scaling", m_private->name()));
-		};
+public:
+	CartesianPlotSetAutoScaleXCmd(CartesianPlotPrivate* private_obj, bool autoScale) {
+		m_private = private_obj;
+		m_autoScale = autoScale;
+		setText(i18n("%1: change x-range auto scaling", m_private->name()));
+	};
 
-		virtual void redo() {
-			m_autoScaleOld = m_private->autoScaleX;
-			if (m_autoScale) {
-				m_minOld = m_private->xMin;
-				m_maxOld = m_private->xMax;
-				m_private->q->scaleAutoX();
-			}
-			m_private->autoScaleX = m_autoScale;
-			emit m_private->q->xAutoScaleChanged(m_autoScale);
-		};
-
-		virtual void undo() {
-			if (!m_autoScaleOld) {
-				m_private->xMin = m_minOld;
-				m_private->xMax = m_maxOld;
-				m_private->retransformScales();
-			}
-			m_private->autoScaleX = m_autoScaleOld;
-			emit m_private->q->xAutoScaleChanged(m_autoScaleOld);
+	virtual void redo() {
+		m_autoScaleOld = m_private->autoScaleX;
+		if (m_autoScale) {
+			m_minOld = m_private->xMin;
+			m_maxOld = m_private->xMax;
+			m_private->q->scaleAutoX();
 		}
+		m_private->autoScaleX = m_autoScale;
+		emit m_private->q->xAutoScaleChanged(m_autoScale);
+	};
 
-	private:
-		CartesianPlotPrivate* m_private;
-		bool m_autoScale;
-		bool m_autoScaleOld;
-		float m_minOld;
-		float m_maxOld;
+	virtual void undo() {
+		if (!m_autoScaleOld) {
+			m_private->xMin = m_minOld;
+			m_private->xMax = m_maxOld;
+			m_private->retransformScales();
+		}
+		m_private->autoScaleX = m_autoScaleOld;
+		emit m_private->q->xAutoScaleChanged(m_autoScaleOld);
+	}
+
+private:
+	CartesianPlotPrivate* m_private;
+	bool m_autoScale;
+	bool m_autoScaleOld;
+	float m_minOld;
+	float m_maxOld;
 };
 
-void CartesianPlot::setAutoScaleX(bool autoScaleX){
+void CartesianPlot::setAutoScaleX(bool autoScaleX) {
 	Q_D(CartesianPlot);
 	if (autoScaleX != d->autoScaleX)
 		exec(new CartesianPlotSetAutoScaleXCmd(d, autoScaleX));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXMin, float, xMin, retransformScales)
-void CartesianPlot::setXMin(float xMin){
+void CartesianPlot::setXMin(float xMin) {
 	Q_D(CartesianPlot);
 	if (xMin != d->xMin)
 		exec(new CartesianPlotSetXMinCmd(d, xMin, i18n("%1: set min x")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXMax, float, xMax, retransformScales);
-void CartesianPlot::setXMax(float xMax){
+void CartesianPlot::setXMax(float xMax) {
 	Q_D(CartesianPlot);
 	if (xMax != d->xMax)
 		exec(new CartesianPlotSetXMaxCmd(d, xMax, i18n("%1: set max x")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXScale, CartesianPlot::Scale, xScale, retransformScales);
-void CartesianPlot::setXScale(Scale scale){
+void CartesianPlot::setXScale(Scale scale) {
 	Q_D(CartesianPlot);
 	if (scale != d->xScale)
 		exec(new CartesianPlotSetXScaleCmd(d, scale, i18n("%1: set x scale")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeBreakingEnabled, bool, xRangeBreakingEnabled, retransformScales)
-void CartesianPlot::setXRangeBreakingEnabled(bool enabled){
+void CartesianPlot::setXRangeBreakingEnabled(bool enabled) {
 	Q_D(CartesianPlot);
 	if (enabled != d->xRangeBreakingEnabled)
 		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, i18n("%1: x-scale breakings enabled")));
@@ -597,64 +597,64 @@ void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
 }
 
 class CartesianPlotSetAutoScaleYCmd : public QUndoCommand {
-	public:
-		CartesianPlotSetAutoScaleYCmd(CartesianPlotPrivate* private_obj, bool autoScale) {
-			m_private = private_obj;
-			m_autoScale = autoScale;
-			setText(i18n("%1: change y-range auto scaling", m_private->name()));
-		};
+public:
+	CartesianPlotSetAutoScaleYCmd(CartesianPlotPrivate* private_obj, bool autoScale) {
+		m_private = private_obj;
+		m_autoScale = autoScale;
+		setText(i18n("%1: change y-range auto scaling", m_private->name()));
+	};
 
-		virtual void redo() {
-			m_autoScaleOld = m_private->autoScaleY;
-			if (m_autoScale) {
-				m_minOld = m_private->yMin;
-				m_maxOld = m_private->yMax;
-				m_private->q->scaleAutoY();
-			}
-			m_private->autoScaleY = m_autoScale;
-			emit m_private->q->yAutoScaleChanged(m_autoScale);
-		};
-
-		virtual void undo() {
-			if (!m_autoScaleOld) {
-				m_private->yMin = m_minOld;
-				m_private->yMax = m_maxOld;
-				m_private->retransformScales();
-			}
-			m_private->autoScaleY = m_autoScaleOld;
-			emit m_private->q->yAutoScaleChanged(m_autoScaleOld);
+	virtual void redo() {
+		m_autoScaleOld = m_private->autoScaleY;
+		if (m_autoScale) {
+			m_minOld = m_private->yMin;
+			m_maxOld = m_private->yMax;
+			m_private->q->scaleAutoY();
 		}
+		m_private->autoScaleY = m_autoScale;
+		emit m_private->q->yAutoScaleChanged(m_autoScale);
+	};
 
-	private:
-		CartesianPlotPrivate* m_private;
-		bool m_autoScale;
-		bool m_autoScaleOld;
-		float m_minOld;
-		float m_maxOld;
+	virtual void undo() {
+		if (!m_autoScaleOld) {
+			m_private->yMin = m_minOld;
+			m_private->yMax = m_maxOld;
+			m_private->retransformScales();
+		}
+		m_private->autoScaleY = m_autoScaleOld;
+		emit m_private->q->yAutoScaleChanged(m_autoScaleOld);
+	}
+
+private:
+	CartesianPlotPrivate* m_private;
+	bool m_autoScale;
+	bool m_autoScaleOld;
+	float m_minOld;
+	float m_maxOld;
 };
 
-void CartesianPlot::setAutoScaleY(bool autoScaleY){
+void CartesianPlot::setAutoScaleY(bool autoScaleY) {
 	Q_D(CartesianPlot);
 	if (autoScaleY != d->autoScaleY)
 		exec(new CartesianPlotSetAutoScaleYCmd(d, autoScaleY));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYMin, float, yMin, retransformScales);
-void CartesianPlot::setYMin(float yMin){
+void CartesianPlot::setYMin(float yMin) {
 	Q_D(CartesianPlot);
 	if (yMin != d->yMin)
 		exec(new CartesianPlotSetYMinCmd(d, yMin, i18n("%1: set min y")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYMax, float, yMax, retransformScales);
-void CartesianPlot::setYMax(float yMax){
+void CartesianPlot::setYMax(float yMax) {
 	Q_D(CartesianPlot);
 	if (yMax != d->yMax)
 		exec(new CartesianPlotSetYMaxCmd(d, yMax, i18n("%1: set max y")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYScale, CartesianPlot::Scale, yScale, retransformScales);
-void CartesianPlot::setYScale(Scale scale){
+void CartesianPlot::setYScale(Scale scale) {
 	Q_D(CartesianPlot);
 	if (scale != d->yScale)
 		exec(new CartesianPlotSetYScaleCmd(d, scale, i18n("%1: set y scale")));
@@ -669,7 +669,7 @@ void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 //################################################################
 //########################## Slots ###############################
 //################################################################
-void CartesianPlot::addHorizontalAxis(){
+void CartesianPlot::addHorizontalAxis() {
 	Axis* axis = new Axis("x-axis", Axis::AxisHorizontal);
 	if (axis->autoScale()) {
 		axis->setUndoAware(false);
@@ -680,7 +680,7 @@ void CartesianPlot::addHorizontalAxis(){
 	addChild(axis);
 }
 
-void CartesianPlot::addVerticalAxis(){
+void CartesianPlot::addVerticalAxis() {
 	Axis* axis = new Axis("y-axis", Axis::AxisVertical);
 	if (axis->autoScale()) {
 		axis->setUndoAware(false);
@@ -691,37 +691,37 @@ void CartesianPlot::addVerticalAxis(){
 	addChild(axis);
 }
 
-XYCurve* CartesianPlot::addCurve(){
+XYCurve* CartesianPlot::addCurve() {
 	XYCurve* curve = new XYCurve("xy-curve");
 	this->addChild(curve);
 	return curve;
 }
 
-XYEquationCurve* CartesianPlot::addEquationCurve(){
+XYEquationCurve* CartesianPlot::addEquationCurve() {
 	XYEquationCurve* curve = new XYEquationCurve("f(x)");
 	this->addChild(curve);
 	return curve;
 }
 
-XYFitCurve* CartesianPlot::addFitCurve(){
+XYFitCurve* CartesianPlot::addFitCurve() {
 	XYFitCurve* curve = new XYFitCurve("fit");
 	this->addChild(curve);
 	return curve;
 }
 
-XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve(){
+XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve() {
 	XYFourierFilterCurve* curve = new XYFourierFilterCurve("Fourier filter");
 	this->addChild(curve);
 	return curve;
 }
 
-XYInterpolationCurve* CartesianPlot::addInterpolationCurve(){
+XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
 	XYInterpolationCurve* curve = new XYInterpolationCurve("Interpolation");
 	this->addChild(curve);
 	return curve;
 }
 
-void CartesianPlot::addLegend(){
+void CartesianPlot::addLegend() {
 	//don't do anything if there's already a legend
 	if (m_legend)
 		return;
@@ -788,7 +788,7 @@ void CartesianPlot::updateLegend() {
 	called when in one of the curves the data was changed.
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
-void CartesianPlot::dataChanged(){
+void CartesianPlot::dataChanged() {
 	Q_D(CartesianPlot);
 	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
 	Q_ASSERT(curve);
@@ -808,7 +808,7 @@ void CartesianPlot::dataChanged(){
 	called when in one of the curves the x-data was changed.
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
-void CartesianPlot::xDataChanged(){
+void CartesianPlot::xDataChanged() {
 	if (project()->isLoading())
 		return;
 
@@ -826,7 +826,7 @@ void CartesianPlot::xDataChanged(){
 	called when in one of the curves the x-data was changed.
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
-void CartesianPlot::yDataChanged(){
+void CartesianPlot::yDataChanged() {
 	if (project()->isLoading())
 		return;
 
@@ -883,7 +883,7 @@ void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
 	}
 }
 
-void CartesianPlot::scaleAutoX(){
+void CartesianPlot::scaleAutoX() {
 	Q_D(CartesianPlot);
 
 	//loop over all xy-curves and determine the maximum x-value
@@ -897,12 +897,12 @@ void CartesianPlot::scaleAutoX(){
 			if (!curve->xColumn())
 				continue;
 
-			if (curve->xColumn()->minimum() != INFINITY){
+			if (curve->xColumn()->minimum() != INFINITY) {
 				if (curve->xColumn()->minimum() < d->curvesXMin)
 					d->curvesXMin = curve->xColumn()->minimum();
 			}
 
-			if (curve->xColumn()->maximum() != -INFINITY){
+			if (curve->xColumn()->maximum() != -INFINITY) {
 				if (curve->xColumn()->maximum() > d->curvesXMax)
 					d->curvesXMax = curve->xColumn()->maximum();
 			}
@@ -912,27 +912,27 @@ void CartesianPlot::scaleAutoX(){
 	}
 
 	bool update = false;
-	if (d->curvesXMin != d->xMin && d->curvesXMin != INFINITY){
+	if (d->curvesXMin != d->xMin && d->curvesXMin != INFINITY) {
 		d->xMin = d->curvesXMin;
 		update = true;
 	}
 
-	if (d->curvesXMax != d->xMax && d->curvesXMax != -INFINITY){
+	if (d->curvesXMax != d->xMax && d->curvesXMax != -INFINITY) {
 		d->xMax = d->curvesXMax;
 		update = true;
 	}
 
-	if(update){
-		if (d->xMax == d->xMin){
+	if(update) {
+		if (d->xMax == d->xMin) {
 			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-			if (d->xMax!=0){
+			if (d->xMax!=0) {
 				d->xMax = d->xMax*1.1;
 				d->xMin = d->xMin*0.9;
-			}else{
+			} else {
 				d->xMax = 0.1;
 				d->xMin = -0.1;
 			}
-		}else{
+		} else {
 			float offset = (d->xMax - d->xMin)*d->autoScaleOffsetFactor;
 			d->xMin -= offset;
 			d->xMax += offset;
@@ -941,7 +941,7 @@ void CartesianPlot::scaleAutoX(){
 	}
 }
 
-void CartesianPlot::scaleAutoY(){
+void CartesianPlot::scaleAutoY() {
 	Q_D(CartesianPlot);
 
 	//loop over all xy-curves and determine the maximum y-value
@@ -955,12 +955,12 @@ void CartesianPlot::scaleAutoY(){
 			if (!curve->yColumn())
 				continue;
 
-			if (curve->yColumn()->minimum() != INFINITY){
+			if (curve->yColumn()->minimum() != INFINITY) {
 				if (curve->yColumn()->minimum() < d->curvesYMin)
 					d->curvesYMin = curve->yColumn()->minimum();
 			}
 
-			if (curve->yColumn()->maximum() != -INFINITY){
+			if (curve->yColumn()->maximum() != -INFINITY) {
 				if (curve->yColumn()->maximum() > d->curvesYMax)
 					d->curvesYMax = curve->yColumn()->maximum();
 			}
@@ -970,27 +970,27 @@ void CartesianPlot::scaleAutoY(){
 	}
 
 	bool update = false;
-	if (d->curvesYMin != d->yMin && d->curvesYMin != INFINITY){
+	if (d->curvesYMin != d->yMin && d->curvesYMin != INFINITY) {
 		d->yMin = d->curvesYMin;
 		update = true;
 	}
 
-	if (d->curvesYMax != d->yMax && d->curvesYMax != -INFINITY){
+	if (d->curvesYMax != d->yMax && d->curvesYMax != -INFINITY) {
 		d->yMax = d->curvesYMax;
 		update = true;
 	}
 
-	if(update){
-		if (d->yMax == d->yMin){
+	if(update) {
+		if (d->yMax == d->yMin) {
 			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-			if (d->yMax!=0){
+			if (d->yMax!=0) {
 				d->yMax = d->yMax*1.1;
 				d->yMin = d->yMin*0.9;
-			}else{
+			} else {
 				d->yMax = 0.1;
 				d->yMin = -0.1;
 			}
-		}else{
+		} else {
 			float offset = (d->yMax - d->yMin)*d->autoScaleOffsetFactor;
 			d->yMin -= offset;
 			d->yMax += offset;
@@ -999,7 +999,7 @@ void CartesianPlot::scaleAutoY(){
 	}
 }
 
-void CartesianPlot::scaleAuto(){
+void CartesianPlot::scaleAuto() {
 	Q_D(CartesianPlot);
 
 	//loop over all xy-curves and determine the maximum x-value
@@ -1013,12 +1013,12 @@ void CartesianPlot::scaleAuto(){
 			if (!curve->xColumn())
 				continue;
 
-			if (curve->xColumn()->minimum() != INFINITY){
+			if (curve->xColumn()->minimum() != INFINITY) {
 				if (curve->xColumn()->minimum() < d->curvesXMin)
 					d->curvesXMin = curve->xColumn()->minimum();
 			}
 
-			if (curve->xColumn()->maximum() != -INFINITY){
+			if (curve->xColumn()->maximum() != -INFINITY) {
 				if (curve->xColumn()->maximum() > d->curvesXMax)
 					d->curvesXMax = curve->xColumn()->maximum();
 			}
@@ -1036,12 +1036,12 @@ void CartesianPlot::scaleAuto(){
 			if (!curve->xColumn())
 				continue;
 
-			if (curve->yColumn()->minimum() != INFINITY){
+			if (curve->yColumn()->minimum() != INFINITY) {
 				if (curve->yColumn()->minimum() < d->curvesYMin)
 					d->curvesYMin = curve->yColumn()->minimum();
 			}
 
-			if (curve->yColumn()->maximum() != -INFINITY){
+			if (curve->yColumn()->maximum() != -INFINITY) {
 				if (curve->yColumn()->maximum() > d->curvesYMax)
 					d->curvesYMax = curve->yColumn()->maximum();
 			}
@@ -1050,34 +1050,34 @@ void CartesianPlot::scaleAuto(){
 
 	bool updateX = false;
 	bool updateY = false;
-	if (d->curvesXMin != d->xMin && d->curvesXMin != INFINITY){
+	if (d->curvesXMin != d->xMin && d->curvesXMin != INFINITY) {
 		d->xMin = d->curvesXMin;
 		updateX = true;
 	}
 
-	if (d->curvesXMax != d->xMax && d->curvesXMax != -INFINITY){
+	if (d->curvesXMax != d->xMax && d->curvesXMax != -INFINITY) {
 		d->xMax = d->curvesXMax;
 		updateX = true;
 	}
 
-	if (d->curvesYMin != d->yMin && d->curvesYMin != INFINITY){
+	if (d->curvesYMin != d->yMin && d->curvesYMin != INFINITY) {
 		d->yMin = d->curvesYMin;
 		updateY = true;
 	}
 
-	if (d->curvesYMax != d->yMax && d->curvesYMax != -INFINITY){
+	if (d->curvesYMax != d->yMax && d->curvesYMax != -INFINITY) {
 		d->yMax = d->curvesYMax;
 		updateY = true;
 	}
 
-	if(updateX || updateY){
-		if (updateX){
+	if(updateX || updateY) {
+		if (updateX) {
 			if (d->xMax == d->xMin) {
 				//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-				if (d->xMax!=0){
+				if (d->xMax!=0) {
 					d->xMax = d->xMax*1.1;
 					d->xMin = d->xMin*0.9;
-				}else{
+				} else {
 					d->xMax = 0.1;
 					d->xMin = -0.1;
 				}
@@ -1087,13 +1087,13 @@ void CartesianPlot::scaleAuto(){
 				d->xMax += offset;
 			}
 		}
-		if (updateY){
+		if (updateY) {
 			if (d->yMax == d->yMin) {
 				//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-				if (d->yMax!=0){
+				if (d->yMax!=0) {
 					d->yMax = d->yMax*1.1;
 					d->yMin = d->yMin*0.9;
-				}else{
+				} else {
 					d->yMax = 0.1;
 					d->yMin = -0.1;
 				}
@@ -1107,7 +1107,7 @@ void CartesianPlot::scaleAuto(){
 	}
 }
 
-void CartesianPlot::zoomIn(){
+void CartesianPlot::zoomIn() {
 	Q_D(CartesianPlot);
 	float oldRange = (d->xMax-d->xMin);
 	float newRange = (d->xMax-d->xMin)/m_zoomFactor;
@@ -1122,7 +1122,7 @@ void CartesianPlot::zoomIn(){
 	d->retransformScales();
 }
 
-void CartesianPlot::zoomOut(){
+void CartesianPlot::zoomOut() {
 	Q_D(CartesianPlot);
 	float oldRange = (d->xMax-d->xMin);
 	float newRange = (d->xMax-d->xMin)*m_zoomFactor;
@@ -1137,7 +1137,7 @@ void CartesianPlot::zoomOut(){
 	d->retransformScales();
 }
 
-void CartesianPlot::zoomInX(){
+void CartesianPlot::zoomInX() {
 	Q_D(CartesianPlot);
 	float oldRange = (d->xMax-d->xMin);
 	float newRange = (d->xMax-d->xMin)/m_zoomFactor;
@@ -1146,7 +1146,7 @@ void CartesianPlot::zoomInX(){
 	d->retransformScales();
 }
 
-void CartesianPlot::zoomOutX(){
+void CartesianPlot::zoomOutX() {
 	Q_D(CartesianPlot);
 	float oldRange = (d->xMax-d->xMin);
 	float newRange = (d->xMax-d->xMin)*m_zoomFactor;
@@ -1155,7 +1155,7 @@ void CartesianPlot::zoomOutX(){
 	d->retransformScales();
 }
 
-void CartesianPlot::zoomInY(){
+void CartesianPlot::zoomInY() {
 	Q_D(CartesianPlot);
 	float oldRange = (d->yMax-d->yMin);
 	float newRange = (d->yMax-d->yMin)/m_zoomFactor;
@@ -1164,7 +1164,7 @@ void CartesianPlot::zoomInY(){
 	d->retransformScales();
 }
 
-void CartesianPlot::zoomOutY(){
+void CartesianPlot::zoomOutY() {
 	Q_D(CartesianPlot);
 	float oldRange = (d->yMax-d->yMin);
 	float newRange = (d->yMax-d->yMin)*m_zoomFactor;
@@ -1173,7 +1173,7 @@ void CartesianPlot::zoomOutY(){
 	d->retransformScales();
 }
 
-void CartesianPlot::shiftLeftX(){
+void CartesianPlot::shiftLeftX() {
 	Q_D(CartesianPlot);
 	float offsetX = (d->xMax-d->xMin)*0.1;
 	d->xMax -= offsetX;
@@ -1181,7 +1181,7 @@ void CartesianPlot::shiftLeftX(){
 	d->retransformScales();
 }
 
-void CartesianPlot::shiftRightX(){
+void CartesianPlot::shiftRightX() {
 	Q_D(CartesianPlot);
 	float offsetX = (d->xMax-d->xMin)*0.1;
 	d->xMax += offsetX;
@@ -1189,7 +1189,7 @@ void CartesianPlot::shiftRightX(){
 	d->retransformScales();
 }
 
-void CartesianPlot::shiftUpY(){
+void CartesianPlot::shiftUpY() {
 	Q_D(CartesianPlot);
 	float offsetY = (d->yMax-d->yMin)*0.1;
 	d->yMax += offsetY;
@@ -1197,7 +1197,7 @@ void CartesianPlot::shiftUpY(){
 	d->retransformScales();
 }
 
-void CartesianPlot::shiftDownY(){
+void CartesianPlot::shiftDownY() {
 	Q_D(CartesianPlot);
 	float offsetY = (d->yMax-d->yMin)*0.1;
 	d->yMax -= offsetY;
@@ -1208,7 +1208,7 @@ void CartesianPlot::shiftDownY(){
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void CartesianPlot::visibilityChanged(){
+void CartesianPlot::visibilityChanged() {
 	Q_D(CartesianPlot);
 	this->setVisible(!d->isVisible());
 }
@@ -1218,9 +1218,9 @@ void CartesianPlot::visibilityChanged(){
 //#####################################################################
 CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner)
 	: AbstractPlotPrivate(owner), q(owner), curvesXMinMaxIsDirty(false), curvesYMinMaxIsDirty(false),
-	curvesXMin(INFINITY), curvesXMax(-INFINITY), curvesYMin(INFINITY), curvesYMax(-INFINITY),
-	suppressRetransform(false), m_printing(false), m_selectionBandIsShown(false), cSystem(0),
-	mouseMode(CartesianPlot::SelectionMode){
+	  curvesXMin(INFINITY), curvesXMax(-INFINITY), curvesYMin(INFINITY), curvesYMax(-INFINITY),
+	  suppressRetransform(false), m_printing(false), m_selectionBandIsShown(false), cSystem(0),
+	  mouseMode(CartesianPlot::SelectionMode) {
 	setData(0, WorksheetElement::NameCartesianPlot);
 }
 
@@ -1231,7 +1231,7 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner)
 	Note, the size of the area used to define the coordinate system doesn't need to be equal to this plot area.
 	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
  */
-void CartesianPlotPrivate::retransform(){
+void CartesianPlotPrivate::retransform() {
 	if (suppressRetransform)
 		return;
 
@@ -1253,7 +1253,7 @@ void CartesianPlotPrivate::retransform(){
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 }
 
-void CartesianPlotPrivate::retransformScales(){
+void CartesianPlotPrivate::retransformScales() {
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
 	QList<CartesianCoordinateSystem::Scale*> scales;
 	double sceneStart, sceneEnd, logicalStart, logicalEnd;
@@ -1382,11 +1382,11 @@ void CartesianPlotPrivate::retransformScales(){
 
 	//adjust auto-scale axes
 	QList<Axis*> childElements = q->children<Axis>();
-	foreach(Axis* axis, childElements){
+	foreach(Axis* axis, childElements) {
 		if (!axis->autoScale())
 			continue;
 
-		if (axis->orientation() == Axis::AxisHorizontal){
+		if (axis->orientation() == Axis::AxisHorizontal) {
 			if (deltaXMax!=0) {
 				axis->setUndoAware(false);
 				axis->setEnd(xMax);
@@ -1401,7 +1401,7 @@ void CartesianPlotPrivate::retransformScales(){
 // 			if (axis->position() == Axis::AxisCustom && deltaYMin != 0){
 // 				axis->setOffset(axis->offset() + deltaYMin, false);
 // 			}
-		}else{
+		} else {
 			if (deltaYMax!=0) {
 				axis->setUndoAware(false);
 				axis->setEnd(yMax);
@@ -1433,7 +1433,7 @@ void CartesianPlotPrivate::checkXRange() {
 	if (xMin <= 0.0) {
 		(min < xMax*min) ? xMin = min : xMin = xMax*min;
 		emit q->xMinChanged(xMin);
-	}else if (xMax <= 0.0) {
+	} else if (xMax <= 0.0) {
 		(-min > xMin*min) ? xMax = -min : xMax = xMin*min;
 		emit q->xMaxChanged(xMax);
 	}
@@ -1448,18 +1448,18 @@ void CartesianPlotPrivate::checkYRange() {
 	if (yMin <= 0.0) {
 		(min < yMax*min) ? yMin = min : yMin = yMax*min;
 		emit q->yMinChanged(yMin);
-	}else if (yMax <= 0.0) {
+	} else if (yMax <= 0.0) {
 		(-min > yMin*min) ? yMax = -min : yMax = yMin*min;
 		emit q->yMaxChanged(yMax);
 	}
 }
 
 CartesianCoordinateSystem::Scale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, Interval<double>& interval,
-																	double sceneStart, double sceneEnd,
-																	double logicalStart, double logicalEnd) {
-	if (type == CartesianPlot::ScaleLinear){
+        double sceneStart, double sceneEnd,
+        double logicalStart, double logicalEnd) {
+	if (type == CartesianPlot::ScaleLinear) {
 		return CartesianCoordinateSystem::Scale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
-	}else {
+	} else {
 		float base;
 		if (type == CartesianPlot::ScaleLog10)
 			base = 10.0;
@@ -1475,7 +1475,7 @@ CartesianCoordinateSystem::Scale* CartesianPlotPrivate::createScale(CartesianPlo
 /*!
  * Reimplemented from QGraphicsItem.
  */
-QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVariant &value){
+QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVariant &value) {
 	if (change == QGraphicsItem::ItemPositionChange) {
 		const QPointF& itemPos = value.toPointF();//item's center point in parent's coordinates;
 		float x = itemPos.x();
@@ -1490,7 +1490,7 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 		newRect.setWidth(w);
 		newRect.setHeight(h);
 		emit q->rectChanged(newRect);
-     }
+	}
 	return QGraphicsItem::itemChange(change, value);
 }
 
@@ -1606,7 +1606,7 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	bool zoomX = false;
 	bool zoomY = false;
 	QList<Axis*> axes = q->children<Axis>();
-	foreach(Axis* axis, axes){
+	foreach(Axis* axis, axes) {
 		if (!axis->graphicsItem()->isSelected())
 			continue;
 
@@ -1635,10 +1635,10 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	}
 }
 
-void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event){
+void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QPointF point = event->pos();
 	QString info;
-	if (q->plotRect().contains(point)){
+	if (q->plotRect().contains(point)) {
 		QPointF logicalPoint = cSystem->mapSceneToLogical(point);
 		if (mouseMode == CartesianPlot::ZoomSelectionMode && !m_selectionBandIsShown) {
 			info = "x=" + QString::number(logicalPoint.x()) + ", y=" + QString::number(logicalPoint.y());
@@ -1669,11 +1669,11 @@ void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsIt
 
 	painter->setPen(QPen(Qt::black, 3));
 	if ( (mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode)
-		&& (!m_selectionBandIsShown)) {
+	        && (!m_selectionBandIsShown)) {
 		painter->drawLine(m_selectionStartLine);
 	}
 
-	if (m_selectionBandIsShown){
+	if (m_selectionBandIsShown) {
 		painter->save();
 		painter->setPen(QPen(Qt::black, 5));
 		painter->drawRect(QRectF(m_selectionStart, m_selectionEnd));
@@ -1691,7 +1691,7 @@ void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsIt
 //##############################################################################
 
 //! Save as XML
-void CartesianPlot::save(QXmlStreamWriter* writer) const{
+void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	Q_D(const CartesianPlot);
 
 	writer->writeStartElement( "cartesianPlot" );
@@ -1751,229 +1751,229 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const{
 		writer->writeEndElement();
 	}
 
-    //serialize all children (plot area, title text label, axes and curves)
-    QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
-    foreach(WorksheetElement *elem, childElements)
-        elem->save(writer);
+	//serialize all children (plot area, title text label, axes and curves)
+	QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
+	foreach(WorksheetElement *elem, childElements)
+		elem->save(writer);
 
-    writer->writeEndElement(); // close "cartesianPlot" section
+	writer->writeEndElement(); // close "cartesianPlot" section
 }
 
 
 //! Load from XML
-bool CartesianPlot::load(XmlStreamReader* reader){
+bool CartesianPlot::load(XmlStreamReader* reader) {
 	Q_D(CartesianPlot);
 
-    if(!reader->isStartElement() || reader->name() != "cartesianPlot"){
-        reader->raiseError(i18n("no cartesianPlot element found"));
-        return false;
-    }
+	if(!reader->isStartElement() || reader->name() != "cartesianPlot") {
+		reader->raiseError(i18n("no cartesianPlot element found"));
+		return false;
+	}
 
-    if (!readBasicAttributes(reader))
-        return false;
+	if (!readBasicAttributes(reader))
+		return false;
 
-    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-    QXmlStreamAttributes attribs;
-    QString str;
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QXmlStreamAttributes attribs;
+	QString str;
 
-    while (!reader->atEnd()){
-        reader->readNext();
-        if (reader->isEndElement() && reader->name() == "cartesianPlot")
-            break;
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == "cartesianPlot")
+			break;
 
-        if (!reader->isStartElement())
-            continue;
+		if (!reader->isStartElement())
+			continue;
 
-        if (reader->name() == "comment"){
-            if (!readCommentElement(reader))
+		if (reader->name() == "comment") {
+			if (!readCommentElement(reader))
 				return false;
-		}else if(reader->name() == "geometry"){
-            attribs = reader->attributes();
+		} else if(reader->name() == "geometry") {
+			attribs = reader->attributes();
 
-            str = attribs.value("x").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'x'"));
-            else
-                d->rect.setX( str.toDouble() );
+			str = attribs.value("x").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'x'"));
+			else
+				d->rect.setX( str.toDouble() );
 
 			str = attribs.value("y").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'y'"));
-            else
-                d->rect.setY( str.toDouble() );
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'y'"));
+			else
+				d->rect.setY( str.toDouble() );
 
 			str = attribs.value("width").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'width'"));
-            else
-                d->rect.setWidth( str.toDouble() );
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'width'"));
+			else
+				d->rect.setWidth( str.toDouble() );
 
 			str = attribs.value("height").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'height'"));
-            else
-                d->rect.setHeight( str.toDouble() );
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'height'"));
+			else
+				d->rect.setHeight( str.toDouble() );
 
 			str = attribs.value("visible").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'visible'"));
-            else
-                d->setVisible(str.toInt());
-		}else if(reader->name() == "coordinateSystem"){
-            attribs = reader->attributes();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'visible'"));
+			else
+				d->setVisible(str.toInt());
+		} else if(reader->name() == "coordinateSystem") {
+			attribs = reader->attributes();
 
 			str = attribs.value("autoScaleX").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'autoScaleX'"));
-            else
-                d->autoScaleX = bool(str.toInt());
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'autoScaleX'"));
+			else
+				d->autoScaleX = bool(str.toInt());
 
 			str = attribs.value("autoScaleY").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'autoScaleY'"));
-            else
-                d->autoScaleY = bool(str.toInt());
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'autoScaleY'"));
+			else
+				d->autoScaleY = bool(str.toInt());
 
-            str = attribs.value("xMin").toString();
-            if(str.isEmpty()) {
-                reader->raiseWarning(attributeWarning.arg("'xMin'"));
+			str = attribs.value("xMin").toString();
+			if(str.isEmpty()) {
+				reader->raiseWarning(attributeWarning.arg("'xMin'"));
 			} else {
-                d->xMin = str.toDouble();
+				d->xMin = str.toDouble();
 				d->xMinPrev = d->xMin;
 			}
 
-            str = attribs.value("xMax").toString();
-            if(str.isEmpty()) {
-                reader->raiseWarning(attributeWarning.arg("'xMax'"));
+			str = attribs.value("xMax").toString();
+			if(str.isEmpty()) {
+				reader->raiseWarning(attributeWarning.arg("'xMax'"));
 			} else {
-                d->xMax = str.toDouble();
+				d->xMax = str.toDouble();
 				d->xMaxPrev = d->xMax;
 			}
 
-            str = attribs.value("yMin").toString();
-            if(str.isEmpty()) {
-                reader->raiseWarning(attributeWarning.arg("'yMin'"));
+			str = attribs.value("yMin").toString();
+			if(str.isEmpty()) {
+				reader->raiseWarning(attributeWarning.arg("'yMin'"));
 			} else {
-                d->yMin = str.toDouble();
+				d->yMin = str.toDouble();
 				d->yMinPrev = d->yMin;
 			}
 
-            str = attribs.value("yMax").toString();
-            if(str.isEmpty()) {
-                reader->raiseWarning(attributeWarning.arg("'yMax'"));
+			str = attribs.value("yMax").toString();
+			if(str.isEmpty()) {
+				reader->raiseWarning(attributeWarning.arg("'yMax'"));
 			} else {
-                d->yMax = str.toDouble();
+				d->yMax = str.toDouble();
 				d->yMaxPrev = d->yMax;
 			}
 
 			str = attribs.value("xScale").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'xScale'"));
-            else
-                d->xScale = CartesianPlot::Scale(str.toInt());
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'xScale'"));
+			else
+				d->xScale = CartesianPlot::Scale(str.toInt());
 
 			str = attribs.value("yScale").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'yScale'"));
-            else
-                d->yScale = CartesianPlot::Scale(str.toInt());
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'yScale'"));
+			else
+				d->yScale = CartesianPlot::Scale(str.toInt());
 
-            str = attribs.value("horizontalPadding").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'horizontalPadding'"));
-            else
-                d->horizontalPadding = str.toDouble();
+			str = attribs.value("horizontalPadding").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'horizontalPadding'"));
+			else
+				d->horizontalPadding = str.toDouble();
 
-            str = attribs.value("verticalPadding").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'verticalPadding'"));
-            else
-                d->verticalPadding = str.toDouble();
+			str = attribs.value("verticalPadding").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'verticalPadding'"));
+			else
+				d->verticalPadding = str.toDouble();
 		} else if(reader->name() == "xRangeBreaks") {
 			attribs = reader->attributes();
 			str = attribs.value("enabled").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'enabled'"));
-            else
-                d->xRangeBreakingEnabled = str.toInt();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'enabled'"));
+			else
+				d->xRangeBreakingEnabled = str.toInt();
 		} else if(reader->name() == "yRangeBreaks") {
 			attribs = reader->attributes();
 			str = attribs.value("enabled").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'enabled'"));
-            else
-                d->yRangeBreakingEnabled = str.toInt();
-        }else if(reader->name() == "textLabel"){
-            m_title = new TextLabel("");
-            if (!m_title->load(reader)){
-                delete m_title;
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'enabled'"));
+			else
+				d->yRangeBreakingEnabled = str.toInt();
+		} else if(reader->name() == "textLabel") {
+			m_title = new TextLabel("");
+			if (!m_title->load(reader)) {
+				delete m_title;
 				m_title=0;
-                return false;
-            }else{
-                addChild(m_title);
-            }
-		}else if(reader->name() == "plotArea"){
+				return false;
+			} else {
+				addChild(m_title);
+			}
+		} else if(reader->name() == "plotArea") {
 			m_plotArea->load(reader);
-		}else if(reader->name() == "axis"){
-            Axis* axis = new Axis("");
-            if (!axis->load(reader)){
-                delete axis;
-                return false;
-            }else{
-                addChild(axis);
-            }
-		}else if(reader->name() == "xyCurve"){
-            XYCurve* curve = addCurve();
-            if (!curve->load(reader)){
-                removeChild(curve);
-                return false;
-            }
-		}else if(reader->name() == "xyEquationCurve"){
-			XYEquationCurve* curve = addEquationCurve();
-            if (!curve->load(reader)){
+		} else if(reader->name() == "axis") {
+			Axis* axis = new Axis("");
+			if (!axis->load(reader)) {
+				delete axis;
+				return false;
+			} else {
+				addChild(axis);
+			}
+		} else if(reader->name() == "xyCurve") {
+			XYCurve* curve = addCurve();
+			if (!curve->load(reader)) {
 				removeChild(curve);
-                return false;
-            }
+				return false;
+			}
+		} else if(reader->name() == "xyEquationCurve") {
+			XYEquationCurve* curve = addEquationCurve();
+			if (!curve->load(reader)) {
+				removeChild(curve);
+				return false;
+			}
 		} else if(reader->name() == "xyFitCurve") {
 			XYFitCurve* curve = addFitCurve();
-			if (!curve->load(reader)){
+			if (!curve->load(reader)) {
 				removeChild(curve);
-			return false;
+				return false;
 			}
 		} else if(reader->name() == "xyFourierFilterCurve") {
 			XYFourierFilterCurve* curve = addFourierFilterCurve();
-			if (!curve->load(reader)){
+			if (!curve->load(reader)) {
 				removeChild(curve);
-			return false;
+				return false;
 			}
 		} else if(reader->name() == "xyInterpolationCurve") {
 			XYInterpolationCurve* curve = addInterpolationCurve();
-			if (!curve->load(reader)){
+			if (!curve->load(reader)) {
 				removeChild(curve);
-			return false;
+				return false;
 			}
-		} else if(reader->name() == "cartesianPlotLegend"){
-            m_legend = new CartesianPlotLegend(this, "");
-            if (!m_legend->load(reader)){
-                delete m_legend;
-                return false;
-            }else{
-                addChild(m_legend);
+		} else if(reader->name() == "cartesianPlotLegend") {
+			m_legend = new CartesianPlotLegend(this, "");
+			if (!m_legend->load(reader)) {
+				delete m_legend;
+				return false;
+			} else {
+				addChild(m_legend);
 				addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
-            }
-		}else if(reader->name() == "customPoint"){
+			}
+		} else if(reader->name() == "customPoint") {
 			CustomPoint* point = new CustomPoint(this, "");
-			if (!point->load(reader)){
+			if (!point->load(reader)) {
 				delete point;
 				return false;
-			}else{
+			} else {
 				addChild(point);
 			}
-        }else{ // unknown element
-            reader->raiseWarning(i18n("unknown cartesianPlot element '%1'", reader->name().toString()));
-            if (!reader->skipToEndElement()) return false;
-        }
-    }
+		} else { // unknown element
+			reader->raiseWarning(i18n("unknown cartesianPlot element '%1'", reader->name().toString()));
+			if (!reader->skipToEndElement()) return false;
+		}
+	}
 
 	d->retransform();//TODO: This is expensive. why do we need this on load?
 	if (m_title) {
@@ -1981,5 +1981,5 @@ bool CartesianPlot::load(XmlStreamReader* reader){
 		m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem());
 	}
 
-    return true;
+	return true;
 }
