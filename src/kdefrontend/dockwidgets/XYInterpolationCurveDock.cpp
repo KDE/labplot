@@ -312,7 +312,7 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 #endif
-		//TODO: minimum/maximum for own types
+		// own types work with 2 or more points
 	}
 }
 

@@ -79,7 +79,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	uiGeneralTab.cbType->addItem(i18n("High pass"));
 	uiGeneralTab.cbType->addItem(i18n("Band pass"));
 	uiGeneralTab.cbType->addItem(i18n("Band reject"));
-	uiGeneralTab.cbType->addItem(i18n("Threshold"));
+//TODO	uiGeneralTab.cbType->addItem(i18n("Threshold"));
 
 	uiGeneralTab.cbForm->addItem(i18n("Ideal"));
 	uiGeneralTab.cbForm->addItem(i18n("Butterworth"));

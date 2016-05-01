@@ -431,10 +431,11 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotMenu->addSeparator();
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotActionModeMenu);
 
-	m_filterMenu = new QMenu(i18n("Filter"));
+	// Filter menu?
+	//m_filterMenu = new QMenu(i18n("Filter"));
 	//TODO: filter icon
-	m_filterMenu->setIcon(KIcon("zoom-draw"));
-	m_filterMenu->addAction(addFourierFilterAction);
+	//m_filterMenu->setIcon(KIcon("zoom-draw"));
+	//m_filterMenu->addAction(addFourierFilterAction);
 }
 
 /*!
@@ -471,7 +472,9 @@ void WorksheetView::createAnalysisMenu(QMenu* menu) const {
 
 	menu->addAction(addInterpolationAction);
 	menu->addAction(addFitAction);
-	menu->insertMenu(0,m_filterMenu);
+	menu->addAction(addFourierFilterAction);
+	// Filter menu?
+	//menu->insertMenu(0,m_filterMenu);
 
 	//TODO: more to come
 }

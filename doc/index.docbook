@@ -51,7 +51,7 @@
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2016-04-09</date>
+<date>2016-05-01</date>
 <releaseinfo>3.1</releaseinfo>
 
 <abstract>
@@ -788,16 +788,20 @@ The menu is only available when a datapicker object is selected on the <guilabel
       Interpolation of data can be done with several algorithm:
     </para>
       <itemizedlist>
-	<listitem><para>Linear</para></listitem>
-	<listitem><para>Polynomial</para></listitem>
+	<listitem><para>linear</para></listitem>
+	<listitem><para>polynomial (if number of data points &lt; 100)</para></listitem>
 	<listitem><para>cubic spline</para></listitem>
 	<listitem><para>cubic spline (periodic)</para></listitem>
 	<listitem><para>Akima spline</para></listitem>
 	<listitem><para>Akima spline (periodic)</para></listitem>
-	<listitem><para>Steffen spline (needs GSL >= 2.0)</para></listitem>
+	<listitem><para>Steffen spline (needs GSL &ge; 2.0)</para></listitem>
+	<listitem><para>cosine</para></listitem>
+	<listitem><para>exponential</para></listitem>
+	<listitem><para>piecewise cubic Hermite (finite differences, Catmull-Rom, cardinal, Kochanek-Bartels)</para></listitem>
+	<listitem><para>rational functions</para></listitem>
       </itemizedlist>
     <para>
-	The interpolating function is calculated with the given number of data points and evaluated as:
+	The interpolating function is calculated with the given number n of data points and evaluated as:
     </para>
       <itemizedlist>
 	<listitem><para>function</para></listitem>
