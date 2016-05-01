@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -1269,7 +1269,7 @@ void CartesianPlotPrivate::retransformScales(){
 	bool hasValidBreak = false;
 	if (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty()) {
 		foreach(const CartesianPlot::RangeBreak& b, xRangeBreaks.list)
-			hasValidBreak = (b.start!=NAN && b.end!=NAN);
+			hasValidBreak = (!isnan(b.start) && !isnan(b.end));
 	}
 
 	//create x-scales
@@ -1315,7 +1315,7 @@ void CartesianPlotPrivate::retransformScales(){
 	hasValidBreak = false;
 	if (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty()) {
 		foreach(const CartesianPlot::RangeBreak& b, yRangeBreaks.list)
-			hasValidBreak = (b.start!=NAN && b.end!=NAN);
+			hasValidBreak = (!isnan(b.start) && !isnan(b.end));
 	}
 
 	//create y-scales
@@ -1722,30 +1722,30 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const{
 	writer->writeEndElement();
 
 	//x-scale breaks
-	if (d->xRangeBreaks.list.size()) {
+	if (d->xRangeBreakingEnabled || !d->xRangeBreaks.list.isEmpty()) {
 		writer->writeStartElement("xRangeBreaks");
+		writer->writeAttribute( "enabled", QString::number(d->xRangeBreakingEnabled) );
 		foreach(const RangeBreak& breaking, d->xRangeBreaks.list) {
 			writer->writeStartElement("item");
 			writer->writeAttribute("start", QString::number(breaking.start));
 			writer->writeAttribute("end", QString::number(breaking.end));
 			writer->writeAttribute("position", QString::number(breaking.position));
 			writer->writeAttribute("style", QString::number(breaking.style));
-			writer->writeAttribute("isValid", QString::number(breaking.isValid));
 			writer->writeEndElement();
 		}
 		writer->writeEndElement();
 	}
 
 	//y-scale breaks
-	if (d->yRangeBreaks.list.size()) {
+	if (d->yRangeBreakingEnabled || !d->yRangeBreaks.list.isEmpty()) {
 		writer->writeStartElement("yRangeBreaks");
+		writer->writeAttribute( "enabled", QString::number(d->yRangeBreakingEnabled) );
 		foreach(const RangeBreak& breaking, d->yRangeBreaks.list) {
 			writer->writeStartElement("item");
 			writer->writeAttribute("start", QString::number(breaking.start));
 			writer->writeAttribute("end", QString::number(breaking.end));
 			writer->writeAttribute("position", QString::number(breaking.position));
 			writer->writeAttribute("style", QString::number(breaking.style));
-			writer->writeAttribute("isValid", QString::number(breaking.isValid));
 			writer->writeEndElement();
 		}
 		writer->writeEndElement();
@@ -1889,6 +1889,20 @@ bool CartesianPlot::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("'verticalPadding'"));
             else
                 d->verticalPadding = str.toDouble();
+		} else if(reader->name() == "xRangeBreaks") {
+			attribs = reader->attributes();
+			str = attribs.value("enabled").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'enabled'"));
+            else
+                d->xRangeBreakingEnabled = str.toInt();
+		} else if(reader->name() == "yRangeBreaks") {
+			attribs = reader->attributes();
+			str = attribs.value("enabled").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'enabled'"));
+            else
+                d->yRangeBreakingEnabled = str.toInt();
         }else if(reader->name() == "textLabel"){
             m_title = new TextLabel("");
             if (!m_title->load(reader)){

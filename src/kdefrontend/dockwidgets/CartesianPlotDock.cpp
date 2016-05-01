@@ -561,7 +561,7 @@ void CartesianPlotDock::xBreakEndChanged() {
 		plot->setXRangeBreaks(breaks);
 }
 
-void CartesianPlotDock::xBreakPositionChanged(int) {
+void CartesianPlotDock::xBreakPositionChanged(int value) {
 	if (m_initializing)
 		return;
 
@@ -570,10 +570,10 @@ void CartesianPlotDock::xBreakPositionChanged(int) {
 	if (index==0 && breaks.list.size()==0) {
 		//no range break avaiable yet, create a new one
 		CartesianPlot::RangeBreak b;
-		b.position = ui.sbXBreakPosition->value()/100;
+		b.position = (float)value/100.;
 		breaks.list<<b;
 	} else {
-		breaks.list[index].position = ui.sbXBreakPosition->value()/100;
+		breaks.list[index].position = (float)value/100.;
 	}
 
 	foreach(CartesianPlot* plot, m_plotList)
@@ -1094,7 +1094,7 @@ void CartesianPlotDock::load(){
 	ui.chkXBreak->setChecked(m_plot->xRangeBreakingEnabled());
 	this->toggleXBreak(m_plot->xRangeBreakingEnabled());
 	if (!m_plot->xRangeBreaks().list.isEmpty()) {
-		const CartesianPlot::RangeBreak& rangeBreak = m_plot->xRangeBreaks().list.first();
+		const CartesianPlot::RangeBreak rangeBreak = m_plot->xRangeBreaks().list.first();
 		QString str = isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.start);
 		ui.leXBreakStart->setText(str);
 		str = isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.end);
@@ -1112,7 +1112,7 @@ void CartesianPlotDock::load(){
 	ui.chkYBreak->setChecked(m_plot->yRangeBreakingEnabled());
 	this->toggleYBreak(m_plot->yRangeBreakingEnabled());
 	if (!m_plot->yRangeBreaks().list.isEmpty()) {
-		const CartesianPlot::RangeBreak& rangeBreak = m_plot->yRangeBreaks().list.first();
+		const CartesianPlot::RangeBreak rangeBreak = m_plot->yRangeBreaks().list.first();
 		QString str = isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.start);
 		ui.leYBreakStart->setText(str);
 		str = isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.end);
