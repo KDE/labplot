@@ -140,6 +140,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/HDFFilter.cpp
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
+        ${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
+
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
  	${BACKEND_DIR}/gsl/parser.tab.c
 	${BACKEND_DIR}/matrix/Matrix.cpp

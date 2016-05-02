@@ -34,6 +34,7 @@ Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/filters/HDFFilter.h"
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/ImageFilter.h"
+#include "backend/datasources/filters/FITSFilter.h"
 
 #include <QTableWidget>
 #include <QInputDialog>
@@ -354,6 +355,9 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		return filter;
 	}
+    case FileDataSource::FITS: {
+        //TODO
+    }
 	}
 
 	return 0;
@@ -757,6 +761,11 @@ void ImportFileWidget::refreshPreview() {
 		tmpTableWidget = netcdfOptionsWidget.twPreview;
 		break;
 	}
+    case FileDataSource::FITS: {
+        //TODO
+        break;
+    }
+
 	}
 
 	// fill the table widget
