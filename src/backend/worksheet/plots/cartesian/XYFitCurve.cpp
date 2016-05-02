@@ -429,6 +429,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
+		case XYFitCurve::Sigmoid: {
+			//TODO
+			break;
+		}
 		case XYFitCurve::Custom: {
 			QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
 			char* func = funcba.data();
