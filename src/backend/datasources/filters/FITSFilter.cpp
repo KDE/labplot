@@ -53,8 +53,8 @@ bool FITSFilter::load(XmlStreamReader * loader) {
     return false;
 }
 
-QStringList FITSFilter::extensionNames() const {
-    return d->extensionNames();
+QStringList FITSFilter::extensionNames(const QString &fileName) {
+    return d->extensionNames(fileName);
 }
 
 //#####################################################################
@@ -62,7 +62,7 @@ QStringList FITSFilter::extensionNames() const {
 //#####################################################################
 
 FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
-    q(owner), status(0) {
+    q(owner) {
 }
 
 void FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode) {
@@ -76,8 +76,73 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
     Q_UNUSED(dataSource)
 }
 
-QStringList FITSFilterPrivate::extensionNames() const {
-    return QStringList();
+QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
+    QStringList extensionNames;
+    int status = 0;
+    if (!fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status )) {
+        int hduCount;
+
+        if (!fits_get_num_hdus(fitsFile, &hduCount, &status)) {
+            int imageCount = 0;
+            int asciiTableCount = 0;
+            int binaryTableCount = 0;
+            for (int currentHDU = 1; currentHDU <= hduCount; ++currentHDU) {
+
+                char extensionName[80];
+                int hduType;
+
+                fits_get_hdu_type(fitsFile, &hduType, &status);
+
+                switch (hduType) {
+                case IMAGE_HDU:
+                    imageCount++;
+                    break;
+                case ASCII_TBL:
+                    asciiTableCount++;
+                    break;
+                case BINARY_TBL:
+                    binaryTableCount++;
+                    break;
+                }
+                QString extName;
+                if (!fits_read_keyword(fitsFile, "EXTNAME", extensionName, NULL, &status)){
+                    extName = QString(extensionName);
+                } else {
+                    status = 0;
+                    if (!fits_read_keyword(fitsFile, "HDUNAME", extensionName, NULL, &status)) {
+                        extName = QString(extensionName);
+                    } else {
+                        switch (hduType) {
+                        case IMAGE_HDU:
+                            extName = i18n("IMAGE #%1").arg(imageCount);
+                            break;
+                        case ASCII_TBL:
+                            extName = i18n("ASCII_TBL #%1").arg(asciiTableCount);
+                            break;
+                        case BINARY_TBL:
+                            extName = i18n("BINARY_TBL #%1").arg(binaryTableCount);
+                            break;
+                        }
+                    }
+                }
+                extensionNames << extName.trimmed();
+                fits_movrel_hdu(fitsFile, 1, NULL, &status);
+            }
+        } else {
+            printError(status);
+        }
+    } else {
+        printError(status);
+    }
+
+    return extensionNames;
+}
+
+void FITSFilterPrivate::printError(int status) const {
+    if (status) {
+        char errorText[80];
+        fits_get_errstatus(status, errorText );
+    }
 }
 
 

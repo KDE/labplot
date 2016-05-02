@@ -27,9 +27,9 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
-#ifdef HAVE_FITS
+//#ifdef HAVE_FITS
 #include "fitsio.h"
-#endif
+//#endif
 class AbstractDataSource;
 
 class FITSFilterPrivate {
@@ -41,15 +41,15 @@ class FITSFilterPrivate {
                 void writeCHDU(const QString & fileName, AbstractDataSource* dataSource);
 
                 const FITSFilter* q;
-                QStringList extensionNames() const;
+                QStringList extensionNames(const QString &fileName) ;
 
 
         private:
-                int status;
+                void printError(int status) const;
 
-#ifdef HAVE_FITS
+//#ifdef HAVE_FITS
                 fitsfile* fitsFile;
-#endif
+//#endif
 
 };
 

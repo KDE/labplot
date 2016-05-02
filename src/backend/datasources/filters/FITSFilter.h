@@ -30,6 +30,8 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include <QStringList>
+#include <KLocale>
+
 class FITSFilterPrivate;
 class FITSFilter : public AbstractFileFilter{
     Q_OBJECT
@@ -44,7 +46,7 @@ class FITSFilter : public AbstractFileFilter{
 
     virtual void save(QXmlStreamWriter*) const;
     virtual bool load(XmlStreamReader*);
-    QStringList extensionNames() const;
+    QStringList extensionNames(const QString& fileName);
 
   private:
     FITSFilterPrivate* const d;
