@@ -1237,7 +1237,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
         if (version >= 2015) {
             out << QLatin1String("\\extrafloats{1280} \n");
         }
-        out << QLatin1String("\\definecolor{HeaderBgColor}{rgb}{0.81,0.81,0.81} \n");
+		out << QLatin1String("\\definecolor{HeaderBgColor}{rgb}{0.81,0.81,0.81} \n");
 		out << QLatin1String("\\geometry{ \n");
 		out << QLatin1String("a4paper, \n");
 		out << QLatin1String("total={170mm,257mm}, \n");

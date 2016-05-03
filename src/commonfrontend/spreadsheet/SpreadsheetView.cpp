@@ -53,7 +53,7 @@
 #include <QToolBar>
 #include <QTextStream>
 #include <QProcess>
-#include <QDebug>
+// #include <QDebug>
 
 #include <KAction>
 #include <KLocale>
@@ -1888,8 +1888,13 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
         version = texVersionOutput.mid(yearidx, 4).toInt(&ok);
     }
 
+<<<<<<< HEAD
     if (latexHeaders) {
         out << QLatin1String("\\documentclass[11pt,a4paper]{article} \n");
+=======
+	if (latexHeaders) {
+		out << QLatin1String("\\documentclass[11pt,a4paper]{article} \n");
+>>>>>>> 6817a867d0bbc07f9b5e898ea5768aa9aba4c424
 		out << QLatin1String("\\usepackage{geometry} \n");
 		out << QLatin1String("\\usepackage{xcolor,colortbl} \n");
         if (version >= 2015) {
