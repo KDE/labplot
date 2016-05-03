@@ -40,6 +40,7 @@ class RandomValuesDialog : public KDialog{
 
 	public:
 		explicit RandomValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
+		~RandomValuesDialog();
 		void setColumns(QList<Column*>);
 
 	private:
