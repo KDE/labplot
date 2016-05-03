@@ -8,7 +8,7 @@ Performance improvements:
 	* Faster generation of random values
 
 Bug fixes:
-	*
+	* Save and restore last used setting in RandomValuesDialog
 
 -----2.2-----
 New features:

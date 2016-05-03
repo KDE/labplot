@@ -141,10 +141,30 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	connect( ui.kleParameter3, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
 	connect(this, SIGNAL(okClicked()), this, SLOT(generate()));
 
-	//Gaussian distribution as default
-	this->distributionChanged(0);
+	//restore saved settings if available
+	KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
+	if (conf.exists()) {
+		ui.cbDistribution->setCurrentIndex(conf.readEntry("Distribution", 0));
+		ui.kleParameter1->setText(conf.readEntry("Parameter1"));
+		ui.kleParameter2->setText(conf.readEntry("Parameter2"));
+		ui.kleParameter3->setText(conf.readEntry("Parameter3"));
+		restoreDialogSize(conf);
+	} else {
+		//Gaussian distribution as default
+		this->distributionChanged(0);
 
-	resize( QSize(400,0).expandedTo(minimumSize()) );
+		resize( QSize(400,0).expandedTo(minimumSize()) );
+	}
+}
+
+RandomValuesDialog::~RandomValuesDialog() {
+	//save current settings
+	KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
+	conf.writeEntry("Distribution", ui.cbDistribution->currentIndex());
+	conf.writeEntry("Parameter1", ui.kleParameter1->text());
+	conf.writeEntry("Parameter2", ui.kleParameter2->text());
+	conf.writeEntry("Parameter3", ui.kleParameter3->text());
+	saveDialogSize(conf);
 }
 
 void RandomValuesDialog::setColumns(QList<Column*> list) {
@@ -268,6 +288,20 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("1.0");
+	} else if (distr==Flat) {
+		ui.lParameter1->show();
+		ui.kleParameter1->show();
+		ui.lParameter1->show();
+		ui.kleParameter1->show();
+		ui.lParameter2->show();
+		ui.kleParameter2->show();
+		ui.lParameter3->hide();
+		ui.kleParameter3->hide();
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText("a=");
+		ui.lParameter2->setText("b=");
+		ui.kleParameter1->setText("0.0");
+		ui.kleParameter2->setText("1.0");
 	} else if (distr==Gamma || distr==Flat || distr==Beta || distr==Pareto || distr==Weibull || distr==Gumbel1 || distr==Gumbel2) {
 		ui.lParameter1->show();
 		ui.kleParameter1->show();
