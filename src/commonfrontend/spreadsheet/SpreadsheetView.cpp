@@ -52,6 +52,7 @@
 #include <QPrinter>
 #include <QToolBar>
 #include <QTextStream>
+#include <QProcess>
 // #include <QDebug>
 
 #include <KAction>
@@ -1862,11 +1863,38 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 	bool columnsSeparating = (cols > columnsPerTable);
 	QTextStream out(&file);
 
+    QProcess tex;
+    tex.start("latex", QStringList() << "--version", QProcess::ReadOnly);
+    tex.waitForFinished(500);
+    QString texVersionOutput = QString(tex.readAllStandardOutput());
+    texVersionOutput = texVersionOutput.split("\n")[0];
+
+    int yearidx = -1;
+    for (int i = texVersionOutput.size() - 1; i >= 0; --i) {
+        if (texVersionOutput.at(i) == QChar('2')) {
+            yearidx = i;
+            break;
+        }
+    }
+
+    if (texVersionOutput.at(yearidx+1) == QChar('/')) {
+        yearidx-=3;
+    }
+
+    bool ok;
+    texVersionOutput.mid(yearidx, 4).toInt(&ok);
+    int version = -1;
+    if (ok) {
+        version = texVersionOutput.mid(yearidx, 4).toInt(&ok);
+    }
+
 	if (latexHeaders) {
 		out << QLatin1String("\\documentclass[11pt,a4paper]{article} \n");
 		out << QLatin1String("\\usepackage{geometry} \n");
 		out << QLatin1String("\\usepackage{xcolor,colortbl} \n");
-		out << QLatin1String("\\extrafloats{1280} \n");
+        if (version >= 2015) {
+            out << QLatin1String("\\extrafloats{1280} \n");
+        }
 		out << QLatin1String("\\definecolor{HeaderBgColor}{rgb}{0.81,0.81,0.81} \n");
 		out << QLatin1String("\\geometry{ \n");
 		out << QLatin1String("a4paper, \n");
