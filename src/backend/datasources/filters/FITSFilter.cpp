@@ -57,6 +57,18 @@ QStringList FITSFilter::extensionNames(const QString &fileName) {
     return d->extensionNames(fileName);
 }
 
+void FITSFilter::addNewKeyword(const FITSFilter::Keyword& keyword) {
+    d->addNewKeyword(keyword);
+}
+
+void FITSFilter::modifyKeywordValue(Keyword &keyword) {
+    d->modifyKeywordValue(keyword);
+}
+
+QList<FITSFilter::Keyword> FITSFilter::keywords(const QString& fileName) {
+    return d->chduKeywords(fileName);
+}
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
@@ -87,7 +99,6 @@ QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
             int asciiTableCount = 0;
             int binaryTableCount = 0;
             for (int currentHDU = 1; currentHDU <= hduCount; ++currentHDU) {
-
                 char extensionName[80];
                 int hduType;
 
@@ -145,4 +156,15 @@ void FITSFilterPrivate::printError(int status) const {
     }
 }
 
+void FITSFilterPrivate::addNewKeyword(const FITSFilter::Keyword& keyword) {
+    Q_UNUSED(keyword)
+}
 
+void FITSFilterPrivate::modifyKeywordValue(FITSFilter::Keyword& keyword) {
+    Q_UNUSED(keyword)
+}
+
+QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileName) {
+    Q_UNUSED(fileName)
+    return QList<FITSFilter::Keyword> ();
+}

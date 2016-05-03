@@ -47,6 +47,16 @@ class FITSFilter : public AbstractFileFilter{
     virtual void save(QXmlStreamWriter*) const;
     virtual bool load(XmlStreamReader*);
     QStringList extensionNames(const QString& fileName);
+    struct Keyword {
+        QString key;
+        QString value;
+        QString comment;
+    };
+
+    void modifyKeywordValue(Keyword& keyword);
+    void addNewKeyword(const Keyword &keyword);
+
+    QList<Keyword> keywords(const QString& fileName);
 
   private:
     FITSFilterPrivate* const d;

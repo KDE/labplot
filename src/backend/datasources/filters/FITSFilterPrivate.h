@@ -41,7 +41,11 @@ class FITSFilterPrivate {
                 void writeCHDU(const QString & fileName, AbstractDataSource* dataSource);
 
                 const FITSFilter* q;
-                QStringList extensionNames(const QString &fileName) ;
+                QStringList extensionNames(const QString &fileName);
+                void modifyKeywordValue(FITSFilter::Keyword& keyword);
+                void addNewKeyword(const FITSFilter::Keyword &keyword);
+
+                QList<FITSFilter::Keyword> chduKeywords(const QString &fileName);
 
 
         private:
