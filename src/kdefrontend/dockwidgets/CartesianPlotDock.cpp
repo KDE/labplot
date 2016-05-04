@@ -530,7 +530,7 @@ void CartesianPlotDock::xBreakStartChanged() {
 	int index = ui.cbXBreak->currentIndex();
 	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
 	if (index==0 && breaks.list.size()==0) {
-		//no range breaking avaiable yet, create a new one
+		//no range breaking available yet, create a new one
 		CartesianPlot::RangeBreak b;
 		b.start = ui.leXBreakStart->text().toDouble();
 		breaks.list<<b;
@@ -549,7 +549,7 @@ void CartesianPlotDock::xBreakEndChanged() {
 	int index = ui.cbXBreak->currentIndex();
 	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
 	if (index==0 && breaks.list.size()==0) {
-		//no range break avaiable yet, create a new one
+		//no range break available yet, create a new one
 		CartesianPlot::RangeBreak b;
 		b.end = ui.leXBreakEnd->text().toDouble();
 		breaks.list<<b;
@@ -568,7 +568,7 @@ void CartesianPlotDock::xBreakPositionChanged(int value) {
 	int index = ui.cbXBreak->currentIndex();
 	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
 	if (index==0 && breaks.list.size()==0) {
-		//no range break avaiable yet, create a new one
+		//no range break available yet, create a new one
 		CartesianPlot::RangeBreak b;
 		b.position = (float)value/100.;
 		breaks.list<<b;
@@ -1093,6 +1093,7 @@ void CartesianPlotDock::load(){
 	//x range breaks, show the first break if available
 	ui.chkXBreak->setChecked(m_plot->xRangeBreakingEnabled());
 	this->toggleXBreak(m_plot->xRangeBreakingEnabled());
+	ui.bRemoveXBreak->setVisible(m_plot->xRangeBreaks().list.size()>1);
 	if (!m_plot->xRangeBreaks().list.isEmpty()) {
 		const CartesianPlot::RangeBreak rangeBreak = m_plot->xRangeBreaks().list.first();
 		QString str = isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.start);
@@ -1111,6 +1112,7 @@ void CartesianPlotDock::load(){
 	//y range breaks, show the first break if available
 	ui.chkYBreak->setChecked(m_plot->yRangeBreakingEnabled());
 	this->toggleYBreak(m_plot->yRangeBreakingEnabled());
+	ui.bRemoveYBreak->setVisible(m_plot->yRangeBreaks().list.size()>1);
 	if (!m_plot->yRangeBreaks().list.isEmpty()) {
 		const CartesianPlot::RangeBreak rangeBreak = m_plot->yRangeBreaks().list.first();
 		QString str = isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.start);
