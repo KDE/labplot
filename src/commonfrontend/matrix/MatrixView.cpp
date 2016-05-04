@@ -1294,7 +1294,6 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 			foreach(const QString& s, textable) {
 				out << s;
 			}
-            bool captionRemoved = false;
 			for (int row = 0; row < totalRowCount; ++row) {
 				if (verticalHeaders) {
 					out << "\\cellcolor{HeaderBgColor} ";
