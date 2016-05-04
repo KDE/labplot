@@ -1,10 +1,10 @@
 /***************************************************************************
     File                 : AsciiFilterPrivate.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Private implementation class for AsciiFilter.
     --------------------------------------------------------------------
-	Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke*web.de)
-						   (replace * with @ in the email addresses)
+    Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************

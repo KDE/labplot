@@ -30,6 +30,7 @@
 #define MATRIX_H
 
 #include "backend/datasources/AbstractDataSource.h"
+#include "backend/lib/macros.h"
 
 class MatrixPrivate;
 class MatrixModel;

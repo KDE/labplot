@@ -36,7 +36,6 @@ class SpreadsheetCommentsHeaderModel : public QAbstractTableModel {
 
 	public:
 		explicit SpreadsheetCommentsHeaderModel(SpreadsheetModel* , QObject* parent = 0);
-		virtual ~SpreadsheetCommentsHeaderModel();
 
 		Qt::ItemFlags flags( const QModelIndex&) const;
 		QVariant data(const QModelIndex& index, int role) const;
