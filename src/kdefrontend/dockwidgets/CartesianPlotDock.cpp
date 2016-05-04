@@ -402,16 +402,7 @@ void CartesianPlotDock::layoutChanged(Worksheet::Layout layout){
 	ui.sbLeft->setEnabled(b);
 	ui.sbWidth->setEnabled(b);
 	ui.sbHeight->setEnabled(b);
-	if (!b){
-		m_initializing = true;
-		ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), Worksheet::Centimeter));
-		ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), Worksheet::Centimeter));
-		ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), Worksheet::Centimeter));
-		ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), Worksheet::Centimeter));
-		m_initializing = false;
-	}
 }
-
 
 void CartesianPlotDock::autoScaleXChanged(int state){
 	bool checked = (state==Qt::Checked);
