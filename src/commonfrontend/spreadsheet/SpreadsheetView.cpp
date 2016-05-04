@@ -1914,17 +1914,19 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 
 	int rowCount = 0;
 	const int maxRows = 45;
+    bool captionRemoved = false;
 
 	if (columnsSeparating) {
 		QVector<int> emptyRowIndices;
 		for (int table = 0; table < tablesCount; ++table) {
 			QStringList textable;
+            captionRemoved = false;
+            textable << beginTable;
 
-			textable << beginTable;
-			if (captions)
-				textable << tableCaption;
-			textable << QLatin1String("\\centering \n");
-			textable << QLatin1String("\\begin{tabular}{") << (gridLines ?QLatin1String("|") : QLatin1String(""));
+            if (captions)
+                textable << tableCaption;
+            textable << QLatin1String("\\centering \n");
+            textable << QLatin1String("\\begin{tabular}{") << (gridLines ?QLatin1String("|") : QLatin1String(""));
 			for (int i = 0; i < columnsPerTable; ++i)
 				textable << ( gridLines ? QLatin1String(" c |") : QLatin1String(" c ") );
 			textable << QLatin1String("} \n");
@@ -1978,11 +1980,15 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 					if (rowCount == maxRows) {
 						out << endTabularTable;
 						out << QLatin1String("\\newpage \n");
-
+                        if (captions)
+                            if (!captionRemoved)
+                                textable.removeAt(1);
 						foreach(const QString& s, textable) {
 							out << s;
 						}
 						rowCount = 0;
+                        if (!captionRemoved)
+                            captionRemoved = true;
 					}
 				}
 			}
@@ -1992,8 +1998,8 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 		//new table for the remaining columns
 		QStringList remainingTable;
 		remainingTable << beginTable;
-		if (captions)
-			remainingTable << tableCaption;
+        if (captions)
+            remainingTable << tableCaption;
 		remainingTable << QLatin1String("\\centering \n");
 		remainingTable << QLatin1String("\\begin{tabular}{") <<  (gridLines ? QLatin1String("|"):QLatin1String(""));
 		for (int c = 0; c < remainingColumns; ++c)
@@ -2019,6 +2025,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 		}
 
 		QStringList values;
+        captionRemoved = false;
 		for (int row = 0; row < totalRowCount; ++row) {
 			values.clear();
 			bool notEmpty = false;
@@ -2044,11 +2051,15 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 				if (rowCount == maxRows) {
 					out << endTabularTable;
 					out << QLatin1String("\\pagebreak[4] \n");
-
+                    if (captions)
+                        if (!captionRemoved)
+                            remainingTable.removeAt(1);
 					foreach(const QString& s, remainingTable) {
 						out << s;
 					}
 					rowCount = 0;
+                    if (!captionRemoved)
+                        captionRemoved = true;
 				}
 			}
 		}
@@ -2082,6 +2093,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 			out << s;
 		}
 		QStringList values;
+        captionRemoved = false;
 		for (int row = 0; row < totalRowCount; ++row) {
 			values.clear();
 			bool notEmpty = false;
@@ -2107,11 +2119,15 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 				if (rowCount == maxRows) {
 					out << endTabularTable;
 					out << QLatin1String("\\newpage \n");
-
-					foreach (const QString& s, textable) {
-						out << s;
-					}
-					rowCount = 0;
+                    if (captions)
+                        if (!captionRemoved)
+                            textable.removeAt(1);
+                    foreach (const QString& s, textable) {
+                        out << s;
+                    }
+                    rowCount = 0;
+                    if (!captionRemoved)
+                        captionRemoved = true;
 				}
 			}
 		}

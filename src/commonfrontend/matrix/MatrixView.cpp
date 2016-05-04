@@ -1257,11 +1257,12 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 	const QString centeredColumn( gridLines ? QLatin1String(" c |") : QLatin1String(" c "));
 	int rowCount = 0;
 	const int maxRows = 45;
+    bool captionRemoved = false;
 
 	if (columnsSeparating) {
 		for (int table = 0; table < tablesCount; ++table) {
 			QStringList textable;
-
+            captionRemoved = false;
 			textable << beginTable;
 			if (captions)
 				textable << tableCaption;
@@ -1293,7 +1294,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 			foreach(const QString& s, textable) {
 				out << s;
 			}
-
+            bool captionRemoved = false;
 			for (int row = 0; row < totalRowCount; ++row) {
 				if (verticalHeaders) {
 					out << "\\cellcolor{HeaderBgColor} ";
@@ -1313,15 +1314,20 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 				if (rowCount == maxRows) {
 					out << endTabularTable;
 					out << QLatin1String("\\newpage \n");
-
+                    if (captions)
+                        if (!captionRemoved)
+                            textable.removeAt(1);
 					foreach(const QString& s, textable) {
 						out << s;
 					}
 					rowCount = 0;
+                    if (!captionRemoved)
+                        captionRemoved = true;
 				}
 			}
 			out << endTabularTable;
 		}
+        captionRemoved = false;
 
 		QStringList remainingTable;
 		remainingTable << beginTable;
@@ -1375,11 +1381,15 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 			if (rowCount == maxRows) {
 				out << endTabularTable;
 				out << QLatin1String("\\pagebreak[4] \n");
-
+                if (captions)
+                    if (!captionRemoved)
+                        remainingTable.removeAt(1);
 				foreach(const QString& s, remainingTable) {
 					out << s;
 				}
 				rowCount = 0;
+                if (!captionRemoved)
+                    captionRemoved = true;
 			}
 		}
 		out << endTabularTable;
@@ -1434,11 +1444,15 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 			if (rowCount == maxRows) {
 				out << endTabularTable;
 				out << QLatin1String("\\newpage \n");
-
+                if (captions)
+                    if (!captionRemoved)
+                        textable.removeAt(1);
 				foreach (const QString& s, textable) {
 					out << s;
 				}
 				rowCount = 0;
+                if (!captionRemoved)
+                    captionRemoved = true;
 			}
 		}
 		out << endTabularTable;
