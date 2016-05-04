@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : TextLabel.cpp
     Project              : LabPlot
-    Description          : A one-line text label supporting floating point font sizes.
+    Description          : Text label supporting reach text and latex formatting
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2012-2015 Alexander Semke (alexander.semke@web.de)

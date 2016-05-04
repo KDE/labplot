@@ -1,11 +1,8 @@
 /***************************************************************************
     File                 : SpreadsheetCommentsHeaderModel.h
-    Project              : SciDAVis
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert,
-    Email (use @ for *)  : thzs*gmx.net
-    Description          : Model wrapping a SpreadsheetModel to display column 
-                           comments in a SpreadsheetCommentsHeaderView
+    Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
 
@@ -34,25 +31,21 @@
 #include <QAbstractTableModel>
 #include <backend/spreadsheet/SpreadsheetModel.h>
 
-class SpreadsheetCommentsHeaderModel : public QAbstractTableModel{
+class SpreadsheetCommentsHeaderModel : public QAbstractTableModel {
 	Q_OBJECT
 
 	public:
-		explicit SpreadsheetCommentsHeaderModel( SpreadsheetModel * spreadsheet_model, QObject * parent = 0 );
+		explicit SpreadsheetCommentsHeaderModel(SpreadsheetModel* , QObject* parent = 0);
 		virtual ~SpreadsheetCommentsHeaderModel();
 
-		//! \name Overloaded functions from QAbstractItemModel
-		//@{
-		Qt::ItemFlags flags( const QModelIndex & index ) const;
-		QVariant data(const QModelIndex &index, int role) const;
-		QVariant headerData(int section, 
-				Qt::Orientation orientation,int role) const;
-		int rowCount(const QModelIndex &parent = QModelIndex()) const;
-		int columnCount(const QModelIndex & parent = QModelIndex()) const;
-		//@}
+		Qt::ItemFlags flags( const QModelIndex&) const;
+		QVariant data(const QModelIndex& index, int role) const;
+		QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+		int rowCount(const QModelIndex& parent = QModelIndex()) const;
+		int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
 	private:
-		SpreadsheetModel * m_spreadsheet_model;
+		SpreadsheetModel* m_spreadsheet_model;
 };
 
 #endif

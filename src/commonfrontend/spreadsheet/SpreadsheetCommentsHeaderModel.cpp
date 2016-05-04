@@ -1,11 +1,8 @@
 /***************************************************************************
     File                 : SpreadsheetCommentsHeaderModel.cpp
-    Project              : SciDAVis
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert,
-    Email (use @ for *)  : thzs*gmx.net
-    Description          : Model wrapping a SpreadsheetModel to display column 
-                           comments in a SpreadsheetCommentsHeaderView
+    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
 
@@ -54,37 +51,32 @@ SpreadsheetCommentsHeaderModel::SpreadsheetCommentsHeaderModel( SpreadsheetModel
 		this, SIGNAL(columnsRemoved(QModelIndex,int,int)));
 }
 
-SpreadsheetCommentsHeaderModel::~SpreadsheetCommentsHeaderModel(){
-}
-
-Qt::ItemFlags SpreadsheetCommentsHeaderModel::flags(const QModelIndex & index ) const{
+Qt::ItemFlags SpreadsheetCommentsHeaderModel::flags(const QModelIndex& index ) const {
 	if (index.isValid())
 		return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 	else
 		return Qt::ItemIsEnabled;
 }
 
-
-QVariant SpreadsheetCommentsHeaderModel::data(const QModelIndex &index, int role) const{
+QVariant SpreadsheetCommentsHeaderModel::data(const QModelIndex& index, int role) const {
 	Q_UNUSED(index);
 	Q_UNUSED(role);
 	return QVariant();
 }
 
-QVariant SpreadsheetCommentsHeaderModel::headerData(int section, Qt::Orientation orientation,
-		int role) const{
+QVariant SpreadsheetCommentsHeaderModel::headerData(int section, Qt::Orientation orientation, int role) const {
 	if( orientation != Qt::Horizontal || role != Qt::DisplayRole || section < 0 || section >= columnCount())
 		return QVariant();
 
 	return QVariant(m_spreadsheet_model->headerData(section, Qt::Horizontal, SpreadsheetModel::CommentRole));
 }
 
-int SpreadsheetCommentsHeaderModel::rowCount(const QModelIndex &parent) const{
+int SpreadsheetCommentsHeaderModel::rowCount(const QModelIndex& parent) const{
 	Q_UNUSED(parent)
 	return m_spreadsheet_model->rowCount();
 }
 
-int SpreadsheetCommentsHeaderModel::columnCount(const QModelIndex & parent) const{
+int SpreadsheetCommentsHeaderModel::columnCount(const QModelIndex& parent) const{
 	Q_UNUSED(parent)
 	return m_spreadsheet_model->columnCount();
 }

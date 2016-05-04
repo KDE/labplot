@@ -1,11 +1,9 @@
 /***************************************************************************
     File                 : CartesianPlotLegendPrivate.h
-    Project              : LabPlot/SciDAVis
-    Description          : Private members of CartesianPlotLegend.
+    Project              : LabPlot
+    Description          : Private members of CartesianPlotLegend
     --------------------------------------------------------------------
-    Copyright            : (C) 2013 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
-
+    Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -99,7 +97,7 @@ class CartesianPlotLegendPrivate : public QGraphicsItem {
 		int layoutColumnCount;
 
 	private:
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+		void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
 		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
 };
