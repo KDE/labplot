@@ -1,10 +1,9 @@
 /***************************************************************************
     File                 : AspectPrivate.cpp
-    Project              : SciDAVis
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
-    Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
-    Description          : Private data managed by AbstractAspect.
+    Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
 
@@ -41,50 +40,46 @@ AbstractAspect::Private::Private(AbstractAspect * owner, const QString& name)
 	m_creation_time = QDateTime::currentDateTime();
 }
 
-AbstractAspect::Private::~Private()
-{
+AbstractAspect::Private::~Private() {
 	foreach(AbstractAspect * child, m_children)
-			delete child;
+		delete child;
 }
 
-void AbstractAspect::Private::insertChild(int index, AbstractAspect* child)
-{
+void AbstractAspect::Private::insertChild(int index, AbstractAspect* child) {
 	m_children.insert(index, child);
 	// Always remove from any previous parent before adding to a new one!
 	// Can't handle this case here since two undo commands have to be created.
 	Q_ASSERT(child->m_aspect_private->m_parent == 0);
 	child->m_aspect_private->m_parent = m_owner;
 	connect(child, SIGNAL(aspectDescriptionAboutToChange(const AbstractAspect*)),
-			m_owner, SIGNAL(aspectDescriptionAboutToChange(const AbstractAspect*)));
+	        m_owner, SIGNAL(aspectDescriptionAboutToChange(const AbstractAspect*)));
 	connect(child, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
-			m_owner, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)));
+	        m_owner, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)));
 	connect(child, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-			m_owner, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
+	        m_owner, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
 	connect(child, SIGNAL(aspectAdded(const AbstractAspect*)),
-			m_owner, SIGNAL(aspectAdded(const AbstractAspect*)));
+	        m_owner, SIGNAL(aspectAdded(const AbstractAspect*)));
 	connect(child, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			m_owner, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)));
+	        m_owner, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(child, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-			m_owner, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
+	        m_owner, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
 	connect(child, SIGNAL(aspectHiddenAboutToChange(const AbstractAspect*)),
-			m_owner, SIGNAL(aspectHiddenAboutToChange(const AbstractAspect*)));
+	        m_owner, SIGNAL(aspectHiddenAboutToChange(const AbstractAspect*)));
 	connect(child, SIGNAL(aspectHiddenChanged(const AbstractAspect*)),
-			m_owner, SIGNAL(aspectHiddenChanged(const AbstractAspect*)));
+	        m_owner, SIGNAL(aspectHiddenChanged(const AbstractAspect*)));
 	connect(child, SIGNAL(statusInfo(QString)), m_owner, SIGNAL(statusInfo(QString)));
 
 	connect(child, SIGNAL(selected(const AbstractAspect*)), m_owner, SLOT(childSelected(const AbstractAspect*)));
 	connect(child, SIGNAL(deselected(const AbstractAspect*)), m_owner, SLOT(childDeselected(const AbstractAspect*)));
 }
 
-int AbstractAspect::Private::indexOfChild(const AbstractAspect *child) const
-{
+int AbstractAspect::Private::indexOfChild(const AbstractAspect* child) const {
 	for(int i=0; i<m_children.size(); i++)
 		if(m_children.at(i) == child) return i;
 	return -1;
 }
 
-int AbstractAspect::Private::removeChild(AbstractAspect* child)
-{
+int AbstractAspect::Private::removeChild(AbstractAspect* child) {
 	int index = indexOfChild(child);
 	Q_ASSERT(index != -1);
 	m_children.removeAll(child);
@@ -93,8 +88,7 @@ int AbstractAspect::Private::removeChild(AbstractAspect* child)
 	return index;
 }
 
-QString AbstractAspect::Private::uniqueNameFor(const QString &current_name) const
-{
+QString AbstractAspect::Private::uniqueNameFor(const QString& current_name) const {
 	QStringList child_names;
 	foreach(AbstractAspect * child, m_children)
 		child_names << child->name();
@@ -105,8 +99,9 @@ QString AbstractAspect::Private::uniqueNameFor(const QString &current_name) cons
 	QString base = current_name;
 	int last_non_digit;
 	for (last_non_digit = base.size()-1; last_non_digit>=0 &&
-			base[last_non_digit].category() == QChar::Number_DecimalDigit; --last_non_digit)
+	        base[last_non_digit].category() == QChar::Number_DecimalDigit; --last_non_digit)
 		base.chop(1);
+
 	if (last_non_digit >=0 && base[last_non_digit].category() != QChar::Separator_Space)
 		base.append(" ");
 
