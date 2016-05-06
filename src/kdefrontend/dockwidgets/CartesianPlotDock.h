@@ -80,7 +80,7 @@ private slots:
 	void yMaxChanged();
 	void yScaleChanged(int);
 
-	//"Scale breaking"-tab
+	//"Range Breaks"-tab
 	void toggleXBreak(bool);
 	void addXBreak();
 	void removeXBreak();
@@ -88,6 +88,7 @@ private slots:
 	void xBreakStartChanged();
 	void xBreakEndChanged();
 	void xBreakPositionChanged(int);
+	void xBreakStyleChanged(int);
 
 	void toggleYBreak(bool);
 	void addYBreak();
@@ -96,6 +97,7 @@ private slots:
 	void yBreakStartChanged();
 	void yBreakEndChanged();
 	void yBreakPositionChanged(int);
+	void yBreakStyleChanged(int);
 
 	//"Plot area"-tab
   	void backgroundTypeChanged(int);

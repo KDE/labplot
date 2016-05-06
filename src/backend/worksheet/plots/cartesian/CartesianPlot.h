@@ -66,7 +66,9 @@ class CartesianPlot:public AbstractPlot{
 
 		//simple wrapper for QList<RangeBreaking> in order to get our macros working
 		struct RangeBreaks {
+			RangeBreaks() : lastChanged(-1) { RangeBreak b; list<<b;};
 			QList<RangeBreak> list;
+			int lastChanged;
 		};
 
 		void initDefault(Type=FourAxes);

@@ -587,13 +587,13 @@ STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeBreakingEnabled, bool, xRangeBre
 void CartesianPlot::setXRangeBreakingEnabled(bool enabled) {
 	Q_D(CartesianPlot);
 	if (enabled != d->xRangeBreakingEnabled)
-		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, i18n("%1: x-scale breakings enabled")));
+		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, i18n("%1: x-range breaking enabled")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeBreaks, CartesianPlot::RangeBreaks, xRangeBreaks, retransformScales);
 void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
 	Q_D(CartesianPlot);
-	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, i18n("%1: set x-scale breaks")));
+	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, i18n("%1: x-range breaks changed")));
 }
 
 class CartesianPlotSetAutoScaleYCmd : public QUndoCommand {
@@ -660,10 +660,17 @@ void CartesianPlot::setYScale(Scale scale) {
 		exec(new CartesianPlotSetYScaleCmd(d, scale, i18n("%1: set y scale")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeBreakingEnabled, bool, yRangeBreakingEnabled, retransformScales)
+void CartesianPlot::setYRangeBreakingEnabled(bool enabled) {
+	Q_D(CartesianPlot);
+	if (enabled != d->yRangeBreakingEnabled)
+		exec(new CartesianPlotSetYRangeBreakingEnabledCmd(d, enabled, i18n("%1: y-range breaking enabled")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeBreaks, CartesianPlot::RangeBreaks, yRangeBreaks, retransformScales);
 void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	Q_D(CartesianPlot);
-	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, i18n("%1: set y-scale breakings")));
+	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, i18n("%1: y-range breaks changed")));
 }
 
 //################################################################
@@ -1775,6 +1782,9 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
+
+	d->xRangeBreaks.list.clear();
+	d->yRangeBreaks.list.clear();
 
 	while (!reader->atEnd()) {
 		reader->readNext();
