@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -166,6 +166,7 @@ void SpreadsheetView::initActions() {
 
 // 	action_set_formula = new KAction(KIcon(""), i18n("Assign &Formula"), this);
 // 	action_recalculate = new KAction(KIcon(""), i18n("Recalculate"), this);
+	action_fill_sel_row_numbers = new KAction(KIcon(""), i18n("Row Numbers"), this);
 	action_fill_row_numbers = new KAction(KIcon(""), i18n("Row Numbers"), this);
 	action_fill_random = new KAction(KIcon(""), i18n("Uniform Random Values"), this);
 	action_fill_random_nonuniform = new KAction(KIcon(""), i18n("Random Values"), this);
@@ -217,7 +218,7 @@ void SpreadsheetView::initMenus() {
 	m_selectionMenu = new QMenu(i18n("Selection"), this);
 
 	QMenu * submenu = new QMenu(i18n("Fi&ll Selection with"), this);
-	submenu->addAction(action_fill_row_numbers);
+	submenu->addAction(action_fill_sel_row_numbers);
 	submenu->addAction(action_fill_const);
 // 	submenu->addAction(action_fill_random);
 	m_selectionMenu ->addMenu(submenu);
@@ -318,7 +319,7 @@ void SpreadsheetView::initMenus() {
 	m_rowMenu->addSeparator();
 
 	submenu = new QMenu(i18n("Fi&ll Selection with"), this);
-	submenu->addAction(action_fill_row_numbers);
+	submenu->addAction(action_fill_sel_row_numbers);
 // 	submenu->addAction(action_fill_random);
 	submenu->addAction(action_fill_const);
 	m_rowMenu->addMenu(submenu);
@@ -337,7 +338,8 @@ void SpreadsheetView::connectActions() {
 
 	connect(action_clear_selection, SIGNAL(triggered()), this, SLOT(clearSelectedCells()));
 // 	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculateSelectedCells()));
-	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
+	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillWithRowNumbers()));
+	connect(action_fill_sel_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
 // 	connect(action_fill_random, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRandomNumbers()));
 	connect(action_fill_random_nonuniform, SIGNAL(triggered()), this, SLOT(fillWithRandomValues()));
 	connect(action_fill_equidistant, SIGNAL(triggered()), this, SLOT(fillWithEquidistantValues()));
@@ -1020,6 +1022,31 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 	RESET_CURSOR;
 }
 
+void SpreadsheetView::fillWithRowNumbers() {
+	if (selectedColumnCount() < 1) return;
+
+	WAIT_CURSOR;
+	m_spreadsheet->beginMacro(i18np("%1: fill column with row numbers",
+								"%1: fill columns with row numbers",
+								m_spreadsheet->name(),
+								selectedColumnCount()));
+
+	const int rows = m_spreadsheet->rowCount();
+	QVector<double> new_data(rows);
+	for (int i=0; i<rows; ++i)
+		new_data[i] = i+1;
+
+	foreach(Column* col, selectedColumns()) {
+		if (col->columnMode() != AbstractColumn::Numeric)
+			continue;
+		col->replaceValues(0, new_data);
+	}
+
+	m_spreadsheet->endMacro();
+	RESET_CURSOR;
+}
+
+//TODO: this function is not used currently.
 void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 	if (selectedColumnCount() < 1) return;
 	int first = firstSelectedRow();
