@@ -281,9 +281,13 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect( m_plot, SIGNAL(yMinChanged(float)), this, SLOT(plotYMinChanged(float)) );
 	connect( m_plot, SIGNAL(yMaxChanged(float)), this, SLOT(plotYMaxChanged(float)) );
 	connect( m_plot, SIGNAL(yScaleChanged(int)), this, SLOT(plotYScaleChanged(int)) );
-	connect( m_plot, SIGNAL(xRangeBreaksChanged(CartesianPlot::RangeBreaks)), this, SLOT(plotXRangeBreaksChanged(CartesianPlot::RangeBreaks)) );
-	connect( m_plot, SIGNAL(yRangeBreaksChanged(CartesianPlot::RangeBreaks)), this, SLOT(plotYRangeBreaksChanged(CartesianPlot::RangeBreaks)) );
 	connect( m_plot, SIGNAL(visibleChanged(bool)), this, SLOT(plotVisibleChanged(bool)) );
+
+	//range breaks
+	connect( m_plot, SIGNAL(xRangeBreakingEnabledChanged(bool)), this, SLOT(plotXRangeBreakingEnabledChanged(bool)) );
+	connect( m_plot, SIGNAL(xRangeBreaksChanged(CartesianPlot::RangeBreaks)), this, SLOT(plotXRangeBreaksChanged(CartesianPlot::RangeBreaks)) );
+	connect( m_plot, SIGNAL(yRangeBreakingEnabledChanged(bool)), this, SLOT(plotYRangeBreakingEnabledChanged(bool)) );
+	connect( m_plot, SIGNAL(yRangeBreaksChanged(CartesianPlot::RangeBreaks)), this, SLOT(plotYRangeBreaksChanged(CartesianPlot::RangeBreaks)) );
 
 	// Plot Area
 	connect( m_plot->plotArea(), SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), this, SLOT(plotBackgroundTypeChanged(PlotArea::BackgroundType)) );
@@ -1057,8 +1061,20 @@ void CartesianPlotDock::plotVisibleChanged(bool on) {
 }
 
 //range breaks
+void CartesianPlotDock::plotXRangeBreakingEnabledChanged(bool on) {
+	m_initializing = true;
+	ui.chkXBreak->setChecked(on);
+	m_initializing = false;
+}
+
 void CartesianPlotDock::plotXRangeBreaksChanged(const CartesianPlot::RangeBreaks& breaks) {
 	Q_UNUSED(breaks);
+}
+
+void CartesianPlotDock::plotYRangeBreakingEnabledChanged(bool on) {
+	m_initializing = true;
+	ui.chkYBreak->setChecked(on);
+	m_initializing = false;
 }
 
 void CartesianPlotDock::plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks& breaks) {

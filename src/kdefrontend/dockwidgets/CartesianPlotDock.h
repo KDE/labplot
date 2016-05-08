@@ -131,8 +131,10 @@ private slots:
 	void plotYScaleChanged(int);
 	void plotVisibleChanged(bool);
 
-	//scale breakings
+	//range breaks
+	void plotXRangeBreakingEnabledChanged(bool);
 	void plotXRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
+	void plotYRangeBreakingEnabledChanged(bool);
 	void plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 
 	//background
