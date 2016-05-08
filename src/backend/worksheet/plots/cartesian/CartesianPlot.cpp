@@ -1783,9 +1783,6 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs;
 	QString str;
 
-	d->xRangeBreaks.list.clear();
-	d->yRangeBreaks.list.clear();
-
 	while (!reader->atEnd()) {
 		reader->readNext();
 		if (reader->isEndElement() && reader->name() == "cartesianPlot")
@@ -1900,6 +1897,9 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			else
 				d->verticalPadding = str.toDouble();
 		} else if(reader->name() == "xRangeBreaks") {
+			//delete default rang break
+			d->xRangeBreaks.list.clear();
+
 			attribs = reader->attributes();
 			str = attribs.value("enabled").toString();
 			if(str.isEmpty())
@@ -1936,6 +1936,9 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 
 			d->xRangeBreaks.list << b;
 		} else if(reader->name() == "yRangeBreaks") {
+			//delete default rang break
+			d->yRangeBreaks.list.clear();
+
 			attribs = reader->attributes();
 			str = attribs.value("enabled").toString();
 			if(str.isEmpty())
