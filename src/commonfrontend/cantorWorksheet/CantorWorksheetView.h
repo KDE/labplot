@@ -75,7 +75,6 @@ class CantorWorksheetView : public QWidget {
 		QAction* m_find;
 		QAction* m_replace;
 		QAction* m_syntaxHighlighting;
-		QAction* m_completion;
 		QAction* m_lineNumbers;
 		QAction* m_animateWorksheet;
 		QAction* m_latexTypesetting;

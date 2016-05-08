@@ -116,10 +116,6 @@ void CantorWorksheetView::initActions() {
 	m_replace->setData("edit_replace");
 	m_replace->setShortcut(Qt::CTRL+Qt::Key_R);
 
-	m_completion = new KToggleAction(i18n("Completion"), cantorActionGroup);
-	m_completion->setChecked(true);
-	m_completion->setData("enable_completion");
-
 	m_lineNumbers = new KToggleAction(i18n("Line Numbers"), cantorActionGroup);
 	m_lineNumbers->setChecked(false);
 	m_lineNumbers->setData("enable_expression_numbers");
@@ -162,7 +158,6 @@ void CantorWorksheetView::initMenus() {
 	m_calculateMenu->addAction(m_differentiationAction);
 
 	m_settingsMenu = new QMenu("Settings", part->widget());
-	m_settingsMenu->addAction(m_completion);
 	m_settingsMenu->addAction(m_lineNumbers);
 	m_settingsMenu->addAction(m_animateWorksheet);
 	m_settingsMenu->addAction(m_latexTypesetting);
