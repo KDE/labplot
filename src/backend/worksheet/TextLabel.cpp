@@ -367,8 +367,6 @@ void TextLabelPrivate::retransform(){
 	boundingRectangle.setHeight(h);
 
 	recalcShapeAndBoundingRect();
-
-	emit(q->changed());
 }
 
 /*!
@@ -471,6 +469,8 @@ void TextLabelPrivate::recalcShapeAndBoundingRect(){
 	labelShape = QPainterPath();
 	labelShape.addRect(boundingRectangle);
 	labelShape = matrix.map(labelShape);
+
+	emit(q->changed());
 }
 
 void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget){
