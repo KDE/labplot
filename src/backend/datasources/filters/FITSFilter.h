@@ -31,6 +31,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include <QStringList>
 #include <KLocale>
+#include <QTableWidget>
 
 class FITSFilterPrivate;
 class FITSFilter : public AbstractFileFilter{
@@ -53,10 +54,10 @@ class FITSFilter : public AbstractFileFilter{
         QString comment;
     };
 
-    void modifyKeywordValue(Keyword& keyword);
-    void addNewKeyword(const Keyword &keyword);
-
-    QList<Keyword> keywords(const QString& fileName);
+    void updateKeywordValue(Keyword& keyword);
+    void addNewKeyword(const Keyword& keyword);
+    void deleteKeyword(const Keyword& keyword);
+    void parseHeader(const QString& fileName, QTableWidget* headerEditTable);
 
   private:
     FITSFilterPrivate* const d;

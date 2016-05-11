@@ -42,11 +42,12 @@ class FITSFilterPrivate {
 
                 const FITSFilter* q;
                 QStringList extensionNames(const QString &fileName);
-                void modifyKeywordValue(FITSFilter::Keyword& keyword);
+                void updateKeywordValue(FITSFilter::Keyword& keyword);
                 void addNewKeyword(const FITSFilter::Keyword &keyword);
+                void deleteKeyword(const FITSFilter::Keyword& keyword);
 
                 QList<FITSFilter::Keyword> chduKeywords(const QString &fileName);
-
+                void parseHeader(const QString& fileName, QTableWidget* headerEditTable);
 
         private:
                 void printError(int status) const;

@@ -28,6 +28,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include "FITSFilter.h"
 #include "FITSFilterPrivate.h"
+#include <QDebug>
 
 FITSFilter::FITSFilter():AbstractFileFilter(), d(new FITSFilterPrivate(this)) {
 }
@@ -44,15 +45,6 @@ void FITSFilter::write(const QString &fileName, AbstractDataSource *dataSource) 
     d->writeCHDU(fileName, dataSource);
 }
 
-void FITSFilter::save(QXmlStreamWriter * writer) const {
-    Q_UNUSED(writer)
-}
-
-bool FITSFilter::load(XmlStreamReader * loader) {
-    Q_UNUSED(loader)
-    return false;
-}
-
 QStringList FITSFilter::extensionNames(const QString &fileName) {
     return d->extensionNames(fileName);
 }
@@ -61,12 +53,16 @@ void FITSFilter::addNewKeyword(const FITSFilter::Keyword& keyword) {
     d->addNewKeyword(keyword);
 }
 
-void FITSFilter::modifyKeywordValue(Keyword &keyword) {
-    d->modifyKeywordValue(keyword);
+void FITSFilter::updateKeywordValue(Keyword &keyword) {
+    d->updateKeywordValue(keyword);
 }
 
-QList<FITSFilter::Keyword> FITSFilter::keywords(const QString& fileName) {
-    return d->chduKeywords(fileName);
+void FITSFilter::deleteKeyword(const Keyword &keyword) {
+    d->deleteKeyword(keyword);
+}
+
+void FITSFilter::parseHeader(const QString &fileName, QTableWidget *headerEditTable){
+    d->parseHeader(fileName, headerEditTable);
 }
 
 //#####################################################################
@@ -77,16 +73,28 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
     q(owner) {
 }
 
+/*!
+    Read the current header data unit from file \c filename in data source \c dataSource in
+    \c importMode import mode
+*/
 void FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode) {
     Q_UNUSED(fileName)
     Q_UNUSED(dataSource)
     Q_UNUSED(importMode)
 }
 
+/*!
+    Export
+*/
+
 void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *dataSource) {
     Q_UNUSED(fileName)
     Q_UNUSED(dataSource)
 }
+
+/*!
+    Return a list of the available extensions names in file \c filename
+*/
 
 QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
     QStringList extensionNames;
@@ -146,25 +154,145 @@ QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
         printError(status);
     }
 
+    if (status == END_OF_FILE) {
+        status = 0;
+    }
+
+    if (fits_close_file(fitsFile, &status)) {
+        printError(status);
+    }
+
     return extensionNames;
 }
 
+/*!
+  Prints the error text corresponding to the status code \c status
+*/
 void FITSFilterPrivate::printError(int status) const {
     if (status) {
         char errorText[80];
         fits_get_errstatus(status, errorText );
+        qDebug() << QLatin1String(errorText);
     }
 }
 
+/*!
+    Add the keyword \c keyword to the current header unit
+*/
 void FITSFilterPrivate::addNewKeyword(const FITSFilter::Keyword& keyword) {
     Q_UNUSED(keyword)
 }
 
-void FITSFilterPrivate::modifyKeywordValue(FITSFilter::Keyword& keyword) {
+/*!
+    Update the value of keyword \c keyword in the current header unit
+*/
+void FITSFilterPrivate::updateKeywordValue(FITSFilter::Keyword& keyword) {
     Q_UNUSED(keyword)
 }
 
-QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileName) {
-    Q_UNUSED(fileName)
-    return QList<FITSFilter::Keyword> ();
+/*!
+    Delete the keyword \c keyword from the current header unit
+*/
+void FITSFilterPrivate::deleteKeyword(const FITSFilter::Keyword &keyword) {
+    Q_UNUSED(keyword)
 }
+
+/*!
+    Returns a list of keywords
+*/
+QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileName) {
+    int status = 0;
+
+    if (fitsFile) {
+        fits_close_file(fitsFile, &status);
+    }
+
+    if (status != 0) {
+        printError(status);
+    }
+
+    status = 0;
+
+    if (fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status )) {
+        printError(status);
+        return QList<FITSFilter::Keyword> ();
+    }
+    char* headerKeywords;
+    int numberOfKeys;
+    if (fits_hdr2str(fitsFile, 0, NULL, 0, &headerKeywords, &numberOfKeys, &status)) {
+        printError(status);
+        free(headerKeywords);
+        return QList<FITSFilter::Keyword> ();
+    }
+
+    QString keywordString = QString(headerKeywords);
+    free(headerKeywords);
+
+    QList<FITSFilter::Keyword> keywords;
+    keywords.reserve(numberOfKeys);
+    FITSFilter::Keyword keyword;
+    for (int i = 0; i < numberOfKeys; ++i) {
+        QString card = keywordString.mid(i* 80, 80);
+        QStringList recordValues = card.split(QRegExp("[=/]"));
+
+        if (recordValues.size() == 3) {
+            keyword.key = recordValues[0].simplified();
+            keyword.value = recordValues[1].simplified();
+            keyword.comment = recordValues[2].simplified();
+        } else if (recordValues.size() == 2) {
+            keyword.key = recordValues[0].simplified();
+            keyword.value = recordValues[1].simplified();
+        } else {
+            keyword.key = recordValues[0].simplified();
+        }
+        keywords.append(keyword);
+    }
+
+    return keywords;
+}
+
+void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *headerEditTable) {
+    QList<FITSFilter::Keyword> keywords = chduKeywords(fileName);
+
+    headerEditTable->setRowCount(keywords.size());
+    headerEditTable->setColumnCount(3);
+
+    for (int i = 0; i < keywords.size(); ++i) {
+        QTableWidgetItem* item = new QTableWidgetItem(keywords.at(i).key);
+        item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        headerEditTable->setItem(i, 0, item );
+
+        item = new QTableWidgetItem(keywords.at(i).value);
+        item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        headerEditTable->setItem(i, 1, item );
+
+        item = new QTableWidgetItem(keywords.at(i).comment);
+        item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        headerEditTable->setItem(i, 2, item );
+    }
+
+    headerEditTable->resizeColumnsToContents();
+}
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+
+/*!
+  Saves as XML.
+*/
+
+void FITSFilter::save(QXmlStreamWriter * writer) const {
+    Q_UNUSED(writer)
+}
+
+/*!
+  Loads from XML.
+*/
+
+bool FITSFilter::load(XmlStreamReader * loader) {
+    Q_UNUSED(loader)
+    return false;
+}
+
+
