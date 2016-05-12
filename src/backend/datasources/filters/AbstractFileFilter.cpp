@@ -1,7 +1,7 @@
 /***************************************************************************
 File                 : AbstractFileFilter.h
-Project              : LabPlot/SciDAVis
-Description          : file I/O-filter related interface for plugins
+Project              : LabPlot
+Description          : file I/O-filter related interface
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/

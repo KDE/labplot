@@ -589,13 +589,13 @@ STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeBreakingEnabled, bool, xRangeBre
 void CartesianPlot::setXRangeBreakingEnabled(bool enabled) {
 	Q_D(CartesianPlot);
 	if (enabled != d->xRangeBreakingEnabled)
-		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, i18n("%1: x-scale breakings enabled")));
+		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, i18n("%1: x-range breaking enabled")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeBreaks, CartesianPlot::RangeBreaks, xRangeBreaks, retransformScales);
 void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
 	Q_D(CartesianPlot);
-	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, i18n("%1: set x-scale breaks")));
+	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, i18n("%1: x-range breaks changed")));
 }
 
 class CartesianPlotSetAutoScaleYCmd : public QUndoCommand {
@@ -662,10 +662,17 @@ void CartesianPlot::setYScale(Scale scale) {
 		exec(new CartesianPlotSetYScaleCmd(d, scale, i18n("%1: set y scale")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeBreakingEnabled, bool, yRangeBreakingEnabled, retransformScales)
+void CartesianPlot::setYRangeBreakingEnabled(bool enabled) {
+	Q_D(CartesianPlot);
+	if (enabled != d->yRangeBreakingEnabled)
+		exec(new CartesianPlotSetYRangeBreakingEnabledCmd(d, enabled, i18n("%1: y-range breaking enabled")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeBreaks, CartesianPlot::RangeBreaks, yRangeBreaks, retransformScales);
 void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	Q_D(CartesianPlot);
-	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, i18n("%1: set y-scale breakings")));
+	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, i18n("%1: y-range breaks changed")));
 }
 
 //################################################################
@@ -1732,12 +1739,12 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	if (d->xRangeBreakingEnabled || !d->xRangeBreaks.list.isEmpty()) {
 		writer->writeStartElement("xRangeBreaks");
 		writer->writeAttribute( "enabled", QString::number(d->xRangeBreakingEnabled) );
-		foreach(const RangeBreak& breaking, d->xRangeBreaks.list) {
-			writer->writeStartElement("item");
-			writer->writeAttribute("start", QString::number(breaking.start));
-			writer->writeAttribute("end", QString::number(breaking.end));
-			writer->writeAttribute("position", QString::number(breaking.position));
-			writer->writeAttribute("style", QString::number(breaking.style));
+		foreach(const RangeBreak& b, d->xRangeBreaks.list) {
+			writer->writeStartElement("xRangeBreak");
+			writer->writeAttribute("start", QString::number(b.start));
+			writer->writeAttribute("end", QString::number(b.end));
+			writer->writeAttribute("position", QString::number(b.position));
+			writer->writeAttribute("style", QString::number(b.style));
 			writer->writeEndElement();
 		}
 		writer->writeEndElement();
@@ -1747,19 +1754,19 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	if (d->yRangeBreakingEnabled || !d->yRangeBreaks.list.isEmpty()) {
 		writer->writeStartElement("yRangeBreaks");
 		writer->writeAttribute( "enabled", QString::number(d->yRangeBreakingEnabled) );
-		foreach(const RangeBreak& breaking, d->yRangeBreaks.list) {
-			writer->writeStartElement("item");
-			writer->writeAttribute("start", QString::number(breaking.start));
-			writer->writeAttribute("end", QString::number(breaking.end));
-			writer->writeAttribute("position", QString::number(breaking.position));
-			writer->writeAttribute("style", QString::number(breaking.style));
+		foreach(const RangeBreak& b, d->yRangeBreaks.list) {
+			writer->writeStartElement("yRangeBreak");
+			writer->writeAttribute("start", QString::number(b.start));
+			writer->writeAttribute("end", QString::number(b.end));
+			writer->writeAttribute("position", QString::number(b.position));
+			writer->writeAttribute("style", QString::number(b.style));
 			writer->writeEndElement();
 		}
 		writer->writeEndElement();
 	}
 
 	//serialize all children (plot area, title text label, axes and curves)
-	QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
+	QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
 	foreach(WorksheetElement *elem, childElements)
 		elem->save(writer);
 
@@ -1897,19 +1904,83 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			else
 				d->verticalPadding = str.toDouble();
 		} else if(reader->name() == "xRangeBreaks") {
+			//delete default rang break
+			d->xRangeBreaks.list.clear();
+
 			attribs = reader->attributes();
 			str = attribs.value("enabled").toString();
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'enabled'"));
 			else
 				d->xRangeBreakingEnabled = str.toInt();
+		} else if(reader->name() == "xRangeBreak") {
+			attribs = reader->attributes();
+
+			RangeBreak b;
+			str = attribs.value("start").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'start'"));
+			else
+				b.start = str.toDouble();
+
+			str = attribs.value("end").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'end'"));
+			else
+				b.end = str.toDouble();
+
+			str = attribs.value("position").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'position'"));
+			else
+				b.position = str.toDouble();
+
+			str = attribs.value("style").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'style'"));
+			else
+				b.style = CartesianPlot::RangeBreakStyle(str.toInt());
+
+			d->xRangeBreaks.list << b;
 		} else if(reader->name() == "yRangeBreaks") {
+			//delete default rang break
+			d->yRangeBreaks.list.clear();
+
 			attribs = reader->attributes();
 			str = attribs.value("enabled").toString();
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'enabled'"));
 			else
 				d->yRangeBreakingEnabled = str.toInt();
+		} else if(reader->name() == "yRangeBreak") {
+			attribs = reader->attributes();
+
+			RangeBreak b;
+			str = attribs.value("start").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'start'"));
+			else
+				b.start = str.toDouble();
+
+			str = attribs.value("end").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'end'"));
+			else
+				b.end = str.toDouble();
+
+			str = attribs.value("position").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'position'"));
+			else
+				b.position = str.toDouble();
+
+			str = attribs.value("style").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'style'"));
+			else
+				b.style = CartesianPlot::RangeBreakStyle(str.toInt());
+
+			d->yRangeBreaks.list << b;
 		} else if(reader->name() == "textLabel") {
 			m_title = new TextLabel("");
 			if (!m_title->load(reader)) {

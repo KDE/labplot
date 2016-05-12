@@ -141,10 +141,31 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	connect( ui.kleParameter3, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
 	connect(this, SIGNAL(okClicked()), this, SLOT(generate()));
 
-	//Gaussian distribution as default
-	this->distributionChanged(0);
+	//restore saved settings if available
+	KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
+	if (conf.exists()) {
+		ui.cbDistribution->setCurrentIndex(conf.readEntry("Distribution", 0));
+		this->distributionChanged(ui.cbDistribution->currentIndex()); //if index=0 no signal is emmited above, call this slot directly here
+		ui.kleParameter1->setText(conf.readEntry("Parameter1"));
+		ui.kleParameter2->setText(conf.readEntry("Parameter2"));
+		ui.kleParameter3->setText(conf.readEntry("Parameter3"));
+		restoreDialogSize(conf);
+	} else {
+		//Gaussian distribution as default
+		this->distributionChanged(0);
 
-	resize( QSize(400,0).expandedTo(minimumSize()) );
+		resize( QSize(400,0).expandedTo(minimumSize()) );
+	}
+}
+
+RandomValuesDialog::~RandomValuesDialog() {
+	//save current settings
+	KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
+	conf.writeEntry("Distribution", ui.cbDistribution->currentIndex());
+	conf.writeEntry("Parameter1", ui.kleParameter1->text());
+	conf.writeEntry("Parameter2", ui.kleParameter2->text());
+	conf.writeEntry("Parameter3", ui.kleParameter3->text());
+	saveDialogSize(conf);
 }
 
 void RandomValuesDialog::setColumns(QList<Column*> list) {
@@ -268,6 +289,20 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("1.0");
+	} else if (distr==Flat) {
+		ui.lParameter1->show();
+		ui.kleParameter1->show();
+		ui.lParameter1->show();
+		ui.kleParameter1->show();
+		ui.lParameter2->show();
+		ui.kleParameter2->show();
+		ui.lParameter3->hide();
+		ui.kleParameter3->hide();
+		ui.lFunc->setText("p(x)=");
+		ui.lParameter1->setText("a=");
+		ui.lParameter2->setText("b=");
+		ui.kleParameter1->setText("0.0");
+		ui.kleParameter2->setText("1.0");
 	} else if (distr==Gamma || distr==Flat || distr==Beta || distr==Pareto || distr==Weibull || distr==Gumbel1 || distr==Gumbel2) {
 		ui.lParameter1->show();
 		ui.kleParameter1->show();
@@ -431,266 +466,300 @@ void RandomValuesDialog::generate() {
 
 	int index = ui.cbDistribution->currentIndex();
 	distribution distr = (distribution)ui.cbDistribution->itemData(index).toInt();
+
+	const int rows = m_spreadsheet->rowCount();
+	QVector<double> new_data(rows);
+
 	if (distr == Gaussian) {
 		double mu = ui.kleParameter1->text().toDouble();
 		double sigma = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_gaussian(r, sigma) + mu;
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Exponential) {
 		double mu = ui.kleParameter1->text().toDouble();
 		mu = 1/mu; //GSL uses the inverse for exp. distrib.
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_exponential(r, mu);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Laplace) {
 		double mu = ui.kleParameter1->text().toDouble();
 		double a = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_laplace(r, a) + mu;
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == ExponentialPower) {
 		double mu = ui.kleParameter1->text().toDouble();
 		double a = ui.kleParameter2->text().toDouble();
 		double b = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_exppow(r, a, b) + mu;
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Cauchy) {
 		double a = ui.kleParameter1->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_cauchy(r, a);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Rayleigh) {
 		double sigma = ui.kleParameter1->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_rayleigh(r, sigma);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == RayleighTail) {
 		double sigma = ui.kleParameter1->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_rayleigh(r, sigma);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Landau) {
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_landau(r);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == LevyAlphaStable) {
 		double c = ui.kleParameter1->text().toDouble();
 		double alpha = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_levy(r, c, alpha);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == LevySkewAlphaStable) {
 		double c = ui.kleParameter1->text().toDouble();
 		double alpha = ui.kleParameter2->text().toDouble();
 		double beta = ui.kleParameter3->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_levy_skew(r, c, alpha, beta);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Gamma) {
 		double a = ui.kleParameter1->text().toDouble();
 		double b = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_gamma(r, a, b);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Flat) {
 		double a = ui.kleParameter1->text().toDouble();
 		double b = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_flat(r, a, b);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Lognormal) {
 		double zeta = ui.kleParameter1->text().toDouble();
 		double sigma = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_lognormal(r, zeta, sigma);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == ChiSquared) {
 		double nu = ui.kleParameter1->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_chisq(r, nu);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == F) {
 		double nu1 = ui.kleParameter1->text().toDouble();
 		double nu2 = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_fdist(r, nu1, nu2);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == t) {
 		double nu = ui.kleParameter1->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_tdist(r, nu);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Beta) {
 		double a = ui.kleParameter1->text().toDouble();
 		double b = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_beta(r, a, b);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Logistic) {
 		double a = ui.kleParameter1->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_logistic(r, a);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Pareto) {
 		double a = ui.kleParameter1->text().toDouble();
 		double b = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_pareto(r, a, b);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Weibull) {
 		double a = ui.kleParameter1->text().toDouble();
 		double b = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_weibull(r, a, b);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Gumbel1) {
 		double a = ui.kleParameter1->text().toDouble();
 		double b = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_gumbel1(r, a, b);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Gumbel2) {
 		double a = ui.kleParameter1->text().toDouble();
 		double b = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_gumbel2(r, a, b);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Poisson) {
 		double mu = ui.kleParameter1->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_poisson(r, mu);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Bernoulli) {
 		double p = ui.kleParameter1->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_bernoulli(r, p);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Binomial) {
 		double p = ui.kleParameter1->text().toDouble();
 		double n = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_binomial(r, p, n);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == NegativeBinomial) {
 		double p = ui.kleParameter1->text().toDouble();
 		double n = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_negative_binomial(r, p, n);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Pascal) {
 		double p = ui.kleParameter1->text().toDouble();
 		double n = ui.kleParameter2->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_pascal(r, p, n);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Geometric) {
 		double p = ui.kleParameter1->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_geometric(r, p);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Hypergeometric) {
 		double n1 = ui.kleParameter1->text().toDouble();
 		double n2 = ui.kleParameter2->text().toDouble();
 		double t = ui.kleParameter3->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_hypergeometric(r, n1, n2, t);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	} else if (distr == Logarithmic) {
 		double p = ui.kleParameter1->text().toDouble();
 		foreach(Column* col, m_columns) {
-			for (int i=0; i<col->rowCount(); ++i) {
+			for (int i=0; i<rows; ++i) {
 				double value = gsl_ran_logarithmic(r, p);
-				col->setValueAt(i, value);
+				new_data[i] = value;
 			}
+			col->replaceValues(0, new_data);
 		}
 	}
 

@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : Dialog showing statistics for column values
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 by Fabian Kristof (f-kristof@hotmail.com)
-    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+    Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 

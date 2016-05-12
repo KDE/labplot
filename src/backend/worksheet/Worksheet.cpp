@@ -617,7 +617,6 @@ WorksheetPrivate::~WorksheetPrivate(){
 }
 
 void WorksheetPrivate::updateLayout(){
-	emit q->layoutChanged(layout);
 	QList<WorksheetElementContainer*> list = q->children<WorksheetElementContainer>();
 	if (layout==Worksheet::NoLayout){
 		foreach(WorksheetElementContainer* elem, list) {
