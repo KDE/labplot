@@ -42,6 +42,14 @@ class FITSFilter : public AbstractFileFilter{
     FITSFilter();
     ~FITSFilter();
 
+    enum KeywordUpdateMode {
+        UpdateComment = 0,
+        UpdateValueComment,
+        UpdateWithBlankValue,
+        UpdateWithoutComment,
+        UpdateKeyname
+    };
+
     void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
     void write(const QString & fileName, AbstractDataSource* dataSource);
     QString readChdu(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
@@ -54,7 +62,8 @@ class FITSFilter : public AbstractFileFilter{
         QString comment;
     };
 
-    void updateKeywordValue(Keyword& keyword, const QString& newValue, const QString& newComment);
+    void updateKeyword(Keyword& keyword,const QString& newKey, const QString& newValue,
+                       const QString& newComment, KeywordUpdateMode mode = UpdateValueComment);
     void addNewKeyword(const Keyword& keyword);
     void deleteKeyword(const Keyword& keyword);
     void renameKeywordKey(const Keyword& keyword, const QString& newKey);

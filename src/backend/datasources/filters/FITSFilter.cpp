@@ -66,8 +66,8 @@ void FITSFilter::addNewKeyword(const FITSFilter::Keyword& keyword) {
     d->addNewKeyword(keyword);
 }
 
-void FITSFilter::updateKeywordValue(Keyword &keyword, const QString &newValue, const QString &newComment) {
-    d->updateKeywordValue(keyword, newValue, newComment);
+void FITSFilter::updateKeyword(Keyword &keyword, const QString &newKey, const QString &newValue, const QString &newComment, KeywordUpdateMode mode) {
+    d->updateKeyword(keyword, newKey, newValue, newComment, mode);
 }
 
 void FITSFilter::deleteKeyword(const Keyword &keyword) {
@@ -136,6 +136,9 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
     int naxis;
     int maxdim = 2;
     long naxes[2];
+    int actualRows;
+    int actualCols;
+    int columnOffset;
 
     long pixelCount;
     double* data;
@@ -163,37 +166,11 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
             return QString();
         }
 
-        int columnOffset;
         QVector<QVector<double>*> dataPointers;
-        int actualRows = naxes[1];
-        int actualCols = naxes[0];
+        actualRows = naxes[1];
+        actualCols = naxes[0];
         if (dataSource!=NULL) {
             columnOffset = dataSource->create(dataPointers, importMode, actualRows, actualCols);
-        }
-
-        // make everything undo/redo-able again
-        // set column comments in spreadsheet
-        Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-        if (spreadsheet) {
-            QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
-            for ( int n=0; n<actualCols; n++ ){
-                Column* column = spreadsheet->column(columnOffset+n);
-                column->setComment(comment);
-                column->setUndoAware(true);
-                if (importMode==AbstractFileFilter::Replace) {
-                    column->setSuppressDataChangedSignal(false);
-                    column->setChanged();
-                }
-            }
-            spreadsheet->setUndoAware(true);
-            return QString();
-        }
-
-        Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-        if (matrix) {
-            matrix->setSuppressDataChangedSignal(false);
-            matrix->setChanged();
-            matrix->setUndoAware(true);
         }
 
         break;
@@ -204,6 +181,31 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
     case BINARY_TBL:
 
         break;
+    }
+
+    // make everything undo/redo-able again
+    // set column comments in spreadsheet
+    Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+    if (spreadsheet) {
+        QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
+        for ( int n=0; n<actualCols; n++ ){
+            Column* column = spreadsheet->column(columnOffset+n);
+            column->setComment(comment);
+            column->setUndoAware(true);
+            if (importMode==AbstractFileFilter::Replace) {
+                column->setSuppressDataChangedSignal(false);
+                column->setChanged();
+            }
+        }
+        spreadsheet->setUndoAware(true);
+        return QString();
+    }
+
+    Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+    if (matrix) {
+        matrix->setSuppressDataChangedSignal(false);
+        matrix->setChanged();
+        matrix->setUndoAware(true);
     }
 
     #else
@@ -229,8 +231,8 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
  * \brief Return a list of the available extensions names in file \a filename
  * \param fileName
  */
-
 QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
+#ifdef HAVE_FITS
     QStringList extensionNames;
     int status = 0;
     if (!fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status )) {
@@ -297,6 +299,10 @@ QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
     }
 
     return extensionNames;
+#else
+    Q_UNUSED(fileName)
+    return QStringList();
+#endif
 }
 
 /*!
@@ -305,7 +311,7 @@ QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
  */
 void FITSFilterPrivate::printError(int status) const {
     if (status) {
-        char errorText[80];
+        char errorText[FLEN_ERRMSG];
         fits_get_errstatus(status, errorText );
         qDebug() << QLatin1String(errorText);
     }
@@ -317,25 +323,139 @@ void FITSFilterPrivate::printError(int status) const {
  */
 
 void FITSFilterPrivate::addNewKeyword(const FITSFilter::Keyword& keyword) {
-    if (!keyword.key.compare("COMMENT")) {
-
-    } else if (!keyword.key.compare("HISTORY")) {
-
-    } else if (!keyword.key.compare("DATE")) {
-
+    int status = 0;
+    if (!keyword.key.compare(QLatin1String("COMMENT"))) {
+        if (fits_write_comment(fitsFile, keyword.key.toLatin1(), &status)) {
+            printError(status);
+        }
+    } else if (!keyword.key.compare(QLatin1String("HISTORY"))) {
+        if (fits_write_history(fitsFile, keyword.key.toLatin1(), &status)) {
+            printError(status);
+        }
+    } else if (!keyword.key.compare(QLatin1String("DATE"))) {
+        if (fits_write_date(fitsFile, &status)) {
+            printError(status);
+        }
+    } else {
+        int ok = 0;
+        if (keyword.key.length() <= FLEN_KEYWORD) {
+            ok++;
+            if (keyword.value.length() <= FLEN_VALUE) {
+                ok++;
+                if(keyword.comment.length() <= FLEN_COMMENT) {
+                 ok++;
+                }
+            }
+        }
+        if (ok == 3) {
+            //add key
+        } else if ( ok == 2) {
+            //comment too long
+        } else if ( ok == 1) {
+            //value too long
+        } else {
+            //keyword too long
+        }
     }
-    Q_UNUSED(keyword)
 }
 
 /*!
  * \brief Update the value and/or comment of keyword \a keyword in the current header unit
  * \param keyword
  */
-void FITSFilterPrivate::updateKeywordValue(FITSFilter::Keyword& keyword, const QString& newValue,
-                                           const QString& newComment) {
-    keyword.value = newValue;
-    keyword.comment = newComment;
-    // FITS update..
+void FITSFilterPrivate::updateKeyword(FITSFilter::Keyword& keyword,const QString& newKey, const QString& newValue,
+                                      const QString& newComment, FITSFilter::KeywordUpdateMode updateMode) {
+#ifdef HAVE_FITS
+    int status = 0;
+    bool updated = false;
+
+    switch (updateMode) {
+    case FITSFilter::UpdateValueComment:{
+        bool ok;
+        int intValue;
+        int doubleValue;
+
+        doubleValue = keyword.value.toDouble(&ok);
+        if (ok) {
+            if (fits_update_key(fitsFile,TDOUBLE, keyword.key.toLatin1(), &doubleValue,
+                                keyword.comment.toLatin1(), &status)) {
+                updated = true;
+            } else {
+                printError(status);
+            }
+        }
+        if (!updated) {
+            intValue = keyword.value.toInt(&ok);
+            if (ok) {
+                if (fits_update_key(fitsFile,TINT, keyword.key.toLatin1(), &intValue,
+                                    keyword.comment.toLatin1(), &status)) {
+                    updated = true;
+                } else {
+                    printError(status);
+                }
+            }
+        }
+        if (!updated) {
+            intValue = keyword.value.toInt(&ok);
+            if (ok) {
+                if (fits_update_key(fitsFile,TSTRING, keyword.key.toLatin1(), keyword.value.toLatin1().data(),
+                                    keyword.comment.toLatin1(), &status)) {
+                    updated = true;
+                } else {
+                    printError(status);
+                }
+            }
+        }
+        if (updated) {
+            keyword.value = newValue;
+            keyword.comment = newComment;
+        }
+        break;
+    }
+    case FITSFilter::UpdateKeyname: {
+        if (fits_modify_name(fitsFile, keyword.key.toLatin1(), newKey.toLatin1(), &status )) {
+            printError(status);
+        } else {
+            updated = true;
+            keyword.key = newKey;
+        }
+        break;
+    }
+    case FITSFilter::UpdateComment: {
+        if (fits_modify_comment(fitsFile, keyword.key.toLatin1(), newComment.toLatin1(), &status)) {
+            printError(status);
+        } else {
+            updated = true;
+            keyword.comment = newComment;
+        }
+        break;
+    }
+    case FITSFilter::UpdateWithBlankValue: {
+        if (fits_update_key_null(fitsFile, keyword.key.toLatin1(), NULL, &status)) {
+            printError(status);
+        } else {
+            updated = true;
+            keyword.value = "";
+        }
+        break;
+    }
+
+    case FITSFilter::UpdateWithoutComment: {
+        break;
+    }
+    }
+
+    if (updated) {
+        qDebug() << "Keyword updated successfully!";
+    } else {
+        qDebug() << "Failed to update keyword!";
+    }
+#else
+    Q_UNUSED(newKey)
+    Q_UNUSED(newComment)
+    Q_UNUSED(newValue)
+    Q_UNUSED(updateMode)
+#endif
 }
 
 /*!
@@ -343,12 +463,16 @@ void FITSFilterPrivate::updateKeywordValue(FITSFilter::Keyword& keyword, const Q
  * \param keyword
  */
 void FITSFilterPrivate::deleteKeyword(const FITSFilter::Keyword &keyword) {
+#ifdef HAVE_FITS
     if (!keyword.key.isEmpty()) {
         int status = 0;
         if (fits_delete_key(fitsFile, keyword.key.toLatin1(), &status)) {
             printError(status);
         }
     }
+#else
+    Q_UNUSED(keyword)
+#endif
 }
 
 /*!
@@ -367,6 +491,7 @@ void FITSFilterPrivate::renameKeywordKey(const FITSFilter::Keyword &keyword, con
  * \return
  */
 QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileName) {
+#ifdef HAVE_FITS
     int status = 0;
 
     if (fitsFile) {
@@ -415,6 +540,10 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
     }
 
     return keywords;
+#else
+    Q_UNUSED(fileName)
+    return QList<FITSFilter::Keyword>();
+#endif
 }
 
 void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *headerEditTable) {

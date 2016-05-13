@@ -42,7 +42,8 @@ class FITSFilterPrivate {
 
                 const FITSFilter* q;
                 QStringList extensionNames(const QString &fileName);
-                void updateKeywordValue(FITSFilter::Keyword& keyword, const QString &newValue, const QString &newComment);
+                void updateKeyword(FITSFilter::Keyword& keyword, const QString &newKey, const QString &newValue, const QString &newComment,
+                                   FITSFilter::KeywordUpdateMode updateMode = FITSFilter::UpdateValueComment);
                 void addNewKeyword(const FITSFilter::Keyword &keyword);
                 void deleteKeyword(const FITSFilter::Keyword& keyword);
                 void renameKeywordKey(const FITSFilter::Keyword& keyword, const QString& newKey);
