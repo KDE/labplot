@@ -127,7 +127,7 @@ int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList 
 }
 
 
-//TODO: use polymorphism instead  - provide Spreadsheet::create() and Matrix::create() instead if this function.
+//TODO: use polymorphism instead  - provide Spreadsheet::create() and Matrix::create() instead of this function.
 int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode, int actualRows, int actualCols) {
 	int columnOffset = 0;
 	setUndoAware(false);
