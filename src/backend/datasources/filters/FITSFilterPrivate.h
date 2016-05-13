@@ -27,34 +27,34 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
-//#ifdef HAVE_FITS
+#ifdef HAVE_FITS
 #include "fitsio.h"
-//#endif
+#endif
 class AbstractDataSource;
 
 class FITSFilterPrivate {
 
         public:
                 explicit FITSFilterPrivate(FITSFilter*);
-                void readCHDU(const QString & fileName, AbstractDataSource* dataSource,
+                QString readCHDU(const QString & fileName, AbstractDataSource* dataSource,
                                         AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
                 void writeCHDU(const QString & fileName, AbstractDataSource* dataSource);
 
                 const FITSFilter* q;
                 QStringList extensionNames(const QString &fileName);
-                void updateKeywordValue(FITSFilter::Keyword& keyword);
+                void updateKeywordValue(FITSFilter::Keyword& keyword, const QString &newValue, const QString &newComment);
                 void addNewKeyword(const FITSFilter::Keyword &keyword);
                 void deleteKeyword(const FITSFilter::Keyword& keyword);
+                void renameKeywordKey(const FITSFilter::Keyword& keyword, const QString& newKey);
 
                 QList<FITSFilter::Keyword> chduKeywords(const QString &fileName);
                 void parseHeader(const QString& fileName, QTableWidget* headerEditTable);
 
         private:
                 void printError(int status) const;
-
-//#ifdef HAVE_FITS
+#ifdef HAVE_FITS
                 fitsfile* fitsFile;
-//#endif
+#endif
 
 };
 

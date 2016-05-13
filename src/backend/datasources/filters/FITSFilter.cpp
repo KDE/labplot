@@ -28,8 +28,17 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include "FITSFilter.h"
 #include "FITSFilterPrivate.h"
+#include "backend/datasources/FileDataSource.h"
+#include "backend/core/column/Column.h"
+
 #include <QDebug>
 
+/*!
+ * \class FITSFilter
+ * \brief Manages the import/export of data from/to a FITS file.
+ * \since 2.2.0
+ * \ingroup datasources
+ */
 FITSFilter::FITSFilter():AbstractFileFilter(), d(new FITSFilterPrivate(this)) {
 }
 
@@ -39,6 +48,10 @@ FITSFilter::~FITSFilter() {
 
 void FITSFilter::read(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode) {
     d->readCHDU(fileName, dataSource, importMode);
+}
+
+QString FITSFilter::readChdu(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode) {
+    return d->readCHDU(fileName, dataSource, importMode);
 }
 
 void FITSFilter::write(const QString &fileName, AbstractDataSource *dataSource) {
@@ -53,16 +66,33 @@ void FITSFilter::addNewKeyword(const FITSFilter::Keyword& keyword) {
     d->addNewKeyword(keyword);
 }
 
-void FITSFilter::updateKeywordValue(Keyword &keyword) {
-    d->updateKeywordValue(keyword);
+void FITSFilter::updateKeywordValue(Keyword &keyword, const QString &newValue, const QString &newComment) {
+    d->updateKeywordValue(keyword, newValue, newComment);
 }
 
 void FITSFilter::deleteKeyword(const Keyword &keyword) {
     d->deleteKeyword(keyword);
 }
 
+void FITSFilter::renameKeywordKey(const Keyword &keyword, const QString &newKey) {
+    d->renameKeywordKey(keyword, newKey);
+}
+
 void FITSFilter::parseHeader(const QString &fileName, QTableWidget *headerEditTable){
     d->parseHeader(fileName, headerEditTable);
+}
+
+QStringList FITSFilter::standardKeywords() {
+    return QStringList() << "(blank)" << "CROTAn"   << "EQUINOX"  << "NAXISn"   << "TBCOLn" << "TUNITn"
+                         << "AUTHOR"  << "CRPIXn"   << "EXTEND"   << "OBJECT"   << "TDIMn"  << "TZEROn"
+                         << "BITPIX"  << "CRVALn"   << "EXTLEVEL" << "OBSERVER" << "TDISPn" << "XTENSION"
+                         << "BLANK"   << "CTYPEn"   << "EXTNAME"  << "ORIGIN"   << "TELESCOP"
+                         << "BLOCKED" << "DATAMAX"  << "EXTVER"   << "PCOUNT"   << "TFIELDS"
+                         << "BSCALE"  << "DATAMIN"  << "GCOUNT"   << "PSCALn"   << "TFORMn"
+                         << "BUNIT"   << "DATE"     << "GROUPS"   << "PTYPEn"   << "THEAP"
+                         << "BZERO"   << "DATE-OBS" << "HISTORY"  << "PZEROn"   << "TNULLn"
+                         << "CDELTn"  << "END"      << "INSTRUME" << "REFERENC" << "TSCALn"
+                         << "COMMENT" << "EPOCH"    << "NAXIS"    << "SIMPLE"   << "TTYPEn";
 }
 
 //#####################################################################
@@ -74,18 +104,121 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
 }
 
 /*!
-    Read the current header data unit from file \c filename in data source \c dataSource in
-    \c importMode import mode
-*/
-void FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode) {
+ * \brief Read the current header data unit from file \a filename in data source \a dataSource in
+    \a importMode import mode
+ * \param fileName
+ * \param dataSource
+ * \param importMode
+ */
+QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode) {
+
+    #ifdef HAVE_FITS
+    int status = 0;
+    if (fitsFile) {
+        fits_close_file(fitsFile, &status);
+        if (status)
+            status = 0;
+    }
+
+    if(fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status)) {
+        printError(status);
+        return QString();
+    }
+
+    int chduType;
+
+    if (fits_get_hdu_type(fitsFile, &chduType, &status)) {
+        printError(status);
+        return QString();
+    }
+
+    int bitpix;
+    int naxis;
+    int maxdim = 2;
+    long naxes[2];
+
+    long pixelCount;
+    double* data;
+
+    status = 0;
+    switch (chduType) {
+    case IMAGE_HDU: {
+        if (fits_get_img_param(fitsFile, maxdim,&bitpix, &naxis, naxes, &status)) {
+            printError(status);
+            return QString();
+        }
+
+        pixelCount = naxes[0] * naxes[1];
+        data = new double[pixelCount];
+
+        if (!data) {
+            qDebug() << "Not enough memory for data";
+            return QString();
+        }
+        int anynull;
+        int nullval = 0;
+
+        if (fits_read_img(fitsFile, TDOUBLE, 1, pixelCount, &nullval, data, &anynull, &status)) {
+            printError(status);
+            return QString();
+        }
+
+        int columnOffset;
+        QVector<QVector<double>*> dataPointers;
+        int actualRows = naxes[1];
+        int actualCols = naxes[0];
+        if (dataSource!=NULL) {
+            columnOffset = dataSource->create(dataPointers, importMode, actualRows, actualCols);
+        }
+
+        // make everything undo/redo-able again
+        // set column comments in spreadsheet
+        Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+        if (spreadsheet) {
+            QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
+            for ( int n=0; n<actualCols; n++ ){
+                Column* column = spreadsheet->column(columnOffset+n);
+                column->setComment(comment);
+                column->setUndoAware(true);
+                if (importMode==AbstractFileFilter::Replace) {
+                    column->setSuppressDataChangedSignal(false);
+                    column->setChanged();
+                }
+            }
+            spreadsheet->setUndoAware(true);
+            return QString();
+        }
+
+        Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+        if (matrix) {
+            matrix->setSuppressDataChangedSignal(false);
+            matrix->setChanged();
+            matrix->setUndoAware(true);
+        }
+
+        break;
+    }
+    case ASCII_TBL:
+
+        break;
+    case BINARY_TBL:
+
+        break;
+    }
+
+    #else
     Q_UNUSED(fileName)
     Q_UNUSED(dataSource)
     Q_UNUSED(importMode)
+    #endif
+    return QString();
 }
 
 /*!
-    Export
-*/
+ * \brief Export from data source \a dataSource to file \a fileName
+ * \param fileName
+ * \param dataSource
+ */
 
 void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *dataSource) {
     Q_UNUSED(fileName)
@@ -93,8 +226,9 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 }
 
 /*!
-    Return a list of the available extensions names in file \c filename
-*/
+ * \brief Return a list of the available extensions names in file \a filename
+ * \param fileName
+ */
 
 QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
     QStringList extensionNames;
@@ -166,8 +300,9 @@ QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
 }
 
 /*!
-  Prints the error text corresponding to the status code \c status
-*/
+ * \brief Prints the error text corresponding to the status code \a status
+ * \param status
+ */
 void FITSFilterPrivate::printError(int status) const {
     if (status) {
         char errorText[80];
@@ -177,29 +312,60 @@ void FITSFilterPrivate::printError(int status) const {
 }
 
 /*!
-    Add the keyword \c keyword to the current header unit
-*/
+ * \brief Add the keyword \a keyword to the current header unit
+ * \param keyword
+ */
+
 void FITSFilterPrivate::addNewKeyword(const FITSFilter::Keyword& keyword) {
+    if (!keyword.key.compare("COMMENT")) {
+
+    } else if (!keyword.key.compare("HISTORY")) {
+
+    } else if (!keyword.key.compare("DATE")) {
+
+    }
     Q_UNUSED(keyword)
 }
 
 /*!
-    Update the value of keyword \c keyword in the current header unit
-*/
-void FITSFilterPrivate::updateKeywordValue(FITSFilter::Keyword& keyword) {
-    Q_UNUSED(keyword)
+ * \brief Update the value and/or comment of keyword \a keyword in the current header unit
+ * \param keyword
+ */
+void FITSFilterPrivate::updateKeywordValue(FITSFilter::Keyword& keyword, const QString& newValue,
+                                           const QString& newComment) {
+    keyword.value = newValue;
+    keyword.comment = newComment;
+    // FITS update..
 }
 
 /*!
-    Delete the keyword \c keyword from the current header unit
-*/
+ * \brief Delete the keyword \a keyword from the current header unit
+ * \param keyword
+ */
 void FITSFilterPrivate::deleteKeyword(const FITSFilter::Keyword &keyword) {
-    Q_UNUSED(keyword)
+    if (!keyword.key.isEmpty()) {
+        int status = 0;
+        if (fits_delete_key(fitsFile, keyword.key.toLatin1(), &status)) {
+            printError(status);
+        }
+    }
 }
 
 /*!
-    Returns a list of keywords
-*/
+ * \brief Rename the keyname of \a keyword, preserving the value and comment fields
+ * \param keyword
+ * \param newKey
+ */
+void FITSFilterPrivate::renameKeywordKey(const FITSFilter::Keyword &keyword, const QString &newKey) {
+    Q_UNUSED(keyword)
+    Q_UNUSED(newKey)
+}
+
+/*!
+ * \brief Returns a list of keywords
+ * \param fileName
+ * \return
+ */
 QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileName) {
     int status = 0;
 
@@ -232,7 +398,7 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
     keywords.reserve(numberOfKeys);
     FITSFilter::Keyword keyword;
     for (int i = 0; i < numberOfKeys; ++i) {
-        QString card = keywordString.mid(i* 80, 80);
+        QString card = keywordString.mid(i* FLEN_CARD -1, FLEN_CARD -1);
         QStringList recordValues = card.split(QRegExp("[=/]"));
 
         if (recordValues.size() == 3) {
@@ -256,9 +422,9 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
 
     headerEditTable->setRowCount(keywords.size());
     headerEditTable->setColumnCount(3);
-
+    QTableWidgetItem* item;
     for (int i = 0; i < keywords.size(); ++i) {
-        QTableWidgetItem* item = new QTableWidgetItem(keywords.at(i).key);
+        item = new QTableWidgetItem(keywords.at(i).key);
         item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         headerEditTable->setItem(i, 0, item );
 
@@ -294,5 +460,3 @@ bool FITSFilter::load(XmlStreamReader * loader) {
     Q_UNUSED(loader)
     return false;
 }
-
-

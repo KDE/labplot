@@ -125,6 +125,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 #ifndef HAVE_NETCDF
 	ui.cbFileType->setItemData(FileDataSource::NETCDF, 0, Qt::UserRole - 1);
 #endif
+#ifndef HAVE_FITS
+    ui.cbFileType->setItemData(FileDataSource::FITS, 0, Qt::UserRole - 1);
+#endif
 
 	ui.gbOptions->hide();
 
@@ -478,7 +481,10 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			netcdfOptionsWidget.twContent->resizeColumnToContents(0);
 			netcdfOptionsWidget.twContent->resizeColumnToContents(2);
 
-		} else {
+        } else if (info.contains("FITS image data")) {
+            debug="detected FITS file";
+            //TODO
+        } else  {
 			debug="probably BINARY file";
 			ui.cbFileType->setCurrentIndex(FileDataSource::Binary);
 		}
@@ -562,6 +568,10 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.cbFilter->hide();
 		break;
 	}
+    case FileDataSource::FITS: {
+    //TODO
+        break;
+    }
 	default:
 		qDebug()<<"unknown file type!";
 	}

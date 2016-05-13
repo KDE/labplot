@@ -44,7 +44,7 @@ class FITSFilter : public AbstractFileFilter{
 
     void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
     void write(const QString & fileName, AbstractDataSource* dataSource);
-
+    QString readChdu(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
     virtual void save(QXmlStreamWriter*) const;
     virtual bool load(XmlStreamReader*);
     QStringList extensionNames(const QString& fileName);
@@ -54,10 +54,13 @@ class FITSFilter : public AbstractFileFilter{
         QString comment;
     };
 
-    void updateKeywordValue(Keyword& keyword);
+    void updateKeywordValue(Keyword& keyword, const QString& newValue, const QString& newComment);
     void addNewKeyword(const Keyword& keyword);
     void deleteKeyword(const Keyword& keyword);
+    void renameKeywordKey(const Keyword& keyword, const QString& newKey);
     void parseHeader(const QString& fileName, QTableWidget* headerEditTable);
+
+    static QStringList standardKeywords();
 
   private:
     FITSFilterPrivate* const d;
