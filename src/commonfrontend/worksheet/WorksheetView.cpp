@@ -121,6 +121,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 
 void WorksheetView::initActions() {
 	QActionGroup* addNewActionGroup = new QActionGroup(this);
+	QActionGroup* addHistogramType = new QActionGroup(this);
 	QActionGroup* zoomActionGroup = new QActionGroup(this);
 	QActionGroup* mouseModeActionGroup = new QActionGroup(this);
 	QActionGroup* layoutActionGroup = new QActionGroup(this);
@@ -194,7 +195,10 @@ void WorksheetView::initActions() {
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered"), i18n("two axes, centered"), addNewActionGroup);
 	addCartesianPlot4Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin"), i18n("two axes, crossing at origin"), addNewActionGroup);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("text label"), addNewActionGroup);
-
+	addOrdinaryHistogram = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"),i18n("Ordinary Histogram"),addHistogramType);
+	addCummulativeHistogram=new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"),i18n("Cummulative Histogram"),addHistogramType);
+	addAvgShiftedHistogram=new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"),i18n("Avg Shifted Histogram"),addHistogramType);
+	
 	//Layout actions
 	verticalLayoutAction = new QAction(QIcon::fromTheme("labplot-editvlayout"), i18n("Vertical layout"), layoutActionGroup);
 	verticalLayoutAction->setCheckable(true);
@@ -236,6 +240,7 @@ void WorksheetView::initActions() {
 	this->layoutChanged(m_worksheet->layout());
 
 	connect(addNewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
+	connect(addHistogramType, SIGNAL(triggered(QAction*)), this, SLOT(addHistogram(QAction*)));
 	connect(mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)));
 	connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
 	connect(magnificationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(magnificationChanged(QAction*)));
@@ -327,8 +332,14 @@ void WorksheetView::initMenus() {
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot3Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot4Action);
 
+	m_addHistogramTypeMenu = new QMenu(i18n("histogram"),this);
+	m_addHistogramTypeMenu->addAction(addOrdinaryHistogram);
+	m_addHistogramTypeMenu->addAction(addCummulativeHistogram);
+	m_addHistogramTypeMenu->addAction(addAvgShiftedHistogram);
+	
 	m_addNewMenu = new QMenu(i18n("Add new"), this);
 	m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(QIcon::fromTheme("office-chart-line"));
+	m_addNewMenu->addMenu(m_addHistogramTypeMenu)->setIcon(QIcon::fromTheme("office-chart-line"));
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
 
@@ -944,7 +955,18 @@ void WorksheetView::mouseModeChanged(QAction* action) {
 		setDragMode(QGraphicsView::NoDrag);
 	}
 }
-
+//"Add Histogram related slots
+void WorksheetView::addHistogram(QAction* action){
+	WorksheetElement* aspect=0;
+	if(action == addOrdinaryHistogram){
+	}
+	else if(action == addCummulativeHistogram){
+	  
+	}
+	else if(action == addAvgShiftedHistogram){
+	}
+}
+	
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action) {
 	WorksheetElement* aspect = 0;
