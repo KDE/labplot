@@ -6,27 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>660</width>
+    <width>760</width>
     <height>833</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="10" column="0">
-    <widget class="QLabel" name="lParameter">
-     <property name="text">
-      <string>Parameter</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="lVariant">
-     <property name="text">
-      <string>Variant</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="3" colspan="2">
-    <widget class="QComboBox" name="cbVariant"/>
+   <item row="10" column="3" colspan="2">
+    <widget class="QComboBox" name="cbWeight"/>
    </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lName">
@@ -85,40 +71,17 @@
      </property>
     </widget>
    </item>
-   <item row="12" column="3" colspan="2">
-    <widget class="QComboBox" name="cbEval"/>
-   </item>
-   <item row="13" column="0">
-    <widget class="QLabel" name="lPoints">
-     <property name="text">
-      <string>Points</string>
-     </property>
-    </widget>
-   </item>
-   <item row="13" column="3" colspan="2">
-    <widget class="QSpinBox" name="sbPoints">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>1000000</number>
-     </property>
-     <property name="value">
-      <number>100</number>
-     </property>
-    </widget>
-   </item>
-   <item row="17" column="0" colspan="5">
+   <item row="14" column="0" colspan="5">
     <widget class="Line" name="line_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="16" column="3" colspan="2">
+   <item row="13" column="3" colspan="2">
     <widget class="QTextEdit" name="teResult"/>
    </item>
-   <item row="18" column="3">
+   <item row="15" column="3">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -131,14 +94,14 @@
      </property>
     </spacer>
    </item>
-   <item row="18" column="4">
+   <item row="15" column="4">
     <widget class="QPushButton" name="pbRecalculate">
      <property name="text">
       <string>Recalculate</string>
      </property>
     </widget>
    </item>
-   <item row="16" column="0">
+   <item row="13" column="0">
     <widget class="QLabel" name="lResults">
      <property name="font">
       <font>
@@ -151,13 +114,6 @@
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="0">
-    <widget class="QLabel" name="lEval">
-     <property name="text">
-      <string>Evaluate</string>
      </property>
     </widget>
    </item>
@@ -181,7 +137,7 @@
      </property>
     </widget>
    </item>
-   <item row="20" column="0">
+   <item row="17" column="0">
     <widget class="QCheckBox" name="chkVisible">
      <property name="text">
       <string>visible</string>
@@ -210,100 +166,8 @@
      </property>
     </spacer>
    </item>
-   <item row="10" column="3" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="lTension">
-       <property name="text">
-        <string>Tension</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="sbTension">
-       <property name="minimum">
-        <double>-1.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-       <property name="value">
-        <double>0.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="lContinuity">
-       <property name="text">
-        <string>Continuity</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="sbContinuity">
-       <property name="minimum">
-        <double>-1.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="lBias">
-       <property name="text">
-        <string>Bias</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="sbBias">
-       <property name="minimum">
-        <double>-1.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
    <item row="11" column="3" colspan="2">
     <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="6" column="3" colspan="2">
-    <spacer name="verticalSpacer_4">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -334,8 +198,8 @@
      </property>
     </spacer>
    </item>
-   <item row="14" column="3" colspan="2">
-    <spacer name="verticalSpacer_5">
+   <item row="6" column="3" colspan="2">
+    <spacer name="verticalSpacer_4">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -344,13 +208,13 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>214</width>
+       <width>20</width>
        <height>18</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="19" column="3" colspan="2">
+   <item row="16" column="3" colspan="2">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -365,6 +229,33 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="10" column="0">
+    <widget class="QLabel" name="lWeight">
+     <property name="text">
+      <string>Weight</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="lPoints">
+     <property name="text">
+      <string>Points</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="3" colspan="2">
+    <widget class="QSpinBox" name="sbPoints">
+     <property name="minimum">
+      <number>3</number>
+     </property>
+     <property name="maximum">
+      <number>100000</number>
+     </property>
+     <property name="singleStep">
+      <number>2</number>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

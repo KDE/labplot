@@ -36,12 +36,14 @@ class XYSmoothCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum SmoothType {Linear,Polynomial,CSpline,CSplinePeriodic,Akima,AkimaPeriodic,Steffen,Cosine,Exponential,PCH,Rational};
+		enum SmoothType {MovingAverage};
+		enum WeightType {Equal};
 
 		struct SmoothData {
-			SmoothData() : type(Linear) {};
+			SmoothData() : type(MovingAverage), weight(Equal) {};
 
 			XYSmoothCurve::SmoothType type;		// type of smooth
+			XYSmoothCurve::WeightType weight;	// type of weight
 		};
 		struct SmoothResult {
 			SmoothResult() : available(false), valid(false), elapsedTime(0) {};

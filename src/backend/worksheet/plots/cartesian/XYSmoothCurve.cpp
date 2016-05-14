@@ -221,7 +221,7 @@ void XYSmoothCurvePrivate::recalculate() {
 		}
 	}
 
-	//number of data points to interpolate
+	//number of data points to smooth
 	unsigned int n = ydataVector.size();
 	if (n < 2) {
 		smoothResult.available = true;
@@ -235,16 +235,26 @@ void XYSmoothCurvePrivate::recalculate() {
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
-	double min = xDataColumn->minimum();
-	double max = xDataColumn->maximum();
+//	double min = xDataColumn->minimum();
+//	double max = xDataColumn->maximum();
 
 	// smooth settings
 	XYSmoothCurve::SmoothType type = smoothData.type;
+	XYSmoothCurve::WeightType weight = smoothData.weight;
 #ifdef QT_DEBUG
 	qDebug()<<"type:"<<type;
+	qDebug()<<"weight:"<<weight;
 #endif
 ///////////////////////////////////////////////////////////
 	int status=0;
+
+	xVector->resize(n);
+	yVector->resize(n);
+	for(unsigned int i=0;i<n;i++) {
+		(*xVector)[i] = xdata[i];
+		//TODO
+		(*yVector)[i] = 0.0;
+	}
 
 ///////////////////////////////////////////////////////////
 

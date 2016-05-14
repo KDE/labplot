@@ -83,8 +83,9 @@ void XYSmoothCurveDock::setupGeneral() {
 	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
 	//TODO
-	uiGeneralTab.cbType->addItem(i18n("linear"));
-	uiGeneralTab.cbType->addItem(i18n("polynomial"));
+	uiGeneralTab.cbType->addItem(i18n("moving average"));
+
+	uiGeneralTab.cbWeight->addItem(i18n("equal"));
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
@@ -220,7 +221,7 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if(column != 0) {
 		unsigned int n=0;
 		for(int row=0;row < column->rowCount();row++)
-			if (!isnan(column->valueAt(row)) && !column->isMasked(row)) 
+			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row)) 
 				n++;
 
 		// TODO: check minimum number of points (see interpolation)
