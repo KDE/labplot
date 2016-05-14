@@ -1,10 +1,9 @@
 /***************************************************************************
     File                 : FileDataSource.h
-    Project              : LabPlot/SciDAVis
-    Description 		: Represents file data source
+    Project              : LabPlot
+    Description          : File data source
     --------------------------------------------------------------------
-	Copyright		        : (C) 2009-2013 Alexander Semke
-    Email (use @ for *) 	: alexander.semke*web.de
+    Copyright            : (C) 2012-2013 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 

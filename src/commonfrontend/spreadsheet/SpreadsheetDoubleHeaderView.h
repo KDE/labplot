@@ -1,9 +1,8 @@
 /***************************************************************************
     File                 : SpreadsheetDoubleHeaderView.h
-    Project              : SciDAVis
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert,
-    Email (use @ for *)  : thzs*gmx.net
+    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
     Description          : Horizontal header for SpreadsheetView displaying comments in a second header
 
  ***************************************************************************/
@@ -33,35 +32,32 @@
 #include <QHeaderView>
 #include <backend/spreadsheet/SpreadsheetModel.h>
 
-
-class SpreadsheetCommentsHeaderView : public QHeaderView{
+class SpreadsheetCommentsHeaderView : public QHeaderView {
 	Q_OBJECT
 
 	public:
-		explicit SpreadsheetCommentsHeaderView(QWidget *parent = 0);
+		explicit SpreadsheetCommentsHeaderView(QWidget* parent = 0);
 		virtual ~SpreadsheetCommentsHeaderView();
 
-	virtual void setModel(QAbstractItemModel * model);
-
-	friend class SpreadsheetDoubleHeaderView; // access to paintSection (protected)
+		virtual void setModel(QAbstractItemModel*);
+		friend class SpreadsheetDoubleHeaderView; // access to paintSection (protected)
 };
-
 
 class SpreadsheetDoubleHeaderView : public QHeaderView{
 	Q_OBJECT
 
 	public:
-		explicit SpreadsheetDoubleHeaderView(QWidget * parent = 0);
+		explicit SpreadsheetDoubleHeaderView(QWidget* parent = 0);
 		~SpreadsheetDoubleHeaderView();
 
-		virtual void setModel(QAbstractItemModel * model);
+		virtual void setModel(QAbstractItemModel*);
 		virtual QSize sizeHint () const;
 		
 		void showComments(bool on = true);
 		bool areCommentsShown() const;
 
 	private:
-		SpreadsheetCommentsHeaderView * m_slave;
+		SpreadsheetCommentsHeaderView* m_slave;
 		bool m_showComments;
 		
 	public slots:

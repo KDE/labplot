@@ -328,8 +328,8 @@ void Column::clearFormulas()
  *
  * Use this only when columnMode() is Text
  */
-void Column::setTextAt(int row, const QString& new_value)
-{
+void Column::setTextAt(int row, const QString& new_value) {
+	setStatisticsAvailable(false);
 	exec(new ColumnSetTextCmd(m_column_private, row, new_value));
 }
 
@@ -338,10 +338,11 @@ void Column::setTextAt(int row, const QString& new_value)
  *
  * Use this only when columnMode() is Text
  */
-void Column::replaceTexts(int first, const QStringList& new_values)
-{
-	if (!new_values.isEmpty())
+void Column::replaceTexts(int first, const QStringList& new_values) {
+	if (!new_values.isEmpty()) { //TODO: do we really need this check?
+		setStatisticsAvailable(false);
 		exec(new ColumnReplaceTextsCmd(m_column_private, first, new_values));
+	}
 }
 
 /**
@@ -349,9 +350,8 @@ void Column::replaceTexts(int first, const QStringList& new_values)
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void Column::setDateAt(int row, const QDate& new_value)
-{
-    setStatisticsAvailable(false);
+void Column::setDateAt(int row, const QDate& new_value) {
+	setStatisticsAvailable(false);
 	setDateTimeAt(row, QDateTime(new_value, timeAt(row)));
 }
 
@@ -1079,6 +1079,7 @@ void ColumnStringIO::setTextAt(int row, const QString &value)
 	m_owner->copy(m_owner->m_column_private->inputFilter()->output(0), 0, row, 1);
 	m_setting = false;
 	m_to_set.clear();
+	m_owner->setStatisticsAvailable(false);
 }
 
 QString ColumnStringIO::textAt(int row) const

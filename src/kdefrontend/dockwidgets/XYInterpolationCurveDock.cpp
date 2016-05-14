@@ -39,7 +39,6 @@
 #include <gsl_interp.h>	// gsl_interp types
 #include <cmath>        // isnan
 
-
 /*!
   \class XYInterpolationCurveDock
  \brief  Provides a widget for editing the properties of the XYInterpolationCurves
@@ -92,11 +91,20 @@ void XYInterpolationCurveDock::setupGeneral() {
 #if GSL_MAJOR_VERSION >= 2
 	uiGeneralTab.cbType->addItem(i18n("Steffen spline"));
 #endif
+	uiGeneralTab.cbType->addItem(i18n("cosine"));
+	uiGeneralTab.cbType->addItem(i18n("exponential"));
+	uiGeneralTab.cbType->addItem(i18n("piecewise cubic Hermite (PCH)"));
+	uiGeneralTab.cbType->addItem(i18n("rational functions"));
 
-	uiGeneralTab.cbEval->addItem(i18n("Function"));
-	uiGeneralTab.cbEval->addItem(i18n("Derivative"));
-	uiGeneralTab.cbEval->addItem(i18n("Second derivative"));
-	uiGeneralTab.cbEval->addItem(i18n("Integral"));
+	uiGeneralTab.cbVariant->addItem(i18n("finite differences"));
+	uiGeneralTab.cbVariant->addItem(i18n("Catmull-Rom"));
+	uiGeneralTab.cbVariant->addItem(i18n("cardinal"));
+	uiGeneralTab.cbVariant->addItem(i18n("Kochanek-Bartels (TCB)"));
+
+	uiGeneralTab.cbEval->addItem(i18n("function"));
+	uiGeneralTab.cbEval->addItem(i18n("derivative"));
+	uiGeneralTab.cbEval->addItem(i18n("second derivative"));
+	uiGeneralTab.cbEval->addItem(i18n("integral"));
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
@@ -110,8 +118,12 @@ void XYInterpolationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
-	connect( uiGeneralTab.cbEval, SIGNAL(currentIndexChanged(int)), this, SLOT(evaluateChanged(int)) );
-	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(int)), this, SLOT(numberOfPointsChanged(int)) );
+	connect( uiGeneralTab.cbVariant, SIGNAL(currentIndexChanged(int)), this, SLOT(variantChanged(int)) );
+	connect( uiGeneralTab.sbTension, SIGNAL(valueChanged(double)), this, SLOT(tensionChanged()) );
+	connect( uiGeneralTab.sbContinuity, SIGNAL(valueChanged(double)), this, SLOT(continuityChanged()) );
+	connect( uiGeneralTab.sbBias, SIGNAL(valueChanged(double)), this, SLOT(biasChanged()) );
+	connect( uiGeneralTab.cbEval, SIGNAL(currentIndexChanged(int)), this, SLOT(evaluateChanged()) );
+	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(int)), this, SLOT(numberOfPointsChanged()) );
 
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
@@ -146,6 +158,11 @@ void XYInterpolationCurveDock::initGeneralTab() {
 
 	uiGeneralTab.cbType->setCurrentIndex(m_interpolationData.type);
 	this->typeChanged(m_interpolationData.type);
+	uiGeneralTab.cbVariant->setCurrentIndex(m_interpolationData.variant);
+	this->variantChanged(m_interpolationData.variant);
+	uiGeneralTab.sbTension->setValue(m_interpolationData.tension);
+	uiGeneralTab.sbContinuity->setValue(m_interpolationData.continuity);
+	uiGeneralTab.sbBias->setValue(m_interpolationData.bias);
 	uiGeneralTab.cbEval->setCurrentIndex(m_interpolationData.evaluate);
 	uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints);
 	this->showInterpolationResult();
@@ -207,14 +224,14 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-void XYInterpolationCurveDock::nameChanged(){
+void XYInterpolationCurveDock::nameChanged() {
 	if (m_initializing)
 		return;
 
 	m_curve->setName(uiGeneralTab.leName->text());
 }
 
-void XYInterpolationCurveDock::commentChanged(){
+void XYInterpolationCurveDock::commentChanged() {
 	if (m_initializing)
 		return;
 
@@ -295,6 +312,7 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 #endif
+		// own types work with 2 or more points
 	}
 }
 
@@ -314,23 +332,105 @@ void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYInterpolationCurveDock::typeChanged(int index) {
-	Q_UNUSED(index);
-	//XYInterpolationCurve::InterpolationType type = (XYInterpolationCurve::InterpolationType)index;
+	XYInterpolationCurve::InterpolationType type = (XYInterpolationCurve::InterpolationType)index;
 	m_interpolationData.type = (XYInterpolationCurve::InterpolationType)uiGeneralTab.cbType->currentIndex();
+
+	switch(type) {
+	case XYInterpolationCurve::PCH:
+		uiGeneralTab.lVariant->show();
+		uiGeneralTab.cbVariant->show();
+		break;
+	default:
+		uiGeneralTab.lVariant->hide();
+		uiGeneralTab.cbVariant->hide();
+		uiGeneralTab.cbVariant->setCurrentIndex(XYInterpolationCurve::FiniteDifference);
+		uiGeneralTab.lParameter->hide();
+		uiGeneralTab.lTension->hide();
+		uiGeneralTab.sbTension->hide();
+		uiGeneralTab.lContinuity->hide();
+		uiGeneralTab.sbContinuity->hide();
+		uiGeneralTab.lBias->hide();
+		uiGeneralTab.sbBias->hide();
+	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYInterpolationCurveDock::evaluateChanged(int index) {
-	Q_UNUSED(index);
-	//XYInterpolationCurve::InterpolationEval eval = (XYInterpolationCurve::InterpolationEval)index;
+void XYInterpolationCurveDock::variantChanged(int index) {
+	XYInterpolationCurve::CubicHermiteVariant variant = (XYInterpolationCurve::CubicHermiteVariant)index;
+	m_interpolationData.variant = (XYInterpolationCurve::CubicHermiteVariant)uiGeneralTab.cbVariant->currentIndex();
+
+	switch(variant) {
+	case XYInterpolationCurve::FiniteDifference:
+		uiGeneralTab.lParameter->hide();
+                uiGeneralTab.lTension->hide();
+                uiGeneralTab.sbTension->hide();
+                uiGeneralTab.lContinuity->hide();
+                uiGeneralTab.sbContinuity->hide();
+                uiGeneralTab.lBias->hide();
+                uiGeneralTab.sbBias->hide();
+		break;
+	case XYInterpolationCurve::CatmullRom:
+		uiGeneralTab.lParameter->show();
+                uiGeneralTab.lTension->show();
+                uiGeneralTab.sbTension->show();
+                uiGeneralTab.sbTension->setEnabled(false);
+                uiGeneralTab.sbTension->setValue(0.0);
+                uiGeneralTab.lContinuity->hide();
+                uiGeneralTab.sbContinuity->hide();
+                uiGeneralTab.lBias->hide();
+                uiGeneralTab.sbBias->hide();
+		break;
+	case XYInterpolationCurve::Cardinal:
+		uiGeneralTab.lParameter->show();
+                uiGeneralTab.lTension->show();
+                uiGeneralTab.sbTension->show();
+                uiGeneralTab.sbTension->setEnabled(true);
+                uiGeneralTab.lContinuity->hide();
+                uiGeneralTab.sbContinuity->hide();
+                uiGeneralTab.lBias->hide();
+                uiGeneralTab.sbBias->hide();
+		break;
+	case XYInterpolationCurve::KochanekBartels:
+		uiGeneralTab.lParameter->show();
+                uiGeneralTab.lTension->show();
+                uiGeneralTab.sbTension->show();
+                uiGeneralTab.sbTension->setEnabled(true);
+                uiGeneralTab.lContinuity->show();
+                uiGeneralTab.sbContinuity->show();
+                uiGeneralTab.lBias->show();
+                uiGeneralTab.sbBias->show();
+		break;
+	}
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYInterpolationCurveDock::tensionChanged() {
+	m_interpolationData.tension = uiGeneralTab.sbTension->value();
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYInterpolationCurveDock::continuityChanged() {
+	m_interpolationData.continuity = uiGeneralTab.sbContinuity->value();
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYInterpolationCurveDock::biasChanged() {
+	m_interpolationData.bias = uiGeneralTab.sbBias->value();
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYInterpolationCurveDock::evaluateChanged() {
 	m_interpolationData.evaluate = (XYInterpolationCurve::InterpolationEval)uiGeneralTab.cbEval->currentIndex();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYInterpolationCurveDock::numberOfPointsChanged(int index) {
-	Q_UNUSED(index)
+void XYInterpolationCurveDock::numberOfPointsChanged() {
 	m_interpolationData.npoints = uiGeneralTab.sbPoints->value();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
@@ -338,7 +438,6 @@ void XYInterpolationCurveDock::numberOfPointsChanged(int index) {
 
 void XYInterpolationCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-	//m_interpolationData.cutoff = uiGeneralTab.sbCutoff->value();
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setInterpolationData(m_interpolationData);

@@ -114,7 +114,8 @@ private:
 	QMenu* m_cartesianPlotAddNewMenu;
 	QMenu* m_cartesianPlotZoomMenu;
 	QMenu* m_cartesianPlotActionModeMenu;
-	QMenu* m_filterMenu;
+	// Filter menu
+	//QMenu* m_filterMenu;
 
 	QToolButton* tbNewCartesianPlot;
 	QToolButton* tbZoom;

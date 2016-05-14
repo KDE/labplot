@@ -2,7 +2,7 @@
     File                 : LabelWidget.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2014 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Description          : label settings widget
 
@@ -442,12 +442,11 @@ void LabelWidget::insertDateTime(QAction* action) {
     called when label's current horizontal position relative to its parent (left, center, right, custom ) is changed.
 */
 void LabelWidget::positionXChanged(int index){
-    //Enable/disable the spinbox for the x- oordinates if the "custom position"-item is selected/deselected
-    if (index == ui.cbPositionX->count()-1 ){
-        ui.sbPositionX->setEnabled(true);
-    }else{
-        ui.sbPositionX->setEnabled(false);
-    }
+	//Enable/disable the spinbox for the x- oordinates if the "custom position"-item is selected/deselected
+	if (index == ui.cbPositionX->count()-1 )
+		ui.sbPositionX->setEnabled(true);
+	else
+		ui.sbPositionX->setEnabled(false);
 
     if (m_initializing)
         return;
@@ -462,12 +461,12 @@ void LabelWidget::positionXChanged(int index){
     called when label's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
 */
 void LabelWidget::positionYChanged(int index){
-    //Enable/disable the spinbox for the y- oordinates if the "custom position"-item is selected/deselected
-    if (index == ui.cbPositionY->count()-1 ){
-        ui.sbPositionY->setEnabled(true);
-    }else{
-        ui.sbPositionY->setEnabled(false);
-    }
+	//Enable/disable the spinbox for the y-coordinates if the "custom position"-item is selected/deselected
+	if (index == ui.cbPositionY->count()-1 ){
+		ui.sbPositionY->setEnabled(true);
+	}else{
+		ui.sbPositionY->setEnabled(false);
+	}
 
     if (m_initializing)
         return;
@@ -655,8 +654,10 @@ void LabelWidget::load() {
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( (int) m_label->position().horizontalPosition );
+	positionXChanged(ui.cbPositionX->currentIndex());
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.x(),Worksheet::Centimeter) );
 	ui.cbPositionY->setCurrentIndex( (int) m_label->position().verticalPosition );
+	positionYChanged(ui.cbPositionY->currentIndex());
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(),Worksheet::Centimeter) );
 
 	if (m_axesList.size()){
@@ -700,8 +701,7 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 	ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_label->position().verticalPosition ) );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()),Worksheet::Centimeter) );
 
-	if (m_axesList.size())
-		{
+	if (m_axesList.size()) {
 		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetX", m_axesList.first()->titleOffsetX()), Worksheet::Point) );
 		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetY", m_axesList.first()->titleOffsetY()), Worksheet::Point) );
 	}

@@ -103,6 +103,7 @@ class SpreadsheetView : public QWidget {
 // 		QAction* action_set_formula;
 // 		QAction* action_recalculate;
 		QAction* action_fill_row_numbers;
+		QAction* action_fill_sel_row_numbers;
 		QAction* action_fill_random;
 		QAction* action_fill_equidistant;
 		QAction* action_fill_random_nonuniform;
@@ -178,6 +179,7 @@ class SpreadsheetView : public QWidget {
 // 		void recalculateSelectedCells();
 
 		void fillSelectedCellsWithRowNumbers();
+		void fillWithRowNumbers();
 		void fillSelectedCellsWithRandomNumbers();
 		void fillWithRandomValues();
 		void fillWithEquidistantValues();
@@ -212,10 +214,9 @@ class SpreadsheetView : public QWidget {
 // 		void setSelectedColumnsAsYError();
 // 		void setSelectedColumnsAsNone();
 
-        void showColumnStatistics(bool forAll = false);
-        void showAllColumnsStatistics();
-
-        void showRowStatistics();
+		void showColumnStatistics(bool forAll = false);
+		void showAllColumnsStatistics();
+		void showRowStatistics();
 
 		bool formulaModeActive() const;
 

@@ -35,11 +35,13 @@
 
 #include "XYInterpolationCurve.h"
 #include "XYInterpolationCurvePrivate.h"
+#include "CartesianCoordinateSystem.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 
 #include <cmath>	// isnan
+#include <cfloat>	// DBL_MIN
 #include <gsl_errno.h>
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_spline.h>
@@ -168,6 +170,123 @@ XYInterpolationCurvePrivate::~XYInterpolationCurvePrivate() {
 // ...
 // see XYFitCurvePrivate
 
+// calculates derivative of n points of xy-data. result in y
+void XYInterpolationCurvePrivate::deriv(double *x, double *y, unsigned n) {
+	double dy, oldy=0;
+	for(unsigned int i=0;i<n;i++) {
+		if(i==0)
+			dy = (y[1]-y[0])/(x[1]-x[0]);
+		else if(i==n-1)
+			y[i] = (y[i]-y[i-1])/(x[i]-x[i-1]);
+		else
+			dy = (y[i+1]-y[i-1])/(x[i+1]-x[i-1]);
+
+		if(i!=0)
+			y[i-1]=oldy;
+		oldy=dy;
+	}
+	
+//	for(unsigned int i=0;i<n;i++)
+//		printf("%g %g\n",x[i],y[i]);	
+}
+
+// calculates second derivative of n points of xy-data. result in y
+void XYInterpolationCurvePrivate::deriv2(double *x, double *y, unsigned n) {
+	double dx1, dx2, dy=0., oldy=0., oldoldy=0.;
+	for(unsigned int i=0;i<n;i++) {
+		// see http://websrv.cs.umt.edu/isis/index.php/Finite_differencing:_Introduction
+		if(i==0) {
+			dx1=x[1]-x[0];
+			dx2=x[2]-x[1];
+			dy = 2.*(dx1*y[2]-(dx1+dx2)*y[1]+dx2*y[0])/(dx1*dx2*(dx1+dx2));
+		}
+		else if(i==n-1) {
+			dx1=x[i-1]-x[i-2];
+			dx2=x[i]-x[i-1];
+			y[i] = 2.*(dx1*y[i]-(dx1+dx2)*y[i-1]+dx2*y[i-2])/(dx1*dx2*(dx1+dx2));
+			y[i-2]=oldoldy;
+		}
+		else {
+			dx1=x[i]-x[i-1];
+			dx2=x[i+1]-x[i];
+			dy = (dx1*y[i+1]-(dx1+dx2)*y[i]+dx2*y[i-1])/(dx1*dx2*(dx1+dx2));
+		}
+
+		// set value (attention if i==n-2)
+		if(i!=0 && i!= n-2)
+			y[i-1]=oldy;
+		if(i==n-2)
+			oldoldy=oldy;
+
+		oldy=dy;
+	}
+
+//	for(unsigned int i=0;i<n;i++)
+//		printf("%g %g\n",x[i],y[i]);
+}
+
+// calculates integration of n points of xy-data. result in y
+void XYInterpolationCurvePrivate::integ(double *x, double *y, unsigned n) {
+	double vold=0.;
+	for(unsigned int i=0;i<n-1;i++) {
+		// trapezoidal rule
+		double v = (x[i+1]-x[i])*(y[i+1]+y[i])/2.;
+		if(i==0)
+			y[i]=vold;
+		else
+			y[i]=y[i-1]+vold;
+		vold=v;
+	}
+	y[n-1]=y[n-2]+vold;
+}
+
+// calculates rational interpolation of n points of xy-data at xn using Burlisch-Stoer method. result in v (error dv)
+void XYInterpolationCurvePrivate::ratint(double *x, double *y, int n, double xn, double *v, double *dv) {
+	int i,j,a=0,b=n-1;
+	while(b-a>1) {	// find interval using bisection
+		j=floor((a+b)/2.);
+		if(x[j]>xn)
+			b=j;
+		else
+			a=j;
+	}
+
+	int ns=a;// nearest index
+	if(fabs(xn-x[a])>fabs(xn-x[b]))
+		ns=b;
+
+	if(xn==x[ns]) {	// exact point
+		*v=y[ns];
+		*dv=0;
+		return;
+	}
+
+	double *c = (double*)malloc(n*sizeof(double));
+	double *d = (double*)malloc(n*sizeof(double));
+	for(i=0;i<n;i++)
+		c[i]=d[i]=y[i];
+
+	*v=y[ns--];
+
+	double t,dd;
+	for(int m=1;m<n;m++) {
+		for(i=0;i<n-m;i++) {
+			t=(x[i]-xn)*d[i]/(x[i+m]-xn);
+			dd=t-c[i+1];
+			if(dd==0.0) // pole
+				dd+=DBL_MIN;
+			dd=(c[i+1]-d[i])/dd;
+			d[i]=c[i+1]*dd;
+			c[i]=t*dd;
+		}
+
+		*dv = (2*(ns+1) < (n-m) ? c[ns+1] : d[ns--]);
+		*v += *dv;
+	}
+
+	free(c);free(d);
+}
+
 void XYInterpolationCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
@@ -225,7 +344,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 		}
 	}
 
-	//number of data points to fit
+	//number of data points to interpolate
 	unsigned int n = ydataVector.size();
 	if (n < 2) {
 		interpolationResult.available = true;
@@ -239,78 +358,225 @@ void XYInterpolationCurvePrivate::recalculate() {
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
-        double min = xDataColumn->minimum();
-        double max = xDataColumn->maximum();
+	double min = xDataColumn->minimum();
+	double max = xDataColumn->maximum();
 
 	// interpolation settings
 	XYInterpolationCurve::InterpolationType type = interpolationData.type;
+	XYInterpolationCurve::CubicHermiteVariant variant = interpolationData.variant;
+	double tension = interpolationData.tension;
+	double continuity = interpolationData.continuity;
+	double bias = interpolationData.bias;
 	XYInterpolationCurve::InterpolationEval evaluate = interpolationData.evaluate;
 	unsigned int npoints = interpolationData.npoints;
 #ifdef QT_DEBUG
 	qDebug()<<"type:"<<type;
+	qDebug()<<"cubic Hermite variant:"<<variant<<tension<<continuity<<bias;
 	qDebug()<<"evaluate:"<<evaluate;
 	qDebug()<<"npoints ="<<npoints;
 #endif
 ///////////////////////////////////////////////////////////
-	int status;
+	int status=0;
 
 	gsl_interp_accel *acc = gsl_interp_accel_alloc();
 	gsl_spline *spline=0;
 	switch(type) {
 	case XYInterpolationCurve::Linear:
 		spline = gsl_spline_alloc(gsl_interp_linear, n);
+		status = gsl_spline_init (spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::Polynomial:
 		spline = gsl_spline_alloc(gsl_interp_polynomial, n);
+		status = gsl_spline_init (spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::CSpline:
 		spline = gsl_spline_alloc(gsl_interp_cspline, n);
+		status = gsl_spline_init (spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::CSplinePeriodic:
 		spline = gsl_spline_alloc(gsl_interp_cspline_periodic, n);
+		status = gsl_spline_init (spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::Akima:
 		spline = gsl_spline_alloc(gsl_interp_akima, n);
+		status = gsl_spline_init (spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::AkimaPeriodic:
 		spline = gsl_spline_alloc(gsl_interp_akima_periodic, n);
+		status = gsl_spline_init (spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::Steffen:
 #if GSL_MAJOR_VERSION >= 2
 		spline = gsl_spline_alloc(gsl_interp_steffen, n);
+		status = gsl_spline_init (spline, xdata, ydata, n);
 #endif
 		break;
+	default:
+		break;
 	}
-
-	status = gsl_spline_init (spline, xdata, ydata, n);
 
 	xVector->resize(npoints);
 	yVector->resize(npoints);
 	for (unsigned int i = 0; i<npoints; i++) {
+		unsigned int a=0,b=n-1;
+
 		double x = min + i*(max-min)/(npoints-1);
 		(*xVector)[i] = x;
-		switch(evaluate) {
-		case XYInterpolationCurve::Function:
-			(*yVector)[i] = gsl_spline_eval(spline, x, acc);
+
+		// find index a,b for interval [x[a],x[b]] around x[i] using bisection
+		int j=0;
+		switch(type) {
+		case XYInterpolationCurve::Cosine:
+		case XYInterpolationCurve::Exponential:
+		case XYInterpolationCurve::PCH:
+			while(b-a>1) {
+				j=floor((a+b)/2.);
+				if(xdata[j]>x)
+					b=j;
+				else
+					a=j;
+			}
 			break;
-		case XYInterpolationCurve::Derivative:
-			(*yVector)[i] = gsl_spline_eval_deriv(spline, x, acc);
+		default:
 			break;
-		case XYInterpolationCurve::Derivative2:
-			(*yVector)[i] = gsl_spline_eval_deriv2(spline, x, acc);
+		}
+
+		// evaluate interpolation
+		double t;
+		switch(type) {
+		case XYInterpolationCurve::Linear:
+		case XYInterpolationCurve::Polynomial:
+		case XYInterpolationCurve::CSpline:
+		case XYInterpolationCurve::CSplinePeriodic:
+		case XYInterpolationCurve::Akima:
+		case XYInterpolationCurve::AkimaPeriodic:
+		case XYInterpolationCurve::Steffen:
+			switch(evaluate) {
+			case XYInterpolationCurve::Function:
+				(*yVector)[i] = gsl_spline_eval(spline, x, acc);
+				break;
+			case XYInterpolationCurve::Derivative:
+				(*yVector)[i] = gsl_spline_eval_deriv(spline, x, acc);
+				break;
+			case XYInterpolationCurve::Derivative2:
+				(*yVector)[i] = gsl_spline_eval_deriv2(spline, x, acc);
+				break;
+			case XYInterpolationCurve::Integral:
+				(*yVector)[i] = gsl_spline_eval_integ(spline, min, x, acc);
+				break;
+			}
 			break;
-		case XYInterpolationCurve::Integral:
-			(*yVector)[i] = gsl_spline_eval_integ(spline, min, x, acc);
+		case XYInterpolationCurve::Cosine:
+			t = (x-xdata[a])/(xdata[b]-xdata[a]);
+			t = (1.-cos(M_PI*t))/2.;
+			(*yVector)[i] =  ydata[a] + t*(ydata[b]-ydata[a]);
+			break;
+		case XYInterpolationCurve::Exponential:
+			t = (x-xdata[a])/(xdata[b]-xdata[a]);
+			(*yVector)[i] = ydata[a]*pow(ydata[b]/ydata[a],t);
+			break;
+		case XYInterpolationCurve::PCH: {
+			t = (x-xdata[a])/(xdata[b]-xdata[a]);
+			double t2=t*t, t3=t2*t;
+			double h1=2.*t3-3.*t2+1, h2=-2.*t3+3.*t2, h3=t3-2*t2+t, h4=t3-t2;
+			double m1=0.,m2=0.;
+			switch(variant) {
+			case XYInterpolationCurve::FiniteDifference:
+				if(a==0)
+					m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m1=( (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) + (ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1]) )/2.;
+				if(b==n-1)
+					m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m2=( (ydata[b+1]-ydata[b])/(xdata[b+1]-xdata[b]) + (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) )/2.;
+
+				break;
+			case XYInterpolationCurve::CatmullRom:
+				if(a==0)
+					m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m1=(ydata[b]-ydata[a-1])/(xdata[b]-xdata[a-1]);
+				if(b==n-1)
+					m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m2=(ydata[b+1]-ydata[a])/(xdata[b+1]-xdata[a]);
+
+				break;
+			case XYInterpolationCurve::Cardinal:
+				if(a==0)
+					m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m1=(ydata[b]-ydata[a-1])/(xdata[b]-xdata[a-1]);
+				m1 *= (1.-tension);
+				if(b==n-1)
+					m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m2=(ydata[b+1]-ydata[a])/(xdata[b+1]-xdata[a]);
+				m2 *= (1.-tension);
+
+				break;
+			case XYInterpolationCurve::KochanekBartels:
+				if(a==0)
+					m1=(1.+continuity)*(1.-bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m1=( (1.-continuity)*(1.+bias)*(ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1]) 
+						+ (1.+continuity)*(1.-bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]) )/2.;
+				m1 *= (1.-tension);
+				if(b==n-1)
+					m2=(1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
+				else
+					m2=( (1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]) 
+						+ (1.-continuity)*(1.-bias)*(ydata[b+1]-ydata[b])/(xdata[b+1]-xdata[b]) )/2.;
+				m2 *= (1.-tension);
+				
+				break;
+			}	
+
+			// Hermite polynomial
+			(*yVector)[i] = ydata[a]*h1+ydata[b]*h2+(xdata[b]-xdata[a])*(m1*h3+m2*h4);
+		}
+			break;
+		case XYInterpolationCurve::Rational: {
+			double v,dv;
+			ratint(xdata, ydata, n, x, &v, &dv);
+			(*yVector)[i] = v;
+			//TODO: use dv
+		}
 			break;
 		}
 	}
 
+	// calculate "evaluate" option for own types
+	switch(type) {
+	case XYInterpolationCurve::Cosine:
+	case XYInterpolationCurve::Exponential:
+	case XYInterpolationCurve::PCH:
+	case XYInterpolationCurve::Rational:
+		switch(evaluate) {
+		case XYInterpolationCurve::Function:
+			break;
+		case XYInterpolationCurve::Derivative:
+			deriv(xVector->data(), yVector->data(), npoints);
+			break;
+		case XYInterpolationCurve::Derivative2:
+			deriv2(xVector->data(), yVector->data(), npoints);
+			break;
+		case XYInterpolationCurve::Integral:
+			integ(xVector->data(), yVector->data(), npoints);
+			break;
+		}
+		break;
+	default:
+		break;
+	}
+
 	// check values
 	for (unsigned int i = 0; i<npoints; i++) {
-		if((*yVector)[i] > XYInterpolationCurve::LIMIT_MAX)
-			(*yVector)[i] = XYInterpolationCurve::LIMIT_MAX;
-		else if((*yVector)[i] < XYInterpolationCurve::LIMIT_MIN)
-			(*yVector)[i] = XYInterpolationCurve::LIMIT_MIN;
+		if((*yVector)[i] > CartesianCoordinateSystem::Scale::LIMIT_MAX)
+			(*yVector)[i] = CartesianCoordinateSystem::Scale::LIMIT_MAX;
+		else if((*yVector)[i] < CartesianCoordinateSystem::Scale::LIMIT_MIN)
+			(*yVector)[i] = CartesianCoordinateSystem::Scale::LIMIT_MIN;
 	}
 
 	gsl_spline_free(spline);
@@ -347,6 +613,10 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "type", QString::number(d->interpolationData.type) );
+	writer->writeAttribute( "variant", QString::number(d->interpolationData.variant) );
+	writer->writeAttribute( "tension", QString::number(d->interpolationData.tension) );
+	writer->writeAttribute( "continuity", QString::number(d->interpolationData.continuity) );
+	writer->writeAttribute( "bias", QString::number(d->interpolationData.bias) );
 	writer->writeAttribute( "npoints", QString::number(d->interpolationData.npoints) );
 	writer->writeAttribute( "evaluate", QString::number(d->interpolationData.evaluate) );
 	writer->writeEndElement();// interpolationData
@@ -403,6 +673,30 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader){
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
 				d->interpolationData.type = (XYInterpolationCurve::InterpolationType) str.toInt();
+
+			str = attribs.value("variant").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'variant'"));
+			else
+				d->interpolationData.variant = (XYInterpolationCurve::CubicHermiteVariant) str.toInt();
+
+			str = attribs.value("tension").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'tension'"));
+			else
+				d->interpolationData.tension = str.toDouble();
+
+			str = attribs.value("continuity").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'continuity'"));
+			else
+				d->interpolationData.continuity = str.toDouble();
+
+			str = attribs.value("bias").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'bias'"));
+			else
+				d->interpolationData.bias = str.toDouble();
 
 			str = attribs.value("npoints").toString();
 			if(str.isEmpty())

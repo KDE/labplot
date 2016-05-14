@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -48,11 +48,12 @@
 #include <QDate>
 #include <QApplication>
 #include <QMenu>
+#include <QMimeData>
 #include <QPainter>
 #include <QPrinter>
 #include <QToolBar>
 #include <QTextStream>
-#include <QMimeData>
+#include <QProcess>
 // #include <QDebug>
 
 #include <QAction>
@@ -166,6 +167,7 @@ void SpreadsheetView::initActions() {
 
 // 	action_set_formula = new QAction(QIcon::fromTheme(""), i18n("Assign &Formula"), this);
 // 	action_recalculate = new QAction(QIcon::fromTheme(""), i18n("Recalculate"), this);
+	action_fill_sel_row_numbers = new QAction(QIcon::fromTheme(""), i18n("Row Numbers"), this);
 	action_fill_row_numbers = new QAction(QIcon::fromTheme(""), i18n("Row Numbers"), this);
 	action_fill_random = new QAction(QIcon::fromTheme(""), i18n("Uniform Random Values"), this);
 	action_fill_random_nonuniform = new QAction(QIcon::fromTheme(""), i18n("Random Values"), this);
@@ -217,7 +219,7 @@ void SpreadsheetView::initMenus() {
 	m_selectionMenu = new QMenu(i18n("Selection"), this);
 
 	QMenu * submenu = new QMenu(i18n("Fi&ll Selection with"), this);
-	submenu->addAction(action_fill_row_numbers);
+	submenu->addAction(action_fill_sel_row_numbers);
 	submenu->addAction(action_fill_const);
 // 	submenu->addAction(action_fill_random);
 	m_selectionMenu ->addMenu(submenu);
@@ -318,7 +320,7 @@ void SpreadsheetView::initMenus() {
 	m_rowMenu->addSeparator();
 
 	submenu = new QMenu(i18n("Fi&ll Selection with"), this);
-	submenu->addAction(action_fill_row_numbers);
+	submenu->addAction(action_fill_sel_row_numbers);
 // 	submenu->addAction(action_fill_random);
 	submenu->addAction(action_fill_const);
 	m_rowMenu->addMenu(submenu);
@@ -337,7 +339,8 @@ void SpreadsheetView::connectActions() {
 
 	connect(action_clear_selection, SIGNAL(triggered()), this, SLOT(clearSelectedCells()));
 // 	connect(action_recalculate, SIGNAL(triggered()), this, SLOT(recalculateSelectedCells()));
-	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
+	connect(action_fill_row_numbers, SIGNAL(triggered()), this, SLOT(fillWithRowNumbers()));
+	connect(action_fill_sel_row_numbers, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRowNumbers()));
 // 	connect(action_fill_random, SIGNAL(triggered()), this, SLOT(fillSelectedCellsWithRandomNumbers()));
 	connect(action_fill_random_nonuniform, SIGNAL(triggered()), this, SLOT(fillWithRandomValues()));
 	connect(action_fill_equidistant, SIGNAL(triggered()), this, SLOT(fillWithEquidistantValues()));
@@ -1020,6 +1023,31 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 	RESET_CURSOR;
 }
 
+void SpreadsheetView::fillWithRowNumbers() {
+	if (selectedColumnCount() < 1) return;
+
+	WAIT_CURSOR;
+	m_spreadsheet->beginMacro(i18np("%1: fill column with row numbers",
+								"%1: fill columns with row numbers",
+								m_spreadsheet->name(),
+								selectedColumnCount()));
+
+	const int rows = m_spreadsheet->rowCount();
+	QVector<double> new_data(rows);
+	for (int i=0; i<rows; ++i)
+		new_data[i] = i+1;
+
+	foreach(Column* col, selectedColumns()) {
+		if (col->columnMode() != AbstractColumn::Numeric)
+			continue;
+		col->replaceValues(0, new_data);
+	}
+
+	m_spreadsheet->endMacro();
+	RESET_CURSOR;
+}
+
+//TODO: this function is not used currently.
 void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 	if (selectedColumnCount() < 1) return;
 	int first = firstSelectedRow();
@@ -1863,11 +1891,38 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 	bool columnsSeparating = (cols > columnsPerTable);
 	QTextStream out(&file);
 
+    QProcess tex;
+    tex.start("latex", QStringList() << "--version", QProcess::ReadOnly);
+    tex.waitForFinished(500);
+    QString texVersionOutput = QString(tex.readAllStandardOutput());
+    texVersionOutput = texVersionOutput.split("\n")[0];
+
+    int yearidx = -1;
+    for (int i = texVersionOutput.size() - 1; i >= 0; --i) {
+        if (texVersionOutput.at(i) == QChar('2')) {
+            yearidx = i;
+            break;
+        }
+    }
+
+    if (texVersionOutput.at(yearidx+1) == QChar('/')) {
+        yearidx-=3;
+    }
+
+    bool ok;
+    texVersionOutput.mid(yearidx, 4).toInt(&ok);
+    int version = -1;
+    if (ok) {
+        version = texVersionOutput.mid(yearidx, 4).toInt(&ok);
+    }
+
 	if (latexHeaders) {
 		out << QLatin1String("\\documentclass[11pt,a4paper]{article} \n");
 		out << QLatin1String("\\usepackage{geometry} \n");
 		out << QLatin1String("\\usepackage{xcolor,colortbl} \n");
-		out << QLatin1String("\\extrafloats{1280} \n");
+        if (version >= 2015) {
+            out << QLatin1String("\\extrafloats{1280} \n");
+        }
 		out << QLatin1String("\\definecolor{HeaderBgColor}{rgb}{0.81,0.81,0.81} \n");
 		out << QLatin1String("\\geometry{ \n");
 		out << QLatin1String("a4paper, \n");
@@ -1887,13 +1942,14 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 
 	int rowCount = 0;
 	const int maxRows = 45;
-
+    bool captionRemoved = false;
 	if (columnsSeparating) {
 		QVector<int> emptyRowIndices;
 		for (int table = 0; table < tablesCount; ++table) {
 			QStringList textable;
-
+            captionRemoved = false;
 			textable << beginTable;
+
 			if (captions)
 				textable << tableCaption;
 			textable << QLatin1String("\\centering \n");
@@ -1952,10 +2008,15 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 						out << endTabularTable;
 						out << QLatin1String("\\newpage \n");
 
-						foreach(const QString& s, textable) {
+                        if (captions)
+                            if (!captionRemoved)
+                                textable.removeAt(1);
+                        foreach(const QString& s, textable) {
 							out << s;
 						}
 						rowCount = 0;
+                        if (!captionRemoved)
+                            captionRemoved = true;
 					}
 				}
 			}
@@ -1992,6 +2053,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 		}
 
 		QStringList values;
+        captionRemoved = false;
 		for (int row = 0; row < totalRowCount; ++row) {
 			values.clear();
 			bool notEmpty = false;
@@ -2017,11 +2079,15 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 				if (rowCount == maxRows) {
 					out << endTabularTable;
 					out << QLatin1String("\\pagebreak[4] \n");
-
+                    if (captions)
+                        if (!captionRemoved)
+                            remainingTable.removeAt(1);
 					foreach(const QString& s, remainingTable) {
 						out << s;
 					}
 					rowCount = 0;
+                    if (!captionRemoved)
+                        captionRemoved = true;
 				}
 			}
 		}
@@ -2055,6 +2121,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 			out << s;
 		}
 		QStringList values;
+        captionRemoved = false;
 		for (int row = 0; row < totalRowCount; ++row) {
 			values.clear();
 			bool notEmpty = false;
@@ -2080,11 +2147,15 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 				if (rowCount == maxRows) {
 					out << endTabularTable;
 					out << QLatin1String("\\newpage \n");
-
+                    if (captions)
+                        if (!captionRemoved)
+                            textable.removeAt(1);
 					foreach (const QString& s, textable) {
 						out << s;
 					}
 					rowCount = 0;
+                    if (!captionRemoved)
+                        captionRemoved = true;
 				}
 			}
 		}

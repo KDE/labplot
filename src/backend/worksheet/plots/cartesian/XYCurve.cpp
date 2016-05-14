@@ -652,7 +652,10 @@ void XYCurve::suppressRetransform(bool b) {
 //#################################  SLOTS  ####################################
 //##############################################################################
 void XYCurve::retransform() {
+	WAIT_CURSOR;
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	d_ptr->retransform();
+	RESET_CURSOR;
 }
 
 void XYCurve::updateValues() {
@@ -1800,6 +1803,8 @@ void XYCurvePrivate::draw(QPainter *painter) {
 }
 
 void XYCurvePrivate::updatePixmap() {
+	WAIT_CURSOR;
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
 // 	QTime timer;
 // 	timer.start();
 	QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
@@ -1807,6 +1812,7 @@ void XYCurvePrivate::updatePixmap() {
 		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;
+		RESET_CURSOR;
 		return;
 	}
 	pixmap.fill(Qt::transparent);
@@ -1821,6 +1827,7 @@ void XYCurvePrivate::updatePixmap() {
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
 // 	qDebug() << "Update the pixmap: " << timer.elapsed() << "ms";
+	RESET_CURSOR;
 }
 
 //TODO: move this to a central place

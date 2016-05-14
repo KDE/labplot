@@ -30,17 +30,18 @@
 
 #include "ui_randomvalueswidget.h"
 #include <QMap>
-#include <QDialog>
+#include <KDialog>
 #include <QPushButton>
 
 class Column;
 class Spreadsheet;
 
-class RandomValuesDialog : public QDialog{
+class RandomValuesDialog : public KDialog{
 	Q_OBJECT
 
 	public:
 		explicit RandomValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
+		~RandomValuesDialog();
 		void setColumns(QList<Column*>);
 
 	private:

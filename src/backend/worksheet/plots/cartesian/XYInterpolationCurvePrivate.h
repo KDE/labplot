@@ -61,8 +61,11 @@ class XYInterpolationCurvePrivate: public XYCurvePrivate {
 
 		XYInterpolationCurve* const q;
 
-//	private:
-//		void writeSolverState(gsl_multifit_fdfsolver* s);
+	private:
+		void deriv(double *x, double *y, unsigned n);
+		void deriv2(double *x, double *y, unsigned n);
+		void integ(double *x, double *y, unsigned n);
+		void ratint(double *x, double *y, int n, double xn, double *v, double *dv);
 };
 
 #endif
