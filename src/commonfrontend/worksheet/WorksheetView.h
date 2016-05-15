@@ -147,6 +147,7 @@ private:
 	QAction* addOrdinaryHistogram;
 	QAction* addCummulativeHistogram;
 	QAction* addAvgShiftedHistogram;
+	QAction* addBarChartGraph;
 
 	QAction* verticalLayoutAction;
 	QAction* horizontalLayoutAction;
@@ -215,6 +216,7 @@ public slots:
 private slots:
 	void addNew(QAction*);
 	void addHistogram(QAction*);
+	void addBarChart(QAction*);
 	void aspectAboutToBeRemoved(const AbstractAspect*);
 	void selectAllElements();
 	void deleteElement();

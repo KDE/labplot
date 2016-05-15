@@ -195,10 +195,10 @@ void WorksheetView::initActions() {
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered"), i18n("two axes, centered"), addNewActionGroup);
 	addCartesianPlot4Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin"), i18n("two axes, crossing at origin"), addNewActionGroup);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("text label"), addNewActionGroup);
+	addBarChartGraph= new QAction(QIcon::fromTheme("office-chart-line"), i18n("bar chart"), addNewActionGroup);
 	addOrdinaryHistogram = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"),i18n("Ordinary Histogram"),addHistogramType);
 	addCummulativeHistogram=new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"),i18n("Cummulative Histogram"),addHistogramType);
 	addAvgShiftedHistogram=new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"),i18n("Avg Shifted Histogram"),addHistogramType);
-	
 	//Layout actions
 	verticalLayoutAction = new QAction(QIcon::fromTheme("labplot-editvlayout"), i18n("Vertical layout"), layoutActionGroup);
 	verticalLayoutAction->setCheckable(true);
@@ -241,6 +241,7 @@ void WorksheetView::initActions() {
 
 	connect(addNewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
 	connect(addHistogramType, SIGNAL(triggered(QAction*)), this, SLOT(addHistogram(QAction*)));
+	connect(addBarChartGraph,SIGNAL(triggered(QAction*)), this, SLOT(addBarChart(QAction*)));
 	connect(mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)));
 	connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
 	connect(magnificationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(magnificationChanged(QAction*)));
@@ -342,6 +343,7 @@ void WorksheetView::initMenus() {
 	m_addNewMenu->addMenu(m_addHistogramTypeMenu)->setIcon(QIcon::fromTheme("office-chart-line"));
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
+	m_addNewMenu->addAction(addBarChartGraph);
 
 	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
 	m_viewMouseModeMenu->setIcon(QIcon::fromTheme("input-mouse"));
@@ -966,7 +968,10 @@ void WorksheetView::addHistogram(QAction* action){
 	else if(action == addAvgShiftedHistogram){
 	}
 }
-	
+void WorksheetView::addBarChart(QAction* action)
+{
+
+}
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action) {
 	WorksheetElement* aspect = 0;
@@ -1002,6 +1007,8 @@ void WorksheetView::addNew(QAction* action) {
 		TextLabel* l = new TextLabel(i18n("text label"));
 		l->setText(i18n("text label"));
 		aspect = l;
+	}
+	else if ( action == addBarChartGraph ) {
 	}
 
 	if (!aspect)
