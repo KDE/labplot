@@ -82,10 +82,24 @@ void XYSmoothCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
-	//TODO
-	uiGeneralTab.cbType->addItem(i18n("moving average"));
+	uiGeneralTab.cbType->addItem(i18n("moving average (central)"));
+//	uiGeneralTab.cbType->addItem(i18n("moving average (lagged)"));
+//	uiGeneralTab.cbType->addItem(i18n("percentile"));
+//	uiGeneralTab.cbType->addItem(i18n("Savitzky-Golay"));
+//	uiGeneralTab.cbType->addItem(i18n("LOWESS/LOESS"));
+//	uiGeneralTab.cbType->addItem(i18n("FFT filter"));
 
-	uiGeneralTab.cbWeight->addItem(i18n("equal"));
+	uiGeneralTab.cbWeight->addItem(i18n("uniform (rectangular)"));
+	uiGeneralTab.cbWeight->addItem(i18n("triangular"));
+	uiGeneralTab.cbWeight->addItem(i18n("binomial"));
+	uiGeneralTab.cbWeight->addItem(i18n("parabolic (Epanechnikov)"));
+	uiGeneralTab.cbWeight->addItem(i18n("quartic (biweight)"));
+	uiGeneralTab.cbWeight->addItem(i18n("triweight"));
+	uiGeneralTab.cbWeight->addItem(i18n("tricube"));
+	uiGeneralTab.cbWeight->addItem(i18n("cosine"));
+// IIR
+//	uiGeneralTab.cbWeight->addItem(i18n("exponential"));
+//	uiGeneralTab.cbWeight->addItem(i18n("Gaussian"));
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
@@ -98,7 +112,9 @@ void XYSmoothCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
-	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
+	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
+	connect( uiGeneralTab.cbWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(weightChanged()) );
+	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(int)), this, SLOT(pointsChanged()) );
 
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
@@ -132,7 +148,9 @@ void XYSmoothCurveDock::initGeneralTab() {
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
-	this->typeChanged(m_smoothData.type);
+	//TODO: called via slot? this->typeChanged(m_smoothData.type);
+	uiGeneralTab.sbPoints->setValue(m_smoothData.points);
+	uiGeneralTab.cbWeight->setCurrentIndex(m_smoothData.weight);
 	this->showSmoothResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last smooth
@@ -224,8 +242,10 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row)) 
 				n++;
 
-		// TODO: check minimum number of points (see interpolation)
+		// set maximum of sbPoints to number of columns
+		uiGeneralTab.sbPoints->setMaximum(n);
 	}
+
 }
 
 void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -243,11 +263,22 @@ void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYSmoothCurve*>(curve)->setYDataColumn(column);
 }
 
-void XYSmoothCurveDock::typeChanged(int index) {
-	XYSmoothCurve::SmoothType type = (XYSmoothCurve::SmoothType)index;
+void XYSmoothCurveDock::typeChanged() {
 	m_smoothData.type = (XYSmoothCurve::SmoothType)uiGeneralTab.cbType->currentIndex();
 
 	//TODO
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYSmoothCurveDock::pointsChanged() {
+	m_smoothData.points = uiGeneralTab.sbPoints->value();
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYSmoothCurveDock::weightChanged() {
+	m_smoothData.weight = (XYSmoothCurve::WeightType)uiGeneralTab.cbWeight->currentIndex();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
@@ -335,7 +366,7 @@ void XYSmoothCurveDock::curveSmoothDataChanged(const XYSmoothCurve::SmoothData& 
 	m_initializing = true;
 	m_smoothData = data;
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
-	this->typeChanged(m_smoothData.type);
+	//TODO: called via slot? this->typeChanged(m_smoothData.type);
 
 	this->showSmoothResult();
 	m_initializing = false;

@@ -40,6 +40,9 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 
+#include <gsl/gsl_math.h>	// gsl_pow_*
+#include <gsl/gsl_sf_gamma.h>	// gsl_sf_choose
+
 #include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
@@ -235,14 +238,13 @@ void XYSmoothCurvePrivate::recalculate() {
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
-//	double min = xDataColumn->minimum();
-//	double max = xDataColumn->maximum();
-
 	// smooth settings
 	XYSmoothCurve::SmoothType type = smoothData.type;
+	unsigned int points = smoothData.points;
 	XYSmoothCurve::WeightType weight = smoothData.weight;
 #ifdef QT_DEBUG
 	qDebug()<<"type:"<<type;
+	qDebug()<<"points ="<<points;
 	qDebug()<<"weight:"<<weight;
 #endif
 ///////////////////////////////////////////////////////////
@@ -250,10 +252,78 @@ void XYSmoothCurvePrivate::recalculate() {
 
 	xVector->resize(n);
 	yVector->resize(n);
+	// moving average
 	for(unsigned int i=0;i<n;i++) {
 		(*xVector)[i] = xdata[i];
-		//TODO
+
+		unsigned int diff = qMin(qMin((points-1)/2,i),n-i-1);
+		unsigned int np = 2*diff+1;
+
+		// weight (see https://en.wikipedia.org/wiki/Kernel_%28statistics%29)
+		double sum=0.0, *w = new double[np];
+		switch(weight) {
+		case XYSmoothCurve::Uniform:
+			for(unsigned int j=0;j<np;j++)
+				w[j]=1./np;
+			break;
+		case XYSmoothCurve::Triangular:
+			sum = gsl_pow_2((np+1)/2);
+			for(unsigned int j=0;j<np;j++)
+				w[j]=qMin(j+1,np-j)/sum;
+			break;
+		case XYSmoothCurve::Binomial:
+			sum = (np-1)/2.;
+			for(unsigned int j=0;j<np;j++)
+				w[j]=gsl_sf_choose(2*sum,sum+fabs(j-sum))/pow(4.,sum);
+			break;
+		case XYSmoothCurve::Parabolic:
+			for(unsigned int j=0;j<np;j++) {
+				w[j]=1.-gsl_pow_2(j-(np-1)/2.)/gsl_pow_2((np+1)/2);
+				sum += w[j];
+			}
+			for(unsigned int j=0;j<np;j++)
+				w[j] /= sum;
+			break;
+		case XYSmoothCurve::Quartic:
+			for(unsigned int j=0;j<np;j++) {
+				w[j]=gsl_pow_2(1.-gsl_pow_2(j-(np-1)/2.)/gsl_pow_2((np+1)/2));
+				sum += w[j];
+			}
+			for(unsigned int j=0;j<np;j++)
+				w[j] /= sum;
+			break;
+		case XYSmoothCurve::Triweight:
+			for(unsigned int j=0;j<np;j++) {
+				w[j]=gsl_pow_3(1.-gsl_pow_2(j-(np-1)/2.)/gsl_pow_2((np+1)/2));
+				sum += w[j];
+			}
+			for(unsigned int j=0;j<np;j++)
+				w[j] /= sum;
+			break;
+		case XYSmoothCurve::Tricube:
+			for(unsigned int j=0;j<np;j++) {
+				w[j]=gsl_pow_3(1.-gsl_pow_3(fabs(j-(np-1)/2.))/gsl_pow_3((np+1)/2));
+				sum += w[j];
+			}
+			for(unsigned int j=0;j<np;j++)
+				w[j] /= sum;
+			break;
+		case XYSmoothCurve::Cosine:
+			for(unsigned int j=0;j<np;j++) {
+				w[j]=cos(M_PI/2.*(j-(np-1)/2.)/((np+1)/2));
+				sum += w[j];
+			}
+			for(unsigned int j=0;j<np;j++)
+				w[j] /= sum;
+			break;
+		}
+
+		// calculate weighted average
 		(*yVector)[i] = 0.0;
+		for(unsigned int j=0;j<np;j++)
+			(*yVector)[i] += w[j]*ydata[i-diff+j];
+
+		delete[] w;
 	}
 
 ///////////////////////////////////////////////////////////
@@ -287,6 +357,8 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "type", QString::number(d->smoothData.type) );
+	writer->writeAttribute( "points", QString::number(d->smoothData.points) );
+	writer->writeAttribute( "weight", QString::number(d->smoothData.weight) );
 	writer->writeEndElement();// smoothData
 
 	// smooth results (generated columns)
@@ -341,6 +413,18 @@ bool XYSmoothCurve::load(XmlStreamReader* reader){
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
 				d->smoothData.type = (XYSmoothCurve::SmoothType) str.toInt();
+
+			str = attribs.value("points").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'points'"));
+			else
+				d->smoothData.points = str.toInt();
+
+			str = attribs.value("weight").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'weight'"));
+			else
+				d->smoothData.weight = (XYSmoothCurve::WeightType) str.toInt();
 
 		} else if (reader->name() == "smoothResult") {
 

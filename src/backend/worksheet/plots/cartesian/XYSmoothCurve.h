@@ -37,12 +37,13 @@ class XYSmoothCurve: public XYCurve {
 
 	public:
 		enum SmoothType {MovingAverage};
-		enum WeightType {Equal};
+		enum WeightType {Uniform, Triangular, Binomial, Parabolic, Quartic, Triweight, Tricube, Cosine};
 
 		struct SmoothData {
-			SmoothData() : type(MovingAverage), weight(Equal) {};
+			SmoothData() : type(MovingAverage), points(3), weight(Uniform) {};
 
 			XYSmoothCurve::SmoothType type;		// type of smooth
+			unsigned int points;			// number of points
 			XYSmoothCurve::WeightType weight;	// type of weight
 		};
 		struct SmoothResult {
