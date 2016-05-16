@@ -252,78 +252,140 @@ void XYSmoothCurvePrivate::recalculate() {
 
 	xVector->resize(n);
 	yVector->resize(n);
-	// moving average
-	for(unsigned int i=0;i<n;i++) {
-		(*xVector)[i] = xdata[i];
+	switch(type) {
+	case XYSmoothCurve::MovingAverage:
+	case XYSmoothCurve::MovingAverageLagged:
+		for(unsigned int i=0;i<n;i++) {
+			(*xVector)[i] = xdata[i];
 
-		unsigned int diff = qMin(qMin((points-1)/2,i),n-i-1);
-		unsigned int np = 2*diff+1;
+			unsigned int diff,np;
+			if(type == XYSmoothCurve::MovingAverage) {
+				diff = qMin(qMin((points-1)/2,i),n-i-1);
+				np = 2*diff+1;
+			} else {
+				np = qMin(points,i+1);
+				diff = np-1;
+			}
+			qDebug()<<"i ="<<i<<"np ="<<np;
 
-		// weight (see https://en.wikipedia.org/wiki/Kernel_%28statistics%29)
-		double sum=0.0, *w = new double[np];
-		switch(weight) {
-		case XYSmoothCurve::Uniform:
-			for(unsigned int j=0;j<np;j++)
-				w[j]=1./np;
-			break;
-		case XYSmoothCurve::Triangular:
-			sum = gsl_pow_2((np+1)/2);
-			for(unsigned int j=0;j<np;j++)
-				w[j]=qMin(j+1,np-j)/sum;
-			break;
-		case XYSmoothCurve::Binomial:
-			sum = (np-1)/2.;
-			for(unsigned int j=0;j<np;j++)
-				w[j]=gsl_sf_choose(2*sum,sum+fabs(j-sum))/pow(4.,sum);
-			break;
-		case XYSmoothCurve::Parabolic:
-			for(unsigned int j=0;j<np;j++) {
-				w[j]=1.-gsl_pow_2(j-(np-1)/2.)/gsl_pow_2((np+1)/2);
-				sum += w[j];
+			// weight (see https://en.wikipedia.org/wiki/Kernel_%28statistics%29)
+			double sum=0.0, *w = new double[np];
+			switch(weight) {
+			case XYSmoothCurve::Uniform:
+				for(unsigned int j=0;j<np;j++)
+					w[j]=1./np;
+				break;
+			case XYSmoothCurve::Triangular:
+				if(type == XYSmoothCurve::MovingAverage) {
+					sum = gsl_pow_2((np+1)/2);
+					for(unsigned int j=0;j<np;j++)
+						w[j]=qMin(j+1,np-j)/sum;
+				} else {
+					sum = np*(np+1)/2;
+					for(unsigned int j=0;j<np;j++)
+						w[j]=(j+1)/sum;
+				}
+				break;
+			case XYSmoothCurve::Binomial:
+				if(type == XYSmoothCurve::MovingAverage) {
+					sum = (np-1)/2.;
+					for(unsigned int j=0;j<np;j++)
+						w[j]=gsl_sf_choose(2*sum,sum+fabs(j-sum))/pow(4.,sum);
+				} else {
+					//TODO: check even np
+					for(unsigned int j=0;j<np;j++) {
+						w[j]=gsl_sf_choose(2*(np-1),j);
+						sum += w[j];
+					}
+					for(unsigned int j=0;j<np;j++)
+						w[j] /= sum;
+				}
+				break;
+			case XYSmoothCurve::Parabolic:
+				if(type == XYSmoothCurve::MovingAverage) {
+					for(unsigned int j=0;j<np;j++) {
+						w[j]=1.-gsl_pow_2(j-(np-1)/2.)/gsl_pow_2((np+1)/2);
+						sum += w[j];
+					}
+				} else {
+					for(unsigned int j=0;j<np;j++) {
+						w[j]=1.-gsl_pow_2(1.-(1+j)/(double)np);
+						sum += w[j];
+					}
+				}
+				for(unsigned int j=0;j<np;j++)
+					w[j] /= sum;
+				break;
+			case XYSmoothCurve::Quartic:
+				if(type == XYSmoothCurve::MovingAverage) {
+					for(unsigned int j=0;j<np;j++) {
+						w[j]=gsl_pow_2(1.-gsl_pow_2(j-(np-1)/2.)/gsl_pow_2((np+1)/2));
+						sum += w[j];
+					}
+				} else {
+					for(unsigned int j=0;j<np;j++) {
+						w[j]=gsl_pow_2(1.-gsl_pow_2(1.-(1+j)/(double)np));
+						sum += w[j];
+					}
+				}
+				for(unsigned int j=0;j<np;j++)
+					w[j] /= sum;
+				break;
+			case XYSmoothCurve::Triweight:
+				if(type == XYSmoothCurve::MovingAverage) {
+					for(unsigned int j=0;j<np;j++) {
+						w[j]=gsl_pow_3(1.-gsl_pow_2(j-(np-1)/2.)/gsl_pow_2((np+1)/2));
+						sum += w[j];
+					}
+				} else {
+					for(unsigned int j=0;j<np;j++) {
+						w[j]=gsl_pow_3(1.-gsl_pow_2(1.-(1+j)/(double)np));
+						sum += w[j];
+					}
+				}
+				for(unsigned int j=0;j<np;j++)
+					w[j] /= sum;
+				break;
+			case XYSmoothCurve::Tricube:
+				if(type == XYSmoothCurve::MovingAverage) {
+					for(unsigned int j=0;j<np;j++) {
+						w[j]=gsl_pow_3(1.-gsl_pow_3(fabs(j-(np-1)/2.))/gsl_pow_3((np+1)/2));
+						sum += w[j];
+					}
+				} else {
+					for(unsigned int j=0;j<np;j++) {
+						w[j]=gsl_pow_3(1.-gsl_pow_3(1.-(1+j)/(double)np));
+						sum += w[j];
+					}
+				}
+				for(unsigned int j=0;j<np;j++)
+					w[j] /= sum;
+				break;
+			case XYSmoothCurve::Cosine:
+				if(type == XYSmoothCurve::MovingAverage) {
+					for(unsigned int j=0;j<np;j++) {
+						w[j]=cos(M_PI/2.*(j-(np-1)/2.)/((np+1)/2));
+						sum += w[j];
+					}
+				} else {
+					for(unsigned int j=0;j<np;j++) {
+						w[j]=cos(M_PI/2.*(np-1-j)/np);
+						sum += w[j];
+					}
+				}
+				for(unsigned int j=0;j<np;j++)
+					w[j] /= sum;
+				break;
 			}
+
+			// calculate weighted average
+			(*yVector)[i] = 0.0;
 			for(unsigned int j=0;j<np;j++)
-				w[j] /= sum;
-			break;
-		case XYSmoothCurve::Quartic:
-			for(unsigned int j=0;j<np;j++) {
-				w[j]=gsl_pow_2(1.-gsl_pow_2(j-(np-1)/2.)/gsl_pow_2((np+1)/2));
-				sum += w[j];
-			}
-			for(unsigned int j=0;j<np;j++)
-				w[j] /= sum;
-			break;
-		case XYSmoothCurve::Triweight:
-			for(unsigned int j=0;j<np;j++) {
-				w[j]=gsl_pow_3(1.-gsl_pow_2(j-(np-1)/2.)/gsl_pow_2((np+1)/2));
-				sum += w[j];
-			}
-			for(unsigned int j=0;j<np;j++)
-				w[j] /= sum;
-			break;
-		case XYSmoothCurve::Tricube:
-			for(unsigned int j=0;j<np;j++) {
-				w[j]=gsl_pow_3(1.-gsl_pow_3(fabs(j-(np-1)/2.))/gsl_pow_3((np+1)/2));
-				sum += w[j];
-			}
-			for(unsigned int j=0;j<np;j++)
-				w[j] /= sum;
-			break;
-		case XYSmoothCurve::Cosine:
-			for(unsigned int j=0;j<np;j++) {
-				w[j]=cos(M_PI/2.*(j-(np-1)/2.)/((np+1)/2));
-				sum += w[j];
-			}
-			for(unsigned int j=0;j<np;j++)
-				w[j] /= sum;
-			break;
+				(*yVector)[i] += w[j]*ydata[i-diff+j];
+
+			delete[] w;
 		}
-
-		// calculate weighted average
-		(*yVector)[i] = 0.0;
-		for(unsigned int j=0;j<np;j++)
-			(*yVector)[i] += w[j]*ydata[i-diff+j];
-
-		delete[] w;
+		break;
 	}
 
 ///////////////////////////////////////////////////////////

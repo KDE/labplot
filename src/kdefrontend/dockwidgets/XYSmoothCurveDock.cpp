@@ -83,7 +83,7 @@ void XYSmoothCurveDock::setupGeneral() {
 	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
 	uiGeneralTab.cbType->addItem(i18n("moving average (central)"));
-//	uiGeneralTab.cbType->addItem(i18n("moving average (lagged)"));
+	uiGeneralTab.cbType->addItem(i18n("moving average (lagged)"));
 //	uiGeneralTab.cbType->addItem(i18n("percentile"));
 //	uiGeneralTab.cbType->addItem(i18n("Savitzky-Golay"));
 //	uiGeneralTab.cbType->addItem(i18n("LOWESS/LOESS"));
@@ -97,7 +97,7 @@ void XYSmoothCurveDock::setupGeneral() {
 	uiGeneralTab.cbWeight->addItem(i18n("triweight"));
 	uiGeneralTab.cbWeight->addItem(i18n("tricube"));
 	uiGeneralTab.cbWeight->addItem(i18n("cosine"));
-// IIR
+// IIR	-> np="all"
 //	uiGeneralTab.cbWeight->addItem(i18n("exponential"));
 //	uiGeneralTab.cbWeight->addItem(i18n("Gaussian"));
 

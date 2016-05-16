@@ -36,7 +36,7 @@ class XYSmoothCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum SmoothType {MovingAverage};
+		enum SmoothType {MovingAverage,MovingAverageLagged};
 		enum WeightType {Uniform, Triangular, Binomial, Parabolic, Quartic, Triweight, Tricube, Cosine};
 
 		struct SmoothData {
