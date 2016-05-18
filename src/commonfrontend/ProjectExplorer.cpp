@@ -390,12 +390,19 @@ void ProjectExplorer::filterTextChanged(const QString& text) {
 }
 
 bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
+	Qt::CaseSensitivity sensitivity = caseSensitiveAction->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+	bool matchCompleteWord = matchCompleteWordAction->isChecked();
+
 	bool childVisible = false;
 	const int rows = index.model()->rowCount(index);
 	for (int i=0; i<rows; i++) {
 		QModelIndex child = index.child(i, 0);
 		AbstractAspect* aspect =  static_cast<AbstractAspect*>(child.internalPointer());
-		bool visible = aspect->name().contains(text, Qt::CaseInsensitive);
+		bool visible;
+		if (matchCompleteWord)
+			visible = aspect->name().startsWith(text, sensitivity);
+		else
+			visible = aspect->name().contains(text, sensitivity);
 
 		if (visible) {
 			//current item is visible -> make all its children visible without applying the filter
@@ -417,29 +424,12 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 }
 
 void ProjectExplorer::toggleFilterCaseSensitivity() {
-	AspectTreeModel * model = qobject_cast<AspectTreeModel *>(m_treeView->model());
-	if(!model)
-		return;
-
-	if (caseSensitiveAction->isChecked())
-		model->setFilterCaseSensitivity(Qt::CaseSensitive);
-	else
-		model->setFilterCaseSensitivity(Qt::CaseInsensitive);
-
-	model->setFilterString(leFilter->text());
-	m_treeView->update();
+	filterTextChanged(leFilter->text());
 }
 
 
 void ProjectExplorer::toggleFilterMatchCompleteWord() {
-	AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	if(!model)
-		return;
-
-	model->setFilterMatchCompleteWord(matchCompleteWordAction->isChecked());
-
-	model->setFilterString(leFilter->text());
-	m_treeView->update();
+	filterTextChanged(leFilter->text());
 }
 
 void ProjectExplorer::selectIndex(const QModelIndex&  index) {
