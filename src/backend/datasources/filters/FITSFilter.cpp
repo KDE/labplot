@@ -136,16 +136,18 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
     int naxis;
     int maxdim = 2;
     long naxes[2];
-    int actualRows;
+    long actualRows;
     int actualCols;
     int columnOffset;
 
     long pixelCount;
     double* data;
+    QStringList columnNames;
+    QList<int> columnsWidth;
 
     status = 0;
-    switch (chduType) {
-    case IMAGE_HDU: {
+
+    if(chduType == IMAGE_HDU) {
         if (fits_get_img_param(fitsFile, maxdim,&bitpix, &naxis, naxes, &status)) {
             printError(status);
             return QString();
@@ -169,18 +171,47 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         QVector<QVector<double>*> dataPointers;
         actualRows = naxes[1];
         actualCols = naxes[0];
+
         if (dataSource!=NULL) {
             columnOffset = dataSource->create(dataPointers, importMode, actualRows, actualCols);
         }
 
-        break;
-    }
-    case ASCII_TBL:
+        for (int i = 0; i < actualRows; ++i) {
+            for (int j = 0; i < actualCols; ++j) {
+                dataPointers[j]->operator [](i) = data[i * actualCols + j];
+            }
+        }
 
-        break;
-    case BINARY_TBL:
+        //TODO
+        //dataString
 
-        break;
+    } else if ((chduType == ASCII_TBL) || (chduType == BINARY_TBL)) {
+        fits_get_num_cols(fitsFile, &actualCols, &status);
+        fits_get_num_rows(fitsFile, &actualRows, &status);
+        columnsWidth.reserve(actualCols);
+        int colWidth;
+        char ttypenKeyword[FLEN_KEYWORD];
+        char columnName[FLEN_VALUE];
+        for (int col = 1; col <=actualCols; ++col) {
+            fits_make_keyn("TTYPE", col, ttypenKeyword, &status);
+            fits_read_key(fitsFile, TSTRING, ttypenKeyword, columnName, NULL, &status);
+            fits_get_col_display_width(fitsFile, col, &colWidth, &status);
+
+            columnsWidth.append(colWidth);
+            columnNames.append(QString(columnName));
+        }
+        char* array;
+        for (int row = 1; row <= actualRows; ++row) {
+            for (int col = 1; col <= actualCols; ++col) {
+                if(fits_read_col_str(fitsFile, col, row, 1, 1, NULL, &array, 0, &status)) {
+                    printError(status);
+                }
+                //TODO
+            }
+        }
+
+    } else {
+        qDebug() << "Incorrect header type!";
     }
 
     // make everything undo/redo-able again
@@ -191,6 +222,10 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         for ( int n=0; n<actualCols; n++ ){
             Column* column = spreadsheet->column(columnOffset+n);
             column->setComment(comment);
+            if ((chduType == ASCII_TBL) || (chduType == BINARY_TBL)) {
+                column->setName(columnNames.at(n));
+                column->setWidth(columnsWidth.at(n));
+            }
             column->setUndoAware(true);
             if (importMode==AbstractFileFilter::Replace) {
                 column->setSuppressDataChangedSignal(false);
