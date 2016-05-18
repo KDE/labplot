@@ -231,15 +231,14 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 		}
 
 		bool visible = false;
-		if (isTopLevel)
+		if (isTopLevel){
 			visible = aspect->name().contains(text, Qt::CaseInsensitive);
 
+		}
 		if (visible) {
 			//current item is visible -> make all its children visible without applying the filter
-			for (int j=0; j<child.model()->rowCount(child); ++j) {
-				QModelIndex c = child.child(j, 0);
-				m_treeView->setRowHidden(j, c, false);
-			}
+			for (int j=0; j<child.model()->rowCount(child); ++j)
+				m_treeView->setRowHidden(j, child, false);
 
 			childVisible = true;
 		} else {
