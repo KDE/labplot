@@ -483,6 +483,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
         } else if (info.contains("FITS image data")) {
             debug="detected FITS file";
+            ui.cbFileType->setCurrentIndex(FileDataSource::FITS);
             //TODO
         } else  {
 			debug="probably BINARY file";

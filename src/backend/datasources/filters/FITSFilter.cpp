@@ -177,7 +177,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         }
 
         for (int i = 0; i < actualRows; ++i) {
-            for (int j = 0; i < actualCols; ++j) {
+            for (int j = 0; j < actualCols; ++j) {
                 dataPointers[j]->operator [](i) = data[i * actualCols + j];
             }
         }

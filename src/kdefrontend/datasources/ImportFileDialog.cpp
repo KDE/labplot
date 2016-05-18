@@ -231,6 +231,8 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			names = importFileWidget->selectedHDFNames();
 		else if (fileType == FileDataSource::NETCDF)
 			names = importFileWidget->selectedNetCDFNames();
+        //TODO
+        //multiple extensions selected
 
 		// multiple data sets/variables for HDF/NetCDF
 		if( fileType == FileDataSource::HDF || fileType == FileDataSource::NETCDF) {
