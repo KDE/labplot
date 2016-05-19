@@ -55,9 +55,9 @@ public:
 	virtual QMenu* createContextMenu();
 	virtual QIcon icon() const;
 
-	virtual void exportView() const;
-	virtual void printView();
-	virtual void printPreview() const;
+	virtual bool exportView() const;
+	virtual bool printView();
+	virtual bool printPreview() const;
 
 	virtual void save(QXmlStreamWriter*) const;
 	virtual bool load(XmlStreamReader*);

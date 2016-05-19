@@ -201,16 +201,18 @@ QString CantorWorksheet::backendName() {
 }
 
 //TODO
-void CantorWorksheet::exportView() const {
-
+bool CantorWorksheet::exportView() const {
+	return false;
 }
 
-void CantorWorksheet::printView() {
+bool CantorWorksheet::printView() {
 	m_part->action("file_print")->trigger();
+	return true;
 }
 
-void CantorWorksheet::printPreview() const {
+bool CantorWorksheet::printPreview() const {
 	m_part->action("file_print_preview")->trigger();
+	return true;
 }
 
 //##############################################################################
