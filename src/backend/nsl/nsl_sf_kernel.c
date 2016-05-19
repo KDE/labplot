@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : TreeViewComboBox.h
+    File                 : nsl_sf_kernel.c
     Project              : LabPlot
-    Description          : Provides a QTreeView in a QComboBox
+    Description          : NSL special kernel functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -26,49 +26,72 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TREEVIEWCOMBOBOX_H
-#define TREEVIEWCOMBOBOX_H
+#include <math.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_randist.h>	/* Gaussian and Cauchy */
+#include "nsl_sf_kernel.h"
 
-#include <QComboBox>
+/* kernel on [-1,1] */
 
-class QGroupBox;
-class QLineEdit;
-class QTreeView;
+double nsl_sf_kernel_uniform(double u) {
+	if(fabs(u) <= 1.0)
+		return 0.5;
+	return 0.0;
+}
 
-class TreeViewComboBox : public QComboBox {
-	Q_OBJECT
+double nsl_sf_kernel_triangular(double u) {
+	if(fabs(u) <= 1.0)
+		return 1.0-fabs(u);
+	return 0.0;
+}
 
-	public:
-		explicit TreeViewComboBox(QWidget* parent = 0);
+double nsl_sf_kernel_parabolic(double u) {
+	if(fabs(u) <= 1.0)
+		return 3./4.*(1.0-gsl_pow_2(u));
+	return 0.0;
+}
 
-		void setModel(QAbstractItemModel*);
-		void setCurrentModelIndex(const QModelIndex&);
-		QModelIndex currentModelIndex() const;
+double nsl_sf_kernel_quartic(double u) {
+	if(fabs(u) <= 1.0)
+		return 15./16.*gsl_pow_2(1.0-gsl_pow_2(u));
+	return 0.0;
+}
 
-		void setTopLevelClasses(QList<const char*>);
-		void setSelectableClasses(QList<const char*>);
+double nsl_sf_kernel_triweight(double u) {
+	if(fabs(u) <= 1.0)
+		return 35./32.*gsl_pow_3(1.0-gsl_pow_2(u));
+	return 0.0;
+}
 
-		virtual void showPopup();
-		virtual void hidePopup();
+double nsl_sf_kernel_tricube(double u) {
+	if(fabs(u) <= 1.0)
+		return 70./81.*gsl_pow_3(1.0-gsl_pow_3(fabs(u)));
+	return 0.0;
+}
 
-	private:
-		QTreeView* m_treeView;
-		QGroupBox* m_groupBox;
-		QLineEdit* m_lineEdit;
+double nsl_sf_kernel_cosine(double u) {
+	if(fabs(u) <= 1.0)
+		return M_PI/4.*cos(M_PI/2.*u);
+	return 0.0;
+}
 
-		QList<const char*> m_topLevelClasses;
-		QList<const char*> m_selectableClasses;
+/* kernel on (-inf,inf) */
+double nsl_sf_kernel_gaussian(double u) {
+	return gsl_ran_gaussian_pdf(u, 1.0);
+}
 
-		void showTopLevelOnly(const QModelIndex&);
-		bool eventFilter(QObject*, QEvent*);
-		bool filter(const QModelIndex&, const QString&);
+double nsl_sf_kernel_cauchy(double u) {
+	return gsl_ran_cauchy_pdf(u, 1.0);
+}
 
-	private slots:
-		void treeViewIndexActivated(const QModelIndex&);
-		void filterChanged(const QString&);
+double nsl_sf_kernel_logistic(double u) {
+	return gsl_ran_logistic_pdf(u, 1.0);
+}
 
-	signals:
-		void currentModelIndexChanged(const QModelIndex&);
-};
+double nsl_sf_kernel_sigmoid(double u) {
+	return 1.0/M_PI/cosh(u);
+}
 
-#endif
+double nsl_sf_kernel_silverman(double u) {
+	return 1.0/2.0*exp(-fabs(u)/M_SQRT2)*sin(fabs(u)/M_SQRT2+M_PI/4.0);
+}

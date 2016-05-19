@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : TreeViewComboBox.h
+    File                 : nsl_sf_kernel.h
     Project              : LabPlot
-    Description          : Provides a QTreeView in a QComboBox
+    Description          : NSL special kernel functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -26,49 +26,39 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TREEVIEWCOMBOBOX_H
-#define TREEVIEWCOMBOBOX_H
+#ifndef NSL_SF_KERNEL_H
+#define NSL_SF_KERNEL_H
 
-#include <QComboBox>
+#include <stdlib.h>
 
-class QGroupBox;
-class QLineEdit;
-class QTreeView;
+/* see https://en.wikipedia.org/wiki/Kernel_%28statistics%29 */
 
-class TreeViewComboBox : public QComboBox {
-	Q_OBJECT
+/* kernel on [-1:1] */
+/* uniform */
+double nsl_sf_kernel_uniform(double u);
+/* triangular */
+double nsl_sf_kernel_triangular(double u);
+/* parabolic (Epanechnikov) */
+double nsl_sf_kernel_parabolic(double u);
+/* quartic (biweight) */
+double nsl_sf_kernel_quartic(double u);
+/* triweight */
+double nsl_sf_kernel_triweight(double u);
+/* tricube */
+double nsl_sf_kernel_tricube(double u);
+/* cosine */
+double nsl_sf_kernel_cosine(double u);
 
-	public:
-		explicit TreeViewComboBox(QWidget* parent = 0);
+/* kernel on (-inf,inf) */
+/* Gaussian */
+double nsl_sf_kernel_gaussian(double u);
+/* Cauchy */
+double nsl_sf_kernel_cauchy(double u);
+/* Logistic */
+double nsl_sf_kernel_logistic(double u);
+/* Sigmoid */
+double nsl_sf_kernel_sigmoid(double u);
+/* Silverman */
+double nsl_sf_kernel_silverman(double u);
 
-		void setModel(QAbstractItemModel*);
-		void setCurrentModelIndex(const QModelIndex&);
-		QModelIndex currentModelIndex() const;
-
-		void setTopLevelClasses(QList<const char*>);
-		void setSelectableClasses(QList<const char*>);
-
-		virtual void showPopup();
-		virtual void hidePopup();
-
-	private:
-		QTreeView* m_treeView;
-		QGroupBox* m_groupBox;
-		QLineEdit* m_lineEdit;
-
-		QList<const char*> m_topLevelClasses;
-		QList<const char*> m_selectableClasses;
-
-		void showTopLevelOnly(const QModelIndex&);
-		bool eventFilter(QObject*, QEvent*);
-		bool filter(const QModelIndex&, const QString&);
-
-	private slots:
-		void treeViewIndexActivated(const QModelIndex&);
-		void filterChanged(const QString&);
-
-	signals:
-		void currentModelIndexChanged(const QModelIndex&);
-};
-
-#endif
+#endif /* NSL_SF_KERNEL_H */
