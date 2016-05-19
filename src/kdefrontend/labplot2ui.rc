@@ -50,6 +50,10 @@
 	<Action name="new_file_datasource" />
 	<Action name="new_database_datasource" />
 </Menu>
+<Separator/>
+<Menu name="edit_files"><text>&amp;Edit</text>
+        <Action name="edit_fits" />
+</Menu>
 <Action name="import" />
 <Action name="export" />
 <Action name="project" />

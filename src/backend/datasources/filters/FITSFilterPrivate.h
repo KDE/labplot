@@ -36,6 +36,7 @@ class FITSFilterPrivate {
 
         public:
                 explicit FITSFilterPrivate(FITSFilter*);
+                ~FITSFilterPrivate();
                 QString readCHDU(const QString & fileName, AbstractDataSource* dataSource,
                                         AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
                 void writeCHDU(const QString & fileName, AbstractDataSource* dataSource);

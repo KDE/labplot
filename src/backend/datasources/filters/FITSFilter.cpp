@@ -82,6 +82,14 @@ void FITSFilter::parseHeader(const QString &fileName, QTableWidget *headerEditTa
     d->parseHeader(fileName, headerEditTable);
 }
 
+void FITSFilter::loadFilterSettings(const QString& fileName) {
+    Q_UNUSED(fileName)
+}
+
+void FITSFilter::saveFilterSettings(const QString& fileName) const {
+    Q_UNUSED(fileName)
+}
+
 QStringList FITSFilter::standardKeywords() {
     return QStringList() << "(blank)" << "CROTAn"   << "EQUINOX"  << "NAXISn"   << "TBCOLn" << "TUNITn"
                          << "AUTHOR"  << "CRPIXn"   << "EXTEND"   << "OBJECT"   << "TDIMn"  << "TZEROn"
@@ -558,7 +566,7 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
     keywords.reserve(numberOfKeys);
     FITSFilter::Keyword keyword;
     for (int i = 0; i < numberOfKeys; ++i) {
-        QString card = keywordString.mid(i* FLEN_CARD -1, FLEN_CARD -1);
+        QString card = keywordString.mid(i* (FLEN_CARD -1), FLEN_CARD -1);
         QStringList recordValues = card.split(QRegExp("[=/]"));
 
         if (recordValues.size() == 3) {
@@ -585,7 +593,6 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
     QList<FITSFilter::Keyword> keywords = chduKeywords(fileName);
 
     headerEditTable->setRowCount(keywords.size());
-    headerEditTable->setColumnCount(3);
     QTableWidgetItem* item;
     for (int i = 0; i < keywords.size(); ++i) {
         item = new QTableWidgetItem(keywords.at(i).key);
@@ -602,6 +609,9 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
     }
 
     headerEditTable->resizeColumnsToContents();
+}
+
+FITSFilterPrivate::~FITSFilterPrivate() {
 }
 
 //##############################################################################

@@ -120,7 +120,7 @@ private:
 	KAction* m_tileWindows;
 	KAction* m_cascadeWindows;
 	KAction* m_newDatapickerAction;
-
+    KAction* m_editFitsFileAction;
 
 	//toggling doch widgets
 	KAction* m_toggleProjectExplorerDockAction;
@@ -150,6 +150,7 @@ private:
 	//Menus
 	QMenu* m_visibilityMenu;
 	QMenu* m_newMenu;
+    QMenu* m_editMenu;
 
 	//Docks
 	QStackedWidget* stackedWidget;
@@ -216,6 +217,7 @@ private slots:
 	void historyDialog();
 	void importFileDialog(const QString& fileName = QString());
 	void exportDialog();
+    void editFitsFileDialog();
 	void settingsDialog();
 	void projectChanged();
 

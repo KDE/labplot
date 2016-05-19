@@ -71,6 +71,9 @@ class FITSFilter : public AbstractFileFilter{
 
     static QStringList standardKeywords();
 
+    void loadFilterSettings(const QString&);
+    void saveFilterSettings(const QString&) const;
+
   private:
     FITSFilterPrivate* const d;
     friend class FITSFilterPrivate;

@@ -63,6 +63,7 @@
 #include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
 #include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
+#include "kdefrontend/widgets/FITSHeaderEditWidget.h"
 
 #include <algorithm>
 
@@ -387,14 +388,13 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
 	toolBar->addAction(action_insert_rows);
 	toolBar->addAction(action_add_rows);
 	toolBar->addAction(action_remove_rows);
-// 	toolBar->addAction(action_statistics_rows);
+    toolBar->addAction(action_statistics_rows);
 
 	toolBar->addSeparator();
 	toolBar->addAction(action_insert_columns);
 	toolBar->addAction(action_add_column);
 	toolBar->addAction(action_remove_columns);
-	//TODO
-// 	toolBar->addAction(action_statistics_columns);
+    toolBar->addAction(action_statistics_columns);
 
 	toolBar->addSeparator();
 	toolBar->addAction(action_sort_asc_column);
@@ -2148,7 +2148,8 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
         toExport.clear();
     }
 }
-
+//TODO
 void SpreadsheetView::editFitsHeader() {
-
+    FITSHeaderEditWidget* editWidget = new FITSHeaderEditWidget(m_spreadsheet, 0);
+    editWidget->show();
 }

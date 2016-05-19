@@ -28,6 +28,8 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #define FITSHEADEREDITWIDGET_H
 
 #include <QWidget>
+#include <QAction>
+#include "backend/datasources/AbstractDataSource.h"
 #include "ui_fitsheadereditwidget.h"
 
 class FITSHeaderEditWidget : public QWidget
@@ -35,11 +37,27 @@ class FITSHeaderEditWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit FITSHeaderEditWidget(QWidget *parent = 0);
+    explicit FITSHeaderEditWidget(AbstractDataSource* dataSource = 0, QWidget *parent = 0);
     ~FITSHeaderEditWidget();
 
 private:
     Ui::FITSHeaderEditWidget ui;
+    QAction* action_remove_keyword;
+    QAction* action_add_keyword;
+    QAction* action_update_keyword;
+    QMenu* m_KeywordActionsMenu;
+
+    void initActions();
+    void initContextMenu();
+    bool eventFilter(QObject*, QEvent*);
+
+private slots:
+    void openFile();
+    void saveFile();
+
+    void removeKeyword();
+    void addKeyword();
+    void updateKeyword();
 };
 
 #endif // FITSHEADEREDITWIDGET_H

@@ -51,6 +51,7 @@
 #include "kdefrontend/HistoryDialog.h"
 #include "kdefrontend/SettingsDialog.h"
 #include "kdefrontend/GuiObserver.h"
+#include "kdefrontend/widgets/FITSHeaderEditWidget.h"
 
 #include <QMdiArea>
 #include <QMenu>
@@ -94,6 +95,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	  m_autoSaveActive(false),
 	  m_visibilityMenu(0),
 	  m_newMenu(0),
+      m_editMenu(0),
 	  axisDock(0),
 	  cartesianPlotDock(0),
 	  cartesianPlotLegendDock(0),
@@ -270,9 +272,12 @@ void MainWin::initActions() {
 
 	m_exportAction = new KAction(KIcon("document-export-database"), i18n("Export"), this);
 	m_exportAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E);
-	actionCollection()->addAction("export", m_exportAction);
+    actionCollection()->addAction("export", m_exportAction);
 	connect(m_exportAction, SIGNAL(triggered()),SLOT(exportDialog()));
 
+    m_editFitsFileAction = new KAction(i18n("Edit FITS file header"), this);
+    actionCollection()->addAction("edit_fits", m_editFitsFileAction);
+    connect(m_editFitsFileAction, SIGNAL(triggered()), SLOT(editFitsFileDialog()));
 	// Edit
 	//Undo/Redo-stuff
 	m_undoAction = KStandardAction::undo(this, SLOT(undo()), actionCollection());
@@ -288,7 +293,7 @@ void MainWin::initActions() {
 	// Script
 
 	//Windows
-	action  = new KAction(i18n("Cl&ose"), this);
+    action = new KAction(i18n("Cl&ose"), this);
 	action->setShortcut(i18n("Ctrl+W"));
 	action->setStatusTip(i18n("Close the active window"));
 	actionCollection()->addAction("close window", action);
@@ -360,7 +365,7 @@ void MainWin::initActions() {
 
 void MainWin::initMenus() {
 	//menu for adding new aspects
-	m_newMenu = new QMenu(i18n("Add new"), this);
+    m_newMenu = new QMenu(i18n("Add new"), this);
 	m_newMenu->setIcon(KIcon("document-new"));
 	m_newMenu->addAction(m_newFolderAction);
 	m_newMenu->addAction(m_newWorkbookAction);
@@ -378,6 +383,10 @@ void MainWin::initMenus() {
 	m_visibilityMenu ->addAction(m_visibilityFolderAction);
 	m_visibilityMenu ->addAction(m_visibilitySubfolderAction);
 	m_visibilityMenu ->addAction(m_visibilityAllAction);
+
+    //menu for editing files
+    m_editMenu = new QMenu(i18n("Edit"), this);
+    m_editMenu->addAction(m_editFitsFileAction);
 }
 
 /*!
@@ -1498,6 +1507,11 @@ void MainWin::exportDialog() {
     if(part->exportView()){
         statusBar()->showMessage(i18n("%1 exported", part->name()));
     }
+}
+//TODO
+void MainWin::editFitsFileDialog() {
+    FITSHeaderEditWidget* editWidget = new FITSHeaderEditWidget(0, 0);
+    editWidget->show();
 }
 
 /*!
