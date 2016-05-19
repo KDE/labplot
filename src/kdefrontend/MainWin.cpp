@@ -947,7 +947,7 @@ void MainWin::printPreview() {
 	adds a new Folder to the project.
 */
 void MainWin::newFolder() {
-	Folder* folder = new Folder(i18n("Folder %1", 1));
+	Folder* folder = new Folder(i18n("Folder"));
 	this->addAspectToProject(folder);
 }
 
