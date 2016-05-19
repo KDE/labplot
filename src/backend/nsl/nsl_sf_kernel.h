@@ -33,6 +33,7 @@
 
 /* see https://en.wikipedia.org/wiki/Kernel_%28statistics%29 */
 
+/* kernel on [-1:1] */
 /* uniform */
 double nsl_sf_kernel_uniform(double u);
 /* triangular */
@@ -47,6 +48,17 @@ double nsl_sf_kernel_triweight(double u);
 double nsl_sf_kernel_tricube(double u);
 /* cosine */
 double nsl_sf_kernel_cosine(double u);
-/* TODO: Gaussian, Logistic, Sigmoid, Silverman */
+
+/* kernel on (-inf,inf) */
+/* Gaussian */
+double nsl_sf_kernel_gaussian(double u);
+/* Cauchy */
+double nsl_sf_kernel_cauchy(double u);
+/* Logistic */
+double nsl_sf_kernel_logistic(double u);
+/* Sigmoid */
+double nsl_sf_kernel_sigmoid(double u);
+/* Silverman */
+double nsl_sf_kernel_silverman(double u);
 
 #endif /* NSL_SF_KERNEL_H */

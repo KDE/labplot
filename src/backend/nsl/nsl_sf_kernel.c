@@ -28,7 +28,10 @@
 
 #include <math.h>
 #include <gsl/gsl_math.h>
+#include <gsl/gsl_randist.h>	/* Gaussian and Cauchy */
 #include "nsl_sf_kernel.h"
+
+/* kernel on [-1,1] */
 
 double nsl_sf_kernel_uniform(double u) {
 	if(fabs(u) <= 1.0)
@@ -70,4 +73,25 @@ double nsl_sf_kernel_cosine(double u) {
 	if(fabs(u) <= 1.0)
 		return M_PI/4.*cos(M_PI/2.*u);
 	return 0.0;
+}
+
+/* kernel on (-inf,inf) */
+double nsl_sf_kernel_gaussian(double u) {
+	return gsl_ran_gaussian_pdf(u, 1.0);
+}
+
+double nsl_sf_kernel_cauchy(double u) {
+	return gsl_ran_cauchy_pdf(u, 1.0);
+}
+
+double nsl_sf_kernel_logistic(double u) {
+	return gsl_ran_cauchy_pdf(u, 1.0);
+}
+
+double nsl_sf_kernel_sigmoid(double u) {
+	return 1.0/M_PI/cosh(u);
+}
+
+double nsl_sf_kernel_silverman(double u) {
+	return 1.0/2.0*exp(-fabs(u)/M_SQRT2)*sin(fabs(u)/M_SQRT2+M_PI/4.0);
 }
