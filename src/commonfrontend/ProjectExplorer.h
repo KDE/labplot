@@ -60,6 +60,7 @@ class ProjectExplorer : public QWidget {
 	  	void contextMenuEvent(QContextMenuEvent*);
 		bool eventFilter(QObject*, QEvent*);
 		void collapseParents(const QModelIndex& index, const QList<QModelIndex>& expanded);
+		bool filter(const QModelIndex&, const QString&);
 		int m_columnToHide;
 		QTreeView* m_treeView;
 		const Project* m_project;

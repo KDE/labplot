@@ -385,38 +385,51 @@ void ProjectExplorer::resizeHeader() {
   called when the filter/search text was changend.
 */
 void ProjectExplorer::filterTextChanged(const QString& text) {
-	AspectTreeModel * model = qobject_cast<AspectTreeModel *>(m_treeView->model());
-	if(!model)
-		return;
+	QModelIndex root = m_treeView->model()->index(0,0);
+	filter(root, text);
+}
 
-	model->setFilterString(text);
-	m_treeView->update();
+bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
+	Qt::CaseSensitivity sensitivity = caseSensitiveAction->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+	bool matchCompleteWord = matchCompleteWordAction->isChecked();
+
+	bool childVisible = false;
+	const int rows = index.model()->rowCount(index);
+	for (int i=0; i<rows; i++) {
+		QModelIndex child = index.child(i, 0);
+		AbstractAspect* aspect =  static_cast<AbstractAspect*>(child.internalPointer());
+		bool visible;
+		if (matchCompleteWord)
+			visible = aspect->name().startsWith(text, sensitivity);
+		else
+			visible = aspect->name().contains(text, sensitivity);
+
+		if (visible) {
+			//current item is visible -> make all its children visible without applying the filter
+			for (int j=0; j<child.model()->rowCount(child); ++j)
+				m_treeView->setRowHidden(j, child, false);
+
+			childVisible = true;
+		} else {
+			//check children items. if one of the children is visible, make the parent (current) item visible too.
+			visible = filter(child, text);
+			if (visible)
+				childVisible = true;
+		}
+
+		m_treeView->setRowHidden(i, index, !visible);
+	}
+
+	return childVisible;
 }
 
 void ProjectExplorer::toggleFilterCaseSensitivity() {
-	AspectTreeModel * model = qobject_cast<AspectTreeModel *>(m_treeView->model());
-	if(!model)
-		return;
-
-	if (caseSensitiveAction->isChecked())
-		model->setFilterCaseSensitivity(Qt::CaseSensitive);
-	else
-		model->setFilterCaseSensitivity(Qt::CaseInsensitive);
-
-	model->setFilterString(leFilter->text());
-	m_treeView->update();
+	filterTextChanged(leFilter->text());
 }
 
 
 void ProjectExplorer::toggleFilterMatchCompleteWord() {
-	AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	if(!model)
-		return;
-
-	model->setFilterMatchCompleteWord(matchCompleteWordAction->isChecked());
-
-	model->setFilterString(leFilter->text());
-	m_treeView->update();
+	filterTextChanged(leFilter->text());
 }
 
 void ProjectExplorer::selectIndex(const QModelIndex&  index) {
