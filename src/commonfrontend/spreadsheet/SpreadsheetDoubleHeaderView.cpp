@@ -1,8 +1,8 @@
 /***************************************************************************
     File                 : SpreadsheetDoubleHeaderView.cpp
-    Project              : SciDAVis
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert,
+    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
     Email (use @ for *)  : thzs*gmx.net
     Description          : Horizontal header for SpreadsheetView displaying comments in a second header
 

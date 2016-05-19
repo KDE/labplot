@@ -43,8 +43,8 @@
 #include <QDir>
 #include <QFileDialog>
 #include <KUrlCompletion>
-#include <KLocalizedString>
 #include <KConfigGroup>
+#include <QDebug>
 
 /*!
   \class XYCurveDock
@@ -488,7 +488,10 @@ void XYCurveDock::init(){
 
 void XYCurveDock::setModel() {
 	QList<const char*>  list;
-        list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve"<<"CantorWorksheet";
+	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
+		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"CantorWorksheet"
+		<<"XYInterpolationCurve"<<"XYFitCurve"<<"XYFourierFilterCurve";
+
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);
 		cbYColumn->setTopLevelClasses(list);

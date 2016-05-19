@@ -71,7 +71,8 @@ class AxisPrivate: public QGraphicsItem {
 
 		// Title
 		TextLabel* title;
-		float titleOffset; //distance to the axis line
+		float titleOffsetX; //distance to the axis line
+		float titleOffsetY; //distance to the axis line
 
 		// Ticks
 		Axis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none

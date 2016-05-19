@@ -1,3 +1,4 @@
+
 /***************************************************************************
     File                 : CartesianCoordinateSystem.cpp
     Project              : LabPlot

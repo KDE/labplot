@@ -4,7 +4,7 @@
     Description          : Private data class of Column
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2013-2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -34,17 +34,14 @@
 #include "backend/core/column/Column.h"
 
 class AbstractSimpleFilter;
-// class QString;
 
 class ColumnPrivate: QObject {
 	Q_OBJECT
 
 	public:
-		ColumnPrivate(Column * owner, AbstractColumn::ColumnMode mode);
+		ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode);
 		~ColumnPrivate();
-		ColumnPrivate(Column * owner, AbstractColumn::ColumnMode mode, void * data);
-
-		Column *owner() { return m_owner; }
+		ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, void* data);
 
 		AbstractColumn::ColumnMode columnMode() const;
 		void setColumnMode(AbstractColumn::ColumnMode mode);
@@ -96,9 +93,12 @@ class ColumnPrivate: QObject {
 		void setValueAt(int row, double new_value);
 		void replaceValues(int first, const QVector<double>& new_values);
 
+		Column::ColumnStatistics statistics;
+		bool statisticsAvailable;
+
 	private:
 		AbstractColumn::ColumnMode m_column_mode;
-		void * m_data;
+		void* m_data;
 		AbstractSimpleFilter* m_input_filter;
 		AbstractSimpleFilter* m_output_filter;
 		QString m_formula;
@@ -107,7 +107,7 @@ class ColumnPrivate: QObject {
 		IntervalAttribute<QString> m_formulas;
 		AbstractColumn::PlotDesignation m_plot_designation;
 		int m_width;
-		Column * m_owner;
+		Column* m_owner;
 };
 
 #endif

@@ -34,6 +34,8 @@
 #include <QLayout>
 #include <KLocale>
 #include <QIcon>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 
 /*!
@@ -43,7 +45,7 @@
 	\ingroup kdefrontend
  */
 
-SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : KDialog( parent, fl ){
+SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : QDialog( parent, fl ){
 
 	setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
 	setWindowTitle(i18n("Sort columns"));
@@ -74,13 +76,21 @@ SortDialog::SortDialog( QWidget* parent, Qt::WFlags fl ) : KDialog( parent, fl )
 	layout->addWidget(cbColumns, 2, 1);
 	layout->setRowStretch(3, 1);
 
-	setMainWidget( widget );
 
-	setButtons( KDialog::Ok | KDialog::Cancel);
-	setButtonText(KDialog::Ok, i18n("&Sort"));
+	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
+                                         | QDialogButtonBox::Cancel);
 
-	connect(this, SIGNAL(okClicked()), this, SLOT(sort()));
-    connect( cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(changeType(int)));
+	buttonBox->button(QDialogButtonBox::Ok)->setText(i18n("Sort"));
+
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(sort()));
+	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+
+	layout->addWidget(buttonBox);
+
+	setLayout(layout);
+
+	connect( cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(changeType(int)));
 
 	this->resize(400,0);
 }

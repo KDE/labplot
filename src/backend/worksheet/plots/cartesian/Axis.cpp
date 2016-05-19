@@ -159,7 +159,8 @@ void Axis::init(){
 	d->title->graphicsItem()->setAcceptHoverEvents(false);
 	d->title->setText(this->name());
 	if (d->orientation == AxisVertical) d->title->setRotationAngle(270);
-	d->titleOffset = Worksheet::convertToSceneUnits(2, Worksheet::Point); //distance to the axis tick labels
+	d->titleOffsetX = Worksheet::convertToSceneUnits(2, Worksheet::Point); //distance to the axis tick labels
+	d->titleOffsetY = Worksheet::convertToSceneUnits(2, Worksheet::Point); //distance to the axis tick labels
 
 	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
 	d->majorTicksType = (Axis::TicksType) group.readEntry("MajorTicksType", (int) Axis::TicksTotalNumber);
@@ -370,7 +371,8 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset)
 
 BASIC_SHARED_D_READER_IMPL(Axis, TextLabel*, title, title)
-BASIC_SHARED_D_READER_IMPL(Axis, float, titleOffset, titleOffset)
+BASIC_SHARED_D_READER_IMPL(Axis, float, titleOffsetX, titleOffsetX)
+BASIC_SHARED_D_READER_IMPL(Axis, float, titleOffsetY, titleOffsetY)
 
 CLASS_SHARED_D_READER_IMPL(Axis, QPen, linePen, linePen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, lineOpacity, lineOpacity)
@@ -522,11 +524,18 @@ void Axis::setScalingFactor(qreal scalingFactor) {
 }
 
 //Title
-STD_SETTER_CMD_IMPL_F_S(Axis, SetTitleOffset, float, titleOffset, retransform);
-void Axis::setTitleOffset(float offset) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetTitleOffsetX, float, titleOffsetX, retransform);
+void Axis::setTitleOffsetX(float offset) {
 	Q_D(Axis);
-	if (offset != d->titleOffset)
-		exec(new AxisSetTitleOffsetCmd(d, offset, i18n("%1: set title offset")));
+	if (offset != d->titleOffsetX)
+		exec(new AxisSetTitleOffsetXCmd(d, offset, i18n("%1: set title offset")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetTitleOffsetY, float, titleOffsetY, retransform);
+void Axis::setTitleOffsetY(float offset) {
+	Q_D(Axis);
+	if (offset != d->titleOffsetY)
+		exec(new AxisSetTitleOffsetYCmd(d, offset, i18n("%1: set title offset")));
 }
 
 //Line
@@ -1591,7 +1600,7 @@ void AxisPrivate::retransformMajorGrid(){
 		}
 	}
 
-	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
+	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping | AbstractCoordinateSystem::MarkGaps);
 	foreach (const QLineF& line, lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
@@ -1610,7 +1619,7 @@ void AxisPrivate::retransformMinorGrid(){
 	//minor tick points are already in scene coordinates, convert them back to logical...
 	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	//Currently, grid lines disappear somtimes without this flag
-	QList<QPointF> logicalMinorTickPoints = m_cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+	QList<QPointF> logicalMinorTickPoints = m_cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping | AbstractCoordinateSystem::MarkGaps);
 
 	QList<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal){ //horizontal axis
@@ -1631,7 +1640,7 @@ void AxisPrivate::retransformMinorGrid(){
 		}
 	}
 
-	lines = m_cSystem->mapLogicalToScene(lines);
+	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
 	foreach (const QLineF& line, lines) {
 		minorGridPath.moveTo(line.p1());
 		minorGridPath.lineTo(line.p2());
@@ -1690,15 +1699,15 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		//we calculate the new position here and not in retransform(),
 		//since it depends on the size and position of the tick labels, tickLabelsPath, available here.
 		QRectF rect=linePath.boundingRect();
-		float offset = titleOffset + labelsOffset; //the distance to the axis line
+		float offsetX = titleOffsetX - labelsOffset; //the distance to the axis line
+		float offsetY = titleOffsetY - labelsOffset; //the distance to the axis line
 		if (orientation == Axis::AxisHorizontal){
-			offset += title->graphicsItem()->boundingRect().height()/2 + tickLabelsPath.boundingRect().height();
-			title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2, rect.bottomLeft().y() + offset ) );
+			offsetY -= title->graphicsItem()->boundingRect().height()/2 + tickLabelsPath.boundingRect().height();
+			title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2 + offsetX, rect.bottomLeft().y() - offsetY ) );
 		}else{
-			offset += title->graphicsItem()->boundingRect().width()/2 + tickLabelsPath.boundingRect().width();
-			title->setPosition( QPointF( rect.topLeft().x() - offset, (rect.topLeft().y() + rect.bottomLeft().y())/2 ) );
+			offsetX -= title->graphicsItem()->boundingRect().width()/2 + tickLabelsPath.boundingRect().width();
+			title->setPosition( QPointF( rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y())/2 - offsetY) );
 		}
-
 		axisShape.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 	}
 
@@ -1832,7 +1841,8 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "end", QString::number(d->end) );
 	writer->writeAttribute( "scalingFactor", QString::number(d->scalingFactor) );
 	writer->writeAttribute( "zeroOffset", QString::number(d->zeroOffset) );
-	writer->writeAttribute( "titleOffset", QString::number(d->titleOffset) );
+	writer->writeAttribute( "titleOffsetX", QString::number(d->titleOffsetX) );
+	writer->writeAttribute( "titleOffsetY", QString::number(d->titleOffsetY) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 
@@ -1987,11 +1997,16 @@ bool Axis::load(XmlStreamReader* reader){
             else
                 d->zeroOffset = str.toDouble();
 
-			str = attribs.value("titleOffset").toString();
+			str = attribs.value("titleOffsetX").toString();
             if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'titleOffset'"));
+                reader->raiseWarning(attributeWarning.arg("'titleOffsetX'"));
             else
-                d->titleOffset = str.toDouble();
+                d->titleOffsetX = str.toDouble();
+			str = attribs.value("titleOffsetY").toString();
+            if(str.isEmpty())
+                reader->raiseWarning(attributeWarning.arg("'titleOffsetY'"));
+            else
+                d->titleOffsetY = str.toDouble();
 
 			str = attribs.value("visible").toString();
             if(str.isEmpty())

@@ -29,7 +29,6 @@
 #include "ExportSpreadsheetDialog.h"
 
 #include <QFileDialog>
-#include <KUrlCompletion>
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KConfigGroup>
@@ -42,19 +41,17 @@
 	\ingroup kdefrontend
 */
 
-ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(parent) {
+ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(parent),
+    m_matrixMode(false), urlCompletion(new KUrlCompletion) {
 	mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
 	ui.gbOptions->hide();
 
-	KUrlCompletion *comp = new KUrlCompletion();
-	ui.kleFileName->setCompletionObject(comp);
+    ui.kleFileName->setCompletionObject(urlCompletion);
 
 	ui.cbFormat->addItem("ASCII");
 	ui.cbFormat->addItem("Binary");
-	//TODO: implement later
-	ui.lFormat->hide();
-	ui.cbFormat->hide();
+	ui.cbFormat->addItem("LaTeX");
 
 	ui.cbSeparator->addItem("TAB");
 	ui.cbSeparator->addItem("SPACE");
@@ -68,6 +65,9 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	ui.cbSeparator->addItem(";SPACE");
 	ui.cbSeparator->addItem(":SPACE");
 
+	ui.cbLaTeXExport->addItem(i18n("Export spreadsheet"));
+	ui.cbLaTeXExport->addItem(i18n("Export selection"));
+
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	setMainWidget( mainWidget );
@@ -77,6 +77,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
 	connect( ui.kleFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
+	connect(ui.cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(formatChanged(int)));
 
 	setCaption(i18n("Export spreadsheet"));
 	setWindowIcon(QIcon::fromTheme("document-export-database"));
@@ -86,6 +87,14 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	ui.cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui.chkExportHeader->setChecked(conf.readEntry("Header", true));
 	ui.cbSeparator->setCurrentItem(conf.readEntry("Separator", "TAB"));
+	ui.chkHeaders->setChecked(conf.readEntry("LaTeXHeaders", true));
+	ui.chkGridLines->setChecked(conf.readEntry("LaTeXGridLines", true));
+	ui.chkCaptions->setChecked(conf.readEntry("LaTeXCaptions", true));
+	ui.chkEmptyRows->setChecked(conf.readEntry("LaTeXSkipEmpty", false));
+	ui.cbLaTeXExport->setCurrentIndex(conf.readEntry("ExportOnly", 0));
+	ui.chkMatrixHHeader->setChecked(conf.readEntry("MatrixHorizontalHeader", true));
+	ui.chkMatrixVHeader->setChecked(conf.readEntry("MatrixVerticalHeader", true));
+
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	ui.gbOptions->setVisible(m_showOptions);
 	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
@@ -99,10 +108,19 @@ ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 	conf.writeEntry("Header", ui.chkExportHeader->isChecked());
 	conf.writeEntry("Separator", ui.cbSeparator->currentIndex());
 	conf.writeEntry("ShowOptions", m_showOptions);
+	conf.writeEntry("LaTeXHeaders", ui.chkHeaders->isChecked());
+	conf.writeEntry("LaTeXGridLines", ui.chkGridLines->isChecked());
+	conf.writeEntry("LaTeXCaptions", ui.chkCaptions->isChecked());
+	conf.writeEntry("LaTeXSkipEmpty", ui.chkEmptyRows->isChecked());
+	conf.writeEntry("ExportOnly", ui.cbLaTeXExport->currentIndex());
+	conf.writeEntry("MatrixVerticalHeader", ui.chkMatrixVHeader->isChecked());
+	conf.writeEntry("MatrixHorizontalHeader", ui.chkMatrixHHeader->isChecked());
+
 	saveDialogSize(conf);
+    delete urlCompletion;
 }
 
-void ExportSpreadsheetDialog::setFileName(const QString& name){
+void ExportSpreadsheetDialog::setFileName(const QString& name) {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	QString dir = conf.readEntry("LastDir", "");
 	if (dir.isEmpty()) dir = QDir::homePath();
@@ -112,17 +130,61 @@ void ExportSpreadsheetDialog::setFileName(const QString& name){
 
 void ExportSpreadsheetDialog::setMatrixMode(bool b) {
 	if (b) {
+		setCaption(i18n("Export matrix"));
 		ui.lExportHeader->hide();
 		ui.chkExportHeader->hide();
+		ui.lEmptyRows->hide();
+		ui.chkEmptyRows->hide();
+		ui.chkMatrixHHeader->show();
+		ui.chkMatrixVHeader->show();
+		ui.lMatrixHHeader->show();
+		ui.lMatrixVHeader->show();
+		ui.lHeader->hide();
+		ui.chkHeaders->hide();
+		ui.cbLaTeXExport->setItemText(0,i18n("Export matrix"));
+
+		m_matrixMode = b;
 	}
 }
 
-QString ExportSpreadsheetDialog::path() const{
+QString ExportSpreadsheetDialog::path() const {
 	return ui.kleFileName->text();
 }
 
 bool ExportSpreadsheetDialog::exportHeader() const {
 	return ui.chkExportHeader->isChecked();
+}
+
+bool ExportSpreadsheetDialog::captions() const {
+	return ui.chkCaptions->isChecked();
+}
+
+bool ExportSpreadsheetDialog::exportLatexHeader() const {
+	return ui.chkHeaders->isChecked();
+}
+
+bool ExportSpreadsheetDialog::gridLines() const {
+	return ui.chkGridLines->isChecked();
+}
+
+bool ExportSpreadsheetDialog::skipEmptyRows() const {
+	return ui.chkEmptyRows->isChecked();
+}
+
+bool ExportSpreadsheetDialog::exportSelection() const {
+	return ui.cbLaTeXExport->currentIndex() == 1;
+}
+
+bool ExportSpreadsheetDialog::entireSpreadheet() const {
+	return ui.cbLaTeXExport->currentIndex() == 0;
+}
+
+bool ExportSpreadsheetDialog::matrixHorizontalHeader() const {
+	return ui.chkMatrixHHeader->isChecked();
+}
+
+bool ExportSpreadsheetDialog::matrixVerticalHeader() const {
+	return ui.chkMatrixVHeader->isChecked();
 }
 
 QString ExportSpreadsheetDialog::separator() const {
@@ -137,21 +199,20 @@ void ExportSpreadsheetDialog::slotButtonClicked(int button) {
 }
 
 //SLOTS
-void ExportSpreadsheetDialog::okClicked(){
-	if ( QFile::exists(ui.kleFileName->text()) ){
+void ExportSpreadsheetDialog::okClicked() {
+	if ( QFile::exists(ui.kleFileName->text()) ) {
 		int r=KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
-		if (r==KMessageBox::No) {
+		if (r==KMessageBox::No)
 			return;
-		}
 	}
 
-    KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
-    conf.writeEntry("Format", ui.cbFormat->currentIndex());
+	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+	conf.writeEntry("Format", ui.cbFormat->currentIndex());
 	conf.writeEntry("Header", ui.chkExportHeader->isChecked());
 	conf.writeEntry("Separator", ui.cbSeparator->currentText());
 
-    QString path = ui.kleFileName->text();
-    if (!path.isEmpty()) {
+	QString path = ui.kleFileName->text();
+	if (!path.isEmpty()) {
 		QString dir = conf.readEntry("LastDir", "");
 		ui.kleFileName->setText(path);
 		int pos = path.lastIndexOf(QDir::separator());
@@ -175,7 +236,7 @@ void ExportSpreadsheetDialog::toggleOptions() {
 	//resize the dialog
 	mainWidget->resize(layout()->minimumSize());
 	layout()->activate();
- 	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
+	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
 }
 
 /*!
@@ -184,8 +245,8 @@ void ExportSpreadsheetDialog::toggleOptions() {
 void ExportSpreadsheetDialog::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	QString dir = conf.readEntry("LastDir", "");
-    QString path = QFileDialog::getOpenFileName(this, i18n("Export to file"), dir);
-    if (!path.isEmpty()) {
+	QString path = QFileDialog::getOpenFileName(this, i18n("Export to file"), dir);
+	if (!path.isEmpty()) {
 		ui.kleFileName->setText(path);
 
 		int pos = path.lastIndexOf(QDir::separator());
@@ -200,9 +261,9 @@ void ExportSpreadsheetDialog::selectFile() {
 /*!
 	called when the output format was changed. Adjusts the extension for the specified file.
  */
-void ExportSpreadsheetDialog::formatChanged(int index){
+void ExportSpreadsheetDialog::formatChanged(int index) {
 	QStringList extensions;
-	extensions<<".txt"<<".bin";
+	extensions<<".txt"<<".bin" << ".tex";
 	QString path = ui.kleFileName->text();
 	int i = path.indexOf(".");
 	if (i==-1)
@@ -210,7 +271,68 @@ void ExportSpreadsheetDialog::formatChanged(int index){
 	else
 		path=path.left(i) + extensions.at(index);
 
+	if (ui.cbFormat->currentIndex() == 2) {
+		ui.cbSeparator->hide();
+		ui.lSeparator->hide();
+
+		ui.chkCaptions->show();
+		ui.chkGridLines->show();;
+		ui.lExportArea->show();
+		ui.lGridLines->show();
+		ui.lCaptions->show();
+		ui.cbLaTeXExport->show();
+
+		if (!m_matrixMode) {
+			ui.lHeader->show();
+			ui.chkHeaders->show();
+			ui.lEmptyRows->show();
+			ui.chkEmptyRows->show();
+		} else {
+			ui.lMatrixHHeader->show();
+			ui.lMatrixVHeader->show();
+			ui.chkMatrixHHeader->show();
+			ui.chkMatrixVHeader->show();
+		}
+
+	} else {
+		ui.cbSeparator->show();
+		ui.lSeparator->show();
+
+		ui.chkCaptions->hide();
+		ui.chkEmptyRows->hide();
+		ui.chkGridLines->hide();;
+		ui.lEmptyRows->hide();
+		ui.lExportArea->hide();
+		ui.lGridLines->hide();
+		ui.lCaptions->hide();
+		ui.cbLaTeXExport->hide();
+		ui.lMatrixHHeader->hide();
+		ui.lMatrixVHeader->hide();
+		ui.chkMatrixHHeader->hide();
+		ui.chkMatrixVHeader->hide();
+
+		ui.lHeader->hide();
+		ui.chkHeaders->hide();
+	}
+
+	if (!m_matrixMode) {
+		ui.chkExportHeader->show();
+		ui.lExportHeader->show();
+	} else {
+		ui.chkExportHeader->hide();
+		ui.lExportHeader->hide();
+	}
+
+	setFormat(static_cast<Format>(index));
 	ui.kleFileName->setText(path);
+}
+
+void ExportSpreadsheetDialog::setFormat(Format format) {
+	m_format = format;
+}
+
+ExportSpreadsheetDialog::Format ExportSpreadsheetDialog::format() const {
+	return m_format;
 }
 
 void ExportSpreadsheetDialog::fileNameChanged(const QString& name) {

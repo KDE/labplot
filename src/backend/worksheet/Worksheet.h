@@ -55,9 +55,9 @@ class Worksheet: public AbstractPart, public scripted {
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
-		virtual void exportView() const;
-		virtual void printView();
-		virtual void printPreview() const;
+        virtual bool exportView() const;
+        virtual bool printView();
+        virtual bool printPreview() const;
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);

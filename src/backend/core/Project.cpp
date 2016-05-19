@@ -30,7 +30,9 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/datapicker/DatapickerCurve.h"
 
@@ -277,7 +279,7 @@ bool Project::load(XmlStreamReader* reader) {
 			//restore the pointer to the data sets (columns) in xy-curves etc.
 			QList<AbstractAspect*> curves = children("XYCurve", AbstractAspect::Recursive);
 			QList<AbstractAspect*> axes = children("Axes", AbstractAspect::Recursive);
-            QList<AbstractAspect*> dataPickerCurves = children("DatapickerCurve", AbstractAspect::Recursive);
+			QList<AbstractAspect*> dataPickerCurves = children("DatapickerCurve", AbstractAspect::Recursive);
 			if (curves.size()!=0 || axes.size()!=0) {
 				QList<AbstractAspect*> columns = children("Column", AbstractAspect::Recursive);
 
@@ -287,25 +289,32 @@ bool Project::load(XmlStreamReader* reader) {
 					if (!curve) continue;
 
 					curve->suppressRetransform(true);
+
 					XYEquationCurve* equationCurve = dynamic_cast<XYEquationCurve*>(aspect);
+					XYInterpolationCurve* interpolationCurve = dynamic_cast<XYInterpolationCurve*>(aspect);
+					XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(aspect);
+					XYFourierFilterCurve* filterCurve = dynamic_cast<XYFourierFilterCurve*>(aspect);
 					if (equationCurve) {
 						//curves defined by a mathematical equations recalculate their own columns on load again.
 						equationCurve->recalculate();
+					} else if (interpolationCurve) {
+						RESTORE_COLUMN_POINTER(interpolationCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(interpolationCurve, yDataColumn, YDataColumn);
+					} else if (fitCurve) {
+						RESTORE_COLUMN_POINTER(fitCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(fitCurve, yDataColumn, YDataColumn);
+						RESTORE_COLUMN_POINTER(fitCurve, weightsColumn, WeightsColumn);
+					} else if (filterCurve) {
+						RESTORE_COLUMN_POINTER(filterCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(filterCurve, yDataColumn, YDataColumn);
 					} else {
-						XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(aspect);
-						if (fitCurve) {
-							RESTORE_COLUMN_POINTER(fitCurve, xDataColumn, XDataColumn);
-							RESTORE_COLUMN_POINTER(fitCurve, yDataColumn, YDataColumn);
-							RESTORE_COLUMN_POINTER(fitCurve, weightsColumn, WeightsColumn);
-						} else {
-							RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
-							RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
-							RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
-							RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
-							RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
-							RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
-							RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
-						}
+						RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
+						RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
+						RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
+						RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
+						RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
+						RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
+						RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
 					}
 					curve->suppressRetransform(false);
 					curve->retransform();

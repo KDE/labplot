@@ -87,10 +87,8 @@ void Folder::save(QXmlStreamWriter* writer) const {
  */
 bool Folder::load(XmlStreamReader* reader) {
 	if(reader->isStartElement() && reader->name() == "folder") {
-		setComment("");
-		removeAllChildren();
-
-		if (!readBasicAttributes(reader)) return false;
+		if (!readBasicAttributes(reader))
+			return false;
 
 		// read child elements
 		while (!reader->atEnd()) {
@@ -123,7 +121,6 @@ bool Folder::load(XmlStreamReader* reader) {
  */
 bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 	bool loaded = false;
-	Q_ASSERT(reader->isStartElement() && reader->name() == "child_aspect");
 
 	if (!reader->skipToNextTag()) return false;
 	if (reader->isEndElement() && reader->name() == "child_aspect") return true; // empty element tag
@@ -204,6 +201,5 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 	}
 
 	if (!reader->skipToNextTag()) return false;
-	Q_ASSERT(reader->isEndElement() && reader->name() == "child_aspect");
 	return !reader->hasError();
 }

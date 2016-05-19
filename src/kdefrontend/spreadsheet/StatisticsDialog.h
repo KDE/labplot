@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : AbstractExportFilter.cpp
-    Project              : SciDAVis
+    File                 : StatisticsDialog.h
+    Project              : LabPlot
+    Description          : Dialog showing statistics for column values
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Knut Franke
-    Email (use @ for *)  : Knut.Franke*gmx.net
-    Description          : Interface for export operations.
+    Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+    Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -26,39 +26,31 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef STATISTICSDIALOG_H
+#define STATISTICSDIALOG_H
 
-#include "AbstractExportFilter.h"
+#include <KDialog>
 
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+class Column;
+class QTabWidget;
 
-/**
- * \class AbstractExportFilter
- * \brief Interface for export operations.
- *
- * This is analogous to AbstractImportFilter.
- */
+class StatisticsDialog : public KDialog {
+	Q_OBJECT
 
-/**
- * \fn bool AbstractExportFilter::exportAspect(AbstractAspect *object, QIODevice *output)
- * \brief Export object to output.
- *
- * \return true if export was successful, false otherwise
- */
+public:
+	explicit StatisticsDialog(const QString&, QWidget *parent = 0);
+	void setColumns(const QList<Column*>& columns);
 
-/**
- * \fn QStringList AbstractExportFilter::fileExtensions() const
- * \brief The file extension(s) typically associated with the handled format.
- */
+private:
+	const QString isNanValue(const double value);
+	QSize sizeHint() const;
 
-/**
- * \fn QString AbstractExportFilter::name() const
- * \brief A (localized) name for the filter.
- */
+	QTabWidget* twStatistics;
+	QString m_htmlText;
+	QList<Column*> m_columns;
 
-/**
- * \brief Uses name() and fileExtensions() to produce a filter specification as used by QFileDialog.
- */
-QString AbstractExportFilter::nameAndPatterns() const {
-	return name() + " (*." + fileExtensions().join(" *.") + ')';
-}
+private slots:
+	void currentTabChanged(int index);
+};
+
+#endif

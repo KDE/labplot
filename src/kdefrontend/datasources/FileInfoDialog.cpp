@@ -34,6 +34,9 @@
 #include <KFilterDev>
 #include <QFileInfo>
 #include <QProcess>
+#include <QDialogButtonBox>
+#include <QIcon>
+#include <QVBoxLayout>
 
  /*!
 	\class ImportWidget
@@ -42,14 +45,25 @@
 	\ingroup kdefrontend
  */
 
-FileInfoDialog::FileInfoDialog(QWidget* parent) : KDialog(parent) {
+FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 
 	textEditWidget.setReadOnly(true);
 	textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
-	setMainWidget( &textEditWidget );
-	setButtons( KDialog::Ok);
+
+	QVBoxLayout *layout = new QVBoxLayout(this);
+	layout->addWidget(&textEditWidget);
+
+	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+
+	layout->addWidget(buttonBox);
+
 	setWindowIcon(QIcon::fromTheme("help-about"));
-	setCaption(i18n("File info"));
+	setWindowTitle(i18n("File info"));
+
+	setLayout(layout);
+
 	resize( QSize(500,300) );
 }
 

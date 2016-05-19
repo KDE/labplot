@@ -47,16 +47,18 @@
 #include <gsl/gsl_version.h>
 
 #include <QElapsedTimer>
+#include <QDebug>
 #include <QIcon>
-#include <KLocale>
+
+#include <KLocalizedString>
 
 XYFitCurve::XYFitCurve(const QString& name)
-		: XYCurve(name, new XYFitCurvePrivate(this)){
+		: XYCurve(name, new XYFitCurvePrivate(this)) {
 	init();
 }
 
 XYFitCurve::XYFitCurve(const QString& name, XYFitCurvePrivate* dd)
-		: XYCurve(name, dd){
+		: XYCurve(name, dd) {
 	init();
 }
 
@@ -93,7 +95,7 @@ BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, xDataColumn, xData
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, yDataColumn, yDataColumn)
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, weightsColumn, weightsColumn)
 const QString& XYFitCurve::xDataColumnPath() const { Q_D(const XYFitCurve); return d->xDataColumnPath; }
-const QString& XYFitCurve::yDataColumnPath() const {	Q_D(const XYFitCurve); return d->yDataColumnPath; }
+const QString& XYFitCurve::yDataColumnPath() const { Q_D(const XYFitCurve); return d->yDataColumnPath; }
 const QString& XYFitCurve::weightsColumnPath() const { Q_D(const XYFitCurve);return d->weightsColumnPath; }
 
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, XYFitCurve::FitData, fitData, fitData)
@@ -428,6 +430,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
+		case XYFitCurve::Sigmoid: {
+			//TODO
+			break;
+		}
 		case XYFitCurve::Custom: {
 			QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
 			char* func = funcba.data();
@@ -747,7 +753,7 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	Q_D(const XYFitCurve);
 
-    writer->writeStartElement("xyFitCurve");
+	writer->writeStartElement("xyFitCurve");
 
 	//write xy-curve information
 	XYCurve::save(writer);

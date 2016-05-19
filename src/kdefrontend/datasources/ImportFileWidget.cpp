@@ -43,7 +43,8 @@ Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 #include <QTextStream>
 #include <KUrlCompletion>
 #include <KLocalizedString>
- #include <KSharedConfig>
+#include <KSharedConfig>
+#include <KConfigGroup>
 #include <QDebug>
 #include <QTimer>
 

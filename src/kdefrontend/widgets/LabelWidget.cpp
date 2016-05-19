@@ -2,7 +2,7 @@
     File                 : LabelWidget.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2014 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Description          : label settings widget
 
@@ -117,7 +117,8 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_initializing(false
 	connect( ui.cbHorizontalAlignment, SIGNAL(currentIndexChanged(int)), this, SLOT(horizontalAlignmentChanged(int)) );
 	connect( ui.cbVerticalAlignment, SIGNAL(currentIndexChanged(int)), this, SLOT(verticalAlignmentChanged(int)) );
 	connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
-	connect( ui.sbOffset, SIGNAL(valueChanged(double)), this, SLOT(offsetChanged(double)) );
+	connect( ui.sbOffsetX, SIGNAL(valueChanged(double)), this, SLOT(offsetXChanged(double)) );
+	connect( ui.sbOffsetY, SIGNAL(valueChanged(double)), this, SLOT(offsetYChanged(double)) );
 
 	connect( ui.chbVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
@@ -130,8 +131,11 @@ void LabelWidget::setLabels(QList<TextLabel*> labels){
 	m_labelsList = labels;
 	m_label = labels.first();
 
-	ui.lOffset->hide();
-	ui.sbOffset->hide();
+	ui.lOffsetX->hide();
+	ui.lOffsetY->hide();
+
+	ui.sbOffsetX->hide();
+	ui.sbOffsetY->hide();
 
 	this->load();
 	initConnections();
@@ -141,7 +145,8 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 	m_labelsList.clear();
 	foreach(Axis* axis, axes) {
 		m_labelsList.append(axis->title());
-		connect(axis, SIGNAL(titleOffsetChanged(float)), this, SLOT(labelOffsetChanged(float)) );
+		connect(axis, SIGNAL(titleOffsetXChanged(float)), this, SLOT(labelOffsetxChanged(float)) );
+		connect(axis, SIGNAL(titleOffsetYChanged(float)), this, SLOT(labelOffsetyChanged(float)) );
 		connect(axis->title(), SIGNAL(rotationAngleChanged(float)), this, SLOT(labelRotationAngleChanged(float)) );
 	}
 
@@ -186,8 +191,10 @@ void LabelWidget::setFixedLabelMode(const bool b){
 	ui.cbHorizontalAlignment->setVisible(!b);
 	ui.lVerticalAlignment->setVisible(!b);
 	ui.cbVerticalAlignment->setVisible(!b);
-	ui.lOffset->setVisible(b);
-	ui.sbOffset->setVisible(b);
+	ui.lOffsetX->setVisible(b);
+	ui.lOffsetY->setVisible(b);
+	ui.sbOffsetX->setVisible(b);
+	ui.sbOffsetY->setVisible(b);
 }
 
 /*!
@@ -206,8 +213,10 @@ void LabelWidget::setNoGeometryMode(const bool b) {
 	ui.cbHorizontalAlignment->setVisible(!b);
 	ui.lVerticalAlignment->setVisible(!b);
 	ui.cbVerticalAlignment->setVisible(!b);
-	ui.lOffset->setVisible(!b);
-	ui.sbOffset->setVisible(!b);
+	ui.lOffsetX->setVisible(!b);
+	ui.lOffsetY->setVisible(!b);
+	ui.sbOffsetX->setVisible(!b);
+	ui.sbOffsetY->setVisible(!b);
 	ui.lRotation->setVisible(!b);
 	ui.sbRotation->setVisible(!b);
 }
@@ -434,11 +443,10 @@ void LabelWidget::insertDateTime(QAction* action) {
 */
 void LabelWidget::positionXChanged(int index){
 	//Enable/disable the spinbox for the x- oordinates if the "custom position"-item is selected/deselected
-	if (index == ui.cbPositionX->count()-1 ){
+	if (index == ui.cbPositionX->count()-1 )
 		ui.sbPositionX->setEnabled(true);
-	}else{
+	else
 		ui.sbPositionX->setEnabled(false);
-	}
 
 	if (m_initializing)
 		return;
@@ -453,7 +461,7 @@ void LabelWidget::positionXChanged(int index){
     called when label's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
 */
 void LabelWidget::positionYChanged(int index){
-	//Enable/disable the spinbox for the y- oordinates if the "custom position"-item is selected/deselected
+	//Enable/disable the spinbox for the y-coordinates if the "custom position"-item is selected/deselected
 	if (index == ui.cbPositionY->count()-1 ){
 		ui.sbPositionY->setEnabled(true);
 	}else{
@@ -513,12 +521,20 @@ void LabelWidget::rotationChanged(int value){
 		label->setRotationAngle(value);
 }
 
-void LabelWidget::offsetChanged(double value){
+void LabelWidget::offsetXChanged(double value){
 	if (m_initializing)
 		return;
 
 	foreach(Axis* axis, m_axesList)
-		axis->setTitleOffset( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		axis->setTitleOffsetX( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+}
+
+void LabelWidget::offsetYChanged(double value){
+	if (m_initializing)
+		return;
+
+	foreach(Axis* axis, m_axesList)
+		axis->setTitleOffsetY( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
 void LabelWidget::visibilityChanged(bool state){
@@ -581,9 +597,15 @@ void LabelWidget::labelVerticalAlignmentChanged(TextLabel::VerticalAlignment ind
 	m_initializing = false;
 }
 
-void LabelWidget::labelOffsetChanged(float offset){
+void LabelWidget::labelOffsetxChanged(float offset){
 	m_initializing = true;
-	ui.sbOffset->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Point));
+	ui.sbOffsetX->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Point));
+	m_initializing = false;
+}
+
+void LabelWidget::labelOffsetyChanged(float offset){
+	m_initializing = true;
+	ui.sbOffsetY->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Point));
 	m_initializing = false;
 }
 
@@ -632,17 +654,19 @@ void LabelWidget::load() {
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( (int) m_label->position().horizontalPosition );
+	positionXChanged(ui.cbPositionX->currentIndex());
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.x(),Worksheet::Centimeter) );
 	ui.cbPositionY->setCurrentIndex( (int) m_label->position().verticalPosition );
+	positionYChanged(ui.cbPositionY->currentIndex());
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(),Worksheet::Centimeter) );
 
-	if (m_axesList.size())
-		ui.sbOffset->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffset(), Worksheet::Point) );
-
+	if (m_axesList.size()){
+		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetX(), Worksheet::Point) );
+		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetY(), Worksheet::Point) );
+	}
 	ui.cbHorizontalAlignment->setCurrentIndex( (int) m_label->horizontalAlignment() );
 	ui.cbVerticalAlignment->setCurrentIndex( (int) m_label->verticalAlignment() );
 	ui.sbRotation->setValue( m_label->rotationAngle() );
-
 
 	m_initializing = false;
 }
@@ -677,9 +701,10 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 	ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_label->position().verticalPosition ) );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()),Worksheet::Centimeter) );
 
-	if (m_axesList.size())
-		ui.sbOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("Offset", m_axesList.first()->titleOffset()), Worksheet::Point) );
-
+	if (m_axesList.size()) {
+		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetX", m_axesList.first()->titleOffsetX()), Worksheet::Point) );
+		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetY", m_axesList.first()->titleOffsetY()), Worksheet::Point) );
+	}
 	ui.cbHorizontalAlignment->setCurrentIndex( group.readEntry("HorizontalAlignment", (int) m_label->horizontalAlignment()) );
 	ui.cbVerticalAlignment->setCurrentIndex( group.readEntry("VerticalAlignment", (int) m_label->verticalAlignment()) );
 	ui.sbRotation->setValue( group.readEntry("Rotation", m_label->rotationAngle()) );
@@ -699,9 +724,10 @@ void LabelWidget::saveConfig(KConfigGroup &group) {
 	group.writeEntry("PositionY", ui.cbPositionY->currentIndex());
 	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),Worksheet::Centimeter) );
 
-	if (m_axesList.size())
-		group.writeEntry("Offset",  Worksheet::convertToSceneUnits(ui.sbOffset->value(), Worksheet::Point) );
-
+	if (m_axesList.size()){
+		group.writeEntry("OffsetX",  Worksheet::convertToSceneUnits(ui.sbOffsetX->value(), Worksheet::Point) );
+		group.writeEntry("OffsetY",  Worksheet::convertToSceneUnits(ui.sbOffsetY->value(), Worksheet::Point) );
+	}
 	group.writeEntry("HorizontalAlignment", ui.cbHorizontalAlignment->currentIndex());
 	group.writeEntry("VerticalAlignment", ui.cbVerticalAlignment->currentIndex());
 	group.writeEntry("Rotation", ui.sbRotation->value());

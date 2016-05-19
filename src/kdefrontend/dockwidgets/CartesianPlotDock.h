@@ -35,6 +35,7 @@
 #include "ui_cartesianplotdock.h"
 #include <QList>
 #include <KConfig>
+#include <KLocalizedString>
 
 class LabelWidget;
 class KUrlCompletion;
@@ -81,22 +82,24 @@ private slots:
 	void yMaxChanged();
 	void yScaleChanged(int);
 
-	//"Scale breaking"-tab
-	void toggleXBreak(int);
+	//"Range Breaks"-tab
+	void toggleXBreak(bool);
 	void addXBreak();
 	void removeXBreak();
 	void currentXBreakChanged(int);
 	void xBreakStartChanged();
 	void xBreakEndChanged();
 	void xBreakPositionChanged(int);
+	void xBreakStyleChanged(int);
 
-	void toggleYBreak(int);
+	void toggleYBreak(bool);
 	void addYBreak();
 	void removeYBreak();
 	void currentYBreakChanged(int);
 	void yBreakStartChanged();
 	void yBreakEndChanged();
 	void yBreakPositionChanged(int);
+	void yBreakStyleChanged(int);
 
 	//"Plot area"-tab
   	void backgroundTypeChanged(int);
@@ -130,9 +133,11 @@ private slots:
 	void plotYScaleChanged(int);
 	void plotVisibleChanged(bool);
 
-	//scale breakings
-	void plotXScaleBreakingChanged(const CartesianPlot::ScaleBreakings&);
-	void plotYScaleBreakingChanged(const CartesianPlot::ScaleBreakings&);
+	//range breaks
+	void plotXRangeBreakingEnabledChanged(bool);
+	void plotXRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
+	void plotYRangeBreakingEnabledChanged(bool);
+	void plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 
 	//background
 	void plotBackgroundTypeChanged(PlotArea::BackgroundType);

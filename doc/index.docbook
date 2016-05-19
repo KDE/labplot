@@ -45,7 +45,7 @@
 </authorgroup>
 
 <copyright>
-  <year>2007-2015</year>
+  <year>2007-2016</year>
 	<holder>Stefan Gerlach</holder>
 </copyright>
 <copyright>
@@ -58,8 +58,8 @@
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2015-03-28</date>
-<releaseinfo>3.0</releaseinfo>
+<date>2016-05-01</date>
+<releaseinfo>3.1</releaseinfo>
 
 <abstract>
 	<para>
@@ -90,7 +90,7 @@ Features:
 <listitem><para>Spreadsheet with basic functionality for manual data entry or for generation of uniform and non-uniform random numbers</para></listitem>
 <listitem><para>Import of external ASCII-data into the project for further editing and visualization</para></listitem>
 <listitem><para>Export of spreadsheet to an ASCII-file</para></listitem>
-<listitem><para>Worksheet as the main parent object for plots, labels etc., supports different layouts and zooming functions</para></listitem>
+<listitem><para>Worksheet as the main parent object for plots, labels &etc;, supports different layouts and zooming functions</para></listitem>
 <listitem><para>Export of worksheet to different formats (pdf, eps, png and svg)</para></listitem>
 <listitem><para>Great variety of editing capabilities for properties of worksheet and its objects</para></listitem>
 <listitem><para>Cartesian plots, created either from imported or manually created data sets or via mathematical equation</para></listitem>
@@ -161,7 +161,7 @@ Project explorer is a dockable window and can be placed at an arbitrary place. T
 <sect1 id="main-area">
 <title>Main Area</title>
 <para>
-Created objects having a view (like worksheet, spreadsheet etc.) are placed in the main area of the application. Depending on the current setting for the user interface, windows are placed either as independent and freely moveable sub-windows (interface "Sub-window view") or as tabs in a tabbed view (interface "Tabbed view").
+Created objects having a view (like worksheet, spreadsheet &etc;) are placed in the main area of the application. Depending on the current setting for the user interface, windows are placed either as independent and freely moveable sub-windows (interface "Sub-window view") or as tabs in a tabbed view (interface "Tabbed view").
 </para>
 <para>
 <screenshot><mediaobject><imageobject>
@@ -190,11 +190,11 @@ Properties explorer is a dockable window and can be placed at an arbitrary place
 The spreadsheet is the main part of &LabPlot; when working with data and consists of columns.
 Column is the basic data set in &LabPlot; used for plotting and data analysis.
 Every column of the spreadsheet is specified by its name and the type - numeric, text, month names, day names and date and time.
-Also, for each type different representation formats can be assigned like decimal or scientific format for numeric columns etc.
+Also, for each type different representation formats can be assigned like decimal or scientific format for numeric columns &etc;
 </para>
 <para>
 You can mask selected data points in the spreadsheet (<menuchoice><guimenu>Selection</guimenu><guimenuitem>Mask Selection</guimenuitem></menuchoice> from the spreadsheet cell context menu).
-Masked data is not plotted and is also excluded from data analysis functions like fitting etc.
+Masked data is not plotted and is also excluded from data analysis functions like fitting &etc;
 Alternatively, you can mask or drop values in a column (<menuchoice><guimenu>Mask Values</guimenu></menuchoice> or <menuchoice><guimenu>Drop Values</guimenu></menuchoice> from the column context menu) by specifying a range.
 When specifying which values to mask or to drop, several operators (“equal to”, “greater than”, “lesser than”, &etc;) are available.
 These operations can help to hide or to remove some outliers in the data set prior to, &eg;, performing a fit to this data set.
@@ -311,7 +311,7 @@ This object serves as the parent container for multiple Spreadsheet- and/or Matr
 </para>
 <para>
 With folders it is already possible to bring some structure in the <link linkend="project-explorer">Project Explorer</link> and to group together several related objects
-(spreadsheets with data stemming from text files of similar origin, red, green and blue values of an image imported into three different matrices, etc.).
+(spreadsheets with data stemming from text files of similar origin, red, green and blue values of an image imported into three different matrices, &etc;).
 With Workbook the user has the possibility for another additional grouping.
 </para>
 
@@ -321,10 +321,10 @@ With Workbook the user has the possibility for another additional grouping.
 <sect1 id="worksheet">
 <title>Worksheet</title>
 <para>
-The worksheet is, besides the data containers <link linkend="spreadsheet">Spreadsheet</link> and <link linkend="matrix">Matrix</link>, another central part of the application and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels etc.
+The worksheet is, besides the data containers <link linkend="spreadsheet">Spreadsheet</link> and <link linkend="matrix">Matrix</link>, another central part of the application and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels &etc;
 </para>
 <para>
-Worksheets can either have a fixed size (a user defined size or one of the predefined sizes like A4, Letter etc.) or they can fill out the complete available area for the worksheet window. Multiple plots can be arranged on the worksheet in a vertical, horizontal or grid layouts.
+Worksheets can either have a fixed size (a user defined size or one of the predefined sizes like A4, Letter &etc;) or they can fill out the complete available area for the worksheet window. Multiple plots can be arranged on the worksheet in a vertical, horizontal or grid layouts.
 </para>
 <para>
 Many properties of the worksheet like size, background colour and layout settings can be changed in the "Worksheet properties" pane.
@@ -526,7 +526,7 @@ The additional options determining the import of the data are equivalent to thos
 Datapicker is a tool that allows you to easily extract data from image files. The process of extraction consists mainly out of the following steps:
 <itemizedlist>
 <listitem><para>Import an image containing plots and curves where you want to read the data points from.</para></listitem>
-<listitem><para>Select the plot type (cartesian, polar, etc.).</para></listitem>
+<listitem><para>Select the plot type (cartesian, polar, &etc;).</para></listitem>
 <listitem><para>Select tree reference points and provide values for them. With the help of these points the logical coordinate system is determined.</para></listitem>
 <listitem><para>Create a new datapicker curve and set the type of the error bars.</para></listitem>
 <listitem><para>Switch to the mouse mode "Set Curve Points" and start selecting points on the imported image - the coordinates for the selected points are determined and added to the spreadsheet "Data".</para></listitem>
@@ -944,6 +944,79 @@ The menu is only available when a datapicker object is selected on the <guilabel
   </para>
 </sect1>
   
+</chapter>
+
+<chapter id="analysis">
+  <title>Analysis functions</title>
+  <para>&LabPlot; supports the data analysis functions interpolation, nonlinear curve fitting and Fourier filter.
+    Both can be applied to any data consisting of x- and y-columns. 
+    The analysis functions can be accessed using the Analysis menu or the context menu of a worksheet.</para>
+  <para>The newly created curves can be customized (line style, symbol style, &etc;) like any x-y-curve.</para>  
+  <sect1 id="interpolation">
+    <title>Interpolation</title>
+    <para>
+      Interpolation of data can be done with several algorithm:
+    </para>
+      <itemizedlist>
+	<listitem><para>linear</para></listitem>
+	<listitem><para>polynomial (if number of data points &lt; 100)</para></listitem>
+	<listitem><para>cubic spline</para></listitem>
+	<listitem><para>cubic spline (periodic)</para></listitem>
+	<listitem><para>Akima spline</para></listitem>
+	<listitem><para>Akima spline (periodic)</para></listitem>
+	<listitem><para>Steffen spline (needs GSL &ge; 2.0)</para></listitem>
+	<listitem><para>cosine</para></listitem>
+	<listitem><para>exponential</para></listitem>
+	<listitem><para>piecewise cubic Hermite (finite differences, Catmull-Rom, cardinal, Kochanek-Bartels)</para></listitem>
+	<listitem><para>rational functions</para></listitem>
+      </itemizedlist>
+    <para>
+	The interpolating function is calculated with the given number n of data points and evaluated as:
+    </para>
+      <itemizedlist>
+	<listitem><para>function</para></listitem>
+	<listitem><para>derivative</para></listitem>
+	<listitem><para>second derivative</para></listitem>
+	<listitem><para>integral (starting from zero)</para></listitem>
+      </itemizedlist>
+  </sect1>
+
+  <sect1 id="fitting">
+    <title>Curve fitting</title>
+    <para>
+      Linear and non-linear curve fitting of data can be done with several predefined fit-models 
+      (for instance polynomial, exponential, Gaussian or custom) to data consisting of x- and y-columns 
+      with an optional weight column. With a custom model any function with unlimited number of parameters
+      can be used for fitting. The options (number of iterations, tolerance, number of fitted points) can
+      be used to optimize the fitting result which is displayed in the results text.
+    </para>
+  </sect1>
+  
+  <sect1 id="filter">
+    <title>Fourier filter</title>
+    <para>
+      This function can be used to apply a Fourier filter to any data consisting of x- and y-columns. Supported
+      filter types are:
+    </para>
+      <itemizedlist>
+	<listitem><para>Low pass</para></listitem>
+	<listitem><para>High pass</para></listitem>
+	<listitem><para>Band pass</para></listitem>
+	<listitem><para>Band reject (Band block)</para></listitem>
+	</itemizedlist>
+    <para>
+      where any of them can have the form
+    </para>
+      <itemizedlist>
+	<listitem><para>Ideal</para></listitem>
+	<listitem><para>Butterworth (order 1 to 10)</para></listitem>
+	<listitem><para>Chebyshev type I or II (order 1 to 10)</para></listitem>
+      </itemizedlist>
+    <para>
+	The cutoff value(s) can be specified in the units frequency (Hertz), fraction (0.0 to 1.0) or index
+	of the data points.
+    </para>
+  </sect1>
 </chapter>
 
 <chapter id="digitization">
@@ -2108,8 +2181,8 @@ needs a lot of work.
 
 <para>&LabPlot;</para>
 <para>
-Program copyright &copy; 2007-2015 Stefan Gerlach <email>stefan.gerlach@uni-konstanz.de</email>
-Program copyright &copy; 2008-2015 Alexander Semke <email>Alexander.Semke@web.de</email>
+Program copyright &copy; 2007-2016 Stefan Gerlach <email>stefan.gerlach@uni-konstanz.de</email>
+Program copyright &copy; 2008-2016 Alexander Semke <email>Alexander.Semke@web.de</email>
 </para>
 
 <important>

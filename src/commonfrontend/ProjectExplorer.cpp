@@ -80,9 +80,10 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) {
 	layoutFilter->addWidget(leFilter);
 
 	bFilterOptions = new QPushButton(frameFilter);
-	bFilterOptions->setText(i18n("Options"));
+	bFilterOptions->setIcon(QIcon::fromTheme("configure"));
 	bFilterOptions->setEnabled(true);
 	bFilterOptions->setCheckable(true);
+	bFilterOptions->setMaximumWidth(20);
 	layoutFilter->addWidget(bFilterOptions);
 
 	layout->addWidget(frameFilter);

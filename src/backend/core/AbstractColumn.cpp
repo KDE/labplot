@@ -459,8 +459,7 @@ void AbstractColumn::setValueAt(int row, double new_value) {
  */
 void AbstractColumn::replaceValues(int first, const QVector<double>& new_values) {
 	Q_UNUSED(first) Q_UNUSED(new_values)
-};
-
+}
 
 double AbstractColumn::minimum() const{
 	double val;
