@@ -24,6 +24,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
+        ${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
@@ -56,6 +57,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/LabelWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/DatapickerImageWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/DatapickerCurveWidget.cpp
+        ${KDEFRONTEND_DIR}/widgets/FITSHeaderEditWidget.cpp
+
 )
 
 set(UI_SOURCES
@@ -72,6 +75,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/netcdfoptionswidget.ui
+        ${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui
@@ -96,6 +100,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickercurvewidget.ui
+        ${KDEFRONTEND_DIR}/ui/fitsheadereditwidget.ui
 )
 
 set(BACKEND_SOURCES
