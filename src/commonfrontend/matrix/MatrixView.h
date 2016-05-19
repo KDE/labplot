@@ -132,6 +132,8 @@ class MatrixView : public QWidget {
 		QAction* action_image_view;
 		QAction* action_fill_function;
 		QAction* action_fill_const;
+        QAction* action_edit_fits_header;
+
 
 		//Menus
 		QMenu* m_selectionMenu;
@@ -170,6 +172,8 @@ class MatrixView : public QWidget {
 
         void showColumnStatistics();
         void showRowStatistics();
+
+        void editFitsHeader();
 };
 
 #endif

@@ -160,7 +160,9 @@ void MatrixView::initActions() {
 	action_mirror_horizontally = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
 	action_mirror_vertically = new KAction(KIcon("object-flip-vertical"), i18n("Mirror &Vertically"), this);
 // 	action_duplicate = new QAction(i18nc("duplicate matrix", "&Duplicate"), this);
-
+    //TODO
+    //icon
+    action_edit_fits_header = new KAction(i18n("Edit FITS header"), this);
 	QActionGroup* headerFormatActionGroup = new QActionGroup(this);
 	headerFormatActionGroup->setExclusive(true);
 	action_header_format_1= new QAction(i18n("Rows and Columns"), headerFormatActionGroup);
@@ -197,6 +199,7 @@ void MatrixView::connectActions() {
 	// matrix related actions
 	connect(action_fill_function, SIGNAL(triggered()), this, SLOT(fillWithFunctionValues()));
 	connect(action_fill_const, SIGNAL(triggered()), this, SLOT(fillWithConstValues()));
+    connect(action_edit_fits_header, SIGNAL(triggered()), this, SLOT(editFitsHeader()));
 
 	connect(action_go_to_cell, SIGNAL(triggered()), this, SLOT(goToCell()));
 	//connect(action_duplicate, SIGNAL(triggered()), this, SLOT(duplicate()));
@@ -262,6 +265,7 @@ void MatrixView::initMenus() {
 
 	m_matrixMenu->addAction(action_select_all);
 	m_matrixMenu->addAction(action_clear_matrix);
+    m_matrixMenu->addAction(action_edit_fits_header);
 	m_matrixMenu->addSeparator();
 
 	m_matrixMenu->addAction(action_transpose);
@@ -324,6 +328,8 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_go_to_cell);
 	menu->insertSeparator(firstAction);
+    menu->insertAction(firstAction, action_edit_fits_header);
+    menu->insertSeparator(firstAction);
 
 	// TODO:
 	// Convert to Spreadsheet
@@ -1498,4 +1504,7 @@ void MatrixView::showRowStatistics() {
 			list.clear();
 		}
 	}
+}
+
+void MatrixView::editFitsHeader() {
 }
