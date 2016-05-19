@@ -41,13 +41,15 @@
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/gsl/parser_extern.h"
 
+#include <cmath>
+extern "C" {
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_version.h>
+}
 
 #include <QElapsedTimer>
-#include <QDebug>
 #include <QIcon>
 
 #include <KLocalizedString>
@@ -218,7 +220,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 
 	char var[]="x";
 	for (int i = 0; i < n; i++) {
-		if (isnan(x[i]) || isnan(y[i]))
+		if (std::isnan(x[i]) || std::isnan(y[i]))
 			continue;
 
 		double Yi=0;
@@ -561,14 +563,14 @@ void XYFitCurvePrivate::recalculate() {
 	QVector<double> sigmaVector;
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x, y and sigma, if given) are valid
-		if (!isnan(xDataColumn->valueAt(row)) && !isnan(yDataColumn->valueAt(row))
+		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
 			if (!weightsColumn) {
 				xdataVector.append(xDataColumn->valueAt(row));
 				ydataVector.append(yDataColumn->valueAt(row));
 			} else {
-				if (!isnan(weightsColumn->valueAt(row))) {
+				if (!std::isnan(weightsColumn->valueAt(row))) {
 					xdataVector.append(xDataColumn->valueAt(row));
 					ydataVector.append(yDataColumn->valueAt(row));
 

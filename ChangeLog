@@ -1,14 +1,17 @@
 -----2.3-----
 New features:
-	* Interpolation and Fourier filter of 1d data
+	* Integration of Cantor - Support for different open-source computer algebra systems
+	* Interpolation, Smooth and Fourier filter of 1d data
 	* Statistics on spreadsheets and matrices
 	* Export of spreadsheets and matrices to LaTeX tables
+	* Filter and search capabilities in the drop down box for the selection of data sources
 
 Performance improvements:
 	* Faster generation of random values
 
 Bug fixes:
 	* Save and restore last used setting in RandomValuesDialog
+	* Update axis title shape on title rotations correctly
 
 -----2.2-----
 New features:

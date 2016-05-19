@@ -174,9 +174,10 @@ private:
 
 	QAction* addCurveAction;
 	QAction* addEquationCurveAction;
+	QAction* addInterpolationCurveAction;
+	QAction* addSmoothCurveAction;
 	QAction* addFitCurveAction;
 	QAction* addFourierFilterCurveAction;
-	QAction* addInterpolationCurveAction;
 	QAction* addHorizontalAxisAction;
 	QAction* addVerticalAxisAction;
 	QAction* addLegendAction;
@@ -197,9 +198,10 @@ private:
 	QAction* shiftDownYAction;
 
 	// filter menu
+	QAction* addInterpolationAction;
+	QAction* addSmoothAction;
 	QAction* addFitAction;
 	QAction* addFourierFilterAction;
-	QAction* addInterpolationAction;
 
 public slots:
 	void createContextMenu(QMenu*) const;

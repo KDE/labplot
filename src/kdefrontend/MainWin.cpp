@@ -112,6 +112,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	  xyCurveDock(0),
 	  xyEquationCurveDock(0),
 	  xyInterpolationCurveDock(0),
+	  xySmoothCurveDock(0),
 	  xyFitCurveDock(0),
 	  xyFourierFilterCurveDock(0),
 	  worksheetDock(0),
@@ -1020,7 +1021,7 @@ void MainWin::printPreview() {
 	adds a new Folder to the project.
 */
 void MainWin::newFolder() {
-	Folder* folder = new Folder(i18n("Folder %1", 1));
+	Folder* folder = new Folder(i18n("Folder"));
 	this->addAspectToProject(folder);
 }
 

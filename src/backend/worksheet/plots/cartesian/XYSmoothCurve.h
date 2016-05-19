@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : XYInterpolationCurve.h
+    File                 : XYSmoothCurve.h
     Project              : LabPlot
-    Description          : A xy-curve defined by an interpolation
+    Description          : A xy-curve defined by a smooth
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
@@ -26,34 +26,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYINTERPOLATIONCURVE_H
-#define XYINTERPOLATIONCURVE_H
+#ifndef XYSMOOTHCURVE_H
+#define XYSMOOTHCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-extern "C" {
-#include <gsl/gsl_version.h>
-}
 
-class XYInterpolationCurvePrivate;
-class XYInterpolationCurve: public XYCurve {
+class XYSmoothCurvePrivate;
+class XYSmoothCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum InterpolationType {Linear,Polynomial,CSpline,CSplinePeriodic,Akima,AkimaPeriodic,Steffen,Cosine,Exponential,PCH,Rational};
-		enum CubicHermiteVariant {FiniteDifference,CatmullRom,Cardinal,KochanekBartels};
-		enum InterpolationEval {Function,Derivative,Derivative2,Integral};
+		enum SmoothType {MovingAverage,MovingAverageLagged};
+		enum WeightType {Uniform, Triangular, Binomial, Parabolic, Quartic, Triweight, Tricube, Cosine};
 
-		struct InterpolationData {
-			InterpolationData() : type(Linear), variant(FiniteDifference), tension(0.0), continuity(0.0), bias(0.0), evaluate(Function), npoints(100) {};
+		struct SmoothData {
+			SmoothData() : type(MovingAverage), points(3), weight(Uniform) {};
 
-			XYInterpolationCurve::InterpolationType type;		// type of interpolation
-			XYInterpolationCurve::CubicHermiteVariant variant;	// variant of cubic Hermite interpolation
-			double tension, continuity, bias;			// TCB values
-			XYInterpolationCurve::InterpolationEval evaluate;	// what to evaluate
-			unsigned int npoints;					// nr. of points
+			XYSmoothCurve::SmoothType type;		// type of smooth
+			unsigned int points;			// number of points
+			XYSmoothCurve::WeightType weight;	// type of weight
 		};
-		struct InterpolationResult {
-			InterpolationResult() : available(false), valid(false), elapsedTime(0) {};
+		struct SmoothResult {
+			SmoothResult() : available(false), valid(false), elapsedTime(0) {};
 
 			bool available;
 			bool valid;
@@ -61,8 +55,8 @@ class XYInterpolationCurve: public XYCurve {
 			qint64 elapsedTime;
 		};
 
-		explicit XYInterpolationCurve(const QString& name);
-		virtual ~XYInterpolationCurve();
+		explicit XYSmoothCurve(const QString& name);
+		virtual ~XYSmoothCurve();
 
 		void recalculate();
 		virtual QIcon icon() const;
@@ -74,32 +68,32 @@ class XYInterpolationCurve: public XYCurve {
 		const QString& xDataColumnPath() const;
 		const QString& yDataColumnPath() const;
 
-		CLASS_D_ACCESSOR_DECL(InterpolationData, interpolationData, InterpolationData)
-		const InterpolationResult& interpolationResult() const;
-		bool isSourceDataChangedSinceLastInterpolation() const;
+		CLASS_D_ACCESSOR_DECL(SmoothData, smoothData, SmoothData)
+		const SmoothResult& smoothResult() const;
+		bool isSourceDataChangedSinceLastSmooth() const;
 
 		typedef WorksheetElement BaseClass;
-		typedef XYInterpolationCurvePrivate Private;
+		typedef XYSmoothCurvePrivate Private;
 
 	protected:
-		XYInterpolationCurve(const QString& name, XYInterpolationCurvePrivate* dd);
+		XYSmoothCurve(const QString& name, XYSmoothCurvePrivate* dd);
 
 	private:
-		Q_DECLARE_PRIVATE(XYInterpolationCurve)
+		Q_DECLARE_PRIVATE(XYSmoothCurve)
 		void init();
 
 	private slots:
 		void handleSourceDataChanged();
 
 	signals:
-		friend class XYInterpolationCurveSetXDataColumnCmd;
-		friend class XYInterpolationCurveSetYDataColumnCmd;
+		friend class XYSmoothCurveSetXDataColumnCmd;
+		friend class XYSmoothCurveSetYDataColumnCmd;
 		void xDataColumnChanged(const AbstractColumn*);
 		void yDataColumnChanged(const AbstractColumn*);
 
-		friend class XYInterpolationCurveSetInterpolationDataCmd;
-		void interpolationDataChanged(const XYInterpolationCurve::InterpolationData&);
-		void sourceDataChangedSinceLastInterpolation();
+		friend class XYSmoothCurveSetSmoothDataCmd;
+		void smoothDataChanged(const XYSmoothCurve::SmoothData&);
+		void sourceDataChangedSinceLastSmooth();
 };
 
 #endif

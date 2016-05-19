@@ -40,15 +40,16 @@
 #include "backend/lib/commandtemplates.h"
 
 #include <cmath>	// isnan
+extern "C" {
 #include <gsl_errno.h>
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_halfcomplex.h>
 #include <gsl/gsl_sf_pow_int.h>
+}
 
 #include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
-#include <QDebug>
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
 		: XYCurve(name, new XYFourierFilterCurvePrivate(this)) {
@@ -218,7 +219,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	QVector<double> ydataVector;
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!isnan(xDataColumn->valueAt(row)) && !isnan(yDataColumn->valueAt(row))
+		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
 			xdataVector.append(xDataColumn->valueAt(row));

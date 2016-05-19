@@ -32,9 +32,10 @@
 #include "Axis.h"
 #include "XYCurve.h"
 #include "XYEquationCurve.h"
+#include "XYInterpolationCurve.h"
+#include "XYSmoothCurve.h"
 #include "XYFitCurve.h"
 #include "XYFourierFilterCurve.h"
-#include "XYInterpolationCurve.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -349,6 +350,7 @@ void CartesianPlot::initActions() {
 	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
 	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
 	addInterpolationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), this);
+	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), this);
 	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("legend"), this);
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("vertical axis"), this);
@@ -710,20 +712,25 @@ XYEquationCurve* CartesianPlot::addEquationCurve() {
 	return curve;
 }
 
-XYFitCurve* CartesianPlot::addFitCurve() {
+XYInterpolationCurve* CartesianPlot::addInterpolationCurve(){
+	XYInterpolationCurve* curve = new XYInterpolationCurve("Interpolation");
+	this->addChild(curve);
+	return curve;
+}
+
+XYSmoothCurve* CartesianPlot::addSmoothCurve(){
+	XYSmoothCurve* curve = new XYSmoothCurve("Smooth");
+	this->addChild(curve);
+	return curve;
+}
+XYFitCurve* CartesianPlot::addFitCurve(){
 	XYFitCurve* curve = new XYFitCurve("fit");
 	this->addChild(curve);
 	return curve;
 }
 
-XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve() {
+XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve(){
 	XYFourierFilterCurve* curve = new XYFourierFilterCurve("Fourier filter");
-	this->addChild(curve);
-	return curve;
-}
-
-XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
-	XYInterpolationCurve* curve = new XYInterpolationCurve("Interpolation");
 	this->addChild(curve);
 	return curve;
 }
@@ -2022,6 +2029,12 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			if (!curve->load(reader)) {
 				removeChild(curve);
 				return false;
+			}
+		} else if(reader->name() == "xySmoothCurve") {
+			XYSmoothCurve* curve = addSmoothCurve();
+			if (!curve->load(reader)){
+				removeChild(curve);
+			return false;
 			}
 		} else if(reader->name() == "cartesianPlotLegend") {
 			m_legend = new CartesianPlotLegend(this, "");
