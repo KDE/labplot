@@ -42,9 +42,11 @@
 
 #include <cmath>	// isnan
 #include <cfloat>	// DBL_MIN
+extern "C" {
 #include <gsl_errno.h>
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_spline.h>
+}
 
 #include <KIcon>
 #include <KLocale>
@@ -336,7 +338,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 	QVector<double> ydataVector;
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!isnan(xDataColumn->valueAt(row)) && !isnan(yDataColumn->valueAt(row))
+		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
 			xdataVector.append(xDataColumn->valueAt(row));

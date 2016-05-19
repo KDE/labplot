@@ -40,7 +40,7 @@
 #include <QImageReader>
 #include <KUrlCompletion>
 #include <QDebug>
-#include <math.h>
+#include <cmath>
 
 /*!
   \class CartesianPlotDock
@@ -551,9 +551,9 @@ void CartesianPlotDock::currentXBreakChanged(int index) {
 
 	m_initializing = true;
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->xRangeBreaks().list.at(index);
-	QString str = isnan(rangeBreak.start) ? "" : QString::number(rangeBreak.start);
+	QString str = std::isnan(rangeBreak.start) ? "" : QString::number(rangeBreak.start);
 	ui.leXBreakStart->setText(str);
-	str = isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.end);
+	str = std::isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.end);
 	ui.leXBreakEnd->setText(str);
 	ui.sbXBreakPosition->setValue(rangeBreak.position*100);
 	ui.cbXBreakStyle->setCurrentIndex((int)rangeBreak.style);
@@ -669,9 +669,9 @@ void CartesianPlotDock::currentYBreakChanged(int index) {
 
 	m_initializing = true;
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->yRangeBreaks().list.at(index);
-	QString str = isnan(rangeBreak.start) ? "" : QString::number(rangeBreak.start);
+	QString str = std::isnan(rangeBreak.start) ? "" : QString::number(rangeBreak.start);
 	ui.leYBreakStart->setText(str);
-	str = isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.end);
+	str = std::isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.end);
 	ui.leYBreakEnd->setText(str);
 	ui.sbYBreakPosition->setValue(rangeBreak.position*100);
 	ui.cbYBreakStyle->setCurrentIndex((int)rangeBreak.style);

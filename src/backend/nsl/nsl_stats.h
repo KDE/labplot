@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : XYFitCurvePrivate.h
+    File                 : nsl_stats.h
     Project              : LabPlot
-    Description          : Private members of XYFitCurve
+    Description          : NSL statistics functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -26,50 +26,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYFITCURVEPRIVATE_H
-#define XYFITCURVEPRIVATE_H
+#ifndef NSL_STATS_H
+#define NSL_STATS_H
 
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
-#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+#include <stdlib.h>
 
-class XYFitCurve;
-class Column;
+/* estimation types of quantile (see https://en.wikipedia.org/wiki/Quantile) */
+typedef enum {nsl_stats_quantile_type1=1, nsl_stats_quantile_type2, nsl_stats_quantile_type3, nsl_stats_quantile_type4, 
+		nsl_stats_quantile_type5, nsl_stats_quantile_type6, nsl_stats_quantile_type7, nsl_stats_quantile_type8,
+		nsl_stats_quantile_type9} nsl_stats_quantile_type;
 
-extern "C" {
-#include <gsl/gsl_multifit_nlin.h>
-}
+/* median from unsorted data. data will be sorted! */
+double nsl_stats_median(double data[], size_t stride, size_t n, nsl_stats_quantile_type type);
+/* median from sorted data */
+double nsl_stats_median_sorted(const double sorted_data[], size_t stride, size_t n, nsl_stats_quantile_type type);
+/* GSL legacy function */
+double nsl_stats_median_from_sorted_data(const double sorted_data[], size_t stride, size_t n);
 
-class XYFitCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYFitCurvePrivate(XYFitCurve*);
-		~XYFitCurvePrivate();
+/* quantile from unsorted data. data will be sorted! */
+double nsl_stats_quantile(double data[], size_t stride, size_t n, double p, nsl_stats_quantile_type type);
+/* quantile from sorted data */
+double nsl_stats_quantile_sorted(const double sorted_data[], size_t stride, size_t n, double p, nsl_stats_quantile_type type);
+/* GSL legacy function */
+double nsl_stats_quantile_from_sorted_data(const double sorted_data[], size_t stride, size_t n, double p);
 
-		void recalculate();
-
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be fitted
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be fitted
-		const AbstractColumn* weightsColumn; //<! column storing the values for the weights to be used in the fit
-		QString xDataColumnPath;
-		QString yDataColumnPath;
-		QString weightsColumnPath;
-
-		XYFitCurve::FitData fitData;
-		XYFitCurve::FitResult fitResult;
-		QStringList solverOutput;
-
-		Column* xColumn; //<! column used internally for storing the x-values of the result fit curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result fit curve
-		Column* residualsColumn;
-		QVector<double>* xVector;
-		QVector<double>* yVector;
-		QVector<double>* residualsVector;
-
-		bool sourceDataChangedSinceLastFit; //<! \c true if the data in the source columns (x, y, or weights) was changed, \c false otherwise
-
-		XYFitCurve* const q;
-
-	private:
-		void writeSolverState(gsl_multifit_fdfsolver* s);
-};
-
-#endif
+#endif /* NSL_STATS_H */

@@ -56,6 +56,7 @@
 #include "kdefrontend/dockwidgets/XYFitCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFourierFilterCurveDock.h"
 #include "kdefrontend/dockwidgets/XYInterpolationCurveDock.h"
+#include "kdefrontend/dockwidgets/XYSmoothCurveDock.h"
 #include "kdefrontend/dockwidgets/CustomPointDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #include "kdefrontend/widgets/LabelWidget.h"
@@ -317,6 +318,23 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->xyInterpolationCurveDock->setCurves(list);
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyInterpolationCurveDock);
+  }else if (className=="XYSmoothCurve"){
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-smooth-curve properties"));
+
+	if (!mainWindow->xySmoothCurveDock){
+	  mainWindow->xySmoothCurveDock = new XYSmoothCurveDock(mainWindow->stackedWidget);
+	  mainWindow->xySmoothCurveDock->setupGeneral();
+	  connect(mainWindow->xySmoothCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+	  mainWindow->stackedWidget->addWidget(mainWindow->xySmoothCurveDock);
+	}
+
+	QList<XYCurve*> list;
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<XYCurve*>(aspect);
+	}
+	mainWindow->xySmoothCurveDock->setCurves(list);
+
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->xySmoothCurveDock);
   }else if (className=="TextLabel"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Text label properties"));
 

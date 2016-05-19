@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : XYInterpolationCurvePrivate.h
+    File                 : XYSmoothCurvePrivate.h
     Project              : LabPlot
-    Description          : Private members of XYInterpolationCurve
+    Description          : Private members of XYSmoothCurve
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
@@ -26,19 +26,19 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYINTERPOLATIONCURVEPRIVATE_H
-#define XYINTERPOLATIONCURVEPRIVATE_H
+#ifndef XYSMOOTHCURVEPRIVATE_H
+#define XYSMOOTHCURVEPRIVATE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
-#include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 
-class XYInterpolationCurve;
+class XYSmoothCurve;
 class Column;
 
-class XYInterpolationCurvePrivate: public XYCurvePrivate {
+class XYSmoothCurvePrivate: public XYCurvePrivate {
 	public:
-		explicit XYInterpolationCurvePrivate(XYInterpolationCurve*);
-		~XYInterpolationCurvePrivate();
+		explicit XYSmoothCurvePrivate(XYSmoothCurve*);
+		~XYSmoothCurvePrivate();
 
 		void recalculate();
 
@@ -47,23 +47,19 @@ class XYInterpolationCurvePrivate: public XYCurvePrivate {
 		QString xDataColumnPath;
 		QString yDataColumnPath;
 
-		XYInterpolationCurve::InterpolationData interpolationData;
-		XYInterpolationCurve::InterpolationResult interpolationResult;
+		XYSmoothCurve::SmoothData smoothData;
+		XYSmoothCurve::SmoothResult smoothResult;
 
-		Column* xColumn; //<! column used internally for storing the x-values of the result interpolation curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result interpolation curve
+		Column* xColumn; //<! column used internally for storing the x-values of the result smooth curve
+		Column* yColumn; //<! column used internally for storing the y-values of the result smooth curve
 		QVector<double>* xVector;
 		QVector<double>* yVector;
 
-		bool sourceDataChangedSinceLastInterpolation; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
+		bool sourceDataChangedSinceLastSmooth; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
 
-		XYInterpolationCurve* const q;
+		XYSmoothCurve* const q;
 
-	private:
-		void deriv(double *x, double *y, unsigned n);
-		void deriv2(double *x, double *y, unsigned n);
-		void integ(double *x, double *y, unsigned n);
-		void ratint(double *x, double *y, int n, double xn, double *v, double *dv);
+//	private:
 };
 
 #endif

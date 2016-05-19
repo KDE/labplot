@@ -1,9 +1,9 @@
 /***************************************************************************
-    File             : XYInterpolationCurveDock.h
+    File             : XYSmoothCurveDock.h
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Description      : widget for editing properties of interpolation curves
+    Description      : widget for editing properties of smooth curves
 
  ***************************************************************************/
 
@@ -26,51 +26,47 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYINTERPOLATIONCURVEDOCK_H
-#define XYINTERPOLATIONCURVEDOCK_H
+#ifndef XYSMOOTHCURVEDOCK_H
+#define XYSMOOTHCURVEDOCK_H
 
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
-#include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
-#include "ui_xyinterpolationcurvedockgeneraltab.h"
+#include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
+#include "ui_xysmoothcurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYInterpolationCurveDock: public XYCurveDock {
+class XYSmoothCurveDock: public XYCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYInterpolationCurveDock(QWidget *parent);
+	explicit XYSmoothCurveDock(QWidget *parent);
 	void setCurves(QList<XYCurve*>);
 	virtual void setupGeneral();
 
 private:
 	virtual void initGeneralTab();
-	void showInterpolationResult();
+	void showSmoothResult();
 
-	Ui::XYInterpolationCurveDockGeneralTab uiGeneralTab;
+	Ui::XYSmoothCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
 
-	XYInterpolationCurve* m_interpolationCurve;
-	XYInterpolationCurve::InterpolationData m_interpolationData;
+	XYSmoothCurve* m_smoothCurve;
+	XYSmoothCurve::SmoothData m_smoothData;
 
 protected:
 	virtual void setModel();
 
 private slots:
-	//SLOTs for changes triggered in XYInterpolationCurveDock
+	//SLOTs for changes triggered in XYSmoothCurveDock
 	//general tab
 	void nameChanged();
 	void commentChanged();
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
-	void typeChanged(int);
-	void variantChanged(int);
-	void tensionChanged();
-	void continuityChanged();
-	void biasChanged();
-	void evaluateChanged();
-	void numberOfPointsChanged();
+	void typeChanged();
+	void pointsChanged();
+	void weightChanged();
 
 //	void showOptions();
 	void recalculateClicked();
@@ -82,7 +78,7 @@ private slots:
 	void curveDescriptionChanged(const AbstractAspect*);
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveYDataColumnChanged(const AbstractColumn*);
-	void curveInterpolationDataChanged(const XYInterpolationCurve::InterpolationData&);
+	void curveSmoothDataChanged(const XYSmoothCurve::SmoothData&);
 	void dataChanged();
 
 };
