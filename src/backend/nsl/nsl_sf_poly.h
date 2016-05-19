@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : XYFourierFilterCurvePrivate.h
+    File                 : nsl_sf_poly.h
     Project              : LabPlot
-    Description          : Private members of XYFourierFilterCurve
+    Description          : NSL special polynomial functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -26,43 +26,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYFOURIERFILTERCURVEPRIVATE_H
-#define XYFOURIERFILTERCURVEPRIVATE_H
+#ifndef NSL_SF_POLY_H
+#define NSL_SF_POLY_H
 
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
-#include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
+#include <stdlib.h>
 
-#include <cmath>
-#include <QDebug>
+/* Chebychev T_n(x) */
+double nsl_sf_poly_chebyshev_T(int n, double x);
 
-class XYFourierFilterCurve;
-class Column;
-
-class XYFourierFilterCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYFourierFilterCurvePrivate(XYFourierFilterCurve*);
-		~XYFourierFilterCurvePrivate();
-		void recalculate();
-
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be fitted
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be fitted
-		QString xDataColumnPath;
-		QString yDataColumnPath;
-
-		XYFourierFilterCurve::FilterData filterData;
-		XYFourierFilterCurve::FilterResult filterResult;
-
-		Column* xColumn; //<! column used internally for storing the x-values of the result fit curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result fit curve
-		QVector<double>* xVector;
-		QVector<double>* yVector;
-
-		bool sourceDataChangedSinceLastFilter; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
-
-		XYFourierFilterCurve* const q;
-
-//	private:
-//		void writeSolverState(gsl_multifit_fdfsolver* s);
-};
-
-#endif
+#endif /* NSL_SF_POLY_H */
