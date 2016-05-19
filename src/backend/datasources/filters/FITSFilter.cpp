@@ -540,47 +540,47 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
     if (fitsFile) {
         fits_close_file(fitsFile, &status);
     }
-
     if (status != 0) {
         printError(status);
     }
-
     status = 0;
 
     if (fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status )) {
         printError(status);
         return QList<FITSFilter::Keyword> ();
     }
-    char* headerKeywords;
     int numberOfKeys;
-    if (fits_hdr2str(fitsFile, 0, NULL, 0, &headerKeywords, &numberOfKeys, &status)) {
+    if (fits_get_hdrspace(fitsFile, &numberOfKeys, NULL, &status)){
         printError(status);
-        free(headerKeywords);
         return QList<FITSFilter::Keyword> ();
     }
 
-    QString keywordString = QString(headerKeywords);
-    free(headerKeywords);
-
     QList<FITSFilter::Keyword> keywords;
     keywords.reserve(numberOfKeys);
-    FITSFilter::Keyword keyword;
-    for (int i = 0; i < numberOfKeys; ++i) {
-        QString card = keywordString.mid(i* (FLEN_CARD -1), FLEN_CARD -1);
-        QStringList recordValues = card.split(QRegExp("[=/]"));
+    char* key = new char[FLEN_KEYWORD];
+    char* value = new char[FLEN_VALUE];
+    char* comment = new char[FLEN_COMMENT];
+    for (int i = 1; i <= numberOfKeys; ++i) {
+        QStringList recordValues;
+        FITSFilter::Keyword keyword;
 
-        if (recordValues.size() == 3) {
-            keyword.key = recordValues[0].simplified();
-            keyword.value = recordValues[1].simplified();
-            keyword.comment = recordValues[2].simplified();
-        } else if (recordValues.size() == 2) {
-            keyword.key = recordValues[0].simplified();
-            keyword.value = recordValues[1].simplified();
-        } else {
-            keyword.key = recordValues[0].simplified();
+        if (fits_read_keyn(fitsFile, i, key, value, comment, &status)) {
+            printError(status);
+            status = 0;
+            continue;
         }
+        recordValues << QString(key) << QString(value) << QString(comment);
+
+        keyword.key = recordValues[0].simplified();
+        keyword.value = recordValues[1].simplified();
+        keyword.comment = recordValues[2].simplified();
+
         keywords.append(keyword);
+
     }
+    free(key);
+    free(value);
+    free(comment);
 
     return keywords;
 #else
