@@ -85,7 +85,7 @@ double nsl_sf_kernel_cauchy(double u) {
 }
 
 double nsl_sf_kernel_logistic(double u) {
-	return gsl_ran_cauchy_pdf(u, 1.0);
+	return gsl_ran_logistic_pdf(u, 1.0);
 }
 
 double nsl_sf_kernel_sigmoid(double u) {
