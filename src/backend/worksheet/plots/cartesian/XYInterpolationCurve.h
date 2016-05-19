@@ -30,7 +30,9 @@
 #define XYINTERPOLATIONCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+extern "C" {
 #include <gsl/gsl_version.h>
+}
 
 class XYInterpolationCurvePrivate;
 class XYInterpolationCurve: public XYCurve {

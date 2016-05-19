@@ -35,7 +35,9 @@
 class XYFitCurve;
 class Column;
 
+extern "C" {
 #include <gsl/gsl_multifit_nlin.h>
+}
 
 class XYFitCurvePrivate: public XYCurvePrivate {
 	public:

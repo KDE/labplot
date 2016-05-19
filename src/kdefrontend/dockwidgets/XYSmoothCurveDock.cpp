@@ -36,7 +36,6 @@
 #include <QWidgetAction>
 #include <QStandardItemModel>
 
-#include <gsl_interp.h>	// gsl_interp types
 #include <cmath>        // isnan
 
 /*!
@@ -97,9 +96,10 @@ void XYSmoothCurveDock::setupGeneral() {
 	uiGeneralTab.cbWeight->addItem(i18n("triweight"));
 	uiGeneralTab.cbWeight->addItem(i18n("tricube"));
 	uiGeneralTab.cbWeight->addItem(i18n("cosine"));
-// IIR	-> np="all"
+// TODO: IIR	-> np="all"?
 //	uiGeneralTab.cbWeight->addItem(i18n("exponential"));
 //	uiGeneralTab.cbWeight->addItem(i18n("Gaussian"));
+//	etc. -> see nsl_sf_kernel
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
@@ -148,7 +148,6 @@ void XYSmoothCurveDock::initGeneralTab() {
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
-	//TODO: called via slot? this->typeChanged(m_smoothData.type);
 	uiGeneralTab.sbPoints->setValue(m_smoothData.points);
 	uiGeneralTab.cbWeight->setCurrentIndex(m_smoothData.weight);
 	this->showSmoothResult();
@@ -266,7 +265,16 @@ void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
 void XYSmoothCurveDock::typeChanged() {
 	m_smoothData.type = (XYSmoothCurve::SmoothType)uiGeneralTab.cbType->currentIndex();
 
-	//TODO
+	switch(m_smoothData.type) {
+	case XYSmoothCurve::MovingAverage:
+		uiGeneralTab.sbPoints->setSingleStep(2);
+		uiGeneralTab.sbPoints->setMinimum(3);
+		break;
+	case XYSmoothCurve::MovingAverageLagged:
+		uiGeneralTab.sbPoints->setSingleStep(1);
+		uiGeneralTab.sbPoints->setMinimum(2);
+		break;
+	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
@@ -366,7 +374,6 @@ void XYSmoothCurveDock::curveSmoothDataChanged(const XYSmoothCurve::SmoothData& 
 	m_initializing = true;
 	m_smoothData = data;
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
-	//TODO: called via slot? this->typeChanged(m_smoothData.type);
 
 	this->showSmoothResult();
 	m_initializing = false;

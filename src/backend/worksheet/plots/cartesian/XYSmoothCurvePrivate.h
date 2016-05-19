@@ -32,8 +32,6 @@
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 
-#include <QDebug>
-
 class XYSmoothCurve;
 class Column;
 

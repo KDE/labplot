@@ -36,7 +36,9 @@
 #include <QWidgetAction>
 #include <QStandardItemModel>
 
+extern "C" {
 #include <gsl_interp.h>	// gsl_interp types
+}
 #include <cmath>        // isnan
 
 /*!
@@ -253,7 +255,7 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if(column != 0) {
 		unsigned int n=0;
 		for(int row=0;row < column->rowCount();row++)
-			if (!isnan(column->valueAt(row)) && !column->isMasked(row)) 
+			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row)) 
 				n++;
 
 		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());

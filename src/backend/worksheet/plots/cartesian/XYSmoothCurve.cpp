@@ -40,8 +40,11 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 
+extern "C" {
 #include <gsl/gsl_math.h>	// gsl_pow_*
 #include <gsl/gsl_sf_gamma.h>	// gsl_sf_choose
+#include "backend/nsl/nsl_sf_kernel.h"	// nsl_sf_kernel_*
+}
 
 #include <KIcon>
 #include <KLocale>
@@ -292,7 +295,6 @@ void XYSmoothCurvePrivate::recalculate() {
 					for(unsigned int j=0;j<np;j++)
 						w[j]=gsl_sf_choose(2*sum,sum+fabs(j-sum))/pow(4.,sum);
 				} else {
-					//TODO: check even np
 					for(unsigned int j=0;j<np;j++) {
 						w[j]=gsl_sf_choose(2*(np-1),j);
 						sum += w[j];
@@ -304,12 +306,12 @@ void XYSmoothCurvePrivate::recalculate() {
 			case XYSmoothCurve::Parabolic:
 				if(type == XYSmoothCurve::MovingAverage) {
 					for(unsigned int j=0;j<np;j++) {
-						w[j]=1.-gsl_pow_2(j-(np-1)/2.)/gsl_pow_2((np+1)/2);
+						w[j]=nsl_sf_kernel_parabolic(2.*(j-(np-1)/2.)/(np+1));
 						sum += w[j];
 					}
 				} else {
 					for(unsigned int j=0;j<np;j++) {
-						w[j]=1.-gsl_pow_2(1.-(1+j)/(double)np);
+						w[j]=nsl_sf_kernel_parabolic(1.-(1+j)/(double)np);
 						sum += w[j];
 					}
 				}
@@ -319,12 +321,12 @@ void XYSmoothCurvePrivate::recalculate() {
 			case XYSmoothCurve::Quartic:
 				if(type == XYSmoothCurve::MovingAverage) {
 					for(unsigned int j=0;j<np;j++) {
-						w[j]=gsl_pow_2(1.-gsl_pow_2(j-(np-1)/2.)/gsl_pow_2((np+1)/2));
+						w[j]=nsl_sf_kernel_quartic(2.*(j-(np-1)/2.)/(np+1));
 						sum += w[j];
 					}
 				} else {
 					for(unsigned int j=0;j<np;j++) {
-						w[j]=gsl_pow_2(1.-gsl_pow_2(1.-(1+j)/(double)np));
+						w[j]=nsl_sf_kernel_quartic(1.-(1+j)/(double)np);
 						sum += w[j];
 					}
 				}
@@ -334,12 +336,12 @@ void XYSmoothCurvePrivate::recalculate() {
 			case XYSmoothCurve::Triweight:
 				if(type == XYSmoothCurve::MovingAverage) {
 					for(unsigned int j=0;j<np;j++) {
-						w[j]=gsl_pow_3(1.-gsl_pow_2(j-(np-1)/2.)/gsl_pow_2((np+1)/2));
+						w[j]=nsl_sf_kernel_triweight(2.*(j-(np-1)/2.)/(np+1));
 						sum += w[j];
 					}
 				} else {
 					for(unsigned int j=0;j<np;j++) {
-						w[j]=gsl_pow_3(1.-gsl_pow_2(1.-(1+j)/(double)np));
+						w[j]=nsl_sf_kernel_triweight(1.-(1+j)/(double)np);
 						sum += w[j];
 					}
 				}
@@ -349,12 +351,12 @@ void XYSmoothCurvePrivate::recalculate() {
 			case XYSmoothCurve::Tricube:
 				if(type == XYSmoothCurve::MovingAverage) {
 					for(unsigned int j=0;j<np;j++) {
-						w[j]=gsl_pow_3(1.-gsl_pow_3(fabs(j-(np-1)/2.))/gsl_pow_3((np+1)/2));
+						w[j]=nsl_sf_kernel_tricube(2.*(j-(np-1)/2.)/(np+1));
 						sum += w[j];
 					}
 				} else {
 					for(unsigned int j=0;j<np;j++) {
-						w[j]=gsl_pow_3(1.-gsl_pow_3(1.-(1+j)/(double)np));
+						w[j]=nsl_sf_kernel_tricube(1.-(1+j)/(double)np);
 						sum += w[j];
 					}
 				}
@@ -364,12 +366,12 @@ void XYSmoothCurvePrivate::recalculate() {
 			case XYSmoothCurve::Cosine:
 				if(type == XYSmoothCurve::MovingAverage) {
 					for(unsigned int j=0;j<np;j++) {
-						w[j]=cos(M_PI/2.*(j-(np-1)/2.)/((np+1)/2));
+						w[j]=nsl_sf_kernel_cosine((j-(np-1)/2.)/((np+1)/2.));
 						sum += w[j];
 					}
 				} else {
 					for(unsigned int j=0;j<np;j++) {
-						w[j]=cos(M_PI/2.*(np-1-j)/np);
+						w[j]=nsl_sf_kernel_cosine((np-1-j)/(double)np);
 						sum += w[j];
 					}
 				}
