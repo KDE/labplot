@@ -32,6 +32,8 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QStringList>
 #include <KLocale>
 #include <QTableWidget>
+#include <QTreeWidgetItem>
+#include <QXmlStreamReader>
 
 class FITSFilterPrivate;
 class FITSFilter : public AbstractFileFilter{
@@ -55,7 +57,6 @@ class FITSFilter : public AbstractFileFilter{
     QString readChdu(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
     virtual void save(QXmlStreamWriter*) const;
     virtual bool load(XmlStreamReader*);
-    QStringList extensionNames(const QString& fileName);
     struct Keyword {
         QString key;
         QString value;
@@ -68,7 +69,7 @@ class FITSFilter : public AbstractFileFilter{
     void deleteKeyword(const Keyword& keyword);
     void renameKeywordKey(const Keyword& keyword, const QString& newKey);
     void parseHeader(const QString& fileName, QTableWidget* headerEditTable);
-
+    void parseExtensions(const QString& fileName, QTreeWidgetItem* root);
     static QStringList standardKeywords();
 
     void loadFilterSettings(const QString&);

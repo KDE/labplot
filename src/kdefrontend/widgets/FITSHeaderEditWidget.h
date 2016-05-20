@@ -31,6 +31,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QAction>
 #include "backend/datasources/AbstractDataSource.h"
 #include "ui_fitsheadereditwidget.h"
+#include "backend/datasources/filters/FITSFilter.h"
 
 class FITSHeaderEditWidget : public QWidget
 {
@@ -50,10 +51,12 @@ private:
     void initActions();
     void initContextMenu();
     bool eventFilter(QObject*, QEvent*);
-
+    FITSFilter* fitsFilter;
 private slots:
     void openFile();
     void saveFile();
+
+    void fillTable(QTreeWidgetItem* item, int col);
 
     void removeKeyword();
     void addKeyword();

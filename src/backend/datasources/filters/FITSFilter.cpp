@@ -58,10 +58,6 @@ void FITSFilter::write(const QString &fileName, AbstractDataSource *dataSource) 
     d->writeCHDU(fileName, dataSource);
 }
 
-QStringList FITSFilter::extensionNames(const QString &fileName) {
-    return d->extensionNames(fileName);
-}
-
 void FITSFilter::addNewKeyword(const FITSFilter::Keyword& keyword) {
     d->addNewKeyword(keyword);
 }
@@ -80,6 +76,10 @@ void FITSFilter::renameKeywordKey(const Keyword &keyword, const QString &newKey)
 
 void FITSFilter::parseHeader(const QString &fileName, QTableWidget *headerEditTable){
     d->parseHeader(fileName, headerEditTable);
+}
+
+void FITSFilter::parseExtensions(const QString &fileName, QTreeWidgetItem *root) {
+    d->parseExtensions(fileName, root);
 }
 
 void FITSFilter::loadFilterSettings(const QString& fileName) {
@@ -278,69 +278,82 @@ QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
 #ifdef HAVE_FITS
     QStringList extensionNames;
     int status = 0;
-    if (!fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status )) {
-        int hduCount;
 
-        if (!fits_get_num_hdus(fitsFile, &hduCount, &status)) {
-            int imageCount = 0;
-            int asciiTableCount = 0;
-            int binaryTableCount = 0;
-            for (int currentHDU = 1; currentHDU <= hduCount; ++currentHDU) {
-                char extensionName[80];
-                int hduType;
+    if (fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status )) {
+        printError(status);
+        return QStringList();
+    }
+    int hduCount;
 
-                fits_get_hdu_type(fitsFile, &hduType, &status);
+    if (fits_get_num_hdus(fitsFile, &hduCount, &status)) {
+        printError(status);
+        return QStringList();
+    }
+    int imageCount = 0;
+    int asciiTableCount = 0;
+    int binaryTableCount = 0;
+    for (int currentHDU = 1; currentHDU <= hduCount; ++currentHDU) {
+        int hduType;
+        int hdunum;
+        status = 0;
 
+        fits_get_hdu_num(fitsFile,&hdunum);
+        fits_get_hdu_type(fitsFile, &hduType, &status);
+        switch (hduType) {
+        case IMAGE_HDU:
+            imageCount++;
+            break;
+        case ASCII_TBL:
+            asciiTableCount++;
+            break;
+        case BINARY_TBL:
+            binaryTableCount++;
+            break;
+        }
+        char keyVal[FLEN_VALUE];
+        QString extName;
+        if (!fits_read_keyword(fitsFile,"EXTNAME", keyVal, NULL, &status)) {
+            extName = QString(keyVal);
+            extName = extName.mid(1, extName.length() -2).simplified();
+        }
+        else {
+            printError(status);
+            status = 0;
+            if (!fits_read_keyword(fitsFile, "HDUNAME", keyVal, NULL, &status)) {
+                extName = QString(keyVal);
+                extName = extName.mid(1, extName.length() -2).simplified();
+            } else {
+                status = 0;
+                printError(status);
                 switch (hduType) {
                 case IMAGE_HDU:
-                    imageCount++;
+                    if (imageCount == 1) {
+                        extName = i18n("Primary header");
+                    } else {
+                        extName = i18n("IMAGE #%1").arg(imageCount);
+                    }
                     break;
                 case ASCII_TBL:
-                    asciiTableCount++;
+                    extName = i18n("ASCII_TBL #%1").arg(asciiTableCount);
                     break;
                 case BINARY_TBL:
-                    binaryTableCount++;
+                    extName = i18n("BINARY_TBL #%1").arg(binaryTableCount);
                     break;
                 }
-                QString extName;
-                if (!fits_read_keyword(fitsFile, "EXTNAME", extensionName, NULL, &status)){
-                    extName = QString(extensionName);
-                } else {
-                    status = 0;
-                    if (!fits_read_keyword(fitsFile, "HDUNAME", extensionName, NULL, &status)) {
-                        extName = QString(extensionName);
-                    } else {
-                        switch (hduType) {
-                        case IMAGE_HDU:
-                            extName = i18n("IMAGE #%1").arg(imageCount);
-                            break;
-                        case ASCII_TBL:
-                            extName = i18n("ASCII_TBL #%1").arg(asciiTableCount);
-                            break;
-                        case BINARY_TBL:
-                            extName = i18n("BINARY_TBL #%1").arg(binaryTableCount);
-                            break;
-                        }
-                    }
-                }
-                extensionNames << extName.trimmed();
-                fits_movrel_hdu(fitsFile, 1, NULL, &status);
             }
-        } else {
+        }
+        status = 0;
+        extensionNames << extName.trimmed();
+        if(fits_movrel_hdu(fitsFile, 1, NULL, &status)) {
             printError(status);
         }
-    } else {
-        printError(status);
     }
 
     if (status == END_OF_FILE) {
         status = 0;
     }
 
-    if (fits_close_file(fitsFile, &status)) {
-        printError(status);
-    }
-
+    fits_close_file(fitsFile, &status);
     return extensionNames;
 #else
     Q_UNUSED(fileName)
@@ -537,14 +550,6 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
 #ifdef HAVE_FITS
     int status = 0;
 
-    if (fitsFile) {
-        fits_close_file(fitsFile, &status);
-    }
-    if (status != 0) {
-        printError(status);
-    }
-    status = 0;
-
     if (fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status )) {
         printError(status);
         return QList<FITSFilter::Keyword> ();
@@ -582,6 +587,8 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
     free(value);
     free(comment);
 
+    fits_close_file(fitsFile, &status);
+
     return keywords;
 #else
     Q_UNUSED(fileName)
@@ -609,6 +616,16 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
     }
 
     headerEditTable->resizeColumnsToContents();
+}
+
+void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidgetItem *root) {
+    QStringList extensions = extensionNames(fileName);
+    QTreeWidgetItem* treeNameItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << fileName);
+    root->addChild(treeNameItem);
+    foreach (const QString& ext, extensions) {
+        QTreeWidgetItem* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << ext);
+        treeNameItem->addChild(treeItem);
+    }
 }
 
 FITSFilterPrivate::~FITSFilterPrivate() {

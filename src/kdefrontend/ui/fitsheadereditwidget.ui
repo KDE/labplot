@@ -6,31 +6,49 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>486</width>
+    <width>628</width>
     <height>546</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>FITS header edit</string>
+   <string/>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
+   <property name="rightMargin">
+    <number>8</number>
+   </property>
    <item>
-    <widget class="QTableWidget" name="twKeywordsTable"/>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QTreeWidget" name="twExtensions">
+      <attribute name="headerVisible">
+       <bool>true</bool>
+      </attribute>
+      <column>
+       <property name="text">
+        <string notr="true">1</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QTableWidget" name="twKeywordsTable"/>
+    </widget>
    </item>
    <item>
     <widget class="QGroupBox" name="gbOptions">
      <property name="title">
       <string>Options</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,1">
-      <item row="0" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
        <widget class="QPushButton" name="pbOpenFile">
         <property name="text">
          <string>Open file</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item>
        <widget class="QPushButton" name="pbSaveFile">
         <property name="text">
          <string>Save file</string>

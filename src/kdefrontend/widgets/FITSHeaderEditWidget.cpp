@@ -31,13 +31,19 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QTableWidget>
 #include <QFileDialog>
 #include <QContextMenuEvent>
+#include <QTreeWidgetItem>
+#include <QDebug>
 
 FITSHeaderEditWidget::FITSHeaderEditWidget(AbstractDataSource *dataSource, QWidget *parent) :
     QWidget(parent) {
     ui.setupUi(this);
+    setWindowTitle(i18n("FITS header edit"));
     initActions();
     initContextMenu();
+    fitsFilter = new FITSFilter();
     ui.twKeywordsTable->setColumnCount(3);
+    ui.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui.twExtensions->headerItem()->setText(0, "Extensions");
     ui.twKeywordsTable->setHorizontalHeaderItem(0, new QTableWidgetItem(i18n("Key")));
     ui.twKeywordsTable->setHorizontalHeaderItem(1, new QTableWidgetItem(i18n("Value")));
     ui.twKeywordsTable->setHorizontalHeaderItem(2, new QTableWidgetItem(i18n("Comment")));
@@ -48,21 +54,63 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(AbstractDataSource *dataSource, QWidg
     if (dataSource != NULL) {
         ui.gbOptions->hide();
     }
+
+    connect(ui.twExtensions, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(fillTable(QTreeWidgetItem*, int)));
 }
 
 FITSHeaderEditWidget::~FITSHeaderEditWidget() {
 }
 
+void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
+    WAIT_CURSOR;
+    QString itemText = item->text(col);
+    QString selectedExtension;
+    if (itemText.contains("IMAGE #")) {
+        //filter - find IMAGE #
+    } else if (itemText.contains("ASCII_TBL #")) {
+
+    } else if (itemText.contains("BINARY_TBL #")) {
+
+    } else if (!itemText.compare("Primary header")) {
+        if (item->parent() != 0) {
+            qDebug() << item->parent()->text(col);
+            selectedExtension = item->parent()->text(col);
+        }
+    } else {
+        if (item->parent() != 0) {
+            selectedExtension = item->parent()->text(col) +"["+ item->text(col)+"]";
+        }
+    }
+    if (!selectedExtension.isEmpty())
+        fitsFilter->parseHeader(selectedExtension, ui.twKeywordsTable);
+    RESET_CURSOR;
+}
+
 void FITSHeaderEditWidget::openFile() {
     QString fileName = QFileDialog::getOpenFileName(this,i18n("Open FITS file"), QDir::homePath(),
                                                     "FITS files (*.fits)");
-    FITSFilter* fitsFilter = new FITSFilter();
-    WAIT_CURSOR;
-    fitsFilter->parseHeader(fileName, ui.twKeywordsTable);
-    RESET_CURSOR;
-    setWindowTitle(i18n("FITS header edit - ") + QFileInfo(fileName).fileName());
-
-    delete fitsFilter;
+    if (!fileName.isEmpty()) {
+        WAIT_CURSOR;
+        QTreeWidgetItem* root = ui.twExtensions->invisibleRootItem();
+        int childCount = root->childCount();
+        bool opened = false;
+        for (int i = 0; i < childCount; ++i) {
+            if(root->child(i)->text(0) == fileName) {
+                opened = true;
+                break;
+            }
+        }
+        if (!opened) {
+            fitsFilter->parseExtensions(fileName, root);
+            foreach (QTreeWidgetItem* item, ui.twExtensions->selectedItems()) {
+                item->setSelected(false);
+            }
+            root->child(root->childCount()-1)->setExpanded(true);
+            root->child(root->childCount()-1)->child(0)->setSelected(true);
+        }
+        fitsFilter->parseHeader(root->child(root->childCount()-1)->text(0), ui.twKeywordsTable);
+        RESET_CURSOR;
+    }
 }
 
 void FITSHeaderEditWidget::saveFile() {
