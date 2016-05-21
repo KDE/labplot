@@ -38,6 +38,8 @@
 
 #include <klocale.h>
 
+#include <cmath>
+
 ExpressionParser* ExpressionParser::instance = NULL;
 
 ExpressionParser::ExpressionParser(){
