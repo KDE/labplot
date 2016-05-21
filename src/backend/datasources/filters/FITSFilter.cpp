@@ -114,19 +114,14 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
 /*!
  * \brief Read the current header data unit from file \a filename in data source \a dataSource in
     \a importMode import mode
- * \param fileName
- * \param dataSource
+ * \param fileName the name of the file to be read
+ * \param dataSource the data source to be filled
  * \param importMode
  */
 QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode) {
 
     #ifdef HAVE_FITS
     int status = 0;
-    if (fitsFile) {
-        fits_close_file(fitsFile, &status);
-        if (status)
-            status = 0;
-    }
 
     if(fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status)) {
         printError(status);
@@ -251,6 +246,9 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         matrix->setUndoAware(true);
     }
 
+    delete data;
+    fits_close_file(fitsFile, &status);
+
     #else
     Q_UNUSED(fileName)
     Q_UNUSED(dataSource)
@@ -294,10 +292,8 @@ QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
     int binaryTableCount = 0;
     for (int currentHDU = 1; currentHDU <= hduCount; ++currentHDU) {
         int hduType;
-        int hdunum;
         status = 0;
 
-        fits_get_hdu_num(fitsFile,&hdunum);
         fits_get_hdu_type(fitsFile, &hduType, &status);
         switch (hduType) {
         case IMAGE_HDU:
@@ -310,7 +306,7 @@ QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
             binaryTableCount++;
             break;
         }
-        char keyVal[FLEN_VALUE];
+        char* keyVal = new char[FLEN_VALUE];
         QString extName;
         if (!fits_read_keyword(fitsFile,"EXTNAME", keyVal, NULL, &status)) {
             extName = QString(keyVal);
@@ -342,6 +338,7 @@ QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
                 }
             }
         }
+        delete keyVal;
         status = 0;
         extensionNames << extName.trimmed();
         if(fits_movrel_hdu(fitsFile, 1, NULL, &status)) {
@@ -363,22 +360,27 @@ QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
 
 /*!
  * \brief Prints the error text corresponding to the status code \a status
- * \param status
+ * \param status the status code
  */
 void FITSFilterPrivate::printError(int status) const {
+#ifdef HAVE_FITS
     if (status) {
         char errorText[FLEN_ERRMSG];
         fits_get_errstatus(status, errorText );
         qDebug() << QLatin1String(errorText);
     }
+#else
+    Q_UNUSED(status)
+#endif
 }
 
 /*!
  * \brief Add the keyword \a keyword to the current header unit
- * \param keyword
+ * \param keyword keyword to be added
  */
 
 void FITSFilterPrivate::addNewKeyword(const FITSFilter::Keyword& keyword) {
+#ifdef HAVE_FITS
     int status = 0;
     if (!keyword.key.compare(QLatin1String("COMMENT"))) {
         if (fits_write_comment(fitsFile, keyword.key.toLatin1(), &status)) {
@@ -413,11 +415,17 @@ void FITSFilterPrivate::addNewKeyword(const FITSFilter::Keyword& keyword) {
             //keyword too long
         }
     }
+#else
+    Q_UNUSED(keyword)
+#endif
 }
-
 /*!
  * \brief Update the value and/or comment of keyword \a keyword in the current header unit
- * \param keyword
+ * \param keyword the keyword to be updated
+ * \param newKey the new key
+ * \param newValue the new value
+ * \param newComment the new comment
+ * \param updateMode the update mode in which the keyword is updated
  */
 void FITSFilterPrivate::updateKeyword(FITSFilter::Keyword& keyword,const QString& newKey, const QString& newValue,
                                       const QString& newComment, FITSFilter::KeywordUpdateMode updateMode) {
@@ -502,6 +510,8 @@ void FITSFilterPrivate::updateKeyword(FITSFilter::Keyword& keyword,const QString
     }
 
     if (updated) {
+        //TODO
+        //messagebox?
         qDebug() << "Keyword updated successfully!";
     } else {
         qDebug() << "Failed to update keyword!";
@@ -516,8 +526,10 @@ void FITSFilterPrivate::updateKeyword(FITSFilter::Keyword& keyword,const QString
 
 /*!
  * \brief Delete the keyword \a keyword from the current header unit
- * \param keyword
+ * \param keyword the keyword to delete
  */
+
+//TODO return bool
 void FITSFilterPrivate::deleteKeyword(const FITSFilter::Keyword &keyword) {
 #ifdef HAVE_FITS
     if (!keyword.key.isEmpty()) {
@@ -533,8 +545,8 @@ void FITSFilterPrivate::deleteKeyword(const FITSFilter::Keyword &keyword) {
 
 /*!
  * \brief Rename the keyname of \a keyword, preserving the value and comment fields
- * \param keyword
- * \param newKey
+ * \param keyword the keyword to rename
+ * \param newKey the new keyname of \a keyword
  */
 void FITSFilterPrivate::renameKeywordKey(const FITSFilter::Keyword &keyword, const QString &newKey) {
     Q_UNUSED(keyword)
@@ -542,8 +554,8 @@ void FITSFilterPrivate::renameKeywordKey(const FITSFilter::Keyword &keyword, con
 }
 
 /*!
- * \brief Returns a list of keywords
- * \param fileName
+ * \brief Returns a list of keywords in the current header
+ * \param fileName the file to open
  * \return
  */
 QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileName) {
@@ -583,9 +595,9 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
         keywords.append(keyword);
 
     }
-    free(key);
-    free(value);
-    free(comment);
+    delete key;
+    delete value;
+    delete comment;
 
     fits_close_file(fitsFile, &status);
 
@@ -627,6 +639,10 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidgetItem
         treeNameItem->addChild(treeItem);
     }
 }
+
+/*!
+ * \brief FITSFilterPrivate::~FITSFilterPrivate
+ */
 
 FITSFilterPrivate::~FITSFilterPrivate() {
 }

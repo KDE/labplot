@@ -59,6 +59,7 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(AbstractDataSource *dataSource, QWidg
 }
 
 FITSHeaderEditWidget::~FITSHeaderEditWidget() {
+    delete fitsFilter;
 }
 
 void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
@@ -73,7 +74,6 @@ void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
 
     } else if (!itemText.compare("Primary header")) {
         if (item->parent() != 0) {
-            qDebug() << item->parent()->text(col);
             selectedExtension = item->parent()->text(col);
         }
     } else {
