@@ -381,7 +381,7 @@ void ImportFileWidget::selectFile() {
 	//use the file name as the name of the data source,
 	//if there is no data source name provided yet
 	if (ui.kleSourceName->text().isEmpty()) {
-		QString fileName=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+        QString fileName = QFileInfo(path).fileName();
 		ui.kleSourceName->setText(fileName);
 	}
 
