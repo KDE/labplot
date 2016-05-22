@@ -54,7 +54,7 @@ class FITSFilter : public AbstractFileFilter{
 
     void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
     void write(const QString & fileName, AbstractDataSource* dataSource);
-    QString readChdu(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
+    QString readChdu(const QString & fileName);
     virtual void save(QXmlStreamWriter*) const;
     virtual bool load(XmlStreamReader*);
     struct Keyword {

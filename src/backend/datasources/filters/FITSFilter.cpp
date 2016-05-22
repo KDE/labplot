@@ -50,8 +50,8 @@ void FITSFilter::read(const QString &fileName, AbstractDataSource *dataSource, A
     d->readCHDU(fileName, dataSource, importMode);
 }
 
-QString FITSFilter::readChdu(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode) {
-    return d->readCHDU(fileName, dataSource, importMode);
+QString FITSFilter::readChdu(const QString &fileName) {
+    return d->readCHDU(fileName, NULL, AbstractFileFilter::Replace);
 }
 
 void FITSFilter::write(const QString &fileName, AbstractDataSource *dataSource) {
@@ -178,12 +178,14 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         if (dataSource!=NULL) {
             columnOffset = dataSource->create(dataPointers, importMode, actualRows, actualCols);
         }
-
+        if (dataSource!= NULL)
         for (int i = 0; i < actualRows; ++i) {
             for (int j = 0; j < actualCols; ++j) {
                 dataPointers[j]->operator [](i) = data[i * actualCols + j];
             }
         }
+
+        delete data;
 
         //TODO
         //dataString
@@ -246,7 +248,6 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         matrix->setUndoAware(true);
     }
 
-    delete data;
     fits_close_file(fitsFile, &status);
 
     #else

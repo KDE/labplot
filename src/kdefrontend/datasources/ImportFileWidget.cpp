@@ -160,7 +160,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( netcdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(netcdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
     connect( netcdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
     connect( fitsOptionsWidget.twExtensions, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(fitsTreeWidgetItemSelected(QTreeWidgetItem*,int)));
-	//TODO: implement save/load of user-defined settings later and activate these buttons again
+    connect( fitsOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
+
+    //TODO: implement save/load of user-defined settings later and activate these buttons again
 	ui.bSaveFilter->hide();
 	ui.bManageFilters->hide();
 
@@ -451,8 +453,18 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			debug="detected compressed data";
 			//probably ascii data
 			ui.cbFileType->setCurrentIndex(FileDataSource::Ascii);
-		}
-		else if (info.contains("image") || info.contains("bitmap" )) {
+        } else if (info.contains("FITS image data")) {
+            debug="detected FITS file";
+            ui.cbFileType->setCurrentIndex(FileDataSource::FITS);
+
+            fitsOptionsWidget.twExtensions->clear();
+            QString fileName = ui.kleFileName->text();
+            QTreeWidgetItem *rootItem = fitsOptionsWidget.twExtensions->invisibleRootItem();
+            FITSFilter *filter = (FITSFilter *)this->currentFileFilter();
+            filter->parseExtensions(fileName, rootItem);
+
+            //TODO
+        } else if (info.contains("image") || info.contains("bitmap" )) {
 			debug="detected IMAGE file";
 			ui.cbFileType->setCurrentIndex(FileDataSource::Image);
 		} else if ( info.contains( ("ASCII") ) ) {
@@ -490,18 +502,6 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			netcdfOptionsWidget.twContent->expandAll();
 			netcdfOptionsWidget.twContent->resizeColumnToContents(0);
 			netcdfOptionsWidget.twContent->resizeColumnToContents(2);
-
-        } else if (info.contains("FITS image data")) {
-            debug="detected FITS file";
-            ui.cbFileType->setCurrentIndex(FileDataSource::FITS);
-
-            fitsOptionsWidget.twExtensions->clear();
-            QString fileName = ui.kleFileName->text();
-            QTreeWidgetItem *rootItem = fitsOptionsWidget.twExtensions->invisibleRootItem();
-            FITSFilter *filter = (FITSFilter *)this->currentFileFilter();
-            filter->parseExtensions(fileName, rootItem);
-
-            //TODO
         } else  {
 			debug="probably BINARY file";
 			ui.cbFileType->setCurrentIndex(FileDataSource::Binary);
@@ -641,8 +641,31 @@ const QStringList ImportFileWidget::selectedHDFNames() const {
 
 //TODO
 void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int column) {
-    Q_UNUSED(column)
-    Q_UNUSED(item)
+    WAIT_CURSOR;
+    QString itemText = item->text(column);
+    QString selectedExtension;
+    if (itemText.contains("IMAGE #")) {
+        //filter - find IMAGE #
+    } else if (itemText.contains("ASCII_TBL #")) {
+
+    } else if (itemText.contains("BINARY_TBL #")) {
+
+    } else if (!itemText.compare("Primary header")) {
+        if (item->parent() != 0) {
+            selectedExtension = item->parent()->text(column);
+        }
+    } else {
+        if (item->parent() != 0) {
+            selectedExtension = item->parent()->text(column) +"["+ item->text(column)+"]";
+        }
+    }
+    if (!selectedExtension.isEmpty()) {
+        FITSFilter* filter = (FITSFilter *)this->currentFileFilter();
+
+        QString importedText = filter->readChdu(selectedExtension);
+        Q_UNUSED(importedText)
+    }
+    RESET_CURSOR;
 }
 
 

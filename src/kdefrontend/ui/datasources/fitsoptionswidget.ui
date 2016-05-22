@@ -24,7 +24,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBox">
+      <widget class="QSpinBox" name="sbPreviewLines">
        <property name="maximum">
         <number>10000</number>
        </property>
@@ -34,7 +34,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="bRefreshPreview">
        <property name="text">
         <string>Refresh</string>
        </property>
