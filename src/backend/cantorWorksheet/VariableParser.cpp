@@ -28,7 +28,6 @@
  ***************************************************************************/
 
 #include "VariableParser.h"
-
 #include <QStringList>
 
 VariableParser::VariableParser(const QString& name, const QString& value)
@@ -59,30 +58,29 @@ void VariableParser::parseMaximaValues() {
 
 void VariableParser::parsePythonValues() {
 	QStringList valueStringList;
-	if(m_string.count(QString("[")) < 2 && m_string.count(QString("[")) > 0 && m_string.count(QString("(")) == 0) {
-		m_string = m_string.replace(QString("["), QString(""));
-		m_string = m_string.replace(QString("]"), QString(""));
-		m_string = m_string.trimmed();
-
-		if(m_string.count(QString(","))>1)
-			valueStringList = m_string.split(',');
-		else
-			valueStringList = m_string.split(' ');
-
-		parseValues(valueStringList);
+	m_string = m_string.trimmed();
+	if (m_string.startsWith("array")) {
+		//parse numpy arrays, string representation like array([1,2,3,4,5])
+		m_string = m_string.replace("array([", "");
+		m_string = m_string.replace("])", "");
+	} else if (m_string.startsWith('[')) {
+		//parse python's lists
+		m_string = m_string.replace('[', "");
+		m_string = m_string.replace(']', "");
+	} else if(m_string.startsWith('(')) {
+		//parse python's tuples
+		m_string = m_string.replace('(', "");
+		m_string = m_string.replace(')', "");
+	} else {
+		return;
 	}
-	else if(m_string.count(QString("(")) < 2 && m_string.count(QString("[")) == 0) {
-		m_string = m_string.replace(QString("("), QString(""));
-		m_string = m_string.replace(QString(")"), QString(""));
-		m_string = m_string.trimmed();
 
-		if(m_string.count(QString(","))>1)
-			valueStringList = m_string.split(',');
-		else
-			valueStringList = m_string.split(' ');
+	if(m_string.count(QString(","))>1)
+		valueStringList = m_string.split(',');
+	else
+		valueStringList = m_string.split(' ');
 
-		parseValues(valueStringList);
-	}
+	parseValues(valueStringList);
 }
 
 void VariableParser::parseRValues() {
