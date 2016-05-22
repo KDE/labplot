@@ -43,7 +43,8 @@
 extern "C" {
 #include <gsl/gsl_math.h>	// gsl_pow_*
 #include <gsl/gsl_sf_gamma.h>	// gsl_sf_choose
-#include "backend/nsl/nsl_sf_kernel.h"	// nsl_sf_kernel_*
+#include "backend/nsl/nsl_stats.h"
+#include "backend/nsl/nsl_sf_kernel.h"
 }
 
 #include <KIcon>
@@ -245,32 +246,43 @@ void XYSmoothCurvePrivate::recalculate() {
 	XYSmoothCurve::SmoothType type = smoothData.type;
 	unsigned int points = smoothData.points;
 	XYSmoothCurve::WeightType weight = smoothData.weight;
+	double percentile = smoothData.percentile;
 #ifdef QT_DEBUG
 	qDebug()<<"type:"<<type;
 	qDebug()<<"points ="<<points;
 	qDebug()<<"weight:"<<weight;
+	qDebug()<<"percentile ="<<percentile;
 #endif
 ///////////////////////////////////////////////////////////
 	int status=0;
 
 	xVector->resize(n);
 	yVector->resize(n);
-	switch(type) {
-	case XYSmoothCurve::MovingAverage:
-	case XYSmoothCurve::MovingAverageLagged:
-		for(unsigned int i=0;i<n;i++) {
-			(*xVector)[i] = xdata[i];
+	for(unsigned int i=0;i<n;i++) {
+		(*xVector)[i] = xdata[i];
 
-			unsigned int diff,np;
-			if(type == XYSmoothCurve::MovingAverage) {
-				diff = qMin(qMin((points-1)/2,i),n-i-1);
-				np = 2*diff+1;
-			} else {
-				np = qMin(points,i+1);
-				diff = np-1;
-			}
-			qDebug()<<"i ="<<i<<"np ="<<np;
+		unsigned int diff,np;
+		if (type == XYSmoothCurve::MovingAverageLagged) {
+			np = qMin(points,i+1);
+			diff = np-1;
+		} else {
+			diff = qMin(qMin((points-1)/2,i),n-i-1);
+			np = 2*diff+1;
+		}
+#ifdef QT_DEBUG
+		qDebug()<<"i ="<<i<<"np ="<<np;
+#endif
 
+		if(type == XYSmoothCurve::Percentile) {
+			double *values = new double[np];
+			for(unsigned int j=0;j<np;j++)
+				values[j] = ydata[i-diff+j];
+
+			for(unsigned int j=0;j<np;j++)
+				(*yVector)[i] = nsl_stats_quantile(values, 1, np, percentile, nsl_stats_quantile_type4);
+			delete[] values;
+			
+		} else { // MovingAverage*
 			// weight (see https://en.wikipedia.org/wiki/Kernel_%28statistics%29)
 			double sum=0.0, *w = new double[np];
 			switch(weight) {
@@ -387,7 +399,6 @@ void XYSmoothCurvePrivate::recalculate() {
 
 			delete[] w;
 		}
-		break;
 	}
 
 ///////////////////////////////////////////////////////////
@@ -423,6 +434,7 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "type", QString::number(d->smoothData.type) );
 	writer->writeAttribute( "points", QString::number(d->smoothData.points) );
 	writer->writeAttribute( "weight", QString::number(d->smoothData.weight) );
+	writer->writeAttribute( "percentile", QString::number(d->smoothData.percentile) );
 	writer->writeEndElement();// smoothData
 
 	// smooth results (generated columns)
@@ -489,6 +501,12 @@ bool XYSmoothCurve::load(XmlStreamReader* reader){
 				reader->raiseWarning(attributeWarning.arg("'weight'"));
 			else
 				d->smoothData.weight = (XYSmoothCurve::WeightType) str.toInt();
+
+			str = attribs.value("percentile").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'percentile'"));
+			else
+				d->smoothData.percentile = str.toDouble();
 
 		} else if (reader->name() == "smoothResult") {
 

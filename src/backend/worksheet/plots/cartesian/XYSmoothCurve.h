@@ -36,15 +36,16 @@ class XYSmoothCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum SmoothType {MovingAverage,MovingAverageLagged};
+		enum SmoothType {MovingAverage,MovingAverageLagged,Percentile};
 		enum WeightType {Uniform, Triangular, Binomial, Parabolic, Quartic, Triweight, Tricube, Cosine};
 
 		struct SmoothData {
-			SmoothData() : type(MovingAverage), points(3), weight(Uniform) {};
+			SmoothData() : type(MovingAverage), points(3), weight(Uniform), percentile(0.5) {};
 
 			XYSmoothCurve::SmoothType type;		// type of smooth
 			unsigned int points;			// number of points
 			XYSmoothCurve::WeightType weight;	// type of weight
+			double percentile;			// percentile for percentile filter (0.0 .. 1.0)
 		};
 		struct SmoothResult {
 			SmoothResult() : available(false), valid(false), elapsedTime(0) {};
