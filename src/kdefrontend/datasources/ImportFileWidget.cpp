@@ -106,6 +106,12 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	netcdfOptionsWidget.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	ui.swOptions->insertWidget(FileDataSource::NETCDF, netcdfw);
 
+    QWidget* fitsw = new QWidget(0);
+    fitsOptionsWidget.setupUi(fitsw);
+    fitsOptionsWidget.twExtensions->headerItem()->setText(0, i18n("Extensions"));
+    fitsOptionsWidget.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui.swOptions->insertWidget(FileDataSource::FITS, fitsw);
+
 	// the table widget for preview
 	twPreview = new QTableWidget(ui.tePreview);
 	twPreview->horizontalHeader()->hide();
@@ -152,8 +158,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( hdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(hdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
 	connect( hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 	connect( netcdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(netcdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
-	connect( hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
-
+    connect( netcdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
+    connect( fitsOptionsWidget.twExtensions, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(fitsTreeWidgetItemSelected(QTreeWidgetItem*,int)));
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
 	ui.bSaveFilter->hide();
 	ui.bManageFilters->hide();
@@ -360,6 +366,10 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	}
     case FileDataSource::FITS: {
         //TODO
+        FITSFilter* filter = new FITSFilter();
+
+
+        return filter;
     }
 	}
 
@@ -388,7 +398,7 @@ void ImportFileWidget::selectFile() {
 	//use the file name as the name of the data source,
 	//if there is no data source name provided yet
 	if (ui.kleSourceName->text().isEmpty()) {
-		QString fileName=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+        QString fileName = QFileInfo(path).fileName();
 		ui.kleSourceName->setText(fileName);
 	}
 
@@ -484,6 +494,13 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
         } else if (info.contains("FITS image data")) {
             debug="detected FITS file";
             ui.cbFileType->setCurrentIndex(FileDataSource::FITS);
+
+            fitsOptionsWidget.twExtensions->clear();
+            QString fileName = ui.kleFileName->text();
+            QTreeWidgetItem *rootItem = fitsOptionsWidget.twExtensions->invisibleRootItem();
+            FITSFilter *filter = (FITSFilter *)this->currentFileFilter();
+            filter->parseExtensions(fileName, rootItem);
+
             //TODO
         } else  {
 			debug="probably BINARY file";
@@ -570,7 +587,12 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		break;
 	}
     case FileDataSource::FITS: {
-    //TODO
+        ui.lFilter->hide();
+        ui.cbFilter->hide();
+        // hide global preview tab. we have our own
+        ui.tabWidget->setTabText(0,i18n("Data format && preview"));
+        ui.tabWidget->removeTab(1);
+        ui.tabWidget->setCurrentIndex(0);
         break;
     }
 	default:
@@ -615,6 +637,12 @@ const QStringList ImportFileWidget::selectedHDFNames() const {
 		names<<items[i]->data(1,Qt::DisplayRole).toString();
 
 	return names;
+}
+
+//TODO
+void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int column) {
+    Q_UNUSED(column)
+    Q_UNUSED(item)
 }
 
 
@@ -681,7 +709,8 @@ void ImportFileWidget::fileInfoDialog() {
 */
 void ImportFileWidget::filterChanged(int index) {
 	// ignore filter for these formats
-	if (ui.cbFileType->currentIndex() == FileDataSource::HDF || ui.cbFileType->currentIndex() == FileDataSource::NETCDF || ui.cbFileType->currentIndex() == FileDataSource::Image ) {
+    if (ui.cbFileType->currentIndex() == FileDataSource::HDF || ui.cbFileType->currentIndex() == FileDataSource::NETCDF
+            || ui.cbFileType->currentIndex() == FileDataSource::Image  || ui.cbFileType->currentIndex() == FileDataSource::FITS) {
 		ui.swOptions->setEnabled(true);
 		return;
 	}

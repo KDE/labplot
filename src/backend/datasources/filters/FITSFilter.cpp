@@ -593,7 +593,6 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
         keyword.comment = recordValues[2].simplified();
 
         keywords.append(keyword);
-
     }
     delete key;
     delete value;

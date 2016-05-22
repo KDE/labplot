@@ -43,7 +43,7 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(AbstractDataSource *dataSource, QWidg
     fitsFilter = new FITSFilter();
     ui.twKeywordsTable->setColumnCount(3);
     ui.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
-    ui.twExtensions->headerItem()->setText(0, "Extensions");
+    ui.twExtensions->headerItem()->setText(0, i18n("Extensions"));
     ui.twKeywordsTable->setHorizontalHeaderItem(0, new QTableWidgetItem(i18n("Key")));
     ui.twKeywordsTable->setHorizontalHeaderItem(1, new QTableWidgetItem(i18n("Value")));
     ui.twKeywordsTable->setHorizontalHeaderItem(2, new QTableWidgetItem(i18n("Comment")));
@@ -106,6 +106,7 @@ void FITSHeaderEditWidget::openFile() {
                 item->setSelected(false);
             }
             root->child(root->childCount()-1)->setExpanded(true);
+            ui.twExtensions->resizeColumnToContents(0);
             root->child(root->childCount()-1)->child(0)->setSelected(true);
         }
         fitsFilter->parseHeader(root->child(root->childCount()-1)->text(0), ui.twKeywordsTable);

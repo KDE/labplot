@@ -35,6 +35,7 @@
 #include "HDFOptionsWidget.h"
 #include "ImageOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
+#include "FITSOptionsWidget.h"
 #include "backend/datasources/FileDataSource.h"
 
 
@@ -65,6 +66,7 @@ private:
 	Ui::HDFOptionsWidget hdfOptionsWidget;
 	Ui::ImageOptionsWidget imageOptionsWidget;
 	Ui::NetCDFOptionsWidget netcdfOptionsWidget;
+    Ui::FITSOptionsWidget fitsOptionsWidget;
 	QTableWidget* twPreview;
 	const QString& m_fileName;
 
@@ -73,6 +75,8 @@ private slots:
 	void fileTypeChanged(int);
 	void hdfTreeWidgetItemSelected(QTreeWidgetItem*,int);
 	void netcdfTreeWidgetItemSelected(QTreeWidgetItem*,int);
+    void fitsTreeWidgetItemSelected(QTreeWidgetItem*,int);
+
 	void saveFilter();
 	void manageFilters();
 	void filterChanged(int);
