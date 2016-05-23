@@ -42,7 +42,7 @@ class FITSFilterPrivate {
                 void writeCHDU(const QString & fileName, AbstractDataSource* dataSource);
 
                 const FITSFilter* q;
-                QStringList extensionNames(const QString &fileName);
+                QMultiMap<QString, QString> extensionNames(const QString &fileName);
                 void updateKeyword(FITSFilter::Keyword& keyword, const QString &newKey, const QString &newValue, const QString &newComment,
                                    FITSFilter::KeywordUpdateMode updateMode = FITSFilter::UpdateValueComment);
                 void addNewKeyword(const FITSFilter::Keyword &keyword);

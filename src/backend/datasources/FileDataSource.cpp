@@ -94,7 +94,7 @@ QStringList FileDataSource::fileTypes(){
 		<< i18n("Hierarchical Data Format (HDF)")
 		<< i18n("Network Common Data Format (NetCDF)")
 //		<< "CDF"
-        << i18n("Flexible Image Transport System (FITS)")
+        << i18n("Flexible Image Transport System Data Format (FITS)")
 //		<< i18n("Sound")
 		);
 }

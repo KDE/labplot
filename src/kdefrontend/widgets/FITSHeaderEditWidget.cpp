@@ -73,16 +73,18 @@ void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
     } else if (itemText.contains("BINARY_TBL #")) {
 
     } else if (!itemText.compare("Primary header")) {
-        if (item->parent() != 0) {
-            selectedExtension = item->parent()->text(col);
+        if (item->parent()->parent() != 0) {
+            selectedExtension = item->parent()->parent()->text(col);
         }
     } else {
         if (item->parent() != 0) {
-            selectedExtension = item->parent()->text(col) +"["+ item->text(col)+"]";
+            if (item->parent()->parent() != 0)
+                selectedExtension = item->parent()->parent()->text(0) +"["+ item->text(col)+"]";
         }
     }
-    if (!selectedExtension.isEmpty())
+    if (!selectedExtension.isEmpty()) {
         fitsFilter->parseHeader(selectedExtension, ui.twKeywordsTable);
+    }
     RESET_CURSOR;
 }
 
@@ -105,9 +107,9 @@ void FITSHeaderEditWidget::openFile() {
             foreach (QTreeWidgetItem* item, ui.twExtensions->selectedItems()) {
                 item->setSelected(false);
             }
-            root->child(root->childCount()-1)->setExpanded(true);
+            //root->child(root->childCount()-1)->setExpanded(true);
             ui.twExtensions->resizeColumnToContents(0);
-            root->child(root->childCount()-1)->child(0)->setSelected(true);
+            //root->child(root->childCount()-1)->child(0)->setSelected(true);
         }
         fitsFilter->parseHeader(root->child(root->childCount()-1)->text(0), ui.twKeywordsTable);
         RESET_CURSOR;

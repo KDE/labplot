@@ -826,6 +826,11 @@ void ImportFileWidget::refreshPreview() {
 	}
     case FileDataSource::FITS: {
         //TODO
+        FITSFilter* filter = reinterpret_cast<FITSFilter*>(this->currentFileFilter());
+        lines = fitsOptionsWidget.sbPreviewLines->value();
+        //filename+ lines
+        importedText = filter->readChdu(fileName);
+        tmpTableWidget = fitsOptionsWidget.twPreview;
         break;
     }
 

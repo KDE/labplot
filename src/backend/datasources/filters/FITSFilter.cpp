@@ -32,6 +32,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "backend/core/column/Column.h"
 
 #include <QDebug>
+#include <QMultiMap>
 
 /*!
  * \class FITSFilter
@@ -273,20 +274,22 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
  * \brief Return a list of the available extensions names in file \a filename
  * \param fileName
  */
-QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
+ QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fileName) {
 #ifdef HAVE_FITS
+    //TODO return QMultiMap
     QStringList extensionNames;
+    QMultiMap<QString, QString> extensions;
     int status = 0;
 
     if (fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status )) {
         printError(status);
-        return QStringList();
+        return QMultiMap<QString, QString>();
     }
     int hduCount;
 
     if (fits_get_num_hdus(fitsFile, &hduCount, &status)) {
         printError(status);
-        return QStringList();
+        return QMultiMap<QString, QString>();
     }
     int imageCount = 0;
     int asciiTableCount = 0;
@@ -311,7 +314,7 @@ QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
         QString extName;
         if (!fits_read_keyword(fitsFile,"EXTNAME", keyVal, NULL, &status)) {
             extName = QString(keyVal);
-            extName = extName.mid(1, extName.length() -2).simplified();
+            extName = extName.mid(1, extName.length() -2).simplified();  
         }
         else {
             printError(status);
@@ -341,7 +344,17 @@ QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
         }
         delete keyVal;
         status = 0;
-        extensionNames << extName.trimmed();
+        switch (hduType) {
+        case IMAGE_HDU:
+            extensions.insert("IMAGES", extName.trimmed());
+            break;
+        case ASCII_TBL:
+            extensions.insert("TABLES", extName.trimmed());
+            break;
+        case BINARY_TBL:
+            extensions.insert("TABLES", extName.trimmed());
+            break;
+        }
         if(fits_movrel_hdu(fitsFile, 1, NULL, &status)) {
             printError(status);
         }
@@ -352,7 +365,7 @@ QStringList FITSFilterPrivate::extensionNames(const QString& fileName) {
     }
 
     fits_close_file(fitsFile, &status);
-    return extensionNames;
+    return extensions;
 #else
     Q_UNUSED(fileName)
     return QStringList();
@@ -631,12 +644,32 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
 }
 
 void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidgetItem *root) {
-    QStringList extensions = extensionNames(fileName);
+    QMultiMap<QString, QString> extensions = extensionNames(fileName);
+    QStringList imageExtensions = extensions.values("IMAGES");
+    QStringList tableExtensions = extensions.values("TABLES");
+
     QTreeWidgetItem* treeNameItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << fileName);
     root->addChild(treeNameItem);
-    foreach (const QString& ext, extensions) {
+    treeNameItem->setExpanded(true);
+
+    QTreeWidgetItem* imageExtensionItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << i18n("Images"));
+    treeNameItem->addChild(imageExtensionItem);
+
+    foreach (const QString& ext, imageExtensions) {
         QTreeWidgetItem* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << ext);
-        treeNameItem->addChild(treeItem);
+        imageExtensionItem->addChild(treeItem);
+    }
+
+    imageExtensionItem->setExpanded(true);
+
+    if (tableExtensions.size() > 0) {
+        QTreeWidgetItem* tableExtensionItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << i18n("Tables"));
+        treeNameItem->addChild(tableExtensionItem);
+        foreach (const QString& ext, tableExtensions) {
+            QTreeWidgetItem* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << ext);
+            tableExtensionItem->addChild(treeItem);
+        }
+        tableExtensionItem->setExpanded(true);
     }
 }
 
