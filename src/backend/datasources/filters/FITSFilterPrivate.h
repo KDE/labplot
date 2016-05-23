@@ -46,7 +46,7 @@ class FITSFilterPrivate {
                 void updateKeyword(FITSFilter::Keyword& keyword, const QString &newKey, const QString &newValue, const QString &newComment,
                                    FITSFilter::KeywordUpdateMode updateMode = FITSFilter::UpdateValueComment);
                 void addNewKeyword(const FITSFilter::Keyword &keyword);
-                void deleteKeyword(const FITSFilter::Keyword& keyword);
+                bool deleteKeyword(const FITSFilter::Keyword& keyword);
                 void renameKeywordKey(const FITSFilter::Keyword& keyword, const QString& newKey);
 
                 QList<FITSFilter::Keyword> chduKeywords(const QString &fileName);

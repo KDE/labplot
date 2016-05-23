@@ -66,13 +66,13 @@ void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
     WAIT_CURSOR;
     QString itemText = item->text(col);
     QString selectedExtension;
-    if (itemText.contains("IMAGE #")) {
+    if (itemText.contains(QLatin1String("IMAGE #"))) {
         //filter - find IMAGE #
-    } else if (itemText.contains("ASCII_TBL #")) {
+    } else if (itemText.contains(QLatin1String("ASCII_TBL #"))) {
 
-    } else if (itemText.contains("BINARY_TBL #")) {
+    } else if (itemText.contains(QLatin1String("BINARY_TBL #"))) {
 
-    } else if (!itemText.compare("Primary header")) {
+    } else if (!itemText.compare(QLatin1String("Primary header"))) {
         if (item->parent()->parent() != 0) {
             selectedExtension = item->parent()->parent()->text(col);
         }
@@ -90,7 +90,7 @@ void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
 
 void FITSHeaderEditWidget::openFile() {
     QString fileName = QFileDialog::getOpenFileName(this,i18n("Open FITS file"), QDir::homePath(),
-                                                    "FITS files (*.fits)");
+                                                    i18n("FITS files (*.fits)"));
     if (!fileName.isEmpty()) {
         WAIT_CURSOR;
         QTreeWidgetItem* root = ui.twExtensions->invisibleRootItem();
