@@ -1814,8 +1814,8 @@ void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader,
 	const int cols = m_spreadsheet->columnCount();
 
 	QString sep = separator;
-	sep = sep.replace(QString("TAB"), QString("\t"), Qt::CaseInsensitive);
-	sep = sep.replace(QString("SPACE"), QString(" "), Qt::CaseInsensitive);
+	sep = sep.replace(QLatin1String("TAB"), QLatin1String("\t"), Qt::CaseInsensitive);
+	sep = sep.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
 
 	//export header (column names)
 	if (exportHeader) {
