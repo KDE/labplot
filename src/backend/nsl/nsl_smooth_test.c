@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : nsl_sf_kernel.c
+    File                 : nsl_smooth_test.c
     Project              : LabPlot
-    Description          : NSL special kernel functions
+    Description          : NSL smooth functions
     --------------------------------------------------------------------
     Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
@@ -26,82 +26,45 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <math.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_randist.h>	/* Gaussian and Cauchy */
-#include "nsl_sf_kernel.h"
+#include <stdio.h>
+//#include <gsl/gsl_statistics_double.h>
+#include "nsl_smooth.h"
 
-/* kernel on [-1,1] */
+double main() {
+	int i,j,points=5, order=2;
+        gsl_matrix *h;
+	
+	h = gsl_matrix_alloc(points, points);
+	nsl_smooth_savgol_coeff(points, order, h);
+	for(j=0;j<points;j++)
+		printf(" %g",35*gsl_matrix_get(h,(points-1)/2,j));
+	printf("\n");
+        gsl_matrix_free(h);
 
-double nsl_sf_kernel_uniform(double u) {
-	if(fabs(u) <= 1.0)
-		return 0.5;
-	return 0.0;
-}
+	points=7;
+        h = gsl_matrix_alloc(points, points);
+	nsl_smooth_savgol_coeff(points, order, h);
+	for(j=0;j<points;j++)
+		printf(" %g",21*gsl_matrix_get(h,(points-1)/2,j));
+	printf("\n");
+	order=4;
+	nsl_smooth_savgol_coeff(points, order, h);
+	for(j=0;j<points;j++)
+		printf(" %g",231*gsl_matrix_get(h,(points-1)/2,j));
+	printf("\n");
+        gsl_matrix_free(h);
 
-double nsl_sf_kernel_triangular(double u) {
-	if(fabs(u) <= 1.0)
-		return 1.0-fabs(u);
-	return 0.0;
-}
-
-double nsl_sf_kernel_parabolic(double u) {
-	if(fabs(u) <= 1.0)
-		return 3./4.*(1.0-gsl_pow_2(u));
-	return 0.0;
-}
-
-double nsl_sf_kernel_quartic(double u) {
-	if(fabs(u) <= 1.0)
-		return 15./16.*gsl_pow_2(1.0-gsl_pow_2(u));
-	return 0.0;
-}
-
-double nsl_sf_kernel_triweight(double u) {
-	if(fabs(u) <= 1.0)
-		return 35./32.*gsl_pow_3(1.0-gsl_pow_2(u));
-	return 0.0;
-}
-
-double nsl_sf_kernel_tricube(double u) {
-	if(fabs(u) <= 1.0)
-		return 70./81.*gsl_pow_3(1.0-gsl_pow_3(fabs(u)));
-	return 0.0;
-}
-
-double nsl_sf_kernel_cosine(double u) {
-	if(fabs(u) <= 1.0)
-		return M_PI/4.*cos(M_PI/2.*u);
-	return 0.0;
-}
-
-double nsl_sf_kernel_semicircle(double u) {
-	if(fabs(u) < 1.0)
-		return 2./M_PI*sqrt(1-gsl_pow_2(u));
-	return 0.0;
-}
-
-/* kernel on (-inf,inf) */
-double nsl_sf_kernel_gaussian(double u) {
-	return gsl_ran_gaussian_pdf(u, 1.0);
-}
-
-double nsl_sf_kernel_cauchy(double u) {
-	return gsl_ran_cauchy_pdf(u, 1.0);
-}
-
-double nsl_sf_kernel_logistic(double u) {
-	return gsl_ran_logistic_pdf(u, 1.0);
-}
-
-double nsl_sf_kernel_picard(double u) {
-	return 0.5*exp(-fabs(u));
-}
-
-double nsl_sf_kernel_sigmoid(double u) {
-	return 1.0/M_PI/cosh(u);
-}
-
-double nsl_sf_kernel_silverman(double u) {
-	return 1.0/2.0*exp(-fabs(u)/M_SQRT2)*sin(fabs(u)/M_SQRT2+M_PI/4.0);
+	order=2;
+	points=9;
+        h = gsl_matrix_alloc(points, points);
+	nsl_smooth_savgol_coeff(points, order, h);
+	for(j=0;j<points;j++)
+		printf(" %g",231*gsl_matrix_get(h,(points-1)/2,j));
+	printf("\n");
+	order=4;
+	nsl_smooth_savgol_coeff(points, order, h);
+	for(j=0;j<points;j++)
+		printf(" %g",429*gsl_matrix_get(h,(points-1)/2,j));
+	printf("\n");
+        gsl_matrix_free(h);
 }
