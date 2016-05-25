@@ -187,13 +187,18 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         actualRows = naxes[1];
         actualCols = naxes[0];
 
-        if (dataSource!=NULL) {
+        int noDataSource = dataSource == NULL;
+
+        if (!noDataSource) {
             columnOffset = dataSource->create(dataPointers, importMode, actualRows, actualCols);
         }
-        if (dataSource!= NULL)
         for (int i = 0; i < actualRows; ++i) {
             for (int j = 0; j < actualCols; ++j) {
-                dataPointers[j]->operator [](i) = data[i * actualCols + j];
+                if (!noDataSource) {
+                    dataPointers[j]->operator [](i) = data[i * actualCols + j];
+                } else {
+                    //TODO datastring
+                }
             }
         }
 
@@ -536,8 +541,6 @@ void FITSFilterPrivate::updateKeyword(FITSFilter::Keyword& keyword,const QString
     }
 
     if (updated) {
-        //TODO
-        //messagebox?
         qDebug() << "Keyword updated successfully!";
     } else {
         qDebug() << "Failed to update keyword!";
@@ -555,7 +558,6 @@ void FITSFilterPrivate::updateKeyword(FITSFilter::Keyword& keyword,const QString
  * \param keyword the keyword to delete
  */
 
-//TODO return bool
 bool FITSFilterPrivate::deleteKeyword(const FITSFilter::Keyword &keyword) {
 #ifdef HAVE_FITS
     if (!keyword.key.isEmpty()) {
@@ -655,7 +657,6 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
         item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         headerEditTable->setItem(i, 2, item );
     }
-
     headerEditTable->resizeColumnsToContents();
 }
 
@@ -674,6 +675,9 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidgetItem
     foreach (const QString& ext, imageExtensions) {
         QTreeWidgetItem* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << ext);
         imageExtensionItem->addChild(treeItem);
+        if (ext == QLatin1String("Primary header")) {
+            treeItem->setSelected(true);
+        }
     }
 
     imageExtensionItem->setExpanded(true);

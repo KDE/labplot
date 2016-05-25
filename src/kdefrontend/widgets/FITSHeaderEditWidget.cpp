@@ -103,10 +103,10 @@ void FITSHeaderEditWidget::openFile() {
             }
         }
         if (!opened) {
-            fitsFilter->parseExtensions(fileName, root);
             foreach (QTreeWidgetItem* item, ui.twExtensions->selectedItems()) {
                 item->setSelected(false);
             }
+            fitsFilter->parseExtensions(fileName, root);
             ui.twExtensions->resizeColumnToContents(0);
         }
         fitsFilter->parseHeader(root->child(root->childCount()-1)->text(0), ui.twKeywordsTable);
@@ -159,6 +159,11 @@ void FITSHeaderEditWidget::addKeyword() {
 }
 
 void FITSHeaderEditWidget::removeKeyword() {
+    int removeKeyWordMb = KMessageBox::questionYesNo(this,"Are you sure you want to delete this keyword?",
+                                                     "Confirm deletion");
+    if (removeKeyWordMb == KMessageBox::Yes) {
+        //TODO removed keywords-  ?
+    }
 }
 
 void FITSHeaderEditWidget::updateKeyword() {
@@ -169,7 +174,9 @@ bool FITSHeaderEditWidget::eventFilter(QObject * watched, QEvent * event) {
         QContextMenuEvent *cm_event = static_cast<QContextMenuEvent*>(event);
         QPoint global_pos = cm_event->globalPos();
         if (watched == ui.twKeywordsTable) {
-            m_KeywordActionsMenu->exec(global_pos);
+            if (ui.twExtensions->selectedItems().size() != 0) {
+                m_KeywordActionsMenu->exec(global_pos);
+            }
         }
         else
             return QWidget::eventFilter(watched, event);
