@@ -71,6 +71,8 @@ class FITSFilter : public AbstractFileFilter{
     void parseHeader(const QString& fileName, QTableWidget* headerEditTable);
     void parseExtensions(const QString& fileName, QTreeWidgetItem* root);
     static QStringList standardKeywords();
+    static QStringList mandatoryImageExtensionKeywords();
+    static QStringList mandatoryTableExtensionKeywords();
 
     void loadFilterSettings(const QString&);
     void saveFilterSettings(const QString&) const;

@@ -104,6 +104,17 @@ QStringList FITSFilter::standardKeywords() {
                          << QLatin1String("COMMENT") << QLatin1String("EPOCH")    << QLatin1String("NAXIS")    << QLatin1String("SIMPLE")   << QLatin1String("TTYPEn");
 }
 
+QStringList FITSFilter::mandatoryImageExtensionKeywords() {
+    return QStringList() << QLatin1String("XTENSION") << QLatin1String("BITPIX") << QLatin1String("NAXIS") << QLatin1String("PCOUNT")
+                         << QLatin1String("GCOUNT") << QLatin1String("END");
+}
+
+QStringList FITSFilter::mandatoryTableExtensionKeywords() {
+    return QStringList() << QLatin1String("XTENSION") << QLatin1String("BITPIX") << QLatin1String("NAXIS") << QLatin1String("NAXIS1")
+                         << QLatin1String("NAXIS2")  << QLatin1String("PCOUNT") << QLatin1String("GCOUNT")
+                         << QLatin1String("TFIELDS") << QLatin1String("END");
+}
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
@@ -627,7 +638,7 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
 }
 
 void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *headerEditTable) {
-    QList<FITSFilter::Keyword> keywords = chduKeywords(fileName);
+    const QList<FITSFilter::Keyword> keywords = chduKeywords(fileName);
 
     headerEditTable->setRowCount(keywords.size());
     QTableWidgetItem* item;

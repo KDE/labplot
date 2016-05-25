@@ -58,7 +58,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/DatapickerImageWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/DatapickerCurveWidget.cpp
         ${KDEFRONTEND_DIR}/widgets/FITSHeaderEditWidget.cpp
-
+        ${KDEFRONTEND_DIR}/widgets/FITSHeaderEditNewKeywordDialog.cpp
 )
 
 set(UI_SOURCES
@@ -101,6 +101,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickercurvewidget.ui
         ${KDEFRONTEND_DIR}/ui/fitsheadereditwidget.ui
+        ${KDEFRONTEND_DIR}/ui/fitsheadereditnewkeywordwidget.ui
 )
 
 set(BACKEND_SOURCES

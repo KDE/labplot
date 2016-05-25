@@ -1,7 +1,7 @@
 /***************************************************************************
-File                 : FITSHeaderEditWidget.h
+File                 : FITSHeaderEditNewKeywordDialog.h
 Project              : LabPlot
-Description          : Widget for listing/editing FITS header keywords
+Description          : Widget for adding new keyword in the FITS edit widget
 --------------------------------------------------------------------
 Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
@@ -24,45 +24,33 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
-#ifndef FITSHEADEREDITWIDGET_H
-#define FITSHEADEREDITWIDGET_H
 
-#include <QWidget>
-#include <QAction>
-#include "backend/datasources/AbstractDataSource.h"
-#include "ui_fitsheadereditwidget.h"
+#ifndef FITSHEADEREDITNEWKEYWORDDIALOG_H
+#define FITSHEADEREDITNEWKEYWORDDIALOG_H
+
 #include "backend/datasources/filters/FITSFilter.h"
-#include "FITSHeaderEditNewKeywordDialog.h"
+#include "ui_fitsheadereditnewkeywordwidget.h"
 
-class FITSHeaderEditWidget : public QWidget
+#include <KDialog>
+#include <KLineEdit>
+#include <KCompletion>
+#include <KMessageBox>
+class FITSHeaderEditNewKeywordDialog : public KDialog
 {
     Q_OBJECT
 
 public:
-    explicit FITSHeaderEditWidget(AbstractDataSource* dataSource = 0, QWidget *parent = 0);
-    ~FITSHeaderEditWidget();
+    explicit FITSHeaderEditNewKeywordDialog(QWidget *parent = 0);
+    ~FITSHeaderEditNewKeywordDialog();
+    FITSFilter::Keyword newKeyword() const;
 
 private:
-    Ui::FITSHeaderEditWidget ui;
-    QAction* action_remove_keyword;
-    QAction* action_add_keyword;
-    QAction* action_update_keyword;
-    QMenu* m_KeywordActionsMenu;
-
-    void initActions();
-    void initContextMenu();
-    void connectActions();
-    bool eventFilter(QObject*, QEvent*);
-    FITSFilter* fitsFilter;
-private slots:
-    void openFile();
-    void saveFile();
-
-    void fillTable(QTreeWidgetItem* item, int col);
-
-    void removeKeyword();
-    void addKeyword();
-    void updateKeyword();
+    Ui::FITSHeaderEditNewKeywordDialog ui;
+    KCompletion* m_keyCompletion;
+    FITSFilter::Keyword m_newKeyword;
+    int okClicked();
+protected slots:
+    virtual void slotButtonClicked(int button);
 };
 
-#endif // FITSHEADEREDITWIDGET_H
+#endif // FITSHEADEREDITNEWKEYWORDDIALOG_H

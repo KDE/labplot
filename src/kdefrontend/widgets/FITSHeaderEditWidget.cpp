@@ -39,6 +39,7 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(AbstractDataSource *dataSource, QWidg
     ui.setupUi(this);
     setWindowTitle(i18n("FITS header edit"));
     initActions();
+    connectActions();
     initContextMenu();
     fitsFilter = new FITSFilter();
     ui.twKeywordsTable->setColumnCount(3);
@@ -47,14 +48,13 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(AbstractDataSource *dataSource, QWidg
     ui.twKeywordsTable->setHorizontalHeaderItem(0, new QTableWidgetItem(i18n("Key")));
     ui.twKeywordsTable->setHorizontalHeaderItem(1, new QTableWidgetItem(i18n("Value")));
     ui.twKeywordsTable->setHorizontalHeaderItem(2, new QTableWidgetItem(i18n("Comment")));
-
     ui.twKeywordsTable->installEventFilter(this);
-    connect(ui.pbOpenFile, SIGNAL(clicked()), this, SLOT(openFile()));
-    connect(ui.pbSaveFile, SIGNAL(clicked()), this, SLOT(saveFile()));
+
     if (dataSource != NULL) {
         ui.gbOptions->hide();
     }
-
+    connect(ui.pbOpenFile, SIGNAL(clicked()), this, SLOT(openFile()));
+    connect(ui.pbSaveFile, SIGNAL(clicked()), this, SLOT(saveFile()));
     connect(ui.twExtensions, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(fillTable(QTreeWidgetItem*, int)));
 }
 
@@ -107,9 +107,7 @@ void FITSHeaderEditWidget::openFile() {
             foreach (QTreeWidgetItem* item, ui.twExtensions->selectedItems()) {
                 item->setSelected(false);
             }
-            //root->child(root->childCount()-1)->setExpanded(true);
             ui.twExtensions->resizeColumnToContents(0);
-            //root->child(root->childCount()-1)->child(0)->setSelected(true);
         }
         fitsFilter->parseHeader(root->child(root->childCount()-1)->text(0), ui.twKeywordsTable);
         RESET_CURSOR;
@@ -125,6 +123,12 @@ void FITSHeaderEditWidget::initActions() {
     action_update_keyword = new QAction(i18n("Update keyword"), this);
 }
 
+void FITSHeaderEditWidget::connectActions() {
+    connect(action_add_keyword, SIGNAL(triggered()), this, SLOT(addKeyword()));
+    connect(action_remove_keyword, SIGNAL(triggered()), this, SLOT(removeKeyword()));
+    connect(action_update_keyword, SIGNAL(triggered()), this, SLOT(updateKeyword()));
+}
+
 void FITSHeaderEditWidget::initContextMenu() {
     m_KeywordActionsMenu = new QMenu(this);
     m_KeywordActionsMenu->addAction(action_add_keyword);
@@ -133,6 +137,25 @@ void FITSHeaderEditWidget::initContextMenu() {
 }
 
 void FITSHeaderEditWidget::addKeyword() {
+    FITSHeaderEditNewKeywordDialog* newKeywordDialog = new FITSHeaderEditNewKeywordDialog;
+
+    if (newKeywordDialog->exec() == KDialog::Accepted) {
+        //TODO - new keywords (?)
+        FITSFilter::Keyword newKeyWord = newKeywordDialog->newKeyword();
+        int lastRow = ui.twKeywordsTable->rowCount();
+        ui.twKeywordsTable->setRowCount(lastRow + 1);
+        QTableWidgetItem* newKeyWordItem = new QTableWidgetItem(newKeyWord.key);
+        newKeyWordItem->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        ui.twKeywordsTable->setItem(lastRow, 0, newKeyWordItem);
+
+        newKeyWordItem = new QTableWidgetItem(newKeyWord.value);
+        newKeyWordItem->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        ui.twKeywordsTable->setItem(lastRow, 1, newKeyWordItem);
+
+        newKeyWordItem = new QTableWidgetItem(newKeyWord.comment);
+        newKeyWordItem->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        ui.twKeywordsTable->setItem(lastRow, 2, newKeyWordItem);
+    }
 }
 
 void FITSHeaderEditWidget::removeKeyword() {
