@@ -387,7 +387,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	QVector<QVector<double>*> dataPointers;
 
 	if(dataSource != NULL)
-		columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
+		columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols, vectorNameList);
 
 	//header: import the values in the first line, if they were not used as the header (as the names for the columns)
 	bool isNumber;
