@@ -367,10 +367,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		return filter;
 	}
     case FileDataSource::FITS: {
-        //TODO
         FITSFilter* filter = new FITSFilter();
-
-
         return filter;
     }
 	}
@@ -461,7 +458,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
             QString fileName = ui.kleFileName->text();
             QTreeWidgetItem *rootItem = fitsOptionsWidget.twExtensions->invisibleRootItem();
             FITSFilter *filter = (FITSFilter *)this->currentFileFilter();
-            filter->parseExtensions(fileName, rootItem);
+            filter->parseExtensions(fileName, rootItem, true);
 
             //TODO
         } else if (info.contains("image") || info.contains("bitmap" )) {
@@ -589,7 +586,6 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
     case FileDataSource::FITS: {
         ui.lFilter->hide();
         ui.cbFilter->hide();
-        // hide global preview tab. we have our own
         ui.tabWidget->setTabText(0,i18n("Data format && preview"));
         ui.tabWidget->removeTab(1);
         ui.tabWidget->setCurrentIndex(0);
@@ -644,26 +640,47 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
     WAIT_CURSOR;
     QString itemText = item->text(column);
     QString selectedExtension;
-    if (itemText.contains("IMAGE #")) {
+    if (itemText.contains(QLatin1String("IMAGE #"))) {
         //filter - find IMAGE #
-    } else if (itemText.contains("ASCII_TBL #")) {
+    } else if (itemText.contains(QLatin1String("ASCII_TBL #"))) {
 
-    } else if (itemText.contains("BINARY_TBL #")) {
+    } else if (itemText.contains(QLatin1String("BINARY_TBL #"))) {
 
-    } else if (!itemText.compare("Primary header")) {
-        if (item->parent() != 0) {
-            selectedExtension = item->parent()->text(column);
+    } else if (!itemText.compare(QLatin1String("Primary header"))) {
+        if (item->parent()->parent() != 0) {
+            qDebug() << "primary";
+            selectedExtension = item->parent()->parent()->text(column);
         }
     } else {
-        if (item->parent() != 0) {
-            selectedExtension = item->parent()->text(column) +"["+ item->text(column)+"]";
-        }
+        /*if (item->parent() != 0) {
+            if (item->parent()->parent() != 0)
+                selectedExtension = item->parent()->parent()->text(0) +"["+ item->text(column)+"]";
+        }*/
+
+        selectedExtension = item->parent()->parent()->text(column) +"["+ item->text(column)+"]";
+
+        qDebug() << "extension " << selectedExtension;
+
     }
     if (!selectedExtension.isEmpty()) {
-        FITSFilter* filter = (FITSFilter *)this->currentFileFilter();
+        FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
 
-        QString importedText = filter->readChdu(selectedExtension);
-        Q_UNUSED(importedText)
+        QString importedText = filter->readChdu(selectedExtension, ui.sbPreviewLines->value());
+        QStringList lineStrings = importedText.split("\n");
+        fitsOptionsWidget.twPreview->clear();
+
+        fitsOptionsWidget.twPreview->setRowCount(lineStrings.size() -1);
+        for(int i=0; i<lineStrings.size(); i++) {
+            QStringList lineString = lineStrings[i].split(" ");
+            if(i==0)
+                fitsOptionsWidget.twPreview->setColumnCount(lineString.size()-1);
+
+            for(int j=0; j<lineString.size(); j++) {
+                QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
+                fitsOptionsWidget.twPreview->setItem(i,j,item);
+            }
+        }
+        fitsOptionsWidget.twPreview->resizeColumnsToContents();
     }
     RESET_CURSOR;
 }
@@ -715,6 +732,16 @@ const QStringList ImportFileWidget::selectedNetCDFNames() const {
 		names<<items[i]->data(0,Qt::DisplayRole).toString();
 
 	return names;
+}
+
+const QStringList ImportFileWidget::selectedFITSExtensions() const {
+    QStringList extensionNames;
+
+    QList<QTreeWidgetItem* > items = fitsOptionsWidget.twExtensions->selectedItems();
+    foreach (QTreeWidgetItem*  item, items) {
+        extensionNames << item->text(0);
+    }
+    return extensionNames;
 }
 
 /*!
@@ -826,10 +853,10 @@ void ImportFileWidget::refreshPreview() {
 	}
     case FileDataSource::FITS: {
         //TODO
-        FITSFilter* filter = reinterpret_cast<FITSFilter*>(this->currentFileFilter());
+        FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
         lines = fitsOptionsWidget.sbPreviewLines->value();
         //filename+ lines
-        importedText = filter->readChdu(fileName);
+        importedText = filter->readChdu(fileName, lines);
         tmpTableWidget = fitsOptionsWidget.twPreview;
         break;
     }

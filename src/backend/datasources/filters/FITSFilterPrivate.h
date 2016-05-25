@@ -38,7 +38,7 @@ class FITSFilterPrivate {
                 explicit FITSFilterPrivate(FITSFilter*);
                 ~FITSFilterPrivate();
                 QString readCHDU(const QString & fileName, AbstractDataSource* dataSource,
-                                        AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
+                                        AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace, int lines= -1);
                 void writeCHDU(const QString & fileName, AbstractDataSource* dataSource);
 
                 const FITSFilter* q;
@@ -48,10 +48,11 @@ class FITSFilterPrivate {
                 void addNewKeyword(const FITSFilter::Keyword &keyword);
                 bool deleteKeyword(const FITSFilter::Keyword& keyword);
                 void renameKeywordKey(const FITSFilter::Keyword& keyword, const QString& newKey);
+                const QString valueOf(const QString &fileName, const char* key);
 
                 QList<FITSFilter::Keyword> chduKeywords(const QString &fileName);
                 void parseHeader(const QString& fileName, QTableWidget* headerEditTable);
-                void parseExtensions(const QString& fileName, QTreeWidgetItem* root);
+                void parseExtensions(const QString& fileName, QTreeWidgetItem* root, bool checkPrimary = false);
         private:
                 void printError(int status) const;
 #ifdef HAVE_FITS

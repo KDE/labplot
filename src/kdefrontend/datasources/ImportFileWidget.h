@@ -57,6 +57,7 @@ public:
 	QString fileName() const;
 	const QStringList selectedHDFNames() const;
 	const QStringList selectedNetCDFNames() const;
+    const QStringList selectedFITSExtensions() const;
 	void hideDataSource() const;
 
 private:

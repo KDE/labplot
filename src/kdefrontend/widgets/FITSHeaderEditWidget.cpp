@@ -89,29 +89,42 @@ void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
 }
 
 void FITSHeaderEditWidget::openFile() {
-    QString fileName = QFileDialog::getOpenFileName(this,i18n("Open FITS file"), QDir::homePath(),
+    /*QString fileName = QFileDialog::getOpenFileName(this,i18n("Open FITS file"), QDir::homePath(),
+                                                    i18n("FITS files (*.fits)"));*/
+
+    KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditWidget");
+    QString dir = conf.readEntry("LastDir", "");
+    QString fileName = QFileDialog::getOpenFileName(this, i18n("Open FITS file"), dir,
                                                     i18n("FITS files (*.fits)"));
-    if (!fileName.isEmpty()) {
-        WAIT_CURSOR;
-        QTreeWidgetItem* root = ui.twExtensions->invisibleRootItem();
-        int childCount = root->childCount();
-        bool opened = false;
-        for (int i = 0; i < childCount; ++i) {
-            if(root->child(i)->text(0) == fileName) {
-                opened = true;
-                break;
-            }
-        }
-        if (!opened) {
-            foreach (QTreeWidgetItem* item, ui.twExtensions->selectedItems()) {
-                item->setSelected(false);
-            }
-            fitsFilter->parseExtensions(fileName, root);
-            ui.twExtensions->resizeColumnToContents(0);
-        }
-        fitsFilter->parseHeader(root->child(root->childCount()-1)->text(0), ui.twKeywordsTable);
-        RESET_CURSOR;
+    if (fileName.isEmpty())
+        return;
+
+    int pos = fileName.lastIndexOf(QDir::separator());
+    if (pos!=-1) {
+        QString newDir = fileName.left(pos);
+        if (newDir!=dir)
+            conf.writeEntry("LastDir", newDir);
     }
+
+    WAIT_CURSOR;
+    QTreeWidgetItem* root = ui.twExtensions->invisibleRootItem();
+    int childCount = root->childCount();
+    bool opened = false;
+    for (int i = 0; i < childCount; ++i) {
+        if(root->child(i)->text(0) == fileName) {
+            opened = true;
+            break;
+        }
+    }
+    if (!opened) {
+        foreach (QTreeWidgetItem* item, ui.twExtensions->selectedItems()) {
+            item->setSelected(false);
+        }
+        fitsFilter->parseExtensions(fileName, root);
+        ui.twExtensions->resizeColumnToContents(0);
+    }
+    fitsFilter->parseHeader(root->child(root->childCount()-1)->text(0), ui.twKeywordsTable);
+    RESET_CURSOR;
 }
 
 void FITSHeaderEditWidget::saveFile() {

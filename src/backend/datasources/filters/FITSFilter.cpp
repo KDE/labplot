@@ -51,8 +51,8 @@ void FITSFilter::read(const QString &fileName, AbstractDataSource *dataSource, A
     d->readCHDU(fileName, dataSource, importMode);
 }
 
-QString FITSFilter::readChdu(const QString &fileName) {
-    return d->readCHDU(fileName, NULL, AbstractFileFilter::Replace);
+QString FITSFilter::readChdu(const QString &fileName, int lines) {
+    return d->readCHDU(fileName, NULL, AbstractFileFilter::Replace, lines);
 }
 
 void FITSFilter::write(const QString &fileName, AbstractDataSource *dataSource) {
@@ -79,8 +79,8 @@ void FITSFilter::parseHeader(const QString &fileName, QTableWidget *headerEditTa
     d->parseHeader(fileName, headerEditTable);
 }
 
-void FITSFilter::parseExtensions(const QString &fileName, QTreeWidgetItem *root) {
-    d->parseExtensions(fileName, root);
+void FITSFilter::parseExtensions(const QString &fileName, QTreeWidgetItem *root, bool checkPrimary) {
+    d->parseExtensions(fileName, root, checkPrimary);
 }
 
 void FITSFilter::loadFilterSettings(const QString& fileName) {
@@ -130,12 +130,13 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
  * \param dataSource the data source to be filled
  * \param importMode
  */
-QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode) {
+QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 
     #ifdef HAVE_FITS
     int status = 0;
 
     if(fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status)) {
+        qDebug() << "Fits open failed: " << fileName.toLatin1();
         printError(status);
         return QString();
     }
@@ -161,6 +162,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
     QList<int> columnsWidth;
 
     status = 0;
+    QStringList dataString;
 
     if(chduType == IMAGE_HDU) {
         if (fits_get_img_param(fitsFile, maxdim,&bitpix, &naxis, naxes, &status)) {
@@ -187,19 +189,23 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         actualRows = naxes[1];
         actualCols = naxes[0];
 
-        int noDataSource = dataSource == NULL;
-
-        if (!noDataSource) {
-            columnOffset = dataSource->create(dataPointers, importMode, actualRows, actualCols);
+        int noDataSource = (dataSource == NULL);
+        if (lines == -1) {
+            lines = actualRows;
         }
-        for (int i = 0; i < actualRows; ++i) {
+        if (!noDataSource) {
+            columnOffset = dataSource->create(dataPointers, importMode, lines, actualCols);
+        }
+
+        for (int i = 0; i < lines; ++i) {
             for (int j = 0; j < actualCols; ++j) {
                 if (!noDataSource) {
                     dataPointers[j]->operator [](i) = data[i * actualCols + j];
                 } else {
-                    //TODO datastring
+                    dataString << QString::number(data[i*actualCols +j]) << QLatin1String(" ");
                 }
             }
+            dataString << QLatin1String("\n");
         }
 
         delete data;
@@ -255,7 +261,9 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
             }
         }
         spreadsheet->setUndoAware(true);
-        return QString();
+        fits_close_file(fitsFile, &status);
+
+        return dataString.join(QLatin1String(""));
     }
 
     Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
@@ -273,7 +281,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
     Q_UNUSED(importMode)
     return QString();
     #endif
-    return QString();
+    return dataString.join(QLatin1String(""));
 }
 
 /*!
@@ -660,7 +668,32 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
     headerEditTable->resizeColumnsToContents();
 }
 
-void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidgetItem *root) {
+const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *key) {
+    int status = 0;
+    if (fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status )) {
+        printError(status);
+        return QString ();
+    }
+
+    char* keyVal = new char[FLEN_VALUE];
+    QString keyValue;
+    if (!fits_read_keyword(fitsFile,key, keyVal, NULL, &status)) {
+        keyValue = QLatin1String(keyVal);
+        keyValue = keyValue.simplified();
+    } else {
+        printError(status);
+        delete keyVal;
+        fits_close_file(fitsFile, &status);
+        return QString();
+    }
+
+    delete keyVal;
+    status = 0;
+    fits_close_file(fitsFile, &status);
+    return keyValue;
+}
+
+void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidgetItem *root, bool checkPrimary) {
     QMultiMap<QString, QString> extensions = extensionNames(fileName);
     QStringList imageExtensions = extensions.values(QLatin1String("IMAGES"));
     QStringList tableExtensions = extensions.values(QLatin1String("TABLES"));
@@ -670,17 +703,22 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidgetItem
     treeNameItem->setExpanded(true);
 
     QTreeWidgetItem* imageExtensionItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << i18n("Images"));
-    treeNameItem->addChild(imageExtensionItem);
-
+    QString primaryHeaderNaxis = valueOf(fileName, "NAXIS");
+    int naxis = primaryHeaderNaxis.toInt();
     foreach (const QString& ext, imageExtensions) {
         QTreeWidgetItem* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << ext);
-        imageExtensionItem->addChild(treeItem);
         if (ext == QLatin1String("Primary header")) {
+            if (checkPrimary && naxis == 0) {
+                continue;
+            }
             treeItem->setSelected(true);
         }
+        imageExtensionItem->addChild(treeItem);
     }
-
-    imageExtensionItem->setExpanded(true);
+    if (imageExtensionItem->childCount() > 0) {
+        treeNameItem->addChild(imageExtensionItem);
+        imageExtensionItem->setExpanded(true);
+    }
 
     if (tableExtensions.size() > 0) {
         QTreeWidgetItem* tableExtensionItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << i18n("Tables"));

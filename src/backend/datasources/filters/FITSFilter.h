@@ -54,7 +54,7 @@ class FITSFilter : public AbstractFileFilter{
 
     void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
     void write(const QString & fileName, AbstractDataSource* dataSource);
-    QString readChdu(const QString & fileName);
+    QString readChdu(const QString & fileName, int lines = -1);
     virtual void save(QXmlStreamWriter*) const;
     virtual bool load(XmlStreamReader*);
     struct Keyword {
@@ -69,7 +69,7 @@ class FITSFilter : public AbstractFileFilter{
     bool deleteKeyword(const Keyword& keyword);
     void renameKeywordKey(const Keyword& keyword, const QString& newKey);
     void parseHeader(const QString& fileName, QTableWidget* headerEditTable);
-    void parseExtensions(const QString& fileName, QTreeWidgetItem* root);
+    void parseExtensions(const QString& fileName, QTreeWidgetItem* root, bool checkPrimary = false);
     static QStringList standardKeywords();
     static QStringList mandatoryImageExtensionKeywords();
     static QStringList mandatoryTableExtensionKeywords();
