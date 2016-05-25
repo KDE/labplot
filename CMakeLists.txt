@@ -139,6 +139,7 @@ FIND_LIBRARY(CFITSIO_LIBRARY cfitsio
 )
 FIND_PATH (CFITSIO_INCLUDE_DIR fitsio.h
         /usr/include/
+        /usr/include/cfitsio/
         /usr/local/include/
 )
 IF (CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
@@ -150,9 +151,11 @@ ENDIF (CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
 IF (CFITSIO_FOUND)
         MESSAGE (STATUS "Found Flexible Image Transport System Data Format (FITS) Library: ${CFITSIO_INCLUDE_DIR} ${CFITSIO_LIBRARY}")
         add_definitions (-DHAVE_FITS)
+	include_directories (${CFITSIO_INCLUDE_DIR})
 ELSE (CFITSIO_FOUND)
         MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library not found.")
 ENDIF (CFITSIO_FOUND)
+#################################################
 
 add_subdirectory(icons)
 add_subdirectory(src)
