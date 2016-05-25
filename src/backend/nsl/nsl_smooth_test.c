@@ -31,10 +31,23 @@
 #include "nsl_smooth.h"
 
 double main() {
-	int i,j,points=5, order=2;
+	int i,j,points=3, order=1;
         gsl_matrix *h;
 	
 	h = gsl_matrix_alloc(points, points);
+	nsl_smooth_savgol_coeff(points, order, h);
+	for(j=0;j<points;j++)
+		printf(" %g",3*gsl_matrix_get(h,(points-1)/2,j));
+	printf("\n");
+        gsl_matrix_free(h);
+
+	points=5;
+	h = gsl_matrix_alloc(points, points);
+	nsl_smooth_savgol_coeff(points, order, h);
+	for(j=0;j<points;j++)
+		printf(" %g",5*gsl_matrix_get(h,(points-1)/2,j));
+	printf("\n");
+	order=3;
 	nsl_smooth_savgol_coeff(points, order, h);
 	for(j=0;j<points;j++)
 		printf(" %g",35*gsl_matrix_get(h,(points-1)/2,j));
