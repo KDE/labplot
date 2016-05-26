@@ -186,7 +186,6 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
 	QApplication::restoreOverrideCursor();
 	statusBar->removeWidget(progressBar);
 }
-#include <QDebug>
 /*!
   triggers data import to the currently selected data container
 */
@@ -215,13 +214,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	timer.start();
 	if(aspect->inherits("Matrix")) {
 		Matrix* matrix = qobject_cast<Matrix*>(aspect);
-        qDebug() << "FILENAMEmat: " << fileName;
 		filter->read(fileName, matrix, mode);
 	}
 	else if (aspect->inherits("Spreadsheet")) {
 		Spreadsheet* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
-        qDebug() << "FILENAMEsh: " << fileName;
-
 		filter->read(fileName, spreadsheet, mode);
 	}
 	else if (aspect->inherits("Workbook")) {
@@ -353,8 +349,23 @@ void ImportFileDialog::checkOkButton() {
 	}
 
 	QString fileName = importFileWidget->fileName();
-	if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator() )
-		fileName = QDir::homePath() + QDir::separator() + fileName;
+    if (importFileWidget->currentFileType() != FileDataSource::FITS) {
+        if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator() )
+            fileName = QDir::homePath() + QDir::separator() + fileName;
+    } else {
+        if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator() ) {
+            if(fileName.left(1) == QLatin1String("]")) {
+                int extensionBraceletPos = 0;
+                for (int i = fileName.size() - 1; i >= 5; --i) {
+                    if (fileName.at(i) == QLatin1Char('[')) {
+                        extensionBraceletPos = i;
+                        break;
+                    }
+                }
+                fileName = QDir::homePath() + QDir::separator() + fileName.mid(0, extensionBraceletPos);
+            }
+        }
+    }
 
 	enableButtonOk( QFile::exists(fileName) ) ;
 }

@@ -136,7 +136,6 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
     int status = 0;
 
     if(fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status)) {
-        qDebug() << "Fits open failed: " << fileName.toLatin1();
         printError(status);
         return QString();
     }
@@ -154,7 +153,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
     long naxes[2];
     long actualRows;
     int actualCols;
-    int columnOffset;
+    int columnOffset = 0;
 
     long pixelCount;
     double* data;
