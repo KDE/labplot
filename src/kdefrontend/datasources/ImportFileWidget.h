@@ -57,6 +57,7 @@ public:
 	const QStringList selectedHDFNames() const;
 	const QStringList selectedNetCDFNames() const;
 	void hideDataSource() const;
+	void showAsciiHeaderOptions(bool);
 
 private:
 	Ui::ImportFileWidget ui;

@@ -230,6 +230,12 @@ void ImportFileWidget::hideDataSource() const {
 	ui.chbLinkFile->hide();
 }
 
+void ImportFileWidget::showAsciiHeaderOptions(bool b) {
+	asciiOptionsWidget.chbHeader->setVisible(b);
+	asciiOptionsWidget.lVectorNames->setVisible(b);
+	asciiOptionsWidget.kleVectorNames->setVisible(b);
+}
+
 void ImportFileWidget::showOptions(bool b) {
 	ui.gbOptions->setVisible(b);
 	resize(layout()->minimumSize());
