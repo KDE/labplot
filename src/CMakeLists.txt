@@ -149,6 +149,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/matrix/MatrixModel.cpp
  	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
  	${BACKEND_DIR}/nsl/nsl_sf_poly.c
+ 	${BACKEND_DIR}/nsl/nsl_smooth.c
  	${BACKEND_DIR}/nsl/nsl_stats.c
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp

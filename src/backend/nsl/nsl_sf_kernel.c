@@ -75,6 +75,12 @@ double nsl_sf_kernel_cosine(double u) {
 	return 0.0;
 }
 
+double nsl_sf_kernel_semicircle(double u) {
+	if(fabs(u) < 1.0)
+		return 2./M_PI*sqrt(1-gsl_pow_2(u));
+	return 0.0;
+}
+
 /* kernel on (-inf,inf) */
 double nsl_sf_kernel_gaussian(double u) {
 	return gsl_ran_gaussian_pdf(u, 1.0);
@@ -86,6 +92,10 @@ double nsl_sf_kernel_cauchy(double u) {
 
 double nsl_sf_kernel_logistic(double u) {
 	return gsl_ran_logistic_pdf(u, 1.0);
+}
+
+double nsl_sf_kernel_picard(double u) {
+	return 0.5*exp(-fabs(u));
 }
 
 double nsl_sf_kernel_sigmoid(double u) {
