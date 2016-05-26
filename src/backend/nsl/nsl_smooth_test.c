@@ -27,10 +27,10 @@
  ***************************************************************************/
 
 #include <stdio.h>
-//#include <gsl/gsl_statistics_double.h>
 #include "nsl_smooth.h"
 
 double main() {
+	/* savgol coefficients */
 	int i,j,points=3, order=1;
         gsl_matrix *h;
 	
@@ -80,4 +80,44 @@ double main() {
 		printf(" %g",429*gsl_matrix_get(h,(points-1)/2,j));
 	printf("\n");
         gsl_matrix_free(h);
+
+	/* Savitzky Golay with different modes */
+	printf("\n");
+	int m=5;
+	order=2;
+
+	double data[9]={2,2,5,2,1,0,1,4,9};
+	printf("mode:interp\n");
+	nsl_smooth_savgol(9,data,m,order,nsl_smooth_savgol_interp);
+	for(i=0;i<9;i++)
+		printf(" %7.4f",data[i]);
+	printf("\n");
+
+	double data2[9]={2,2,5,2,1,0,1,4,9};
+	printf("mode:mirror\n");
+	nsl_smooth_savgol(9,data2,m,order,nsl_smooth_savgol_mirror);
+	for(i=0;i<9;i++)
+		printf(" %7.4f",data2[i]);
+	printf("\n");
+
+	double data3[9]={2,2,5,2,1,0,1,4,9};
+	printf("mode:nearest\n");
+	nsl_smooth_savgol(9,data3,m,order,nsl_smooth_savgol_nearest);
+	for(i=0;i<9;i++)
+		printf(" %7.4f",data3[i]);
+	printf("\n");
+
+	double data4[9]={2,2,5,2,1,0,1,4,9};
+	printf("mode:constant\n");
+	nsl_smooth_savgol(9,data4,m,order,nsl_smooth_savgol_constant);
+	for(i=0;i<9;i++)
+		printf(" %7.4f",data4[i]);
+	printf("\n");
+
+	double data5[9]={2,2,5,2,1,0,1,4,9};
+	printf("mode:wrap\n");
+	nsl_smooth_savgol(9,data5,m,order,nsl_smooth_savgol_wrap);
+	for(i=0;i<9;i++)
+		printf(" %7.4f",data5[i]);
+	printf("\n");
 }

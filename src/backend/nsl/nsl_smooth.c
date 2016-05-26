@@ -31,20 +31,6 @@
 #include <gsl/gsl_blas.h>
 #include "nsl_smooth.h"
 
-/**
- * \brief Compute Savitzky-Golay coefficients and store them into #h.
- *
- * This function follows GSL conventions in that it writes its result into a matrix allocated by
- * the caller and returns a non-zero result on error.
- *
- * The coefficient matrix is defined as the matrix H mapping a set of input values to the values
- * of the polynomial of order #polynom_order which minimizes squared deviations from the input
- * values. It is computed using the formula \$H=V(V^TV)^(-1)V^T\$, where \$V\$ is the Vandermonde
- * matrix of the point indices.
- *
- * For a short description of the mathematical background, see
- * http://www.statistics4u.info/fundstat_eng/cc_filter_savgol_math.html
- */
 int nsl_smooth_savgol_coeff(int points, int order, gsl_matrix *h) {
         int i, j, error = 0;
 
@@ -90,105 +76,104 @@ int nsl_smooth_savgol_coeff(int points, int order, gsl_matrix *h) {
         return error;
 }
 
-/**
- * \brief Savitzky-Golay smoothing of (uniformly distributed) data.
- *
- * When the data is not uniformly distributed, Savitzky-Golay looses its interesting conservation
- * properties. On the other hand, a central point of the algorithm is that for uniform data, the
- * operation can be implemented as a convolution. This is considerably more efficient than a more
- * generic method (see smoothModifiedSavGol()) able to handle non-uniform input data.
- *
- * There are at least three possible approaches for handling edges of the data vector (cutting them
- * off, zero padding and using the left-/rightmost smoothing polynomial for computing smoothed
- * values near the edges). Zero-padding is a particularly bad choice for signals with a distinctly
- * non-zero baseline and cutting off edges makes further computations on the original and smoothed
- * signals more difficult; 
- *
- * SciDAVis: therefore, deviating from the user-specified number of left/right
- * adjacent points (by smoothing over a fixed window at the edges) would be the least annoying
- * alternative; if it were not for the fact that previous versions of SciDAVis had a different
- * behaviour and such a subtle change to the behaviour would be even more annoying, especially
- * between bugfix releases. (would it help to add an "edge behaviour" option to the UI?)
- */
-/* void SmoothFilter::smoothSavGol(double *, double *y_inout); */
-int nsl_smooth_savgol(double *y_inout) {
-	int d_n=100;	//TODO
-	int d_right_points = 2;
-	int d_left_points = 2;
-	int d_polynom_order = 2;
+void nsl_smooth_savgol_constant_set(double lvalue, double rvalue) {
+	nsl_smooth_savgol_constant_lvalue = lvalue;
+	nsl_smooth_savgol_constant_rvalue = rvalue;
+}
+
+int nsl_smooth_savgol(int n, double *data, int points, int order, nsl_smooth_savgol_mode mode) {
 	int i,k,error=0;
+        int half=(points-1)/2;	/* n//2 */
 
-        /* total number of points in smoothing window */
-        int points = d_left_points + d_right_points + 1;
-
-        if (points < d_polynom_order+1)
-		printf("The polynomial order must be lower than the number of points!");
-        if (d_n < points)
-		printf("Tried to smooth over more points (points=%d) than given as input (%d).",points, d_n);
+        if (points > n) {
+		printf("Tried to smooth over more points (points=%d) than given as input (%d).",points, n);
+		return -1;
+	}
+        if (order <1 || order > points-1) {
+		printf("The polynomial order must be between 1 and %d (%d given)!",points-1,order);
+		return -2;
+	}
 
         /* Savitzky-Golay coefficient matrix, y' = H y */
         gsl_matrix *h = gsl_matrix_alloc(points, points);
-        if (error = nsl_smooth_savgol_coeff(points, d_polynom_order, h)) {
+        if (error = nsl_smooth_savgol_coeff(points, order, h)) {
 		printf("Internal error in Savitzky-Golay algorithm:\n%s",gsl_strerror(error));
                 gsl_matrix_free(h);
                 return error;
         }
 
-        /* allocate memory for the result (temporary; don't overwrite y_inout while we still read from it) */
-	double *result = (double *)malloc(d_n*sizeof(double));
+	double *result = (double *)malloc(n*sizeof(double));
 
-        /* near left edge: use interpolation of (points) left-most input values
-         i.e. we deviate from the specified left/right points to use */
+        /* left edge */
+	for (i=0; i<half; i++) {
+		double convolution = 0.0;
+		for (k=0; k<points; k++)
+			switch(mode) {
+			case nsl_smooth_savgol_interp:
+				convolution += gsl_matrix_get(h, i, k) * data[k];
+				break;
+			case nsl_smooth_savgol_mirror:
+				convolution += gsl_matrix_get(h, half, k) * data[abs(k+i-half)];
+				break;
+			case nsl_smooth_savgol_nearest:
+				convolution += gsl_matrix_get(h, half, k) * data[GSL_MAX(0,i-half+k)];
+				break;
+			case nsl_smooth_savgol_constant:
+				if (k<half-i)
+					convolution += gsl_matrix_get(h, half, k) * nsl_smooth_savgol_constant_lvalue;
+				else
+					convolution += gsl_matrix_get(h, half, k) * data[i-half+k];
+				break;
+			case nsl_smooth_savgol_wrap:
+				convolution += gsl_matrix_get(h, half, k) * data[k<half-i?n+i+k-half:i-half+k];
+        		}
+		result[i] = convolution;
+	}
 
-/*        for (i=0; i<d_left_points; i++) {
-                double convolution = 0.0;
-                for (k=0; k<points; k++)
-                        convolution += gsl_matrix_get(h, i, k) * y_inout[k];
-                result[i] =  convolution;
-        }
-*/
-        /* legacy behaviour: handle left edge by zero padding */
-        for (i=0; i<d_left_points; i++) {
-                double convolution = 0.0;
-                for (k=d_left_points-i; k<points; k++)
-                        convolution += gsl_matrix_get(h, d_left_points, k) * y_inout[i-d_left_points+k];
-                result[i] = convolution;
-        }
-        /* central part: convolve with fixed row of h (as given by number of left points to use) */
-        for (i=d_left_points; i<d_n-d_right_points; i++) {
-                double convolution = 0.0;
-                for (k=0; k<points; k++)
-                        convolution += gsl_matrix_get(h, d_left_points, k) * y_inout[i-d_left_points+k];
-                result[i] = convolution;
-        }
+        /* central part: convolve with fixed row of h */
+	for (i=half; i<n-half; i++) {
+		double convolution = 0.0;
+		for (k=0; k<points; k++)
+			convolution += gsl_matrix_get(h, half, k) * data[i-half+k];
+		result[i] = convolution;
+	}
 
-        /* near right edge: use interpolation of (points) right-most input values
-         i.e. we deviate from the specified left/right points to use */
-
-/*        for (i=d_n-d_right_points; i<d_n; i++) {
-                double convolution = 0.0;
-                for (k=0; k<points; k++)
-                        convolution += gsl_matrix_get(h, points-d_n+i, k) * y_inout[d_n-points+k];
-                result[i] = convolution;
-        }
-*/
-        /* legacy behaviour: handle right edge by zero padding */
-        for (i=d_n-d_right_points; i<d_n; i++) {
-                double convolution = 0.0;
-                for (k=0; i-d_left_points+k < d_n; k++)
-                        convolution += gsl_matrix_get(h, d_left_points, k) * y_inout[i-d_left_points+k];
-                result[i] = convolution;
-        }
+        /* right edge */
+	for (i=n-half; i<n; i++) {
+		double convolution = 0.0;
+		for (k=0; k<points; k++)
+			switch(mode) {
+			case nsl_smooth_savgol_interp:
+				convolution += gsl_matrix_get(h, points-n+i, k) * data[n-points+k];
+				break;
+			case nsl_smooth_savgol_mirror:
+				convolution += gsl_matrix_get(h, half, k) * data[n-1-abs(k+1+i-n-half)];
+				break;
+			case nsl_smooth_savgol_nearest:
+				convolution += gsl_matrix_get(h, half, k) * data[GSL_MIN(i-half+k,n-1)];
+				break;
+			case nsl_smooth_savgol_constant:
+				if (k < n-i+half)
+					convolution += gsl_matrix_get(h, half, k) * data[i-half+k];
+				else
+					convolution += gsl_matrix_get(h, half, k) * nsl_smooth_savgol_constant_rvalue;
+				break;
+			case nsl_smooth_savgol_wrap:
+				convolution += gsl_matrix_get(h, half, k) * data[(i-half+k) % n];
+			}
+		result[i] = convolution;
+	}
 
         gsl_matrix_free(h);
 
-        /* TODO: qCopy(result.begin(), result.end(), y_inout); */
+        for (i=0; i<n; i++)
+		data[i]=result[i];
 	free(result);
 
 	return 0;
 }
 
+int nsl_smooth_savgol_default(int n, double *data, int points, int order) {
+	return nsl_smooth_savgol(n, data, points, order, nsl_smooth_savgol_constant);
+}
 
-/* TODO SmoothFilter::smoothModifiedSavGol(double *x_in, double *y_inout)
-	see SmoothFilter.cpp of libscidavis
-*/
