@@ -258,6 +258,9 @@ void XYSmoothCurvePrivate::recalculate() {
 
 	xVector->resize(n);
 	yVector->resize(n);
+	if(type == XYSmoothCurve::SavitzkyGolay) {
+		//TODO
+	} else {
 	for(unsigned int i=0;i<n;i++) {
 		(*xVector)[i] = xdata[i];
 
@@ -399,6 +402,7 @@ void XYSmoothCurvePrivate::recalculate() {
 
 			delete[] w;
 		}
+	}
 	}
 
 ///////////////////////////////////////////////////////////
