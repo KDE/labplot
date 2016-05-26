@@ -81,7 +81,7 @@ void nsl_smooth_savgol_constant_set(double lvalue, double rvalue) {
 	nsl_smooth_savgol_constant_rvalue = rvalue;
 }
 
-int nsl_smooth_savgol(int n, double *data, int points, int order, nsl_smooth_savgol_mode mode) {
+int nsl_smooth_savgol(double *data, int n, int points, int order, nsl_smooth_savgol_mode mode) {
 	int i,k,error=0;
         int half=(points-1)/2;	/* n//2 */
 
@@ -173,7 +173,7 @@ int nsl_smooth_savgol(int n, double *data, int points, int order, nsl_smooth_sav
 	return 0;
 }
 
-int nsl_smooth_savgol_default(int n, double *data, int points, int order) {
-	return nsl_smooth_savgol(n, data, points, order, nsl_smooth_savgol_constant);
+int nsl_smooth_savgol_default( double *data, int n, int points, int order) {
+	return nsl_smooth_savgol(data, n, points, order, nsl_smooth_savgol_constant);
 }
 

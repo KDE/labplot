@@ -72,10 +72,10 @@ void nsl_smooth_savgol_constant_set(double lvalue, double rvalue);
  * operation can be implemented as a convolution. This is considerably more efficient than a more
  * generic method (see smoothModifiedSavGol()) able to handle non-uniform input data.
  */
-int nsl_smooth_savgol(int n, double *data, int m, int order, nsl_smooth_savgol_mode mode);
+int nsl_smooth_savgol(double *data, int n, int points, int order, nsl_smooth_savgol_mode mode);
 
 /* Savitzky-Golay default smooting (interp) */
-int nsl_smooth_savgol_default(int n, double *data, int m, int order);
+int nsl_smooth_savgol_default(double *data, int n, int points, int order);
 
 /* TODO SmoothFilter::smoothModifiedSavGol(double *x_in, double *y_inout)
 	see SmoothFilter.cpp of libscidavis
