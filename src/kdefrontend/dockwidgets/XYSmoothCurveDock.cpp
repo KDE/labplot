@@ -123,8 +123,11 @@ void XYSmoothCurveDock::setupGeneral() {
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
 	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(int)), this, SLOT(pointsChanged()) );
 	connect( uiGeneralTab.cbWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(weightChanged()) );
-	connect( uiGeneralTab.cbMode, SIGNAL(currentIndexChanged(int)), this, SLOT(modeChanged()) );
 	connect( uiGeneralTab.sbPercentile, SIGNAL(valueChanged(double)), this, SLOT(percentileChanged()) );
+	connect( uiGeneralTab.sbOrder, SIGNAL(valueChanged(int)), this, SLOT(orderChanged()) );
+	connect( uiGeneralTab.cbMode, SIGNAL(currentIndexChanged(int)), this, SLOT(modeChanged()) );
+	connect( uiGeneralTab.sbLeftValue, SIGNAL(valueChanged(double)), this, SLOT(valueChanged()) );
+	connect( uiGeneralTab.sbRightValue, SIGNAL(valueChanged(double)), this, SLOT(valueChanged()) );
 
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
@@ -161,9 +164,13 @@ void XYSmoothCurveDock::initGeneralTab() {
 	typeChanged();	// needed, when type does not change
 	uiGeneralTab.sbPoints->setValue(m_smoothData.points);
 	uiGeneralTab.cbWeight->setCurrentIndex(m_smoothData.weight);
+	uiGeneralTab.sbPercentile->setValue(m_smoothData.percentile);
+	uiGeneralTab.sbOrder->setValue(m_smoothData.order);
 	uiGeneralTab.cbMode->setCurrentIndex(m_smoothData.mode-1);
 	modeChanged();	// needed, when mode does not change
-	uiGeneralTab.sbPercentile->setValue(m_smoothData.percentile);
+	uiGeneralTab.sbLeftValue->setValue(m_smoothData.lvalue);
+	uiGeneralTab.sbRightValue->setValue(m_smoothData.rvalue);
+	valueChanged();
 	this->showSmoothResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last smooth
@@ -320,11 +327,26 @@ void XYSmoothCurveDock::typeChanged() {
 void XYSmoothCurveDock::pointsChanged() {
 	m_smoothData.points = uiGeneralTab.sbPoints->value();
 
+	// set maximum order
+	uiGeneralTab.sbOrder->setMaximum(m_smoothData.points-1);
+
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYSmoothCurveDock::weightChanged() {
 	m_smoothData.weight = (XYSmoothCurve::WeightType)uiGeneralTab.cbWeight->currentIndex();
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYSmoothCurveDock::percentileChanged() {
+	m_smoothData.percentile = uiGeneralTab.sbPercentile->value();
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYSmoothCurveDock::orderChanged() {
+	m_smoothData.order = uiGeneralTab.sbOrder->value();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
@@ -347,8 +369,9 @@ void XYSmoothCurveDock::modeChanged() {
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYSmoothCurveDock::percentileChanged() {
-	m_smoothData.percentile = uiGeneralTab.sbPercentile->value();
+void XYSmoothCurveDock::valueChanged() {
+	m_smoothData.lvalue = uiGeneralTab.sbLeftValue->value();
+	m_smoothData.rvalue = uiGeneralTab.sbRightValue->value();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }

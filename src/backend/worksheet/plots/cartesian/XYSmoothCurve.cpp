@@ -247,11 +247,18 @@ void XYSmoothCurvePrivate::recalculate() {
 	unsigned int points = smoothData.points;
 	XYSmoothCurve::WeightType weight = smoothData.weight;
 	double percentile = smoothData.percentile;
+	unsigned int order = smoothData.order;
+	nsl_smooth_savgol_mode mode = smoothData.mode;
+	double lvalue = smoothData.lvalue;
+	double rvalue = smoothData.rvalue;
 #ifdef QT_DEBUG
 	qDebug()<<"type:"<<type;
 	qDebug()<<"points ="<<points;
 	qDebug()<<"weight:"<<weight;
 	qDebug()<<"percentile ="<<percentile;
+	qDebug()<<"order ="<<order;
+	qDebug()<<"mode ="<<mode;
+	qDebug()<<"const. values ="<<lvalue<<rvalue;
 #endif
 ///////////////////////////////////////////////////////////
 	int status=0;
@@ -259,7 +266,15 @@ void XYSmoothCurvePrivate::recalculate() {
 	xVector->resize(n);
 	yVector->resize(n);
 	if(type == XYSmoothCurve::SavitzkyGolay) {
-		//TODO
+		for(unsigned int i=0;i<n;i++)
+			(*xVector)[i] = xdata[i];
+		
+		if(mode == nsl_smooth_savgol_constant)
+			nsl_smooth_savgol_constant_set(lvalue, rvalue);
+		status = nsl_smooth_savgol(ydata, n, points, order, mode);
+
+		for(unsigned int i=0;i<n;i++)
+			(*yVector)[i]=ydata[i];
 	} else {
 	for(unsigned int i=0;i<n;i++) {
 		(*xVector)[i] = xdata[i];
@@ -439,6 +454,10 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "points", QString::number(d->smoothData.points) );
 	writer->writeAttribute( "weight", QString::number(d->smoothData.weight) );
 	writer->writeAttribute( "percentile", QString::number(d->smoothData.percentile) );
+	writer->writeAttribute( "order", QString::number(d->smoothData.order) );
+	writer->writeAttribute( "mode", QString::number(d->smoothData.mode) );
+	writer->writeAttribute( "lvalue", QString::number(d->smoothData.lvalue) );
+	writer->writeAttribute( "rvalue", QString::number(d->smoothData.rvalue) );
 	writer->writeEndElement();// smoothData
 
 	// smooth results (generated columns)
@@ -512,6 +531,29 @@ bool XYSmoothCurve::load(XmlStreamReader* reader){
 			else
 				d->smoothData.percentile = str.toDouble();
 
+			str = attribs.value("order").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'order'"));
+			else
+				d->smoothData.order = str.toInt();
+
+			str = attribs.value("mode").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'mode'"));
+			else
+				d->smoothData.mode = (nsl_smooth_savgol_mode) str.toInt();
+
+			str = attribs.value("lvalue").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'lvalue'"));
+			else
+				d->smoothData.lvalue = str.toDouble();
+
+			str = attribs.value("rvalue").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'rvalue'"));
+			else
+				d->smoothData.rvalue = str.toDouble();
 		} else if (reader->name() == "smoothResult") {
 
 			attribs = reader->attributes();
