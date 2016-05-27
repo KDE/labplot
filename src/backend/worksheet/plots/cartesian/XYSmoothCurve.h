@@ -31,6 +31,10 @@
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
+extern "C" {
+#include "backend/nsl/nsl_smooth.h"
+}
+
 class XYSmoothCurvePrivate;
 class XYSmoothCurve: public XYCurve {
 	Q_OBJECT
@@ -40,14 +44,14 @@ class XYSmoothCurve: public XYCurve {
 		enum WeightType {Uniform, Triangular, Binomial, Parabolic, Quartic, Triweight, Tricube, Cosine};
 
 		struct SmoothData {
-			SmoothData() : type(MovingAverage), points(3), weight(Uniform), percentile(0.5), order(2) {};
+			SmoothData() : type(MovingAverage), points(3), weight(Uniform), percentile(0.5), order(2), mode(nsl_smooth_savgol_interp) {};
 
 			XYSmoothCurve::SmoothType type;		// type of smoothing
 			unsigned int points;			// number of points
 			XYSmoothCurve::WeightType weight;	// type of weight
 			double percentile;			// percentile for percentile filter (0.0 .. 1.0)
 			unsigned order;				// order for Savitzky-Golay filter
-			//TODO: mode
+			nsl_smooth_savgol_mode mode;		// mode of padding for Savitzky-Golay filter
 			//TODO: lvalue,rvalue
 		};
 		struct SmoothResult {

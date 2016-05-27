@@ -41,7 +41,7 @@
 typedef enum {nsl_smooth_savgol_interp=1, nsl_smooth_savgol_mirror, nsl_smooth_savgol_nearest,
 	nsl_smooth_savgol_constant, nsl_smooth_savgol_wrap} nsl_smooth_savgol_mode;
 /* values used for constant padding */
-static double nsl_smooth_savgol_constant_lvalue = 0.0, nsl_smooth_savgol_constant_rvalue = 0.0;
+extern double nsl_smooth_savgol_constant_lvalue, nsl_smooth_savgol_constant_rvalue;
 
 /* Savitzky-Golay coefficents */
 /**
