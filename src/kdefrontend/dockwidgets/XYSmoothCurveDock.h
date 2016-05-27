@@ -67,6 +67,7 @@ private slots:
 	void typeChanged();
 	void pointsChanged();
 	void weightChanged();
+	void modeChanged();
 	void percentileChanged();
 
 //	void showOptions();

@@ -27,9 +27,12 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <gsl/gsl_math.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_blas.h>
 #include "nsl_smooth.h"
+
+double nsl_smooth_savgol_constant_lvalue = 0.0, nsl_smooth_savgol_constant_rvalue = 0.0;
 
 int nsl_smooth_savgol_coeff(int points, int order, gsl_matrix *h) {
         int i, j, error = 0;
@@ -96,7 +99,8 @@ int nsl_smooth_savgol(double *data, int n, int points, int order, nsl_smooth_sav
 
         /* Savitzky-Golay coefficient matrix, y' = H y */
         gsl_matrix *h = gsl_matrix_alloc(points, points);
-        if (error = nsl_smooth_savgol_coeff(points, order, h)) {
+        error = nsl_smooth_savgol_coeff(points, order, h);
+        if (error) {
 		printf("Internal error in Savitzky-Golay algorithm:\n%s",gsl_strerror(error));
                 gsl_matrix_free(h);
                 return error;
