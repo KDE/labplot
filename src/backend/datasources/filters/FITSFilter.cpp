@@ -136,6 +136,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
     int status = 0;
 
     if(fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status)) {
+        qDebug() << fileName;
         printError(status);
         return QString();
     }
@@ -162,6 +163,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 
     status = 0;
     QStringList dataString;
+    int noDataSource = (dataSource == NULL);
 
     if(chduType == IMAGE_HDU) {
         if (fits_get_img_param(fitsFile, maxdim,&bitpix, &naxis, naxes, &status)) {
@@ -188,9 +190,12 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         actualRows = naxes[1];
         actualCols = naxes[0];
 
-        int noDataSource = (dataSource == NULL);
         if (lines == -1) {
-            lines = actualRows;
+                lines = actualRows;
+        } else {
+            if (lines > actualRows) {
+                lines = actualRows;
+            }
         }
         if (!noDataSource) {
             columnOffset = dataSource->create(dataPointers, importMode, lines, actualCols);
@@ -209,12 +214,10 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 
         delete data;
 
-        //TODO
-        //dataString
-
     } else if ((chduType == ASCII_TBL) || (chduType == BINARY_TBL)) {
         fits_get_num_cols(fitsFile, &actualCols, &status);
         fits_get_num_rows(fitsFile, &actualRows, &status);
+
         columnsWidth.reserve(actualCols);
         int colWidth;
         char ttypenKeyword[FLEN_KEYWORD];
@@ -228,21 +231,34 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
             columnNames.append(QLatin1String(columnName));
         }
         char* array;
-        for (int row = 1; row <= actualRows; ++row) {
-            for (int col = 1; col <= actualCols; ++col) {
-                if(fits_read_col_str(fitsFile, col, row, 1, 1, NULL, &array, 0, &status)) {
-                    printError(status);
-                }
-                //TODO
-            }
+        if (lines == -1) {
+            lines = actualRows;
+        } else if (lines > actualRows) {
+            lines = actualRows;
         }
 
+        for (int row = 1; row <= lines; ++row) {
+            for (int col = 1; col <= actualCols; ++col) {
+                if(fits_read_col_str(fitsFile, col, row, 1, 1, NULL, &array, 0, &status)) {
+                    qDebug() << "error on table reading";
+                    printError(status);
+                    dataString << QLatin1String(" ");
+                }
+                if (!noDataSource) {
+                    //TODO
+                } else {
+                    dataString << array << QLatin1String(" ");
+                }
+            }
+            dataString << QLatin1String("\n");
+        }
     } else {
         qDebug() << i18n("Incorrect header type!");
     }
 
     // make everything undo/redo-able again
     // set column comments in spreadsheet
+    // TODO - this to image extension
     Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
     if (spreadsheet) {
         QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
@@ -317,7 +333,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
     int imageCount = 0;
     int asciiTableCount = 0;
     int binaryTableCount = 0;
-    for (int currentHDU = 1; currentHDU <= hduCount; ++currentHDU) {
+    for (int currentHDU = 1; (currentHDU <= hduCount) && !status; ++currentHDU) {
         int hduType;
         status = 0;
 
@@ -340,14 +356,12 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
             extName = extName.mid(1, extName.length() -2).simplified();  
         }
         else {
-            printError(status);
             status = 0;
             if (!fits_read_keyword(fitsFile,"HDUNAME", keyVal, NULL, &status)) {
                 extName = QLatin1String(keyVal);
                 extName = extName.mid(1, extName.length() -2).simplified();
             } else {
                 status = 0;
-                printError(status);
                 switch (hduType) {
                 case IMAGE_HDU:
                     if (imageCount == 1) {
@@ -379,9 +393,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
             extensions.insert(QLatin1String("TABLES"), extName);
             break;
         }
-        if(fits_movrel_hdu(fitsFile, 1, NULL, &status)) {
-            printError(status);
-        }
+        fits_movrel_hdu(fitsFile, 1, NULL, &status);
     }
 
     if (status == END_OF_FILE) {

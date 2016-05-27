@@ -422,7 +422,7 @@ void ImportFileWidget::selectFile() {
 	and activates the corresponding options.
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
-	QString fileName=name;
+    QString fileName=name;
 	if ( !fileName.isEmpty() && fileName.left(1)!=QDir::separator()) {
 		fileName=QDir::homePath() + QDir::separator() + fileName;
 	}
@@ -659,15 +659,7 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
             selectedExtension = item->parent()->parent()->text(column);
         }
     } else {
-        /*if (item->parent() != 0) {
-            if (item->parent()->parent() != 0)
-                selectedExtension = item->parent()->parent()->text(0) +"["+ item->text(column)+"]";
-        }*/
-
         selectedExtension = item->parent()->parent()->text(column) +"["+ item->text(column)+"]";
-
-        qDebug() << "extension " << selectedExtension;
-
     }
     if (!selectedExtension.isEmpty()) {
         FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
@@ -803,8 +795,8 @@ void ImportFileWidget::refreshPreview() {
 	WAIT_CURSOR;
 
 	QString fileName = ui.kleFileName->text();
-	if ( fileName.left(1) != QDir::separator() )
-		fileName = QDir::homePath() + QDir::separator() + fileName;
+    if ( fileName.left(1) != QDir::separator() )
+        fileName = QDir::homePath() + QDir::separator() + fileName;
 
 	QString importedText;
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
@@ -860,9 +852,14 @@ void ImportFileWidget::refreshPreview() {
 	}
     case FileDataSource::FITS: {
         //TODO
+
         FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
         lines = fitsOptionsWidget.sbPreviewLines->value();
         //filename+ lines
+        if (fitsOptionsWidget.twExtensions->currentItem() != 0) {
+            fileName = fileName + QLatin1String("[") + fitsOptionsWidget.twExtensions->currentItem()->text(0) +
+                        QLatin1String("]");
+        }
         importedText = filter->readChdu(fileName, lines);
         tmpTableWidget = fitsOptionsWidget.twPreview;
         break;
@@ -870,26 +867,25 @@ void ImportFileWidget::refreshPreview() {
 
 	}
 
-	// fill the table widget
-	if( !importedText.isEmpty() ) {
-		tmpTableWidget->clear();
+    // fill the table widget
+    if( !importedText.isEmpty() ) {
+        tmpTableWidget->clear();
 
-		QStringList lineStrings = importedText.split("\n");
-		tmpTableWidget->setRowCount(qMax(lineStrings.size()-1,1));
-		for(int i=0; i<lineStrings.size(); i++) {
-			QStringList lineString = lineStrings[i].split(" ");
-			if(i==0)
-				tmpTableWidget->setColumnCount(qMax(lineString.size()-1,1));
+        QStringList lineStrings = importedText.split("\n");
+        tmpTableWidget->setRowCount(qMax(lineStrings.size()-1,1));
+        for(int i=0; i<lineStrings.size(); i++) {
+            QStringList lineString = lineStrings[i].split(" ");
+            if(i==0)
+                tmpTableWidget->setColumnCount(qMax(lineString.size()-1,1));
 
-			for(int j=0; j<lineString.size(); j++) {
-				QTableWidgetItem* item = new QTableWidgetItem();
-				item->setText(lineString[j]);
-				tmpTableWidget->setItem(i,j,item);
-			}
-		}
+            for(int j=0; j<lineString.size(); j++) {
+                QTableWidgetItem* item = new QTableWidgetItem();
+                item->setText(lineString[j]);
+                tmpTableWidget->setItem(i,j,item);
+            }
+        }
 
-		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
-	}
-
-	RESET_CURSOR;
+        tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+    }
+    RESET_CURSOR;
 }
