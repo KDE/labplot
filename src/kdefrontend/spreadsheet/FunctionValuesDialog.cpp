@@ -68,7 +68,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 #if __cplusplus < 201103L
 	m_aspectTreeModel = std::auto_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
 #else
-	m_aspectTreeModel = std::uniq_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
+	m_aspectTreeModel = std::unique_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
 #endif
 	m_aspectTreeModel->setSelectableAspects(m_selectableClasses);
 
