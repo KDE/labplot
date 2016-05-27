@@ -854,8 +854,8 @@ bool MainWin::saveProjectAs() {
 	if( fileName.isEmpty() )// "Cancel" was clicked
 		return false;
 
-	if( fileName.contains(QString(".lml"),Qt::CaseInsensitive) == false )
-		fileName.append(".lml");
+	if( fileName.contains(QLatin1String(".lml"),Qt::CaseInsensitive) == false )
+		fileName.append(QLatin1String(".lml"));
 
 	return save(fileName);
 }

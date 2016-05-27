@@ -230,6 +230,12 @@ void ImportFileWidget::hideDataSource() const {
 	ui.chbLinkFile->hide();
 }
 
+void ImportFileWidget::showAsciiHeaderOptions(bool b) {
+	asciiOptionsWidget.chbHeader->setVisible(b);
+	asciiOptionsWidget.lVectorNames->setVisible(b);
+	asciiOptionsWidget.kleVectorNames->setVisible(b);
+}
+
 void ImportFileWidget::showOptions(bool b) {
 	ui.gbOptions->setVisible(b);
 	resize(layout()->minimumSize());
@@ -381,7 +387,7 @@ void ImportFileWidget::selectFile() {
 	//use the file name as the name of the data source,
 	//if there is no data source name provided yet
 	if (ui.kleSourceName->text().isEmpty()) {
-		QString fileName=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+        QString fileName = QFileInfo(path).fileName();
 		ui.kleSourceName->setText(fileName);
 	}
 

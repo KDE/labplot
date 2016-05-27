@@ -1107,8 +1107,8 @@ void MatrixView::exportToFile(const QString& path, const QString& separator) con
 	QTextStream out(&file);
 
 	QString sep = separator;
-	sep = sep.replace(QString("TAB"), QString("\t"), Qt::CaseInsensitive);
-	sep = sep.replace(QString("SPACE"), QString(" "), Qt::CaseInsensitive);
+	sep = sep.replace(QLatin1String("TAB"), QLatin1String("\t"), Qt::CaseInsensitive);
+	sep = sep.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
 
 	//export values
 	const int cols = m_matrix->columnCount();

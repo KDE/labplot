@@ -344,6 +344,11 @@ void ImportFileDialog::checkOkButton() {
 		} else {
 			lPosition->setEnabled(true);
 			cbPosition->setEnabled(true);
+
+			//when doing ASCII import to a matrix, hide the options for using the file header (first line)
+			//to name the columns since the column names are fixed in a matrix
+			const Matrix* matrix = dynamic_cast<const Matrix*>(aspect);
+			importFileWidget->showAsciiHeaderOptions(matrix==NULL);
 		}
 	}
 

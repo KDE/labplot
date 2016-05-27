@@ -639,8 +639,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("column");
 	writeBasicAttributes(writer);
 
-	writer->writeAttribute("mode", enumValueToString(columnMode(), "ColumnMode"));
-	writer->writeAttribute("plot_designation", enumValueToString(plotDesignation(), "PlotDesignation"));
+	writer->writeAttribute("mode", QString::number(columnMode()));
 	writer->writeAttribute("width", QString::number(width()));
 
 	//save the formula used to generate column values, if available
@@ -720,7 +719,6 @@ void Column::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement(); // "column"
 }
 
-
 class DecodeColumnTask : public QRunnable {
 	public:
 		DecodeColumnTask(ColumnPrivate* priv, const QString& content) { m_private =priv; m_content = content;};
@@ -741,53 +739,23 @@ class DecodeColumnTask : public QRunnable {
  */
 bool Column::load(XmlStreamReader* reader) {
 	if(reader->isStartElement() && reader->name() == "column") {
-		if (!readBasicAttributes(reader)) return false;
+		if (!readBasicAttributes(reader))
+			return false;
 
+		QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 		QXmlStreamAttributes attribs = reader->attributes();
-		QString str;
 
-		// read mode
-		str = attribs.value(reader->namespaceUri().toString(), "mode").toString();
-		if(str.isEmpty()) {
-			reader->raiseError(i18n("column mode missing"));
-			return false;
-		}
+		QString str = attribs.value("mode").toString();
+		if(str.isEmpty())
+			reader->raiseWarning(attributeWarning.arg("'mode'"));
+		else
+			setColumnMode( AbstractColumn::ColumnMode(str.toInt()) );
 
-		int mode_code = enumStringToValue(str, "ColumnMode");
-		if(mode_code == -1) {
-			reader->raiseError(i18n("column mode invalid"));
-			return false;
-		}
-		AbstractColumn::ColumnMode mode = (AbstractColumn::ColumnMode)mode_code;
-		if (mode!=columnMode())
-			setColumnMode((AbstractColumn::ColumnMode)mode_code);
-
-		// read plot designation
-		str = attribs.value(reader->namespaceUri().toString(), "plot_designation").toString();
-		int pd_code = enumStringToValue(str, "PlotDesignation");
-		if(str.isEmpty()) {
-			setPlotDesignation(AbstractColumn::noDesignation);
-		} else if(pd_code == -1) {
-			reader->raiseError(i18n("column plot designation invalid"));
-			return false;
-		} else {
-			setPlotDesignation((AbstractColumn::PlotDesignation)pd_code);
-		}
-
-		bool ok;
-		int width = attribs.value(reader->namespaceUri().toString(), "width").toString().toInt(&ok);
-		if (ok)
-			setWidth(width);
-		else {
-			reader->raiseError(i18n("missing or invalid column width"));
-			return false;
-		}
-
-// 		setComment("");
-// 		if (rowCount() > 0)
-// 			removeRows(0, rowCount());
-// 		clearMasks();
-// 		clearFormulas();
+		str = attribs.value("width").toString();
+		if(str.isEmpty())
+			reader->raiseWarning(attributeWarning.arg("'width'"));
+		else
+			setWidth(str.toInt());
 
 		// read child elements
 		while (!reader->atEnd()) {
@@ -1052,21 +1020,6 @@ void Column::handleFormatChange()
 		emit dataChanged(this); // all cells must be repainted
 
 	setStatisticsAvailable(false);
-}
-
-
-QString Column::enumValueToString(int key, const QString& enum_name) {
-	int index = staticMetaObject.indexOfEnumerator(enum_name.toAscii());
-	if(index == -1) return QString("invalid");
-	QMetaEnum meta_enum = staticMetaObject.enumerator(index);
-	return QString(meta_enum.valueToKey(key));
-}
-
-int Column::enumStringToValue(const QString& string, const QString& enum_name) {
-	int index = staticMetaObject.indexOfEnumerator(enum_name.toAscii());
-	if(index == -1) return -1;
-	QMetaEnum meta_enum = staticMetaObject.enumerator(index);
-	return meta_enum.keyToValue(string.toAscii());
 }
 
 /**

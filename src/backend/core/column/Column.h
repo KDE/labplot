@@ -145,9 +145,6 @@ class Column : public AbstractColumn {
 		void setStatisticsAvailable(bool available);
         bool statisticsAvailable() const;
 
-		static QString enumValueToString(int key, const QString& enum_name);
-		static int enumStringToValue(const QString& string, const QString& enum_name);
-
 		ColumnPrivate* m_column_private;
 		ColumnStringIO* m_string_io;
 		bool m_suppressDataChangedSignal;
