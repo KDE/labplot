@@ -87,8 +87,7 @@ void XYSmoothCurveDock::setupGeneral() {
 	uiGeneralTab.cbType->addItem(i18n("percentile"));
 	uiGeneralTab.cbType->addItem(i18n("Savitzky-Golay"));
 //	uiGeneralTab.cbType->addItem(i18n("LOWESS/LOESS"));
-// see Fourier Filter
-//	uiGeneralTab.cbType->addItem(i18n("FFT filter"));
+//	etc.
 
 	uiGeneralTab.cbWeight->addItem(i18n("uniform (rectangular)"));
 	uiGeneralTab.cbWeight->addItem(i18n("triangular"));

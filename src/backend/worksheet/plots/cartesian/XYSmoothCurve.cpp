@@ -266,15 +266,14 @@ void XYSmoothCurvePrivate::recalculate() {
 	xVector->resize(n);
 	yVector->resize(n);
 	if(type == XYSmoothCurve::SavitzkyGolay) {
-		for(unsigned int i=0;i<n;i++)
-			(*xVector)[i] = xdata[i];
-		
 		if(mode == nsl_smooth_savgol_constant)
 			nsl_smooth_savgol_constant_set(lvalue, rvalue);
 		status = nsl_smooth_savgol(ydata, n, points, order, mode);
 
-		for(unsigned int i=0;i<n;i++)
-			(*yVector)[i]=ydata[i];
+		for(unsigned int i=0;i<n;i++) {
+			(*xVector)[i] = xdata[i];
+			(*yVector)[i] = ydata[i];
+		}
 	} else {
 	for(unsigned int i=0;i<n;i++) {
 		(*xVector)[i] = xdata[i];
@@ -425,7 +424,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	//write the result
 	smoothResult.available = true;
 	smoothResult.valid = true;
-//	smoothResult.status = QString(gsl_strerror(status));;
+	smoothResult.status = status;
 	smoothResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
