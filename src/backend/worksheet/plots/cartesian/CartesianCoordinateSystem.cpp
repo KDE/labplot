@@ -708,35 +708,35 @@ void CartesianCoordinateSystem::handlePageResize(double horizontalRatio, double 
  * TODO: check whether the newer versions of Qt do the comparison correctly.
  */
 bool CartesianCoordinateSystem::rectContainsPoint(const QRectF& rect, const QPointF& point) const{
-    qreal l = rect.x();
-    qreal r = rect.x();
+	qreal l = rect.x();
+	qreal r = rect.x();
 	qreal w = rect.width();
 	qreal h = rect.height();
-    if (w < 0)
-        l += w;
-    else
-        r += w;
-    if ( AbstractCoordinateSystem::essentiallyEqual(l, r)) // null rect
-        return false;
+	if (w < 0)
+		l += w;
+	else
+		r += w;
+	if ( AbstractCoordinateSystem::essentiallyEqual(l, r)) // null rect
+		return false;
 
-    if ( AbstractCoordinateSystem::definitelyLessThan(point.x(), l)
+	if ( AbstractCoordinateSystem::definitelyLessThan(point.x(), l)
 		|| AbstractCoordinateSystem::definitelyGreaterThan(point.x(), r) )
-        return false;
+ 	return false;
 
-    qreal t = rect.y();
-    qreal b = rect.y();
-    if (h < 0)
-        t += h;
-    else
-        b += h;
-    if ( AbstractCoordinateSystem::essentiallyEqual(t, b) ) // null rect
-        return false;
+	qreal t = rect.y();
+	qreal b = rect.y();
+	if (h < 0)
+		t += h;
+	else
+		b += h;
+ 	if ( AbstractCoordinateSystem::essentiallyEqual(t, b) ) // null rect
+		return false;
 
 	if ( AbstractCoordinateSystem::definitelyLessThan(point.y(), t)
 		|| AbstractCoordinateSystem::definitelyGreaterThan(point.y(), b) )
-        return false;
+		return false;
 
-    return true;
+	return true;
 }
 
 //##############################################################################

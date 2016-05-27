@@ -1179,7 +1179,7 @@ void AxisPrivate::retransformTicks(){
 	QPointF anchorPoint;
 	QPointF startPoint;
 	QPointF endPoint;
-	qreal majorTickPos;
+	qreal majorTickPos=0.0;
 	qreal minorTickPos;
 	qreal nextMajorTickPos = 0.0;
 	int xDirection = m_cSystem->xDirection();

@@ -1477,9 +1477,9 @@ void XYCurveDock::fillingSecondColorChanged(const QColor& c){
 void XYCurveDock::selectFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "XYCurveDock");
 	QString dir = conf.readEntry("LastImageDir", "");
-    QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
-    if (path.isEmpty())
-        return; //cancel was clicked in the file-dialog
+	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
+	if (path.isEmpty())
+		return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());
 	if (pos!=-1) {
@@ -1488,7 +1488,7 @@ void XYCurveDock::selectFile() {
 			conf.writeEntry("LastImageDir", newDir);
 	}
 
-    ui.kleFillingFileName->setText( path );
+	ui.kleFillingFileName->setText( path );
 
 	foreach(XYCurve* curve, m_curvesList)
 		curve->setFillingFileName(path);
