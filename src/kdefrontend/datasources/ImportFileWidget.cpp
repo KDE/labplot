@@ -654,12 +654,13 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
     } else if (itemText.contains(QLatin1String("BINARY_TBL #"))) {
 
     } else if (!itemText.compare(QLatin1String("Primary header"))) {
-        if (item->parent()->parent() != 0) {
-            qDebug() << "primary";
-            selectedExtension = item->parent()->parent()->text(column);
-        }
+        selectedExtension = item->parent()->parent()->text(column);
     } else {
-        selectedExtension = item->parent()->parent()->text(column) +"["+ item->text(column)+"]";
+        if (item->parent() != 0) {
+            if (item->parent()->parent() != 0) {
+                selectedExtension = item->parent()->parent()->text(column) +"["+ item->text(column)+"]";
+            }
+        }
     }
     if (!selectedExtension.isEmpty()) {
         FITSFilter* filter = (FITSFilter*)this->currentFileFilter();

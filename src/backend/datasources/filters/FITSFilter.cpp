@@ -230,6 +230,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
             columnsWidth.append(colWidth);
             columnNames.append(QLatin1String(columnName));
         }
+        status = 0;
         char* array;
         if (lines == -1) {
             lines = actualRows;
