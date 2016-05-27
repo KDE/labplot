@@ -250,8 +250,10 @@ void ImportFileWidget::showOptions(bool b) {
 QString ImportFileWidget::fileName() const {
     if (currentFileType() == FileDataSource::FITS) {
         if (fitsOptionsWidget.twExtensions->currentItem() != 0) {
-            return ui.kleFileName->text() + QLatin1String("[") +
-                    fitsOptionsWidget.twExtensions->currentItem()->text(fitsOptionsWidget.twExtensions->currentColumn()) + QLatin1String("]");
+            if (fitsOptionsWidget.twExtensions->currentItem()->text(0) != QLatin1String("Primary header")) {
+                return ui.kleFileName->text() + QLatin1String("[") +
+                        fitsOptionsWidget.twExtensions->currentItem()->text(fitsOptionsWidget.twExtensions->currentColumn()) + QLatin1String("]");
+            }
         }
 
     }
