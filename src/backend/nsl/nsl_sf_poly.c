@@ -26,18 +26,20 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
 #include <math.h>
 #include "nsl_sf_poly.h"
 
+/* see https://en.wikipedia.org/wiki/Chebyshev_polynomials */
 double nsl_sf_poly_chebyshev_T(int n, double x) {
-	if(x<0) {
-		printf("range error in nsl_sf_poly_chebyshev_T: x = %g\n",x);
-		return 0;
-	}
-
-	if(x < 1.0)
+	if(fabs(x) <= 1)
 		return cos(n*acos(x));
-	else
+	else if (x > 1)
 		return cosh(n*acosh(x));
+	else 
+		return pow(-1.,n)*cosh(n*acosh(-x));
+}
+
+double nsl_sf_poly_chebyshev_U(int n, double x) {
+	double sq=sqrt(x*x-1);
+	return (pow(x+sq,n+1)-pow(x-sq,n+1))/2./sq;
 }

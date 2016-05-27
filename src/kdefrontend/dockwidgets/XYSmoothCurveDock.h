@@ -67,6 +67,10 @@ private slots:
 	void typeChanged();
 	void pointsChanged();
 	void weightChanged();
+	void percentileChanged();
+	void orderChanged();
+	void modeChanged();
+	void valueChanged();
 
 //	void showOptions();
 	void recalculateClicked();
