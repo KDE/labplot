@@ -585,13 +585,13 @@ void XYFitCurveDock::showFitResult() {
 
 	str += i18n("degrees of freedom") + ": " + QString::number(fitResult.dof) + "<br><br>";
 
-	str += "<b>Parameters:</b>";
+	str += i18n("<b>Parameters:</b>");
 	for (int i=0; i<fitResult.paramValues.size(); i++) {
 		str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
 		       + QString::fromUtf8("\u2213") + QString::number(fitResult.errorValues.at(i));
 	}
 
-	str += "<br><br><b>Goodness of fit:</b><br>";
+	str += "<br><br>" + i18n("<b>Goodness of fit:</b>") + "<br>";
 	str += i18n("sum of squared errors") + ": " + QString::number(fitResult.sse) + "<br>";
 	str += i18n("mean squared error") + ": " + QString::number(fitResult.mse) + "<br>";
 	str += i18n("root-mean squared error") + ": " + QString::number(fitResult.rmse) + "<br>";
