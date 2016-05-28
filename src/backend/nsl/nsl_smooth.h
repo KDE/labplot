@@ -33,10 +33,10 @@
 
 /* mode of extension for padding signal 
  *	interp: polynomial interpolation
- *	mirror:   3 2 | 1 2 3 4 5 | 4 3
- *	nearest:  1 1 | 1 2 3 4 5 | 5 5
- *	constant: 0 0 | 1 2 3 4 5 | 0 0
- *	wrap:     4 5 | 1 2 3 4 5 | 1 2
+ *	mirror:   3 2 | 1 2 3 4 5 | 4 3	(reflect)
+ *	nearest:  1 1 | 1 2 3 4 5 | 5 5	(repeat)
+ *	constant: V V | 1 2 3 4 5 | V V
+ *	wrap:     4 5 | 1 2 3 4 5 | 1 2 (periodic)
 */
 typedef enum {nsl_smooth_savgol_interp=1, nsl_smooth_savgol_mirror, nsl_smooth_savgol_nearest,
 	nsl_smooth_savgol_constant, nsl_smooth_savgol_wrap} nsl_smooth_savgol_mode;
@@ -67,10 +67,10 @@ void nsl_smooth_savgol_constant_set(double lvalue, double rvalue);
 /**
  * \brief Savitzky-Golay smoothing of (uniformly distributed) data.
  *
- * TODO: When the data is not uniformly distributed, Savitzky-Golay looses its interesting conservation
+ * When the data is not uniformly distributed, Savitzky-Golay looses its interesting conservation
  * properties. On the other hand, a central point of the algorithm is that for uniform data, the
  * operation can be implemented as a convolution. This is considerably more efficient than a more
- * generic method (see smoothModifiedSavGol()) able to handle non-uniform input data.
+ * generic method able to handle non-uniform input data.
  */
 int nsl_smooth_savgol(double *data, int n, int points, int order, nsl_smooth_savgol_mode mode);
 
