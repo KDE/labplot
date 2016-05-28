@@ -1604,7 +1604,7 @@ void AxisDock::axisVisibilityChanged(bool on){
 //*************************************************************
 void AxisDock::load(){
 	//General
-  	ui.chkVisible->setChecked( m_axis->isVisible() );
+	ui.chkVisible->setChecked( m_axis->isVisible() );
 	ui.cbOrientation->setCurrentIndex( (int) m_axis->orientation() );
 
 	int index = (int) m_axis->position();
@@ -1613,13 +1613,13 @@ void AxisDock::load(){
 	else
 		ui.cbPosition->setCurrentIndex(index);
 
-  	ui.lePosition->setText( QString::number( m_axis->offset()) );
+	ui.lePosition->setText( QString::number( m_axis->offset()) );
 	ui.cbScale->setCurrentIndex(  (int) m_axis->scale() );
 	ui.chkAutoScale->setChecked( m_axis->autoScale() );
-  	ui.leStart->setText( QString::number(m_axis->start()) );
-  	ui.leEnd->setText( QString::number(m_axis->end()) );
-  	ui.leZeroOffset->setText( QString::number(m_axis->zeroOffset()) );
-  	ui.leScalingFactor->setText( QString::number(m_axis->scalingFactor()) );
+	ui.leStart->setText( QString::number(m_axis->start()) );
+	ui.leEnd->setText( QString::number(m_axis->end()) );
+	ui.leZeroOffset->setText( QString::number(m_axis->zeroOffset()) );
+	ui.leScalingFactor->setText( QString::number(m_axis->scalingFactor()) );
 
 	//Line
 	ui.cbLineStyle->setCurrentIndex( (int) m_axis->linePen().style() );
@@ -1634,7 +1634,7 @@ void AxisDock::load(){
 	ui.cbMajorTicksDirection->setCurrentIndex( (int) m_axis->majorTicksDirection() );
 	ui.cbMajorTicksType->setCurrentIndex( (int) m_axis->majorTicksType() );
 	ui.sbMajorTicksNumber->setValue( m_axis->majorTicksNumber() );
-  	ui.leMajorTicksIncrement->setText( QString::number(m_axis->majorTicksIncrement()) );
+	ui.leMajorTicksIncrement->setText( QString::number(m_axis->majorTicksIncrement()) );
 	ui.cbMajorTicksLineStyle->setCurrentIndex( (int) m_axis->majorTicksPen().style() );
 	ui.kcbMajorTicksColor->setColor( m_axis->majorTicksPen().color() );
 	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits( m_axis->majorTicksPen().widthF(),Worksheet::Point) );
@@ -1645,7 +1645,7 @@ void AxisDock::load(){
 	ui.cbMinorTicksDirection->setCurrentIndex( (int) m_axis->minorTicksDirection() );
 	ui.cbMinorTicksType->setCurrentIndex( (int) m_axis->minorTicksType() );
 	ui.sbMinorTicksNumber->setValue( m_axis->minorTicksNumber() );
-  	ui.leMinorTicksIncrement->setText( QString::number( m_axis->minorTicksIncrement()) );
+	ui.leMinorTicksIncrement->setText( QString::number( m_axis->minorTicksIncrement()) );
 	ui.cbMinorTicksLineStyle->setCurrentIndex( (int) m_axis->minorTicksPen().style() );
 	ui.kcbMinorTicksColor->setColor( m_axis->minorTicksPen().color() );
 	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->minorTicksPen().widthF(),Worksheet::Point) );
@@ -1717,7 +1717,6 @@ void AxisDock::loadConfig(KConfig& config){
 	KConfigGroup group = config.group( "Axis" );
 
 	//General
-  	ui.chkVisible->setChecked(group.readEntry("Visible", m_axis->isVisible()));
 	ui.cbOrientation->setCurrentIndex( group.readEntry("Orientation", (int) m_axis->orientation()) );
 
 	int index = group.readEntry("Position", (int) m_axis->position());
@@ -1726,13 +1725,13 @@ void AxisDock::loadConfig(KConfig& config){
 	else
 		ui.cbPosition->setCurrentIndex(index);
 
-  	ui.lePosition->setText( QString::number( group.readEntry("PositionOffset", m_axis->offset())) );
+	ui.lePosition->setText( QString::number( group.readEntry("PositionOffset", m_axis->offset())) );
 	ui.cbScale->setCurrentIndex( group.readEntry("Scale", (int) m_axis->scale()) );
 	ui.chkAutoScale->setChecked(group.readEntry("AutoScale", m_axis->autoScale()));
-  	ui.leStart->setText( QString::number( group.readEntry("Start", m_axis->start())) );
-  	ui.leEnd->setText( QString::number( group.readEntry("End", m_axis->end())) );
-  	ui.leZeroOffset->setText( QString::number( group.readEntry("ZeroOffset", m_axis->zeroOffset())) );
-  	ui.leScalingFactor->setText( QString::number( group.readEntry("ScalingFactor", m_axis->scalingFactor())) );
+	ui.leStart->setText( QString::number( group.readEntry("Start", m_axis->start())) );
+	ui.leEnd->setText( QString::number( group.readEntry("End", m_axis->end())) );
+	ui.leZeroOffset->setText( QString::number( group.readEntry("ZeroOffset", m_axis->zeroOffset())) );
+	ui.leScalingFactor->setText( QString::number( group.readEntry("ScalingFactor", m_axis->scalingFactor())) );
 
 	//Title
 	KConfigGroup axisLabelGroup = config.group("AxisLabel");
@@ -1751,7 +1750,7 @@ void AxisDock::loadConfig(KConfig& config){
 	ui.cbMajorTicksDirection->setCurrentIndex( group.readEntry("MajorTicksDirection", (int) m_axis->majorTicksDirection()) );
 	ui.cbMajorTicksType->setCurrentIndex( group.readEntry("MajorTicksType", (int) m_axis->majorTicksType()) );
 	ui.sbMajorTicksNumber->setValue( group.readEntry("MajorTicksNumber", m_axis->majorTicksNumber()) );
-  	ui.leMajorTicksIncrement->setText( QString::number( group.readEntry("MajorTicksIncrement", m_axis->majorTicksIncrement())) );
+	ui.leMajorTicksIncrement->setText( QString::number( group.readEntry("MajorTicksIncrement", m_axis->majorTicksIncrement())) );
 	ui.cbMajorTicksLineStyle->setCurrentIndex( group.readEntry("MajorTicksLineStyle", (int) m_axis->majorTicksPen().style()) );
 	ui.kcbMajorTicksColor->setColor( group.readEntry("MajorTicksColor", m_axis->majorTicksPen().color()) );
 	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorTicksWidth", m_axis->majorTicksPen().widthF()),Worksheet::Point) );
@@ -1762,7 +1761,7 @@ void AxisDock::loadConfig(KConfig& config){
 	ui.cbMinorTicksDirection->setCurrentIndex( group.readEntry("MinorTicksDirection", (int) m_axis->minorTicksDirection()) );
 	ui.cbMinorTicksType->setCurrentIndex( group.readEntry("MinorTicksType", (int) m_axis->minorTicksType()) );
 	ui.sbMinorTicksNumber->setValue( group.readEntry("MinorTicksNumber", m_axis->minorTicksNumber()) );
-  	ui.leMinorTicksIncrement->setText( QString::number( group.readEntry("MinorTicksIncrement", m_axis->minorTicksIncrement())) );
+	ui.leMinorTicksIncrement->setText( QString::number( group.readEntry("MinorTicksIncrement", m_axis->minorTicksIncrement())) );
 	ui.cbMinorTicksLineStyle->setCurrentIndex( group.readEntry("MinorTicksLineStyle", (int) m_axis->minorTicksPen().style()) );
 	ui.kcbMinorTicksColor->setColor( group.readEntry("MinorTicksColor", m_axis->minorTicksPen().color()) );
 	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksWidth", m_axis->minorTicksPen().widthF()),Worksheet::Point) );
@@ -1814,7 +1813,6 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group( "Axis" );
 
 	//General
-	group.writeEntry("Visible", ui.chkVisible->isChecked());
 	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
 
 	if (ui.cbPosition->currentIndex()==2){

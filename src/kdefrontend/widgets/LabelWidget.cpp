@@ -676,8 +676,6 @@ void LabelWidget::loadConfig(KConfigGroup &group) {
 
 	m_initializing = true;
 
-	ui.chbVisible->setChecked( group.readEntry("Visible", m_label->isVisible()) );
-
 	//Text
 	ui.tbTexUsed->setChecked(group.readEntry("TeXUsed", (bool) m_label->text().teXUsed));
 	ui.sbFontSize->setValue( group.readEntry("TeXFontSize", m_label->teXFontSize()) );
