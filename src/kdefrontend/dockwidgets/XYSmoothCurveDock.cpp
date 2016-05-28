@@ -35,6 +35,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
+#include <QDebug>
 
 #include <cmath>        // isnan
 
@@ -83,10 +84,10 @@ void XYSmoothCurveDock::setupGeneral() {
 
 	uiGeneralTab.cbType->addItem(i18n("moving average (central)"));
 	uiGeneralTab.cbType->addItem(i18n("moving average (lagged)"));
-//	uiGeneralTab.cbType->addItem(i18n("percentile"));
-//	uiGeneralTab.cbType->addItem(i18n("Savitzky-Golay"));
+	uiGeneralTab.cbType->addItem(i18n("percentile"));
+	uiGeneralTab.cbType->addItem(i18n("Savitzky-Golay"));
 //	uiGeneralTab.cbType->addItem(i18n("LOWESS/LOESS"));
-//	uiGeneralTab.cbType->addItem(i18n("FFT filter"));
+//	etc.
 
 	uiGeneralTab.cbWeight->addItem(i18n("uniform (rectangular)"));
 	uiGeneralTab.cbWeight->addItem(i18n("triangular"));
@@ -101,6 +102,12 @@ void XYSmoothCurveDock::setupGeneral() {
 //	uiGeneralTab.cbWeight->addItem(i18n("Gaussian"));
 //	etc. -> see nsl_sf_kernel
 
+	uiGeneralTab.cbMode->addItem(i18n("interpolating"));
+	uiGeneralTab.cbMode->addItem(i18n("mirror"));
+	uiGeneralTab.cbMode->addItem(i18n("nearest"));
+	uiGeneralTab.cbMode->addItem(i18n("constant"));
+	uiGeneralTab.cbMode->addItem(i18n("wrap"));
+
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
@@ -113,8 +120,13 @@ void XYSmoothCurveDock::setupGeneral() {
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
-	connect( uiGeneralTab.cbWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(weightChanged()) );
 	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(int)), this, SLOT(pointsChanged()) );
+	connect( uiGeneralTab.cbWeight, SIGNAL(currentIndexChanged(int)), this, SLOT(weightChanged()) );
+	connect( uiGeneralTab.sbPercentile, SIGNAL(valueChanged(double)), this, SLOT(percentileChanged()) );
+	connect( uiGeneralTab.sbOrder, SIGNAL(valueChanged(int)), this, SLOT(orderChanged()) );
+	connect( uiGeneralTab.cbMode, SIGNAL(currentIndexChanged(int)), this, SLOT(modeChanged()) );
+	connect( uiGeneralTab.sbLeftValue, SIGNAL(valueChanged(double)), this, SLOT(valueChanged()) );
+	connect( uiGeneralTab.sbRightValue, SIGNAL(valueChanged(double)), this, SLOT(valueChanged()) );
 
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
@@ -148,8 +160,16 @@ void XYSmoothCurveDock::initGeneralTab() {
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
+	typeChanged();	// needed, when type does not change
 	uiGeneralTab.sbPoints->setValue(m_smoothData.points);
 	uiGeneralTab.cbWeight->setCurrentIndex(m_smoothData.weight);
+	uiGeneralTab.sbPercentile->setValue(m_smoothData.percentile);
+	uiGeneralTab.sbOrder->setValue(m_smoothData.order);
+	uiGeneralTab.cbMode->setCurrentIndex(m_smoothData.mode-1);
+	modeChanged();	// needed, when mode does not change
+	uiGeneralTab.sbLeftValue->setValue(m_smoothData.lvalue);
+	uiGeneralTab.sbRightValue->setValue(m_smoothData.rvalue);
+	valueChanged();
 	this->showSmoothResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last smooth
@@ -263,17 +283,41 @@ void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYSmoothCurveDock::typeChanged() {
-	m_smoothData.type = (XYSmoothCurve::SmoothType)uiGeneralTab.cbType->currentIndex();
+	XYSmoothCurve::SmoothType type = (XYSmoothCurve::SmoothType)uiGeneralTab.cbType->currentIndex();
+	m_smoothData.type = type;
 
-	switch(m_smoothData.type) {
-	case XYSmoothCurve::MovingAverage:
-		uiGeneralTab.sbPoints->setSingleStep(2);
-		uiGeneralTab.sbPoints->setMinimum(3);
-		break;
-	case XYSmoothCurve::MovingAverageLagged:
+	if(type == XYSmoothCurve::MovingAverage || type == XYSmoothCurve::MovingAverageLagged) {
+		uiGeneralTab.lWeight->show();
+		uiGeneralTab.cbWeight->show();
+	} else {
+		uiGeneralTab.lWeight->hide();
+		uiGeneralTab.cbWeight->hide();
+	}
+	if(type == XYSmoothCurve::MovingAverageLagged) {
 		uiGeneralTab.sbPoints->setSingleStep(1);
 		uiGeneralTab.sbPoints->setMinimum(2);
-		break;
+	} else {
+		uiGeneralTab.sbPoints->setSingleStep(2);
+		uiGeneralTab.sbPoints->setMinimum(3);
+	}
+	if(type == XYSmoothCurve::Percentile) {
+		uiGeneralTab.lPercentile->show();
+		uiGeneralTab.sbPercentile->show();
+	} else {
+		uiGeneralTab.lPercentile->hide();
+		uiGeneralTab.sbPercentile->hide();
+	}
+	if(type == XYSmoothCurve::SavitzkyGolay) {
+		uiGeneralTab.sbPoints->setValue(5);
+		uiGeneralTab.lOrder->show();
+		uiGeneralTab.sbOrder->show();
+		uiGeneralTab.lMode->show();
+		uiGeneralTab.cbMode->show();
+	} else {
+		uiGeneralTab.lOrder->hide();
+		uiGeneralTab.sbOrder->hide();
+		uiGeneralTab.lMode->hide();
+		uiGeneralTab.cbMode->hide();
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
@@ -282,11 +326,51 @@ void XYSmoothCurveDock::typeChanged() {
 void XYSmoothCurveDock::pointsChanged() {
 	m_smoothData.points = uiGeneralTab.sbPoints->value();
 
+	// set maximum order
+	uiGeneralTab.sbOrder->setMaximum(m_smoothData.points-1);
+
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYSmoothCurveDock::weightChanged() {
 	m_smoothData.weight = (XYSmoothCurve::WeightType)uiGeneralTab.cbWeight->currentIndex();
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYSmoothCurveDock::percentileChanged() {
+	m_smoothData.percentile = uiGeneralTab.sbPercentile->value();
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYSmoothCurveDock::orderChanged() {
+	m_smoothData.order = uiGeneralTab.sbOrder->value();
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYSmoothCurveDock::modeChanged() {
+	m_smoothData.mode = (nsl_smooth_savgol_mode)(uiGeneralTab.cbMode->currentIndex()+1);
+
+	if(m_smoothData.mode == nsl_smooth_savgol_constant) {
+		uiGeneralTab.lLeftValue->show();
+		uiGeneralTab.sbLeftValue->show();
+		uiGeneralTab.lRightValue->show();
+		uiGeneralTab.sbRightValue->show();
+	} else {
+		uiGeneralTab.lLeftValue->hide();
+		uiGeneralTab.sbLeftValue->hide();
+		uiGeneralTab.lRightValue->hide();
+		uiGeneralTab.sbRightValue->hide();
+	}
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYSmoothCurveDock::valueChanged() {
+	m_smoothData.lvalue = uiGeneralTab.sbLeftValue->value();
+	m_smoothData.rvalue = uiGeneralTab.sbRightValue->value();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }

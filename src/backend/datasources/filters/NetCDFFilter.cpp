@@ -443,19 +443,19 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 	qDebug()<<" nattr/ndims/nvars ="<<nattr<<ndims<<nvars;
 #endif
 
-	QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString("Attributes"));
+	QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(i18n("Attributes")));
 	attrItem->setIcon(0,QIcon::fromTheme("folder"));
 	attrItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(attrItem);
 	scanAttrs(ncid,NC_GLOBAL,-1,attrItem);
 
-	QTreeWidgetItem *dimItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString("Dimensions"));
+	QTreeWidgetItem *dimItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(i18n("Dimensions")));
 	dimItem->setIcon(0,QIcon::fromTheme("folder"));
 	dimItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(dimItem);
 	scanDims(ncid,ndims,dimItem);
 
-	QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString("Variables"));
+	QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(i18n("Variables")));
 	varItem->setIcon(0,QIcon::fromTheme("folder"));
 	varItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(varItem);

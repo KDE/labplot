@@ -151,7 +151,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( hdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(hdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
 	connect( hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 	connect( netcdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(netcdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
-	connect( hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
+    connect( netcdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
 	ui.bSaveFilter->hide();
@@ -231,6 +231,12 @@ void ImportFileWidget::hideDataSource() const {
 	ui.kleSourceName->hide();
 	ui.chbWatchFile->hide();
 	ui.chbLinkFile->hide();
+}
+
+void ImportFileWidget::showAsciiHeaderOptions(bool b) {
+	asciiOptionsWidget.chbHeader->setVisible(b);
+	asciiOptionsWidget.lVectorNames->setVisible(b);
+	asciiOptionsWidget.kleVectorNames->setVisible(b);
 }
 
 void ImportFileWidget::showOptions(bool b) {
@@ -384,7 +390,7 @@ void ImportFileWidget::selectFile() {
 	//use the file name as the name of the data source,
 	//if there is no data source name provided yet
 	if (ui.kleSourceName->text().isEmpty()) {
-		QString fileName=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+        QString fileName = QFileInfo(path).fileName();
 		ui.kleSourceName->setText(fileName);
 	}
 

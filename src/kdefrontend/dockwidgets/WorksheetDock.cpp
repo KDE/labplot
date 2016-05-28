@@ -652,8 +652,8 @@ void WorksheetDock::selectFile() {
 	}
 
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
-    if (path.isEmpty())
-        return; //cancel was clicked in the file-dialog
+	if (path.isEmpty())
+		return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());
 	if (pos!=-1) {
@@ -662,7 +662,7 @@ void WorksheetDock::selectFile() {
 			conf.writeEntry("LastImageDir", newDir);
 	}
 
-    ui.kleBackgroundFileName->setText( path );
+	ui.kleBackgroundFileName->setText( path );
 
 	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setBackgroundFileName(path);
@@ -675,7 +675,7 @@ void WorksheetDock::fileNameChanged(){
 	QString fileName = ui.kleBackgroundFileName->text();
 	foreach(Worksheet* worksheet, m_worksheetList){
 		worksheet->setBackgroundFileName(fileName);
-  }
+	}
 }
 
 //*************************************************************

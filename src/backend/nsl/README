@@ -6,3 +6,4 @@ NSL is written in plain C.
 
 Test:
 gcc -o nsl_stats_test nsl_stats_test.c nsl_stats.c -lm -lgsl -lgslcblas
+gcc -o nsl_smooth_test nsl_smooth_test.c nsl_smooth.c -lm -lgsl -lgslcblas

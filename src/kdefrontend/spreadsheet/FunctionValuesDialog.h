@@ -49,8 +49,11 @@ class FunctionValuesDialog : public KDialog{
 		Ui::FunctionValuesWidget ui;
 		QList<Column*> m_columns;
 		Spreadsheet* m_spreadsheet;
-        // TODO - Change this to a modern smart pointer
+#if __cplusplus < 201103L
 		std::auto_ptr<AspectTreeModel> m_aspectTreeModel;
+#else
+		std::unique_ptr<AspectTreeModel> m_aspectTreeModel;
+#endif
 		QList<const char*>  m_topLevelClasses;
 		QList<const char*>  m_selectableClasses;
 

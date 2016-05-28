@@ -271,8 +271,8 @@ void CartesianPlotLegendDock::retranslateUi() {
 
 // "General"-tab
 void CartesianPlotLegendDock::nameChanged() {
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
 	m_legend->setName(ui.leName->text());
 }
@@ -528,8 +528,8 @@ void CartesianPlotLegendDock::selectFile() {
 	}
 
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
-    if (path.isEmpty())
-        return; //cancel was clicked in the file-dialog
+	if (path.isEmpty())
+		return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());
 	if (pos!=-1) {

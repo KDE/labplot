@@ -48,6 +48,8 @@ double nsl_sf_kernel_triweight(double u);
 double nsl_sf_kernel_tricube(double u);
 /* cosine */
 double nsl_sf_kernel_cosine(double u);
+/* semi circle */
+double nsl_sf_kernel_semicircle(double u);
 
 /* kernel on (-inf,inf) */
 /* Gaussian */
@@ -56,6 +58,8 @@ double nsl_sf_kernel_gaussian(double u);
 double nsl_sf_kernel_cauchy(double u);
 /* Logistic */
 double nsl_sf_kernel_logistic(double u);
+/* Picard */
+double nsl_sf_kernel_picard(double u);
 /* Sigmoid */
 double nsl_sf_kernel_sigmoid(double u);
 /* Silverman */

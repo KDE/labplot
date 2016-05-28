@@ -43,7 +43,8 @@
 extern "C" {
 #include <gsl/gsl_math.h>	// gsl_pow_*
 #include <gsl/gsl_sf_gamma.h>	// gsl_sf_choose
-#include "backend/nsl/nsl_sf_kernel.h"	// nsl_sf_kernel_*
+#include "backend/nsl/nsl_stats.h"
+#include "backend/nsl/nsl_sf_kernel.h"
 }
 
 #include <KLocale>
@@ -245,32 +246,60 @@ void XYSmoothCurvePrivate::recalculate() {
 	XYSmoothCurve::SmoothType type = smoothData.type;
 	unsigned int points = smoothData.points;
 	XYSmoothCurve::WeightType weight = smoothData.weight;
+	double percentile = smoothData.percentile;
+	unsigned int order = smoothData.order;
+	nsl_smooth_savgol_mode mode = smoothData.mode;
+	double lvalue = smoothData.lvalue;
+	double rvalue = smoothData.rvalue;
 #ifdef QT_DEBUG
 	qDebug()<<"type:"<<type;
 	qDebug()<<"points ="<<points;
 	qDebug()<<"weight:"<<weight;
+	qDebug()<<"percentile ="<<percentile;
+	qDebug()<<"order ="<<order;
+	qDebug()<<"mode ="<<mode;
+	qDebug()<<"const. values ="<<lvalue<<rvalue;
 #endif
 ///////////////////////////////////////////////////////////
 	int status=0;
 
 	xVector->resize(n);
 	yVector->resize(n);
-	switch(type) {
-	case XYSmoothCurve::MovingAverage:
-	case XYSmoothCurve::MovingAverageLagged:
+	if(type == XYSmoothCurve::SavitzkyGolay) {
+		if(mode == nsl_smooth_savgol_constant)
+			nsl_smooth_savgol_constant_set(lvalue, rvalue);
+		status = nsl_smooth_savgol(ydata, n, points, order, mode);
+
 		for(unsigned int i=0;i<n;i++) {
 			(*xVector)[i] = xdata[i];
+			(*yVector)[i] = ydata[i];
+		}
+	} else {
+	for(unsigned int i=0;i<n;i++) {
+		(*xVector)[i] = xdata[i];
 
-			unsigned int diff,np;
-			if(type == XYSmoothCurve::MovingAverage) {
-				diff = qMin(qMin((points-1)/2,i),n-i-1);
-				np = 2*diff+1;
-			} else {
-				np = qMin(points,i+1);
-				diff = np-1;
-			}
-			qDebug()<<"i ="<<i<<"np ="<<np;
+		unsigned int diff,np;
+		if (type == XYSmoothCurve::MovingAverageLagged) {
+			np = qMin(points,i+1);
+			diff = np-1;
+		} else {
+			diff = qMin(qMin((points-1)/2,i),n-i-1);
+			np = 2*diff+1;
+		}
+#ifdef QT_DEBUG
+		qDebug()<<"i ="<<i<<"np ="<<np;
+#endif
 
+		if(type == XYSmoothCurve::Percentile) {
+			double *values = new double[np];
+			for(unsigned int j=0;j<np;j++)
+				values[j] = ydata[i-diff+j];
+
+			for(unsigned int j=0;j<np;j++)
+				(*yVector)[i] = nsl_stats_quantile(values, 1, np, percentile, nsl_stats_quantile_type4);
+			delete[] values;
+			
+		} else { // MovingAverage*
 			// weight (see https://en.wikipedia.org/wiki/Kernel_%28statistics%29)
 			double sum=0.0, *w = new double[np];
 			switch(weight) {
@@ -387,7 +416,7 @@ void XYSmoothCurvePrivate::recalculate() {
 
 			delete[] w;
 		}
-		break;
+	}
 	}
 
 ///////////////////////////////////////////////////////////
@@ -395,7 +424,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	//write the result
 	smoothResult.available = true;
 	smoothResult.valid = true;
-//	smoothResult.status = QString(gsl_strerror(status));;
+	smoothResult.status = status;
 	smoothResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
@@ -423,6 +452,11 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "type", QString::number(d->smoothData.type) );
 	writer->writeAttribute( "points", QString::number(d->smoothData.points) );
 	writer->writeAttribute( "weight", QString::number(d->smoothData.weight) );
+	writer->writeAttribute( "percentile", QString::number(d->smoothData.percentile) );
+	writer->writeAttribute( "order", QString::number(d->smoothData.order) );
+	writer->writeAttribute( "mode", QString::number(d->smoothData.mode) );
+	writer->writeAttribute( "lvalue", QString::number(d->smoothData.lvalue) );
+	writer->writeAttribute( "rvalue", QString::number(d->smoothData.rvalue) );
 	writer->writeEndElement();// smoothData
 
 	// smooth results (generated columns)
@@ -490,6 +524,35 @@ bool XYSmoothCurve::load(XmlStreamReader* reader){
 			else
 				d->smoothData.weight = (XYSmoothCurve::WeightType) str.toInt();
 
+			str = attribs.value("percentile").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'percentile'"));
+			else
+				d->smoothData.percentile = str.toDouble();
+
+			str = attribs.value("order").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'order'"));
+			else
+				d->smoothData.order = str.toInt();
+
+			str = attribs.value("mode").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'mode'"));
+			else
+				d->smoothData.mode = (nsl_smooth_savgol_mode) str.toInt();
+
+			str = attribs.value("lvalue").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'lvalue'"));
+			else
+				d->smoothData.lvalue = str.toDouble();
+
+			str = attribs.value("rvalue").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'rvalue'"));
+			else
+				d->smoothData.rvalue = str.toDouble();
 		} else if (reader->name() == "smoothResult") {
 
 			attribs = reader->attributes();

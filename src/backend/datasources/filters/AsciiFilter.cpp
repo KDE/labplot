@@ -327,8 +327,8 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 			}
 		}
 	}else {
-		separator = separatingCharacter.replace(QString("TAB"), QString("\t"), Qt::CaseInsensitive);
-		separator = separatingCharacter.replace(QString("SPACE"), QString(" "), Qt::CaseInsensitive);
+		separator = separatingCharacter.replace(QLatin1String("TAB"), QLatin1String("\t"), Qt::CaseInsensitive);
+		separator = separatingCharacter.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
 		lineStringList = line.split( separator, QString::SplitBehavior(skipEmptyParts) );
 	}
 #ifdef QT_DEBUG
@@ -383,7 +383,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	QVector<QVector<double>*> dataPointers;
 
 	if(dataSource != NULL)
-		columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
+		columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols, vectorNameList);
 
 	//header: import the values in the first line, if they were not used as the header (as the names for the columns)
 	bool isNumber;
@@ -394,12 +394,12 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 				if (dataSource != NULL)
 					isNumber ? dataPointers[n]->operator[](0) = value : dataPointers[n]->operator[](0) = NAN;
 				else
-					isNumber ? dataString<<QString::number(value)<<" " : dataString<<QString("NAN ");
+					isNumber ? dataString<<QString::number(value)<<" " : dataString<<QLatin1String("NAN ");
 			} else {
 				if (dataSource != NULL)
 					dataPointers[n]->operator[](0) = NAN;
 				else
-					dataString<<QString("NAN ");
+					dataString<<QLatin1String("NAN ");
 			}
 		}
 		dataString<<"\n";
@@ -436,7 +436,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 				if (dataSource != NULL)
 					dataPointers[n]->operator[](currentRow) = NAN;
 				else
-					dataString<<QString("NAN ");
+					dataString<<QLatin1String("NAN ");
 			}
 		}
 

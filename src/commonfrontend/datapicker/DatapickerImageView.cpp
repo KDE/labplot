@@ -708,7 +708,7 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		printer.setPaperSize( QSizeF(w, h), QPrinter::Millimeter);
 		printer.setPageMargins(0,0,0,0, QPrinter::Millimeter);
 		printer.setPrintRange(QPrinter::PageRange);
-		printer.setCreator( QString("LabPlot ") + LVERSION );
+		printer.setCreator( QLatin1String("LabPlot ") + LVERSION );
 
 		QPainter painter(&printer);
 		painter.setRenderHint(QPainter::Antialiasing);
