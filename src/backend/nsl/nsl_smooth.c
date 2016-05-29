@@ -46,7 +46,7 @@ int nsl_smooth_moving_average(double *data, unsigned int n, unsigned int points,
 	for(i=0;i<n;i++) {
 		unsigned int np=points;
 		unsigned int half=(points-1)/2;
-		if(mode == nsl_smooth_pad_none)  {
+		if(mode == nsl_smooth_pad_none) { /* reduce points */
 			half = GSL_MIN(GSL_MIN((points-1)/2,i),n-i-1);
 			np = 2*half+1;
 		}
@@ -162,7 +162,6 @@ int nsl_smooth_moving_average(double *data, unsigned int n, unsigned int points,
 	return 0;
 }
 
-/*TODO: use mode */
 int nsl_smooth_moving_average_lagged(double *data, unsigned int n, unsigned int points, nsl_smooth_weight_type weight, nsl_smooth_pad_mode mode) {
 	unsigned int i,j;
 	double *result = (double *)malloc(n*sizeof(double));
@@ -170,9 +169,12 @@ int nsl_smooth_moving_average_lagged(double *data, unsigned int n, unsigned int 
 		result[i]=0;
 
 	for(i=0;i<n;i++) {
-		unsigned int diff,np;
-		np = GSL_MIN(points,i+1);
-		diff = np-1;
+		unsigned int np=points;
+		unsigned int half=(points-1)/2;
+		if(mode == nsl_smooth_pad_none) { /* reduce points */
+			np = GSL_MIN(points,i+1);
+			half = np-1;
+		}
 
 		/* weight */
 		double sum=0.0, *w = (double *)malloc(np*sizeof(double));
@@ -236,12 +238,50 @@ int nsl_smooth_moving_average_lagged(double *data, unsigned int n, unsigned int 
 			break;
 		}
 
-		/* calculate weighted average */
+		/*printf("(%d) w:",i);
 		for(j=0;j<np;j++)
-			result[i] += w[j]*data[i-diff+j];
+			printf(" %g",w[j]);
+		printf(" (half=%d) index = ",half);*/
+
+		/* calculate weighted average */
+		for(j=0;j<np;j++) {
+			int index=i-np+1+j;
+			switch(mode) {
+			case nsl_smooth_pad_none:
+				result[i] += w[j]*data[i-half+j];
+				/*printf(" %d",index);*/
+				break;
+			case nsl_smooth_pad_interp:
+				printf("not implemented yet\n");
+				break;
+			case nsl_smooth_pad_mirror:
+				index=abs(index);
+				/*printf(" %d",index);*/
+				result[i] += w[j]*data[index];
+				break;
+			case nsl_smooth_pad_nearest:
+				/*printf(" %d",GSL_MAX(0,index));*/
+				result[i] += w[j]*data[index];
+				break;
+			case nsl_smooth_pad_constant:
+				if(index < 0)
+					result[i] += w[j]*nsl_smooth_pad_constant_lvalue;
+				else
+					result[i] += w[j]*data[index];
+
+				break;
+			case nsl_smooth_pad_periodic:
+				if(index < 0)
+					index += n;
+				/*printf(" %d",index);*/
+				result[i] += w[j]*data[index];
+				break;
+			}
+		}
+		/*puts("");*/
 		free(w);
 	}
-	
+
 	for (i=0; i<n; i++)
 		data[i]=result[i];
 	free(result);

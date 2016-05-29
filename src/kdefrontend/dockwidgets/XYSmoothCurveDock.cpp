@@ -292,7 +292,7 @@ void XYSmoothCurveDock::typeChanged() {
 	if(type == XYSmoothCurve::MovingAverage || type == XYSmoothCurve::MovingAverageLagged) {
 		uiGeneralTab.lWeight->show();
 		uiGeneralTab.cbWeight->show();
-		// if mode == nls_smooth_
+		// disable interp pad model for MA and MAL
 		pad_interp_item->setFlags(pad_interp_item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 	} else {
 		uiGeneralTab.lWeight->hide();
@@ -303,9 +303,13 @@ void XYSmoothCurveDock::typeChanged() {
 	if(type == XYSmoothCurve::MovingAverageLagged) {
 		uiGeneralTab.sbPoints->setSingleStep(1);
 		uiGeneralTab.sbPoints->setMinimum(2);
+		uiGeneralTab.lRightValue->hide();
+		uiGeneralTab.sbRightValue->hide();
 	} else {
 		uiGeneralTab.sbPoints->setSingleStep(2);
 		uiGeneralTab.sbPoints->setMinimum(3);
+		uiGeneralTab.lRightValue->show();
+		uiGeneralTab.sbRightValue->show();
 	}
 
 	if(type == XYSmoothCurve::Percentile) {
@@ -362,8 +366,13 @@ void XYSmoothCurveDock::modeChanged() {
 	if(m_smoothData.mode == nsl_smooth_pad_constant) {
 		uiGeneralTab.lLeftValue->show();
 		uiGeneralTab.sbLeftValue->show();
-		uiGeneralTab.lRightValue->show();
-		uiGeneralTab.sbRightValue->show();
+		if(m_smoothData.type == XYSmoothCurve::MovingAverageLagged) {
+			uiGeneralTab.lRightValue->hide();
+			uiGeneralTab.sbRightValue->hide();
+		} else {
+			uiGeneralTab.lRightValue->show();
+			uiGeneralTab.sbRightValue->show();
+		}
 	} else {
 		uiGeneralTab.lLeftValue->hide();
 		uiGeneralTab.sbLeftValue->hide();
