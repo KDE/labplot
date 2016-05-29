@@ -2102,7 +2102,7 @@ void XYCurveDock::loadConfigFromTemplate(KConfig& config) {
 void XYCurveDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group( "XYCurve" );
 
-  	//General
+	//General
 	//we don't load/save the settings in the general-tab, since they are not style related.
 	//It doesn't make sense to load/save them in the template.
 	//This data is read in XYCurveDock::setCurves().
@@ -2181,7 +2181,7 @@ void XYCurveDock::loadConfig(KConfig& config) {
 void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group( "XYCurve" );
 
-  	//General
+	//General
 	//we don't load/save the settings in the general-tab, since they are not style related.
 	//It doesn't make sense to load/save them in the template.
 

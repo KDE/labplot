@@ -1274,7 +1274,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			else if(H5Tequal(dtype,H5T_STD_U64LE) || H5Tequal(dtype,H5T_STD_U64BE) || H5Tequal(dtype,H5T_NATIVE_ULLONG))
 				dataString = readHDFData1D<unsigned long long>(dataset, H5T_NATIVE_ULLONG, rows, lines, dataPointers[0]);
 			else {
-				dataString<<"Unsupported integer type for rank=1";
+				dataString<<i18n("Unsupported integer type for rank=1");
 				qDebug()<<dataString.join(" ");
 			}
 
@@ -1288,7 +1288,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			else if(H5Tequal(dtype,H5T_NATIVE_LDOUBLE))
 				dataString = readHDFData1D<long double>(dataset, H5T_NATIVE_LDOUBLE, rows, lines, dataPointers[0]);
 			else {
-				dataString<<"Unsupported float type for rank=1";
+				dataString<<i18n("Unsupported float type for rank=1");
 				qDebug()<<dataString.join(" ");
 			}
 			break;
@@ -1318,7 +1318,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		case H5T_ARRAY:
 		case H5T_NO_CLASS:
 		case H5T_NCLASSES: {
-			dataString<<"rank = 1 not implemented yet for type "<<translateHDFClass(dclass);
+			dataString<<i18n("rank = 1 not implemented yet for type %1").arg(translateHDFClass(dclass));
 			qDebug()<<dataString.join("");
 		}
 		default:
@@ -1401,7 +1401,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			else if(H5Tequal(dtype,H5T_STD_U64LE) || H5Tequal(dtype,H5T_STD_U64BE) || H5Tequal(dtype,H5T_NATIVE_ULLONG))
 				dataString = readHDFData2D<unsigned long long>(dataset, H5T_NATIVE_ULLONG, rows, cols, lines, dataPointers);
 			else {
-				dataString<<"Unsupported integer type for rank=2";
+				dataString<<i18n("Unsupported integer type for rank=2");
 				qDebug()<<dataString.join(" ");
 			}
 			break;
@@ -1414,23 +1414,21 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			else if(H5Tequal(dtype,H5T_NATIVE_LDOUBLE))
 				dataString = readHDFData2D<long double>(dataset, H5T_NATIVE_LDOUBLE, rows, cols, lines, dataPointers);
 			else {
-				dataString<<"Unsupported float type for rank=2";
+				dataString<<i18n("Unsupported float type for rank=2");
 				qDebug()<<dataString.join(" ");
 			}
 			break;
 		}
 		case H5T_COMPOUND: {
 			dataString<<readHDFCompound(dtype);
-#ifdef QT_DEBUG
 			qDebug()<<dataString.join("");
-#endif
 			dataString<<readHDFCompoundData2D(dataset,dtype,rows,cols,lines);
 			break;
 		}
 		case H5T_STRING: {
 			//TODO
-			dataString<<translateHDFClass(dclass)<<" not implemented yet";
-			dataString<<", size = "<<QString::number(typeSize);
+			dataString<<translateHDFClass(dclass)<<" " << i18n("not implemented yet");
+			dataString<<", " << i18n("size = %1").arg(typeSize);
 			qDebug()<<dataString.join("");
 			break;
 		}
@@ -1452,7 +1450,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		break;
 	}
 	default: {
-		QString message = "rank = "+QString::number(rank)+" not supported";
+		QString message = i18n("rank = %1 not supported").arg(rank);
 		qDebug()<<message;
 		dataString<<message.replace(' ',QChar::Nbsp);
 	}

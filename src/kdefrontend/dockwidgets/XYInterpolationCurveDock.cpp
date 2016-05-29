@@ -471,7 +471,7 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 	}
 
 	//const XYInterpolationCurve::InterpolationData& interpolationData = m_interpolationCurve->interpolationData();
-	QString str = i18n("status") + ": " + interpolationResult.status + "<br>";
+	QString str = i18n("status:") + " " + interpolationResult.status + "<br>";
 
 	if (!interpolationResult.valid) {
 		uiGeneralTab.teResult->setText(str);

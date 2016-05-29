@@ -414,7 +414,7 @@ void XYSmoothCurveDock::showSmoothResult() {
 	}
 
 	//const XYSmoothCurve::SmoothData& smoothData = m_smoothCurve->smoothData();
-	QString str = i18n("status") + ": " + smoothResult.status + "<br>";
+	QString str = i18n("status:") + " " + smoothResult.status + "<br>";
 
 	if (!smoothResult.valid) {
 		uiGeneralTab.teResult->setText(str);
