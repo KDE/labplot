@@ -102,11 +102,12 @@ void XYSmoothCurveDock::setupGeneral() {
 //	uiGeneralTab.cbWeight->addItem(i18n("Gaussian"));
 //	etc. -> see nsl_sf_kernel
 
+	uiGeneralTab.cbMode->addItem(i18n("none"));
 	uiGeneralTab.cbMode->addItem(i18n("interpolating"));
 	uiGeneralTab.cbMode->addItem(i18n("mirror"));
 	uiGeneralTab.cbMode->addItem(i18n("nearest"));
 	uiGeneralTab.cbMode->addItem(i18n("constant"));
-	uiGeneralTab.cbMode->addItem(i18n("wrap"));
+	uiGeneralTab.cbMode->addItem(i18n("periodic"));
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
@@ -165,7 +166,7 @@ void XYSmoothCurveDock::initGeneralTab() {
 	uiGeneralTab.cbWeight->setCurrentIndex(m_smoothData.weight);
 	uiGeneralTab.sbPercentile->setValue(m_smoothData.percentile);
 	uiGeneralTab.sbOrder->setValue(m_smoothData.order);
-	uiGeneralTab.cbMode->setCurrentIndex(m_smoothData.mode-1);
+	uiGeneralTab.cbMode->setCurrentIndex(m_smoothData.mode);
 	modeChanged();	// needed, when mode does not change
 	uiGeneralTab.sbLeftValue->setValue(m_smoothData.lvalue);
 	uiGeneralTab.sbRightValue->setValue(m_smoothData.rvalue);
@@ -286,13 +287,19 @@ void XYSmoothCurveDock::typeChanged() {
 	XYSmoothCurve::SmoothType type = (XYSmoothCurve::SmoothType)uiGeneralTab.cbType->currentIndex();
 	m_smoothData.type = type;
 
+	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbMode->model());
+	QStandardItem* pad_interp_item = model->item(nsl_smooth_pad_interp);
 	if(type == XYSmoothCurve::MovingAverage || type == XYSmoothCurve::MovingAverageLagged) {
 		uiGeneralTab.lWeight->show();
 		uiGeneralTab.cbWeight->show();
+		// if mode == nls_smooth_
+		pad_interp_item->setFlags(pad_interp_item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 	} else {
 		uiGeneralTab.lWeight->hide();
 		uiGeneralTab.cbWeight->hide();
+		pad_interp_item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 	}
+
 	if(type == XYSmoothCurve::MovingAverageLagged) {
 		uiGeneralTab.sbPoints->setSingleStep(1);
 		uiGeneralTab.sbPoints->setMinimum(2);
@@ -300,6 +307,7 @@ void XYSmoothCurveDock::typeChanged() {
 		uiGeneralTab.sbPoints->setSingleStep(2);
 		uiGeneralTab.sbPoints->setMinimum(3);
 	}
+
 	if(type == XYSmoothCurve::Percentile) {
 		uiGeneralTab.lPercentile->show();
 		uiGeneralTab.sbPercentile->show();
@@ -307,18 +315,16 @@ void XYSmoothCurveDock::typeChanged() {
 		uiGeneralTab.lPercentile->hide();
 		uiGeneralTab.sbPercentile->hide();
 	}
+
 	if(type == XYSmoothCurve::SavitzkyGolay) {
 		uiGeneralTab.sbPoints->setValue(5);
 		uiGeneralTab.lOrder->show();
 		uiGeneralTab.sbOrder->show();
-		uiGeneralTab.lMode->show();
-		uiGeneralTab.cbMode->show();
 	} else {
 		uiGeneralTab.lOrder->hide();
 		uiGeneralTab.sbOrder->hide();
-		uiGeneralTab.lMode->hide();
-		uiGeneralTab.cbMode->hide();
 	}
+	
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
@@ -333,7 +339,7 @@ void XYSmoothCurveDock::pointsChanged() {
 }
 
 void XYSmoothCurveDock::weightChanged() {
-	m_smoothData.weight = (XYSmoothCurve::WeightType)uiGeneralTab.cbWeight->currentIndex();
+	m_smoothData.weight = (nsl_smooth_weight_type)uiGeneralTab.cbWeight->currentIndex();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
@@ -351,9 +357,9 @@ void XYSmoothCurveDock::orderChanged() {
 }
 
 void XYSmoothCurveDock::modeChanged() {
-	m_smoothData.mode = (nsl_smooth_savgol_mode)(uiGeneralTab.cbMode->currentIndex()+1);
+	m_smoothData.mode = (nsl_smooth_pad_mode)(uiGeneralTab.cbMode->currentIndex());
 
-	if(m_smoothData.mode == nsl_smooth_savgol_constant) {
+	if(m_smoothData.mode == nsl_smooth_pad_constant) {
 		uiGeneralTab.lLeftValue->show();
 		uiGeneralTab.sbLeftValue->show();
 		uiGeneralTab.lRightValue->show();
