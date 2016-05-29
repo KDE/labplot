@@ -1264,7 +1264,7 @@ void CartesianPlotDock::load() {
 }
 
 void CartesianPlotDock::loadConfig(KConfig& config) {
-// 	KConfigGroup group = config.group( "CartesianPlot" );
+	KConfigGroup group = config.group("CartesianPlot");
 
 	//General
 	//we don't load/save the settings in the general-tab, since they are not style related.
@@ -1272,14 +1272,13 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	//This data is read in CartesianPlotDock::setPlots().
 
 	//Title
-	KConfigGroup group = config.group("PlotTitle");
-	labelWidget->loadConfig(group);
+	KConfigGroup plotTitleGroup = config.group("CartesianPlotTitle");
+	labelWidget->loadConfig(plotTitleGroup);
 
 	//Scale breakings
 	//TODO
 
 	//Background-tab
-	group = config.group("PlotArea");
 	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_plot->plotArea()->backgroundType()) );
 	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) m_plot->plotArea()->backgroundColorStyle()) );
 	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) m_plot->plotArea()->backgroundImageStyle()) );
@@ -1304,21 +1303,20 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 }
 
 void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
-// 	KConfigGroup group = config.group( "CartesianPlot" );
+	KConfigGroup group = config.group("CartesianPlot");
 
 	//General
 	//we don't load/save the settings in the general-tab, since they are not style related.
 	//It doesn't make sense to load/save them in the template.
 
 	//Title
-	KConfigGroup group = config.group("PlotTitle");
-	labelWidget->saveConfig(group);
+	KConfigGroup plotTitleGroup = config.group("CartesianPlotTitle");
+	labelWidget->saveConfig(plotTitleGroup);
 
 	//Scale breakings
 	//TODO
 
 	//Background
-	group = config.group("PlotArea");
 	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
 	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
 	group.writeEntry("BackgroundImageStyle", ui.cbBackgroundImageStyle->currentIndex());
