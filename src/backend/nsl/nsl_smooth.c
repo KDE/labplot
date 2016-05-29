@@ -289,19 +289,59 @@ int nsl_smooth_moving_average_lagged(double *data, unsigned int n, unsigned int 
 	return 0;
 }
 
-/*TODO: use mode */
 int nsl_smooth_percentile(double *data, unsigned int n, unsigned int points, double percentile, nsl_smooth_pad_mode mode) {
-	unsigned int i,j,diff,np;
+	unsigned int i,j;
 	double *result = (double *)malloc(n*sizeof(double));
 
 	for(i=0;i<n;i++) {
-		diff = GSL_MIN(GSL_MIN((points-1)/2,i),n-i-1);
-		np = 2*diff+1;
+		unsigned int np=points;
+		unsigned int half=(points-1)/2;
+		if(mode == nsl_smooth_pad_none) { /* reduce points */
+			half = GSL_MIN(GSL_MIN((points-1)/2,i),n-i-1);
+			np = 2*half+1;
+		}
 
 		double *values = (double *)malloc(np*sizeof(double));
-		for(j=0;j<np;j++)
-			values[j] = data[i-diff+j];
+		for(j=0;j<np;j++) {
+			int index = i-half+j;
+			switch(mode) {
+			case nsl_smooth_pad_none:
+				/*printf(" %d",index);*/
+				values[j] = data[index];
+				break;
+			case nsl_smooth_pad_interp:
+				printf("not implemented yet\n");
+				break;
+			case nsl_smooth_pad_mirror:
+				index=abs(index);
+				/*printf(" %d",GSL_MIN(index,2*(n-1)-index));*/
+				values[j] = data[GSL_MIN(index,2*(n-1)-index)];
+				break;
+			case nsl_smooth_pad_nearest:
+				/*printf(" %d",GSL_MIN(n-1,GSL_MAX(0,index)));*/
+				values[j] = data[GSL_MIN(n-1,GSL_MAX(0,index))];
+				break;
+			case nsl_smooth_pad_constant:
+				if(index<0)
+					values[j] = nsl_smooth_pad_constant_lvalue;
+				else if(index>(int)n-1)
+					values[j] = nsl_smooth_pad_constant_rvalue;
+				else
+					values[j] = data[index];
+				break;
+			case nsl_smooth_pad_periodic:
+				if(index<0)
+					index = n+index;
+				else if(index>(int)n-1)
+					index = index-n;
+				/*printf(" %d",index);*/
+				values[j] = data[index];
+				break;
+			}
+		}
+		/*puts("");*/
 
+		/*using type 4 as default */
 		result[i] = nsl_stats_quantile(values, 1, np, percentile, nsl_stats_quantile_type4);
 		free(values);
 	}

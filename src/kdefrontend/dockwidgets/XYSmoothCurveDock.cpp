@@ -315,6 +315,8 @@ void XYSmoothCurveDock::typeChanged() {
 	if(type == XYSmoothCurve::Percentile) {
 		uiGeneralTab.lPercentile->show();
 		uiGeneralTab.sbPercentile->show();
+		// disable interp pad model for MA and MAL
+		pad_interp_item->setFlags(pad_interp_item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 	} else {
 		uiGeneralTab.lPercentile->hide();
 		uiGeneralTab.sbPercentile->hide();
