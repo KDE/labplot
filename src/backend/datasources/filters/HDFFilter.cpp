@@ -298,7 +298,7 @@ QStringList HDFFilterPrivate::readHDFData1D(hid_t dataset, hid_t type, int rows,
 	status = H5Dread(dataset, type, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
 	handleError(status,"H5Dread");
 	for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
-		if (dataPointer)
+		if (dataPointer != NULL)
 			dataPointer->operator[](i-startRow+1) = data[i];
 		else
 			dataString<<QString::number(static_cast<double>(data[i]));
@@ -325,7 +325,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 		handleError(status,"H5Tinsert");
 
 		QVector<double>* dataP=NULL;
-		if(dataPointer.size()>0)
+		if(dataPointer[0] != NULL)
 			dataP = dataPointer[m];
 
 		if(H5Tequal(mtype,H5T_STD_I8LE) || H5Tequal(mtype,H5T_STD_I8BE) || H5Tequal(mtype,H5T_NATIVE_CHAR)) {
@@ -393,7 +393,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 
 	// create dataString from data
 	QStringList dataString;
-	if(dataPointer.size() == 0) {
+	if(dataPointer[0] == NULL) {
 		for(int i=0;i<qMin(rows,lines);i++) {
 			dataString<<"(";
 
@@ -429,7 +429,7 @@ QStringList HDFFilterPrivate::readHDFData2D(hid_t dataset, hid_t type, int rows,
 
 	for (int i=0; i < qMin(rows,lines); i++) {
 		for (int j=0; j < cols; j++) {
-			if (dataPointer.size()>0)
+			if (dataPointer[0] != NULL)
 				dataPointer[j-startColumn+1]->operator[](i-startRow+1) = data[i][j];
 			else
 				dataString<<QString::number(static_cast<double>(data[i][j]))<<" ";
@@ -457,7 +457,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 		status = H5Tinsert(ctype, H5Tget_member_name(tid,m), 0, mtype);
 		handleError(status,"H5Tinsert");
 
-		QVector< QVector<double>* > dummy;
+		QVector< QVector<double>* > dummy(1,NULL);
 		if(H5Tequal(mtype,H5T_STD_I8LE) || H5Tequal(mtype,H5T_STD_I8BE) || H5Tequal(mtype,H5T_NATIVE_CHAR)) {
 			switch(sizeof(H5T_NATIVE_CHAR)) {
 			case 1:
@@ -1149,7 +1149,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	int columnOffset = 0;	// offset to import data
 	int actualRows=0, actualCols=0;	// rows and cols to read
 
-	QVector<QVector<double>*> dataPointers(0,NULL);
+	// this is used to store the data read from the dataSource
+	// check for dataPointers[0] != NULL to decide if dataSource should be used
+	QVector<QVector<double>*> dataPointers(1,NULL);
 	switch(rank) {
 	case 0: {
 		actualRows=1;
