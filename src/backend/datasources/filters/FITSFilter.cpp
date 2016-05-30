@@ -33,6 +33,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include <QDebug>
 #include <QMultiMap>
+#include <QString>
 
 /*!
  * \class FITSFilter
@@ -156,16 +157,15 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
     int actualCols;
     int columnOffset = 0;
 
-    long pixelCount;
-    double* data;
     QStringList columnNames;
     QList<int> columnsWidth;
 
-    status = 0;
     QStringList dataString;
     int noDataSource = (dataSource == NULL);
 
     if(chduType == IMAGE_HDU) {
+        long pixelCount;
+        double* data;
         if (fits_get_img_param(fitsFile, maxdim,&bitpix, &naxis, naxes, &status)) {
             printError(status);
             return QString();
@@ -214,6 +214,31 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 
         delete data;
 
+        Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+        if (spreadsheet) {
+            QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
+            for ( int n=0; n<actualCols; n++ ){
+                Column* column = spreadsheet->column(columnOffset+n);
+                column->setComment(comment);
+                column->setUndoAware(true);
+                if (importMode==AbstractFileFilter::Replace) {
+                    column->setSuppressDataChangedSignal(false);
+                    column->setChanged();
+                }
+            }
+            spreadsheet->setUndoAware(true);
+            fits_close_file(fitsFile, &status);
+
+            return dataString.join(QLatin1String(""));
+        }
+
+        Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+        if (matrix) {
+            matrix->setSuppressDataChangedSignal(false);
+            matrix->setChanged();
+            matrix->setUndoAware(true);
+        }
+
     } else if ((chduType == ASCII_TBL) || (chduType == BINARY_TBL)) {
         fits_get_num_cols(fitsFile, &actualCols, &status);
         fits_get_num_rows(fitsFile, &actualRows, &status);
@@ -230,70 +255,98 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
             columnsWidth.append(colWidth);
             columnNames.append(QLatin1String(columnName));
         }
+
         status = 0;
-        char* array;
         if (lines == -1) {
             lines = actualRows;
         } else if (lines > actualRows) {
             lines = actualRows;
         }
+
+        QVector<QStringList*> dataPointers;
+        dataPointers.reserve(actualCols);
+
+        if (!noDataSource) {
+            Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+            if(spreadsheet) {
+                columnOffset = spreadsheet->resize(importMode,columnNames,actualCols);
+
+                if (importMode==AbstractFileFilter::Replace) {
+                    spreadsheet->clear();
+                    spreadsheet->setRowCount(lines);
+                } else {
+                    if (spreadsheet->rowCount() < lines)
+                        spreadsheet->setRowCount(lines);
+                }
+                for (int n=0; n<actualCols; n++ ){
+                    Column* column = spreadsheet->column(columnOffset+n);
+                    column->setColumnMode(AbstractColumn::Text);
+                    //TODO column units as comments (?)
+                    //column->setComment();
+                    QStringList* dataPointer = static_cast<QStringList*>(column->data());
+
+                    dataPointers.push_back(dataPointer);
+                    column->setWidth(columnsWidth.at(n));
+                }
+            } else {
+                return dataString.join(QLatin1String(""));
+            }
+        }
+
+        char* array = new char[1000];
         for (int row = 1; row <= lines; ++row) {
             for (int col = 1; col <= actualCols; ++col) {
+
                 if(fits_read_col_str(fitsFile, col, row, 1, 1, NULL, &array, 0, &status)) {
                     qDebug() << "error on table reading";
                     printError(status);
                     dataString << QLatin1String(" ");
                 }
                 if (!noDataSource) {
-                    //TODO
+                    QString str = QString::fromLatin1(array);
+                    dataPointers[col-1]->append(str.simplified());
                 } else {
-                    QString tmpColstr = QLatin1String(array);
+                    //TODO - whitespaces can appear in cells too
+                    QString tmpColstr = QString::fromLatin1(array);
                     tmpColstr = tmpColstr.simplified();
                     tmpColstr.replace(QLatin1String(" "), QLatin1String(""));
+
                     dataString << tmpColstr << QLatin1String(" ");
                 }
             }
             dataString << QLatin1String("\n");
         }
+
+        if (!noDataSource) {
+            Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+            if(spreadsheet) {
+
+                for (int n=0; n<actualCols; n++ ){
+                    Column* column = spreadsheet->column(columnOffset+n);
+                    column->setSuppressDataChangedSignal(true);
+
+                    for (int i = 0; i < spreadsheet->rowCount();++i) {
+                        column->setTextAt(i, dataPointers[n]->at(i));
+                    }
+
+                    if (importMode==AbstractFileFilter::Replace) {
+                        column->setSuppressDataChangedSignal(false);
+                        column->setChanged();
+                    }
+                }
+                spreadsheet->setUndoAware(true);
+            }
+        }
+        fits_close_file(fitsFile, &status);
+
+        return dataString.join(QLatin1String(""));
     } else {
         qDebug() << i18n("Incorrect header type!");
     }
 
-    // make everything undo/redo-able again
-    // set column comments in spreadsheet
-    // TODO - this to image extension
-    Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-    if (spreadsheet) {
-        QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
-        for ( int n=0; n<actualCols; n++ ){
-            Column* column = spreadsheet->column(columnOffset+n);
-            column->setComment(comment);
-            if ((chduType == ASCII_TBL) || (chduType == BINARY_TBL)) {
-                column->setName(columnNames.at(n));
-                column->setWidth(columnsWidth.at(n));
-            }
-            column->setUndoAware(true);
-            if (importMode==AbstractFileFilter::Replace) {
-                column->setSuppressDataChangedSignal(false);
-                column->setChanged();
-            }
-        }
-        spreadsheet->setUndoAware(true);
-        fits_close_file(fitsFile, &status);
-
-        return dataString.join(QLatin1String(""));
-    }
-
-    Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-    if (matrix) {
-        matrix->setSuppressDataChangedSignal(false);
-        matrix->setChanged();
-        matrix->setUndoAware(true);
-    }
-
     fits_close_file(fitsFile, &status);
 
-    #else
+#else
     Q_UNUSED(fileName)
     Q_UNUSED(dataSource)
     Q_UNUSED(importMode)
