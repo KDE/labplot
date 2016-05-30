@@ -854,8 +854,6 @@ void ImportFileWidget::refreshPreview() {
 		break;
 	}
     case FileDataSource::FITS: {
-        //TODO
-
         FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
         lines = fitsOptionsWidget.sbPreviewLines->value();
         //filename+ lines
@@ -867,23 +865,21 @@ void ImportFileWidget::refreshPreview() {
         tmpTableWidget = fitsOptionsWidget.twPreview;
         break;
     }
-
 	}
 
     // fill the table widget
     if( !importedText.isEmpty() ) {
         tmpTableWidget->clear();
 
-        QStringList lineStrings = importedText.split("\n");
+        QStringList lineStrings = importedText.split(QLatin1String("\n"));
         tmpTableWidget->setRowCount(qMax(lineStrings.size()-1,1));
         for(int i=0; i<lineStrings.size(); i++) {
-            QStringList lineString = lineStrings[i].split(" ");
+            QStringList lineString = lineStrings[i].split(QLatin1String(" "));
             if(i==0)
                 tmpTableWidget->setColumnCount(qMax(lineString.size()-1,1));
 
             for(int j=0; j<lineString.size(); j++) {
-                QTableWidgetItem* item = new QTableWidgetItem();
-                item->setText(lineString[j]);
+                QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
                 tmpTableWidget->setItem(i,j,item);
             }
         }

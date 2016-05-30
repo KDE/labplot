@@ -171,7 +171,17 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
             return QString();
         }
 
-        pixelCount = naxes[0] * naxes[1];
+        actualRows = naxes[1];
+        actualCols = naxes[0];
+        if (lines == -1) {
+                lines = actualRows;
+        } else {
+            if (lines > actualRows) {
+                lines = actualRows;
+            }
+        }
+
+        pixelCount = lines * actualCols;
         data = new double[pixelCount];
 
         if (!data) {
@@ -187,29 +197,22 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         }
 
         QVector<QVector<double>*> dataPointers;
-        actualRows = naxes[1];
-        actualCols = naxes[0];
 
-        if (lines == -1) {
-                lines = actualRows;
-        } else {
-            if (lines > actualRows) {
-                lines = actualRows;
-            }
-        }
+        dataString.reserve(lines * actualCols);
         if (!noDataSource) {
             columnOffset = dataSource->create(dataPointers, importMode, lines, actualCols);
         }
-
+        QLatin1String ws = QLatin1String(" ");
+        QLatin1String nl = QLatin1String("\n");
         for (int i = 0; i < lines; ++i) {
             for (int j = 0; j < actualCols; ++j) {
                 if (!noDataSource) {
                     dataPointers[j]->operator [](i) = data[i * actualCols + j];
                 } else {
-                    dataString << QString::number(data[i*actualCols +j]) << QLatin1String(" ");
+                    dataString << QString::number(data[i*actualCols +j]) << ws;
                 }
             }
-            dataString << QLatin1String("\n");
+            dataString << nl;
         }
 
         delete data;
