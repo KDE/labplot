@@ -1118,7 +1118,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	if(currentDataSetName.isEmpty()) {
 		//return QString("No data set selected").replace(' ',QChar::Nbsp);
 		ok=false;
-		return QString("No data set selected");
+		return i18n("No data set selected");
 	}
 #ifdef QT_DEBUG
 	qDebug()<<" current data set ="<<currentDataSetName;
