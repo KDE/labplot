@@ -37,7 +37,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 FITSHeaderEditWidget::FITSHeaderEditWidget(AbstractDataSource *dataSource, QWidget *parent) :
     QWidget(parent) {
     ui.setupUi(this);
-    setWindowTitle(i18n("FITS header edit"));
     initActions();
     connectActions();
     initContextMenu();
@@ -51,10 +50,9 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(AbstractDataSource *dataSource, QWidg
     ui.twKeywordsTable->installEventFilter(this);
 
     if (dataSource != NULL) {
-        ui.gbOptions->hide();
+        ui.pbOpenFile->hide();
     }
     connect(ui.pbOpenFile, SIGNAL(clicked()), this, SLOT(openFile()));
-    connect(ui.pbSaveFile, SIGNAL(clicked()), this, SLOT(saveFile()));
     connect(ui.twExtensions, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(fillTable(QTreeWidgetItem*, int)));
 }
 

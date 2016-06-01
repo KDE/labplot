@@ -37,6 +37,7 @@
 
 #include "kdefrontend/matrix/MatrixFunctionDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
+#include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 
 #include <QStackedWidget>
 #include <QTableView>
@@ -1506,5 +1507,12 @@ void MatrixView::showRowStatistics() {
 	}
 }
 
+//TODO
 void MatrixView::editFitsHeader() {
+    FITSHeaderEditDialog* editDialog = new FITSHeaderEditDialog(m_matrix, this);
+    if (editDialog->exec() == KDialog::Accepted) {
+
+    }
+
+    delete editDialog;
 }

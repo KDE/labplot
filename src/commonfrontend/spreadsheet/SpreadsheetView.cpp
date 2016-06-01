@@ -63,7 +63,7 @@
 #include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
 #include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
-#include "kdefrontend/widgets/FITSHeaderEditWidget.h"
+#include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 
 #include <algorithm>
 
@@ -2150,6 +2150,10 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 }
 //TODO
 void SpreadsheetView::editFitsHeader() {
-    FITSHeaderEditWidget* editWidget = new FITSHeaderEditWidget(m_spreadsheet, 0);
-    editWidget->show();
+    FITSHeaderEditDialog* editDialog = new FITSHeaderEditDialog(m_spreadsheet, this);
+    if (editDialog->exec() == KDialog::Accepted) {
+
+    }
+
+    delete editDialog;
 }

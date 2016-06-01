@@ -51,7 +51,7 @@
 #include "kdefrontend/HistoryDialog.h"
 #include "kdefrontend/SettingsDialog.h"
 #include "kdefrontend/GuiObserver.h"
-#include "kdefrontend/widgets/FITSHeaderEditWidget.h"
+#include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 
 #include <QMdiArea>
 #include <QMenu>
@@ -1510,8 +1510,10 @@ void MainWin::exportDialog() {
 }
 //TODO
 void MainWin::editFitsFileDialog() {
-    FITSHeaderEditWidget* editWidget = new FITSHeaderEditWidget(0, 0);
-    editWidget->show();
+    FITSHeaderEditDialog* editDialog = new FITSHeaderEditDialog(0, this);
+    if (editDialog->exec() == KDialog::Accepted) {
+
+    }
 }
 
 /*!
