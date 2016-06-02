@@ -1,7 +1,7 @@
 -----2.3-----
 New features:
 	* Integration of Cantor - Support for different open-source computer algebra systems
-	* Interpolation, Smooth and Fourier filter of 1d data
+	* Various interpolation, smooth and Fourier filter methods for 1d data
 	* Statistics on spreadsheets and matrices
 	* Export of spreadsheets and matrices to LaTeX tables
 	* Filter and search capabilities in the drop down box for the selection of data sources
