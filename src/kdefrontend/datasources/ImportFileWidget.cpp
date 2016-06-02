@@ -722,6 +722,7 @@ void ImportFileWidget::refreshPreview() {
 
 	int lines = ui.sbPreviewLines->value();
 
+	bool ok=true;
 	QTableWidget *tmpTableWidget=0;
 	switch (fileType) {
 	case FileDataSource::Ascii: {
@@ -752,7 +753,7 @@ void ImportFileWidget::refreshPreview() {
 	case FileDataSource::HDF: {
 		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
 		lines = hdfOptionsWidget.sbPreviewLines->value();
-		importedText = filter->readCurrentDataSet(fileName,NULL,AbstractFileFilter::Replace,lines);
+		importedText = filter->readCurrentDataSet(fileName,NULL,ok,AbstractFileFilter::Replace,lines);
 		tmpTableWidget = hdfOptionsWidget.twPreview;
 		break;
 	}
@@ -769,17 +770,27 @@ void ImportFileWidget::refreshPreview() {
 	if( !importedText.isEmpty() ) {
 		tmpTableWidget->clear();
 
-		QStringList lineStrings = importedText.split("\n");
-		tmpTableWidget->setRowCount(qMax(lineStrings.size()-1,1));
-		for(int i=0; i<lineStrings.size(); i++) {
-			QStringList lineString = lineStrings[i].split(" ");
-			if(i==0)
-				tmpTableWidget->setColumnCount(qMax(lineString.size()-1,1));
+		if(!ok) { 
+			// show importedText as error message
+			tmpTableWidget->setRowCount(1);
+			tmpTableWidget->setColumnCount(1);
+			QTableWidgetItem* item = new QTableWidgetItem();
+			item->setText(importedText);
+			tmpTableWidget->setItem(0,0,item);
+		} else {
 
-			for(int j=0; j<lineString.size(); j++) {
-				QTableWidgetItem* item = new QTableWidgetItem();
-				item->setText(lineString[j]);
-				tmpTableWidget->setItem(i,j,item);
+			QStringList lineStrings = importedText.split("\n");
+			tmpTableWidget->setRowCount(qMax(lineStrings.size()-1,1));
+			for(int i=0; i<lineStrings.size(); i++) {
+				QStringList lineString = lineStrings[i].split(" ");
+				if(i==0)
+					tmpTableWidget->setColumnCount(qMax(lineString.size()-1,1));
+
+				for(int j=0; j<lineString.size(); j++) {
+					QTableWidgetItem* item = new QTableWidgetItem();
+					item->setText(lineString[j]);
+					tmpTableWidget->setItem(i,j,item);
+				}
 			}
 		}
 
