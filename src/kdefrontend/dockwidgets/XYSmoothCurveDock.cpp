@@ -308,8 +308,10 @@ void XYSmoothCurveDock::typeChanged() {
 	} else {
 		uiGeneralTab.sbPoints->setSingleStep(2);
 		uiGeneralTab.sbPoints->setMinimum(3);
-		uiGeneralTab.lRightValue->show();
-		uiGeneralTab.sbRightValue->show();
+		if(m_smoothData.mode == nsl_smooth_pad_constant) {
+			uiGeneralTab.lRightValue->show();
+			uiGeneralTab.sbRightValue->show();
+		}
 	}
 
 	if(type == XYSmoothCurve::Percentile) {
