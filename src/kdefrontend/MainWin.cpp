@@ -1202,7 +1202,6 @@ Worksheet* MainWin::activeWorksheet() const {
 */
 void MainWin::newCantorWorksheet(QAction* action) {
 	CantorWorksheet* cantorworksheet = new CantorWorksheet(0, action->data().toString());
-	cantorworksheet->setUndoAware(false);
 	this->addAspectToProject(cantorworksheet);
 }
 

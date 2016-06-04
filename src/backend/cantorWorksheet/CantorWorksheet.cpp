@@ -71,11 +71,12 @@ bool CantorWorksheet::init(QByteArray* content) {
 			return false;
 		}
 		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
-		connect(m_worksheetAccess, SIGNAL(sessionChanged()), this, SLOT(sessionChanged()));
 
 		//load worksheet content if available
 		if(content)
 			m_worksheetAccess->loadWorksheetFromByteArray(content);
+
+		connect(m_worksheetAccess, SIGNAL(sessionChanged()), this, SLOT(sessionChanged()));
 
 		//cantor's session and the variable model
 		m_session = m_worksheetAccess->session();
@@ -138,13 +139,13 @@ void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int las
 }
 
 void CantorWorksheet::sessionChanged() {
-
+	//TODO: signal is never emitted in Cantor
+	project()->setChanged(true);
 }
 
 void CantorWorksheet::modelReset() {
-	for(int i = 0; i < childCount<Column>(); ++i) {
+	for(int i = 0; i < childCount<Column>(); ++i)
 		child<Column>(i)->remove();
-	}
 }
 
 void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last) {

@@ -173,7 +173,6 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			delete cantorWorksheet;
 			return false;
 		}
-		cantorWorksheet->setUndoAware(false);
 		addChild(cantorWorksheet);
 		loaded = true;
 #endif
