@@ -1219,7 +1219,7 @@ void AxisPrivate::retransformTicks(){
 			}
 		} else {
 			majorTickPos = majorTicksColumn->valueAt(iMajor);
-			if (isnan(majorTickPos))
+			if (std::isnan(majorTickPos))
 				break; //stop iterating after the first non numerical value in the column
 		}
 
@@ -1274,7 +1274,7 @@ void AxisPrivate::retransformTicks(){
 					minorTickPos = majorTickPos + (iMinor+1)*minorTicksSpacing;
 				} else {
 					minorTickPos = minorTicksColumn->valueAt(iMinor);
-					if (isnan(minorTickPos))
+					if (std::isnan(minorTickPos))
 						break; //stop iterating after the first non numerical value in the column
 
 					//in the case a custom column is used for the minor ticks, we draw them _once_ for the whole range of the axis.

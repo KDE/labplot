@@ -74,7 +74,7 @@ class Double2StringFilter : public AbstractSimpleFilter
 			if (!m_inputs.value(0)) return QString();
 			if (m_inputs.value(0)->rowCount() <= row) return QString();
 			double inputValue = m_inputs.value(0)->valueAt(row);
-			if (isnan(inputValue)) return QString();
+			if (std::isnan(inputValue)) return QString();
 			return QLocale().toString(inputValue, m_format, m_digits);
 		}
 

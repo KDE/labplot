@@ -39,7 +39,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 
-#include <cmath>	// isnan
+#include <cmath>	// std::isnan
 #include <gsl_errno.h>
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_halfcomplex.h>
@@ -218,7 +218,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	QVector<double> ydataVector;
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!isnan(xDataColumn->valueAt(row)) && !isnan(yDataColumn->valueAt(row))
+		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
 			xdataVector.append(xDataColumn->valueAt(row));

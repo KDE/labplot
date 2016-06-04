@@ -1096,9 +1096,9 @@ void CartesianPlotDock::load(){
 	this->toggleXBreak(m_plot->xRangeBreakingEnabled());
 	if (!m_plot->xRangeBreaks().list.isEmpty()) {
 		const CartesianPlot::RangeBreak& rangeBreak = m_plot->xRangeBreaks().list.first();
-		QString str = isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.start);
+		QString str = std::isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.start);
 		ui.leXBreakStart->setText(str);
-		str = isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.end);
+		str = std::isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.end);
 		ui.leXBreakEnd->setText(str);
 		ui.sbXBreakPosition->setValue(rangeBreak.position*100);
 		ui.cbXBreakStyle->setCurrentIndex(0);
@@ -1114,9 +1114,9 @@ void CartesianPlotDock::load(){
 	this->toggleYBreak(m_plot->yRangeBreakingEnabled());
 	if (!m_plot->yRangeBreaks().list.isEmpty()) {
 		const CartesianPlot::RangeBreak& rangeBreak = m_plot->yRangeBreaks().list.first();
-		QString str = isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.start);
+		QString str = std::isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.start);
 		ui.leYBreakStart->setText(str);
-		str = isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.end);
+		str = std::isnan(rangeBreak.end) ? "" : QString::number(rangeBreak.end);
 		ui.leYBreakEnd->setText(str);
 		ui.sbYBreakPosition->setValue(rangeBreak.position*100);
 		ui.cbYBreakStyle->setCurrentIndex(0);

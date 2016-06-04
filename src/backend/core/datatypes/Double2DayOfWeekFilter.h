@@ -42,7 +42,7 @@ class Double2DayOfWeekFilter : public AbstractSimpleFilter
 		virtual QDate dateAt(int row) const {
 			if (!m_inputs.value(0)) return QDate();
 			double inputValue = m_inputs.value(0)->valueAt(row);
-			if (isnan(inputValue)) return QDate();
+			if (std::isnan(inputValue)) return QDate();
 			// Don't use Julian days here since support for years < 1 is bad
 			// Use 1900-01-01 instead (a Monday)
 			return QDate(1900,1,1).addDays(qRound(inputValue - 1.0));
