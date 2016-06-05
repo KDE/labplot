@@ -38,7 +38,7 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QDate>
 #include <QtCore/QTime>
-#include <math.h>
+#include <cmath>
 #include <QMetaType>
 #include <QDebug>
 #include <KLocale>
@@ -480,7 +480,7 @@ double AbstractColumn::maximum() const{
 	double max = -INFINITY;
 	for (int row = 0; row < rowCount(); row++) {
 		val = valueAt(row);
-		if (isnan(val))
+		if (std::isnan(val))
 			continue;
 
 		if (val > max)
