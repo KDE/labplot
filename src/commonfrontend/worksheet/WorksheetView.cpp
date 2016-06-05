@@ -241,7 +241,7 @@ void WorksheetView::initActions() {
 
 	connect(addNewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
 	connect(addHistogramType, SIGNAL(triggered(QAction*)), this, SLOT(addHistogram(QAction*)));
-	connect(addBarChartGraph,SIGNAL(triggered(QAction*)), this, SLOT(addBarChart(QAction*)));
+	connect(addBarChartGraph,SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
 	connect(mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)));
 	connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
 	connect(magnificationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(magnificationChanged(QAction*)));
@@ -960,18 +960,59 @@ void WorksheetView::mouseModeChanged(QAction* action) {
 //"Add Histogram related slots
 void WorksheetView::addHistogram(QAction* action){
 	WorksheetElement* aspect=0;
+	//histogram will be drawn using the CartesianPlot- x and y axes showing the bin count and magnitute respectively 
 	if(action == addOrdinaryHistogram){
+	  CartesianPlot* plot = new CartesianPlot(i18n("histogram"));
+		plot->initDefault(CartesianPlot::TwoAxes);
+		plot->setMouseMode(m_cartesianPlotMouseMode);
+		aspect = plot;
+		if (tbNewCartesianPlot)
+			tbNewCartesianPlot->setDefaultAction(addOrdinaryHistogram);
 	}
 	else if(action == addCummulativeHistogram){
-	  
+	  CartesianPlot* plot = new CartesianPlot(i18n("histogram"));
+		plot->initDefault(CartesianPlot::TwoAxes);
+		plot->setMouseMode(m_cartesianPlotMouseMode);
+		aspect = plot;
+		if (tbNewCartesianPlot)
+			tbNewCartesianPlot->setDefaultAction(addCummulativeHistogram);  
 	}
 	else if(action == addAvgShiftedHistogram){
+	  CartesianPlot* plot = new CartesianPlot(i18n("histogram"));
+		plot->initDefault(CartesianPlot::TwoAxes);
+		plot->setMouseMode(m_cartesianPlotMouseMode);
+		aspect = plot;
+		if (tbNewCartesianPlot)
+			tbNewCartesianPlot->setDefaultAction(addAvgShiftedHistogram);
 	}
-}
-void WorksheetView::addBarChart(QAction* action)
-{
+	if (!aspect)
+		return;
 
+	m_worksheet->addChild(aspect);
+	handleCartesianPlotActions();
+
+	if (!m_fadeInTimeLine) {
+		m_fadeInTimeLine = new QTimeLine(1000, this);
+		m_fadeInTimeLine->setFrameRange(0, 100);
+		connect(m_fadeInTimeLine, SIGNAL(valueChanged(qreal)), this, SLOT(fadeIn(qreal)));
+	}
+
+	//if there is already an element fading in, stop the time line and show the element with the full opacity.
+	if (m_fadeInTimeLine->state() == QTimeLine::Running) {
+		m_fadeInTimeLine->stop();
+		QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
+		effect->setOpacity(1);
+		lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
+	}
+
+	//fade-in the newly added element
+	lastAddedWorksheetElement = aspect;
+	QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
+	effect->setOpacity(0);
+	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
+	m_fadeInTimeLine->start();
 }
+
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action) {
 	WorksheetElement* aspect = 0;
@@ -1009,6 +1050,12 @@ void WorksheetView::addNew(QAction* action) {
 		aspect = l;
 	}
 	else if ( action == addBarChartGraph ) {
+		CartesianPlot* plot = new CartesianPlot(i18n("BarChart"));
+		plot->initDefault(CartesianPlot::TwoAxes);
+		plot->setMouseMode(m_cartesianPlotMouseMode);
+		aspect = plot;
+		if (tbNewCartesianPlot)
+			tbNewCartesianPlot->setDefaultAction(addBarChartGraph);
 	}
 
 	if (!aspect)
