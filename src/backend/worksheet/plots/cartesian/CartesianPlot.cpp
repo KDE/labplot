@@ -46,6 +46,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 
+#include <cmath>
 #include <QMenu>
 #include <QToolBar>
 #include <QPainter>
@@ -1269,7 +1270,7 @@ void CartesianPlotPrivate::retransformScales(){
 	bool hasValidBreak = false;
 	if (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty()) {
 		foreach(const CartesianPlot::RangeBreak& b, xRangeBreaks.list)
-			hasValidBreak = (b.start!=NAN && b.end!=NAN);
+			hasValidBreak = (!std::isnan(b.start) && !std::isnan(b.end));
 	}
 
 	//create x-scales
@@ -1315,7 +1316,7 @@ void CartesianPlotPrivate::retransformScales(){
 	hasValidBreak = false;
 	if (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty()) {
 		foreach(const CartesianPlot::RangeBreak& b, yRangeBreaks.list)
-			hasValidBreak = (b.start!=NAN && b.end!=NAN);
+			hasValidBreak = (!std::isnan(b.start) && !std::isnan(b.end));
 	}
 
 	//create y-scales

@@ -32,7 +32,7 @@
 
 #include "../AbstractSimpleFilter.h"
 #include <QDateTime>
-#include <math.h>
+#include <cmath>
 
 //! Conversion filter double -> QDateTime, interpreting the input numbers as days of the week (1 = Monday).
 class Double2DayOfWeekFilter : public AbstractSimpleFilter
