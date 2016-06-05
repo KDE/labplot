@@ -558,7 +558,7 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 
 
 				if (flags & MarkGaps) {
-					if (!isnan(xGapBefore)) {
+					if (!std::isnan(xGapBefore)) {
 						if (clipResult.xClippedLeft[0]) {
 							QLineF gapMarker(QPointF(x1 + xGapBefore / 4, y1 - xGapBefore / 2),
 									QPointF(x1 - xGapBefore / 4, y1 + xGapBefore / 2));
@@ -573,7 +573,7 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 						}
 					}
 
-					if (!isnan(xGapAfter)) {
+					if (!std::isnan(xGapAfter)) {
 						if (clipResult.xClippedRight[0]) {
 							QLineF gapMarker(QPointF(x1 + xGapAfter / 4, y1 - xGapAfter / 2),
 									QPointF(x1 - xGapAfter / 4, y1 + xGapAfter / 2));
@@ -588,7 +588,7 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 						}
 					}
 
-					if (!isnan(yGapBefore)) {
+					if (!std::isnan(yGapBefore)) {
 						if (clipResult.yClippedTop[0]) {
 							QLineF gapMarker(QPointF(x1 + yGapBefore / 2, y1 - yGapBefore / 4),
 									QPointF(x1 - yGapBefore / 2, y1 + yGapBefore / 4));
@@ -603,7 +603,7 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 						}
 					}
 
-					if (!isnan(yGapAfter)) {
+					if (!std::isnan(yGapAfter)) {
 						if (clipResult.yClippedBottom[0]) {
 							QLineF gapMarker(QPointF(x1 + yGapAfter / 2, y1 - yGapAfter / 4),
 									QPointF(x1 - yGapAfter / 2, y1 + yGapAfter / 4));
