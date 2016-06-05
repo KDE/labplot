@@ -29,7 +29,7 @@
 
 #include "StatisticsDialog.h"
 #include "backend/core/column/Column.h"
-#include "math.h"
+#include <cmath>
 
 #include <QTextEdit>
 #include <QTabWidget>
