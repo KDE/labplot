@@ -34,8 +34,10 @@
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 
+extern "C" {
 #include <gsl/gsl_sort.h>
-#include <math.h>
+}
+#include <cmath>
 
 #include <QMetaEnum>
 #include <QThreadPool>
