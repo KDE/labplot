@@ -3,27 +3,3 @@ The following items will be adopted to the new code and implemented if they stil
 For items where it is clear that they need to be implemented in the near feature, consider creating a feature 
 request ticket at the KDE bug tracker or Phabricator.
 
-#####################
-I/O:
-****
-	* reading multiple files from data dialog
-		-> also "same x column"
-	F support "indexed" matrix format
-	* IMPORT/EXPORT
-		* read date format "2000/12/24" ("Temperatur.dat")
-		* ignore columns
-		* multiple column files (NXY)	-> XYYYYY... / YYYYYYYY, X-index
-
-DRAWING/ DATA MANIPULATION:
-***************************
-	* any mathematical formula as baseline
-	* move marker with mouse
-	* image profiling (vertical/horizontal profiles)
-	Axes 
-		* axis tic label format:
-			* degree (2:10'33'')
-		* (fast) flip x-y graph
-		* scales:
-			* db axis scale (exp+log)
-	* extract feature (see grace)
-
