@@ -213,7 +213,7 @@ void AbstractColumn::clear() {}
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
 		case AbstractColumn::Numeric:
-			return !isnan(valueAt(row));
+			return !std::isnan(valueAt(row));
 		case AbstractColumn::Text:
 			return !textAt(row).isNull();
 		case AbstractColumn::DateTime:
@@ -466,7 +466,7 @@ double AbstractColumn::minimum() const{
 	double min = INFINITY;
 	for (int row = 0; row < rowCount(); row++) {
 		val = valueAt(row);
-		if (isnan(val))
+		if (std::isnan(val))
 			continue;
 
 		if (val < min)
