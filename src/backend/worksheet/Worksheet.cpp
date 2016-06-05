@@ -4,7 +4,7 @@
     Description          : Worksheet
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -351,6 +351,13 @@ void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item){
 		aspect->parentAspect()->removeChild(aspect);
 	else
 		this->removeChild(aspect);
+}
+
+void Worksheet::setIsClosing() {
+	if (m_view) {
+		WorksheetView* view = reinterpret_cast<WorksheetView*>(m_view);
+		view->setIsClosing();
+	}
 }
 
 void Worksheet::update(){
