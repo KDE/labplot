@@ -38,7 +38,7 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QDate>
 #include <QtCore/QTime>
-#include <math.h>
+#include <cmath>
 #include <QMetaType>
 #include <QDebug>
 #include <KLocale>
