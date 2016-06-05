@@ -60,7 +60,9 @@
 #include "kdefrontend/dockwidgets/XYSmoothCurveDock.h"
 #include "kdefrontend/dockwidgets/CustomPointDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
+#ifdef HAVE_CANTOR_LIBS
 #include "kdefrontend/dockwidgets/CantorWorksheetDock.h"
+#endif
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/widgets/DatapickerImageWidget.h"
 #include "kdefrontend/widgets/DatapickerCurveWidget.h"
