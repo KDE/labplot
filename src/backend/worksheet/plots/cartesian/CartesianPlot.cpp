@@ -373,7 +373,7 @@ void CartesianPlot::initActions(){
 	zoomOutXAction = new QAction(QIcon::fromTheme("labplot-zoom-out-x"), i18n("zoom out X"), this);
 	zoomInYAction = new QAction(QIcon::fromTheme("labplot-zoom-in-y"), i18n("zoom in Y"), this);
 	zoomOutYAction = new QAction(QIcon::fromTheme("labplot-zoom-out-y"), i18n("zoom out Y"), this);
-    shiftLeftXAction = new QAction(QIcon::fromTheme("labplot-shift-left-x"), i18n("shift left X"), this);
+	shiftLeftXAction = new QAction(QIcon::fromTheme("labplot-shift-left-x"), i18n("shift left X"), this);
 	shiftRightXAction = new QAction(QIcon::fromTheme("labplot-shift-right-x"), i18n("shift right X"), this);
 	shiftUpYAction = new QAction(QIcon::fromTheme("labplot-shift-up-y"), i18n("shift up Y"), this);
 	shiftDownYAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("shift down Y"), this);

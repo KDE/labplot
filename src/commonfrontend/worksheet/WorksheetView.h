@@ -147,7 +147,7 @@ private:
 	QAction* addOrdinaryHistogram;
 	QAction* addCummulativeHistogram;
 	QAction* addAvgShiftedHistogram;
-	QAction* addBarChartGraph;
+	QAction* addBarChartPlot;
 
 	QAction* verticalLayoutAction;
 	QAction* horizontalLayoutAction;
