@@ -40,8 +40,14 @@ FITSHeaderEditDialog::FITSHeaderEditDialog(AbstractDataSource *dataSource, QWidg
 
     setWindowTitle(i18n("FITS header editor"));
     setButtons( KDialog::Ok | KDialog::Cancel );
-    setButtonText(KDialog::Ok, i18n("&Save"));}
+    setButtonText(KDialog::Ok, i18n("&Save"));
+    connect(this, SIGNAL(okClicked()), this, SLOT(save()));
+}
 
 FITSHeaderEditDialog::~FITSHeaderEditDialog() {
     delete m_HeaderEditWidget;
+}
+
+void FITSHeaderEditDialog::save() {
+
 }

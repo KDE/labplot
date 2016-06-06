@@ -42,6 +42,9 @@ public:
 
 private:
     FITSHeaderEditWidget* m_HeaderEditWidget;
+
+private slots:
+    void save();
 };
 
 #endif // FITSHEADEREDITDIALOG_H
