@@ -34,6 +34,7 @@
 
 #include <QMenu>
 #include <QWidgetAction>
+#include <QDebug>
 
 /*!
   \class XYFourierFilterCurveDock
@@ -320,16 +321,20 @@ void XYFourierFilterCurveDock::unitChanged(int index) {
 	m_filterData.unit = (XYFourierFilterCurve::CutoffUnit)uiGeneralTab.cbUnit->currentIndex();
 
 	int n=100;
-	double T=1.0;
+	double f=1.0;	// sample frequency
 	if(m_filterCurve->xDataColumn() != NULL) {
 		n = m_filterCurve->xDataColumn()->rowCount();
-		T = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
+		double range = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
+		f=(n-1)/range;
+#ifndef NDEBUG
+		qDebug()<<" n ="<<n<<" sample frequency ="<<f;
+#endif
 	}
 	switch(unit) {
 	case XYFourierFilterCurve::Frequency:
 		uiGeneralTab.sbCutoff->setDecimals(6);
-		uiGeneralTab.sbCutoff->setMaximum(1.0/T);
-		uiGeneralTab.sbCutoff->setSingleStep(0.01/T);
+		uiGeneralTab.sbCutoff->setMaximum(f);
+		uiGeneralTab.sbCutoff->setSingleStep(0.01*f);
 		break;
 	case XYFourierFilterCurve::Fraction:
 		uiGeneralTab.sbCutoff->setDecimals(6);
@@ -351,16 +356,20 @@ void XYFourierFilterCurveDock::unit2Changed(int index) {
 	m_filterData.unit2 = (XYFourierFilterCurve::CutoffUnit)uiGeneralTab.cbUnit2->currentIndex();
 
 	int n=100;
-	double T=1.0;
+	double f=1.0;
 	if(m_filterCurve->xDataColumn() != NULL) {
 		n = m_filterCurve->xDataColumn()->rowCount();
-		T = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
+		double range = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
+		f = (n-1)/range;
+#ifndef NDEBUG
+		qDebug()<<" n ="<<n<<" sample frequency ="<<f;
+#endif
 	}
 	switch(unit2) {
 	case XYFourierFilterCurve::Frequency:
 		uiGeneralTab.sbCutoff2->setDecimals(6);
-		uiGeneralTab.sbCutoff2->setMaximum(1.0/T);
-		uiGeneralTab.sbCutoff2->setSingleStep(0.01/T);
+		uiGeneralTab.sbCutoff2->setMaximum(f);
+		uiGeneralTab.sbCutoff2->setSingleStep(0.01*f);
 		break;
 	case XYFourierFilterCurve::Fraction:
 		uiGeneralTab.sbCutoff2->setDecimals(6);

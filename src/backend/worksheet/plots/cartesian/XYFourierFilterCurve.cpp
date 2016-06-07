@@ -159,7 +159,7 @@ XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* o
 	xColumn(0), yColumn(0), 
 	xVector(0), yVector(0), 
 	sourceDataChangedSinceLastFilter(false),
-	q(owner)  {
+	q(owner) {
 
 }
 
@@ -251,7 +251,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	const signed int order = filterData.order;
 	const double cutoff = filterData.cutoff, cutoff2 = filterData.cutoff2;
 	const XYFourierFilterCurve::CutoffUnit unit = filterData.unit, unit2 = filterData.unit2;
-#ifdef QT_DEBUG
+#ifndef NDEBUG
+	qDebug()<<"n ="<<n;
 	qDebug()<<"type:"<<type;
 	qDebug()<<"form (order "<<order<<") :"<<form;
 	qDebug()<<"cutoffs ="<<cutoff<<cutoff2;
@@ -260,8 +261,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 ///////////////////////////////////////////////////////////
 	int status;
 	// 1. transform
-	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc (n);
-	gsl_fft_real_wavetable *real = gsl_fft_real_wavetable_alloc (n);
+	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc(n);
+	gsl_fft_real_wavetable *real = gsl_fft_real_wavetable_alloc(n);
 
 	status = gsl_fft_real_transform(ydata, 1, n, real, work);
 	gsl_fft_real_wavetable_free(real);
@@ -288,6 +289,9 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	case XYFourierFilterCurve::Index:
 		cutindex2 = cutoff2;
 	}
+#ifndef NDEBUG
+	qDebug()<<"cut off @"<<cutindex<<cutindex2;
+#endif
 	const double centerindex=(cutindex2+cutindex)/2.;
 	const int bandwidth=(cutindex2-cutindex);
 
@@ -388,6 +392,10 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	yVector->resize(n);
 	memcpy(xVector->data(), xdataVector.data(), n*sizeof(double));
 	memcpy(yVector->data(), ydata, n*sizeof(double));
+#ifndef NDEBUG
+	for(int i=0;i<10;i++)
+		qDebug()<<(*xVector)[i]<<(*yVector)[i];
+#endif
 ///////////////////////////////////////////////////////////
 
 	//write the result
@@ -440,7 +448,6 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
 		d->yColumn->save(writer);
 	}
 	writer->writeEndElement(); //"filterResult"
-
 	writer->writeEndElement(); //"xyFourierFilterCurve"
 }
 
