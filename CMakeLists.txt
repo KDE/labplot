@@ -113,10 +113,12 @@ FIND_LIBRARY(HDF5_LIBRARY hdf5
 	PATHS
 	/usr/lib
 	/usr/local/lib
+	/usr/lib/x86_64-linux-gnu/hdf5/serial
 )
 FIND_PATH (HDF5_INCLUDE_DIR hdf5.h
-	/usr/include/
-	/usr/local/include/
+	/usr/include
+	/usr/local/include
+	/usr/include/hdf5/serial
 )
 IF (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
 	SET (HDF5_FOUND TRUE)
@@ -127,6 +129,7 @@ ENDIF (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
 IF (HDF5_FOUND)
 	MESSAGE (STATUS "Found Hierarchical Data Format (HDF) 5 Library: ${HDF5_INCLUDE_DIR} ${HDF5_LIBRARY}")
 	add_definitions (-DHAVE_HDF5)
+	include_directories (${HDF5_INCLUDE_DIR})
 ELSE (HDF5_FOUND)
 	MESSAGE (STATUS "Hierarchical Data Format (HDF) 5 Library not found.")
 ENDIF (HDF5_FOUND)
