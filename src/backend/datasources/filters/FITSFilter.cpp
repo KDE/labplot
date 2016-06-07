@@ -34,6 +34,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QDebug>
 #include <QMultiMap>
 #include <QString>
+#include <QHeaderView>
 
 /*!
  * \class FITSFilter
@@ -106,14 +107,17 @@ QStringList FITSFilter::standardKeywords() {
 }
 
 QStringList FITSFilter::mandatoryImageExtensionKeywords() {
-    return QStringList() << QLatin1String("XTENSION") << QLatin1String("BITPIX") << QLatin1String("NAXIS") << QLatin1String("PCOUNT")
+    return QStringList() << QLatin1String("XTENSION") << QLatin1String("BITPIX")
+                         << QLatin1String("NAXIS") << QLatin1String("PCOUNT")
                          << QLatin1String("GCOUNT") << QLatin1String("END");
 }
 
 QStringList FITSFilter::mandatoryTableExtensionKeywords() {
-    return QStringList() << QLatin1String("XTENSION") << QLatin1String("BITPIX") << QLatin1String("NAXIS") << QLatin1String("NAXIS1")
-                         << QLatin1String("NAXIS2")  << QLatin1String("PCOUNT") << QLatin1String("GCOUNT")
-                         << QLatin1String("TFIELDS") << QLatin1String("END");
+    return QStringList() << QLatin1String("XTENSION") << QLatin1String("BITPIX")
+                         << QLatin1String("NAXIS") << QLatin1String("NAXIS1")
+                         << QLatin1String("NAXIS2") << QLatin1String("PCOUNT")
+                         << QLatin1String("GCOUNT") << QLatin1String("TFIELDS")
+                         << QLatin1String("END");
 }
 
 //#####################################################################
@@ -730,6 +734,7 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
         item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         headerEditTable->setItem(i, 2, item );
     }
+
     headerEditTable->resizeColumnsToContents();
 }
 
@@ -776,13 +781,13 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidgetItem
             if (checkPrimary && naxis == 0) {
                 continue;
             }
-            treeItem->setSelected(true);
         }
         imageExtensionItem->addChild(treeItem);
     }
     if (imageExtensionItem->childCount() > 0) {
         treeNameItem->addChild(imageExtensionItem);
         imageExtensionItem->setExpanded(true);
+        imageExtensionItem->child(0)->setSelected(true);
     }
 
     if (tableExtensions.size() > 0) {

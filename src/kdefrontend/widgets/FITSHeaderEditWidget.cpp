@@ -40,7 +40,7 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(AbstractDataSource *dataSource, QWidg
     initActions();
     connectActions();
     initContextMenu();
-    fitsFilter = new FITSFilter();
+    m_fitsFilter = new FITSFilter();
     ui.twKeywordsTable->setColumnCount(3);
     ui.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
     ui.twExtensions->headerItem()->setText(0, i18n("Extensions"));
@@ -57,7 +57,7 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(AbstractDataSource *dataSource, QWidg
 }
 
 FITSHeaderEditWidget::~FITSHeaderEditWidget() {
-    delete fitsFilter;
+    delete m_fitsFilter;
 }
 
 void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
@@ -81,14 +81,12 @@ void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
         }
     }
     if (!selectedExtension.isEmpty()) {
-        fitsFilter->parseHeader(selectedExtension, ui.twKeywordsTable);
+        m_fitsFilter->parseHeader(selectedExtension, ui.twKeywordsTable);
     }
     RESET_CURSOR;
 }
 
 void FITSHeaderEditWidget::openFile() {
-    /*QString fileName = QFileDialog::getOpenFileName(this,i18n("Open FITS file"), QDir::homePath(),
-                                                    i18n("FITS files (*.fits)"));*/
 
     KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditWidget");
     QString dir = conf.readEntry("LastDir", "");
@@ -118,14 +116,20 @@ void FITSHeaderEditWidget::openFile() {
         foreach (QTreeWidgetItem* item, ui.twExtensions->selectedItems()) {
             item->setSelected(false);
         }
-        fitsFilter->parseExtensions(fileName, root);
+        m_fitsFilter->parseExtensions(fileName, root);
         ui.twExtensions->resizeColumnToContents(0);
     }
-    fitsFilter->parseHeader(root->child(root->childCount()-1)->text(0), ui.twKeywordsTable);
+    m_fitsFilter->parseHeader(root->child(root->childCount()-1)->text(0), ui.twKeywordsTable);
     RESET_CURSOR;
 }
 
-void FITSHeaderEditWidget::saveFile() {
+void FITSHeaderEditWidget::save() {
+
+    QList<HeaderUpdate> headerUpdates = m_headerUpdates.values();
+    QList<QString> fileNames = m_headerUpdates.keys();
+    for (int i = 0; i < fileNames.size(); ++i) {
+        //TODO
+    }
 }
 
 void FITSHeaderEditWidget::initActions() {
@@ -173,7 +177,29 @@ void FITSHeaderEditWidget::removeKeyword() {
     int removeKeyWordMb = KMessageBox::questionYesNo(this,"Are you sure you want to delete this keyword?",
                                                      "Confirm deletion");
     if (removeKeyWordMb == KMessageBox::Yes) {
-        //TODO removed keywords-  ?
+        int row = ui.twKeywordsTable->currentRow();
+        QString key = ui.twKeywordsTable->item(row, 0)->text();
+        QList<QString> mandatoryKeywords;
+        const QTreeWidgetItem* currentItem = ui.twExtensions->currentItem();
+        if (currentItem->parent()->text(0).compare(QLatin1String("Images"))) {
+            mandatoryKeywords = FITSFilter::mandatoryImageExtensionKeywords();
+        } else {
+            mandatoryKeywords = FITSFilter::mandatoryTableExtensionKeywords();
+        }
+        bool remove = true;
+        foreach (const QString& k, mandatoryKeywords) {
+            if (!k.compare(key)) {
+                remove = false;
+                break;
+            }
+        }
+
+        if (remove) {
+            ui.twKeywordsTable->removeRow(row);
+        } else {
+            //TODO
+            qDebug() << "cannot remove mandatory keyword!";
+        }
     }
 }
 

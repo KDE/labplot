@@ -29,6 +29,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include <QWidget>
 #include <QAction>
+#include <QMap>
 #include "backend/datasources/AbstractDataSource.h"
 #include "ui_fitsheadereditwidget.h"
 #include "backend/datasources/filters/FITSFilter.h"
@@ -49,14 +50,23 @@ private:
     QAction* action_update_keyword;
     QMenu* m_KeywordActionsMenu;
 
+    struct HeaderUpdate {
+        QList<FITSFilter::Keyword> newKeywords;
+        QList<FITSFilter::Keyword> updatedKeywords;
+        QList<FITSFilter::Keyword> removedKeywords;
+    };
+
+    QMap<QString, HeaderUpdate> m_headerUpdates;
+    FITSFilter* m_fitsFilter;
+
     void initActions();
     void initContextMenu();
     void connectActions();
     bool eventFilter(QObject*, QEvent*);
-    FITSFilter* fitsFilter;
+public slots:
+    void save();
 private slots:
     void openFile();
-    void saveFile();
 
     void fillTable(QTreeWidgetItem* item, int col);
 

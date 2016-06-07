@@ -49,5 +49,5 @@ FITSHeaderEditDialog::~FITSHeaderEditDialog() {
 }
 
 void FITSHeaderEditDialog::save() {
-
+    m_HeaderEditWidget->save();
 }
