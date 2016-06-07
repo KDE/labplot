@@ -242,15 +242,15 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
-        double min = xDataColumn->minimum();
-        double max = xDataColumn->maximum();
+	const double min = xDataColumn->minimum();
+	const double max = xDataColumn->maximum();
 
 	// filter settings
-	XYFourierFilterCurve::FilterType type = filterData.type;
-	XYFourierFilterCurve::FilterForm form = filterData.form;
-	unsigned int order = filterData.order;
-	double cutoff = filterData.cutoff, cutoff2 = filterData.cutoff2;
-	XYFourierFilterCurve::CutoffUnit unit = filterData.unit, unit2 = filterData.unit2;
+	const XYFourierFilterCurve::FilterType type = filterData.type;
+	const XYFourierFilterCurve::FilterForm form = filterData.form;
+	const signed int order = filterData.order;
+	const double cutoff = filterData.cutoff, cutoff2 = filterData.cutoff2;
+	const XYFourierFilterCurve::CutoffUnit unit = filterData.unit, unit2 = filterData.unit2;
 #ifdef QT_DEBUG
 	qDebug()<<"type:"<<type;
 	qDebug()<<"form (order "<<order<<") :"<<form;
@@ -263,8 +263,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc (n);
 	gsl_fft_real_wavetable *real = gsl_fft_real_wavetable_alloc (n);
 
-        status = gsl_fft_real_transform(ydata, 1, n, real, work);
-        gsl_fft_real_wavetable_free(real);
+	status = gsl_fft_real_transform(ydata, 1, n, real, work);
+	gsl_fft_real_wavetable_free(real);
 
 	// calculate index
 	double cutindex=0, cutindex2=0;
@@ -288,8 +288,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	case XYFourierFilterCurve::Index:
 		cutindex2 = cutoff2;
 	}
-	double centerindex=(cutindex2+cutindex)/2.;
-	int bandwidth=(cutindex2-cutindex);
+	const double centerindex=(cutindex2+cutindex)/2.;
+	const int bandwidth=(cutindex2-cutindex);
 
 	// 2. apply filter
 	switch(type) {
@@ -386,10 +386,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	xVector->resize(n);
 	yVector->resize(n);
-	for (unsigned int i = 0; i < n; i++) {
-		(*xVector)[i] = xdataVector[i];
-		(*yVector)[i] = ydata[i];
-	}
+	memcpy(xVector->data(), xdataVector.data(), n*sizeof(double));
+	memcpy(yVector->data(), ydata, n*sizeof(double));
 ///////////////////////////////////////////////////////////
 
 	//write the result
