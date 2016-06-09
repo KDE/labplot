@@ -333,7 +333,7 @@ void ImportFileDialog::newDataContainer(QAction* action) {
 void ImportFileDialog::newDataContainerMenu() {
 	m_newDataContainerMenu->exec( tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
 }
-
+#include <QDebug>
 void ImportFileDialog::checkOkButton() {
 	if (cbAddTo) { //only check for the target container when no file data source is being added
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
@@ -353,19 +353,22 @@ void ImportFileDialog::checkOkButton() {
         if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator() )
             fileName = QDir::homePath() + QDir::separator() + fileName;
     } else {
-        if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator() ) {
-            if(fileName.left(1) == QLatin1String("]")) {
-                int extensionBraceletPos = 0;
+        int extensionBraceletPos = 0;
+        if (!fileName.isEmpty()) {
+            if(fileName.right(1) == QLatin1String("]")) {
                 for (int i = fileName.size() - 1; i >= 5; --i) {
                     if (fileName.at(i) == QLatin1Char('[')) {
                         extensionBraceletPos = i;
                         break;
                     }
                 }
-                fileName = QDir::homePath() + QDir::separator() + fileName.mid(0, extensionBraceletPos);
             }
         }
+        if ( fileName.left(1) != QDir::separator() ) {
+            fileName = QDir::homePath() + QDir::separator() + fileName.mid(0, extensionBraceletPos);
+        } else {
+            fileName = fileName.mid(0, extensionBraceletPos);
+        }
     }
-
-	enableButtonOk( QFile::exists(fileName) ) ;
+    enableButtonOk( QFile::exists(fileName) ) ;
 }
