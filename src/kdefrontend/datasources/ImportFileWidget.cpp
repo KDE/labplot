@@ -465,9 +465,8 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
             fitsOptionsWidget.twExtensions->clear();
             QString fileName = ui.kleFileName->text();
-            QTreeWidgetItem *rootItem = fitsOptionsWidget.twExtensions->invisibleRootItem();
             FITSFilter *filter = (FITSFilter *)this->currentFileFilter();
-            filter->parseExtensions(fileName, rootItem, true);
+            filter->parseExtensions(fileName, fitsOptionsWidget.twExtensions, true);
 
             //TODO
         } else if (info.contains("image") || info.contains("bitmap" )) {

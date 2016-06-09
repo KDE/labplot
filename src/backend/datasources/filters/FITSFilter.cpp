@@ -81,8 +81,12 @@ void FITSFilter::parseHeader(const QString &fileName, QTableWidget *headerEditTa
     d->parseHeader(fileName, headerEditTable);
 }
 
-void FITSFilter::parseExtensions(const QString &fileName, QTreeWidgetItem *root, bool checkPrimary) {
-    d->parseExtensions(fileName, root, checkPrimary);
+void FITSFilter::parseExtensions(const QString &fileName, QTreeWidget *tw, bool checkPrimary) {
+    d->parseExtensions(fileName, tw, checkPrimary);
+}
+
+QList<FITSFilter::Keyword> FITSFilter::chduKeywords(const QString &fileName) {
+    return d->chduKeywords(fileName);
 }
 
 void FITSFilter::loadFilterSettings(const QString& fileName) {
@@ -93,16 +97,21 @@ void FITSFilter::saveFilterSettings(const QString& fileName) const {
     Q_UNUSED(fileName)
 }
 
+/*!
+ * \brief FITSFilter::standardKeywords
+ *      contains the {StandardKeywords \ MandatoryKeywords} keywords
+ * \return A list of keywords
+ */
 QStringList FITSFilter::standardKeywords() {
     return QStringList() << QLatin1String("(blank)") << QLatin1String("CROTAn")   << QLatin1String("EQUINOX")  << QLatin1String("NAXISn")   << QLatin1String("TBCOLn") << QLatin1String("TUNITn")
                          << QLatin1String("AUTHOR")  << QLatin1String("CRPIXn")   << QLatin1String("EXTEND")   << QLatin1String("OBJECT")   << QLatin1String("TDIMn")  << QLatin1String("TZEROn")
                          << QLatin1String("BITPIX")  << QLatin1String("CRVALn")   << QLatin1String("EXTLEVEL") << QLatin1String("OBSERVER") << QLatin1String("TDISPn") << QLatin1String("XTENSION")
                          << QLatin1String("BLANK")   << QLatin1String("CTYPEn")   << QLatin1String("EXTNAME")  << QLatin1String("ORIGIN")   << QLatin1String("TELESCOP")
-                         << QLatin1String("BLOCKED") << QLatin1String("DATAMAX")  << QLatin1String("EXTVER")  << QLatin1String("PCOUNT")  << QLatin1String("TFIELDS")
-                         << QLatin1String("BSCALE")  << QLatin1String("DATAMIN")  << QLatin1String("GCOUNT")   << QLatin1String("PSCALn")  << QLatin1String("TFORMn")
+                         << QLatin1String("BLOCKED") << QLatin1String("DATAMAX")  << QLatin1String("EXTVER")
+                         << QLatin1String("BSCALE")  << QLatin1String("DATAMIN")  << QLatin1String("PSCALn")  << QLatin1String("TFORMn")
                          << QLatin1String("BUNIT")   << QLatin1String("DATE")     << QLatin1String("GROUPS")   << QLatin1String("PTYPEn")   << QLatin1String("THEAP")
                          << QLatin1String("BZERO")   << QLatin1String("DATE-OBS") << QLatin1String("HISTORY")  << QLatin1String("PZEROn")   << QLatin1String("TNULLn")
-                         << QLatin1String("CDELTn")  << QLatin1String("END")      << QLatin1String("INSTRUME") << QLatin1String("REFERENC") << QLatin1String("TSCALn")
+                         << QLatin1String("CDELTn")  << QLatin1String("INSTRUME") << QLatin1String("REFERENC") << QLatin1String("TSCALn")
                          << QLatin1String("COMMENT") << QLatin1String("EPOCH")    << QLatin1String("NAXIS")    << QLatin1String("SIMPLE")   << QLatin1String("TTYPEn");
 }
 
@@ -514,6 +523,7 @@ void FITSFilterPrivate::addNewKeyword(const FITSFilter::Keyword& keyword) {
             }
         }
         if (ok == 3) {
+            //TODO
             //add key
         } else if ( ok == 2) {
             //comment too long
@@ -703,9 +713,9 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
 
         keywords.append(keyword);
     }
-    delete key;
-    delete value;
-    delete comment;
+    delete[] key;
+    delete[] value;
+    delete[] comment;
 
     fits_close_file(fitsFile, &status);
 
@@ -763,11 +773,12 @@ const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *ke
     return keyValue;
 }
 
-void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidgetItem *root, bool checkPrimary) {
+void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw, bool checkPrimary) {
     QMultiMap<QString, QString> extensions = extensionNames(fileName);
     QStringList imageExtensions = extensions.values(QLatin1String("IMAGES"));
     QStringList tableExtensions = extensions.values(QLatin1String("TABLES"));
 
+    QTreeWidgetItem* root = tw->invisibleRootItem();
     QTreeWidgetItem* treeNameItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << fileName);
     root->addChild(treeNameItem);
     treeNameItem->setExpanded(true);
@@ -788,6 +799,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidgetItem
         treeNameItem->addChild(imageExtensionItem);
         imageExtensionItem->setExpanded(true);
         imageExtensionItem->child(0)->setSelected(true);
+        tw->setCurrentItem(imageExtensionItem->child(0));
     }
 
     if (tableExtensions.size() > 0) {

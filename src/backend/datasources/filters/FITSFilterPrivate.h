@@ -52,7 +52,7 @@ class FITSFilterPrivate {
 
                 QList<FITSFilter::Keyword> chduKeywords(const QString &fileName);
                 void parseHeader(const QString& fileName, QTableWidget* headerEditTable);
-                void parseExtensions(const QString& fileName, QTreeWidgetItem* root, bool checkPrimary = false);
+                void parseExtensions(const QString& fileName, QTreeWidget *tw, bool checkPrimary = false);
         private:
                 void printError(int status) const;
 #ifdef HAVE_FITS

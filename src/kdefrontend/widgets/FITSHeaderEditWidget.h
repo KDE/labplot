@@ -59,9 +59,12 @@ private:
     QMap<QString, HeaderUpdate> m_headerUpdates;
     FITSFilter* m_fitsFilter;
 
+    QString m_seletedExtension;
+
     void initActions();
     void initContextMenu();
     void connectActions();
+    QList<QString> mandatoryKeywords() const;
     bool eventFilter(QObject*, QEvent*);
 public slots:
     void save();

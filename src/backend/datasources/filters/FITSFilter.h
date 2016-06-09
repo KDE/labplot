@@ -61,6 +61,11 @@ class FITSFilter : public AbstractFileFilter{
         QString key;
         QString value;
         QString comment;
+        bool operator==(const Keyword& other) const{
+            return other.key == key &&
+                    other.value == value &&
+                     other.comment == comment;
+        }
     };
 
     void updateKeyword(Keyword& keyword,const QString& newKey, const QString& newValue,
@@ -69,7 +74,9 @@ class FITSFilter : public AbstractFileFilter{
     bool deleteKeyword(const Keyword& keyword);
     void renameKeywordKey(const Keyword& keyword, const QString& newKey);
     void parseHeader(const QString& fileName, QTableWidget* headerEditTable);
-    void parseExtensions(const QString& fileName, QTreeWidgetItem* root, bool checkPrimary = false);
+    void parseExtensions(const QString& fileName, QTreeWidget *tw, bool checkPrimary = false);
+    QList<Keyword> chduKeywords(const QString &fileName);
+
     static QStringList standardKeywords();
     static QStringList mandatoryImageExtensionKeywords();
     static QStringList mandatoryTableExtensionKeywords();
