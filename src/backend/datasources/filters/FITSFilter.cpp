@@ -506,14 +506,19 @@ void FITSFilterPrivate::addNewKeyword(const QString& fileName, const QList<FITSF
     foreach (const FITSFilter::Keyword& keyword, keywords) {
         status = 0;
         if (!keyword.key.compare(QLatin1String("COMMENT"))) {
-            if (fits_write_comment(fitsFile, keyword.key.toLatin1(), &status)) {
+            qDebug() << "comment";
+
+            if (fits_write_comment(fitsFile, keyword.value.toLatin1(), &status)) {
                 printError(status);
             }
         } else if (!keyword.key.compare(QLatin1String("HISTORY"))) {
-            if (fits_write_history(fitsFile, keyword.key.toLatin1(), &status)) {
+            qDebug() << "hist";
+
+            if (fits_write_history(fitsFile, keyword.value.toLatin1(), &status)) {
                 printError(status);
             }
         } else if (!keyword.key.compare(QLatin1String("DATE"))) {
+            qDebug() << "date";
             if (fits_write_date(fitsFile, &status)) {
                 printError(status);
             }
