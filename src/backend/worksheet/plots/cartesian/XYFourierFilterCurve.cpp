@@ -174,7 +174,7 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 void XYFourierFilterCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
-
+i
 	//create filter result columns if not available yet, clear them otherwise
 	if (!xColumn) {
 		xColumn = new Column("x", AbstractColumn::Numeric);
@@ -195,6 +195,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		xVector->clear();
 		yVector->clear();
 	}
+	for(int i=0;i<10;i++)
+		qDebug()<<xColumn->valueAt(i)<<yColumn->valueAt(i);
 
 	// clear the previous result
 	filterResult = XYFourierFilterCurve::FilterResult();
