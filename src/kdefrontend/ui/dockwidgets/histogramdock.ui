@@ -48,7 +48,7 @@
         </spacer>
        </item>
        <item row="0" column="2">
-        <widget class="KLineEdit" name="leName" native="true">
+        <widget class="KLineEdit" name="leName">
          <property name="showClearButton" stdset="0">
           <bool>true</bool>
          </property>
@@ -62,7 +62,7 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="KLineEdit" name="leComment" native="true">
+        <widget class="KLineEdit" name="leComment">
          <property name="showClearButton" stdset="0">
           <bool>true</bool>
          </property>
@@ -240,8 +240,8 @@
         </spacer>
        </item>
        <item row="11" column="2">
-        <widget class="KLineEdit" name="kleXMin" native="true">
-         <property name="placeholderText" stdset="0">
+        <widget class="KLineEdit" name="kleXMin">
+         <property name="placeholderText">
           <string>Auto</string>
          </property>
          <property name="showClearButton" stdset="0">
@@ -257,8 +257,8 @@
         </widget>
        </item>
        <item row="12" column="2">
-        <widget class="KLineEdit" name="kleXMax" native="true">
-         <property name="placeholderText" stdset="0">
+        <widget class="KLineEdit" name="kleXMax">
+         <property name="placeholderText">
           <string>Auto</string>
          </property>
          <property name="showClearButton" stdset="0">
@@ -313,8 +313,8 @@
         </widget>
        </item>
        <item row="17" column="2">
-        <widget class="KLineEdit" name="kleYMin" native="true">
-         <property name="placeholderText" stdset="0">
+        <widget class="KLineEdit" name="kleYMin">
+         <property name="placeholderText">
           <string>Auto</string>
          </property>
          <property name="showClearButton" stdset="0">
@@ -343,8 +343,8 @@
         </spacer>
        </item>
        <item row="18" column="2">
-        <widget class="KLineEdit" name="kleYMax" native="true">
-         <property name="placeholderText" stdset="0">
+        <widget class="KLineEdit" name="kleYMax">
+         <property name="placeholderText">
           <string>Auto</string>
          </property>
          <property name="showClearButton" stdset="0">
@@ -518,7 +518,7 @@
         </widget>
        </item>
        <item row="2" column="3" colspan="3">
-        <widget class="KLineEdit" name="leXBreakStart" native="true"/>
+        <widget class="KLineEdit" name="leXBreakStart"/>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="lXBreakEnd">
@@ -528,7 +528,7 @@
         </widget>
        </item>
        <item row="3" column="3" colspan="3">
-        <widget class="KLineEdit" name="leXBreakEnd" native="true"/>
+        <widget class="KLineEdit" name="leXBreakEnd"/>
        </item>
        <item row="4" column="0" colspan="2">
         <widget class="QLabel" name="lXBreakPosition">
@@ -686,7 +686,7 @@
         </widget>
        </item>
        <item row="9" column="3" colspan="3">
-        <widget class="KLineEdit" name="leYBreakStart" native="true"/>
+        <widget class="KLineEdit" name="leYBreakStart"/>
        </item>
        <item row="10" column="0">
         <widget class="QLabel" name="lYBreakEnd">
@@ -696,7 +696,7 @@
         </widget>
        </item>
        <item row="10" column="3" colspan="3">
-        <widget class="KLineEdit" name="leYBreakEnd" native="true"/>
+        <widget class="KLineEdit" name="leYBreakEnd"/>
        </item>
        <item row="11" column="0" colspan="2">
         <widget class="QLabel" name="lYBreakPosition">
@@ -812,7 +812,7 @@
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="KLineEdit" name="kleBackgroundFileName" native="true">
+        <widget class="KLineEdit" name="kleBackgroundFileName">
          <property name="toolTip">
           <string>Specify the name of the image file.</string>
          </property>
@@ -1173,15 +1173,40 @@
         <string>Bin Settings:</string>
        </property>
       </widget>
-      <widget class="QSpinBox" name="binCount">
+      <widget class="QWidget" name="">
        <property name="geometry">
         <rect>
-         <x>110</x>
-         <y>10</y>
-         <width>47</width>
-         <height>23</height>
+         <x>20</x>
+         <y>30</y>
+         <width>211</width>
+         <height>41</height>
         </rect>
        </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>No. of bins:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_7">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="binCount"/>
+        </item>
+       </layout>
       </widget>
      </widget>
     </widget>
@@ -1196,7 +1221,7 @@
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>
-   <extends>QWidget</extends>
+   <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
