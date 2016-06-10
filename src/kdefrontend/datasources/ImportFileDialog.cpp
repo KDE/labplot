@@ -333,7 +333,7 @@ void ImportFileDialog::newDataContainer(QAction* action) {
 void ImportFileDialog::newDataContainerMenu() {
 	m_newDataContainerMenu->exec( tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
 }
-#include <QDebug>
+
 void ImportFileDialog::checkOkButton() {
 	if (cbAddTo) { //only check for the target container when no file data source is being added
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
