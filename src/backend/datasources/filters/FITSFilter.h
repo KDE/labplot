@@ -70,8 +70,8 @@ class FITSFilter : public AbstractFileFilter{
 
     void updateKeyword(Keyword& keyword,const QString& newKey, const QString& newValue,
                        const QString& newComment, KeywordUpdateMode mode = UpdateValueComment);
-    void addNewKeyword(const Keyword& keyword);
-    bool deleteKeyword(const Keyword& keyword);
+    void addNewKeyword(const QString& filename, const QList<Keyword>& keywords);
+    void deleteKeyword(const QString& fileName, const QList<Keyword>& keywords);
     void renameKeywordKey(const Keyword& keyword, const QString& newKey);
     void parseHeader(const QString& fileName, QTableWidget* headerEditTable);
     void parseExtensions(const QString& fileName, QTreeWidget *tw, bool checkPrimary = false);

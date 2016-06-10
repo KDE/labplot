@@ -61,16 +61,16 @@ void FITSFilter::write(const QString &fileName, AbstractDataSource *dataSource) 
     d->writeCHDU(fileName, dataSource);
 }
 
-void FITSFilter::addNewKeyword(const FITSFilter::Keyword& keyword) {
-    d->addNewKeyword(keyword);
+void FITSFilter::addNewKeyword(const QString &filename, const QList<Keyword> &keywords) {
+    d->addNewKeyword(filename, keywords);
 }
 
 void FITSFilter::updateKeyword(Keyword &keyword, const QString &newKey, const QString &newValue, const QString &newComment, KeywordUpdateMode mode) {
     d->updateKeyword(keyword, newKey, newValue, newComment, mode);
 }
 
-bool FITSFilter::deleteKeyword(const Keyword &keyword) {
-    return d->deleteKeyword(keyword);
+void FITSFilter::deleteKeyword(const QString &fileName, const QList<Keyword>& keywords) {
+    d->deleteKeyword(fileName, keywords);
 }
 
 void FITSFilter::renameKeywordKey(const Keyword &keyword, const QString &newKey) {
@@ -496,43 +496,70 @@ void FITSFilterPrivate::printError(int status) const {
  * \param keyword keyword to be added
  */
 
-void FITSFilterPrivate::addNewKeyword(const FITSFilter::Keyword& keyword) {
+void FITSFilterPrivate::addNewKeyword(const QString& fileName, const QList<FITSFilter::Keyword>& keywords) {
 #ifdef HAVE_FITS
     int status = 0;
-    if (!keyword.key.compare(QLatin1String("COMMENT"))) {
-        if (fits_write_comment(fitsFile, keyword.key.toLatin1(), &status)) {
-            printError(status);
-        }
-    } else if (!keyword.key.compare(QLatin1String("HISTORY"))) {
-        if (fits_write_history(fitsFile, keyword.key.toLatin1(), &status)) {
-            printError(status);
-        }
-    } else if (!keyword.key.compare(QLatin1String("DATE"))) {
-        if (fits_write_date(fitsFile, &status)) {
-            printError(status);
-        }
-    } else {
-        int ok = 0;
-        if (keyword.key.length() <= FLEN_KEYWORD) {
-            ok++;
-            if (keyword.value.length() <= FLEN_VALUE) {
+    if (fits_open_file(&fitsFile, fileName.toLatin1(), READWRITE, &status )) {
+        printError(status);
+        return;
+    }
+    foreach (const FITSFilter::Keyword& keyword, keywords) {
+        status = 0;
+        if (!keyword.key.compare(QLatin1String("COMMENT"))) {
+            if (fits_write_comment(fitsFile, keyword.key.toLatin1(), &status)) {
+                printError(status);
+            }
+        } else if (!keyword.key.compare(QLatin1String("HISTORY"))) {
+            if (fits_write_history(fitsFile, keyword.key.toLatin1(), &status)) {
+                printError(status);
+            }
+        } else if (!keyword.key.compare(QLatin1String("DATE"))) {
+            if (fits_write_date(fitsFile, &status)) {
+                printError(status);
+            }
+        } else {
+            int ok = 0;
+            if (keyword.key.length() <= FLEN_KEYWORD) {
                 ok++;
-                if(keyword.comment.length() <= FLEN_COMMENT) {
-                 ok++;
+                if (keyword.value.length() <= FLEN_VALUE) {
+                    ok++;
+                    if(keyword.comment.length() <= FLEN_COMMENT) {
+                        ok++;
+                    }
                 }
             }
-        }
-        if (ok == 3) {
-            //TODO
-            //add key
-        } else if ( ok == 2) {
-            //comment too long
-        } else if ( ok == 1) {
-            //value too long
-        } else {
-            //keyword too long
+            if (ok == 3) {
+                bool ok;
+                double val = keyword.value.toDouble(&ok);
+                if (ok) {
+                    if (fits_write_key(fitsFile,
+                                       TDOUBLE,
+                                       keyword.key.toLatin1().data(),
+                                       &val,
+                                       keyword.comment.toLatin1().data(),
+                                       &status)) {
+                        printError(status);
+                    }
+                } else {
+                    if (fits_write_key(fitsFile,
+                                       TSTRING,
+                                       keyword.key.toLatin1().data(),
+                                       keyword.value.toLatin1().data(),
+                                       keyword.comment.toLatin1().data(),
+                                       &status)) {
+                        printError(status);
+                    }
+                }
+            } else if ( ok == 2) {
+                //comment too long
+            } else if ( ok == 1) {
+                //value too long
+            } else {
+                //keyword too long
+            }
         }
     }
+    fits_close_file(fitsFile, &status);
 #else
     Q_UNUSED(keyword)
 #endif
@@ -645,17 +672,22 @@ void FITSFilterPrivate::updateKeyword(FITSFilter::Keyword& keyword,const QString
  * \param keyword the keyword to delete
  */
 
-bool FITSFilterPrivate::deleteKeyword(const FITSFilter::Keyword &keyword) {
+void FITSFilterPrivate::deleteKeyword(const QString& fileName, const QList<FITSFilter::Keyword> &keywords) {
 #ifdef HAVE_FITS
-    if (!keyword.key.isEmpty()) {
-        int status = 0;
-        if (fits_delete_key(fitsFile, keyword.key.toLatin1(), &status)) {
-            printError(status);
-            return false;
-        }
-        return true;
+    int status = 0;
+    if (fits_open_file(&fitsFile, fileName.toLatin1(), READWRITE, &status )) {
+        printError(status);
+        return;
     }
-    return false;
+    foreach (const FITSFilter::Keyword& keyword, keywords) {
+        if (!keyword.key.isEmpty()) {
+            status = 0;
+            if (fits_delete_key(fitsFile, keyword.key.toLatin1(), &status)) {
+                printError(status);
+            }
+        }
+    }
+    fits_close_file(fitsFile, &status);
 #else
     Q_UNUSED(keyword)
     return false;

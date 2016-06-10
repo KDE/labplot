@@ -86,6 +86,7 @@ void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
             m_fitsFilter->parseHeader(selectedExtension, ui.twKeywordsTable);
         }
     }
+    //TODO added keywords/removed keywords
     RESET_CURSOR;
 }
 
@@ -129,11 +130,12 @@ void FITSHeaderEditWidget::openFile() {
 }
 
 void FITSHeaderEditWidget::save() {
+    foreach (const QString& fileName, m_headerUpdates.keys()) {
+        qDebug() << "Saving " << fileName;
+        m_fitsFilter->addNewKeyword(fileName,m_headerUpdates[fileName].newKeywords);
+        m_fitsFilter->deleteKeyword(fileName, m_headerUpdates[fileName].removedKeywords);
 
-    QList<HeaderUpdate> headerUpdates = m_headerUpdates.values();
-    QList<QString> fileNames = m_headerUpdates.keys();
-    for (int i = 0; i < fileNames.size(); ++i) {
-        //TODO
+        //TODO update
     }
 }
 
@@ -185,6 +187,23 @@ void FITSHeaderEditWidget::addKeyword() {
             }
         }
 
+        m_headerUpdates[m_seletedExtension].newKeywords.append(newKeyWord);
+
+        qDebug() << "Updates====";
+        qDebug() << "New Keywords: ";
+        foreach (const FITSFilter::Keyword& keyw, m_headerUpdates[m_seletedExtension].newKeywords) {
+            qDebug() << keyw.key << " " << keyw.value << " " << keyw.comment;
+        }
+        qDebug() << "Remove Keywords: ";
+        foreach (const FITSFilter::Keyword& keyw, m_headerUpdates[m_seletedExtension].removedKeywords) {
+            qDebug() << keyw.key << " " << keyw.value << " " << keyw.comment;
+        }
+
+        qDebug() << "Updated Keywords: ";
+        foreach (const FITSFilter::Keyword& keyw, m_headerUpdates[m_seletedExtension].updatedKeywords) {
+            qDebug() << keyw.key << " " << keyw.value << " " << keyw.comment;
+        }
+
         int lastRow = ui.twKeywordsTable->rowCount();
         ui.twKeywordsTable->setRowCount(lastRow + 1);
         QTableWidgetItem* newKeyWordItem = new QTableWidgetItem(newKeyWord.key);
@@ -199,17 +218,6 @@ void FITSHeaderEditWidget::addKeyword() {
         newKeyWordItem->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         ui.twKeywordsTable->setItem(lastRow, 2, newKeyWordItem);
     }
-}
-
-QList<QString> FITSHeaderEditWidget::mandatoryKeywords() const {
-    QList<QString> mandatoryKeywords;
-    const QTreeWidgetItem* currentItem = ui.twExtensions->currentItem();
-    if (currentItem->parent()->text(0).compare(QLatin1String("Images"))) {
-        mandatoryKeywords = FITSFilter::mandatoryImageExtensionKeywords();
-    } else {
-        mandatoryKeywords = FITSFilter::mandatoryTableExtensionKeywords();
-    }
-    return mandatoryKeywords;
 }
 
 void FITSHeaderEditWidget::removeKeyword() {
@@ -233,6 +241,13 @@ void FITSHeaderEditWidget::removeKeyword() {
             toRemove.value = ui.twKeywordsTable->item(row, 1)->text();
             toRemove.comment = ui.twKeywordsTable->item(row, 2)->text();
             ui.twKeywordsTable->removeRow(row);
+
+            foreach (const FITSFilter::Keyword& keyword, m_headerUpdates[m_seletedExtension].newKeywords) {
+                if (keyword.operator ==(toRemove)) {
+                    m_headerUpdates[m_seletedExtension].newKeywords.removeOne(keyword);
+                    return;
+                }
+            }
             m_headerUpdates[m_seletedExtension].removedKeywords.append(toRemove);
         } else {
             KMessageBox::information(this, i18n("Cannot remove mandatory keyword!"),i18n("Removing keyword"));
@@ -241,6 +256,17 @@ void FITSHeaderEditWidget::removeKeyword() {
 }
 
 void FITSHeaderEditWidget::updateKeyword() {
+}
+
+QList<QString> FITSHeaderEditWidget::mandatoryKeywords() const {
+    QList<QString> mandatoryKeywords;
+    const QTreeWidgetItem* currentItem = ui.twExtensions->currentItem();
+    if (currentItem->parent()->text(0).compare(QLatin1String("Images"))) {
+        mandatoryKeywords = FITSFilter::mandatoryImageExtensionKeywords();
+    } else {
+        mandatoryKeywords = FITSFilter::mandatoryTableExtensionKeywords();
+    }
+    return mandatoryKeywords;
 }
 
 bool FITSHeaderEditWidget::eventFilter(QObject * watched, QEvent * event) {

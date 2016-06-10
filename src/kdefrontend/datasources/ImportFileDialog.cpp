@@ -353,7 +353,7 @@ void ImportFileDialog::checkOkButton() {
         if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator() )
             fileName = QDir::homePath() + QDir::separator() + fileName;
     } else {
-        int extensionBraceletPos = 0;
+        int extensionBraceletPos = -1;
         if (!fileName.isEmpty()) {
             if(fileName.right(1) == QLatin1String("]")) {
                 for (int i = fileName.size() - 1; i >= 5; --i) {

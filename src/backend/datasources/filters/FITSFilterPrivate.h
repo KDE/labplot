@@ -45,8 +45,8 @@ class FITSFilterPrivate {
                 QMultiMap<QString, QString> extensionNames(const QString &fileName);
                 void updateKeyword(FITSFilter::Keyword& keyword, const QString &newKey, const QString &newValue, const QString &newComment,
                                    FITSFilter::KeywordUpdateMode updateMode = FITSFilter::UpdateValueComment);
-                void addNewKeyword(const FITSFilter::Keyword &keyword);
-                bool deleteKeyword(const FITSFilter::Keyword& keyword);
+                void addNewKeyword(const QString &fileName, const QList<FITSFilter::Keyword> &keywords);
+                void deleteKeyword(const QString &fileName, const QList<FITSFilter::Keyword>& keywords);
                 void renameKeywordKey(const FITSFilter::Keyword& keyword, const QString& newKey);
                 const QString valueOf(const QString &fileName, const char* key);
 
