@@ -299,84 +299,100 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	switch(type) {
 	case XYFourierFilterCurve::LowPass:
 		switch(form) {
-		case XYFourierFilterCurve::Ideal: 
-			for (unsigned int i = cutindex; i < n; i++)
-				ydata[i] = 0;
-			break;
-		case XYFourierFilterCurve::Butterworth:
-			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i/cutindex,2*order));
-			break;
-		case XYFourierFilterCurve::ChebyshevI:
-			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i/cutindex),2));
-			break;
-		case XYFourierFilterCurve::ChebyshevII:
-			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,cutindex/i),2));
-			break;
+			case XYFourierFilterCurve::Ideal: {
+				for (unsigned int i = cutindex; i < n; i++)
+					ydata[i] = 0;
+				break;
+			}
+			case XYFourierFilterCurve::Butterworth: {
+				for (unsigned int i = 0; i < n; i++)
+					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i/cutindex,2*order));
+				break;
+			}
+			case XYFourierFilterCurve::ChebyshevI: {
+				for (unsigned int i = 0; i < n; i++)
+					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i/cutindex),2));
+				break;
+			}
+			case XYFourierFilterCurve::ChebyshevII: {
+				for (unsigned int i = 0; i < n; i++)
+					ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,cutindex/i),2));
+				break;
+			}
 		}
 		break;
 	case XYFourierFilterCurve::HighPass:
 		switch(form) {
-		case XYFourierFilterCurve::Ideal: 
-			for (unsigned int i = 0; i < cutindex; i++)
-				ydata[i] = 0;
-			break;
-		case XYFourierFilterCurve::Butterworth:
-			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(cutindex/i,2*order));
-			break;
-		case XYFourierFilterCurve::ChebyshevI:
-			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,cutindex/i),2));
-			break;
-		case XYFourierFilterCurve::ChebyshevII:
-			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i/cutindex),2));
-			break;
+			case XYFourierFilterCurve::Ideal: {
+				for (unsigned int i = 0; i < cutindex; i++)
+					ydata[i] = 0;
+				break;
+			}
+			case XYFourierFilterCurve::Butterworth: {
+				for (unsigned int i = 0; i < n; i++)
+					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(cutindex/i,2*order));
+				break;
+			}
+			case XYFourierFilterCurve::ChebyshevI: {
+				for (unsigned int i = 0; i < n; i++)
+					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,cutindex/i),2));
+				break;
+			}
+			case XYFourierFilterCurve::ChebyshevII: {
+				for (unsigned int i = 0; i < n; i++)
+					ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i/cutindex),2));
+				break;
+			}
 		}
 		break;
 	case XYFourierFilterCurve::BandPass:
 		switch(form) {
-		case XYFourierFilterCurve::Ideal: 
-			for (unsigned int i = 0; i < cutindex; i++)
-				ydata[i] = 0;
-			for (unsigned int i = cutindex2; i < n; i++)
-				ydata[i] = 0;
-			break;
-		case XYFourierFilterCurve::Butterworth:
-			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int((i*i-centerindex*centerindex)/i/bandwidth,2*order));
-			break;
-		case XYFourierFilterCurve::ChebyshevI:
-			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
-			break;
-		case XYFourierFilterCurve::ChebyshevII:
-			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
-			break;
+			case XYFourierFilterCurve::Ideal: {
+				for (unsigned int i = 0; i < cutindex; i++)
+					ydata[i] = 0;
+				for (unsigned int i = cutindex2; i < n; i++)
+					ydata[i] = 0;
+				break;
+			}
+			case XYFourierFilterCurve::Butterworth: {
+				for (unsigned int i = 0; i < n; i++)
+					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int((i*i-centerindex*centerindex)/i/bandwidth,2*order));
+				break;
+			}
+			case XYFourierFilterCurve::ChebyshevI: {
+				for (unsigned int i = 0; i < n; i++)
+					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
+				break;
+			}
+			case XYFourierFilterCurve::ChebyshevII: {
+				for (unsigned int i = 0; i < n; i++)
+					ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
+				break;
+			}
 		}
 		break;
 	case XYFourierFilterCurve::BandReject:
 		switch(form) {
-		case XYFourierFilterCurve::Ideal: 
-			for (unsigned int i = cutindex; i < cutindex2; i++)
-				ydata[i] = 0;
-			break;
-		case XYFourierFilterCurve::Butterworth:
-			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i*bandwidth/(i*i-gsl_sf_pow_int(centerindex,2)),2*order));
-			break;
-		case XYFourierFilterCurve::ChebyshevI:
-			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
-			break;
-		case XYFourierFilterCurve::ChebyshevII:
-			for (unsigned int i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
-			break;
+			case XYFourierFilterCurve::Ideal: {
+				for (unsigned int i = cutindex; i < cutindex2; i++)
+					ydata[i] = 0;
+				break;
+			}
+			case XYFourierFilterCurve::Butterworth: {
+				for (unsigned int i = 0; i < n; i++)
+					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i*bandwidth/(i*i-gsl_sf_pow_int(centerindex,2)),2*order));
+				break;
+			}
+			case XYFourierFilterCurve::ChebyshevI: {
+				for (unsigned int i = 0; i < n; i++)
+					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
+				break;
+			}
+			case XYFourierFilterCurve::ChebyshevII: {
+				for (unsigned int i = 0; i < n; i++)
+					ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
+				break;
+			}
 		}
 		break;
 //TODO	case XYFourierFilterCurve::Threshold:
