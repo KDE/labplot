@@ -227,7 +227,6 @@ class SpreadsheetView : public QWidget {
 		void currentColumnChanged(const QModelIndex& current, const QModelIndex & previous);
 		void handleAspectAdded(const AbstractAspect* aspect);
 		void handleAspectAboutToBeRemoved(const AbstractAspect* aspect);
-		void updateSectionSize(const Column*);
 		void updateHeaderGeometry(Qt::Orientation o, int first, int last);
 
 		void selectColumn(int);
