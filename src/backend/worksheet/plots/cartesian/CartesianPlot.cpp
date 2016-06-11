@@ -122,7 +122,7 @@ void CartesianPlot::init() {
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(childAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	        this, SLOT(childRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
+			this, SLOT(childRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -1469,8 +1469,7 @@ void CartesianPlotPrivate::checkYRange() {
 }
 
 CartesianCoordinateSystem::Scale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, Interval<double>& interval,
-        double sceneStart, double sceneEnd,
-        double logicalStart, double logicalEnd) {
+	double sceneStart, double sceneEnd,double logicalStart, double logicalEnd) {
 	if (type == CartesianPlot::ScaleLinear) {
 		return CartesianCoordinateSystem::Scale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	} else {
@@ -1683,7 +1682,7 @@ void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsIt
 
 	painter->setPen(QPen(Qt::black, 3));
 	if ( (mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode)
-	        && (!m_selectionBandIsShown)) {
+			&& (!m_selectionBandIsShown)) {
 		painter->drawLine(m_selectionStartLine);
 	}
 

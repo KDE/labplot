@@ -284,7 +284,7 @@ void XYCurve::setXColumn(const AbstractColumn* column) {
 			//update the curve itself on changes
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(xColumnAboutToBeRemoved(const AbstractAspect*)));
+					this, SLOT(xColumnAboutToBeRemoved(const AbstractAspect*)));
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -304,7 +304,7 @@ void XYCurve::setYColumn(const AbstractColumn* column) {
 			//update the curve itself on changes
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(yColumnAboutToBeRemoved(const AbstractAspect*)));
+					this, SLOT(yColumnAboutToBeRemoved(const AbstractAspect*)));
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -427,7 +427,7 @@ void XYCurve::setValuesColumn(const AbstractColumn* column) {
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateValues()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(valuesColumnAboutToBeRemoved(const AbstractAspect*)));
+					this, SLOT(valuesColumnAboutToBeRemoved(const AbstractAspect*)));
 		}
 	}
 }
@@ -570,7 +570,7 @@ void XYCurve::setXErrorPlusColumn(const AbstractColumn* column) {
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(xErrorPlusColumnAboutToBeRemoved(const AbstractAspect*)));
+					this, SLOT(xErrorPlusColumnAboutToBeRemoved(const AbstractAspect*)));
 		}
 	}
 }
@@ -583,7 +583,7 @@ void XYCurve::setXErrorMinusColumn(const AbstractColumn* column) {
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(xErrorMinusColumnAboutToBeRemoved(const AbstractAspect*)));
+					this, SLOT(xErrorMinusColumnAboutToBeRemoved(const AbstractAspect*)));
 		}
 	}
 }
@@ -603,7 +603,7 @@ void XYCurve::setYErrorPlusColumn(const AbstractColumn* column) {
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(yErrorPlusColumnAboutToBeRemoved(const AbstractAspect*)));
+					this, SLOT(yErrorPlusColumnAboutToBeRemoved(const AbstractAspect*)));
 		}
 	}
 }
@@ -616,7 +616,7 @@ void XYCurve::setYErrorMinusColumn(const AbstractColumn* column) {
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			        this, SLOT(yErrorMinusColumnAboutToBeRemoved(const AbstractAspect*)));
+					this, SLOT(yErrorMinusColumnAboutToBeRemoved(const AbstractAspect*)));
 		}
 	}
 }
@@ -825,7 +825,7 @@ void XYCurvePrivate::retransform() {
 	//take over only valid and non masked points.
 	for (int row = startRow; row <= endRow; row++) {
 		if ( xColumn->isValid(row) && yColumn->isValid(row)
-		        && (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
+				&& (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
 
 			switch (xColMode) {
 			case AbstractColumn::Numeric:
@@ -1226,7 +1226,7 @@ void XYCurvePrivate::updateValues() {
 		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).x()) + ','
-			              + QString::number(symbolPointsLogical.at(i).y()) + valuesSuffix;
+						  + QString::number(symbolPointsLogical.at(i).y()) + valuesSuffix;
 		}
 		break;
 	}
@@ -1234,7 +1234,7 @@ void XYCurvePrivate::updateValues() {
 		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			valuesStrings <<  valuesPrefix + '(' + QString::number(symbolPointsLogical.at(i).x()) + ','
-			              + QString::number(symbolPointsLogical.at(i).y()) +')' + valuesSuffix;
+						  + QString::number(symbolPointsLogical.at(i).y()) +')' + valuesSuffix;
 		}
 		break;
 	}
@@ -1624,18 +1624,18 @@ void XYCurvePrivate::updateErrorBars() {
 			switch (errorBarsType) {
 			case XYCurve::ErrorBarsSimple:
 				lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
-				                    QPointF(point.x()+errorPlus, point.y())));
+						QPointF(point.x()+errorPlus, point.y())));
 				break;
 			case XYCurve::ErrorBarsWithEnds:
 				lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
-				                    QPointF(point.x()+errorPlus, point.y())));
+						QPointF(point.x()+errorPlus, point.y())));
 				if (errorMinus!=0) {
 					lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()-capSizeX),
-					                    QPointF(point.x()-errorMinus, point.y()+capSizeX)));
+							QPointF(point.x()-errorMinus, point.y()+capSizeX)));
 				}
 				if (errorPlus!=0) {
 					lines.append(QLineF(QPointF(point.x()+errorPlus, point.y()-capSizeX),
-					                    QPointF(point.x()+errorPlus, point.y()+capSizeX)));
+							QPointF(point.x()+errorPlus, point.y()+capSizeX)));
 				}
 				break;
 			}
@@ -1662,17 +1662,17 @@ void XYCurvePrivate::updateErrorBars() {
 			switch (errorBarsType) {
 			case XYCurve::ErrorBarsSimple:
 				lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
-				                    QPointF(point.x(), point.y()+errorPlus)));
+						QPointF(point.x(), point.y()+errorPlus)));
 				break;
 			case XYCurve::ErrorBarsWithEnds:
 				lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
-				                    QPointF(point.x(), point.y()+errorPlus)));
+						QPointF(point.x(), point.y()+errorPlus)));
 				if (errorMinus!=0)
 					lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()-errorMinus),
-					                    QPointF(point.x()+capSizeY, point.y()-errorMinus)));
+							QPointF(point.x()+capSizeY, point.y()-errorMinus)));
 				if (errorPlus!=0)
 					lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()+errorPlus),
-					                    QPointF(point.x()+capSizeY, point.y()+errorPlus)));
+							QPointF(point.x()+capSizeY, point.y()+errorPlus)));
 				break;
 			}
 		}

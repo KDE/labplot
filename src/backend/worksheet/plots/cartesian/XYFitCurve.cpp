@@ -832,25 +832,25 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 bool XYFitCurve::load(XmlStreamReader* reader) {
 	Q_D(XYFitCurve);
 
-    if (!reader->isStartElement() || reader->name() != "xyFitCurve") {
-        reader->raiseError(i18n("no xy fit curve element found"));
-        return false;
-    }
+	if (!reader->isStartElement() || reader->name() != "xyFitCurve") {
+		reader->raiseError(i18n("no xy fit curve element found"));
+		return false;
+	}
 
-    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-    QXmlStreamAttributes attribs;
-    QString str;
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QXmlStreamAttributes attribs;
+	QString str;
 
-    while (!reader->atEnd()) {
-        reader->readNext();
-        if (reader->isEndElement() && reader->name() == "xyFitCurve")
-            break;
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == "xyFitCurve")
+			break;
 
-        if (!reader->isStartElement())
-            continue;
+		if (!reader->isStartElement())
+			continue;
 
 		if (reader->name() == "xyCurve") {
-            if ( !XYCurve::load(reader) )
+			if ( !XYCurve::load(reader) )
 				return false;
 		} else if (reader->name() == "fitData") {
 			attribs = reader->attributes();
@@ -860,46 +860,46 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(weightsColumn);
 
 			str = attribs.value("modelType").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'modelType'"));
-            else
-                d->fitData.modelType = (XYFitCurve::ModelType)str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'modelType'"));
+			else
+				d->fitData.modelType = (XYFitCurve::ModelType)str.toInt();
 
 			str = attribs.value("weightsType").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'weightsType'"));
-            else
-                d->fitData.weightsType = (XYFitCurve::WeightsType)str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'weightsType'"));
+			else
+				d->fitData.weightsType = (XYFitCurve::WeightsType)str.toInt();
 
 			str = attribs.value("degree").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'degree'"));
-            else
-                d->fitData.degree = str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'degree'"));
+			else
+				d->fitData.degree = str.toInt();
 
 			str = attribs.value("model").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'model'"));
-            else
-                d->fitData.model = str;
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'model'"));
+			else
+				d->fitData.model = str;
 
 			str = attribs.value("maxIterations").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'maxIterations'"));
-            else
-                d->fitData.maxIterations = str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'maxIterations'"));
+			else
+				d->fitData.maxIterations = str.toInt();
 
 			str = attribs.value("eps").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'eps'"));
-            else
-                d->fitData.eps = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'eps'"));
+			else
+				d->fitData.eps = str.toDouble();
 
 			str = attribs.value("fittedPoints").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'fittedPoints'"));
-            else
-                d->fitData.fittedPoints = str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'fittedPoints'"));
+			else
+				d->fitData.fittedPoints = str.toInt();
 		} else if (reader->name() == "name") {
 			d->fitData.paramNames<<reader->readElementText();
 		} else if (reader->name() == "startValue") {
@@ -912,94 +912,94 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			attribs = reader->attributes();
 
 			str = attribs.value("available").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'available'"));
-            else
-                d->fitResult.available = str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'available'"));
+			else
+				d->fitResult.available = str.toInt();
 
 			str = attribs.value("valid").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'valid'"));
-            else
-                d->fitResult.valid = str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'valid'"));
+			else
+				d->fitResult.valid = str.toInt();
 
 			str = attribs.value("status").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'status'"));
-            else
-                d->fitResult.status = str;
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'status'"));
+			else
+				d->fitResult.status = str;
 
 			str = attribs.value("iterations").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'iterations'"));
-            else
-                d->fitResult.iterations = str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'iterations'"));
+			else
+				d->fitResult.iterations = str.toInt();
 
 			str = attribs.value("time").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'time'"));
-            else
-                d->fitResult.elapsedTime = str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'time'"));
+			else
+				d->fitResult.elapsedTime = str.toInt();
 
 			str = attribs.value("dof").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'dof'"));
-            else
-                d->fitResult.dof = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'dof'"));
+			else
+				d->fitResult.dof = str.toDouble();
 
 			str = attribs.value("sse").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'sse'"));
-            else
-                d->fitResult.sse = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'sse'"));
+			else
+				d->fitResult.sse = str.toDouble();
 
 			str = attribs.value("mse").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'mse'"));
-            else
-                d->fitResult.mse = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'mse'"));
+			else
+				d->fitResult.mse = str.toDouble();
 
 			str = attribs.value("rmse").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'rmse'"));
-            else
-                d->fitResult.rmse = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'rmse'"));
+			else
+				d->fitResult.rmse = str.toDouble();
 
 			str = attribs.value("mae").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'mae'"));
-            else
-                d->fitResult.mae = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'mae'"));
+			else
+				d->fitResult.mae = str.toDouble();
 
 			str = attribs.value("rms").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'rms'"));
-            else
-                d->fitResult.rms = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'rms'"));
+			else
+				d->fitResult.rms = str.toDouble();
 
 			str = attribs.value("rsd").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'rsd'"));
-            else
-                d->fitResult.rsd = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'rsd'"));
+			else
+				d->fitResult.rsd = str.toDouble();
 
 			str = attribs.value("rsquared").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'rsquared'"));
-            else
-                d->fitResult.rsquared = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'rsquared'"));
+			else
+				d->fitResult.rsquared = str.toDouble();
 
 			str = attribs.value("rsquaredAdj").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'rsquaredAdj'"));
-            else
-                d->fitResult.rsquaredAdj = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'rsquaredAdj'"));
+			else
+				d->fitResult.rsquaredAdj = str.toDouble();
 
 			str = attribs.value("solverOutput").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'solverOutput'"));
-            else
-                d->fitResult.solverOutput = str;
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'solverOutput'"));
+			else
+				d->fitResult.solverOutput = str;
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {

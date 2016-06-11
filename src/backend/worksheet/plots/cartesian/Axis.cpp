@@ -1800,7 +1800,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 }
 
 void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-    q->createContextMenu()->exec(event->screenPos());
+	q->createContextMenu()->exec(event->screenPos());
 }
 
 void AxisPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
@@ -1826,12 +1826,12 @@ void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 void Axis::save(QXmlStreamWriter* writer) const{
 	Q_D(const Axis);
 
-    writer->writeStartElement( "axis" );
-    writeBasicAttributes( writer );
-    writeCommentElement( writer );
+	writer->writeStartElement( "axis" );
+	writeBasicAttributes( writer );
+	writeCommentElement( writer );
 
 	//general
-    writer->writeStartElement( "general" );
+	writer->writeStartElement( "general" );
 	writer->writeAttribute( "autoScale", QString::number(d->autoScale) );
 	writer->writeAttribute( "orientation", QString::number(d->orientation) );
 	writer->writeAttribute( "position", QString::number(d->position) );
@@ -1910,109 +1910,109 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "opacity", QString::number(d->minorGridOpacity) );
 	writer->writeEndElement();
 
-    writer->writeEndElement(); // close "axis" section
+	writer->writeEndElement(); // close "axis" section
 }
 
 //! Load from XML
 bool Axis::load(XmlStreamReader* reader) {
 	Q_D(Axis);
 
-    if (!reader->isStartElement() || reader->name() != "axis") {
-        reader->raiseError(i18n("no axis element found"));
-        return false;
-    }
+	if (!reader->isStartElement() || reader->name() != "axis") {
+		reader->raiseError(i18n("no axis element found"));
+		return false;
+	}
 
-    if (!readBasicAttributes(reader))
-        return false;
+	if (!readBasicAttributes(reader))
+		return false;
 
-    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-    QXmlStreamAttributes attribs;
-    QString str;
-    QRectF rect;
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QXmlStreamAttributes attribs;
+	QString str;
+	QRectF rect;
 
-    while (!reader->atEnd()) {
-        reader->readNext();
-        if (reader->isEndElement() && reader->name() == "axis")
-            break;
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == "axis")
+			break;
 
-        if (!reader->isStartElement())
-            continue;
+		if (!reader->isStartElement())
+			continue;
 
-        if (reader->name() == "comment") {
-            if (!readCommentElement(reader)) return false;
+		if (reader->name() == "comment") {
+			if (!readCommentElement(reader)) return false;
 		} else if (reader->name() == "general") {
-            attribs = reader->attributes();
+			attribs = reader->attributes();
 
 			str = attribs.value("autoScale").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'autoScale'"));
-            else
-                d->autoScale = (bool)str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'autoScale'"));
+			else
+				d->autoScale = (bool)str.toInt();
 
-            str = attribs.value("orientation").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'orientation'"));
-            else
-                d->orientation = (Axis::AxisOrientation)str.toInt();
+			str = attribs.value("orientation").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'orientation'"));
+			else
+				d->orientation = (Axis::AxisOrientation)str.toInt();
 
-            str = attribs.value("position").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'position'"));
-            else
-                d->position = (Axis::AxisPosition)str.toInt();
+			str = attribs.value("position").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'position'"));
+			else
+				d->position = (Axis::AxisPosition)str.toInt();
 
-            str = attribs.value("scale").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'scale'"));
-            else
-                d->scale = (Axis::AxisScale)str.toInt();
+			str = attribs.value("scale").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'scale'"));
+			else
+				d->scale = (Axis::AxisScale)str.toInt();
 
-            str = attribs.value("offset").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'offset'"));
-            else
-                d->offset = str.toDouble();
+			str = attribs.value("offset").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'offset'"));
+			else
+				d->offset = str.toDouble();
 
-            str = attribs.value("start").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'start'"));
-            else
-                d->start = str.toDouble();
+			str = attribs.value("start").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'start'"));
+			else
+				d->start = str.toDouble();
 
 			str = attribs.value("end").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'end'"));
-            else
-                d->end = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'end'"));
+			else
+				d->end = str.toDouble();
 
-            str = attribs.value("scalingFactor").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'scalingFactor'"));
-            else
-                d->scalingFactor = str.toDouble();
+			str = attribs.value("scalingFactor").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'scalingFactor'"));
+			else
+				d->scalingFactor = str.toDouble();
 
 			str = attribs.value("zeroOffset").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'zeroOffset'"));
-            else
-                d->zeroOffset = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'zeroOffset'"));
+			else
+				d->zeroOffset = str.toDouble();
 
 			str = attribs.value("titleOffsetX").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'titleOffsetX'"));
-            else
-                d->titleOffsetX = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'titleOffsetX'"));
+			else
+				d->titleOffsetX = str.toDouble();
 			str = attribs.value("titleOffsetY").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'titleOffsetY'"));
-            else
-                d->titleOffsetY = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'titleOffsetY'"));
+			else
+				d->titleOffsetY = str.toDouble();
 
 			str = attribs.value("visible").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'visible'"));
-            else
-                d->setVisible(str.toInt());
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'visible'"));
+			else
+				d->setVisible(str.toInt());
 		} else if (reader->name() == "textLabel") {
 			d->title->load(reader);
 		} else if (reader->name() == "line") {
@@ -2021,150 +2021,150 @@ bool Axis::load(XmlStreamReader* reader) {
 			READ_QPEN(d->linePen);
 
 			str = attribs.value("opacity").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'opacity'"));
-            else
-                d->lineOpacity = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+			else
+				d->lineOpacity = str.toDouble();
 
 			str = attribs.value("arrowType").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'arrowType'"));
-            else
-                d->arrowType = (Axis::ArrowType)str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'arrowType'"));
+			else
+				d->arrowType = (Axis::ArrowType)str.toInt();
 
 			str = attribs.value("arrowPosition").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'arrowPosition'"));
-            else
-                d->arrowPosition = (Axis::ArrowPosition)str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'arrowPosition'"));
+			else
+				d->arrowPosition = (Axis::ArrowPosition)str.toInt();
 
 			str = attribs.value("arrowSize").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'arrowSize'"));
-            else
-                d->arrowSize = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'arrowSize'"));
+			else
+				d->arrowSize = str.toDouble();
 		} else if (reader->name() == "majorTicks") {
 			attribs = reader->attributes();
 
 			str = attribs.value("direction").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'direction'"));
-            else
-                d->majorTicksDirection = (Axis::TicksDirection)str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'direction'"));
+			else
+				d->majorTicksDirection = (Axis::TicksDirection)str.toInt();
 
 			str = attribs.value("type").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'type'"));
-            else
-                d->majorTicksType = (Axis::TicksType)str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'type'"));
+			else
+				d->majorTicksType = (Axis::TicksType)str.toInt();
 
 			str = attribs.value("number").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'number'"));
-            else
-                d->majorTicksNumber = str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'number'"));
+			else
+				d->majorTicksNumber = str.toInt();
 
 			str = attribs.value("increment").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'increment'"));
-            else
-                d->majorTicksIncrement = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'increment'"));
+			else
+				d->majorTicksIncrement = str.toDouble();
 
 			READ_COLUMN(majorTicksColumn);
 
 			str = attribs.value("length").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'length'"));
-            else
-                d->majorTicksLength = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'length'"));
+			else
+				d->majorTicksLength = str.toDouble();
 
 			READ_QPEN(d->majorTicksPen);
 
 			str = attribs.value("opacity").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'opacity'"));
-            else
-                d->majorTicksOpacity = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+			else
+				d->majorTicksOpacity = str.toDouble();
 		} else if (reader->name() == "minorTicks") {
 			attribs = reader->attributes();
 
 			str = attribs.value("direction").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'direction'"));
-            else
-                d->minorTicksDirection = (Axis::TicksDirection)str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'direction'"));
+			else
+				d->minorTicksDirection = (Axis::TicksDirection)str.toInt();
 
 			str = attribs.value("type").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'type'"));
-            else
-                d->minorTicksType = (Axis::TicksType)str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'type'"));
+			else
+				d->minorTicksType = (Axis::TicksType)str.toInt();
 
 			str = attribs.value("number").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'number'"));
-            else
-                d->minorTicksNumber = str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'number'"));
+			else
+				d->minorTicksNumber = str.toInt();
 
 			str = attribs.value("increment").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'increment'"));
-            else
-                d->minorTicksIncrement = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'increment'"));
+			else
+				d->minorTicksIncrement = str.toDouble();
 
 			READ_COLUMN(minorTicksColumn);
 
 			str = attribs.value("length").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'length'"));
-            else
-                d->minorTicksLength = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'length'"));
+			else
+				d->minorTicksLength = str.toDouble();
 
 			READ_QPEN(d->minorTicksPen);
 
 			str = attribs.value("opacity").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'opacity'"));
-            else
-                d->minorTicksOpacity = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+			else
+				d->minorTicksOpacity = str.toDouble();
 		} else if (reader->name() == "labels") {
 			attribs = reader->attributes();
 
 			str = attribs.value("position").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'position'"));
-            else
-                d->labelsPosition = (Axis::LabelsPosition)str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'position'"));
+			else
+				d->labelsPosition = (Axis::LabelsPosition)str.toInt();
 
 			str = attribs.value("offset").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'offset'"));
-            else
-                d->labelsOffset = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'offset'"));
+			else
+				d->labelsOffset = str.toDouble();
 
 			str = attribs.value("rotation").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'rotation'"));
-            else
-                d->labelsRotationAngle = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'rotation'"));
+			else
+				d->labelsRotationAngle = str.toDouble();
 
 			str = attribs.value("format").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'format'"));
-            else
-                d->labelsFormat = (Axis::LabelsFormat)str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'format'"));
+			else
+				d->labelsFormat = (Axis::LabelsFormat)str.toInt();
 
 			str = attribs.value("precision").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'precision'"));
-            else
-                d->labelsPrecision = str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'precision'"));
+			else
+				d->labelsPrecision = str.toInt();
 
 			str = attribs.value("autoPrecision").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'autoPrecision'"));
-            else
-                d->labelsAutoPrecision = str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'autoPrecision'"));
+			else
+				d->labelsAutoPrecision = str.toInt();
 
 			READ_QCOLOR(d->labelsColor);
 			READ_QFONT(d->labelsFont);
@@ -2174,35 +2174,35 @@ bool Axis::load(XmlStreamReader* reader) {
 			d->labelsSuffix = attribs.value("suffix").toString();
 
 			str = attribs.value("opacity").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'opacity'"));
-            else
-                d->labelsOpacity = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+			else
+				d->labelsOpacity = str.toDouble();
 		} else if (reader->name() == "majorGrid") {
 			attribs = reader->attributes();
 
 			READ_QPEN(d->majorGridPen);
 
 			str = attribs.value("opacity").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'opacity'"));
-            else
-                d->majorGridOpacity = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+			else
+				d->majorGridOpacity = str.toDouble();
 		} else if (reader->name() == "minorGrid") {
 			attribs = reader->attributes();
 
 			READ_QPEN(d->minorGridPen);
 
 			str = attribs.value("opacity").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'opacity'"));
-            else
-                d->minorGridOpacity = str.toDouble();
-        } else { // unknown element
-            reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-            if (!reader->skipToEndElement()) return false;
-        }
-    }
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'opacity'"));
+			else
+				d->minorGridOpacity = str.toDouble();
+		} else { // unknown element
+			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			if (!reader->skipToEndElement()) return false;
+		}
+	}
 
-    return true;
+	return true;
 }

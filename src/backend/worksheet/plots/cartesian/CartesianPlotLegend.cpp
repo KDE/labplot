@@ -422,7 +422,7 @@ QRectF CartesianPlotLegendPrivate::boundingRect() const {
 }
 
 void CartesianPlotLegendPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-    q->createContextMenu()->exec(event->screenPos());
+	q->createContextMenu()->exec(event->screenPos());
 }
 
 /*!
@@ -812,7 +812,7 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 		//we don't set the position related member variables during the mouse movements.
 		//this is done on mouse release events only.
 		emit q->positionChanged(tempPosition);
-     }
+	 }
 
 	return QGraphicsItem::itemChange(change, value);
 }
@@ -857,9 +857,9 @@ void CartesianPlotLegendPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 	Q_D(const CartesianPlotLegend);
 
-    writer->writeStartElement( "cartesianPlotLegend" );
-    writeBasicAttributes( writer );
-    writeCommentElement( writer );
+	writer->writeStartElement( "cartesianPlotLegend" );
+	writeBasicAttributes( writer );
+	writeCommentElement( writer );
 
 	//general
 	writer->writeStartElement( "general" );
@@ -871,48 +871,48 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//geometry
-    writer->writeStartElement( "geometry" );
-    writer->writeAttribute( "x", QString::number(d->position.point.x()) );
-    writer->writeAttribute( "y", QString::number(d->position.point.y()) );
-    writer->writeAttribute( "horizontalPosition", QString::number(d->position.horizontalPosition) );
+	writer->writeStartElement( "geometry" );
+	writer->writeAttribute( "x", QString::number(d->position.point.x()) );
+	writer->writeAttribute( "y", QString::number(d->position.point.y()) );
+	writer->writeAttribute( "horizontalPosition", QString::number(d->position.horizontalPosition) );
 	writer->writeAttribute( "verticalPosition", QString::number(d->position.verticalPosition) );
-    writer->writeEndElement();
+	writer->writeEndElement();
 
 	//title
 	d->title->save(writer);
 
 	//background
 	writer->writeStartElement( "background" );
-    writer->writeAttribute( "type", QString::number(d->backgroundType) );
-    writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
-    writer->writeAttribute( "imageStyle", QString::number(d->backgroundImageStyle) );
-    writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrushStyle) );
-    writer->writeAttribute( "firstColor_r", QString::number(d->backgroundFirstColor.red()) );
-    writer->writeAttribute( "firstColor_g", QString::number(d->backgroundFirstColor.green()) );
-    writer->writeAttribute( "firstColor_b", QString::number(d->backgroundFirstColor.blue()) );
-    writer->writeAttribute( "secondColor_r", QString::number(d->backgroundSecondColor.red()) );
-    writer->writeAttribute( "secondColor_g", QString::number(d->backgroundSecondColor.green()) );
-    writer->writeAttribute( "secondColor_b", QString::number(d->backgroundSecondColor.blue()) );
-    writer->writeAttribute( "fileName", d->backgroundFileName );
-    writer->writeAttribute( "opacity", QString::number(d->backgroundOpacity) );
-    writer->writeEndElement();
+	writer->writeAttribute( "type", QString::number(d->backgroundType) );
+	writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
+	writer->writeAttribute( "imageStyle", QString::number(d->backgroundImageStyle) );
+	writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrushStyle) );
+	writer->writeAttribute( "firstColor_r", QString::number(d->backgroundFirstColor.red()) );
+	writer->writeAttribute( "firstColor_g", QString::number(d->backgroundFirstColor.green()) );
+	writer->writeAttribute( "firstColor_b", QString::number(d->backgroundFirstColor.blue()) );
+	writer->writeAttribute( "secondColor_r", QString::number(d->backgroundSecondColor.red()) );
+	writer->writeAttribute( "secondColor_g", QString::number(d->backgroundSecondColor.green()) );
+	writer->writeAttribute( "secondColor_b", QString::number(d->backgroundSecondColor.blue()) );
+	writer->writeAttribute( "fileName", d->backgroundFileName );
+	writer->writeAttribute( "opacity", QString::number(d->backgroundOpacity) );
+	writer->writeEndElement();
 
 	//border
 	writer->writeStartElement( "border" );
 	WRITE_QPEN(d->borderPen);
-    writer->writeAttribute( "borderOpacity", QString::number(d->borderOpacity) );
-    writer->writeEndElement();
+	writer->writeAttribute( "borderOpacity", QString::number(d->borderOpacity) );
+	writer->writeEndElement();
 
-    //layout
-    writer->writeStartElement( "layout" );
-    writer->writeAttribute( "topMargin", QString::number(d->layoutTopMargin) );
-    writer->writeAttribute( "bottomMargin", QString::number(d->layoutBottomMargin) );
-    writer->writeAttribute( "leftMargin", QString::number(d->layoutLeftMargin) );
-    writer->writeAttribute( "rightMargin", QString::number(d->layoutRightMargin) );
-    writer->writeAttribute( "verticalSpacing", QString::number(d->layoutVerticalSpacing) );
-    writer->writeAttribute( "horizontalSpacing", QString::number(d->layoutHorizontalSpacing) );
-    writer->writeAttribute( "columnCount", QString::number(d->layoutColumnCount) );
-    writer->writeEndElement();
+	//layout
+	writer->writeStartElement( "layout" );
+	writer->writeAttribute( "topMargin", QString::number(d->layoutTopMargin) );
+	writer->writeAttribute( "bottomMargin", QString::number(d->layoutBottomMargin) );
+	writer->writeAttribute( "leftMargin", QString::number(d->layoutLeftMargin) );
+	writer->writeAttribute( "rightMargin", QString::number(d->layoutRightMargin) );
+	writer->writeAttribute( "verticalSpacing", QString::number(d->layoutVerticalSpacing) );
+	writer->writeAttribute( "horizontalSpacing", QString::number(d->layoutHorizontalSpacing) );
+	writer->writeAttribute( "columnCount", QString::number(d->layoutColumnCount) );
+	writer->writeEndElement();
 
 	writer->writeEndElement(); // close "cartesianPlotLegend" section
 }
@@ -921,28 +921,28 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 bool CartesianPlotLegend::load(XmlStreamReader* reader) {
 	Q_D(CartesianPlotLegend);
 
-    if (!reader->isStartElement() || reader->name() != "cartesianPlotLegend") {
-        reader->raiseError(i18n("no cartesian plot legend element found"));
-        return false;
-    }
+	if (!reader->isStartElement() || reader->name() != "cartesianPlotLegend") {
+		reader->raiseError(i18n("no cartesian plot legend element found"));
+		return false;
+	}
 
-    if (!readBasicAttributes(reader))
-        return false;
+	if (!readBasicAttributes(reader))
+		return false;
 
-    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-    QXmlStreamAttributes attribs;
-    QString str;
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QXmlStreamAttributes attribs;
+	QString str;
 
-    while (!reader->atEnd()) {
-        reader->readNext();
-        if (reader->isEndElement() && reader->name() == "cartesianPlotLegend")
-            break;
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == "cartesianPlotLegend")
+			break;
 
-        if (!reader->isStartElement())
-            continue;
+		if (!reader->isStartElement())
+			continue;
 
-        if (reader->name() == "comment") {
-            if (!readCommentElement(reader)) return false;
+		if (reader->name() == "comment") {
+			if (!readCommentElement(reader)) return false;
 		} else if (reader->name() == "general") {
 			attribs = reader->attributes();
 
@@ -950,179 +950,179 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader) {
 			READ_QFONT(d->labelFont);
 
 			str = attribs.value("columnMajor").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'columnMajor'"));
-            else
-                d->labelColumnMajor = str.toInt();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'columnMajor'"));
+			else
+				d->labelColumnMajor = str.toInt();
 
 			str = attribs.value("lineSymbolWidth").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'lineSymbolWidth'"));
-            else
-                d->lineSymbolWidth = str.toDouble();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'lineSymbolWidth'"));
+			else
+				d->lineSymbolWidth = str.toDouble();
 
 			str = attribs.value("visible").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'visible'"));
-            else
-                d->setVisible(str.toInt());
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'visible'"));
+			else
+				d->setVisible(str.toInt());
 		} else if (reader->name() == "geometry") {
-            attribs = reader->attributes();
+			attribs = reader->attributes();
 
-            str = attribs.value("x").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'x'"));
-            else
-                d->position.point.setX(str.toDouble());
+			str = attribs.value("x").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'x'"));
+			else
+				d->position.point.setX(str.toDouble());
 
-            str = attribs.value("y").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'y'"));
-            else
-                d->position.point.setY(str.toDouble());
+			str = attribs.value("y").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'y'"));
+			else
+				d->position.point.setY(str.toDouble());
 
-            str = attribs.value("horizontalPosition").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'horizontalPosition'"));
-            else
-                d->position.horizontalPosition = (CartesianPlotLegend::HorizontalPosition)str.toInt();
+			str = attribs.value("horizontalPosition").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'horizontalPosition'"));
+			else
+				d->position.horizontalPosition = (CartesianPlotLegend::HorizontalPosition)str.toInt();
 
-            str = attribs.value("verticalPosition").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'verticalPosition'"));
-            else
-                d->position.verticalPosition = (CartesianPlotLegend::VerticalPosition)str.toInt();
-        } else if (reader->name() == "textLabel") {
-            if (!d->title->load(reader)) {
-                delete d->title;
+			str = attribs.value("verticalPosition").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'verticalPosition'"));
+			else
+				d->position.verticalPosition = (CartesianPlotLegend::VerticalPosition)str.toInt();
+		} else if (reader->name() == "textLabel") {
+			if (!d->title->load(reader)) {
+				delete d->title;
 				d->title=0;
-                return false;
-            }
+				return false;
+			}
 		} else if (reader->name() == "background") {
-            attribs = reader->attributes();
+			attribs = reader->attributes();
 
-            str = attribs.value("type").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("type"));
-            else
-                d->backgroundType = PlotArea::BackgroundType(str.toInt());
+			str = attribs.value("type").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("type"));
+			else
+				d->backgroundType = PlotArea::BackgroundType(str.toInt());
 
-            str = attribs.value("colorStyle").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("colorStyle"));
-            else
-                d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
+			str = attribs.value("colorStyle").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("colorStyle"));
+			else
+				d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
 
-            str = attribs.value("imageStyle").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("imageStyle"));
-            else
-                d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
+			str = attribs.value("imageStyle").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("imageStyle"));
+			else
+				d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
 
-            str = attribs.value("brushStyle").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("brushStyle"));
-            else
-                d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
+			str = attribs.value("brushStyle").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("brushStyle"));
+			else
+				d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
 
-            str = attribs.value("firstColor_r").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("firstColor_r"));
-            else
-                d->backgroundFirstColor.setRed(str.toInt());
+			str = attribs.value("firstColor_r").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("firstColor_r"));
+			else
+				d->backgroundFirstColor.setRed(str.toInt());
 
-            str = attribs.value("firstColor_g").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("firstColor_g"));
-            else
-                d->backgroundFirstColor.setGreen(str.toInt());
+			str = attribs.value("firstColor_g").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("firstColor_g"));
+			else
+				d->backgroundFirstColor.setGreen(str.toInt());
 
-            str = attribs.value("firstColor_b").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("firstColor_b"));
-            else
-                d->backgroundFirstColor.setBlue(str.toInt());
+			str = attribs.value("firstColor_b").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("firstColor_b"));
+			else
+				d->backgroundFirstColor.setBlue(str.toInt());
 
-            str = attribs.value("secondColor_r").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("secondColor_r"));
-            else
-                d->backgroundSecondColor.setRed(str.toInt());
+			str = attribs.value("secondColor_r").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("secondColor_r"));
+			else
+				d->backgroundSecondColor.setRed(str.toInt());
 
-            str = attribs.value("secondColor_g").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("secondColor_g"));
-            else
-                d->backgroundSecondColor.setGreen(str.toInt());
+			str = attribs.value("secondColor_g").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("secondColor_g"));
+			else
+				d->backgroundSecondColor.setGreen(str.toInt());
 
-            str = attribs.value("secondColor_b").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("secondColor_b"));
-            else
-                d->backgroundSecondColor.setBlue(str.toInt());
+			str = attribs.value("secondColor_b").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("secondColor_b"));
+			else
+				d->backgroundSecondColor.setBlue(str.toInt());
 
-            str = attribs.value("fileName").toString();
-            d->backgroundFileName = str;
+			str = attribs.value("fileName").toString();
+			d->backgroundFileName = str;
 
-            str = attribs.value("opacity").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("opacity"));
-            else
-                d->backgroundOpacity = str.toDouble();
+			str = attribs.value("opacity").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("opacity"));
+			else
+				d->backgroundOpacity = str.toDouble();
 		} else if (reader->name() == "border") {
 			attribs = reader->attributes();
 
 			READ_QPEN(d->borderPen);
 
-            str = attribs.value("borderOpacity").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("borderOpacity"));
-            else
-                d->borderOpacity = str.toDouble();
-        } else if (reader->name() == "layout") {
-            attribs = reader->attributes();
+			str = attribs.value("borderOpacity").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("borderOpacity"));
+			else
+				d->borderOpacity = str.toDouble();
+		} else if (reader->name() == "layout") {
+			attribs = reader->attributes();
 
-            str = attribs.value("topMargin").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("topMargin"));
-            else
-                d->layoutTopMargin = str.toDouble();
+			str = attribs.value("topMargin").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("topMargin"));
+			else
+				d->layoutTopMargin = str.toDouble();
 
-            str = attribs.value("bottomMargin").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("bottomMargin"));
-            else
-                d->layoutBottomMargin = str.toDouble();
+			str = attribs.value("bottomMargin").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("bottomMargin"));
+			else
+				d->layoutBottomMargin = str.toDouble();
 
-            str = attribs.value("leftMargin").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("leftMargin"));
-            else
-                d->layoutLeftMargin = str.toDouble();
+			str = attribs.value("leftMargin").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("leftMargin"));
+			else
+				d->layoutLeftMargin = str.toDouble();
 
-            str = attribs.value("rightMargin").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("rightMargin"));
-            else
-                d->layoutRightMargin = str.toDouble();
+			str = attribs.value("rightMargin").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("rightMargin"));
+			else
+				d->layoutRightMargin = str.toDouble();
 
-            str = attribs.value("verticalSpacing").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("verticalSpacing"));
-            else
-                d->layoutVerticalSpacing = str.toDouble();
+			str = attribs.value("verticalSpacing").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("verticalSpacing"));
+			else
+				d->layoutVerticalSpacing = str.toDouble();
 
-            str = attribs.value("horizontalSpacing").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("horizontalSpacing"));
-            else
-                d->layoutHorizontalSpacing = str.toDouble();
+			str = attribs.value("horizontalSpacing").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("horizontalSpacing"));
+			else
+				d->layoutHorizontalSpacing = str.toDouble();
 
-            str = attribs.value("columnCount").toString();
-            if (str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("columnCount"));
-            else
-                d->layoutColumnCount = str.toInt();
+			str = attribs.value("columnCount").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("columnCount"));
+			else
+				d->layoutColumnCount = str.toInt();
 		}
 	}
 
