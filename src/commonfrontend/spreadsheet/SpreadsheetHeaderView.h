@@ -40,15 +40,15 @@ class SpreadsheetCommentsHeaderView : public QHeaderView {
 		virtual ~SpreadsheetCommentsHeaderView();
 
 		virtual void setModel(QAbstractItemModel*);
-		friend class SpreadsheetDoubleHeaderView; // access to paintSection (protected)
+		friend class SpreadsheetHeaderView; // access to paintSection (protected)
 };
 
-class SpreadsheetDoubleHeaderView : public QHeaderView{
+class SpreadsheetHeaderView : public QHeaderView{
 	Q_OBJECT
 
 	public:
-		explicit SpreadsheetDoubleHeaderView(QWidget* parent = 0);
-		~SpreadsheetDoubleHeaderView();
+		explicit SpreadsheetHeaderView(QWidget* parent = 0);
+		~SpreadsheetHeaderView();
 
 		virtual void setModel(QAbstractItemModel*);
 		virtual QSize sizeHint () const;

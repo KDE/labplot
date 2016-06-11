@@ -30,7 +30,7 @@
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/spreadsheet/SpreadsheetItemDelegate.h"
-#include "commonfrontend/spreadsheet/SpreadsheetDoubleHeaderView.h"
+#include "commonfrontend/spreadsheet/SpreadsheetHeaderView.h"
 #include "backend/lib/macros.h"
 
 #include "backend/core/column/Column.h"
@@ -98,7 +98,7 @@ void SpreadsheetView::init() {
 	m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
 	//horizontal header
-	m_horizontalHeader = new SpreadsheetDoubleHeaderView(this);
+	m_horizontalHeader = new SpreadsheetHeaderView(this);
 	m_horizontalHeader->setClickable(true);
 	m_horizontalHeader->setHighlightSections(true);
 	m_tableView->setHorizontalHeader(m_horizontalHeader);

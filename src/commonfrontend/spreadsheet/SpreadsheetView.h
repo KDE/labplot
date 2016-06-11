@@ -38,7 +38,7 @@ class Column;
 class Spreadsheet;
 class SpreadsheetModel;
 class SpreadsheetItemDelegate;
-class SpreadsheetDoubleHeaderView;
+class SpreadsheetHeaderView;
 class AbstractAspect;
 class QTableView;
 
@@ -86,7 +86,7 @@ class SpreadsheetView : public QWidget {
 		Spreadsheet* m_spreadsheet;
 		SpreadsheetItemDelegate* m_delegate;
 		SpreadsheetModel* m_model;
-		SpreadsheetDoubleHeaderView* m_horizontalHeader;
+		SpreadsheetHeaderView* m_horizontalHeader;
 		bool m_suppressSelectionChangedEvent;
 
 		bool eventFilter(QObject*, QEvent*);
