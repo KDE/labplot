@@ -272,7 +272,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	// calculate index
 	double cutindex=0, cutindex2=0;
-	switch(unit) {
+	switch (unit) {
 	case XYFourierFilterCurve::Frequency:
 		cutindex = 2*cutoff*(max-min);
 		break;
@@ -282,7 +282,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	case XYFourierFilterCurve::Index:
 		cutindex = cutoff;
 	}
-	switch(unit2) {
+	switch (unit2) {
 	case XYFourierFilterCurve::Frequency:
 		cutindex2 = 2*cutoff2*(max-min);
 		break;
@@ -301,9 +301,9 @@ void XYFourierFilterCurvePrivate::recalculate() {
 #endif
 
 	// 2. apply filter
-	switch(type) {
+	switch (type) {
 	case XYFourierFilterCurve::LowPass:
-		switch(form) {
+		switch (form) {
 		case XYFourierFilterCurve::Ideal:
 			for (unsigned int i = cutindex; i < n; i++)
 				ydata[i] = 0;
@@ -323,7 +323,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		}
 		break;
 	case XYFourierFilterCurve::HighPass:
-		switch(form) {
+		switch (form) {
 		case XYFourierFilterCurve::Ideal:
 			for (unsigned int i = 0; i < cutindex; i++)
 				ydata[i] = 0;
@@ -343,7 +343,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		}
 		break;
 	case XYFourierFilterCurve::BandPass:
-		switch(form) {
+		switch (form) {
 		case XYFourierFilterCurve::Ideal:
 			for (unsigned int i = 0; i < cutindex; i++)
 				ydata[i] = 0;
@@ -365,7 +365,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		}
 		break;
 	case XYFourierFilterCurve::BandReject:
-		switch(form) {
+		switch (form) {
 		case XYFourierFilterCurve::Ideal:
 			for (unsigned int i = cutindex; i < cutindex2; i++)
 				ydata[i] = 0;
@@ -452,10 +452,10 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYFourierFilterCurve::load(XmlStreamReader* reader){
+bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
 	Q_D(XYFourierFilterCurve);
 
-	if(!reader->isStartElement() || reader->name() != "xyFourierFilterCurve"){
+	if (!reader->isStartElement() || reader->name() != "xyFourierFilterCurve") {
 		reader->raiseError(i18n("no xy Fourier filter curve element found"));
 		return false;
 	}
@@ -482,43 +482,43 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 			READ_COLUMN(yDataColumn);
 
 			str = attribs.value("type").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
 				d->filterData.type = (XYFourierFilterCurve::FilterType)str.toInt();
 
 			str = attribs.value("form").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'form'"));
 			else
 				d->filterData.form = (XYFourierFilterCurve::FilterForm)str.toInt();
 
 			str = attribs.value("order").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'order'"));
 			else
 				d->filterData.order = str.toInt();
 
 			str = attribs.value("cutoff").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'cutoff'"));
 			else
 				d->filterData.cutoff = str.toDouble();
 
 			str = attribs.value("unit").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'unit'"));
 			else
 				d->filterData.unit = (XYFourierFilterCurve::CutoffUnit)str.toInt();
 
 			str = attribs.value("cutoff2").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'cutoff2'"));
 			else
 				d->filterData.cutoff2 = str.toDouble();
 
 			str = attribs.value("unit2").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'unit2'"));
 			else
 				d->filterData.unit2 = (XYFourierFilterCurve::CutoffUnit)str.toInt();
@@ -527,29 +527,29 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 			attribs = reader->attributes();
 
 			str = attribs.value("available").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'available'"));
 			else
 				d->filterResult.available = str.toInt();
 
 			str = attribs.value("valid").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'valid'"));
 			else
 				d->filterResult.valid = str.toInt();
 			
 			str = attribs.value("status").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'status'"));
 			else
 				d->filterResult.status = str;
 
 			str = attribs.value("time").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'time'"));
 			else
 				d->filterResult.elapsedTime = str.toInt();
-		} else if(reader->name() == "column") {
+		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {
 				delete column;

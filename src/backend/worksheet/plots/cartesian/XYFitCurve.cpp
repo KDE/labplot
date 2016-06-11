@@ -212,13 +212,13 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 
 	//set current values of the parameters
 	QByteArray paramba;
-	for (int j=0; j<paramNames->size(); j++) {
+	for (int j=0; j < paramNames->size(); j++) {
 		paramba = paramNames->at(j).toLocal8Bit();
 		assign_variable(paramba.data(), gsl_vector_get(paramValues,j));
 	}
 
 	char var[]="x";
-	for (int i = 0; i < n; i++) {
+	for (int i=0; i < n; i++) {
 		if (std::isnan(x[i]) || std::isnan(y[i]))
 			continue;
 
@@ -233,16 +233,14 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 			printf("%g ",gsl_vector_get(paramValues,j));
 		printf("\n	Y[%d]=%g \n",i,Yi);
 */
-		if(parse_errors()>0) {
+		if (parse_errors() > 0)
 			return GSL_EINVAL;
-		}
 
 // 		Yi += base; //TODO
-		if (sigma) {
-				gsl_vector_set (f, i, (Yi - y[i])/sigma[i]);
-		} else {
-				gsl_vector_set (f, i, (Yi - y[i]));
-		}
+		if (sigma)
+			gsl_vector_set (f, i, (Yi - y[i])/sigma[i]);
+		else
+			gsl_vector_set (f, i, (Yi - y[i]));
 	}
 
 	return GSL_SUCCESS;
@@ -270,208 +268,205 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	double x;
 	double sigma = 1.0;
 
-	switch(modelType) {
-		case XYFitCurve::Polynomial: {
-			// Y(x) = c0 + c1*x + ... + cn*x^n
-			for (int i=0; i<n; i++) {
-				x = xVector[i];
-				if (sigmaVector) sigma = sigmaVector[i];
-				for (int j=0; j<paramNames->size(); ++j) {
-					gsl_matrix_set(J, i, j, pow(x,j)/sigma);
-				}
+	switch (modelType) {
+	case XYFitCurve::Polynomial:
+		// Y(x) = c0 + c1*x + ... + cn*x^n
+		for (int i=0; i < n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+			for (int j=0; j<paramNames->size(); ++j) {
+				gsl_matrix_set(J, i, j, pow(x,j)/sigma);
 			}
-			break;
 		}
-		case XYFitCurve::Power: {
-			// Y(x) = a*x^b or Y(x) = a + b*x^c.
-			if (degree==1) {
-				double a = gsl_vector_get(paramValues,0);
-				double b = gsl_vector_get(paramValues,1);
-				for (int i=0; i<n; i++) {
-					x = xVector[i];
-					if (sigmaVector) sigma = sigmaVector[i];
-					gsl_matrix_set(J, i, 0, pow(x,b)/sigma);
-					gsl_matrix_set(J, i, 1, a*pow(x,b)*log(x)/sigma);
-				}
-			} else if (degree==2) {
-				double b = gsl_vector_get(paramValues,1);
-				double c = gsl_vector_get(paramValues,2);
-				for (int i=0; i<n; i++) {
-					x = xVector[i];
-					if (sigmaVector) sigma = sigmaVector[i];
-					gsl_matrix_set(J, i, 0, 1/sigma);
-					gsl_matrix_set(J, i, 1, pow(x,c)/sigma);
-					gsl_matrix_set(J, i, 2, b*pow(x,c)*log(x)/sigma);
-				}
-			}
-			break;
-		}
-		case XYFitCurve::Exponential: {
-			// Y(x) = a*exp(b*x) or Y(x) = a*exp(b*x) + c*exp(d*x) or Y(x) = a*exp(b*x) + c*exp(d*x) + e*exp(f*x)
-			if (degree==1) {
-				double a = gsl_vector_get(paramValues,0);
-				double b = gsl_vector_get(paramValues,1);
-				for (int i=0; i<n; i++) {
-					x = xVector[i];
-					if (sigmaVector) sigma = sigmaVector[i];
-					gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
-					gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
-				}
-			} else if (degree==2) {
-				double a = gsl_vector_get(paramValues,0);
-				double b = gsl_vector_get(paramValues,1);
-				double c = gsl_vector_get(paramValues,2);
-				double d = gsl_vector_get(paramValues,3);
-				for (int i=0; i<n; i++) {
-					x = xVector[i];
-					if (sigmaVector) sigma = sigmaVector[i];
-					gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
-					gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
-					gsl_matrix_set(J, i, 2, exp(d*x)/sigma);
-					gsl_matrix_set(J, i, 3, c*x*exp(d*x)/sigma);
-				}
-			} else if (degree==3) {
-				double a = gsl_vector_get(paramValues,0);
-				double b = gsl_vector_get(paramValues,1);
-				double c = gsl_vector_get(paramValues,2);
-				double d = gsl_vector_get(paramValues,3);
-				double e = gsl_vector_get(paramValues,4);
-				double f = gsl_vector_get(paramValues,5);
-				for (int i=0; i<n; i++) {
-					x = xVector[i];
-					if (sigmaVector) sigma = sigmaVector[i];
-					gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
-					gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
-					gsl_matrix_set(J, i, 2, exp(d*x)/sigma);
-					gsl_matrix_set(J, i, 3, c*x*exp(b*x)/sigma);
-					gsl_matrix_set(J, i, 4, exp(f*x)/sigma);
-					gsl_matrix_set(J, i, 5, e*x*exp(f*x)/sigma);
-				}
-			}
-			break;
-		}
-		case XYFitCurve::Inverse_Exponential: {
-			// Y(x) = a*(1-exp(b*x))+c
+		break;
+	case XYFitCurve::Power:
+		// Y(x) = a*x^b or Y(x) = a + b*x^c.
+		if (degree == 1) {
 			double a = gsl_vector_get(paramValues,0);
 			double b = gsl_vector_get(paramValues,1);
-			//double c = gsl_vector_get(paramValues,2);
 			for (int i=0; i<n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
-				gsl_matrix_set(J, i, 0, (1.0-exp(b*x))/sigma);
-				gsl_matrix_set(J, i, 1, -a*x*exp(b*x)/sigma);
-				gsl_matrix_set(J, i, 2, 1.0/sigma);
+				gsl_matrix_set(J, i, 0, pow(x,b)/sigma);
+				gsl_matrix_set(J, i, 1, a*pow(x,b)*log(x)/sigma);
 			}
-			break;
-		}
-		case XYFitCurve::Fourier: {
-			// Y(x) = a0 + (a1*cos(w*x) + b1*sin(w*x)) + ... + (an*cos(n*w*x) + bn*sin(n*w*x)
-			//parameters: w, a0, a1, b1, ... an, bn
-			double a[degree];
-			double b[degree];
-			double w = gsl_vector_get(paramValues,0);
-			a[0] = gsl_vector_get(paramValues,1);
-			b[0] = 0;
-			for (int j=1; j<degree; ++j) {
-				a[j] = gsl_vector_get(paramValues,2*j);
-				b[j] = gsl_vector_get(paramValues,2*j+1);
-			}
+		} else if (degree == 2) {
+			double b = gsl_vector_get(paramValues,1);
+			double c = gsl_vector_get(paramValues,2);
 			for (int i=0; i<n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
-				double wd = 0; //first derivative with respect to the w parameter
-				for (int j=1; j<degree; ++j) {
-					wd += -a[j]*j*x*sin(j*w*x) + b[j]*j*x*cos(j*w*x);
-				}
-				gsl_matrix_set(J, i, 0, wd/sigma);
-				gsl_matrix_set(J, i, 1, 1/sigma);
-				for (int j=1; j<=degree; ++j) {
-					gsl_matrix_set(J, i, 2*j, cos(j*w*x)/sigma);
-					gsl_matrix_set(J, i, 2*j+1, sin(j*w*x)/sigma);
-				}
+				gsl_matrix_set(J, i, 0, 1/sigma);
+				gsl_matrix_set(J, i, 1, pow(x,c)/sigma);
+				gsl_matrix_set(J, i, 2, b*pow(x,c)*log(x)/sigma);
 			}
-			break;
 		}
-		case XYFitCurve::Gaussian: {
-			// Y(x) = a1*exp(-((x-b1)/c1)^2) + a2*exp(-((x-b2)/c2)^2) + ... + an*exp(-((x-bn)/cn)^2)
-			double a,b,c;
-			for (int i=0; i<n; i++) {
-				x = xVector[i];
-				if (sigmaVector) sigma = sigmaVector[i];
-				for (int j=0; j<degree; ++j) {
-					a = gsl_vector_get(paramValues,3*j);
-					b = gsl_vector_get(paramValues,3*j+1);
-					c = gsl_vector_get(paramValues,3*j+2);
-					gsl_matrix_set(J, i, 3*j, exp(-(x-b)*(x-b)/(c*c))/sigma);
-					gsl_matrix_set(J, i, 3*j+1, 2*a*(x-b)/(c*c)*exp(-(x-b)*(x-b)/(c*c))/sigma);
-					gsl_matrix_set(J, i, 3*j+2, 2*a*(x-b)*(x-b)/(c*c*c)*exp(-(x-b)*(x-b)/(c*c))/sigma);
-				}
-			}
-			break;
-		}
-		case XYFitCurve::Lorentz: {
-			// Y(x) = 1/pi*s/(s^2+(x-t)^2)
-			double s = gsl_vector_get(paramValues,0);
-			double t = gsl_vector_get(paramValues,1);
-			for (int i=0; i<n; i++) {
-				x = xVector[i];
-				if (sigmaVector) sigma = sigmaVector[i];
-				gsl_matrix_set(J, i, 0, (-s*s+(x-t)*(x-t))/pow(s*s+(x-t)*(x-t),2)/M_PI/sigma);
-				gsl_matrix_set(J, i, 1, 2*s*(x-t)/pow(s*s+(x-t)*(x-t),2)/M_PI/sigma);
-			}
-			break;
-		}
-		case XYFitCurve::Maxwell: {
-			// Y(x) = sqrt(2/pi)*x^2*exp(-x^2/(2*a^2))/a^3
+		break;
+	case XYFitCurve::Exponential:
+		// Y(x) = a*exp(b*x) or Y(x) = a*exp(b*x) + c*exp(d*x) or Y(x) = a*exp(b*x) + c*exp(d*x) + e*exp(f*x)
+		if (degree == 1) {
 			double a = gsl_vector_get(paramValues,0);
+			double b = gsl_vector_get(paramValues,1);
 			for (int i=0; i<n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
-				gsl_matrix_set(J, i, 0, sqrt(2/M_PI)*x*x*(x*x-3*a*a)*exp(-x*x/2/a/a)/pow(a,6)/sigma);
+				gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
+				gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
 			}
-			break;
-		}
-		case XYFitCurve::Sigmoid: {
-			//TODO
-			break;
-		}
-		case XYFitCurve::Custom: {
-			QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
-			char* func = funcba.data();
-			double eps = 1.0e-5;
-			QByteArray nameba;
-			char* name;
-			double value;
+		} else if (degree == 2) {
+			double a = gsl_vector_get(paramValues,0);
+			double b = gsl_vector_get(paramValues,1);
+			double c = gsl_vector_get(paramValues,2);
+			double d = gsl_vector_get(paramValues,3);
 			for (int i=0; i<n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
-				char var[]="x";
-				assign_variable(var, x);
+				gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
+				gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
+				gsl_matrix_set(J, i, 2, exp(d*x)/sigma);
+				gsl_matrix_set(J, i, 3, c*x*exp(d*x)/sigma);
+			}
+		} else if (degree == 3) {
+			double a = gsl_vector_get(paramValues,0);
+			double b = gsl_vector_get(paramValues,1);
+			double c = gsl_vector_get(paramValues,2);
+			double d = gsl_vector_get(paramValues,3);
+			double e = gsl_vector_get(paramValues,4);
+			double f = gsl_vector_get(paramValues,5);
+			for (int i=0; i < n; i++) {
+				x = xVector[i];
+				if (sigmaVector) sigma = sigmaVector[i];
+				gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
+				gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
+				gsl_matrix_set(J, i, 2, exp(d*x)/sigma);
+				gsl_matrix_set(J, i, 3, c*x*exp(b*x)/sigma);
+				gsl_matrix_set(J, i, 4, exp(f*x)/sigma);
+				gsl_matrix_set(J, i, 5, e*x*exp(f*x)/sigma);
+			}
+		}
+		break;
+	case XYFitCurve::Inverse_Exponential: {
+		// Y(x) = a*(1-exp(b*x))+c
+		double a = gsl_vector_get(paramValues,0);
+		double b = gsl_vector_get(paramValues,1);
+		//double c = gsl_vector_get(paramValues,2);
+		for (int i=0; i < n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+			gsl_matrix_set(J, i, 0, (1.0-exp(b*x))/sigma);
+			gsl_matrix_set(J, i, 1, -a*x*exp(b*x)/sigma);
+			gsl_matrix_set(J, i, 2, 1.0/sigma);
+		}
+		break;
+	}
+	case XYFitCurve::Fourier: {
+		// Y(x) = a0 + (a1*cos(w*x) + b1*sin(w*x)) + ... + (an*cos(n*w*x) + bn*sin(n*w*x)
+		//parameters: w, a0, a1, b1, ... an, bn
+		double a[degree];
+		double b[degree];
+		double w = gsl_vector_get(paramValues,0);
+		a[0] = gsl_vector_get(paramValues,1);
+		b[0] = 0;
+		for (int j=1; j < degree; ++j) {
+			a[j] = gsl_vector_get(paramValues,2*j);
+			b[j] = gsl_vector_get(paramValues,2*j+1);
+		}
+		for (int i=0; i < n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+			double wd = 0; //first derivative with respect to the w parameter
+			for (int j=1; j < degree; ++j) {
+				wd += -a[j]*j*x*sin(j*w*x) + b[j]*j*x*cos(j*w*x);
+			}
+			gsl_matrix_set(J, i, 0, wd/sigma);
+			gsl_matrix_set(J, i, 1, 1/sigma);
+			for (int j=1; j <= degree; ++j) {
+				gsl_matrix_set(J, i, 2*j, cos(j*w*x)/sigma);
+				gsl_matrix_set(J, i, 2*j+1, sin(j*w*x)/sigma);
+			}
+		}
+		break;
+	}
+	case XYFitCurve::Gaussian: {
+		// Y(x) = a1*exp(-((x-b1)/c1)^2) + a2*exp(-((x-b2)/c2)^2) + ... + an*exp(-((x-bn)/cn)^2)
+		double a,b,c;
+		for (int i=0; i < n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+			for (int j=0; j < degree; ++j) {
+				a = gsl_vector_get(paramValues,3*j);
+				b = gsl_vector_get(paramValues,3*j+1);
+				c = gsl_vector_get(paramValues,3*j+2);
+				gsl_matrix_set(J, i, 3*j, exp(-(x-b)*(x-b)/(c*c))/sigma);
+				gsl_matrix_set(J, i, 3*j+1, 2*a*(x-b)/(c*c)*exp(-(x-b)*(x-b)/(c*c))/sigma);
+				gsl_matrix_set(J, i, 3*j+2, 2*a*(x-b)*(x-b)/(c*c*c)*exp(-(x-b)*(x-b)/(c*c))/sigma);
+			}
+		}
+		break;
+	}
+	case XYFitCurve::Lorentz: {
+		// Y(x) = 1/pi*s/(s^2+(x-t)^2)
+		double s = gsl_vector_get(paramValues,0);
+		double t = gsl_vector_get(paramValues,1);
+		for (int i=0; i < n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+			gsl_matrix_set(J, i, 0, (-s*s+(x-t)*(x-t))/pow(s*s+(x-t)*(x-t),2)/M_PI/sigma);
+			gsl_matrix_set(J, i, 1, 2*s*(x-t)/pow(s*s+(x-t)*(x-t),2)/M_PI/sigma);
+		}
+		break;
+	}
+	case XYFitCurve::Maxwell: {
+		// Y(x) = sqrt(2/pi)*x^2*exp(-x^2/(2*a^2))/a^3
+		double a = gsl_vector_get(paramValues,0);
+		for (int i=0; i < n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+			gsl_matrix_set(J, i, 0, sqrt(2/M_PI)*x*x*(x*x-3*a*a)*exp(-x*x/2/a/a)/pow(a,6)/sigma);
+		}
+		break;
+	}
+	case XYFitCurve::Sigmoid: {
+		//TODO
+		break;
+	}
+	case XYFitCurve::Custom: {
+		QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
+		char* func = funcba.data();
+		double eps = 1.0e-5;
+		QByteArray nameba;
+		char* name;
+		double value;
+		for (int i=0; i<n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+			char var[]="x";
+			assign_variable(var, x);
 
-				for(int j=0; j<paramNames->size(); j++) {
-					for(int k=0; k<paramNames->size();k++) {
-						if(k!=j) {
-							nameba = paramNames->at(k).toLocal8Bit();
-							value = gsl_vector_get(paramValues,k);
-							assign_variable(nameba.data(), value);
-						}
+			for (int j=0; j < paramNames->size(); j++) {
+				for (int k=0; k < paramNames->size(); k++) {
+					if (k != j) {
+						nameba = paramNames->at(k).toLocal8Bit();
+						value = gsl_vector_get(paramValues,k);
+						assign_variable(nameba.data(), value);
 					}
-
-					nameba = paramNames->at(j).toLocal8Bit();
-					name = nameba.data();
-					value = gsl_vector_get(paramValues,j);
-					assign_variable(name, value);
-					double f_p = parse(func);
-
-					value = value + eps;
-					assign_variable(name, value);
-					double f_pdp = parse(func);
-
-					gsl_matrix_set(J, i, j, (f_pdp-f_p)/eps/sigma);
 				}
+
+				nameba = paramNames->at(j).toLocal8Bit();
+				name = nameba.data();
+				value = gsl_vector_get(paramValues,j);
+				assign_variable(name, value);
+				double f_p = parse(func);
+
+				value = value + eps;
+				assign_variable(name, value);
+				double f_pdp = parse(func);
+
+				gsl_matrix_set(J, i, j, (f_pdp-f_p)/eps/sigma);
 			}
-			break;
 		}
+		break;
+	}
 	}
 
 	return GSL_SUCCESS;
@@ -823,7 +818,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeEndElement();
 
 	//save calculated columns if available
-	if (d->xColumn) {
+	if (d->xColumn && d->yColumn && d->residualsColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
 		d->residualsColumn->save(writer);
@@ -834,10 +829,10 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYFitCurve::load(XmlStreamReader* reader){
+bool XYFitCurve::load(XmlStreamReader* reader) {
 	Q_D(XYFitCurve);
 
-    if(!reader->isStartElement() || reader->name() != "xyFitCurve"){
+    if (!reader->isStartElement() || reader->name() != "xyFitCurve") {
         reader->raiseError(i18n("no xy fit curve element found"));
         return false;
     }
@@ -846,7 +841,7 @@ bool XYFitCurve::load(XmlStreamReader* reader){
     QXmlStreamAttributes attribs;
     QString str;
 
-    while (!reader->atEnd()){
+    while (!reader->atEnd()) {
         reader->readNext();
         if (reader->isEndElement() && reader->name() == "xyFitCurve")
             break;
@@ -857,7 +852,7 @@ bool XYFitCurve::load(XmlStreamReader* reader){
 		if (reader->name() == "xyCurve") {
             if ( !XYCurve::load(reader) )
 				return false;
-		}else if (reader->name() == "fitData"){
+		} else if (reader->name() == "fitData") {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xDataColumn);
@@ -865,147 +860,147 @@ bool XYFitCurve::load(XmlStreamReader* reader){
 			READ_COLUMN(weightsColumn);
 
 			str = attribs.value("modelType").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'modelType'"));
             else
                 d->fitData.modelType = (XYFitCurve::ModelType)str.toInt();
 
 			str = attribs.value("weightsType").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'weightsType'"));
             else
                 d->fitData.weightsType = (XYFitCurve::WeightsType)str.toInt();
 
 			str = attribs.value("degree").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'degree'"));
             else
                 d->fitData.degree = str.toInt();
 
 			str = attribs.value("model").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'model'"));
             else
                 d->fitData.model = str;
 
 			str = attribs.value("maxIterations").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'maxIterations'"));
             else
                 d->fitData.maxIterations = str.toInt();
 
 			str = attribs.value("eps").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'eps'"));
             else
                 d->fitData.eps = str.toDouble();
 
 			str = attribs.value("fittedPoints").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'fittedPoints'"));
             else
                 d->fitData.fittedPoints = str.toInt();
-		} else if (reader->name() == "name"){
+		} else if (reader->name() == "name") {
 			d->fitData.paramNames<<reader->readElementText();
-		} else if (reader->name() == "startValue"){
+		} else if (reader->name() == "startValue") {
 			d->fitData.paramStartValues<<reader->readElementText().toDouble();
-		} else if (reader->name() == "value"){
+		} else if (reader->name() == "value") {
 			d->fitResult.paramValues<<reader->readElementText().toDouble();
-		} else if (reader->name() == "error"){
+		} else if (reader->name() == "error") {
 			d->fitResult.errorValues<<reader->readElementText().toDouble();
-		}else if (reader->name() == "fitResult"){
+		} else if (reader->name() == "fitResult") {
 			attribs = reader->attributes();
 
 			str = attribs.value("available").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'available'"));
             else
                 d->fitResult.available = str.toInt();
 
 			str = attribs.value("valid").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'valid'"));
             else
                 d->fitResult.valid = str.toInt();
 
 			str = attribs.value("status").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'status'"));
             else
                 d->fitResult.status = str;
 
 			str = attribs.value("iterations").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'iterations'"));
             else
                 d->fitResult.iterations = str.toInt();
 
 			str = attribs.value("time").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'time'"));
             else
                 d->fitResult.elapsedTime = str.toInt();
 
 			str = attribs.value("dof").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'dof'"));
             else
                 d->fitResult.dof = str.toDouble();
 
 			str = attribs.value("sse").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'sse'"));
             else
                 d->fitResult.sse = str.toDouble();
 
 			str = attribs.value("mse").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'mse'"));
             else
                 d->fitResult.mse = str.toDouble();
 
 			str = attribs.value("rmse").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'rmse'"));
             else
                 d->fitResult.rmse = str.toDouble();
 
 			str = attribs.value("mae").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'mae'"));
             else
                 d->fitResult.mae = str.toDouble();
 
 			str = attribs.value("rms").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'rms'"));
             else
                 d->fitResult.rms = str.toDouble();
 
 			str = attribs.value("rsd").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'rsd'"));
             else
                 d->fitResult.rsd = str.toDouble();
 
 			str = attribs.value("rsquared").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'rsquared'"));
             else
                 d->fitResult.rsquared = str.toDouble();
 
 			str = attribs.value("rsquaredAdj").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'rsquaredAdj'"));
             else
                 d->fitResult.rsquaredAdj = str.toDouble();
 
 			str = attribs.value("solverOutput").toString();
-            if(str.isEmpty())
+            if (str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'solverOutput'"));
             else
                 d->fitResult.solverOutput = str;
-		} else if(reader->name() == "column") {
+		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {
 				delete column;
@@ -1020,7 +1015,7 @@ bool XYFitCurve::load(XmlStreamReader* reader){
 		}
 	}
 
-	if (d->xColumn) {
+	if (d->xColumn && d->yColumn && d->residualsColumn) {
 		d->xColumn->setHidden(true);
 		addChild(d->xColumn);
 

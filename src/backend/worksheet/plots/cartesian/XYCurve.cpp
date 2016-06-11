@@ -823,11 +823,11 @@ void XYCurvePrivate::retransform() {
 	AbstractColumn::ColumnMode yColMode = yColumn->columnMode();
 
 	//take over only valid and non masked points.
-	for (int row = startRow; row <= endRow; row++ ) {
+	for (int row = startRow; row <= endRow; row++) {
 		if ( xColumn->isValid(row) && yColumn->isValid(row)
 		        && (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
 
-			switch(xColMode) {
+			switch (xColMode) {
 			case AbstractColumn::Numeric:
 				tempPoint.setX(xColumn->valueAt(row));
 				break;
@@ -840,7 +840,7 @@ void XYCurvePrivate::retransform() {
 				break;
 			}
 
-			switch(yColMode) {
+			switch (yColMode) {
 			case AbstractColumn::Numeric:
 				tempPoint.setY(yColumn->valueAt(row));
 				break;
@@ -908,17 +908,16 @@ void XYCurvePrivate::updateLines() {
 	//calculate the lines connecting the data points
 	QPointF tempPoint1, tempPoint2;
 	QPointF curPoint, nextPoint;
-	switch(lineType) {
+	switch (lineType) {
 	case XYCurve::NoLine:
 		break;
-	case XYCurve::Line: {
+	case XYCurve::Line:
 		for (int i=0; i<count-1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
 		break;
-	}
-	case XYCurve::StartHorizontal: {
+	case XYCurve::StartHorizontal:
 		for (int i=0; i<count-1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 			curPoint=symbolPointsLogical.at(i);
@@ -928,8 +927,7 @@ void XYCurvePrivate::updateLines() {
 			lines.append(QLineF(tempPoint1, nextPoint));
 		}
 		break;
-	}
-	case XYCurve::StartVertical: {
+	case XYCurve::StartVertical:
 		for (int i=0; i<count-1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 			curPoint=symbolPointsLogical.at(i);
@@ -939,8 +937,7 @@ void XYCurvePrivate::updateLines() {
 			lines.append(QLineF(tempPoint1,nextPoint));
 		}
 		break;
-	}
-	case XYCurve::MidpointHorizontal: {
+	case XYCurve::MidpointHorizontal:
 		for (int i=0; i<count-1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 			curPoint=symbolPointsLogical.at(i);
@@ -952,8 +949,7 @@ void XYCurvePrivate::updateLines() {
 			lines.append(QLineF(tempPoint2, nextPoint));
 		}
 		break;
-	}
-	case XYCurve::MidpointVertical: {
+	case XYCurve::MidpointVertical:
 		for (int i=0; i<count-1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 			curPoint=symbolPointsLogical.at(i);
@@ -965,7 +961,6 @@ void XYCurvePrivate::updateLines() {
 			lines.append(QLineF(tempPoint2, nextPoint));
 		}
 		break;
-	}
 	case XYCurve::Segments2: {
 		int skip=0;
 		for (int i=0; i<count-1; i++) {
@@ -1075,8 +1070,6 @@ void XYCurvePrivate::updateLines() {
 		gsl_interp_accel_free (acc);
 		break;
 	}
-	default:
-		break;
 	}
 
 	//map the lines to scene coordinates
@@ -1113,26 +1106,24 @@ void XYCurvePrivate::updateDropLines() {
 
 	xMin = plot->xMin();
 	yMin = plot->yMin();
-	switch(dropLineType) {
+	switch (dropLineType) {
 	case XYCurve::NoDropLine:
 		break;
-	case XYCurve::DropLineX: {
+	case XYCurve::DropLineX:
 		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append(QLineF(point, QPointF(point.x(), yMin)));
 		}
 		break;
-	}
-	case XYCurve::DropLineY: {
+	case XYCurve::DropLineY:
 		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append(QLineF(point, QPointF(xMin, point.y())));
 		}
 		break;
-	}
-	case XYCurve::DropLineXY: {
+	case XYCurve::DropLineXY:
 		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
@@ -1140,32 +1131,26 @@ void XYCurvePrivate::updateDropLines() {
 			lines.append(QLineF(point, QPointF(xMin, point.y())));
 		}
 		break;
-	}
-	case XYCurve::DropLineXZeroBaseline: {
+	case XYCurve::DropLineXZeroBaseline:
 		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append(QLineF(point, QPointF(point.x(), 0)));
 		}
 		break;
-	}
-	case XYCurve::DropLineXMinBaseline: {
+	case XYCurve::DropLineXMinBaseline:
 		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append( QLineF(point, QPointF(point.x(), dynamic_cast<const Column*>(yColumn)->minimum())) );
 		}
 		break;
-	}
-	case XYCurve::DropLineXMaxBaseline: {
+	case XYCurve::DropLineXMaxBaseline:
 		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append( QLineF(point, QPointF(point.x(), dynamic_cast<const Column*>(yColumn)->maximum())) );
 		}
-		break;
-	}
-	default:
 		break;
 	}
 
@@ -1295,43 +1280,27 @@ void XYCurvePrivate::updateValues() {
 	qreal w;
 	qreal h=fm.ascent();
 
-	switch(valuesPosition) {
-	case XYCurve::ValuesAbove: {
-		for (int i=0; i<valuesStrings.size(); i++) {
-			w=fm.width(valuesStrings.at(i));
+	for (int i=0; i<valuesStrings.size(); i++) {
+		w=fm.width(valuesStrings.at(i));
+		switch (valuesPosition) {
+		case XYCurve::ValuesAbove:
 			tempPoint.setX( symbolPointsScene.at(i).x() - w/2);
 			tempPoint.setY( symbolPointsScene.at(i).y() - valuesDistance );
-			valuesPoints.append(tempPoint);
-		}
-		break;
-	}
-	case XYCurve::ValuesUnder: {
-		for (int i=0; i<valuesStrings.size(); i++) {
-			w=fm.width(valuesStrings.at(i));
+			break;
+		case XYCurve::ValuesUnder:
 			tempPoint.setX( symbolPointsScene.at(i).x() -w/2 );
 			tempPoint.setY( symbolPointsScene.at(i).y() + valuesDistance + h/2);
-			valuesPoints.append(tempPoint);
-		}
-		break;
-	}
-	case XYCurve::ValuesLeft: {
-		for (int i=0; i<valuesStrings.size(); i++) {
-			w=fm.width(valuesStrings.at(i));
+			break;
+		case XYCurve::ValuesLeft:
 			tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1 );
 			tempPoint.setY( symbolPointsScene.at(i).y());
-			valuesPoints.append(tempPoint);
-		}
-		break;
-	}
-	case XYCurve::ValuesRight: {
-		for (int i=0; i<valuesStrings.size(); i++) {
-			w=fm.width(valuesStrings.at(i));
+			break;
+		case XYCurve::ValuesRight:
 			tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1 );
 			tempPoint.setY( symbolPointsScene.at(i).y() );
-			valuesPoints.append(tempPoint);
+			break;
 		}
-		break;
-	}
+		valuesPoints.append(tempPoint);
 	}
 
 	QTransform trafo;
@@ -1378,7 +1347,6 @@ void XYCurvePrivate::updateFilling() {
 	//no lines available (no points), nothing to do
 	if (!fillLines.size())
 		return;
-
 
 	//create polygon(s):
 	//1. Depending on the current zoom-level, only a subset of the curve may be visible in the plot
@@ -1610,10 +1578,10 @@ void XYCurvePrivate::updateErrorBars() {
 	if (errorBarsType != XYCurve::ErrorBarsSimple && !symbolPointsLogical.isEmpty()) {
 		//determine the index of the first visible point
 		size_t i = 0;
-		while( i<visiblePoints.size() && !visiblePoints[i])
+		while (i<visiblePoints.size() && !visiblePoints[i])
 			i++;
 
-		if (i==visiblePoints.size())
+		if (i == visiblePoints.size())
 			return; //no visible points -> no error bars to draw
 
 		//cap size for x-error bars
@@ -1629,14 +1597,14 @@ void XYCurvePrivate::updateErrorBars() {
 		capSizeY = (pointLogical.x() - symbolPointsLogical.at(i).x())/2;
 	}
 
-	for (int i=0; i<symbolPointsLogical.size(); ++i) {
+	for (int i=0; i < symbolPointsLogical.size(); ++i) {
 		if (!visiblePoints[i])
 			continue;
 
 		const QPointF& point = symbolPointsLogical.at(i);
 
 		//error bars for x
-		if (xErrorType!=XYCurve::NoError) {
+		if (xErrorType != XYCurve::NoError) {
 			//determine the values for the errors
 			if (xErrorPlusColumn && xErrorPlusColumn->isValid(i) && !xErrorPlusColumn->isMasked(i))
 				errorPlus = xErrorPlusColumn->valueAt(i);
@@ -1653,12 +1621,12 @@ void XYCurvePrivate::updateErrorBars() {
 			}
 
 			//draw the error bars
-			switch(errorBarsType) {
+			switch (errorBarsType) {
 			case XYCurve::ErrorBarsSimple:
 				lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
 				                    QPointF(point.x()+errorPlus, point.y())));
 				break;
-			case XYCurve::ErrorBarsWithEnds: {
+			case XYCurve::ErrorBarsWithEnds:
 				lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
 				                    QPointF(point.x()+errorPlus, point.y())));
 				if (errorMinus!=0) {
@@ -1670,7 +1638,6 @@ void XYCurvePrivate::updateErrorBars() {
 					                    QPointF(point.x()+errorPlus, point.y()+capSizeX)));
 				}
 				break;
-			}
 			}
 		}
 
@@ -1692,24 +1659,21 @@ void XYCurvePrivate::updateErrorBars() {
 			}
 
 			//draw the error bars
-			switch(errorBarsType) {
+			switch (errorBarsType) {
 			case XYCurve::ErrorBarsSimple:
 				lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
 				                    QPointF(point.x(), point.y()+errorPlus)));
 				break;
-			case XYCurve::ErrorBarsWithEnds: {
+			case XYCurve::ErrorBarsWithEnds:
 				lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
 				                    QPointF(point.x(), point.y()+errorPlus)));
-				if (errorMinus!=0) {
+				if (errorMinus!=0)
 					lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()-errorMinus),
 					                    QPointF(point.x()+capSizeY, point.y()-errorMinus)));
-				}
-				if (errorPlus!=0) {
+				if (errorPlus!=0)
 					lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()+errorPlus),
 					                    QPointF(point.x()+capSizeY, point.y()+errorPlus)));
-				}
 				break;
-			}
 			}
 		}
 	}
@@ -2210,7 +2174,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 bool XYCurve::load(XmlStreamReader* reader) {
 	Q_D(XYCurve);
 
-	if(!reader->isStartElement() || reader->name() != "xyCurve") {
+	if (!reader->isStartElement() || reader->name() != "xyCurve") {
 		reader->raiseError(i18n("no xy-curve element found"));
 		return false;
 	}
@@ -2239,7 +2203,7 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(yColumn);
 
 			str = attribs.value("visible").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'visible'"));
 			else
 				d->setVisible(str.toInt());
@@ -2247,19 +2211,19 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			attribs = reader->attributes();
 
 			str = attribs.value("type").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
 				d->lineType = (XYCurve::LineType)str.toInt();
 
 			str = attribs.value("skipGaps").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'skipGps'"));
 			else
 				d->lineSkipGaps = str.toInt();
 
 			str = attribs.value("interpolationPointsCount").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'interpolationPointsCount'"));
 			else
 				d->lineInterpolationPointsCount = str.toInt();
@@ -2267,7 +2231,7 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			READ_QPEN(d->linePen);
 
 			str = attribs.value("opacity").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'opacity'"));
 			else
 				d->lineOpacity = str.toDouble();
@@ -2275,7 +2239,7 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			attribs = reader->attributes();
 
 			str = attribs.value("type").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
 				d->dropLineType = (XYCurve::DropLineType)str.toInt();
@@ -2283,7 +2247,7 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			READ_QPEN(d->dropLinePen);
 
 			str = attribs.value("opacity").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'opacity'"));
 			else
 				d->dropLineOpacity = str.toDouble();
@@ -2291,25 +2255,25 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			attribs = reader->attributes();
 
 			str = attribs.value("symbolsStyle").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'symbolsStyle'"));
 			else
 				d->symbolsStyle = (Symbol::Style)str.toInt();
 
 			str = attribs.value("opacity").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'opacity'"));
 			else
 				d->symbolsOpacity = str.toDouble();
 
 			str = attribs.value("rotation").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'rotation'"));
 			else
 				d->symbolsRotationAngle = str.toDouble();
 
 			str = attribs.value("size").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'size'"));
 			else
 				d->symbolsSize = str.toDouble();
@@ -2320,7 +2284,7 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			attribs = reader->attributes();
 
 			str = attribs.value("type").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
 				d->valuesType = (XYCurve::ValuesType)str.toInt();
@@ -2328,25 +2292,25 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(valuesColumn);
 
 			str = attribs.value("position").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'position'"));
 			else
 				d->valuesPosition = (XYCurve::ValuesPosition)str.toInt();
 
 			str = attribs.value("distance").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'distance'"));
 			else
 				d->valuesDistance = str.toDouble();
 
 			str = attribs.value("rotation").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'rotation'"));
 			else
 				d->valuesRotationAngle = str.toDouble();
 
 			str = attribs.value("opacity").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'opacity'"));
 			else
 				d->valuesOpacity = str.toDouble();
@@ -2359,7 +2323,7 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			READ_QFONT(d->valuesFont);
 
 			str = attribs.value("opacity").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'opacity'"));
 			else
 				d->valuesOpacity = str.toDouble();
@@ -2367,67 +2331,67 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			attribs = reader->attributes();
 
 			str = attribs.value("position").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("position"));
 			else
 				d->fillingPosition = XYCurve::FillingPosition(str.toInt());
 
 			str = attribs.value("type").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("type"));
 			else
 				d->fillingType = PlotArea::BackgroundType(str.toInt());
 
 			str = attribs.value("colorStyle").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("colorStyle"));
 			else
 				d->fillingColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
 
 			str = attribs.value("imageStyle").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("imageStyle"));
 			else
 				d->fillingImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
 
 			str = attribs.value("brushStyle").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("brushStyle"));
 			else
 				d->fillingBrushStyle = Qt::BrushStyle(str.toInt());
 
 			str = attribs.value("firstColor_r").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("firstColor_r"));
 			else
 				d->fillingFirstColor.setRed(str.toInt());
 
 			str = attribs.value("firstColor_g").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("firstColor_g"));
 			else
 				d->fillingFirstColor.setGreen(str.toInt());
 
 			str = attribs.value("firstColor_b").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("firstColor_b"));
 			else
 				d->fillingFirstColor.setBlue(str.toInt());
 
 			str = attribs.value("secondColor_r").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("secondColor_r"));
 			else
 				d->fillingSecondColor.setRed(str.toInt());
 
 			str = attribs.value("secondColor_g").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("secondColor_g"));
 			else
 				d->fillingSecondColor.setGreen(str.toInt());
 
 			str = attribs.value("secondColor_b").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("secondColor_b"));
 			else
 				d->fillingSecondColor.setBlue(str.toInt());
@@ -2436,7 +2400,7 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			d->fillingFileName = str;
 
 			str = attribs.value("opacity").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("opacity"));
 			else
 				d->fillingOpacity = str.toDouble();
@@ -2444,7 +2408,7 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			attribs = reader->attributes();
 
 			str = attribs.value("xErrorType").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'xErrorType'"));
 			else
 				d->xErrorType = (XYCurve::ErrorType)str.toInt();
@@ -2453,7 +2417,7 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xErrorMinusColumn);
 
 			str = attribs.value("yErrorType").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'yErrorType'"));
 			else
 				d->yErrorType = (XYCurve::ErrorType)str.toInt();
@@ -2462,13 +2426,13 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(yErrorMinusColumn);
 
 			str = attribs.value("type").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
 				d->errorBarsType = (XYCurve::ErrorBarsType)str.toInt();
 
 			str = attribs.value("capSize").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'capSize'"));
 			else
 				d->errorBarsCapSize = str.toDouble();
@@ -2476,7 +2440,7 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			READ_QPEN(d->errorBarsPen);
 
 			str = attribs.value("opacity").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'opacity'"));
 			else
 				d->errorBarsOpacity = str.toDouble();

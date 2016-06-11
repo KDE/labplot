@@ -263,7 +263,7 @@ void XYSmoothCurvePrivate::recalculate() {
 ///////////////////////////////////////////////////////////
 	int status=0;
 
-	switch(type) {
+	switch (type) {
 	case XYSmoothCurve::MovingAverage:
 		status = nsl_smooth_moving_average(ydata, n, points, weight, mode);
 		break;
@@ -274,19 +274,16 @@ void XYSmoothCurvePrivate::recalculate() {
 		status = nsl_smooth_percentile(ydata, n, points, percentile, mode);
 		break;
 	case XYSmoothCurve::SavitzkyGolay:
-		if(mode == nsl_smooth_pad_constant)
+		if (mode == nsl_smooth_pad_constant)
 			nsl_smooth_pad_constant_set(lvalue, rvalue);
 		status = nsl_smooth_savgol(ydata, n, points, order, mode);
-
 		break;
 	}
 
 	xVector->resize(n);
 	yVector->resize(n);
-	for(unsigned int i=0;i<n;i++) {
-		(*xVector)[i] = xdata[i];
-		(*yVector)[i] = ydata[i];
-	}
+	memcpy(xVector->data(), xdata, n*sizeof(double));
+	memcpy(yVector->data(), ydata, n*sizeof(double));
 
 ///////////////////////////////////////////////////////////
 
@@ -346,10 +343,10 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYSmoothCurve::load(XmlStreamReader* reader){
+bool XYSmoothCurve::load(XmlStreamReader* reader) {
 	Q_D(XYSmoothCurve);
 
-	if(!reader->isStartElement() || reader->name() != "xySmoothCurve"){
+	if (!reader->isStartElement() || reader->name() != "xySmoothCurve") {
 		reader->raiseError(i18n("no xy Fourier smooth curve element found"));
 		return false;
 	}
@@ -376,49 +373,49 @@ bool XYSmoothCurve::load(XmlStreamReader* reader){
 			READ_COLUMN(yDataColumn);
 
 			str = attribs.value("type").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
 				d->smoothData.type = (XYSmoothCurve::SmoothType) str.toInt();
 
 			str = attribs.value("points").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'points'"));
 			else
 				d->smoothData.points = str.toInt();
 
 			str = attribs.value("weight").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'weight'"));
 			else
 				d->smoothData.weight = (nsl_smooth_weight_type) str.toInt();
 
 			str = attribs.value("percentile").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'percentile'"));
 			else
 				d->smoothData.percentile = str.toDouble();
 
 			str = attribs.value("order").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'order'"));
 			else
 				d->smoothData.order = str.toInt();
 
 			str = attribs.value("mode").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'mode'"));
 			else
 				d->smoothData.mode = (nsl_smooth_pad_mode) str.toInt();
 
 			str = attribs.value("lvalue").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'lvalue'"));
 			else
 				d->smoothData.lvalue = str.toDouble();
 
 			str = attribs.value("rvalue").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'rvalue'"));
 			else
 				d->smoothData.rvalue = str.toDouble();
@@ -427,29 +424,29 @@ bool XYSmoothCurve::load(XmlStreamReader* reader){
 			attribs = reader->attributes();
 
 			str = attribs.value("available").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'available'"));
 			else
 				d->smoothResult.available = str.toInt();
 
 			str = attribs.value("valid").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'valid'"));
 			else
 				d->smoothResult.valid = str.toInt();
 			
 			str = attribs.value("status").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'status'"));
 			else
 				d->smoothResult.status = str;
 
 			str = attribs.value("time").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'time'"));
 			else
 				d->smoothResult.elapsedTime = str.toInt();
-		} else if(reader->name() == "column") {
+		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {
 				delete column;
@@ -462,7 +459,7 @@ bool XYSmoothCurve::load(XmlStreamReader* reader){
 		}
 	}
 
-	if (d->xColumn) {
+	if (d->xColumn && d->yColumn) {
 		d->xColumn->setHidden(true);
 		addChild(d->xColumn);
 
