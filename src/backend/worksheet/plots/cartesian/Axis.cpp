@@ -50,8 +50,10 @@
 #include <KIcon>
 #include <KLocale>
 
-#include <math.h>
+#include <cmath>
+extern "C" {
 #include <float.h>
+}
 
 /**
  * \class AxisGrid

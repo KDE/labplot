@@ -39,7 +39,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 
-#include <math.h>
+#include <cmath>
 
 /*!
 	\class FunctionValuesDialog

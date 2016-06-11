@@ -35,6 +35,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QDebug>
+#include <KMessageBox>
 
 /*!
   \class XYFourierFilterCurveDock
@@ -387,10 +388,17 @@ void XYFourierFilterCurveDock::unit2Changed(int index) {
 }
 
 void XYFourierFilterCurveDock::recalculateClicked() {
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	m_filterData.cutoff = uiGeneralTab.sbCutoff->value();
 	m_filterData.cutoff2 = uiGeneralTab.sbCutoff2->value();
 
+	if ((m_filterData.type == XYFourierFilterCurve::BandPass || m_filterData.type == XYFourierFilterCurve::BandReject) 
+			&& m_filterData.cutoff2 <= m_filterData.cutoff) {
+		KMessageBox::sorry(this, i18n("The band width is <= 0 since lower cutoff value is not smaller than upper cutoff value. Please fix this."),
+			                   i18n("band width <= 0") );
+		return;
+	}
+
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setFilterData(m_filterData);
 

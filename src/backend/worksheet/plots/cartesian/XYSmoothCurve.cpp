@@ -40,17 +40,16 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 
-extern "C" {
-//TODO: 
-#include <gsl/gsl_math.h>	// gsl_pow_*
-#include "backend/nsl/nsl_stats.h"
-#include "backend/nsl/nsl_sf_kernel.h"
-}
-
 #include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
 #include <QDebug>
+
+extern "C" {
+#include <gsl/gsl_math.h>	// gsl_pow_*
+#include "backend/nsl/nsl_stats.h"
+#include "backend/nsl/nsl_sf_kernel.h"
+}
 
 XYSmoothCurve::XYSmoothCurve(const QString& name)
 		: XYCurve(name, new XYSmoothCurvePrivate(this)) {

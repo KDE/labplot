@@ -53,10 +53,12 @@
 #include <KConfigGroup>
 #include <KLocale>
 
+#include <cmath>
+#include <vector>
+extern "C" {
 #include <gsl/gsl_spline.h>
 #include <gsl/gsl_errno.h>
-#include <math.h>
-#include <vector>
+}
 
 XYCurve::XYCurve(const QString &name) : WorksheetElement(name), d_ptr(new XYCurvePrivate(this)) {
 	init();

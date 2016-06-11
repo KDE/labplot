@@ -40,7 +40,6 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/commandtemplates.h"
-#include <math.h>
 
 #include <QGraphicsItem>
 #include <QPainterPath>
@@ -52,6 +51,8 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
+
+#include <cmath>
 
 CartesianPlotLegend::CartesianPlotLegend(CartesianPlot* plot, const QString &name)
 		: WorksheetElement(name), d_ptr(new CartesianPlotLegendPrivate(this)), m_plot(plot) {

@@ -224,8 +224,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
-			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
-
+				&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 			xdataVector.append(xDataColumn->valueAt(row));
 			ydataVector.append(yDataColumn->valueAt(row));
 		}
@@ -292,8 +291,13 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	case XYFourierFilterCurve::Index:
 		cutindex2 = cutoff2;
 	}
-	const double centerindex=(cutindex2+cutindex)/2.;
-	const int bandwidth=(cutindex2-cutindex);
+	const double centerindex = (cutindex2+cutindex)/2.;
+	const int bandwidth = (cutindex2-cutindex);
+	if(bandwidth <= 0) {
+		qWarning()<<"band width must be > 0. Giving up.";
+		return;
+	}
+
 #ifndef NDEBUG
 	qDebug()<<"cut off @"<<cutindex<<cutindex2;
 	qDebug()<<"center index ="<<centerindex;
@@ -301,23 +305,24 @@ void XYFourierFilterCurvePrivate::recalculate() {
 #endif
 
 	// 2. apply filter
+	unsigned int i;
 	switch (type) {
 	case XYFourierFilterCurve::LowPass:
 		switch (form) {
 		case XYFourierFilterCurve::Ideal:
-			for (unsigned int i = cutindex; i < n; i++)
+			for (i = cutindex; i < n; i++)
 				ydata[i] = 0;
 			break;
 		case XYFourierFilterCurve::Butterworth:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i/cutindex,2*order));
 			break;
 		case XYFourierFilterCurve::ChebyshevI:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i/cutindex),2));
 			break;
 		case XYFourierFilterCurve::ChebyshevII:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,cutindex/i),2));
 			break;
 		}
@@ -325,19 +330,19 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	case XYFourierFilterCurve::HighPass:
 		switch (form) {
 		case XYFourierFilterCurve::Ideal:
-			for (unsigned int i = 0; i < cutindex; i++)
+			for (i = 0; i < cutindex; i++)
 				ydata[i] = 0;
 			break;
 		case XYFourierFilterCurve::Butterworth:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(cutindex/i,2*order));
 			break;
 		case XYFourierFilterCurve::ChebyshevI:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,cutindex/i),2));
 			break;
 		case XYFourierFilterCurve::ChebyshevII:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i/cutindex),2));
 			break;
 		}
@@ -345,21 +350,21 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	case XYFourierFilterCurve::BandPass:
 		switch (form) {
 		case XYFourierFilterCurve::Ideal:
-			for (unsigned int i = 0; i < cutindex; i++)
+			for (i = 0; i < cutindex; i++)
 				ydata[i] = 0;
-			for (unsigned int i = cutindex2; i < n; i++)
+			for (i = cutindex2; i < n; i++)
 				ydata[i] = 0;
 			break;
 		case XYFourierFilterCurve::Butterworth:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int((i*i-centerindex*centerindex)/i/bandwidth,2*order));
 			break;
 		case XYFourierFilterCurve::ChebyshevI:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
 			break;
 		case XYFourierFilterCurve::ChebyshevII:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
 			break;
 		}
@@ -367,19 +372,19 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	case XYFourierFilterCurve::BandReject:
 		switch (form) {
 		case XYFourierFilterCurve::Ideal:
-			for (unsigned int i = cutindex; i < cutindex2; i++)
+			for (i = cutindex; i < cutindex2; i++)
 				ydata[i] = 0;
 			break;
 		case XYFourierFilterCurve::Butterworth:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i*bandwidth/(i*i-gsl_sf_pow_int(centerindex,2)),2*order));
 			break;
 		case XYFourierFilterCurve::ChebyshevI:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
 			break;
 		case XYFourierFilterCurve::ChebyshevII:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
 			break;
 		}
