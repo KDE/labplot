@@ -798,11 +798,9 @@ bool XYCurvePrivate::swapVisible(bool on) {
   Triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-	if (m_suppressRetransform) {
+	if (m_suppressRetransform)
 		return;
-	}
 
- 	qDebug()<<"XYCurvePrivate::retransform() " << q->name();
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
 	connectedPointsLogical.clear();
@@ -823,9 +821,6 @@ void XYCurvePrivate::retransform() {
 
 	AbstractColumn::ColumnMode xColMode = xColumn->columnMode();
 	AbstractColumn::ColumnMode yColMode = yColumn->columnMode();
-
-	for(int i=0;i<qMin(10,endRow);i++)
-		qDebug()<<xColumn->valueAt(i)<<yColumn->valueAt(i);
 
 	//take over only valid and non masked points.
 	for (int row = startRow; row <= endRow; row++ ) {
@@ -889,9 +884,6 @@ void XYCurvePrivate::retransform() {
   Called each time when the type of this connection is changed.
 */
 void XYCurvePrivate::updateLines() {
-#ifndef NDEBUG
-	qDebug()<<"XYCurvePrivate::updateLines()";
-#endif
 	linePath = QPainterPath();
 	lines.clear();
 	if (lineType == XYCurve::NoLine) {
@@ -902,10 +894,9 @@ void XYCurvePrivate::updateLines() {
 
 	const int count=symbolPointsLogical.count();
 #ifndef NDEBUG
-	qDebug()<<"count ="<<count;
-	qDebug()<<"line type ="<<lineType;
-	for(int i=0;i<qMin(10,count);i++)
-		qDebug()<<symbolPointsLogical.at(i);
+//	qDebug()<<"count ="<<count<<", line type ="<<lineType;
+//	for(int i=0;i<qMin(10,count);i++)
+//		qDebug()<<symbolPointsLogical.at(i);
 #endif
 
 	//nothing to do, if no data points available

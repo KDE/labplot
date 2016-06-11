@@ -324,7 +324,7 @@ void XYFourierFilterCurveDock::unitChanged(int index) {
 	double f=1.0;	// sample frequency
 	if(m_filterCurve->xDataColumn() != NULL) {
 		n = m_filterCurve->xDataColumn()->rowCount();
-		double range = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
+		double range = 2.*(m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum());
 		f=(n-1)/range;
 #ifndef NDEBUG
 		qDebug()<<" n ="<<n<<" sample frequency ="<<f;
@@ -359,7 +359,7 @@ void XYFourierFilterCurveDock::unit2Changed(int index) {
 	double f=1.0;
 	if(m_filterCurve->xDataColumn() != NULL) {
 		n = m_filterCurve->xDataColumn()->rowCount();
-		double range = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
+		double range = 2.*(m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum());
 		f = (n-1)/range;
 #ifndef NDEBUG
 		qDebug()<<" n ="<<n<<" sample frequency ="<<f;

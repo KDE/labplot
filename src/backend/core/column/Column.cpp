@@ -42,6 +42,9 @@
 
 #include <KIcon>
 #include <KLocale>
+#ifndef NDEBUG
+#include <QDebug>
+#endif
 
 /**
  * \class Column

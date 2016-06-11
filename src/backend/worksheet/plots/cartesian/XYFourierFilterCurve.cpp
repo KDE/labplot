@@ -172,9 +172,12 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 // see XYFitCurvePrivate
 
 void XYFourierFilterCurvePrivate::recalculate() {
+#ifndef NDEBUG
+	qDebug()<<"XYFourierFilterCurvePrivate::recalculate()";
+#endif
 	QElapsedTimer timer;
 	timer.start();
-i
+
 	//create filter result columns if not available yet, clear them otherwise
 	if (!xColumn) {
 		xColumn = new Column("x", AbstractColumn::Numeric);
@@ -195,8 +198,6 @@ i
 		xVector->clear();
 		yVector->clear();
 	}
-	for(int i=0;i<10;i++)
-		qDebug()<<xColumn->valueAt(i)<<yColumn->valueAt(i);
 
 	// clear the previous result
 	filterResult = XYFourierFilterCurve::FilterResult();
@@ -273,7 +274,7 @@ i
 	double cutindex=0, cutindex2=0;
 	switch(unit) {
 	case XYFourierFilterCurve::Frequency:
-		cutindex = cutoff*(max-min);
+		cutindex = 2*cutoff*(max-min);
 		break;
 	case XYFourierFilterCurve::Fraction:
 		cutindex = cutoff*n;
@@ -283,7 +284,7 @@ i
 	}
 	switch(unit2) {
 	case XYFourierFilterCurve::Frequency:
-		cutindex2 = cutoff2*(max-min);
+		cutindex2 = 2*cutoff2*(max-min);
 		break;
 	case XYFourierFilterCurve::Fraction:
 		cutindex2 = cutoff2*n;
@@ -291,113 +292,98 @@ i
 	case XYFourierFilterCurve::Index:
 		cutindex2 = cutoff2;
 	}
-#ifndef NDEBUG
-	qDebug()<<"cut off @"<<cutindex<<cutindex2;
-#endif
 	const double centerindex=(cutindex2+cutindex)/2.;
 	const int bandwidth=(cutindex2-cutindex);
+#ifndef NDEBUG
+	qDebug()<<"cut off @"<<cutindex<<cutindex2;
+	qDebug()<<"center index ="<<centerindex;
+	qDebug()<<"bandwidth ="<<bandwidth;
+#endif
 
 	// 2. apply filter
 	switch(type) {
 	case XYFourierFilterCurve::LowPass:
 		switch(form) {
-			case XYFourierFilterCurve::Ideal: {
-				for (unsigned int i = cutindex; i < n; i++)
-					ydata[i] = 0;
-				break;
-			}
-			case XYFourierFilterCurve::Butterworth: {
-				for (unsigned int i = 0; i < n; i++)
-					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i/cutindex,2*order));
-				break;
-			}
-			case XYFourierFilterCurve::ChebyshevI: {
-				for (unsigned int i = 0; i < n; i++)
-					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i/cutindex),2));
-				break;
-			}
-			case XYFourierFilterCurve::ChebyshevII: {
-				for (unsigned int i = 0; i < n; i++)
-					ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,cutindex/i),2));
-				break;
-			}
+		case XYFourierFilterCurve::Ideal:
+			for (unsigned int i = cutindex; i < n; i++)
+				ydata[i] = 0;
+			break;
+		case XYFourierFilterCurve::Butterworth:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i/cutindex,2*order));
+			break;
+		case XYFourierFilterCurve::ChebyshevI:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i/cutindex),2));
+			break;
+		case XYFourierFilterCurve::ChebyshevII:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,cutindex/i),2));
+			break;
 		}
 		break;
 	case XYFourierFilterCurve::HighPass:
 		switch(form) {
-			case XYFourierFilterCurve::Ideal: {
-				for (unsigned int i = 0; i < cutindex; i++)
-					ydata[i] = 0;
-				break;
-			}
-			case XYFourierFilterCurve::Butterworth: {
-				for (unsigned int i = 0; i < n; i++)
-					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(cutindex/i,2*order));
-				break;
-			}
-			case XYFourierFilterCurve::ChebyshevI: {
-				for (unsigned int i = 0; i < n; i++)
-					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,cutindex/i),2));
-				break;
-			}
-			case XYFourierFilterCurve::ChebyshevII: {
-				for (unsigned int i = 0; i < n; i++)
-					ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i/cutindex),2));
-				break;
-			}
+		case XYFourierFilterCurve::Ideal:
+			for (unsigned int i = 0; i < cutindex; i++)
+				ydata[i] = 0;
+			break;
+		case XYFourierFilterCurve::Butterworth:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(cutindex/i,2*order));
+			break;
+		case XYFourierFilterCurve::ChebyshevI:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,cutindex/i),2));
+			break;
+		case XYFourierFilterCurve::ChebyshevII:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i/cutindex),2));
+			break;
 		}
 		break;
 	case XYFourierFilterCurve::BandPass:
 		switch(form) {
-			case XYFourierFilterCurve::Ideal: {
-				for (unsigned int i = 0; i < cutindex; i++)
-					ydata[i] = 0;
-				for (unsigned int i = cutindex2; i < n; i++)
-					ydata[i] = 0;
-				break;
-			}
-			case XYFourierFilterCurve::Butterworth: {
-				for (unsigned int i = 0; i < n; i++)
-					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int((i*i-centerindex*centerindex)/i/bandwidth,2*order));
-				break;
-			}
-			case XYFourierFilterCurve::ChebyshevI: {
-				for (unsigned int i = 0; i < n; i++)
-					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
-				break;
-			}
-			case XYFourierFilterCurve::ChebyshevII: {
-				for (unsigned int i = 0; i < n; i++)
-					ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
-				break;
-			}
+		case XYFourierFilterCurve::Ideal:
+			for (unsigned int i = 0; i < cutindex; i++)
+				ydata[i] = 0;
+			for (unsigned int i = cutindex2; i < n; i++)
+				ydata[i] = 0;
+			break;
+		case XYFourierFilterCurve::Butterworth:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int((i*i-centerindex*centerindex)/i/bandwidth,2*order));
+			break;
+		case XYFourierFilterCurve::ChebyshevI:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
+			break;
+		case XYFourierFilterCurve::ChebyshevII:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
+			break;
 		}
 		break;
 	case XYFourierFilterCurve::BandReject:
 		switch(form) {
-			case XYFourierFilterCurve::Ideal: {
-				for (unsigned int i = cutindex; i < cutindex2; i++)
-					ydata[i] = 0;
-				break;
-			}
-			case XYFourierFilterCurve::Butterworth: {
-				for (unsigned int i = 0; i < n; i++)
-					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i*bandwidth/(i*i-gsl_sf_pow_int(centerindex,2)),2*order));
-				break;
-			}
-			case XYFourierFilterCurve::ChebyshevI: {
-				for (unsigned int i = 0; i < n; i++)
-					ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
-				break;
-			}
-			case XYFourierFilterCurve::ChebyshevII: {
-				for (unsigned int i = 0; i < n; i++)
-					ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
-				break;
-			}
+		case XYFourierFilterCurve::Ideal:
+			for (unsigned int i = cutindex; i < cutindex2; i++)
+				ydata[i] = 0;
+			break;
+		case XYFourierFilterCurve::Butterworth:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i*bandwidth/(i*i-gsl_sf_pow_int(centerindex,2)),2*order));
+			break;
+		case XYFourierFilterCurve::ChebyshevI:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
+			break;
+		case XYFourierFilterCurve::ChebyshevII:
+			for (unsigned int i = 0; i < n; i++)
+				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
+			break;
 		}
 		break;
-//TODO	case XYFourierFilterCurve::Threshold:
 	}
 
 	// 3. back transform
@@ -410,10 +396,6 @@ i
 	yVector->resize(n);
 	memcpy(xVector->data(), xdataVector.data(), n*sizeof(double));
 	memcpy(yVector->data(), ydata, n*sizeof(double));
-#ifndef NDEBUG
-	for(int i=0;i<10;i++)
-		qDebug()<<(*xVector)[i]<<(*yVector)[i];
-#endif
 ///////////////////////////////////////////////////////////
 
 	//write the result
@@ -573,6 +555,7 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 				delete column;
 				return false;
 			}
+
 			if (column->name()=="x")
 				d->xColumn = column;
 			else if (column->name()=="y")
@@ -580,7 +563,7 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 		}
 	}
 
-	if (d->xColumn) {
+	if (d->xColumn && d->yColumn) {
 		d->xColumn->setHidden(true);
 		addChild(d->xColumn);
 
@@ -594,6 +577,8 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 		XYCurve::d_ptr->xColumn = d->xColumn;
 		XYCurve::d_ptr->yColumn = d->yColumn;
 		setUndoAware(true);
+	} else {
+		qWarning()<<"	d->xColumn == NULL!";
 	}
 
 	return true;
