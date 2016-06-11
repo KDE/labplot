@@ -56,6 +56,13 @@ private:
         QList<FITSFilter::Keyword> removedKeywords;
     };
 
+    struct ExtensionData {
+        HeaderUpdate updates;
+        QList<FITSFilter::Keyword> keywords;
+    };
+
+
+    QMap<QString, ExtensionData> m_extensions;
     QMap<QString, HeaderUpdate> m_headerUpdates;
     FITSFilter* m_fitsFilter;
 
