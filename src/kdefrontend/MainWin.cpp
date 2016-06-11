@@ -716,12 +716,11 @@ void MainWin::openProject() {
 
 void MainWin::openProject(const QString& filename) {
 	if (filename == m_currentFileName) {
-		KMessageBox::information(this,
-		                         i18n("The project file %1 is already opened.", filename),i18n("Open project"));
+		KMessageBox::information(this, i18n("The project file %1 is already opened.", filename),i18n("Open project"));
 		return;
 	}
 
-	QIODevice *file = KFilterDev::deviceForFile(filename,"application/x-gzip",true);
+	QIODevice *file = KFilterDev::deviceForFile(filename);
 	if (file==0)
 		file = new QFile(filename);
 
