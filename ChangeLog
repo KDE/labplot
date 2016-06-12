@@ -13,6 +13,7 @@ Bug fixes:
 	* Save and restore last used setting in RandomValuesDialog
 	* Update axis title shape on title rotations correctly
 	* Save and restore custom column widths in the spreadsheet
+	* Fixed sporadic crashes during project close
 
 -----2.2-----
 New features:
