@@ -67,6 +67,9 @@ XYSmoothCurveDock::XYSmoothCurveDock(QWidget *parent):
  * 	// Tab "General"
  */
 void XYSmoothCurveDock::setupGeneral() {
+#ifndef NDEBUG
+	qDebug()<<"XYSmoothCurveDock::setupGeneral()";
+#endif
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 
@@ -133,6 +136,9 @@ void XYSmoothCurveDock::setupGeneral() {
 }
 
 void XYSmoothCurveDock::initGeneralTab() {
+#ifndef NDEBUG
+	qDebug()<<"XYSmoothCurveDock::initGeneralTab()";
+#endif
 	//if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size()==1){
 		uiGeneralTab.lName->setEnabled(true);
@@ -162,6 +168,10 @@ void XYSmoothCurveDock::initGeneralTab() {
 
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
 	typeChanged();	// needed, when type does not change
+#ifndef NDEBUG
+	qDebug()<<"	curve ="<<m_smoothCurve->name();
+	qDebug()<<"	m_smoothData.points ="<<m_smoothData.points;
+#endif
 	uiGeneralTab.sbPoints->setValue(m_smoothData.points);
 	uiGeneralTab.cbWeight->setCurrentIndex(m_smoothData.weight);
 	uiGeneralTab.sbPercentile->setValue(m_smoothData.percentile);
@@ -210,6 +220,9 @@ void XYSmoothCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
+#ifndef NDEBUG
+	qDebug()<<"XYSmoothCurveDock::setCurves()";
+#endif
 	m_initializing=true;
 	m_curvesList=list;
 	m_curve=list.first();
@@ -325,7 +338,6 @@ void XYSmoothCurveDock::typeChanged() {
 	}
 
 	if(type == XYSmoothCurve::SavitzkyGolay) {
-		uiGeneralTab.sbPoints->setValue(5);
 		uiGeneralTab.lOrder->show();
 		uiGeneralTab.sbOrder->show();
 	} else {
