@@ -154,7 +154,6 @@ void FITSHeaderEditWidget::openFile() {
     }
     m_seletedExtension = root->child(root->childCount()-1)->text(0);
     fillTable();
-
     RESET_CURSOR;
 }
 
@@ -250,6 +249,7 @@ void FITSHeaderEditWidget::addKeyword() {
         newKeyWordItem->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         ui.twKeywordsTable->setItem(lastRow, 2, newKeyWordItem);
     }
+    delete newKeywordDialog;
 }
 
 void FITSHeaderEditWidget::removeKeyword() {

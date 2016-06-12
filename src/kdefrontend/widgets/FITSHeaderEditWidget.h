@@ -63,10 +63,9 @@ private:
 
 
     QMap<QString, ExtensionData> m_extensionDatas;
-    //QMap<QString, HeaderUpdate> m_headerUpdates;
-    FITSFilter* m_fitsFilter;
-
     QString m_seletedExtension;
+
+    FITSFilter* m_fitsFilter;
 
     void initActions();
     void initContextMenu();
