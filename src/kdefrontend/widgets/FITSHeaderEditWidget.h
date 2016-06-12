@@ -62,8 +62,8 @@ private:
     };
 
 
-    QMap<QString, ExtensionData> m_extensions;
-    QMap<QString, HeaderUpdate> m_headerUpdates;
+    QMap<QString, ExtensionData> m_extensionDatas;
+    //QMap<QString, HeaderUpdate> m_headerUpdates;
     FITSFilter* m_fitsFilter;
 
     QString m_seletedExtension;
@@ -71,6 +71,7 @@ private:
     void initActions();
     void initContextMenu();
     void connectActions();
+    void fillTable();
     QList<QString> mandatoryKeywords() const;
     bool eventFilter(QObject*, QEvent*);
 public slots:
