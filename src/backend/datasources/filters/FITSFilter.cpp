@@ -810,12 +810,12 @@ const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *ke
         keyValue = keyValue.simplified();
     } else {
         printError(status);
-        delete keyVal;
+        delete[] keyVal;
         fits_close_file(fitsFile, &status);
         return QString();
     }
 
-    delete keyVal;
+    delete[] keyVal;
     status = 0;
     fits_close_file(fitsFile, &status);
     return keyValue;

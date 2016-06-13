@@ -98,7 +98,6 @@ void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
             fillTable();
         }
     }
-    //TODO added keywords/removed keywords
     RESET_CURSOR;
 }
 
@@ -134,15 +133,16 @@ void FITSHeaderEditWidget::openFile() {
         }
         m_fitsFilter->parseExtensions(fileName, ui.twExtensions);
         ui.twExtensions->resizeColumnToContents(0);
+    } else {
+        KMessageBox::information(this, i18n("Cannot open file, file already opened!"),
+                                 i18n("File already opened!"));
     }
-    m_seletedExtension = root->child(root->childCount()-1)->text(0);
-    fillTable();
+    fillTable(ui.twExtensions->selectedItems().at(0), 0);
     RESET_CURSOR;
 }
 
 void FITSHeaderEditWidget::save() {
     foreach (const QString& fileName, m_extensionDatas.keys()) {
-        qDebug() << "Saving " << fileName;
         if (m_extensionDatas[fileName].updates.newKeywords.size() > 0) {
             m_fitsFilter->addNewKeyword(fileName,m_extensionDatas[fileName].updates.newKeywords);
         }
