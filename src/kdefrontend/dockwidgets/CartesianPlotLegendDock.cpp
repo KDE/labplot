@@ -32,6 +32,7 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
+#include "kdefrontend/ThemeHandler.h"
 
 #include <QDir>
 #include <QFileDialog>
@@ -130,6 +131,9 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+    ThemeHandler* themeHandler = new ThemeHandler(this, ThemeHandler::CartesianPlotLegend);
+    ui.verticalLayout->addWidget(themeHandler);
 
 	init();
 }

@@ -32,6 +32,7 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
+#include "kdefrontend/ThemeHandler.h"
 
 #include <QPainter>
 #include <QTimer>
@@ -164,6 +165,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+    ThemeHandler* themeHandler = new ThemeHandler(this, ThemeHandler::CartesianPlot);
+    ui.verticalLayout->addWidget(themeHandler);
 
 	init();
 }

@@ -29,6 +29,7 @@
 
 #include "WorksheetDock.h"
 #include "kdefrontend/TemplateHandler.h"
+#include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/GuiTools.h"
 
 #include <QPrinter>
@@ -140,6 +141,9 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0), 
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+    ThemeHandler* themeHandler = new ThemeHandler(this, ThemeHandler::Worksheet);
+    ui.verticalLayout->addWidget(themeHandler);
 
 	this->retranslateUi();
 }
