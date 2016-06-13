@@ -35,6 +35,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QMultiMap>
 #include <QString>
 #include <QHeaderView>
+#include <QTableWidgetItem>
 
 /*!
  * \class FITSFilter
@@ -77,8 +78,8 @@ void FITSFilter::renameKeywordKey(const Keyword &keyword, const QString &newKey)
     d->renameKeywordKey(keyword, newKey);
 }
 
-void FITSFilter::parseHeader(const QString &fileName, QTableWidget *headerEditTable){
-    d->parseHeader(fileName, headerEditTable);
+void FITSFilter::parseHeader(const QString &fileName, QTableWidget *headerEditTable, bool readKeys, const QList<Keyword> &keys){
+    d->parseHeader(fileName, headerEditTable, readKeys, keys);
 }
 
 void FITSFilter::parseExtensions(const QString &fileName, QTreeWidget *tw, bool checkPrimary) {
@@ -758,18 +759,33 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
 #endif
 }
 
-void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *headerEditTable) {
-    const QList<FITSFilter::Keyword> keywords = chduKeywords(fileName);
+void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *headerEditTable,
+                                     bool readKeys, const QList<FITSFilter::Keyword>& keys) {
+
+    QList<FITSFilter::Keyword> keywords;
+    if (readKeys) {
+         keywords = chduKeywords(fileName);
+    } else {
+        keywords = keys;
+    }
 
     headerEditTable->setRowCount(keywords.size());
     QTableWidgetItem* item;
     for (int i = 0; i < keywords.size(); ++i) {
+        bool mandatory = FITSFilter::mandatoryImageExtensionKeywords().contains(keywords.at(i).key) ||
+                FITSFilter::mandatoryTableExtensionKeywords().contains(keywords.at(i).key);
         item = new QTableWidgetItem(keywords.at(i).key);
         item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        if (mandatory) {
+            item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+        }
         headerEditTable->setItem(i, 0, item );
 
         item = new QTableWidgetItem(keywords.at(i).value);
         item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        if (mandatory) {
+            item->setFlags(item->flags() & ~Qt::ItemIsEditable);
+        }
         headerEditTable->setItem(i, 1, item );
 
         item = new QTableWidgetItem(keywords.at(i).comment);

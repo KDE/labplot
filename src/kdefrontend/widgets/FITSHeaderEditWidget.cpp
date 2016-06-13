@@ -31,7 +31,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QTableWidget>
 #include <QFileDialog>
 #include <QContextMenuEvent>
-#include <QTreeWidgetItem>
 #include <QDebug>
 
 FITSHeaderEditWidget::FITSHeaderEditWidget(AbstractDataSource *dataSource, QWidget *parent) :
@@ -69,23 +68,7 @@ void FITSHeaderEditWidget::fillTable() {
         foreach (const FITSFilter::Keyword& key, m_extensionDatas[m_seletedExtension].updates.newKeywords) {
             keywords.append(key);
         }
-
-        ui.twKeywordsTable->setRowCount(keywords.size());
-        QTableWidgetItem* item;
-        for (int i = 0; i < keywords.size(); ++i) {
-            item = new QTableWidgetItem(keywords.at(i).key);
-            item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-            ui.twKeywordsTable->setItem(i, 0, item );
-
-            item = new QTableWidgetItem(keywords.at(i).value);
-            item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-            ui.twKeywordsTable->setItem(i, 1, item );
-
-            item = new QTableWidgetItem(keywords.at(i).comment);
-            item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-            ui.twKeywordsTable->setItem(i, 2, item );
-        }
-        ui.twKeywordsTable->resizeColumnsToContents();
+        m_fitsFilter->parseHeader(QString(), ui.twKeywordsTable, false, keywords);
     }
 }
 
@@ -217,6 +200,16 @@ void FITSHeaderEditWidget::addKeyword() {
                 return;
             }
         }
+
+        /*
+     - XTENSION keyword in the primary array
+     - Column related keyword (TFIELDS, TTYPEn,TFORMn, etc.) in an image
+     - SIMPLE, EXTEND, or BLOCKED keyword in any extension
+     - BSCALE, BZERO, BUNIT, BLANK, DATAMAX, DATAMIN keywords in a table
+     - Table WCS keywords (TCTYPn, TCRPXn, TCRVLn, etc.) in an image
+     - END keyword
+     - Keyword name contains illegal character
+     */
 
         m_extensionDatas[m_seletedExtension].updates.newKeywords.append(newKeyWord);
 

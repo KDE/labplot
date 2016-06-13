@@ -51,7 +51,9 @@ class FITSFilterPrivate {
                 const QString valueOf(const QString &fileName, const char* key);
 
                 QList<FITSFilter::Keyword> chduKeywords(const QString &fileName);
-                void parseHeader(const QString& fileName, QTableWidget* headerEditTable);
+                void parseHeader(const QString& fileName, QTableWidget* headerEditTable,
+                                 bool readKeys = true,
+                                 const QList<FITSFilter::Keyword> &keys = QList<FITSFilter::Keyword>());
                 void parseExtensions(const QString& fileName, QTreeWidget *tw, bool checkPrimary = false);
         private:
                 void printError(int status) const;
