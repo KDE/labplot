@@ -133,11 +133,11 @@ void FITSHeaderEditWidget::openFile() {
         }
         m_fitsFilter->parseExtensions(fileName, ui.twExtensions);
         ui.twExtensions->resizeColumnToContents(0);
+        fillTable(ui.twExtensions->selectedItems().at(0), 0);
     } else {
         KMessageBox::information(this, i18n("Cannot open file, file already opened!"),
                                  i18n("File already opened!"));
     }
-    fillTable(ui.twExtensions->selectedItems().at(0), 0);
     RESET_CURSOR;
 }
 
