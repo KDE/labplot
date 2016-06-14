@@ -143,8 +143,6 @@ long AsciiFilter::lineNumber(const QString & fileName) {
 	long rows=0;
 	while (!device.atEnd()) {
 		device.readLine();
-	while (!in.atEnd()) {
-		in.readLine();
 		rows++;
 	}
 
