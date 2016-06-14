@@ -235,13 +235,13 @@ public:
 };
 
 CartesianCoordinateSystem::CartesianCoordinateSystem(CartesianPlot* plot)
-		: AbstractCoordinateSystem(plot), d(new CartesianCoordinateSystemPrivate(this)){
+		: AbstractCoordinateSystem(plot), d(new CartesianCoordinateSystemPrivate(this)) {
 			d->plot=plot;
 	// TODO: set some standard scales
 }
 
 
-CartesianCoordinateSystem::~CartesianCoordinateSystem(){
+CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 	delete d;
 }
 
@@ -301,12 +301,12 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalP
 	QList<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
-	foreach (const Scale* xScale, d->xScales){
+	foreach (const Scale* xScale, d->xScales) {
 		if (!xScale) continue;
 		Interval<double> xInterval;
 		xScale->getProperties(NULL, &xInterval);
 
-		foreach (const Scale* yScale, d->yScales){
+		foreach (const Scale* yScale, d->yScales) {
 			if (!yScale) continue;
 			Interval<double> yInterval;
 			yScale->getProperties(NULL, &yInterval);
@@ -329,7 +329,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalP
 					continue;
 
 				const QPointF mappedPoint(x, y);
-				if (noPageClipping || rectContainsPoint(pageRect, mappedPoint)){
+				if (noPageClipping || rectContainsPoint(pageRect, mappedPoint)) {
 					scenePoints.append(mappedPoint);
 					visiblePoints[i].flip();
 				}
@@ -343,12 +343,12 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(const QPointF& logicalPoint
 	QList<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
-	foreach (const Scale* xScale, d->xScales){
+	foreach (const Scale* xScale, d->xScales) {
 		if (!xScale) continue;
 		Interval<double> xInterval;
 		xScale->getProperties(NULL, &xInterval);
 
-		foreach (const Scale* yScale, d->yScales){
+		foreach (const Scale* yScale, d->yScales) {
 			if (!yScale) continue;
 			Interval<double> yInterval;
 			yScale->getProperties(NULL, &yInterval);
@@ -359,7 +359,7 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(const QPointF& logicalPoint
 			if (!xInterval.fuzzyContains(x))
 				continue;
 
-			if(!yInterval.fuzzyContains(y))
+			if (!yInterval.fuzzyContains(y))
 				continue;
 
 			if (!xScale->map(&x))
@@ -743,7 +743,7 @@ bool CartesianCoordinateSystem::rectContainsPoint(const QRectF& rect, const QPoi
 //######################### Private implementation #############################
 //##############################################################################
 CartesianCoordinateSystemPrivate::CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner)
-	:q(owner), plot(0){
+	:q(owner), plot(0) {
 }
 
 CartesianCoordinateSystemPrivate::~CartesianCoordinateSystemPrivate() {
@@ -761,7 +761,7 @@ void CartesianCoordinateSystem::save(QXmlStreamWriter* writer) const{
 	Q_UNUSED(writer);
 }
 
-bool CartesianCoordinateSystem::load(XmlStreamReader* reader){
+bool CartesianCoordinateSystem::load(XmlStreamReader* reader) {
 	Q_UNUSED(reader);
 	return true;
 }

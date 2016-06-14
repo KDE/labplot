@@ -571,40 +571,40 @@ void XYFitCurveDock::showFitResult() {
 	}
 
 	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
-	QString str = i18n("status") + ": " + fitResult.status + "<br>";
+	QString str = i18n("status:") + " " + fitResult.status + "<br>";
 
 	if (!fitResult.valid) {
 		uiGeneralTab.teResult->setText(str);
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	str += i18n("iterations") + ": " + QString::number(fitResult.iterations) + "<br>";
+	str += i18n("iterations:") + " " + QString::number(fitResult.iterations) + "<br>";
 	if (fitResult.elapsedTime>1000)
 		str += i18n("calculation time: %1 s", fitResult.elapsedTime/1000) + "<br>";
 	else
 		str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + "<br>";
 
-	str += i18n("degrees of freedom") + ": " + QString::number(fitResult.dof) + "<br><br>";
+	str += i18n("degrees of freedom:") + " " + QString::number(fitResult.dof) + "<br><br>";
 
-	str += "<b>Parameters:</b>";
+	str += "<b>" +i18n("Parameters:") + "</b>";
 	for (int i=0; i<fitResult.paramValues.size(); i++) {
 		str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
 		       + QString::fromUtf8("\u2213") + QString::number(fitResult.errorValues.at(i));
 	}
 
-	str += "<br><br><b>Goodness of fit:</b><br>";
-	str += i18n("sum of squared errors") + ": " + QString::number(fitResult.sse) + "<br>";
-	str += i18n("mean squared error") + ": " + QString::number(fitResult.mse) + "<br>";
-	str += i18n("root-mean squared error") + ": " + QString::number(fitResult.rmse) + "<br>";
-	str += i18n("mean absolute error") + ": " + QString::number(fitResult.mae) + "<br>";
+	str += "<br><br><b>" + i18n("Goodness of fit:") + "</b><br>";
+	str += i18n("sum of squared errors:") + " " + QString::number(fitResult.sse) + "<br>";
+	str += i18n("mean squared error:") + " " + QString::number(fitResult.mse) + "<br>";
+	str += i18n("root-mean squared error:") + " " + QString::number(fitResult.rmse) + "<br>";
+	str += i18n("mean absolute error:") + " " + QString::number(fitResult.mae) + "<br>";
 
 	if (fitResult.dof!=0) {
-		str += i18n("residual mean square") + ": " + QString::number(fitResult.rms) + "<br>";
-		str += i18n("residual standard deviation") + ": " + QString::number(fitResult.rsd) + "<br>";
+		str += i18n("residual mean square:") + " " + QString::number(fitResult.rms) + "<br>";
+		str += i18n("residual standard deviation:") + " " + QString::number(fitResult.rsd) + "<br>";
 	}
 
-	str += i18n("coefficient of determination (R²)") + ": " + QString::number(fitResult.rsquared) + "<br>";
-	str += i18n("adj. coefficient of determination (R²)") + ": " + QString::number(fitResult.rsquaredAdj) + "<br>";
+	str += i18n("coefficient of determination (R²):") + " " + QString::number(fitResult.rsquared) + "<br>";
+	str += i18n("adj. coefficient of determination (R²):") + " " + QString::number(fitResult.rsquaredAdj) + "<br>";
 // 	str += "<br><br>";
 //
 // 	QStringList iterations = fitResult.solverOutput.split(';');

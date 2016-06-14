@@ -37,12 +37,15 @@
 extern "C" {
 #include <gsl/gsl_sort.h>
 }
-#include <cmath>
 
-#include <QMetaEnum>
+#include <QFont>
+#include <QFontMetrics>
 #include <QThreadPool>
 #include <QIcon>
 #include <KLocale>
+#ifndef NDEBUG
+#include <QDebug>
+#endif
 
 /**
  * \class Column
@@ -119,8 +122,13 @@ void Column::init() {
 	m_column_private->outputFilter()->setHidden(true);
 	addChild(m_column_private->inputFilter());
 	addChild(m_column_private->outputFilter());
-	m_column_private->setWidth(120);
     m_column_private->statisticsAvailable = false;
+
+	//set the default width, synchronize this with the format used for the header in SpreadsheetModel::updateHorizontalHeader()
+	QString str = name() + QLatin1String(" {") + i18n("Numeric") + QLatin1String("} ");
+	QFont font;
+	QFontMetrics fm(font);
+	m_column_private->setWidth(fm.width(str)*1.1);
 
 	m_suppressDataChangedSignal = false;
 }

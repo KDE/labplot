@@ -189,7 +189,7 @@ set(BACKEND_SOURCES
 set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/matrix/MatrixView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
-	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetDoubleHeaderView.cpp
+	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetHeaderView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
 	${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp

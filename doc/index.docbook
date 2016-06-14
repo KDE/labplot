@@ -58,8 +58,8 @@
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2016-05-01</date>
-<releaseinfo>3.1</releaseinfo>
+<date>2016-06-02</date>
+<releaseinfo>3.2</releaseinfo>
 
 <abstract>
 	<para>
@@ -96,6 +96,7 @@ Features:
 <listitem><para>Cartesian plots, created either from imported or manually created data sets or via mathematical equation</para></listitem>
 <listitem><para>Definition of mathematical formulas is supported by syntax-highlighting and completion and by the list of thematicaly grouped mathematical and physical constants and functions</para></listitem>
 <listitem><para>Analysis of plotted data is supported by many zooming and navigation features</para></listitem>
+<listitem><para>Several interpolation, smoothing and Fourier filter methods for filtering data</para></listitem>
 <listitem><para>Linear and non-linear fits to data, several fit-models are predefined and custom models with arbitrary number of parameters can be provided</para></listitem>
 <listitem><para>Supports many CAS backends like Maxima, Python, KAlgebra, Sage</para></listitem>
 <listitem><para>Nice Worksheet view for evaluating expressions</para></listitem>
@@ -948,10 +949,19 @@ The menu is only available when a datapicker object is selected on the <guilabel
 
 <chapter id="analysis">
   <title>Analysis functions</title>
-  <para>&LabPlot; supports the data analysis functions interpolation, nonlinear curve fitting and Fourier filter.
-    Both can be applied to any data consisting of x- and y-columns. 
-    The analysis functions can be accessed using the Analysis menu or the context menu of a worksheet.</para>
-  <para>The newly created curves can be customized (line style, symbol style, &etc;) like any x-y-curve.</para>  
+  <para>&LabPlot; supports a wide variety of data analysis functions:
+    </para>
+      <itemizedlist>
+	<listitem><para>Interpolation</para></listitem>
+	<listitem><para>Smoothing</para></listitem>
+	<listitem><para>Nonlinear curve fitting</para></listitem>
+	<listitem><para>Fourier filter</para></listitem>
+      </itemizedlist>
+    <para>
+    All of them can be applied to any data consisting of x- and y-columns. 
+    The analysis functions can be accessed using the Analysis menu or the context menu of a worksheet.
+    The newly created curves can be customized (line style, symbol style, &etc;) like any other x-y-curve.</para>  
+
   <sect1 id="interpolation">
     <title>Interpolation</title>
     <para>
@@ -981,6 +991,25 @@ The menu is only available when a datapicker object is selected on the <guilabel
       </itemizedlist>
   </sect1>
 
+    <sect1 id="smoothing">
+    <title>Smoothing</title>
+    <para>
+      A number of different smoothing methods are supported:
+    </para>
+      <itemizedlist>
+	<listitem><para>Moving average (central)</para></listitem>
+	<listitem><para>Moving average (lagged)</para></listitem>
+	<listitem><para>Percentile filter</para></listitem>
+	<listitem><para>Savitzky-Golay</para></listitem>
+      </itemizedlist>
+    <para>
+      All smoothing methods support several padding modes (constant, periodic, mirror, nearest, etc.) for the beginning and end
+      of the data set. The moving averages support several weight functions (uniform, triangular, binomial, parabolic, tricubic, etc.)
+      which can be selected to weight the selected data points depending on their distance.
+      </para>
+  </sect1>
+
+  
   <sect1 id="fitting">
     <title>Curve fitting</title>
     <para>

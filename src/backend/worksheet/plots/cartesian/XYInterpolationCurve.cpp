@@ -172,114 +172,115 @@ XYInterpolationCurvePrivate::~XYInterpolationCurvePrivate() {
 // ...
 // see XYFitCurvePrivate
 
+//TODO: put this into NSL (or use GSL?)
 // calculates derivative of n points of xy-data. result in y
 void XYInterpolationCurvePrivate::deriv(double *x, double *y, unsigned n) {
 	double dy, oldy=0;
-	for(unsigned int i=0;i<n;i++) {
-		if(i==0)
+	for (unsigned int i=0; i<n; i++) {
+		if (i == 0)
 			dy = (y[1]-y[0])/(x[1]-x[0]);
-		else if(i==n-1)
+		else if (i == n-1)
 			y[i] = (y[i]-y[i-1])/(x[i]-x[i-1]);
 		else
 			dy = (y[i+1]-y[i-1])/(x[i+1]-x[i-1]);
 
-		if(i!=0)
-			y[i-1]=oldy;
-		oldy=dy;
+		if (i != 0)
+			y[i-1] = oldy;
+		oldy = dy;
 	}
 	
-//	for(unsigned int i=0;i<n;i++)
-//		printf("%g %g\n",x[i],y[i]);	
+//	for (unsigned int i=0; i < n; i++)
+//		printf("%g %g\n",x[i], y[i]);	
 }
 
 // calculates second derivative of n points of xy-data. result in y
 void XYInterpolationCurvePrivate::deriv2(double *x, double *y, unsigned n) {
 	double dx1, dx2, dy=0., oldy=0., oldoldy=0.;
-	for(unsigned int i=0;i<n;i++) {
+	for (unsigned int i=0; i<n; i++) {
 		// see http://websrv.cs.umt.edu/isis/index.php/Finite_differencing:_Introduction
-		if(i==0) {
-			dx1=x[1]-x[0];
-			dx2=x[2]-x[1];
+		if (i == 0) {
+			dx1 = x[1]-x[0];
+			dx2 = x[2]-x[1];
 			dy = 2.*(dx1*y[2]-(dx1+dx2)*y[1]+dx2*y[0])/(dx1*dx2*(dx1+dx2));
 		}
-		else if(i==n-1) {
-			dx1=x[i-1]-x[i-2];
-			dx2=x[i]-x[i-1];
+		else if (i == n-1) {
+			dx1 = x[i-1]-x[i-2];
+			dx2 = x[i]-x[i-1];
 			y[i] = 2.*(dx1*y[i]-(dx1+dx2)*y[i-1]+dx2*y[i-2])/(dx1*dx2*(dx1+dx2));
-			y[i-2]=oldoldy;
+			y[i-2] = oldoldy;
 		}
 		else {
-			dx1=x[i]-x[i-1];
-			dx2=x[i+1]-x[i];
+			dx1 = x[i]-x[i-1];
+			dx2 = x[i+1]-x[i];
 			dy = (dx1*y[i+1]-(dx1+dx2)*y[i]+dx2*y[i-1])/(dx1*dx2*(dx1+dx2));
 		}
 
 		// set value (attention if i==n-2)
-		if(i!=0 && i!= n-2)
-			y[i-1]=oldy;
-		if(i==n-2)
-			oldoldy=oldy;
+		if (i != 0 && i != n-2)
+			y[i-1] = oldy;
+		if (i == n-2)
+			oldoldy = oldy;
 
 		oldy=dy;
 	}
 
-//	for(unsigned int i=0;i<n;i++)
-//		printf("%g %g\n",x[i],y[i]);
+//	for (unsigned int i=0; i < n; i++)
+//		printf("%g %g\n",x[i], y[i]);
 }
 
 // calculates integration of n points of xy-data. result in y
 void XYInterpolationCurvePrivate::integ(double *x, double *y, unsigned n) {
 	double vold=0.;
-	for(unsigned int i=0;i<n-1;i++) {
+	for (unsigned int i=0; i < n-1; i++) {
 		// trapezoidal rule
 		double v = (x[i+1]-x[i])*(y[i+1]+y[i])/2.;
-		if(i==0)
-			y[i]=vold;
+		if (i == 0)
+			y[i] = vold;
 		else
-			y[i]=y[i-1]+vold;
-		vold=v;
+			y[i] = y[i-1]+vold;
+		vold = v;
 	}
-	y[n-1]=y[n-2]+vold;
+	y[n-1] = y[n-2] + vold;
 }
 
 // calculates rational interpolation of n points of xy-data at xn using Burlisch-Stoer method. result in v (error dv)
 void XYInterpolationCurvePrivate::ratint(double *x, double *y, int n, double xn, double *v, double *dv) {
 	int i,j,a=0,b=n-1;
-	while(b-a>1) {	// find interval using bisection
-		j=floor((a+b)/2.);
-		if(x[j]>xn)
-			b=j;
+	while (b-a > 1) {	// find interval using bisection
+		j = floor((a+b)/2.);
+		if (x[j] > xn)
+			b = j;
 		else
-			a=j;
+			a = j;
 	}
 
 	int ns=a;// nearest index
-	if(fabs(xn-x[a])>fabs(xn-x[b]))
+	if (fabs(xn-x[a]) > fabs(xn-x[b]))
 		ns=b;
 
-	if(xn==x[ns]) {	// exact point
-		*v=y[ns];
-		*dv=0;
+	if (xn == x[ns]) {	// exact point
+		*v = y[ns];
+		*dv = 0;
 		return;
 	}
 
 	double *c = (double*)malloc(n*sizeof(double));
 	double *d = (double*)malloc(n*sizeof(double));
-	for(i=0;i<n;i++)
-		c[i]=d[i]=y[i];
+	for (i=0; i < n; i++)
+		c[i] = d[i] = y[i];
 
-	*v=y[ns--];
+	*v = y[ns--];
 
-	double t,dd;
-	for(int m=1;m<n;m++) {
-		for(i=0;i<n-m;i++) {
-			t=(x[i]-xn)*d[i]/(x[i+m]-xn);
-			dd=t-c[i+1];
-			if(dd==0.0) // pole
-				dd+=DBL_MIN;
-			dd=(c[i+1]-d[i])/dd;
-			d[i]=c[i+1]*dd;
-			c[i]=t*dd;
+	double t, dd;
+	for (int m=1; m < n; m++) {
+		for (i=0; i < n-m; i++) {
+			t = (x[i]-xn)*d[i]/(x[i+m]-xn);
+			dd = t-c[i+1];
+			if (dd == 0.0) // pole
+				dd += DBL_MIN;
+			dd = (c[i+1]-d[i])/dd;
+			d[i] = c[i+1]*dd;
+			c[i] = t*dd;
 		}
 
 		*dv = (2*(ns+1) < (n-m) ? c[ns+1] : d[ns--]);
@@ -382,7 +383,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	gsl_interp_accel *acc = gsl_interp_accel_alloc();
 	gsl_spline *spline=0;
-	switch(type) {
+	switch (type) {
 	case XYInterpolationCurve::Linear:
 		spline = gsl_spline_alloc(gsl_interp_linear, n);
 		status = gsl_spline_init (spline, xdata, ydata, n);
@@ -419,7 +420,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	xVector->resize(npoints);
 	yVector->resize(npoints);
-	for (unsigned int i = 0; i<npoints; i++) {
+	for (unsigned int i = 0; i < npoints; i++) {
 		unsigned int a=0,b=n-1;
 
 		double x = min + i*(max-min)/(npoints-1);
@@ -427,13 +428,13 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 		// find index a,b for interval [x[a],x[b]] around x[i] using bisection
 		int j=0;
-		switch(type) {
+		switch (type) {
 		case XYInterpolationCurve::Cosine:
 		case XYInterpolationCurve::Exponential:
 		case XYInterpolationCurve::PCH:
-			while(b-a>1) {
+			while (b-a > 1) {
 				j=floor((a+b)/2.);
-				if(xdata[j]>x)
+				if (xdata[j] > x)
 					b=j;
 				else
 					a=j;
@@ -445,7 +446,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 		// evaluate interpolation
 		double t;
-		switch(type) {
+		switch (type) {
 		case XYInterpolationCurve::Linear:
 		case XYInterpolationCurve::Polynomial:
 		case XYInterpolationCurve::CSpline:
@@ -453,7 +454,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 		case XYInterpolationCurve::Akima:
 		case XYInterpolationCurve::AkimaPeriodic:
 		case XYInterpolationCurve::Steffen:
-			switch(evaluate) {
+			switch (evaluate) {
 			case XYInterpolationCurve::Function:
 				(*yVector)[i] = gsl_spline_eval(spline, x, acc);
 				break;
@@ -482,36 +483,36 @@ void XYInterpolationCurvePrivate::recalculate() {
 			double t2=t*t, t3=t2*t;
 			double h1=2.*t3-3.*t2+1, h2=-2.*t3+3.*t2, h3=t3-2*t2+t, h4=t3-t2;
 			double m1=0.,m2=0.;
-			switch(variant) {
+			switch (variant) {
 			case XYInterpolationCurve::FiniteDifference:
-				if(a==0)
+				if (a==0)
 					m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 				else
 					m1=( (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) + (ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1]) )/2.;
-				if(b==n-1)
+				if (b==n-1)
 					m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 				else
 					m2=( (ydata[b+1]-ydata[b])/(xdata[b+1]-xdata[b]) + (ydata[b]-ydata[a])/(xdata[b]-xdata[a]) )/2.;
 
 				break;
 			case XYInterpolationCurve::CatmullRom:
-				if(a==0)
+				if (a==0)
 					m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 				else
 					m1=(ydata[b]-ydata[a-1])/(xdata[b]-xdata[a-1]);
-				if(b==n-1)
+				if (b==n-1)
 					m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 				else
 					m2=(ydata[b+1]-ydata[a])/(xdata[b+1]-xdata[a]);
 
 				break;
 			case XYInterpolationCurve::Cardinal:
-				if(a==0)
+				if (a==0)
 					m1=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 				else
 					m1=(ydata[b]-ydata[a-1])/(xdata[b]-xdata[a-1]);
 				m1 *= (1.-tension);
-				if(b==n-1)
+				if (b==n-1)
 					m2=(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 				else
 					m2=(ydata[b+1]-ydata[a])/(xdata[b+1]-xdata[a]);
@@ -519,13 +520,13 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 				break;
 			case XYInterpolationCurve::KochanekBartels:
-				if(a==0)
+				if (a==0)
 					m1=(1.+continuity)*(1.-bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 				else
 					m1=( (1.-continuity)*(1.+bias)*(ydata[a]-ydata[a-1])/(xdata[a]-xdata[a-1]) 
 						+ (1.+continuity)*(1.-bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]) )/2.;
 				m1 *= (1.-tension);
-				if(b==n-1)
+				if (b==n-1)
 					m2=(1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]);
 				else
 					m2=( (1.+continuity)*(1.+bias)*(ydata[b]-ydata[a])/(xdata[b]-xdata[a]) 
@@ -544,18 +545,18 @@ void XYInterpolationCurvePrivate::recalculate() {
 			ratint(xdata, ydata, n, x, &v, &dv);
 			(*yVector)[i] = v;
 			//TODO: use dv
-		}
 			break;
+		}
 		}
 	}
 
 	// calculate "evaluate" option for own types
-	switch(type) {
+	switch (type) {
 	case XYInterpolationCurve::Cosine:
 	case XYInterpolationCurve::Exponential:
 	case XYInterpolationCurve::PCH:
 	case XYInterpolationCurve::Rational:
-		switch(evaluate) {
+		switch (evaluate) {
 		case XYInterpolationCurve::Function:
 			break;
 		case XYInterpolationCurve::Derivative:
@@ -574,10 +575,10 @@ void XYInterpolationCurvePrivate::recalculate() {
 	}
 
 	// check values
-	for (unsigned int i = 0; i<npoints; i++) {
-		if((*yVector)[i] > CartesianCoordinateSystem::Scale::LIMIT_MAX)
+	for (unsigned int i = 0; i < npoints; i++) {
+		if ((*yVector)[i] > CartesianCoordinateSystem::Scale::LIMIT_MAX)
 			(*yVector)[i] = CartesianCoordinateSystem::Scale::LIMIT_MAX;
-		else if((*yVector)[i] < CartesianCoordinateSystem::Scale::LIMIT_MIN)
+		else if ((*yVector)[i] < CartesianCoordinateSystem::Scale::LIMIT_MIN)
 			(*yVector)[i] = CartesianCoordinateSystem::Scale::LIMIT_MIN;
 	}
 
@@ -641,10 +642,10 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYInterpolationCurve::load(XmlStreamReader* reader){
+bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 	Q_D(XYInterpolationCurve);
 
-	if(!reader->isStartElement() || reader->name() != "xyInterpolationCurve"){
+	if (!reader->isStartElement() || reader->name() != "xyInterpolationCurve") {
 		reader->raiseError(i18n("no xy Fourier interpolation curve element found"));
 		return false;
 	}
@@ -671,43 +672,43 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader){
 			READ_COLUMN(yDataColumn);
 
 			str = attribs.value("type").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
 				d->interpolationData.type = (XYInterpolationCurve::InterpolationType) str.toInt();
 
 			str = attribs.value("variant").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'variant'"));
 			else
 				d->interpolationData.variant = (XYInterpolationCurve::CubicHermiteVariant) str.toInt();
 
 			str = attribs.value("tension").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'tension'"));
 			else
 				d->interpolationData.tension = str.toDouble();
 
 			str = attribs.value("continuity").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'continuity'"));
 			else
 				d->interpolationData.continuity = str.toDouble();
 
 			str = attribs.value("bias").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'bias'"));
 			else
 				d->interpolationData.bias = str.toDouble();
 
 			str = attribs.value("npoints").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'npoints'"));
 			else
 				d->interpolationData.npoints = str.toInt();
 
 			str = attribs.value("evaluate").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'evaluate'"));
 			else
 				d->interpolationData.evaluate = (XYInterpolationCurve::InterpolationEval)str.toInt();
@@ -717,29 +718,29 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader){
 			attribs = reader->attributes();
 
 			str = attribs.value("available").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'available'"));
 			else
 				d->interpolationResult.available = str.toInt();
 
 			str = attribs.value("valid").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'valid'"));
 			else
 				d->interpolationResult.valid = str.toInt();
 			
 			str = attribs.value("status").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'status'"));
 			else
 				d->interpolationResult.status = str;
 
 			str = attribs.value("time").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'time'"));
 			else
 				d->interpolationResult.elapsedTime = str.toInt();
-		} else if(reader->name() == "column") {
+		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {
 				delete column;
@@ -752,7 +753,7 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader){
 		}
 	}
 
-	if (d->xColumn) {
+	if (d->xColumn && d->yColumn) {
 		d->xColumn->setHidden(true);
 		addChild(d->xColumn);
 

@@ -31,7 +31,7 @@
 #define CARTESIANPLOT_H
 
 #include "backend/worksheet/plots/AbstractPlot.h"
-#include <math.h>
+#include <cmath>
 
 class QToolBar;
 class CartesianPlotPrivate;

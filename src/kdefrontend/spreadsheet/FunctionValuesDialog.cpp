@@ -40,7 +40,7 @@
 #include <QWidgetAction>
 #include <KLocalizedString>
 
-#include <math.h>
+#include <cmath>
 
 /*!
 	\class FunctionValuesDialog

@@ -2,8 +2,8 @@
     File                 : SpreadsheetDoubleHeaderView.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
-    Email (use @ for *)  : thzs*gmx.net
+	Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
     Description          : Horizontal header for SpreadsheetView displaying comments in a second header
 
  ***************************************************************************/
@@ -27,7 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "SpreadsheetDoubleHeaderView.h"
+#include "SpreadsheetHeaderView.h"
 #include "SpreadsheetCommentsHeaderModel.h"
 
  /*!
@@ -78,7 +78,7 @@ void SpreadsheetCommentsHeaderView::setModel(QAbstractItemModel * model){
 
   \ingroup commonfrontend
 */
-SpreadsheetDoubleHeaderView::SpreadsheetDoubleHeaderView(QWidget * parent) 
+SpreadsheetHeaderView::SpreadsheetHeaderView(QWidget * parent) 
 : QHeaderView(Qt::Horizontal, parent){ 
 	setDefaultAlignment(Qt::AlignLeft | Qt::AlignTop);
 	m_slave = new SpreadsheetCommentsHeaderView(); 
@@ -86,11 +86,11 @@ SpreadsheetDoubleHeaderView::SpreadsheetDoubleHeaderView(QWidget * parent)
 	m_showComments = true;
 }
 
-SpreadsheetDoubleHeaderView::~SpreadsheetDoubleHeaderView(){
+SpreadsheetHeaderView::~SpreadsheetHeaderView(){
 	delete m_slave;
 }
 
-QSize SpreadsheetDoubleHeaderView::sizeHint() const{
+QSize SpreadsheetHeaderView::sizeHint() const{
 	QSize master_size = QHeaderView::sizeHint();
 	master_size.setHeight(master_size.height() + 5);
 	if(m_showComments)
@@ -98,14 +98,14 @@ QSize SpreadsheetDoubleHeaderView::sizeHint() const{
 	return master_size;
 }
 
-void SpreadsheetDoubleHeaderView::setModel(QAbstractItemModel * model){
+void SpreadsheetHeaderView::setModel(QAbstractItemModel * model){
 	Q_ASSERT(model->inherits("SpreadsheetModel"));
 	m_slave->setModel(model);
 	QHeaderView::setModel(model);
 	connect(model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this, SLOT(headerDataChanged(Qt::Orientation,int,int)));
 }
 
-void SpreadsheetDoubleHeaderView::paintSection ( QPainter * painter, const QRect & rect, int logicalIndex ) const{
+void SpreadsheetHeaderView::paintSection ( QPainter * painter, const QRect & rect, int logicalIndex ) const{
 	QRect master_rect = rect;
 	if(m_showComments)
 		master_rect = rect.adjusted(0, 0, 0, -m_slave->sizeHint().height());
@@ -120,14 +120,14 @@ void SpreadsheetDoubleHeaderView::paintSection ( QPainter * painter, const QRect
 /*!
   Returns whether comments are shown currently or not.
 */
-bool SpreadsheetDoubleHeaderView::areCommentsShown() const{
+bool SpreadsheetHeaderView::areCommentsShown() const{
 	return m_showComments;
 }
 
 /*!
   Show or hide (if \c on = \c false) the column comments.
 */
-void SpreadsheetDoubleHeaderView::showComments(bool on){
+void SpreadsheetHeaderView::showComments(bool on){
 	m_showComments = on;
 	refresh();
 }
@@ -135,29 +135,31 @@ void SpreadsheetDoubleHeaderView::showComments(bool on){
 /*!
   adjust geometry and repaint header .
 */
-void SpreadsheetDoubleHeaderView::refresh(){
+void SpreadsheetHeaderView::refresh(){
   //TODO
 	// adjust geometry and repaint header (still looking for a more elegant solution)
-	m_slave->setStretchLastSection(true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
+	int width = sectionSize(count()-1);
+	m_slave->setStretchLastSection(true);  // ugly hack /*(flaw in Qt? Does anyone know a better way?)*/
 	m_slave->updateGeometry();
 	m_slave->setStretchLastSection(false); // ugly hack part 2
 	setStretchLastSection(true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
 	updateGeometry();
 	setStretchLastSection(false); // ugly hack part 2
+	resizeSection(count()-1, width);
 	update();
 }
 
 /*!
   Reacts to a header data change.
 */
-void SpreadsheetDoubleHeaderView::headerDataChanged(Qt::Orientation orientation, int logicalFirst, int logicalLast){	
+void SpreadsheetHeaderView::headerDataChanged(Qt::Orientation orientation, int logicalFirst, int logicalLast){	
 	Q_UNUSED(logicalFirst);
 	Q_UNUSED(logicalLast);
 	if(orientation == Qt::Horizontal)
 		refresh();
 }
 		
-void SpreadsheetDoubleHeaderView::sectionsInserted(const QModelIndex & parent, int logicalFirst, int logicalLast ){
+void SpreadsheetHeaderView::sectionsInserted(const QModelIndex & parent, int logicalFirst, int logicalLast ){
 	m_slave->sectionsInserted(parent, logicalFirst, logicalLast);
 	QHeaderView::sectionsInserted(parent, logicalFirst, logicalLast);
 	Q_ASSERT(m_slave->count() == QHeaderView::count());

@@ -30,7 +30,7 @@
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/spreadsheet/SpreadsheetItemDelegate.h"
-#include "commonfrontend/spreadsheet/SpreadsheetDoubleHeaderView.h"
+#include "commonfrontend/spreadsheet/SpreadsheetHeaderView.h"
 #include "backend/lib/macros.h"
 
 #include "backend/core/column/Column.h"
@@ -65,7 +65,7 @@
 #include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
 
-#include <algorithm>
+#include <algorithm> //for std::reverse
 
 /*!
 	\class SpreadsheetView
@@ -99,21 +99,23 @@ void SpreadsheetView::init() {
 	m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
 	//horizontal header
-	m_horizontalHeader = new SpreadsheetDoubleHeaderView(this);
+	m_horizontalHeader = new SpreadsheetHeaderView(this);
 	m_horizontalHeader->setClickable(true);
 	m_horizontalHeader->setHighlightSections(true);
 	m_tableView->setHorizontalHeader(m_horizontalHeader);
 	m_horizontalHeader->setResizeMode(QHeaderView::Interactive);
 	m_horizontalHeader->setMovable(true);
 	m_horizontalHeader->installEventFilter(this);
+
+	int i=0;
+	//set the column sizes to the saved values
+	foreach(Column* col, m_spreadsheet->children<Column>())
+		m_horizontalHeader->resizeSection(i++, col->width());
+
 	connect(m_horizontalHeader, SIGNAL(sectionMoved(int,int,int)), this, SLOT(handleHorizontalSectionMoved(int,int,int)));
 	connect(m_horizontalHeader, SIGNAL(sectionDoubleClicked(int)), this, SLOT(handleHorizontalHeaderDoubleClicked(int)));
 	connect(m_horizontalHeader, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
 	connect(m_horizontalHeader, SIGNAL(sectionClicked(int)), this, SLOT(columnClicked(int)) );
-
-	int i=0;
-	foreach(Column * col, m_spreadsheet->children<Column>())
-	m_horizontalHeader->resizeSection(i++, col->width());
 
 	// vertical header
 	QHeaderView * v_header = m_tableView->verticalHeader();
@@ -432,9 +434,6 @@ void SpreadsheetView::createContextMenu(QMenu* menu) const {
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_statistics_all_columns);
 	menu->insertSeparator(firstAction);
-	// TODO
-	// Export to ASCII
-	//Export to latex
 }
 
 //SLOTS
@@ -442,7 +441,6 @@ void SpreadsheetView::handleAspectAdded(const AbstractAspect * aspect) {
 	const Column * col = qobject_cast<const Column*>(aspect);
 	if (!col || col->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
-	connect(col, SIGNAL(widthChanged(const Column*)), this, SLOT(updateSectionSize(const Column*)));
 }
 
 void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect * aspect) {
@@ -452,26 +450,14 @@ void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect * aspect
 	disconnect(col, 0, this, 0);
 }
 
-void SpreadsheetView::updateSectionSize(const Column* col) {
-	disconnect(m_horizontalHeader, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
-	m_horizontalHeader->resizeSection(m_spreadsheet->indexOfChild<Column>(col), col->width());
-	connect(m_horizontalHeader, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
-}
 
-//TODO what for?!?
 void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize) {
 	Q_UNUSED(logicalIndex);
 	Q_UNUSED(oldSize);
-	static bool inside = false;
-	if (inside) return;
-	inside = true;
 
-	int cols = m_spreadsheet->columnCount();
-	for (int i=0; i<cols; i++)
-		if (isColumnSelected(i, true))
-			m_horizontalHeader->resizeSection(i, newSize);
-
-	inside = false;
+	//save the new size in the column
+	Column* col = m_spreadsheet->child<Column>(logicalIndex);
+	col->setWidth(newSize);
 }
 
 /*!

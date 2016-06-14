@@ -82,7 +82,7 @@ int main (int argc, char *argv[]) {
 				filename=""; //Wrong file -> clear the file name and continue
 			}
 		} else if ( !(filename.contains(".lml", Qt::CaseInsensitive) || filename.contains(".lml.gz", Qt::CaseInsensitive)
-				  || filename.contains(".lml.bz2", Qt::CaseInsensitive) ) ) {
+				  || filename.contains(".lml.bz2", Qt::CaseInsensitive) || filename.contains(".lml.xz", Qt::CaseInsensitive) ) ) {
 			if ( KMessageBox::warningContinueCancel( 0,
 			        i18n( "File \'%1\' doesn't contain any LabPlot data. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
 			        i18n("Failed to open")) == KMessageBox::Cancel) {

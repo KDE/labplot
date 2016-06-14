@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Aspect providing a spreadsheet table with column logic
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2015 Alexander Semke(alexander.semke@web.de)
+    Copyright            : (C) 2010-2016 Alexander Semke(alexander.semke@web.de)
     Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
@@ -81,8 +81,8 @@ class Spreadsheet : public AbstractDataSource {
 		void appendColumn();
 		void prependColumns(int count);
 
-		void setColumnCount(int new_size);
-		void setRowCount(int new_size);
+		void setColumnCount(int);
+		void setRowCount(int);
 
 		void clear();
 		void clearMasks();

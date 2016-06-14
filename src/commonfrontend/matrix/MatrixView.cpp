@@ -324,10 +324,6 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_go_to_cell);
 	menu->insertSeparator(firstAction);
-
-	// TODO:
-	// Convert to Spreadsheet
-	// Export
 }
 
 /*!
@@ -352,7 +348,7 @@ void MatrixView::adjustHeaders() {
 }
 
 /*!
-	Resizes the headers/columns to fit the new content. Called on changed of the header format in Matrix.
+	Resizes the headers/columns to fit the new content. Called on changes of the header format in Matrix.
 */
 void MatrixView::resizeHeaders() {
 	//hide and unhide the table view in order to trigger the refresh of the view and to get the new sizes
@@ -366,22 +362,6 @@ void MatrixView::resizeHeaders() {
 		action_header_format_2->setChecked(true);
 	else
 		action_header_format_3->setChecked(true);
-}
-
-void MatrixView::setRowHeight(int row, int height) {
-	m_tableView->verticalHeader()->resizeSection(row, height);
-}
-
-void MatrixView::setColumnWidth(int col, int width) {
-	m_tableView->horizontalHeader()->resizeSection(col, width);
-}
-
-int MatrixView::rowHeight(int row) const {
-	return m_tableView->verticalHeader()->sectionSize(row);
-}
-
-int MatrixView::columnWidth(int col) const {
-	return m_tableView->horizontalHeader()->sectionSize(col);
 }
 
 /*!
@@ -566,34 +546,12 @@ void MatrixView::goToCell(int row, int col) {
 
 void MatrixView::handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize) {
 	Q_UNUSED(oldSize)
-	static bool inside = false;
 	m_matrix->setColumnWidth(logicalIndex, newSize);
-	if (inside) return;
-	inside = true;
-
-	QHeaderView* h_header = m_tableView->horizontalHeader();
-	int cols = m_matrix->columnCount();
-	for (int i=0; i<cols; i++)
-		if(isColumnSelected(i, true))
-			h_header->resizeSection(i, newSize);
-
-	inside = false;
 }
 
 void MatrixView::handleVerticalSectionResized(int logicalIndex, int oldSize, int newSize) {
 	Q_UNUSED(oldSize)
-	static bool inside = false;
 	m_matrix->setRowHeight(logicalIndex, newSize);
-	if (inside) return;
-	inside = true;
-
-	QHeaderView* v_header = m_tableView->verticalHeader();
-	int rows = m_matrix->rowCount();
-	for (int i=0; i<rows; i++)
-		if(isRowSelected(i, true))
-			v_header->resizeSection(i, newSize);
-
-	inside = false;
 }
 
 void MatrixView::fillWithFunctionValues() {

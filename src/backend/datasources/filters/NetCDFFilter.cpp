@@ -340,11 +340,11 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 		if(parentItem != NULL) {
 			QString typeName;
 			if(varid == NC_GLOBAL)
-				typeName="global attribute";
+				typeName = i18n("global attribute");
 			else {
 				char varName[NC_MAX_NAME + 1];
 				status = nc_inq_varname(ncid, varid, varName);
-				typeName=QString(varName)+QString(" attribute");
+				typeName=QString(varName) + " " + i18n("attribute");
 			}
 			QStringList props;
 			props<<translateDataType(type)<<" ("<<QString::number(len)<<")";
@@ -373,11 +373,11 @@ void NetCDFFilterPrivate::scanDims(int ncid, int ndims, QTreeWidgetItem* parentI
 #endif
 
 		QStringList props;
-		props<<"length = "<<QString::number(len);
+		props<<i18n("length") << QLatin1String(" = ") << QString::number(len);
 		QString value;
 		if(i == ulid)
-			value="unlimited";
-		QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<"dimension"<<props.join("")<<value);
+			value = i18n("unlimited");
+		QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<i18n("dimension")<<props.join("")<<value);
 		attrItem->setIcon(0,QIcon::fromTheme("accessories-calculator"));
 		attrItem->setFlags(Qt::ItemIsEnabled);
 		parentItem->addChild(attrItem);
@@ -412,7 +412,7 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 		}
 		props<<")";
 
-		QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<"variable"<<props.join("")<<"");
+		QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<i18n("variable")<<props.join("")<<"");
 		varItem->setIcon(0,QIcon::fromTheme("x-office-spreadsheet"));
 		varItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		// highlight item
@@ -505,7 +505,7 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 	QStringList dataString;
 
 	if(currentVarName.isEmpty())
-		return QString("No variable selected");
+		return i18n("No variable selected");
 #ifdef QT_DEBUG
 	qDebug()<<" current variable ="<<currentVarName;
 #endif

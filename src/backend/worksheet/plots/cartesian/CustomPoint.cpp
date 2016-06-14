@@ -287,7 +287,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
 	pointShape = QPainterPath();
-	if (m_visible && symbolStyle != Symbol::NoSymbols){
+	if (m_visible && symbolStyle != Symbol::NoSymbols) {
 		QPainterPath path = Symbol::pathFromStyle(symbolStyle);
 
 		QTransform trafo;
@@ -312,7 +312,7 @@ void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 	if (!m_visible)
 		return;
 
-	if (symbolStyle != Symbol::NoSymbols){
+	if (symbolStyle != Symbol::NoSymbols) {
 		painter->setOpacity(symbolOpacity);
 		painter->setPen(symbolPen);
 		painter->setBrush(symbolBrush);
@@ -412,7 +412,7 @@ void CustomPoint::save(QXmlStreamWriter* writer) const {
 bool CustomPoint::load(XmlStreamReader* reader) {
 	Q_D(CustomPoint);
 
-	if(!reader->isStartElement() || reader->name() != "customPoint") {
+	if (!reader->isStartElement() || reader->name() != "customPoint") {
 		reader->raiseError(i18n("no custom point element found"));
 		return false;
 	}
@@ -438,19 +438,19 @@ bool CustomPoint::load(XmlStreamReader* reader) {
 			attribs = reader->attributes();
 
 			str = attribs.value("x").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'x'"));
 			else
 				d->position.setX(str.toDouble());
 
 			str = attribs.value("y").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'y'"));
 			else
 				d->position.setY(str.toDouble());
 
 			str = attribs.value("visible").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'visible'"));
 			else
 				d->setVisible(str.toInt());
@@ -458,25 +458,25 @@ bool CustomPoint::load(XmlStreamReader* reader) {
 			attribs = reader->attributes();
 
 			str = attribs.value("symbolStyle").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'symbolStyle'"));
 			else
 				d->symbolStyle = (Symbol::Style)str.toInt();
 
 			str = attribs.value("opacity").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'opacity'"));
 			else
 				d->symbolOpacity = str.toDouble();
 
 			str = attribs.value("rotation").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'rotation'"));
 			else
 				d->symbolRotationAngle = str.toDouble();
 
 			str = attribs.value("size").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'size'"));
 			else
 				d->symbolSize = str.toDouble();

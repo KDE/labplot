@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : XYEquationCurve.h
+    File                 : nsl_smooth_ma_test.c
     Project              : LabPlot
-    Description          : A xy-curve defined by a mathematical equation
+    Description          : NSL smooth functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -26,52 +26,41 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYEQUATIONCURVE_H
-#define XYEQUATIONCURVE_H
+#include <stdio.h>
+#include "nsl_smooth.h"
 
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
+int main() {
+	double data[9]={2,2,5,2,1,0,1,4,9};
+	int i,points=5;
+	nsl_smooth_weight_type weight = nsl_smooth_weight_uniform;
 
-class XYEquationCurvePrivate;
-class XYEquationCurve: public XYCurve {
-	Q_OBJECT
-
-	public:
-		enum EquationType {Cartesian, Polar, Parametric, Implicit, Neutral};
-
-		struct EquationData {
-			EquationData() : type(Cartesian), min("0"), max("1"), count(1000) {};
-
-			EquationType type;
-			QString expression1;
-			QString expression2;
-			QString min;
-			QString max;
-			int count;
-		};
-
-		explicit XYEquationCurve(const QString& name);
-		virtual ~XYEquationCurve();
-
-		void recalculate();
-		virtual QIcon icon() const;
-		virtual void save(QXmlStreamWriter*) const;
-		virtual bool load(XmlStreamReader*);
-
-		CLASS_D_ACCESSOR_DECL(EquationData, equationData, EquationData)
-
-		typedef WorksheetElement BaseClass;
-		typedef XYEquationCurvePrivate Private;
-
-	protected:
-		XYEquationCurve(const QString& name, XYEquationCurvePrivate* dd);
-
-	private:
-		Q_DECLARE_PRIVATE(XYEquationCurve)
-		void init();
-
-	signals:
-		friend class XYEquationCurveSetEquationDataCmd;
-		void equationDataChanged(const XYEquationCurve::EquationData&);
-};
-
-#endif
+	int status;
+	printf("pad_none\n");
+	status = nsl_smooth_moving_average(data, 9, points, weight, nsl_smooth_pad_none);
+	for(i=0;i<9;i++)
+		printf(" %g",data[i]);
+	/*printf("pad_interp\n");
+	status = nsl_smooth_moving_average(data, 9, points, weight, nsl_smooth_pad_interp);
+	*/
+	printf("\npad_mirror\n");
+	double data2[9]={2,2,5,2,1,0,1,4,9};
+	status = nsl_smooth_moving_average(data2, 9, points, weight, nsl_smooth_pad_mirror);
+	for(i=0;i<9;i++)
+		printf(" %g",data2[i]);
+	printf("\npad_nearest\n");
+	double data3[9]={2,2,5,2,1,0,1,4,9};
+	status = nsl_smooth_moving_average(data3, 9, points, weight, nsl_smooth_pad_nearest);
+	for(i=0;i<9;i++)
+		printf(" %g",data3[i]);
+	printf("\npad_constant\n");
+	double data4[9]={2,2,5,2,1,0,1,4,9};
+	status = nsl_smooth_moving_average(data4, 9, points, weight, nsl_smooth_pad_constant);
+	for(i=0;i<9;i++)
+		printf(" %g",data4[i]);
+	printf("\npad_periodic\n");
+	double data5[9]={2,2,5,2,1,0,1,4,9};
+	status = nsl_smooth_moving_average(data5, 9, points, weight, nsl_smooth_pad_periodic);
+	for(i=0;i<9;i++)
+		printf(" %g",data5[i]);
+	puts("");
+}

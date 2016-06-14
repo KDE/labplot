@@ -38,8 +38,8 @@
 #include <QImageReader>
 #include <KUrlCompletion>
 #include <KLocalizedString>
+#include <cmath>
 
-#include <math.h>
 
 /*!
   \class CartesianPlotLegendDock

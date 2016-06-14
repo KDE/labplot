@@ -31,13 +31,13 @@
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
 
-#include "math.h"
-
 #include <QPainter>
 #include <QDir>
 #include <KLocale>
 #include <KConfig>
 #include <KConfigGroup>
+
+#include <cmath>
 
 CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);

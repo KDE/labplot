@@ -774,7 +774,7 @@ void MainWin::openProject() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	QString dir = conf.readEntry("LastOpenDir", "");
 	QString path = QFileDialog::getOpenFileName(this,i18n("Open project"), dir,
-	               i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"));
+	               i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
 
 	if (!path.isEmpty()) {
 		this->openProject(path);
@@ -790,12 +790,17 @@ void MainWin::openProject() {
 
 void MainWin::openProject(const QString& filename) {
 	if (filename == m_currentFileName) {
-		KMessageBox::information(this,
-		                         i18n("The project file %1 is already opened.", filename),i18n("Open project"));
+		KMessageBox::information(this, i18n("The project file %1 is already opened.", filename),i18n("Open project"));
 		return;
 	}
 
-	QIODevice *file = new KCompressionDevice(filename,KFilterDev::compressionTypeForMimeType("application/x-gzip"));
+	QIODevice *file;
+	// first try gzip compression, because older files are gzipped but end with .lml
+	if (filename.endsWith(".lml", Qt::CaseInsensitive))
+		file = new KCompressionDevice(filename,KFilterDev::compressionTypeForMimeType("application/x-gzip"));
+	else	// opens filename using file ending
+		file = KFilterDev::deviceForFile(filename);
+
 	if (file==0)
 		file = new QFile(filename);
 
@@ -922,7 +927,7 @@ bool MainWin::saveProjectAs() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	QString dir = conf.readEntry("LastOpenDir", "");
 	QString fileName = QFileDialog::getSaveFileName(this, i18n("Save project as"), dir,
-	                   i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"));
+	                   i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
 
 	if( fileName.isEmpty() )// "Cancel" was clicked
 		return false;

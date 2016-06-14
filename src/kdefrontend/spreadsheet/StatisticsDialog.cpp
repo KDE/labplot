@@ -29,11 +29,12 @@
 
 #include "StatisticsDialog.h"
 #include "backend/core/column/Column.h"
-#include <cmath>
 
 #include <QTextEdit>
 #include <QTabWidget>
 #include <KLocale>
+
+#include <cmath>
 
 StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	KDialog(parent) {

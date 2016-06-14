@@ -67,6 +67,9 @@ XYSmoothCurveDock::XYSmoothCurveDock(QWidget *parent):
  * 	// Tab "General"
  */
 void XYSmoothCurveDock::setupGeneral() {
+#ifndef NDEBUG
+	qDebug()<<"XYSmoothCurveDock::setupGeneral()";
+#endif
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 
@@ -102,11 +105,12 @@ void XYSmoothCurveDock::setupGeneral() {
 //	uiGeneralTab.cbWeight->addItem(i18n("Gaussian"));
 //	etc. -> see nsl_sf_kernel
 
+	uiGeneralTab.cbMode->addItem(i18n("none"));
 	uiGeneralTab.cbMode->addItem(i18n("interpolating"));
 	uiGeneralTab.cbMode->addItem(i18n("mirror"));
 	uiGeneralTab.cbMode->addItem(i18n("nearest"));
 	uiGeneralTab.cbMode->addItem(i18n("constant"));
-	uiGeneralTab.cbMode->addItem(i18n("wrap"));
+	uiGeneralTab.cbMode->addItem(i18n("periodic"));
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
@@ -132,6 +136,9 @@ void XYSmoothCurveDock::setupGeneral() {
 }
 
 void XYSmoothCurveDock::initGeneralTab() {
+#ifndef NDEBUG
+	qDebug()<<"XYSmoothCurveDock::initGeneralTab()";
+#endif
 	//if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size()==1){
 		uiGeneralTab.lName->setEnabled(true);
@@ -161,11 +168,15 @@ void XYSmoothCurveDock::initGeneralTab() {
 
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
 	typeChanged();	// needed, when type does not change
+#ifndef NDEBUG
+	qDebug()<<"	curve ="<<m_smoothCurve->name();
+	qDebug()<<"	m_smoothData.points ="<<m_smoothData.points;
+#endif
 	uiGeneralTab.sbPoints->setValue(m_smoothData.points);
 	uiGeneralTab.cbWeight->setCurrentIndex(m_smoothData.weight);
 	uiGeneralTab.sbPercentile->setValue(m_smoothData.percentile);
 	uiGeneralTab.sbOrder->setValue(m_smoothData.order);
-	uiGeneralTab.cbMode->setCurrentIndex(m_smoothData.mode-1);
+	uiGeneralTab.cbMode->setCurrentIndex(m_smoothData.mode);
 	modeChanged();	// needed, when mode does not change
 	uiGeneralTab.sbLeftValue->setValue(m_smoothData.lvalue);
 	uiGeneralTab.sbRightValue->setValue(m_smoothData.rvalue);
@@ -209,6 +220,9 @@ void XYSmoothCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
+#ifndef NDEBUG
+	qDebug()<<"XYSmoothCurveDock::setCurves()";
+#endif
 	m_initializing=true;
 	m_curvesList=list;
 	m_curve=list.first();
@@ -286,39 +300,51 @@ void XYSmoothCurveDock::typeChanged() {
 	XYSmoothCurve::SmoothType type = (XYSmoothCurve::SmoothType)uiGeneralTab.cbType->currentIndex();
 	m_smoothData.type = type;
 
+	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbMode->model());
+	QStandardItem* pad_interp_item = model->item(nsl_smooth_pad_interp);
 	if(type == XYSmoothCurve::MovingAverage || type == XYSmoothCurve::MovingAverageLagged) {
 		uiGeneralTab.lWeight->show();
 		uiGeneralTab.cbWeight->show();
+		// disable interp pad model for MA and MAL
+		pad_interp_item->setFlags(pad_interp_item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 	} else {
 		uiGeneralTab.lWeight->hide();
 		uiGeneralTab.cbWeight->hide();
+		pad_interp_item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 	}
+
 	if(type == XYSmoothCurve::MovingAverageLagged) {
 		uiGeneralTab.sbPoints->setSingleStep(1);
 		uiGeneralTab.sbPoints->setMinimum(2);
+		uiGeneralTab.lRightValue->hide();
+		uiGeneralTab.sbRightValue->hide();
 	} else {
 		uiGeneralTab.sbPoints->setSingleStep(2);
 		uiGeneralTab.sbPoints->setMinimum(3);
+		if(m_smoothData.mode == nsl_smooth_pad_constant) {
+			uiGeneralTab.lRightValue->show();
+			uiGeneralTab.sbRightValue->show();
+		}
 	}
+
 	if(type == XYSmoothCurve::Percentile) {
 		uiGeneralTab.lPercentile->show();
 		uiGeneralTab.sbPercentile->show();
+		// disable interp pad model for MA and MAL
+		pad_interp_item->setFlags(pad_interp_item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 	} else {
 		uiGeneralTab.lPercentile->hide();
 		uiGeneralTab.sbPercentile->hide();
 	}
+
 	if(type == XYSmoothCurve::SavitzkyGolay) {
-		uiGeneralTab.sbPoints->setValue(5);
 		uiGeneralTab.lOrder->show();
 		uiGeneralTab.sbOrder->show();
-		uiGeneralTab.lMode->show();
-		uiGeneralTab.cbMode->show();
 	} else {
 		uiGeneralTab.lOrder->hide();
 		uiGeneralTab.sbOrder->hide();
-		uiGeneralTab.lMode->hide();
-		uiGeneralTab.cbMode->hide();
 	}
+	
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
@@ -333,7 +359,7 @@ void XYSmoothCurveDock::pointsChanged() {
 }
 
 void XYSmoothCurveDock::weightChanged() {
-	m_smoothData.weight = (XYSmoothCurve::WeightType)uiGeneralTab.cbWeight->currentIndex();
+	m_smoothData.weight = (nsl_smooth_weight_type)uiGeneralTab.cbWeight->currentIndex();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
@@ -351,13 +377,18 @@ void XYSmoothCurveDock::orderChanged() {
 }
 
 void XYSmoothCurveDock::modeChanged() {
-	m_smoothData.mode = (nsl_smooth_savgol_mode)(uiGeneralTab.cbMode->currentIndex()+1);
+	m_smoothData.mode = (nsl_smooth_pad_mode)(uiGeneralTab.cbMode->currentIndex());
 
-	if(m_smoothData.mode == nsl_smooth_savgol_constant) {
+	if(m_smoothData.mode == nsl_smooth_pad_constant) {
 		uiGeneralTab.lLeftValue->show();
 		uiGeneralTab.sbLeftValue->show();
-		uiGeneralTab.lRightValue->show();
-		uiGeneralTab.sbRightValue->show();
+		if(m_smoothData.type == XYSmoothCurve::MovingAverageLagged) {
+			uiGeneralTab.lRightValue->hide();
+			uiGeneralTab.sbRightValue->hide();
+		} else {
+			uiGeneralTab.lRightValue->show();
+			uiGeneralTab.sbRightValue->show();
+		}
 	} else {
 		uiGeneralTab.lLeftValue->hide();
 		uiGeneralTab.sbLeftValue->hide();
@@ -408,7 +439,7 @@ void XYSmoothCurveDock::showSmoothResult() {
 	}
 
 	//const XYSmoothCurve::SmoothData& smoothData = m_smoothCurve->smoothData();
-	QString str = i18n("status") + ": " + smoothResult.status + "<br>";
+	QString str = i18n("status:") + " " + smoothResult.status + "<br>";
 
 	if (!smoothResult.valid) {
 		uiGeneralTab.teResult->setText(str);

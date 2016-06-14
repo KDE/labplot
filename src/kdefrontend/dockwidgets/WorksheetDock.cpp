@@ -38,7 +38,7 @@
 #include <KLocalizedString>
 #include <KConfigGroup>
 
-#include <math.h>
+#include <cmath>
 
 // a couple of standard sizes in mm, taken from qprinter.cpp
 const int numOfPaperSizes = 30;
