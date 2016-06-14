@@ -3,8 +3,8 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
-			(C) 2014 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Description      : c++ wrapper for the bison generated parser.
+    Copyright        : (C) 2014 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Description      : C++ wrapper for the bison generated parser.
 
  ***************************************************************************/
 
@@ -31,12 +31,14 @@
 #include "backend/gsl/parser_extern.h"
 #include "backend/gsl/parser_struct.h"
 
+#include <klocale.h>
+
+extern "C" {
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_const_num.h>
-
-#include <klocale.h>
+}
 
 #include <cmath>
 

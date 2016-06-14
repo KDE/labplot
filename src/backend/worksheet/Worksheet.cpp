@@ -35,7 +35,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
-#include <math.h>
 
 #include <QPrinter>
 #include <QPrintDialog>
@@ -45,6 +44,7 @@
 #include <KConfigGroup>
 #include <KLocale>
 #include <QDebug>
+#include <cmath>
 
 /**
  * \class Worksheet

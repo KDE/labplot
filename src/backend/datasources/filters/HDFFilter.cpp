@@ -29,13 +29,12 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
 
-#include <math.h>
-
 #include <QFile>
 #include <QTextStream>
 #include <QIcon>
 #include <QDebug>
 #include <KLocale>
+#include <cmath>
 
 /*!
 	\class HDFFilter

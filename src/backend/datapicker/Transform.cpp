@@ -26,9 +26,7 @@
  ***************************************************************************/
 
 #include "Transform.h"
-#include "math.h"
-
-#define PI 3.14159265
+#include <cmath>
 
 Transform::Transform() {
 }
@@ -56,8 +54,8 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 		for(int i=0; i<3; i++) {
 			if (axisPoints.logicalPos[i].x() < 0)
 				return false;
-			x[i] = axisPoints.logicalPos[i].x()*cos(axisPoints.logicalPos[i].y()*PI / 180.0);
-			y[i] = axisPoints.logicalPos[i].x()*sin(axisPoints.logicalPos[i].y()*PI / 180.0);
+			x[i] = axisPoints.logicalPos[i].x()*cos(axisPoints.logicalPos[i].y()*M_PI / 180.0);
+			y[i] = axisPoints.logicalPos[i].x()*sin(axisPoints.logicalPos[i].y()*M_PI / 180.0);
 			X[i] = axisPoints.scenePos[i].x();
 			Y[i] = axisPoints.scenePos[i].y();
 		}
@@ -138,7 +136,7 @@ QVector3D Transform::mapCartesianToType(const QPointF& point, const DatapickerIm
 		return QVector3D(point.x(), exp(point.y()), 0);
 	} else if (axisPoints.type == DatapickerImage::PolarInDegree) {
 		double r = sqrt(point.x()*point.x() + point.y()*point.y());
-		double angle = atan(point.y()*180/(point.x()*PI));
+		double angle = atan(point.y()*180/(point.x()*M_PI));
 		return QVector3D(r, angle, 0);
 	} else if (axisPoints.type == DatapickerImage::PolarInRadians) {
 		double r = sqrt(point.x()*point.x() + point.y()*point.y());

@@ -59,8 +59,8 @@
 #include <KAction>
 #include <QIcon>
 
-#include <float.h>
-#include "math.h"
+#include <cfloat>
+#include <cmath>
 
 MatrixView::MatrixView(Matrix* matrix) : QWidget(),
 	m_stackedWidget(new QStackedWidget(this)),

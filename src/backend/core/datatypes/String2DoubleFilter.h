@@ -31,7 +31,7 @@
 
 #include "../AbstractSimpleFilter.h"
 #include <QLocale>
-#include <math.h>
+#include <cmath>
 
 //! Locale-aware conversion filter QString -> double.
 class String2DoubleFilter : public AbstractSimpleFilter

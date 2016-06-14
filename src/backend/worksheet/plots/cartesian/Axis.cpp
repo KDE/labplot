@@ -51,9 +51,7 @@
 #include <KLocale>
 
 #include <cmath>
-extern "C" {
-#include <float.h>
-}
+#include <cfloat>
 
 /**
  * \class AxisGrid

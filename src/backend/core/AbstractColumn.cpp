@@ -38,10 +38,11 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QDate>
 #include <QtCore/QTime>
-#include <cmath>
+
 #include <QMetaType>
 #include <QDebug>
 #include <KLocale>
+#include <cmath>
 
 /**
  * \class AbstractColumn
