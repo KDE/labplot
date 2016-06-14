@@ -219,7 +219,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	QVector<double> ydataVector;
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!isnan(xDataColumn->valueAt(row)) && !isnan(yDataColumn->valueAt(row))
+		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
 			xdataVector.append(xDataColumn->valueAt(row));

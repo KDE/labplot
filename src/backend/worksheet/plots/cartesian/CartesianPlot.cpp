@@ -1283,7 +1283,7 @@ void CartesianPlotPrivate::retransformScales() {
 	bool hasValidBreak = false;
 	if (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty()) {
 		foreach(const CartesianPlot::RangeBreak& b, xRangeBreaks.list)
-			hasValidBreak = (!isnan(b.start) && !isnan(b.end));
+			hasValidBreak = (!std::isnan(b.start) && !std::isnan(b.end));
 	}
 
 	//create x-scales
@@ -1329,7 +1329,7 @@ void CartesianPlotPrivate::retransformScales() {
 	hasValidBreak = false;
 	if (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty()) {
 		foreach(const CartesianPlot::RangeBreak& b, yRangeBreaks.list)
-			hasValidBreak = (!isnan(b.start) && !isnan(b.end));
+			hasValidBreak = (!std::isnan(b.start) && !std::isnan(b.end));
 	}
 
 	//create y-scales

@@ -29,12 +29,11 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
 
-#include <math.h>
-
 #include <QDataStream>
 #include <QDebug>
 #include <KLocale>
 #include <kfilterdev.h>
+#include <cmath>
 
  /*!
 	\class BinaryFilter
