@@ -104,7 +104,6 @@ private:
 	//Menus
 	QMenu* m_addNewMenu;
 	QMenu* m_addNewCartesianPlotMenu;
-	QMenu* m_addHistogramTypeMenu;
 	QMenu* m_zoomMenu;
 	QMenu* m_magnificationMenu;
 	QMenu* m_layoutMenu;
@@ -144,9 +143,7 @@ private:
 	QAction* addCartesianPlot3Action;
 	QAction* addCartesianPlot4Action;
 	QAction* addTextLabelAction;
-	QAction* addOrdinaryHistogram;
-	QAction* addCummulativeHistogram;
-	QAction* addAvgShiftedHistogram;
+	QAction* addHistogram;
 	QAction* addBarChartPlot;
 
 	QAction* verticalLayoutAction;
@@ -215,7 +212,6 @@ public slots:
 
 private slots:
 	void addNew(QAction*);
-	void addHistogram(QAction*);
 	void aspectAboutToBeRemoved(const AbstractAspect*);
 	void selectAllElements();
 	void deleteElement();

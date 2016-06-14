@@ -121,7 +121,6 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 
 void WorksheetView::initActions() {
 	QActionGroup* addNewActionGroup = new QActionGroup(this);
-	QActionGroup* addHistogramType = new QActionGroup(this);
 	QActionGroup* zoomActionGroup = new QActionGroup(this);
 	QActionGroup* mouseModeActionGroup = new QActionGroup(this);
 	QActionGroup* layoutActionGroup = new QActionGroup(this);
@@ -196,9 +195,7 @@ void WorksheetView::initActions() {
 	addCartesianPlot4Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin"), i18n("two axes, crossing at origin"), addNewActionGroup);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("text label"), addNewActionGroup);
 	addBarChartPlot= new QAction(QIcon::fromTheme("office-chart-line"), i18n("bar chart"), addNewActionGroup);
-	addOrdinaryHistogram = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"),i18n("Ordinary Histogram"),addHistogramType);
-	addCummulativeHistogram=new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"),i18n("Cummulative Histogram"),addHistogramType);
-	addAvgShiftedHistogram=new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"),i18n("Avg Shifted Histogram"),addHistogramType);
+	addHistogram = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"),i18n("Histogram"),addNewActionGroup);
 	//Layout actions
 	verticalLayoutAction = new QAction(QIcon::fromTheme("labplot-editvlayout"), i18n("Vertical layout"), layoutActionGroup);
 	verticalLayoutAction->setCheckable(true);
@@ -240,7 +237,7 @@ void WorksheetView::initActions() {
 	this->layoutChanged(m_worksheet->layout());
 
 	connect(addNewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
-	connect(addHistogramType, SIGNAL(triggered(QAction*)), this, SLOT(addHistogram(QAction*)));
+	connect(addHistogram, SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
 	connect(addBarChartPlot,SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
 	connect(mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)));
 	connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
@@ -333,16 +330,11 @@ void WorksheetView::initMenus() {
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot3Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot4Action);
 
-	m_addHistogramTypeMenu = new QMenu(i18n("histogram"),this);
-	m_addHistogramTypeMenu->addAction(addOrdinaryHistogram);
-	m_addHistogramTypeMenu->addAction(addCummulativeHistogram);
-	m_addHistogramTypeMenu->addAction(addAvgShiftedHistogram);
-	
 	m_addNewMenu = new QMenu(i18n("Add new"), this);
 	m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(QIcon::fromTheme("office-chart-line"));
-	m_addNewMenu->addMenu(m_addHistogramTypeMenu)->setIcon(QIcon::fromTheme("office-chart-line"));
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
+	m_addNewMenu->addAction(addHistogram);
 	m_addNewMenu->addAction(addBarChartPlot);
 
 	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
@@ -957,61 +949,6 @@ void WorksheetView::mouseModeChanged(QAction* action) {
 		setDragMode(QGraphicsView::NoDrag);
 	}
 }
-//"Add Histogram related slots
-void WorksheetView::addHistogram(QAction* action){
-	WorksheetElement* aspect=0;
-	//histogram will be drawn using the CartesianPlot- x and y axes showing the bin count and magnitute respectively 
-	if(action == addOrdinaryHistogram){
-	  CartesianPlot* plot = new CartesianPlot(i18n("histogram"));
-		plot->initDefault(CartesianPlot::TwoAxes);
-		plot->setMouseMode(m_cartesianPlotMouseMode);
-		aspect = plot;
-		if (tbNewCartesianPlot)
-			tbNewCartesianPlot->setDefaultAction(addOrdinaryHistogram);
-	}
-	else if(action == addCummulativeHistogram){
-	  CartesianPlot* plot = new CartesianPlot(i18n("histogram"));
-		plot->initDefault(CartesianPlot::TwoAxes);
-		plot->setMouseMode(m_cartesianPlotMouseMode);
-		aspect = plot;
-		if (tbNewCartesianPlot)
-			tbNewCartesianPlot->setDefaultAction(addCummulativeHistogram);  
-	}
-	else if(action == addAvgShiftedHistogram){
-	  CartesianPlot* plot = new CartesianPlot(i18n("histogram"));
-		plot->initDefault(CartesianPlot::TwoAxes);
-		plot->setMouseMode(m_cartesianPlotMouseMode);
-		aspect = plot;
-		if (tbNewCartesianPlot)
-			tbNewCartesianPlot->setDefaultAction(addAvgShiftedHistogram);
-	}
-	if (!aspect)
-		return;
-
-	m_worksheet->addChild(aspect);
-	handleCartesianPlotActions();
-
-	if (!m_fadeInTimeLine) {
-		m_fadeInTimeLine = new QTimeLine(1000, this);
-		m_fadeInTimeLine->setFrameRange(0, 100);
-		connect(m_fadeInTimeLine, SIGNAL(valueChanged(qreal)), this, SLOT(fadeIn(qreal)));
-	}
-
-	//if there is already an element fading in, stop the time line and show the element with the full opacity.
-	if (m_fadeInTimeLine->state() == QTimeLine::Running) {
-		m_fadeInTimeLine->stop();
-		QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
-		effect->setOpacity(1);
-		lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
-	}
-
-	//fade-in the newly added element
-	lastAddedWorksheetElement = aspect;
-	QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect();
-	effect->setOpacity(0);
-	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
-	m_fadeInTimeLine->start();
-}
 
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action) {
@@ -1048,14 +985,20 @@ void WorksheetView::addNew(QAction* action) {
 		TextLabel* l = new TextLabel(i18n("text label"));
 		l->setText(i18n("text label"));
 		aspect = l;
-	}
-	else if ( action == addBarChartPlot ) {
+	} else if ( action == addBarChartPlot ) {
 		CartesianPlot* plot = new CartesianPlot(i18n("BarChart"));
 		plot->initDefault(CartesianPlot::TwoAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addBarChartPlot);
+	} else if ( action == addHistogram ) {
+		CartesianPlot* plot = new CartesianPlot(i18n("Histogram"));
+		plot->initDefault(CartesianPlot::TwoAxes);
+		plot->setMouseMode(m_cartesianPlotMouseMode);
+		aspect = plot;
+		if (tbNewCartesianPlot)
+			tbNewCartesianPlot->setDefaultAction(addHistogram);
 	}
 
 	if (!aspect)
