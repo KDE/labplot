@@ -130,6 +130,38 @@ QStringList FITSFilter::mandatoryTableExtensionKeywords() {
                          << QLatin1String("END");
 }
 
+void FITSFilter::setStartColumn(const int column) {
+    d->startColumn = column;
+}
+
+int FITSFilter::startColumn() const {
+    return d->startColumn;
+}
+
+void FITSFilter::setEndColumn(const int column) {
+    d->endColumn = column;
+}
+
+int FITSFilter::endColumn() const {
+    return d->endColumn;
+}
+
+void FITSFilter::setStartRow(const int row) {
+    d->startRow = row;
+}
+
+int FITSFilter::startRow() const {
+    return d->startRow;
+}
+
+void FITSFilter::setEndRow(const int row) {
+    d->endRow = row;
+}
+
+int FITSFilter::endRow() const {
+    return d->endRow;
+}
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
@@ -215,6 +247,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         }
         QLatin1String ws = QLatin1String(" ");
         QLatin1String nl = QLatin1String("\n");
+        //TODO startColumn/end..
         for (int i = 0; i < lines; ++i) {
             for (int j = 0; j < actualCols; ++j) {
                 if (!noDataSource) {
@@ -309,6 +342,8 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         }
 
         char* array = new char[1000];
+        //TODO startColumn/end..
+
         for (int row = 1; row <= lines; ++row) {
             for (int col = 1; col <= actualCols; ++col) {
 
@@ -335,8 +370,6 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         delete[] array;
 
         if (!noDataSource) {
-            qDebug() << "dps: " << dataPointers.size()<< " x " << dataPointers.at(0)->size();
-
             Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
             if (spreadsheet) {
                 QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);

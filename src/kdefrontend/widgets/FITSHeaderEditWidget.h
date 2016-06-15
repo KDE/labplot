@@ -82,7 +82,7 @@ private slots:
 
     void removeKeyword();
     void addKeyword();
-    void updateKeyword();
+    void updateKeyword(QTableWidgetItem* item);
 };
 
 #endif // FITSHEADEREDITWIDGET_H

@@ -34,31 +34,36 @@ class AbstractDataSource;
 
 class FITSFilterPrivate {
 
-        public:
-                explicit FITSFilterPrivate(FITSFilter*);
-                ~FITSFilterPrivate();
-                QString readCHDU(const QString & fileName, AbstractDataSource* dataSource,
-                                        AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace, int lines= -1);
-                void writeCHDU(const QString & fileName, AbstractDataSource* dataSource);
+public:
+    explicit FITSFilterPrivate(FITSFilter*);
+    ~FITSFilterPrivate();
+    QString readCHDU(const QString & fileName, AbstractDataSource* dataSource,
+                     AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace, int lines= -1);
+    void writeCHDU(const QString & fileName, AbstractDataSource* dataSource);
 
-                const FITSFilter* q;
-                QMultiMap<QString, QString> extensionNames(const QString &fileName);
-                void updateKeyword(FITSFilter::Keyword& keyword, const QString &newKey, const QString &newValue, const QString &newComment,
-                                   FITSFilter::KeywordUpdateMode updateMode = FITSFilter::UpdateValueComment);
-                void addNewKeyword(const QString &fileName, const QList<FITSFilter::Keyword> &keywords);
-                void deleteKeyword(const QString &fileName, const QList<FITSFilter::Keyword>& keywords);
-                void renameKeywordKey(const FITSFilter::Keyword& keyword, const QString& newKey);
-                const QString valueOf(const QString &fileName, const char* key);
+    const FITSFilter* q;
+    QMultiMap<QString, QString> extensionNames(const QString &fileName);
+    void updateKeyword(FITSFilter::Keyword& keyword, const QString &newKey, const QString &newValue, const QString &newComment,
+                       FITSFilter::KeywordUpdateMode updateMode = FITSFilter::UpdateValueComment);
+    void addNewKeyword(const QString &fileName, const QList<FITSFilter::Keyword> &keywords);
+    void deleteKeyword(const QString &fileName, const QList<FITSFilter::Keyword>& keywords);
+    void renameKeywordKey(const FITSFilter::Keyword& keyword, const QString& newKey);
+    const QString valueOf(const QString &fileName, const char* key);
 
-                QList<FITSFilter::Keyword> chduKeywords(const QString &fileName);
-                void parseHeader(const QString& fileName, QTableWidget* headerEditTable,
-                                 bool readKeys = true,
-                                 const QList<FITSFilter::Keyword> &keys = QList<FITSFilter::Keyword>());
-                void parseExtensions(const QString& fileName, QTreeWidget *tw, bool checkPrimary = false);
-        private:
-                void printError(int status) const;
+    QList<FITSFilter::Keyword> chduKeywords(const QString &fileName);
+    void parseHeader(const QString& fileName, QTableWidget* headerEditTable,
+                     bool readKeys = true,
+                     const QList<FITSFilter::Keyword> &keys = QList<FITSFilter::Keyword>());
+    void parseExtensions(const QString& fileName, QTreeWidget *tw, bool checkPrimary = false);
+    int startRow;
+    int endRow;
+    int startColumn;
+    int endColumn;
+private:
+    void printError(int status) const;
+
 #ifdef HAVE_FITS
-                fitsfile* fitsFile;
+    fitsfile* fitsFile;
 #endif
 
 };

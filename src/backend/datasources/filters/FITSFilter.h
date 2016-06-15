@@ -86,7 +86,16 @@ class FITSFilter : public AbstractFileFilter{
     void loadFilterSettings(const QString&);
     void saveFilterSettings(const QString&) const;
 
-  private:
+    void setStartRow(const int);
+    int startRow() const;
+    void setEndRow(const int);
+    int endRow() const;
+    void setStartColumn(const int);
+    int startColumn() const;
+    void setEndColumn(const int);
+    int endColumn() const;
+
+private:
     FITSFilterPrivate* const d;
     friend class FITSFilterPrivate;
 };

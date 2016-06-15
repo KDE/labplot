@@ -671,12 +671,17 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
         fitsOptionsWidget.twPreview->clear();
 
         fitsOptionsWidget.twPreview->setRowCount(lineStrings.size() -1);
+        int colCount = 0;
+        const int maxColumns = 300;
         for(int i=0; i<lineStrings.size(); i++) {
             QStringList lineString = lineStrings[i].split(" ");
-            if(i==0)
-                fitsOptionsWidget.twPreview->setColumnCount(lineString.size()-1);
+            if(i==0) {
+                colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
+                fitsOptionsWidget.twPreview->setColumnCount(colCount);
+            }
+            colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
 
-            for(int j=0; j<lineString.size(); j++) {
+            for(int j=0; j<colCount; j++) {
                 QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
                 fitsOptionsWidget.twPreview->setItem(i,j,item);
             }
@@ -857,8 +862,26 @@ void ImportFileWidget::refreshPreview() {
         lines = fitsOptionsWidget.sbPreviewLines->value();
         //filename+ lines
         if (fitsOptionsWidget.twExtensions->currentItem() != 0) {
-            fileName = fileName + QLatin1String("[") + fitsOptionsWidget.twExtensions->currentItem()->text(0) +
-                        QLatin1String("]");
+            const QTreeWidgetItem* item = fitsOptionsWidget.twExtensions->currentItem();
+            const int currentColumn = fitsOptionsWidget.twExtensions->currentColumn();
+            QString itemText = item->text(currentColumn);
+            if (itemText.contains(QLatin1String("IMAGE #"))) {
+                //filter - find IMAGE #
+            } else if (itemText.contains(QLatin1String("ASCII_TBL #"))) {
+
+            } else if (itemText.contains(QLatin1String("BINARY_TBL #"))) {
+
+            } else if (!itemText.compare(QLatin1String("Primary header"))) {
+                fileName = item->parent()->parent()->text(currentColumn);
+            } else {
+                if (item->parent() != 0) {
+                    if (item->parent()->parent() != 0) {
+                        fileName = item->parent()->parent()->text(currentColumn) +"["+ item->text(currentColumn)+"]";
+                    }
+                }
+            }
+            /*fileName = fileName + QLatin1String("[") + fitsOptionsWidget.twExtensions->currentItem()->text(0) +
+                        QLatin1String("]");*/
         }
         importedText = filter->readChdu(fileName, lines);
         tmpTableWidget = fitsOptionsWidget.twPreview;
@@ -872,12 +895,17 @@ void ImportFileWidget::refreshPreview() {
 
         QStringList lineStrings = importedText.split(QLatin1String("\n"));
         tmpTableWidget->setRowCount(qMax(lineStrings.size()-1,1));
+        int colCount = 0;
+        const int maxColumns = 300;
         for(int i=0; i<lineStrings.size(); i++) {
             QStringList lineString = lineStrings[i].split(QLatin1String(" "));
-            if(i==0)
-                tmpTableWidget->setColumnCount(qMax(lineString.size()-1,1));
+            if(i==0) {
+                colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
+                tmpTableWidget->setColumnCount(qMax( colCount,1));
+            }
+            colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
 
-            for(int j=0; j<lineString.size(); j++) {
+            for(int j=0; j< colCount; j++) {
                 QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
                 tmpTableWidget->setItem(i,j,item);
             }

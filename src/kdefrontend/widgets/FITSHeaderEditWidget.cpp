@@ -52,6 +52,7 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(AbstractDataSource *dataSource, QWidg
         ui.pbOpenFile->hide();
     }
     connect(ui.pbOpenFile, SIGNAL(clicked()), this, SLOT(openFile()));
+    connect(ui.twKeywordsTable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(updateKeyword(QTableWidgetItem*)));
     connect(ui.twExtensions, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(fillTable(QTreeWidgetItem*, int)));
 }
 
@@ -275,7 +276,7 @@ void FITSHeaderEditWidget::removeKeyword() {
     }
 }
 
-void FITSHeaderEditWidget::updateKeyword() {
+void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem *item) {
 }
 
 QList<QString> FITSHeaderEditWidget::mandatoryKeywords() const {
