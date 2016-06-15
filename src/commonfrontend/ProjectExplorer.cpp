@@ -389,6 +389,8 @@ void ProjectExplorer::filterTextChanged(const QString& text) {
 	filter(root, text);
 }
 
+#include <QDebug>
+
 bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 	Qt::CaseSensitivity sensitivity = caseSensitiveAction->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
 	bool matchCompleteWord = matchCompleteWordAction->isChecked();
@@ -399,15 +401,20 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 		QModelIndex child = index.child(i, 0);
 		AbstractAspect* aspect =  static_cast<AbstractAspect*>(child.internalPointer());
 		bool visible;
-		if (matchCompleteWord)
+		if(text.isEmpty())
+			visible = true;
+		else if (matchCompleteWord)
 			visible = aspect->name().startsWith(text, sensitivity);
 		else
 			visible = aspect->name().contains(text, sensitivity);
 
 		if (visible) {
 			//current item is visible -> make all its children visible without applying the filter
-			for (int j=0; j<child.model()->rowCount(child); ++j)
+			for (int j=0; j<child.model()->rowCount(child); ++j) {
 				m_treeView->setRowHidden(j, child, false);
+				if(text.isEmpty())
+					filter(child, text);
+			}
 
 			childVisible = true;
 		} else {
