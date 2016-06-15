@@ -799,7 +799,7 @@ void MainWin::openProject(const QString& filename) {
 	if (filename.endsWith(".lml", Qt::CaseInsensitive))
 		file = new KCompressionDevice(filename,KFilterDev::compressionTypeForMimeType("application/x-gzip"));
 	else	// opens filename using file ending
-		file = KFilterDev::deviceForFile(filename);
+		file = new KFilterDev(filename);
 
 	if (file==0)
 		file = new QFile(filename);
@@ -943,6 +943,7 @@ bool MainWin::saveProjectAs() {
  */
 bool MainWin::save(const QString& fileName) {
 	WAIT_CURSOR;
+	// TODO: always save gzipped?
 	QIODevice* file = new KCompressionDevice(fileName, KFilterDev::compressionTypeForMimeType("application/x-gzip"));
 	if (file == 0)
 		file = new QFile(fileName);
