@@ -386,7 +386,7 @@ void MainWin::initMenus() {
 	\return \c true if the project still needs to be saved ("cancel" clicked), \c false otherwise.
  */
 bool MainWin::warnModified() {
-	if(m_project->hasChanged()) {
+	if (m_project->hasChanged()) {
 		int want_save = KMessageBox::warningYesNoCancel( this,
 		                i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
 		                i18n("Save Project"));
@@ -700,15 +700,16 @@ bool MainWin::newProject() {
 void MainWin::openProject() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	QString dir = conf.readEntry("LastOpenDir", "");
-	QString path = KFileDialog::getOpenFileName(KUrl(dir),i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"),this, i18n("Open project"));
+	QString path = KFileDialog::getOpenFileName(KUrl(dir),
+		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"), this, i18n("Open project"));
 
 	if (!path.isEmpty()) {
 		this->openProject(path);
 
 		int pos = path.lastIndexOf(QDir::separator());
-		if (pos!=-1) {
+		if (pos != -1) {
 			QString newDir = path.left(pos);
-			if (newDir!=dir)
+			if (newDir != dir)
 				conf.writeEntry("LastOpenDir", newDir);
 		}
 	}
@@ -716,7 +717,7 @@ void MainWin::openProject() {
 
 void MainWin::openProject(const QString& filename) {
 	if (filename == m_currentFileName) {
-		KMessageBox::information(this, i18n("The project file %1 is already opened.", filename),i18n("Open project"));
+		KMessageBox::information(this, i18n("The project file %1 is already opened.", filename), i18n("Open project"));
 		return;
 	}
 
@@ -816,7 +817,7 @@ bool MainWin::closeProject() {
 	if (m_project==0)
 		return true; //nothing to close
 
-	if(warnModified())
+	if (warnModified())
 		return false;
 
 	delete m_aspectTreeModel;
@@ -843,7 +844,7 @@ bool MainWin::closeProject() {
 
 bool MainWin::saveProject() {
 	const QString& fileName = m_project->fileName();
-	if(fileName.isEmpty())
+	if (fileName.isEmpty())
 		return saveProjectAs();
 	else
 		return save(fileName);
@@ -856,10 +857,10 @@ bool MainWin::saveProjectAs() {
 	                   i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"),
 	                   this, i18n("Save project as"));
 
-	if( fileName.isEmpty() )// "Cancel" was clicked
+	if (fileName.isEmpty())// "Cancel" was clicked
 		return false;
 
-	if( fileName.contains(QLatin1String(".lml"),Qt::CaseInsensitive) == false )
+	if (fileName.contains(QLatin1String(".lml"), Qt::CaseInsensitive) == false)
 		fileName.append(QLatin1String(".lml"));
 
 	return save(fileName);
@@ -870,12 +871,13 @@ bool MainWin::saveProjectAs() {
  */
 bool MainWin::save(const QString& fileName) {
 	WAIT_CURSOR;
-	QIODevice* file = KFilterDev::deviceForFile(fileName, "application/x-gzip", true);
+	// use file ending to find out how to compress file
+	QIODevice* file = KFilterDev::deviceForFile(fileName);
 	if (file == 0)
 		file = new QFile(fileName);
 
 	bool ok;
-	if(file->open(QIODevice::WriteOnly)) {
+	if (file->open(QIODevice::WriteOnly)) {
 		m_project->setFileName(fileName);
 
 		QXmlStreamWriter writer(file);
@@ -931,7 +933,7 @@ void MainWin::print() {
 		return;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-    if (part->printView()){
+    if (part->printView()) {
         statusBar()->showMessage(i18n("%1 printed", part->name()));
     }
 }
@@ -942,7 +944,7 @@ void MainWin::printPreview() {
 		return;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-    if (part->printPreview()){
+    if (part->printPreview()) {
         statusBar()->showMessage(i18n("%1 printed", part->name()));
     }
 }
@@ -1022,7 +1024,7 @@ void MainWin::newWorksheet() {
 	this->addAspectToProject(worksheet);
 }
 
-//TODO: void MainWin::newScript(){}
+//TODO: void MainWin::newScript() {}
 
 /*!
 	returns a pointer to a Workbook-object, if the currently active Mdi-Subwindow is \a WorkbookView.
@@ -1207,7 +1209,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
 		aspect = m_project; // should never happen, just in case
 
 	m_suppressCurrentSubWindowChangedEvent = true;
-	if(aspect->folder() != m_currentFolder)	{
+	if (aspect->folder() != m_currentFolder)	{
 		m_currentFolder = aspect->folder();
 		updateMdiWindowVisibility();
 	}
@@ -1347,7 +1349,7 @@ void MainWin::updateMdiWindowVisibility() const {
 		foreach(QMdiSubWindow *window, windows) {
 			part_view = qobject_cast<PartMdiView *>(window);
 			Q_ASSERT(part_view);
-			if(part_view->part()->folder() == m_currentFolder)
+			if (part_view->part()->folder() == m_currentFolder)
 				part_view->show();
 			else
 				part_view->hide();
@@ -1356,7 +1358,7 @@ void MainWin::updateMdiWindowVisibility() const {
 	case Project::folderAndSubfolders:
 		foreach(QMdiSubWindow *window, windows) {
 			part_view = qobject_cast<PartMdiView *>(window);
-			if(part_view->part()->isDescendantOf(m_currentFolder))
+			if (part_view->part()->isDescendantOf(m_currentFolder))
 				part_view->show();
 			else
 				part_view->hide();
@@ -1476,14 +1478,14 @@ void MainWin::historyDialog() {
 void MainWin::importFileDialog(const QString& fileName) {
 	m_importFileDialog = new ImportFileDialog(this, false, fileName);
 
-	if ( m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook") ) {
+	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook")) {
 		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
-	} else if ( m_currentAspect->inherits("Column") ) {
+	} else if (m_currentAspect->inherits("Column")) {
 		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
 			m_importFileDialog->setCurrentIndex( m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 	}
 
-	if ( m_importFileDialog->exec() == QDialog::Accepted ) {
+	if (m_importFileDialog->exec() == QDialog::Accepted) {
 		m_importFileDialog->importTo(statusBar());
 		m_project->setChanged(true);
 	}
@@ -1501,7 +1503,7 @@ void MainWin::exportDialog() {
 		return;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-    if(part->exportView()){
+    if (part->exportView()) {
         statusBar()->showMessage(i18n("%1 exported", part->name()));
     }
 }
@@ -1511,7 +1513,7 @@ void MainWin::exportDialog() {
 */
 void MainWin::newFileDataSourceActionTriggered() {
 	ImportFileDialog* dlg = new ImportFileDialog(this, true);
-	if ( dlg->exec() == QDialog::Accepted ) {
+	if (dlg->exec() == QDialog::Accepted) {
 		FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1", 1));
 		dlg->importToFileDataSource(dataSource, statusBar());
 		this->addAspectToProject(dataSource);
@@ -1528,7 +1530,7 @@ void MainWin::newSqlDataSourceActionTriggered() {
 
 void MainWin::addAspectToProject(AbstractAspect* aspect) {
 	QModelIndex index = m_projectExplorer->currentIndex();
-	if(!index.isValid())
+	if (!index.isValid())
 		m_project->addChild(aspect);
 	else {
 		AbstractAspect * parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
