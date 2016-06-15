@@ -32,7 +32,7 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <QDataStream>
 #include <QDebug>
 #include <KLocale>
-#include <kfilterdev.h>
+#include <KFilterDev>
 #include <cmath>
 
  /*!

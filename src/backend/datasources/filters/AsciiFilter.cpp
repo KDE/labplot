@@ -34,7 +34,7 @@ Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 #include <QTextStream>
 #include <QDebug>
 #include <KLocale>
-#include <kfilterdev.h>
+#include <KFilterDev>
 
 #include <cmath>
 
