@@ -860,7 +860,6 @@ void ImportFileWidget::refreshPreview() {
     case FileDataSource::FITS: {
         FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
         lines = fitsOptionsWidget.sbPreviewLines->value();
-        //filename+ lines
         if (fitsOptionsWidget.twExtensions->currentItem() != 0) {
             const QTreeWidgetItem* item = fitsOptionsWidget.twExtensions->currentItem();
             const int currentColumn = fitsOptionsWidget.twExtensions->currentColumn();
@@ -880,8 +879,6 @@ void ImportFileWidget::refreshPreview() {
                     }
                 }
             }
-            /*fileName = fileName + QLatin1String("[") + fitsOptionsWidget.twExtensions->currentItem()->text(0) +
-                        QLatin1String("]");*/
         }
         importedText = filter->readChdu(fileName, lines);
         tmpTableWidget = fitsOptionsWidget.twPreview;

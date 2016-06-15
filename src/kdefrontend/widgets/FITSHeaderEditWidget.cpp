@@ -203,12 +203,9 @@ void FITSHeaderEditWidget::addKeyword() {
         }
 
         /*
-     - XTENSION keyword in the primary array
      - Column related keyword (TFIELDS, TTYPEn,TFORMn, etc.) in an image
      - SIMPLE, EXTEND, or BLOCKED keyword in any extension
      - BSCALE, BZERO, BUNIT, BLANK, DATAMAX, DATAMIN keywords in a table
-     - Table WCS keywords (TCTYPn, TCRPXn, TCRVLn, etc.) in an image
-     - END keyword
      - Keyword name contains illegal character
      */
 
@@ -277,6 +274,7 @@ void FITSHeaderEditWidget::removeKeyword() {
 }
 
 void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem *item) {
+    //TODO
 }
 
 QList<QString> FITSHeaderEditWidget::mandatoryKeywords() const {
