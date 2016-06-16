@@ -291,18 +291,25 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         fits_get_num_rows(fitsFile, &actualRows, &status);
         QStringList columnNames;
         QList<int> columnsWidth;
+        QStringList columnUnits;
+        columnUnits.reserve(actualCols);
         columnsWidth.reserve(actualCols);
         columnNames.reserve(actualCols);
         int colWidth;
-        char ttypenKeyword[FLEN_KEYWORD];
-        char columnName[FLEN_VALUE];
+        char keyword[FLEN_KEYWORD];
+        char value[FLEN_VALUE];
         for (int col = 1; col <=actualCols; ++col) {
-            fits_make_keyn("TTYPE", col, ttypenKeyword, &status);
-            fits_read_key(fitsFile, TSTRING, ttypenKeyword, columnName, NULL, &status);
-            fits_get_col_display_width(fitsFile, col, &colWidth, &status);
+            status = 0;
+            fits_make_keyn("TTYPE", col, keyword, &status);
+            fits_read_key(fitsFile, TSTRING, keyword, value, NULL, &status);
+            columnNames.append(QLatin1String(value));
 
+            fits_make_keyn("TUNIT", col, keyword, &status);
+            fits_read_key(fitsFile, TSTRING, keyword, value, NULL, &status);
+            columnUnits.append(QLatin1String(value));
+
+            fits_get_col_display_width(fitsFile, col, &colWidth, &status);
             columnsWidth.append(colWidth);
-            columnNames.append(QLatin1String(columnName));
         }
 
         status = 0;
@@ -344,8 +351,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         //TODO startColumn/end..
         for (int row = 1; row <= lines; ++row) {
             for (int col = 1; col <= actualCols; ++col) {
-
-                if(fits_read_col_str(fitsFile, col, row, 1, 1, NULL, &array, 0, &status)) {
+                if(fits_read_col_str(fitsFile, col, row, 1, 1, NULL, &array, NULL, &status)) {
                     printError(status);
                     dataString << QLatin1String(" ");
                 }
@@ -377,10 +383,10 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
             Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
             if (spreadsheet) {
                 //TODO comment -> units
-                QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
+                //QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
                 for ( int n=0; n<actualCols; n++ ){
                     Column* column = spreadsheet->column(columnOffset+n);
-                    column->setComment(comment);
+                    column->setComment(columnUnits.at(n));
                     column->setUndoAware(true);
                     if (importMode==AbstractFileFilter::Replace) {
                         column->setSuppressDataChangedSignal(false);
@@ -908,7 +914,6 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
             }
 
         }
-
     }
 }
 
