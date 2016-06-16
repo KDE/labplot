@@ -49,6 +49,8 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	ui.cbFormat->addItem("ASCII");
 	ui.cbFormat->addItem("Binary");
 	ui.cbFormat->addItem("LaTeX");
+    ui.cbFormat->addItem("FITS");
+
 
 	ui.cbSeparator->addItem("TAB");
 	ui.cbSeparator->addItem("SPACE");
@@ -260,7 +262,7 @@ void ExportSpreadsheetDialog::selectFile() {
  */
 void ExportSpreadsheetDialog::formatChanged(int index) {
 	QStringList extensions;
-	extensions<<".txt"<<".bin" << ".tex";
+    extensions<<".txt"<<".bin" << ".tex" << ".fits";
 	QString path = ui.kleFileName->text();
 	int i = path.indexOf(".");
 	if (i==-1)
@@ -290,27 +292,32 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 			ui.chkMatrixHHeader->show();
 			ui.chkMatrixVHeader->show();
 		}
+    //FITS
+    } else if(ui.cbFormat->currentIndex() == 3) {
+        if (fitsEditWidget == (FITSHeaderEditWidget*)0) {
+           // fitsEditWidget = new FITSHeaderEditWidget()
+        }
 
-	} else {
-		ui.cbSeparator->show();
-		ui.lSeparator->show();
+    } else {
+        ui.cbSeparator->show();
+        ui.lSeparator->show();
 
-		ui.chkCaptions->hide();
-		ui.chkEmptyRows->hide();
-		ui.chkGridLines->hide();;
-		ui.lEmptyRows->hide();
-		ui.lExportArea->hide();
-		ui.lGridLines->hide();
-		ui.lCaptions->hide();
-		ui.cbLaTeXExport->hide();
-		ui.lMatrixHHeader->hide();
-		ui.lMatrixVHeader->hide();
-		ui.chkMatrixHHeader->hide();
-		ui.chkMatrixVHeader->hide();
+        ui.chkCaptions->hide();
+        ui.chkEmptyRows->hide();
+        ui.chkGridLines->hide();;
+        ui.lEmptyRows->hide();
+        ui.lExportArea->hide();
+        ui.lGridLines->hide();
+        ui.lCaptions->hide();
+        ui.cbLaTeXExport->hide();
+        ui.lMatrixHHeader->hide();
+        ui.lMatrixVHeader->hide();
+        ui.chkMatrixHHeader->hide();
+        ui.chkMatrixVHeader->hide();
 
-		ui.lHeader->hide();
-		ui.chkHeaders->hide();
-	}
+        ui.lHeader->hide();
+        ui.chkHeaders->hide();
+    }
 
 	if (!m_matrixMode) {
 		ui.chkExportHeader->show();

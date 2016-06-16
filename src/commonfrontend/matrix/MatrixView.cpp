@@ -1507,6 +1507,11 @@ void MatrixView::showRowStatistics() {
 	}
 }
 
+void MatrixView::exportToFits(const QString &fileName, FITSHeaderEditWidget* editWidget) {
+    Q_UNUSED(fileName)
+    Q_UNUSED(editWidget)
+}
+
 //TODO
 void MatrixView::editFitsHeader() {
     FITSHeaderEditDialog* editDialog = new FITSHeaderEditDialog(m_matrix, this);

@@ -39,7 +39,7 @@ public:
     ~FITSFilterPrivate();
     QString readCHDU(const QString & fileName, AbstractDataSource* dataSource,
                      AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace, int lines= -1);
-    void writeCHDU(const QString & fileName, AbstractDataSource* dataSource);
+    void writeCHDU(const QString & fileName, AbstractDataSource* dataSource, const QList<FITSFilter::Keyword> &keywords);
 
     const FITSFilter* q;
     QMultiMap<QString, QString> extensionNames(const QString &fileName);

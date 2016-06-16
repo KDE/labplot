@@ -66,6 +66,7 @@ private:
     QString m_seletedExtension;
 
     FITSFilter* m_fitsFilter;
+    AbstractDataSource* dataSource;
 
     void initActions();
     void initContextMenu();

@@ -144,7 +144,9 @@ bool Matrix::exportView() const {
             const bool captions = dlg->captions();
             view->exportToLaTeX(path, verticalHeader, horizontalHeader,
                                 latexHeader, gridLines, entire, captions);
-        }else {
+        } else if (dlg->format() == ExportSpreadsheetDialog::FITS) {
+            //view->exportToFits(path, );
+        } else {
             const QString separator = dlg->separator();
             view->exportToFile(path, separator);
         }

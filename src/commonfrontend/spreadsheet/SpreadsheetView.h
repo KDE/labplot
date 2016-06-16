@@ -33,6 +33,7 @@
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"
+#include "backend/datasources/filters/FITSFilter.h"
 
 class Column;
 class Spreadsheet;
@@ -76,6 +77,7 @@ class SpreadsheetView : public QWidget {
         void exportToLaTeX(const QString&, const bool exportHeaders,
                            const bool gridLines, const bool captions, const bool latexHeaders,
                            const bool skipEmptyRows,const bool exportEntire) const;
+        void exportToFits(const QString &fileName, const QList<FITSFilter::Keyword> &keywords);
 	private:
 	  	void init();
 		void initActions();

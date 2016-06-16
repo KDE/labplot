@@ -27,6 +27,8 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include "FITSHeaderEditWidget.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "backend/matrix/Matrix.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include <QMenu>
 #include <QTableWidget>
 #include <QFileDialog>
@@ -50,6 +52,31 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(AbstractDataSource *dataSource, QWidg
 
     if (dataSource != NULL) {
         ui.pbOpenFile->hide();
+    } else {
+        Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+        if (matrix) {
+            int naxis;
+            const QVector<QVector<double> > data = matrix->data();
+            if (data.size() < 2) {
+                if (data.size() < 1) {
+                    naxis = 0;
+                } else {
+                    naxis = 1;
+                }
+            } else {
+                naxis = 2;
+            }
+
+            int naxes[naxis];
+            if (naxis > 1) {
+                naxes[0] = matrix->data().at(0).size();
+            }
+        }
+
+        Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+        if (spreadsheet) {
+
+        }
     }
     connect(ui.pbOpenFile, SIGNAL(clicked()), this, SLOT(openFile()));
     connect(ui.twKeywordsTable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(updateKeyword(QTableWidgetItem*)));

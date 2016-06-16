@@ -2148,6 +2148,12 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
         toExport.clear();
     }
 }
+
+void SpreadsheetView::exportToFits(const QString &fileName, const QList<FITSFilter::Keyword> &keywords) {
+    Q_UNUSED(fileName)
+    Q_UNUSED(keywords)
+}
+
 //TODO
 void SpreadsheetView::editFitsHeader() {
     FITSHeaderEditDialog* editDialog = new FITSHeaderEditDialog(m_spreadsheet, this);

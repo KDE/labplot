@@ -31,6 +31,7 @@
 
 #include <KDialog>
 #include <KUrlCompletion>
+#include "kdefrontend/widgets/FITSHeaderEditWidget.h"
 #include "ui_exportspreadsheetwidget.h"
 
 class ExportSpreadsheetDialog: public KDialog {
@@ -57,7 +58,8 @@ class ExportSpreadsheetDialog: public KDialog {
         enum Format {
             ASCII = 0,
             Binary,
-            LaTeX
+            FITS,
+            LaTeX,
         };
 
         Format format() const;
@@ -67,6 +69,7 @@ class ExportSpreadsheetDialog: public KDialog {
 		bool m_showOptions;
         bool m_matrixMode;
         Format m_format;
+        FITSHeaderEditWidget* fitsEditWidget;
         KUrlCompletion *urlCompletion;
 
 	private slots:
