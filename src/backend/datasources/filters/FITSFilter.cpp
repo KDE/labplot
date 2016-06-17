@@ -429,7 +429,6 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
             return;
         }
     } else {
-        status = 0;
         if (fits_open_file(&fitsFile, fileName.toLatin1(), READWRITE, &status )) {
             printError(status);
             return;
@@ -458,22 +457,89 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
             return;
         }
 
-        int hduNum;
-
-        if (fits_get_hdu_num(fitsFile,&hduNum)) {
-            printError(status);
-        }
-
-        qDebug() << "hdunum: " << hduNum;
-
-        status = 0;
         fits_close_file(fitsFile, &status);
         delete[] array;
     }
 
     Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
     if (spreadsheet) {
+        int nrows = spreadsheet->rowCount();
+        int tfields = spreadsheet->columnCount();
+        char* columnNames[tfields] ;
+        char* tform[tfields] ;
+        char* tunit[tfields] ;
 
+        //TODO
+        for (int i = 0; i < tfields; ++i) {
+            const Column* column =  spreadsheet->column(i);
+
+            columnNames[i] = new char[column->name().size()];
+            strcpy(columnNames[i], column->name().toLatin1().data());
+            tunit[i] = new char[2];
+            strcpy(tunit[i], "");
+            switch (column->columnMode()) {
+            case AbstractColumn::Numeric: {
+                int maxSize = -1;
+                for (int row = 0; row < column->rowCount(); ++row) {
+                    if (column->asStringColumn()->textAt(row).size() > maxSize) {
+                        maxSize = column->asStringColumn()->textAt(row).size();
+                    }
+                }
+                QString tformn = QLatin1String("F") + QString::number(maxSize) +
+                        QLatin1String(".2");
+                tform[i] = new char[tformn.size()];
+                strcpy(tform[i], tformn.toLatin1().data());
+            }
+            case AbstractColumn::Text: {
+                int maxSize = -1;
+                for (int row = 0; row < column->rowCount(); ++row) {
+                    if (column->textAt(row).size() > maxSize) {
+                        maxSize = column->textAt(row).size();
+                    }
+                }
+                QString tformn = QLatin1String("A") + QString::number(maxSize);
+                tform[i] = new char[tformn.size()];
+                strcpy(tform[i], tformn.toLatin1().data());
+            }
+            case AbstractColumn::DateTime: {
+
+            }
+            case AbstractColumn::Day: {
+
+            }
+            case AbstractColumn::Month: {
+
+            }
+
+            }
+        }
+
+        if (fits_create_tbl(fitsFile, ASCII_TBL,
+                            nrows, tfields,
+                            columnNames, tform, tunit,
+                            spreadsheet->name().toLatin1().data(),&status )) {
+            printError(status);
+            return;
+        }
+
+        char* column[nrows];
+        for (int col = 1; col <= tfields; ++col) {
+            const Column* c =  spreadsheet->column(col-1);
+
+            for (int row = 0; row < nrows; ++row) {
+                column[row] = new char[c->textAt(row).size()];
+                strcpy(column[row], c->textAt(row).toLatin1().data());
+            }
+
+            fits_write_col(fitsFile, TSTRING, col, 1, 1, nrows, column, &status);
+            if (status) {
+                printError(status);
+                return;
+            }
+        }
+
+        status = 0;
+        fits_close_file(fitsFile, &status);
     }
 }
 
@@ -659,6 +725,7 @@ void FITSFilterPrivate::addNewKeyword(const QString& fileName, const QList<FITSF
             }
         }
     }
+    status = 0;
     fits_close_file(fitsFile, &status);
 #else
     Q_UNUSED(keyword)

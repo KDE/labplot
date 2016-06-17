@@ -120,7 +120,9 @@ bool Spreadsheet::exportView() const {
             view->exportToLaTeX(path, exportHeader, gridLines, captions,
                                 exportLatexHeader, skipEmptyRows, exportEntire);
         }
-        else {
+        else if (dlg->format() == ExportSpreadsheetDialog::FITS) {
+            view->exportToFits(path, true);
+        } else {
             const QString separator = dlg->separator();
             view->exportToFile(path, exportHeader, separator);
         }

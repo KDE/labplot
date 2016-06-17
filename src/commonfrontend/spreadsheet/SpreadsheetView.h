@@ -77,7 +77,7 @@ class SpreadsheetView : public QWidget {
         void exportToLaTeX(const QString&, const bool exportHeaders,
                            const bool gridLines, const bool captions, const bool latexHeaders,
                            const bool skipEmptyRows,const bool exportEntire) const;
-        void exportToFits(const QString &fileName, const QList<FITSFilter::Keyword> &keywords);
+        void exportToFits(const QString &fileName, const bool entire) const;
 	private:
 	  	void init();
 		void initActions();

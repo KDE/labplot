@@ -2144,7 +2144,10 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
     }
 }
 
-void SpreadsheetView::exportToFits(const QString &fileName, const QList<FITSFilter::Keyword> &keywords) {
-    Q_UNUSED(fileName)
-    Q_UNUSED(keywords)
+void SpreadsheetView::exportToFits(const QString &fileName, const bool entire) const {
+    FITSFilter* filter = new FITSFilter;
+    filter->write(fileName, m_spreadsheet);
+
+    delete filter;
+    Q_UNUSED(entire)
 }
