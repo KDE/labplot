@@ -36,6 +36,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QString>
 #include <QHeaderView>
 #include <QTableWidgetItem>
+#include <QFile>
 
 /*!
  * \class FITSFilter
@@ -421,10 +422,18 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
     }
     int status = 0;
 
-    if (fits_create_file(&fitsFile, fileName.toLatin1(), &status)) {
-        printError(status);
-        qDebug() << fileName;
-        return;
+    if (!QFile::exists(fileName)) {
+        if (fits_create_file(&fitsFile, fileName.toLatin1(), &status)) {
+            printError(status);
+            qDebug() << fileName;
+            return;
+        }
+    } else {
+        status = 0;
+        if (fits_open_file(&fitsFile, fileName.toLatin1(), READWRITE, &status )) {
+            printError(status);
+            return;
+        }
     }
 
     Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
@@ -435,10 +444,8 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
             return;
         }
         long nelem = naxes[0] * naxes[1];
-
         double* array = new double[nelem];
-
-        const QVector<QVector<double> > data = matrix->data();
+        const QVector<QVector<double> >& data = matrix->data();
 
         for (int row = 0; row < naxes[1]; ++row) {
             for (int col = 0; col < naxes[0]; ++col) {
@@ -451,6 +458,15 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
             return;
         }
 
+        int hduNum;
+
+        if (fits_get_hdu_num(fitsFile,&hduNum)) {
+            printError(status);
+        }
+
+        qDebug() << "hdunum: " << hduNum;
+
+        status = 0;
         fits_close_file(fitsFile, &status);
         delete[] array;
     }

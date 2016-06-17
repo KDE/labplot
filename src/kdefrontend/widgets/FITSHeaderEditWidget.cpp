@@ -77,7 +77,15 @@ void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
     QString itemText = item->text(col);
     QString selectedExtension;
     if (itemText.contains(QLatin1String("IMAGE #"))) {
-        //filter - find IMAGE #
+
+        if (item->parent() != 0) {
+            if (item->parent()->parent() != 0) {
+                bool ok;
+                int hduNum = itemText.right(1).toInt(&ok);
+                selectedExtension = item->parent()->parent()->text(0) +"["+ QString::number(hduNum-1) +"]";
+                qDebug() << selectedExtension;
+            }
+        }
     } else if (itemText.contains(QLatin1String("ASCII_TBL #"))) {
 
     } else if (itemText.contains(QLatin1String("BINARY_TBL #"))) {

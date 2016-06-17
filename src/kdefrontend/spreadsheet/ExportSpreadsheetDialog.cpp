@@ -199,15 +199,16 @@ void ExportSpreadsheetDialog::slotButtonClicked(int button) {
 
 //SLOTS
 void ExportSpreadsheetDialog::okClicked() {
-	if ( QFile::exists(ui.kleFileName->text()) ) {
-		int r=KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
-		if (r==KMessageBox::No)
-			return;
-	}
+    if (format() != FITS)
+        if ( QFile::exists(ui.kleFileName->text()) ) {
+            int r=KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
+            if (r==KMessageBox::No)
+                return;
+        }
 
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
-	conf.writeEntry("Format", ui.cbFormat->currentIndex());
-	conf.writeEntry("Header", ui.chkExportHeader->isChecked());
+    KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+    conf.writeEntry("Format", ui.cbFormat->currentIndex());
+    conf.writeEntry("Header", ui.chkExportHeader->isChecked());
 	conf.writeEntry("Separator", ui.cbSeparator->currentText());
 
 	QString path = ui.kleFileName->text();
