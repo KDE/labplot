@@ -742,7 +742,7 @@ const QStringList ImportFileWidget::selectedNetCDFNames() const {
 
 const QStringList ImportFileWidget::selectedFITSExtensions() const {
     QStringList extensionNames;
-
+    //TODO
     QList<QTreeWidgetItem* > items = fitsOptionsWidget.twExtensions->selectedItems();
     foreach (QTreeWidgetItem*  item, items) {
         extensionNames << item->text(0);

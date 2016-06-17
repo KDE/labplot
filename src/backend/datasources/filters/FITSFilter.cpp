@@ -476,6 +476,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
             columnNames[i] = new char[column->name().size()];
             strcpy(columnNames[i], column->name().toLatin1().data());
             tunit[i] = new char[2];
+            //TODO comments units? import dialog
             strcpy(tunit[i], "");
             switch (column->columnMode()) {
             case AbstractColumn::Numeric: {
