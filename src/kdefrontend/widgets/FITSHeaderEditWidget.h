@@ -40,14 +40,13 @@ class FITSHeaderEditWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit FITSHeaderEditWidget(AbstractDataSource* dataSource = 0, QWidget *parent = 0);
+    explicit FITSHeaderEditWidget(QWidget *parent = 0);
     ~FITSHeaderEditWidget();
 
 private:
     Ui::FITSHeaderEditWidget ui;
     QAction* action_remove_keyword;
     QAction* action_add_keyword;
-    QAction* action_update_keyword;
     QMenu* m_KeywordActionsMenu;
 
     struct HeaderUpdate {
@@ -66,7 +65,6 @@ private:
     QString m_seletedExtension;
 
     FITSFilter* m_fitsFilter;
-    AbstractDataSource* dataSource;
 
     void initActions();
     void initContextMenu();
@@ -80,10 +78,10 @@ private slots:
     void openFile();
 
     void fillTable(QTreeWidgetItem* item, int col);
+    void updateKeyword(QTableWidgetItem*);
 
     void removeKeyword();
     void addKeyword();
-    void updateKeyword(QTableWidgetItem* item);
 };
 
 #endif // FITSHEADEREDITWIDGET_H

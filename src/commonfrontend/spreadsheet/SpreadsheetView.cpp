@@ -182,7 +182,6 @@ void SpreadsheetView::initActions() {
 	action_sort_spreadsheet = new KAction(KIcon("view-sort-ascending"), i18n("&Sort Spreadsheet"), this);
 	action_go_to_cell = new KAction(KIcon("go-jump"), i18n("&Go to Cell"), this);
 	action_statistics_all_columns = new KAction(KIcon("view-statistics"), i18n("Statisti&cs"), this );
-    action_edit_fits_header = new KAction(i18n("Edit FITS header"), this);
 
     // column related actions
 	action_insert_columns = new KAction(KIcon("edit-table-insert-column-left"), i18n("&Insert Empty Columns"), this);
@@ -307,7 +306,6 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu->addAction(action_add_column);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_go_to_cell);
-    m_spreadsheetMenu->addAction(action_edit_fits_header);
 	m_spreadsheetMenu->addAction(action_statistics_all_columns);
 	action_statistics_all_columns->setVisible(true);
 
@@ -374,7 +372,6 @@ void SpreadsheetView::connectActions() {
 	connect(action_sort_desc_column, SIGNAL(triggered()), this, SLOT(sortColumnDescending()));
 	connect(action_statistics_columns, SIGNAL(triggered()), this, SLOT(showColumnStatistics()));
 	connect(action_statistics_all_columns, SIGNAL(triggered()), this, SLOT(showAllColumnsStatistics()));
-    connect(action_edit_fits_header, SIGNAL(triggered()), this, SLOT(editFitsHeader()));
 
 	connect(action_insert_rows, SIGNAL(triggered()), this, SLOT(insertEmptyRows()));
 	connect(action_remove_rows, SIGNAL(triggered()), this, SLOT(removeSelectedRows()));
@@ -432,11 +429,9 @@ void SpreadsheetView::createContextMenu(QMenu* menu) const {
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_statistics_all_columns);
 	menu->insertSeparator(firstAction);
-    menu->insertAction(firstAction, action_edit_fits_header);
-    menu->insertSeparator(firstAction);
+
 	// TODO
 	// Export to ASCII
-	//Export to latex
 }
 
 //SLOTS
@@ -2152,14 +2147,4 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 void SpreadsheetView::exportToFits(const QString &fileName, const QList<FITSFilter::Keyword> &keywords) {
     Q_UNUSED(fileName)
     Q_UNUSED(keywords)
-}
-
-//TODO
-void SpreadsheetView::editFitsHeader() {
-    FITSHeaderEditDialog* editDialog = new FITSHeaderEditDialog(m_spreadsheet, this);
-    if (editDialog->exec() == KDialog::Accepted) {
-
-    }
-
-    delete editDialog;
 }

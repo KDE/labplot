@@ -58,8 +58,8 @@ class ExportSpreadsheetDialog: public KDialog {
         enum Format {
             ASCII = 0,
             Binary,
-            FITS,
             LaTeX,
+            FITS,
         };
 
         Format format() const;
@@ -69,7 +69,6 @@ class ExportSpreadsheetDialog: public KDialog {
 		bool m_showOptions;
         bool m_matrixMode;
         Format m_format;
-        FITSHeaderEditWidget* fitsEditWidget;
         KUrlCompletion *urlCompletion;
 
 	private slots:

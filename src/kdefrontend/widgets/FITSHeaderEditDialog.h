@@ -37,7 +37,7 @@ class FITSHeaderEditDialog : public KDialog
     Q_OBJECT
 
 public:
-    explicit FITSHeaderEditDialog(AbstractDataSource* dataSource = 0, QWidget *parent = 0);
+    explicit FITSHeaderEditDialog( QWidget *parent = 0);
     ~FITSHeaderEditDialog();
 
 private:

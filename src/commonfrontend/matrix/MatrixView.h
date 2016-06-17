@@ -76,7 +76,7 @@ class MatrixView : public QWidget {
         void exportToLaTeX(const QString&, const bool verticalHeaders, const bool horizontalHeaders,
                            const bool latexHeaders, const bool gridLines,
                            const bool entire, const bool captions) const;
-        void exportToFits(const QString& fileName, FITSHeaderEditWidget* editWidget);
+        void exportToFits(const QString& fileName, const bool entire) const;
 	public slots:
 		void createContextMenu(QMenu*) const;
 		void print(QPrinter*) const;
@@ -136,7 +136,6 @@ class MatrixView : public QWidget {
 		QAction* action_image_view;
 		QAction* action_fill_function;
 		QAction* action_fill_const;
-        QAction* action_edit_fits_header;
 
 
 		//Menus
@@ -176,8 +175,6 @@ class MatrixView : public QWidget {
 
         void showColumnStatistics();
         void showRowStatistics();
-
-        void editFitsHeader();
 };
 
 #endif

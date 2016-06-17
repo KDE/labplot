@@ -1510,9 +1510,8 @@ void MainWin::exportDialog() {
 }
 //TODO
 void MainWin::editFitsFileDialog() {
-    FITSHeaderEditDialog* editDialog = new FITSHeaderEditDialog(0, this);
+    FITSHeaderEditDialog* editDialog = new FITSHeaderEditDialog(this);
     if (editDialog->exec() == KDialog::Accepted) {
-
     }
 }
 

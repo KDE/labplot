@@ -35,7 +35,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QContextMenuEvent>
 #include <QDebug>
 
-FITSHeaderEditWidget::FITSHeaderEditWidget(AbstractDataSource *dataSource, QWidget *parent) :
+FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget *parent) :
     QWidget(parent) {
     ui.setupUi(this);
     initActions();
@@ -50,34 +50,6 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(AbstractDataSource *dataSource, QWidg
     ui.twKeywordsTable->setHorizontalHeaderItem(2, new QTableWidgetItem(i18n("Comment")));
     ui.twKeywordsTable->installEventFilter(this);
 
-    if (dataSource != NULL) {
-        ui.pbOpenFile->hide();
-    } else {
-        Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-        if (matrix) {
-            int naxis;
-            const QVector<QVector<double> > data = matrix->data();
-            if (data.size() < 2) {
-                if (data.size() < 1) {
-                    naxis = 0;
-                } else {
-                    naxis = 1;
-                }
-            } else {
-                naxis = 2;
-            }
-
-            int naxes[naxis];
-            if (naxis > 1) {
-                naxes[0] = matrix->data().at(0).size();
-            }
-        }
-
-        Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-        if (spreadsheet) {
-
-        }
-    }
     connect(ui.pbOpenFile, SIGNAL(clicked()), this, SLOT(openFile()));
     connect(ui.twKeywordsTable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(updateKeyword(QTableWidgetItem*)));
     connect(ui.twExtensions, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(fillTable(QTreeWidgetItem*, int)));
@@ -184,20 +156,17 @@ void FITSHeaderEditWidget::save() {
 void FITSHeaderEditWidget::initActions() {
     action_add_keyword = new QAction(i18n("Add new keyword"), this);
     action_remove_keyword = new QAction(i18n("Remove keyword"), this);
-    action_update_keyword = new QAction(i18n("Update keyword"), this);
 }
 
 void FITSHeaderEditWidget::connectActions() {
     connect(action_add_keyword, SIGNAL(triggered()), this, SLOT(addKeyword()));
     connect(action_remove_keyword, SIGNAL(triggered()), this, SLOT(removeKeyword()));
-    connect(action_update_keyword, SIGNAL(triggered()), this, SLOT(updateKeyword()));
 }
 
 void FITSHeaderEditWidget::initContextMenu() {
     m_KeywordActionsMenu = new QMenu(this);
     m_KeywordActionsMenu->addAction(action_add_keyword);
     m_KeywordActionsMenu->addAction(action_remove_keyword);
-    m_KeywordActionsMenu->addAction(action_update_keyword);
 }
 
 void FITSHeaderEditWidget::addKeyword() {
@@ -301,7 +270,7 @@ void FITSHeaderEditWidget::removeKeyword() {
 }
 
 void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem *item) {
-    //TODO
+    Q_UNUSED(item)
 }
 
 QList<QString> FITSHeaderEditWidget::mandatoryKeywords() const {

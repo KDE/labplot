@@ -28,13 +28,13 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "FITSHeaderEditDialog.h"
 #include <QVBoxLayout>
 
-FITSHeaderEditDialog::FITSHeaderEditDialog(AbstractDataSource *dataSource, QWidget *parent) : KDialog(parent) {
+FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget *parent) : KDialog(parent) {
     QWidget* mainWidget = new QWidget(this);
     QVBoxLayout* vLayout = new QVBoxLayout(mainWidget);
     vLayout->setSpacing(0);
     vLayout->setContentsMargins(0,0,0,0);
 
-    m_HeaderEditWidget = new FITSHeaderEditWidget(dataSource, this);
+    m_HeaderEditWidget = new FITSHeaderEditWidget(this);
     vLayout->addWidget(m_HeaderEditWidget);
     setMainWidget( mainWidget );
 

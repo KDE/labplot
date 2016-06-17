@@ -294,9 +294,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		}
     //FITS
     } else if(ui.cbFormat->currentIndex() == 3) {
-        if (fitsEditWidget == (FITSHeaderEditWidget*)0) {
-           // fitsEditWidget = new FITSHeaderEditWidget()
-        }
+        ui.gbOptions->hide();
 
     } else {
         ui.cbSeparator->show();

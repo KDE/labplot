@@ -119,7 +119,6 @@ class SpreadsheetView : public QWidget {
 		QAction* action_sort_spreadsheet;
 		QAction* action_go_to_cell;
         QAction* action_statistics_all_columns;
-        QAction* action_edit_fits_header;
 
 		//column related actions
 		QAction* action_insert_columns;
@@ -218,7 +217,6 @@ class SpreadsheetView : public QWidget {
         void showAllColumnsStatistics();
 
         void showRowStatistics();
-        void editFitsHeader();
 		bool formulaModeActive() const;
 
 		void advanceCell();

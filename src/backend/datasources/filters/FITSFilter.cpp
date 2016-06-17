@@ -59,7 +59,7 @@ QString FITSFilter::readChdu(const QString &fileName, int lines) {
 }
 
 void FITSFilter::write(const QString &fileName, AbstractDataSource *dataSource) {
-    //d->writeCHDU(fileName, dataSource, );
+    d->writeCHDU(fileName, dataSource);
 }
 
 void FITSFilter::addNewKeyword(const QString &filename, const QList<Keyword> &keywords) {
@@ -382,8 +382,6 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         if (!noDataSource) {
             Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
             if (spreadsheet) {
-                //TODO comment -> units
-                //QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
                 for ( int n=0; n<actualCols; n++ ){
                     Column* column = spreadsheet->column(columnOffset+n);
                     column->setComment(columnUnits.at(n));
@@ -417,10 +415,50 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
  * \param dataSource
  */
 
-void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *dataSource, const QList<FITSFilter::Keyword>& keywords) {
-    Q_UNUSED(fileName)
-    Q_UNUSED(dataSource)
-    Q_UNUSED(keywords)
+void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *dataSource) {
+    if (!(fileName.right(4) == QLatin1String("fits"))) {
+        return;
+    }
+    int status = 0;
+
+    if (fits_create_file(&fitsFile, fileName.toLatin1(), &status)) {
+        printError(status);
+        qDebug() << fileName;
+        return;
+    }
+
+    Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+    if (matrix) {
+        long naxes[2] = { matrix->columnCount(), matrix->rowCount() };
+        if (fits_create_img(fitsFile, FLOAT_IMG, 2, naxes, &status)) {
+            printError(status);
+            return;
+        }
+        long nelem = naxes[0] * naxes[1];
+
+        double* array = new double[nelem];
+
+        const QVector<QVector<double> > data = matrix->data();
+
+        for (int row = 0; row < naxes[1]; ++row) {
+            for (int col = 0; col < naxes[0]; ++col) {
+                array[row * naxes[0] + col] = data.at(col).at(row);
+            }
+        }
+
+        if (fits_write_img(fitsFile, TDOUBLE, 1, nelem, array, &status )) {
+            printError(status);
+            return;
+        }
+
+        fits_close_file(fitsFile, &status);
+        delete[] array;
+    }
+
+    Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+    if (spreadsheet) {
+
+    }
 }
 
 /*!
