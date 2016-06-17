@@ -42,9 +42,14 @@
 #include <cmath>	// isnan
 extern "C" {
 #include <gsl_errno.h>
+#include <gsl/gsl_sf_pow_int.h>
+#ifdef HAVE_FFWT3
+#include <fftw3.h>
+#endif
+// TODO: include these if fftw3 is used instead?
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_halfcomplex.h>
-#include <gsl/gsl_sf_pow_int.h>
+
 #include "backend/nsl/nsl_sf_poly.h"
 }
 
