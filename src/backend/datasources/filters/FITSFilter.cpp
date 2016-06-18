@@ -578,6 +578,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
                 fits_write_col(fitsFile, TDOUBLE, col, 1, 1, nrows, columnNumeric, &status);
                 if (status) {
                     printError(status);
+                    delete[] columnNumeric;
                     return;
                 }
             } else {
@@ -588,6 +589,9 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
                 fits_write_col(fitsFile, TSTRING, col, 1, 1, nrows, column, &status);
                 if (status) {
                     printError(status);
+                    for (int i = 0; i < nrows; ++i) {
+                        delete[] column[i];
+                    }
                     return;
                 }
             }
