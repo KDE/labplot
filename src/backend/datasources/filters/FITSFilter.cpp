@@ -554,7 +554,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
         }
 
         char* column[nrows];
-        double columnNumeric[nrows];
+        double* columnNumeric = new double[nrows];
         for (int col = 1; col <= tfields; ++col) {
             const Column* c =  spreadsheet->column(col-1);
             AbstractColumn::ColumnMode columnMode = c->columnMode();
@@ -580,6 +580,11 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
                     return;
                 }
             }
+        }
+
+        delete[] columnNumeric;
+        for (int i = 0; i < nrows; ++i) {
+            delete[] column[i];
         }
 
         status = 0;
