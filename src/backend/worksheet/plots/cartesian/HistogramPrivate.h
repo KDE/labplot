@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : Private members of Histogram
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
-	Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2016 Anu Mittal (anu22mittal@gmail.com)
+    
  ***************************************************************************/
 
 /***************************************************************************
