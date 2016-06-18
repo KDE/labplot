@@ -195,7 +195,6 @@ void WorksheetView::initActions() {
 	addCartesianPlot4Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin"), i18n("two axes, crossing at origin"), addNewActionGroup);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("text label"), addNewActionGroup);
 	addBarChartPlot= new QAction(QIcon::fromTheme("office-chart-line"), i18n("bar chart"), addNewActionGroup);
-	addHistogram = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"),i18n("Histogram"),addNewActionGroup);
 	//Layout actions
 	verticalLayoutAction = new QAction(QIcon::fromTheme("labplot-editvlayout"), i18n("Vertical layout"), layoutActionGroup);
 	verticalLayoutAction->setCheckable(true);
@@ -237,8 +236,6 @@ void WorksheetView::initActions() {
 	this->layoutChanged(m_worksheet->layout());
 
 	connect(addNewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
-	connect(addHistogram, SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
-	connect(addBarChartPlot,SIGNAL(triggered(QAction*)), this, SLOT(addNew(QAction*)));
 	connect(mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)));
 	connect(zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)));
 	connect(magnificationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(magnificationChanged(QAction*)));
@@ -334,9 +331,7 @@ void WorksheetView::initMenus() {
 	m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(QIcon::fromTheme("office-chart-line"));
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
-	m_addNewMenu->addAction(addHistogram);
-	m_addNewMenu->addAction(addBarChartPlot);
-
+	
 	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
 	m_viewMouseModeMenu->setIcon(QIcon::fromTheme("input-mouse"));
 	m_viewMouseModeMenu->addAction(selectionModeAction);
@@ -985,22 +980,7 @@ void WorksheetView::addNew(QAction* action) {
 		TextLabel* l = new TextLabel(i18n("text label"));
 		l->setText(i18n("text label"));
 		aspect = l;
-	} else if ( action == addBarChartPlot ) {
-		CartesianPlot* plot = new CartesianPlot(i18n("BarChart"));
-		plot->initDefault(CartesianPlot::TwoAxes);
-		plot->setMouseMode(m_cartesianPlotMouseMode);
-		aspect = plot;
-		if (tbNewCartesianPlot)
-			tbNewCartesianPlot->setDefaultAction(addBarChartPlot);
-	} else if ( action == addHistogram ) {
-		CartesianPlot* plot = new CartesianPlot(i18n("Histogram"));
-		plot->initDefault(CartesianPlot::TwoAxes);
-		plot->setMouseMode(m_cartesianPlotMouseMode);
-		aspect = plot;
-		if (tbNewCartesianPlot)
-			tbNewCartesianPlot->setDefaultAction(addHistogram);
-	}
-
+	} 
 	if (!aspect)
 		return;
 

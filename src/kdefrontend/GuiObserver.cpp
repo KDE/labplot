@@ -37,6 +37,8 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/BarChartPlot.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/core/Project.h"
 #include "backend/datapicker/Datapicker.h"
@@ -52,6 +54,7 @@
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "kdefrontend/dockwidgets/HistogramDock.h"
 #include "kdefrontend/dockwidgets/XYEquationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFitCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFourierFilterCurveDock.h"
@@ -190,10 +193,11 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("Cartesian plot properties"));
 
 	if (!mainWindow->cartesianPlotDock){
-	  mainWindow->cartesianPlotDock = new CartesianPlotDock(mainWindow->stackedWidget);
-	  connect(mainWindow->cartesianPlotDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
-	  mainWindow->stackedWidget->addWidget(mainWindow->cartesianPlotDock);
+		mainWindow->cartesianPlotDock = new CartesianPlotDock(mainWindow->stackedWidget);
+		connect(mainWindow->cartesianPlotDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+		mainWindow->stackedWidget->addWidget(mainWindow->cartesianPlotDock);
 	}
+
 
 	QList<CartesianPlot*> list;
 	foreach(aspect, selectedAspects){
@@ -251,6 +255,23 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->xyCurveDock->setCurves(list);
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyCurveDock);
+  }else if (className=="Histogram"){
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Histogram properties"));
+
+	if (!mainWindow->histogramDock){
+	  mainWindow->histogramDock = new HistogramDock(mainWindow->stackedWidget);
+	 // mainWindow->histogramDock->setupGeneral();
+	  connect(mainWindow->histogramDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+	  mainWindow->stackedWidget->addWidget(mainWindow->histogramDock);
+	}
+
+	QList<Histogram*> list;
+	foreach(aspect, selectedAspects){
+	  list<<qobject_cast<Histogram *>(aspect);
+	}
+	mainWindow->histogramDock->setCurves(list);
+
+	mainWindow->stackedWidget->setCurrentWidget(mainWindow->histogramDock);
   }else if (className=="XYEquationCurve"){
 	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-equation-curve properties"));
 

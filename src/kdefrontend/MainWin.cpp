@@ -98,6 +98,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	  axisDock(0),
 	  cartesianPlotDock(0),
 	  cartesianPlotLegendDock(0),
+	  histogramDock(0),
 	  columnDock(0),
 	  matrixDock(0),
 	  spreadsheetDock(0),
@@ -443,6 +444,8 @@ void MainWin::updateGUIOnProjectChanges() {
 		factory->container("spreadsheet_toolbar", this)->hide();
 		factory->container("worksheet_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
+// 		factory->container("histogram_toolbar",this)->hide();
+// 		factory->container("barchart_toolbar",this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 	}
 
@@ -482,6 +485,8 @@ void MainWin::updateGUI() {
 		factory->container("datapicker", this)->setEnabled(false);
 		factory->container("spreadsheet_toolbar", this)->hide();
 		factory->container("worksheet_toolbar", this)->hide();
+// 		factory->container("histogram_toolbar",this)->hide();
+// 		factory->container("barchart_toolbar",this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 		return;
@@ -535,7 +540,14 @@ void MainWin::updateGUI() {
 		toolbar->setVisible(true);
 		toolbar->clear();
 		view->fillCartesianPlotToolBar(toolbar);
+		//populate the toolbar for histogram plots
+// 		toolbar=qobject_cast<QToolBar*>(factory->container("histogram_toolbar", this));
+// 		if (group.groupList().indexOf("Toolbar histogram_toolbar")==-1)
+// 			toolbar->setToolButtonStyle(Qt::ToolButtonFollowStyle);
 
+// 		toolbar->setVisible(true);
+// 		toolbar->clear();
+// 		view->fillCartesianPlotToolBar(toolbar);
 		//hide the spreadsheet toolbar
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
 	} else {

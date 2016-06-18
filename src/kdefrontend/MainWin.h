@@ -46,6 +46,8 @@ class Matrix;
 class GuiObserver;
 class AxisDock;
 class CartesianPlotDock;
+class HistogramDock;
+class BarChartPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
 class ColumnDock;
@@ -157,6 +159,7 @@ private:
 	AxisDock* axisDock;
 	CartesianPlotDock* cartesianPlotDock;
 	CartesianPlotLegendDock* cartesianPlotLegendDock;
+	HistogramDock* histogramDock;
 	ColumnDock* columnDock;
 	MatrixDock* matrixDock;
 	SpreadsheetDock* spreadsheetDock;

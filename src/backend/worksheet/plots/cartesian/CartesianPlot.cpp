@@ -346,6 +346,7 @@ void CartesianPlot::initDefault(Type type){
 void CartesianPlot::initActions(){
 	//"add new" actions
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), this);
+	addHistogramPlot = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("Histogram"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
 	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
 	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
@@ -356,6 +357,7 @@ void CartesianPlot::initActions(){
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("custom point"), this);
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
+	connect(addHistogramPlot,SIGNAL(triggered()), SLOT(addHistogram()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
 	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addFourierFilterCurveAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
@@ -402,6 +404,7 @@ void CartesianPlot::initActions(){
 void CartesianPlot::initMenus(){
 	addNewMenu = new QMenu(i18n("Add new"));
 	addNewMenu->addAction(addCurveAction);
+	addNewMenu->addAction(addHistogramPlot);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addAction(addFitCurveAction);
 	addNewMenu->addAction(addFourierFilterCurveAction);
@@ -703,7 +706,11 @@ XYEquationCurve* CartesianPlot::addEquationCurve(){
 	this->addChild(curve);
 	return curve;
 }
-
+Histogram* CartesianPlot::addHistogram(){
+	Histogram* curve= new Histogram("Histogram");
+	this->addChild(curve);
+	return curve;
+}
 XYFitCurve* CartesianPlot::addFitCurve(){
 	XYFitCurve* curve = new XYFitCurve("fit");
 	this->addChild(curve);

@@ -32,6 +32,7 @@
 
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include <math.h>
+#include <backend/worksheet/plots/cartesian/Histogram.h>
 
 class QToolBar;
 class CartesianPlotPrivate;
@@ -110,6 +111,7 @@ class CartesianPlot:public AbstractPlot{
 
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
+		QAction* addHistogramPlot;
 		QAction* addFitCurveAction;
 		QAction* addFourierFilterCurveAction;
 		QAction* addInterpolationCurveAction;
@@ -141,6 +143,7 @@ class CartesianPlot:public AbstractPlot{
 		void addHorizontalAxis();
 		void addVerticalAxis();
 		XYCurve* addCurve();
+		Histogram* addHistogram();
 		XYEquationCurve* addEquationCurve();
 		XYFitCurve* addFitCurve();
 		XYFourierFilterCurve* addFourierFilterCurve();

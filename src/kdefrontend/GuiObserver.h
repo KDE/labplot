@@ -33,6 +33,7 @@
 class MainWin;
 class AbstractAspect;
 class CartesianPlot;
+class Histogram;
 
 class GuiObserver:public QObject {
   Q_OBJECT
@@ -43,6 +44,7 @@ class GuiObserver:public QObject {
   private:
 	MainWin* mainWindow;
 	CartesianPlot* m_lastCartesianPlot;
+	Histogram* m_lastHistogram;
 
   private slots:
 	void selectedAspectsChanged(QList<AbstractAspect*>&);
