@@ -467,9 +467,9 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
     if (spreadsheet) {
         int nrows = spreadsheet->rowCount();
         int tfields = spreadsheet->columnCount();
-        char* columnNames[tfields] ;
-        char* tform[tfields] ;
-        char* tunit[tfields] ;
+        char* columnNames[tfields];
+        char* tform[tfields];
+        char* tunit[tfields];
 
         //TODO
         for (int i = 0; i < tfields; ++i) {
@@ -550,7 +550,18 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
                             columnNames, tform, tunit,
                             spreadsheet->name().toLatin1().data(),&status )) {
             printError(status);
+            for (int i = 0; i < tfields; ++i) {
+                delete[] tform[i];
+                delete[] tunit[i];
+                delete[] columnNames[i];
+            }
             return;
+        }
+
+        for (int i = 0; i < tfields; ++i) {
+            delete[] tform[i];
+            delete[] tunit[i];
+            delete[] columnNames[i];
         }
 
         char* column[nrows];
