@@ -110,6 +110,7 @@ private:
 	KAction* m_newWorkbookAction;
 	KAction* m_newSpreadsheetAction;
 	KAction* m_newMatrixAction;
+	KAction* m_newNotesAction;
 	KAction* m_newWorksheetAction;
 	KAction* m_newFileDataSourceAction;
 	KAction* m_newSqlDataSourceAction;
@@ -226,6 +227,7 @@ private slots:
 	void newSpreadsheet();
 	void newMatrix();
 	void newWorksheet();
+	void newNotes();
 	void newDatapicker();
 	//TODO: void newScript();
 	void newFileDataSourceActionTriggered();
