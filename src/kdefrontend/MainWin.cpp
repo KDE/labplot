@@ -39,6 +39,7 @@
 #include "backend/datasources/FileDataSource.h"
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #include "backend/datapicker/Datapicker.h"
+#include "backend/notes/Notes.h"
 
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/matrix/MatrixView.h"
@@ -256,6 +257,10 @@ void MainWin::initActions() {
 // 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
 	actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
 	connect(m_newWorksheetAction, SIGNAL(triggered()), SLOT(newWorksheet()));
+	
+	m_newNotesAction= new QAction(QIcon::fromTheme("document-new"),i18n("Notes"),this);
+	actionCollection()->addAction("new_notes", m_newNotesAction);
+	connect(m_newNotesAction, SIGNAL(triggered()), SLOT(newNotes()));
 
 // 	m_newScriptAction = new QAction(QIcon::fromTheme("insert-text"),i18n("Note/Script"),this);
 // 	actionCollection()->addAction("new_script", m_newScriptAction);
@@ -378,6 +383,7 @@ void MainWin::initMenus() {
 	m_newMenu->addAction(m_newSpreadsheetAction);
 	m_newMenu->addAction(m_newMatrixAction);
 	m_newMenu->addAction(m_newWorksheetAction);
+	m_newMenu->addAction(m_newNotesAction);
 	m_newMenu->addAction(m_newDatapickerAction);
 	m_newMenu->addSeparator();
 	m_newMenu->addAction(m_newFileDataSourceAction);
@@ -1094,6 +1100,12 @@ void MainWin::newMatrix() {
 void MainWin::newWorksheet() {
 	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet"));
 	this->addAspectToProject(worksheet);
+}
+
+void MainWin::newNotes() {
+	Notes* notes = new Notes(0, i18n("Notes"));
+	qDebug() << "yha pr";
+	this->addAspectToProject(notes);
 }
 
 //TODO: void MainWin::newScript() {}

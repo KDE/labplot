@@ -116,6 +116,7 @@ private:
 	QAction* m_newSpreadsheetAction;
 	QAction* m_newMatrixAction;
 	QAction* m_newWorksheetAction;
+	QAction* m_newNotesAction;
 	QAction* m_newFileDataSourceAction;
 	QAction* m_newSqlDataSourceAction;
 	QAction* m_newScriptAction;
@@ -244,6 +245,7 @@ private slots:
 	void newSpreadsheet();
 	void newMatrix();
 	void newWorksheet();
+	void newNotes();
 	void newDatapicker();
 	//TODO: void newScript();
 	void newFileDataSourceActionTriggered();

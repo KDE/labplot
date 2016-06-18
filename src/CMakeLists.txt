@@ -155,6 +155,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
+	${BACKEND_DIR}/notes/Notes.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElement.cpp
 	${BACKEND_DIR}/worksheet/TextLabel.cpp
 	${BACKEND_DIR}/worksheet/Worksheet.cpp
@@ -188,6 +189,7 @@ set(BACKEND_SOURCES
 
 set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/matrix/MatrixView.cpp
+	${COMMONFRONTEND_DIR}/notes/NotesView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetHeaderView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp
@@ -241,3 +243,6 @@ install(FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png DES
 install(PROGRAMS labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
 update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )
+
+add_subdirectory(backend/notes)
+add_subdirectory(commonfrontend/notes)
