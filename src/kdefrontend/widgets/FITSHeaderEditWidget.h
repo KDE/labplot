@@ -49,6 +49,9 @@ private:
     QAction* action_add_keyword;
     QMenu* m_KeywordActionsMenu;
 
+    //TODO
+    QAction* action_delete_hdu;
+
     struct HeaderUpdate {
         QList<FITSFilter::Keyword> newKeywords;
         QList<FITSFilter::Keyword> updatedKeywords;

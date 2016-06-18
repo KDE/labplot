@@ -30,6 +30,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "FITSFilterPrivate.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/datatypes/Double2StringFilter.h"
 
 #include <QDebug>
 #include <QMultiMap>
@@ -337,6 +338,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                         spreadsheet->setRowCount(lines);
                 }
                 for (int n = 0; n < actualCols; n++ ){
+                    //TODO non string columns in FITS file
                     spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::Text);
                     QStringList* list = static_cast<QStringList* >(spreadsheet->column(columnOffset+n)->data());
                     dataPointers.push_back(list);
@@ -481,19 +483,45 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
             switch (column->columnMode()) {
             case AbstractColumn::Numeric: {
                 int maxSize = -1;
-                for (int row = 0; row < column->rowCount(); ++row) {
-                    if (column->asStringColumn()->textAt(row).size() > maxSize) {
-                        maxSize = column->asStringColumn()->textAt(row).size();
+                for (int row = 0; row < nrows; ++row) {
+                    if (QString::number(column->valueAt(row)).size() > maxSize) {
+                        maxSize = QString::number(column->valueAt(row)).size();
                     }
                 }
-                QString tformn = QLatin1String("F") + QString::number(maxSize) +
-                        QLatin1String(".2");
+
+                Double2StringFilter * filter = static_cast<Double2StringFilter*>(column->outputFilter());
+                bool decimals = false;
+                for (int ii = 0; ii < nrows; ++ii) {
+                    bool ok;
+                    QString cell = column->asStringColumn()->textAt(ii);
+                    double val = cell.toDouble(&ok);
+                    if (cell.size() > QString::number(val).size() + 1) {
+                        decimals = true;
+                        break;
+                    }
+                }
+                QString tformn;
+                if (decimals) {
+                    int maxStringSize = -1;
+                    for (int row = 0; row < nrows; ++row) {
+                        if (column->asStringColumn()->textAt(row).size() > maxStringSize) {
+                            maxStringSize = column->asStringColumn()->textAt(row).size();
+                        }
+                    }
+                    int diff = abs(maxSize - maxStringSize);
+                    maxSize+= diff;
+                    tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".") +
+                            QString::number(filter->numDigits());
+                } else {
+                    tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".0");
+                }
                 tform[i] = new char[tformn.size()];
                 strcpy(tform[i], tformn.toLatin1().data());
+                break;
             }
             case AbstractColumn::Text: {
                 int maxSize = -1;
-                for (int row = 0; row < column->rowCount(); ++row) {
+                for (int row = 0; row < nrows; ++row) {
                     if (column->textAt(row).size() > maxSize) {
                         maxSize = column->textAt(row).size();
                     }
@@ -501,6 +529,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
                 QString tformn = QLatin1String("A") + QString::number(maxSize);
                 tform[i] = new char[tformn.size()];
                 strcpy(tform[i], tformn.toLatin1().data());
+                break;
             }
             case AbstractColumn::DateTime: {
 
@@ -514,6 +543,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
             }
         }
+        //TODO extension name containing[] ?
 
         if (fits_create_tbl(fitsFile, ASCII_TBL,
                             nrows, tfields,
@@ -524,18 +554,31 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
         }
 
         char* column[nrows];
+        double columnNumeric[nrows];
         for (int col = 1; col <= tfields; ++col) {
             const Column* c =  spreadsheet->column(col-1);
+            AbstractColumn::ColumnMode columnMode = c->columnMode();
 
-            for (int row = 0; row < nrows; ++row) {
-                column[row] = new char[c->textAt(row).size()];
-                strcpy(column[row], c->textAt(row).toLatin1().data());
-            }
+            if (columnMode == AbstractColumn::Numeric) {
+                for (int row = 0; row < nrows; ++row) {
+                    columnNumeric[row] = c->valueAt(row);
+                }
 
-            fits_write_col(fitsFile, TSTRING, col, 1, 1, nrows, column, &status);
-            if (status) {
-                printError(status);
-                return;
+                fits_write_col(fitsFile, TDOUBLE, col, 1, 1, nrows, columnNumeric, &status);
+                if (status) {
+                    printError(status);
+                    return;
+                }
+            } else {
+                for (int row = 0; row < nrows; ++row) {
+                    column[row] = new char[c->textAt(row).size()];
+                    strcpy(column[row], c->textAt(row).toLatin1().data());
+                }
+                fits_write_col(fitsFile, TSTRING, col, 1, 1, nrows, column, &status);
+                if (status) {
+                    printError(status);
+                    return;
+                }
             }
         }
 
