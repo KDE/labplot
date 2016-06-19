@@ -260,7 +260,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 	if (!mainWindow->histogramDock){
 	  mainWindow->histogramDock = new HistogramDock(mainWindow->stackedWidget);
-	 // mainWindow->histogramDock->setupGeneral();
+	  mainWindow->histogramDock->setupGeneral();
 	  connect(mainWindow->histogramDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
 	  mainWindow->stackedWidget->addWidget(mainWindow->histogramDock);
 	}
