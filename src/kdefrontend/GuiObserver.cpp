@@ -4,6 +4,7 @@
 	Description 		 : GUI observer
 --------------------------------------------------------------------
 	Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2016-2016 Garvit Khatri (garvitdelhi@gmail.com)
 
 ***************************************************************************/
 
@@ -45,6 +46,7 @@
 #include "commonfrontend/ProjectExplorer.h"
 #include "kdefrontend/MainWin.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
+#include "kdefrontend/dockwidgets/NotesDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
@@ -406,11 +408,21 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->projectDock->setProject(mainWindow->m_project);
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->projectDock);
-  }else{
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
-	if (mainWindow->stackedWidget->currentWidget())
-	  mainWindow->stackedWidget->currentWidget()->hide();
-  }
+
+	} else if (className == "Notes") {
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Notes properties"));
+
+		if (!mainWindow->notesDock){
+			mainWindow->notesDock = new NotesDock(mainWindow->stackedWidget);
+			mainWindow->stackedWidget->addWidget(mainWindow->notesDock);
+		}
+
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->notesDock);
+	} else{
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
+		if (mainWindow->stackedWidget->currentWidget())
+			mainWindow->stackedWidget->currentWidget()->hide();
+	}
 
 }
 

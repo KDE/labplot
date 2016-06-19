@@ -29,14 +29,19 @@
 #ifndef NOTESVIEW_H
 #define NOTESVIEW_H
 
-#include <QGraphicsView>
+#include <QMainWindow>
+#include <QTextEdit>
 
-class NotesView : public QGraphicsView {
+class NotesView : public QMainWindow {
 	Q_OBJECT
 
 public:
 	NotesView();
 	~NotesView();
+	
+private:
+	QTextEdit *m_textEdit;
+	QPalette palette;
 
 };
 

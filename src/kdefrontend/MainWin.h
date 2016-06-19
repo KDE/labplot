@@ -45,6 +45,7 @@ class Spreadsheet;
 class Matrix;
 class GuiObserver;
 class AxisDock;
+class NotesDock;
 class CartesianPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
@@ -156,6 +157,7 @@ private:
 	//Docks
 	QStackedWidget* stackedWidget;
 	AxisDock* axisDock;
+	NotesDock* notesDock;
 	CartesianPlotDock* cartesianPlotDock;
 	CartesianPlotLegendDock* cartesianPlotLegendDock;
 	ColumnDock* columnDock;
