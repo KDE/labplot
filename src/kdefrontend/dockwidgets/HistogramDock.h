@@ -32,7 +32,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "ui_histogramdock.h"
-#include "ui_xycurvedockgeneraltab.h"
+#include "ui_histogramdockgeneraltab.h"
 #include <QList>
 #include <KConfig>
 #include <KLocalizedString>
@@ -53,7 +53,7 @@ public:
 	void setCurves(QList<Histogram*>);
 	virtual void setupGeneral();
 private:
-	Ui::XYCurveDockGeneralTab uiGeneralTab;
+	Ui:HistogramDockGeneralTab uiGeneralTab;
 	KUrlCompletion* m_completion;
 	QStringList dateStrings;
 	QStringList timeStrings;
@@ -81,7 +81,7 @@ protected:
 	AspectTreeModel* m_aspectTreeModel;
 
 	void initTabs();
-	//virtual void setModel();
+	virtual void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
 
 private slots:
