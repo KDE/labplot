@@ -4,6 +4,7 @@
 	Description 		 : GUI observer
 --------------------------------------------------------------------
 	Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2016-2016 Garvit Khatri (garvitdelhi@gmail.com)
 
 ***************************************************************************/
 
@@ -46,6 +47,7 @@
 #include "commonfrontend/ProjectExplorer.h"
 #include "kdefrontend/MainWin.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
+#include "kdefrontend/dockwidgets/NotesDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
@@ -412,7 +414,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		mainWindow->projectDock->setProject(mainWindow->m_project);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->projectDock);
-	}else if (className=="CantorWorksheet"){
+	} else if (className=="CantorWorksheet"){
 		#ifdef HAVE_CANTOR_LIBS
 		if (!mainWindow->cantorWorksheetDock){
 			mainWindow->cantorWorksheetDock = new CantorWorksheetDock(mainWindow->stackedWidget);
@@ -433,7 +435,16 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->cantorWorksheetDock);
 		#endif
-	}else{
+	} else if (className == "Notes") {
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Notes properties"));
+
+		if (!mainWindow->notesDock){
+			mainWindow->notesDock = new NotesDock(mainWindow->stackedWidget);
+			mainWindow->stackedWidget->addWidget(mainWindow->notesDock);
+		}
+
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->notesDock);
+	} else{
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("Properties"));
 		if (mainWindow->stackedWidget->currentWidget())
 			mainWindow->stackedWidget->currentWidget()->hide();

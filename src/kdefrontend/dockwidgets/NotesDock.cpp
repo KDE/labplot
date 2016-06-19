@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : NotesView.cpp
+    File                 : NotesDock.cpp
     Project              : LabPlot
-    Description          : Notes View for taking notes
+    Description          : Notes Dock for configuring notes
     --------------------------------------------------------------------
     Copyright            : (C) 2016-2016 Garvit Khatri (garvitdelhi@gmail.com)
 
@@ -26,27 +26,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "NotesView.h"
+#include "NotesDock.h"
 
-#include <QGraphicsItem>
-#include <QColorDialog>
-
-NotesView::NotesView() {
-	
-	m_textEdit = new QTextEdit(this);
-	
-// 	QColor color = QColorDialog::getColor(Qt::yellow,this); // can be used to give options
-	
-	palette = m_textEdit->palette();
-	
-	palette.setColor(QPalette::Base, Qt::yellow); // set color "Red" for textedit base
-	palette.setColor(QPalette::Text, Qt::black);
-	
-	m_textEdit->setPalette(palette);
-	
-	setCentralWidget(m_textEdit);
+NotesDock::NotesDock(QWidget *parent) : QWidget(parent), m_initializing(false) {
+	ui.setupUi(this);
 }
 
-NotesView::~NotesView() {
+NotesDock::~NotesDock() {
 
 }

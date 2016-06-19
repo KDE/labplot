@@ -104,6 +104,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	  m_visibilityMenu(0),
 	  m_newMenu(0),
 	  axisDock(0),
+	  notesDock(0),
 	  cartesianPlotDock(0),
 	  cartesianPlotLegendDock(0),
 	  columnDock(0),
