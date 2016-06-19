@@ -204,31 +204,25 @@ void WorksheetElement::prepareMoveInFrontOfMenu() {
 	//m_moveInFrontOfMenu->menuAction()->setVisible(!m_moveInFrontOfMenu->isEmpty());
 }
 
-void WorksheetElement::execMoveBehind(QAction *action) {
-	Q_ASSERT(action != NULL);
-	AbstractAspect *parent = parentAspect();
-	if (parent) {
-		int index = action->data().toInt();
-		AbstractAspect *sibling1 = parent->child<WorksheetElement>(index);
-		beginMacro(i18n("%1: move behind %2.", name(), sibling1->name()));
-		remove();
-		AbstractAspect *sibling2 = parent->child<WorksheetElement>(index + 1);
-		parent->insertChildBefore(this, sibling2);
-		endMacro();
-	}
+void WorksheetElement::execMoveInFrontOf(QAction* action) {
+	AbstractAspect* parent = parentAspect();
+	int index = action->data().toInt();
+	AbstractAspect* sibling1 = parent->child<WorksheetElement>(index);
+	AbstractAspect* sibling2 = parent->child<WorksheetElement>(index + 1);
+	beginMacro(i18n("%1: move behind %2.", name(), sibling1->name()));
+	remove();
+	parent->insertChildBefore(this, sibling2);
+	endMacro();
 }
 
-void WorksheetElement::execMoveInFrontOf(QAction *action) {
-	Q_ASSERT(action != NULL);
-	AbstractAspect *parent = parentAspect();
-	if (parent) {
-		int index = action->data().toInt();
-		AbstractAspect *sibling = parent->child<WorksheetElement>(index);
-		beginMacro(i18n("%1: move in front of %2.", name(), sibling->name()));
-		remove();
-		parent->insertChildBefore(this, sibling);
-		endMacro();
-	}
+void WorksheetElement::execMoveBehind(QAction* action) {
+	AbstractAspect* parent = parentAspect();
+	int index = action->data().toInt();
+	AbstractAspect* sibling = parent->child<WorksheetElement>(index);
+	beginMacro(i18n("%1: move in front of %2.", name(), sibling->name()));
+	remove();
+	parent->insertChildBefore(this, sibling);
+	endMacro();
 }
 
 /**
