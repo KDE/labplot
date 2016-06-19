@@ -53,7 +53,7 @@ public:
 	void setCurves(QList<Histogram*>);
 	virtual void setupGeneral();
 private:
-	Ui:HistogramDockGeneralTab uiGeneralTab;
+	Ui::HistogramDockGeneralTab uiGeneralTab;
 	KUrlCompletion* m_completion;
 	QStringList dateStrings;
 	QStringList timeStrings;
