@@ -32,6 +32,7 @@
 #include "backend/core/AbstractPart.h"
 #include "backend/core/AbstractScriptingEngine.h"
 #include "backend/lib/macros.h"
+#include "commonfrontend/notes/NotesView.h"
 
 #include <QIcon>
 
@@ -48,9 +49,14 @@ public:
 	virtual bool exportView() const;
 	virtual bool printView();
 	virtual bool printPreview() const;
+	
+	void changeBgColor(QColor);
+	void changeTextColor(QColor);
 
 	virtual void save(QXmlStreamWriter*) const;
 	virtual bool load(XmlStreamReader*);
+private:
+	NotesView* m_notesView;
 signals:
 	void requestProjectContextMenu(QMenu*);
 

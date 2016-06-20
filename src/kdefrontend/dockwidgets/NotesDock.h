@@ -30,6 +30,7 @@
 #define NOTESDOCK_H
 
 #include <QWidget>
+#include "backend/notes/Notes.h"
 #include "ui_notesdock.h"
 
 class NotesDock : public QWidget {
@@ -38,14 +39,21 @@ class NotesDock : public QWidget {
 	public:
 		explicit NotesDock(QWidget *parent);
 		~NotesDock();
+		
+		void setNotesList(QList<Notes*>);
 
 	private:
 		Ui::NotesDock ui;
 		bool m_initializing;
+		Notes* m_notes;
 
 	private slots:
 		//SLOTs for changes triggered in WorksheetDock
 		//"General"-tab
+		void nameChanged(QString name);
+		void commentChanged(QString name);
+		void bgColorChanged(QColor color);
+		void textColorChanged(QColor color);
 
 		//SLOTs for changes triggered in Worksheet
 // 		void worksheetDescriptionChanged(const AbstractAspect*);

@@ -37,16 +37,26 @@ NotesView::NotesView() {
 	
 // 	QColor color = QColorDialog::getColor(Qt::yellow,this); // can be used to give options
 	
-	palette = m_textEdit->palette();
+	m_palette = m_textEdit->palette();
 	
-	palette.setColor(QPalette::Base, Qt::yellow); // set color "Red" for textedit base
-	palette.setColor(QPalette::Text, Qt::black);
+	m_palette.setColor(QPalette::Base, Qt::yellow); // set color "Red" for textedit base
+	m_palette.setColor(QPalette::Text, Qt::black);
 	
-	m_textEdit->setPalette(palette);
+	m_textEdit->setPalette(m_palette);
 	
 	setCentralWidget(m_textEdit);
 }
 
 NotesView::~NotesView() {
 
+}
+
+void NotesView::changeBgColor(QColor color) {
+	m_palette.setColor(QPalette::Base, color);
+	m_textEdit->setPalette(m_palette);
+}
+
+void NotesView::changeTextColor(QColor color) {
+	m_palette.setColor(QPalette::Text, color);
+	m_textEdit->setPalette(m_palette);
 }
