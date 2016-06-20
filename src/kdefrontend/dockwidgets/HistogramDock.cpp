@@ -563,12 +563,20 @@ void HistogramDock::initGeneralTab(){
 
 	//show the properties of the first curve
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
+	
+	connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
+	
 
 	//Slots
 	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
 	connect(m_curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(curveXColumnChanged(const AbstractColumn*)));
 	connect(m_curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(curveYColumnChanged(const AbstractColumn*)));
 	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
+	//types options
+	uiGeneralTab.cbHistogramType->addItem(i18n("Ordinary Histogram"));
+	uiGeneralTab.cbHistogramType->addItem(i18n("Cummulative Histogram"));
+	uiGeneralTab.cbHistogramType->addItem(i18n("AvgShifted Histogram"));
+	
 }
 
 void HistogramDock::initTabs() {

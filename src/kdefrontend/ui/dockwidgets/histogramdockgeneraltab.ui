@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>367</width>
-    <height>190</height>
+    <height>218</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -26,6 +26,22 @@
    <property name="spacing">
     <number>2</number>
    </property>
+   <item row="4" column="0">
+    <spacer name="verticalSpacerST">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>32</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lName">
      <property name="text">
@@ -69,10 +85,10 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
-    <widget class="QCheckBox" name="chkVisible">
+   <item row="6" column="0">
+    <widget class="QLabel" name="lBinCount">
      <property name="text">
-      <string>visible</string>
+      <string>No. of bins</string>
      </property>
     </widget>
    </item>
@@ -83,7 +99,14 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
+   <item row="11" column="0">
+    <widget class="QCheckBox" name="chkVisible">
+     <property name="text">
+      <string>visible</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -99,15 +122,25 @@
      </property>
     </spacer>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="BinCount">
+   <item row="7" column="0">
+    <widget class="QLabel" name="lHistogramColour">
      <property name="text">
-      <string>No. of bins</string>
+      <string>Color</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="BinSettings">
+   <item row="7" column="2">
+    <widget class="KColorButton" name="kcbLineColor">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="lBinSettings">
      <property name="font">
       <font>
        <weight>75</weight>
@@ -119,25 +152,40 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="histogramColour">
-     <property name="text">
-      <string>Color</string>
-     </property>
-    </widget>
-   </item>
    <item row="6" column="2">
-    <widget class="KColorButton" name="kcbLineColor">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <widget class="QSpinBox" name="sbBinCount"/>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="lType">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Histogram type</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="2">
-    <widget class="QSpinBox" name="binCount"/>
+   <item row="9" column="2">
+    <widget class="QComboBox" name="cbHistogramType"/>
+   </item>
+   <item row="8" column="0">
+    <spacer name="verticalSpacerHT">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>32</width>
+       <height>8</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

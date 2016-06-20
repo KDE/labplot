@@ -94,7 +94,8 @@ private slots:
 	void xColumnChanged(const QModelIndex&);
 	void yColumnChanged(const QModelIndex&);
 	void visibilityChanged(bool);
-
+	//Histogram-types
+	void histogramTypeChanged(int);
 	//Line-Tab
 	void lineTypeChanged(int);
 	void lineSkipGapsChanged(bool);
