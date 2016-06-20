@@ -166,8 +166,11 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
-    ThemeHandler* themeHandler = new ThemeHandler(this, ThemeHandler::CartesianPlot);
+    ThemeHandler* themeHandler = new ThemeHandler(this);
     ui.verticalLayout->addWidget(themeHandler);
+
+    connect(themeHandler, SIGNAL(loadThemeRequested(KConfig&)), this, SLOT(loadTheme(KConfig&)));
+    connect(m_plot, SIGNAL(themeLoaded()),this, SLOT(load()));
 
 	init();
 }
@@ -308,6 +311,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect( m_plot, SIGNAL(verticalPaddingChanged(float)), this, SLOT(plotVerticalPaddingChanged(float)) );
 
 	m_initializing = false;
+
 }
 
 void CartesianPlotDock::activateTitleTab() {
@@ -1191,10 +1195,11 @@ void CartesianPlotDock::loadConfigFromTemplate(KConfig& config) {
 	this->loadConfig(config);
 
 	m_plot->endMacro();
+
 }
 
 void CartesianPlotDock::load() {
-	//General-tab
+    //General-tab
 	ui.chkVisible->setChecked(m_plot->isVisible());
 	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), Worksheet::Centimeter));
 	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), Worksheet::Centimeter));
@@ -1340,4 +1345,10 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
 
 	config.sync();
+}
+
+void CartesianPlotDock::loadTheme(KConfig& config)
+{
+    foreach(CartesianPlot *plot, m_plotList)
+        plot->loadThemeConfig(config);
 }

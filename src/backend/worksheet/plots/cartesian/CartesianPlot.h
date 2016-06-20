@@ -42,6 +42,7 @@ class XYInterpolationCurve;
 class XYSmoothCurve;
 class XYFitCurve;
 class XYFourierFilterCurve;
+class KConfig;
 
 class CartesianPlot:public AbstractPlot{
 	Q_OBJECT
@@ -99,6 +100,7 @@ class CartesianPlot:public AbstractPlot{
 
 		typedef CartesianPlot BaseClass;
 		typedef CartesianPlotPrivate Private;
+
 
 	private:
 		void init();
@@ -164,6 +166,7 @@ class CartesianPlot:public AbstractPlot{
 		void shiftRightX();
 		void shiftUpY();
 		void shiftDownY();
+        void loadThemeConfig(KConfig& config);
 
 	private slots:
 		void updateLegend();
@@ -208,6 +211,7 @@ class CartesianPlot:public AbstractPlot{
 		void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 		void yRangeBreakingEnabledChanged(bool);
 		void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
+        	void themeLoaded();
 };
 
 #endif

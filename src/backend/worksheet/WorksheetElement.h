@@ -33,6 +33,7 @@
 #include "backend/core/AbstractAspect.h"
 #include <QGraphicsItem>
 #include <QPen>
+#include <KConfig>
 
 class QAction;
 
@@ -52,7 +53,7 @@ class WorksheetElement: public AbstractAspect {
 		virtual bool isFullyVisible() const;
 		virtual void setPrinting(bool) = 0;
 		virtual QMenu* createContextMenu();
-
+        	virtual void loadConfig(const KConfig&);
 		static QPainterPath shapeFromPath(const QPainterPath&, const QPen&);
 
 	public slots:

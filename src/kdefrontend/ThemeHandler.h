@@ -30,9 +30,9 @@
 #ifndef THEMEHANDLER_H
 #define THEMEHANDLER_H
 
-#include <QPushButton>
-#include <QVBoxLayout>
 #include <QtGui/QWidget>
+#include <QPushButton>
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 class QHBoxLayout;
 class QToolButton;
 class QSpacerItem;
@@ -43,37 +43,23 @@ class ThemeHandler : public QWidget{
 	Q_OBJECT
 
 	public:
-		enum ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, XYCurve, Axis, CustomPoint};
-
-		ThemeHandler(QWidget* parent, ClassName);
+        ThemeHandler(QWidget* parent);
 
 	private:
-        void retranslateUi();
-
-        ClassName className;
         QList<QString> dirNames;
 
         QHBoxLayout *horizontalLayout;
         QSpacerItem *horizontalSpacer;
-        QToolButton *tbLoad;
-        QToolButton *tbSave;
-        QToolButton *tbSaveDefault;
         QSpacerItem *horizontalSpacer2;
-        QToolButton *tbCopy;
-        QToolButton *tbPaste;
         QLabel *lTheme;
+        QPushButton *pbLoadTheme;
 
     private slots:
         void loadMenu();
-        void saveMenu();
-        void loadMenuSelected(QAction*);
-        void saveMenuSelected(QAction*);
-        void saveNewSelected(const QString&);
-        void saveDefaults();
+        void loadSelected(QAction*);
 
     signals:
-        void loadConfigRequested(KConfig&);
-        void saveConfigRequested(KConfig&);
+        void loadThemeRequested(KConfig& config);
         void info(const QString&);
 };
 

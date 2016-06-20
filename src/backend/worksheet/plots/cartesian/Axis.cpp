@@ -91,7 +91,7 @@ class AxisGrid : public QGraphicsItem {
 			if (axis->majorGridPen.style() != Qt::NoPen){
 				painter->setOpacity(axis->majorGridOpacity);
 				painter->setPen(axis->majorGridPen);
-				painter->setBrush(Qt::NoBrush);
+                painter->setBrush(Qt::NoBrush);
 				painter->drawPath(axis->majorGridPath);
 			}
 
@@ -2205,4 +2205,40 @@ bool Axis::load(XmlStreamReader* reader){
     }
 
     return true;
+}
+
+void Axis::loadConfig(const KConfig& config)
+{
+        KConfigGroup group = config.group("ThemeAxis");
+
+        // Tick label
+        this->setLabelsColor(group.readEntry("LabelsFontColor",(QColor) this->labelsColor()));
+        this->setLabelsOpacity(group.readEntry("LabelsOpacity",this->labelsOpacity()));
+        this->setLineOpacity(group.readEntry("LineOpacity",this->lineOpacity()));
+        this->linePen().setColor(group.readEntry("LineColor",(QColor) this->linePen().color()));
+        this->linePen().setStyle((Qt::PenStyle)group.readEntry("LineStyle",(int) this->linePen().style()));
+        this->linePen().setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
+
+        //Major ticks
+        this->majorGridPen().setColor(group.readEntry("MajorGridColor",(QColor) this->majorGridPen().color()));
+        this->setMajorGridOpacity(group.readEntry("MajorGridOpacity", this->majorGridOpacity()));
+        this->majorGridPen().setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle",(int) this->majorGridPen().style()));
+        this->majorGridPen().setWidthF(group.readEntry("MajorGridWidth", this->majorGridPen().widthF()));
+        this->majorTicksPen().setColor(group.readEntry("MajorTicksColor",(QColor)this->majorTicksPen().color()));
+        this->majorTicksPen().setStyle((Qt::PenStyle)group.readEntry("MajorTicksLineStyle",(int) this->majorTicksPen().style()));
+        this->majorTicksPen().setWidthF(group.readEntry("MajorTicksWidth", this->majorTicksPen().widthF()));
+        this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity",this->majorTicksOpacity()));
+        this->setMajorTicksType((Axis::TicksType)group.readEntry("MajorTicksType",(int)this->majorTicksType()));
+
+        //Minor ticks
+        this->minorGridPen().setColor(group.readEntry("MinorGridColor",(QColor) this->minorGridPen().color()));
+        this->setMinorGridOpacity(group.readEntry("MinorGridOpacity", this->minorGridOpacity()));
+        this->minorGridPen().setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle",(int) this->minorGridPen().style()));
+        this->minorGridPen().setWidthF(group.readEntry("MinorGridWidth", this->minorGridPen().widthF()));
+        this->minorTicksPen().setColor(group.readEntry("MinorTicksColor",(QColor) this->minorTicksPen().color()));
+        this->minorTicksPen().setStyle((Qt::PenStyle)group.readEntry("MinorTicksLineStyle",(int) this->minorTicksPen().style()));
+        this->minorTicksPen().setWidthF(group.readEntry("MinorTicksWidth", this->minorTicksPen().widthF()));
+        this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity",this->minorTicksOpacity()));
+        this->setMinorTicksType((Axis::TicksType)group.readEntry("MinorTicksType",(int)this->minorTicksType()));
+
 }

@@ -560,3 +560,24 @@ bool PlotArea::load(XmlStreamReader* reader){
 
     return true;
 }
+
+void PlotArea::loadConfig(const KConfig& config)
+{
+
+    KConfigGroup group = config.group("ThemeCartesianPlot");
+
+    this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle",(int) this->backgroundBrushStyle()));
+    this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle)(group.readEntry("BackgroundType",(int) this->backgroundColorStyle())));
+    this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor",(QColor) this->backgroundFirstColor()));
+    this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle)group.readEntry("BackgroundImageStyle",(int) this->backgroundImageStyle()));
+    this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", this->backgroundOpacity()));
+    this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor",(QColor) this->backgroundSecondColor()));
+    this->setBackgroundType((PlotArea::BackgroundType)(group.readEntry("BackgroundType",(int) this->backgroundType())));
+
+    this->borderPen().setColor(group.readEntry("BorderColor",(QColor) this->borderPen().color()));
+    this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", this->borderCornerRadius()));
+    this->setBorderOpacity(group.readEntry("BorderOpacity", this->borderOpacity()));
+    this->borderPen().setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int) this->borderPen().style())));
+    this->borderPen().setWidthF(group.readEntry("BorderWidth", this->borderPen().widthF()));
+
+}

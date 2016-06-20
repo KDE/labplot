@@ -37,7 +37,6 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/TemplateHandler.h"
-#include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/GuiTools.h"
 
 #include <QPainter>
@@ -181,9 +180,6 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent),
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
-
-    ThemeHandler* themeHandler = new ThemeHandler(this, ThemeHandler::XYCurve);
-    ui.verticalLayout->addWidget(themeHandler);
 
 	retranslateUi();
 	init();

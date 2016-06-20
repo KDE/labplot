@@ -233,3 +233,8 @@ void WorksheetElement::handlePageResize(double horizontalRatio, double verticalR
 	Q_UNUSED(horizontalRatio);
 	Q_UNUSED(verticalRatio);
 }
+
+void WorksheetElement::loadConfig(const KConfig &)
+{
+
+}

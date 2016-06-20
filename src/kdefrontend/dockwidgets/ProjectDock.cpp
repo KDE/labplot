@@ -30,7 +30,6 @@
 #include "ProjectDock.h"
 #include "backend/core/Project.h"
 #include "kdefrontend/TemplateHandler.h"
-#include "kdefrontend/ThemeHandler.h"
 
 /*!
   \class ProjectDock
@@ -52,9 +51,6 @@ ProjectDock::ProjectDock(QWidget *parent): QWidget(parent),	m_project(0), m_init
 	templateHandler->show();
 	connect( templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfig(KConfig&)));
 	connect( templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfig(KConfig&)));
-
-    ThemeHandler* themeHandler = new ThemeHandler(this, ThemeHandler::Worksheet);
-    ui.verticalLayout->addWidget(themeHandler);
 
 	this->retranslateUi();
 }

@@ -55,7 +55,6 @@ private:
 	bool m_initializing;
 	KUrlCompletion* m_completion;
 
-	void load();
 	void loadConfig(KConfig&);
 
 private slots:
@@ -158,6 +157,11 @@ private slots:
 
 signals:
 	void info(const QString&);
+
+public slots:
+    void load();
+    void loadTheme(KConfig& config);
+
 };
 
 #endif
