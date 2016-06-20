@@ -38,10 +38,12 @@ class NotesView : public QMainWindow {
 public:
 	NotesView();
 	~NotesView();
+	void changeBgColor(QColor);
+	void changeTextColor(QColor);
 	
 private:
 	QTextEdit *m_textEdit;
-	QPalette palette;
+	QPalette m_palette;
 
 };
 

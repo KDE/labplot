@@ -275,134 +275,134 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		mainWindow->xyEquationCurveDock->setCurves(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyEquationCurveDock);
-  }else if (className=="XYFitCurve"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-fit-curve properties"));
+	}else if (className=="XYFitCurve"){
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-fit-curve properties"));
 
-	if (!mainWindow->xyFitCurveDock){
-	  mainWindow->xyFitCurveDock = new XYFitCurveDock(mainWindow->stackedWidget);
-	  mainWindow->xyFitCurveDock->setupGeneral();
-	  connect(mainWindow->xyFitCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
-	  mainWindow->stackedWidget->addWidget(mainWindow->xyFitCurveDock);
-	}
+		if (!mainWindow->xyFitCurveDock){
+			mainWindow->xyFitCurveDock = new XYFitCurveDock(mainWindow->stackedWidget);
+			mainWindow->xyFitCurveDock->setupGeneral();
+			connect(mainWindow->xyFitCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+			mainWindow->stackedWidget->addWidget(mainWindow->xyFitCurveDock);
+		}
 
-	QList<XYCurve*> list;
-	foreach(aspect, selectedAspects){
-	  list<<qobject_cast<XYCurve*>(aspect);
-	}
-	mainWindow->xyFitCurveDock->setCurves(list);
+		QList<XYCurve*> list;
+		foreach(aspect, selectedAspects){
+			list<<qobject_cast<XYCurve*>(aspect);
+		}
+		mainWindow->xyFitCurveDock->setCurves(list);
 
-	mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyFitCurveDock);
-  }else if (className=="XYFourierFilterCurve"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-fourier_filter-curve properties"));
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyFitCurveDock);
+	}else if (className=="XYFourierFilterCurve"){
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-fourier_filter-curve properties"));
 
-	if (!mainWindow->xyFourierFilterCurveDock){
-	  mainWindow->xyFourierFilterCurveDock = new XYFourierFilterCurveDock(mainWindow->stackedWidget);
-	  mainWindow->xyFourierFilterCurveDock->setupGeneral();
-	  connect(mainWindow->xyFourierFilterCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
-	  mainWindow->stackedWidget->addWidget(mainWindow->xyFourierFilterCurveDock);
-	}
+		if (!mainWindow->xyFourierFilterCurveDock){
+			mainWindow->xyFourierFilterCurveDock = new XYFourierFilterCurveDock(mainWindow->stackedWidget);
+			mainWindow->xyFourierFilterCurveDock->setupGeneral();
+			connect(mainWindow->xyFourierFilterCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+			mainWindow->stackedWidget->addWidget(mainWindow->xyFourierFilterCurveDock);
+		}
 
-	QList<XYCurve*> list;
-	foreach(aspect, selectedAspects){
-	  list<<qobject_cast<XYCurve*>(aspect);
-	}
-	mainWindow->xyFourierFilterCurveDock->setCurves(list);
+		QList<XYCurve*> list;
+		foreach(aspect, selectedAspects){
+			list<<qobject_cast<XYCurve*>(aspect);
+		}
+		mainWindow->xyFourierFilterCurveDock->setCurves(list);
 
-	mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyFourierFilterCurveDock);
-  }else if (className=="XYInterpolationCurve"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-interpolation-curve properties"));
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyFourierFilterCurveDock);
+	}else if (className=="XYInterpolationCurve"){
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-interpolation-curve properties"));
 
-	if (!mainWindow->xyInterpolationCurveDock){
-	  mainWindow->xyInterpolationCurveDock = new XYInterpolationCurveDock(mainWindow->stackedWidget);
-	  mainWindow->xyInterpolationCurveDock->setupGeneral();
-	  connect(mainWindow->xyInterpolationCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
-	  mainWindow->stackedWidget->addWidget(mainWindow->xyInterpolationCurveDock);
-	}
+		if (!mainWindow->xyInterpolationCurveDock){
+			mainWindow->xyInterpolationCurveDock = new XYInterpolationCurveDock(mainWindow->stackedWidget);
+			mainWindow->xyInterpolationCurveDock->setupGeneral();
+			connect(mainWindow->xyInterpolationCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+			mainWindow->stackedWidget->addWidget(mainWindow->xyInterpolationCurveDock);
+		}
 
-	QList<XYCurve*> list;
-	foreach(aspect, selectedAspects){
-	  list<<qobject_cast<XYCurve*>(aspect);
-	}
-	mainWindow->xyInterpolationCurveDock->setCurves(list);
+		QList<XYCurve*> list;
+		foreach(aspect, selectedAspects){
+			list<<qobject_cast<XYCurve*>(aspect);
+		}
+		mainWindow->xyInterpolationCurveDock->setCurves(list);
 
-	mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyInterpolationCurveDock);
-  }else if (className=="XYSmoothCurve"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-smooth-curve properties"));
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyInterpolationCurveDock);
+	}else if (className=="XYSmoothCurve"){
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-smooth-curve properties"));
 
-	if (!mainWindow->xySmoothCurveDock){
-	  mainWindow->xySmoothCurveDock = new XYSmoothCurveDock(mainWindow->stackedWidget);
-	  mainWindow->xySmoothCurveDock->setupGeneral();
-	  connect(mainWindow->xySmoothCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
-	  mainWindow->stackedWidget->addWidget(mainWindow->xySmoothCurveDock);
-	}
+		if (!mainWindow->xySmoothCurveDock){
+			mainWindow->xySmoothCurveDock = new XYSmoothCurveDock(mainWindow->stackedWidget);
+			mainWindow->xySmoothCurveDock->setupGeneral();
+			connect(mainWindow->xySmoothCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+			mainWindow->stackedWidget->addWidget(mainWindow->xySmoothCurveDock);
+		}
 
-	QList<XYCurve*> list;
-	foreach(aspect, selectedAspects){
-	  list<<qobject_cast<XYCurve*>(aspect);
-	}
-	mainWindow->xySmoothCurveDock->setCurves(list);
+		QList<XYCurve*> list;
+		foreach(aspect, selectedAspects){
+			list<<qobject_cast<XYCurve*>(aspect);
+		}
+		mainWindow->xySmoothCurveDock->setCurves(list);
 
-	mainWindow->stackedWidget->setCurrentWidget(mainWindow->xySmoothCurveDock);
-  }else if (className=="TextLabel"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("Text label properties"));
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xySmoothCurveDock);
+	}else if (className=="TextLabel"){
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Text label properties"));
 
-	if (!mainWindow->textLabelDock){
-	  mainWindow->textLabelDock = new LabelWidget(mainWindow->stackedWidget);
-	  mainWindow->stackedWidget->addWidget(mainWindow->textLabelDock);
-	}
+		if (!mainWindow->textLabelDock){
+			mainWindow->textLabelDock = new LabelWidget(mainWindow->stackedWidget);
+			mainWindow->stackedWidget->addWidget(mainWindow->textLabelDock);
+		}
 
-	QList<TextLabel*> list;
-	foreach(aspect, selectedAspects){
-	  list<<qobject_cast<TextLabel*>(aspect);
-	}
-	mainWindow->textLabelDock->setLabels(list);
+		QList<TextLabel*> list;
+		foreach(aspect, selectedAspects){
+			list<<qobject_cast<TextLabel*>(aspect);
+		}
+		mainWindow->textLabelDock->setLabels(list);
 
-	mainWindow->stackedWidget->setCurrentWidget(mainWindow->textLabelDock);
-  }else if (className=="CustomPoint"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("Custom point properties"));
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->textLabelDock);
+	}else if (className=="CustomPoint"){
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Custom point properties"));
 
-	if (!mainWindow->customPointDock){
-	  mainWindow->customPointDock = new CustomPointDock(mainWindow->stackedWidget);
-	  mainWindow->stackedWidget->addWidget(mainWindow->customPointDock);
-	}
+		if (!mainWindow->customPointDock){
+			mainWindow->customPointDock = new CustomPointDock(mainWindow->stackedWidget);
+			mainWindow->stackedWidget->addWidget(mainWindow->customPointDock);
+		}
 
-	QList<CustomPoint*> list;
-	foreach(aspect, selectedAspects){
-	  list<<qobject_cast<CustomPoint*>(aspect);
-	}
-	mainWindow->customPointDock->setPoints(list);
+		QList<CustomPoint*> list;
+		foreach(aspect, selectedAspects){
+			list<<qobject_cast<CustomPoint*>(aspect);
+		}
+		mainWindow->customPointDock->setPoints(list);
 
-	mainWindow->stackedWidget->setCurrentWidget(mainWindow->customPointDock);
-  }else if (className=="DatapickerCurve"){
-      mainWindow->m_propertiesDock->setWindowTitle(i18n("DatapickerCurve properties"));
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->customPointDock);
+	}else if (className=="DatapickerCurve"){
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("DatapickerCurve properties"));
 
-      if (!mainWindow->datapickerCurveDock){
-        mainWindow->datapickerCurveDock = new DatapickerCurveWidget(mainWindow->stackedWidget);
-        mainWindow->stackedWidget->addWidget(mainWindow->datapickerCurveDock);
-      }
+		if (!mainWindow->datapickerCurveDock){
+			mainWindow->datapickerCurveDock = new DatapickerCurveWidget(mainWindow->stackedWidget);
+			mainWindow->stackedWidget->addWidget(mainWindow->datapickerCurveDock);
+		}
 
-      QList<DatapickerCurve*> list;
-      foreach(aspect, selectedAspects){
-        list<<qobject_cast<DatapickerCurve*>(aspect);
-      }
-      mainWindow->datapickerCurveDock->setCurves(list);
+		QList<DatapickerCurve*> list;
+		foreach(aspect, selectedAspects){
+			list<<qobject_cast<DatapickerCurve*>(aspect);
+		}
+		mainWindow->datapickerCurveDock->setCurves(list);
 
-      mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerCurveDock);
-  }else if (className=="Datapicker"){
-      mainWindow->m_propertiesDock->setWindowTitle(i18n("Datapicker properties"));
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerCurveDock);
+	}else if (className=="Datapicker"){
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Datapicker properties"));
 
-      if (!mainWindow->datapickerImageDock){
-        mainWindow->datapickerImageDock = new DatapickerImageWidget(mainWindow->stackedWidget);
-        mainWindow->stackedWidget->addWidget(mainWindow->datapickerImageDock);
-      }
+		if (!mainWindow->datapickerImageDock){
+			mainWindow->datapickerImageDock = new DatapickerImageWidget(mainWindow->stackedWidget);
+			mainWindow->stackedWidget->addWidget(mainWindow->datapickerImageDock);
+		}
 
-      QList<DatapickerImage*> list;
-      foreach(aspect, selectedAspects){
-        list<<qobject_cast<Datapicker*>(aspect)->image();
-      }
-      mainWindow->datapickerImageDock->setImages(list);
+		QList<DatapickerImage*> list;
+		foreach(aspect, selectedAspects){
+			list<<qobject_cast<Datapicker*>(aspect)->image();
+		}
+		mainWindow->datapickerImageDock->setImages(list);
 
-      mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerImageDock);
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerImageDock);
 	}else if (className=="Project"){
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("Project properties"));
 
@@ -442,6 +442,12 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 			mainWindow->notesDock = new NotesDock(mainWindow->stackedWidget);
 			mainWindow->stackedWidget->addWidget(mainWindow->notesDock);
 		}
+		
+		QList<Notes*> list;
+		foreach(aspect, selectedAspects){
+			list<<qobject_cast<Notes*>(aspect);
+		}
+		mainWindow->notesDock->setNotesList(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->notesDock);
 	} else{

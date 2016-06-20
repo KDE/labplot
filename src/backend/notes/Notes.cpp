@@ -27,11 +27,10 @@
  ***************************************************************************/
 
 #include "Notes.h"
-#include "commonfrontend/notes/NotesView.h"
 
 
 Notes::Notes(AbstractScriptingEngine* engine, const QString& name, bool loading): AbstractPart(name), scripted(engine) {
-
+	m_notesView = new NotesView();
 }
 
 Notes::~Notes() {
@@ -69,9 +68,17 @@ void Notes::save(QXmlStreamWriter*) const {
 	
 }
 
+void Notes::changeBgColor(QColor color) {
+	m_notesView->changeBgColor(color);
+}
+
+void Notes::changeTextColor(QColor color) {
+	m_notesView->changeTextColor(color);
+}
+
 QWidget* Notes::view() const {
 	if (!m_view) {
-		m_view = new NotesView();
+		m_view = m_notesView;
 // 		m_view->setBaseSize(1500, 1500);
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 	}
