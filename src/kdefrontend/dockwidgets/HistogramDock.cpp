@@ -526,7 +526,50 @@ void HistogramDock::setCurves(QList<Histogram*> list){
 	m_initializing=false;
 }
 void HistogramDock::initGeneralTab(){
+	//if there are more then one curve in the list, disable the content in the tab "general"
+	if (m_curvesList.size()==1){
+		uiGeneralTab.lName->setEnabled(true);
+		uiGeneralTab.leName->setEnabled(true);
+		uiGeneralTab.lComment->setEnabled(true);
+		uiGeneralTab.leComment->setEnabled(true);
+
+		uiGeneralTab.lXColumn->setEnabled(true);
+		cbXColumn->setEnabled(true);
+		uiGeneralTab.lYColumn->setEnabled(true);
+		cbYColumn->setEnabled(true);
+
+		this->setModelIndexFromColumn(cbXColumn, m_curve->xColumn());
+		this->setModelIndexFromColumn(cbYColumn, m_curve->yColumn());
+
+		uiGeneralTab.leName->setText(m_curve->name());
+		uiGeneralTab.leComment->setText(m_curve->comment());
+	}else {
+		uiGeneralTab.lName->setEnabled(false);
+		uiGeneralTab.leName->setEnabled(false);
+		uiGeneralTab.lComment->setEnabled(false);
+		uiGeneralTab.leComment->setEnabled(false);
+
+		uiGeneralTab.lXColumn->setEnabled(false);
+		cbXColumn->setEnabled(false);
+		uiGeneralTab.lYColumn->setEnabled(false);
+		cbYColumn->setEnabled(false);
+
+		cbXColumn->setCurrentModelIndex(QModelIndex());
+		cbYColumn->setCurrentModelIndex(QModelIndex());
+
+		uiGeneralTab.leName->setText("");
+		uiGeneralTab.leComment->setText("");
 	}
+
+	//show the properties of the first curve
+	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
+
+	//Slots
+	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(curveXColumnChanged(const AbstractColumn*)));
+	connect(m_curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(curveYColumnChanged(const AbstractColumn*)));
+	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
+}
 
 void HistogramDock::initTabs() {
 	//if there are more then one curve in the list, disable the tab "general"
@@ -685,4 +728,23 @@ void HistogramDock::loadConfig(KConfig& config) {
 void HistogramDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
+	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
+	layout->setMargin(0);
+	layout->addWidget(generalTab);
+
+	// Tab "General"
+	QGridLayout* gridLayout = qobject_cast<QGridLayout*>(generalTab->layout());
+
+	cbXColumn = new TreeViewComboBox(generalTab);
+	gridLayout->addWidget(cbXColumn, 2, 2, 1, 1);
+
+	cbYColumn = new TreeViewComboBox(generalTab);
+	gridLayout->addWidget(cbYColumn, 3, 2, 1, 1);
+
+	//General
+	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
+	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
+	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
+	connect( cbYColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yColumnChanged(QModelIndex)) );
 }
