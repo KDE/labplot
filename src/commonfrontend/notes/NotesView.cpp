@@ -28,35 +28,49 @@
 
 #include "NotesView.h"
 
-#include <QGraphicsItem>
+#include <QHBoxLayout>
 #include <QColorDialog>
 
-NotesView::NotesView() {
+#include "backend/notes/Notes.h"
+
+NotesView::NotesView(Notes* notes) : m_notes(notes) {
+
+	QHBoxLayout* layout = new QHBoxLayout(this);
+	layout->setContentsMargins(0, 0, 0, 0);
 	
 	m_textEdit = new QTextEdit(this);
+
+	QPalette palette = m_textEdit->palette();
+
+	palette.setColor(QPalette::Base, m_notes->bgColor());
+	palette.setColor(QPalette::Text, m_notes->textColor());
+
+	m_textEdit->setPalette(palette);
+	m_textEdit->setText(m_notes->note());
+
+	layout->addWidget(m_textEdit);
 	
-// 	QColor color = QColorDialog::getColor(Qt::yellow,this); // can be used to give options
-	
-	m_palette = m_textEdit->palette();
-	
-	m_palette.setColor(QPalette::Base, Qt::yellow); // set color "Red" for textedit base
-	m_palette.setColor(QPalette::Text, Qt::black);
-	
-	m_textEdit->setPalette(m_palette);
-	
-	setCentralWidget(m_textEdit);
+	connect(m_notes, SIGNAL(bgColorChanged(QColor)), this, SLOT(bgColorChanged(QColor)));
+	connect(m_notes, SIGNAL(textColorChanged(QColor)), this, SLOT(textColorChanged(QColor)));
+	connect(m_textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
+}
+
+void NotesView::textChanged() {
+	m_notes->setNote(m_textEdit->toPlainText());
+}
+
+void NotesView::bgColorChanged(QColor color) {
+	QPalette palette = m_textEdit->palette();
+	palette.setColor(QPalette::Base, color);
+	m_textEdit->setPalette(palette);
+}
+
+void NotesView::textColorChanged(QColor color) {
+	QPalette palette = m_textEdit->palette();
+	palette.setColor(QPalette::Text, color);
+	m_textEdit->setPalette(palette);
 }
 
 NotesView::~NotesView() {
 
-}
-
-void NotesView::changeBgColor(QColor color) {
-	m_palette.setColor(QPalette::Base, color);
-	m_textEdit->setPalette(m_palette);
-}
-
-void NotesView::changeTextColor(QColor color) {
-	m_palette.setColor(QPalette::Text, color);
-	m_textEdit->setPalette(m_palette);
 }

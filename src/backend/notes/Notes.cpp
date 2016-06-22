@@ -28,13 +28,23 @@
 
 #include "Notes.h"
 
+#include <QPalette>
 
 Notes::Notes(AbstractScriptingEngine* engine, const QString& name, bool loading): AbstractPart(name), scripted(engine) {
-	m_notesView = new NotesView();
+	init();
 }
 
 Notes::~Notes() {
 
+}
+
+void Notes::init() {
+
+// 	QColor color = QColorDialog::getColor(Qt::yellow,this); // can be used to give options
+
+	m_bgColor = Qt::yellow;
+	m_textColor = Qt::black;
+	m_note = "";
 }
 
 bool Notes::exportView() const {
@@ -69,16 +79,34 @@ void Notes::save(QXmlStreamWriter*) const {
 }
 
 void Notes::changeBgColor(QColor color) {
-	m_notesView->changeBgColor(color);
+	m_bgColor = color;
+	emit bgColorChanged(color);
 }
 
 void Notes::changeTextColor(QColor color) {
-	m_notesView->changeTextColor(color);
+	m_textColor = color;
+	emit textColorChanged(color);
+}
+
+QColor Notes::bgColor() {
+	return m_bgColor;
+}
+
+QColor Notes::textColor() {
+	return m_textColor;
+}
+
+void Notes::setNote(QString note) {
+	m_note = note;
+}
+
+QString Notes::note() {
+	return m_note;
 }
 
 QWidget* Notes::view() const {
 	if (!m_view) {
-		m_view = m_notesView;
+		m_view = new NotesView(const_cast<Notes*>(this));
 // 		m_view->setBaseSize(1500, 1500);
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 	}
