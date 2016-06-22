@@ -53,6 +53,7 @@ class ThemeHandler : public QWidget{
         QSpacerItem *horizontalSpacer2;
         QLabel *lTheme;
         QPushButton *pbLoadTheme;
+        void setThemePalette(KConfig& config);
 
     private slots:
         void loadMenu();
@@ -61,6 +62,7 @@ class ThemeHandler : public QWidget{
     signals:
         void loadThemeRequested(KConfig& config);
         void info(const QString&);
+        void setThemePalette(QList<QColor> color);
 };
 
 #endif

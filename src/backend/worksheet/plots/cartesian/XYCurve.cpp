@@ -2497,7 +2497,6 @@ void XYCurve::loadConfig(const KConfig& config)
     //Filling
     this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle",(int) this->fillingBrushStyle()));
     this->setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle",(int) this->fillingColorStyle()));
-    this->setFillingFirstColor(group.readEntry("FillingFirstColor",(QColor)this->fillingFirstColor()));
     this->setFillingImageStyle((PlotArea::BackgroundImageStyle)group.readEntry("FillingImageStyle",(int) this->fillingImageStyle()));
     this->setFillingOpacity(group.readEntry("FillingOpacity", this->fillingOpacity()));
     this->setFillingPosition((XYCurve::FillingPosition)group.readEntry("FillingPosition",(int) this->fillingPosition()));
@@ -2509,29 +2508,7 @@ void XYCurve::loadConfig(const KConfig& config)
     this->setLineOpacity(group.readEntry("LineOpacity", this->lineOpacity()));
     this->setLineSkipGaps(group.readEntry("LineSkipGaps",(bool) this->lineSkipGaps()));
     this->setLineType((XYCurve::LineType)group.readEntry("LineType",(int) this->lineType()));
-    this->linePen().setColor(group.readEntry("LineColor",(QColor) this->linePen().color()));
     this->linePen().setStyle((Qt::PenStyle)group.readEntry("LineStyle",(int) this->linePen().style()));
     this->linePen().setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
-
-    KConfigGroup groupColor = config.group("Theme");
-
-    int colorNum = 0;
-    QColor color[5];
-    color[0] = groupColor.readEntry("ThemePaletteColor1",(QColor) this->linePen().color());
-    color[1] = groupColor.readEntry("ThemePaletteColor2",(QColor) this->linePen().color());
-    color[2] = groupColor.readEntry("ThemePaletteColor3",(QColor) this->linePen().color());
-    color[3] = groupColor.readEntry("ThemePaletteColor4",(QColor) this->linePen().color());
-    color[4] = groupColor.readEntry("ThemePaletteColor5",(QColor) this->linePen().color());
-
-    QList<XYCurve*> child = children<XYCurve>();
-    foreach(XYCurve* curve, child)
-    {
-        if(colorNum<5)
-        {
-            curve->linePen().setColor(color[colorNum]);
-            curve->setFillingFirstColor(color[colorNum]);
-            colorNum++;
-        }
-    }
 
 }

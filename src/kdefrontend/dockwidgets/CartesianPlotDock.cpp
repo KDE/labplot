@@ -171,6 +171,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 
     connect(themeHandler, SIGNAL(loadThemeRequested(KConfig&)), this, SLOT(loadTheme(KConfig&)));
     connect(m_plot, SIGNAL(themeLoaded()),this, SLOT(load()));
+    connect(themeHandler, SIGNAL(setThemePalette(QList<QColor>)), m_plot, SLOT(QList<QColor>)) ;
 
 	init();
 }

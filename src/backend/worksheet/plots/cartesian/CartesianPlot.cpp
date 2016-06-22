@@ -51,6 +51,8 @@
 #include <QToolBar>
 #include <QPainter>
 
+#include <QDebug>
+
 #include <KConfigGroup>
 #include <KIcon>
 #include <KAction>
@@ -67,56 +69,56 @@
  *
  */
 CartesianPlot::CartesianPlot(const QString &name):AbstractPlot(name, new CartesianPlotPrivate(this)),
-	m_legend(0), m_zoomFactor(1.2) {
-	init();
+    m_legend(0), m_zoomFactor(1.2) {
+    init();
 }
 
 CartesianPlot::CartesianPlot(const QString &name, CartesianPlotPrivate *dd):AbstractPlot(name, dd),
-	m_legend(0), m_zoomFactor(1.2) {
-	init();
+    m_legend(0), m_zoomFactor(1.2) {
+    init();
 }
 
 CartesianPlot::~CartesianPlot() {
-	delete m_coordinateSystem;
-	delete addNewMenu;
-	delete zoomMenu;
+    delete m_coordinateSystem;
+    delete addNewMenu;
+    delete zoomMenu;
 
-	//don't need to delete objects added with addChild()
+    //don't need to delete objects added with addChild()
 
-	//no need to delete the d-pointer here - it inherits from QGraphicsItem
-	//and is deleted during the cleanup in QGraphicsScene
+    //no need to delete the d-pointer here - it inherits from QGraphicsItem
+    //and is deleted during the cleanup in QGraphicsScene
 }
 
 /*!
-	initializes all member variables of \c CartesianPlot
+    initializes all member variables of \c CartesianPlot
 */
 void CartesianPlot::init() {
-	Q_D(CartesianPlot);
+    Q_D(CartesianPlot);
 
-	d->cSystem = new CartesianCoordinateSystem(this);;
-	m_coordinateSystem = d->cSystem;
+    d->cSystem = new CartesianCoordinateSystem(this);;
+    m_coordinateSystem = d->cSystem;
 
-	d->autoScaleX = true;
-	d->autoScaleY = true;
-	d->xScale = ScaleLinear;
-	d->yScale = ScaleLinear;
-	d->xRangeBreakingEnabled = false;
-	d->yRangeBreakingEnabled = false;
+    d->autoScaleX = true;
+    d->autoScaleY = true;
+    d->xScale = ScaleLinear;
+    d->yScale = ScaleLinear;
+    d->xRangeBreakingEnabled = false;
+    d->yRangeBreakingEnabled = false;
 
-	//the following factor determines the size of the offset between the min/max points of the curves
-	//and the coordinate system ranges, when doing auto scaling
-	//Factor 1 corresponds to the exact match - min/max values of the curves correspond to the start/end values of the ranges.
-	d->autoScaleOffsetFactor = 0.05;
+    //the following factor determines the size of the offset between the min/max points of the curves
+    //and the coordinate system ranges, when doing auto scaling
+    //Factor 1 corresponds to the exact match - min/max values of the curves correspond to the start/end values of the ranges.
+    d->autoScaleOffsetFactor = 0.05;
 
-	//TODO: make this factor optional.
-	//Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
+    //TODO: make this factor optional.
+    //Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
 
-	m_plotArea = new PlotArea(name() + " plot area");
-	addChild(m_plotArea);
+    m_plotArea = new PlotArea(name() + " plot area");
+    addChild(m_plotArea);
 
-	//offset between the plot area and the area defining the coordinate system, in scene units.
-	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
-	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
+    //offset between the plot area and the area defining the coordinate system, in scene units.
+    d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
+    d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Centimeter);
 
     initActions();
     initMenus();
@@ -2068,16 +2070,31 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 
     return true;
 }
+
+void CartesianPlot::setColorPalette(QList<QColor> color)
+{
+    m_themeColorPalette = color;
+}
+
 void CartesianPlot::loadThemeConfig(KConfig& config)
 {
     KConfigGroup group = config.group("ThemeCartesianPlotTitle");
 
-    m_title->setTeXFontColor(group.readEntry("TeXFontColor", (QColor) m_title->teXFontColor()));
-    m_title->setTeXFontSize(group.readEntry("TeXFontSize", (int) m_title->teXFontSize()));
+    this->m_title->setTeXFontColor(group.readEntry("TeXFontColor", (QColor) this->m_title->teXFontColor()));
+    this->m_title->setTeXFontSize(group.readEntry("TeXFontSize", (int) this->m_title->teXFontSize()));
 
     const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
     foreach(WorksheetElement *child, childElements)
         child->loadConfig(config);
 
+    int colorNum = 1;
+    QList<XYCurve*> child = children<XYCurve>();
+    foreach(XYCurve* curve, child)
+    {
+        curve->linePen().setColor(m_themeColorPalette.at(colorNum));
+        curve->setFillingFirstColor(m_themeColorPalette.at(colorNum));
+        colorNum++;
+    }
+    this->retransform();
     emit (themeLoaded());
 }

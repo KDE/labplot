@@ -579,5 +579,6 @@ void PlotArea::loadConfig(const KConfig& config)
     this->setBorderOpacity(group.readEntry("BorderOpacity", this->borderOpacity()));
     this->borderPen().setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int) this->borderPen().style())));
     this->borderPen().setWidthF(group.readEntry("BorderWidth", this->borderPen().widthF()));
+    this->retransform();
 
 }

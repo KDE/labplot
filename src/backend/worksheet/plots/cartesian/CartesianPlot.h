@@ -109,6 +109,7 @@ class CartesianPlot:public AbstractPlot{
 
 		CartesianPlotLegend* m_legend;
 		float m_zoomFactor;
+        QList<QColor> m_themeColorPalette;
 
 		QAction* visibilityAction;
 
@@ -167,6 +168,7 @@ class CartesianPlot:public AbstractPlot{
 		void shiftUpY();
 		void shiftDownY();
         void loadThemeConfig(KConfig& config);
+        void setColorPalette(QList<QColor> color);
 
 	private slots:
 		void updateLegend();
@@ -211,7 +213,7 @@ class CartesianPlot:public AbstractPlot{
 		void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 		void yRangeBreakingEnabledChanged(bool);
 		void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
-        	void themeLoaded();
+        void themeLoaded();
 };
 
 #endif

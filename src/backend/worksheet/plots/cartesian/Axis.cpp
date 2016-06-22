@@ -2214,8 +2214,10 @@ void Axis::loadConfig(const KConfig& config)
         // Tick label
         this->setLabelsColor(group.readEntry("LabelsFontColor",(QColor) this->labelsColor()));
         this->setLabelsOpacity(group.readEntry("LabelsOpacity",this->labelsOpacity()));
+
+        //Line
         this->setLineOpacity(group.readEntry("LineOpacity",this->lineOpacity()));
-        this->linePen().setColor(group.readEntry("LineColor",(QColor) this->linePen().color()));
+        this->linePen().setColor((QColor)group.readEntry("LineColor"));
         this->linePen().setStyle((Qt::PenStyle)group.readEntry("LineStyle",(int) this->linePen().style()));
         this->linePen().setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
 
@@ -2240,5 +2242,10 @@ void Axis::loadConfig(const KConfig& config)
         this->minorTicksPen().setWidthF(group.readEntry("MinorTicksWidth", this->minorTicksPen().widthF()));
         this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity",this->minorTicksOpacity()));
         this->setMinorTicksType((Axis::TicksType)group.readEntry("MinorTicksType",(int)this->minorTicksType()));
+
+        KConfigGroup groupAxisLabel = config.group("ThemeAxisLabel");
+
+        this->title()->setTeXFontColor(groupAxisLabel.readEntry("TeXFontColor",(QColor) this->title()->teXFontColor()));
+        this->title()->setTeXFontSize(groupAxisLabel.readEntry("TeXFontSize",(int) this->title()->teXFontSize()));
 
 }
