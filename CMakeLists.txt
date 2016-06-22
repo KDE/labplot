@@ -94,8 +94,8 @@ FIND_LIBRARY (CANTOR_LIBS cantorlibs
 	/usr/local/lib
 )
 FIND_PATH (CANTOR_INCLUDE_DIR worksheetaccess.h
-	/usr/include
-	/usr/local/include
+	/usr/include/cantor
+	/usr/local/include/cantor
 )
 IF (CANTOR_LIBS AND CANTOR_INCLUDE_DIR)
 	SET (CANTOR_LIBS_FOUND TRUE)
