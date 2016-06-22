@@ -729,11 +729,11 @@ void Column::save(QXmlStreamWriter* writer) const {
 
 class DecodeColumnTask : public QRunnable {
 	public:
-		DecodeColumnTask(ColumnPrivate* priv, const QString& content) { m_private =priv; m_content = content;};
+		DecodeColumnTask(ColumnPrivate* priv, const QString& content) { m_private = priv; m_content = content;};
 		void run() {
 			QByteArray bytes = QByteArray::fromBase64(m_content.toAscii());
 			QVector<double> * data = new QVector<double>(bytes.size()/sizeof(double));
-			memcpy(data->data(), bytes.data(), (bytes.size()/sizeof(double))*sizeof(double));
+			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
 		}
 
@@ -797,6 +797,8 @@ bool Column::load(XmlStreamReader* reader) {
 			if (!content.isEmpty() && columnMode() == AbstractColumn::Numeric) {
 				DecodeColumnTask* task = new DecodeColumnTask(m_column_private, content);
 				QThreadPool::globalInstance()->start(task);
+				// wait for data to be read before using the pointers
+				QThreadPool::globalInstance()->waitForDone();
 			}
 		}
 	}
