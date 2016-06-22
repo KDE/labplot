@@ -26,10 +26,10 @@
  ***************************************************************************/
 
 #include "ImageEditor.h"
-#include "math.h"
 #include <QThreadPool>
 #include <QElapsedTimer>
 #include <QMutex>
+#include <cmath>
 // #include <QDebug>
 
 static const QRgb white = QColor(Qt::white).rgb();

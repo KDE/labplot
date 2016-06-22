@@ -164,7 +164,7 @@ XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* o
 	xColumn(0), yColumn(0), 
 	xVector(0), yVector(0), 
 	sourceDataChangedSinceLastFilter(false),
-	q(owner)  {
+	q(owner) {
 
 }
 
@@ -177,8 +177,12 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 // see XYFitCurvePrivate
 
 void XYFourierFilterCurvePrivate::recalculate() {
+#ifndef NDEBUG
+	qDebug()<<"XYFourierFilterCurvePrivate::recalculate()";
+#endif
 	QElapsedTimer timer;
 	timer.start();
+
 
 	//create filter result columns if not available yet, clear them otherwise
 	if (!xColumn) {
@@ -226,8 +230,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
-			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
-
+				&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 			xdataVector.append(xDataColumn->valueAt(row));
 			ydataVector.append(yDataColumn->valueAt(row));
 		}
@@ -247,16 +250,26 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
-        double min = xDataColumn->minimum();
-        double max = xDataColumn->maximum();
+	const double min = xDataColumn->minimum();
+	const double max = xDataColumn->maximum();
 
 	// filter settings
+<<<<<<< HEAD
 	XYFourierFilterCurve::FilterType type = filterData.type;
 	XYFourierFilterCurve::FilterForm form = filterData.form;
 	unsigned int order = filterData.order;
 	double cutoff = filterData.cutoff, cutoff2 = filterData.cutoff2;
 	XYFourierFilterCurve::CutoffUnit unit = filterData.unit, unit2 = filterData.unit2;
 #ifndef NDEBUG
+=======
+	const XYFourierFilterCurve::FilterType type = filterData.type;
+	const XYFourierFilterCurve::FilterForm form = filterData.form;
+	const signed int order = filterData.order;
+	const double cutoff = filterData.cutoff, cutoff2 = filterData.cutoff2;
+	const XYFourierFilterCurve::CutoffUnit unit = filterData.unit, unit2 = filterData.unit2;
+#ifndef NDEBUG
+	qDebug()<<"n ="<<n;
+>>>>>>> master
 	qDebug()<<"type:"<<type;
 	qDebug()<<"form (order "<<order<<") :"<<form;
 	qDebug()<<"cutoffs ="<<cutoff<<cutoff2;
@@ -265,6 +278,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 ///////////////////////////////////////////////////////////
 	int status;
 	// 1. transform
+<<<<<<< HEAD
 	// TODO: use fftw3 if available
 #ifdef HAVE_FFTW3
 	// FFTW_R2HC
@@ -287,12 +301,19 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		//out<<ydata[i]<<ydata[n-i];
 		out<<ydata[i];
 #endif
+=======
+	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc(n);
+	gsl_fft_real_wavetable *real = gsl_fft_real_wavetable_alloc(n);
+
+	status = gsl_fft_real_transform(ydata, 1, n, real, work);
+	gsl_fft_real_wavetable_free(real);
+>>>>>>> master
 
 	// calculate index
 	double cutindex=0, cutindex2=0;
-	switch(unit) {
+	switch (unit) {
 	case XYFourierFilterCurve::Frequency:
-		cutindex = cutoff*(max-min);
+		cutindex = 2*cutoff*(max-min);
 		break;
 	case XYFourierFilterCurve::Fraction:
 		cutindex = cutoff*n;
@@ -300,9 +321,9 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	case XYFourierFilterCurve::Index:
 		cutindex = cutoff;
 	}
-	switch(unit2) {
+	switch (unit2) {
 	case XYFourierFilterCurve::Frequency:
-		cutindex2 = cutoff2*(max-min);
+		cutindex2 = 2*cutoff2*(max-min);
 		break;
 	case XYFourierFilterCurve::Fraction:
 		cutindex2 = cutoff2*n;
@@ -310,94 +331,104 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	case XYFourierFilterCurve::Index:
 		cutindex2 = cutoff2;
 	}
-	double centerindex=(cutindex2+cutindex)/2.;
-	int bandwidth=(cutindex2-cutindex);
+	const double centerindex = (cutindex2+cutindex)/2.;
+	const int bandwidth = (cutindex2-cutindex);
+	if((type == XYFourierFilterCurve::BandPass || type == XYFourierFilterCurve::BandReject) && bandwidth <= 0) {
+		qWarning()<<"band width must be > 0. Giving up.";
+		return;
+	}
+
+#ifndef NDEBUG
+	qDebug()<<"cut off @"<<cutindex<<cutindex2;
+	qDebug()<<"center index ="<<centerindex;
+	qDebug()<<"bandwidth ="<<bandwidth;
+#endif
 
 	// 2. apply filter
-	switch(type) {
+	unsigned int i;
+	switch (type) {
 	case XYFourierFilterCurve::LowPass:
-		switch(form) {
-		case XYFourierFilterCurve::Ideal: 
-			for (unsigned int i = cutindex; i < n; i++)
+		switch (form) {
+		case XYFourierFilterCurve::Ideal:
+			for (i = cutindex; i < n; i++)
 				ydata[i] = 0;
 			break;
 		case XYFourierFilterCurve::Butterworth:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i/cutindex,2*order));
 			break;
 		case XYFourierFilterCurve::ChebyshevI:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i/cutindex),2));
 			break;
 		case XYFourierFilterCurve::ChebyshevII:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,cutindex/i),2));
 			break;
 		}
 		break;
 	case XYFourierFilterCurve::HighPass:
-		switch(form) {
-		case XYFourierFilterCurve::Ideal: 
-			for (unsigned int i = 0; i < cutindex; i++)
+		switch (form) {
+		case XYFourierFilterCurve::Ideal:
+			for (i = 0; i < cutindex; i++)
 				ydata[i] = 0;
 			break;
 		case XYFourierFilterCurve::Butterworth:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(cutindex/i,2*order));
 			break;
 		case XYFourierFilterCurve::ChebyshevI:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,cutindex/i),2));
 			break;
 		case XYFourierFilterCurve::ChebyshevII:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i/cutindex),2));
 			break;
 		}
 		break;
 	case XYFourierFilterCurve::BandPass:
-		switch(form) {
-		case XYFourierFilterCurve::Ideal: 
-			for (unsigned int i = 0; i < cutindex; i++)
+		switch (form) {
+		case XYFourierFilterCurve::Ideal:
+			for (i = 0; i < cutindex; i++)
 				ydata[i] = 0;
-			for (unsigned int i = cutindex2; i < n; i++)
+			for (i = cutindex2; i < n; i++)
 				ydata[i] = 0;
 			break;
 		case XYFourierFilterCurve::Butterworth:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int((i*i-centerindex*centerindex)/i/bandwidth,2*order));
 			break;
 		case XYFourierFilterCurve::ChebyshevI:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
 			break;
 		case XYFourierFilterCurve::ChebyshevII:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
 			break;
 		}
 		break;
 	case XYFourierFilterCurve::BandReject:
-		switch(form) {
-		case XYFourierFilterCurve::Ideal: 
-			for (unsigned int i = cutindex; i < cutindex2; i++)
+		switch (form) {
+		case XYFourierFilterCurve::Ideal:
+			for (i = cutindex; i < cutindex2; i++)
 				ydata[i] = 0;
 			break;
 		case XYFourierFilterCurve::Butterworth:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i*bandwidth/(i*i-gsl_sf_pow_int(centerindex,2)),2*order));
 			break;
 		case XYFourierFilterCurve::ChebyshevI:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
 			break;
 		case XYFourierFilterCurve::ChebyshevII:
-			for (unsigned int i = 0; i < n; i++)
+			for (i = 0; i < n; i++)
 				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
 			break;
 		}
 		break;
-//TODO	case XYFourierFilterCurve::Threshold:
 	}
 
 	// 3. back transform
@@ -412,11 +443,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	xVector->resize(n);
 	yVector->resize(n);
-	//TODO: use memcpy
-	for (unsigned int i = 0; i < n; i++) {
-		(*xVector)[i] = xdataVector[i];
-		(*yVector)[i] = ydata[i];
-	}
+	memcpy(xVector->data(), xdataVector.data(), n*sizeof(double));
+	memcpy(yVector->data(), ydata, n*sizeof(double));
 ///////////////////////////////////////////////////////////
 
 	//write the result
@@ -464,20 +492,19 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "time", QString::number(d->filterResult.elapsedTime) );
 
 	//save calculated columns if available
-	if (d->xColumn) {
+	if (d->xColumn && d->yColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
 	}
 	writer->writeEndElement(); //"filterResult"
-
 	writer->writeEndElement(); //"xyFourierFilterCurve"
 }
 
 //! Load from XML
-bool XYFourierFilterCurve::load(XmlStreamReader* reader){
+bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
 	Q_D(XYFourierFilterCurve);
 
-	if(!reader->isStartElement() || reader->name() != "xyFourierFilterCurve"){
+	if (!reader->isStartElement() || reader->name() != "xyFourierFilterCurve") {
 		reader->raiseError(i18n("no xy Fourier filter curve element found"));
 		return false;
 	}
@@ -504,43 +531,43 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 			READ_COLUMN(yDataColumn);
 
 			str = attribs.value("type").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
 				d->filterData.type = (XYFourierFilterCurve::FilterType)str.toInt();
 
 			str = attribs.value("form").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'form'"));
 			else
 				d->filterData.form = (XYFourierFilterCurve::FilterForm)str.toInt();
 
 			str = attribs.value("order").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'order'"));
 			else
 				d->filterData.order = str.toInt();
 
 			str = attribs.value("cutoff").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'cutoff'"));
 			else
 				d->filterData.cutoff = str.toDouble();
 
 			str = attribs.value("unit").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'unit'"));
 			else
 				d->filterData.unit = (XYFourierFilterCurve::CutoffUnit)str.toInt();
 
 			str = attribs.value("cutoff2").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'cutoff2'"));
 			else
 				d->filterData.cutoff2 = str.toDouble();
 
 			str = attribs.value("unit2").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'unit2'"));
 			else
 				d->filterData.unit2 = (XYFourierFilterCurve::CutoffUnit)str.toInt();
@@ -549,42 +576,43 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 			attribs = reader->attributes();
 
 			str = attribs.value("available").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'available'"));
 			else
 				d->filterResult.available = str.toInt();
 
 			str = attribs.value("valid").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'valid'"));
 			else
 				d->filterResult.valid = str.toInt();
 			
 			str = attribs.value("status").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'status'"));
 			else
 				d->filterResult.status = str;
 
 			str = attribs.value("time").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'time'"));
 			else
 				d->filterResult.elapsedTime = str.toInt();
-		} else if(reader->name() == "column") {
+		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {
 				delete column;
 				return false;
 			}
-			if (column->name()=="x")
+
+			if (column->name() == "x")
 				d->xColumn = column;
-			else if (column->name()=="y")
+			else if (column->name() == "y")
 				d->yColumn = column;
 		}
 	}
 
-	if (d->xColumn) {
+	if (d->xColumn && d->yColumn) {
 		d->xColumn->setHidden(true);
 		addChild(d->xColumn);
 
@@ -598,6 +626,8 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader){
 		XYCurve::d_ptr->xColumn = d->xColumn;
 		XYCurve::d_ptr->yColumn = d->yColumn;
 		setUndoAware(true);
+	} else {
+		qWarning()<<"	d->xColumn == NULL!";
 	}
 
 	return true;

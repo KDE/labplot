@@ -39,9 +39,10 @@
 #include <QTimer>
 #include <QDir>
 #include <QPainter>
-#include <KMessageBox>
 #include <QDebug>
-#include <math.h>
+#include <KMessageBox>
+
+#include <cmath>
 
 /*!
  \class AxisDock

@@ -3,8 +3,7 @@
     Project              : LabPlot
     Description          : Worksheet view
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -73,6 +72,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	lastAddedWorksheetElement(0),
 	m_fadeInTimeLine(0),
 	m_fadeOutTimeLine(0),
+	m_isClosing(false),
 	tbNewCartesianPlot(0),
 	tbZoom(0),
 	tbMagnification(0) {
@@ -550,6 +550,10 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 void WorksheetView::setScene(QGraphicsScene* scene) {
 	QGraphicsView::setScene(scene);
 	setTransform(QTransform());
+}
+
+void WorksheetView::setIsClosing() {
+	m_isClosing = true;
 }
 
 void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
@@ -1215,6 +1219,11 @@ void WorksheetView::deselectItem(QGraphicsItem* item) {
  *  and forwards these changes to \c Worksheet
  */
 void WorksheetView::selectionChanged() {
+	//if the project is being closed, the scene items are being removed and the selection can change.
+	//don't react on these changes since this can lead crashes (worksheet object is already in the destructor).
+	if (m_isClosing)
+		return;
+
 	if (m_suppressSelectionChangedEvent)
 		return;
 

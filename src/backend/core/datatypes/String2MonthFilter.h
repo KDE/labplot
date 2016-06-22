@@ -32,7 +32,7 @@
 
 #include "../AbstractSimpleFilter.h"
 #include <QDateTime>
-#include <math.h>
+#include <cmath>
 
 //! Conversion filter String -> QDateTime, interpreting the input as months of the year (either numeric or "Jan" etc).
 class String2MonthFilter : public AbstractSimpleFilter

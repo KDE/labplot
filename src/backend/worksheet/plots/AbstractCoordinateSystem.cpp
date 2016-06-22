@@ -29,7 +29,7 @@
 
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 #include "backend/worksheet/plots/AbstractPlot.h"
-#include <math.h>
+#include <cmath>
 
 /**
  * \class AbstractCoordinateSystem

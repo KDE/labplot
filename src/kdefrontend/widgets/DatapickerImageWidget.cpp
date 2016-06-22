@@ -34,8 +34,6 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/datapicker/ImageEditor.h"
 
-#include "math.h"
-
 #include <QPainter>
 #include <KUrlCompletion>
 #include <KStandardDirs>
@@ -43,6 +41,8 @@
 #include <QDir>
 #include <QGraphicsScene>
 #include <QImageReader>
+
+#include <cmath>
 
 HistogramView::HistogramView(QWidget* parent, int range) :
 	QGraphicsView(parent),
