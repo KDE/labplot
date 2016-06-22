@@ -107,6 +107,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	  xySmoothCurveDock(0),
 	  xyFitCurveDock(0),
 	  xyFourierFilterCurveDock(0),
+	  xyFourierTransformCurveDock(0),
 	  worksheetDock(0),
 	  textLabelDock(0),
 	  customPointDock(0),

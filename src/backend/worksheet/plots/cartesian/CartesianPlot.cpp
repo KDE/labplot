@@ -36,6 +36,7 @@
 #include "XYSmoothCurve.h"
 #include "XYFitCurve.h"
 #include "XYFourierFilterCurve.h"
+#include "XYFourierTransformCurve.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -349,6 +350,7 @@ void CartesianPlot::initActions() {
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
 	addFitCurveAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
 	addFourierFilterCurveAction = new KAction(KIcon("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
+	addFourierTransformCurveAction = new KAction(KIcon("labplot-xy-fourier_transform-curve"), i18n("xy-curve from a Fourier transform"), this);
 	addInterpolationCurveAction = new KAction(KIcon("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), this);
 	addSmoothCurveAction = new KAction(KIcon("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), this);
 	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
@@ -360,6 +362,7 @@ void CartesianPlot::initActions() {
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
 	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addFourierFilterCurveAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
+	connect(addFourierTransformCurveAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
 	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
@@ -406,6 +409,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addAction(addFitCurveAction);
 	addNewMenu->addAction(addFourierFilterCurveAction);
+	addNewMenu->addAction(addFourierTransformCurveAction);
 	addNewMenu->addAction(addLegendAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addHorizontalAxisAction);
@@ -731,6 +735,12 @@ XYFitCurve* CartesianPlot::addFitCurve() {
 
 XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve() {
 	XYFourierFilterCurve* curve = new XYFourierFilterCurve("Fourier filter");
+	this->addChild(curve);
+	return curve;
+}
+
+XYFourierTransformCurve* CartesianPlot::addFourierTransformCurve() {
+	XYFourierTransformCurve* curve = new XYFourierTransformCurve("Fourier transform");
 	this->addChild(curve);
 	return curve;
 }
@@ -2019,6 +2029,12 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			}
 		} else if (reader->name() == "xyFourierFilterCurve") {
 			XYFourierFilterCurve* curve = addFourierFilterCurve();
+			if (!curve->load(reader)) {
+				removeChild(curve);
+				return false;
+			}
+		} else if (reader->name() == "xyFourierTransformCurve") {
+			XYFourierTransformCurve* curve = addFourierTransformCurve();
 			if (!curve->load(reader)) {
 				removeChild(curve);
 				return false;
