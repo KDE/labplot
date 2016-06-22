@@ -254,14 +254,6 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	const double max = xDataColumn->maximum();
 
 	// filter settings
-<<<<<<< HEAD
-	XYFourierFilterCurve::FilterType type = filterData.type;
-	XYFourierFilterCurve::FilterForm form = filterData.form;
-	unsigned int order = filterData.order;
-	double cutoff = filterData.cutoff, cutoff2 = filterData.cutoff2;
-	XYFourierFilterCurve::CutoffUnit unit = filterData.unit, unit2 = filterData.unit2;
-#ifndef NDEBUG
-=======
 	const XYFourierFilterCurve::FilterType type = filterData.type;
 	const XYFourierFilterCurve::FilterForm form = filterData.form;
 	const signed int order = filterData.order;
@@ -269,7 +261,6 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	const XYFourierFilterCurve::CutoffUnit unit = filterData.unit, unit2 = filterData.unit2;
 #ifndef NDEBUG
 	qDebug()<<"n ="<<n;
->>>>>>> master
 	qDebug()<<"type:"<<type;
 	qDebug()<<"form (order "<<order<<") :"<<form;
 	qDebug()<<"cutoffs ="<<cutoff<<cutoff2;
@@ -278,36 +269,28 @@ void XYFourierFilterCurvePrivate::recalculate() {
 ///////////////////////////////////////////////////////////
 	int status;
 	// 1. transform
-<<<<<<< HEAD
 	// TODO: use fftw3 if available
-#ifdef HAVE_FFTW3
+//#ifdef HAVE_FFTW3
 	// FFTW_R2HC
 	//fftw_plan plan = fftw_plan_r2r_1d(n, ydata, ydata, FFTW_R2HC, FFTW_ESTIMATE);
-	fftw_plan plan = fftw_plan_dft_r2c_1d(n, ydata, (fftw_complex *)ydata, FFTW_ESTIMATE);
+//	fftw_plan plan = fftw_plan_dft_r2c_1d(n, ydata, (fftw_complex *)ydata, FFTW_ESTIMATE);
 	//fftw_execute(plan);
-	fftw_execute_dft_r2c(plan, ydata, (fftw_complex *)ydata);
-	fftw_destroy_plan(plan);
-#else
+//	fftw_execute_dft_r2c(plan, ydata, (fftw_complex *)ydata);
+//	fftw_destroy_plan(plan);
+//#else
 	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc(n);
 	gsl_fft_real_wavetable *real = gsl_fft_real_wavetable_alloc(n);
 
 	// double*, stride, size, wavetable, workspace
         status = gsl_fft_real_transform(ydata, 1, n, real, work);
         gsl_fft_real_wavetable_free(real);
-#endif
+//#endif
 #ifndef NDEBUG
 	QDebug out = qDebug();
 	for(unsigned int i=0;i<n;i++)
 		//out<<ydata[i]<<ydata[n-i];
 		out<<ydata[i];
 #endif
-=======
-	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc(n);
-	gsl_fft_real_wavetable *real = gsl_fft_real_wavetable_alloc(n);
-
-	status = gsl_fft_real_transform(ydata, 1, n, real, work);
-	gsl_fft_real_wavetable_free(real);
->>>>>>> master
 
 	// calculate index
 	double cutindex=0, cutindex2=0;
@@ -433,13 +416,13 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	// 3. back transform
 	// TODO: use fftw3 if available
-#ifdef HAVE_FFTW3
-#else
+//#ifdef HAVE_FFTW3
+//#else
 	gsl_fft_halfcomplex_wavetable *hc = gsl_fft_halfcomplex_wavetable_alloc(n);
 	status = gsl_fft_halfcomplex_inverse(ydata, 1, n, hc, work);
 	gsl_fft_halfcomplex_wavetable_free(hc);
 	gsl_fft_real_workspace_free(work);
-#endif
+//#endif
 
 	xVector->resize(n);
 	yVector->resize(n);
