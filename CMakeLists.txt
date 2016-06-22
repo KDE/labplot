@@ -69,26 +69,6 @@ FIND_PROGRAM (GSL_CONFIG gsl-config
 	/usr/local/bin
 )
 
-### Cantorlibs #####################################
-FIND_LIBRARY (CANTOR_LIBS cantorlibs
-	PATHS
-	/usr/lib
-	/usr/local/lib
-)
-IF (CANTOR_LIBS)
-	SET (CANTOR_LIBS_FOUND TRUE)
-ELSE (CANTOR_LIBS)
-	SET (CANTOR_LIBS_FOUND FALSE)
-	SET (CANTOR_LIBS "")
-ENDIF (CANTOR_LIBS)
-IF (CANTOR_LIBS_FOUND)
-	MESSAGE (STATUS "Found CantorLibs ${CANTOR_LIBS}")
-	add_definitions (-DHAVE_CANTOR_LIBS)
-ELSE (CANTOR_LIBS_FOUND)
-	MESSAGE (STATUS "CantorLibs not found.")
-ENDIF (CANTOR_LIBS_FOUND)
-
-
 IF (GSL_CONFIG)
 	EXEC_PROGRAM (${GSL_CONFIG} ARGS "--version" OUTPUT_VARIABLE gsl_version)
 	SET (GSL_VERSION ${gsl_version} CACHE STRING "GNU Scientific Library Version")
@@ -102,11 +82,33 @@ ENDIF (GSL_LIBRARIES AND GSL_CBLAS_LIBRARIES AND GSL_INCLUDE_DIR)
 IF (GSL_FOUND)
 	MESSAGE (STATUS "Found GNU Scientific Library ${GSL_VERSION}: ${GSL_INCLUDE_DIR} ${GSL_LIBRARIES};${GSL_CBLAS_LIBRARIES}")
 	add_definitions (-DHAVE_GSL)
-	# TODO : set version ?
 	add_definitions (-DGSL_VERSION=GSL_VERSION)
 ELSE (GSL_FOUND)
 	MESSAGE (FATAL_ERROR "GNU Scientific Library not found.")
 ENDIF (GSL_FOUND)
+
+### Cantorlibs #####################################
+FIND_LIBRARY (CANTOR_LIBS cantorlibs
+	PATHS
+	/usr/lib
+	/usr/local/lib
+)
+FIND_PATH (CANTOR_INCLUDE_DIR worksheetaccess.h
+	/usr/include
+	/usr/local/include
+)
+IF (CANTOR_LIBS AND CANTOR_INCLUDE_DIR)
+	SET (CANTOR_LIBS_FOUND TRUE)
+ELSE (CANTOR_LIBS AND CANTOR_INCLUDE_DIR)
+	SET (CANTOR_LIBS_FOUND FALSE)
+	SET (CANTOR_LIBS "")
+ENDIF (CANTOR_LIBS AND CANTOR_INCLUDE_DIR)
+IF (CANTOR_LIBS_FOUND)
+	MESSAGE (STATUS "Found CantorLibs ${CANTOR_INCLUDE_DIR} ${CANTOR_LIBS}")
+	add_definitions (-DHAVE_CANTOR_LIBS)
+ELSE (CANTOR_LIBS_FOUND)
+	MESSAGE (STATUS "CantorLibs not found.")
+ENDIF (CANTOR_LIBS_FOUND)
 
 ### HDF5 #####################################
 FIND_LIBRARY(HDF5_LIBRARY hdf5
