@@ -34,6 +34,7 @@
 #include "backend/lib/macros.h"
 #include "commonfrontend/notes/NotesView.h"
 
+#include <QColor>
 #include <QIcon>
 
 class Notes : public AbstractPart, public scripted {
@@ -55,8 +56,19 @@ public:
 
 	virtual void save(QXmlStreamWriter*) const;
 	virtual bool load(XmlStreamReader*);
+
+	QColor bgColor();
+	QColor textColor();
+	void setNote(QString);
+	QString note();
+signals:
+	void bgColorChanged(QColor);
+	void textColorChanged(QColor);
 private:
-	NotesView* m_notesView;
+	void init();
+	QColor m_bgColor;
+	QColor m_textColor;
+	QString m_note;
 signals:
 	void requestProjectContextMenu(QMenu*);
 

@@ -29,21 +29,25 @@
 #ifndef NOTESVIEW_H
 #define NOTESVIEW_H
 
-#include <QMainWindow>
+#include <QWidget>
 #include <QTextEdit>
 
-class NotesView : public QMainWindow {
+
+class Notes;
+class NotesView : public QWidget {
 	Q_OBJECT
 
 public:
-	NotesView();
+	NotesView(Notes* notes);
 	~NotesView();
-	void changeBgColor(QColor);
-	void changeTextColor(QColor);
 	
+public slots:
+	void bgColorChanged(QColor);
+	void textColorChanged(QColor);
+	void textChanged();
 private:
-	QTextEdit *m_textEdit;
-	QPalette m_palette;
+	Notes* m_notes;
+	QTextEdit* m_textEdit;
 
 };
 

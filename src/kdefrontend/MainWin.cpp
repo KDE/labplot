@@ -248,7 +248,7 @@ void MainWin::initActions() {
 	actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
 	connect(m_newWorksheetAction, SIGNAL(triggered()), SLOT(newWorksheet()));
 	
-	m_newNotesAction= new QAction(QIcon::fromTheme("document-new"),i18n("Notes"),this);
+	m_newNotesAction= new QAction(QIcon::fromTheme("document-new"),i18n("Note"),this);
 	actionCollection()->addAction("new_notes", m_newNotesAction);
 	connect(m_newNotesAction, SIGNAL(triggered()), SLOT(newNotes()));
 
@@ -1032,8 +1032,7 @@ void MainWin::newWorksheet() {
 }
 
 void MainWin::newNotes() {
-	Notes* notes = new Notes(0, i18n("Notes"));
-	qDebug() << "yha pr";
+	Notes* notes = new Notes(0, i18n("Note"));
 	this->addAspectToProject(notes);
 }
 
