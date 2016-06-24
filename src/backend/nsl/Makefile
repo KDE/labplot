@@ -1,4 +1,4 @@
-all: nsl_stats_test nsl_smooth_ma_test nsl_smooth_mal_test nsl_smooth_percentile_test nsl_smooth_savgol_test
+all: nsl_stats_test nsl_smooth_ma_test nsl_smooth_mal_test nsl_smooth_percentile_test nsl_smooth_savgol_test nsl_dft_test
 
 nsl_stats_test: nsl_stats_test.c nsl_stats.c
 	gcc -o $@ $^ -lm -lgsl -lgslcblas
@@ -11,6 +11,8 @@ nsl_smooth_percentile_test: nsl_smooth_percentile_test.c nsl_smooth.c nsl_sf_ker
 	gcc -o $@ $^ -lm -lgsl -lgslcblas
 nsl_smooth_savgol_test: nsl_smooth_savgol_test.c nsl_smooth.c nsl_sf_kernel.c nsl_stats.c
 	gcc -o $@ $^ -lm -lgsl -lgslcblas
+nsl_dft_test: nsl_dft_test.c nsl_dft.c
+	gcc -o $@ $^ -lm -lgsl -lgslcblas
 
 clean:
-	rm -f nsl_stats_test nsl_smooth_ma_test nsl_smooth_mal_test nsl_smooth_percentile_test nsl_smooth_savgol_test
+	rm -f nsl_stats_test nsl_smooth_ma_test nsl_smooth_mal_test nsl_smooth_percentile_test nsl_smooth_savgol_test nsl_dft_test
