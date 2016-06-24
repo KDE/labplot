@@ -446,10 +446,12 @@ void MainWin::updateGUIOnProjectChanges() {
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
 		factory->container("worksheet", this)->setEnabled(false);
+		factory->container("notes", this)->setEnabled(false);
 		factory->container("analysis", this)->setEnabled(false);
 		factory->container("datapicker", this)->setEnabled(false);
 		factory->container("spreadsheet_toolbar", this)->hide();
 		factory->container("worksheet_toolbar", this)->hide();
+		factory->container("notes_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 	}
@@ -486,10 +488,12 @@ void MainWin::updateGUI() {
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
 		factory->container("worksheet", this)->setEnabled(false);
+		factory->container("notes", this)->setEnabled(false);
 		factory->container("analysis", this)->setEnabled(false);
 		factory->container("datapicker", this)->setEnabled(false);
 		factory->container("spreadsheet_toolbar", this)->hide();
 		factory->container("worksheet_toolbar", this)->hide();
+		factory->container("notes_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 		return;
@@ -571,6 +575,31 @@ void MainWin::updateGUI() {
 		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
 		if (group.groupList().indexOf("Toolbar spreadsheet_toolbar")==-1)
 			toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
+
+		toolbar->setVisible(true);
+		toolbar->clear();
+		view->fillToolBar(toolbar);
+	} else {
+		factory->container("spreadsheet", this)->setEnabled(false);
+		factory->container("spreadsheet_toolbar", this)->setVisible(false);
+	}
+
+	//Handle the Notes-object
+	const  Notes* notes = this->activeNotes();
+	if (notes) {
+		//enable notes related menus
+		factory->container("notes", this)->setEnabled(true);
+
+		//populate notes-menu
+		NotesView* view=qobject_cast<NotesView*>(notes->view());
+		QMenu* menu=qobject_cast<QMenu*>(factory->container("notes", this));
+		menu->clear();
+		view->createContextMenu(menu);
+
+		//populate notes-toolbar
+		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("notes_toolbar", this));
+		if (group.groupList().indexOf("Toolbar notes_toolbar")==-1)
+			toolbar->setToolButtonStyle(Qt::ToolButtonFollowStyle);
 
 		toolbar->setVisible(true);
 		toolbar->clear();
@@ -1140,6 +1169,16 @@ Worksheet* MainWin::activeWorksheet() const {
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
 	return dynamic_cast<Worksheet*>(part);
+}
+
+Notes* MainWin::activeNotes() const {
+	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
+	if (!win)
+		return 0;
+
+	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	Q_ASSERT(part);
+	return dynamic_cast<Notes*>(part);
 }
 
 /********************************************************************************/
