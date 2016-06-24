@@ -31,6 +31,7 @@
 
 #include <QWidget>
 #include <QTextEdit>
+#include <QToolBar>
 
 
 class Notes;
@@ -42,6 +43,8 @@ public:
 	~NotesView();
 	
 public slots:
+	void createContextMenu(QMenu*) const;
+	void fillToolBar(QToolBar*);
 	void bgColorChanged(QColor);
 	void textColorChanged(QColor);
 	void textChanged();

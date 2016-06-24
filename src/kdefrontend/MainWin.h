@@ -38,6 +38,7 @@ class Folder;
 class ProjectExplorer;
 class Project;
 class Worksheet;
+class Notes;
 class Workbook;
 class Datapicker;
 class Image;
@@ -195,6 +196,7 @@ private:
 	Spreadsheet* activeSpreadsheet() const;
 	Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
+	Notes* activeNotes() const;
 	Datapicker* activeDatapicker() const;
 
 	//cantor

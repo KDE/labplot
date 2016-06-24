@@ -55,6 +55,14 @@ NotesView::NotesView(Notes* notes) : m_notes(notes) {
 	connect(m_textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
 }
 
+void NotesView::createContextMenu(QMenu* menu) const {
+
+}
+
+void NotesView::fillToolBar(QToolBar* toolbar) {
+
+}
+
 void NotesView::textChanged() {
 	m_notes->setNote(m_textEdit->toPlainText());
 }
