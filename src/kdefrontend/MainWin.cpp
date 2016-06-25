@@ -248,7 +248,7 @@ void MainWin::initActions() {
 	actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
 	connect(m_newWorksheetAction, SIGNAL(triggered()), SLOT(newWorksheet()));
 	
-	m_newNotesAction= new QAction(QIcon::fromTheme("document-new"),i18n("Note"),this);
+	m_newNotesAction= new KAction(KIcon("document-new"),i18n("Note"),this);
 	actionCollection()->addAction("new_notes", m_newNotesAction);
 	connect(m_newNotesAction, SIGNAL(triggered()), SLOT(newNotes()));
 
