@@ -34,8 +34,6 @@
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 
-#include <gsl/gsl_sort.h>
-
 #include <QFont>
 #include <QFontMetrics>
 #include <QThreadPool>
@@ -45,6 +43,10 @@
 #ifndef NDEBUG
 #include <QDebug>
 #endif
+
+extern "C" {
+#include <gsl/gsl_sort.h>
+}
 
 /**
  * \class Column
@@ -797,8 +799,6 @@ bool Column::load(XmlStreamReader* reader) {
 			if (!content.isEmpty() && columnMode() == AbstractColumn::Numeric) {
 				DecodeColumnTask* task = new DecodeColumnTask(m_column_private, content);
 				QThreadPool::globalInstance()->start(task);
-				// wait for data to be read before using the pointers
-				QThreadPool::globalInstance()->waitForDone();
 			}
 		}
 	}

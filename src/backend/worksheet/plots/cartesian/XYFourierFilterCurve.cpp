@@ -56,6 +56,7 @@ extern "C" {
 #include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
+#include <QThreadPool>
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
 		: XYCurve(name, new XYFourierFilterCurvePrivate(this)) {
@@ -594,6 +595,9 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
 				d->yColumn = column;
 		}
 	}
+
+	// wait for data to be read before using the pointers
+	QThreadPool::globalInstance()->waitForDone();
 
 	if (d->xColumn && d->yColumn) {
 		d->xColumn->setHidden(true);
