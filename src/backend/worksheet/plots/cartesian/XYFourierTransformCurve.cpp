@@ -254,42 +254,30 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	const double max = xDataColumn->maximum();
 
 	// transform settings
-	const XYFourierTransformCurve::TransformType type = transformData.type;
+	const nsl_dft_result_type type = transformData.type;
 #ifndef NDEBUG
 	qDebug()<<"n ="<<n;
 	qDebug()<<"type:"<<type;
+	QDebug out = qDebug();
+	for(unsigned int i=0;i<n;i++)
+		out<<ydata[i];
 #endif
 ///////////////////////////////////////////////////////////
 	int status;
-	// 1. transform
-	// TODO: use fftw3 if available
-//#ifdef HAVE_FFTW3
-	// FFTW_R2HC
-	//fftw_plan plan = fftw_plan_r2r_1d(n, ydata, ydata, FFTW_R2HC, FFTW_ESTIMATE);
-//	fftw_plan plan = fftw_plan_dft_r2c_1d(n, ydata, (fftw_complex *)ydata, FFTW_ESTIMATE);
-	//fftw_execute(plan);
-//	fftw_execute_dft_r2c(plan, ydata, (fftw_complex *)ydata);
-//	fftw_destroy_plan(plan);
-//#else
-	gsl_fft_real_workspace *work = gsl_fft_real_workspace_alloc(n);
-	gsl_fft_real_wavetable *real = gsl_fft_real_wavetable_alloc(n);
 
-	// double*, stride, size, wavetable, workspace
-        status = gsl_fft_real_transform(ydata, 1, n, real, work);
-        gsl_fft_real_wavetable_free(real);
-//#endif
+	// DFT
+	status = nsl_dft_transform(ydata, 1, n, type);
+
 #ifndef NDEBUG
-	QDebug out = qDebug();
+	out = qDebug();
 	for(unsigned int i=0;i<n;i++)
-		//out<<ydata[i]<<ydata[n-i];
 		out<<ydata[i];
 #endif
 
 	xVector->resize(n);
 	yVector->resize(n);
-	//TODO
-	//memcpy(xVector->data(), xdataVector.data(), n*sizeof(double));
-	//memcpy(yVector->data(), ydata, n*sizeof(double));
+	memcpy(xVector->data(), xdataVector.data(), n*sizeof(double));
+	memcpy(yVector->data(), ydata, n*sizeof(double));
 ///////////////////////////////////////////////////////////
 
 	//write the result
@@ -373,7 +361,7 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
-				d->transformData.type = (XYFourierTransformCurve::TransformType)str.toInt();
+				d->transformData.type = (nsl_dft_result_type)str.toInt();
 
 		} else if (reader->name() == "transformResult") {
 

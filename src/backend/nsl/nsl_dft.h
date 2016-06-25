@@ -32,8 +32,11 @@
 #include <stdlib.h>
 
 /* DFT result type */
-typedef enum {nsl_dft_result_raw, nsl_dft_result_real, nsl_dft_result_imag, nsl_dft_result_magnitude, nsl_dft_result_amplitude, 
-	nsl_dft_result_power, nsl_dft_result_phase, nsl_dft_result_dB, nsl_dft_result_squaremagnitude, nsl_dft_result_squareamplitude} nsl_dft_result_type;
+#define NSL_DFT_RESULT_TYPES_COUNT 10
+typedef enum {nsl_dft_result_magnitude, nsl_dft_result_amplitude, nsl_dft_result_real, nsl_dft_result_imag, nsl_dft_result_power, 
+	nsl_dft_result_phase, nsl_dft_result_dB, nsl_dft_result_squaremagnitude, nsl_dft_result_squareamplitude, nsl_dft_result_raw} nsl_dft_result_type;
+const char* const nsl_dft_result_type_name[] = { "Magnitude", "Amplitude", "real", "imag", "Power", "Phase", 
+		"dB", "Magnitude squared", "Amplitude squared", "raw" };
 
 /* transform data of size n. result in data */
 int nsl_dft_transform(double data[], size_t stride, size_t n, nsl_dft_result_type type);

@@ -30,18 +30,19 @@
 #define XYFOURIERTRANSFORMCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+extern "C" {
+#include "backend/nsl/nsl_dft.h"
+}
 
 class XYFourierTransformCurvePrivate;
 class XYFourierTransformCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum TransformType {LowPass, HighPass, BandPass, BandReject};	// TODO:
-
 		struct TransformData {
-			TransformData() : type(LowPass) {};
+			TransformData() : type(nsl_dft_result_magnitude) {};
 
-			TransformType type;
+			nsl_dft_result_type type;
 		};
 		struct TransformResult {
 			TransformResult() : available(false), valid(false), elapsedTime(0) {};

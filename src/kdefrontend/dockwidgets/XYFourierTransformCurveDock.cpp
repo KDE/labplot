@@ -77,11 +77,8 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 2, 1, 2);
 
-	uiGeneralTab.cbType->addItem(i18n("Low pass"));
-	uiGeneralTab.cbType->addItem(i18n("High pass"));
-	uiGeneralTab.cbType->addItem(i18n("Band pass"));
-	uiGeneralTab.cbType->addItem(i18n("Band reject"));
-//TODO	uiGeneralTab.cbType->addItem(i18n("Threshold"));
+	for(int i=0; i < NSL_DFT_RESULT_TYPES_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_dft_result_type_name[i]));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -225,8 +222,8 @@ void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYFourierTransformCurveDock::typeChanged(int index) {
-	XYFourierTransformCurve::TransformType type = (XYFourierTransformCurve::TransformType)index;
-	m_transformData.type = (XYFourierTransformCurve::TransformType)uiGeneralTab.cbType->currentIndex();
+	//nsl_dft_result_type type = (nsl_dft_result_type) index;
+	m_transformData.type = (nsl_dft_result_type)uiGeneralTab.cbType->currentIndex();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
