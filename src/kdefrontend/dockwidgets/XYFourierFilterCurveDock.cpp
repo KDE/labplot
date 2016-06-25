@@ -105,13 +105,13 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
-	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
-	connect( uiGeneralTab.cbForm, SIGNAL(currentIndexChanged(int)), this, SLOT(formChanged(int)) );
-	connect( uiGeneralTab.sbOrder, SIGNAL(valueChanged(int)), this, SLOT(orderChanged(int)) );
+	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
+	connect( uiGeneralTab.cbForm, SIGNAL(currentIndexChanged(int)), this, SLOT(formChanged()) );
+	connect( uiGeneralTab.sbOrder, SIGNAL(valueChanged(int)), this, SLOT(orderChanged()) );
 	connect( uiGeneralTab.sbCutoff, SIGNAL(valueChanged(double)), this, SLOT(enableRecalculate()) );
 	connect( uiGeneralTab.sbCutoff2, SIGNAL(valueChanged(double)), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.cbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged(int)) );
-	connect( uiGeneralTab.cbUnit2, SIGNAL(currentIndexChanged(int)), this, SLOT(unit2Changed(int)) );
+	connect( uiGeneralTab.cbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged()) );
+	connect( uiGeneralTab.cbUnit2, SIGNAL(currentIndexChanged(int)), this, SLOT(unit2Changed()) );
 
 //	connect( uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
@@ -144,16 +144,16 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_filterCurve->yDataColumn());
 
 	uiGeneralTab.cbType->setCurrentIndex(m_filterData.type);
-	this->typeChanged(m_filterData.type);
+	this->typeChanged();
 	uiGeneralTab.cbForm->setCurrentIndex(m_filterData.form);
-	this->formChanged(m_filterData.form);
+	this->formChanged();
 	uiGeneralTab.sbOrder->setValue(m_filterData.order);
 	uiGeneralTab.cbUnit->setCurrentIndex(m_filterData.unit);
-	this->unitChanged(m_filterData.unit);
+	this->unitChanged();
 	// after unit has set
 	uiGeneralTab.sbCutoff->setValue(m_filterData.cutoff);
 	uiGeneralTab.cbUnit2->setCurrentIndex(m_filterData.unit2);
-	this->unit2Changed(m_filterData.unit2);
+	this->unit2Changed();
 	// after unit has set
 	uiGeneralTab.sbCutoff2->setValue(m_filterData.cutoff2);
 	this->showFilterResult();
@@ -239,8 +239,8 @@ void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setXDataColumn(column);
 
 	// update range of cutoff spin boxes (like a unit change)
-	unitChanged(uiGeneralTab.cbUnit->currentIndex());
-	unit2Changed(uiGeneralTab.cbUnit2->currentIndex());
+	unitChanged();
+	unit2Changed();
 }
 
 void XYFourierFilterCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -258,9 +258,9 @@ void XYFourierFilterCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setYDataColumn(column);
 }
 
-void XYFourierFilterCurveDock::typeChanged(int index) {
-	XYFourierFilterCurve::FilterType type = (XYFourierFilterCurve::FilterType)index;
-	m_filterData.type = (XYFourierFilterCurve::FilterType)uiGeneralTab.cbType->currentIndex();
+void XYFourierFilterCurveDock::typeChanged() {
+	XYFourierFilterCurve::FilterType type = (XYFourierFilterCurve::FilterType)uiGeneralTab.cbType->currentIndex();
+	m_filterData.type = type;
 
 	switch(type) {
 	case XYFourierFilterCurve::LowPass:
@@ -290,9 +290,9 @@ void XYFourierFilterCurveDock::typeChanged(int index) {
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYFourierFilterCurveDock::formChanged(int index) {
-	XYFourierFilterCurve::FilterForm form = (XYFourierFilterCurve::FilterForm)index;
-	m_filterData.form = (XYFourierFilterCurve::FilterForm)uiGeneralTab.cbForm->currentIndex();
+void XYFourierFilterCurveDock::formChanged() {
+	XYFourierFilterCurve::FilterForm form = (XYFourierFilterCurve::FilterForm)uiGeneralTab.cbForm->currentIndex();
+	m_filterData.form = form;
 
 	switch(form) {
 	case XYFourierFilterCurve::Ideal:
@@ -310,16 +310,15 @@ void XYFourierFilterCurveDock::formChanged(int index) {
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYFourierFilterCurveDock::orderChanged(int index) {
-	Q_UNUSED(index)
+void XYFourierFilterCurveDock::orderChanged() {
 	m_filterData.order = uiGeneralTab.sbOrder->value();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYFourierFilterCurveDock::unitChanged(int index) {
-	XYFourierFilterCurve::CutoffUnit unit = (XYFourierFilterCurve::CutoffUnit)index;
-	m_filterData.unit = (XYFourierFilterCurve::CutoffUnit)uiGeneralTab.cbUnit->currentIndex();
+void XYFourierFilterCurveDock::unitChanged() {
+	XYFourierFilterCurve::CutoffUnit unit = (XYFourierFilterCurve::CutoffUnit)uiGeneralTab.cbUnit->currentIndex();
+	m_filterData.unit = unit;
 
 	int n=100;
 	double f=1.0;	// sample frequency
@@ -331,6 +330,8 @@ void XYFourierFilterCurveDock::unitChanged(int index) {
 		qDebug()<<" n ="<<n<<" sample frequency ="<<f;
 #endif
 	}
+
+	//TODO: calculate new value from old
 	switch(unit) {
 	case XYFourierFilterCurve::Frequency:
 		uiGeneralTab.sbCutoff->setDecimals(6);
@@ -355,9 +356,9 @@ void XYFourierFilterCurveDock::unitChanged(int index) {
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYFourierFilterCurveDock::unit2Changed(int index) {
-	XYFourierFilterCurve::CutoffUnit unit2 = (XYFourierFilterCurve::CutoffUnit)index;
-	m_filterData.unit2 = (XYFourierFilterCurve::CutoffUnit)uiGeneralTab.cbUnit2->currentIndex();
+void XYFourierFilterCurveDock::unit2Changed() {
+	XYFourierFilterCurve::CutoffUnit unit = (XYFourierFilterCurve::CutoffUnit)uiGeneralTab.cbUnit2->currentIndex();
+	m_filterData.unit2 = unit;
 
 	int n=100;
 	double f=1.0;
@@ -369,7 +370,9 @@ void XYFourierFilterCurveDock::unit2Changed(int index) {
 		qDebug()<<" n ="<<n<<" sample frequency ="<<f;
 #endif
 	}
-	switch(unit2) {
+
+	//TODO: calculate new value from old
+	switch(unit) {
 	case XYFourierFilterCurve::Frequency:
 		uiGeneralTab.sbCutoff2->setDecimals(6);
 		uiGeneralTab.sbCutoff2->setMaximum(f);
@@ -485,7 +488,7 @@ void XYFourierFilterCurveDock::curveFilterDataChanged(const XYFourierFilterCurve
 	m_initializing = true;
 	m_filterData = data;
 	uiGeneralTab.cbType->setCurrentIndex(m_filterData.type);
-	this->typeChanged(m_filterData.type);
+	this->typeChanged();
 
 	this->showFilterResult();
 	m_initializing = false;

@@ -119,8 +119,8 @@ void XYInterpolationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
-	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
-	connect( uiGeneralTab.cbVariant, SIGNAL(currentIndexChanged(int)), this, SLOT(variantChanged(int)) );
+	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
+	connect( uiGeneralTab.cbVariant, SIGNAL(currentIndexChanged(int)), this, SLOT(variantChanged()) );
 	connect( uiGeneralTab.sbTension, SIGNAL(valueChanged(double)), this, SLOT(tensionChanged()) );
 	connect( uiGeneralTab.sbContinuity, SIGNAL(valueChanged(double)), this, SLOT(continuityChanged()) );
 	connect( uiGeneralTab.sbBias, SIGNAL(valueChanged(double)), this, SLOT(biasChanged()) );
@@ -159,9 +159,9 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
 	uiGeneralTab.cbType->setCurrentIndex(m_interpolationData.type);
-	this->typeChanged(m_interpolationData.type);
+	this->typeChanged();
 	uiGeneralTab.cbVariant->setCurrentIndex(m_interpolationData.variant);
-	this->variantChanged(m_interpolationData.variant);
+	this->variantChanged();
 	uiGeneralTab.sbTension->setValue(m_interpolationData.tension);
 	uiGeneralTab.sbContinuity->setValue(m_interpolationData.continuity);
 	uiGeneralTab.sbBias->setValue(m_interpolationData.bias);
@@ -333,9 +333,9 @@ void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYInterpolationCurve*>(curve)->setYDataColumn(column);
 }
 
-void XYInterpolationCurveDock::typeChanged(int index) {
-	XYInterpolationCurve::InterpolationType type = (XYInterpolationCurve::InterpolationType)index;
-	m_interpolationData.type = (XYInterpolationCurve::InterpolationType)uiGeneralTab.cbType->currentIndex();
+void XYInterpolationCurveDock::typeChanged() {
+	XYInterpolationCurve::InterpolationType type = (XYInterpolationCurve::InterpolationType)uiGeneralTab.cbType->currentIndex();
+	m_interpolationData.type = type;
 
 	switch(type) {
 	case XYInterpolationCurve::PCH:
@@ -358,9 +358,9 @@ void XYInterpolationCurveDock::typeChanged(int index) {
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYInterpolationCurveDock::variantChanged(int index) {
-	XYInterpolationCurve::CubicHermiteVariant variant = (XYInterpolationCurve::CubicHermiteVariant)index;
-	m_interpolationData.variant = (XYInterpolationCurve::CubicHermiteVariant)uiGeneralTab.cbVariant->currentIndex();
+void XYInterpolationCurveDock::variantChanged() {
+	XYInterpolationCurve::CubicHermiteVariant variant = (XYInterpolationCurve::CubicHermiteVariant)uiGeneralTab.cbVariant->currentIndex();
+	m_interpolationData.variant = variant;
 
 	switch(variant) {
 	case XYInterpolationCurve::FiniteDifference:
@@ -521,7 +521,7 @@ void XYInterpolationCurveDock::curveInterpolationDataChanged(const XYInterpolati
 	m_initializing = true;
 	m_interpolationData = data;
 	uiGeneralTab.cbType->setCurrentIndex(m_interpolationData.type);
-	this->typeChanged(m_interpolationData.type);
+	this->typeChanged();
 
 	this->showInterpolationResult();
 	m_initializing = false;
