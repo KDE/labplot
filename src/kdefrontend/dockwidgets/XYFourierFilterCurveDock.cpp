@@ -88,10 +88,10 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	uiGeneralTab.cbForm->addItem(i18n("Chebyshev type I"));
 	uiGeneralTab.cbForm->addItem(i18n("Chebyshev type II"));
 
-	uiGeneralTab.cbUnit->addItem(i18n("Frequency (Hz)"));
+	uiGeneralTab.cbUnit->addItem(i18n("Frequency"));
 	uiGeneralTab.cbUnit->addItem(i18n("Fraction"));
 	uiGeneralTab.cbUnit->addItem(i18n("Index"));
-	uiGeneralTab.cbUnit2->addItem(i18n("Frequency (Hz)"));
+	uiGeneralTab.cbUnit2->addItem(i18n("Frequency"));
 	uiGeneralTab.cbUnit2->addItem(i18n("Fraction"));
 	uiGeneralTab.cbUnit2->addItem(i18n("Index"));
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
@@ -336,16 +336,19 @@ void XYFourierFilterCurveDock::unitChanged(int index) {
 		uiGeneralTab.sbCutoff->setDecimals(6);
 		uiGeneralTab.sbCutoff->setMaximum(f);
 		uiGeneralTab.sbCutoff->setSingleStep(0.01*f);
+		uiGeneralTab.sbCutoff->setSuffix(" Hz");
 		break;
 	case XYFourierFilterCurve::Fraction:
 		uiGeneralTab.sbCutoff->setDecimals(6);
 		uiGeneralTab.sbCutoff->setMaximum(1.0);
 		uiGeneralTab.sbCutoff->setSingleStep(0.01);
+		uiGeneralTab.sbCutoff->setSuffix("");
 		break;
 	case XYFourierFilterCurve::Index:
 		uiGeneralTab.sbCutoff->setDecimals(0);
 		uiGeneralTab.sbCutoff->setSingleStep(1);
 		uiGeneralTab.sbCutoff->setMaximum(n);
+		uiGeneralTab.sbCutoff->setSuffix("");
 		break;
 	}
 
@@ -371,16 +374,19 @@ void XYFourierFilterCurveDock::unit2Changed(int index) {
 		uiGeneralTab.sbCutoff2->setDecimals(6);
 		uiGeneralTab.sbCutoff2->setMaximum(f);
 		uiGeneralTab.sbCutoff2->setSingleStep(0.01*f);
+		uiGeneralTab.sbCutoff->setSuffix(" Hz");
 		break;
 	case XYFourierFilterCurve::Fraction:
 		uiGeneralTab.sbCutoff2->setDecimals(6);
 		uiGeneralTab.sbCutoff2->setMaximum(1.0);
 		uiGeneralTab.sbCutoff2->setSingleStep(0.01);
+		uiGeneralTab.sbCutoff->setSuffix("");
 		break;
 	case XYFourierFilterCurve::Index:
 		uiGeneralTab.sbCutoff2->setDecimals(0);
 		uiGeneralTab.sbCutoff2->setSingleStep(1);
 		uiGeneralTab.sbCutoff2->setMaximum(n);
+		uiGeneralTab.sbCutoff->setSuffix("");
 		break;
 	}
 
