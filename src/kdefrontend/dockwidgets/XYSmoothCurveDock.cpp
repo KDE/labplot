@@ -92,25 +92,11 @@ void XYSmoothCurveDock::setupGeneral() {
 //	uiGeneralTab.cbType->addItem(i18n("LOWESS/LOESS"));
 //	etc.
 
-	uiGeneralTab.cbWeight->addItem(i18n("uniform (rectangular)"));
-	uiGeneralTab.cbWeight->addItem(i18n("triangular"));
-	uiGeneralTab.cbWeight->addItem(i18n("binomial"));
-	uiGeneralTab.cbWeight->addItem(i18n("parabolic (Epanechnikov)"));
-	uiGeneralTab.cbWeight->addItem(i18n("quartic (biweight)"));
-	uiGeneralTab.cbWeight->addItem(i18n("triweight"));
-	uiGeneralTab.cbWeight->addItem(i18n("tricube"));
-	uiGeneralTab.cbWeight->addItem(i18n("cosine"));
-// TODO: IIR	-> np="all"?
-//	uiGeneralTab.cbWeight->addItem(i18n("exponential"));
-//	uiGeneralTab.cbWeight->addItem(i18n("Gaussian"));
-//	etc. -> see nsl_sf_kernel
+	for(int i=0; i < NSL_SMOOTH_WEIGHT_TYPE_COUNT; i++)
+		uiGeneralTab.cbWeight->addItem(i18n(nsl_smooth_weight_type_name[i]));
 
-	uiGeneralTab.cbMode->addItem(i18n("none"));
-	uiGeneralTab.cbMode->addItem(i18n("interpolating"));
-	uiGeneralTab.cbMode->addItem(i18n("mirror"));
-	uiGeneralTab.cbMode->addItem(i18n("nearest"));
-	uiGeneralTab.cbMode->addItem(i18n("constant"));
-	uiGeneralTab.cbMode->addItem(i18n("periodic"));
+	for(int i=0; i < NSL_SMOOTH_PAD_MODE_COUNT; i++)
+		uiGeneralTab.cbMode->addItem(i18n(nsl_smooth_pad_mode_name[i]));
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
