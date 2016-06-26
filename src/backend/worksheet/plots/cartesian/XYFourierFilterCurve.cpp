@@ -178,12 +178,8 @@ XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() {
 // see XYFitCurvePrivate
 
 void XYFourierFilterCurvePrivate::recalculate() {
-#ifndef NDEBUG
-	qDebug()<<"XYFourierFilterCurvePrivate::recalculate()";
-#endif
 	QElapsedTimer timer;
 	timer.start();
-
 
 	//create filter result columns if not available yet, clear them otherwise
 	if (!xColumn) {

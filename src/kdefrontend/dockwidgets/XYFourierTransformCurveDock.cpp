@@ -79,6 +79,8 @@ void XYFourierTransformCurveDock::setupGeneral() {
 
 	for(int i=0; i < NSL_DFT_RESULT_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_dft_result_type_name[i]));
+	for(int i=0; i < NSL_DFT_XSCALE_COUNT; i++)
+		uiGeneralTab.cbXScale->addItem(i18n(nsl_dft_xscale_name[i]));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -89,7 +91,8 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
-	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
+	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
+	connect( uiGeneralTab.cbXScale, SIGNAL(currentIndexChanged(int)), this, SLOT(xScaleChanged()) );
 
 //	connect( uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
@@ -122,7 +125,7 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_transformCurve->yDataColumn());
 
 	uiGeneralTab.cbType->setCurrentIndex(m_transformData.type);
-	this->typeChanged(m_transformData.type);
+	this->typeChanged();
 	this->showTransformResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last transform
@@ -221,9 +224,16 @@ void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setYDataColumn(column);
 }
 
-void XYFourierTransformCurveDock::typeChanged(int index) {
-	//nsl_dft_result_type type = (nsl_dft_result_type) index;
-	m_transformData.type = (nsl_dft_result_type)uiGeneralTab.cbType->currentIndex();
+void XYFourierTransformCurveDock::typeChanged() {
+	nsl_dft_result_type type = (nsl_dft_result_type)uiGeneralTab.cbType->currentIndex();
+	m_transformData.type = type;
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYFourierTransformCurveDock::xScaleChanged() {
+	nsl_dft_xscale xScale = (nsl_dft_xscale)uiGeneralTab.cbXScale->currentIndex();
+	m_transformData.xScale = xScale;
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
@@ -311,7 +321,7 @@ void XYFourierTransformCurveDock::curveTransformDataChanged(const XYFourierTrans
 	m_initializing = true;
 	m_transformData = data;
 	uiGeneralTab.cbType->setCurrentIndex(m_transformData.type);
-	this->typeChanged(m_transformData.type);
+	this->typeChanged();
 
 	this->showTransformResult();
 	m_initializing = false;

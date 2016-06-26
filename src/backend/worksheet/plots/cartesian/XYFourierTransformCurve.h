@@ -40,9 +40,11 @@ class XYFourierTransformCurve: public XYCurve {
 
 	public:
 		struct TransformData {
-			TransformData() : type(nsl_dft_result_magnitude) {};
+			TransformData() : type(nsl_dft_result_magnitude), xScale(nsl_dft_xscale_frequency), twoSided(false) {};
 
 			nsl_dft_result_type type;
+			nsl_dft_xscale xScale;
+			bool twoSided;
 		};
 		struct TransformResult {
 			TransformResult() : available(false), valid(false), elapsedTime(0) {};

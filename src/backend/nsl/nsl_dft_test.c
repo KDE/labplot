@@ -124,5 +124,13 @@ double main() {
 	/* output */
 	for(i=0; i < size; i++)
 		printf("%g ", data10[i]);
+	puts("\nnormdB:");
+
+	double data11[]={1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
+	nsl_dft_transform(data11, 1, size, nsl_dft_result_normdB);
+
+	/* output */
+	for(i=0; i < size; i++)
+		printf("%g ", data11[i]);
 	puts("");
 }
