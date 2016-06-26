@@ -262,7 +262,7 @@ void XYFourierFilterCurveDock::typeChanged() {
 	XYFourierFilterCurve::FilterType type = (XYFourierFilterCurve::FilterType)uiGeneralTab.cbType->currentIndex();
 	m_filterData.type = type;
 
-	switch(type) {
+	switch (type) {
 	case XYFourierFilterCurve::LowPass:
 	case XYFourierFilterCurve::HighPass:
 		uiGeneralTab.lCutoff->setText(i18n("Cutoff"));
@@ -294,7 +294,7 @@ void XYFourierFilterCurveDock::formChanged() {
 	XYFourierFilterCurve::FilterForm form = (XYFourierFilterCurve::FilterForm)uiGeneralTab.cbForm->currentIndex();
 	m_filterData.form = form;
 
-	switch(form) {
+	switch (form) {
 	case XYFourierFilterCurve::Ideal:
 		uiGeneralTab.sbOrder->setVisible(false);
 		uiGeneralTab.lOrder->setVisible(false);
@@ -318,38 +318,69 @@ void XYFourierFilterCurveDock::orderChanged() {
 
 void XYFourierFilterCurveDock::unitChanged() {
 	XYFourierFilterCurve::CutoffUnit unit = (XYFourierFilterCurve::CutoffUnit)uiGeneralTab.cbUnit->currentIndex();
+	XYFourierFilterCurve::CutoffUnit oldUnit = m_filterData.unit;
+	double oldValue = uiGeneralTab.sbCutoff->value();
 	m_filterData.unit = unit;
 
 	int n=100;
 	double f=1.0;	// sample frequency
-	if(m_filterCurve->xDataColumn() != NULL) {
+	if (m_filterCurve->xDataColumn() != NULL) {
 		n = m_filterCurve->xDataColumn()->rowCount();
-		double range = 2.*(m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum());
-		f=(n-1)/range;
+		double range = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
+		f=(n-1)/range/2.;
 #ifndef NDEBUG
 		qDebug()<<" n ="<<n<<" sample frequency ="<<f;
 #endif
 	}
 
-	//TODO: calculate new value from old
-	switch(unit) {
+	switch (unit) {
 	case XYFourierFilterCurve::Frequency:
 		uiGeneralTab.sbCutoff->setDecimals(6);
 		uiGeneralTab.sbCutoff->setMaximum(f);
 		uiGeneralTab.sbCutoff->setSingleStep(0.01*f);
 		uiGeneralTab.sbCutoff->setSuffix(" Hz");
+		switch (oldUnit) {
+		case XYFourierFilterCurve::Frequency:
+			break;
+		case XYFourierFilterCurve::Fraction:
+			uiGeneralTab.sbCutoff->setValue(oldValue*f);
+			break;
+		case XYFourierFilterCurve::Index:
+			uiGeneralTab.sbCutoff->setValue(oldValue*f/n);
+			break;
+		}
 		break;
 	case XYFourierFilterCurve::Fraction:
 		uiGeneralTab.sbCutoff->setDecimals(6);
 		uiGeneralTab.sbCutoff->setMaximum(1.0);
 		uiGeneralTab.sbCutoff->setSingleStep(0.01);
 		uiGeneralTab.sbCutoff->setSuffix("");
+		switch (oldUnit) {
+		case XYFourierFilterCurve::Frequency:
+			uiGeneralTab.sbCutoff->setValue(oldValue/f);
+			break;
+		case XYFourierFilterCurve::Fraction:
+			break;
+		case XYFourierFilterCurve::Index:
+			uiGeneralTab.sbCutoff->setValue(oldValue/n);
+			break;
+		}
 		break;
 	case XYFourierFilterCurve::Index:
 		uiGeneralTab.sbCutoff->setDecimals(0);
 		uiGeneralTab.sbCutoff->setSingleStep(1);
 		uiGeneralTab.sbCutoff->setMaximum(n);
 		uiGeneralTab.sbCutoff->setSuffix("");
+		switch (oldUnit) {
+		case XYFourierFilterCurve::Frequency:
+			uiGeneralTab.sbCutoff->setValue(oldValue*n/f);
+			break;
+		case XYFourierFilterCurve::Fraction:
+			uiGeneralTab.sbCutoff->setValue(oldValue*n);
+			break;
+		case XYFourierFilterCurve::Index:
+			break;
+		}
 		break;
 	}
 
@@ -358,38 +389,69 @@ void XYFourierFilterCurveDock::unitChanged() {
 
 void XYFourierFilterCurveDock::unit2Changed() {
 	XYFourierFilterCurve::CutoffUnit unit = (XYFourierFilterCurve::CutoffUnit)uiGeneralTab.cbUnit2->currentIndex();
+	XYFourierFilterCurve::CutoffUnit oldUnit = m_filterData.unit2;
+	double oldValue = uiGeneralTab.sbCutoff2->value();
 	m_filterData.unit2 = unit;
 
 	int n=100;
 	double f=1.0;
-	if(m_filterCurve->xDataColumn() != NULL) {
+	if (m_filterCurve->xDataColumn() != NULL) {
 		n = m_filterCurve->xDataColumn()->rowCount();
-		double range = 2.*(m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum());
-		f = (n-1)/range;
+		double range = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
+		f = (n-1)/2./range;
 #ifndef NDEBUG
 		qDebug()<<" n ="<<n<<" sample frequency ="<<f;
 #endif
 	}
 
-	//TODO: calculate new value from old
-	switch(unit) {
+	switch (unit) {
 	case XYFourierFilterCurve::Frequency:
 		uiGeneralTab.sbCutoff2->setDecimals(6);
 		uiGeneralTab.sbCutoff2->setMaximum(f);
 		uiGeneralTab.sbCutoff2->setSingleStep(0.01*f);
 		uiGeneralTab.sbCutoff->setSuffix(" Hz");
+		switch (oldUnit) {
+		case XYFourierFilterCurve::Frequency:
+			break;
+		case XYFourierFilterCurve::Fraction:
+			uiGeneralTab.sbCutoff2->setValue(oldValue*f);
+			break;
+		case XYFourierFilterCurve::Index:
+			uiGeneralTab.sbCutoff2->setValue(oldValue*f/n);
+			break;
+		}
 		break;
 	case XYFourierFilterCurve::Fraction:
 		uiGeneralTab.sbCutoff2->setDecimals(6);
 		uiGeneralTab.sbCutoff2->setMaximum(1.0);
 		uiGeneralTab.sbCutoff2->setSingleStep(0.01);
 		uiGeneralTab.sbCutoff->setSuffix("");
+		switch (oldUnit) {
+		case XYFourierFilterCurve::Frequency:
+			uiGeneralTab.sbCutoff2->setValue(oldValue/f);
+			break;
+		case XYFourierFilterCurve::Fraction:
+			break;
+		case XYFourierFilterCurve::Index:
+			uiGeneralTab.sbCutoff2->setValue(oldValue/n);
+			break;
+		}
 		break;
 	case XYFourierFilterCurve::Index:
 		uiGeneralTab.sbCutoff2->setDecimals(0);
 		uiGeneralTab.sbCutoff2->setSingleStep(1);
 		uiGeneralTab.sbCutoff2->setMaximum(n);
 		uiGeneralTab.sbCutoff->setSuffix("");
+		switch (oldUnit) {
+		case XYFourierFilterCurve::Frequency:
+			uiGeneralTab.sbCutoff2->setValue(oldValue*n/f);
+			break;
+		case XYFourierFilterCurve::Fraction:
+			uiGeneralTab.sbCutoff2->setValue(oldValue*n);
+			break;
+		case XYFourierFilterCurve::Index:
+			break;
+		}
 		break;
 	}
 
