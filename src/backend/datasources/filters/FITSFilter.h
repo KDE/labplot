@@ -3,7 +3,7 @@ File                 : FITSFilter.h
 Project              : LabPlot
 Description          : FITS I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2016 by Fabian  Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 
 /***************************************************************************
