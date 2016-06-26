@@ -35,6 +35,7 @@
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/datapicker/DatapickerCurve.h"
 
@@ -303,6 +304,7 @@ bool Project::load(XmlStreamReader* reader) {
 					XYSmoothCurve* smoothCurve = dynamic_cast<XYSmoothCurve*>(aspect);
 					XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(aspect);
 					XYFourierFilterCurve* filterCurve = dynamic_cast<XYFourierFilterCurve*>(aspect);
+					XYFourierTransformCurve* dftCurve = dynamic_cast<XYFourierTransformCurve*>(aspect);
 					if (equationCurve) {
 						//curves defined by a mathematical equations recalculate their own columns on load again.
 						equationCurve->recalculate();
@@ -319,6 +321,9 @@ bool Project::load(XmlStreamReader* reader) {
 					} else if (filterCurve) {
 						RESTORE_COLUMN_POINTER(filterCurve, xDataColumn, XDataColumn);
 						RESTORE_COLUMN_POINTER(filterCurve, yDataColumn, YDataColumn);
+					} else if (dftCurve) {
+						RESTORE_COLUMN_POINTER(dftCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(dftCurve, yDataColumn, YDataColumn);
 					} else {
 						RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
 						RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);

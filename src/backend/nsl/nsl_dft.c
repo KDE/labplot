@@ -33,6 +33,9 @@
 
 #include <stdio.h>
 
+const char* nsl_dft_result_type_name[] = { "Magnitude", "Amplitude", "real", "imag", "Power", "Phase", 
+		"dB", "Magnitude squared", "Amplitude squared", "raw" };
+
 int nsl_dft_transform(double data[], size_t stride, size_t n, nsl_dft_result_type type) {
 	/* 1. transform */
 	gsl_fft_real_wavetable *real = gsl_fft_real_wavetable_alloc(n);
