@@ -38,6 +38,7 @@ class Folder;
 class ProjectExplorer;
 class Project;
 class Worksheet;
+class Notes;
 class Workbook;
 class Datapicker;
 class Image;
@@ -45,6 +46,7 @@ class Spreadsheet;
 class Matrix;
 class GuiObserver;
 class AxisDock;
+class NotesDock;
 class CartesianPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
@@ -111,6 +113,7 @@ private:
 	KAction* m_newWorkbookAction;
 	KAction* m_newSpreadsheetAction;
 	KAction* m_newMatrixAction;
+	KAction* m_newNotesAction;
 	KAction* m_newWorksheetAction;
 	KAction* m_newFileDataSourceAction;
 	KAction* m_newSqlDataSourceAction;
@@ -156,6 +159,7 @@ private:
 	//Docks
 	QStackedWidget* stackedWidget;
 	AxisDock* axisDock;
+	NotesDock* notesDock;
 	CartesianPlotDock* cartesianPlotDock;
 	CartesianPlotLegendDock* cartesianPlotLegendDock;
 	ColumnDock* columnDock;
@@ -188,6 +192,7 @@ private:
 	Spreadsheet* activeSpreadsheet() const;
 	Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
+	Notes* activeNotes() const;
 	Datapicker* activeDatapicker() const;
 
 	friend class GuiObserver;
@@ -228,6 +233,7 @@ private slots:
 	void newSpreadsheet();
 	void newMatrix();
 	void newWorksheet();
+	void newNotes();
 	void newDatapicker();
 	//TODO: void newScript();
 	void newFileDataSourceActionTriggered();

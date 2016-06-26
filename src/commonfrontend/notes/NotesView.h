@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : GuiObserver.h
+    File                 : NotesView.cpp
     Project              : LabPlot
-    Description          : GUI observer
+    Description          : Notes View for taking notes
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2016 Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
 
@@ -25,28 +25,33 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef GUIOBSERVER_H
-#define GUIOBSERVER_H
 
-#include <QObject>
+#ifndef NOTESVIEW_H
+#define NOTESVIEW_H
 
-class MainWin;
-class AbstractAspect;
-class CartesianPlot;
+#include <QWidget>
+#include <QTextEdit>
+#include <QToolBar>
 
-class GuiObserver : public QObject {
+
+class Notes;
+class NotesView : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit GuiObserver(MainWin*);
-
+	NotesView(Notes* notes);
+	~NotesView();
+	
+public slots:
+	void createContextMenu(QMenu*) const;
+	void fillToolBar(QToolBar*);
+	void bgColorChanged(QColor);
+	void textColorChanged(QColor);
+	void textChanged();
 private:
-	MainWin* mainWindow;
-	CartesianPlot* m_lastCartesianPlot;
+	Notes* m_notes;
+	QTextEdit* m_textEdit;
 
-private slots:
-	void selectedAspectsChanged(QList<AbstractAspect*>&) const;
-	void hiddenAspectSelected(const AbstractAspect*) const;
 };
 
-#endif
+#endif // NOTESVIEW_H

@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : GuiObserver.h
+    File                 : Notes.h
     Project              : LabPlot
-    Description          : GUI observer
+    Description          : Notes Widget for taking notes
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2015 Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
 
@@ -25,28 +25,53 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef GUIOBSERVER_H
-#define GUIOBSERVER_H
 
-#include <QObject>
+#ifndef NOTES_H
+#define NOTES_H
 
-class MainWin;
-class AbstractAspect;
-class CartesianPlot;
+#include "backend/core/AbstractPart.h"
+#include "backend/core/AbstractScriptingEngine.h"
+#include "backend/lib/macros.h"
+#include "commonfrontend/notes/NotesView.h"
 
-class GuiObserver : public QObject {
+#include <QColor>
+#include <QIcon>
+
+class Notes : public AbstractPart, public scripted {
 	Q_OBJECT
-
 public:
-	explicit GuiObserver(MainWin*);
+	Notes(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
+	virtual ~Notes();
 
+	virtual QWidget* view() const;
+	virtual QMenu* createContextMenu();
+	virtual QIcon icon() const;
+
+	virtual bool exportView() const;
+	virtual bool printView();
+	virtual bool printPreview() const;
+	
+	void changeBgColor(QColor);
+	void changeTextColor(QColor);
+
+	virtual void save(QXmlStreamWriter*) const;
+	virtual bool load(XmlStreamReader*);
+
+	QColor bgColor();
+	QColor textColor();
+	void setNote(QString);
+	QString note();
+signals:
+	void bgColorChanged(QColor);
+	void textColorChanged(QColor);
 private:
-	MainWin* mainWindow;
-	CartesianPlot* m_lastCartesianPlot;
+	void init();
+	QColor m_bgColor;
+	QColor m_textColor;
+	QString m_note;
+signals:
+	void requestProjectContextMenu(QMenu*);
 
-private slots:
-	void selectedAspectsChanged(QList<AbstractAspect*>&) const;
-	void hiddenAspectSelected(const AbstractAspect*) const;
 };
 
-#endif
+#endif // NOTES_H

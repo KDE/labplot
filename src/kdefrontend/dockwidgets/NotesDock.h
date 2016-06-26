@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : GuiObserver.h
+    File                 : NotesDock.h
     Project              : LabPlot
-    Description          : GUI observer
+    Description          : Notes Dock for configuring notes
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2016 Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
 
@@ -25,28 +25,40 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef GUIOBSERVER_H
-#define GUIOBSERVER_H
 
-#include <QObject>
+#ifndef NOTESDOCK_H
+#define NOTESDOCK_H
 
-class MainWin;
-class AbstractAspect;
-class CartesianPlot;
+#include <QWidget>
+#include "backend/notes/Notes.h"
+#include "ui_notesdock.h"
 
-class GuiObserver : public QObject {
+class NotesDock : public QWidget {
 	Q_OBJECT
 
-public:
-	explicit GuiObserver(MainWin*);
+	public:
+		explicit NotesDock(QWidget *parent);
+		~NotesDock();
+		
+		void setNotesList(QList<Notes*>);
 
-private:
-	MainWin* mainWindow;
-	CartesianPlot* m_lastCartesianPlot;
+	private:
+		Ui::NotesDock ui;
+		bool m_initializing;
+		Notes* m_notes;
 
-private slots:
-	void selectedAspectsChanged(QList<AbstractAspect*>&) const;
-	void hiddenAspectSelected(const AbstractAspect*) const;
+	private slots:
+		//SLOTs for changes triggered in WorksheetDock
+		//"General"-tab
+		void nameChanged(QString name);
+		void commentChanged(QString name);
+		void bgColorChanged(QColor color);
+		void textColorChanged(QColor color);
+
+		//SLOTs for changes triggered in Worksheet
+// 		void worksheetDescriptionChanged(const AbstractAspect*);
+	signals:
+// 		void info(const QString&);
 };
 
-#endif
+#endif // NOTESDOCK_H

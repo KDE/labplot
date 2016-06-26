@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : GuiObserver.h
+    File                 : NotesDock.cpp
     Project              : LabPlot
-    Description          : GUI observer
+    Description          : Notes Dock for configuring notes
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2016 Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
 
@@ -25,28 +25,49 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef GUIOBSERVER_H
-#define GUIOBSERVER_H
 
-#include <QObject>
+#include "NotesDock.h"
 
-class MainWin;
-class AbstractAspect;
-class CartesianPlot;
+NotesDock::NotesDock(QWidget *parent) : QWidget(parent), m_initializing(false) {
+	ui.setupUi(this);
+	
+	connect(ui.leName, SIGNAL(returnPressed(QString)), this, SLOT(nameChanged(QString)));
+	connect(ui.leComment, SIGNAL(returnPressed(QString)), this, SLOT(commentChanged(QString)));
+	
+	connect(ui.kcbBgColor, SIGNAL(changed(QColor)), this, SLOT(bgColorChanged(QColor)));
+	connect(ui.kcbTextColor, SIGNAL(changed(QColor)), this, SLOT(textColorChanged(QColor)));
+}
 
-class GuiObserver : public QObject {
-	Q_OBJECT
+NotesDock::~NotesDock() {
+}
 
-public:
-	explicit GuiObserver(MainWin*);
+void NotesDock::bgColorChanged(QColor color) {
+	if(m_initializing)
+		return;
+	m_notes->changeBgColor(color);
+}
 
-private:
-	MainWin* mainWindow;
-	CartesianPlot* m_lastCartesianPlot;
+void NotesDock::textColorChanged(QColor color) {
+	if(m_initializing)
+		return;
+	m_notes->changeTextColor(color);
+}
 
-private slots:
-	void selectedAspectsChanged(QList<AbstractAspect*>&) const;
-	void hiddenAspectSelected(const AbstractAspect*) const;
-};
+void NotesDock::setNotesList(QList< Notes* > list) {
+	m_initializing=true;
+	m_notes = list.first();
+	ui.leName->setText(m_notes->name());
+	m_initializing=false;
+}
 
-#endif
+void NotesDock::nameChanged(QString name) {
+	if(m_initializing)
+		return;
+	m_notes->setName(name);
+}
+
+void NotesDock::commentChanged(QString name) {
+	if(m_initializing)
+		return;
+	m_notes->setComment(name);
+}

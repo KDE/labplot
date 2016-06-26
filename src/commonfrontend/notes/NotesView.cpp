@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : GuiObserver.h
+    File                 : NotesView.cpp
     Project              : LabPlot
-    Description          : GUI observer
+    Description          : Notes View for taking notes
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2016 Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
 
@@ -25,28 +25,60 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef GUIOBSERVER_H
-#define GUIOBSERVER_H
 
-#include <QObject>
+#include "NotesView.h"
 
-class MainWin;
-class AbstractAspect;
-class CartesianPlot;
+#include <QHBoxLayout>
+#include <QColorDialog>
 
-class GuiObserver : public QObject {
-	Q_OBJECT
+#include "backend/notes/Notes.h"
 
-public:
-	explicit GuiObserver(MainWin*);
+NotesView::NotesView(Notes* notes) : m_notes(notes) {
 
-private:
-	MainWin* mainWindow;
-	CartesianPlot* m_lastCartesianPlot;
+	QHBoxLayout* layout = new QHBoxLayout(this);
+	layout->setContentsMargins(0, 0, 0, 0);
+	
+	m_textEdit = new QTextEdit(this);
 
-private slots:
-	void selectedAspectsChanged(QList<AbstractAspect*>&) const;
-	void hiddenAspectSelected(const AbstractAspect*) const;
-};
+	QPalette palette = m_textEdit->palette();
 
-#endif
+	palette.setColor(QPalette::Base, m_notes->bgColor());
+	palette.setColor(QPalette::Text, m_notes->textColor());
+
+	m_textEdit->setPalette(palette);
+	m_textEdit->setText(m_notes->note());
+
+	layout->addWidget(m_textEdit);
+	
+	connect(m_notes, SIGNAL(bgColorChanged(QColor)), this, SLOT(bgColorChanged(QColor)));
+	connect(m_notes, SIGNAL(textColorChanged(QColor)), this, SLOT(textColorChanged(QColor)));
+	connect(m_textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
+}
+
+void NotesView::createContextMenu(QMenu* menu) const {
+
+}
+
+void NotesView::fillToolBar(QToolBar* toolbar) {
+
+}
+
+void NotesView::textChanged() {
+	m_notes->setNote(m_textEdit->toPlainText());
+}
+
+void NotesView::bgColorChanged(QColor color) {
+	QPalette palette = m_textEdit->palette();
+	palette.setColor(QPalette::Base, color);
+	m_textEdit->setPalette(palette);
+}
+
+void NotesView::textColorChanged(QColor color) {
+	QPalette palette = m_textEdit->palette();
+	palette.setColor(QPalette::Text, color);
+	m_textEdit->setPalette(palette);
+}
+
+NotesView::~NotesView() {
+
+}

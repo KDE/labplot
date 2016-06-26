@@ -38,6 +38,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datapicker/Datapicker.h"
+#include "backend/notes/Notes.h"
 
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/matrix/MatrixView.h"
@@ -95,6 +96,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	  m_visibilityMenu(0),
 	  m_newMenu(0),
 	  axisDock(0),
+	  notesDock(0),
 	  cartesianPlotDock(0),
 	  cartesianPlotLegendDock(0),
 	  columnDock(0),
@@ -246,6 +248,10 @@ void MainWin::initActions() {
 // 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
 	actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
 	connect(m_newWorksheetAction, SIGNAL(triggered()), SLOT(newWorksheet()));
+	
+	m_newNotesAction= new KAction(KIcon("document-new"),i18n("Note"),this);
+	actionCollection()->addAction("new_notes", m_newNotesAction);
+	connect(m_newNotesAction, SIGNAL(triggered()), SLOT(newNotes()));
 
 // 	m_newScriptAction = new KAction(KIcon("insert-text"),i18n("Note/Script"),this);
 // 	actionCollection()->addAction("new_script", m_newScriptAction);
@@ -369,6 +375,7 @@ void MainWin::initMenus() {
 	m_newMenu->addAction(m_newSpreadsheetAction);
 	m_newMenu->addAction(m_newMatrixAction);
 	m_newMenu->addAction(m_newWorksheetAction);
+	m_newMenu->addAction(m_newNotesAction);
 	m_newMenu->addAction(m_newDatapickerAction);
 	m_newMenu->addSeparator();
 	m_newMenu->addAction(m_newFileDataSourceAction);
@@ -440,10 +447,12 @@ void MainWin::updateGUIOnProjectChanges() {
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
 		factory->container("worksheet", this)->setEnabled(false);
+		factory->container("notes", this)->setEnabled(false);
 		factory->container("analysis", this)->setEnabled(false);
 		factory->container("datapicker", this)->setEnabled(false);
 		factory->container("spreadsheet_toolbar", this)->hide();
 		factory->container("worksheet_toolbar", this)->hide();
+		factory->container("notes_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 	}
@@ -480,10 +489,12 @@ void MainWin::updateGUI() {
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("matrix", this)->setEnabled(false);
 		factory->container("worksheet", this)->setEnabled(false);
+		factory->container("notes", this)->setEnabled(false);
 		factory->container("analysis", this)->setEnabled(false);
 		factory->container("datapicker", this)->setEnabled(false);
 		factory->container("spreadsheet_toolbar", this)->hide();
 		factory->container("worksheet_toolbar", this)->hide();
+		factory->container("notes_toolbar", this)->hide();
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 		return;
@@ -565,6 +576,31 @@ void MainWin::updateGUI() {
 		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
 		if (group.groupList().indexOf("Toolbar spreadsheet_toolbar")==-1)
 			toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
+
+		toolbar->setVisible(true);
+		toolbar->clear();
+		view->fillToolBar(toolbar);
+	} else {
+		factory->container("spreadsheet", this)->setEnabled(false);
+		factory->container("spreadsheet_toolbar", this)->setVisible(false);
+	}
+
+	//Handle the Notes-object
+	const  Notes* notes = this->activeNotes();
+	if (notes) {
+		//enable notes related menus
+		factory->container("notes", this)->setEnabled(true);
+
+		//populate notes-menu
+		NotesView* view=qobject_cast<NotesView*>(notes->view());
+		QMenu* menu=qobject_cast<QMenu*>(factory->container("notes", this));
+		menu->clear();
+		view->createContextMenu(menu);
+
+		//populate notes-toolbar
+		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("notes_toolbar", this));
+		if (group.groupList().indexOf("Toolbar notes_toolbar")==-1)
+			toolbar->setToolButtonStyle(Qt::ToolButtonFollowStyle);
 
 		toolbar->setVisible(true);
 		toolbar->clear();
@@ -1025,6 +1061,11 @@ void MainWin::newWorksheet() {
 	this->addAspectToProject(worksheet);
 }
 
+void MainWin::newNotes() {
+	Notes* notes = new Notes(0, i18n("Note"));
+	this->addAspectToProject(notes);
+}
+
 //TODO: void MainWin::newScript() {}
 
 /*!
@@ -1129,6 +1170,16 @@ Worksheet* MainWin::activeWorksheet() const {
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
 	Q_ASSERT(part);
 	return dynamic_cast<Worksheet*>(part);
+}
+
+Notes* MainWin::activeNotes() const {
+	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
+	if (!win)
+		return 0;
+
+	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	Q_ASSERT(part);
+	return dynamic_cast<Notes*>(part);
 }
 
 /********************************************************************************/
