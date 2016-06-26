@@ -296,7 +296,7 @@ void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem *item) {
 
 void FITSHeaderEditWidget::removeExtension() {
     QTreeWidgetItem* current = ui.twExtensions->currentItem();
-    QTreeWidgetItem* newCurrent = ui.twExtensions->itemAbove(current);
+    QTreeWidgetItem* newCurrent = ui.twExtensions->itemBelow(current);
     if (current->parent()) {
         if (current->parent()->childCount() < 2) {
             delete current->parent();

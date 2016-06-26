@@ -954,14 +954,13 @@ void FITSFilterPrivate::removeExtensions(const QStringList &extensions) {
 #ifdef HAVE_FITS
     int status = 0;
     foreach (const QString& ext, extensions) {
-        if (fits_open_file(&fitsFile, ext.toLatin1(), READONLY, &status )) {
+        if (fits_open_file(&fitsFile, ext.toLatin1(), READWRITE, &status )) {
             printError(status);
         }
 
-        qDebug() << "Removing.." << ext;
-
-
-        //TODO
+        if (fits_delete_hdu(fitsFile, NULL, &status)) {
+            printError(status);
+        }
 
         fits_close_file(fitsFile, &status);
         status = 0;
