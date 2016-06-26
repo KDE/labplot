@@ -61,7 +61,7 @@ class XYCurve: public WorksheetElement {
 		virtual QGraphicsItem *graphicsItem() const;
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
-        virtual void loadConfig(const KConfig& config);
+		virtual void loadConfig(const KConfig& config);
 
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
@@ -133,6 +133,7 @@ class XYCurve: public WorksheetElement {
 	public slots:
 		virtual void retransform();
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
+		void setColorPalette(const KConfig& config);
 
 	private slots:
 		void updateValues();
@@ -158,6 +159,7 @@ class XYCurve: public WorksheetElement {
 		void initActions();
 
 		QAction* visibilityAction;
+		QList<QColor> m_themeColorPalette;
 
 	signals:
 		//General-Tab

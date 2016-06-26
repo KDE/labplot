@@ -32,7 +32,6 @@
 
 #include <QtGui/QWidget>
 #include <QPushButton>
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 class QHBoxLayout;
 class QToolButton;
 class QSpacerItem;
@@ -43,7 +42,7 @@ class ThemeHandler : public QWidget{
 	Q_OBJECT
 
 	public:
-        ThemeHandler(QWidget* parent);
+	ThemeHandler(QWidget* parent);
 
 	private:
         QList<QString> dirNames;
@@ -52,17 +51,15 @@ class ThemeHandler : public QWidget{
         QSpacerItem *horizontalSpacer;
         QSpacerItem *horizontalSpacer2;
         QLabel *lTheme;
-        QPushButton *pbLoadTheme;
-        void setThemePalette(KConfig& config);
+	QPushButton *pbLoadTheme;
 
     private slots:
         void loadMenu();
-        void loadSelected(QAction*);
+	void loadSelected(QAction*);
 
     signals:
-        void loadThemeRequested(KConfig& config);
+	void loadThemeRequested(KConfig& config);
         void info(const QString&);
-        void setThemePalette(QList<QColor> color);
 };
 
 #endif

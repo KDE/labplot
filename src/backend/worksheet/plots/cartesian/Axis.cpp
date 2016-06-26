@@ -91,7 +91,7 @@ class AxisGrid : public QGraphicsItem {
 			if (axis->majorGridPen.style() != Qt::NoPen){
 				painter->setOpacity(axis->majorGridOpacity);
 				painter->setPen(axis->majorGridPen);
-                painter->setBrush(Qt::NoBrush);
+				painter->setBrush(Qt::NoBrush);
 				painter->drawPath(axis->majorGridPath);
 			}
 
@@ -2209,43 +2209,49 @@ bool Axis::load(XmlStreamReader* reader){
 
 void Axis::loadConfig(const KConfig& config)
 {
-        KConfigGroup group = config.group("ThemeAxis");
+	KConfigGroup group = config.group("ThemeAxis");
 
-        // Tick label
-        this->setLabelsColor(group.readEntry("LabelsFontColor",(QColor) this->labelsColor()));
-        this->setLabelsOpacity(group.readEntry("LabelsOpacity",this->labelsOpacity()));
+	QPen p;
+	// Tick label
+	this->setLabelsColor(group.readEntry("LabelsFontColor",(QColor) this->labelsColor()));
+	this->setLabelsOpacity(group.readEntry("LabelsOpacity",this->labelsOpacity()));
 
-        //Line
-        this->setLineOpacity(group.readEntry("LineOpacity",this->lineOpacity()));
-        this->linePen().setColor((QColor)group.readEntry("LineColor"));
-        this->linePen().setStyle((Qt::PenStyle)group.readEntry("LineStyle",(int) this->linePen().style()));
-        this->linePen().setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
+	//Line
+	this->setLineOpacity(group.readEntry("LineOpacity",this->lineOpacity()));
+	p.setColor(group.readEntry("LineColor", (QColor) this->linePen().color()));
+	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle",(int) this->linePen().style()));
+	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
+	this->setLinePen(p);
 
-        //Major ticks
-        this->majorGridPen().setColor(group.readEntry("MajorGridColor",(QColor) this->majorGridPen().color()));
-        this->setMajorGridOpacity(group.readEntry("MajorGridOpacity", this->majorGridOpacity()));
-        this->majorGridPen().setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle",(int) this->majorGridPen().style()));
-        this->majorGridPen().setWidthF(group.readEntry("MajorGridWidth", this->majorGridPen().widthF()));
-        this->majorTicksPen().setColor(group.readEntry("MajorTicksColor",(QColor)this->majorTicksPen().color()));
-        this->majorTicksPen().setStyle((Qt::PenStyle)group.readEntry("MajorTicksLineStyle",(int) this->majorTicksPen().style()));
-        this->majorTicksPen().setWidthF(group.readEntry("MajorTicksWidth", this->majorTicksPen().widthF()));
-        this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity",this->majorTicksOpacity()));
-        this->setMajorTicksType((Axis::TicksType)group.readEntry("MajorTicksType",(int)this->majorTicksType()));
+	//Major ticks
+	this->setMajorGridOpacity(group.readEntry("MajorGridOpacity", this->majorGridOpacity()));
+	p.setColor(group.readEntry("MajorGridColor",(QColor) this->majorGridPen().color()));
+	p.setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle",(int) this->majorGridPen().style()));
+	p.setWidthF(group.readEntry("MajorGridWidth", this->majorGridPen().widthF()));
+	this->setMajorGridPen(p);
+	p.setColor(group.readEntry("MajorTicksColor",(QColor)this->majorTicksPen().color()));
+	p.setStyle((Qt::PenStyle)group.readEntry("MajorTicksLineStyle",(int) this->majorTicksPen().style()));
+	p.setWidthF(group.readEntry("MajorTicksWidth", this->majorTicksPen().widthF()));
+	this->setMajorTicksPen(p);
+	this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity",this->majorTicksOpacity()));
+	this->setMajorTicksType((Axis::TicksType)group.readEntry("MajorTicksType",(int)this->majorTicksType()));
 
-        //Minor ticks
-        this->minorGridPen().setColor(group.readEntry("MinorGridColor",(QColor) this->minorGridPen().color()));
-        this->setMinorGridOpacity(group.readEntry("MinorGridOpacity", this->minorGridOpacity()));
-        this->minorGridPen().setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle",(int) this->minorGridPen().style()));
-        this->minorGridPen().setWidthF(group.readEntry("MinorGridWidth", this->minorGridPen().widthF()));
-        this->minorTicksPen().setColor(group.readEntry("MinorTicksColor",(QColor) this->minorTicksPen().color()));
-        this->minorTicksPen().setStyle((Qt::PenStyle)group.readEntry("MinorTicksLineStyle",(int) this->minorTicksPen().style()));
-        this->minorTicksPen().setWidthF(group.readEntry("MinorTicksWidth", this->minorTicksPen().widthF()));
-        this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity",this->minorTicksOpacity()));
-        this->setMinorTicksType((Axis::TicksType)group.readEntry("MinorTicksType",(int)this->minorTicksType()));
+	//Minor ticks
+	this->setMinorGridOpacity(group.readEntry("MinorGridOpacity", this->minorGridOpacity()));
+	p.setColor(group.readEntry("MinorGridColor",(QColor) this->minorGridPen().color()));
+	p.setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle",(int) this->minorGridPen().style()));
+	p.setWidthF(group.readEntry("MinorGridWidth", this->minorGridPen().widthF()));
+	this->setMinorGridPen(p);
+	p.setColor(group.readEntry("MinorTicksColor",(QColor) this->minorTicksPen().color()));
+	p.setStyle((Qt::PenStyle)group.readEntry("MinorTicksLineStyle",(int) this->minorTicksPen().style()));
+	p.setWidthF(group.readEntry("MinorTicksWidth", this->minorTicksPen().widthF()));
+	this->setMinorTicksPen(p);
+	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity",this->minorTicksOpacity()));
+	this->setMinorTicksType((Axis::TicksType)group.readEntry("MinorTicksType",(int)this->minorTicksType()));
 
-        KConfigGroup groupAxisLabel = config.group("ThemeAxisLabel");
+	KConfigGroup groupAxisLabel = config.group("ThemeAxisLabel");
 
-        this->title()->setTeXFontColor(groupAxisLabel.readEntry("TeXFontColor",(QColor) this->title()->teXFontColor()));
-        this->title()->setTeXFontSize(groupAxisLabel.readEntry("TeXFontSize",(int) this->title()->teXFontSize()));
+	this->title()->setTeXFontColor(groupAxisLabel.readEntry("TeXFontColor",(QColor) this->title()->teXFontColor()));
+	this->title()->setTeXFontSize(groupAxisLabel.readEntry("TeXFontSize",(int) this->title()->teXFontSize()));
 
 }

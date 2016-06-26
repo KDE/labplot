@@ -159,8 +159,8 @@ signals:
 	void info(const QString&);
 
 public slots:
-    void load();
-    void loadTheme(KConfig& config);
+	void load();
+	void loadTheme(KConfig& config);
 
 };
 
