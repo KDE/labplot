@@ -49,8 +49,8 @@ private:
     QAction* action_add_keyword;
     QMenu* m_KeywordActionsMenu;
 
-    //TODO
-    QAction* action_delete_hdu;
+    QMenu* m_ExtensionActionsMenu;
+    QAction* action_remove_extension;
 
     struct HeaderUpdate {
         QList<FITSFilter::Keyword> newKeywords;
@@ -65,12 +65,13 @@ private:
 
 
     QMap<QString, ExtensionData> m_extensionDatas;
+    QStringList m_removedExtensions;
     QString m_seletedExtension;
 
     FITSFilter* m_fitsFilter;
 
     void initActions();
-    void initContextMenu();
+    void initContextMenus();
     void connectActions();
     void fillTable();
     QList<QString> mandatoryKeywords() const;
@@ -84,6 +85,7 @@ private slots:
     void updateKeyword(QTableWidgetItem*);
 
     void removeKeyword();
+    void removeExtension();
     void addKeyword();
 };
 

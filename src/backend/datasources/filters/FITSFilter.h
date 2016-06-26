@@ -3,7 +3,7 @@ File                 : FITSFilter.h
 Project              : LabPlot
 Description          : FITS I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2016 by Fabian  Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 
 /***************************************************************************
@@ -73,6 +73,7 @@ class FITSFilter : public AbstractFileFilter{
     void addNewKeyword(const QString& filename, const QList<Keyword>& keywords);
     void deleteKeyword(const QString& fileName, const QList<Keyword>& keywords);
     void renameKeywordKey(const Keyword& keyword, const QString& newKey);
+    void removeExtensions(const QStringList& extensions);
     void parseHeader(const QString &fileName, QTableWidget* headerEditTable,
                      bool readKeys = true,
                      const QList<Keyword> &keys = QList<Keyword>());

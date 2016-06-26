@@ -48,6 +48,7 @@ public:
     void addNewKeyword(const QString &fileName, const QList<FITSFilter::Keyword> &keywords);
     void deleteKeyword(const QString &fileName, const QList<FITSFilter::Keyword>& keywords);
     void renameKeywordKey(const FITSFilter::Keyword& keyword, const QString& newKey);
+    void removeExtensions(const QStringList& extensions);
     const QString valueOf(const QString &fileName, const char* key);
 
     QList<FITSFilter::Keyword> chduKeywords(const QString &fileName);

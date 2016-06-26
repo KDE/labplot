@@ -40,7 +40,7 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget *parent) :
     ui.setupUi(this);
     initActions();
     connectActions();
-    initContextMenu();
+    initContextMenus();
     m_fitsFilter = new FITSFilter();
     ui.twKeywordsTable->setColumnCount(3);
     ui.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -49,6 +49,7 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget *parent) :
     ui.twKeywordsTable->setHorizontalHeaderItem(1, new QTableWidgetItem(i18n("Value")));
     ui.twKeywordsTable->setHorizontalHeaderItem(2, new QTableWidgetItem(i18n("Comment")));
     ui.twKeywordsTable->installEventFilter(this);
+    ui.twExtensions->installEventFilter(this);
 
     connect(ui.pbOpenFile, SIGNAL(clicked()), this, SLOT(openFile()));
     connect(ui.twKeywordsTable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(updateKeyword(QTableWidgetItem*)));
@@ -151,30 +152,42 @@ void FITSHeaderEditWidget::openFile() {
 
 void FITSHeaderEditWidget::save() {
     foreach (const QString& fileName, m_extensionDatas.keys()) {
+        qDebug() << "Saving.." << fileName;
         if (m_extensionDatas[fileName].updates.newKeywords.size() > 0) {
             m_fitsFilter->addNewKeyword(fileName,m_extensionDatas[fileName].updates.newKeywords);
         }
         if (m_extensionDatas[fileName].updates.removedKeywords.size() > 0) {
             m_fitsFilter->deleteKeyword(fileName, m_extensionDatas[fileName].updates.removedKeywords);
         }
-        //TODO update
     }
+
+    if (m_removedExtensions.size() > 0) {
+        m_fitsFilter->removeExtensions(m_removedExtensions);
+    }
+
 }
 
 void FITSHeaderEditWidget::initActions() {
     action_add_keyword = new QAction(i18n("Add new keyword"), this);
+    action_add_keyword->setShortcut(QKeySequence(Qt::ControlModifier, Qt::Key_N));
     action_remove_keyword = new QAction(i18n("Remove keyword"), this);
+    action_remove_extension = new QAction(i18n("Delete"), this);
+    action_remove_extension->setShortcut(QKeySequence(Qt::Key_Delete));
 }
 
 void FITSHeaderEditWidget::connectActions() {
     connect(action_add_keyword, SIGNAL(triggered()), this, SLOT(addKeyword()));
     connect(action_remove_keyword, SIGNAL(triggered()), this, SLOT(removeKeyword()));
+    connect(action_remove_extension, SIGNAL(triggered()), this, SLOT(removeExtension()));
 }
 
-void FITSHeaderEditWidget::initContextMenu() {
+void FITSHeaderEditWidget::initContextMenus() {
     m_KeywordActionsMenu = new QMenu(this);
     m_KeywordActionsMenu->addAction(action_add_keyword);
     m_KeywordActionsMenu->addAction(action_remove_keyword);
+
+    m_ExtensionActionsMenu = new QMenu(this);
+    m_ExtensionActionsMenu->addAction(action_remove_extension);
 }
 
 void FITSHeaderEditWidget::addKeyword() {
@@ -215,7 +228,7 @@ void FITSHeaderEditWidget::addKeyword() {
 
         m_extensionDatas[m_seletedExtension].updates.newKeywords.append(newKeyWord);
 
-        qDebug() << "Updates====";
+        qDebug() << "Updates====" << m_seletedExtension ;
         qDebug() << "New Keywords: ";
         foreach (const FITSFilter::Keyword& keyw, m_extensionDatas[m_seletedExtension].updates.newKeywords) {
             qDebug() << keyw.key << " " << keyw.value << " " << keyw.comment;
@@ -281,6 +294,27 @@ void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem *item) {
     Q_UNUSED(item)
 }
 
+void FITSHeaderEditWidget::removeExtension() {
+    QTreeWidgetItem* current = ui.twExtensions->currentItem();
+    QTreeWidgetItem* newCurrent = ui.twExtensions->itemAbove(current);
+    if (current->parent()) {
+        if (current->parent()->childCount() < 2) {
+            delete current->parent();
+        } else {
+            delete current;
+        }
+    }
+    int selectedidx = m_extensionDatas.keys().indexOf(m_seletedExtension);
+    if (selectedidx > 0) {
+        QString ext = m_seletedExtension;
+        m_seletedExtension = m_extensionDatas.keys().at(selectedidx-1);
+        m_extensionDatas.remove(ext);
+        m_removedExtensions.append(ext);
+        fillTable();
+    }
+    ui.twExtensions->setCurrentItem(newCurrent);
+}
+
 QList<QString> FITSHeaderEditWidget::mandatoryKeywords() const {
     QList<QString> mandatoryKeywords;
     const QTreeWidgetItem* currentItem = ui.twExtensions->currentItem();
@@ -299,6 +333,17 @@ bool FITSHeaderEditWidget::eventFilter(QObject * watched, QEvent * event) {
         if (watched == ui.twKeywordsTable) {
             if (ui.twExtensions->selectedItems().size() != 0) {
                 m_KeywordActionsMenu->exec(global_pos);
+            }
+        } else if (watched == ui.twExtensions) {
+            if (ui.twExtensions->selectedItems().size() != 0) {
+                QTreeWidgetItem* current = ui.twExtensions->currentItem();
+                int col = ui.twExtensions->currentColumn();
+                if (current->parent()) {
+                    if ((current->text(col) != QLatin1String("Images")) &&
+                            (current->text(col) != QLatin1String("Tables"))) {
+                        m_ExtensionActionsMenu->exec(global_pos);
+                    }
+                }
             }
         }
         else

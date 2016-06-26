@@ -80,6 +80,10 @@ void FITSFilter::renameKeywordKey(const Keyword &keyword, const QString &newKey)
     d->renameKeywordKey(keyword, newKey);
 }
 
+void FITSFilter::removeExtensions(const QStringList &extensions) {
+    d->removeExtensions(extensions);
+}
+
 void FITSFilter::parseHeader(const QString &fileName, QTableWidget *headerEditTable, bool readKeys, const QList<Keyword> &keys){
     d->parseHeader(fileName, headerEditTable, readKeys, keys);
 }
@@ -419,6 +423,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
  */
 
 void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *dataSource) {
+#ifdef HAVE_FITS
     if (!(fileName.right(4) == QLatin1String("fits"))) {
         return;
     }
@@ -605,6 +610,10 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
         status = 0;
         fits_close_file(fitsFile, &status);
     }
+#else
+    Q_UNUSED(fileName)
+    Q_UNUSED(dataSource)
+#endif
 }
 
 /*!
@@ -650,7 +659,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
         QString extName;
         if (!fits_read_keyword(fitsFile,"EXTNAME", keyVal, NULL, &status)) {
             extName = QLatin1String(keyVal);
-            extName = extName.mid(1, extName.length() -2).simplified();  
+            extName = extName.mid(1, extName.length() -2).simplified();
         }
         else {
             status = 0;
@@ -937,6 +946,32 @@ void FITSFilterPrivate::renameKeywordKey(const FITSFilter::Keyword &keyword, con
 }
 
 /*!
+ * \brief Remove extensions from a FITS file
+ * \param fileName
+ * \param extensions
+ */
+void FITSFilterPrivate::removeExtensions(const QStringList &extensions) {
+#ifdef HAVE_FITS
+    int status = 0;
+    foreach (const QString& ext, extensions) {
+        if (fits_open_file(&fitsFile, ext.toLatin1(), READONLY, &status )) {
+            printError(status);
+        }
+
+        qDebug() << "Removing.." << ext;
+
+
+        //TODO
+
+        fits_close_file(fitsFile, &status);
+        status = 0;
+    }
+#else
+    Q_UNUSED(extensions)
+#endif
+}
+
+/*!
  * \brief Returns a list of keywords in the current header
  * \param fileName the file to open
  * \return
@@ -992,7 +1027,7 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
 
 void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *headerEditTable,
                                      bool readKeys, const QList<FITSFilter::Keyword>& keys) {
-
+#ifdef HAVE_FITS
     QList<FITSFilter::Keyword> keywords;
     if (readKeys) {
          keywords = chduKeywords(fileName);
@@ -1025,9 +1060,16 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
     }
 
     headerEditTable->resizeColumnsToContents();
+#else
+    Q_UNUSED(fileName)
+    Q_UNUSED(headerEditTable)
+    Q_UNUSED(readKeys)
+    Q_UNUSED(keys)
+#endif
 }
 
 const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *key) {
+#ifdef HAVE_FITS
     int status = 0;
     if (fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status )) {
         printError(status);
@@ -1050,9 +1092,15 @@ const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *ke
     status = 0;
     fits_close_file(fitsFile, &status);
     return keyValue;
+#else
+    Q_UNUSED(fileName)
+    Q_UNUSED(key)
+    return QString();
+#endif
 }
 
 void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw, bool checkPrimary) {
+#ifdef HAVE_FITS
     QMultiMap<QString, QString> extensions = extensionNames(fileName);
     QStringList imageExtensions = extensions.values(QLatin1String("IMAGES"));
     QStringList tableExtensions = extensions.values(QLatin1String("TABLES"));
@@ -1100,6 +1148,11 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 
         }
     }
+#else
+    Q_UNUSED(fileName)
+    Q_UNUSED(tw)
+    Q_UNUSED(checkPrimary)
+#endif
 }
 
 /*!
