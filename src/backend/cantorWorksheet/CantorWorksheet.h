@@ -31,9 +31,9 @@
 
 #include <backend/core/AbstractPart.h>
 #include "backend/core/AbstractScriptingEngine.h"
+#include <cantor/session.h>
 
 namespace Cantor {
-class Session;
 class PanelPlugin;
 class WorksheetAccessInterface;
 }
@@ -84,6 +84,7 @@ private slots:
 
 signals:
 	void requestProjectContextMenu(QMenu*);
+	void statusChanged(Cantor::Session::Status);
 };
 
 #endif // CANTORWORKSHEET_H

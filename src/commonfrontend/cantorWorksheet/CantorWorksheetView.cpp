@@ -47,6 +47,7 @@ CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget()
 	initActions();
 	initMenus();
 	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
+	connect(m_worksheet, SIGNAL(statusChanged(Cantor::Session::Status)), this, SLOT(statusChanged(Cantor::Session::Status)));
 }
 
 void CantorWorksheetView::initActions() {
@@ -211,4 +212,16 @@ void CantorWorksheetView::triggerCantorAction(QAction* action) {
 
 CantorWorksheetView::~CantorWorksheetView() {
 	part->widget()->setParent(0);
+}
+
+void CantorWorksheetView::statusChanged(Cantor::Session::Status status) {
+	if(status==Cantor::Session::Running) {
+		m_evaluateWorsheetAction->setText(i18n("Interrupt"));
+		m_evaluateWorsheetAction->setIcon(QIcon::fromTheme(QLatin1String("dialog-close")));
+		m_worksheet->statusInfo(i18n("Calculating..."));
+	} else {
+		m_evaluateWorsheetAction->setText(i18n("Evaluate Worksheet"));
+		m_evaluateWorsheetAction->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
+		m_worksheet->statusInfo(i18n("Ready"));
+	}
 }

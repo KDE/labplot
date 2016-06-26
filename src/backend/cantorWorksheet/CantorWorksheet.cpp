@@ -38,12 +38,10 @@
 
 #include <QAction>
 #include <QModelIndex>
-#include <QDebug>
 
 #include "cantor/cantor_part.h"
 #include <cantor/panelpluginhandler.h>
 #include <cantor/panelplugin.h>
-#include <cantor/session.h>
 #include <cantor/worksheetaccess.h>
 
 CantorWorksheet::CantorWorksheet(AbstractScriptingEngine* engine, const QString &name, bool loading)
@@ -78,8 +76,11 @@ bool CantorWorksheet::init(QByteArray* content) {
 
 		connect(m_worksheetAccess, SIGNAL(sessionChanged()), this, SLOT(sessionChanged()));
 
-		//cantor's session and the variable model
+		//cantor's session
 		m_session = m_worksheetAccess->session();
+		connect(m_session, SIGNAL(statusChanged(Cantor::Session::Status)), this, SIGNAL(statusChanged(Cantor::Session::Status)));
+
+		//variable model
 		m_variableModel = m_session->variableModel();
 		connect(m_variableModel, SIGNAL(rowsInserted(const QModelIndex, int, int)), this, SLOT(rowsInserted(const QModelIndex, int, int)));
 		connect(m_variableModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex, int, int)), this, SLOT(rowsAboutToBeRemoved(const QModelIndex, int, int)));

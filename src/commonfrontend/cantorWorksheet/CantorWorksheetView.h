@@ -29,6 +29,7 @@
 #define CANTORWORKSHEETVIEW_H
 
 #include <QWidget>
+#include <cantor/session.h>
 
 class QAbstractItemModel;
 class QToolBar;
@@ -87,6 +88,9 @@ class CantorWorksheetView : public QWidget {
 
 		void initActions();
 		void initMenus();
+
+	private slots:
+		void statusChanged(Cantor::Session::Status);
 };
 
 #endif // CANTORWORKSHEETVIEW_H
