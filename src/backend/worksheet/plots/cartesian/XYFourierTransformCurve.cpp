@@ -251,28 +251,39 @@ void XYFourierTransformCurvePrivate::recalculate() {
 
 	// transform settings
 	const nsl_dft_result_type type = transformData.type;
-	const nsl_dft_xscale xScale = transformData.xScale;
 	const bool twoSided = transformData.twoSided;
+	const bool shifted = transformData.shifted;
+	const nsl_dft_xscale xScale = transformData.xScale;
 #ifndef NDEBUG
 	qDebug()<<"n ="<<n;
 	qDebug()<<"type:"<<nsl_dft_result_type_name[type];
 	qDebug()<<"scale:"<<nsl_dft_xscale_name[xScale];
 	qDebug()<<"two sided:"<<twoSided;
+	qDebug()<<"shifted:"<<shifted;
 	QDebug out = qDebug();
 	for (unsigned int i=0; i < n; i++)
 		out<<ydata[i];
 #endif
 ///////////////////////////////////////////////////////////
 	// transform
+	// TODO: use twoSided to calculate only needed values
 	int status = nsl_dft_transform(ydata, 1, n, type);
+
+	unsigned int N=n;
+	if(twoSided == false)
+		N=n/2;
 
 	switch (xScale) {
 	case nsl_dft_xscale_frequency:
-		for (unsigned int i=0; i < n; i++)
-			xdata[i] = i/2./(xmax-xmin);
+		for (unsigned int i=0; i < n/2; i++)
+			xdata[i] = (n-1)*i/(xmax-xmin)/n;
+		if(twoSided)
+			for (unsigned int i=n/2; i < n; i++)
+				xdata[i] = (n-1)*i/(xmax-xmin)/n-(n-1)/(xmax-xmin);
 		break;
 	case nsl_dft_xscale_index:
-		for (unsigned int i=0; i < n; i++)
+		//TODO: twoSided
+		for (unsigned int i=0; i < N; i++)
 			xdata[i] = i;
 		break;
 	case nsl_dft_xscale_period:	// see xmgr manual
@@ -281,14 +292,21 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	}
 #ifndef NDEBUG
 	out = qDebug();
-	for (unsigned int i=0; i < n; i++)
+	for (unsigned int i=0; i < N; i++)
 		out<<ydata[i]<<'('<<xdata[i]<<')';
 #endif
 
-	xVector->resize(n);
-	yVector->resize(n);
-	memcpy(xVector->data(), xdata, n*sizeof(double));
-	memcpy(yVector->data(), ydata, n*sizeof(double));
+	xVector->resize(N);
+	yVector->resize(N);
+	if(shifted) {
+		memcpy(xVector->data(), &xdata[n/2], n/2*sizeof(double));
+		memcpy(&xVector->data()[n/2], xdata, n/2*sizeof(double));
+		memcpy(yVector->data(), &ydata[n/2], n/2*sizeof(double));
+		memcpy(&yVector->data()[n/2], ydata, n/2*sizeof(double));
+	} else {
+		memcpy(xVector->data(), xdata, N*sizeof(double));
+		memcpy(yVector->data(), ydata, N*sizeof(double));
+	}
 ///////////////////////////////////////////////////////////
 
 	//write the result

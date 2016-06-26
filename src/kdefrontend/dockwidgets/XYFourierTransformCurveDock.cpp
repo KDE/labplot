@@ -92,6 +92,8 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
+	connect( uiGeneralTab.cbTwoSided, SIGNAL(stateChanged(int)), this, SLOT(twoSidedChanged()) );
+	connect( uiGeneralTab.cbShifted, SIGNAL(stateChanged(int)), this, SLOT(shiftedChanged()) );
 	connect( uiGeneralTab.cbXScale, SIGNAL(currentIndexChanged(int)), this, SLOT(xScaleChanged()) );
 
 //	connect( uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()) );
@@ -126,6 +128,7 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 
 	uiGeneralTab.cbType->setCurrentIndex(m_transformData.type);
 	this->typeChanged();
+	this->twoSidedChanged();	// show/hide shifted check box
 	this->showTransformResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last transform
@@ -227,6 +230,25 @@ void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
 void XYFourierTransformCurveDock::typeChanged() {
 	nsl_dft_result_type type = (nsl_dft_result_type)uiGeneralTab.cbType->currentIndex();
 	m_transformData.type = type;
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYFourierTransformCurveDock::twoSidedChanged() {
+	bool twoSided = uiGeneralTab.cbTwoSided->isChecked();
+	m_transformData.twoSided = twoSided;
+
+	if(twoSided)
+		uiGeneralTab.cbShifted->setEnabled(true);
+	else
+		uiGeneralTab.cbShifted->setEnabled(false);
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYFourierTransformCurveDock::shiftedChanged() {
+	bool shifted = uiGeneralTab.cbShifted->isChecked();
+	m_transformData.shifted = shifted;
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
