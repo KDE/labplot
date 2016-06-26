@@ -2209,7 +2209,7 @@ bool Axis::load(XmlStreamReader* reader){
 
 void Axis::loadConfig(const KConfig& config)
 {
-	KConfigGroup group = config.group("ThemeAxis");
+	KConfigGroup group = config.group("Axis");
 
 	QPen p;
 	// Tick label
@@ -2249,7 +2249,7 @@ void Axis::loadConfig(const KConfig& config)
 	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity",this->minorTicksOpacity()));
 	this->setMinorTicksType((Axis::TicksType)group.readEntry("MinorTicksType",(int)this->minorTicksType()));
 
-	KConfigGroup groupAxisLabel = config.group("ThemeAxisLabel");
+	KConfigGroup groupAxisLabel = config.group("AxisLabel");
 
 	this->title()->setTeXFontColor(groupAxisLabel.readEntry("TeXFontColor",(QColor) this->title()->teXFontColor()));
 	this->title()->setTeXFontSize(groupAxisLabel.readEntry("TeXFontSize",(int) this->title()->teXFontSize()));

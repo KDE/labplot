@@ -2071,7 +2071,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 
 void CartesianPlot::loadThemeConfig(KConfig& config)
 {
-	KConfigGroup group = config.group("ThemeCartesianPlotTitle");
+	KConfigGroup group = config.group("CartesianPlotTitle");
 
 	this->m_title->setTeXFontColor(group.readEntry("TeXFontColor", (QColor) this->m_title->teXFontColor()));
 	this->m_title->setTeXFontSize(group.readEntry("TeXFontSize", (int) this->m_title->teXFontSize()));

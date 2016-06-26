@@ -2516,7 +2516,7 @@ void XYCurve::setColorPalette(const KConfig& config)
 
 void XYCurve::loadConfig(const KConfig& config)
 {
-	KConfigGroup group = config.group("ThemeXYCurve");
+	KConfigGroup group = config.group("XYCurve");
 
 	QPen p;
 	this->setColorPalette(config);

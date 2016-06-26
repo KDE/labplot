@@ -564,7 +564,7 @@ bool PlotArea::load(XmlStreamReader* reader){
 void PlotArea::loadConfig(const KConfig& config)
 {
 
-	KConfigGroup group = config.group("ThemeCartesianPlot");
+	KConfigGroup group = config.group("CartesianPlot");
 
 	this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle",(int) this->backgroundBrushStyle()));
 	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle)(group.readEntry("BackgroundType",(int) this->backgroundColorStyle())));
