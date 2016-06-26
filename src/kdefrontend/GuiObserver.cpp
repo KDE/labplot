@@ -124,7 +124,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 	mainWindow->stackedWidget->currentWidget()->show();
 
   if (className=="Spreadsheet"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("Spreadsheet properties"));
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Spreadsheet"));
 
 	if (!mainWindow->spreadsheetDock){
 	  mainWindow->spreadsheetDock = new SpreadsheetDock(mainWindow->stackedWidget);
@@ -140,7 +140,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->spreadsheetDock);
   }else if (className=="Column"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("Column properties"));
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Column"));
 
 	if (!mainWindow->columnDock){
 	  mainWindow->columnDock = new ColumnDock(mainWindow->stackedWidget);
@@ -156,7 +156,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->columnDock);
   }else if (className=="Matrix"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("Matrix properties"));
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Matrix"));
 
 	if (!mainWindow->matrixDock){
 	  mainWindow->matrixDock = new MatrixDock(mainWindow->stackedWidget);
@@ -172,7 +172,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->matrixDock);
   }else if (className=="Worksheet"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("Worksheet properties"));
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Worksheet"));
 
 	if (!mainWindow->worksheetDock){
 	  mainWindow->worksheetDock = new WorksheetDock(mainWindow->stackedWidget);
@@ -188,7 +188,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->worksheetDock);
   }else if (className=="CartesianPlot"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("Cartesian plot properties"));
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Cartesian Plot"));
 
 	if (!mainWindow->cartesianPlotDock){
 	  mainWindow->cartesianPlotDock = new CartesianPlotDock(mainWindow->stackedWidget);
@@ -204,7 +204,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->cartesianPlotDock);
   }else if (className=="CartesianPlotLegend"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("Cartesian plot legend properties"));
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Legend"));
 
 	if (!mainWindow->cartesianPlotLegendDock){
 	  mainWindow->cartesianPlotLegendDock = new CartesianPlotLegendDock(mainWindow->stackedWidget);
@@ -220,7 +220,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->cartesianPlotLegendDock);
   }else if (className=="Axis"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("Axis properties"));
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Axis"));
 
 	if (!mainWindow->axisDock){
 	  mainWindow->axisDock = new AxisDock(mainWindow->stackedWidget);
@@ -236,7 +236,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->axisDock);
   }else if (className=="XYCurve"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-curve properties"));
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-Curve"));
 
 	if (!mainWindow->xyCurveDock){
 	  mainWindow->xyCurveDock = new XYCurveDock(mainWindow->stackedWidget);
@@ -253,7 +253,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyCurveDock);
   }else if (className=="XYEquationCurve"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-equation-curve properties"));
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-Equation"));
 
 	if (!mainWindow->xyEquationCurveDock){
 	  mainWindow->xyEquationCurveDock = new XYEquationCurveDock(mainWindow->stackedWidget);
@@ -270,7 +270,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 	mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyEquationCurveDock);
 	}else if (className=="XYFitCurve"){
-		mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-fit-curve properties"));
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Fit"));
 
 		if (!mainWindow->xyFitCurveDock){
 			mainWindow->xyFitCurveDock = new XYFitCurveDock(mainWindow->stackedWidget);
@@ -287,7 +287,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyFitCurveDock);
 	}else if (className=="XYFourierFilterCurve"){
-		mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-fourier_filter-curve properties"));
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Fourier Filter"));
 
 		if (!mainWindow->xyFourierFilterCurveDock){
 			mainWindow->xyFourierFilterCurveDock = new XYFourierFilterCurveDock(mainWindow->stackedWidget);
@@ -304,7 +304,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyFourierFilterCurveDock);
 	}else if (className=="XYInterpolationCurve"){
-		mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-interpolation-curve properties"));
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Interpolation"));
 
 		if (!mainWindow->xyInterpolationCurveDock){
 			mainWindow->xyInterpolationCurveDock = new XYInterpolationCurveDock(mainWindow->stackedWidget);
@@ -321,7 +321,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyInterpolationCurveDock);
 	}else if (className=="XYSmoothCurve"){
-		mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-smooth-curve properties"));
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Smoothing"));
 
 		if (!mainWindow->xySmoothCurveDock){
 			mainWindow->xySmoothCurveDock = new XYSmoothCurveDock(mainWindow->stackedWidget);
@@ -338,7 +338,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xySmoothCurveDock);
 	}else if (className=="TextLabel"){
-		mainWindow->m_propertiesDock->setWindowTitle(i18n("Text label properties"));
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Text Label"));
 
 		if (!mainWindow->textLabelDock){
 			mainWindow->textLabelDock = new LabelWidget(mainWindow->stackedWidget);
@@ -353,7 +353,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->textLabelDock);
 	}else if (className=="CustomPoint"){
-		mainWindow->m_propertiesDock->setWindowTitle(i18n("Custom point properties"));
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Custom Point"));
 
 		if (!mainWindow->customPointDock){
 			mainWindow->customPointDock = new CustomPointDock(mainWindow->stackedWidget);
@@ -368,7 +368,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->customPointDock);
 	}else if (className=="DatapickerCurve"){
-		mainWindow->m_propertiesDock->setWindowTitle(i18n("DatapickerCurve properties"));
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Datapicker Curve"));
 
 		if (!mainWindow->datapickerCurveDock){
 			mainWindow->datapickerCurveDock = new DatapickerCurveWidget(mainWindow->stackedWidget);
@@ -383,7 +383,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerCurveDock);
 	}else if (className=="Datapicker"){
-		mainWindow->m_propertiesDock->setWindowTitle(i18n("Datapicker properties"));
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Datapicker"));
 
 		if (!mainWindow->datapickerImageDock){
 			mainWindow->datapickerImageDock = new DatapickerImageWidget(mainWindow->stackedWidget);
@@ -398,7 +398,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0){
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerImageDock);
   }else if (className=="Project"){
-	mainWindow->m_propertiesDock->setWindowTitle(i18n("Project properties"));
+	mainWindow->m_propertiesDock->setWindowTitle(i18n("Project"));
 
 	if (!mainWindow->projectDock){
 	  mainWindow->projectDock = new ProjectDock(mainWindow->stackedWidget);
