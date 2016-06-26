@@ -30,6 +30,8 @@
 
 #include <QFileDialog>
 #include <KMessageBox>
+#include <QLabel>
+#include <QComboBox>
 
 /*!
 	\class ExportSpreadsheetDialog
@@ -50,7 +52,6 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	ui.cbFormat->addItem("Binary");
 	ui.cbFormat->addItem("LaTeX");
     ui.cbFormat->addItem("FITS");
-
 
 	ui.cbSeparator->addItem("TAB");
 	ui.cbSeparator->addItem("SPACE");
@@ -82,6 +83,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	setWindowIcon(KIcon("document-export-database"));
 
 	//restore saved settings
+
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	ui.cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui.chkExportHeader->setChecked(conf.readEntry("Header", true));
@@ -93,7 +95,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	ui.cbLaTeXExport->setCurrentIndex(conf.readEntry("ExportOnly", 0));
 	ui.chkMatrixHHeader->setChecked(conf.readEntry("MatrixHorizontalHeader", true));
 	ui.chkMatrixVHeader->setChecked(conf.readEntry("MatrixVerticalHeader", true));
-
+    ui.cbExportToFITS->setCurrentIndex(conf.readEntry("FITSTo", 0));
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	ui.gbOptions->setVisible(m_showOptions);
 	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
@@ -114,6 +116,7 @@ ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 	conf.writeEntry("ExportOnly", ui.cbLaTeXExport->currentIndex());
 	conf.writeEntry("MatrixVerticalHeader", ui.chkMatrixVHeader->isChecked());
 	conf.writeEntry("MatrixHorizontalHeader", ui.chkMatrixHHeader->isChecked());
+    conf.writeEntry("FITSTo", ui.cbExportToFITS->currentIndex());
 
 	saveDialogSize(conf);
     delete urlCompletion;
@@ -141,6 +144,7 @@ void ExportSpreadsheetDialog::setMatrixMode(bool b) {
 		ui.lHeader->hide();
 		ui.chkHeaders->hide();
 		ui.cbLaTeXExport->setItemText(0,i18n("Export matrix"));
+        ui.cbExportToFITS->setCurrentIndex(0);
 
 		m_matrixMode = b;
 	}
@@ -148,6 +152,10 @@ void ExportSpreadsheetDialog::setMatrixMode(bool b) {
 
 QString ExportSpreadsheetDialog::path() const {
 	return ui.kleFileName->text();
+}
+
+int ExportSpreadsheetDialog::exportToFits() const {
+    return ui.cbExportToFITS->currentIndex();
 }
 
 bool ExportSpreadsheetDialog::exportHeader() const {
@@ -205,7 +213,6 @@ void ExportSpreadsheetDialog::okClicked() {
             if (r==KMessageBox::No)
                 return;
         }
-
     KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
     conf.writeEntry("Format", ui.cbFormat->currentIndex());
     conf.writeEntry("Header", ui.chkExportHeader->isChecked());
@@ -293,10 +300,29 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 			ui.chkMatrixHHeader->show();
 			ui.chkMatrixVHeader->show();
 		}
+        ui.cbExportToFITS->hide();
+        ui.lExportToFITS->hide();
     //FITS
     } else if(ui.cbFormat->currentIndex() == 3) {
-        ui.gbOptions->hide();
-
+        ui.lCaptions->hide();
+        ui.lEmptyRows->hide();
+        ui.lExportArea->hide();
+        ui.lGridLines->hide();
+        ui.lMatrixHHeader->hide();
+        ui.lMatrixVHeader->hide();
+        ui.lSeparator->hide();
+        ui.lHeader->hide();
+        ui.chkEmptyRows->hide();
+        ui.chkHeaders->hide();
+        ui.chkExportHeader->hide();
+        ui.chkGridLines->hide();
+        ui.chkMatrixHHeader->hide();
+        ui.chkMatrixVHeader->hide();
+        ui.chkCaptions->hide();
+        ui.cbLaTeXExport->hide();
+        ui.cbSeparator->hide();
+        ui.cbExportToFITS->show();
+        ui.lExportToFITS->show();
     } else {
         ui.cbSeparator->show();
         ui.lSeparator->show();
@@ -316,6 +342,9 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 
         ui.lHeader->hide();
         ui.chkHeaders->hide();
+
+        ui.cbExportToFITS->hide();
+        ui.lExportToFITS->hide();
     }
 
 	if (!m_matrixMode) {
@@ -332,6 +361,10 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 
 void ExportSpreadsheetDialog::setFormat(Format format) {
 	m_format = format;
+}
+
+void ExportSpreadsheetDialog::setExportTo(const QStringList &to) {
+    ui.cbExportToFITS->addItems(to);
 }
 
 ExportSpreadsheetDialog::Format ExportSpreadsheetDialog::format() const {
