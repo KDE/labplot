@@ -139,10 +139,13 @@ void ExportSpreadsheetDialog::setMatrixMode(bool b) {
 		ui.chkExportHeader->hide();
 		ui.lEmptyRows->hide();
 		ui.chkEmptyRows->hide();
-		ui.chkMatrixHHeader->show();
-		ui.chkMatrixVHeader->show();
-		ui.lMatrixHHeader->show();
-		ui.lMatrixVHeader->show();
+        if (ui.cbFormat->currentIndex() != 3) {
+            ui.chkMatrixHHeader->show();
+            ui.chkMatrixVHeader->show();
+            ui.lMatrixHHeader->show();
+            ui.lMatrixVHeader->show();
+        }
+
 		ui.lHeader->hide();
 		ui.chkHeaders->hide();
 		ui.cbLaTeXExport->setItemText(0,i18n("Export matrix"));
@@ -367,14 +370,16 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
     }
 
 	if (!m_matrixMode) {
-        if (ui.cbFormat->currentIndex() != 3) {
             ui.chkExportHeader->show();
             ui.lExportHeader->show();
-        }
 	} else {
 		ui.chkExportHeader->hide();
 		ui.lExportHeader->hide();
 	}
+    if (ui.cbFormat->currentIndex() == 3) {
+        ui.chkExportHeader->hide();
+        ui.lExportHeader->hide();
+    }
 
 	setFormat(static_cast<Format>(index));
 	ui.kleFileName->setText(path);

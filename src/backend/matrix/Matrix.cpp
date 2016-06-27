@@ -130,6 +130,8 @@ bool Matrix::exportView() const {
 	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(m_view);
 	dlg->setFileName(name());
 	dlg->setMatrixMode(true);
+    //TODO FITS filter to decide if it can be exported to both
+    dlg->setExportTo(QStringList() << i18n("FITS image") << i18n("FITS table"));
     bool ret;
     if ((ret = dlg->exec()==QDialog::Accepted)) {
         const QString path = dlg->path();

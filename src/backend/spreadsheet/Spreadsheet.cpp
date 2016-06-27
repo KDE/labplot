@@ -125,7 +125,7 @@ bool Spreadsheet::exportView() const {
         else if (dlg->format() == ExportSpreadsheetDialog::FITS) {
             const int exportTo = dlg->exportToFits();
             const bool commentsAsUnits = dlg->commentsAsUnitsFits();
-            view->exportToFits(path, exportTo, commentsAsUnits) ;
+            view->exportToFits(path, exportTo, commentsAsUnits);
         } else {
             const QString separator = dlg->separator();
             view->exportToFile(path, exportHeader, separator);
