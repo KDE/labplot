@@ -35,8 +35,6 @@
 
 #include "XYSmoothCurve.h"
 #include "XYSmoothCurvePrivate.h"
-#include "CartesianCoordinateSystem.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 
@@ -228,7 +226,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	}
 
 	//number of data points to smooth
-	unsigned int n = ydataVector.size();
+	const unsigned int n = ydataVector.size();
 	if (n < 2) {
 		smoothResult.available = true;
 		smoothResult.valid = false;
@@ -242,14 +240,14 @@ void XYSmoothCurvePrivate::recalculate() {
 	double* ydata = ydataVector.data();
 
 	// smooth settings
-	XYSmoothCurve::SmoothType type = smoothData.type;
-	unsigned int points = smoothData.points;
-	nsl_smooth_weight_type weight = smoothData.weight;
-	double percentile = smoothData.percentile;
-	unsigned int order = smoothData.order;
-	nsl_smooth_pad_mode mode = smoothData.mode;
-	double lvalue = smoothData.lvalue;
-	double rvalue = smoothData.rvalue;
+	const XYSmoothCurve::SmoothType type = smoothData.type;
+	const unsigned int points = smoothData.points;
+	const nsl_smooth_weight_type weight = smoothData.weight;
+	const double percentile = smoothData.percentile;
+	const unsigned int order = smoothData.order;
+	const nsl_smooth_pad_mode mode = smoothData.mode;
+	const double lvalue = smoothData.lvalue;
+	const double rvalue = smoothData.rvalue;
 #ifdef QT_DEBUG
 	qDebug()<<"type:"<<type;
 	qDebug()<<"points ="<<points;

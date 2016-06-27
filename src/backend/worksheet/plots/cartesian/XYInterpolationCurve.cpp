@@ -36,7 +36,6 @@
 #include "XYInterpolationCurve.h"
 #include "XYInterpolationCurvePrivate.h"
 #include "CartesianCoordinateSystem.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 
@@ -348,7 +347,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 	}
 
 	//number of data points to interpolate
-	unsigned int n = ydataVector.size();
+	const unsigned int n = ydataVector.size();
 	if (n < 2) {
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
@@ -361,17 +360,17 @@ void XYInterpolationCurvePrivate::recalculate() {
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
-	double min = xDataColumn->minimum();
-	double max = xDataColumn->maximum();
+	const double min = xDataColumn->minimum();
+	const double max = xDataColumn->maximum();
 
 	// interpolation settings
-	XYInterpolationCurve::InterpolationType type = interpolationData.type;
-	XYInterpolationCurve::CubicHermiteVariant variant = interpolationData.variant;
-	double tension = interpolationData.tension;
-	double continuity = interpolationData.continuity;
-	double bias = interpolationData.bias;
-	XYInterpolationCurve::InterpolationEval evaluate = interpolationData.evaluate;
-	unsigned int npoints = interpolationData.npoints;
+	const XYInterpolationCurve::InterpolationType type = interpolationData.type;
+	const XYInterpolationCurve::CubicHermiteVariant variant = interpolationData.variant;
+	const double tension = interpolationData.tension;
+	const double continuity = interpolationData.continuity;
+	const double bias = interpolationData.bias;
+	const XYInterpolationCurve::InterpolationEval evaluate = interpolationData.evaluate;
+	const unsigned int npoints = interpolationData.npoints;
 #ifdef QT_DEBUG
 	qDebug()<<"type:"<<type;
 	qDebug()<<"cubic Hermite variant:"<<variant<<tension<<continuity<<bias;
