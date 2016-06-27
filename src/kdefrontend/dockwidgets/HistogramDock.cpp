@@ -76,21 +76,6 @@ HistogramDock::HistogramDock(QWidget *parent): QWidget(parent),
 
 	ui.kleFillingFileName->setCompletionObject(m_completion);
 
-	//Tab "Error bars"
-	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
-
-	cbXErrorPlusColumn = new TreeViewComboBox(ui.tabErrorBars);
-	gridLayout->addWidget(cbXErrorPlusColumn, 2, 2, 1, 1);
-
-	cbXErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
-	gridLayout->addWidget(cbXErrorMinusColumn, 3, 2, 1, 1);
-
-	cbYErrorPlusColumn = new TreeViewComboBox(ui.tabErrorBars);
-	gridLayout->addWidget(cbYErrorPlusColumn, 7, 2, 1, 1);
-
-	cbYErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
-	gridLayout->addWidget(cbYErrorMinusColumn, 8, 2, 1, 1);
-
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i){
 	  QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
@@ -102,36 +87,7 @@ HistogramDock::HistogramDock(QWidget *parent): QWidget(parent),
 	  layout->setVerticalSpacing(2);
 	}
 
-	//Slots
-
-	//Lines
-	connect( ui.cbLineType, SIGNAL(currentIndexChanged(int)), this, SLOT(lineTypeChanged(int)) );
-	connect( ui.sbLineInterpolationPointsCount, SIGNAL(valueChanged(int)), this, SLOT(lineInterpolationPointsCountChanged(int)) );
-	connect( ui.chkLineSkipGaps, SIGNAL(clicked(bool)), this, SLOT(lineSkipGapsChanged(bool)) );
-	connect( ui.cbLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(lineStyleChanged(int)) );
-	connect( ui.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
-	connect( ui.sbLineWidth, SIGNAL(valueChanged(double)), this, SLOT(lineWidthChanged(double)) );
-	connect( ui.sbLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(lineOpacityChanged(int)) );
-
-	connect( ui.cbDropLineType, SIGNAL(currentIndexChanged(int)), this, SLOT(dropLineTypeChanged(int)) );
-	connect( ui.cbDropLineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(dropLineStyleChanged(int)) );
-	connect( ui.kcbDropLineColor, SIGNAL(changed(QColor)), this, SLOT(dropLineColorChanged(QColor)) );
-	connect( ui.sbDropLineWidth, SIGNAL(valueChanged(double)), this, SLOT(dropLineWidthChanged(double)) );
-	connect( ui.sbDropLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(dropLineOpacityChanged(int)) );
-
-	//Symbol
-	connect( ui.cbSymbolStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolsStyleChanged(int)) );
-	connect( ui.sbSymbolSize, SIGNAL(valueChanged(double)), this, SLOT(symbolsSizeChanged(double)) );
-	connect( ui.sbSymbolRotation, SIGNAL(valueChanged(int)), this, SLOT(symbolsRotationChanged(int)) );
-	connect( ui.sbSymbolOpacity, SIGNAL(valueChanged(int)), this, SLOT(symbolsOpacityChanged(int)) );
-
-	connect( ui.cbSymbolFillingStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolsFillingStyleChanged(int)) );
-	connect( ui.kcbSymbolFillingColor, SIGNAL(changed(QColor)), this, SLOT(symbolsFillingColorChanged(QColor)) );
-
-	connect( ui.cbSymbolBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolsBorderStyleChanged(int)) );
-	connect( ui.kcbSymbolBorderColor, SIGNAL(changed(QColor)), this, SLOT(symbolsBorderColorChanged(QColor)) );
-	connect( ui.sbSymbolBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(symbolsBorderWidthChanged(double)) );
-
+	//Slots	
 	//Values
 	connect( ui.cbValuesType, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesTypeChanged(int)) );
 	connect( cbValuesColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(valuesColumnChanged(QModelIndex)) );
@@ -159,22 +115,9 @@ HistogramDock::HistogramDock(QWidget *parent): QWidget(parent),
 	connect( ui.kcbFillingSecondColor, SIGNAL(changed(QColor)), this, SLOT(fillingSecondColorChanged(QColor)) );
 	connect( ui.sbFillingOpacity, SIGNAL(valueChanged(int)), this, SLOT(fillingOpacityChanged(int)) );
 
-	//Error bars
-	connect( ui.cbXErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(xErrorTypeChanged(int)) );
-	connect( cbXErrorPlusColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xErrorPlusColumnChanged(QModelIndex)) );
-	connect( cbXErrorMinusColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xErrorMinusColumnChanged(QModelIndex)) );
-	connect( ui.cbYErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(yErrorTypeChanged(int)) );
-	connect( cbYErrorPlusColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yErrorPlusColumnChanged(QModelIndex)) );
-	connect( cbYErrorMinusColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yErrorMinusColumnChanged(QModelIndex)) );
-	connect( ui.cbErrorBarsType, SIGNAL(currentIndexChanged(int)), this, SLOT(errorBarsTypeChanged(int)) );
-	connect( ui.sbErrorBarsCapSize, SIGNAL(valueChanged(double)), this, SLOT(errorBarsCapSizeChanged(double)) );
-	connect( ui.cbErrorBarsStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(errorBarsStyleChanged(int)) );
-	connect( ui.kcbErrorBarsColor, SIGNAL(changed(QColor)), this, SLOT(errorBarsColorChanged(QColor)) );
-	connect( ui.sbErrorBarsWidth, SIGNAL(valueChanged(double)), this, SLOT(errorBarsWidthChanged(double)) );
-	connect( ui.sbErrorBarsOpacity, SIGNAL(valueChanged(int)), this, SLOT(errorBarsOpacityChanged(int)) );
-
+	
 	//template handler
-	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::XYCurve);
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Histogram);
 	ui.verticalLayout->addWidget(templateHandler);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
@@ -208,6 +151,14 @@ void HistogramDock::retranslateUi(){
 
 	//TODO updatePenStyles, updateBrushStyles for all comboboxes
 }
+// "General"-tab
+void HistogramDock::nameChanged(){
+  if (m_initializing)
+	return;
+
+  m_curve->setName(uiGeneralTab.leName->text());
+}
+
 void HistogramDock::init(){
   	dateStrings<<"yyyy-MM-dd";
 	dateStrings<<"yyyy/MM/dd";
@@ -228,174 +179,6 @@ void HistogramDock::init(){
 	timeStrings<<"hh:mm:ss:zzz";
 	timeStrings<<"mm:ss.zzz";
 	timeStrings<<"hhmmss";
-
-	m_initializing = true;
-
-	//Line
-	ui.cbLineType->addItem(i18n("none"));
-	ui.cbLineType->addItem(i18n("line"));
-	ui.cbLineType->addItem(i18n("horiz. start"));
-	ui.cbLineType->addItem(i18n("vert. start"));
-	ui.cbLineType->addItem(i18n("horiz. midpoint"));
-	ui.cbLineType->addItem(i18n("vert. midpoint"));
-	ui.cbLineType->addItem(i18n("2-segments"));
-	ui.cbLineType->addItem(i18n("3-segments"));
-	ui.cbLineType->addItem(i18n("cubic spline (natural)"));
-	ui.cbLineType->addItem(i18n("cubic spline (periodic)"));
-	ui.cbLineType->addItem(i18n("Akima-spline (natural)"));
-	ui.cbLineType->addItem(i18n("Akima-spline (periodic)"));
-
-	QPainter pa;
-	//TODO size of the icon depending on the actuall height of the combobox?
-	int iconSize = 20;
-	QPixmap pm(iconSize, iconSize);
-	ui.cbLineType->setIconSize(QSize(iconSize, iconSize));
-
-	QPen pen(Qt::SolidPattern, 0);
- 	pa.setPen( pen );
-
-	//no line
-	pm.fill(Qt::transparent);
-	pa.begin( &pm );
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawEllipse( 1,1,4,4);
-	pa.drawEllipse( 15,15,4,4);
-	pa.end();
-	ui.cbLineType->setItemIcon(0, pm);
-
-	//line
-	pm.fill(Qt::transparent);
-	pa.begin( &pm );
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawEllipse( 1,1,4,4);
-	pa.drawEllipse( 15,15,4,4);
-	pa.drawLine(3,3,17,17);
-	pa.end();
-	ui.cbLineType->setItemIcon(1, pm);
-
-	pm.fill(Qt::transparent);
-	pa.begin( &pm );
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawEllipse( 1,1,4,4);
-	pa.drawEllipse( 15,15,4,4);
-	pa.drawLine(3,3,17,3);
-	pa.drawLine(17,3,17,17);
-	pa.end();
-	ui.cbLineType->setItemIcon(2, pm);
-
-	pm.fill(Qt::transparent);
-	pa.begin( &pm );
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawEllipse( 1,1,4,4);
-	pa.drawEllipse( 15,15,4,4);
-	pa.drawLine(3,3,3,17);
-	pa.drawLine(3,17,17,17);
-	pa.end();
-	ui.cbLineType->setItemIcon(3, pm);
-
-	//horizontal midpoint
-	pm.fill(Qt::transparent);
-	pa.begin( &pm );
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawEllipse( 1,1,4,4);
-	pa.drawEllipse( 15,15,4,4);
-	pa.drawLine(3,3,10,3);
-	pa.drawLine(10,3,10,17);
-	pa.drawLine(10,17,17,17);
-	pa.end();
-	ui.cbLineType->setItemIcon(4, pm);
-
-	//vertical midpoint
-	pm.fill(Qt::transparent);
-	pa.begin( &pm );
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawEllipse( 1,1,4,4);
-	pa.drawEllipse( 15,15,4,4);
-	pa.drawLine(3,3,3,10);
-	pa.drawLine(3,10,17,10);
-	pa.drawLine(17,10,17,17);
-	pa.end();
-	ui.cbLineType->setItemIcon(5, pm);
-
-	//2-segments
-	pm.fill(Qt::transparent);
-	pa.begin( &pm );
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawEllipse( 1,1,4,4);
-	pa.drawEllipse( 8,8,4,4);
-	pa.drawEllipse( 15,15,4,4);
-	pa.drawLine(3,3,10,10);
-	pa.end();
-	ui.cbLineType->setItemIcon(6, pm);
-
-	//3-segments
-	pm.fill(Qt::transparent);
-	pa.begin( &pm );
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawEllipse( 1,1,4,4);
-	pa.drawEllipse( 8,8,4,4);
-	pa.drawEllipse( 15,15,4,4);
-	pa.drawLine(3,3,17,17);
-	pa.end();
-	ui.cbLineType->setItemIcon(7, pm);
-
-	//natural spline
-	pm.fill(Qt::transparent);
-	pa.begin( &pm );
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawEllipse( 1,1,4,4);
-	pa.drawEllipse( 15,15,4,4);
-	pa.rotate(45);
-  	pa.drawArc(2*sqrt(2),-4,17*sqrt(2),20,30*16,120*16);
-
-	pa.end();
-	ui.cbLineType->setItemIcon(8, pm);
-	ui.cbLineType->setItemIcon(9, pm);
-	ui.cbLineType->setItemIcon(10, pm);
-	ui.cbLineType->setItemIcon(11, pm);
-
-	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
-
-	//Drop lines
-	ui.cbDropLineType->addItem(i18n("no drop lines"));
-	ui.cbDropLineType->addItem(i18n("drop lines, X"));
-	ui.cbDropLineType->addItem(i18n("drop lines, Y"));
-	ui.cbDropLineType->addItem(i18n("drop lines, XY"));
-	ui.cbDropLineType->addItem(i18n("drop lines, X, zero baseline"));
-	ui.cbDropLineType->addItem(i18n("drop lines, X, min baseline"));
-	ui.cbDropLineType->addItem(i18n("drop lines, X, max baseline"));
-	GuiTools::updatePenStyles(ui.cbDropLineStyle, Qt::black);
-
-	//Symbols
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
-
-	ui.cbSymbolStyle->setIconSize(QSize(iconSize, iconSize));
-	QTransform trafo;
-	trafo.scale(15, 15);
-
-	ui.cbSymbolStyle->addItem(i18n("none"));
-	for (int i=1; i<19; ++i) {
-		Symbol::Style style = (Symbol::Style)i;
-		pm.fill(Qt::transparent);
-		pa.begin(&pm);
-		pa.setRenderHint(QPainter::Antialiasing);
-		pa.translate(iconSize/2,iconSize/2);
-		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
-		pa.end();
-        ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style));
-	}
-
- 	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
-	m_initializing = false;
 
 	//Values
 	ui.cbValuesType->addItem(i18n("no values"));
@@ -441,44 +224,11 @@ void HistogramDock::init(){
 	ui.cbFillingImageStyle->addItem(i18n("center tiled"));
 	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, Qt::SolidPattern);
 
-	//Error-bars
-	pm.fill(Qt::transparent);
-	pa.begin( &pm );
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.drawLine(3,10,17,10);//vert. line
-	pa.drawLine(10,3,10,17);//hor. line
-	pa.end();
-	ui.cbErrorBarsType->addItem(i18n("bars"));
-	ui.cbErrorBarsType->setItemIcon(0, pm);
-
-	pm.fill(Qt::transparent);
-	pa.begin( &pm );
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawLine(3,10,17,10); //vert. line
-	pa.drawLine(10,3,10,17); //hor. line
-	pa.drawLine(7,3,13,3); //upper cap
-	pa.drawLine(7,17,13,17); //bottom cap
-	pa.drawLine(3,7,3,13); //left cap
-	pa.drawLine(17,7,17,13); //right cap
-	pa.end();
-	ui.cbErrorBarsType->addItem(i18n("bars with ends"));
-	ui.cbErrorBarsType->setItemIcon(1, pm);
-
-	ui.cbXErrorType->addItem(i18n("no"));
-	ui.cbXErrorType->addItem(i18n("symmetric"));
-	ui.cbXErrorType->addItem(i18n("asymmetric"));
-
-	ui.cbYErrorType->addItem(i18n("no"));
-	ui.cbYErrorType->addItem(i18n("symmetric"));
-	ui.cbYErrorType->addItem(i18n("asymmetric"));
-
-	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, Qt::black);
 }
 void HistogramDock::setModel() {
 	QList<const char*>  list;
 	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
-		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"
+		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<< "Histogram"
 		<<"XYInterpolationCurve"<<"XYFitCurve"<<"XYFourierFilterCurve";
 
 	if (cbXColumn) {
@@ -486,10 +236,6 @@ void HistogramDock::setModel() {
 		cbYColumn->setTopLevelClasses(list);
 	}
 	cbValuesColumn->setTopLevelClasses(list);
-	cbXErrorMinusColumn->setTopLevelClasses(list);
-	cbXErrorPlusColumn->setTopLevelClasses(list);
-	cbYErrorMinusColumn->setTopLevelClasses(list);
-	cbYErrorPlusColumn->setTopLevelClasses(list);
 
  	list.clear();
 	list<<"Column";
@@ -499,20 +245,11 @@ void HistogramDock::setModel() {
 		cbYColumn->setSelectableClasses(list);
 	}
 	cbValuesColumn->setSelectableClasses(list);
-	cbXErrorMinusColumn->setSelectableClasses(list);
-	cbXErrorPlusColumn->setSelectableClasses(list);
-	cbYErrorMinusColumn->setSelectableClasses(list);
-	cbYErrorPlusColumn->setSelectableClasses(list);
-
 	if (cbXColumn) {
 		cbXColumn->setModel(m_aspectTreeModel);
 		cbYColumn->setModel(m_aspectTreeModel);
 	}
 	cbValuesColumn->setModel(m_aspectTreeModel);
-	cbXErrorMinusColumn->setModel(m_aspectTreeModel);
-	cbXErrorPlusColumn->setModel(m_aspectTreeModel);
-	cbYErrorMinusColumn->setModel(m_aspectTreeModel);
-	cbYErrorPlusColumn->setModel(m_aspectTreeModel);
 }
 void HistogramDock::setCurves(QList<Histogram*> list){
 	m_initializing=true;
@@ -569,6 +306,7 @@ void HistogramDock::initGeneralTab(){
 
 	//Slots
 	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	
 	connect(m_curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(curveXColumnChanged(const AbstractColumn*)));
 	connect(m_curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(curveYColumnChanged(const AbstractColumn*)));
 	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
@@ -579,20 +317,111 @@ void HistogramDock::initGeneralTab(){
 	
 }
 
+//Values-Tab
+void HistogramDock::curveValuesTypeChanged(Histogram::ValuesType type) {
+	m_initializing = true;
+  	ui.cbValuesType->setCurrentIndex((int) type);
+	m_initializing = false;
+}
+void HistogramDock::curveValuesColumnChanged(const AbstractColumn* column) {
+	m_initializing = true;
+	this->setModelIndexFromColumn(cbValuesColumn, column);
+	m_initializing = false;
+}
+void HistogramDock::curveValuesPositionChanged(Histogram::ValuesPosition position) {
+	m_initializing = true;
+  	ui.cbValuesPosition->setCurrentIndex((int) position);
+	m_initializing = false;
+}
+void HistogramDock::curveValuesDistanceChanged(qreal distance) {
+	m_initializing = true;
+  	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(distance, Worksheet::Point) );
+	m_initializing = false;
+}
+void HistogramDock::curveValuesRotationAngleChanged(qreal angle) {
+	m_initializing = true;
+	ui.sbValuesRotation->setValue(angle);
+	m_initializing = false;
+}
+void HistogramDock::curveValuesOpacityChanged(qreal opacity) {
+	m_initializing = true;
+	ui.sbValuesOpacity->setValue( round(opacity*100.0) );
+	m_initializing = false;
+}
+void HistogramDock::curveValuesPrefixChanged(QString prefix) {
+	m_initializing = true;
+  	ui.leValuesPrefix->setText(prefix);
+	m_initializing = false;
+}
+void HistogramDock::curveValuesSuffixChanged(QString suffix) {
+	m_initializing = true;
+  	ui.leValuesSuffix->setText(suffix);
+	m_initializing = false;
+}
+void HistogramDock::curveValuesFontChanged(QFont font) {
+	m_initializing = true;
+	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
+  	ui.kfrValuesFont->setFont(font);
+	m_initializing = false;
+}
+void HistogramDock::curveValuesColorChanged(QColor color) {
+	m_initializing = true;
+  	ui.kcbValuesColor->setColor(color);
+	m_initializing = false;
+}
+
+//Filling
+void HistogramDock::curveFillingPositionChanged(Histogram::FillingPosition position) {
+	m_initializing = true;
+	ui.cbFillingPosition->setCurrentIndex((int)position);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingTypeChanged(PlotArea::BackgroundType type){
+	m_initializing = true;
+	ui.cbFillingType->setCurrentIndex(type);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle style){
+	m_initializing = true;
+	ui.cbFillingColorStyle->setCurrentIndex(style);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle style){
+	m_initializing = true;
+	ui.cbFillingImageStyle->setCurrentIndex(style);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingBrushStyleChanged(Qt::BrushStyle style){
+	m_initializing = true;
+	ui.cbFillingBrushStyle->setCurrentIndex(style);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingFirstColorChanged(QColor& color){
+	m_initializing = true;
+	ui.kcbFillingFirstColor->setColor(color);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingSecondColorChanged(QColor& color){
+	m_initializing = true;
+	ui.kcbFillingSecondColor->setColor(color);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingFileNameChanged(QString& filename){
+	m_initializing = true;
+	ui.kleFillingFileName->setText(filename);
+	m_initializing = false;
+}
+void HistogramDock::curveFillingOpacityChanged(float opacity){
+	m_initializing = true;
+	ui.sbFillingOpacity->setValue( round(opacity*100.0) );
+	m_initializing = false;
+}
 void HistogramDock::initTabs() {
 	//if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size()==1){
 		/*this->setModelIndexFromColumn(cbValuesColumn, m_curve->valuesColumn());
-		this->setModelIndexFromColumn(cbXErrorPlusColumn, m_curve->xErrorPlusColumn());
-		this->setModelIndexFromColumn(cbXErrorMinusColumn, m_curve->xErrorMinusColumn());
-		this->setModelIndexFromColumn(cbYErrorPlusColumn, m_curve->yErrorPlusColumn());
-		this->setModelIndexFromColumn(cbYErrorMinusColumn, m_curve->yErrorMinusColumn());
 	*/}else {
 		cbValuesColumn->setCurrentModelIndex(QModelIndex());
-		cbXErrorPlusColumn->setCurrentModelIndex(QModelIndex());
-		cbXErrorMinusColumn->setCurrentModelIndex(QModelIndex());
-		cbYErrorPlusColumn->setCurrentModelIndex(QModelIndex());
-		cbYErrorMinusColumn->setCurrentModelIndex(QModelIndex());
 	}
 
 	//show the properties of the first curve
@@ -600,25 +429,6 @@ void HistogramDock::initTabs() {
 	loadConfig(config);
 
 	//Slots
-
-	//Line-Tab
-	connect(m_curve, SIGNAL(lineTypeChanged(Histogram::LineType)), this, SLOT(curveLineTypeChanged(Histogram::LineType)));
-	connect(m_curve, SIGNAL(lineSkipGapsChanged(bool)), this, SLOT(curveLineSkipGapsChanged(bool)));
-	connect(m_curve, SIGNAL(lineInterpolationPointsCountChanged(int)), this, SLOT(curveLineInterpolationPointsCountChanged(int)));
-	connect(m_curve, SIGNAL(linePenChanged(QPen)), this, SLOT(curveLinePenChanged(QPen)));
-	connect(m_curve, SIGNAL(lineOpacityChanged(qreal)), this, SLOT(curveLineOpacityChanged(qreal)));
-	connect(m_curve, SIGNAL(dropLineTypeChanged(Histogram::DropLineType)), this, SLOT(curveDropLineTypeChanged(Histogram::DropLineType)));
-	connect(m_curve, SIGNAL(dropLinePenChanged(QPen)), this, SLOT(curveDropLinePenChanged(QPen)));
-	connect(m_curve, SIGNAL(dropLineOpacityChanged(qreal)), this, SLOT(curveDropLineOpacityChanged(qreal)));
-
-	//Symbol-Tab
-	connect(m_curve, SIGNAL(symbolsStyleChanged(Symbol::Style)), this, SLOT(curveSymbolsStyleChanged(Symbol::Style)));
-	connect(m_curve, SIGNAL(symbolsSizeChanged(qreal)), this, SLOT(curveSymbolsSizeChanged(qreal)));
-	connect(m_curve, SIGNAL(symbolsRotationAngleChanged(qreal)), this, SLOT(curveSymbolsRotationAngleChanged(qreal)));
-	connect(m_curve, SIGNAL(symbolsOpacityChanged(qreal)), this, SLOT(curveSymbolsOpacityChanged(qreal)));
-	connect(m_curve, SIGNAL(symbolsBrushChanged(QBrush)), this, SLOT(curveSymbolsBrushChanged(QBrush)));
-	connect(m_curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(curveSymbolsPenChanged(QPen)));
-
 	//Values-Tab
 	connect(m_curve, SIGNAL(valuesTypeChanged(Histogram::ValuesType)), this, SLOT(curveValuesTypeChanged(Histogram::ValuesType)));
 	connect(m_curve, SIGNAL(valuesColumnChanged(const AbstractColumn*)), this, SLOT(curveValuesColumnChanged(const AbstractColumn*)));
@@ -641,20 +451,195 @@ void HistogramDock::initTabs() {
 	connect( m_curve, SIGNAL(fillingSecondColorChanged(QColor&)), this, SLOT(curveFillingSecondColorChanged(QColor&)) );
 	connect( m_curve, SIGNAL(fillingFileNameChanged(QString&)), this, SLOT(curveFillingFileNameChanged(QString&)) );
 	connect( m_curve, SIGNAL(fillingOpacityChanged(float)), this, SLOT(curveFillingOpacityChanged(float)) );
-
-	//"Error bars"-Tab
-	connect(m_curve, SIGNAL(xErrorTypeChanged(Histogram::ErrorType)), this, SLOT(curveXErrorTypeChanged(Histogram::ErrorType)));
-	connect(m_curve, SIGNAL(xErrorPlusColumnChanged(const AbstractColumn*)), this, SLOT(curveXErrorPlusColumnChanged(const AbstractColumn*)));
-	connect(m_curve, SIGNAL(xErrorMinusColumnChanged(const AbstractColumn*)), this, SLOT(curveXErrorMinusColumnChanged(const AbstractColumn*)));
-	connect(m_curve, SIGNAL(yErrorTypeChanged(Histogram::ErrorType)), this, SLOT(curveYErrorTypeChanged(Histogram::ErrorType)));
-	connect(m_curve, SIGNAL(yErrorPlusColumnChanged(const AbstractColumn*)), this, SLOT(curveYErrorPlusColumnChanged(const AbstractColumn*)));
-	connect(m_curve, SIGNAL(yErrorMinusColumnChanged(const AbstractColumn*)), this, SLOT(curveYErrorMinusColumnChanged(const AbstractColumn*)));
-	connect(m_curve, SIGNAL(errorBarsCapSizeChanged(qreal)), this, SLOT(curveErrorBarsCapSizeChanged(qreal)));
-	connect(m_curve, SIGNAL(errorBarsTypeChanged(Histogram::ErrorBarsType)), this, SLOT(curveErrorBarsTypeChanged(Histogram::ErrorBarsType)));
-	connect(m_curve, SIGNAL(errorBarsPenChanged(QPen)), this, SLOT(curveErrorBarsPenChanged(QPen)));
-	connect(m_curve, SIGNAL(errorBarsOpacityChanged(qreal)), this, SLOT(curveErrorBarsOpacityChanged(qreal)));
 }
 
+//Filling-tab
+void HistogramDock::fillingPositionChanged(int index){
+	Histogram::FillingPosition fillingPosition = Histogram::FillingPosition(index);
+
+	bool b = (fillingPosition != Histogram::NoFilling);
+	ui.cbFillingType->setEnabled(b);
+	ui.cbFillingColorStyle->setEnabled(b);
+	ui.cbFillingBrushStyle->setEnabled(b);
+	ui.cbFillingImageStyle->setEnabled(b);
+	ui.kcbFillingFirstColor->setEnabled(b);
+	ui.kcbFillingSecondColor->setEnabled(b);
+	ui.kleFillingFileName->setEnabled(b);
+	ui.bFillingOpen->setEnabled(b);
+	ui.sbFillingOpacity->setEnabled(b);
+
+	if (m_initializing)
+		return;
+
+	foreach(Histogram* curve, m_curvesList)
+		curve->setFillingPosition(fillingPosition);
+}
+
+void HistogramDock::fillingTypeChanged(int index){
+	PlotArea::BackgroundType type = (PlotArea::BackgroundType)index;
+
+	if (type == PlotArea::Color){
+		ui.lFillingColorStyle->show();
+		ui.cbFillingColorStyle->show();
+		ui.lFillingImageStyle->hide();
+		ui.cbFillingImageStyle->hide();
+		ui.lFillingBrushStyle->hide();
+		ui.cbFillingBrushStyle->hide();
+
+		ui.lFillingFileName->hide();
+		ui.kleFillingFileName->hide();
+		ui.bFillingOpen->hide();
+
+		ui.lFillingFirstColor->show();
+		ui.kcbFillingFirstColor->show();
+
+		PlotArea::BackgroundColorStyle style =
+			(PlotArea::BackgroundColorStyle) ui.cbFillingColorStyle->currentIndex();
+		if (style == PlotArea::SingleColor){
+			ui.lFillingFirstColor->setText(i18n("Color"));
+			ui.lFillingSecondColor->hide();
+			ui.kcbFillingSecondColor->hide();
+		}else{
+			ui.lFillingFirstColor->setText(i18n("First Color"));
+			ui.lFillingSecondColor->show();
+			ui.kcbFillingSecondColor->show();
+		}
+	}else if(type == PlotArea::Image){
+		ui.lFillingColorStyle->hide();
+		ui.cbFillingColorStyle->hide();
+		ui.lFillingImageStyle->show();
+		ui.cbFillingImageStyle->show();
+		ui.lFillingBrushStyle->hide();
+		ui.cbFillingBrushStyle->hide();
+		ui.lFillingFileName->show();
+		ui.kleFillingFileName->show();
+		ui.bFillingOpen->show();
+
+		ui.lFillingFirstColor->hide();
+		ui.kcbFillingFirstColor->hide();
+		ui.lFillingSecondColor->hide();
+		ui.kcbFillingSecondColor->hide();
+	}else if(type == PlotArea::Pattern) {
+		ui.lFillingFirstColor->setText(i18n("Color"));
+		ui.lFillingColorStyle->hide();
+		ui.cbFillingColorStyle->hide();
+		ui.lFillingImageStyle->hide();
+		ui.cbFillingImageStyle->hide();
+		ui.lFillingBrushStyle->show();
+		ui.cbFillingBrushStyle->show();
+		ui.lFillingFileName->hide();
+		ui.kleFillingFileName->hide();
+		ui.bFillingOpen->hide();
+
+		ui.lFillingFirstColor->show();
+		ui.kcbFillingFirstColor->show();
+		ui.lFillingSecondColor->hide();
+		ui.kcbFillingSecondColor->hide();
+	}
+
+	if (m_initializing)
+		return;
+
+	foreach(Histogram* curve, m_curvesList)
+		curve->setFillingType(type);
+}
+
+void HistogramDock::fillingColorStyleChanged(int index){
+	PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
+
+	if (style == PlotArea::SingleColor){
+		ui.lFillingFirstColor->setText(i18n("Color"));
+		ui.lFillingSecondColor->hide();
+		ui.kcbFillingSecondColor->hide();
+	}else{
+		ui.lFillingFirstColor->setText(i18n("First Color"));
+		ui.lFillingSecondColor->show();
+		ui.kcbFillingSecondColor->show();
+		ui.lFillingBrushStyle->hide();
+		ui.cbFillingBrushStyle->hide();
+	}
+
+	if (m_initializing)
+		return;
+
+	foreach(Histogram* curve, m_curvesList)
+		curve->setFillingColorStyle(style);
+}
+
+void HistogramDock::fillingImageStyleChanged(int index){
+	if (m_initializing)
+		return;
+
+	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
+	foreach(Histogram* curve, m_curvesList)
+		curve->setFillingImageStyle(style);
+}
+
+void HistogramDock::fillingBrushStyleChanged(int index){
+	if (m_initializing)
+		return;
+
+	Qt::BrushStyle style = (Qt::BrushStyle)index;
+	foreach(Histogram* curve, m_curvesList)
+		curve->setFillingBrushStyle(style);
+}
+
+void HistogramDock::fillingFirstColorChanged(const QColor& c){
+	if (m_initializing)
+		return;
+
+	foreach(Histogram* curve, m_curvesList)
+		curve->setFillingFirstColor(c);
+}
+
+void HistogramDock::fillingSecondColorChanged(const QColor& c){
+	if (m_initializing)
+		return;
+
+	foreach(Histogram* curve, m_curvesList)
+		curve->setFillingSecondColor(c);
+}
+
+/*!
+	opens a file dialog and lets the user select the image file.
+*/
+void HistogramDock::selectFile() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "HistogramDock");
+	QString dir = conf.readEntry("LastImageDir", "");
+    QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir);
+    if (path.isEmpty())
+        return; //cancel was clicked in the file-dialog
+
+	int pos = path.lastIndexOf(QDir::separator());
+	if (pos!=-1) {
+		QString newDir = path.left(pos);
+		if (newDir!=dir)
+			conf.writeEntry("LastImageDir", newDir);
+	}
+
+    ui.kleFillingFileName->setText( path );
+
+	foreach(Histogram* curve, m_curvesList)
+		curve->setFillingFileName(path);
+}
+
+void HistogramDock::fileNameChanged(){
+	if (m_initializing)
+		return;
+
+	QString fileName = ui.kleFillingFileName->text();
+	foreach(Histogram* curve, m_curvesList)
+		curve->setFillingFileName(fileName);
+}
+
+void HistogramDock::fillingOpacityChanged(int value){
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	foreach(Histogram* curve, m_curvesList)
+		curve->setFillingOpacity(opacity);
+}
 void HistogramDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group( "Histogram" );
 
@@ -663,35 +648,7 @@ void HistogramDock::loadConfig(KConfig& config) {
 	//It doesn't make sense to load/save them in the template.
 	//This data is read in HistogramDock::setCurves().
 
-  	//Line
-	ui.cbLineType->setCurrentIndex( group.readEntry("LineType", (int) m_curve->lineType()) );
-	ui.chkLineSkipGaps->setChecked( group.readEntry("LineSkipGaps", m_curve->lineSkipGaps()) );
-	ui.sbLineInterpolationPointsCount->setValue( group.readEntry("LineInterpolationPointsCount", m_curve->lineInterpolationPointsCount()) );
-	ui.cbLineStyle->setCurrentIndex( group.readEntry("LineStyle", (int) m_curve->linePen().style()) );
-	ui.kcbLineColor->setColor( group.readEntry("LineColor", m_curve->linePen().color()) );
-	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", m_curve->linePen().widthF()), Worksheet::Point) );
-	ui.sbLineOpacity->setValue( round(group.readEntry("LineOpacity", m_curve->lineOpacity())*100.0) );
-
-	//Drop lines
-	ui.cbDropLineType->setCurrentIndex( group.readEntry("DropLineType", (int) m_curve->dropLineType()) );
-	ui.cbDropLineStyle->setCurrentIndex( group.readEntry("DropLineStyle", (int) m_curve->dropLinePen().style()) );
-	ui.kcbDropLineColor->setColor( group.readEntry("DropLineColor", m_curve->dropLinePen().color()) );
-	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("DropLineWidth", m_curve->dropLinePen().widthF()),Worksheet::Point) );
-	ui.sbDropLineOpacity->setValue( round(group.readEntry("DropLineOpacity", m_curve->dropLineOpacity())*100.0) );
-
-	//Symbols
-	//TODO: character
-	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", (int)m_curve->symbolsStyle()) );
-  	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_curve->symbolsSize()), Worksheet::Point) );
-	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", m_curve->symbolsRotationAngle()) );
-	ui.sbSymbolOpacity->setValue( round(group.readEntry("SymbolOpacity", m_curve->symbolsOpacity())*100.0) );
-  	ui.cbSymbolFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle", (int) m_curve->symbolsBrush().style()) );
-  	ui.kcbSymbolFillingColor->setColor(  group.readEntry("SymbolFillingColor", m_curve->symbolsBrush().color()) );
-  	ui.cbSymbolBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle", (int) m_curve->symbolsPen().style()) );
-  	ui.kcbSymbolBorderColor->setColor( group.readEntry("SymbolBorderColor", m_curve->symbolsPen().color()) );
-  	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",m_curve->symbolsPen().widthF()), Worksheet::Point) );
-
-	//Values
+  	//Values
   	ui.cbValuesType->setCurrentIndex( group.readEntry("ValuesType", (int) m_curve->valuesType()) );
   	ui.cbValuesPosition->setCurrentIndex( group.readEntry("ValuesPosition", (int) m_curve->valuesPosition()) );
   	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ValuesDistance", m_curve->valuesDistance()), Worksheet::Point) );
@@ -715,22 +672,7 @@ void HistogramDock::loadConfig(KConfig& config) {
 	ui.kcbFillingSecondColor->setColor( group.readEntry("FillingSecondColor", m_curve->fillingSecondColor()) );
 	ui.sbFillingOpacity->setValue( round(group.readEntry("FillingOpacity", m_curve->fillingOpacity())*100.0) );
 
-	//Error bars
-	ui.cbXErrorType->setCurrentIndex( group.readEntry("XErrorType", (int) m_curve->xErrorType()) );
-	ui.cbYErrorType->setCurrentIndex( group.readEntry("YErrorType", (int) m_curve->yErrorType()) );
-	ui.cbErrorBarsType->setCurrentIndex( group.readEntry("ErrorBarsType", (int) m_curve->errorBarsType()) );
-	ui.sbErrorBarsCapSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsCapSize", m_curve->errorBarsCapSize()), Worksheet::Point) );
-	ui.cbErrorBarsStyle->setCurrentIndex( group.readEntry("ErrorBarsStyle", (int) m_curve->errorBarsPen().style()) );
-	ui.kcbErrorBarsColor->setColor( group.readEntry("ErrorBarsColor", m_curve->errorBarsPen().color()) );
-	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsWidth", m_curve->errorBarsPen().widthF()),Worksheet::Point) );
-	ui.sbErrorBarsOpacity->setValue( round(group.readEntry("ErrorBarsOpacity", m_curve->errorBarsOpacity())*100.0) );
-
 	m_initializing=true;
-	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
-	GuiTools::updatePenStyles(ui.cbDropLineStyle, ui.kcbDropLineColor->color());
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, ui.kcbSymbolFillingColor->color());
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, ui.kcbSymbolBorderColor->color());
-	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, ui.kcbErrorBarsColor->color());
 	m_initializing=false;
 }
 void HistogramDock::setupGeneral() {
@@ -753,6 +695,46 @@ void HistogramDock::setupGeneral() {
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	qDebug() << "colo";
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
+	qDebug() << "colo1";
 	connect( cbYColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yColumnChanged(QModelIndex)) );
+
+}
+
+void HistogramDock::xColumnChanged(const QModelIndex& index) {
+	
+	qDebug() << "here";
+	if (m_initializing)
+		return;
+	
+	qDebug() << "here";
+
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = 0;
+	if (aspect) {
+		qDebug() << "here as[ect";
+		column = dynamic_cast<AbstractColumn*>(aspect);
+		Q_ASSERT(column);
+	}
+
+	foreach(Histogram* curve, m_curvesList) {
+		qDebug() << "here as well";
+		curve->setXColumn(column);
+	}
+}
+
+void HistogramDock::yColumnChanged(const QModelIndex& index) {
+	if (m_initializing)
+		return;
+
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = 0;
+	if (aspect) {
+		column = dynamic_cast<AbstractColumn*>(aspect);
+		Q_ASSERT(column);
+	}
+
+	foreach(Histogram* curve, m_curvesList)
+		curve->setYColumn(column);
 }

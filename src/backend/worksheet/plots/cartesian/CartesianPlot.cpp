@@ -31,6 +31,7 @@
 #include "CartesianPlotPrivate.h"
 #include "Axis.h"
 #include "XYCurve.h"
+#include "Histogram.h"
 #include "XYEquationCurve.h"
 #include "XYFitCurve.h"
 #include "XYFourierFilterCurve.h"

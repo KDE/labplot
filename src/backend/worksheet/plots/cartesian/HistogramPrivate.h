@@ -50,12 +50,8 @@ class HistogramPrivate: public QGraphicsItem {
 		bool m_selectionEffectImageIsDirty;
 
 		void retransform();
-		void updateLines();
-		void updateDropLines();
-		void updateSymbols();
 		void updateValues();
 		void updateFilling();
-		void updateErrorBars();
 		bool swapVisible(bool on);
 		void recalcShapeAndBoundingRect();
 		void drawSymbols(QPainter*);
@@ -63,6 +59,7 @@ class HistogramPrivate: public QGraphicsItem {
 		void drawFilling(QPainter*);
 		void draw(QPainter*);
 		void updatePixmap();
+		bool autoScaleX, autoScaleY;
 
 		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 
@@ -71,26 +68,6 @@ class HistogramPrivate: public QGraphicsItem {
 		const AbstractColumn* yColumn;
 		QString xColumnPath;
 		QString yColumnPath;
-
-		//line
-		Histogram::LineType lineType;
-		bool lineSkipGaps;
-		int lineInterpolationPointsCount;
-		QPen linePen;
-		qreal lineOpacity;
-
-		//drop lines
-		Histogram::DropLineType dropLineType;
-		QPen dropLinePen;
-		qreal dropLineOpacity;
-
-		//symbols
-		Symbol::Style symbolsStyle;
-		QBrush symbolsBrush;
-		QPen symbolsPen;
-		qreal symbolsOpacity;
-		qreal symbolsRotationAngle;
-		qreal symbolsSize;
 
 		//values
 		Histogram::ValuesType valuesType;
@@ -116,29 +93,7 @@ class HistogramPrivate: public QGraphicsItem {
 		QString fillingFileName;
 		qreal fillingOpacity;
 
-		//error bars
-		Histogram::ErrorType xErrorType;
-		const AbstractColumn* xErrorPlusColumn;
-		QString xErrorPlusColumnPath;
-		const AbstractColumn* xErrorMinusColumn;
-		QString xErrorMinusColumnPath;
-
-		Histogram::ErrorType yErrorType;
-		const AbstractColumn* yErrorPlusColumn;
-		QString yErrorPlusColumnPath;
-		const AbstractColumn* yErrorMinusColumn;
-		QString yErrorMinusColumnPath;
-
-		Histogram::ErrorBarsType errorBarsType;
-		double errorBarsCapSize;
-		QPen errorBarsPen;
-		qreal errorBarsOpacity;
-
-		QPainterPath linePath;
-		QPainterPath dropLinePath;
 		QPainterPath valuesPath;
-		QPainterPath errorBarsPath;
-		QPainterPath symbolsPath;
 		QRectF boundingRectangle;
 		QPainterPath curveShape;
 		QList<QLineF> lines;
@@ -150,8 +105,17 @@ class HistogramPrivate: public QGraphicsItem {
 											       //false otherwise (don't connect because of a gap (NAN) in-between)
 		QList<QString> valuesStrings;
 		QList<QPolygonF> fillPolygons;
-
+		
+		//cached values of minimum and maximum for all visible curves
+		bool curvesXMinMaxIsDirty, curvesYMinMaxIsDirty;
+		double curvesXMin, curvesXMax, curvesYMin, curvesYMax;
+		
+		float xMin, xMax, yMin, yMax;
+		float xMinPrev, xMaxPrev, yMinPrev, yMaxPrev;
+		bool autoScaleHistogramX, autoScaleHistogramY;
+		
 		Histogram* const q;
+		
 
 	private:
         void contextMenuEvent(QGraphicsSceneContextMenuEvent*);

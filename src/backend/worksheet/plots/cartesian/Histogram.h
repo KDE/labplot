@@ -65,23 +65,12 @@ class Histogram: public WorksheetElement {
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
 		QString& xColumnPath() const;
 		QString& yColumnPath() const;
+		
+		BASIC_D_ACCESSOR_DECL(float, xMin, XMin)
+		BASIC_D_ACCESSOR_DECL(float, xMax, XMax)
+		BASIC_D_ACCESSOR_DECL(float, yMin, YMin)
+		BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
 
-		BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType)
-		BASIC_D_ACCESSOR_DECL(bool, lineSkipGaps, LineSkipGaps)
-		BASIC_D_ACCESSOR_DECL(int, lineInterpolationPointsCount, LineInterpolationPointsCount)
-		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
-		BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
-
-		BASIC_D_ACCESSOR_DECL(DropLineType, dropLineType, DropLineType)
-		CLASS_D_ACCESSOR_DECL(QPen, dropLinePen, DropLinePen)
-		BASIC_D_ACCESSOR_DECL(qreal, dropLineOpacity, DropLineOpacity)
-
-		BASIC_D_ACCESSOR_DECL(Symbol::Style, symbolsStyle, SymbolsStyle)
-		BASIC_D_ACCESSOR_DECL(qreal, symbolsOpacity, SymbolsOpacity)
-		BASIC_D_ACCESSOR_DECL(qreal, symbolsRotationAngle, SymbolsRotationAngle)
-		BASIC_D_ACCESSOR_DECL(qreal, symbolsSize, SymbolsSize)
-		CLASS_D_ACCESSOR_DECL(QBrush, symbolsBrush, SymbolsBrush)
-		CLASS_D_ACCESSOR_DECL(QPen, symbolsPen, SymbolsPen)
 
 		BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
@@ -104,22 +93,7 @@ class Histogram: public WorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QColor, fillingSecondColor, FillingSecondColor)
 		CLASS_D_ACCESSOR_DECL(QString, fillingFileName, FillingFileName)
 		BASIC_D_ACCESSOR_DECL(qreal, fillingOpacity, FillingOpacity)
-
-		BASIC_D_ACCESSOR_DECL(ErrorType, xErrorType, XErrorType)
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorPlusColumn, XErrorPlusColumn)
-		QString& xErrorPlusColumnPath() const;
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorMinusColumn, XErrorMinusColumn)
-		QString& xErrorMinusColumnPath() const;
-		BASIC_D_ACCESSOR_DECL(ErrorType, yErrorType, YErrorType)
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorPlusColumn, YErrorPlusColumn)
-		QString& yErrorPlusColumnPath() const;
-		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorMinusColumn, YErrorMinusColumn)
-		QString& yErrorMinusColumnPath() const;
-		BASIC_D_ACCESSOR_DECL(ErrorBarsType, errorBarsType, ErrorBarsType)
-		BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
-		CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
-		BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
-
+		
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool on);
@@ -131,18 +105,14 @@ class Histogram: public WorksheetElement {
 	public slots:
 		virtual void retransform();
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
-
+		void scaleAutoX();
+		void scaleAutoY();
+		
 	private slots:
 		void updateValues();
-		void updateErrorBars();
 		void xColumnAboutToBeRemoved(const AbstractAspect*);
 		void yColumnAboutToBeRemoved(const AbstractAspect*);
 		void valuesColumnAboutToBeRemoved(const AbstractAspect*);
-		void xErrorPlusColumnAboutToBeRemoved(const AbstractAspect*);
-		void xErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
-		void yErrorPlusColumnAboutToBeRemoved(const AbstractAspect*);
-		void yErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
-
 		//SLOTs for changes triggered via QActions in the context menu
 		void visibilityChanged();
 
@@ -160,46 +130,14 @@ class Histogram: public WorksheetElement {
 	signals:
 		//General-Tab
 		void dataChanged();
-		void xDataChanged();
-		void yDataChanged();
+		void xHistogramDataChanged();
+		void yHistogramDataChanged();
 		void visibilityChanged(bool);
 
 		friend class HistogramSetXColumnCmd;
 		friend class HistogramSetYColumnCmd;
 		void xColumnChanged(const AbstractColumn*);
 		void yColumnChanged(const AbstractColumn*);
-
-		//Line-Tab
-		friend class HistogramSetLineTypeCmd;
-		friend class HistogramSetLineSkipGapsCmd;
-		friend class HistogramSetLineInterpolationPointsCountCmd;
-		friend class HistogramSetLinePenCmd;
-		friend class HistogramSetLineOpacityCmd;
-		friend class HistogramSetDropLineTypeCmd;
-		friend class HistogramSetDropLinePenCmd;
-		friend class HistogramSetDropLineOpacityCmd;
-		void lineTypeChanged(Histogram::LineType);
-		void lineSkipGapsChanged(bool);
-		void lineInterpolationPointsCountChanged(int);
-		void linePenChanged(const QPen&);
-		void lineOpacityChanged(qreal);
-		void dropLineTypeChanged(Histogram::DropLineType);
-		void dropLinePenChanged(const QPen&);
-		void dropLineOpacityChanged(qreal);
-
-		//Symbol-Tab
-		friend class HistogramSetSymbolsStyleCmd;
-		friend class HistogramSetSymbolsSizeCmd;
-		friend class HistogramSetSymbolsRotationAngleCmd;
-		friend class HistogramSetSymbolsOpacityCmd;
-		friend class HistogramSetSymbolsBrushCmd;
-		friend class HistogramSetSymbolsPenCmd;
-		void symbolsStyleChanged(Symbol::Style);
-		void symbolsSizeChanged(qreal);
-		void symbolsRotationAngleChanged(qreal);
-		void symbolsOpacityChanged(qreal);
-		void symbolsBrushChanged(QBrush);
-		void symbolsPenChanged(const QPen&);
 
 		//Values-Tab
 		friend class HistogramSetValuesColumnCmd;
@@ -243,27 +181,6 @@ class Histogram: public WorksheetElement {
 		void fillingFileNameChanged(QString&);
 		void fillingOpacityChanged(float);
 
-		//Error bars
-		friend class HistogramSetXErrorTypeCmd;
-		friend class HistogramSetXErrorPlusColumnCmd;
-		friend class HistogramSetXErrorMinusColumnCmd;
-		friend class HistogramSetYErrorTypeCmd;
-		friend class HistogramSetYErrorPlusColumnCmd;
-		friend class HistogramSetYErrorMinusColumnCmd;
-		friend class HistogramSetErrorBarsCapSizeCmd;
-		friend class HistogramSetErrorBarsTypeCmd;
-		friend class HistogramSetErrorBarsPenCmd;
-		friend class HistogramSetErrorBarsOpacityCmd;
-		void xErrorTypeChanged(Histogram::ErrorType);
-		void xErrorPlusColumnChanged(const AbstractColumn*);
-		void xErrorMinusColumnChanged(const AbstractColumn*);
-		void yErrorTypeChanged(Histogram::ErrorType);
-		void yErrorPlusColumnChanged(const AbstractColumn*);
-		void yErrorMinusColumnChanged(const AbstractColumn*);
-		void errorBarsCapSizeChanged(qreal);
-		void errorBarsTypeChanged(Histogram::ErrorBarsType);
-		void errorBarsPenChanged(QPen);
-		void errorBarsOpacityChanged(qreal);
 };
 
 #endif

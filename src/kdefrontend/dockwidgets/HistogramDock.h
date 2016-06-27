@@ -44,7 +44,7 @@ class Column;
 class KUrlCompletion;
 
 class HistogramDock : public QWidget {
-    //Q_OBJECT
+    Q_OBJECT
   
 public:
     explicit HistogramDock(QWidget*);
@@ -61,10 +61,6 @@ private:
 	TreeViewComboBox* cbXColumn;
 	TreeViewComboBox* cbYColumn;
 	TreeViewComboBox* cbValuesColumn;
-	TreeViewComboBox* cbXErrorPlusColumn;
-	TreeViewComboBox* cbXErrorMinusColumn;
-	TreeViewComboBox* cbYErrorPlusColumn;
-	TreeViewComboBox* cbYErrorMinusColumn;
 
 	virtual void initGeneralTab();
 	void updateValuesFormatWidgets(const AbstractColumn::ColumnMode);
@@ -90,40 +86,15 @@ private slots:
 
 	//SLOTs for changes triggered in HistogramDock
 	void nameChanged();
-	void commentChanged();
+	//void commentChanged();
 	void xColumnChanged(const QModelIndex&);
 	void yColumnChanged(const QModelIndex&);
-	void visibilityChanged(bool);
+//	void visibilityChanged(bool);
 	//Histogram-types
-	void histogramTypeChanged(int);
-	//Line-Tab
-	void lineTypeChanged(int);
-	void lineSkipGapsChanged(bool);
-	void lineInterpolationPointsCountChanged(int);
-  	void lineStyleChanged(int);
-	void lineColorChanged(const QColor&);
-	void lineWidthChanged(double);
-	void lineOpacityChanged(int);
-
-	void dropLineTypeChanged(int);
-  	void dropLineStyleChanged(int);
-	void dropLineColorChanged(const QColor&);
-	void dropLineWidthChanged(double);
-	void dropLineOpacityChanged(int);
-
-	//Symbol-tab
-  	void symbolsStyleChanged(int);
-	void symbolsSizeChanged(double);
-	void symbolsRotationChanged(int);
-	void symbolsOpacityChanged(int);
-	void symbolsFillingStyleChanged(int);
-	void symbolsFillingColorChanged(const QColor&);
-	void symbolsBorderStyleChanged(int);
-	void symbolsBorderColorChanged(const QColor&);
-	void symbolsBorderWidthChanged(double);
+	//void histogramTypeChanged(int);
 
 	//Values-Tab
-	void valuesTypeChanged(int);
+	/*void valuesTypeChanged(int);
 	void valuesColumnChanged(const QModelIndex&);
 	void valuesPositionChanged(int);
 	void valuesDistanceChanged(double);
@@ -132,7 +103,7 @@ private slots:
 	void valuesPrefixChanged();
 	void valuesSuffixChanged();
 	void valuesFontChanged(const QFont&);
-	void valuesColorChanged(const QColor&);
+	void valuesColorChanged(const QColor&);*/
 
 	//Filling-tab
 	void fillingPositionChanged(int);
@@ -146,44 +117,12 @@ private slots:
 	void fileNameChanged();
 	void fillingOpacityChanged(int);
 
-	//"Error bars"-Tab
-	void xErrorTypeChanged(int) const;
-	void yErrorTypeChanged(int) const;
-	void xErrorPlusColumnChanged(const QModelIndex&) const;
-	void xErrorMinusColumnChanged(const QModelIndex&) const;
-	void yErrorPlusColumnChanged(const QModelIndex&) const;
-	void yErrorMinusColumnChanged(const QModelIndex&) const;
-	void errorBarsTypeChanged(int) const;
-	void errorBarsCapSizeChanged(double) const;
-  	void errorBarsStyleChanged(int) const;
-	void errorBarsColorChanged(const QColor&);
-	void errorBarsWidthChanged(double) const;
-	void errorBarsOpacityChanged(int) const;
-
 	//SLOTs for changes triggered in Histogram
 	//General-Tab
-	void curveDescriptionChanged(const AbstractAspect*);
+	/*void curveDescriptionChanged(const AbstractAspect*);
 	void curveXColumnChanged(const AbstractColumn*);
 	void curveYColumnChanged(const AbstractColumn*);
-	void curveVisibilityChanged(bool);
-
-	//Line-Tab
-	void curveLineTypeChanged(Histogram::LineType);
-	void curveLineSkipGapsChanged(bool);
-	void curveLineInterpolationPointsCountChanged(int);
-	void curveLinePenChanged(const QPen&);
-	void curveLineOpacityChanged(qreal);
-	void curveDropLineTypeChanged(Histogram::DropLineType);
-	void curveDropLinePenChanged(const QPen&);
-	void curveDropLineOpacityChanged(qreal);
-
-	//Symbol-Tab
-	void curveSymbolsStyleChanged(Symbol::Style);
-	void curveSymbolsSizeChanged(qreal);
-	void curveSymbolsRotationAngleChanged(qreal);
-	void curveSymbolsOpacityChanged(qreal);
-	void curveSymbolsBrushChanged(QBrush);
-	void curveSymbolsPenChanged(const QPen&);
+	void curveVisibilityChanged(bool);*/
 
 	//Values-Tab
 	void curveValuesTypeChanged(Histogram::ValuesType);
@@ -208,21 +147,10 @@ private slots:
 	void curveFillingFileNameChanged(QString&);
 	void curveFillingOpacityChanged(float);
 
-	//"Error bars"-Tab
-	void curveXErrorTypeChanged(Histogram::ErrorType);
-	void curveXErrorPlusColumnChanged(const AbstractColumn*);
-	void curveXErrorMinusColumnChanged(const AbstractColumn*);
-	void curveYErrorTypeChanged(Histogram::ErrorType);
-	void curveYErrorPlusColumnChanged(const AbstractColumn*);
-	void curveYErrorMinusColumnChanged(const AbstractColumn*);
-	void curveErrorBarsCapSizeChanged(qreal);
-	void curveErrorBarsTypeChanged(Histogram::ErrorBarsType);
-	void curveErrorBarsPenChanged(QPen);
-	void curveErrorBarsOpacityChanged(qreal);
 
 	//load and save
-	void loadConfigFromTemplate(KConfig&);
-	void saveConfigAsTemplate(KConfig&);
+//	void loadConfigFromTemplate(KConfig&);
+//	void saveConfigAsTemplate(KConfig&);
 
 signals:
 	void info(const QString&);
