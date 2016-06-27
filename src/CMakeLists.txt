@@ -154,6 +154,7 @@ set(BACKEND_SOURCES
  	${BACKEND_DIR}/nsl/nsl_dft.c
  	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
  	${BACKEND_DIR}/nsl/nsl_sf_poly.c
+ 	${BACKEND_DIR}/nsl/nsl_sf_window.c
  	${BACKEND_DIR}/nsl/nsl_smooth.c
  	${BACKEND_DIR}/nsl/nsl_stats.c
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp

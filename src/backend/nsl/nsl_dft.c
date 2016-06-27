@@ -39,9 +39,13 @@ const char* nsl_dft_result_type_name[] = {"Magnitude", "Amplitude", "real", "ima
 		"dB", "dB normalized", "Magnitude squared", "Amplitude squared", "raw"};
 const char* nsl_dft_xscale_name[] = {"Frequency", "Index", "Period"};
 
-int nsl_dft_transform(double data[], size_t stride, size_t n, nsl_dft_result_type type) {
+/* TODO: use window */
+int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type, nsl_sf_window_type window) {
 	unsigned int i;
 	double result[2*n];
+	unsigned int N=n/2;	/* number of resulting data points */
+	if(two_sided)
+		N=n;
 #ifdef HAVE_FFTW3
 	/* stride ignored */
         fftw_plan plan = fftw_plan_dft_r2c_1d(n, data, (fftw_complex *) result, FFTW_ESTIMATE);
@@ -49,13 +53,15 @@ int nsl_dft_transform(double data[], size_t stride, size_t n, nsl_dft_result_typ
 	fftw_destroy_plan(plan);
 
 	/* 2. unpack data */
-	for(i = 1; i < n-i; i++) {
-		result[2*(n - i)] = result[2*i];
-		result[2*(n - i)+1] = -result[2*i+1];
-	}
-	if (i == n - i) {
-		result[2*i] = result[2*(n-1)];
-		result[2*i+1] = 0;
+	if(two_sided) {
+		for(i = 1; i < n-i; i++) {
+			result[2*(n - i)] = result[2*i];
+			result[2*(n - i)+1] = -result[2*i+1];
+		}
+		if (i == n - i) {
+			result[2*i] = result[2*(n-1)];
+			result[2*i+1] = 0;
+		}
 	}
 #else
 	/* 1. transform */
@@ -72,51 +78,68 @@ int nsl_dft_transform(double data[], size_t stride, size_t n, nsl_dft_result_typ
 	/* 3. write result */
 	switch(type) {
 	case nsl_dft_result_magnitude:
-		for (i = 0; i < n; i++)
+		for (i = 0; i < N; i++)
 			data[i] = sqrt(gsl_pow_2(result[2*i])+gsl_pow_2(result[2*i+1]));
 		break;
 	case nsl_dft_result_amplitude:
-		for (i = 0; i < n; i++)
+		for (i = 0; i < N; i++) {
 			data[i] = sqrt(gsl_pow_2(result[2*i])+gsl_pow_2(result[2*i+1]))/n;
+			if(i>0)
+				data[i] *= 2.;
+		}
 		break;
 	case nsl_dft_result_real:
-		for (i = 0; i < n; i++)
+		for (i = 0; i < N; i++)
 			data[i] = result[2*i];
 		break;
 	case nsl_dft_result_imag:
-		for (i = 0; i < n; i++)
+		for (i = 0; i < N; i++)
 			data[i] = result[2*i+1];
 		break;
 	case nsl_dft_result_power:
-		for (i = 0; i < n; i++)
+		for (i = 0; i < N; i++) {
 			data[i] = (gsl_pow_2(result[2*i])+gsl_pow_2(result[2*i+1]))/n;
+			if (i > 0)
+				data[i] *= 2.;
+		}
 		break;
 	case nsl_dft_result_phase:
-		for (i = 0; i < n; i++)
+		for (i = 0; i < N; i++)
 			data[i] = -atan2(result[2*i+1],result[2*i]);
 		break;
 	case nsl_dft_result_dB:
-		for (i = 0; i < n; i++)
-			data[i] = 20.*log10(sqrt(gsl_pow_2(result[2*i])+gsl_pow_2(result[2*i+1]))/(double)n);
+		for (i = 0; i < N; i++) {
+			if (i == 0)
+				data[i] = 20.*log10(sqrt(gsl_pow_2(result[2*i])+gsl_pow_2(result[2*i+1]))/(double)n);
+			else
+				data[i] = 20.*log10(2.*sqrt(gsl_pow_2(result[2*i])+gsl_pow_2(result[2*i+1]))/(double)n);
+		}
 		break;
 	case nsl_dft_result_normdB: {
 		double maxdB=0;
-		for (i = 0; i < n; i++) {
-			data[i] = 20.*log10(sqrt(gsl_pow_2(result[2*i])+gsl_pow_2(result[2*i+1]))/(double)n);
-			if(i == 0 || maxdB < data[i])
+		for (i = 0; i < N; i++) {
+			if (i == 0)
+				data[i] = 20.*log10(sqrt(gsl_pow_2(result[2*i])+gsl_pow_2(result[2*i+1]))/(double)n);
+			else
+				data[i] = 20.*log10(2.*sqrt(gsl_pow_2(result[2*i])+gsl_pow_2(result[2*i+1]))/(double)n);
+
+			if (i == 0 || maxdB < data[i])
 				maxdB = data[i];
 		}
-		for (i = 0; i < n; i++)
+		for (i = 0; i < N; i++)
 			data[i] -= maxdB;
 		break;
 	}
 	case nsl_dft_result_squaremagnitude:
-		for (i = 0; i < n; i++)
+		for (i = 0; i < N; i++)
 			data[i] = gsl_pow_2(result[2*i])+gsl_pow_2(result[2*i+1]);
 		break;
 	case nsl_dft_result_squareamplitude:
-		for (i = 0; i < n; i++)
-			data[i] = (gsl_pow_2(result[2*i])+gsl_pow_2(result[2*i+1]))/n/n;
+		for (i = 0; i < N; i++) {
+			data[i] = (gsl_pow_2(result[2*i])+gsl_pow_2(result[2*i+1]))/gsl_pow_2(n);
+			if (i > 0)
+				data[i] *= 4.;
+		}
 		break;
 	case nsl_dft_result_raw:
 		break;

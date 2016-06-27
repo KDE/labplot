@@ -27,11 +27,27 @@
  ***************************************************************************/
 
 #include <math.h>
+#include <gsl/gsl_math.h>
 #include "nsl_sf_window.h"
 
-double nsl_sf_window_uniform(double u) {
-	if(fabs(u) <= 1.0)
-		return 0.5;
-	return 0.0;
-}
+const char* nsl_sf_window_type_name[] = {"rectangular (uniform)", "triangular", "Welch (parabolic)" };
 
+double nsl_sf_window(int i, int N, nsl_sf_window_type type) {
+	double v=0.0;
+
+	switch (type) {
+	case nsl_sf_window_uniform:
+		if (i >= 0 && i < N)
+			v = 1.0;
+		else
+			v = 0.0;
+		break;
+	case nsl_sf_window_triangle:
+		v = 1.0 - 2./(N-1)*fabs(i-(N-1)/2.);
+		break;
+	case nsl_sf_window_welch:
+		v= 1.0 - gsl_pow_2(2*(i-(N-1)/2.)/(N+1));
+	}
+
+	return v;
+}

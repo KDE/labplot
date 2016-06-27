@@ -32,15 +32,20 @@
 double main() {
 	double data[]={1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	/*double data[]={1, 2, 3, 3, 1};*/
-	const int size=10;
+	const int N=10;
+	const int two_sided=1;
+
+	int size=N/2;
+	if(two_sided)
+		size=N;
 	/* input */
 	int i;
-	for(i=0; i < size; i++)
+	for(i=0; i < N; i++)
 		printf("%g ", data[i]);
 	puts("\nraw:");
 
 	// 'raw' result
-	nsl_dft_transform(data, 1, size, nsl_dft_result_raw);
+	nsl_dft_transform(data, 1, N, two_sided, nsl_dft_result_raw, nsl_sf_window_type_uniform);
 
 	/* output */
 	for(i=0; i < size; i++)
@@ -49,7 +54,7 @@ double main() {
 
 	double data2[]={1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	/*double data2[]={1, 2, 3, 3, 1};*/
-	nsl_dft_transform(data2, 1, size, nsl_dft_result_real);
+	nsl_dft_transform(data2, 1, N, two_sided, nsl_dft_result_real, nsl_sf_window_type_uniform);
 
 	/* output */
 	for(i=0; i < size; i++)
@@ -58,7 +63,7 @@ double main() {
 
 	double data3[]={1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	/*double data3[]={1, 2, 3, 3, 1};*/
-	nsl_dft_transform(data3, 1, size, nsl_dft_result_imag);
+	nsl_dft_transform(data3, 1, N, two_sided, nsl_dft_result_imag, nsl_sf_window_type_uniform);
 
 	/* output */
 	for(i=0; i < size; i++)
@@ -67,7 +72,7 @@ double main() {
 
 	double data4[]={1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	/*double data4[]={1, 2, 3, 3, 1};*/
-	nsl_dft_transform(data4, 1, size, nsl_dft_result_magnitude);
+	nsl_dft_transform(data4, 1, N, two_sided, nsl_dft_result_magnitude, nsl_sf_window_type_uniform);
 
 	/* output */
 	for(i=0; i < size; i++)
@@ -76,7 +81,7 @@ double main() {
 
 	double data5[]={1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	/*double data5[]={1, 2, 3, 3, 1};*/
-	nsl_dft_transform(data5, 1, size, nsl_dft_result_amplitude);
+	nsl_dft_transform(data5, 1, N, two_sided, nsl_dft_result_amplitude, nsl_sf_window_type_uniform);
 
 	/* output */
 	for(i=0; i < size; i++)
@@ -85,7 +90,7 @@ double main() {
 
 	double data6[]={1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	/*double data6[]={1, 2, 3, 3, 1};*/
-	nsl_dft_transform(data6, 1, size, nsl_dft_result_power);
+	nsl_dft_transform(data6, 1, N, two_sided, nsl_dft_result_power, nsl_sf_window_type_uniform);
 
 	/* output */
 	for(i=0; i < size; i++)
@@ -94,7 +99,7 @@ double main() {
 
 	double data7[]={1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	/*double data7[]={1, 2, 3, 3, 1};*/
-	nsl_dft_transform(data7, 1, size, nsl_dft_result_phase);
+	nsl_dft_transform(data7, 1, N, two_sided, nsl_dft_result_phase, nsl_sf_window_type_uniform);
 
 	/* output */
 	for(i=0; i < size; i++)
@@ -103,7 +108,7 @@ double main() {
 
 	double data8[]={1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	/*double data8[]={1, 2, 3, 3, 1};*/
-	nsl_dft_transform(data8, 1, size, nsl_dft_result_dB);
+	nsl_dft_transform(data8, 1, N, two_sided, nsl_dft_result_dB, nsl_sf_window_type_uniform);
 
 	/* output */
 	for(i=0; i < size; i++)
@@ -111,7 +116,7 @@ double main() {
 	puts("\nsquare magnitude:");
 
 	double data9[]={1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
-	nsl_dft_transform(data9, 1, size, nsl_dft_result_squaremagnitude);
+	nsl_dft_transform(data9, 1, N, two_sided, nsl_dft_result_squaremagnitude, nsl_sf_window_type_uniform);
 
 	/* output */
 	for(i=0; i < size; i++)
@@ -119,7 +124,7 @@ double main() {
 	puts("\nsquare amplitude:");
 
 	double data10[]={1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
-	nsl_dft_transform(data10, 1, size, nsl_dft_result_squareamplitude);
+	nsl_dft_transform(data10, 1, N, two_sided, nsl_dft_result_squareamplitude, nsl_sf_window_type_uniform);
 
 	/* output */
 	for(i=0; i < size; i++)
@@ -127,7 +132,7 @@ double main() {
 	puts("\nnormdB:");
 
 	double data11[]={1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
-	nsl_dft_transform(data11, 1, size, nsl_dft_result_normdB);
+	nsl_dft_transform(data11, 1, N, two_sided, nsl_dft_result_normdB, nsl_sf_window_type_uniform);
 
 	/* output */
 	for(i=0; i < size; i++)

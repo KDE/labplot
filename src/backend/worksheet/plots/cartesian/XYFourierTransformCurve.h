@@ -32,6 +32,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 extern "C" {
 #include "backend/nsl/nsl_dft.h"
+#include "backend/nsl/nsl_sf_window.h"
 }
 
 class XYFourierTransformCurvePrivate;
@@ -40,12 +41,14 @@ class XYFourierTransformCurve: public XYCurve {
 
 	public:
 		struct TransformData {
-			TransformData() : type(nsl_dft_result_magnitude), twoSided(false), shifted(false), xScale(nsl_dft_xscale_frequency) {};
+			TransformData() : type(nsl_dft_result_magnitude), twoSided(false), shifted(false), 
+				xScale(nsl_dft_xscale_frequency), windowType(nsl_sf_window_uniform) {};
 
 			nsl_dft_result_type type;
 			bool twoSided;
 			bool shifted;
 			nsl_dft_xscale xScale;
+			nsl_sf_window_type windowType;
 		};
 		struct TransformResult {
 			TransformResult() : available(false), valid(false), elapsedTime(0) {};

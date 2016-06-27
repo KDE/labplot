@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : nsl_sf_window.h
+    File                 : nsl_sf_window_test.c
     Project              : LabPlot
-    Description          : NSL special window functions
+    Description          : NSL window functions test
     --------------------------------------------------------------------
     Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
@@ -26,18 +26,21 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef NSL_SF_WINDOW_H
-#define NSL_SF_WINDOW_H
+#include <stdio.h>
+#include "nsl_sf_window.h"
 
-#include <stdlib.h>
+double main() {
+	const int N=10;
 
-#define NSL_SF_WINDOW_TYPE_COUNT 3
-typedef enum {nsl_sf_window_uniform, nsl_sf_window_triangle, nsl_sf_window_welch} nsl_sf_window_type;
-extern const char* nsl_sf_window_type_name[];
+	int i;
+	for(i=0; i < N; i++)
+		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_uniform));
+	puts("\n");
+	for(i=0; i < N; i++)
+		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_triangle));
+	puts("\n");
+	for(i=0; i < N; i++)
+		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_welch));
+	puts("\n");
 
-/* u range: [0:1] or [0:N-1] ? */
-
-/* uniform */
-double nsl_sf_window(int i, int N, nsl_sf_window_type type);
-
-#endif /* NSL_SF_WINDOW_H */
+}

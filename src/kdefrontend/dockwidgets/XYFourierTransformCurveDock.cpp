@@ -77,6 +77,8 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 2, 1, 2);
 
+	for(int i=0; i < NSL_SF_WINDOW_TYPE_COUNT; i++)
+		uiGeneralTab.cbWindow->addItem(i18n(nsl_sf_window_type_name[i]));
 	for(int i=0; i < NSL_DFT_RESULT_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_dft_result_type_name[i]));
 	for(int i=0; i < NSL_DFT_XSCALE_COUNT; i++)

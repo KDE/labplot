@@ -254,6 +254,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	const bool twoSided = transformData.twoSided;
 	const bool shifted = transformData.shifted;
 	const nsl_dft_xscale xScale = transformData.xScale;
+	const nsl_sf_window_type windowType = transformData.windowType;
 #ifndef NDEBUG
 	qDebug()<<"n ="<<n;
 	qDebug()<<"type:"<<nsl_dft_result_type_name[type];
@@ -266,8 +267,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 #endif
 ///////////////////////////////////////////////////////////
 	// transform
-	// TODO: use twoSided to calculate only needed values
-	int status = nsl_dft_transform(ydata, 1, n, type);
+	int status = nsl_dft_transform(ydata, 1, n, twoSided, type, windowType);
 
 	unsigned int N=n;
 	if(twoSided == false)
@@ -282,7 +282,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 				xdata[i] = (n-1)*i/(xmax-xmin)/n-(n-1)/(xmax-xmin);
 		break;
 	case nsl_dft_xscale_index:
-		//TODO: twoSided
+		//TODO: twoSided, shifted
 		for (unsigned int i=0; i < N; i++)
 			xdata[i] = i;
 		break;
