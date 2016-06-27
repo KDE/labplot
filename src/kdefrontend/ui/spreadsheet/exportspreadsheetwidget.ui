@@ -198,17 +198,17 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="lHeader">
-        <property name="text">
-         <string>Headers</string>
-        </property>
-       </widget>
-      </item>
       <item row="7" column="2">
        <widget class="QCheckBox" name="chkEmptyRows">
         <property name="text">
          <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="lHeader">
+        <property name="text">
+         <string>Headers</string>
         </property>
        </widget>
       </item>
@@ -221,6 +221,9 @@
          <bool>true</bool>
         </property>
        </widget>
+      </item>
+      <item row="8" column="2">
+       <widget class="QComboBox" name="cbLaTeXExport"/>
       </item>
       <item row="7" column="0">
        <widget class="QLabel" name="lEmptyRows">
@@ -236,8 +239,8 @@
         </property>
        </widget>
       </item>
-      <item row="8" column="2">
-       <widget class="QComboBox" name="cbLaTeXExport"/>
+      <item row="9" column="2">
+       <widget class="QComboBox" name="cbExportToFITS"/>
       </item>
       <item row="8" column="0">
        <widget class="QLabel" name="lExportArea">
@@ -246,8 +249,19 @@
         </property>
        </widget>
       </item>
-      <item row="9" column="2">
-       <widget class="QComboBox" name="cbExportToFITS"/>
+      <item row="10" column="0">
+       <widget class="QLabel" name="lColumnAsUnits">
+        <property name="text">
+         <string>Comments as column units</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="2">
+       <widget class="QCheckBox" name="chkColumnsAsUnits">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

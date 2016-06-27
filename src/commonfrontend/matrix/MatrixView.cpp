@@ -1502,12 +1502,11 @@ void MatrixView::showRowStatistics() {
 	}
 }
 
-void MatrixView::exportToFits(const QString &fileName, const bool entire) const {
+void MatrixView::exportToFits(const QString &fileName, const int exportTo) const {
     FITSFilter* filter = new FITSFilter;
+    filter->setExportTo(exportTo);
     filter->write(fileName, m_matrix);
 
     delete filter;
-
-    Q_UNUSED(entire)
 }
 

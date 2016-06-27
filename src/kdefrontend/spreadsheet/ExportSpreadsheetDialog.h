@@ -55,6 +55,7 @@ class ExportSpreadsheetDialog: public KDialog {
         bool matrixHorizontalHeader() const;
 		QString separator() const;
         int exportToFits() const;
+        bool commentsAsUnitsFits() const;
         void setExportTo(const QStringList& to);
 
         enum Format {

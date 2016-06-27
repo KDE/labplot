@@ -168,6 +168,14 @@ int FITSFilter::endRow() const {
     return d->endRow;
 }
 
+void FITSFilter::setCommentsAsUnits(const bool commentsAsUnits) {
+    d->commentsAsUnits = commentsAsUnits;
+}
+
+void FITSFilter::setExportTo(const int exportTo) {
+    d->exportTo = exportTo;
+}
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
@@ -349,8 +357,12 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                     list->clear();
                 }
             }
-            else {
-                return dataString.join(QLatin1String(""));
+
+            Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+            if (matrix) {
+                matrix->setSuppressDataChangedSignal(false);
+                matrix->setChanged();
+                matrix->setUndoAware(true);
             }
         }
 
@@ -444,171 +456,190 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
     Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
     if (matrix) {
-        long naxes[2] = { matrix->columnCount(), matrix->rowCount() };
-        if (fits_create_img(fitsFile, FLOAT_IMG, 2, naxes, &status)) {
-            printError(status);
-            return;
-        }
-        long nelem = naxes[0] * naxes[1];
-        double* array = new double[nelem];
-        const QVector<QVector<double> >& data = matrix->data();
-
-        for (int row = 0; row < naxes[1]; ++row) {
-            for (int col = 0; col < naxes[0]; ++col) {
-                array[row * naxes[0] + col] = data.at(col).at(row);
+        //FITS image
+        if (exportTo == 0) {
+            long naxes[2] = { matrix->columnCount(), matrix->rowCount() };
+            if (fits_create_img(fitsFile, FLOAT_IMG, 2, naxes, &status)) {
+                printError(status);
+                return;
             }
-        }
+            long nelem = naxes[0] * naxes[1];
+            double* array = new double[nelem];
+            const QVector<QVector<double> >& data = matrix->data();
 
-        if (fits_write_img(fitsFile, TDOUBLE, 1, nelem, array, &status )) {
-            printError(status);
-            return;
-        }
+            for (int row = 0; row < naxes[1]; ++row) {
+                for (int col = 0; col < naxes[0]; ++col) {
+                    array[row * naxes[0] + col] = data.at(col).at(row);
+                }
+            }
 
-        fits_close_file(fitsFile, &status);
-        delete[] array;
+            if (fits_write_img(fitsFile, TDOUBLE, 1, nelem, array, &status )) {
+                printError(status);
+                return;
+            }
+
+            fits_close_file(fitsFile, &status);
+            delete[] array;
+        //FITS table
+        } else {
+
+        }
     }
 
     Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
     if (spreadsheet) {
-        int nrows = spreadsheet->rowCount();
-        int tfields = spreadsheet->columnCount();
-        char* columnNames[tfields];
-        char* tform[tfields];
-        char* tunit[tfields];
+        //FITS image
+        if (exportTo == 0) {
 
-        //TODO
-        for (int i = 0; i < tfields; ++i) {
-            const Column* column =  spreadsheet->column(i);
+        } else {
+            int nrows = spreadsheet->rowCount();
+            int tfields = spreadsheet->columnCount();
+            char* columnNames[tfields];
+            char* tform[tfields];
+            char* tunit[tfields];
 
-            columnNames[i] = new char[column->name().size()];
-            strcpy(columnNames[i], column->name().toLatin1().data());
-            tunit[i] = new char[2];
-            //TODO comments units? import dialog
-            strcpy(tunit[i], "");
-            switch (column->columnMode()) {
-            case AbstractColumn::Numeric: {
-                int maxSize = -1;
-                for (int row = 0; row < nrows; ++row) {
-                    if (QString::number(column->valueAt(row)).size() > maxSize) {
-                        maxSize = QString::number(column->valueAt(row)).size();
-                    }
+            //TODO
+            for (int i = 0; i < tfields; ++i) {
+                const Column* column =  spreadsheet->column(i);
+
+                columnNames[i] = new char[column->name().size()];
+                strcpy(columnNames[i], column->name().toLatin1().data());
+                //TODO comments units? import dialog
+                if (commentsAsUnits) {
+                    tunit[i] = new char[column->comment().size()];
+                    strcpy(tunit[i], column->comment().toLatin1().constData());
+                } else {
+                    tunit[i] = new char[2];
+                    strcpy(tunit[i], "");
                 }
-
-                Double2StringFilter * filter = static_cast<Double2StringFilter*>(column->outputFilter());
-                bool decimals = false;
-                for (int ii = 0; ii < nrows; ++ii) {
-                    bool ok;
-                    QString cell = column->asStringColumn()->textAt(ii);
-                    double val = cell.toDouble(&ok);
-                    if (cell.size() > QString::number(val).size() + 1) {
-                        decimals = true;
-                        break;
-                    }
-                }
-                QString tformn;
-                if (decimals) {
-                    int maxStringSize = -1;
+                switch (column->columnMode()) {
+                case AbstractColumn::Numeric: {
+                    int maxSize = -1;
                     for (int row = 0; row < nrows; ++row) {
-                        if (column->asStringColumn()->textAt(row).size() > maxStringSize) {
-                            maxStringSize = column->asStringColumn()->textAt(row).size();
+                        if (QString::number(column->valueAt(row)).size() > maxSize) {
+                            maxSize = QString::number(column->valueAt(row)).size();
                         }
                     }
-                    int diff = abs(maxSize - maxStringSize);
-                    maxSize+= diff;
-                    tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".") +
-                            QString::number(filter->numDigits());
-                } else {
-                    tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".0");
-                }
-                tform[i] = new char[tformn.size()];
-                strcpy(tform[i], tformn.toLatin1().data());
-                break;
-            }
-            case AbstractColumn::Text: {
-                int maxSize = -1;
-                for (int row = 0; row < nrows; ++row) {
-                    if (column->textAt(row).size() > maxSize) {
-                        maxSize = column->textAt(row).size();
+
+                    Double2StringFilter * filter = static_cast<Double2StringFilter*>(column->outputFilter());
+                    bool decimals = false;
+                    for (int ii = 0; ii < nrows; ++ii) {
+                        bool ok;
+                        QString cell = column->asStringColumn()->textAt(ii);
+                        double val = cell.toDouble(&ok);
+                        if (cell.size() > QString::number(val).size() + 1) {
+                            decimals = true;
+                            break;
+                        }
                     }
+                    QString tformn;
+                    if (decimals) {
+                        int maxStringSize = -1;
+                        for (int row = 0; row < nrows; ++row) {
+                            if (column->asStringColumn()->textAt(row).size() > maxStringSize) {
+                                maxStringSize = column->asStringColumn()->textAt(row).size();
+                            }
+                        }
+                        int diff = abs(maxSize - maxStringSize);
+                        maxSize+= diff;
+                        tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".") +
+                                QString::number(filter->numDigits());
+                    } else {
+                        tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".0");
+                    }
+                    tform[i] = new char[tformn.size()];
+                    strcpy(tform[i], tformn.toLatin1().data());
+                    break;
                 }
-                QString tformn = QLatin1String("A") + QString::number(maxSize);
-                tform[i] = new char[tformn.size()];
-                strcpy(tform[i], tformn.toLatin1().data());
-                break;
-            }
-            case AbstractColumn::DateTime: {
+                case AbstractColumn::Text: {
+                    int maxSize = -1;
+                    for (int row = 0; row < nrows; ++row) {
+                        if (column->textAt(row).size() > maxSize) {
+                            maxSize = column->textAt(row).size();
+                        }
+                    }
+                    QString tformn = QLatin1String("A") + QString::number(maxSize);
+                    tform[i] = new char[tformn.size()];
+                    strcpy(tform[i], tformn.toLatin1().data());
+                    break;
+                }
+                case AbstractColumn::DateTime: {
 
-            }
-            case AbstractColumn::Day: {
+                }
+                case AbstractColumn::Day: {
 
-            }
-            case AbstractColumn::Month: {
+                }
+                case AbstractColumn::Month: {
 
+                }
+
+                }
+            }
+            //TODO extension name containing[] ?
+
+            if (fits_create_tbl(fitsFile, ASCII_TBL,
+                                nrows, tfields,
+                                columnNames, tform, tunit,
+                                spreadsheet->name().toLatin1().data(),&status )) {
+                printError(status);
+                for (int i = 0; i < tfields; ++i) {
+                    delete[] tform[i];
+                    delete[] tunit[i];
+                    delete[] columnNames[i];
+                }
+                return;
             }
 
-            }
-        }
-        //TODO extension name containing[] ?
-
-        if (fits_create_tbl(fitsFile, ASCII_TBL,
-                            nrows, tfields,
-                            columnNames, tform, tunit,
-                            spreadsheet->name().toLatin1().data(),&status )) {
-            printError(status);
             for (int i = 0; i < tfields; ++i) {
                 delete[] tform[i];
                 delete[] tunit[i];
                 delete[] columnNames[i];
             }
-            return;
-        }
 
-        for (int i = 0; i < tfields; ++i) {
-            delete[] tform[i];
-            delete[] tunit[i];
-            delete[] columnNames[i];
-        }
+            char* column[nrows];
+            double* columnNumeric = new double[nrows];
+            bool hadTextColumn = false;
+            for (int col = 1; col <= tfields; ++col) {
+                const Column* c =  spreadsheet->column(col-1);
+                AbstractColumn::ColumnMode columnMode = c->columnMode();
 
-        char* column[nrows];
-        double* columnNumeric = new double[nrows];
-        for (int col = 1; col <= tfields; ++col) {
-            const Column* c =  spreadsheet->column(col-1);
-            AbstractColumn::ColumnMode columnMode = c->columnMode();
-
-            if (columnMode == AbstractColumn::Numeric) {
-                for (int row = 0; row < nrows; ++row) {
-                    columnNumeric[row] = c->valueAt(row);
-                }
-
-                fits_write_col(fitsFile, TDOUBLE, col, 1, 1, nrows, columnNumeric, &status);
-                if (status) {
-                    printError(status);
-                    delete[] columnNumeric;
-                    return;
-                }
-            } else {
-                for (int row = 0; row < nrows; ++row) {
-                    column[row] = new char[c->textAt(row).size()];
-                    strcpy(column[row], c->textAt(row).toLatin1().data());
-                }
-                fits_write_col(fitsFile, TSTRING, col, 1, 1, nrows, column, &status);
-                if (status) {
-                    printError(status);
-                    for (int i = 0; i < nrows; ++i) {
-                        delete[] column[i];
+                if (columnMode == AbstractColumn::Numeric) {
+                    for (int row = 0; row < nrows; ++row) {
+                        columnNumeric[row] = c->valueAt(row);
                     }
-                    return;
+
+                    fits_write_col(fitsFile, TDOUBLE, col, 1, 1, nrows, columnNumeric, &status);
+                    if (status) {
+                        printError(status);
+                        delete[] columnNumeric;
+                        return;
+                    }
+                } else {
+                    hadTextColumn = true;
+                    for (int row = 0; row < nrows; ++row) {
+                        column[row] = new char[c->textAt(row).size()];
+                        strcpy(column[row], c->textAt(row).toLatin1().data());
+                    }
+                    fits_write_col(fitsFile, TSTRING, col, 1, 1, nrows, column, &status);
+                    if (status) {
+                        printError(status);
+                        for (int i = 0; i < nrows; ++i) {
+                            delete[] column[i];
+                        }
+                        return;
+                    }
                 }
             }
-        }
 
-        delete[] columnNumeric;
-        for (int i = 0; i < nrows; ++i) {
-            delete[] column[i];
-        }
+            delete[] columnNumeric;
+            if (hadTextColumn)
+                for (int i = 0; i < nrows; ++i) {
+                    delete[] column[i];
+                }
 
-        status = 0;
-        fits_close_file(fitsFile, &status);
+            status = 0;
+            fits_close_file(fitsFile, &status);
+        }
     }
 #else
     Q_UNUSED(fileName)

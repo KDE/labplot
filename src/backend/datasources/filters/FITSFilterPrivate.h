@@ -60,6 +60,9 @@ public:
     int endRow;
     int startColumn;
     int endColumn;
+
+    bool commentsAsUnits;
+    int exportTo;
 private:
     void printError(int status) const;
 

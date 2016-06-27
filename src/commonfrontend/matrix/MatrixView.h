@@ -76,7 +76,7 @@ class MatrixView : public QWidget {
         void exportToLaTeX(const QString&, const bool verticalHeaders, const bool horizontalHeaders,
                            const bool latexHeaders, const bool gridLines,
                            const bool entire, const bool captions) const;
-        void exportToFits(const QString& fileName, const bool entire) const;
+        void exportToFits(const QString& fileName, const int exportTo) const;
 	public slots:
 		void createContextMenu(QMenu*) const;
 		void print(QPrinter*) const;

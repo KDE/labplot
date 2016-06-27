@@ -146,7 +146,8 @@ bool Matrix::exportView() const {
             view->exportToLaTeX(path, verticalHeader, horizontalHeader,
                                 latexHeader, gridLines, entire, captions);
         } else if (dlg->format() == ExportSpreadsheetDialog::FITS) {
-            view->exportToFits(path, true );
+            const int exportTo = dlg->exportToFits();
+            view->exportToFits(path, exportTo );
         } else {
             const QString separator = dlg->separator();
             view->exportToFile(path, separator);

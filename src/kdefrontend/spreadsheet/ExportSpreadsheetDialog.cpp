@@ -95,6 +95,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	ui.cbLaTeXExport->setCurrentIndex(conf.readEntry("ExportOnly", 0));
 	ui.chkMatrixHHeader->setChecked(conf.readEntry("MatrixHorizontalHeader", true));
 	ui.chkMatrixVHeader->setChecked(conf.readEntry("MatrixVerticalHeader", true));
+    ui.chkMatrixVHeader->setChecked(conf.readEntry("FITSSpreadsheetColumnsUnits", true));
     ui.cbExportToFITS->setCurrentIndex(conf.readEntry("FITSTo", 0));
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	ui.gbOptions->setVisible(m_showOptions);
@@ -117,6 +118,7 @@ ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 	conf.writeEntry("MatrixVerticalHeader", ui.chkMatrixVHeader->isChecked());
 	conf.writeEntry("MatrixHorizontalHeader", ui.chkMatrixHHeader->isChecked());
     conf.writeEntry("FITSTo", ui.cbExportToFITS->currentIndex());
+    conf.writeEntry("FITSSpreadsheetColumnsUnits", ui.chkColumnsAsUnits->isChecked());
 
 	saveDialogSize(conf);
     delete urlCompletion;
@@ -145,6 +147,9 @@ void ExportSpreadsheetDialog::setMatrixMode(bool b) {
 		ui.chkHeaders->hide();
 		ui.cbLaTeXExport->setItemText(0,i18n("Export matrix"));
         ui.cbExportToFITS->setCurrentIndex(0);
+
+        ui.lColumnAsUnits->hide();
+        ui.chkColumnsAsUnits->hide();
 
 		m_matrixMode = b;
 	}
@@ -192,6 +197,10 @@ bool ExportSpreadsheetDialog::matrixHorizontalHeader() const {
 
 bool ExportSpreadsheetDialog::matrixVerticalHeader() const {
 	return ui.chkMatrixVHeader->isChecked();
+}
+
+bool ExportSpreadsheetDialog::commentsAsUnitsFits() const {
+    return ui.chkColumnsAsUnits->isChecked();
 }
 
 QString ExportSpreadsheetDialog::separator() const {
@@ -302,6 +311,8 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		}
         ui.cbExportToFITS->hide();
         ui.lExportToFITS->hide();
+        ui.lColumnAsUnits->hide();
+        ui.chkColumnsAsUnits->hide();
     //FITS
     } else if(ui.cbFormat->currentIndex() == 3) {
         ui.lCaptions->hide();
@@ -315,14 +326,20 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
         ui.chkEmptyRows->hide();
         ui.chkHeaders->hide();
         ui.chkExportHeader->hide();
+        ui.lExportHeader->hide();
         ui.chkGridLines->hide();
         ui.chkMatrixHHeader->hide();
         ui.chkMatrixVHeader->hide();
         ui.chkCaptions->hide();
         ui.cbLaTeXExport->hide();
         ui.cbSeparator->hide();
+
         ui.cbExportToFITS->show();
         ui.lExportToFITS->show();
+        if (!m_matrixMode) {
+            ui.lColumnAsUnits->show();
+            ui.chkColumnsAsUnits->show();
+        }
     } else {
         ui.cbSeparator->show();
         ui.lSeparator->show();
@@ -345,11 +362,15 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 
         ui.cbExportToFITS->hide();
         ui.lExportToFITS->hide();
+        ui.lColumnAsUnits->hide();
+        ui.chkColumnsAsUnits->hide();
     }
 
 	if (!m_matrixMode) {
-		ui.chkExportHeader->show();
-		ui.lExportHeader->show();
+        if (ui.cbFormat->currentIndex() != 3) {
+            ui.chkExportHeader->show();
+            ui.lExportHeader->show();
+        }
 	} else {
 		ui.chkExportHeader->hide();
 		ui.lExportHeader->hide();

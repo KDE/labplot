@@ -106,7 +106,7 @@ bool Spreadsheet::exportView() const {
 	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(view());
 	dlg->setFileName(name());
     //TODO FITS filter to decide if it can be exported to both
-    dlg->setExportTo(QStringList() << i18n("FITS images") << i18n("FITS table"));
+    dlg->setExportTo(QStringList() << i18n("FITS image") << i18n("FITS table"));
     bool ret;
     if ((ret = dlg->exec()==QDialog::Accepted)){
         const QString path = dlg->path();
@@ -123,7 +123,9 @@ bool Spreadsheet::exportView() const {
                                 exportLatexHeader, skipEmptyRows, exportEntire);
         }
         else if (dlg->format() == ExportSpreadsheetDialog::FITS) {
-            view->exportToFits(path, true);
+            const int exportTo = dlg->exportToFits();
+            const bool commentsAsUnits = dlg->commentsAsUnitsFits();
+            view->exportToFits(path, exportTo, commentsAsUnits) ;
         } else {
             const QString separator = dlg->separator();
             view->exportToFile(path, exportHeader, separator);

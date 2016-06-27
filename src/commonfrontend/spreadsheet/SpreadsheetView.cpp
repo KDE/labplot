@@ -2144,10 +2144,12 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
     }
 }
 
-void SpreadsheetView::exportToFits(const QString &fileName, const bool entire) const {
+void SpreadsheetView::exportToFits(const QString &fileName, const int exportTo, const bool commentsAsUnits) const {
     FITSFilter* filter = new FITSFilter;
+
+    filter->setExportTo(exportTo);
+    filter->setCommentsAsUnits(commentsAsUnits);
     filter->write(fileName, m_spreadsheet);
 
     delete filter;
-    Q_UNUSED(entire)
 }

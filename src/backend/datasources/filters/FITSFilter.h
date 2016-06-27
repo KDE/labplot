@@ -66,8 +66,7 @@ class FITSFilter : public AbstractFileFilter{
                     other.value == value &&
                      other.comment == comment;
         }
-    };
-
+    };  
     void updateKeyword(Keyword& keyword,const QString& newKey, const QString& newValue,
                        const QString& newComment, KeywordUpdateMode mode = UpdateValueComment);
     void addNewKeyword(const QString& filename, const QList<Keyword>& keywords);
@@ -95,7 +94,8 @@ class FITSFilter : public AbstractFileFilter{
     int startColumn() const;
     void setEndColumn(const int);
     int endColumn() const;
-
+    void setCommentsAsUnits(const bool);
+    void setExportTo(const int);
 private:
     FITSFilterPrivate* const d;
     friend class FITSFilterPrivate;
