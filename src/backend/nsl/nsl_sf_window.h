@@ -31,8 +31,11 @@
 
 #include <stdlib.h>
 
-#define NSL_SF_WINDOW_TYPE_COUNT 3
-typedef enum {nsl_sf_window_uniform, nsl_sf_window_triangle, nsl_sf_window_welch} nsl_sf_window_type;
+#define NSL_SF_WINDOW_TYPE_COUNT 15
+typedef enum {nsl_sf_window_uniform, nsl_sf_window_triangle, nsl_sf_window_triangleII, nsl_sf_window_triangleIII, 
+	nsl_sf_window_welch, nsl_sf_window_hann, nsl_sf_window_hamming, nsl_sf_window_blackman, nsl_sf_window_nuttall,
+	nsl_sf_window_blackman_nuttall, nsl_sf_window_blackman_harris, nsl_sf_window_flat_top, nsl_sf_window_cosine,
+	nsl_sf_window_bartlett_hann, nsl_sf_window_lanczos} nsl_sf_window_type;
 extern const char* nsl_sf_window_type_name[];
 
 /* u range: [0:1] or [0:N-1] ? */
