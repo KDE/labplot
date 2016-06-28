@@ -44,7 +44,7 @@ class XYSmoothCurve: public XYCurve {
 
 		struct SmoothData {
 			SmoothData() : type(MovingAverage), points(5), weight(nsl_smooth_weight_uniform), percentile(0.5), order(2),
-				mode(nsl_smooth_pad_interp), lvalue(0.0), rvalue(0.0) {};
+				mode(nsl_smooth_pad_none), lvalue(0.0), rvalue(0.0) {};
 
 			XYSmoothCurve::SmoothType type;		// type of smoothing
 			unsigned int points;			// number of points
