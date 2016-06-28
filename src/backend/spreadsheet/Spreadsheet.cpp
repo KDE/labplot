@@ -105,8 +105,13 @@ QWidget *Spreadsheet::view() const {
 bool Spreadsheet::exportView() const {
 	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(view());
 	dlg->setFileName(name());
-    //TODO FITS filter to decide if it can be exported to both
     dlg->setExportTo(QStringList() << i18n("FITS image") << i18n("FITS table"));
+    for (int i = 0; i < columnCount();++i) {
+        if (column(i)->columnMode() != AbstractColumn::Numeric) {
+            dlg->setExportToImage(false);
+            break;
+        }
+    }
     bool ret;
     if ((ret = dlg->exec()==QDialog::Accepted)){
         const QString path = dlg->path();

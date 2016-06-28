@@ -57,6 +57,7 @@ class ExportSpreadsheetDialog: public KDialog {
         int exportToFits() const;
         bool commentsAsUnitsFits() const;
         void setExportTo(const QStringList& to);
+        void setExportToImage(bool possible);
 
         enum Format {
             ASCII = 0,
@@ -82,6 +83,7 @@ class ExportSpreadsheetDialog: public KDialog {
 		void selectFile();
 		void formatChanged(int);
 		void fileNameChanged(const QString&);
+        void fitsExportToChanged(int);
 };
 
 #endif

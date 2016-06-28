@@ -523,7 +523,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
                         break;
                     }
                 }
-
+                // TODO ?
                 QString tformn;
                 if (decimals) {
                     int maxStringSize = -1;
@@ -571,7 +571,6 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
                 for (int r = 0; r < column.size(); ++r) {
                     columnNumeric[r] = column.at(r);
                 }
-                //columnNumeric = const_cast<double*>(matrixData.at(col-1).data());
 
                 fits_write_col(fitsFile, TDOUBLE, col, 1, 1, nrows, columnNumeric, &status);
                 if (status) {
@@ -592,9 +591,32 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
     Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
     if (spreadsheet) {
         //FITS image
-        //TODO
         if (exportTo == 0) {
+            long naxes[2] = { spreadsheet->columnCount(), spreadsheet->rowCount() };
+            if (fits_create_img(fitsFile, FLOAT_IMG, 2, naxes, &status)) {
+                printError(status);
+                status = 0;
+                fits_close_file(fitsFile, &status);
+                return;
+            }
+            long nelem = naxes[0] * naxes[1];
+            double* array = new double[nelem];
 
+            for (int row = 0; row < naxes[1]; ++row) {
+                for (int col = 0; col < naxes[0]; ++col) {
+                    array[row * naxes[0] + col] = spreadsheet->column(col)->valueAt(row);
+                }
+            }
+
+            if (fits_write_img(fitsFile, TDOUBLE, 1, nelem, array, &status )) {
+                printError(status);
+                status = 0;
+                fits_close_file(fitsFile, &status);
+                return;
+            }
+
+            fits_close_file(fitsFile, &status);
+            delete[] array;
         } else {
             int nrows = spreadsheet->rowCount();
             int tfields = spreadsheet->columnCount();
@@ -607,7 +629,6 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
                 columnNames[i] = new char[column->name().size()];
                 strcpy(columnNames[i], column->name().toLatin1().data());
-                //TODO comments units? import dialog
                 if (commentsAsUnits) {
                     tunit[i] = new char[column->comment().size()];
                     strcpy(tunit[i], column->comment().toLatin1().constData());
@@ -1182,6 +1203,7 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
 
         item = new QTableWidgetItem(keywords.at(i).value);
         item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        //TODO TFIELD..
         if (mandatory) {
             item->setFlags(item->flags() & ~Qt::ItemIsEditable);
         }

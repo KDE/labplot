@@ -78,6 +78,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	connect( ui.kleFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 	connect(ui.cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(formatChanged(int)));
+    connect(ui.cbExportToFITS, SIGNAL(currentIndexChanged(int)), this, SLOT(fitsExportToChanged(int)));
 
 	setCaption(i18n("Export spreadsheet"));
 	setWindowIcon(KIcon("document-export-database"));
@@ -130,6 +131,16 @@ void ExportSpreadsheetDialog::setFileName(const QString& name) {
 	if (dir.isEmpty()) dir = QDir::homePath();
 	ui.kleFileName->setText(dir + QDir::separator() +  name);
 	this->formatChanged(ui.cbFormat->currentIndex());
+}
+
+void ExportSpreadsheetDialog::fitsExportToChanged(int idx) {
+    if (idx == 0) {
+        ui.chkColumnsAsUnits->hide();
+        ui.lColumnAsUnits->hide();
+    } else {
+        ui.chkColumnsAsUnits->show();
+        ui.lColumnAsUnits->show();
+    }
 }
 
 void ExportSpreadsheetDialog::setMatrixMode(bool b) {
@@ -215,6 +226,13 @@ void ExportSpreadsheetDialog::slotButtonClicked(int button) {
 		okClicked();
 	else
 		KDialog::slotButtonClicked(button);
+}
+
+void ExportSpreadsheetDialog::setExportToImage(bool possible) {
+    if (!possible) {
+        ui.cbExportToFITS->setCurrentIndex(1);
+        ui.cbExportToFITS->setItemData(0, 0, Qt::UserRole - 1);
+    }
 }
 
 //SLOTS
