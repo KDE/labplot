@@ -371,7 +371,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 	const double bias = interpolationData.bias;
 	const XYInterpolationCurve::InterpolationEval evaluate = interpolationData.evaluate;
 	const unsigned int npoints = interpolationData.npoints;
-#ifdef QT_DEBUG
+#ifndef NDEBUG
 	qDebug()<<"type:"<<type;
 	qDebug()<<"cubic Hermite variant:"<<variant<<tension<<continuity<<bias;
 	qDebug()<<"evaluate:"<<evaluate;
@@ -385,32 +385,32 @@ void XYInterpolationCurvePrivate::recalculate() {
 	switch (type) {
 	case XYInterpolationCurve::Linear:
 		spline = gsl_spline_alloc(gsl_interp_linear, n);
-		status = gsl_spline_init (spline, xdata, ydata, n);
+		status = gsl_spline_init(spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::Polynomial:
 		spline = gsl_spline_alloc(gsl_interp_polynomial, n);
-		status = gsl_spline_init (spline, xdata, ydata, n);
+		status = gsl_spline_init(spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::CSpline:
 		spline = gsl_spline_alloc(gsl_interp_cspline, n);
-		status = gsl_spline_init (spline, xdata, ydata, n);
+		status = gsl_spline_init(spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::CSplinePeriodic:
 		spline = gsl_spline_alloc(gsl_interp_cspline_periodic, n);
-		status = gsl_spline_init (spline, xdata, ydata, n);
+		status = gsl_spline_init(spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::Akima:
 		spline = gsl_spline_alloc(gsl_interp_akima, n);
-		status = gsl_spline_init (spline, xdata, ydata, n);
+		status = gsl_spline_init(spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::AkimaPeriodic:
 		spline = gsl_spline_alloc(gsl_interp_akima_periodic, n);
-		status = gsl_spline_init (spline, xdata, ydata, n);
+		status = gsl_spline_init(spline, xdata, ydata, n);
 		break;
 	case XYInterpolationCurve::Steffen:
 #if GSL_MAJOR_VERSION >= 2
 		spline = gsl_spline_alloc(gsl_interp_steffen, n);
-		status = gsl_spline_init (spline, xdata, ydata, n);
+		status = gsl_spline_init(spline, xdata, ydata, n);
 #endif
 		break;
 	default:
