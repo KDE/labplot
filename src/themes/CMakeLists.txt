@@ -1,0 +1,2 @@
+FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/*.txt")
+install(FILES ${files} DESTINATION ${DATA_INSTALL_DIR}/${PROJECT_NAME}/themes )

@@ -210,6 +210,7 @@ set(TOOLS_SOURCES
 add_subdirectory( pics )
 add_subdirectory( pics/gsl_distributions )
 add_subdirectory( pics/colorchooser )
+add_subdirectory( themes )
 
 ##############################################################################
 # set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} parser/parser.tab.c)

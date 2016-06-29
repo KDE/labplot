@@ -78,8 +78,8 @@ ThemeHandler::ThemeHandler(QWidget *parent): QWidget(parent){
 void ThemeHandler::loadMenu() {
 	KMenu menu;
 	menu.addTitle(i18n("Themes:"));
+	QStringList list = KGlobal::dirs()->findAllResources("data","labplot2/themes/*");
 
-	QStringList list = KGlobal::dirs()->findAllResources("appdata", "themes/*");
 	for (int i = 0; i < list.size(); ++i) {
 		QFileInfo fileinfo(list.at(i));
 		QAction* action = menu.addAction(fileinfo.fileName());
