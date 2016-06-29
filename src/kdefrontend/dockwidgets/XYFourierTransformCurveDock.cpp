@@ -129,9 +129,16 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_transformCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_transformCurve->yDataColumn());
 
+	uiGeneralTab.cbWindowType->setCurrentIndex(m_transformData.windowType);
+	this->windowTypeChanged();
 	uiGeneralTab.cbType->setCurrentIndex(m_transformData.type);
 	this->typeChanged();
+	uiGeneralTab.cbTwoSided->setChecked(m_transformData.twoSided);
 	this->twoSidedChanged();	// show/hide shifted check box
+	uiGeneralTab.cbShifted->setChecked(m_transformData.shifted);
+	this->shiftedChanged();
+	uiGeneralTab.cbXScale->setCurrentIndex(m_transformData.xScale);
+	this->xScaleChanged();
 	this->showTransformResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last transform

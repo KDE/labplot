@@ -336,6 +336,10 @@ void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "type", QString::number(d->transformData.type) );
+	writer->writeAttribute( "twoSided", QString::number(d->transformData.twoSided) );
+	writer->writeAttribute( "shifted", QString::number(d->transformData.shifted) );
+	writer->writeAttribute( "xScale", QString::number(d->transformData.xScale) );
+	writer->writeAttribute( "windowType", QString::number(d->transformData.windowType) );
 	writer->writeEndElement();// transformData
 
 	//transform results (generated columns)
@@ -390,6 +394,29 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader) {
 			else
 				d->transformData.type = (nsl_dft_result_type)str.toInt();
 
+			str = attribs.value("twoSided").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'twoSided'"));
+			else
+				d->transformData.twoSided = (bool)str.toInt();
+
+			str = attribs.value("shifted").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'shifted'"));
+			else
+				d->transformData.shifted = (bool)str.toInt();
+
+			str = attribs.value("xScale").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'xScale'"));
+			else
+				d->transformData.xScale = (nsl_dft_xscale)str.toInt();
+
+			str = attribs.value("windowType").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'windowType'"));
+			else
+				d->transformData.windowType = (nsl_sf_window_type)str.toInt();
 		} else if (reader->name() == "transformResult") {
 
 			attribs = reader->attributes();

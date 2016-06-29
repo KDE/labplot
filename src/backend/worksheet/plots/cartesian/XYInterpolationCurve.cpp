@@ -51,6 +51,9 @@ extern "C" {
 #include <KLocale>
 #include <QElapsedTimer>
 #include <QThreadPool>
+#ifndef NDEBUG
+#include <QDebug>
+#endif
 
 XYInterpolationCurve::XYInterpolationCurve(const QString& name)
 		: XYCurve(name, new XYInterpolationCurvePrivate(this)) {
