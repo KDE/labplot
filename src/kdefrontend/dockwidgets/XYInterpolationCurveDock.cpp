@@ -90,13 +90,17 @@ void XYInterpolationCurveDock::setupGeneral() {
 	uiGeneralTab.cbType->addItem(i18n("cubic spline (periodic)"));
 	uiGeneralTab.cbType->addItem(i18n("Akima-spline (natural)"));
 	uiGeneralTab.cbType->addItem(i18n("Akima-spline (periodic)"));
-#if GSL_MAJOR_VERSION >= 2
 	uiGeneralTab.cbType->addItem(i18n("Steffen spline"));
-#endif
 	uiGeneralTab.cbType->addItem(i18n("cosine"));
 	uiGeneralTab.cbType->addItem(i18n("exponential"));
 	uiGeneralTab.cbType->addItem(i18n("piecewise cubic Hermite (PCH)"));
 	uiGeneralTab.cbType->addItem(i18n("rational functions"));
+#if GSL_MAJOR_VERSION < 2
+	// disable Steffen spline
+	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
+	QStandardItem* item = model->item(XYInterpolationCurve::Steffen);
+	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+#endif
 
 	uiGeneralTab.cbVariant->addItem(i18n("finite differences"));
 	uiGeneralTab.cbVariant->addItem(i18n("Catmull-Rom"));
