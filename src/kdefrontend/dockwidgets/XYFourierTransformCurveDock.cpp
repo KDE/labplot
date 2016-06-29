@@ -250,8 +250,10 @@ void XYFourierTransformCurveDock::twoSidedChanged() {
 
 	if(twoSided)
 		uiGeneralTab.cbShifted->setEnabled(true);
-	else
+	else {
 		uiGeneralTab.cbShifted->setEnabled(false);
+		uiGeneralTab.cbShifted->setChecked(false);
+	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }

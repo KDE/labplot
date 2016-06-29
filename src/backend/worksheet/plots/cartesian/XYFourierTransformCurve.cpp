@@ -42,14 +42,6 @@
 #include <cmath>	// isnan
 extern "C" {
 #include <gsl_errno.h>
-#include <gsl/gsl_sf_pow_int.h>
-#ifdef HAVE_FFTW3
-#include <fftw3.h>
-#endif
-// TODO: include these if fftw3 is used instead?
-#include <gsl/gsl_fft_real.h>
-#include <gsl/gsl_fft_halfcomplex.h>
-
 #include "backend/nsl/nsl_sf_poly.h"
 }
 
@@ -277,16 +269,20 @@ void XYFourierTransformCurvePrivate::recalculate() {
 
 	switch (xScale) {
 	case nsl_dft_xscale_frequency:
-		for (unsigned int i=0; i < n/2; i++)
-			xdata[i] = (n-1)*i/(xmax-xmin)/n;
-		if(twoSided)
-			for (unsigned int i=n/2; i < n; i++)
-				xdata[i] = (n-1)*i/(xmax-xmin)/n-(n-1)/(xmax-xmin);
+		for (unsigned int i=0; i < N; i++) {
+			if(i >= n/2 && shifted)
+				xdata[i] = (n-1)/(xmax-xmin)*(i/(double)n-1.);
+			else
+				xdata[i] = (n-1)*i/(xmax-xmin)/n;
+		}
 		break;
 	case nsl_dft_xscale_index:
-		//TODO: twoSided, shifted
-		for (unsigned int i=0; i < N; i++)
-			xdata[i] = i;
+		for (unsigned int i=0; i < N; i++) {
+			if (i >= n/2 && shifted)
+				xdata[i] = (int)i-(int) N;
+			else
+				xdata[i] = i;
+		}
 		break;
 	case nsl_dft_xscale_period:	// see xmgr manual
 		//TODO
