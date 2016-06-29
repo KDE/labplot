@@ -50,7 +50,7 @@ extern "C" {
 #include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
-#include <QDebug>
+#include <QThreadPool>
 
 XYInterpolationCurve::XYInterpolationCurve(const QString& name)
 		: XYCurve(name, new XYInterpolationCurvePrivate(this)) {
@@ -751,6 +751,9 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 				d->yColumn = column;
 		}
 	}
+
+	// wait for data to be read before using the pointers
+	QThreadPool::globalInstance()->waitForDone();
 
 	if (d->xColumn && d->yColumn) {
 		d->xColumn->setHidden(true);

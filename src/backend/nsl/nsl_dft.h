@@ -59,6 +59,8 @@ extern const char* nsl_dft_xscale_name[];
 /* transform data of size n. result in data 
 	calculates the two-sided DFT
 */
-int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type, nsl_sf_window_type window);
+int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type);
+/* windowed version */
+int nsl_dft_transform_window(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type, nsl_sf_window_type window);
 
 #endif /* NSL_DFT_H */

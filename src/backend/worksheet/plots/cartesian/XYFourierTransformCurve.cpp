@@ -56,6 +56,7 @@ extern "C" {
 #include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
+#include <QThreadPool>
 
 XYFourierTransformCurve::XYFourierTransformCurve(const QString& name)
 		: XYCurve(name, new XYFourierTransformCurvePrivate(this)) {
@@ -250,13 +251,14 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	const double xmax = xDataColumn->maximum();
 
 	// transform settings
+	const nsl_sf_window_type windowType = transformData.windowType;
 	const nsl_dft_result_type type = transformData.type;
 	const bool twoSided = transformData.twoSided;
 	const bool shifted = transformData.shifted;
 	const nsl_dft_xscale xScale = transformData.xScale;
-	const nsl_sf_window_type windowType = transformData.windowType;
 #ifndef NDEBUG
 	qDebug()<<"n ="<<n;
+	qDebug()<<"window type:"<<nsl_sf_window_type_name[windowType];
 	qDebug()<<"type:"<<nsl_dft_result_type_name[type];
 	qDebug()<<"scale:"<<nsl_dft_xscale_name[xScale];
 	qDebug()<<"two sided:"<<twoSided;
@@ -266,8 +268,8 @@ void XYFourierTransformCurvePrivate::recalculate() {
 		out<<ydata[i];
 #endif
 ///////////////////////////////////////////////////////////
-	// transform
-	int status = nsl_dft_transform(ydata, 1, n, twoSided, type, windowType);
+	// transform with window
+	int status = nsl_dft_transform_window(ydata, 1, n, twoSided, type, windowType);
 
 	unsigned int N=n;
 	if(twoSided == false)
@@ -432,6 +434,9 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader) {
 				d->yColumn = column;
 		}
 	}
+
+	// wait for data to be read before using the pointers
+	QThreadPool::globalInstance()->waitForDone();
 
 	if (d->xColumn && d->yColumn) {
 		d->xColumn->setHidden(true);

@@ -257,7 +257,7 @@
     </widget>
    </item>
    <item row="8" column="2" colspan="2">
-    <widget class="KComboBox" name="cbWindow"/>
+    <widget class="KComboBox" name="cbWindowType"/>
    </item>
   </layout>
  </widget>

@@ -64,6 +64,7 @@ private slots:
 	void commentChanged();
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
+	void windowTypeChanged();
 	void typeChanged();
 	void twoSidedChanged();
 	void shiftedChanged();

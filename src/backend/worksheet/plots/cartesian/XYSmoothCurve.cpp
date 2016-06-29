@@ -41,7 +41,7 @@
 #include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
-#include <QDebug>
+#include <QThreadPool>
 
 extern "C" {
 #include <gsl/gsl_math.h>	// gsl_pow_*
@@ -455,6 +455,9 @@ bool XYSmoothCurve::load(XmlStreamReader* reader) {
 				d->yColumn = column;
 		}
 	}
+
+	// wait for data to be read before using the pointers
+	QThreadPool::globalInstance()->waitForDone();
 
 	if (d->xColumn && d->yColumn) {
 		d->xColumn->setHidden(true);

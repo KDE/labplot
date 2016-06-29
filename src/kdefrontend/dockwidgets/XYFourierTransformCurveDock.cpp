@@ -78,7 +78,7 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	gridLayout->addWidget(cbYDataColumn, 5, 2, 1, 2);
 
 	for(int i=0; i < NSL_SF_WINDOW_TYPE_COUNT; i++)
-		uiGeneralTab.cbWindow->addItem(i18n(nsl_sf_window_type_name[i]));
+		uiGeneralTab.cbWindowType->addItem(i18n(nsl_sf_window_type_name[i]));
 	for(int i=0; i < NSL_DFT_RESULT_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_dft_result_type_name[i]));
 	for(int i=0; i < NSL_DFT_XSCALE_COUNT; i++)
@@ -93,6 +93,7 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
+	connect( uiGeneralTab.cbWindowType, SIGNAL(currentIndexChanged(int)), this, SLOT(windowTypeChanged()) );
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
 	connect( uiGeneralTab.cbTwoSided, SIGNAL(stateChanged(int)), this, SLOT(twoSidedChanged()) );
 	connect( uiGeneralTab.cbShifted, SIGNAL(stateChanged(int)), this, SLOT(shiftedChanged()) );
@@ -227,6 +228,13 @@ void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setYDataColumn(column);
+}
+
+void XYFourierTransformCurveDock::windowTypeChanged() {
+	nsl_sf_window_type windowType = (nsl_sf_window_type)uiGeneralTab.cbWindowType->currentIndex();
+	m_transformData.windowType = windowType;
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYFourierTransformCurveDock::typeChanged() {

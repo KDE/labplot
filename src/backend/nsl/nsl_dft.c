@@ -39,8 +39,19 @@ const char* nsl_dft_result_type_name[] = {"Magnitude", "Amplitude", "real", "ima
 		"dB", "dB normalized", "Magnitude squared", "Amplitude squared", "raw"};
 const char* nsl_dft_xscale_name[] = {"Frequency", "Index", "Period"};
 
-/* TODO: use window */
-int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type, nsl_sf_window_type window) {
+int nsl_dft_transform_window(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type, nsl_sf_window_type window_type) {
+	/* apply window function */
+	unsigned int i;
+	for (i=0; i < n; i++)
+		data[i] *= nsl_sf_window(i, n, window_type);
+
+	/* transform */
+	int status = nsl_dft_transform(data, stride, n, two_sided, type);
+
+	return status;
+}
+
+int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type) {
 	unsigned int i;
 	double result[2*n];
 	unsigned int N=n/2;	/* number of resulting data points */
@@ -48,6 +59,8 @@ int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl
 		N=n;
 #ifdef HAVE_FFTW3
 	/* stride ignored */
+	(void)stride;
+
         fftw_plan plan = fftw_plan_dft_r2c_1d(n, data, (fftw_complex *) result, FFTW_ESTIMATE);
         fftw_execute(plan);
 	fftw_destroy_plan(plan);
