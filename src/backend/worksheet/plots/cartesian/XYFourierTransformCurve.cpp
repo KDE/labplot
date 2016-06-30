@@ -284,9 +284,14 @@ void XYFourierTransformCurvePrivate::recalculate() {
 				xdata[i] = i;
 		}
 		break;
-	case nsl_dft_xscale_period:	// see xmgr manual
-		//TODO
+	case nsl_dft_xscale_period: {
+		double f0 = (n-1)/(xmax-xmin)/n;
+		for (unsigned int i=0; i < N; i++) {
+			double f = (n-1)*i/(xmax-xmin)/n;
+			xdata[i] = 1/(f+f0);
+		}
 		break;
+	}
 	}
 #ifndef NDEBUG
 	out = qDebug();
