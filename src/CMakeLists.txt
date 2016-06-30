@@ -152,6 +152,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp
  	${BACKEND_DIR}/nsl/nsl_dft.c
+ 	${BACKEND_DIR}/nsl/nsl_interp.c
  	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
  	${BACKEND_DIR}/nsl/nsl_sf_poly.c
  	${BACKEND_DIR}/nsl/nsl_sf_window.c

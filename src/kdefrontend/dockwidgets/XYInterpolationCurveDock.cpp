@@ -84,33 +84,18 @@ void XYInterpolationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
-	uiGeneralTab.cbType->addItem(i18n("linear"));
-	uiGeneralTab.cbType->addItem(i18n("polynomial"));
-	uiGeneralTab.cbType->addItem(i18n("cubic spline (natural)"));
-	uiGeneralTab.cbType->addItem(i18n("cubic spline (periodic)"));
-	uiGeneralTab.cbType->addItem(i18n("Akima-spline (natural)"));
-	uiGeneralTab.cbType->addItem(i18n("Akima-spline (periodic)"));
-	uiGeneralTab.cbType->addItem(i18n("Steffen spline"));
-	uiGeneralTab.cbType->addItem(i18n("cosine"));
-	uiGeneralTab.cbType->addItem(i18n("exponential"));
-	uiGeneralTab.cbType->addItem(i18n("piecewise cubic Hermite (PCH)"));
-	uiGeneralTab.cbType->addItem(i18n("rational functions"));
+	for(int i=0; i < NSL_INTERP_TYPE_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_interp_type_name[i]));
 #if GSL_MAJOR_VERSION < 2
-	// disable Steffen spline
+	// disable Steffen spline item
 	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
-	QStandardItem* item = model->item(XYInterpolationCurve::Steffen);
+	QStandardItem* item = model->item(nsl_interp_type_steffen);
 	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 #endif
-
-	uiGeneralTab.cbVariant->addItem(i18n("finite differences"));
-	uiGeneralTab.cbVariant->addItem(i18n("Catmull-Rom"));
-	uiGeneralTab.cbVariant->addItem(i18n("cardinal"));
-	uiGeneralTab.cbVariant->addItem(i18n("Kochanek-Bartels (TCB)"));
-
-	uiGeneralTab.cbEval->addItem(i18n("function"));
-	uiGeneralTab.cbEval->addItem(i18n("derivative"));
-	uiGeneralTab.cbEval->addItem(i18n("second derivative"));
-	uiGeneralTab.cbEval->addItem(i18n("integral"));
+	for(int i=0; i < NSL_INTERP_PCH_VARIANT_COUNT; i++)
+		uiGeneralTab.cbVariant->addItem(i18n(nsl_interp_pch_variant_name[i]));
+	for(int i=0; i < NSL_INTERP_EVALUATE_COUNT; i++)
+		uiGeneralTab.cbEval->addItem(i18n(nsl_interp_evaluate_name[i]));
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
@@ -263,56 +248,56 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 				n++;
 
 		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
-		QStandardItem* item = model->item(XYInterpolationCurve::Polynomial);
+		QStandardItem* item = model->item(nsl_interp_type_polynomial);
 		if(n < gsl_interp_type_min_size(gsl_interp_polynomial) || n>100) {	// not good for many points
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == XYInterpolationCurve::Polynomial)
+			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_polynomial)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
-		item = model->item(XYInterpolationCurve::CSpline);
+		item = model->item(nsl_interp_type_cspline);
 		if(n < gsl_interp_type_min_size(gsl_interp_cspline)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == XYInterpolationCurve::CSpline)
+			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
-		item = model->item(XYInterpolationCurve::CSplinePeriodic);
+		item = model->item(nsl_interp_type_cspline_periodic);
 		if(n < gsl_interp_type_min_size(gsl_interp_cspline_periodic)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == XYInterpolationCurve::CSplinePeriodic)
+			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline_periodic)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
-		item = model->item(XYInterpolationCurve::Akima);
+		item = model->item(nsl_interp_type_akima);
 		if(n < gsl_interp_type_min_size(gsl_interp_akima)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == XYInterpolationCurve::Akima)
+			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
-		item = model->item(XYInterpolationCurve::AkimaPeriodic);
+		item = model->item(nsl_interp_type_akima_periodic);
 		if(n < gsl_interp_type_min_size(gsl_interp_akima_periodic)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == XYInterpolationCurve::AkimaPeriodic)
+			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima_periodic)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
 #if GSL_MAJOR_VERSION >= 2
-		item = model->item(XYInterpolationCurve::Steffen);
+		item = model->item(nsl_interp_type_steffen);
 		if(n < gsl_interp_type_min_size(gsl_interp_steffen)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == XYInterpolationCurve::Steffen)
+			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_steffen)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
@@ -338,18 +323,18 @@ void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYInterpolationCurveDock::typeChanged() {
-	XYInterpolationCurve::InterpolationType type = (XYInterpolationCurve::InterpolationType)uiGeneralTab.cbType->currentIndex();
+	nsl_interp_type type = (nsl_interp_type)uiGeneralTab.cbType->currentIndex();
 	m_interpolationData.type = type;
 
 	switch(type) {
-	case XYInterpolationCurve::PCH:
+	case nsl_interp_type_pch:
 		uiGeneralTab.lVariant->show();
 		uiGeneralTab.cbVariant->show();
 		break;
 	default:
 		uiGeneralTab.lVariant->hide();
 		uiGeneralTab.cbVariant->hide();
-		uiGeneralTab.cbVariant->setCurrentIndex(XYInterpolationCurve::FiniteDifference);
+		uiGeneralTab.cbVariant->setCurrentIndex(nsl_interp_pch_variant_finite_difference);
 		uiGeneralTab.lParameter->hide();
 		uiGeneralTab.lTension->hide();
 		uiGeneralTab.sbTension->hide();
@@ -363,11 +348,11 @@ void XYInterpolationCurveDock::typeChanged() {
 }
 
 void XYInterpolationCurveDock::variantChanged() {
-	XYInterpolationCurve::CubicHermiteVariant variant = (XYInterpolationCurve::CubicHermiteVariant)uiGeneralTab.cbVariant->currentIndex();
+	nsl_interp_pch_variant variant = (nsl_interp_pch_variant)uiGeneralTab.cbVariant->currentIndex();
 	m_interpolationData.variant = variant;
 
 	switch(variant) {
-	case XYInterpolationCurve::FiniteDifference:
+	case nsl_interp_pch_variant_finite_difference:
 		uiGeneralTab.lParameter->hide();
                 uiGeneralTab.lTension->hide();
                 uiGeneralTab.sbTension->hide();
@@ -376,7 +361,7 @@ void XYInterpolationCurveDock::variantChanged() {
                 uiGeneralTab.lBias->hide();
                 uiGeneralTab.sbBias->hide();
 		break;
-	case XYInterpolationCurve::CatmullRom:
+	case nsl_interp_pch_variant_catmull_rom:
 		uiGeneralTab.lParameter->show();
                 uiGeneralTab.lTension->show();
                 uiGeneralTab.sbTension->show();
@@ -387,7 +372,7 @@ void XYInterpolationCurveDock::variantChanged() {
                 uiGeneralTab.lBias->hide();
                 uiGeneralTab.sbBias->hide();
 		break;
-	case XYInterpolationCurve::Cardinal:
+	case nsl_interp_pch_variant_cardinal:
 		uiGeneralTab.lParameter->show();
                 uiGeneralTab.lTension->show();
                 uiGeneralTab.sbTension->show();
@@ -397,7 +382,7 @@ void XYInterpolationCurveDock::variantChanged() {
                 uiGeneralTab.lBias->hide();
                 uiGeneralTab.sbBias->hide();
 		break;
-	case XYInterpolationCurve::KochanekBartels:
+	case nsl_interp_pch_variant_kochanek_bartels:
 		uiGeneralTab.lParameter->show();
                 uiGeneralTab.lTension->show();
                 uiGeneralTab.sbTension->show();
@@ -431,7 +416,7 @@ void XYInterpolationCurveDock::biasChanged() {
 }
 
 void XYInterpolationCurveDock::evaluateChanged() {
-	m_interpolationData.evaluate = (XYInterpolationCurve::InterpolationEval)uiGeneralTab.cbEval->currentIndex();
+	m_interpolationData.evaluate = (nsl_interp_evaluate)uiGeneralTab.cbEval->currentIndex();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
