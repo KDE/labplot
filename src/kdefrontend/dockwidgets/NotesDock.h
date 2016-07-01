@@ -46,14 +46,19 @@ class NotesDock : public QWidget {
 		Ui::NotesDock ui;
 		bool m_initializing;
 		Notes* m_notes;
+		QList< Notes* > m_notesList;
+
+		void init();
 
 	private slots:
 		//SLOTs for changes triggered in WorksheetDock
 		//"General"-tab
-		void nameChanged(QString name);
-		void commentChanged(QString name);
-		void bgColorChanged(QColor color);
-		void textColorChanged(QColor color);
+		void nameChanged(QString);
+		void commentChanged(QString);
+		void bgColorChanged(QColor);
+		void textColorChanged(QColor);
+		void loadConfigFromTemplate(KConfig&);
+		void saveConfigAsTemplate(KConfig&);
 
 		//SLOTs for changes triggered in Worksheet
 // 		void worksheetDescriptionChanged(const AbstractAspect*);
