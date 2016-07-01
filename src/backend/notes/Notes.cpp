@@ -29,6 +29,8 @@
 #include "Notes.h"
 
 #include <QPalette>
+#include <KConfig>
+#include <KConfigGroup>
 
 Notes::Notes(AbstractScriptingEngine* engine, const QString& name, bool loading): AbstractPart(name), scripted(engine) {
 	init();
@@ -42,8 +44,11 @@ void Notes::init() {
 
 // 	QColor color = QColorDialog::getColor(Qt::yellow,this); // can be used to give options
 
-	m_bgColor = Qt::yellow;
-	m_textColor = Qt::black;
+	KConfig config;
+	KConfigGroup group = config.group( "Notes" );
+
+	m_bgColor = group.readEntry("bgColor", QColor(Qt::yellow));
+	m_textColor = group.readEntry("textColor", QColor(Qt::black));
 	m_note = "";
 }
 
