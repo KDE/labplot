@@ -67,7 +67,7 @@ double nsl_stats_quantile_sorted(const double d[], size_t stride, size_t n, doub
 		if(p <= 0.5/n)
 			return d[0];
 		else
-			return d[(lrint(n*p)-1)*stride];
+			return d[((int)rint(n*p)-1)*stride];
 	case nsl_stats_quantile_type4:
 		if(p < 1./n)
 			return d[0];
