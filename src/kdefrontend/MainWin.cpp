@@ -47,7 +47,9 @@
 #include "commonfrontend/matrix/MatrixView.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
+#ifdef HAVE_CANTOR_LIBS
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
+#endif
 #include "commonfrontend/datapicker/DatapickerView.h"
 #include "commonfrontend/datapicker/DatapickerImageView.h"
 
