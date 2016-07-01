@@ -30,7 +30,6 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-#include <math.h>
 #include <gsl/gsl_version.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf.h>
@@ -44,9 +43,11 @@ double my_rand() { return rand(); }
 double my_random() { return random(); }
 double my_drand() { return random()/(double)RAND_MAX; }
 /* math.h */
-double my_jn(double n, double x) { return jn((int)n,x); }
 double my_ldexp(double x, double expo) { return ldexp(x,(int)expo); }
+#ifndef _WIN32
+double my_jn(double n, double x) { return jn((int)n,x); }
 double my_yn(double n,double x) { return yn((int)n,x); }
+#endif
 
 /* wrapper for GSL functions with integer parameters */
 #define MODE GSL_PREC_DOUBLE
@@ -154,27 +155,29 @@ struct func _functions[] = {
 	{"drand",my_drand},
 	/* math.h */
 	{"acos",acos},
-	{"acosh",acosh},
 	{"asin",asin},
-	{"asinh",asinh},
 	{"atan",atan},
 	{"atan2",atan2},
-	{"atanh",atanh},
-	{"cbrt",cbrt},
 	{"ceil",ceil},
 	{"cosh",cosh},
 	{"fabs",fabs},
 	{"ldexp",my_ldexp},
 	{"log10",log10},
-	{"logb",logb},
 	{"pow",pow},
-	{"rint",rint},
-	{"round",round},
 	{"sinh",sinh},
 	{"sqrt", sqrt},
 	{"tan",tan},
 	{"tanh",tanh},
+#ifndef _WIN32
+	{"acosh",acosh},
+	{"asinh",asinh},
+	{"atanh",atanh},
+	{"cbrt",cbrt},
+	{"logb",logb},
+	{"rint",rint},
+	{"round",round},
 	{"trunc",trunc},
+#endif
 	/* TODO: use these if GSL is not available? */
 /*	{"cos", cos},
 	{"erf",erf},
