@@ -36,7 +36,9 @@
 #include "backend/datasources/FileDataSource.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
+#endif
 #include "backend/worksheet/Worksheet.h"
 
 #include <QIcon>
