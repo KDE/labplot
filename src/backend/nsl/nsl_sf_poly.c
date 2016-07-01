@@ -27,6 +27,7 @@
  ***************************************************************************/
 
 #include <math.h>
+#include <gsl_math.h>
 #include "nsl_sf_poly.h"
 
 /* see https://en.wikipedia.org/wiki/Chebyshev_polynomials */
@@ -34,9 +35,9 @@ double nsl_sf_poly_chebyshev_T(int n, double x) {
 	if(fabs(x) <= 1)
 		return cos(n*acos(x));
 	else if (x > 1)
-		return cosh(n*acosh(x));
+		return cosh(n*gsl_acosh(x));
 	else 
-		return pow(-1.,n)*cosh(n*acosh(-x));
+		return pow(-1.,n)*cosh(n*gsl_acosh(-x));
 }
 
 double nsl_sf_poly_chebyshev_U(int n, double x) {

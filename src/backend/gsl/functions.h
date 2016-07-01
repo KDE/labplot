@@ -169,9 +169,6 @@ struct func _functions[] = {
 	{"tan",tan},
 	{"tanh",tanh},
 #ifndef _WIN32
-	{"acosh",acosh},
-	{"asinh",asinh},
-	{"atanh",atanh},
 	{"cbrt",cbrt},
 	{"logb",logb},
 	{"rint",rint},
@@ -200,13 +197,13 @@ struct func _functions[] = {
 	{"yn",my_yn},
 */
 	/* GSL mathematical functions: see http://www.gnu.org/software/gsl/manual/gsl-ref.html#Mathematical-Functions */
+	{"acosh",gsl_acosh},
+	{"asinh",gsl_asinh},
+	{"atanh",gsl_atanh},
 	{"gsl_log1p",gsl_log1p},
 	{"gsl_expm1",gsl_expm1},
 	{"gsl_hypot",gsl_hypot},
 	{"gsl_hypot3",gsl_hypot3},
-	{"gsl_acosh",gsl_acosh},
-	{"gsl_asinh",gsl_asinh},
-	{"gsl_atanh",gsl_atanh},
 	{"gsl_ldexp",gsl_ldexp},
 	{"gsl_powint",my_gsl_powint},
 	{"pow2",gsl_pow_2},
