@@ -41,7 +41,7 @@
 
 #include <cmath>	// isnan
 extern "C" {
-#include <gsl_errno.h>
+#include <gsl/gsl_errno.h>
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_halfcomplex.h>
 #include <gsl/gsl_sf_pow_int.h>
