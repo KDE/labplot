@@ -27,7 +27,7 @@
  ***************************************************************************/
 
 #include <math.h>
-#include <gsl_math.h>
+#include <gsl/gsl_math.h>
 #include "nsl_sf_poly.h"
 
 /* see https://en.wikipedia.org/wiki/Chebyshev_polynomials */
