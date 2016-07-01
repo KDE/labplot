@@ -30,6 +30,7 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
+#include <math.h>
 #include <gsl/gsl_version.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf.h>
