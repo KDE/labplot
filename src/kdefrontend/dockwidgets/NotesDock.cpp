@@ -27,6 +27,9 @@
  ***************************************************************************/
 
 #include "NotesDock.h"
+#include "kdefrontend/TemplateHandler.h"
+
+#include <QDir>
 
 NotesDock::NotesDock(QWidget *parent) : QWidget(parent), m_initializing(false) {
 	ui.setupUi(this);
@@ -36,10 +39,22 @@ NotesDock::NotesDock(QWidget *parent) : QWidget(parent), m_initializing(false) {
 	
 	connect(ui.kcbBgColor, SIGNAL(changed(QColor)), this, SLOT(bgColorChanged(QColor)));
 	connect(ui.kcbTextColor, SIGNAL(changed(QColor)), this, SLOT(textColorChanged(QColor)));
+
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
+	ui.gridLayout->addWidget(templateHandler, 7, 0);
+	templateHandler->show();
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 }
 
 NotesDock::~NotesDock() {
 }
+
+void NotesDock::init() {
+	ui.kcbBgColor->setColor(m_notes->bgColor());
+	ui.kcbTextColor->setColor(m_notes->textColor());
+}
+
 
 void NotesDock::bgColorChanged(QColor color) {
 	if(m_initializing)
@@ -55,9 +70,11 @@ void NotesDock::textColorChanged(QColor color) {
 
 void NotesDock::setNotesList(QList< Notes* > list) {
 	m_initializing=true;
+	m_notesList = list;
 	m_notes = list.first();
 	ui.leName->setText(m_notes->name());
 	m_initializing=false;
+	init();
 }
 
 void NotesDock::nameChanged(QString name) {
@@ -70,4 +87,33 @@ void NotesDock::commentChanged(QString name) {
 	if(m_initializing)
 		return;
 	m_notes->setComment(name);
+}
+
+void NotesDock::loadConfigFromTemplate(KConfig& config) {
+
+	QString name;
+	int index = config.name().lastIndexOf(QDir::separator());
+	if (index!=-1)
+		name = config.name().right(config.name().size() - index - 1);
+	else
+		name = config.name();
+
+	int size = m_notesList.size();
+	if (size>1)
+		m_notes->beginMacro(i18n("%1 Notes: template \"%2\" loaded", size, name));
+	else
+		m_notes->beginMacro(i18n("%1: template \"%2\" loaded", m_notes->name(), name));
+
+	KConfigGroup group = config.group( "Notes" );
+	ui.kcbBgColor->setColor(group.readEntry("bgColor", m_notes->bgColor()));
+	ui.kcbTextColor->setColor(group.readEntry("textColor", m_notes->textColor()));
+
+	m_notes->endMacro();
+}
+
+void NotesDock::saveConfigAsTemplate(KConfig& config) {
+	KConfigGroup group = config.group( "Notes" );
+
+	group.writeEntry("bgColor", ui.kcbBgColor->color());
+	group.writeEntry("textColor", ui.kcbTextColor->color());
 }

@@ -41,7 +41,7 @@
 
 #include <cmath>	// isnan
 extern "C" {
-#include <gsl_errno.h>
+#include <gsl/gsl_errno.h>
 #include <gsl/gsl_sf_pow_int.h>
 #ifdef HAVE_FFTW3
 #include <fftw3.h>

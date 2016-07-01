@@ -460,7 +460,7 @@ void Column::calculateStatistics() {
     rowData.reserve(rowValues->size());
     for (int row = 0; row < rowValues->size(); ++row) {
         val = rowValues->value(row);
-        if (isnan(val) || isMasked(row))
+        if (std::isnan(val) || isMasked(row))
             continue;
 
         if (val < statistics.minimum){
@@ -514,7 +514,7 @@ void Column::calculateStatistics() {
     int idx = 0;
     for(int row = 0; row < rowValues->size(); ++row){
         val = rowValues->value(row);
-        if ( isnan(val) || isMasked(row) )
+        if ( std::isnan(val) || isMasked(row) )
             continue;
         columnSumVariance+= pow(val - statistics.arithmeticMean, 2.0);
 

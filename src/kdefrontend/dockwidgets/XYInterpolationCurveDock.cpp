@@ -37,7 +37,7 @@
 #include <QStandardItemModel>
 
 extern "C" {
-#include <gsl_interp.h>	// gsl_interp types
+#include <gsl/gsl_interp.h>	// gsl_interp types
 }
 #include <cmath>        // isnan
 

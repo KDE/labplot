@@ -58,9 +58,9 @@ FIND_LIBRARY (GSL_CBLAS_LIBRARIES gslcblas
 	/usr/lib
 	/usr/local/lib
 )
-FIND_PATH (GSL_INCLUDE_DIR gsl_multimin.h
-	/usr/include/gsl
-	/usr/local/include/gsl
+FIND_PATH (GSL_INCLUDE_DIR gsl/gsl_multimin.h
+	/usr/include
+	/usr/local/include
 )
 FIND_PROGRAM (GSL_CONFIG gsl-config
 	/usr/bin
