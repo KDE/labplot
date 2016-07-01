@@ -39,7 +39,9 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/TextLabel.h"
+#ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
+#endif
 #include "backend/core/Project.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/DatapickerImage.h"

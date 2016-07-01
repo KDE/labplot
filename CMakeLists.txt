@@ -61,6 +61,7 @@ FIND_LIBRARY (GSL_CBLAS_LIBRARIES gslcblas
 	/usr/local/lib
 )
 FIND_PATH (GSL_INCLUDE_DIR gsl_multimin.h
+	R:/include/gsl
 	/usr/include/gsl
 	/usr/local/include/gsl
 )
@@ -68,6 +69,16 @@ FIND_PROGRAM (GSL_CONFIG gsl-config
 	/usr/bin
 	/usr/local/bin
 )
+IF (GSL_LIBRARIES)
+	MESSAGE (STATUS "Found GNU Scientific Library ${GSL_LIBRARIES}")
+ENDIF (GSL_LIBRARIES)
+IF (GSL_CBLAS_LIBRARIES)
+	MESSAGE (STATUS "Found GNU Scientific Library ${GSL_CBLAS_LIBRARIES}")
+ENDIF (GSL_CBLAS_LIBRARIES)
+IF (GSL_INCLUDE_DIR)
+	MESSAGE (STATUS "Found GNU Scientific Library header ${GSL_INCLUDE_DIR}")
+ENDIF (GSL_INCLUDE_DIR)
+
 
 IF (GSL_CONFIG)
 	EXEC_PROGRAM (${GSL_CONFIG} ARGS "--version" OUTPUT_VARIABLE gsl_version)
