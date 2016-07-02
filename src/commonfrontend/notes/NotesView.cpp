@@ -4,6 +4,7 @@
     Description          : Notes View for taking notes
     --------------------------------------------------------------------
     Copyright            : (C) 2016-2016 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,12 +28,11 @@
  ***************************************************************************/
 
 #include "NotesView.h"
+#include "backend/notes/Notes.h"
 
 #include <QHBoxLayout>
-// #include <QColorDialog>
 #include <QTextEdit>
 
-#include "backend/notes/Notes.h"
 
 NotesView::NotesView(Notes* notes) : m_notes(notes) {
 
@@ -58,8 +58,8 @@ NotesView::NotesView(Notes* notes) : m_notes(notes) {
 	connect(m_textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
 }
 
-void NotesView::createContextMenu(QMenu* menu) const {
-
+void NotesView::print(QPrinter* printer) const {
+	m_textEdit->print(printer);
 }
 
 void NotesView::textChanged() {
@@ -80,8 +80,4 @@ void NotesView::textColorChanged(QColor color) {
 	QPalette palette = m_textEdit->palette();
 	palette.setColor(QPalette::Text, color);
 	m_textEdit->setPalette(palette);
-}
-
-NotesView::~NotesView() {
-
 }

@@ -4,6 +4,7 @@
     Description          : Notes Widget for taking notes
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -42,7 +43,6 @@ class Notes : public AbstractPart {
 		Notes(const QString& name);
 
 		virtual QWidget* view() const;
-		virtual QMenu* createContextMenu();
 		virtual QIcon icon() const;
 
 		virtual bool exportView() const;
@@ -70,14 +70,10 @@ class Notes : public AbstractPart {
 		void textFontChanged(QFont);
 
 	private:
-		void init();
 		QColor m_backgroundColor;
 		QColor m_textColor;
 		QFont m_textFont;
 		QString m_note;
-
-	signals:
-		void requestProjectContextMenu(QMenu*);
 };
 
 #endif // NOTES_H

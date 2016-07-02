@@ -4,6 +4,7 @@
     Description          : Notes Widget for taking notes
     --------------------------------------------------------------------
     Copyright            : (C) 2009-2015 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -33,15 +34,15 @@
 #include "backend/lib/macros.h"
 
 #include <QPalette>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
+
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
 
-Notes::Notes(const QString& name): AbstractPart(name) {
-	init();
-}
-
-void Notes::init() {
+Notes::Notes(const QString& name) : AbstractPart(name) {
 	KConfig config;
 	KConfigGroup group = config.group("Notes");
 
@@ -50,23 +51,28 @@ void Notes::init() {
 	m_textFont = group.readEntry("TextFont", QFont());
 }
 
-QMenu* Notes::createContextMenu() {
-	QMenu* menu = AbstractPart::createContextMenu();
-	Q_ASSERT(menu);
-	emit requestProjectContextMenu(menu);
-	return menu;
-}
-
 QIcon Notes::icon() const {
 	return QIcon::fromTheme("document-new");
 }
 
-bool Notes::printPreview() const {
-	return false;
+bool Notes::printView() {
+	QPrinter printer;
+	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
+	dlg->setWindowTitle(i18n("Print Worksheet"));
+	bool ret;
+    if ((ret = dlg->exec() == QDialog::Accepted)) {
+		NotesView* view = reinterpret_cast<NotesView*>(m_view);
+		view->print(&printer);
+	}
+	delete dlg;
+	return ret;
 }
 
-bool Notes::printView() {
-	return false;
+bool Notes::printPreview() const {
+	const NotesView* view = reinterpret_cast<const NotesView*>(m_view);
+	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
+	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
+	return dlg->exec();
 }
 
 bool Notes::exportView() const {
@@ -109,11 +115,9 @@ const QFont& Notes::textFont() const {
 }
 
 QWidget* Notes::view() const {
-	if (!m_view) {
+	if (!m_view)
 		m_view = new NotesView(const_cast<Notes*>(this));
-// 		m_view->setBaseSize(1500, 1500);
-		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
-	}
+
 	return m_view;
 }
 

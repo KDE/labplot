@@ -4,6 +4,7 @@
     Description          : Notes View for taking notes
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -32,7 +33,6 @@
 #include <QWidget>
 
 class Notes;
-class QMenu;
 class QTextEdit;
 
 class NotesView : public QWidget {
@@ -40,10 +40,9 @@ class NotesView : public QWidget {
 
 	public:
 		NotesView(Notes* notes);
-		~NotesView();
 
 	public slots:
-		void createContextMenu(QMenu*) const;
+		void print(QPrinter*) const;
 
 	private slots:
 		void backgroundColorChanged(QColor);
