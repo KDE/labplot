@@ -58,8 +58,8 @@
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2016-06-02</date>
-<releaseinfo>3.2</releaseinfo>
+<date>2016-06-17</date>
+<releaseinfo>3.2.1</releaseinfo>
 
 <abstract>
 	<para>
@@ -605,7 +605,7 @@ Preview of all supported file types is available in the import dialog. For data 
 </para>
 
 <para>
-Import of ascii and binary data compressed with gzip, bzip2 or xz can be done directly – the decompression happens transparently for the user.
+Import of ascii and binary data compressed with gzip, bzip2 or xz can be done directly as the decompression happens transparently for the user.
 </para>
 
 
@@ -1162,7 +1162,7 @@ Here you will find some explanations of advanced topics.
 <title>Specify a File</title>
 
 <para>
-When starting &LabPlot; from the command prompt, you can supply the name of a project file:
+When starting &LabPlot; from the command prompt, you can supply the name of a project file (ending with .lml, .lml.gz, .lml.bz2 or .lml.xz):
 <cmdsynopsis>
 <command>labplot2</command>
 <arg rep="repeat"><replaceable>file.lml</replaceable></arg>

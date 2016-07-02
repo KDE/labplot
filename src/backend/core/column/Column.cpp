@@ -47,6 +47,10 @@ extern "C" {
 #include <QDebug>
 #endif
 
+extern "C" {
+#include <gsl/gsl_sort.h>
+}
+
 /**
  * \class Column
  * \brief Aspect that manages a column
@@ -730,11 +734,11 @@ void Column::save(QXmlStreamWriter* writer) const {
 
 class DecodeColumnTask : public QRunnable {
 	public:
-		DecodeColumnTask(ColumnPrivate* priv, const QString& content) { m_private =priv; m_content = content;};
+		DecodeColumnTask(ColumnPrivate* priv, const QString& content) { m_private = priv; m_content = content;};
 		void run() {
 			QByteArray bytes = QByteArray::fromBase64(m_content.toAscii());
 			QVector<double> * data = new QVector<double>(bytes.size()/sizeof(double));
-			memcpy(data->data(), bytes.data(), (bytes.size()/sizeof(double))*sizeof(double));
+			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
 		}
 

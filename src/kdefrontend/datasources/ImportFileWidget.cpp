@@ -186,6 +186,7 @@ void ImportFileWidget::loadSettings() {
 	//general settings
 	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
 	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
+	filterChanged(ui.cbFilter->currentIndex());	// needed if filter is not changed
 	if (m_fileName.isEmpty())
 		ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
 	else
@@ -283,9 +284,9 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		//TODO use auto_ptr
 		AsciiFilter* filter = new AsciiFilter();
 
-		if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
+		if (ui.cbFilter->currentIndex() == 0) { //"automatic"
 			filter->setAutoModeEnabled(true);
-		} else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
+		} else if (ui.cbFilter->currentIndex() == 1) { //"custom"
 			filter->setAutoModeEnabled(false);
 			filter->setCommentCharacter( asciiOptionsWidget.cbCommentCharacter->currentText() );
 			filter->setSeparatingCharacter( asciiOptionsWidget.cbSeparatingCharacter->currentText() );
@@ -673,10 +674,10 @@ void ImportFileWidget::filterChanged(int index) {
 		return;
 	}
 
-	if (index==0) { // "automatic"
+	if (index == 0) { // "automatic"
 		ui.swOptions->setEnabled(false);
 		ui.bSaveFilter->setEnabled(false);
-	} else if (index==1) { //custom
+	} else if (index == 1) { //custom
 		ui.swOptions->setEnabled(true);
 		ui.bSaveFilter->setEnabled(true);
 	} else {
@@ -691,7 +692,7 @@ void ImportFileWidget::filterChanged(int index) {
   Disables it otherwise.
 */
 void ImportFileWidget::headerChanged(int state) {
-	if (state==Qt::Checked) {
+	if (state == Qt::Checked) {
 		asciiOptionsWidget.kleVectorNames->setEnabled(false);
 		asciiOptionsWidget.lVectorNames->setEnabled(false);
 	} else {

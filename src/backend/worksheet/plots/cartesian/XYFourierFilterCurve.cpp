@@ -51,6 +51,7 @@ extern "C" {
 #include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
+#include <QThreadPool>
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
 		: XYCurve(name, new XYFourierFilterCurvePrivate(this)) {
@@ -178,6 +179,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
 
+
 	//create filter result columns if not available yet, clear them otherwise
 	if (!xColumn) {
 		xColumn = new Column("x", AbstractColumn::Numeric);
@@ -293,7 +295,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	}
 	const double centerindex = (cutindex2+cutindex)/2.;
 	const int bandwidth = (cutindex2-cutindex);
-	if(bandwidth <= 0) {
+	if((type == XYFourierFilterCurve::BandPass || type == XYFourierFilterCurve::BandReject) && bandwidth <= 0) {
 		qWarning()<<"band width must be > 0. Giving up.";
 		return;
 	}
@@ -448,7 +450,7 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "time", QString::number(d->filterResult.elapsedTime) );
 
 	//save calculated columns if available
-	if (d->xColumn) {
+	if (d->xColumn && d->yColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
 	}
@@ -561,12 +563,15 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
 				return false;
 			}
 
-			if (column->name()=="x")
+			if (column->name() == "x")
 				d->xColumn = column;
-			else if (column->name()=="y")
+			else if (column->name() == "y")
 				d->yColumn = column;
 		}
 	}
+
+	// wait for data to be read before using the pointers
+	QThreadPool::globalInstance()->waitForDone();
 
 	if (d->xColumn && d->yColumn) {
 		d->xColumn->setHidden(true);

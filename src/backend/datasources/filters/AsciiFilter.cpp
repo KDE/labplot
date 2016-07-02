@@ -282,7 +282,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 		if( device.atEnd() ) {
 			if (mode == AbstractFileFilter::Replace) {
 				//file with no data to be imported. In replace-mode clear the data source
-				if(dataSource != NULL)
+				if (dataSource != NULL)
 					dataSource->clear();
 			}
 			return QString();
@@ -297,7 +297,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	if( device.atEnd() ) {
 		if (mode == AbstractFileFilter::Replace) {
 			//file with no data to be imported. In replace-mode clear the data source
-			if(dataSource != NULL)
+			if (dataSource != NULL)
 				dataSource->clear();
 		}
 		return QString();
@@ -331,6 +331,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	}
 #ifndef NDEBUG
  	qDebug() << "separator '"<<separator << "'";
+ 	qDebug() << "headerEnabled ="<<headerEnabled;
 #endif
 
 	if (endColumn == -1)
@@ -341,9 +342,8 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 		vectorNameList = lineStringList;
 	} else {
 		//create vector names out of the space separated vectorNames-string, if not empty
-		if (!vectorNames.isEmpty()) {
+		if (!vectorNames.isEmpty())
 			vectorNameList = vectorNames.split(' ');
-		}
 	}
 
 	//qDebug()<<"	vector names ="<<vectorNameList;
@@ -380,7 +380,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	QVector<QVector<double>*> dataPointers;	// pointers to the actual data containers
 	QStringList dataString;
 
-	if(dataSource != NULL)
+	if (dataSource != NULL)
 		columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols, vectorNameList);
 
 	//header: import the values in the first line, if they were not used as the header (as the names for the columns)
@@ -408,14 +408,14 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	for (int i=currentRow; i < qMin(lines,actualRows); i++) {
 		line = device.readLine();
 
-		if(simplifyWhitespacesEnabled)
+		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
 
 		//skip empty lines
 		if (line.isEmpty())
 			continue;
 
-		if( line.startsWith(commentCharacter) == true ) {
+		if (line.startsWith(commentCharacter) == true ) {
 			currentRow++;
 			continue;
 		}
@@ -519,7 +519,7 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool AsciiFilter::load(XmlStreamReader* reader) {
-	if(!reader->isStartElement() || reader->name() != "asciiFilter") {
+	if (!reader->isStartElement() || reader->name() != "asciiFilter") {
 		reader->raiseError(i18n("no ascii filter element found"));
 		return false;
 	}
@@ -528,25 +528,25 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	QString str = attribs.value("commentCharacter").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'commentCharacter'"));
 	else
 		d->commentCharacter = str;
 
 	str = attribs.value("separatingCharacter").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'separatingCharacter'"));
 	else
 		d->separatingCharacter = str;
 
 	str = attribs.value("autoMode").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'autoMode'"));
 	else
 		d->autoModeEnabled = str.toInt();
 
 	str = attribs.value("header").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'header'"));
 	else
 		d->headerEnabled = str.toInt();
@@ -555,43 +555,43 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	d->vectorNames = str; //may be empty
 
 	str = attribs.value("simplifyWhitespaces").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'simplifyWhitespaces'"));
 	else
 		d->simplifyWhitespacesEnabled = str.toInt();
 
 	str = attribs.value("skipEmptyParts").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'skipEmptyParts'"));
 	else
 		d->skipEmptyParts = str.toInt();
 
 	str = attribs.value("transposed").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'transposed'"));
 	else
 		d->transposed = str.toInt();
 
 	str = attribs.value("startRow").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'startRow'"));
 	else
 		d->startRow = str.toInt();
 
 	str = attribs.value("endRow").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'endRow'"));
 	else
 		d->endRow = str.toInt();
 
 	str = attribs.value("startColumn").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'startColumn'"));
 	else
 		d->startColumn = str.toInt();
 
 	str = attribs.value("endColumn").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'endColumn'"));
 	else
 		d->endColumn = str.toInt();

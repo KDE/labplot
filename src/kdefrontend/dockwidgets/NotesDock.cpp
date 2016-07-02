@@ -30,6 +30,8 @@
 #include "kdefrontend/TemplateHandler.h"
 
 #include <QDir>
+#include <KConfigGroup>
+#include <KLocale>
 
 NotesDock::NotesDock(QWidget *parent) : QWidget(parent), m_initializing(false) {
 	ui.setupUi(this);
