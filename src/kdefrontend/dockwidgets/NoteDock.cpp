@@ -1,9 +1,9 @@
 /***************************************************************************
     File                 : NotesDock.cpp
     Project              : LabPlot
-    Description          : Notes Dock for configuring notes
+    Description          : Dock for configuring notes
     --------------------------------------------------------------------
-    Copyright            : (C) 2016-2016 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
 
@@ -26,73 +26,87 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "NotesDock.h"
+#include "NoteDock.h"
 #include "kdefrontend/TemplateHandler.h"
 
 #include <QDir>
 #include <KConfigGroup>
 #include <KLocale>
 
-NotesDock::NotesDock(QWidget *parent) : QWidget(parent), m_initializing(false) {
+NoteDock::NoteDock(QWidget *parent) : QWidget(parent), m_initializing(false) {
 	ui.setupUi(this);
-	
+
 	connect(ui.leName, SIGNAL(returnPressed(QString)), this, SLOT(nameChanged(QString)));
 	connect(ui.leComment, SIGNAL(returnPressed(QString)), this, SLOT(commentChanged(QString)));
 	
-	connect(ui.kcbBgColor, SIGNAL(changed(QColor)), this, SLOT(bgColorChanged(QColor)));
+	connect(ui.kcbBgColor, SIGNAL(changed(QColor)), this, SLOT(backgroundColorChanged(QColor)));
 	connect(ui.kcbTextColor, SIGNAL(changed(QColor)), this, SLOT(textColorChanged(QColor)));
+	connect(ui.kfrTextFont, SIGNAL(fontSelected(QFont)), this, SLOT(textFontChanged(QFont)));
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
-	ui.gridLayout->addWidget(templateHandler, 7, 0);
+	ui.gridLayout->addWidget(templateHandler, 8, 3);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 }
 
-NotesDock::~NotesDock() {
-}
-
-void NotesDock::init() {
-	ui.kcbBgColor->setColor(m_notes->bgColor());
-	ui.kcbTextColor->setColor(m_notes->textColor());
-}
-
-
-void NotesDock::bgColorChanged(QColor color) {
-	if(m_initializing)
-		return;
-	m_notes->changeBgColor(color);
-}
-
-void NotesDock::textColorChanged(QColor color) {
-	if(m_initializing)
-		return;
-	m_notes->changeTextColor(color);
-}
-
-void NotesDock::setNotesList(QList< Notes* > list) {
-	m_initializing=true;
+void NoteDock::setNotesList(QList< Note* > list) {
 	m_notesList = list;
 	m_notes = list.first();
+
+	m_initializing=true;
 	ui.leName->setText(m_notes->name());
+	ui.kcbBgColor->setColor(m_notes->backgroundColor());
+	ui.kcbTextColor->setColor(m_notes->textColor());
+	ui.kfrTextFont->setFont(m_notes->textFont());
 	m_initializing=false;
-	init();
 }
 
-void NotesDock::nameChanged(QString name) {
+//*************************************************************
+//********** SLOTs for changes triggered in NoteDock **********
+//*************************************************************
+void NoteDock::nameChanged(QString name) {
 	if(m_initializing)
 		return;
+
 	m_notes->setName(name);
 }
 
-void NotesDock::commentChanged(QString name) {
+void NoteDock::commentChanged(QString name) {
 	if(m_initializing)
 		return;
+
 	m_notes->setComment(name);
 }
 
-void NotesDock::loadConfigFromTemplate(KConfig& config) {
+void NoteDock::backgroundColorChanged(QColor color) {
+	if(m_initializing)
+		return;
 
+	foreach(Note* note, m_notesList)
+		note->setBackgroundColor(color);
+}
+
+void NoteDock::textColorChanged(QColor color) {
+	if(m_initializing)
+		return;
+
+	foreach(Note* note, m_notesList)
+		note->setTextColor(color);
+}
+
+void NoteDock::textFontChanged(QFont font) {
+	if(m_initializing)
+		return;
+
+	foreach(Note* note, m_notesList)
+		note->setTextFont(font);
+}
+
+//*************************************************************
+//************************* Settings **************************
+//*************************************************************
+void NoteDock::loadConfigFromTemplate(KConfig& config) {
 	QString name;
 	int index = config.name().lastIndexOf(QDir::separator());
 	if (index!=-1)
@@ -100,22 +114,16 @@ void NotesDock::loadConfigFromTemplate(KConfig& config) {
 	else
 		name = config.name();
 
-	int size = m_notesList.size();
-	if (size>1)
-		m_notes->beginMacro(i18n("%1 Notes: template \"%2\" loaded", size, name));
-	else
-		m_notes->beginMacro(i18n("%1: template \"%2\" loaded", m_notes->name(), name));
-
-	KConfigGroup group = config.group( "Notes" );
-	ui.kcbBgColor->setColor(group.readEntry("bgColor", m_notes->bgColor()));
-	ui.kcbTextColor->setColor(group.readEntry("textColor", m_notes->textColor()));
-
-	m_notes->endMacro();
+	KConfigGroup group = config.group("Notes");
+	ui.kcbBgColor->setColor(group.readEntry("BackgroundColor", m_notes->backgroundColor()));
+	ui.kcbTextColor->setColor(group.readEntry("TextColor", m_notes->textColor()));
+	ui.kfrTextFont->setFont(group.readEntry("TextColor", m_notes->textFont()));
 }
 
-void NotesDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group( "Notes" );
+void NoteDock::saveConfigAsTemplate(KConfig& config) {
+	KConfigGroup group = config.group("Notes");
 
-	group.writeEntry("bgColor", ui.kcbBgColor->color());
-	group.writeEntry("textColor", ui.kcbTextColor->color());
+	group.writeEntry("BackgroundColor", ui.kcbBgColor->color());
+	group.writeEntry("TextColor", ui.kcbTextColor->color());
+	group.writeEntry("TextFont", ui.kfrTextFont->font());
 }

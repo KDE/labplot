@@ -133,21 +133,21 @@ bool Spreadsheet::exportView() const {
 bool Spreadsheet::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, view());
-    bool ret;
+	bool ret;
 	dlg->setWindowTitle(i18n("Print Spreadsheet"));
-    if ((ret = dlg->exec() == QDialog::Accepted)) {
+	if ((ret = dlg->exec() == QDialog::Accepted)) {
 		const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
 		view->print(&printer);
 	}
 	delete dlg;
-    return ret;
+	return ret;
 }
 
 bool Spreadsheet::printPreview() const {
 	const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
-    return dlg->exec();
+	return dlg->exec();
 }
 
 /*!

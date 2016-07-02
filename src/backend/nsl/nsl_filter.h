@@ -47,8 +47,7 @@ typedef enum {nsl_filter_cutoff_unit_frequency, nsl_filter_cutoff_unit_fraction,
 	nsl_filter_cutoff_unit_index} nsl_filter_cutoff_unit;
 extern const char* nsl_filter_cutoff_unit_name[];
 
-int nsl_filter_transform(double data[], size_t n);
-int nsl_filter_backtransform(double data[], size_t n);
-int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_form form);
+int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_form form, int order, double cutindex, double bandwidth);
+int nsl_filter_fourier(double data[], size_t n, nsl_filter_type type, nsl_filter_form form, int order, int cutindex, int bandwidth);
 
 #endif /* NSL_FILTER_H */

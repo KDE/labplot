@@ -49,7 +49,7 @@
 #include "commonfrontend/ProjectExplorer.h"
 #include "kdefrontend/MainWin.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
-#include "kdefrontend/dockwidgets/NotesDock.h"
+#include "kdefrontend/dockwidgets/NoteDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
@@ -294,9 +294,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 		mainWindow->xyFitCurveDock->setCurves(list);
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyFitCurveDock);
-
 	} else if (className=="XYFourierTransformCurve") {
-		mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-fourier_transform-curve properties"));
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Fourier Transform"));
 
 		if (!mainWindow->xyFourierTransformCurveDock) {
 	  		mainWindow->xyFourierTransformCurveDock = new XYFourierTransformCurveDock(mainWindow->stackedWidget);
@@ -459,13 +458,13 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("Notes"));
 
 		if (!mainWindow->notesDock) {
-			mainWindow->notesDock = new NotesDock(mainWindow->stackedWidget);
+			mainWindow->notesDock = new NoteDock(mainWindow->stackedWidget);
 			mainWindow->stackedWidget->addWidget(mainWindow->notesDock);
 		}
 
-		QList<Notes*> list;
+		QList<Note*> list;
 		foreach(aspect, selectedAspects) {
-			list<<qobject_cast<Notes*>(aspect);
+			list<<qobject_cast<Note*>(aspect);
 		}
 		mainWindow->notesDock->setNotesList(list);
 

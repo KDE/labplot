@@ -1,9 +1,10 @@
 /***************************************************************************
-    File                 : NotesDock.h
+    File                 : NotesView.cpp
     Project              : LabPlot
-    Description          : Notes Dock for configuring notes
+    Description          : Notes View for taking notes
     --------------------------------------------------------------------
     Copyright            : (C) 2016-2016 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -26,45 +27,57 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef NOTESDOCK_H
-#define NOTESDOCK_H
+#include "NoteView.h"
+#include "backend/note/Note.h"
 
-#include <QWidget>
-#include "backend/notes/Notes.h"
-#include "ui_notesdock.h"
-#include <KConfig>
+#include <QHBoxLayout>
+#include <QPrinter>
+#include <QTextEdit>
 
-class NotesDock : public QWidget {
-	Q_OBJECT
+NoteView::NoteView(Note* notes) : m_notes(notes) {
 
-	public:
-		explicit NotesDock(QWidget *parent);
-		~NotesDock();
-		
-		void setNotesList(QList<Notes*>);
+	QHBoxLayout* layout = new QHBoxLayout(this);
+	layout->setContentsMargins(0, 0, 0, 0);
+	
+	m_textEdit = new QTextEdit(this);
 
-	private:
-		Ui::NotesDock ui;
-		bool m_initializing;
-		Notes* m_notes;
-		QList< Notes* > m_notesList;
+	QPalette palette = m_textEdit->palette();
 
-		void init();
+	palette.setColor(QPalette::Base, m_notes->backgroundColor());
+	palette.setColor(QPalette::Text, m_notes->textColor());
 
-	private slots:
-		//SLOTs for changes triggered in WorksheetDock
-		//"General"-tab
-		void nameChanged(QString);
-		void commentChanged(QString);
-		void bgColorChanged(QColor);
-		void textColorChanged(QColor);
-		void loadConfigFromTemplate(KConfig&);
-		void saveConfigAsTemplate(KConfig&);
+	m_textEdit->setPalette(palette);
+	m_textEdit->setFont(m_notes->textFont());
+	m_textEdit->setText(m_notes->note());
 
-		//SLOTs for changes triggered in Worksheet
-// 		void worksheetDescriptionChanged(const AbstractAspect*);
-	signals:
-// 		void info(const QString&);
-};
+	layout->addWidget(m_textEdit);
+	
+	connect(m_notes, SIGNAL(backgroundColorChanged(QColor)), this, SLOT(backgroundColorChanged(QColor)));
+	connect(m_notes, SIGNAL(textColorChanged(QColor)), this, SLOT(textColorChanged(QColor)));
+	connect(m_notes, SIGNAL(textFontChanged(QFont)), this, SLOT(textFontChanged(QFont)));
+	connect(m_textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
+}
 
-#endif // NOTESDOCK_H
+void NoteView::print(QPrinter* printer) const {
+	m_textEdit->print(printer);
+}
+
+void NoteView::textChanged() {
+	m_notes->setNote(m_textEdit->toPlainText());
+}
+
+void NoteView::backgroundColorChanged(QColor color) {
+	QPalette palette = m_textEdit->palette();
+	palette.setColor(QPalette::Base, color);
+	m_textEdit->setPalette(palette);
+}
+
+void NoteView::textFontChanged(QFont font) {
+	m_textEdit->setFont(font);
+}
+
+void NoteView::textColorChanged(QColor color) {
+	QPalette palette = m_textEdit->palette();
+	palette.setColor(QPalette::Text, color);
+	m_textEdit->setPalette(palette);
+}

@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : NotesView.cpp
+    File                 : NotesDock.h
     Project              : LabPlot
-    Description          : Notes View for taking notes
+    Description          : Dock for configuring notes
     --------------------------------------------------------------------
-    Copyright            : (C) 2016-2016 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
 
@@ -26,59 +26,38 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "NotesView.h"
+#ifndef NOTEDOCK_H
+#define NOTEDOCK_H
 
-#include <QHBoxLayout>
-#include <QColorDialog>
+#include <QWidget>
+#include "backend/note/Note.h"
+#include "ui_notesdock.h"
+#include <KConfig>
 
-#include "backend/notes/Notes.h"
+class NoteDock : public QWidget {
+	Q_OBJECT
 
-NotesView::NotesView(Notes* notes) : m_notes(notes) {
+	public:
+		explicit NoteDock(QWidget *parent);
+		void setNotesList(QList<Note*>);
 
-	QHBoxLayout* layout = new QHBoxLayout(this);
-	layout->setContentsMargins(0, 0, 0, 0);
-	
-	m_textEdit = new QTextEdit(this);
+	private:
+		Ui::NotesDock ui;
+		bool m_initializing;
+		Note* m_notes;
+		QList< Note* > m_notesList;
 
-	QPalette palette = m_textEdit->palette();
+		void init();
 
-	palette.setColor(QPalette::Base, m_notes->bgColor());
-	palette.setColor(QPalette::Text, m_notes->textColor());
+	private slots:
+		void nameChanged(QString);
+		void commentChanged(QString);
+		void backgroundColorChanged(QColor);
+		void textColorChanged(QColor);
+		void textFontChanged(QFont);
 
-	m_textEdit->setPalette(palette);
-	m_textEdit->setText(m_notes->note());
+		void loadConfigFromTemplate(KConfig&);
+		void saveConfigAsTemplate(KConfig&);
+};
 
-	layout->addWidget(m_textEdit);
-	
-	connect(m_notes, SIGNAL(bgColorChanged(QColor)), this, SLOT(bgColorChanged(QColor)));
-	connect(m_notes, SIGNAL(textColorChanged(QColor)), this, SLOT(textColorChanged(QColor)));
-	connect(m_textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
-}
-
-void NotesView::createContextMenu(QMenu* menu) const {
-
-}
-
-void NotesView::fillToolBar(QToolBar* toolbar) {
-
-}
-
-void NotesView::textChanged() {
-	m_notes->setNote(m_textEdit->toPlainText());
-}
-
-void NotesView::bgColorChanged(QColor color) {
-	QPalette palette = m_textEdit->palette();
-	palette.setColor(QPalette::Base, color);
-	m_textEdit->setPalette(palette);
-}
-
-void NotesView::textColorChanged(QColor color) {
-	QPalette palette = m_textEdit->palette();
-	palette.setColor(QPalette::Text, color);
-	m_textEdit->setPalette(palette);
-}
-
-NotesView::~NotesView() {
-
-}
+#endif // NOTEDOCK_H

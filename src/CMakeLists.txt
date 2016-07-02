@@ -26,7 +26,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
-	${KDEFRONTEND_DIR}/dockwidgets/NotesDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/NoteDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CustomPointDock.cpp
@@ -81,7 +81,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
-	${KDEFRONTEND_DIR}/ui/dockwidgets/notesdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/notedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/projectdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
@@ -163,7 +163,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
-	${BACKEND_DIR}/notes/Notes.cpp
+	${BACKEND_DIR}/note/Note.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElement.cpp
 	${BACKEND_DIR}/worksheet/TextLabel.cpp
 	${BACKEND_DIR}/worksheet/Worksheet.cpp
@@ -198,7 +198,7 @@ set(BACKEND_SOURCES
 
 set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/matrix/MatrixView.cpp
-	${COMMONFRONTEND_DIR}/notes/NotesView.cpp
+	${COMMONFRONTEND_DIR}/note/NoteView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetHeaderView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp

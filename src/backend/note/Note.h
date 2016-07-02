@@ -1,9 +1,10 @@
 /***************************************************************************
     File                 : Notes.h
     Project              : LabPlot
-    Description          : Notes Widget for taking notes
+    Description          : Widget for taking notes
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2015 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -26,52 +27,53 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef NOTES_H
-#define NOTES_H
+#ifndef NOTE_H
+#define NOTE_H
 
 #include "backend/core/AbstractPart.h"
-#include "backend/core/AbstractScriptingEngine.h"
-#include "backend/lib/macros.h"
-#include "commonfrontend/notes/NotesView.h"
 
-#include <QColor>
 #include <QIcon>
+#include <QColor>
+#include <QFont>
 
-class Notes : public AbstractPart, public scripted {
+class Note : public AbstractPart {
 	Q_OBJECT
-public:
-	Notes(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
-	virtual ~Notes();
 
-	virtual QWidget* view() const;
-	virtual QMenu* createContextMenu();
-	virtual QIcon icon() const;
+	public:
+		Note(const QString& name);
 
-	virtual bool exportView() const;
-	virtual bool printView();
-	virtual bool printPreview() const;
-	
-	void changeBgColor(QColor);
-	void changeTextColor(QColor);
+		virtual QWidget* view() const;
+		virtual QIcon icon() const;
 
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+		virtual bool exportView() const;
+		virtual bool printView();
+		virtual bool printPreview() const;
 
-	QColor bgColor();
-	QColor textColor();
-	void setNote(QString);
-	QString note();
-signals:
-	void bgColorChanged(QColor);
-	void textColorChanged(QColor);
-private:
-	void init();
-	QColor m_bgColor;
-	QColor m_textColor;
-	QString m_note;
-signals:
-	void requestProjectContextMenu(QMenu*);
+		void setNote(const QString&);
+		const QString& note() const;
 
+		void setBackgroundColor(const QColor&);
+		const QColor& backgroundColor() const;
+
+		void setTextColor(const QColor&);
+		const QColor& textColor() const;
+
+		void setTextFont(const QFont&);
+		const QFont& textFont() const;
+
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
+
+	signals:
+		void backgroundColorChanged(QColor);
+		void textColorChanged(QColor);
+		void textFontChanged(QFont);
+
+	private:
+		QColor m_backgroundColor;
+		QColor m_textColor;
+		QFont m_textFont;
+		QString m_note;
 };
 
-#endif // NOTES_H
+#endif // NOTE_H

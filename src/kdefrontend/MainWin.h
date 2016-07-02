@@ -38,7 +38,7 @@ class Folder;
 class ProjectExplorer;
 class Project;
 class Worksheet;
-class Notes;
+class Note;
 class Workbook;
 class Datapicker;
 class Image;
@@ -46,7 +46,7 @@ class Spreadsheet;
 class Matrix;
 class GuiObserver;
 class AxisDock;
-class NotesDock;
+class NoteDock;
 class CartesianPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
@@ -165,7 +165,7 @@ private:
 	//Docks
 	QStackedWidget* stackedWidget;
 	AxisDock* axisDock;
-	NotesDock* notesDock;
+	NoteDock* notesDock;
 	CartesianPlotDock* cartesianPlotDock;
 	CartesianPlotLegendDock* cartesianPlotLegendDock;
 	ColumnDock* columnDock;
@@ -198,7 +198,6 @@ private:
 	Spreadsheet* activeSpreadsheet() const;
 	Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
-	Notes* activeNotes() const;
 	Datapicker* activeDatapicker() const;
 
 	//cantor

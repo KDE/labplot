@@ -14,7 +14,6 @@
 <Action name="new_spreadsheet" />
 <Action name="new_matrix" />
 <Action name="new_worksheet" />
-<Action name="new_notes" />
 <Action name="new_datapicker" />
 <Separator/>
 <Action name="import" />
@@ -31,10 +30,6 @@
 
 <ToolBar name="spreadsheet_toolbar" >
 <text>Spreadsheet</text>
-</ToolBar>
-
-<ToolBar name="notes_toolbar" >
-<text>Note</text>
 </ToolBar>
 
 <ToolBar name="cantorworksheet_toolbar" >
@@ -76,12 +71,9 @@
 <Menu name="spreadsheet"><text>&amp;Spreadsheet</text></Menu>
 <Menu name="matrix"><text>&amp;Matrix</text></Menu>
 <Menu name="worksheet"><text>&amp;Worksheet</text></Menu>
-<Menu name="notes"><text>&amp;Note</text></Menu>
 <Menu name="casWorksheet"><text>&amp;CAS Worksheet</text></Menu>
 <Menu name="analysis"><text>&amp;Analysis</text></Menu>
 <Menu name="datapicker"><text>&amp;Datapicker</text></Menu>
-<!-- <Menu name="drawing"><text>&amp;Drawing</text></Menu> -->
-<!-- <Menu name="script"><text>&amp;Script</text></Menu> -->
 <Menu name="windows"><text>&amp;Windows</text>
 <Action name="close window" />
 <Action name="close all windows" />

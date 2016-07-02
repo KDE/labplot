@@ -403,7 +403,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 		uiGeneralTab.sbCutoff2->setDecimals(6);
 		uiGeneralTab.sbCutoff2->setMaximum(f);
 		uiGeneralTab.sbCutoff2->setSingleStep(0.01*f);
-		uiGeneralTab.sbCutoff->setSuffix(" Hz");
+		uiGeneralTab.sbCutoff2->setSuffix(" Hz");
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
 			break;
@@ -419,7 +419,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 		uiGeneralTab.sbCutoff2->setDecimals(6);
 		uiGeneralTab.sbCutoff2->setMaximum(1.0);
 		uiGeneralTab.sbCutoff2->setSingleStep(0.01);
-		uiGeneralTab.sbCutoff->setSuffix("");
+		uiGeneralTab.sbCutoff2->setSuffix("");
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
 			uiGeneralTab.sbCutoff2->setValue(oldValue/f);
@@ -435,7 +435,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 		uiGeneralTab.sbCutoff2->setDecimals(0);
 		uiGeneralTab.sbCutoff2->setSingleStep(1);
 		uiGeneralTab.sbCutoff2->setMaximum(n);
-		uiGeneralTab.sbCutoff->setSuffix("");
+		uiGeneralTab.sbCutoff2->setSuffix("");
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
 			uiGeneralTab.sbCutoff2->setValue(oldValue*n/f);

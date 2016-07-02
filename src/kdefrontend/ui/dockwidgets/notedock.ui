@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>NotesDock</class>
- <widget class="QWidget" name="NotesDock">
+ <class>NoteDock</class>
+ <widget class="QWidget" name="NoteDock">
   <property name="geometry">
    <rect>
     <x>0</x>
