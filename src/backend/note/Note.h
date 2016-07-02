@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : Notes.h
     Project              : LabPlot
-    Description          : Notes Widget for taking notes
+    Description          : Widget for taking notes
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
     Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
@@ -27,8 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef NOTES_H
-#define NOTES_H
+#ifndef NOTE_H
+#define NOTE_H
 
 #include "backend/core/AbstractPart.h"
 
@@ -36,11 +36,11 @@
 #include <QColor>
 #include <QFont>
 
-class Notes : public AbstractPart {
+class Note : public AbstractPart {
 	Q_OBJECT
 
 	public:
-		Notes(const QString& name);
+		Note(const QString& name);
 
 		virtual QWidget* view() const;
 		virtual QIcon icon() const;
@@ -76,4 +76,4 @@ class Notes : public AbstractPart {
 		QString m_note;
 };
 
-#endif // NOTES_H
+#endif // NOTE_H

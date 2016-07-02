@@ -27,9 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "Notes.h"
-#include "backend/lib/macros.h"
-#include "commonfrontend/notes/NotesView.h"
+#include "Note.h"
+#include "commonfrontend/note/NoteView.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 
@@ -42,7 +41,7 @@
 #include <KConfigGroup>
 #include <KLocale>
 
-Notes::Notes(const QString& name) : AbstractPart(name) {
+Note::Note(const QString& name) : AbstractPart(name) {
 	KConfig config;
 	KConfigGroup group = config.group("Notes");
 
@@ -51,72 +50,72 @@ Notes::Notes(const QString& name) : AbstractPart(name) {
 	m_textFont = group.readEntry("TextFont", QFont());
 }
 
-QIcon Notes::icon() const {
+QIcon Note::icon() const {
 	return QIcon::fromTheme("document-new");
 }
 
-bool Notes::printView() {
+bool Note::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18n("Print Worksheet"));
 	bool ret;
     if ((ret = dlg->exec() == QDialog::Accepted)) {
-		NotesView* view = reinterpret_cast<NotesView*>(m_view);
+		NoteView* view = reinterpret_cast<NoteView*>(m_view);
 		view->print(&printer);
 	}
 	delete dlg;
 	return ret;
 }
 
-bool Notes::printPreview() const {
-	const NotesView* view = reinterpret_cast<const NotesView*>(m_view);
+bool Note::printPreview() const {
+	const NoteView* view = reinterpret_cast<const NoteView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
 	return dlg->exec();
 }
 
-bool Notes::exportView() const {
+bool Note::exportView() const {
 	return false;
 }
 
-void Notes::setNote(const QString& note) {
+void Note::setNote(const QString& note) {
 	m_note = note;
 }
 
-const QString& Notes::note() const {
+const QString& Note::note() const {
 	return m_note;
 }
 
-void Notes::setBackgroundColor(const QColor& color) {
+void Note::setBackgroundColor(const QColor& color) {
 	m_backgroundColor = color;
 	emit (backgroundColorChanged(color));
 }
 
-const QColor& Notes::backgroundColor() const {
+const QColor& Note::backgroundColor() const {
 	return m_backgroundColor;
 }
 
-void Notes::setTextColor(const QColor& color) {
+void Note::setTextColor(const QColor& color) {
 	m_textColor = color;
 	emit (textColorChanged(color));
 }
 
-const QColor& Notes::textColor() const{
+const QColor& Note::textColor() const{
 	return m_textColor;
 }
 
-void Notes::setTextFont(const QFont& font) {
+void Note::setTextFont(const QFont& font) {
 	m_textFont = font;
 	emit (textFontChanged(font));
 }
 
-const QFont& Notes::textFont() const {
+const QFont& Note::textFont() const {
 	return m_textFont;
 }
 
-QWidget* Notes::view() const {
+QWidget* Note::view() const {
 	if (!m_view)
-		m_view = new NotesView(const_cast<Notes*>(this));
+		m_view = new NoteView(const_cast<Note*>(this));
 
 	return m_view;
 }
@@ -125,7 +124,7 @@ QWidget* Notes::view() const {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void Notes::save(QXmlStreamWriter* writer) const {
+void Note::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("note");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
@@ -143,7 +142,7 @@ void Notes::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement(); // close "note" section
 }
 
-bool Notes::load(XmlStreamReader* reader) {
+bool Note::load(XmlStreamReader* reader) {
 	if (!reader->isStartElement() || reader->name() != "note") {
 		reader->raiseError(i18n("no note element found"));
 		return false;

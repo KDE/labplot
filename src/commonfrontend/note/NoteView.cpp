@@ -27,14 +27,13 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "NotesView.h"
-#include "backend/notes/Notes.h"
+#include "NoteView.h"
+#include "backend/note/Note.h"
 
 #include <QHBoxLayout>
 #include <QTextEdit>
 
-
-NotesView::NotesView(Notes* notes) : m_notes(notes) {
+NoteView::NoteView(Note* notes) : m_notes(notes) {
 
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -58,25 +57,25 @@ NotesView::NotesView(Notes* notes) : m_notes(notes) {
 	connect(m_textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
 }
 
-void NotesView::print(QPrinter* printer) const {
+void NoteView::print(QPrinter* printer) const {
 	m_textEdit->print(printer);
 }
 
-void NotesView::textChanged() {
+void NoteView::textChanged() {
 	m_notes->setNote(m_textEdit->toPlainText());
 }
 
-void NotesView::backgroundColorChanged(QColor color) {
+void NoteView::backgroundColorChanged(QColor color) {
 	QPalette palette = m_textEdit->palette();
 	palette.setColor(QPalette::Base, color);
 	m_textEdit->setPalette(palette);
 }
 
-void NotesView::textFontChanged(QFont font) {
+void NoteView::textFontChanged(QFont font) {
 	m_textEdit->setFont(font);
 }
 
-void NotesView::textColorChanged(QColor color) {
+void NoteView::textColorChanged(QColor color) {
 	QPalette palette = m_textEdit->palette();
 	palette.setColor(QPalette::Text, color);
 	m_textEdit->setPalette(palette);

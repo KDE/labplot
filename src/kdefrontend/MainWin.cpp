@@ -38,7 +38,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/datapicker/Datapicker.h"
-#include "backend/notes/Notes.h"
+#include "backend/note/Note.h"
 
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/matrix/MatrixView.h"
@@ -46,7 +46,7 @@
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "commonfrontend/datapicker/DatapickerView.h"
 #include "commonfrontend/datapicker/DatapickerImageView.h"
-#include "commonfrontend/notes/NotesView.h"
+#include "commonfrontend/note/NoteView.h"
 
 #include "kdefrontend/datasources/ImportFileDialog.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
@@ -1034,7 +1034,7 @@ void MainWin::newWorksheet() {
 }
 
 void MainWin::newNotes() {
-	Notes* notes = new Notes(i18n("Note"));
+	Note* notes = new Note(i18n("Note"));
 	this->addAspectToProject(notes);
 }
 
@@ -1258,7 +1258,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 			win = part->mdiSubWindow();
 
 		if (m_mdiArea->subWindowList().indexOf(win) == -1) {
-			if (dynamic_cast<const Notes*>(part))
+			if (dynamic_cast<const Note*>(part))
 				m_mdiArea->addSubWindow(win, Qt::Tool);
 			else
 				m_mdiArea->addSubWindow(win);

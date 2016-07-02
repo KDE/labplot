@@ -1,9 +1,9 @@
 /***************************************************************************
     File                 : NotesDock.cpp
     Project              : LabPlot
-    Description          : Notes Dock for configuring notes
+    Description          : Dock for configuring notes
     --------------------------------------------------------------------
-    Copyright            : (C) 2016-2016 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
 
@@ -26,12 +26,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "NotesDock.h"
+#include "NoteDock.h"
 #include "kdefrontend/TemplateHandler.h"
 
 #include <QDir>
 
-NotesDock::NotesDock(QWidget *parent) : QWidget(parent), m_initializing(false) {
+NoteDock::NoteDock(QWidget *parent) : QWidget(parent), m_initializing(false) {
 	ui.setupUi(this);
 
 	connect(ui.leName, SIGNAL(returnPressed(QString)), this, SLOT(nameChanged(QString)));
@@ -48,7 +48,7 @@ NotesDock::NotesDock(QWidget *parent) : QWidget(parent), m_initializing(false) {
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 }
 
-void NotesDock::setNotesList(QList< Notes* > list) {
+void NoteDock::setNotesList(QList< Note* > list) {
 	m_notesList = list;
 	m_notes = list.first();
 
@@ -63,48 +63,48 @@ void NotesDock::setNotesList(QList< Notes* > list) {
 //*************************************************************
 //********** SLOTs for changes triggered in NoteDock **********
 //*************************************************************
-void NotesDock::nameChanged(QString name) {
+void NoteDock::nameChanged(QString name) {
 	if(m_initializing)
 		return;
 
 	m_notes->setName(name);
 }
 
-void NotesDock::commentChanged(QString name) {
+void NoteDock::commentChanged(QString name) {
 	if(m_initializing)
 		return;
 
 	m_notes->setComment(name);
 }
 
-void NotesDock::backgroundColorChanged(QColor color) {
+void NoteDock::backgroundColorChanged(QColor color) {
 	if(m_initializing)
 		return;
 
-	foreach(Notes* note, m_notesList)
+	foreach(Note* note, m_notesList)
 		note->setBackgroundColor(color);
 }
 
-void NotesDock::textColorChanged(QColor color) {
+void NoteDock::textColorChanged(QColor color) {
 	if(m_initializing)
 		return;
 
-	foreach(Notes* note, m_notesList)
+	foreach(Note* note, m_notesList)
 		note->setTextColor(color);
 }
 
-void NotesDock::textFontChanged(QFont font) {
+void NoteDock::textFontChanged(QFont font) {
 	if(m_initializing)
 		return;
 
-	foreach(Notes* note, m_notesList)
+	foreach(Note* note, m_notesList)
 		note->setTextFont(font);
 }
 
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
-void NotesDock::loadConfigFromTemplate(KConfig& config) {
+void NoteDock::loadConfigFromTemplate(KConfig& config) {
 	QString name;
 	int index = config.name().lastIndexOf(QDir::separator());
 	if (index!=-1)
@@ -118,7 +118,7 @@ void NotesDock::loadConfigFromTemplate(KConfig& config) {
 	ui.kfrTextFont->setFont(group.readEntry("TextColor", m_notes->textFont()));
 }
 
-void NotesDock::saveConfigAsTemplate(KConfig& config) {
+void NoteDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group("Notes");
 
 	group.writeEntry("BackgroundColor", ui.kcbBgColor->color());

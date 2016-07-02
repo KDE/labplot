@@ -1,9 +1,10 @@
 /***************************************************************************
-    File                 : NotesDock.h
+    File                 : NotesView.cpp
     Project              : LabPlot
-    Description          : Notes Dock for configuring notes
+    Description          : Notes View for taking notes
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -26,37 +27,33 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef NOTESDOCK_H
-#define NOTESDOCK_H
+#ifndef NOTEVIEW_H
+#define NOTEVIEW_H
 
 #include <QWidget>
-#include "backend/notes/Notes.h"
-#include "ui_notesdock.h"
 
-class NotesDock : public QWidget {
+class Note;
+class QTextEdit;
+
+class NoteView : public QWidget {
 	Q_OBJECT
 
 	public:
-		explicit NotesDock(QWidget *parent);
-		void setNotesList(QList<Notes*>);
+		NoteView(Note* notes);
 
-	private:
-		Ui::NotesDock ui;
-		bool m_initializing;
-		Notes* m_notes;
-		QList< Notes* > m_notesList;
-
-		void init();
+	public slots:
+		void print(QPrinter*) const;
 
 	private slots:
-		void nameChanged(QString);
-		void commentChanged(QString);
 		void backgroundColorChanged(QColor);
 		void textColorChanged(QColor);
 		void textFontChanged(QFont);
+		void textChanged();
 
-		void loadConfigFromTemplate(KConfig&);
-		void saveConfigAsTemplate(KConfig&);
+	private:
+		Note* m_notes;
+		QTextEdit* m_textEdit;
+
 };
 
-#endif // NOTESDOCK_H
+#endif // NOTEVIEW_H
