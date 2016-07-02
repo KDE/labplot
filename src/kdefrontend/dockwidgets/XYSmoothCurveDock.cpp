@@ -85,32 +85,14 @@ void XYSmoothCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
-	uiGeneralTab.cbType->addItem(i18n("moving average (central)"));
-	uiGeneralTab.cbType->addItem(i18n("moving average (lagged)"));
-	uiGeneralTab.cbType->addItem(i18n("percentile"));
-	uiGeneralTab.cbType->addItem(i18n("Savitzky-Golay"));
-//	uiGeneralTab.cbType->addItem(i18n("LOWESS/LOESS"));
-//	etc.
+	for(int i=0; i < NSL_SMOOTH_TYPE_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_smooth_type_name[i]));
 
-	uiGeneralTab.cbWeight->addItem(i18n("uniform (rectangular)"));
-	uiGeneralTab.cbWeight->addItem(i18n("triangular"));
-	uiGeneralTab.cbWeight->addItem(i18n("binomial"));
-	uiGeneralTab.cbWeight->addItem(i18n("parabolic (Epanechnikov)"));
-	uiGeneralTab.cbWeight->addItem(i18n("quartic (biweight)"));
-	uiGeneralTab.cbWeight->addItem(i18n("triweight"));
-	uiGeneralTab.cbWeight->addItem(i18n("tricube"));
-	uiGeneralTab.cbWeight->addItem(i18n("cosine"));
-// TODO: IIR	-> np="all"?
-//	uiGeneralTab.cbWeight->addItem(i18n("exponential"));
-//	uiGeneralTab.cbWeight->addItem(i18n("Gaussian"));
-//	etc. -> see nsl_sf_kernel
+	for(int i=0; i < NSL_SMOOTH_WEIGHT_TYPE_COUNT; i++)
+		uiGeneralTab.cbWeight->addItem(i18n(nsl_smooth_weight_type_name[i]));
 
-	uiGeneralTab.cbMode->addItem(i18n("none"));
-	uiGeneralTab.cbMode->addItem(i18n("interpolating"));
-	uiGeneralTab.cbMode->addItem(i18n("mirror"));
-	uiGeneralTab.cbMode->addItem(i18n("nearest"));
-	uiGeneralTab.cbMode->addItem(i18n("constant"));
-	uiGeneralTab.cbMode->addItem(i18n("periodic"));
+	for(int i=0; i < NSL_SMOOTH_PAD_MODE_COUNT; i++)
+		uiGeneralTab.cbMode->addItem(i18n(nsl_smooth_pad_mode_name[i]));
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
@@ -297,12 +279,12 @@ void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYSmoothCurveDock::typeChanged() {
-	XYSmoothCurve::SmoothType type = (XYSmoothCurve::SmoothType)uiGeneralTab.cbType->currentIndex();
+	nsl_smooth_type type = (nsl_smooth_type)uiGeneralTab.cbType->currentIndex();
 	m_smoothData.type = type;
 
 	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbMode->model());
 	QStandardItem* pad_interp_item = model->item(nsl_smooth_pad_interp);
-	if(type == XYSmoothCurve::MovingAverage || type == XYSmoothCurve::MovingAverageLagged) {
+	if (type == nsl_smooth_type_moving_average || type == nsl_smooth_type_moving_average_lagged) {
 		uiGeneralTab.lWeight->show();
 		uiGeneralTab.cbWeight->show();
 		// disable interp pad model for MA and MAL
@@ -313,7 +295,7 @@ void XYSmoothCurveDock::typeChanged() {
 		pad_interp_item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 	}
 
-	if(type == XYSmoothCurve::MovingAverageLagged) {
+	if (type == nsl_smooth_type_moving_average_lagged) {
 		uiGeneralTab.sbPoints->setSingleStep(1);
 		uiGeneralTab.sbPoints->setMinimum(2);
 		uiGeneralTab.lRightValue->hide();
@@ -327,7 +309,7 @@ void XYSmoothCurveDock::typeChanged() {
 		}
 	}
 
-	if(type == XYSmoothCurve::Percentile) {
+	if (type == nsl_smooth_type_percentile) {
 		uiGeneralTab.lPercentile->show();
 		uiGeneralTab.sbPercentile->show();
 		// disable interp pad model for MA and MAL
@@ -337,7 +319,7 @@ void XYSmoothCurveDock::typeChanged() {
 		uiGeneralTab.sbPercentile->hide();
 	}
 
-	if(type == XYSmoothCurve::SavitzkyGolay) {
+	if (type == nsl_smooth_type_savitzky_golay) {
 		uiGeneralTab.lOrder->show();
 		uiGeneralTab.sbOrder->show();
 	} else {
@@ -382,7 +364,7 @@ void XYSmoothCurveDock::modeChanged() {
 	if(m_smoothData.mode == nsl_smooth_pad_constant) {
 		uiGeneralTab.lLeftValue->show();
 		uiGeneralTab.sbLeftValue->show();
-		if(m_smoothData.type == XYSmoothCurve::MovingAverageLagged) {
+		if(m_smoothData.type == nsl_smooth_type_moving_average_lagged) {
 			uiGeneralTab.lRightValue->hide();
 			uiGeneralTab.sbRightValue->hide();
 		} else {

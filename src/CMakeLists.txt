@@ -40,6 +40,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYSmoothCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYFitCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYFourierFilterCurveDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/XYFourierTransformCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
 	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/EquidistantValuesDialog.cpp
@@ -90,6 +91,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyfitcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyequationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
@@ -150,8 +152,12 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/matrix/Matrix.cpp
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp
+ 	${BACKEND_DIR}/nsl/nsl_dft.c
+	${BACKEND_DIR}/nsl/nsl_filter.c
+ 	${BACKEND_DIR}/nsl/nsl_interp.c
  	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
  	${BACKEND_DIR}/nsl/nsl_sf_poly.c
+ 	${BACKEND_DIR}/nsl/nsl_sf_window.c
  	${BACKEND_DIR}/nsl/nsl_smooth.c
  	${BACKEND_DIR}/nsl/nsl_stats.c
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
@@ -178,6 +184,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYSmoothCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierFilterCurve.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierTransformCurve.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
         ${BACKEND_DIR}/datapicker/DatapickerPoint.cpp
         ${BACKEND_DIR}/datapicker/DatapickerImage.cpp
@@ -234,7 +241,7 @@ set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 INCLUDE_DIRECTORIES(. ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/..)
 qt5_wrap_ui(LABPLOT_SRCS ${UI_SOURCES})
 add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
-target_link_libraries(labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${CANTOR_LIBS} ${HDF5_LIBRARY} ${NETCDF_LIBRARY})
+target_link_libraries(labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${CANTOR_LIBS} ${HDF5_LIBRARY} ${NETCDF_LIBRARY} ${FFTW_LIBRARIES})
 # ${OPJ_LIBRARY}
 
 ############## installation ################################

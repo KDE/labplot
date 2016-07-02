@@ -51,8 +51,8 @@ extern "C" {
 
 #include <QElapsedTimer>
 #include <QIcon>
-
 #include <KLocalizedString>
+#include <QThreadPool>
 
 XYFitCurve::XYFitCurve(const QString& name)
 		: XYCurve(name, new XYFitCurvePrivate(this)) {
@@ -1015,6 +1015,9 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 				d->residualsColumn = column;
 		}
 	}
+
+	// wait for data to be read before using the pointers
+	QThreadPool::globalInstance()->waitForDone();
 
 	if (d->xColumn && d->yColumn && d->residualsColumn) {
 		d->xColumn->setHidden(true);

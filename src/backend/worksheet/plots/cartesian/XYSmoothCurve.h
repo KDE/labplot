@@ -40,13 +40,11 @@ class XYSmoothCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum SmoothType {MovingAverage,MovingAverageLagged,Percentile,SavitzkyGolay}; //TODO: LOWESS/etc., Bezier, B-Spline, (FFT Filter)
-
 		struct SmoothData {
-			SmoothData() : type(MovingAverage), points(5), weight(nsl_smooth_weight_uniform), percentile(0.5), order(2),
+			SmoothData() : type(nsl_smooth_type_moving_average), points(5), weight(nsl_smooth_weight_uniform), percentile(0.5), order(2),
 				mode(nsl_smooth_pad_none), lvalue(0.0), rvalue(0.0) {};
 
-			XYSmoothCurve::SmoothType type;		// type of smoothing
+			nsl_smooth_type type;			// type of smoothing
 			unsigned int points;			// number of points
 			nsl_smooth_weight_type weight;		// type of weight
 			double percentile;			// percentile for percentile filter (0.0 .. 1.0)

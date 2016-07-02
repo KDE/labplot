@@ -180,6 +180,7 @@ private:
 	QAction* addSmoothCurveAction;
 	QAction* addFitCurveAction;
 	QAction* addFourierFilterCurveAction;
+	QAction* addFourierTransformCurveAction;
 	QAction* addHorizontalAxisAction;
 	QAction* addVerticalAxisAction;
 	QAction* addLegendAction;
@@ -204,6 +205,7 @@ private:
 	QAction* addSmoothAction;
 	QAction* addFitAction;
 	QAction* addFourierFilterAction;
+	QAction* addFourierTransformAction;
 
 public slots:
 	void createContextMenu(QMenu*) const;
