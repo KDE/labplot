@@ -34,10 +34,12 @@
 #include <QLabel>
 #include <QFileInfo>
 #include <QWidgetAction>
+
 #include <KLocale>
 #include <KStandardDirs>
 #include <KLineEdit>
 #include <KIcon>
+#include <KIconLoader>
 #include <KMenu>
 #include <KConfig>
 
@@ -58,23 +60,30 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 	horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 	horizontalLayout->addItem(horizontalSpacer);
 
+	int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
+
 	tbLoad = new QToolButton(this);
+	tbLoad->setIconSize(QSize(size, size));
 	horizontalLayout->addWidget(tbLoad);
 
 	tbSave = new QToolButton(this);
+	tbSave->setIconSize(QSize(size, size));
 	horizontalLayout->addWidget(tbSave);
 
 	tbSaveDefault = new QToolButton(this);
+	tbSaveDefault->setIconSize(QSize(size, size));
 	horizontalLayout->addWidget(tbSaveDefault);
 
 	horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 	horizontalLayout->addItem(horizontalSpacer2);
 
 	tbCopy = new QToolButton(this);
+	tbCopy->setIconSize(QSize(size, size));
 	tbCopy->setEnabled(false);
 	horizontalLayout->addWidget(tbCopy);
 
 	tbPaste = new QToolButton(this);
+	tbPaste->setIconSize(QSize(size, size));
 	tbPaste->setEnabled(false);
 	horizontalLayout->addWidget(tbPaste);
 
@@ -98,6 +107,10 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 	//disable the load-button if no templates are available yet
 	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/" + dirNames.at(className) + "/*");
 	tbLoad->setEnabled(list.size());
+
+	//TODO: implement copy&paste of properties and activate copy- and paste-buttons again
+	tbCopy->hide();
+	tbPaste->hide();
 }
 
 void TemplateHandler::retranslateUi(){
