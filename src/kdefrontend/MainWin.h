@@ -192,7 +192,6 @@ private:
 	Spreadsheet* activeSpreadsheet() const;
 	Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
-	Notes* activeNotes() const;
 	Datapicker* activeDatapicker() const;
 
 	friend class GuiObserver;

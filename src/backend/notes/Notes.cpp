@@ -27,33 +27,24 @@
  ***************************************************************************/
 
 #include "Notes.h"
+#include "backend/lib/macros.h"
+#include "commonfrontend/notes/NotesView.h"
 
 #include <QPalette>
 #include <KConfig>
 #include <KConfigGroup>
 
-Notes::Notes(AbstractScriptingEngine* engine, const QString& name, bool loading): AbstractPart(name), scripted(engine) {
+Notes::Notes(const QString& name): AbstractPart(name) {
 	init();
 }
 
-Notes::~Notes() {
-
-}
-
 void Notes::init() {
-
-// 	QColor color = QColorDialog::getColor(Qt::yellow,this); // can be used to give options
-
 	KConfig config;
-	KConfigGroup group = config.group( "Notes" );
+	KConfigGroup group = config.group("Notes");
 
-	m_bgColor = group.readEntry("bgColor", QColor(Qt::yellow));
-	m_textColor = group.readEntry("textColor", QColor(Qt::black));
-	m_note = "";
-}
-
-bool Notes::exportView() const {
-	return false;
+	m_backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::yellow));
+	m_textColor = group.readEntry("TextColor", QColor(Qt::black));
+	m_textFont = group.readEntry("TextFont", QFont());
 }
 
 QMenu* Notes::createContextMenu() {
@@ -67,10 +58,6 @@ QIcon Notes::icon() const {
 	return QIcon::fromTheme("document-new");
 }
 
-bool Notes::load(XmlStreamReader*) {
-	return false;
-}
-
 bool Notes::printPreview() const {
 	return false;
 }
@@ -79,34 +66,43 @@ bool Notes::printView() {
 	return false;
 }
 
-void Notes::save(QXmlStreamWriter*) const {
-	
+bool Notes::exportView() const {
+	return false;
 }
 
-void Notes::changeBgColor(QColor color) {
-	m_bgColor = color;
-	emit bgColorChanged(color);
-}
-
-void Notes::changeTextColor(QColor color) {
-	m_textColor = color;
-	emit textColorChanged(color);
-}
-
-QColor Notes::bgColor() {
-	return m_bgColor;
-}
-
-QColor Notes::textColor() {
-	return m_textColor;
-}
-
-void Notes::setNote(QString note) {
+void Notes::setNote(const QString& note) {
 	m_note = note;
 }
 
-QString Notes::note() {
+const QString& Notes::note() const {
 	return m_note;
+}
+
+void Notes::setBackgroundColor(const QColor& color) {
+	m_backgroundColor = color;
+	emit (backgroundColorChanged(color));
+}
+
+const QColor& Notes::backgroundColor() const {
+	return m_backgroundColor;
+}
+
+void Notes::setTextColor(const QColor& color) {
+	m_textColor = color;
+	emit (textColorChanged(color));
+}
+
+const QColor& Notes::textColor() const{
+	return m_textColor;
+}
+
+void Notes::setTextFont(const QFont& font) {
+	m_textFont = font;
+	emit (textFontChanged(font));
+}
+
+const QFont& Notes::textFont() const {
+	return m_textFont;
 }
 
 QWidget* Notes::view() const {
@@ -116,4 +112,16 @@ QWidget* Notes::view() const {
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 	}
 	return m_view;
+}
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+//! Save as XML
+void Notes::save(QXmlStreamWriter*) const {
+	
+}
+
+bool Notes::load(XmlStreamReader*) {
+	return false;
 }

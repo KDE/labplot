@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Notes Dock for configuring notes
     --------------------------------------------------------------------
-    Copyright            : (C) 2016-2016 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
 
@@ -38,8 +38,6 @@ class NotesDock : public QWidget {
 
 	public:
 		explicit NotesDock(QWidget *parent);
-		~NotesDock();
-		
 		void setNotesList(QList<Notes*>);
 
 	private:
@@ -51,19 +49,14 @@ class NotesDock : public QWidget {
 		void init();
 
 	private slots:
-		//SLOTs for changes triggered in WorksheetDock
-		//"General"-tab
 		void nameChanged(QString);
 		void commentChanged(QString);
-		void bgColorChanged(QColor);
+		void backgroundColorChanged(QColor);
 		void textColorChanged(QColor);
+		void textFontChanged(QFont);
+
 		void loadConfigFromTemplate(KConfig&);
 		void saveConfigAsTemplate(KConfig&);
-
-		//SLOTs for changes triggered in Worksheet
-// 		void worksheetDescriptionChanged(const AbstractAspect*);
-	signals:
-// 		void info(const QString&);
 };
 
 #endif // NOTESDOCK_H

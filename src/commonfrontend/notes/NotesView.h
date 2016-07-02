@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Notes View for taking notes
     --------------------------------------------------------------------
-    Copyright            : (C) 2016-2016 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
 
@@ -30,27 +30,30 @@
 #define NOTESVIEW_H
 
 #include <QWidget>
-#include <QTextEdit>
-#include <QToolBar>
-
 
 class Notes;
+class QMenu;
+class QTextEdit;
+
 class NotesView : public QWidget {
 	Q_OBJECT
 
-public:
-	NotesView(Notes* notes);
-	~NotesView();
-	
-public slots:
-	void createContextMenu(QMenu*) const;
-	void fillToolBar(QToolBar*);
-	void bgColorChanged(QColor);
-	void textColorChanged(QColor);
-	void textChanged();
-private:
-	Notes* m_notes;
-	QTextEdit* m_textEdit;
+	public:
+		NotesView(Notes* notes);
+		~NotesView();
+
+	public slots:
+		void createContextMenu(QMenu*) const;
+
+	private slots:
+		void backgroundColorChanged(QColor);
+		void textColorChanged(QColor);
+		void textFontChanged(QFont);
+		void textChanged();
+
+	private:
+		Notes* m_notes;
+		QTextEdit* m_textEdit;
 
 };
 
