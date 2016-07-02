@@ -41,7 +41,7 @@
 
 #include <cmath>	// isnan
 extern "C" {
-#include <gsl_errno.h>
+#include <gsl/gsl_errno.h>
 #include "backend/nsl/nsl_sf_poly.h"
 }
 

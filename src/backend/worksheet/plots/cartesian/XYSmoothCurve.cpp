@@ -240,7 +240,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	double* ydata = ydataVector.data();
 
 	// smooth settings
-	const XYSmoothCurve::SmoothType type = smoothData.type;
+	const nsl_smooth_type type = smoothData.type;
 	const unsigned int points = smoothData.points;
 	const nsl_smooth_weight_type weight = smoothData.weight;
 	const double percentile = smoothData.percentile;
@@ -249,28 +249,28 @@ void XYSmoothCurvePrivate::recalculate() {
 	const double lvalue = smoothData.lvalue;
 	const double rvalue = smoothData.rvalue;
 #ifdef QT_DEBUG
-	qDebug()<<"type:"<<type;
+	qDebug()<<"type:"<<nsl_smooth_type_name[type];
 	qDebug()<<"points ="<<points;
-	qDebug()<<"weight:"<<weight;
+	qDebug()<<"weight:"<<nsl_smooth_weight_type_name[weight];
 	qDebug()<<"percentile ="<<percentile;
 	qDebug()<<"order ="<<order;
-	qDebug()<<"mode ="<<mode;
+	qDebug()<<"mode ="<<nsl_smooth_pad_mode_name[mode];
 	qDebug()<<"const. values ="<<lvalue<<rvalue;
 #endif
 ///////////////////////////////////////////////////////////
 	int status=0;
 
 	switch (type) {
-	case XYSmoothCurve::MovingAverage:
+	case nsl_smooth_type_moving_average:
 		status = nsl_smooth_moving_average(ydata, n, points, weight, mode);
 		break;
-	case XYSmoothCurve::MovingAverageLagged:
+	case nsl_smooth_type_moving_average_lagged:
 		status = nsl_smooth_moving_average_lagged(ydata, n, points, weight, mode);
 		break;
-	case XYSmoothCurve::Percentile:
+	case nsl_smooth_type_percentile:
 		status = nsl_smooth_percentile(ydata, n, points, percentile, mode);
 		break;
-	case XYSmoothCurve::SavitzkyGolay:
+	case nsl_smooth_type_savitzky_golay:
 		if (mode == nsl_smooth_pad_constant)
 			nsl_smooth_pad_constant_set(lvalue, rvalue);
 		status = nsl_smooth_savgol(ydata, n, points, order, mode);
@@ -373,7 +373,7 @@ bool XYSmoothCurve::load(XmlStreamReader* reader) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
-				d->smoothData.type = (XYSmoothCurve::SmoothType) str.toInt();
+				d->smoothData.type = (nsl_smooth_type) str.toInt();
 
 			str = attribs.value("points").toString();
 			if (str.isEmpty())

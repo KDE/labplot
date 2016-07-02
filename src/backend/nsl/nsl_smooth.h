@@ -31,6 +31,12 @@
 
 #include <gsl/gsl_matrix.h>
 
+#define NSL_SMOOTH_TYPE_COUNT 4
+typedef enum {nsl_smooth_type_moving_average, nsl_smooth_type_moving_average_lagged, nsl_smooth_type_percentile,
+	nsl_smooth_type_savitzky_golay} nsl_smooth_type;
+extern const char* nsl_smooth_type_name[];
+/* TODO: LOWESS/etc., Bezier, B-Spline, (FFT Filter) */
+
 /* mode of extension for padding signal 
  *	none: reduce points at edges
  *	interp: polynomial interpolation
@@ -43,6 +49,7 @@
 typedef enum {nsl_smooth_pad_none, nsl_smooth_pad_interp, nsl_smooth_pad_mirror, nsl_smooth_pad_nearest,
 	nsl_smooth_pad_constant, nsl_smooth_pad_periodic} nsl_smooth_pad_mode;
 extern const char* nsl_smooth_pad_mode_name[];
+
 #define NSL_SMOOTH_WEIGHT_TYPE_COUNT 8
 typedef enum {nsl_smooth_weight_uniform, nsl_smooth_weight_triangular, nsl_smooth_weight_binomial, 
 	nsl_smooth_weight_parabolic, nsl_smooth_weight_quartic, nsl_smooth_weight_triweight, 
