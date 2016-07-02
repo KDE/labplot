@@ -29,10 +29,13 @@
 #include "Notes.h"
 #include "backend/lib/macros.h"
 #include "commonfrontend/notes/NotesView.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/macros.h"
 
 #include <QPalette>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KLocale>
 
 Notes::Notes(const QString& name): AbstractPart(name) {
 	init();
@@ -118,10 +121,58 @@ QWidget* Notes::view() const {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void Notes::save(QXmlStreamWriter*) const {
-	
+void Notes::save(QXmlStreamWriter* writer) const {
+	writer->writeStartElement("note");
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
+
+	writer->writeStartElement("background");
+	WRITE_QCOLOR(m_backgroundColor);
+	writer->writeEndElement();
+
+	writer->writeStartElement("text");
+	WRITE_QCOLOR(m_textColor);
+	WRITE_QFONT(m_textFont);
+	writer->writeAttribute("text", m_note);
+	writer->writeEndElement();
+
+	writer->writeEndElement(); // close "note" section
 }
 
-bool Notes::load(XmlStreamReader*) {
-	return false;
+bool Notes::load(XmlStreamReader* reader) {
+	if (!reader->isStartElement() || reader->name() != "note") {
+		reader->raiseError(i18n("no note element found"));
+		return false;
+	}
+
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	if (!readBasicAttributes(reader))
+		return false;
+
+	QXmlStreamAttributes attribs;
+	QString str;
+
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == "note")
+			break;
+
+		if (!reader->isStartElement())
+			continue;
+
+		if (reader->name() == "comment") {
+			if (!readCommentElement(reader))
+				return false;
+		} else if (reader->name() == "background") {
+			attribs = reader->attributes();
+			READ_QCOLOR(m_backgroundColor);
+		} else if (reader->name() == "text") {
+			attribs = reader->attributes();
+			READ_QCOLOR(m_textColor);
+			READ_QFONT(m_textFont);
+			m_note = attribs.value("text").toString();
+		}
+	}
+	
+	return true;
 }

@@ -35,6 +35,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/matrix/Matrix.h"
+#include "backend/notes/Notes.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 
@@ -180,6 +181,14 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(datapicker);
+		loaded = true;
+	} else if (element_name == "note") {
+		Notes* note = new Notes("");
+		if (!note->load(reader)){
+			delete note;
+			return false;
+		}
+		addChild(note);
 		loaded = true;
 	}
 
