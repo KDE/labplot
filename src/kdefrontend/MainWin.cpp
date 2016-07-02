@@ -1258,7 +1258,10 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 			win = part->mdiSubWindow();
 
 		if (m_mdiArea->subWindowList().indexOf(win) == -1) {
-			m_mdiArea->addSubWindow(win);
+			if (dynamic_cast<const Notes*>(part))
+				m_mdiArea->addSubWindow(win, Qt::Tool);
+			else
+				m_mdiArea->addSubWindow(win);
 			win->show();
 		}
 		m_mdiArea->setActiveSubWindow(win);
