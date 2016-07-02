@@ -29,7 +29,8 @@
 #include "NotesView.h"
 
 #include <QHBoxLayout>
-#include <QColorDialog>
+// #include <QColorDialog>
+#include <QTextEdit>
 
 #include "backend/notes/Notes.h"
 
@@ -42,16 +43,18 @@ NotesView::NotesView(Notes* notes) : m_notes(notes) {
 
 	QPalette palette = m_textEdit->palette();
 
-	palette.setColor(QPalette::Base, m_notes->bgColor());
+	palette.setColor(QPalette::Base, m_notes->backgroundColor());
 	palette.setColor(QPalette::Text, m_notes->textColor());
 
 	m_textEdit->setPalette(palette);
+	m_textEdit->setFont(m_notes->textFont());
 	m_textEdit->setText(m_notes->note());
 
 	layout->addWidget(m_textEdit);
 	
-	connect(m_notes, SIGNAL(bgColorChanged(QColor)), this, SLOT(bgColorChanged(QColor)));
+	connect(m_notes, SIGNAL(backgroundColorChanged(QColor)), this, SLOT(backgroundColorChanged(QColor)));
 	connect(m_notes, SIGNAL(textColorChanged(QColor)), this, SLOT(textColorChanged(QColor)));
+	connect(m_notes, SIGNAL(textFontChanged(QFont)), this, SLOT(textFontChanged(QFont)));
 	connect(m_textEdit, SIGNAL(textChanged()), this, SLOT(textChanged()));
 }
 
@@ -59,18 +62,18 @@ void NotesView::createContextMenu(QMenu* menu) const {
 
 }
 
-void NotesView::fillToolBar(QToolBar* toolbar) {
-
-}
-
 void NotesView::textChanged() {
 	m_notes->setNote(m_textEdit->toPlainText());
 }
 
-void NotesView::bgColorChanged(QColor color) {
+void NotesView::backgroundColorChanged(QColor color) {
 	QPalette palette = m_textEdit->palette();
 	palette.setColor(QPalette::Base, color);
 	m_textEdit->setPalette(palette);
+}
+
+void NotesView::textFontChanged(QFont font) {
+	m_textEdit->setFont(font);
 }
 
 void NotesView::textColorChanged(QColor color) {
