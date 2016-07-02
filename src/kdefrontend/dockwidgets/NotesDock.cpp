@@ -42,7 +42,7 @@ NotesDock::NotesDock(QWidget *parent) : QWidget(parent), m_initializing(false) {
 	connect(ui.kfrTextFont, SIGNAL(fontSelected(QFont)), this, SLOT(textFontChanged(QFont)));
 
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
-	ui.gridLayout->addWidget(templateHandler, 7, 0);
+	ui.gridLayout->addWidget(templateHandler, 8, 3);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
