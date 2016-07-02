@@ -286,9 +286,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 		mainWindow->xyFitCurveDock->setCurves(list);
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyFitCurveDock);
-
 	} else if (className=="XYFourierTransformCurve") {
-		mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-fourier_transform-curve properties"));
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Fourier Transform"));
 
 		if (!mainWindow->xyFourierTransformCurveDock) {
 	  		mainWindow->xyFourierTransformCurveDock = new XYFourierTransformCurveDock(mainWindow->stackedWidget);
