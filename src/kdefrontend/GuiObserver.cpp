@@ -426,8 +426,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->projectDock);
 
-	} else if (className == "Notes") {
-		mainWindow->m_propertiesDock->setWindowTitle(i18n("Notes"));
+	} else if (className == "Note") {
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Note"));
 
 		if (!mainWindow->notesDock) {
 			mainWindow->notesDock = new NoteDock(mainWindow->stackedWidget);
