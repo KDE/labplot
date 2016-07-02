@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : XYFourierFilterCurve.h
+    File                 : XYFourierTransformCurve.h
     Project              : LabPlot
-    Description          : A xy-curve defined by a Fourier filter
+    Description          : A xy-curve defined by a Fourier transform
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
@@ -26,33 +26,32 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYFOURIERFILTERCURVE_H
-#define XYFOURIERFILTERCURVE_H
+#ifndef XYFOURIERTRANSFORMCURVE_H
+#define XYFOURIERTRANSFORMCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 extern "C" {
-#include "backend/nsl/nsl_filter.h"
+#include "backend/nsl/nsl_dft.h"
+#include "backend/nsl/nsl_sf_window.h"
 }
 
-class XYFourierFilterCurvePrivate;
-class XYFourierFilterCurve: public XYCurve {
+class XYFourierTransformCurvePrivate;
+class XYFourierTransformCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		struct FilterData {
-			FilterData() : type(nsl_filter_type_low_pass), form(nsl_filter_form_ideal), order(1),
-				cutoff(0), unit(nsl_filter_cutoff_unit_frequency), cutoff2(0), unit2(nsl_filter_cutoff_unit_frequency) {};
+		struct TransformData {
+			TransformData() : type(nsl_dft_result_magnitude), twoSided(false), shifted(false), 
+				xScale(nsl_dft_xscale_frequency), windowType(nsl_sf_window_uniform) {};
 
-			nsl_filter_type type;
-			nsl_filter_form form;
-			unsigned int order;
-			double cutoff;			// (low) cutoff
-			nsl_filter_cutoff_unit unit;	// (low) value unit
-			double cutoff2;			// high cutoff
-			nsl_filter_cutoff_unit unit2;	// high value unit
+			nsl_dft_result_type type;
+			bool twoSided;
+			bool shifted;
+			nsl_dft_xscale xScale;
+			nsl_sf_window_type windowType;
 		};
-		struct FilterResult {
-			FilterResult() : available(false), valid(false), elapsedTime(0) {};
+		struct TransformResult {
+			TransformResult() : available(false), valid(false), elapsedTime(0) {};
 
 			bool available;
 			bool valid;
@@ -60,8 +59,8 @@ class XYFourierFilterCurve: public XYCurve {
 			qint64 elapsedTime;
 		};
 
-		explicit XYFourierFilterCurve(const QString& name);
-		virtual ~XYFourierFilterCurve();
+		explicit XYFourierTransformCurve(const QString& name);
+		virtual ~XYFourierTransformCurve();
 
 		void recalculate();
 		virtual QIcon icon() const;
@@ -73,32 +72,32 @@ class XYFourierFilterCurve: public XYCurve {
 		const QString& xDataColumnPath() const;
 		const QString& yDataColumnPath() const;
 
-		CLASS_D_ACCESSOR_DECL(FilterData, filterData, FilterData)
-		const FilterResult& filterResult() const;
-		bool isSourceDataChangedSinceLastFilter() const;
+		CLASS_D_ACCESSOR_DECL(TransformData, transformData, TransformData)
+		const TransformResult& transformResult() const;
+		bool isSourceDataChangedSinceLastTransform() const;
 
 		typedef WorksheetElement BaseClass;
-		typedef XYFourierFilterCurvePrivate Private;
+		typedef XYFourierTransformCurvePrivate Private;
 
 	protected:
-		XYFourierFilterCurve(const QString& name, XYFourierFilterCurvePrivate* dd);
+		XYFourierTransformCurve(const QString& name, XYFourierTransformCurvePrivate* dd);
 
 	private:
-		Q_DECLARE_PRIVATE(XYFourierFilterCurve)
+		Q_DECLARE_PRIVATE(XYFourierTransformCurve)
 		void init();
 
 	private slots:
 		void handleSourceDataChanged();
 
 	signals:
-		friend class XYFourierFilterCurveSetXDataColumnCmd;
-		friend class XYFourierFilterCurveSetYDataColumnCmd;
+		friend class XYFourierTransformCurveSetXDataColumnCmd;
+		friend class XYFourierTransformCurveSetYDataColumnCmd;
 		void xDataColumnChanged(const AbstractColumn*);
 		void yDataColumnChanged(const AbstractColumn*);
 
-		friend class XYFourierFilterCurveSetFilterDataCmd;
-		void filterDataChanged(const XYFourierFilterCurve::FilterData&);
-		void sourceDataChangedSinceLastFilter();
+		friend class XYFourierTransformCurveSetTransformDataCmd;
+		void transformDataChanged(const XYFourierTransformCurve::TransformData&);
+		void sourceDataChangedSinceLastTransform();
 };
 
 #endif

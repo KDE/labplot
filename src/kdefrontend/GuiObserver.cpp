@@ -57,6 +57,7 @@
 #include "kdefrontend/dockwidgets/XYEquationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFitCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFourierFilterCurveDock.h"
+#include "kdefrontend/dockwidgets/XYFourierTransformCurveDock.h"
 #include "kdefrontend/dockwidgets/XYInterpolationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYSmoothCurveDock.h"
 #include "kdefrontend/dockwidgets/CustomPointDock.h"
@@ -284,8 +285,25 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 			list<<qobject_cast<XYCurve*>(aspect);
 		}
 		mainWindow->xyFitCurveDock->setCurves(list);
-
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyFitCurveDock);
+
+	} else if (className=="XYFourierTransformCurve") {
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("xy-fourier_transform-curve properties"));
+
+		if (!mainWindow->xyFourierTransformCurveDock) {
+	  		mainWindow->xyFourierTransformCurveDock = new XYFourierTransformCurveDock(mainWindow->stackedWidget);
+			mainWindow->xyFourierTransformCurveDock->setupGeneral();
+			connect(mainWindow->xyFourierTransformCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+			mainWindow->stackedWidget->addWidget(mainWindow->xyFourierTransformCurveDock);
+		}
+
+		QList<XYCurve*> list;
+		foreach (aspect, selectedAspects)
+			list<<qobject_cast<XYCurve*>(aspect);
+
+		mainWindow->xyFourierTransformCurveDock->setCurves(list);
+
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyFourierTransformCurveDock);
 	} else if (className=="XYFourierFilterCurve") {
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("Fourier Filter"));
 
