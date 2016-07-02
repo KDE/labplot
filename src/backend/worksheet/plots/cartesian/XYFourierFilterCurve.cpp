@@ -46,9 +46,6 @@ extern "C" {
 #ifdef HAVE_FFTW3
 #include <fftw3.h>
 #endif
-// TODO: include these if fftw3 is used instead?
-#include <gsl/gsl_fft_real.h>
-#include <gsl/gsl_fft_halfcomplex.h>
 
 #include "backend/nsl/nsl_sf_poly.h"
 }
@@ -253,7 +250,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	// filter settings
 	const nsl_filter_type type = filterData.type;
 	const nsl_filter_form form = filterData.form;
-	const signed int order = filterData.order;
+	const unsigned int order = filterData.order;
 	const double cutoff = filterData.cutoff, cutoff2 = filterData.cutoff2;
 	const nsl_filter_cutoff_unit unit = filterData.unit, unit2 = filterData.unit2;
 #ifndef NDEBUG
@@ -264,20 +261,11 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	qDebug()<<"unit :"<<nsl_filter_cutoff_unit_name[unit]<<nsl_filter_cutoff_unit_name[unit2];
 #endif
 ///////////////////////////////////////////////////////////
-	int status = nsl_filter_transform(ydata,n);
-
-#ifndef NDEBUG
-	QDebug out = qDebug();
-	for(unsigned int i=0;i<n;i++)
-		//out<<ydata[i]<<ydata[n-i];
-		out<<ydata[i];
-#endif
-
 	// calculate index
 	double cutindex=0, cutindex2=0;
 	switch (unit) {
 	case nsl_filter_cutoff_unit_frequency:
-		cutindex = 2*cutoff*(max-min);
+		cutindex = cutoff*(max-min);
 		break;
 	case nsl_filter_cutoff_unit_fraction:
 		cutindex = cutoff*n;
@@ -287,7 +275,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	}
 	switch (unit2) {
 	case nsl_filter_cutoff_unit_frequency:
-		cutindex2 = 2*cutoff2*(max-min);
+		cutindex2 = cutoff2*(max-min);
 		break;
 	case nsl_filter_cutoff_unit_fraction:
 		cutindex2 = cutoff2*n;
@@ -295,109 +283,19 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	case nsl_filter_cutoff_unit_index:
 		cutindex2 = cutoff2;
 	}
-	const double centerindex = (cutindex2+cutindex)/2.;
-	const int bandwidth = (cutindex2-cutindex);
-	if((type == nsl_filter_type_band_pass || type == nsl_filter_type_band_reject) && bandwidth <= 0) {
+	const double bandwidth = (cutindex2 - cutindex);
+	if ((type == nsl_filter_type_band_pass || type == nsl_filter_type_band_reject) && bandwidth <= 0) {
 		qWarning()<<"band width must be > 0. Giving up.";
 		return;
 	}
 
 #ifndef NDEBUG
 	qDebug()<<"cut off @"<<cutindex<<cutindex2;
-	qDebug()<<"center index ="<<centerindex;
 	qDebug()<<"bandwidth ="<<bandwidth;
 #endif
 
-	// 2. apply filter
-	// TODO: nsl_filter_apply(ydata, n, type, form);
-	unsigned int i;
-	switch (type) {
-	case nsl_filter_type_low_pass:
-		switch (form) {
-		case nsl_filter_form_ideal:
-			for (i = cutindex; i < n; i++)
-				ydata[i] = 0;
-			break;
-		case nsl_filter_form_butterworth:
-			for (i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i/cutindex,2*order));
-			break;
-		case nsl_filter_form_chebyshev_i:
-			for (i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i/cutindex),2));
-			break;
-		case nsl_filter_form_chebyshev_ii:
-			for (i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,cutindex/i),2));
-			break;
-		}
-		break;
-	case nsl_filter_type_high_pass:
-		switch (form) {
-		case nsl_filter_form_ideal:
-			for (i = 0; i < cutindex; i++)
-				ydata[i] = 0;
-			break;
-		case nsl_filter_form_butterworth:
-			for (i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(cutindex/i,2*order));
-			break;
-		case nsl_filter_form_chebyshev_i:
-			for (i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,cutindex/i),2));
-			break;
-		case nsl_filter_form_chebyshev_ii:
-			for (i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i/cutindex),2));
-			break;
-		}
-		break;
-	case nsl_filter_type_band_pass:
-		switch (form) {
-		case nsl_filter_form_ideal:
-			for (i = 0; i < cutindex; i++)
-				ydata[i] = 0;
-			for (i = cutindex2; i < n; i++)
-				ydata[i] = 0;
-			break;
-		case nsl_filter_form_butterworth:
-			for (i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int((i*i-centerindex*centerindex)/i/bandwidth,2*order));
-			break;
-		case nsl_filter_form_chebyshev_i:
-			for (i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
-			break;
-		case nsl_filter_form_chebyshev_ii:
-			for (i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
-			break;
-		}
-		break;
-	case nsl_filter_type_band_reject:
-		switch (form) {
-		case nsl_filter_form_ideal:
-			for (i = cutindex; i < cutindex2; i++)
-				ydata[i] = 0;
-			break;
-		case nsl_filter_form_butterworth:
-			for (i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(i*bandwidth/(i*i-gsl_sf_pow_int(centerindex,2)),2*order));
-			break;
-		case nsl_filter_form_chebyshev_i:
-			for (i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,i*bandwidth/(i*i-centerindex*centerindex)),2));
-			break;
-		case nsl_filter_form_chebyshev_ii:
-			for (i = 0; i < n; i++)
-				ydata[i] *= 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order,(i*i-centerindex*centerindex)/i/bandwidth),2));
-			break;
-		}
-		break;
-	}
-
-	// 3. back transform
-	status += nsl_filter_backtransform(ydata,n);
+	// run filter
+	int status = nsl_filter_fourier(ydata, n, type, form, order, cutindex, bandwidth);
 
 	xVector->resize(n);
 	yVector->resize(n);
