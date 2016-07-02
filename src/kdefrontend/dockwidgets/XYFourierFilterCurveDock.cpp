@@ -88,7 +88,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 		uiGeneralTab.cbUnit2->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
 	}
 
-	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);

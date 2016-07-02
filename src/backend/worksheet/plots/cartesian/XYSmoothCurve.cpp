@@ -42,6 +42,7 @@
 #include <KLocale>
 #include <QElapsedTimer>
 #include <QThreadPool>
+#include <QDebug>
 
 extern "C" {
 #include <gsl/gsl_math.h>	// gsl_pow_*
