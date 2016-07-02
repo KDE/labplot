@@ -51,8 +51,8 @@
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2016-06-17</date>
-<releaseinfo>3.2.1</releaseinfo>
+<date>2016-07-02</date>
+<releaseinfo>3.2.2</releaseinfo>
 
 <abstract>
 	<para>
@@ -88,8 +88,8 @@ Features:
 <listitem><para>Great variety of editing capabilities for properties of worksheet and its objects</para></listitem>
 <listitem><para>Cartesian plots, created either from imported or manually created data sets or via mathematical equation</para></listitem>
 <listitem><para>Definition of mathematical formulas is supported by syntax-highlighting and completion and by the list of thematicaly grouped mathematical and physical constants and functions</para></listitem>
-<listitem><para>Analysis of plotted data is supported by many zooming and navigation features</para></listitem>
-<listitem><para>Several interpolation, smoothing and Fourier filter methods for filtering data</para></listitem>
+<listitem><para>Investigation of plotted data is supported by many zooming and navigation features</para></listitem>
+<listitem><para>Several analysis functions and methods for interpolation, smoothing, (nonlinear) fitting, Fourier filter and Fourier transform</para></listitem>
 <listitem><para>Linear and non-linear fits to data, several fit-models are predefined and custom models with arbitrary number of parameters can be provided</para></listitem>
 <listitem><para>Datapicker for manual or (semi-)automatic data extraction from imported images containing plots and curves.</para></listitem>
 </itemizedlist>
@@ -838,7 +838,6 @@ The menu is only available when a datapicker object is selected on the <guilabel
       which can be selected to weight the selected data points depending on their distance.
       </para>
   </sect1>
-
   
   <sect1 id="fitting">
     <title>Curve fitting</title>
@@ -875,6 +874,21 @@ The menu is only available when a datapicker object is selected on the <guilabel
 	The cutoff value(s) can be specified in the units frequency (Hertz), fraction (0.0 to 1.0) or index
 	of the data points.
     </para>
+  </sect1>
+
+  <sect1 id="dft">
+    <title>Fourier transform</title>
+    <para>
+      To convert a signal from time to frequency domain or to change between other conjugate variables like
+      position and momentum (k-space) a discrete Fourier transform can be applied.
+      Following options can be used to suite one needs:
+    </para>
+      <itemizedlist>
+	<listitem><para>window function (Welch, Hann, Hamming, etc.) to avoid leakage effects</para></listitem>
+	<listitem><para>output (magnitude, amplitude, phase, dB, etc.)</para></listitem>
+	<listitem><para>one or two sided spectrum with or without shifting</para></listitem>
+	<listitem><para>x axis scaling to frequency, index or period</para></listitem>
+      </itemizedlist>
   </sect1>
 </chapter>
 
