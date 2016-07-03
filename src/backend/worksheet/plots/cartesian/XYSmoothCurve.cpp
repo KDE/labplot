@@ -35,22 +35,19 @@
 
 #include "XYSmoothCurve.h"
 #include "XYSmoothCurvePrivate.h"
-#include "CartesianCoordinateSystem.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
-
-extern "C" {
-#include <gsl/gsl_math.h>	// gsl_pow_*
-#include <gsl/gsl_sf_gamma.h>	// gsl_sf_choose
-#include "backend/nsl/nsl_stats.h"
-#include "backend/nsl/nsl_sf_kernel.h"
-}
 
 #include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
-#include <QDebug>
+#include <QThreadPool>
+
+extern "C" {
+#include <gsl/gsl_math.h>	// gsl_pow_*
+#include "backend/nsl/nsl_stats.h"
+#include "backend/nsl/nsl_sf_kernel.h"
+}
 
 XYSmoothCurve::XYSmoothCurve(const QString& name)
 		: XYCurve(name, new XYSmoothCurvePrivate(this)) {
@@ -220,7 +217,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	QVector<double> ydataVector;
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!isnan(xDataColumn->valueAt(row)) && !isnan(yDataColumn->valueAt(row))
+		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
 			xdataVector.append(xDataColumn->valueAt(row));
@@ -229,7 +226,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	}
 
 	//number of data points to smooth
-	unsigned int n = ydataVector.size();
+	const unsigned int n = ydataVector.size();
 	if (n < 2) {
 		smoothResult.available = true;
 		smoothResult.valid = false;
@@ -243,188 +240,54 @@ void XYSmoothCurvePrivate::recalculate() {
 	double* ydata = ydataVector.data();
 
 	// smooth settings
-	XYSmoothCurve::SmoothType type = smoothData.type;
-	unsigned int points = smoothData.points;
-	XYSmoothCurve::WeightType weight = smoothData.weight;
-	double percentile = smoothData.percentile;
-	unsigned int order = smoothData.order;
-	nsl_smooth_savgol_mode mode = smoothData.mode;
-	double lvalue = smoothData.lvalue;
-	double rvalue = smoothData.rvalue;
+	const nsl_smooth_type type = smoothData.type;
+	const unsigned int points = smoothData.points;
+	const nsl_smooth_weight_type weight = smoothData.weight;
+	const double percentile = smoothData.percentile;
+	const unsigned int order = smoothData.order;
+	const nsl_smooth_pad_mode mode = smoothData.mode;
+	const double lvalue = smoothData.lvalue;
+	const double rvalue = smoothData.rvalue;
 #ifdef QT_DEBUG
-	qDebug()<<"type:"<<type;
+	qDebug()<<"type:"<<nsl_smooth_type_name[type];
 	qDebug()<<"points ="<<points;
-	qDebug()<<"weight:"<<weight;
+	qDebug()<<"weight:"<<nsl_smooth_weight_type_name[weight];
 	qDebug()<<"percentile ="<<percentile;
 	qDebug()<<"order ="<<order;
-	qDebug()<<"mode ="<<mode;
+	qDebug()<<"mode ="<<nsl_smooth_pad_mode_name[mode];
 	qDebug()<<"const. values ="<<lvalue<<rvalue;
 #endif
 ///////////////////////////////////////////////////////////
 	int status=0;
 
+	switch (type) {
+	case nsl_smooth_type_moving_average:
+		status = nsl_smooth_moving_average(ydata, n, points, weight, mode);
+		break;
+	case nsl_smooth_type_moving_average_lagged:
+		status = nsl_smooth_moving_average_lagged(ydata, n, points, weight, mode);
+		break;
+	case nsl_smooth_type_percentile:
+		status = nsl_smooth_percentile(ydata, n, points, percentile, mode);
+		break;
+	case nsl_smooth_type_savitzky_golay:
+		if (mode == nsl_smooth_pad_constant)
+			nsl_smooth_pad_constant_set(lvalue, rvalue);
+		status = nsl_smooth_savgol(ydata, n, points, order, mode);
+		break;
+	}
+
 	xVector->resize(n);
 	yVector->resize(n);
-	if(type == XYSmoothCurve::SavitzkyGolay) {
-		if(mode == nsl_smooth_savgol_constant)
-			nsl_smooth_savgol_constant_set(lvalue, rvalue);
-		status = nsl_smooth_savgol(ydata, n, points, order, mode);
-
-		for(unsigned int i=0;i<n;i++) {
-			(*xVector)[i] = xdata[i];
-			(*yVector)[i] = ydata[i];
-		}
-	} else {
-	for(unsigned int i=0;i<n;i++) {
-		(*xVector)[i] = xdata[i];
-
-		unsigned int diff,np;
-		if (type == XYSmoothCurve::MovingAverageLagged) {
-			np = qMin(points,i+1);
-			diff = np-1;
-		} else {
-			diff = qMin(qMin((points-1)/2,i),n-i-1);
-			np = 2*diff+1;
-		}
-#ifdef QT_DEBUG
-		qDebug()<<"i ="<<i<<"np ="<<np;
-#endif
-
-		if(type == XYSmoothCurve::Percentile) {
-			double *values = new double[np];
-			for(unsigned int j=0;j<np;j++)
-				values[j] = ydata[i-diff+j];
-
-			for(unsigned int j=0;j<np;j++)
-				(*yVector)[i] = nsl_stats_quantile(values, 1, np, percentile, nsl_stats_quantile_type4);
-			delete[] values;
-			
-		} else { // MovingAverage*
-			// weight (see https://en.wikipedia.org/wiki/Kernel_%28statistics%29)
-			double sum=0.0, *w = new double[np];
-			switch(weight) {
-			case XYSmoothCurve::Uniform:
-				for(unsigned int j=0;j<np;j++)
-					w[j]=1./np;
-				break;
-			case XYSmoothCurve::Triangular:
-				if(type == XYSmoothCurve::MovingAverage) {
-					sum = gsl_pow_2((np+1)/2);
-					for(unsigned int j=0;j<np;j++)
-						w[j]=qMin(j+1,np-j)/sum;
-				} else {
-					sum = np*(np+1)/2;
-					for(unsigned int j=0;j<np;j++)
-						w[j]=(j+1)/sum;
-				}
-				break;
-			case XYSmoothCurve::Binomial:
-				if(type == XYSmoothCurve::MovingAverage) {
-					sum = (np-1)/2.;
-					for(unsigned int j=0;j<np;j++)
-						w[j]=gsl_sf_choose(2*sum,sum+fabs(j-sum))/pow(4.,sum);
-				} else {
-					for(unsigned int j=0;j<np;j++) {
-						w[j]=gsl_sf_choose(2*(np-1),j);
-						sum += w[j];
-					}
-					for(unsigned int j=0;j<np;j++)
-						w[j] /= sum;
-				}
-				break;
-			case XYSmoothCurve::Parabolic:
-				if(type == XYSmoothCurve::MovingAverage) {
-					for(unsigned int j=0;j<np;j++) {
-						w[j]=nsl_sf_kernel_parabolic(2.*(j-(np-1)/2.)/(np+1));
-						sum += w[j];
-					}
-				} else {
-					for(unsigned int j=0;j<np;j++) {
-						w[j]=nsl_sf_kernel_parabolic(1.-(1+j)/(double)np);
-						sum += w[j];
-					}
-				}
-				for(unsigned int j=0;j<np;j++)
-					w[j] /= sum;
-				break;
-			case XYSmoothCurve::Quartic:
-				if(type == XYSmoothCurve::MovingAverage) {
-					for(unsigned int j=0;j<np;j++) {
-						w[j]=nsl_sf_kernel_quartic(2.*(j-(np-1)/2.)/(np+1));
-						sum += w[j];
-					}
-				} else {
-					for(unsigned int j=0;j<np;j++) {
-						w[j]=nsl_sf_kernel_quartic(1.-(1+j)/(double)np);
-						sum += w[j];
-					}
-				}
-				for(unsigned int j=0;j<np;j++)
-					w[j] /= sum;
-				break;
-			case XYSmoothCurve::Triweight:
-				if(type == XYSmoothCurve::MovingAverage) {
-					for(unsigned int j=0;j<np;j++) {
-						w[j]=nsl_sf_kernel_triweight(2.*(j-(np-1)/2.)/(np+1));
-						sum += w[j];
-					}
-				} else {
-					for(unsigned int j=0;j<np;j++) {
-						w[j]=nsl_sf_kernel_triweight(1.-(1+j)/(double)np);
-						sum += w[j];
-					}
-				}
-				for(unsigned int j=0;j<np;j++)
-					w[j] /= sum;
-				break;
-			case XYSmoothCurve::Tricube:
-				if(type == XYSmoothCurve::MovingAverage) {
-					for(unsigned int j=0;j<np;j++) {
-						w[j]=nsl_sf_kernel_tricube(2.*(j-(np-1)/2.)/(np+1));
-						sum += w[j];
-					}
-				} else {
-					for(unsigned int j=0;j<np;j++) {
-						w[j]=nsl_sf_kernel_tricube(1.-(1+j)/(double)np);
-						sum += w[j];
-					}
-				}
-				for(unsigned int j=0;j<np;j++)
-					w[j] /= sum;
-				break;
-			case XYSmoothCurve::Cosine:
-				if(type == XYSmoothCurve::MovingAverage) {
-					for(unsigned int j=0;j<np;j++) {
-						w[j]=nsl_sf_kernel_cosine((j-(np-1)/2.)/((np+1)/2.));
-						sum += w[j];
-					}
-				} else {
-					for(unsigned int j=0;j<np;j++) {
-						w[j]=nsl_sf_kernel_cosine((np-1-j)/(double)np);
-						sum += w[j];
-					}
-				}
-				for(unsigned int j=0;j<np;j++)
-					w[j] /= sum;
-				break;
-			}
-
-			// calculate weighted average
-			(*yVector)[i] = 0.0;
-			for(unsigned int j=0;j<np;j++)
-				(*yVector)[i] += w[j]*ydata[i-diff+j];
-
-			delete[] w;
-		}
-	}
-	}
+	memcpy(xVector->data(), xdata, n*sizeof(double));
+	memcpy(yVector->data(), ydata, n*sizeof(double));
 
 ///////////////////////////////////////////////////////////
 
 	//write the result
 	smoothResult.available = true;
 	smoothResult.valid = true;
-	smoothResult.status = status;
+	smoothResult.status = QString::number(status);
 	smoothResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
@@ -477,10 +340,10 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYSmoothCurve::load(XmlStreamReader* reader){
+bool XYSmoothCurve::load(XmlStreamReader* reader) {
 	Q_D(XYSmoothCurve);
 
-	if(!reader->isStartElement() || reader->name() != "xySmoothCurve"){
+	if (!reader->isStartElement() || reader->name() != "xySmoothCurve") {
 		reader->raiseError(i18n("no xy Fourier smooth curve element found"));
 		return false;
 	}
@@ -507,49 +370,49 @@ bool XYSmoothCurve::load(XmlStreamReader* reader){
 			READ_COLUMN(yDataColumn);
 
 			str = attribs.value("type").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
-				d->smoothData.type = (XYSmoothCurve::SmoothType) str.toInt();
+				d->smoothData.type = (nsl_smooth_type) str.toInt();
 
 			str = attribs.value("points").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'points'"));
 			else
 				d->smoothData.points = str.toInt();
 
 			str = attribs.value("weight").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'weight'"));
 			else
-				d->smoothData.weight = (XYSmoothCurve::WeightType) str.toInt();
+				d->smoothData.weight = (nsl_smooth_weight_type) str.toInt();
 
 			str = attribs.value("percentile").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'percentile'"));
 			else
 				d->smoothData.percentile = str.toDouble();
 
 			str = attribs.value("order").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'order'"));
 			else
 				d->smoothData.order = str.toInt();
 
 			str = attribs.value("mode").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'mode'"));
 			else
-				d->smoothData.mode = (nsl_smooth_savgol_mode) str.toInt();
+				d->smoothData.mode = (nsl_smooth_pad_mode) str.toInt();
 
 			str = attribs.value("lvalue").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'lvalue'"));
 			else
 				d->smoothData.lvalue = str.toDouble();
 
 			str = attribs.value("rvalue").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'rvalue'"));
 			else
 				d->smoothData.rvalue = str.toDouble();
@@ -558,29 +421,29 @@ bool XYSmoothCurve::load(XmlStreamReader* reader){
 			attribs = reader->attributes();
 
 			str = attribs.value("available").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'available'"));
 			else
 				d->smoothResult.available = str.toInt();
 
 			str = attribs.value("valid").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'valid'"));
 			else
 				d->smoothResult.valid = str.toInt();
 			
 			str = attribs.value("status").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'status'"));
 			else
 				d->smoothResult.status = str;
 
 			str = attribs.value("time").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'time'"));
 			else
 				d->smoothResult.elapsedTime = str.toInt();
-		} else if(reader->name() == "column") {
+		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {
 				delete column;
@@ -593,7 +456,10 @@ bool XYSmoothCurve::load(XmlStreamReader* reader){
 		}
 	}
 
-	if (d->xColumn) {
+	// wait for data to be read before using the pointers
+	QThreadPool::globalInstance()->waitForDone();
+
+	if (d->xColumn && d->yColumn) {
 		d->xColumn->setHidden(true);
 		addChild(d->xColumn);
 

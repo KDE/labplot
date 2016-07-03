@@ -31,7 +31,6 @@
 #include "backend/datasources/FileDataSource.h"
 
 #include <KLocale>
-#include <KFilterDev>
 #include <QFileInfo>
 #include <QProcess>
 
@@ -53,7 +52,7 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : KDialog(parent) {
  	resize( QSize(500,300) );
 }
 
-void FileInfoDialog::setFiles(QStringList& files){
+void FileInfoDialog::setFiles(QStringList& files) {
 	QString fileName;
 	QString infoString;
 	QFileInfo fileInfo;

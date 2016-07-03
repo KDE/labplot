@@ -43,8 +43,9 @@ class AspectChildRemoveCmd : public QUndoCommand {
 			}
 
 		~AspectChildRemoveCmd() {
-			if (m_removed)
-				delete m_child;
+			//TODO: this makes labplot crashing on project close/save.
+// 			if (m_removed)
+// 				delete m_child;
 		}
 
 		// calling redo transfers ownership of m_child to the undo command

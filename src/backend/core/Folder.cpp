@@ -35,6 +35,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/matrix/Matrix.h"
+#include "backend/note/Note.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 
@@ -119,8 +120,6 @@ bool Folder::load(XmlStreamReader* reader) {
  * \brief Read child aspect from XML
  */
 bool Folder::readChildAspectElement(XmlStreamReader* reader) {
-	bool loaded = false;
-
 	if (!reader->skipToNextTag()) return false;
 	if (reader->isEndElement() && reader->name() == "child_aspect") return true; // empty element tag
 
@@ -132,7 +131,6 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(folder);
-		loaded = true;
 	} else if (element_name == "workbook") {
 		Workbook* workbook = new Workbook(0, "");
 		if (!workbook->load(reader)) {
@@ -140,7 +138,6 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(workbook);
-		loaded = true;
 	} else if (element_name == "spreadsheet") {
 		Spreadsheet* spreadsheet = new Spreadsheet(0, "", true);
 		if (!spreadsheet->load(reader)) {
@@ -148,7 +145,6 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(spreadsheet);
-		loaded = true;
 	} else if (element_name == "matrix") {
 		Matrix* matrix = new Matrix(0, "", true);
 		if (!matrix->load(reader)) {
@@ -156,7 +152,6 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(matrix);
-		loaded = true;
 	} else if (element_name == "worksheet") {
 		Worksheet* worksheet = new Worksheet(0, "");
 		if (!worksheet->load(reader)){
@@ -164,7 +159,6 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(worksheet);
-		loaded = true;
 	} else if (element_name == "fileDataSource") {
 		FileDataSource* fileDataSource = new FileDataSource(0, "", true);
 		if (!fileDataSource->load(reader)){
@@ -172,7 +166,6 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(fileDataSource);
-		loaded = true;
 	} else if (element_name == "datapicker") {
 		Datapicker* datapicker = new Datapicker(0, "", true);
 		if (!datapicker->load(reader)){
@@ -180,12 +173,17 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(datapicker);
-		loaded = true;
-	}
-
-	if (!loaded) {
+	} else if (element_name == "note") {
+		Note* note = new Note("");
+		if (!note->load(reader)){
+			delete note;
+			return false;
+		}
+		addChild(note);
+	} else {
 		reader->raiseWarning(i18n("unknown element '%1' found", element_name));
-		if (!reader->skipToEndElement()) return false;
+		if (!reader->skipToEndElement())
+			return false;
 	}
 
 	if (!reader->skipToNextTag()) return false;

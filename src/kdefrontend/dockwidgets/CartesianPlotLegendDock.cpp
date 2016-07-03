@@ -37,8 +37,8 @@
 #include <QFileDialog>
 #include <QImageReader>
 #include <KUrlCompletion>
+#include <cmath>
 
-#include <math.h>
 
 /*!
   \class CartesianPlotLegendDock

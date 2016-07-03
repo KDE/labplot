@@ -1,0 +1,3 @@
+update parser.tab.c:
+
+bison parser.y

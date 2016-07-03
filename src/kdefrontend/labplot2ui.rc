@@ -43,6 +43,7 @@
 	<Action name="new_spreadsheet" />
 	<Action name="new_matrix" />
 	<Action name="new_worksheet" />
+	<Action name="new_notes" />
 	<Action name="new_datapicker" />
 	<Action name="new_script" />
 	<Action name="new_folder" />
@@ -64,8 +65,6 @@
 <Menu name="worksheet"><text>&amp;Worksheet</text></Menu>
 <Menu name="analysis"><text>&amp;Analysis</text></Menu>
 <Menu name="datapicker"><text>&amp;Datapicker</text></Menu>
-<!-- <Menu name="drawing"><text>&amp;Drawing</text></Menu> -->
-<!-- <Menu name="script"><text>&amp;Script</text></Menu> -->
 <Menu name="windows"><text>&amp;Windows</text>
 <Action name="close window" />
 <Action name="close all windows" />

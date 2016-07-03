@@ -64,11 +64,11 @@ private slots:
 	void commentChanged();
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
-	void typeChanged(int);
-	void formChanged(int);
-	void orderChanged(int);
-	void unitChanged(int);
-	void unit2Changed(int);
+	void typeChanged();
+	void formChanged();
+	void orderChanged();
+	void unitChanged();
+	void unit2Changed();
 
 //	void showOptions();
 	void recalculateClicked();

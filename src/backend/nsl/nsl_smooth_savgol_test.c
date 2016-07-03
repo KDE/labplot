@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : nsl_smooth_test.c
+    File                 : nsl_smooth_savgol_test.c
     Project              : LabPlot
     Description          : NSL smooth functions
     --------------------------------------------------------------------
@@ -88,35 +88,35 @@ double main() {
 
 	double data[9]={2,2,5,2,1,0,1,4,9};
 	printf("mode:interp\n");
-	nsl_smooth_savgol(data,9,m,order,nsl_smooth_savgol_interp);
+	nsl_smooth_savgol(data,9,m,order,nsl_smooth_pad_interp);
 	for(i=0;i<9;i++)
 		printf(" %7.4f",data[i]);
 	printf("\n");
 
 	double data2[9]={2,2,5,2,1,0,1,4,9};
 	printf("mode:mirror\n");
-	nsl_smooth_savgol(data2,9,m,order,nsl_smooth_savgol_mirror);
+	nsl_smooth_savgol(data2,9,m,order,nsl_smooth_pad_mirror);
 	for(i=0;i<9;i++)
 		printf(" %7.4f",data2[i]);
 	printf("\n");
 
 	double data3[9]={2,2,5,2,1,0,1,4,9};
 	printf("mode:nearest\n");
-	nsl_smooth_savgol(data3,9,m,order,nsl_smooth_savgol_nearest);
+	nsl_smooth_savgol(data3,9,m,order,nsl_smooth_pad_nearest);
 	for(i=0;i<9;i++)
 		printf(" %7.4f",data3[i]);
 	printf("\n");
 
 	double data4[9]={2,2,5,2,1,0,1,4,9};
 	printf("mode:constant\n");
-	nsl_smooth_savgol(data4,9,m,order,nsl_smooth_savgol_constant);
+	nsl_smooth_savgol(data4,9,m,order,nsl_smooth_pad_constant);
 	for(i=0;i<9;i++)
 		printf(" %7.4f",data4[i]);
 	printf("\n");
 
 	double data5[9]={2,2,5,2,1,0,1,4,9};
 	printf("mode:wrap\n");
-	nsl_smooth_savgol(data5,9,m,order,nsl_smooth_savgol_wrap);
+	nsl_smooth_savgol(data5,9,m,order,nsl_smooth_pad_periodic);
 	for(i=0;i<9;i++)
 		printf(" %7.4f",data5[i]);
 	printf("\n");
