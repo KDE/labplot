@@ -31,7 +31,7 @@
 
 #include <QWidget>
 #include "backend/note/Note.h"
-#include "ui_notesdock.h"
+#include "ui_notedock.h"
 #include <KConfig>
 
 class NoteDock : public QWidget {
@@ -42,7 +42,7 @@ class NoteDock : public QWidget {
 		void setNotesList(QList<Note*>);
 
 	private:
-		Ui::NotesDock ui;
+		Ui::NoteDock ui;
 		bool m_initializing;
 		Note* m_notes;
 		QList< Note* > m_notesList;
