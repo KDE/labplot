@@ -334,14 +334,13 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         } else if (lines > actualRows) {
             lines = actualRows;
         }
-        QVector<QStringList*> dataPointers;
-        dataPointers.reserve(actualCols);
-
+        QVector<QStringList*> stringDataPointers;
         QVector<QVector<double>*> numericDataPointers;
-        numericDataPointers.reserve(actualCols);
         QList<bool> columnNumericTypes;
 
         if (!noDataSource) {
+            numericDataPointers.reserve(actualCols);
+            stringDataPointers.reserve(actualCols);
             columnNumericTypes.reserve(actualCols);
             int datatype;
             for (int c = 1; c <= actualCols; ++c) {
@@ -402,7 +401,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                     } else {
                         spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::Text);
                         QStringList* list = static_cast<QStringList* >(spreadsheet->column(columnOffset+n)->data());
-                        dataPointers.push_back(list);
+                        stringDataPointers.push_back(list);
                         list->clear();
                     }
                 }
@@ -414,6 +413,8 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                 matrix->setChanged();
                 matrix->setUndoAware(true);
             }
+            numericDataPointers.squeeze();
+            stringDataPointers.squeeze();
         }
 
         char* array = new char[1000];
@@ -432,14 +433,13 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                         if (columnNumericTypes.at(col-1)) {
                             numericDataPointers[numericixd++]->push_back(0);
                         } else {
-                            dataPointers[stringidx++]->append(QLatin1String("NULL"));
+                            stringDataPointers[stringidx++]->append(QLatin1String("NULL"));
                         }
                     } else {
                         if (columnNumericTypes.at(col-1)) {
                             numericDataPointers[numericixd++]->push_back(str.toDouble());
                         } else {
-                            dataPointers[stringidx++]->operator <<( str.simplified());
-
+                            stringDataPointers[stringidx++]->operator <<( str.simplified());
                         }
                     }
                 } else {
