@@ -337,7 +337,50 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         QVector<QStringList*> dataPointers;
         dataPointers.reserve(actualCols);
 
+        QVector<QVector<double>*> numericDataPointers;
+        numericDataPointers.reserve(actualCols);
+        QList<bool> columnNumericTypes;
+
         if (!noDataSource) {
+            columnNumericTypes.reserve(actualCols);
+            int datatype;
+            for (int c = 1; c <= actualCols; ++c) {
+                fits_get_coltype(fitsFile, c, &datatype, NULL, NULL, &status);
+
+                switch (datatype) {
+                case TSTRING:
+                    columnNumericTypes.append(false);
+                    break;
+                case TSHORT:
+                    columnNumericTypes.append(true);
+                        break;
+                case TLONG:
+                    columnNumericTypes.append(true);
+                    break;
+                case TFLOAT:
+                    columnNumericTypes.append(true);
+                    break;
+                case TDOUBLE:
+                    columnNumericTypes.append(true);
+                    break;
+                case TLOGICAL:
+                    columnNumericTypes.append(true);
+                    break;
+                case TBIT:
+                    columnNumericTypes.append(true);
+                    break;
+                case TBYTE:
+                    columnNumericTypes.append(true);
+                    break;
+                case TCOMPLEX:
+                    columnNumericTypes.append(true);
+                    break;
+                default:
+                    columnNumericTypes.append(false);
+                    break;
+                }
+            }
+
             Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 
             if(spreadsheet) {
@@ -352,11 +395,16 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                         spreadsheet->setRowCount(lines);
                 }
                 for (int n = 0; n < actualCols; n++ ){
-                    //TODO non string columns in FITS file
-                    spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::Text);
-                    QStringList* list = static_cast<QStringList* >(spreadsheet->column(columnOffset+n)->data());
-                    dataPointers.push_back(list);
-                    list->clear();
+                    if (columnNumericTypes.at(n)) {
+                        spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::Numeric);
+                        QVector<double>* datap = static_cast<QVector<double>* >(spreadsheet->column(columnOffset+n)->data());
+                        numericDataPointers.push_back(datap);
+                    } else {
+                        spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::Text);
+                        QStringList* list = static_cast<QStringList* >(spreadsheet->column(columnOffset+n)->data());
+                        dataPointers.push_back(list);
+                        list->clear();
+                    }
                 }
             }
 
@@ -371,6 +419,8 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         char* array = new char[1000];
         //TODO startColumn/end..
         for (int row = 1; row <= lines; ++row) {
+            int numericixd = 0;
+            int stringidx = 0;
             for (int col = 1; col <= actualCols; ++col) {
                 if(fits_read_col_str(fitsFile, col, row, 1, 1, NULL, &array, NULL, &status)) {
                     printError(status);
@@ -379,9 +429,18 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                 if (!noDataSource) {
                     QString str = QString::fromLatin1(array);
                     if (str.isEmpty()) {
-                        dataPointers[col-1]->append(QLatin1String("NULL"));
+                        if (columnNumericTypes.at(col-1)) {
+                            numericDataPointers[numericixd++]->push_back(0);
+                        } else {
+                            dataPointers[stringidx++]->append(QLatin1String("NULL"));
+                        }
                     } else {
-                        dataPointers[col-1]->operator <<( str.simplified());
+                        if (columnNumericTypes.at(col-1)) {
+                            numericDataPointers[numericixd++]->push_back(str.toDouble());
+                        } else {
+                            dataPointers[stringidx++]->operator <<( str.simplified());
+
+                        }
                     }
                 } else {
                     //TODO - whitespaces can appear in cells too
