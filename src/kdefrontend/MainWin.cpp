@@ -168,7 +168,9 @@ void MainWin::initGUI(const QString& fileName) {
 	setCentralWidget(m_mdiArea);
 	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
 	        this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
-
+#ifdef _WIN32
+	QIcon::setThemeName("hicolor");
+#endif
 	statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
 	initActions();
 	setupGUI(Default, QLatin1String("labplot2ui.rc"));
