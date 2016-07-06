@@ -44,6 +44,7 @@ Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 #include <KUrlCompletion>
 #include <QDebug>
 #include <QTimer>
+#include <QStandardItemModel>
 
 /*!
    \class ImportFileWidget
@@ -115,12 +116,18 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 
 	// default filter
 	ui.swOptions->setCurrentIndex(FileDataSource::Ascii);
-	// disable items (undocumented feature)
+#if !defined(HAVE_HDF5) || !defined(HAVE_NETCDF)
+	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbFileType->model());
+#endif
 #ifndef HAVE_HDF5
-	ui.cbFileType->setItemData(FileDataSource::HDF, 0, Qt::UserRole - 1);
+	// disable HDF5 item
+	QStandardItem* item = model->item(FileDataSource::HDF);
+	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 #endif
 #ifndef HAVE_NETCDF
-	ui.cbFileType->setItemData(FileDataSource::NETCDF, 0, Qt::UserRole - 1);
+	// disable NETCDF item
+	QStandardItem* item2 = model->item(FileDataSource::NETCDF);
+	item2->setFlags(item2->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 #endif
 
 	ui.gbOptions->hide();
