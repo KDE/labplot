@@ -415,9 +415,12 @@ void ImportFileWidget::selectFile() {
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
 	QString fileName=name;
-	if ( !fileName.isEmpty() && fileName.left(1)!=QDir::separator()) {
+#ifndef _WIN32
+	// make relative path
+	if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator()) {
 		fileName=QDir::homePath() + QDir::separator() + fileName;
 	}
+#endif
 
 	bool fileExists = QFile::exists(fileName);
 	ui.gbOptions->setEnabled(fileExists);

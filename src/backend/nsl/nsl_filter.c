@@ -193,8 +193,6 @@ void print_fdata(double data[], int n) {
 }
 
 int nsl_filter_fourier(double data[], size_t n, nsl_filter_type type, nsl_filter_form form, int order, int cutindex, int bandwidth) {
-	unsigned int i;
-
 	/* 1. transform */
 	double fdata[2*n];	/* contains re0,im0,re1,im1,re2,im2,... */
 #ifdef HAVE_FFTW3
@@ -222,6 +220,7 @@ int nsl_filter_fourier(double data[], size_t n, nsl_filter_type type, nsl_filter
         fftw_execute(plan);
 	fftw_destroy_plan(plan);
 	/* normalize*/
+	unsigned int i;
 	for (i=0; i < n; i++)
 		data[i] /= n;
 #else

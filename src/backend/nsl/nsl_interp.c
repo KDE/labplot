@@ -37,7 +37,7 @@ const char* nsl_interp_pch_variant_name[] = { "finite differences", "Catmull-Rom
 const char* nsl_interp_evaluate_name[] = { "function", "derivative", "second derivative", "integral"};
 
 int nsl_interp_derivative(double *x, double *y, unsigned int n) {
-	double dy, oldy=0;
+	double dy=0, oldy=0;
 	unsigned int i;
 	for (i=0; i<n; i++) {
 		if (i == 0)
