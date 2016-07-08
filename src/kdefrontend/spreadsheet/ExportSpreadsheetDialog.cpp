@@ -138,8 +138,10 @@ void ExportSpreadsheetDialog::fitsExportToChanged(int idx) {
         ui.chkColumnsAsUnits->hide();
         ui.lColumnAsUnits->hide();
     } else {
-        ui.chkColumnsAsUnits->show();
-        ui.lColumnAsUnits->show();
+        if (!m_matrixMode) {
+            ui.chkColumnsAsUnits->show();
+            ui.lColumnAsUnits->show();
+        }
     }
 }
 

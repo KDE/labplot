@@ -256,7 +256,6 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 
         QVector<QVector<double>*> dataPointers;
         dataPointers.reserve(actualCols);
-
         dataString.reserve(lines * actualCols);
         if (!noDataSource) {
             columnOffset = dataSource->create(dataPointers, importMode, lines, actualCols);
@@ -339,8 +338,6 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         QList<bool> columnNumericTypes;
 
         if (!noDataSource) {
-            numericDataPointers.reserve(actualCols);
-            stringDataPointers.reserve(actualCols);
             columnNumericTypes.reserve(actualCols);
             int datatype;
             for (int c = 1; c <= actualCols; ++c) {
@@ -379,10 +376,11 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                     break;
                 }
             }
+            numericDataPointers.reserve(actualCols);
 
             Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-
             if(spreadsheet) {
+                stringDataPointers.reserve(actualCols);
                 spreadsheet->setUndoAware(false);
                 columnOffset = spreadsheet->resize(importMode,columnNames,actualCols);
 
@@ -405,16 +403,11 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                         list->clear();
                     }
                 }
+                numericDataPointers.squeeze();
+                stringDataPointers.squeeze();
+            } else {
+                columnOffset = dataSource->create(numericDataPointers, importMode, lines, actualCols);
             }
-
-            Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
-            if (matrix) {
-                matrix->setSuppressDataChangedSignal(false);
-                matrix->setChanged();
-                matrix->setUndoAware(true);
-            }
-            numericDataPointers.squeeze();
-            stringDataPointers.squeeze();
         }
 
         char* array = new char[1000];
@@ -472,6 +465,13 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                     }
                 }
                 spreadsheet->setUndoAware(true);
+            }
+
+            Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
+            if (matrix) {
+                matrix->setSuppressDataChangedSignal(false);
+                matrix->setChanged();
+                matrix->setUndoAware(true);
             }
         }
     } else {
