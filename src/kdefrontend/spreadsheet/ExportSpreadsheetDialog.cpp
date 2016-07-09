@@ -288,6 +288,10 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 			ui.chkHeaders->show();
 			ui.lEmptyRows->show();
 			ui.chkEmptyRows->show();
+            ui.lMatrixHHeader->hide();
+            ui.lMatrixVHeader->hide();
+            ui.chkMatrixHHeader->hide();
+            ui.chkMatrixVHeader->hide();
 		} else {
 			ui.lMatrixHHeader->show();
 			ui.lMatrixVHeader->show();

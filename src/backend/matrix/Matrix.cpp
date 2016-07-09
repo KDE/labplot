@@ -124,7 +124,7 @@ QWidget* Matrix::view() const {
 	}
 	return m_view;
 }
-#include <QDebug>
+
 bool Matrix::exportView() const {
 	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(m_view);
 	dlg->setFileName(name());
