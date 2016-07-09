@@ -52,6 +52,7 @@ class ThemeHandler : public QWidget{
         QSpacerItem *horizontalSpacer2;
         QLabel *lTheme;
 	QPushButton *pbLoadTheme;
+	QStringList m_themeList;
 
     private slots:
         void loadMenu();

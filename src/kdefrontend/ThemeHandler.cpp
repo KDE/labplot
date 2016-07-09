@@ -70,20 +70,19 @@ ThemeHandler::ThemeHandler(QWidget *parent): QWidget(parent){
 	horizontalLayout->addItem(horizontalSpacer2);
 
 	connect( pbLoadTheme, SIGNAL(clicked()), this, SLOT(loadMenu()));
-	QStringList list = KGlobal::dirs()->findAllResources("appdata", "themes/*");
-	pbLoadTheme->setEnabled(list.size());
+	m_themeList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
+	pbLoadTheme->setEnabled(!m_themeList.empty());
 }
 
 
 void ThemeHandler::loadMenu() {
 	KMenu menu;
 	menu.addTitle(i18n("Themes:"));
-	QStringList list = KGlobal::dirs()->findAllResources("data","labplot2/themes/*");
 
-	for (int i = 0; i < list.size(); ++i) {
-		QFileInfo fileinfo(list.at(i));
+	for (int i = 0; i < m_themeList.size(); ++i) {
+		QFileInfo fileinfo(m_themeList.at(i));
 		QAction* action = menu.addAction(fileinfo.fileName());
-		action->setData(QVariant(list.at(i)));
+		action->setData(QVariant(m_themeList.at(i)));
 	}
 	connect(&menu, SIGNAL(triggered(QAction*)), this, SLOT(loadSelected(QAction*)));
 
@@ -97,4 +96,3 @@ void ThemeHandler::loadSelected(QAction* action) {
 
 	emit info( i18n("Theme \"%1\" was loaded.", action->text().remove('&')) );
 }
-

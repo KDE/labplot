@@ -2069,13 +2069,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 	return true;
 }
 
-void CartesianPlot::loadThemeConfig(KConfig& config)
-{
-	KConfigGroup group = config.group("CartesianPlotTitle");
-
-	this->m_title->setTeXFontColor(group.readEntry("TeXFontColor", (QColor) this->m_title->teXFontColor()));
-	this->m_title->setTeXFontSize(group.readEntry("TeXFontSize", (int) this->m_title->teXFontSize()));
-
+void CartesianPlot::loadThemeConfig(KConfig& config) {
 	const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
 	foreach(WorksheetElement *child, childElements)
 		child->loadConfig(config);

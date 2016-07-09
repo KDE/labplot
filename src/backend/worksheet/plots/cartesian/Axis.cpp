@@ -2249,9 +2249,7 @@ void Axis::loadConfig(const KConfig& config)
 	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity",this->minorTicksOpacity()));
 	this->setMinorTicksType((Axis::TicksType)group.readEntry("MinorTicksType",(int)this->minorTicksType()));
 
-	KConfigGroup groupAxisLabel = config.group("AxisLabel");
-
-	this->title()->setTeXFontColor(groupAxisLabel.readEntry("TeXFontColor",(QColor) this->title()->teXFontColor()));
-	this->title()->setTeXFontSize(groupAxisLabel.readEntry("TeXFontSize",(int) this->title()->teXFontSize()));
-
+	const QList<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
+	foreach(TextLabel *child, childElements)
+		child->loadConfig(config);
 }
