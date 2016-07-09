@@ -968,8 +968,8 @@ void MatrixView::print(QPrinter* printer) const {
 		columnsPerTable++;
 	}
 
-	int tablesCount = cols / columnsPerTable;
-	int remainingColumns = cols % columnsPerTable;
+	int tablesCount = (columnsPerTable!=0) ? cols/columnsPerTable : 0;
+	const int remainingColumns = cols % columnsPerTable;
 
 	if (!tablesNeeded) {
 		tablesCount = 1;
@@ -1157,7 +1157,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 		++columnsPerTable;
 	}
 
-	const int tablesCount = cols / columnsPerTable;
+	int tablesCount = (columnsPerTable!=0) ? cols/columnsPerTable : 0;
 	const int remainingColumns = cols % columnsPerTable;
 
 	bool columnsSeparating = (cols > columnsPerTable);
