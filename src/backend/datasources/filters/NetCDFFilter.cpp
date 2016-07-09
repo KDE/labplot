@@ -343,7 +343,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 			else {
 				char varName[NC_MAX_NAME + 1];
 				status = nc_inq_varname(ncid, varid, varName);
-				typeName=QString(varName) + " " + i18n("attribute");
+				typeName=QString(varName) + ' ' + i18n("attribute");
 			}
 			QStringList props;
 			props<<translateDataType(type)<<" ("<<QString::number(len)<<")";

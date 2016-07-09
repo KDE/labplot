@@ -312,7 +312,7 @@ void XYFourierTransformCurveDock::showTransformResult() {
 	}
 
 	//const XYFourierTransformCurve::TransformData& transformData = m_transformCurve->transformData();
-	QString str = i18n("status:") + " " + transformResult.status + "<br>";
+	QString str = i18n("status:") + ' ' + transformResult.status + "<br>";
 
 	if (!transformResult.valid) {
 		uiGeneralTab.teResult->setText(str);

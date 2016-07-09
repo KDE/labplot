@@ -1167,7 +1167,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
     tex.start("latex", QStringList() << "--version", QProcess::ReadOnly);
     tex.waitForFinished(500);
     QString texVersionOutput = QString(tex.readAllStandardOutput());
-    texVersionOutput = texVersionOutput.split("\n")[0];
+    texVersionOutput = texVersionOutput.split('\n')[0];
 
     int yearidx = -1;
     for (int i = texVersionOutput.size() - 1; i >= 0; --i) {

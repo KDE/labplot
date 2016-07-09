@@ -494,7 +494,7 @@ void XYFourierFilterCurveDock::showFilterResult() {
 	}
 
 	//const XYFourierFilterCurve::FilterData& filterData = m_filterCurve->filterData();
-	QString str = i18n("status:") + " " + filterResult.status + "<br>";
+	QString str = i18n("status:") + ' ' + filterResult.status + "<br>";
 
 	if (!filterResult.valid) {
 		uiGeneralTab.teResult->setText(str);
