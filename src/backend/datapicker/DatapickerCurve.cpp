@@ -189,8 +189,8 @@ void DatapickerCurve::addDatasheet(const DatapickerImage::GraphType& type) {
 
 	m_datasheet = new Spreadsheet(0, i18n("Data"));
 	addChild(m_datasheet);
-	QString xLabel = "x";
-	QString yLabel = "y";
+	QString xLabel('x');
+	QString yLabel('y');
 
 	if (type == DatapickerImage::PolarInDegree) {
 		xLabel = "r";

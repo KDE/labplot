@@ -1699,8 +1699,8 @@ void SpreadsheetView::print(QPrinter* printer) const {
 		columnsPerTable++;
 	}
 
-	int tablesCount = cols / columnsPerTable;
-	int remainingColumns = cols % columnsPerTable;
+	int tablesCount = (columnsPerTable!=0) ? cols/columnsPerTable : 0;
+	const int remainingColumns = cols % columnsPerTable;
 
 	if (!tablesNeeded) {
 		tablesCount = 1;
@@ -1871,7 +1871,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 		++columnsPerTable;
 	}
 
-	const int tablesCount = cols / columnsPerTable;
+	const int tablesCount = (columnsPerTable!=0) ? cols/columnsPerTable : 0;
 	const int remainingColumns = cols % columnsPerTable;
 
 	bool columnsSeparating = (cols > columnsPerTable);
@@ -1881,7 +1881,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
     tex.start("latex", QStringList() << "--version", QProcess::ReadOnly);
     tex.waitForFinished(500);
     QString texVersionOutput = QString(tex.readAllStandardOutput());
-    texVersionOutput = texVersionOutput.split("\n")[0];
+    texVersionOutput = texVersionOutput.split('\n')[0];
 
     int yearidx = -1;
     for (int i = texVersionOutput.size() - 1; i >= 0; --i) {

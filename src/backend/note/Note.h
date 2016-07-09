@@ -40,7 +40,7 @@ class Note : public AbstractPart {
 	Q_OBJECT
 
 	public:
-		Note(const QString& name);
+		explicit Note(const QString& name);
 
 		virtual QWidget* view() const;
 		virtual QIcon icon() const;

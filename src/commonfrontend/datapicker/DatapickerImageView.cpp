@@ -449,8 +449,8 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 		if (m_image->axisPoints().type == DatapickerImage::Ternary) {
 			emit statusInfo( "a =" + QString::number(logicalPos.x()) + ", b =" + QString::number(logicalPos.y()) + ", c =" + QString::number(logicalPos.z()));
 		} else {
-			QString xLabel = "x";
-			QString yLabel = "y";
+			QString xLabel('x');
+			QString yLabel('y');
 			if (m_image->axisPoints().type == DatapickerImage::PolarInDegree) {
 				xLabel = "r";
 				yLabel = "y(deg)";

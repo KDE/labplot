@@ -156,7 +156,8 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 
 void XYFourierTransformCurveDock::setModel() {
 	QList<const char*>  list;
-	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Datapicker";
+	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
+		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -312,7 +313,7 @@ void XYFourierTransformCurveDock::showTransformResult() {
 	}
 
 	//const XYFourierTransformCurve::TransformData& transformData = m_transformCurve->transformData();
-	QString str = i18n("status:") + " " + transformResult.status + "<br>";
+	QString str = i18n("status:") + ' ' + transformResult.status + "<br>";
 
 	if (!transformResult.valid) {
 		uiGeneralTab.teResult->setText(str);

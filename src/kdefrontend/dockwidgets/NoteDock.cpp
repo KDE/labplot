@@ -33,7 +33,7 @@
 #include <KConfigGroup>
 #include <KLocale>
 
-NoteDock::NoteDock(QWidget *parent) : QWidget(parent), m_initializing(false) {
+NoteDock::NoteDock(QWidget *parent) : QWidget(parent), m_initializing(false), m_notes(0) {
 	ui.setupUi(this);
 
 	connect(ui.leName, SIGNAL(returnPressed(QString)), this, SLOT(nameChanged(QString)));

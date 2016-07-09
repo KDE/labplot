@@ -29,6 +29,7 @@
 #include "ExportSpreadsheetDialog.h"
 
 #include <QFileDialog>
+#include <QStandardItemModel>
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KConfigGroup>
@@ -265,21 +266,22 @@ void ExportSpreadsheetDialog::selectFile() {
 void ExportSpreadsheetDialog::formatChanged(int index) {
 	QStringList extensions;
 	extensions<<".txt"<<".bin" << ".tex";
-	QString path = ui.kleFileName->text();
-	int i = path.indexOf(".");
-	if (i==-1)
-		path = path + extensions.at(index);
-	else
-		path=path.left(i) + extensions.at(index);
+    QString path = ui.kleFileName->text();
+    int i = path.indexOf(".");
+    if (index != -1) {
+        if (i==-1)
+            path = path + extensions.at(index);
+        else
+            path=path.left(i) + extensions.at(index);
+    }
+    if (ui.cbFormat->currentIndex() == 2) {
+        ui.cbSeparator->hide();
+        ui.lSeparator->hide();
 
-	if (ui.cbFormat->currentIndex() == 2) {
-		ui.cbSeparator->hide();
-		ui.lSeparator->hide();
-
-		ui.chkCaptions->show();
-		ui.chkGridLines->show();;
-		ui.lExportArea->show();
-		ui.lGridLines->show();
+        ui.chkCaptions->show();
+        ui.chkGridLines->show();;
+        ui.lExportArea->show();
+        ui.lGridLines->show();
 		ui.lCaptions->show();
 		ui.cbLaTeXExport->show();
 
@@ -298,7 +300,6 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 			ui.chkMatrixHHeader->show();
 			ui.chkMatrixVHeader->show();
 		}
-
 	} else {
 		ui.cbSeparator->show();
 		ui.lSeparator->show();

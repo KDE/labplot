@@ -173,7 +173,8 @@ void XYInterpolationCurveDock::initGeneralTab() {
 
 void XYInterpolationCurveDock::setModel() {
 	QList<const char*>  list;
-	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Datapicker";
+	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
+		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -460,7 +461,7 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 	}
 
 	//const XYInterpolationCurve::InterpolationData& interpolationData = m_interpolationCurve->interpolationData();
-	QString str = i18n("status:") + " " + interpolationResult.status + "<br>";
+	QString str = i18n("status:") + ' ' + interpolationResult.status + "<br>";
 
 	if (!interpolationResult.valid) {
 		uiGeneralTab.teResult->setText(str);

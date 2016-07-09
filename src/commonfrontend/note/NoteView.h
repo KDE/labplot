@@ -40,7 +40,7 @@ class NoteView : public QWidget {
 	Q_OBJECT
 
 	public:
-		NoteView(Note* notes);
+		explicit NoteView(Note* notes);
 
 	public slots:
 		void print(QPrinter*) const;
