@@ -426,9 +426,9 @@ void MainWin::initMenus() {
 		}
 	}
 #else
-	delete this->guiFactory()->container("casWorksheet", this);
+	delete this->guiFactory()->container("cas_worksheet", this);
 	delete this->guiFactory()->container("new_casWorksheet", this);
-	delete this->guiFactory()->container("cantorworksheet_toolbar", this);
+	delete this->guiFactory()->container("cas_worksheet_toolbar", this);
 #endif
 
 // 	m_newMenu->addAction(m_newSqlDataSourceAction);
@@ -506,8 +506,8 @@ void MainWin::updateGUIOnProjectChanges() {
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 #ifdef HAVE_CANTOR_LIBS
-		factory->container("casWorksheet", this)->setEnabled(false);
-		factory->container("cantorworksheet_toolbar", this)->hide();
+		factory->container("cas_worksheet", this)->setEnabled(false);
+		factory->container("cas_worksheet_toolbar", this)->hide();
 #endif
 	}
 
@@ -550,8 +550,8 @@ void MainWin::updateGUI() {
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 #ifdef HAVE_CANTOR_LIBS
-		factory->container("casWorksheet", this)->setEnabled(false);
-		factory->container("cantorworksheet_toolbar", this)->hide();
+		factory->container("cas_worksheet", this)->setEnabled(false);
+		factory->container("cas_worksheet_toolbar", this)->hide();
 #endif
 		return;
 	}
@@ -659,19 +659,19 @@ void MainWin::updateGUI() {
 	CantorWorksheet* cantorworksheet = this->activeCantorWorksheet();
 	if(cantorworksheet) {
 		// enable Cantor Worksheet related menues
-		factory->container("casWorksheet", this)->setEnabled(true);
+		factory->container("cas_worksheet", this)->setEnabled(true);
 		CantorWorksheetView* view=qobject_cast<CantorWorksheetView*>(cantorworksheet->view());
-		QMenu* menu=qobject_cast<QMenu*>(factory->container("casWorksheet", this));
+		QMenu* menu=qobject_cast<QMenu*>(factory->container("cas_worksheet", this));
 		menu->clear();
 		view->createContextMenu(menu);
-		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("cantorworksheet_toolbar", this));
+		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("cas_worksheet_toolbar", this));
 		toolbar->setVisible(true);
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 	} else {
-		//no cantor worksheet selected -> deactivate cantor worksheet related menus
-		factory->container("casWorksheet", this)->setEnabled(false);
-		factory->container("casWorksheet", this)->setVisible(false);
+		//no cantor worksheet selected -> deactivate cantor worksheet related menu and toolbar
+		factory->container("cas_worksheet", this)->setEnabled(false);
+		factory->container("cas_worksheet_toolbar", this)->setVisible(false);
 	}
 #endif
 
