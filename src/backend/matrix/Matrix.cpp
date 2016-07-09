@@ -124,11 +124,16 @@ QWidget* Matrix::view() const {
 	}
 	return m_view;
 }
-
+#include <QDebug>
 bool Matrix::exportView() const {
 	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(m_view);
 	dlg->setFileName(name());
 	dlg->setMatrixMode(true);
+
+    if (reinterpret_cast<const MatrixView*>(m_view)->selectedColumnCount() == 0) {
+        dlg->setExportSelection(false);
+    }
+
     bool ret;
     if ((ret = dlg->exec()==QDialog::Accepted)) {
         const QString path = dlg->path();

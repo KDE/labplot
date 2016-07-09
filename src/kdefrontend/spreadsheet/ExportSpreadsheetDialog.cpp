@@ -33,6 +33,7 @@
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KSharedConfig>
+#include <QStandardItemModel>
 
 /*!
 	\class ExportSpreadsheetDialog
@@ -325,6 +326,14 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 
 	setFormat(static_cast<Format>(index));
 	ui.kleFileName->setText(path);
+}
+
+void ExportSpreadsheetDialog::setExportSelection(bool enable) {
+    if (!enable) {
+        const QStandardItemModel* areaToExportModel = qobject_cast<const QStandardItemModel*>(ui.cbLaTeXExport->model());
+        QStandardItem* item = areaToExportModel->item(1);
+        item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+    }
 }
 
 void ExportSpreadsheetDialog::setFormat(Format format) {

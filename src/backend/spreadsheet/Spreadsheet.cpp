@@ -105,6 +105,9 @@ QWidget *Spreadsheet::view() const {
 bool Spreadsheet::exportView() const {
 	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(view());
 	dlg->setFileName(name());
+    if (const_cast<SpreadsheetView*>(reinterpret_cast<const SpreadsheetView*>(m_view))->selectedColumnCount() == 0) {
+        dlg->setExportSelection(false);
+    }
     bool ret;
     if ((ret = dlg->exec()==QDialog::Accepted)){
         const QString path = dlg->path();
