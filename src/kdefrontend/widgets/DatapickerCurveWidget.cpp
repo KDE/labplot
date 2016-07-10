@@ -31,9 +31,9 @@
 #include "backend/worksheet/Worksheet.h"
 #include "kdefrontend/GuiTools.h"
 
-#include "math.h"
-
 #include <QPainter>
+
+#include <cmath>
 
 DatapickerCurveWidget::DatapickerCurveWidget(QWidget *parent) : QWidget(parent), m_suppressTypeChange(false) {
 	ui.setupUi(this);

@@ -29,11 +29,13 @@
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/datapicker/DatapickerCurve.h"
 
@@ -120,6 +122,12 @@ Project::Project() : Folder(i18n("Project")), d(new Private()) {
 }
 
 Project::~Project() {
+	//if the project is being closed, in Worksheet the scene items are being removed and the selection in the view can change.
+	//don't react on these changes since this can lead crashes (worksheet object is already in the destructor).
+	//->notify all worksheets about the project being closed.
+	foreach(Worksheet* w, children<Worksheet>())
+		w->setIsClosing();
+
 	d->undo_stack.clear();
 	delete d;
 }
@@ -296,6 +304,7 @@ bool Project::load(XmlStreamReader* reader) {
 					XYSmoothCurve* smoothCurve = dynamic_cast<XYSmoothCurve*>(aspect);
 					XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(aspect);
 					XYFourierFilterCurve* filterCurve = dynamic_cast<XYFourierFilterCurve*>(aspect);
+					XYFourierTransformCurve* dftCurve = dynamic_cast<XYFourierTransformCurve*>(aspect);
 					if (equationCurve) {
 						//curves defined by a mathematical equations recalculate their own columns on load again.
 						equationCurve->recalculate();
@@ -312,6 +321,9 @@ bool Project::load(XmlStreamReader* reader) {
 					} else if (filterCurve) {
 						RESTORE_COLUMN_POINTER(filterCurve, xDataColumn, XDataColumn);
 						RESTORE_COLUMN_POINTER(filterCurve, yDataColumn, YDataColumn);
+					} else if (dftCurve) {
+						RESTORE_COLUMN_POINTER(dftCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(dftCurve, yDataColumn, YDataColumn);
 					} else {
 						RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
 						RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);

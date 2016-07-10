@@ -29,13 +29,12 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
 
-#include <math.h>
-
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
 #include <KLocale>
 #include <KIcon>
+#include <cmath>
 
 /*!
 	\class HDFFilter
@@ -61,8 +60,8 @@ void HDFFilter::parse(const QString & fileName, QTreeWidgetItem* rootItem){
 /*!
   reads the content of the data set \c dataSet from file \c fileName.
 */
-QString HDFFilter::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  int lines){
-	return d->readCurrentDataSet(fileName, dataSource, importMode, lines);
+QString HDFFilter::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, bool &ok, AbstractFileFilter::ImportMode importMode,  int lines){
+	return d->readCurrentDataSet(fileName, dataSource, ok, importMode, lines);
 }
 
 /*!
@@ -298,7 +297,7 @@ QStringList HDFFilterPrivate::readHDFData1D(hid_t dataset, hid_t type, int rows,
 	status = H5Dread(dataset, type, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
 	handleError(status,"H5Dread");
 	for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
-		if (dataPointer)
+		if (dataPointer != NULL)
 			dataPointer->operator[](i-startRow+1) = data[i];
 		else
 			dataString<<QString::number(static_cast<double>(data[i]));
@@ -325,7 +324,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 		handleError(status,"H5Tinsert");
 
 		QVector<double>* dataP=NULL;
-		if(dataPointer.size()>0)
+		if(dataPointer[0] != NULL)
 			dataP = dataPointer[m];
 
 		if(H5Tequal(mtype,H5T_STD_I8LE) || H5Tequal(mtype,H5T_STD_I8BE) || H5Tequal(mtype,H5T_NATIVE_CHAR)) {
@@ -393,7 +392,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 
 	// create dataString from data
 	QStringList dataString;
-	if(dataPointer.size() == 0) {
+	if(dataPointer[0] == NULL) {
 		for(int i=0;i<qMin(rows,lines);i++) {
 			dataString<<"(";
 
@@ -429,7 +428,7 @@ QStringList HDFFilterPrivate::readHDFData2D(hid_t dataset, hid_t type, int rows,
 
 	for (int i=0; i < qMin(rows,lines); i++) {
 		for (int j=0; j < cols; j++) {
-			if (dataPointer.size()>0)
+			if (dataPointer[0] != NULL)
 				dataPointer[j-startColumn+1]->operator[](i-startRow+1) = data[i][j];
 			else
 				dataString<<QString::number(static_cast<double>(data[i][j]))<<" ";
@@ -457,7 +456,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 		status = H5Tinsert(ctype, H5Tget_member_name(tid,m), 0, mtype);
 		handleError(status,"H5Tinsert");
 
-		QVector< QVector<double>* > dummy;
+		QVector< QVector<double>* > dummy(1,NULL);
 		if(H5Tequal(mtype,H5T_STD_I8LE) || H5Tequal(mtype,H5T_STD_I8BE) || H5Tequal(mtype,H5T_NATIVE_CHAR)) {
 			switch(sizeof(H5T_NATIVE_CHAR)) {
 			case 1:
@@ -1112,12 +1111,14 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
 /*!
     reads the content of the date set in the file \c fileName to a string (for preview) or to the data source.
 */
-QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, bool &ok, AbstractFileFilter::ImportMode mode, int lines) {
 	QStringList dataString;
 
-	if(currentDataSetName.isEmpty())
-		return QString("No data set selected").replace(' ',QChar::Nbsp);
-		//return QString("No data set selected");
+	if(currentDataSetName.isEmpty()) {
+		//return QString("No data set selected").replace(' ',QChar::Nbsp);
+		ok=false;
+		return i18n("No data set selected");
+	}
 #ifdef QT_DEBUG
 	qDebug()<<" current data set ="<<currentDataSetName;
 #endif
@@ -1149,7 +1150,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	int columnOffset = 0;	// offset to import data
 	int actualRows=0, actualCols=0;	// rows and cols to read
 
-	QVector<QVector<double>*> dataPointers(0,NULL);
+	// this is used to store the data read from the dataSource
+	// check for dataPointers[0] != NULL to decide if dataSource should be used
+	QVector<QVector<double>*> dataPointers(1,NULL);
 	switch(rank) {
 	case 0: {
 		actualRows=1;
@@ -1181,7 +1184,8 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		case H5T_ARRAY:
 		case H5T_NO_CLASS:
 		case H5T_NCLASSES: {
-			dataString<<QString("rank = 0 not implemented yet for type ").replace(' ',QChar::Nbsp)<<translateHDFClass(dclass);
+			ok=false;
+			dataString<<i18n("rank = 0 not implemented yet for type %1").arg(translateHDFClass(dclass));
 			qDebug()<<dataString.join("");
 		}
 		default:
@@ -1274,6 +1278,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			else if(H5Tequal(dtype,H5T_STD_U64LE) || H5Tequal(dtype,H5T_STD_U64BE) || H5Tequal(dtype,H5T_NATIVE_ULLONG))
 				dataString = readHDFData1D<unsigned long long>(dataset, H5T_NATIVE_ULLONG, rows, lines, dataPointers[0]);
 			else {
+				ok=false;
 				dataString<<i18n("Unsupported integer type for rank=1");
 				qDebug()<<dataString.join(" ");
 			}
@@ -1288,6 +1293,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			else if(H5Tequal(dtype,H5T_NATIVE_LDOUBLE))
 				dataString = readHDFData1D<long double>(dataset, H5T_NATIVE_LDOUBLE, rows, lines, dataPointers[0]);
 			else {
+				ok=false;
 				dataString<<i18n("Unsupported float type for rank=1");
 				qDebug()<<dataString.join(" ");
 			}
@@ -1318,6 +1324,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		case H5T_ARRAY:
 		case H5T_NO_CLASS:
 		case H5T_NCLASSES: {
+			ok=false;
 			dataString<<i18n("rank = 1 not implemented yet for type %1").arg(translateHDFClass(dclass));
 			qDebug()<<dataString.join("");
 		}
@@ -1401,6 +1408,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			else if(H5Tequal(dtype,H5T_STD_U64LE) || H5Tequal(dtype,H5T_STD_U64BE) || H5Tequal(dtype,H5T_NATIVE_ULLONG))
 				dataString = readHDFData2D<unsigned long long>(dataset, H5T_NATIVE_ULLONG, rows, cols, lines, dataPointers);
 			else {
+				ok=false;
 				dataString<<i18n("Unsupported integer type for rank=2");
 				qDebug()<<dataString.join(" ");
 			}
@@ -1414,6 +1422,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			else if(H5Tequal(dtype,H5T_NATIVE_LDOUBLE))
 				dataString = readHDFData2D<long double>(dataset, H5T_NATIVE_LDOUBLE, rows, cols, lines, dataPointers);
 			else {
+				ok=false;
 				dataString<<i18n("Unsupported float type for rank=2");
 				qDebug()<<dataString.join(" ");
 			}
@@ -1426,8 +1435,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			break;
 		}
 		case H5T_STRING: {
+			ok=false;
 			//TODO
-			dataString<<translateHDFClass(dclass)<<" " << i18n("not implemented yet");
+			dataString<<translateHDFClass(dclass)<<" "<< i18n("not implemented yet");
 			dataString<<", " << i18n("size = %1").arg(typeSize);
 			qDebug()<<dataString.join("");
 			break;
@@ -1441,7 +1451,8 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		case H5T_ARRAY:
 		case H5T_NO_CLASS:
 		case H5T_NCLASSES: {
-			dataString<<translateHDFClass(dclass)<<" data class not supported";
+			ok=false;
+			dataString<<translateHDFClass(dclass)<<" "<< i18n("data class not supported");
 			qDebug()<<dataString.join("");
 		}
 		default:
@@ -1450,9 +1461,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		break;
 	}
 	default: {
+		ok=false;
 		QString message = i18n("rank = %1 not supported").arg(rank);
 		qDebug()<<message;
-		dataString<<message.replace(' ',QChar::Nbsp);
 	}
 	}
 
@@ -1507,7 +1518,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
     reads the content of the file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
-void HDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
+void HDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
 
 	if(currentDataSetName.isEmpty()) {
 		qDebug()<<" No data set selected";
@@ -1517,8 +1528,8 @@ void HDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSo
 	else
 		qDebug()<<" current data set ="<<currentDataSetName;
 #endif
-
-	readCurrentDataSet(fileName,dataSource,mode);
+	bool ok=true;
+	readCurrentDataSet(fileName,dataSource,ok,mode);
 }
 
 /*!

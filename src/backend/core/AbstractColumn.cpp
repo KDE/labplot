@@ -38,10 +38,10 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QDate>
 #include <QtCore/QTime>
-#include <math.h>
 #include <QMetaType>
 #include <QDebug>
 #include <KLocale>
+#include <cmath>
 
 /**
  * \class AbstractColumn
@@ -213,7 +213,7 @@ void AbstractColumn::clear() {}
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
 		case AbstractColumn::Numeric:
-			return !isnan(valueAt(row));
+			return !std::isnan(valueAt(row));
 		case AbstractColumn::Text:
 			return !textAt(row).isNull();
 		case AbstractColumn::DateTime:
@@ -466,7 +466,7 @@ double AbstractColumn::minimum() const{
 	double min = INFINITY;
 	for (int row = 0; row < rowCount(); row++) {
 		val = valueAt(row);
-		if (isnan(val))
+		if (std::isnan(val))
 			continue;
 
 		if (val < min)
@@ -480,7 +480,7 @@ double AbstractColumn::maximum() const{
 	double max = -INFINITY;
 	for (int row = 0; row < rowCount(); row++) {
 		val = valueAt(row);
-		if (isnan(val))
+		if (std::isnan(val))
 			continue;
 
 		if (val > max)

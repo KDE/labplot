@@ -54,9 +54,6 @@ class AbstractAspect::Private {
 		bool m_hidden;
 		AbstractAspect* m_owner;
 		AbstractAspect* m_parent;
-
-	private:
-		static int indexOfMatchingBrace(const QString &str, int start);
 };
 
 #endif // ifndef ASPECT_PRIVATE_H

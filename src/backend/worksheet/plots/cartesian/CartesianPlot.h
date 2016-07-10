@@ -31,7 +31,7 @@
 #define CARTESIANPLOT_H
 
 #include "backend/worksheet/plots/AbstractPlot.h"
-#include <math.h>
+#include <cmath>
 
 class QToolBar;
 class CartesianPlotPrivate;
@@ -43,6 +43,7 @@ class XYSmoothCurve;
 class XYFitCurve;
 class XYFourierFilterCurve;
 class KConfig;
+class XYFourierTransformCurve;
 
 class CartesianPlot:public AbstractPlot{
 	Q_OBJECT
@@ -118,6 +119,7 @@ class CartesianPlot:public AbstractPlot{
 		QAction* addSmoothCurveAction;
 		QAction* addFitCurveAction;
 		QAction* addFourierFilterCurveAction;
+		QAction* addFourierTransformCurveAction;
 		QAction* addHorizontalAxisAction;
 		QAction* addVerticalAxisAction;
  		QAction* addLegendAction;
@@ -151,6 +153,7 @@ class CartesianPlot:public AbstractPlot{
 		XYSmoothCurve* addSmoothCurve();
 		XYFitCurve* addFitCurve();
 		XYFourierFilterCurve* addFourierFilterCurve();
+		XYFourierTransformCurve* addFourierTransformCurve();
 		void addLegend();
 		void addCustomPoint();
 		void scaleAuto();

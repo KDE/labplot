@@ -166,57 +166,63 @@ QMenu* WorksheetElement::createContextMenu() {
 
 void WorksheetElement::prepareMoveBehindMenu() {
 	m_moveBehindMenu->clear();
-	AbstractAspect *parent = parentAspect();
-	if (parent) {
-		QList<WorksheetElement *> childElements = parent->children<WorksheetElement>();
-		foreach(const WorksheetElement *elem, childElements) {
-			if (elem != this && !dynamic_cast<const Axis*>(elem)) {
-				QAction *action = m_moveBehindMenu->addAction(elem->name());
-				action->setData(parent->indexOfChild<WorksheetElement>(elem));
-			}
+	AbstractAspect* parent = parentAspect();
+	int index = parent->indexOfChild<WorksheetElement>(this);
+	const QList<WorksheetElement*>& children = parent->children<WorksheetElement>();
+
+	for (int i=0; i<index; ++i) {
+		const WorksheetElement* elem = children.at(i);
+		//axes are always drawn on top of other elements, don't add them to the menu
+		if (!dynamic_cast<const Axis*>(elem)) {
+			QAction* action = m_moveBehindMenu->addAction(elem->name());
+			action->setData(i);
 		}
 	}
+
+	//TODO: doesn't alway work properly
+	//hide the "move behind" menu if it doesn't have any entries, show if not shown yet otherwise
+	//m_moveBehindMenu->menuAction()->setVisible(!m_moveBehindMenu->isEmpty());
 }
 
 void WorksheetElement::prepareMoveInFrontOfMenu() {
 	m_moveInFrontOfMenu->clear();
-	AbstractAspect *parent = parentAspect();
-	if (parent) {
-		QList<WorksheetElement *> childElements = parent->children<WorksheetElement>();
-		foreach(const WorksheetElement *elem, childElements) {
-			if (elem != this && !dynamic_cast<const Axis*>(elem)) {
-				QAction *action = m_moveInFrontOfMenu->addAction(elem->name());
-				action->setData(parent->indexOfChild<WorksheetElement>(elem));
-			}
+	AbstractAspect* parent = parentAspect();
+	int index = parent->indexOfChild<WorksheetElement>(this);
+	const QList<WorksheetElement*>& children = parent->children<WorksheetElement>();
+
+	for (int i=index+1; i<children.size(); ++i) {
+		const WorksheetElement* elem = children.at(i);
+		//axes are always drawn on top of other elements, don't add them to the menu
+		if (!dynamic_cast<const Axis*>(elem)) {
+			QAction* action = m_moveInFrontOfMenu->addAction(elem->name());
+			action->setData(i);
 		}
 	}
+
+	//TODO: doesn't alway work properly
+	//hide the "move in front" menu if it doesn't have any entries, show if not shown yet otherwise
+	//m_moveInFrontOfMenu->menuAction()->setVisible(!m_moveInFrontOfMenu->isEmpty());
 }
 
-void WorksheetElement::execMoveBehind(QAction *action) {
-	Q_ASSERT(action != NULL);
-	AbstractAspect *parent = parentAspect();
-	if (parent) {
-		int index = action->data().toInt();
-		AbstractAspect *sibling1 = parent->child<WorksheetElement>(index);
-		beginMacro(i18n("%1: move behind %2.", name(), sibling1->name()));
-		remove();
-		AbstractAspect *sibling2 = parent->child<WorksheetElement>(index + 1);
-		parent->insertChildBefore(this, sibling2);
-		endMacro();
-	}
+void WorksheetElement::execMoveInFrontOf(QAction* action) {
+	AbstractAspect* parent = parentAspect();
+	int index = action->data().toInt();
+	AbstractAspect* sibling1 = parent->child<WorksheetElement>(index);
+	AbstractAspect* sibling2 = parent->child<WorksheetElement>(index + 1);
+	beginMacro(i18n("%1: move behind %2.", name(), sibling1->name()));
+	remove();
+	parent->insertChildBefore(this, sibling2);
+	endMacro();
 }
 
-void WorksheetElement::execMoveInFrontOf(QAction *action) {
-	Q_ASSERT(action != NULL);
-	AbstractAspect *parent = parentAspect();
-	if (parent) {
-		int index = action->data().toInt();
-		AbstractAspect *sibling = parent->child<WorksheetElement>(index);
-		beginMacro(i18n("%1: move in front of %2.", name(), sibling->name()));
-		remove();
-		parent->insertChildBefore(this, sibling);
-		endMacro();
-	}
+void WorksheetElement::execMoveBehind(QAction* action) {
+	AbstractAspect* parent = parentAspect();
+	int index = action->data().toInt();
+	AbstractAspect* sibling = parent->child<WorksheetElement>(index);
+	beginMacro(i18n("%1: move in front of %2.", name(), sibling->name()));
+	remove();
+	parent->insertChildBefore(this, sibling);
+	endMacro();
 }
 
 /**

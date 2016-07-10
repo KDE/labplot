@@ -31,6 +31,7 @@
 
 #include <QComboBox>
 
+class AbstractAspect;
 class QGroupBox;
 class QLineEdit;
 class QTreeView;
@@ -62,6 +63,7 @@ class TreeViewComboBox : public QComboBox {
 		void showTopLevelOnly(const QModelIndex&);
 		bool eventFilter(QObject*, QEvent*);
 		bool filter(const QModelIndex&, const QString&);
+		bool isTopLevel(const AbstractAspect* aspect) const;
 
 	private slots:
 		void treeViewIndexActivated(const QModelIndex&);

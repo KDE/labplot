@@ -44,6 +44,7 @@
 #include <QSignalMapper>
 #include <QTimer>
 
+#include <KIconLoader>
 #include <KLineEdit>
 #include <KLocale>
 #include <KMenu>
@@ -83,7 +84,8 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) {
 	bFilterOptions->setIcon(QIcon::fromTheme("configure"));
 	bFilterOptions->setEnabled(true);
 	bFilterOptions->setCheckable(true);
-	bFilterOptions->setMaximumWidth(20);
+	int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
+	bFilterOptions->setIconSize(QSize(size, size));
 	layoutFilter->addWidget(bFilterOptions);
 
 	layout->addWidget(frameFilter);
@@ -389,6 +391,8 @@ void ProjectExplorer::filterTextChanged(const QString& text) {
 	filter(root, text);
 }
 
+#include <QDebug>
+
 bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 	Qt::CaseSensitivity sensitivity = caseSensitiveAction->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
 	bool matchCompleteWord = matchCompleteWordAction->isChecked();
@@ -399,15 +403,20 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 		QModelIndex child = index.child(i, 0);
 		AbstractAspect* aspect =  static_cast<AbstractAspect*>(child.internalPointer());
 		bool visible;
-		if (matchCompleteWord)
+		if(text.isEmpty())
+			visible = true;
+		else if (matchCompleteWord)
 			visible = aspect->name().startsWith(text, sensitivity);
 		else
 			visible = aspect->name().contains(text, sensitivity);
 
 		if (visible) {
 			//current item is visible -> make all its children visible without applying the filter
-			for (int j=0; j<child.model()->rowCount(child); ++j)
+			for (int j=0; j<child.model()->rowCount(child); ++j) {
 				m_treeView->setRowHidden(j, child, false);
+				if(text.isEmpty())
+					filter(child, text);
+			}
 
 			childVisible = true;
 		} else {
@@ -503,6 +512,10 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 
 	int currentRow = -1; //row corresponding to the current index in the tree view, -1 for the root element (=project)
 	QModelIndexList selectedRows = m_treeView->selectionModel()->selectedRows();
+
+	//check whether the project node itself is expanded
+	if (m_treeView->isExpanded(m_treeView->model()->index(0,0)))
+		expanded.push_back(-1);
 
 	int row = 0;
 	QList<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
@@ -615,15 +628,13 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 			attribs = reader->attributes();
 			row = reader->readElementText().toInt();
 
-			if (row==-1) {
-				//-1 can only be stored for no current item or for the project-item being the current item (s.a. ProjectExplorer::save())
-				//-> make the project item current in this case
-				currentIndex = model->modelIndexOfAspect(m_project);
+			QModelIndex index;
+			if (row==-1)
+				index = model->modelIndexOfAspect(m_project); //-1 corresponds tothe project-item (s.a. ProjectExplorer::save())
+			else if (row>=aspects.size())
 				continue;
-			} else if (row>=aspects.size())
-				continue;
-
-			const QModelIndex& index = model->modelIndexOfAspect(aspects.at(row));
+			else
+				index = model->modelIndexOfAspect(aspects.at(row));
 
 			if (expandedItem) {
 				expanded.push_back(index);
@@ -689,13 +700,18 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 	m_treeView->setCurrentIndex(currentIndex);
 	m_treeView->scrollTo(currentIndex);
-//TODO
-	collapseParents(currentIndex, expanded);//even if it's the current index, collapse all parent indices if they are not expanded when saved
+
+	//when setting the current index above it gets expanded, collapse all parent indices if they are were not expanded when saved
+	collapseParents(currentIndex, expanded);
 
 	return true;
 }
 
 void ProjectExplorer::collapseParents(const QModelIndex& index, const QList<QModelIndex>& expanded) {
+	//root index doesn't have any parents - this case is not catched by the second if-statement below
+	if (index.column()==0 && index.row()==0)
+		return;
+
 	QModelIndex parent = index.parent();
 	if (parent==QModelIndex())
 		return;

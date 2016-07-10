@@ -49,10 +49,6 @@ class MatrixView : public QWidget {
 		virtual ~MatrixView();
 
 		MatrixModel* model() const;
-		void setRowHeight(int row, int height);
-		void setColumnWidth(int col, int width);
-		int rowHeight(int row) const;
-		int columnWidth(int col) const;
 
 		int selectedColumnCount(bool full = false) const;
 		bool isColumnSelected(int col, bool full = false) const;

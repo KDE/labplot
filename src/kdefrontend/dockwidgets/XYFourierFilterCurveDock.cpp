@@ -34,6 +34,8 @@
 
 #include <QMenu>
 #include <QWidgetAction>
+#include <QDebug>
+#include <KMessageBox>
 
 /*!
   \class XYFourierFilterCurveDock
@@ -75,23 +77,17 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 2, 1, 2);
 
-	uiGeneralTab.cbType->addItem(i18n("Low pass"));
-	uiGeneralTab.cbType->addItem(i18n("High pass"));
-	uiGeneralTab.cbType->addItem(i18n("Band pass"));
-	uiGeneralTab.cbType->addItem(i18n("Band reject"));
-//TODO	uiGeneralTab.cbType->addItem(i18n("Threshold"));
+	for(int i=0; i < NSL_FILTER_TYPE_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_filter_type_name[i]));
 
-	uiGeneralTab.cbForm->addItem(i18n("Ideal"));
-	uiGeneralTab.cbForm->addItem(i18n("Butterworth"));
-	uiGeneralTab.cbForm->addItem(i18n("Chebyshev type I"));
-	uiGeneralTab.cbForm->addItem(i18n("Chebyshev type II"));
+	for(int i=0; i < NSL_FILTER_FORM_COUNT; i++)
+		uiGeneralTab.cbForm->addItem(i18n(nsl_filter_form_name[i]));
 
-	uiGeneralTab.cbUnit->addItem(i18n("Frequency (Hz)"));
-	uiGeneralTab.cbUnit->addItem(i18n("Fraction"));
-	uiGeneralTab.cbUnit->addItem(i18n("Index"));
-	uiGeneralTab.cbUnit2->addItem(i18n("Frequency (Hz)"));
-	uiGeneralTab.cbUnit2->addItem(i18n("Fraction"));
-	uiGeneralTab.cbUnit2->addItem(i18n("Index"));
+	for(int i=0; i < NSL_FILTER_CUTOFF_UNIT_COUNT; i++) {
+		uiGeneralTab.cbUnit->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
+		uiGeneralTab.cbUnit2->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
+	}
+
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
@@ -103,13 +99,13 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
-	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
-	connect( uiGeneralTab.cbForm, SIGNAL(currentIndexChanged(int)), this, SLOT(formChanged(int)) );
-	connect( uiGeneralTab.sbOrder, SIGNAL(valueChanged(int)), this, SLOT(orderChanged(int)) );
+	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
+	connect( uiGeneralTab.cbForm, SIGNAL(currentIndexChanged(int)), this, SLOT(formChanged()) );
+	connect( uiGeneralTab.sbOrder, SIGNAL(valueChanged(int)), this, SLOT(orderChanged()) );
 	connect( uiGeneralTab.sbCutoff, SIGNAL(valueChanged(double)), this, SLOT(enableRecalculate()) );
 	connect( uiGeneralTab.sbCutoff2, SIGNAL(valueChanged(double)), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.cbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged(int)) );
-	connect( uiGeneralTab.cbUnit2, SIGNAL(currentIndexChanged(int)), this, SLOT(unit2Changed(int)) );
+	connect( uiGeneralTab.cbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged()) );
+	connect( uiGeneralTab.cbUnit2, SIGNAL(currentIndexChanged(int)), this, SLOT(unit2Changed()) );
 
 //	connect( uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
@@ -142,16 +138,16 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_filterCurve->yDataColumn());
 
 	uiGeneralTab.cbType->setCurrentIndex(m_filterData.type);
-	this->typeChanged(m_filterData.type);
+	this->typeChanged();
 	uiGeneralTab.cbForm->setCurrentIndex(m_filterData.form);
-	this->formChanged(m_filterData.form);
+	this->formChanged();
 	uiGeneralTab.sbOrder->setValue(m_filterData.order);
 	uiGeneralTab.cbUnit->setCurrentIndex(m_filterData.unit);
-	this->unitChanged(m_filterData.unit);
+	this->unitChanged();
 	// after unit has set
 	uiGeneralTab.sbCutoff->setValue(m_filterData.cutoff);
 	uiGeneralTab.cbUnit2->setCurrentIndex(m_filterData.unit2);
-	this->unit2Changed(m_filterData.unit2);
+	this->unit2Changed();
 	// after unit has set
 	uiGeneralTab.sbCutoff2->setValue(m_filterData.cutoff2);
 	this->showFilterResult();
@@ -237,8 +233,8 @@ void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setXDataColumn(column);
 
 	// update range of cutoff spin boxes (like a unit change)
-	unitChanged(uiGeneralTab.cbUnit->currentIndex());
-	unit2Changed(uiGeneralTab.cbUnit2->currentIndex());
+	unitChanged();
+	unit2Changed();
 }
 
 void XYFourierFilterCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -256,20 +252,20 @@ void XYFourierFilterCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setYDataColumn(column);
 }
 
-void XYFourierFilterCurveDock::typeChanged(int index) {
-	XYFourierFilterCurve::FilterType type = (XYFourierFilterCurve::FilterType)index;
-	m_filterData.type = (XYFourierFilterCurve::FilterType)uiGeneralTab.cbType->currentIndex();
+void XYFourierFilterCurveDock::typeChanged() {
+	nsl_filter_type type = (nsl_filter_type)uiGeneralTab.cbType->currentIndex();
+	m_filterData.type = type;
 
-	switch(type) {
-	case XYFourierFilterCurve::LowPass:
-	case XYFourierFilterCurve::HighPass:
+	switch (type) {
+	case nsl_filter_type_low_pass:
+	case nsl_filter_type_high_pass:
 		uiGeneralTab.lCutoff->setText(i18n("Cutoff"));
 		uiGeneralTab.lCutoff2->setVisible(false);
 		uiGeneralTab.sbCutoff2->setVisible(false);
 		uiGeneralTab.cbUnit2->setVisible(false);
 		break;
-	case XYFourierFilterCurve::BandPass:
-	case XYFourierFilterCurve::BandReject:
+	case nsl_filter_type_band_pass:
+	case nsl_filter_type_band_reject:
 		uiGeneralTab.lCutoff2->setVisible(true);
 		uiGeneralTab.lCutoff->setText(i18n("Lower Cutoff"));
 		uiGeneralTab.lCutoff2->setText(i18n("Upper Cutoff"));
@@ -277,7 +273,7 @@ void XYFourierFilterCurveDock::typeChanged(int index) {
 		uiGeneralTab.cbUnit2->setVisible(true);
 		break;
 //TODO
-/*	case XYFourierFilterCurve::Threshold:
+/*	case nsl_filter_type_threshold:
 		uiGeneralTab.lCutoff->setText(i18n("Value"));
 		uiGeneralTab.lCutoff2->setVisible(false);
 		uiGeneralTab.sbCutoff2->setVisible(false);
@@ -288,18 +284,18 @@ void XYFourierFilterCurveDock::typeChanged(int index) {
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYFourierFilterCurveDock::formChanged(int index) {
-	XYFourierFilterCurve::FilterForm form = (XYFourierFilterCurve::FilterForm)index;
-	m_filterData.form = (XYFourierFilterCurve::FilterForm)uiGeneralTab.cbForm->currentIndex();
+void XYFourierFilterCurveDock::formChanged() {
+	nsl_filter_form form = (nsl_filter_form)uiGeneralTab.cbForm->currentIndex();
+	m_filterData.form = form;
 
-	switch(form) {
-	case XYFourierFilterCurve::Ideal:
+	switch (form) {
+	case nsl_filter_form_ideal:
 		uiGeneralTab.sbOrder->setVisible(false);
 		uiGeneralTab.lOrder->setVisible(false);
 		break;
-	case XYFourierFilterCurve::Butterworth:
-	case XYFourierFilterCurve::ChebyshevI:
-	case XYFourierFilterCurve::ChebyshevII:
+	case nsl_filter_form_butterworth:
+	case nsl_filter_form_chebyshev_i:
+	case nsl_filter_form_chebyshev_ii:
 		uiGeneralTab.sbOrder->setVisible(true);
 		uiGeneralTab.lOrder->setVisible(true);
 		break;
@@ -308,69 +304,148 @@ void XYFourierFilterCurveDock::formChanged(int index) {
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYFourierFilterCurveDock::orderChanged(int index) {
-	Q_UNUSED(index)
+void XYFourierFilterCurveDock::orderChanged() {
 	m_filterData.order = uiGeneralTab.sbOrder->value();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYFourierFilterCurveDock::unitChanged(int index) {
-	XYFourierFilterCurve::CutoffUnit unit = (XYFourierFilterCurve::CutoffUnit)index;
-	m_filterData.unit = (XYFourierFilterCurve::CutoffUnit)uiGeneralTab.cbUnit->currentIndex();
+void XYFourierFilterCurveDock::unitChanged() {
+	nsl_filter_cutoff_unit unit = (nsl_filter_cutoff_unit)uiGeneralTab.cbUnit->currentIndex();
+	nsl_filter_cutoff_unit oldUnit = m_filterData.unit;
+	double oldValue = uiGeneralTab.sbCutoff->value();
+	m_filterData.unit = unit;
 
 	int n=100;
-	double T=1.0;
-	if(m_filterCurve->xDataColumn() != NULL) {
+	double f=1.0;	// sample frequency
+	if (m_filterCurve->xDataColumn() != NULL) {
 		n = m_filterCurve->xDataColumn()->rowCount();
-		T = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
+		double range = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
+		f=(n-1)/range/2.;
+#ifndef NDEBUG
+		qDebug()<<" n ="<<n<<" sample frequency ="<<f;
+#endif
 	}
-	switch(unit) {
-	case XYFourierFilterCurve::Frequency:
+
+	switch (unit) {
+	case nsl_filter_cutoff_unit_frequency:
 		uiGeneralTab.sbCutoff->setDecimals(6);
-		uiGeneralTab.sbCutoff->setMaximum(1.0/T);
-		uiGeneralTab.sbCutoff->setSingleStep(0.01/T);
+		uiGeneralTab.sbCutoff->setMaximum(f);
+		uiGeneralTab.sbCutoff->setSingleStep(0.01*f);
+		uiGeneralTab.sbCutoff->setSuffix(" Hz");
+		switch (oldUnit) {
+		case nsl_filter_cutoff_unit_frequency:
+			break;
+		case nsl_filter_cutoff_unit_fraction:
+			uiGeneralTab.sbCutoff->setValue(oldValue*f);
+			break;
+		case nsl_filter_cutoff_unit_index:
+			uiGeneralTab.sbCutoff->setValue(oldValue*f/n);
+			break;
+		}
 		break;
-	case XYFourierFilterCurve::Fraction:
+	case nsl_filter_cutoff_unit_fraction:
 		uiGeneralTab.sbCutoff->setDecimals(6);
 		uiGeneralTab.sbCutoff->setMaximum(1.0);
 		uiGeneralTab.sbCutoff->setSingleStep(0.01);
+		uiGeneralTab.sbCutoff->setSuffix("");
+		switch (oldUnit) {
+		case nsl_filter_cutoff_unit_frequency:
+			uiGeneralTab.sbCutoff->setValue(oldValue/f);
+			break;
+		case nsl_filter_cutoff_unit_fraction:
+			break;
+		case nsl_filter_cutoff_unit_index:
+			uiGeneralTab.sbCutoff->setValue(oldValue/n);
+			break;
+		}
 		break;
-	case XYFourierFilterCurve::Index:
+	case nsl_filter_cutoff_unit_index:
 		uiGeneralTab.sbCutoff->setDecimals(0);
 		uiGeneralTab.sbCutoff->setSingleStep(1);
 		uiGeneralTab.sbCutoff->setMaximum(n);
+		uiGeneralTab.sbCutoff->setSuffix("");
+		switch (oldUnit) {
+		case nsl_filter_cutoff_unit_frequency:
+			uiGeneralTab.sbCutoff->setValue(oldValue*n/f);
+			break;
+		case nsl_filter_cutoff_unit_fraction:
+			uiGeneralTab.sbCutoff->setValue(oldValue*n);
+			break;
+		case nsl_filter_cutoff_unit_index:
+			break;
+		}
 		break;
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYFourierFilterCurveDock::unit2Changed(int index) {
-	XYFourierFilterCurve::CutoffUnit unit2 = (XYFourierFilterCurve::CutoffUnit)index;
-	m_filterData.unit2 = (XYFourierFilterCurve::CutoffUnit)uiGeneralTab.cbUnit2->currentIndex();
+void XYFourierFilterCurveDock::unit2Changed() {
+	nsl_filter_cutoff_unit unit = (nsl_filter_cutoff_unit)uiGeneralTab.cbUnit2->currentIndex();
+	nsl_filter_cutoff_unit oldUnit = m_filterData.unit2;
+	double oldValue = uiGeneralTab.sbCutoff2->value();
+	m_filterData.unit2 = unit;
 
 	int n=100;
-	double T=1.0;
-	if(m_filterCurve->xDataColumn() != NULL) {
+	double f=1.0;
+	if (m_filterCurve->xDataColumn() != NULL) {
 		n = m_filterCurve->xDataColumn()->rowCount();
-		T = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
+		double range = m_filterCurve->xDataColumn()->maximum() - m_filterCurve->xDataColumn()->minimum();
+		f = (n-1)/2./range;
+#ifndef NDEBUG
+		qDebug()<<" n ="<<n<<" sample frequency ="<<f;
+#endif
 	}
-	switch(unit2) {
-	case XYFourierFilterCurve::Frequency:
+
+	switch (unit) {
+	case nsl_filter_cutoff_unit_frequency:
 		uiGeneralTab.sbCutoff2->setDecimals(6);
-		uiGeneralTab.sbCutoff2->setMaximum(1.0/T);
-		uiGeneralTab.sbCutoff2->setSingleStep(0.01/T);
+		uiGeneralTab.sbCutoff2->setMaximum(f);
+		uiGeneralTab.sbCutoff2->setSingleStep(0.01*f);
+		uiGeneralTab.sbCutoff2->setSuffix(" Hz");
+		switch (oldUnit) {
+		case nsl_filter_cutoff_unit_frequency:
+			break;
+		case nsl_filter_cutoff_unit_fraction:
+			uiGeneralTab.sbCutoff2->setValue(oldValue*f);
+			break;
+		case nsl_filter_cutoff_unit_index:
+			uiGeneralTab.sbCutoff2->setValue(oldValue*f/n);
+			break;
+		}
 		break;
-	case XYFourierFilterCurve::Fraction:
+	case nsl_filter_cutoff_unit_fraction:
 		uiGeneralTab.sbCutoff2->setDecimals(6);
 		uiGeneralTab.sbCutoff2->setMaximum(1.0);
 		uiGeneralTab.sbCutoff2->setSingleStep(0.01);
+		uiGeneralTab.sbCutoff2->setSuffix("");
+		switch (oldUnit) {
+		case nsl_filter_cutoff_unit_frequency:
+			uiGeneralTab.sbCutoff2->setValue(oldValue/f);
+			break;
+		case nsl_filter_cutoff_unit_fraction:
+			break;
+		case nsl_filter_cutoff_unit_index:
+			uiGeneralTab.sbCutoff2->setValue(oldValue/n);
+			break;
+		}
 		break;
-	case XYFourierFilterCurve::Index:
+	case nsl_filter_cutoff_unit_index:
 		uiGeneralTab.sbCutoff2->setDecimals(0);
 		uiGeneralTab.sbCutoff2->setSingleStep(1);
 		uiGeneralTab.sbCutoff2->setMaximum(n);
+		uiGeneralTab.sbCutoff2->setSuffix("");
+		switch (oldUnit) {
+		case nsl_filter_cutoff_unit_frequency:
+			uiGeneralTab.sbCutoff2->setValue(oldValue*n/f);
+			break;
+		case nsl_filter_cutoff_unit_fraction:
+			uiGeneralTab.sbCutoff2->setValue(oldValue*n);
+			break;
+		case nsl_filter_cutoff_unit_index:
+			break;
+		}
 		break;
 	}
 
@@ -378,10 +453,17 @@ void XYFourierFilterCurveDock::unit2Changed(int index) {
 }
 
 void XYFourierFilterCurveDock::recalculateClicked() {
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	m_filterData.cutoff = uiGeneralTab.sbCutoff->value();
 	m_filterData.cutoff2 = uiGeneralTab.sbCutoff2->value();
 
+	if ((m_filterData.type == nsl_filter_type_band_pass || m_filterData.type == nsl_filter_type_band_reject) 
+			&& m_filterData.cutoff2 <= m_filterData.cutoff) {
+		KMessageBox::sorry(this, i18n("The band width is <= 0 since lower cutoff value is not smaller than upper cutoff value. Please fix this."),
+			                   i18n("band width <= 0") );
+		return;
+	}
+
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setFilterData(m_filterData);
 
@@ -462,7 +544,7 @@ void XYFourierFilterCurveDock::curveFilterDataChanged(const XYFourierFilterCurve
 	m_initializing = true;
 	m_filterData = data;
 	uiGeneralTab.cbType->setCurrentIndex(m_filterData.type);
-	this->typeChanged(m_filterData.type);
+	this->typeChanged();
 
 	this->showFilterResult();
 	m_initializing = false;

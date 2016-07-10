@@ -214,31 +214,18 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 	for (int i=0; i<rows; i++) {
 		QModelIndex child = index.child(i, 0);
 		AbstractAspect* aspect =  static_cast<AbstractAspect*>(child.internalPointer());
-		bool isTopLevel = false;
+		bool topLevel = isTopLevel(aspect);
+		if (!topLevel)
+			continue;
 
-		//check whether current item is one of the allowed top level types
-		foreach(const char* classString, m_topLevelClasses) {
-			if (aspect->inherits(classString)) {
-				if ( strcmp(classString, "Spreadsheet")==0 ) {
-					if (aspect->inherits("FileDataSource"))
-						isTopLevel = false;
-					else
-						isTopLevel = true;
-				} else {
-					isTopLevel = true;
-				}
-			}
-		}
+		bool visible = aspect->name().contains(text, Qt::CaseInsensitive);
 
-		bool visible = false;
-		if (isTopLevel){
-			visible = aspect->name().contains(text, Qt::CaseInsensitive);
-
-		}
 		if (visible) {
-			//current item is visible -> make all its children visible without applying the filter
-			for (int j=0; j<child.model()->rowCount(child); ++j)
-				m_treeView->setRowHidden(j, child, false);
+			//current item is visible -> make all its children (allowed top level types only) visible without applying the filter
+			for (int j=0; j<child.model()->rowCount(child); ++j) {
+				AbstractAspect* aspect =  static_cast<AbstractAspect*>(child.child(j,0).internalPointer());
+				m_treeView->setRowHidden(j, child, !isTopLevel(aspect));
+			}
 
 			childVisible = true;
 		} else {
@@ -252,4 +239,23 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 	}
 
 	return childVisible;
+}
+
+/*!
+	checks whether \c aspect is one of the allowed top level types
+*/
+bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
+	foreach(const char* classString, m_topLevelClasses) {
+		if (aspect->inherits(classString)) {
+			if ( strcmp(classString, "Spreadsheet")==0 ) {
+				if (aspect->inherits("FileDataSource"))
+					return false;
+				else
+					return true;
+			} else {
+				return true;
+			}
+		}
+	}
+	return false;
 }

@@ -38,6 +38,7 @@ class Folder;
 class ProjectExplorer;
 class Project;
 class Worksheet;
+class Note;
 class Workbook;
 class Datapicker;
 class Image;
@@ -45,6 +46,7 @@ class Spreadsheet;
 class Matrix;
 class GuiObserver;
 class AxisDock;
+class NoteDock;
 class CartesianPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
@@ -58,6 +60,7 @@ class XYInterpolationCurveDock;
 class XYSmoothCurveDock;
 class XYFitCurveDock;
 class XYFourierFilterCurveDock;
+class XYFourierTransformCurveDock;
 class WorksheetDock;
 class LabelWidget;
 class ImportFileDialog;
@@ -110,6 +113,7 @@ private:
 	KAction* m_newWorkbookAction;
 	KAction* m_newSpreadsheetAction;
 	KAction* m_newMatrixAction;
+	KAction* m_newNotesAction;
 	KAction* m_newWorksheetAction;
 	KAction* m_newFileDataSourceAction;
 	KAction* m_newSqlDataSourceAction;
@@ -155,6 +159,7 @@ private:
 	//Docks
 	QStackedWidget* stackedWidget;
 	AxisDock* axisDock;
+	NoteDock* notesDock;
 	CartesianPlotDock* cartesianPlotDock;
 	CartesianPlotLegendDock* cartesianPlotLegendDock;
 	ColumnDock* columnDock;
@@ -167,6 +172,7 @@ private:
 	XYSmoothCurveDock* xySmoothCurveDock;
 	XYFitCurveDock* xyFitCurveDock;
 	XYFourierFilterCurveDock* xyFourierFilterCurveDock;
+	XYFourierTransformCurveDock* xyFourierTransformCurveDock;
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
 	CustomPointDock* customPointDock;
@@ -226,6 +232,7 @@ private slots:
 	void newSpreadsheet();
 	void newMatrix();
 	void newWorksheet();
+	void newNotes();
 	void newDatapicker();
 	//TODO: void newScript();
 	void newFileDataSourceActionTriggered();

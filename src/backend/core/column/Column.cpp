@@ -34,14 +34,19 @@
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 
-#include <gsl/gsl_sort.h>
-#include <math.h>
-
-#include <QMetaEnum>
+#include <QFont>
+#include <QFontMetrics>
 #include <QThreadPool>
 
 #include <KIcon>
 #include <KLocale>
+#ifndef NDEBUG
+#include <QDebug>
+#endif
+
+extern "C" {
+#include <gsl/gsl_sort.h>
+}
 
 /**
  * \class Column
@@ -118,8 +123,13 @@ void Column::init() {
 	m_column_private->outputFilter()->setHidden(true);
 	addChild(m_column_private->inputFilter());
 	addChild(m_column_private->outputFilter());
-	m_column_private->setWidth(120);
     m_column_private->statisticsAvailable = false;
+
+	//set the default width, synchronize this with the format used for the header in SpreadsheetModel::updateHorizontalHeader()
+	QString str = name() + QLatin1String(" {") + i18n("Numeric") + QLatin1String("} ");
+	QFont font;
+	QFontMetrics fm(font);
+	m_column_private->setWidth(fm.width(str)*1.1);
 
 	m_suppressDataChangedSignal = false;
 }
@@ -450,7 +460,7 @@ void Column::calculateStatistics() {
     rowData.reserve(rowValues->size());
     for (int row = 0; row < rowValues->size(); ++row) {
         val = rowValues->value(row);
-        if (isnan(val) || isMasked(row))
+        if (std::isnan(val) || isMasked(row))
             continue;
 
         if (val < statistics.minimum){
@@ -504,7 +514,7 @@ void Column::calculateStatistics() {
     int idx = 0;
     for(int row = 0; row < rowValues->size(); ++row){
         val = rowValues->value(row);
-        if ( isnan(val) || isMasked(row) )
+        if ( std::isnan(val) || isMasked(row) )
             continue;
         columnSumVariance+= pow(val - statistics.arithmeticMean, 2.0);
 
@@ -721,11 +731,11 @@ void Column::save(QXmlStreamWriter* writer) const {
 
 class DecodeColumnTask : public QRunnable {
 	public:
-		DecodeColumnTask(ColumnPrivate* priv, const QString& content) { m_private =priv; m_content = content;};
+		DecodeColumnTask(ColumnPrivate* priv, const QString& content) { m_private = priv; m_content = content;};
 		void run() {
 			QByteArray bytes = QByteArray::fromBase64(m_content.toAscii());
 			QVector<double> * data = new QVector<double>(bytes.size()/sizeof(double));
-			memcpy(data->data(), bytes.data(), (bytes.size()/sizeof(double))*sizeof(double));
+			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
 		}
 

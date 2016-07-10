@@ -31,12 +31,12 @@ Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
 
-#include <math.h>
-
 #include <QTextStream>
 #include <QDebug>
 #include <KLocale>
-#include <kfilterdev.h>
+#include <KFilterDev>
+
+#include <cmath>
 
  /*!
 	\class AsciiFilter
@@ -45,25 +45,25 @@ Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 	\ingroup datasources
  */
 
-AsciiFilter::AsciiFilter():AbstractFileFilter(), d(new AsciiFilterPrivate(this)){
+AsciiFilter::AsciiFilter():AbstractFileFilter(), d(new AsciiFilterPrivate(this)) {
 
 }
 
-AsciiFilter::~AsciiFilter(){
+AsciiFilter::~AsciiFilter() {
 	delete d;
 }
 
 /*!
   reads the content of the file \c fileName.
 */
-QString AsciiFilter::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  int lines){
+QString AsciiFilter::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  int lines) {
 	return d->readData(fileName, dataSource, importMode, lines);
 }
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void AsciiFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode){
+void AsciiFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	d->read(fileName, dataSource, importMode);
 }
 
@@ -71,7 +71,7 @@ void AsciiFilter::read(const QString & fileName, AbstractDataSource* dataSource,
 /*!
 writes the content of the data source \c dataSource to the file \c fileName.
 */
-void AsciiFilter::write(const QString & fileName, AbstractDataSource* dataSource){
+void AsciiFilter::write(const QString & fileName, AbstractDataSource* dataSource) {
  	d->write(fileName, dataSource);
 // 	emit()
 }
@@ -79,7 +79,7 @@ void AsciiFilter::write(const QString & fileName, AbstractDataSource* dataSource
 /*!
   loads the predefined filter settings for \c filterName
 */
-void AsciiFilter::loadFilterSettings(const QString& filterName){
+void AsciiFilter::loadFilterSettings(const QString& filterName) {
 	Q_UNUSED(filterName);
 }
 
@@ -94,14 +94,14 @@ void AsciiFilter::saveFilterSettings(const QString& filterName) const{
   returns the list with the names of all saved
   (system wide or user defined) filter settings.
 */
-QStringList AsciiFilter::predefinedFilters(){
+QStringList AsciiFilter::predefinedFilters() {
 	return QStringList();
 }
 
 /*!
   returns the list of all predefined separator characters.
 */
-QStringList AsciiFilter::separatorCharacters(){
+QStringList AsciiFilter::separatorCharacters() {
 	return (QStringList()<<"auto"<<"TAB"<<"SPACE"<<","<<";"<<":"
 				  <<",TAB"<<";TAB"<<":TAB"
 				  <<",SPACE"<<";SPACE"<<":SPACE");
@@ -110,14 +110,14 @@ QStringList AsciiFilter::separatorCharacters(){
 /*!
 returns the list of all predefined comment characters.
 */
-QStringList AsciiFilter::commentCharacters(){
+QStringList AsciiFilter::commentCharacters() {
 	return (QStringList()<<"#"<<"!"<<"//"<<"+"<<"c"<<":"<<";");
 }
 
 /*!
     returns the number of columns in the file \c fileName.
 */
-int AsciiFilter::columnNumber(const QString & fileName){
+int AsciiFilter::columnNumber(const QString & fileName) {
 	QString line;
 	QStringList lineStringList;
 
@@ -135,7 +135,7 @@ int AsciiFilter::columnNumber(const QString & fileName){
 /*!
   returns the number of lines in the file \c fileName.
 */
-long AsciiFilter::lineNumber(const QString & fileName){
+long AsciiFilter::lineNumber(const QString & fileName) {
 	//TODO: compare the speed of this function with the speed of wc from GNU-coreutils.
 	QIODevice *device = KFilterDev::deviceForFile(fileName);
 	if (!device->open(QIODevice::ReadOnly))
@@ -143,7 +143,7 @@ long AsciiFilter::lineNumber(const QString & fileName){
 
 	QTextStream in(device);
 	long rows=0;
-	while (!in.atEnd()){
+	while (!in.atEnd()) {
 		in.readLine();
 		rows++;
 	}
@@ -151,7 +151,7 @@ long AsciiFilter::lineNumber(const QString & fileName){
 	return rows;
 }
 
-void AsciiFilter::setTransposed(const bool b){
+void AsciiFilter::setTransposed(const bool b) {
 	d->transposed=b;
 }
 
@@ -159,7 +159,7 @@ bool AsciiFilter::isTransposed() const{
 	return d->transposed;
 }
 
-void AsciiFilter::setCommentCharacter(const QString& s){
+void AsciiFilter::setCommentCharacter(const QString& s) {
 	d->commentCharacter=s;
 }
 
@@ -167,7 +167,7 @@ QString AsciiFilter::commentCharacter() const{
 	return d->commentCharacter;
 }
 
-void AsciiFilter::setSeparatingCharacter(const QString& s){
+void AsciiFilter::setSeparatingCharacter(const QString& s) {
 	d->separatingCharacter=s;
 }
 
@@ -175,7 +175,7 @@ QString AsciiFilter::separatingCharacter() const{
 	return d->separatingCharacter;
 }
 
-void AsciiFilter::setAutoModeEnabled(bool b){
+void AsciiFilter::setAutoModeEnabled(bool b) {
 	d->autoModeEnabled=b;
 }
 
@@ -183,7 +183,7 @@ bool AsciiFilter::isAutoModeEnabled() const{
 	return d->autoModeEnabled;
 }
 
-void AsciiFilter::setHeaderEnabled(bool b){
+void AsciiFilter::setHeaderEnabled(bool b) {
 	d->headerEnabled=b;
 }
 
@@ -191,7 +191,7 @@ bool AsciiFilter::isHeaderEnabled() const{
 	return d->headerEnabled;
 }
 
-void AsciiFilter::setVectorNames(const QString s){
+void AsciiFilter::setVectorNames(const QString s) {
 	d->vectorNames=s.simplified();
 }
 
@@ -199,7 +199,7 @@ QString AsciiFilter::vectorNames() const{
 	return d->vectorNames;
 }
 
-void AsciiFilter::setSkipEmptyParts(bool b){
+void AsciiFilter::setSkipEmptyParts(bool b) {
 	d->skipEmptyParts=b;
 }
 
@@ -207,7 +207,7 @@ bool AsciiFilter::skipEmptyParts() const{
 	return d->skipEmptyParts;
 }
 
-void AsciiFilter::setSimplifyWhitespacesEnabled(bool b){
+void AsciiFilter::setSimplifyWhitespacesEnabled(bool b) {
 	d->simplifyWhitespacesEnabled=b;
 }
 
@@ -215,7 +215,7 @@ bool AsciiFilter::simplifyWhitespacesEnabled() const{
 	return d->simplifyWhitespacesEnabled;
 }
 
-void AsciiFilter::setStartRow(const int r){
+void AsciiFilter::setStartRow(const int r) {
 	d->startRow=r;
 }
 
@@ -223,7 +223,7 @@ int AsciiFilter::startRow() const{
 	return d->startRow;
 }
 
-void AsciiFilter::setEndRow(const int r){
+void AsciiFilter::setEndRow(const int r) {
 	d->endRow=r;
 }
 
@@ -231,7 +231,7 @@ int AsciiFilter::endRow() const{
 	return d->endRow;
 }
 
-void AsciiFilter::setStartColumn(const int c){
+void AsciiFilter::setStartColumn(const int c) {
 	d->startColumn=c;
 }
 
@@ -239,7 +239,7 @@ int AsciiFilter::startColumn() const{
 	return d->startColumn;
 }
 
-void AsciiFilter::setEndColumn(const int c){
+void AsciiFilter::setEndColumn(const int c) {
 	d->endColumn=c;
 }
 
@@ -268,8 +268,7 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
     reads the content of the file \c fileName to the data source \c dataSource or return as string for preview.
     Uses the settings defined in the data source.
 */
-QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines){
-	QStringList dataString;
+QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
 
 	QIODevice *device = KFilterDev::deviceForFile(fileName);
 	if (!device->open(QIODevice::ReadOnly))
@@ -282,13 +281,12 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	//...
 
 	//skip rows, if required
-	for (int i=0; i<startRow-1; i++){
-        //if the number of rows to skip is bigger then the actual number
-		//of the rows in the file, then quit the function.
-		if( in.atEnd() ) {
-			if (mode==AbstractFileFilter::Replace) {
+	for (int i=0; i < startRow-1; i++) {
+		//if the number of rows to skip is bigger then the actual number of the rows in the file, then quit the function.
+		if (in.atEnd()) {
+			if (mode == AbstractFileFilter::Replace) {
 				//file with no data to be imported. In replace-mode clear the data source
-				if(dataSource != NULL)
+				if (dataSource != NULL)
 					dataSource->clear();
 			}
 			return QString();
@@ -297,59 +295,59 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 		in.readLine();
 	}
 
-	//parse the first row:
-	//use the first row to determine the number of columns,
-	//create the columns and use (optionaly) the first row to name them
-	if( in.atEnd() ) {
-		if (mode==AbstractFileFilter::Replace) {
+	if (in.atEnd()) {
+		if (mode == AbstractFileFilter::Replace) {
 			//file with no data to be imported. In replace-mode clear the data source
-			if(dataSource != NULL)
+			if (dataSource != NULL)
 				dataSource->clear();
 		}
 		return QString();
 	}
 
+	//parse the first row:
+	//use the first row to determine the number of columns,
+	//create the columns and use (optionaly) the first row to name them
 	QString line = in.readLine();
-	if( simplifyWhitespacesEnabled)
+	if (simplifyWhitespacesEnabled)
 		line = line.simplified();
 
 	// determine separator
 	QString separator;
 	QStringList lineStringList;
-	if( separatingCharacter == "auto" ){
+	if (separatingCharacter == "auto") {
 		QRegExp regExp("(\\s+)|(,\\s+)|(;\\s+)|(:\\s+)");
 		lineStringList = line.split( regExp, QString::SplitBehavior(skipEmptyParts) );
 
 		//determine the separator
-		if (lineStringList.size()){
+		if (lineStringList.size()) {
 			int length1 = lineStringList.at(0).length();
-			if (lineStringList.size()>1){
+			if (lineStringList.size()>1) {
 				int pos2 = line.indexOf(lineStringList.at(1),length1);
 				separator = line.mid(length1, pos2-length1);
 			}else {
 				separator = line.right(line.length()-length1);
 			}
 		}
-	}else {
+	} else {
 		separator = separatingCharacter.replace(QLatin1String("TAB"), QLatin1String("\t"), Qt::CaseInsensitive);
 		separator = separatingCharacter.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
-		lineStringList = line.split( separator, QString::SplitBehavior(skipEmptyParts) );
+		lineStringList = line.split(separator, QString::SplitBehavior(skipEmptyParts));
 	}
-#ifdef QT_DEBUG
+#ifndef NDEBUG
  	qDebug() << "separator '"<<separator << "'";
+ 	qDebug() << "headerEnabled ="<<headerEnabled;
 #endif
 
 	if (endColumn == -1)
 		endColumn = lineStringList.size(); //use the last available column index
 
 	QStringList vectorNameList;
-	if ( headerEnabled ){
+	if (headerEnabled) {
 		vectorNameList = lineStringList;
-	}else{
+	} else {
 		//create vector names out of the space separated vectorNames-string, if not empty
-		if (!vectorNames.isEmpty()){
+		if (!vectorNames.isEmpty())
 			vectorNameList = vectorNames.split(' ');
-		}
 	}
 
 	//qDebug()<<"	vector names ="<<vectorNameList;
@@ -371,7 +369,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	if (lines == -1)
 		lines=actualRows;
 
-#ifdef QT_DEBUG
+#ifndef NDEBUG
 	qDebug()<<"	start column ="<<startColumn;
 	qDebug()<<"	end column ="<<endColumn;
 	qDebug()<<"	actual cols ="<<actualCols;
@@ -383,17 +381,17 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 
 	int currentRow=0; //indexes the position in the vector(column)
 	int columnOffset=0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
-	//pointers to the actual data containers
-	QVector<QVector<double>*> dataPointers;
+	QVector<QVector<double>*> dataPointers;	// pointers to the actual data containers
+	QStringList dataString;
 
-	if(dataSource != NULL)
+	if (dataSource != NULL)
 		columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols, vectorNameList);
 
 	//header: import the values in the first line, if they were not used as the header (as the names for the columns)
 	bool isNumber;
-	if (!headerEnabled){
-		for ( int n=0; n<actualCols; n++ ){
-			if (n<lineStringList.size()) {
+	if (!headerEnabled) {
+		for (int n=0; n < actualCols; n++) {
+			if (n < lineStringList.size()) {
 				const double value = lineStringList.at(n).toDouble(&isNumber);
 				if (dataSource != NULL)
 					isNumber ? dataPointers[n]->operator[](0) = value : dataPointers[n]->operator[](0) = NAN;
@@ -411,17 +409,17 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	}
 
 	//Read the remainder of the file.
-	for (int i=currentRow; i<qMin(lines,actualRows); i++){
+	for (int i=currentRow; i < qMin(lines,actualRows); i++) {
 		line = in.readLine();
 
-		if(simplifyWhitespacesEnabled)
+		if (simplifyWhitespacesEnabled)
 			line = line.simplified();
 
 		//skip empty lines
 		if (line.isEmpty())
 			continue;
 
-		if( line.startsWith(commentCharacter) == true ){
+		if (line.startsWith(commentCharacter) == true ) {
 			currentRow++;
 			continue;
 		}
@@ -429,8 +427,8 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 		lineStringList = line.split( separator, QString::SplitBehavior(skipEmptyParts) );
 
 		// TODO : read strings (comments) or datetime too
-		for ( int n=0; n<actualCols; n++ ){
-			if (n<lineStringList.size()) {
+		for (int n=0; n < actualCols; n++) {
+			if (n < lineStringList.size()) {
 				const double value = lineStringList.at(n).toDouble(&isNumber);
 				if (dataSource != NULL)
 					isNumber ? dataPointers[n]->operator[](currentRow) = value : dataPointers[n]->operator[](currentRow) = NAN;
@@ -458,11 +456,11 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	if (spreadsheet) {
 		//TODO: generalize to different data types
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", headerEnabled ? currentRow : currentRow+1);
-		for ( int n=startColumn; n<=endColumn; n++ ){
+		for (int n=startColumn; n <= endColumn; n++) {
 			Column* column = spreadsheet->column(columnOffset+n-startColumn);
 			column->setComment(comment);
 			column->setUndoAware(true);
-			if (mode==AbstractFileFilter::Replace) {
+			if (mode == AbstractFileFilter::Replace) {
 				column->setSuppressDataChangedSignal(false);
 				column->setChanged();
 			}
@@ -485,14 +483,14 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 /*!
     reads the content of the file \c fileName to the data source \c dataSource.
 */
-void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
+void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
 	readData(fileName,dataSource,mode);
 }
 
 /*!
     writes the content of \c dataSource to the file \c fileName.
 */
-void AsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource){
+void AsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
 	Q_UNUSED(fileName);
 	Q_UNUSED(dataSource);
 	//TODO
@@ -525,7 +523,7 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool AsciiFilter::load(XmlStreamReader* reader) {
-	if(!reader->isStartElement() || reader->name() != "asciiFilter"){
+	if (!reader->isStartElement() || reader->name() != "asciiFilter") {
 		reader->raiseError(i18n("no ascii filter element found"));
 		return false;
 	}
@@ -534,25 +532,25 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	QString str = attribs.value("commentCharacter").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'commentCharacter'"));
 	else
 		d->commentCharacter = str;
 
 	str = attribs.value("separatingCharacter").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'separatingCharacter'"));
 	else
 		d->separatingCharacter = str;
 
 	str = attribs.value("autoMode").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'autoMode'"));
 	else
 		d->autoModeEnabled = str.toInt();
 
 	str = attribs.value("header").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'header'"));
 	else
 		d->headerEnabled = str.toInt();
@@ -561,43 +559,43 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	d->vectorNames = str; //may be empty
 
 	str = attribs.value("simplifyWhitespaces").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'simplifyWhitespaces'"));
 	else
 		d->simplifyWhitespacesEnabled = str.toInt();
 
 	str = attribs.value("skipEmptyParts").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'skipEmptyParts'"));
 	else
 		d->skipEmptyParts = str.toInt();
 
 	str = attribs.value("transposed").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'transposed'"));
 	else
 		d->transposed = str.toInt();
 
 	str = attribs.value("startRow").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'startRow'"));
 	else
 		d->startRow = str.toInt();
 
 	str = attribs.value("endRow").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'endRow'"));
 	else
 		d->endRow = str.toInt();
 
 	str = attribs.value("startColumn").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'startColumn'"));
 	else
 		d->startColumn = str.toInt();
 
 	str = attribs.value("endColumn").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'endColumn'"));
 	else
 		d->endColumn = str.toInt();

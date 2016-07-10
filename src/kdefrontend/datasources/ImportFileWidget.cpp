@@ -45,8 +45,6 @@ Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 #include <QDebug>
 #include <QTimer>
 
-#include <kfilterdev.h>
-
 /*!
    \class ImportFileWidget
    \brief Widget for importing data from a file.
@@ -148,7 +146,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( hdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(hdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
 	connect( hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 	connect( netcdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(netcdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
-    connect( netcdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
+	connect( netcdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
 	ui.bSaveFilter->hide();
@@ -185,6 +183,7 @@ void ImportFileWidget::loadSettings() {
 	//general settings
 	ui.cbFileType->setCurrentIndex(conf.readEntry("Type", 0));
 	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
+	filterChanged(ui.cbFilter->currentIndex());	// needed if filter is not changed
 	if (m_fileName.isEmpty())
 		ui.kleFileName->setText(conf.readEntry("LastImportedFile", ""));
 	else
@@ -282,9 +281,9 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		//TODO use auto_ptr
 		AsciiFilter* filter = new AsciiFilter();
 
-		if ( ui.cbFilter->currentIndex()==0 ) { //"automatic"
+		if (ui.cbFilter->currentIndex() == 0) { //"automatic"
 			filter->setAutoModeEnabled(true);
-		} else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
+		} else if (ui.cbFilter->currentIndex() == 1) { //"custom"
 			filter->setAutoModeEnabled(false);
 			filter->setCommentCharacter( asciiOptionsWidget.cbCommentCharacter->currentText() );
 			filter->setSeparatingCharacter( asciiOptionsWidget.cbSeparatingCharacter->currentText() );
@@ -376,18 +375,18 @@ void ImportFileWidget::selectFile() {
 		return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());
-	if (pos!=-1) {
+	if (pos != -1) {
 		QString newDir = path.left(pos);
-		if (newDir!=dir)
+		if (newDir != dir)
 			conf.writeEntry("LastDir", newDir);
 	}
 
-	ui.kleFileName->setText( path );
+	ui.kleFileName->setText(path);
 
 	//use the file name as the name of the data source,
 	//if there is no data source name provided yet
 	if (ui.kleSourceName->text().isEmpty()) {
-        QString fileName = QFileInfo(path).fileName();
+		QString fileName = QFileInfo(path).fileName();
 		ui.kleSourceName->setText(fileName);
 	}
 
@@ -432,7 +431,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	proc->start("file", args);
 
 	QString debug;
-	if ( proc->waitForReadyRead(1000) == false ) {
+	if (proc->waitForReadyRead(1000) == false) {
 		// 		kDebug()<<"ERROR: reading file type of file"<<ui.kleFileName->text()<<endl;
 	} else {
 		QString info = proc->readLine();
@@ -499,7 +498,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 void ImportFileWidget::saveFilter() {
 	bool ok;
 	QString text = QInputDialog::getText(this, i18n("Save Filter Settings as"),
-	                                     i18n("Filter name:"), QLineEdit::Normal, i18n("new filter"), &ok);
+				i18n("Filter name:"), QLineEdit::Normal, i18n("new filter"), &ok);
 	if (ok && !text.isEmpty()) {
 		//TODO
 		//AsciiFilter::saveFilter()
@@ -537,18 +536,16 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	ui.sbEndColumn->show();
 
 	switch (fileType) {
-	case FileDataSource::Ascii: {
+	case FileDataSource::Ascii:
 		break;
-	}
-	case FileDataSource::Binary: {
+	case FileDataSource::Binary:
 		ui.lStartColumn->hide();
 		ui.sbStartColumn->hide();
 		ui.lEndColumn->hide();
 		ui.sbEndColumn->hide();
 		break;
-	}
 	case FileDataSource::HDF:
-	case FileDataSource::NETCDF: {
+	case FileDataSource::NETCDF:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		// hide global preview tab. we have our own
@@ -556,16 +553,12 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.tabWidget->removeTab(1);
 		ui.tabWidget->setCurrentIndex(0);
 		break;
-	}
-	case FileDataSource::Image: {
+	case FileDataSource::Image:
 		ui.lPreviewLines->hide();
 		ui.sbPreviewLines->hide();
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		break;
-	}
-	default:
-		qDebug()<<"unknown file type!";
 	}
 
 	hdfOptionsWidget.twContent->clear();
@@ -672,15 +665,16 @@ void ImportFileWidget::fileInfoDialog() {
 */
 void ImportFileWidget::filterChanged(int index) {
 	// ignore filter for these formats
-	if (ui.cbFileType->currentIndex() == FileDataSource::HDF || ui.cbFileType->currentIndex() == FileDataSource::NETCDF || ui.cbFileType->currentIndex() == FileDataSource::Image ) {
+	if (ui.cbFileType->currentIndex() == FileDataSource::HDF || ui.cbFileType->currentIndex() == FileDataSource::NETCDF 
+		|| ui.cbFileType->currentIndex() == FileDataSource::Image) {
 		ui.swOptions->setEnabled(true);
 		return;
 	}
 
-	if (index==0) { // "automatic"
+	if (index == 0) { // "automatic"
 		ui.swOptions->setEnabled(false);
 		ui.bSaveFilter->setEnabled(false);
-	} else if (index==1) { //custom
+	} else if (index == 1) { //custom
 		ui.swOptions->setEnabled(true);
 		ui.bSaveFilter->setEnabled(true);
 	} else {
@@ -695,7 +689,7 @@ void ImportFileWidget::filterChanged(int index) {
   Disables it otherwise.
 */
 void ImportFileWidget::headerChanged(int state) {
-	if (state==Qt::Checked) {
+	if (state == Qt::Checked) {
 		asciiOptionsWidget.kleVectorNames->setEnabled(false);
 		asciiOptionsWidget.lVectorNames->setEnabled(false);
 	} else {
@@ -708,7 +702,7 @@ void ImportFileWidget::refreshPreview() {
 	WAIT_CURSOR;
 
 	QString fileName = ui.kleFileName->text();
-	if ( fileName.left(1) != QDir::separator() )
+	if (fileName.left(1) != QDir::separator())
 		fileName = QDir::homePath() + QDir::separator() + fileName;
 
 	QString importedText;
@@ -722,6 +716,7 @@ void ImportFileWidget::refreshPreview() {
 
 	int lines = ui.sbPreviewLines->value();
 
+	bool ok=true;
 	QTableWidget *tmpTableWidget=0;
 	switch (fileType) {
 	case FileDataSource::Ascii: {
@@ -752,7 +747,7 @@ void ImportFileWidget::refreshPreview() {
 	case FileDataSource::HDF: {
 		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
 		lines = hdfOptionsWidget.sbPreviewLines->value();
-		importedText = filter->readCurrentDataSet(fileName,NULL,AbstractFileFilter::Replace,lines);
+		importedText = filter->readCurrentDataSet(fileName,NULL,ok,AbstractFileFilter::Replace,lines);
 		tmpTableWidget = hdfOptionsWidget.twPreview;
 		break;
 	}
@@ -769,17 +764,27 @@ void ImportFileWidget::refreshPreview() {
 	if( !importedText.isEmpty() ) {
 		tmpTableWidget->clear();
 
-		QStringList lineStrings = importedText.split("\n");
-		tmpTableWidget->setRowCount(qMax(lineStrings.size()-1,1));
-		for(int i=0; i<lineStrings.size(); i++) {
-			QStringList lineString = lineStrings[i].split(" ");
-			if(i==0)
-				tmpTableWidget->setColumnCount(qMax(lineString.size()-1,1));
+		if(!ok) { 
+			// show importedText as error message
+			tmpTableWidget->setRowCount(1);
+			tmpTableWidget->setColumnCount(1);
+			QTableWidgetItem* item = new QTableWidgetItem();
+			item->setText(importedText);
+			tmpTableWidget->setItem(0,0,item);
+		} else {
 
-			for(int j=0; j<lineString.size(); j++) {
-				QTableWidgetItem* item = new QTableWidgetItem();
-				item->setText(lineString[j]);
-				tmpTableWidget->setItem(i,j,item);
+			QStringList lineStrings = importedText.split("\n");
+			tmpTableWidget->setRowCount(qMax(lineStrings.size()-1,1));
+			for(int i=0; i<lineStrings.size(); i++) {
+				QStringList lineString = lineStrings[i].split(" ");
+				if(i==0)
+					tmpTableWidget->setColumnCount(qMax(lineString.size()-1,1));
+
+				for(int j=0; j<lineString.size(); j++) {
+					QTableWidgetItem* item = new QTableWidgetItem();
+					item->setText(lineString[j]);
+					tmpTableWidget->setItem(i,j,item);
+				}
 			}
 		}
 
