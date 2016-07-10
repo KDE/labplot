@@ -445,6 +445,7 @@ int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigne
 			if (error) {
 				printf("Internal error in Savitzky-Golay algorithm:\n%s",gsl_strerror(error));
 				gsl_matrix_free(rh);
+				free(result);
 				return error;
 			}
 			
@@ -494,6 +495,7 @@ int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigne
 			if (error) {
 				printf("Internal error in Savitzky-Golay algorithm:\n%s",gsl_strerror(error));
 				gsl_matrix_free(rh);
+				free(result);
 				return error;
 			}
 			
