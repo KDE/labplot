@@ -46,7 +46,9 @@
 #include <QPainter>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
-#include <QtDebug>
+#ifndef NDEBUG
+#include <QDebug>
+#endif
 // #include <QElapsedTimer>
 
 #include <KIcon>
@@ -1027,22 +1029,24 @@ void XYCurvePrivate::updateLines() {
 				msg=i18n("Error: Akima spline interpolation requires a minimum of 5 points.");
 			else
 				msg =i18n("Couldn't initialize spline function");
+#ifndef NDEBUG
 			qDebug()<<msg;
+#endif
 			recalcShapeAndBoundingRect();
 			return;
 		}
 
 		int status = gsl_spline_init (spline, x, y, count);
-		if (status ) {
+		if (status) {
 			//TODO: check in gsl/interp.c when GSL_EINVAL is thrown
 			QString gslError;
 			if (status == GSL_EINVAL)
 				gslError = "x values must be monotonically increasing.";
 			else
 				gslError = gsl_strerror (status);
-
+#ifndef NDEBUG
 			qDebug() << "Error in spline calculation. " << gslError;
-
+#endif
 			recalcShapeAndBoundingRect();
 			return;
 		}

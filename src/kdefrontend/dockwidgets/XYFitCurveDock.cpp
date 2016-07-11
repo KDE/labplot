@@ -37,7 +37,6 @@
 
 #include <QMenu>
 #include <QWidgetAction>
-#include <QDebug>
 
 /*!
   \class XYFitCurveDock

@@ -39,7 +39,6 @@
 #include <QTimer>
 #include <QDir>
 #include <QPainter>
-#include <QDebug>
 #include <KMessageBox>
 
 #include <cmath>

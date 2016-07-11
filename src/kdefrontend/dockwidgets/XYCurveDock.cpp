@@ -43,7 +43,6 @@
 #include <QDir>
 #include <QFileDialog>
 #include <KUrlCompletion>
-#include <QDebug>
 
 /*!
   \class XYCurveDock

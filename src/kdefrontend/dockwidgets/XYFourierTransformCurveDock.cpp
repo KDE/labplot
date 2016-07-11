@@ -34,7 +34,6 @@
 
 #include <QMenu>
 #include <QWidgetAction>
-#include <QDebug>
 #include <KMessageBox>
 
 /*!
