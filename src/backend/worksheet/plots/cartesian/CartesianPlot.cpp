@@ -60,7 +60,6 @@
 #define SCALE_MIN CartesianCoordinateSystem::Scale::LIMIT_MIN
 #define SCALE_MAX CartesianCoordinateSystem::Scale::LIMIT_MAX
 
-
 /**
  * \class CartesianPlot
  * \brief A xy-plot.
@@ -81,7 +80,7 @@ CartesianPlot::~CartesianPlot() {
 	delete m_coordinateSystem;
 	delete addNewMenu;
 	delete zoomMenu;
-
+	delete themeMenu;
 	//don't need to delete objects added with addChild()
 
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -402,6 +401,7 @@ void CartesianPlot::initActions() {
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+
 }
 
 void CartesianPlot::initMenus() {
@@ -437,6 +437,13 @@ void CartesianPlot::initMenus() {
 	zoomMenu->addSeparator();
 	zoomMenu->addAction(shiftUpYAction);
 	zoomMenu->addAction(shiftDownYAction);
+
+	themeMenu = new QMenu(i18n("Apply Theme"));
+	foreach(const QString theme, ThemeHandler::getThemeList())
+		themeMenu->addAction(theme);
+
+	connect(themeMenu, SIGNAL(triggered(QAction* action)), this, SLOT(loadTheme(QAction* action)));
+
 }
 
 QMenu* CartesianPlot::createContextMenu() {
@@ -449,6 +456,7 @@ QMenu* CartesianPlot::createContextMenu() {
 	menu->insertMenu(firstAction, addNewMenu);
 	menu->insertMenu(firstAction, zoomMenu);
 	menu->insertSeparator(firstAction);
+	menu->insertMenu(firstAction, themeMenu);
 
 	return menu;
 }
@@ -2082,6 +2090,12 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 	}
 
 	return true;
+}
+
+void CartesianPlot::loadTheme(QAction* action) {
+	QString themeName = action->data().toString();
+	themeName.append(".txt");
+	emit (triggerLoadTheme(themeName));
 }
 
 void CartesianPlot::loadThemeConfig(KConfig& config) {

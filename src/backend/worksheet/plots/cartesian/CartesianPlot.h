@@ -102,7 +102,6 @@ class CartesianPlot:public AbstractPlot{
 		typedef CartesianPlot BaseClass;
 		typedef CartesianPlotPrivate Private;
 
-
 	private:
 		void init();
 		void initActions();
@@ -141,6 +140,7 @@ class CartesianPlot:public AbstractPlot{
 
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;
+		QMenu* themeMenu;
 
 		Q_DECLARE_PRIVATE(CartesianPlot)
 
@@ -184,6 +184,8 @@ class CartesianPlot:public AbstractPlot{
 		//SLOTs for changes triggered via QActions in the context menu
 		void visibilityChanged();
 
+		void loadTheme(QAction* action);
+
 	protected:
 		CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
 
@@ -215,6 +217,7 @@ class CartesianPlot:public AbstractPlot{
 		void yRangeBreakingEnabledChanged(bool);
 		void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 		void themeLoaded();
+		void triggerLoadTheme(QString);
 };
 
 #endif

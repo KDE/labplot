@@ -42,25 +42,27 @@ class ThemeHandler : public QWidget{
 	Q_OBJECT
 
 	public:
-	ThemeHandler(QWidget* parent);
+		ThemeHandler(QWidget* parent);
+		static QStringList getThemeList();
 
 	private:
-        QList<QString> dirNames;
+		QList<QString> dirNames;
+		QHBoxLayout *horizontalLayout;
+		QSpacerItem *horizontalSpacer;
+		QSpacerItem *horizontalSpacer2;
+		QLabel *lTheme;
+		QPushButton *pbLoadTheme;
+		QStringList m_themeList;
 
-        QHBoxLayout *horizontalLayout;
-        QSpacerItem *horizontalSpacer;
-        QSpacerItem *horizontalSpacer2;
-        QLabel *lTheme;
-	QPushButton *pbLoadTheme;
-	QStringList m_themeList;
 
-    private slots:
-        void loadMenu();
-	void loadSelected(QAction*);
+	private slots:
+		void loadMenu();
+		void loadSelected(QAction*);
+		void triggerLoadTheme(QString);
 
-    signals:
-	void loadThemeRequested(KConfig& config);
-        void info(const QString&);
+	signals:
+		void loadThemeRequested(KConfig& config);
+		void info(const QString&);
 };
 
 #endif

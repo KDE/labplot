@@ -431,15 +431,11 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToSelectionAction);
 	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToAllAction);
 
-	m_cartesianPlotThemeMenu = new QMenu(i18n("Apply Theme"), this);
-
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotMouseModeMenu);
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotAddNewMenu);
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotZoomMenu);
 	m_cartesianPlotMenu->addSeparator();
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotActionModeMenu);
-	m_cartesianPlotMenu->addSeparator();
-	m_cartesianPlotMenu->addMenu(m_cartesianPlotThemeMenu);
 
 	// Filter menu?
 	//m_filterMenu = new QMenu(i18n("Filter"));

@@ -96,3 +96,27 @@ void ThemeHandler::loadSelected(QAction* action) {
 
 	emit info( i18n("Theme \"%1\" was loaded.", action->text().remove('&')) );
 }
+
+QStringList ThemeHandler::getThemeList() {
+	QStringList pathList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
+	QStringList themeList;
+	for(int i = 0; i < pathList.size(); ++i) {
+		QFileInfo fileinfo(pathList.at(i));
+		themeList.append(fileinfo.fileName().split('.').at(0));
+	}
+	return themeList;
+}
+
+void ThemeHandler::triggerLoadTheme(QString themeName) {
+	QString name;
+	int i;
+	for(i = 0; i < m_themeList.size(); ++i) {
+		QFileInfo fileinfo(m_themeList.at(i));
+		name = fileinfo.fileName().split('.').at(0);
+		if(name==themeName)
+			break;
+	}
+
+	KConfig config(m_themeList.at(i), KConfig::SimpleConfig);
+	emit (loadThemeRequested(config));
+}
