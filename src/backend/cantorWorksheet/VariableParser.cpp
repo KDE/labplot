@@ -29,6 +29,7 @@
 
 #include "VariableParser.h"
 #include <QStringList>
+#include <cmath>
 
 VariableParser::VariableParser(const QString& name, const QString& value)
 	: m_backendName(name), m_string(value), m_parsed(false) {
