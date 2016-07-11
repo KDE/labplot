@@ -34,8 +34,10 @@
 
 #include <QMenu>
 #include <QWidgetAction>
-#include <QDebug>
 #include <KMessageBox>
+#ifndef NDEBUG
+#include <QDebug>
+#endif
 
 /*!
   \class XYFourierFilterCurveDock

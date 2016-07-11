@@ -28,7 +28,6 @@
 
 #include "CantorWorksheetDock.h"
 #include "backend/cantorWorksheet/CantorWorksheet.h"
-#include <QDebug>
 #include <cantor/session.h>
 #include <KParts/ReadWritePart>
 

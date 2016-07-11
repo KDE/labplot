@@ -49,6 +49,9 @@ extern "C" {
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
+#ifndef NDEBUG
+#include <QDebug>
+#endif
 
 XYFourierTransformCurve::XYFourierTransformCurve(const QString& name)
 		: XYCurve(name, new XYFourierTransformCurvePrivate(this)) {

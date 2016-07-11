@@ -54,6 +54,9 @@ extern "C" {
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
+#ifndef NDEBUG
+#include <QDebug>
+#endif
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
 		: XYCurve(name, new XYFourierFilterCurvePrivate(this)) {

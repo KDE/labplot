@@ -40,7 +40,6 @@
 #include <QImageReader>
 #include <KUrlCompletion>
 
-#include <QDebug>
 #include <cmath>
 
 /*!

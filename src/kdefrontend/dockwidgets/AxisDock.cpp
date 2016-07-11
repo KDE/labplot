@@ -40,7 +40,6 @@
 #include <QDir>
 #include <QPainter>
 #include <KLocalizedString>
-#include <QDebug>
 #include <KMessageBox>
 
 #include <cmath>
