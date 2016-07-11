@@ -567,32 +567,13 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
                 strcpy(tunit[i], "");
                 int maxSize = -1;
                 for (int row = 0; row < nrows; ++row) {
-                    if (QString::number(column.at(row)).size() > maxSize) {
-                        maxSize = QString::number(column.at(row)).size();
-                    }
-                }
-
-                bool decimals = false;
-                for (int ii = 0; ii < nrows; ++ii) {
-                    bool ok;
-                    QString cell = matrix->text(ii, i);
-                    double val = cell.toDouble(&ok);
-                    if (cell.size() > QString::number(val).size() + 1) {
-                        decimals = true;
-                        break;
+                    if (matrix->text(row, i).size() > maxSize) {
+                        maxSize = matrix->text(row, i).size();
                     }
                 }
                 // TODO ?
                 QString tformn;
-                if (decimals) {
-                    int maxStringSize = -1;
-                    for (int row = 0; row < nrows; ++row) {
-                        if (matrix->text(row, i).size() > maxStringSize) {
-                            maxStringSize = matrix->text(row, i).size();
-                        }
-                    }
-                    int diff = abs(maxSize - maxStringSize);
-                    maxSize+= diff;
+                if (precision > 0) {
                     tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".") +
                             QString::number(precision);
                 } else {
@@ -600,7 +581,6 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
                 }
                 tform[i] = new char[tformn.size()];
                 strcpy(tform[i], tformn.toLatin1().data());
-
             }
             //TODO extension name containing[] ?
 
@@ -627,6 +607,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
             double* columnNumeric = new double[nrows];
             for (int col = 1; col <= tfields; ++col) {
+                column = matrixData.at(col-1);
                 for (int r = 0; r < column.size(); ++r) {
                     columnNumeric[r] = column.at(r);
                 }
@@ -1168,6 +1149,7 @@ void FITSFilterPrivate::removeExtensions(const QStringList &extensions) {
 #ifdef HAVE_FITS
     int status = 0;
     foreach (const QString& ext, extensions) {
+        qDebug() << "Removing: " << ext;
         if (fits_open_file(&fitsFile, ext.toLatin1(), READWRITE, &status )) {
             printError(status);
         }

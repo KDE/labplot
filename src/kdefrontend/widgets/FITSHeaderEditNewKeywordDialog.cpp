@@ -35,13 +35,13 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
     setButtons( KDialog::Ok | KDialog::Cancel );
     setButtonText(KDialog::Ok, i18n("&Add keyword"));
 
-    m_keyCompletion = new KCompletion;
-    m_keyCompletion->setItems(FITSFilter::standardKeywords());
-    ui.kleKey->setCompletionObject(m_keyCompletion);
+    KCompletion* keyCompletion = new KCompletion;
+    keyCompletion->setItems(FITSFilter::standardKeywords());
+    ui.kleKey->setCompletionObject(keyCompletion);
+    ui.kleKey->setAutoDeleteCompletionObject(true);
 }
 
 FITSHeaderEditNewKeywordDialog::~FITSHeaderEditNewKeywordDialog() {
-    delete m_keyCompletion;
 }
 
 int FITSHeaderEditNewKeywordDialog::okClicked() {

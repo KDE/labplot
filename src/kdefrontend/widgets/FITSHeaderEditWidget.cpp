@@ -77,30 +77,33 @@ void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
     WAIT_CURSOR;
     QString itemText = item->text(col);
     QString selectedExtension;
-    if (itemText.contains(QLatin1String("IMAGE #"))) {
-
+    int extType = 0;
+    if (itemText.contains(QLatin1String("IMAGE #")) ||
+            itemText.contains(QLatin1String("ASCII_TBL #")) ||
+            itemText.contains(QLatin1String("BINARY_TBL #"))){
+        extType = 1;
+    } else if (!itemText.compare(QLatin1String("Primary header"))) {
+        extType = 2;
+    }
+    if (extType == 0) {
+        if (item->parent() != 0) {
+            if (item->parent()->parent() != 0)
+                selectedExtension = item->parent()->parent()->text(0) +"["+ item->text(col)+"]";
+        }
+    } else if (extType == 1) {
         if (item->parent() != 0) {
             if (item->parent()->parent() != 0) {
                 bool ok;
                 int hduNum = itemText.right(1).toInt(&ok);
                 selectedExtension = item->parent()->parent()->text(0) +"["+ QString::number(hduNum-1) +"]";
-                qDebug() << selectedExtension;
             }
         }
-    } else if (itemText.contains(QLatin1String("ASCII_TBL #"))) {
-
-    } else if (itemText.contains(QLatin1String("BINARY_TBL #"))) {
-
-    } else if (!itemText.compare(QLatin1String("Primary header"))) {
+    } else {
         if (item->parent()->parent() != 0) {
             selectedExtension = item->parent()->parent()->text(col);
         }
-    } else {
-        if (item->parent() != 0) {
-            if (item->parent()->parent() != 0)
-                selectedExtension = item->parent()->parent()->text(0) +"["+ item->text(col)+"]";
-        }
     }
+
     if (!selectedExtension.isEmpty()) {
         if (!(m_seletedExtension == selectedExtension)) {
             m_seletedExtension = selectedExtension;

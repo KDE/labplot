@@ -46,7 +46,6 @@ public:
 
 private:
     Ui::FITSHeaderEditNewKeywordDialog ui;
-    KCompletion* m_keyCompletion;
     FITSFilter::Keyword m_newKeyword;
     int okClicked();
 protected slots:
