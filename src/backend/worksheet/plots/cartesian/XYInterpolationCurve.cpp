@@ -46,10 +46,10 @@ extern "C" {
 #include <gsl/gsl_spline.h>
 }
 
-#include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
 #include <QThreadPool>
+#include <QIcon>
 #ifndef NDEBUG
 #include <QDebug>
 #endif
@@ -87,7 +87,7 @@ void XYInterpolationCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYInterpolationCurve::icon() const {
-	return KIcon("labplot-xy-interpolation-curve");
+	return QIcon::fromTheme("labplot-xy-interpolation-curve");
 }
 
 //##############################################################################

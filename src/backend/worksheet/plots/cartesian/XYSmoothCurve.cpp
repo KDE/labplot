@@ -38,8 +38,8 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 
-#include <KIcon>
 #include <KLocale>
+#include <QIcon>
 #include <QElapsedTimer>
 #include <QThreadPool>
 #include <QDebug>

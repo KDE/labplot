@@ -50,9 +50,9 @@ extern "C" {
 #include "backend/nsl/nsl_sf_poly.h"
 }
 
-#include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
+#include <QIcon>
 #include <QThreadPool>
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
@@ -88,7 +88,7 @@ void XYFourierFilterCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYFourierFilterCurve::icon() const {
-	return KIcon("labplot-xy-fourier_filter-curve");
+	return QIcon::fromTheme("labplot-xy-fourier_filter-curve");
 }
 
 //##############################################################################

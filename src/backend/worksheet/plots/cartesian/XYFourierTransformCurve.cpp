@@ -45,9 +45,9 @@ extern "C" {
 #include "backend/nsl/nsl_sf_poly.h"
 }
 
-#include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
+#include <QIcon>
 #include <QThreadPool>
 
 XYFourierTransformCurve::XYFourierTransformCurve(const QString& name)
@@ -83,7 +83,7 @@ void XYFourierTransformCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYFourierTransformCurve::icon() const {
-	return KIcon("labplot-xy-fourier_transform-curve");
+	return QIcon::fromTheme("labplot-xy-fourier_transform-curve");
 }
 
 //##############################################################################
