@@ -452,17 +452,16 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	fileInfo = proc->readLine();
 #endif
 
-	FileDataSource::FileType fileType = FileDataSource::Binary;	// default file type
 	QByteArray imageFormat = QImageReader::imageFormat(fileName);
 	if (fileInfo.contains("compressed data") || fileInfo.contains("ASCII") ||
 			fileName.endsWith("dat", Qt::CaseInsensitive) || fileName.endsWith("txt", Qt::CaseInsensitive)) {
 		//probably ascii data
-		fileType = FileDataSource::Ascii;
+		ui.cbFileType->setCurrentIndex(FileDataSource::Ascii);
 	} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty()) {
-		fileType = FileDataSource::Image;
+		ui.cbFileType->setCurrentIndex(FileDataSource::Image);
 	} else if (fileInfo.contains("Hierarchical Data Format") || fileName.endsWith("h5", Qt::CaseInsensitive) ||
 			fileName.endsWith("hdf", Qt::CaseInsensitive) || fileName.endsWith("hdf5", Qt::CaseInsensitive) ) {
-		fileType = FileDataSource::HDF;
+		ui.cbFileType->setCurrentIndex(FileDataSource::HDF);
 
 		// update HDF tree widget using current selected file
 		hdfOptionsWidget.twContent->clear();
@@ -476,7 +475,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		hdfOptionsWidget.twContent->resizeColumnToContents(3);
 	} else if (fileInfo.contains("NetCDF Data Format") || fileName.endsWith("nc", Qt::CaseInsensitive) ||
 			fileName.endsWith("netcdf", Qt::CaseInsensitive) || fileName.endsWith("cdf", Qt::CaseInsensitive)) {
-		fileType = FileDataSource::NETCDF;
+		ui.cbFileType->setCurrentIndex(FileDataSource::NETCDF);
 
 		// update NetCDF tree widget using current selected file
 		netcdfOptionsWidget.twContent->clear();
@@ -488,13 +487,9 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		netcdfOptionsWidget.twContent->expandAll();
 		netcdfOptionsWidget.twContent->resizeColumnToContents(0);
 		netcdfOptionsWidget.twContent->resizeColumnToContents(2);
+	} else {
+		ui.cbFileType->setCurrentIndex(FileDataSource::Binary);	// default
 	}
-
-	ui.cbFileType->setCurrentIndex(fileType);
-
-#ifndef NDEBUG
-	qDebug()<<"detected file of type"<<fileType;
-#endif
 
 	refreshPreview();
 	emit fileNameChanged();
