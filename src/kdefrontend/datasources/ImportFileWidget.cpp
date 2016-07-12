@@ -438,57 +438,60 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		return;
 	}
 
+	QString fileInfo;
+#ifndef _WIN32
 	//check, if we can guess the file type by content
-	// only works on Linux
 	QProcess *proc = new QProcess(this);
 	QStringList args;
 	args<<"-b"<<ui.kleFileName->text();
 	proc->start("file", args);
+	if (proc->waitForReadyRead(1000) == false) {
+		qDebug()<<"ERROR: reading file type of file"<<fileName;
+		return;
+	}
+	fileInfo = proc->readLine();
+#endif
 
 	FileDataSource::FileType fileType = FileDataSource::Binary;	// default file type
-	if (proc->waitForReadyRead(1000) == false) {
-		qDebug()<<"ERROR: reading file type of file"<<ui.kleFileName->text();
-	} else {
-		QString fileInfo = proc->readLine();
-		QByteArray imageFormat = QImageReader::imageFormat(fileName);
-		if (fileInfo.contains("compressed data") || fileInfo.contains("ASCII") ||
+	QByteArray imageFormat = QImageReader::imageFormat(fileName);
+	if (fileInfo.contains("compressed data") || fileInfo.contains("ASCII") ||
 			fileName.endsWith("dat", Qt::CaseInsensitive) || fileName.endsWith("txt", Qt::CaseInsensitive)) {
-			//probably ascii data
-			fileType = FileDataSource::Ascii;
-		} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty()) {
-			fileType = FileDataSource::Image;
-		} else if (fileInfo.contains("Hierarchical Data Format") || fileName.endsWith("h5", Qt::CaseInsensitive) || 
-				fileName.endsWith("hdf", Qt::CaseInsensitive) || fileName.endsWith("hdf5", Qt::CaseInsensitive) ) {
-			fileType = FileDataSource::HDF;
+		//probably ascii data
+		fileType = FileDataSource::Ascii;
+	} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty()) {
+		fileType = FileDataSource::Image;
+	} else if (fileInfo.contains("Hierarchical Data Format") || fileName.endsWith("h5", Qt::CaseInsensitive) ||
+			fileName.endsWith("hdf", Qt::CaseInsensitive) || fileName.endsWith("hdf5", Qt::CaseInsensitive) ) {
+		fileType = FileDataSource::HDF;
 
-			// update HDF tree widget using current selected file
-			hdfOptionsWidget.twContent->clear();
+		// update HDF tree widget using current selected file
+		hdfOptionsWidget.twContent->clear();
 
-			QTreeWidgetItem *rootItem = hdfOptionsWidget.twContent->invisibleRootItem();
-			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
-			filter->parse(fileName, rootItem);
-			hdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
-			hdfOptionsWidget.twContent->expandAll();
-			hdfOptionsWidget.twContent->resizeColumnToContents(0);
-			hdfOptionsWidget.twContent->resizeColumnToContents(3);
-		} else if (fileInfo.contains("NetCDF Data Format") || fileName.endsWith("nc", Qt::CaseInsensitive) || 
+		QTreeWidgetItem *rootItem = hdfOptionsWidget.twContent->invisibleRootItem();
+		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
+		filter->parse(fileName, rootItem);
+		hdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
+		hdfOptionsWidget.twContent->expandAll();
+		hdfOptionsWidget.twContent->resizeColumnToContents(0);
+		hdfOptionsWidget.twContent->resizeColumnToContents(3);
+	} else if (fileInfo.contains("NetCDF Data Format") || fileName.endsWith("nc", Qt::CaseInsensitive) ||
 			fileName.endsWith("netcdf", Qt::CaseInsensitive) || fileName.endsWith("cdf", Qt::CaseInsensitive)) {
-			fileType = FileDataSource::NETCDF;
+		fileType = FileDataSource::NETCDF;
 
-			// update NetCDF tree widget using current selected file
-			netcdfOptionsWidget.twContent->clear();
+		// update NetCDF tree widget using current selected file
+		netcdfOptionsWidget.twContent->clear();
 
-			QTreeWidgetItem *rootItem = netcdfOptionsWidget.twContent->invisibleRootItem();
-			NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
-			filter->parse(fileName, rootItem);
-			netcdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
-			netcdfOptionsWidget.twContent->expandAll();
-			netcdfOptionsWidget.twContent->resizeColumnToContents(0);
-			netcdfOptionsWidget.twContent->resizeColumnToContents(2);
-		}
-
-		ui.cbFileType->setCurrentIndex(fileType);
+		QTreeWidgetItem *rootItem = netcdfOptionsWidget.twContent->invisibleRootItem();
+		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
+		filter->parse(fileName, rootItem);
+		netcdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
+		netcdfOptionsWidget.twContent->expandAll();
+		netcdfOptionsWidget.twContent->resizeColumnToContents(0);
+		netcdfOptionsWidget.twContent->resizeColumnToContents(2);
 	}
+
+	ui.cbFileType->setCurrentIndex(fileType);
+
 #ifndef NDEBUG
 	qDebug()<<"detected file of type"<<fileType;
 #endif
@@ -707,8 +710,10 @@ void ImportFileWidget::refreshPreview() {
 	WAIT_CURSOR;
 
 	QString fileName = ui.kleFileName->text();
+#ifndef _WIN32
 	if (fileName.left(1) != QDir::separator())
 		fileName = QDir::homePath() + QDir::separator() + fileName;
+#endif
 
 	QString importedText;
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
