@@ -195,7 +195,7 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
  */
 QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 
-    #ifdef HAVE_FITS
+#ifdef HAVE_FITS
     int status = 0;
 
     if(fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status)) {
@@ -485,8 +485,8 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
     Q_UNUSED(dataSource)
     Q_UNUSED(importMode)
     Q_UNUSED(lines)
+#endif
     return QString();
-    #endif
 }
 
 /*!

@@ -42,10 +42,11 @@
 
 #include <cmath>	// isnan
 #include <cfloat>	// DBL_MIN
-#include <gsl_errno.h>
+extern "C" {
+#include <gsl/gsl_errno.h>
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_spline.h>
-
+}
 #include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>

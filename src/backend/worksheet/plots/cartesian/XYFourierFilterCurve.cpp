@@ -40,11 +40,12 @@
 #include "backend/lib/commandtemplates.h"
 
 #include <cmath>	// isnan
-#include <gsl_errno.h>
+extern "C" {
+#include <gsl/gsl_errno.h>
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_halfcomplex.h>
 #include <gsl/gsl_sf_pow_int.h>
-
+}
 #include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
