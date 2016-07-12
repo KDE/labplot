@@ -773,7 +773,17 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		d->curvesXMinMaxIsDirty = true;
 		d->curvesYMinMaxIsDirty = true;
 	}
+	else{
+		const Histogram* histo = qobject_cast<const Histogram*>(child);
+			if (histo)
+			{
+				connect(histo, SIGNAL(xHistogramDataChanged()), this, SLOT(xHistogramDataChanged()));
+				connect(histo, SIGNAL(yHistogramDataChanged()), this, SLOT(yHistogramDataChanged()));
+				connect(histo, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged()));
+			}
+	}
 }
+
 
 void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
 	Q_UNUSED(parent);
@@ -831,6 +841,20 @@ void CartesianPlot::xDataChanged(){
 		curve->retransform();
 }
 
+#include <QDebug>
+void CartesianPlot::xHistogramDataChanged(){
+	if (project()->isLoading())
+		return;
+
+	Q_D(CartesianPlot);
+	Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
+	Q_ASSERT(curve);
+	d->curvesXMinMaxIsDirty = true;
+	if (d->autoScaleX)
+		this->scaleAutoX();
+	else
+		curve->retransform();
+}
 /*!
 	called when in one of the curves the x-data was changed.
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
@@ -841,6 +865,19 @@ void CartesianPlot::yDataChanged(){
 
 	Q_D(CartesianPlot);
 	XYCurve* curve = dynamic_cast<XYCurve*>(QObject::sender());
+	Q_ASSERT(curve);
+	d->curvesYMinMaxIsDirty = true;
+	if (d->autoScaleY)
+		this->scaleAutoY();
+	else
+		curve->retransform();
+}
+void CartesianPlot::yHistogramDataChanged(){
+	if (project()->isLoading())
+		return;
+
+	Q_D(CartesianPlot);
+	Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
 	Q_ASSERT(curve);
 	d->curvesYMinMaxIsDirty = true;
 	if (d->autoScaleY)

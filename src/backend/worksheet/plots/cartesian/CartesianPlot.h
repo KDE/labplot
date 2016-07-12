@@ -172,6 +172,8 @@ class CartesianPlot:public AbstractPlot{
 		void dataChanged();
 		void xDataChanged();
 		void yDataChanged();
+		void xHistogramDataChanged();
+		void yHistogramDataChanged();
 		void curveVisibilityChanged();
 
 		//SLOTs for changes triggered via QActions in the context menu
