@@ -484,9 +484,9 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
     Q_UNUSED(fileName)
     Q_UNUSED(dataSource)
     Q_UNUSED(importMode)
+    Q_UNUSED(lines)
     return QString();
     #endif
-    return dataString.join(QLatin1String(""));
 }
 
 /*!
@@ -571,7 +571,6 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
                         maxSize = matrix->text(row, i).size();
                     }
                 }
-                // TODO ?
                 QString tformn;
                 if (precision > 0) {
                     tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".") +
@@ -996,7 +995,9 @@ void FITSFilterPrivate::addNewKeyword(const QString& fileName, const QList<FITSF
     status = 0;
     fits_close_file(fitsFile, &status);
 #else
-    Q_UNUSED(keyword)
+    Q_UNUSED(keywords)
+    Q_UNUSED(fileName)
+
 #endif
 }
 /*!
@@ -1097,6 +1098,7 @@ void FITSFilterPrivate::updateKeyword(FITSFilter::Keyword& keyword,const QString
     }
 #else
     Q_UNUSED(newKey)
+    Q_UNUSED(keyword)
     Q_UNUSED(newComment)
     Q_UNUSED(newValue)
     Q_UNUSED(updateMode)
@@ -1125,8 +1127,8 @@ void FITSFilterPrivate::deleteKeyword(const QString& fileName, const QList<FITSF
     }
     fits_close_file(fitsFile, &status);
 #else
-    Q_UNUSED(keyword)
-    return false;
+    Q_UNUSED(keywords)
+    Q_UNUSED(fileName)
 #endif
 }
 
