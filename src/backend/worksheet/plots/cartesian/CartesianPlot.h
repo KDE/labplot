@@ -217,7 +217,6 @@ class CartesianPlot:public AbstractPlot{
 		void yRangeBreakingEnabledChanged(bool);
 		void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 		void themeLoaded();
-		void triggerLoadTheme(QString);
 };
 
 #endif

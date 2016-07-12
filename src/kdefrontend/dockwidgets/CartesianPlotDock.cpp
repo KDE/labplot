@@ -170,7 +170,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	ui.verticalLayout->addWidget(themeHandler);
 	connect(themeHandler, SIGNAL(loadThemeRequested(KConfig&)), this, SLOT(loadTheme(KConfig&)));
 	connect(m_plot, SIGNAL(themeLoaded()),this, SLOT(load()));
-	connect(m_plot, SIGNAL(triggerLoadTheme(QString)), themeHandler, SLOT(triggerLoadTheme(QString)));
 
 	init();
 }
