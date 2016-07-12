@@ -1354,7 +1354,7 @@ void MainWin::redo() {
 void MainWin::updateMdiWindowVisibility() const {
 	QList<QMdiSubWindow *> windows = m_mdiArea->subWindowList();
 	PartMdiView * part_view;
-	switch(m_project->mdiWindowVisibility()) {
+	switch (m_project->mdiWindowVisibility()) {
 	case Project::allMdiWindows:
 		foreach(QMdiSubWindow* window, windows)
 			window->show();

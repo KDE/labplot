@@ -284,7 +284,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 	//qDebug()<<"	current filter ="<<ui.cbFilter->currentIndex();
 
-	switch(fileType) {
+	switch (fileType) {
 	case FileDataSource::Ascii: {
 		//TODO use auto_ptr
 		AsciiFilter* filter = new AsciiFilter();
@@ -346,7 +346,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	case FileDataSource::HDF: {
 		HDFFilter* filter = new HDFFilter();
 
-		if(!selectedHDFNames().isEmpty())
+		if (!selectedHDFNames().isEmpty())
 			filter->setCurrentDataSetName(selectedHDFNames()[0]);
 		filter->setStartRow( ui.sbStartRow->value() );
 		filter->setEndRow( ui.sbEndRow->value() );
@@ -358,7 +358,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	case FileDataSource::NETCDF: {
 		NetCDFFilter* filter = new NetCDFFilter();
 
-		if(!selectedNetCDFNames().isEmpty())
+		if (!selectedNetCDFNames().isEmpty())
 			filter->setCurrentVarName(selectedNetCDFNames()[0]);
 		filter->setStartRow( ui.sbStartRow->value() );
 		filter->setEndRow( ui.sbEndRow->value() );
@@ -581,7 +581,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 */
 void ImportFileWidget::hdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
 	Q_UNUSED(column);
-	if( item->data(2,Qt::DisplayRole).toString() == "data set" )
+	if (item->data(2, Qt::DisplayRole).toString() == "data set")
 		refreshPreview();
 	else
 		qDebug()<<"non data set selected in HDF tree widget";
@@ -595,7 +595,7 @@ const QStringList ImportFileWidget::selectedHDFNames() const {
 	QList<QTreeWidgetItem *> items = hdfOptionsWidget.twContent->selectedItems();
 
 	// the data link is saved in the second column
-	for(int i=0; i<items.size(); i++)
+	for (int i=0; i < items.size(); i++)
 		names<<items[i]->data(1,Qt::DisplayRole).toString();
 
 	return names;
@@ -607,9 +607,9 @@ const QStringList ImportFileWidget::selectedHDFNames() const {
 */
 void ImportFileWidget::netcdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
 	Q_UNUSED(column);
-	if( item->data(1,Qt::DisplayRole).toString() == "variable" ) {
+	if (item->data(1, Qt::DisplayRole).toString() == "variable") {
 		refreshPreview();
-	} else if( item->data(1,Qt::DisplayRole).toString().contains("attribute") ) {
+	} else if (item->data(1, Qt::DisplayRole).toString().contains("attribute")) {
 		// reads attributes (only for preview)
 		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 		QString fileName = ui.kleFileName->text();
@@ -621,12 +621,12 @@ void ImportFileWidget::netcdfTreeWidgetItemSelected(QTreeWidgetItem* item, int c
 
 		QStringList lineStrings = importedText.split("\n");
 		netcdfOptionsWidget.twPreview->setRowCount(lineStrings.size());
-		for(int i=0; i<lineStrings.size(); i++) {
+		for (int i=0; i < lineStrings.size(); i++) {
 			QStringList lineString = lineStrings[i].split(" ");
-			if(i==0)
+			if (i == 0)
 				netcdfOptionsWidget.twPreview->setColumnCount(lineString.size()-1);
 
-			for(int j=0; j<lineString.size(); j++) {
+			for (int j=0; j < lineString.size(); j++) {
 				QTableWidgetItem* item = new QTableWidgetItem();
 				item->setText(lineString[j]);
 				netcdfOptionsWidget.twPreview->setItem(i,j,item);
@@ -644,7 +644,7 @@ const QStringList ImportFileWidget::selectedNetCDFNames() const {
 	QStringList names;
 	QList<QTreeWidgetItem *> items = netcdfOptionsWidget.twContent->selectedItems();
 
-	for(int i=0; i<items.size(); i++)
+	for (int i=0; i < items.size(); i++)
 		names<<items[i]->data(0,Qt::DisplayRole).toString();
 
 	return names;
@@ -711,7 +711,7 @@ void ImportFileWidget::refreshPreview() {
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 
 	// generic table widget
-	if(fileType == FileDataSource::Ascii || fileType == FileDataSource::Binary)
+	if (fileType == FileDataSource::Ascii || fileType == FileDataSource::Binary)
 		twPreview->show();
 	else
 		twPreview->hide();
@@ -725,7 +725,7 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 
 		AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
-		importedText = filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
+		importedText = filter->readData(fileName, NULL, AbstractFileFilter::Replace, lines);
 		tmpTableWidget = twPreview;
 		break;
 	}
@@ -733,7 +733,7 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 
 		BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
-		importedText = filter->readData(fileName,NULL,AbstractFileFilter::Replace,lines);
+		importedText = filter->readData(fileName, NULL, AbstractFileFilter::Replace, lines);
 		tmpTableWidget = twPreview;
 		break;
 	}
@@ -749,24 +749,24 @@ void ImportFileWidget::refreshPreview() {
 	case FileDataSource::HDF: {
 		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
 		lines = hdfOptionsWidget.sbPreviewLines->value();
-		importedText = filter->readCurrentDataSet(fileName,NULL,ok,AbstractFileFilter::Replace,lines);
+		importedText = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
 		tmpTableWidget = hdfOptionsWidget.twPreview;
 		break;
 	}
 	case FileDataSource::NETCDF: {
 		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 		lines = netcdfOptionsWidget.sbPreviewLines->value();
-		importedText = filter->readCurrentVar(fileName,NULL,AbstractFileFilter::Replace,lines);
+		importedText = filter->readCurrentVar(fileName, NULL, AbstractFileFilter::Replace, lines);
 		tmpTableWidget = netcdfOptionsWidget.twPreview;
 		break;
 	}
 	}
 
 	// fill the table widget
-	if( !importedText.isEmpty() ) {
+	if (!importedText.isEmpty()) {
 		tmpTableWidget->clear();
 
-		if(!ok) { 
+		if (!ok) {
 			// show importedText as error message
 			tmpTableWidget->setRowCount(1);
 			tmpTableWidget->setColumnCount(1);
@@ -777,12 +777,12 @@ void ImportFileWidget::refreshPreview() {
 
 			QStringList lineStrings = importedText.split("\n");
 			tmpTableWidget->setRowCount(qMax(lineStrings.size()-1,1));
-			for(int i=0; i<lineStrings.size(); i++) {
+			for (int i=0; i < lineStrings.size(); i++) {
 				QStringList lineString = lineStrings[i].split(" ");
-				if(i==0)
-					tmpTableWidget->setColumnCount(qMax(lineString.size()-1,1));
+				if (i == 0)
+					tmpTableWidget->setColumnCount(qMax(lineString.size()-1, 1));
 
-				for(int j=0; j<lineString.size(); j++) {
+				for (int j=0; j < lineString.size(); j++) {
 					QTableWidgetItem* item = new QTableWidgetItem();
 					item->setText(lineString[j]);
 					tmpTableWidget->setItem(i,j,item);
