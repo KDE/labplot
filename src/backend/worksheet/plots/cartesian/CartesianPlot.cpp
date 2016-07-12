@@ -841,7 +841,6 @@ void CartesianPlot::xDataChanged(){
 		curve->retransform();
 }
 
-#include <QDebug>
 void CartesianPlot::xHistogramDataChanged(){
 	if (project()->isLoading())
 		return;

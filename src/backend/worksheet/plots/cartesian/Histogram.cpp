@@ -377,6 +377,7 @@ void Histogram::setFillingOpacity(qreal opacity) {
 //#################################  SLOTS  ####################################
 //##############################################################################
 void Histogram::retransform() {
+	qDebug() << "Retransform begins";
 	d_ptr->retransform();
 }
 
@@ -559,6 +560,7 @@ QString HistogramPrivate::name() const {
 }
 
 QRectF HistogramPrivate::boundingRect() const {
+	return QRectF(0, 0, 100, 100);
 	return boundingRectangle;
 }
 
@@ -658,6 +660,7 @@ void HistogramPrivate::retransform(){
 	m_suppressRecalc = true;
 	updateValues();
 	m_suppressRecalc = false;
+	qDebug() << "Retransform end";
 }
 
 /*!
@@ -1065,6 +1068,8 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 
 void HistogramPrivate::draw(QPainter *painter) {
 	//draw filling
+	
+	qDebug() << "drawing Histogram";
 	if (fillingPosition != Histogram::NoFilling) {
 		painter->setOpacity(fillingOpacity);
 		painter->setPen(Qt::SolidLine);
@@ -1180,55 +1185,99 @@ QImage HistogramPrivate::blurred(const QImage& image, const QRect& rect, int rad
   \sa QGraphicsItem::paint().
 */
 void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget){
-// 	qDebug()<<"HistogramPrivate::paint, " + q->name();
-	Q_UNUSED(option);
-	Q_UNUSED(widget);
-	if (!isVisible())
-		return;
-
-// 	QTime timer;
-// 	timer.start();
-	painter->setPen(Qt::NoPen);
-	painter->setBrush(Qt::NoBrush);
-	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
-
-// TODO: draw directly
-	draw(painter);
-// or use pixmap for double buffering
-// 	painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap);
-// 	qDebug() << "Paint the pixmap: " << timer.elapsed() << "ms";
-
-	if (m_hovered && !isSelected() && !m_printing){
-// 		timer.start();
-		if (m_hoverEffectImageIsDirty) {
-			QPixmap pix = m_pixmap;
-			pix.fill(q->hoveredPen.color());
-			pix.setAlphaChannel(m_pixmap.alphaChannel());
-			m_hoverEffectImage =blurred(pix.toImage(), m_pixmap.rect(), 5,false);
-			m_hoverEffectImageIsDirty = false;
-		}
-
-		painter->setOpacity(q->hoveredOpacity*2);
-		painter->drawImage(boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
-// 		qDebug() << "Paint hovering effect: " << timer.elapsed() << "ms";
-		return;
-	}
-
-	if (isSelected() && !m_printing){
-// 		timer.start();
-		if (m_selectionEffectImageIsDirty) {
-			QPixmap pix = m_pixmap;
-			pix.fill(q->selectedPen.color());
-			pix.setAlphaChannel(m_pixmap.alphaChannel());
-			m_selectionEffectImage = blurred(pix.toImage(), m_pixmap.rect(), 5,false);
-			m_selectionEffectImageIsDirty = false;
-		}
-
-		painter->setOpacity(q->selectedOpacity*2);
-		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
-// 		qDebug() << "Paint selection effect: " << timer.elapsed() << "ms";
-		return;
-	}
+//  qDebug()<<"HistogramPrivate::paint, " + q->name();
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+   
+    //Ordinary logic
+    QPainterPath LinePath = QPainterPath();
+    QList<QLineF> lines;
+    lines.clear();
+    double bins[] = {5.0, 6.0, 2.0, 9.0, 10.0};
+   
+    QPointF tempPoint, tempPoint1;
+   
+    for(int i=0;i < 4; ++i) {
+        tempPoint.setX((double) i);
+        tempPoint.setY(0.0);
+       
+        tempPoint1.setX((double) i);
+        tempPoint1.setY(bins[i]);
+       
+        lines.append(QLineF(tempPoint, tempPoint1));
+       
+        tempPoint.setX((double) i);
+        tempPoint.setY(bins[i]);
+       
+        tempPoint1.setX((double) i+1);
+        tempPoint1.setY(bins[i]);
+       
+        lines.append(QLineF(tempPoint,tempPoint1));
+       
+        tempPoint.setX((double) i+1);
+        tempPoint.setY(bins[i]);
+       
+        tempPoint1.setX((double) i+1);
+        tempPoint1.setY(0.0);
+       
+        lines.append(QLineF(tempPoint, tempPoint1));
+    }
+   
+    const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+    const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
+    lines = cSystem->mapLogicalToScene(lines);
+   
+    foreach (const QLineF& line, lines){
+        LinePath.moveTo(line.p1());
+        LinePath.lineTo(line.p2());
+    }
+   
+    QPen linePen;
+   
+    linePen.setStyle( Qt::SolidLine );
+    linePen.setColor( QColor(Qt::black) );
+    linePen.setWidthF( Worksheet::convertToSceneUnits(1.0, Worksheet::Point) );
+   
+    prepareGeometryChange(); 
+    curveShape = QPainterPath();
+    curveShape.addPath(WorksheetElement::shapeFromPath(LinePath, linePen));
+    boundingRectangle = curveShape.boundingRect();
+   
+   
+    QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
+    if (boundingRectangle.width()==0 || boundingRectangle.width()==0) {
+        m_pixmap = pixmap;
+        m_hoverEffectImageIsDirty = true;
+        m_selectionEffectImageIsDirty = true;
+        return;
+    }
+    pixmap.fill(Qt::transparent);
+    QPainter temp_painter(&pixmap);
+    temp_painter.setRenderHint(QPainter::Antialiasing, true);
+    temp_painter.translate(-boundingRectangle.topLeft());
+ 
+    temp_painter.setOpacity(1.0);
+    temp_painter.setPen(linePen);
+    temp_painter.setBrush(Qt::NoBrush);
+    temp_painter.drawPath(LinePath);
+       
+    temp_painter.end();
+ 
+    m_pixmap = pixmap;
+   
+    painter->setPen(Qt::NoPen);
+    painter->setBrush(Qt::NoBrush);
+    painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+   
+    draw(painter);
+   
+    QPixmap pix = m_pixmap;
+    m_selectionEffectImage = blurred(pix.toImage(), m_pixmap.rect(), 5.0, true);
+   
+    painter->setOpacity(1.0*2);
+    painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
+   
+    return;
 }
 
 /*!

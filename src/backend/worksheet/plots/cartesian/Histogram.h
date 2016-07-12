@@ -30,7 +30,6 @@
 #define HISTOGRAM_H
 
 #include "backend/worksheet/WorksheetElement.h"
-#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/lib/macros.h"
 #include "backend/core/AbstractColumn.h"
@@ -43,15 +42,10 @@ class Histogram: public WorksheetElement {
 	Q_OBJECT
 
 	public:
-		enum LineType {NoLine, Line, StartHorizontal, StartVertical, MidpointHorizontal, MidpointVertical, Segments2, Segments3,
-					   SplineCubicNatural, SplineCubicPeriodic, SplineAkimaNatural, SplineAkimaPeriodic};
-		enum DropLineType {NoDropLine, DropLineX, DropLineY, DropLineXY, DropLineXZeroBaseline, DropLineXMinBaseline, DropLineXMaxBaseline};
 		enum ValuesType {NoValues, ValuesX, ValuesY, ValuesXY, ValuesXYBracketed, ValuesCustomColumn};
 		enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
-		enum ErrorType {NoError, SymmetricError, AsymmetricError};
 		enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
-		enum ErrorBarsType {ErrorBarsSimple, ErrorBarsWithEnds};
-
+		
 		explicit Histogram(const QString &name);
 		virtual ~Histogram();
 

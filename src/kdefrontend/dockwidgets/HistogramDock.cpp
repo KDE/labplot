@@ -135,6 +135,107 @@ HistogramDock::~HistogramDock()
 	delete m_completion;
 
 }
+
+void HistogramDock::updateValuesFormatWidgets(const AbstractColumn::ColumnMode columnMode){
+  ui.cbValuesFormat->clear();
+
+  switch (columnMode){
+	case AbstractColumn::Numeric:
+	  ui.cbValuesFormat->addItem(i18n("Decimal"), QVariant('f'));
+	  ui.cbValuesFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
+	  ui.cbValuesFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
+	  ui.cbValuesFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
+	  ui.cbValuesFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
+	  break;
+	case AbstractColumn::Text:
+	  ui.cbValuesFormat->addItem(i18n("Text"), QVariant());
+	  break;
+	case AbstractColumn::Month:
+	  ui.cbValuesFormat->addItem(i18n("Number without leading zero"), QVariant("M"));
+	  ui.cbValuesFormat->addItem(i18n("Number with leading zero"), QVariant("MM"));
+	  ui.cbValuesFormat->addItem(i18n("Abbreviated month name"), QVariant("MMM"));
+	  ui.cbValuesFormat->addItem(i18n("Full month name"), QVariant("MMMM"));
+	  break;
+	case AbstractColumn::Day:
+	  ui.cbValuesFormat->addItem(i18n("Number without leading zero"), QVariant("d"));
+	  ui.cbValuesFormat->addItem(i18n("Number with leading zero"), QVariant("dd"));
+	  ui.cbValuesFormat->addItem(i18n("Abbreviated day name"), QVariant("ddd"));
+	  ui.cbValuesFormat->addItem(i18n("Full day name"), QVariant("dddd"));
+	  break;
+	case AbstractColumn::DateTime:{
+	  foreach(const QString& s, dateStrings)
+		ui.cbValuesFormat->addItem(s, QVariant(s));
+
+	  foreach(const QString& s, timeStrings)
+		ui.cbValuesFormat->addItem(s, QVariant(s));
+
+	  foreach(const QString& s1, dateStrings){
+		foreach(const QString& s2, timeStrings)
+		  ui.cbValuesFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
+	  }
+	  break;
+	}
+  }
+
+  ui.cbValuesFormat->setCurrentIndex(0);
+
+  if (columnMode == AbstractColumn::Numeric){
+	ui.lValuesPrecision->show();
+	ui.sbValuesPrecision->show();
+  }else{
+	ui.lValuesPrecision->hide();
+	ui.sbValuesPrecision->hide();
+  }
+
+  if (columnMode == AbstractColumn::Text){
+	ui.lValuesFormatTop->hide();
+	ui.lValuesFormat->hide();
+	ui.cbValuesFormat->hide();
+  }else{
+	ui.lValuesFormatTop->show();
+	ui.lValuesFormat->show();
+	ui.cbValuesFormat->show();
+	ui.cbValuesFormat->setCurrentIndex(0);
+  }
+
+  if (columnMode == AbstractColumn::DateTime){
+	ui.cbValuesFormat->setEditable( true );
+  }else{
+	ui.cbValuesFormat->setEditable( false );
+  }
+}
+
+void HistogramDock::showValuesColumnFormat(const Column* column){
+  if (!column){
+	// no valid column is available
+	// -> hide all the format properties widgets (equivalent to showing the properties of the column mode "Text")
+	this->updateValuesFormatWidgets(AbstractColumn::Text);
+  }else{
+	AbstractColumn::ColumnMode columnMode = column->columnMode();
+
+	//update the format widgets for the new column mode
+	this->updateValuesFormatWidgets(columnMode);
+
+	 //show the actuall formating properties
+	switch(columnMode) {
+		case AbstractColumn::Numeric:{
+		  Double2StringFilter * filter = static_cast<Double2StringFilter*>(column->outputFilter());
+		  ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->numericFormat()));
+		  ui.sbValuesPrecision->setValue(filter->numDigits());
+		  break;
+		}
+		case AbstractColumn::Text:
+			break;
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
+		case AbstractColumn::DateTime: {
+				DateTime2StringFilter * filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
+				ui.cbValuesFormat->setCurrentIndex(ui.cbValuesFormat->findData(filter->format()));
+				break;
+			}
+	}
+  }
+}
 void HistogramDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column){
 	if (column)
 		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
@@ -158,7 +259,27 @@ void HistogramDock::nameChanged(){
 
   m_curve->setName(uiGeneralTab.leName->text());
 }
+void HistogramDock::commentChanged(){
+  if (m_initializing)
+	return;
 
+  m_curve->setComment(uiGeneralTab.leComment->text());
+}
+
+void HistogramDock::visibilityChanged(bool state){
+	if (m_initializing)
+		return;
+
+	foreach(Histogram* curve, m_curvesList)
+		curve->setVisible(state);
+}
+void HistogramDock::valuesColorChanged(const QColor& color){
+	if (m_initializing)
+		return;
+
+	foreach(Histogram* curve, m_curvesList)
+		curve->setValuesColor(color);
+}
 void HistogramDock::init(){
   	dateStrings<<"yyyy-MM-dd";
 	dateStrings<<"yyyy/MM/dd";
@@ -301,15 +422,7 @@ void HistogramDock::initGeneralTab(){
 	//show the properties of the first curve
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 	
-	connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
-	
-
-	//Slots
-	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	
-	connect(m_curve, SIGNAL(xColumnChanged(const AbstractColumn*)), this, SLOT(curveXColumnChanged(const AbstractColumn*)));
-	connect(m_curve, SIGNAL(yColumnChanged(const AbstractColumn*)), this, SLOT(curveYColumnChanged(const AbstractColumn*)));
-	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
+	//connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
 	//types options
 	uiGeneralTab.cbHistogramType->addItem(i18n("Ordinary Histogram"));
 	uiGeneralTab.cbHistogramType->addItem(i18n("Cummulative Histogram"));
@@ -368,6 +481,144 @@ void HistogramDock::curveValuesColorChanged(QColor color) {
 	m_initializing = true;
   	ui.kcbValuesColor->setColor(color);
 	m_initializing = false;
+}
+//Values-tab
+
+/*!
+  called when the type of the values (none, x, y, (x,y) etc.) was changed.
+*/
+void HistogramDock::valuesTypeChanged(int index){
+  Histogram::ValuesType valuesType = Histogram::ValuesType(index);
+
+  if (valuesType==Histogram::NoValues){
+	//no values are to paint -> deactivate all the pertinent widgets
+	ui.cbValuesPosition->setEnabled(false);
+	ui.lValuesColumn->hide();
+	cbValuesColumn->hide();
+	ui.sbValuesDistance->setEnabled(false);
+	ui.sbValuesRotation->setEnabled(false);
+	ui.sbValuesOpacity->setEnabled(false);
+	ui.cbValuesFormat->setEnabled(false);
+	ui.cbValuesFormat->setEnabled(false);
+	ui.sbValuesPrecision->setEnabled(false);
+	ui.leValuesPrefix->setEnabled(false);
+	ui.leValuesSuffix->setEnabled(false);
+	ui.kfrValuesFont->setEnabled(false);
+	ui.kcbValuesColor->setEnabled(false);
+  }else{
+	ui.cbValuesPosition->setEnabled(true);
+	ui.sbValuesDistance->setEnabled(true);
+	ui.sbValuesRotation->setEnabled(true);
+	ui.sbValuesOpacity->setEnabled(true);
+	ui.cbValuesFormat->setEnabled(true);
+	ui.sbValuesPrecision->setEnabled(true);
+	ui.leValuesPrefix->setEnabled(true);
+	ui.leValuesSuffix->setEnabled(true);
+	ui.kfrValuesFont->setEnabled(true);
+	ui.kcbValuesColor->setEnabled(true);
+
+	const Column* column;
+	if (valuesType==Histogram::ValuesCustomColumn){
+	  ui.lValuesColumn->show();
+	  cbValuesColumn->show();
+
+	  column= static_cast<Column*>(cbValuesColumn->currentModelIndex().internalPointer());
+	}else{
+	  ui.lValuesColumn->hide();
+	  cbValuesColumn->hide();
+
+	  if (valuesType==Histogram::ValuesY){
+		column = static_cast<const Column*>(m_curve->yColumn());
+	  }else{
+		column = static_cast<const Column*>(m_curve->xColumn());
+	  }
+	}
+	this->showValuesColumnFormat(column);
+  }
+
+
+  if (m_initializing)
+	return;
+
+  foreach(Histogram* curve, m_curvesList)
+	curve->setValuesType(valuesType);
+}
+
+/*!
+  called when the custom column for the values was changed.
+*/
+void HistogramDock::valuesColumnChanged(const QModelIndex& index){
+  if (m_initializing)
+	return;
+
+  Column* column= static_cast<Column*>(index.internalPointer());
+  this->showValuesColumnFormat(column);
+
+  foreach(Histogram* curve, m_curvesList){
+	//TODO save also the format of the currently selected column for the values (precision etc.)
+	curve->setValuesColumn(column);
+  }
+}
+
+void HistogramDock::valuesPositionChanged(int index){
+  if (m_initializing)
+	return;
+
+  foreach(Histogram* curve, m_curvesList)
+	curve->setValuesPosition(Histogram::ValuesPosition(index));
+}
+
+void HistogramDock::valuesDistanceChanged(double  value){
+  if (m_initializing)
+	return;
+
+  foreach(Histogram* curve, m_curvesList)
+	curve->setValuesDistance( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+}
+
+void HistogramDock::valuesRotationChanged(int value){
+  if (m_initializing)
+	return;
+
+  foreach(Histogram* curve, m_curvesList)
+	curve->setValuesRotationAngle(value);
+}
+
+void HistogramDock::valuesOpacityChanged(int value){
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	foreach(Histogram* curve, m_curvesList)
+		curve->setValuesOpacity(opacity);
+}
+
+void HistogramDock::valuesPrefixChanged(){
+  if (m_initializing)
+	return;
+
+  QString prefix = ui.leValuesPrefix->text();
+  foreach(Histogram* curve, m_curvesList)
+	curve->setValuesPrefix(prefix);
+}
+
+void HistogramDock::valuesSuffixChanged(){
+  if (m_initializing)
+	return;
+
+  QString suffix = ui.leValuesSuffix->text();
+  foreach(Histogram* curve, m_curvesList)
+	curve->setValuesSuffix(suffix);
+}
+
+void HistogramDock::valuesFontChanged(const QFont& font){
+	if (m_initializing)
+		return;
+
+	QFont valuesFont = font;
+	valuesFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	foreach(Histogram* curve, m_curvesList)
+		curve->setValuesFont(valuesFont);
 }
 
 //Filling
@@ -695,9 +946,7 @@ void HistogramDock::setupGeneral() {
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-	qDebug() << "colo";
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
-	qDebug() << "colo1";
 	connect( cbYColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yColumnChanged(QModelIndex)) );
 
 }
@@ -737,4 +986,50 @@ void HistogramDock::yColumnChanged(const QModelIndex& index) {
 
 	foreach(Histogram* curve, m_curvesList)
 		curve->setYColumn(column);
+}
+
+void HistogramDock::loadConfigFromTemplate(KConfig& config) {
+	//extract the name of the template from the file name
+	QString name;
+	int index = config.name().lastIndexOf(QDir::separator());
+	if (index!=-1)
+		name = config.name().right(config.name().size() - index - 1);
+	else
+		name = config.name();
+
+	int size = m_curvesList.size();
+	if (size>1)
+		m_curve->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded", size, name));
+	else
+		m_curve->beginMacro(i18n("%1: template \"%2\" loaded", m_curve->name(), name));
+
+	this->loadConfig(config);
+
+	m_curve->endMacro();
+}
+void HistogramDock::saveConfigAsTemplate(KConfig& config) {
+	KConfigGroup group = config.group( "Histogram" );
+	//Values
+	group.writeEntry("ValuesType", ui.cbValuesType->currentIndex());
+	group.writeEntry("ValuesPosition", ui.cbValuesPosition->currentIndex());
+	group.writeEntry("ValuesDistance", Worksheet::convertToSceneUnits(ui.sbValuesDistance->value(),Worksheet::Point));
+	group.writeEntry("ValuesRotation", ui.sbValuesRotation->value());
+	group.writeEntry("ValuesOpacity", ui.sbValuesOpacity->value()/100);
+	group.writeEntry("ValuesPrefix", ui.leValuesPrefix->text());
+	group.writeEntry("ValuesSuffix", ui.leValuesSuffix->text());
+	group.writeEntry("ValuesFont", ui.kfrValuesFont->font());
+	group.writeEntry("ValuesColor", ui.kcbValuesColor->color());
+
+	//Filling
+	group.writeEntry("FillingPosition", ui.cbFillingPosition->currentIndex());
+	group.writeEntry("FillingType", ui.cbFillingType->currentIndex());
+	group.writeEntry("FillingColorStyle", ui.cbFillingColorStyle->currentIndex());
+	group.writeEntry("FillingImageStyle", ui.cbFillingImageStyle->currentIndex());
+	group.writeEntry("FillingBrushStyle", ui.cbFillingBrushStyle->currentIndex());
+	group.writeEntry("FillingFileName", ui.kleFillingFileName->text());
+	group.writeEntry("FillingFirstColor", ui.kcbFillingFirstColor->color());
+	group.writeEntry("FillingSecondColor", ui.kcbFillingSecondColor->color());
+	group.writeEntry("FillingOpacity", ui.sbFillingOpacity->value()/100.0);
+	
+	config.sync();
 }

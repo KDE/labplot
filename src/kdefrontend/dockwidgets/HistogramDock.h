@@ -86,15 +86,15 @@ private slots:
 
 	//SLOTs for changes triggered in HistogramDock
 	void nameChanged();
-	//void commentChanged();
+	void commentChanged();
 	void xColumnChanged(const QModelIndex&);
 	void yColumnChanged(const QModelIndex&);
-//	void visibilityChanged(bool);
+	void visibilityChanged(bool);
 	//Histogram-types
 	//void histogramTypeChanged(int);
 
 	//Values-Tab
-	/*void valuesTypeChanged(int);
+	void valuesTypeChanged(int);
 	void valuesColumnChanged(const QModelIndex&);
 	void valuesPositionChanged(int);
 	void valuesDistanceChanged(double);
@@ -103,7 +103,7 @@ private slots:
 	void valuesPrefixChanged();
 	void valuesSuffixChanged();
 	void valuesFontChanged(const QFont&);
-	void valuesColorChanged(const QColor&);*/
+	void valuesColorChanged(const QColor&);
 
 	//Filling-tab
 	void fillingPositionChanged(int);
@@ -149,8 +149,8 @@ private slots:
 
 
 	//load and save
-//	void loadConfigFromTemplate(KConfig&);
-//	void saveConfigAsTemplate(KConfig&);
+	void loadConfigFromTemplate(KConfig&);
+	void saveConfigAsTemplate(KConfig&);
 
 signals:
 	void info(const QString&);
