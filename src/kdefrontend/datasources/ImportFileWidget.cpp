@@ -45,6 +45,7 @@ Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 #include <QDebug>
 #include <QTimer>
 #include <QStandardItemModel>
+#include <QImageReader>
 
 /*!
    \class ImportFileWidget
@@ -428,43 +429,38 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	ui.kleSourceName->setEnabled(fileExists);
 	ui.chbWatchFile->setEnabled(fileExists);
 	ui.chbLinkFile->setEnabled(fileExists);
-	if ( !fileExists ) {
+	if (!fileExists) {
 		refreshPreview();
 		emit fileNameChanged();
 		return;
 	}
 
 	//check, if we can guess the file type by content
+	// only works on Linux
 	QProcess *proc = new QProcess(this);
 	QStringList args;
 	args<<"-b"<<ui.kleFileName->text();
 	proc->start("file", args);
 
-	QString debug;
+	FileDataSource::FileType fileType = FileDataSource::Binary;	// default file type
 	if (proc->waitForReadyRead(1000) == false) {
-		// 		kDebug()<<"ERROR: reading file type of file"<<ui.kleFileName->text()<<endl;
+		qDebug()<<"ERROR: reading file type of file"<<ui.kleFileName->text();
 	} else {
-		QString info = proc->readLine();
-		if (info.contains("compressed data")) {
-			debug="detected compressed data";
+		QString fileInfo = proc->readLine();
+		QByteArray imageFormat = QImageReader::imageFormat(fileName);
+		if (fileInfo.contains("compressed data") || fileInfo.contains("ASCII") ||
+			fileName.endsWith("dat", Qt::CaseInsensitive) || fileName.endsWith("txt", Qt::CaseInsensitive)) {
 			//probably ascii data
-			ui.cbFileType->setCurrentIndex(FileDataSource::Ascii);
-		}
-		else if (info.contains("image") || info.contains("bitmap" )) {
-			debug="detected IMAGE file";
-			ui.cbFileType->setCurrentIndex(FileDataSource::Image);
-		} else if ( info.contains( ("ASCII") ) ) {
-			debug="detected ASCII file";
-			ui.cbFileType->setCurrentIndex(FileDataSource::Ascii);
-		} else if (info.contains(("Hierarchical Data Format"))) {
-			debug="detected HDF file";
-			ui.cbFileType->setCurrentIndex(FileDataSource::HDF);
+			fileType = FileDataSource::Ascii;
+		} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty()) {
+			fileType = FileDataSource::Image;
+		} else if (fileInfo.contains("Hierarchical Data Format") || fileName.endsWith("h5", Qt::CaseInsensitive) || 
+				fileName.endsWith("hdf", Qt::CaseInsensitive) || fileName.endsWith("hdf5", Qt::CaseInsensitive) ) {
+			fileType = FileDataSource::HDF;
 
 			// update HDF tree widget using current selected file
 			hdfOptionsWidget.twContent->clear();
 
-			QString fileName = ui.kleFileName->text();
-			QFileInfo fileInfo(fileName);
 			QTreeWidgetItem *rootItem = hdfOptionsWidget.twContent->invisibleRootItem();
 			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
 			filter->parse(fileName, rootItem);
@@ -472,15 +468,13 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			hdfOptionsWidget.twContent->expandAll();
 			hdfOptionsWidget.twContent->resizeColumnToContents(0);
 			hdfOptionsWidget.twContent->resizeColumnToContents(3);
-		} else if (info.contains(("NetCDF Data Format"))) {
-			debug="detected NetCDF file";
-			ui.cbFileType->setCurrentIndex(FileDataSource::NETCDF);
+		} else if (fileInfo.contains("NetCDF Data Format") || fileName.endsWith("nc", Qt::CaseInsensitive) || 
+			fileName.endsWith("netcdf", Qt::CaseInsensitive) || fileName.endsWith("cdf", Qt::CaseInsensitive)) {
+			fileType = FileDataSource::NETCDF;
 
 			// update NetCDF tree widget using current selected file
 			netcdfOptionsWidget.twContent->clear();
 
-			QString fileName = ui.kleFileName->text();
-			QFileInfo fileInfo(fileName);
 			QTreeWidgetItem *rootItem = netcdfOptionsWidget.twContent->invisibleRootItem();
 			NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 			filter->parse(fileName, rootItem);
@@ -488,14 +482,12 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			netcdfOptionsWidget.twContent->expandAll();
 			netcdfOptionsWidget.twContent->resizeColumnToContents(0);
 			netcdfOptionsWidget.twContent->resizeColumnToContents(2);
-
-		} else {
-			debug="probably BINARY file";
-			ui.cbFileType->setCurrentIndex(FileDataSource::Binary);
 		}
+
+		ui.cbFileType->setCurrentIndex(fileType);
 	}
-#ifdef QT_DEBUG
-	qDebug()<<debug;
+#ifndef NDEBUG
+	qDebug()<<"detected file of type"<<fileType;
 #endif
 
 	refreshPreview();

@@ -27,6 +27,7 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #ifndef HDFFILTERPRIVATE_H
 #define HDFFILTERPRIVATE_H
 
+#include <QList>
 #ifdef HAVE_HDF5
 #include <hdf5.h>
 #endif
