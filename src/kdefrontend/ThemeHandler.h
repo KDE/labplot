@@ -43,7 +43,8 @@ class ThemeHandler : public QWidget{
 
 	public:
 		ThemeHandler(QWidget* parent);
-		static QStringList getThemeList();
+		static QStringList themes();
+		static const QString themeConfigPath(const QString&);
 
 	private:
 		QList<QString> dirNames;
@@ -58,7 +59,6 @@ class ThemeHandler : public QWidget{
 	private slots:
 		void loadMenu();
 		void loadSelected(QAction*);
-		void triggerLoadTheme(QString);
 
 	signals:
 		void loadThemeRequested(KConfig& config);

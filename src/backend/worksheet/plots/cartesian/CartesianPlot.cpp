@@ -439,10 +439,10 @@ void CartesianPlot::initMenus() {
 	zoomMenu->addAction(shiftDownYAction);
 
 	themeMenu = new QMenu(i18n("Apply Theme"));
-	foreach(const QString theme, ThemeHandler::getThemeList())
+	foreach(const QString theme, ThemeHandler::themes())
 		themeMenu->addAction(theme);
 
-	connect(themeMenu, SIGNAL(triggered(QAction* action)), this, SLOT(loadTheme(QAction* action)));
+	connect(themeMenu, SIGNAL(triggered(QAction*)), this, SLOT(loadTheme(QAction*)));
 
 }
 
@@ -2093,9 +2093,8 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 }
 
 void CartesianPlot::loadTheme(QAction* action) {
-	QString themeName = action->data().toString();
-	themeName.append(".txt");
-	emit (triggerLoadTheme(themeName));
+	KConfig config( ThemeHandler::themeConfigPath(action->text().remove('&')), KConfig::SimpleConfig );
+	loadThemeConfig(config);
 }
 
 void CartesianPlot::loadThemeConfig(KConfig& config) {
