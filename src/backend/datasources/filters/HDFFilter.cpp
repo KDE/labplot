@@ -1095,7 +1095,7 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
 	char rootName[]="/";
 	hid_t group = H5Gopen(file, rootName, H5P_DEFAULT);
 	handleError((int)group,"H5Gopen",rootName);
-	multiLinkList.clear();
+	// CRASHES multiLinkList.clear();
 	scanHDFGroup(group,rootName, rootItem);
 	status = H5Gclose(group);
 	handleError(status,"H5Gclose","");
