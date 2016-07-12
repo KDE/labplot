@@ -151,7 +151,7 @@ void HDFFilterPrivate::handleError(int err, QString function, QString arg) {
 
 QString HDFFilterPrivate::translateHDFOrder(H5T_order_t o) {
 	QString order;
-	switch(o) {
+	switch (o) {
         case H5T_ORDER_LE:
 			order="LE";
 			break;
@@ -716,11 +716,11 @@ QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 	typeProps<<translateHDFOrder(order);
 
 	// type specific props
-	switch(typeClass) {
+	switch (typeClass) {
 	case H5T_STRING: {
 		H5T_cset_t cset = H5Tget_cset (tid);
 		handleError((int)cset,"H5Tget_cset");
-		switch(cset) {
+		switch (cset) {
 		case H5T_CSET_ASCII:
 			typeProps<<", ASCII";
 			break;
@@ -749,7 +749,7 @@ QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 		}
 		H5T_str_t strpad = H5Tget_strpad(tid);
 		handleError((int)strpad,"H5Tget_strpad");
-		switch(strpad) {
+		switch (strpad) {
 		case H5T_STR_NULLTERM:
 			typeProps<<" NULLTERM";
 			break;
@@ -1045,7 +1045,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 
                 int otype =  H5Gget_objtype_by_idx(gid, (size_t)i );
 		handleError(otype,"H5Gget_objtype_by_idx");
-                switch(otype) {
+                switch (otype) {
                 case H5G_LINK: {
                         scanHDFLink(gid,memberName, groupItem);
                         break;
@@ -1152,12 +1152,12 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	// this is used to store the data read from the dataSource
 	// check for dataPointers[0] != NULL to decide if dataSource should be used
 	QVector<QVector<double>*> dataPointers(1,NULL);
-	switch(rank) {
+	switch (rank) {
 	case 0: {
 		actualRows=1;
 		actualCols=1;
 
-		switch(dclass) {
+		switch (dclass) {
 		case H5T_STRING: {
 			char* data = (char *) malloc(typeSize * sizeof (char));
 			hid_t memtype = H5Tcopy(H5T_C_S1);
@@ -1362,7 +1362,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
 
 		// read data
-		switch(dclass) {
+		switch (dclass) {
 		case H5T_INTEGER: {
 			if (H5Tequal(dtype, H5T_STD_I8LE) || H5Tequal(dtype, H5T_STD_I8BE) || H5Tequal(dtype, H5T_NATIVE_CHAR)) {
 				switch (sizeof(H5T_NATIVE_CHAR)) {
