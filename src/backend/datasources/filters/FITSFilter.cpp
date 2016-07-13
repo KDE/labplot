@@ -194,6 +194,7 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
  * \param importMode
  */
 QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+    QStringList dataString;
 
 #ifdef HAVE_FITS
     int status = 0;
@@ -215,7 +216,6 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
     int actualCols;
     int columnOffset = 0;
 
-    QStringList dataString;
     int noDataSource = (dataSource == NULL);
 
     if(chduType == IMAGE_HDU) {
@@ -255,9 +255,9 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         }
 
         QVector<QVector<double>*> dataPointers;
-        dataPointers.reserve(actualCols);
         dataString.reserve(lines * actualCols);
         if (!noDataSource) {
+            dataPointers.reserve(actualCols);
             columnOffset = dataSource->create(dataPointers, importMode, lines, actualCols);
         }
         QLatin1String ws = QLatin1String(" ");
@@ -289,9 +289,6 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                 }
             }
             spreadsheet->setUndoAware(true);
-            fits_close_file(fitsFile, &status);
-
-            return dataString.join(QLatin1String(""));
         }
 
         Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
@@ -300,6 +297,9 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
             matrix->setChanged();
             matrix->setUndoAware(true);
         }
+        fits_close_file(fitsFile, &status);
+
+        return dataString.join(QLatin1String(""));
 
     } else if ((chduType == ASCII_TBL) || (chduType == BINARY_TBL)) {
         fits_get_num_cols(fitsFile, &actualCols, &status);
@@ -474,6 +474,8 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                 matrix->setUndoAware(true);
             }
         }
+        fits_close_file(fitsFile, &status);
+        return dataString.join(QLatin1String(""));
     } else {
         qDebug() << i18n("Incorrect header type!");
     }
@@ -486,7 +488,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
     Q_UNUSED(importMode)
     Q_UNUSED(lines)
 #endif
-    return QString();
+    return dataString.join(QLatin1String(""));
 }
 
 /*!
