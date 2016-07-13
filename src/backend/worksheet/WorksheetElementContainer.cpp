@@ -85,7 +85,7 @@ void WorksheetElementContainer::setVisible(bool on){
 	//if visible is set true, change the visibility of the container first
 	if (on) {
 		beginMacro( i18n("%1: set visible", name()) );
-    	exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
+    	exec( new WorksheetElementContainerSetVisibleCmd(d, on, i18n("%1: set visible")) );
 	} else {
 		beginMacro( i18n("%1: set invisible", name()) );
 	}
