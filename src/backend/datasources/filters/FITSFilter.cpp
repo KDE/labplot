@@ -1311,6 +1311,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
     treeNameItem->setExpanded(true);
 
     QTreeWidgetItem* imageExtensionItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << i18n("Images"));
+    imageExtensionItem->setFlags(imageExtensionItem->flags() & ~Qt::ItemIsSelectable );
     QString primaryHeaderNaxis = valueOf(fileName, "NAXIS");
     int naxis = primaryHeaderNaxis.toInt();
     bool noImage = false;
@@ -1334,6 +1335,8 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 
     if (tableExtensions.size() > 0) {
         QTreeWidgetItem* tableExtensionItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << i18n("Tables"));
+        tableExtensionItem->setFlags(tableExtensionItem->flags() & ~Qt::ItemIsSelectable );
+
         foreach (const QString& ext, tableExtensions) {
             QTreeWidgetItem* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << ext);
             tableExtensionItem->addChild(treeItem);
