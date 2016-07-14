@@ -76,11 +76,11 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 2, 1, 2);
 
-	for(int i=0; i < NSL_SF_WINDOW_TYPE_COUNT; i++)
+	for (int i=0; i < NSL_SF_WINDOW_TYPE_COUNT; i++)
 		uiGeneralTab.cbWindowType->addItem(i18n(nsl_sf_window_type_name[i]));
-	for(int i=0; i < NSL_DFT_RESULT_TYPE_COUNT; i++)
+	for (int i=0; i < NSL_DFT_RESULT_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_dft_result_type_name[i]));
-	for(int i=0; i < NSL_DFT_XSCALE_COUNT; i++)
+	for (int i=0; i < NSL_DFT_XSCALE_COUNT; i++)
 		uiGeneralTab.cbXScale->addItem(i18n(nsl_dft_xscale_name[i]));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
@@ -104,7 +104,7 @@ void XYFourierTransformCurveDock::setupGeneral() {
 
 void XYFourierTransformCurveDock::initGeneralTab() {
 	//if there are more then one curve in the list, disable the tab "general"
-	if (m_curvesList.size()==1){
+	if (m_curvesList.size()==1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
@@ -193,14 +193,14 @@ void XYFourierTransformCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-void XYFourierTransformCurveDock::nameChanged(){
+void XYFourierTransformCurveDock::nameChanged() {
 	if (m_initializing)
 		return;
 
 	m_curve->setName(uiGeneralTab.leName->text());
 }
 
-void XYFourierTransformCurveDock::commentChanged(){
+void XYFourierTransformCurveDock::commentChanged() {
 	if (m_initializing)
 		return;
 
@@ -255,7 +255,7 @@ void XYFourierTransformCurveDock::twoSidedChanged() {
 	bool twoSided = uiGeneralTab.cbTwoSided->isChecked();
 	m_transformData.twoSided = twoSided;
 
-	if(twoSided)
+	if (twoSided)
 		uiGeneralTab.cbShifted->setEnabled(true);
 	else {
 		uiGeneralTab.cbShifted->setEnabled(false);

@@ -87,13 +87,13 @@ void XYSmoothCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
-	for(int i=0; i < NSL_SMOOTH_TYPE_COUNT; i++)
+	for (int i=0; i < NSL_SMOOTH_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_smooth_type_name[i]));
 
-	for(int i=0; i < NSL_SMOOTH_WEIGHT_TYPE_COUNT; i++)
+	for (int i=0; i < NSL_SMOOTH_WEIGHT_TYPE_COUNT; i++)
 		uiGeneralTab.cbWeight->addItem(i18n(nsl_smooth_weight_type_name[i]));
 
-	for(int i=0; i < NSL_SMOOTH_PAD_MODE_COUNT; i++)
+	for (int i=0; i < NSL_SMOOTH_PAD_MODE_COUNT; i++)
 		uiGeneralTab.cbMode->addItem(i18n(nsl_smooth_pad_mode_name[i]));
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
@@ -124,7 +124,7 @@ void XYSmoothCurveDock::initGeneralTab() {
 	qDebug()<<"XYSmoothCurveDock::initGeneralTab()";
 #endif
 	//if there are more then one curve in the list, disable the tab "general"
-	if (m_curvesList.size()==1){
+	if (m_curvesList.size()==1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
@@ -254,9 +254,9 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYSmoothCurve*>(curve)->setXDataColumn(column);
 
 	// disable types that need more data points
-	if(column != 0) {
+	if (column != 0) {
 		unsigned int n=0;
-		for(int row=0;row < column->rowCount();row++)
+		for (int row=0; row < column->rowCount(); row++)
 			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row)) 
 				n++;
 
@@ -306,7 +306,7 @@ void XYSmoothCurveDock::typeChanged() {
 	} else {
 		uiGeneralTab.sbPoints->setSingleStep(2);
 		uiGeneralTab.sbPoints->setMinimum(3);
-		if(m_smoothData.mode == nsl_smooth_pad_constant) {
+		if (m_smoothData.mode == nsl_smooth_pad_constant) {
 			uiGeneralTab.lRightValue->show();
 			uiGeneralTab.sbRightValue->show();
 		}
@@ -364,10 +364,10 @@ void XYSmoothCurveDock::orderChanged() {
 void XYSmoothCurveDock::modeChanged() {
 	m_smoothData.mode = (nsl_smooth_pad_mode)(uiGeneralTab.cbMode->currentIndex());
 
-	if(m_smoothData.mode == nsl_smooth_pad_constant) {
+	if (m_smoothData.mode == nsl_smooth_pad_constant) {
 		uiGeneralTab.lLeftValue->show();
 		uiGeneralTab.sbLeftValue->show();
-		if(m_smoothData.type == nsl_smooth_type_moving_average_lagged) {
+		if (m_smoothData.type == nsl_smooth_type_moving_average_lagged) {
 			uiGeneralTab.lRightValue->hide();
 			uiGeneralTab.sbRightValue->hide();
 		} else {

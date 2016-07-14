@@ -299,6 +299,7 @@ void XYFourierFilterCurveDock::formChanged() {
 	case nsl_filter_form_butterworth:
 	case nsl_filter_form_chebyshev_i:
 	case nsl_filter_form_chebyshev_ii:
+	case nsl_filter_form_legendre:
 		uiGeneralTab.sbOrder->setVisible(true);
 		uiGeneralTab.lOrder->setVisible(true);
 		break;

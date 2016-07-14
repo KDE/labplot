@@ -357,7 +357,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	labelWidget->setAxes(list);
 
 	//if there are more then one axis in the list, disable the tab "general"
-	if (list.size()==1) {
+	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
@@ -531,10 +531,10 @@ void AxisDock::orientationChanged(int index) {
 	(top, bottom, left, right, center or custom) was changed.
 */
 void AxisDock::positionChanged(int index) {
-	if (index==-1)
+	if (index == -1)
 		return;	//we occasionally get -1 here, nothing to do in this case
 
-	if ( index==3 )
+	if (index == 3)
 		ui.lePosition->setVisible(true);
 	else
 		ui.lePosition->setVisible(false);
@@ -579,7 +579,7 @@ void AxisDock::scaleChanged(int index) {
 }
 
 void AxisDock::autoScaleChanged(int index) {
-	bool autoScale = index==Qt::Checked;
+	bool autoScale = index == Qt::Checked;
 	ui.leStart->setEnabled(!autoScale);
 	ui.leEnd->setEnabled(!autoScale);
 
@@ -598,16 +598,16 @@ void AxisDock::startChanged() {
 
 	//check first, whether the value for the lower limit is valid for the log- and square root scaling. If not, set the default values.
 	Axis::AxisScale scale = Axis::AxisScale(ui.cbScale->currentIndex());
-	if (scale==Axis::ScaleLog10|| scale==Axis::ScaleLog2|| scale==Axis::ScaleLn) {
-		if(value <= 0) {
+	if (scale == Axis::ScaleLog10 || scale == Axis::ScaleLog2 || scale == Axis::ScaleLn) {
+		if (value <= 0) {
 			KMessageBox::sorry(this,
 			                   i18n("The axes lower limit has a non-positive value. Default minimal value will be used."),
 			                   i18n("Wrong lower limit value") );
 			ui.leStart->setText( "0.01" );
 			value=0.01;
 		}
-	} else if (scale==Axis::ScaleSqrt) {
-		if(value < 0) {
+	} else if (scale == Axis::ScaleSqrt) {
+		if (value < 0) {
 			KMessageBox::sorry(this,
 			                   i18n("The axes lower limit has a negative value. Default minimal value will be used."),
 			                   i18n("Wrong lower limit value") );
@@ -616,7 +616,7 @@ void AxisDock::startChanged() {
 		}
 	}
 
-	foreach(Axis* axis, m_axesList)
+	foreach (Axis* axis, m_axesList)
 		axis->setStart(value);
 }
 
@@ -709,7 +709,7 @@ void AxisDock::lineOpacityChanged(int value) {
 
 void AxisDock::arrowTypeChanged(int index) {
 	Axis::ArrowType type = (Axis::ArrowType)index;
-	if (type==Axis::NoArrow) {
+	if (type == Axis::NoArrow) {
 		ui.cbArrowPosition->setEnabled(false);
 		ui.sbArrowSize->setEnabled(false);
 	} else {
@@ -1099,7 +1099,7 @@ void AxisDock::labelsPrecisionChanged(int value) {
 
 
 void AxisDock::labelsAutoPrecisionChanged(int state) {
-	bool checked = (state==Qt::Checked);
+	bool checked = (state == Qt::Checked);
 	ui.sbLabelsPrecision->setEnabled(!checked);
 
 	if (m_initializing)
@@ -1816,9 +1816,9 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	//General
 	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
 
-	if (ui.cbPosition->currentIndex()==2) {
+	if (ui.cbPosition->currentIndex() == 2) {
 		group.writeEntry("Position", (int)Axis::AxisCentered);
-	} else if (ui.cbPosition->currentIndex()==3) {
+	} else if (ui.cbPosition->currentIndex() == 3) {
 		group.writeEntry("Position", (int)Axis::AxisCustom);
 	} else {
 		if ( ui.cbOrientation->currentIndex() == Axis::AxisHorizontal )

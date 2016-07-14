@@ -84,7 +84,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
-	for(int i=0; i < NSL_INTERP_TYPE_COUNT; i++)
+	for (int i=0; i < NSL_INTERP_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_interp_type_name[i]));
 #if GSL_MAJOR_VERSION < 2
 	// disable Steffen spline item
@@ -92,9 +92,9 @@ void XYInterpolationCurveDock::setupGeneral() {
 	QStandardItem* item = model->item(nsl_interp_type_steffen);
 	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 #endif
-	for(int i=0; i < NSL_INTERP_PCH_VARIANT_COUNT; i++)
+	for (int i=0; i < NSL_INTERP_PCH_VARIANT_COUNT; i++)
 		uiGeneralTab.cbVariant->addItem(i18n(nsl_interp_pch_variant_name[i]));
-	for(int i=0; i < NSL_INTERP_EVALUATE_COUNT; i++)
+	for (int i=0; i < NSL_INTERP_EVALUATE_COUNT; i++)
 		uiGeneralTab.cbEval->addItem(i18n(nsl_interp_evaluate_name[i]));
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
@@ -121,7 +121,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 
 void XYInterpolationCurveDock::initGeneralTab() {
 	//if there are more then one curve in the list, disable the tab "general"
-	if (m_curvesList.size()==1){
+	if (m_curvesList.size()==1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
@@ -242,53 +242,53 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYInterpolationCurve*>(curve)->setXDataColumn(column);
 
 	// disable types that need more data points
-	if(column != 0) {
+	if (column != 0) {
 		unsigned int n=0;
-		for(int row=0;row < column->rowCount();row++)
+		for (int row=0; row < column->rowCount(); row++)
 			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row)) 
 				n++;
 
 		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
 		QStandardItem* item = model->item(nsl_interp_type_polynomial);
-		if(n < gsl_interp_type_min_size(gsl_interp_polynomial) || n>100) {	// not good for many points
+		if (n < gsl_interp_type_min_size(gsl_interp_polynomial) || n>100) {	// not good for many points
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_polynomial)
+			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_polynomial)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
 		item = model->item(nsl_interp_type_cspline);
-		if(n < gsl_interp_type_min_size(gsl_interp_cspline)) {
+		if (n < gsl_interp_type_min_size(gsl_interp_cspline)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline)
+			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
 		item = model->item(nsl_interp_type_cspline_periodic);
-		if(n < gsl_interp_type_min_size(gsl_interp_cspline_periodic)) {
+		if (n < gsl_interp_type_min_size(gsl_interp_cspline_periodic)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline_periodic)
+			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline_periodic)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
 		item = model->item(nsl_interp_type_akima);
-		if(n < gsl_interp_type_min_size(gsl_interp_akima)) {
+		if (n < gsl_interp_type_min_size(gsl_interp_akima)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima)
+			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
 		item = model->item(nsl_interp_type_akima_periodic);
-		if(n < gsl_interp_type_min_size(gsl_interp_akima_periodic)) {
+		if (n < gsl_interp_type_min_size(gsl_interp_akima_periodic)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima_periodic)
+			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima_periodic)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
@@ -296,9 +296,9 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 #if GSL_MAJOR_VERSION >= 2
 		item = model->item(nsl_interp_type_steffen);
-		if(n < gsl_interp_type_min_size(gsl_interp_steffen)) {
+		if (n < gsl_interp_type_min_size(gsl_interp_steffen)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_steffen)
+			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_steffen)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
@@ -327,7 +327,7 @@ void XYInterpolationCurveDock::typeChanged() {
 	nsl_interp_type type = (nsl_interp_type)uiGeneralTab.cbType->currentIndex();
 	m_interpolationData.type = type;
 
-	switch(type) {
+	switch (type) {
 	case nsl_interp_type_pch:
 		uiGeneralTab.lVariant->show();
 		uiGeneralTab.cbVariant->show();
@@ -352,7 +352,7 @@ void XYInterpolationCurveDock::variantChanged() {
 	nsl_interp_pch_variant variant = (nsl_interp_pch_variant)uiGeneralTab.cbVariant->currentIndex();
 	m_interpolationData.variant = variant;
 
-	switch(variant) {
+	switch (variant) {
 	case nsl_interp_pch_variant_finite_difference:
 		uiGeneralTab.lParameter->hide();
                 uiGeneralTab.lTension->hide();
