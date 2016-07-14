@@ -75,7 +75,7 @@ int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_f
 			}
 			break;
 		case nsl_filter_form_chebyshev_ii:
-			for (i = 0; i < n/2+1; i++) {
+			for (i = 1; i < n/2+1; i++) {	/* i==0: factor=1 */
 				factor = 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order, cutindex/i), 2));
 				data[2*i] *= factor;
 				data[2*i+1] *= factor;
@@ -90,14 +90,16 @@ int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_f
 				data[2*i] = data[2*i+1] = 0;
 			break;
 		case nsl_filter_form_butterworth:
-			for (i = 0; i < n/2+1; i++) {
+			data[0]=data[1]=0;
+			for (i = 1; i < n/2+1; i++) {
 				factor = 1./sqrt(1.+gsl_sf_pow_int(cutindex/i, 2*order));
 				data[2*i] *= factor;
 				data[2*i+1] *= factor;
 			}
 			break;
 		case nsl_filter_form_chebyshev_i:
-			for (i = 0; i < n/2+1; i++) {
+			data[0]=data[1]=0;
+			for (i = 1; i < n/2+1; i++) {
 				factor = 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order, cutindex/i), 2));
 				data[2*i] *= factor;
 				data[2*i+1] *= factor;
@@ -121,22 +123,24 @@ int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_f
 				data[2*i] = data[2*i+1] = 0;
 			break;
 		case nsl_filter_form_butterworth:
-			for (i = 0; i < n/2+1; i++) {
-				factor = 1./sqrt(1.+gsl_sf_pow_int((i*i-centerindex*centerindex)/i/bandwidth, 2*order));
+			data[0]=data[1]=0;
+			for (i = 1; i < n/2+1; i++) {
+				factor = 1./sqrt(1.+gsl_sf_pow_int((i*i - centerindex*centerindex)/i/bandwidth, 2*order));
 				data[2*i] *= factor;
 				data[2*i+1] *= factor;
 			}
 			break;
 		case nsl_filter_form_chebyshev_i:
-			for (i = 0; i < n/2+1; i++) {
-				factor = 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order, (i*i-centerindex*centerindex)/i/bandwidth), 2));
+			data[0]=data[1]=0;
+			for (i = 1; i < n/2+1; i++) {
+				factor = 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order, (i*i - centerindex*centerindex)/i/bandwidth), 2));
 				data[2*i] *= factor;
 				data[2*i+1] *= factor;
 			}
 			break;
 		case nsl_filter_form_chebyshev_ii:
 			for (i = 0; i < n/2+1; i++) {
-				factor = 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order, i*bandwidth/(i*i-centerindex*centerindex)), 2));
+				factor = 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order, i*bandwidth/(i*i - centerindex*centerindex)), 2));
 				data[2*i] *= factor;
 				data[2*i+1] *= factor;
 			}
@@ -151,21 +155,21 @@ int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_f
 			break;
 		case nsl_filter_form_butterworth:
 			for (i = 0; i < n/2+1; i++) {
-				factor = 1./sqrt(1.+gsl_sf_pow_int(i*bandwidth/(i*i-gsl_sf_pow_int(centerindex, 2)), 2*order));
+				factor = 1./sqrt(1.+gsl_sf_pow_int(i*bandwidth/(i*i - centerindex*centerindex), 2*order));
 				data[2*i] *= factor;
 				data[2*i+1] *= factor;
 			}
 			break;
 		case nsl_filter_form_chebyshev_i:
 			for (i = 0; i < n/2+1; i++) {
-				factor = 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order, i*bandwidth/(i*i-centerindex*centerindex)), 2));
+				factor = 1./sqrt(1.+gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order, i*bandwidth/(i*i - centerindex*centerindex)), 2));
 				data[2*i] *= factor;
 				data[2*i+1] *= factor;
 			}
 			break;
 		case nsl_filter_form_chebyshev_ii:
-			for (i = 0; i < n/2+1; i++) {
-				factor = 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order, (i*i-centerindex*centerindex)/i/bandwidth), 2));
+			for (i = 1; i < n/2+1; i++) {	/* i==0: factor=1 */
+				factor = 1./sqrt(1.+1./gsl_sf_pow_int(nsl_sf_poly_chebyshev_T(order, (i*i - centerindex*centerindex)/i/bandwidth), 2));
 				data[2*i] *= factor;
 				data[2*i+1] *= factor;
 			}
