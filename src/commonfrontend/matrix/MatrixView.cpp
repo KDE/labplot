@@ -1157,8 +1157,8 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 		++columnsPerTable;
 	}
 
-	int tablesCount = (columnsPerTable!=0) ? cols/columnsPerTable : 0;
-	const int remainingColumns = cols % columnsPerTable;
+	int tablesCount = (columnsPerTable != 0) ? cols/columnsPerTable : 0;
+	const int remainingColumns = (columnsPerTable != 0) ? cols % columnsPerTable : cols;
 
 	bool columnsSeparating = (cols > columnsPerTable);
 	QTextStream out(&file);
