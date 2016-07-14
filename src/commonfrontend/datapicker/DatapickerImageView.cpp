@@ -322,9 +322,9 @@ void DatapickerImageView::drawBackground(QPainter* painter, const QRectF& rect) 
 	//shadow
 	int shadowSize = scene_rect.width()*0.02;
 	QRectF rightShadowRect(scene_rect.right(), scene_rect.top() + shadowSize,
-	                       shadowSize, scene_rect.height());
+				shadowSize, scene_rect.height());
 	QRectF bottomShadowRect(scene_rect.left() + shadowSize, scene_rect.bottom(),
-	                        scene_rect.width(), shadowSize);
+				scene_rect.width(), shadowSize);
 
 	painter->fillRect(rightShadowRect.intersected(rect), Qt::darkGray);
 	painter->fillRect(bottomShadowRect.intersected(rect), Qt::darkGray);
@@ -469,7 +469,7 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 
 	//show the magnification window
 	if ( magnificationFactor && m_mouseMode == SelectAndEditMode && m_image->isLoaded && sceneRect().contains(pos)
-	        && m_image->plotPointsType() != DatapickerImage::SegmentPoints ) {
+		&& m_image->plotPointsType() != DatapickerImage::SegmentPoints ) {
 
 		if (!m_image->m_magnificationWindow) {
 			m_image->m_magnificationWindow = new QGraphicsPixmapItem(0, scene());
@@ -577,7 +577,8 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 		newPos = newPos + shift;
 		point->setPosition(newPos);
 
-		int pointIndex = m_image->indexOfChild<DatapickerPoint>(point , AbstractAspect::IncludeHidden);
+		int pointIndex = m_image->indexOfChild<DatapickerPoint>(point, AbstractAspect::IncludeHidden);
+		Q_ASSERT(pointIndex != -1);
 		DatapickerImage::ReferencePoints points = m_image->axisPoints();
 		points.scenePos[pointIndex].setX(point->position().x());
 		points.scenePos[pointIndex].setY(point->position().y());
