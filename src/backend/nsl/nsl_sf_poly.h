@@ -36,4 +36,7 @@ double nsl_sf_poly_chebyshev_T(int n, double x);
 /* Chebychev U_n(x) */
 double nsl_sf_poly_chebyshev_U(int n, double x);
 
+/* Optimal "L"egendre Polynomials */
+double nsl_sf_poly_optimal_legendre(int n, double x);
+
 #endif /* NSL_SF_POLY_H */

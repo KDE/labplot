@@ -38,7 +38,7 @@
 #endif
 
 const char* nsl_filter_type_name[] = { "Low pass", "High pass", "Band pass", "Band reject" };
-const char* nsl_filter_form_name[] = { "Ideal", "Butterworth", "Chebyshev type I", "Chebyshev type II" };
+const char* nsl_filter_form_name[] = { "Ideal", "Butterworth", "Chebyshev type I", "Chebyshev type II", "Legendre (Optimum L)" };
 const char* nsl_filter_cutoff_unit_name[] = { "Frequency", "Fraction", "Index" };
 
 int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_form form, int order, double cutindex, double bandwidth) {
