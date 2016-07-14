@@ -53,6 +53,7 @@
 
 #include <KIcon>
 #include <KConfigGroup>
+#include <KGlobal>
 #include <KLocale>
 
 #include <cmath>
@@ -1898,10 +1899,14 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-// TODO: draw directly
-	draw(painter);
-// or use pixmap for double buffering
-// 	painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap);
+	if ( KGlobal::config()->group("General").readEntry<bool>("DoubleBuffering", true) ){
+		qDebug()<<"draw from cache";
+		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); //draw the cached pixmap (fast)
+	}else{
+		qDebug()<<"draw directly";
+		draw(painter); //draw directly again (slow)
+	}
+
 // 	qDebug() << "Paint the pixmap: " << timer.elapsed() << "ms";
 
 	if (m_hovered && !isSelected() && !m_printing) {
