@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : SettingsGeneralPage.cpp
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2008-2013 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
     Description          : general settings page
-                           
+    --------------------------------------------------------------------
+    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,6 +25,7 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+
 #include "SettingsGeneralPage.h"
 #include "MainWin.h"
 
@@ -50,6 +50,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
 	connect(ui.cbTabPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
 	connect(ui.chkAutoSave, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
 	connect(ui.sbAutoSaveInterval, SIGNAL(valueChanged(int)), this, SLOT(changed()) );
+	connect(ui.chkDoubleBuffering, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
 
 	loadSettings();
 	interfaceChanged(ui.cbInterface->currentIndex());
@@ -63,6 +64,7 @@ void SettingsGeneralPage::applySettings(){
 	group.writeEntry("MdiWindowVisibility", ui.cbMdiVisibility->currentIndex());
 	group.writeEntry("AutoSave", ui.chkAutoSave->isChecked());
 	group.writeEntry("AutoSaveInterval", ui.sbAutoSaveInterval->value());
+	group.writeEntry("DoubleBuffering", ui.chkDoubleBuffering->isChecked());
 }
 
 void SettingsGeneralPage::restoreDefaults(){
@@ -77,6 +79,7 @@ void SettingsGeneralPage::loadSettings(){
 	ui.cbMdiVisibility->setCurrentIndex(group.readEntry("MdiWindowVisibility", 0));
 	ui.chkAutoSave->setChecked(group.readEntry<bool>("AutoSave", 0));
 	ui.sbAutoSaveInterval->setValue(group.readEntry("AutoSaveInterval", 0));
+	ui.chkDoubleBuffering->setChecked(group.readEntry<bool>("DoubleBuffering", 1));
 }
 
 void SettingsGeneralPage::retranslateUi() {
@@ -113,6 +116,5 @@ void SettingsGeneralPage::interfaceChanged(int index) {
 	ui.cbTabPosition->setVisible(tabbedView);
 	ui.lMdiVisibility->setVisible(!tabbedView);
 	ui.cbMdiVisibility->setVisible(!tabbedView);
-	
 	changed();
 }

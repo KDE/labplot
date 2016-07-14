@@ -9,10 +9,12 @@ New features:
 	* Fourier transform with many window functions (Welch, Hann, Hamming, etc.) calculating magnitude, amplitude, power, phase, dB, etc. and supporting 
 		one/two sided spectrum with or without shift and x scaling to frequency, index or period
 	* Filter and search capabilities in the drop down box for the selection of data sources
+	* Sigmoid function as a new pre-defined fit model
 	* Support for compiling on Microsoft Windows
 
 Performance improvements:
 	* Faster generation of random values
+	* Global option to enable/disable the double-buffering for faster painting of curves (enabled on default)
 
 Bug fixes:
 	* Save and restore last used setting in RandomValuesDialog
