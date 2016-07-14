@@ -425,12 +425,12 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.model = eq;
 		vars << "a";
 		m_fitData.paramNames << "a";
-	} else if(m_fitData.modelType==XYFitCurve::Sigmoid) {
+	} else if (m_fitData.modelType == XYFitCurve::Sigmoid) {
 		eq = "a/(1+exp(-b*(x-c)))";
 		m_fitData.model = eq;
 		vars << "a" << "b" << "c";
 		m_fitData.paramNames << "a" << "b" << "c";
-	} else if (m_fitData.modelType==XYFitCurve::Custom) {
+	} else if (m_fitData.modelType == XYFitCurve::Custom) {
 		//use the equation of the last selected predefined model or of the last available custom model
 		eq = m_fitData.model;
 		vars << m_fitData.paramNames;

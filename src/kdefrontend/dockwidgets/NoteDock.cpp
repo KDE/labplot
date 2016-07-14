@@ -64,21 +64,21 @@ void NoteDock::setNotesList(QList< Note* > list) {
 //********** SLOTs for changes triggered in NoteDock **********
 //*************************************************************
 void NoteDock::nameChanged(QString name) {
-	if(m_initializing)
+	if (m_initializing)
 		return;
 
 	m_notes->setName(name);
 }
 
 void NoteDock::commentChanged(QString name) {
-	if(m_initializing)
+	if (m_initializing)
 		return;
 
 	m_notes->setComment(name);
 }
 
 void NoteDock::backgroundColorChanged(QColor color) {
-	if(m_initializing)
+	if (m_initializing)
 		return;
 
 	foreach(Note* note, m_notesList)
@@ -86,7 +86,7 @@ void NoteDock::backgroundColorChanged(QColor color) {
 }
 
 void NoteDock::textColorChanged(QColor color) {
-	if(m_initializing)
+	if (m_initializing)
 		return;
 
 	foreach(Note* note, m_notesList)
@@ -94,7 +94,7 @@ void NoteDock::textColorChanged(QColor color) {
 }
 
 void NoteDock::textFontChanged(QFont font) {
-	if(m_initializing)
+	if (m_initializing)
 		return;
 
 	foreach(Note* note, m_notesList)
