@@ -46,6 +46,7 @@ public:
     void updateKeywords(const QString &fileName, const QList<FITSFilter::Keyword> &originals, const QVector<FITSFilter::Keyword> &updates,
                         const QVector<FITSFilter::KeywordUpdates> &updatesOfKeywords);
     void addNewKeyword(const QString &fileName, const QList<FITSFilter::Keyword> &keywords);
+    void addKeywordUnit(const QString& fileName, const QList<FITSFilter::Keyword> &keywords);
     void deleteKeyword(const QString &fileName, const QList<FITSFilter::Keyword>& keywords);
     void removeExtensions(const QStringList& extensions);
     const QString valueOf(const QString &fileName, const char* key);

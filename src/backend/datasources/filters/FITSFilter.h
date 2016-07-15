@@ -81,6 +81,7 @@ class FITSFilter : public AbstractFileFilter {
     void updateKeywords(const QString& fileName, const QList<Keyword>& originals, const QVector<Keyword>& updates,
                         const QVector<KeywordUpdates>& updatesOfKeywords);
     void addNewKeyword(const QString& filename, const QList<Keyword> &keywords);
+    void addKeywordUnit(const QString& fileName, const QList<Keyword> &keywords);
     void deleteKeyword(const QString& fileName, const QList<Keyword>& keywords);
     void removeExtensions(const QStringList& extensions);
     void parseHeader(const QString &fileName, QTableWidget* headerEditTable,

@@ -79,6 +79,10 @@ void FITSFilter::deleteKeyword(const QString &fileName, const QList<Keyword>& ke
     d->deleteKeyword(fileName, keywords);
 }
 
+void FITSFilter::addKeywordUnit(const QString &fileName, const QList<Keyword> &keywords) {
+    d->addKeywordUnit(fileName, keywords);
+}
+
 void FITSFilter::removeExtensions(const QStringList &extensions) {
     d->removeExtensions(extensions);
 }
@@ -1184,6 +1188,28 @@ void FITSFilterPrivate::deleteKeyword(const QString& fileName, const QList<FITSF
 #endif
 }
 
+void FITSFilterPrivate::addKeywordUnit(const QString &fileName, const QList<FITSFilter::Keyword> &keywords) {
+#ifdef HAVE_FITS
+    int status = 0;
+    if (fits_open_file(&fitsFile, fileName.toLatin1(), READWRITE, &status )) {
+        printError(status);
+        return;
+    }
+
+    foreach (const FITSFilter::Keyword& keyword, keywords) {
+        if (fits_write_key_unit(fitsFile, keyword.key.toLatin1(), keyword.unit.toLatin1().constData(), &status)) {
+            printError(status);
+            status = 0;
+        }
+    }
+    status = 0;
+    fits_close_file(fitsFile, &status);
+#else
+    Q_UNUSED(fileName)
+    Q_UNUSED(keywords)
+#endif
+}
+
 /*!
  * \brief Remove extensions from a FITS file
  * \param fileName
@@ -1251,11 +1277,8 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
         keyword.key = recordValues[0].simplified();
         keyword.value = recordValues[1].simplified();
         keyword.comment = recordValues[2].simplified();
-        if (recordValues[3].isEmpty()) {
-            keyword.unit = QLatin1String("null");
-        } else {
-            keyword.unit = recordValues[3].simplified();
-        }
+        keyword.unit = recordValues[3].simplified();
+
         keywords.append(keyword);
     }
     delete[] key;
@@ -1315,17 +1338,16 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
             item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         }
         headerEditTable->setItem(i, 1, item );
-
-        bool hasUnit = false;
-        if (keyword.unit != QLatin1String("null")) {
-            hasUnit = true;
+        if (!keyword.unit.isEmpty()) {
+            if (keyword.comment.left(1) == QLatin1String("[")) {
+                item = new QTableWidgetItem(keyword.comment);
+            } else {
+                item = new QTableWidgetItem(QLatin1String("[") + keyword.unit + QLatin1String("] ") + keyword.comment);
+            }
+        } else {
+            item = new QTableWidgetItem(keyword.comment);
         }
 
-        item = new QTableWidgetItem(hasUnit ?  QLatin1String("[") +
-                                               keyword.unit +
-                                               QLatin1String("] ") +
-                                               keyword.comment
-                                    :keyword.comment);
         item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         headerEditTable->setItem(i, 2, item );
     }
