@@ -5,7 +5,7 @@ New features:
 	* Export of spreadsheets and matrices to LaTeX tables
 	* Interpolation of data including different splines, cosine, exponential, cubic Hermite (Catmull-Rom, cardinal, Kochanek-Bartels) and rational functions
 	* Data smoothing using moving average (centered or lagged), percentile filter or Savitzky-Golay algorithm
-	* Fourier filter (low pass, high pass, band pass, band reject) with ideal, Butterworth, Chebychev I+II or Legendre filter
+	* Fourier filter (low pass, high pass, band pass, band reject) with ideal, Butterworth, Chebychev I+II, Legendre or Bessel-Thomson filter
 	* Fourier transform with many window functions (Welch, Hann, Hamming, etc.) calculating magnitude, amplitude, power, phase, dB, etc. and supporting 
 		one/two sided spectrum with or without shift and x scaling to frequency, index or period
 	* Filter and search capabilities in the drop down box for the selection of data sources

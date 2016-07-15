@@ -38,8 +38,13 @@
 #endif
 
 const char* nsl_filter_type_name[] = { "Low pass", "High pass", "Band pass", "Band reject" };
-const char* nsl_filter_form_name[] = { "Ideal", "Butterworth", "Chebyshev type I", "Chebyshev type II", "Legendre (Optimum L)" };
+const char* nsl_filter_form_name[] = { "Ideal", "Butterworth", "Chebyshev type I", "Chebyshev type II", "Legendre (Optimum L)", "Bessel (Thomson)" };
 const char* nsl_filter_cutoff_unit_name[] = { "Frequency", "Fraction", "Index" };
+
+/* n - order, x = w/w0 */
+double nsl_filter_gain_bessel(int n, double x) {
+	return nsl_sf_poly_reversed_bessel_theta(n, 0)/cabs(nsl_sf_poly_reversed_bessel_theta(n, I*x));
+}
 
 int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_form form, int order, double cutindex, double bandwidth) {
 	if (cutindex < 0) {
@@ -83,7 +88,14 @@ int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_f
 			break;
 		case nsl_filter_form_legendre:
 			for (i = 0; i < n/2+1; i++) {
-				factor = 1./sqrt(1. + nsl_sf_poly_optimal_legendre(order, i*i/(cutindex*cutindex) ));
+				factor = 1./sqrt(1. + nsl_sf_poly_optimal_legendre_L(order, i*i/(cutindex*cutindex) ));
+				data[2*i] *= factor;
+				data[2*i+1] *= factor;
+			}
+			break;
+		case nsl_filter_form_bessel:
+			for (i = 0; i < n/2+1; i++) {
+				factor = nsl_filter_gain_bessel(order, i/cutindex);
 				data[2*i] *= factor;
 				data[2*i+1] *= factor;
 			}
@@ -122,7 +134,15 @@ int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_f
 		case nsl_filter_form_legendre:
 			data[0]=data[1]=0;
 			for (i = 1; i < n/2+1; i++) {
-				factor = 1./sqrt(1. + nsl_sf_poly_optimal_legendre(order, cutindex*cutindex/(i*i) ));
+				factor = 1./sqrt(1. + nsl_sf_poly_optimal_legendre_L(order, cutindex*cutindex/(i*i) ));
+				data[2*i] *= factor;
+				data[2*i+1] *= factor;
+			}
+			break;
+		case nsl_filter_form_bessel:
+			data[0]=data[1]=0;
+			for (i = 1; i < n/2+1; i++) {
+				factor = nsl_filter_gain_bessel(order, cutindex/i);
 				data[2*i] *= factor;
 				data[2*i+1] *= factor;
 			}
@@ -163,8 +183,16 @@ int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_f
 		case nsl_filter_form_legendre:
 			data[0]=data[1]=0;
 			for (i = 1; i < n/2+1; i++) {
-				factor = 1./sqrt(1. + nsl_sf_poly_optimal_legendre(order,
+				factor = 1./sqrt(1. + nsl_sf_poly_optimal_legendre_L(order,
 								(i*i-2.*centerindex*centerindex+gsl_pow_4(centerindex)/(i*i))/gsl_pow_2(bandwidth) ));
+				data[2*i] *= factor;
+				data[2*i+1] *= factor;
+			}
+			break;
+		case nsl_filter_form_bessel:
+			data[0]=data[1]=0;
+			for (i = 1; i < n/2+1; i++) {
+				factor = nsl_filter_gain_bessel(order, (i*i - centerindex*centerindex)/i/bandwidth);
 				data[2*i] *= factor;
 				data[2*i+1] *= factor;
 			}
@@ -200,8 +228,18 @@ int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_f
 			break;
 		case nsl_filter_form_legendre:
 			for (i = 0; i < n/2+1; i++) {
-				factor = 1./sqrt(1. + nsl_sf_poly_optimal_legendre(order,
+				factor = 1./sqrt(1. + nsl_sf_poly_optimal_legendre_L(order,
 								gsl_pow_2(i*bandwidth)/gsl_pow_2(i*i-centerindex*centerindex)  ));
+				data[2*i] *= factor;
+				data[2*i+1] *= factor;
+			}
+			break;
+		case nsl_filter_form_bessel:
+			for (i = 0; i < n/2+1; i++) {
+				if (i == centerindex)
+					factor = 0;
+				else
+					factor = nsl_filter_gain_bessel(order, i*bandwidth/(i*i - centerindex*centerindex));
 				data[2*i] *= factor;
 				data[2*i+1] *= factor;
 			}
