@@ -88,37 +88,17 @@
    <item row="12" column="3" colspan="2">
     <widget class="QComboBox" name="cbEval"/>
    </item>
-   <item row="13" column="0">
-    <widget class="QLabel" name="lPoints">
-     <property name="text">
-      <string>Points</string>
-     </property>
-    </widget>
-   </item>
-   <item row="13" column="3" colspan="2">
-    <widget class="QSpinBox" name="sbPoints">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>1000000</number>
-     </property>
-     <property name="value">
-      <number>100</number>
-     </property>
-    </widget>
-   </item>
-   <item row="17" column="0" colspan="5">
+   <item row="18" column="0" colspan="5">
     <widget class="Line" name="line_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="16" column="3" colspan="2">
+   <item row="17" column="3" colspan="2">
     <widget class="QTextEdit" name="teResult"/>
    </item>
-   <item row="18" column="3">
+   <item row="19" column="3">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -131,14 +111,14 @@
      </property>
     </spacer>
    </item>
-   <item row="18" column="4">
+   <item row="19" column="4">
     <widget class="QPushButton" name="pbRecalculate">
      <property name="text">
       <string>Recalculate</string>
      </property>
     </widget>
    </item>
-   <item row="16" column="0">
+   <item row="17" column="0">
     <widget class="QLabel" name="lResults">
      <property name="font">
       <font>
@@ -181,7 +161,7 @@
      </property>
     </widget>
    </item>
-   <item row="20" column="0">
+   <item row="21" column="0">
     <widget class="QCheckBox" name="chkVisible">
      <property name="text">
       <string>visible</string>
@@ -302,6 +282,22 @@
      </property>
     </spacer>
    </item>
+   <item row="15" column="3" colspan="2">
+    <spacer name="verticalSpacer_5">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>214</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="6" column="3" colspan="2">
     <spacer name="verticalSpacer_4">
      <property name="orientation">
@@ -334,23 +330,7 @@
      </property>
     </spacer>
    </item>
-   <item row="14" column="3" colspan="2">
-    <spacer name="verticalSpacer_5">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>214</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="19" column="3" colspan="2">
+   <item row="20" column="3" colspan="2">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -365,6 +345,68 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="13" column="0">
+    <widget class="QLabel" name="lPoints">
+     <property name="text">
+      <string>Points</string>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="3" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QDoubleSpinBox" name="sbPoints">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>number should be bigger than number of data points</string>
+       </property>
+       <property name="decimals">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <double>1000000000.000000000000000</double>
+       </property>
+       <property name="value">
+        <double>100.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="cbAutoPoints">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>auto</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="cbMultiplyPoints">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>multiple of data points</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

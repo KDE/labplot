@@ -408,6 +408,8 @@ void CartesianPlot::initMenus() {
 	addNewMenu = new QMenu(i18n("Add new"));
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
+	addNewMenu->addAction(addInterpolationCurveAction);
+	addNewMenu->addAction(addSmoothCurveAction);
 	addNewMenu->addAction(addFitCurveAction);
 	addNewMenu->addAction(addFourierFilterCurveAction);
 	addNewMenu->addAction(addFourierTransformCurveAction);
