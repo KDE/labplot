@@ -457,9 +457,11 @@ void XYInterpolationCurveDock::numberOfPointsMultiplyChanged() {
 	if(uiGeneralTab.cbMultiplyPoints->isChecked()) {
 		uiGeneralTab.sbPoints->setDecimals(2);
 		uiGeneralTab.sbPoints->setValue(uiGeneralTab.sbPoints->value()/(double)dataPoints);
+		uiGeneralTab.sbPoints->setSingleStep(0.01);
 	} else {
 		uiGeneralTab.sbPoints->setValue(uiGeneralTab.sbPoints->value()*dataPoints);
 		uiGeneralTab.sbPoints->setDecimals(0);
+		uiGeneralTab.sbPoints->setSingleStep(1.0);
 	}
 }
 
