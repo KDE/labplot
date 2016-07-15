@@ -526,12 +526,13 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(cartesianPlotZoomYSelectionModeAction);
 	toolBar->addSeparator();
 	toolBar->addAction(addCurveAction);
-	toolBar->addAction(addEquationCurveAction);
-	toolBar->addAction(addInterpolationCurveAction);
-	toolBar->addAction(addSmoothCurveAction);
-	toolBar->addAction(addFitCurveAction);
-	toolBar->addAction(addFourierFilterCurveAction);
-	toolBar->addAction(addFourierTransformCurveAction);
+// don't over populate the tool bar
+//	toolBar->addAction(addEquationCurveAction);
+//	toolBar->addAction(addInterpolationCurveAction);
+//	toolBar->addAction(addSmoothCurveAction);
+//	toolBar->addAction(addFitCurveAction);
+//	toolBar->addAction(addFourierFilterCurveAction);
+//	toolBar->addAction(addFourierTransformCurveAction);
 	toolBar->addAction(addLegendAction);
 	toolBar->addSeparator();
 	toolBar->addAction(addHorizontalAxisAction);
