@@ -38,7 +38,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QDebug>
 
 FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget *parent) :
-    QWidget(parent) {
+    QWidget(parent), m_initializingTable(false) {
     ui.setupUi(this);
     initActions();
     connectActions();
@@ -63,6 +63,7 @@ FITSHeaderEditWidget::~FITSHeaderEditWidget() {
 }
 
 void FITSHeaderEditWidget::fillTable() {
+    m_initializingTable = true;
     if (!m_extensionDatas.contains(m_seletedExtension)) {
         m_extensionDatas[m_seletedExtension].keywords = m_fitsFilter->chduKeywords(m_seletedExtension);
         m_extensionDatas[m_seletedExtension].updates.updatedKeywords.reserve(m_extensionDatas[m_seletedExtension].keywords.size());
@@ -91,6 +92,7 @@ void FITSHeaderEditWidget::fillTable() {
         }
         m_fitsFilter->parseHeader(QString(), ui.twKeywordsTable, false, keywords);
     }
+    m_initializingTable = false;
 }
 
 void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
@@ -181,6 +183,14 @@ void FITSHeaderEditWidget::save() {
         }
         if (m_extensionDatas[fileName].updates.removedKeywords.size() > 0) {
             m_fitsFilter->deleteKeyword(fileName, m_extensionDatas[fileName].updates.removedKeywords);
+        }
+
+        for(int i = 0; i < m_extensionDatas[fileName].updates.updatedKeywords.size(); ++i) {
+            FITSFilter::Keyword keyword =  m_extensionDatas[fileName].updates.updatedKeywords.at(i);
+            FITSFilter::KeywordUpdates updates = m_extensionDatas[fileName].updates.updatesOfKeywords.at(i);
+            if (updates.keyUpdated || updates.valueUpdated || updates.commentUpdated) {
+                qDebug() << "UPDATED: " << keyword.key << " " << keyword.value << " " << keyword.comment;
+            }
         }
 
         m_fitsFilter->updateKeywords(fileName, m_extensionDatas[fileName].keywords, m_extensionDatas[fileName].updates.updatedKeywords,
@@ -313,16 +323,19 @@ void FITSHeaderEditWidget::removeKeyword() {
 }
 
 void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem *item) {
-    int row = item->row();
-    if (item->column() == 0) {
-        m_extensionDatas[m_seletedExtension].updates.updatedKeywords.operator [](row).key = item->text();
-        m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.operator [](row).keyUpdated = true;
-    } else if (item->column() == 1) {
-        m_extensionDatas[m_seletedExtension].updates.updatedKeywords.operator [](row).value = item->text();
-        m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.operator [](row).valueUpdated = true;
-    } else {
-        m_extensionDatas[m_seletedExtension].updates.updatedKeywords.operator [](row).comment = item->text();
-        m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.operator [](row).commentUpdated = true;
+    if (!m_initializingTable) {
+        int row = item->row();
+        qDebug() << "UPDATESLOT";
+        if (item->column() == 0) {
+            m_extensionDatas[m_seletedExtension].updates.updatedKeywords.operator [](row).key = item->text();
+            m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.operator [](row).keyUpdated = true;
+        } else if (item->column() == 1) {
+            m_extensionDatas[m_seletedExtension].updates.updatedKeywords.operator [](row).value = item->text();
+            m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.operator [](row).valueUpdated = true;
+        } else {
+            m_extensionDatas[m_seletedExtension].updates.updatedKeywords.operator [](row).comment = item->text();
+            m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.operator [](row).commentUpdated = true;
+        }
     }
 }
 

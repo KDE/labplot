@@ -1062,12 +1062,14 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName, const QList<FITS
         if (updatesOfKeywords.at(i).keyUpdated &&
                 updatesOfKeywords.at(i).valueUpdated &&
                 updatesOfKeywords.at(i).commentUpdated) {
-            if (updatedKeyword.key.isEmpty() && updatedKeyword.value.isEmpty() && updatedKeyword.comment.isEmpty()) {
+            if (updatedKeyword.key.isEmpty() &&
+                    updatedKeyword.value.isEmpty() &&
+                    updatedKeyword.comment.isEmpty()) {
                 if (fits_delete_key(fitsFile, originalKeyword.key.toLatin1(), &status)) {
                     printError(status);
                     status = 0;
                 }
-                return;
+                continue;
             }
         }
         if (!updatedKeyword.key.isEmpty()) {
@@ -1080,7 +1082,7 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName, const QList<FITS
         if (!updatedKeyword.value.isEmpty()) {
             bool ok;
             int intValue;
-            int doubleValue;
+            double doubleValue;
             bool updated = false;
 
             doubleValue = updatedKeyword.value.toDouble(&ok);
@@ -1110,7 +1112,7 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName, const QList<FITS
             if (!updated) {
                 if (fits_update_key(fitsFile,TSTRING,
                                     updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
-                                    updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.value.toLatin1().data() : originalKeyword.value.toLatin1().data(),
+                                    updatedKeyword.value.toLatin1().data(),
                                     NULL, &status)) {
                     printError(status);
                 }
@@ -1128,7 +1130,7 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName, const QList<FITS
 
         if (!updatedKeyword.comment.isEmpty()) {
             if (fits_modify_comment(fitsFile, updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
-                                    updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.comment.toLatin1() : originalKeyword.comment.toLatin1(), &status)) {
+                                    updatedKeyword.comment.toLatin1(), &status)) {
                 printError(status);
                 status = 0;
             }
@@ -1191,7 +1193,6 @@ void FITSFilterPrivate::removeExtensions(const QStringList &extensions) {
 #ifdef HAVE_FITS
     int status = 0;
     foreach (const QString& ext, extensions) {
-        qDebug() << "Removing: " << ext;
         if (fits_open_file(&fitsFile, ext.toLatin1(), READWRITE, &status )) {
             printError(status);
             return;
@@ -1254,7 +1255,6 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
             keyword.unit = QLatin1String("null");
         } else {
             keyword.unit = recordValues[3].simplified();
-            qDebug() << "YESS: " << keyword.unit;
         }
         keywords.append(keyword);
     }

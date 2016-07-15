@@ -72,6 +72,8 @@ private:
 
     FITSFilter* m_fitsFilter;
 
+    bool m_initializingTable;
+
     void initActions();
     void initContextMenus();
     void connectActions();
