@@ -299,7 +299,7 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 #if GSL_MAJOR_VERSION >= 2
 		item = model->item(nsl_interp_type_steffen);
-		if (dataoints < gsl_interp_type_min_size(gsl_interp_steffen)) {
+		if (dataPoints < gsl_interp_type_min_size(gsl_interp_steffen)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_steffen)
 				uiGeneralTab.cbType->setCurrentIndex(0);
@@ -307,7 +307,7 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 #endif
-		// own types work with 2 or more dataPoints
+		// own types work with 2 or more data points
 	}
 }
 
