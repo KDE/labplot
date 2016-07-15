@@ -29,11 +29,12 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include <QWidget>
 #include <QAction>
+#include <QVector>
 #include <QMap>
+#include <QPair>
 #include "backend/datasources/AbstractDataSource.h"
 #include "ui_fitsheadereditwidget.h"
 #include "backend/datasources/filters/FITSFilter.h"
-#include "FITSHeaderEditNewKeywordDialog.h"
 
 class FITSHeaderEditWidget : public QWidget
 {
@@ -47,6 +48,7 @@ private:
     Ui::FITSHeaderEditWidget ui;
     QAction* action_remove_keyword;
     QAction* action_add_keyword;
+    QAction* action_addmodify_unit;
     QMenu* m_KeywordActionsMenu;
 
     QMenu* m_ExtensionActionsMenu;
@@ -54,7 +56,8 @@ private:
 
     struct HeaderUpdate {
         QList<FITSFilter::Keyword> newKeywords;
-        QList<FITSFilter::Keyword> updatedKeywords;
+        QVector<FITSFilter::Keyword> updatedKeywords;
+        QVector<FITSFilter::KeywordUpdates> updatesOfKeywords;
         QList<FITSFilter::Keyword> removedKeywords;
     };
 
@@ -62,7 +65,6 @@ private:
         HeaderUpdate updates;
         QList<FITSFilter::Keyword> keywords;
     };
-
 
     QMap<QString, ExtensionData> m_extensionDatas;
     QStringList m_removedExtensions;
@@ -87,6 +89,7 @@ private slots:
     void removeKeyword();
     void removeExtension();
     void addKeyword();
+    void addModifyKeywordUnit();
 };
 
 #endif // FITSHEADEREDITWIDGET_H

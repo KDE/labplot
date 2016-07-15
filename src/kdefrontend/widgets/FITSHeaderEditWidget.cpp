@@ -29,6 +29,8 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "FITSHeaderEditNewKeywordDialog.h"
+#include "FITSHeaderEditAddUnitDialog.h"
 #include <QMenu>
 #include <QTableWidget>
 #include <QFileDialog>
@@ -63,9 +65,27 @@ FITSHeaderEditWidget::~FITSHeaderEditWidget() {
 void FITSHeaderEditWidget::fillTable() {
     if (!m_extensionDatas.contains(m_seletedExtension)) {
         m_extensionDatas[m_seletedExtension].keywords = m_fitsFilter->chduKeywords(m_seletedExtension);
+        m_extensionDatas[m_seletedExtension].updates.updatedKeywords.reserve(m_extensionDatas[m_seletedExtension].keywords.size());
+        m_extensionDatas[m_seletedExtension].updates.updatedKeywords.resize(m_extensionDatas[m_seletedExtension].keywords.size());
+
+        m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.reserve(m_extensionDatas[m_seletedExtension].keywords.size());
+        m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.resize(m_extensionDatas[m_seletedExtension].keywords.size());
+
         m_fitsFilter->parseHeader(m_seletedExtension, ui.twKeywordsTable);
     } else {
         QList<FITSFilter::Keyword> keywords = m_extensionDatas[m_seletedExtension].keywords;
+        for (int i = 0; i < m_extensionDatas[m_seletedExtension].updates.updatedKeywords.size(); ++i) {
+            FITSFilter::Keyword keyword = m_extensionDatas[m_seletedExtension].updates.updatedKeywords.at(i);
+            if (!keyword.key.isEmpty()) {
+                keywords.operator [](i).key = keyword.key;
+            }
+            if (!keyword.value.isEmpty()) {
+                keywords.operator [](i).value = keyword.value;
+            }
+            if (!keyword.comment.isEmpty()) {
+                keywords.operator [](i).comment = keyword.comment;
+            }
+        }
         foreach (const FITSFilter::Keyword& key, m_extensionDatas[m_seletedExtension].updates.newKeywords) {
             keywords.append(key);
         }
@@ -162,6 +182,9 @@ void FITSHeaderEditWidget::save() {
         if (m_extensionDatas[fileName].updates.removedKeywords.size() > 0) {
             m_fitsFilter->deleteKeyword(fileName, m_extensionDatas[fileName].updates.removedKeywords);
         }
+
+        m_fitsFilter->updateKeywords(fileName, m_extensionDatas[fileName].keywords, m_extensionDatas[fileName].updates.updatedKeywords,
+                                     m_extensionDatas[fileName].updates.updatesOfKeywords);
     }
 
     if (m_removedExtensions.size() > 0) {
@@ -172,22 +195,23 @@ void FITSHeaderEditWidget::save() {
 
 void FITSHeaderEditWidget::initActions() {
     action_add_keyword = new QAction(i18n("Add new keyword"), this);
-    action_add_keyword->setShortcut(QKeySequence(Qt::ControlModifier, Qt::Key_N));
     action_remove_keyword = new QAction(i18n("Remove keyword"), this);
     action_remove_extension = new QAction(i18n("Delete"), this);
-    action_remove_extension->setShortcut(QKeySequence(Qt::Key_Delete));
+    action_addmodify_unit = new QAction(i18n("Add unit"), this);
 }
 
 void FITSHeaderEditWidget::connectActions() {
     connect(action_add_keyword, SIGNAL(triggered()), this, SLOT(addKeyword()));
     connect(action_remove_keyword, SIGNAL(triggered()), this, SLOT(removeKeyword()));
     connect(action_remove_extension, SIGNAL(triggered()), this, SLOT(removeExtension()));
+    connect(action_addmodify_unit, SIGNAL(triggered()), this, SLOT(addModifyKeywordUnit()));
 }
 
 void FITSHeaderEditWidget::initContextMenus() {
     m_KeywordActionsMenu = new QMenu(this);
     m_KeywordActionsMenu->addAction(action_add_keyword);
     m_KeywordActionsMenu->addAction(action_remove_keyword);
+    m_KeywordActionsMenu->addAction(action_addmodify_unit);
 
     m_ExtensionActionsMenu = new QMenu(this);
     m_ExtensionActionsMenu->addAction(action_remove_extension);
@@ -241,11 +265,6 @@ void FITSHeaderEditWidget::addKeyword() {
             qDebug() << keyw.key << " " << keyw.value << " " << keyw.comment;
         }
 
-        qDebug() << "Updated Keywords: ";
-        foreach (const FITSFilter::Keyword& keyw, m_extensionDatas[m_seletedExtension].updates.updatedKeywords) {
-            qDebug() << keyw.key << " " << keyw.value << " " << keyw.comment;
-        }
-
         int lastRow = ui.twKeywordsTable->rowCount();
         ui.twKeywordsTable->setRowCount(lastRow + 1);
         QTableWidgetItem* newKeyWordItem = new QTableWidgetItem(newKeyWord.key);
@@ -294,7 +313,33 @@ void FITSHeaderEditWidget::removeKeyword() {
 }
 
 void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem *item) {
-    Q_UNUSED(item)
+    int row = item->row();
+    if (item->column() == 0) {
+        m_extensionDatas[m_seletedExtension].updates.updatedKeywords.operator [](row).key = item->text();
+        m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.operator [](row).keyUpdated = true;
+    } else if (item->column() == 1) {
+        m_extensionDatas[m_seletedExtension].updates.updatedKeywords.operator [](row).value = item->text();
+        m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.operator [](row).valueUpdated = true;
+    } else {
+        m_extensionDatas[m_seletedExtension].updates.updatedKeywords.operator [](row).comment = item->text();
+        m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.operator [](row).commentUpdated = true;
+    }
+}
+
+void FITSHeaderEditWidget::addModifyKeywordUnit() {
+    FITSHeaderEditAddUnitDialog* addUnitDialog;
+
+    int selectedRow = ui.twKeywordsTable->currentRow();
+    if (m_extensionDatas[m_seletedExtension].keywords.at(selectedRow).unit != QLatin1String("null")) {
+        addUnitDialog = new FITSHeaderEditAddUnitDialog(m_extensionDatas[m_seletedExtension].keywords.at(selectedRow).unit);
+    } else {
+        addUnitDialog = new FITSHeaderEditAddUnitDialog;
+    }
+
+    if (addUnitDialog->exec() == KDialog::Accepted) {
+        m_extensionDatas[m_seletedExtension].keywords.operator [](selectedRow).unit = addUnitDialog->unit();
+        fillTable();
+    }
 }
 
 void FITSHeaderEditWidget::removeExtension() {

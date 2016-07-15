@@ -27,7 +27,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #ifndef FITSFILTER_H
 #define FITSFILTER_H
-
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include <QStringList>
 #include <KLocale>
@@ -36,7 +35,8 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QXmlStreamReader>
 
 class FITSFilterPrivate;
-class FITSFilter : public AbstractFileFilter{
+class FITSHeaderEditWidget;
+class FITSFilter : public AbstractFileFilter {
     Q_OBJECT
 
   public:
@@ -58,20 +58,30 @@ class FITSFilter : public AbstractFileFilter{
     virtual void save(QXmlStreamWriter*) const;
     virtual bool load(XmlStreamReader*);
     struct Keyword {
+        Keyword(const QString& key, const QString& value, const QString& comment): key(key), value(value),
+                    comment(comment) {}
+        Keyword(){}
         QString key;
         QString value;
         QString comment;
+        QString unit;
         bool operator==(const Keyword& other) const{
             return other.key == key &&
                     other.value == value &&
                      other.comment == comment;
         }
     };  
-    void updateKeyword(Keyword& keyword,const QString& newKey, const QString& newValue,
-                       const QString& newComment, KeywordUpdateMode mode = UpdateValueComment);
-    void addNewKeyword(const QString& filename, const QList<Keyword>& keywords);
+    struct KeywordUpdates {
+        KeywordUpdates() : keyUpdated(false), valueUpdated(false), commentUpdated(false) {}
+        bool keyUpdated;
+        bool valueUpdated;
+        bool commentUpdated;
+    };
+
+    void updateKeywords(const QString& fileName, const QList<Keyword>& originals, const QVector<Keyword>& updates,
+                        const QVector<KeywordUpdates>& updatesOfKeywords);
+    void addNewKeyword(const QString& filename, const QList<Keyword> &keywords);
     void deleteKeyword(const QString& fileName, const QList<Keyword>& keywords);
-    void renameKeywordKey(const Keyword& keyword, const QString& newKey);
     void removeExtensions(const QStringList& extensions);
     void parseHeader(const QString &fileName, QTableWidget* headerEditTable,
                      bool readKeys = true,
@@ -82,6 +92,7 @@ class FITSFilter : public AbstractFileFilter{
     static QStringList standardKeywords();
     static QStringList mandatoryImageExtensionKeywords();
     static QStringList mandatoryTableExtensionKeywords();
+    static QStringList units();
 
     void loadFilterSettings(const QString&);
     void saveFilterSettings(const QString&) const;

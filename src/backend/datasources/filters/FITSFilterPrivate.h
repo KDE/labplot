@@ -43,11 +43,10 @@ public:
 
     const FITSFilter* q;
     QMultiMap<QString, QString> extensionNames(const QString &fileName);
-    void updateKeyword(FITSFilter::Keyword& keyword, const QString &newKey, const QString &newValue, const QString &newComment,
-                       FITSFilter::KeywordUpdateMode updateMode = FITSFilter::UpdateValueComment);
+    void updateKeywords(const QString &fileName, const QList<FITSFilter::Keyword> &originals, const QVector<FITSFilter::Keyword> &updates,
+                        const QVector<FITSFilter::KeywordUpdates> &updatesOfKeywords);
     void addNewKeyword(const QString &fileName, const QList<FITSFilter::Keyword> &keywords);
     void deleteKeyword(const QString &fileName, const QList<FITSFilter::Keyword>& keywords);
-    void renameKeywordKey(const FITSFilter::Keyword& keyword, const QString& newKey);
     void removeExtensions(const QStringList& extensions);
     const QString valueOf(const QString &fileName, const char* key);
 

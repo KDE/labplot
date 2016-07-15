@@ -70,16 +70,13 @@ void FITSFilter::addNewKeyword(const QString &filename, const QList<Keyword> &ke
     d->addNewKeyword(filename, keywords);
 }
 
-void FITSFilter::updateKeyword(Keyword &keyword, const QString &newKey, const QString &newValue, const QString &newComment, KeywordUpdateMode mode) {
-    d->updateKeyword(keyword, newKey, newValue, newComment, mode);
+void FITSFilter::updateKeywords(const QString &fileName, const QList<Keyword>& originals, const QVector<Keyword>& updates,
+                                const QVector<KeywordUpdates> &updatesOfKeywords) {
+    d->updateKeywords(fileName, originals, updates, updatesOfKeywords);
 }
 
 void FITSFilter::deleteKeyword(const QString &fileName, const QList<Keyword>& keywords) {
     d->deleteKeyword(fileName, keywords);
-}
-
-void FITSFilter::renameKeywordKey(const Keyword &keyword, const QString &newKey) {
-    d->renameKeywordKey(keyword, newKey);
 }
 
 void FITSFilter::removeExtensions(const QStringList &extensions) {
@@ -136,6 +133,13 @@ QStringList FITSFilter::mandatoryTableExtensionKeywords() {
                          << QLatin1String("NAXIS2") << QLatin1String("PCOUNT")
                          << QLatin1String("GCOUNT") << QLatin1String("TFIELDS")
                          << QLatin1String("END");
+}
+
+QStringList FITSFilter::units() {
+    return QStringList() << QLatin1String("m (Metre)") << QLatin1String("kg (Kilogram)") << QLatin1String("s (Second)")
+                         << QLatin1String("M☉ (Solar mass)") << QLatin1String("AU (Astronomical unit") << QLatin1String("l.y (Light year)")
+                         << QLatin1String("km (Kilometres") << QLatin1String("pc (Parsec)") << QLatin1String("K (Kelvin)")
+                         << QLatin1String("mol (Mole)") << QLatin1String("cd (Candela)");
 }
 
 void FITSFilter::setStartColumn(const int column) {
@@ -1041,94 +1045,106 @@ void FITSFilterPrivate::addNewKeyword(const QString& fileName, const QList<FITSF
  * \param newComment the new comment
  * \param updateMode the update mode in which the keyword is updated
  */
-void FITSFilterPrivate::updateKeyword(FITSFilter::Keyword& keyword,const QString& newKey, const QString& newValue,
-                                      const QString& newComment, FITSFilter::KeywordUpdateMode updateMode) {
+void FITSFilterPrivate::updateKeywords(const QString& fileName, const QList<FITSFilter::Keyword>& originals, const QVector<FITSFilter::Keyword>& updates,
+                                       const QVector<FITSFilter::KeywordUpdates> &updatesOfKeywords) {
 #ifdef HAVE_FITS
     int status = 0;
-    bool updated = false;
+    if (fits_open_file(&fitsFile, fileName.toLatin1(), READWRITE, &status )) {
+        printError(status);
+        return;
+    }
+    FITSFilter::Keyword updatedKeyword;
+    FITSFilter::Keyword originalKeyword;
 
-    switch (updateMode) {
-    case FITSFilter::UpdateValueComment:{
-        bool ok;
-        int intValue;
-        int doubleValue;
-
-        doubleValue = keyword.value.toDouble(&ok);
-        if (ok) {
-            if (fits_update_key(fitsFile,TDOUBLE, keyword.key.toLatin1(), &doubleValue,
-                                keyword.comment.toLatin1(), &status)) {
+    for (int i = 0; i < updates.size(); ++i) {
+        updatedKeyword = updates.at(i);
+        originalKeyword = originals.at(i);
+        if (updatesOfKeywords.at(i).keyUpdated &&
+                updatesOfKeywords.at(i).valueUpdated &&
+                updatesOfKeywords.at(i).commentUpdated) {
+            if (updatedKeyword.key.isEmpty() && updatedKeyword.value.isEmpty() && updatedKeyword.comment.isEmpty()) {
+                if (fits_delete_key(fitsFile, originalKeyword.key.toLatin1(), &status)) {
+                    printError(status);
+                    status = 0;
+                }
+                return;
+            }
+        }
+        if (!updatedKeyword.key.isEmpty()) {
+            if (fits_modify_name(fitsFile, originalKeyword.key.toLatin1(), updatedKeyword.key.toLatin1(), &status )) {
                 printError(status);
-            } else {
-                updated = true;
+                status = 0;
             }
         }
-        if (!updated) {
-            intValue = keyword.value.toInt(&ok);
+
+        if (!updatedKeyword.value.isEmpty()) {
+            bool ok;
+            int intValue;
+            int doubleValue;
+            bool updated = false;
+
+            doubleValue = updatedKeyword.value.toDouble(&ok);
             if (ok) {
-                if (fits_update_key(fitsFile,TINT, keyword.key.toLatin1(), &intValue,
-                                    keyword.comment.toLatin1(), &status)) {
+                if (fits_update_key(fitsFile,TDOUBLE,
+                                    updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+                                    &doubleValue,
+                                    NULL, &status)) {
                     printError(status);
                 } else {
                     updated = true;
                 }
             }
-        }
-        if (!updated) {
-            intValue = keyword.value.toInt(&ok);
-            if (ok) {
-                if (fits_update_key(fitsFile,TSTRING, keyword.key.toLatin1(), keyword.value.toLatin1().data(),
-                                    keyword.comment.toLatin1(), &status)) {
+            if (!updated) {
+                intValue = updatedKeyword.value.toInt(&ok);
+                if (ok) {
+                    if (fits_update_key(fitsFile,TINT,
+                                        updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+                                        &intValue,
+                                        NULL, &status)) {
+                        printError(status);
+                    } else {
+                        updated = true;
+                    }
+                }
+            }
+            if (!updated) {
+                if (fits_update_key(fitsFile,TSTRING,
+                                    updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+                                    updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.value.toLatin1().data() : originalKeyword.value.toLatin1().data(),
+                                    NULL, &status)) {
                     printError(status);
-
-                } else {
-                    updated = true;
+                }
+            }
+        } else {
+            if (updatesOfKeywords.at(i).valueUpdated) {
+                if (fits_update_key_null(fitsFile,
+                                         updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+                                         NULL, &status)) {
+                    printError(status);
+                    status = 0;
                 }
             }
         }
-        if (updated) {
-            keyword.value = newValue;
-            keyword.comment = newComment;
-        }
-        break;
-    }
-    case FITSFilter::UpdateKeyname: {
-        if (fits_modify_name(fitsFile, keyword.key.toLatin1(), newKey.toLatin1(), &status )) {
-            printError(status);
-        } else {
-            updated = true;
-            keyword.key = newKey;
-        }
-        break;
-    }
-    case FITSFilter::UpdateComment: {
-        if (fits_modify_comment(fitsFile, keyword.key.toLatin1(), newComment.toLatin1(), &status)) {
-            printError(status);
-        } else {
-            updated = true;
-            keyword.comment = newComment;
-        }
-        break;
-    }
-    case FITSFilter::UpdateWithBlankValue: {
-        if (fits_update_key_null(fitsFile, keyword.key.toLatin1(), NULL, &status)) {
-            printError(status);
-        } else {
-            updated = true;
-            keyword.value = "";
-        }
-        break;
-    }
 
-    case FITSFilter::UpdateWithoutComment: {
-        break;
+        if (!updatedKeyword.comment.isEmpty()) {
+            if (fits_modify_comment(fitsFile, updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+                                    updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.comment.toLatin1() : originalKeyword.comment.toLatin1(), &status)) {
+                printError(status);
+                status = 0;
+            }
+        } else {
+            if (updatesOfKeywords.at(i).commentUpdated) {
+                if (fits_modify_comment(fitsFile,
+                                        updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+                                        "", &status)) {
+                    printError(status);
+                    status = 0;
+                }
+            }
+        }
     }
-    }
-
-    if (updated) {
-        qDebug() << "Keyword updated successfully!";
-    } else {
-        qDebug() << "Failed to update keyword!";
-    }
+    status = 0;
+    fits_close_file(fitsFile, &status);
 #else
     Q_UNUSED(newKey)
     Q_UNUSED(keyword)
@@ -1164,16 +1180,6 @@ void FITSFilterPrivate::deleteKeyword(const QString& fileName, const QList<FITSF
     Q_UNUSED(keywords)
     Q_UNUSED(fileName)
 #endif
-}
-
-/*!
- * \brief Rename the keyname of \a keyword, preserving the value and comment fields
- * \param keyword the keyword to rename
- * \param newKey the new keyname of \a keyword
- */
-void FITSFilterPrivate::renameKeywordKey(const FITSFilter::Keyword &keyword, const QString &newKey) {
-    Q_UNUSED(keyword)
-    Q_UNUSED(newKey)
 }
 
 /*!
@@ -1226,6 +1232,7 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
     char* key = new char[FLEN_KEYWORD];
     char* value = new char[FLEN_VALUE];
     char* comment = new char[FLEN_COMMENT];
+    char* unit = new char[FLEN_VALUE];
     for (int i = 1; i <= numberOfKeys; ++i) {
         QStringList recordValues;
         FITSFilter::Keyword keyword;
@@ -1235,17 +1242,26 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
             status = 0;
             continue;
         }
-        recordValues << QLatin1String(key) << QLatin1String(value) << QLatin1String(comment);
+
+        fits_read_key_unit(fitsFile, key, unit, &status);
+
+        recordValues << QLatin1String(key) << QLatin1String(value) << QLatin1String(comment) << QLatin1String(unit);
 
         keyword.key = recordValues[0].simplified();
         keyword.value = recordValues[1].simplified();
         keyword.comment = recordValues[2].simplified();
-
+        if (recordValues[3].isEmpty()) {
+            keyword.unit = QLatin1String("null");
+        } else {
+            keyword.unit = recordValues[3].simplified();
+            qDebug() << "YESS: " << keyword.unit;
+        }
         keywords.append(keyword);
     }
     delete[] key;
     delete[] value;
     delete[] comment;
+    delete[] unit;
 
     fits_close_file(fitsFile, &status);
 
@@ -1269,9 +1285,10 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
     headerEditTable->setRowCount(keywords.size());
     QTableWidgetItem* item;
     for (int i = 0; i < keywords.size(); ++i) {
-        const bool mandatory = FITSFilter::mandatoryImageExtensionKeywords().contains(keywords.at(i).key) ||
-                FITSFilter::mandatoryTableExtensionKeywords().contains(keywords.at(i).key);
-        item = new QTableWidgetItem(keywords.at(i).key);
+        const FITSFilter::Keyword keyword = keywords.at(i);
+        const bool mandatory = FITSFilter::mandatoryImageExtensionKeywords().contains(keyword.key) ||
+                FITSFilter::mandatoryTableExtensionKeywords().contains(keyword.key);
+        item = new QTableWidgetItem(keyword.key);
         const QString& itemText = item->text();
         const bool notEditableKey = mandatory || itemText.contains(QLatin1String("TFORM")) ||
                                     itemText.contains(QLatin1String("TTYPE")) ||
@@ -1291,7 +1308,7 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
         }
         headerEditTable->setItem(i, 0, item );
 
-        item = new QTableWidgetItem(keywords.at(i).value);
+        item = new QTableWidgetItem(keyword.value);
         if (notEditableValue) {
             item->setFlags(item->flags() & ~Qt::ItemIsEditable);
         } else {
@@ -1299,7 +1316,16 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
         }
         headerEditTable->setItem(i, 1, item );
 
-        item = new QTableWidgetItem(keywords.at(i).comment);
+        bool hasUnit = false;
+        if (keyword.unit != QLatin1String("null")) {
+            hasUnit = true;
+        }
+
+        item = new QTableWidgetItem(hasUnit ?  QLatin1String("[") +
+                                               keyword.unit +
+                                               QLatin1String("] ") +
+                                               keyword.comment
+                                    :keyword.comment);
         item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         headerEditTable->setItem(i, 2, item );
     }
