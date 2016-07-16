@@ -48,11 +48,18 @@ int main() {
 	for(i=0;i<N;i++)
 		data[i]=1.0;
 
+	/*Bessel gain*/
+/*	printf("G = %g\n",nsl_filter_gain_bessel(3,1)); */
+
 	/* filter form */
 	/*nsl_filter_apply(data, N, nsl_filter_type_low_pass, nsl_filter_form_legendre, 2, 50, 2);*/
 	/*nsl_filter_apply(data, N, nsl_filter_type_high_pass, nsl_filter_form_legendre, 2, 50, 2);*/
 	/*nsl_filter_apply(data, N, nsl_filter_type_band_pass, nsl_filter_form_legendre, 2, 100, 50);*/
-	nsl_filter_apply(data, N, nsl_filter_type_band_reject, nsl_filter_form_legendre, 2, 100, 100);
+	/*nsl_filter_apply(data, N, nsl_filter_type_band_reject, nsl_filter_form_legendre, 2, 100, 100);*/
+	/*nsl_filter_apply(data, N, nsl_filter_type_low_pass, nsl_filter_form_bessel, 2, 100, 100);*/
+	/*nsl_filter_apply(data, N, nsl_filter_type_high_pass, nsl_filter_form_bessel, 2, 100, 100);*/
+	/*nsl_filter_apply(data, N, nsl_filter_type_band_pass, nsl_filter_form_bessel, 2, 100, 100);*/
+	nsl_filter_apply(data, N, nsl_filter_type_band_reject, nsl_filter_form_bessel, 2, 100, 100);
 	for(i=0; i < N/2; i++)
 		printf("%d %g\n", i, data[2*i]);
 

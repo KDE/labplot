@@ -58,8 +58,8 @@
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2016-07-02</date>
-<releaseinfo>3.2.2</releaseinfo>
+<date>2016-07-15</date>
+<releaseinfo>3.2.3</releaseinfo>
 
 <abstract>
 	<para>
@@ -1039,7 +1039,8 @@ The menu is only available when a datapicker object is selected on the <guilabel
 	<listitem><para>Ideal</para></listitem>
 	<listitem><para>Butterworth (order 1 to 10)</para></listitem>
 	<listitem><para>Chebyshev type I or II (order 1 to 10)</para></listitem>
-	<listitem><para>Optimal Legendre (order 1 to 10)</para></listitem>
+	<listitem><para>Optimal "L"egendre (order 1 to 10)</para></listitem>
+	<listitem><para>Bessel-Thomson (any order)</para></listitem>
       </itemizedlist>
     <para>
 	The cutoff value(s) can be specified in the units frequency (Hertz), fraction (0.0 to 1.0) or index
