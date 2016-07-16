@@ -30,7 +30,12 @@
 #define NSL_SF_POLY_H
 
 #include <stdlib.h>
+/* C++ including this header */
+#ifdef __cplusplus
+#define complex _Complex
+#else
 #include <complex.h>
+#endif
 
 /* Chebychev T_n(x) */
 double nsl_sf_poly_chebyshev_T(int n, double x);
