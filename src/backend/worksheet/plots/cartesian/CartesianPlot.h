@@ -172,6 +172,7 @@ class CartesianPlot:public AbstractPlot{
 		void dataChanged();
 		void xDataChanged();
 		void yDataChanged();
+		void HistogramdataChanged();
 		void xHistogramDataChanged();
 		void yHistogramDataChanged();
 		void curveVisibilityChanged();

@@ -99,8 +99,6 @@ class Histogram: public WorksheetElement {
 	public slots:
 		virtual void retransform();
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
-		void scaleAutoX();
-		void scaleAutoY();
 		
 	private slots:
 		void updateValues();
@@ -123,7 +121,7 @@ class Histogram: public WorksheetElement {
 
 	signals:
 		//General-Tab
-		void dataChanged();
+		void HistogramdataChanged();
 		void xHistogramDataChanged();
 		void yHistogramDataChanged();
 		void visibilityChanged(bool);

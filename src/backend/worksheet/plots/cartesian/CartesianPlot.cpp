@@ -55,6 +55,7 @@
 #include <QIcon>
 #include <QAction>
 #include <KLocale>
+#include <QtDebug>
 
 #define SCALE_MIN CartesianCoordinateSystem::Scale::LIMIT_MIN
 #define SCALE_MAX CartesianCoordinateSystem::Scale::LIMIT_MAX
@@ -777,6 +778,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		const Histogram* histo = qobject_cast<const Histogram*>(child);
 			if (histo)
 			{
+				connect(histo, SIGNAL(HistogramdataChanged()), this, SLOT(HistogramdataChanged()));
 				connect(histo, SIGNAL(xHistogramDataChanged()), this, SLOT(xHistogramDataChanged()));
 				connect(histo, SIGNAL(yHistogramDataChanged()), this, SLOT(yHistogramDataChanged()));
 				connect(histo, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged()));
@@ -822,7 +824,21 @@ void CartesianPlot::dataChanged(){
 	else
 		curve->retransform();
 }
-
+void CartesianPlot::HistogramdataChanged(){
+	Q_D(CartesianPlot);
+	Histogram* curve = dynamic_cast<Histogram*>(QObject::sender());
+	Q_ASSERT(curve);
+	d->curvesXMinMaxIsDirty = true;
+	d->curvesYMinMaxIsDirty = true;
+	if (d->autoScaleX && d->autoScaleY)
+		this->scaleAuto();
+	else if (d->autoScaleX)
+		this->scaleAutoX();
+	else if (d->autoScaleY)
+		this->scaleAutoY();
+	else
+		curve->retransform();
+}
 /*!
 	called when in one of the curves the x-data was changed.
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
@@ -952,7 +968,23 @@ void CartesianPlot::scaleAutoX(){
 					d->curvesXMax = curve->xColumn()->maximum();
 			}
 		}
+		QList<const Histogram*> childrenHistogram = this->children<const Histogram>();
+		foreach(const Histogram* curve, childrenHistogram) {
+			if (!curve->isVisible())
+				continue;
+			if (!curve->xColumn())
+				continue;
 
+			if (curve->xColumn()->minimum() != INFINITY){
+				if (curve->xColumn()->minimum() < d->curvesXMin)
+					d->curvesXMin = curve->xColumn()->minimum();
+			}
+
+			if (curve->xColumn()->maximum() != -INFINITY){
+				if (curve->xColumn()->maximum() > d->curvesXMax)
+					d->curvesXMax = curve->xColumn()->maximum();
+			}
+		}
 		d->curvesXMinMaxIsDirty = false;
 	}
 
@@ -1010,7 +1042,23 @@ void CartesianPlot::scaleAutoY(){
 					d->curvesYMax = curve->yColumn()->maximum();
 			}
 		}
+		QList<const Histogram*> childrenHistogram = this->children<const Histogram>();
+		foreach(const Histogram* curve, childrenHistogram) {
+			if (!curve->isVisible())
+				continue;
+			if (!curve->yColumn())
+				continue;
 
+			if (curve->yColumn()->minimum() != INFINITY){
+				if (curve->yColumn()->minimum() < d->curvesYMin)
+					d->curvesYMin = curve->yColumn()->minimum();
+			}
+
+			if (curve->yColumn()->maximum() != -INFINITY){
+				if (curve->yColumn()->maximum() > d->curvesYMax)
+					d->curvesYMax = curve->yColumn()->maximum();
+			}
+		}
 		d->curvesYMinMaxIsDirty = false;
 	}
 
@@ -1043,7 +1091,6 @@ void CartesianPlot::scaleAutoY(){
 		d->retransformScales();
 	}
 }
-
 void CartesianPlot::scaleAuto(){
 	Q_D(CartesianPlot);
 
@@ -1323,7 +1370,6 @@ void CartesianPlotPrivate::retransformScales(){
 		sceneEnd = itemRect.x()+itemRect.width()-horizontalPadding;
 		logicalStart = xMin;
 		logicalEnd = xMax;
-
 		//TODO: how should we handle the case sceneStart=sceneEnd
 		//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
 		if (sceneStart!=sceneEnd) {
@@ -1365,6 +1411,7 @@ void CartesianPlotPrivate::retransformScales(){
 
 	//create y-scales
 	scales.clear();
+
 	if (!hasValidBreak) {
 		sceneStart = itemRect.y()+itemRect.height()-verticalPadding;
 		sceneEnd = itemRect.y()+verticalPadding;
@@ -1393,7 +1440,6 @@ void CartesianPlotPrivate::retransformScales(){
 	}
 
 	cSystem ->setYScales(scales);
-
 	//calculate the changes in x and y and save the current values for xMin, xMax, yMin, yMax
 	float deltaXMin = 0;
 	float deltaXMax = 0;
@@ -1424,7 +1470,6 @@ void CartesianPlotPrivate::retransformScales(){
 	xMaxPrev = xMax;
 	yMinPrev = yMin;
 	yMaxPrev = yMax;
-
 	//adjust auto-scale axes
 	QList<Axis*> childElements = q->children<Axis>();
 	foreach(Axis* axis, childElements){

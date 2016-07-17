@@ -377,7 +377,6 @@ void Histogram::setFillingOpacity(qreal opacity) {
 //#################################  SLOTS  ####################################
 //##############################################################################
 void Histogram::retransform() {
-	qDebug() << "Retransform begins";
 	d_ptr->retransform();
 }
 
@@ -418,123 +417,6 @@ void Histogram::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->valuesColumn) {
 		d->valuesColumn = 0;
 		d->updateValues();
-	}
-}
-
-
-void Histogram::scaleAutoX(){
-	Q_D(Histogram);
-
-	//loop over all xy-curves and determine the maximum x-value
-	if (d->curvesXMinMaxIsDirty) {
-		d->curvesXMin = INFINITY;
-		d->curvesXMax = -INFINITY;
-		QList<const Histogram*> children = this->children<const Histogram>();
-		foreach(const Histogram* curve, children) {
-			if (!curve->isVisible())
-				continue;
-			if (!curve->xColumn())
-				continue;
-
-			if (curve->xColumn()->minimum() != INFINITY){
-				if (curve->xColumn()->minimum() < d->curvesXMin)
-					d->curvesXMin = curve->xColumn()->minimum();
-			}
-
-			if (curve->xColumn()->maximum() != -INFINITY){
-				if (curve->xColumn()->maximum() > d->curvesXMax)
-					d->curvesXMax = curve->xColumn()->maximum();
-			}
-		}
-
-		d->curvesXMinMaxIsDirty = false;
-	}
-
-	bool update = false;
-	if (d->curvesXMin != d->xMin && d->curvesXMin != INFINITY){
-		d->xMin = d->curvesXMin;
-		update = true;
-	}
-
-	if (d->curvesXMax != d->xMax && d->curvesXMax != -INFINITY){
-		d->xMax = d->curvesXMax;
-		update = true;
-	}
-
-	if(update){
-		if (d->xMax == d->xMin){
-			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-			if (d->xMax!=0){
-				d->xMax = d->xMax*1.1;
-				d->xMin = d->xMin*0.9;
-			}else{
-				d->xMax = 0.1;
-				d->xMin = -0.1;
-			}
-		}else{
-		/*	float offset = (d->xMax - d->xMin)*d->autoScaleOffsetFactor;
-			d->xMin -= offset;
-			d->xMax += offset;
-		*/}
-		//d->retransformScales();
-	}
-}
-
-void Histogram::scaleAutoY(){
-	Q_D(Histogram);
-
-	//loop over all xy-curves and determine the maximum y-value
-	if (d->curvesYMinMaxIsDirty) {
-		d->curvesYMin = INFINITY;
-		d->curvesYMax = -INFINITY;
-		QList<const Histogram*> children = this->children<const Histogram>();
-		foreach(const Histogram* curve, children) {
-			if (!curve->isVisible())
-				continue;
-			if (!curve->yColumn())
-				continue;
-
-			if (curve->yColumn()->minimum() != INFINITY){
-				if (curve->yColumn()->minimum() < d->curvesYMin)
-					d->curvesYMin = curve->yColumn()->minimum();
-			}
-
-			if (curve->yColumn()->maximum() != -INFINITY){
-				if (curve->yColumn()->maximum() > d->curvesYMax)
-					d->curvesYMax = curve->yColumn()->maximum();
-			}
-		}
-
-		d->curvesYMinMaxIsDirty = false;
-	}
-
-	bool update = false;
-	if (d->curvesYMin != d->yMin && d->curvesYMin != INFINITY){
-		d->yMin = d->curvesYMin;
-		update = true;
-	}
-
-	if (d->curvesYMax != d->yMax && d->curvesYMax != -INFINITY){
-		d->yMax = d->curvesYMax;
-		update = true;
-	}
-
-	if(update){
-		if (d->yMax == d->yMin){
-			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-			if (d->yMax!=0){
-				d->yMax = d->yMax*1.1;
-				d->yMin = d->yMin*0.9;
-			}else{
-				d->yMax = 0.1;
-				d->yMin = -0.1;
-			}
-		}else{
-		/*	float offset = (d->yMax - d->yMin)*d->autoScaleOffsetFactor;
-			d->yMin -= offset;
-			d->yMax += offset;
-	*/	}
-		//d->retransformScales();
 	}
 }
 
@@ -591,7 +473,7 @@ void HistogramPrivate::retransform(){
 		return;
 	}
 
-// 	qDebug()<<"HistogramPrivate::retransform() " << q->name();
+ 	//qDebug()<<"HistogramPrivate::retransform() " << q->name();
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
 	connectedPointsLogical.clear();
@@ -616,7 +498,7 @@ void HistogramPrivate::retransform(){
 
 			switch(xColMode) {
 				case AbstractColumn::Numeric:
-					tempPoint.setX(xColumn->valueAt(row));
+					tempPoint.setX(xColumn->valueAt(row));\
 					break;
 				case AbstractColumn::Text:
 					//TODO
@@ -629,8 +511,8 @@ void HistogramPrivate::retransform(){
 
 			switch(yColMode) {
 				case AbstractColumn::Numeric:
-					tempPoint.setY(yColumn->valueAt(row));
-					break;
+						tempPoint.setY(yColumn->valueAt(row));
+						break;
 				case AbstractColumn::Text:
 					//TODO
 				case AbstractColumn::DateTime:
@@ -660,7 +542,6 @@ void HistogramPrivate::retransform(){
 	m_suppressRecalc = true;
 	updateValues();
 	m_suppressRecalc = false;
-	qDebug() << "Retransform end";
 }
 
 /*!
@@ -1069,7 +950,6 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 void HistogramPrivate::draw(QPainter *painter) {
 	//draw filling
 	
-	qDebug() << "drawing Histogram";
 	if (fillingPosition != Histogram::NoFilling) {
 		painter->setOpacity(fillingOpacity);
 		painter->setPen(Qt::SolidLine);
@@ -1189,7 +1069,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     Q_UNUSED(option);
     Q_UNUSED(widget);
    
-    //Ordinary logic
+    //Ordinary histogram logic
     QPainterPath LinePath = QPainterPath();
     QList<QLineF> lines;
     lines.clear();
@@ -1238,7 +1118,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     linePen.setColor( QColor(Qt::black) );
     linePen.setWidthF( Worksheet::convertToSceneUnits(1.0, Worksheet::Point) );
    
-    prepareGeometryChange(); 
+   // prepareGeometryChange(); 
     curveShape = QPainterPath();
     curveShape.addPath(WorksheetElement::shapeFromPath(LinePath, linePen));
     boundingRectangle = curveShape.boundingRect();
@@ -1278,6 +1158,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
    
     return;
+    //ends my logic
 }
 
 /*!
@@ -1295,7 +1176,7 @@ void HistogramPrivate::drawValues(QPainter* painter) {
 		trafo.reset();
 		trafo.translate( valuesPoints.at(i).x(), valuesPoints.at(i).y() );
 		if (valuesRotationAngle!=0)
-			trafo.rotate( -valuesRotationAngle );
+			trafo.rotate(-valuesRotationAngle );
 
 		painter->drawPath(trafo.map(path));
 	}
