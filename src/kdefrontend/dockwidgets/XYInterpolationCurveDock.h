@@ -72,7 +72,7 @@ private slots:
 	void biasChanged();
 	void evaluateChanged();
 	void numberOfPointsChanged();
-	void numberOfPointsMultiplyChanged();
+	void pointsModeChanged();
 
 //	void showOptions();
 	void recalculateClicked();

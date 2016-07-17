@@ -504,6 +504,7 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "continuity", QString::number(d->interpolationData.continuity) );
 	writer->writeAttribute( "bias", QString::number(d->interpolationData.bias) );
 	writer->writeAttribute( "npoints", QString::number(d->interpolationData.npoints) );
+	writer->writeAttribute( "pointsMode", QString::number(d->interpolationData.pointsMode) );
 	writer->writeAttribute( "evaluate", QString::number(d->interpolationData.evaluate) );
 	writer->writeEndElement();// interpolationData
 
@@ -589,6 +590,12 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 				reader->raiseWarning(attributeWarning.arg("'npoints'"));
 			else
 				d->interpolationData.npoints = str.toInt();
+
+			str = attribs.value("pointsMode").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'pointsMode'"));
+			else
+				d->interpolationData.pointsMode = (XYInterpolationCurve::PointsMode)str.toInt();
 
 			str = attribs.value("evaluate").toString();
 			if (str.isEmpty())

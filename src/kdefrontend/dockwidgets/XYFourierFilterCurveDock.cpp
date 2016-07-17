@@ -284,7 +284,7 @@ void XYFourierFilterCurveDock::typeChanged() {
 */
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::formChanged() {
@@ -306,13 +306,13 @@ void XYFourierFilterCurveDock::formChanged() {
 		break;
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::orderChanged() {
 	m_filterData.order = uiGeneralTab.sbOrder->value();
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::unitChanged() {
@@ -383,7 +383,7 @@ void XYFourierFilterCurveDock::unitChanged() {
 		break;
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::unit2Changed() {
@@ -454,7 +454,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 		break;
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::recalculateClicked() {

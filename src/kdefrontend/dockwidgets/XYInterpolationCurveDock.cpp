@@ -97,6 +97,10 @@ void XYInterpolationCurveDock::setupGeneral() {
 	for (int i=0; i < NSL_INTERP_EVALUATE_COUNT; i++)
 		uiGeneralTab.cbEval->addItem(i18n(nsl_interp_evaluate_name[i]));
 
+	uiGeneralTab.cbPointsMode->addItem(i18n("Auto (5x data points)"));
+	uiGeneralTab.cbPointsMode->addItem(i18n("Multiple of data points"));
+	uiGeneralTab.cbPointsMode->addItem(i18n("Custom"));
+
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
@@ -115,8 +119,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.sbBias, SIGNAL(valueChanged(double)), this, SLOT(biasChanged()) );
 	connect( uiGeneralTab.cbEval, SIGNAL(currentIndexChanged(int)), this, SLOT(evaluateChanged()) );
 	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(double)), this, SLOT(numberOfPointsChanged()) );
-	connect( uiGeneralTab.cbAutoPoints, SIGNAL(clicked(bool)), this, SLOT(numberOfPointsChanged()) );
-	connect( uiGeneralTab.cbMultiplyPoints, SIGNAL(stateChanged(int)), this, SLOT(numberOfPointsMultiplyChanged()) );
+	connect( uiGeneralTab.cbPointsMode, SIGNAL(currentIndexChanged(int)), this, SLOT(pointsModeChanged()) );
 
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
@@ -157,7 +160,13 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	uiGeneralTab.sbContinuity->setValue(m_interpolationData.continuity);
 	uiGeneralTab.sbBias->setValue(m_interpolationData.bias);
 	uiGeneralTab.cbEval->setCurrentIndex(m_interpolationData.evaluate);
-	uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints);
+
+	if (m_interpolationData.pointsMode == XYInterpolationCurve::Multiple)
+		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints/5.);
+	else
+		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints);
+	uiGeneralTab.cbPointsMode->setCurrentIndex(m_interpolationData.pointsMode);
+
 	this->showInterpolationResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last interpolation
@@ -250,6 +259,8 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row)) 
 				n++;
 		dataPoints = n;
+		if(m_interpolationData.pointsMode == XYInterpolationCurve::Auto)
+			pointsModeChanged();
 
 		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
 		QStandardItem* item = model->item(nsl_interp_type_polynomial);
@@ -422,11 +433,43 @@ void XYInterpolationCurveDock::biasChanged() {
 void XYInterpolationCurveDock::evaluateChanged() {
 	m_interpolationData.evaluate = (nsl_interp_evaluate)uiGeneralTab.cbEval->currentIndex();
 
+
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
+void XYInterpolationCurveDock::pointsModeChanged() {
+	XYInterpolationCurve::PointsMode mode = (XYInterpolationCurve::PointsMode)uiGeneralTab.cbPointsMode->currentIndex();
+
+	switch (mode) {
+	case XYInterpolationCurve::Auto:
+		uiGeneralTab.sbPoints->setEnabled(false);
+		uiGeneralTab.sbPoints->setDecimals(0);
+		uiGeneralTab.sbPoints->setSingleStep(1.0);
+		uiGeneralTab.sbPoints->setValue(5*dataPoints);
+		break;
+	case XYInterpolationCurve::Multiple:
+		uiGeneralTab.sbPoints->setEnabled(true);
+		if(m_interpolationData.pointsMode != XYInterpolationCurve::Multiple && dataPoints > 0) {
+			uiGeneralTab.sbPoints->setDecimals(2);
+			uiGeneralTab.sbPoints->setValue(uiGeneralTab.sbPoints->value()/(double)dataPoints);
+			uiGeneralTab.sbPoints->setSingleStep(0.01);
+		}
+		break;
+	case XYInterpolationCurve::Custom:
+		uiGeneralTab.sbPoints->setEnabled(true);
+		if(m_interpolationData.pointsMode == XYInterpolationCurve::Multiple) {
+			uiGeneralTab.sbPoints->setDecimals(0);
+			uiGeneralTab.sbPoints->setSingleStep(1.0);
+			uiGeneralTab.sbPoints->setValue(uiGeneralTab.sbPoints->value()*dataPoints);
+		}
+		break;
+	}
+
+	m_interpolationData.pointsMode = mode;
+}
+
 void XYInterpolationCurveDock::numberOfPointsChanged() {
-	if(uiGeneralTab.cbMultiplyPoints->isChecked())
+	if(uiGeneralTab.cbPointsMode->currentIndex() == XYInterpolationCurve::Multiple)
 		m_interpolationData.npoints = uiGeneralTab.sbPoints->value()*dataPoints;
 	else
 		m_interpolationData.npoints = uiGeneralTab.sbPoints->value();
@@ -439,30 +482,7 @@ void XYInterpolationCurveDock::numberOfPointsChanged() {
 		palette.setColor(QPalette::Text, Qt::black);
 	uiGeneralTab.sbPoints->setPalette(palette);
 
-	// auto
-	if(uiGeneralTab.cbAutoPoints->isChecked()) {
-		uiGeneralTab.sbPoints->setEnabled(false);
-		if(uiGeneralTab.cbMultiplyPoints->isChecked())
-			uiGeneralTab.sbPoints->setValue(5.0);
-		else
-			uiGeneralTab.sbPoints->setValue(5*dataPoints);
-	}
-	else
-		uiGeneralTab.sbPoints->setEnabled(true);
-
-	uiGeneralTab.pbRecalculate->setEnabled(true);
-}
-
-void XYInterpolationCurveDock::numberOfPointsMultiplyChanged() {
-	if(uiGeneralTab.cbMultiplyPoints->isChecked()) {
-		uiGeneralTab.sbPoints->setDecimals(2);
-		uiGeneralTab.sbPoints->setValue(uiGeneralTab.sbPoints->value()/(double)dataPoints);
-		uiGeneralTab.sbPoints->setSingleStep(0.01);
-	} else {
-		uiGeneralTab.sbPoints->setValue(uiGeneralTab.sbPoints->value()*dataPoints);
-		uiGeneralTab.sbPoints->setDecimals(0);
-		uiGeneralTab.sbPoints->setSingleStep(1.0);
-	}
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::recalculateClicked() {
