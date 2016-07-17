@@ -331,7 +331,7 @@ void XYSmoothCurveDock::typeChanged() {
 	}
 	
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::pointsChanged() {
@@ -340,25 +340,25 @@ void XYSmoothCurveDock::pointsChanged() {
 	// set maximum order
 	uiGeneralTab.sbOrder->setMaximum(m_smoothData.points-1);
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::weightChanged() {
 	m_smoothData.weight = (nsl_smooth_weight_type)uiGeneralTab.cbWeight->currentIndex();
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::percentileChanged() {
 	m_smoothData.percentile = uiGeneralTab.sbPercentile->value();
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::orderChanged() {
 	m_smoothData.order = uiGeneralTab.sbOrder->value();
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::modeChanged() {
@@ -381,14 +381,14 @@ void XYSmoothCurveDock::modeChanged() {
 		uiGeneralTab.sbRightValue->hide();
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::valueChanged() {
 	m_smoothData.lvalue = uiGeneralTab.sbLeftValue->value();
 	m_smoothData.rvalue = uiGeneralTab.sbRightValue->value();
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::recalculateClicked() {

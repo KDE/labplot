@@ -241,14 +241,14 @@ void XYFourierTransformCurveDock::windowTypeChanged() {
 	nsl_sf_window_type windowType = (nsl_sf_window_type)uiGeneralTab.cbWindowType->currentIndex();
 	m_transformData.windowType = windowType;
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierTransformCurveDock::typeChanged() {
 	nsl_dft_result_type type = (nsl_dft_result_type)uiGeneralTab.cbType->currentIndex();
 	m_transformData.type = type;
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierTransformCurveDock::twoSidedChanged() {
@@ -262,21 +262,21 @@ void XYFourierTransformCurveDock::twoSidedChanged() {
 		uiGeneralTab.cbShifted->setChecked(false);
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierTransformCurveDock::shiftedChanged() {
 	bool shifted = uiGeneralTab.cbShifted->isChecked();
 	m_transformData.shifted = shifted;
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierTransformCurveDock::xScaleChanged() {
 	nsl_dft_xscale xScale = (nsl_dft_xscale)uiGeneralTab.cbXScale->currentIndex();
 	m_transformData.xScale = xScale;
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierTransformCurveDock::recalculateClicked() {
