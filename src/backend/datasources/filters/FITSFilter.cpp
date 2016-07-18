@@ -40,8 +40,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QTableWidgetItem>
 #include <QFile>
 
-/*!
- * \class FITSFilter
+/*! \class FITSFilter
  * \brief Manages the import/export of data from/to a FITS file.
  * \since 2.2.0
  * \ingroup datasources
@@ -106,8 +105,7 @@ void FITSFilter::saveFilterSettings(const QString& fileName) const {
 }
 
 /*!
- * \brief FITSFilter::standardKeywords
- *      contains the {StandardKeywords \ MandatoryKeywords} keywords
+ * \brief contains the {StandardKeywords \ MandatoryKeywords} keywords
  * \return A list of keywords
  */
 QStringList FITSFilter::standardKeywords() {
@@ -123,12 +121,27 @@ QStringList FITSFilter::standardKeywords() {
                          << QLatin1String("COMMENT") << QLatin1String("EPOCH")    << QLatin1String("NAXIS")    << QLatin1String("SIMPLE")   << QLatin1String("TTYPE");
 }
 
+/*!
+ * \brief Returns a list of keywords, that are mandatory for an image extension of a FITS file
+ * see:
+ * https://archive.stsci.edu/fits/fits_standard/node64.html
+ * \return A list of keywords
+ */
+
 QStringList FITSFilter::mandatoryImageExtensionKeywords() {
     return QStringList() << QLatin1String("XTENSION") << QLatin1String("BITPIX")
                          << QLatin1String("NAXIS") << QLatin1String("PCOUNT")
                          << QLatin1String("GCOUNT") << QLatin1String("END");
 }
 
+/*!
+ * \brief Returns a list of keywords, that are mandatory for a table extension (ascii or bintable)
+ * of a FITS file
+ * see:
+ * https://archive.stsci.edu/fits/fits_standard/node58.html
+ * https://archive.stsci.edu/fits/fits_standard/node68.html
+ * \return A list of keywords
+ */
 QStringList FITSFilter::mandatoryTableExtensionKeywords() {
     return QStringList() << QLatin1String("XTENSION") << QLatin1String("BITPIX")
                          << QLatin1String("NAXIS") << QLatin1String("NAXIS1")
@@ -137,6 +150,11 @@ QStringList FITSFilter::mandatoryTableExtensionKeywords() {
                          << QLatin1String("END");
 }
 
+/*!
+ * \brief Returns a list of strings that represent units which are used for autocompletion when adding
+ * keyword units to keywords
+ * \return A list of strings that represent units
+ */
 QStringList FITSFilter::units() {
     return QStringList() << QLatin1String("m (Metre)") << QLatin1String("kg (Kilogram)") << QLatin1String("s (Second)")
                          << QLatin1String("M☉ (Solar mass)") << QLatin1String("AU (Astronomical unit") << QLatin1String("l.y (Light year)")
@@ -144,42 +162,88 @@ QStringList FITSFilter::units() {
                          << QLatin1String("mol (Mole)") << QLatin1String("cd (Candela)");
 }
 
+/*!
+ * \brief Sets the startColumn to \a column
+ * \param column the column to be set
+ */
 void FITSFilter::setStartColumn(const int column) {
     d->startColumn = column;
 }
 
+/*!
+ * \brief Returns startColumn
+ * \return The startColumn
+ */
 int FITSFilter::startColumn() const {
     return d->startColumn;
 }
 
+/*!
+ * \brief Sets the endColumn to \a column
+ * \param column the column to be set
+ */
 void FITSFilter::setEndColumn(const int column) {
     d->endColumn = column;
 }
 
+/*!
+ * \brief Returns endColumn
+ * \return The endColumn
+ */
 int FITSFilter::endColumn() const {
     return d->endColumn;
 }
 
+/*!
+ * \brief Sets the startRow to \a row
+ * \param row the row to be set
+ */
 void FITSFilter::setStartRow(const int row) {
     d->startRow = row;
 }
 
+/*!
+ * \brief Returns startRow
+ * \return The startRow
+ */
 int FITSFilter::startRow() const {
     return d->startRow;
 }
 
+/*!
+ * \brief Sets the endRow to \a row
+ * \param row the row to be set
+ */
 void FITSFilter::setEndRow(const int row) {
     d->endRow = row;
 }
 
+/*!
+ * \brief Returns endRow
+ * \return The endRow
+ */
 int FITSFilter::endRow() const {
     return d->endRow;
 }
 
+/*!
+ * \brief Sets commentsAsUnits to \a commentsAsUnits
+ *
+ * This is used when spreadsheets are exported to FITS table extensions and comments are used as the
+ * units of the table's columns.
+ * \param commentsAsUnits
+ */
 void FITSFilter::setCommentsAsUnits(const bool commentsAsUnits) {
     d->commentsAsUnits = commentsAsUnits;
 }
 
+/*!
+ * \brief Sets exportTo to \a exportTo
+ *
+ * This is used to decide wether the container should be exported to a FITS image or a FITS table
+ * For an image \a exportTo should be 0, for a table 1
+ * \param exportTo
+ */
 void FITSFilter::setExportTo(const int exportTo) {
     d->exportTo = exportTo;
 }
@@ -500,8 +564,8 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 
 /*!
  * \brief Export from data source \a dataSource to file \a fileName
- * \param fileName
- * \param dataSource
+ * \param fileName the name of the file to be exported to
+ * \param dataSource the datasource whose data is exported
  */
 
 void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *dataSource) {
@@ -852,7 +916,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 /*!
  * \brief Return a map of the available extensions names in file \a filename
  *        The keys of the map are the extension types, the values are the names
- * \param fileName
+ * \param fileName the name of the FITS file to be analyzed
  */
  QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fileName) {
 #ifdef HAVE_FITS
@@ -949,7 +1013,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
 /*!
  * \brief Prints the error text corresponding to the status code \a status
- * \param status the status code
+ * \param status the status code of the error
  */
 void FITSFilterPrivate::printError(int status) const {
 #ifdef HAVE_FITS
@@ -964,8 +1028,9 @@ void FITSFilterPrivate::printError(int status) const {
 }
 
 /*!
- * \brief Add the keyword \a keyword to the current header unit
- * \param keyword keyword to be added
+ * \brief Add the keywords \a keywords to the current header unit
+ * \param keywords the keywords to be added
+ * \param fileName the name of the FITS file (extension) in which the keywords are added
  */
 
 void FITSFilterPrivate::addNewKeyword(const QString& fileName, const QList<FITSFilter::Keyword>& keywords) {
@@ -1040,12 +1105,10 @@ void FITSFilterPrivate::addNewKeyword(const QString& fileName, const QList<FITSF
 #endif
 }
 /*!
- * \brief Update the value and/or comment of keyword \a keyword in the current header unit
- * \param keyword the keyword to be updated
- * \param newKey the new key
- * \param newValue the new value
- * \param newComment the new comment
- * \param updateMode the update mode in which the keyword is updated
+ * \brief Update keywords in the current header unit
+ * \param fileName The name of the FITS file (extension) in which the keywords will be updated
+ * \param originals The original keywords of the FITS file (extension)
+ * \param updates The keywords that contain the updated values
  */
 void FITSFilterPrivate::updateKeywords(const QString& fileName,
                                        const QList<FITSFilter::Keyword>& originals,
@@ -1162,8 +1225,9 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName,
 }
 
 /*!
- * \brief Delete the keyword \a keyword from the current header unit
- * \param keyword the keyword to delete
+ * \brief Delete the keywords \a keywords from the current header unit
+ * \param fileName the name of the FITS file (extension) in which the keywords will be deleted.
+ * \param keywords the keywords to deleted
  */
 
 void FITSFilterPrivate::deleteKeyword(const QString& fileName, const QList<FITSFilter::Keyword> &keywords) {
@@ -1189,6 +1253,12 @@ void FITSFilterPrivate::deleteKeyword(const QString& fileName, const QList<FITSF
 #endif
 }
 
+/*!
+ * \brief FITSFilterPrivate::addKeywordUnit
+ * \param fileName the FITS file (extension) in which the keyword units are updated/added
+ * \param keywords the keywords whose units were modified/added
+ */
+
 void FITSFilterPrivate::addKeywordUnit(const QString &fileName, const QList<FITSFilter::Keyword> &keywords) {
 #ifdef HAVE_FITS
     int status = 0;
@@ -1198,9 +1268,11 @@ void FITSFilterPrivate::addKeywordUnit(const QString &fileName, const QList<FITS
     }
 
     foreach (const FITSFilter::Keyword& keyword, keywords) {
-        if (fits_write_key_unit(fitsFile, keyword.key.toLatin1(), keyword.unit.toLatin1().constData(), &status)) {
-            printError(status);
-            status = 0;
+        if (keyword.updates.unitUpdated) {
+            if (fits_write_key_unit(fitsFile, keyword.key.toLatin1(), keyword.unit.toLatin1().constData(), &status)) {
+                printError(status);
+                status = 0;
+            }
         }
     }
     status = 0;
@@ -1213,8 +1285,7 @@ void FITSFilterPrivate::addKeywordUnit(const QString &fileName, const QList<FITS
 
 /*!
  * \brief Remove extensions from a FITS file
- * \param fileName
- * \param extensions
+ * \param extensions The extensions to be removed from the FITS file
  */
 void FITSFilterPrivate::removeExtensions(const QStringList &extensions) {
 #ifdef HAVE_FITS
@@ -1239,9 +1310,9 @@ void FITSFilterPrivate::removeExtensions(const QStringList &extensions) {
 }
 
 /*!
- * \brief Returns a list of keywords in the current header
- * \param fileName the file to open
- * \return
+ * \brief Returns a list of keywords in the current header of \a fileName
+ * \param fileName the name of the FITS file (extension) to be opened
+ * \return A list of keywords
  */
 QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileName) {
 #ifdef HAVE_FITS
@@ -1298,6 +1369,14 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
 #endif
 }
 
+/*!
+ * \brief Builds the table \a headerEditTable from the keywords \a keys
+ * \param fileName The name of the FITS file from which the keys are read if \a readKeys is \c true
+ * \param headerEditTable The table to be built
+ * \param readKeys It's used to determine whether the keywords are provided or they should be read from
+ * file \a fileName
+ * \param keys The keywords that are provided if the keywords were read already.
+ */
 void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *headerEditTable,
                                      bool readKeys, const QList<FITSFilter::Keyword>& keys) {
 #ifdef HAVE_FITS
@@ -1372,6 +1451,12 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
 #endif
 }
 
+/*!
+ * \brief Helper function to return the value of the key \a key
+ * \param fileName The name of the FITS file (extension) in which the keyword with key \a key should exist
+ * \param key The key of the keyword whose value it's returned
+ * \return The value of the keyword as a string
+ */
 const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *key) {
 #ifdef HAVE_FITS
     int status = 0;
@@ -1403,9 +1488,16 @@ const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *ke
 #endif
 }
 
+/*!
+ * \brief Build the extensions tree from FITS file (extension) \a fileName
+ * \param fileName The name of the FITS file to be opened
+ * \param tw The QTreeWidget to be built
+ * \param checkPrimary Used to determine whether the tree will be used for import or the header edit,
+ * if it's \c true and if the primary array it's empty, then the item won't be added to the tree
+ */
 void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw, bool checkPrimary) {
 #ifdef HAVE_FITS
-    QMultiMap<QString, QString> extensions = extensionNames(fileName);
+    const QMultiMap<QString, QString>& extensions = extensionNames(fileName);
     const QStringList& imageExtensions = extensions.values(QLatin1String("IMAGES"));
     const QStringList& tableExtensions = extensions.values(QLatin1String("TABLES"));
 
