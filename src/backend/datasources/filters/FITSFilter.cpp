@@ -70,9 +70,8 @@ void FITSFilter::addNewKeyword(const QString &filename, const QList<Keyword> &ke
     d->addNewKeyword(filename, keywords);
 }
 
-void FITSFilter::updateKeywords(const QString &fileName, const QList<Keyword>& originals, const QVector<Keyword>& updates,
-                                const QVector<KeywordUpdates> &updatesOfKeywords) {
-    d->updateKeywords(fileName, originals, updates, updatesOfKeywords);
+void FITSFilter::updateKeywords(const QString &fileName, const QList<Keyword>& originals, const QVector<Keyword>& updates) {
+    d->updateKeywords(fileName, originals, updates);
 }
 
 void FITSFilter::deleteKeyword(const QString &fileName, const QList<Keyword>& keywords) {
@@ -1049,8 +1048,9 @@ void FITSFilterPrivate::addNewKeyword(const QString& fileName, const QList<FITSF
  * \param newComment the new comment
  * \param updateMode the update mode in which the keyword is updated
  */
-void FITSFilterPrivate::updateKeywords(const QString& fileName, const QList<FITSFilter::Keyword>& originals, const QVector<FITSFilter::Keyword>& updates,
-                                       const QVector<FITSFilter::KeywordUpdates> &updatesOfKeywords) {
+void FITSFilterPrivate::updateKeywords(const QString& fileName,
+                                       const QList<FITSFilter::Keyword>& originals,
+                                       const QVector<FITSFilter::Keyword>& updates) {
 #ifdef HAVE_FITS
     int status = 0;
     if (fits_open_file(&fitsFile, fileName.toLatin1(), READWRITE, &status )) {
@@ -1059,13 +1059,15 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName, const QList<FITS
     }
     FITSFilter::Keyword updatedKeyword;
     FITSFilter::Keyword originalKeyword;
+    FITSFilter::KeywordUpdate keywordUpdate;
 
     for (int i = 0; i < updates.size(); ++i) {
         updatedKeyword = updates.at(i);
         originalKeyword = originals.at(i);
-        if (updatesOfKeywords.at(i).keyUpdated &&
-                updatesOfKeywords.at(i).valueUpdated &&
-                updatesOfKeywords.at(i).commentUpdated) {
+        keywordUpdate = originals.at(i).updates;
+        if (keywordUpdate.keyUpdated &&
+                keywordUpdate.valueUpdated &&
+                keywordUpdate.commentUpdated) {
             if (updatedKeyword.key.isEmpty() &&
                     updatedKeyword.value.isEmpty() &&
                     updatedKeyword.comment.isEmpty()) {
@@ -1092,7 +1094,7 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName, const QList<FITS
             doubleValue = updatedKeyword.value.toDouble(&ok);
             if (ok) {
                 if (fits_update_key(fitsFile,TDOUBLE,
-                                    updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+                                    keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
                                     &doubleValue,
                                     NULL, &status)) {
                     printError(status);
@@ -1104,7 +1106,7 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName, const QList<FITS
                 intValue = updatedKeyword.value.toInt(&ok);
                 if (ok) {
                     if (fits_update_key(fitsFile,TINT,
-                                        updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+                                        keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
                                         &intValue,
                                         NULL, &status)) {
                         printError(status);
@@ -1115,16 +1117,16 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName, const QList<FITS
             }
             if (!updated) {
                 if (fits_update_key(fitsFile,TSTRING,
-                                    updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+                                    keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
                                     updatedKeyword.value.toLatin1().data(),
                                     NULL, &status)) {
                     printError(status);
                 }
             }
         } else {
-            if (updatesOfKeywords.at(i).valueUpdated) {
+            if (keywordUpdate.valueUpdated) {
                 if (fits_update_key_null(fitsFile,
-                                         updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+                                         keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
                                          NULL, &status)) {
                     printError(status);
                     status = 0;
@@ -1133,15 +1135,15 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName, const QList<FITS
         }
 
         if (!updatedKeyword.comment.isEmpty()) {
-            if (fits_modify_comment(fitsFile, updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+            if (fits_modify_comment(fitsFile, keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
                                     updatedKeyword.comment.toLatin1(), &status)) {
                 printError(status);
                 status = 0;
             }
         } else {
-            if (updatesOfKeywords.at(i).commentUpdated) {
+            if (keywordUpdate.commentUpdated) {
                 if (fits_modify_comment(fitsFile,
-                                        updatesOfKeywords.at(i).keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+                                        keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
                                         "", &status)) {
                     printError(status);
                     status = 0;

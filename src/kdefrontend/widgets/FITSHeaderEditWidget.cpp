@@ -69,9 +69,6 @@ void FITSHeaderEditWidget::fillTable() {
         m_extensionDatas[m_seletedExtension].updates.updatedKeywords.reserve(m_extensionDatas[m_seletedExtension].keywords.size());
         m_extensionDatas[m_seletedExtension].updates.updatedKeywords.resize(m_extensionDatas[m_seletedExtension].keywords.size());
 
-        m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.reserve(m_extensionDatas[m_seletedExtension].keywords.size());
-        m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.resize(m_extensionDatas[m_seletedExtension].keywords.size());
-
         m_fitsFilter->parseHeader(m_seletedExtension, ui.twKeywordsTable);
     } else {
         QList<FITSFilter::Keyword> keywords = m_extensionDatas[m_seletedExtension].keywords;
@@ -186,7 +183,7 @@ void FITSHeaderEditWidget::save() {
 
         for(int i = 0; i < m_extensionDatas[fileName].updates.updatedKeywords.size(); ++i) {
             FITSFilter::Keyword keyword =  m_extensionDatas[fileName].updates.updatedKeywords.at(i);
-            FITSFilter::KeywordUpdates updates = m_extensionDatas[fileName].updates.updatesOfKeywords.at(i);
+            FITSFilter::KeywordUpdate updates = m_extensionDatas[fileName].keywords.at(i).updates;
             if (updates.keyUpdated || updates.valueUpdated || updates.commentUpdated) {
                 qDebug() << "UPDATED: " << keyword.key << " " << keyword.value << " " << keyword.comment;
             }
@@ -195,14 +192,12 @@ void FITSHeaderEditWidget::save() {
         m_fitsFilter->addKeywordUnit(fileName, m_extensionDatas[fileName].keywords);
         m_fitsFilter->addKeywordUnit(fileName, m_extensionDatas[fileName].updates.newKeywords);
 
-        m_fitsFilter->updateKeywords(fileName, m_extensionDatas[fileName].keywords, m_extensionDatas[fileName].updates.updatedKeywords,
-                                     m_extensionDatas[fileName].updates.updatesOfKeywords);
+        m_fitsFilter->updateKeywords(fileName, m_extensionDatas[fileName].keywords, m_extensionDatas[fileName].updates.updatedKeywords);
     }
 
     if (m_removedExtensions.size() > 0) {
         m_fitsFilter->removeExtensions(m_removedExtensions);
     }
-
 }
 
 void FITSHeaderEditWidget::initActions() {
@@ -318,6 +313,7 @@ void FITSHeaderEditWidget::removeKeyword() {
             ui.twKeywordsTable->removeRow(row);
 
             m_extensionDatas[m_seletedExtension].keywords.removeAt(row);
+
             m_extensionDatas[m_seletedExtension].updates.removedKeywords.append(toRemove);
         } else {
             KMessageBox::information(this, i18n("Cannot remove mandatory keyword!"),i18n("Removing keyword"));
@@ -327,16 +323,41 @@ void FITSHeaderEditWidget::removeKeyword() {
 
 void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem *item) {
     if (!m_initializingTable) {
-        int row = item->row();
-        if (item->column() == 0) {
-            m_extensionDatas[m_seletedExtension].updates.updatedKeywords.operator [](row).key = item->text();
-            m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.operator [](row).keyUpdated = true;
-        } else if (item->column() == 1) {
-            m_extensionDatas[m_seletedExtension].updates.updatedKeywords.operator [](row).value = item->text();
-            m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.operator [](row).valueUpdated = true;
+        const int row = item->row();
+        int idx;
+        bool fromNewKeyword = false;
+        if (row > m_extensionDatas[m_seletedExtension].keywords.size()-1) {
+            idx = row - m_extensionDatas[m_seletedExtension].keywords.size();
+            fromNewKeyword = true;
         } else {
-            m_extensionDatas[m_seletedExtension].updates.updatedKeywords.operator [](row).comment = item->text();
-            m_extensionDatas[m_seletedExtension].updates.updatesOfKeywords.operator [](row).commentUpdated = true;
+            idx = row;
+        }
+
+        if (item->column() == 0) {
+            if (!fromNewKeyword) {
+                m_extensionDatas[m_seletedExtension].updates.updatedKeywords.operator [](idx).key = item->text();
+                m_extensionDatas[m_seletedExtension].keywords.operator [](idx).updates.keyUpdated = true;
+            } else {
+                m_extensionDatas[m_seletedExtension].updates.newKeywords.operator [](idx).key = item->text();
+                m_extensionDatas[m_seletedExtension].updates.newKeywords.operator [](idx).updates.keyUpdated = true;
+            }
+
+        } else if (item->column() == 1) {
+            if (!fromNewKeyword) {
+                m_extensionDatas[m_seletedExtension].updates.updatedKeywords.operator [](idx).value = item->text();
+                m_extensionDatas[m_seletedExtension].keywords.operator [](idx).updates.valueUpdated = true;
+            } else {
+                m_extensionDatas[m_seletedExtension].updates.newKeywords.operator [](idx).value = item->text();
+                m_extensionDatas[m_seletedExtension].updates.newKeywords.operator [](idx).updates.valueUpdated = true;
+            }
+        } else {
+            if (!fromNewKeyword) {
+                m_extensionDatas[m_seletedExtension].updates.updatedKeywords.operator [](idx).comment = item->text();
+                m_extensionDatas[m_seletedExtension].keywords.operator [](idx).updates.commentUpdated = true;
+            } else {
+                m_extensionDatas[m_seletedExtension].updates.newKeywords.operator [](idx).comment = item->text();
+                m_extensionDatas[m_seletedExtension].updates.newKeywords.operator [](idx).updates.commentUpdated = true;
+            }
         }
     }
 }
@@ -377,6 +398,7 @@ void FITSHeaderEditWidget::addModifyKeywordUnit() {
             m_extensionDatas[m_seletedExtension].updates.newKeywords.operator [](addedidx).unit = addUnitDialog->unit();
         } else {
             m_extensionDatas[m_seletedExtension].keywords.operator [](selectedRow).unit = addUnitDialog->unit();
+            m_extensionDatas[m_seletedExtension].keywords.operator [](selectedRow).updates.unitUpdated = true;;
         }
         fillTable();
     }

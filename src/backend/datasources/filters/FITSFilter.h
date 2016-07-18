@@ -44,19 +44,21 @@ class FITSFilter : public AbstractFileFilter {
     FITSFilter();
     ~FITSFilter();
 
-    enum KeywordUpdateMode {
-        UpdateComment = 0,
-        UpdateValueComment,
-        UpdateWithBlankValue,
-        UpdateWithoutComment,
-        UpdateKeyname
-    };
-
     void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
     void write(const QString & fileName, AbstractDataSource* dataSource);
     QString readChdu(const QString & fileName, int lines = -1);
     virtual void save(QXmlStreamWriter*) const;
     virtual bool load(XmlStreamReader*);
+
+    struct KeywordUpdate {
+        KeywordUpdate() : keyUpdated(false), valueUpdated(false),
+            commentUpdated(false), unitUpdated(false) {}
+        bool keyUpdated;
+        bool valueUpdated;
+        bool commentUpdated;
+        bool unitUpdated;
+    };
+
     struct Keyword {
         Keyword(const QString& key, const QString& value, const QString& comment): key(key), value(value),
                     comment(comment) {}
@@ -70,16 +72,10 @@ class FITSFilter : public AbstractFileFilter {
                     other.value == value &&
                      other.comment == comment;
         }
+        KeywordUpdate updates;
     };  
-    struct KeywordUpdates {
-        KeywordUpdates() : keyUpdated(false), valueUpdated(false), commentUpdated(false) {}
-        bool keyUpdated;
-        bool valueUpdated;
-        bool commentUpdated;
-    };
 
-    void updateKeywords(const QString& fileName, const QList<Keyword>& originals, const QVector<Keyword>& updates,
-                        const QVector<KeywordUpdates>& updatesOfKeywords);
+    void updateKeywords(const QString& fileName, const QList<Keyword>& originals, const QVector<Keyword>& updates);
     void addNewKeyword(const QString& filename, const QList<Keyword> &keywords);
     void addKeywordUnit(const QString& fileName, const QList<Keyword> &keywords);
     void deleteKeyword(const QString& fileName, const QList<Keyword>& keywords);

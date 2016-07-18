@@ -46,9 +46,7 @@ FITSHeaderEditNewKeywordDialog::~FITSHeaderEditNewKeywordDialog() {
 
 int FITSHeaderEditNewKeywordDialog::okClicked() {
     if (!ui.kleKey->text().isEmpty()) {
-        m_newKeyword.key = ui.kleKey->text();
-        m_newKeyword.value = ui.kleValue->text();
-        m_newKeyword.comment = ui.kleComment->text();
+        m_newKeyword = FITSFilter::Keyword(ui.kleKey->text(), ui.kleValue->text(), ui.kleComment->text());
         return KDialog::Ok;
     } else {
         int yesNo = KMessageBox::warningYesNo(this, i18n("Can't add new keyword without key, would you like to try again?"),
@@ -65,8 +63,7 @@ FITSFilter::Keyword FITSHeaderEditNewKeywordDialog::newKeyword() const {
 }
 
 void FITSHeaderEditNewKeywordDialog::slotButtonClicked(int button) {
-    if (button == KDialog::Ok)
-    {
+    if (button == KDialog::Ok) {
         int okClickedBtn = okClicked();
         if (okClickedBtn == KDialog::Ok) {
             accept();

@@ -57,7 +57,7 @@ private:
     struct HeaderUpdate {
         QList<FITSFilter::Keyword> newKeywords;
         QVector<FITSFilter::Keyword> updatedKeywords;
-        QVector<FITSFilter::KeywordUpdates> updatesOfKeywords;
+     //   QVector<FITSFilter::KeywordUpdates> updatesOfKeywords;
         QList<FITSFilter::Keyword> removedKeywords;
     };
 
