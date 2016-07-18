@@ -1229,6 +1229,7 @@ void FITSFilterPrivate::removeExtensions(const QStringList &extensions) {
         if (fits_delete_hdu(fitsFile, NULL, &status)) {
             printError(status);
         }
+
         status = 0;
         fits_close_file(fitsFile, &status);
     }

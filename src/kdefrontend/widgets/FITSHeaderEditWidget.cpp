@@ -181,18 +181,10 @@ void FITSHeaderEditWidget::save() {
             m_fitsFilter->deleteKeyword(fileName, m_extensionDatas[fileName].updates.removedKeywords);
         }
 
-        for(int i = 0; i < m_extensionDatas[fileName].updates.updatedKeywords.size(); ++i) {
-            FITSFilter::Keyword keyword =  m_extensionDatas[fileName].updates.updatedKeywords.at(i);
-            FITSFilter::KeywordUpdate updates = m_extensionDatas[fileName].keywords.at(i).updates;
-            if (updates.keyUpdated || updates.valueUpdated || updates.commentUpdated || updates.unitUpdated) {
-                qDebug() << "UPDATED: " << keyword.key << " " << keyword.value << " " << keyword.comment << keyword.unit;
-            }
-        }
         m_fitsFilter->updateKeywords(fileName, m_extensionDatas[fileName].keywords, m_extensionDatas[fileName].updates.updatedKeywords);
 
         m_fitsFilter->addKeywordUnit(fileName, m_extensionDatas[fileName].keywords);
         m_fitsFilter->addKeywordUnit(fileName, m_extensionDatas[fileName].updates.newKeywords);
-
     }
 
     if (m_removedExtensions.size() > 0) {
@@ -420,9 +412,10 @@ void FITSHeaderEditWidget::removeExtension() {
     const int selectedidx = m_extensionDatas.keys().indexOf(m_seletedExtension);
     if (selectedidx > 0) {
         const QString& ext = m_seletedExtension;
-        m_seletedExtension = m_extensionDatas.keys().at(selectedidx-1);
         m_extensionDatas.remove(ext);
         m_removedExtensions.append(ext);
+        m_seletedExtension = m_extensionDatas.keys().at(selectedidx-1);
+
         fillTable();
     }
     ui.twExtensions->setCurrentItem(newCurrent);
