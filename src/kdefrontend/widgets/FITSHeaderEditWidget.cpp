@@ -254,16 +254,6 @@ void FITSHeaderEditWidget::addKeyword() {
 
         m_extensionDatas[m_seletedExtension].updates.newKeywords.append(newKeyWord);
 
-        qDebug() << "Updates====" << m_seletedExtension ;
-        qDebug() << "New Keywords: ";
-        foreach (const FITSFilter::Keyword& keyw, m_extensionDatas[m_seletedExtension].updates.newKeywords) {
-            qDebug() << keyw.key << " " << keyw.value << " " << keyw.comment;
-        }
-        qDebug() << "Remove Keywords: ";
-        foreach (const FITSFilter::Keyword& keyw, m_extensionDatas[m_seletedExtension].updates.removedKeywords) {
-            qDebug() << keyw.key << " " << keyw.value << " " << keyw.comment;
-        }
-
         const int lastRow = ui.twKeywordsTable->rowCount();
         ui.twKeywordsTable->setRowCount(lastRow + 1);
         QTableWidgetItem* newKeyWordItem = new QTableWidgetItem(newKeyWord.key);

@@ -26,8 +26,11 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 #include "FITSHeaderEditNewKeywordDialog.h"
 #include <QDebug>
-FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) :
-    KDialog(parent) {
+#define FLEN_KEYWORD   75  /* max length of a keyword (HIERARCH convention) */
+#define FLEN_VALUE     71  /* max length of a keyword value string */
+#define FLEN_COMMENT   73  /* max length of a keyword comment string */
+
+FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) : KDialog(parent) {
     QWidget* mainWidget = new QWidget(this);
     ui.setupUi(mainWidget);
     setMainWidget( mainWidget );
@@ -39,6 +42,13 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
     keyCompletion->setItems(FITSFilter::standardKeywords());
     ui.kleKey->setCompletionObject(keyCompletion);
     ui.kleKey->setAutoDeleteCompletionObject(true);
+
+    ui.kleValue->setPlaceholderText(QLatin1String("Specify the value"));
+    ui.kleComment->setPlaceholderText(QLatin1String("Specify the comment"));
+
+    ui.kleKey->setMaxLength(FLEN_KEYWORD);
+    ui.kleValue->setMaxLength(FLEN_VALUE);
+    ui.kleComment->setMaxLength(FLEN_COMMENT);
 }
 
 FITSHeaderEditNewKeywordDialog::~FITSHeaderEditNewKeywordDialog() {
