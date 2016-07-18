@@ -30,8 +30,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <KDialog>
 #include "ui_fitsheadereditaddunitwidget.h"
 
-class FITSHeaderEditAddUnitDialog : public KDialog
-{
+class FITSHeaderEditAddUnitDialog : public KDialog {
     Q_OBJECT
 
 public:

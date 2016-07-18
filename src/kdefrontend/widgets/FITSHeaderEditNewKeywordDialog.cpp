@@ -49,7 +49,7 @@ int FITSHeaderEditNewKeywordDialog::okClicked() {
         m_newKeyword = FITSFilter::Keyword(ui.kleKey->text(), ui.kleValue->text(), ui.kleComment->text());
         return KDialog::Ok;
     } else {
-        int yesNo = KMessageBox::warningYesNo(this, i18n("Can't add new keyword without key, would you like to try again?"),
+        const int yesNo = KMessageBox::warningYesNo(this, i18n("Can't add new keyword without key, would you like to try again?"),
                                   i18n("Cannot add empty key"));
         if (yesNo == KMessageBox::No) {
             return KDialog::Cancel;

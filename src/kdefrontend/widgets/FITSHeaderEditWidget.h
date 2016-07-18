@@ -36,8 +36,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "ui_fitsheadereditwidget.h"
 #include "backend/datasources/filters/FITSFilter.h"
 
-class FITSHeaderEditWidget : public QWidget
-{
+class FITSHeaderEditWidget : public QWidget {
     Q_OBJECT
 
 public:
@@ -57,7 +56,6 @@ private:
     struct HeaderUpdate {
         QList<FITSFilter::Keyword> newKeywords;
         QVector<FITSFilter::Keyword> updatedKeywords;
-     //   QVector<FITSFilter::KeywordUpdates> updatesOfKeywords;
         QList<FITSFilter::Keyword> removedKeywords;
     };
 

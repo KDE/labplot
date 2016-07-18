@@ -55,7 +55,7 @@ QString FITSHeaderEditAddUnitDialog::unit() const {
 
 void FITSHeaderEditAddUnitDialog::addUnit() {
     if (ui.kleUnit->text().contains(QLatin1Char('('))) {
-        m_unit = ui.kleUnit->text().left(ui.kleUnit->text().indexOf('(')-1);
+        m_unit = ui.kleUnit->text().left(ui.kleUnit->text().indexOf(QLatin1Char('('))-1);
     } else {
         m_unit = ui.kleUnit->text();
     }

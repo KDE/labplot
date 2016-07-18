@@ -24,7 +24,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
-
 #ifndef FITSHEADEREDITNEWKEYWORDDIALOG_H
 #define FITSHEADEREDITNEWKEYWORDDIALOG_H
 
@@ -35,8 +34,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <KLineEdit>
 #include <KCompletion>
 #include <KMessageBox>
-class FITSHeaderEditNewKeywordDialog : public KDialog
-{
+class FITSHeaderEditNewKeywordDialog : public KDialog {
     Q_OBJECT
 
 public:

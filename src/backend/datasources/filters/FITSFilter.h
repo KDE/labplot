@@ -24,7 +24,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
-
 #ifndef FITSFILTER_H
 #define FITSFILTER_H
 #include "backend/datasources/filters/AbstractFileFilter.h"

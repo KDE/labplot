@@ -32,8 +32,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QWidget>
 #include <KDialog>
 
-class FITSHeaderEditDialog : public KDialog
-{
+class FITSHeaderEditDialog : public KDialog {
     Q_OBJECT
 
 public:

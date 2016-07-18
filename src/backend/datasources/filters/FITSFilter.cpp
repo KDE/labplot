@@ -25,7 +25,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *                                                                         *
 ***************************************************************************/
 
-
 #include "FITSFilter.h"
 #include "FITSFilterPrivate.h"
 #include "backend/datasources/FileDataSource.h"
@@ -223,7 +222,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
     int actualCols;
     int columnOffset = 0;
 
-    int noDataSource = (dataSource == NULL);
+    bool noDataSource = (dataSource == NULL);
 
     if(chduType == IMAGE_HDU) {
         int bitpix;
@@ -285,7 +284,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 
         Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
         if (spreadsheet) {
-            QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
+            const QString& comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
             for ( int n=0; n<actualCols; n++ ){
                 Column* column = spreadsheet->column(columnOffset+n);
                 column->setComment(comment);
@@ -394,7 +393,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                 if (importMode==AbstractFileFilter::Replace) {
                     spreadsheet->clear();
                     spreadsheet->setRowCount(lines);
-                }else{
+                } else {
                     if (spreadsheet->rowCount() < lines)
                         spreadsheet->setRowCount(lines);
                 }
@@ -748,7 +747,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
                             maxSize = column->textAt(row).size();
                         }
                     }
-                    QString tformn = QLatin1String("A") + QString::number(maxSize);
+                    const QString& tformn = QLatin1String("A") + QString::number(maxSize);
                     tform[i] = new char[tformn.size()];
                     strcpy(tform[i], tformn.toLatin1().data());
                     break;
@@ -1221,9 +1220,10 @@ void FITSFilterPrivate::removeExtensions(const QStringList &extensions) {
 #ifdef HAVE_FITS
     int status = 0;
     foreach (const QString& ext, extensions) {
+        status = 0;
         if (fits_open_file(&fitsFile, ext.toLatin1(), READWRITE, &status )) {
             printError(status);
-            return;
+            continue;
         }
 
         if (fits_delete_hdu(fitsFile, NULL, &status)) {
@@ -1340,15 +1340,23 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
             item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         }
         headerEditTable->setItem(i, 1, item );
+        QString commentFieldText;
         if (!keyword.unit.isEmpty()) {
-            if (keyword.comment.left(1) == QLatin1String("[")) {
-                item = new QTableWidgetItem(keyword.comment);
+            if (keyword.updates.unitUpdated) {
+                const QString& comment = keyword.comment.right(
+                            keyword.comment.size() - keyword.comment.indexOf(QChar(']'))-1);
+                commentFieldText = QLatin1String("[") + keyword.unit + QLatin1String("] ") + comment;
             } else {
-                item = new QTableWidgetItem(QLatin1String("[") + keyword.unit + QLatin1String("] ") + keyword.comment);
+                if (keyword.comment.left(1) == QLatin1String("[")) {
+                    commentFieldText = keyword.comment;
+                } else {
+                    commentFieldText = QLatin1String("[") + keyword.unit + QLatin1String("] ") + keyword.comment;
+                }
             }
         } else {
-            item = new QTableWidgetItem(keyword.comment);
+            commentFieldText = keyword.comment;
         }
+        item = new QTableWidgetItem(commentFieldText);
 
         item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         headerEditTable->setItem(i, 2, item );
