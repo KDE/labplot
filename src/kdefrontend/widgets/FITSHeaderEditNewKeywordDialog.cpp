@@ -43,8 +43,8 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
     ui.kleKey->setCompletionObject(keyCompletion);
     ui.kleKey->setAutoDeleteCompletionObject(true);
 
-    ui.kleValue->setPlaceholderText(QLatin1String("Specify the value"));
-    ui.kleComment->setPlaceholderText(QLatin1String("Specify the comment"));
+    ui.kleValue->setPlaceholderText(i18n("Specify the value"));
+    ui.kleComment->setPlaceholderText(i18n("Specify the comment"));
 
     ui.kleKey->setMaxLength(FLEN_KEYWORD);
     ui.kleValue->setMaxLength(FLEN_VALUE);
