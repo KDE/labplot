@@ -347,7 +347,7 @@ bool XYSmoothCurve::load(XmlStreamReader* reader) {
 	Q_D(XYSmoothCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xySmoothCurve") {
-		reader->raiseError(i18n("no xy Fourier smooth curve element found"));
+		reader->raiseError(i18n("no xy smooth curve element found"));
 		return false;
 	}
 

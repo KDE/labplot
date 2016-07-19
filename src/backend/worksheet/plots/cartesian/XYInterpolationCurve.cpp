@@ -530,7 +530,7 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 	Q_D(XYInterpolationCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyInterpolationCurve") {
-		reader->raiseError(i18n("no xy Fourier interpolation curve element found"));
+		reader->raiseError(i18n("no xy interpolation curve element found"));
 		return false;
 	}
 

@@ -35,8 +35,8 @@
 #include <fftw3.h>
 #endif
 
-const char* nsl_dft_result_type_name[] = {"Magnitude", "Amplitude", "real", "imaginary", "Power", "Phase", 
-		"dB", "dB normalized", "Magnitude squared", "Amplitude squared", "raw"};
+const char* nsl_dft_result_type_name[] = {"Magnitude", "Amplitude", "real part", "imaginary part", "Power", "Phase",
+		"Amplitude in dB", "normalized amplitude in dB", "Magnitude squared", "Amplitude squared", "raw"};
 const char* nsl_dft_xscale_name[] = {"Frequency", "Index", "Period"};
 
 int nsl_dft_transform_window(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type, nsl_sf_window_type window_type) {
