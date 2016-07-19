@@ -1216,11 +1216,9 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName,
     status = 0;
     fits_close_file(fitsFile, &status);
 #else
-    Q_UNUSED(newKey)
-    Q_UNUSED(keyword)
-    Q_UNUSED(newComment)
-    Q_UNUSED(newValue)
-    Q_UNUSED(updateMode)
+    Q_UNUSED(fileName)
+    Q_UNUSED(originals)
+    Q_UNUSED(updates)
 #endif
 }
 
