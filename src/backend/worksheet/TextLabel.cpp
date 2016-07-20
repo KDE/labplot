@@ -88,8 +88,13 @@ void TextLabel::init() {
 	d->textWrapper.teXUsed = group.readEntry("TeXUsed", false);
 	d->teXFontSize = group.readEntry("TeXFontSize", 12);
 	d->teXFontColor = group.readEntry("TeXFontColor", QColor(Qt::black));
-	d->staticText.setTextFormat(Qt::RichText);
 	d->rotationAngle = group.readEntry("Rotation", 0.0);
+
+	d->staticText.setTextFormat(Qt::RichText);
+	// explicitly set no wrap mode for text label to avoid unnecessary line breaks
+	QTextOption textOption;
+	textOption.setWrapMode(QTextOption::NoWrap);
+	d->staticText.setTextOption(textOption);
 
 	//position and alignment relevant properties, dependent on the actual type
 	if (m_type == PlotTitle || m_type == PlotLegendTitle) {
