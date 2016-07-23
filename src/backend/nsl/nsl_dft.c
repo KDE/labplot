@@ -61,8 +61,8 @@ int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl
 	/* stride ignored */
 	(void)stride;
 
-        fftw_plan plan = fftw_plan_dft_r2c_1d(n, data, (fftw_complex *) result, FFTW_ESTIMATE);
-        fftw_execute(plan);
+	fftw_plan plan = fftw_plan_dft_r2c_1d(n, data, (fftw_complex *) result, FFTW_ESTIMATE);
+	fftw_execute(plan);
 	fftw_destroy_plan(plan);
 
 	/* 2. unpack data */

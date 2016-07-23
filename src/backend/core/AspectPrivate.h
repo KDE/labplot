@@ -35,16 +35,14 @@
 
 class AbstractAspect;
 
-class AbstractAspect::Private {
+class AbstractAspectPrivate {
 	public:
-		Private(AbstractAspect* owner, const QString& name);
-		~Private();
+		explicit AbstractAspectPrivate(AbstractAspect* owner, const QString& name);
+		~AbstractAspectPrivate();
 
 		void insertChild(int index, AbstractAspect*);
 		int indexOfChild(const AbstractAspect*) const;
 		int removeChild(AbstractAspect*);
-
-		QString uniqueNameFor(const QString&) const;
 
 	public:
 		QList<AbstractAspect*> m_children;
@@ -52,7 +50,7 @@ class AbstractAspect::Private {
 		QString m_comment;
 		QDateTime m_creation_time;
 		bool m_hidden;
-		AbstractAspect* m_owner;
+		AbstractAspect* const q;
 		AbstractAspect* m_parent;
 };
 

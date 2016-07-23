@@ -35,6 +35,7 @@
 #include "backend/lib/macros.h"
 
 class QGraphicsItem;
+class QGraphicsScene;
 class QRectF;
 
 class WorksheetPrivate;
@@ -64,7 +65,7 @@ class Worksheet: public AbstractPart, public scripted {
 
 		QRectF pageRect() const;
 		void setPageRect(const QRectF&);
-		QGraphicsScene *scene() const;
+		QGraphicsScene* scene() const;
 		void update();
 		void setPrinting(bool) const;
 
