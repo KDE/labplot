@@ -389,8 +389,6 @@ void HistogramDock::initGeneralTab(){
 
 		uiGeneralTab.lXColumn->setEnabled(true);
 		cbXColumn->setEnabled(true);
-		uiGeneralTab.lYColumn->setEnabled(true);
-		//cbYColumn->setEnabled(true);
 
 		this->setModelIndexFromColumn(cbXColumn, m_curve->xColumn());
 
@@ -413,6 +411,12 @@ void HistogramDock::initGeneralTab(){
 
 	//show the properties of the first curve
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
+	//bins option
+	uiGeneralTab.cbBins->addItem(i18n("By Number"));
+	uiGeneralTab.cbBins->addItem(i18n("By width"));
+	uiGeneralTab.cbBins->addItem(i18n("Square-root rule"));
+	uiGeneralTab.cbBins->addItem(i18n("Rice rule"));
+	uiGeneralTab.cbBins->addItem(i18n("Sturgis rule"));
 	
 	//connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
 	//types options
@@ -927,9 +931,6 @@ void HistogramDock::setupGeneral() {
 	cbXColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbXColumn, 2, 2, 1, 1);
 
-/*	cbYColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYColumn, 3, 2, 1, 1);
-*/
 	//General
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
