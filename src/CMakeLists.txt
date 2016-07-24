@@ -53,6 +53,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ConstantsWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/ThemesWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ExpressionTextEdit.cpp
 	${KDEFRONTEND_DIR}/widgets/FitOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/FitParametersWidget.cpp
@@ -64,6 +65,7 @@ set(GUI_SOURCES
 
 set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/constantswidget.ui
+	${KDEFRONTEND_DIR}/ui/themeswidget.ui
 	${KDEFRONTEND_DIR}/ui/functionswidget.ui
 	${KDEFRONTEND_DIR}/ui/fitoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/fitparameterswidget.ui

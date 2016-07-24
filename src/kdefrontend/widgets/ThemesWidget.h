@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : ThemeHandler.h
+    File                 : ThemesWidget.h
     Project              : LabPlot
-    Description          : Widget for handling saving and loading of themes
+    Description          : widget for selecting themes
     --------------------------------------------------------------------
-	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-	Copyright            : (C) 2012-2013 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -26,45 +25,32 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef THEMESWIDGET_H
+#define THEMESWIDGET_H
 
-#ifndef THEMEHANDLER_H
-#define THEMEHANDLER_H
+#include <QWidget>
+#include <QStringList>
 
-#include <QtGui/QWidget>
-#include <QPushButton>
-#include <QListView>
-#include <QVBoxLayout>
-class QHBoxLayout;
-class QToolButton;
-class QSpacerItem;
-class QLabel;
-class KConfig;
+#include "ui_themeswidget.h"
 
-class ThemeHandler : public QWidget{
+class ThemesWidget: public QWidget{
 	Q_OBJECT
 
-	public:
-		ThemeHandler(QWidget* parent);
-		static QStringList themes();
-		static const QString themeConfigPath(const QString&);
+public:
+	explicit ThemesWidget(QWidget*);
 
-	private:
-		QList<QString> dirNames;
-		QHBoxLayout *horizontalLayout;
-		QSpacerItem *horizontalSpacer;
-		QSpacerItem *horizontalSpacer2;
-		QLabel *lTheme;
-		QPushButton *pbLoadTheme;
-		QStringList m_themeList;
-
-	private slots:
-		void loadSelected(QString str);
-		void showPanel();
+private:
+	Ui::ThemesWidget ui;
 
 signals:
-		void loadThemeRequested(KConfig& config);
-		void info(const QString&);
-		void loadPreviewPanel(QStringList);
+	void themeSelected(const QString&);
+	void canceled();
+
+private slots:
+	void applyClicked();
+
+public slots:
+	void setupPreview(QStringList themeList);
 };
 
-#endif
+#endif //THEMESWIDGET_H
