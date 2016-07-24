@@ -50,6 +50,7 @@ class HistogramPrivate: public QGraphicsItem {
 		bool m_selectionEffectImageIsDirty;
 
 		void retransform();
+		void updateLines();
 		void updateValues();
 		void updateFilling();
 		bool swapVisible(bool on);
@@ -68,6 +69,12 @@ class HistogramPrivate: public QGraphicsItem {
 		const AbstractColumn* yColumn;
 		QString xColumnPath;
 		QString yColumnPath;
+		
+		//line
+		bool lineSkipGaps;
+		int lineInterpolationPointsCount;
+		QPen linePen;
+		qreal lineOpacity;
 
 		//values
 		Histogram::ValuesType valuesType;
@@ -93,6 +100,7 @@ class HistogramPrivate: public QGraphicsItem {
 		QString fillingFileName;
 		qreal fillingOpacity;
 
+		QPainterPath linePath;
 		QPainterPath valuesPath;
 		QRectF boundingRectangle;
 		QPainterPath curveShape;

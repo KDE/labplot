@@ -480,6 +480,7 @@ void HistogramPrivate::retransform(){
 
 	if ( (NULL == xColumn) || (NULL == yColumn) ){
 		valuesPath = QPainterPath();
+//		dropLinePath = QPainterPath();
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -498,7 +499,7 @@ void HistogramPrivate::retransform(){
 
 			switch(xColMode) {
 				case AbstractColumn::Numeric:
-					tempPoint.setX(xColumn->valueAt(row));\
+					tempPoint.setX(xColumn->valueAt(row));
 					break;
 				case AbstractColumn::Text:
 					//TODO
@@ -540,14 +541,51 @@ void HistogramPrivate::retransform(){
 	cSystem->mapLogicalToScene(symbolPointsLogical, symbolPointsScene, visiblePoints);
 
 	m_suppressRecalc = true;
+	updateLines();
 	updateValues();
 	m_suppressRecalc = false;
 }
 
 /*!
+  recalculates the painter path for the lines connecting the data points.
+  Called each time when the type of this connection is changed.
+*/
+void HistogramPrivate::updateLines(){
+	linePath = QPainterPath();
+	lines.clear();
+
+	const int count=symbolPointsLogical.count();
+
+	//nothing to do, if no data points available
+	if (count<=1){
+	  	recalcShapeAndBoundingRect();
+		return;
+	}
+
+	//calculate the lines connecting the data points
+		for (int i=0; i<count-1; i++){
+		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
+		  lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
+		}
+	
+	//map the lines to scene coordinates
+	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
+	lines = cSystem->mapLogicalToScene(lines);
+
+	//new line path
+	foreach (const QLineF& line, lines){
+		linePath.moveTo(line.p1());
+		linePath.lineTo(line.p2());
+	}
+
+	//updateFilling();
+	recalcShapeAndBoundingRect();
+}
+/*!
   recreates the value strings to be shown and recalculates their draw position.
 */
-void HistogramPrivate::updateValues(){
+void HistogramPrivate::updateValues() {
   	valuesPath = QPainterPath();
 	valuesPoints.clear();
 	valuesStrings.clear();
@@ -930,6 +968,7 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 
 	prepareGeometryChange();
 	curveShape = QPainterPath();
+	curveShape.addPath(WorksheetElement::shapeFromPath(linePath, linePen));
 
 	if (valuesType != Histogram::NoValues){
 		curveShape.addPath(valuesPath);
@@ -1077,7 +1116,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
    
     QPointF tempPoint, tempPoint1;
    
-    for(int i=0;i < 4; ++i) {
+    for(int i=0;i < 5; ++i) {
         tempPoint.setX((double) i);
         tempPoint.setY(0.0);
        
@@ -1158,7 +1197,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
    
     return;
-    //ends my logic
+  //ends my logic
 }
 
 /*!

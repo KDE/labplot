@@ -953,22 +953,17 @@ void HistogramDock::setupGeneral() {
 
 void HistogramDock::xColumnChanged(const QModelIndex& index) {
 	
-	qDebug() << "here";
 	if (m_initializing)
 		return;
-	
-	qDebug() << "here";
 
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = 0;
 	if (aspect) {
-		qDebug() << "here as[ect";
 		column = dynamic_cast<AbstractColumn*>(aspect);
 		Q_ASSERT(column);
 	}
 
 	foreach(Histogram* curve, m_curvesList) {
-		qDebug() << "here as well";
 		curve->setXColumn(column);
 	}
 }
