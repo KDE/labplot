@@ -60,6 +60,7 @@
 #include <KConfigGroup>
 #include <KLocale>
 
+#include <gsl/gsl_histogram.h>
 #include <gsl/gsl_spline.h>
 #include <gsl/gsl_errno.h>
 #include <math.h>
@@ -87,7 +88,6 @@ void Histogram::init(){
 	KConfigGroup group = config.group("Histogram");
 
 	d->xColumn = NULL;
-	d->yColumn = NULL;
 
 	d->valuesType = (Histogram::ValuesType) group.readEntry("ValuesType", (int)Histogram::NoValues);
 	d->valuesColumn = NULL;
@@ -159,9 +159,7 @@ void Histogram::setPrinting(bool on) {
 //##########################  getter methods  ##################################
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, xColumn, xColumn)
-BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, yColumn, yColumn)
 QString& Histogram::xColumnPath() const { return d_ptr->xColumnPath; }
-QString& Histogram::yColumnPath() const {	return d_ptr->yColumnPath; }
 
 //values
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesType, valuesType, valuesType)
@@ -205,26 +203,6 @@ void Histogram::setXColumn(const AbstractColumn* column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 					this, SLOT(xColumnAboutToBeRemoved(const AbstractAspect*)));
-			//TODO: add disconnect in the undo-function
-		}
-	}
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetYColumn, const AbstractColumn*, yColumn, retransform)
-void Histogram::setYColumn(const AbstractColumn* column) {
-	Q_D(Histogram);
-	if (column != d->yColumn) {
-		exec(new HistogramSetYColumnCmd(d, column, i18n("%1: assign y values")));
-
-		//emit yHistogramDataChanged() in order to notify the plot about the changes
-		emit yHistogramDataChanged();
-		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(yHistogramDataChanged()));
-
-			//update the curve itself on changes
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
-			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-					this, SLOT(yColumnAboutToBeRemoved(const AbstractAspect*)));
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -404,14 +382,6 @@ void Histogram::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-void Histogram::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
-	Q_D(Histogram);
-	if (aspect == d->yColumn) {
-		d->yColumn = 0;
-		d->retransform();
-	}
-}
-
 void Histogram::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Histogram);
 	if (aspect == d->valuesColumn) {
@@ -478,7 +448,7 @@ void HistogramPrivate::retransform(){
 	symbolPointsScene.clear();
 	connectedPointsLogical.clear();
 
-	if ( (NULL == xColumn) || (NULL == yColumn) ){
+	if (NULL == xColumn){
 		valuesPath = QPainterPath();
 //		dropLinePath = QPainterPath();
 		recalcShapeAndBoundingRect();
@@ -490,12 +460,10 @@ void HistogramPrivate::retransform(){
 	QPointF tempPoint;
 
 	AbstractColumn::ColumnMode xColMode = xColumn->columnMode();
-	AbstractColumn::ColumnMode yColMode = yColumn->columnMode();
 
 	//take over only valid and non masked points.
 	for (int row = startRow; row <= endRow; row++ ){
-		if ( xColumn->isValid(row) && yColumn->isValid(row)
-			&& (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
+		if ( xColumn->isValid(row) && !xColumn->isMasked(row) ) {
 
 			switch(xColMode) {
 				case AbstractColumn::Numeric:
@@ -510,18 +478,6 @@ void HistogramPrivate::retransform(){
 					break;
 			}
 
-			switch(yColMode) {
-				case AbstractColumn::Numeric:
-						tempPoint.setY(yColumn->valueAt(row));
-						break;
-				case AbstractColumn::Text:
-					//TODO
-				case AbstractColumn::DateTime:
-				case AbstractColumn::Month:
-				case AbstractColumn::Day:
-					//TODO
-					break;
-			}
 			symbolPointsLogical.append(tempPoint);
 			connectedPointsLogical.push_back(true);
 		} else {
@@ -1112,34 +1068,56 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     QPainterPath LinePath = QPainterPath();
     QList<QLineF> lines;
     lines.clear();
-    double bins[] = {5.0, 6.0, 2.0, 9.0, 10.0};
+    //double bins[] = {5.0, 6.0, 2.0, 9.0, 10.0};
    
     QPointF tempPoint, tempPoint1;
-   
-    for(int i=0;i < 5; ++i) {
-        tempPoint.setX((double) i);
+	double xAxisMin= xColumn->minimum();
+	double xAxisMax= xColumn->maximum();
+	
+	qDebug()<< "axis value" << xAxisMax << xAxisMin;	
+	
+	int startRow = 0;
+	int endRow = xColumn->rowCount() - 1;
+	
+	gsl_histogram * h = gsl_histogram_alloc (10); // demo- number of bins
+	gsl_histogram_set_ranges_uniform (h, xAxisMin,xAxisMax);
+	
+	for (int row = startRow; row <= endRow; row++ ){
+		if ( xColumn->isValid(row) && !xColumn->isMasked(row) )
+		gsl_histogram_increment(h,xColumn->valueAt(row));
+	}
+	
+	//checking height of each column 
+	for(int i=0;i < 10; ++i) {
+		qDebug() << gsl_histogram_get(h,i);
+	}
+	double width = (xAxisMax-xAxisMin)/10;
+	
+	for(int i=0;i < 10; ++i) {
+        tempPoint.setX(xAxisMin);
         tempPoint.setY(0.0);
        
-        tempPoint1.setX((double) i);
-        tempPoint1.setY(bins[i]);
+        tempPoint1.setX(xAxisMin);
+        tempPoint1.setY(gsl_histogram_get(h,i));
        
         lines.append(QLineF(tempPoint, tempPoint1));
        
-        tempPoint.setX((double) i);
-        tempPoint.setY(bins[i]);
+        tempPoint.setX(xAxisMin);
+        tempPoint.setY(gsl_histogram_get(h,i));
        
-        tempPoint1.setX((double) i+1);
-        tempPoint1.setY(bins[i]);
+        tempPoint1.setX(xAxisMin+width);
+        tempPoint1.setY(gsl_histogram_get(h,i));
        
         lines.append(QLineF(tempPoint,tempPoint1));
        
-        tempPoint.setX((double) i+1);
-        tempPoint.setY(bins[i]);
+        tempPoint.setX(xAxisMin+width);
+        tempPoint.setY(gsl_histogram_get(h,i));
        
-        tempPoint1.setX((double) i+1);
+        tempPoint1.setX(xAxisMin+width);
         tempPoint1.setY(0.0);
        
         lines.append(QLineF(tempPoint, tempPoint1));
+		xAxisMin+= width;
     }
    
     const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
@@ -1343,7 +1321,6 @@ void Histogram::save(QXmlStreamWriter* writer) const{
 	//general
 	writer->writeStartElement( "general" );
 	WRITE_COLUMN(d->xColumn, xColumn);
-	WRITE_COLUMN(d->yColumn, yColumn);
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 

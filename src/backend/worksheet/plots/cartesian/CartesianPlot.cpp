@@ -1042,23 +1042,6 @@ void CartesianPlot::scaleAutoY(){
 					d->curvesYMax = curve->yColumn()->maximum();
 			}
 		}
-		QList<const Histogram*> childrenHistogram = this->children<const Histogram>();
-		foreach(const Histogram* curve, childrenHistogram) {
-			if (!curve->isVisible())
-				continue;
-			if (!curve->yColumn())
-				continue;
-
-			if (curve->yColumn()->minimum() != INFINITY){
-				if (curve->yColumn()->minimum() < d->curvesYMin)
-					d->curvesYMin = curve->yColumn()->minimum();
-			}
-
-			if (curve->yColumn()->maximum() != -INFINITY){
-				if (curve->yColumn()->maximum() > d->curvesYMax)
-					d->curvesYMax = curve->yColumn()->maximum();
-			}
-		}
 		d->curvesYMinMaxIsDirty = false;
 	}
 

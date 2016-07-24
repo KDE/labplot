@@ -103,7 +103,6 @@ class Histogram: public WorksheetElement {
 	private slots:
 		void updateValues();
 		void xColumnAboutToBeRemoved(const AbstractAspect*);
-		void yColumnAboutToBeRemoved(const AbstractAspect*);
 		void valuesColumnAboutToBeRemoved(const AbstractAspect*);
 		//SLOTs for changes triggered via QActions in the context menu
 		void visibilityChanged();

@@ -58,7 +58,6 @@
 HistogramDock::HistogramDock(QWidget *parent): QWidget(parent),
 	m_completion(new KUrlCompletion()),
 	cbXColumn(0),
-	cbYColumn(0),
 	m_curve(0),
 	m_aspectTreeModel(0) {
 
@@ -354,7 +353,6 @@ void HistogramDock::setModel() {
 
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);
-		cbYColumn->setTopLevelClasses(list);
 	}
 	cbValuesColumn->setTopLevelClasses(list);
 
@@ -363,12 +361,10 @@ void HistogramDock::setModel() {
 	m_aspectTreeModel->setSelectableAspects(list);
 	if (cbXColumn) {
 		cbXColumn->setSelectableClasses(list);
-		cbYColumn->setSelectableClasses(list);
 	}
 	cbValuesColumn->setSelectableClasses(list);
 	if (cbXColumn) {
 		cbXColumn->setModel(m_aspectTreeModel);
-		cbYColumn->setModel(m_aspectTreeModel);
 	}
 	cbValuesColumn->setModel(m_aspectTreeModel);
 }
@@ -394,10 +390,9 @@ void HistogramDock::initGeneralTab(){
 		uiGeneralTab.lXColumn->setEnabled(true);
 		cbXColumn->setEnabled(true);
 		uiGeneralTab.lYColumn->setEnabled(true);
-		cbYColumn->setEnabled(true);
+		//cbYColumn->setEnabled(true);
 
 		this->setModelIndexFromColumn(cbXColumn, m_curve->xColumn());
-		this->setModelIndexFromColumn(cbYColumn, m_curve->yColumn());
 
 		uiGeneralTab.leName->setText(m_curve->name());
 		uiGeneralTab.leComment->setText(m_curve->comment());
@@ -409,11 +404,8 @@ void HistogramDock::initGeneralTab(){
 
 		uiGeneralTab.lXColumn->setEnabled(false);
 		cbXColumn->setEnabled(false);
-		uiGeneralTab.lYColumn->setEnabled(false);
-		cbYColumn->setEnabled(false);
 
 		cbXColumn->setCurrentModelIndex(QModelIndex());
-		cbYColumn->setCurrentModelIndex(QModelIndex());
 
 		uiGeneralTab.leName->setText("");
 		uiGeneralTab.leComment->setText("");
@@ -526,12 +518,8 @@ void HistogramDock::valuesTypeChanged(int index){
 	}else{
 	  ui.lValuesColumn->hide();
 	  cbValuesColumn->hide();
-
-	  if (valuesType==Histogram::ValuesY){
-		column = static_cast<const Column*>(m_curve->yColumn());
-	  }else{
 		column = static_cast<const Column*>(m_curve->xColumn());
-	  }
+	  
 	}
 	this->showValuesColumnFormat(column);
   }
@@ -939,15 +927,14 @@ void HistogramDock::setupGeneral() {
 	cbXColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbXColumn, 2, 2, 1, 1);
 
-	cbYColumn = new TreeViewComboBox(generalTab);
+/*	cbYColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYColumn, 3, 2, 1, 1);
-
+*/
 	//General
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
-	connect( cbYColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yColumnChanged(QModelIndex)) );
 
 }
 
@@ -966,21 +953,6 @@ void HistogramDock::xColumnChanged(const QModelIndex& index) {
 	foreach(Histogram* curve, m_curvesList) {
 		curve->setXColumn(column);
 	}
-}
-
-void HistogramDock::yColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
-
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
-
-	foreach(Histogram* curve, m_curvesList)
-		curve->setYColumn(column);
 }
 
 void HistogramDock::loadConfigFromTemplate(KConfig& config) {

@@ -59,7 +59,6 @@ private:
 	QStringList timeStrings;
 
 	TreeViewComboBox* cbXColumn;
-	TreeViewComboBox* cbYColumn;
 	TreeViewComboBox* cbValuesColumn;
 
 	virtual void initGeneralTab();
@@ -88,7 +87,6 @@ private slots:
 	void nameChanged();
 	void commentChanged();
 	void xColumnChanged(const QModelIndex&);
-	void yColumnChanged(const QModelIndex&);
 	void visibilityChanged(bool);
 	//Histogram-types
 	//void histogramTypeChanged(int);
@@ -121,7 +119,6 @@ private slots:
 	//General-Tab
 	/*void curveDescriptionChanged(const AbstractAspect*);
 	void curveXColumnChanged(const AbstractColumn*);
-	void curveYColumnChanged(const AbstractColumn*);
 	void curveVisibilityChanged(bool);*/
 
 	//Values-Tab

@@ -66,7 +66,6 @@ class HistogramPrivate: public QGraphicsItem {
 
 		//data columns
 		const AbstractColumn* xColumn;
-		const AbstractColumn* yColumn;
 		QString xColumnPath;
 		QString yColumnPath;
 		
@@ -118,9 +117,9 @@ class HistogramPrivate: public QGraphicsItem {
 		bool curvesXMinMaxIsDirty, curvesYMinMaxIsDirty;
 		double curvesXMin, curvesXMax, curvesYMin, curvesYMax;
 		
-		float xMin, xMax, yMin, yMax;
-		float xMinPrev, xMaxPrev, yMinPrev, yMaxPrev;
-		bool autoScaleHistogramX, autoScaleHistogramY;
+		float xMin, xMax;
+		float xMinPrev, xMaxPrev;
+		bool autoScaleHistogramX;
 		
 		Histogram* const q;
 		
