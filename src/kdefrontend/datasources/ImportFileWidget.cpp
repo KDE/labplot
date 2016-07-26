@@ -377,6 +377,10 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	}
     case FileDataSource::FITS: {
         FITSFilter* filter = new FITSFilter();
+        filter->setStartRow( ui.sbStartRow->value());
+        filter->setEndRow( ui.sbEndRow->value() );
+        filter->setStartColumn( ui.sbStartColumn->value());
+        filter->setEndColumn( ui.sbEndColumn->value());
         return filter;
     }
 	}

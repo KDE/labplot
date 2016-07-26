@@ -333,8 +333,25 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         QLatin1String ws = QLatin1String(" ");
         QLatin1String nl = QLatin1String("\n");
         //TODO startColumn/end..
-        for (int i = 0; i < lines; ++i) {
-            for (int j = 0; j < actualCols; ++j) {
+        int i = 0;
+        int j = 0;
+        if (startRow != -1) {
+            i = startRow;
+        }
+
+        if (startColumn != -1) {
+            j = startColumn;
+        }
+
+        if (endRow != -1) {
+            lines = endRow;
+        }
+
+        if (endColumn != -1) {
+            actualCols = endColumn;
+        }
+        for (; i < lines; ++i) {
+            for (; j < actualCols; ++j) {
                 if (!noDataSource) {
                     dataPointers[j]->operator [](i) = data[i * actualCols + j];
                 } else {
@@ -372,8 +389,19 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         return dataString.join(QLatin1String(""));
 
     } else if ((chduType == ASCII_TBL) || (chduType == BINARY_TBL)) {
-        fits_get_num_cols(fitsFile, &actualCols, &status);
-        fits_get_num_rows(fitsFile, &actualRows, &status);
+
+        if (endColumn != -1) {
+            actualCols = endColumn;
+        } else {
+            fits_get_num_cols(fitsFile, &actualCols, &status);
+        }
+
+        if (endRow != -1) {
+            actualRows = endRow;
+        } else {
+            fits_get_num_rows(fitsFile, &actualRows, &status);
+        }
+
         QStringList columnNames;
         QList<int> columnsWidth;
         QStringList columnUnits;
@@ -383,7 +411,13 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         int colWidth;
         char keyword[FLEN_KEYWORD];
         char value[FLEN_VALUE];
-        for (int col = 1; col <=actualCols; ++col) {
+        int col = 1;
+        if (startColumn != -1) {
+            if (startColumn != 0) {
+                col = startColumn;
+            }
+        }
+        for (; col <=actualCols; ++col) {
             status = 0;
             fits_make_keyn("TTYPE", col, keyword, &status);
             fits_read_key(fitsFile, TSTRING, keyword, value, NULL, &status);
@@ -403,6 +437,10 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         } else if (lines > actualRows) {
             lines = actualRows;
         }
+
+        if (endRow != -1) {
+            lines = endRow;
+        }
         QVector<QStringList*> stringDataPointers;
         QVector<QVector<double>*> numericDataPointers;
         QList<bool> columnNumericTypes;
@@ -410,7 +448,13 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         if (!noDataSource) {
             columnNumericTypes.reserve(actualCols);
             int datatype;
-            for (int c = 1; c <= actualCols; ++c) {
+            int c = 1;
+            if (startColumn != -1) {
+                if (startColumn != 0) {
+                    c = startColumn;
+                }
+            }
+            for (; c <= actualCols; ++c) {
                 fits_get_coltype(fitsFile, c, &datatype, NULL, NULL, &status);
 
                 switch (datatype) {
@@ -483,10 +527,24 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 
         char* array = new char[1000];
         //TODO startColumn/end..
-        for (int row = 1; row <= lines; ++row) {
+        int row = 1;
+        if (startRow != -1) {
+            if (startRow != 0) {
+                row = startRow;
+            }
+        }
+
+        int coll = 1;
+        if (startColumn != -1) {
+            if (startColumn != 0) {
+                coll = startColumn;
+            }
+        }
+
+        for (; row <= lines; ++row) {
             int numericixd = 0;
             int stringidx = 0;
-            for (int col = 1; col <= actualCols; ++col) {
+            for (int col = coll; col <= actualCols; ++col) {
                 if(fits_read_col_str(fitsFile, col, row, 1, 1, NULL, &array, NULL, &status)) {
                     printError(status);
                     dataString << QLatin1String(" ");
