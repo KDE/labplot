@@ -240,7 +240,10 @@ set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 INCLUDE_DIRECTORIES(. ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/..)
 qt5_wrap_ui(LABPLOT_SRCS ${UI_SOURCES})
 add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
-target_link_libraries(labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${CANTOR_LIBS} ${HDF5_LIBRARY} ${NETCDF_LIBRARY} ${FFTW_LIBRARIES})
+target_link_libraries(labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${CANTOR_LIBS} ${NETCDF_LIBRARY} ${FFTW_LIBRARIES})
+IF (HDF5_FOUND)
+	target_link_libraries(labplot2 ${HDF5_C_LIBRARIES})
+ENDIF (HDF5_FOUND)
 # ${OPJ_LIBRARY}
 
 ############## installation ################################
