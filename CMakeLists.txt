@@ -91,7 +91,7 @@ FIND_LIBRARY(HDF5_LIBRARY hdf5
 	PATHS
 	/usr/lib
 	/usr/local/lib
-	/usr/lib/x86_64-linux-gnu/hdf5/serial
+	/usr/lib/${CMAKE_LIBRARY_ARCHITECTURE}/hdf5/serial
 )
 FIND_PATH (HDF5_INCLUDE_DIR hdf5.h
 	/usr/include
