@@ -87,29 +87,10 @@ ELSE (GSL_FOUND)
 ENDIF (GSL_FOUND)
 
 ### HDF5 #####################################
-FIND_LIBRARY(HDF5_LIBRARY hdf5
-	PATHS
-	/usr/lib
-	/usr/local/lib
-	/usr/lib/${CMAKE_LIBRARY_ARCHITECTURE}/hdf5/serial
-)
-FIND_PATH (HDF5_INCLUDE_DIR hdf5.h
-	/usr/include
-	/usr/local/include
-	/usr/include/hdf5/serial
-)
-IF (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
-	SET (HDF5_FOUND TRUE)
-ELSE (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
-	SET (HDF5_FOUND FALSE)
-	SET (HDF5_LIBRARY "")
-ENDIF (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
+FIND_PACKAGE(HDF5 COMPONENTS C)
 IF (HDF5_FOUND)
-	MESSAGE (STATUS "Found Hierarchical Data Format (HDF) 5 Library: ${HDF5_INCLUDE_DIR} ${HDF5_LIBRARY}")
 	add_definitions (-DHAVE_HDF5)
-	include_directories (${HDF5_INCLUDE_DIR})
-ELSE (HDF5_FOUND)
-	MESSAGE (STATUS "Hierarchical Data Format (HDF) 5 Library not found.")
+	include_directories (${HDF5_INCLUDE_DIRS})
 ENDIF (HDF5_FOUND)
 
 ### NETCDF #####################################
