@@ -29,6 +29,7 @@
 #ifndef XYCURVEPRIVATE_H
 #define XYCURVEPRIVATE_H
 
+#include <QGraphicsItem>
 #include <vector>
 
 class CartesianPlot;

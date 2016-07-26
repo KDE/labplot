@@ -37,7 +37,7 @@
 
 class AspectChildRemoveCmd : public QUndoCommand {
 	public:
-		AspectChildRemoveCmd(AbstractAspect::Private* target, AbstractAspect* child)
+		AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child)
 			: m_target(target), m_child(child), m_index(-1), m_removed(false) {
 				setText(i18n("%1: remove %2", m_target->m_name, m_child->name()));
 			}
@@ -56,26 +56,26 @@ class AspectChildRemoveCmd : public QUndoCommand {
 			else
 				nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
 
-			emit m_target->m_owner->aspectAboutToBeRemoved(m_child);
+			emit m_target->q->aspectAboutToBeRemoved(m_child);
 			m_index = m_target->removeChild(m_child);
-			emit m_target->m_owner->aspectRemoved(m_target->m_owner, nextSibling, m_child);
+			emit m_target->q->aspectRemoved(m_target->q, nextSibling, m_child);
 
 			m_removed = true;
 		}
 
 		// calling undo transfers ownership of m_child back to its parent aspect
 		virtual void undo() {
-			Q_ASSERT(m_index != -1); // m_child must be a child of m_target->m_owner
+			Q_ASSERT(m_index != -1); // m_child must be a child of m_target->q
 
-			emit m_target->m_owner->aspectAboutToBeAdded(m_target->m_owner, 0, m_child);
+			emit m_target->q->aspectAboutToBeAdded(m_target->q, 0, m_child);
 			m_target->insertChild(m_index, m_child);
-			emit m_target->m_owner->aspectAdded(m_child);
+			emit m_target->q->aspectAdded(m_child);
 
 			m_removed = false;
 		}
 
 	protected:
-		AbstractAspect::Private * m_target;
+		AbstractAspectPrivate * m_target;
 		AbstractAspect* m_child;
 		int m_index;
 		bool m_removed;
@@ -83,7 +83,7 @@ class AspectChildRemoveCmd : public QUndoCommand {
 
 class AspectChildAddCmd : public AspectChildRemoveCmd {
 	public:
-		AspectChildAddCmd(AbstractAspect::Private * target, AbstractAspect* child, int index)
+		AspectChildAddCmd(AbstractAspectPrivate * target, AbstractAspect* child, int index)
 			: AspectChildRemoveCmd(target, child) {
 				setText(i18n("%1: add %2", m_target->m_name, m_child->name()));
 				m_index = index;
@@ -97,7 +97,7 @@ class AspectChildAddCmd : public AspectChildRemoveCmd {
 
 class AspectChildReparentCmd : public QUndoCommand {
 	public:
-		AspectChildReparentCmd(AbstractAspect::Private * target, AbstractAspect::Private * new_parent,
+		AspectChildReparentCmd(AbstractAspectPrivate * target, AbstractAspectPrivate * new_parent,
 				AbstractAspect* child, int new_index)
 			: m_target(target), m_new_parent(new_parent), m_child(child), m_index(-1), m_new_index(new_index)
 		{
@@ -121,8 +121,8 @@ class AspectChildReparentCmd : public QUndoCommand {
 		}
 
 	protected:
-		AbstractAspect::Private * m_target;
-		AbstractAspect::Private * m_new_parent;
+		AbstractAspectPrivate * m_target;
+		AbstractAspectPrivate * m_new_parent;
 		AbstractAspect* m_child;
 		int m_index;
 		int m_new_index;

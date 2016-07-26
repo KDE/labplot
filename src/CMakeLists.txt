@@ -108,7 +108,6 @@ set(UI_SOURCES
 set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/Folder.cpp
 	${BACKEND_DIR}/core/AbstractAspect.cpp
-	${BACKEND_DIR}/core/AspectPrivate.cpp
 	${BACKEND_DIR}/core/AbstractColumn.cpp
 	${BACKEND_DIR}/core/AbstractColumnPrivate.cpp
 	${BACKEND_DIR}/core/abstractcolumncommands.cpp
