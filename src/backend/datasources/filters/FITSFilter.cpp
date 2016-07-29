@@ -325,40 +325,51 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         }
 
         QVector<QVector<double>*> dataPointers;
+
         dataString.reserve(lines * actualCols);
-        if (!noDataSource) {
-            dataPointers.reserve(actualCols);
-            columnOffset = dataSource->create(dataPointers, importMode, lines, actualCols);
-        }
-        QLatin1String ws = QLatin1String(" ");
-        QLatin1String nl = QLatin1String("\n");
-        //TODO startColumn/end..
-        int i = 0;
-        int j = 0;
-        if (startRow != -1) {
-            i = startRow;
-        }
-
-        if (startColumn != -1) {
-            j = startColumn;
-        }
-
         if (endRow != -1) {
-            lines = endRow;
+            if (!noDataSource) {
+                lines = endRow;
+            }
         }
-
         if (endColumn != -1) {
             actualCols = endColumn;
         }
+
+        QLatin1String ws = QLatin1String(" ");
+        QLatin1String nl = QLatin1String("\n");
+        int i = 0;
+        int j = 0;
+        if (startRow != 1) {
+            i = startRow;
+        }
+        if (startColumn != 1) {
+            j = startColumn;
+        }
+
+        if (!noDataSource) {
+            dataPointers.reserve(actualCols);
+            columnOffset = dataSource->create(dataPointers, importMode, lines - i, actualCols - j);
+        }
+        int ii = 0;
         for (; i < lines; ++i) {
+            int jj = 0;
             for (; j < actualCols; ++j) {
                 if (!noDataSource) {
-                    dataPointers[j]->operator [](i) = data[i * actualCols + j];
+                    dataPointers[jj++]->operator [](ii) = data[i* naxes[0] + j];
                 } else {
-                    dataString << QString::number(data[i*actualCols +j]) << ws;
+                    dataString << QString::number(data[i*naxes[0] +j]) << ws;
                 }
             }
-            dataString << nl;
+            if (startColumn != 1) {
+                j = startColumn;
+            } else {
+                j = 0;
+            }
+            ii++;
+            if (noDataSource) {
+                dataString << nl;
+            }
         }
 
         delete[] data;
@@ -412,7 +423,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         char keyword[FLEN_KEYWORD];
         char value[FLEN_VALUE];
         int col = 1;
-        if (startColumn != -1) {
+        if (startColumn != 1) {
             if (startColumn != 0) {
                 col = startColumn;
             }
@@ -449,7 +460,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
             columnNumericTypes.reserve(actualCols);
             int datatype;
             int c = 1;
-            if (startColumn != -1) {
+            if (startColumn != 1) {
                 if (startColumn != 0) {
                     c = startColumn;
                 }
@@ -528,14 +539,14 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         char* array = new char[1000];
         //TODO startColumn/end..
         int row = 1;
-        if (startRow != -1) {
+        if (startRow != 1) {
             if (startRow != 0) {
                 row = startRow;
             }
         }
 
         int coll = 1;
-        if (startColumn != -1) {
+        if (startColumn != 1) {
             if (startColumn != 0) {
                 coll = startColumn;
             }
