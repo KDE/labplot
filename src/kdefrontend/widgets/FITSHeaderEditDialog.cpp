@@ -28,6 +28,11 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "FITSHeaderEditDialog.h"
 #include <QVBoxLayout>
 
+/*! \class FITSHeaderEditDialog
+ * \brief Dialog class for editing FITS header units.
+ * \since 2.2.0
+ * \ingroup widgets
+ */
 FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget *parent) : KDialog(parent) {
     QWidget* mainWidget = new QWidget(this);
     QVBoxLayout* vLayout = new QVBoxLayout(mainWidget);
@@ -44,10 +49,16 @@ FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget *parent) : KDialog(parent) {
     connect(this, SIGNAL(okClicked()), this, SLOT(save()));
 }
 
+/*!
+ * \brief FITSHeaderEditDialog::~FITSHeaderEditDialog
+ */
 FITSHeaderEditDialog::~FITSHeaderEditDialog() {
     delete m_HeaderEditWidget;
 }
 
+/*!
+ * \brief This slot is triggered when the Save button was clicked in the ui.
+ */
 void FITSHeaderEditDialog::save() {
     m_HeaderEditWidget->save();
 }

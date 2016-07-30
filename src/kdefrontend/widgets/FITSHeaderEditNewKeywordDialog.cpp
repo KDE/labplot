@@ -30,6 +30,11 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #define FLEN_VALUE     71  /* max length of a keyword value string */
 #define FLEN_COMMENT   73  /* max length of a keyword comment string */
 
+/*! \class FITSHeaderEditNewKeywordDialog
+ * \brief Dialog class for adding new keywords to the FITSHeaderEditDialog's table.
+ * \since 2.2.0
+ * \ingroup widgets
+ */
 FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) : KDialog(parent) {
     QWidget* mainWidget = new QWidget(this);
     ui.setupUi(mainWidget);
@@ -50,10 +55,16 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
     ui.kleValue->setMaxLength(FLEN_VALUE);
     ui.kleComment->setMaxLength(FLEN_COMMENT);
 }
-
+/*!
+ * \brief FITSHeaderEditNewKeywordDialog::~FITSHeaderEditNewKeywordDialog
+ */
 FITSHeaderEditNewKeywordDialog::~FITSHeaderEditNewKeywordDialog() {
 }
 
+/*!
+ * \brief Decides whether the keyword can be used, messagebox pops up if the keywords key is empty.
+ * \return Whether the keyword was "Ok" or not.
+ */
 int FITSHeaderEditNewKeywordDialog::okClicked() {
     if (!ui.kleKey->text().isEmpty()) {
         m_newKeyword = FITSFilter::Keyword(ui.kleKey->text(), ui.kleValue->text(), ui.kleComment->text());
@@ -68,10 +79,19 @@ int FITSHeaderEditNewKeywordDialog::okClicked() {
     }
 }
 
+/*!
+ * \brief Returns the new keyword.
+ * \return The newly constructed keyword from the line edits.
+ */
 FITSFilter::Keyword FITSHeaderEditNewKeywordDialog::newKeyword() const {
     return m_newKeyword;
 }
 
+/*!
+ * \brief Overrides KDialog's slotButtonClicked slot.
+ *        Decides whether the dialog should move in an accepted state or canceled.
+ * \param button the code of the button clicked
+ */
 void FITSHeaderEditNewKeywordDialog::slotButtonClicked(int button) {
     if (button == KDialog::Ok) {
         int okClickedBtn = okClicked();
