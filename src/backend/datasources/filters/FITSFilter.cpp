@@ -326,7 +326,6 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 
         QVector<QVector<double>*> dataPointers;
 
-        dataString.reserve(lines * actualCols);
         if (endRow != -1) {
             if (!noDataSource) {
                 lines = endRow;
@@ -335,6 +334,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         if (endColumn != -1) {
             actualCols = endColumn;
         }
+        dataString.reserve(lines * actualCols);
 
         QLatin1String ws = QLatin1String(" ");
         QLatin1String nl = QLatin1String("\n");
@@ -456,6 +456,14 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         QVector<QVector<double>*> numericDataPointers;
         QList<bool> columnNumericTypes;
 
+        int startCol = 0;
+        if (startColumn != 1) {
+            startCol = startColumn;
+        }
+        int startRrow = 0;
+        if (startRow != 1) {
+            startRrow = startRow;
+        }
         if (!noDataSource) {
             columnNumericTypes.reserve(actualCols);
             int datatype;
@@ -501,22 +509,23 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                     break;
                 }
             }
-            numericDataPointers.reserve(actualCols);
+
+            numericDataPointers.reserve(actualCols - startCol);
 
             Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
             if(spreadsheet) {
-                stringDataPointers.reserve(actualCols);
+                stringDataPointers.reserve(actualCols - startCol);
                 spreadsheet->setUndoAware(false);
-                columnOffset = spreadsheet->resize(importMode, columnNames, actualCols);
+                columnOffset = spreadsheet->resize(importMode, columnNames, actualCols - startCol);
 
                 if (importMode==AbstractFileFilter::Replace) {
                     spreadsheet->clear();
-                    spreadsheet->setRowCount(lines);
+                    spreadsheet->setRowCount(lines - startRrow);
                 } else {
-                    if (spreadsheet->rowCount() < lines)
-                        spreadsheet->setRowCount(lines);
+                    if (spreadsheet->rowCount() < (lines - startRrow))
+                        spreadsheet->setRowCount(lines - startRrow);
                 }
-                for (int n = 0; n < actualCols; n++ ){
+                for (int n = 0; n < actualCols - startCol; n++ ) {
                     if (columnNumericTypes.at(n)) {
                         spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::Numeric);
                         QVector<double>* datap = static_cast<QVector<double>* >(spreadsheet->column(columnOffset+n)->data());
@@ -532,7 +541,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                 numericDataPointers.squeeze();
                 stringDataPointers.squeeze();
             } else {
-                columnOffset = dataSource->create(numericDataPointers, importMode, lines, actualCols);
+                columnOffset = dataSource->create(numericDataPointers, importMode, lines - startRrow, actualCols - startCol);
             }
         }
 
@@ -595,7 +604,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         if (!noDataSource) {
             Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
             if (spreadsheet) {
-                for ( int n=0; n<actualCols; n++ ){
+                for ( int n=0; n<actualCols - startRrow; n++ ){
                     Column* column = spreadsheet->column(columnOffset+n);
                     column->setComment(columnUnits.at(n));
                     column->setUndoAware(true);
