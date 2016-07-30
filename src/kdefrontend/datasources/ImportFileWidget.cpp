@@ -465,8 +465,9 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			ui.cbFileType->setCurrentIndex(FileDataSource::Ascii);
         } else if (info.contains("FITS image data")) {
             debug="detected FITS file";
+#ifdef HAVE_FITS
             ui.cbFileType->setCurrentIndex(FileDataSource::FITS);
-
+#endif
             fitsOptionsWidget.twExtensions->clear();
             QString fileName = ui.kleFileName->text();
             FITSFilter *filter = (FITSFilter *)this->currentFileFilter();
@@ -474,7 +475,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
             //TODO
         } else if (info.contains("image") || info.contains("bitmap" )) {
-			debug="detected IMAGE file";
+            debug="detected IMAGE file";
 			ui.cbFileType->setCurrentIndex(FileDataSource::Image);
 		} else if ( info.contains( ("ASCII") ) ) {
 			debug="detected ASCII file";
