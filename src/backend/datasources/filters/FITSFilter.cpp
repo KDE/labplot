@@ -334,7 +334,9 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         if (endColumn != -1) {
             actualCols = endColumn;
         }
-        dataString.reserve(lines * actualCols);
+        if (noDataSource) {
+            dataString.reserve(lines * actualCols);
+        }
 
         QLatin1String ws = QLatin1String(" ");
         QLatin1String nl = QLatin1String("\n");
@@ -567,7 +569,9 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
             for (int col = coll; col <= actualCols; ++col) {
                 if(fits_read_col_str(fitsFile, col, row, 1, 1, NULL, &array, NULL, &status)) {
                     printError(status);
-                    dataString << QLatin1String(" ");
+                    if (noDataSource) {
+                        dataString << QLatin1String(" ");
+                    }
                 }
                 if (!noDataSource) {
                     const QString& str = QString::fromLatin1(array);
@@ -596,7 +600,9 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                     }
                 }
             }
-            dataString << QLatin1String("\n");
+            if (noDataSource) {
+                dataString << QLatin1String("\n");
+            }
         }
 
         delete[] array;
