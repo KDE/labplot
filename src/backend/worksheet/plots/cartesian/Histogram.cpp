@@ -89,6 +89,14 @@ void Histogram::init(){
 
 	d->xColumn = NULL;
 
+	d->histogramType = (Histogram::TypeHistogram) group.readEntry("histogramType", (int)Histogram::Ordinary);
+	d->lineSkipGaps = group.readEntry("SkipLineGaps", false);
+	d->lineInterpolationPointsCount = group.readEntry("LineInterpolationPointsCount", 1);
+	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine) );
+	d->linePen.setColor( group.readEntry("LineColor", QColor(Qt::black)) );
+	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
+	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
+
 	d->valuesType = (Histogram::ValuesType) group.readEntry("ValuesType", (int)Histogram::NoValues);
 	d->valuesColumn = NULL;
 	d->valuesPosition = (Histogram::ValuesPosition) group.readEntry("ValuesPosition", (int)Histogram::ValuesAbove);
@@ -155,6 +163,10 @@ void Histogram::setPrinting(bool on) {
 	d->m_printing = on;
 }
 
+void Histogram::setHistrogramType(Histogram::TypeHistogram histogramType) {
+	d_ptr->histogramType = histogramType;
+}
+
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
@@ -184,6 +196,11 @@ CLASS_SHARED_D_READER_IMPL(Histogram, QColor, fillingFirstColor, fillingFirstCol
 CLASS_SHARED_D_READER_IMPL(Histogram, QColor, fillingSecondColor, fillingSecondColor)
 CLASS_SHARED_D_READER_IMPL(Histogram, QString, fillingFileName, fillingFileName)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, fillingOpacity, fillingOpacity)
+
+double Histogram::getYMaximum() const {
+	return d_ptr->getYMaximum();
+}
+
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
@@ -415,6 +432,13 @@ QRectF HistogramPrivate::boundingRect() const {
 	return QRectF(0, 0, 100, 100);
 	return boundingRectangle;
 }
+double HistogramPrivate::getYMaximum() {
+	if (histogram){
+		size_t maxYAddes= gsl_histogram_max_bin(histogram);
+		return gsl_histogram_get(histogram, maxYAddes);
+	}
+	return -INFINITY;
+}
 
 /*!
   Returns the shape of the Histogram as a QPainterPath in local coordinates
@@ -449,6 +473,7 @@ void HistogramPrivate::retransform(){
 	connectedPointsLogical.clear();
 
 	if (NULL == xColumn){
+		linePath = QPainterPath();
 		valuesPath = QPainterPath();
 //		dropLinePath = QPainterPath();
 		recalcShapeAndBoundingRect();
@@ -514,8 +539,74 @@ void HistogramPrivate::updateLines(){
 
 	//nothing to do, if no data points available
 	if (count<=1){
-	  	recalcShapeAndBoundingRect();
+		recalcShapeAndBoundingRect();
 		return;
+	}
+	int startRow = 0;
+	int endRow = xColumn->rowCount() - 1;
+	QPointF tempPoint,tempPoint1;
+
+	double xAxisMin= xColumn->minimum();
+	double xAxisMax= xColumn->maximum();
+
+	bins = 10; //temprary
+
+	double width = (xAxisMax-xAxisMin)/bins;
+
+	histogram = gsl_histogram_alloc (bins); // demo- number of bins
+	gsl_histogram_set_ranges_uniform (histogram, xAxisMin,xAxisMax+1);
+
+	for (int row = startRow; row <= endRow; row++ ){
+		if ( xColumn->isValid(row) && !xColumn->isMasked(row) )
+			gsl_histogram_increment(histogram,xColumn->valueAt(row));
+	}
+
+	//checking height of each column
+	/*for(int i=0;i < bins; ++i) {
+		qDebug() <<i<< " height "<< gsl_histogram_get(histogram,i);
+	}
+	*/
+	switch(histogramType) {
+		case Histogram::Ordinary:
+	for(int i=0;i < bins; ++i) {
+		tempPoint.setX(xAxisMin);
+		tempPoint.setY(0.0);
+
+		tempPoint1.setX(xAxisMin);
+		tempPoint1.setY(gsl_histogram_get(histogram,i));
+
+		lines.append(QLineF(tempPoint, tempPoint1));
+
+		tempPoint.setX(xAxisMin);
+		tempPoint.setY(gsl_histogram_get(histogram,i));
+
+		tempPoint1.setX(xAxisMin+width);
+		tempPoint1.setY(gsl_histogram_get(histogram,i));
+
+		lines.append(QLineF(tempPoint,tempPoint1));
+
+		tempPoint.setX(xAxisMin+width);
+		tempPoint.setY(gsl_histogram_get(histogram,i));
+
+		tempPoint1.setX(xAxisMin+width);
+		tempPoint1.setY(0.0);
+
+		lines.append(QLineF(tempPoint, tempPoint1));
+
+		tempPoint.setX(xAxisMin+width);
+		tempPoint.setY(0.0);
+
+		tempPoint1.setX(xAxisMin);
+		tempPoint1.setY(0.0);
+
+		lines.append(QLineF(tempPoint, tempPoint1));
+		xAxisMin+= width;
+	}
+	break;
+		case Histogram::Cummulative:
+			break;
+		case Histogram::AvgShift:
+			break;
 	}
 
 	//calculate the lines connecting the data points
@@ -535,7 +626,7 @@ void HistogramPrivate::updateLines(){
 		linePath.lineTo(line.p2());
 	}
 
-	//updateFilling();
+	updateFilling();
 	recalcShapeAndBoundingRect();
 }
 /*!
@@ -557,7 +648,7 @@ void HistogramPrivate::updateValues() {
 	  case Histogram::ValuesX:{
 		for(int i=0; i<symbolPointsLogical.size(); ++i){
 			if (!visiblePoints[i]) continue;
- 			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).x()) + valuesSuffix;
+			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).x()) + valuesSuffix;
 		}
 	  break;
 	  }
@@ -943,8 +1034,14 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 }
 
 void HistogramPrivate::draw(QPainter *painter) {
+
+	painter->setOpacity(lineOpacity);
+	painter->setPen(linePen);
+	painter->setBrush(Qt::NoBrush);
+	painter->drawPath(linePath);
+
 	//draw filling
-	
+
 	if (fillingPosition != Histogram::NoFilling) {
 		painter->setOpacity(fillingOpacity);
 		painter->setPen(Qt::SolidLine);
@@ -987,7 +1084,7 @@ void HistogramPrivate::updatePixmap() {
 
 
 //TODO: move this to a central place
-QImage HistogramPrivate::blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnly)
+QImage HistogramPrivate::blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnly = false)
 {
     int tab[] = { 14, 10, 8, 6, 5, 5, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2 };
     int alpha = (radius < 1)  ? 16 : (radius > 17) ? 1 : tab[radius-1];
@@ -1062,120 +1159,53 @@ QImage HistogramPrivate::blurred(const QImage& image, const QRect& rect, int rad
 void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget){
 //  qDebug()<<"HistogramPrivate::paint, " + q->name();
     Q_UNUSED(option);
-    Q_UNUSED(widget);
-   
-    //Ordinary histogram logic
-    QPainterPath LinePath = QPainterPath();
-    QList<QLineF> lines;
-    lines.clear();
-    //double bins[] = {5.0, 6.0, 2.0, 9.0, 10.0};
-   
-    QPointF tempPoint, tempPoint1;
-	double xAxisMin= xColumn->minimum();
-	double xAxisMax= xColumn->maximum();
-	
-	qDebug()<< "axis value" << xAxisMax << xAxisMin;	
-	
-	int startRow = 0;
-	int endRow = xColumn->rowCount() - 1;
-	
-	gsl_histogram * h = gsl_histogram_alloc (10); // demo- number of bins
-	gsl_histogram_set_ranges_uniform (h, xAxisMin,xAxisMax);
-	
-	for (int row = startRow; row <= endRow; row++ ){
-		if ( xColumn->isValid(row) && !xColumn->isMasked(row) )
-		gsl_histogram_increment(h,xColumn->valueAt(row));
+	Q_UNUSED(widget);
+	if (!isVisible())
+		return;
+
+// 	QTime timer;
+// 	timer.start();
+	painter->setPen(Qt::NoPen);
+	painter->setBrush(Qt::NoBrush);
+	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+
+// TODO: draw directly
+	draw(painter);
+// or use pixmap for double buffering
+// 	painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap);
+// 	qDebug() << "Paint the pixmap: " << timer.elapsed() << "ms";
+
+	if (m_hovered && !isSelected() && !m_printing){
+// 		timer.start();
+		if (m_hoverEffectImageIsDirty) {
+			QPixmap pix = m_pixmap;
+			pix.fill(q->hoveredPen.color());
+			pix.setAlphaChannel(m_pixmap.alphaChannel());
+			m_hoverEffectImage = blurred(pix.toImage(), m_pixmap.rect(), 5);
+			m_hoverEffectImageIsDirty = false;
+		}
+
+		painter->setOpacity(q->hoveredOpacity*2);
+		painter->drawImage(boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
+// 		qDebug() << "Paint hovering effect: " << timer.elapsed() << "ms";
+		return;
 	}
-	
-	//checking height of each column 
-	for(int i=0;i < 10; ++i) {
-		qDebug() << gsl_histogram_get(h,i);
+
+	if (isSelected() && !m_printing){
+// 		timer.start();
+		if (m_selectionEffectImageIsDirty) {
+			QPixmap pix = m_pixmap;
+			pix.fill(q->selectedPen.color());
+			pix.setAlphaChannel(m_pixmap.alphaChannel());
+			m_selectionEffectImage = blurred(pix.toImage(), m_pixmap.rect(), 5,false);
+			m_selectionEffectImageIsDirty = false;
+		}
+
+		painter->setOpacity(q->selectedOpacity*2);
+		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
+// 		qDebug() << "Paint selection effect: " << timer.elapsed() << "ms";
+		return;
 	}
-	double width = (xAxisMax-xAxisMin)/10;
-	
-	for(int i=0;i < 10; ++i) {
-        tempPoint.setX(xAxisMin);
-        tempPoint.setY(0.0);
-       
-        tempPoint1.setX(xAxisMin);
-        tempPoint1.setY(gsl_histogram_get(h,i));
-       
-        lines.append(QLineF(tempPoint, tempPoint1));
-       
-        tempPoint.setX(xAxisMin);
-        tempPoint.setY(gsl_histogram_get(h,i));
-       
-        tempPoint1.setX(xAxisMin+width);
-        tempPoint1.setY(gsl_histogram_get(h,i));
-       
-        lines.append(QLineF(tempPoint,tempPoint1));
-       
-        tempPoint.setX(xAxisMin+width);
-        tempPoint.setY(gsl_histogram_get(h,i));
-       
-        tempPoint1.setX(xAxisMin+width);
-        tempPoint1.setY(0.0);
-       
-        lines.append(QLineF(tempPoint, tempPoint1));
-		xAxisMin+= width;
-    }
-   
-    const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
-    const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
-    lines = cSystem->mapLogicalToScene(lines);
-   
-    foreach (const QLineF& line, lines){
-        LinePath.moveTo(line.p1());
-        LinePath.lineTo(line.p2());
-    }
-   
-    QPen linePen;
-   
-    linePen.setStyle( Qt::SolidLine );
-    linePen.setColor( QColor(Qt::black) );
-    linePen.setWidthF( Worksheet::convertToSceneUnits(1.0, Worksheet::Point) );
-   
-   // prepareGeometryChange(); 
-    curveShape = QPainterPath();
-    curveShape.addPath(WorksheetElement::shapeFromPath(LinePath, linePen));
-    boundingRectangle = curveShape.boundingRect();
-   
-   
-    QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
-    if (boundingRectangle.width()==0 || boundingRectangle.width()==0) {
-        m_pixmap = pixmap;
-        m_hoverEffectImageIsDirty = true;
-        m_selectionEffectImageIsDirty = true;
-        return;
-    }
-    pixmap.fill(Qt::transparent);
-    QPainter temp_painter(&pixmap);
-    temp_painter.setRenderHint(QPainter::Antialiasing, true);
-    temp_painter.translate(-boundingRectangle.topLeft());
- 
-    temp_painter.setOpacity(1.0);
-    temp_painter.setPen(linePen);
-    temp_painter.setBrush(Qt::NoBrush);
-    temp_painter.drawPath(LinePath);
-       
-    temp_painter.end();
- 
-    m_pixmap = pixmap;
-   
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(Qt::NoBrush);
-    painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
-   
-    draw(painter);
-   
-    QPixmap pix = m_pixmap;
-    m_selectionEffectImage = blurred(pix.toImage(), m_pixmap.rect(), 5.0, true);
-   
-    painter->setOpacity(1.0*2);
-    painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
-   
-    return;
-  //ends my logic
 }
 
 /*!

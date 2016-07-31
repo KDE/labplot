@@ -89,7 +89,9 @@ private slots:
 	void xColumnChanged(const QModelIndex&);
 	void visibilityChanged(bool);
 	//Histogram-types
-	//void histogramTypeChanged(int);
+	void histogramTypeChanged(int);
+	//bins setting
+	void binsOptionChanged(int);
 
 	//Values-Tab
 	void valuesTypeChanged(int);

@@ -412,6 +412,7 @@ void HistogramDock::initGeneralTab(){
 	//show the properties of the first curve
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 	//bins option
+	uiGeneralTab.cbBins->clear();
 	uiGeneralTab.cbBins->addItem(i18n("By Number"));
 	uiGeneralTab.cbBins->addItem(i18n("By width"));
 	uiGeneralTab.cbBins->addItem(i18n("Square-root rule"));
@@ -420,6 +421,7 @@ void HistogramDock::initGeneralTab(){
 	
 	//connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
 	//types options
+	uiGeneralTab.cbHistogramType->clear();
 	uiGeneralTab.cbHistogramType->addItem(i18n("Ordinary Histogram"));
 	uiGeneralTab.cbHistogramType->addItem(i18n("Cummulative Histogram"));
 	uiGeneralTab.cbHistogramType->addItem(i18n("AvgShifted Histogram"));
@@ -479,7 +481,14 @@ void HistogramDock::curveValuesColorChanged(QColor color) {
 	m_initializing = false;
 }
 //Values-tab
+void HistogramDock::binsOptionChanged(int index){
+	Histogram::BinsOption binOption = Histogram::BinsOption(index);
+	if(binOption==Histogram::Number)
+	{
 
+	}
+
+}
 /*!
   called when the type of the values (none, x, y, (x,y) etc.) was changed.
 */
@@ -936,11 +945,17 @@ void HistogramDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
+	connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
 
 }
 
+void HistogramDock::histogramTypeChanged(int index) {
+	Histogram::TypeHistogram histogramType = Histogram::TypeHistogram(index);
+	m_curve->setHistrogramType(histogramType);
+}
+
 void HistogramDock::xColumnChanged(const QModelIndex& index) {
-	
+
 	if (m_initializing)
 		return;
 

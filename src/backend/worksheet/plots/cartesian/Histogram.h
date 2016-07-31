@@ -42,10 +42,11 @@ class Histogram: public WorksheetElement {
 	Q_OBJECT
 
 	public:
+		enum BinsOption {Number,Width,SquareRoot,RiceRule,SturgisRule};
 		enum ValuesType {NoValues, ValuesX, ValuesY, ValuesXY, ValuesXYBracketed, ValuesCustomColumn};
 		enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
 		enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
-		
+		enum TypeHistogram {Ordinary,Cummulative, AvgShift};
 		explicit Histogram(const QString &name);
 		virtual ~Histogram();
 
@@ -92,6 +93,8 @@ class Histogram: public WorksheetElement {
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool on);
 		void suppressRetransform(bool);
+		double getYMaximum() const;
+		void setHistrogramType(Histogram::TypeHistogram);
 
 		typedef WorksheetElement BaseClass;
 		typedef HistogramPrivate Private;
@@ -115,7 +118,6 @@ class Histogram: public WorksheetElement {
     	Q_DECLARE_PRIVATE(Histogram)
 		void init();
 		void initActions();
-
 		QAction* visibilityAction;
 
 	signals:

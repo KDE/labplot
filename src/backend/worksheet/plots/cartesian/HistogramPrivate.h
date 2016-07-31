@@ -30,6 +30,7 @@
 #define HISTOGRAMPRIVATE_H
 
 #include <vector>
+#include <gsl_histogram.h>
 
 class HistogramPrivate: public QGraphicsItem {
   public:
@@ -60,7 +61,9 @@ class HistogramPrivate: public QGraphicsItem {
 		void drawFilling(QPainter*);
 		void draw(QPainter*);
 		void updatePixmap();
+		double getYMaximum();
 		bool autoScaleX, autoScaleY;
+		Histogram::TypeHistogram histogramType;
 
 		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 
@@ -100,6 +103,7 @@ class HistogramPrivate: public QGraphicsItem {
 		qreal fillingOpacity;
 
 		QPainterPath linePath;
+		long long int bins;
 		QPainterPath valuesPath;
 		QRectF boundingRectangle;
 		QPainterPath curveShape;
@@ -125,6 +129,7 @@ class HistogramPrivate: public QGraphicsItem {
 		
 
 	private:
+		gsl_histogram * histogram;
         void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
 		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
