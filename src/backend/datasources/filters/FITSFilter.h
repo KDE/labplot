@@ -74,6 +74,8 @@ class FITSFilter : public AbstractFileFilter {
         KeywordUpdate updates;
     };  
 
+    int imagesCount(const QString& fileName);
+    int tablesCount(const QString& fileName);
     void updateKeywords(const QString& fileName, const QList<Keyword>& originals, const QVector<Keyword>& updates);
     void addNewKeyword(const QString& filename, const QList<Keyword> &keywords);
     void addKeywordUnit(const QString& fileName, const QList<Keyword> &keywords);

@@ -49,7 +49,8 @@ public:
     void deleteKeyword(const QString &fileName, const QList<FITSFilter::Keyword>& keywords);
     void removeExtensions(const QStringList& extensions);
     const QString valueOf(const QString &fileName, const char* key);
-
+    int imagesCount(const QString& fileName) ;
+    int tablesCount(const QString& fileName) ;
     QList<FITSFilter::Keyword> chduKeywords(const QString &fileName);
     void parseHeader(const QString& fileName, QTableWidget* headerEditTable,
                      bool readKeys = true,

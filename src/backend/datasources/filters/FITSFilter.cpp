@@ -248,6 +248,15 @@ void FITSFilter::setExportTo(const int exportTo) {
     d->exportTo = exportTo;
 }
 
+int FITSFilter::imagesCount(const QString &fileName) {
+    return d->imagesCount(fileName);
+}
+
+int FITSFilter::tablesCount(const QString &fileName) {
+    return d->tablesCount(fileName);
+}
+
+
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
@@ -654,7 +663,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 
 void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *dataSource) {
 #ifdef HAVE_FITS
-    if (!(fileName.right(4) == QLatin1String("fits"))) {
+    if (!fileName.endsWith(QLatin1String(".fits"))) {
         return;
     }
     int status = 0;
@@ -1633,6 +1642,14 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
     Q_UNUSED(tw)
     Q_UNUSED(checkPrimary)
 #endif
+}
+
+int FITSFilterPrivate::imagesCount(const QString &fileName)  {
+    return extensionNames(fileName).values(QLatin1String("IMAGES")).size();
+}
+
+int FITSFilterPrivate::tablesCount(const QString &fileName) {
+    return extensionNames(fileName).values(QLatin1String("TABLES")).size();
 }
 
 /*!
