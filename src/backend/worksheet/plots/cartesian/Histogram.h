@@ -46,7 +46,7 @@ class Histogram: public WorksheetElement {
 		enum ValuesType {NoValues, ValuesX, ValuesY, ValuesXY, ValuesXYBracketed, ValuesCustomColumn};
 		enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
 		enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
-		enum TypeHistogram {Ordinary,Cummulative, AvgShift};
+		enum HistogramType {Ordinary,Cummulative, AvgShift};
 		explicit Histogram(const QString &name);
 		virtual ~Histogram();
 
@@ -94,7 +94,8 @@ class Histogram: public WorksheetElement {
 		virtual void setPrinting(bool on);
 		void suppressRetransform(bool);
 		double getYMaximum() const;
-		void setHistrogramType(Histogram::TypeHistogram);
+		void setHistrogramType(Histogram::HistogramType);
+		void setbinsOption(Histogram::BinsOption);
 
 		typedef WorksheetElement BaseClass;
 		typedef HistogramPrivate Private;

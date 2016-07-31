@@ -63,7 +63,8 @@ class HistogramPrivate: public QGraphicsItem {
 		void updatePixmap();
 		double getYMaximum();
 		bool autoScaleX, autoScaleY;
-		Histogram::TypeHistogram histogramType;
+		Histogram::HistogramType histogramType;
+		Histogram::BinsOption binsOption;
 
 		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 
@@ -103,7 +104,7 @@ class HistogramPrivate: public QGraphicsItem {
 		qreal fillingOpacity;
 
 		QPainterPath linePath;
-		long long int bins;
+		//long long int bins;
 		QPainterPath valuesPath;
 		QRectF boundingRectangle;
 		QPainterPath curveShape;
@@ -130,6 +131,9 @@ class HistogramPrivate: public QGraphicsItem {
 
 	private:
 		gsl_histogram * histogram;
+		size_t bins;
+		int binValue=10;
+		
         void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
 		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);

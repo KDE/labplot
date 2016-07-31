@@ -107,7 +107,7 @@ HistogramDock::HistogramDock(QWidget *parent): QWidget(parent),
 	connect( ui.cbFillingColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingColorStyleChanged(int)) );
 	connect( ui.cbFillingImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingImageStyleChanged(int)) );
 	connect( ui.cbFillingBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingBrushStyleChanged(int)) );
-	connect(ui.bFillingOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
+	connect( ui.bFillingOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
 	connect( ui.kleFillingFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
 	connect( ui.kleFillingFileName, SIGNAL(clearButtonClicked()), this, SLOT(fileNameChanged()) );
 	connect( ui.kcbFillingFirstColor, SIGNAL(changed(QColor)), this, SLOT(fillingFirstColorChanged(QColor)) );
@@ -480,15 +480,6 @@ void HistogramDock::curveValuesColorChanged(QColor color) {
   	ui.kcbValuesColor->setColor(color);
 	m_initializing = false;
 }
-//Values-tab
-void HistogramDock::binsOptionChanged(int index){
-	Histogram::BinsOption binOption = Histogram::BinsOption(index);
-	if(binOption==Histogram::Number)
-	{
-
-	}
-
-}
 /*!
   called when the type of the values (none, x, y, (x,y) etc.) was changed.
 */
@@ -671,8 +662,8 @@ void HistogramDock::curveFillingOpacityChanged(float opacity){
 void HistogramDock::initTabs() {
 	//if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size()==1){
-		/*this->setModelIndexFromColumn(cbValuesColumn, m_curve->valuesColumn());
-	*/}else {
+		this->setModelIndexFromColumn(cbValuesColumn, m_curve->valuesColumn());
+	}else {
 		cbValuesColumn->setCurrentModelIndex(QModelIndex());
 	}
 
@@ -946,12 +937,17 @@ void HistogramDock::setupGeneral() {
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
 	connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
-
+	connect( uiGeneralTab.cbBins, SIGNAL(currentIndexChanged(int)), this, SLOT(binsOptionChanged(int)) );
 }
 
 void HistogramDock::histogramTypeChanged(int index) {
-	Histogram::TypeHistogram histogramType = Histogram::TypeHistogram(index);
+	Histogram::HistogramType histogramType = Histogram::HistogramType(index);
 	m_curve->setHistrogramType(histogramType);
+}
+
+void HistogramDock::binsOptionChanged(int index){
+	Histogram::BinsOption binsOption = Histogram::BinsOption(index);
+	m_curve->setbinsOption(binsOption);
 }
 
 void HistogramDock::xColumnChanged(const QModelIndex& index) {

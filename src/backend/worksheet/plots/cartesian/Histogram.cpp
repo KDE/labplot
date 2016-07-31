@@ -89,7 +89,8 @@ void Histogram::init(){
 
 	d->xColumn = NULL;
 
-	d->histogramType = (Histogram::TypeHistogram) group.readEntry("histogramType", (int)Histogram::Ordinary);
+	d->histogramType = (Histogram::HistogramType) group.readEntry("histogramType", (int)Histogram::Ordinary);
+	d->binsOption = (Histogram::BinsOption) group.readEntry("binOption", (int)Histogram::Number);
 	d->lineSkipGaps = group.readEntry("SkipLineGaps", false);
 	d->lineInterpolationPointsCount = group.readEntry("LineInterpolationPointsCount", 1);
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine) );
@@ -163,8 +164,12 @@ void Histogram::setPrinting(bool on) {
 	d->m_printing = on;
 }
 
-void Histogram::setHistrogramType(Histogram::TypeHistogram histogramType) {
+void Histogram::setHistrogramType(Histogram::HistogramType histogramType) {
 	d_ptr->histogramType = histogramType;
+}
+
+void Histogram::setbinsOption(Histogram::BinsOption binsOption) {
+	d_ptr->binsOption = binsOption;
 }
 
 //##############################################################################
@@ -548,8 +553,20 @@ void HistogramPrivate::updateLines(){
 
 	double xAxisMin= xColumn->minimum();
 	double xAxisMax= xColumn->maximum();
-
-	bins = 10; //temprary
+	switch (binsOption) {
+		case Histogram::Number:
+			bins = (size_t)binValue;
+			break;
+		case Histogram::RiceRule:
+			bins = (size_t)2*cbrt(binValue);
+			break;
+		case Histogram::Width:
+			bins = (size_t) (xAxisMax-xAxisMin)/binValue;
+			break;
+		case Histogram::SturgisRule:
+			bins =(size_t) 1 + 3.33*log(binValue);
+			break;	
+	}
 
 	double width = (xAxisMax-xAxisMin)/bins;
 
@@ -614,7 +631,7 @@ void HistogramPrivate::updateLines(){
 		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 		  lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
-	
+
 	//map the lines to scene coordinates
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
 	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
