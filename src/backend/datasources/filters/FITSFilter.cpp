@@ -358,8 +358,10 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
             j = startColumn;
         }
 
+        const int jstart = j;
+
         if (!noDataSource) {
-            dataPointers.reserve(actualCols);
+            dataPointers.reserve(actualCols - j);
             columnOffset = dataSource->create(dataPointers, importMode, lines - i, actualCols - j);
         }
         int ii = 0;
@@ -372,11 +374,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                     dataString << QString::number(data[i*naxes[0] +j]) << ws;
                 }
             }
-            if (startColumn != 1) {
-                j = startColumn;
-            } else {
-                j = 0;
-            }
+            j = jstart;
             ii++;
             if (noDataSource) {
                 dataString << nl;

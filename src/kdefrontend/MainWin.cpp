@@ -1513,6 +1513,8 @@ void MainWin::editFitsFileDialog() {
     FITSHeaderEditDialog* editDialog = new FITSHeaderEditDialog(this);
     if (editDialog->exec() == KDialog::Accepted) {
     }
+
+    delete editDialog;
 }
 
 /*!
