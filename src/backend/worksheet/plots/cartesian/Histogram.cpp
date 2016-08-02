@@ -439,8 +439,25 @@ QRectF HistogramPrivate::boundingRect() const {
 }
 double HistogramPrivate::getYMaximum() {
 	if (histogram){
-		size_t maxYAddes= gsl_histogram_max_bin(histogram);
-		return gsl_histogram_get(histogram, maxYAddes);
+		double yMaxRange=0.0;
+		switch(histogramType) {
+			case Histogram::Ordinary:
+			{
+				size_t maxYAddes= gsl_histogram_max_bin(histogram);
+				yMaxRange = gsl_histogram_get(histogram, maxYAddes);
+				break;
+			}
+			case Histogram::Cummulative:
+			{
+				yMaxRange = xColumn->rowCount();
+				break;
+			}
+			case Histogram::AvgShift:
+			{
+				//TODO
+			}
+		}
+		return yMaxRange;
 	}
 	return -INFINITY;
 }
@@ -573,57 +590,103 @@ void HistogramPrivate::updateLines(){
 	histogram = gsl_histogram_alloc (bins); // demo- number of bins
 	gsl_histogram_set_ranges_uniform (histogram, xAxisMin,xAxisMax+1);
 
-	for (int row = startRow; row <= endRow; row++ ){
-		if ( xColumn->isValid(row) && !xColumn->isMasked(row) )
-			gsl_histogram_increment(histogram,xColumn->valueAt(row));
-	}
-
 	//checking height of each column
 	/*for(int i=0;i < bins; ++i) {
 		qDebug() <<i<< " height "<< gsl_histogram_get(histogram,i);
 	}
 	*/
 	switch(histogramType) {
-		case Histogram::Ordinary:
-	for(int i=0;i < bins; ++i) {
-		tempPoint.setX(xAxisMin);
-		tempPoint.setY(0.0);
+		case Histogram::Ordinary: {
+		for (int row = startRow; row <= endRow; row++ ){
+			if ( xColumn->isValid(row) && !xColumn->isMasked(row) )
+				gsl_histogram_increment(histogram,xColumn->valueAt(row));
+		}
+		for(int i=0;i < bins; ++i) {
+			tempPoint.setX(xAxisMin);
+			tempPoint.setY(0.0);
 
-		tempPoint1.setX(xAxisMin);
-		tempPoint1.setY(gsl_histogram_get(histogram,i));
+			tempPoint1.setX(xAxisMin);
+			tempPoint1.setY(gsl_histogram_get(histogram,i));
 
-		lines.append(QLineF(tempPoint, tempPoint1));
+			lines.append(QLineF(tempPoint, tempPoint1));
 
-		tempPoint.setX(xAxisMin);
-		tempPoint.setY(gsl_histogram_get(histogram,i));
+			tempPoint.setX(xAxisMin);
+			tempPoint.setY(gsl_histogram_get(histogram,i));
 
-		tempPoint1.setX(xAxisMin+width);
-		tempPoint1.setY(gsl_histogram_get(histogram,i));
+			tempPoint1.setX(xAxisMin+width);
+			tempPoint1.setY(gsl_histogram_get(histogram,i));
 
-		lines.append(QLineF(tempPoint,tempPoint1));
+			lines.append(QLineF(tempPoint,tempPoint1));
 
-		tempPoint.setX(xAxisMin+width);
-		tempPoint.setY(gsl_histogram_get(histogram,i));
+			tempPoint.setX(xAxisMin+width);
+			tempPoint.setY(gsl_histogram_get(histogram,i));
 
-		tempPoint1.setX(xAxisMin+width);
-		tempPoint1.setY(0.0);
+			tempPoint1.setX(xAxisMin+width);
+			tempPoint1.setY(0.0);
 
-		lines.append(QLineF(tempPoint, tempPoint1));
+			lines.append(QLineF(tempPoint, tempPoint1));
 
-		tempPoint.setX(xAxisMin+width);
-		tempPoint.setY(0.0);
+			tempPoint.setX(xAxisMin+width);
+			tempPoint.setY(0.0);
+		
+			tempPoint1.setX(xAxisMin);
+			tempPoint1.setY(0.0);
 
-		tempPoint1.setX(xAxisMin);
-		tempPoint1.setY(0.0);
+			lines.append(QLineF(tempPoint, tempPoint1));
+			xAxisMin+= width;
+			}
+		break;
+		}
+		case Histogram::Cummulative: {
+		double point =0.0;
+		for (int row = startRow; row <= endRow; row++ ){
+			if ( xColumn->isValid(row) && !xColumn->isMasked(row))
+				{ 
+					gsl_histogram_increment(histogram,xColumn->valueAt(row));
+				}
+			}
+			for(int i=0;i < bins; ++i) {
+				point+= gsl_histogram_get(histogram,i);
+				tempPoint.setX(xAxisMin);
+				tempPoint.setY(0.0);
 
-		lines.append(QLineF(tempPoint, tempPoint1));
-		xAxisMin+= width;
-	}
-	break;
-		case Histogram::Cummulative:
+				tempPoint1.setX(xAxisMin);
+				tempPoint1.setY(point);
+
+				lines.append(QLineF(tempPoint, tempPoint1));
+
+				tempPoint.setX(xAxisMin);
+				tempPoint.setY(point);
+
+				tempPoint1.setX(xAxisMin+width);
+				tempPoint1.setY(point);
+
+				lines.append(QLineF(tempPoint,tempPoint1));
+
+				tempPoint.setX(xAxisMin+width);
+				tempPoint.setY(point);
+
+				tempPoint1.setX(xAxisMin+width);
+				tempPoint1.setY(0.0);
+
+				lines.append(QLineF(tempPoint, tempPoint1));
+
+				tempPoint.setX(xAxisMin+width);
+				tempPoint.setY(0.0);
+
+				tempPoint1.setX(xAxisMin);
+				tempPoint1.setY(0.0);
+
+				lines.append(QLineF(tempPoint, tempPoint1));
+				xAxisMin+= width;
+			}		
 			break;
+		}
 		case Histogram::AvgShift:
+		{
+			//TODO
 			break;
+		}
 	}
 
 	//calculate the lines connecting the data points
