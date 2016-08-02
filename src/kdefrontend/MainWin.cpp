@@ -1508,10 +1508,13 @@ void MainWin::exportDialog() {
         statusBar()->showMessage(i18n("%1 exported", part->name()));
     }
 }
-//TODO
+
 void MainWin::editFitsFileDialog() {
     FITSHeaderEditDialog* editDialog = new FITSHeaderEditDialog(this);
     if (editDialog->exec() == KDialog::Accepted) {
+        if (editDialog->saved()) {
+            statusBar()->showMessage(i18n("FITS files saved"));
+        }
     }
 
     delete editDialog;

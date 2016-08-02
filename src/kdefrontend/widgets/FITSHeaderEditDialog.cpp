@@ -33,7 +33,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
  * \since 2.2.0
  * \ingroup widgets
  */
-FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget *parent) : KDialog(parent) {
+FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget *parent) : KDialog(parent), m_saved(false) {
     QWidget* mainWidget = new QWidget(this);
     QVBoxLayout* vLayout = new QVBoxLayout(mainWidget);
     vLayout->setSpacing(0);
@@ -60,5 +60,9 @@ FITSHeaderEditDialog::~FITSHeaderEditDialog() {
  * \brief This slot is triggered when the Save button was clicked in the ui.
  */
 void FITSHeaderEditDialog::save() {
-    m_HeaderEditWidget->save();
+    m_saved = m_HeaderEditWidget->save();
+}
+
+bool FITSHeaderEditDialog::saved() const {
+    return m_saved;
 }

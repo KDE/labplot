@@ -79,7 +79,7 @@ private:
     QList<QString> mandatoryKeywords() const;
     bool eventFilter(QObject*, QEvent*);
 public slots:
-    void save();
+    bool save();
 private slots:
     void openFile();
 

@@ -1221,9 +1221,7 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName,
         if (keywordUpdate.keyUpdated &&
                 keywordUpdate.valueUpdated &&
                 keywordUpdate.commentUpdated) {
-            if (updatedKeyword.key.isEmpty() &&
-                    updatedKeyword.value.isEmpty() &&
-                    updatedKeyword.comment.isEmpty()) {
+            if (updatedKeyword.isEmpty()) {
                 if (fits_delete_key(fitsFile, originalKeyword.key.toLatin1(), &status)) {
                     printError(status);
                     status = 0;

@@ -38,10 +38,10 @@ class FITSHeaderEditDialog : public KDialog {
 public:
     explicit FITSHeaderEditDialog( QWidget *parent = 0);
     ~FITSHeaderEditDialog();
-
+    bool saved() const;
 private:
     FITSHeaderEditWidget* m_HeaderEditWidget;
-
+    bool m_saved;
 private slots:
     void save();
 };

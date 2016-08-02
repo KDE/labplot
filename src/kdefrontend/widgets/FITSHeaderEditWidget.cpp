@@ -177,24 +177,42 @@ void FITSHeaderEditWidget::openFile() {
     RESET_CURSOR;
 }
 
-void FITSHeaderEditWidget::save() {
+bool FITSHeaderEditWidget::save() {
+    bool saved = false;
     foreach (const QString& fileName, m_extensionDatas.keys()) {
         if (m_extensionDatas[fileName].updates.newKeywords.size() > 0) {
             m_fitsFilter->addNewKeyword(fileName,m_extensionDatas[fileName].updates.newKeywords);
+            if (!saved) {
+                saved = true;
+            }
         }
         if (m_extensionDatas[fileName].updates.removedKeywords.size() > 0) {
             m_fitsFilter->deleteKeyword(fileName, m_extensionDatas[fileName].updates.removedKeywords);
+            if (!saved) {
+                saved = true;
+            }
+        }
+        if (!saved) {
+            foreach (const FITSFilter::Keyword& key, m_extensionDatas[fileName].updates.updatedKeywords) {
+                if (!key.isEmpty()) {
+                    saved = true;
+                    break;
+                }
+            }
         }
 
         m_fitsFilter->updateKeywords(fileName, m_extensionDatas[fileName].keywords, m_extensionDatas[fileName].updates.updatedKeywords);
-
         m_fitsFilter->addKeywordUnit(fileName, m_extensionDatas[fileName].keywords);
         m_fitsFilter->addKeywordUnit(fileName, m_extensionDatas[fileName].updates.newKeywords);
     }
 
     if (m_removedExtensions.size() > 0) {
         m_fitsFilter->removeExtensions(m_removedExtensions);
+        if (!saved) {
+            saved = true;
+        }
     }
+    return saved;
 }
 
 void FITSHeaderEditWidget::initActions() {

@@ -71,6 +71,10 @@ class FITSFilter : public AbstractFileFilter {
                     other.value == value &&
                      other.comment == comment;
         }
+        bool isEmpty() const {
+            return key.isEmpty() && value.isEmpty() && comment.isEmpty();
+        }
+
         KeywordUpdate updates;
     };  
 
