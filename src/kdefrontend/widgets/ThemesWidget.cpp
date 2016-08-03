@@ -48,16 +48,18 @@ ThemesWidget::ThemesWidget(QWidget *parent): QWidget(parent) {
 
 }
 
-void ThemesWidget::setupPreview(QStringList themeList) {
+void ThemesWidget::setupPreview(QStringList themeList, QString themeImgPath) {
 	QStandardItemModel* mContentItemModel = new QStandardItemModel(this);
-
+	QString tempPath = themeImgPath;
 	for (int i = 0; i < themeList.size(); ++i) {
 		QStandardItem* listItem = new QStandardItem();
-		QPixmap placeHolderMap;
+		tempPath = tempPath+"themes/"+QVariant(themeList.at(i)).toString()+".png";
+		QPixmap placeHolderMap(tempPath);
 		listItem->setIcon(QIcon(placeHolderMap));
 		listItem->setText(QVariant(themeList.at(i)).toString());
 		listItem->setData(QVariant(themeList.at(i)).toString(), Qt::UserRole);
 		mContentItemModel->appendRow(listItem);
+		tempPath = themeImgPath;
 	}
 
 	ui.lvThemes->setModel(mContentItemModel);
@@ -67,6 +69,7 @@ void ThemesWidget::setupPreview(QStringList themeList) {
 	ui.lvThemes->setViewMode(QListWidget::IconMode);
 	ui.lvThemes->setIconSize(QSize(200,200));
 	ui.lvThemes->setResizeMode(QListWidget::Adjust);
+	ui.lvThemes->setMaximumWidth(225);
 }
 
 void ThemesWidget::applyClicked() {

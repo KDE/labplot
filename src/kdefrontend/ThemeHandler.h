@@ -56,6 +56,7 @@ class ThemeHandler : public QWidget{
 		QLabel *lTheme;
 		QPushButton *pbLoadTheme;
 		QStringList m_themeList;
+		QString m_themeImgPath;
 
 	private slots:
 		void loadSelected(QString str);
@@ -64,7 +65,7 @@ class ThemeHandler : public QWidget{
 signals:
 		void loadThemeRequested(KConfig& config);
 		void info(const QString&);
-		void loadPreviewPanel(QStringList);
+		void loadPreviewPanel(QStringList,QString);
 };
 
 #endif

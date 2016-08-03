@@ -50,7 +50,7 @@ private slots:
 	void applyClicked();
 
 public slots:
-	void setupPreview(QStringList themeList);
+	void setupPreview(QStringList themeList, QString themeImgPath);
 };
 
 #endif //THEMESWIDGET_H

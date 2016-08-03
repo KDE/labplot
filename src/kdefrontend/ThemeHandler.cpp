@@ -74,8 +74,9 @@ ThemeHandler::ThemeHandler(QWidget *parent): QWidget(parent){
 
 	connect( pbLoadTheme, SIGNAL(clicked()), this, SLOT(showPanel()));
 
-	m_themeList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
+	m_themeList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*.txt");
 	pbLoadTheme->setEnabled(!m_themeList.empty());
+	m_themeImgPath = m_themeList.at(0).split("themes/").at(0);
 }
 
 void ThemeHandler::loadSelected(QString str) {
@@ -92,7 +93,7 @@ void ThemeHandler::loadSelected(QString str) {
 }
 
 QStringList ThemeHandler::themes() {
-	const QStringList pathList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
+	const QStringList pathList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*.txt");
 	QStringList themeList;
 	for(int i = 0; i < pathList.size(); ++i) {
 		QFileInfo fileinfo(pathList.at(i));
@@ -115,7 +116,7 @@ void ThemeHandler::showPanel() {
 	QMenu menu;
 	ThemesWidget themeWidget(&menu);
 
-	connect(this, SIGNAL(loadPreviewPanel(QStringList)), &themeWidget, SLOT(setupPreview(QStringList)));
+	connect(this, SIGNAL(loadPreviewPanel(QStringList,QString)), &themeWidget, SLOT(setupPreview(QStringList,QString)));
 	connect(&themeWidget, SIGNAL(themeSelected(QString)), this, SLOT(loadSelected(QString)));
 	connect(&themeWidget, SIGNAL(themeSelected(QString)), &menu, SLOT(close()));
 	connect(&themeWidget, SIGNAL(canceled()), &menu, SLOT(close()));
@@ -124,7 +125,7 @@ void ThemeHandler::showPanel() {
 	widgetAction->setDefaultWidget(&themeWidget);
 	menu.addAction(widgetAction);
 
-	emit(loadPreviewPanel(this->themes()));
+	emit(loadPreviewPanel(this->themes(),m_themeImgPath));
 	QPoint pos(-menu.sizeHint().width()+pbLoadTheme->width(),-menu.sizeHint().height());
 	menu.exec(pbLoadTheme->mapToGlobal(pos));
 
