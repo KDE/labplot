@@ -1018,18 +1018,6 @@ void CartesianPlot::scaleAutoX(){
 void CartesianPlot::scaleAutoY(){
 	Q_D(CartesianPlot);
 	
-	QList<const Histogram*> childrenHistogram = this->children<const Histogram>();
-	foreach(const Histogram* curve, childrenHistogram) {
-		if (!curve->isVisible())
-			continue;
-			
-		d->curvesYMin = 0.0;
-		if (curve->getYMaximum() != -INFINITY) {
-			if ( curve->getYMaximum() > d->curvesYMax)
-				d->curvesYMax = curve->getYMaximum(); 
-		}
-	}
-
 	//loop over all xy-curves and determine the maximum y-value
 	if (d->curvesYMinMaxIsDirty) {
 		d->curvesYMin = INFINITY;
@@ -1054,6 +1042,16 @@ void CartesianPlot::scaleAutoY(){
 		//qDebug() << "autoscaley Max Y, X: " << d->curvesYMax << d->curvesXMax;
 		//qDebug() << "autoscaley Min Y, X: " << d->curvesYMin << d->curvesXMin;
 		d->curvesYMinMaxIsDirty = false;
+	}
+	QList<const Histogram*> childrenHistogram = this->children<const Histogram>();
+	foreach(const Histogram* curve, childrenHistogram) {
+		if (!curve->isVisible())
+			continue;
+		d->curvesYMin = 0.0;
+		if (curve->getYMaximum() != -INFINITY) {
+			if ( curve->getYMaximum() > d->curvesYMax)
+				d->curvesYMax = curve->getYMaximum();
+		}
 	}
 
 	bool update = false;
@@ -1149,15 +1147,16 @@ void CartesianPlot::scaleAuto(){
 					d->curvesYMax = curve->yColumn()->maximum();
 			}
 		}
-		foreach(const Histogram* curve, childrenHistogram) {
-			if (!curve->isVisible())
-				continue;
-			
-			d->curvesYMin = 0.0;
-			if (curve->getYMaximum() != -INFINITY){
-				if ( curve->getYMaximum() > d->curvesYMax)
-					d->curvesYMax = curve->getYMaximum();
-			}
+	}
+
+	foreach(const Histogram* curve, childrenHistogram) {
+		if (!curve->isVisible())
+			continue;
+
+		d->curvesYMin = 0.0;
+		if (curve->getYMaximum() != -INFINITY){
+			if ( curve->getYMaximum() > d->curvesYMax)
+				d->curvesYMax = curve->getYMaximum();
 		}
 	}
 

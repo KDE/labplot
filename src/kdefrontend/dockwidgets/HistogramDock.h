@@ -92,6 +92,7 @@ private slots:
 	void histogramTypeChanged(int);
 	//bins setting
 	void binsOptionChanged(int);
+	void binValueChanged();
 
 	//Values-Tab
 	void valuesTypeChanged(int);

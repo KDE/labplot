@@ -95,6 +95,7 @@ class Histogram: public WorksheetElement {
 		void suppressRetransform(bool);
 		double getYMaximum() const;
 		void setHistrogramType(Histogram::HistogramType);
+		Histogram::HistogramType getHistrogramType();
 		void setbinsOption(Histogram::BinsOption);
 
 		typedef WorksheetElement BaseClass;

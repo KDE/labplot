@@ -166,6 +166,12 @@ void Histogram::setPrinting(bool on) {
 
 void Histogram::setHistrogramType(Histogram::HistogramType histogramType) {
 	d_ptr->histogramType = histogramType;
+	qDebug() << histogramType;
+	d_ptr->retransform();
+}
+
+Histogram::HistogramType Histogram::getHistrogramType() {
+	return d_ptr->histogramType;
 }
 
 void Histogram::setbinsOption(Histogram::BinsOption binsOption) {
@@ -434,7 +440,6 @@ QString HistogramPrivate::name() const {
 }
 
 QRectF HistogramPrivate::boundingRect() const {
-	return QRectF(0, 0, 100, 100);
 	return boundingRectangle;
 }
 double HistogramPrivate::getYMaximum() {
@@ -1277,7 +1282,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 			QPixmap pix = m_pixmap;
 			pix.fill(q->selectedPen.color());
 			pix.setAlphaChannel(m_pixmap.alphaChannel());
-			m_selectionEffectImage = blurred(pix.toImage(), m_pixmap.rect(), 5,false);
+			m_selectionEffectImage = blurred(pix.toImage(), m_pixmap.rect(), 5);
 			m_selectionEffectImageIsDirty = false;
 		}
 
@@ -1400,21 +1405,23 @@ void HistogramPrivate::drawFilling(QPainter* painter) {
 }
 
 void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	/*const Histogram* plot = dynamic_cast<const Histogram*>(q->parentAspect());
-	if (plot->mouseMode() == Histogram::SelectionMode && !isSelected()) {
+	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	qDebug() << plot->mouseMode();
+	if (plot->mouseMode() == CartesianPlot::SelectionMode && !isSelected()) {
 		m_hovered = true;
+		qDebug() << "hoverEnterEvent";
 		q->hovered();
 		update();
-	}*/
+	}
 }
 
 void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	/*const Histogram* plot = dynamic_cast<const Histogram*>(q->parentAspect());
-	if (plot->mouseMode() == Histogram::SelectionMode && m_hovered) {
+	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
+	if (plot->mouseMode() == CartesianPlot::SelectionMode && m_hovered) {
 		m_hovered = false;
 		q->unhovered();
 		update();
-	}*/
+	}
 }
 
 //##############################################################################

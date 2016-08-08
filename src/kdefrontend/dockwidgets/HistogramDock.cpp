@@ -408,24 +408,8 @@ void HistogramDock::initGeneralTab(){
 		uiGeneralTab.leName->setText("");
 		uiGeneralTab.leComment->setText("");
 	}
-
-	//show the properties of the first curve
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
-	//bins option
-	uiGeneralTab.cbBins->clear();
-	uiGeneralTab.cbBins->addItem(i18n("By Number"));
-	uiGeneralTab.cbBins->addItem(i18n("By width"));
-	uiGeneralTab.cbBins->addItem(i18n("Square-root rule"));
-	uiGeneralTab.cbBins->addItem(i18n("Rice rule"));
-	uiGeneralTab.cbBins->addItem(i18n("Sturgis rule"));
-	
-	//connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
-	//types options
-	uiGeneralTab.cbHistogramType->clear();
-	uiGeneralTab.cbHistogramType->addItem(i18n("Ordinary Histogram"));
-	uiGeneralTab.cbHistogramType->addItem(i18n("Cummulative Histogram"));
-	uiGeneralTab.cbHistogramType->addItem(i18n("AvgShifted Histogram"));
-	
+	uiGeneralTab.cbHistogramType->setCurrentIndex(m_curve->getHistrogramType());
 }
 
 //Values-Tab
@@ -931,6 +915,20 @@ void HistogramDock::setupGeneral() {
 	cbXColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbXColumn, 2, 2, 1, 1);
 
+	//show the properties of the first curve
+	//bins option
+	uiGeneralTab.cbBins->addItem(i18n("By Number"));
+	uiGeneralTab.cbBins->addItem(i18n("By width"));
+	uiGeneralTab.cbBins->addItem(i18n("Square-root rule"));
+	uiGeneralTab.cbBins->addItem(i18n("Rice rule"));
+	uiGeneralTab.cbBins->addItem(i18n("Sturgis rule"));
+
+	//connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
+	//types options
+	uiGeneralTab.cbHistogramType->addItem(i18n("Ordinary Histogram"));
+	uiGeneralTab.cbHistogramType->addItem(i18n("Cummulative Histogram"));
+	uiGeneralTab.cbHistogramType->addItem(i18n("AvgShifted Histogram"));
+
 	//General
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
@@ -938,11 +936,17 @@ void HistogramDock::setupGeneral() {
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
 	connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
 	connect( uiGeneralTab.cbBins, SIGNAL(currentIndexChanged(int)), this, SLOT(binsOptionChanged(int)) );
+	connect( uiGeneralTab.leBins, SIGNAL(returnPressed()), this, SLOT(binValueChanged()) );
+	
 }
 
 void HistogramDock::histogramTypeChanged(int index) {
 	Histogram::HistogramType histogramType = Histogram::HistogramType(index);
 	m_curve->setHistrogramType(histogramType);
+}
+
+void HistogramDock::binValueChanged() {
+	uiGeneralTab.leBins->text();
 }
 
 void HistogramDock::binsOptionChanged(int index){
