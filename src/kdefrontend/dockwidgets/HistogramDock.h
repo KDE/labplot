@@ -117,12 +117,14 @@ private slots:
 	void selectFile();
 	void fileNameChanged();
 	void fillingOpacityChanged(int);
+	void lineColorChanged(const QColor&);
 
 	//SLOTs for changes triggered in Histogram
 	//General-Tab
 	/*void curveDescriptionChanged(const AbstractAspect*);
-	void curveXColumnChanged(const AbstractColumn*);
-	void curveVisibilityChanged(bool);*/
+	void curveXColumnChanged(const AbstractColumn*);*/
+	void curveVisibilityChanged(bool);
+	void curveLinePenChanged(const QPen&);
 
 	//Values-Tab
 	void curveValuesTypeChanged(Histogram::ValuesType);

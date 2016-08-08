@@ -410,8 +410,14 @@ void HistogramDock::initGeneralTab(){
 	}
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 	uiGeneralTab.cbHistogramType->setCurrentIndex(m_curve->getHistrogramType());
+	connect(m_curve, SIGNAL(linePenChanged(QPen)), this, SLOT(curveLinePenChanged(QPen)));
+	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
 }
-
+void HistogramDock::curveLinePenChanged(const QPen& pen) {
+	m_initializing = true;
+	uiGeneralTab.kcbLineColor->setColor( pen.color());
+	m_initializing = false;
+}
 //Values-Tab
 void HistogramDock::curveValuesTypeChanged(Histogram::ValuesType type) {
 	m_initializing = true;
@@ -535,6 +541,12 @@ void HistogramDock::valuesColumnChanged(const QModelIndex& index){
 	curve->setValuesColumn(column);
   }
 }
+void HistogramDock::curveVisibilityChanged(bool on) {
+	m_initializing = true;
+	uiGeneralTab.chkVisible->setChecked(on);
+	m_initializing = false;
+}
+
 
 void HistogramDock::valuesPositionChanged(int index){
   if (m_initializing)
@@ -933,6 +945,7 @@ void HistogramDock::setupGeneral() {
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( uiGeneralTab.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
 	connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
 	connect( uiGeneralTab.cbBins, SIGNAL(currentIndexChanged(int)), this, SLOT(binsOptionChanged(int)) );
@@ -953,7 +966,21 @@ void HistogramDock::binsOptionChanged(int index){
 	Histogram::BinsOption binsOption = Histogram::BinsOption(index);
 	m_curve->setbinsOption(binsOption);
 }
+void HistogramDock::lineColorChanged(const QColor& color){
+  if (m_initializing)
+	return;
 
+	QPen pen;
+	foreach(Histogram* curve, m_curvesList){
+	pen=curve->linePen();
+	pen.setColor(color);
+	curve->setLinePen(pen);
+  }
+
+/*  m_initializing = true;
+  GuiTools::updatePenStyles(ui.cbLineStyle, color);
+  m_initializing = false;*/
+}
 void HistogramDock::xColumnChanged(const QModelIndex& index) {
 
 	if (m_initializing)

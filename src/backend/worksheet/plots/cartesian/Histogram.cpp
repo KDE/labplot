@@ -183,6 +183,7 @@ void Histogram::setbinsOption(Histogram::BinsOption binsOption) {
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, xColumn, xColumn)
 QString& Histogram::xColumnPath() const { return d_ptr->xColumnPath; }
+CLASS_SHARED_D_READER_IMPL(Histogram, QPen, linePen, linePen)
 
 //values
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesType, valuesType, valuesType)
@@ -235,7 +236,12 @@ void Histogram::setXColumn(const AbstractColumn* column) {
 		}
 	}
 }
-
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect)
+void Histogram::setLinePen(const QPen &pen) {
+	Q_D(Histogram);
+	if (pen != d->linePen)
+		exec(new HistogramSetLinePenCmd(d, pen, i18n("%1: set line style")));
+}
 //Values-Tab
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesType, Histogram::ValuesType, valuesType, updateValues)
 void Histogram::setValuesType(Histogram::ValuesType type) {
@@ -606,7 +612,7 @@ void HistogramPrivate::updateLines(){
 			if ( xColumn->isValid(row) && !xColumn->isMasked(row) )
 				gsl_histogram_increment(histogram,xColumn->valueAt(row));
 		}
-		for(int i=0;i < bins; ++i) {
+		for(size_t i=0;i < bins; ++i) {
 			tempPoint.setX(xAxisMin);
 			tempPoint.setY(0.0);
 
@@ -650,7 +656,7 @@ void HistogramPrivate::updateLines(){
 					gsl_histogram_increment(histogram,xColumn->valueAt(row));
 				}
 			}
-			for(int i=0;i < bins; ++i) {
+			for(size_t i=0;i < bins; ++i) {
 				point+= gsl_histogram_get(histogram,i);
 				tempPoint.setX(xAxisMin);
 				tempPoint.setY(0.0);

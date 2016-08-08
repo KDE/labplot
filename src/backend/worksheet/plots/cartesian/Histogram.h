@@ -70,6 +70,7 @@ class Histogram: public WorksheetElement {
 		BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
 		QString& valuesColumnPath() const;
+		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
 		BASIC_D_ACCESSOR_DECL(ValuesPosition, valuesPosition, ValuesPosition)
 		BASIC_D_ACCESSOR_DECL(qreal, valuesDistance, ValuesDistance)
 		BASIC_D_ACCESSOR_DECL(qreal, valuesRotationAngle, ValuesRotationAngle)
@@ -131,6 +132,7 @@ class Histogram: public WorksheetElement {
 
 		friend class HistogramSetXColumnCmd;
 		friend class HistogramSetYColumnCmd;
+		friend class HistogramSetLinePenCmd;
 		void xColumnChanged(const AbstractColumn*);
 		void yColumnChanged(const AbstractColumn*);
 
@@ -155,6 +157,8 @@ class Histogram: public WorksheetElement {
 		void valuesSuffixChanged(QString);
 		void valuesFontChanged(QFont);
 		void valuesColorChanged(QColor);
+
+		void linePenChanged(const QPen&);
 
 		//Filling
 		friend class HistogramSetFillingPositionCmd;
