@@ -2207,8 +2207,7 @@ bool Axis::load(XmlStreamReader* reader) {
 	return true;
 }
 
-void Axis::loadConfig(const KConfig& config)
-{
+void Axis::loadConfig(const KConfig& config) {
 	KConfigGroup group = config.group("Axis");
 
 	QPen p;
@@ -2252,4 +2251,43 @@ void Axis::loadConfig(const KConfig& config)
 	const QList<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
 	foreach(TextLabel *child, childElements)
 		child->loadConfig(config);
+}
+
+void Axis::saveConfig(const KConfig& config) {
+	KConfigGroup group = config.group("Axis");
+
+	// Tick label
+	group.writeEntry("LabelsFontColor",(QColor) this->labelsColor());
+	group.writeEntry("LabelsOpacity",this->labelsOpacity());
+
+	//Line
+	group.writeEntry("LineOpacity",this->lineOpacity());
+	group.writeEntry("LineColor", (QColor) this->linePen().color());
+	group.writeEntry("LineStyle",(int) this->linePen().style());
+	group.writeEntry("LineWidth", this->linePen().widthF());
+
+	//Major ticks
+	group.writeEntry("MajorGridOpacity", this->majorGridOpacity());
+	group.writeEntry("MajorGridColor",(QColor) this->majorGridPen().color());
+	group.writeEntry("MajorGridStyle",(int) this->majorGridPen().style());
+	group.writeEntry("MajorGridWidth", this->majorGridPen().widthF());
+	group.writeEntry("MajorTicksColor",(QColor)this->majorTicksPen().color());
+	group.writeEntry("MajorTicksLineStyle",(int) this->majorTicksPen().style());
+	group.writeEntry("MajorTicksWidth", this->majorTicksPen().widthF());
+	group.writeEntry("MajorTicksOpacity",this->majorTicksOpacity());
+	group.writeEntry("MajorTicksType",(int)this->majorTicksType());
+
+	//Minor ticks
+	group.writeEntry("MinorGridOpacity", this->minorGridOpacity());
+	group.writeEntry("MinorGridColor",(QColor) this->minorGridPen().color());
+	group.writeEntry("MinorGridStyle",(int) this->minorGridPen().style());
+	group.writeEntry("MinorGridWidth", this->minorGridPen().widthF());
+	group.writeEntry("MinorTicksColor",(QColor) this->minorTicksPen().color());
+	group.writeEntry("MinorTicksLineStyle",(int) this->minorTicksPen().style());
+	group.writeEntry("MinorTicksWidth", this->minorTicksPen().widthF());
+	group.writeEntry("MinorTicksOpacity",this->minorTicksOpacity());
+	group.writeEntry("MinorTicksType",(int)this->minorTicksType());
+
+	const QList<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
+	childElements.at(0)->saveConfig(config);
 }

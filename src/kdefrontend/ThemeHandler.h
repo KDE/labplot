@@ -57,13 +57,21 @@ class ThemeHandler : public QWidget{
 		QPushButton *pbLoadTheme;
 		QStringList m_themeList;
 		QString m_themeImgPath;
+		QPushButton *pbSaveTheme;
 
 	private slots:
 		void loadSelected(QString str);
 		void showPanel();
+		void saveMenu();
+		void saveNewSelected(const QString&);
+		void saveDefaults();
 
-signals:
+	public slots:
+		void saveThemeEnable(bool enable);
+
+	signals:
 		void loadThemeRequested(KConfig& config);
+		void saveThemeRequested(KConfig& config);
 		void info(const QString&);
 		void loadPreviewPanel(QStringList,QString);
 };

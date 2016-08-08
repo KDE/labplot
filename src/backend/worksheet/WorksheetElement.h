@@ -54,6 +54,7 @@ class WorksheetElement: public AbstractAspect {
 		virtual void setPrinting(bool) = 0;
 		virtual QMenu* createContextMenu();
 		virtual void loadConfig(const KConfig&);
+		virtual void saveConfig(const KConfig&);
 		static QPainterPath shapeFromPath(const QPainterPath&, const QPen&);
 
 	public slots:

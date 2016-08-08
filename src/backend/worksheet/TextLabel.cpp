@@ -774,18 +774,19 @@ bool TextLabel::load(XmlStreamReader* reader){
     return true;
 }
 
-void TextLabel::loadConfig(const KConfig& config)
-{
-	if(this->type()==0){
-		KConfigGroup group = config.group("CartesianPlotTitle");
-		this->setTeXFontColor(group.readEntry("TeXFontColor", (QColor) this->teXFontColor()));
-		this->teXFontColorChanged(group.readEntry("TeXFontColor", (QColor) this->teXFontColor()));
-		this->setTeXFontSize(group.readEntry("TeXFontSize", this->teXFontSize()));
-	}
-	else{
-		KConfigGroup group = config.group("AxisLabel");
-		this->setTeXFontColor(group.readEntry("TeXFontColor", (QColor) this->teXFontColor()));
-		this->setTeXFontSize(group.readEntry("TeXFontSize", this->teXFontSize()));
-	}
+void TextLabel::loadConfig(const KConfig& config) {
+
+	KConfigGroup group = config.group("Label");
+	this->setTeXFontColor(group.readEntry("TeXFontColor", (QColor) this->teXFontColor()));
+	this->teXFontColorChanged(group.readEntry("TeXFontColor", (QColor) this->teXFontColor()));
+	this->setTeXFontSize(group.readEntry("TeXFontSize", this->teXFontSize()));
+
+}
+
+void TextLabel::saveConfig(const KConfig& config) {
+
+	KConfigGroup group = config.group("Label");
+	group.writeEntry("TeXFontColor", (QColor) this->teXFontColor());
+	group.writeEntry("TeXFontSize", this->teXFontSize());
 
 }

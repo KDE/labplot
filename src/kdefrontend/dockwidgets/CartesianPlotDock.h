@@ -161,6 +161,7 @@ signals:
 public slots:
 	void load();
 	void loadTheme(KConfig& config);
+	void saveTheme(KConfig& config);
 
 };
 

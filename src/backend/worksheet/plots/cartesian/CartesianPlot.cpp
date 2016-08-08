@@ -2108,3 +2108,18 @@ void CartesianPlot::loadThemeConfig(KConfig& config) {
 	d->update(this->rect());
 	emit (themeLoaded());
 }
+
+void CartesianPlot::saveThemeConfig(KConfig &config) {
+
+	const QList<Axis*>& axisElements = children<Axis>(AbstractAspect::IncludeHidden);
+	const QList<PlotArea*>& plotAreaElements = children<PlotArea>(AbstractAspect::IncludeHidden);
+	const QList<TextLabel*>& textLabelElements = children<TextLabel>(AbstractAspect::IncludeHidden);
+	const QList<XYCurve*>& xyCurveElements = children<XYCurve>(AbstractAspect::IncludeHidden);
+
+	axisElements.at(0)->saveConfig(config);
+	plotAreaElements.at(0)->saveConfig(config);
+	textLabelElements.at(0)->saveConfig(config);
+
+	foreach(XYCurve *child, xyCurveElements)
+		child->saveConfig(config);
+}

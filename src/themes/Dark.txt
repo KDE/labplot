@@ -7,10 +7,8 @@ ThemePaletteColor4=199,152,191
 ThemePaletteColor5=133,214,91
 
 [Axis]
-LabelsFont=Serif,10,-1,5,50,0,0,0,0,0
 LabelsFontColor=128,128,128
 LabelsOpacity=1
-LabelsPosition=2
 LineColor=128,128,128
 LineOpacity=1
 LineStyle=1
@@ -34,20 +32,6 @@ MinorTicksOpacity=1
 MinorTicksType=0
 MinorTicksWidth=0.283465
 
-[AxisLabel]
-HorizontalAlignment=1
-OffsetX=7.05556
-OffsetY=7.05556
-PositionX=3
-PositionXValue=-11
-PositionY=3
-PositionYValue=636
-Rotation=0
-TeXFontColor=128,128,128
-TeXFontSize=12
-TeXUsed=false
-VerticalAlignment=1
-
 [CartesianPlot]
 BackgroundBrushStyle=1
 BackgroundColorStyle=0
@@ -62,17 +46,9 @@ BorderOpacity=1
 BorderStyle=0
 BorderWidth=3.52778
 
-[CartesianPlotTitle]
-HorizontalAlignment=2
-PositionX=0
-PositionXValue=-702
-PositionY=0
-PositionYValue=-702
-Rotation=0
+[Label]
 TeXFontColor=0,128,128
 TeXFontSize=12
-TeXUsed=false
-VerticalAlignment=2
 
 [XYCurve]
 DropLineColor=0,0,0
@@ -88,37 +64,22 @@ ErrorBarsType=0
 ErrorBarsWidth=0
 FillingBrushStyle=1
 FillingColorStyle=2
-FillingFileName=
-FillingFirstColor=255,255,255
 FillingImageStyle=1
 FillingOpacity=0.4
 FillingPosition=2
 FillingSecondColor=0,0,0
 FillingType=0
-LineColor=0,0,0
 LineInterpolationPointsCount=1
 LineOpacity=1
 LineSkipGaps=false
 LineStyle=1
 LineType=1
 LineWidth=3.52778
-SymbolBorderColor=0,0,0
-SymbolBorderStyle=1
-SymbolBorderWidth=0
-SymbolFillingColor=0,0,0
-SymbolFillingStyle=1
 SymbolOpacity=0
 SymbolRotation=0
 SymbolSize=10.5833
-SymbolStyle=none
 ValuesColor=0,0,0
-ValuesDistance=17.6389
 ValuesFont=Droid Sans,8,-1,5,50,0,0,0,0,0
 ValuesOpacity=1
-ValuesPosition=0
-ValuesPrefix=
 ValuesRotation=0
-ValuesSuffix=
 ValuesType=0
-XErrorType=0
-YErrorType=0

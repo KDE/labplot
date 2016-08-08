@@ -52,6 +52,7 @@ class PlotArea : public WorksheetElement{
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool) {};
 		virtual void loadConfig(const KConfig& config);
+		virtual void saveConfig(const KConfig& config);
 
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)

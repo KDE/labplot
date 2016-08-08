@@ -170,6 +170,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	ui.verticalLayout->addWidget(themeHandler);
 	connect(themeHandler, SIGNAL(loadThemeRequested(KConfig&)), this, SLOT(loadTheme(KConfig&)));
 	connect(m_plot, SIGNAL(themeLoaded()),this, SLOT(load()));
+	connect(themeHandler, SIGNAL(saveThemeRequested(KConfig&)), this, SLOT(saveTheme(KConfig&)));
+	//connect(this, SIGNAL(saveThemeEnable(bool)), themeHandler, SLOT(saveThemeEnable(bool)));
 
 	init();
 }
@@ -1344,8 +1346,13 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	config.sync();
 }
 
-void CartesianPlotDock::loadTheme(KConfig& config)
-{
+void CartesianPlotDock::loadTheme(KConfig& config) {
 	foreach(CartesianPlot *plot, m_plotList)
 		plot->loadThemeConfig(config);
+}
+
+void CartesianPlotDock::saveTheme(KConfig& config) {
+	if(m_plotList.empty()==false)
+		m_plotList.at(0)->saveThemeConfig(config);
+
 }

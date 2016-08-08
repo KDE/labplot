@@ -71,6 +71,7 @@ class Axis: public WorksheetElement {
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 		virtual void loadConfig(const KConfig& config);
+		virtual void saveConfig(const KConfig& config);
 
 		BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale)
 		BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation)

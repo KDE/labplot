@@ -78,6 +78,7 @@ class TextLabel : public WorksheetElement{
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
 		virtual void loadConfig(const KConfig& config);
+		virtual void saveConfig(const KConfig& config);
 
 		CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text);
 		BASIC_D_ACCESSOR_DECL(int, teXFontSize, TeXFontSize);

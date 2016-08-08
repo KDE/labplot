@@ -2453,8 +2453,7 @@ bool XYCurve::load(XmlStreamReader* reader) {
 }
 
 //Generating colors from 5-color theme palette
-void XYCurve::setColorPalette(const KConfig& config)
-{
+void XYCurve::setColorPalette(const KConfig& config) {
 	KConfigGroup group = config.group("Theme");
 
 	QList<QColor> color;
@@ -2486,13 +2485,13 @@ void XYCurve::setColorPalette(const KConfig& config)
 				c.setRed((int)(color.at(i).red()+((255-color.at(i).red())*fac[j-4])));
 				c.setGreen((int)(color.at(i).green()+((255-color.at(i).green())*fac[j-4])));
 				c.setBlue((int)(color.at(i).blue()+((255-color.at(i).blue())*fac[j-4])));
+				color.append(c);
 			}
 	}
 	m_themeColorPalette = color;
 }
 
-void XYCurve::loadConfig(const KConfig& config)
-{
+void XYCurve::loadConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
 
 	QPen p;
@@ -2533,19 +2532,79 @@ void XYCurve::loadConfig(const KConfig& config)
 	this->setLinePen(p);
 
 	//Symbol
-	//    p.setColor(group.readEntry("SymbolBorderColor",(QColor) this->symbolsPen().color()));
-	//    p.setStyle((Qt::PenStyle)group.readEntry("SymbolBorderStyle",(int) this->symbolsPen().style()));
-	//    p.setWidthF(group.readEntry("SymbolBorderWidth", this->symbolsPen().widthF()));
-	//    this->setSymbolsPen(p);
 	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", this->symbolsOpacity()));
 	this->setSymbolsRotationAngle(group.readEntry("SymbolRotation",(int) this->symbolsRotationAngle()));
 	this->setSymbolsSize(group.readEntry("SymbolSize", (int) this->symbolsSize()));
-	//    this->setSymbolsStyle(group.readEntry("SymbolStyle",(Symbol::Style) this->symbolsStyle()));
+
+	//Values
+	this->setValuesOpacity(group.readEntry("ValuesOpacity", this->valuesOpacity()));
+	this->setValuesRotationAngle(group.readEntry("ValuesRotation",(int) this->symbolsRotationAngle()));
+	this->setValuesColor(group.readEntry("ValuesColor", (QColor) this->valuesColor()));
+	this->setValuesFont(group.readEntry("ValuesFont", QFont()));
+	this->setValuesType((XYCurve::ValuesType)group.readEntry("ValuesType", (int) this->valuesType()));
 
 	int index = parentAspect()->indexOfChild<XYCurve>(this);
 	p.setColor(m_themeColorPalette.at(index));
 	this->setLinePen(p);
 	this->setFillingFirstColor(m_themeColorPalette.at(index));
 	this->setSymbolsPen(p);
+
+}
+
+void XYCurve::saveConfig(const KConfig& config) {
+	KConfigGroup group = config.group("XYCurve");
+
+	//Drop line
+	group.writeEntry("DropLineColor",(QColor) this->dropLinePen().color());
+	group.writeEntry("DropLineStyle",(int) this->dropLinePen().style());
+	group.writeEntry("DropLineWidth", this->dropLinePen().widthF());
+	group.writeEntry("DropLineOpacity",this->dropLineOpacity());
+	group.writeEntry("DropLineType", (int) this->dropLineType());
+
+	//Error Bars
+	group.writeEntry("ErrorBarsCapSize",this->errorBarsCapSize());
+	group.writeEntry("ErrorBarsOpacity",this->errorBarsOpacity());
+	group.writeEntry("ErrorBarsType",(int) this->errorBarsType());
+	group.writeEntry("ErrorBarsColor",(QColor) this->errorBarsPen().color());
+	group.writeEntry("ErrorBarsStyle",(int) this->errorBarsPen().style());
+	group.writeEntry("ErrorBarsWidth", this->errorBarsPen().widthF());
+
+	//Filling
+	group.writeEntry("FillingBrushStyle",(int) this->fillingBrushStyle());
+	group.writeEntry("FillingColorStyle",(int) this->fillingColorStyle());
+	group.writeEntry("FillingImageStyle",(int) this->fillingImageStyle());
+	group.writeEntry("FillingOpacity", this->fillingOpacity());
+	group.writeEntry("FillingPosition",(int) this->fillingPosition());
+	group.writeEntry("FillingSecondColor",(QColor) this->fillingSecondColor());
+	group.writeEntry("FillingType",(int) this->fillingType());
+
+	//Line
+	group.writeEntry("LineInterpolationPointsCount",(int) this->lineInterpolationPointsCount());
+	group.writeEntry("LineOpacity", this->lineOpacity());
+	group.writeEntry("LineSkipGaps",(bool) this->lineSkipGaps());
+	group.writeEntry("LineType",(int) this->lineType());
+	group.writeEntry("LineStyle",(int) this->linePen().style());
+	group.writeEntry("LineWidth", this->linePen().widthF());
+
+	//Symbol
+	group.writeEntry("SymbolOpacity", this->symbolsOpacity());
+	group.writeEntry("SymbolRotation",(int) this->symbolsRotationAngle());
+	group.writeEntry("SymbolSize", (int) this->symbolsSize());
+
+	//Values
+	group.writeEntry("ValuesOpacity", this->valuesOpacity());
+	group.writeEntry("ValuesRotation",(int) this->symbolsRotationAngle());
+	group.writeEntry("ValuesColor", (QColor) this->valuesColor());
+	group.writeEntry("ValuesFont", this->valuesFont());
+	group.writeEntry("ValuesType", (int) this->valuesType());
+
+	KConfigGroup themeGroup = config.group("Theme");
+	int index = parentAspect()->indexOfChild<XYCurve>(this);
+	if(index<5) {
+		for(int i = index; i<5; i++) {
+			QString s = "ThemePaletteColor" + QString::number(i+1);
+			themeGroup.writeEntry(s,(QColor) this->fillingFirstColor());
+		}
+	}
 
 }

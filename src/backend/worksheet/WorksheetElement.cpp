@@ -244,3 +244,8 @@ void WorksheetElement::loadConfig(const KConfig &)
 {
 
 }
+
+void WorksheetElement::saveConfig(const KConfig &)
+{
+
+}

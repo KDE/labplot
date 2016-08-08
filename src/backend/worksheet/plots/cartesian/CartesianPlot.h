@@ -170,6 +170,7 @@ class CartesianPlot:public AbstractPlot{
 		void shiftUpY();
 		void shiftDownY();
 		void loadThemeConfig(KConfig& config);
+		void saveThemeConfig(KConfig& config);
 
 	private slots:
 		void updateLegend();

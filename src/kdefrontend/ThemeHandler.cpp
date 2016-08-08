@@ -67,14 +67,21 @@ ThemeHandler::ThemeHandler(QWidget *parent): QWidget(parent){
 
 	pbLoadTheme = new QPushButton(this);
 	horizontalLayout->addWidget(pbLoadTheme);
-	pbLoadTheme->setText("Choose theme");
+	pbLoadTheme->setText("Apply theme");
+
+	pbSaveTheme = new QPushButton(this);
+	horizontalLayout->addWidget(pbSaveTheme);
+	pbSaveTheme->setText("Save theme");
+	this->saveThemeEnable(true);
 
 	horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 	horizontalLayout->addItem(horizontalSpacer2);
 
 	connect( pbLoadTheme, SIGNAL(clicked()), this, SLOT(showPanel()));
+	connect( pbSaveTheme, SIGNAL(clicked()), this, SLOT(saveMenu()));
 
 	m_themeList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*.txt");
+//	m_themeList =
 	pbLoadTheme->setEnabled(!m_themeList.empty());
 	m_themeImgPath = m_themeList.at(0).split("themes/").at(0);
 }
@@ -129,4 +136,48 @@ void ThemeHandler::showPanel() {
 	QPoint pos(-menu.sizeHint().width()+pbLoadTheme->width(),-menu.sizeHint().height());
 	menu.exec(pbLoadTheme->mapToGlobal(pos));
 
+}
+
+void ThemeHandler::saveMenu() {
+	KMenu menu;
+	menu.addTitle(i18n("Save as"));
+
+	// add editable action
+	QWidgetAction* widgetAction = new QWidgetAction(this);
+	QFrame* frame = new QFrame(this);
+	QHBoxLayout* layout = new QHBoxLayout(frame);
+
+	QLabel* label = new QLabel(i18n("Enter name:"), frame);
+	layout->addWidget(label);
+
+	KLineEdit* leFilename = new KLineEdit("", frame);
+	layout->addWidget(leFilename);
+	connect(leFilename, SIGNAL(returnPressed(QString)), this, SLOT(saveNewSelected(QString)));
+	connect(leFilename, SIGNAL(returnPressed(QString)), &menu, SLOT(close()));
+
+	widgetAction->setDefaultWidget(frame);
+	menu.addAction(widgetAction);
+
+	QPoint pos(-menu.sizeHint().width()+pbSaveTheme->width(),-menu.sizeHint().height());
+	menu.exec(pbSaveTheme->mapToGlobal(pos));
+
+	leFilename->setFocus();
+}
+
+void ThemeHandler::saveNewSelected(const QString& filename) {
+	KConfig config(KGlobal::dirs()->locateLocal("appdata", "themes/local") + '/' + filename, KConfig::SimpleConfig);
+	emit (saveThemeRequested(config));
+
+	emit info( i18n("New theme \"%1\" was saved.", filename) );
+}
+
+void ThemeHandler::saveDefaults() {
+	KConfig config;
+	emit (saveThemeRequested(config));
+
+	emit info( i18n("New default theme was saved.") );
+}
+
+void ThemeHandler::saveThemeEnable(bool enable) {
+	pbSaveTheme->setEnabled(enable);
 }
