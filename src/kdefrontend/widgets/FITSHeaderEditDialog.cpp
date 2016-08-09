@@ -63,6 +63,10 @@ void FITSHeaderEditDialog::save() {
     m_saved = m_HeaderEditWidget->save();
 }
 
+/*!
+ * \brief Returns whether there were changes saved.
+ * \return
+ */
 bool FITSHeaderEditDialog::saved() const {
     return m_saved;
 }

@@ -670,8 +670,16 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
     }
     if (!selectedExtension.isEmpty()) {
         FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
+        bool okToMatrix;
+        QString importedText = filter->readChdu(selectedExtension, &okToMatrix, ui.sbPreviewLines->value());
+        if (okToMatrix) {
+            readFitsTableToMatrix = true;
+        } else {
+            readFitsTableToMatrix = false;
+        }
+        emit checkedFitsTableToMatrix();
 
-        QString importedText = filter->readChdu(selectedExtension, ui.sbPreviewLines->value());
+        //TODO
         QStringList lineStrings = importedText.split("\n");
         fitsOptionsWidget.twPreview->clear();
 
@@ -885,7 +893,16 @@ void ImportFileWidget::refreshPreview() {
                 }
             }
         }
-        importedText = filter->readChdu(fileName, lines);
+        //TODO
+        bool okToMatrix;
+        importedText = filter->readChdu(fileName, &okToMatrix, lines);
+        if (okToMatrix) {
+            readFitsTableToMatrix = true;
+        } else {
+            readFitsTableToMatrix = false;
+        }
+        emit checkedFitsTableToMatrix();
+
         tmpTableWidget = fitsOptionsWidget.twPreview;
         break;
     }
@@ -916,4 +933,8 @@ void ImportFileWidget::refreshPreview() {
         tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
     }
     RESET_CURSOR;
+}
+
+bool ImportFileWidget::canReadFitsTableToMatrix() const {
+    return readFitsTableToMatrix;
 }

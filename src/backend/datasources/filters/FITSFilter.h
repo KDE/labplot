@@ -45,7 +45,7 @@ class FITSFilter : public AbstractFileFilter {
 
     void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
     void write(const QString & fileName, AbstractDataSource* dataSource);
-    QString readChdu(const QString & fileName, int lines = -1);
+    QString readChdu(const QString & fileName, bool *okToMatrix = 0, int lines = -1);
     virtual void save(QXmlStreamWriter*) const;
     virtual bool load(XmlStreamReader*);
 

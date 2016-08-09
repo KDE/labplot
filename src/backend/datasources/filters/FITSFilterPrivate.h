@@ -38,7 +38,7 @@ public:
     explicit FITSFilterPrivate(FITSFilter*);
     ~FITSFilterPrivate();
     QString readCHDU(const QString & fileName, AbstractDataSource* dataSource,
-                     AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace, int lines= -1);
+                     AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace, bool*okToMatrix = 0, int lines= -1);
     void writeCHDU(const QString & fileName, AbstractDataSource* dataSource);
 
     const FITSFilter* q;

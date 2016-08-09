@@ -40,7 +40,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 /*! \class FITSHeaderEditWidget
  * \brief Widget for listing/editing FITS header keywords
  * \since 2.2.0
- * \ingroup widgets
+ * \ingroup kdefrontend/widgets
  */
 FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget *parent) :
     QWidget(parent), m_initializingTable(false) {

@@ -56,8 +56,8 @@ void FITSFilter::read(const QString &fileName, AbstractDataSource *dataSource, A
     d->readCHDU(fileName, dataSource, importMode);
 }
 
-QString FITSFilter::readChdu(const QString &fileName, int lines) {
-    return d->readCHDU(fileName, NULL, AbstractFileFilter::Replace, lines);
+QString FITSFilter::readChdu(const QString &fileName, bool* okToMatrix, int lines) {
+    return d->readCHDU(fileName, NULL, AbstractFileFilter::Replace, okToMatrix, lines);
 }
 
 void FITSFilter::write(const QString &fileName, AbstractDataSource *dataSource) {
@@ -272,7 +272,7 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
  * \param dataSource the data source to be filled
  * \param importMode
  */
-QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode, bool *okToMatrix, int lines) {
     QStringList dataString;
 
 #ifdef HAVE_FITS
@@ -473,52 +473,66 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         if (startRow != 1) {
             startRrow = startRow;
         }
+
+        columnNumericTypes.reserve(actualCols);
+        int datatype;
+        int c = 1;
+        if (startColumn != 1) {
+            if (startColumn != 0) {
+                c = startColumn;
+            }
+        }
+        for (; c <= actualCols; ++c) {
+            fits_get_coltype(fitsFile, c, &datatype, NULL, NULL, &status);
+
+            switch (datatype) {
+            case TSTRING:
+                columnNumericTypes.append(false);
+                break;
+            case TSHORT:
+                columnNumericTypes.append(true);
+                break;
+            case TLONG:
+                columnNumericTypes.append(true);
+                break;
+            case TFLOAT:
+                columnNumericTypes.append(true);
+                break;
+            case TDOUBLE:
+                columnNumericTypes.append(true);
+                break;
+            case TLOGICAL:
+                columnNumericTypes.append(false);
+                break;
+            case TBIT:
+                columnNumericTypes.append(true);
+                break;
+            case TBYTE:
+                columnNumericTypes.append(true);
+                break;
+            case TCOMPLEX:
+                columnNumericTypes.append(true);
+                break;
+            default:
+                columnNumericTypes.append(false);
+                break;
+            }
+        }
+
+        if (noDataSource) {
+            *okToMatrix = true;
+            foreach (const bool& numeric, columnNumericTypes) {
+                if (!numeric) {
+                    *okToMatrix = numeric;
+                    qDebug() << "NOPPPE";
+                    break;
+                }
+            }
+            if (*okToMatrix) {
+                qDebug() << "YUPPP";
+            }
+        }
         if (!noDataSource) {
-            columnNumericTypes.reserve(actualCols);
-            int datatype;
-            int c = 1;
-            if (startColumn != 1) {
-                if (startColumn != 0) {
-                    c = startColumn;
-                }
-            }
-            for (; c <= actualCols; ++c) {
-                fits_get_coltype(fitsFile, c, &datatype, NULL, NULL, &status);
-
-                switch (datatype) {
-                case TSTRING:
-                    columnNumericTypes.append(false);
-                    break;
-                case TSHORT:
-                    columnNumericTypes.append(true);
-                        break;
-                case TLONG:
-                    columnNumericTypes.append(true);
-                    break;
-                case TFLOAT:
-                    columnNumericTypes.append(true);
-                    break;
-                case TDOUBLE:
-                    columnNumericTypes.append(true);
-                    break;
-                case TLOGICAL:
-                    columnNumericTypes.append(true);
-                    break;
-                case TBIT:
-                    columnNumericTypes.append(true);
-                    break;
-                case TBYTE:
-                    columnNumericTypes.append(true);
-                    break;
-                case TCOMPLEX:
-                    columnNumericTypes.append(true);
-                    break;
-                default:
-                    columnNumericTypes.append(false);
-                    break;
-                }
-            }
-
             numericDataPointers.reserve(actualCols - startCol);
 
             Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);

@@ -78,6 +78,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 	connect(importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
+    connect(importFileWidget, SIGNAL(checkedFitsTableToMatrix()), this, SLOT(checkOnFitsTableToMatrix()));
 
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
 	setWindowIcon(KIcon("document-import-database"));
@@ -332,6 +333,18 @@ void ImportFileDialog::newDataContainer(QAction* action) {
 
 void ImportFileDialog::newDataContainerMenu() {
 	m_newDataContainerMenu->exec( tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
+}
+
+void ImportFileDialog::checkOnFitsTableToMatrix() {
+    if (cbAddTo) {
+        AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
+        if (!aspect) {
+            return;
+        }
+        if(aspect->inherits("Matrix")) {
+            enableButtonOk(importFileWidget->canReadFitsTableToMatrix());
+        }
+    }
 }
 
 void ImportFileDialog::checkOkButton() {
