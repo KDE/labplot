@@ -57,6 +57,7 @@ private:
 	KUrlCompletion* m_completion;
 	QStringList dateStrings;
 	QStringList timeStrings;
+	QString bin;
 
 	TreeViewComboBox* cbXColumn;
 	TreeViewComboBox* cbValuesColumn;
@@ -94,6 +95,8 @@ private slots:
 	void binsOptionChanged(int);
 	void binValueChanged();
 
+	void recalculateClicked();
+	void enableRecalculate() const;
 	//Values-Tab
 	void valuesTypeChanged(int);
 	void valuesColumnChanged(const QModelIndex&);

@@ -49,6 +49,7 @@ class Histogram: public WorksheetElement {
 		enum HistogramType {Ordinary,Cummulative, AvgShift};
 		explicit Histogram(const QString &name);
 		virtual ~Histogram();
+		//size_t bins;
 
         virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
@@ -98,6 +99,7 @@ class Histogram: public WorksheetElement {
 		void setHistrogramType(Histogram::HistogramType);
 		Histogram::HistogramType getHistrogramType();
 		void setbinsOption(Histogram::BinsOption);
+		void setBinValue(int);
 
 		typedef WorksheetElement BaseClass;
 		typedef HistogramPrivate Private;

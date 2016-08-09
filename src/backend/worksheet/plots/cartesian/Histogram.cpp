@@ -177,6 +177,10 @@ Histogram::HistogramType Histogram::getHistrogramType() {
 void Histogram::setbinsOption(Histogram::BinsOption binsOption) {
 	d_ptr->binsOption = binsOption;
 }
+void Histogram::setBinValue(int binValue)
+{
+	d_ptr->binValue= binValue;
+}
 
 //##############################################################################
 //##########################  getter methods  ##################################
@@ -1447,7 +1451,9 @@ void Histogram::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 
-	
+	//Line
+    writer->writeStartElement( "lines" );
+	WRITE_QPEN(d->linePen);
 
 	//Values
 	writer->writeStartElement( "values" );
@@ -1481,6 +1487,13 @@ void Histogram::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "opacity", QString::number(d->fillingOpacity) );
 	writer->writeEndElement();
 
+	//write Histogram specific information
+	writer->writeStartElement( "typeChanged" );
+	writer->writeAttribute( "Histogramtype", QString::number(d->histogramType) );
+	writer->writeAttribute( "BinsOption", QString::number(d->binsOption) );
+	writer->writeAttribute( "binValue", QString::number(d->binValue));
+	writer->writeEndElement();
+	
 	writer->writeEndElement(); //close "Histogram" section
 }
 
@@ -1489,7 +1502,7 @@ bool Histogram::load(XmlStreamReader* reader){
 	Q_D(Histogram);
 
     if(!reader->isStartElement() || reader->name() != "Histogram"){
-        reader->raiseError(i18n("no xy-curve element found"));
+        reader->raiseError(i18n("no histogram element found"));
         return false;
     }
 
@@ -1514,13 +1527,25 @@ bool Histogram::load(XmlStreamReader* reader){
 			attribs = reader->attributes();
 
 			READ_COLUMN(xColumn);
-			READ_COLUMN(yColumn);
 
 			str = attribs.value("visible").toString();
             if(str.isEmpty())
                 reader->raiseWarning(attributeWarning.arg("'visible'"));
             else
                 d->setVisible(str.toInt());
+		}else if (reader->name() == "typeChanged") {
+			attribs = reader->attributes();
+			str = attribs.value("type").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'type'"));
+			else
+				d->histogramType = (Histogram::HistogramType)str.toInt();
+
+			str = attribs.value("BinsOption").toString();
+			d->binsOption = (Histogram::BinsOption)str.toInt();
+
+			str = attribs.value("binValue").toString();
+			d->binValue = str.toInt();
 		}else if (reader->name() == "values"){
 			attribs = reader->attributes();
 
@@ -1645,8 +1670,8 @@ bool Histogram::load(XmlStreamReader* reader){
                 reader->raiseWarning(attributeWarning.arg("opacity"));
             else
                 d->fillingOpacity = str.toDouble();
-		
-	}
+
+		}
 	}
 	return true;
 }

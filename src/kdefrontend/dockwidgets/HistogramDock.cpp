@@ -410,8 +410,39 @@ void HistogramDock::initGeneralTab(){
 	}
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 	uiGeneralTab.cbHistogramType->setCurrentIndex(m_curve->getHistrogramType());
+	uiGeneralTab.teBins->setText("10");
+
 	connect(m_curve, SIGNAL(linePenChanged(QPen)), this, SLOT(curveLinePenChanged(QPen)));
 	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
+
+}
+
+//*************************************************************
+//**** SLOTs for changes triggered in HistogramDock *****
+//*************************************************************
+
+void HistogramDock::recalculateClicked() {
+
+	foreach(Histogram* curve, m_curvesList);
+		//dynamic_cast<Histogram*>(curve)->setEquationData(data);
+
+	uiGeneralTab.pbRecalculate->setEnabled(false);
+}
+
+void HistogramDock::enableRecalculate() const {
+	if (m_initializing)
+		return;
+
+	//check whether the bin range is correct
+	bool valid = false;
+	valid = uiGeneralTab.teBins->isValid();
+	bin = uiGeneralTab.teBins->document()->toPlainText();
+	int binValue = bin.toInt();
+	uiGeneralTab.teBins->setText(bin);
+	if (binValue > 0 && binValue < 20)
+		valid =true;
+
+	uiGeneralTab.pbRecalculate->setEnabled(valid);
 }
 void HistogramDock::curveLinePenChanged(const QPen& pen) {
 	m_initializing = true;
@@ -421,7 +452,7 @@ void HistogramDock::curveLinePenChanged(const QPen& pen) {
 //Values-Tab
 void HistogramDock::curveValuesTypeChanged(Histogram::ValuesType type) {
 	m_initializing = true;
-  	ui.cbValuesType->setCurrentIndex((int) type);
+	ui.cbValuesType->setCurrentIndex((int) type);
 	m_initializing = false;
 }
 void HistogramDock::curveValuesColumnChanged(const AbstractColumn* column) {
@@ -926,6 +957,8 @@ void HistogramDock::setupGeneral() {
 
 	cbXColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbXColumn, 2, 2, 1, 1);
+	
+	uiGeneralTab.teBins->setMaximumHeight(uiGeneralTab.leName->sizeHint().height());
 
 	//show the properties of the first curve
 	//bins option
@@ -935,21 +968,24 @@ void HistogramDock::setupGeneral() {
 	uiGeneralTab.cbBins->addItem(i18n("Rice rule"));
 	uiGeneralTab.cbBins->addItem(i18n("Sturgis rule"));
 
-	//connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
 	//types options
 	uiGeneralTab.cbHistogramType->addItem(i18n("Ordinary Histogram"));
 	uiGeneralTab.cbHistogramType->addItem(i18n("Cummulative Histogram"));
 	uiGeneralTab.cbHistogramType->addItem(i18n("AvgShifted Histogram"));
 
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+
 	//General
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+
 	connect( uiGeneralTab.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
-	connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
-	connect( uiGeneralTab.cbBins, SIGNAL(currentIndexChanged(int)), this, SLOT(binsOptionChanged(int)) );
-	connect( uiGeneralTab.leBins, SIGNAL(returnPressed()), this, SLOT(binValueChanged()) );
+	connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(enableRecalculate()) );
+	connect( uiGeneralTab.cbBins, SIGNAL(currentIndexChanged(int)), this, SLOT(enableRecalculate()) );
+	connect( uiGeneralTab.teBins, SIGNAL(expressionChanged()), this, SLOT(binValueChanged()) );
+	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 	
 }
 
@@ -959,7 +995,7 @@ void HistogramDock::histogramTypeChanged(int index) {
 }
 
 void HistogramDock::binValueChanged() {
-	uiGeneralTab.leBins->text();
+		m_curve->setBinValue(binValue);
 }
 
 void HistogramDock::binsOptionChanged(int index){
@@ -976,10 +1012,6 @@ void HistogramDock::lineColorChanged(const QColor& color){
 	pen.setColor(color);
 	curve->setLinePen(pen);
   }
-
-/*  m_initializing = true;
-  GuiTools::updatePenStyles(ui.cbLineStyle, color);
-  m_initializing = false;*/
 }
 void HistogramDock::xColumnChanged(const QModelIndex& index) {
 

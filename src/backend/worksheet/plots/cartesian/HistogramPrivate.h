@@ -125,15 +125,13 @@ class HistogramPrivate: public QGraphicsItem {
 		float xMin, xMax;
 		float xMinPrev, xMaxPrev;
 		bool autoScaleHistogramX;
-		
 		Histogram* const q;
-		
+		int binValue;
 
 	private:
 		gsl_histogram * histogram;
 		size_t bins;
-		int binValue=10;
-		
+
         void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
 		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);
