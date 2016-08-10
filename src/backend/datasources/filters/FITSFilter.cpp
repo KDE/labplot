@@ -482,6 +482,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                 c = startColumn;
             }
         }
+        QList<int> matrixNumericColumnIndices;
         for (; c <= actualCols; ++c) {
             fits_get_coltype(fitsFile, c, &datatype, NULL, NULL, &status);
 
@@ -517,26 +518,19 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                 columnNumericTypes.append(false);
                 break;
             }
+            if ((datatype != TSTRING) && (datatype != TLOGICAL)) {
+                matrixNumericColumnIndices.append(c);
+            }
         }
 
         if (noDataSource) {
-            *okToMatrix = true;
-            foreach (const bool& numeric, columnNumericTypes) {
-                if (!numeric) {
-                    *okToMatrix = numeric;
-                    qDebug() << "NOPPPE";
-                    break;
-                }
-            }
-            if (*okToMatrix) {
-                qDebug() << "YUPPP";
-            }
+            *okToMatrix = matrixNumericColumnIndices.size() == 0 ? false : true;
         }
         if (!noDataSource) {
-            numericDataPointers.reserve(actualCols - startCol);
-
             Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
             if(spreadsheet) {
+                numericDataPointers.reserve(actualCols - startCol);
+
                 stringDataPointers.reserve(actualCols - startCol);
                 spreadsheet->setUndoAware(false);
                 columnOffset = spreadsheet->resize(importMode, columnNames, actualCols - startCol);
@@ -561,15 +555,15 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                         list->clear();
                     }
                 }
-                numericDataPointers.squeeze();
                 stringDataPointers.squeeze();
             } else {
-                columnOffset = dataSource->create(numericDataPointers, importMode, lines - startRrow, actualCols - startCol);
+                numericDataPointers.reserve(matrixNumericColumnIndices.size());
+                columnOffset = dataSource->create(numericDataPointers, importMode, lines - startRrow, matrixNumericColumnIndices.size());
             }
+            numericDataPointers.squeeze();
         }
 
         char* array = new char[1000];
-        //TODO startColumn/end..
         int row = 1;
         if (startRow != 1) {
             if (startRow != 0) {
@@ -581,6 +575,15 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         if (startColumn != 1) {
             if (startColumn != 0) {
                 coll = startColumn;
+            }
+        }
+        if (dynamic_cast<Matrix*>(dataSource)) {
+            coll = matrixNumericColumnIndices.first();
+            actualCols = matrixNumericColumnIndices.last();
+            if (importMode == AbstractFileFilter::Replace) {
+                for (int i = 0; i < numericDataPointers.size(); ++i) {
+                    numericDataPointers[i]->clear();
+                }
             }
         }
 
@@ -606,7 +609,9 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                         if (columnNumericTypes.at(col-1)) {
                             numericDataPointers[numericixd++]->push_back(str.toDouble());
                         } else {
-                            stringDataPointers[stringidx++]->operator <<( str.simplified());
+                            if (stringDataPointers.size() != 0) {
+                                stringDataPointers[stringidx++]->operator <<( str.simplified());
+                            }
                         }
                     }
                 } else {
