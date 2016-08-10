@@ -651,23 +651,35 @@ const QStringList ImportFileWidget::selectedHDFNames() const {
 //TODO
 void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int column) {
     WAIT_CURSOR;
-    QString itemText = item->text(column);
+    const QString& itemText = item->text(column);
     QString selectedExtension;
-    if (itemText.contains(QLatin1String("IMAGE #"))) {
-        //filter - find IMAGE #
-    } else if (itemText.contains(QLatin1String("ASCII_TBL #"))) {
-
-    } else if (itemText.contains(QLatin1String("BINARY_TBL #"))) {
-
+    int extType = 0;
+    if (itemText.contains(QLatin1String("IMAGE #")) ||
+            itemText.contains(QLatin1String("ASCII_TBL #")) ||
+            itemText.contains(QLatin1String("BINARY_TBL #"))){
+        extType = 1;
     } else if (!itemText.compare(QLatin1String("Primary header"))) {
-        selectedExtension = item->parent()->parent()->text(column);
-    } else {
+        extType = 2;
+    }
+    if (extType == 0) {
+        if (item->parent() != 0) {
+            if (item->parent()->parent() != 0)
+                selectedExtension = item->parent()->parent()->text(0) +"["+ item->text(column)+"]";
+        }
+    } else if (extType == 1) {
         if (item->parent() != 0) {
             if (item->parent()->parent() != 0) {
-                selectedExtension = item->parent()->parent()->text(column) +"["+ item->text(column)+"]";
+                bool ok;
+                int hduNum = itemText.right(1).toInt(&ok);
+                selectedExtension = item->parent()->parent()->text(0) +"["+ QString::number(hduNum-1) +"]";
             }
         }
+    } else {
+        if (item->parent()->parent() != 0) {
+            selectedExtension = item->parent()->parent()->text(column);
+        }
     }
+
     if (!selectedExtension.isEmpty()) {
         FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
         bool okToMatrix;
@@ -877,23 +889,34 @@ void ImportFileWidget::refreshPreview() {
             const QTreeWidgetItem* item = fitsOptionsWidget.twExtensions->currentItem();
             const int currentColumn = fitsOptionsWidget.twExtensions->currentColumn();
             QString itemText = item->text(currentColumn);
-            if (itemText.contains(QLatin1String("IMAGE #"))) {
-                //filter - find IMAGE #
-            } else if (itemText.contains(QLatin1String("ASCII_TBL #"))) {
-
-            } else if (itemText.contains(QLatin1String("BINARY_TBL #"))) {
-
+            int extType = 0;
+            if (itemText.contains(QLatin1String("IMAGE #")) ||
+                    itemText.contains(QLatin1String("ASCII_TBL #")) ||
+                    itemText.contains(QLatin1String("BINARY_TBL #"))){
+                extType = 1;
             } else if (!itemText.compare(QLatin1String("Primary header"))) {
-                fileName = item->parent()->parent()->text(currentColumn);
-            } else {
+                extType = 2;
+            }
+            if (extType == 0) {
+                if (item->parent() != 0) {
+                    if (item->parent()->parent() != 0)
+                        fileName = item->parent()->parent()->text(0) +"["+ item->text(currentColumn)+"]";
+                }
+            } else if (extType == 1) {
                 if (item->parent() != 0) {
                     if (item->parent()->parent() != 0) {
-                        fileName = item->parent()->parent()->text(currentColumn) +"["+ item->text(currentColumn)+"]";
+                        bool ok;
+                        int hduNum = itemText.right(1).toInt(&ok);
+                        fileName = item->parent()->parent()->text(0) +"["+ QString::number(hduNum-1) +"]";
                     }
+                }
+            } else {
+                if (item->parent()->parent() != 0) {
+                    fileName = item->parent()->parent()->text(currentColumn);
                 }
             }
         }
-        //TODO
+
         bool okToMatrix;
         importedText = filter->readChdu(fileName, &okToMatrix, lines);
         if (okToMatrix) {
