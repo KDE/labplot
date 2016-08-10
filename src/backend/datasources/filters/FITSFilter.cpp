@@ -577,6 +577,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                 coll = startColumn;
             }
         }
+        bool isMatrix = false;
         if (dynamic_cast<Matrix*>(dataSource)) {
             coll = matrixNumericColumnIndices.first();
             actualCols = matrixNumericColumnIndices.last();
@@ -585,12 +586,18 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                     numericDataPointers[i]->clear();
                 }
             }
+            isMatrix = true;
         }
 
         for (; row <= lines; ++row) {
             int numericixd = 0;
             int stringidx = 0;
             for (int col = coll; col <= actualCols; ++col) {
+                if (isMatrix) {
+                    if (!matrixNumericColumnIndices.contains(col)) {
+                        continue;
+                    }
+                }
                 if(fits_read_col_str(fitsFile, col, row, 1, 1, NULL, &array, NULL, &status)) {
                     printError(status);
                     if (noDataSource) {
