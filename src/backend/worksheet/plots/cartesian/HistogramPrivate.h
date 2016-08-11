@@ -75,6 +75,7 @@ class HistogramPrivate: public QGraphicsItem {
 
 		void recalculate();
 		Histogram::HistogramData histogramData;
+		
 		//line
 		bool lineSkipGaps;
 		int lineInterpolationPointsCount;
@@ -129,8 +130,6 @@ class HistogramPrivate: public QGraphicsItem {
 		bool autoScaleHistogramX;
 		Histogram* const q;
 		bool sourceDataChangedSinceLastPlot; //<! \c true if the data in the source columns (x, or bins) was changed, \c false otherwise
-
-		int binValue=10;
 
 	private:
 		gsl_histogram * histogram;

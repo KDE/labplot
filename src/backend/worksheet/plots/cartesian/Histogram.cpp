@@ -175,11 +175,11 @@ Histogram::HistogramType Histogram::getHistrogramType() {
 }
 
 void Histogram::setbinsOption(Histogram::BinsOption binsOption) {
-	d_ptr->binsOption = binsOption;
+	d_ptr->histogramData.binsOption = binsOption;
 }
 void Histogram::setBinValue(int binValue)
 {
-	d_ptr->binValue= binValue;
+	d_ptr->histogramData.binValue= binValue;
 }
 
 //##############################################################################
@@ -520,8 +520,7 @@ void HistogramPrivate::retransform(){
 	if (m_suppressRetransform){
 		return;
 	}
-
- 	//qDebug()<<"HistogramPrivate::retransform() " << q->name();
+	qDebug()<<"HistogramPrivate::retransform() " << q->name();
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
 	connectedPointsLogical.clear();
@@ -602,18 +601,24 @@ void HistogramPrivate::updateLines(){
 
 	double xAxisMin= xColumn->minimum();
 	double xAxisMax= xColumn->maximum();
-	switch (binsOption) {
+	switch (histogramData.binsOption) {
 		case Histogram::Number:
-			bins = (size_t)binValue;
+			qDebug() <<"number selected";
+			bins = (size_t)histogramData.binValue;
 			break;
+		case Histogram::SquareRoot:
+			qDebug() <<"Sqrt selected";
+			bins = (size_t)sqrt(histogramData.binValue);
 		case Histogram::RiceRule:
-			bins = (size_t)2*cbrt(binValue);
+			
+			qDebug() <<"riceri=ule selected";
+			bins = (size_t)2*cbrt(histogramData.binValue);
 			break;
 		case Histogram::Width:
-			bins = (size_t) (xAxisMax-xAxisMin)/binValue;
+			bins = (size_t) (xAxisMax-xAxisMin)/histogramData.binValue;
 			break;
 		case Histogram::SturgisRule:
-			bins =(size_t) 1 + 3.33*log(binValue);
+			bins =(size_t) 1 + 3.33*log(histogramData.binValue);
 			break;	
 	}
 
@@ -628,6 +633,7 @@ void HistogramPrivate::updateLines(){
 	}
 	*/
 	switch(histogramType) {
+		qDebug() << "histogramType switch case " << histogramType;
 		case Histogram::Ordinary: {
 		for (int row = startRow; row <= endRow; row++ ){
 			if ( xColumn->isValid(row) && !xColumn->isMasked(row) )
@@ -758,9 +764,9 @@ void HistogramPrivate::updateValues() {
 	switch (valuesType){
 	  case Histogram::NoValues:
 	  case Histogram::ValuesX:{
-		for(int i=0; i<symbolPointsLogical.size(); ++i){
+		for(int i=0; i<bins; ++i){
 			if (!visiblePoints[i]) continue;
-			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).x()) + valuesSuffix;
+			valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(histogram,i)) + valuesSuffix+ "  ";
 		}
 	  break;
 	  }
@@ -1509,9 +1515,9 @@ void Histogram::save(QXmlStreamWriter* writer) const{
 
 	//write Histogram specific information
 	writer->writeStartElement( "typeChanged" );
-	writer->writeAttribute( "Histogramtype", QString::number(d->histogramType) );
-	writer->writeAttribute( "BinsOption", QString::number(d->binsOption) );
-	writer->writeAttribute( "binValue", QString::number(d->binValue));
+	writer->writeAttribute( "Histogramtype", QString::number(d->histogramData.type) );
+	writer->writeAttribute( "BinsOption", QString::number(d->histogramData.binsOption) );
+	writer->writeAttribute( "binValue", QString::number(d->histogramData.binValue));
 	writer->writeEndElement();
 	
 	writer->writeEndElement(); //close "Histogram" section
@@ -1565,7 +1571,7 @@ bool Histogram::load(XmlStreamReader* reader){
 			d->binsOption = (Histogram::BinsOption)str.toInt();
 
 			str = attribs.value("binValue").toString();
-			d->binValue = str.toInt();
+			d->histogramData.binValue = str.toInt();
 		}else if (reader->name() == "values"){
 			attribs = reader->attributes();
 

@@ -434,29 +434,24 @@ void HistogramDock::initGeneralTab(){
 
 void HistogramDock::recalculateClicked() {
 	Histogram::HistogramData data;
-	data.type = (Histogram::HistogramType)uiGeneralTab.cbHistogramType->currentIndex();
+	qDebug() <<"types " << uiGeneralTab.cbHistogramType->currentIndex();
+	if( data.type != (Histogram::HistogramType)uiGeneralTab.cbHistogramType->currentIndex())
+	{
+		qDebug() << "type changed before : " << data.type;
+		data.type = (Histogram::HistogramType)uiGeneralTab.cbHistogramType->currentIndex();
+	}
 	data.binsOption= (Histogram::BinsOption)uiGeneralTab.cbBins->currentIndex();
 	data.binValue = uiGeneralTab.sbBins->value();
-
-	foreach(Histogram* curve, m_curvesList)
+	m_curve->retransform();
+	/*foreach(Histogram* curve, m_curvesList)
 		dynamic_cast<Histogram*>(curve)->setHistogramData(data);
-
+*/
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 }
 
 void HistogramDock::enableRecalculate() const {
 	if (m_initializing)
 		return;
-
-	//check whether the bin range is correct
-	/*bool valid = false;
-	valid = uiGeneralTab.teBins->isValid();
-	bin = uiGeneralTab.teBins->document()->toPlainText();
-	binValue = bin.toInt();
-	uiGeneralTab.teBins->setText(bin);
-	if (binValue > 0 && binValue < 20)
-		valid =true;*/
-
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 void HistogramDock::curveLinePenChanged(const QPen& pen) {
@@ -560,6 +555,7 @@ void HistogramDock::valuesTypeChanged(int index){
 	  cbValuesColumn->hide();
 		column = static_cast<const Column*>(m_curve->xColumn());
 		qDebug() <<"column va;" ;
+
 	}
 	this->showValuesColumnFormat(column);
   }
@@ -995,9 +991,9 @@ void HistogramDock::setupGeneral() {
 
 	connect( uiGeneralTab.kcbLineColor, SIGNAL(changed(QColor)), this, SLOT(lineColorChanged(QColor)) );
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
-	connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.cbBins, SIGNAL(currentIndexChanged(int)), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.sbBins, SIGNAL(valueChanged(int)), this, SLOT(enableRecalculate()) );
+	connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(histogramTypeChanged(int)) );
+	connect( uiGeneralTab.cbBins, SIGNAL(currentIndexChanged(int)), this, SLOT(binsOptionChanged(int)) );
+	connect( uiGeneralTab.sbBins, SIGNAL(valueChanged(int)), this, SLOT(binValueChanged()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 	
 }
@@ -1005,15 +1001,18 @@ void HistogramDock::setupGeneral() {
 void HistogramDock::histogramTypeChanged(int index) {
 	Histogram::HistogramType histogramType = Histogram::HistogramType(index);
 	m_curve->setHistrogramType(histogramType);
+	enableRecalculate();
 }
 
 void HistogramDock::binValueChanged() {
 		m_curve->setBinValue(binValue);
+		enableRecalculate();
 }
 
 void HistogramDock::binsOptionChanged(int index){
 	Histogram::BinsOption binsOption = Histogram::BinsOption(index);
 	m_curve->setbinsOption(binsOption);
+	enableRecalculate();
 }
 void HistogramDock::lineColorChanged(const QColor& color){
   if (m_initializing)
