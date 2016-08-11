@@ -72,7 +72,9 @@ class HistogramPrivate: public QGraphicsItem {
 		const AbstractColumn* xColumn;
 		QString xColumnPath;
 		QString yColumnPath;
-		
+
+		void recalculate();
+		Histogram::HistogramData histogramData;
 		//line
 		bool lineSkipGaps;
 		int lineInterpolationPointsCount;
@@ -117,16 +119,18 @@ class HistogramPrivate: public QGraphicsItem {
 											       //false otherwise (don't connect because of a gap (NAN) in-between)
 		QList<QString> valuesStrings;
 		QList<QPolygonF> fillPolygons;
-		
+
 		//cached values of minimum and maximum for all visible curves
 		bool curvesXMinMaxIsDirty, curvesYMinMaxIsDirty;
 		double curvesXMin, curvesXMax, curvesYMin, curvesYMax;
-		
+
 		float xMin, xMax;
 		float xMinPrev, xMaxPrev;
 		bool autoScaleHistogramX;
 		Histogram* const q;
-		int binValue;
+		bool sourceDataChangedSinceLastPlot; //<! \c true if the data in the source columns (x, or bins) was changed, \c false otherwise
+
+		int binValue=10;
 
 	private:
 		gsl_histogram * histogram;

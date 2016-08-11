@@ -24,12 +24,6 @@
        <string>General</string>
       </attribute>
      </widget>
-     <widget class="QWidget" name="tabBoundary">
-      <attribute name="title">
-       <string>Boundary</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_4"/>
-     </widget>
      <widget class="QWidget" name="tabValues">
       <attribute name="title">
        <string>Values</string>

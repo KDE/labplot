@@ -188,6 +188,7 @@ void Histogram::setBinValue(int binValue)
 BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, xColumn, xColumn)
 QString& Histogram::xColumnPath() const { return d_ptr->xColumnPath; }
 CLASS_SHARED_D_READER_IMPL(Histogram, QPen, linePen, linePen)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramData, histogramData, histogramData)
 
 //values
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesType, valuesType, valuesType)
@@ -216,22 +217,34 @@ BASIC_SHARED_D_READER_IMPL(Histogram, qreal, fillingOpacity, fillingOpacity)
 double Histogram::getYMaximum() const {
 	return d_ptr->getYMaximum();
 }
-
+bool Histogram::isSourceDataChangedSinceLastPlot() const {
+	Q_D(const Histogram);
+	return d->sourceDataChangedSinceLastPlot;
+}
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramData, Histogram::HistogramData, histogramData, recalculate);
+void Histogram::setHistogramData(const Histogram::HistogramData& histogramData) {
+	Q_D(Histogram);
+	if ((histogramData.binValue != d->histogramData.binValue)
+		|| (histogramData.binsOption != d->histogramData.binsOption) );
+		//exec(new HistogramSetDataCmd(d, histogramData, i18n("%1: set equation")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetXColumn, const AbstractColumn*, xColumn, retransform)
 void Histogram::setXColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
 	if (column != d->xColumn) {
 		exec(new HistogramSetXColumnCmd(d, column, i18n("%1: assign x values")));
+		emit sourceDataChangedSinceLastPlot();
 
 		//emit xHistogramDataChanged() in order to notify the plot about the changes
 		emit xHistogramDataChanged();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SIGNAL(xHistogramDataChanged()));
-
+			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//update the curve itself on changes
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(retransform()));
 			connect(column->parentAspect(), SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
@@ -395,7 +408,11 @@ void Histogram::setFillingOpacity(qreal opacity) {
 void Histogram::retransform() {
 	d_ptr->retransform();
 }
-
+void Histogram::handleSourceDataChanged() {
+	Q_D(Histogram);
+	d->sourceDataChangedSinceLastPlot = true;
+	emit sourceDataChangedSinceLastPlot();
+}
 //TODO
 void Histogram::handlePageResize(double horizontalRatio, double verticalRatio){
 	Q_D(const Histogram);
@@ -1433,7 +1450,9 @@ void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 		update();
 	}
 }
-
+void HistogramPrivate::recalculate() {
+	emit (q->HistogramdataChanged());
+}
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -1454,6 +1473,7 @@ void Histogram::save(QXmlStreamWriter* writer) const{
 	//Line
     writer->writeStartElement( "lines" );
 	WRITE_QPEN(d->linePen);
+	writer->writeEndElement();
 
 	//Values
 	writer->writeStartElement( "values" );

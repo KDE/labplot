@@ -408,12 +408,23 @@ void HistogramDock::initGeneralTab(){
 		uiGeneralTab.leName->setText("");
 		uiGeneralTab.leComment->setText("");
 	}
+	//show the properties of the first curve
+	const Histogram::HistogramData& data = m_curve->histogramData();
+	uiGeneralTab.cbHistogramType->setCurrentIndex(data.type);
+	uiGeneralTab.cbBins->setCurrentIndex(data.binsOption);
+
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
-	uiGeneralTab.cbHistogramType->setCurrentIndex(m_curve->getHistrogramType());
-	uiGeneralTab.teBins->setText("10");
 
 	connect(m_curve, SIGNAL(linePenChanged(QPen)), this, SLOT(curveLinePenChanged(QPen)));
 	connect(m_curve, SIGNAL(visibilityChanged(bool)), this, SLOT(curveVisibilityChanged(bool)));
+	
+	uiGeneralTab.pbRecalculate->setEnabled(m_curve->isSourceDataChangedSinceLastPlot());
+	//Slots
+	
+	connect(m_curve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
+			this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_curve, SIGNAL(histogramDataChanged(Histogram::HistogramData)),
+			this, SLOT(curveHistogramDataChanged(Histogram::HistogramData)));
 
 }
 
@@ -422,9 +433,13 @@ void HistogramDock::initGeneralTab(){
 //*************************************************************
 
 void HistogramDock::recalculateClicked() {
+	Histogram::HistogramData data;
+	data.type = (Histogram::HistogramType)uiGeneralTab.cbHistogramType->currentIndex();
+	data.binsOption= (Histogram::BinsOption)uiGeneralTab.cbBins->currentIndex();
+	data.binValue = uiGeneralTab.sbBins->value();
 
-	foreach(Histogram* curve, m_curvesList);
-		//dynamic_cast<Histogram*>(curve)->setEquationData(data);
+	foreach(Histogram* curve, m_curvesList)
+		dynamic_cast<Histogram*>(curve)->setHistogramData(data);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 }
@@ -434,15 +449,15 @@ void HistogramDock::enableRecalculate() const {
 		return;
 
 	//check whether the bin range is correct
-	bool valid = false;
+	/*bool valid = false;
 	valid = uiGeneralTab.teBins->isValid();
 	bin = uiGeneralTab.teBins->document()->toPlainText();
-	int binValue = bin.toInt();
+	binValue = bin.toInt();
 	uiGeneralTab.teBins->setText(bin);
 	if (binValue > 0 && binValue < 20)
-		valid =true;
+		valid =true;*/
 
-	uiGeneralTab.pbRecalculate->setEnabled(valid);
+	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 void HistogramDock::curveLinePenChanged(const QPen& pen) {
 	m_initializing = true;
@@ -544,7 +559,7 @@ void HistogramDock::valuesTypeChanged(int index){
 	  ui.lValuesColumn->hide();
 	  cbValuesColumn->hide();
 		column = static_cast<const Column*>(m_curve->xColumn());
-	  
+		qDebug() <<"column va;" ;
 	}
 	this->showValuesColumnFormat(column);
   }
@@ -957,8 +972,6 @@ void HistogramDock::setupGeneral() {
 
 	cbXColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbXColumn, 2, 2, 1, 1);
-	
-	uiGeneralTab.teBins->setMaximumHeight(uiGeneralTab.leName->sizeHint().height());
 
 	//show the properties of the first curve
 	//bins option
@@ -984,7 +997,7 @@ void HistogramDock::setupGeneral() {
 	connect( cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)) );
 	connect( uiGeneralTab.cbHistogramType, SIGNAL(currentIndexChanged(int)), this, SLOT(enableRecalculate()) );
 	connect( uiGeneralTab.cbBins, SIGNAL(currentIndexChanged(int)), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.teBins, SIGNAL(expressionChanged()), this, SLOT(binValueChanged()) );
+	connect( uiGeneralTab.sbBins, SIGNAL(valueChanged(int)), this, SLOT(enableRecalculate()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 	
 }
@@ -1074,4 +1087,28 @@ void HistogramDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("FillingOpacity", ui.sbFillingOpacity->value()/100.0);
 	
 	config.sync();
+}
+//*************************************************************
+//*********** SLOTs for changes triggered in Histogram **********
+//*************************************************************
+//General-Tab
+void HistogramDock::curveDescriptionChanged(const AbstractAspect* aspect) {
+	if (m_curve != aspect)
+		return;
+
+	m_initializing = true;
+	if (aspect->name() != uiGeneralTab.leName->text()) {
+		uiGeneralTab.leName->setText(aspect->name());
+	} else if (aspect->comment() != uiGeneralTab.leComment->text()) {
+		uiGeneralTab.leComment->setText(aspect->comment());
+	}
+	m_initializing = false;
+}
+
+void HistogramDock::curveHistogramDataChanged(const Histogram::HistogramData& data) {
+	m_initializing = true;
+	uiGeneralTab.cbHistogramType->setCurrentIndex(data.type);
+	uiGeneralTab.cbBins->setCurrentIndex(data.binsOption);
+	uiGeneralTab.sbBins->setValue(data.binValue);
+	m_initializing = false;
 }

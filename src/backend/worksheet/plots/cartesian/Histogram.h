@@ -47,6 +47,14 @@ class Histogram: public WorksheetElement {
 		enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
 		enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
 		enum HistogramType {Ordinary,Cummulative, AvgShift};
+
+		struct HistogramData {
+			HistogramData() : type(Ordinary),binsOption(Number), binValue(10){};
+
+			HistogramType type;
+			BinsOption binsOption;
+			int binValue;
+		};
 		explicit Histogram(const QString &name);
 		virtual ~Histogram();
 		//size_t bins;
@@ -56,6 +64,8 @@ class Histogram: public WorksheetElement {
 		virtual QGraphicsItem *graphicsItem() const;
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
+
+		CLASS_D_ACCESSOR_DECL(HistogramData, histogramData, HistogramData)
 
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
@@ -90,7 +100,7 @@ class Histogram: public WorksheetElement {
 		CLASS_D_ACCESSOR_DECL(QColor, fillingSecondColor, FillingSecondColor)
 		CLASS_D_ACCESSOR_DECL(QString, fillingFileName, FillingFileName)
 		BASIC_D_ACCESSOR_DECL(qreal, fillingOpacity, FillingOpacity)
-		
+
 		virtual void setVisible(bool on);
 		virtual bool isVisible() const;
 		virtual void setPrinting(bool on);
@@ -104,6 +114,8 @@ class Histogram: public WorksheetElement {
 		typedef WorksheetElement BaseClass;
 		typedef HistogramPrivate Private;
 
+		bool isSourceDataChangedSinceLastPlot() const;
+
 	public slots:
 		virtual void retransform();
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
@@ -115,6 +127,7 @@ class Histogram: public WorksheetElement {
 		//SLOTs for changes triggered via QActions in the context menu
 		void visibilityChanged();
 
+		void handleSourceDataChanged();
 	protected:
 		Histogram(const QString& name, HistogramPrivate* dd);
 		HistogramPrivate* const d_ptr;
@@ -182,6 +195,9 @@ class Histogram: public WorksheetElement {
 		void fillingFileNameChanged(QString&);
 		void fillingOpacityChanged(float);
 
+		friend class HistogramSetDataCmd;
+		void histogramDataChanged(const Histogram::HistogramData&);
+		void sourceDataChangedSinceLastPlot();
 };
 
 #endif

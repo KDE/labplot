@@ -58,6 +58,7 @@ private:
 	QStringList dateStrings;
 	QStringList timeStrings;
 	QString bin;
+	int binValue;
 
 	TreeViewComboBox* cbXColumn;
 	TreeViewComboBox* cbValuesColumn;
@@ -152,6 +153,8 @@ private slots:
 	void curveFillingFileNameChanged(QString&);
 	void curveFillingOpacityChanged(float);
 
+	void curveDescriptionChanged(const AbstractAspect*);
+	void curveHistogramDataChanged(const Histogram::HistogramData&);
 
 	//load and save
 	void loadConfigFromTemplate(KConfig&);
