@@ -763,35 +763,13 @@ void HistogramPrivate::updateValues() {
 	//determine the value string for all points that are currently visible in the plot
 	switch (valuesType){
 	  case Histogram::NoValues:
-	  case Histogram::ValuesX:{
-		for(int i=0; i<bins; ++i){
+	  case Histogram::ValuesY:{
+		for(size_t i=0; i<bins; ++i){
 			if (!visiblePoints[i]) continue;
-			valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(histogram,i)) + valuesSuffix+ "  ";
+			valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(histogram,i)) + valuesSuffix;
+			qDebug() << valuesStrings;
 		}
 	  break;
-	  }
-	  case Histogram::ValuesY:{
-		for(int i=0; i<symbolPointsLogical.size(); ++i){
-			if (!visiblePoints[i]) continue;
- 			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).y()) + valuesSuffix;
-		}
-		break;
-	  }
-	  case Histogram::ValuesXY:{
-		for(int i=0; i<symbolPointsLogical.size(); ++i){
-			if (!visiblePoints[i]) continue;
-			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).x()) + ','
-							+ QString::number(symbolPointsLogical.at(i).y()) + valuesSuffix;
-		}
-		break;
-	  }
-	  case Histogram::ValuesXYBracketed:{
-		for(int i=0; i<symbolPointsLogical.size(); ++i){
-			if (!visiblePoints[i]) continue;
-			valuesStrings <<  valuesPrefix + '(' + QString::number(symbolPointsLogical.at(i).x()) + ','
-							+ QString::number(symbolPointsLogical.at(i).y()) +')' + valuesSuffix;
-		}
-		break;
 	  }
 	  case Histogram::ValuesCustomColumn:{
 		if (!valuesColumn){
@@ -815,6 +793,7 @@ void HistogramPrivate::updateValues() {
 			switch (xColMode){
 				case AbstractColumn::Numeric:
 					valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
+					qDebug() << valuesStrings;
 					break;
 				case AbstractColumn::Text:
 					valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
@@ -834,41 +813,47 @@ void HistogramPrivate::updateValues() {
 	QFontMetrics fm(valuesFont);
 	qreal w;
 	qreal h=fm.ascent();
-
+	double xAxisMin=xColumn->minimum();
+	double xAxisMax=xColumn->maximum();
+	double width = (xAxisMax-xAxisMin)/bins;
 	switch(valuesPosition){
 	  case Histogram::ValuesAbove:{
 		for (int i=0; i<valuesStrings.size(); i++){
 		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPointsScene.at(i).x() - w/2);
+		  tempPoint.setX( symbolPointsScene.at(i).x() -w/2 +xAxisMin);
 		  tempPoint.setY( symbolPointsScene.at(i).y() - valuesDistance );
 		  valuesPoints.append(tempPoint);
+		  xAxisMin+= 9*width;
 		  }
 		  break;
 		}
 	  case Histogram::ValuesUnder:{
 		for (int i=0; i<valuesStrings.size(); i++){
 		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPointsScene.at(i).x() -w/2 );
+		  tempPoint.setX( symbolPointsScene.at(i).x() -w/2+xAxisMin );
 		  tempPoint.setY( symbolPointsScene.at(i).y() + valuesDistance + h/2);
 		  valuesPoints.append(tempPoint);
+		  xAxisMin+= 9*width;
 		}
 		break;
 	  }
 	  case Histogram::ValuesLeft:{
 		for (int i=0; i<valuesStrings.size(); i++){
 		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1 );
+		  tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1 +xAxisMin);
 		  tempPoint.setY( symbolPointsScene.at(i).y());
 		  valuesPoints.append(tempPoint);
+		  xAxisMin+= 9*width;
 		}
 		break;
 	  }
 	  case Histogram::ValuesRight:{
 		for (int i=0; i<valuesStrings.size(); i++){
 		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1 );
+		  tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1 +xAxisMin);
 		  tempPoint.setY( symbolPointsScene.at(i).y() );
 		  valuesPoints.append(tempPoint);
+		  xAxisMin+= 9*width;
 		}
 		break;
 	  }

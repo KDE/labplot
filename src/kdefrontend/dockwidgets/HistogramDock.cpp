@@ -302,10 +302,7 @@ void HistogramDock::init(){
 
 	//Values
 	ui.cbValuesType->addItem(i18n("no values"));
-	ui.cbValuesType->addItem("x");
 	ui.cbValuesType->addItem("y");
-	ui.cbValuesType->addItem("x, y");
-	ui.cbValuesType->addItem("(x, y)");
 	ui.cbValuesType->addItem(i18n("custom column"));
 
 	ui.cbValuesPosition->addItem(i18n("above"));

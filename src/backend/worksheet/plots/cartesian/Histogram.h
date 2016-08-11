@@ -43,7 +43,7 @@ class Histogram: public WorksheetElement {
 
 	public:
 		enum BinsOption {Number,Width,SquareRoot,RiceRule,SturgisRule};
-		enum ValuesType {NoValues, ValuesX, ValuesY, ValuesXY, ValuesXYBracketed, ValuesCustomColumn};
+		enum ValuesType {NoValues, ValuesY, ValuesYBracketed, ValuesCustomColumn};
 		enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
 		enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
 		enum HistogramType {Ordinary,Cummulative, AvgShift};
