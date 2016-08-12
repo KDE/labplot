@@ -30,6 +30,7 @@
 #include <QListWidgetItem>
 #include <QStandardItemModel>
 #include <QDebug>
+#include <QFile>
 /*!
 	\class ThemesWidget
 	\brief Widget for showing theme previews and for selecting a theme.
@@ -50,10 +51,14 @@ ThemesWidget::ThemesWidget(QWidget *parent): QWidget(parent) {
 
 void ThemesWidget::setupPreview(QStringList themeList, QString themeImgPath) {
 	QStandardItemModel* mContentItemModel = new QStandardItemModel(this);
-	QString tempPath = themeImgPath;
+	QString tempPath;
 	for (int i = 0; i < themeList.size(); ++i) {
 		QStandardItem* listItem = new QStandardItem();
-		tempPath = tempPath+"themes/"+QVariant(themeList.at(i)).toString()+".png";
+		tempPath = themeImgPath+"screenshots/"+QVariant(themeList.at(i)).toString()+".png";
+		qDebug()<<tempPath;
+		if(!QFile::exists(tempPath)) {
+			tempPath = themeImgPath+"screenshots/Unavailable.png";
+		}
 		QPixmap placeHolderMap(tempPath);
 		listItem->setIcon(QIcon(placeHolderMap));
 		listItem->setText(QVariant(themeList.at(i)).toString());
@@ -70,7 +75,7 @@ void ThemesWidget::setupPreview(QStringList themeList, QString themeImgPath) {
 	ui.lvThemes->setIconSize(QSize(200,200));
 	ui.lvThemes->setResizeMode(QListWidget::Adjust);
 	ui.lvThemes->setMaximumWidth(225);
-	ui.lvThemes->setMinimumHeight(300);
+	ui.lvThemes->setMinimumHeight(425);
 }
 void ThemesWidget::applyClicked() {
 

@@ -80,17 +80,17 @@ ThemeHandler::ThemeHandler(QWidget *parent): QWidget(parent){
 	connect( pbLoadTheme, SIGNAL(clicked()), this, SLOT(showPanel()));
 	connect( pbSaveTheme, SIGNAL(clicked()), this, SLOT(saveMenu()));
 
-	m_themeList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*.txt");
+	m_themeList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/theme_files/*");
 //	m_themeList =
 	pbLoadTheme->setEnabled(!m_themeList.empty());
-	m_themeImgPath = m_themeList.at(0).split("themes/").at(0);
+	m_themeImgPath = m_themeList.at(0).split("theme_files/").at(0);
 }
 
 void ThemeHandler::loadSelected(QString str) {
 
 	QString themeName;
 	for(int i = 0; i < m_themeList.size();i++) {
-		if(m_themeList.at(i).indexOf(str + ".txt")!=-1)
+		if((m_themeList.at(i).indexOf(str)!=-1) || (m_themeList.at(i).indexOf(str + ".txt")!=-1))
 			themeName = m_themeList.at(i);
 	}
 	KConfig config(themeName, KConfig::SimpleConfig);
@@ -100,7 +100,7 @@ void ThemeHandler::loadSelected(QString str) {
 }
 
 QStringList ThemeHandler::themes() {
-	const QStringList pathList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*.txt");
+	const QStringList pathList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/theme_files/*");
 	QStringList themeList;
 	for(int i = 0; i < pathList.size(); ++i) {
 		QFileInfo fileinfo(pathList.at(i));
@@ -110,9 +110,9 @@ QStringList ThemeHandler::themes() {
 }
 
 const QString ThemeHandler::themeConfigPath(const QString& name) {
-	const QStringList themes = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
+	const QStringList themes = KGlobal::dirs()->findAllResources("data", "labplot2/themes/theme_files/*");
 	for (int i=0; i<themes.size(); ++i) {
-		if (themes.at(i).indexOf(name + ".txt")!=-1)
+		if ((themes.at(i).indexOf(name + ".txt")!=-1) || (themes.at(i).indexOf(name)!=-1))
 			return themes.at(i);
 	}
 
