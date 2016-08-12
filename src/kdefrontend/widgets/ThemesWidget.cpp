@@ -29,7 +29,6 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QStandardItemModel>
-#include <QDebug>
 #include <QFile>
 /*!
 	\class ThemesWidget
@@ -55,7 +54,6 @@ void ThemesWidget::setupPreview(QStringList themeList, QString themeImgPath) {
 	for (int i = 0; i < themeList.size(); ++i) {
 		QStandardItem* listItem = new QStandardItem();
 		tempPath = themeImgPath+"screenshots/"+QVariant(themeList.at(i)).toString()+".png";
-		qDebug()<<tempPath;
 		if(!QFile::exists(tempPath)) {
 			tempPath = themeImgPath+"screenshots/Unavailable.png";
 		}

@@ -2464,7 +2464,7 @@ void XYCurve::setColorPalette(const KConfig& config) {
 	color.append(group.readEntry("ThemePaletteColor3",(QColor)p.color()));
 	color.append(group.readEntry("ThemePaletteColor4",(QColor)p.color()));
 	color.append(group.readEntry("ThemePaletteColor5",(QColor)p.color()));
-	qDebug()<<color;
+
 	float fac[3] = {0.25,0.45,0.65};    //3 factors to create shades from theme's palette
 	//Generating 3 lighter shades of the color
 	for(int i=0;i<5;i++)
