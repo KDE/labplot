@@ -83,6 +83,7 @@ class HistogramPrivate: public QGraphicsItem {
 		qreal lineOpacity;
 
 		//values
+		int value;
 		Histogram::ValuesType valuesType;
 		const AbstractColumn* valuesColumn;
 		QString valuesColumnPath;

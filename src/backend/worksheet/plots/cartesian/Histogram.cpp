@@ -520,7 +520,7 @@ void HistogramPrivate::retransform(){
 	if (m_suppressRetransform){
 		return;
 	}
-	qDebug()<<"HistogramPrivate::retransform() " << q->name();
+	//qDebug()<<"HistogramPrivate::retransform() " << q->name();
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
 	connectedPointsLogical.clear();
@@ -603,15 +603,11 @@ void HistogramPrivate::updateLines(){
 	double xAxisMax= xColumn->maximum();
 	switch (histogramData.binsOption) {
 		case Histogram::Number:
-			qDebug() <<"number selected";
 			bins = (size_t)histogramData.binValue;
 			break;
 		case Histogram::SquareRoot:
-			qDebug() <<"Sqrt selected";
 			bins = (size_t)sqrt(histogramData.binValue);
 		case Histogram::RiceRule:
-			
-			qDebug() <<"riceri=ule selected";
 			bins = (size_t)2*cbrt(histogramData.binValue);
 			break;
 		case Histogram::Width:
@@ -764,13 +760,28 @@ void HistogramPrivate::updateValues() {
 	switch (valuesType){
 	  case Histogram::NoValues:
 	  case Histogram::ValuesY:{
-		for(size_t i=0; i<bins; ++i){
-			if (!visiblePoints[i]) continue;
-			valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(histogram,i)) + valuesSuffix;
-			qDebug() << valuesStrings;
+			switch(histogramType) {
+				case Histogram::Ordinary: {
+					for(size_t i=0; i<bins; ++i){
+						if (!visiblePoints[i]) continue;
+						valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(histogram,i)) + valuesSuffix;
+						}
+				break;
+				}
+			case Histogram::Cummulative:
+			{
+				value=0;
+				for(size_t i=0; i<bins; ++i){
+					if (!visiblePoints[i]) continue;
+					value+=gsl_histogram_get(histogram,i);
+					valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
+					}
+			break;
+			}
+			//TODO case Histogram::AvgShift:
+		} 
+		break;
 		}
-	  break;
-	  }
 	  case Histogram::ValuesCustomColumn:{
 		if (!valuesColumn){
 		  recalcShapeAndBoundingRect();
@@ -793,7 +804,6 @@ void HistogramPrivate::updateValues() {
 			switch (xColMode){
 				case AbstractColumn::Numeric:
 					valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
-					qDebug() << valuesStrings;
 					break;
 				case AbstractColumn::Text:
 					valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
@@ -1113,8 +1123,8 @@ void HistogramPrivate::updateFilling() {
   recalculates the outer bounds and the shape of the curve.
 */
 void HistogramPrivate::recalcShapeAndBoundingRect() {
-	if (m_suppressRecalc)
-		return;
+	//if (m_suppressRecalc)
+	//	return;
 
 	prepareGeometryChange();
 	curveShape = QPainterPath();
@@ -1137,14 +1147,13 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 }
 
 void HistogramPrivate::draw(QPainter *painter) {
-
+	//drawing line
 	painter->setOpacity(lineOpacity);
 	painter->setPen(linePen);
 	painter->setBrush(Qt::NoBrush);
 	painter->drawPath(linePath);
 
 	//draw filling
-
 	if (fillingPosition != Histogram::NoFilling) {
 		painter->setOpacity(fillingOpacity);
 		painter->setPen(Qt::SolidLine);
@@ -1163,6 +1172,7 @@ void HistogramPrivate::draw(QPainter *painter) {
 void HistogramPrivate::updatePixmap() {
 // 	QTime timer;
 // 	timer.start();
+
 	QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
 	if (boundingRectangle.width()==0 || boundingRectangle.width()==0) {
 		m_pixmap = pixmap;
@@ -1424,10 +1434,8 @@ void HistogramPrivate::drawFilling(QPainter* painter) {
 
 void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(q->parentAspect());
-	qDebug() << plot->mouseMode();
 	if (plot->mouseMode() == CartesianPlot::SelectionMode && !isSelected()) {
 		m_hovered = true;
-		qDebug() << "hoverEnterEvent";
 		q->hovered();
 		update();
 	}
