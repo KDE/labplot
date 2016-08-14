@@ -73,7 +73,7 @@ void ThemesWidget::setupPreview(QStringList themeList, QString themeImgPath) {
 	ui.lvThemes->setIconSize(QSize(200,200));
 	ui.lvThemes->setResizeMode(QListWidget::Adjust);
 	ui.lvThemes->setMaximumWidth(225);
-	ui.lvThemes->setMinimumHeight(425);
+
 }
 void ThemesWidget::applyClicked() {
 

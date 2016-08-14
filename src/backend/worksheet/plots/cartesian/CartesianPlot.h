@@ -106,6 +106,7 @@ class CartesianPlot:public AbstractPlot{
 		void init();
 		void initActions();
 		void initMenus();
+		void applyThemeOnNewCurve(XYCurve* curve);
 
 		CartesianPlotLegend* m_legend;
 		float m_zoomFactor;
@@ -141,6 +142,7 @@ class CartesianPlot:public AbstractPlot{
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;
 		QMenu* themeMenu;
+		QList<QColor> m_themeColorPalette;
 
 		Q_DECLARE_PRIVATE(CartesianPlot)
 

@@ -131,6 +131,9 @@ class XYCurve: public WorksheetElement {
 		typedef WorksheetElement BaseClass;
 		typedef XYCurvePrivate Private;
 
+		QList<QColor> getColorPalette();
+		void applyColorPalette(QList<QColor> color);
+
 	public slots:
 		virtual void retransform();
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);

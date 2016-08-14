@@ -718,41 +718,48 @@ void CartesianPlot::addVerticalAxis() {
 XYCurve* CartesianPlot::addCurve() {
 	XYCurve* curve = new XYCurve("xy-curve");
 	this->addChild(curve);
+	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
 XYEquationCurve* CartesianPlot::addEquationCurve() {
 	XYEquationCurve* curve = new XYEquationCurve("f(x)");
 	this->addChild(curve);
+	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
 XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
 	XYInterpolationCurve* curve = new XYInterpolationCurve("Interpolation");
 	this->addChild(curve);
+	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
 XYSmoothCurve* CartesianPlot::addSmoothCurve() {
 	XYSmoothCurve* curve = new XYSmoothCurve("Smooth");
 	this->addChild(curve);
+	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 XYFitCurve* CartesianPlot::addFitCurve() {
 	XYFitCurve* curve = new XYFitCurve("fit");
 	this->addChild(curve);
+	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
 XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve() {
 	XYFourierFilterCurve* curve = new XYFourierFilterCurve("Fourier filter");
 	this->addChild(curve);
+	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
 XYFourierTransformCurve* CartesianPlot::addFourierTransformCurve() {
 	XYFourierTransformCurve* curve = new XYFourierTransformCurve("Fourier transform");
 	this->addChild(curve);
+	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
@@ -2104,6 +2111,9 @@ void CartesianPlot::loadThemeConfig(KConfig& config) {
 	foreach(WorksheetElement *child, childElements)
 		child->loadConfig(config);
 
+	const QList<XYCurve*>& childXYCurve = children<XYCurve>(AbstractAspect::IncludeHidden);
+	m_themeColorPalette = childXYCurve.last()->getColorPalette();
+
 	Q_D(CartesianPlot);
 	d->update(this->rect());
 	emit (themeLoaded());
@@ -2122,4 +2132,8 @@ void CartesianPlot::saveThemeConfig(KConfig &config) {
 
 	foreach(XYCurve *child, xyCurveElements)
 		child->saveConfig(config);
+}
+
+void CartesianPlot::applyThemeOnNewCurve(XYCurve* curve) {
+	curve->applyColorPalette(m_themeColorPalette);
 }

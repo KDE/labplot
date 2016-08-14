@@ -136,6 +136,7 @@ void ThemeHandler::showPanel() {
 
 	emit(loadPreviewPanel(this->themes(),m_themeImgPath));
 	QPoint pos(-menu.sizeHint().width()+pbLoadTheme->width(),-menu.sizeHint().height());
+	menu.setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 	menu.exec(pbLoadTheme->mapToGlobal(pos));
 
 }
@@ -162,7 +163,6 @@ void ThemeHandler::saveMenu() {
 
 	QPoint pos(-menu.sizeHint().width()+pbSaveTheme->width(),-menu.sizeHint().height());
 	menu.exec(pbSaveTheme->mapToGlobal(pos));
-
 	leFilename->setFocus();
 }
 
