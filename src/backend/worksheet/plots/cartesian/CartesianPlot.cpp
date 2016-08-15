@@ -1874,189 +1874,189 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const{
 bool CartesianPlot::load(XmlStreamReader* reader){
 	Q_D(CartesianPlot);
 
-    if(!reader->isStartElement() || reader->name() != "cartesianPlot"){
-        reader->raiseError(i18n("no cartesianPlot element found"));
-        return false;
-    }
+	if(!reader->isStartElement() || reader->name() != "cartesianPlot"){
+		reader->raiseError(i18n("no cartesianPlot element found"));
+		return false;
+	}
 
-    if (!readBasicAttributes(reader))
-        return false;
+	if (!readBasicAttributes(reader))
+		return false;
 
-    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-    QXmlStreamAttributes attribs;
-    QString str;
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QXmlStreamAttributes attribs;
+	QString str;
 
-    while (!reader->atEnd()){
-        reader->readNext();
-        if (reader->isEndElement() && reader->name() == "cartesianPlot")
-            break;
+	while (!reader->atEnd()){
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == "cartesianPlot")
+			break;
 
-        if (!reader->isStartElement())
-            continue;
+		if (!reader->isStartElement())
+			continue;
 
-        if (reader->name() == "comment"){
-            if (!readCommentElement(reader))
+		if (reader->name() == "comment"){
+			if (!readCommentElement(reader))
 				return false;
 		}else if(reader->name() == "geometry"){
-            attribs = reader->attributes();
+			attribs = reader->attributes();
 
-            str = attribs.value("x").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'x'"));
-            else
-                d->rect.setX( str.toDouble() );
+			str = attribs.value("x").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'x'"));
+			else
+				d->rect.setX( str.toDouble() );
 
 			str = attribs.value("y").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'y'"));
-            else
-                d->rect.setY( str.toDouble() );
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'y'"));
+			else
+				d->rect.setY( str.toDouble() );
 
 			str = attribs.value("width").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'width'"));
-            else
-                d->rect.setWidth( str.toDouble() );
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'width'"));
+			else
+				d->rect.setWidth( str.toDouble() );
 
 			str = attribs.value("height").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'height'"));
-            else
-                d->rect.setHeight( str.toDouble() );
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'height'"));
+			else
+				d->rect.setHeight( str.toDouble() );
 
 			str = attribs.value("visible").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'visible'"));
-            else
-                d->setVisible(str.toInt());
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'visible'"));
+			else
+				d->setVisible(str.toInt());
 		}else if(reader->name() == "coordinateSystem"){
-            attribs = reader->attributes();
+			attribs = reader->attributes();
 
 			str = attribs.value("autoScaleX").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'autoScaleX'"));
-            else
-                d->autoScaleX = bool(str.toInt());
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'autoScaleX'"));
+			else
+				d->autoScaleX = bool(str.toInt());
 
 			str = attribs.value("autoScaleY").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'autoScaleY'"));
-            else
-                d->autoScaleY = bool(str.toInt());
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'autoScaleY'"));
+			else
+				d->autoScaleY = bool(str.toInt());
 
-            str = attribs.value("xMin").toString();
-            if(str.isEmpty()) {
-                reader->raiseWarning(attributeWarning.arg("'xMin'"));
+			str = attribs.value("xMin").toString();
+			if(str.isEmpty()) {
+					reader->raiseWarning(attributeWarning.arg("'xMin'"));
 			} else {
-                d->xMin = str.toDouble();
+				d->xMin = str.toDouble();
 				d->xMinPrev = d->xMin;
 			}
 
-            str = attribs.value("xMax").toString();
-            if(str.isEmpty()) {
-                reader->raiseWarning(attributeWarning.arg("'xMax'"));
+			str = attribs.value("xMax").toString();
+			if(str.isEmpty()) {
+				reader->raiseWarning(attributeWarning.arg("'xMax'"));
 			} else {
-                d->xMax = str.toDouble();
+				d->xMax = str.toDouble();
 				d->xMaxPrev = d->xMax;
 			}
 
-            str = attribs.value("yMin").toString();
-            if(str.isEmpty()) {
-                reader->raiseWarning(attributeWarning.arg("'yMin'"));
+			str = attribs.value("yMin").toString();
+			if(str.isEmpty()) {
+				reader->raiseWarning(attributeWarning.arg("'yMin'"));
 			} else {
-                d->yMin = str.toDouble();
+				d->yMin = str.toDouble();
 				d->yMinPrev = d->yMin;
 			}
 
-            str = attribs.value("yMax").toString();
-            if(str.isEmpty()) {
-                reader->raiseWarning(attributeWarning.arg("'yMax'"));
+			str = attribs.value("yMax").toString();
+			if(str.isEmpty()) {
+				reader->raiseWarning(attributeWarning.arg("'yMax'"));
 			} else {
-                d->yMax = str.toDouble();
+				d->yMax = str.toDouble();
 				d->yMaxPrev = d->yMax;
 			}
 
 			str = attribs.value("xScale").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'xScale'"));
-            else
-                d->xScale = CartesianPlot::Scale(str.toInt());
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'xScale'"));
+			else
+				d->xScale = CartesianPlot::Scale(str.toInt());
 
 			str = attribs.value("yScale").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'yScale'"));
-            else
-                d->yScale = CartesianPlot::Scale(str.toInt());
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'yScale'"));
+			else
+				d->yScale = CartesianPlot::Scale(str.toInt());
 
-            str = attribs.value("horizontalPadding").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'horizontalPadding'"));
-            else
-                d->horizontalPadding = str.toDouble();
+			str = attribs.value("horizontalPadding").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'horizontalPadding'"));
+			else
+				d->horizontalPadding = str.toDouble();
 
-            str = attribs.value("verticalPadding").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'verticalPadding'"));
-            else
-                d->verticalPadding = str.toDouble();
-        }else if(reader->name() == "textLabel"){
-            m_title = new TextLabel("");
-            if (!m_title->load(reader)){
-                delete m_title;
+			str = attribs.value("verticalPadding").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'verticalPadding'"));
+			else
+				d->verticalPadding = str.toDouble();
+		}else if(reader->name() == "textLabel"){
+			m_title = new TextLabel("");
+			if (!m_title->load(reader)){
+				delete m_title;
 				m_title=0;
-                return false;
-            }else{
-                addChild(m_title);
-            }
+				return false;
+			}else{
+				addChild(m_title);
+			}
 		}else if(reader->name() == "plotArea"){
 			m_plotArea->load(reader);
 		}else if(reader->name() == "axis"){
-            Axis* axis = new Axis("");
-            if (!axis->load(reader)){
-                delete axis;
-                return false;
-            }else{
-                addChild(axis);
-            }
+			Axis* axis = new Axis("");
+			if (!axis->load(reader)){
+				delete axis;
+				return false;
+			}else{
+				addChild(axis);
+			}
 		}else if(reader->name() == "xyCurve"){
-            XYCurve* curve = addCurve();
-            if (!curve->load(reader)){
-                removeChild(curve);
-                return false;
-            }
+			XYCurve* curve = addCurve();
+			if (!curve->load(reader)){
+				removeChild(curve);
+				return false;
+			}
 		}else if(reader->name() == "xyEquationCurve"){
 			XYEquationCurve* curve = addEquationCurve();
-            if (!curve->load(reader)){
+			if (!curve->load(reader)){
 				removeChild(curve);
-                return false;
-            }
+				return false;
+			}
 		} else if(reader->name() == "xyFitCurve") {
 			XYFitCurve* curve = addFitCurve();
 			if (!curve->load(reader)){
 				removeChild(curve);
-			return false;
+				return false;
 			}
 		} else if(reader->name() == "xyFourierFilterCurve") {
 			XYFourierFilterCurve* curve = addFourierFilterCurve();
 			if (!curve->load(reader)){
 				removeChild(curve);
-			return false;
+				return false;
 			}
 		} else if(reader->name() == "xyInterpolationCurve") {
 			XYInterpolationCurve* curve = addInterpolationCurve();
 			if (!curve->load(reader)){
 				removeChild(curve);
-			return false;
+				return false;
 			}
 		} else if(reader->name() == "cartesianPlotLegend"){
-            m_legend = new CartesianPlotLegend(this, "");
-            if (!m_legend->load(reader)){
-                delete m_legend;
-                return false;
-            }else{
-                addChild(m_legend);
+			m_legend = new CartesianPlotLegend(this, "");
+			if (!m_legend->load(reader)){
+				delete m_legend;
+				return false;
+			}else{
+				addChild(m_legend);
 				addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
-            }
+			}
 		}else if(reader->name() == "customPoint"){
 			CustomPoint* point = new CustomPoint(this, "");
 			if (!point->load(reader)){
@@ -2065,11 +2065,17 @@ bool CartesianPlot::load(XmlStreamReader* reader){
 			}else{
 				addChild(point);
 			}
-        }else{ // unknown element
-            reader->raiseWarning(i18n("unknown cartesianPlot element '%1'", reader->name().toString()));
-            if (!reader->skipToEndElement()) return false;
-        }
-    }
+		}else if(reader->name() == "Histogram"){
+			Histogram* curve = addHistogram();
+			if (!curve->load(reader)){
+				removeChild(curve);
+				return false;
+			}
+		}else{ // unknown element
+			reader->raiseWarning(i18n("unknown cartesianPlot element '%1'", reader->name().toString()));
+			if (!reader->skipToEndElement()) return false;
+		}
+	}
 
 	d->retransform();//TODO: This is expensive. why do we need this on load?
 	if (m_title) {
