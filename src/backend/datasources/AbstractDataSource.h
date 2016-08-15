@@ -36,7 +36,7 @@ class AbstractDataSource : public AbstractPart, public scripted{
 
 	public:
    		AbstractDataSource(AbstractScriptingEngine *engine, const QString& name);
-		virtual ~AbstractDataSource() {};
+        virtual ~AbstractDataSource() {}
 		void clear();
 		int resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols);
 		int create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode, int actualRows, int actualCols);
