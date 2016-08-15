@@ -2234,8 +2234,10 @@ void Axis::loadConfig(const KConfig& config) {
 	this->setMajorTicksPen(p);
 	this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity",this->majorTicksOpacity()));
 	this->setMajorTicksType((Axis::TicksType)group.readEntry("MajorTicksType",(int)this->majorTicksType()));
+	this->setMajorTicksNumber(group.readEntry("MajorTicksNumber", (int) this->majorTicksNumber()));
 
 	//Minor ticks
+	this->setMinorTicksNumber(group.readEntry("MinorTicksNumber", (int) this->minorTicksNumber()));
 	this->setMinorGridOpacity(group.readEntry("MinorGridOpacity", this->minorGridOpacity()));
 	p.setColor(group.readEntry("MinorGridColor",(QColor) this->minorGridPen().color()));
 	p.setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle",(int) this->minorGridPen().style()));
@@ -2276,8 +2278,10 @@ void Axis::saveConfig(const KConfig& config) {
 	group.writeEntry("MajorTicksWidth", this->majorTicksPen().widthF());
 	group.writeEntry("MajorTicksOpacity",this->majorTicksOpacity());
 	group.writeEntry("MajorTicksType",(int)this->majorTicksType());
+	group.writeEntry("MajorTicksNumber",(int)this->majorTicksNumber());
 
 	//Minor ticks
+	group.writeEntry("MinorTicksNumber",(int)this->minorTicksNumber());
 	group.writeEntry("MinorGridOpacity", this->minorGridOpacity());
 	group.writeEntry("MinorGridColor",(QColor) this->minorGridPen().color());
 	group.writeEntry("MinorGridStyle",(int) this->minorGridPen().style());
