@@ -330,7 +330,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 
         if (fits_read_img(fitsFile, TDOUBLE, 1, pixelCount, NULL, data, NULL, &status)) {
             printError(status);
-            return QString();
+            return QString("Error");
         }
 
         QVector<QVector<double>*> dataPointers;
@@ -386,11 +386,11 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
         if (spreadsheet) {
             const QString& comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
-            for ( int n=0; n<actualCols; n++ ){
-                Column* column = spreadsheet->column(columnOffset+n);
+            for (int n = 0; n < actualCols; n++) {
+                Column* column = spreadsheet->column(columnOffset + n);
                 column->setComment(comment);
                 column->setUndoAware(true);
-                if (importMode==AbstractFileFilter::Replace) {
+                if (importMode == AbstractFileFilter::Replace) {
                     column->setSuppressDataChangedSignal(false);
                     column->setChanged();
                 }
@@ -524,7 +524,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         }
 
         if (noDataSource) {
-            *okToMatrix = matrixNumericColumnIndices.size() == 0 ? false : true;
+            *okToMatrix = matrixNumericColumnIndices.isEmpty() ? false : true;
         }
         if (!noDataSource) {
             Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
@@ -535,24 +535,28 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                 spreadsheet->setUndoAware(false);
                 columnOffset = spreadsheet->resize(importMode, columnNames, actualCols - startCol);
 
-                if (importMode==AbstractFileFilter::Replace) {
+                if (importMode == AbstractFileFilter::Replace) {
                     spreadsheet->clear();
                     spreadsheet->setRowCount(lines - startRrow);
                 } else {
                     if (spreadsheet->rowCount() < (lines - startRrow))
                         spreadsheet->setRowCount(lines - startRrow);
                 }
-                for (int n = 0; n < actualCols - startCol; n++ ) {
+                for (int n = 0; n < actualCols - startCol; n++) {
                     if (columnNumericTypes.at(n)) {
                         spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::Numeric);
                         QVector<double>* datap = static_cast<QVector<double>* >(spreadsheet->column(columnOffset+n)->data());
                         numericDataPointers.push_back(datap);
-                        datap->clear();
+                        if (importMode == AbstractFileFilter::Replace) {
+                            datap->clear();
+                        }
                     } else {
                         spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::Text);
                         QStringList* list = static_cast<QStringList* >(spreadsheet->column(columnOffset+n)->data());
                         stringDataPointers.push_back(list);
-                        list->clear();
+                        if (importMode == AbstractFileFilter::Replace) {
+                            list->clear();
+                        }
                     }
                 }
                 stringDataPointers.squeeze();
@@ -643,7 +647,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
         if (!noDataSource) {
             Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
             if (spreadsheet) {
-                for ( int n=0; n<actualCols - startRrow; n++ ){
+                for ( int n = 0; n < actualCols - startRrow; ++n){
                     Column* column = spreadsheet->column(columnOffset+n);
                     column->setComment(columnUnits.at(n));
                     column->setUndoAware(true);
@@ -731,8 +735,6 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
             if (fits_write_img(fitsFile, TDOUBLE, 1, nelem, array, &status )) {
                 printError(status);
                 status = 0;
-                fits_close_file(fitsFile, &status);
-                return;
             }
 
             fits_close_file(fitsFile, &status);
