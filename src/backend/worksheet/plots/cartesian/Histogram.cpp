@@ -167,7 +167,6 @@ void Histogram::setPrinting(bool on) {
 void Histogram::setHistrogramType(Histogram::HistogramType histogramType) {
 	d_ptr->histogramType = histogramType;
 	qDebug() << histogramType;
-	d_ptr->retransform();
 }
 
 Histogram::HistogramType Histogram::getHistrogramType() {
@@ -230,7 +229,7 @@ void Histogram::setHistogramData(const Histogram::HistogramData& histogramData) 
 	Q_D(Histogram);
 	if ((histogramData.binValue != d->histogramData.binValue)
 		|| (histogramData.binsOption != d->histogramData.binsOption) );
-		//exec(new HistogramSetDataCmd(d, histogramData, i18n("%1: set equation")));
+		exec(new HistogramSetHistogramDataCmd(d, histogramData, i18n("%1: set equation")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetXColumn, const AbstractColumn*, xColumn, retransform)
@@ -619,7 +618,6 @@ void HistogramPrivate::updateLines(){
 	}
 
 	double width = (xAxisMax-xAxisMin)/bins;
-
 	histogram = gsl_histogram_alloc (bins); // demo- number of bins
 	gsl_histogram_set_ranges_uniform (histogram, xAxisMin,xAxisMax+1);
 

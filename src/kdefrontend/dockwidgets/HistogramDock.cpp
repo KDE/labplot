@@ -439,10 +439,10 @@ void HistogramDock::recalculateClicked() {
 	}
 	data.binsOption= (Histogram::BinsOption)uiGeneralTab.cbBins->currentIndex();
 	data.binValue = uiGeneralTab.sbBins->value();
-	m_curve->retransform();
-	/*foreach(Histogram* curve, m_curvesList)
+// 	m_curve->retransform();
+	foreach(Histogram* curve, m_curvesList)
 		dynamic_cast<Histogram*>(curve)->setHistogramData(data);
-*/
+
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 }
 
