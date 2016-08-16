@@ -1656,7 +1656,6 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
             tableExtensionItem->addChild(treeItem);
         }
         if (tableExtensionItem->childCount() > 0) {
-
             treeNameItem->addChild(tableExtensionItem);
             tableExtensionItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
             tableExtensionItem->setExpanded(true);

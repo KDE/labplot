@@ -63,10 +63,18 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget *parent) :
     connect(ui.twExtensions, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(fillTable(QTreeWidgetItem*, int)));
 }
 
+/*!
+ * \brief Destructor
+ */
 FITSHeaderEditWidget::~FITSHeaderEditWidget() {
     delete m_fitsFilter;
 }
 
+/*!
+ * \brief Fills the keywords tablewidget.
+ * If the selected extension was not yet selected before, then the keywords are read from the file
+ * and then the table is filled, otherwise the table is filled using the already existing keywords.
+ */
 void FITSHeaderEditWidget::fillTable() {
     m_initializingTable = true;
     if (!m_extensionDatas.contains(m_seletedExtension)) {
@@ -97,6 +105,11 @@ void FITSHeaderEditWidget::fillTable() {
     m_initializingTable = false;
 }
 
+/*!
+ * \brief Fills the tablewidget with the keywords of extension \a item
+ * \param item the extension selected
+ * \param col the column of the selected item
+ */
 void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
     WAIT_CURSOR;
     const QString& itemText = item->text(col);
@@ -137,6 +150,11 @@ void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
     RESET_CURSOR;
 }
 
+/*!
+ * \brief Shows a dialog for opening a FITS file
+ * If the returned file name is not empty (so a FITS file was selected) and it's not opened yet
+ * then the file is parsed, so the treeview for the extensions is built and the table is filled.
+ */
 void FITSHeaderEditWidget::openFile() {
 
     KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditWidget");
@@ -179,6 +197,12 @@ void FITSHeaderEditWidget::openFile() {
     RESET_CURSOR;
 }
 
+/*!
+ * \brief Triggered when clicking the Save button
+ * Saves the modifications (new keywords, new keyword units, keyword modifications,
+ * deleted keywords, deleted extensions) to the FITS files.
+ * \return \c true if there was something saved, otherwise false
+ */
 bool FITSHeaderEditWidget::save() {
     bool saved = false;
     foreach (const QString& fileName, m_extensionDatas.keys()) {
@@ -217,6 +241,9 @@ bool FITSHeaderEditWidget::save() {
     return saved;
 }
 
+/*!
+ * \brief Initializes the context menu's actions.
+ */
 void FITSHeaderEditWidget::initActions() {
     action_add_keyword = new QAction(i18n("Add new keyword"), this);
     action_remove_keyword = new QAction(i18n("Remove keyword"), this);
@@ -224,6 +251,9 @@ void FITSHeaderEditWidget::initActions() {
     action_addmodify_unit = new QAction(i18n("Add unit"), this);
 }
 
+/*!
+ * \brief Connects signals of the actions to the appropriate slots.
+ */
 void FITSHeaderEditWidget::connectActions() {
     connect(action_add_keyword, SIGNAL(triggered()), this, SLOT(addKeyword()));
     connect(action_remove_keyword, SIGNAL(triggered()), this, SLOT(removeKeyword()));
@@ -231,6 +261,9 @@ void FITSHeaderEditWidget::connectActions() {
     connect(action_addmodify_unit, SIGNAL(triggered()), this, SLOT(addModifyKeywordUnit()));
 }
 
+/*!
+ * \brief Initializes the context menus.
+ */
 void FITSHeaderEditWidget::initContextMenus() {
     m_KeywordActionsMenu = new QMenu(this);
     m_KeywordActionsMenu->addAction(action_add_keyword);
@@ -241,6 +274,10 @@ void FITSHeaderEditWidget::initContextMenus() {
     m_ExtensionActionsMenu->addAction(action_remove_extension);
 }
 
+/*!
+ * \brief Shows a FITSHeaderEditNewKeywordDialog and decides whether the new keyword provided in the dialog
+ * can be added to the new keywords or not. Updates the tablewidget if it's needed.
+ */
 void FITSHeaderEditWidget::addKeyword() {
     FITSHeaderEditNewKeywordDialog* newKeywordDialog = new FITSHeaderEditNewKeywordDialog;
     m_initializingTable = true;
@@ -297,6 +334,10 @@ void FITSHeaderEditWidget::addKeyword() {
     delete newKeywordDialog;
 }
 
+/*!
+ * \brief Shows a messagebox whether we want to remove the keyword or not.
+ * Mandatory keywords cannot be deleted.
+ */
 void FITSHeaderEditWidget::removeKeyword() {
     const int removeKeyWordMb = KMessageBox::questionYesNo(this,"Are you sure you want to delete this keyword?",
                                                      "Confirm deletion");
@@ -326,6 +367,10 @@ void FITSHeaderEditWidget::removeKeyword() {
     }
 }
 
+/*!
+ * \brief Trigggered when an item was updated by the user in the tablewidget
+ * \param item the item which was updated
+ */
 void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem *item) {
     if (!m_initializingTable) {
         const int row = item->row();
@@ -367,6 +412,11 @@ void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem *item) {
     }
 }
 
+/*!
+ * \brief Shows a FITSHeaderEditAddUnitDialog on the selected keyword (provides the keyword's unit to the
+ * dialog if it had one) and if the dialog was accepted then the new keyword unit is set and the tablewidget
+ * is updated (filled with the modifications).
+ */
 void FITSHeaderEditWidget::addModifyKeywordUnit() {
     FITSHeaderEditAddUnitDialog* addUnitDialog;
 
@@ -414,6 +464,10 @@ void FITSHeaderEditWidget::addModifyKeywordUnit() {
     delete addUnitDialog;
 }
 
+/*!
+ * \brief Removes the selected extension from the extensions treeview
+ * If the last extension is removed from the tree, then the extension and the file will be removed too.
+ */
 void FITSHeaderEditWidget::removeExtension() {
     QTreeWidgetItem* current = ui.twExtensions->currentItem();
     QTreeWidgetItem* newCurrent = ui.twExtensions->itemBelow(current);
@@ -436,6 +490,12 @@ void FITSHeaderEditWidget::removeExtension() {
     ui.twExtensions->setCurrentItem(newCurrent);
 }
 
+/*!
+ * \brief Returns a list of mandatory keywords according to the currently selected extension.
+ * If the currently selected extension is an image then it returns the mandatory keywords of an image,
+ * otherwise the mandatory keywords of a table
+ * \return a list of mandatory keywords
+ */
 QList<QString> FITSHeaderEditWidget::mandatoryKeywords() const {
     QList<QString> mandatoryKeywords;
     const QTreeWidgetItem* currentItem = ui.twExtensions->currentItem();
@@ -447,6 +507,12 @@ QList<QString> FITSHeaderEditWidget::mandatoryKeywords() const {
     return mandatoryKeywords;
 }
 
+/*!
+ * \brief Manipulates the contextmenu event of the widget
+ * \param watched the object on which the event occoured
+ * \param event the event watched
+ * \return
+ */
 bool FITSHeaderEditWidget::eventFilter(QObject * watched, QEvent * event) {
     if (event->type() == QEvent::ContextMenu) {
         QContextMenuEvent *cm_event = static_cast<QContextMenuEvent*>(event);
