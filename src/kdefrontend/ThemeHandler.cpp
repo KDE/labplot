@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : Widget for handling saving and loading of themes
     --------------------------------------------------------------------
-	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-	Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 Prakriti Bhardwaj (p_bhardwaj14@informatik.uni-kl.de)
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -55,17 +55,9 @@
   \ingroup kdefrontend
 */
 
-ThemeHandler::ThemeHandler(QWidget *parent): QWidget(parent){
-
+ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	QHBoxLayout* horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
-
-	QLabel* lTheme = new QLabel(this);
-	horizontalLayout->addWidget(lTheme);
-	lTheme->setText("Theme Manager:");
-
-	QSpacerItem* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-	horizontalLayout->addItem(horizontalSpacer);
 
 	pbLoadTheme = new QPushButton(this);
 	horizontalLayout->addWidget(pbLoadTheme);
@@ -166,14 +158,12 @@ void ThemeHandler::saveMenu() {
 void ThemeHandler::saveNewSelected(const QString& filename) {
 	KConfig config(KGlobal::dirs()->locateLocal("appdata", "themes/local") + '/' + filename, KConfig::SimpleConfig);
 	emit (saveThemeRequested(config));
-
 	emit info( i18n("New theme \"%1\" was saved.", filename) );
 }
 
 void ThemeHandler::saveDefaults() {
 	KConfig config;
 	emit (saveThemeRequested(config));
-
 	emit info( i18n("New default theme was saved.") );
 }
 

@@ -159,19 +159,24 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.sbPaddingHorizontal, SIGNAL(valueChanged(double)), this, SLOT(horizontalPaddingChanged(double)) );
 	connect( ui.sbPaddingVertical, SIGNAL(valueChanged(double)), this, SLOT(verticalPaddingChanged(double)) );
 
-	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
-	ui.verticalLayout->addWidget(templateHandler);
-	templateHandler->show();
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	//theme and template handlers
+	QFrame* frame = new QFrame(this);
+	QHBoxLayout* layout = new QHBoxLayout(frame);
 
 	ThemeHandler* themeHandler = new ThemeHandler(this);
-	ui.verticalLayout->addWidget(themeHandler);
+	layout->addWidget(themeHandler);
 	connect(themeHandler, SIGNAL(loadThemeRequested(KConfig&)), this, SLOT(loadTheme(KConfig&)));
 	connect(m_plot, SIGNAL(themeLoaded()),this, SLOT(load()));
 	connect(themeHandler, SIGNAL(saveThemeRequested(KConfig&)), this, SLOT(saveTheme(KConfig&)));
 	//connect(this, SIGNAL(saveThemeEnable(bool)), themeHandler, SLOT(saveThemeEnable(bool)));
+
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
+	layout->addWidget(templateHandler);
+	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
+	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
+	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+	ui.verticalLayout->addWidget(frame);
 
 	init();
 }
