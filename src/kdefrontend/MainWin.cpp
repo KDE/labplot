@@ -168,7 +168,7 @@ void MainWin::initGUI(const QString& fileName) {
 	setCentralWidget(m_mdiArea);
 	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
 	        this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__APPLE__)
 	QIcon::setThemeName("hicolor");
 #endif
 	statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
