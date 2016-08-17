@@ -32,6 +32,7 @@
 #include <QListWidgetItem>
 #include <QStandardItemModel>
 #include <QFile>
+#include <KStandardDirs>
 
 /*!
 	\class ThemesWidget
@@ -39,24 +40,20 @@
 
 	\ingroup kdefrontend
  */
-ThemesWidget::ThemesWidget(QWidget* parent, QString themeImgPath): QWidget(parent) {
-	ui.setupUi(this);
-
-	ui.bApply->setIcon(KIcon("dialog-ok-apply"));
-	ui.bCancel->setIcon(KIcon("dialog-cancel"));
-
-	ui.lvThemes->setSelectionMode(QAbstractItemView::SingleSelection);
-	ui.lvThemes->setWordWrap(true);
-	ui.lvThemes->setViewMode(QListWidget::IconMode);
-	ui.lvThemes->setResizeMode(QListWidget::Adjust);
+ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
+	setSelectionMode(QAbstractItemView::SingleSelection);
+	setWordWrap(true);
+	setViewMode(QListWidget::IconMode);
+	setResizeMode(QListWidget::Adjust);
 
 	//TODO: make this pixel-independent
-	ui.lvThemes->setIconSize(QSize(200,200));
-	ui.lvThemes->setMaximumWidth(225);
+	setIconSize(QSize(200,200));
+	setMaximumWidth(225);
 
 	//show preview pixmaps
 	QStandardItemModel* mContentItemModel = new QStandardItemModel(this);
 	QStringList themeList = ThemeHandler::themes();
+	QString themeImgPath = KGlobal::dirs()->findDirs("data", "labplot2/themes/").first();
 	QString tempPath;
 	for (int i = 0; i < themeList.size(); ++i) {
 		QStandardItem* listItem = new QStandardItem();
@@ -70,16 +67,13 @@ ThemesWidget::ThemesWidget(QWidget* parent, QString themeImgPath): QWidget(paren
 		mContentItemModel->appendRow(listItem);
 	}
 
-	ui.lvThemes->setModel(mContentItemModel);
+	setModel(mContentItemModel);
 
 	//SLOTS
-	connect( ui.bApply, SIGNAL(clicked(bool)), this, SLOT(applyClicked()) );
-	connect( ui.bCancel, SIGNAL(clicked(bool)), this, SIGNAL(canceled()) );
-	connect( ui.lvThemes, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(applyClicked()) );
+	connect( this, SIGNAL(clicked(QModelIndex)), this, SLOT(applyClicked()) );
 }
 
 void ThemesWidget::applyClicked() {
-	QModelIndex m = ui.lvThemes->currentIndex();
-	QString themeName = m.data(Qt::UserRole).value<QString>();
+	QString themeName = currentIndex().data(Qt::UserRole).value<QString>();
 	emit(themeSelected(themeName));
 }

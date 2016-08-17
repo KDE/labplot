@@ -57,6 +57,8 @@
 #include <KAction>
 #include <KLocale>
 #include "kdefrontend/ThemeHandler.h"
+#include "kdefrontend/widgets/ThemesWidget.h"
+
 #define SCALE_MIN CartesianCoordinateSystem::Scale::LIMIT_MIN
 #define SCALE_MAX CartesianCoordinateSystem::Scale::LIMIT_MAX
 
@@ -403,7 +405,6 @@ void CartesianPlot::initActions() {
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
-
 }
 
 void CartesianPlot::initMenus() {
@@ -441,11 +442,13 @@ void CartesianPlot::initMenus() {
 	zoomMenu->addAction(shiftDownYAction);
 
 	themeMenu = new QMenu(i18n("Apply Theme"));
-	foreach(const QString theme, ThemeHandler::themes())
-		themeMenu->addAction(theme);
+	ThemesWidget* themeWidget = new ThemesWidget(0);
+	connect(themeWidget, SIGNAL(themeSelected(QString)), this, SLOT(loadTheme(QString)));
+	connect(themeWidget, SIGNAL(themeSelected(QString)), themeMenu, SLOT(close()));
 
-	connect(themeMenu, SIGNAL(triggered(QAction*)), this, SLOT(loadTheme(QAction*)));
-
+	QWidgetAction* widgetAction = new QWidgetAction(this);
+	widgetAction->setDefaultWidget(themeWidget);
+	themeMenu->addAction(widgetAction);
 }
 
 QMenu* CartesianPlot::createContextMenu() {
@@ -459,6 +462,7 @@ QMenu* CartesianPlot::createContextMenu() {
 	menu->insertMenu(firstAction, zoomMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, themeMenu);
+	menu->insertSeparator(firstAction);
 
 	return menu;
 }
@@ -2101,8 +2105,8 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 	return true;
 }
 
-void CartesianPlot::loadTheme(QAction* action) {
-	KConfig config( ThemeHandler::themeConfigPath(action->text().remove('&')), KConfig::SimpleConfig );
+void CartesianPlot::loadTheme(const QString& name) {
+	KConfig config( ThemeHandler::themeConfigPath(name), KConfig::SimpleConfig );
 	loadThemeConfig(config);
 }
 

@@ -187,7 +187,7 @@ class CartesianPlot:public AbstractPlot{
 		//SLOTs for changes triggered via QActions in the context menu
 		void visibilityChanged();
 
-		void loadTheme(QAction* action);
+		void loadTheme(const QString&);
 
 	protected:
 		CartesianPlot(const QString &name, CartesianPlotPrivate *dd);

@@ -30,13 +30,11 @@
 #ifndef TEMPLATEHANDLER_H
 #define TEMPLATEHANDLER_H
 
-#include <QtGui/QWidget>
-class QHBoxLayout;
+#include <QWidget>
 class QToolButton;
-class QSpacerItem;
 class KConfig;
 
-class TemplateHandler : public QWidget{
+class TemplateHandler : public QWidget {
 	Q_OBJECT
 
 	public:

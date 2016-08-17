@@ -29,25 +29,21 @@
 #ifndef THEMESWIDGET_H
 #define THEMESWIDGET_H
 
+#include <QListView>
 #include <QStringList>
 
-#include "ui_themeswidget.h"
-
-class ThemesWidget : public QWidget {
+class ThemesWidget : public QListView {
 	Q_OBJECT
 
-public:
-	explicit ThemesWidget(QWidget* parent, QString themeImgPath);
+	public:
+		explicit ThemesWidget(QWidget*);
 
-private:
-	Ui::ThemesWidget ui;
+	signals:
+		void themeSelected(const QString&);
+		void canceled();
 
-signals:
-	void themeSelected(const QString&);
-	void canceled();
-
-private slots:
-	void applyClicked();
+	private slots:
+		void applyClicked();
 };
 
 #endif //THEMESWIDGET_H

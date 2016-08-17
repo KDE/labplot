@@ -65,7 +65,6 @@ set(GUI_SOURCES
 
 set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/constantswidget.ui
-	${KDEFRONTEND_DIR}/ui/themeswidget.ui
 	${KDEFRONTEND_DIR}/ui/functionswidget.ui
 	${KDEFRONTEND_DIR}/ui/fitoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/fitparameterswidget.ui

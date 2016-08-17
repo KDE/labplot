@@ -46,7 +46,6 @@ class ThemeHandler : public QWidget {
 	private:
 		QList<QString> dirNames;
 		QStringList m_themeList;
-		QString m_themeImgPath;
 
 		QPushButton* pbLoadTheme;
 		QPushButton* pbSaveTheme;

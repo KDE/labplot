@@ -32,7 +32,7 @@
 
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QSpacerItem>
-#include <QtGui/QToolButton>
+#include <QPushButton>
 #include <QLabel>
 #include <QFileInfo>
 #include <QWidgetAction>
@@ -77,7 +77,6 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	m_themeList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/theme_files/*");
 	m_themeList.append(KGlobal::dirs()->findAllResources("appdata", "themes/local/*"));
 	pbLoadTheme->setEnabled(!m_themeList.empty());
-	m_themeImgPath = m_themeList.at(0).split("theme_files/").at(0);
 }
 
 void ThemeHandler::loadSelected(QString str) {
@@ -116,7 +115,7 @@ const QString ThemeHandler::themeConfigPath(const QString& name) {
 
 void ThemeHandler::showPanel() {
 	QMenu menu;
-	ThemesWidget themeWidget(&menu, m_themeImgPath);
+	ThemesWidget themeWidget(&menu);
 	connect(&themeWidget, SIGNAL(themeSelected(QString)), this, SLOT(loadSelected(QString)));
 	connect(&themeWidget, SIGNAL(themeSelected(QString)), &menu, SLOT(close()));
 	connect(&themeWidget, SIGNAL(canceled()), &menu, SLOT(close()));
