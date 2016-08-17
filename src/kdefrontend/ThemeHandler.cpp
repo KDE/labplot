@@ -57,14 +57,14 @@
 
 ThemeHandler::ThemeHandler(QWidget *parent): QWidget(parent){
 
-	horizontalLayout = new QHBoxLayout(this);
+	QHBoxLayout* horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
 
-	lTheme = new QLabel(this);
+	QLabel* lTheme = new QLabel(this);
 	horizontalLayout->addWidget(lTheme);
 	lTheme->setText("Theme Manager:");
 
-	horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+	QSpacerItem* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 	horizontalLayout->addItem(horizontalSpacer);
 
 	pbLoadTheme = new QPushButton(this);
@@ -76,7 +76,7 @@ ThemeHandler::ThemeHandler(QWidget *parent): QWidget(parent){
 	pbSaveTheme->setText("Save theme");
 	this->saveThemeEnable(true);
 
-	horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+	QSpacerItem* horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 	horizontalLayout->addItem(horizontalSpacer2);
 
 	connect( pbLoadTheme, SIGNAL(clicked()), this, SLOT(showPanel()));

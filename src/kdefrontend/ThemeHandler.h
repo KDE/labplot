@@ -50,14 +50,11 @@ class ThemeHandler : public QWidget{
 
 	private:
 		QList<QString> dirNames;
-		QHBoxLayout *horizontalLayout;
-		QSpacerItem *horizontalSpacer;
-		QSpacerItem *horizontalSpacer2;
-		QLabel *lTheme;
-		QPushButton *pbLoadTheme;
 		QStringList m_themeList;
 		QString m_themeImgPath;
-		QPushButton *pbSaveTheme;
+
+		QPushButton* pbLoadTheme;
+		QPushButton* pbSaveTheme;
 
 	private slots:
 		void loadSelected(QString str);
