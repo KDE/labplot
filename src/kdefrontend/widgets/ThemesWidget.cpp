@@ -42,7 +42,7 @@
 ThemesWidget::ThemesWidget(QWidget* parent, QString themeImgPath): QWidget(parent) {
 	ui.setupUi(this);
 
-	ui.bApply->setIcon(KIcon("edit-paste"));
+	ui.bApply->setIcon(KIcon("dialog-ok-apply"));
 	ui.bCancel->setIcon(KIcon("dialog-cancel"));
 
 	ui.lvThemes->setSelectionMode(QAbstractItemView::SingleSelection);

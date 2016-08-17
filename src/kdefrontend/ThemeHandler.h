@@ -30,17 +30,12 @@
 #ifndef THEMEHANDLER_H
 #define THEMEHANDLER_H
 
-#include <QtGui/QWidget>
-#include <QPushButton>
-#include <QListView>
-#include <QVBoxLayout>
-class QHBoxLayout;
-class QToolButton;
-class QSpacerItem;
-class QLabel;
+#include <QWidget>
+
+class QPushButton;
 class KConfig;
 
-class ThemeHandler : public QWidget{
+class ThemeHandler : public QWidget {
 	Q_OBJECT
 
 	public:
@@ -57,20 +52,20 @@ class ThemeHandler : public QWidget{
 		QPushButton* pbSaveTheme;
 
 	private slots:
-		void loadSelected(QString str);
+		void loadSelected(QString);
 		void showPanel();
 		void saveMenu();
 		void saveNewSelected(const QString&);
 		void saveDefaults();
 
 	public slots:
-		void saveThemeEnable(bool enable);
+		void saveThemeEnable(bool);
 
 	signals:
-		void loadThemeRequested(KConfig& config);
-		void saveThemeRequested(KConfig& config);
+		void loadThemeRequested(KConfig&);
+		void saveThemeRequested(KConfig&);
 		void info(const QString&);
-		void loadPreviewPanel(QStringList,QString);
+		void loadPreviewPanel(QStringList, QString);
 };
 
 #endif

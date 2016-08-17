@@ -27,7 +27,7 @@
    <item row="2" column="3">
     <widget class="QPushButton" name="bCancel">
      <property name="text">
-      <string>Cancel</string>
+      <string/>
      </property>
     </widget>
    </item>
@@ -43,16 +43,7 @@
       <property name="spacing">
        <number>2</number>
       </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
      </layout>
@@ -61,7 +52,7 @@
    <item row="2" column="2">
     <widget class="QPushButton" name="bApply">
      <property name="text">
-      <string>Apply</string>
+      <string/>
      </property>
     </widget>
    </item>
