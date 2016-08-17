@@ -48,6 +48,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 
+#include <QDir>
 #include <QMenu>
 #include <QToolBar>
 #include <QPainter>
@@ -2111,6 +2112,10 @@ void CartesianPlot::loadTheme(const QString& name) {
 }
 
 void CartesianPlot::loadThemeConfig(KConfig& config) {
+	const QString str = config.name();
+	QString themeName = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
+	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), themeName) );
+
 	const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
 	foreach(WorksheetElement *child, childElements)
 		child->loadConfig(config);
@@ -2121,6 +2126,8 @@ void CartesianPlot::loadThemeConfig(KConfig& config) {
 	Q_D(CartesianPlot);
 	d->update(this->rect());
 	emit (themeLoaded());
+
+	endMacro();
 }
 
 void CartesianPlot::saveThemeConfig(KConfig &config) {
