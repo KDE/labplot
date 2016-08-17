@@ -28,12 +28,15 @@
  ***************************************************************************/
 
 #include "ThemeHandler.h"
+#include "widgets/ThemesWidget.h"
+
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QSpacerItem>
 #include <QtGui/QToolButton>
 #include <QLabel>
 #include <QFileInfo>
 #include <QWidgetAction>
+
 #include <KLocale>
 #include <KStandardDirs>
 #include <KLineEdit>
@@ -41,8 +44,7 @@
 #include <KMenu>
 #include <KConfig>
 #include <KConfigGroup>
-#include "widgets/ThemesWidget.h"
-#include <QDebug>
+
 /*!
   \class ThemeHandler
   \brief Provides a widget with buttons for loading of themes.
@@ -87,7 +89,6 @@ ThemeHandler::ThemeHandler(QWidget *parent): QWidget(parent){
 }
 
 void ThemeHandler::loadSelected(QString str) {
-
 	QString themeName;
 	for(int i = 0; i < m_themeList.size();i++) {
 		if((m_themeList.at(i).indexOf(str)!=-1) || (m_themeList.at(i).indexOf(str + ".txt")!=-1))
@@ -123,9 +124,7 @@ const QString ThemeHandler::themeConfigPath(const QString& name) {
 
 void ThemeHandler::showPanel() {
 	QMenu menu;
-	ThemesWidget themeWidget(&menu);
-
-	connect(this, SIGNAL(loadPreviewPanel(QStringList,QString)), &themeWidget, SLOT(setupPreview(QStringList,QString)));
+	ThemesWidget themeWidget(&menu, m_themeImgPath);
 	connect(&themeWidget, SIGNAL(themeSelected(QString)), this, SLOT(loadSelected(QString)));
 	connect(&themeWidget, SIGNAL(themeSelected(QString)), &menu, SLOT(close()));
 	connect(&themeWidget, SIGNAL(canceled()), &menu, SLOT(close()));
@@ -134,11 +133,9 @@ void ThemeHandler::showPanel() {
 	widgetAction->setDefaultWidget(&themeWidget);
 	menu.addAction(widgetAction);
 
-	emit(loadPreviewPanel(this->themes(),m_themeImgPath));
 	QPoint pos(-menu.sizeHint().width()+pbLoadTheme->width(),-menu.sizeHint().height());
 	menu.setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 	menu.exec(pbLoadTheme->mapToGlobal(pos));
-
 }
 
 void ThemeHandler::saveMenu() {

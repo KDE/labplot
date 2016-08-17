@@ -3,7 +3,8 @@
     Project              : LabPlot
     Description          : widget for selecting themes
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 Prakriti Bhardwaj (p_bhardwaj14@informatik.uni-kl.de)
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -28,16 +29,15 @@
 #ifndef THEMESWIDGET_H
 #define THEMESWIDGET_H
 
-#include <QWidget>
 #include <QStringList>
 
 #include "ui_themeswidget.h"
 
-class ThemesWidget: public QWidget{
+class ThemesWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit ThemesWidget(QWidget*);
+	explicit ThemesWidget(QWidget* parent, QString themeImgPath);
 
 private:
 	Ui::ThemesWidget ui;
@@ -48,9 +48,6 @@ signals:
 
 private slots:
 	void applyClicked();
-
-public slots:
-	void setupPreview(QStringList themeList, QString themeImgPath);
 };
 
 #endif //THEMESWIDGET_H
