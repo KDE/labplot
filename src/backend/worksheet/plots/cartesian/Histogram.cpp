@@ -1511,6 +1511,10 @@ void Histogram::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "binValue", QString::number(d->histogramData.binValue));
 	writer->writeEndElement();
 	
+	if (d->xColumn) {
+		d->xColumn->save(writer);
+	}
+
 	writer->writeEndElement(); //close "Histogram" section
 }
 
@@ -1688,6 +1692,13 @@ bool Histogram::load(XmlStreamReader* reader){
             else
                 d->fillingOpacity = str.toDouble();
 
+		} else if(reader->name() == "column") {
+			Column* column = new Column("", AbstractColumn::Numeric);
+			if (!column->load(reader)) {
+				delete column;
+				return false;
+			}
+			d->xColumn = column;
 		}
 	}
 	return true;
