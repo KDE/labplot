@@ -30,8 +30,7 @@
 #include "ThemeHandler.h"
 #include "widgets/ThemesWidget.h"
 
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QSpacerItem>
+#include <QHBoxLayout>
 #include <QPushButton>
 #include <QLabel>
 #include <QFileInfo>
@@ -40,7 +39,6 @@
 #include <KLocale>
 #include <KStandardDirs>
 #include <KLineEdit>
-#include <KIcon>
 #include <KMenu>
 #include <KConfig>
 #include <KConfigGroup>
@@ -88,7 +86,7 @@ void ThemeHandler::loadSelected(QString str) {
 	KConfig config(themeName, KConfig::SimpleConfig);
 	emit (loadThemeRequested(config));
 
-	emit info( i18n("Theme \"%1\" was loaded.", themeName.remove('&')) );
+	emit info( i18n("Theme \"%1\" was loaded.", str) );
 }
 
 QStringList ThemeHandler::themes() {
