@@ -44,6 +44,8 @@ class ThemesWidget : public QListView {
 
 	private slots:
 		void applyClicked();
+		void publishThemes();
+		void downloadThemes();
 };
 
 #endif //THEMESWIDGET_H

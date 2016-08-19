@@ -167,3 +167,9 @@ void ThemeHandler::saveDefaults() {
 void ThemeHandler::saveThemeEnable(bool enable) {
 	pbSaveTheme->setEnabled(enable);
 }
+
+QStringList ThemeHandler::getLocalThemes() {
+
+	QStringList list = KGlobal::dirs()->findAllResources("appdata", "themes/local/*");
+	return list;
+}

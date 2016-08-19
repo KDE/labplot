@@ -42,6 +42,7 @@ class ThemeHandler : public QWidget {
 		ThemeHandler(QWidget* parent);
 		static QStringList themes();
 		static const QString themeConfigPath(const QString&);
+		QStringList getLocalThemes();
 
 	private:
 		QList<QString> dirNames;
