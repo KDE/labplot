@@ -35,11 +35,7 @@
 #include <KStandardDirs>
 
 #include <KMessageBox>
-#include <knewstuff3/uploaddialog.h>
-#include <kapplication.h>
 #include <kdebug.h>
-#include <klocale.h>
-#include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <knewstuff3/downloaddialog.h>
 
@@ -77,20 +73,13 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 		listItem->setData(themeList.at(i), Qt::UserRole);
 		mContentItemModel->appendRow(listItem);
 	}
-	//adding upload themes option in list
-	QStandardItem* listItem1 = new QStandardItem();
-	tempPath = themeImgPath+"Unavailable.png";
-	listItem1->setIcon(QIcon(QPixmap(tempPath)));
-	listItem1->setText("Publish Themes");
-	listItem1->setData("file_publish_theme", Qt::UserRole);
-	mContentItemModel->appendRow(listItem1);
 
-	//adding download themes option in list
-	QStandardItem* listItem2 = new QStandardItem();
-	listItem2->setIcon(QIcon(QPixmap(tempPath)));
-	listItem2->setText("Download Themes");
-	listItem2->setData("file_download_theme", Qt::UserRole);
-	mContentItemModel->appendRow(listItem2);
+	//adding download themes option
+	QStandardItem* listItem = new QStandardItem();
+	listItem->setIcon(QIcon::fromTheme("get-hot-new-stuff"));
+	listItem->setText("Download Themes");
+	listItem->setData("file_download_theme", Qt::UserRole);
+	mContentItemModel->appendRow(listItem);
 
 	setModel(mContentItemModel);
 
@@ -101,51 +90,22 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 
 void ThemesWidget::applyClicked() {
 	QString themeName = currentIndex().data(Qt::UserRole).value<QString>();
-	if(themeName=="file_publish_theme")
-		this->publishThemes();
-	else if(themeName=="file_download_theme")
+	if(themeName=="file_download_theme")
 		this->downloadThemes();
 	else
 		emit(themeSelected(themeName));
 }
 
-void ThemesWidget::publishThemes() {
-	this->parentWidget()->close();
-	QStringList localThemeFiles = KGlobal::dirs()->findAllResources("appdata", "themes/local/*");
-
-	int ret = KMessageBox::questionYesNo(this->parentWidget(),
-					     i18n("Do you want to upload your themes to public web server?"),
-					     i18n("Question - Labplot"));
-	if (ret != KMessageBox::Yes) return;
-
-
-	// upload
-
-	if(!localThemeFiles.empty()) {
-		foreach(QString fileName, localThemeFiles) {
-			qDebug()<<"uploading file "<<fileName;
-			KNS3::UploadDialog dialog("labplot2.knsrc", this);
-			dialog.setUploadFile(KUrl(fileName));
-			dialog.exec();
-		}
-	}
-	else {
-		ret = KMessageBox::warningContinueCancel(this,
-							 i18n("There are no locally saved themes to be uploaded. Please create new themes."),
-							 i18n("Warning - Labplot"),  KStandardGuiItem::ok());
-		if (ret != KMessageBox::Continue) return;
-	}
-
-
-}
 
 void ThemesWidget::downloadThemes() {
 	this->parentWidget()->close();
-	KNS3::DownloadDialog dialog;
+	KAboutData about("khotnewstuff", 0, ki18n("KHotNewStuff"), "0.4");
+	about.setProgramIconName("get-hot-new-stuff");
+
+	KNS3::DownloadDialog dialog("labplot2_themes.knsrc", this);
 	dialog.exec();
-//	foreach (const KNS3::Entry& e,  dialog.changedEntries())
-//	{
-//	    qDebug() << "Changed Entry: " << e.name();
-//	}
+	foreach (const KNS3::Entry& e, dialog.changedEntries()) {
+	    kDebug() << "Changed Entry: " << e.name();
+	}
 
 }

@@ -2,4 +2,4 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/theme_files DESTINATION ${DATA_INS
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/screenshots DESTINATION ${DATA_INSTALL_DIR}/${PROJECT_NAME}/themes )
 
-install( FILES labplot2.knsrc  DESTINATION  ${CONFIG_INSTALL_DIR} )
+install( FILES labplot2_themes.knsrc  DESTINATION  ~/.kde/share/config/ )

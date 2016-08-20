@@ -43,6 +43,14 @@
 #include <KConfig>
 #include <KConfigGroup>
 
+#include <KMessageBox>
+#include <knewstuff3/uploaddialog.h>
+//#include <kapplication.h>
+#include <kdebug.h>
+//#include <klocale.h>
+//#include <kcmdlineargs.h>
+//#include <kaboutdata.h>
+
 /*!
   \class ThemeHandler
   \brief Provides a widget with buttons for loading of themes.
@@ -64,13 +72,17 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	pbSaveTheme = new QPushButton(this);
 	horizontalLayout->addWidget(pbSaveTheme);
 	pbSaveTheme->setText("Save theme");
-	this->saveThemeEnable(true);
+
+	pbPublishTheme = new QPushButton(this);
+	horizontalLayout->addWidget(pbPublishTheme);
+	pbPublishTheme->setText("Publish theme");
 
 	QSpacerItem* horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 	horizontalLayout->addItem(horizontalSpacer2);
 
 	connect( pbLoadTheme, SIGNAL(clicked()), this, SLOT(showPanel()));
 	connect( pbSaveTheme, SIGNAL(clicked()), this, SLOT(saveMenu()));
+	connect( pbPublishTheme, SIGNAL(clicked()), this, SLOT(publishThemes()));
 
 	m_themeList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/theme_files/*");
 	m_themeList.append(KGlobal::dirs()->findAllResources("appdata", "themes/local/*"));
@@ -158,18 +170,30 @@ void ThemeHandler::saveNewSelected(const QString& filename) {
 	emit info( i18n("New theme \"%1\" was saved.", filename) );
 }
 
-void ThemeHandler::saveDefaults() {
-	KConfig config;
-	emit (saveThemeRequested(config));
-	emit info( i18n("New default theme was saved.") );
-}
+void ThemeHandler::publishThemes() {
+	QStringList localThemeFiles = KGlobal::dirs()->findAllResources("appdata", "themes/local/*");
 
-void ThemeHandler::saveThemeEnable(bool enable) {
-	pbSaveTheme->setEnabled(enable);
-}
+	int ret = KMessageBox::questionYesNo(this,
+					     i18n("Do you want to upload your themes to public web server?"),
+					     i18n("Question - Labplot"));
+	if (ret != KMessageBox::Yes) return;
 
-QStringList ThemeHandler::getLocalThemes() {
 
-	QStringList list = KGlobal::dirs()->findAllResources("appdata", "themes/local/*");
-	return list;
+	// creating upload dialog
+
+	if(!localThemeFiles.empty()) {
+		foreach(QString fileName, localThemeFiles) {
+			KNS3::UploadDialog dialog("labplot2_themes.knsrc", this);
+			qDebug()<<"uploading file "<<fileName;
+			dialog.setUploadFile(fileName);
+			dialog.exec();
+		}
+	}
+	else {
+		ret = KMessageBox::warningContinueCancel(this,
+							 i18n("There are no locally saved themes to be uploaded. Please create new themes."),
+							 i18n("Warning - Labplot"),  KStandardGuiItem::ok());
+		if (ret != KMessageBox::Continue) return;
+	}
+
 }
