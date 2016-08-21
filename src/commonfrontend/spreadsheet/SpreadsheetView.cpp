@@ -1859,7 +1859,13 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 	int columnsPerTable = 0;
 
 	for (int i = 0; i < cols; ++i) {
-		columnsStringSize += toExport.at(i)->asStringColumn()->textAt(0).length();
+        int maxSize = -1;
+        for (int j = 0; j < toExport.at(i)->asStringColumn()->rowCount(); ++j) {
+            if (toExport.at(i)->asStringColumn()->textAt(j).size() > maxSize) {
+                maxSize = toExport.at(i)->asStringColumn()->textAt(j).size();
+            }
+        }
+        columnsStringSize += maxSize;
 		if (!toExport.at(i)->isValid(0))
 			columnsStringSize+=3;
 		if (columnsStringSize > 65)

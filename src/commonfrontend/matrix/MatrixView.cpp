@@ -1147,8 +1147,14 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 	}
 
 	for (int col = 0; col < cols; ++col) {
-		columnsStringSize += toExport.at(0).at(col).length();
-		if (horizontalHeaders)
+        int maxSize = -1;
+        for (int row = 0; row < toExport.at(row).size(); ++row) {
+            if (toExport.at(row).at(col).size() > maxSize) {
+                maxSize = toExport.at(row).at(col).size();
+            }
+        }
+        columnsStringSize += maxSize;
+        if (horizontalHeaders)
 			headerStringSize += m_tableView->model()->headerData(col, Qt::Horizontal).toString().length();
 		if ((columnsStringSize > 65) || (headerStringSize > 65))
 			break;
