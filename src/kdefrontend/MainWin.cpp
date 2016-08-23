@@ -173,7 +173,11 @@ void MainWin::initGUI(const QString& fileName) {
 #endif
 	statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
 	initActions();
+#ifdef __APPLE__
+	setupGUI(Default, QLatin1String("/Applications/labplot2.app/Contents/share/labplot2ui.rc"));
+#else
 	setupGUI(Default, QLatin1String("labplot2ui.rc"));
+#endif
 	initMenus();
 	setWindowIcon(QIcon::fromTheme("LabPlot2"));
 	setAttribute( Qt::WA_DeleteOnClose );
