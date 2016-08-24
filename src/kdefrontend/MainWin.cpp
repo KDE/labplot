@@ -168,6 +168,9 @@ void MainWin::initGUI(const QString& fileName) {
 	setCentralWidget(m_mdiArea);
 	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
 	        this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
+#ifdef __APPLE__
+	QIcon::setThemeSearchPaths(QStringList() << "/Applications/labplot2.app/Contents/share/icons");
+#endif
 #if defined(_WIN32) || defined(__APPLE__)
 	QIcon::setThemeName("hicolor");
 #endif
