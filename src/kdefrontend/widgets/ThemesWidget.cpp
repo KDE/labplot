@@ -36,7 +36,6 @@
 
 #include <KMessageBox>
 #include <kdebug.h>
-#include <kaboutdata.h>
 #include <knewstuff3/downloaddialog.h>
 
 /*!
@@ -87,7 +86,6 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	connect( this, SIGNAL(clicked(QModelIndex)), this, SLOT(applyClicked()) );
 }
 
-
 void ThemesWidget::applyClicked() {
 	QString themeName = currentIndex().data(Qt::UserRole).value<QString>();
 	if(themeName=="file_download_theme")
@@ -96,16 +94,10 @@ void ThemesWidget::applyClicked() {
 		emit(themeSelected(themeName));
 }
 
-
 void ThemesWidget::downloadThemes() {
-	this->parentWidget()->close();
-	KAboutData about("khotnewstuff", 0, ki18n("KHotNewStuff"), "0.4");
-	about.setProgramIconName("get-hot-new-stuff");
-
 	KNS3::DownloadDialog dialog("labplot2_themes.knsrc", this);
 	dialog.exec();
 	foreach (const KNS3::Entry& e, dialog.changedEntries()) {
 	    kDebug() << "Changed Entry: " << e.name();
 	}
-
 }

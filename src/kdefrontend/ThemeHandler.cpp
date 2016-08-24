@@ -45,11 +45,7 @@
 
 #include <KMessageBox>
 #include <knewstuff3/uploaddialog.h>
-//#include <kapplication.h>
-#include <kdebug.h>
-//#include <klocale.h>
-//#include <kcmdlineargs.h>
-//#include <kaboutdata.h>
+// #include <kdebug.h>
 
 /*!
   \class ThemeHandler
@@ -84,8 +80,8 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	connect( pbSaveTheme, SIGNAL(clicked()), this, SLOT(saveMenu()));
 	connect( pbPublishTheme, SIGNAL(clicked()), this, SLOT(publishThemes()));
 
-	m_themeList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/theme_files/*");
-	m_themeList.append(KGlobal::dirs()->findAllResources("appdata", "themes/local/*"));
+	m_themeList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
+	m_themeList.append(KGlobal::dirs()->findAllResources("appdata", "themes/*"));
 	pbLoadTheme->setEnabled(!m_themeList.empty());
 }
 
@@ -102,8 +98,8 @@ void ThemeHandler::loadSelected(QString str) {
 }
 
 QStringList ThemeHandler::themes() {
-	QStringList pathList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/theme_files/*");
-	pathList.append(KGlobal::dirs()->findAllResources("appdata", "themes/local/*"));
+	QStringList pathList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
+	pathList.append(KGlobal::dirs()->findAllResources("appdata", "themes/*"));
 	QStringList themeList;
 	for(int i = 0; i < pathList.size(); ++i) {
 		QFileInfo fileinfo(pathList.at(i));
@@ -113,8 +109,8 @@ QStringList ThemeHandler::themes() {
 }
 
 const QString ThemeHandler::themeConfigPath(const QString& name) {
-	QStringList themes = KGlobal::dirs()->findAllResources("data", "labplot2/themes/theme_files/*");
-	themes.append(KGlobal::dirs()->findAllResources("appdata", "themes/local/*"));
+	QStringList themes = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
+	themes.append(KGlobal::dirs()->findAllResources("appdata", "themes/*"));
 	for (int i=0; i<themes.size(); ++i) {
 		if ((themes.at(i).indexOf(name + ".txt")!=-1) || (themes.at(i).indexOf(name)!=-1))
 			return themes.at(i);
@@ -165,13 +161,13 @@ void ThemeHandler::saveMenu() {
 }
 
 void ThemeHandler::saveNewSelected(const QString& filename) {
-	KConfig config(KGlobal::dirs()->locateLocal("appdata", "themes/local") + '/' + filename, KConfig::SimpleConfig);
+	KConfig config(KGlobal::dirs()->locateLocal("appdata", "themes") + '/' + filename, KConfig::SimpleConfig);
 	emit (saveThemeRequested(config));
 	emit info( i18n("New theme \"%1\" was saved.", filename) );
 }
 
 void ThemeHandler::publishThemes() {
-	QStringList localThemeFiles = KGlobal::dirs()->findAllResources("appdata", "themes/local/*");
+	QStringList localThemeFiles = KGlobal::dirs()->findAllResources("appdata", "themes/*");
 
 	int ret = KMessageBox::questionYesNo(this,
 					     i18n("Do you want to upload your themes to public web server?"),
@@ -180,11 +176,10 @@ void ThemeHandler::publishThemes() {
 
 
 	// creating upload dialog
-
 	if(!localThemeFiles.empty()) {
 		foreach(QString fileName, localThemeFiles) {
 			KNS3::UploadDialog dialog("labplot2_themes.knsrc", this);
-			qDebug()<<"uploading file "<<fileName;
+// 			qDebug()<<"uploading file "<<fileName;
 			dialog.setUploadFile(fileName);
 			dialog.exec();
 		}
