@@ -171,8 +171,8 @@ class CartesianPlot:public AbstractPlot{
 		void shiftRightX();
 		void shiftUpY();
 		void shiftDownY();
-		void loadThemeConfig(KConfig& config);
-		void saveThemeConfig(KConfig& config);
+		void loadTheme(KConfig& config);
+		void saveTheme(KConfig& config);
 
 	private slots:
 		void updateLegend();

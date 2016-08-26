@@ -774,7 +774,7 @@ bool TextLabel::load(XmlStreamReader* reader){
     return true;
 }
 
-void TextLabel::loadConfig(const KConfig& config) {
+void TextLabel::loadThemeConfig(const KConfig& config) {
 
 	KConfigGroup group = config.group("Label");
 	this->setTeXFontColor(group.readEntry("TeXFontColor", (QColor) this->teXFontColor()));
@@ -783,7 +783,7 @@ void TextLabel::loadConfig(const KConfig& config) {
 
 }
 
-void TextLabel::saveConfig(const KConfig& config) {
+void TextLabel::saveThemeConfig(const KConfig& config) {
 
 	KConfigGroup group = config.group("Label");
 	group.writeEntry("TeXFontColor", (QColor) this->teXFontColor());

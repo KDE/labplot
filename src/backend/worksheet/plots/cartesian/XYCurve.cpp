@@ -2514,7 +2514,7 @@ void XYCurve::applyColorPalette(QList<QColor> color) {
 	}
 }
 
-void XYCurve::loadConfig(const KConfig& config) {
+void XYCurve::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
 
 	QPen p;
@@ -2574,7 +2574,7 @@ void XYCurve::loadConfig(const KConfig& config) {
 
 }
 
-void XYCurve::saveConfig(const KConfig& config) {
+void XYCurve::saveThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
 
 	//Drop line

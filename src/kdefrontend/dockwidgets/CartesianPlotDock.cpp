@@ -1354,10 +1354,10 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 
 void CartesianPlotDock::loadTheme(KConfig& config) {
 	foreach(CartesianPlot *plot, m_plotList)
-		plot->loadThemeConfig(config);
+		plot->loadTheme(config);
 }
 
 void CartesianPlotDock::saveTheme(KConfig& config) {
 	if(m_plotList.empty()==false)
-		m_plotList.at(0)->saveThemeConfig(config);
+		m_plotList.at(0)->saveTheme(config);
 }

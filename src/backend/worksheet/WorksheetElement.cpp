@@ -240,12 +240,12 @@ void WorksheetElement::handlePageResize(double horizontalRatio, double verticalR
 	Q_UNUSED(verticalRatio);
 }
 
-void WorksheetElement::loadConfig(const KConfig &)
+void WorksheetElement::loadThemeConfig(const KConfig &)
 {
 
 }
 
-void WorksheetElement::saveConfig(const KConfig &)
+void WorksheetElement::saveThemeConfig(const KConfig &)
 {
 
 }

@@ -2207,7 +2207,7 @@ bool Axis::load(XmlStreamReader* reader) {
 	return true;
 }
 
-void Axis::loadConfig(const KConfig& config) {
+void Axis::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("Axis");
 
 	QPen p;
@@ -2252,10 +2252,10 @@ void Axis::loadConfig(const KConfig& config) {
 
 	const QList<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
 	foreach(TextLabel *child, childElements)
-		child->loadConfig(config);
+		child->loadThemeConfig(config);
 }
 
-void Axis::saveConfig(const KConfig& config) {
+void Axis::saveThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("Axis");
 
 	// Tick label
@@ -2293,5 +2293,5 @@ void Axis::saveConfig(const KConfig& config) {
 	group.writeEntry("MinorTicksType",(int)this->minorTicksType());
 
 	const QList<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
-	childElements.at(0)->saveConfig(config);
+	childElements.at(0)->saveThemeConfig(config);
 }

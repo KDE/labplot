@@ -561,7 +561,7 @@ bool PlotArea::load(XmlStreamReader* reader){
     return true;
 }
 
-void PlotArea::loadConfig(const KConfig& config) {
+void PlotArea::loadThemeConfig(const KConfig& config) {
 
 	KConfigGroup group = config.group("CartesianPlot");
 
@@ -582,7 +582,7 @@ void PlotArea::loadConfig(const KConfig& config) {
 
 }
 
-void PlotArea::saveConfig(const KConfig& config) {
+void PlotArea::saveThemeConfig(const KConfig& config) {
 
 	KConfigGroup group = config.group("CartesianPlot");
 

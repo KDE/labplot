@@ -2108,17 +2108,17 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 
 void CartesianPlot::loadTheme(const QString& name) {
 	KConfig config( ThemeHandler::themeConfigPath(name), KConfig::SimpleConfig );
-	loadThemeConfig(config);
+	loadTheme(config);
 }
 
-void CartesianPlot::loadThemeConfig(KConfig& config) {
+void CartesianPlot::loadTheme(KConfig& config) {
 	const QString str = config.name();
 	QString themeName = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
 	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), themeName) );
 
 	const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
 	foreach(WorksheetElement *child, childElements)
-		child->loadConfig(config);
+		child->loadThemeConfig(config);
 
 	const QList<XYCurve*>& childXYCurve = children<XYCurve>(AbstractAspect::IncludeHidden);
 	m_themeColorPalette = childXYCurve.last()->getColorPalette();
@@ -2130,18 +2130,18 @@ void CartesianPlot::loadThemeConfig(KConfig& config) {
 	endMacro();
 }
 
-void CartesianPlot::saveThemeConfig(KConfig &config) {
+void CartesianPlot::saveTheme(KConfig &config) {
 	const QList<Axis*>& axisElements = children<Axis>(AbstractAspect::IncludeHidden);
 	const QList<PlotArea*>& plotAreaElements = children<PlotArea>(AbstractAspect::IncludeHidden);
 	const QList<TextLabel*>& textLabelElements = children<TextLabel>(AbstractAspect::IncludeHidden);
 	const QList<XYCurve*>& xyCurveElements = children<XYCurve>(AbstractAspect::IncludeHidden);
 
-	axisElements.at(0)->saveConfig(config);
-	plotAreaElements.at(0)->saveConfig(config);
-	textLabelElements.at(0)->saveConfig(config);
+	axisElements.at(0)->saveThemeConfig(config);
+	plotAreaElements.at(0)->saveThemeConfig(config);
+	textLabelElements.at(0)->saveThemeConfig(config);
 
 	foreach(XYCurve *child, xyCurveElements)
-		child->saveConfig(config);
+		child->saveThemeConfig(config);
 }
 
 void CartesianPlot::applyThemeOnNewCurve(XYCurve* curve) {
