@@ -106,11 +106,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	netcdfOptionsWidget.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	ui.swOptions->insertWidget(FileDataSource::NETCDF, netcdfw);
 
-    QWidget* fitsw = new QWidget(0);
-    fitsOptionsWidget.setupUi(fitsw);
-    fitsOptionsWidget.twExtensions->headerItem()->setText(0, i18n("Extensions"));
-    fitsOptionsWidget.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
-    ui.swOptions->insertWidget(FileDataSource::FITS, fitsw);
+	QWidget* fitsw = new QWidget(0);
+	fitsOptionsWidget.setupUi(fitsw);
+	fitsOptionsWidget.twExtensions->headerItem()->setText(0, i18n("Extensions"));
+	fitsOptionsWidget.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
+	ui.swOptions->insertWidget(FileDataSource::FITS, fitsw);
 
 	// the table widget for preview
 	twPreview = new QTableWidget(ui.tePreview);
@@ -138,7 +138,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	item2->setFlags(item2->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 #endif
 #ifndef HAVE_FITS
-    ui.cbFileType->setItemData(FileDataSource::FITS, 0, Qt::UserRole - 1);
+	ui.cbFileType->setItemData(FileDataSource::FITS, 0, Qt::UserRole - 1);
 #endif
 
 	ui.gbOptions->hide();
@@ -261,15 +261,15 @@ void ImportFileWidget::showOptions(bool b) {
 }
 
 QString ImportFileWidget::fileName() const {
-    if (currentFileType() == FileDataSource::FITS) {
-        if (fitsOptionsWidget.twExtensions->currentItem() != 0) {
-            if (fitsOptionsWidget.twExtensions->currentItem()->text(0) != QLatin1String("Primary header")) {
-                return ui.kleFileName->text() + QLatin1String("[") +
-                        fitsOptionsWidget.twExtensions->currentItem()->text(fitsOptionsWidget.twExtensions->currentColumn()) + QLatin1String("]");
-            }
-        }
+	if (currentFileType() == FileDataSource::FITS) {
+		if (fitsOptionsWidget.twExtensions->currentItem() != 0) {
+			if (fitsOptionsWidget.twExtensions->currentItem()->text(0) != QLatin1String("Primary header")) {
+				return ui.kleFileName->text() + QLatin1String("[") +
+						fitsOptionsWidget.twExtensions->currentItem()->text(fitsOptionsWidget.twExtensions->currentColumn()) + QLatin1String("]");
+			}
+		}
 
-    }
+	}
 	return ui.kleFileName->text();
 }
 
@@ -388,14 +388,14 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		return filter;
 	}
-    case FileDataSource::FITS: {
-        FITSFilter* filter = new FITSFilter();
-        filter->setStartRow( ui.sbStartRow->value());
-        filter->setEndRow( ui.sbEndRow->value() );
-        filter->setStartColumn( ui.sbStartColumn->value());
-        filter->setEndColumn( ui.sbEndColumn->value());
-        return filter;
-    }
+	case FileDataSource::FITS: {
+		FITSFilter* filter = new FITSFilter();
+		filter->setStartRow( ui.sbStartRow->value());
+		filter->setEndRow( ui.sbEndRow->value() );
+		filter->setStartColumn( ui.sbStartColumn->value());
+		filter->setEndColumn( ui.sbEndColumn->value());
+		return filter;
+	}
 	}
 
 	return 0;
@@ -483,8 +483,6 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			fileName.endsWith("dat", Qt::CaseInsensitive) || fileName.endsWith("txt", Qt::CaseInsensitive)) {
 		//probably ascii data
 		ui.cbFileType->setCurrentIndex(FileDataSource::Ascii);
-	} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty()) {
-		ui.cbFileType->setCurrentIndex(FileDataSource::Image);
 	} else if (fileInfo.contains("Hierarchical Data Format") || fileName.endsWith("h5", Qt::CaseInsensitive) ||
 			fileName.endsWith("hdf", Qt::CaseInsensitive) || fileName.endsWith("hdf5", Qt::CaseInsensitive) ) {
 		ui.cbFileType->setCurrentIndex(FileDataSource::HDF);
@@ -513,8 +511,8 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		netcdfOptionsWidget.twContent->expandAll();
 		netcdfOptionsWidget.twContent->resizeColumnToContents(0);
 		netcdfOptionsWidget.twContent->resizeColumnToContents(2);
-        } else if (fileInfo.contains("FITS image data") || fileName.endsWith("fits", Qt::CaseInsensitive) ||
-			fileName.endsWith("fit", Qt::CaseInsensitive) || fileName.endsWith("fts", Qt::CaseInsensitive)) {
+	} else if (fileInfo.contains("FITS image data") || fileName.endsWith("fits", Qt::CaseInsensitive) ||
+		fileName.endsWith("fit", Qt::CaseInsensitive) || fileName.endsWith("fts", Qt::CaseInsensitive)) {
 #ifdef HAVE_FITS
 		ui.cbFileType->setCurrentIndex(FileDataSource::FITS);
 #endif
@@ -522,6 +520,8 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		QString fileName = ui.kleFileName->text();
 		FITSFilter *filter = (FITSFilter *)this->currentFileFilter();
 		filter->parseExtensions(fileName, fitsOptionsWidget.twExtensions, true);
+	} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty()) {
+		ui.cbFileType->setCurrentIndex(FileDataSource::Image);
 	} else  {
 		ui.cbFileType->setCurrentIndex(FileDataSource::Binary);
 	}
