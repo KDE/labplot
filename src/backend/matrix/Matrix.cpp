@@ -130,54 +130,61 @@ bool Matrix::exportView() const {
 	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(m_view);
 	dlg->setFileName(name());
 	dlg->setMatrixMode(true);
-    //TODO FITS filter to decide if it can be exported to both
-    dlg->setExportTo(QStringList() << i18n("FITS image") << i18n("FITS table"));
-    bool ret;
-    if ((ret = dlg->exec()==QDialog::Accepted)) {
-        const QString path = dlg->path();
-        const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
-        WAIT_CURSOR;
 
-        if (dlg->format() == ExportSpreadsheetDialog::LaTeX){
-            const bool verticalHeader = dlg->matrixVerticalHeader();
-            const bool horizontalHeader = dlg->matrixHorizontalHeader();
-            const bool latexHeader = dlg->exportHeader();
-            const bool gridLines = dlg->gridLines();
-            const bool entire = dlg->entireSpreadheet();
-            const bool captions = dlg->captions();
-            view->exportToLaTeX(path, verticalHeader, horizontalHeader,
-                                latexHeader, gridLines, entire, captions);
-        } else if (dlg->format() == ExportSpreadsheetDialog::FITS) {
-            const int exportTo = dlg->exportToFits();
-            view->exportToFits(path, exportTo );
-        } else {
-            const QString separator = dlg->separator();
-            view->exportToFile(path, separator);
-        }
-        RESET_CURSOR;
-    }
+	//TODO FITS filter to decide if it can be exported to both
+	dlg->setExportTo(QStringList() << i18n("FITS image") << i18n("FITS table"));
+	if (reinterpret_cast<const MatrixView*>(m_view)->selectedColumnCount() == 0) {
+		dlg->setExportSelection(false);
+	}
+
+	bool ret;
+	if ((ret = dlg->exec()==QDialog::Accepted)) {
+		const QString path = dlg->path();
+		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
+		WAIT_CURSOR;
+
+		if (dlg->format() == ExportSpreadsheetDialog::LaTeX) {
+			const bool verticalHeader = dlg->matrixVerticalHeader();
+			const bool horizontalHeader = dlg->matrixHorizontalHeader();
+			const bool latexHeader = dlg->exportHeader();
+			const bool gridLines = dlg->gridLines();
+			const bool entire = dlg->entireSpreadheet();
+			const bool captions = dlg->captions();
+			view->exportToLaTeX(path, verticalHeader, horizontalHeader,
+				latexHeader, gridLines, entire, captions);
+		} else if (dlg->format() == ExportSpreadsheetDialog::FITS) {
+			const int exportTo = dlg->exportToFits();
+			view->exportToFits(path, exportTo );
+		} else {
+			const QString separator = dlg->separator();
+			view->exportToFile(path, separator);
+		}
+		RESET_CURSOR;
+    	}
 	delete dlg;
-    return ret;
+
+	return ret;
 }
 
 bool Matrix::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
-    bool ret;
+    	bool ret;
 	dlg->setWindowTitle(i18n("Print Matrix"));
-    if ((ret = dlg->exec() == QDialog::Accepted)) {
+    	if ((ret = dlg->exec() == QDialog::Accepted)) {
 		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
 		view->print(&printer);
 	}
 	delete dlg;
-    return ret;
+
+	return ret;
 }
 
 bool Matrix::printPreview() const {
 	const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
-    return dlg->exec();
+	return dlg->exec();
 }
 
 //##############################################################################

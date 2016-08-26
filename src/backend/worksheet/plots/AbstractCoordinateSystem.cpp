@@ -1,6 +1,6 @@
 /***************************************************************************
     File                 : AbstractCoordinateSystem.cpp
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Base class of all worksheet coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
@@ -29,7 +29,7 @@
 
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 #include "backend/worksheet/plots/AbstractPlot.h"
-#include <math.h>
+#include <cmath>
 
 /**
  * \class AbstractCoordinateSystem

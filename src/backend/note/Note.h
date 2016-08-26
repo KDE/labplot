@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : AbstractExportFilter.h
-    Project              : SciDAVis
+    File                 : Notes.h
+    Project              : LabPlot
+    Description          : Widget for taking notes
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 Knut Franke
-    Email (use @ for *)  : Knut.Franke*gmx.net
-    Description          : Interface for export operations.
+    Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,22 +27,53 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ABSTRACT_EXPORT_FILTER_H
-#define ABSTRACT_EXPORT_FILTER_H
+#ifndef NOTE_H
+#define NOTE_H
 
-class AbstractAspect;
-class QIODevice;
-class QStringList;
-class QString;
+#include "backend/core/AbstractPart.h"
 
-class AbstractExportFilter
-{
+#include <QIcon>
+#include <QColor>
+#include <QFont>
+
+class Note : public AbstractPart {
+	Q_OBJECT
+
 	public:
-		virtual ~AbstractExportFilter() {}
-		virtual bool exportAspect(AbstractAspect * object, QIODevice * output) = 0;
-		virtual QStringList fileExtensions() const = 0;
-		virtual QString name() const = 0;
-		QString nameAndPatterns() const;
+		explicit Note(const QString& name);
+
+		virtual QWidget* view() const;
+		virtual QIcon icon() const;
+
+		virtual bool exportView() const;
+		virtual bool printView();
+		virtual bool printPreview() const;
+
+		void setNote(const QString&);
+		const QString& note() const;
+
+		void setBackgroundColor(const QColor&);
+		const QColor& backgroundColor() const;
+
+		void setTextColor(const QColor&);
+		const QColor& textColor() const;
+
+		void setTextFont(const QFont&);
+		const QFont& textFont() const;
+
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
+
+	signals:
+		void backgroundColorChanged(QColor);
+		void textColorChanged(QColor);
+		void textFontChanged(QFont);
+
+	private:
+		QColor m_backgroundColor;
+		QColor m_textColor;
+		QFont m_textFont;
+		QString m_note;
 };
 
-#endif // ifndef ABSTRACT_EXPORT_FILTER_H
+#endif // NOTE_H

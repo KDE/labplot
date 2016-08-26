@@ -37,8 +37,8 @@
 #include <QFileDialog>
 #include <QImageReader>
 #include <KUrlCompletion>
+#include <cmath>
 
-#include <math.h>
 
 /*!
   \class CartesianPlotLegendDock
@@ -70,7 +70,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(paren
 	ui.kleBackgroundFileName->setCompletionObject(m_completion);
 
 	//adjust layouts in the tabs
-	for (int i=0; i<ui.tabWidget->count(); ++i){
+	for (int i=0; i<ui.tabWidget->count(); ++i) {
 		QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
@@ -149,7 +149,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	m_legend=list.first();
 
 	//if there is more then one legend in the list, disable the tab "general"
-	if (list.size()==1){
+	if (list.size()==1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
@@ -270,8 +270,8 @@ void CartesianPlotLegendDock::retranslateUi() {
 
 // "General"-tab
 void CartesianPlotLegendDock::nameChanged() {
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
 	m_legend->setName(ui.leName->text());
 }
@@ -292,7 +292,7 @@ void CartesianPlotLegendDock::visibilityChanged(bool state) {
 }
 
 //General
-void CartesianPlotLegendDock::labelFontChanged(const QFont& font){
+void CartesianPlotLegendDock::labelFontChanged(const QFont& font) {
 	if (m_initializing)
 		return;
 
@@ -302,7 +302,7 @@ void CartesianPlotLegendDock::labelFontChanged(const QFont& font){
 		legend->setLabelFont(labelsFont);
 }
 
-void CartesianPlotLegendDock::labelColorChanged(const QColor& color){
+void CartesianPlotLegendDock::labelColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
@@ -310,7 +310,7 @@ void CartesianPlotLegendDock::labelColorChanged(const QColor& color){
 		legend->setLabelColor(color);
 }
 
-void CartesianPlotLegendDock::labelOrderChanged(const int index){
+void CartesianPlotLegendDock::labelOrderChanged(const int index) {
 	if (m_initializing)
 		return;
 
@@ -319,7 +319,7 @@ void CartesianPlotLegendDock::labelOrderChanged(const int index){
 		legend->setLabelColumnMajor(columnMajor);
 }
 
-void CartesianPlotLegendDock::lineSymbolWidthChanged(double value){
+void CartesianPlotLegendDock::lineSymbolWidthChanged(double value) {
 	if (m_initializing)
 		return;
 
@@ -330,9 +330,9 @@ void CartesianPlotLegendDock::lineSymbolWidthChanged(double value){
 /*!
 	called when legend's current horizontal position relative to its parent (left, center, right, custom ) is changed.
 */
-void CartesianPlotLegendDock::positionXChanged(int index){
+void CartesianPlotLegendDock::positionXChanged(int index) {
 	//Enable/disable the spinbox for the x- oordinates if the "custom position"-item is selected/deselected
-	if (index == ui.cbPositionX->count()-1 ){
+	if (index == ui.cbPositionX->count()-1 ) {
 		ui.sbPositionX->setEnabled(true);
 	}else{
 		ui.sbPositionX->setEnabled(false);
@@ -350,9 +350,9 @@ void CartesianPlotLegendDock::positionXChanged(int index){
 /*!
 	called when legend's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
 */
-void CartesianPlotLegendDock::positionYChanged(int index){
+void CartesianPlotLegendDock::positionYChanged(int index) {
 	//Enable/disable the spinbox for the y- oordinates if the "custom position"-item is selected/deselected
-	if (index == ui.cbPositionY->count()-1 ){
+	if (index == ui.cbPositionY->count()-1 ) {
 		ui.sbPositionY->setEnabled(true);
 	}else{
 		ui.sbPositionY->setEnabled(false);
@@ -367,7 +367,7 @@ void CartesianPlotLegendDock::positionYChanged(int index){
 		legend->setPosition(position);
 }
 
-void CartesianPlotLegendDock::customPositionXChanged(double value){
+void CartesianPlotLegendDock::customPositionXChanged(double value) {
 	if (m_initializing)
 		return;
 
@@ -377,7 +377,7 @@ void CartesianPlotLegendDock::customPositionXChanged(double value){
 		legend->setPosition(position);
 }
 
-void CartesianPlotLegendDock::customPositionYChanged(double value){
+void CartesianPlotLegendDock::customPositionYChanged(double value) {
 	if (m_initializing)
 		return;
 
@@ -391,7 +391,7 @@ void CartesianPlotLegendDock::customPositionYChanged(double value){
 void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 	PlotArea::BackgroundType type = (PlotArea::BackgroundType)index;
 
-	if (type == PlotArea::Color){
+	if (type == PlotArea::Color) {
 		ui.lBackgroundColorStyle->show();
 		ui.cbBackgroundColorStyle->show();
 		ui.lBackgroundImageStyle->hide();
@@ -408,7 +408,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 
 		PlotArea::BackgroundColorStyle style =
 			(PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
-		if (style == PlotArea::SingleColor){
+		if (style == PlotArea::SingleColor) {
 			ui.lBackgroundFirstColor->setText(i18n("Color"));
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
@@ -417,7 +417,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
 		}
-	}else if(type == PlotArea::Image){
+	}else if (type == PlotArea::Image) {
 		ui.lBackgroundColorStyle->hide();
 		ui.cbBackgroundColorStyle->hide();
 		ui.lBackgroundImageStyle->show();
@@ -432,7 +432,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 		ui.kcbBackgroundFirstColor->hide();
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
-	}else if(type == PlotArea::Pattern) {
+	}else if (type == PlotArea::Pattern) {
 		ui.lBackgroundFirstColor->setText(i18n("Color"));
 		ui.lBackgroundColorStyle->hide();
 		ui.cbBackgroundColorStyle->hide();
@@ -460,7 +460,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 void CartesianPlotLegendDock::backgroundColorStyleChanged(int index) {
 	PlotArea::BackgroundColorStyle style = (PlotArea::BackgroundColorStyle)index;
 
-	if (style == PlotArea::SingleColor){
+	if (style == PlotArea::SingleColor) {
 		ui.lBackgroundFirstColor->setText(i18n("Color"));
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
@@ -527,8 +527,8 @@ void CartesianPlotLegendDock::selectFile() {
 	}
 
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
-    if (path.isEmpty())
-        return; //cancel was clicked in the file-dialog
+	if (path.isEmpty())
+		return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());
 	if (pos!=-1) {
@@ -728,7 +728,7 @@ void CartesianPlotLegendDock::legendLineSymbolWidthChanged(float value) {
 }
 
 
-void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::PositionWrapper& position){
+void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::PositionWrapper& position) {
 	m_initializing = true;
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), Worksheet::Centimeter) );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), Worksheet::Centimeter) );
@@ -798,16 +798,16 @@ void CartesianPlotLegendDock::legendBorderPenChanged(QPen& pen) {
 		return;
 
 	m_initializing = true;
-	if(ui.cbBorderStyle->currentIndex() != pen.style())
+	if (ui.cbBorderStyle->currentIndex() != pen.style())
 		ui.cbBorderStyle->setCurrentIndex(pen.style());
-	if(ui.kcbBorderColor->color() != pen.color())
+	if (ui.kcbBorderColor->color() != pen.color())
 		ui.kcbBorderColor->setColor(pen.color());
-	if(ui.sbBorderWidth->value() != pen.widthF())
+	if (ui.sbBorderWidth->value() != pen.widthF())
 		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
 	m_initializing = false;
 }
 
-void CartesianPlotLegendDock::legendBorderCornerRadiusChanged(float value){
+void CartesianPlotLegendDock::legendBorderCornerRadiusChanged(float value) {
 	m_initializing = true;
 	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
 	m_initializing = false;

@@ -32,6 +32,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 
+#include <QBrush>
 #include <QIcon>
 #include <QFontMetrics>
 
@@ -389,29 +390,26 @@ void SpreadsheetModel::updateHorizontalHeader() {
 	while(m_horizontal_header_data.size() > column_count)
 		m_horizontal_header_data.removeLast();
 
-// 	int x_cols;
-// 	if(m_spreadsheet->columnCount(AbstractColumn::X) <= 1)
-// 		x_cols = -1;
-// 	else
-// 		x_cols = 0;
-
 	for (int i=0; i<column_count; i++) {
 		Column* col = m_spreadsheet->child<Column>(i);
 
 		QString middle_section;
 
-		//TODO: add i18n?
 		switch(col->columnMode()) {
 			case AbstractColumn::Numeric:
-				middle_section = " {numeric} ";
+				middle_section = QLatin1String(" {") + i18n("Numeric") + QLatin1String("} ");
 				break;
 			case AbstractColumn::Text:
-				middle_section = " {text} ";
+				middle_section = QLatin1String(" {") + i18n("Text") + QLatin1String("} ");
+				break;
+			case AbstractColumn::Month:
+				middle_section = QLatin1String(" {") + i18n("Month names") + QLatin1String("} ");
+				break;
+			case AbstractColumn::Day:
+				middle_section = QLatin1String(" {") + i18n("Day names") + QLatin1String("} ");
 				break;
 			case AbstractColumn::DateTime:
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
-				middle_section = " {datetime} ";
+				middle_section = QLatin1String(" {") + i18n("Date and time") + QLatin1String("} ");
 				break;
 		}
 

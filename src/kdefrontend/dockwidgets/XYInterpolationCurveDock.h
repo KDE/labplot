@@ -50,10 +50,10 @@ private:
 	Ui::XYInterpolationCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
-	TreeViewComboBox* cbWeightsColumn;
 
 	XYInterpolationCurve* m_interpolationCurve;
 	XYInterpolationCurve::InterpolationData m_interpolationData;
+	unsigned int dataPoints;	// number of data points in selected column
 
 protected:
 	virtual void setModel();
@@ -65,13 +65,14 @@ private slots:
 	void commentChanged();
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
-	void typeChanged(int);
-	void variantChanged(int);
+	void typeChanged();
+	void variantChanged();
 	void tensionChanged();
 	void continuityChanged();
 	void biasChanged();
 	void evaluateChanged();
 	void numberOfPointsChanged();
+	void pointsModeChanged();
 
 //	void showOptions();
 	void recalculateClicked();

@@ -44,6 +44,7 @@ class ExportSpreadsheetDialog: public KDialog {
 		QString path() const;
 		void setFileName(const QString&);
 		void setMatrixMode(bool);
+        void setExportSelection(bool);
 		bool exportHeader() const;
         bool exportLatexHeader() const;
         bool gridLines() const;

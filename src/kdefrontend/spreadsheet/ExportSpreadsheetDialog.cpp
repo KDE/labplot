@@ -29,6 +29,7 @@
 #include "ExportSpreadsheetDialog.h"
 
 #include <QFileDialog>
+#include <QStandardItemModel>
 #include <KMessageBox>
 #include <QLabel>
 #include <QComboBox>
@@ -302,14 +303,15 @@ void ExportSpreadsheetDialog::selectFile() {
  */
 void ExportSpreadsheetDialog::formatChanged(int index) {
 	QStringList extensions;
-    extensions<<".txt"<<".bin" << ".tex" << ".fits";
+	extensions << ".txt" << ".bin" << ".tex" << ".fits";
 	QString path = ui.kleFileName->text();
 	int i = path.indexOf(".");
-	if (i==-1)
-		path = path + extensions.at(index);
-	else
-		path=path.left(i) + extensions.at(index);
-
+	if (index != 1) {
+		if (i==-1)
+			path = path + extensions.at(index);
+		else
+			path=path.left(i) + extensions.at(index);
+	}
 	if (ui.cbFormat->currentIndex() == 2) {
 		ui.cbSeparator->hide();
 		ui.lSeparator->hide();
@@ -326,83 +328,95 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 			ui.chkHeaders->show();
 			ui.lEmptyRows->show();
 			ui.chkEmptyRows->show();
+            ui.lMatrixHHeader->hide();
+            ui.lMatrixVHeader->hide();
+            ui.chkMatrixHHeader->hide();
+            ui.chkMatrixVHeader->hide();
 		} else {
 			ui.lMatrixHHeader->show();
 			ui.lMatrixVHeader->show();
 			ui.chkMatrixHHeader->show();
 			ui.chkMatrixVHeader->show();
 		}
-        ui.cbExportToFITS->hide();
-        ui.lExportToFITS->hide();
-        ui.lColumnAsUnits->hide();
-        ui.chkColumnsAsUnits->hide();
-    //FITS
-    } else if(ui.cbFormat->currentIndex() == 3) {
-        ui.lCaptions->hide();
-        ui.lEmptyRows->hide();
-        ui.lExportArea->hide();
-        ui.lGridLines->hide();
-        ui.lMatrixHHeader->hide();
-        ui.lMatrixVHeader->hide();
-        ui.lSeparator->hide();
-        ui.lHeader->hide();
-        ui.chkEmptyRows->hide();
-        ui.chkHeaders->hide();
-        ui.chkExportHeader->hide();
-        ui.lExportHeader->hide();
-        ui.chkGridLines->hide();
-        ui.chkMatrixHHeader->hide();
-        ui.chkMatrixVHeader->hide();
-        ui.chkCaptions->hide();
-        ui.cbLaTeXExport->hide();
-        ui.cbSeparator->hide();
+		ui.cbExportToFITS->hide();
+		ui.lExportToFITS->hide();
+		ui.lColumnAsUnits->hide();
+		ui.chkColumnsAsUnits->hide();
+	//FITS
+	} else if(ui.cbFormat->currentIndex() == 3) {
+		ui.lCaptions->hide();
+		ui.lEmptyRows->hide();
+		ui.lExportArea->hide();
+		ui.lGridLines->hide();
+		ui.lMatrixHHeader->hide();
+		ui.lMatrixVHeader->hide();
+		ui.lSeparator->hide();
+		ui.lHeader->hide();
+		ui.chkEmptyRows->hide();
+		ui.chkHeaders->hide();
+		ui.chkExportHeader->hide();
+		ui.lExportHeader->hide();
+		ui.chkGridLines->hide();
+		ui.chkMatrixHHeader->hide();
+		ui.chkMatrixVHeader->hide();
+		ui.chkCaptions->hide();
+		ui.cbLaTeXExport->hide();
+		ui.cbSeparator->hide();
 
-        ui.cbExportToFITS->show();
-        ui.lExportToFITS->show();
-        if (!m_matrixMode) {
-            ui.lColumnAsUnits->show();
-            ui.chkColumnsAsUnits->show();
-        }
-    } else {
-        ui.cbSeparator->show();
-        ui.lSeparator->show();
+		ui.cbExportToFITS->show();
+		ui.lExportToFITS->show();
+		if (!m_matrixMode) {
+			ui.lColumnAsUnits->show();
+			ui.chkColumnsAsUnits->show();
+		}
+	} else {
+		ui.cbSeparator->show();
+		ui.lSeparator->show();
 
-        ui.chkCaptions->hide();
-        ui.chkEmptyRows->hide();
-        ui.chkGridLines->hide();;
-        ui.lEmptyRows->hide();
-        ui.lExportArea->hide();
-        ui.lGridLines->hide();
-        ui.lCaptions->hide();
-        ui.cbLaTeXExport->hide();
-        ui.lMatrixHHeader->hide();
-        ui.lMatrixVHeader->hide();
-        ui.chkMatrixHHeader->hide();
-        ui.chkMatrixVHeader->hide();
+		ui.chkCaptions->hide();
+		ui.chkEmptyRows->hide();
+		ui.chkGridLines->hide();;
+		ui.lEmptyRows->hide();
+		ui.lExportArea->hide();
+		ui.lGridLines->hide();
+		ui.lCaptions->hide();
+		ui.cbLaTeXExport->hide();
+		ui.lMatrixHHeader->hide();
+		ui.lMatrixVHeader->hide();
+		ui.chkMatrixHHeader->hide();
+		ui.chkMatrixVHeader->hide();
 
-        ui.lHeader->hide();
-        ui.chkHeaders->hide();
+		ui.lHeader->hide();
+		ui.chkHeaders->hide();
 
-        ui.cbExportToFITS->hide();
-        ui.lExportToFITS->hide();
-        ui.lColumnAsUnits->hide();
-        ui.chkColumnsAsUnits->hide();
-    }
+		ui.cbExportToFITS->hide();
+		ui.lExportToFITS->hide();
+		ui.lColumnAsUnits->hide();
+		ui.chkColumnsAsUnits->hide();
+	}
 
 	if (!m_matrixMode) {
-            ui.chkExportHeader->show();
-            ui.lExportHeader->show();
+			ui.chkExportHeader->show();
+			ui.lExportHeader->show();
 	} else {
 		ui.chkExportHeader->hide();
 		ui.lExportHeader->hide();
 	}
-    if (ui.cbFormat->currentIndex() == 3) {
-        ui.chkExportHeader->hide();
-        ui.lExportHeader->hide();
-    }
+	if (ui.cbFormat->currentIndex() == 3) {
+		ui.chkExportHeader->hide();
+		ui.lExportHeader->hide();
+	}
 
 	setFormat(static_cast<Format>(index));
 	ui.kleFileName->setText(path);
+}
+
+void ExportSpreadsheetDialog::setExportSelection(bool enable) {
+	if (!enable) {
+		const QStandardItemModel* areaToExportModel = qobject_cast<const QStandardItemModel*>(ui.cbLaTeXExport->model());
+		QStandardItem* item = areaToExportModel->item(1);
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+	}
 }
 
 void ExportSpreadsheetDialog::setFormat(Format format) {
@@ -410,7 +424,7 @@ void ExportSpreadsheetDialog::setFormat(Format format) {
 }
 
 void ExportSpreadsheetDialog::setExportTo(const QStringList &to) {
-    ui.cbExportToFITS->addItems(to);
+	ui.cbExportToFITS->addItems(to);
 }
 
 ExportSpreadsheetDialog::Format ExportSpreadsheetDialog::format() const {

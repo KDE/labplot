@@ -31,16 +31,18 @@
 #define CARTESIANPLOT_H
 
 #include "backend/worksheet/plots/AbstractPlot.h"
-#include <math.h>
+#include <cmath>
 
 class QToolBar;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
 class XYCurve;
 class XYEquationCurve;
+class XYInterpolationCurve;
+class XYSmoothCurve;
 class XYFitCurve;
 class XYFourierFilterCurve;
-class XYInterpolationCurve;
+class XYFourierTransformCurve;
 
 class CartesianPlot:public AbstractPlot{
 	Q_OBJECT
@@ -66,7 +68,9 @@ class CartesianPlot:public AbstractPlot{
 
 		//simple wrapper for QList<RangeBreaking> in order to get our macros working
 		struct RangeBreaks {
+			RangeBreaks() : lastChanged(-1) { RangeBreak b; list<<b;};
 			QList<RangeBreak> list;
+			int lastChanged;
 		};
 
 		void initDefault(Type=FourAxes);
@@ -109,9 +113,11 @@ class CartesianPlot:public AbstractPlot{
 
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
+		QAction* addInterpolationCurveAction;
+		QAction* addSmoothCurveAction;
 		QAction* addFitCurveAction;
 		QAction* addFourierFilterCurveAction;
-		QAction* addInterpolationCurveAction;
+		QAction* addFourierTransformCurveAction;
 		QAction* addHorizontalAxisAction;
 		QAction* addVerticalAxisAction;
  		QAction* addLegendAction;
@@ -141,9 +147,11 @@ class CartesianPlot:public AbstractPlot{
 		void addVerticalAxis();
 		XYCurve* addCurve();
 		XYEquationCurve* addEquationCurve();
+		XYInterpolationCurve* addInterpolationCurve();
+		XYSmoothCurve* addSmoothCurve();
 		XYFitCurve* addFitCurve();
 		XYFourierFilterCurve* addFourierFilterCurve();
-		XYInterpolationCurve* addInterpolationCurve();
+		XYFourierTransformCurve* addFourierTransformCurve();
 		void addLegend();
 		void addCustomPoint();
 		void scaleAuto();

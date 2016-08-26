@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : AbstractExportFilter.cpp
-    Project              : SciDAVis
+    File                 : SpreadsheetDoubleHeaderView.h
+    Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Knut Franke
-    Email (use @ for *)  : Knut.Franke*gmx.net
-    Description          : Interface for export operations.
+    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
+    Description          : Horizontal header for SpreadsheetView displaying comments in a second header
 
  ***************************************************************************/
 
@@ -27,38 +26,49 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "AbstractExportFilter.h"
+#ifndef SPREADSHEETDOUBLEHEADERVIEW_H
+#define SPREADSHEETDOUBLEHEADERVIEW_H
 
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QHeaderView>
+#include <backend/spreadsheet/SpreadsheetModel.h>
 
-/**
- * \class AbstractExportFilter
- * \brief Interface for export operations.
- *
- * This is analogous to AbstractImportFilter.
- */
+class SpreadsheetCommentsHeaderView : public QHeaderView {
+	Q_OBJECT
 
-/**
- * \fn bool AbstractExportFilter::exportAspect(AbstractAspect *object, QIODevice *output)
- * \brief Export object to output.
- *
- * \return true if export was successful, false otherwise
- */
+	public:
+		explicit SpreadsheetCommentsHeaderView(QWidget* parent = 0);
+		virtual ~SpreadsheetCommentsHeaderView();
 
-/**
- * \fn QStringList AbstractExportFilter::fileExtensions() const
- * \brief The file extension(s) typically associated with the handled format.
- */
+		virtual void setModel(QAbstractItemModel*);
+		friend class SpreadsheetHeaderView; // access to paintSection (protected)
+};
 
-/**
- * \fn QString AbstractExportFilter::name() const
- * \brief A (localized) name for the filter.
- */
+class SpreadsheetHeaderView : public QHeaderView{
+	Q_OBJECT
 
-/**
- * \brief Uses name() and fileExtensions() to produce a filter specification as used by QFileDialog.
- */
-QString AbstractExportFilter::nameAndPatterns() const {
-	return name() + " (*." + fileExtensions().join(" *.") + ')';
-}
+	public:
+		explicit SpreadsheetHeaderView(QWidget* parent = 0);
+		~SpreadsheetHeaderView();
+
+		virtual void setModel(QAbstractItemModel*);
+		virtual QSize sizeHint () const;
+		
+		void showComments(bool on = true);
+		bool areCommentsShown() const;
+
+	private:
+		SpreadsheetCommentsHeaderView* m_slave;
+		bool m_showComments;
+		
+	public slots:
+		void refresh();
+		void headerDataChanged(Qt::Orientation orientation, int logicalFirst, int logicalLast);
+
+	protected slots:
+		void sectionsInserted(const QModelIndex & parent, int logicalFirst, int logicalLast);
+
+	protected:
+		virtual void paintSection(QPainter * painter, const QRect & rect, int logicalIndex) const;
+};
+
+#endif

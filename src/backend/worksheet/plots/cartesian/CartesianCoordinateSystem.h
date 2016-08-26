@@ -44,8 +44,13 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 	public:
 		class Scale {
 			public:
+#if __cplusplus < 201103L
 				static const double LIMIT_MAX = 1e15;
 				static const double LIMIT_MIN = -1e15;
+#else
+				static constexpr double LIMIT_MAX = 1e15;
+				static constexpr double LIMIT_MIN = -1e15;
+#endif
 
 				virtual ~Scale();
 				enum ScaleType {

@@ -57,9 +57,10 @@ public:
 	QString fileName() const;
 	const QStringList selectedHDFNames() const;
 	const QStringList selectedNetCDFNames() const;
-    const QStringList selectedFITSExtensions() const;
+	const QStringList selectedFITSExtensions() const;
 	void hideDataSource() const;
-    bool canReadFitsTableToMatrix() const;
+	bool canReadFitsTableToMatrix() const;
+	void showAsciiHeaderOptions(bool);
 
 private:
 	Ui::ImportFileWidget ui;
@@ -68,17 +69,17 @@ private:
 	Ui::HDFOptionsWidget hdfOptionsWidget;
 	Ui::ImageOptionsWidget imageOptionsWidget;
 	Ui::NetCDFOptionsWidget netcdfOptionsWidget;
-    Ui::FITSOptionsWidget fitsOptionsWidget;
+	Ui::FITSOptionsWidget fitsOptionsWidget;
 	QTableWidget* twPreview;
 	const QString& m_fileName;
-    bool readFitsTableToMatrix;
+	bool readFitsTableToMatrix;
 
 private slots:
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int);
 	void hdfTreeWidgetItemSelected(QTreeWidgetItem*,int);
 	void netcdfTreeWidgetItemSelected(QTreeWidgetItem*,int);
-    void fitsTreeWidgetItemSelected(QTreeWidgetItem*,int);
+	void fitsTreeWidgetItemSelected(QTreeWidgetItem*,int);
 
 	void saveFilter();
 	void manageFilters();
@@ -91,7 +92,7 @@ private slots:
 
 signals:
 	void fileNameChanged();
-    void checkedFitsTableToMatrix();
+	void checkedFitsTableToMatrix();
 };
 
 #endif

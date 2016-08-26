@@ -4,7 +4,7 @@
     Description          : Worksheet
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -35,16 +35,16 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
-#include <math.h>
 
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 
-#include "KIcon"
+#include <KIcon>
 #include <KConfigGroup>
 #include <KLocale>
 #include <QDebug>
+#include <cmath>
 
 /**
  * \class Worksheet
@@ -353,6 +353,13 @@ void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item){
 		this->removeChild(aspect);
 }
 
+void Worksheet::setIsClosing() {
+	if (m_view) {
+		WorksheetView* view = reinterpret_cast<WorksheetView*>(m_view);
+		view->setIsClosing();
+	}
+}
+
 void Worksheet::update(){
 	emit requestUpdate();
 }
@@ -617,7 +624,6 @@ WorksheetPrivate::~WorksheetPrivate(){
 }
 
 void WorksheetPrivate::updateLayout(){
-	emit q->layoutChanged(layout);
 	QList<WorksheetElementContainer*> list = q->children<WorksheetElementContainer>();
 	if (layout==Worksheet::NoLayout){
 		foreach(WorksheetElementContainer* elem, list) {

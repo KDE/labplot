@@ -29,12 +29,11 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
 
-#include <math.h>
-
 #include <QDataStream>
 #include <QDebug>
 #include <KLocale>
-#include <kfilterdev.h>
+#include <KFilterDev>
+#include <cmath>
 
  /*!
 	\class BinaryFilter
@@ -42,32 +41,31 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
 	\ingroup datasources
  */
-BinaryFilter::BinaryFilter():AbstractFileFilter(), d(new BinaryFilterPrivate(this)){
-
+BinaryFilter::BinaryFilter():AbstractFileFilter(), d(new BinaryFilterPrivate(this)) {
 }
 
-BinaryFilter::~BinaryFilter(){
+BinaryFilter::~BinaryFilter() {
 	delete d;
 }
 
 /*!
   reads the content of the file \c fileName.
 */
-QString BinaryFilter::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  int lines){
+QString BinaryFilter::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  int lines) {
 	return d->readData(fileName, dataSource, importMode, lines);
 }
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void BinaryFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode){
+void BinaryFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	d->read(fileName, dataSource, importMode);
 }
 
 /*!
 writes the content of the data source \c dataSource to the file \c fileName.
 */
-void BinaryFilter::write(const QString & fileName, AbstractDataSource* dataSource){
+void BinaryFilter::write(const QString & fileName, AbstractDataSource* dataSource) {
  	d->write(fileName, dataSource);
 // 	emit()
 }
@@ -75,7 +73,7 @@ void BinaryFilter::write(const QString & fileName, AbstractDataSource* dataSourc
 /*!
 returns the list of all predefined data formats.
 */
-QStringList BinaryFilter::dataTypes(){
+QStringList BinaryFilter::dataTypes() {
 	return (QStringList()<<"int8 (8 bit signed integer)"<<"int16 (16 bit signed integer)"<<"int32 (32 bit signed integer)"<<"int64 (64 bit signed integer)"
   	<<"uint8 (8 bit unsigned integer)"<<"uint16 (16 bit unsigned integer)"<<"uint32 (32 bit unsigned integer)"<<"uint64 (64 bit unsigned integer)"
 	<<"real32 (single precision floats)"<<"real64 (double precision floats)");
@@ -84,7 +82,7 @@ QStringList BinaryFilter::dataTypes(){
 /*!
 returns the list of all predefined byte order.
 */
-QStringList BinaryFilter::byteOrders(){
+QStringList BinaryFilter::byteOrders() {
 	return (QStringList()<<"Little endian"<<"Big endian");
 }
 
@@ -107,10 +105,10 @@ long BinaryFilter::rowNumber(const QString & fileName, const int vectors, const 
 
 	QDataStream in(device);
 	long rows=0;
-	while (!in.atEnd()){
+	while (!in.atEnd()) {
 		// one row
-		for (int i=0; i<vectors; ++i){
-			for(int j=0;j<BinaryFilter::dataSize(type);++j) {
+		for (int i=0; i < vectors; ++i) {
+			for (int j=0; j < BinaryFilter::dataSize(type); ++j) {
 				qint8 tmp;
 				in >> tmp;
 			}
@@ -125,24 +123,24 @@ long BinaryFilter::rowNumber(const QString & fileName, const int vectors, const 
 /*!
   loads the predefined filter settings for \c filterName
 */
-void BinaryFilter::loadFilterSettings(const QString& filterName){
+void BinaryFilter::loadFilterSettings(const QString& filterName) {
 	Q_UNUSED(filterName);
 }
 
 /*!
   saves the current settings as a new filter with the name \c filterName
 */
-void BinaryFilter::saveFilterSettings(const QString& filterName) const{
+void BinaryFilter::saveFilterSettings(const QString& filterName) const {
 	Q_UNUSED(filterName);
 }
 
 ///////////////////////////////////////////////////////////////////////
 
-void BinaryFilter::setVectors(const int v){
+void BinaryFilter::setVectors(const int v) {
 	d->vectors = v;
 }
 
-int BinaryFilter::vectors() const{
+int BinaryFilter::vectors() const {
 	return d->vectors;
 }
 
@@ -150,7 +148,7 @@ void BinaryFilter::setDataType(const BinaryFilter::DataType t) {
 	d->dataType = t;
 }
 
-BinaryFilter::DataType BinaryFilter::dataType() const{
+BinaryFilter::DataType BinaryFilter::dataType() const {
 	return d->dataType;
 }
 
@@ -166,7 +164,7 @@ void BinaryFilter::setSkipStartBytes(const int s) {
 	d->skipStartBytes = s;
 }
 
-int BinaryFilter::skipStartBytes() const{
+int BinaryFilter::skipStartBytes() const {
 	return d->skipStartBytes;
 }
 
@@ -174,7 +172,7 @@ void BinaryFilter::setStartRow(const int s) {
 	d->startRow = s;
 }
 
-int BinaryFilter::startRow() const{
+int BinaryFilter::startRow() const {
 	return d->startRow;
 }
 
@@ -182,7 +180,7 @@ void BinaryFilter::setEndRow(const int e) {
 	d->endRow = e;
 }
 
-int BinaryFilter::endRow() const{
+int BinaryFilter::endRow() const {
 	return d->endRow;
 }
 
@@ -190,15 +188,15 @@ void BinaryFilter::setSkipBytes(const int s) {
 	d->skipBytes = s;
 }
 
-int BinaryFilter::skipBytes() const{
+int BinaryFilter::skipBytes() const {
 	return d->skipBytes;
 }
 
-void BinaryFilter::setAutoModeEnabled(bool b){
+void BinaryFilter::setAutoModeEnabled(bool b) {
 	d->autoModeEnabled = b;
 }
 
-bool BinaryFilter::isAutoModeEnabled() const{
+bool BinaryFilter::isAutoModeEnabled() const {
 	return d->autoModeEnabled;
 }
 //#####################################################################
@@ -213,7 +211,7 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
     reads the content of the file \c fileName to the data source \c dataSource or return as string for preview.
     Uses the settings defined in the data source.
 */
-QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines){
+QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
 	QStringList dataString;
 
 	QIODevice *device = KFilterDev::deviceForFile(fileName);
@@ -230,21 +228,21 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 	int numRows=BinaryFilter::rowNumber(fileName,vectors,dataType);
 
 	// catch case that skipStartBytes or startRow is bigger than file
-	if(skipStartBytes >= BinaryFilter::dataSize(dataType)*vectors*numRows || startRow > numRows) {
-		if(dataSource != NULL)
+	if (skipStartBytes >= BinaryFilter::dataSize(dataType)*vectors*numRows || startRow > numRows) {
+		if (dataSource != NULL)
 			dataSource->clear();
 		return QString();
 	}
 
 	// skip bytes at start
-	for (int i=0; i<skipStartBytes; i++){
+	for (int i=0; i < skipStartBytes; i++) {
 		qint8 tmp;
 		in >> tmp;
 	}
 
 	// skip until start row
-	for (int i=0; i<(startRow-1)*vectors; ++i){
-		for(int j=0;j<BinaryFilter::dataSize(dataType);++j) {
+	for (int i=0; i < (startRow-1)*vectors; ++i) {
+		for (int j=0; j < BinaryFilter::dataSize(dataType); ++j) {
 			qint8 tmp;
 			in >> tmp;
 		}
@@ -272,13 +270,13 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 
 	QVector<QVector<double>*> dataPointers;
 	int columnOffset = 0;
-	if(dataSource != NULL)
+	if (dataSource != NULL)
 		columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
 
 	// read data
-	for (int i=0; i<qMin(actualRows,lines); i++){
-		for ( int n=0; n<actualCols; n++ ){
-			switch(dataType) {
+	for (int i=0; i<qMin(actualRows,lines); i++) {
+		for ( int n=0; n<actualCols; n++ ) {
+			switch (dataType) {
 			case BinaryFilter::INT8: {
 				qint8 value;
 				in >> value;
@@ -384,7 +382,7 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 	if (spreadsheet) {
 		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
-		for ( int n=0; n<actualCols; n++ ){
+		for (int n=0; n < actualCols; n++) {
 			Column* column = spreadsheet->column(columnOffset+n);
 			column->setComment(comment);
 			column->setUndoAware(true);
@@ -408,14 +406,14 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 }
 
 
-void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
+void BinaryFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
 	readData(fileName,dataSource,mode);
 }
 
 /*!
     writes the content of \c dataSource to the file \c fileName.
 */
-void BinaryFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource){
+void BinaryFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
 	Q_UNUSED(fileName);
 	Q_UNUSED(dataSource);
 	//TODO
@@ -445,7 +443,7 @@ void BinaryFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool BinaryFilter::load(XmlStreamReader* reader) {
-	if(!reader->isStartElement() || reader->name() != "binaryFilter"){
+	if (!reader->isStartElement() || reader->name() != "binaryFilter") {
 		reader->raiseError(i18n("no binary filter element found"));
 		return false;
 	}
@@ -455,49 +453,49 @@ bool BinaryFilter::load(XmlStreamReader* reader) {
 
 	// read attributes
 	QString str = attribs.value("vectors").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'vectors'"));
 	else
 		d->vectors = str.toInt();
 
 	str = attribs.value("dataType").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'dataType'"));
 	else
 		d->dataType = (BinaryFilter::DataType) str.toInt();
 
 	str = attribs.value("byteOrder").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'byteOrder'"));
 	else
 		d->byteOrder = (BinaryFilter::ByteOrder) str.toInt();
 
 	str = attribs.value("autoMode").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'autoMode'"));
 	else
 		d->autoModeEnabled = str.toInt();
 
 	str = attribs.value("startRow").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'startRow'"));
 	else
 		d->startRow = str.toInt();
 
 	str = attribs.value("endRow").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'endRow'"));
 	else
 		d->endRow = str.toInt();
 
 	str = attribs.value("skipStartBytes").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'skipStartBytes'"));
 	else
 		d->skipStartBytes = str.toInt();
 
 	str = attribs.value("skipBytes").toString();
-	if(str.isEmpty())
+	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.arg("'skipBytes'"));
 	else
 		d->skipBytes = str.toInt();

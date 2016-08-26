@@ -32,8 +32,6 @@
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 
-#include <QDebug>
-
 class XYInterpolationCurve;
 class Column;
 

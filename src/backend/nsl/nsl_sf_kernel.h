@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : SpreadsheetDoubleHeaderView.h
-    Project              : SciDAVis
+    File                 : nsl_sf_kernel.h
+    Project              : LabPlot
+    Description          : NSL special kernel functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert,
-    Email (use @ for *)  : thzs*gmx.net
-    Description          : Horizontal header for SpreadsheetView displaying comments in a second header
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -27,52 +26,43 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SPREADSHEETDOUBLEHEADERVIEW_H
-#define SPREADSHEETDOUBLEHEADERVIEW_H
+#ifndef NSL_SF_KERNEL_H
+#define NSL_SF_KERNEL_H
 
-#include <QHeaderView>
-#include <backend/spreadsheet/SpreadsheetModel.h>
+#include <stdlib.h>
 
+/* see https://en.wikipedia.org/wiki/Kernel_%28statistics%29 */
 
-class SpreadsheetCommentsHeaderView : public QHeaderView{
-	Q_OBJECT
+/* kernel on [-1:1] */
+/* uniform */
+double nsl_sf_kernel_uniform(double u);
+/* triangular */
+double nsl_sf_kernel_triangular(double u);
+/* parabolic (Epanechnikov) */
+double nsl_sf_kernel_parabolic(double u);
+/* quartic (biweight) */
+double nsl_sf_kernel_quartic(double u);
+/* triweight */
+double nsl_sf_kernel_triweight(double u);
+/* tricube */
+double nsl_sf_kernel_tricube(double u);
+/* cosine */
+double nsl_sf_kernel_cosine(double u);
+/* semi circle */
+double nsl_sf_kernel_semicircle(double u);
 
-	public:
-		explicit SpreadsheetCommentsHeaderView(QWidget *parent = 0);
-		virtual ~SpreadsheetCommentsHeaderView();
+/* kernel on (-inf,inf) */
+/* Gaussian */
+double nsl_sf_kernel_gaussian(double u);
+/* Cauchy */
+double nsl_sf_kernel_cauchy(double u);
+/* Logistic */
+double nsl_sf_kernel_logistic(double u);
+/* Picard */
+double nsl_sf_kernel_picard(double u);
+/* Sigmoid */
+double nsl_sf_kernel_sigmoid(double u);
+/* Silverman */
+double nsl_sf_kernel_silverman(double u);
 
-	virtual void setModel(QAbstractItemModel * model);
-
-	friend class SpreadsheetDoubleHeaderView; // access to paintSection (protected)
-};
-
-
-class SpreadsheetDoubleHeaderView : public QHeaderView{
-	Q_OBJECT
-
-	public:
-		explicit SpreadsheetDoubleHeaderView(QWidget * parent = 0);
-		~SpreadsheetDoubleHeaderView();
-
-		virtual void setModel(QAbstractItemModel * model);
-		virtual QSize sizeHint () const;
-		
-		void showComments(bool on = true);
-		bool areCommentsShown() const;
-
-	private:
-		SpreadsheetCommentsHeaderView * m_slave;
-		bool m_showComments;
-		
-	public slots:
-		void refresh();
-		void headerDataChanged(Qt::Orientation orientation, int logicalFirst, int logicalLast);
-
-	protected slots:
-		void sectionsInserted(const QModelIndex & parent, int logicalFirst, int logicalLast);
-
-	protected:
-		virtual void paintSection(QPainter * painter, const QRect & rect, int logicalIndex) const;
-};
-
-#endif
+#endif /* NSL_SF_KERNEL_H */

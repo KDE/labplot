@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Worksheet view
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -62,6 +62,7 @@ public:
 
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
+	void setIsClosing();
 
 private:
 	enum MouseMode {SelectionMode, NavigationMode, ZoomSelectionMode};
@@ -99,6 +100,7 @@ private:
 	WorksheetElement* lastAddedWorksheetElement;
 	QTimeLine* m_fadeInTimeLine;
 	QTimeLine* m_fadeOutTimeLine;
+	bool m_isClosing;
 
 	//Menus
 	QMenu* m_addNewMenu;
@@ -173,9 +175,11 @@ private:
 
 	QAction* addCurveAction;
 	QAction* addEquationCurveAction;
+	QAction* addInterpolationCurveAction;
+	QAction* addSmoothCurveAction;
 	QAction* addFitCurveAction;
 	QAction* addFourierFilterCurveAction;
-	QAction* addInterpolationCurveAction;
+	QAction* addFourierTransformCurveAction;
 	QAction* addHorizontalAxisAction;
 	QAction* addVerticalAxisAction;
 	QAction* addLegendAction;
@@ -196,9 +200,11 @@ private:
 	QAction* shiftDownYAction;
 
 	// filter menu
+	QAction* addInterpolationAction;
+	QAction* addSmoothAction;
 	QAction* addFitAction;
 	QAction* addFourierFilterAction;
-	QAction* addInterpolationAction;
+	QAction* addFourierTransformAction;
 
 public slots:
 	void createContextMenu(QMenu*) const;

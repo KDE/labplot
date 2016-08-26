@@ -32,9 +32,11 @@
 #include "Axis.h"
 #include "XYCurve.h"
 #include "XYEquationCurve.h"
+#include "XYInterpolationCurve.h"
+#include "XYSmoothCurve.h"
 #include "XYFitCurve.h"
 #include "XYFourierFilterCurve.h"
-#include "XYInterpolationCurve.h"
+#include "XYFourierTransformCurve.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -121,7 +123,7 @@ void CartesianPlot::init() {
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(childAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	        this, SLOT(childRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
+			this, SLOT(childRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -346,9 +348,17 @@ void CartesianPlot::initActions() {
 	//"add new" actions
 	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("xy-curve"), this);
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
+// no icons yet
+	addInterpolationCurveAction = new KAction(i18n("xy-curve from an interpolation"), this);
+	addSmoothCurveAction = new KAction(i18n("xy-curve from a smooth"), this);
 	addFitCurveAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
-	addFourierFilterCurveAction = new KAction(KIcon("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
-	addInterpolationCurveAction = new KAction(KIcon("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), this);
+	addFourierFilterCurveAction = new KAction(i18n("xy-curve from a Fourier filter"), this);
+	addFourierTransformCurveAction = new KAction(i18n("xy-curve from a Fourier transform"), this);
+//	addInterpolationCurveAction = new KAction(KIcon("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), this);
+//	addSmoothCurveAction = new KAction(KIcon("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), this);
+//	addFourierFilterCurveAction = new KAction(KIcon("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
+//	addFourierTransformCurveAction = new KAction(KIcon("labplot-xy-fourier_transform-curve"), i18n("xy-curve from a Fourier transform"), this);
+
 	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
 	addHorizontalAxisAction = new KAction(KIcon("labplot-axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new KAction(KIcon("labplot-axis-vertical"), i18n("vertical axis"), this);
@@ -358,6 +368,7 @@ void CartesianPlot::initActions() {
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
 	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addFourierFilterCurveAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
+	connect(addFourierTransformCurveAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
 	connect(addLegendAction, SIGNAL(triggered()), SLOT(addLegend()));
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
@@ -402,8 +413,11 @@ void CartesianPlot::initMenus() {
 	addNewMenu = new QMenu(i18n("Add new"));
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
+	addNewMenu->addAction(addInterpolationCurveAction);
+	addNewMenu->addAction(addSmoothCurveAction);
 	addNewMenu->addAction(addFitCurveAction);
 	addNewMenu->addAction(addFourierFilterCurveAction);
+	addNewMenu->addAction(addFourierTransformCurveAction);
 	addNewMenu->addAction(addLegendAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addHorizontalAxisAction);
@@ -587,13 +601,13 @@ STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeBreakingEnabled, bool, xRangeBre
 void CartesianPlot::setXRangeBreakingEnabled(bool enabled) {
 	Q_D(CartesianPlot);
 	if (enabled != d->xRangeBreakingEnabled)
-		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, i18n("%1: x-scale breakings enabled")));
+		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, i18n("%1: x-range breaking enabled")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeBreaks, CartesianPlot::RangeBreaks, xRangeBreaks, retransformScales);
 void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
 	Q_D(CartesianPlot);
-	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, i18n("%1: set x-scale breaks")));
+	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, i18n("%1: x-range breaks changed")));
 }
 
 class CartesianPlotSetAutoScaleYCmd : public QUndoCommand {
@@ -660,10 +674,17 @@ void CartesianPlot::setYScale(Scale scale) {
 		exec(new CartesianPlotSetYScaleCmd(d, scale, i18n("%1: set y scale")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeBreakingEnabled, bool, yRangeBreakingEnabled, retransformScales)
+void CartesianPlot::setYRangeBreakingEnabled(bool enabled) {
+	Q_D(CartesianPlot);
+	if (enabled != d->yRangeBreakingEnabled)
+		exec(new CartesianPlotSetYRangeBreakingEnabledCmd(d, enabled, i18n("%1: y-range breaking enabled")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeBreaks, CartesianPlot::RangeBreaks, yRangeBreaks, retransformScales);
 void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	Q_D(CartesianPlot);
-	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, i18n("%1: set y-scale breakings")));
+	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, i18n("%1: y-range breaks changed")));
 }
 
 //################################################################
@@ -703,6 +724,17 @@ XYEquationCurve* CartesianPlot::addEquationCurve() {
 	return curve;
 }
 
+XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
+	XYInterpolationCurve* curve = new XYInterpolationCurve("Interpolation");
+	this->addChild(curve);
+	return curve;
+}
+
+XYSmoothCurve* CartesianPlot::addSmoothCurve() {
+	XYSmoothCurve* curve = new XYSmoothCurve("Smooth");
+	this->addChild(curve);
+	return curve;
+}
 XYFitCurve* CartesianPlot::addFitCurve() {
 	XYFitCurve* curve = new XYFitCurve("fit");
 	this->addChild(curve);
@@ -715,8 +747,8 @@ XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve() {
 	return curve;
 }
 
-XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
-	XYInterpolationCurve* curve = new XYInterpolationCurve("Interpolation");
+XYFourierTransformCurve* CartesianPlot::addFourierTransformCurve() {
+	XYFourierTransformCurve* curve = new XYFourierTransformCurve("Fourier transform");
 	this->addChild(curve);
 	return curve;
 }
@@ -922,7 +954,7 @@ void CartesianPlot::scaleAutoX() {
 		update = true;
 	}
 
-	if(update) {
+	if (update) {
 		if (d->xMax == d->xMin) {
 			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
 			if (d->xMax!=0) {
@@ -980,7 +1012,7 @@ void CartesianPlot::scaleAutoY() {
 		update = true;
 	}
 
-	if(update) {
+	if (update) {
 		if (d->yMax == d->yMin) {
 			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
 			if (d->yMax!=0) {
@@ -1070,7 +1102,7 @@ void CartesianPlot::scaleAuto() {
 		updateY = true;
 	}
 
-	if(updateX || updateY) {
+	if (updateX || updateY) {
 		if (updateX) {
 			if (d->xMax == d->xMin) {
 				//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
@@ -1269,7 +1301,7 @@ void CartesianPlotPrivate::retransformScales() {
 	bool hasValidBreak = false;
 	if (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty()) {
 		foreach(const CartesianPlot::RangeBreak& b, xRangeBreaks.list)
-			hasValidBreak = (!isnan(b.start) && !isnan(b.end));
+			hasValidBreak = (!std::isnan(b.start) && !std::isnan(b.end));
 	}
 
 	//create x-scales
@@ -1315,7 +1347,7 @@ void CartesianPlotPrivate::retransformScales() {
 	hasValidBreak = false;
 	if (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty()) {
 		foreach(const CartesianPlot::RangeBreak& b, yRangeBreaks.list)
-			hasValidBreak = (!isnan(b.start) && !isnan(b.end));
+			hasValidBreak = (!std::isnan(b.start) && !std::isnan(b.end));
 	}
 
 	//create y-scales
@@ -1398,7 +1430,7 @@ void CartesianPlotPrivate::retransformScales() {
 				axis->setUndoAware(true);
 			}
 			//TODO;
-// 			if (axis->position() == Axis::AxisCustom && deltaYMin != 0){
+// 			if (axis->position() == Axis::AxisCustom && deltaYMin != 0) {
 // 				axis->setOffset(axis->offset() + deltaYMin, false);
 // 			}
 		} else {
@@ -1414,7 +1446,7 @@ void CartesianPlotPrivate::retransformScales() {
 			}
 
 			//TODO;
-// 			if (axis->position() == Axis::AxisCustom && deltaXMin != 0){
+// 			if (axis->position() == Axis::AxisCustom && deltaXMin != 0) {
 // 				axis->setOffset(axis->offset() + deltaXMin, false);
 // 			}
 		}
@@ -1455,8 +1487,7 @@ void CartesianPlotPrivate::checkYRange() {
 }
 
 CartesianCoordinateSystem::Scale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, Interval<double>& interval,
-        double sceneStart, double sceneEnd,
-        double logicalStart, double logicalEnd) {
+	double sceneStart, double sceneEnd,double logicalStart, double logicalEnd) {
 	if (type == CartesianPlot::ScaleLinear) {
 		return CartesianCoordinateSystem::Scale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	} else {
@@ -1669,7 +1700,7 @@ void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsIt
 
 	painter->setPen(QPen(Qt::black, 3));
 	if ( (mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode)
-	        && (!m_selectionBandIsShown)) {
+			&& (!m_selectionBandIsShown)) {
 		painter->drawLine(m_selectionStartLine);
 	}
 
@@ -1725,12 +1756,12 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	if (d->xRangeBreakingEnabled || !d->xRangeBreaks.list.isEmpty()) {
 		writer->writeStartElement("xRangeBreaks");
 		writer->writeAttribute( "enabled", QString::number(d->xRangeBreakingEnabled) );
-		foreach(const RangeBreak& breaking, d->xRangeBreaks.list) {
-			writer->writeStartElement("item");
-			writer->writeAttribute("start", QString::number(breaking.start));
-			writer->writeAttribute("end", QString::number(breaking.end));
-			writer->writeAttribute("position", QString::number(breaking.position));
-			writer->writeAttribute("style", QString::number(breaking.style));
+		foreach(const RangeBreak& b, d->xRangeBreaks.list) {
+			writer->writeStartElement("xRangeBreak");
+			writer->writeAttribute("start", QString::number(b.start));
+			writer->writeAttribute("end", QString::number(b.end));
+			writer->writeAttribute("position", QString::number(b.position));
+			writer->writeAttribute("style", QString::number(b.style));
 			writer->writeEndElement();
 		}
 		writer->writeEndElement();
@@ -1740,19 +1771,19 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	if (d->yRangeBreakingEnabled || !d->yRangeBreaks.list.isEmpty()) {
 		writer->writeStartElement("yRangeBreaks");
 		writer->writeAttribute( "enabled", QString::number(d->yRangeBreakingEnabled) );
-		foreach(const RangeBreak& breaking, d->yRangeBreaks.list) {
-			writer->writeStartElement("item");
-			writer->writeAttribute("start", QString::number(breaking.start));
-			writer->writeAttribute("end", QString::number(breaking.end));
-			writer->writeAttribute("position", QString::number(breaking.position));
-			writer->writeAttribute("style", QString::number(breaking.style));
+		foreach(const RangeBreak& b, d->yRangeBreaks.list) {
+			writer->writeStartElement("yRangeBreak");
+			writer->writeAttribute("start", QString::number(b.start));
+			writer->writeAttribute("end", QString::number(b.end));
+			writer->writeAttribute("position", QString::number(b.position));
+			writer->writeAttribute("style", QString::number(b.style));
 			writer->writeEndElement();
 		}
 		writer->writeEndElement();
 	}
 
 	//serialize all children (plot area, title text label, axes and curves)
-	QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
+	QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
 	foreach(WorksheetElement *elem, childElements)
 		elem->save(writer);
 
@@ -1764,7 +1795,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 bool CartesianPlot::load(XmlStreamReader* reader) {
 	Q_D(CartesianPlot);
 
-	if(!reader->isStartElement() || reader->name() != "cartesianPlot") {
+	if (!reader->isStartElement() || reader->name() != "cartesianPlot") {
 		reader->raiseError(i18n("no cartesianPlot element found"));
 		return false;
 	}
@@ -1787,55 +1818,55 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader))
 				return false;
-		} else if(reader->name() == "geometry") {
+		} else if (reader->name() == "geometry") {
 			attribs = reader->attributes();
 
 			str = attribs.value("x").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'x'"));
 			else
 				d->rect.setX( str.toDouble() );
 
 			str = attribs.value("y").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'y'"));
 			else
 				d->rect.setY( str.toDouble() );
 
 			str = attribs.value("width").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'width'"));
 			else
 				d->rect.setWidth( str.toDouble() );
 
 			str = attribs.value("height").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'height'"));
 			else
 				d->rect.setHeight( str.toDouble() );
 
 			str = attribs.value("visible").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'visible'"));
 			else
 				d->setVisible(str.toInt());
-		} else if(reader->name() == "coordinateSystem") {
+		} else if (reader->name() == "coordinateSystem") {
 			attribs = reader->attributes();
 
 			str = attribs.value("autoScaleX").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'autoScaleX'"));
 			else
 				d->autoScaleX = bool(str.toInt());
 
 			str = attribs.value("autoScaleY").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'autoScaleY'"));
 			else
 				d->autoScaleY = bool(str.toInt());
 
 			str = attribs.value("xMin").toString();
-			if(str.isEmpty()) {
+			if (str.isEmpty()) {
 				reader->raiseWarning(attributeWarning.arg("'xMin'"));
 			} else {
 				d->xMin = str.toDouble();
@@ -1843,7 +1874,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			}
 
 			str = attribs.value("xMax").toString();
-			if(str.isEmpty()) {
+			if (str.isEmpty()) {
 				reader->raiseWarning(attributeWarning.arg("'xMax'"));
 			} else {
 				d->xMax = str.toDouble();
@@ -1851,7 +1882,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			}
 
 			str = attribs.value("yMin").toString();
-			if(str.isEmpty()) {
+			if (str.isEmpty()) {
 				reader->raiseWarning(attributeWarning.arg("'yMin'"));
 			} else {
 				d->yMin = str.toDouble();
@@ -1859,7 +1890,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			}
 
 			str = attribs.value("yMax").toString();
-			if(str.isEmpty()) {
+			if (str.isEmpty()) {
 				reader->raiseWarning(attributeWarning.arg("'yMax'"));
 			} else {
 				d->yMax = str.toDouble();
@@ -1867,43 +1898,107 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			}
 
 			str = attribs.value("xScale").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'xScale'"));
 			else
 				d->xScale = CartesianPlot::Scale(str.toInt());
 
 			str = attribs.value("yScale").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'yScale'"));
 			else
 				d->yScale = CartesianPlot::Scale(str.toInt());
 
 			str = attribs.value("horizontalPadding").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'horizontalPadding'"));
 			else
 				d->horizontalPadding = str.toDouble();
 
 			str = attribs.value("verticalPadding").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'verticalPadding'"));
 			else
 				d->verticalPadding = str.toDouble();
-		} else if(reader->name() == "xRangeBreaks") {
+		} else if (reader->name() == "xRangeBreaks") {
+			//delete default rang break
+			d->xRangeBreaks.list.clear();
+
 			attribs = reader->attributes();
 			str = attribs.value("enabled").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'enabled'"));
 			else
 				d->xRangeBreakingEnabled = str.toInt();
-		} else if(reader->name() == "yRangeBreaks") {
+		} else if (reader->name() == "xRangeBreak") {
+			attribs = reader->attributes();
+
+			RangeBreak b;
+			str = attribs.value("start").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'start'"));
+			else
+				b.start = str.toDouble();
+
+			str = attribs.value("end").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'end'"));
+			else
+				b.end = str.toDouble();
+
+			str = attribs.value("position").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'position'"));
+			else
+				b.position = str.toDouble();
+
+			str = attribs.value("style").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'style'"));
+			else
+				b.style = CartesianPlot::RangeBreakStyle(str.toInt());
+
+			d->xRangeBreaks.list << b;
+		} else if (reader->name() == "yRangeBreaks") {
+			//delete default rang break
+			d->yRangeBreaks.list.clear();
+
 			attribs = reader->attributes();
 			str = attribs.value("enabled").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'enabled'"));
 			else
 				d->yRangeBreakingEnabled = str.toInt();
-		} else if(reader->name() == "textLabel") {
+		} else if (reader->name() == "yRangeBreak") {
+			attribs = reader->attributes();
+
+			RangeBreak b;
+			str = attribs.value("start").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'start'"));
+			else
+				b.start = str.toDouble();
+
+			str = attribs.value("end").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'end'"));
+			else
+				b.end = str.toDouble();
+
+			str = attribs.value("position").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'position'"));
+			else
+				b.position = str.toDouble();
+
+			str = attribs.value("style").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'style'"));
+			else
+				b.style = CartesianPlot::RangeBreakStyle(str.toInt());
+
+			d->yRangeBreaks.list << b;
+		} else if (reader->name() == "textLabel") {
 			m_title = new TextLabel("");
 			if (!m_title->load(reader)) {
 				delete m_title;
@@ -1912,9 +2007,9 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			} else {
 				addChild(m_title);
 			}
-		} else if(reader->name() == "plotArea") {
+		} else if (reader->name() == "plotArea") {
 			m_plotArea->load(reader);
-		} else if(reader->name() == "axis") {
+		} else if (reader->name() == "axis") {
 			Axis* axis = new Axis("");
 			if (!axis->load(reader)) {
 				delete axis;
@@ -1922,37 +2017,49 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			} else {
 				addChild(axis);
 			}
-		} else if(reader->name() == "xyCurve") {
+		} else if (reader->name() == "xyCurve") {
 			XYCurve* curve = addCurve();
 			if (!curve->load(reader)) {
 				removeChild(curve);
 				return false;
 			}
-		} else if(reader->name() == "xyEquationCurve") {
+		} else if (reader->name() == "xyEquationCurve") {
 			XYEquationCurve* curve = addEquationCurve();
 			if (!curve->load(reader)) {
 				removeChild(curve);
 				return false;
 			}
-		} else if(reader->name() == "xyFitCurve") {
+		} else if (reader->name() == "xyFitCurve") {
 			XYFitCurve* curve = addFitCurve();
 			if (!curve->load(reader)) {
 				removeChild(curve);
 				return false;
 			}
-		} else if(reader->name() == "xyFourierFilterCurve") {
+		} else if (reader->name() == "xyFourierFilterCurve") {
 			XYFourierFilterCurve* curve = addFourierFilterCurve();
 			if (!curve->load(reader)) {
 				removeChild(curve);
 				return false;
 			}
-		} else if(reader->name() == "xyInterpolationCurve") {
+		} else if (reader->name() == "xyFourierTransformCurve") {
+			XYFourierTransformCurve* curve = addFourierTransformCurve();
+			if (!curve->load(reader)) {
+				removeChild(curve);
+				return false;
+			}
+		} else if (reader->name() == "xyInterpolationCurve") {
 			XYInterpolationCurve* curve = addInterpolationCurve();
 			if (!curve->load(reader)) {
 				removeChild(curve);
 				return false;
 			}
-		} else if(reader->name() == "cartesianPlotLegend") {
+		} else if (reader->name() == "xySmoothCurve") {
+			XYSmoothCurve* curve = addSmoothCurve();
+			if (!curve->load(reader)) {
+				removeChild(curve);
+			return false;
+			}
+		} else if (reader->name() == "cartesianPlotLegend") {
 			m_legend = new CartesianPlotLegend(this, "");
 			if (!m_legend->load(reader)) {
 				delete m_legend;
@@ -1961,7 +2068,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 				addChild(m_legend);
 				addLegendAction->setEnabled(false);	//only one legend is allowed -> disable the action
 			}
-		} else if(reader->name() == "customPoint") {
+		} else if (reader->name() == "customPoint") {
 			CustomPoint* point = new CustomPoint(this, "");
 			if (!point->load(reader)) {
 				delete point;

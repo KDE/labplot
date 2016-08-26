@@ -16,7 +16,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wundef -Wpointer-arith -W
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION=\"2.2.0\")
+add_definitions (-DLVERSION=\"2.3.0\")
 # add_definitions (-DLDEBUG='1')
 set(BUILD_SHARED_LIBS true)
 add_definitions(-fvisibility=default)
@@ -38,11 +38,12 @@ IF (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
 	SET (FFTW_FOUND TRUE)
 ELSE (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
 	SET (FFTW_FOUND FALSE)
+	SET (FFTW_LIBRARIES "")
 ENDIF (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
 
 IF (FFTW_FOUND)
 	MESSAGE (STATUS "Found FFTW 3 Library: ${FFTW_INCLUDE_DIR} ${FFTW_LIBRARIES}")
-	#add_definitions (-DHAVE_GSL)
+	add_definitions (-DHAVE_FFTW3)
 ELSE (FFTW_FOUND)
 	MESSAGE (STATUS "FFTW 3 Library not found.")
 ENDIF (FFTW_FOUND)
@@ -58,9 +59,9 @@ FIND_LIBRARY (GSL_CBLAS_LIBRARIES gslcblas
 	/usr/lib
 	/usr/local/lib
 )
-FIND_PATH (GSL_INCLUDE_DIR gsl_multimin.h
-	/usr/include/gsl
-	/usr/local/include/gsl
+FIND_PATH (GSL_INCLUDE_DIR gsl/gsl_multimin.h
+	/usr/include
+	/usr/local/include
 )
 FIND_PROGRAM (GSL_CONFIG gsl-config
 	/usr/bin
@@ -86,26 +87,10 @@ ELSE (GSL_FOUND)
 ENDIF (GSL_FOUND)
 
 ### HDF5 #####################################
-FIND_LIBRARY(HDF5_LIBRARY hdf5
-	PATHS
-	/usr/lib
-	/usr/local/lib
-)
-FIND_PATH (HDF5_INCLUDE_DIR hdf5.h
-	/usr/include/
-	/usr/local/include/
-)
-IF (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
-	SET (HDF5_FOUND TRUE)
-ELSE (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
-	SET (HDF5_FOUND FALSE)
-	SET (HDF5_LIBRARY "")
-ENDIF (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
+FIND_PACKAGE(HDF5 COMPONENTS C)
 IF (HDF5_FOUND)
-	MESSAGE (STATUS "Found Hierarchical Data Format (HDF) 5 Library: ${HDF5_INCLUDE_DIR} ${HDF5_LIBRARY}")
 	add_definitions (-DHAVE_HDF5)
-ELSE (HDF5_FOUND)
-	MESSAGE (STATUS "Hierarchical Data Format (HDF) 5 Library not found.")
+	include_directories (${HDF5_INCLUDE_DIRS})
 ENDIF (HDF5_FOUND)
 
 ### NETCDF #####################################

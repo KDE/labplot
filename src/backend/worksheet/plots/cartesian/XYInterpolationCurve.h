@@ -30,25 +30,27 @@
 #define XYINTERPOLATIONCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+extern "C" {
 #include <gsl/gsl_version.h>
+#include "backend/nsl/nsl_interp.h"
+}
 
 class XYInterpolationCurvePrivate;
 class XYInterpolationCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum InterpolationType {Linear,Polynomial,CSpline,CSplinePeriodic,Akima,AkimaPeriodic,Steffen,Cosine,Exponential,PCH,Rational};
-		enum CubicHermiteVariant {FiniteDifference,CatmullRom,Cardinal,KochanekBartels};
-		enum InterpolationEval {Function,Derivative,Derivative2,Integral};
-
+		enum PointsMode {Auto, Multiple, Custom};
 		struct InterpolationData {
-			InterpolationData() : type(Linear), variant(FiniteDifference), tension(0.0), continuity(0.0), bias(0.0), evaluate(Function), npoints(100) {};
+			InterpolationData() : type(nsl_interp_type_linear), variant(nsl_interp_pch_variant_finite_difference), 
+				tension(0.0), continuity(0.0), bias(0.0), evaluate(nsl_interp_evaluate_function), npoints(100), pointsMode(XYInterpolationCurve::Auto) {};
 
-			XYInterpolationCurve::InterpolationType type;		// type of interpolation
-			XYInterpolationCurve::CubicHermiteVariant variant;	// variant of cubic Hermite interpolation
-			double tension, continuity, bias;			// TCB values
-			XYInterpolationCurve::InterpolationEval evaluate;	// what to evaluate
-			unsigned int npoints;					// nr. of points
+			nsl_interp_type type;			// type of interpolation
+			nsl_interp_pch_variant variant;		// variant of cubic Hermite interpolation
+			double tension, continuity, bias;	// TCB values
+			nsl_interp_evaluate evaluate;		// what to evaluate
+			unsigned int npoints;			// nr. of points
+			XYInterpolationCurve::PointsMode pointsMode;	// mode to interpret points
 		};
 		struct InterpolationResult {
 			InterpolationResult() : available(false), valid(false), elapsedTime(0) {};

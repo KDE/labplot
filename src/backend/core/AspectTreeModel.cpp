@@ -189,7 +189,7 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const{
 			if (aspect->comment().isEmpty())
 				return aspect->name();
 			else
-				return aspect->name() + ", " + aspect->comment();
+				return aspect->name() + QLatin1String(", ") + aspect->comment();
 		case Qt::DecorationRole:
 			return index.column() == 0 ? aspect->icon() : QIcon();
 		case ContextMenuRole:

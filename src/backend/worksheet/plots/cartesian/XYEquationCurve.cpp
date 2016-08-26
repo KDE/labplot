@@ -44,12 +44,12 @@
 #include <KLocale>
 
 XYEquationCurve::XYEquationCurve(const QString& name)
-		: XYCurve(name, new XYEquationCurvePrivate(this)){
+		: XYCurve(name, new XYEquationCurvePrivate(this)) {
 	init();
 }
 
 XYEquationCurve::XYEquationCurve(const QString& name, XYEquationCurvePrivate* dd)
-		: XYCurve(name, dd){
+		: XYCurve(name, dd) {
 	init();
 }
 
@@ -200,10 +200,10 @@ void XYEquationCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYEquationCurve::load(XmlStreamReader* reader){
+bool XYEquationCurve::load(XmlStreamReader* reader) {
 	Q_D(XYEquationCurve);
 
-	if(!reader->isStartElement() || reader->name() != "xyEquationCurve"){
+	if (!reader->isStartElement() || reader->name() != "xyEquationCurve") {
 		reader->raiseError(i18n("no xy equation curve element found"));
 		return false;
 	}
@@ -212,7 +212,7 @@ bool XYEquationCurve::load(XmlStreamReader* reader){
 	QXmlStreamAttributes attribs;
 	QString str;
 
-	while (!reader->atEnd()){
+	while (!reader->atEnd()) {
 		reader->readNext();
 		if (reader->isEndElement() && reader->name() == "xyEquationCurve")
 			break;
@@ -226,7 +226,7 @@ bool XYEquationCurve::load(XmlStreamReader* reader){
 		} else if (reader->name() == "equationData") {
 			attribs = reader->attributes();
 			str = attribs.value("type").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
 				d->equationData.type = (XYEquationCurve::EquationType)str.toInt();
@@ -244,7 +244,7 @@ bool XYEquationCurve::load(XmlStreamReader* reader){
 			d->equationData.max = str;
 
 			str = attribs.value("count").toString();
-			if(!str.isEmpty())
+			if (!str.isEmpty())
 				d->equationData.count = str.toInt();
 		}
 	}

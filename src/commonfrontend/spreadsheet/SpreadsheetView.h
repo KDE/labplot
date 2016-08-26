@@ -39,7 +39,7 @@ class Column;
 class Spreadsheet;
 class SpreadsheetModel;
 class SpreadsheetItemDelegate;
-class SpreadsheetDoubleHeaderView;
+class SpreadsheetHeaderView;
 class AbstractAspect;
 class QTableView;
 
@@ -88,7 +88,7 @@ class SpreadsheetView : public QWidget {
 		Spreadsheet* m_spreadsheet;
 		SpreadsheetItemDelegate* m_delegate;
 		SpreadsheetModel* m_model;
-		SpreadsheetDoubleHeaderView* m_horizontalHeader;
+		SpreadsheetHeaderView* m_horizontalHeader;
 		bool m_suppressSelectionChangedEvent;
 
 		bool eventFilter(QObject*, QEvent*);
@@ -104,6 +104,7 @@ class SpreadsheetView : public QWidget {
 // 		QAction* action_set_formula;
 // 		QAction* action_recalculate;
 		QAction* action_fill_row_numbers;
+		QAction* action_fill_sel_row_numbers;
 		QAction* action_fill_random;
 		QAction* action_fill_equidistant;
 		QAction* action_fill_random_nonuniform;
@@ -179,6 +180,7 @@ class SpreadsheetView : public QWidget {
 // 		void recalculateSelectedCells();
 
 		void fillSelectedCellsWithRowNumbers();
+		void fillWithRowNumbers();
 		void fillSelectedCellsWithRandomNumbers();
 		void fillWithRandomValues();
 		void fillWithEquidistantValues();
@@ -213,10 +215,10 @@ class SpreadsheetView : public QWidget {
 // 		void setSelectedColumnsAsYError();
 // 		void setSelectedColumnsAsNone();
 
-        void showColumnStatistics(bool forAll = false);
-        void showAllColumnsStatistics();
+		void showColumnStatistics(bool forAll = false);
+		void showAllColumnsStatistics();
+		void showRowStatistics();
 
-        void showRowStatistics();
 		bool formulaModeActive() const;
 
 		void advanceCell();
@@ -227,7 +229,6 @@ class SpreadsheetView : public QWidget {
 		void currentColumnChanged(const QModelIndex& current, const QModelIndex & previous);
 		void handleAspectAdded(const AbstractAspect* aspect);
 		void handleAspectAboutToBeRemoved(const AbstractAspect* aspect);
-		void updateSectionSize(const Column*);
 		void updateHeaderGeometry(Qt::Orientation o, int first, int last);
 
 		void selectColumn(int);

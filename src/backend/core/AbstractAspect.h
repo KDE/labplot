@@ -33,6 +33,7 @@
 #include <QObject>
 #include <QList>
 
+class AbstractAspectPrivate;
 class Project;
 class QUndoStack;
 class QDateTime;
@@ -54,9 +55,9 @@ class AbstractAspect : public QObject {
 		};
 		Q_DECLARE_FLAGS(ChildIndexFlags, ChildIndexFlag)
 
-		class Private;
 		friend class AspectChildAddCmd;
 		friend class AspectChildRemoveCmd;
+		friend class AbstractAspectPrivate;
 
 		explicit AbstractAspect(const QString& name);
 		virtual ~AbstractAspect();
@@ -74,6 +75,7 @@ class AbstractAspect : public QObject {
 
 		//functions related to the handling of the tree-like project structure
 		AbstractAspect* parentAspect() const;
+		void setParentAspect(AbstractAspect*);
 		Folder* folder();
 		bool isDescendantOf(AbstractAspect* other);
 		void addChild(AbstractAspect*);
@@ -98,7 +100,7 @@ class AbstractAspect : public QObject {
 
 		template <class T> QList<T*> children(const ChildIndexFlags& flags=0) const {
 			QList<T*> result;
-			foreach (AbstractAspect* child, rawChildren()) {
+			foreach (AbstractAspect* child, children()) {
 				if (flags & IncludeHidden || !child->hidden()) {
 					T* i = qobject_cast<T*>(child);
 					if (i)
@@ -113,7 +115,7 @@ class AbstractAspect : public QObject {
 
 		template <class T> T* child(int index, const ChildIndexFlags& flags=0) const {
 			int i = 0;
-			foreach (AbstractAspect* child, rawChildren()) {
+			foreach (AbstractAspect* child, children()) {
 				T* c = qobject_cast<T*>(child);
 				if (c && (flags & IncludeHidden || !child->hidden()) && index == i++)
 					return c;
@@ -122,7 +124,7 @@ class AbstractAspect : public QObject {
 		}
 
 		template <class T> T* child(const QString& name) const {
-			foreach (AbstractAspect* child, rawChildren()) {
+			foreach (AbstractAspect* child, children()) {
 			T* c = qobject_cast<T*>(child);
 			if (c && child->name() == name)
 				return c;
@@ -132,7 +134,7 @@ class AbstractAspect : public QObject {
 
 		template <class T> int childCount(const ChildIndexFlags& flags=0) const {
 			int result = 0;
-			foreach(AbstractAspect* child, rawChildren()) {
+			foreach(AbstractAspect* child, children()) {
 				T* i = qobject_cast<T*>(child);
 				if (i && (flags & IncludeHidden || !child->hidden()))
 					result++;
@@ -142,7 +144,7 @@ class AbstractAspect : public QObject {
 
 		template <class T> int indexOfChild(const AbstractAspect* child, const ChildIndexFlags& flags=0) const {
 			int index = 0;
-			foreach(AbstractAspect* c, rawChildren()) {
+			foreach(AbstractAspect* c, children()) {
 				if (child == c) return index;
 				T* i = qobject_cast<T*>(c);
 				if (i && (flags & IncludeHidden || !c->hidden()))
@@ -175,10 +177,10 @@ class AbstractAspect : public QObject {
 		bool readCommentElement(XmlStreamReader*);
 
 	private:
-		Private* m_aspect_private;
+		AbstractAspectPrivate* d;
 		QString uniqueNameFor(const QString&) const;
-		const QList<AbstractAspect*> rawChildren() const;
-		void setCreationTime(const QDateTime&);
+		const QList<AbstractAspect*> children() const;
+		void connectChild(AbstractAspect*);
 		bool m_undoAware;
 
 	public slots:

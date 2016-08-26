@@ -3,8 +3,7 @@
     Project              : LabPlot
     Description          : Worksheet view
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -73,6 +72,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	lastAddedWorksheetElement(0),
 	m_fadeInTimeLine(0),
 	m_fadeOutTimeLine(0),
+	m_isClosing(false),
 	tbNewCartesianPlot(0),
 	tbZoom(0),
 	tbMagnification(0) {
@@ -274,9 +274,16 @@ void WorksheetView::initActions() {
 	QActionGroup* cartesianPlotAddNewActionGroup = new QActionGroup(this);
 	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), cartesianPlotAddNewActionGroup);
-	addInterpolationCurveAction = new KAction(KIcon("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), cartesianPlotAddNewActionGroup);
+// no icons yet
+	addInterpolationCurveAction = new KAction(i18n("xy-curve from an interpolation"), cartesianPlotAddNewActionGroup);
+	addSmoothCurveAction = new KAction(i18n("xy-curve from a smooth"), cartesianPlotAddNewActionGroup);
+	addFourierFilterCurveAction = new KAction(i18n("xy-curve from a Fourier filter"), cartesianPlotAddNewActionGroup);
+	addFourierTransformCurveAction = new KAction(i18n("xy-curve from a Fourier transform"), cartesianPlotAddNewActionGroup);
+//	addInterpolationCurveAction = new KAction(KIcon("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), cartesianPlotAddNewActionGroup);
+//	addSmoothCurveAction = new KAction(KIcon("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), cartesianPlotAddNewActionGroup);
 	addFitCurveAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), cartesianPlotAddNewActionGroup);
-	addFourierFilterCurveAction = new KAction(KIcon("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), cartesianPlotAddNewActionGroup);
+//	addFourierFilterCurveAction = new KAction(KIcon("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), cartesianPlotAddNewActionGroup);
+//	addFourierTransformCurveAction = new KAction(KIcon("labplot-xy-fourier_transform-curve"), i18n("xy-curve from a Fourier transform"), cartesianPlotAddNewActionGroup);
 	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), cartesianPlotAddNewActionGroup);
 	addHorizontalAxisAction = new KAction(KIcon("labplot-axis-horizontal"), i18n("horizontal axis"), cartesianPlotAddNewActionGroup);
 	addVerticalAxisAction = new KAction(KIcon("labplot-axis-vertical"), i18n("vertical axis"), cartesianPlotAddNewActionGroup);
@@ -284,9 +291,16 @@ void WorksheetView::initActions() {
 	connect(cartesianPlotAddNewActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotAddNew(QAction*)));
 
 	// Analysis menu
-	addInterpolationAction = new KAction(KIcon("labplot-xy-interpolation-curve"), i18n("Interpolation"), cartesianPlotAddNewActionGroup);
+// no icons yet
+	addInterpolationAction = new KAction(i18n("Interpolation"), cartesianPlotAddNewActionGroup);
+	addSmoothAction = new KAction(i18n("Smooth"), cartesianPlotAddNewActionGroup);
 	addFitAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("Data fitting"), cartesianPlotAddNewActionGroup);
-	addFourierFilterAction = new KAction(KIcon("labplot-xy-fourier_filter-curve"), i18n("Fourier filter"), cartesianPlotAddNewActionGroup);
+	addFourierFilterAction = new KAction(i18n("Fourier filter"), cartesianPlotAddNewActionGroup);
+	addFourierTransformAction = new KAction(i18n("Fourier transform"), cartesianPlotAddNewActionGroup);
+//	addInterpolationAction = new KAction(KIcon("labplot-xy-interpolation-curve"), i18n("Interpolation"), cartesianPlotAddNewActionGroup);
+//	addSmoothAction = new KAction(KIcon("labplot-xy-smooth-curve"), i18n("Smooth"), cartesianPlotAddNewActionGroup);
+//	addFourierFilterAction = new KAction(KIcon("labplot-xy-fourier_filter-curve"), i18n("Fourier filter"), cartesianPlotAddNewActionGroup);
+//	addFourierTransformAction = new KAction(KIcon("labplot-xy-fourier_transform-curve"), i18n("Fourier transform"), cartesianPlotAddNewActionGroup);
 
 	QActionGroup* cartesianPlotNavigationGroup = new QActionGroup(this);
 	scaleAutoAction = new KAction(KIcon("labplot-auto-scale-all"), i18n("auto scale"), cartesianPlotNavigationGroup);
@@ -391,8 +405,10 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotAddNewMenu->addAction(addCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addEquationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addInterpolationCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addSmoothCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addFitCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addFourierFilterCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addFourierTransformCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addLegendAction);
 	m_cartesianPlotAddNewMenu->addSeparator();
 	m_cartesianPlotAddNewMenu->addAction(addHorizontalAxisAction);
@@ -471,8 +487,10 @@ void WorksheetView::createAnalysisMenu(QMenu* menu) const {
 	Q_ASSERT(menu);
 
 	menu->addAction(addInterpolationAction);
+	menu->addAction(addSmoothAction);
 	menu->addAction(addFitAction);
 	menu->addAction(addFourierFilterAction);
+	menu->addAction(addFourierTransformAction);
 	// Filter menu?
 	//menu->insertMenu(0,m_filterMenu);
 
@@ -519,9 +537,12 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addSeparator();
 	toolBar->addAction(addCurveAction);
 	toolBar->addAction(addEquationCurveAction);
-	toolBar->addAction(addInterpolationCurveAction);
-	toolBar->addAction(addFitCurveAction);
-	toolBar->addAction(addFourierFilterCurveAction);
+// don't over populate the tool bar
+//	toolBar->addAction(addInterpolationCurveAction);
+//	toolBar->addAction(addSmoothCurveAction);
+//	toolBar->addAction(addFitCurveAction);
+//	toolBar->addAction(addFourierFilterCurveAction);
+//	toolBar->addAction(addFourierTransformCurveAction);
 	toolBar->addAction(addLegendAction);
 	toolBar->addSeparator();
 	toolBar->addAction(addHorizontalAxisAction);
@@ -545,6 +566,10 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 void WorksheetView::setScene(QGraphicsScene* scene) {
 	QGraphicsView::setScene(scene);
 	setTransform(QTransform());
+}
+
+void WorksheetView::setIsClosing() {
+	m_isClosing = true;
 }
 
 void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
@@ -1210,6 +1235,11 @@ void WorksheetView::deselectItem(QGraphicsItem* item) {
  *  and forwards these changes to \c Worksheet
  */
 void WorksheetView::selectionChanged() {
+	//if the project is being closed, the scene items are being removed and the selection can change.
+	//don't react on these changes since this can lead crashes (worksheet object is already in the destructor).
+	if (m_isClosing)
+		return;
+
 	if (m_suppressSelectionChangedEvent)
 		return;
 
@@ -1279,8 +1309,10 @@ void WorksheetView::handleCartesianPlotActions() {
 	addCurveAction->setEnabled(plot);
 	addEquationCurveAction->setEnabled(plot);
 	addInterpolationCurveAction->setEnabled(plot);
+	addSmoothCurveAction->setEnabled(plot);
 	addFitCurveAction->setEnabled(plot);
 	addFourierFilterCurveAction->setEnabled(plot);
+	addFourierTransformCurveAction->setEnabled(plot);
 	addHorizontalAxisAction->setEnabled(plot);
 	addVerticalAxisAction->setEnabled(plot);
 	addLegendAction->setEnabled(plot);
@@ -1302,8 +1334,10 @@ void WorksheetView::handleCartesianPlotActions() {
 	// analysis functions
 	//m_filterMenu->setEnabled(plot);
 	addInterpolationAction->setEnabled(plot);
+	addSmoothAction->setEnabled(plot);
 	addFitAction->setEnabled(plot);
 	addFourierFilterAction->setEnabled(plot);
+	addFourierTransformAction->setEnabled(plot);
 }
 
 void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background, const int resolution) {
@@ -1335,7 +1369,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		printer.setPaperSize( QSizeF(w, h), QPrinter::Millimeter);
 		printer.setPageMargins(0,0,0,0, QPrinter::Millimeter);
 		printer.setPrintRange(QPrinter::PageRange);
-		printer.setCreator( QString("LabPlot ") + LVERSION );
+		printer.setCreator( QLatin1String("LabPlot ") + LVERSION );
 
 		QPainter painter(&printer);
 		painter.setRenderHint(QPainter::Antialiasing);
@@ -1498,8 +1532,12 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addFitCurve();
 	else if (action==addFourierFilterCurveAction)
 		plot->addFourierFilterCurve();
+	else if (action==addFourierTransformCurveAction)
+		plot->addFourierTransformCurve();
 	else if (action==addInterpolationCurveAction)
 		plot->addInterpolationCurve();
+	else if (action==addSmoothCurveAction)
+		plot->addSmoothCurve();
 	else if (action==addLegendAction)
 		plot->addLegend();
 	else if (action==addHorizontalAxisAction)
@@ -1513,8 +1551,12 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addFitCurve();
 	else if (action==addFourierFilterAction)
 		plot->addFourierFilterCurve();
+	else if (action==addFourierTransformAction)
+		plot->addFourierTransformCurve();
 	else if (action==addInterpolationAction)
 		plot->addInterpolationCurve();
+	else if (action==addSmoothAction)
+		plot->addSmoothCurve();
 }
 
 void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {

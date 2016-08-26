@@ -51,8 +51,8 @@
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2016-05-01</date>
-<releaseinfo>3.1</releaseinfo>
+<date>2016-07-15</date>
+<releaseinfo>3.2.3</releaseinfo>
 
 <abstract>
 	<para>
@@ -88,7 +88,8 @@ Features:
 <listitem><para>Great variety of editing capabilities for properties of worksheet and its objects</para></listitem>
 <listitem><para>Cartesian plots, created either from imported or manually created data sets or via mathematical equation</para></listitem>
 <listitem><para>Definition of mathematical formulas is supported by syntax-highlighting and completion and by the list of thematicaly grouped mathematical and physical constants and functions</para></listitem>
-<listitem><para>Analysis of plotted data is supported by many zooming and navigation features</para></listitem>
+<listitem><para>Investigation of plotted data is supported by many zooming and navigation features</para></listitem>
+<listitem><para>Several analysis functions and methods for interpolation, smoothing, (nonlinear) fitting, Fourier filter and Fourier transform</para></listitem>
 <listitem><para>Linear and non-linear fits to data, several fit-models are predefined and custom models with arbitrary number of parameters can be provided</para></listitem>
 <listitem><para>Datapicker for manual or (semi-)automatic data extraction from imported images containing plots and curves.</para></listitem>
 </itemizedlist>
@@ -441,7 +442,7 @@ Preview of all supported file types is available in the import dialog. For data 
 </para>
 
 <para>
-Import of ascii and binary data compressed with gzip, bzip2 or xz can be done directly – the decompression happens transparently for the user.
+Import of ascii and binary data compressed with gzip, bzip2 or xz can be done directly as the decompression happens transparently for the user.
 </para>
 
 
@@ -778,10 +779,19 @@ The menu is only available when a datapicker object is selected on the <guilabel
 
 <chapter id="analysis">
   <title>Analysis functions</title>
-  <para>&LabPlot; supports the data analysis functions interpolation, nonlinear curve fitting and Fourier filter.
-    Both can be applied to any data consisting of x- and y-columns. 
-    The analysis functions can be accessed using the Analysis menu or the context menu of a worksheet.</para>
-  <para>The newly created curves can be customized (line style, symbol style, &etc;) like any x-y-curve.</para>  
+  <para>&LabPlot; supports a wide variety of data analysis functions:
+    </para>
+      <itemizedlist>
+	<listitem><para>Interpolation</para></listitem>
+	<listitem><para>Smoothing</para></listitem>
+	<listitem><para>Nonlinear curve fitting</para></listitem>
+	<listitem><para>Fourier filter</para></listitem>
+      </itemizedlist>
+    <para>
+    All of them can be applied to any data consisting of x- and y-columns. 
+    The analysis functions can be accessed using the Analysis menu or the context menu of a worksheet.
+    The newly created curves can be customized (line style, symbol style, &etc;) like any other x-y-curve.</para>  
+
   <sect1 id="interpolation">
     <title>Interpolation</title>
     <para>
@@ -811,6 +821,24 @@ The menu is only available when a datapicker object is selected on the <guilabel
       </itemizedlist>
   </sect1>
 
+    <sect1 id="smoothing">
+    <title>Smoothing</title>
+    <para>
+      A number of different smoothing methods are supported:
+    </para>
+      <itemizedlist>
+	<listitem><para>Moving average (central)</para></listitem>
+	<listitem><para>Moving average (lagged)</para></listitem>
+	<listitem><para>Percentile filter</para></listitem>
+	<listitem><para>Savitzky-Golay</para></listitem>
+      </itemizedlist>
+    <para>
+      All smoothing methods support several padding modes (constant, periodic, mirror, nearest, etc.) for the beginning and end
+      of the data set. The moving averages support several weight functions (uniform, triangular, binomial, parabolic, tricubic, etc.)
+      which can be selected to weight the selected data points depending on their distance.
+      </para>
+  </sect1>
+  
   <sect1 id="fitting">
     <title>Curve fitting</title>
     <para>
@@ -832,7 +860,7 @@ The menu is only available when a datapicker object is selected on the <guilabel
 	<listitem><para>Low pass</para></listitem>
 	<listitem><para>High pass</para></listitem>
 	<listitem><para>Band pass</para></listitem>
-	<listitem><para>Band reject (Band block)</para></listitem>
+	<listitem><para>Band reject (band block)</para></listitem>
 	</itemizedlist>
     <para>
       where any of them can have the form
@@ -841,11 +869,28 @@ The menu is only available when a datapicker object is selected on the <guilabel
 	<listitem><para>Ideal</para></listitem>
 	<listitem><para>Butterworth (order 1 to 10)</para></listitem>
 	<listitem><para>Chebyshev type I or II (order 1 to 10)</para></listitem>
+	<listitem><para>Optimal "L"egendre (order 1 to 10)</para></listitem>
+	<listitem><para>Bessel-Thomson (any order)</para></listitem>
       </itemizedlist>
     <para>
 	The cutoff value(s) can be specified in the units frequency (Hertz), fraction (0.0 to 1.0) or index
 	of the data points.
     </para>
+  </sect1>
+
+  <sect1 id="dft">
+    <title>Fourier transform</title>
+    <para>
+      To convert a signal from time to frequency domain or to change between other conjugate variables like
+      position and momentum (k-space) a discrete Fourier transform can be applied.
+      Following options can be used to suite one needs:
+    </para>
+      <itemizedlist>
+	<listitem><para>window function (Welch, Hann, Hamming, etc.) to avoid leakage effects</para></listitem>
+	<listitem><para>output (magnitude, amplitude, phase, dB, etc.)</para></listitem>
+	<listitem><para>one or two sided spectrum with or without shifting</para></listitem>
+	<listitem><para>x axis scaling to frequency, index or period</para></listitem>
+      </itemizedlist>
   </sect1>
 </chapter>
 
@@ -963,7 +1008,7 @@ Here you will find some explanations of advanced topics.
 <title>Specify a File</title>
 
 <para>
-When starting &LabPlot; from the command prompt, you can supply the name of a project file:
+When starting &LabPlot; from the command prompt, you can supply the name of a project file (ending with .lml, .lml.gz, .lml.bz2 or .lml.xz):
 <cmdsynopsis>
 <command>labplot2</command>
 <arg rep="repeat"><replaceable>file.lml</replaceable></arg>

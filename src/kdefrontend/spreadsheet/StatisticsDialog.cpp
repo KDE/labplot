@@ -29,11 +29,12 @@
 
 #include "StatisticsDialog.h"
 #include "backend/core/column/Column.h"
-#include "math.h"
 
 #include <QTextEdit>
 #include <QTabWidget>
 #include <KLocale>
+
+#include <cmath>
 
 StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	KDialog(parent) {
@@ -177,7 +178,7 @@ void StatisticsDialog::setColumns(const QList<Column*>& columns) {
 }
 
 const QString StatisticsDialog::isNanValue(const double value) {
-	return (isnan(value) ? i18n("The value couldn't be calculated.") : QString::number(value,'g', 10));
+	return (std::isnan(value) ? i18n("The value couldn't be calculated.") : QString::number(value,'g', 10));
 }
 
 QSize StatisticsDialog::sizeHint() const {
