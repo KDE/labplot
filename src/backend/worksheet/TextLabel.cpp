@@ -779,7 +779,6 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("Label");
 	this->setTeXFontColor(group.readEntry("TeXFontColor", (QColor) this->teXFontColor()));
 	this->teXFontColorChanged(group.readEntry("TeXFontColor", (QColor) this->teXFontColor()));
-	this->setTeXFontSize(group.readEntry("TeXFontSize", this->teXFontSize()));
 
 }
 
@@ -787,6 +786,5 @@ void TextLabel::saveThemeConfig(const KConfig& config) {
 
 	KConfigGroup group = config.group("Label");
 	group.writeEntry("TeXFontColor", (QColor) this->teXFontColor());
-	group.writeEntry("TeXFontSize", this->teXFontSize());
 
 }

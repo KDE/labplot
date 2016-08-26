@@ -2528,7 +2528,6 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	this->setDropLineType((XYCurve::DropLineType)group.readEntry("DropLineType", (int) this->dropLineType()));
 
 	//Error Bars
-	this->setErrorBarsCapSize(group.readEntry("ErrorBarsCapSize",this->errorBarsCapSize()));
 	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity",this->errorBarsOpacity()));
 	this->setErrorBarsType((XYCurve::ErrorBarsType)group.readEntry("ErrorBarsType",(int) this->errorBarsType()));
 	p.setColor(group.readEntry("ErrorBarsColor",(QColor) this->errorBarsPen().color()));
@@ -2546,9 +2545,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType",(int) this->fillingType()));
 
 	//Line
-	this->setLineInterpolationPointsCount(group.readEntry("LineInterpolationPointsCount",(int) this->lineInterpolationPointsCount()));
 	this->setLineOpacity(group.readEntry("LineOpacity", this->lineOpacity()));
-	this->setLineSkipGaps(group.readEntry("LineSkipGaps",(bool) this->lineSkipGaps()));
 	this->setLineType((XYCurve::LineType)group.readEntry("LineType",(int) this->lineType()));
 	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle",(int) this->linePen().style()));
 	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
@@ -2556,12 +2553,9 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 
 	//Symbol
 	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", this->symbolsOpacity()));
-	this->setSymbolsRotationAngle(group.readEntry("SymbolRotation",(int) this->symbolsRotationAngle()));
-	this->setSymbolsSize(group.readEntry("SymbolSize", (int) this->symbolsSize()));
 
 	//Values
 	this->setValuesOpacity(group.readEntry("ValuesOpacity", this->valuesOpacity()));
-	this->setValuesRotationAngle(group.readEntry("ValuesRotation",(int) this->symbolsRotationAngle()));
 	this->setValuesColor(group.readEntry("ValuesColor", (QColor) this->valuesColor()));
 	this->setValuesFont(group.readEntry("ValuesFont", QFont()));
 	this->setValuesType((XYCurve::ValuesType)group.readEntry("ValuesType", (int) this->valuesType()));
