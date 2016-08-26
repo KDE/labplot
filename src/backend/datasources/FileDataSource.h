@@ -37,13 +37,13 @@ class QFileSystemWatcher;
 class QAction;
 
 class FileDataSource : public Spreadsheet {
-    Q_OBJECT
+	Q_OBJECT
 
 	public:
 		FileDataSource(AbstractScriptingEngine* engine,  const QString& name, bool loading = false);
 		~FileDataSource();
 
-		enum FileType{Ascii, Binary, Image, HDF, NETCDF};
+		enum FileType{Ascii, Binary, Image, HDF, NETCDF, FITS};
 
 		static QStringList fileTypes();
 		static QString fileInfoString(const QString&);

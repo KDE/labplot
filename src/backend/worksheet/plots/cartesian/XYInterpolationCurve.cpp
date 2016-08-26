@@ -40,6 +40,7 @@
 #include "backend/lib/commandtemplates.h"
 
 #include <cmath>	// isnan
+#include <cfloat>	// DBL_MIN
 extern "C" {
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_interp.h>

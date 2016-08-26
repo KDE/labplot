@@ -24,6 +24,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
+        ${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/NoteDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
@@ -59,6 +60,11 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/LabelWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/DatapickerImageWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/DatapickerCurveWidget.cpp
+        ${KDEFRONTEND_DIR}/widgets/FITSHeaderEditWidget.cpp
+        ${KDEFRONTEND_DIR}/widgets/FITSHeaderEditNewKeywordDialog.cpp
+        ${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
+        ${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
+
 )
 
 set(UI_SOURCES
@@ -75,6 +81,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/netcdfoptionswidget.ui
+        ${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui
@@ -102,6 +109,9 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickercurvewidget.ui
+        ${KDEFRONTEND_DIR}/ui/fitsheadereditwidget.ui
+        ${KDEFRONTEND_DIR}/ui/fitsheadereditnewkeywordwidget.ui
+        ${KDEFRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
 )
 
 set(BACKEND_SOURCES
@@ -145,6 +155,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/HDFFilter.cpp
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
+        ${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
+
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
  	${BACKEND_DIR}/gsl/parser.tab.c
 	${BACKEND_DIR}/matrix/Matrix.cpp
@@ -226,7 +238,7 @@ set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 INCLUDE_DIRECTORIES(. ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/..)
 kde4_add_ui_files(LABPLOT_SRCS ${UI_SOURCES})
 kde4_add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES})
-target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${NETCDF_LIBRARY} ${FFTW_LIBRARIES})
+target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${NETCDF_LIBRARY} ${FFTW_LIBRARIES} ${CFITSIO_LIBRARY})
 IF (HDF5_FOUND)
 	target_link_libraries(labplot2 ${HDF5_C_LIBRARIES})
 ENDIF (HDF5_FOUND)

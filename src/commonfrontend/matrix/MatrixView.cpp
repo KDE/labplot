@@ -37,6 +37,7 @@
 
 #include "kdefrontend/matrix/MatrixFunctionDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
+#include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 
 #include <QStackedWidget>
 #include <QTableView>
@@ -160,7 +161,8 @@ void MatrixView::initActions() {
 	action_mirror_horizontally = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
 	action_mirror_vertically = new KAction(KIcon("object-flip-vertical"), i18n("Mirror &Vertically"), this);
 // 	action_duplicate = new QAction(i18nc("duplicate matrix", "&Duplicate"), this);
-
+    //TODO
+    //icon
 	QActionGroup* headerFormatActionGroup = new QActionGroup(this);
 	headerFormatActionGroup->setExclusive(true);
 	action_header_format_1= new QAction(i18n("Rows and Columns"), headerFormatActionGroup);
@@ -1220,6 +1222,7 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 	int rowCount = 0;
 	const int maxRows = 45;
 	bool captionRemoved = false;
+
 	if (columnsSeparating) {
 		for (int table = 0; table < tablesCount; ++table) {
 			QStringList textable;
@@ -1256,7 +1259,6 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 			foreach (const QString& s, textable) {
 				out << s;
 			}
-
 			for (int row = 0; row < totalRowCount; ++row) {
 				if (verticalHeaders) {
 					out << "\\cellcolor{HeaderBgColor} ";
@@ -1274,22 +1276,23 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 					out << QLatin1String("\\hline \n");
 				rowCount++;
 				if (rowCount == maxRows) {
-			out << endTabularTable;
-			out << QLatin1String("\\newpage \n");
-			if (captions)
-			if (!captionRemoved)
-				textable.removeAt(1);
-			foreach (const QString& s, textable) {
-			out << s;
+					out << endTabularTable;
+					out << QLatin1String("\\newpage \n");
+					if (captions)
+						if (!captionRemoved)
+							textable.removeAt(1);
+					foreach (const QString& s, textable) {
+						out << s;
 					}
 					rowCount = 0;
-			if (!captionRemoved)
-			captionRemoved = true;
+					if (!captionRemoved)
+						captionRemoved = true;
 				}
 			}
 			out << endTabularTable;
 		}
-	captionRemoved = false;
+		captionRemoved = false;
+
 		QStringList remainingTable;
 		remainingTable << beginTable;
 		if (captions)
@@ -1342,15 +1345,15 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 			if (rowCount == maxRows) {
 				out << endTabularTable;
 				out << QLatin1String("\\pagebreak[4] \n");
-		if (captions)
-			if (!captionRemoved)
-			remainingTable.removeAt(1);
+				if (captions)
+					if (!captionRemoved)
+						remainingTable.removeAt(1);
 				foreach (const QString& s, remainingTable) {
 					out << s;
 				}
 				rowCount = 0;
-		if (!captionRemoved)
-			captionRemoved = true;
+				if (!captionRemoved)
+					captionRemoved = true;
 			}
 		}
 		out << endTabularTable;
@@ -1405,15 +1408,17 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 			if (rowCount == maxRows) {
 				out << endTabularTable;
 				out << QLatin1String("\\newpage \n");
-		if (captions)
-			if (!captionRemoved)
-			textable.removeAt(1);
+				if (captions)
+					if (!captionRemoved)
+						textable.removeAt(1);
 				foreach (const QString& s, textable) {
 					out << s;
 				}
-		if (!captionRemoved)
-			captionRemoved = true;
+				if (!captionRemoved)
+					captionRemoved = true;
 				rowCount = 0;
+                		if (!captionRemoved)
+                    			captionRemoved = true;
 			}
 		}
 		out << endTabularTable;
@@ -1461,3 +1466,12 @@ void MatrixView::showRowStatistics() {
 		}
 	}
 }
+
+void MatrixView::exportToFits(const QString &fileName, const int exportTo) const {
+    FITSFilter* filter = new FITSFilter;
+    filter->setExportTo(exportTo);
+    filter->write(fileName, m_matrix);
+
+    delete filter;
+}
+

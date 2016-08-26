@@ -116,6 +116,32 @@ ELSE (NETCDF_FOUND)
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library not found.")
 ENDIF (NETCDF_FOUND)
 
+### FITS ########################################
+FIND_LIBRARY(CFITSIO_LIBRARY cfitsio
+        PATHS
+        /usr/lib
+        /usr/local/lib
+)
+FIND_PATH (CFITSIO_INCLUDE_DIR fitsio.h
+        /usr/include/
+        /usr/include/cfitsio/
+        /usr/local/include/
+)
+IF (CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
+        SET (CFITSIO_FOUND TRUE)
+ELSE (CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
+        SET (CFITSIO_FOUND FALSE)
+        SET (CFITSIO_LIBRARY "")
+ENDIF (CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
+IF (CFITSIO_FOUND)
+        MESSAGE (STATUS "Found Flexible Image Transport System Data Format (FITS) Library: ${CFITSIO_INCLUDE_DIR} ${CFITSIO_LIBRARY}")
+        add_definitions (-DHAVE_FITS)
+	include_directories (${CFITSIO_INCLUDE_DIR})
+ELSE (CFITSIO_FOUND)
+        MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library not found.")
+ENDIF (CFITSIO_FOUND)
+#################################################
+
 add_subdirectory(icons)
 add_subdirectory(src)
 add_subdirectory(doc)

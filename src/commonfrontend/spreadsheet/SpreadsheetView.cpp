@@ -63,6 +63,7 @@
 #include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
 #include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
+#include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 
 #include <algorithm> //for std::reverse
 
@@ -185,7 +186,7 @@ void SpreadsheetView::initActions() {
 	action_go_to_cell = new KAction(KIcon("go-jump"), i18n("&Go to Cell"), this);
 	action_statistics_all_columns = new KAction(KIcon("view-statistics"), i18n("Statisti&cs"), this );
 
-	// column related actions
+    // column related actions
 	action_insert_columns = new KAction(KIcon("edit-table-insert-column-left"), i18n("&Insert Empty Columns"), this);
 	action_remove_columns = new KAction(KIcon("edit-table-delete-column"), i18n("Remo&ve Columns"), this);
 	action_clear_columns = new KAction(KIcon("edit-clear"), i18n("Clea&r Columns"), this);
@@ -388,14 +389,13 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
 	toolBar->addAction(action_insert_rows);
 	toolBar->addAction(action_add_rows);
 	toolBar->addAction(action_remove_rows);
-// 	toolBar->addAction(action_statistics_rows);
+    toolBar->addAction(action_statistics_rows);
 
 	toolBar->addSeparator();
 	toolBar->addAction(action_insert_columns);
 	toolBar->addAction(action_add_column);
 	toolBar->addAction(action_remove_columns);
-	//TODO
-// 	toolBar->addAction(action_statistics_columns);
+    toolBar->addAction(action_statistics_columns);
 
 	toolBar->addSeparator();
 	toolBar->addAction(action_sort_asc_column);
@@ -2014,8 +2014,8 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 		//new table for the remaining columns
 		QStringList remainingTable;
 		remainingTable << beginTable;
-		if (captions)
-			remainingTable << tableCaption;
+        if (captions)
+            remainingTable << tableCaption;
 		remainingTable << QLatin1String("\\centering \n");
 		remainingTable << QLatin1String("\\begin{tabular}{") <<  (gridLines ? QLatin1String("|"):QLatin1String(""));
 		for (int c = 0; c < remainingColumns; ++c)
@@ -2158,4 +2158,14 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 	} else {
 		toExport.clear();
 	}
+}
+
+void SpreadsheetView::exportToFits(const QString &fileName, const int exportTo, const bool commentsAsUnits) const {
+    FITSFilter* filter = new FITSFilter;
+
+    filter->setExportTo(exportTo);
+    filter->setCommentsAsUnits(commentsAsUnits);
+    filter->write(fileName, m_spreadsheet);
+
+    delete filter;
 }
