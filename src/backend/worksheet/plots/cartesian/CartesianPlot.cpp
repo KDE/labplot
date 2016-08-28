@@ -127,7 +127,6 @@ void CartesianPlot::init() {
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(childAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
 			this, SLOT(childRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
-	connect(themeMenu, SIGNAL(triggered(QAction* action)), this, SLOT(loadTheme(QAction* action)));
 
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
@@ -2106,6 +2105,9 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 	return true;
 }
 
+//##############################################################################
+//#########################  Theme management ##################################
+//##############################################################################
 void CartesianPlot::loadTheme(const QString& name) {
 	KConfig config( ThemeHandler::themeConfigPath(name), KConfig::SimpleConfig );
 	loadTheme(config);
@@ -2125,7 +2127,6 @@ void CartesianPlot::loadTheme(KConfig& config) {
 
 	Q_D(CartesianPlot);
 	d->update(this->rect());
-	emit (themeLoaded());
 
 	endMacro();
 }

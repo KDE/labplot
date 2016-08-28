@@ -166,7 +166,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	ThemeHandler* themeHandler = new ThemeHandler(this);
 	layout->addWidget(themeHandler);
 	connect(themeHandler, SIGNAL(loadThemeRequested(KConfig&)), this, SLOT(loadTheme(KConfig&)));
-	connect(m_plot, SIGNAL(themeLoaded()),this, SLOT(load()));
 	connect(themeHandler, SIGNAL(saveThemeRequested(KConfig&)), this, SLOT(saveTheme(KConfig&)));
 	connect(themeHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 	//connect(this, SIGNAL(saveThemeEnable(bool)), themeHandler, SLOT(saveThemeEnable(bool)));

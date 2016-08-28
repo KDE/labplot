@@ -774,17 +774,16 @@ bool TextLabel::load(XmlStreamReader* reader){
     return true;
 }
 
+//##############################################################################
+//#########################  Theme management ##################################
+//##############################################################################
 void TextLabel::loadThemeConfig(const KConfig& config) {
-
 	KConfigGroup group = config.group("Label");
 	this->setTeXFontColor(group.readEntry("TeXFontColor", (QColor) this->teXFontColor()));
 	this->teXFontColorChanged(group.readEntry("TeXFontColor", (QColor) this->teXFontColor()));
-
 }
 
 void TextLabel::saveThemeConfig(const KConfig& config) {
-
 	KConfigGroup group = config.group("Label");
 	group.writeEntry("TeXFontColor", (QColor) this->teXFontColor());
-
 }

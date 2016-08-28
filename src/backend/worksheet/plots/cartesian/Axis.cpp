@@ -2207,6 +2207,9 @@ bool Axis::load(XmlStreamReader* reader) {
 	return true;
 }
 
+//##############################################################################
+//#########################  Theme management ##################################
+//##############################################################################
 void Axis::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("Axis");
 

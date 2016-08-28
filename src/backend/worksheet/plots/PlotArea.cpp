@@ -562,7 +562,6 @@ bool PlotArea::load(XmlStreamReader* reader){
 }
 
 void PlotArea::loadThemeConfig(const KConfig& config) {
-
 	KConfigGroup group = config.group("CartesianPlot");
 
 	this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle",(int) this->backgroundBrushStyle()));
@@ -578,12 +577,9 @@ void PlotArea::loadThemeConfig(const KConfig& config) {
 	this->setBorderOpacity(group.readEntry("BorderOpacity", this->borderOpacity()));
 	this->borderPen().setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int) this->borderPen().style())));
 	this->borderPen().setWidthF(group.readEntry("BorderWidth", this->borderPen().widthF()));
-	this->retransform();
-
 }
 
 void PlotArea::saveThemeConfig(const KConfig& config) {
-
 	KConfigGroup group = config.group("CartesianPlot");
 
 	group.writeEntry("BackgroundBrushStyle",(int) this->backgroundBrushStyle());
@@ -599,5 +595,4 @@ void PlotArea::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("BorderOpacity", this->borderOpacity());
 	group.writeEntry("BorderStyle", (int) this->borderPen().style());
 	group.writeEntry("BorderWidth", this->borderPen().widthF());
-
 }

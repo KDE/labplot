@@ -2452,6 +2452,10 @@ bool XYCurve::load(XmlStreamReader* reader) {
 	return true;
 }
 
+//##############################################################################
+//#########################  Theme management ##################################
+//##############################################################################
+
 //Generating colors from 5-color theme palette
 void XYCurve::setColorPalette(const KConfig& config) {
 	KConfigGroup group = config.group("Theme");
@@ -2623,5 +2627,4 @@ void XYCurve::saveThemeConfig(const KConfig& config) {
 			themeGroup.writeEntry(s,(QColor) this->linePen().color());
 		}
 	}
-
 }
