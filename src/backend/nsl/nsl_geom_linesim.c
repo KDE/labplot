@@ -29,7 +29,18 @@
 #include <math.h>
 #include "nsl_geom_linesim.h"
 
+size_t nsl_geom_linesim_nthpoint(const double xdata[], const double ydata[], const size_t n, const size_t step, size_t index[]) {
+	size_t nout=0, i;
 
-double nsl_geom_linesim_nthpoint(const double data[], size_t n) {
-	/*TODO*/
+	/*first point*/
+	index[nout++]=0;
+	
+	for(i=1; i<n-1; i++)
+		if(i%step == 0)
+			index[nout++] = i;
+
+	/* last point */
+	index[nout++]=n-1;
+
+	return nout;
 }

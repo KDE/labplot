@@ -31,7 +31,13 @@
 
 #include <stdlib.h>
 
-/* simple n-th point simplification */
-double nsl_geom_linesim_nthpoint(const double data[], size_t n);
+/* simple n-th point simplification 
+	data: xdata, xdata
+	size: n
+	step size: step
+	index: index of reduced points
+	returns final number of points
+*/
+size_t nsl_geom_linesim_nthpoint(const double xdata[], const double ydata[], size_t n, size_t step, size_t index[]);
 
 #endif /* NSL_GEOM_LINESIM_H */
