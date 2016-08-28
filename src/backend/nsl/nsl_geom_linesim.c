@@ -27,20 +27,46 @@
  ***************************************************************************/
 
 #include <math.h>
+/*#include <stdio.h>*/
 #include "nsl_geom_linesim.h"
 
-size_t nsl_geom_linesim_nthpoint(const double xdata[], const double ydata[], const size_t n, const size_t step, size_t index[]) {
+size_t nsl_geom_linesim_nthpoint(const size_t n, const size_t step, size_t index[]) {
 	size_t nout=0, i;
 
 	/*first point*/
-	index[nout++]=0;
+	index[nout++] = 0;
 	
-	for(i=1; i<n-1; i++)
+	for(i=1; i < n-1; i++)
 		if(i%step == 0)
 			index[nout++] = i;
 
 	/* last point */
-	index[nout++]=n-1;
+	index[nout++] = n-1;
+
+	return nout;
+}
+
+size_t nsl_geom_linesim_raddist(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]) {
+	size_t nout=0, key=0, i;
+
+	/*first point*/
+	index[nout++] = 0;
+
+	for(i=1; i < n-1; i++) {
+		/* distance to key point */
+		double dist = sqrt((xdata[key]-xdata[i])*(xdata[key]-xdata[i]) + (ydata[key]-ydata[i])*(ydata[key]-ydata[i]) );
+		/* distance to last point */
+		double lastdist = sqrt((xdata[n-1]-xdata[i])*(xdata[n-1]-xdata[i]) + (ydata[n-1]-ydata[i])*(ydata[n-1]-ydata[i]) );
+		/*printf("%d: %g %g\n", i, dist, lastdist);*/
+
+		if(dist > eps && lastdist > eps) {
+			index[nout++] = i;
+			key = i;
+		}
+	}
+
+	/* last point */
+	index[nout++] = n-1;
 
 	return nout;
 }

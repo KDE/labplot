@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : nsl_geom_linesim.h
+    File                 : nsl_geom_linesim_test.c
     Project              : LabPlot
-    Description          : NSL geometry line simplification functions
+    Description          : NSL line simplification test
     --------------------------------------------------------------------
     Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
@@ -26,27 +26,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef NSL_GEOM_LINESIM_H
-#define NSL_GEOM_LINESIM_H
+#include <stdio.h>
+#include "nsl_geom_linesim.h"
 
-#include <stdlib.h>
+double main() {
+	const double xdata[]={1,2,2.5,3,4,7,9,11,13,14};
+	const double ydata[]={1,1,1,3,4,7,9,11,13,13};
+	const size_t n=10, np=2;
+	size_t index[n];
 
-/* simple n-th point line simplification
-	n: number of points
-	step: step size
-	index: index of reduced points
-	-> returns final number of points
-*/
-size_t nsl_geom_linesim_nthpoint(size_t n, size_t step, size_t index[]);
+	size_t nout = nsl_geom_linesim_nthpoint(n, np, index);
 
+	printf("* n-th point\nnout = %d\n", nout);
+	int i;
+	for(i=0; i<nout; i++)
+		printf("%d: %d\n", i, index[i]);
 
-/* radial distance line simplification
-	xdata, ydata: data points
-	n: number of points
-	eps: tolerance (radius)
-	index: index of reduced points
-	-> returns final number of points
-*/
-size_t nsl_geom_linesim_raddist(const double xdata[], const double ydata[], size_t n, double eps, size_t index[]);
+	const double eps=1.5;
+	nout = nsl_geom_linesim_raddist(xdata, ydata, n, eps, index);
 
-#endif /* NSL_GEOM_LINESIM_H */
+	printf("* radial distance\nnout = %d\n", nout);
+	for(i=0; i<nout; i++)
+		printf("%d: %d\n", i, index[i]);
+}
