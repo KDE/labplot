@@ -49,4 +49,17 @@ size_t nsl_geom_linesim_nthpoint(size_t n, size_t step, size_t index[]);
 */
 size_t nsl_geom_linesim_raddist(const double xdata[], const double ydata[], size_t n, double eps, size_t index[]);
 
+/* perpendicular distance line simplification
+	xdata, ydata: data points
+	n: number of points
+	eps: tolerance (perp. distance)
+	index: index of reduced points
+	-> returns final number of points
+*/
+size_t nsl_geom_linesim_perpdist(const double xdata[], const double ydata[], size_t n, double eps, size_t index[]);
+/* repeat perpendicular distance line simplification
+	repeat: number of repeats
+ */
+size_t nsl_geom_linesim_perpdist_repeat(const double xdata[], const double ydata[], size_t n, double eps, size_t repeat, size_t index[]);
+
 #endif /* NSL_GEOM_LINESIM_H */

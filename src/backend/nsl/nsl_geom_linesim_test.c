@@ -31,21 +31,32 @@
 
 double main() {
 	const double xdata[]={1,2,2.5,3,4,7,9,11,13,14};
-	const double ydata[]={1,1,1,3,4,7,9,11,13,13};
+	const double ydata[]={1,1,1,3,4,7,8,12,13,13};
 	const size_t n=10, np=2;
 	size_t index[n];
 
+	printf("* n-th point\n");
 	size_t nout = nsl_geom_linesim_nthpoint(n, np, index);
+	printf("nout = %d\n", nout);
 
-	printf("* n-th point\nnout = %d\n", nout);
-	int i;
+	size_t i;
 	for(i=0; i<nout; i++)
 		printf("%d: %d\n", i, index[i]);
 
 	const double eps=1.5;
+	printf("* radial distance\n");
 	nout = nsl_geom_linesim_raddist(xdata, ydata, n, eps, index);
+	printf("nout = %d\n", nout);
 
-	printf("* radial distance\nnout = %d\n", nout);
+	for(i=0; i<nout; i++)
+		printf("%d: %d\n", i, index[i]);
+
+	const double eps2=0.5;
+	const size_t repeat = 3;
+	printf("* perpendicular distance (repeat = %d)\n", repeat);
+	nout = nsl_geom_linesim_perpdist_repeat(xdata, ydata, n, eps2, repeat, index);
+	printf("nout = %d\n", nout);
+
 	for(i=0; i<nout; i++)
 		printf("%d: %d\n", i, index[i]);
 }
