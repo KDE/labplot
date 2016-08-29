@@ -59,4 +59,13 @@ double main() {
 
 	for(i=0; i<nout; i++)
 		printf("%d: %d\n", i, index[i]);
+
+	const double eps3=0.5;
+	printf("* perp. distance (Reumann-Witkam)\n");
+	nout = nsl_geom_linesim_reumann_witkam(xdata, ydata, n, eps3, index);
+	printf("nout = %d\n", nout);
+
+	for(i=0; i<nout; i++)
+		printf("%d: %d\n", i, index[i]);
+
 }

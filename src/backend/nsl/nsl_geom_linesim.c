@@ -28,6 +28,7 @@
 
 #include <math.h>
 #include <stdio.h>
+#include "nsl_geom.h"
 #include "nsl_geom_linesim.h"
 
 size_t nsl_geom_linesim_nthpoint(const size_t n, const size_t step, size_t index[]) {
@@ -54,9 +55,9 @@ size_t nsl_geom_linesim_raddist(const double xdata[], const double ydata[], cons
 
 	for(i=1; i < n-1; i++) {
 		/* distance to key point */
-		double dist = sqrt((xdata[key]-xdata[i])*(xdata[key]-xdata[i]) + (ydata[key]-ydata[i])*(ydata[key]-ydata[i]) );
+		double dist = nsl_geom_point_point_dist(xdata[i], ydata[i], xdata[key], ydata[key]);
 		/* distance to last point */
-		double lastdist = sqrt((xdata[n-1]-xdata[i])*(xdata[n-1]-xdata[i]) + (ydata[n-1]-ydata[i])*(ydata[n-1]-ydata[i]) );
+		double lastdist = nsl_geom_point_point_dist(xdata[i], ydata[i], xdata[n-1], ydata[n-1]);
 		/*printf("%d: %g %g\n", i, dist, lastdist);*/
 
 		if(dist > eps && lastdist > eps) {
@@ -78,9 +79,8 @@ size_t nsl_geom_linesim_perpdist(const double xdata[], const double ydata[], con
 	index[nout++] = 0;
 
 	for(i=1; i < n-1; i++) {
-		/* distance to line key -- i+1 */
-		double dist = fabs( (xdata[i]-xdata[key])*(ydata[i+1]-ydata[key]) - (xdata[i+1]-xdata[key])*(ydata[i]-ydata[key]));
-		dist /= sqrt((xdata[i+1]-xdata[key])*(xdata[i+1]-xdata[key]) + (ydata[i+1]-ydata[key])*(ydata[i+1]-ydata[key])); 
+		/* distance of point i to line key -- i+1 */
+		double dist = nsl_geom_point_line_dist(xdata[key], ydata[key], xdata[i+1], ydata[i+1], xdata[i], ydata[i]);
 		/*printf("%d: %g\n", i, dist);*/
 
 		if(dist > eps) {	/* take it */
@@ -132,6 +132,31 @@ size_t nsl_geom_linesim_perpdist_repeat(const double xdata[], const double ydata
 	free(tmpindex);
 	free(xtmp);
 	free(ytmp);
+
+	return nout;
+}
+
+size_t nsl_geom_linesim_reumann_witkam(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]) {
+	size_t nout=0, key=0, key2=1, i;
+
+	/*first  point*/
+	index[nout++] = 0;
+
+	for(i=2; i < n-1; i++) {
+		/* distance to line key -- key2 */
+		double dist = nsl_geom_point_line_dist(xdata[key], ydata[key], xdata[key2], ydata[key2], xdata[i], ydata[i]);
+		/*printf("%d: %g\n", i, dist);*/
+
+		if(dist > eps) {	/* take it */
+			/*printf("%d: take it\n", i);*/
+			key = i-1;
+			key2 = i;
+			index[nout++] = i-1;
+		}
+	}
+
+	/* last point */
+	index[nout++] = n-1;
 
 	return nout;
 }
