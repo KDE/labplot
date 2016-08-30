@@ -71,4 +71,14 @@ size_t nsl_geom_linesim_perpdist_repeat(const double xdata[], const double ydata
 */
 size_t nsl_geom_linesim_reumann_witkam(const double xdata[], const double ydata[], size_t n, double eps, size_t index[]);
 
+/* Opheim line simplification
+	xdata, ydata: data points
+	n: number of points
+	mineps: minimum tolerance (to define ray)
+	maxeps: maxmimum tolerance (to define next key)
+	index: index of reduced points
+	-> returns final number of points
+*/
+size_t nsl_geom_linesim_opheim(const double xdata[], const double ydata[], size_t n, double mineps, double maxeps, size_t index[]);
+
 #endif /* NSL_GEOM_LINESIM_H */

@@ -68,4 +68,13 @@ double main() {
 	for(i=0; i<nout; i++)
 		printf("%d: %d\n", i, index[i]);
 
+	const double mineps=2.0;
+	const double maxeps=7.0;
+	printf("* perp. distance (Opheim)\n");
+	nout = nsl_geom_linesim_opheim(xdata, ydata, n, mineps, maxeps, index);
+	printf("nout = %d\n", nout);
+
+	for(i=0; i<nout; i++)
+		printf("%d: %d\n", i, index[i]);
+
 }

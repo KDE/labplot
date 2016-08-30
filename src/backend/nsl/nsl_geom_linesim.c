@@ -160,3 +160,47 @@ size_t nsl_geom_linesim_reumann_witkam(const double xdata[], const double ydata[
 
 	return nout;
 }
+
+size_t nsl_geom_linesim_opheim(const double xdata[], const double ydata[], const size_t n, const double mineps, const double maxeps, size_t index[]) {
+	size_t nout=0, key=0, key2, i;
+
+	/*first  point*/
+	index[nout++] = 0;
+
+	for(i=1; i < n-1; i++) {
+		double dist, perpdist;
+		do {	/* find key2 */
+			dist = nsl_geom_point_point_dist(xdata[key], ydata[key], xdata[i], ydata[i]);
+			/*printf("dist = %g: %d-%d\n", dist, key, i);*/
+			i++;
+		} while (dist < mineps);
+		i--;
+		if(key == i-1)		/*i+1 outside mineps */
+			key2 = i;
+		else
+			key2 = i-1;	/* last point inside */
+		/*printf("found key2 @%d\n", key2);*/
+
+		do {	/* find next key */
+			dist = nsl_geom_point_point_dist(xdata[key], ydata[key], xdata[i], ydata[i]);
+			perpdist = nsl_geom_point_line_dist(xdata[key], ydata[key], xdata[key2], ydata[key2], xdata[i], ydata[i]);
+			/*printf("dist = %g, perpdist=%g: %d\n", dist, perpdist, i);*/
+			i++;
+		} while (dist < maxeps && perpdist < mineps);
+		i--;
+		if(key == i-1)		/*i+1 outside */
+			key = i;
+		else {
+			key = i-1;
+			i--;
+		}
+		/*printf("new key: %d\n", key);*/
+		index[nout++] = key;
+	}
+
+	/* last point */
+	if (index[nout-1] != n-1)
+		index[nout++] = n-1;
+
+	return nout;
+}
