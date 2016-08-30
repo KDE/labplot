@@ -204,3 +204,39 @@ size_t nsl_geom_linesim_opheim(const double xdata[], const double ydata[], const
 
 	return nout;
 }
+
+size_t nsl_geom_linesim_lang(const double xdata[], const double ydata[], const size_t n, const double eps, const size_t region, size_t index[]) {
+	size_t nout=0, key=0, i, j;
+
+	/*first  point*/
+	index[nout++] = 0;
+
+	double dist, maxdist;
+	for(i=1; i<n-1; i++) {
+		size_t tmpregion=region;
+		if(key+tmpregion > n-1)	/* end of data set */
+			tmpregion = n-1-key;
+
+		do {
+			maxdist=0;
+			for (j=1; j < tmpregion; j++) {
+				dist = nsl_geom_point_line_dist(xdata[key], ydata[key], xdata[key+tmpregion], ydata[key+tmpregion], xdata[key+j], ydata[key+j]);
+				/*printf("%d: dist (%d to %d-%d) = %g\n", j, key+j, key, key+tmpregion, dist);*/
+				if(dist > maxdist)
+					maxdist = dist;
+			}
+			/*printf("eps = %g maxdist = %g\n", eps, maxdist);*/
+			tmpregion--;
+			/*printf("region = %d\n", tmpregion);*/
+		} while (maxdist>eps && tmpregion>0);
+		i += tmpregion;
+		index[nout++] = key = i;
+		/*printf("take it (%d) key=%d\n", i, key);*/
+	}
+
+	/* last point */
+	if (index[nout-1] != n-1)
+		index[nout++] = n-1;
+
+	return nout;
+}

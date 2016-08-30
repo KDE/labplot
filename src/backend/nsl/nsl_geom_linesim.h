@@ -81,4 +81,14 @@ size_t nsl_geom_linesim_reumann_witkam(const double xdata[], const double ydata[
 */
 size_t nsl_geom_linesim_opheim(const double xdata[], const double ydata[], size_t n, double mineps, double maxeps, size_t index[]);
 
+/* Lang line simplification
+	xdata, ydata: data points
+	n: number of points
+	eps: minimum tolerance (perpendicular distance)
+	region: search region (number of points)
+	index: index of reduced points
+	-> returns final number of points
+*/
+size_t nsl_geom_linesim_lang(const double xdata[], const double ydata[], size_t n, double eps, size_t region, size_t index[]);
+
 #endif /* NSL_GEOM_LINESIM_H */
