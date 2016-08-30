@@ -91,4 +91,14 @@ size_t nsl_geom_linesim_opheim(const double xdata[], const double ydata[], size_
 */
 size_t nsl_geom_linesim_lang(const double xdata[], const double ydata[], size_t n, double eps, size_t region, size_t index[]);
 
+/* Douglas-Peucker line simplification
+	xdata, ydata: data points
+	n: number of points
+	eps: minimum tolerance (perpendicular distance)
+	region: search region (number of points)
+	index: index of reduced points
+	-> returns final number of points
+*/
+size_t nsl_geom_linesim_douglas_peucker(const double xdata[], const double ydata[], size_t n, double eps, size_t index[]);
+
 #endif /* NSL_GEOM_LINESIM_H */

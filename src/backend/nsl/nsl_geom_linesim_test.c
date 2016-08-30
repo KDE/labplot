@@ -79,8 +79,16 @@ double main() {
 
 	const double eps4=0.5;
 	const size_t region=5;
-	printf("* distance (Lang)\n");
+	printf("* simplification (Lang)\n");
 	nout = nsl_geom_linesim_lang(xdata, ydata, n, eps4, region, index);
+	printf("nout = %d\n", nout);
+
+	for(i=0; i<nout; i++)
+		printf("%d: %d\n", i, index[i]);
+
+	const double eps5=0.6;
+	printf("* simplification (Douglas Peucker)\n");
+	nout = nsl_geom_linesim_douglas_peucker(xdata, ydata, n, eps5, index);
 	printf("nout = %d\n", nout);
 
 	for(i=0; i<nout; i++)
