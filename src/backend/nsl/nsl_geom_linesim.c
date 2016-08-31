@@ -29,7 +29,7 @@
 /*
 	TODO:
 	* non-parametric functions (calculate eps from data)
-	* more algorithms: Interpolation, Visvaligam-Whyatt, Jenks, Zhao-Saalfeld
+	* more algorithms: Interpolation, Visvalingam-Whyatt, Jenks, Zhao-Saalfeld
 	* sort algorithms by importance
 	* error calculation by area
 	* calculate error statistics
