@@ -31,14 +31,18 @@
 
 #include <stdlib.h>
 
+/* calculates positional error (summed perpendicular distance)
+	from simplified set (given by index[])
+*/
+double nsl_geom_linesim_positional_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]);
+
 /* simple n-th point line simplification
 	n: number of points
 	step: step size
 	index: index of reduced points
 	-> returns final number of points
 */
-size_t nsl_geom_linesim_nthpoint(size_t n, size_t step, size_t index[]);
-
+size_t nsl_geom_linesim_nthpoint(const size_t n, const size_t step, size_t index[]);
 
 /* radial distance line simplification
 	xdata, ydata: data points
@@ -47,7 +51,7 @@ size_t nsl_geom_linesim_nthpoint(size_t n, size_t step, size_t index[]);
 	index: index of reduced points
 	-> returns final number of points
 */
-size_t nsl_geom_linesim_raddist(const double xdata[], const double ydata[], size_t n, double eps, size_t index[]);
+size_t nsl_geom_linesim_raddist(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]);
 
 /* perpendicular distance line simplification
 	xdata, ydata: data points
@@ -56,11 +60,11 @@ size_t nsl_geom_linesim_raddist(const double xdata[], const double ydata[], size
 	index: index of reduced points
 	-> returns final number of points
 */
-size_t nsl_geom_linesim_perpdist(const double xdata[], const double ydata[], size_t n, double eps, size_t index[]);
+size_t nsl_geom_linesim_perpdist(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]);
 /* repeat perpendicular distance line simplification
 	repeat: number of repeats
  */
-size_t nsl_geom_linesim_perpdist_repeat(const double xdata[], const double ydata[], size_t n, double eps, size_t repeat, size_t index[]);
+size_t nsl_geom_linesim_perpdist_repeat(const double xdata[], const double ydata[], const size_t n, const double eps, const size_t repeat, size_t index[]);
 
 /* Reumann-Witkam line simplification
 	xdata, ydata: data points
@@ -69,7 +73,7 @@ size_t nsl_geom_linesim_perpdist_repeat(const double xdata[], const double ydata
 	index: index of reduced points
 	-> returns final number of points
 */
-size_t nsl_geom_linesim_reumann_witkam(const double xdata[], const double ydata[], size_t n, double eps, size_t index[]);
+size_t nsl_geom_linesim_reumann_witkam(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]);
 
 /* Opheim line simplification
 	xdata, ydata: data points
@@ -79,7 +83,7 @@ size_t nsl_geom_linesim_reumann_witkam(const double xdata[], const double ydata[
 	index: index of reduced points
 	-> returns final number of points
 */
-size_t nsl_geom_linesim_opheim(const double xdata[], const double ydata[], size_t n, double mineps, double maxeps, size_t index[]);
+size_t nsl_geom_linesim_opheim(const double xdata[], const double ydata[], const size_t n, const double mineps, const double maxeps, size_t index[]);
 
 /* Lang line simplification
 	xdata, ydata: data points
@@ -89,7 +93,7 @@ size_t nsl_geom_linesim_opheim(const double xdata[], const double ydata[], size_
 	index: index of reduced points
 	-> returns final number of points
 */
-size_t nsl_geom_linesim_lang(const double xdata[], const double ydata[], size_t n, double eps, size_t region, size_t index[]);
+size_t nsl_geom_linesim_lang(const double xdata[], const double ydata[], const size_t n, const double eps, const size_t region, size_t index[]);
 
 /* Douglas-Peucker line simplification
 	xdata, ydata: data points
@@ -99,6 +103,6 @@ size_t nsl_geom_linesim_lang(const double xdata[], const double ydata[], size_t 
 	index: index of reduced points
 	-> returns final number of points
 */
-size_t nsl_geom_linesim_douglas_peucker(const double xdata[], const double ydata[], size_t n, double eps, size_t index[]);
+size_t nsl_geom_linesim_douglas_peucker(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]);
 
 #endif /* NSL_GEOM_LINESIM_H */

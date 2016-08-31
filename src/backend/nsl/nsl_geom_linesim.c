@@ -32,6 +32,23 @@
 #include "nsl_geom.h"
 #include "nsl_geom_linesim.h"
 
+double nsl_geom_linesim_positional_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]) {
+	double dist=0;
+	size_t i=0, j;	/* index of index[] */
+	do {
+		/*for every point not in index[] calculate distance to line*/
+		/*printf("i=%d (index[i]-index[i+1]=%d-%d)\n", i , index[i], index[i+1]);*/
+		for(j=1;j<index[i+1]-index[i];j++) {
+			/*printf("i=%d: j=%d\n", i, j);*/
+			dist += nsl_geom_point_line_dist(xdata[index[i]], ydata[index[i]], xdata[index[i+1]], ydata[index[i+1]], xdata[index[i]+j], ydata[index[i]+j]);
+			/*printf("dist = %g\n", dist);*/
+		}
+		i++;
+	} while(index[i] != n-1);
+	
+	return dist;
+}
+
 size_t nsl_geom_linesim_nthpoint(const size_t n, const size_t step, size_t index[]) {
 	size_t nout=0, i;
 
@@ -280,7 +297,8 @@ size_t nsl_geom_linesim_douglas_peucker(const double xdata[], const double ydata
 		index[nout++] = n-1;
 
 	/* sort array index */
-	int compare(const void* a, const void* b) {
+	/* TODO: put in extra file */
+	int nsl_compare(const void* a, const void* b) {
 		size_t _a = * ( (size_t*) a );
 		size_t _b = * ( (size_t*) b );
 
@@ -288,7 +306,7 @@ size_t nsl_geom_linesim_douglas_peucker(const double xdata[], const double ydata
 		return (_a > _b) - (_a < _b);
 	}
 
-	qsort(index, nout, sizeof(size_t), compare);
+	qsort(index, nout, sizeof(size_t), nsl_compare);
 
 	return nout;
 }
