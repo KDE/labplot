@@ -28,7 +28,6 @@
 
 /*
 	TODO:
-	* extern nsl_compare
 	* non-parametric functions (calculate eps from data)
 	* more algorithm
 	* error calculation by area
@@ -38,6 +37,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "nsl_sort.h"
 #include "nsl_geom.h"
 #include "nsl_geom_linesim.h"
 
@@ -310,16 +310,7 @@ size_t nsl_geom_linesim_douglas_peucker(const double xdata[], const double ydata
 		index[nout++] = n-1;
 
 	/* sort array index */
-	/* TODO: put in extra file */
-	int nsl_compare(const void* a, const void* b) {
-		size_t _a = * ( (size_t*) a );
-		size_t _b = * ( (size_t*) b );
-
-		// an easy expression for comparing
-		return (_a > _b) - (_a < _b);
-	}
-
-	qsort(index, nout, sizeof(size_t), nsl_compare);
+	nsl_sort_size_t(index, nout);
 
 	return nout;
 }
