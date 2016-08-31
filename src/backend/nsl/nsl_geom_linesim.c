@@ -28,7 +28,6 @@
 
 /*
 	TODO:
-	* struct of algorithm and names
 	* extern nsl_compare
 	* non-parametric functions (calculate eps from data)
 	* more algorithm
@@ -41,6 +40,10 @@
 #include <stdlib.h>
 #include "nsl_geom.h"
 #include "nsl_geom_linesim.h"
+
+
+const char* nsl_geom_linesim_type_name[] = {"Douglas-Peucker", "n-th point", "radial distance", "perpendicular distance" , 
+	"Reumann-Witkam", "Opheim", "Lang"};
 
 double nsl_geom_linesim_positional_squared_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]) {
 	double dist=0;
