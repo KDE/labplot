@@ -245,9 +245,7 @@ size_t nsl_geom_linesim_lang(const double xdata[], const double ydata[], const s
 
 void nsl_geom_linesim_douglas_peucker_step(const double xdata[], const double ydata[], const size_t start, const size_t end, size_t *nout, const double eps, size_t index[]) {
 	/*printf("DP: %d - %d\n", start, end);*/
-	if (end - start < 2)
-		return;
-	
+
 	size_t i, nkey=start;
 	double dist, maxdist=0;
 	/* search for key (biggest perp. distance) */
@@ -260,8 +258,10 @@ void nsl_geom_linesim_douglas_peucker_step(const double xdata[], const double yd
 	if(maxdist > eps) {
 		/*printf("take %d\n", nkey);*/
 		index[(*nout)++]=nkey;
-		nsl_geom_linesim_douglas_peucker_step(xdata, ydata, start, nkey, nout, eps, index);
-		nsl_geom_linesim_douglas_peucker_step(xdata, ydata, nkey, end, nout, eps, index);
+		if(nkey-start > 1)
+			nsl_geom_linesim_douglas_peucker_step(xdata, ydata, start, nkey, nout, eps, index);
+		if(end-nkey > 1)
+			nsl_geom_linesim_douglas_peucker_step(xdata, ydata, nkey, end, nout, eps, index);
 	}
 
 	/*printf("nout=%d\n", *nout);*/
@@ -280,7 +280,7 @@ size_t nsl_geom_linesim_douglas_peucker(const double xdata[], const double ydata
 		index[nout++] = n-1;
 
 	/* sort array index */
-	int compare( const void* a, const void* b) {
+	int compare(const void* a, const void* b) {
 		size_t _a = * ( (size_t*) a );
 		size_t _b = * ( (size_t*) b );
 
