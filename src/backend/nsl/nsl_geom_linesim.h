@@ -31,10 +31,10 @@
 
 #include <stdlib.h>
 
-/* calculates positional error (summed perpendicular distance)
-	from simplified set (given by index[])
+/* calculates positional error (sum of squared perpendicular distance)
+	of simplified set (given by index[])
 */
-double nsl_geom_linesim_positional_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]);
+double nsl_geom_linesim_positional_squared_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]);
 
 /* simple n-th point line simplification
 	n: number of points

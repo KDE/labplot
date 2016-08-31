@@ -26,27 +26,37 @@
  *                                                                         *
  ***************************************************************************/
 
+/*
+	TODO:
+	* struct of algorithm and names
+	* extern nsl_compare
+	* non-parametric functions (calculate eps from data)
+	* more algorithm
+	* error calculation by area
+	* error statistics
+*/
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "nsl_geom.h"
 #include "nsl_geom_linesim.h"
 
-double nsl_geom_linesim_positional_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]) {
+double nsl_geom_linesim_positional_squared_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]) {
 	double dist=0;
-	size_t i=0, j;	/* index of index[] */
+	size_t i=0, j;	/* i: index of index[] */
 	do {
 		/*for every point not in index[] calculate distance to line*/
 		/*printf("i=%d (index[i]-index[i+1]=%d-%d)\n", i , index[i], index[i+1]);*/
 		for(j=1;j<index[i+1]-index[i];j++) {
 			/*printf("i=%d: j=%d\n", i, j);*/
-			dist += nsl_geom_point_line_dist(xdata[index[i]], ydata[index[i]], xdata[index[i+1]], ydata[index[i+1]], xdata[index[i]+j], ydata[index[i]+j]);
+			dist += pow(nsl_geom_point_line_dist(xdata[index[i]], ydata[index[i]], xdata[index[i+1]], ydata[index[i+1]], xdata[index[i]+j], ydata[index[i]+j]), 2);
 			/*printf("dist = %g\n", dist);*/
 		}
 		i++;
 	} while(index[i] != n-1);
 	
-	return dist;
+	return dist/(double)n;
 }
 
 size_t nsl_geom_linesim_nthpoint(const size_t n, const size_t step, size_t index[]) {
