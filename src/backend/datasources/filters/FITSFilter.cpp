@@ -679,6 +679,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
     Q_UNUSED(fileName)
     Q_UNUSED(dataSource)
     Q_UNUSED(importMode)
+    Q_UNUSED(okToMatrix)
     Q_UNUSED(lines)
 #endif
     return dataString.join(QLatin1String(""));
