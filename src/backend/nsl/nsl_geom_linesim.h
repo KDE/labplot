@@ -26,20 +26,39 @@
  *                                                                         *
  ***************************************************************************/
 
+/*
+	TODO:
+	* non-parametric functions (calculate eps from data)
+	* more algorithms: Visvalingam-Whyatt, Jenks, Zhao-Saalfeld
+	* sort algorithms by importance
+	* error calculation by area
+	* calculate error statistics
+*/
+
 #ifndef NSL_GEOM_LINESIM_H
 #define NSL_GEOM_LINESIM_H
 
 #include <stdlib.h>
 
-#define NSL_GEOM_LINESIM_TYPE_COUNT 7
+#define NSL_GEOM_LINESIM_TYPE_COUNT 8
 typedef enum {nsl_geom_linesim_type_douglas_peucker, nsl_geom_linesim_type_nthpoint, nsl_geom_linesim_type_raddist, nsl_geom_linesim_type_perpdist,
-	nsl_geom_linesim_type_reumann_witkam, nsl_geom_linesim_type_opheim, nsl_geom_linesim_type_lang} nsl_geom_linesim_type;
+	nsl_geom_linesim_type_interp, nsl_geom_linesim_type_reumann_witkam, nsl_geom_linesim_type_opheim, nsl_geom_linesim_type_lang} nsl_geom_linesim_type;
 extern const char* nsl_geom_linesim_type_name[];
 
 /* calculates positional error (sum of squared perpendicular distance)
 	of simplified set (given by index[])
 */
 double nsl_geom_linesim_positional_squared_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]);
+
+/* Douglas-Peucker line simplification
+	xdata, ydata: data points
+	n: number of points
+	eps: minimum tolerance (perpendicular distance)
+	region: search region (number of points)
+	index: index of reduced points
+	-> returns final number of points
+*/
+size_t nsl_geom_linesim_douglas_peucker(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]);
 
 /* simple n-th point line simplification
 	n: number of points
@@ -71,6 +90,15 @@ size_t nsl_geom_linesim_perpdist(const double xdata[], const double ydata[], con
  */
 size_t nsl_geom_linesim_perpdist_repeat(const double xdata[], const double ydata[], const size_t n, const double eps, const size_t repeat, size_t index[]);
 
+/* line simplification by nearest neigbor interpolation	(idea from xmgrace)
+	xdata, ydata: data points
+	n: number of points
+	eps: tolerance (perp. distance)
+	index: index of reduced points
+	-> returns final number of points
+*/
+size_t nsl_geom_linesim_interp(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]);
+
 /* Reumann-Witkam line simplification
 	xdata, ydata: data points
 	n: number of points
@@ -99,15 +127,5 @@ size_t nsl_geom_linesim_opheim(const double xdata[], const double ydata[], const
 	-> returns final number of points
 */
 size_t nsl_geom_linesim_lang(const double xdata[], const double ydata[], const size_t n, const double eps, const size_t region, size_t index[]);
-
-/* Douglas-Peucker line simplification
-	xdata, ydata: data points
-	n: number of points
-	eps: minimum tolerance (perpendicular distance)
-	region: search region (number of points)
-	index: index of reduced points
-	-> returns final number of points
-*/
-size_t nsl_geom_linesim_douglas_peucker(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]);
 
 #endif /* NSL_GEOM_LINESIM_H */

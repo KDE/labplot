@@ -32,14 +32,22 @@
 double main() {
 	const double xdata[]={1,2,2.5,3,4,7,9,11,13,14};
 	const double ydata[]={1,1,1,3,4,7,8,12,13,13};
-	const size_t n=10, np=2;
-	size_t index[n];
+	const size_t n=10;
+	size_t index[n], i;
 
-	printf("* n-th point\n");
-	size_t nout = nsl_geom_linesim_nthpoint(n, np, index);
+	const double eps5=0.6;
+	printf("* simplification (Douglas Peucker)\n");
+	size_t nout = nsl_geom_linesim_douglas_peucker(xdata, ydata, n, eps5, index);
 	printf("nout = %d (error = %g)\n", nout, nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index));
 
-	size_t i;
+	for(i=0; i<nout; i++)
+		printf("%d: %d\n", i, index[i]);
+
+	const size_t np=2;
+	printf("* n-th point\n");
+	nout = nsl_geom_linesim_nthpoint(n, np, index);
+	printf("nout = %d (error = %g)\n", nout, nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index));
+
 	for(i=0; i<nout; i++)
 		printf("%d: %d\n", i, index[i]);
 
@@ -55,6 +63,14 @@ double main() {
 	const size_t repeat = 3;
 	printf("* perpendicular distance (repeat = %d)\n", repeat);
 	nout = nsl_geom_linesim_perpdist_repeat(xdata, ydata, n, eps2, repeat, index);
+	printf("nout = %d (error = %g)\n", nout, nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index));
+
+	for(i=0; i<nout; i++)
+		printf("%d: %d\n", i, index[i]);
+
+	const double eps6=0.7;
+	printf("* y distance (interpolation)\n", repeat);
+	nout = nsl_geom_linesim_interp(xdata, ydata, n, eps6, index);
 	printf("nout = %d (error = %g)\n", nout, nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index));
 
 	for(i=0; i<nout; i++)
@@ -81,14 +97,6 @@ double main() {
 	const size_t region=5;
 	printf("* simplification (Lang)\n");
 	nout = nsl_geom_linesim_lang(xdata, ydata, n, eps4, region, index);
-	printf("nout = %d (error = %g)\n", nout, nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index));
-
-	for(i=0; i<nout; i++)
-		printf("%d: %d\n", i, index[i]);
-
-	const double eps5=0.6;
-	printf("* simplification (Douglas Peucker)\n");
-	nout = nsl_geom_linesim_douglas_peucker(xdata, ydata, n, eps5, index);
 	printf("nout = %d (error = %g)\n", nout, nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index));
 
 	for(i=0; i<nout; i++)

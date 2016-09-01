@@ -34,9 +34,14 @@
  */
 double nsl_geom_point_point_dist(double x1, double y1, double x2, double y2);
 
-/* point-line distance
+/* point-line distance sqrt(dx^2+dy^2)
 	point (xp,yp) to line (x1,y1)-(x2,y2)
  */
 double nsl_geom_point_line_dist(double x1, double y1, double x2, double y2, double xp, double yp);
+
+/* point-line distance |dy|
+	point (xp,yp) to line (x1,y1)-(x2,y2)
+ */
+double nsl_geom_point_line_dist_y(double x1, double y1, double x2, double y2, double xp, double yp);
 
 #endif /* NSL_GEOM_H */

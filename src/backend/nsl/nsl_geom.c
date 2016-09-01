@@ -36,3 +36,7 @@ double nsl_geom_point_point_dist(double x1, double y1, double x2, double y2) {
 double nsl_geom_point_line_dist(double x1, double y1, double x2, double y2, double xp, double yp) {
 	return fabs( (xp-x1)*(y2-y1) - (x2-x1)*(yp-y1) ) / nsl_geom_point_point_dist(x1, y1, x2, y2);
 }
+
+double nsl_geom_point_line_dist_y(double x1, double y1, double x2, double y2, double xp, double yp) {
+	return fabs( yp - y1 - (y2-y1)*(xp-x1)/(x2-x1) );
+}

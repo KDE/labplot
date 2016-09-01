@@ -26,15 +26,6 @@
  *                                                                         *
  ***************************************************************************/
 
-/*
-	TODO:
-	* non-parametric functions (calculate eps from data)
-	* more algorithms: Interpolation, Visvalingam-Whyatt, Jenks, Zhao-Saalfeld
-	* sort algorithms by importance
-	* error calculation by area
-	* calculate error statistics
-*/
-
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,9 +33,8 @@
 #include "nsl_geom.h"
 #include "nsl_geom_linesim.h"
 
-
-const char* nsl_geom_linesim_type_name[] = {"Douglas-Peucker", "n-th point", "radial distance", "perpendicular distance" , 
-	"Reumann-Witkam", "Opheim", "Lang"};
+const char* nsl_geom_linesim_type_name[] = {"Douglas-Peucker", "n-th point", "radial distance", "perpendicular distance", 
+	"Interpolation", "Reumann-Witkam", "Opheim", "Lang"};
 
 double nsl_geom_linesim_positional_squared_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]) {
 	double dist=0;
@@ -164,6 +154,29 @@ size_t nsl_geom_linesim_perpdist_repeat(const double xdata[], const double ydata
 	free(tmpindex);
 	free(xtmp);
 	free(ytmp);
+
+	return nout;
+}
+
+size_t nsl_geom_linesim_interp(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]) {
+	size_t nout=0, i;
+
+	/*first  point*/
+	index[nout++] = 0;
+
+	size_t key=0;
+	for(i=1; i < n-1; i++) {
+		/*printf("%d: %d-%d\n", i, key, i+1);*/
+		double dist = nsl_geom_point_line_dist_y(xdata[key], ydata[key], xdata[i+1], ydata[i+1], xdata[i], ydata[i]);
+		/*printf("%d: dist = %g\n", i, dist);*/
+		if(dist > eps) {
+			/*printf("take it %d\n", i);*/
+			index[nout++] = key = i;
+		}
+	}
+
+	/* last point */
+	index[nout++] = n-1;
 
 	return nout;
 }
