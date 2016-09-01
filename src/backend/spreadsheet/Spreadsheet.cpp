@@ -115,9 +115,9 @@ bool Spreadsheet::exportView() const {
 	}
 	if (const_cast<SpreadsheetView*>(reinterpret_cast<const SpreadsheetView*>(m_view))->selectedColumnCount() == 0) {
 		dlg->setExportSelection(false);
-    	}
-    	bool ret;
-    	if (ret = dlg->exec() == QDialog::Accepted) {
+	}
+	bool ret;
+	if ((ret = dlg->exec()) == QDialog::Accepted) {
 		const QString path = dlg->path();
 		const bool exportHeader = dlg->exportHeader();
 		const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
@@ -150,7 +150,7 @@ bool Spreadsheet::printView() {
 	QPrintDialog* dlg = new QPrintDialog(&printer, view());
 	bool ret;
 	dlg->setWindowTitle(i18n("Print Spreadsheet"));
-	if ((ret = dlg->exec() == QDialog::Accepted)) {
+	if ((ret = dlg->exec()) == QDialog::Accepted) {
 		const SpreadsheetView* view = reinterpret_cast<const SpreadsheetView*>(m_view);
 		view->print(&printer);
 	}
@@ -183,7 +183,7 @@ void Spreadsheet::removeRows(int first, int count)
 	WAIT_CURSOR;
 	beginMacro( i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count) );
 	foreach(Column * col, children<Column>(IncludeHidden))
-	    col->removeRows(first, count);
+		col->removeRows(first, count);
 	endMacro();
 	RESET_CURSOR;
 }
@@ -194,7 +194,7 @@ void Spreadsheet::insertRows(int before, int count)
 	WAIT_CURSOR;
 	beginMacro( i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count) );
 	foreach(Column * col, children<Column>(IncludeHidden))
-	    col->insertRows(before, count);
+		col->insertRows(before, count);
 	endMacro();
 	RESET_CURSOR;
 }
