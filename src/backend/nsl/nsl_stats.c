@@ -30,6 +30,26 @@
 #include <gsl/gsl_sort.h>
 #include "nsl_stats.h"
 
+double nsl_stats_minimum(const double data[], const size_t n, size_t *index) {
+	size_t i;
+
+	double min = data[0];
+	for (i=1; i < n; i++)
+		(data[i] < min) ? min = data[i], *index = i : 0;
+
+	return min;
+}
+
+double nsl_stats_maximum(const double data[], const size_t n, size_t *index) {
+	size_t i;
+
+	double max = data[0];
+	for (i=1; i < n; i++)
+		(data[i] > max) ? max = data[i], *index = i : 0;
+
+	return max;
+}
+
 double nsl_stats_median(double data[], size_t stride, size_t n, nsl_stats_quantile_type type) {
 	gsl_sort(data, stride, n);
 	return nsl_stats_median_sorted(data,stride,n,type);

@@ -76,6 +76,14 @@ double main() {
 	for(i=0; i<nout; i++)
 		printf("%d: %d\n", i, index[i]);
 
+	const double eps7=5.5;
+	printf("* minimum area (Visvalingam-Whyatt)\n", repeat);
+	nout = nsl_geom_linesim_visvalingam_whyatt(xdata, ydata, n, eps7, index);
+	printf("nout = %d (error = %g)\n", nout, nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index));
+
+	for(i=0; i<nout; i++)
+		printf("%d: %d\n", i, index[i]);
+
 	const double eps3=0.7;
 	printf("* perp. distance (Reumann-Witkam)\n");
 	nout = nsl_geom_linesim_reumann_witkam(xdata, ydata, n, eps3, index);

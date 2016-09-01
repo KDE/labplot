@@ -44,4 +44,7 @@ double nsl_geom_point_line_dist(double x1, double y1, double x2, double y2, doub
  */
 double nsl_geom_point_line_dist_y(double x1, double y1, double x2, double y2, double xp, double yp);
 
+/* area of triangle defined by three points */
+double nsl_geom_three_point_area(double x1, double y1, double x2, double y2, double x3, double y3);
+
 #endif /* NSL_GEOM_H */

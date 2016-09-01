@@ -36,6 +36,19 @@ typedef enum {nsl_stats_quantile_type1=1, nsl_stats_quantile_type2, nsl_stats_qu
 		nsl_stats_quantile_type5, nsl_stats_quantile_type6, nsl_stats_quantile_type7, nsl_stats_quantile_type8,
 		nsl_stats_quantile_type9} nsl_stats_quantile_type;
 
+/* minimum value of data array 
+	data - data array
+	n - size of data array
+	index - index of mimimum value
+*/
+double nsl_stats_minimum(const double data[], const size_t n, size_t *index);
+/* maximum value of data array 
+	data - data array
+	n - size of data array
+	index - index of maximum value
+*/
+double nsl_stats_maximum(const double data[], const size_t n, size_t *index);
+
 /* median from unsorted data. data will be sorted! */
 double nsl_stats_median(double data[], size_t stride, size_t n, nsl_stats_quantile_type type);
 /* median from sorted data */

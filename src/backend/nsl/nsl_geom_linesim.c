@@ -29,12 +29,33 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <float.h>
 #include "nsl_sort.h"
+#include "nsl_stats.h"
 #include "nsl_geom.h"
 #include "nsl_geom_linesim.h"
 
 const char* nsl_geom_linesim_type_name[] = {"Douglas-Peucker", "n-th point", "radial distance", "perpendicular distance", 
-	"Interpolation", "Reumann-Witkam", "Opheim", "Lang"};
+	"Interpolation", "Visvalingam-Whyatt", "Reumann-Witkam", "Opheim", "Lang"};
+
+/*********** error calculation functions *********/
+
+double nsl_geom_linesim_positional_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]) {
+	double dist=0;
+	size_t i=0, j;	/* i: index of index[] */
+	do {
+		/*for every point not in index[] calculate distance to line*/
+		/*printf("i=%d (index[i]-index[i+1]=%d-%d)\n", i , index[i], index[i+1]);*/
+		for(j=1;j<index[i+1]-index[i];j++) {
+			/*printf("i=%d: j=%d\n", i, j);*/
+			dist += nsl_geom_point_line_dist(xdata[index[i]], ydata[index[i]], xdata[index[i+1]], ydata[index[i+1]], xdata[index[i]+j], ydata[index[i]+j]);
+			/*printf("dist = %g\n", dist);*/
+		}
+		i++;
+	} while(index[i] != n-1);
+	
+	return dist/(double)n;
+}
 
 double nsl_geom_linesim_positional_squared_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]) {
 	double dist=0;
@@ -52,6 +73,8 @@ double nsl_geom_linesim_positional_squared_error(const double xdata[], const dou
 	
 	return dist/(double)n;
 }
+
+/*********** simplification algorithms *********/
 
 size_t nsl_geom_linesim_nthpoint(const size_t n, const size_t step, size_t index[]) {
 	size_t nout=0, i;
@@ -178,6 +201,59 @@ size_t nsl_geom_linesim_interp(const double xdata[], const double ydata[], const
 	/* last point */
 	index[nout++] = n-1;
 
+	return nout;
+}
+
+size_t nsl_geom_linesim_visvalingam_whyatt(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]) {
+	size_t i, nout=n;
+
+	double *area = (double *) malloc((n-2)*sizeof(double));	/* area associated with every point */
+	for(i=1;i<n-1;i++) {
+		area[i-1] = nsl_geom_three_point_area(xdata[i-1], ydata[i-1], xdata[i], ydata[i], xdata[i+1], ydata[i+1]);
+		index[i] = i;
+	}
+	index[n-1]=n-1;
+
+	double minarea;
+	size_t minindex;
+	while ( (minarea = nsl_stats_minimum(area, n-2, &minindex)) < eps) {
+
+		/* remove point minindex */
+		/*printf("removing point %d (minarea = %g) \n", minindex+1, minarea);*/
+		index[minindex+1] = 0;
+		area[minindex] = DBL_MAX;
+		double tmparea;
+		if(minindex>0) {
+			tmparea = nsl_geom_three_point_area(xdata[minindex-1], ydata[minindex-1], xdata[minindex], ydata[minindex], xdata[minindex+1], ydata[minindex+1]);
+			if(tmparea > area[minindex-1])	/* take largest value new and old area */
+				area[minindex-1] = tmparea;
+		}
+		if(minindex<n-2) {
+			tmparea = nsl_geom_three_point_area(xdata[minindex], ydata[minindex], xdata[minindex+1], ydata[minindex+1], xdata[minindex+2], ydata[minindex+2]);
+			if(tmparea > area[minindex+1])	/* take largest value new and old area */
+				area[minindex+1] = tmparea;
+
+		}
+		nout--;
+	};
+
+	/*for(i=0;i<n;i++)
+		printf("INDEX = %d\n", index[i]);
+	*/
+	/* condens index */
+	i=1;
+	size_t newi=1;
+	while (newi < n-1) {
+		while (index[newi] == 0)
+			newi++;
+		index[i++] = index[newi++];
+	};
+
+	/*for(i=0;i<nout;i++)
+		printf("INDEX2 = %d\n", index[i]);
+	*/
+
+	free(area);
 	return nout;
 }
 
