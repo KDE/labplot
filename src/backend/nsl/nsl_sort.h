@@ -1,11 +1,11 @@
 /***************************************************************************
-File		: AbstractDataSource.h
-Project		: LabPlot
-Description 	: Interface for data sources
---------------------------------------------------------------------
-Copyright	: (C) 2009 Alexander Semke (alexander.semke@web.de)
-Copyright	: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
-***************************************************************************/
+    File                 : nsl_sort.h
+    Project              : LabPlot
+    Description          : NSL sorting functions
+    --------------------------------------------------------------------
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
+
+ ***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -25,24 +25,16 @@ Copyright	: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef ABSTRACTDATASOURCE_H
-#define ABSTRACTDATASOURCE_H
 
-#include "backend/core/AbstractPart.h"
-#include "backend/core/AbstractScriptingEngine.h"
-#include "backend/datasources/filters/AbstractFileFilter.h"
+#ifndef NSL_SORT_H
+#define NSL_SORT_H
 
-#include <QStringList>
+#include <stdlib.h>
 
-class AbstractDataSource : public AbstractPart, public scripted{
+/* compare size_t objects */
+int nsl_sort_compare_size_t(const void* a, const void* b); 
 
-	public:
-   		AbstractDataSource(AbstractScriptingEngine *engine, const QString& name);
-        virtual ~AbstractDataSource() {}
-		void clear();
-		int resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols);
-		int create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
-				   int actualRows, int actualCols, QStringList colNameList = QStringList());
-};
+/* sort size_t array of size n */
+void nsl_sort_size_t(size_t array[], const size_t n);
 
-#endif // ifndef ABSTRACTDATASOURCE_H
+#endif /* NSL_SORT_H */

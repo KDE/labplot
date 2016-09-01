@@ -79,6 +79,7 @@ private slots:
 	void newDataContainerMenu();
 	void newDataContainer(QAction*);
 	void checkOkButton();
+    void checkOnFitsTableToMatrix();
 };
 
 #endif //IMPORTFILEDIALOG_H

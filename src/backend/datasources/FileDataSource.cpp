@@ -94,7 +94,7 @@ QStringList FileDataSource::fileTypes(){
 		<< i18n("Hierarchical Data Format (HDF)")
 		<< i18n("Network Common Data Format (NetCDF)")
 //		<< "CDF"
-//		<< "FITS"
+        << i18n("Flexible Image Transport System Data Format (FITS)")
 //		<< i18n("Sound")
 		);
 }
@@ -244,10 +244,10 @@ QString FileDataSource::fileInfoString(const QString &name){
 	QIODevice *file = new QFile(name);
 
 	QString fileName;
-	if ( name.left(1)!=QDir::separator()){
-		fileName=QDir::homePath() + QDir::separator() + name;
-	}else{
-		fileName=name;
+    if (name.left(1)!=QDir::separator()) {
+        fileName = QDir::homePath() + QDir::separator() + name;
+    } else {
+        fileName = name;
 	}
 
 	if(file==0)
@@ -272,6 +272,17 @@ QString FileDataSource::fileInfoString(const QString &name){
 		infoStrings << i18n("Owner: %1", fileInfo.owner());
 		infoStrings << i18n("Group: %1", fileInfo.group());
 		infoStrings << i18n("Size: %1", i18np("%1 cByte", "%1 cBytes", fileInfo.size()));
+
+#ifdef HAVE_FITS
+        if (fileName.endsWith(QLatin1String(".fits"))) {
+            FITSFilter* fitsFilter = new FITSFilter;
+
+            infoStrings << i18n("Images: %1", QString::number(fitsFilter->imagesCount(fileName) ));
+            infoStrings << i18n("Tables: %1", QString::number(fitsFilter->tablesCount(fileName) ));
+
+            delete fitsFilter;
+        }
+#endif
 
 		// file type and type specific information about the file
 #ifdef Q_OS_LINUX

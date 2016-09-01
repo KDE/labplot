@@ -59,6 +59,7 @@
 #include "kdefrontend/HistoryDialog.h"
 #include "kdefrontend/SettingsDialog.h"
 #include "kdefrontend/GuiObserver.h"
+#include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 
 #include <QMdiArea>
 #include <QMenu>
@@ -108,6 +109,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	  m_autoSaveActive(false),
 	  m_visibilityMenu(0),
 	  m_newMenu(0),
+      m_editMenu(0),
 	  axisDock(0),
 	  notesDock(0),
 	  cartesianPlotDock(0),
@@ -303,6 +305,10 @@ void MainWin::initActions() {
 	actionCollection()->addAction("export", m_exportAction);
 	connect(m_exportAction, SIGNAL(triggered()),SLOT(exportDialog()));
 
+	m_editFitsFileAction = new QAction(i18n("Edit FITS file header"), this);
+	actionCollection()->addAction("edit_fits", m_editFitsFileAction);
+	connect(m_editFitsFileAction, SIGNAL(triggered()), SLOT(editFitsFileDialog()));
+
 	// Edit
 	//Undo/Redo-stuff
 	m_undoAction = KStandardAction::undo(this, SLOT(undo()), actionCollection());
@@ -443,6 +449,10 @@ void MainWin::initMenus() {
 	m_visibilityMenu ->addAction(m_visibilityFolderAction);
 	m_visibilityMenu ->addAction(m_visibilitySubfolderAction);
 	m_visibilityMenu ->addAction(m_visibilityAllAction);
+
+    //menu for editing files
+    m_editMenu = new QMenu(i18n("Edit"), this);
+    m_editMenu->addAction(m_editFitsFileAction);
 }
 
 /*!
@@ -1626,6 +1636,17 @@ void MainWin::exportDialog() {
     if (part->exportView()) {
         statusBar()->showMessage(i18n("%1 exported", part->name()));
     }
+}
+
+void MainWin::editFitsFileDialog() {
+    FITSHeaderEditDialog* editDialog = new FITSHeaderEditDialog(this);
+    if (editDialog->exec() == KDialog::Accepted) {
+        if (editDialog->saved()) {
+            statusBar()->showMessage(i18n("FITS files saved"));
+        }
+    }
+
+    delete editDialog;
 }
 
 /*!

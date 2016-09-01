@@ -80,6 +80,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 	connect(importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
+    connect(importFileWidget, SIGNAL(checkedFitsTableToMatrix()), this, SLOT(checkOnFitsTableToMatrix()));
 
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
     setWindowIcon(QIcon::fromTheme("document-import-database"));
@@ -188,7 +189,6 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
 	QApplication::restoreOverrideCursor();
 	statusBar->removeWidget(progressBar);
 }
-
 /*!
   triggers data import to the currently selected data container
 */
@@ -233,6 +233,8 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			names = importFileWidget->selectedHDFNames();
 		else if (fileType == FileDataSource::NETCDF)
 			names = importFileWidget->selectedNetCDFNames();
+        //TODO
+        //multiple extensions selected
 
 		// multiple data sets/variables for HDF/NetCDF
 		if (fileType == FileDataSource::HDF || fileType == FileDataSource::NETCDF) {
@@ -335,6 +337,18 @@ void ImportFileDialog::newDataContainerMenu() {
 	m_newDataContainerMenu->exec( tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
 }
 
+void ImportFileDialog::checkOnFitsTableToMatrix() {
+    if (cbAddTo) {
+        AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
+        if (!aspect) {
+            return;
+        }
+        if(aspect->inherits("Matrix")) {
+            enableButtonOk(importFileWidget->canReadFitsTableToMatrix());
+        }
+    }
+}
+
 void ImportFileDialog::checkOkButton() {
 	if (cbAddTo) { //only check for the target container when no file data source is being added
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
@@ -355,10 +369,29 @@ void ImportFileDialog::checkOkButton() {
 	}
 
 	QString fileName = importFileWidget->fileName();
+	if (importFileWidget->currentFileType() != FileDataSource::FITS) {
 #ifndef _WIN32
-	if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator() )
-		fileName = QDir::homePath() + QDir::separator() + fileName;
+		if (!fileName.isEmpty() && fileName.left(1) != QDir::separator())
+			fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
+	} else {
+		int extensionBraceletPos = -1;
+		if (!fileName.isEmpty()) {
+			if(fileName.right(1) == QLatin1String("]")) {
+				for (int i = fileName.size() - 1; i >= 5; --i) {
+					if (fileName.at(i) == QLatin1Char('[')) {
+						extensionBraceletPos = i;
+						break;
+					}
+				}
+			}
+		}
 
-	enableButtonOk( QFile::exists(fileName) ) ;
+		if (fileName.left(1) != QDir::separator()) {
+			fileName = QDir::homePath() + QDir::separator() + fileName.mid(0, extensionBraceletPos);
+		} else {
+			fileName = fileName.mid(0, extensionBraceletPos);
+		}
+    	}
+    	enableButtonOk( QFile::exists(fileName) ) ;
 }
