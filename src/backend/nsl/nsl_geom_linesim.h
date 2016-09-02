@@ -28,7 +28,6 @@
 
 /*
 	TODO:
-	* sort algorithms by importance
 	* calculate error statistics
 	* more algorithms: Jenks, Zhao-Saalfeld
 	* non-parametric version of Visvalingam-Whyatt, Opheim and Lang

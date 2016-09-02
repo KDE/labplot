@@ -427,7 +427,7 @@ size_t nsl_geom_linesim_opheim(const double xdata[], const double ydata[], const
 size_t nsl_geom_linesim_opheim_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
 	/* TODO: calculate min and max tolerance */
 	/*double eps = nsl_geom_linesim_eps(xdata, ydata, n);
-	return  nsl_geom_linesim_visvalingam_whyatt(xdata, ydata, n, eps, index);
+	return  nsl_geom_linesim_opheim(xdata, ydata, n, mineps, maxeps, index);
 	*/
 	printf("nsl_geom_linesim_opheim_auto(): Not implemented yet\n");
 	return 0;
@@ -471,7 +471,7 @@ size_t nsl_geom_linesim_lang(const double xdata[], const double ydata[], const s
 size_t nsl_geom_linesim_lang_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
 	/* TODO: calculate  region */
 	double eps = nsl_geom_linesim_eps(xdata, ydata, n);
-	/*return  nsl_geom_linesim_visvalingam_whyatt(xdata, ydata, n, eps, index);
+	/*return  nsl_geom_linesim_lang(xdata, ydata, n, eps, region, index);
 	*/
 	printf("nsl_geom_linesim_lang_auto(): Not implemented yet\n");
 	return 0;
