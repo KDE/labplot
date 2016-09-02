@@ -35,6 +35,8 @@ double main() {
 	const size_t n=10;
 	size_t index[n], i;
 
+	printf("automatic eps = %g\n", nsl_geom_linesim_eps(xdata, ydata, n));
+
 	const double eps5=0.6;
 	printf("* simplification (Douglas Peucker)\n");
 	size_t nout = nsl_geom_linesim_douglas_peucker(xdata, ydata, n, eps5, index);

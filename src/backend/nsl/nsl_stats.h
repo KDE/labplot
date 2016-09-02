@@ -39,13 +39,13 @@ typedef enum {nsl_stats_quantile_type1=1, nsl_stats_quantile_type2, nsl_stats_qu
 /* minimum value of data array 
 	data - data array
 	n - size of data array
-	index - index of mimimum value
+	index - index of mimimum value	(not used if NULL)
 */
 double nsl_stats_minimum(const double data[], const size_t n, size_t *index);
 /* maximum value of data array 
 	data - data array
 	n - size of data array
-	index - index of maximum value
+	index - index of maximum value (not used if NULL)
 */
 double nsl_stats_maximum(const double data[], const size_t n, size_t *index);
 
