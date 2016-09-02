@@ -275,6 +275,7 @@ void WorksheetView::initActions() {
 	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), cartesianPlotAddNewActionGroup);
 // no icons yet
+	addDataReductionCurveAction = new KAction(i18n("xy-curve from a data reduction"), cartesianPlotAddNewActionGroup);
 	addInterpolationCurveAction = new KAction(i18n("xy-curve from an interpolation"), cartesianPlotAddNewActionGroup);
 	addSmoothCurveAction = new KAction(i18n("xy-curve from a smooth"), cartesianPlotAddNewActionGroup);
 	addFourierFilterCurveAction = new KAction(i18n("xy-curve from a Fourier filter"), cartesianPlotAddNewActionGroup);
@@ -291,6 +292,7 @@ void WorksheetView::initActions() {
 	connect(cartesianPlotAddNewActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotAddNew(QAction*)));
 
 	// Analysis menu
+	addDataReductionAction = new KAction(i18n("Data Reduction"), cartesianPlotAddNewActionGroup);
 // no icons yet
 	addInterpolationAction = new KAction(i18n("Interpolation"), cartesianPlotAddNewActionGroup);
 	addSmoothAction = new KAction(i18n("Smooth"), cartesianPlotAddNewActionGroup);
@@ -447,11 +449,10 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotMenu->addSeparator();
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotActionModeMenu);
 
-	// Filter menu?
-	//m_filterMenu = new QMenu(i18n("Filter"));
-	//TODO: filter icon
-	//m_filterMenu->setIcon(KIcon("zoom-draw"));
-	//m_filterMenu->addAction(addFourierFilterAction);
+	// Data manipulation menu
+	m_dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
+	m_dataManipulationMenu->setIcon(KIcon("zoom-draw"));
+	m_dataManipulationMenu->addAction(addDataReductionAction);
 }
 
 /*!
@@ -486,15 +487,14 @@ void WorksheetView::createContextMenu(QMenu* menu) const {
 void WorksheetView::createAnalysisMenu(QMenu* menu) const {
 	Q_ASSERT(menu);
 
+	// Data manipulation menu
+	menu->insertMenu(0,m_dataManipulationMenu);
+
 	menu->addAction(addInterpolationAction);
 	menu->addAction(addSmoothAction);
 	menu->addAction(addFitAction);
 	menu->addAction(addFourierFilterAction);
 	menu->addAction(addFourierTransformAction);
-	// Filter menu?
-	//menu->insertMenu(0,m_filterMenu);
-
-	//TODO: more to come
 }
 
 void WorksheetView::fillToolBar(QToolBar* toolBar) {
@@ -538,6 +538,7 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(addCurveAction);
 	toolBar->addAction(addEquationCurveAction);
 // don't over populate the tool bar
+//	toolBar->addAction(addDataReductionCurveAction);
 //	toolBar->addAction(addInterpolationCurveAction);
 //	toolBar->addAction(addSmoothCurveAction);
 //	toolBar->addAction(addFitCurveAction);
@@ -1308,6 +1309,7 @@ void WorksheetView::handleCartesianPlotActions() {
 
 	addCurveAction->setEnabled(plot);
 	addEquationCurveAction->setEnabled(plot);
+	addDataReductionCurveAction->setEnabled(plot);
 	addInterpolationCurveAction->setEnabled(plot);
 	addSmoothCurveAction->setEnabled(plot);
 	addFitCurveAction->setEnabled(plot);
@@ -1331,8 +1333,8 @@ void WorksheetView::handleCartesianPlotActions() {
 	shiftUpYAction->setEnabled(plot);
 	shiftDownYAction->setEnabled(plot);
 
-	// analysis functions
-	//m_filterMenu->setEnabled(plot);
+	// analysis menu
+	m_dataManipulationMenu->setEnabled(plot);
 	addInterpolationAction->setEnabled(plot);
 	addSmoothAction->setEnabled(plot);
 	addFitAction->setEnabled(plot);

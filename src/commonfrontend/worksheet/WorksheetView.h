@@ -115,8 +115,8 @@ private:
 	QMenu* m_cartesianPlotAddNewMenu;
 	QMenu* m_cartesianPlotZoomMenu;
 	QMenu* m_cartesianPlotActionModeMenu;
-	// Filter menu
-	//QMenu* m_filterMenu;
+	// Data manipulation menu
+	QMenu* m_dataManipulationMenu;
 
 	QToolButton* tbNewCartesianPlot;
 	QToolButton* tbZoom;
@@ -175,6 +175,7 @@ private:
 
 	QAction* addCurveAction;
 	QAction* addEquationCurveAction;
+	QAction* addDataReductionCurveAction;
 	QAction* addInterpolationCurveAction;
 	QAction* addSmoothCurveAction;
 	QAction* addFitCurveAction;
@@ -199,7 +200,8 @@ private:
 	QAction* shiftUpYAction;
 	QAction* shiftDownYAction;
 
-	// filter menu
+	// Analysis menu
+	QAction* addDataReductionAction;
 	QAction* addInterpolationAction;
 	QAction* addSmoothAction;
 	QAction* addFitAction;
