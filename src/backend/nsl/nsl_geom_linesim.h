@@ -26,20 +26,55 @@
  *                                                                         *
  ***************************************************************************/
 
+/*
+	TODO:
+	* calculate error statistics
+	* more algorithms: Jenks, Zhao-Saalfeld
+	* non-parametric version of Visvalingam-Whyatt, Opheim and Lang
+*/
+
 #ifndef NSL_GEOM_LINESIM_H
 #define NSL_GEOM_LINESIM_H
 
 #include <stdlib.h>
 
-#define NSL_GEOM_LINESIM_TYPE_COUNT 7
+#define NSL_GEOM_LINESIM_TYPE_COUNT 9
 typedef enum {nsl_geom_linesim_type_douglas_peucker, nsl_geom_linesim_type_nthpoint, nsl_geom_linesim_type_raddist, nsl_geom_linesim_type_perpdist,
-	nsl_geom_linesim_type_reumann_witkam, nsl_geom_linesim_type_opheim, nsl_geom_linesim_type_lang} nsl_geom_linesim_type;
+	nsl_geom_linesim_type_interp, nsl_geom_linesim_type_visvalingam_whyatt, nsl_geom_linesim_type_reumann_witkam, nsl_geom_linesim_type_opheim,
+	nsl_geom_linesim_type_lang} nsl_geom_linesim_type;
 extern const char* nsl_geom_linesim_type_name[];
 
-/* calculates positional error (sum of squared perpendicular distance)
+/*********** error calculation functions *********/
+
+/* calculates positional error (sum of perpendicular distance per point)
+	of simplified set (given by index[])
+*/
+double nsl_geom_linesim_positional_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]);
+/* calculates positional error (sum of squared perpendicular distance per point)
 	of simplified set (given by index[])
 */
 double nsl_geom_linesim_positional_squared_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]);
+
+/* calculates area error (area between original and simplified data per point)
+	of simplified set (given by index[])
+*/
+double nsl_geom_linesim_area_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]);
+
+/* calculates tolerance eps from data */
+double nsl_geom_linesim_eps(const double xdata[], const double ydata[], const size_t n);
+
+/*********** simplification algorithms *********/
+
+/* Douglas-Peucker line simplification
+	xdata, ydata: data points
+	n: number of points
+	eps: minimum tolerance (perpendicular distance)
+	region: search region (number of points)
+	index: index of reduced points
+	-> returns final number of points
+*/
+size_t nsl_geom_linesim_douglas_peucker(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]);
+size_t nsl_geom_linesim_douglas_peucker_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]);
 
 /* simple n-th point line simplification
 	n: number of points
@@ -57,6 +92,7 @@ size_t nsl_geom_linesim_nthpoint(const size_t n, const size_t step, size_t index
 	-> returns final number of points
 */
 size_t nsl_geom_linesim_raddist(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]);
+size_t nsl_geom_linesim_raddist_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]);
 
 /* perpendicular distance line simplification
 	xdata, ydata: data points
@@ -66,10 +102,31 @@ size_t nsl_geom_linesim_raddist(const double xdata[], const double ydata[], cons
 	-> returns final number of points
 */
 size_t nsl_geom_linesim_perpdist(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]);
+size_t nsl_geom_linesim_perpdist_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]);
 /* repeat perpendicular distance line simplification
 	repeat: number of repeats
  */
 size_t nsl_geom_linesim_perpdist_repeat(const double xdata[], const double ydata[], const size_t n, const double eps, const size_t repeat, size_t index[]);
+
+/* line simplification by nearest neigbor interpolation	(idea from xmgrace)
+	xdata, ydata: data points
+	n: number of points
+	eps: tolerance (perp. distance)
+	index: index of reduced points
+	-> returns final number of points
+*/
+size_t nsl_geom_linesim_interp(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]);
+size_t nsl_geom_linesim_interp_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]);
+
+/* Visvalingam-Whyatt line simplification
+	xdata, ydata: data points
+	n: number of points
+	eps: tolerance (area)
+	index: index of reduced points
+	-> returns final number of points
+*/
+size_t nsl_geom_linesim_visvalingam_whyatt(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]);
+size_t nsl_geom_linesim_visvalingam_whyatt_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]);
 
 /* Reumann-Witkam line simplification
 	xdata, ydata: data points
@@ -79,6 +136,7 @@ size_t nsl_geom_linesim_perpdist_repeat(const double xdata[], const double ydata
 	-> returns final number of points
 */
 size_t nsl_geom_linesim_reumann_witkam(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]);
+size_t nsl_geom_linesim_reumann_witkam_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]);
 
 /* Opheim line simplification
 	xdata, ydata: data points
@@ -89,6 +147,7 @@ size_t nsl_geom_linesim_reumann_witkam(const double xdata[], const double ydata[
 	-> returns final number of points
 */
 size_t nsl_geom_linesim_opheim(const double xdata[], const double ydata[], const size_t n, const double mineps, const double maxeps, size_t index[]);
+size_t nsl_geom_linesim_opheim_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]);
 
 /* Lang line simplification
 	xdata, ydata: data points
@@ -99,15 +158,6 @@ size_t nsl_geom_linesim_opheim(const double xdata[], const double ydata[], const
 	-> returns final number of points
 */
 size_t nsl_geom_linesim_lang(const double xdata[], const double ydata[], const size_t n, const double eps, const size_t region, size_t index[]);
-
-/* Douglas-Peucker line simplification
-	xdata, ydata: data points
-	n: number of points
-	eps: minimum tolerance (perpendicular distance)
-	region: search region (number of points)
-	index: index of reduced points
-	-> returns final number of points
-*/
-size_t nsl_geom_linesim_douglas_peucker(const double xdata[], const double ydata[], const size_t n, const double eps, size_t index[]);
+size_t nsl_geom_linesim_lang_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]);
 
 #endif /* NSL_GEOM_LINESIM_H */
