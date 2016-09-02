@@ -74,6 +74,25 @@ double nsl_geom_linesim_positional_squared_error(const double xdata[], const dou
 	return dist/(double)n;
 }
 
+double nsl_geom_linesim_area_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]) {
+	double area=0;
+
+	size_t i=0, j;	/* i: index of index[] */
+	do {
+		/* for every point not in index[] calculate area */
+		/*printf("i=%d (index[i]-index[i+1]=%d-%d)\n", i , index[i], index[i+1]);*/
+		for(j=1;j<index[i+1]-index[i];j++) {
+			/*printf("j=%d: area between %d %d %d\n", j, index[i]+j-1, index[i]+j, index[i+1]);*/
+			area += nsl_geom_three_point_area(xdata[index[i]+j-1], ydata[index[i]+j-1], xdata[index[i]+j], ydata[index[i]+j], xdata[index[i+1]], ydata[index[i+1]]);
+			/*printf("area = %g\n", area);*/
+		}
+		i++;
+	} while(index[i] != n-1);
+	
+
+	return area/(double)n;
+}
+
 /*********** simplification algorithms *********/
 
 size_t nsl_geom_linesim_nthpoint(const size_t n, const size_t step, size_t index[]) {

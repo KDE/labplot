@@ -30,7 +30,6 @@
 	TODO:
 	* non-parametric functions (calculate eps from data)
 	* sort algorithms by importance
-	* error calculation by area
 	* calculate error statistics
 	* more algorithms: Jenks, Zhao-Saalfeld
 */
@@ -46,14 +45,23 @@ typedef enum {nsl_geom_linesim_type_douglas_peucker, nsl_geom_linesim_type_nthpo
 	nsl_geom_linesim_type_lang} nsl_geom_linesim_type;
 extern const char* nsl_geom_linesim_type_name[];
 
-/* calculates positional error (sum of perpendicular distance)
+/*********** error calculation functions *********/
+
+/* calculates positional error (sum of perpendicular distance per point)
 	of simplified set (given by index[])
 */
 double nsl_geom_linesim_positional_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]);
-/* calculates positional error (sum of squared perpendicular distance)
+/* calculates positional error (sum of squared perpendicular distance per point)
 	of simplified set (given by index[])
 */
 double nsl_geom_linesim_positional_squared_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]);
+
+/* calculates area error (area between original and simplified data per point)
+	of simplified set (given by index[])
+*/
+double nsl_geom_linesim_area_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]);
+
+/*********** simplification algorithms *********/
 
 /* Douglas-Peucker line simplification
 	xdata, ydata: data points
