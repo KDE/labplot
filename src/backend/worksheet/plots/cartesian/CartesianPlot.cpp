@@ -32,6 +32,7 @@
 #include "Axis.h"
 #include "XYCurve.h"
 #include "XYEquationCurve.h"
+#include "XYDataReductionCurve.h"
 #include "XYInterpolationCurve.h"
 #include "XYSmoothCurve.h"
 #include "XYFitCurve.h"
@@ -349,6 +350,7 @@ void CartesianPlot::initActions() {
 	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("xy-curve"), this);
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
 // no icons yet
+	addDataReductionCurveAction = new KAction(i18n("xy-curve from a data reduction"), this);
 	addInterpolationCurveAction = new KAction(i18n("xy-curve from an interpolation"), this);
 	addSmoothCurveAction = new KAction(i18n("xy-curve from a smooth"), this);
 	addFitCurveAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
@@ -366,6 +368,7 @@ void CartesianPlot::initActions() {
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
+	// TODO: other analysis functions?
 	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addFourierFilterCurveAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
 	connect(addFourierTransformCurveAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
@@ -413,6 +416,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu = new QMenu(i18n("Add new"));
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
+	addNewMenu->addAction(addDataReductionCurveAction);
 	addNewMenu->addAction(addInterpolationCurveAction);
 	addNewMenu->addAction(addSmoothCurveAction);
 	addNewMenu->addAction(addFitCurveAction);
@@ -720,6 +724,12 @@ XYCurve* CartesianPlot::addCurve() {
 
 XYEquationCurve* CartesianPlot::addEquationCurve() {
 	XYEquationCurve* curve = new XYEquationCurve("f(x)");
+	this->addChild(curve);
+	return curve;
+}
+
+XYDataReductionCurve* CartesianPlot::addDataReductionCurve() {
+	XYDataReductionCurve* curve = new XYDataReductionCurve("Data reduction");
 	this->addChild(curve);
 	return curve;
 }

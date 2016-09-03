@@ -36,6 +36,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
+#	${KDEFRONTEND_DIR}/dockwidgets/XYDataReductionCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYInterpolationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYSmoothCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYFitCurveDock.cpp
@@ -190,6 +191,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/XYDataReductionCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYInterpolationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYSmoothCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp

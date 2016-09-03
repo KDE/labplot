@@ -292,7 +292,7 @@ void WorksheetView::initActions() {
 	connect(cartesianPlotAddNewActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotAddNew(QAction*)));
 
 	// Analysis menu
-	addDataReductionAction = new KAction(i18n("Data Reduction"), cartesianPlotAddNewActionGroup);
+	addDataReductionAction = new KAction(i18n("Data reduction"), cartesianPlotAddNewActionGroup);
 // no icons yet
 	addInterpolationAction = new KAction(i18n("Interpolation"), cartesianPlotAddNewActionGroup);
 	addSmoothAction = new KAction(i18n("Smooth"), cartesianPlotAddNewActionGroup);
@@ -406,6 +406,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotAddNewMenu = new QMenu(i18n("Add new"), this);
 	m_cartesianPlotAddNewMenu->addAction(addCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addEquationCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addDataReductionCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addInterpolationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addSmoothCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addFitCurveAction);
@@ -1530,14 +1531,16 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addCurve();
 	else if (action==addEquationCurveAction)
 		plot->addEquationCurve();
+	else if (action==addInterpolationCurveAction)
+		plot->addInterpolationCurve();
+	else if (action==addDataReductionCurveAction)
+		plot->addDataReductionCurve();
 	else if (action==addFitCurveAction)
 		plot->addFitCurve();
 	else if (action==addFourierFilterCurveAction)
 		plot->addFourierFilterCurve();
 	else if (action==addFourierTransformCurveAction)
 		plot->addFourierTransformCurve();
-	else if (action==addInterpolationCurveAction)
-		plot->addInterpolationCurve();
 	else if (action==addSmoothCurveAction)
 		plot->addSmoothCurve();
 	else if (action==addLegendAction)
@@ -1549,14 +1552,16 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 	else if (action==addCustomPointAction)
 		plot->addCustomPoint();
 // analysis actions
+	else if (action==addDataReductionAction)
+		plot->addDataReductionCurve();
+	else if (action==addInterpolationAction)
+		plot->addInterpolationCurve();
 	else if (action==addFitAction)
 		plot->addFitCurve();
 	else if (action==addFourierFilterAction)
 		plot->addFourierFilterCurve();
 	else if (action==addFourierTransformAction)
 		plot->addFourierTransformCurve();
-	else if (action==addInterpolationAction)
-		plot->addInterpolationCurve();
 	else if (action==addSmoothAction)
 		plot->addSmoothCurve();
 }
