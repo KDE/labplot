@@ -292,8 +292,8 @@ void WorksheetView::initActions() {
 	connect(cartesianPlotAddNewActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotAddNew(QAction*)));
 
 	// Analysis menu
-	addDataReductionAction = new KAction(i18n("Data reduction"), cartesianPlotAddNewActionGroup);
 // no icons yet
+	addDataReductionAction = new KAction(i18n("Data reduction"), cartesianPlotAddNewActionGroup);
 	addInterpolationAction = new KAction(i18n("Interpolation"), cartesianPlotAddNewActionGroup);
 	addSmoothAction = new KAction(i18n("Smooth"), cartesianPlotAddNewActionGroup);
 	addFitAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("Data fitting"), cartesianPlotAddNewActionGroup);
@@ -1531,10 +1531,10 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addCurve();
 	else if (action==addEquationCurveAction)
 		plot->addEquationCurve();
-	else if (action==addInterpolationCurveAction)
-		plot->addInterpolationCurve();
 	else if (action==addDataReductionCurveAction)
 		plot->addDataReductionCurve();
+	else if (action==addInterpolationCurveAction)
+		plot->addInterpolationCurve();
 	else if (action==addFitCurveAction)
 		plot->addFitCurve();
 	else if (action==addFourierFilterCurveAction)

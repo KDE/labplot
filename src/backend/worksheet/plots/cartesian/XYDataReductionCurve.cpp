@@ -225,7 +225,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 		}
 	}
 
-	//number of data points to interpolate
+	//number of data points to use
 	const unsigned int n = ydataVector.size();
 	if (n < 2) {
 		dataReductionResult.available = true;
@@ -236,19 +236,41 @@ void XYDataReductionCurvePrivate::recalculate() {
 		return;
 	}
 
-	//double* xdata = xdataVector.data();
-	//double* ydata = ydataVector.data();
+	double* xdata = xdataVector.data();
+	double* ydata = ydataVector.data();
 
 	//const double min = xDataColumn->minimum();
 	//const double max = xDataColumn->maximum();
 
 	// dataReduction settings
-	//const nsl_interp_type type = dataReductionData.type;
+	const nsl_geom_linesim_type type = dataReductionData.type;
 #ifndef NDEBUG
-	//qDebug()<<"type:"<<nsl_interp_type_name[type];
+	qDebug()<<"type:"<<nsl_geom_linesim_type_name[type];
 #endif
 ///////////////////////////////////////////////////////////
 	int status=0;
+
+	size_t npoints=0;
+	double eps;
+	size_t *index = (size_t *) malloc(n*sizeof(size_t));
+	switch (type) {
+	case nsl_geom_linesim_type_douglas_peucker:
+		npoints = nsl_geom_linesim_douglas_peucker(xdata, ydata, n, 0.01, index);
+	}
+#ifndef NDEBUG
+	qDebug()<<"npoints:"<<npoints;
+#endif
+
+	xVector->resize(npoints);
+	yVector->resize(npoints);
+	for (unsigned int i = 0; i < npoints; i++) {
+		(*xVector)[i] = xdata[index[i]];
+		(*yVector)[i] = ydata[index[i]];
+	}
+
+	//TODO: calculate errors and show them
+
+	free(index);
 
 ///////////////////////////////////////////////////////////
 

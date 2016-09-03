@@ -30,17 +30,19 @@
 #define XYDATAREDUCTIONCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+extern "C" {
+#include "backend/nsl/nsl_geom_linesim.h"
+}
 
 class XYDataReductionCurvePrivate;
 class XYDataReductionCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum PointsMode {Auto, Multiple, Custom};
 		struct DataReductionData {
-			DataReductionData() : type(0) {};
+			DataReductionData() : type(nsl_geom_linesim_type_douglas_peucker) {};
 	
-			int type;		// type of simplification
+			nsl_geom_linesim_type type;		// type of simplification
 		};
 		struct DataReductionResult {
 			DataReductionResult() : available(false), valid(false), elapsedTime(0) {};

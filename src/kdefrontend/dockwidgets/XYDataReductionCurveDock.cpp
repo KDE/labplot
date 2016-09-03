@@ -81,23 +81,9 @@ void XYDataReductionCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
-/*	for (int i=0; i < NSL_INTERP_TYPE_COUNT; i++)
-		uiGeneralTab.cbType->addItem(i18n(nsl_interp_type_name[i]));
-#if GSL_MAJOR_VERSION < 2
-	// disable Steffen spline item
-	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
-	QStandardItem* item = model->item(nsl_interp_type_steffen);
-	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-#endif
-	for (int i=0; i < NSL_INTERP_PCH_VARIANT_COUNT; i++)
-		uiGeneralTab.cbVariant->addItem(i18n(nsl_interp_pch_variant_name[i]));
-	for (int i=0; i < NSL_INTERP_EVALUATE_COUNT; i++)
-		uiGeneralTab.cbEval->addItem(i18n(nsl_interp_evaluate_name[i]));
+	for (int i=0; i < NSL_GEOM_LINESIM_TYPE_COUNT; i++)
+		uiGeneralTab.cbType->addItem(i18n(nsl_geom_linesim_type_name[i]));
 
-	uiGeneralTab.cbPointsMode->addItem(i18n("Auto (5x data points)"));
-	uiGeneralTab.cbPointsMode->addItem(i18n("Multiple of data points"));
-	uiGeneralTab.cbPointsMode->addItem(i18n("Custom"));
-*/
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
@@ -109,7 +95,8 @@ void XYDataReductionCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
-	//connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
+	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
+	//TODO: connect Auto
 
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
@@ -142,8 +129,8 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
-	/*uiGeneralTab.cbType->setCurrentIndex(m_dataReductionData.type);
-	this->typeChanged();*/
+	uiGeneralTab.cbType->setCurrentIndex(m_dataReductionData.type);
+	this->typeChanged();
 
 	this->showDataReductionResult();
 
@@ -317,30 +304,16 @@ void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYDataReductionCurve*>(curve)->setYDataColumn(column);
 }
 
-/*void XYDataReductionCurveDock::typeChanged() {
-	nsl_interp_type type = (nsl_interp_type)uiGeneralTab.cbType->currentIndex();
+void XYDataReductionCurveDock::typeChanged() {
+	nsl_geom_linesim_type type = (nsl_geom_linesim_type)uiGeneralTab.cbType->currentIndex();
 	m_dataReductionData.type = type;
 
-	switch (type) {
-	case nsl_interp_type_pch:
-		uiGeneralTab.lVariant->show();
-		uiGeneralTab.cbVariant->show();
-		break;
-	default:
-		uiGeneralTab.lVariant->hide();
-		uiGeneralTab.cbVariant->hide();
-		uiGeneralTab.cbVariant->setCurrentIndex(nsl_interp_pch_variant_finite_difference);
-		uiGeneralTab.lParameter->hide();
-		uiGeneralTab.lTension->hide();
-		uiGeneralTab.sbTension->hide();
-		uiGeneralTab.lContinuity->hide();
-		uiGeneralTab.sbContinuity->hide();
-		uiGeneralTab.lBias->hide();
-		uiGeneralTab.sbBias->hide();
-	}
+//	switch (type) {
+// TODO
+//	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
-}*/
+}
 
 void XYDataReductionCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
