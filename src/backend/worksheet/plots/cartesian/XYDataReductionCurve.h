@@ -66,7 +66,7 @@ class XYDataReductionCurve: public XYCurve {
 
 		CLASS_D_ACCESSOR_DECL(DataReductionData, dataReductionData, DataReductionData)
 		const DataReductionResult& dataReductionResult() const;
-		bool isSourceDataChangedSinceLastReduction() const;
+		bool isSourceDataChangedSinceLastDataReduction() const;
 
 		typedef WorksheetElement BaseClass;
 		typedef XYDataReductionCurvePrivate Private;

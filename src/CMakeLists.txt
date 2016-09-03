@@ -36,7 +36,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
-#	${KDEFRONTEND_DIR}/dockwidgets/XYDataReductionCurveDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/XYDataReductionCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYInterpolationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYSmoothCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYFitCurveDock.cpp
@@ -94,6 +94,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedockgeneraltab.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyfitcurvedockgeneraltab.ui

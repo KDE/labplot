@@ -2039,6 +2039,18 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 				removeChild(curve);
 				return false;
 			}
+		} else if (reader->name() == "xyDataReductionCurve") {
+			XYDataReductionCurve* curve = addDataReductionCurve();
+			if (!curve->load(reader)) {
+				removeChild(curve);
+				return false;
+			}
+		} else if (reader->name() == "xyInterpolationCurve") {
+			XYInterpolationCurve* curve = addInterpolationCurve();
+			if (!curve->load(reader)) {
+				removeChild(curve);
+				return false;
+			}
 		} else if (reader->name() == "xyFitCurve") {
 			XYFitCurve* curve = addFitCurve();
 			if (!curve->load(reader)) {
@@ -2053,12 +2065,6 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			}
 		} else if (reader->name() == "xyFourierTransformCurve") {
 			XYFourierTransformCurve* curve = addFourierTransformCurve();
-			if (!curve->load(reader)) {
-				removeChild(curve);
-				return false;
-			}
-		} else if (reader->name() == "xyInterpolationCurve") {
-			XYInterpolationCurve* curve = addInterpolationCurve();
 			if (!curve->load(reader)) {
 				removeChild(curve);
 				return false;

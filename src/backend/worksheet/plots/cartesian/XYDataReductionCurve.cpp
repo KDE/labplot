@@ -100,7 +100,7 @@ const XYDataReductionCurve::DataReductionResult& XYDataReductionCurve::dataReduc
 	return d->dataReductionResult;
 }
 
-bool XYDataReductionCurve::isSourceDataChangedSinceLastReduction() const {
+bool XYDataReductionCurve::isSourceDataChangedSinceLastDataReduction() const {
 	Q_D(const XYDataReductionCurve);
 	return d->sourceDataChangedSinceLastDataReduction;
 }
