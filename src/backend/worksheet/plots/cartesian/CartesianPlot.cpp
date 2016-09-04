@@ -2109,7 +2109,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 //#########################  Theme management ##################################
 //##############################################################################
 void CartesianPlot::loadTheme(const QString& name) {
-	KConfig config( ThemeHandler::themeConfigPath(name), KConfig::SimpleConfig );
+	KConfig config( ThemeHandler::themeFilePath(name), KConfig::SimpleConfig );
 	loadTheme(config);
 }
 
