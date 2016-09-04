@@ -244,7 +244,6 @@ void XYDataReductionCurveDock::updateTolerance() {
 }
 
 void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	qDebug()<<"XYDataReductionCurveDock::xDataColumnChanged()";
 	if (m_initializing)
 		return;
 
@@ -262,7 +261,6 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	qDebug()<<"XYDataReductionCurveDock::yDataColumnChanged()";
 	if (m_initializing)
 		return;
 
