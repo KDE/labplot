@@ -247,20 +247,44 @@ void XYDataReductionCurvePrivate::recalculate() {
 	qDebug()<<"tolerance/step:"<<tol;
 #endif
 ///////////////////////////////////////////////////////////
-	int status=0;
+	int status;
 
 	size_t npoints=0;
 	size_t *index = (size_t *) malloc(n*sizeof(size_t));
 	switch (type) {
 	case nsl_geom_linesim_type_douglas_peucker:
 		npoints = nsl_geom_linesim_douglas_peucker(xdata, ydata, n, tol, index);
+		break;
 	case nsl_geom_linesim_type_nthpoint:
 		npoints = nsl_geom_linesim_nthpoint(n, (int)tol, index);
-	// TODO: all types
+		break;
+	case nsl_geom_linesim_type_raddist:
+		npoints = nsl_geom_linesim_raddist(xdata, ydata, n, tol, index);
+		break;
+	case nsl_geom_linesim_type_perpdist:	// TODO: repeat=10
+		npoints = nsl_geom_linesim_perpdist_repeat(xdata, ydata, n, tol, 10, index);
+		break;
+	case nsl_geom_linesim_type_interp:
+		npoints = nsl_geom_linesim_interp(xdata, ydata, n, tol, index);
+		break;
+	case nsl_geom_linesim_type_visvalingam_whyatt:	// TODO: endless loop!
+		npoints = nsl_geom_linesim_visvalingam_whyatt(xdata, ydata, n, tol, index);
+		break;
+	case nsl_geom_linesim_type_reumann_witkam:
+		npoints = nsl_geom_linesim_reumann_witkam(xdata, ydata, n, tol, index);
+		break;
+	case nsl_geom_linesim_type_opheim:	// TODO: maxtol=5*tol
+		npoints = nsl_geom_linesim_opheim(xdata, ydata, n, tol, 5*tol, index);
+		break;
+	case nsl_geom_linesim_type_lang:	// TODO: region=1.0
+		npoints = nsl_geom_linesim_opheim(xdata, ydata, n, tol, 1.0, index);
+		break;
 	}
 #ifndef NDEBUG
 	qDebug()<<"npoints:"<<npoints;
 #endif
+	if (npoints > 0)
+		status = 0;
 
 	xVector->resize(npoints);
 	yVector->resize(npoints);
@@ -279,7 +303,10 @@ void XYDataReductionCurvePrivate::recalculate() {
 	//write the result
 	dataReductionResult.available = true;
 	dataReductionResult.valid = true;
-	dataReductionResult.status = QString("OK");
+	if (status == 0)
+		dataReductionResult.status = QString("OK");
+	else
+		dataReductionResult.status = QString("FAILURE");
 	dataReductionResult.elapsedTime = timer.elapsed();
 	dataReductionResult.npoints = npoints;
 	dataReductionResult.posError = posError;

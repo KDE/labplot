@@ -285,11 +285,19 @@ void XYDataReductionCurveDock::typeChanged() {
 
 	switch (type) {
 	case nsl_geom_linesim_type_douglas_peucker:
+	case nsl_geom_linesim_type_raddist:
+	case nsl_geom_linesim_type_perpdist:	// TODO: repeat
+	case nsl_geom_linesim_type_interp:
+	case nsl_geom_linesim_type_visvalingam_whyatt:
+	case nsl_geom_linesim_type_reumann_witkam:
+	case nsl_geom_linesim_type_opheim:	//TODO: min/max tol
+	case nsl_geom_linesim_type_lang:	//TODO: region
 		uiGeneralTab.lDistance->setText(i18n("distance"));
-		// set value when coming from nthpoint?
 		uiGeneralTab.sbTolerance->setDecimals(6);
 		uiGeneralTab.sbTolerance->setMinimum(0);
 		uiGeneralTab.sbTolerance->setSingleStep(0.01);
+		if (uiGeneralTab.chkAuto->isChecked())
+			updateTolerance();
 		break;
 	case nsl_geom_linesim_type_nthpoint:
 		uiGeneralTab.lDistance->setText(i18n("step"));
@@ -298,7 +306,6 @@ void XYDataReductionCurveDock::typeChanged() {
 		uiGeneralTab.sbTolerance->setMinimum(1);
 		uiGeneralTab.sbTolerance->setSingleStep(1);
 		break;
-// TODO
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
