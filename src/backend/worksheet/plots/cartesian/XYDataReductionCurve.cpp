@@ -212,7 +212,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 		return;
 	}
 
-	//copy all valid data point for the dataReduction to temporary vectors
+	//copy all valid data point for the data reduction to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
@@ -239,23 +239,24 @@ void XYDataReductionCurvePrivate::recalculate() {
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
-	//const double min = xDataColumn->minimum();
-	//const double max = xDataColumn->maximum();
-
 	// dataReduction settings
 	const nsl_geom_linesim_type type = dataReductionData.type;
+	const double tol = dataReductionData.tolerance;
 #ifndef NDEBUG
 	qDebug()<<"type:"<<nsl_geom_linesim_type_name[type];
+	qDebug()<<"tolerance/step:"<<tol;
 #endif
 ///////////////////////////////////////////////////////////
 	int status=0;
 
 	size_t npoints=0;
-	double eps;
 	size_t *index = (size_t *) malloc(n*sizeof(size_t));
 	switch (type) {
 	case nsl_geom_linesim_type_douglas_peucker:
-		npoints = nsl_geom_linesim_douglas_peucker(xdata, ydata, n, 0.01, index);
+		npoints = nsl_geom_linesim_douglas_peucker(xdata, ydata, n, tol, index);
+	case nsl_geom_linesim_type_nthpoint:
+		npoints = nsl_geom_linesim_nthpoint(n, (int)tol, index);
+	// TODO: all types
 	}
 #ifndef NDEBUG
 	qDebug()<<"npoints:"<<npoints;
@@ -268,7 +269,8 @@ void XYDataReductionCurvePrivate::recalculate() {
 		(*yVector)[i] = ydata[index[i]];
 	}
 
-	//TODO: calculate errors and show them
+	double posError = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
+	double areaError = nsl_geom_linesim_area_error(xdata, ydata, n, index);
 
 	free(index);
 
@@ -277,8 +279,11 @@ void XYDataReductionCurvePrivate::recalculate() {
 	//write the result
 	dataReductionResult.available = true;
 	dataReductionResult.valid = true;
-	//dataReductionResult.status = QString(gsl_strerror(status));;
+	dataReductionResult.status = QString("OK");
 	dataReductionResult.elapsedTime = timer.elapsed();
+	dataReductionResult.npoints = npoints;
+	dataReductionResult.posError = posError;
+	dataReductionResult.areaError = areaError;
 
 	//redraw the curve
 	emit (q->dataChanged());
@@ -302,7 +307,9 @@ void XYDataReductionCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement("dataReductionData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
-	//writer->writeAttribute( "type", QString::number(d->dataReductionData.type) );
+	writer->writeAttribute( "type", QString::number(d->dataReductionData.type) );
+	writer->writeAttribute( "autoTolerance", QString::number(d->dataReductionData.autoTolerance) );
+	writer->writeAttribute( "tolerance", QString::number(d->dataReductionData.tolerance) );
 	writer->writeEndElement();// dataReductionData
 
 	// dataReduction results (generated columns)
@@ -311,6 +318,9 @@ void XYDataReductionCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "valid", QString::number(d->dataReductionResult.valid) );
 	writer->writeAttribute( "status", d->dataReductionResult.status );
 	writer->writeAttribute( "time", QString::number(d->dataReductionResult.elapsedTime) );
+	writer->writeAttribute( "npoints", QString::number(d->dataReductionResult.npoints) );
+	writer->writeAttribute( "posError", QString::number(d->dataReductionResult.posError) );
+	writer->writeAttribute( "areaError", QString::number(d->dataReductionResult.areaError) );
 
 	//save calculated columns if available
 	if (d->xColumn) {
@@ -352,6 +362,23 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
+			str = attribs.value("type").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'type'"));
+			else
+				d->dataReductionData.type = (nsl_geom_linesim_type) str.toInt();
+
+			str = attribs.value("autoTolerance").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'autoTolerance'"));
+			else
+				d->dataReductionData.autoTolerance = str.toInt();
+
+			str = attribs.value("tolerance").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'tolerance'"));
+			else
+				d->dataReductionData.tolerance = str.toDouble();
 		} else if (reader->name() == "dataReductionResult") {
 
 			attribs = reader->attributes();
@@ -379,6 +406,25 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader) {
 				reader->raiseWarning(attributeWarning.arg("'time'"));
 			else
 				d->dataReductionResult.elapsedTime = str.toInt();
+
+			str = attribs.value("npoints").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'npoints'"));
+			else
+				d->dataReductionResult.npoints = str.toInt();
+
+			str = attribs.value("posError").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'posError'"));
+			else
+				d->dataReductionResult.posError = str.toDouble();
+
+			str = attribs.value("areaError").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'areaError'"));
+			else
+				d->dataReductionResult.areaError = str.toDouble();
+
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {

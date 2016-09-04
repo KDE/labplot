@@ -35,6 +35,9 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
+#ifndef NDEBUG
+#include <QDebug>
+#endif
 
 #include <cmath>        // isnan
 
@@ -53,7 +56,7 @@
 */
 
 XYDataReductionCurveDock::XYDataReductionCurveDock(QWidget *parent): 
-	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_dataReductionCurve(0), dataPoints(0) {
+	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_dataReductionCurve(0) {
 
 	//hide the line connection type
 	ui.cbLineType->setDisabled(true);
@@ -96,7 +99,8 @@ void XYDataReductionCurveDock::setupGeneral() {
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
-	//TODO: connect Auto
+	connect( uiGeneralTab.chkAuto, SIGNAL(clicked(bool)), this, SLOT(autoToleranceChanged()) );
+	connect( uiGeneralTab.sbTolerance, SIGNAL(valueChanged(double)), this, SLOT(toleranceChanged()) );
 
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
@@ -131,6 +135,10 @@ void XYDataReductionCurveDock::initGeneralTab() {
 
 	uiGeneralTab.cbType->setCurrentIndex(m_dataReductionData.type);
 	this->typeChanged();
+	uiGeneralTab.chkAuto->setChecked(m_dataReductionData.autoTolerance);
+	this->autoToleranceChanged();
+	uiGeneralTab.sbTolerance->setValue(m_dataReductionData.tolerance);
+	this->toleranceChanged();
 
 	this->showDataReductionResult();
 
@@ -206,90 +214,37 @@ void XYDataReductionCurveDock::commentChanged() {
 	m_curve->setComment(uiGeneralTab.leComment->text());
 }
 
-void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = 0;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
+void XYDataReductionCurveDock::updateTolerance() {
+	const AbstractColumn *xDataColumn = dynamic_cast<XYDataReductionCurve*>(m_curve)->xDataColumn();
+	const AbstractColumn *yDataColumn = dynamic_cast<XYDataReductionCurve*>(m_curve)->yDataColumn();
+	if(xDataColumn == 0 || yDataColumn == 0)
+			return;
+
+	//copy all valid data points for calculating tolerance to temporary vectors
+	QVector<double> xdataVector;
+	QVector<double> ydataVector;
+	for (int row=0; row<xDataColumn->rowCount(); ++row) {
+		//only copy those data where _all_ values (for x and y, if given) are valid
+		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
+			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
+				xdataVector.append(xDataColumn->valueAt(row));
+				ydataVector.append(yDataColumn->valueAt(row));
+		}
 	}
 
-	foreach(XYCurve* curve, m_curvesList)
-		dynamic_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
-
-/*	// disable types that need more data points
-	if (column != 0) {
-		unsigned int n=0;
-		for (int row=0; row < column->rowCount(); row++)
-			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row)) 
-				n++;
-		dataPoints = n;
-		if(m_dataReductionData.pointsMode == XYDataReductionCurve::Auto)
-			pointsModeChanged();
-
-		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
-		QStandardItem* item = model->item(nsl_interp_type_polynomial);
-		if (dataPoints < gsl_interp_type_min_size(gsl_interp_polynomial) || dataPoints > 100) {	// not good for many points
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_polynomial)
-				uiGeneralTab.cbType->setCurrentIndex(0);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-
-		item = model->item(nsl_interp_type_cspline);
-		if (dataPoints < gsl_interp_type_min_size(gsl_interp_cspline)) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline)
-				uiGeneralTab.cbType->setCurrentIndex(0);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-
-		item = model->item(nsl_interp_type_cspline_periodic);
-		if (dataPoints < gsl_interp_type_min_size(gsl_interp_cspline_periodic)) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline_periodic)
-				uiGeneralTab.cbType->setCurrentIndex(0);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-
-		item = model->item(nsl_interp_type_akima);
-		if (dataPoints < gsl_interp_type_min_size(gsl_interp_akima)) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima)
-				uiGeneralTab.cbType->setCurrentIndex(0);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-
-		item = model->item(nsl_interp_type_akima_periodic);
-		if (dataPoints < gsl_interp_type_min_size(gsl_interp_akima_periodic)) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima_periodic)
-				uiGeneralTab.cbType->setCurrentIndex(0);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-
-#if GSL_MAJOR_VERSION >= 2
-		item = model->item(nsl_interp_type_steffen);
-		if (dataPoints < gsl_interp_type_min_size(gsl_interp_steffen)) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_steffen)
-				uiGeneralTab.cbType->setCurrentIndex(0);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-#endif
-
-		// own types work with 2 or more data points
+	if(xdataVector.size() > 1) {
+		uiGeneralTab.cbType->setEnabled(true);
+	} else {
+		uiGeneralTab.cbType->setEnabled(false);
+		return;
 	}
-*/
+
+	m_dataReductionData.tolerance = nsl_geom_linesim_tol(xdataVector.data(), ydataVector.data(), xdataVector.size());
+	uiGeneralTab.sbTolerance->setValue(m_dataReductionData.tolerance);
 }
 
-void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
+void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
+	qDebug()<<"XYDataReductionCurveDock::xDataColumnChanged()";
 	if (m_initializing)
 		return;
 
@@ -301,16 +256,68 @@ void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	}
 
 	foreach(XYCurve* curve, m_curvesList)
+		dynamic_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
+
+	updateTolerance();
+}
+
+void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
+	qDebug()<<"XYDataReductionCurveDock::yDataColumnChanged()";
+	if (m_initializing)
+		return;
+
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column = 0;
+	if (aspect) {
+		column = dynamic_cast<AbstractColumn*>(aspect);
+		Q_ASSERT();
+	}
+
+	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYDataReductionCurve*>(curve)->setYDataColumn(column);
+
+	updateTolerance();
 }
 
 void XYDataReductionCurveDock::typeChanged() {
 	nsl_geom_linesim_type type = (nsl_geom_linesim_type)uiGeneralTab.cbType->currentIndex();
 	m_dataReductionData.type = type;
 
-//	switch (type) {
+	switch (type) {
+	case nsl_geom_linesim_type_douglas_peucker:
+		uiGeneralTab.lDistance->setText(i18n("distance"));
+		// set value when coming from nthpoint?
+		uiGeneralTab.sbTolerance->setDecimals(6);
+		uiGeneralTab.sbTolerance->setMinimum(0);
+		uiGeneralTab.sbTolerance->setSingleStep(0.01);
+		break;
+	case nsl_geom_linesim_type_nthpoint:
+		uiGeneralTab.lDistance->setText(i18n("step"));
+		uiGeneralTab.sbTolerance->setValue(10);
+		uiGeneralTab.sbTolerance->setDecimals(0);
+		uiGeneralTab.sbTolerance->setMinimum(1);
+		uiGeneralTab.sbTolerance->setSingleStep(1);
+		break;
 // TODO
-//	}
+	}
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYDataReductionCurveDock::autoToleranceChanged() {
+	bool autoTolerance = (bool)uiGeneralTab.chkAuto->isChecked();
+	m_dataReductionData.autoTolerance = autoTolerance;
+
+	if (autoTolerance) {
+		uiGeneralTab.sbTolerance->setEnabled(false);
+		updateTolerance();
+	} else {
+		uiGeneralTab.sbTolerance->setEnabled(true);
+	}
+}
+
+void XYDataReductionCurveDock::toleranceChanged() {
+	m_dataReductionData.tolerance = uiGeneralTab.sbTolerance->value();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
@@ -318,7 +325,7 @@ void XYDataReductionCurveDock::typeChanged() {
 void XYDataReductionCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-	foreach(XYCurve* curve, m_curvesList)
+	foreach (XYCurve* curve, m_curvesList)
 		dynamic_cast<XYDataReductionCurve*>(curve)->setDataReductionData(m_dataReductionData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
@@ -360,7 +367,11 @@ void XYDataReductionCurveDock::showDataReductionResult() {
 	else
 		str += i18n("calculation time: %1 ms").arg(QString::number(dataReductionResult.elapsedTime)) + "<br>";
 
- 	str += "<br><br>";
+ 	str += "<br>";
+
+	str += i18n("number of points: %1").arg(QString::number(dataReductionResult.npoints)) + "<br>";
+	str += i18n("positional squared error: %1").arg(QString::number(dataReductionResult.posError)) + "<br>";
+	str += i18n("area error: %1").arg(QString::number(dataReductionResult.areaError)) + "<br>";
 
 	uiGeneralTab.teResult->setText(str);
 }

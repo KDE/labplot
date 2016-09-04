@@ -46,6 +46,7 @@ public:
 private:
 	virtual void initGeneralTab();
 	void showDataReductionResult();
+	void updateTolerance();
 
 	Ui::XYDataReductionCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbXDataColumn;
@@ -53,7 +54,6 @@ private:
 
 	XYDataReductionCurve* m_dataReductionCurve;
 	XYDataReductionCurve::DataReductionData m_dataReductionData;
-	unsigned int dataPoints;	// number of data points in selected column
 
 protected:
 	virtual void setModel();
@@ -66,6 +66,8 @@ private slots:
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void typeChanged();
+	void autoToleranceChanged();
+	void toleranceChanged();
 
 //	void showOptions();
 	void recalculateClicked();

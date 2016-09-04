@@ -60,8 +60,8 @@ double nsl_geom_linesim_positional_squared_error(const double xdata[], const dou
 */
 double nsl_geom_linesim_area_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]);
 
-/* calculates tolerance eps from data */
-double nsl_geom_linesim_eps(const double xdata[], const double ydata[], const size_t n);
+/* calculates tolerance tol from data */
+double nsl_geom_linesim_tol(const double xdata[], const double ydata[], const size_t n);
 
 /*********** simplification algorithms *********/
 

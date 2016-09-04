@@ -12,7 +12,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="9" column="3">
-    <widget class="QCheckBox" name="cbAuto">
+    <widget class="QCheckBox" name="chkAuto">
      <property name="text">
       <string>Auto</string>
      </property>
@@ -22,7 +22,7 @@
     </widget>
    </item>
    <item row="9" column="0">
-    <widget class="QLabel" name="ltolerance">
+    <widget class="QLabel" name="lTolerance">
      <property name="text">
       <string>Tolerance</string>
      </property>
@@ -248,14 +248,14 @@
     <layout class="QHBoxLayout" name="horizontalLayout_2"/>
    </item>
    <item row="10" column="0">
-    <widget class="QLabel" name="ldistance">
+    <widget class="QLabel" name="lDistance">
      <property name="text">
       <string>Distance</string>
      </property>
     </widget>
    </item>
    <item row="10" column="3" colspan="2">
-    <widget class="QDoubleSpinBox" name="sbdistance">
+    <widget class="QDoubleSpinBox" name="sbTolerance">
      <property name="enabled">
       <bool>false</bool>
      </property>

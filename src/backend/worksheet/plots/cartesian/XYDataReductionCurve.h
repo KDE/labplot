@@ -40,17 +40,22 @@ class XYDataReductionCurve: public XYCurve {
 
 	public:
 		struct DataReductionData {
-			DataReductionData() : type(nsl_geom_linesim_type_douglas_peucker) {};
+			DataReductionData() : type(nsl_geom_linesim_type_douglas_peucker), autoTolerance(true), tolerance(0.0) {};
 	
 			nsl_geom_linesim_type type;		// type of simplification
+			bool autoTolerance;			// automatic tolerance
+			double tolerance;			// tolerance
 		};
 		struct DataReductionResult {
-			DataReductionResult() : available(false), valid(false), elapsedTime(0) {};
+			DataReductionResult() : available(false), valid(false), elapsedTime(0), npoints(0), posError(0), areaError(0) {};
 
 			bool available;
 			bool valid;
 			QString status;
 			qint64 elapsedTime;
+			size_t npoints;
+			double posError;
+			double areaError;
 		};
 
 		explicit XYDataReductionCurve(const QString& name);
