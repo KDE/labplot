@@ -101,6 +101,8 @@ void XYDataReductionCurveDock::setupGeneral() {
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
 	connect( uiGeneralTab.chkAuto, SIGNAL(clicked(bool)), this, SLOT(autoToleranceChanged()) );
 	connect( uiGeneralTab.sbTolerance, SIGNAL(valueChanged(double)), this, SLOT(toleranceChanged()) );
+	connect( uiGeneralTab.chkAuto2, SIGNAL(clicked(bool)), this, SLOT(autoTolerance2Changed()) );
+	connect( uiGeneralTab.sbTolerance2, SIGNAL(valueChanged(double)), this, SLOT(tolerance2Changed()) );
 
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
@@ -139,6 +141,10 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	this->autoToleranceChanged();
 	uiGeneralTab.sbTolerance->setValue(m_dataReductionData.tolerance);
 	this->toleranceChanged();
+	uiGeneralTab.chkAuto2->setChecked(m_dataReductionData.autoTolerance2);
+	this->autoTolerance2Changed();
+	uiGeneralTab.sbTolerance2->setValue(m_dataReductionData.tolerance2);
+	this->tolerance2Changed();
 
 	this->showDataReductionResult();
 
@@ -239,8 +245,25 @@ void XYDataReductionCurveDock::updateTolerance() {
 		return;
 	}
 
-	m_dataReductionData.tolerance = nsl_geom_linesim_tol(xdataVector.data(), ydataVector.data(), xdataVector.size());
+	nsl_geom_linesim_type type = (nsl_geom_linesim_type)uiGeneralTab.cbType->currentIndex();
+	if (type == nsl_geom_linesim_type_raddist || type == nsl_geom_linesim_type_opheim)
+		m_dataReductionData.tolerance = nsl_geom_linesim_radial_tol(xdataVector.data(), ydataVector.data(), xdataVector.size());
+	else if (type == nsl_geom_linesim_type_visvalingam_whyatt)
+		m_dataReductionData.tolerance = nsl_geom_linesim_area_tol(xdataVector.data(), ydataVector.data(), xdataVector.size());
+	else
+		m_dataReductionData.tolerance = nsl_geom_linesim_perpendicular_tol(xdataVector.data(), ydataVector.data(), xdataVector.size());
 	uiGeneralTab.sbTolerance->setValue(m_dataReductionData.tolerance);
+}
+
+void XYDataReductionCurveDock::updateTolerance2() {
+	nsl_geom_linesim_type type = (nsl_geom_linesim_type)uiGeneralTab.cbType->currentIndex();
+
+	if (type == nsl_geom_linesim_type_perpdist)
+		uiGeneralTab.sbTolerance2->setValue(10);
+	else if (type == nsl_geom_linesim_type_opheim)
+		uiGeneralTab.sbTolerance2->setValue(5*uiGeneralTab.sbTolerance->value());
+	else if (type == nsl_geom_linesim_type_lang)
+		uiGeneralTab.sbTolerance2->setValue(10);
 }
 
 void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
@@ -258,6 +281,7 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
 
 	updateTolerance();
+	updateTolerance2();
 }
 
 void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -275,6 +299,7 @@ void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYDataReductionCurve*>(curve)->setYDataColumn(column);
 
 	updateTolerance();
+	updateTolerance2();
 }
 
 void XYDataReductionCurveDock::typeChanged() {
@@ -284,25 +309,89 @@ void XYDataReductionCurveDock::typeChanged() {
 	switch (type) {
 	case nsl_geom_linesim_type_douglas_peucker:
 	case nsl_geom_linesim_type_raddist:
-	case nsl_geom_linesim_type_perpdist:	// TODO: repeat
 	case nsl_geom_linesim_type_interp:
-	case nsl_geom_linesim_type_visvalingam_whyatt:
 	case nsl_geom_linesim_type_reumann_witkam:
-	case nsl_geom_linesim_type_opheim:	//TODO: min/max tol
-	case nsl_geom_linesim_type_lang:	//TODO: region
-		uiGeneralTab.lDistance->setText(i18n("distance"));
+		uiGeneralTab.lOption->setText(i18n("Tolerance (distance)"));
 		uiGeneralTab.sbTolerance->setDecimals(6);
 		uiGeneralTab.sbTolerance->setMinimum(0);
 		uiGeneralTab.sbTolerance->setSingleStep(0.01);
+		uiGeneralTab.lOption2->hide();
+		uiGeneralTab.chkAuto2->hide();
+		uiGeneralTab.sbTolerance2->hide();
 		if (uiGeneralTab.chkAuto->isChecked())
 			updateTolerance();
 		break;
 	case nsl_geom_linesim_type_nthpoint:
-		uiGeneralTab.lDistance->setText(i18n("step"));
+		uiGeneralTab.lOption->setText(i18n("Step size"));
 		uiGeneralTab.sbTolerance->setValue(10);
 		uiGeneralTab.sbTolerance->setDecimals(0);
 		uiGeneralTab.sbTolerance->setMinimum(1);
 		uiGeneralTab.sbTolerance->setSingleStep(1);
+		uiGeneralTab.lOption2->hide();
+		uiGeneralTab.chkAuto2->hide();
+		uiGeneralTab.sbTolerance2->hide();
+		break;
+	case nsl_geom_linesim_type_perpdist:	// repeat option
+		uiGeneralTab.lOption->setText(i18n("Tolerance (distance)"));
+		uiGeneralTab.sbTolerance->setDecimals(6);
+		uiGeneralTab.sbTolerance->setMinimum(0);
+		uiGeneralTab.sbTolerance->setSingleStep(0.01);
+		uiGeneralTab.sbTolerance2->show();
+		uiGeneralTab.lOption2->show();
+		uiGeneralTab.chkAuto2->show();
+		uiGeneralTab.lOption2->setText(i18n("Repeats"));
+		uiGeneralTab.sbTolerance2->setDecimals(0);
+		uiGeneralTab.sbTolerance2->setMinimum(1);
+		uiGeneralTab.sbTolerance2->setSingleStep(1);
+		if (uiGeneralTab.chkAuto->isChecked())
+			updateTolerance();
+		if (uiGeneralTab.chkAuto2->isChecked())
+			updateTolerance2();
+		break;
+	case nsl_geom_linesim_type_visvalingam_whyatt:
+		uiGeneralTab.lOption->setText(i18n("Tolerance (area)"));
+		uiGeneralTab.sbTolerance->setDecimals(6);
+		uiGeneralTab.sbTolerance->setMinimum(0);
+		uiGeneralTab.sbTolerance->setSingleStep(0.01);
+		uiGeneralTab.lOption2->hide();
+		uiGeneralTab.chkAuto2->hide();
+		uiGeneralTab.sbTolerance2->hide();
+		if (uiGeneralTab.chkAuto->isChecked())
+			updateTolerance();
+		break;
+	case nsl_geom_linesim_type_opheim:	// min/max tol options
+		uiGeneralTab.lOption->setText(i18n(" Min. Tolerance"));
+		uiGeneralTab.sbTolerance->setDecimals(6);
+		uiGeneralTab.sbTolerance->setMinimum(0);
+		uiGeneralTab.sbTolerance->setSingleStep(0.01);
+		uiGeneralTab.lOption2->setText(i18n("Max. Tolerance"));
+		uiGeneralTab.lOption2->show();
+		uiGeneralTab.chkAuto2->show();
+		uiGeneralTab.sbTolerance2->show();
+		uiGeneralTab.sbTolerance2->setDecimals(6);
+		uiGeneralTab.sbTolerance2->setMinimum(0);
+		uiGeneralTab.sbTolerance2->setSingleStep(0.01);
+		if (uiGeneralTab.chkAuto->isChecked())
+			updateTolerance();
+		if (uiGeneralTab.chkAuto2->isChecked())
+			updateTolerance2();
+		break;
+	case nsl_geom_linesim_type_lang:	// distance/region
+		uiGeneralTab.lOption->setText(i18n("Tolerance (distance)"));
+		uiGeneralTab.sbTolerance->setDecimals(6);
+		uiGeneralTab.sbTolerance->setMinimum(0);
+		uiGeneralTab.sbTolerance->setSingleStep(0.01);
+		uiGeneralTab.lOption2->setText(i18n("Search region"));
+		uiGeneralTab.lOption2->show();
+		uiGeneralTab.chkAuto2->show();
+		uiGeneralTab.sbTolerance2->show();
+		uiGeneralTab.sbTolerance2->setDecimals(0);
+		uiGeneralTab.sbTolerance2->setMinimum(1);
+		uiGeneralTab.sbTolerance2->setSingleStep(1);
+		if (uiGeneralTab.chkAuto->isChecked())
+			updateTolerance();
+		if (uiGeneralTab.chkAuto2->isChecked())
+			updateTolerance2();
 		break;
 	}
 
@@ -323,6 +412,24 @@ void XYDataReductionCurveDock::autoToleranceChanged() {
 
 void XYDataReductionCurveDock::toleranceChanged() {
 	m_dataReductionData.tolerance = uiGeneralTab.sbTolerance->value();
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYDataReductionCurveDock::autoTolerance2Changed() {
+	bool autoTolerance2 = (bool)uiGeneralTab.chkAuto2->isChecked();
+	m_dataReductionData.autoTolerance2 = autoTolerance2;
+
+	if (autoTolerance2) {
+		uiGeneralTab.sbTolerance2->setEnabled(false);
+		updateTolerance2();
+	} else {
+		uiGeneralTab.sbTolerance2->setEnabled(true);
+	}
+}
+
+void XYDataReductionCurveDock::tolerance2Changed() {
+	m_dataReductionData.tolerance2 = uiGeneralTab.sbTolerance2->value();
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }

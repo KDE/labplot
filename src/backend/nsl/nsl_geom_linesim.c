@@ -93,11 +93,29 @@ double nsl_geom_linesim_area_error(const double xdata[], const double ydata[], c
 	return area/(double)n;
 }
 
-double nsl_geom_linesim_tol(const double xdata[], const double ydata[], const size_t n) {
+double nsl_geom_linesim_radial_tol(const double xdata[], const double ydata[], const size_t n) {
+	double dx = nsl_stats_maximum(xdata, n, NULL) - nsl_stats_minimum(xdata, n, NULL);
+	double dy = nsl_stats_maximum(ydata, n, NULL) - nsl_stats_minimum(ydata, n, NULL);
+	double d = sqrt(dx*dx+dy*dy);
+	double tol = 10.*d/(double)n;	/* "small" */
+	
+	return tol;
+}
+
+double nsl_geom_linesim_perpendicular_tol(const double xdata[], const double ydata[], const size_t n) {
 	double dx = nsl_stats_maximum(xdata, n, NULL) - nsl_stats_minimum(xdata, n, NULL);
 	double dy = nsl_stats_maximum(ydata, n, NULL) - nsl_stats_minimum(ydata, n, NULL);
 	double d = sqrt(dx*dx+dy*dy);
 	double tol = d/1000.0;	/* "small" */
+	
+	return tol;
+}
+
+double nsl_geom_linesim_area_tol(const double xdata[], const double ydata[], const size_t n) {
+	double dx = nsl_stats_maximum(xdata, n, NULL) - nsl_stats_minimum(xdata, n, NULL);
+	double dy = nsl_stats_maximum(ydata, n, NULL) - nsl_stats_minimum(ydata, n, NULL);
+	double A = dx*dy;
+	double tol = A/(double)n/1000.0;	/* "small" */
 	
 	return tol;
 }
@@ -146,7 +164,7 @@ size_t nsl_geom_linesim_douglas_peucker(const double xdata[], const double ydata
 	return nout;
 }
 size_t nsl_geom_linesim_douglas_peucker_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
-	double tol = nsl_geom_linesim_tol(xdata, ydata, n);
+	double tol = nsl_geom_linesim_perpendicular_tol(xdata, ydata, n);
 	return  nsl_geom_linesim_douglas_peucker(xdata, ydata, n, tol, index);
 }
 
@@ -197,7 +215,7 @@ size_t nsl_geom_linesim_raddist(const double xdata[], const double ydata[], cons
 	return nout;
 }
 size_t nsl_geom_linesim_raddist_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
-	double tol = nsl_geom_linesim_tol(xdata, ydata, n);
+	double tol = nsl_geom_linesim_radial_tol(xdata, ydata, n);
 	return  nsl_geom_linesim_raddist(xdata, ydata, n, tol, index);
 }
 
@@ -230,7 +248,7 @@ size_t nsl_geom_linesim_perpdist(const double xdata[], const double ydata[], con
 	return nout;
 }
 size_t nsl_geom_linesim_perpdist_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
-	double tol = nsl_geom_linesim_tol(xdata, ydata, n);
+	double tol = nsl_geom_linesim_perpendicular_tol(xdata, ydata, n);
 	return  nsl_geom_linesim_perpdist(xdata, ydata, n, tol, index);
 }
 
@@ -293,7 +311,7 @@ size_t nsl_geom_linesim_interp(const double xdata[], const double ydata[], const
 	return nout;
 }
 size_t nsl_geom_linesim_interp_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
-	double tol = nsl_geom_linesim_tol(xdata, ydata, n);
+	double tol = nsl_geom_linesim_perpendicular_tol(xdata, ydata, n);
 	return  nsl_geom_linesim_interp(xdata, ydata, n, tol, index);
 }
 
@@ -301,31 +319,33 @@ size_t nsl_geom_linesim_visvalingam_whyatt(const double xdata[], const double yd
 	size_t i, nout=n;
 
 	double *area = (double *) malloc((n-2)*sizeof(double));	/* area associated with every point */
-	for(i=1;i<n-1;i++) {
-		area[i-1] = nsl_geom_three_point_area(xdata[i-1], ydata[i-1], xdata[i], ydata[i], xdata[i+1], ydata[i+1]);
+	for (i=0; i < n; i++)
 		index[i] = i;
-	}
-	index[n-1]=n-1;
+	for (i=1; i < n-1; i++)
+		area[i-1] = nsl_geom_three_point_area(xdata[i-1], ydata[i-1], xdata[i], ydata[i], xdata[i+1], ydata[i+1]);
 
 	double minarea;
 	size_t minindex;
-	while ( (minarea = nsl_stats_minimum(area, n-2, &minindex)) < tol) {
-
+	while ( (minarea = nsl_stats_minimum(area, n-2, &minindex)) < tol && nout>2) {
+		/*for (i=0; i < n-3; i++)
+			if (area[i]<DBL_MAX)
+				printf("area[%zu] = %g\n", i, area[i]);
+		*/
 		/* remove point minindex */
-		/*printf("removing point %d (minarea = %g) \n", minindex+1, minarea);*/
+		/*printf("removing point %zu (minarea = %g) nout=%zu \n", minindex+1, minarea, nout);*/
 		index[minindex+1] = 0;
 		area[minindex] = DBL_MAX;
 		double tmparea;
+		/* update area of neigbor points */
 		if(minindex>0) {
-			tmparea = nsl_geom_three_point_area(xdata[minindex-1], ydata[minindex-1], xdata[minindex], ydata[minindex], xdata[minindex+1], ydata[minindex+1]);
-			if(tmparea > area[minindex-1])	/* take largest value new and old area */
+			tmparea = nsl_geom_three_point_area(xdata[minindex-1], ydata[minindex-1], xdata[minindex], ydata[minindex], xdata[minindex+2], ydata[minindex+2]);
+			if(tmparea > area[minindex-1])	/* take largest value of new and old area */
 				area[minindex-1] = tmparea;
 		}
-		if(minindex<n-2) {
-			tmparea = nsl_geom_three_point_area(xdata[minindex], ydata[minindex], xdata[minindex+1], ydata[minindex+1], xdata[minindex+2], ydata[minindex+2]);
-			if(tmparea > area[minindex+1])	/* take largest value new and old area */
+		if(minindex<n-3) {
+			tmparea = nsl_geom_three_point_area(xdata[minindex], ydata[minindex], xdata[minindex+1], ydata[minindex+1], xdata[minindex+3], ydata[minindex+3]);
+			if(tmparea > area[minindex+1])	/* take largest value of new and old area */
 				area[minindex+1] = tmparea;
-
 		}
 		nout--;
 	};
@@ -350,10 +370,7 @@ size_t nsl_geom_linesim_visvalingam_whyatt(const double xdata[], const double yd
 	return nout;
 }
 size_t nsl_geom_linesim_visvalingam_whyatt_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
-	/* TODO: calculate area tol */
-	double tol=0;
-	/*double tol = nsl_geom_linesim_tol(xdata, ydata, n);*/
-	printf("nsl_geom_linesim_visvalingam_whyatt_auto(): Not implemented yet\n");
+	double tol = nsl_geom_linesim_area_tol(xdata, ydata, n);
 
 	return  nsl_geom_linesim_visvalingam_whyatt(xdata, ydata, n, tol, index);
 }
@@ -383,7 +400,7 @@ size_t nsl_geom_linesim_reumann_witkam(const double xdata[], const double ydata[
 	return nout;
 }
 size_t nsl_geom_linesim_reumann_witkam_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
-	double tol = nsl_geom_linesim_tol(xdata, ydata, n);
+	double tol = nsl_geom_linesim_perpendicular_tol(xdata, ydata, n);
 	return  nsl_geom_linesim_reumann_witkam(xdata, ydata, n, tol, index);
 }
 
@@ -431,10 +448,9 @@ size_t nsl_geom_linesim_opheim(const double xdata[], const double ydata[], const
 	return nout;
 }
 size_t nsl_geom_linesim_opheim_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
-	/* TODO: calculate min and max tolerance */
-	double mintol = 0, maxtol = 0;
-	/*double tol = nsl_geom_linesim_tol(xdata, ydata, n);*/
-	printf("nsl_geom_linesim_opheim_auto(): Not implemented yet\n");
+	double mintol = nsl_geom_linesim_radial_tol(xdata, ydata, n);
+	/* TODO: calculate max tolerance ? */
+	double maxtol = 5.*mintol;
 
 	return  nsl_geom_linesim_opheim(xdata, ydata, n, mintol, maxtol, index);
 
@@ -477,8 +493,8 @@ size_t nsl_geom_linesim_lang(const double xdata[], const double ydata[], const s
 	return nout;
 }
 size_t nsl_geom_linesim_lang_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
-	double tol = nsl_geom_linesim_tol(xdata, ydata, n);
-	/* TODO: calculate  region */
+	double tol = nsl_geom_linesim_perpendicular_tol(xdata, ydata, n);
+	/* TODO: calculate search region */
 	double region=0;
 	printf("nsl_geom_linesim_lang_auto(): Not implemented yet\n");
 

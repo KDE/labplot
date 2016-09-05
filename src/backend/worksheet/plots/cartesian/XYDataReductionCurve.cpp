@@ -242,9 +242,12 @@ void XYDataReductionCurvePrivate::recalculate() {
 	// dataReduction settings
 	const nsl_geom_linesim_type type = dataReductionData.type;
 	const double tol = dataReductionData.tolerance;
+	const double tol2 = dataReductionData.tolerance2;
 #ifndef NDEBUG
+	qDebug()<<"n ="<<n;
 	qDebug()<<"type:"<<nsl_geom_linesim_type_name[type];
 	qDebug()<<"tolerance/step:"<<tol;
+	qDebug()<<"tolerance2/repeat/maxtol/region:"<<tol2;
 #endif
 ///////////////////////////////////////////////////////////
 	int status;
@@ -255,33 +258,33 @@ void XYDataReductionCurvePrivate::recalculate() {
 	case nsl_geom_linesim_type_douglas_peucker:
 		npoints = nsl_geom_linesim_douglas_peucker(xdata, ydata, n, tol, index);
 		break;
-	case nsl_geom_linesim_type_nthpoint:
+	case nsl_geom_linesim_type_nthpoint:	// tol used as step
 		npoints = nsl_geom_linesim_nthpoint(n, (int)tol, index);
 		break;
 	case nsl_geom_linesim_type_raddist:
 		npoints = nsl_geom_linesim_raddist(xdata, ydata, n, tol, index);
 		break;
-	case nsl_geom_linesim_type_perpdist:	// TODO: repeat=10
-		npoints = nsl_geom_linesim_perpdist_repeat(xdata, ydata, n, tol, 10, index);
+	case nsl_geom_linesim_type_perpdist:	// tol2 used as repeat
+		npoints = nsl_geom_linesim_perpdist_repeat(xdata, ydata, n, tol, tol2, index);
 		break;
 	case nsl_geom_linesim_type_interp:
 		npoints = nsl_geom_linesim_interp(xdata, ydata, n, tol, index);
 		break;
-	case nsl_geom_linesim_type_visvalingam_whyatt:	// TODO: endless loop!
+	case nsl_geom_linesim_type_visvalingam_whyatt:
 		npoints = nsl_geom_linesim_visvalingam_whyatt(xdata, ydata, n, tol, index);
 		break;
 	case nsl_geom_linesim_type_reumann_witkam:
 		npoints = nsl_geom_linesim_reumann_witkam(xdata, ydata, n, tol, index);
 		break;
-	case nsl_geom_linesim_type_opheim:	// TODO: maxtol=5*tol
-		npoints = nsl_geom_linesim_opheim(xdata, ydata, n, tol, 5*tol, index);
+	case nsl_geom_linesim_type_opheim:
+		npoints = nsl_geom_linesim_opheim(xdata, ydata, n, tol, tol2, index);
 		break;
-	case nsl_geom_linesim_type_lang:	// TODO: region=1.0
-		npoints = nsl_geom_linesim_opheim(xdata, ydata, n, tol, 1.0, index);
+	case nsl_geom_linesim_type_lang:	// tol2 used as region
+		npoints = nsl_geom_linesim_opheim(xdata, ydata, n, tol, tol2, index);
 		break;
 	}
 #ifndef NDEBUG
-	qDebug()<<"npoints:"<<npoints;
+	qDebug()<<"npoints ="<<npoints;
 #endif
 	if (npoints > 0)
 		status = 0;
@@ -337,6 +340,8 @@ void XYDataReductionCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "type", QString::number(d->dataReductionData.type) );
 	writer->writeAttribute( "autoTolerance", QString::number(d->dataReductionData.autoTolerance) );
 	writer->writeAttribute( "tolerance", QString::number(d->dataReductionData.tolerance) );
+	writer->writeAttribute( "autoTolerance2", QString::number(d->dataReductionData.autoTolerance2) );
+	writer->writeAttribute( "tolerance2", QString::number(d->dataReductionData.tolerance2) );
 	writer->writeEndElement();// dataReductionData
 
 	// dataReduction results (generated columns)
@@ -406,6 +411,18 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader) {
 				reader->raiseWarning(attributeWarning.arg("'tolerance'"));
 			else
 				d->dataReductionData.tolerance = str.toDouble();
+
+			str = attribs.value("autoTolerance2").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'autoTolerance2'"));
+			else
+				d->dataReductionData.autoTolerance2 = str.toInt();
+
+			str = attribs.value("tolerance2").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'tolerance2'"));
+			else
+				d->dataReductionData.tolerance2 = str.toDouble();
 		} else if (reader->name() == "dataReductionResult") {
 
 			attribs = reader->attributes();

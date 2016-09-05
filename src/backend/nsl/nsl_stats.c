@@ -34,6 +34,9 @@ double nsl_stats_minimum(const double data[], const size_t n, size_t *index) {
 	size_t i;
 
 	double min = data[0];
+	if (index != NULL) 
+		*index = 0;
+
 	for (i=1; i < n; i++) {
 		if (data[i] < min) {
 			min = data[i];
@@ -49,6 +52,9 @@ double nsl_stats_maximum(const double data[], const size_t n, size_t *index) {
 	size_t i;
 
 	double max = data[0];
+	if (index != NULL) 
+		*index = 0;
+
 	for (i=1; i < n; i++) {
 		if (data[i] > max) {
 			 max = data[i];

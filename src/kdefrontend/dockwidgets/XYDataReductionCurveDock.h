@@ -47,6 +47,7 @@ private:
 	virtual void initGeneralTab();
 	void showDataReductionResult();
 	void updateTolerance();
+	void updateTolerance2();
 
 	Ui::XYDataReductionCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbXDataColumn;
@@ -68,6 +69,8 @@ private slots:
 	void typeChanged();
 	void autoToleranceChanged();
 	void toleranceChanged();
+	void autoTolerance2Changed();
+	void tolerance2Changed();
 
 //	void showOptions();
 	void recalculateClicked();
