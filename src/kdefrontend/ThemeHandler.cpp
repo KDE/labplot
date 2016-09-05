@@ -181,6 +181,7 @@ void ThemeHandler::saveNewSelected(const QString& filename) {
 	emit info( i18n("New theme \"%1\" was saved.", filename) );
 
 	m_currentLocalTheme = filename;
+	m_themeList.append(config.name());
 
 	//enable the publish button so the newly created theme can be published
 	pbPublishTheme->setEnabled(true);
