@@ -130,7 +130,10 @@ void nsl_geom_linesim_douglas_peucker_step(const double xdata[], const double yd
 	/* search for key (biggest perp. distance) */
 	for(i=start+1; i < end; i++) {
 		dist = nsl_geom_point_line_dist(xdata[start], ydata[start], xdata[end], ydata[end], xdata[i], ydata[i]);
-		(dist > maxdist) ? maxdist=dist, nkey=i : 0;
+		if (dist > maxdist) {
+			maxdist=dist;
+			nkey=i;
+		}
 	}
 	/*printf("maxdist = %g @ i = %d\n", maxdist, nkey);*/
 
