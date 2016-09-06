@@ -84,9 +84,9 @@
 
 GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0) {
 	connect(mainWin->m_projectExplorer, SIGNAL(selectedAspectsChanged(QList<AbstractAspect*>&)),
-	        this, SLOT(selectedAspectsChanged(QList<AbstractAspect*>&)) );
+		this, SLOT(selectedAspectsChanged(QList<AbstractAspect*>&)) );
 	connect(mainWin->m_projectExplorer, SIGNAL(hiddenAspectSelected(const AbstractAspect*)),
-	        this, SLOT(hiddenAspectSelected(const AbstractAspect*)) );
+		this, SLOT(hiddenAspectSelected(const AbstractAspect*)) );
 	mainWindow=mainWin;
 }
 

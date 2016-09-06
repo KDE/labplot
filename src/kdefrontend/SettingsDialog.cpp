@@ -77,7 +77,7 @@ void SettingsDialog::slotButtonClicked(int button) {
 		}
 	}
 
-    KPageDialog::slotButtonClicked(button);
+	KPageDialog::slotButtonClicked(button);
 }
 
 void SettingsDialog::changed() {
