@@ -35,8 +35,8 @@
 #include "nsl_geom.h"
 #include "nsl_geom_linesim.h"
 
-const char* nsl_geom_linesim_type_name[] = {"Douglas-Peucker", "n-th point", "radial distance", "perpendicular distance", 
-	"Interpolation", "Visvalingam-Whyatt", "Reumann-Witkam", "Opheim", "Lang"};
+const char* nsl_geom_linesim_type_name[] = {"Douglas-Peucker", "Visvalingam-Whyatt", "Reumann-Witkam", "perpendicular distance", "n-th point",
+	"radial distance", "Interpolation", "Opheim", "Lang"};
 
 /*********** error calculation functions *********/
 
@@ -115,7 +115,7 @@ double nsl_geom_linesim_area_tol(const double xdata[], const double ydata[], con
 	double dx = nsl_stats_maximum(xdata, n, NULL) - nsl_stats_minimum(xdata, n, NULL);
 	double dy = nsl_stats_maximum(ydata, n, NULL) - nsl_stats_minimum(ydata, n, NULL);
 	double A = dx*dy;
-	double tol = A/(double)n/1000.0;	/* "small" */
+	double tol = A/100.0/100.0;	/* "small" */
 	
 	return tol;
 }
@@ -326,26 +326,43 @@ size_t nsl_geom_linesim_visvalingam_whyatt(const double xdata[], const double yd
 
 	double minarea;
 	size_t minindex;
-	while ( (minarea = nsl_stats_minimum(area, n-2, &minindex)) < tol && nout>2) {
-		/*for (i=0; i < n-3; i++)
+	while ( (minarea = nsl_stats_minimum(area, n-2, &minindex)) < tol && nout > 2) {
+		/*for (i=0; i < n-2; i++)
 			if (area[i]<DBL_MAX)
 				printf("area[%zu] = %g\n", i, area[i]);
 		*/
 		/* remove point minindex */
-		/*printf("removing point %zu (minarea = %g) nout=%zu \n", minindex+1, minarea, nout);*/
+		/*printf("removing point %zu (minindex = %zu, minarea = %g) nout=%zu\n", minindex+1, minindex, minarea, nout-1);*/
 		index[minindex+1] = 0;
 		area[minindex] = DBL_MAX;
 		double tmparea;
 		/* update area of neigbor points */
-		if(minindex>0) {
-			tmparea = nsl_geom_three_point_area(xdata[minindex-1], ydata[minindex-1], xdata[minindex], ydata[minindex], xdata[minindex+2], ydata[minindex+2]);
-			if(tmparea > area[minindex-1])	/* take largest value of new and old area */
-				area[minindex-1] = tmparea;
+		size_t before=minindex, after=minindex+2;	/* find index before and after */
+		while (index[before] == 0 && before > 0)
+			before--;
+		while (index[after] == 0 && after < n-1)
+			after++;
+		if(minindex>0) {	/*before */
+			if(before > 0) {
+				size_t beforebefore=before-1;
+				while (index[beforebefore] == 0 && beforebefore > 0)
+					beforebefore--;
+				/*printf("recalculate area[%zu] from %zu %zu %zu\n", before-1, beforebefore, before, after);*/
+				tmparea = nsl_geom_three_point_area(xdata[beforebefore], ydata[beforebefore], xdata[before], ydata[before], xdata[after], ydata[after]);
+				if(tmparea > area[before-1])	/* take largest value of new and old area */
+					area[before-1] = tmparea;
+			}
 		}
-		if(minindex<n-3) {
-			tmparea = nsl_geom_three_point_area(xdata[minindex], ydata[minindex], xdata[minindex+1], ydata[minindex+1], xdata[minindex+3], ydata[minindex+3]);
-			if(tmparea > area[minindex+1])	/* take largest value of new and old area */
-				area[minindex+1] = tmparea;
+		if(minindex<n-3) {	/* after */
+			if(after < n-1) {
+				size_t afterafter=after+1;
+				while (index[afterafter] == 0 && afterafter < n-1)
+					afterafter++;
+				/*printf("recalculate area[%zu] from %zu %zu %zu\n",after-1, before, after, afterafter);*/
+				tmparea = nsl_geom_three_point_area(xdata[before], ydata[before], xdata[after], ydata[after], xdata[afterafter], ydata[afterafter]);
+				if(tmparea > area[after-1])	/* take largest value of new and old area */
+					area[after-1] = tmparea;
+			}
 		}
 		nout--;
 	};

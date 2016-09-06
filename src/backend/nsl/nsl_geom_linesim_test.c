@@ -35,7 +35,9 @@ double main() {
 	const size_t n=10;
 	size_t index[n], i;
 
-	printf("automatic tol = %g\n", nsl_geom_linesim_tol(xdata, ydata, n));
+	printf("automatic radial tol = %g\n", nsl_geom_linesim_radial_tol(xdata, ydata, n));
+	printf("automatic perpendicular tol = %g\n", nsl_geom_linesim_perpendicular_tol(xdata, ydata, n));
+	printf("automatic area tol = %g\n", nsl_geom_linesim_area_tol(xdata, ydata, n));
 
 	const double tol5=0.6;
 	printf("* simplification (Douglas Peucker)\n");
@@ -78,13 +80,14 @@ double main() {
 	for(i=0; i<nout; i++)
 		printf("%d: %d\n", i, index[i]);
 
-	const double tol7=0.7;
+	const double tol7=1.6;
 	printf("* minimum area (Visvalingam-Whyatt)\n", repeat);
 	nout = nsl_geom_linesim_visvalingam_whyatt(xdata, ydata, n, tol7, index);
 	printf("nout = %d (pos. error = %g, area error = %g)\n", nout, nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index), nsl_geom_linesim_area_error(xdata, ydata, n, index));
 
 	for(i=0; i<nout; i++)
 		printf("%d: %d\n", i, index[i]);
+	return 0;
 
 	const double tol3=0.7;
 	printf("* perp. distance (Reumann-Witkam)\n");
