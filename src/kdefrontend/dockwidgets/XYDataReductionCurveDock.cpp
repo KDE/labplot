@@ -86,6 +86,7 @@ void XYDataReductionCurveDock::setupGeneral() {
 
 	for (int i=0; i < NSL_GEOM_LINESIM_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_geom_linesim_type_name[i]));
+	uiGeneralTab.cbType->setItemData(nsl_geom_linesim_type_visvalingam_whyatt, i18n("This method is much slower than any other"), Qt::ToolTipRole);
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 

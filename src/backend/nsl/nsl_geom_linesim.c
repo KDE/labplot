@@ -135,7 +135,7 @@ void nsl_geom_linesim_douglas_peucker_step(const double xdata[], const double yd
 			nkey=i;
 		}
 	}
-	/*printf("maxdist = %g @ i = %d\n", maxdist, nkey);*/
+	/*printf("maxdist = %g @ i = %zu\n", maxdist, nkey);*/
 
 	if(maxdist > tol) {
 		/*printf("take %d\n", nkey);*/
