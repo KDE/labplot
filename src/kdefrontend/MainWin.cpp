@@ -95,45 +95,45 @@
 */
 
 MainWin::MainWin(QWidget *parent, const QString& filename)
-	: KXmlGuiWindow(parent),
-	  m_currentSubWindow(0),
-	  m_project(0),
-	  m_aspectTreeModel(0),
-	  m_projectExplorer(0),
-	  m_projectExplorerDock(0),
-	  m_propertiesDock(0),
-	  m_currentAspect(0),
-	  m_currentFolder(0),
-	  m_suppressCurrentSubWindowChangedEvent(false),
-	  m_closing(false),
-	  m_autoSaveActive(false),
-	  m_visibilityMenu(0),
-	  m_newMenu(0),
-      m_editMenu(0),
-	  axisDock(0),
-	  notesDock(0),
-	  cartesianPlotDock(0),
-	  cartesianPlotLegendDock(0),
-	  columnDock(0),
-	  matrixDock(0),
-	  spreadsheetDock(0),
-	  projectDock(0),
-	  xyCurveDock(0),
-	  xyEquationCurveDock(0),
-	  xyInterpolationCurveDock(0),
-	  xySmoothCurveDock(0),
-	  xyFitCurveDock(0),
-	  xyFourierFilterCurveDock(0),
-	  xyFourierTransformCurveDock(0),
-	  worksheetDock(0),
-	  textLabelDock(0),
-	  customPointDock(0),
-	  datapickerImageDock(0),
-	  datapickerCurveDock(0),
+		: KXmlGuiWindow(parent),
+	m_currentSubWindow(0),
+	m_project(0),
+	m_aspectTreeModel(0),
+	m_projectExplorer(0),
+	m_projectExplorerDock(0),
+	m_propertiesDock(0),
+	m_currentAspect(0),
+	m_currentFolder(0),
+	m_suppressCurrentSubWindowChangedEvent(false),
+	m_closing(false),
+	m_autoSaveActive(false),
+	m_visibilityMenu(0),
+	m_newMenu(0),
+	m_editMenu(0),
+	axisDock(0),
+	notesDock(0),
+	cartesianPlotDock(0),
+	cartesianPlotLegendDock(0),
+	columnDock(0),
+	matrixDock(0),
+	spreadsheetDock(0),
+	projectDock(0),
+	xyCurveDock(0),
+	xyEquationCurveDock(0),
+	xyInterpolationCurveDock(0),
+	xySmoothCurveDock(0),
+	xyFitCurveDock(0),
+	xyFourierFilterCurveDock(0),
+	xyFourierTransformCurveDock(0),
+	worksheetDock(0),
+	textLabelDock(0),
+	customPointDock(0),
+	datapickerImageDock(0),
+	datapickerCurveDock(0),
 #ifdef HAVE_CANTOR_LIBS
 	cantorWorksheetDock(0),
 #endif
-	  m_guiObserver(0) {
+	m_guiObserver(0) {
 
 // 	QTimer::singleShot( 0, this, SLOT(initGUI(filename)) );  //TODO doesn't work anymore
 	initGUI(filename);
@@ -169,7 +169,7 @@ void MainWin::initGUI(const QString& fileName) {
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
 	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
-	        this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
+		this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
 #ifdef _WIN32
 	QIcon::setThemeName("hicolor");
 #endif
@@ -450,9 +450,9 @@ void MainWin::initMenus() {
 	m_visibilityMenu ->addAction(m_visibilitySubfolderAction);
 	m_visibilityMenu ->addAction(m_visibilityAllAction);
 
-    //menu for editing files
-    m_editMenu = new QMenu(i18n("Edit"), this);
-    m_editMenu->addAction(m_editFitsFileAction);
+	//menu for editing files
+	m_editMenu = new QMenu(i18n("Edit"), this);
+	m_editMenu->addAction(m_editFitsFileAction);
 }
 
 /*!
@@ -462,8 +462,8 @@ void MainWin::initMenus() {
 bool MainWin::warnModified() {
 	if (m_project->hasChanged()) {
 		int want_save = KMessageBox::warningYesNoCancel( this,
-		                i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
-		                i18n("Save Project"));
+			i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
+			i18n("Save Project"));
 		switch (want_save) {
 		case KMessageBox::Yes:
 			return !saveProject();
@@ -756,7 +756,7 @@ bool MainWin::newProject() {
 		m_projectExplorerDock->setWidget(m_projectExplorer);
 
 		connect(m_projectExplorer, SIGNAL(currentAspectChanged(AbstractAspect*)),
-		        this, SLOT(handleCurrentAspectChanged(AbstractAspect*)));
+			this, SLOT(handleCurrentAspectChanged(AbstractAspect*)));
 
 		//Properties dock
 		m_propertiesDock = new QDockWidget(this);
@@ -784,9 +784,9 @@ bool MainWin::newProject() {
 
 	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-	        this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
+		this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
 	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-	        this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
+		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(m_project, SIGNAL(statusInfo(QString)), statusBar(), SLOT(showMessage(QString)));
 	connect(m_project, SIGNAL(changed()), this, SLOT(projectChanged()));
 	connect(m_project, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
@@ -956,7 +956,7 @@ bool MainWin::saveProjectAs() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	QString dir = conf.readEntry("LastOpenDir", "");
 	QString fileName = QFileDialog::getSaveFileName(this, i18n("Save project as"), dir,
-	                   i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
+		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
 
 	if (fileName.isEmpty())// "Cancel" was clicked
 		return false;
@@ -1034,9 +1034,8 @@ void MainWin::print() {
 		return;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-    if (part->printView()) {
-        statusBar()->showMessage(i18n("%1 printed", part->name()));
-    }
+	if (part->printView())
+		statusBar()->showMessage(i18n("%1 printed", part->name()));
 }
 
 void MainWin::printPreview() {
@@ -1045,9 +1044,8 @@ void MainWin::printPreview() {
 		return;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-    if (part->printPreview()) {
-        statusBar()->showMessage(i18n("%1 printed", part->name()));
-    }
+	if (part->printPreview())
+		statusBar()->showMessage(i18n("%1 printed", part->name()));
 }
 
 /**************************************************************************************/
@@ -1069,7 +1067,7 @@ void MainWin::newWorkbook() {
 }
 
 /*!
-    adds a new Datapicker to the project.
+	adds a new Datapicker to the project.
 */
 void MainWin::newDatapicker() {
 	Datapicker* datapicker = new Datapicker(0, i18n("Datapicker"));
@@ -1145,8 +1143,8 @@ Workbook* MainWin::activeWorkbook() const {
 }
 
 /*!
-    returns a pointer to a Datapicker-object, if the currently active Mdi-Subwindow is \a DatapickerView.
-    Otherwise returns \a 0.
+	returns a pointer to a Datapicker-object, if the currently active Mdi-Subwindow is \a DatapickerView.
+	Otherwise returns \a 0.
 */
 Datapicker* MainWin::activeDatapicker() const {
 	QMdiSubWindow* win = m_mdiArea->currentSubWindow();
@@ -1633,20 +1631,18 @@ void MainWin::exportDialog() {
 		return;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
-    if (part->exportView()) {
-        statusBar()->showMessage(i18n("%1 exported", part->name()));
-    }
+	if (part->exportView())
+		statusBar()->showMessage(i18n("%1 exported", part->name()));
 }
 
 void MainWin::editFitsFileDialog() {
-    FITSHeaderEditDialog* editDialog = new FITSHeaderEditDialog(this);
-    if (editDialog->exec() == KDialog::Accepted) {
-        if (editDialog->saved()) {
-            statusBar()->showMessage(i18n("FITS files saved"));
-        }
-    }
+	FITSHeaderEditDialog* editDialog = new FITSHeaderEditDialog(this);
+	if (editDialog->exec() == KDialog::Accepted) {
+		if (editDialog->saved())
+			statusBar()->showMessage(i18n("FITS files saved"));
+	}
 
-    delete editDialog;
+	delete editDialog;
 }
 
 /*!

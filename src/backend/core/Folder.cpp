@@ -52,8 +52,6 @@
 
 Folder::Folder(const QString &name) : AbstractAspect(name) {}
 
-Folder::~Folder(){}
-
 QIcon Folder::icon() const {
 	return QIcon::fromTheme("folder");
 }

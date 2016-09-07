@@ -58,8 +58,8 @@
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2016-07-15</date>
-<releaseinfo>3.2.3</releaseinfo>
+<date>2016-09-06</date>
+<releaseinfo>3.2.4</releaseinfo>
 
 <abstract>
 	<para>
@@ -952,6 +952,7 @@ The menu is only available when a datapicker object is selected on the <guilabel
   <para>&LabPlot; supports a wide variety of data analysis functions:
     </para>
       <itemizedlist>
+	<listitem><para>Data reduction</para></listitem>
 	<listitem><para>Interpolation</para></listitem>
 	<listitem><para>Smoothing</para></listitem>
 	<listitem><para>Nonlinear curve fitting</para></listitem>
@@ -962,6 +963,29 @@ The menu is only available when a datapicker object is selected on the <guilabel
     The analysis functions can be accessed using the Analysis menu or the context menu of a worksheet.
     The newly created curves can be customized (line style, symbol style, &etc;) like any other x-y-curve.</para>  
 
+  <sect1 id="data_reduction">
+    <title>Data reduction</title>
+    <para>
+      To reduce the number of data points without losing the features of a data set
+      you can apply one of several line simplification algorithm:
+    </para>
+      <itemizedlist>
+	<listitem><para>Douglas-Peucker</para></listitem>
+	<listitem><para>Visvalingam-Whyatt</para></listitem>
+	<listitem><para>Reumann-Witkam</para></listitem>
+	<listitem><para>Perpendicular distance simplification</para></listitem>
+	<listitem><para>n-th point simplification</para></listitem>
+	<listitem><para>Radial distance simplification</para></listitem>
+	<listitem><para>Interpolation (nearest neighbor)</para></listitem>
+	<listitem><para>Opheim</para></listitem>
+	<listitem><para>Lang</para></listitem>
+      </itemizedlist>
+    <para>
+      The desired tolerance is automatically calculated from the data but can also be changed
+      in the dock widget.
+    </para>
+  </sect1>
+    
   <sect1 id="interpolation">
     <title>Interpolation</title>
     <para>

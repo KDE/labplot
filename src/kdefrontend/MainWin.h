@@ -56,6 +56,7 @@ class ProjectDock;
 class SpreadsheetDock;
 class XYCurveDock;
 class XYEquationCurveDock;
+class XYDataReductionCurveDock;
 class XYInterpolationCurveDock;
 class XYSmoothCurveDock;
 class XYFitCurveDock;
@@ -162,7 +163,7 @@ private:
 	//Menus
 	QMenu* m_visibilityMenu;
 	QMenu* m_newMenu;
-    QMenu* m_editMenu;
+	QMenu* m_editMenu;
 
 	//Docks
 	QStackedWidget* stackedWidget;
@@ -176,6 +177,7 @@ private:
 	ProjectDock* projectDock;
 	XYCurveDock* xyCurveDock;
 	XYEquationCurveDock* xyEquationCurveDock;
+	XYDataReductionCurveDock* xyDataReductionCurveDock;
 	XYInterpolationCurveDock* xyInterpolationCurveDock;
 	XYSmoothCurveDock* xySmoothCurveDock;
 	XYFitCurveDock* xyFitCurveDock;
@@ -239,7 +241,7 @@ private slots:
 	void historyDialog();
 	void importFileDialog(const QString& fileName = QString());
 	void exportDialog();
-    void editFitsFileDialog();
+	void editFitsFileDialog();
 	void settingsDialog();
 	void projectChanged();
 	

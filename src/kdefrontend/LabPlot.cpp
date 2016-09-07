@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : main function
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -40,12 +40,8 @@
 
 int main (int argc, char *argv[]) {
 	KAboutData aboutData( QStringLiteral("labplot2"), QString("labplot2"),
-				LVERSION,
-				i18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
-				KAboutLicense::GPL,
-				i18n("(c) 2007-2016"),
-				QString(),
-				QStringLiteral("http://www.labplot.sourceforge.net"));
+		LVERSION, i18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
+		KAboutLicense::GPL,i18n("(c) 2007-2016"), QString(), QStringLiteral("http://www.labplot.sourceforge.net"));
 
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18n("developer"), "stefan.gerlach@uni-konstanz.de", 0);
 	aboutData.addAuthor(i18n("Alexander Semke"), i18n("developer"), "alexander.semke@web.de", 0);
@@ -75,8 +71,8 @@ int main (int argc, char *argv[]) {
 	if(!filename.isEmpty() ) {
 		if ( !QFile::exists(filename)) {
 			if ( KMessageBox::warningContinueCancel( 0,
-			        i18n( "Could not open file \'%1\'. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
-			        i18n("Failed to open")) == KMessageBox::Cancel) {
+					i18n( "Could not open file \'%1\'. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
+					i18n("Failed to open")) == KMessageBox::Cancel) {
 				exit(-1);  //"Cancel" clicked -> exit the application
 			} else {
 				filename=""; //Wrong file -> clear the file name and continue
@@ -84,8 +80,8 @@ int main (int argc, char *argv[]) {
 		} else if ( !(filename.contains(".lml", Qt::CaseInsensitive) || filename.contains(".lml.gz", Qt::CaseInsensitive)
 				  || filename.contains(".lml.bz2", Qt::CaseInsensitive) || filename.contains(".lml.xz", Qt::CaseInsensitive) ) ) {
 			if ( KMessageBox::warningContinueCancel( 0,
-			        i18n( "File \'%1\' doesn't contain any LabPlot data. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
-			        i18n("Failed to open")) == KMessageBox::Cancel) {
+					i18n( "File \'%1\' doesn't contain any LabPlot data. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
+					i18n("Failed to open")) == KMessageBox::Cancel) {
 				exit(-1); //"Cancel" clicked -> exit the application
 			} else {
 				filename=""; //Wrong file -> clear the file name and continue

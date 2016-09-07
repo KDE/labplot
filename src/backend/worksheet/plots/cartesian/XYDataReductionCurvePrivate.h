@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : PlotAreaPrivate.h
+    File                 : XYDataReductionCurvePrivate.h
     Project              : LabPlot
-    Description          : Private members of PlotArea.
+    Description          : Private members of XYDataReductionCurve
     --------------------------------------------------------------------
-    Copyright            : (C) 2011 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -26,43 +26,38 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PLOTAREAPRIVATE_H
-#define PLOTAREAPRIVATE_H
+#ifndef XYINTERPOLATIONCURVEPRIVATE_H
+#define XYINTERPOLATIONCURVEPRIVATE_H
 
-#include <QGraphicsItem>
-#include <QBrush>
-#include <QPen>
+#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
 
-class PlotArea;
-class PlotAreaPrivate: public QGraphicsItem {
+class XYDataReductionCurve;
+class Column;
+
+class XYDataReductionCurvePrivate: public XYCurvePrivate {
 	public:
-		explicit PlotAreaPrivate(PlotArea *owner);
+		explicit XYDataReductionCurvePrivate(XYDataReductionCurve*);
+		~XYDataReductionCurvePrivate();
 
-		QString name() const;
-		bool swapVisible(bool on);
-		bool toggleClipping(bool on);
-		bool clippingEnabled() const;
-		void setRect(const QRectF&);
+		void recalculate();
 
-		//QGraphicsItem's virtual functions
-		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-		virtual QRectF boundingRect() const;
-		virtual QPainterPath shape() const;
+		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be interpolated
+		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be interpolated
+		QString xDataColumnPath;
+		QString yDataColumnPath;
 
-		QRectF rect;
-		PlotArea::BackgroundType backgroundType;
-		PlotArea::BackgroundColorStyle backgroundColorStyle;
-		PlotArea::BackgroundImageStyle backgroundImageStyle;
-		Qt::BrushStyle backgroundBrushStyle;
-		QColor backgroundFirstColor;
-		QColor backgroundSecondColor;
-		QString backgroundFileName;
-		qreal backgroundOpacity;
-		QPen borderPen;
-		qreal borderOpacity;
-		qreal borderCornerRadius;
+		XYDataReductionCurve::DataReductionData dataReductionData;
+		XYDataReductionCurve::DataReductionResult dataReductionResult;
 
-		PlotArea* const q;
+		Column* xColumn; //<! column used internally for storing the x-values of the result data reduction curve
+		Column* yColumn; //<! column used internally for storing the y-values of the result data reduction curve
+		QVector<double>* xVector;
+		QVector<double>* yVector;
+
+		bool sourceDataChangedSinceLastDataReduction; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
+
+		XYDataReductionCurve* const q;
 };
 
 #endif

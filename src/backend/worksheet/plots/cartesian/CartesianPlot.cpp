@@ -32,6 +32,7 @@
 #include "Axis.h"
 #include "XYCurve.h"
 #include "XYEquationCurve.h"
+#include "XYDataReductionCurve.h"
 #include "XYInterpolationCurve.h"
 #include "XYSmoothCurve.h"
 #include "XYFitCurve.h"
@@ -350,6 +351,7 @@ void CartesianPlot::initActions() {
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
 // no icons yet
+	addDataReductionCurveAction = new QAction(i18n("xy-curve from a data reduction"), this);
 	addInterpolationCurveAction = new QAction(i18n("xy-curve from an interpolation"), this);
 	addSmoothCurveAction = new QAction(i18n("xy-curve from a smooth"), this);
 	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
@@ -366,6 +368,7 @@ void CartesianPlot::initActions() {
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
+	// TODO: other analysis functions?
 	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addFourierFilterCurveAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
 	connect(addFourierTransformCurveAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
@@ -413,6 +416,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu = new QMenu(i18n("Add new"));
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
+	addNewMenu->addAction(addDataReductionCurveAction);
 	addNewMenu->addAction(addInterpolationCurveAction);
 	addNewMenu->addAction(addSmoothCurveAction);
 	addNewMenu->addAction(addFitCurveAction);
@@ -720,6 +724,12 @@ XYCurve* CartesianPlot::addCurve() {
 
 XYEquationCurve* CartesianPlot::addEquationCurve() {
 	XYEquationCurve* curve = new XYEquationCurve("f(x)");
+	this->addChild(curve);
+	return curve;
+}
+
+XYDataReductionCurve* CartesianPlot::addDataReductionCurve() {
+	XYDataReductionCurve* curve = new XYDataReductionCurve("Data reduction");
 	this->addChild(curve);
 	return curve;
 }
@@ -2029,6 +2039,18 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 				removeChild(curve);
 				return false;
 			}
+		} else if (reader->name() == "xyDataReductionCurve") {
+			XYDataReductionCurve* curve = addDataReductionCurve();
+			if (!curve->load(reader)) {
+				removeChild(curve);
+				return false;
+			}
+		} else if (reader->name() == "xyInterpolationCurve") {
+			XYInterpolationCurve* curve = addInterpolationCurve();
+			if (!curve->load(reader)) {
+				removeChild(curve);
+				return false;
+			}
 		} else if (reader->name() == "xyFitCurve") {
 			XYFitCurve* curve = addFitCurve();
 			if (!curve->load(reader)) {
@@ -2043,12 +2065,6 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			}
 		} else if (reader->name() == "xyFourierTransformCurve") {
 			XYFourierTransformCurve* curve = addFourierTransformCurve();
-			if (!curve->load(reader)) {
-				removeChild(curve);
-				return false;
-			}
-		} else if (reader->name() == "xyInterpolationCurve") {
-			XYInterpolationCurve* curve = addInterpolationCurve();
 			if (!curve->load(reader)) {
 				removeChild(curve);
 				return false;
