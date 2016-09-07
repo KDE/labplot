@@ -236,9 +236,6 @@ void PlotArea::setBorderOpacity(qreal opacity) {
 PlotAreaPrivate::PlotAreaPrivate(PlotArea *owner):q(owner) {
 }
 
-PlotAreaPrivate::~PlotAreaPrivate() {
-}
-
 QString PlotAreaPrivate::name() const {
 	return q->name();
 }

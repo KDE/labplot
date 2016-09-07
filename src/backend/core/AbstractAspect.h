@@ -64,6 +64,7 @@ class AbstractAspect : public QObject {
 
 		QString name() const;
 		QString comment() const;
+		void setCreationTime(const QDateTime&);
 		QDateTime creationTime() const;
 		virtual Project* project();
 		virtual QString path() const;
@@ -178,10 +179,10 @@ class AbstractAspect : public QObject {
 
 	private:
 		AbstractAspectPrivate* d;
+
 		QString uniqueNameFor(const QString&) const;
 		const QList<AbstractAspect*> children() const;
 		void connectChild(AbstractAspect*);
-		bool m_undoAware;
 
 	public slots:
 		void setName(const QString&);

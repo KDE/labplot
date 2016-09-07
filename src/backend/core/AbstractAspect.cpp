@@ -65,14 +65,6 @@
  * as well as adding/removing children support multi-level undo/redo. In order to support undo/redo
  * for problem-specific data in derived classes, make sure that all changes to your data are done
  * by handing appropriate commands to exec().
- *
- * Optionally,
- * you can supply an icon() to be used by different views (including the ProjectExplorer)
- * and/or reimplement createContextMenu() for a custom context menu of views.
- *
- * The private data of AbstractAspect is contained in a separate class AbstractAspect::Private.
- * The write access to AbstractAspect::Private should always be done using aspect commands
- * to allow undo/redo.
  */
 
 /**
@@ -209,7 +201,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 AbstractAspect::AbstractAspect(const QString &name)
-	: d(new AbstractAspectPrivate(this, name)), m_undoAware(true)
+	: d(new AbstractAspectPrivate(this, name))
 {
 }
 
@@ -253,6 +245,10 @@ void AbstractAspect::setComment(const QString& value) {
 	exec(new PropertyChangeCommand<QString>(i18n("%1: change comment", d->m_name),
 				&d->m_comment, value),
 			"aspectDescriptionAboutToChange", "aspectDescriptionChanged", Q_ARG(const AbstractAspect*,this));
+}
+
+void AbstractAspect::setCreationTime(const QDateTime& time) {
+	d->m_creation_time = time;
 }
 
 QDateTime AbstractAspect::creationTime() const {
@@ -604,7 +600,7 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader){
 //@{
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void AbstractAspect::setUndoAware(bool b) {
-	m_undoAware = b;
+	d->m_undoAware = b;
 }
 
 /**
@@ -623,7 +619,7 @@ QUndoStack* AbstractAspect::undoStack() const {
  */
 void AbstractAspect::exec(QUndoCommand* cmd) {
 	Q_CHECK_PTR(cmd);
-	if (m_undoAware) {
+	if (d->m_undoAware) {
 		QUndoStack *stack = undoStack();
 		if (stack)
 			stack->push(cmd);
@@ -672,7 +668,7 @@ void AbstractAspect::exec(QUndoCommand* command,
  * \brief Begin an undo stack macro (series of commands)
  */
 void AbstractAspect::beginMacro(const QString& text) {
-	if (!m_undoAware)
+	if (!d->m_undoAware)
 		return;
 
 	QUndoStack* stack = undoStack();
@@ -684,7 +680,7 @@ void AbstractAspect::beginMacro(const QString& text) {
  * \brief End the current undo stack macro
  */
 void AbstractAspect::endMacro() {
-	if (!m_undoAware)
+	if (!d->m_undoAware)
 		return;
 
 	QUndoStack* stack = undoStack();
@@ -787,7 +783,7 @@ void AbstractAspect::connectChild(AbstractAspect* child) {
 //######################  Private implementation ###############################
 //##############################################################################
 AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QString& name)
-	: m_name(name.isEmpty() ? "1" : name), m_hidden(false), q(owner), m_parent(0)
+	: m_name(name.isEmpty() ? "1" : name), m_hidden(false), q(owner), m_parent(0), m_undoAware(true)
 {
 	m_creation_time = QDateTime::currentDateTime();
 }
