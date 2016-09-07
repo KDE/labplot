@@ -38,6 +38,7 @@ double main() {
 	printf("automatic radial tol = %g\n", nsl_geom_linesim_radial_tol(xdata, ydata, n));
 	printf("automatic perpendicular tol = %g\n", nsl_geom_linesim_perpendicular_tol(xdata, ydata, n));
 	printf("automatic area tol = %g\n", nsl_geom_linesim_area_tol(xdata, ydata, n));
+	printf("automatic dist tol = %g\n", nsl_geom_linesim_dist_tol(xdata, ydata, n));
 
 	const double tol5=0.6;
 	printf("* simplification (Douglas Peucker)\n");

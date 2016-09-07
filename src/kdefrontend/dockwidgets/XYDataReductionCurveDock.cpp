@@ -253,6 +253,7 @@ void XYDataReductionCurveDock::updateTolerance() {
 		m_dataReductionData.tolerance = nsl_geom_linesim_area_tol(xdataVector.data(), ydataVector.data(), xdataVector.size());
 	else
 		m_dataReductionData.tolerance = nsl_geom_linesim_perpendicular_tol(xdataVector.data(), ydataVector.data(), xdataVector.size());
+		//m_dataReductionData.tolerance = nsl_geom_linesim_dist_tol(xdataVector.data(), ydataVector.data(), xdataVector.size());
 	uiGeneralTab.sbTolerance->setValue(m_dataReductionData.tolerance);
 }
 

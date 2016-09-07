@@ -66,8 +66,11 @@ double nsl_geom_linesim_radial_tol(const double xdata[], const double ydata[], c
 /* calculates tolerance for perpendicular distance from data */
 double nsl_geom_linesim_perpendicular_tol(const double xdata[], const double ydata[], const size_t n);
 
-/* calculates tolerance for area from data */
+/* calculates tolerance from area for data */
 double nsl_geom_linesim_area_tol(const double xdata[], const double ydata[], const size_t n);
+
+/* calculates tolerance from average distance of data for data */
+double nsl_geom_linesim_dist_tol(const double xdata[], const double ydata[], const size_t n);
 
 /*********** simplification algorithms *********/
 

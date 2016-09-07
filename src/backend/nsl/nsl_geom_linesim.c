@@ -98,7 +98,7 @@ double nsl_geom_linesim_radial_tol(const double xdata[], const double ydata[], c
 	double dy = nsl_stats_maximum(ydata, n, NULL) - nsl_stats_minimum(ydata, n, NULL);
 	double d = sqrt(dx*dx+dy*dy);
 	double tol = 10.*d/(double)n;	/* "small" */
-	
+
 	return tol;
 }
 
@@ -106,8 +106,8 @@ double nsl_geom_linesim_perpendicular_tol(const double xdata[], const double yda
 	double dx = nsl_stats_maximum(xdata, n, NULL) - nsl_stats_minimum(xdata, n, NULL);
 	double dy = nsl_stats_maximum(ydata, n, NULL) - nsl_stats_minimum(ydata, n, NULL);
 	double d = sqrt(dx*dx+dy*dy);
-	double tol = d/10000.0;	/* "small" */
-	
+	double tol = d/(double)n;	/* "small" */
+
 	return tol;
 }
 
@@ -116,8 +116,21 @@ double nsl_geom_linesim_area_tol(const double xdata[], const double ydata[], con
 	double dy = nsl_stats_maximum(ydata, n, NULL) - nsl_stats_minimum(ydata, n, NULL);
 	double A = dx*dy;
 	double tol = A/1000.0/1000.0;	/* "small" */
-	
+
 	return tol;
+}
+
+double nsl_geom_linesim_dist_tol(const double xdata[], const double ydata[], const size_t n) {
+	double dist=0, dx, dy;
+	size_t i;
+	for (i=0;i<n-1;i++) {
+		dx = xdata[i+1]-xdata[i];
+		dy = ydata[i+1]-ydata[i];
+		dist += sqrt(dx*dx+dy*dy);
+	}
+	dist /= (double)n;
+
+	return dist/100.0;
 }
 
 /*********** simplification algorithms *********/
