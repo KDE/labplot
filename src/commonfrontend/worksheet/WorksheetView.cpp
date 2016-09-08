@@ -1499,30 +1499,47 @@ void WorksheetView::cartesianPlotActionModeChanged(QAction* action) {
 }
 
 void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
-	if (action==cartesianPlotSelectionModeAction) {
+	if (action==cartesianPlotSelectionModeAction)
 		m_cartesianPlotMouseMode = CartesianPlot::SelectionMode;
-	} else if (action==cartesianPlotZoomSelectionModeAction) {
+	else if (action==cartesianPlotZoomSelectionModeAction)
 		m_cartesianPlotMouseMode = CartesianPlot::ZoomSelectionMode;
-	} else if (action==cartesianPlotZoomXSelectionModeAction) {
+	else if (action==cartesianPlotZoomXSelectionModeAction)
 		m_cartesianPlotMouseMode = CartesianPlot::ZoomXSelectionMode;
-	} else if (action==cartesianPlotZoomYSelectionModeAction) {
+	else if (action==cartesianPlotZoomYSelectionModeAction)
 		m_cartesianPlotMouseMode = CartesianPlot::ZoomYSelectionMode;
-	}
 
-	foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ) {
+	foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() )
 		plot->setMouseMode(m_cartesianPlotMouseMode);
-	}
 }
 
 void WorksheetView::cartesianPlotAddNew(QAction* action) {
+	QList<CartesianPlot*> plots = m_worksheet->children<CartesianPlot>();
 	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ) {
+		int selectedPlots = 0;
+		foreach(CartesianPlot* plot, plots ) {
+			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
+				++selectedPlots;
+		}
+
+		if  (selectedPlots>1)
+			m_worksheet->beginMacro(i18n("%1: Add curve to %2 plots", m_worksheet->name(), selectedPlots));
+
+		foreach(CartesianPlot* plot, plots ) {
 			if (m_selectedItems.indexOf(plot->graphicsItem())!=-1)
 				this->cartesianPlotAdd(plot, action);
 		}
+
+		if (selectedPlots>1)
+			m_worksheet->endMacro();
 	} else {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() )
+		if  (plots.size()>1)
+			m_worksheet->beginMacro(i18n("%1: Add curve to %2 plots", m_worksheet->name(), plots.size()));
+
+		foreach(CartesianPlot* plot, plots )
 			this->cartesianPlotAdd(plot, action);
+
+		if  (plots.size()>1)
+			m_worksheet->endMacro();
 	}
 }
 
@@ -1574,8 +1591,7 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 				plot->navigate(op);
 		}
 	} else {
-		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() ) {
+		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() )
 			plot->navigate(op);
-		}
 	}
 }
