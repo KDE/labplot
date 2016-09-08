@@ -60,17 +60,17 @@ double nsl_geom_linesim_positional_squared_error(const double xdata[], const dou
 */
 double nsl_geom_linesim_area_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]);
 
-/* calculates tolerance for radial distance from data */
-double nsl_geom_linesim_radial_tol(const double xdata[], const double ydata[], const size_t n);
+/* calculates tolerance by using diagonal distance of all data point clip area 
+	divided by n */
+double nsl_geom_linesim_clip_diag_perpoint(const double xdata[], const double ydata[], const size_t n);
 
-/* calculates tolerance for perpendicular distance from data */
-double nsl_geom_linesim_perpendicular_tol(const double xdata[], const double ydata[], const size_t n);
+/* calculates tolerance from clip area 
+	divided by n */
+double nsl_geom_linesim_clip_area_perpoint(const double xdata[], const double ydata[], const size_t n);
 
-/* calculates tolerance from area for data */
-double nsl_geom_linesim_area_tol(const double xdata[], const double ydata[], const size_t n);
-
-/* calculates tolerance from average distance of data for data */
-double nsl_geom_linesim_dist_tol(const double xdata[], const double ydata[], const size_t n);
+/* calculates tolerance from average distance of following point 
+	divided by n */
+double nsl_geom_linesim_avg_dist_perpoint(const double xdata[], const double ydata[], const size_t n);
 
 /*********** simplification algorithms *********/
 
