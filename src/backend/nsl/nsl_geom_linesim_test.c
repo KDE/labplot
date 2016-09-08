@@ -47,6 +47,14 @@ double main() {
 	for(i=0; i<nout; i++)
 		printf("%d: %d\n", i, index[i]);
 
+	const size_t no=6;
+	printf("* simplification (Douglas Peucker variant) nout = %zu\n", no);
+	double tolout = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, n, nout, index);
+	printf("maxtol = %g (pos. error = %g, area error = %g)\n", tolout, nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index), nsl_geom_linesim_area_error(xdata, ydata, n, index));
+
+	for(i=0; i<nout; i++)
+		printf("%d: %d\n", i, index[i]);
+
 	const size_t np=2;
 	printf("* n-th point\n");
 	nout = nsl_geom_linesim_nthpoint(n, np, index);

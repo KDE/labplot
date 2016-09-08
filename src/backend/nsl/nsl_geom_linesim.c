@@ -173,6 +173,39 @@ size_t nsl_geom_linesim_douglas_peucker_auto(const double xdata[], const double 
 	return  nsl_geom_linesim_douglas_peucker(xdata, ydata, n, tol, index);
 }
 
+double nsl_geom_linesim_douglas_peucker_variant(const double xdata[], const double ydata[], const size_t n, const size_t nout, size_t index[]) {
+	/* first and last point */
+	size_t ntmp=0;
+	index[ntmp++]=0;
+	index[ntmp++]=n-1;
+
+	double dist, maxdist;
+	while (ntmp < nout) {
+		/*printf("ntmp = %zu\n", ntmp);*/
+		maxdist=0;
+		size_t i, v, key;
+		for (i=0;i<ntmp-1;i++) {	/* all edges */
+			/*printf("edge %zu (%zu - %zu)\n", i, index[i], index[i+1]);*/
+			for (v=index[i]+1; v < index[i+1]; v++) {
+				/*printf("vertex %zu \n", v);*/
+				dist = nsl_geom_point_line_dist(xdata[index[i]], ydata[index[i]], xdata[index[i+1]], ydata[index[i+1]], xdata[v], ydata[v]);
+				/*printf("	dist = %g\n", dist);*/
+				if (dist > maxdist) {
+					maxdist=dist;
+					key=v;
+				}
+			}
+		}
+		/*printf("adding key %zu (dist = %g)\n", key, maxdist);*/
+		index[ntmp++]=key;
+
+		/* sort array index */
+		nsl_sort_size_t(index, ntmp);
+	}
+
+	return maxdist;
+}
+
 size_t nsl_geom_linesim_nthpoint(const size_t n, const size_t step, size_t index[]) {
 	if (step < 1) {
 		printf("step size must be > 0 (given: %zd)\n", step);
