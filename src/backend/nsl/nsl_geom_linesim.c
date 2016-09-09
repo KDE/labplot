@@ -174,16 +174,26 @@ size_t nsl_geom_linesim_douglas_peucker_auto(const double xdata[], const double 
 }
 
 double nsl_geom_linesim_douglas_peucker_variant(const double xdata[], const double ydata[], const size_t n, const size_t nout, size_t index[]) {
+	size_t i;
+	if(nout >= n) {
+		for (i=0;i<n;i++)
+			index[i]=i;
+		return 0;
+	}
+
 	/* first and last point */
 	size_t ntmp=0;
 	index[ntmp++]=0;
 	index[ntmp++]=n-1;
 
-	double dist, maxdist;
+	if(nout <= 2)	/* using first and last point */
+		return DBL_MAX;
+
+	double dist, maxdist=0;
 	while (ntmp < nout) {
 		/*printf("ntmp = %zu\n", ntmp);*/
 		maxdist=0;
-		size_t i, v, key;
+		size_t v, key=0;
 		for (i=0;i<ntmp-1;i++) {	/* all edges */
 			/*printf("edge %zu (%zu - %zu)\n", i, index[i], index[i+1]);*/
 			for (v=index[i]+1; v < index[i+1]; v++) {
@@ -197,7 +207,8 @@ double nsl_geom_linesim_douglas_peucker_variant(const double xdata[], const doub
 			}
 		}
 		/*printf("adding key %zu (dist = %g)\n", key, maxdist);*/
-		index[ntmp++]=key;
+		if (key != 0)
+			index[ntmp++]=key;
 
 		/* sort array index */
 		nsl_sort_size_t(index, ntmp);
