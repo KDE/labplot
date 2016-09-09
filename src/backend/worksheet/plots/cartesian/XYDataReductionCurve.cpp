@@ -253,8 +253,13 @@ void XYDataReductionCurvePrivate::recalculate() {
 	int status;
 
 	size_t npoints=0;
+	double calcTolerance=0;		// calculated tolerance from Douglas-Peucker variant
 	size_t *index = (size_t *) malloc(n*sizeof(size_t));
 	switch (type) {
+	case nsl_geom_linesim_type_douglas_peucker_variant:	// tol used as number of points
+		npoints = tol;
+		calcTolerance = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, n, npoints, index);
+		break;
 	case nsl_geom_linesim_type_douglas_peucker:
 		npoints = nsl_geom_linesim_douglas_peucker(xdata, ydata, n, tol, index);
 		break;
@@ -285,6 +290,10 @@ void XYDataReductionCurvePrivate::recalculate() {
 	}
 #ifndef NDEBUG
 	qDebug()<<"npoints ="<<npoints;
+	if (type == nsl_geom_linesim_type_douglas_peucker_variant)
+		qDebug()<<"calculated tolerance ="<<calcTolerance;
+#else
+	Q_UNUSED(calcTolerance);
 #endif
 	if (npoints > 0)
 		status = 0;

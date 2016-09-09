@@ -257,7 +257,9 @@ void XYDataReductionCurveDock::updateTolerance() {
 		m_dataReductionData.tolerance = 10.*nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
 	else if (type == nsl_geom_linesim_type_visvalingam_whyatt)
 		m_dataReductionData.tolerance = 0.1*nsl_geom_linesim_clip_area_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
-	else
+	else if (type == nsl_geom_linesim_type_douglas_peucker_variant)
+		m_dataReductionData.tolerance = xdataVector.size()/10.;	// reduction to 10%
+	else 
 		m_dataReductionData.tolerance = 2.*nsl_geom_linesim_avg_dist_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
 		//m_dataReductionData.tolerance = nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
 	uiGeneralTab.sbTolerance->setValue(m_dataReductionData.tolerance);
@@ -323,6 +325,17 @@ void XYDataReductionCurveDock::typeChanged() {
 		uiGeneralTab.sbTolerance->setDecimals(6);
 		uiGeneralTab.sbTolerance->setMinimum(0);
 		uiGeneralTab.sbTolerance->setSingleStep(0.01);
+		uiGeneralTab.lOption2->hide();
+		uiGeneralTab.chkAuto2->hide();
+		uiGeneralTab.sbTolerance2->hide();
+		if (uiGeneralTab.chkAuto->isChecked())
+			updateTolerance();
+		break;
+	case nsl_geom_linesim_type_douglas_peucker_variant:
+		uiGeneralTab.lOption->setText(i18n("Number of points"));
+		uiGeneralTab.sbTolerance->setDecimals(0);
+		uiGeneralTab.sbTolerance->setMinimum(2);
+		uiGeneralTab.sbTolerance->setSingleStep(1);
 		uiGeneralTab.lOption2->hide();
 		uiGeneralTab.chkAuto2->hide();
 		uiGeneralTab.sbTolerance2->hide();

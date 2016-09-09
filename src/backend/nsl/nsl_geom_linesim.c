@@ -35,7 +35,7 @@
 #include "nsl_geom.h"
 #include "nsl_geom_linesim.h"
 
-const char* nsl_geom_linesim_type_name[] = {"Douglas-Peucker", "Visvalingam-Whyatt", "Reumann-Witkam", "perpendicular distance", "n-th point",
+const char* nsl_geom_linesim_type_name[] = {"Douglas-Peucker (number)", "Douglas-Peucker (tolerance)", "Visvalingam-Whyatt", "Reumann-Witkam", "perpendicular distance", "n-th point",
 	"radial distance", "Interpolation", "Opheim", "Lang"};
 
 /*********** error calculation functions *********/

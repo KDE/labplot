@@ -38,10 +38,10 @@
 
 #include <stdlib.h>
 
-#define NSL_GEOM_LINESIM_TYPE_COUNT 9
-typedef enum {nsl_geom_linesim_type_douglas_peucker, nsl_geom_linesim_type_visvalingam_whyatt, nsl_geom_linesim_type_reumann_witkam,
-	nsl_geom_linesim_type_perpdist, nsl_geom_linesim_type_nthpoint, nsl_geom_linesim_type_raddist, nsl_geom_linesim_type_interp, 
-	nsl_geom_linesim_type_opheim, nsl_geom_linesim_type_lang} nsl_geom_linesim_type;
+#define NSL_GEOM_LINESIM_TYPE_COUNT 10
+typedef enum {nsl_geom_linesim_type_douglas_peucker_variant, nsl_geom_linesim_type_douglas_peucker, nsl_geom_linesim_type_visvalingam_whyatt,
+	nsl_geom_linesim_type_reumann_witkam, nsl_geom_linesim_type_perpdist, nsl_geom_linesim_type_nthpoint, nsl_geom_linesim_type_raddist,
+	nsl_geom_linesim_type_interp, nsl_geom_linesim_type_opheim, nsl_geom_linesim_type_lang} nsl_geom_linesim_type;
 extern const char* nsl_geom_linesim_type_name[];
 
 /*********** error calculation functions *********/
