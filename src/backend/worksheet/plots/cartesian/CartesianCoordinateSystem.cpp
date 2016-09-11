@@ -4,8 +4,7 @@
     Project              : LabPlot
     Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -30,27 +29,20 @@
 
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+
 #include <cmath>
-#include <QUndoCommand>
 #include <KLocale>
 
-/**
- * \class CartesianCoordinateSystem
- * \brief Cartesian coordinate system for plots.
- *
- *
- */
 
+/* ============================================================================ */
+/* =================================== scales ================================= */
+/* ============================================================================ */
 /**
  * \class CartesianCoordinateSystem::Scale
  * \brief Base class for cartesian coordinate system scales.
  *
  *
  */
-
-/* ============================================================================ */
-/* =================================== scales ================================= */
-/* ============================================================================ */
 CartesianCoordinateSystem::Scale::Scale(ScaleType type, const Interval<double> &interval, double a, double b, double c)
 	: m_type(type), m_interval(interval), m_a(a), m_b(b), m_c(c) {
 }
@@ -70,38 +62,6 @@ void CartesianCoordinateSystem::Scale::getProperties(ScaleType *type, Interval<d
 	if (c)
 		*c = m_c;
 }
-
-class CartesianCoordinateSystemSetScalePropertiesCmd : public QUndoCommand {
-	public:
-		CartesianCoordinateSystemSetScalePropertiesCmd(CartesianCoordinateSystem::Scale *target,
-				const Interval<double> &interval, double a, double b, double c)
-			: m_target(target), m_interval(interval), m_a(a), m_b(b), m_c(c) {
-				// use in macro only
-			}
-
-		template <typename T> void swap(T *a, T *b) {
-			T temp = *a;
-			*a = *b;
-			*b = temp;
-		}
-
-		virtual void redo() {
-			swap< Interval<double> >(&m_interval, &m_target->m_interval);
-			swap< double >(&m_a, &m_target->m_a);
-			swap< double >(&m_b, &m_target->m_b);
-			swap< double >(&m_c, &m_target->m_c);
-		}
-
-		virtual void undo() { redo(); }
-
-	private:
-		CartesianCoordinateSystem::Scale *m_target;
-		Interval<double> m_interval;
-		double m_a;
-		double m_b;
-		double m_c;
-};
-
 
 class LinearScale: public CartesianCoordinateSystem::Scale {
 	public:
@@ -171,10 +131,8 @@ class LogScale: public CartesianCoordinateSystem::Scale {
 				*a = m_a * ratio;
 				*b = m_b * ratio;
 				*c = m_c;
-
 		}
 };
-
 
 CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createScale(ScaleType type, const Interval<double> &interval, double a, double b, double c) {
 	switch (type) {
@@ -223,7 +181,9 @@ CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createLogSca
 /* ============================================================================ */
 /* ========================= coordinate system ================================ */
 /* ============================================================================ */
-class CartesianCoordinateSystemPrivate{
+
+
+class CartesianCoordinateSystemPrivate {
 public:
 	CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner);
 	~CartesianCoordinateSystemPrivate();
@@ -234,12 +194,15 @@ public:
 	QList<CartesianCoordinateSystem::Scale*> yScales;
 };
 
+/**
+ * \class CartesianCoordinateSystem
+ * \brief Cartesian coordinate system for plots.
+ */
 CartesianCoordinateSystem::CartesianCoordinateSystem(CartesianPlot* plot)
 		: AbstractCoordinateSystem(plot), d(new CartesianCoordinateSystemPrivate(this)) {
 			d->plot=plot;
 	// TODO: set some standard scales
 }
-
 
 CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 	delete d;
@@ -684,24 +647,6 @@ QList<CartesianCoordinateSystem::Scale *> CartesianCoordinateSystem::yScales() c
 	return d->yScales; // TODO: should rather return a copy of the scales here
 }
 
-void CartesianCoordinateSystem::handlePageResize(double horizontalRatio, double verticalRatio) {
-	Scale::ScaleType type;
-	Interval<double> interval;
-	double a, b, c;
-
-	d->plot->beginMacro(i18n("adjust to page size"));
-	foreach (Scale *xScale, d->xScales) {
-		xScale->getPropertiesOnResize(horizontalRatio, &type, &interval, &a, &b, &c);
-		d->plot->exec(new CartesianCoordinateSystemSetScalePropertiesCmd(xScale, interval, a, b, c));
-	}
-
-	foreach (Scale *yScale, d->yScales) {
-		yScale->getPropertiesOnResize(verticalRatio, &type, &interval, &a, &b, &c);
-		d->plot->exec(new CartesianCoordinateSystemSetScalePropertiesCmd(yScale, interval, a, b, c));
-	}
-	d->plot->endMacro();
-}
-
 /*!
  * Adjusted the function QRectF::contains(QPointF) from Qt 4.8.4 to handle the
  * comparison of float numbers correctly.
@@ -752,16 +697,4 @@ CartesianCoordinateSystemPrivate::~CartesianCoordinateSystemPrivate() {
 
 	while (!yScales.isEmpty())
 		delete yScales.takeFirst();
-}
-
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
-void CartesianCoordinateSystem::save(QXmlStreamWriter* writer) const{
-	Q_UNUSED(writer);
-}
-
-bool CartesianCoordinateSystem::load(XmlStreamReader* reader) {
-	Q_UNUSED(reader);
-	return true;
 }

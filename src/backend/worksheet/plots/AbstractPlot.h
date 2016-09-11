@@ -55,9 +55,6 @@ class AbstractPlot:public WorksheetElementContainer{
 		typedef AbstractPlot BaseClass;
 		typedef AbstractPlotPrivate Private;
 
-	public slots:
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
-
 	protected:
 		AbstractPlot(const QString &name, AbstractPlotPrivate *dd);
 		AbstractCoordinateSystem* m_coordinateSystem;

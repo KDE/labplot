@@ -1324,8 +1324,7 @@ void CartesianPlotPrivate::retransformScales() {
 		//TODO: how should we handle the case sceneStart=sceneEnd
 		//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
 		if (sceneStart!=sceneEnd) {
-			Interval<double> interval(SCALE_MIN, SCALE_MAX);
-			scales << this->createScale(xScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 		}
 	} else {
 		foreach(const CartesianPlot::RangeBreak& b, xRangeBreaks.list) {
@@ -1334,16 +1333,13 @@ void CartesianPlotPrivate::retransformScales() {
 			sceneEnd = sceneStart+(sceneEnd-sceneStart)*b.position;
 			logicalStart = xMin;
 			logicalEnd = b.start;
-
-			Interval<double> interval(SCALE_MIN, SCALE_MAX);
-			scales << this->createScale(xScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 
 			sceneStart = sceneEnd+50;
 			sceneEnd = itemRect.x()+itemRect.width()-horizontalPadding;
 			logicalStart = b.end;
 			logicalEnd = xMax;
-			Interval<double> interval2(SCALE_MIN, SCALE_MAX);
-			scales << this->createScale(xScale, interval2, sceneStart, sceneEnd, logicalStart, logicalEnd);
+			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 		}
 	}
 
@@ -1367,8 +1363,7 @@ void CartesianPlotPrivate::retransformScales() {
 		sceneEnd = itemRect.y()+verticalPadding;
 		logicalStart = yMin;
 		logicalEnd = yMax;
-		Interval<double> interval (SCALE_MIN, SCALE_MAX);
-		scales << this->createScale(yScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+		scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	} else {
 		foreach(const CartesianPlot::RangeBreak& b, yRangeBreaks.list) {
 			sceneStart = itemRect.y()+itemRect.height()-verticalPadding;
@@ -1376,16 +1371,13 @@ void CartesianPlotPrivate::retransformScales() {
 			sceneEnd = sceneStart+(sceneEnd-sceneStart)*b.position;
 			logicalStart = yMin;
 			logicalEnd = b.start;
-
-			Interval<double> interval(SCALE_MIN, SCALE_MAX);
-			scales << this->createScale(yScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+			scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 
 			sceneStart = sceneEnd+50;
 			sceneEnd = itemRect.y()+verticalPadding;
 			logicalStart = b.end;
 			logicalEnd = yMax;
-			Interval<double> interval2(SCALE_MIN, SCALE_MAX);
-			scales << this->createScale(yScale, interval2, sceneStart, sceneEnd, logicalStart, logicalEnd);
+			scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 		}
 	}
 
@@ -1496,8 +1488,8 @@ void CartesianPlotPrivate::checkYRange() {
 	}
 }
 
-CartesianCoordinateSystem::Scale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, Interval<double>& interval,
-	double sceneStart, double sceneEnd,double logicalStart, double logicalEnd) {
+CartesianCoordinateSystem::Scale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
+	Interval<double> interval (SCALE_MIN, SCALE_MAX);
 	if (type == CartesianPlot::ScaleLinear) {
 		return CartesianCoordinateSystem::Scale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	} else {

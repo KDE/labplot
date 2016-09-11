@@ -3,8 +3,7 @@
     Project              : LabPlot
     Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -31,7 +30,6 @@
 #define CARTESIANCOORDINATESYSTEM_H
 
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
-#include "backend/lib/macros.h"
 #include "backend/lib/Interval.h"
 
 #include <vector>
@@ -39,6 +37,7 @@
 class CartesianPlot;
 class CartesianCoordinateSystemPrivate;
 class CartesianCoordinateSystemSetScalePropertiesCmd;
+
 class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 
 	public:
@@ -51,12 +50,9 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 				static constexpr double LIMIT_MAX = 1e15;
 				static constexpr double LIMIT_MIN = -1e15;
 #endif
-
 				virtual ~Scale();
-				enum ScaleType {
-					ScaleLinear,
-					ScaleLog,
-				};
+
+				enum ScaleType {ScaleLinear, ScaleLog};
 
 				static Scale *createScale(ScaleType type, const Interval<double> &interval, double a, double b, double c);
 				static Scale *createLinearScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
@@ -73,8 +69,6 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 				virtual void getPropertiesOnResize(double ratio,
 					ScaleType *type, Interval<double> *interval, double *a, double *b, double *c) const = 0;
 
-				// changing properties is done via this command:
-				friend class CartesianCoordinateSystemSetScalePropertiesCmd;
 			protected:
 				Scale(ScaleType type, const Interval<double> &interval, double a, double b, double c);
 				ScaleType m_type;
@@ -94,17 +88,12 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 		virtual QPointF mapSceneToLogical(const QPointF&, const MappingFlags &flags = DefaultMapping) const;
 		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF>&, const MappingFlags &flags = DefaultMapping) const;
 
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
-
 		int xDirection() const;
 		int yDirection() const;
-		bool setXScales(const QList<Scale *> &scales);
-		QList<Scale *> xScales() const;
-		bool setYScales(const QList<Scale *> &scales);
-		QList<Scale *> yScales() const;
-
-		virtual void save(QXmlStreamWriter *) const;
-		virtual bool load(XmlStreamReader *);
+		bool setXScales(const QList<Scale*>& scales);
+		QList<Scale*> xScales() const;
+		bool setYScales(const QList<Scale*>& scales);
+		QList<Scale*> yScales() const;
 
 	private:
 		void init();
