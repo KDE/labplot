@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include "nsl_geom_linesim.h"
 
-double main() {
+int main() {
 	const double xdata[]={1,2,2.5,3,4,7,9,11,13,14};
 	const double ydata[]={1,1,1,3,4,7,8,12,13,13};
 	const size_t n=10;
@@ -49,10 +49,10 @@ double main() {
 
 	const size_t no=6;
 	printf("* simplification (Douglas Peucker variant) nout = %zu\n", no);
-	double tolout = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, n, nout, index);
+	double tolout = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, n, no, index);
 	printf("maxtol = %g (pos. error = %g, area error = %g)\n", tolout, nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index), nsl_geom_linesim_area_error(xdata, ydata, n, index));
 
-	for(i=0; i<nout; i++)
+	for(i=0; i<no; i++)
 		printf("%d: %d\n", i, index[i]);
 
 	const size_t np=2;

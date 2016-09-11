@@ -175,8 +175,8 @@ size_t nsl_geom_linesim_douglas_peucker_auto(const double xdata[], const double 
 
 double nsl_geom_linesim_douglas_peucker_variant(const double xdata[], const double ydata[], const size_t n, const size_t nout, size_t index[]) {
 	size_t i;
-	if(nout >= n) {
-		for (i=0;i<n;i++)
+	if(nout >= n) {	/* all points */
+		for (i = 0; i < n; i++)
 			index[i]=i;
 		return 0;
 	}
@@ -189,30 +189,63 @@ double nsl_geom_linesim_douglas_peucker_variant(const double xdata[], const doub
 	if(nout <= 2)	/* using first and last point */
 		return DBL_MAX;
 
-	double dist, maxdist=0;
+	double *dist = (double *)malloc(n*sizeof(double));
+	for (i = 0; i < n; i++) {	/* initialize  dist */
+		dist[i] = nsl_geom_point_line_dist(xdata[0], ydata[0], xdata[n-1], ydata[n-1], xdata[i], ydata[i]);
+		/*printf("%zu: %g\n", i, dist[i]);*/
+	}
+
+	double maxdist;
 	while (ntmp < nout) {
-		/*printf("ntmp = %zu\n", ntmp);*/
+		size_t key=0, v;
+
+		/* find maximum (takes 95% of time !) */
+		/*maxdist = nsl_stats_maximum(dist, n, &key);*/
 		maxdist=0;
-		size_t v, key=0;
-		for (i=0;i<ntmp-1;i++) {	/* all edges */
-			/*printf("edge %zu (%zu - %zu)\n", i, index[i], index[i+1]);*/
-			for (v=index[i]+1; v < index[i+1]; v++) {
-				/*printf("vertex %zu \n", v);*/
-				dist = nsl_geom_point_line_dist(xdata[index[i]], ydata[index[i]], xdata[index[i+1]], ydata[index[i+1]], xdata[v], ydata[v]);
-				/*printf("	dist = %g\n", dist);*/
-				if (dist > maxdist) {
-					maxdist=dist;
-					key=v;
-				}
+		for (i = 1; i < n-1; i++)
+			if (dist[i] > maxdist) {
+				maxdist = dist[i];
+				key = i;
+			}
+
+		/*printf("found key %zu (dist = %g)\n", key, maxdist);*/
+		ntmp++;
+		dist[key] = 0;
+
+		/* find index of previous key */
+		size_t previndex=0;
+		while(index[previndex+1] < key)
+			previndex++;
+		/*printf("previndex = %zu (update key %zu - %zu)\n", previndex, index[previndex], index[previndex+1]);*/
+
+		/* no update on last key */
+		if(ntmp < nout) {
+
+			/* update dist[] */
+			for (v = index[previndex]+1; v < key; v++) {
+				/*printf("updating vertex %zu : ", v);*/
+				/*printf("%zu to %zu - %zu", v, index[previndex], key);*/
+				dist[v] = nsl_geom_point_line_dist(xdata[index[previndex]], ydata[index[previndex]], xdata[key], ydata[key], 
+					xdata[v], ydata[v]);
+
+				/*printf(" dist = %g\n", dist[v]);*/
+			}
+			for (v = key+1; v < index[previndex+1]; v++) {
+				/*printf("updating vertex %zu : ", v);*/
+				/*printf("%zu to %zu - %zu", v, key, index[previndex+1]);*/
+				dist[v] = nsl_geom_point_line_dist(xdata[key], ydata[key], xdata[index[previndex+1]], ydata[index[previndex+1]], 
+					xdata[v], ydata[v]);
+				/*printf(" dist = %g\n", dist[v]);*/
 			}
 		}
-		/*printf("adding key %zu (dist = %g)\n", key, maxdist);*/
-		if (key != 0)
-			index[ntmp++]=key;
 
-		/* sort array index */
-		nsl_sort_size_t(index, ntmp);
+		/* put into index array */
+		for(v = ntmp; v > previndex+1; v--)
+			index[v] = index[v-1];
+		index[previndex+1] = key;
 	}
+
+	free(dist);
 
 	return maxdist;
 }
