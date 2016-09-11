@@ -47,8 +47,6 @@ int main() {
 	}
 	for(i=0; i<N; i++)
 		fscanf(file,"%lf %lf", &xdata[i], &ydata[i]);
-	for(i=0; i<10; i++)
-		printf("%g %g\n", xdata[i], ydata[i]);
 	
 	printf("automatic tol clip_diag_perpoint = %g\n", nsl_geom_linesim_clip_diag_perpoint(xdata, ydata, N));
 	printf("automatic tol clip_area_perpoint = %g\n", nsl_geom_linesim_clip_area_perpoint(xdata, ydata, N));
