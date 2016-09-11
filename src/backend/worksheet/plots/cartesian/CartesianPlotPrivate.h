@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Private members of CartesianPlot.
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -52,9 +52,9 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		void retransformScales();
 		void checkXRange();
 		void checkYRange();
-		CartesianCoordinateSystem::Scale* createScale(CartesianPlot::Scale type, Interval<double>& interval,
-													  double sceneStart, double sceneEnd,
-													  double logicalStart, double logicalEnd);
+		CartesianScale* createScale(CartesianPlot::Scale type,
+									double sceneStart, double sceneEnd,
+									double logicalStart, double logicalEnd);
 
 		float xMin, xMax, yMin, yMax;
 		float xMinPrev, xMaxPrev, yMinPrev, yMaxPrev;
