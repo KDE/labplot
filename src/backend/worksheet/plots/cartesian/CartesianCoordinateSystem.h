@@ -38,62 +38,62 @@ class CartesianPlot;
 class CartesianCoordinateSystemPrivate;
 class CartesianCoordinateSystemSetScalePropertiesCmd;
 
-class CartesianCoordinateSystem: public AbstractCoordinateSystem {
-
+class CartesianScale {
 	public:
-		class Scale {
-			public:
 #if __cplusplus < 201103L
-				static const double LIMIT_MAX = 1e15;
-				static const double LIMIT_MIN = -1e15;
+		static const double LIMIT_MAX = 1e15;
+		static const double LIMIT_MIN = -1e15;
 #else
-				static constexpr double LIMIT_MAX = 1e15;
-				static constexpr double LIMIT_MIN = -1e15;
+		static constexpr double LIMIT_MAX = 1e15;
+		static constexpr double LIMIT_MIN = -1e15;
 #endif
-				virtual ~Scale();
+		virtual ~CartesianScale();
 
-				enum ScaleType {ScaleLinear, ScaleLog};
+		enum ScaleType {ScaleLinear, ScaleLog};
 
-				static Scale *createScale(ScaleType type, const Interval<double> &interval, double a, double b, double c);
-				static Scale *createLinearScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
-					double logicalStart, double logicalEnd);
-				static Scale *createLogScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
-					double logicalStart, double logicalEnd, double base);
+		static CartesianScale *createScale(ScaleType type, const Interval<double> &interval, double a, double b, double c);
+		static CartesianScale *createLinearScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
+			double logicalStart, double logicalEnd);
+		static CartesianScale *createLogScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
+			double logicalStart, double logicalEnd, double base);
 
-				virtual void getProperties(ScaleType *type = NULL, Interval<double> *interval = NULL,
-						double *a = NULL, double *b = NULL, double *c = NULL) const;
+		virtual void getProperties(ScaleType *type = NULL, Interval<double> *interval = NULL,
+				double *a = NULL, double *b = NULL, double *c = NULL) const;
 
-				virtual bool map(double *value) const = 0;
-				virtual bool inverseMap(double *value) const = 0;
-				virtual int direction() const = 0;
-				virtual void getPropertiesOnResize(double ratio,
-					ScaleType *type, Interval<double> *interval, double *a, double *b, double *c) const = 0;
+		virtual bool map(double *value) const = 0;
+		virtual bool inverseMap(double *value) const = 0;
+		virtual int direction() const = 0;
+		virtual void getPropertiesOnResize(double ratio,
+			ScaleType *type, Interval<double> *interval, double *a, double *b, double *c) const = 0;
 
-			protected:
-				Scale(ScaleType type, const Interval<double> &interval, double a, double b, double c);
-				ScaleType m_type;
-				Interval<double> m_interval;
-				double m_a;
-				double m_b;
-				double m_c;
-		};
+	protected:
+		CartesianScale(ScaleType type, const Interval<double> &interval, double a, double b, double c);
+		ScaleType m_type;
+		Interval<double> m_interval;
+		double m_a;
+		double m_b;
+		double m_c;
+};
 
+class CartesianCoordinateSystem: public AbstractCoordinateSystem {
+	public:
 		CartesianCoordinateSystem(CartesianPlot*);
 		virtual ~CartesianCoordinateSystem();
 
 		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF>&, const MappingFlags &flags = DefaultMapping) const;
 		void mapLogicalToScene(const QList<QPointF>& logicalPoints, QList<QPointF>& scenePoints, std::vector<bool>& visiblePoints, const MappingFlags& flags = DefaultMapping) const;
 		virtual QPointF mapLogicalToScene(const QPointF&,const MappingFlags& flags = DefaultMapping) const;
+		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF>&, const MappingFlags &flags = DefaultMapping) const;
+
 		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF>&, const MappingFlags &flags = DefaultMapping) const;
 		virtual QPointF mapSceneToLogical(const QPointF&, const MappingFlags &flags = DefaultMapping) const;
-		virtual QList<QLineF> mapLogicalToScene(const QList<QLineF>&, const MappingFlags &flags = DefaultMapping) const;
 
 		int xDirection() const;
 		int yDirection() const;
-		bool setXScales(const QList<Scale*>& scales);
-		QList<Scale*> xScales() const;
-		bool setYScales(const QList<Scale*>& scales);
-		QList<Scale*> yScales() const;
+		bool setXScales(const QList<CartesianScale*>& scales);
+		QList<CartesianScale*> xScales() const;
+		bool setYScales(const QList<CartesianScale*>& scales);
+		QList<CartesianScale*> yScales() const;
 
 	private:
 		void init();
