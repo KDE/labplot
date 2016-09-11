@@ -61,6 +61,10 @@ void CartesianScale::getProperties(ScaleType *type, Interval<double> *interval,
 		*c = m_c;
 }
 
+bool CartesianScale::contains(double value) const {
+	return m_interval.fuzzyContains(value);
+}
+
 /**
  * \class CartesianCoordinateSystem::LinearScale
  * \brief implementation of the linear scale for cartesian coordinate system.
@@ -85,15 +89,6 @@ class LinearScale : public CartesianScale {
 
 		virtual int direction() const {
 			return m_b < 0 ? -1 : 1;
-		}
-
-		virtual void getPropertiesOnResize(double ratio,
-				ScaleType *type, Interval<double> *interval, double *a, double *b, double *c) const {
-				*type = m_type;
-				*interval = Interval<double>(m_interval.start() * ratio, m_interval.end() * ratio);
-				*a = m_a * ratio;
-				*b = m_b * ratio;
-				*c = m_c;
 		}
 };
 
@@ -130,14 +125,6 @@ class LogScale : public CartesianScale {
 		}
 		virtual int direction() const {
 			return m_b < 0 ? -1 : 1;
-		}
-		virtual void getPropertiesOnResize(double ratio,
-				ScaleType *type, Interval<double> *interval, double *a, double *b, double *c) const {
-				*type = m_type;
-				*interval = Interval<double>(m_interval.start() * ratio, m_interval.end() * ratio);
-				*a = m_a * ratio;
-				*b = m_b * ratio;
-				*c = m_c;
 		}
 };
 
@@ -223,22 +210,18 @@ QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>
 
 	foreach (const CartesianScale* xScale, d->xScales) {
 		if (!xScale) continue;
-		Interval<double> xInterval;
-		xScale->getProperties(NULL, &xInterval);
 
 		foreach (const CartesianScale* yScale, d->yScales) {
 			if (!yScale) continue;
-			Interval<double> yInterval;
-			yScale->getProperties(NULL, &yInterval);
 
 			foreach(const QPointF& point, points) {
 				double x = point.x();
 				double y = point.y();
 
-				if (!xInterval.fuzzyContains(x))
+				if (!xScale->contains(x))
 					continue;
 
-				if (!yInterval.fuzzyContains(y))
+				if (!yScale->contains(y))
 					continue;
 
 				if (!xScale->map(&x))
@@ -274,23 +257,19 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalP
 
 	foreach (const CartesianScale* xScale, d->xScales) {
 		if (!xScale) continue;
-		Interval<double> xInterval;
-		xScale->getProperties(NULL, &xInterval);
 
 		foreach (const CartesianScale* yScale, d->yScales) {
 			if (!yScale) continue;
-			Interval<double> yInterval;
-			yScale->getProperties(NULL, &yInterval);
 
 			for (int i=0; i<logicalPoints.size(); ++i) {
 				const QPointF& point = logicalPoints.at(i);
 				double x = point.x();
 				double y = point.y();
 
-				if (!xInterval.fuzzyContains(x))
+				if (!xScale->contains(x))
 					continue;
 
-				if (!yInterval.fuzzyContains(y))
+				if (!yScale->contains(y))
 					continue;
 
 				if (!xScale->map(&x))
@@ -314,23 +293,19 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(const QPointF& logicalPoint
 	QList<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
+	double x = logicalPoint.x();
+	double y = logicalPoint.y();
+
 	foreach (const CartesianScale* xScale, d->xScales) {
 		if (!xScale) continue;
-		Interval<double> xInterval;
-		xScale->getProperties(NULL, &xInterval);
 
 		foreach (const CartesianScale* yScale, d->yScales) {
 			if (!yScale) continue;
-			Interval<double> yInterval;
-			yScale->getProperties(NULL, &yInterval);
 
-			double x = logicalPoint.x();
-			double y = logicalPoint.y();
-
-			if (!xInterval.fuzzyContains(x))
+			if (!xScale->contains(x))
 				continue;
 
-			if (!yInterval.fuzzyContains(y))
+			if (!yScale->contains(y))
 				continue;
 
 			if (!xScale->map(&x))
@@ -344,6 +319,7 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(const QPointF& logicalPoint
 				return mappedPoint;
 		}
 	}
+
 	return QPointF();
 }
 
@@ -532,17 +508,11 @@ QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF>
 
 			foreach (const CartesianScale* xScale, d->xScales) {
 				if (found) break;
-
 				if (!xScale) continue;
-				Interval<double> xInterval;
-				xScale->getProperties(NULL, &xInterval);
 
 				foreach (const CartesianScale* yScale, d->yScales) {
 					if (found) break;
-
 					if (!yScale) continue;
-					Interval<double> yInterval;
-					yScale->getProperties(NULL, &yInterval);
 
 					if (!xScale->inverseMap(&x))
 						continue;
@@ -550,10 +520,10 @@ QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF>
 					if (!yScale->inverseMap(&y))
 						continue;
 
-					if (!xInterval.fuzzyContains(x))
+					if (!xScale->contains(x))
 						continue;
 
-					if (!yInterval.fuzzyContains(y))
+					if (!yScale->contains(y))
 						continue;
 
 					result.append(QPointF(x, y));
@@ -577,13 +547,9 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(const QPointF& logicalPoint
 
 		foreach (const CartesianScale* xScale, d->xScales) {
 			if (!xScale) continue;
-			Interval<double> xInterval;
-			xScale->getProperties(NULL, &xInterval);
 
 			foreach (const CartesianScale* yScale, d->yScales) {
 				if (!yScale) continue;
-				Interval<double> yInterval;
-				yScale->getProperties(NULL, &yInterval);
 
 				if (!xScale->inverseMap(&x))
 					continue;
@@ -591,10 +557,10 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(const QPointF& logicalPoint
 				if (!yScale->inverseMap(&y))
 					continue;
 
-				if (!xInterval.fuzzyContains(x))
+				if (!xScale->contains(x))
 					continue;
 
-				if (!yInterval.fuzzyContains(y))
+				if (!yScale->contains(y))
 					continue;
 
 				result.setX(x);

@@ -60,11 +60,10 @@ class CartesianScale {
 		virtual void getProperties(ScaleType *type = NULL, Interval<double> *interval = NULL,
 				double *a = NULL, double *b = NULL, double *c = NULL) const;
 
-		virtual bool map(double *value) const = 0;
-		virtual bool inverseMap(double *value) const = 0;
+		bool contains(double) const;
+		virtual bool map(double*) const = 0;
+		virtual bool inverseMap(double*) const = 0;
 		virtual int direction() const = 0;
-		virtual void getPropertiesOnResize(double ratio,
-			ScaleType *type, Interval<double> *interval, double *a, double *b, double *c) const = 0;
 
 	protected:
 		CartesianScale(ScaleType type, const Interval<double> &interval, double a, double b, double c);
