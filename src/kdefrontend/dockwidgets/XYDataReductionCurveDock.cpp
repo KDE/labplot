@@ -35,6 +35,8 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
+#include <QStatusBar>
+#include <QProgressBar>
 #ifndef NDEBUG
 #include <QDebug>
 #endif
@@ -55,8 +57,8 @@
   \ingroup kdefrontend
 */
 
-XYDataReductionCurveDock::XYDataReductionCurveDock(QWidget *parent): 
-	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_dataReductionCurve(0) {
+XYDataReductionCurveDock::XYDataReductionCurveDock(QWidget *parent, QStatusBar *sb):
+	XYCurveDock(parent), statusBar(sb), cbXDataColumn(0), cbYDataColumn(0), m_dataReductionCurve(0) {
 
 	//hide the line connection type
 	ui.cbLineType->setDisabled(true);
@@ -456,13 +458,22 @@ void XYDataReductionCurveDock::tolerance2Changed() {
 }
 
 void XYDataReductionCurveDock::recalculateClicked() {
+        //show a progress bar in the status bar
+        QProgressBar* progressBar = new QProgressBar();
+        progressBar->setMinimum(0);
+        progressBar->setMaximum(100);
+	connect(m_curve, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
+        statusBar->clearMessage();
+        statusBar->addWidget(progressBar, 1);
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	foreach (XYCurve* curve, m_curvesList)
 		dynamic_cast<XYDataReductionCurve*>(curve)->setDataReductionData(m_dataReductionData);
 
+        QApplication::restoreOverrideCursor();
+        statusBar->removeWidget(progressBar);
+
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	QApplication::restoreOverrideCursor();
 }
 
 void XYDataReductionCurveDock::enableRecalculate() const {
