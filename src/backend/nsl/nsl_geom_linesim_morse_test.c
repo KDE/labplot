@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : AbstractPlot.h
+    File                 : nsl_geom_linesim_morse_test.c
     Project              : LabPlot
-    Description          : Base class for plots of different types
+    Description          : NSL line simplification morse test
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2012 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -27,43 +26,40 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ABSTRACTPLOT_H
-#define ABSTRACTPLOT_H
+#include <stdio.h>
+#include "nsl_geom_linesim.h"
 
-#include "backend/worksheet/WorksheetElementContainer.h"
-#include "backend/worksheet/WorksheetElementContainerPrivate.h"
-#include "backend/lib/macros.h"
+#define FILENAME "morse_code.dat"
+#define N 152000
+#define NOUT 15200
 
-class AbstractCoordinateSystem;
-class PlotArea;
-class TextLabel;
-class AbstractPlotPrivate;
+int main() {
+	double *xdata, *ydata;
+	size_t index[N], i;
 
-class AbstractPlot:public WorksheetElementContainer{
-	Q_OBJECT
+	xdata = (double *)malloc(N*sizeof(double));
+	ydata = (double *)malloc(N*sizeof(double));
 
-	public:
-		explicit AbstractPlot(const QString &name);
-		virtual ~AbstractPlot(){}
-		AbstractCoordinateSystem* coordinateSystem() const;
-		PlotArea* plotArea();
-		TextLabel* title();
+	FILE *file;
+	if((file = fopen(FILENAME, "r")) == NULL) {
+		printf("ERROR reading %s. Giving up.\n", FILENAME);	
+		return -1;
+	}
+	for(i=0; i<N; i++)
+		fscanf(file,"%lf %lf", &xdata[i], &ydata[i]);
+	
+	printf("automatic tol clip_diag_perpoint = %g\n", nsl_geom_linesim_clip_diag_perpoint(xdata, ydata, N));
+	printf("automatic tol clip_area_perpoint = %g\n", nsl_geom_linesim_clip_area_perpoint(xdata, ydata, N));
+	printf("automatic tol avg_dist = %g\n", nsl_geom_linesim_avg_dist_perpoint(xdata, ydata, N));
 
-		BASIC_D_ACCESSOR_DECL(float, horizontalPadding, HorizontalPadding)
-		BASIC_D_ACCESSOR_DECL(float, verticalPadding, VerticalPadding)
+	printf("* simplification (Douglas Peucker variant) nout = %zu\n", NOUT);
+	
+	struct timeval time1, time2;
+	gettimeofday(&time1, NULL);
+	double tolout = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, N, NOUT, index);
+	gettimeofday(&time2, NULL);
+	printf("run time : %llu ms\n", 1000 * (time2.tv_sec - time1.tv_sec) + (time2.tv_usec - time1.tv_usec) / 1000);
 
-		typedef AbstractPlot BaseClass;
-		typedef AbstractPlotPrivate Private;
+	printf("maxtol = %g (pos. error = %g, area error = %g)\n", tolout, nsl_geom_linesim_positional_squared_error(xdata, ydata, N, index), nsl_geom_linesim_area_error(xdata, ydata, N, index));
 
-	protected:
-		AbstractPlot(const QString &name, AbstractPlotPrivate *dd);
-		AbstractCoordinateSystem* m_coordinateSystem;
-		PlotArea* m_plotArea;
-		TextLabel *m_title;
-
-	private:
-		void init();
-    	Q_DECLARE_PRIVATE(AbstractPlot)
-};
-
-#endif
+}

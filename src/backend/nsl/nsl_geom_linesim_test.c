@@ -29,15 +29,15 @@
 #include <stdio.h>
 #include "nsl_geom_linesim.h"
 
-double main() {
+int main() {
 	const double xdata[]={1,2,2.5,3,4,7,9,11,13,14};
 	const double ydata[]={1,1,1,3,4,7,8,12,13,13};
 	const size_t n=10;
 	size_t index[n], i;
 
-	printf("automatic radial tol = %g\n", nsl_geom_linesim_radial_tol(xdata, ydata, n));
-	printf("automatic perpendicular tol = %g\n", nsl_geom_linesim_perpendicular_tol(xdata, ydata, n));
-	printf("automatic area tol = %g\n", nsl_geom_linesim_area_tol(xdata, ydata, n));
+	printf("automatic tol clip_diag_perpoint = %g\n", nsl_geom_linesim_clip_diag_perpoint(xdata, ydata, n));
+	printf("automatic tol clip_area_perpoint = %g\n", nsl_geom_linesim_clip_area_perpoint(xdata, ydata, n));
+	printf("automatic tol avg_dist = %g\n", nsl_geom_linesim_avg_dist_perpoint(xdata, ydata, n));
 
 	const double tol5=0.6;
 	printf("* simplification (Douglas Peucker)\n");
@@ -45,6 +45,14 @@ double main() {
 	printf("nout = %d (pos. error = %g, area error = %g)\n", nout, nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index), nsl_geom_linesim_area_error(xdata, ydata, n, index));
 
 	for(i=0; i<nout; i++)
+		printf("%d: %d\n", i, index[i]);
+
+	const size_t no=6;
+	printf("* simplification (Douglas Peucker variant) nout = %zu\n", no);
+	double tolout = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, n, no, index);
+	printf("maxtol = %g (pos. error = %g, area error = %g)\n", tolout, nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index), nsl_geom_linesim_area_error(xdata, ydata, n, index));
+
+	for(i=0; i<no; i++)
 		printf("%d: %d\n", i, index[i]);
 
 	const size_t np=2;

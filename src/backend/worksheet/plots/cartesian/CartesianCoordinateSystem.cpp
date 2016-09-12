@@ -4,8 +4,7 @@
     Project              : LabPlot
     Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -30,34 +29,25 @@
 
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+
 #include <cmath>
-#include <QUndoCommand>
 #include <KLocale>
 
-/**
- * \class CartesianCoordinateSystem
- * \brief Cartesian coordinate system for plots.
- *
- *
- */
-
-/**
- * \class CartesianCoordinateSystem::Scale
- * \brief Base class for cartesian coordinate system scales.
- *
- *
- */
 
 /* ============================================================================ */
 /* =================================== scales ================================= */
 /* ============================================================================ */
-CartesianCoordinateSystem::Scale::Scale(ScaleType type, const Interval<double> &interval, double a, double b, double c)
+/**
+ * \class CartesianScale
+ * \brief Base class for cartesian coordinate system scales.
+ */
+CartesianScale::CartesianScale(ScaleType type, const Interval<double> &interval, double a, double b, double c)
 	: m_type(type), m_interval(interval), m_a(a), m_b(b), m_c(c) {
 }
 
-CartesianCoordinateSystem::Scale::~Scale() {}
+CartesianScale::~CartesianScale() {}
 
-void CartesianCoordinateSystem::Scale::getProperties(ScaleType *type, Interval<double> *interval,
+void CartesianScale::getProperties(ScaleType *type, Interval<double> *interval,
 		double *a, double *b, double *c) const {
 	if (type)
 		*type = m_type;
@@ -71,43 +61,19 @@ void CartesianCoordinateSystem::Scale::getProperties(ScaleType *type, Interval<d
 		*c = m_c;
 }
 
-class CartesianCoordinateSystemSetScalePropertiesCmd : public QUndoCommand {
+bool CartesianScale::contains(double value) const {
+	return m_interval.fuzzyContains(value);
+}
+
+/**
+ * \class CartesianCoordinateSystem::LinearScale
+ * \brief implementation of the linear scale for cartesian coordinate system.
+ */
+class LinearScale : public CartesianScale {
 	public:
-		CartesianCoordinateSystemSetScalePropertiesCmd(CartesianCoordinateSystem::Scale *target,
-				const Interval<double> &interval, double a, double b, double c)
-			: m_target(target), m_interval(interval), m_a(a), m_b(b), m_c(c) {
-				// use in macro only
-			}
-
-		template <typename T> void swap(T *a, T *b) {
-			T temp = *a;
-			*a = *b;
-			*b = temp;
-		}
-
-		virtual void redo() {
-			swap< Interval<double> >(&m_interval, &m_target->m_interval);
-			swap< double >(&m_a, &m_target->m_a);
-			swap< double >(&m_b, &m_target->m_b);
-			swap< double >(&m_c, &m_target->m_c);
-		}
-
-		virtual void undo() { redo(); }
-
-	private:
-		CartesianCoordinateSystem::Scale *m_target;
-		Interval<double> m_interval;
-		double m_a;
-		double m_b;
-		double m_c;
-};
-
-
-class LinearScale: public CartesianCoordinateSystem::Scale {
-	public:
-		virtual ~LinearScale() {}
 		LinearScale(const Interval<double> &interval, double offset, double gradient)
-			: CartesianCoordinateSystem::Scale(ScaleLinear, interval, offset, gradient, 0) { Q_ASSERT(gradient != 0.0); }
+			: CartesianScale(ScaleLinear, interval, offset, gradient, 0) { Q_ASSERT(gradient != 0.0); }
+		virtual ~LinearScale() {}
 
 		virtual bool map(double *value) const {
 			*value = *value * m_b + m_a;
@@ -120,25 +86,21 @@ class LinearScale: public CartesianCoordinateSystem::Scale {
 			*value = (*value - m_a) / m_b;
 			return true;
 		}
+
 		virtual int direction() const {
 			return m_b < 0 ? -1 : 1;
 		}
-		virtual void getPropertiesOnResize(double ratio,
-				ScaleType *type, Interval<double> *interval, double *a, double *b, double *c) const {
-				*type = m_type;
-				*interval = Interval<double>(m_interval.start() * ratio, m_interval.end() * ratio);
-				*a = m_a * ratio;
-				*b = m_b * ratio;
-				*c = m_c;
-
-		}
 };
 
-class LogScale: public CartesianCoordinateSystem::Scale {
+/**
+ * \class CartesianCoordinateSystem::LinearScale
+ * \brief implementation of the linear scale for cartesian coordinate system.
+ */
+class LogScale : public CartesianScale {
 	public:
 		virtual ~LogScale() {}
 		LogScale(const Interval<double> &interval, double offset, double scaleFactor, double base)
-			: CartesianCoordinateSystem::Scale(ScaleLog, interval, offset, scaleFactor, base) {
+			: CartesianScale(ScaleLog, interval, offset, scaleFactor, base) {
 				Q_ASSERT(scaleFactor != 0.0);
 				Q_ASSERT(base > 0.0);
 		}
@@ -164,19 +126,37 @@ class LogScale: public CartesianCoordinateSystem::Scale {
 		virtual int direction() const {
 			return m_b < 0 ? -1 : 1;
 		}
-		virtual void getPropertiesOnResize(double ratio,
-				ScaleType *type, Interval<double> *interval, double *a, double *b, double *c) const {
-				*type = m_type;
-				*interval = Interval<double>(m_interval.start() * ratio, m_interval.end() * ratio);
-				*a = m_a * ratio;
-				*b = m_b * ratio;
-				*c = m_c;
-
-		}
 };
 
+/* ============================================================================ */
+/* ========================= coordinate system ================================ */
+/* ============================================================================ */
+class CartesianCoordinateSystemPrivate {
+public:
+	CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner);
+	~CartesianCoordinateSystemPrivate();
 
-CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createScale(ScaleType type, const Interval<double> &interval, double a, double b, double c) {
+	CartesianCoordinateSystem* const q;
+	CartesianPlot* plot;
+	QList<CartesianScale*> xScales;
+	QList<CartesianScale*> yScales;
+};
+
+/**
+ * \class CartesianCoordinateSystem
+ * \brief Cartesian coordinate system for plots.
+ */
+CartesianCoordinateSystem::CartesianCoordinateSystem(CartesianPlot* plot)
+		: AbstractCoordinateSystem(plot), d(new CartesianCoordinateSystemPrivate(this)) {
+			d->plot=plot;
+	// TODO: set some standard scales
+}
+
+CartesianCoordinateSystem::~CartesianCoordinateSystem() {
+	delete d;
+}
+
+CartesianScale *CartesianScale::createScale(ScaleType type, const Interval<double> &interval, double a, double b, double c) {
 	switch (type) {
 		case ScaleLinear:
 			return new LinearScale(interval, a, b);
@@ -187,7 +167,7 @@ CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createScale(
 	}
 }
 
-CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createLinearScale(const Interval<double> &interval,
+CartesianScale *CartesianScale::createLinearScale(const Interval<double> &interval,
 		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
 
 	double lDiff = logicalEnd - logicalStart;
@@ -200,7 +180,7 @@ CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createLinear
 	return new LinearScale(interval, a, b);
 }
 
-CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createLogScale(const Interval<double> &interval,
+CartesianScale *CartesianScale::createLogScale(const Interval<double> &interval,
 		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd, double base) {
 
 	if (base < 0.0 || base == 0.0)
@@ -220,54 +200,28 @@ CartesianCoordinateSystem::Scale *CartesianCoordinateSystem::Scale::createLogSca
 	return new LogScale(interval, a, b, base);
 }
 
-/* ============================================================================ */
-/* ========================= coordinate system ================================ */
-/* ============================================================================ */
-class CartesianCoordinateSystemPrivate{
-public:
-	CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner);
-	~CartesianCoordinateSystemPrivate();
-
-	CartesianCoordinateSystem* const q;
-	CartesianPlot* plot;
-	QList<CartesianCoordinateSystem::Scale*> xScales;
-	QList<CartesianCoordinateSystem::Scale*> yScales;
-};
-
-CartesianCoordinateSystem::CartesianCoordinateSystem(CartesianPlot* plot)
-		: AbstractCoordinateSystem(plot), d(new CartesianCoordinateSystemPrivate(this)) {
-			d->plot=plot;
-	// TODO: set some standard scales
-}
-
-
-CartesianCoordinateSystem::~CartesianCoordinateSystem() {
-	delete d;
-}
-
+//##############################################################################
+//######################### logical to scene mappers ###########################
+//##############################################################################
 QList<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF> &points, const MappingFlags &flags) const {
 	const QRectF pageRect = d->plot->plotRect();
 	QList<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
-	foreach (const Scale* xScale, d->xScales) {
+	foreach (const CartesianScale* xScale, d->xScales) {
 		if (!xScale) continue;
-		Interval<double> xInterval;
-		xScale->getProperties(NULL, &xInterval);
 
-		foreach (const Scale* yScale, d->yScales) {
+		foreach (const CartesianScale* yScale, d->yScales) {
 			if (!yScale) continue;
-			Interval<double> yInterval;
-			yScale->getProperties(NULL, &yInterval);
 
 			foreach(const QPointF& point, points) {
 				double x = point.x();
 				double y = point.y();
 
-				if (!xInterval.fuzzyContains(x))
+				if (!xScale->contains(x))
 					continue;
 
-				if (!yInterval.fuzzyContains(y))
+				if (!yScale->contains(y))
 					continue;
 
 				if (!xScale->map(&x))
@@ -301,25 +255,21 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QList<QPointF>& logicalP
 	QList<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
-	foreach (const Scale* xScale, d->xScales) {
+	foreach (const CartesianScale* xScale, d->xScales) {
 		if (!xScale) continue;
-		Interval<double> xInterval;
-		xScale->getProperties(NULL, &xInterval);
 
-		foreach (const Scale* yScale, d->yScales) {
+		foreach (const CartesianScale* yScale, d->yScales) {
 			if (!yScale) continue;
-			Interval<double> yInterval;
-			yScale->getProperties(NULL, &yInterval);
 
 			for (int i=0; i<logicalPoints.size(); ++i) {
 				const QPointF& point = logicalPoints.at(i);
 				double x = point.x();
 				double y = point.y();
 
-				if (!xInterval.fuzzyContains(x))
+				if (!xScale->contains(x))
 					continue;
 
-				if (!yInterval.fuzzyContains(y))
+				if (!yScale->contains(y))
 					continue;
 
 				if (!xScale->map(&x))
@@ -343,23 +293,19 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(const QPointF& logicalPoint
 	QList<QPointF> result;
 	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
 
-	foreach (const Scale* xScale, d->xScales) {
+	double x = logicalPoint.x();
+	double y = logicalPoint.y();
+
+	foreach (const CartesianScale* xScale, d->xScales) {
 		if (!xScale) continue;
-		Interval<double> xInterval;
-		xScale->getProperties(NULL, &xInterval);
 
-		foreach (const Scale* yScale, d->yScales) {
+		foreach (const CartesianScale* yScale, d->yScales) {
 			if (!yScale) continue;
-			Interval<double> yInterval;
-			yScale->getProperties(NULL, &yInterval);
 
-			double x = logicalPoint.x();
-			double y = logicalPoint.y();
-
-			if (!xInterval.fuzzyContains(x))
+			if (!xScale->contains(x))
 				continue;
 
-			if (!yInterval.fuzzyContains(y))
+			if (!yScale->contains(y))
 				continue;
 
 			if (!xScale->map(&x))
@@ -373,96 +319,8 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(const QPointF& logicalPoint
 				return mappedPoint;
 		}
 	}
+
 	return QPointF();
-}
-
-QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags) const{
-	QRectF pageRect = d->plot->plotRect();
-	QList<QPointF> result;
-	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
-
-	foreach(const QPointF& point, points) {
-		if (noPageClipping || pageRect.contains(point)) {
-			bool found = false;
-
-			double x = point.x();
-			double y = point.y();
-
-			foreach (const Scale* xScale, d->xScales) {
-				if (found) break;
-
-				if (!xScale) continue;
-				Interval<double> xInterval;
-				xScale->getProperties(NULL, &xInterval);
-
-				foreach (const Scale* yScale, d->yScales) {
-					if (found) break;
-
-					if (!yScale) continue;
-					Interval<double> yInterval;
-					yScale->getProperties(NULL, &yInterval);
-
-					if (!xScale->inverseMap(&x))
-						continue;
-
-					if (!yScale->inverseMap(&y))
-						continue;
-
-					if (!xInterval.fuzzyContains(x))
-						continue;
-
-					if (!yInterval.fuzzyContains(y))
-						continue;
-
-					result.append(QPointF(x, y));
-					found = true;
-				}
-			}
-		}
-	}
-
-	return result;
-}
-
-QPointF CartesianCoordinateSystem::mapSceneToLogical(const QPointF& logicalPoint, const MappingFlags& flags) const {
-	QRectF pageRect = d->plot->plotRect();
-	QPointF result;
-	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
-
-	if (noPageClipping || pageRect.contains(logicalPoint)) {
-		double x = logicalPoint.x();
-		double y = logicalPoint.y();
-
-		foreach (const Scale* xScale, d->xScales) {
-			if (!xScale) continue;
-			Interval<double> xInterval;
-			xScale->getProperties(NULL, &xInterval);
-
-			foreach (const Scale* yScale, d->yScales) {
-				if (!yScale) continue;
-				Interval<double> yInterval;
-				yScale->getProperties(NULL, &yInterval);
-
-				if (!xScale->inverseMap(&x))
-					continue;
-
-				if (!yScale->inverseMap(&y))
-					continue;
-
-				if (!xInterval.fuzzyContains(x))
-					continue;
-
-				if (!yInterval.fuzzyContains(y))
-					continue;
-
-				result.setX(x);
-				result.setY(y);
-				return result;
-			}
-		}
-	}
-
-	return result;
 }
 
 QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &lines, const MappingFlags &flags) const{
@@ -475,16 +333,16 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 	double yGapBefore = NAN;
 	double yGapAfter = NAN;
 
- 	QListIterator<Scale *> xIterator(d->xScales);
+ 	QListIterator<CartesianScale *> xIterator(d->xScales);
 	while (xIterator.hasNext()) {
-		const Scale* xScale = xIterator.next();
+		const CartesianScale* xScale = xIterator.next();
 		if (!xScale) continue;
 		Interval<double> xInterval;
 		xScale->getProperties(NULL, &xInterval);
 
 		xGapBefore = xGapAfter;
 		if (xIterator.hasNext()) {
-			const Scale* nextXScale = xIterator.peekNext();
+			const CartesianScale* nextXScale = xIterator.peekNext();
 			if (!nextXScale) continue;
 			Interval<double> nextXInterval;
 			nextXScale->getProperties(NULL, &nextXInterval);
@@ -503,16 +361,16 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 		} else
 			xGapAfter = NAN;
 
-		QListIterator<Scale *> yIterator(d->yScales);
+		QListIterator<CartesianScale *> yIterator(d->yScales);
 		while (yIterator.hasNext()) {
-			const Scale* yScale = yIterator.next();
+			const CartesianScale* yScale = yIterator.next();
 			if (!yScale) continue;
 			Interval<double> yInterval;
 			yScale->getProperties(NULL, &yInterval);
 
 			yGapBefore = yGapAfter;
 			if (yIterator.hasNext()) {
-				const Scale* nextYScale = yIterator.peekNext();
+				const CartesianScale* nextYScale = yIterator.peekNext();
 				if (!nextYScale) continue;
 				Interval<double> nextYInterval;
 				nextYScale->getProperties(NULL, &nextYInterval);
@@ -633,6 +491,88 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 	return result;
 }
 
+//##############################################################################
+//######################### scene to logical mappers ###########################
+//##############################################################################
+QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF> &points, const MappingFlags &flags) const{
+	QRectF pageRect = d->plot->plotRect();
+	QList<QPointF> result;
+	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
+
+	foreach(const QPointF& point, points) {
+		if (noPageClipping || pageRect.contains(point)) {
+			bool found = false;
+
+			double x = point.x();
+			double y = point.y();
+
+			foreach (const CartesianScale* xScale, d->xScales) {
+				if (found) break;
+				if (!xScale) continue;
+
+				foreach (const CartesianScale* yScale, d->yScales) {
+					if (found) break;
+					if (!yScale) continue;
+
+					if (!xScale->inverseMap(&x))
+						continue;
+
+					if (!yScale->inverseMap(&y))
+						continue;
+
+					if (!xScale->contains(x))
+						continue;
+
+					if (!yScale->contains(y))
+						continue;
+
+					result.append(QPointF(x, y));
+					found = true;
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
+QPointF CartesianCoordinateSystem::mapSceneToLogical(const QPointF& logicalPoint, const MappingFlags& flags) const {
+	QRectF pageRect = d->plot->plotRect();
+	QPointF result;
+	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
+
+	if (noPageClipping || pageRect.contains(logicalPoint)) {
+		double x = logicalPoint.x();
+		double y = logicalPoint.y();
+
+		foreach (const CartesianScale* xScale, d->xScales) {
+			if (!xScale) continue;
+
+			foreach (const CartesianScale* yScale, d->yScales) {
+				if (!yScale) continue;
+
+				if (!xScale->inverseMap(&x))
+					continue;
+
+				if (!yScale->inverseMap(&y))
+					continue;
+
+				if (!xScale->contains(x))
+					continue;
+
+				if (!yScale->contains(y))
+					continue;
+
+				result.setX(x);
+				result.setY(y);
+				return result;
+			}
+		}
+	}
+
+	return result;
+}
+
 /**
  * \brief Determine the horizontal direction relative to the page.
  *
@@ -660,7 +600,7 @@ int CartesianCoordinateSystem::yDirection() const{
 }
 
 // TODO: design elegant, flexible and undo-aware API for changing scales
-bool CartesianCoordinateSystem::setXScales(const QList<Scale *> &scales) {
+bool CartesianCoordinateSystem::setXScales(const QList<CartesianScale *> &scales) {
 	while (!d->xScales.isEmpty())
 		delete d->xScales.takeFirst();
 
@@ -668,11 +608,11 @@ bool CartesianCoordinateSystem::setXScales(const QList<Scale *> &scales) {
 	return true; // TODO: check scales validity
 }
 
-QList<CartesianCoordinateSystem::Scale *> CartesianCoordinateSystem::xScales() const {
+QList<CartesianScale*> CartesianCoordinateSystem::xScales() const {
 	return d->xScales; // TODO: should rather return a copy of the scales here
 }
 
-bool CartesianCoordinateSystem::setYScales(const QList<Scale *> &scales) {
+bool CartesianCoordinateSystem::setYScales(const QList<CartesianScale*> &scales) {
 	while (!d->yScales.isEmpty())
 		delete d->yScales.takeFirst();
 
@@ -680,26 +620,8 @@ bool CartesianCoordinateSystem::setYScales(const QList<Scale *> &scales) {
 	return true; // TODO: check scales validity
 }
 
-QList<CartesianCoordinateSystem::Scale *> CartesianCoordinateSystem::yScales() const {
+QList<CartesianScale*> CartesianCoordinateSystem::yScales() const {
 	return d->yScales; // TODO: should rather return a copy of the scales here
-}
-
-void CartesianCoordinateSystem::handlePageResize(double horizontalRatio, double verticalRatio) {
-	Scale::ScaleType type;
-	Interval<double> interval;
-	double a, b, c;
-
-	d->plot->beginMacro(i18n("adjust to page size"));
-	foreach (Scale *xScale, d->xScales) {
-		xScale->getPropertiesOnResize(horizontalRatio, &type, &interval, &a, &b, &c);
-		d->plot->exec(new CartesianCoordinateSystemSetScalePropertiesCmd(xScale, interval, a, b, c));
-	}
-
-	foreach (Scale *yScale, d->yScales) {
-		yScale->getPropertiesOnResize(verticalRatio, &type, &interval, &a, &b, &c);
-		d->plot->exec(new CartesianCoordinateSystemSetScalePropertiesCmd(yScale, interval, a, b, c));
-	}
-	d->plot->endMacro();
 }
 
 /*!
@@ -752,16 +674,4 @@ CartesianCoordinateSystemPrivate::~CartesianCoordinateSystemPrivate() {
 
 	while (!yScales.isEmpty())
 		delete yScales.takeFirst();
-}
-
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
-void CartesianCoordinateSystem::save(QXmlStreamWriter* writer) const{
-	Q_UNUSED(writer);
-}
-
-bool CartesianCoordinateSystem::load(XmlStreamReader* reader) {
-	Q_UNUSED(reader);
-	return true;
 }

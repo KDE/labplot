@@ -38,10 +38,10 @@
 
 #include <stdlib.h>
 
-#define NSL_GEOM_LINESIM_TYPE_COUNT 9
-typedef enum {nsl_geom_linesim_type_douglas_peucker, nsl_geom_linesim_type_visvalingam_whyatt, nsl_geom_linesim_type_reumann_witkam,
-	nsl_geom_linesim_type_perpdist, nsl_geom_linesim_type_nthpoint, nsl_geom_linesim_type_raddist, nsl_geom_linesim_type_interp, 
-	nsl_geom_linesim_type_opheim, nsl_geom_linesim_type_lang} nsl_geom_linesim_type;
+#define NSL_GEOM_LINESIM_TYPE_COUNT 10
+typedef enum {nsl_geom_linesim_type_douglas_peucker_variant, nsl_geom_linesim_type_douglas_peucker, nsl_geom_linesim_type_visvalingam_whyatt,
+	nsl_geom_linesim_type_reumann_witkam, nsl_geom_linesim_type_perpdist, nsl_geom_linesim_type_nthpoint, nsl_geom_linesim_type_raddist,
+	nsl_geom_linesim_type_interp, nsl_geom_linesim_type_opheim, nsl_geom_linesim_type_lang} nsl_geom_linesim_type;
 extern const char* nsl_geom_linesim_type_name[];
 
 /*********** error calculation functions *********/
@@ -60,14 +60,17 @@ double nsl_geom_linesim_positional_squared_error(const double xdata[], const dou
 */
 double nsl_geom_linesim_area_error(const double xdata[], const double ydata[], const size_t n, const size_t index[]);
 
-/* calculates tolerance for radial distance from data */
-double nsl_geom_linesim_radial_tol(const double xdata[], const double ydata[], const size_t n);
+/* calculates tolerance by using diagonal distance of all data point clip area 
+	divided by n */
+double nsl_geom_linesim_clip_diag_perpoint(const double xdata[], const double ydata[], const size_t n);
 
-/* calculates tolerance for perpendicular distance from data */
-double nsl_geom_linesim_perpendicular_tol(const double xdata[], const double ydata[], const size_t n);
+/* calculates tolerance from clip area 
+	divided by n */
+double nsl_geom_linesim_clip_area_perpoint(const double xdata[], const double ydata[], const size_t n);
 
-/* calculates tolerance for area from data */
-double nsl_geom_linesim_area_tol(const double xdata[], const double ydata[], const size_t n);
+/* calculates tolerance from average distance of following point 
+	divided by n */
+double nsl_geom_linesim_avg_dist_perpoint(const double xdata[], const double ydata[], const size_t n);
 
 /*********** simplification algorithms *********/
 
@@ -75,12 +78,21 @@ double nsl_geom_linesim_area_tol(const double xdata[], const double ydata[], con
 	xdata, ydata: data points
 	n: number of points
 	tol: minimum tolerance (perpendicular distance)
-	region: search region (number of points)
 	index: index of reduced points
 	-> returns final number of points
 */
 size_t nsl_geom_linesim_douglas_peucker(const double xdata[], const double ydata[], const size_t n, const double tol, size_t index[]);
 size_t nsl_geom_linesim_douglas_peucker_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]);
+/* Douglas-Peucker variant resulting in a given number of points
+	The key of all egdes of the current simplified line is calculated and only the
+	largest is added. This is repeated until nout is reached.
+	xdata, ydata: data points
+	n: number of points
+	nout: number of output points
+	index: index of reduced points
+	-> returns perpendicular distance of last added point (upper limit for all removed points)
+*/
+double nsl_geom_linesim_douglas_peucker_variant(const double xdata[], const double ydata[], const size_t n, const size_t nout, size_t index[]);
 
 /* simple n-th point line simplification
 	n: number of points
