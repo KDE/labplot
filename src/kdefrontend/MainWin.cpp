@@ -886,7 +886,10 @@ void MainWin::openProject(const QString& filename) {
 }
 
 void MainWin::openRecentProject(const QUrl& url) {
-	this->openProject(url.path());
+	if (url.isLocalFile())	// fix for Windows
+		this->openProject(url.toLocalFile());
+	else
+		this->openProject(url.path());
 }
 
 bool MainWin::openXML(QIODevice *file) {
