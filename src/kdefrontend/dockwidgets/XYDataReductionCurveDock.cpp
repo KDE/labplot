@@ -302,7 +302,7 @@ void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	AbstractColumn* column = 0;
 	if (aspect) {
 		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT();
+		Q_ASSERT(column);
 	}
 
 	foreach(XYCurve* curve, m_curvesList)
