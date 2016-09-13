@@ -201,6 +201,9 @@ private:
 	QAction* shiftDownYAction;
 
 	// Analysis menu
+	QAction* addDifferentiationAction;
+	QAction* addIntegrationAction;
+	QAction* addDataOperationAction;
 	QAction* addDataReductionAction;
 	QAction* addInterpolationAction;
 	QAction* addSmoothAction;

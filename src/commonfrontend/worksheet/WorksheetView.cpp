@@ -292,8 +292,11 @@ void WorksheetView::initActions() {
 	connect(cartesianPlotAddNewActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotAddNew(QAction*)));
 
 	// Analysis menu
-// no icons yet
+	addDataOperationAction = new KAction(i18n("Data operation"), cartesianPlotAddNewActionGroup);
 	addDataReductionAction = new KAction(i18n("Data reduction"), cartesianPlotAddNewActionGroup);
+	addDifferentiationAction = new KAction(i18n("Differentiation"), cartesianPlotAddNewActionGroup);
+	addIntegrationAction = new KAction(i18n("Integration"), cartesianPlotAddNewActionGroup);
+// no icons yet
 	addInterpolationAction = new KAction(i18n("Interpolation"), cartesianPlotAddNewActionGroup);
 	addSmoothAction = new KAction(i18n("Smooth"), cartesianPlotAddNewActionGroup);
 	addFitAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("Data fitting"), cartesianPlotAddNewActionGroup);
@@ -453,6 +456,7 @@ void WorksheetView::initMenus() {
 	// Data manipulation menu
 	m_dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
 	m_dataManipulationMenu->setIcon(KIcon("zoom-draw"));
+	m_dataManipulationMenu->addAction(addDataOperationAction);
 	m_dataManipulationMenu->addAction(addDataReductionAction);
 }
 
@@ -491,6 +495,8 @@ void WorksheetView::createAnalysisMenu(QMenu* menu) const {
 	// Data manipulation menu
 	menu->insertMenu(0,m_dataManipulationMenu);
 
+	menu->addAction(addDifferentiationAction);
+	menu->addAction(addIntegrationAction);
 	menu->addAction(addInterpolationAction);
 	menu->addAction(addSmoothAction);
 	menu->addAction(addFitAction);
