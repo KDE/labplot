@@ -175,6 +175,9 @@ private:
 
 	QAction* addCurveAction;
 	QAction* addEquationCurveAction;
+	QAction* addDifferentationCurveAction;
+	QAction* addIntegrationCurveAction;
+	QAction* addDataOperationCurveAction;
 	QAction* addDataReductionCurveAction;
 	QAction* addInterpolationCurveAction;
 	QAction* addSmoothCurveAction;
@@ -201,10 +204,10 @@ private:
 	QAction* shiftDownYAction;
 
 	// Analysis menu
-	QAction* addDifferentiationAction;
-	QAction* addIntegrationAction;
 	QAction* addDataOperationAction;
 	QAction* addDataReductionAction;
+	QAction* addDifferentiationAction;
+	QAction* addIntegrationAction;
 	QAction* addInterpolationAction;
 	QAction* addSmoothAction;
 	QAction* addFitAction;

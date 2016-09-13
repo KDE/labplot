@@ -274,8 +274,11 @@ void WorksheetView::initActions() {
 	QActionGroup* cartesianPlotAddNewActionGroup = new QActionGroup(this);
 	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), cartesianPlotAddNewActionGroup);
-// no icons yet
+	addDataOperationCurveAction = new KAction(i18n("xy-curve from a data operation"), cartesianPlotAddNewActionGroup);
 	addDataReductionCurveAction = new KAction(i18n("xy-curve from a data reduction"), cartesianPlotAddNewActionGroup);
+	addDifferentationCurveAction = new KAction(i18n("xy-curve from a differentation"), cartesianPlotAddNewActionGroup);
+	addIntegrationCurveAction = new KAction(i18n("xy-curve from an integration"), cartesianPlotAddNewActionGroup);
+// no icons yet
 	addInterpolationCurveAction = new KAction(i18n("xy-curve from an interpolation"), cartesianPlotAddNewActionGroup);
 	addSmoothCurveAction = new KAction(i18n("xy-curve from a smooth"), cartesianPlotAddNewActionGroup);
 	addFourierFilterCurveAction = new KAction(i18n("xy-curve from a Fourier filter"), cartesianPlotAddNewActionGroup);
@@ -409,7 +412,10 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotAddNewMenu = new QMenu(i18n("Add new"), this);
 	m_cartesianPlotAddNewMenu->addAction(addCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addEquationCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addDataOperationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addDataReductionCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addDifferentationCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addIntegrationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addInterpolationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addSmoothCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addFitCurveAction);
@@ -545,6 +551,9 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(addCurveAction);
 	toolBar->addAction(addEquationCurveAction);
 // don't over populate the tool bar
+//	toolBar->addAction(addDifferentiationCurveAction);
+//	toolBar->addAction(addIntegrationCurveAction);
+//	toolBar->addAction(addDataOperationCurveAction);
 //	toolBar->addAction(addDataReductionCurveAction);
 //	toolBar->addAction(addInterpolationCurveAction);
 //	toolBar->addAction(addSmoothCurveAction);
@@ -1316,7 +1325,10 @@ void WorksheetView::handleCartesianPlotActions() {
 
 	addCurveAction->setEnabled(plot);
 	addEquationCurveAction->setEnabled(plot);
+	addDataOperationCurveAction->setEnabled(false);
 	addDataReductionCurveAction->setEnabled(plot);
+	addDifferentationCurveAction->setEnabled(false);
+	addIntegrationCurveAction->setEnabled(false);
 	addInterpolationCurveAction->setEnabled(plot);
 	addSmoothCurveAction->setEnabled(plot);
 	addFitCurveAction->setEnabled(plot);
@@ -1341,7 +1353,10 @@ void WorksheetView::handleCartesianPlotActions() {
 	shiftDownYAction->setEnabled(plot);
 
 	// analysis menu
+	addDataOperationAction->setEnabled(false);
 	m_dataManipulationMenu->setEnabled(plot);
+	addDifferentiationAction->setEnabled(false);
+	addIntegrationAction->setEnabled(false);
 	addInterpolationAction->setEnabled(plot);
 	addSmoothAction->setEnabled(plot);
 	addFitAction->setEnabled(plot);
