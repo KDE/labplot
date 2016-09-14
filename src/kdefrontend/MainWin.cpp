@@ -109,6 +109,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	xyCurveDock(0),
 	xyEquationCurveDock(0),
 	xyDataReductionCurveDock(0),
+	xyDifferentationCurveDock(0),
 	xyInterpolationCurveDock(0),
 	xySmoothCurveDock(0),
 	xyFitCurveDock(0),
