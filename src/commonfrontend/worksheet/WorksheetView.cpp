@@ -276,7 +276,7 @@ void WorksheetView::initActions() {
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), cartesianPlotAddNewActionGroup);
 	addDataOperationCurveAction = new KAction(i18n("xy-curve from a data operation"), cartesianPlotAddNewActionGroup);
 	addDataReductionCurveAction = new KAction(i18n("xy-curve from a data reduction"), cartesianPlotAddNewActionGroup);
-	addDifferentationCurveAction = new KAction(i18n("xy-curve from a differentation"), cartesianPlotAddNewActionGroup);
+	addDifferentationCurveAction = new KAction(i18n("xy-curve from a differentiation"), cartesianPlotAddNewActionGroup);
 	addIntegrationCurveAction = new KAction(i18n("xy-curve from an integration"), cartesianPlotAddNewActionGroup);
 // no icons yet
 	addInterpolationCurveAction = new KAction(i18n("xy-curve from an interpolation"), cartesianPlotAddNewActionGroup);
