@@ -141,7 +141,7 @@ void XYDifferentationCurve::setYDataColumn(const AbstractColumn* column) {
 STD_SETTER_CMD_IMPL_F_S(XYDifferentationCurve, SetDifferentationData, XYDifferentationCurve::DifferentationData, differentationData, recalculate);
 void XYDifferentationCurve::setDifferentationData(const XYDifferentationCurve::DifferentationData& differentationData) {
 	Q_D(XYDifferentationCurve);
-	exec(new XYDifferentationCurveSetDifferentationDataCmd(d, differentationData, i18n("%1: set options and perform the differentation")));
+	exec(new XYDifferentationCurveSetDifferentationDataCmd(d, differentationData, i18n("%1: set options and perform the differentiation")));
 }
 
 //##############################################################################
@@ -309,7 +309,7 @@ bool XYDifferentationCurve::load(XmlStreamReader* reader) {
 	Q_D(XYDifferentationCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyDifferentationCurve") {
-		reader->raiseError(i18n("no xy differentation curve element found"));
+		reader->raiseError(i18n("no xy differentiation curve element found"));
 		return false;
 	}
 
