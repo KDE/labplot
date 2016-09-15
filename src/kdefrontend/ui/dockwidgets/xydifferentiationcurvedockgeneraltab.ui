@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>XYDifferentationCurveDockGeneralTab</class>
- <widget class="QWidget" name="XYDifferentationCurveDockGeneralTab">
+ <class>XYDifferentiationCurveDockGeneralTab</class>
+ <widget class="QWidget" name="XYDifferentiationCurveDockGeneralTab">
   <property name="geometry">
    <rect>
     <x>0</x>

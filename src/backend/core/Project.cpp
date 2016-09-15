@@ -32,7 +32,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
-#include "backend/worksheet/plots/cartesian/XYDifferentationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
@@ -303,7 +303,7 @@ bool Project::load(XmlStreamReader* reader) {
 
 					XYEquationCurve* equationCurve = dynamic_cast<XYEquationCurve*>(aspect);
 					XYDataReductionCurve* dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(aspect);
-					XYDifferentationCurve* differentationCurve = dynamic_cast<XYDifferentationCurve*>(aspect);
+					XYDifferentiationCurve* differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(aspect);
 					XYInterpolationCurve* interpolationCurve = dynamic_cast<XYInterpolationCurve*>(aspect);
 					XYSmoothCurve* smoothCurve = dynamic_cast<XYSmoothCurve*>(aspect);
 					XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(aspect);
@@ -315,9 +315,9 @@ bool Project::load(XmlStreamReader* reader) {
 					} else if (dataReductionCurve) {
 						RESTORE_COLUMN_POINTER(dataReductionCurve, xDataColumn, XDataColumn);
 						RESTORE_COLUMN_POINTER(dataReductionCurve, yDataColumn, YDataColumn);
-					} else if (differentationCurve) {
-						RESTORE_COLUMN_POINTER(differentationCurve, xDataColumn, XDataColumn);
-						RESTORE_COLUMN_POINTER(differentationCurve, yDataColumn, YDataColumn);
+					} else if (differentiationCurve) {
+						RESTORE_COLUMN_POINTER(differentiationCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(differentiationCurve, yDataColumn, YDataColumn);
 					} else if (interpolationCurve) {
 						RESTORE_COLUMN_POINTER(interpolationCurve, xDataColumn, XDataColumn);
 						RESTORE_COLUMN_POINTER(interpolationCurve, yDataColumn, YDataColumn);

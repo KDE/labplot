@@ -276,7 +276,7 @@ void WorksheetView::initActions() {
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), cartesianPlotAddNewActionGroup);
 	addDataOperationCurveAction = new KAction(i18n("xy-curve from a data operation"), cartesianPlotAddNewActionGroup);
 	addDataReductionCurveAction = new KAction(i18n("xy-curve from a data reduction"), cartesianPlotAddNewActionGroup);
-	addDifferentationCurveAction = new KAction(i18n("xy-curve from a differentiation"), cartesianPlotAddNewActionGroup);
+	addDifferentiationCurveAction = new KAction(i18n("xy-curve from a differentiation"), cartesianPlotAddNewActionGroup);
 	addIntegrationCurveAction = new KAction(i18n("xy-curve from an integration"), cartesianPlotAddNewActionGroup);
 // no icons yet
 	addInterpolationCurveAction = new KAction(i18n("xy-curve from an interpolation"), cartesianPlotAddNewActionGroup);
@@ -297,7 +297,7 @@ void WorksheetView::initActions() {
 	// Analysis menu
 	addDataOperationAction = new KAction(i18n("Data operation"), cartesianPlotAddNewActionGroup);
 	addDataReductionAction = new KAction(i18n("Data reduction"), cartesianPlotAddNewActionGroup);
-	addDifferentationAction = new KAction(i18n("Differentiation"), cartesianPlotAddNewActionGroup);
+	addDifferentiationAction = new KAction(i18n("Differentiation"), cartesianPlotAddNewActionGroup);
 	addIntegrationAction = new KAction(i18n("Integration"), cartesianPlotAddNewActionGroup);
 // no icons yet
 	addInterpolationAction = new KAction(i18n("Interpolation"), cartesianPlotAddNewActionGroup);
@@ -414,7 +414,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotAddNewMenu->addAction(addEquationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addDataOperationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addDataReductionCurveAction);
-	m_cartesianPlotAddNewMenu->addAction(addDifferentationCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addDifferentiationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addIntegrationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addInterpolationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addSmoothCurveAction);
@@ -501,7 +501,7 @@ void WorksheetView::createAnalysisMenu(QMenu* menu) const {
 	// Data manipulation menu
 	menu->insertMenu(0,m_dataManipulationMenu);
 
-	menu->addAction(addDifferentationAction);
+	menu->addAction(addDifferentiationAction);
 	menu->addAction(addIntegrationAction);
 	menu->addAction(addInterpolationAction);
 	menu->addAction(addSmoothAction);
@@ -1327,7 +1327,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	addEquationCurveAction->setEnabled(plot);
 	addDataOperationCurveAction->setEnabled(false);
 	addDataReductionCurveAction->setEnabled(plot);
-	addDifferentationCurveAction->setEnabled(plot);
+	addDifferentiationCurveAction->setEnabled(plot);
 	addIntegrationCurveAction->setEnabled(false);
 	addInterpolationCurveAction->setEnabled(plot);
 	addSmoothCurveAction->setEnabled(plot);
@@ -1355,7 +1355,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	// analysis menu
 	addDataOperationAction->setEnabled(false);
 	m_dataManipulationMenu->setEnabled(plot);
-	addDifferentationAction->setEnabled(plot);
+	addDifferentiationAction->setEnabled(plot);
 	addIntegrationAction->setEnabled(false);
 	addInterpolationAction->setEnabled(plot);
 	addSmoothAction->setEnabled(plot);
@@ -1571,8 +1571,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addEquationCurve();
 	else if (action == addDataReductionCurveAction)
 		plot->addDataReductionCurve();
-	else if (action == addDifferentationCurveAction)
-		plot->addDifferentationCurve();
+	else if (action == addDifferentiationCurveAction)
+		plot->addDifferentiationCurve();
 	else if (action == addInterpolationCurveAction)
 		plot->addInterpolationCurve();
 	else if (action == addFitCurveAction)
@@ -1594,8 +1594,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 // analysis actions
 	else if (action == addDataReductionAction)
 		plot->addDataReductionCurve();
-	else if (action == addDifferentationAction)
-		plot->addDifferentationCurve();
+	else if (action == addDifferentiationAction)
+		plot->addDifferentiationCurve();
 	else if (action == addInterpolationAction)
 		plot->addInterpolationCurve();
 	else if (action == addFitAction)

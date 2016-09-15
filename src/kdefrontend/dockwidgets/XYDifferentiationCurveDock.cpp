@@ -1,9 +1,9 @@
 /***************************************************************************
-    File             : XYDifferentationCurveDock.cpp
+    File             : XYDifferentiationCurveDock.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Description      : widget for editing properties of differentation curves
+    Description      : widget for editing properties of differentiation curves
 
  ***************************************************************************/
 
@@ -26,10 +26,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "XYDifferentationCurveDock.h"
+#include "XYDifferentiationCurveDock.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
-#include "backend/worksheet/plots/cartesian/XYDifferentationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include <QMenu>
@@ -39,9 +39,9 @@
 #include <cmath>        // isnan
 
 /*!
-  \class XYDifferentationCurveDock
- \brief  Provides a widget for editing the properties of the XYDifferentationCurves
-		(2D-curves defined by an differentation) currently selected in
+  \class XYDifferentiationCurveDock
+ \brief  Provides a widget for editing the properties of the XYDifferentiationCurves
+		(2D-curves defined by an differentiation) currently selected in
 		the project explorer.
 
   If more then one curves are set, the properties of the first column are shown.
@@ -52,8 +52,8 @@
   \ingroup kdefrontend
 */
 
-XYDifferentationCurveDock::XYDifferentationCurveDock(QWidget *parent): 
-	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_differentationCurve(0) {
+XYDifferentiationCurveDock::XYDifferentiationCurveDock(QWidget *parent): 
+	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_differentiationCurve(0) {
 
 	//hide the line connection type
 	ui.cbLineType->setDisabled(true);
@@ -65,7 +65,7 @@ XYDifferentationCurveDock::XYDifferentationCurveDock(QWidget *parent):
 /*!
  * 	// Tab "General"
  */
-void XYDifferentationCurveDock::setupGeneral() {
+void XYDifferentiationCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 
@@ -100,7 +100,7 @@ void XYDifferentationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
 
-void XYDifferentationCurveDock::initGeneralTab() {
+void XYDifferentiationCurveDock::initGeneralTab() {
 	//if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size()==1) {
 		uiGeneralTab.lName->setEnabled(true);
@@ -121,32 +121,32 @@ void XYDifferentationCurveDock::initGeneralTab() {
 	}
 
 	//show the properties of the first curve
-	m_differentationCurve = dynamic_cast<XYDifferentationCurve*>(m_curve);
-	Q_ASSERT(m_differentationCurve);
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_differentationCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_differentationCurve->yDataColumn());
+	m_differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(m_curve);
+	Q_ASSERT(m_differentiationCurve);
+	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_differentiationCurve->xDataColumn());
+	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_differentiationCurve->yDataColumn());
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
-	uiGeneralTab.cbType->setCurrentIndex(m_differentationData.type);
+	uiGeneralTab.cbType->setCurrentIndex(m_differentiationData.type);
 	this->typeChanged();
 
-	this->showDifferentationResult();
+	this->showDifferentiationResult();
 
-	//enable the "recalculate"-button if the source data was changed since the last differentation
-	uiGeneralTab.pbRecalculate->setEnabled(m_differentationCurve->isSourceDataChangedSinceLastDifferentation());
+	//enable the "recalculate"-button if the source data was changed since the last differentiation
+	uiGeneralTab.pbRecalculate->setEnabled(m_differentiationCurve->isSourceDataChangedSinceLastDifferentiation());
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_differentationCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_differentationCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
-	connect(m_differentationCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
-	connect(m_differentationCurve, SIGNAL(differentationDataChanged(XYDifferentationCurve::DifferentationData)), this, SLOT(curveDifferentationDataChanged(XYDifferentationCurve::DifferentationData)));
-	connect(m_differentationCurve, SIGNAL(sourceDataChangedSinceLastDifferentation()), this, SLOT(enableRecalculate()));
+	connect(m_differentiationCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
+	connect(m_differentiationCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
+	connect(m_differentiationCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
+	connect(m_differentiationCurve, SIGNAL(differentiationDataChanged(XYDifferentiationCurve::DifferentiationData)), this, SLOT(curveDifferentiationDataChanged(XYDifferentiationCurve::DifferentiationData)));
+	connect(m_differentiationCurve, SIGNAL(sourceDataChangedSinceLastDifferentiation()), this, SLOT(enableRecalculate()));
 }
 
-void XYDifferentationCurveDock::setModel() {
+void XYDifferentiationCurveDock::setModel() {
 	QList<const char*>  list;
 	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
 		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
@@ -170,15 +170,15 @@ void XYDifferentationCurveDock::setModel() {
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
-void XYDifferentationCurveDock::setCurves(QList<XYCurve*> list) {
+void XYDifferentiationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing=true;
 	m_curvesList=list;
 	m_curve=list.first();
-	m_differentationCurve = dynamic_cast<XYDifferentationCurve*>(m_curve);
-	Q_ASSERT(m_differentationCurve);
+	m_differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(m_curve);
+	Q_ASSERT(m_differentiationCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
-	m_differentationData = m_differentationCurve->differentationData();
+	m_differentiationData = m_differentiationCurve->differentiationData();
 	initGeneralTab();
 	initTabs();
 	m_initializing=false;
@@ -191,21 +191,21 @@ void XYDifferentationCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-void XYDifferentationCurveDock::nameChanged() {
+void XYDifferentiationCurveDock::nameChanged() {
 	if (m_initializing)
 		return;
 
 	m_curve->setName(uiGeneralTab.leName->text());
 }
 
-void XYDifferentationCurveDock::commentChanged() {
+void XYDifferentiationCurveDock::commentChanged() {
 	if (m_initializing)
 		return;
 
 	m_curve->setComment(uiGeneralTab.leComment->text());
 }
 
-void XYDifferentationCurveDock::xDataColumnChanged(const QModelIndex& index) {
+void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = 0;
 	if (aspect) {
@@ -214,12 +214,12 @@ void XYDifferentationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	}
 
 	foreach(XYCurve* curve, m_curvesList)
-		dynamic_cast<XYDifferentationCurve*>(curve)->setXDataColumn(column);
+		dynamic_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
 
 	// disable types that need more data points
 }
 
-void XYDifferentationCurveDock::yDataColumnChanged(const QModelIndex& index) {
+void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
@@ -231,31 +231,31 @@ void XYDifferentationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	}
 
 	foreach(XYCurve* curve, m_curvesList)
-		dynamic_cast<XYDifferentationCurve*>(curve)->setYDataColumn(column);
+		dynamic_cast<XYDifferentiationCurve*>(curve)->setYDataColumn(column);
 }
 
-void XYDifferentationCurveDock::typeChanged() {
+void XYDifferentiationCurveDock::typeChanged() {
 //	nsl_interp_type type = (nsl_interp_type)uiGeneralTab.cbType->currentIndex();
-//	m_differentationData.type = type;
+//	m_differentiationData.type = type;
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYDifferentationCurveDock::recalculateClicked() {
+void XYDifferentiationCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	foreach(XYCurve* curve, m_curvesList)
-		dynamic_cast<XYDifferentationCurve*>(curve)->setDifferentationData(m_differentationData);
+		dynamic_cast<XYDifferentiationCurve*>(curve)->setDifferentiationData(m_differentiationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	QApplication::restoreOverrideCursor();
 }
 
-void XYDifferentationCurveDock::enableRecalculate() const {
+void XYDifferentiationCurveDock::enableRecalculate() const {
 	if (m_initializing)
 		return;
 
-	//no differentationing possible without the x- and y-data
+	//no differentiationing possible without the x- and y-data
 	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 	bool data = (aspectX!=0 && aspectY!=0);
@@ -264,27 +264,27 @@ void XYDifferentationCurveDock::enableRecalculate() const {
 }
 
 /*!
- * show the result and details of the differentation
+ * show the result and details of the differentiation
  */
-void XYDifferentationCurveDock::showDifferentationResult() {
-	const XYDifferentationCurve::DifferentationResult& differentationResult = m_differentationCurve->differentationResult();
-	if (!differentationResult.available) {
+void XYDifferentiationCurveDock::showDifferentiationResult() {
+	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = m_differentiationCurve->differentiationResult();
+	if (!differentiationResult.available) {
 		uiGeneralTab.teResult->clear();
 		return;
 	}
 
-	//const XYDifferentationCurve::DifferentationData& differentationData = m_differentationCurve->differentationData();
-	QString str = i18n("status:") + ' ' + differentationResult.status + "<br>";
+	//const XYDifferentiationCurve::DifferentiationData& differentiationData = m_differentiationCurve->differentiationData();
+	QString str = i18n("status:") + ' ' + differentiationResult.status + "<br>";
 
-	if (!differentationResult.valid) {
+	if (!differentiationResult.valid) {
 		uiGeneralTab.teResult->setText(str);
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	if (differentationResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s").arg(QString::number(differentationResult.elapsedTime/1000)) + "<br>";
+	if (differentiationResult.elapsedTime>1000)
+		str += i18n("calculation time: %1 s").arg(QString::number(differentiationResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms").arg(QString::number(differentationResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms").arg(QString::number(differentiationResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 
@@ -295,7 +295,7 @@ void XYDifferentationCurveDock::showDifferentationResult() {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 //General-Tab
-void XYDifferentationCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
+void XYDifferentiationCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_curve != aspect)
 		return;
 
@@ -308,28 +308,28 @@ void XYDifferentationCurveDock::curveDescriptionChanged(const AbstractAspect* as
 	m_initializing = false;
 }
 
-void XYDifferentationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
+void XYDifferentiationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, column);
 	m_initializing = false;
 }
 
-void XYDifferentationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
+void XYDifferentiationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, column);
 	m_initializing = false;
 }
 
-void XYDifferentationCurveDock::curveDifferentationDataChanged(const XYDifferentationCurve::DifferentationData& data) {
+void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData& data) {
 	m_initializing = true;
-	m_differentationData = data;
-	uiGeneralTab.cbType->setCurrentIndex(m_differentationData.type);
+	m_differentiationData = data;
+	uiGeneralTab.cbType->setCurrentIndex(m_differentiationData.type);
 	this->typeChanged();
 
-	this->showDifferentationResult();
+	this->showDifferentiationResult();
 	m_initializing = false;
 }
 
-void XYDifferentationCurveDock::dataChanged() {
+void XYDifferentiationCurveDock::dataChanged() {
 	this->enableRecalculate();
 }

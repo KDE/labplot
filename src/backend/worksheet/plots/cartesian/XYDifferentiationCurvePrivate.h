@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : XYDifferentationCurvePrivate.h
+    File                 : XYDifferentiationCurvePrivate.h
     Project              : LabPlot
-    Description          : Private members of XYDifferentationCurve
+    Description          : Private members of XYDifferentiationCurve
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
@@ -30,34 +30,34 @@
 #define XYDIFFERENTATIONCURVEPRIVATE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
-#include "backend/worksheet/plots/cartesian/XYDifferentationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
 
-class XYDifferentationCurve;
+class XYDifferentiationCurve;
 class Column;
 
-class XYDifferentationCurvePrivate: public XYCurvePrivate {
+class XYDifferentiationCurvePrivate: public XYCurvePrivate {
 	public:
-		explicit XYDifferentationCurvePrivate(XYDifferentationCurve*);
-		~XYDifferentationCurvePrivate();
+		explicit XYDifferentiationCurvePrivate(XYDifferentiationCurve*);
+		~XYDifferentiationCurvePrivate();
 
 		void recalculate();
 
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be differentated
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be differentated
+		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be differentiated
+		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be differentiated
 		QString xDataColumnPath;
 		QString yDataColumnPath;
 
-		XYDifferentationCurve::DifferentationData differentationData;
-		XYDifferentationCurve::DifferentationResult differentationResult;
+		XYDifferentiationCurve::DifferentiationData differentiationData;
+		XYDifferentiationCurve::DifferentiationResult differentiationResult;
 
-		Column* xColumn; //<! column used internally for storing the x-values of the result differentation curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result differentation curve
+		Column* xColumn; //<! column used internally for storing the x-values of the result differentiation curve
+		Column* yColumn; //<! column used internally for storing the y-values of the result differentiation curve
 		QVector<double>* xVector;
 		QVector<double>* yVector;
 
-		bool sourceDataChangedSinceLastDifferentation; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
+		bool sourceDataChangedSinceLastDifferentiation; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
 
-		XYDifferentationCurve* const q;
+		XYDifferentiationCurve* const q;
 };
 
 #endif

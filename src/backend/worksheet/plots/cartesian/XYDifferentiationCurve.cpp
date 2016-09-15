@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : XYDifferentationCurve.cpp
+    File                 : XYDifferentiationCurve.cpp
     Project              : LabPlot
-    Description          : A xy-curve defined by an differentation
+    Description          : A xy-curve defined by an differentiation
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
@@ -27,14 +27,14 @@
  ***************************************************************************/
 
 /*!
-  \class XYDifferentationCurve
-  \brief A xy-curve defined by an differentation
+  \class XYDifferentiationCurve
+  \brief A xy-curve defined by an differentiation
 
   \ingroup worksheet
 */
 
-#include "XYDifferentationCurve.h"
-#include "XYDifferentationCurvePrivate.h"
+#include "XYDifferentiationCurve.h"
+#include "XYDifferentiationCurvePrivate.h"
 #include "CartesianCoordinateSystem.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
@@ -53,71 +53,71 @@ extern "C" {
 #include <QDebug>
 #endif
 
-XYDifferentationCurve::XYDifferentationCurve(const QString& name)
-		: XYCurve(name, new XYDifferentationCurvePrivate(this)) {
+XYDifferentiationCurve::XYDifferentiationCurve(const QString& name)
+		: XYCurve(name, new XYDifferentiationCurvePrivate(this)) {
 	init();
 }
 
-XYDifferentationCurve::XYDifferentationCurve(const QString& name, XYDifferentationCurvePrivate* dd)
+XYDifferentiationCurve::XYDifferentiationCurve(const QString& name, XYDifferentiationCurvePrivate* dd)
 		: XYCurve(name, dd) {
 	init();
 }
 
 
-XYDifferentationCurve::~XYDifferentationCurve() {
+XYDifferentiationCurve::~XYDifferentiationCurve() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
 }
 
-void XYDifferentationCurve::init() {
-	Q_D(XYDifferentationCurve);
+void XYDifferentiationCurve::init() {
+	Q_D(XYDifferentiationCurve);
 
-	//TODO: read from the saved settings for XYDifferentationCurve?
+	//TODO: read from the saved settings for XYDifferentiationCurve?
 	d->lineType = XYCurve::Line;
 	d->symbolsStyle = Symbol::NoSymbols;
 }
 
-void XYDifferentationCurve::recalculate() {
-	Q_D(XYDifferentationCurve);
+void XYDifferentiationCurve::recalculate() {
+	Q_D(XYDifferentiationCurve);
 	d->recalculate();
 }
 
 /*!
 	Returns an icon to be used in the project explorer.
 */
-QIcon XYDifferentationCurve::icon() const {
-	return KIcon("labplot-xy-differentation-curve");
+QIcon XYDifferentiationCurve::icon() const {
+	return KIcon("labplot-xy-differentiation-curve");
 }
 
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(XYDifferentationCurve, const AbstractColumn*, xDataColumn, xDataColumn)
-BASIC_SHARED_D_READER_IMPL(XYDifferentationCurve, const AbstractColumn*, yDataColumn, yDataColumn)
-const QString& XYDifferentationCurve::xDataColumnPath() const { Q_D(const XYDifferentationCurve); return d->xDataColumnPath; }
-const QString& XYDifferentationCurve::yDataColumnPath() const { Q_D(const XYDifferentationCurve); return d->yDataColumnPath; }
+BASIC_SHARED_D_READER_IMPL(XYDifferentiationCurve, const AbstractColumn*, xDataColumn, xDataColumn)
+BASIC_SHARED_D_READER_IMPL(XYDifferentiationCurve, const AbstractColumn*, yDataColumn, yDataColumn)
+const QString& XYDifferentiationCurve::xDataColumnPath() const { Q_D(const XYDifferentiationCurve); return d->xDataColumnPath; }
+const QString& XYDifferentiationCurve::yDataColumnPath() const { Q_D(const XYDifferentiationCurve); return d->yDataColumnPath; }
 
-BASIC_SHARED_D_READER_IMPL(XYDifferentationCurve, XYDifferentationCurve::DifferentationData, differentationData, differentationData)
+BASIC_SHARED_D_READER_IMPL(XYDifferentiationCurve, XYDifferentiationCurve::DifferentiationData, differentiationData, differentiationData)
 
-const XYDifferentationCurve::DifferentationResult& XYDifferentationCurve::differentationResult() const {
-	Q_D(const XYDifferentationCurve);
-	return d->differentationResult;
+const XYDifferentiationCurve::DifferentiationResult& XYDifferentiationCurve::differentiationResult() const {
+	Q_D(const XYDifferentiationCurve);
+	return d->differentiationResult;
 }
 
-bool XYDifferentationCurve::isSourceDataChangedSinceLastDifferentation() const {
-	Q_D(const XYDifferentationCurve);
-	return d->sourceDataChangedSinceLastDifferentation;
+bool XYDifferentiationCurve::isSourceDataChangedSinceLastDifferentiation() const {
+	Q_D(const XYDifferentiationCurve);
+	return d->sourceDataChangedSinceLastDifferentiation;
 }
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_S(XYDifferentationCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
-void XYDifferentationCurve::setXDataColumn(const AbstractColumn* column) {
-	Q_D(XYDifferentationCurve);
+STD_SETTER_CMD_IMPL_S(XYDifferentiationCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
+void XYDifferentiationCurve::setXDataColumn(const AbstractColumn* column) {
+	Q_D(XYDifferentiationCurve);
 	if (column != d->xDataColumn) {
-		exec(new XYDifferentationCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
-		emit sourceDataChangedSinceLastDifferentation();
+		exec(new XYDifferentiationCurveSetXDataColumnCmd(d, column, i18n("%1: assign x-data")));
+		emit sourceDataChangedSinceLastDifferentiation();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -125,12 +125,12 @@ void XYDifferentationCurve::setXDataColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_S(XYDifferentationCurve, SetYDataColumn, const AbstractColumn*, yDataColumn)
-void XYDifferentationCurve::setYDataColumn(const AbstractColumn* column) {
-	Q_D(XYDifferentationCurve);
+STD_SETTER_CMD_IMPL_S(XYDifferentiationCurve, SetYDataColumn, const AbstractColumn*, yDataColumn)
+void XYDifferentiationCurve::setYDataColumn(const AbstractColumn* column) {
+	Q_D(XYDifferentiationCurve);
 	if (column != d->yDataColumn) {
-		exec(new XYDifferentationCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
-		emit sourceDataChangedSinceLastDifferentation();
+		exec(new XYDifferentiationCurveSetYDataColumnCmd(d, column, i18n("%1: assign y-data")));
+		emit sourceDataChangedSinceLastDifferentiation();
 		if (column) {
 			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 			//TODO disconnect on undo
@@ -138,33 +138,33 @@ void XYDifferentationCurve::setYDataColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYDifferentationCurve, SetDifferentationData, XYDifferentationCurve::DifferentationData, differentationData, recalculate);
-void XYDifferentationCurve::setDifferentationData(const XYDifferentationCurve::DifferentationData& differentationData) {
-	Q_D(XYDifferentationCurve);
-	exec(new XYDifferentationCurveSetDifferentationDataCmd(d, differentationData, i18n("%1: set options and perform the differentation")));
+STD_SETTER_CMD_IMPL_F_S(XYDifferentiationCurve, SetDifferentiationData, XYDifferentiationCurve::DifferentiationData, differentiationData, recalculate);
+void XYDifferentiationCurve::setDifferentiationData(const XYDifferentiationCurve::DifferentiationData& differentiationData) {
+	Q_D(XYDifferentiationCurve);
+	exec(new XYDifferentiationCurveSetDifferentiationDataCmd(d, differentiationData, i18n("%1: set options and perform the differentiation")));
 }
 
 //##############################################################################
 //################################## SLOTS ####################################
 //##############################################################################
-void XYDifferentationCurve::handleSourceDataChanged() {
-	Q_D(XYDifferentationCurve);
-	d->sourceDataChangedSinceLastDifferentation = true;
-	emit sourceDataChangedSinceLastDifferentation();
+void XYDifferentiationCurve::handleSourceDataChanged() {
+	Q_D(XYDifferentiationCurve);
+	d->sourceDataChangedSinceLastDifferentiation = true;
+	emit sourceDataChangedSinceLastDifferentiation();
 }
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYDifferentationCurvePrivate::XYDifferentationCurvePrivate(XYDifferentationCurve* owner) : XYCurvePrivate(owner),
+XYDifferentiationCurvePrivate::XYDifferentiationCurvePrivate(XYDifferentiationCurve* owner) : XYCurvePrivate(owner),
 	xDataColumn(0), yDataColumn(0), 
 	xColumn(0), yColumn(0), 
 	xVector(0), yVector(0), 
-	sourceDataChangedSinceLastDifferentation(false),
+	sourceDataChangedSinceLastDifferentiation(false),
 	q(owner)  {
 
 }
 
-XYDifferentationCurvePrivate::~XYDifferentationCurvePrivate() {
+XYDifferentiationCurvePrivate::~XYDifferentiationCurvePrivate() {
 	//no need to delete xColumn and yColumn, they are deleted
 	//when the parent aspect is removed
 }
@@ -172,11 +172,11 @@ XYDifferentationCurvePrivate::~XYDifferentationCurvePrivate() {
 // ...
 // see XYFitCurvePrivate
 
-void XYDifferentationCurvePrivate::recalculate() {
+void XYDifferentiationCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
 
-	//create differentation result columns if not available yet, clear them otherwise
+	//create differentiation result columns if not available yet, clear them otherwise
 	if (!xColumn) {
 		xColumn = new Column("x", AbstractColumn::Numeric);
 		yColumn = new Column("y", AbstractColumn::Numeric);
@@ -198,25 +198,25 @@ void XYDifferentationCurvePrivate::recalculate() {
 	}
 
 	// clear the previous result
-	differentationResult = XYDifferentationCurve::DifferentationResult();
+	differentiationResult = XYDifferentiationCurve::DifferentiationResult();
 
 	if (!xDataColumn || !yDataColumn) {
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastDifferentation = false;
+		sourceDataChangedSinceLastDifferentiation = false;
 		return;
 	}
 
 	//check column sizes
 	if (xDataColumn->rowCount()!=yDataColumn->rowCount()) {
-		differentationResult.available = true;
-		differentationResult.valid = false;
-		differentationResult.status = i18n("Number of x and y data points must be equal.");
+		differentiationResult.available = true;
+		differentiationResult.valid = false;
+		differentiationResult.status = i18n("Number of x and y data points must be equal.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastDifferentation = false;
+		sourceDataChangedSinceLastDifferentiation = false;
 		return;
 	}
 
-	//copy all valid data point for the differentation to temporary vectors
+	//copy all valid data point for the differentiation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
@@ -229,14 +229,14 @@ void XYDifferentationCurvePrivate::recalculate() {
 		}
 	}
 
-	//number of data points to differentate
+	//number of data points to differentiate
 	const unsigned int n = ydataVector.size();
 	if (n < 2) {
-		differentationResult.available = true;
-		differentationResult.valid = false;
-		differentationResult.status = i18n("Not enough data points available.");
+		differentiationResult.available = true;
+		differentiationResult.valid = false;
+		differentiationResult.status = i18n("Not enough data points available.");
 		emit (q->dataChanged());
-		sourceDataChangedSinceLastDifferentation = false;
+		sourceDataChangedSinceLastDifferentiation = false;
 		return;
 	}
 
@@ -246,8 +246,8 @@ void XYDifferentationCurvePrivate::recalculate() {
 	const double min = xDataColumn->minimum();
 	const double max = xDataColumn->maximum();
 
-	// differentation settings
-	const int type = differentationData.type;
+	// differentiation settings
+	const int type = differentiationData.type;
 #ifndef NDEBUG
 	qDebug()<<"type:"<<type;
 #endif
@@ -257,59 +257,59 @@ void XYDifferentationCurvePrivate::recalculate() {
 ///////////////////////////////////////////////////////////
 
 	//write the result
-	differentationResult.available = true;
-	differentationResult.valid = true;
-	differentationResult.status = QString(gsl_strerror(status));;
-	differentationResult.elapsedTime = timer.elapsed();
+	differentiationResult.available = true;
+	differentiationResult.valid = true;
+	differentiationResult.status = QString(gsl_strerror(status));;
+	differentiationResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
 	emit (q->dataChanged());
-	sourceDataChangedSinceLastDifferentation = false;
+	sourceDataChangedSinceLastDifferentiation = false;
 }
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void XYDifferentationCurve::save(QXmlStreamWriter* writer) const{
-	Q_D(const XYDifferentationCurve);
+void XYDifferentiationCurve::save(QXmlStreamWriter* writer) const{
+	Q_D(const XYDifferentiationCurve);
 
-	writer->writeStartElement("xyDifferentationCurve");
+	writer->writeStartElement("xyDifferentiationCurve");
 
 	//write xy-curve information
 	XYCurve::save(writer);
 
-	//write xy-differentation-curve specific information
-	// differentation data
-	writer->writeStartElement("differentationData");
+	//write xy-differentiation-curve specific information
+	// differentiation data
+	writer->writeStartElement("differentiationData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
-	writer->writeAttribute( "type", QString::number(d->differentationData.type) );
-	writer->writeEndElement();// differentationData
+	writer->writeAttribute( "type", QString::number(d->differentiationData.type) );
+	writer->writeEndElement();// differentiationData
 
-	// differentation results (generated columns)
-	writer->writeStartElement("differentationResult");
-	writer->writeAttribute( "available", QString::number(d->differentationResult.available) );
-	writer->writeAttribute( "valid", QString::number(d->differentationResult.valid) );
-	writer->writeAttribute( "status", d->differentationResult.status );
-	writer->writeAttribute( "time", QString::number(d->differentationResult.elapsedTime) );
+	// differentiation results (generated columns)
+	writer->writeStartElement("differentiationResult");
+	writer->writeAttribute( "available", QString::number(d->differentiationResult.available) );
+	writer->writeAttribute( "valid", QString::number(d->differentiationResult.valid) );
+	writer->writeAttribute( "status", d->differentiationResult.status );
+	writer->writeAttribute( "time", QString::number(d->differentiationResult.elapsedTime) );
 
 	//save calculated columns if available
 	if (d->xColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
 	}
-	writer->writeEndElement(); //"differentationResult"
+	writer->writeEndElement(); //"differentiationResult"
 
-	writer->writeEndElement(); //"xyDifferentationCurve"
+	writer->writeEndElement(); //"xyDifferentiationCurve"
 }
 
 //! Load from XML
-bool XYDifferentationCurve::load(XmlStreamReader* reader) {
-	Q_D(XYDifferentationCurve);
+bool XYDifferentiationCurve::load(XmlStreamReader* reader) {
+	Q_D(XYDifferentiationCurve);
 
-	if (!reader->isStartElement() || reader->name() != "xyDifferentationCurve") {
-		reader->raiseError(i18n("no xy differentation curve element found"));
+	if (!reader->isStartElement() || reader->name() != "xyDifferentiationCurve") {
+		reader->raiseError(i18n("no xy differentiation curve element found"));
 		return false;
 	}
 
@@ -319,7 +319,7 @@ bool XYDifferentationCurve::load(XmlStreamReader* reader) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "xyDifferentationCurve")
+		if (reader->isEndElement() && reader->name() == "xyDifferentiationCurve")
 			break;
 
 		if (!reader->isStartElement())
@@ -328,7 +328,7 @@ bool XYDifferentationCurve::load(XmlStreamReader* reader) {
 		if (reader->name() == "xyCurve") {
 			if ( !XYCurve::load(reader) )
 				return false;
-		} else if (reader->name() == "differentationData") {
+		} else if (reader->name() == "differentiationData") {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xDataColumn);
@@ -338,9 +338,9 @@ bool XYDifferentationCurve::load(XmlStreamReader* reader) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'type'"));
 			else
-				d->differentationData.type = str.toInt();
+				d->differentiationData.type = str.toInt();
 
-		} else if (reader->name() == "differentationResult") {
+		} else if (reader->name() == "differentiationResult") {
 
 			attribs = reader->attributes();
 
@@ -348,25 +348,25 @@ bool XYDifferentationCurve::load(XmlStreamReader* reader) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'available'"));
 			else
-				d->differentationResult.available = str.toInt();
+				d->differentiationResult.available = str.toInt();
 
 			str = attribs.value("valid").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'valid'"));
 			else
-				d->differentationResult.valid = str.toInt();
+				d->differentiationResult.valid = str.toInt();
 			
 			str = attribs.value("status").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'status'"));
 			else
-				d->differentationResult.status = str;
+				d->differentiationResult.status = str;
 
 			str = attribs.value("time").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'time'"));
 			else
-				d->differentationResult.elapsedTime = str.toInt();
+				d->differentiationResult.elapsedTime = str.toInt();
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {

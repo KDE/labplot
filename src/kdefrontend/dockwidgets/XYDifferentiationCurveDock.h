@@ -1,9 +1,9 @@
 /***************************************************************************
-    File             : XYDifferentationCurveDock.h
+    File             : XYDifferentiationCurveDock.h
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Description      : widget for editing properties of differentation curves
+    Description      : widget for editing properties of differentiation curves
 
  ***************************************************************************/
 
@@ -30,35 +30,35 @@
 #define XYDIFFERENTATIONCURVEDOCK_H
 
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
-#include "backend/worksheet/plots/cartesian/XYDifferentationCurve.h"
-#include "ui_xydifferentationcurvedockgeneraltab.h"
+#include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
+#include "ui_xydifferentiationcurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYDifferentationCurveDock: public XYCurveDock {
+class XYDifferentiationCurveDock: public XYCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYDifferentationCurveDock(QWidget *parent);
+	explicit XYDifferentiationCurveDock(QWidget *parent);
 	void setCurves(QList<XYCurve*>);
 	virtual void setupGeneral();
 
 private:
 	virtual void initGeneralTab();
-	void showDifferentationResult();
+	void showDifferentiationResult();
 
-	Ui::XYDifferentationCurveDockGeneralTab uiGeneralTab;
+	Ui::XYDifferentiationCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
 
-	XYDifferentationCurve* m_differentationCurve;
-	XYDifferentationCurve::DifferentationData m_differentationData;
+	XYDifferentiationCurve* m_differentiationCurve;
+	XYDifferentiationCurve::DifferentiationData m_differentiationData;
 
 protected:
 	virtual void setModel();
 
 private slots:
-	//SLOTs for changes triggered in XYDifferentationCurveDock
+	//SLOTs for changes triggered in XYDifferentiationCurveDock
 	//general tab
 	void nameChanged();
 	void commentChanged();
@@ -76,7 +76,7 @@ private slots:
 	void curveDescriptionChanged(const AbstractAspect*);
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveYDataColumnChanged(const AbstractColumn*);
-	void curveDifferentationDataChanged(const XYDifferentationCurve::DifferentationData&);
+	void curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData&);
 	void dataChanged();
 
 };
