@@ -83,6 +83,9 @@ void XYDifferentiationCurveDock::setupGeneral() {
 
 //	for (int i=0; i < NSL_INTERP_TYPE_COUNT; i++)
 //		uiGeneralTab.cbType->addItem(i18n(nsl_interp_type_name[i]));
+	uiGeneralTab.cbType->addItem(i18n("central"));
+	uiGeneralTab.cbType->addItem(i18n("forward"));
+	uiGeneralTab.cbType->addItem(i18n("backward"));
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
