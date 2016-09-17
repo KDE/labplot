@@ -57,9 +57,6 @@
 #include <KAction>
 #include <KLocale>
 
-#define SCALE_MIN CartesianScale::LIMIT_MIN
-#define SCALE_MAX CartesianScale::LIMIT_MAX
-
 
 /**
  * \class CartesianPlot
@@ -1459,7 +1456,7 @@ void CartesianPlotPrivate::retransformScales() {
 }
 
 /*!
- * don't allow any negative values on for the x range when log or sqrt scalings are used
+ * don't allow any negative values for the x range when log or sqrt scalings are used
  */
 void CartesianPlotPrivate::checkXRange() {
 	double min = 0.01;
@@ -1474,7 +1471,7 @@ void CartesianPlotPrivate::checkXRange() {
 }
 
 /*!
- * don't allow any negative values on for the y range when log or sqrt scalings are used
+ * don't allow any negative values for the y range when log or sqrt scalings are used
  */
 void CartesianPlotPrivate::checkYRange() {
 	double min = 0.01;
@@ -1489,7 +1486,7 @@ void CartesianPlotPrivate::checkYRange() {
 }
 
 CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
-	Interval<double> interval (SCALE_MIN, SCALE_MAX);
+	Interval<double> interval (logicalStart-0.01, logicalEnd+0.01); //TODO: move this to CartesianScale
 	if (type == CartesianPlot::ScaleLinear) {
 		return CartesianScale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	} else {

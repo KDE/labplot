@@ -40,7 +40,6 @@
 
 #include <QPainter>
 #include <QMenu>
-#include <QDebug>
 #include <QTextDocument>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsSceneHoverEvent>
@@ -912,6 +911,7 @@ void AxisPrivate::retransform() {
 	if (!m_plot)
 		return;
 
+	//TODO: add comment here for why we need this
 	m_cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem());
 	if (!m_cSystem)
 		return;
@@ -1600,7 +1600,7 @@ void AxisPrivate::retransformMajorGrid() {
 		}
 	}
 
-	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping | AbstractCoordinateSystem::MarkGaps);
+	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
 	foreach (const QLineF& line, lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
@@ -1619,7 +1619,7 @@ void AxisPrivate::retransformMinorGrid() {
 	//minor tick points are already in scene coordinates, convert them back to logical...
 	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	//Currently, grid lines disappear somtimes without this flag
-	QList<QPointF> logicalMinorTickPoints = m_cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping | AbstractCoordinateSystem::MarkGaps);
+	QList<QPointF> logicalMinorTickPoints = m_cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
 
 	QList<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal) { //horizontal axis
@@ -1640,7 +1640,7 @@ void AxisPrivate::retransformMinorGrid() {
 		}
 	}
 
-	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
 	foreach (const QLineF& line, lines) {
 		minorGridPath.moveTo(line.p1());
 		minorGridPath.lineTo(line.p2());

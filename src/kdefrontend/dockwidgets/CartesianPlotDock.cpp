@@ -166,9 +166,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
 	init();
-
-	//TODO: activate the tab again once the functionality is implemented
-	ui.tabWidget->removeTab(2);
 }
 
 CartesianPlotDock::~CartesianPlotDock() {
