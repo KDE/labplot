@@ -36,6 +36,7 @@
 class QAction;
 class QGraphicsItem;
 class QPen;
+class KConfig;
 
 class WorksheetElement : public AbstractAspect {
 	Q_OBJECT
