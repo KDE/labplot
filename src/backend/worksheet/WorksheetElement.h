@@ -31,13 +31,13 @@
 #define WORKSHEETELEMENT_H
 
 #include "backend/core/AbstractAspect.h"
-#include <QGraphicsItem>
-#include <QPen>
-#include <KConfig>
+#include <QPainterPath>
 
 class QAction;
+class QGraphicsItem;
+class QPen;
 
-class WorksheetElement: public AbstractAspect {
+class WorksheetElement : public AbstractAspect {
 	Q_OBJECT
 
 	public:

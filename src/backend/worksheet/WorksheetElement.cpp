@@ -32,7 +32,9 @@
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 
+#include <QGraphicsItem>
 #include <QMenu>
+#include <QPen>
 #include <KLocale>
 
 QPen WorksheetElement::hoveredPen = QPen(QColor(128,179,255), 3, Qt::SolidLine);

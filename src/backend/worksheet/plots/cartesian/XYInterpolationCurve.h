@@ -40,15 +40,17 @@ class XYInterpolationCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
+		enum PointsMode {Auto, Multiple, Custom};
 		struct InterpolationData {
 			InterpolationData() : type(nsl_interp_type_linear), variant(nsl_interp_pch_variant_finite_difference), 
-				tension(0.0), continuity(0.0), bias(0.0), evaluate(nsl_interp_evaluate_function), npoints(100) {};
+				tension(0.0), continuity(0.0), bias(0.0), evaluate(nsl_interp_evaluate_function), npoints(100), pointsMode(XYInterpolationCurve::Auto) {};
 
 			nsl_interp_type type;			// type of interpolation
 			nsl_interp_pch_variant variant;		// variant of cubic Hermite interpolation
 			double tension, continuity, bias;	// TCB values
 			nsl_interp_evaluate evaluate;		// what to evaluate
 			unsigned int npoints;			// nr. of points
+			XYInterpolationCurve::PointsMode pointsMode;	// mode to interpret points
 		};
 		struct InterpolationResult {
 			InterpolationResult() : available(false), valid(false), elapsedTime(0) {};

@@ -32,6 +32,7 @@
 #include "Axis.h"
 #include "XYCurve.h"
 #include "XYEquationCurve.h"
+#include "XYDataReductionCurve.h"
 #include "XYInterpolationCurve.h"
 #include "XYSmoothCurve.h"
 #include "XYFitCurve.h"
@@ -59,9 +60,6 @@
 #include <KLocale>
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
-
-#define SCALE_MIN CartesianCoordinateSystem::Scale::LIMIT_MIN
-#define SCALE_MAX CartesianCoordinateSystem::Scale::LIMIT_MAX
 
 /**
  * \class CartesianPlot
@@ -352,11 +350,18 @@ void CartesianPlot::initActions() {
 	//"add new" actions
 	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("xy-curve"), this);
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
+// no icons yet
+	addDataReductionCurveAction = new KAction(i18n("xy-curve from a data reduction"), this);
+	addInterpolationCurveAction = new KAction(i18n("xy-curve from an interpolation"), this);
+	addSmoothCurveAction = new KAction(i18n("xy-curve from a smooth"), this);
 	addFitCurveAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
-	addFourierFilterCurveAction = new KAction(KIcon("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
-	addFourierTransformCurveAction = new KAction(KIcon("labplot-xy-fourier_transform-curve"), i18n("xy-curve from a Fourier transform"), this);
-	addInterpolationCurveAction = new KAction(KIcon("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), this);
-	addSmoothCurveAction = new KAction(KIcon("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), this);
+	addFourierFilterCurveAction = new KAction(i18n("xy-curve from a Fourier filter"), this);
+	addFourierTransformCurveAction = new KAction(i18n("xy-curve from a Fourier transform"), this);
+//	addInterpolationCurveAction = new KAction(KIcon("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), this);
+//	addSmoothCurveAction = new KAction(KIcon("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), this);
+//	addFourierFilterCurveAction = new KAction(KIcon("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
+//	addFourierTransformCurveAction = new KAction(KIcon("labplot-xy-fourier_transform-curve"), i18n("xy-curve from a Fourier transform"), this);
+
 	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
 	addHorizontalAxisAction = new KAction(KIcon("labplot-axis-horizontal"), i18n("horizontal axis"), this);
 	addVerticalAxisAction = new KAction(KIcon("labplot-axis-vertical"), i18n("vertical axis"), this);
@@ -364,6 +369,7 @@ void CartesianPlot::initActions() {
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
+	// TODO: other analysis functions?
 	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addFourierFilterCurveAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
 	connect(addFourierTransformCurveAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
@@ -411,6 +417,9 @@ void CartesianPlot::initMenus() {
 	addNewMenu = new QMenu(i18n("Add new"));
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
+	addNewMenu->addAction(addDataReductionCurveAction);
+	addNewMenu->addAction(addInterpolationCurveAction);
+	addNewMenu->addAction(addSmoothCurveAction);
 	addNewMenu->addAction(addFitCurveAction);
 	addNewMenu->addAction(addFourierFilterCurveAction);
 	addNewMenu->addAction(addFourierTransformCurveAction);
@@ -730,6 +739,12 @@ XYEquationCurve* CartesianPlot::addEquationCurve() {
 	XYEquationCurve* curve = new XYEquationCurve("f(x)");
 	this->addChild(curve);
 	this->applyThemeOnNewCurve(curve);
+	return curve;
+}
+
+XYDataReductionCurve* CartesianPlot::addDataReductionCurve() {
+	XYDataReductionCurve* curve = new XYDataReductionCurve("Data reduction");
+	this->addChild(curve);
 	return curve;
 }
 
@@ -1301,7 +1316,7 @@ void CartesianPlotPrivate::retransform() {
 
 void CartesianPlotPrivate::retransformScales() {
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
-	QList<CartesianCoordinateSystem::Scale*> scales;
+	QList<CartesianScale*> scales;
 	double sceneStart, sceneEnd, logicalStart, logicalEnd;
 
 	//perform the mapping from the scene coordinates to the plot's coordinates here.
@@ -1328,8 +1343,7 @@ void CartesianPlotPrivate::retransformScales() {
 		//TODO: how should we handle the case sceneStart=sceneEnd
 		//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
 		if (sceneStart!=sceneEnd) {
-			Interval<double> interval(SCALE_MIN, SCALE_MAX);
-			scales << this->createScale(xScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 		}
 	} else {
 		foreach(const CartesianPlot::RangeBreak& b, xRangeBreaks.list) {
@@ -1338,16 +1352,13 @@ void CartesianPlotPrivate::retransformScales() {
 			sceneEnd = sceneStart+(sceneEnd-sceneStart)*b.position;
 			logicalStart = xMin;
 			logicalEnd = b.start;
-
-			Interval<double> interval(SCALE_MIN, SCALE_MAX);
-			scales << this->createScale(xScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 
 			sceneStart = sceneEnd+50;
 			sceneEnd = itemRect.x()+itemRect.width()-horizontalPadding;
 			logicalStart = b.end;
 			logicalEnd = xMax;
-			Interval<double> interval2(SCALE_MIN, SCALE_MAX);
-			scales << this->createScale(xScale, interval2, sceneStart, sceneEnd, logicalStart, logicalEnd);
+			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 		}
 	}
 
@@ -1371,8 +1382,7 @@ void CartesianPlotPrivate::retransformScales() {
 		sceneEnd = itemRect.y()+verticalPadding;
 		logicalStart = yMin;
 		logicalEnd = yMax;
-		Interval<double> interval (SCALE_MIN, SCALE_MAX);
-		scales << this->createScale(yScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+		scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	} else {
 		foreach(const CartesianPlot::RangeBreak& b, yRangeBreaks.list) {
 			sceneStart = itemRect.y()+itemRect.height()-verticalPadding;
@@ -1380,16 +1390,13 @@ void CartesianPlotPrivate::retransformScales() {
 			sceneEnd = sceneStart+(sceneEnd-sceneStart)*b.position;
 			logicalStart = yMin;
 			logicalEnd = b.start;
-
-			Interval<double> interval(SCALE_MIN, SCALE_MAX);
-			scales << this->createScale(yScale, interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+			scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 
 			sceneStart = sceneEnd+50;
 			sceneEnd = itemRect.y()+verticalPadding;
 			logicalStart = b.end;
 			logicalEnd = yMax;
-			Interval<double> interval2(SCALE_MIN, SCALE_MAX);
-			scales << this->createScale(yScale, interval2, sceneStart, sceneEnd, logicalStart, logicalEnd);
+			scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 		}
 	}
 
@@ -1471,7 +1478,7 @@ void CartesianPlotPrivate::retransformScales() {
 }
 
 /*!
- * don't allow any negative values on for the x range when log or sqrt scalings are used
+ * don't allow any negative values for the x range when log or sqrt scalings are used
  */
 void CartesianPlotPrivate::checkXRange() {
 	double min = 0.01;
@@ -1486,7 +1493,7 @@ void CartesianPlotPrivate::checkXRange() {
 }
 
 /*!
- * don't allow any negative values on for the y range when log or sqrt scalings are used
+ * don't allow any negative values for the y range when log or sqrt scalings are used
  */
 void CartesianPlotPrivate::checkYRange() {
 	double min = 0.01;
@@ -1500,10 +1507,10 @@ void CartesianPlotPrivate::checkYRange() {
 	}
 }
 
-CartesianCoordinateSystem::Scale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, Interval<double>& interval,
-	double sceneStart, double sceneEnd,double logicalStart, double logicalEnd) {
+CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
+	Interval<double> interval (logicalStart-0.01, logicalEnd+0.01); //TODO: move this to CartesianScale
 	if (type == CartesianPlot::ScaleLinear) {
-		return CartesianCoordinateSystem::Scale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+		return CartesianScale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	} else {
 		float base;
 		if (type == CartesianPlot::ScaleLog10)
@@ -1513,7 +1520,7 @@ CartesianCoordinateSystem::Scale* CartesianPlotPrivate::createScale(CartesianPlo
 		else
 			base = 2.71828;
 
-		return CartesianCoordinateSystem::Scale::createLogScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd, base);
+		return CartesianScale::createLogScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd, base);
 	}
 }
 
@@ -2043,6 +2050,18 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 				removeChild(curve);
 				return false;
 			}
+		} else if (reader->name() == "xyDataReductionCurve") {
+			XYDataReductionCurve* curve = addDataReductionCurve();
+			if (!curve->load(reader)) {
+				removeChild(curve);
+				return false;
+			}
+		} else if (reader->name() == "xyInterpolationCurve") {
+			XYInterpolationCurve* curve = addInterpolationCurve();
+			if (!curve->load(reader)) {
+				removeChild(curve);
+				return false;
+			}
 		} else if (reader->name() == "xyFitCurve") {
 			XYFitCurve* curve = addFitCurve();
 			if (!curve->load(reader)) {
@@ -2057,12 +2076,6 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			}
 		} else if (reader->name() == "xyFourierTransformCurve") {
 			XYFourierTransformCurve* curve = addFourierTransformCurve();
-			if (!curve->load(reader)) {
-				removeChild(curve);
-				return false;
-			}
-		} else if (reader->name() == "xyInterpolationCurve") {
-			XYInterpolationCurve* curve = addInterpolationCurve();
 			if (!curve->load(reader)) {
 				removeChild(curve);
 				return false;

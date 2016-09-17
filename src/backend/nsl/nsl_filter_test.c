@@ -37,14 +37,37 @@ print_data(double data[], int n) {
 }
 
 int main() {
-        double data[]={1, 2, 3, 3, 1, -1, 0, 1, 1, 0};
+        /* double data[]={1, 2, 3, 3, 1, -1, 0, 1, 1, 0}; */
         /*double data[]={1, 1, 3, 3, 1, -1, 0, 1, 1};*/
         /*double data[]={1, 2, 3, 3, 1};*/
-        const int N=10;
+        const int N=1002;
         /*const int N=9;*/
+        double data[N];
 
-	print_data(data, N);
-	nsl_filter_fourier(data, N, nsl_filter_type_high_pass, nsl_filter_form_ideal, 0, 0, 2);
+	int i;
+	for(i=0;i<N;i++)
+		data[i]=1.0;
+
+	/*Bessel gain*/
+/*	printf("G = %g\n",nsl_filter_gain_bessel(3,1)); */
+
+	/* filter form */
+	/*nsl_filter_apply(data, N, nsl_filter_type_low_pass, nsl_filter_form_legendre, 2, 50, 2);*/
+	/*nsl_filter_apply(data, N, nsl_filter_type_high_pass, nsl_filter_form_legendre, 2, 50, 2);*/
+	/*nsl_filter_apply(data, N, nsl_filter_type_band_pass, nsl_filter_form_legendre, 2, 100, 50);*/
+	/*nsl_filter_apply(data, N, nsl_filter_type_band_reject, nsl_filter_form_legendre, 2, 100, 100);*/
+	/*nsl_filter_apply(data, N, nsl_filter_type_low_pass, nsl_filter_form_bessel, 2, 100, 100);*/
+	/*nsl_filter_apply(data, N, nsl_filter_type_high_pass, nsl_filter_form_bessel, 2, 100, 100);*/
+	/*nsl_filter_apply(data, N, nsl_filter_type_band_pass, nsl_filter_form_bessel, 2, 100, 100);*/
+	nsl_filter_apply(data, N, nsl_filter_type_band_reject, nsl_filter_form_bessel, 2, 100, 100);
+	for(i=0; i < N/2; i++)
+		printf("%d %g\n", i, data[2*i]);
+
+	/*print_data(data, N);*/
+	/* all pass order,cut,bw */
+	/*nsl_filter_fourier(data, N, nsl_filter_type_high_pass, nsl_filter_form_ideal, 0, 0, 2); */
+
+	/* filter tests */
 	/*nsl_filter_fourier(data, N, nsl_filter_type_low_pass, nsl_filter_form_ideal, 0, 3, 2);*/
 	/*nsl_filter_fourier(data, N, nsl_filter_type_high_pass, nsl_filter_form_ideal, 0, 3, 2);*/
 	/*nsl_filter_fourier(data, N, nsl_filter_type_band_pass, nsl_filter_form_ideal, 0, 2, 2);*/
@@ -52,7 +75,7 @@ int main() {
 	/*nsl_filter_fourier(data, N, nsl_filter_type_low_pass, nsl_filter_form_butterworth, 1, 2, 2);*/
 	/*nsl_filter_fourier(data, N, nsl_filter_type_high_pass, nsl_filter_form_butterworth, 1, 2, 2);*/
 	/*nsl_filter_fourier(data, N, nsl_filter_type_band_pass, nsl_filter_form_butterworth, 2, 2, 2);*/
-	print_data(data, N);
+	/*print_data(data, N);*/
 
 	return 0;
 }

@@ -53,6 +53,7 @@ private:
 
 	XYInterpolationCurve* m_interpolationCurve;
 	XYInterpolationCurve::InterpolationData m_interpolationData;
+	unsigned int dataPoints;	// number of data points in selected column
 
 protected:
 	virtual void setModel();
@@ -71,6 +72,7 @@ private slots:
 	void biasChanged();
 	void evaluateChanged();
 	void numberOfPointsChanged();
+	void pointsModeChanged();
 
 //	void showOptions();
 	void recalculateClicked();

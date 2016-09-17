@@ -34,18 +34,19 @@
 
 class PlotAreaPrivate;
 
-class PlotArea : public WorksheetElement{
+class PlotArea : public WorksheetElement {
 	Q_OBJECT
 
 	public:
 		explicit PlotArea(const QString& name);
 		virtual ~PlotArea();
 
-		enum BackgroundType{Color, Image, Pattern};
-		enum BackgroundColorStyle{SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
-								  TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient,
-								  RadialGradient};
-		enum BackgroundImageStyle{ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
+		enum BackgroundType {Color, Image, Pattern};
+		enum BackgroundColorStyle {SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
+								TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient,
+								RadialGradient
+								};
+		enum BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
 
 		virtual QGraphicsItem* graphicsItem() const;
 		virtual void setVisible(bool on);
@@ -85,7 +86,7 @@ class PlotArea : public WorksheetElement{
 		PlotAreaPrivate* const d_ptr;
 
 	private:
-    	Q_DECLARE_PRIVATE(PlotArea)
+		Q_DECLARE_PRIVATE(PlotArea)
 		void init();
 
 	signals:

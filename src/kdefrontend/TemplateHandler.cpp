@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
-	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni.kn)
 	Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/

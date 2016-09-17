@@ -31,6 +31,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
@@ -300,6 +301,7 @@ bool Project::load(XmlStreamReader* reader) {
 					curve->suppressRetransform(true);
 
 					XYEquationCurve* equationCurve = dynamic_cast<XYEquationCurve*>(aspect);
+					XYDataReductionCurve* dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(aspect);
 					XYInterpolationCurve* interpolationCurve = dynamic_cast<XYInterpolationCurve*>(aspect);
 					XYSmoothCurve* smoothCurve = dynamic_cast<XYSmoothCurve*>(aspect);
 					XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(aspect);
@@ -308,6 +310,9 @@ bool Project::load(XmlStreamReader* reader) {
 					if (equationCurve) {
 						//curves defined by a mathematical equations recalculate their own columns on load again.
 						equationCurve->recalculate();
+					} else if (dataReductionCurve) {
+						RESTORE_COLUMN_POINTER(dataReductionCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(dataReductionCurve, yDataColumn, YDataColumn);
 					} else if (interpolationCurve) {
 						RESTORE_COLUMN_POINTER(interpolationCurve, xDataColumn, XDataColumn);
 						RESTORE_COLUMN_POINTER(interpolationCurve, yDataColumn, YDataColumn);

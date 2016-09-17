@@ -34,7 +34,6 @@
 
 #include <QMenu>
 #include <QWidgetAction>
-#include <QDebug>
 #include <KMessageBox>
 
 /*!
@@ -77,11 +76,11 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 2, 1, 2);
 
-	for(int i=0; i < NSL_SF_WINDOW_TYPE_COUNT; i++)
+	for (int i=0; i < NSL_SF_WINDOW_TYPE_COUNT; i++)
 		uiGeneralTab.cbWindowType->addItem(i18n(nsl_sf_window_type_name[i]));
-	for(int i=0; i < NSL_DFT_RESULT_TYPE_COUNT; i++)
+	for (int i=0; i < NSL_DFT_RESULT_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_dft_result_type_name[i]));
-	for(int i=0; i < NSL_DFT_XSCALE_COUNT; i++)
+	for (int i=0; i < NSL_DFT_XSCALE_COUNT; i++)
 		uiGeneralTab.cbXScale->addItem(i18n(nsl_dft_xscale_name[i]));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
@@ -105,7 +104,7 @@ void XYFourierTransformCurveDock::setupGeneral() {
 
 void XYFourierTransformCurveDock::initGeneralTab() {
 	//if there are more then one curve in the list, disable the tab "general"
-	if (m_curvesList.size()==1){
+	if (m_curvesList.size()==1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
@@ -156,7 +155,8 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 
 void XYFourierTransformCurveDock::setModel() {
 	QList<const char*>  list;
-	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Datapicker";
+	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
+		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -193,14 +193,14 @@ void XYFourierTransformCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
-void XYFourierTransformCurveDock::nameChanged(){
+void XYFourierTransformCurveDock::nameChanged() {
 	if (m_initializing)
 		return;
 
 	m_curve->setName(uiGeneralTab.leName->text());
 }
 
-void XYFourierTransformCurveDock::commentChanged(){
+void XYFourierTransformCurveDock::commentChanged() {
 	if (m_initializing)
 		return;
 
@@ -241,42 +241,42 @@ void XYFourierTransformCurveDock::windowTypeChanged() {
 	nsl_sf_window_type windowType = (nsl_sf_window_type)uiGeneralTab.cbWindowType->currentIndex();
 	m_transformData.windowType = windowType;
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierTransformCurveDock::typeChanged() {
 	nsl_dft_result_type type = (nsl_dft_result_type)uiGeneralTab.cbType->currentIndex();
 	m_transformData.type = type;
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierTransformCurveDock::twoSidedChanged() {
 	bool twoSided = uiGeneralTab.cbTwoSided->isChecked();
 	m_transformData.twoSided = twoSided;
 
-	if(twoSided)
+	if (twoSided)
 		uiGeneralTab.cbShifted->setEnabled(true);
 	else {
 		uiGeneralTab.cbShifted->setEnabled(false);
 		uiGeneralTab.cbShifted->setChecked(false);
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierTransformCurveDock::shiftedChanged() {
 	bool shifted = uiGeneralTab.cbShifted->isChecked();
 	m_transformData.shifted = shifted;
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierTransformCurveDock::xScaleChanged() {
 	nsl_dft_xscale xScale = (nsl_dft_xscale)uiGeneralTab.cbXScale->currentIndex();
 	m_transformData.xScale = xScale;
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierTransformCurveDock::recalculateClicked() {
@@ -312,7 +312,7 @@ void XYFourierTransformCurveDock::showTransformResult() {
 	}
 
 	//const XYFourierTransformCurve::TransformData& transformData = m_transformCurve->transformData();
-	QString str = i18n("status:") + " " + transformResult.status + "<br>";
+	QString str = i18n("status:") + ' ' + transformResult.status + "<br>";
 
 	if (!transformResult.valid) {
 		uiGeneralTab.teResult->setText(str);

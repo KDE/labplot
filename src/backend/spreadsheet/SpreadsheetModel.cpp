@@ -32,6 +32,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 
+#include <QBrush>
 #include <QIcon>
 #include <QFontMetrics>
 

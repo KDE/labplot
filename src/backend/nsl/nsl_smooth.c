@@ -130,13 +130,13 @@ int nsl_smooth_moving_average(double *data, unsigned int n, unsigned int points,
 				printf("not implemented yet\n");
 				break;
 			case nsl_smooth_pad_mirror:
-				index=abs(i-half+j);
+				index=abs((int)(i-half+j));
 				/*printf(" %d",GSL_MIN(index,2*(n-1)-index));*/
-				result[i] += w[j]*data[GSL_MIN(index,2*(n-1)-index)];
+				result[i] += w[j]*data[GSL_MIN(index,2*((int)n-1)-index)];
 				break;
 			case nsl_smooth_pad_nearest:
 				/*printf(" %d",GSL_MIN(n-1,GSL_MAX(0,index)));*/
-				result[i] += w[j]*data[GSL_MIN(n-1,GSL_MAX(0,index))];
+				result[i] += w[j]*data[GSL_MIN((int)n-1,GSL_MAX(0,index))];
 				break;
 			case nsl_smooth_pad_constant:
 				if(index<0)
@@ -319,11 +319,11 @@ int nsl_smooth_percentile(double *data, unsigned int n, unsigned int points, dou
 			case nsl_smooth_pad_mirror:
 				index=abs(index);
 				/*printf(" %d",GSL_MIN(index,2*(n-1)-index));*/
-				values[j] = data[GSL_MIN(index,2*(n-1)-index)];
+				values[j] = data[GSL_MIN(index,2*((int)n-1)-index)];
 				break;
 			case nsl_smooth_pad_nearest:
 				/*printf(" %d",GSL_MIN(n-1,GSL_MAX(0,index)));*/
-				values[j] = data[GSL_MIN(n-1,GSL_MAX(0,index))];
+				values[j] = data[GSL_MIN((int)n-1,GSL_MAX(0,index))];
 				break;
 			case nsl_smooth_pad_constant:
 				if(index<0)
@@ -445,6 +445,7 @@ int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigne
 			if (error) {
 				printf("Internal error in Savitzky-Golay algorithm:\n%s",gsl_strerror(error));
 				gsl_matrix_free(rh);
+				free(result);
 				return error;
 			}
 			
@@ -459,7 +460,7 @@ int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigne
 					result[i] += gsl_matrix_get(h, i, k) * data[k];
 					break;
 				case nsl_smooth_pad_mirror:
-					result[i] += gsl_matrix_get(h, half, k) * data[abs(k+i-half)];
+					result[i] += gsl_matrix_get(h, half, k) * data[abs((int)(k+i-half))];
 					break;
 				case nsl_smooth_pad_nearest:
 					result[i] += gsl_matrix_get(h, half, k) * data[i+k-GSL_MIN(half,i+k)];
@@ -494,6 +495,7 @@ int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigne
 			if (error) {
 				printf("Internal error in Savitzky-Golay algorithm:\n%s",gsl_strerror(error));
 				gsl_matrix_free(rh);
+				free(result);
 				return error;
 			}
 			
@@ -508,7 +510,7 @@ int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigne
 					result[i] += gsl_matrix_get(h, points-n+i, k) * data[n-points+k];
 					break;
 				case nsl_smooth_pad_mirror:
-					result[i] += gsl_matrix_get(h, half, k) * data[n-1-abs(k+1+i-n-half)];
+					result[i] += gsl_matrix_get(h, half, k) * data[n-1-abs((int)(k+1+i-n-half))];
 					break;
 				case nsl_smooth_pad_nearest:
 					result[i] += gsl_matrix_get(h, half, k) * data[GSL_MIN(i-half+k,n-1)];

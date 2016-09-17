@@ -40,7 +40,7 @@
 #include <QFileDialog>
 #include <QImageReader>
 #include <KUrlCompletion>
-#include <QDebug>
+
 #include <cmath>
 
 /*!
@@ -774,7 +774,7 @@ void CartesianPlotDock::backgroundTypeChanged(int index) {
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
 		}
-	} else if(type == PlotArea::Image) {
+	} else if (type == PlotArea::Image) {
 		ui.lBackgroundColorStyle->hide();
 		ui.cbBackgroundColorStyle->hide();
 		ui.lBackgroundImageStyle->show();
@@ -789,7 +789,7 @@ void CartesianPlotDock::backgroundTypeChanged(int index) {
 		ui.kcbBackgroundFirstColor->hide();
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
-	} else if(type == PlotArea::Pattern) {
+	} else if (type == PlotArea::Pattern) {
 		ui.lBackgroundFirstColor->setText(i18n("Color"));
 		ui.lBackgroundColorStyle->hide();
 		ui.cbBackgroundColorStyle->hide();
@@ -1145,11 +1145,11 @@ void CartesianPlotDock::plotBackgroundOpacityChanged(float opacity) {
 
 void CartesianPlotDock::plotBorderPenChanged(QPen& pen) {
 	m_initializing = true;
-	if(ui.cbBorderStyle->currentIndex() != pen.style())
+	if (ui.cbBorderStyle->currentIndex() != pen.style())
 		ui.cbBorderStyle->setCurrentIndex(pen.style());
-	if(ui.kcbBorderColor->color() != pen.color())
+	if (ui.kcbBorderColor->color() != pen.color())
 		ui.kcbBorderColor->setColor(pen.color());
-	if(ui.sbBorderWidth->value() != pen.widthF())
+	if (ui.sbBorderWidth->value() != pen.widthF())
 		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
 	m_initializing = false;
 }

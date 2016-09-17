@@ -31,6 +31,7 @@
 
 #include <KDialog>
 #include <KUrlCompletion>
+#include "kdefrontend/widgets/FITSHeaderEditWidget.h"
 #include "ui_exportspreadsheetwidget.h"
 
 class ExportSpreadsheetDialog: public KDialog {
@@ -43,6 +44,7 @@ class ExportSpreadsheetDialog: public KDialog {
 		QString path() const;
 		void setFileName(const QString&);
 		void setMatrixMode(bool);
+        void setExportSelection(bool);
 		bool exportHeader() const;
         bool exportLatexHeader() const;
         bool gridLines() const;
@@ -53,11 +55,16 @@ class ExportSpreadsheetDialog: public KDialog {
         bool matrixVerticalHeader() const;
         bool matrixHorizontalHeader() const;
 		QString separator() const;
+        int exportToFits() const;
+        bool commentsAsUnitsFits() const;
+        void setExportTo(const QStringList& to);
+        void setExportToImage(bool possible);
 
         enum Format {
             ASCII = 0,
             Binary,
-            LaTeX
+            LaTeX,
+            FITS,
         };
 
         Format format() const;
@@ -77,6 +84,7 @@ class ExportSpreadsheetDialog: public KDialog {
 		void selectFile();
 		void formatChanged(int);
 		void fileNameChanged(const QString&);
+        void fitsExportToChanged(int);
 };
 
 #endif

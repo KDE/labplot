@@ -1,3 +1,4 @@
+
 /***************************************************************************
     File                 : XYFitCurve.cpp
     Project              : LabPlot
@@ -428,7 +429,17 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		break;
 	}
 	case XYFitCurve::Sigmoid: {
-		//TODO
+		// Y(x) = a/(1+exp(-b*(x-c)))
+		double a = gsl_vector_get(paramValues, 0);
+		double b = gsl_vector_get(paramValues, 1);
+		double c = gsl_vector_get(paramValues, 2);
+		for (int i=0; i<n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+			gsl_matrix_set(J, i, 0, 1/(exp(b*(c-x))+1)/sigma);
+			gsl_matrix_set(J, i, 1, a*(x-c)*exp((c-x)*b)/pow(exp((c-x)*b)+1, 2)/sigma);
+			gsl_matrix_set(J, i, 2, -a*b*exp(b*(c-x))/pow(exp(b*(c-x))+1, 2)/sigma);
+		}
 		break;
 	}
 	case XYFitCurve::Custom: {

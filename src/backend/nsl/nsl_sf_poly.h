@@ -30,10 +30,24 @@
 #define NSL_SF_POLY_H
 
 #include <stdlib.h>
+/* C++ including this header */
+#ifdef __cplusplus
+#define complex _Complex
+#else
+#include <complex.h>
+#endif
 
 /* Chebychev T_n(x) */
 double nsl_sf_poly_chebyshev_T(int n, double x);
 /* Chebychev U_n(x) */
 double nsl_sf_poly_chebyshev_U(int n, double x);
+
+/* Optimal "L"egendre Polynomials */
+double nsl_sf_poly_optimal_legendre_L(int n, double x);
+
+/* Bessel polynomials y_n(x) */
+double complex nsl_sf_poly_bessel_y(int n, double complex x);
+/* reversed Bessel polynomials \theta_n(x) */
+double complex nsl_sf_poly_reversed_bessel_theta(int n, double complex x);
 
 #endif /* NSL_SF_POLY_H */

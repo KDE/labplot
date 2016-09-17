@@ -54,8 +54,6 @@ class AbstractCoordinateSystem {
 		virtual QList<QPointF> mapSceneToLogical(const QList<QPointF>&, const MappingFlags &flags = DefaultMapping) const = 0;
 		virtual QPointF mapSceneToLogical(const QPointF&, const MappingFlags &flags = DefaultMapping) const = 0;
 
-		virtual void handlePageResize(double horizontalRatio, double verticalRatio) = 0;
-
 		class LineClipResult {
 			public:
 				LineClipResult() {

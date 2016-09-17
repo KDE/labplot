@@ -83,9 +83,9 @@ public:
 	void createContextMenu(QMenu*);
 	virtual QWidget* view() const;
 
-    virtual bool exportView() const;
-    virtual bool printView();
-    virtual bool printPreview() const;
+	virtual bool exportView() const;
+	virtual bool printView();
+	virtual bool printPreview() const;
 
 	virtual void save(QXmlStreamWriter*) const;
 	virtual bool load(XmlStreamReader*);
@@ -95,7 +95,7 @@ public:
 	QGraphicsScene *scene() const;
 	void setPrinting(bool) const;
 	void setSelectedInView(const bool);
-    void setSegmentsHoverEvent(const bool);
+	void setSegmentsHoverEvent(const bool);
 
 	void setPlotImageType(const DatapickerImage::PlotImageType);
 	DatapickerImage::PlotImageType plotImageType();

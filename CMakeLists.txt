@@ -16,7 +16,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wundef -Wpointer-arith -W
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION=\"2.2.0\")
+add_definitions (-DLVERSION=\"2.3.0\")
 # add_definitions (-DLDEBUG='1')
 set(BUILD_SHARED_LIBS true)
 add_definitions(-fvisibility=default)
@@ -38,6 +38,7 @@ IF (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
 	SET (FFTW_FOUND TRUE)
 ELSE (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
 	SET (FFTW_FOUND FALSE)
+	SET (FFTW_LIBRARIES "")
 ENDIF (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
 
 IF (FFTW_FOUND)
@@ -86,29 +87,10 @@ ELSE (GSL_FOUND)
 ENDIF (GSL_FOUND)
 
 ### HDF5 #####################################
-FIND_LIBRARY(HDF5_LIBRARY hdf5
-	PATHS
-	/usr/lib
-	/usr/local/lib
-	/usr/lib/x86_64-linux-gnu/hdf5/serial
-)
-FIND_PATH (HDF5_INCLUDE_DIR hdf5.h
-	/usr/include
-	/usr/local/include
-	/usr/include/hdf5/serial
-)
-IF (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
-	SET (HDF5_FOUND TRUE)
-ELSE (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
-	SET (HDF5_FOUND FALSE)
-	SET (HDF5_LIBRARY "")
-ENDIF (HDF5_LIBRARY AND HDF5_INCLUDE_DIR)
+FIND_PACKAGE(HDF5 COMPONENTS C)
 IF (HDF5_FOUND)
-	MESSAGE (STATUS "Found Hierarchical Data Format (HDF) 5 Library: ${HDF5_INCLUDE_DIR} ${HDF5_LIBRARY}")
 	add_definitions (-DHAVE_HDF5)
-	include_directories (${HDF5_INCLUDE_DIR})
-ELSE (HDF5_FOUND)
-	MESSAGE (STATUS "Hierarchical Data Format (HDF) 5 Library not found.")
+	include_directories (${HDF5_INCLUDE_DIRS})
 ENDIF (HDF5_FOUND)
 
 ### NETCDF #####################################
@@ -133,6 +115,32 @@ IF (NETCDF_FOUND)
 ELSE (NETCDF_FOUND)
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library not found.")
 ENDIF (NETCDF_FOUND)
+
+### FITS ########################################
+FIND_LIBRARY(CFITSIO_LIBRARY cfitsio
+        PATHS
+        /usr/lib
+        /usr/local/lib
+)
+FIND_PATH (CFITSIO_INCLUDE_DIR fitsio.h
+        /usr/include/
+        /usr/include/cfitsio/
+        /usr/local/include/
+)
+IF (CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
+        SET (CFITSIO_FOUND TRUE)
+ELSE (CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
+        SET (CFITSIO_FOUND FALSE)
+        SET (CFITSIO_LIBRARY "")
+ENDIF (CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
+IF (CFITSIO_FOUND)
+        MESSAGE (STATUS "Found Flexible Image Transport System Data Format (FITS) Library: ${CFITSIO_INCLUDE_DIR} ${CFITSIO_LIBRARY}")
+        add_definitions (-DHAVE_FITS)
+	include_directories (${CFITSIO_INCLUDE_DIR})
+ELSE (CFITSIO_FOUND)
+        MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library not found.")
+ENDIF (CFITSIO_FOUND)
+#################################################
 
 add_subdirectory(icons)
 add_subdirectory(src)

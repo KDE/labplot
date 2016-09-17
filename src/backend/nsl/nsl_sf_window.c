@@ -33,7 +33,7 @@
 
 const char* nsl_sf_window_type_name[] = {"rectangular (uniform)", "triangular", "triangular II (Bartlett)", "triangular III (Parzen)" , 
 	"Welch (parabolic)", "Hann (raised cosine)", "Hamming", "Blackman", "Nuttall", "Blackman-Nuttall", "Blackman-Harris", "Flat top",
-	"Bartlett-Hann", "Lanczos"};
+	"Cosine", "Bartlett-Hann", "Lanczos"};
 
 double nsl_sf_window(int i, int N, nsl_sf_window_type type) {
 	double v=0.0;

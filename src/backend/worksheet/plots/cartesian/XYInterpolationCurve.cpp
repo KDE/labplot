@@ -40,6 +40,7 @@
 #include "backend/lib/commandtemplates.h"
 
 #include <cmath>	// isnan
+#include <cfloat>	// DBL_MIN
 extern "C" {
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_interp.h>
@@ -459,10 +460,10 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	// check values
 	for (unsigned int i = 0; i < npoints; i++) {
-		if ((*yVector)[i] > CartesianCoordinateSystem::Scale::LIMIT_MAX)
-			(*yVector)[i] = CartesianCoordinateSystem::Scale::LIMIT_MAX;
-		else if ((*yVector)[i] < CartesianCoordinateSystem::Scale::LIMIT_MIN)
-			(*yVector)[i] = CartesianCoordinateSystem::Scale::LIMIT_MIN;
+		if ((*yVector)[i] > CartesianScale::LIMIT_MAX)
+			(*yVector)[i] = CartesianScale::LIMIT_MAX;
+		else if ((*yVector)[i] < CartesianScale::LIMIT_MIN)
+			(*yVector)[i] = CartesianScale::LIMIT_MIN;
 	}
 
 	gsl_spline_free(spline);
@@ -504,6 +505,7 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "continuity", QString::number(d->interpolationData.continuity) );
 	writer->writeAttribute( "bias", QString::number(d->interpolationData.bias) );
 	writer->writeAttribute( "npoints", QString::number(d->interpolationData.npoints) );
+	writer->writeAttribute( "pointsMode", QString::number(d->interpolationData.pointsMode) );
 	writer->writeAttribute( "evaluate", QString::number(d->interpolationData.evaluate) );
 	writer->writeEndElement();// interpolationData
 
@@ -529,7 +531,7 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 	Q_D(XYInterpolationCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xyInterpolationCurve") {
-		reader->raiseError(i18n("no xy Fourier interpolation curve element found"));
+		reader->raiseError(i18n("no xy interpolation curve element found"));
 		return false;
 	}
 
@@ -589,6 +591,12 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 				reader->raiseWarning(attributeWarning.arg("'npoints'"));
 			else
 				d->interpolationData.npoints = str.toInt();
+
+			str = attribs.value("pointsMode").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'pointsMode'"));
+			else
+				d->interpolationData.pointsMode = (XYInterpolationCurve::PointsMode)str.toInt();
 
 			str = attribs.value("evaluate").toString();
 			if (str.isEmpty())

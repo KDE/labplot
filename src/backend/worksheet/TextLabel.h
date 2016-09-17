@@ -39,7 +39,7 @@
 #include "backend/worksheet/WorksheetElement.h"
 
 class TextLabelPrivate;
-class TextLabel : public WorksheetElement{
+class TextLabel : public WorksheetElement {
 	Q_OBJECT
 
 	public:
@@ -51,16 +51,16 @@ class TextLabel : public WorksheetElement{
 		enum HorizontalAlignment {hAlignLeft, hAlignCenter, hAlignRight};
 		enum VerticalAlignment {vAlignTop, vAlignCenter, vAlignBottom};
 
-		struct TextWrapper{
-			TextWrapper() : teXUsed(false){}
-			TextWrapper(const QString& t, bool b) : text(t), teXUsed(b){}
-			TextWrapper(const QString& t) : text(t), teXUsed(false){}
+		struct TextWrapper {
+			TextWrapper() : teXUsed(false) {}
+			TextWrapper(const QString& t, bool b) : text(t), teXUsed(b) {}
+			TextWrapper(const QString& t) : text(t), teXUsed(false) {}
 
 			QString text;
 			bool teXUsed;
 		};
 
-		struct PositionWrapper{
+		struct PositionWrapper {
 			QPointF 		   point;
 			HorizontalPosition horizontalPosition;
 			VerticalPosition   verticalPosition;
@@ -111,7 +111,7 @@ class TextLabel : public WorksheetElement{
 		TextLabel(const QString& name, TextLabelPrivate* dd, Type type = General);
 
 	private:
-    	Q_DECLARE_PRIVATE(TextLabel)
+		Q_DECLARE_PRIVATE(TextLabel)
 		void init();
 		void initActions();
 

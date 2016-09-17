@@ -42,6 +42,9 @@
 #include <KLocale>
 #include <QElapsedTimer>
 #include <QThreadPool>
+#ifndef NDEBUG
+#include <QDebug>
+#endif
 
 extern "C" {
 #include <gsl/gsl_math.h>	// gsl_pow_*
@@ -248,7 +251,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	const nsl_smooth_pad_mode mode = smoothData.mode;
 	const double lvalue = smoothData.lvalue;
 	const double rvalue = smoothData.rvalue;
-#ifdef QT_DEBUG
+#ifndef NDEBUG
 	qDebug()<<"type:"<<nsl_smooth_type_name[type];
 	qDebug()<<"points ="<<points;
 	qDebug()<<"weight:"<<nsl_smooth_weight_type_name[weight];
@@ -344,7 +347,7 @@ bool XYSmoothCurve::load(XmlStreamReader* reader) {
 	Q_D(XYSmoothCurve);
 
 	if (!reader->isStartElement() || reader->name() != "xySmoothCurve") {
-		reader->raiseError(i18n("no xy Fourier smooth curve element found"));
+		reader->raiseError(i18n("no xy smooth curve element found"));
 		return false;
 	}
 

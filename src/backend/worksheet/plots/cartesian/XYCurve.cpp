@@ -46,11 +46,14 @@
 #include <QPainter>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
-#include <QtDebug>
+#ifndef NDEBUG
+#include <QDebug>
+#endif
 // #include <QElapsedTimer>
 
 #include <KIcon>
 #include <KConfigGroup>
+#include <KGlobal>
 #include <KLocale>
 
 #include <cmath>
@@ -1027,22 +1030,24 @@ void XYCurvePrivate::updateLines() {
 				msg=i18n("Error: Akima spline interpolation requires a minimum of 5 points.");
 			else
 				msg =i18n("Couldn't initialize spline function");
+#ifndef NDEBUG
 			qDebug()<<msg;
+#endif
 			recalcShapeAndBoundingRect();
 			return;
 		}
 
 		int status = gsl_spline_init (spline, x, y, count);
-		if (status ) {
+		if (status) {
 			//TODO: check in gsl/interp.c when GSL_EINVAL is thrown
 			QString gslError;
 			if (status == GSL_EINVAL)
 				gslError = "x values must be monotonically increasing.";
 			else
 				gslError = gsl_strerror (status);
-
+#ifndef NDEBUG
 			qDebug() << "Error in spline calculation. " << gslError;
-
+#endif
 			recalcShapeAndBoundingRect();
 			return;
 		}
@@ -1894,10 +1899,11 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-// TODO: draw directly
-	draw(painter);
-// or use pixmap for double buffering
-// 	painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap);
+	if ( KGlobal::config()->group("General").readEntry<bool>("DoubleBuffering", true) )
+		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); //draw the cached pixmap (fast)
+	else
+		draw(painter); //draw directly again (slow)
+
 // 	qDebug() << "Paint the pixmap: " << timer.elapsed() << "ms";
 
 	if (m_hovered && !isSelected() && !m_printing) {

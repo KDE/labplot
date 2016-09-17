@@ -34,8 +34,10 @@
 
 #include <QMenu>
 #include <QWidgetAction>
-#include <QDebug>
 #include <KMessageBox>
+#ifndef NDEBUG
+#include <QDebug>
+#endif
 
 /*!
   \class XYFourierFilterCurveDock
@@ -167,7 +169,8 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 
 void XYFourierFilterCurveDock::setModel() {
 	QList<const char*>  list;
-	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Datapicker";
+	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
+		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -281,7 +284,7 @@ void XYFourierFilterCurveDock::typeChanged() {
 */
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::formChanged() {
@@ -296,18 +299,20 @@ void XYFourierFilterCurveDock::formChanged() {
 	case nsl_filter_form_butterworth:
 	case nsl_filter_form_chebyshev_i:
 	case nsl_filter_form_chebyshev_ii:
+	case nsl_filter_form_legendre:
+	case nsl_filter_form_bessel:
 		uiGeneralTab.sbOrder->setVisible(true);
 		uiGeneralTab.lOrder->setVisible(true);
 		break;
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::orderChanged() {
 	m_filterData.order = uiGeneralTab.sbOrder->value();
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::unitChanged() {
@@ -378,7 +383,7 @@ void XYFourierFilterCurveDock::unitChanged() {
 		break;
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::unit2Changed() {
@@ -449,7 +454,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 		break;
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::recalculateClicked() {
@@ -494,7 +499,7 @@ void XYFourierFilterCurveDock::showFilterResult() {
 	}
 
 	//const XYFourierFilterCurve::FilterData& filterData = m_filterCurve->filterData();
-	QString str = i18n("status:") + " " + filterResult.status + "<br>";
+	QString str = i18n("status:") + ' ' + filterResult.status + "<br>";
 
 	if (!filterResult.valid) {
 		uiGeneralTab.teResult->setText(str);

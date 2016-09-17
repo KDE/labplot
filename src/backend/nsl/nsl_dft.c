@@ -35,8 +35,8 @@
 #include <fftw3.h>
 #endif
 
-const char* nsl_dft_result_type_name[] = {"Magnitude", "Amplitude", "real", "imaginary", "Power", "Phase", 
-		"dB", "dB normalized", "Magnitude squared", "Amplitude squared", "raw"};
+const char* nsl_dft_result_type_name[] = {"Magnitude", "Amplitude", "real part", "imaginary part", "Power", "Phase",
+		"Amplitude in dB", "normalized amplitude in dB", "Magnitude squared", "Amplitude squared", "raw"};
 const char* nsl_dft_xscale_name[] = {"Frequency", "Index", "Period"};
 
 int nsl_dft_transform_window(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type, nsl_sf_window_type window_type) {
@@ -61,8 +61,8 @@ int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl
 	/* stride ignored */
 	(void)stride;
 
-        fftw_plan plan = fftw_plan_dft_r2c_1d(n, data, (fftw_complex *) result, FFTW_ESTIMATE);
-        fftw_execute(plan);
+	fftw_plan plan = fftw_plan_dft_r2c_1d(n, data, (fftw_complex *) result, FFTW_ESTIMATE);
+	fftw_execute(plan);
 	fftw_destroy_plan(plan);
 
 	/* 2. unpack data */

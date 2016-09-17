@@ -56,7 +56,7 @@ extern "C" {
 */
 
 XYInterpolationCurveDock::XYInterpolationCurveDock(QWidget *parent): 
-	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_interpolationCurve(0) {
+	XYCurveDock(parent), cbXDataColumn(0), cbYDataColumn(0), m_interpolationCurve(0), dataPoints(0) {
 
 	//hide the line connection type
 	ui.cbLineType->setDisabled(true);
@@ -84,7 +84,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
-	for(int i=0; i < NSL_INTERP_TYPE_COUNT; i++)
+	for (int i=0; i < NSL_INTERP_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_interp_type_name[i]));
 #if GSL_MAJOR_VERSION < 2
 	// disable Steffen spline item
@@ -92,10 +92,14 @@ void XYInterpolationCurveDock::setupGeneral() {
 	QStandardItem* item = model->item(nsl_interp_type_steffen);
 	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 #endif
-	for(int i=0; i < NSL_INTERP_PCH_VARIANT_COUNT; i++)
+	for (int i=0; i < NSL_INTERP_PCH_VARIANT_COUNT; i++)
 		uiGeneralTab.cbVariant->addItem(i18n(nsl_interp_pch_variant_name[i]));
-	for(int i=0; i < NSL_INTERP_EVALUATE_COUNT; i++)
+	for (int i=0; i < NSL_INTERP_EVALUATE_COUNT; i++)
 		uiGeneralTab.cbEval->addItem(i18n(nsl_interp_evaluate_name[i]));
+
+	uiGeneralTab.cbPointsMode->addItem(i18n("Auto (5x data points)"));
+	uiGeneralTab.cbPointsMode->addItem(i18n("Multiple of data points"));
+	uiGeneralTab.cbPointsMode->addItem(i18n("Custom"));
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
@@ -114,14 +118,15 @@ void XYInterpolationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.sbContinuity, SIGNAL(valueChanged(double)), this, SLOT(continuityChanged()) );
 	connect( uiGeneralTab.sbBias, SIGNAL(valueChanged(double)), this, SLOT(biasChanged()) );
 	connect( uiGeneralTab.cbEval, SIGNAL(currentIndexChanged(int)), this, SLOT(evaluateChanged()) );
-	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(int)), this, SLOT(numberOfPointsChanged()) );
+	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(double)), this, SLOT(numberOfPointsChanged()) );
+	connect( uiGeneralTab.cbPointsMode, SIGNAL(currentIndexChanged(int)), this, SLOT(pointsModeChanged()) );
 
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
 
 void XYInterpolationCurveDock::initGeneralTab() {
 	//if there are more then one curve in the list, disable the tab "general"
-	if (m_curvesList.size()==1){
+	if (m_curvesList.size()==1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
@@ -155,7 +160,13 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	uiGeneralTab.sbContinuity->setValue(m_interpolationData.continuity);
 	uiGeneralTab.sbBias->setValue(m_interpolationData.bias);
 	uiGeneralTab.cbEval->setCurrentIndex(m_interpolationData.evaluate);
-	uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints);
+
+	if (m_interpolationData.pointsMode == XYInterpolationCurve::Multiple)
+		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints/5.);
+	else
+		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints);
+	uiGeneralTab.cbPointsMode->setCurrentIndex(m_interpolationData.pointsMode);
+
 	this->showInterpolationResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last interpolation
@@ -173,7 +184,8 @@ void XYInterpolationCurveDock::initGeneralTab() {
 
 void XYInterpolationCurveDock::setModel() {
 	QList<const char*>  list;
-	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Datapicker";
+	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
+		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -241,53 +253,56 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYInterpolationCurve*>(curve)->setXDataColumn(column);
 
 	// disable types that need more data points
-	if(column != 0) {
+	if (column != 0) {
 		unsigned int n=0;
-		for(int row=0;row < column->rowCount();row++)
+		for (int row=0; row < column->rowCount(); row++)
 			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row)) 
 				n++;
+		dataPoints = n;
+		if(m_interpolationData.pointsMode == XYInterpolationCurve::Auto)
+			pointsModeChanged();
 
 		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
 		QStandardItem* item = model->item(nsl_interp_type_polynomial);
-		if(n < gsl_interp_type_min_size(gsl_interp_polynomial) || n>100) {	// not good for many points
+		if (dataPoints < gsl_interp_type_min_size(gsl_interp_polynomial) || dataPoints > 100) {	// not good for many points
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_polynomial)
+			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_polynomial)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
 		item = model->item(nsl_interp_type_cspline);
-		if(n < gsl_interp_type_min_size(gsl_interp_cspline)) {
+		if (dataPoints < gsl_interp_type_min_size(gsl_interp_cspline)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline)
+			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
 		item = model->item(nsl_interp_type_cspline_periodic);
-		if(n < gsl_interp_type_min_size(gsl_interp_cspline_periodic)) {
+		if (dataPoints < gsl_interp_type_min_size(gsl_interp_cspline_periodic)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline_periodic)
+			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_cspline_periodic)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
 		item = model->item(nsl_interp_type_akima);
-		if(n < gsl_interp_type_min_size(gsl_interp_akima)) {
+		if (dataPoints < gsl_interp_type_min_size(gsl_interp_akima)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima)
+			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 
 		item = model->item(nsl_interp_type_akima_periodic);
-		if(n < gsl_interp_type_min_size(gsl_interp_akima_periodic)) {
+		if (dataPoints < gsl_interp_type_min_size(gsl_interp_akima_periodic)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima_periodic)
+			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_akima_periodic)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
@@ -295,15 +310,15 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 #if GSL_MAJOR_VERSION >= 2
 		item = model->item(nsl_interp_type_steffen);
-		if(n < gsl_interp_type_min_size(gsl_interp_steffen)) {
+		if (dataPoints < gsl_interp_type_min_size(gsl_interp_steffen)) {
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if(uiGeneralTab.cbType->currentIndex() == nsl_interp_type_steffen)
+			if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_steffen)
 				uiGeneralTab.cbType->setCurrentIndex(0);
 		}
 		else
 			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 #endif
-		// own types work with 2 or more points
+		// own types work with 2 or more data points
 	}
 }
 
@@ -326,7 +341,7 @@ void XYInterpolationCurveDock::typeChanged() {
 	nsl_interp_type type = (nsl_interp_type)uiGeneralTab.cbType->currentIndex();
 	m_interpolationData.type = type;
 
-	switch(type) {
+	switch (type) {
 	case nsl_interp_type_pch:
 		uiGeneralTab.lVariant->show();
 		uiGeneralTab.cbVariant->show();
@@ -351,7 +366,7 @@ void XYInterpolationCurveDock::variantChanged() {
 	nsl_interp_pch_variant variant = (nsl_interp_pch_variant)uiGeneralTab.cbVariant->currentIndex();
 	m_interpolationData.variant = variant;
 
-	switch(variant) {
+	switch (variant) {
 	case nsl_interp_pch_variant_finite_difference:
 		uiGeneralTab.lParameter->hide();
                 uiGeneralTab.lTension->hide();
@@ -418,13 +433,56 @@ void XYInterpolationCurveDock::biasChanged() {
 void XYInterpolationCurveDock::evaluateChanged() {
 	m_interpolationData.evaluate = (nsl_interp_evaluate)uiGeneralTab.cbEval->currentIndex();
 
+
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYInterpolationCurveDock::numberOfPointsChanged() {
-	m_interpolationData.npoints = uiGeneralTab.sbPoints->value();
+void XYInterpolationCurveDock::pointsModeChanged() {
+	XYInterpolationCurve::PointsMode mode = (XYInterpolationCurve::PointsMode)uiGeneralTab.cbPointsMode->currentIndex();
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	switch (mode) {
+	case XYInterpolationCurve::Auto:
+		uiGeneralTab.sbPoints->setEnabled(false);
+		uiGeneralTab.sbPoints->setDecimals(0);
+		uiGeneralTab.sbPoints->setSingleStep(1.0);
+		uiGeneralTab.sbPoints->setValue(5*dataPoints);
+		break;
+	case XYInterpolationCurve::Multiple:
+		uiGeneralTab.sbPoints->setEnabled(true);
+		if(m_interpolationData.pointsMode != XYInterpolationCurve::Multiple && dataPoints > 0) {
+			uiGeneralTab.sbPoints->setDecimals(2);
+			uiGeneralTab.sbPoints->setValue(uiGeneralTab.sbPoints->value()/(double)dataPoints);
+			uiGeneralTab.sbPoints->setSingleStep(0.01);
+		}
+		break;
+	case XYInterpolationCurve::Custom:
+		uiGeneralTab.sbPoints->setEnabled(true);
+		if(m_interpolationData.pointsMode == XYInterpolationCurve::Multiple) {
+			uiGeneralTab.sbPoints->setDecimals(0);
+			uiGeneralTab.sbPoints->setSingleStep(1.0);
+			uiGeneralTab.sbPoints->setValue(uiGeneralTab.sbPoints->value()*dataPoints);
+		}
+		break;
+	}
+
+	m_interpolationData.pointsMode = mode;
+}
+
+void XYInterpolationCurveDock::numberOfPointsChanged() {
+	if(uiGeneralTab.cbPointsMode->currentIndex() == XYInterpolationCurve::Multiple)
+		m_interpolationData.npoints = uiGeneralTab.sbPoints->value()*dataPoints;
+	else
+		m_interpolationData.npoints = uiGeneralTab.sbPoints->value();
+
+	// warn if points is smaller than data points
+	QPalette palette = uiGeneralTab.sbPoints->palette();
+	if(m_interpolationData.npoints < dataPoints)
+		palette.setColor(QPalette::Text, Qt::red);
+	else
+		palette.setColor(QPalette::Text, Qt::black);
+	uiGeneralTab.sbPoints->setPalette(palette);
+
+	enableRecalculate();
 }
 
 void XYInterpolationCurveDock::recalculateClicked() {
@@ -460,7 +518,7 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 	}
 
 	//const XYInterpolationCurve::InterpolationData& interpolationData = m_interpolationCurve->interpolationData();
-	QString str = i18n("status:") + " " + interpolationResult.status + "<br>";
+	QString str = i18n("status:") + ' ' + interpolationResult.status + "<br>";
 
 	if (!interpolationResult.valid) {
 		uiGeneralTab.teResult->setText(str);

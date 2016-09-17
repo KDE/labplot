@@ -35,7 +35,9 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
+#ifndef NDEBUG
 #include <QDebug>
+#endif
 
 #include <cmath>        // isnan
 
@@ -85,13 +87,13 @@ void XYSmoothCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
-	for(int i=0; i < NSL_SMOOTH_TYPE_COUNT; i++)
+	for (int i=0; i < NSL_SMOOTH_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_smooth_type_name[i]));
 
-	for(int i=0; i < NSL_SMOOTH_WEIGHT_TYPE_COUNT; i++)
+	for (int i=0; i < NSL_SMOOTH_WEIGHT_TYPE_COUNT; i++)
 		uiGeneralTab.cbWeight->addItem(i18n(nsl_smooth_weight_type_name[i]));
 
-	for(int i=0; i < NSL_SMOOTH_PAD_MODE_COUNT; i++)
+	for (int i=0; i < NSL_SMOOTH_PAD_MODE_COUNT; i++)
 		uiGeneralTab.cbMode->addItem(i18n(nsl_smooth_pad_mode_name[i]));
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
@@ -122,7 +124,7 @@ void XYSmoothCurveDock::initGeneralTab() {
 	qDebug()<<"XYSmoothCurveDock::initGeneralTab()";
 #endif
 	//if there are more then one curve in the list, disable the tab "general"
-	if (m_curvesList.size()==1){
+	if (m_curvesList.size()==1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
@@ -180,7 +182,8 @@ void XYSmoothCurveDock::initGeneralTab() {
 
 void XYSmoothCurveDock::setModel() {
 	QList<const char*>  list;
-	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Datapicker";
+	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
+		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -251,9 +254,9 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYSmoothCurve*>(curve)->setXDataColumn(column);
 
 	// disable types that need more data points
-	if(column != 0) {
+	if (column != 0) {
 		unsigned int n=0;
-		for(int row=0;row < column->rowCount();row++)
+		for (int row=0; row < column->rowCount(); row++)
 			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row)) 
 				n++;
 
@@ -303,7 +306,7 @@ void XYSmoothCurveDock::typeChanged() {
 	} else {
 		uiGeneralTab.sbPoints->setSingleStep(2);
 		uiGeneralTab.sbPoints->setMinimum(3);
-		if(m_smoothData.mode == nsl_smooth_pad_constant) {
+		if (m_smoothData.mode == nsl_smooth_pad_constant) {
 			uiGeneralTab.lRightValue->show();
 			uiGeneralTab.sbRightValue->show();
 		}
@@ -328,7 +331,7 @@ void XYSmoothCurveDock::typeChanged() {
 	}
 	
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::pointsChanged() {
@@ -337,34 +340,34 @@ void XYSmoothCurveDock::pointsChanged() {
 	// set maximum order
 	uiGeneralTab.sbOrder->setMaximum(m_smoothData.points-1);
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::weightChanged() {
 	m_smoothData.weight = (nsl_smooth_weight_type)uiGeneralTab.cbWeight->currentIndex();
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::percentileChanged() {
 	m_smoothData.percentile = uiGeneralTab.sbPercentile->value();
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::orderChanged() {
 	m_smoothData.order = uiGeneralTab.sbOrder->value();
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::modeChanged() {
 	m_smoothData.mode = (nsl_smooth_pad_mode)(uiGeneralTab.cbMode->currentIndex());
 
-	if(m_smoothData.mode == nsl_smooth_pad_constant) {
+	if (m_smoothData.mode == nsl_smooth_pad_constant) {
 		uiGeneralTab.lLeftValue->show();
 		uiGeneralTab.sbLeftValue->show();
-		if(m_smoothData.type == nsl_smooth_type_moving_average_lagged) {
+		if (m_smoothData.type == nsl_smooth_type_moving_average_lagged) {
 			uiGeneralTab.lRightValue->hide();
 			uiGeneralTab.sbRightValue->hide();
 		} else {
@@ -378,14 +381,14 @@ void XYSmoothCurveDock::modeChanged() {
 		uiGeneralTab.sbRightValue->hide();
 	}
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::valueChanged() {
 	m_smoothData.lvalue = uiGeneralTab.sbLeftValue->value();
 	m_smoothData.rvalue = uiGeneralTab.sbRightValue->value();
 
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::recalculateClicked() {
@@ -421,7 +424,7 @@ void XYSmoothCurveDock::showSmoothResult() {
 	}
 
 	//const XYSmoothCurve::SmoothData& smoothData = m_smoothCurve->smoothData();
-	QString str = i18n("status:") + " " + smoothResult.status + "<br>";
+	QString str = i18n("status:") + ' ' + smoothResult.status + "<br>";
 
 	if (!smoothResult.valid) {
 		uiGeneralTab.teResult->setText(str);

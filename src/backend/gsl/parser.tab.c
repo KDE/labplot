@@ -1894,13 +1894,17 @@ int yylex (void) {
                 ungetcstr();
                 char *s = &string[pos];
 
+		/* convert to double */
+		char *remain;
+#if defined(_WIN32) || defined(__APPLE__)
+		double result = strtod(s,&remain);
+#else
 		/* use same locale for all languages: '.' as decimal point */
 		locale_t locale = newlocale (LC_NUMERIC_MASK, "C", NULL);
 
-		/* convert to double */
-		char *remain;
 		double result = strtod_l(s,&remain,locale);
 		freelocale(locale);
+#endif
 #ifdef LDEBUG
 		printf("		reading: %s",s);
 		printf("		remain = %s",remain);

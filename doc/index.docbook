@@ -51,8 +51,8 @@
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2016-07-02</date>
-<releaseinfo>3.2.2</releaseinfo>
+<date>2016-09-06</date>
+<releaseinfo>3.2.4</releaseinfo>
 
 <abstract>
 	<para>
@@ -437,8 +437,13 @@ The supported data formats are
 <listitem><para>Image</para></listitem>
 <listitem><para>NetCDF</para></listitem>
 <listitem><para>HDF5</para></listitem>
+<listitem><para>FITS</para></listitem>
 </itemizedlist>
-Preview of all supported file types is available in the import dialog. For data formats with complex internal structures like NetCDF and HDF5, the content of the file is presented in a tree view that allows comfortable navigation through the file.
+Preview of all supported file types is available in the import dialog.
+For data formats with complex internal structures (like NetCDF, HDF5 and FITS),
+the content of the file is presented in a tree view that allows comfortable navigation
+through the file. A versatile dialog to edit the headers (keywords) of a FITS file is also
+provided.
 </para>
 
 <para>
@@ -471,10 +476,15 @@ The start and end row to read can be customized using the <guilabel>Data portion
 <sect1 id="exportdialog">
 <title>Export Dialog</title>
 <para>
-	A worksheet can be exported to several graphics format (vector and raster). The export is done via the export dialog reachable via the <guibutton>Export</guibutton> in the main toolbar or <menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem></menuchoice> in the main menu.
+	A worksheet can be exported to several graphics format (vector and raster).
+	The export is done via the export dialog reachable via the
+	<guibutton>Export</guibutton> in the main toolbar or
+	<menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem></menuchoice>
+	in the main menu.
 </para>
 <para>
-	Besides the graphics format, the user can specify which part of the worksheet has to be exported and whether the background has to be exported or not.
+	Besides the graphics format, the user can specify which part of the worksheet
+	has to be exported and whether the background has to be exported or not.
 	Also, for raster graphics the image resolution can be provided.
 </para>
 <para>
@@ -483,7 +493,10 @@ The start and end row to read can be customized using the <guilabel>Data portion
 </imageobject></mediaobject></screenshot>
 </para>
 <para>
-	The content of a spreadsheet can be exported to an external text file. In the export dialog for spreadsheets the user can specify the character separating values of different columns. Optionally, the header of the spreadsheet (names of the columns in the spreadsheet) can be exported.
+	The content of a spreadsheet can be exported to an external text or FITS file.
+	In the export dialog for spreadsheets the user can specify the character
+	separating values of different columns. Optionally, the header of the spreadsheet
+	(names of the columns in the spreadsheet) can be exported.
 </para>
 <para>
 <screenshot><mediaobject><imageobject>
@@ -782,6 +795,7 @@ The menu is only available when a datapicker object is selected on the <guilabel
   <para>&LabPlot; supports a wide variety of data analysis functions:
     </para>
       <itemizedlist>
+	<listitem><para>Data reduction</para></listitem>
 	<listitem><para>Interpolation</para></listitem>
 	<listitem><para>Smoothing</para></listitem>
 	<listitem><para>Nonlinear curve fitting</para></listitem>
@@ -792,6 +806,29 @@ The menu is only available when a datapicker object is selected on the <guilabel
     The analysis functions can be accessed using the Analysis menu or the context menu of a worksheet.
     The newly created curves can be customized (line style, symbol style, &etc;) like any other x-y-curve.</para>  
 
+  <sect1 id="data_reduction">
+    <title>Data reduction</title>
+    <para>
+      To reduce the number of data points without losing the features of a data set
+      you can apply one of several line simplification algorithm:
+    </para>
+      <itemizedlist>
+	<listitem><para>Douglas-Peucker</para></listitem>
+	<listitem><para>Visvalingam-Whyatt</para></listitem>
+	<listitem><para>Reumann-Witkam</para></listitem>
+	<listitem><para>Perpendicular distance simplification</para></listitem>
+	<listitem><para>n-th point simplification</para></listitem>
+	<listitem><para>Radial distance simplification</para></listitem>
+	<listitem><para>Interpolation (nearest neighbor)</para></listitem>
+	<listitem><para>Opheim</para></listitem>
+	<listitem><para>Lang</para></listitem>
+      </itemizedlist>
+    <para>
+      The desired tolerance is automatically calculated from the data but can also be changed
+      in the dock widget.
+    </para>
+  </sect1>
+    
   <sect1 id="interpolation">
     <title>Interpolation</title>
     <para>
@@ -860,7 +897,7 @@ The menu is only available when a datapicker object is selected on the <guilabel
 	<listitem><para>Low pass</para></listitem>
 	<listitem><para>High pass</para></listitem>
 	<listitem><para>Band pass</para></listitem>
-	<listitem><para>Band reject (Band block)</para></listitem>
+	<listitem><para>Band reject (band block)</para></listitem>
 	</itemizedlist>
     <para>
       where any of them can have the form
@@ -869,6 +906,8 @@ The menu is only available when a datapicker object is selected on the <guilabel
 	<listitem><para>Ideal</para></listitem>
 	<listitem><para>Butterworth (order 1 to 10)</para></listitem>
 	<listitem><para>Chebyshev type I or II (order 1 to 10)</para></listitem>
+	<listitem><para>Optimal "L"egendre (order 1 to 10)</para></listitem>
+	<listitem><para>Bessel-Thomson (any order)</para></listitem>
       </itemizedlist>
     <para>
 	The cutoff value(s) can be specified in the units frequency (Hertz), fraction (0.0 to 1.0) or index

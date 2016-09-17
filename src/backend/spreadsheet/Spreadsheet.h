@@ -72,7 +72,6 @@ class Spreadsheet : public AbstractDataSource {
 		// used from model to inform dock
 		void emitRowCountChanged() { emit rowCountChanged(rowCount()); }
 		void emitColumnCountChanged() { emit columnCountChanged(columnCount()); }
-        bool m_viewExported;
 
 	public slots:
 		void appendRows(int count);

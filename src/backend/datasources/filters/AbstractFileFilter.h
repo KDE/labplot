@@ -38,7 +38,7 @@ class AbstractFileFilter : public QObject {
 	Q_OBJECT
 
 	public:
-		AbstractFileFilter() {};
+        AbstractFileFilter() {}
 		virtual ~AbstractFileFilter() {}
 		enum ImportMode {Append, Prepend, Replace};
 		

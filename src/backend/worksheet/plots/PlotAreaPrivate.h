@@ -37,7 +37,6 @@ class PlotArea;
 class PlotAreaPrivate: public QGraphicsItem {
 	public:
 		explicit PlotAreaPrivate(PlotArea *owner);
-		virtual ~PlotAreaPrivate();
 
 		QString name() const;
 		bool swapVisible(bool on);

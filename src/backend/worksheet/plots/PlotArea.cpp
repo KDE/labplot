@@ -44,21 +44,21 @@
  */
 
 PlotArea::PlotArea(const QString &name):WorksheetElement(name),
-		d_ptr(new PlotAreaPrivate(this)){
+	d_ptr(new PlotAreaPrivate(this)) {
 	init();
 }
 
 PlotArea::PlotArea(const QString &name, PlotAreaPrivate *dd)
-    : WorksheetElement(name), d_ptr(dd){
+	: WorksheetElement(name), d_ptr(dd) {
 	init();
 }
 
-PlotArea::~PlotArea(){
+PlotArea::~PlotArea() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
 }
 
-void PlotArea::init(){
+void PlotArea::init() {
 	Q_D(PlotArea);
 
 	setHidden(true);//we don't show PlotArea aspect in the model view.
@@ -80,28 +80,28 @@ void PlotArea::init(){
 
 	//Border
 	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
-						group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
-						(Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
+	                    group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
+	                    (Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
 	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
 	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
 }
 
-QGraphicsItem *PlotArea::graphicsItem() const{
+QGraphicsItem *PlotArea::graphicsItem() const {
 	return d_ptr;
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(PlotArea, SetVisible, bool, swapVisible)
-void PlotArea::setVisible(bool on){
+void PlotArea::setVisible(bool on) {
 	Q_D(PlotArea);
 	exec(new PlotAreaSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
 }
 
-bool PlotArea::isVisible() const{
+bool PlotArea::isVisible() const {
 	Q_D(const PlotArea);
 	return d->isVisible();
 }
 
-void PlotArea::handlePageResize(double horizontalRatio, double verticalRatio){
+void PlotArea::handlePageResize(double horizontalRatio, double verticalRatio) {
 	Q_D(PlotArea);
 
 	d->rect.setWidth(d->rect.width()*horizontalRatio);
@@ -111,20 +111,9 @@ void PlotArea::handlePageResize(double horizontalRatio, double verticalRatio){
 	BaseClass::handlePageResize(horizontalRatio, verticalRatio);
 }
 
-void PlotArea::retransform(){
+void PlotArea::retransform() {
 
 }
-
-
-/* ============================ accessor documentation ================= */
-/**
-  \fn PlotArea::BASIC_D_ACCESSOR_DECL(bool, clippingEnabled, ClippingEnabled);
-  \brief Set/get whether clipping is enabled.
-*/
-/**
-  \fn PlotArea::CLASS_D_ACCESSOR_DECL(QRectF, rect, Rect);
-  \brief Set/get the plot area rectangle.
-*/
 
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(PlotArea, bool, clippingEnabled, clippingEnabled())
@@ -241,13 +230,10 @@ void PlotArea::setBorderOpacity(qreal opacity) {
 		exec(new PlotAreaSetBorderOpacityCmd(d, opacity, i18n("%1: set plot area border opacity")));
 }
 
-//################################################################
+//#####################################################################
 //################### Private implementation ##########################
-//################################################################
-PlotAreaPrivate::PlotAreaPrivate(PlotArea *owner):q(owner){
-}
-
-PlotAreaPrivate::~PlotAreaPrivate() {
+//#####################################################################
+PlotAreaPrivate::PlotAreaPrivate(PlotArea *owner):q(owner) {
 }
 
 QString PlotAreaPrivate::name() const {
@@ -264,26 +250,26 @@ bool PlotAreaPrivate::toggleClipping(bool on) {
 	return oldValue;
 }
 
-bool PlotAreaPrivate::swapVisible(bool on){
+bool PlotAreaPrivate::swapVisible(bool on) {
 	bool oldValue = isVisible();
 	setVisible(on);
 	return oldValue;
 }
 
-void PlotAreaPrivate::setRect(const QRectF& r){
+void PlotAreaPrivate::setRect(const QRectF& r) {
 	prepareGeometryChange();
 	rect = mapRectFromScene(r);
 }
 
-QRectF PlotAreaPrivate::boundingRect () const{
+QRectF PlotAreaPrivate::boundingRect () const {
 	float width = rect.width();
 	float height = rect.height();
 	float penWidth = borderPen.width();
 	return QRectF(-width/2 - penWidth/2, -height/2 - penWidth/2,
-                   width + penWidth, height + penWidth);
+	              width + penWidth, height + penWidth);
 }
 
-QPainterPath PlotAreaPrivate::shape() const{
+QPainterPath PlotAreaPrivate::shape() const {
 	QPainterPath path;
 	if ( qFuzzyIsNull(borderCornerRadius) )
 		path.addRect(rect);
@@ -303,84 +289,84 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	//draw the area
 	painter->setOpacity(backgroundOpacity);
 	painter->setPen(Qt::NoPen);
-	if (backgroundType == PlotArea::Color){
-		switch (backgroundColorStyle){
-			case PlotArea::SingleColor:{
-				painter->setBrush(QBrush(backgroundFirstColor));
-				break;
-			}
-			case PlotArea::HorizontalLinearGradient:{
-				QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-				linearGrad.setColorAt(0, backgroundFirstColor);
-				linearGrad.setColorAt(1, backgroundSecondColor);
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case PlotArea::VerticalLinearGradient:{
-				QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-				linearGrad.setColorAt(0, backgroundFirstColor);
-				linearGrad.setColorAt(1, backgroundSecondColor);
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case PlotArea::TopLeftDiagonalLinearGradient:{
-				QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-				linearGrad.setColorAt(0, backgroundFirstColor);
-				linearGrad.setColorAt(1, backgroundSecondColor);
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case PlotArea::BottomLeftDiagonalLinearGradient:{
-				QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-				linearGrad.setColorAt(0, backgroundFirstColor);
-				linearGrad.setColorAt(1, backgroundSecondColor);
-				painter->setBrush(QBrush(linearGrad));
-				break;
-			}
-			case PlotArea::RadialGradient:{
-				QRadialGradient radialGrad(rect.center(), rect.width()/2);
-				radialGrad.setColorAt(0, backgroundFirstColor);
-				radialGrad.setColorAt(1, backgroundSecondColor);
-				painter->setBrush(QBrush(radialGrad));
-				break;
-			}
+	if (backgroundType == PlotArea::Color) {
+		switch (backgroundColorStyle) {
+		case PlotArea::SingleColor: {
+			painter->setBrush(QBrush(backgroundFirstColor));
+			break;
 		}
-	}else if (backgroundType == PlotArea::Image){
+		case PlotArea::HorizontalLinearGradient: {
+			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
+			linearGrad.setColorAt(0, backgroundFirstColor);
+			linearGrad.setColorAt(1, backgroundSecondColor);
+			painter->setBrush(QBrush(linearGrad));
+			break;
+		}
+		case PlotArea::VerticalLinearGradient: {
+			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
+			linearGrad.setColorAt(0, backgroundFirstColor);
+			linearGrad.setColorAt(1, backgroundSecondColor);
+			painter->setBrush(QBrush(linearGrad));
+			break;
+		}
+		case PlotArea::TopLeftDiagonalLinearGradient: {
+			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
+			linearGrad.setColorAt(0, backgroundFirstColor);
+			linearGrad.setColorAt(1, backgroundSecondColor);
+			painter->setBrush(QBrush(linearGrad));
+			break;
+		}
+		case PlotArea::BottomLeftDiagonalLinearGradient: {
+			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
+			linearGrad.setColorAt(0, backgroundFirstColor);
+			linearGrad.setColorAt(1, backgroundSecondColor);
+			painter->setBrush(QBrush(linearGrad));
+			break;
+		}
+		case PlotArea::RadialGradient: {
+			QRadialGradient radialGrad(rect.center(), rect.width()/2);
+			radialGrad.setColorAt(0, backgroundFirstColor);
+			radialGrad.setColorAt(1, backgroundSecondColor);
+			painter->setBrush(QBrush(radialGrad));
+			break;
+		}
+		}
+	} else if (backgroundType == PlotArea::Image) {
 		if ( !backgroundFileName.trimmed().isEmpty() ) {
 			QPixmap pix(backgroundFileName);
-			switch (backgroundImageStyle){
-				case PlotArea::ScaledCropped:
-					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
-					break;
-				case PlotArea::Scaled:
-					pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
-					break;
-				case PlotArea::ScaledAspectRatio:
-					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
-					break;
-				case PlotArea::Centered:
-					painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
-					break;
-				case PlotArea::Tiled:
-					painter->setBrush(QBrush(pix));
-					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
-					break;
-				case PlotArea::CenterTiled:
-					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-					painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+			switch (backgroundImageStyle) {
+			case PlotArea::ScaledCropped:
+				pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
+				painter->setBrush(QBrush(pix));
+				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+				break;
+			case PlotArea::Scaled:
+				pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+				painter->setBrush(QBrush(pix));
+				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+				break;
+			case PlotArea::ScaledAspectRatio:
+				pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+				painter->setBrush(QBrush(pix));
+				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+				break;
+			case PlotArea::Centered:
+				painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
+				break;
+			case PlotArea::Tiled:
+				painter->setBrush(QBrush(pix));
+				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+				break;
+			case PlotArea::CenterTiled:
+				painter->setBrush(QBrush(pix));
+				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 			}
 		}
-	} else if (backgroundType == PlotArea::Pattern){
+	} else if (backgroundType == PlotArea::Pattern) {
 		painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
 	}
 
@@ -390,7 +376,7 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 		painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 
 	//draw the border
-	if (borderPen.style() != Qt::NoPen){
+	if (borderPen.style() != Qt::NoPen) {
 		painter->setPen(borderPen);
 		painter->setBrush(Qt::NoBrush);
 		painter->setOpacity(borderOpacity);
@@ -407,158 +393,158 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 //##############################################################################
 
 //! Save as XML
-void PlotArea::save(QXmlStreamWriter* writer) const{
+void PlotArea::save(QXmlStreamWriter* writer) const {
 	Q_D(const PlotArea);
 
 	writer->writeStartElement("plotArea");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-    writer->writeStartElement( "background" );
-    writer->writeAttribute( "type", QString::number(d->backgroundType) );
-    writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
-    writer->writeAttribute( "imageStyle", QString::number(d->backgroundImageStyle) );
-    writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrushStyle) );
-    writer->writeAttribute( "firstColor_r", QString::number(d->backgroundFirstColor.red()) );
-    writer->writeAttribute( "firstColor_g", QString::number(d->backgroundFirstColor.green()) );
-    writer->writeAttribute( "firstColor_b", QString::number(d->backgroundFirstColor.blue()) );
-    writer->writeAttribute( "secondColor_r", QString::number(d->backgroundSecondColor.red()) );
-    writer->writeAttribute( "secondColor_g", QString::number(d->backgroundSecondColor.green()) );
-    writer->writeAttribute( "secondColor_b", QString::number(d->backgroundSecondColor.blue()) );
-    writer->writeAttribute( "fileName", d->backgroundFileName );
-    writer->writeAttribute( "opacity", QString::number(d->backgroundOpacity) );
-    writer->writeEndElement();
+	writer->writeStartElement( "background" );
+	writer->writeAttribute( "type", QString::number(d->backgroundType) );
+	writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
+	writer->writeAttribute( "imageStyle", QString::number(d->backgroundImageStyle) );
+	writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrushStyle) );
+	writer->writeAttribute( "firstColor_r", QString::number(d->backgroundFirstColor.red()) );
+	writer->writeAttribute( "firstColor_g", QString::number(d->backgroundFirstColor.green()) );
+	writer->writeAttribute( "firstColor_b", QString::number(d->backgroundFirstColor.blue()) );
+	writer->writeAttribute( "secondColor_r", QString::number(d->backgroundSecondColor.red()) );
+	writer->writeAttribute( "secondColor_g", QString::number(d->backgroundSecondColor.green()) );
+	writer->writeAttribute( "secondColor_b", QString::number(d->backgroundSecondColor.blue()) );
+	writer->writeAttribute( "fileName", d->backgroundFileName );
+	writer->writeAttribute( "opacity", QString::number(d->backgroundOpacity) );
+	writer->writeEndElement();
 
 	//border
 	writer->writeStartElement( "border" );
 	WRITE_QPEN(d->borderPen);
-    writer->writeAttribute( "borderOpacity", QString::number(d->borderOpacity) );
+	writer->writeAttribute( "borderOpacity", QString::number(d->borderOpacity) );
 	writer->writeAttribute( "borderCornerRadius", QString::number(d->borderCornerRadius) );
-    writer->writeEndElement();
+	writer->writeEndElement();
 
 	writer->writeEndElement();
 }
 
 //! Load from XML
-bool PlotArea::load(XmlStreamReader* reader){
+bool PlotArea::load(XmlStreamReader* reader) {
 	Q_D(PlotArea);
 
-    if(!reader->isStartElement() || reader->name() != "plotArea"){
-        reader->raiseError(i18n("no plot area element found"));
-        return false;
-    }
+	if(!reader->isStartElement() || reader->name() != "plotArea") {
+		reader->raiseError(i18n("no plot area element found"));
+		return false;
+	}
 
-    if (!readBasicAttributes(reader))
-        return false;
+	if (!readBasicAttributes(reader))
+		return false;
 
-    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-    QXmlStreamAttributes attribs;
-    QString str;
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QXmlStreamAttributes attribs;
+	QString str;
 
-    while (!reader->atEnd()){
-        reader->readNext();
-        if (reader->isEndElement() && reader->name() == "plotArea")
-            break;
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == "plotArea")
+			break;
 
-        if (!reader->isStartElement())
-            continue;
+		if (!reader->isStartElement())
+			continue;
 
-        if (reader->name() == "comment"){
-            if (!readCommentElement(reader)) return false;
-        }else if (reader->name() == "background"){
-            attribs = reader->attributes();
+		if (reader->name() == "comment") {
+			if (!readCommentElement(reader)) return false;
+		} else if (reader->name() == "background") {
+			attribs = reader->attributes();
 
-            str = attribs.value("type").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("type"));
-            else
-                d->backgroundType = PlotArea::BackgroundType(str.toInt());
+			str = attribs.value("type").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("type"));
+			else
+				d->backgroundType = PlotArea::BackgroundType(str.toInt());
 
-            str = attribs.value("colorStyle").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("colorStyle"));
-            else
-                d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
+			str = attribs.value("colorStyle").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("colorStyle"));
+			else
+				d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
 
-            str = attribs.value("imageStyle").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("imageStyle"));
-            else
-                d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
+			str = attribs.value("imageStyle").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("imageStyle"));
+			else
+				d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
 
-            str = attribs.value("brushStyle").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("brushStyle"));
-            else
-                d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
+			str = attribs.value("brushStyle").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("brushStyle"));
+			else
+				d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
 
-            str = attribs.value("firstColor_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("firstColor_r"));
-            else
-                d->backgroundFirstColor.setRed(str.toInt());
+			str = attribs.value("firstColor_r").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("firstColor_r"));
+			else
+				d->backgroundFirstColor.setRed(str.toInt());
 
-            str = attribs.value("firstColor_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("firstColor_g"));
-            else
-                d->backgroundFirstColor.setGreen(str.toInt());
+			str = attribs.value("firstColor_g").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("firstColor_g"));
+			else
+				d->backgroundFirstColor.setGreen(str.toInt());
 
-            str = attribs.value("firstColor_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("firstColor_b"));
-            else
-                d->backgroundFirstColor.setBlue(str.toInt());
+			str = attribs.value("firstColor_b").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("firstColor_b"));
+			else
+				d->backgroundFirstColor.setBlue(str.toInt());
 
-            str = attribs.value("secondColor_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("secondColor_r"));
-            else
-                d->backgroundSecondColor.setRed(str.toInt());
+			str = attribs.value("secondColor_r").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("secondColor_r"));
+			else
+				d->backgroundSecondColor.setRed(str.toInt());
 
-            str = attribs.value("secondColor_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("secondColor_g"));
-            else
-                d->backgroundSecondColor.setGreen(str.toInt());
+			str = attribs.value("secondColor_g").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("secondColor_g"));
+			else
+				d->backgroundSecondColor.setGreen(str.toInt());
 
-            str = attribs.value("secondColor_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("secondColor_b"));
-            else
-                d->backgroundSecondColor.setBlue(str.toInt());
+			str = attribs.value("secondColor_b").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("secondColor_b"));
+			else
+				d->backgroundSecondColor.setBlue(str.toInt());
 
-            str = attribs.value("fileName").toString();
-            d->backgroundFileName = str;
+			str = attribs.value("fileName").toString();
+			d->backgroundFileName = str;
 
-            str = attribs.value("opacity").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("opacity"));
-            else
-                d->backgroundOpacity = str.toDouble();
-		}else if (reader->name() == "border"){
+			str = attribs.value("opacity").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("opacity"));
+			else
+				d->backgroundOpacity = str.toDouble();
+		} else if (reader->name() == "border") {
 			attribs = reader->attributes();
 
 			READ_QPEN(d->borderPen);
 
 			str = attribs.value("borderOpacity").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("borderOpacity"));
-            else
-                d->borderOpacity = str.toDouble();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("borderOpacity"));
+			else
+				d->borderOpacity = str.toDouble();
 
 			str = attribs.value("borderCornerRadius").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("borderCornerRadius"));
-            else
-                d->borderCornerRadius = str.toDouble();
-        }else{ // unknown element
-            reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-            if (!reader->skipToEndElement()) return false;
-        }
-    }
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("borderCornerRadius"));
+			else
+				d->borderCornerRadius = str.toDouble();
+		} else { // unknown element
+			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			if (!reader->skipToEndElement()) return false;
+		}
+	}
 
-    return true;
+	return true;
 }
 
 void PlotArea::loadThemeConfig(const KConfig& config) {
