@@ -17,6 +17,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPage.h
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
+        ${KDEFRONTEND_DIR}/ThemeHandler.cpp
 	${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/HDFOptionsWidget.cpp
@@ -55,6 +56,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ConstantsWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/ThemesWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ExpressionTextEdit.cpp
 	${KDEFRONTEND_DIR}/widgets/FitOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/FitParametersWidget.cpp
@@ -197,6 +199,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYDataReductionCurve.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/XYDifferentationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYInterpolationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYSmoothCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
@@ -251,6 +254,7 @@ set(TOOLS_SOURCES
 add_subdirectory( pics )
 add_subdirectory( pics/gsl_distributions )
 add_subdirectory( pics/colorchooser )
+add_subdirectory( themes )
 
 ##############################################################################
 # set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} parser/parser.tab.c)
@@ -258,7 +262,7 @@ set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 INCLUDE_DIRECTORIES(. ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/..)
 qt5_wrap_ui(LABPLOT_SRCS ${UI_SOURCES})
 add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
-target_link_libraries(labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${CANTOR_LIBS} ${NETCDF_LIBRARY} ${FFTW_LIBRARIES} ${CFITSIO_LIBRARY})
+target_link_libraries(labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui KF5::NewStuff Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${CANTOR_LIBS} ${NETCDF_LIBRARY} ${FFTW_LIBRARIES} ${CFITSIO_LIBRARY})
 IF (HDF5_FOUND)
 	target_link_libraries(labplot2 ${HDF5_C_LIBRARIES})
 ENDIF (HDF5_FOUND)
@@ -271,4 +275,5 @@ install(FILES ${KDEFRONTEND_DIR}/labplot2ui.rc DESTINATION  ${KXMLGUI_INSTALL_DI
 install(FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico DESTINATION  ${DATA_INSTALL_DIR}/${PROJECT_NAME})
 install(PROGRAMS labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
+install( FILES labplot2_themes.knsrc  DESTINATION  ${KDE_INSTALL_CONFDIR}  )
 update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )

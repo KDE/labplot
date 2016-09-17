@@ -5,7 +5,7 @@ find_package(ECM 1.3.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Widgets Svg Concurrent)
-find_package(KF5 REQUIRED COMPONENTS I18n KDELibs4Support)
+find_package(KF5 REQUIRED COMPONENTS I18n KDELibs4Support NewStuff)
 
 include(FeatureSummary)
 include(ECMInstallIcons)

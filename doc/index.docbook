@@ -600,8 +600,13 @@ The supported data formats are
 <listitem><para>Image</para></listitem>
 <listitem><para>NetCDF</para></listitem>
 <listitem><para>HDF5</para></listitem>
+<listitem><para>FITS</para></listitem>
 </itemizedlist>
-Preview of all supported file types is available in the import dialog. For data formats with complex internal structures like NetCDF and HDF5, the content of the file is presented in a tree view that allows comfortable navigation through the file.
+Preview of all supported file types is available in the import dialog.
+For data formats with complex internal structures (like NetCDF, HDF5 and FITS),
+the content of the file is presented in a tree view that allows comfortable navigation
+through the file. A versatile dialog to edit the headers (keywords) of a FITS file is also
+provided.
 </para>
 
 <para>
@@ -634,10 +639,15 @@ The start and end row to read can be customized using the <guilabel>Data portion
 <sect1 id="exportdialog">
 <title>Export Dialog</title>
 <para>
-	A worksheet can be exported to several graphics format (vector and raster). The export is done via the export dialog reachable via the <guibutton>Export</guibutton> in the main toolbar or <menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem></menuchoice> in the main menu.
+	A worksheet can be exported to several graphics format (vector and raster).
+	The export is done via the export dialog reachable via the
+	<guibutton>Export</guibutton> in the main toolbar or
+	<menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem></menuchoice>
+	in the main menu.
 </para>
 <para>
-	Besides the graphics format, the user can specify which part of the worksheet has to be exported and whether the background has to be exported or not.
+	Besides the graphics format, the user can specify which part of the worksheet
+	has to be exported and whether the background has to be exported or not.
 	Also, for raster graphics the image resolution can be provided.
 </para>
 <para>
@@ -646,7 +656,10 @@ The start and end row to read can be customized using the <guilabel>Data portion
 </imageobject></mediaobject></screenshot>
 </para>
 <para>
-	The content of a spreadsheet can be exported to an external text file. In the export dialog for spreadsheets the user can specify the character separating values of different columns. Optionally, the header of the spreadsheet (names of the columns in the spreadsheet) can be exported.
+	The content of a spreadsheet can be exported to an external text or FITS file.
+	In the export dialog for spreadsheets the user can specify the character
+	separating values of different columns. Optionally, the header of the spreadsheet
+	(names of the columns in the spreadsheet) can be exported.
 </para>
 <para>
 <screenshot><mediaobject><imageobject>

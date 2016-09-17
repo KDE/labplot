@@ -283,7 +283,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("Data reduction"));
 
 		if (!mainWindow->xyDataReductionCurveDock) {
-			mainWindow->xyDataReductionCurveDock = new XYDataReductionCurveDock(mainWindow->stackedWidget);
+			mainWindow->xyDataReductionCurveDock = new XYDataReductionCurveDock(mainWindow->stackedWidget, mainWindow->statusBar());
 			mainWindow->xyDataReductionCurveDock->setupGeneral();
 			connect(mainWindow->xyDataReductionCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
 			mainWindow->stackedWidget->addWidget(mainWindow->xyDataReductionCurveDock);

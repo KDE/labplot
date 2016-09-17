@@ -34,12 +34,13 @@
 #include "ui_xydatareductioncurvedockgeneraltab.h"
 
 class TreeViewComboBox;
+class QStatusBar;
 
 class XYDataReductionCurveDock: public XYCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYDataReductionCurveDock(QWidget *parent);
+	explicit XYDataReductionCurveDock(QWidget *parent, QStatusBar *sb);
 	void setCurves(QList<XYCurve*>);
 	virtual void setupGeneral();
 
@@ -50,6 +51,7 @@ private:
 	void updateTolerance2();
 
 	Ui::XYDataReductionCurveDockGeneralTab uiGeneralTab;
+	QStatusBar *statusBar;	// main status bar to display progress
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
 

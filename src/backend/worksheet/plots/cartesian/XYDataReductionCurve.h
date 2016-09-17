@@ -99,6 +99,7 @@ class XYDataReductionCurve: public XYCurve {
 		friend class XYDataReductionCurveSetDataReductionDataCmd;
 		void dataReductionDataChanged(const XYDataReductionCurve::DataReductionData&);
 		void sourceDataChangedSinceLastDataReduction();
+		void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of the analysis process
 };
 
 #endif

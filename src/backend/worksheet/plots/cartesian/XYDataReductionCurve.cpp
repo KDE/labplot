@@ -251,6 +251,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 #endif
 ///////////////////////////////////////////////////////////
 	int status;
+	emit q->completed(10);
 
 	size_t npoints=0;
 	double calcTolerance=0;		// calculated tolerance from Douglas-Peucker variant
@@ -297,6 +298,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 #endif
 	if (npoints > 0)
 		status = 0;
+	emit q->completed(80);
 
 	xVector->resize(npoints);
 	yVector->resize(npoints);
@@ -305,6 +307,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 		(*yVector)[i] = ydata[index[i]];
 	}
 
+	emit q->completed(90);
 	double posError = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
 	double areaError = nsl_geom_linesim_area_error(xdata, ydata, n, index);
 

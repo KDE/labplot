@@ -274,15 +274,18 @@ void WorksheetView::initActions() {
 	QActionGroup* cartesianPlotAddNewActionGroup = new QActionGroup(this);
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), cartesianPlotAddNewActionGroup);
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), cartesianPlotAddNewActionGroup);
-// no icons yet
+	addDataOperationCurveAction = new QAction(i18n("xy-curve from a data operation"), cartesianPlotAddNewActionGroup);
 	addDataReductionCurveAction = new QAction(i18n("xy-curve from a data reduction"), cartesianPlotAddNewActionGroup);
+	addDifferentationCurveAction = new QAction(i18n("xy-curve from a differentiation"), cartesianPlotAddNewActionGroup);
+	addIntegrationCurveAction = new QAction(i18n("xy-curve from an integration"), cartesianPlotAddNewActionGroup);
+// no icons yet
 	addInterpolationCurveAction = new QAction(i18n("xy-curve from an interpolation"), cartesianPlotAddNewActionGroup);
 	addSmoothCurveAction = new QAction(i18n("xy-curve from a smooth"), cartesianPlotAddNewActionGroup);
-	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), cartesianPlotAddNewActionGroup);
 	addFourierFilterCurveAction = new QAction(i18n("xy-curve from a Fourier filter"), cartesianPlotAddNewActionGroup);
 	addFourierTransformCurveAction = new QAction(i18n("xy-curve from a Fourier transform"), cartesianPlotAddNewActionGroup);
 //	addInterpolationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), cartesianPlotAddNewActionGroup);
 //	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), cartesianPlotAddNewActionGroup);
+	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), cartesianPlotAddNewActionGroup);
 //	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), cartesianPlotAddNewActionGroup);
 //	addFourierTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_transform-curve"), i18n("xy-curve from a Fourier transform"), cartesianPlotAddNewActionGroup);
 	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("legend"), cartesianPlotAddNewActionGroup);
@@ -292,8 +295,11 @@ void WorksheetView::initActions() {
 	connect(cartesianPlotAddNewActionGroup, SIGNAL(triggered(QAction*)), SLOT(cartesianPlotAddNew(QAction*)));
 
 	// Analysis menu
-// no icons yet
+	addDataOperationAction = new QAction(i18n("Data operation"), cartesianPlotAddNewActionGroup);
 	addDataReductionAction = new QAction(i18n("Data reduction"), cartesianPlotAddNewActionGroup);
+	addDifferentiationAction = new QAction(i18n("Differentiation"), cartesianPlotAddNewActionGroup);
+	addIntegrationAction = new QAction(i18n("Integration"), cartesianPlotAddNewActionGroup);
+// no icons yet
 	addInterpolationAction = new QAction(i18n("Interpolation"), cartesianPlotAddNewActionGroup);
 	addSmoothAction = new QAction(i18n("Smooth"), cartesianPlotAddNewActionGroup);
 	addFitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Data fitting"), cartesianPlotAddNewActionGroup);
@@ -406,7 +412,10 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotAddNewMenu = new QMenu(i18n("Add new"), this);
 	m_cartesianPlotAddNewMenu->addAction(addCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addEquationCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addDataOperationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addDataReductionCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addDifferentationCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addIntegrationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addInterpolationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addSmoothCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addFitCurveAction);
@@ -451,6 +460,7 @@ void WorksheetView::initMenus() {
 	// Data manipulation menu
 	m_dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
 	m_dataManipulationMenu->setIcon(QIcon::fromTheme("zoom-draw"));
+	m_dataManipulationMenu->addAction(addDataOperationAction);
 	m_dataManipulationMenu->addAction(addDataReductionAction);
 }
 
@@ -489,6 +499,8 @@ void WorksheetView::createAnalysisMenu(QMenu* menu) const {
 	// Data manipulation menu
 	menu->insertMenu(0,m_dataManipulationMenu);
 
+	menu->addAction(addDifferentiationAction);
+	menu->addAction(addIntegrationAction);
 	menu->addAction(addInterpolationAction);
 	menu->addAction(addSmoothAction);
 	menu->addAction(addFitAction);
@@ -537,6 +549,9 @@ void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(addCurveAction);
 	toolBar->addAction(addEquationCurveAction);
 // don't over populate the tool bar
+//	toolBar->addAction(addDifferentiationCurveAction);
+//	toolBar->addAction(addIntegrationCurveAction);
+//	toolBar->addAction(addDataOperationCurveAction);
 //	toolBar->addAction(addDataReductionCurveAction);
 //	toolBar->addAction(addInterpolationCurveAction);
 //	toolBar->addAction(addSmoothCurveAction);
@@ -1309,7 +1324,10 @@ void WorksheetView::handleCartesianPlotActions() {
 
 	addCurveAction->setEnabled(plot);
 	addEquationCurveAction->setEnabled(plot);
+	addDataOperationCurveAction->setEnabled(false);
 	addDataReductionCurveAction->setEnabled(plot);
+	addDifferentationCurveAction->setEnabled(false);
+	addIntegrationCurveAction->setEnabled(false);
 	addInterpolationCurveAction->setEnabled(plot);
 	addSmoothCurveAction->setEnabled(plot);
 	addFitCurveAction->setEnabled(plot);
@@ -1334,7 +1352,10 @@ void WorksheetView::handleCartesianPlotActions() {
 	shiftDownYAction->setEnabled(plot);
 
 	// analysis menu
+	addDataOperationAction->setEnabled(false);
 	m_dataManipulationMenu->setEnabled(plot);
+	addDifferentiationAction->setEnabled(false);
+	addIntegrationAction->setEnabled(false);
 	addInterpolationAction->setEnabled(plot);
 	addSmoothAction->setEnabled(plot);
 	addFitAction->setEnabled(plot);

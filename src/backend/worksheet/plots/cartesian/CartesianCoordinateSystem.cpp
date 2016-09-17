@@ -30,10 +30,6 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
-#include <cmath>
-#include <KLocale>
-
-
 /* ============================================================================ */
 /* =================================== scales ================================= */
 /* ============================================================================ */
@@ -391,7 +387,6 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 
 			QRectF scaleRect = QRectF(xInterval.start(), yInterval.start(),
 					xInterval.end() - xInterval.start(), yInterval.end() - yInterval.start()).normalized();
-
 			foreach(QLineF line, lines) {
 				LineClipResult clipResult;
 				if (!AbstractCoordinateSystem::clipLineToRect(&line, scaleRect, &clipResult))
@@ -414,49 +409,44 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 				if (!yScale->map(&y2))
 					continue;
 
-
 				if (flags & MarkGaps) {
+					//mark the end of the gap
 					if (!std::isnan(xGapBefore)) {
 						if (clipResult.xClippedLeft[0]) {
-							QLineF gapMarker(QPointF(x1 + xGapBefore / 4, y1 - xGapBefore / 2),
-									QPointF(x1 - xGapBefore / 4, y1 + xGapBefore / 2));
-							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							QLineF gapMarker(x1 + xGapBefore/4, y1 - xGapBefore/2, x1 - xGapBefore/4, y1 + xGapBefore/2);
+// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 						if (clipResult.xClippedLeft[1]) {
-							QLineF gapMarker(QPointF(x2 + xGapBefore / 4, y2 - xGapBefore / 2),
-									QPointF(x2 - xGapBefore / 4, y2 + xGapBefore / 2));
-							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							QLineF gapMarker(x2 + xGapBefore/4, y2 - xGapBefore/2, x2 - xGapBefore/4, y2 + xGapBefore/2);
+// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 					}
 
+					//mark the beginning of the gap
 					if (!std::isnan(xGapAfter)) {
 						if (clipResult.xClippedRight[0]) {
-							QLineF gapMarker(QPointF(x1 + xGapAfter / 4, y1 - xGapAfter / 2),
-									QPointF(x1 - xGapAfter / 4, y1 + xGapAfter / 2));
-							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							QLineF gapMarker(x1 + xGapAfter/4, y1 - xGapAfter/2, x1 - xGapAfter/4, y1 + xGapAfter/2);
+// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 						if (clipResult.xClippedRight[1]) {
-							QLineF gapMarker(QPointF(x2 + xGapAfter / 4, y2 - xGapAfter / 2),
-									QPointF(x2 - xGapAfter / 4, y2 + xGapAfter / 2));
-							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							QLineF gapMarker(x2 + xGapAfter/4, y2 - xGapAfter/2, x2 - xGapAfter/4, y2 + xGapAfter/2);
+// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 					}
 
 					if (!std::isnan(yGapBefore)) {
 						if (clipResult.yClippedTop[0]) {
-							QLineF gapMarker(QPointF(x1 + yGapBefore / 2, y1 - yGapBefore / 4),
-									QPointF(x1 - yGapBefore / 2, y1 + yGapBefore / 4));
-							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							QLineF gapMarker(x1 + yGapBefore/2, y1 - yGapBefore/4, x1 - yGapBefore/2, y1 + yGapBefore/4);
+// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 						if (clipResult.yClippedTop[1]) {
-							QLineF gapMarker(QPointF(x2 + yGapBefore / 2, y2 - yGapBefore / 4),
-									QPointF(x2 - yGapBefore / 2, y2 + yGapBefore / 4));
-							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							QLineF gapMarker(x2 + yGapBefore/2, y2 - yGapBefore/4, x2 - yGapBefore/2, y2 + yGapBefore/4);
+// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 					}
@@ -514,17 +504,25 @@ QList<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QList<QPointF>
 					if (found) break;
 					if (!yScale) continue;
 
-					if (!xScale->inverseMap(&x))
+					if (!xScale->inverseMap(&x)) {
+						x = point.x();
 						continue;
+					}
 
-					if (!yScale->inverseMap(&y))
+					if (!yScale->inverseMap(&y)) {
+						y = point.y();
 						continue;
+					}
 
-					if (!xScale->contains(x))
+					if (!xScale->contains(x)) {
+						x = point.x();
 						continue;
+					}
 
-					if (!yScale->contains(y))
+					if (!yScale->contains(y)) {
+						y = point.y();
 						continue;
+					}
 
 					result.append(QPointF(x, y));
 					found = true;

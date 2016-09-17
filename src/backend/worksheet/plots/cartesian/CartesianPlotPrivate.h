@@ -35,9 +35,9 @@
 
 #include <QGraphicsSceneMouseEvent>
 
-class CartesianPlotPrivate:public AbstractPlotPrivate{
+class CartesianPlotPrivate : public AbstractPlotPrivate {
     public:
-		explicit CartesianPlotPrivate(CartesianPlot* owner);
+		explicit CartesianPlotPrivate(CartesianPlot*);
 		CartesianPlot* const q;
 
 		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
