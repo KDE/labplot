@@ -42,8 +42,8 @@ double nsl_diff_first_central(double xm, double fm, double xp, double fp);
 	for equal/unequal spaced data.
 	result in y 
 */
-int nsl_diff_deriv_first(double *x, double *y, size_t n);
-int nsl_diff_deriv_first_unequal(double *x, double *y, size_t n);
+int nsl_diff_deriv_first(const double *x, double *y, const size_t n);
+int nsl_diff_deriv_first_unequal(const double *x, double *y, const size_t n);
 
 /************ second derivatives *********/
 
@@ -51,6 +51,6 @@ int nsl_diff_deriv_first_unequal(double *x, double *y, size_t n);
 	for unequal spaced data.
 	result in y
 */
-int nsl_diff_deriv_second_unequal(double *x, double *y, size_t n);
+int nsl_diff_deriv_second_unequal(const double *x, double *y, const size_t n);
 
 #endif /* NSL_DIFF_H */

@@ -34,7 +34,7 @@ double nsl_diff_first_central(double xm, double fm, double xp, double fp) {
 	return (fp - fm)/(xp - xm);
 }
 
-int nsl_diff_deriv_first(double *x, double *y, size_t n) {
+int nsl_diff_deriv_first(const double *x, double *y, const size_t n) {
 	if (n < 2)
 		return -1;
 
@@ -55,12 +55,12 @@ int nsl_diff_deriv_first(double *x, double *y, size_t n) {
 
 	return 0;
 }
-int nsl_diff_deriv_first_unequal(double *x, double *y, size_t n) {
+int nsl_diff_deriv_first_unequal(const double *x, double *y, const size_t n) {
 	/*TODO: use general version */
 	return nsl_diff_deriv_first(x, y, n);
 }
 
-int nsl_diff_deriv_second_unequal(double *x, double *y, size_t n) {
+int nsl_diff_deriv_second_unequal(const double *x, double *y, const size_t n) {
 	if (n < 3)
 		return -1;
 
