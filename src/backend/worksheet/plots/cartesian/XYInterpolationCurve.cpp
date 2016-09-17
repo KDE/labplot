@@ -45,6 +45,7 @@ extern "C" {
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_spline.h>
+#include "backend/nsl/nsl_diff.h"
 }
 
 #include <KIcon>
@@ -444,10 +445,10 @@ void XYInterpolationCurvePrivate::recalculate() {
 		case nsl_interp_evaluate_function:
 			break;
 		case nsl_interp_evaluate_derivative:
-			nsl_interp_derivative(xVector->data(), yVector->data(), npoints);
+			nsl_diff_deriv_first_unequal(xVector->data(), yVector->data(), npoints);
 			break;
 		case nsl_interp_evaluate_second_derivative:
-			nsl_interp_second_derivative(xVector->data(), yVector->data(), npoints);
+			nsl_diff_deriv_second_unequal(xVector->data(), yVector->data(), npoints);
 			break;
 		case nsl_interp_evaluate_integral:
 			nsl_interp_integral(xVector->data(), yVector->data(), npoints);

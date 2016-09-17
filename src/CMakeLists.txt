@@ -167,6 +167,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp
  	${BACKEND_DIR}/nsl/nsl_dft.c
+ 	${BACKEND_DIR}/nsl/nsl_diff.c
 	${BACKEND_DIR}/nsl/nsl_filter.c
 	${BACKEND_DIR}/nsl/nsl_geom.c
 	${BACKEND_DIR}/nsl/nsl_geom_linesim.c

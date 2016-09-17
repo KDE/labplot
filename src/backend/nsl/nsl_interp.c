@@ -36,59 +36,6 @@ const char* nsl_interp_type_name[] = { "linear", "polynomial", "cubic spline (na
 const char* nsl_interp_pch_variant_name[] = { "finite differences", "Catmull-Rom", "cardinal", "Kochanek-Bartels (TCB)"};
 const char* nsl_interp_evaluate_name[] = { "function", "derivative", "second derivative", "integral"};
 
-int nsl_interp_derivative(double *x, double *y, unsigned int n) {
-	double dy=0, oldy=0;
-	unsigned int i;
-	for (i=0; i<n; i++) {
-		if (i == 0)
-			dy = (y[1]-y[0])/(x[1]-x[0]);
-		else if (i == n-1)
-			y[i] = (y[i]-y[i-1])/(x[i]-x[i-1]);
-		else
-			dy = (y[i+1]-y[i-1])/(x[i+1]-x[i-1]);
-
-		if (i != 0)
-			y[i-1] = oldy;
-		oldy = dy;
-	}
-
-	return 0;
-}
-
-int nsl_interp_second_derivative(double *x, double *y, unsigned int n) {
-	double dx1, dx2, dy=0., oldy=0., oldoldy=0.;
-	unsigned int i;
-	for (i=0; i<n; i++) {
-		/* see http://websrv.cs.umt.edu/isis/index.php/Finite_differencing:_Introduction */
-		if (i == 0) {
-			dx1 = x[1]-x[0];
-			dx2 = x[2]-x[1];
-			dy = 2.*(dx1*y[2]-(dx1+dx2)*y[1]+dx2*y[0])/(dx1*dx2*(dx1+dx2));
-		}
-		else if (i == n-1) {
-			dx1 = x[i-1]-x[i-2];
-			dx2 = x[i]-x[i-1];
-			y[i] = 2.*(dx1*y[i]-(dx1+dx2)*y[i-1]+dx2*y[i-2])/(dx1*dx2*(dx1+dx2));
-			y[i-2] = oldoldy;
-		}
-		else {
-			dx1 = x[i]-x[i-1];
-			dx2 = x[i+1]-x[i];
-			dy = (dx1*y[i+1]-(dx1+dx2)*y[i]+dx2*y[i-1])/(dx1*dx2*(dx1+dx2));
-		}
-
-		/* set value (attention if i==n-2) */
-		if (i != 0 && i != n-2)
-			y[i-1] = oldy;
-		if (i == n-2)
-			oldoldy = oldy;
-
-		oldy=dy;
-	}
-	
-	return 0;
-}
-
 int nsl_interp_integral(double *x, double *y, unsigned int n) {
 	double vold=0.;
 	unsigned int i;
