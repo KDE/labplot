@@ -44,7 +44,7 @@ double nsl_diff_first_central(double xm, double fm, double xp, double fp);
 */
 int nsl_diff_deriv_first_equal(const double *x, double *y, const size_t n);
 int nsl_diff_deriv_first(const double *x, double *y, const size_t n);
-/* using average between left and right diff */
+/* using average between left and right diff (like in other programs) */
 int nsl_diff_deriv_first_avg(const double *x, double *y, const size_t n);
 
 /************ second derivatives *********/
