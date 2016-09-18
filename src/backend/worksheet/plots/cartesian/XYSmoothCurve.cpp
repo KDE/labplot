@@ -284,7 +284,6 @@ void XYSmoothCurvePrivate::recalculate() {
 	yVector->resize(n);
 	memcpy(xVector->data(), xdata, n*sizeof(double));
 	memcpy(yVector->data(), ydata, n*sizeof(double));
-
 ///////////////////////////////////////////////////////////
 
 	//write the result

@@ -37,9 +37,9 @@ class XYDifferentiationCurve: public XYCurve {
 
 	public:
 		struct DifferentiationData {
-			DifferentiationData() : type(0) {};
+			DifferentiationData() : order(1) {};
 
-			int type;			// type of differentiation
+			int order;			// order of differentiation
 		};
 		struct DifferentiationResult {
 			DifferentiationResult() : available(false), valid(false), elapsedTime(0) {};

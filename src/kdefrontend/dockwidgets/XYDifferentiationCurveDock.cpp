@@ -81,12 +81,6 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
-//	for (int i=0; i < NSL_INTERP_TYPE_COUNT; i++)
-//		uiGeneralTab.cbType->addItem(i18n(nsl_interp_type_name[i]));
-	uiGeneralTab.cbType->addItem(i18n("central"));
-	uiGeneralTab.cbType->addItem(i18n("forward"));
-	uiGeneralTab.cbType->addItem(i18n("backward"));
-
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
@@ -98,7 +92,7 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
-	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
+	connect( uiGeneralTab.sbOrder, SIGNAL(valueChanged(int)), this, SLOT(orderChanged()) );
 
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
@@ -131,8 +125,8 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
-	uiGeneralTab.cbType->setCurrentIndex(m_differentiationData.type);
-	this->typeChanged();
+	uiGeneralTab.sbOrder->setValue(m_differentiationData.order);
+	this->orderChanged();
 
 	this->showDifferentiationResult();
 
@@ -237,9 +231,9 @@ void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYDifferentiationCurve*>(curve)->setYDataColumn(column);
 }
 
-void XYDifferentiationCurveDock::typeChanged() {
-//	nsl_interp_type type = (nsl_interp_type)uiGeneralTab.cbType->currentIndex();
-//	m_differentiationData.type = type;
+void XYDifferentiationCurveDock::orderChanged() {
+	int order = (int)uiGeneralTab.sbOrder->value();
+	m_differentiationData.order = order;
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
@@ -326,8 +320,8 @@ void XYDifferentiationCurveDock::curveYDataColumnChanged(const AbstractColumn* c
 void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData& data) {
 	m_initializing = true;
 	m_differentiationData = data;
-	uiGeneralTab.cbType->setCurrentIndex(m_differentiationData.type);
-	this->typeChanged();
+	uiGeneralTab.sbOrder->setValue(m_differentiationData.order);
+	this->orderChanged();
 
 	this->showDifferentiationResult();
 	m_initializing = false;

@@ -43,6 +43,7 @@
 #include <cfloat>	// DBL_MIN
 extern "C" {
 #include <gsl/gsl_errno.h>
+#include "backend/nsl/nsl_diff.h"
 }
 
 #include <KIcon>
@@ -231,7 +232,7 @@ void XYDifferentiationCurvePrivate::recalculate() {
 
 	//number of data points to differentiate
 	const unsigned int n = ydataVector.size();
-	if (n < 2) {
+	if (n < 3) {
 		differentiationResult.available = true;
 		differentiationResult.valid = false;
 		differentiationResult.status = i18n("Not enough data points available.");
@@ -243,23 +244,33 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
-	const double min = xDataColumn->minimum();
-	const double max = xDataColumn->maximum();
-
 	// differentiation settings
-	const int type = differentiationData.type;
+	const int order = differentiationData.order;
 #ifndef NDEBUG
-	qDebug()<<"type:"<<type;
+	qDebug()<<"order:"<<order;
 #endif
 ///////////////////////////////////////////////////////////
 	int status=0;
 
+	switch (order) {
+	case 1:
+		status = nsl_diff_deriv_first(xdata, ydata, n);
+		break;
+	case 2:
+		status = nsl_diff_deriv_second(xdata, ydata, n);
+		break;
+	}
+
+	xVector->resize(n);
+	yVector->resize(n);
+	memcpy(xVector->data(), xdata, n*sizeof(double));
+	memcpy(yVector->data(), ydata, n*sizeof(double));
 ///////////////////////////////////////////////////////////
 
 	//write the result
 	differentiationResult.available = true;
 	differentiationResult.valid = true;
-	differentiationResult.status = QString(gsl_strerror(status));;
+	differentiationResult.status = QString::number(status);
 	differentiationResult.elapsedTime = timer.elapsed();
 
 	//redraw the curve
@@ -284,7 +295,7 @@ void XYDifferentiationCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement("differentiationData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
-	writer->writeAttribute( "type", QString::number(d->differentiationData.type) );
+	writer->writeAttribute( "order", QString::number(d->differentiationData.order) );
 	writer->writeEndElement();// differentiationData
 
 	// differentiation results (generated columns)
@@ -334,11 +345,11 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-			str = attribs.value("type").toString();
+			str = attribs.value("order").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
+				reader->raiseWarning(attributeWarning.arg("'order'"));
 			else
-				d->differentiationData.type = str.toInt();
+				d->differentiationData.order = str.toInt();
 
 		} else if (reader->name() == "differentiationResult") {
 

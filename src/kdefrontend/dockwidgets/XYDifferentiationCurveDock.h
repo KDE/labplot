@@ -64,7 +64,7 @@ private slots:
 	void commentChanged();
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
-	void typeChanged();
+	void orderChanged();
 
 //	void showOptions();
 	void recalculateClicked();
