@@ -71,14 +71,14 @@ int nsl_diff_deriv_first(const double *x, double *y, const size_t n) {
 	for (i=0; i < n; i++) {
 		if (i == 0) {	/* forward */
 			double h1=x[1]-x[0], h2=x[2]-x[1];
-			dy = (-h1*h1*y[2] + (h1+h2)*(h1+h2)*y[1] - (h2*h2+2.*h1*h2)*y[0])/(h1*h2*(h1+h2));
+			dy = (y[1]-y[0])/h1 - (y[2]-y[1])/h2 + (y[2]-y[0])/(h1+h2);
 		} else if (i == n-1) {	/* backward */
 			double h1=x[i-1]-x[i-2], h2=x[i]-x[i-1];
-			y[i] = ( (h1*h1+2.*h1*h2)*y[i] - (h1+h2)*(h1+h2)*y[i-1] + h2*h2*y[i-2])/(h1*h2*(h1+h2));
+			y[i] = (y[i]-y[i-1])/h2 - (y[i-1]-y[i-2])/h1 + (y[i]-y[i-2])/(h1+h2);
 			y[i-1] = oldy;
 		} else {
 			double h1=x[i]-x[i-1], h2=x[i+1]-x[i];
-			dy = (y[i+1]*h1*h1 + (h2*h2-h1*h1)*y[i] - h2*h2*y[i-1])/(h1*h2*(h1+h2));
+			dy = ( (y[i+1]-y[i])*h1*h1 + (y[i]-y[i-1])*h2*h2)/(h1*h2*(h1+h2));
 		}
 
 		if (i > 1)
