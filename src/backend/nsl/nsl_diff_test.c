@@ -30,8 +30,8 @@
 #include "nsl_diff.h"
 
 int main() {
-	const double xdata[]={.1,.2,.4,.8,1.6,3.2,6.4};
-	double ydata[]={.01,.04,.16,.64,2.56,10.24,40.96};
+	const double xdata[]={1,2,4,8,16,32,64};
+	double ydata[]={1,4,16,64,256,1024,4096};
 	const int n=7;
 
 	size_t i;
@@ -44,6 +44,13 @@ int main() {
 
 	for (i=0; i < n; i++)
 		printf("%g %g\n", xdata[i], ydata[i]);
+	puts("");
+
+	double ydata2[]={1,4,16,64,256,1024,4096};
+	status = nsl_diff_deriv_first_avg(xdata, ydata2, n);
+
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata2[i]);
 
 	return 0;
 }

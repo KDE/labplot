@@ -92,6 +92,30 @@ int nsl_diff_deriv_first(const double *x, double *y, const size_t n) {
 	return 0;
 }
 
+int nsl_diff_deriv_first_avg(const double *x, double *y, const size_t n) {
+	if (n < 1)
+		return -1;
+
+	size_t i;
+	double dy=0, oldy=0;
+	for (i=0; i<n; i++) {
+		if(i == 0) {
+			dy = (y[1]-y[0])/(x[1]-x[0]);
+		} else if (i == n-1) {
+			y[i] = (y[n-1]-y[n-2])/(x[n-1]-x[n-2]);
+		} else {
+			dy = ( (y[i+1]-y[i])/(x[i+1]-x[i]) + (y[i]-y[i-1])/(x[i]-x[i-1]) )/2.;
+		}
+
+		if (i > 0)
+			y[i-1] = oldy;
+
+		oldy = dy;
+	}
+
+	return 0;
+}
+
 int nsl_diff_deriv_second(const double *x, double *y, const size_t n) {
 	if (n < 3)
 		return -1;
