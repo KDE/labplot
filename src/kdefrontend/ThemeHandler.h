@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : TemplateHandler.h
+    File                 : ThemeHandler.h
     Project              : LabPlot
-    Description          : Widget for handling saving and loading of templates
+    Description          : Widget for handling saving and loading of themes
     --------------------------------------------------------------------
-	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-	Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 Prakriti Bhardwaj (p_bhardwaj14@informatik.uni-kl.de)
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,45 +27,43 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef TEMPLATEHANDLER_H
-#define TEMPLATEHANDLER_H
+#ifndef THEMEHANDLER_H
+#define THEMEHANDLER_H
 
 #include <QWidget>
-class QToolButton;
+
+class QPushButton;
 class KConfig;
 
-class TemplateHandler : public QWidget {
+class ThemeHandler : public QWidget {
 	Q_OBJECT
 
 	public:
-		enum ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, XYCurve, Axis, CustomPoint};
-
-		TemplateHandler(QWidget* parent, ClassName);
+		ThemeHandler(QWidget* parent);
+		static QStringList themes();
+		static const QString themeFilePath(const QString&);
 
 	private:
-		void retranslateUi();
-
-		ClassName className;
 		QList<QString> dirNames;
+		QStringList m_themeList;
+		QString m_currentLocalTheme;
 
-		QToolButton* tbLoad;
-		QToolButton* tbSave;
-		QToolButton* tbSaveDefault;
-		QToolButton* tbCopy;
-		QToolButton* tbPaste;
+		QPushButton* pbLoadTheme;
+		QPushButton* pbSaveTheme;
+		QPushButton* pbPublishTheme;
 
 	private slots:
-		void loadMenu();
+		void loadSelected(QString);
+		void showPanel();
 		void saveMenu();
-		void loadMenuSelected(QAction*);
-		void saveMenuSelected(QAction*);
 		void saveNewSelected(const QString&);
-		void saveDefaults();
+		void publishThemes();
 
 	signals:
-		void loadConfigRequested(KConfig&);
-		void saveConfigRequested(KConfig&);
+		void loadThemeRequested(KConfig&);
+		void saveThemeRequested(KConfig&);
 		void info(const QString&);
+		void loadPreviewPanel(QStringList, QString);
 };
 
 #endif

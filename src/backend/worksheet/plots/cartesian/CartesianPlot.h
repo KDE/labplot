@@ -44,6 +44,7 @@ class XYInterpolationCurve;
 class XYSmoothCurve;
 class XYFitCurve;
 class XYFourierFilterCurve;
+class KConfig;
 class XYFourierTransformCurve;
 
 class CartesianPlot:public AbstractPlot{
@@ -107,6 +108,7 @@ class CartesianPlot:public AbstractPlot{
 		void init();
 		void initActions();
 		void initMenus();
+		void applyThemeOnNewCurve(XYCurve* curve);
 
 		CartesianPlotLegend* m_legend;
 		float m_zoomFactor;
@@ -143,6 +145,8 @@ class CartesianPlot:public AbstractPlot{
 
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;
+		QMenu* themeMenu;
+		QList<QColor> m_themeColorPalette;
 
 		Q_DECLARE_PRIVATE(CartesianPlot)
 
@@ -173,6 +177,8 @@ class CartesianPlot:public AbstractPlot{
 		void shiftRightX();
 		void shiftUpY();
 		void shiftDownY();
+		void loadTheme(KConfig& config);
+		void saveTheme(KConfig& config);
 
 	private slots:
 		void updateLegend();
@@ -186,6 +192,8 @@ class CartesianPlot:public AbstractPlot{
 
 		//SLOTs for changes triggered via QActions in the context menu
 		void visibilityChanged();
+
+		void loadTheme(const QString&);
 
 	protected:
 		CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
@@ -217,6 +225,7 @@ class CartesianPlot:public AbstractPlot{
 		void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 		void yRangeBreakingEnabledChanged(bool);
 		void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
+		void themeLoaded();
 };
 
 #endif

@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : TemplateHandler.h
+    File                 : ThemesWidget.h
     Project              : LabPlot
-    Description          : Widget for handling saving and loading of templates
+    Description          : widget for selecting themes
     --------------------------------------------------------------------
-	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-	Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 Prakriti Bhardwaj (p_bhardwaj14@informatik.uni-kl.de)
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -26,46 +26,25 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef THEMESWIDGET_H
+#define THEMESWIDGET_H
 
-#ifndef TEMPLATEHANDLER_H
-#define TEMPLATEHANDLER_H
+#include <QListView>
+#include <QStringList>
 
-#include <QWidget>
-class QToolButton;
-class KConfig;
-
-class TemplateHandler : public QWidget {
+class ThemesWidget : public QListView {
 	Q_OBJECT
 
 	public:
-		enum ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, XYCurve, Axis, CustomPoint};
-
-		TemplateHandler(QWidget* parent, ClassName);
-
-	private:
-		void retranslateUi();
-
-		ClassName className;
-		QList<QString> dirNames;
-
-		QToolButton* tbLoad;
-		QToolButton* tbSave;
-		QToolButton* tbSaveDefault;
-		QToolButton* tbCopy;
-		QToolButton* tbPaste;
-
-	private slots:
-		void loadMenu();
-		void saveMenu();
-		void loadMenuSelected(QAction*);
-		void saveMenuSelected(QAction*);
-		void saveNewSelected(const QString&);
-		void saveDefaults();
+		explicit ThemesWidget(QWidget*);
 
 	signals:
-		void loadConfigRequested(KConfig&);
-		void saveConfigRequested(KConfig&);
-		void info(const QString&);
+		void themeSelected(const QString&);
+		void canceled();
+
+	private slots:
+		void applyClicked();
+		void downloadThemes();
 };
 
-#endif
+#endif //THEMESWIDGET_H

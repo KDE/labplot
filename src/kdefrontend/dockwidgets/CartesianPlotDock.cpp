@@ -32,6 +32,7 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
+#include "kdefrontend/ThemeHandler.h"
 
 #include <QPainter>
 #include <QTimer>
@@ -158,17 +159,26 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	connect( ui.sbPaddingHorizontal, SIGNAL(valueChanged(double)), this, SLOT(horizontalPaddingChanged(double)) );
 	connect( ui.sbPaddingVertical, SIGNAL(valueChanged(double)), this, SLOT(verticalPaddingChanged(double)) );
 
+	//theme and template handlers
+	QFrame* frame = new QFrame(this);
+	QHBoxLayout* layout = new QHBoxLayout(frame);
+
+	ThemeHandler* themeHandler = new ThemeHandler(this);
+	layout->addWidget(themeHandler);
+	connect(themeHandler, SIGNAL(loadThemeRequested(KConfig&)), this, SLOT(loadTheme(KConfig&)));
+	connect(themeHandler, SIGNAL(saveThemeRequested(KConfig&)), this, SLOT(saveTheme(KConfig&)));
+	connect(themeHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	//connect(this, SIGNAL(saveThemeEnable(bool)), themeHandler, SLOT(saveThemeEnable(bool)));
+
 	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
-	ui.verticalLayout->addWidget(templateHandler);
-	templateHandler->show();
+	layout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
-	init();
+	ui.verticalLayout->addWidget(frame);
 
-	//TODO: activate the tab again once the functionality is implemented
-	ui.tabWidget->removeTab(2);
+	init();
 }
 
 CartesianPlotDock::~CartesianPlotDock() {
@@ -1339,4 +1349,14 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
 
 	config.sync();
+}
+
+void CartesianPlotDock::loadTheme(KConfig& config) {
+	foreach(CartesianPlot *plot, m_plotList)
+		plot->loadTheme(config);
+}
+
+void CartesianPlotDock::saveTheme(KConfig& config) {
+	if(m_plotList.empty()==false)
+		m_plotList.at(0)->saveTheme(config);
 }
