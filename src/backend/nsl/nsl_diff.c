@@ -36,22 +36,26 @@ double nsl_diff_first_central(double xm, double fm, double xp, double fp) {
 }
 
 int nsl_diff_deriv_first_equal(const double *x, double *y, const size_t n) {
-	if (n < 2)
+	if (n < 3)
 		return -1;
 
-	/*TODO: same order for all points */
-	double dy=0, oldy=0;
+	double dy=0, oldy=0, oldoldy=0;
 	size_t i;
 	for (i=0; i < n; i++) {
 		if (i == 0)	/* forward */
-			dy = (y[1]-y[0])/(x[1]-x[0]);
+			dy = (-y[2] + 4.*y[1] - 3.*y[0])/(x[2]-x[0]);
 		else if (i == n-1)	/* backward */
-			y[i] = (y[i]-y[i-1])/(x[i]-x[i-1]);
+			y[i] = (3.*y[n-1] - 4.*y[n-2] + y[n-3])/(x[n-1]-x[n-3]);
 		else
 			dy = (y[i+1]-y[i-1])/(x[i+1]-x[i-1]);
 
-		if (i != 0)
-			y[i-1] = oldy;
+		if (i > 1)
+			y[i-2] = oldoldy;
+		if (i > 0 && i < n-1)
+			oldoldy = oldy;
+
+		if (i == n-1)
+			y[n-2] = oldy;
 		oldy = dy;
 	}
 
@@ -69,7 +73,7 @@ int nsl_diff_deriv_first(const double *x, double *y, const size_t n) {
 			dy = (-h1*h1*y[2] + (h1+h2)*(h1+h2)*y[1] - (h2*h2+2.*h1*h2)*y[0])/(h1*h2*(h1+h2));
 		} else if (i == n-1) {	/* backward */
 			double h1=x[n-2]-x[n-3], h2=x[n-1]-x[n-2];
-			dy = ( (h1*h1+2.*h1*h2)*y[n-1] - (h1+h2)*(h1+h2)*y[n-2] + h2*h2*y[n-3])/(h1*h2*(h1+h2));
+			y[i] = ( (h1*h1+2.*h1*h2)*y[n-1] - (h1+h2)*(h1+h2)*y[n-2] + h2*h2*y[n-3])/(h1*h2*(h1+h2));
 		} else {
 			double h1=x[i]-x[i-1], h2=x[i+1]-x[i];
 			dy = (y[i+1]*h1*h1 + (h2*h2-h1*h1)*y[i] - h2*h2*y[i-1])/(h1*h2*(h1+h2));
@@ -80,10 +84,8 @@ int nsl_diff_deriv_first(const double *x, double *y, const size_t n) {
 		if (i > 0 && i < n-1)
 			oldoldy = oldy;
 
-		if (i == n-1) {
+		if (i == n-1)
 			y[n-2] = oldy;
-			y[n-1] = dy;
-		}
 		oldy = dy;
 	}
 
