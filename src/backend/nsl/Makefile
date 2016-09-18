@@ -29,4 +29,4 @@ nsl_diff_test: nsl_diff_test.c nsl_diff.c
 	gcc -o $@ $^ -lm -lgsl -lgslcblas
 
 clean:
-	rm -f nsl_stats_test nsl_smooth_ma_test nsl_smooth_mal_test nsl_smooth_percentile_test nsl_smooth_savgol_test nsl_dft_test nsl_dft_test_fftw nsl_sf_window_test nsl_filter_test nsl_filter_test_fftw nsl_geom_linesim_test nsl_geom_linesim_morse_test
+	rm -f nsl_stats_test nsl_smooth_ma_test nsl_smooth_mal_test nsl_smooth_percentile_test nsl_smooth_savgol_test nsl_dft_test nsl_dft_test_fftw nsl_sf_window_test nsl_filter_test nsl_filter_test_fftw nsl_geom_linesim_test nsl_geom_linesim_morse_test nsl_diff_test
