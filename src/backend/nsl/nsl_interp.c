@@ -36,9 +36,12 @@ const char* nsl_interp_type_name[] = { "linear", "polynomial", "cubic spline (na
 const char* nsl_interp_pch_variant_name[] = { "finite differences", "Catmull-Rom", "cardinal", "Kochanek-Bartels (TCB)"};
 const char* nsl_interp_evaluate_name[] = { "function", "derivative", "second derivative", "integral"};
 
-int nsl_interp_integral(double *x, double *y, unsigned int n) {
+int nsl_interp_integral(double *x, double *y, size_t n) {
+	if (n<2)
+		return -1;
+
 	double vold=0.;
-	unsigned int i;
+	size_t i;
 	for (i=0; i < n-1; i++) {
 		/* trapezoidal rule */
 		double v = (x[i+1]-x[i])*(y[i+1]+y[i])/2.;

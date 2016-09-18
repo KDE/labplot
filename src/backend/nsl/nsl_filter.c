@@ -56,7 +56,7 @@ int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_f
 		return -1;
 	}
 
-	unsigned int i;
+	size_t i;
 	double factor, centerindex = cutindex + bandwidth/2.;
 	switch (type) {
 	case nsl_filter_type_low_pass:
@@ -251,8 +251,8 @@ int nsl_filter_apply(double data[], size_t n, nsl_filter_type type, nsl_filter_f
 	return 0;
 }
 
-void print_fdata(double data[], int n) {
-	int i;
+void print_fdata(double data[], size_t n) {
+	size_t i;
 	for(i=0; i < 2*(n/2+1); i++)
 		printf("%g ", data[i]);
 	puts("");
@@ -294,7 +294,7 @@ int nsl_filter_fourier(double data[], size_t n, nsl_filter_type type, nsl_filter
         fftw_execute(plan);
 	fftw_destroy_plan(plan);
 	/* normalize*/
-	unsigned int i;
+	size_t i;
 	for (i=0; i < n; i++)
 		data[i] /= n;
 #else
