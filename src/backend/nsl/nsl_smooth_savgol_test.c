@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include "nsl_smooth.h"
 
-double main() {
+int main() {
 	/* savgol coefficients */
 	int i,j,points=3, order=1;
         gsl_matrix *h;

@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : nsl_sf_window_test.c
+    File                 : nsl_diff_test.c
     Project              : LabPlot
-    Description          : NSL window functions test
+    Description          : NSL numerical differentiation functions
     --------------------------------------------------------------------
     Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
@@ -27,56 +27,22 @@
  ***************************************************************************/
 
 #include <stdio.h>
-#include "nsl_sf_window.h"
+#include "nsl_diff.h"
 
 int main() {
-	const int N=10;
+	const double xdata[]={1,2,3,3.5,5};
+	double ydata[]={1,2,1,3,4};
+	const int n=5;
 
-	int i;
-	for(i=0; i < N; i++)
-		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_uniform));
-	puts("\n");
-	for(i=0; i < N; i++)
-		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_triangle));
-	puts("\n");
-	for(i=0; i < N; i++)
-		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_triangleII));
-	puts("\n");
-	for(i=0; i < N; i++)
-		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_triangleIII));
-	puts("\n");
-	for(i=0; i < N; i++)
-		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_welch));
-	puts("\n");
-	for(i=0; i < N; i++)
-		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_hann));
-	puts("\n");
-	for(i=0; i < N; i++)
-		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_hamming));
-	puts("\n");
-	for(i=0; i < N; i++)
-		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_blackman));
-	puts("\n");
-	for(i=0; i < N; i++)
-		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_nuttall));
-	puts("\n");
-	for(i=0; i < N; i++)
-		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_blackman_nuttall));
-	puts("\n");
-	for(i=0; i < N; i++)
-		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_blackman_harris));
-	puts("\n");
-	for(i=0; i < N; i++)
-		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_flat_top));
-	puts("\n");
-	for(i=0; i < N; i++)
-		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_cosine));
-	puts("\n");
-	for(i=0; i < N; i++)
-		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_bartlett_hann));
-	puts("\n");
-	for(i=0; i < N; i++)
-		printf("%g ", nsl_sf_window(i,N, nsl_sf_window_lanczos));
-	puts("\n");
+	size_t i;
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata[i]);
+	puts("");
 
+	int status = nsl_diff_deriv_first(xdata, ydata, n);
+
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata[i]);
+
+	return 0;
 }
