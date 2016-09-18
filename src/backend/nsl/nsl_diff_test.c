@@ -30,15 +30,16 @@
 #include "nsl_diff.h"
 
 int main() {
-	const double xdata[]={1,2,3,3.5,5};
-	double ydata[]={1,2,1,3,4};
-	const int n=5;
+	const double xdata[]={.1,.2,.4,.8,1.6,3.2,6.4};
+	double ydata[]={.01,.04,.16,.64,2.56,10.24,40.96};
+	const int n=7;
 
 	size_t i;
 	for (i=0; i < n; i++)
 		printf("%g %g\n", xdata[i], ydata[i]);
 	puts("");
 
+	/*int status = nsl_diff_deriv_first_equal(xdata, ydata, n);*/
 	int status = nsl_diff_deriv_first(xdata, ydata, n);
 
 	for (i=0; i < n; i++)
