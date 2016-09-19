@@ -92,7 +92,8 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
-	connect( uiGeneralTab.sbOrder, SIGNAL(valueChanged(int)), this, SLOT(orderChanged()) );
+	connect( uiGeneralTab.sbDerivOrder, SIGNAL(valueChanged(int)), this, SLOT(derivOrderChanged()) );
+	connect( uiGeneralTab.sbAccOrder, SIGNAL(valueChanged(int)), this, SLOT(accOrderChanged()) );
 
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
@@ -125,8 +126,10 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
-	uiGeneralTab.sbOrder->setValue(m_differentiationData.order);
-	this->orderChanged();
+	uiGeneralTab.sbDerivOrder->setValue(m_differentiationData.derivOrder);
+	this->derivOrderChanged();
+	uiGeneralTab.sbAccOrder->setValue(m_differentiationData.accOrder);
+	this->accOrderChanged();
 
 	this->showDifferentiationResult();
 
@@ -231,9 +234,16 @@ void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYDifferentiationCurve*>(curve)->setYDataColumn(column);
 }
 
-void XYDifferentiationCurveDock::orderChanged() {
-	int order = (int)uiGeneralTab.sbOrder->value();
-	m_differentiationData.order = order;
+void XYDifferentiationCurveDock::derivOrderChanged() {
+	int derivOrder = (int)uiGeneralTab.sbDerivOrder->value();
+	m_differentiationData.derivOrder = derivOrder;
+
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYDifferentiationCurveDock::accOrderChanged() {
+	int accOrder = (int)uiGeneralTab.sbAccOrder->value();
+	m_differentiationData.accOrder = accOrder;
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
@@ -320,8 +330,10 @@ void XYDifferentiationCurveDock::curveYDataColumnChanged(const AbstractColumn* c
 void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData& data) {
 	m_initializing = true;
 	m_differentiationData = data;
-	uiGeneralTab.sbOrder->setValue(m_differentiationData.order);
-	this->orderChanged();
+	uiGeneralTab.sbDerivOrder->setValue(m_differentiationData.derivOrder);
+	this->derivOrderChanged();
+	uiGeneralTab.sbAccOrder->setValue(m_differentiationData.accOrder);
+	this->accOrderChanged();
 
 	this->showDifferentiationResult();
 	m_initializing = false;

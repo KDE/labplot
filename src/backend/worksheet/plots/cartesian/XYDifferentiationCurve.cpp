@@ -245,14 +245,17 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	double* ydata = ydataVector.data();
 
 	// differentiation settings
-	const int order = differentiationData.order;
+	const int derivOrder = differentiationData.derivOrder;
+	const int accOrder = differentiationData.accOrder;
 #ifndef NDEBUG
-	qDebug()<<"order:"<<order;
+	qDebug()<<"derivation order:"<<derivOrder;
+	qDebug()<<"accuracy order:"<<accOrder;
 #endif
 ///////////////////////////////////////////////////////////
 	int status=0;
 
-	switch (order) {
+	// TODO: use accOrder
+	switch (derivOrder) {
 	case 1:
 		status = nsl_diff_first_deriv_second_order(xdata, ydata, n);
 		break;
@@ -295,7 +298,8 @@ void XYDifferentiationCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement("differentiationData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
-	writer->writeAttribute( "order", QString::number(d->differentiationData.order) );
+	writer->writeAttribute( "derivOrder", QString::number(d->differentiationData.derivOrder) );
+	writer->writeAttribute( "accOrder", QString::number(d->differentiationData.accOrder) );
 	writer->writeEndElement();// differentiationData
 
 	// differentiation results (generated columns)
@@ -345,11 +349,17 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-			str = attribs.value("order").toString();
+			str = attribs.value("derivOrder").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'order'"));
+				reader->raiseWarning(attributeWarning.arg("'derivOrder'"));
 			else
-				d->differentiationData.order = str.toInt();
+				d->differentiationData.derivOrder = str.toInt();
+
+			str = attribs.value("accOrder").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'accOrder'"));
+			else
+				d->differentiationData.accOrder = str.toInt();
 
 		} else if (reader->name() == "differentiationResult") {
 
