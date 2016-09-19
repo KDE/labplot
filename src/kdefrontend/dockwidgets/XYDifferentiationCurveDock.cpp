@@ -41,7 +41,7 @@
 /*!
   \class XYDifferentiationCurveDock
  \brief  Provides a widget for editing the properties of the XYDifferentiationCurves
-		(2D-curves defined by an differentiation) currently selected in
+		(2D-curves defined by a differentiation) currently selected in
 		the project explorer.
 
   If more then one curves are set, the properties of the first column are shown.
@@ -216,7 +216,7 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
 
-	// disable types that need more data points
+	// TODO: disable derivOrders and accOrders that need more data points
 }
 
 void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -237,6 +237,8 @@ void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 void XYDifferentiationCurveDock::derivOrderChanged() {
 	int derivOrder = (int)uiGeneralTab.sbDerivOrder->value();
 	m_differentiationData.derivOrder = derivOrder;
+
+	//TODO: update avail. accuracies
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
