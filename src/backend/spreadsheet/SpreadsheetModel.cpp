@@ -254,10 +254,6 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect * aspect) {
 	updateVerticalHeader();
 	updateHorizontalHeader();
 
-	emit headerDataChanged(Qt::Horizontal, 0, m_spreadsheet->columnCount()-1);
-	//emit headerDataChanged(Qt::Vertical, old_rows, m_spreadsheet->rowCount()-1);
-	emit headerDataChanged(Qt::Vertical, 0, m_spreadsheet->rowCount()-1);
-
 	connect(col, SIGNAL(plotDesignationChanged(const AbstractColumn*)), this,
 	        SLOT(handlePlotDesignationChange(const AbstractColumn*)));
 	connect(col, SIGNAL(modeChanged(const AbstractColumn*)), this,
@@ -299,13 +295,8 @@ void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* parent, const A
 	if (!col || parent != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
 
-	int old_rows = m_vertical_header_data.size();
-
 	updateVerticalHeader();
 	updateHorizontalHeader();
-
-	emit headerDataChanged(Qt::Horizontal, 0, m_spreadsheet->columnCount()-1);
-	emit headerDataChanged(Qt::Vertical, old_rows, m_spreadsheet->rowCount()-1);
 
 	beginResetModel();
 	endRemoveColumns();
