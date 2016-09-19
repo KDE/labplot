@@ -81,7 +81,7 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
-	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon( QIcon::fromTheme("run-build") );
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
