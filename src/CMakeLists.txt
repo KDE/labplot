@@ -17,7 +17,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPage.h
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
-        ${KDEFRONTEND_DIR}/ThemeHandler.cpp
+	${KDEFRONTEND_DIR}/ThemeHandler.cpp
 	${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/HDFOptionsWidget.cpp
@@ -26,7 +26,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
-        ${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/NoteDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
@@ -39,6 +39,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYDataReductionCurveDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/XYDifferentiationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYInterpolationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYSmoothCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYFitCurveDock.cpp
@@ -64,11 +65,10 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/LabelWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/DatapickerImageWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/DatapickerCurveWidget.cpp
-        ${KDEFRONTEND_DIR}/widgets/FITSHeaderEditWidget.cpp
-        ${KDEFRONTEND_DIR}/widgets/FITSHeaderEditNewKeywordDialog.cpp
-        ${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
-        ${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
-
+	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditNewKeywordDialog.cpp
+	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
+	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 )
 
 set(UI_SOURCES
@@ -85,7 +85,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/netcdfoptionswidget.ui
-        ${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui
@@ -98,6 +98,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyfitcurvedockgeneraltab.ui
@@ -114,9 +115,9 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickercurvewidget.ui
-        ${KDEFRONTEND_DIR}/ui/fitsheadereditwidget.ui
-        ${KDEFRONTEND_DIR}/ui/fitsheadereditnewkeywordwidget.ui
-        ${KDEFRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
+	${KDEFRONTEND_DIR}/ui/fitsheadereditwidget.ui
+	${KDEFRONTEND_DIR}/ui/fitsheadereditnewkeywordwidget.ui
+	${KDEFRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
 )
 
 set(BACKEND_SOURCES
@@ -160,24 +161,25 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/HDFFilter.cpp
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
-        ${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
+	${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
 
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
- 	${BACKEND_DIR}/gsl/parser.tab.c
+	${BACKEND_DIR}/gsl/parser.tab.c
 	${BACKEND_DIR}/matrix/Matrix.cpp
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp
  	${BACKEND_DIR}/nsl/nsl_dft.c
+ 	${BACKEND_DIR}/nsl/nsl_diff.c
 	${BACKEND_DIR}/nsl/nsl_filter.c
 	${BACKEND_DIR}/nsl/nsl_geom.c
 	${BACKEND_DIR}/nsl/nsl_geom_linesim.c
- 	${BACKEND_DIR}/nsl/nsl_interp.c
- 	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
- 	${BACKEND_DIR}/nsl/nsl_sf_poly.c
- 	${BACKEND_DIR}/nsl/nsl_sf_window.c
- 	${BACKEND_DIR}/nsl/nsl_smooth.c
- 	${BACKEND_DIR}/nsl/nsl_sort.c
- 	${BACKEND_DIR}/nsl/nsl_stats.c
+	${BACKEND_DIR}/nsl/nsl_interp.c
+	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
+	${BACKEND_DIR}/nsl/nsl_sf_poly.c
+	${BACKEND_DIR}/nsl/nsl_sf_window.c
+	${BACKEND_DIR}/nsl/nsl_smooth.c
+	${BACKEND_DIR}/nsl/nsl_sort.c
+	${BACKEND_DIR}/nsl/nsl_stats.c
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
@@ -199,21 +201,21 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYDataReductionCurve.cpp
-	${BACKEND_DIR}/worksheet/plots/cartesian/XYDifferentationCurve.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/XYDifferentiationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYInterpolationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYSmoothCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierFilterCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierTransformCurve.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
-        ${BACKEND_DIR}/datapicker/DatapickerPoint.cpp
-        ${BACKEND_DIR}/datapicker/DatapickerImage.cpp
+	${BACKEND_DIR}/datapicker/DatapickerPoint.cpp
+	${BACKEND_DIR}/datapicker/DatapickerImage.cpp
 	${BACKEND_DIR}/datapicker/Datapicker.cpp
 	${BACKEND_DIR}/datapicker/Transform.cpp
-        ${BACKEND_DIR}/datapicker/ImageEditor.cpp
-       	${BACKEND_DIR}/datapicker/Segment.cpp
-        ${BACKEND_DIR}/datapicker/Segments.cpp
-        ${BACKEND_DIR}/datapicker/DatapickerCurve.cpp
+	${BACKEND_DIR}/datapicker/ImageEditor.cpp
+	${BACKEND_DIR}/datapicker/Segment.cpp
+	${BACKEND_DIR}/datapicker/Segments.cpp
+	${BACKEND_DIR}/datapicker/DatapickerCurve.cpp
 )
 
 set(COMMONFRONTEND_SOURCES
@@ -230,7 +232,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
 	${COMMONFRONTEND_DIR}/widgets/qxtspanslider.cpp
 	${COMMONFRONTEND_DIR}/datapicker/DatapickerView.cpp
-        ${COMMONFRONTEND_DIR}/datapicker/DatapickerImageView.cpp
+	${COMMONFRONTEND_DIR}/datapicker/DatapickerImageView.cpp
 )
 
 IF (${CANTOR_LIBS_FOUND})

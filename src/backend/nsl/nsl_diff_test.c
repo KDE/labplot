@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : nsl_interp.h
+    File                 : nsl_diff_test.c
     Project              : LabPlot
-    Description          : NSL interpolation functions
+    Description          : NSL numerical differentiation functions
     --------------------------------------------------------------------
     Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
@@ -26,32 +26,42 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef NSL_INTERP_H
-#define NSL_INTERP_H
+#include <stdio.h>
+#include "nsl_diff.h"
 
-#define NSL_INTERP_TYPE_COUNT 11
-typedef enum {nsl_interp_type_linear, nsl_interp_type_polynomial, nsl_interp_type_cspline, nsl_interp_type_cspline_periodic, 
-	nsl_interp_type_akima, nsl_interp_type_akima_periodic, nsl_interp_type_steffen, nsl_interp_type_cosine,
-	nsl_interp_type_exponential, nsl_interp_type_pch, nsl_interp_type_rational} nsl_interp_type;
-extern const char* nsl_interp_type_name[];
+int main() {
+	const double xdata[]={1,2,4,8,16,32,64};
+	double ydata[]={1,4,16,64,256,1024,4096};
+	const int n=7;
 
-#define NSL_INTERP_PCH_VARIANT_COUNT 4
-typedef enum {nsl_interp_pch_variant_finite_difference, nsl_interp_pch_variant_catmull_rom, nsl_interp_pch_variant_cardinal,
-	nsl_interp_pch_variant_kochanek_bartels} nsl_interp_pch_variant;
-extern const char* nsl_interp_pch_variant_name[];
+	printf("function x^2:\n");
+	size_t i;
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata[i]);
+	puts("");
 
-#define NSL_INTERP_EVALUATE_COUNT 4
-typedef enum {nsl_interp_evaluate_function, nsl_interp_evaluate_derivative, nsl_interp_evaluate_second_derivative, 
-	nsl_interp_evaluate_integral} nsl_interp_evaluate;
-extern const char* nsl_interp_evaluate_name[];
+	printf("expecting 2*x as derivative:\n");
+	/*int status = nsl_diff_deriv_first_equal(xdata, ydata, n);*/
+	int status = nsl_diff_deriv_first(xdata, ydata, n);
 
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata[i]);
+	puts("");
 
+	printf("avg derivative:\n");
+	double ydata2[]={1,4,16,64,256,1024,4096};
+	status = nsl_diff_deriv_first_avg(xdata, ydata2, n);
 
-/* calculates integration of n points of xy-data. result in y */
-/* TODO: put in nsl_int.h */
-int nsl_interp_integral(double *x, double *y, size_t n);
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata2[i]);
+	puts("");
 
-/* calculates rational interpolation of n points of xy-data at xn using Burlisch-Stoer method. result in v (error dv) */
-int nsl_interp_ratint(double *x, double *y, int n, double xn, double *v, double *dv);
+	printf("expecting 2 as second derivative:\n");
+	double ydata3[]={1,4,16,64,256,1024,4096};
+	status = nsl_diff_deriv_second(xdata, ydata3, n);
 
-#endif /* NSL_INTERP_H */
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata3[i]);
+
+	return 0;
+}

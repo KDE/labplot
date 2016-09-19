@@ -41,7 +41,7 @@ const char* nsl_dft_xscale_name[] = {"Frequency", "Index", "Period"};
 
 int nsl_dft_transform_window(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type, nsl_sf_window_type window_type) {
 	/* apply window function */
-	unsigned int i;
+	size_t i;
 	for (i=0; i < n; i++)
 		data[i] *= nsl_sf_window(i, n, window_type);
 
@@ -52,9 +52,9 @@ int nsl_dft_transform_window(double data[], size_t stride, size_t n, int two_sid
 }
 
 int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type) {
-	unsigned int i;
+	size_t i;
 	double result[2*n];
-	unsigned int N=n/2;	/* number of resulting data points */
+	size_t N=n/2;	/* number of resulting data points */
 	if(two_sided)
 		N=n;
 #ifdef HAVE_FFTW3

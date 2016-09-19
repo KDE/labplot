@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : XYDifferentationCurvePrivate.h
+    File                 : nsl_diff.h
     Project              : LabPlot
-    Description          : Private members of XYDifferentationCurve
+    Description          : NSL numerical differentiation functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -26,38 +26,33 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYDIFFERENTATIONCURVEPRIVATE_H
-#define XYDIFFERENTATIONCURVEPRIVATE_H
+#ifndef NSL_DIFF_H
+#define NSL_DIFF_H
 
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
-#include "backend/worksheet/plots/cartesian/XYDifferentationCurve.h"
+/************ finite differences *********/
 
-class XYDifferentationCurve;
-class Column;
+/* first derivative, central
+	remark: do we need this?
+*/
+double nsl_diff_first_central(double xm, double fm, double xp, double fp);
 
-class XYDifferentationCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYDifferentationCurvePrivate(XYDifferentationCurve*);
-		~XYDifferentationCurvePrivate();
+/************ first derivatives *********/
 
-		void recalculate();
+/* calculates derivative of n points of xy-data.
+	for equal/unequal spaced data.
+	result in y 
+*/
+int nsl_diff_deriv_first_equal(const double *x, double *y, const size_t n);
+int nsl_diff_deriv_first(const double *x, double *y, const size_t n);
+/* using average between left and right diff (like in other programs) */
+int nsl_diff_deriv_first_avg(const double *x, double *y, const size_t n);
 
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be differentated
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be differentated
-		QString xDataColumnPath;
-		QString yDataColumnPath;
+/************ second derivatives *********/
 
-		XYDifferentationCurve::DifferentationData differentationData;
-		XYDifferentationCurve::DifferentationResult differentationResult;
+/* calculates second derivative of n points of xy-data
+	for unequal spaced data.
+	result in y
+*/
+int nsl_diff_deriv_second(const double *x, double *y, const size_t n);
 
-		Column* xColumn; //<! column used internally for storing the x-values of the result differentation curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result differentation curve
-		QVector<double>* xVector;
-		QVector<double>* yVector;
-
-		bool sourceDataChangedSinceLastDifferentation; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
-
-		XYDifferentationCurve* const q;
-};
-
-#endif
+#endif /* NSL_DIFF_H */

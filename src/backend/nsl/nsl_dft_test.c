@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include "nsl_dft.h"
 
-double main() {
+int main() {
 	double data[]={1, 1, 3, 3, 1, -1, 0, 1, 1, 0};
 	/*double data[]={1, 2, 3, 3, 1};*/
 	const int N=10;

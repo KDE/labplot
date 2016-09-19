@@ -176,10 +176,10 @@ private:
 
 	QAction* addCurveAction;
 	QAction* addEquationCurveAction;
-	QAction* addDifferentationCurveAction;
-	QAction* addIntegrationCurveAction;
 	QAction* addDataOperationCurveAction;
 	QAction* addDataReductionCurveAction;
+	QAction* addDifferentiationCurveAction;
+	QAction* addIntegrationCurveAction;
 	QAction* addInterpolationCurveAction;
 	QAction* addSmoothCurveAction;
 	QAction* addFitCurveAction;

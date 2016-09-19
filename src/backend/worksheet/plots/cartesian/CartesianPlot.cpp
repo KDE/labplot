@@ -33,6 +33,7 @@
 #include "XYCurve.h"
 #include "XYEquationCurve.h"
 #include "XYDataReductionCurve.h"
+#include "XYDifferentiationCurve.h"
 #include "XYInterpolationCurve.h"
 #include "XYSmoothCurve.h"
 #include "XYFitCurve.h"
@@ -353,6 +354,7 @@ void CartesianPlot::initActions() {
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
 // no icons yet
 	addDataReductionCurveAction = new QAction(i18n("xy-curve from a data reduction"), this);
+	addDifferentiationCurveAction = new QAction(i18n("xy-curve from a differentiation"), this);
 	addInterpolationCurveAction = new QAction(i18n("xy-curve from an interpolation"), this);
 	addSmoothCurveAction = new QAction(i18n("xy-curve from a smooth"), this);
 	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
@@ -418,6 +420,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addAction(addDataReductionCurveAction);
+	addNewMenu->addAction(addDifferentiationCurveAction);
 	addNewMenu->addAction(addInterpolationCurveAction);
 	addNewMenu->addAction(addSmoothCurveAction);
 	addNewMenu->addAction(addFitCurveAction);
@@ -744,6 +747,12 @@ XYEquationCurve* CartesianPlot::addEquationCurve() {
 
 XYDataReductionCurve* CartesianPlot::addDataReductionCurve() {
 	XYDataReductionCurve* curve = new XYDataReductionCurve("Data reduction");
+	this->addChild(curve);
+	return curve;
+}
+
+XYDifferentiationCurve* CartesianPlot::addDifferentiationCurve() {
+	XYDifferentiationCurve* curve = new XYDifferentiationCurve("Differentiation");
 	this->addChild(curve);
 	return curve;
 }
@@ -2052,6 +2061,12 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			}
 		} else if (reader->name() == "xyDataReductionCurve") {
 			XYDataReductionCurve* curve = addDataReductionCurve();
+			if (!curve->load(reader)) {
+				removeChild(curve);
+				return false;
+			}
+		} else if (reader->name() == "xyDifferentiationCurve") {
+			XYDifferentiationCurve* curve = addDifferentiationCurve();
 			if (!curve->load(reader)) {
 				removeChild(curve);
 				return false;
