@@ -89,9 +89,9 @@ class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 
 		int xDirection() const;
 		int yDirection() const;
-		bool setXScales(const QList<CartesianScale*>& scales);
+		bool setXScales(const QList<CartesianScale*>&);
 		QList<CartesianScale*> xScales() const;
-		bool setYScales(const QList<CartesianScale*>& scales);
+		bool setYScales(const QList<CartesianScale*>&);
 		QList<CartesianScale*> yScales() const;
 
 	private:

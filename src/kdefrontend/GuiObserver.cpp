@@ -56,6 +56,7 @@
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "kdefrontend/dockwidgets/XYEquationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYDataReductionCurveDock.h"
+#include "kdefrontend/dockwidgets/XYDifferentiationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYInterpolationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFitCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFourierFilterCurveDock.h"
@@ -275,7 +276,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("Data reduction"));
 
 		if (!mainWindow->xyDataReductionCurveDock) {
-			mainWindow->xyDataReductionCurveDock = new XYDataReductionCurveDock(mainWindow->stackedWidget);
+			mainWindow->xyDataReductionCurveDock = new XYDataReductionCurveDock(mainWindow->stackedWidget, mainWindow->statusBar());
 			mainWindow->xyDataReductionCurveDock->setupGeneral();
 			connect(mainWindow->xyDataReductionCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
 			mainWindow->stackedWidget->addWidget(mainWindow->xyDataReductionCurveDock);
@@ -288,6 +289,23 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		mainWindow->xyDataReductionCurveDock->setCurves(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyDataReductionCurveDock);
+	} else if (className=="XYDifferentiationCurve") {
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Differentiation"));
+
+		if (!mainWindow->xyDifferentiationCurveDock) {
+			mainWindow->xyDifferentiationCurveDock = new XYDifferentiationCurveDock(mainWindow->stackedWidget);
+			mainWindow->xyDifferentiationCurveDock->setupGeneral();
+			connect(mainWindow->xyDifferentiationCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+			mainWindow->stackedWidget->addWidget(mainWindow->xyDifferentiationCurveDock);
+		}
+
+		QList<XYCurve*> list;
+		foreach(aspect, selectedAspects) {
+			list<<qobject_cast<XYCurve*>(aspect);
+		}
+		mainWindow->xyDifferentiationCurveDock->setCurves(list);
+
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyDifferentiationCurveDock);
 	} else if (className=="XYInterpolationCurve") {
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("Interpolation"));
 

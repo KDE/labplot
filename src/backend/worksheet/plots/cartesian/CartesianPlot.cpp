@@ -33,6 +33,7 @@
 #include "XYCurve.h"
 #include "XYEquationCurve.h"
 #include "XYDataReductionCurve.h"
+#include "XYDifferentiationCurve.h"
 #include "XYInterpolationCurve.h"
 #include "XYSmoothCurve.h"
 #include "XYFitCurve.h"
@@ -49,17 +50,17 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 
+#include <QDir>
 #include <QMenu>
 #include <QToolBar>
 #include <QPainter>
 
+#include <KConfigGroup>
 #include <KIcon>
 #include <KAction>
 #include <KLocale>
-
-#define SCALE_MIN CartesianScale::LIMIT_MIN
-#define SCALE_MAX CartesianScale::LIMIT_MAX
-
+#include "kdefrontend/ThemeHandler.h"
+#include "kdefrontend/widgets/ThemesWidget.h"
 
 /**
  * \class CartesianPlot
@@ -81,7 +82,7 @@ CartesianPlot::~CartesianPlot() {
 	delete m_coordinateSystem;
 	delete addNewMenu;
 	delete zoomMenu;
-
+	delete themeMenu;
 	//don't need to delete objects added with addChild()
 
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -125,6 +126,7 @@ void CartesianPlot::init() {
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(childAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
 			this, SLOT(childRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
+
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -351,6 +353,7 @@ void CartesianPlot::initActions() {
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
 // no icons yet
 	addDataReductionCurveAction = new KAction(i18n("xy-curve from a data reduction"), this);
+	addDifferentiationCurveAction = new KAction(i18n("xy-curve from a differentiation"), this);
 	addInterpolationCurveAction = new KAction(i18n("xy-curve from an interpolation"), this);
 	addSmoothCurveAction = new KAction(i18n("xy-curve from a smooth"), this);
 	addFitCurveAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
@@ -417,6 +420,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addAction(addDataReductionCurveAction);
+	addNewMenu->addAction(addDifferentiationCurveAction);
 	addNewMenu->addAction(addInterpolationCurveAction);
 	addNewMenu->addAction(addSmoothCurveAction);
 	addNewMenu->addAction(addFitCurveAction);
@@ -448,6 +452,15 @@ void CartesianPlot::initMenus() {
 	zoomMenu->addSeparator();
 	zoomMenu->addAction(shiftUpYAction);
 	zoomMenu->addAction(shiftDownYAction);
+
+	themeMenu = new QMenu(i18n("Apply Theme"));
+	ThemesWidget* themeWidget = new ThemesWidget(0);
+	connect(themeWidget, SIGNAL(themeSelected(QString)), this, SLOT(loadTheme(QString)));
+	connect(themeWidget, SIGNAL(themeSelected(QString)), themeMenu, SLOT(close()));
+
+	QWidgetAction* widgetAction = new QWidgetAction(this);
+	widgetAction->setDefaultWidget(themeWidget);
+	themeMenu->addAction(widgetAction);
 }
 
 QMenu* CartesianPlot::createContextMenu() {
@@ -459,6 +472,8 @@ QMenu* CartesianPlot::createContextMenu() {
 
 	menu->insertMenu(firstAction, addNewMenu);
 	menu->insertMenu(firstAction, zoomMenu);
+	menu->insertSeparator(firstAction);
+	menu->insertMenu(firstAction, themeMenu);
 	menu->insertSeparator(firstAction);
 
 	return menu;
@@ -719,12 +734,14 @@ void CartesianPlot::addVerticalAxis() {
 XYCurve* CartesianPlot::addCurve() {
 	XYCurve* curve = new XYCurve("xy-curve");
 	this->addChild(curve);
+	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
 XYEquationCurve* CartesianPlot::addEquationCurve() {
 	XYEquationCurve* curve = new XYEquationCurve("f(x)");
 	this->addChild(curve);
+	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
@@ -734,32 +751,43 @@ XYDataReductionCurve* CartesianPlot::addDataReductionCurve() {
 	return curve;
 }
 
+XYDifferentiationCurve* CartesianPlot::addDifferentiationCurve() {
+	XYDifferentiationCurve* curve = new XYDifferentiationCurve("Differentiation");
+	this->addChild(curve);
+	return curve;
+}
+
 XYInterpolationCurve* CartesianPlot::addInterpolationCurve() {
 	XYInterpolationCurve* curve = new XYInterpolationCurve("Interpolation");
 	this->addChild(curve);
+	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
 XYSmoothCurve* CartesianPlot::addSmoothCurve() {
 	XYSmoothCurve* curve = new XYSmoothCurve("Smooth");
 	this->addChild(curve);
+	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 XYFitCurve* CartesianPlot::addFitCurve() {
 	XYFitCurve* curve = new XYFitCurve("fit");
 	this->addChild(curve);
+	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
 XYFourierFilterCurve* CartesianPlot::addFourierFilterCurve() {
 	XYFourierFilterCurve* curve = new XYFourierFilterCurve("Fourier filter");
 	this->addChild(curve);
+	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
 XYFourierTransformCurve* CartesianPlot::addFourierTransformCurve() {
 	XYFourierTransformCurve* curve = new XYFourierTransformCurve("Fourier transform");
 	this->addChild(curve);
+	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
@@ -1459,7 +1487,7 @@ void CartesianPlotPrivate::retransformScales() {
 }
 
 /*!
- * don't allow any negative values on for the x range when log or sqrt scalings are used
+ * don't allow any negative values for the x range when log or sqrt scalings are used
  */
 void CartesianPlotPrivate::checkXRange() {
 	double min = 0.01;
@@ -1474,7 +1502,7 @@ void CartesianPlotPrivate::checkXRange() {
 }
 
 /*!
- * don't allow any negative values on for the y range when log or sqrt scalings are used
+ * don't allow any negative values for the y range when log or sqrt scalings are used
  */
 void CartesianPlotPrivate::checkYRange() {
 	double min = 0.01;
@@ -1489,7 +1517,7 @@ void CartesianPlotPrivate::checkYRange() {
 }
 
 CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
-	Interval<double> interval (SCALE_MIN, SCALE_MAX);
+	Interval<double> interval (logicalStart-0.01, logicalEnd+0.01); //TODO: move this to CartesianScale
 	if (type == CartesianPlot::ScaleLinear) {
 		return CartesianScale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	} else {
@@ -2037,6 +2065,12 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 				removeChild(curve);
 				return false;
 			}
+		} else if (reader->name() == "xyDifferentiationCurve") {
+			XYDifferentiationCurve* curve = addDifferentiationCurve();
+			if (!curve->load(reader)) {
+				removeChild(curve);
+				return false;
+			}
 		} else if (reader->name() == "xyInterpolationCurve") {
 			XYInterpolationCurve* curve = addInterpolationCurve();
 			if (!curve->load(reader)) {
@@ -2097,4 +2131,48 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 	}
 
 	return true;
+}
+
+//##############################################################################
+//#########################  Theme management ##################################
+//##############################################################################
+void CartesianPlot::loadTheme(const QString& name) {
+	KConfig config( ThemeHandler::themeFilePath(name), KConfig::SimpleConfig );
+	loadTheme(config);
+}
+
+void CartesianPlot::loadTheme(KConfig& config) {
+	const QString str = config.name();
+	QString themeName = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
+	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), themeName) );
+
+	const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
+	foreach(WorksheetElement *child, childElements)
+		child->loadThemeConfig(config);
+
+	const QList<XYCurve*>& childXYCurve = children<XYCurve>(AbstractAspect::IncludeHidden);
+	m_themeColorPalette = childXYCurve.last()->getColorPalette();
+
+	Q_D(CartesianPlot);
+	d->update(this->rect());
+
+	endMacro();
+}
+
+void CartesianPlot::saveTheme(KConfig &config) {
+	const QList<Axis*>& axisElements = children<Axis>(AbstractAspect::IncludeHidden);
+	const QList<PlotArea*>& plotAreaElements = children<PlotArea>(AbstractAspect::IncludeHidden);
+	const QList<TextLabel*>& textLabelElements = children<TextLabel>(AbstractAspect::IncludeHidden);
+	const QList<XYCurve*>& xyCurveElements = children<XYCurve>(AbstractAspect::IncludeHidden);
+
+	axisElements.at(0)->saveThemeConfig(config);
+	plotAreaElements.at(0)->saveThemeConfig(config);
+	textLabelElements.at(0)->saveThemeConfig(config);
+
+	foreach(XYCurve *child, xyCurveElements)
+		child->saveThemeConfig(config);
+}
+
+void CartesianPlot::applyThemeOnNewCurve(XYCurve* curve) {
+	curve->applyColorPalette(m_themeColorPalette);
 }

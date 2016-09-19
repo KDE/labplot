@@ -40,7 +40,6 @@
 
 #include <QPainter>
 #include <QMenu>
-#include <QDebug>
 #include <QTextDocument>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsSceneHoverEvent>
@@ -912,6 +911,7 @@ void AxisPrivate::retransform() {
 	if (!m_plot)
 		return;
 
+	//TODO: add comment here for why we need this
 	m_cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem());
 	if (!m_cSystem)
 		return;
@@ -1600,7 +1600,7 @@ void AxisPrivate::retransformMajorGrid() {
 		}
 	}
 
-	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping | AbstractCoordinateSystem::MarkGaps);
+	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
 	foreach (const QLineF& line, lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
@@ -1619,7 +1619,7 @@ void AxisPrivate::retransformMinorGrid() {
 	//minor tick points are already in scene coordinates, convert them back to logical...
 	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	//Currently, grid lines disappear somtimes without this flag
-	QList<QPointF> logicalMinorTickPoints = m_cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping | AbstractCoordinateSystem::MarkGaps);
+	QList<QPointF> logicalMinorTickPoints = m_cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
 
 	QList<QLineF> lines;
 	if (orientation == Axis::AxisHorizontal) { //horizontal axis
@@ -1640,7 +1640,7 @@ void AxisPrivate::retransformMinorGrid() {
 		}
 	}
 
-	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	lines = m_cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
 	foreach (const QLineF& line, lines) {
 		minorGridPath.moveTo(line.p1());
 		minorGridPath.lineTo(line.p2());
@@ -2205,4 +2205,92 @@ bool Axis::load(XmlStreamReader* reader) {
 	}
 
 	return true;
+}
+
+//##############################################################################
+//#########################  Theme management ##################################
+//##############################################################################
+void Axis::loadThemeConfig(const KConfig& config) {
+	KConfigGroup group = config.group("Axis");
+
+	QPen p;
+	// Tick label
+	this->setLabelsColor(group.readEntry("LabelsFontColor",(QColor) this->labelsColor()));
+	this->setLabelsOpacity(group.readEntry("LabelsOpacity",this->labelsOpacity()));
+
+	//Line
+	this->setLineOpacity(group.readEntry("LineOpacity",this->lineOpacity()));
+	p.setColor(group.readEntry("LineColor", (QColor) this->linePen().color()));
+	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle",(int) this->linePen().style()));
+	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
+	this->setLinePen(p);
+
+	//Major ticks
+	this->setMajorGridOpacity(group.readEntry("MajorGridOpacity", this->majorGridOpacity()));
+	p.setColor(group.readEntry("MajorGridColor",(QColor) this->majorGridPen().color()));
+	p.setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle",(int) this->majorGridPen().style()));
+	p.setWidthF(group.readEntry("MajorGridWidth", this->majorGridPen().widthF()));
+	this->setMajorGridPen(p);
+	p.setColor(group.readEntry("MajorTicksColor",(QColor)this->majorTicksPen().color()));
+	p.setStyle((Qt::PenStyle)group.readEntry("MajorTicksLineStyle",(int) this->majorTicksPen().style()));
+	p.setWidthF(group.readEntry("MajorTicksWidth", this->majorTicksPen().widthF()));
+	this->setMajorTicksPen(p);
+	this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity",this->majorTicksOpacity()));
+	this->setMajorTicksType((Axis::TicksType)group.readEntry("MajorTicksType",(int)this->majorTicksType()));
+
+	//Minor ticks
+	this->setMinorGridOpacity(group.readEntry("MinorGridOpacity", this->minorGridOpacity()));
+	p.setColor(group.readEntry("MinorGridColor",(QColor) this->minorGridPen().color()));
+	p.setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle",(int) this->minorGridPen().style()));
+	p.setWidthF(group.readEntry("MinorGridWidth", this->minorGridPen().widthF()));
+	this->setMinorGridPen(p);
+	p.setColor(group.readEntry("MinorTicksColor",(QColor) this->minorTicksPen().color()));
+	p.setStyle((Qt::PenStyle)group.readEntry("MinorTicksLineStyle",(int) this->minorTicksPen().style()));
+	p.setWidthF(group.readEntry("MinorTicksWidth", this->minorTicksPen().widthF()));
+	this->setMinorTicksPen(p);
+	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity",this->minorTicksOpacity()));
+	this->setMinorTicksType((Axis::TicksType)group.readEntry("MinorTicksType",(int)this->minorTicksType()));
+
+	const QList<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
+	foreach(TextLabel *child, childElements)
+		child->loadThemeConfig(config);
+}
+
+void Axis::saveThemeConfig(const KConfig& config) {
+	KConfigGroup group = config.group("Axis");
+
+	// Tick label
+	group.writeEntry("LabelsFontColor",(QColor) this->labelsColor());
+	group.writeEntry("LabelsOpacity",this->labelsOpacity());
+
+	//Line
+	group.writeEntry("LineOpacity",this->lineOpacity());
+	group.writeEntry("LineColor", (QColor) this->linePen().color());
+	group.writeEntry("LineStyle",(int) this->linePen().style());
+	group.writeEntry("LineWidth", this->linePen().widthF());
+
+	//Major ticks
+	group.writeEntry("MajorGridOpacity", this->majorGridOpacity());
+	group.writeEntry("MajorGridColor",(QColor) this->majorGridPen().color());
+	group.writeEntry("MajorGridStyle",(int) this->majorGridPen().style());
+	group.writeEntry("MajorGridWidth", this->majorGridPen().widthF());
+	group.writeEntry("MajorTicksColor",(QColor)this->majorTicksPen().color());
+	group.writeEntry("MajorTicksLineStyle",(int) this->majorTicksPen().style());
+	group.writeEntry("MajorTicksWidth", this->majorTicksPen().widthF());
+	group.writeEntry("MajorTicksOpacity",this->majorTicksOpacity());
+	group.writeEntry("MajorTicksType",(int)this->majorTicksType());
+
+	//Minor ticks
+	group.writeEntry("MinorGridOpacity", this->minorGridOpacity());
+	group.writeEntry("MinorGridColor",(QColor) this->minorGridPen().color());
+	group.writeEntry("MinorGridStyle",(int) this->minorGridPen().style());
+	group.writeEntry("MinorGridWidth", this->minorGridPen().widthF());
+	group.writeEntry("MinorTicksColor",(QColor) this->minorTicksPen().color());
+	group.writeEntry("MinorTicksLineStyle",(int) this->minorTicksPen().style());
+	group.writeEntry("MinorTicksWidth", this->minorTicksPen().widthF());
+	group.writeEntry("MinorTicksOpacity",this->minorTicksOpacity());
+	group.writeEntry("MinorTicksType",(int)this->minorTicksType());
+
+	const QList<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
+	childElements.at(0)->saveThemeConfig(config);
 }

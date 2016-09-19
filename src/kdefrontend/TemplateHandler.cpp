@@ -4,7 +4,7 @@
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
 	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni.kn)
-	Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -54,10 +54,10 @@
 */
 
 TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(parent){
-	horizontalLayout = new QHBoxLayout(this);
+	QHBoxLayout* horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
 
-	horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+	QSpacerItem* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 	horizontalLayout->addItem(horizontalSpacer);
 
 	int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
@@ -74,7 +74,7 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 	tbSaveDefault->setIconSize(QSize(size, size));
 	horizontalLayout->addWidget(tbSaveDefault);
 
-	horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+	QSpacerItem* horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 	horizontalLayout->addItem(horizontalSpacer2);
 
 	tbCopy = new QToolButton(this);
