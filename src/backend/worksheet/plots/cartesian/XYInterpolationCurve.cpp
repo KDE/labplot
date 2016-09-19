@@ -445,10 +445,10 @@ void XYInterpolationCurvePrivate::recalculate() {
 		case nsl_interp_evaluate_function:
 			break;
 		case nsl_interp_evaluate_derivative:
-			nsl_diff_deriv_first(xVector->data(), yVector->data(), npoints);
+			nsl_diff_first_deriv_second_order(xVector->data(), yVector->data(), npoints);
 			break;
 		case nsl_interp_evaluate_second_derivative:
-			nsl_diff_deriv_second(xVector->data(), yVector->data(), npoints);
+			nsl_diff_second_deriv_second_order(xVector->data(), yVector->data(), npoints);
 			break;
 		case nsl_interp_evaluate_integral:
 			nsl_interp_integral(xVector->data(), yVector->data(), npoints);

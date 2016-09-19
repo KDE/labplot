@@ -62,7 +62,20 @@ int nsl_diff_deriv_first_equal(const double *x, double *y, const size_t n) {
 	return 0;
 }
 
-int nsl_diff_deriv_first(const double *x, double *y, const size_t n) {
+int nsl_diff_first_deriv(const double *x, double *y, const size_t n, int order) {
+	switch (order) {
+	case 2:
+		return nsl_diff_first_deriv_second_order(x, y, n);
+	/*TODO: higher order */
+	default:
+		printf("nsl_diff_first_deriv() unknown order %d\n", order);
+		return -1;
+	}
+
+	return 0;
+}
+
+int nsl_diff_first_deriv_second_order(const double *x, double *y, const size_t n) {
 	if (n < 3)
 		return -1;
 
@@ -92,7 +105,7 @@ int nsl_diff_deriv_first(const double *x, double *y, const size_t n) {
 	return 0;
 }
 
-int nsl_diff_deriv_first_avg(const double *x, double *y, const size_t n) {
+int nsl_diff_first_deriv_avg(const double *x, double *y, const size_t n) {
 	if (n < 1)
 		return -1;
 
@@ -116,38 +129,100 @@ int nsl_diff_deriv_first_avg(const double *x, double *y, const size_t n) {
 	return 0;
 }
 
-int nsl_diff_deriv_second(const double *x, double *y, const size_t n) {
+int nsl_diff_second_deriv(const double *x, double *y, const size_t n, int order) {
+	switch (order) {
+	case 1:
+		return nsl_diff_second_deriv_first_order(x, y, n);
+	case 2:
+		return nsl_diff_second_deriv_second_order(x, y, n);
+	/*TODO: higher order */
+	default:
+		printf("nsl_diff_second_deriv() unknown order %d\n", order);
+		return -1;
+	}
+
+	return 0;
+}
+
+int nsl_diff_second_deriv_first_order(const double *x, double *y, const size_t n) {
 	if (n < 3)
 		return -1;
 
-	/* TODO: same order for all points */
-	double h1, h2, dy=0., oldy=0., oldoldy=0.;
+	double h1, h2, h12, dy=0., oldy=0., oldy2=0.;
 	size_t i;
 	for (i=0; i<n; i++) {
 		if (i == 0) {
 			h1 = x[1]-x[0];
 			h2 = x[2]-x[1];
-			dy = 2.*(h1*y[2] - (h1+h2)*y[1] + h2*y[0])/(h1*h2*(h1+h2));
+			h12 = h1 + h2;
+			/*first order */
+			dy = 2.*(h1*y[2] - h12*y[1] + h2*y[0])/(h1*h2*h12);
 		}
 		else if (i == n-1) {
 			h1 = x[i-1]-x[i-2];
 			h2 = x[i]-x[i-1];
-			y[i] = 2.*(h1*y[i] - (h1+h2)*y[i-1] + h2*y[i-2])/(h1*h2*(h1+h2));
+			h12 = h1 + h2;
+			/*first order */
+			y[i] = 2.*(h1*y[i] - h12*y[i-1] + h2*y[i-2])/(h1*h2*h12);
 			y[i-1] = oldy;
 		}
 		else {
 			h1 = x[i]-x[i-1];
 			h2 = x[i+1]-x[i];
-			dy = 2.*(h1*y[i+1] - (h1+h2)*y[i] + h2*y[i-1])/(h1*h2*(h1+h2));
+			h12 = h1 + h2;
+			/*second order */
+			dy = 2.*(h1*y[i+1] - h12*y[i] + h2*y[i-1])/(h1*h2*h12);
 		}
 
 		if (i > 1)
-			y[i-2] = oldoldy;
+			y[i-2] = oldy2;
 		if (i > 0 && i < n-1)
-			oldoldy = oldy;
+			oldy2 = oldy;
 
 		oldy = dy;
 	}
-	
+
+	return 0;
+}
+
+int nsl_diff_second_deriv_second_order(const double *x, double *y, const size_t n) {
+	if (n < 3)
+		return -1;
+
+	/* TODO: same order for all points */
+	double h1, h2, h12, dy=0., oldy=0., oldy2=0., oldy3=0.;
+	size_t i;
+	for (i=0; i<n; i++) {
+		if (i == 0) {
+			h1 = x[1]-x[0];
+			h2 = x[2]-x[1];
+			h12 = h1 + h2;
+			/*first order */
+			dy = 2.*(h1*y[2] - h12*y[1] + h2*y[0])/(h1*h2*h12);
+		}
+		else if (i == n-1) {
+			h1 = x[i-1]-x[i-2];
+			h2 = x[i]-x[i-1];
+			h12 = h1 + h2;
+			/*first order */
+			y[i] = 2.*(h1*y[i] - h12*y[i-1] + h2*y[i-2])/(h1*h2*h12);
+			y[i-1] = oldy;
+		}
+		else {
+			h1 = x[i]-x[i-1];
+			h2 = x[i+1]-x[i];
+			h12 = h1 + h2;
+			/*second order */
+			dy = 2.*(h1*y[i+1] - h12*y[i] + h2*y[i-1])/(h1*h2*h12);
+		}
+
+		if (i > 1)
+			y[i-2] = oldy2;
+		if (i > 0 && i < n-1)
+			oldy2 = oldy;
+
+		oldy = dy;
+	}
+
 	return 0;
 }

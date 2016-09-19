@@ -254,10 +254,10 @@ void XYDifferentiationCurvePrivate::recalculate() {
 
 	switch (order) {
 	case 1:
-		status = nsl_diff_deriv_first(xdata, ydata, n);
+		status = nsl_diff_first_deriv_second_order(xdata, ydata, n);
 		break;
 	case 2:
-		status = nsl_diff_deriv_second(xdata, ydata, n);
+		status = nsl_diff_second_deriv_second_order(xdata, ydata, n);
 		break;
 	}
 
