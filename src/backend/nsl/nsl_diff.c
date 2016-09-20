@@ -25,6 +25,11 @@
  *                                                                         *
  ***************************************************************************/
 
+/* TODO:
+	* check that all functions really work with minimum number of points
+	* add more orders
+*/
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -120,29 +125,55 @@ int nsl_diff_first_deriv_fourth_order(const double *x, double *y, const size_t n
 	if (n < 5)
 		return -1;
 
-	/* TODO */
-	double h1, h2, h12, dy, oldy, oldy2, oldy3, oldy4;
+	double h1, h2, h3, h4, h12, h23, h34, h13, h24, h14, dy, oldy, oldy2, oldy3, oldy4;
 	size_t i;
 	for (i=0; i < n; i++) {
-		if (i == 0) {	
+		if (i == 0) {
 			h1 = x[1]-x[0];
 			h2 = x[2]-x[1];
+			h3 = x[3]-x[2];
+			h4 = x[4]-x[3];
 			h12 = h1 + h2;
-			/* TODO: 5-point forward */
-			dy = (y[1]-y[0])/h1 - (y[2]-y[1])/h2 + (y[2]-y[0])/(h1+h2);
+			h23 = h2 + h3;
+			h34 = h3 + h4;
+			h13 = h12 + h3;
+			h24 = h23 + h4;
+			h14 = h12 + h34;
+			/* 5-point forward */
+			dy = -y[0]*(1./h1+1./h12+1./h13+1./h14) + y[1]*(h12*h13*h14)/(h1*h2*h23*h24) - y[2]*h1*h13*h14/(h12*h2*h3*h34)
+				+ y[3]*h1*h12*h14/(h13*h23*h3*h4) - y[4]*h1*h12*h13/(h14*h24*h34*h4);
+		} else if (i == 1) {
+			/* using values from i==0 */
+			/* 5-point left */
+			dy = -y[0]*h2*h23*h24/(h1*h12*h13*h14) + y[1]*(1./h1-1./h2-1./h23-1./h24) + y[2]*h1*h23*h24/(h12*h2*h3*h34)
+				- y[3]*h1*h2*h24/(h13*h23*h3*h4) + y[4]*h1*h2*h23/(h14*h24*h34*h4);
+		} else if (i == n-2) {
+			/* using values from i==n-3*/
+			/* 5-point right */
+			dy = -y[i-3]*h23*h3*h4/(h1*h12*h13*h14) + y[i-2]*h13*h3*h4/(h1*h2*h23*h24) - y[i-1]*h13*h23*h4/(h12*h2*h3*h34)
+				 + y[i]*(1./h13+1./h23+1./h3-1./h4) + y[i+1]*h13*h23*h3/(h14*h24*h34*h4);
 		} else if (i == n-1) {
-			h1 = x[i-1]-x[i-2];
-			h2 = x[i]-x[i-1];
-			/* TODO: 5-point backward */
-			y[i] = (y[i]-y[i-1])/h2 - (y[i-1]-y[i-2])/h1 + (y[i]-y[i-2])/(h1+h2);
+			/* using values from i==n-3*/
+			/* 5-point backward */
+			y[i] = y[i-4]*h24*h34*h4/(h1*h12*h13*h14) - y[i-3]*h14*h34*h4/(h1*h2*h23*h24) + y[i-2]*h14*h24*h4/(h12*h2*h3*h34)
+				- y[i-1]*h14*h24*h34/(h13*h23*h3*h4) + y[i]*(1./h14+1./h24+1./h34+1./h4);
 			y[i-3] = oldy3;
 			y[i-2] = oldy2;
 			y[i-1] = oldy;
 		} else {
-			h1 = x[i]-x[i-1];
-			h2 = x[i+1]-x[i];
-			/* TODO: 5-point center */
-			dy = ( (y[i+1]-y[i])*h1*h1 + (y[i]-y[i-1])*h2*h2)/(h1*h2*(h1+h2));
+			h1 = x[i-1]-x[i-2];
+			h2 = x[i]-x[i-1];
+			h3 = x[i+1]-x[i];
+			h4 = x[i+2]-x[i+1];
+			h12 = h1 + h2;
+			h23 = h2 + h3;
+			h34 = h3 + h4;
+			h13 = h12 + h3;
+			h24 = h23 + h4;
+			h14 = h12 + h34;
+			/* 5-point center */
+			dy = y[i-2]*h2*h3*h34/(h1*h12*h13*h14) - y[i-1]*h12*h3*h34/(h1*h2*h23*h24) + y[i]*(1./h12+1./h2-1./h3-1./h34)
+				+ y[i+1]*h12*h2*h34/(h13*h23*h3*h4) - y[i+2]*h12*h2*h3/(h14*h24*h34*h4);
 		}
 
 		if (i > 3)

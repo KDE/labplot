@@ -40,12 +40,20 @@ int main() {
 		printf("%g %g\n", xdata[i], ydata[i]);
 	puts("");
 
-	printf("expecting 2*x as derivative:\n");
+	printf("expecting 2*x as derivative (second order):\n");
 	/*int status = nsl_diff_deriv_first_equal(xdata, ydata, n);*/
 	int status = nsl_diff_first_deriv(xdata, ydata, n, 2);
 
 	for (i=0; i < n; i++)
 		printf("%g %g\n", xdata[i], ydata[i]);
+	puts("");
+
+	printf("expecting 2*x as derivative (fourth order):\n");
+	double ydata4[]={1,4,16,64,256,1024,4096};
+	status = nsl_diff_first_deriv(xdata, ydata4, n, 4);
+
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata4[i]);
 	puts("");
 
 	printf("avg derivative:\n");
