@@ -58,5 +58,6 @@ int nsl_diff_first_deriv_avg(const double *x, double *y, const size_t n);
 int nsl_diff_second_deriv(const double *x, double *y, const size_t n, int order);
 int nsl_diff_second_deriv_first_order(const double *x, double *y, const size_t n);
 int nsl_diff_second_deriv_second_order(const double *x, double *y, const size_t n);
+int nsl_diff_second_deriv_third_order(const double *x, double *y, const size_t n);
 
 #endif /* NSL_DIFF_H */

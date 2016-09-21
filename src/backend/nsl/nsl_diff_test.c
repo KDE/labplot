@@ -64,12 +64,21 @@ int main() {
 		printf("%g %g\n", xdata[i], ydata2[i]);
 	puts("");
 
-	printf("expecting 2 as second derivative:\n");
+	printf("expecting 2 as second derivative (second order):\n");
 	double ydata3[]={1,4,16,64,256,1024,4096};
 	status = nsl_diff_second_deriv(xdata, ydata3, n, 2);
 
 	for (i=0; i < n; i++)
 		printf("%g %g\n", xdata[i], ydata3[i]);
+	puts("");
+
+	printf("expecting 2 as second derivative (third order):\n");
+	double ydata5[]={1,4,16,64,256,1024,4096};
+	status = nsl_diff_second_deriv(xdata, ydata5, n, 3);
+
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata5[i]);
+	puts("");
 
 	return 0;
 }
