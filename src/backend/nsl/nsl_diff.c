@@ -35,6 +35,7 @@
 #include <stdlib.h>
 #include <float.h>
 #include "nsl_diff.h"
+#include "nsl_sf_poly.h"
 
 double nsl_diff_first_central(double xm, double fm, double xp, double fp) {
 	return (fp - fm)/(xp - xm);
@@ -86,28 +87,23 @@ int nsl_diff_first_deriv_second_order(const double *x, double *y, const size_t n
 	if (n < 3)
 		return -1;
 
-	double h1, h2, h12, dy, oldy, oldy2;
+	double dy, oldy, oldy2, xdata[3], ydata[3];
 	size_t i;
 	for (i=0; i < n; i++) {
-		if (i == 0) {	
-			h1 = x[1]-x[0];
-			h2 = x[2]-x[1];
-			h12 = h1 + h2;
+		if (i == 0) {
 			/* 3-point forward */
-			dy = (y[1]-y[0])/h1 - (y[2]-y[1])/h2 + (y[2]-y[0])/h12;
+			xdata[0]=x[0], xdata[1]=x[1], xdata[2]=x[2];
+			ydata[0]=y[0], ydata[1]=y[1], ydata[2]=y[2];
+			dy = nsl_sf_poly_interp_lagrange_2_deriv(x[0], xdata, ydata);
 		} else if (i == n-1) {
-			h1 = x[i-1]-x[i-2];
-			h2 = x[i]-x[i-1];
-			h12 = h1 + h2;
 			/* 3-point backward */
-			y[i] = (y[i]-y[i-1])/h2 - (y[i-1]-y[i-2])/h1 + (y[i]-y[i-2])/h12;
+			y[i] = nsl_sf_poly_interp_lagrange_2_deriv(x[i], xdata, ydata);
 			y[i-1] = oldy;
 		} else {
-			h1 = x[i]-x[i-1];
-			h2 = x[i+1]-x[i];
-			h12 = h1 + h2;
 			/* 3-point center */
-			dy = ( (y[i+1]-y[i])*h1*h1 + (y[i]-y[i-1])*h2*h2)/(h1*h2*h12);
+			xdata[0]=x[i-1], xdata[1]=x[i], xdata[2]=x[i+1];
+			ydata[0]=y[i-1], ydata[1]=y[i], ydata[2]=y[i+1];
+			dy = nsl_sf_poly_interp_lagrange_2_deriv(x[i], xdata, ydata);
 		}
 
 		if (i > 1)

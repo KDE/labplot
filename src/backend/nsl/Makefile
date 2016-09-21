@@ -25,7 +25,7 @@ nsl_geom_linesim_test: nsl_geom_linesim_test.c nsl_geom_linesim.c nsl_geom.c nsl
 	gcc -o $@ $^ -lm -lgsl -lgslcblas
 nsl_geom_linesim_morse_test: nsl_geom_linesim_morse_test.c nsl_geom_linesim.c nsl_geom.c nsl_sort.c nsl_stats.c
 	gcc -O2 -o $@ $^ -lm -lgsl -lgslcblas
-nsl_diff_test: nsl_diff_test.c nsl_diff.c
+nsl_diff_test: nsl_diff_test.c nsl_diff.c nsl_sf_poly.c
 	gcc -o $@ $^ -lm -lgsl -lgslcblas
 
 clean:
