@@ -142,7 +142,7 @@ double nsl_sf_poly_interp_lagrange_3(double v, double *x, double *y) {
 }
 
 double nsl_sf_poly_interp_lagrange_3_deriv(double v, double *x, double *y) {
-	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2], S=x[1]+x[2]+x[3]+x[4];
+	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2], S = x[0]+x[1]+x[2]+x[3];
 	double h12 = h1+h2, h23 = h2+h3, h13=h12+h3;
 
 	return -y[0]*(3*v*v-2.*v*(S-x[0])+x[1]*x[2]+(S-x[0]-x[3])*x[3])/(h1*h12*h13)
@@ -152,11 +152,11 @@ double nsl_sf_poly_interp_lagrange_3_deriv(double v, double *x, double *y) {
 }
 
 double nsl_sf_poly_interp_lagrange_3_deriv2(double v, double *x, double *y) {
-	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2], S=x[1]+x[2]+x[3]+x[4];
+	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2], S = x[0]+x[1]+x[2]+x[3];
 	double h12 = h1+h2, h23 = h2+h3, h13=h12+h3;
 
 	return 2.*( y[0]*(S-3.*v-x[0])/(h1*h12*h13) + y[1]*(3.*v-S+x[1])/(h1*h2*h23) 
-			+ y[2]*(S-3.*v-x[2])/(h12*h2*h3) +y[3]*(3.*v-S+x[3])/(h13*h23*h3) );
+			+ y[2]*(S-3.*v-x[2])/(h12*h2*h3) + y[3]*(3.*v-S+x[3])/(h13*h23*h3) );
 }
 
 double nsl_sf_poly_interp_lagrange_3_deriv3(double *x, double *y) {

@@ -88,12 +88,12 @@ int nsl_diff_first_deriv_second_order(const double *x, double *y, const size_t n
 		return -1;
 
 	double dy, oldy, oldy2, xdata[3], ydata[3];
-	size_t i;
+	size_t i, j;
 	for (i=0; i < n; i++) {
 		if (i == 0) {
 			/* 3-point forward */
-			xdata[0]=x[0], xdata[1]=x[1], xdata[2]=x[2];
-			ydata[0]=y[0], ydata[1]=y[1], ydata[2]=y[2];
+			for (j=0; j < 3; j++)
+				xdata[j]=x[j], ydata[j]=y[j];
 			dy = nsl_sf_poly_interp_lagrange_2_deriv(x[0], xdata, ydata);
 		} else if (i == n-1) {
 			/* 3-point backward */
@@ -101,8 +101,8 @@ int nsl_diff_first_deriv_second_order(const double *x, double *y, const size_t n
 			y[i-1] = oldy;
 		} else {
 			/* 3-point center */
-			xdata[0]=x[i-1], xdata[1]=x[i], xdata[2]=x[i+1];
-			ydata[0]=y[i-1], ydata[1]=y[i], ydata[2]=y[i+1];
+			for (j=0; j < 3; j++)
+				xdata[j]=x[i-1+j], ydata[j]=y[i-1+j];
 			dy = nsl_sf_poly_interp_lagrange_2_deriv(x[i], xdata, ydata);
 		}
 
@@ -121,6 +121,7 @@ int nsl_diff_first_deriv_fourth_order(const double *x, double *y, const size_t n
 	if (n < 5)
 		return -1;
 
+	/*TODO: use interp. poly. */
 	double h1, h2, h3, h4, h12, h23, h34, h13, h24, h14, dy, oldy, oldy2, oldy3, oldy4;
 	size_t i;
 	for (i=0; i < n; i++) {
@@ -231,30 +232,25 @@ int nsl_diff_second_deriv_first_order(const double *x, double *y, const size_t n
 	if (n < 3)
 		return -1;
 
-	double h1, h2, h12, dy, oldy, oldy2;
-	size_t i;
+	double dy, oldy, oldy2, xdata[3], ydata[3];
+	size_t i, j;
 	for (i=0; i<n; i++) {
 		if (i == 0) {
-			h1 = x[1]-x[0];
-			h2 = x[2]-x[1];
-			h12 = h1 + h2;
 			/* 3-point forward: first order */
-			dy = 2.*(h1*y[2] - h12*y[1] + h2*y[0])/(h1*h2*h12);
+			for (j=0; j < 3; j++)
+				xdata[j]=x[j], ydata[j]=y[j];
+			dy = nsl_sf_poly_interp_lagrange_2_deriv2(xdata, ydata);
 		}
 		else if (i == n-1) {
-			h1 = x[i-1]-x[i-2];
-			h2 = x[i]-x[i-1];
-			h12 = h1 + h2;
 			/* 3-point backward: first order */
-			y[i] = 2.*(h1*y[i] - h12*y[i-1] + h2*y[i-2])/(h1*h2*h12);
+			y[i] = nsl_sf_poly_interp_lagrange_2_deriv2(xdata, ydata);
 			y[i-1] = oldy;
 		}
 		else {
-			h1 = x[i]-x[i-1];
-			h2 = x[i+1]-x[i];
-			h12 = h1 + h2;
 			/* 3-point center: second order */
-			dy = 2.*(h1*y[i+1] - h12*y[i] + h2*y[i-1])/(h1*h2*h12);
+			for (j=0; j < 3; j++)
+				xdata[j]=x[i-1+j], ydata[j]=y[i-1+j];
+			dy = nsl_sf_poly_interp_lagrange_2_deriv2(xdata, ydata);
 		}
 
 		if (i > 1)
@@ -272,37 +268,28 @@ int nsl_diff_second_deriv_second_order(const double *x, double *y, const size_t 
 	if (n < 4)
 		return -1;
 
-	double h1, h2, h3, h12, h23, h13, dy, oldy, oldy2, oldy3;
-	size_t i;
+	double dy, oldy, oldy2, oldy3, xdata[4], ydata[4];
+	size_t i, j;
 	for (i=0; i<n; i++) {
 		if (i == 0) {
-			h1 = x[1]-x[0];
-			h2 = x[2]-x[1];
-			h3 = x[3]-x[2];
-			h12 = h1 + h2;
-			h23 = h2 + h3;
-			h13 = h1 + h23;
 			/* 4-point forward */
-			dy = 2.*( y[0]*(h1+h12+h13)/(h1*h12*h13) - y[1]*(h12+h13)/(h1*h2*h23) + y[2]*(h1+h13)/(h12*h2*h3) - y[3]*(h1+h12)/(h13*h23*h3) );
+			for (j=0; j < 4; j++)
+				xdata[j]=x[j], ydata[j]=y[j];
+			dy = nsl_sf_poly_interp_lagrange_3_deriv2(x[0], xdata, ydata);
 		}
 		else if (i == n-1) {
-			h1 = x[i-2]-x[i-3];
-			h2 = x[i-1]-x[i-2];
-			h3 = x[i]-x[i-1];
-			h12 = h1 + h2;
-			h23 = h2 + h3;
-			h13 = h1 + h23;
 			/* 4-point backward */
-			y[i] = 2.*( y[i]*(h13+h23+h3)/(h13*h23*h3) - y[i-1]*(h13+h23)/(h12*h2*h3) + y[i-2]*(h13+h3)/(h1*h2*h23) - y[i-3]*(h23+h3)/(h1*h12*h13) );
-			y[i-2] = oldy2;
+			for (j=0; j < 4; j++)
+				xdata[j]=x[i-3+j], ydata[j]=y[i-3+j];
+			y[i] = nsl_sf_poly_interp_lagrange_3_deriv2(x[i], xdata, ydata);
 			y[i-1] = oldy;
+			y[i-2] = oldy2;
 		}
 		else {
-			h1 = x[i]-x[i-1];
-			h2 = x[i+1]-x[i];
-			h12 = h1 + h2;
 			/* 3-point center */
-			dy = 2.*(h1*y[i+1] - h12*y[i] + h2*y[i-1])/(h1*h2*h12);
+			xdata[0]=x[i-1], xdata[1]=x[i], xdata[2]=x[i+1];
+			ydata[0]=y[i-1], ydata[1]=y[i], ydata[2]=y[i+1];
+			dy = nsl_sf_poly_interp_lagrange_2_deriv2(xdata, ydata);
 		}
 
 		if (i > 2)
@@ -322,6 +309,7 @@ int nsl_diff_second_deriv_third_order(const double *x, double *y, const size_t n
 	if (n < 5)
 		return -1;
 
+	/*TODO: use interp. poly. */
 	double h1, h2, h3, h4, h12, h23, h34, h13, h24, h14, dy, oldy, oldy2, oldy3, oldy4;
 	size_t i;
 	for (i=0; i < n; i++) {
