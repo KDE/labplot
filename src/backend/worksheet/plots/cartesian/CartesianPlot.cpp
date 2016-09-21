@@ -1517,7 +1517,8 @@ void CartesianPlotPrivate::checkYRange() {
 }
 
 CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
-	Interval<double> interval (logicalStart-0.01, logicalEnd+0.01); //TODO: move this to CartesianScale
+// 	Interval<double> interval (logicalStart-0.01, logicalEnd+0.01); //TODO: move this to CartesianScale
+	Interval<double> interval (-1E15, 1E15);
 	if (type == CartesianPlot::ScaleLinear) {
 		return CartesianScale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	} else {
