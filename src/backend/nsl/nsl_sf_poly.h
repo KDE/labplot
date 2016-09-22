@@ -55,6 +55,7 @@ double complex nsl_sf_poly_reversed_bessel_theta(int n, double complex x);
 	2 - second order (3-point) and derivatives
 	3 - third order (4-point) and derivatives
 	4 - fourth order (5-point) and derivatives
+	6 - sixth order (7-point) and derivatives
 	TODO: barycentric form (https://en.wikipedia.org/wiki/Lagrange_polynomial)
 */
 double nsl_sf_poly_interp_lagrange_1(double v, double *x, double *y);
@@ -71,5 +72,8 @@ double nsl_sf_poly_interp_lagrange_4_deriv(double v, double *x, double *y);
 double nsl_sf_poly_interp_lagrange_4_deriv2(double v, double *x, double *y);
 double nsl_sf_poly_interp_lagrange_4_deriv3(double v, double *x, double *y);
 double nsl_sf_poly_interp_lagrange_4_deriv4(double *x, double *y);
+double nsl_sf_poly_interp_lagrange_6_deriv4(double v, double *x, double *y);
+double nsl_sf_poly_interp_lagrange_6_deriv5(double v, double *x, double *y);
+double nsl_sf_poly_interp_lagrange_6_deriv6(double *x, double *y);
 
 #endif /* NSL_SF_POLY_H */

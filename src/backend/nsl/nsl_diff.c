@@ -269,7 +269,7 @@ int nsl_diff_second_deriv_third_order(const double *x, double *y, const size_t n
 		if (i == 0)
 			for (j=0; j < 5; j++)
 				xdata[j]=x[j], ydata[j]=y[j];
-		else if (i > 1 && i < n-2)
+		else if (i > 2 && i < n-3)
 			for (j=0; j < 5; j++)
 				xdata[j]=x[i-2+j], ydata[j]=y[i-2+j];
 
@@ -313,7 +313,7 @@ int nsl_diff_third_deriv_second_order(const double *x, double *y, const size_t n
 		if (i == 0)
 			for (j=0; j < 5; j++)
 				xdata[j]=x[j], ydata[j]=y[j];
-		else if (i > 1 && i < n-2)
+		else if (i > 2 && i < n-3)
 			for (j=0; j < 5; j++)
 				xdata[j]=x[i-2+j], ydata[j]=y[i-2+j];
 
@@ -338,6 +338,8 @@ int nsl_diff_fourth_deriv(const double *x, double *y, const size_t n, int order)
 	switch (order) {
 	case 1:
 		return nsl_diff_fourth_deriv_first_order(x, y, n);
+	case 3:
+		return nsl_diff_fourth_deriv_third_order(x, y, n);
 	/*TODO: higher order */
 	default:
 		printf("nsl_diff_fourth_deriv() unsupported order %d\n", order);
@@ -357,7 +359,7 @@ int nsl_diff_fourth_deriv_first_order(const double *x, double *y, const size_t n
 		if (i == 0)
 			for (j=0; j < 5; j++)
 				xdata[j]=x[j], ydata[j]=y[j];
-		else if (i > 1 && i < n-2)
+		else if (i > 2 && i < n-3)
 			for (j=0; j < 5; j++)
 				xdata[j]=x[i-2+j], ydata[j]=y[i-2+j];
 
@@ -371,6 +373,125 @@ int nsl_diff_fourth_deriv_first_order(const double *x, double *y, const size_t n
 		if (i > 3)
 			y[i-4] = dy[4];
 		for (j=4; j > 0; j--)
+			if (i >= j-1)
+				dy[j] = dy[j-1];
+	}
+
+	return 0;
+}
+
+int nsl_diff_fourth_deriv_third_order(const double *x, double *y, const size_t n) {
+	if (n < 7)
+		return -1;
+
+	double dy[7], xdata[7], ydata[7];
+	size_t i, j;
+	for (i=0; i < n; i++) {
+		if (i == 0)
+			for (j=0; j < 7; j++)
+				xdata[j]=x[j], ydata[j]=y[j];
+		else if (i > 3 && i < n-4)
+			for (j=0; j < 7; j++)
+				xdata[j]=x[i-3+j], ydata[j]=y[i-3+j];
+
+		/* 7-point rule */
+		dy[0] = nsl_sf_poly_interp_lagrange_6_deriv4(x[i], xdata, ydata);
+
+		if (i == n-1)
+			for (j=0; j < 6; j++)
+				y[i-j] = dy[j];
+
+		if (i > 5)
+			y[i-6] = dy[6];
+		for (j=6; j > 0; j--)
+			if (i >= j-1)
+				dy[j] = dy[j-1];
+	}
+
+	return 0;
+}
+
+int nsl_diff_fifth_deriv(const double *x, double *y, const size_t n, int order) {
+	switch (order) {
+	case 2:
+		return nsl_diff_fifth_deriv_second_order(x, y, n);
+	/*TODO: higher order */
+	default:
+		printf("nsl_diff_fifth_deriv() unsupported order %d\n", order);
+		return -1;
+	}
+
+	return 0;
+}
+
+int nsl_diff_fifth_deriv_second_order(const double *x, double *y, const size_t n) {
+	if (n < 7)
+		return -1;
+
+	double dy[7], xdata[7], ydata[7];
+	size_t i, j;
+	for (i=0; i < n; i++) {
+		if (i == 0)
+			for (j=0; j < 7; j++)
+				xdata[j]=x[j], ydata[j]=y[j];
+		else if (i > 3 && i < n-4)
+			for (j=0; j < 7; j++)
+				xdata[j]=x[i-3+j], ydata[j]=y[i-3+j];
+
+		/* 7-point rule */
+		dy[0] = nsl_sf_poly_interp_lagrange_6_deriv5(x[i], xdata, ydata);
+
+		if (i == n-1)
+			for (j=0; j < 6; j++)
+				y[i-j] = dy[j];
+
+		if (i > 5)
+			y[i-6] = dy[6];
+		for (j=6; j > 0; j--)
+			if (i >= j-1)
+				dy[j] = dy[j-1];
+	}
+
+	return 0;
+}
+
+int nsl_diff_six_deriv(const double *x, double *y, const size_t n, int order) {
+	switch (order) {
+	case 1:
+		return nsl_diff_sixth_deriv_first_order(x, y, n);
+	/*TODO: higher order */
+	default:
+		printf("nsl_diff_sixth_deriv() unsupported order %d\n", order);
+		return -1;
+	}
+
+	return 0;
+}
+
+int nsl_diff_sixth_deriv_first_order(const double *x, double *y, const size_t n) {
+	if (n < 7)
+		return -1;
+
+	double dy[7], xdata[7], ydata[7];
+	size_t i, j;
+	for (i=0; i < n; i++) {
+		if (i == 0)
+			for (j=0; j < 7; j++)
+				xdata[j]=x[j], ydata[j]=y[j];
+		else if (i > 3 && i < n-4)
+			for (j=0; j < 7; j++)
+				xdata[j]=x[i-3+j], ydata[j]=y[i-3+j];
+
+		/* 7-point rule */
+		dy[0] = nsl_sf_poly_interp_lagrange_6_deriv6(xdata, ydata);
+
+		if (i == n-1)
+			for (j=0; j < 6; j++)
+				y[i-j] = dy[j];
+
+		if (i > 5)
+			y[i-6] = dy[6];
+		for (j=6; j > 0; j--)
 			if (i >= j-1)
 				dy[j] = dy[j-1];
 	}

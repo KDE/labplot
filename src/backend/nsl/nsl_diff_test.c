@@ -33,8 +33,8 @@ int main() {
 	const double xdata[]={1,2,4,8,16,32,64};
 	const int n=7;
 
-	printf("function x^2/x^3:\n");
-	/*for (i=0; i < n; i++)
+	/*printf("function x^2/x^3:\n");
+	for (i=0; i < n; i++)
 		printf("%g %g\n", xdata[i], ydata[i]);
 	puts("");*/
 
@@ -102,6 +102,30 @@ int main() {
 
 	for (i=0; i < n; i++)
 		printf("%g %g\n", xdata[i], ydata8[i]);
+	puts("");
+
+	printf("expecting 0 as fourth derivative (third order):\n");
+	double ydata9[]={1,8,64,512,4096,32768,262144};
+	status = nsl_diff_fourth_deriv(xdata, ydata9, n, 3);
+
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata9[i]);
+	puts("");
+
+	printf("expecting 0 as fifth derivative (second order):\n");
+	double ydata10[]={1,8,64,512,4096,32768,262144};
+	status = nsl_diff_fifth_deriv(xdata, ydata10, n, 2);
+
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata10[i]);
+	puts("");
+
+	printf("expecting 0 as sixth derivative (first order):\n");
+	double ydata11[]={1,8,64,512,4096,32768,262144};
+	status = nsl_diff_six_deriv(xdata, ydata11, n, 1);
+
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata11[i]);
 	puts("");
 
 	return 0;
