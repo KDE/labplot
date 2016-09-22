@@ -177,26 +177,42 @@ double nsl_sf_poly_interp_lagrange_4(double v, double *x, double *y) {
 		+ y[4]*(v-x[0])*(v-x[1])*(v-x[2])*(v-x[3])/(h14*h24*h34*h4);
 }
 
+/* 1/2 sum_{i != j}^n (x_i x_j) for n=4 */
+double sum_of_2product_combinations_4_2(double a, double b, double c, double d) {
+	return a*(b+c+d) + b*(c+d) + c*d;
+}
+
+/* 1/6 sum_{i != j, j != k, i != k}^n (x_i x_j x_k) for n=4 */
+double sum_of_3product_combinations_4_6(double a, double b, double c, double d) {
+	return a*(b*(c+d) + c*d) + b*c*d;
+}
+
 double nsl_sf_poly_interp_lagrange_4_deriv(double v, double *x, double *y) {
 	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2], h4 = x[4]-x[3], S = x[0]+x[1]+x[2]+x[3]+x[4];
 	double h12 = h1+h2, h23 = h2+h3, h34 = h3+h4, h13=h12+h3, h24 = h23+h4, h14 = h12+h34;
 
-	return y[0]*(4.*v*v*v-3.*v*v*(S-x[0])-x[1]*x[2]*x[3]-(x[2]*x[3]+x[1]*(x[2]+x[3]))*x[4]+2.*v*((S-x[0]-x[1])*x[1]+x[2]*x[3]+(x[2]+x[3])*x[4]) )/(h1*h12*h13*h14)
-		+y[1]*(-4.*v*v*v+3.*v*v*(S-x[1])+x[2]*x[3]*x[4]+x[0]*(x[3]*x[4]+x[2]*(x[3]+x[4]))-2.*v*((S-x[0]-x[1])*x[0]+x[3]*x[4]+(x[3]+x[4])*x[2]) )/(h1*h2*h23*h24)
-		+y[2]*(4.*v*v*v-3.*v*v*(S-x[2])-x[1]*x[3]*x[4]-x[0]*(x[1]*x[3]+x[4]*(x[1]+x[3]))+2.*v*((S-x[0]-x[2])*x[0]+x[1]*x[3]+(x[1]+x[3])*x[4]) )/(h12*h2*h3*h34)
-		+y[3]*(-4.*v*v*v+3.*v*v*(S-x[3])+x[1]*x[2]*x[4]+x[0]*(x[2]*x[4]+x[1]*(x[2]+x[4]))-2.*v*((S-x[0]-x[3])*x[0]+x[2]*x[4]+(x[2]+x[4])*x[1]) )/(h13*h23*h3*h4)
-		+y[4]*(4.*v*v*v-3.*v*v*(S-x[4])-x[0]*x[1]*x[2]-x[3]*(x[1]*x[2]+x[0]*(x[1]+x[2]))+2.*v*((S-x[0]-x[4])*x[0]+x[1]*x[2]+(x[1]+x[2])*x[3]) )/(h14*h24*h34*h4);
+	return    y[0]*(4.*v*v*v - 3.*v*v*(S-x[0]) - sum_of_3product_combinations_4_6(x[1],x[2],x[3],x[4])
+			+ 2.*v*sum_of_2product_combinations_4_2(x[1],x[2],x[3],x[4]) )/(h1*h12*h13*h14)
+		- y[1]*(4.*v*v*v - 3.*v*v*(S-x[1]) - sum_of_3product_combinations_4_6(x[0],x[2],x[3],x[4])
+			+ 2.*v*sum_of_2product_combinations_4_2(x[0],x[2],x[3],x[4]) )/(h1*h2*h23*h24)
+		+ y[2]*(4.*v*v*v - 3.*v*v*(S-x[2]) - sum_of_3product_combinations_4_6(x[0],x[1],x[3],x[4])
+			+ 2.*v*sum_of_2product_combinations_4_2(x[0],x[1],x[3],x[4]) )/(h12*h2*h3*h34)
+		- y[3]*(4.*v*v*v - 3.*v*v*(S-x[3]) - sum_of_3product_combinations_4_6(x[0],x[1],x[2],x[4])
+			+ 2.*v*sum_of_2product_combinations_4_2(x[0],x[1],x[2],x[4]) )/(h13*h23*h3*h4)
+		+ y[4]*(4.*v*v*v - 3.*v*v*(S-x[4]) - sum_of_3product_combinations_4_6(x[0],x[1],x[2],x[3])
+			+ 2.*v*sum_of_2product_combinations_4_2(x[0],x[1],x[2],x[3]) )/(h14*h24*h34*h4);
 }
 
 double nsl_sf_poly_interp_lagrange_4_deriv2(double v, double *x, double *y) {
 	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2], h4 = x[4]-x[3], S = x[0]+x[1]+x[2]+x[3]+x[4];
 	double h12 = h1+h2, h23 = h2+h3, h34 = h3+h4, h13=h12+h3, h24 = h23+h4, h14 = h12+h34;
 
-	return 2.*( y[0]*(6.*v*v-3.*v*(S-x[0])+x[1]*(S-x[0]-x[1])+x[2]*x[3]+x[4]*(x[2]+x[3]))/(h1*h12*h13*h14)
-			- y[1]*(6.*v*v-3.*v*(S-x[1])+x[0]*(S-x[0]-x[1])+x[2]*x[3]+x[4]*(x[2]+x[3]))/(h1*h2*h23*h24)
-			+ y[2]*(6.*v*v-3.*v*(S-x[2])+x[0]*(S-x[0]-x[2])+x[1]*x[3]+x[4]*(x[1]+x[3]))/(h12*h2*h3*h34)
-			- y[3]*(6.*v*v-3.*v*(S-x[3])+x[0]*(S-x[0]-x[3])+x[1]*x[2]+x[4]*(x[1]+x[2]))/(h13*h23*h3*h4)
-			+ y[4]*(6.*v*v-3.*v*(S-x[4])+x[0]*(S-x[0]-x[4])+x[1]*x[2]+x[3]*(x[1]+x[2]))/(h14*h24*h34*h4) );
+	return 2.*(
+		  y[0]*(6.*v*v-3.*v*(S-x[0]) + sum_of_2product_combinations_4_2(x[1],x[2],x[3],x[4]))/(h1*h12*h13*h14)
+		- y[1]*(6.*v*v-3.*v*(S-x[1]) + sum_of_2product_combinations_4_2(x[0],x[2],x[3],x[4]))/(h1*h2*h23*h24)
+		+ y[2]*(6.*v*v-3.*v*(S-x[2]) + sum_of_2product_combinations_4_2(x[0],x[1],x[3],x[4]))/(h12*h2*h3*h34)
+		- y[3]*(6.*v*v-3.*v*(S-x[3]) + sum_of_2product_combinations_4_2(x[0],x[1],x[2],x[4]))/(h13*h23*h3*h4)
+		+ y[4]*(6.*v*v-3.*v*(S-x[4]) + sum_of_2product_combinations_4_2(x[0],x[1],x[2],x[3]))/(h14*h24*h34*h4) );
 }
 
 double nsl_sf_poly_interp_lagrange_4_deriv3(double v, double *x, double *y) {
