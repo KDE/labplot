@@ -31,29 +31,29 @@
 
 int main() {
 	const double xdata[]={1,2,4,8,16,32,64};
-	double ydata[]={1,4,16,64,256,1024,4096};
 	const int n=7;
 
-	printf("function x^2:\n");
-	size_t i;
-	for (i=0; i < n; i++)
+	printf("function x^2/x^3:\n");
+	/*for (i=0; i < n; i++)
 		printf("%g %g\n", xdata[i], ydata[i]);
-	puts("");
+	puts("");*/
 
 	printf("expecting 2*x as derivative (second order):\n");
+	double ydata[]={1,4,16,64,256,1024,4096};
 	/*int status = nsl_diff_deriv_first_equal(xdata, ydata, n);*/
 	int status = nsl_diff_first_deriv(xdata, ydata, n, 2);
 
+	size_t i;
 	for (i=0; i < n; i++)
-		printf("%g %g\n", xdata[i], ydata[i]);
+		printf("%g %g (%g)\n", xdata[i], ydata[i], 2.*xdata[i]);
 	puts("");
 
-	printf("expecting 2*x as derivative (fourth order):\n");
-	double ydata4[]={1,4,16,64,256,1024,4096};
+	printf("expecting 3*x^2 as derivative (fourth order):\n");
+	double ydata4[]={1,8,64,512,4096,32768,262144};
 	status = nsl_diff_first_deriv(xdata, ydata4, n, 4);
 
 	for (i=0; i < n; i++)
-		printf("%g %g\n", xdata[i], ydata4[i]);
+		printf("%g %g (%g)\n", xdata[i], ydata4[i], 3.*xdata[i]*xdata[i]);
 	puts("");
 
 	printf("avg derivative:\n");
@@ -80,12 +80,28 @@ int main() {
 		printf("%g %g\n", xdata[i], ydata5[i]);
 	puts("");
 
-	printf("expecting 2 as second derivative (third order):\n");
-	double ydata6[]={1,4,16,64,256,1024,4096};
+	printf("expecting 6*x as second derivative (third order):\n");
+	double ydata6[]={1,8,64,512,4096,32768,262144};
 	status = nsl_diff_second_deriv(xdata, ydata6, n, 3);
 
 	for (i=0; i < n; i++)
-		printf("%g %g\n", xdata[i], ydata6[i]);
+		printf("%g %g (%g)\n", xdata[i], ydata6[i], 6*xdata[i]);
+	puts("");
+
+	printf("expecting 6 as third derivative (second order):\n");
+	double ydata7[]={1,8,64,512,4096,32768,262144};
+	status = nsl_diff_third_deriv(xdata, ydata7, n, 2);
+
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata7[i]);
+	puts("");
+
+	printf("expecting 0 as fourth derivative (first order):\n");
+	double ydata8[]={1,8,64,512,4096,32768,262144};
+	status = nsl_diff_fourth_deriv(xdata, ydata8, n, 1);
+
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata8[i]);
 	puts("");
 
 	return 0;

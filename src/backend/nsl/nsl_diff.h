@@ -60,4 +60,23 @@ int nsl_diff_second_deriv_first_order(const double *x, double *y, const size_t n
 int nsl_diff_second_deriv_second_order(const double *x, double *y, const size_t n);
 int nsl_diff_second_deriv_third_order(const double *x, double *y, const size_t n);
 
+/************ third derivatives *********/
+
+/* calculates third derivative of n points of xy-data
+	for unequal spaced data.
+	result in y
+*/
+int nsl_diff_third_deriv(const double *x, double *y, const size_t n, int order);
+int nsl_diff_third_deriv_second_order(const double *x, double *y, const size_t n);
+
+/************ fourth derivatives *********/
+
+/* calculates fourth derivative of n points of xy-data
+	for unequal spaced data.
+	result in y
+*/
+int nsl_diff_fourth_deriv(const double *x, double *y, const size_t n, int order);
+int nsl_diff_fourth_deriv_first_order(const double *x, double *y, const size_t n);
+
+
 #endif /* NSL_DIFF_H */

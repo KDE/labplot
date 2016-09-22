@@ -69,7 +69,7 @@ double nsl_sf_poly_interp_lagrange_3_deriv3(double *x, double *y);
 double nsl_sf_poly_interp_lagrange_4(double v, double *x, double *y);
 double nsl_sf_poly_interp_lagrange_4_deriv(double v, double *x, double *y);
 double nsl_sf_poly_interp_lagrange_4_deriv2(double v, double *x, double *y);
-double nsl_sf_poly_interp_lagrange_4_deriv3(double *x, double *y);
+double nsl_sf_poly_interp_lagrange_4_deriv3(double v, double *x, double *y);
 double nsl_sf_poly_interp_lagrange_4_deriv4(double *x, double *y);
 
 #endif /* NSL_SF_POLY_H */
