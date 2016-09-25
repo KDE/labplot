@@ -1326,7 +1326,6 @@ void CartesianPlotPrivate::retransform() {
 void CartesianPlotPrivate::retransformScales() {
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
 	QList<CartesianScale*> scales;
-	double sceneStart, sceneEnd, logicalStart, logicalEnd;
 
 	//perform the mapping from the scene coordinates to the plot's coordinates here.
 	QRectF itemRect = mapRectFromScene(rect);
@@ -1335,40 +1334,56 @@ void CartesianPlotPrivate::retransformScales() {
 	if (xScale != CartesianPlot::ScaleLinear)
 		checkXRange();
 
-	//check where we have x-range breaks
-	bool hasValidBreak = false;
-	if (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty()) {
-		foreach(const CartesianPlot::RangeBreak& b, xRangeBreaks.list)
-			hasValidBreak = (!std::isnan(b.start) && !std::isnan(b.end));
-	}
+	//check whether we have x-range breaks - the first break, if available, should be valid
+	bool hasValidBreak = (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty() && xRangeBreaks.list.first().isValid());
+
+	static const int breakGap = 20;
+	double sceneStart, sceneEnd, logicalStart, logicalEnd;
 
 	//create x-scales
+	int plotSceneStart = itemRect.x()+horizontalPadding;
+	int plotSceneEnd = itemRect.x()+itemRect.width()-horizontalPadding;
 	if (!hasValidBreak) {
-		sceneStart = itemRect.x()+horizontalPadding;
-		sceneEnd = itemRect.x()+itemRect.width()-horizontalPadding;
+		//no breaks available -> range goes from the plot beginning to the end of the plot
+		sceneStart = plotSceneStart;
+		sceneEnd = plotSceneEnd;
 		logicalStart = xMin;
 		logicalEnd = xMax;
 
 		//TODO: how should we handle the case sceneStart=sceneEnd
 		//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
-		if (sceneStart!=sceneEnd) {
+		if (sceneStart!=sceneEnd)
 			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
-		}
 	} else {
-		foreach(const CartesianPlot::RangeBreak& b, xRangeBreaks.list) {
-			sceneStart = itemRect.x()+horizontalPadding;
-			sceneEnd = itemRect.x()+itemRect.width()-horizontalPadding;
-			sceneEnd = sceneStart+(sceneEnd-sceneStart)*b.position;
-			logicalStart = xMin;
-			logicalEnd = b.start;
-			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
+		int sceneEndLast = plotSceneStart;
+		int logicalEndLast = xMin;
+		for (int i=0; i<xRangeBreaks.list.size(); ++i) {
+			const CartesianPlot::RangeBreak& curBreak = xRangeBreaks.list.at(i);
+			if (!curBreak.isValid())
+				break;
 
-			sceneStart = sceneEnd+50;
-			sceneEnd = itemRect.x()+itemRect.width()-horizontalPadding;
-			logicalStart = b.end;
-			logicalEnd = xMax;
-			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
+			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
+			sceneStart = sceneEndLast;
+			if (i!=0) sceneStart+=breakGap;
+			sceneEnd = plotSceneStart+(plotSceneEnd-plotSceneStart)*curBreak.position;
+			logicalStart = logicalEndLast;
+			logicalEnd = curBreak.start;
+
+			if (sceneStart!=sceneEnd)
+				scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
+
+			sceneEndLast = sceneEnd;
+			logicalEndLast = curBreak.end;
 		}
+
+		//add the remaining range going from the last available range break to the end of the plot (=end of the x-data range)
+		sceneStart = sceneEndLast+breakGap;
+		sceneEnd = plotSceneEnd;
+		logicalStart = logicalEndLast;
+		logicalEnd = xMax;
+
+		if (sceneStart!=sceneEnd)
+			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	}
 
 	cSystem ->setXScales(scales);
@@ -1377,36 +1392,52 @@ void CartesianPlotPrivate::retransformScales() {
 	if (yScale != CartesianPlot::ScaleLinear)
 		checkYRange();
 
-	//check where we have y-range breaks
-	hasValidBreak = false;
-	if (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty()) {
-		foreach(const CartesianPlot::RangeBreak& b, yRangeBreaks.list)
-			hasValidBreak = (!std::isnan(b.start) && !std::isnan(b.end));
-	}
+	//check whether we have y-range breaks - the first break, if available, should be valid
+	hasValidBreak = (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty() && yRangeBreaks.list.first().isValid());
 
 	//create y-scales
 	scales.clear();
+	plotSceneStart = itemRect.y()+itemRect.height()-verticalPadding;
+	plotSceneEnd = itemRect.y()+verticalPadding;
 	if (!hasValidBreak) {
-		sceneStart = itemRect.y()+itemRect.height()-verticalPadding;
-		sceneEnd = itemRect.y()+verticalPadding;
+		//no breaks available -> range goes from the plot beginning to the end of the plot
+		sceneStart = plotSceneStart;
+		sceneEnd = plotSceneEnd;
 		logicalStart = yMin;
 		logicalEnd = yMax;
-		scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
-	} else {
-		foreach(const CartesianPlot::RangeBreak& b, yRangeBreaks.list) {
-			sceneStart = itemRect.y()+itemRect.height()-verticalPadding;
-			sceneEnd = itemRect.y()+verticalPadding;
-			sceneEnd = sceneStart+(sceneEnd-sceneStart)*b.position;
-			logicalStart = yMin;
-			logicalEnd = b.start;
-			scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 
-			sceneStart = sceneEnd+50;
-			sceneEnd = itemRect.y()+verticalPadding;
-			logicalStart = b.end;
-			logicalEnd = yMax;
+		if (sceneStart!=sceneEnd)
 			scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
+	} else {
+		int sceneEndLast = plotSceneStart;
+		int logicalEndLast = yMin;
+		for (int i=0; i<yRangeBreaks.list.size(); ++i) {
+			const CartesianPlot::RangeBreak& curBreak = yRangeBreaks.list.at(i);
+			if (!curBreak.isValid())
+				break;
+
+			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
+			sceneStart = sceneEndLast;
+			if (i!=0) sceneStart-=breakGap;
+			sceneEnd = plotSceneStart+(plotSceneEnd-plotSceneStart)*curBreak.position;
+			logicalStart = logicalEndLast;
+			logicalEnd = curBreak.start;
+
+			if (sceneStart!=sceneEnd)
+				scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
+
+			sceneEndLast = sceneEnd;
+			logicalEndLast = curBreak.end;
 		}
+
+		//add the remaining range going from the last available range break to the end of the plot (=end of the y-data range)
+		sceneStart = sceneEndLast-breakGap;
+		sceneEnd = plotSceneEnd;
+		logicalStart = logicalEndLast;
+		logicalEnd = yMax;
+
+		if (sceneStart!=sceneEnd)
+			scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	}
 
 	cSystem ->setYScales(scales);

@@ -62,7 +62,8 @@ class CartesianPlot:public AbstractPlot{
 									ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
 
 		struct RangeBreak {
-			RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakSloped) {};
+			RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakSloped) {}
+			bool isValid() const {return (!std::isnan(start) && !std::isnan(end)); }
 			float start;
 			float end;
 			float position;
