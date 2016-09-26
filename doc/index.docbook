@@ -51,8 +51,8 @@
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2016-09-06</date>
-<releaseinfo>3.2.4</releaseinfo>
+<date>2016-09-26</date>
+<releaseinfo>3.2.5</releaseinfo>
 
 <abstract>
 	<para>
@@ -89,7 +89,7 @@ Features:
 <listitem><para>Cartesian plots, created either from imported or manually created data sets or via mathematical equation</para></listitem>
 <listitem><para>Definition of mathematical formulas is supported by syntax-highlighting and completion and by the list of thematicaly grouped mathematical and physical constants and functions</para></listitem>
 <listitem><para>Investigation of plotted data is supported by many zooming and navigation features</para></listitem>
-<listitem><para>Several analysis functions and methods for interpolation, smoothing, (nonlinear) fitting, Fourier filter and Fourier transform</para></listitem>
+<listitem><para>Several analysis functions and methods for data reduction, differentiation, interpolation, smoothing, (nonlinear) fitting, Fourier filter and Fourier transform</para></listitem>
 <listitem><para>Linear and non-linear fits to data, several fit-models are predefined and custom models with arbitrary number of parameters can be provided</para></listitem>
 <listitem><para>Datapicker for manual or (semi-)automatic data extraction from imported images containing plots and curves.</para></listitem>
 </itemizedlist>
@@ -796,10 +796,12 @@ The menu is only available when a datapicker object is selected on the <guilabel
     </para>
       <itemizedlist>
 	<listitem><para>Data reduction</para></listitem>
+	<listitem><para>Differentiation</para></listitem>
 	<listitem><para>Interpolation</para></listitem>
 	<listitem><para>Smoothing</para></listitem>
 	<listitem><para>Nonlinear curve fitting</para></listitem>
 	<listitem><para>Fourier filter</para></listitem>
+	<listitem><para>Fourier transform</para></listitem>
       </itemizedlist>
     <para>
     All of them can be applied to any data consisting of x- and y-columns. 
@@ -827,6 +829,17 @@ The menu is only available when a datapicker object is selected on the <guilabel
       The desired tolerance is automatically calculated from the data but can also be changed
       in the dock widget.
     </para>
+  </sect1>
+
+  <sect1 id="differentiation">
+    <title>Differentiation</title>
+    <para>
+      Numerical differentiation of data can be done specifying:
+    </para>
+      <itemizedlist>
+	<listitem><para>order of derivation (first to sixth order)</para></listitem>
+	<listitem><para>order of accurary (up to 4th order, depending on derivation order)</para></listitem>
+      </itemizedlist>
   </sect1>
     
   <sect1 id="interpolation">
