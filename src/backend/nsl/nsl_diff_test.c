@@ -42,7 +42,7 @@ int main() {
 
 	printf("expecting 2*x as derivative:\n");
 	/*int status = nsl_diff_deriv_first_equal(xdata, ydata, n);*/
-	int status = nsl_diff_deriv_first(xdata, ydata, n);
+	int status = nsl_diff_first_deriv(xdata, ydata, n, 2);
 
 	for (i=0; i < n; i++)
 		printf("%g %g\n", xdata[i], ydata[i]);
@@ -50,7 +50,7 @@ int main() {
 
 	printf("avg derivative:\n");
 	double ydata2[]={1,4,16,64,256,1024,4096};
-	status = nsl_diff_deriv_first_avg(xdata, ydata2, n);
+	status = nsl_diff_first_deriv_avg(xdata, ydata2, n);
 
 	for (i=0; i < n; i++)
 		printf("%g %g\n", xdata[i], ydata2[i]);
@@ -58,7 +58,7 @@ int main() {
 
 	printf("expecting 2 as second derivative:\n");
 	double ydata3[]={1,4,16,64,256,1024,4096};
-	status = nsl_diff_deriv_second(xdata, ydata3, n);
+	status = nsl_diff_second_deriv(xdata, ydata3, n, 2);
 
 	for (i=0; i < n; i++)
 		printf("%g %g\n", xdata[i], ydata3[i]);

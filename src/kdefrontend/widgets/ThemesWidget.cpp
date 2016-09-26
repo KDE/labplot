@@ -58,7 +58,10 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	//show preview pixmaps
 	QStandardItemModel* mContentItemModel = new QStandardItemModel(this);
 	QStringList themeList = ThemeHandler::themes();
-	QString themeImgPath = KGlobal::dirs()->findDirs("data", "labplot2/themes/screenshots/").first();
+	QStringList themeImgPathList = KGlobal::dirs()->findDirs("data", "labplot2/themes/screenshots/");
+	if (themeImgPathList.isEmpty())
+		return;
+	QString themeImgPath = themeImgPathList.first();
 	QString tempPath;
 
 	for (int i = 0; i < themeList.size(); ++i) {

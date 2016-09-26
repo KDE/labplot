@@ -37,9 +37,10 @@ class XYDifferentiationCurve: public XYCurve {
 
 	public:
 		struct DifferentiationData {
-			DifferentiationData() : order(1) {};
+			DifferentiationData() : derivOrder(1), accOrder(2) {};
 
-			int order;			// order of differentiation
+			int derivOrder;			// order of differentiation
+			int accOrder;			// order ofaccuracy
 		};
 		struct DifferentiationResult {
 			DifferentiationResult() : available(false), valid(false), elapsedTime(0) {};
