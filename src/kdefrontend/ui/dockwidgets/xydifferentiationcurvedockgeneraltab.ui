@@ -221,16 +221,6 @@
      </property>
     </spacer>
    </item>
-   <item row="9" column="3" colspan="2">
-    <widget class="QSpinBox" name="sbDerivOrder">
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>2</number>
-     </property>
-    </widget>
-   </item>
    <item row="15" column="3" colspan="2">
     <widget class="QTextEdit" name="teResult"/>
    </item>
@@ -250,6 +240,9 @@
       <number>2</number>
      </property>
     </widget>
+   </item>
+   <item row="9" column="3" colspan="2">
+    <widget class="QComboBox" name="cbDerivOrder"/>
    </item>
   </layout>
  </widget>

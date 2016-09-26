@@ -36,6 +36,9 @@
 #include <QWidgetAction>
 #include <QStandardItemModel>
 
+extern "C" {
+#include "backend/nsl/nsl_diff.h"
+}
 #include <cmath>        // isnan
 
 /*!
@@ -81,6 +84,9 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
+	for (int i=0; i < NSL_DIFF_DERIV_ORDER_COUNT; i++)
+		uiGeneralTab.cbDerivOrder->addItem(i18n(nsl_diff_deriv_order_name[i]));
+
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
@@ -92,7 +98,7 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
-	connect( uiGeneralTab.sbDerivOrder, SIGNAL(valueChanged(int)), this, SLOT(derivOrderChanged()) );
+	connect( uiGeneralTab.cbDerivOrder, SIGNAL(currentIndexChanged(int)), this, SLOT(derivOrderChanged()) );
 	connect( uiGeneralTab.sbAccOrder, SIGNAL(valueChanged(int)), this, SLOT(accOrderChanged()) );
 
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
@@ -126,7 +132,7 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
-	uiGeneralTab.sbDerivOrder->setValue(m_differentiationData.derivOrder);
+	uiGeneralTab.cbDerivOrder->setCurrentIndex(m_differentiationData.derivOrder);
 	this->derivOrderChanged();
 	uiGeneralTab.sbAccOrder->setValue(m_differentiationData.accOrder);
 	this->accOrderChanged();
@@ -235,10 +241,42 @@ void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYDifferentiationCurveDock::derivOrderChanged() {
-	int derivOrder = (int)uiGeneralTab.sbDerivOrder->value();
+	int derivOrder = (int)uiGeneralTab.cbDerivOrder->currentIndex();
 	m_differentiationData.derivOrder = derivOrder;
 
-	//TODO: update avail. accuracies
+	// update avail. accuracies
+	switch (derivOrder) {
+	case nsl_diff_deriv_order_first:
+		uiGeneralTab.sbAccOrder->setMinimum(2);
+		uiGeneralTab.sbAccOrder->setMaximum(4);
+		uiGeneralTab.sbAccOrder->setSingleStep(2);
+		uiGeneralTab.sbAccOrder->setValue(4);
+		break;
+	case nsl_diff_deriv_order_second:
+		uiGeneralTab.sbAccOrder->setMinimum(1);
+		uiGeneralTab.sbAccOrder->setMaximum(3);
+		uiGeneralTab.sbAccOrder->setSingleStep(1);
+		uiGeneralTab.sbAccOrder->setValue(3);
+		break;
+	case nsl_diff_deriv_order_third:
+		uiGeneralTab.sbAccOrder->setMinimum(2);
+		uiGeneralTab.sbAccOrder->setMaximum(2);
+		break;
+	case nsl_diff_deriv_order_fourth:
+		uiGeneralTab.sbAccOrder->setMinimum(1);
+		uiGeneralTab.sbAccOrder->setMaximum(3);
+		uiGeneralTab.sbAccOrder->setSingleStep(2);
+		uiGeneralTab.sbAccOrder->setValue(3);
+		break;
+	case nsl_diff_deriv_order_fifth:
+		uiGeneralTab.sbAccOrder->setMinimum(2);
+		uiGeneralTab.sbAccOrder->setMaximum(2);
+		break;
+	case nsl_diff_deriv_order_sixth:
+		uiGeneralTab.sbAccOrder->setMinimum(1);
+		uiGeneralTab.sbAccOrder->setMaximum(1);
+		break;
+	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
@@ -332,7 +370,7 @@ void XYDifferentiationCurveDock::curveYDataColumnChanged(const AbstractColumn* c
 void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData& data) {
 	m_initializing = true;
 	m_differentiationData = data;
-	uiGeneralTab.sbDerivOrder->setValue(m_differentiationData.derivOrder);
+	uiGeneralTab.cbDerivOrder->setCurrentIndex(m_differentiationData.derivOrder);
 	this->derivOrderChanged();
 	uiGeneralTab.sbAccOrder->setValue(m_differentiationData.accOrder);
 	this->accOrderChanged();

@@ -37,6 +37,8 @@
 #include "nsl_diff.h"
 #include "nsl_sf_poly.h"
 
+const char* nsl_diff_deriv_order_name[] = {"first", "second", "third", "fourth", "fifth", "sixth"};
+
 double nsl_diff_first_central(double xm, double fm, double xp, double fp) {
 	return (fp - fm)/(xp - xm);
 }
@@ -455,7 +457,7 @@ int nsl_diff_fifth_deriv_second_order(const double *x, double *y, const size_t n
 	return 0;
 }
 
-int nsl_diff_six_deriv(const double *x, double *y, const size_t n, int order) {
+int nsl_diff_sixth_deriv(const double *x, double *y, const size_t n, int order) {
 	switch (order) {
 	case 1:
 		return nsl_diff_sixth_deriv_first_order(x, y, n);

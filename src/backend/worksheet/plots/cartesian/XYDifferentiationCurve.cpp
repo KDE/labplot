@@ -248,19 +248,30 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	const int derivOrder = differentiationData.derivOrder;
 	const int accOrder = differentiationData.accOrder;
 #ifndef NDEBUG
-	qDebug()<<"derivation order:"<<derivOrder;
+	qDebug()<<nsl_diff_deriv_order_name[derivOrder]<<"derivative";
 	qDebug()<<"accuracy order:"<<accOrder;
 #endif
 ///////////////////////////////////////////////////////////
 	int status=0;
 
-	// TODO: use accOrder
 	switch (derivOrder) {
-	case 1:
-		status = nsl_diff_first_deriv_second_order(xdata, ydata, n);
+	case nsl_diff_deriv_order_first:
+		status = nsl_diff_first_deriv(xdata, ydata, n, accOrder);
 		break;
-	case 2:
-		status = nsl_diff_second_deriv_second_order(xdata, ydata, n);
+	case nsl_diff_deriv_order_second:
+		status = nsl_diff_second_deriv(xdata, ydata, n, accOrder);
+		break;
+	case nsl_diff_deriv_order_third:
+		status = nsl_diff_third_deriv(xdata, ydata, n, accOrder);
+		break;
+	case nsl_diff_deriv_order_fourth:
+		status = nsl_diff_fourth_deriv(xdata, ydata, n, accOrder);
+		break;
+	case nsl_diff_deriv_order_fifth:
+		status = nsl_diff_fifth_deriv(xdata, ydata, n, accOrder);
+		break;
+	case nsl_diff_deriv_order_sixth:
+		status = nsl_diff_sixth_deriv(xdata, ydata, n, accOrder);
 		break;
 	}
 
