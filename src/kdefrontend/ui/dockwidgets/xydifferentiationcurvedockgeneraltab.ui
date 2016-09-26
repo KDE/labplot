@@ -12,9 +12,9 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="9" column="0">
-    <widget class="QLabel" name="lOrder">
+    <widget class="QLabel" name="lDerivative">
      <property name="text">
-      <string>Derivative order</string>
+      <string>Derivative</string>
      </property>
     </widget>
    </item>

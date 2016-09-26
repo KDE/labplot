@@ -26,7 +26,6 @@
  ***************************************************************************/
 
 /* TODO:
-	* check that all functions really work with minimum number of points
 	* add more orders
 */
 

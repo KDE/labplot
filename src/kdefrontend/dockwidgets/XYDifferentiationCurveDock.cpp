@@ -222,7 +222,77 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
 
-	// TODO: disable derivOrders and accOrders that need more data points
+	// disable deriv orders and accuracies that need more data points
+	if (column != 0) {
+		size_t n=0;
+		for (int row=0; row < column->rowCount(); row++)
+			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
+				n++;
+
+
+		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbDerivOrder->model());
+		QStandardItem* item = model->item(nsl_diff_deriv_order_first);
+		if (n < 3)
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		else {
+			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+			if (n < 5)
+				uiGeneralTab.sbAccOrder->setMinimum(2);
+		}
+
+		item = model->item(nsl_diff_deriv_order_second);
+		if (n < 3) {
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+			if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_second)
+					uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
+		}
+		else {
+			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+			if (n < 4)
+				uiGeneralTab.sbAccOrder->setMinimum(1);
+			else if (n < 5)
+				uiGeneralTab.sbAccOrder->setMinimum(2);
+		}
+
+		item = model->item(nsl_diff_deriv_order_third);
+		if (n < 5) {
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+			if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_third)
+					uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
+		}
+		else
+			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+
+		item = model->item(nsl_diff_deriv_order_fourth);
+		if (n < 5) {
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+			if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_fourth)
+					uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
+		}
+		else {
+			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+			if (n < 7)
+				uiGeneralTab.sbAccOrder->setMinimum(1);
+		}
+
+		item = model->item(nsl_diff_deriv_order_fifth);
+		if (n < 7) {
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+			if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_fifth)
+					uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
+		}
+		else
+			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+
+		item = model->item(nsl_diff_deriv_order_sixth);
+		if (n < 7) {
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+			if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_sixth)
+					uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
+		}
+		else
+			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+	}
 }
 
 void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
