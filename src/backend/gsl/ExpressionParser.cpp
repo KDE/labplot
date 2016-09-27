@@ -117,29 +117,28 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("nonlinear additive feedback rng [0,RAND_MAX]");
 	m_functionsNames << i18n("nonlinear additive feedback rng [0,1]");
 	m_functionsNames << i18n("Arc cosine");
-	m_functionsNames << i18n("Inverse hyperbolic cosine");
 	m_functionsNames << i18n("Principal value of the arc sine");
-	m_functionsNames << i18n("Inverse hyperbolic sine");
 	m_functionsNames << i18n("Principal value of the arc tangent");
 	m_functionsNames << i18n("atan() using sign");
-	m_functionsNames << i18n("Inverse hyperbolic tangent");
-
-	m_functionsNames << i18n("Cube root");
 	m_functionsNames << i18n("Smallest integral value not less");
 	m_functionsNames << i18n("Hyperbolic cosine");
 	m_functionsNames << i18n("Absolute value");
+
 	m_functionsNames << i18n("x * 2^y");
 	m_functionsNames << i18n("Base 10 logarithm");
-	m_functionsNames << i18n("Extract the exponent");
 	m_functionsNames << i18n("Power function [x^y]");
-	m_functionsNames << i18n("Round to an integer value");
-	m_functionsNames << i18n("Round to the nearest integer");
 	m_functionsNames << i18n("Hyperbolic sine");
 	m_functionsNames << i18n("Nonnegative square root");
-
 	m_functionsNames << i18n("Tangent");
 	m_functionsNames << i18n("Hyperbolic tangent");
+
+#ifndef _WIN32
+	m_functionsNames << i18n("Cube root");
+	m_functionsNames << i18n("Extract the exponent");
+	m_functionsNames << i18n("Round to an integer value");
 	m_functionsNames << i18n("Round to the nearest integer");
+	m_functionsNames << i18n("Round to the nearest integer");
+#endif
 //	m_functionsNames << i18n("Bessel function of first kind, orders 0");
 //	m_functionsNames << i18n("Bessel function of first kind, orders 1");
 //	m_functionsNames << i18n("Bessel function of first kind, orders n");
@@ -160,17 +159,21 @@ void ExpressionParser::initFunctions() {
 //	m_functionsNames << i18n("Length of the hypotenuse sqrt(x*x+y*y)");
 //	m_functionsNames << i18n("Sine");
 
-	for(int i=0;i<25;i++)
+#ifndef _WIN32
+	for(int i=0;i<22;i++)
+#else
+	for(int i=0;i<17;i++)
+#endif
 		m_functionsGroupIndex << 0;
 
 	// GSL mathematical functions
+	m_functionsNames << i18n("Inverse hyperbolic cosine");
+	m_functionsNames << i18n("Inverse hyperbolic sine");
+	m_functionsNames << i18n("Inverse hyperbolic tangent");
 	m_functionsNames << i18n("log(1+x)");
 	m_functionsNames << i18n("exp(x)-1");
 	m_functionsNames << i18n("sqrt(x^2+y^2)");
 	m_functionsNames << i18n("sqrt(x^2+y^2+z^2)");
-	m_functionsNames << i18n("arccosh(x)");
-	m_functionsNames << i18n("arcsinh(x)");
-	m_functionsNames << i18n("arctanh(x)");
 	m_functionsNames << i18n("x * 2^e");
 	m_functionsNames << i18n("x^n");
 	m_functionsNames << i18n("x^2");
