@@ -838,7 +838,7 @@ The menu is only available when a datapicker object is selected on the <guilabel
     </para>
       <itemizedlist>
 	<listitem><para>order of derivation (first to sixth order)</para></listitem>
-	<listitem><para>order of accurary (up to 4th order, depending on derivation order)</para></listitem>
+	<listitem><para>order of accuracy (up to 4th order, depending on derivation order)</para></listitem>
       </itemizedlist>
   </sect1>
     
