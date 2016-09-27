@@ -46,7 +46,7 @@ int nsl_diff_deriv_first_equal(const double *x, double *y, const size_t n) {
 	if (n < 3)
 		return -1;
 
-	double dy, oldy, oldy2;
+	double dy=0, oldy=0, oldy2=0;
 	size_t i;
 	for (i=0; i < n; i++) {
 		if (i == 0)	/* forward */
@@ -88,7 +88,7 @@ int nsl_diff_first_deriv_second_order(const double *x, double *y, const size_t n
 	if (n < 3)
 		return -1;
 
-	double dy, oldy, oldy2, xdata[3], ydata[3];
+	double dy=0, oldy=0, oldy2=0, xdata[3], ydata[3];
 	size_t i, j;
 	for (i=0; i < n; i++) {
 		if (i == 0) {
@@ -122,7 +122,7 @@ int nsl_diff_first_deriv_fourth_order(const double *x, double *y, const size_t n
 	if (n < 5)
 		return -1;
 
-	double dy[5], xdata[5], ydata[5];
+	double dy[5]={0}, xdata[5], ydata[5];
 	size_t i, j;
 	for (i=0; i < n; i++) {
 		if (i == 0)
@@ -193,7 +193,7 @@ int nsl_diff_second_deriv_first_order(const double *x, double *y, const size_t n
 	if (n < 3)
 		return -1;
 
-	double dy[3], xdata[3], ydata[3];
+	double dy[3]={0}, xdata[3], ydata[3];
 	size_t i, j;
 	for (i=0; i<n; i++) {
 		if (i == 0)
@@ -226,7 +226,7 @@ int nsl_diff_second_deriv_second_order(const double *x, double *y, const size_t 
 	if (n < 4)
 		return -1;
 
-	double dy[4], xdata[4], ydata[4];
+	double dy[4]={0}, xdata[4], ydata[4];
 	size_t i, j;
 	for (i=0; i<n; i++) {
 		if (i == 0) {
@@ -264,7 +264,7 @@ int nsl_diff_second_deriv_third_order(const double *x, double *y, const size_t n
 	if (n < 5)
 		return -1;
 
-	double dy[5], xdata[5], ydata[5];
+	double dy[5]={0}, xdata[5], ydata[5];
 	size_t i, j;
 	for (i=0; i < n; i++) {
 		if (i == 0)
@@ -308,7 +308,7 @@ int nsl_diff_third_deriv_second_order(const double *x, double *y, const size_t n
 	if (n < 5)
 		return -1;
 
-	double dy[5], xdata[5], ydata[5];
+	double dy[5]={0}, xdata[5], ydata[5];
 	size_t i, j;
 	for (i=0; i < n; i++) {
 		if (i == 0)
@@ -354,7 +354,7 @@ int nsl_diff_fourth_deriv_first_order(const double *x, double *y, const size_t n
 	if (n < 5)
 		return -1;
 
-	double dy[5], xdata[5], ydata[5];
+	double dy[5]={0}, xdata[5], ydata[5];
 	size_t i, j;
 	for (i=0; i < n; i++) {
 		if (i == 0)
@@ -429,7 +429,7 @@ int nsl_diff_fifth_deriv_second_order(const double *x, double *y, const size_t n
 	if (n < 7)
 		return -1;
 
-	double dy[7], xdata[7], ydata[7];
+	double dy[7]={0}, xdata[7], ydata[7];
 	size_t i, j;
 	for (i=0; i < n; i++) {
 		if (i == 0)
@@ -473,7 +473,7 @@ int nsl_diff_sixth_deriv_first_order(const double *x, double *y, const size_t n)
 	if (n < 7)
 		return -1;
 
-	double dy[7], xdata[7], ydata[7];
+	double dy[7]={0}, xdata[7], ydata[7];
 	size_t i, j;
 	for (i=0; i < n; i++) {
 		if (i == 0)
