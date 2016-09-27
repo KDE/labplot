@@ -1639,7 +1639,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
     }
     if (imageExtensionItem->childCount() > 0) {
         treeNameItem->addChild(imageExtensionItem);
-        imageExtensionItem->setIcon(0,QIcon(KIcon("view-preview")));
+        imageExtensionItem->setIcon(0,QIcon::fromTheme("view-preview"));
         imageExtensionItem->setExpanded(true);
         imageExtensionItem->child(0)->setSelected(true);
 
@@ -1658,7 +1658,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
         }
         if (tableExtensionItem->childCount() > 0) {
             treeNameItem->addChild(tableExtensionItem);
-            tableExtensionItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
+            tableExtensionItem->setIcon(0,QIcon::fromTheme("x-office-spreadsheet"));
             tableExtensionItem->setExpanded(true);
             if (noImage) {
                 tableExtensionItem->child(0)->setSelected(true);
