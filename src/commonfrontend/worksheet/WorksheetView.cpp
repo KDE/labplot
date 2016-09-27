@@ -1328,7 +1328,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	addDataOperationCurveAction->setEnabled(false);
 	addDataReductionCurveAction->setEnabled(plot);
 	addDifferentiationCurveAction->setEnabled(plot);
-	addIntegrationCurveAction->setEnabled(false);
+	addIntegrationCurveAction->setEnabled(plot);
 	addInterpolationCurveAction->setEnabled(plot);
 	addSmoothCurveAction->setEnabled(plot);
 	addFitCurveAction->setEnabled(plot);
@@ -1356,7 +1356,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	addDataOperationAction->setEnabled(false);
 	m_dataManipulationMenu->setEnabled(plot);
 	addDifferentiationAction->setEnabled(plot);
-	addIntegrationAction->setEnabled(false);
+	addIntegrationAction->setEnabled(plot);
 	addInterpolationAction->setEnabled(plot);
 	addSmoothAction->setEnabled(plot);
 	addFitAction->setEnabled(plot);
@@ -1573,6 +1573,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addDataReductionCurve();
 	else if (action == addDifferentiationCurveAction)
 		plot->addDifferentiationCurve();
+	else if (action == addIntegrationCurveAction)
+		plot->addIntegrationCurve();
 	else if (action == addInterpolationCurveAction)
 		plot->addInterpolationCurve();
 	else if (action == addFitCurveAction)
@@ -1596,6 +1598,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addDataReductionCurve();
 	else if (action == addDifferentiationAction)
 		plot->addDifferentiationCurve();
+	else if (action == addIntegrationAction)
+		plot->addIntegrationCurve();
 	else if (action == addInterpolationAction)
 		plot->addInterpolationCurve();
 	else if (action == addFitAction)
