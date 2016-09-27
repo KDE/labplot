@@ -30,6 +30,9 @@
 #define XYDIFFERENTATIONCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+extern "C" {
+#include "backend/nsl/nsl_diff.h"
+}
 
 class XYDifferentiationCurvePrivate;
 class XYDifferentiationCurve: public XYCurve {
@@ -37,10 +40,10 @@ class XYDifferentiationCurve: public XYCurve {
 
 	public:
 		struct DifferentiationData {
-			DifferentiationData() : derivOrder(1), accOrder(2) {};
+			DifferentiationData() : derivOrder(nsl_diff_deriv_order_first), accOrder(2) {};
 
-			int derivOrder;			// order of differentiation
-			int accOrder;			// order ofaccuracy
+			nsl_diff_deriv_order_type derivOrder;	// order of differentiation
+			int accOrder;				// order ofaccuracy
 		};
 		struct DifferentiationResult {
 			DifferentiationResult() : available(false), valid(false), elapsedTime(0) {};
