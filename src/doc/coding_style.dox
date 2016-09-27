@@ -1,4 +1,4 @@
-/**\page style Coding Style
+/**\page coding_style Coding Style
 
 The following rules are not used everywhere (yet), but are intended as guidelines for new code and eventually
 old code should be adapted as well. 
