@@ -1,9 +1,9 @@
 /***************************************************************************
-    File             : XYDifferentiationCurveDock.h
+    File             : XYIntegrationCurveDock.h
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-    Description      : widget for editing properties of differentiation curves
+    Description      : widget for editing properties of integration curves
 
  ***************************************************************************/
 
@@ -26,39 +26,39 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYDIFFERENTIATIONCURVEDOCK_H
-#define XYDIFFERENTIATIONCURVEDOCK_H
+#ifndef XYINTEGRATIONCURVEDOCK_H
+#define XYINTEGRATIONCURVEDOCK_H
 
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
-#include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
-#include "ui_xydifferentiationcurvedockgeneraltab.h"
+#include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
+#include "ui_xyintegrationcurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYDifferentiationCurveDock: public XYCurveDock {
+class XYIntegrationCurveDock: public XYCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYDifferentiationCurveDock(QWidget *parent);
+	explicit XYIntegrationCurveDock(QWidget *parent);
 	void setCurves(QList<XYCurve*>);
 	virtual void setupGeneral();
 
 private:
 	virtual void initGeneralTab();
-	void showDifferentiationResult();
+	void showIntegrationResult();
 
-	Ui::XYDifferentiationCurveDockGeneralTab uiGeneralTab;
+	Ui::XYIntegrationCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
 
-	XYDifferentiationCurve* m_differentiationCurve;
-	XYDifferentiationCurve::DifferentiationData m_differentiationData;
+	XYIntegrationCurve* m_integrationCurve;
+	XYIntegrationCurve::IntegrationData m_integrationData;
 
 protected:
 	virtual void setModel();
 
 private slots:
-	//SLOTs for changes triggered in XYDifferentiationCurveDock
+	//SLOTs for changes triggered in XYIntegrationCurveDock
 	//general tab
 	void nameChanged();
 	void commentChanged();
@@ -77,7 +77,7 @@ private slots:
 	void curveDescriptionChanged(const AbstractAspect*);
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveYDataColumnChanged(const AbstractColumn*);
-	void curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData&);
+	void curveIntegrationDataChanged(const XYIntegrationCurve::IntegrationData&);
 	void dataChanged();
 
 };

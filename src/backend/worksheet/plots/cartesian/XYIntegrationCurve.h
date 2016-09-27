@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : XYDifferentiationCurve.h
+    File                 : XYIntegrationCurve.h
     Project              : LabPlot
-    Description          : A xy-curve defined by an differentiation
+    Description          : A xy-curve defined by an integration
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
@@ -26,24 +26,24 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYDIFFERENTIATIONCURVE_H
-#define XYDIFFERENTIATIONCURVE_H
+#ifndef XYINTEGRATIONCURVE_H
+#define XYINTEGRATIONCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
-class XYDifferentiationCurvePrivate;
-class XYDifferentiationCurve: public XYCurve {
+class XYIntegrationCurvePrivate;
+class XYIntegrationCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		struct DifferentiationData {
-			DifferentiationData() : derivOrder(1), accOrder(2) {};
+		struct IntegrationData {
+			IntegrationData() : derivOrder(1), accOrder(2) {};
 
-			int derivOrder;			// order of differentiation
+			int derivOrder;			// order of integration
 			int accOrder;			// order ofaccuracy
 		};
-		struct DifferentiationResult {
-			DifferentiationResult() : available(false), valid(false), elapsedTime(0) {};
+		struct IntegrationResult {
+			IntegrationResult() : available(false), valid(false), elapsedTime(0) {};
 
 			bool available;
 			bool valid;
@@ -51,8 +51,8 @@ class XYDifferentiationCurve: public XYCurve {
 			qint64 elapsedTime;
 		};
 
-		explicit XYDifferentiationCurve(const QString& name);
-		virtual ~XYDifferentiationCurve();
+		explicit XYIntegrationCurve(const QString& name);
+		virtual ~XYIntegrationCurve();
 
 		void recalculate();
 		virtual QIcon icon() const;
@@ -64,32 +64,32 @@ class XYDifferentiationCurve: public XYCurve {
 		const QString& xDataColumnPath() const;
 		const QString& yDataColumnPath() const;
 
-		CLASS_D_ACCESSOR_DECL(DifferentiationData, differentiationData, DifferentiationData)
-		const DifferentiationResult& differentiationResult() const;
-		bool isSourceDataChangedSinceLastDifferentiation() const;
+		CLASS_D_ACCESSOR_DECL(IntegrationData, integrationData, IntegrationData)
+		const IntegrationResult& integrationResult() const;
+		bool isSourceDataChangedSinceLastIntegration() const;
 
 		typedef WorksheetElement BaseClass;
-		typedef XYDifferentiationCurvePrivate Private;
+		typedef XYIntegrationCurvePrivate Private;
 
 	protected:
-		XYDifferentiationCurve(const QString& name, XYDifferentiationCurvePrivate* dd);
+		XYIntegrationCurve(const QString& name, XYIntegrationCurvePrivate* dd);
 
 	private:
-		Q_DECLARE_PRIVATE(XYDifferentiationCurve)
+		Q_DECLARE_PRIVATE(XYIntegrationCurve)
 		void init();
 
 	private slots:
 		void handleSourceDataChanged();
 
 	signals:
-		friend class XYDifferentiationCurveSetXDataColumnCmd;
-		friend class XYDifferentiationCurveSetYDataColumnCmd;
+		friend class XYIntegrationCurveSetXDataColumnCmd;
+		friend class XYIntegrationCurveSetYDataColumnCmd;
 		void xDataColumnChanged(const AbstractColumn*);
 		void yDataColumnChanged(const AbstractColumn*);
 
-		friend class XYDifferentiationCurveSetDifferentiationDataCmd;
-		void differentiationDataChanged(const XYDifferentiationCurve::DifferentiationData&);
-		void sourceDataChangedSinceLastDifferentiation();
+		friend class XYIntegrationCurveSetIntegrationDataCmd;
+		void integrationDataChanged(const XYIntegrationCurve::IntegrationData&);
+		void sourceDataChangedSinceLastIntegration();
 };
 
 #endif
