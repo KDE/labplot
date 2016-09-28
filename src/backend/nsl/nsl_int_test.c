@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : nsl_int.h
+    File                 : nsl_int_test.c
     Project              : LabPlot
     Description          : NSL numerical integration functions
     --------------------------------------------------------------------
@@ -26,16 +26,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef NSL_INT_H
-#define NSL_INT_H
+#include <stdio.h>
+#include "nsl_int.h"
 
-#define NSL_INT_NETHOD_COUNT 4
-typedef enum {nsl_int_method_rectangular, nsl_int_method_trapezoid, nsl_int_method_Simpson, nsl_int_method_Simpson_3_8} nsl_int_method_type;
-extern const char* nsl_int_method_name[];
+int main() {
+	const double xdata[]={1,2,3,5,7};
+	double ydata[]={1,1,1,1,1};
+	const int n=5;
 
-/*
-	rectangular rule (1-point)
-*/
-double nsl_int_rectangle(const double *x, double *y, const size_t n);
+	printf("data:\n");
+	size_t i;
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata[i]);
+	puts("");
 
-#endif /* NSL_INT_H */
+	printf("expecting ??? as integral (rectangle, 1-point):\n");
+	double sum = nsl_int_rectangle(xdata, ydata, n);
+
+	for (i=0; i < n; i++)
+		printf("%g %g (%g)\n", xdata[i], ydata[i], xdata[i]);
+	printf("sum = %g\n", sum);
+
+	return 0;
+}

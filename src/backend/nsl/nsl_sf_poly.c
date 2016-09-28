@@ -105,12 +105,18 @@ double complex nsl_sf_poly_reversed_bessel_theta(int n, double complex x) {
 
 /***************** interpolating polynomials *************/
 
+double nsl_sf_poly_interp_lagrange_0_int(double *x, double y) {
+	return (x[1]-x[0])*y;
+}
+
 double nsl_sf_poly_interp_lagrange_1(double v, double *x, double *y) {
 	return (y[0]*(x[1]-v) + y[1]*(v-x[0]))/(x[1]-x[0]);
 }
-
 double nsl_sf_poly_interp_lagrange_1_deriv(double *x, double *y) {
 	return (y[0]-y[1])/(x[1]-x[0]);
+}
+double nsl_sf_poly_interp_lagrange_1_int(double *x, double *y) {
+	return (x[1]-x[0])*(y[0]+y[1])/2.;
 }
 
 double nsl_sf_poly_interp_lagrange_2(double v, double *x, double *y) {

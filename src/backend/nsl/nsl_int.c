@@ -36,11 +36,23 @@
 #include <stdlib.h>
 #include <float.h>
 #include "nsl_int.h"
+#include "nsl_sf_poly.h"
 
-const char* nsl_int_method_name[] = {"rectangle (1-point)", "trapezoid (2-point)", "Simpson (3-point)", "Simpson 3/8 (4-point)"};
+const char* nsl_int_method_name[] = {"rectangle (1-point)", "trapezoid (2-point)", "Simpson's (3-point)", "Simpson's 3/8 (4-point)"};
 
-int nsl_int_rectangle(const double *x, double *y, const size_t n) {
-	/* TODO */
+double nsl_int_rectangle(const double *x, double *y, const size_t n) {
+	if (n == 0)
+		return 0;
 
-	return 0;
+	size_t i, j;
+	double sum=0, xdata[2];
+	for (i = 0; i < n-1; i++) {
+		for (j=0; j < 2; j++)
+			xdata[j] = x[i+j];
+		y[i] = nsl_sf_poly_interp_lagrange_0_int(xdata, y[i]);
+		sum += y[i];
+		printf("%zu %g %g\n", i, y[i], sum);
+	}
+
+	return sum;
 }
