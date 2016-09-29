@@ -93,11 +93,11 @@ size_t nsl_int_simpson(double *x, double *y, const size_t n, int abs) {
 	for (i = 0; i < n-2; i+=2) {
 		for (j=0; j < 3; j++)
 			xdata[j] = x[i+j], ydata[j] = y[i+j];
-		y[np] = sum;
-		x[np++] = x[i+1];
-		printf("i/sum: %zu-%zu %g\n", i, i+2, sum);
 
 		sum += nsl_sf_poly_interp_lagrange_2_int(xdata, ydata);
+		y[np] = sum;
+		x[np++] = x[i+1];
+		/*printf("i/sum: %zu-%zu %g\n", i, i+2, sum);*/
 	}
 	y[n-1] = sum;
 

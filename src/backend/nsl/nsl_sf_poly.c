@@ -106,6 +106,7 @@ double complex nsl_sf_poly_reversed_bessel_theta(int n, double complex x) {
 /***************** interpolating polynomials *************/
 
 double nsl_sf_poly_interp_lagrange_0_int(double *x, double y) {
+	/* rectangle rule */
 	return (x[1]-x[0])*y;
 }
 
@@ -116,6 +117,7 @@ double nsl_sf_poly_interp_lagrange_1_deriv(double *x, double *y) {
 	return (y[0]-y[1])/(x[1]-x[0]);
 }
 double nsl_sf_poly_interp_lagrange_1_int(double *x, double *y) {
+	/* trapezoid rule (2-point) */
 	return (x[1]-x[0])*(y[0]+y[1])/2.;
 }
 double nsl_sf_poly_interp_lagrange_1_absint(double *x, double *y) {
@@ -147,8 +149,11 @@ double nsl_sf_poly_interp_lagrange_2_deriv2(double *x, double *y) {
 	return 2.*( y[0]/(h1*h12) - y[1]/(h1*h2) + y[2]/(h12*h2) );
 }
 double nsl_sf_poly_interp_lagrange_2_int(double *x, double *y) {
-	/* TODO */
-	return 0;
+	/* Simpson's 1/3 rule for non-uniform grid (3-point) */
+	double h1 = x[1]-x[0], h2 = x[2]-x[1];
+	double h12 = h1+h2, h1_2 = h1/h2;
+
+	return h12/6.*( (2.-1./h1_2)*y[0] + (2.+h1_2+1./h1_2)*y[1] + (2.-h1_2)*y[2] );
 }
 
 double nsl_sf_poly_interp_lagrange_3(double v, double *x, double *y) {

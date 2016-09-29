@@ -76,12 +76,13 @@ int main() {
 	puts("");
 
 	printf("integral (Simpson's 1/3, 3-point):\n");
+	/*double ydata5[]={2,2,2,2,2};*/
 	double ydata5[]={1,2,3,-1,-3};
 	size_t np = nsl_int_simpson(xdata, ydata5, n, 0);
 
 	for (i=0; i < np; i++)
 		printf("%g %g\n", xdata[i], ydata5[i]);
-	printf("sum = %g (n = %zu)\n", ydata5[n-1], np);
+	printf("sum = %g (n = %zu)\n", ydata5[np-1], np);
 	puts("");
 
 	return 0;
