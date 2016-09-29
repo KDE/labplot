@@ -174,6 +174,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/nsl/nsl_filter.c
 	${BACKEND_DIR}/nsl/nsl_geom.c
 	${BACKEND_DIR}/nsl/nsl_geom_linesim.c
+	${BACKEND_DIR}/nsl/nsl_int.c
 	${BACKEND_DIR}/nsl/nsl_interp.c
 	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
 	${BACKEND_DIR}/nsl/nsl_sf_poly.c

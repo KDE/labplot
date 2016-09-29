@@ -229,7 +229,6 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
 				n++;
 
-
 		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbDerivOrder->model());
 		QStandardItem* item = model->item(nsl_diff_deriv_order_first);
 		if (n < 3)

@@ -30,6 +30,9 @@
 #define XYINTEGRATIONCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+extern "C" {
+#include "backend/nsl/nsl_int.h"
+}
 
 class XYIntegrationCurvePrivate;
 class XYIntegrationCurve: public XYCurve {
@@ -37,10 +40,10 @@ class XYIntegrationCurve: public XYCurve {
 
 	public:
 		struct IntegrationData {
-			IntegrationData() : derivOrder(1), accOrder(2) {};
+			IntegrationData() : method(nsl_int_method_trapezoid), absolute(false) {};
 
-			int derivOrder;			// order of integration
-			int accOrder;			// order ofaccuracy
+			nsl_int_method_type method;	// method for integration
+			bool absolute;			// absolutr area?
 		};
 		struct IntegrationResult {
 			IntegrationResult() : available(false), valid(false), elapsedTime(0) {};

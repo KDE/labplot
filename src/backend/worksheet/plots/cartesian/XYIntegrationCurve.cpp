@@ -43,7 +43,6 @@
 #include <cfloat>	// DBL_MIN
 extern "C" {
 #include <gsl/gsl_errno.h>
-#include "backend/nsl/nsl_diff.h"
 }
 
 #include <KIcon>
@@ -232,7 +231,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 
 	//number of data points to integrate
 	const unsigned int n = ydataVector.size();
-	if (n < 3) {
+	if (n < 1) {
 		integrationResult.available = true;
 		integrationResult.valid = false;
 		integrationResult.status = i18n("Not enough data points available.");
@@ -245,35 +244,16 @@ void XYIntegrationCurvePrivate::recalculate() {
 	double* ydata = ydataVector.data();
 
 	// integration settings
-	const int derivOrder = integrationData.derivOrder;
-	const int accOrder = integrationData.accOrder;
+	const nsl_int_method_type method = integrationData.method;
+	const bool absolute = integrationData.absolute;
 #ifndef NDEBUG
-	qDebug()<<nsl_diff_deriv_order_name[derivOrder]<<"derivative";
-	qDebug()<<"accuracy order:"<<accOrder;
+	qDebug()<<"method:"<<nsl_int_method_name[method];
+	qDebug()<<"absolute area:"<<absolute;
 #endif
 ///////////////////////////////////////////////////////////
 	int status=0;
 
-	switch (derivOrder) {
-	case nsl_diff_deriv_order_first:
-		status = nsl_diff_first_deriv(xdata, ydata, n, accOrder);
-		break;
-	case nsl_diff_deriv_order_second:
-		status = nsl_diff_second_deriv(xdata, ydata, n, accOrder);
-		break;
-	case nsl_diff_deriv_order_third:
-		status = nsl_diff_third_deriv(xdata, ydata, n, accOrder);
-		break;
-	case nsl_diff_deriv_order_fourth:
-		status = nsl_diff_fourth_deriv(xdata, ydata, n, accOrder);
-		break;
-	case nsl_diff_deriv_order_fifth:
-		status = nsl_diff_fifth_deriv(xdata, ydata, n, accOrder);
-		break;
-	case nsl_diff_deriv_order_sixth:
-		status = nsl_diff_sixth_deriv(xdata, ydata, n, accOrder);
-		break;
-	}
+	//TODO
 
 	xVector->resize(n);
 	yVector->resize(n);
@@ -309,8 +289,8 @@ void XYIntegrationCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement("integrationData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
-	writer->writeAttribute( "derivOrder", QString::number(d->integrationData.derivOrder) );
-	writer->writeAttribute( "accOrder", QString::number(d->integrationData.accOrder) );
+	writer->writeAttribute( "method", QString::number(d->integrationData.method) );
+	writer->writeAttribute( "absolute", QString::number(d->integrationData.absolute) );
 	writer->writeEndElement();// integrationData
 
 	// integration results (generated columns)
@@ -360,17 +340,17 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-			str = attribs.value("derivOrder").toString();
+			str = attribs.value("method").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'derivOrder'"));
+				reader->raiseWarning(attributeWarning.arg("'method'"));
 			else
-				d->integrationData.derivOrder = str.toInt();
+				d->integrationData.method = (nsl_int_method_type) str.toInt();
 
-			str = attribs.value("accOrder").toString();
+			str = attribs.value("absolute").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'accOrder'"));
+				reader->raiseWarning(attributeWarning.arg("'absolute'"));
 			else
-				d->integrationData.accOrder = str.toInt();
+				d->integrationData.absolute = (bool) str.toInt();
 
 		} else if (reader->name() == "integrationResult") {
 

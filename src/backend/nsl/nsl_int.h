@@ -30,7 +30,7 @@
 #define NSL_INT_H
 
 #define NSL_INT_NETHOD_COUNT 4
-typedef enum {nsl_int_method_rectangular, nsl_int_method_trapezoid, nsl_int_method_Simpson, nsl_int_method_Simpson_3_8} nsl_int_method_type;
+typedef enum {nsl_int_method_rectangle, nsl_int_method_trapezoid, nsl_int_method_Simpson, nsl_int_method_Simpson_3_8} nsl_int_method_type;
 extern const char* nsl_int_method_name[];
 
 /*

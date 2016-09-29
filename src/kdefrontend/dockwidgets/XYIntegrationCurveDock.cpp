@@ -37,7 +37,7 @@
 #include <QStandardItemModel>
 
 extern "C" {
-#include "backend/nsl/nsl_diff.h"
+#include "backend/nsl/nsl_int.h"
 }
 #include <cmath>        // isnan
 
@@ -84,8 +84,9 @@ void XYIntegrationCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
 
-	for (int i=0; i < NSL_DIFF_DERIV_ORDER_COUNT; i++)
-		uiGeneralTab.cbDerivOrder->addItem(i18n(nsl_diff_deriv_order_name[i]));
+	for (int i=0; i < NSL_INT_NETHOD_COUNT; i++)
+		uiGeneralTab.cbMethod->addItem(i18n(nsl_int_method_name[i]));
+	//TODO: set default method here?
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
@@ -98,8 +99,8 @@ void XYIntegrationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 
-	connect( uiGeneralTab.cbDerivOrder, SIGNAL(currentIndexChanged(int)), this, SLOT(derivOrderChanged()) );
-	connect( uiGeneralTab.sbAccOrder, SIGNAL(valueChanged(int)), this, SLOT(accOrderChanged()) );
+	connect( uiGeneralTab.cbMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(methodChanged()) );
+	connect( uiGeneralTab.cbAbsolute, SIGNAL(clicked(bool)), this, SLOT(absoluteChanged()) );
 
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
@@ -132,10 +133,10 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
-	uiGeneralTab.cbDerivOrder->setCurrentIndex(m_integrationData.derivOrder);
-	this->derivOrderChanged();
-	uiGeneralTab.sbAccOrder->setValue(m_integrationData.accOrder);
-	this->accOrderChanged();
+	uiGeneralTab.cbMethod->setCurrentIndex(m_integrationData.method);
+	this->methodChanged();
+	uiGeneralTab.cbAbsolute->setChecked(m_integrationData.absolute);
+	this->absoluteChanged();
 
 	this->showIntegrationResult();
 
@@ -229,69 +230,7 @@ void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
 				n++;
 
-
-		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbDerivOrder->model());
-		QStandardItem* item = model->item(nsl_diff_deriv_order_first);
-		if (n < 3)
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-		else {
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-			if (n < 5)
-				uiGeneralTab.sbAccOrder->setMinimum(2);
-		}
-
-		item = model->item(nsl_diff_deriv_order_second);
-		if (n < 3) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_second)
-					uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
-		}
-		else {
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-			if (n < 4)
-				uiGeneralTab.sbAccOrder->setMinimum(1);
-			else if (n < 5)
-				uiGeneralTab.sbAccOrder->setMinimum(2);
-		}
-
-		item = model->item(nsl_diff_deriv_order_third);
-		if (n < 5) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_third)
-					uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-
-		item = model->item(nsl_diff_deriv_order_fourth);
-		if (n < 5) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_fourth)
-					uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
-		}
-		else {
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-			if (n < 7)
-				uiGeneralTab.sbAccOrder->setMinimum(1);
-		}
-
-		item = model->item(nsl_diff_deriv_order_fifth);
-		if (n < 7) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_fifth)
-					uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-
-		item = model->item(nsl_diff_deriv_order_sixth);
-		if (n < 7) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_sixth)
-					uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+		// TODO
 	}
 }
 
@@ -310,50 +249,26 @@ void XYIntegrationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYIntegrationCurve*>(curve)->setYDataColumn(column);
 }
 
-void XYIntegrationCurveDock::derivOrderChanged() {
-	int derivOrder = (int)uiGeneralTab.cbDerivOrder->currentIndex();
-	m_integrationData.derivOrder = derivOrder;
+void XYIntegrationCurveDock::methodChanged() {
+	nsl_int_method_type method = (nsl_int_method_type)uiGeneralTab.cbMethod->currentIndex();
+	m_integrationData.method = method;
 
-	// update avail. accuracies
-	switch (derivOrder) {
-	case nsl_diff_deriv_order_first:
-		uiGeneralTab.sbAccOrder->setMinimum(2);
-		uiGeneralTab.sbAccOrder->setMaximum(4);
-		uiGeneralTab.sbAccOrder->setSingleStep(2);
-		uiGeneralTab.sbAccOrder->setValue(4);
+	// update absolute option
+	switch (method) {
+	case nsl_int_method_rectangle:
+	case nsl_int_method_trapezoid:
+		uiGeneralTab.cbAbsolute->setEnabled(true);
 		break;
-	case nsl_diff_deriv_order_second:
-		uiGeneralTab.sbAccOrder->setMinimum(1);
-		uiGeneralTab.sbAccOrder->setMaximum(3);
-		uiGeneralTab.sbAccOrder->setSingleStep(1);
-		uiGeneralTab.sbAccOrder->setValue(3);
-		break;
-	case nsl_diff_deriv_order_third:
-		uiGeneralTab.sbAccOrder->setMinimum(2);
-		uiGeneralTab.sbAccOrder->setMaximum(2);
-		break;
-	case nsl_diff_deriv_order_fourth:
-		uiGeneralTab.sbAccOrder->setMinimum(1);
-		uiGeneralTab.sbAccOrder->setMaximum(3);
-		uiGeneralTab.sbAccOrder->setSingleStep(2);
-		uiGeneralTab.sbAccOrder->setValue(3);
-		break;
-	case nsl_diff_deriv_order_fifth:
-		uiGeneralTab.sbAccOrder->setMinimum(2);
-		uiGeneralTab.sbAccOrder->setMaximum(2);
-		break;
-	case nsl_diff_deriv_order_sixth:
-		uiGeneralTab.sbAccOrder->setMinimum(1);
-		uiGeneralTab.sbAccOrder->setMaximum(1);
-		break;
+	default:
+		uiGeneralTab.cbAbsolute->setEnabled(false);
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYIntegrationCurveDock::accOrderChanged() {
-	int accOrder = (int)uiGeneralTab.sbAccOrder->value();
-	m_integrationData.accOrder = accOrder;
+void XYIntegrationCurveDock::absoluteChanged() {
+	bool absolute = uiGeneralTab.cbAbsolute->isChecked();
+	m_integrationData.absolute = absolute;
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
@@ -440,10 +355,10 @@ void XYIntegrationCurveDock::curveYDataColumnChanged(const AbstractColumn* colum
 void XYIntegrationCurveDock::curveIntegrationDataChanged(const XYIntegrationCurve::IntegrationData& data) {
 	m_initializing = true;
 	m_integrationData = data;
-	uiGeneralTab.cbDerivOrder->setCurrentIndex(m_integrationData.derivOrder);
-	this->derivOrderChanged();
-	uiGeneralTab.sbAccOrder->setValue(m_integrationData.accOrder);
-	this->accOrderChanged();
+	uiGeneralTab.cbMethod->setCurrentIndex(m_integrationData.method);
+	this->methodChanged();
+	uiGeneralTab.cbAbsolute->setChecked(m_integrationData.absolute);
+	this->absoluteChanged();
 
 	this->showIntegrationResult();
 	m_initializing = false;

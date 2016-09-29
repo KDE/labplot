@@ -26,9 +26,8 @@
  ***************************************************************************/
 
 /* TODO:
-	* implement all rules
-	* absolute area
-	* sum of all values
+	* absolute area for Simpson/Simpson-3/8 rules?
+	* consider not multiple of 3/4 points for Simpson/Simpson-3/8 rules?
 */
 
 #include <stdio.h>
