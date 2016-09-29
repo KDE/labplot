@@ -40,19 +40,42 @@
 
 const char* nsl_int_method_name[] = {"rectangle (1-point)", "trapezoid (2-point)", "Simpson's (3-point)", "Simpson's 3/8 (4-point)"};
 
-double nsl_int_rectangle(const double *x, double *y, const size_t n) {
+int nsl_int_rectangle(const double *x, double *y, const size_t n, int abs) {
 	if (n == 0)
-		return 0;
+		return -1;
 
 	size_t i, j;
-	double sum=0, xdata[2];
+	double s, sum=0, xdata[2];
 	for (i = 0; i < n-1; i++) {
 		for (j=0; j < 2; j++)
 			xdata[j] = x[i+j];
-		y[i] = nsl_sf_poly_interp_lagrange_0_int(xdata, y[i]);
-		sum += y[i];
-		printf("%zu %g %g\n", i, y[i], sum);
+		s = nsl_sf_poly_interp_lagrange_0_int(xdata, y[i]);
+		if (abs)
+			s = fabs(s);
+		y[i] = sum;
+		sum += s;
 	}
+	y[n-1] = sum;
 
-	return sum;
+	return 0;
+}
+
+int nsl_int_trapezoid(const double *x, double *y, const size_t n, int abs) {
+	if (n < 2)
+		return -1;
+
+	size_t i, j;
+	double sum=0, xdata[2], ydata[2];
+	for (i = 0; i < n-1; i++) {
+		for (j=0; j < 2; j++)
+			xdata[j] = x[i+j], ydata[j] = y[i+j];
+		y[i] = sum;
+		if (abs)
+			sum += nsl_sf_poly_interp_lagrange_1_absint(xdata, ydata);
+		else
+			sum += nsl_sf_poly_interp_lagrange_1_int(xdata, ydata);
+	}
+	y[n-1] = sum;
+
+	return 0;
 }

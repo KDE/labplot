@@ -34,8 +34,11 @@ typedef enum {nsl_int_method_rectangular, nsl_int_method_trapezoid, nsl_int_meth
 extern const char* nsl_int_method_name[];
 
 /*
+	numerical integration for non-uniform samples
 	rectangular rule (1-point)
+	abs - 0:return mathem. area, 1: return absolute area
 */
-double nsl_int_rectangle(const double *x, double *y, const size_t n);
+int nsl_int_rectangle(const double *x, double *y, const size_t n, int abs);
+int nsl_int_trapezoid(const double *x, double *y, const size_t n, int abs);
 
 #endif /* NSL_INT_H */

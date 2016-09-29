@@ -31,7 +31,7 @@
 
 int main() {
 	const double xdata[]={1,2,3,5,7};
-	double ydata[]={1,1,1,1,1};
+	double ydata[]={2,2,2,-2,-2};
 	const int n=5;
 
 	printf("data:\n");
@@ -40,12 +40,40 @@ int main() {
 		printf("%g %g\n", xdata[i], ydata[i]);
 	puts("");
 
-	printf("expecting ??? as integral (rectangle, 1-point):\n");
-	double sum = nsl_int_rectangle(xdata, ydata, n);
+	printf("integral (rectangle, 1-point):\n");
+	int status = nsl_int_rectangle(xdata, ydata, n, 0);
 
 	for (i=0; i < n; i++)
-		printf("%g %g (%g)\n", xdata[i], ydata[i], xdata[i]);
-	printf("sum = %g\n", sum);
+		printf("%g %g\n", xdata[i], ydata[i]);
+	printf("sum = %g\n", ydata[n-1]);
+	puts("");
+
+	printf("area (rectangle, 1-point):\n");
+	double ydata4[]={2,2,2,2,2};
+	status = nsl_int_rectangle(xdata, ydata4, n, 1);
+
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata4[i]);
+	printf("sum = %g\n", ydata4[n-1]);
+	puts("");
+
+	printf("integral (trapezoid, 2-point):\n");
+	double ydata2[]={1,2,3,-1,-3};
+	status = nsl_int_trapezoid(xdata, ydata2, n, 0);
+
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata2[i]);
+	printf("sum = %g\n", ydata2[n-1]);
+	puts("");
+
+	printf("area (trapezoid, 2-point):\n");
+	double ydata3[]={1,2,3,-1,-3};
+	status = nsl_int_trapezoid(xdata, ydata3, n, 1);
+
+	for (i=0; i < n; i++)
+		printf("%g %g\n", xdata[i], ydata3[i]);
+	printf("sum = %g\n", ydata3[n-1]);
+	puts("");
 
 	return 0;
 }

@@ -118,6 +118,15 @@ double nsl_sf_poly_interp_lagrange_1_deriv(double *x, double *y) {
 double nsl_sf_poly_interp_lagrange_1_int(double *x, double *y) {
 	return (x[1]-x[0])*(y[0]+y[1])/2.;
 }
+double nsl_sf_poly_interp_lagrange_1_absint(double *x, double *y) {
+	double dx = x[1]-x[0];
+	if (y[0]*y[1] < 0)	/* sign change */
+		return dx*( (fabs(y[0])-fabs(y[1]))/(fabs(y[1]/y[0])+1) + fabs(y[1]) )/2.;
+	if (y[0] < 0 && y[1] < 0)
+		return dx*(fabs(y[0])+fabs(y[1]))/2.;
+	else
+		return dx*(y[0]+y[1])/2.;
+}
 
 double nsl_sf_poly_interp_lagrange_2(double v, double *x, double *y) {
 	double h1 = x[1]-x[0], h2 = x[2]-x[1];	
@@ -125,7 +134,6 @@ double nsl_sf_poly_interp_lagrange_2(double v, double *x, double *y) {
 
 	return y[0]*(v-x[1])*(v-x[2])/(h1*h12) + y[1]*(x[0]-v)*(v-x[2])/(h1*h2) + y[2]*(x[0]-v)*(x[1]-v)/(h12*h2);
 }
-
 double nsl_sf_poly_interp_lagrange_2_deriv(double v, double *x, double *y) {
 	double h1 = x[1]-x[0], h2 = x[2]-x[1];	
 	double h12 = h1+h2;
@@ -146,7 +154,6 @@ double nsl_sf_poly_interp_lagrange_3(double v, double *x, double *y) {
 	return y[0]*(v-x[1])*(v-x[2])*(v-x[3])/(h1*h12*h13) + y[1]*(v-x[0])*(v-x[2])*(v-x[3])/(h1*h2*h23) 
 		- y[2]*(v-x[0])*(v-x[1])*(v-x[3])/(h12*h2*h3) + y[3]*(v-x[0])*(v-x[1])*(v-x[2])/(h13*h23*h3);
 }
-
 double nsl_sf_poly_interp_lagrange_3_deriv(double v, double *x, double *y) {
 	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2], S = x[0]+x[1]+x[2]+x[3];
 	double h12 = h1+h2, h23 = h2+h3, h13=h12+h3;
@@ -156,7 +163,6 @@ double nsl_sf_poly_interp_lagrange_3_deriv(double v, double *x, double *y) {
 		+ y[2]*(3*v*v+x[0]*x[1]-2.*v*(S-x[2])+(x[0]+x[1])*x[3])/(h12*h2*h3)
 		+ y[3]*(3*v*v+x[0]*x[1]+(x[0]+x[1])*x[2]-2.*v*(S-x[3]))/(h13*h23*h3);
 }
-
 double nsl_sf_poly_interp_lagrange_3_deriv2(double v, double *x, double *y) {
 	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2], S = x[0]+x[1]+x[2]+x[3];
 	double h12 = h1+h2, h23 = h2+h3, h13=h12+h3;
@@ -164,12 +170,20 @@ double nsl_sf_poly_interp_lagrange_3_deriv2(double v, double *x, double *y) {
 	return 2.*( y[0]*(S-3.*v-x[0])/(h1*h12*h13) + y[1]*(3.*v-S+x[1])/(h1*h2*h23) 
 			+ y[2]*(S-3.*v-x[2])/(h12*h2*h3) + y[3]*(3.*v-S+x[3])/(h13*h23*h3) );
 }
-
 double nsl_sf_poly_interp_lagrange_3_deriv3(double *x, double *y) {
 	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2];
 	double h12 = h1+h2, h23 = h2+h3, h13=h12+h3;
 
 	return 6.*( -y[0]/(h1*h12*h13) + y[1]/(h1*h2*h23) - y[2]/(h12*h2*h3) +y[3]/(h13*h23*h3) );
+}
+
+/* 1/2 sum_{i != j}^n (x_i x_j) for n=4 */
+double sum_of_2product_combinations_4_2(double a, double b, double c, double d) {
+	return a*(b+c+d) + b*(c+d) + c*d;
+}
+/* 1/6 sum_{i != j, j != k, i != k}^n (x_i x_j x_k) for n=4 */
+double sum_of_3product_combinations_4_6(double a, double b, double c, double d) {
+	return a*(b*(c+d) + c*d) + b*c*d;
 }
 
 double nsl_sf_poly_interp_lagrange_4(double v, double *x, double *y) {
@@ -182,17 +196,6 @@ double nsl_sf_poly_interp_lagrange_4(double v, double *x, double *y) {
 		- y[3]*(v-x[0])*(v-x[1])*(v-x[2])*(v-x[4])/(h13*h23*h3*h4)
 		+ y[4]*(v-x[0])*(v-x[1])*(v-x[2])*(v-x[3])/(h14*h24*h34*h4);
 }
-
-/* 1/2 sum_{i != j}^n (x_i x_j) for n=4 */
-double sum_of_2product_combinations_4_2(double a, double b, double c, double d) {
-	return a*(b+c+d) + b*(c+d) + c*d;
-}
-
-/* 1/6 sum_{i != j, j != k, i != k}^n (x_i x_j x_k) for n=4 */
-double sum_of_3product_combinations_4_6(double a, double b, double c, double d) {
-	return a*(b*(c+d) + c*d) + b*c*d;
-}
-
 double nsl_sf_poly_interp_lagrange_4_deriv(double v, double *x, double *y) {
 	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2], h4 = x[4]-x[3], S = x[0]+x[1]+x[2]+x[3]+x[4];
 	double h12 = h1+h2, h23 = h2+h3, h34 = h3+h4, h13=h12+h3, h24 = h23+h4, h14 = h12+h34;
@@ -208,7 +211,6 @@ double nsl_sf_poly_interp_lagrange_4_deriv(double v, double *x, double *y) {
 		+ y[4]*(4.*v*v*v - 3.*v*v*(S-x[4]) - sum_of_3product_combinations_4_6(x[0],x[1],x[2],x[3])
 			+ 2.*v*sum_of_2product_combinations_4_2(x[0],x[1],x[2],x[3]) )/(h14*h24*h34*h4);
 }
-
 double nsl_sf_poly_interp_lagrange_4_deriv2(double v, double *x, double *y) {
 	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2], h4 = x[4]-x[3], S = x[0]+x[1]+x[2]+x[3]+x[4];
 	double h12 = h1+h2, h23 = h2+h3, h34 = h3+h4, h13=h12+h3, h24 = h23+h4, h14 = h12+h34;
@@ -220,7 +222,6 @@ double nsl_sf_poly_interp_lagrange_4_deriv2(double v, double *x, double *y) {
 		- y[3]*(6.*v*v-3.*v*(S-x[3]) + sum_of_2product_combinations_4_2(x[0],x[1],x[2],x[4]))/(h13*h23*h3*h4)
 		+ y[4]*(6.*v*v-3.*v*(S-x[4]) + sum_of_2product_combinations_4_2(x[0],x[1],x[2],x[3]))/(h14*h24*h34*h4) );
 }
-
 double nsl_sf_poly_interp_lagrange_4_deriv3(double v, double *x, double *y) {
 	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2], h4 = x[4]-x[3], S = x[0]+x[1]+x[2]+x[3]+x[4];
 	double h12 = h1+h2, h23 = h2+h3, h34 = h3+h4, h13=h12+h3, h24 = h23+h4, h14 = h12+h34;
@@ -228,7 +229,6 @@ double nsl_sf_poly_interp_lagrange_4_deriv3(double v, double *x, double *y) {
 	return 6.*( y[0]*(4.*v-S+x[0])/(h1*h12*h13*h14) + y[1]*(S-4.*v-x[1])/(h1*h2*h23*h24) + y[2]*(4.*v-S+x[2])/(h12*h2*h3*h34)
 			+ y[3]*(S-4.*v-x[3])/(h13*h23*h3*h4) + y[4]*(4.*v-S+x[4])/(h14*h24*h34*h4) );
 }
-
 double nsl_sf_poly_interp_lagrange_4_deriv4(double *x, double *y) {
 	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2], h4 = x[4]-x[3];
 	double h12 = h1+h2, h23 = h2+h3, h34 = h3+h4, h13=h12+h3, h24 = h23+h4, h14 = h12+h34;
@@ -256,7 +256,6 @@ double nsl_sf_poly_interp_lagrange_6_deriv4(double v, double *x, double *y) {
 		- y[5]*(15.*v*v-5.*v*(S-x[5]) + sum_of_product_combinations_6_2(x[0],x[1],x[2],x[3],x[4],x[6]))/(h15*h25*h35*h45*h5*h6)
 		+ y[6]*(15.*v*v-5.*v*(S-x[6]) + sum_of_product_combinations_6_2(x[0],x[1],x[2],x[3],x[4],x[5]))/(h16*h26*h36*h46*h56*h6) );
 }
-
 double nsl_sf_poly_interp_lagrange_6_deriv5(double v, double *x, double *y) {
 	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2], h4 = x[4]-x[3], h5 = x[5]-x[4], h6 = x[6]-x[5];
 	double h12 = h1+h2, h23 = h2+h3, h34 = h3+h4, h45 = h4+h5, h56 = h5+h6;
@@ -268,7 +267,6 @@ double nsl_sf_poly_interp_lagrange_6_deriv5(double v, double *x, double *y) {
 			+ y[4]*(6.*v-S+x[4])/(h14*h24*h34*h4*h5*h56) - y[5]*(6.*v-S+x[5])/(h15*h25*h35*h45*h5*h6)
 			+ y[6]*(6.*v-S+x[6])/(h16*h26*h36*h46*h56*h6) );
 }
-
 double nsl_sf_poly_interp_lagrange_6_deriv6(double *x, double *y) {
 	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2], h4 = x[4]-x[3], h5 = x[5]-x[4], h6 = x[6]-x[5];
 	double h12 = h1+h2, h23 = h2+h3, h34 = h3+h4, h45 = h4+h5, h56 = h5+h6;
