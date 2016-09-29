@@ -146,6 +146,10 @@ double nsl_sf_poly_interp_lagrange_2_deriv2(double *x, double *y) {
 
 	return 2.*( y[0]/(h1*h12) - y[1]/(h1*h2) + y[2]/(h12*h2) );
 }
+double nsl_sf_poly_interp_lagrange_2_int(double *x, double *y) {
+	/* TODO */
+	return 0;
+}
 
 double nsl_sf_poly_interp_lagrange_3(double v, double *x, double *y) {
 	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2];	

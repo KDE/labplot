@@ -51,9 +51,9 @@ double complex nsl_sf_poly_bessel_y(int n, double complex x);
 double complex nsl_sf_poly_reversed_bessel_theta(int n, double complex x);
 
 /* interpolating polynomial (Lagrange) 
-	0 - zeroth order (1-point) integral (rectangle)
-	1 - first order (2-point), derivative, integral and absolute area (trapezoid)
-	2 - second order (3-point) and derivatives
+	0 - zeroth order (1-point) integral (rectangle rule)
+	1 - first order (2-point), derivative, integral and absolute area (trapezoid rule)
+	2 - second order (3-point) and derivatives and integral (Simpson's 1/3 rule)
 	3 - third order (4-point) and derivatives
 	4 - fourth order (5-point) and derivatives
 	6 - sixth order (7-point) and derivatives
@@ -67,6 +67,7 @@ double nsl_sf_poly_interp_lagrange_1_absint(double *x, double *y);
 double nsl_sf_poly_interp_lagrange_2(double v, double *x, double *y);
 double nsl_sf_poly_interp_lagrange_2_deriv(double v, double *x, double *y);
 double nsl_sf_poly_interp_lagrange_2_deriv2(double *x, double *y);
+double nsl_sf_poly_interp_lagrange_2_int(double *x, double *y);
 double nsl_sf_poly_interp_lagrange_3(double v, double *x, double *y);
 double nsl_sf_poly_interp_lagrange_3_deriv(double v, double *x, double *y);
 double nsl_sf_poly_interp_lagrange_3_deriv2(double v, double *x, double *y);

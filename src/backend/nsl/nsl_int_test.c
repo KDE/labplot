@@ -30,7 +30,7 @@
 #include "nsl_int.h"
 
 int main() {
-	const double xdata[]={1,2,3,5,7};
+	double xdata[]={1,2,3,5,7};
 	double ydata[]={2,2,2,-2,-2};
 	const int n=5;
 
@@ -73,6 +73,15 @@ int main() {
 	for (i=0; i < n; i++)
 		printf("%g %g\n", xdata[i], ydata3[i]);
 	printf("sum = %g\n", ydata3[n-1]);
+	puts("");
+
+	printf("integral (Simpson's 1/3, 3-point):\n");
+	double ydata5[]={1,2,3,-1,-3};
+	size_t np = nsl_int_simpson(xdata, ydata5, n, 0);
+
+	for (i=0; i < np; i++)
+		printf("%g %g\n", xdata[i], ydata5[i]);
+	printf("sum = %g (n = %zu)\n", ydata5[n-1], np);
 	puts("");
 
 	return 0;

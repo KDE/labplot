@@ -79,3 +79,27 @@ int nsl_int_trapezoid(const double *x, double *y, const size_t n, int abs) {
 
 	return 0;
 }
+
+size_t nsl_int_simpson(double *x, double *y, const size_t n, int abs) {
+	if (n < 3)
+		return 0;
+	if (abs != 0) {
+		printf("absolute area Simpson rule not implemented yet.\n");
+		return 0;
+	}
+
+	size_t i, j, np=0;
+	double sum=0, xdata[3], ydata[3];
+	for (i = 0; i < n-2; i+=2) {
+		for (j=0; j < 3; j++)
+			xdata[j] = x[i+j], ydata[j] = y[i+j];
+		y[np] = sum;
+		x[np++] = x[i+1];
+		printf("i/sum: %zu-%zu %g\n", i, i+2, sum);
+
+		sum += nsl_sf_poly_interp_lagrange_2_int(xdata, ydata);
+	}
+	y[n-1] = sum;
+
+	return np;
+}
