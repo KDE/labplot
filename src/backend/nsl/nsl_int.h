@@ -38,10 +38,12 @@ extern const char* nsl_int_method_name[];
 	rectangle rule (1-point)
 	trapezoid rule (2-point)
 	Simpson-1/3 rule (3-point)	returns number of points
+	Simpson-3/8 rule (4-point)	returns number of points
 	abs - 0:return mathem. area, 1: return absolute area
 */
 int nsl_int_rectangle(const double *x, double *y, const size_t n, int abs);
 int nsl_int_trapezoid(const double *x, double *y, const size_t n, int abs);
 size_t nsl_int_simpson(double *x, double *y, const size_t n, int abs);
+size_t nsl_int_simpson_3_8(double *x, double *y, const size_t n, int abs);
 
 #endif /* NSL_INT_H */

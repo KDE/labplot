@@ -185,6 +185,15 @@ double nsl_sf_poly_interp_lagrange_3_deriv3(double *x, double *y) {
 
 	return 6.*( -y[0]/(h1*h12*h13) + y[1]/(h1*h2*h23) - y[2]/(h12*h2*h3) +y[3]/(h13*h23*h3) );
 }
+double nsl_sf_poly_interp_lagrange_3_int(double *x, double *y) {
+	/* Simpson's 3/8 rule for non-uniform grid (4-point) */
+	double h1 = x[1]-x[0], h2 = x[2]-x[1], h3 = x[3]-x[2];
+	double h12 = h1+h2, h23 = h2+h3, h13 = h12+h3;
+
+	return h13/12.*( (3.*x[0]*x[0]-4.*x[0]*(x[1]+x[2])+6.*x[1]*x[2]+2.*x[0]*x[3]-2.*(x[1]+x[2])*x[3]+x[3]*x[3])/(h1*h12)*y[0] 
+			+ h13*h13*(h12-h3)/(h1*h2*h23)*y[1] + h13*h13*(h23-h1)/(h12*h2*h3)*y[2] 
+			+ (x[0]*x[0]-2.*x[0]*(x[1]+x[2])+6.*x[1]*x[2]+2.*x[0]*x[3]-4.*(x[1]+x[2])*x[3]+3.*x[3]*x[3])/(h23*h3)*y[3] );
+}
 
 /* 1/2 sum_{i != j}^n (x_i x_j) for n=4 */
 double sum_of_2product_combinations_4_2(double a, double b, double c, double d) {

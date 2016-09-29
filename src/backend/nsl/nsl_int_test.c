@@ -32,7 +32,7 @@
 int main() {
 	double xdata[]={1,2,3,5,7};
 	double ydata[]={2,2,2,-2,-2};
-	const int n=5;
+	int n=5;
 
 	printf("data:\n");
 	size_t i;
@@ -83,6 +83,18 @@ int main() {
 	for (i=0; i < np; i++)
 		printf("%g %g\n", xdata[i], ydata5[i]);
 	printf("sum = %g (n = %zu)\n", ydata5[np-1], np);
+	puts("");
+
+	printf("integral (Simpson's 3/8, 4-point):\n");
+	double xdata2[]={1,2,3,5,7,8,9};
+	double ydata6[]={2,2,2,2,2,2,2};
+	/*double ydata6[]={1,2,3,4,5,-1,-2};*/
+	n=7;
+	np = nsl_int_simpson_3_8(xdata2, ydata6, n, 0);
+
+	for (i=0; i < np; i++)
+		printf("%g %g\n", xdata2[i], ydata6[i]);
+	printf("sum = %g (n = %zu)\n", ydata6[np-1], np);
 	puts("");
 
 	return 0;

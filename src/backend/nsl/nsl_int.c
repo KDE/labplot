@@ -96,10 +96,34 @@ size_t nsl_int_simpson(double *x, double *y, const size_t n, int abs) {
 
 		sum += nsl_sf_poly_interp_lagrange_2_int(xdata, ydata);
 		y[np] = sum;
-		x[np++] = x[i+1];
+		x[np++] = (x[i]+x[i+1]+x[i+2])/3.;
 		/*printf("i/sum: %zu-%zu %g\n", i, i+2, sum);*/
 	}
-	y[n-1] = sum;
+
+	return np;
+}
+
+size_t nsl_int_simpson_3_8(double *x, double *y, const size_t n, int abs) {
+	if (n < 4) {
+		printf("minimum number of points is 4 (given %zu).\n", n);
+		return 0;
+	}
+	if (abs != 0) {
+		printf("absolute area Simpson 3/8 rule not implemented yet.\n");
+		return 0;
+	}
+
+	size_t i, j, np=0;
+	double sum=0, xdata[4], ydata[4];
+	for (i = 0; i < n-3; i+=3) {
+		for (j=0; j < 4; j++)
+			xdata[j] = x[i+j], ydata[j] = y[i+j];
+
+		sum += nsl_sf_poly_interp_lagrange_3_int(xdata, ydata);
+		y[np] = sum;
+		x[np++] = (x[i]+x[i+1]+x[i+2]+x[i+3])/4.;
+		/*printf("i/sum: %zu-%zu %g\n", i, i+3, sum);*/
+	}
 
 	return np;
 }
