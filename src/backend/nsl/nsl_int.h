@@ -30,15 +30,15 @@
 #define NSL_INT_H
 
 #define NSL_INT_NETHOD_COUNT 4
-typedef enum {nsl_int_method_rectangle, nsl_int_method_trapezoid, nsl_int_method_Simpson, nsl_int_method_Simpson_3_8} nsl_int_method_type;
+typedef enum {nsl_int_method_rectangle, nsl_int_method_trapezoid, nsl_int_method_simpson, nsl_int_method_simpson_3_8} nsl_int_method_type;
 extern const char* nsl_int_method_name[];
 
 /*
 	numerical integration for non-uniform samples
 	rectangle rule (1-point)
 	trapezoid rule (2-point)
-	Simpson-1/3 rule (3-point)	returns number of points
-	Simpson-3/8 rule (4-point)	returns number of points
+	Simpson-1/3 rule (3-point)	returns number of points, abs not supported
+	Simpson-3/8 rule (4-point)	returns number of points, abs not supported
 	abs - 0:return mathem. area, 1: return absolute area
 */
 int nsl_int_rectangle(const double *x, double *y, const size_t n, int abs);

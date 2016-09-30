@@ -230,7 +230,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 	}
 
 	//number of data points to integrate
-	const unsigned int n = ydataVector.size();
+	const size_t n = ydataVector.size();
 	if (n < 1) {
 		integrationResult.available = true;
 		integrationResult.valid = false;
@@ -252,13 +252,27 @@ void XYIntegrationCurvePrivate::recalculate() {
 #endif
 ///////////////////////////////////////////////////////////
 	int status=0;
+	size_t np=n;
 
-	//TODO
+	switch (method) {
+	case nsl_int_method_rectangle:
+		status = nsl_int_rectangle(xdata, ydata, n, absolute);
+		break;
+	case nsl_int_method_trapezoid:
+		status = nsl_int_trapezoid(xdata, ydata, n, absolute);
+		break;
+	case nsl_int_method_simpson:
+		np = nsl_int_simpson(xdata, ydata, n, absolute);
+		break;
+	case nsl_int_method_simpson_3_8:
+		np = nsl_int_simpson_3_8(xdata, ydata, n, absolute);
+		break;
+	}
 
-	xVector->resize(n);
-	yVector->resize(n);
-	memcpy(xVector->data(), xdata, n*sizeof(double));
-	memcpy(yVector->data(), ydata, n*sizeof(double));
+	xVector->resize(np);
+	yVector->resize(np);
+	memcpy(xVector->data(), xdata, np*sizeof(double));
+	memcpy(yVector->data(), ydata, np*sizeof(double));
 ///////////////////////////////////////////////////////////
 
 	//write the result
