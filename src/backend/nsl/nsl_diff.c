@@ -154,7 +154,7 @@ int nsl_diff_first_deriv_avg(const double *x, double *y, const size_t n) {
 		return -1;
 
 	size_t i;
-	double dy, oldy;
+	double dy=0, oldy=0;
 	for (i=0; i<n; i++) {
 		if(i == 0)
 			dy = (y[1]-y[0])/(x[1]-x[0]);
