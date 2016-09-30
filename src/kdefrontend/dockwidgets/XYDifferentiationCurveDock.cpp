@@ -310,7 +310,7 @@ void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYDifferentiationCurveDock::derivOrderChanged() {
-	int derivOrder = (int)uiGeneralTab.cbDerivOrder->currentIndex();
+	const nsl_diff_deriv_order_type derivOrder = (nsl_diff_deriv_order_type)uiGeneralTab.cbDerivOrder->currentIndex();
 	m_differentiationData.derivOrder = derivOrder;
 
 	// update avail. accuracies

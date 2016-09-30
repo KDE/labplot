@@ -43,7 +43,6 @@
 #include <cfloat>	// DBL_MIN
 extern "C" {
 #include <gsl/gsl_errno.h>
-#include "backend/nsl/nsl_diff.h"
 }
 
 #include <KIcon>
@@ -245,7 +244,7 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	double* ydata = ydataVector.data();
 
 	// differentiation settings
-	const int derivOrder = differentiationData.derivOrder;
+	const nsl_diff_deriv_order_type derivOrder = differentiationData.derivOrder;
 	const int accOrder = differentiationData.accOrder;
 #ifndef NDEBUG
 	qDebug()<<nsl_diff_deriv_order_name[derivOrder]<<"derivative";
@@ -364,7 +363,7 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'derivOrder'"));
 			else
-				d->differentiationData.derivOrder = str.toInt();
+				d->differentiationData.derivOrder = (nsl_diff_deriv_order_type) str.toInt();
 
 			str = attribs.value("accOrder").toString();
 			if (str.isEmpty())

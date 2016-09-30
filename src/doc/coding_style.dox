@@ -1,0 +1,120 @@
+/**\page coding_style Coding Style
+
+The following rules are not used everywhere (yet), but are intended as guidelines for new code and eventually
+old code should be adapted as well. 
+
+\section files Files
+
+- Files use Unix-style line endings ('\\n').
+- C++ source files use “.cpp” as extension, header files use “.h”.
+- The code is documented using Doxygen comments which are placed in the source files, not the header files.
+- Every file should be named exactly like the class inside and there should be only one class per file, with the exception of really short classes.
+Very short classes can be bundled in one file which then is named using all lower case letters.
+
+\section identifier Identifier names
+
+- Class names start with a capital letter and use CamelCase, acronyms in class names are use like normal words. Example: MySuperHtmlToPdfConverter
+- Function/method names start with a lower case letter and use CamelCase Example: doSomethingImportant()
+- Variable/object names start with a lower case letter and use CamelCase, underscores are used for special prefixes only.
+- Class member variables are prefixed with “m_”
+- Property access methods use Qt style: property() and setProperty(), except for boolean properties (isVisible(), hasChanged()). Accessor functions (getter/setter) can be done using macros.
+- Avoid abbreviations, except for local counters and temporaries whose purpose is obvious.
+
+\section indent Indentation, spacing and line breaks
+
+- Tabs are used for indentation because they allow everyone to choose the indentation depth for him/herself.
+- Opening braces (‘{‘) are placed behind the statement and are preceded by a space. This also goes for function implementations, class, struct and namespace declarations, which are exceptions in other coding styles. Example:
+@code
+    void MyClass::doSomething() {
+            if (condition) {
+                    ...
+            }
+            ...
+    }
+@endcode
+- Opening brackets (‘(‘) are preceded by a space in for/switch/if/while statements, but not for function calls.
+    Example:
+@code
+    if (condition) {
+        doSomething(myData);
+        ...
+    }
+@endcode
+- For pointers or references, use a single space before ‘*’ or ‘&’, but not after. Example:
+@code
+    void doSomething(int *dataPointer, const QString &name);
+    ... = static_cast(...)
+@endcode
+    “public” and namespace enclosures are indented. “case” of switch is not. Example:
+@code
+    class MyClass: public QObject {
+    public:
+        void doSomething();
+@endcode
+    “case” of switch is not indented. “default” should be present if type of condition is not an enum. Example:
+@code
+    switch (condition) {
+    case 1:
+        handleCaseOne();
+        break;
+    case 2: {
+        int i=0;
+        ...
+        break;
+    }
+    ...
+    default:
+        ...
+    }
+@endcode
+- Each comma in a function call or semicolon in a for statement is followed by a space character; no space before the first and after the last argument. Example:
+@code   
+    for (int i=0; i < 10; i++) {
+        ...
+        doSomething(arg1, arg2, arg3);
+    }
+@endcode
+    "else" (and "catch" if it is ever used) is put after the closing brace (like this: "} else {")
+- Use as many brackets and spaces in conditions/math terms as you see fit for optimum readability. '=' should always be surrounded by spaces. '+', '-', '*', '/' is sometimes better written without spaces. Examples:
+@code
+    foo/2 + bar/4 + baz/3
+    for (int i=0; i < bar+1; i++)
+    var = (foo - 1) + (bar - 2) + (baz - 3)
+@endcode
+- Try to keep lines shorter than 100 characters, inserting line breaks as necessary.
+- In SIGNAL() and SLOT() macros, use as little whitespace as possible. This gives a little speed up since Qt does not have to normalize the signal/slot name.
+
+\section contructs Usage of specific constructs
+
+* Use C++ not C style casts (static_cast, const_cast, qobject_cast)
+* Don't use braces to enclose a single statement.
+* #include <...> vs. #include "...": Include headers from external libraries using angle brackets (as in #include <QDebug>) and headers from LabPlot/SciDAVis using double quotes (as in #include "core/AbstractAspect.h"). Rationale: Headers of external libraries are never in the same directory as the including file, so it makes sense to use the angle bracket form (which searches only in directories specified using -I). If you work with a build system that does not include the current source directory, or disable CMAKE_INCLUDE_CURRENT_DIR, then all angle-bracket-includes referencing LabPlot/SciDAVis headers will break. Excluding the current directory from -I dirs may be desirable one day when using a new library or a new version of a library containing a header file with the same name as one of our headers.
+* Use NDEBUG for debugging code. This variable is defined in release mode, but not in debug mode. Example:
+@code
+    #ifndef NDEBUG
+        qDebug()<<"i ="<<i;
+    #endif
+@endcode
+* Use Qt functions for user messages: qDebug(), qWarning(), qCritical(), qFatal(). Check conditions with Q_ASSERT(cond) or Q_ASSERT_X(cond, where, what) and pointers with Q_CHECK_PTR(ptr).
+* Import C header (from GSL etc.) with extern statement. We use cmath instead of math.h and std:: prefix (C++11). Example:
+@code
+    extern "C" {
+    #include <gsl/gsl_version.h>
+    }
+    #include <cmath>
+
+    if (std::isnan(x)) {
+        ...
+    }
+@endcode
+\section links Links
+
+Apart from that, the following links are recommended as guidelines for the coding style:
+
+http://techbase.kde.org/index.php?title=Policies/Library_Code_Policy
+
+http://doc.trolltech.com/qq/qq13-apis.html
+
+http://techbase.kde.org/Policies/Kdelibs_Coding_Style
+
+*/
