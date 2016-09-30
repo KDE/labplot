@@ -87,7 +87,7 @@ size_t nsl_int_simpson(double *x, double *y, const size_t n, int abs) {
 		return 0;
 	}
 
-	size_t i, j, np=0;
+	size_t i, j, np=1;
 	double sum=0, xdata[3], ydata[3];
 	for (i = 0; i < n-2; i+=2) {
 		for (j=0; j < 3; j++)
@@ -98,6 +98,18 @@ size_t nsl_int_simpson(double *x, double *y, const size_t n, int abs) {
 		x[np++] = (x[i]+x[i+1]+x[i+2])/3.;
 		/*printf("i/sum: %zu-%zu %g\n", i, i+2, sum);*/
 	}
+
+	/* handle possible last point: use trapezoid rule */
+	if (i == n-2) {
+		for (j=0; j < 2; j++)
+			xdata[j] = x[i+j], ydata[j] = y[i+j];
+		sum += nsl_sf_poly_interp_lagrange_1_int(xdata, ydata);
+		y[np] = sum;
+		x[np++] = x[i];
+	}
+
+	/* first point */
+	y[0]=0;
 
 	return np;
 }
@@ -112,7 +124,7 @@ size_t nsl_int_simpson_3_8(double *x, double *y, const size_t n, int abs) {
 		return 0;
 	}
 
-	size_t i, j, np=0;
+	size_t i, j, np=1;
 	double sum=0, xdata[4], ydata[4];
 	for (i = 0; i < n-3; i+=3) {
 		for (j=0; j < 4; j++)
@@ -123,6 +135,24 @@ size_t nsl_int_simpson_3_8(double *x, double *y, const size_t n, int abs) {
 		x[np++] = (x[i]+x[i+1]+x[i+2]+x[i+3])/4.;
 		/*printf("i/sum: %zu-%zu %g\n", i, i+3, sum);*/
 	}
+
+	/* handle possible last point(s): use trapezoid (one point) or simpson rule (two points) */
+	if (i == n-2) {
+		for (j=0; j < 2; j++)
+			xdata[j] = x[i+j], ydata[j] = y[i+j];
+		sum += nsl_sf_poly_interp_lagrange_1_int(xdata, ydata);
+		y[np] = sum;
+		x[np++] = x[i];
+	} else if ( i == n-3) {
+		for (j=0; j < 3; j++)
+			xdata[j] = x[i+j], ydata[j] = y[i+j];
+		sum += nsl_sf_poly_interp_lagrange_2_int(xdata, ydata);
+		y[np] = sum;
+		x[np++] = (x[i]+x[i+1]+x[i+2])/3.;
+	}
+
+	/* first point */
+	y[0]=0;
 
 	return np;
 }
