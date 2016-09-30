@@ -46,6 +46,7 @@ extern "C" {
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_spline.h>
 #include "backend/nsl/nsl_diff.h"
+#include "backend/nsl/nsl_int.h"
 }
 
 #include <KIcon>
@@ -451,7 +452,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 			nsl_diff_second_deriv_second_order(xVector->data(), yVector->data(), npoints);
 			break;
 		case nsl_interp_evaluate_integral:
-			nsl_interp_integral(xVector->data(), yVector->data(), npoints);
+			nsl_int_trapezoid(xVector->data(), yVector->data(), npoints, 0);
 			break;
 		}
 		break;
