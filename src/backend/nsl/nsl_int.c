@@ -26,8 +26,8 @@
  ***************************************************************************/
 
 /* TODO:
-	* absolute area for Simpson/Simpson-3/8 rules?
-	* consider not multiple of 3/4 points for Simpson/Simpson-3/8 rules?
+	* absolute area for Simpson/Simpson-3/8 rules (needs more numerics)
+	* start and end point for integration: use ranges?
 */
 
 #include <stdio.h>
