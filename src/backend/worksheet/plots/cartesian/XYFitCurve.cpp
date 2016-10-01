@@ -390,18 +390,16 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		break;
 	}
 	case XYFitCurve::Gaussian: {
-		// Y(x) = a1*exp(-((x-b1)/c1)^2) + a2*exp(-((x-b2)/c2)^2) + ... + an*exp(-((x-bn)/cn)^2)
-		double a,b,c;
+		// Y(x) = 1/sqrt(2*pi)/a1*exp(-((x-b1)/a1)^2/2) + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + ... 1/sqrt(2*pi)/an*exp(-((x-bn)/an)^2/2)
+		double a,b;
 		for (int i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			for (int j=0; j < degree; ++j) {
-				a = gsl_vector_get(paramValues,3*j);
-				b = gsl_vector_get(paramValues,3*j+1);
-				c = gsl_vector_get(paramValues,3*j+2);
-				gsl_matrix_set(J, i, 3*j, exp(-(x-b)*(x-b)/(c*c))/sigma);
-				gsl_matrix_set(J, i, 3*j+1, 2*a*(x-b)/(c*c)*exp(-(x-b)*(x-b)/(c*c))/sigma);
-				gsl_matrix_set(J, i, 3*j+2, 2*a*(x-b)*(x-b)/(c*c*c)*exp(-(x-b)*(x-b)/(c*c))/sigma);
+				a = gsl_vector_get(paramValues,2*j);
+				b = gsl_vector_get(paramValues,2*j+1);
+				gsl_matrix_set(J, i, 2*j, (exp(-pow(b-x,2)/(2*pow(a,2)))*(pow(b-x,2)-pow(a,2)))/(sqrt(2*M_PI)*pow(a,4))/sigma);
+				gsl_matrix_set(J, i, 2*j+1, ((x-b)*exp(-pow(b-x,2)/(2*pow(a,2))))/(sqrt(2*M_PI)*pow(a,3))/sigma);
 			}
 		}
 		break;

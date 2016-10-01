@@ -391,28 +391,28 @@ void XYFitCurveDock::updateModelEquation() {
 			}
 		}
 	} else if (m_fitData.modelType == XYFitCurve::Gaussian) {
-		eq = "a1*exp(-((x-b1)/c1)^2)";
+		eq = "1/sqrt(2*pi)/a1*exp(-((x-b1)/a1)^2/2)";
 		m_fitData.model = eq;
-		vars << "a1" << "b1" << "c1";
-		m_fitData.paramNames << "a1" << "b1" << "c1";
+		vars << "a1" << "b1";
+		m_fitData.paramNames << "a1" << "b1";
 		if (num==2) {
-			eq += " + a2*exp(-((x-b2)/c2)^2)";
-			m_fitData.model += " + a2*exp(-((x-b2)/c2)^2)";
-			vars << "a2" << "b2" << "c2";
-			m_fitData.paramNames << "a2" << "b2" << "c2";
+			eq += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2)";
+			m_fitData.model += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2)";
+			vars << "a2" << "b2";
+			m_fitData.paramNames << "a2" << "b2";
 		} else if (num==3) {
-			eq += " + a2*exp(-((x-b2)/c2)^2) + a3*exp(-((x-b3)/c3)^2)";
-			m_fitData.model += " + a2*exp(-((x-b2)/c2)^2) + a3*exp(-((x-b3)/c3)^2)";
-			vars << "a2" << "b2" << "c2" << "a3" << "b3" << "c3";
-			m_fitData.paramNames << "a2" << "b2" << "c2" << "a3" << "b3" << "c3";
+			eq += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + 1/sqrt(2*pi)/a3*exp(-((x-b3)/a3)^2/2)";
+			m_fitData.model += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + 1/sqrt(2*pi)/a3*exp(-((x-b3)/a3)^2/2)";
+			vars << "a2" << "b2" << "a3" << "b3";
+			m_fitData.paramNames << "a2" << "b2" << "a3" << "b3";
 		} else if (num>3) {
 			QString numStr = QString::number(num);
-			eq += " + a2*exp(-((x-b2)/c2)^2) + ... + a" + numStr + "*exp(-((x-b" + numStr + ")/c" + numStr + ")^2)";
-			vars << "a2" << "b2" << "c2" << "a"+numStr << "b"+numStr << "c"+numStr << "...";
+			eq += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + ... + 1/sqrt(2*pi)/a" + numStr + "*exp(-((x-b" + numStr + ")/a" + numStr + ")^2/2)";
+			vars << "a2" << "b2" << "a"+numStr << "b"+numStr << "...";
 			for (int i=2; i<=num; ++i) {
 				numStr = QString::number(i);
-				m_fitData.model += "+ a" + numStr + "*exp(-((x-b" + numStr + ")/c" + numStr + ")^2)";
-				m_fitData.paramNames << "a"+numStr << "b"+numStr << "c"+numStr;
+				m_fitData.model += "+ 1/sqrt(2*pi)/a" + numStr + "*exp(-((x-b" + numStr + ")/a" + numStr + ")^2/2)";
+				m_fitData.paramNames << "a"+numStr << "b"+numStr;
 			}
 		}
 	} else if (m_fitData.modelType == XYFitCurve::Lorentz) {
