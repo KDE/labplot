@@ -1,3 +1,8 @@
+-----2.4-----
+New features:
+	* New pre-defined fit models: Gompertz, Weibull, Log-Normal, Gumbel
+
+
 -----2.3-----
 New features:
 	* Integration of Cantor - Support for different open-source computer algebra systems

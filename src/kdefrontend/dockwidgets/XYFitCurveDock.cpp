@@ -90,6 +90,10 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbModel->addItem(i18n("Lorentz (Cauchy)"));
 	uiGeneralTab.cbModel->addItem(i18n("Maxwell-Boltzmann"));
 	uiGeneralTab.cbModel->addItem(i18n("Sigmoid"));
+	uiGeneralTab.cbModel->addItem(i18n("Gompertz"));
+	uiGeneralTab.cbModel->addItem(i18n("Weibull"));
+	uiGeneralTab.cbModel->addItem(i18n("Log-Normal"));
+	uiGeneralTab.cbModel->addItem(i18n("Gumbel"));
 	uiGeneralTab.cbModel->addItem(i18n("Custom"));
 
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
@@ -298,11 +302,7 @@ void XYFitCurveDock::modelChanged(int index) {
 		uiGeneralTab.sbDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setMaximum(10);
 		uiGeneralTab.sbDegree->setValue(1);
-	} else if (type == XYFitCurve::Lorentz
-		|| type == XYFitCurve::Maxwell
-		|| type == XYFitCurve::Inverse_Exponential
-		|| type == XYFitCurve::Sigmoid
-		|| type == XYFitCurve::Custom) {
+	} else {
 		uiGeneralTab.lDegree->setVisible(false);
 		uiGeneralTab.sbDegree->setVisible(false);
 	}
@@ -430,6 +430,26 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.model = eq;
 		vars << "a" << "b" << "c";
 		m_fitData.paramNames << "a" << "b" << "c";
+	} else if (m_fitData.modelType == XYFitCurve::Gompertz) {
+		eq = "a*exp(-b*exp(-c*x))";
+		m_fitData.model = eq;
+		vars << "a" << "b" << "c";
+		m_fitData.paramNames << "a" << "b" << "c";
+	} else if (m_fitData.modelType == XYFitCurve::Weibull) {
+		eq = "a/b*((x-c)/b)^(a-1)*exp(-((x-c)/b)^a)";
+		m_fitData.model = eq;
+		vars << "a" << "b" << "c";
+		m_fitData.paramNames << "a" << "b" << "c";
+	} else if (m_fitData.modelType == XYFitCurve::LogNormal) {
+		eq = "1/(sqrt(2*pi)*x*a)*exp(-(log(x)-b)^2/(2*a^2))";
+		m_fitData.model = eq;
+		vars << "a" << "b";
+		m_fitData.paramNames << "a" << "b";
+	} else if (m_fitData.modelType == XYFitCurve::Gumbel) {
+		eq = "1/a*exp((x-b)/a-exp((x-b)/a))";
+		m_fitData.model = eq;
+		vars << "a" << "b";
+		m_fitData.paramNames << "a" << "b";
 	} else if (m_fitData.modelType == XYFitCurve::Custom) {
 		//use the equation of the last selected predefined model or of the last available custom model
 		eq = m_fitData.model;

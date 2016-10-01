@@ -442,6 +442,71 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		break;
 	}
+	case XYFitCurve::Gompertz: {
+		//Y(x) = a*exp(-b*exp(-c*x));
+		double a = gsl_vector_get(paramValues, 0);
+		double b = gsl_vector_get(paramValues, 1);
+		double c = gsl_vector_get(paramValues, 2);
+		for (int i=0; i<n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+			gsl_matrix_set(J, i, 0, exp(-b*exp(-c*x))/sigma);
+			gsl_matrix_set(J, i, 1, -a*exp(-c*x-b*exp(-c*x))/sigma);
+			gsl_matrix_set(J, i, 2, a*b*x*exp(-c*x-b*exp(-c*x))/sigma);
+		}
+		break;
+	}
+	case XYFitCurve::Weibull: {
+		//Y(x) = a/b*((x-c)/b)^(a-1)*exp(-((x-c)/b)^a);
+		double a = gsl_vector_get(paramValues, 0);
+		double b = gsl_vector_get(paramValues, 1);
+		double c = gsl_vector_get(paramValues, 2);
+		for (int i=0; i<n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+			//TODO: how to deal correctly with (x-c)/b <=0
+			if (x>0) {
+				const double d = pow((x-c)/b,a);
+				gsl_matrix_set(J, i, 0, (exp(-d)*d*(a*(d-1)*log((x-c)/b)-1))/(c-x)/sigma);
+				gsl_matrix_set(J, i, 1, (pow(a,2)*exp(-d)*d*(d-1))/(b*(x-c))/sigma);
+				gsl_matrix_set(J, i, 2, (a*exp(-d)*d*(a*(d-1)+1))/pow(c-x,2)/sigma);
+			} else {
+				gsl_matrix_set(J, i, 0, 0);
+				gsl_matrix_set(J, i, 1, 0);
+				gsl_matrix_set(J, i, 2, 0);
+			}
+		}
+		break;
+	}
+	case XYFitCurve::LogNormal: {
+		//Y(x) = 1/(sqrt(2*pi)*x*a)*exp(-(log(x)-b)^2/(2*a^2));
+		double a = gsl_vector_get(paramValues, 0);
+		double b = gsl_vector_get(paramValues, 1);
+		for (int i=0; i<n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+			if (x>0) {
+				gsl_matrix_set(J, i, 0, -(exp(-pow(b-log(x),2)/(2*pow(a,2)))*(a+b-log(x))*(a-b+log(x)))/(sqrt(2*M_PI)*pow(a,4)*x)/sigma);
+				gsl_matrix_set(J, i, 1, ((log(x)-b)*exp(-pow(b-log(x),2)/(2*pow(a,2))))/(sqrt(2*M_PI)*pow(a,3)*x)/sigma);
+			} else {
+				gsl_matrix_set(J, i, 0, 0);
+				gsl_matrix_set(J, i, 1, 0);
+			}
+		}
+		break;
+	}
+	case XYFitCurve::Gumbel: {
+		//Y(x) = 1/a*exp((x-b)/a-exp((x-b)/a));
+		double a = gsl_vector_get(paramValues, 0);
+		double b = gsl_vector_get(paramValues, 1);
+		for (int i=0; i<n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+			gsl_matrix_set(J, i, 0, (exp((x-2*b)/a-exp((x-b)/a))*(exp(x/a)*(x-b)-exp(b/a)*(a-b+x)))/pow(a,3)/sigma);
+			gsl_matrix_set(J, i, 1, (exp(-exp(x/a-b/a)-(2*b)/a+x/a)*(exp(x/a)-exp(b/a)))/pow(a,2)/sigma);
+		}
+		break;
+	}
 	case XYFitCurve::Custom: {
 		QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
 		char* func = funcba.data();
