@@ -318,6 +318,7 @@ void XYIntegrationCurveDock::showIntegrationResult() {
 	else
 		str += i18n("calculation time: %1 ms").arg(QString::number(integrationResult.elapsedTime)) + "<br>";
 
+	str += i18n("value: ") + QString::number(integrationResult.value) + "<br>";
  	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);

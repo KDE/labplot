@@ -46,12 +46,13 @@ class XYIntegrationCurve: public XYCurve {
 			bool absolute;			// absolutr area?
 		};
 		struct IntegrationResult {
-			IntegrationResult() : available(false), valid(false), elapsedTime(0) {};
+			IntegrationResult() : available(false), valid(false), elapsedTime(0), value(0) {};
 
 			bool available;
 			bool valid;
 			QString status;
 			qint64 elapsedTime;
+			double value;	// final result of integration
 		};
 
 		explicit XYIntegrationCurve(const QString& name);

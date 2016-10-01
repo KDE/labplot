@@ -280,6 +280,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 	integrationResult.valid = true;
 	integrationResult.status = QString::number(status);
 	integrationResult.elapsedTime = timer.elapsed();
+	integrationResult.value = ydata[np-1];
 
 	//redraw the curve
 	emit (q->dataChanged());
@@ -313,6 +314,7 @@ void XYIntegrationCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "valid", QString::number(d->integrationResult.valid) );
 	writer->writeAttribute( "status", d->integrationResult.status );
 	writer->writeAttribute( "time", QString::number(d->integrationResult.elapsedTime) );
+	writer->writeAttribute( "value", QString::number(d->integrationResult.value) );
 
 	//save calculated columns if available
 	if (d->xColumn) {
@@ -393,6 +395,12 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader) {
 				reader->raiseWarning(attributeWarning.arg("'time'"));
 			else
 				d->integrationResult.elapsedTime = str.toInt();
+
+			str = attribs.value("value").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'value'"));
+			else
+				d->integrationResult.value = str.toDouble();
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {
