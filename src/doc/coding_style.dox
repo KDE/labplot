@@ -84,7 +84,7 @@ Very short classes can be bundled in one file which then is named using all lowe
 - Try to keep lines shorter than 100 characters, inserting line breaks as necessary.
 - In SIGNAL() and SLOT() macros, use as little whitespace as possible. This gives a little speed up since Qt does not have to normalize the signal/slot name.
 
-\section contructs Usage of specific constructs
+\section constructs Usage of specific constructs
 
 * Use C++ not C style casts (static_cast, const_cast, qobject_cast)
 * Don't use braces to enclose a single statement.
