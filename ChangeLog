@@ -2,6 +2,8 @@
 New features:
 	* New pre-defined fit models: Gompertz, Weibull, Log-Normal, Gumbel
 
+Bug fixes:
+	* Correctly load worksheet sizes from saved templates
 
 -----2.3-----
 New features:

@@ -141,7 +141,7 @@ void XYCurve::init() {
 	d->errorBarsCapSize = group.readEntry( "ErrorBarsCapSize", Worksheet::convertToSceneUnits(10, Worksheet::Point) );
 	d->errorBarsPen.setStyle( (Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine) );
 	d->errorBarsPen.setColor( group.readEntry("ErrorBarsColor", QColor(Qt::black)) );
-	d->errorBarsPen.setWidthF( group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
+	d->errorBarsPen.setWidthF( group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
 	d->errorBarsOpacity = group.readEntry("ErrorBarsOpacity", 1.0);
 
 	this->initActions();
@@ -1795,7 +1795,7 @@ void XYCurvePrivate::updatePixmap() {
 // 	timer.start();
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
-	QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
+	QPixmap pixmap(ceil(boundingRectangle.width()), ceil(boundingRectangle.height()));
 	if (boundingRectangle.width()==0 || boundingRectangle.width()==0) {
 		m_pixmap = pixmap;
 		RESET_CURSOR;
@@ -2512,8 +2512,7 @@ QList<QColor> XYCurve::getColorPalette() {
 }
 
 void XYCurve::applyColorPalette(QList<QColor> color) {
-	if(!color.empty())
-	{
+	if(!color.empty()) {
 		m_themeColorPalette = color;
 		QPen p;
 		int index = parentAspect()->indexOfChild<XYCurve>(this);
@@ -2527,55 +2526,54 @@ void XYCurve::applyColorPalette(QList<QColor> color) {
 void XYCurve::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
 
-	QPen p;
+	int index = parentAspect()->indexOfChild<XYCurve>(this);
 	this->setColorPalette(config);
+	QColor themeColor = m_themeColorPalette.at(index);
+	QPen p;
+
+	//Line
+	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)this->linePen().style()));
+	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
+	p.setColor(themeColor);
+	this->setLinePen(p);
+	this->setLineOpacity(group.readEntry("LineOpacity", this->lineOpacity()));
+
 	//Drop line
-	p.setColor(group.readEntry("DropLineColor",(QColor) this->dropLinePen().color()));
 	p.setStyle((Qt::PenStyle)group.readEntry("DropLineStyle",(int) this->dropLinePen().style()));
 	p.setWidthF(group.readEntry("DropLineWidth", this->dropLinePen().widthF()));
+	p.setColor(themeColor);
 	this->setDropLinePen(p);
-	this->setDropLineOpacity(group.readEntry("DropLineOpacity",this->dropLineOpacity()));
-	this->setDropLineType((XYCurve::DropLineType)group.readEntry("DropLineType", (int) this->dropLineType()));
+	this->setDropLineOpacity(group.readEntry("DropLineOpacity", this->dropLineOpacity()));
 
-	//Error Bars
-	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity",this->errorBarsOpacity()));
-	this->setErrorBarsType((XYCurve::ErrorBarsType)group.readEntry("ErrorBarsType",(int) this->errorBarsType()));
-	p.setColor(group.readEntry("ErrorBarsColor",(QColor) this->errorBarsPen().color()));
-	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle",(int) this->errorBarsPen().style()));
-	p.setWidthF(group.readEntry("ErrorBarsWidth", this->errorBarsPen().widthF()));
-	this->setErrorBarsPen(p);
+	//Symbol
+	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", this->symbolsOpacity()));
+	QBrush brush = symbolsBrush();
+	brush.setColor(themeColor);
+	this->setSymbolsBrush(brush);
+	p = symbolsPen();
+	p.setColor(themeColor);
+	this->setSymbolsPen(p);
+
+	//Values
+	this->setValuesOpacity(group.readEntry("ValuesOpacity", this->valuesOpacity()));
+	this->setValuesColor(group.readEntry("ValuesColor", this->valuesColor()));
+	this->setValuesFont(group.readEntry("ValuesFont", QFont()));
 
 	//Filling
 	this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle",(int) this->fillingBrushStyle()));
 	this->setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle",(int) this->fillingColorStyle()));
-	this->setFillingImageStyle((PlotArea::BackgroundImageStyle)group.readEntry("FillingImageStyle",(int) this->fillingImageStyle()));
 	this->setFillingOpacity(group.readEntry("FillingOpacity", this->fillingOpacity()));
 	this->setFillingPosition((XYCurve::FillingPosition)group.readEntry("FillingPosition",(int) this->fillingPosition()));
 	this->setFillingSecondColor(group.readEntry("FillingSecondColor",(QColor) this->fillingSecondColor()));
+	this->setFillingFirstColor(themeColor);
 	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType",(int) this->fillingType()));
 
-	//Line
-	this->setLineOpacity(group.readEntry("LineOpacity", this->lineOpacity()));
-	this->setLineType((XYCurve::LineType)group.readEntry("LineType",(int) this->lineType()));
-	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle",(int) this->linePen().style()));
-	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
-	this->setLinePen(p);
-
-	//Symbol
-	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", this->symbolsOpacity()));
-
-	//Values
-	this->setValuesOpacity(group.readEntry("ValuesOpacity", this->valuesOpacity()));
-	this->setValuesColor(group.readEntry("ValuesColor", (QColor) this->valuesColor()));
-	this->setValuesFont(group.readEntry("ValuesFont", QFont()));
-	this->setValuesType((XYCurve::ValuesType)group.readEntry("ValuesType", (int) this->valuesType()));
-
-	int index = parentAspect()->indexOfChild<XYCurve>(this);
-	p.setColor(m_themeColorPalette.at(index));
-	this->setLinePen(p);
-	this->setFillingFirstColor(m_themeColorPalette.at(index));
-	this->setSymbolsPen(p);
-
+	//Error Bars
+	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle",(int) this->errorBarsPen().style()));
+	p.setWidthF(group.readEntry("ErrorBarsWidth", this->errorBarsPen().widthF()));
+	p.setColor(themeColor);
+	this->setErrorBarsPen(p);
+	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity",this->errorBarsOpacity()));
 }
 
 void XYCurve::saveThemeConfig(const KConfig& config) {
@@ -2586,12 +2584,10 @@ void XYCurve::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("DropLineStyle",(int) this->dropLinePen().style());
 	group.writeEntry("DropLineWidth", this->dropLinePen().widthF());
 	group.writeEntry("DropLineOpacity",this->dropLineOpacity());
-	group.writeEntry("DropLineType", (int) this->dropLineType());
 
 	//Error Bars
 	group.writeEntry("ErrorBarsCapSize",this->errorBarsCapSize());
 	group.writeEntry("ErrorBarsOpacity",this->errorBarsOpacity());
-	group.writeEntry("ErrorBarsType",(int) this->errorBarsType());
 	group.writeEntry("ErrorBarsColor",(QColor) this->errorBarsPen().color());
 	group.writeEntry("ErrorBarsStyle",(int) this->errorBarsPen().style());
 	group.writeEntry("ErrorBarsWidth", this->errorBarsPen().widthF());
@@ -2599,35 +2595,27 @@ void XYCurve::saveThemeConfig(const KConfig& config) {
 	//Filling
 	group.writeEntry("FillingBrushStyle",(int) this->fillingBrushStyle());
 	group.writeEntry("FillingColorStyle",(int) this->fillingColorStyle());
-	group.writeEntry("FillingImageStyle",(int) this->fillingImageStyle());
 	group.writeEntry("FillingOpacity", this->fillingOpacity());
 	group.writeEntry("FillingPosition",(int) this->fillingPosition());
 	group.writeEntry("FillingSecondColor",(QColor) this->fillingSecondColor());
 	group.writeEntry("FillingType",(int) this->fillingType());
 
 	//Line
-	group.writeEntry("LineInterpolationPointsCount",(int) this->lineInterpolationPointsCount());
 	group.writeEntry("LineOpacity", this->lineOpacity());
-	group.writeEntry("LineSkipGaps",(bool) this->lineSkipGaps());
-	group.writeEntry("LineType",(int) this->lineType());
 	group.writeEntry("LineStyle",(int) this->linePen().style());
 	group.writeEntry("LineWidth", this->linePen().widthF());
 
 	//Symbol
 	group.writeEntry("SymbolOpacity", this->symbolsOpacity());
-	group.writeEntry("SymbolRotation",(int) this->symbolsRotationAngle());
-	group.writeEntry("SymbolSize", (int) this->symbolsSize());
 
 	//Values
 	group.writeEntry("ValuesOpacity", this->valuesOpacity());
-	group.writeEntry("ValuesRotation",(int) this->symbolsRotationAngle());
 	group.writeEntry("ValuesColor", (QColor) this->valuesColor());
 	group.writeEntry("ValuesFont", this->valuesFont());
-	group.writeEntry("ValuesType", (int) this->valuesType());
 
-	KConfigGroup themeGroup = config.group("Theme");
 	int index = parentAspect()->indexOfChild<XYCurve>(this);
 	if(index<5) {
+		KConfigGroup themeGroup = config.group("Theme");
 		for(int i = index; i<5; i++) {
 			QString s = "ThemePaletteColor" + QString::number(i+1);
 			themeGroup.writeEntry(s,(QColor) this->linePen().color());

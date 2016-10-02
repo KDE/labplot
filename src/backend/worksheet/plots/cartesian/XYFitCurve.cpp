@@ -719,7 +719,7 @@ void XYFitCurvePrivate::recalculate() {
 	//get the covariance matrix
 	gsl_matrix* covar = gsl_matrix_alloc (np, np);
 #if GSL_MAJOR_VERSION >=2
-	gsl_matrix *J=0;
+	gsl_matrix *J = gsl_matrix_alloc(s->fdf->n, s->fdf->p);
 	gsl_multifit_fdfsolver_jac (s, J);
 	gsl_multifit_covar (J, 0.0, covar);
 #else

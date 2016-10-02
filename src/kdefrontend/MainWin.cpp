@@ -131,8 +131,6 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 MainWin::~MainWin() {
 	//write settings
 	m_recentProjectsAction->saveEntries( KGlobal::config()->group("Recent Files") );
-// 	qDebug()<<"SAVED m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls()<<endl;
-	//etc...
 
 	KGlobal::config()->sync();
 
@@ -517,7 +515,6 @@ void MainWin::updateGUI() {
 	//TODO: is this the usual behaviour for toolbars defined in the rc-file?
 	KConfigGroup group = KGlobal::config()->group("MainWindow");
 
-
 	//Handle the Worksheet-object
 	Worksheet* w = this->activeWorksheet();
 	if (w!=0) {
@@ -546,18 +543,18 @@ void MainWin::updateGUI() {
 		if (group.groupList().indexOf("Toolbar worksheet_toolbar")==-1)
 			toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
 
-		toolbar->setVisible(true);
 		toolbar->clear();
 		view->fillToolBar(toolbar);
+		toolbar->setVisible(true);
 
 		//populate the toolbar for cartesian plots
 		toolbar=qobject_cast<QToolBar*>(factory->container("cartesian_plot_toolbar", this));
 		if (group.groupList().indexOf("Toolbar cartesian_plot_toolbar")==-1)
 			toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
 
-		toolbar->setVisible(true);
 		toolbar->clear();
 		view->fillCartesianPlotToolBar(toolbar);
+		toolbar->setVisible(true);
 
 		//hide the spreadsheet toolbar
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
@@ -567,7 +564,6 @@ void MainWin::updateGUI() {
 //		factory->container("drawing", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->setVisible(false);
 		factory->container("cartesian_plot_toolbar", this)->setVisible(false);
-
 	}
 
 	//Handle the Spreadsheet-object
@@ -623,9 +619,9 @@ void MainWin::updateGUI() {
 		if (group.groupList().indexOf("Toolbar datapicker_toolbar")==-1)
 			toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
 
-		toolbar->setVisible(true);
 		toolbar->clear();
 		view->fillToolBar(toolbar);
+		toolbar->setVisible(true);
 	} else {
 		factory->container("datapicker", this)->setEnabled(false);
 		factory->container("datapicker_toolbar", this)->setVisible(false);
@@ -819,15 +815,17 @@ bool MainWin::openXML(QIODevice *file) {
 		return false;
 	}
 
-	//TODO: show warnings in a kind of "log window" but not in message box
-// 	if (reader.hasWarnings()) {
-// 		QString msg_text = i18n("The following problems occurred when loading the project:\n");
-// 		QStringList warnings = reader.warningStrings();
-// 		foreach(const QString& str, warnings)
-// 			msg_text += str + '\n';
-// 		KMessageBox::error(this, msg_text, i18n("Project loading partly failed"));
-// 		statusBar()->showMessage(msg_text);
-// 	}
+	if (reader.hasWarnings()) {
+		QString msg = i18n("The following problems occurred when loading the project file:\n");
+		const QStringList& warnings = reader.warningStrings();
+		foreach(const QString& str, warnings)
+			msg += str + '\n';
+
+		qWarning()<<msg;
+//TODO: show warnings in a kind of "log window" but not in message box
+// 		KMessageBox::error(this, msg, i18n("Project loading partly failed"));
+// 		statusBar()->showMessage(msg);
+	}
 
 	return true;
 }
