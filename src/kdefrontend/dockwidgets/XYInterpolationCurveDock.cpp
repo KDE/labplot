@@ -111,6 +111,9 @@ void XYInterpolationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
+	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
+	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
 	connect( uiGeneralTab.cbVariant, SIGNAL(currentIndexChanged(int)), this, SLOT(variantChanged()) );
@@ -149,6 +152,10 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	Q_ASSERT(m_interpolationCurve);
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_interpolationCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_interpolationCurve->yDataColumn());
+	uiGeneralTab.cbAutoRange->setChecked(m_interpolationData.autoRange);
+	uiGeneralTab.sbMin->setValue(m_interpolationData.xRange.front());
+	uiGeneralTab.sbMax->setValue(m_interpolationData.xRange.back());
+	this->autoRangeChanged();
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
@@ -335,6 +342,43 @@ void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYInterpolationCurve*>(curve)->setYDataColumn(column);
+}
+
+void XYInterpolationCurveDock::autoRangeChanged() {
+	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
+	m_interpolationData.autoRange = autoRange;
+
+	if (autoRange) {
+		uiGeneralTab.lMin->setEnabled(false);
+		uiGeneralTab.sbMin->setEnabled(false);
+		uiGeneralTab.lMax->setEnabled(false);
+		uiGeneralTab.sbMax->setEnabled(false);
+		m_interpolationCurve = dynamic_cast<XYInterpolationCurve*>(m_curve);
+		Q_ASSERT(m_interpolationCurve);
+		if (m_interpolationCurve->xDataColumn()) {
+			uiGeneralTab.sbMin->setValue(m_interpolationCurve->xDataColumn()->minimum());
+			uiGeneralTab.sbMax->setValue(m_interpolationCurve->xDataColumn()->maximum());
+		}
+	} else {
+		uiGeneralTab.lMin->setEnabled(true);
+		uiGeneralTab.sbMin->setEnabled(true);
+		uiGeneralTab.lMax->setEnabled(true);
+		uiGeneralTab.sbMax->setEnabled(true);
+	}
+
+}
+void XYInterpolationCurveDock::xRangeMinChanged() {
+	double xMin = uiGeneralTab.sbMin->value();
+
+	m_interpolationData.xRange.front() = xMin;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYInterpolationCurveDock::xRangeMaxChanged() {
+	double xMax = uiGeneralTab.sbMax->value();
+
+	m_interpolationData.xRange.back() = xMax;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYInterpolationCurveDock::typeChanged() {

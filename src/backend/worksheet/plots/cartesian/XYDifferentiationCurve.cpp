@@ -219,14 +219,15 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	//copy all valid data point for the differentiation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
+	const double min = differentiationData.xRange.front();
+	const double max = differentiationData.xRange.back();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= differentiationData.xRange.front()
-				&& xDataColumn->valueAt(row) <= differentiationData.xRange.back() ) {
+			if (xDataColumn->valueAt(row) >= min && xDataColumn->valueAt(row) <= max) {
 				xdataVector.append(xDataColumn->valueAt(row));
 				ydataVector.append(yDataColumn->valueAt(row));
 			}
@@ -234,7 +235,7 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	}
 
 	//number of data points to differentiate
-	const unsigned int n = ydataVector.size();
+	const unsigned int n = xdataVector.size();
 	if (n < 3) {
 		differentiationResult.available = true;
 		differentiationResult.valid = false;
@@ -314,7 +315,7 @@ void XYDifferentiationCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "derivOrder", QString::number(d->differentiationData.derivOrder) );
 	writer->writeAttribute( "accOrder", QString::number(d->differentiationData.accOrder) );
-	writer->writeAttribute( "AutoRange", QString::number(d->differentiationData.autoRange) );
+	writer->writeAttribute( "autoRange", QString::number(d->differentiationData.autoRange) );
 	writer->writeAttribute( "xRangeMin", QString::number(d->differentiationData.xRange.front()) );
 	writer->writeAttribute( "xRangeMax", QString::number(d->differentiationData.xRange.back()) );
 	writer->writeEndElement();// differentiationData
@@ -366,9 +367,9 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-			str = attribs.value("AutoRange").toString();
+			str = attribs.value("autoRange").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'AutoRange'"));
+				reader->raiseWarning(attributeWarning.arg("'autoRange'"));
 			else
 				d->differentiationData.autoRange = (bool)str.toInt();
 

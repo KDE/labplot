@@ -219,14 +219,15 @@ void XYIntegrationCurvePrivate::recalculate() {
 	//copy all valid data point for the integration to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
+	const double min = integrationData.xRange.front();
+	const double max = integrationData.xRange.back();
 	for (int row=0; row < xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= integrationData.xRange.front()
-				&& xDataColumn->valueAt(row) <= integrationData.xRange.back() ) {
+			if (xDataColumn->valueAt(row) >= min && xDataColumn->valueAt(row) <= max) {
 				xdataVector.append(xDataColumn->valueAt(row));
 				ydataVector.append(yDataColumn->valueAt(row));
 			}
@@ -307,11 +308,11 @@ void XYIntegrationCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement("integrationData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
-	writer->writeAttribute( "method", QString::number(d->integrationData.method) );
-	writer->writeAttribute( "absolute", QString::number(d->integrationData.absolute) );
-	writer->writeAttribute( "AutoRange", QString::number(d->integrationData.autoRange) );
+	writer->writeAttribute( "autoRange", QString::number(d->integrationData.autoRange) );
 	writer->writeAttribute( "xRangeMin", QString::number(d->integrationData.xRange.front()) );
 	writer->writeAttribute( "xRangeMax", QString::number(d->integrationData.xRange.back()) );
+	writer->writeAttribute( "method", QString::number(d->integrationData.method) );
+	writer->writeAttribute( "absolute", QString::number(d->integrationData.absolute) );
 	writer->writeEndElement();// integrationData
 
 	// integration results (generated columns)
@@ -362,9 +363,9 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-			str = attribs.value("AutoRange").toString();
+			str = attribs.value("autoRange").toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'AutoRange'"));
+				reader->raiseWarning(attributeWarning.arg("'autoRange'"));
 			else
 				d->integrationData.autoRange = (bool)str.toInt();
 
