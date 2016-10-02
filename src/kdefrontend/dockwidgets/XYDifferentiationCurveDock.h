@@ -64,6 +64,9 @@ private slots:
 	void commentChanged();
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
+	void autoRangeChanged();
+	void xRangeMinChanged();
+	void xRangeMaxChanged();
 	void derivOrderChanged();
 	void accOrderChanged();
 

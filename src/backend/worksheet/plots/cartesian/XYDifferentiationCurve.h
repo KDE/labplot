@@ -33,6 +33,7 @@
 extern "C" {
 #include "backend/nsl/nsl_diff.h"
 }
+#include <array>
 
 class XYDifferentiationCurvePrivate;
 class XYDifferentiationCurve: public XYCurve {
@@ -40,10 +41,12 @@ class XYDifferentiationCurve: public XYCurve {
 
 	public:
 		struct DifferentiationData {
-			DifferentiationData() : derivOrder(nsl_diff_deriv_order_first), accOrder(2) {};
+			DifferentiationData() : derivOrder(nsl_diff_deriv_order_first), accOrder(2), autoRange(true), xRange() {};
 
 			nsl_diff_deriv_order_type derivOrder;	// order of differentiation
 			int accOrder;				// order ofaccuracy
+			bool autoRange;				// use all data?
+			std::array<double, 2> xRange;		// x range for integration
 		};
 		struct DifferentiationResult {
 			DifferentiationResult() : available(false), valid(false), elapsedTime(0) {};

@@ -98,8 +98,8 @@ void XYIntegrationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
-	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeChanged()) );
-	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeChanged()) );
+	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
+	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
 
 	connect( uiGeneralTab.cbMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(methodChanged()) );
 	connect( uiGeneralTab.cbAbsolute, SIGNAL(clicked(bool)), this, SLOT(absoluteChanged()) );
@@ -282,11 +282,17 @@ void XYIntegrationCurveDock::autoRangeChanged() {
 	}
 
 }
-void XYIntegrationCurveDock::xRangeChanged() {
+void XYIntegrationCurveDock::xRangeMinChanged() {
 	double xMin = uiGeneralTab.sbMin->value();
+
+	m_integrationData.xRange.front() = xMin;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYIntegrationCurveDock::xRangeMaxChanged() {
 	double xMax = uiGeneralTab.sbMax->value();
 
-	m_integrationData.xRange = {xMin, xMax};
+	m_integrationData.xRange.back() = xMax;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 

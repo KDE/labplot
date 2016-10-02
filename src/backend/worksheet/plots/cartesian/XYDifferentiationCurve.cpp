@@ -224,8 +224,12 @@ void XYDifferentiationCurvePrivate::recalculate() {
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
-			xdataVector.append(xDataColumn->valueAt(row));
-			ydataVector.append(yDataColumn->valueAt(row));
+			// only when inside given range
+			if (xDataColumn->valueAt(row) >= differentiationData.xRange.front()
+				&& xDataColumn->valueAt(row) <= differentiationData.xRange.back() ) {
+				xdataVector.append(xDataColumn->valueAt(row));
+				ydataVector.append(yDataColumn->valueAt(row));
+			}
 		}
 	}
 
@@ -310,6 +314,9 @@ void XYDifferentiationCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "derivOrder", QString::number(d->differentiationData.derivOrder) );
 	writer->writeAttribute( "accOrder", QString::number(d->differentiationData.accOrder) );
+	writer->writeAttribute( "AutoRange", QString::number(d->differentiationData.autoRange) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->differentiationData.xRange.front()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->differentiationData.xRange.back()) );
 	writer->writeEndElement();// differentiationData
 
 	// differentiation results (generated columns)
@@ -358,6 +365,24 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader) {
 
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
+
+			str = attribs.value("AutoRange").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'AutoRange'"));
+			else
+				d->differentiationData.autoRange = (bool)str.toInt();
+
+			str = attribs.value("xRangeMin").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'xRangeMin'"));
+			else
+				d->differentiationData.xRange.front() = str.toDouble();
+
+			str = attribs.value("xRangeMax").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'xRangeMax'"));
+			else
+				d->differentiationData.xRange.back() = str.toDouble();
 
 			str = attribs.value("derivOrder").toString();
 			if (str.isEmpty())
