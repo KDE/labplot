@@ -42,8 +42,6 @@
 
 #include <KIcon>
 #include <KConfigGroup>
-#include <KLocale>
-#include <QDebug>
 #include <cmath>
 
 /**
@@ -83,6 +81,7 @@ void Worksheet::init() {
 	d->pageRect.setY(0);
 	d->pageRect.setWidth(group.readEntry("Width", 1500));
 	d->pageRect.setHeight(group.readEntry("Height",1500));
+	d->m_scene->setSceneRect(d->pageRect);
 
 	//background
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
@@ -579,9 +578,8 @@ void Worksheet::setPrinting(bool on) const {
 //##############################################################################
 //######################  Private implementation ###############################
 //##############################################################################
-WorksheetPrivate::WorksheetPrivate(Worksheet *owner):q(owner),
-	pageRect(0, 0, 1500, 1500),
-	m_scene(new QGraphicsScene(pageRect)),
+WorksheetPrivate::WorksheetPrivate(Worksheet* owner):q(owner),
+	m_scene(new QGraphicsScene()),
 	scaleContent(false) {
 }
 
