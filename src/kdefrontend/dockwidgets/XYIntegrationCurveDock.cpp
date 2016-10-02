@@ -80,13 +80,12 @@ void XYIntegrationCurveDock::setupGeneral() {
 	}
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 4, 3, 1, 2);
+	gridLayout->addWidget(cbXDataColumn, 4, 2, 1, 3);
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 5, 3, 1, 2);
+	gridLayout->addWidget(cbYDataColumn, 5, 2, 1, 3);
 
 	for (int i=0; i < NSL_INT_NETHOD_COUNT; i++)
 		uiGeneralTab.cbMethod->addItem(i18n(nsl_int_method_name[i]));
-	//TODO: set default method here?
 
 	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
 
@@ -98,6 +97,9 @@ void XYIntegrationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
+	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeChanged()) );
+	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeChanged()) );
 
 	connect( uiGeneralTab.cbMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(methodChanged()) );
 	connect( uiGeneralTab.cbAbsolute, SIGNAL(clicked(bool)), this, SLOT(absoluteChanged()) );
@@ -130,6 +132,10 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	Q_ASSERT(m_integrationCurve);
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_integrationCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_integrationCurve->yDataColumn());
+	uiGeneralTab.cbAutoRange->setChecked(m_integrationData.autoRange);
+	uiGeneralTab.sbMin->setValue(m_integrationData.xRange.front());
+	uiGeneralTab.sbMax->setValue(m_integrationData.xRange.back());
+	this->autoRangeChanged();
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
@@ -223,14 +229,18 @@ void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYIntegrationCurve*>(curve)->setXDataColumn(column);
 
-	// disable deriv orders and accuracies that need more data points
 	if (column != 0) {
+		if (uiGeneralTab.cbAutoRange->isChecked()) {
+			uiGeneralTab.sbMin->setValue(column->minimum());
+			uiGeneralTab.sbMax->setValue(column->maximum());
+		}
+
 		size_t n=0;
 		for (int row=0; row < column->rowCount(); row++)
 			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
 				n++;
 
-		// TODO
+		// TODO: disable integration methods that need more data points
 	}
 }
 
@@ -247,6 +257,37 @@ void XYIntegrationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYIntegrationCurve*>(curve)->setYDataColumn(column);
+}
+
+void XYIntegrationCurveDock::autoRangeChanged() {
+	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
+	m_integrationData.autoRange = autoRange;
+
+	if (autoRange) {
+		uiGeneralTab.lMin->setEnabled(false);
+		uiGeneralTab.sbMin->setEnabled(false);
+		uiGeneralTab.lMax->setEnabled(false);
+		uiGeneralTab.sbMax->setEnabled(false);
+		m_integrationCurve = dynamic_cast<XYIntegrationCurve*>(m_curve);
+		Q_ASSERT(m_integrationCurve);
+		if (m_integrationCurve->xDataColumn()) {
+			uiGeneralTab.sbMin->setValue(m_integrationCurve->xDataColumn()->minimum());
+			uiGeneralTab.sbMax->setValue(m_integrationCurve->xDataColumn()->maximum());
+		}
+	} else {
+		uiGeneralTab.lMin->setEnabled(true);
+		uiGeneralTab.sbMin->setEnabled(true);
+		uiGeneralTab.lMax->setEnabled(true);
+		uiGeneralTab.sbMax->setEnabled(true);
+	}
+
+}
+void XYIntegrationCurveDock::xRangeChanged() {
+	double xMin = uiGeneralTab.sbMin->value();
+	double xMax = uiGeneralTab.sbMax->value();
+
+	m_integrationData.xRange = {xMin, xMax};
+	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYIntegrationCurveDock::methodChanged() {

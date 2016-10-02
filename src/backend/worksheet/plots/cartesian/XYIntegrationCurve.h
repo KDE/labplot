@@ -33,6 +33,7 @@
 extern "C" {
 #include "backend/nsl/nsl_int.h"
 }
+#include <array>
 
 class XYIntegrationCurvePrivate;
 class XYIntegrationCurve: public XYCurve {
@@ -40,10 +41,12 @@ class XYIntegrationCurve: public XYCurve {
 
 	public:
 		struct IntegrationData {
-			IntegrationData() : method(nsl_int_method_trapezoid), absolute(false) {};
+			IntegrationData() : method(nsl_int_method_trapezoid), absolute(false), autoRange(true), xRange() {};
 
 			nsl_int_method_type method;	// method for integration
-			bool absolute;			// absolutr area?
+			bool absolute;			// absolute area?
+			bool autoRange;			// use all data?
+			std::array<double, 2> xRange;	// x range for integration
 		};
 		struct IntegrationResult {
 			IntegrationResult() : available(false), valid(false), elapsedTime(0), value(0) {};

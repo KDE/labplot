@@ -224,15 +224,16 @@ void XYIntegrationCurvePrivate::recalculate() {
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
-			// TODO: only when inside given range
-
-			xdataVector.append(xDataColumn->valueAt(row));
-			ydataVector.append(yDataColumn->valueAt(row));
+			// only when inside given range
+			if (xDataColumn->valueAt(row) >= integrationData.xRange.front()
+				&& xDataColumn->valueAt(row) <= integrationData.xRange.back() ) {
+				xdataVector.append(xDataColumn->valueAt(row));
+				ydataVector.append(yDataColumn->valueAt(row));
+			}
 		}
 	}
 
-	//number of data points to integrate
-	const size_t n = xdataVector.size();
+	const size_t n = xdataVector.size();	// number of data points to integrate
 	if (n < 2) {
 		integrationResult.available = true;
 		integrationResult.valid = false;
@@ -308,6 +309,9 @@ void XYIntegrationCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "method", QString::number(d->integrationData.method) );
 	writer->writeAttribute( "absolute", QString::number(d->integrationData.absolute) );
+	writer->writeAttribute( "AutoRange", QString::number(d->integrationData.autoRange) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->integrationData.xRange.front()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->integrationData.xRange.back()) );
 	writer->writeEndElement();// integrationData
 
 	// integration results (generated columns)
@@ -357,6 +361,24 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader) {
 
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
+
+			str = attribs.value("AutoRange").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'AutoRange'"));
+			else
+				d->integrationData.autoRange = (bool)str.toInt();
+
+			str = attribs.value("xRangeMin").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'xRangeMin'"));
+			else
+				d->integrationData.xRange.front() = str.toDouble();
+
+			str = attribs.value("xRangeMax").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'xRangeMax'"));
+			else
+				d->integrationData.xRange.back() = str.toDouble();
 
 			str = attribs.value("method").toString();
 			if (str.isEmpty())
