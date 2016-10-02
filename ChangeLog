@@ -1,9 +1,17 @@
 -----2.4-----
 New features:
 	* New pre-defined fit models: Gompertz, Weibull, Log-Normal, Gumbel
+	* New analysis functions: numerical differentiation and integration
+	* Support user specified x range in all analysis functions
+	* MacOSX port
 
 Bug fixes:
 	* Correctly load worksheet sizes from saved templates
+	* Don't crash when removing columns in spreadsheet
+	* fixed crash when fitting von GSL >= 2
+	* list of available functions corrected
+	* constants are now available with full accuracy
+	* Windows: open recent files fixed
 
 -----2.3-----
 New features:
