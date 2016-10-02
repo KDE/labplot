@@ -11,6 +11,22 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
+   <item row="2" column="2">
+    <spacer name="verticalSpacer_3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="lName">
      <property name="text">
@@ -44,24 +60,21 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="4" colspan="2">
-    <widget class="KLineEdit" name="leComment"/>
-   </item>
-   <item row="2" column="2">
-    <spacer name="verticalSpacer_3">
+   <item row="17" column="4">
+    <spacer name="horizontalSpacer_2">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>10</height>
+       <width>97</width>
+       <height>20</height>
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="1" column="4" colspan="2">
+    <widget class="KLineEdit" name="leComment"/>
    </item>
    <item row="7" column="2">
     <spacer name="verticalSpacer_4">
@@ -237,19 +250,6 @@
      </property>
     </widget>
    </item>
-   <item row="17" column="4">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>97</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="17" column="5">
     <widget class="QPushButton" name="pbRecalculate">
      <property name="text">
@@ -319,14 +319,7 @@
    <item row="4" column="0" colspan="3">
     <widget class="QLabel" name="lXColumn">
      <property name="text">
-      <string>x-data</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0" colspan="3">
-    <widget class="QLabel" name="lYColumn">
-     <property name="text">
-      <string>y-data</string>
+      <string>x-Data</string>
      </property>
     </widget>
    </item>
@@ -377,6 +370,13 @@
      </property>
      <property name="text">
       <string>Fit:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="3">
+    <widget class="QLabel" name="lYColumn">
+     <property name="text">
+      <string>y-Data</string>
      </property>
     </widget>
    </item>

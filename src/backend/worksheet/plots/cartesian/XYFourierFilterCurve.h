@@ -33,6 +33,7 @@
 extern "C" {
 #include "backend/nsl/nsl_filter.h"
 }
+#include <array>
 
 class XYFourierFilterCurvePrivate;
 class XYFourierFilterCurve: public XYCurve {
@@ -41,7 +42,8 @@ class XYFourierFilterCurve: public XYCurve {
 	public:
 		struct FilterData {
 			FilterData() : type(nsl_filter_type_low_pass), form(nsl_filter_form_ideal), order(1),
-				cutoff(0), unit(nsl_filter_cutoff_unit_frequency), cutoff2(0), unit2(nsl_filter_cutoff_unit_frequency) {};
+				cutoff(0), unit(nsl_filter_cutoff_unit_frequency), cutoff2(0), unit2(nsl_filter_cutoff_unit_frequency),
+				autoRange(true), xRange() {};
 
 			nsl_filter_type type;
 			nsl_filter_form form;
@@ -50,6 +52,8 @@ class XYFourierFilterCurve: public XYCurve {
 			nsl_filter_cutoff_unit unit;	// (low) value unit
 			double cutoff2;			// high cutoff
 			nsl_filter_cutoff_unit unit2;	// high value unit
+			bool autoRange;			// use all data?
+			std::array<double, 2> xRange;	// x range for integration
 		};
 		struct FilterResult {
 			FilterResult() : available(false), valid(false), elapsedTime(0) {};

@@ -261,6 +261,11 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	// disable types that need more data points
 	if (column != 0) {
+		if (uiGeneralTab.cbAutoRange->isChecked()) {
+			uiGeneralTab.sbMin->setValue(column->minimum());
+			uiGeneralTab.sbMax->setValue(column->maximum());
+		}
+
 		unsigned int n=0;
 		for (int row=0; row < column->rowCount(); row++)
 			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row)) 

@@ -106,6 +106,9 @@ void XYSmoothCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
+	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
+	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
 	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(int)), this, SLOT(pointsChanged()) );
@@ -147,6 +150,10 @@ void XYSmoothCurveDock::initGeneralTab() {
 	Q_ASSERT(m_smoothCurve);
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_smoothCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_smoothCurve->yDataColumn());
+	uiGeneralTab.cbAutoRange->setChecked(m_smoothData.autoRange);
+	uiGeneralTab.sbMin->setValue(m_smoothData.xRange.front());
+	uiGeneralTab.sbMax->setValue(m_smoothData.xRange.back());
+	this->autoRangeChanged();
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
@@ -255,6 +262,11 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	// disable types that need more data points
 	if (column != 0) {
+		if (uiGeneralTab.cbAutoRange->isChecked()) {
+			uiGeneralTab.sbMin->setValue(column->minimum());
+			uiGeneralTab.sbMax->setValue(column->maximum());
+		}
+
 		unsigned int n=0;
 		for (int row=0; row < column->rowCount(); row++)
 			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row)) 
@@ -279,6 +291,43 @@ void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYSmoothCurve*>(curve)->setYDataColumn(column);
+}
+
+void XYSmoothCurveDock::autoRangeChanged() {
+	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
+	m_smoothData.autoRange = autoRange;
+
+	if (autoRange) {
+		uiGeneralTab.lMin->setEnabled(false);
+		uiGeneralTab.sbMin->setEnabled(false);
+		uiGeneralTab.lMax->setEnabled(false);
+		uiGeneralTab.sbMax->setEnabled(false);
+		m_smoothCurve = dynamic_cast<XYSmoothCurve*>(m_curve);
+		Q_ASSERT(m_smoothCurve);
+		if (m_smoothCurve->xDataColumn()) {
+			uiGeneralTab.sbMin->setValue(m_smoothCurve->xDataColumn()->minimum());
+			uiGeneralTab.sbMax->setValue(m_smoothCurve->xDataColumn()->maximum());
+		}
+	} else {
+		uiGeneralTab.lMin->setEnabled(true);
+		uiGeneralTab.sbMin->setEnabled(true);
+		uiGeneralTab.lMax->setEnabled(true);
+		uiGeneralTab.sbMax->setEnabled(true);
+	}
+
+}
+void XYSmoothCurveDock::xRangeMinChanged() {
+	double xMin = uiGeneralTab.sbMin->value();
+
+	m_smoothData.xRange.front() = xMin;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYSmoothCurveDock::xRangeMaxChanged() {
+	double xMax = uiGeneralTab.sbMax->value();
+
+	m_smoothData.xRange.back() = xMax;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYSmoothCurveDock::typeChanged() {

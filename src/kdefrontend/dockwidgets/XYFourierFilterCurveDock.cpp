@@ -100,6 +100,9 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
+	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
+	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
 	connect( uiGeneralTab.cbForm, SIGNAL(currentIndexChanged(int)), this, SLOT(formChanged()) );
@@ -138,6 +141,10 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	Q_ASSERT(m_filterCurve);
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_filterCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_filterCurve->yDataColumn());
+	uiGeneralTab.cbAutoRange->setChecked(m_filterData.autoRange);
+	uiGeneralTab.sbMin->setValue(m_filterData.xRange.front());
+	uiGeneralTab.sbMax->setValue(m_filterData.xRange.back());
+	this->autoRangeChanged();
 
 	uiGeneralTab.cbType->setCurrentIndex(m_filterData.type);
 	this->typeChanged();
@@ -238,6 +245,13 @@ void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	// update range of cutoff spin boxes (like a unit change)
 	unitChanged();
 	unit2Changed();
+	
+	if (column != 0) {
+		if (uiGeneralTab.cbAutoRange->isChecked()) {
+			uiGeneralTab.sbMin->setValue(column->minimum());
+			uiGeneralTab.sbMax->setValue(column->maximum());
+		}
+	}
 }
 
 void XYFourierFilterCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -253,6 +267,43 @@ void XYFourierFilterCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFourierFilterCurve*>(curve)->setYDataColumn(column);
+}
+
+void XYFourierFilterCurveDock::autoRangeChanged() {
+	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
+	m_filterData.autoRange = autoRange;
+
+	if (autoRange) {
+		uiGeneralTab.lMin->setEnabled(false);
+		uiGeneralTab.sbMin->setEnabled(false);
+		uiGeneralTab.lMax->setEnabled(false);
+		uiGeneralTab.sbMax->setEnabled(false);
+		m_filterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
+		Q_ASSERT(m_filterCurve);
+		if (m_filterCurve->xDataColumn()) {
+			uiGeneralTab.sbMin->setValue(m_filterCurve->xDataColumn()->minimum());
+			uiGeneralTab.sbMax->setValue(m_filterCurve->xDataColumn()->maximum());
+		}
+	} else {
+		uiGeneralTab.lMin->setEnabled(true);
+		uiGeneralTab.sbMin->setEnabled(true);
+		uiGeneralTab.lMax->setEnabled(true);
+		uiGeneralTab.sbMax->setEnabled(true);
+	}
+
+}
+void XYFourierFilterCurveDock::xRangeMinChanged() {
+	double xMin = uiGeneralTab.sbMin->value();
+
+	m_filterData.xRange.front() = xMin;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYFourierFilterCurveDock::xRangeMaxChanged() {
+	double xMax = uiGeneralTab.sbMax->value();
+
+	m_filterData.xRange.back() = xMax;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYFourierFilterCurveDock::typeChanged() {
