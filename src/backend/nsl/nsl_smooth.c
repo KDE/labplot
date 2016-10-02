@@ -35,10 +35,12 @@
 #include "nsl_sf_kernel.h"
 #include "nsl_stats.h"
 
-const char* nsl_smooth_type_name[] = { "moving average (central)", "moving average (lagged)", "percentile", "Savitzky-Golay" };
-const char* nsl_smooth_pad_mode_name[] = { "none", "interpolating", "mirror", "nearest", "constant", "periodic" };
-const char* nsl_smooth_weight_type_name[] = { "uniform (rectangular)", "triangular", "binomial", "parabolic (Epanechnikov)",
-		"quartic (biweight)", "triweight", "tricube", "cosine"  };
+#define i18n(m) m
+
+const char* nsl_smooth_type_name[] = { i18n("moving average (central)"), i18n("moving average (lagged)"), i18n("percentile"), i18n("Savitzky-Golay") };
+const char* nsl_smooth_pad_mode_name[] = { i18n("none"), i18n("interpolating"), i18n("mirror"), i18n("nearest"), i18n("constant"), i18n("periodic") };
+const char* nsl_smooth_weight_type_name[] = { i18n("uniform (rectangular)"), i18n("triangular"), i18n("binomial"), i18n("parabolic (Epanechnikov)"),
+		i18n("quartic (biweight)"), i18n("triweight"), i18n("tricube"), i18n("cosine")  };
 double nsl_smooth_pad_constant_lvalue = 0.0, nsl_smooth_pad_constant_rvalue = 0.0;
 
 int nsl_smooth_moving_average(double *data, unsigned int n, unsigned int points, nsl_smooth_weight_type weight, nsl_smooth_pad_mode mode) {

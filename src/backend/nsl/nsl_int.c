@@ -37,7 +37,9 @@
 #include "nsl_int.h"
 #include "nsl_sf_poly.h"
 
-const char* nsl_int_method_name[] = {"rectangle (1-point)", "trapezoid (2-point)", "Simpson's (3-point)", "Simpson's 3/8 (4-point)"};
+#define i18n(m) m
+
+const char* nsl_int_method_name[] = {i18n("rectangle (1-point)"), i18n("trapezoid (2-point)"), i18n("Simpson's (3-point)"), i18n("Simpson's 3/8 (4-point)")};
 
 int nsl_int_rectangle(const double *x, double *y, const size_t n, int abs) {
 	if (n == 0)
