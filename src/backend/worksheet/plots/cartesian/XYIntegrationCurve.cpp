@@ -219,15 +219,15 @@ void XYIntegrationCurvePrivate::recalculate() {
 	//copy all valid data point for the integration to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double min = integrationData.xRange.front();
-	const double max = integrationData.xRange.back();
+	const double xmin = integrationData.xRange.front();
+	const double xmax = integrationData.xRange.back();
 	for (int row=0; row < xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= min && xDataColumn->valueAt(row) <= max) {
+			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
 				xdataVector.append(xDataColumn->valueAt(row));
 				ydataVector.append(yDataColumn->valueAt(row));
 			}

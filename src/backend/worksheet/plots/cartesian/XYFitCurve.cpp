@@ -630,25 +630,30 @@ void XYFitCurvePrivate::recalculate() {
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	QVector<double> sigmaVector;
+	const double xmin = fitData.xRange.front();
+	const double xmax = fitData.xRange.back();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x, y and sigma, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
-			if (!weightsColumn) {
-				xdataVector.append(xDataColumn->valueAt(row));
-				ydataVector.append(yDataColumn->valueAt(row));
-			} else {
-				if (!std::isnan(weightsColumn->valueAt(row))) {
+			// only when inside given range
+			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
+				if (!weightsColumn) {
 					xdataVector.append(xDataColumn->valueAt(row));
 					ydataVector.append(yDataColumn->valueAt(row));
+				} else {
+					if (!std::isnan(weightsColumn->valueAt(row))) {
+						xdataVector.append(xDataColumn->valueAt(row));
+						ydataVector.append(yDataColumn->valueAt(row));
 
-					if (fitData.weightsType == XYFitCurve::WeightsFromColumn) {
-						//weights from a given column -> calculate the square root of the inverse (sigma = sqrt(1/weight))
-						sigmaVector.append( sqrt(1/weightsColumn->valueAt(row)) );
-					} else if (fitData.weightsType == XYFitCurve::WeightsFromErrorColumn) {
-						//weights from a given column with error bars (sigma = error)
-						sigmaVector.append( weightsColumn->valueAt(row) );
+						if (fitData.weightsType == XYFitCurve::WeightsFromColumn) {
+							//weights from a given column -> calculate the square root of the inverse (sigma = sqrt(1/weight))
+							sigmaVector.append( sqrt(1/weightsColumn->valueAt(row)) );
+						} else if (fitData.weightsType == XYFitCurve::WeightsFromErrorColumn) {
+							//weights from a given column with error bars (sigma = error)
+							sigmaVector.append( weightsColumn->valueAt(row) );
+						}
 					}
 				}
 			}
@@ -782,11 +787,9 @@ void XYFitCurvePrivate::recalculate() {
 
 	//calculate the fit function (vectors)
 	ExpressionParser* parser = ExpressionParser::getInstance();
-	double min = xDataColumn->minimum();
-	double max = xDataColumn->maximum();
 	xVector->resize(fitData.fittedPoints);
 	yVector->resize(fitData.fittedPoints);
-	bool rc = parser->evaluateCartesian(fitData.model, QString::number(min), QString::number(max), fitData.fittedPoints, xVector, yVector, fitData.paramNames, fitResult.paramValues);
+	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), fitData.fittedPoints, xVector, yVector, fitData.paramNames, fitResult.paramValues);
 	if (!rc) {
 		xVector->clear();
 		yVector->clear();
@@ -836,6 +839,9 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	WRITE_COLUMN(d->weightsColumn, weightsColumn);
+	writer->writeAttribute( "autoRange", QString::number(d->fitData.autoRange) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->fitData.xRange.front()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->fitData.xRange.back()) );
 	writer->writeAttribute( "modelType", QString::number(d->fitData.modelType) );
 	writer->writeAttribute( "weightsType", QString::number(d->fitData.weightsType) );
 	writer->writeAttribute( "degree", QString::number(d->fitData.degree) );
@@ -933,6 +939,24 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 			READ_COLUMN(weightsColumn);
+
+			str = attribs.value("autoRange").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'autoRange'"));
+			else
+				d->fitData.autoRange = (bool)str.toInt();
+
+			str = attribs.value("xRangeMin").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'xRangeMin'"));
+			else
+				d->fitData.xRange.front() = str.toDouble();
+
+			str = attribs.value("xRangeMax").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'xRangeMax'"));
+			else
+				d->fitData.xRange.back() = str.toDouble();
 
 			str = attribs.value("modelType").toString();
 			if (str.isEmpty())

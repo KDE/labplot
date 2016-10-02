@@ -30,6 +30,7 @@
 #define XYFITCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include <array>
 
 class XYFitCurvePrivate;
 class XYFitCurve : public XYCurve {
@@ -47,7 +48,8 @@ class XYFitCurve : public XYCurve {
 						degree(1),
 						maxIterations(500),
 						eps(1e-4),
-						fittedPoints(100) {};
+						fittedPoints(100),
+						autoRange(true), xRange() {};
 
 			ModelType modelType;
 			WeightsType weightsType;
@@ -59,6 +61,9 @@ class XYFitCurve : public XYCurve {
 			int maxIterations;
 			double eps;
 			int fittedPoints;
+
+			bool autoRange;			// use all data?
+			std::array<double, 2> xRange;	// x range for integration
 		};
 
 		struct FitResult {
