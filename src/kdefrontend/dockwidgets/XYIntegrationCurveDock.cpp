@@ -260,6 +260,7 @@ void XYIntegrationCurveDock::methodChanged() {
 		uiGeneralTab.cbAbsolute->setEnabled(true);
 		break;
 	default:
+		uiGeneralTab.cbAbsolute->setChecked(false);
 		uiGeneralTab.cbAbsolute->setEnabled(false);
 	}
 

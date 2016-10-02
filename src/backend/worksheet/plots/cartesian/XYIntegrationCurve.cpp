@@ -207,7 +207,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 	}
 
 	//check column sizes
-	if (xDataColumn->rowCount()!=yDataColumn->rowCount()) {
+	if (xDataColumn->rowCount() != yDataColumn->rowCount()) {
 		integrationResult.available = true;
 		integrationResult.valid = false;
 		integrationResult.status = i18n("Number of x and y data points must be equal.");
@@ -219,10 +219,12 @@ void XYIntegrationCurvePrivate::recalculate() {
 	//copy all valid data point for the integration to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	for (int row=0; row<xDataColumn->rowCount(); ++row) {
+	for (int row=0; row < xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
+
+			// TODO: only when inside given range
 
 			xdataVector.append(xDataColumn->valueAt(row));
 			ydataVector.append(yDataColumn->valueAt(row));
@@ -230,8 +232,8 @@ void XYIntegrationCurvePrivate::recalculate() {
 	}
 
 	//number of data points to integrate
-	const size_t n = ydataVector.size();
-	if (n < 1) {
+	const size_t n = xdataVector.size();
+	if (n < 2) {
 		integrationResult.available = true;
 		integrationResult.valid = false;
 		integrationResult.status = i18n("Not enough data points available.");
