@@ -1,7 +1,9 @@
 -----2.4-----
 New features:
-	* New pre-defined fit models: Gompertz, Weibull, Log-Normal, Gumbel
+	* Support themes for plots
+	* Import of FITS support added
 	* New analysis functions: numerical differentiation and integration
+	* New pre-defined fit models: Gompertz, Weibull, Log-Normal, Gumbel
 	* Support user specified x range in all analysis functions
 	* MacOSX port
 
