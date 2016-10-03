@@ -60,15 +60,30 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 
 	// create latex code
 	QTextStream out(&file);
-	out << "\\documentclass{minimal}";
-	out << "\\usepackage{color}\\usepackage[active,displaymath,textmath,tightpage]{preview}";
+	int headerIndex = teXString.indexOf("\\begin{document}");
+	QString body;
+	if (headerIndex!=-1) {
+		//user provided a complete latex document -> extract the document header and body
+		QString header = teXString.left(headerIndex);
+		int footerIndex = teXString.indexOf("\\end{document}");
+		body = teXString.mid(headerIndex + 16, footerIndex - headerIndex - 16);
+		out << header;
+	} else {
+		//user simply provided a document body -> add a minimal header
+		out << "\\documentclass{minimal}";
+		body = teXString;
+	}
+
+	out << "\\usepackage{color}";
+	out << "\\usepackage[active,displaymath,textmath,tightpage]{preview}";
 	out << "\\begin{document}";
 	out << "\\definecolor{fontcolor}{rgb}{" << fontColor.redF() << ',' << fontColor.greenF() << ','<<fontColor.blueF() << "}";
 	out << "\\begin{preview}";
 	out << "{\\fontsize{" << QString::number(fontSize) << "}{" << QString::number(fontSize) << "}\\selectfont";
-	out << "{\\color{fontcolor}\n";
-	out << teXString;
-	out << "\n}}\\end{preview}";
+	out << "{\\color{fontcolor}";
+	out << body;
+	out << "}}\\end{preview}";
+	out << "\\end{preview}";
 	out << "\\end{document}";
 	out.flush();
 

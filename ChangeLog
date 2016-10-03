@@ -5,6 +5,7 @@ New features:
 	* New analysis functions: numerical differentiation and integration
 	* New pre-defined fit models: Gompertz, Weibull, Log-Normal, Gumbel
 	* Support user specified x range in all analysis functions
+	* Allow to enter complete LaTeX documents in text labels
 	* MacOSX port
 
 Bug fixes:
