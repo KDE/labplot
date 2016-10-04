@@ -49,7 +49,7 @@ ExpressionParser::ExpressionParser(){
 }
 
 void ExpressionParser::initFunctions() {
-	//functions
+	//functions	(sync with functions.h!)
 	for (int i = 0; _functions[i].name != 0; i++)
 		m_functions << _functions[i].name;
 
@@ -131,6 +131,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Nonnegative square root");
 	m_functionsNames << i18n("Tangent");
 	m_functionsNames << i18n("Hyperbolic tangent");
+	m_functionsNames << i18n("Sign function");
 
 #ifndef _WIN32
 	m_functionsNames << i18n("Cube root");
@@ -160,9 +161,9 @@ void ExpressionParser::initFunctions() {
 //	m_functionsNames << i18n("Sine");
 
 #ifndef _WIN32
-	for(int i=0;i<22;i++)
+	for(int i=0;i<23;i++)
 #else
-	for(int i=0;i<17;i++)
+	for(int i=0;i<18;i++)
 #endif
 		m_functionsGroupIndex << 0;
 
