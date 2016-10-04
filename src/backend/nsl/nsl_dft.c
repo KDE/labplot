@@ -26,16 +26,13 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
-#include <math.h>
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_halfcomplex.h>
+#include "nsl_common.h"
 #include "nsl_dft.h"
 #ifdef HAVE_FFTW3
 #include <fftw3.h>
 #endif
-
-#define i18n(m) m
 
 const char* nsl_dft_result_type_name[] = {i18n("Magnitude"), i18n("Amplitude"), i18n("real part"), i18n("imaginary part"), i18n("Power"), i18n("Phase"),
 		i18n("Amplitude in dB"), i18n("normalized amplitude in dB"), i18n("Magnitude squared"), i18n("Amplitude squared"), i18n("raw")};

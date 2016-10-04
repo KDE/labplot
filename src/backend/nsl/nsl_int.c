@@ -27,17 +27,12 @@
 
 /* TODO:
 	* absolute area for Simpson/Simpson-3/8 rules (needs more numerics)
-	* start and end point for integration: use ranges?
 */
 
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
-#include <float.h>
+#include "nsl_common.h"
 #include "nsl_int.h"
 #include "nsl_sf_poly.h"
 
-#define i18n(m) m
 
 const char* nsl_int_method_name[] = {i18n("rectangle (1-point)"), i18n("trapezoid (2-point)"), i18n("Simpson's (3-point)"), i18n("Simpson's 3/8 (4-point)")};
 

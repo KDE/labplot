@@ -26,12 +26,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_trig.h>
+#include "nsl_common.h"
 #include "nsl_sf_window.h"
-
-#define i18n(m) m
 
 const char* nsl_sf_window_type_name[] = {i18n("rectangular (uniform)"), i18n("triangular"), i18n("triangular II (Bartlett)"), i18n("triangular III (Parzen)") ,
 	i18n("Welch (parabolic)"), i18n("Hann (raised cosine)"), i18n("Hamming"), i18n("Blackman"), i18n("Nuttall"), i18n("Blackman-Nuttall"), i18n("Blackman-Harris"), i18n("Flat top"),

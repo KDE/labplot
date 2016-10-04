@@ -37,8 +37,8 @@ extern const char* nsl_int_method_name[];
 	numerical integration for non-uniform samples
 	rectangle rule (1-point)
 	trapezoid rule (2-point)
-	Simpson-1/3 rule (3-point)	returns number of points, abs not supported
-	Simpson-3/8 rule (4-point)	returns number of points, abs not supported
+	Simpson-1/3 rule (3-point)	returns number of points, abs not supported yet
+	Simpson-3/8 rule (4-point)	returns number of points, abs not supported yet
 	abs - 0:return mathem. area, 1: return absolute area
 */
 int nsl_int_rectangle(const double *x, double *y, const size_t n, int abs);

@@ -26,18 +26,15 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
-#include <math.h>
 #include <gsl/gsl_sf_pow_int.h>
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_halfcomplex.h>
+#include "nsl_common.h"
 #include "nsl_filter.h"
 #include "nsl_sf_poly.h"
 #ifdef HAVE_FFTW3
 #include <fftw3.h>
 #endif
-
-#define i18n(m) m
 
 const char* nsl_filter_type_name[] = { i18n("Low pass"), i18n("High pass"), i18n("Band pass"), i18n("Band reject") };
 const char* nsl_filter_form_name[] = { i18n("Ideal"), i18n("Butterworth"), i18n("Chebyshev type I"), i18n("Chebyshev type II"), i18n("Legendre (Optimum L)"), i18n("Bessel (Thomson)") };
