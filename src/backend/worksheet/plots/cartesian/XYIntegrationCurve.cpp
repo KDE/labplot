@@ -363,69 +363,20 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-			str = attribs.value("autoRange").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'autoRange'"));
-			else
-				d->integrationData.autoRange = (bool)str.toInt();
-
-			str = attribs.value("xRangeMin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xRangeMin'"));
-			else
-				d->integrationData.xRange.front() = str.toDouble();
-
-			str = attribs.value("xRangeMax").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xRangeMax'"));
-			else
-				d->integrationData.xRange.back() = str.toDouble();
-
-			str = attribs.value("method").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'method'"));
-			else
-				d->integrationData.method = (nsl_int_method_type) str.toInt();
-
-			str = attribs.value("absolute").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'absolute'"));
-			else
-				d->integrationData.absolute = (bool) str.toInt();
-
+			READ_INT_VALUE("autoRange", integrationData.autoRange, bool);
+			READ_DOUBLE_VALUE("xRangeMin", integrationData.xRange.front());
+			READ_DOUBLE_VALUE("xRangeMax", integrationData.xRange.back());
+			READ_INT_VALUE("method", integrationData.method, nsl_int_method_type);
+			READ_INT_VALUE("absolute", integrationData.absolute, bool);
 		} else if (reader->name() == "integrationResult") {
 
 			attribs = reader->attributes();
 
-			str = attribs.value("available").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'available'"));
-			else
-				d->integrationResult.available = str.toInt();
-
-			str = attribs.value("valid").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'valid'"));
-			else
-				d->integrationResult.valid = str.toInt();
-			
-			str = attribs.value("status").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'status'"));
-			else
-				d->integrationResult.status = str;
-
-			str = attribs.value("time").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'time'"));
-			else
-				d->integrationResult.elapsedTime = str.toInt();
-
-			str = attribs.value("value").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'value'"));
-			else
-				d->integrationResult.value = str.toDouble();
+			READ_INT_VALUE("available", integrationResult.available, int);
+			READ_INT_VALUE("valid", integrationResult.valid, int);
+			READ_STRING_VALUE("status", integrationResult.status);
+			READ_INT_VALUE("time", integrationResult.elapsedTime, int);
+			READ_DOUBLE_VALUE("value", integrationResult.value);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {
