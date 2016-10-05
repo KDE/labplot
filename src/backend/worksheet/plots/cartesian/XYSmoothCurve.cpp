@@ -218,13 +218,18 @@ void XYSmoothCurvePrivate::recalculate() {
 	//copy all valid data point for the smooth to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
+	const double min = smoothData.xRange.front();
+	const double max = smoothData.xRange.back();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
-			xdataVector.append(xDataColumn->valueAt(row));
-			ydataVector.append(yDataColumn->valueAt(row));
+			// only when inside given range
+			if (xDataColumn->valueAt(row) >= min && xDataColumn->valueAt(row) <= max) {
+				xdataVector.append(xDataColumn->valueAt(row));
+				ydataVector.append(yDataColumn->valueAt(row));
+			}
 		}
 	}
 
@@ -284,7 +289,6 @@ void XYSmoothCurvePrivate::recalculate() {
 	yVector->resize(n);
 	memcpy(xVector->data(), xdata, n*sizeof(double));
 	memcpy(yVector->data(), ydata, n*sizeof(double));
-
 ///////////////////////////////////////////////////////////
 
 	//write the result
@@ -315,6 +319,9 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement("smoothData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
+	writer->writeAttribute( "autoRange", QString::number(d->smoothData.autoRange) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->smoothData.xRange.front()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->smoothData.xRange.back()) );
 	writer->writeAttribute( "type", QString::number(d->smoothData.type) );
 	writer->writeAttribute( "points", QString::number(d->smoothData.points) );
 	writer->writeAttribute( "weight", QString::number(d->smoothData.weight) );
@@ -371,6 +378,24 @@ bool XYSmoothCurve::load(XmlStreamReader* reader) {
 
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
+
+			str = attribs.value("autoRange").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'autoRange'"));
+			else
+				d->smoothData.autoRange = (bool)str.toInt();
+
+			str = attribs.value("xRangeMin").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'xRangeMin'"));
+			else
+				d->smoothData.xRange.front() = str.toDouble();
+
+			str = attribs.value("xRangeMax").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'xRangeMax'"));
+			else
+				d->smoothData.xRange.back() = str.toDouble();
 
 			str = attribs.value("type").toString();
 			if (str.isEmpty())

@@ -57,6 +57,8 @@ class SpreadsheetDock;
 class XYCurveDock;
 class XYEquationCurveDock;
 class XYDataReductionCurveDock;
+class XYDifferentiationCurveDock;
+class XYIntegrationCurveDock;
 class XYInterpolationCurveDock;
 class XYSmoothCurveDock;
 class XYFitCurveDock;
@@ -171,6 +173,8 @@ private:
 	XYCurveDock* xyCurveDock;
 	XYEquationCurveDock* xyEquationCurveDock;
 	XYDataReductionCurveDock* xyDataReductionCurveDock;
+	XYDifferentiationCurveDock* xyDifferentiationCurveDock;
+	XYIntegrationCurveDock* xyIntegrationCurveDock;
 	XYInterpolationCurveDock* xyInterpolationCurveDock;
 	XYSmoothCurveDock* xySmoothCurveDock;
 	XYFitCurveDock* xyFitCurveDock;

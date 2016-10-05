@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : XYDifferentationCurvePrivate.h
+    File                 : nsl_int.h
     Project              : LabPlot
-    Description          : Private members of XYDifferentationCurve
+    Description          : NSL numerical integration functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -26,38 +26,24 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYDIFFERENTATIONCURVEPRIVATE_H
-#define XYDIFFERENTATIONCURVEPRIVATE_H
+#ifndef NSL_INT_H
+#define NSL_INT_H
 
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
-#include "backend/worksheet/plots/cartesian/XYDifferentationCurve.h"
+#define NSL_INT_NETHOD_COUNT 4
+typedef enum {nsl_int_method_rectangle, nsl_int_method_trapezoid, nsl_int_method_simpson, nsl_int_method_simpson_3_8} nsl_int_method_type;
+extern const char* nsl_int_method_name[];
 
-class XYDifferentationCurve;
-class Column;
+/*
+	numerical integration for non-uniform samples
+	rectangle rule (1-point)
+	trapezoid rule (2-point)
+	Simpson-1/3 rule (3-point)	returns number of points, abs not supported yet
+	Simpson-3/8 rule (4-point)	returns number of points, abs not supported yet
+	abs - 0:return mathem. area, 1: return absolute area
+*/
+int nsl_int_rectangle(const double *x, double *y, const size_t n, int abs);
+int nsl_int_trapezoid(const double *x, double *y, const size_t n, int abs);
+size_t nsl_int_simpson(double *x, double *y, const size_t n, int abs);
+size_t nsl_int_simpson_3_8(double *x, double *y, const size_t n, int abs);
 
-class XYDifferentationCurvePrivate: public XYCurvePrivate {
-	public:
-		explicit XYDifferentationCurvePrivate(XYDifferentationCurve*);
-		~XYDifferentationCurvePrivate();
-
-		void recalculate();
-
-		const AbstractColumn* xDataColumn; //<! column storing the values for the x-data to be differentated
-		const AbstractColumn* yDataColumn; //<! column storing the values for the y-data to be differentated
-		QString xDataColumnPath;
-		QString yDataColumnPath;
-
-		XYDifferentationCurve::DifferentationData differentationData;
-		XYDifferentationCurve::DifferentationResult differentationResult;
-
-		Column* xColumn; //<! column used internally for storing the x-values of the result differentation curve
-		Column* yColumn; //<! column used internally for storing the y-values of the result differentation curve
-		QVector<double>* xVector;
-		QVector<double>* yVector;
-
-		bool sourceDataChangedSinceLastDifferentation; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
-
-		XYDifferentationCurve* const q;
-};
-
-#endif
+#endif /* NSL_INT_H */

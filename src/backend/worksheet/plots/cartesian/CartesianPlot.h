@@ -39,6 +39,8 @@ class CartesianPlotLegend;
 class XYCurve;
 class XYEquationCurve;
 class XYDataReductionCurve;
+class XYDifferentiationCurve;
+class XYIntegrationCurve;
 class XYInterpolationCurve;
 class XYSmoothCurve;
 class XYFitCurve;
@@ -61,7 +63,8 @@ class CartesianPlot:public AbstractPlot{
 									ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
 
 		struct RangeBreak {
-			RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakSloped) {};
+			RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakSloped) {}
+			bool isValid() const {return (!std::isnan(start) && !std::isnan(end)); }
 			float start;
 			float end;
 			float position;
@@ -117,6 +120,8 @@ class CartesianPlot:public AbstractPlot{
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
 		QAction* addDataReductionCurveAction;
+		QAction* addDifferentiationCurveAction;
+		QAction* addIntegrationCurveAction;
 		QAction* addInterpolationCurveAction;
 		QAction* addSmoothCurveAction;
 		QAction* addFitCurveAction;
@@ -154,6 +159,8 @@ class CartesianPlot:public AbstractPlot{
 		XYCurve* addCurve();
 		XYEquationCurve* addEquationCurve();
 		XYDataReductionCurve* addDataReductionCurve();
+		XYDifferentiationCurve* addDifferentiationCurve();
+		XYIntegrationCurve* addIntegrationCurve();
 		XYInterpolationCurve* addInterpolationCurve();
 		XYSmoothCurve* addSmoothCurve();
 		XYFitCurve* addFitCurve();

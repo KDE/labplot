@@ -1,0 +1,89 @@
+/**\page plugins Plugins
+
+
+\section Plugins based on Qt's plugin system
+
+This article is meant to explain the inner workings of the plugin system used in the backend to a degree where it completely loses any 'mystic aura'. 'Plugin system' may sound like something complicated, but it really isn't. All it takes is to know how to build and link libraries and to understand two macros (and to know how to use another two for implementing plugins).
+
+\section How do Qt plugins work?
+
+A Qt plugin is basically a library which uses a standardized way to access the so-called root component object, a normal C++ object which inherits from QObject. Once you have this root object, you use qobject_cast to check which of your predefined plugin interfaces it implements. See 'Q_DECLARE_INTERFACE' and 'Q_INTERFACES' in the Qt documentation for details. In short, these two macros register your interfaces (i.e., abstract C++ classes) to Qt's meta object system.
+
+Such a library can be statically or dynamically linked into the application.
+
+To understand how the plugin system works internally, one has to look at the involved macros defined in qplugin.h (to be found in /src/corelib/plugin in the official source archive):
+
+@code
+Q_EXPORT_PLUGIN2
+@endcode
+and
+@code
+Q_IMPORT_PLUGIN
+@endcode
+.
+
+These macros are different based on whether 'QT_STATICPLUGIN' is defined or not. Important to note here is that 'static plugin' does not mean statically linked but that there is a static (using the 'static' C++ keyword) object involved. Static plugins can also be linked as dynamic libraries. The difference to a dynamic plugin is that the application will not start if a static plugin is missing, it will run without dynamic plugins though. Since being optional is basically the whole point of plugins, static plugins are usually only used to unify the interface to mandatory and optional components.
+
+\section Declaring a plugin: Q_EXPORT_PLUGIN2
+
+The 'Q_EXPORT_PLUGIN2' macro is responsible for declaring the necessary code to access the plugin. It is defined in the code implementing the plugin.
+
+For static plugins the 'Q_EXPORT_PLUGIN2(PLUGIN, PLUGINCLASS)' macro expands to roughly this (somewhat simplified):
+@code
+QObject *qt_plugin_instance_PLUGIN()
+{
+  static QPointer _instance;
+  if (!_instance)
+    _instance = new PLUGINCLASS;
+  return _instance;
+}
+@endcode
+So, basically, you have a static instance of the root object and a function named using a standard prefix followed by the plugin name to get a pointer to this instance.
+BTW: In this case (i.e., with 'QT_STATICPLUGIN' defined), 'Q_EXPORT_STATIC_PLUGIN2(PLUGIN, PLUGINCLASS)' is exactly the same as 'Q_EXPORT_PLUGIN2(PLUGIN, PLUGINCLASS)'.
+
+For dynamic plugins, 'Q_EXPORT_PLUGIN2(PLUGIN, PLUGINCLASS)' expands to (also somewhat simplified):
+@code
+extern "C" {
+  QObject * qt_plugin_instance();
+  {
+    static QPointer _instance;
+    if (!_instance)
+      _instance = new PLUGINCLASS;
+    return _instance;
+  }
+}
+@endcode
+So it boils down to defining the root object access function as 'extern 'C''. In addition, a function called 'qt_plugin_query_verification_data()' is defined which is used to check whether the plugin is compatible with the application its loaded in (same Qt version etc.).
+BTW: 'Q_EXPORT_STATIC_PLUGIN2(PLUGIN, PLUGINCLASS)' does nothing if 'QT_STATICPLUGIN' is not defined.
+
+\section Using static plugins: Q_IMPORT_PLUGIN
+
+The 'Q_IMPORT_PLUGIN(PLUGIN)' macro, which is used in the code using the static plugin, expands to the following:
+@code
+extern QObject *qt_plugin_instance_##PLUGIN();
+class Static##PLUGIN##PluginInstance {
+  public:
+    Static##PLUGIN##PluginInstance() {
+    qRegisterStaticPluginInstanceFunction(qt_plugin_instance_##PLUGIN);
+  }
+};
+static Static##PLUGIN##PluginInstance static##PLUGIN##Instance;
+@endcode
+This is the static object I was talking about at the beginning. It is created during the static initialization of the application and registers the plugin root object access function to a global list. This list is used by 'static QObjectList QPluginLoader::staticInstances()' which returns all plugin root component objects.
+
+The simplest way to make your static plugin available via 'QPluginLoader::staticInstances()' therefore is:
+@code
+#define QT_STATICPLUGIN
+Q_EXPORT_PLUGIN2(scidavis_standardcurvesymbolfactory, StandardCurveSymbolFactory)
+Q_IMPORT_PLUGIN(scidavis_standardcurvesymbolfactory)
+@endcode
+Together with 'Q_DECLARE_INTERFACE' and 'Q_INTERFACES' that's all it takes to define a static plugin.
+
+\section Using dynamic plugins: QPluginLoader/PluginManager
+
+As mentioned above, static plugins must be present for the application to run. They are completely normal library dependencies of the executable. Dynamic plugins are what plugins really should be: optional functionality which can be added at runtime. They are always compiled as dynamic libraries and then loaded at runtime by 'QPluginLoader' (no 'Q_IMPORT_PLUGIN' involved here). 'QPluginLoader' is well documented in the Qt docs, so I won't go into detail here, there is no need to know it anyway, neither when writing plugins nor building the application.
+
+There exists a class called 'PluginManager' in the backend which encapsulates the whole usage of 'QPluginLoader'. All you need to do is call 'PluginManager::plugins()' which works like 'QPluginLoader::staticInstances()' but also includes all dynamically loaded plugins. You can enable and disable plugins permanently (or at least until someone deletes the application config file because QSettings are used to store the list of enabled plugins) by calling 'PluginManager::enablePlugin()' or 'PluginManager::disablePlugin()', respectively.
+
+
+*/

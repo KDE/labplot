@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by a fit model
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -30,13 +30,16 @@
 #define XYFITCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include <array>
 
 class XYFitCurvePrivate;
-class XYFitCurve: public XYCurve {
+class XYFitCurve : public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum ModelType {Polynomial, Power, Exponential, Inverse_Exponential, Fourier, Gaussian, Lorentz, Maxwell, Sigmoid, Custom};
+		enum ModelType {Polynomial, Power, Exponential, Inverse_Exponential, Fourier,
+						Gaussian, Lorentz, Maxwell, Sigmoid, Gompertz,
+						Weibull, LogNormal, Gumbel, Custom};
 		enum WeightsType {WeightsFromColumn, WeightsFromErrorColumn};
 
 		struct FitData {
@@ -45,7 +48,8 @@ class XYFitCurve: public XYCurve {
 						degree(1),
 						maxIterations(500),
 						eps(1e-4),
-						fittedPoints(100) {};
+						fittedPoints(100),
+						autoRange(true), xRange() {};
 
 			ModelType modelType;
 			WeightsType weightsType;
@@ -57,6 +61,9 @@ class XYFitCurve: public XYCurve {
 			int maxIterations;
 			double eps;
 			int fittedPoints;
+
+			bool autoRange;			// use all data?
+			std::array<double, 2> xRange;	// x range for integration
 		};
 
 		struct FitResult {

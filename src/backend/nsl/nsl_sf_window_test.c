@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include "nsl_sf_window.h"
 
-double main() {
+int main() {
 	const int N=10;
 
 	int i;

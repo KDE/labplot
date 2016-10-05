@@ -5,3 +5,8 @@ NSL is currently part of LabPlot but may be a separate library in the future if 
 NSL is written in plain C.
 
 Compile tests with "make".
+
+Some releated links:
+
+https://www.gnu.org/software/gsl/design/gsl-design.html
+https://www.gnu.org/prep/standards/standards.html

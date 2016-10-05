@@ -26,22 +26,21 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
-#include <math.h>
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_halfcomplex.h>
+#include "nsl_common.h"
 #include "nsl_dft.h"
 #ifdef HAVE_FFTW3
 #include <fftw3.h>
 #endif
 
-const char* nsl_dft_result_type_name[] = {"Magnitude", "Amplitude", "real part", "imaginary part", "Power", "Phase",
-		"Amplitude in dB", "normalized amplitude in dB", "Magnitude squared", "Amplitude squared", "raw"};
-const char* nsl_dft_xscale_name[] = {"Frequency", "Index", "Period"};
+const char* nsl_dft_result_type_name[] = {i18n("Magnitude"), i18n("Amplitude"), i18n("real part"), i18n("imaginary part"), i18n("Power"), i18n("Phase"),
+		i18n("Amplitude in dB"), i18n("normalized amplitude in dB"), i18n("Magnitude squared"), i18n("Amplitude squared"), i18n("raw")};
+const char* nsl_dft_xscale_name[] = {i18n("Frequency"), i18n("Index"), i18n("Period")};
 
 int nsl_dft_transform_window(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type, nsl_sf_window_type window_type) {
 	/* apply window function */
-	unsigned int i;
+	size_t i;
 	for (i=0; i < n; i++)
 		data[i] *= nsl_sf_window(i, n, window_type);
 
@@ -52,9 +51,9 @@ int nsl_dft_transform_window(double data[], size_t stride, size_t n, int two_sid
 }
 
 int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type) {
-	unsigned int i;
+	size_t i;
 	double result[2*n];
-	unsigned int N=n/2;	/* number of resulting data points */
+	size_t N=n/2;	/* number of resulting data points */
 	if(two_sided)
 		N=n;
 #ifdef HAVE_FFTW3

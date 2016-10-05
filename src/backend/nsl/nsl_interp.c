@@ -25,86 +25,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <math.h>
-#include <stdlib.h>
-#include <float.h>
+#include "nsl_common.h"
 #include "nsl_interp.h"
 
-const char* nsl_interp_type_name[] = { "linear", "polynomial", "cubic spline (natural)", "cubic spline (periodic)", 
-	"Akima-spline (natural)", "Akima-spline (periodic)", "Steffen spline", "cosine", "exponential",
-	"piecewise cubic Hermite (PCH)", "rational functions" };
-const char* nsl_interp_pch_variant_name[] = { "finite differences", "Catmull-Rom", "cardinal", "Kochanek-Bartels (TCB)"};
-const char* nsl_interp_evaluate_name[] = { "function", "derivative", "second derivative", "integral"};
-
-int nsl_interp_derivative(double *x, double *y, unsigned int n) {
-	double dy=0, oldy=0;
-	unsigned int i;
-	for (i=0; i<n; i++) {
-		if (i == 0)
-			dy = (y[1]-y[0])/(x[1]-x[0]);
-		else if (i == n-1)
-			y[i] = (y[i]-y[i-1])/(x[i]-x[i-1]);
-		else
-			dy = (y[i+1]-y[i-1])/(x[i+1]-x[i-1]);
-
-		if (i != 0)
-			y[i-1] = oldy;
-		oldy = dy;
-	}
-
-	return 0;
-}
-
-int nsl_interp_second_derivative(double *x, double *y, unsigned int n) {
-	double dx1, dx2, dy=0., oldy=0., oldoldy=0.;
-	unsigned int i;
-	for (i=0; i<n; i++) {
-		/* see http://websrv.cs.umt.edu/isis/index.php/Finite_differencing:_Introduction */
-		if (i == 0) {
-			dx1 = x[1]-x[0];
-			dx2 = x[2]-x[1];
-			dy = 2.*(dx1*y[2]-(dx1+dx2)*y[1]+dx2*y[0])/(dx1*dx2*(dx1+dx2));
-		}
-		else if (i == n-1) {
-			dx1 = x[i-1]-x[i-2];
-			dx2 = x[i]-x[i-1];
-			y[i] = 2.*(dx1*y[i]-(dx1+dx2)*y[i-1]+dx2*y[i-2])/(dx1*dx2*(dx1+dx2));
-			y[i-2] = oldoldy;
-		}
-		else {
-			dx1 = x[i]-x[i-1];
-			dx2 = x[i+1]-x[i];
-			dy = (dx1*y[i+1]-(dx1+dx2)*y[i]+dx2*y[i-1])/(dx1*dx2*(dx1+dx2));
-		}
-
-		/* set value (attention if i==n-2) */
-		if (i != 0 && i != n-2)
-			y[i-1] = oldy;
-		if (i == n-2)
-			oldoldy = oldy;
-
-		oldy=dy;
-	}
-	
-	return 0;
-}
-
-int nsl_interp_integral(double *x, double *y, unsigned int n) {
-	double vold=0.;
-	unsigned int i;
-	for (i=0; i < n-1; i++) {
-		/* trapezoidal rule */
-		double v = (x[i+1]-x[i])*(y[i+1]+y[i])/2.;
-		if (i == 0)
-			y[i] = vold;
-		else
-			y[i] = y[i-1]+vold;
-		vold = v;
-	}
-	y[n-1] = y[n-2] + vold;
-
-	return 0;
-}
+const char* nsl_interp_type_name[] = { i18n("linear"), i18n("polynomial"), i18n("cubic spline (natural)"), i18n("cubic spline (periodic)"),
+	i18n("Akima-spline (natural)"), i18n("Akima-spline (periodic)"), i18n("Steffen spline"), i18n("cosine"), i18n("exponential"),
+	i18n("piecewise cubic Hermite (PCH)"), i18n("rational functions") };
+const char* nsl_interp_pch_variant_name[] = { i18n("finite differences"), i18n("Catmull-Rom"), i18n("cardinal"), i18n("Kochanek-Bartels (TCB)")};
+const char* nsl_interp_evaluate_name[] = { i18n("function"), i18n("derivative"), i18n("second derivative"), i18n("integral")};
 
 int nsl_interp_ratint(double *x, double *y, int n, double xn, double *v, double *dv) {
 	int i,j,a=0,b=n-1;

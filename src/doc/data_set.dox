@@ -1,0 +1,98 @@
+/**\page data_set Data set
+
+\section goals Main goals
+
+We want support for easily importing data from a variety of sources, including files, pipes, SQL-databases, measuring devices (real-time measurements?)
+and function generators. Furthermore, GUI should provide functions for easy editing of imported data sets without opening them in a specific view
+(spreadsheet, worksheet or editor).
+
+To set the terminology used in our project, we define some objects. The basic object for storing the data is 'DataSet'.
+Furthermore, we discriminate between following data sets:
+
+- Vector data set: data is organized in columns (vectors). Data can be numeric, text or date/time values,
+where the data type always applies to a column as a whole (in contrast to spreadsheet applications à la KSpread).
+- Matrix data set: data is organized in matrices, represents values of functions which depends on two variables.
+- Image data set: represents imported or generated image data.
+
+The actual origin of the data is encapsulated in the object 'DataSource'. Each 'DataSet' object has a 'DataSource' object.
+
+\section features Planned features (user's sight)
+
+- There is a container for all imported data sets - 'DataSetContainer'.
+- There is a 'DataSetManager' - part of the GUI, which provides all the functions for managing available data sets. 
+It is possible to generate new sets out of already existing, plots out of vectors from different sets etc. KST is worth looking at.
+- It is possible to convert the content of a spreadsheet to vectors and/or matrices and to add them to the 'DataSetContainter'. 
+May be this should be done by default. Say, in the 'DataSetManager' all the columns created by hand in different spreadsheets are accessible.
+- 'ProjectManager' contains a folder 'DataSets' which represents the data set container introduced above.
+- 'DataSets'-folder provides functions for adding new data sets, updating all available sets, removing all sets etc. in the context menu.
+- Each child node in the 'DataSets'-folder corresponds to an imported/generated data set.
+The different origins of the data sets (file, database or generated from a function)
+are pointed out in the 'ProjectManager' by using different icons and different strings in the column 'Comments'.
+- Context menu of each 'DataSet'-node provides functions for updating, deleting, showing the data in a new spreadsheet or text editor,
+attaching the data to a an existing spreadsheet or worksheet etc. 'Edit'-function opens the Widget associated with the corresponding 'DataSource'
+(currently ImportWidget), where the origin of the data (e.g. the file name) can be changed etc.
+Update-functions ('Watch the file', 'reload the file', 'stop/continue reading from the pipe') trigger the update in the corresponding views, if available.
+Data can be displayed in a spreadsheet or in a text editor in read-only mode on in a mode which also allows changing of the original data.
+Saving of the changes modifies the original data in the corresponding data source, except for data set which are generated with the help of a function.
+- There are 'Add data plot' and 'Add function plot' fictions in the GUI which help to create/generate a plot from imported/generated data set in one step.
+
+\section arch Architecture (developer's sight)
+
+(The contents of this section are still subject to discussion. Everyone is encouraged to provide suggestions and ideas to improve the architecture.)
+
+We need an object for storing imported/generated data. The general interface for that is provided by 'AbstractDataSet'.
+
+AbstractAspect
+¦
+`- AbstractDataSet
+        ¦
+        +- VectorDataSet
+        ¦
+        +- MatrixDataSet
+        ¦
+        `- ImageDataSet
+
+'DataSetContainer' is a one the central parts of the application and contains all the data sets available at run-time.
+
+AbstractPart
+¦
+`- DataSetContainer
+
+The view of the 'DataSetContainer' is the 'DataSetManagerWidget'.
+
+Data can be imported from a directory, a file on the disk or from a database. May be it's better to first concentrate on these sources only.
+Importing of data from measuring devices reduces on Unix-systems to reading out a device file in /dev/ or a pipe created and filled by the measuring device.
+Furthermore, we need an abstract interface that allows users to add support for data sources using plug-ins or scripts.
+'AbstractDataSource' provides the common interface for all possible data sources.
+
+AbstractDataSource
+        ¦
+        +- DirDataSource
+        ¦
+        +- FileDataSource
+        ¦
+        +- SqlDataSource
+        ¦
+        `- FunctionDataSource
+
+Different formats of data stemming from file- and sql-sources (ascii or binary, separator, number of lines to skip, numeric or date/time or strings,
+data organized in columns or rows etc.) are handled by pre-defined or user-defined I/O-filters,
+which convert the content of the data source to the internal representation in terms of vectors or matrices.
+Custom settings are made in the ImportWidget. It is possible to save the made settings as a new filter.
+Data in the source can be read once, checked for updates automatically ('watch the file'-function in the GUI),
+in defined time intervals or the update is triggered by the user himself. In the last case, the GUI signals if the source was changed
+(e.g. 'changed'-icon in the project manager).
+
+\section status Current status in the back-end
+
+The back-end code from SciDAVis already contains some concept of a data source: 'AbstractColumn'.
+A better name would probably be 'AbstractVectorDataSource'
+('vector' in the sense of a mathematical vector in R^N where N is the number of rows and R can be real numbers (or rather the subset that 'double' supports),
+strings or dates; the corresponding data abstraction for 3D surface plots would be a matrix), at least from the developer's perspective.
+Currently, however, there is only one real implementation of this interface: 'Column'.
+
+Labplot1.x contains already some pre-defined settings in the 'ImportWidget' and has filters for reading CDF, HDF5 and Origin-files.
+Those should be casted to the new I/O-filter-plugin-Framework.
+
+
+*/

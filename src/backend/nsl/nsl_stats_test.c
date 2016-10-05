@@ -30,7 +30,7 @@
 //#include <gsl/gsl_statistics_double.h>
 #include "nsl_stats.h"
 
-double main() {
+int main() {
 	const double data[]={1,1,1,3,4,7,9,11,13,13};
 	const int size=10;
 

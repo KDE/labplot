@@ -219,12 +219,17 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	//copy all valid data point for the transform to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
+	const double xmin = transformData.xRange.front();
+	const double xmax = transformData.xRange.back();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 				&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
-			xdataVector.append(xDataColumn->valueAt(row));
-			ydataVector.append(yDataColumn->valueAt(row));
+			// only when inside given range
+			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(xDataColumn->valueAt(row));
+				ydataVector.append(yDataColumn->valueAt(row));
+			}
 		}
 	}
 
@@ -241,9 +246,6 @@ void XYFourierTransformCurvePrivate::recalculate() {
 
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
-
-	const double xmin = xDataColumn->minimum();
-	const double xmax = xDataColumn->maximum();
 
 	// transform settings
 	const nsl_sf_window_type windowType = transformData.windowType;
@@ -343,6 +345,9 @@ void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement("transformData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
+	writer->writeAttribute( "autoRange", QString::number(d->transformData.autoRange) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->transformData.xRange.front()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->transformData.xRange.back()) );
 	writer->writeAttribute( "type", QString::number(d->transformData.type) );
 	writer->writeAttribute( "twoSided", QString::number(d->transformData.twoSided) );
 	writer->writeAttribute( "shifted", QString::number(d->transformData.shifted) );
@@ -395,6 +400,24 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader) {
 
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
+
+			str = attribs.value("autoRange").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'autoRange'"));
+			else
+				d->transformData.autoRange = (bool)str.toInt();
+
+			str = attribs.value("xRangeMin").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'xRangeMin'"));
+			else
+				d->transformData.xRange.front() = str.toDouble();
+
+			str = attribs.value("xRangeMax").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'xRangeMax'"));
+			else
+				d->transformData.xRange.back() = str.toDouble();
 
 			str = attribs.value("type").toString();
 			if (str.isEmpty())

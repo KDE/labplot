@@ -72,9 +72,9 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	}
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 4, 2, 1, 2);
+	gridLayout->addWidget(cbXDataColumn, 5, 2, 1, 2);
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 5, 2, 1, 2);
+	gridLayout->addWidget(cbYDataColumn, 6, 2, 1, 2);
 
 	for (int i=0; i < NSL_SF_WINDOW_TYPE_COUNT; i++)
 		uiGeneralTab.cbWindowType->addItem(i18n(nsl_sf_window_type_name[i]));
@@ -91,6 +91,9 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
+	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
+	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
 
 	connect( uiGeneralTab.cbWindowType, SIGNAL(currentIndexChanged(int)), this, SLOT(windowTypeChanged()) );
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
@@ -127,6 +130,10 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	Q_ASSERT(m_transformCurve);
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_transformCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_transformCurve->yDataColumn());
+	uiGeneralTab.cbAutoRange->setChecked(m_transformData.autoRange);
+	uiGeneralTab.sbMin->setValue(m_transformData.xRange.front());
+	uiGeneralTab.sbMax->setValue(m_transformData.xRange.back());
+	this->autoRangeChanged();
 
 	uiGeneralTab.cbWindowType->setCurrentIndex(m_transformData.windowType);
 	this->windowTypeChanged();
@@ -220,6 +227,13 @@ void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setXDataColumn(column);
+
+	if (column != 0) {
+		if (uiGeneralTab.cbAutoRange->isChecked()) {
+			uiGeneralTab.sbMin->setValue(column->minimum());
+			uiGeneralTab.sbMax->setValue(column->maximum());
+		}
+	}
 }
 
 void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -235,6 +249,43 @@ void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setYDataColumn(column);
+}
+
+void XYFourierTransformCurveDock::autoRangeChanged() {
+	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
+	m_transformData.autoRange = autoRange;
+
+	if (autoRange) {
+		uiGeneralTab.lMin->setEnabled(false);
+		uiGeneralTab.sbMin->setEnabled(false);
+		uiGeneralTab.lMax->setEnabled(false);
+		uiGeneralTab.sbMax->setEnabled(false);
+		m_transformCurve = dynamic_cast<XYFourierTransformCurve*>(m_curve);
+		Q_ASSERT(m_transformCurve);
+		if (m_transformCurve->xDataColumn()) {
+			uiGeneralTab.sbMin->setValue(m_transformCurve->xDataColumn()->minimum());
+			uiGeneralTab.sbMax->setValue(m_transformCurve->xDataColumn()->maximum());
+		}
+	} else {
+		uiGeneralTab.lMin->setEnabled(true);
+		uiGeneralTab.sbMin->setEnabled(true);
+		uiGeneralTab.lMax->setEnabled(true);
+		uiGeneralTab.sbMax->setEnabled(true);
+	}
+
+}
+void XYFourierTransformCurveDock::xRangeMinChanged() {
+	double xMin = uiGeneralTab.sbMin->value();
+
+	m_transformData.xRange.front() = xMin;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYFourierTransformCurveDock::xRangeMaxChanged() {
+	double xMax = uiGeneralTab.sbMax->value();
+
+	m_transformData.xRange.back() = xMax;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYFourierTransformCurveDock::windowTypeChanged() {

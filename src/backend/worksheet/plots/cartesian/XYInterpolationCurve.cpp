@@ -45,6 +45,8 @@ extern "C" {
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_spline.h>
+#include "backend/nsl/nsl_diff.h"
+#include "backend/nsl/nsl_int.h"
 }
 
 #include <KIcon>
@@ -221,18 +223,23 @@ void XYInterpolationCurvePrivate::recalculate() {
 	//copy all valid data point for the interpolation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
+	const double min = interpolationData.xRange.front();
+	const double max = interpolationData.xRange.back();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
-			xdataVector.append(xDataColumn->valueAt(row));
-			ydataVector.append(yDataColumn->valueAt(row));
+			// only when inside given range
+			if (xDataColumn->valueAt(row) >= min && xDataColumn->valueAt(row) <= max) {
+				xdataVector.append(xDataColumn->valueAt(row));
+				ydataVector.append(yDataColumn->valueAt(row));
+			}
 		}
 	}
 
 	//number of data points to interpolate
-	const unsigned int n = ydataVector.size();
+	const unsigned int n = xdataVector.size();
 	if (n < 2) {
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
@@ -244,9 +251,6 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
-
-	const double min = xDataColumn->minimum();
-	const double max = xDataColumn->maximum();
 
 	// interpolation settings
 	const nsl_interp_type type = interpolationData.type;
@@ -444,13 +448,13 @@ void XYInterpolationCurvePrivate::recalculate() {
 		case nsl_interp_evaluate_function:
 			break;
 		case nsl_interp_evaluate_derivative:
-			nsl_interp_derivative(xVector->data(), yVector->data(), npoints);
+			nsl_diff_first_deriv_second_order(xVector->data(), yVector->data(), npoints);
 			break;
 		case nsl_interp_evaluate_second_derivative:
-			nsl_interp_second_derivative(xVector->data(), yVector->data(), npoints);
+			nsl_diff_second_deriv_second_order(xVector->data(), yVector->data(), npoints);
 			break;
 		case nsl_interp_evaluate_integral:
-			nsl_interp_integral(xVector->data(), yVector->data(), npoints);
+			nsl_int_trapezoid(xVector->data(), yVector->data(), npoints, 0);
 			break;
 		}
 		break;
@@ -499,6 +503,9 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement("interpolationData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
+	writer->writeAttribute( "autoRange", QString::number(d->interpolationData.autoRange) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->interpolationData.xRange.front()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->interpolationData.xRange.back()) );
 	writer->writeAttribute( "type", QString::number(d->interpolationData.type) );
 	writer->writeAttribute( "variant", QString::number(d->interpolationData.variant) );
 	writer->writeAttribute( "tension", QString::number(d->interpolationData.tension) );
@@ -555,6 +562,24 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
+
+			str = attribs.value("autoRange").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'autoRange'"));
+			else
+				d->interpolationData.autoRange = (bool)str.toInt();
+
+			str = attribs.value("xRangeMin").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'xRangeMin'"));
+			else
+				d->interpolationData.xRange.front() = str.toDouble();
+
+			str = attribs.value("xRangeMax").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'xRangeMax'"));
+			else
+				d->interpolationData.xRange.back() = str.toDouble();
 
 			str = attribs.value("type").toString();
 			if (str.isEmpty())

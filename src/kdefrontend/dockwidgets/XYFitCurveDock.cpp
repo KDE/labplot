@@ -90,6 +90,10 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbModel->addItem(i18n("Lorentz (Cauchy)"));
 	uiGeneralTab.cbModel->addItem(i18n("Maxwell-Boltzmann"));
 	uiGeneralTab.cbModel->addItem(i18n("Sigmoid"));
+	uiGeneralTab.cbModel->addItem(i18n("Gompertz"));
+	uiGeneralTab.cbModel->addItem(i18n("Weibull"));
+	uiGeneralTab.cbModel->addItem(i18n("Log-Normal"));
+	uiGeneralTab.cbModel->addItem(i18n("Gumbel"));
 	uiGeneralTab.cbModel->addItem(i18n("Custom"));
 
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
@@ -106,6 +110,9 @@ void XYFitCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
+	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
+	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
 
 	connect( uiGeneralTab.cbModel, SIGNAL(currentIndexChanged(int)), this, SLOT(modelChanged(int)) );
 	connect( uiGeneralTab.sbDegree, SIGNAL(valueChanged(int)), this, SLOT(updateModelEquation()) );
@@ -143,6 +150,10 @@ void XYFitCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_fitCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_fitCurve->yDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbWeightsColumn, m_fitCurve->weightsColumn());
+	uiGeneralTab.cbAutoRange->setChecked(m_fitData.autoRange);
+	uiGeneralTab.sbMin->setValue(m_fitData.xRange.front());
+	uiGeneralTab.sbMax->setValue(m_fitData.xRange.back());
+	this->autoRangeChanged();
 
 	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 	this->modelChanged(m_fitData.modelType);
@@ -234,6 +245,13 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXDataColumn(column);
+
+	if (column != 0) {
+		if (uiGeneralTab.cbAutoRange->isChecked()) {
+			uiGeneralTab.sbMin->setValue(column->minimum());
+			uiGeneralTab.sbMax->setValue(column->maximum());
+		}
+	}
 }
 
 void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
@@ -249,6 +267,43 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYDataColumn(column);
+}
+
+void XYFitCurveDock::autoRangeChanged() {
+	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
+	m_fitData.autoRange = autoRange;
+
+	if (autoRange) {
+		uiGeneralTab.lMin->setEnabled(false);
+		uiGeneralTab.sbMin->setEnabled(false);
+		uiGeneralTab.lMax->setEnabled(false);
+		uiGeneralTab.sbMax->setEnabled(false);
+		m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
+		Q_ASSERT(m_fitCurve);
+		if (m_fitCurve->xDataColumn()) {
+			uiGeneralTab.sbMin->setValue(m_fitCurve->xDataColumn()->minimum());
+			uiGeneralTab.sbMax->setValue(m_fitCurve->xDataColumn()->maximum());
+		}
+	} else {
+		uiGeneralTab.lMin->setEnabled(true);
+		uiGeneralTab.sbMin->setEnabled(true);
+		uiGeneralTab.lMax->setEnabled(true);
+		uiGeneralTab.sbMax->setEnabled(true);
+	}
+
+}
+void XYFitCurveDock::xRangeMinChanged() {
+	double xMin = uiGeneralTab.sbMin->value();
+
+	m_fitData.xRange.front() = xMin;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYFitCurveDock::xRangeMaxChanged() {
+	double xMax = uiGeneralTab.sbMax->value();
+
+	m_fitData.xRange.back() = xMax;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index) {
@@ -298,11 +353,7 @@ void XYFitCurveDock::modelChanged(int index) {
 		uiGeneralTab.sbDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setMaximum(10);
 		uiGeneralTab.sbDegree->setValue(1);
-	} else if (type == XYFitCurve::Lorentz
-		|| type == XYFitCurve::Maxwell
-		|| type == XYFitCurve::Inverse_Exponential
-		|| type == XYFitCurve::Sigmoid
-		|| type == XYFitCurve::Custom) {
+	} else {
 		uiGeneralTab.lDegree->setVisible(false);
 		uiGeneralTab.sbDegree->setVisible(false);
 	}
@@ -391,28 +442,28 @@ void XYFitCurveDock::updateModelEquation() {
 			}
 		}
 	} else if (m_fitData.modelType == XYFitCurve::Gaussian) {
-		eq = "a1*exp(-((x-b1)/c1)^2)";
+		eq = "1/sqrt(2*pi)/a1*exp(-((x-b1)/a1)^2/2)";
 		m_fitData.model = eq;
-		vars << "a1" << "b1" << "c1";
-		m_fitData.paramNames << "a1" << "b1" << "c1";
+		vars << "a1" << "b1";
+		m_fitData.paramNames << "a1" << "b1";
 		if (num==2) {
-			eq += " + a2*exp(-((x-b2)/c2)^2)";
-			m_fitData.model += " + a2*exp(-((x-b2)/c2)^2)";
-			vars << "a2" << "b2" << "c2";
-			m_fitData.paramNames << "a2" << "b2" << "c2";
+			eq += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2)";
+			m_fitData.model += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2)";
+			vars << "a2" << "b2";
+			m_fitData.paramNames << "a2" << "b2";
 		} else if (num==3) {
-			eq += " + a2*exp(-((x-b2)/c2)^2) + a3*exp(-((x-b3)/c3)^2)";
-			m_fitData.model += " + a2*exp(-((x-b2)/c2)^2) + a3*exp(-((x-b3)/c3)^2)";
-			vars << "a2" << "b2" << "c2" << "a3" << "b3" << "c3";
-			m_fitData.paramNames << "a2" << "b2" << "c2" << "a3" << "b3" << "c3";
+			eq += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + 1/sqrt(2*pi)/a3*exp(-((x-b3)/a3)^2/2)";
+			m_fitData.model += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + 1/sqrt(2*pi)/a3*exp(-((x-b3)/a3)^2/2)";
+			vars << "a2" << "b2" << "a3" << "b3";
+			m_fitData.paramNames << "a2" << "b2" << "a3" << "b3";
 		} else if (num>3) {
 			QString numStr = QString::number(num);
-			eq += " + a2*exp(-((x-b2)/c2)^2) + ... + a" + numStr + "*exp(-((x-b" + numStr + ")/c" + numStr + ")^2)";
-			vars << "a2" << "b2" << "c2" << "a"+numStr << "b"+numStr << "c"+numStr << "...";
+			eq += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + ... + 1/sqrt(2*pi)/a" + numStr + "*exp(-((x-b" + numStr + ")/a" + numStr + ")^2/2)";
+			vars << "a2" << "b2" << "a"+numStr << "b"+numStr << "...";
 			for (int i=2; i<=num; ++i) {
 				numStr = QString::number(i);
-				m_fitData.model += "+ a" + numStr + "*exp(-((x-b" + numStr + ")/c" + numStr + ")^2)";
-				m_fitData.paramNames << "a"+numStr << "b"+numStr << "c"+numStr;
+				m_fitData.model += "+ 1/sqrt(2*pi)/a" + numStr + "*exp(-((x-b" + numStr + ")/a" + numStr + ")^2/2)";
+				m_fitData.paramNames << "a"+numStr << "b"+numStr;
 			}
 		}
 	} else if (m_fitData.modelType == XYFitCurve::Lorentz) {
@@ -430,6 +481,26 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.model = eq;
 		vars << "a" << "b" << "c";
 		m_fitData.paramNames << "a" << "b" << "c";
+	} else if (m_fitData.modelType == XYFitCurve::Gompertz) {
+		eq = "a*exp(-b*exp(-c*x))";
+		m_fitData.model = eq;
+		vars << "a" << "b" << "c";
+		m_fitData.paramNames << "a" << "b" << "c";
+	} else if (m_fitData.modelType == XYFitCurve::Weibull) {
+		eq = "a/b*((x-c)/b)^(a-1)*exp(-((x-c)/b)^a)";
+		m_fitData.model = eq;
+		vars << "a" << "b" << "c";
+		m_fitData.paramNames << "a" << "b" << "c";
+	} else if (m_fitData.modelType == XYFitCurve::LogNormal) {
+		eq = "1/(sqrt(2*pi)*x*a)*exp(-(log(x)-b)^2/(2*a^2))";
+		m_fitData.model = eq;
+		vars << "a" << "b";
+		m_fitData.paramNames << "a" << "b";
+	} else if (m_fitData.modelType == XYFitCurve::Gumbel) {
+		eq = "1/a*exp((x-b)/a-exp((x-b)/a))";
+		m_fitData.model = eq;
+		vars << "a" << "b";
+		m_fitData.paramNames << "a" << "b";
 	} else if (m_fitData.modelType == XYFitCurve::Custom) {
 		//use the equation of the last selected predefined model or of the last available custom model
 		eq = m_fitData.model;

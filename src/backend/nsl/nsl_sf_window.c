@@ -26,14 +26,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_trig.h>
+#include "nsl_common.h"
 #include "nsl_sf_window.h"
 
-const char* nsl_sf_window_type_name[] = {"rectangular (uniform)", "triangular", "triangular II (Bartlett)", "triangular III (Parzen)" , 
-	"Welch (parabolic)", "Hann (raised cosine)", "Hamming", "Blackman", "Nuttall", "Blackman-Nuttall", "Blackman-Harris", "Flat top",
-	"Cosine", "Bartlett-Hann", "Lanczos"};
+const char* nsl_sf_window_type_name[] = {i18n("rectangular (uniform)"), i18n("triangular"), i18n("triangular II (Bartlett)"), i18n("triangular III (Parzen)") ,
+	i18n("Welch (parabolic)"), i18n("Hann (raised cosine)"), i18n("Hamming"), i18n("Blackman"), i18n("Nuttall"), i18n("Blackman-Nuttall"), i18n("Blackman-Harris"), i18n("Flat top"),
+	i18n("Cosine"), i18n("Bartlett-Hann"), i18n("Lanczos")};
 
 double nsl_sf_window(int i, int N, nsl_sf_window_type type) {
 	double v=0.0;

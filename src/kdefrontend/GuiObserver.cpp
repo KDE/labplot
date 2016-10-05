@@ -56,6 +56,8 @@
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "kdefrontend/dockwidgets/XYEquationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYDataReductionCurveDock.h"
+#include "kdefrontend/dockwidgets/XYDifferentiationCurveDock.h"
+#include "kdefrontend/dockwidgets/XYIntegrationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYInterpolationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFitCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFourierFilterCurveDock.h"
@@ -135,9 +137,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<Spreadsheet*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<Spreadsheet *>(aspect);
-		}
 		mainWindow->spreadsheetDock->setSpreadsheets(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->spreadsheetDock);
@@ -151,9 +152,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<Column*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<Column *>(aspect);
-		}
 		mainWindow->columnDock->setColumns(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->columnDock);
@@ -167,9 +167,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<Matrix*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<Matrix*>(aspect);
-		}
 		mainWindow->matrixDock->setMatrices(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->matrixDock);
@@ -183,9 +182,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<Worksheet*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<Worksheet *>(aspect);
-		}
 		mainWindow->worksheetDock->setWorksheets(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->worksheetDock);
@@ -199,9 +197,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<CartesianPlot*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<CartesianPlot *>(aspect);
-		}
 		mainWindow->cartesianPlotDock->setPlots(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->cartesianPlotDock);
@@ -215,9 +212,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<CartesianPlotLegend*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<CartesianPlotLegend*>(aspect);
-		}
 		mainWindow->cartesianPlotLegendDock->setLegends(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->cartesianPlotLegendDock);
@@ -231,9 +227,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<Axis*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<Axis *>(aspect);
-		}
 		mainWindow->axisDock->setAxes(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->axisDock);
@@ -248,9 +243,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<XYCurve *>(aspect);
-		}
 		mainWindow->xyCurveDock->setCurves(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyCurveDock);
@@ -265,9 +259,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<XYCurve *>(aspect);
-		}
 		mainWindow->xyEquationCurveDock->setCurves(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyEquationCurveDock);
@@ -282,12 +275,43 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<XYCurve*>(aspect);
-		}
 		mainWindow->xyDataReductionCurveDock->setCurves(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyDataReductionCurveDock);
+	} else if (className=="XYDifferentiationCurve") {
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Differentiation"));
+
+		if (!mainWindow->xyDifferentiationCurveDock) {
+			mainWindow->xyDifferentiationCurveDock = new XYDifferentiationCurveDock(mainWindow->stackedWidget);
+			mainWindow->xyDifferentiationCurveDock->setupGeneral();
+			connect(mainWindow->xyDifferentiationCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+			mainWindow->stackedWidget->addWidget(mainWindow->xyDifferentiationCurveDock);
+		}
+
+		QList<XYCurve*> list;
+		foreach(aspect, selectedAspects)
+			list<<qobject_cast<XYCurve*>(aspect);
+		mainWindow->xyDifferentiationCurveDock->setCurves(list);
+
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyDifferentiationCurveDock);
+	} else if (className=="XYIntegrationCurve") {
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Integration"));
+
+		if (!mainWindow->xyIntegrationCurveDock) {
+			mainWindow->xyIntegrationCurveDock = new XYIntegrationCurveDock(mainWindow->stackedWidget);
+			mainWindow->xyIntegrationCurveDock->setupGeneral();
+			connect(mainWindow->xyIntegrationCurveDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+			mainWindow->stackedWidget->addWidget(mainWindow->xyIntegrationCurveDock);
+		}
+
+		QList<XYCurve*> list;
+		foreach(aspect, selectedAspects)
+			list<<qobject_cast<XYCurve*>(aspect);
+		mainWindow->xyIntegrationCurveDock->setCurves(list);
+
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyIntegrationCurveDock);
 	} else if (className=="XYInterpolationCurve") {
 		mainWindow->m_propertiesDock->setWindowTitle(i18n("Interpolation"));
 
@@ -299,9 +323,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<XYCurve*>(aspect);
-		}
 		mainWindow->xyInterpolationCurveDock->setCurves(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyInterpolationCurveDock);
@@ -316,9 +339,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<XYCurve*>(aspect);
-		}
 		mainWindow->xyFitCurveDock->setCurves(list);
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyFitCurveDock);
 	} else if (className=="XYFourierTransformCurve") {
@@ -349,9 +371,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<XYCurve*>(aspect);
-		}
 		mainWindow->xyFourierFilterCurveDock->setCurves(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xyFourierFilterCurveDock);
@@ -366,9 +387,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<XYCurve*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<XYCurve*>(aspect);
-		}
 		mainWindow->xySmoothCurveDock->setCurves(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->xySmoothCurveDock);
@@ -381,9 +401,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<TextLabel*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<TextLabel*>(aspect);
-		}
 		mainWindow->textLabelDock->setLabels(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->textLabelDock);
@@ -396,9 +415,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<CustomPoint*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<CustomPoint*>(aspect);
-		}
 		mainWindow->customPointDock->setPoints(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->customPointDock);
@@ -411,9 +429,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<DatapickerCurve*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<DatapickerCurve*>(aspect);
-		}
 		mainWindow->datapickerCurveDock->setCurves(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerCurveDock);
@@ -426,9 +443,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<DatapickerImage*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<Datapicker*>(aspect)->image();
-		}
 		mainWindow->datapickerImageDock->setImages(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->datapickerImageDock);
@@ -453,9 +469,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		}
 
 		QList<Note*> list;
-		foreach(aspect, selectedAspects) {
+		foreach(aspect, selectedAspects)
 			list<<qobject_cast<Note*>(aspect);
-		}
 		mainWindow->notesDock->setNotesList(list);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->notesDock);

@@ -276,7 +276,7 @@ void WorksheetView::initActions() {
 	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), cartesianPlotAddNewActionGroup);
 	addDataOperationCurveAction = new KAction(i18n("xy-curve from a data operation"), cartesianPlotAddNewActionGroup);
 	addDataReductionCurveAction = new KAction(i18n("xy-curve from a data reduction"), cartesianPlotAddNewActionGroup);
-	addDifferentationCurveAction = new KAction(i18n("xy-curve from a differentiation"), cartesianPlotAddNewActionGroup);
+	addDifferentiationCurveAction = new KAction(i18n("xy-curve from a differentiation"), cartesianPlotAddNewActionGroup);
 	addIntegrationCurveAction = new KAction(i18n("xy-curve from an integration"), cartesianPlotAddNewActionGroup);
 // no icons yet
 	addInterpolationCurveAction = new KAction(i18n("xy-curve from an interpolation"), cartesianPlotAddNewActionGroup);
@@ -414,7 +414,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotAddNewMenu->addAction(addEquationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addDataOperationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addDataReductionCurveAction);
-	m_cartesianPlotAddNewMenu->addAction(addDifferentationCurveAction);
+	m_cartesianPlotAddNewMenu->addAction(addDifferentiationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addIntegrationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addInterpolationCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addSmoothCurveAction);
@@ -1327,8 +1327,8 @@ void WorksheetView::handleCartesianPlotActions() {
 	addEquationCurveAction->setEnabled(plot);
 	addDataOperationCurveAction->setEnabled(false);
 	addDataReductionCurveAction->setEnabled(plot);
-	addDifferentationCurveAction->setEnabled(false);
-	addIntegrationCurveAction->setEnabled(false);
+	addDifferentiationCurveAction->setEnabled(plot);
+	addIntegrationCurveAction->setEnabled(plot);
 	addInterpolationCurveAction->setEnabled(plot);
 	addSmoothCurveAction->setEnabled(plot);
 	addFitCurveAction->setEnabled(plot);
@@ -1355,8 +1355,8 @@ void WorksheetView::handleCartesianPlotActions() {
 	// analysis menu
 	addDataOperationAction->setEnabled(false);
 	m_dataManipulationMenu->setEnabled(plot);
-	addDifferentiationAction->setEnabled(false);
-	addIntegrationAction->setEnabled(false);
+	addDifferentiationAction->setEnabled(plot);
+	addIntegrationAction->setEnabled(plot);
 	addInterpolationAction->setEnabled(plot);
 	addSmoothAction->setEnabled(plot);
 	addFitAction->setEnabled(plot);
@@ -1565,42 +1565,50 @@ void WorksheetView::cartesianPlotAddNew(QAction* action) {
 }
 
 void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
-	if (action==addCurveAction)
+	if (action == addCurveAction)
 		plot->addCurve();
-	else if (action==addEquationCurveAction)
+	else if (action == addEquationCurveAction)
 		plot->addEquationCurve();
-	else if (action==addDataReductionCurveAction)
+	else if (action == addDataReductionCurveAction)
 		plot->addDataReductionCurve();
-	else if (action==addInterpolationCurveAction)
+	else if (action == addDifferentiationCurveAction)
+		plot->addDifferentiationCurve();
+	else if (action == addIntegrationCurveAction)
+		plot->addIntegrationCurve();
+	else if (action == addInterpolationCurveAction)
 		plot->addInterpolationCurve();
-	else if (action==addFitCurveAction)
+	else if (action == addFitCurveAction)
 		plot->addFitCurve();
-	else if (action==addFourierFilterCurveAction)
+	else if (action == addFourierFilterCurveAction)
 		plot->addFourierFilterCurve();
-	else if (action==addFourierTransformCurveAction)
+	else if (action == addFourierTransformCurveAction)
 		plot->addFourierTransformCurve();
-	else if (action==addSmoothCurveAction)
+	else if (action == addSmoothCurveAction)
 		plot->addSmoothCurve();
-	else if (action==addLegendAction)
+	else if (action == addLegendAction)
 		plot->addLegend();
-	else if (action==addHorizontalAxisAction)
+	else if (action == addHorizontalAxisAction)
 		plot->addHorizontalAxis();
-	else if (action==addVerticalAxisAction)
+	else if (action == addVerticalAxisAction)
 		plot->addVerticalAxis();
-	else if (action==addCustomPointAction)
+	else if (action == addCustomPointAction)
 		plot->addCustomPoint();
 // analysis actions
-	else if (action==addDataReductionAction)
+	else if (action == addDataReductionAction)
 		plot->addDataReductionCurve();
-	else if (action==addInterpolationAction)
+	else if (action == addDifferentiationAction)
+		plot->addDifferentiationCurve();
+	else if (action == addIntegrationAction)
+		plot->addIntegrationCurve();
+	else if (action == addInterpolationAction)
 		plot->addInterpolationCurve();
-	else if (action==addFitAction)
+	else if (action == addFitAction)
 		plot->addFitCurve();
-	else if (action==addFourierFilterAction)
+	else if (action == addFourierFilterAction)
 		plot->addFourierFilterCurve();
-	else if (action==addFourierTransformAction)
+	else if (action == addFourierTransformAction)
 		plot->addFourierTransformCurve();
-	else if (action==addSmoothAction)
+	else if (action == addSmoothAction)
 		plot->addSmoothCurve();
 }
 

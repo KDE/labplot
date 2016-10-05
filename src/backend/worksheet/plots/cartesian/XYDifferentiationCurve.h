@@ -1,7 +1,7 @@
 /***************************************************************************
-    File                 : XYDifferentationCurve.h
+    File                 : XYDifferentiationCurve.h
     Project              : LabPlot
-    Description          : A xy-curve defined by an differentation
+    Description          : A xy-curve defined by an differentiation
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
@@ -26,23 +26,30 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYDIFFERENTATIONCURVE_H
-#define XYDIFFERENTATIONCURVE_H
+#ifndef XYDIFFERENTIATIONCURVE_H
+#define XYDIFFERENTIATIONCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+extern "C" {
+#include "backend/nsl/nsl_diff.h"
+}
+#include <array>
 
-class XYDifferentationCurvePrivate;
-class XYDifferentationCurve: public XYCurve {
+class XYDifferentiationCurvePrivate;
+class XYDifferentiationCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		struct DifferentationData {
-			DifferentationData() : type(0) {};
+		struct DifferentiationData {
+			DifferentiationData() : derivOrder(nsl_diff_deriv_order_first), accOrder(2), autoRange(true), xRange() {};
 
-			int type;			// type of differentation
+			nsl_diff_deriv_order_type derivOrder;	// order of differentiation
+			int accOrder;				// order ofaccuracy
+			bool autoRange;				// use all data?
+			std::array<double, 2> xRange;		// x range for integration
 		};
-		struct DifferentationResult {
-			DifferentationResult() : available(false), valid(false), elapsedTime(0) {};
+		struct DifferentiationResult {
+			DifferentiationResult() : available(false), valid(false), elapsedTime(0) {};
 
 			bool available;
 			bool valid;
@@ -50,8 +57,8 @@ class XYDifferentationCurve: public XYCurve {
 			qint64 elapsedTime;
 		};
 
-		explicit XYDifferentationCurve(const QString& name);
-		virtual ~XYDifferentationCurve();
+		explicit XYDifferentiationCurve(const QString& name);
+		virtual ~XYDifferentiationCurve();
 
 		void recalculate();
 		virtual QIcon icon() const;
@@ -63,32 +70,32 @@ class XYDifferentationCurve: public XYCurve {
 		const QString& xDataColumnPath() const;
 		const QString& yDataColumnPath() const;
 
-		CLASS_D_ACCESSOR_DECL(DifferentationData, differentationData, DifferentationData)
-		const DifferentationResult& differentationResult() const;
-		bool isSourceDataChangedSinceLastDifferentation() const;
+		CLASS_D_ACCESSOR_DECL(DifferentiationData, differentiationData, DifferentiationData)
+		const DifferentiationResult& differentiationResult() const;
+		bool isSourceDataChangedSinceLastDifferentiation() const;
 
 		typedef WorksheetElement BaseClass;
-		typedef XYDifferentationCurvePrivate Private;
+		typedef XYDifferentiationCurvePrivate Private;
 
 	protected:
-		XYDifferentationCurve(const QString& name, XYDifferentationCurvePrivate* dd);
+		XYDifferentiationCurve(const QString& name, XYDifferentiationCurvePrivate* dd);
 
 	private:
-		Q_DECLARE_PRIVATE(XYDifferentationCurve)
+		Q_DECLARE_PRIVATE(XYDifferentiationCurve)
 		void init();
 
 	private slots:
 		void handleSourceDataChanged();
 
 	signals:
-		friend class XYDifferentationCurveSetXDataColumnCmd;
-		friend class XYDifferentationCurveSetYDataColumnCmd;
+		friend class XYDifferentiationCurveSetXDataColumnCmd;
+		friend class XYDifferentiationCurveSetYDataColumnCmd;
 		void xDataColumnChanged(const AbstractColumn*);
 		void yDataColumnChanged(const AbstractColumn*);
 
-		friend class XYDifferentationCurveSetDifferentationDataCmd;
-		void differentationDataChanged(const XYDifferentationCurve::DifferentationData&);
-		void sourceDataChangedSinceLastDifferentation();
+		friend class XYDifferentiationCurveSetDifferentiationDataCmd;
+		void differentiationDataChanged(const XYDifferentiationCurve::DifferentiationData&);
+		void sourceDataChangedSinceLastDifferentiation();
 };
 
 #endif

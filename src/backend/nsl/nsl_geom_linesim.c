@@ -26,17 +26,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <float.h>
+#include "nsl_common.h"
 #include "nsl_sort.h"
 #include "nsl_stats.h"
 #include "nsl_geom.h"
 #include "nsl_geom_linesim.h"
 
-const char* nsl_geom_linesim_type_name[] = {"Douglas-Peucker (number)", "Douglas-Peucker (tolerance)", "Visvalingam-Whyatt", "Reumann-Witkam", "perpendicular distance", "n-th point",
-	"radial distance", "Interpolation", "Opheim", "Lang"};
+const char* nsl_geom_linesim_type_name[] = {i18n("Douglas-Peucker (number)"), i18n("Douglas-Peucker (tolerance)"), i18n("Visvalingam-Whyatt"), i18n("Reumann-Witkam"), i18n("perpendicular distance"), i18n("n-th point"),
+	i18n("radial distance"), i18n("Interpolation"), i18n("Opheim"), i18n("Lang")};
 
 /*********** error calculation functions *********/
 
@@ -170,7 +167,7 @@ size_t nsl_geom_linesim_douglas_peucker(const double xdata[], const double ydata
 }
 size_t nsl_geom_linesim_douglas_peucker_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
 	double tol = nsl_geom_linesim_clip_diag_perpoint(xdata, ydata, n);
-	return  nsl_geom_linesim_douglas_peucker(xdata, ydata, n, tol, index);
+	return nsl_geom_linesim_douglas_peucker(xdata, ydata, n, tol, index);
 }
 
 double nsl_geom_linesim_douglas_peucker_variant(const double xdata[], const double ydata[], const size_t n, const size_t nout, size_t index[]) {
@@ -271,7 +268,6 @@ size_t nsl_geom_linesim_nthpoint(const size_t n, const size_t step, size_t index
 		printf("step size must be > 0 (given: %zd)\n", step);
 		return 0;
 	}
-		
 
 	size_t nout=0, i;
 
@@ -314,7 +310,7 @@ size_t nsl_geom_linesim_raddist(const double xdata[], const double ydata[], cons
 }
 size_t nsl_geom_linesim_raddist_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
 	double tol = 10.*nsl_geom_linesim_clip_diag_perpoint(xdata, ydata, n);
-	return  nsl_geom_linesim_raddist(xdata, ydata, n, tol, index);
+	return nsl_geom_linesim_raddist(xdata, ydata, n, tol, index);
 }
 
 size_t nsl_geom_linesim_perpdist(const double xdata[], const double ydata[], const size_t n, const double tol, size_t index[]) {
@@ -347,9 +343,8 @@ size_t nsl_geom_linesim_perpdist(const double xdata[], const double ydata[], con
 }
 size_t nsl_geom_linesim_perpdist_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
 	double tol = nsl_geom_linesim_clip_diag_perpoint(xdata, ydata, n);
-	return  nsl_geom_linesim_perpdist(xdata, ydata, n, tol, index);
+	return nsl_geom_linesim_perpdist(xdata, ydata, n, tol, index);
 }
-
 
 size_t nsl_geom_linesim_perpdist_repeat(const double xdata[], const double ydata[], const size_t n, const double tol, const size_t repeat, size_t index[]) {
 	size_t i, j, nout;
@@ -410,7 +405,7 @@ size_t nsl_geom_linesim_interp(const double xdata[], const double ydata[], const
 }
 size_t nsl_geom_linesim_interp_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
 	double tol = nsl_geom_linesim_clip_diag_perpoint(xdata, ydata, n);
-	return  nsl_geom_linesim_interp(xdata, ydata, n, tol, index);
+	return nsl_geom_linesim_interp(xdata, ydata, n, tol, index);
 }
 
 size_t nsl_geom_linesim_visvalingam_whyatt(const double xdata[], const double ydata[], const size_t n, const double tol, size_t index[]) {
@@ -487,7 +482,7 @@ size_t nsl_geom_linesim_visvalingam_whyatt(const double xdata[], const double yd
 size_t nsl_geom_linesim_visvalingam_whyatt_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
 	double tol = nsl_geom_linesim_clip_area_perpoint(xdata, ydata, n);
 
-	return  nsl_geom_linesim_visvalingam_whyatt(xdata, ydata, n, tol, index);
+	return nsl_geom_linesim_visvalingam_whyatt(xdata, ydata, n, tol, index);
 }
 
 size_t nsl_geom_linesim_reumann_witkam(const double xdata[], const double ydata[], const size_t n, const double tol, size_t index[]) {
@@ -516,7 +511,7 @@ size_t nsl_geom_linesim_reumann_witkam(const double xdata[], const double ydata[
 }
 size_t nsl_geom_linesim_reumann_witkam_auto(const double xdata[], const double ydata[], const size_t n, size_t index[]) {
 	double tol = nsl_geom_linesim_clip_diag_perpoint(xdata, ydata, n);
-	return  nsl_geom_linesim_reumann_witkam(xdata, ydata, n, tol, index);
+	return nsl_geom_linesim_reumann_witkam(xdata, ydata, n, tol, index);
 }
 
 size_t nsl_geom_linesim_opheim(const double xdata[], const double ydata[], const size_t n, const double mintol, const double maxtol, size_t index[]) {
@@ -567,7 +562,7 @@ size_t nsl_geom_linesim_opheim_auto(const double xdata[], const double ydata[], 
 	/* TODO: calculate max tolerance ? */
 	double maxtol = 5.*mintol;
 
-	return  nsl_geom_linesim_opheim(xdata, ydata, n, mintol, maxtol, index);
+	return nsl_geom_linesim_opheim(xdata, ydata, n, mintol, maxtol, index);
 
 	return 0;
 }
@@ -613,6 +608,6 @@ size_t nsl_geom_linesim_lang_auto(const double xdata[], const double ydata[], co
 	double region=0;
 	printf("nsl_geom_linesim_lang_auto(): Not implemented yet\n");
 
-	return  nsl_geom_linesim_lang(xdata, ydata, n, tol, region, index);
+	return nsl_geom_linesim_lang(xdata, ydata, n, tol, region, index);
 }
 
