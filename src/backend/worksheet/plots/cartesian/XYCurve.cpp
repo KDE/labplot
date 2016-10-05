@@ -2218,110 +2218,38 @@ bool XYCurve::load(XmlStreamReader* reader) {
 		} else if (reader->name() == "lines") {
 			attribs = reader->attributes();
 
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->lineType = (XYCurve::LineType)str.toInt();
-
-			str = attribs.value("skipGaps").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'skipGps'"));
-			else
-				d->lineSkipGaps = str.toInt();
-
-			str = attribs.value("interpolationPointsCount").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'interpolationPointsCount'"));
-			else
-				d->lineInterpolationPointsCount = str.toInt();
-
+			READ_INT_VALUE("type", lineType, XYCurve::LineType);
+			READ_INT_VALUE("skipGaps", lineSkipGaps, int);
+			READ_INT_VALUE("interpolationPointsCount", lineInterpolationPointsCount, int);
 			READ_QPEN(d->linePen);
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
-			else
-				d->lineOpacity = str.toDouble();
+			READ_DOUBLE_VALUE("opacity", lineOpacity);
 		} else if (reader->name() == "dropLines") {
 			attribs = reader->attributes();
 
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->dropLineType = (XYCurve::DropLineType)str.toInt();
-
+			READ_INT_VALUE("type", dropLineType, XYCurve::DropLineType);
 			READ_QPEN(d->dropLinePen);
+			READ_DOUBLE_VALUE("opacity", dropLineOpacity);
 
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
-			else
-				d->dropLineOpacity = str.toDouble();
 		} else if (reader->name() == "symbols") {
 			attribs = reader->attributes();
 
-			str = attribs.value("symbolsStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'symbolsStyle'"));
-			else
-				d->symbolsStyle = (Symbol::Style)str.toInt();
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
-			else
-				d->symbolsOpacity = str.toDouble();
-
-			str = attribs.value("rotation").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rotation'"));
-			else
-				d->symbolsRotationAngle = str.toDouble();
-
-			str = attribs.value("size").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'size'"));
-			else
-				d->symbolsSize = str.toDouble();
+			READ_INT_VALUE("symbolsStyle", symbolsStyle, Symbol::Style);
+			READ_DOUBLE_VALUE("opacity", symbolsOpacity);
+			READ_DOUBLE_VALUE("rotation", symbolsRotationAngle);
+			READ_DOUBLE_VALUE("size", symbolsSize);
 
 			READ_QBRUSH(d->symbolsBrush);
 			READ_QPEN(d->symbolsPen);
 		} else if (reader->name() == "values") {
 			attribs = reader->attributes();
 
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->valuesType = (XYCurve::ValuesType)str.toInt();
-
+			READ_INT_VALUE("type", valuesType, XYCurve::ValuesType);
 			READ_COLUMN(valuesColumn);
 
-			str = attribs.value("position").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'position'"));
-			else
-				d->valuesPosition = (XYCurve::ValuesPosition)str.toInt();
-
-			str = attribs.value("distance").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'distance'"));
-			else
-				d->valuesDistance = str.toDouble();
-
-			str = attribs.value("rotation").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rotation'"));
-			else
-				d->valuesRotationAngle = str.toDouble();
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
-			else
-				d->valuesOpacity = str.toDouble();
+			READ_INT_VALUE("position", valuesPosition, XYCurve::ValuesPosition);
+			READ_DOUBLE_VALUE("distance", valuesDistance);
+			READ_DOUBLE_VALUE("rotation", valuesRotationAngle);
+			READ_DOUBLE_VALUE("opacity", valuesOpacity);
 
 			//don't produce any warning if no prefix or suffix is set (empty string is allowd here in xml)
 			d->valuesPrefix = attribs.value("prefix").toString();
@@ -2329,44 +2257,14 @@ bool XYCurve::load(XmlStreamReader* reader) {
 
 			READ_QCOLOR(d->valuesColor);
 			READ_QFONT(d->valuesFont);
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
-			else
-				d->valuesOpacity = str.toDouble();
 		} else if (reader->name() == "filling") {
 			attribs = reader->attributes();
 
-			str = attribs.value("position").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("position"));
-			else
-				d->fillingPosition = XYCurve::FillingPosition(str.toInt());
-
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("type"));
-			else
-				d->fillingType = PlotArea::BackgroundType(str.toInt());
-
-			str = attribs.value("colorStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("colorStyle"));
-			else
-				d->fillingColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
-
-			str = attribs.value("imageStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("imageStyle"));
-			else
-				d->fillingImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
-
-			str = attribs.value("brushStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("brushStyle"));
-			else
-				d->fillingBrushStyle = Qt::BrushStyle(str.toInt());
+			READ_INT_VALUE("position", fillingPosition, XYCurve::FillingPosition);
+			READ_INT_VALUE("type", fillingType, PlotArea::BackgroundType);
+			READ_INT_VALUE("colorStyle", fillingColorStyle, PlotArea::BackgroundColorStyle);
+			READ_INT_VALUE("imageStyle", fillingImageStyle, PlotArea::BackgroundImageStyle );
+			READ_INT_VALUE("brushStyle", fillingBrushStyle, Qt::BrushStyle);
 
 			str = attribs.value("firstColor_r").toString();
 			if (str.isEmpty())
@@ -2404,54 +2302,25 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			else
 				d->fillingSecondColor.setBlue(str.toInt());
 
-			str = attribs.value("fileName").toString();
-			d->fillingFileName = str;
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("opacity"));
-			else
-				d->fillingOpacity = str.toDouble();
+			READ_STRING_VALUE("fileName", fillingFileName);
+			READ_DOUBLE_VALUE("opacity", fillingOpacity);
 		} else if (reader->name() == "errorBars") {
 			attribs = reader->attributes();
 
-			str = attribs.value("xErrorType").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xErrorType'"));
-			else
-				d->xErrorType = (XYCurve::ErrorType)str.toInt();
-
+			READ_INT_VALUE("xErrorType", xErrorType, XYCurve::ErrorType);
 			READ_COLUMN(xErrorPlusColumn);
 			READ_COLUMN(xErrorMinusColumn);
 
-			str = attribs.value("yErrorType").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'yErrorType'"));
-			else
-				d->yErrorType = (XYCurve::ErrorType)str.toInt();
-
+			READ_INT_VALUE("yErrorType", yErrorType, XYCurve::ErrorType);
 			READ_COLUMN(yErrorPlusColumn);
 			READ_COLUMN(yErrorMinusColumn);
 
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->errorBarsType = (XYCurve::ErrorBarsType)str.toInt();
-
-			str = attribs.value("capSize").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'capSize'"));
-			else
-				d->errorBarsCapSize = str.toDouble();
+			READ_INT_VALUE("type", errorBarsType, XYCurve::ErrorBarsType);
+			READ_DOUBLE_VALUE("capSize", errorBarsCapSize);
 
 			READ_QPEN(d->errorBarsPen);
 
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
-			else
-				d->errorBarsOpacity = str.toDouble();
+			READ_DOUBLE_VALUE("opacity", errorBarsOpacity);
 		}
 	}
 

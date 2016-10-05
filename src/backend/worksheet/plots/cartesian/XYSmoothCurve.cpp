@@ -379,98 +379,25 @@ bool XYSmoothCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-			str = attribs.value("autoRange").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'autoRange'"));
-			else
-				d->smoothData.autoRange = (bool)str.toInt();
-
-			str = attribs.value("xRangeMin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xRangeMin'"));
-			else
-				d->smoothData.xRange.front() = str.toDouble();
-
-			str = attribs.value("xRangeMax").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xRangeMax'"));
-			else
-				d->smoothData.xRange.back() = str.toDouble();
-
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->smoothData.type = (nsl_smooth_type) str.toInt();
-
-			str = attribs.value("points").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'points'"));
-			else
-				d->smoothData.points = str.toInt();
-
-			str = attribs.value("weight").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'weight'"));
-			else
-				d->smoothData.weight = (nsl_smooth_weight_type) str.toInt();
-
-			str = attribs.value("percentile").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'percentile'"));
-			else
-				d->smoothData.percentile = str.toDouble();
-
-			str = attribs.value("order").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'order'"));
-			else
-				d->smoothData.order = str.toInt();
-
-			str = attribs.value("mode").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'mode'"));
-			else
-				d->smoothData.mode = (nsl_smooth_pad_mode) str.toInt();
-
-			str = attribs.value("lvalue").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'lvalue'"));
-			else
-				d->smoothData.lvalue = str.toDouble();
-
-			str = attribs.value("rvalue").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rvalue'"));
-			else
-				d->smoothData.rvalue = str.toDouble();
+			READ_INT_VALUE("autoRange", smoothData.autoRange, bool);
+			READ_DOUBLE_VALUE("xRangeMin", smoothData.xRange.front());
+			READ_DOUBLE_VALUE("xRangeMax", smoothData.xRange.back());
+			READ_INT_VALUE("type", smoothData.type, nsl_smooth_type);
+			READ_INT_VALUE("points", smoothData.points, int);
+			READ_INT_VALUE("weight", smoothData.weight, nsl_smooth_weight_type);
+			READ_DOUBLE_VALUE("percentile", smoothData.percentile);
+			READ_INT_VALUE("order", smoothData.order, int);
+			READ_INT_VALUE("mode", smoothData.mode, nsl_smooth_pad_mode);
+			READ_DOUBLE_VALUE("lvalue", smoothData.lvalue);
+			READ_DOUBLE_VALUE("rvalue", smoothData.rvalue);
 		} else if (reader->name() == "smoothResult") {
 
 			attribs = reader->attributes();
 
-			str = attribs.value("available").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'available'"));
-			else
-				d->smoothResult.available = str.toInt();
-
-			str = attribs.value("valid").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'valid'"));
-			else
-				d->smoothResult.valid = str.toInt();
-			
-			str = attribs.value("status").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'status'"));
-			else
-				d->smoothResult.status = str;
-
-			str = attribs.value("time").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'time'"));
-			else
-				d->smoothResult.elapsedTime = str.toInt();
+			READ_INT_VALUE("available", smoothResult.available, int);
+			READ_INT_VALUE("valid", smoothResult.valid, int);
+			READ_STRING_VALUE("status", smoothResult.status);
+			READ_INT_VALUE("time", smoothResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {

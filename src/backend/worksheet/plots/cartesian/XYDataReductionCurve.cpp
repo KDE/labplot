@@ -406,81 +406,22 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->dataReductionData.type = (nsl_geom_linesim_type) str.toInt();
-
-			str = attribs.value("autoTolerance").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'autoTolerance'"));
-			else
-				d->dataReductionData.autoTolerance = str.toInt();
-
-			str = attribs.value("tolerance").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'tolerance'"));
-			else
-				d->dataReductionData.tolerance = str.toDouble();
-
-			str = attribs.value("autoTolerance2").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'autoTolerance2'"));
-			else
-				d->dataReductionData.autoTolerance2 = str.toInt();
-
-			str = attribs.value("tolerance2").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'tolerance2'"));
-			else
-				d->dataReductionData.tolerance2 = str.toDouble();
+			READ_INT_VALUE("type", dataReductionData.type, nsl_geom_linesim_type);
+			READ_INT_VALUE("autoTolerance", dataReductionData.autoTolerance, int);
+			READ_DOUBLE_VALUE("tolerance", dataReductionData.tolerance);
+			READ_INT_VALUE("autoTolerance2", dataReductionData.autoTolerance2, int);
+			READ_DOUBLE_VALUE("tolerance2", dataReductionData.tolerance2);
 		} else if (reader->name() == "dataReductionResult") {
 
 			attribs = reader->attributes();
 
-			str = attribs.value("available").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'available'"));
-			else
-				d->dataReductionResult.available = str.toInt();
-
-			str = attribs.value("valid").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'valid'"));
-			else
-				d->dataReductionResult.valid = str.toInt();
-			
-			str = attribs.value("status").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'status'"));
-			else
-				d->dataReductionResult.status = str;
-
-			str = attribs.value("time").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'time'"));
-			else
-				d->dataReductionResult.elapsedTime = str.toInt();
-
-			str = attribs.value("npoints").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'npoints'"));
-			else
-				d->dataReductionResult.npoints = str.toInt();
-
-			str = attribs.value("posError").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'posError'"));
-			else
-				d->dataReductionResult.posError = str.toDouble();
-
-			str = attribs.value("areaError").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'areaError'"));
-			else
-				d->dataReductionResult.areaError = str.toDouble();
-
+			READ_INT_VALUE("available", dataReductionResult.available, int);
+			READ_INT_VALUE("valid", dataReductionResult.valid, int);
+			READ_STRING_VALUE("status", dataReductionResult.status);
+			READ_INT_VALUE("time", dataReductionResult.elapsedTime, int);
+			READ_INT_VALUE("npoints", dataReductionResult.npoints, int);
+			READ_DOUBLE_VALUE("posError", dataReductionResult.posError);
+			READ_DOUBLE_VALUE("areaError", dataReductionResult.areaError);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {

@@ -563,99 +563,25 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-			str = attribs.value("autoRange").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'autoRange'"));
-			else
-				d->interpolationData.autoRange = (bool)str.toInt();
-
-			str = attribs.value("xRangeMin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xRangeMin'"));
-			else
-				d->interpolationData.xRange.front() = str.toDouble();
-
-			str = attribs.value("xRangeMax").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xRangeMax'"));
-			else
-				d->interpolationData.xRange.back() = str.toDouble();
-
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->interpolationData.type = (nsl_interp_type) str.toInt();
-
-			str = attribs.value("variant").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'variant'"));
-			else
-				d->interpolationData.variant = (nsl_interp_pch_variant) str.toInt();
-
-			str = attribs.value("tension").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'tension'"));
-			else
-				d->interpolationData.tension = str.toDouble();
-
-			str = attribs.value("continuity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'continuity'"));
-			else
-				d->interpolationData.continuity = str.toDouble();
-
-			str = attribs.value("bias").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'bias'"));
-			else
-				d->interpolationData.bias = str.toDouble();
-
-			str = attribs.value("npoints").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'npoints'"));
-			else
-				d->interpolationData.npoints = str.toInt();
-
-			str = attribs.value("pointsMode").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'pointsMode'"));
-			else
-				d->interpolationData.pointsMode = (XYInterpolationCurve::PointsMode)str.toInt();
-
-			str = attribs.value("evaluate").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'evaluate'"));
-			else
-				d->interpolationData.evaluate = (nsl_interp_evaluate)str.toInt();
-
+			READ_INT_VALUE("autoRange", interpolationData.autoRange, bool);
+			READ_DOUBLE_VALUE("xRangeMin", interpolationData.xRange.front());
+			READ_DOUBLE_VALUE("xRangeMax", interpolationData.xRange.back());
+			READ_INT_VALUE("type", interpolationData.type, nsl_interp_type);
+			READ_INT_VALUE("variant", interpolationData.variant, nsl_interp_pch_variant);
+			READ_DOUBLE_VALUE("tension", interpolationData.tension);
+			READ_DOUBLE_VALUE("continuity", interpolationData.continuity);
+			READ_DOUBLE_VALUE("bias", interpolationData.bias);
+			READ_INT_VALUE("npoints", interpolationData.npoints, int);
+			READ_INT_VALUE("pointsMode", interpolationData.pointsMode, XYInterpolationCurve::PointsMode);
+			READ_INT_VALUE("evaluate", interpolationData.evaluate, nsl_interp_evaluate);
 		} else if (reader->name() == "interpolationResult") {
 
 			attribs = reader->attributes();
 
-			str = attribs.value("available").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'available'"));
-			else
-				d->interpolationResult.available = str.toInt();
-
-			str = attribs.value("valid").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'valid'"));
-			else
-				d->interpolationResult.valid = str.toInt();
-			
-			str = attribs.value("status").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'status'"));
-			else
-				d->interpolationResult.status = str;
-
-			str = attribs.value("time").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'time'"));
-			else
-				d->interpolationResult.elapsedTime = str.toInt();
+			READ_INT_VALUE("available", interpolationResult.available, int);
+			READ_INT_VALUE("valid", interpolationResult.valid, int);
+			READ_STRING_VALUE("status", interpolationResult.status);
+			READ_INT_VALUE("time", interpolationResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {

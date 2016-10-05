@@ -395,92 +395,25 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-			str = attribs.value("autoRange").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'autoRange'"));
-			else
-				d->filterData.autoRange = (bool)str.toInt();
+			READ_INT_VALUE("autoRange", filterData.autoRange, bool);
+			READ_DOUBLE_VALUE("xRangeMin", filterData.xRange.front());
+			READ_DOUBLE_VALUE("xRangeMax", filterData.xRange.back());
+			READ_INT_VALUE("type", filterData.type, nsl_filter_type);
+			READ_INT_VALUE("form", filterData.form, nsl_filter_form);
+			READ_INT_VALUE("order", filterData.order, int);
+			READ_DOUBLE_VALUE("cutoff", filterData.cutoff);
+			READ_INT_VALUE("unit", filterData.unit, nsl_filter_cutoff_unit);
+			READ_DOUBLE_VALUE("cutoff2", filterData.cutoff2);
+			READ_INT_VALUE("unit2", filterData.unit2, nsl_filter_cutoff_unit);
 
-			str = attribs.value("xRangeMin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xRangeMin'"));
-			else
-				d->filterData.xRange.front() = str.toDouble();
-
-			str = attribs.value("xRangeMax").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xRangeMax'"));
-			else
-				d->filterData.xRange.back() = str.toDouble();
-
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->filterData.type = (nsl_filter_type)str.toInt();
-
-			str = attribs.value("form").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'form'"));
-			else
-				d->filterData.form = (nsl_filter_form)str.toInt();
-
-			str = attribs.value("order").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'order'"));
-			else
-				d->filterData.order = str.toInt();
-
-			str = attribs.value("cutoff").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'cutoff'"));
-			else
-				d->filterData.cutoff = str.toDouble();
-
-			str = attribs.value("unit").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'unit'"));
-			else
-				d->filterData.unit = (nsl_filter_cutoff_unit)str.toInt();
-
-			str = attribs.value("cutoff2").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'cutoff2'"));
-			else
-				d->filterData.cutoff2 = str.toDouble();
-
-			str = attribs.value("unit2").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'unit2'"));
-			else
-				d->filterData.unit2 = (nsl_filter_cutoff_unit)str.toInt();
 		} else if (reader->name() == "filterResult") {
 
 			attribs = reader->attributes();
 
-			str = attribs.value("available").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'available'"));
-			else
-				d->filterResult.available = str.toInt();
-
-			str = attribs.value("valid").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'valid'"));
-			else
-				d->filterResult.valid = str.toInt();
-			
-			str = attribs.value("status").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'status'"));
-			else
-				d->filterResult.status = str;
-
-			str = attribs.value("time").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'time'"));
-			else
-				d->filterResult.elapsedTime = str.toInt();
+			READ_INT_VALUE("available", filterResult.available, int);
+			READ_INT_VALUE("valid", filterResult.valid, int);
+			READ_STRING_VALUE("status", filterResult.status);
+			READ_INT_VALUE("time", filterResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {

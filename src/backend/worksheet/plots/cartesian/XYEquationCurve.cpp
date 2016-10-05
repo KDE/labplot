@@ -225,27 +225,13 @@ bool XYEquationCurve::load(XmlStreamReader* reader) {
 				return false;
 		} else if (reader->name() == "equationData") {
 			attribs = reader->attributes();
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->equationData.type = (XYEquationCurve::EquationType)str.toInt();
 
-			str = attribs.value("expression1").toString();
-			d->equationData.expression1 = str;
-
-			str = attribs.value("expression2").toString();
-			d->equationData.expression2 = str;
-
-			str = attribs.value("min").toString();
-			d->equationData.min = str;
-
-			str = attribs.value("max").toString();
-			d->equationData.max = str;
-
-			str = attribs.value("count").toString();
-			if (!str.isEmpty())
-				d->equationData.count = str.toInt();
+			READ_INT_VALUE("type", equationData.type, XYEquationCurve::EquationType);
+			READ_STRING_VALUE("expression1", equationData.expression1);
+			READ_STRING_VALUE("expression2", equationData.expression2);
+			READ_STRING_VALUE("min", equationData.min);
+			READ_STRING_VALUE("max", equationData.max);
+			READ_INT_VALUE("count", equationData.count, int);
 		}
 	}
 

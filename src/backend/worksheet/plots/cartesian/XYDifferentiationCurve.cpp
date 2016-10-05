@@ -367,63 +367,19 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-			str = attribs.value("autoRange").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'autoRange'"));
-			else
-				d->differentiationData.autoRange = (bool)str.toInt();
-
-			str = attribs.value("xRangeMin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xRangeMin'"));
-			else
-				d->differentiationData.xRange.front() = str.toDouble();
-
-			str = attribs.value("xRangeMax").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xRangeMax'"));
-			else
-				d->differentiationData.xRange.back() = str.toDouble();
-
-			str = attribs.value("derivOrder").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'derivOrder'"));
-			else
-				d->differentiationData.derivOrder = (nsl_diff_deriv_order_type) str.toInt();
-
-			str = attribs.value("accOrder").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'accOrder'"));
-			else
-				d->differentiationData.accOrder = str.toInt();
-
+			READ_INT_VALUE("autoRange", differentiationData.autoRange, bool);
+			READ_DOUBLE_VALUE("xRangeMin", differentiationData.xRange.front());
+			READ_DOUBLE_VALUE("xRangeMax", differentiationData.xRange.back());
+			READ_INT_VALUE("derivOrder", differentiationData.derivOrder, nsl_diff_deriv_order_type);
+			READ_INT_VALUE("accOrder", differentiationData.accOrder, int);
 		} else if (reader->name() == "differentiationResult") {
 
 			attribs = reader->attributes();
 
-			str = attribs.value("available").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'available'"));
-			else
-				d->differentiationResult.available = str.toInt();
-
-			str = attribs.value("valid").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'valid'"));
-			else
-				d->differentiationResult.valid = str.toInt();
-			
-			str = attribs.value("status").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'status'"));
-			else
-				d->differentiationResult.status = str;
-
-			str = attribs.value("time").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'time'"));
-			else
-				d->differentiationResult.elapsedTime = str.toInt();
+			READ_INT_VALUE("available", differentiationResult.available, int);
+			READ_INT_VALUE("valid", differentiationResult.valid, int);
+			READ_STRING_VALUE("status", differentiationResult.status);
+			READ_INT_VALUE("time", differentiationResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {

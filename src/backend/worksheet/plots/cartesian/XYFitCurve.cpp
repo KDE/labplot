@@ -940,65 +940,16 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(yDataColumn);
 			READ_COLUMN(weightsColumn);
 
-			str = attribs.value("autoRange").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'autoRange'"));
-			else
-				d->fitData.autoRange = (bool)str.toInt();
-
-			str = attribs.value("xRangeMin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xRangeMin'"));
-			else
-				d->fitData.xRange.front() = str.toDouble();
-
-			str = attribs.value("xRangeMax").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xRangeMax'"));
-			else
-				d->fitData.xRange.back() = str.toDouble();
-
-			str = attribs.value("modelType").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'modelType'"));
-			else
-				d->fitData.modelType = (XYFitCurve::ModelType)str.toInt();
-
-			str = attribs.value("weightsType").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'weightsType'"));
-			else
-				d->fitData.weightsType = (XYFitCurve::WeightsType)str.toInt();
-
-			str = attribs.value("degree").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'degree'"));
-			else
-				d->fitData.degree = str.toInt();
-
-			str = attribs.value("model").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'model'"));
-			else
-				d->fitData.model = str;
-
-			str = attribs.value("maxIterations").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'maxIterations'"));
-			else
-				d->fitData.maxIterations = str.toInt();
-
-			str = attribs.value("eps").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'eps'"));
-			else
-				d->fitData.eps = str.toDouble();
-
-			str = attribs.value("fittedPoints").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'fittedPoints'"));
-			else
-				d->fitData.fittedPoints = str.toInt();
+			READ_INT_VALUE("autoRange", fitData.autoRange, bool);
+			READ_DOUBLE_VALUE("xRangeMin", fitData.xRange.front());
+			READ_DOUBLE_VALUE("xRangeMax", fitData.xRange.back());
+			READ_INT_VALUE("modelType", fitData.modelType, XYFitCurve::ModelType);
+			READ_INT_VALUE("weightsType", fitData.weightsType, XYFitCurve::WeightsType);
+			READ_INT_VALUE("degree", fitData.degree, int);
+			READ_STRING_VALUE("model", fitData.model);
+			READ_INT_VALUE("maxIterations", fitData.maxIterations, int);
+			READ_DOUBLE_VALUE("eps", fitData.eps);
+			READ_INT_VALUE("fittedPoints", fitData.fittedPoints, int);
 		} else if (reader->name() == "name") {
 			d->fitData.paramNames<<reader->readElementText();
 		} else if (reader->name() == "startValue") {
@@ -1010,95 +961,21 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 		} else if (reader->name() == "fitResult") {
 			attribs = reader->attributes();
 
-			str = attribs.value("available").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'available'"));
-			else
-				d->fitResult.available = str.toInt();
-
-			str = attribs.value("valid").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'valid'"));
-			else
-				d->fitResult.valid = str.toInt();
-
-			str = attribs.value("status").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'status'"));
-			else
-				d->fitResult.status = str;
-
-			str = attribs.value("iterations").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'iterations'"));
-			else
-				d->fitResult.iterations = str.toInt();
-
-			str = attribs.value("time").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'time'"));
-			else
-				d->fitResult.elapsedTime = str.toInt();
-
-			str = attribs.value("dof").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'dof'"));
-			else
-				d->fitResult.dof = str.toDouble();
-
-			str = attribs.value("sse").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'sse'"));
-			else
-				d->fitResult.sse = str.toDouble();
-
-			str = attribs.value("mse").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'mse'"));
-			else
-				d->fitResult.mse = str.toDouble();
-
-			str = attribs.value("rmse").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rmse'"));
-			else
-				d->fitResult.rmse = str.toDouble();
-
-			str = attribs.value("mae").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'mae'"));
-			else
-				d->fitResult.mae = str.toDouble();
-
-			str = attribs.value("rms").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rms'"));
-			else
-				d->fitResult.rms = str.toDouble();
-
-			str = attribs.value("rsd").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rsd'"));
-			else
-				d->fitResult.rsd = str.toDouble();
-
-			str = attribs.value("rsquared").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rsquared'"));
-			else
-				d->fitResult.rsquared = str.toDouble();
-
-			str = attribs.value("rsquaredAdj").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rsquaredAdj'"));
-			else
-				d->fitResult.rsquaredAdj = str.toDouble();
-
-			str = attribs.value("solverOutput").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'solverOutput'"));
-			else
-				d->fitResult.solverOutput = str;
+			READ_INT_VALUE("available", fitResult.available, int);
+			READ_INT_VALUE("valid", fitResult.valid, int);
+			READ_STRING_VALUE("status", fitResult.status);
+			READ_INT_VALUE("iterations", fitResult.iterations, int);
+			READ_INT_VALUE("time", fitResult.elapsedTime, int);
+			READ_DOUBLE_VALUE("dof", fitResult.dof);
+			READ_DOUBLE_VALUE("sse", fitResult.sse);
+			READ_DOUBLE_VALUE("mse", fitResult.mse);
+			READ_DOUBLE_VALUE("rmse", fitResult.rmse);
+			READ_DOUBLE_VALUE("mae", fitResult.mae);
+			READ_DOUBLE_VALUE("rms", fitResult.rms);
+			READ_DOUBLE_VALUE("rsd", fitResult.rsd);
+			READ_DOUBLE_VALUE("rsquared", fitResult.rsquared);
+			READ_DOUBLE_VALUE("rsquaredAdj", fitResult.rsquaredAdj);
+			READ_STRING_VALUE("solverOutput", fitResult.solverOutput);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {
