@@ -362,10 +362,10 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader) {
 
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
-
 			READ_INT_VALUE("autoRange", integrationData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", integrationData.xRange.front());
 			READ_DOUBLE_VALUE("xRangeMax", integrationData.xRange.back());
+
 			READ_INT_VALUE("method", integrationData.method, nsl_int_method_type);
 			READ_INT_VALUE("absolute", integrationData.absolute, bool);
 		} else if (reader->name() == "integrationResult") {

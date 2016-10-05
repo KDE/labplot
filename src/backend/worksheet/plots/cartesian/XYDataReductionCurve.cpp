@@ -215,18 +215,23 @@ void XYDataReductionCurvePrivate::recalculate() {
 	//copy all valid data point for the data reduction to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
+	const double xmin = dataReductionData.xRange.front();
+	const double xmax = dataReductionData.xRange.back();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
-			xdataVector.append(xDataColumn->valueAt(row));
-			ydataVector.append(yDataColumn->valueAt(row));
+			// only when inside given range
+			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(xDataColumn->valueAt(row));
+				ydataVector.append(yDataColumn->valueAt(row));
+			}
 		}
 	}
 
 	//number of data points to use
-	const unsigned int n = ydataVector.size();
+	const unsigned int n = xdataVector.size();
 	if (n < 2) {
 		dataReductionResult.available = true;
 		dataReductionResult.valid = false;
@@ -349,6 +354,9 @@ void XYDataReductionCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement("dataReductionData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
+	writer->writeAttribute( "autoRange", QString::number(d->dataReductionData.autoRange) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->dataReductionData.xRange.front()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->dataReductionData.xRange.back()) );
 	writer->writeAttribute( "type", QString::number(d->dataReductionData.type) );
 	writer->writeAttribute( "autoTolerance", QString::number(d->dataReductionData.autoTolerance) );
 	writer->writeAttribute( "tolerance", QString::number(d->dataReductionData.tolerance) );
@@ -405,6 +413,9 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader) {
 
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
+			READ_INT_VALUE("autoRange", dataReductionData.autoRange, bool);
+			READ_DOUBLE_VALUE("xRangeMin", dataReductionData.xRange.front());
+			READ_DOUBLE_VALUE("xRangeMax", dataReductionData.xRange.back());
 
 			READ_INT_VALUE("type", dataReductionData.type, nsl_geom_linesim_type);
 			READ_INT_VALUE("autoTolerance", dataReductionData.autoTolerance, int);

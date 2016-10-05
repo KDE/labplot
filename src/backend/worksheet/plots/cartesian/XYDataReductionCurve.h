@@ -33,6 +33,7 @@
 extern "C" {
 #include "backend/nsl/nsl_geom_linesim.h"
 }
+#include <array>
 
 class XYDataReductionCurvePrivate;
 class XYDataReductionCurve: public XYCurve {
@@ -40,13 +41,16 @@ class XYDataReductionCurve: public XYCurve {
 
 	public:
 		struct DataReductionData {
-			DataReductionData() : type(nsl_geom_linesim_type_douglas_peucker), autoTolerance(true), tolerance(0.0), autoTolerance2(true), tolerance2(0.0) {};
+			DataReductionData() : type(nsl_geom_linesim_type_douglas_peucker), autoTolerance(true), tolerance(0.0), autoTolerance2(true), tolerance2(0.0),
+						autoRange(true), xRange() {};
 	
-			nsl_geom_linesim_type type;		// type of simplification
-			bool autoTolerance;			// automatic tolerance
-			double tolerance;			// tolerance
-			bool autoTolerance2;			// automatic tolerance2
-			double tolerance2;			// tolerance2
+			nsl_geom_linesim_type type;	// type of simplification
+			bool autoTolerance;		// automatic tolerance
+			double tolerance;		// tolerance
+			bool autoTolerance2;		// automatic tolerance2
+			double tolerance2;		// tolerance2
+			bool autoRange;			// use all data?
+			std::array<double, 2> xRange;	// x range for integration
 		};
 		struct DataReductionResult {
 			DataReductionResult() : available(false), valid(false), elapsedTime(0), npoints(0), posError(0), areaError(0) {};
