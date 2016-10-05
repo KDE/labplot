@@ -41,8 +41,8 @@ class XYDataReductionCurve: public XYCurve {
 
 	public:
 		struct DataReductionData {
-			DataReductionData() : type(nsl_geom_linesim_type_douglas_peucker), autoTolerance(true), tolerance(0.0), autoTolerance2(true), tolerance2(0.0),
-						autoRange(true), xRange() {};
+			DataReductionData() : type(nsl_geom_linesim_type_douglas_peucker_variant), autoTolerance(true), tolerance(0.0),
+						autoTolerance2(true), tolerance2(0.0), autoRange(true), xRange() {};
 	
 			nsl_geom_linesim_type type;	// type of simplification
 			bool autoTolerance;		// automatic tolerance
