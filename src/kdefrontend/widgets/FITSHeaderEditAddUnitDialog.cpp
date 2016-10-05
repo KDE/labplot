@@ -44,6 +44,7 @@ FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QW
     ui.kleUnit->setCompletionObject(keyCompletion);
     ui.kleUnit->setAutoDeleteCompletionObject(true);
     connect(this, SIGNAL(okClicked()), this, SLOT(addUnit()));
+    setAttribute(Qt::WA_DeleteOnClose);
 }
 
 FITSHeaderEditAddUnitDialog::~FITSHeaderEditAddUnitDialog() {

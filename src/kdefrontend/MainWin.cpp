@@ -1514,7 +1514,6 @@ void MainWin::importFileDialog(const QString& fileName) {
 		m_project->setChanged(true);
 	}
 
-	delete m_importFileDialog;
 	m_importFileDialog = 0;
 }
 
@@ -1537,8 +1536,6 @@ void MainWin::editFitsFileDialog() {
 		if (editDialog->saved())
 			statusBar()->showMessage(i18n("FITS files saved"));
 	}
-
-	delete editDialog;
 }
 
 /*!
@@ -1551,7 +1548,6 @@ void MainWin::newFileDataSourceActionTriggered() {
 		dlg->importToFileDataSource(dataSource, statusBar());
 		this->addAspectToProject(dataSource);
 	}
-	delete dlg;
 }
 
 /*!
@@ -1577,5 +1573,4 @@ void MainWin::settingsDialog() {
 	SettingsDialog* dlg = new SettingsDialog(this);
 	connect (dlg, SIGNAL(settingsChanged()), this, SLOT(handleSettingsChanges()));
 	dlg->exec();
-	delete dlg;
 }

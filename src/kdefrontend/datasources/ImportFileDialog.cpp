@@ -82,6 +82,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
 	setWindowIcon(KIcon("document-import-database"));
+    setAttribute(Qt::WA_DeleteOnClose);
 
 	//restore saved settings
 	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");

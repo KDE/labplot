@@ -57,6 +57,7 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget *parent) :
     ui.twKeywordsTable->setHorizontalHeaderItem(2, new QTableWidgetItem(i18n("Comment")));
     ui.twKeywordsTable->installEventFilter(this);
     ui.twExtensions->installEventFilter(this);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     connect(ui.pbOpenFile, SIGNAL(clicked()), this, SLOT(openFile()));
     connect(ui.twKeywordsTable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(updateKeyword(QTableWidgetItem*)));

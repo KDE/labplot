@@ -51,7 +51,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, QString& emptyL
 	setWindowIcon( KIcon("view-history") );
 	setWindowTitle(i18n("Undo/Redo History"));
 	showButtonSeparator(true);
-
+    setAttribute(Qt::WA_DeleteOnClose);
 	if (stack->count()) {
 		setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 		setButtonToolTip(KDialog::User1, i18n("Clears the undo history. Commands are not undone or redone; the state of the project remains unchanged."));

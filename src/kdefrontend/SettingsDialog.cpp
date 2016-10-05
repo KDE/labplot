@@ -46,6 +46,7 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent), m_changed
 	setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Default);
 	setDefaultButton(KDialog::Ok);
 	enableButton(KDialog::Apply, false);
+    setAttribute(Qt::WA_DeleteOnClose);
 
 	generalPage = new SettingsGeneralPage(this);
 	KPageWidgetItem* generalFrame = addPage(generalPage, i18n("General"));
