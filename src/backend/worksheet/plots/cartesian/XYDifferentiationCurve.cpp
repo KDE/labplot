@@ -219,15 +219,15 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	//copy all valid data point for the differentiation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double min = differentiationData.xRange.front();
-	const double max = differentiationData.xRange.back();
+	const double xmin = differentiationData.xRange.front();
+	const double xmax = differentiationData.xRange.back();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= min && xDataColumn->valueAt(row) <= max) {
+			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
 				xdataVector.append(xDataColumn->valueAt(row));
 				ydataVector.append(yDataColumn->valueAt(row));
 			}

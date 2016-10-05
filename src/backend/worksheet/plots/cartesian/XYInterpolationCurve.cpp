@@ -223,15 +223,15 @@ void XYInterpolationCurvePrivate::recalculate() {
 	//copy all valid data point for the interpolation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double min = interpolationData.xRange.front();
-	const double max = interpolationData.xRange.back();
+	const double xmin = interpolationData.xRange.front();
+	const double xmax = interpolationData.xRange.back();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= min && xDataColumn->valueAt(row) <= max) {
+			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
 				xdataVector.append(xDataColumn->valueAt(row));
 				ydataVector.append(yDataColumn->valueAt(row));
 			}
@@ -311,7 +311,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 	for (unsigned int i = 0; i < npoints; i++) {
 		unsigned int a=0,b=n-1;
 
-		double x = min + i*(max-min)/(npoints-1);
+		double x = xmin + i*(xmax-xmin)/(npoints-1);
 		(*xVector)[i] = x;
 
 		// find index a,b for interval [x[a],x[b]] around x[i] using bisection
@@ -353,7 +353,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 				(*yVector)[i] = gsl_spline_eval_deriv2(spline, x, acc);
 				break;
 			case nsl_interp_evaluate_integral:
-				(*yVector)[i] = gsl_spline_eval_integ(spline, min, x, acc);
+				(*yVector)[i] = gsl_spline_eval_integ(spline, xmin, x, acc);
 				break;
 			}
 			break;

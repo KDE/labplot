@@ -218,15 +218,15 @@ void XYSmoothCurvePrivate::recalculate() {
 	//copy all valid data point for the smooth to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double min = smoothData.xRange.front();
-	const double max = smoothData.xRange.back();
+	const double xmin = smoothData.xRange.front();
+	const double xmax = smoothData.xRange.back();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= min && xDataColumn->valueAt(row) <= max) {
+			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
 				xdataVector.append(xDataColumn->valueAt(row));
 				ydataVector.append(yDataColumn->valueAt(row));
 			}
@@ -234,7 +234,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	}
 
 	//number of data points to smooth
-	const unsigned int n = ydataVector.size();
+	const unsigned int n = xdataVector.size();
 	if (n < 2) {
 		smoothResult.available = true;
 		smoothResult.valid = false;

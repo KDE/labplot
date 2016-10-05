@@ -224,14 +224,14 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//copy all valid data point for the filter to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double min = filterData.xRange.front();
-	const double max = filterData.xRange.back();
+	const double xmin = filterData.xRange.front();
+	const double xmax = filterData.xRange.back();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 				&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 			// only when inside given range
-			if (xDataColumn->valueAt(row) >= min && xDataColumn->valueAt(row) <= max) {
+			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
 				xdataVector.append(xDataColumn->valueAt(row));
 				ydataVector.append(yDataColumn->valueAt(row));
 			}
@@ -271,7 +271,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	double cutindex=0, cutindex2=0;
 	switch (unit) {
 	case nsl_filter_cutoff_unit_frequency:
-		cutindex = cutoff*(max-min);
+		cutindex = cutoff*(xmax-xmin);
 		break;
 	case nsl_filter_cutoff_unit_fraction:
 		cutindex = cutoff*n;
@@ -281,7 +281,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	}
 	switch (unit2) {
 	case nsl_filter_cutoff_unit_frequency:
-		cutindex2 = cutoff2*(max-min);
+		cutindex2 = cutoff2*(xmax-xmin);
 		break;
 	case nsl_filter_cutoff_unit_fraction:
 		cutindex2 = cutoff2*n;
