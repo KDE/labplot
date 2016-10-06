@@ -41,7 +41,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 	ui.pbApply->setIcon(KIcon("dialog-ok-apply"));
 	ui.pbCancel->setIcon(KIcon("dialog-cancel"));
 
-	ui.tableWidget->setColumnCount(2);
+	ui.tableWidget->setColumnCount(5);
 
 	QTableWidgetItem* headerItem = new QTableWidgetItem();
 	headerItem->setText(i18n("Name"));
@@ -51,45 +51,69 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 	headerItem->setText(i18n("Start value"));
 	ui.tableWidget->setHorizontalHeaderItem(1, headerItem);
 
-	ui.tableWidget->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
-	ui.tableWidget->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
+	headerItem = new QTableWidgetItem();
+	headerItem->setText(i18n("Fixed"));
+	ui.tableWidget->setHorizontalHeaderItem(2, headerItem);
 
-	if (m_fitData->modelType != XYFitCurve::Custom) {
+	headerItem = new QTableWidgetItem();
+	headerItem->setText(i18n("Lower limit"));
+	ui.tableWidget->setHorizontalHeaderItem(3, headerItem);
+
+	headerItem = new QTableWidgetItem();
+	headerItem->setText(i18n("Upper limit"));
+	ui.tableWidget->setHorizontalHeaderItem(4, headerItem);
+
+	ui.tableWidget->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
+	ui.tableWidget->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+	ui.tableWidget->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+	ui.tableWidget->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
+	ui.tableWidget->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
+
+	if (m_fitData->modelType != XYFitCurve::Custom) {	// pre-defined model
 		ui.tableWidget->setRowCount(m_fitData->paramNames.size());
-		for (int i=0; i<m_fitData->paramNames.size(); ++i){
+
+		for (int i=0; i < m_fitData->paramNames.size(); ++i){
 			QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNames.at(i));
 			item->setFlags(item->flags() ^ Qt::ItemIsEditable);
 			item->setBackground(QBrush(Qt::lightGray));
 			ui.tableWidget->setItem(i, 0, item);
 			ui.tableWidget->setItem(i, 1, new QTableWidgetItem(QString::number(m_fitData->paramStartValues.at(i), 'g')));
+			//TODO: fixed parameter
+			ui.tableWidget->setItem(i, 3, new QTableWidgetItem(QString::number(m_fitData->paramLowerLimits.at(i), 'g')));
+			ui.tableWidget->setItem(i, 4, new QTableWidgetItem(QString::number(m_fitData->paramUpperLimits.at(i), 'g')));
 		}
 		ui.tableWidget->setCurrentCell(0, 1);
 		ui.pbAdd->setVisible(false);
 		ui.pbRemove->setVisible(false);
 	} else {
-		if (m_fitData->paramNames.size()) {
-			//parameters for the custom model are already available -> show them
+		if (m_fitData->paramNames.size()) {	// parameters for the custom model are already available -> show them
 			ui.tableWidget->setRowCount(m_fitData->paramNames.size());
-			for (int i=0; i<m_fitData->paramNames.size(); ++i){
+
+			for (int i=0; i < m_fitData->paramNames.size(); ++i){
 				QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNames.at(i));
 				item->setBackground(QBrush(Qt::lightGray));
 				ui.tableWidget->setItem(i, 0, item);
 				ui.tableWidget->setItem(i, 1, new QTableWidgetItem(QString::number(m_fitData->paramStartValues.at(i), 'g')));
+				//TODO: fixed parameter
+				ui.tableWidget->setItem(i, 3, new QTableWidgetItem(QString::number(m_fitData->paramLowerLimits.at(i), 'g')));
+				ui.tableWidget->setItem(i, 4, new QTableWidgetItem(QString::number(m_fitData->paramUpperLimits.at(i), 'g')));
 			}
-		} else {
-			//no parameters available yet -> create the first row in the table for the first parameter
+		} else {			// no parameters available yet -> create the first row in the table for the first parameter
 			ui.tableWidget->setRowCount(1);
 			QTableWidgetItem* item = new QTableWidgetItem();
 			item->setBackground(QBrush(Qt::lightGray));
 			ui.tableWidget->setItem(0, 0, item);
 			ui.tableWidget->setItem(0, 1, new QTableWidgetItem());
+			//TODO: fixed parameter
+			ui.tableWidget->setItem(0, 3, new QTableWidgetItem());
+			ui.tableWidget->setItem(0, 4, new QTableWidgetItem());
 		}
 		ui.tableWidget->setCurrentCell(0, 0);
 		ui.pbAdd->setIcon(KIcon("list-add"));
 		ui.pbAdd->setVisible(true);
 		ui.pbRemove->setIcon(KIcon("list-remove"));
 		ui.pbRemove->setVisible(true);
-		ui.pbRemove->setEnabled(m_fitData->paramNames.size()>1);
+		ui.pbRemove->setEnabled(m_fitData->paramNames.size() > 1);
 	}
 
 	ui.tableWidget->installEventFilter(this);

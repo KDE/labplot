@@ -65,7 +65,6 @@ XYFitCurve::XYFitCurve(const QString& name, XYFitCurvePrivate* dd)
 	init();
 }
 
-
 XYFitCurve::~XYFitCurve() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
@@ -188,13 +187,13 @@ XYFitCurvePrivate::~XYFitCurvePrivate() {
 }
 
 struct data {
-	size_t n; //number of data points
-	double* x; //pointer to the vector with x-data values
-	double* y; //pointer to the vector with y-data vector
-	double* sigma; //pointer to the vector with sigma values
+	size_t n;	//number of data points
+	double* x;	//pointer to the vector with x-data values
+	double* y;	//pointer to the vector with y-data values
+	double* sigma;	//pointer to the vector with sigma values
 	XYFitCurve::ModelType modelType;
 	int degree;
-	QString* func; // string containing the definition of the model/function
+	QString* func;	// string containing the definition of the model/function
 	QStringList* paramNames;
 };
 
@@ -213,6 +212,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 
 	//set current values of the parameters
+	// TODO: scale if upper or lower limit is set
 	QByteArray paramba;
 	for (int j=0; j < paramNames->size(); j++) {
 		paramba = paramNames->at(j).toLocal8Bit();
@@ -276,9 +276,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		for (int i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
-			for (int j=0; j<paramNames->size(); ++j) {
+			for (int j=0; j < paramNames->size(); ++j)
 				gsl_matrix_set(J, i, j, pow(x,j)/sigma);
-			}
 		}
 		break;
 	case XYFitCurve::Power:
@@ -286,7 +285,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		if (degree == 1) {
 			double a = gsl_vector_get(paramValues,0);
 			double b = gsl_vector_get(paramValues,1);
-			for (int i=0; i<n; i++) {
+			for (int i=0; i < n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
 				gsl_matrix_set(J, i, 0, pow(x,b)/sigma);
@@ -295,7 +294,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		} else if (degree == 2) {
 			double b = gsl_vector_get(paramValues,1);
 			double c = gsl_vector_get(paramValues,2);
-			for (int i=0; i<n; i++) {
+			for (int i=0; i < n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
 				gsl_matrix_set(J, i, 0, 1/sigma);
@@ -594,8 +593,8 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	//fit settings
-	int maxIters = fitData.maxIterations; //maximal number of iterations
-	float delta = fitData.eps; //fit tolerance
+	int maxIters = fitData.maxIterations;	//maximal number of iterations
+	float delta = fitData.eps;		//fit tolerance
 	const unsigned int np = fitData.paramNames.size(); //number of fit parameters
 	if (np == 0) {
 		fitResult.available = true;
@@ -607,7 +606,7 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	//check column sizes
-	if (xDataColumn->rowCount()!=yDataColumn->rowCount()) {
+	if (xDataColumn->rowCount() != yDataColumn->rowCount()) {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Number of x and y data points must be equal.");
@@ -616,7 +615,7 @@ void XYFitCurvePrivate::recalculate() {
 		return;
 	}
 	if (weightsColumn) {
-		if (weightsColumn->rowCount()<xDataColumn->rowCount()) {
+		if (weightsColumn->rowCount() < xDataColumn->rowCount()) {
 			fitResult.available = true;
 			fitResult.valid = false;
 			fitResult.status = i18n("Not sufficient weight data points provided.");
@@ -632,7 +631,7 @@ void XYFitCurvePrivate::recalculate() {
 	QVector<double> sigmaVector;
 	const double xmin = fitData.xRange.front();
 	const double xmax = fitData.xRange.back();
-	for (int row=0; row<xDataColumn->rowCount(); ++row) {
+	for (int row=0; row < xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x, y and sigma, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
@@ -671,7 +670,7 @@ void XYFitCurvePrivate::recalculate() {
 		return;
 	}
 
-	if (n<np) {
+	if (n < np) {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).", n, np);
@@ -698,10 +697,10 @@ void XYFitCurvePrivate::recalculate() {
 
 	//initialize the solver
 	const gsl_multifit_fdfsolver_type* T = gsl_multifit_fdfsolver_lmsder;
-	gsl_multifit_fdfsolver* s = gsl_multifit_fdfsolver_alloc (T, n, np);
+	gsl_multifit_fdfsolver* s = gsl_multifit_fdfsolver_alloc(T, n, np);
 	double* x_init = fitData.paramStartValues.data();
-	gsl_vector_view x = gsl_vector_view_array (x_init, np);
-	gsl_multifit_fdfsolver_set (s, &f, &x.vector);
+	gsl_vector_view x = gsl_vector_view_array(x_init, np);
+	gsl_multifit_fdfsolver_set(s, &f, &x.vector);
 
 	//iterate
 	int status;
@@ -710,20 +709,20 @@ void XYFitCurvePrivate::recalculate() {
 	writeSolverState(s);
 	do {
 		iter++;
-		status = gsl_multifit_fdfsolver_iterate (s);
+		status = gsl_multifit_fdfsolver_iterate(s);
 		writeSolverState(s);
 		if (status) break;
-		status = gsl_multifit_test_delta (s->dx, s->x, delta, delta);
+		status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
 	} while (status == GSL_CONTINUE && iter < maxIters);
 
 	//get the covariance matrix
-	gsl_matrix* covar = gsl_matrix_alloc (np, np);
+	gsl_matrix* covar = gsl_matrix_alloc(np, np);
 #if GSL_MAJOR_VERSION >=2
 	gsl_matrix *J = gsl_matrix_alloc(s->fdf->n, s->fdf->p);
-	gsl_multifit_fdfsolver_jac (s, J);
-	gsl_multifit_covar (J, 0.0, covar);
+	gsl_multifit_fdfsolver_jac(s, J);
+	gsl_multifit_covar(J, 0.0, covar);
 #else
-	gsl_multifit_covar (s->J, 0.0, covar);
+	gsl_multifit_covar(s->J, 0.0, covar);
 #endif
 
 	//write the result
@@ -745,9 +744,8 @@ void XYFitCurvePrivate::recalculate() {
 	//Adjusted Coefficient of determination  adj. R-squared = 1 - (1-R-squared^2)*(n-1)/(n-np-1);
 
 	residualsVector->resize(n);
-	for (unsigned int i=0; i<n; ++i) {
+	for (unsigned int i=0; i < n; ++i)
 		residualsVector->data()[i] = gsl_vector_get(s->f, i);
-	}
 	residualsColumn->setChanged();
 
 	//gsl_blas_dnrm2() - computes the Euclidian norm (||x||_2 = \sqrt {\sum x_i^2}) of the vector with the elements (Yi - y[i])/sigma[i]
@@ -756,18 +754,18 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.mse = fitResult.sse/n;
 	fitResult.rmse = sqrt(fitResult.mse);
 	fitResult.mae = gsl_blas_dasum(s->f);
-	if (fitResult.dof!=0) {
+	if (fitResult.dof != 0) {
 		fitResult.rms = fitResult.sse/fitResult.dof;
 		fitResult.rsd = sqrt(fitResult.rms);
 	}
 
 	//Coefficient of determination, R-squared
 	double ybar = 0; //mean value of the y-data
-	for (unsigned int i=0; i<n; ++i)
+	for (unsigned int i=0; i < n; ++i)
 		ybar += ydata[i];
 	ybar = ybar/n;
 	double sstot = 0;
-	for (unsigned int i=0; i<n; ++i)
+	for (unsigned int i=0; i < n; ++i)
 		sstot += pow(ydata[i]-ybar, 2);
 	fitResult.rsquared = 1 - fitResult.sse/sstot;
 	fitResult.rsquaredAdj = 1-(1-fitResult.rsquared*fitResult.rsquared)*(n-1)/(n-np-1);
@@ -776,7 +774,7 @@ void XYFitCurvePrivate::recalculate() {
 	double c = GSL_MIN_DBL(1, sqrt(fitResult.sse)); //limit error for poor fit
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
-	for (unsigned int i=0; i<np; i++) {
+	for (unsigned int i=0; i < np; i++) {
 		fitResult.paramValues[i] = gsl_vector_get(s->x, i);
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar,i,i));
 	}
@@ -789,7 +787,8 @@ void XYFitCurvePrivate::recalculate() {
 	ExpressionParser* parser = ExpressionParser::getInstance();
 	xVector->resize(fitData.fittedPoints);
 	yVector->resize(fitData.fittedPoints);
-	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), fitData.fittedPoints, xVector, yVector, fitData.paramNames, fitResult.paramValues);
+	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), fitData.fittedPoints, xVector, yVector,
+						fitData.paramNames, fitResult.paramValues);
 	if (!rc) {
 		xVector->clear();
 		yVector->clear();
@@ -859,6 +858,8 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	for (int i=0; i<d->fitData.paramStartValues.size(); ++i)
 		writer->writeTextElement("startValue", QString::number(d->fitData.paramStartValues.at(i)));
 	writer->writeEndElement();
+
+	//TODO: save fixed state and limits
 
 	writer->writeEndElement();
 
