@@ -211,8 +211,8 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	const char *func = funcba.data();
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 
-	//set current values of the parameters
-	// TODO: scale if upper or lower limit is set
+	// set current values of the parameters
+	// TODO: scale values if upper or lower limit is set
 	QByteArray paramba;
 	for (int j=0; j < paramNames->size(); j++) {
 		paramba = paramNames->at(j).toLocal8Bit();
@@ -698,6 +698,7 @@ void XYFitCurvePrivate::recalculate() {
 	//initialize the solver
 	const gsl_multifit_fdfsolver_type* T = gsl_multifit_fdfsolver_lmsder;
 	gsl_multifit_fdfsolver* s = gsl_multifit_fdfsolver_alloc(T, n, np);
+	//TODO: scale start values if limits are set
 	double* x_init = fitData.paramStartValues.data();
 	gsl_vector_view x = gsl_vector_view_array(x_init, np);
 	gsl_multifit_fdfsolver_set(s, &f, &x.vector);

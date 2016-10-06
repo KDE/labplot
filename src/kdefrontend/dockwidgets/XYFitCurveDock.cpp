@@ -37,6 +37,7 @@
 
 #include <QMenu>
 #include <QWidgetAction>
+#include <cfloat>	// DBL_MAX
 
 /*!
   \class XYFitCurveDock
@@ -511,11 +512,18 @@ void XYFitCurveDock::updateModelEquation() {
 	//in case a custom model is used, do nothing, we take over the previous values
 	//when initializing, don't do anything - we use start values already
 	//available - unless there're no values available
-	if (m_fitData.modelType!=XYFitCurve::Custom &&
+	if (m_fitData.modelType != XYFitCurve::Custom &&
 	        !(m_initializing && m_fitData.paramNames.size() == m_fitData.paramStartValues.size())) {
 		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
-		for (int i=0; i<m_fitData.paramStartValues.size(); ++i)
+		m_fitData.paramLowerLimits.resize(m_fitData.paramNames.size());
+		m_fitData.paramUpperLimits.resize(m_fitData.paramNames.size());
+
+		for (int i=0; i < m_fitData.paramStartValues.size(); ++i) {
 			m_fitData.paramStartValues[i] = 1.0;
+			m_fitData.paramLowerLimits[i] = -DBL_MAX;
+			m_fitData.paramUpperLimits[i] = DBL_MAX;
+			//TODO: set fixed flag to no
+		}
 	}
 
 	uiGeneralTab.teEquation->setVariables(vars);

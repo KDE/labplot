@@ -27,6 +27,7 @@
  ***************************************************************************/
 #include "FitParametersWidget.h"
 #include <QKeyEvent>
+#include <cfloat>
 
 /*!
 	\class FitParametersWidget
@@ -79,8 +80,16 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			ui.tableWidget->setItem(i, 0, item);
 			ui.tableWidget->setItem(i, 1, new QTableWidgetItem(QString::number(m_fitData->paramStartValues.at(i), 'g')));
 			//TODO: fixed parameter
-			ui.tableWidget->setItem(i, 3, new QTableWidgetItem(QString::number(m_fitData->paramLowerLimits.at(i), 'g')));
-			ui.tableWidget->setItem(i, 4, new QTableWidgetItem(QString::number(m_fitData->paramUpperLimits.at(i), 'g')));
+			ui.tableWidget->setItem(i, 2, new QTableWidgetItem());
+
+			if (m_fitData->paramLowerLimits.at(i) > -DBL_MAX)
+				ui.tableWidget->setItem(i, 3, new QTableWidgetItem(QString::number(m_fitData->paramLowerLimits.at(i), 'g')));
+			else
+				ui.tableWidget->setItem(i, 3, new QTableWidgetItem());
+			if (m_fitData->paramUpperLimits.at(i) < DBL_MAX)
+				ui.tableWidget->setItem(i, 4, new QTableWidgetItem(QString::number(m_fitData->paramUpperLimits.at(i), 'g')));
+			else
+				ui.tableWidget->setItem(i, 4, new QTableWidgetItem());
 		}
 		ui.tableWidget->setCurrentCell(0, 1);
 		ui.pbAdd->setVisible(false);
@@ -95,8 +104,16 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 				ui.tableWidget->setItem(i, 0, item);
 				ui.tableWidget->setItem(i, 1, new QTableWidgetItem(QString::number(m_fitData->paramStartValues.at(i), 'g')));
 				//TODO: fixed parameter
-				ui.tableWidget->setItem(i, 3, new QTableWidgetItem(QString::number(m_fitData->paramLowerLimits.at(i), 'g')));
-				ui.tableWidget->setItem(i, 4, new QTableWidgetItem(QString::number(m_fitData->paramUpperLimits.at(i), 'g')));
+				ui.tableWidget->setItem(i, 2, new QTableWidgetItem());
+
+				if (m_fitData->paramLowerLimits.at(i) > -DBL_MAX)
+					ui.tableWidget->setItem(i, 3, new QTableWidgetItem(QString::number(m_fitData->paramLowerLimits.at(i), 'g')));
+				else
+					ui.tableWidget->setItem(i, 3, new QTableWidgetItem());
+				if (m_fitData->paramUpperLimits.at(i) < DBL_MAX)
+					ui.tableWidget->setItem(i, 4, new QTableWidgetItem(QString::number(m_fitData->paramUpperLimits.at(i), 'g')));
+				else
+					ui.tableWidget->setItem(i, 4, new QTableWidgetItem());
 			}
 		} else {			// no parameters available yet -> create the first row in the table for the first parameter
 			ui.tableWidget->setRowCount(1);
@@ -104,7 +121,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			item->setBackground(QBrush(Qt::lightGray));
 			ui.tableWidget->setItem(0, 0, item);
 			ui.tableWidget->setItem(0, 1, new QTableWidgetItem());
-			//TODO: fixed parameter
+			ui.tableWidget->setItem(0, 2, new QTableWidgetItem());
 			ui.tableWidget->setItem(0, 3, new QTableWidgetItem());
 			ui.tableWidget->setItem(0, 4, new QTableWidgetItem());
 		}
@@ -164,17 +181,37 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 }
 
 void FitParametersWidget::applyClicked() {
-	if (m_fitData->modelType != XYFitCurve::Custom) {
-		for (int i=0; i<ui.tableWidget->rowCount(); ++i)
+	//TODO: set fixed flag
+	if (m_fitData->modelType != XYFitCurve::Custom) {	// pre-defined models
+		for (int i=0; i < ui.tableWidget->rowCount(); ++i) {
 			m_fitData->paramStartValues[i] = ui.tableWidget->item(i,1)->text().toDouble();
+			if ( !ui.tableWidget->item(i,3)->text().isEmpty() )
+				m_fitData->paramLowerLimits[i] = ui.tableWidget->item(i,3)->text().toDouble();
+			else
+				m_fitData->paramLowerLimits[i] = -DBL_MAX;
+			if ( !ui.tableWidget->item(i,4)->text().isEmpty() )
+				m_fitData->paramUpperLimits[i] = ui.tableWidget->item(i,4)->text().toDouble();
+			else
+				m_fitData->paramUpperLimits[i] = DBL_MAX;
+		}
 	} else {
 		m_fitData->paramNames.clear();
 		m_fitData->paramStartValues.clear();
-		for (int i=0; i<ui.tableWidget->rowCount(); ++i) {
+		m_fitData->paramLowerLimits.clear();
+		m_fitData->paramUpperLimits.clear();
+		for (int i=0; i < ui.tableWidget->rowCount(); ++i) {
 			//skip those rows where either the name or the value are empty
 			if ( !ui.tableWidget->item(i,0)->text().simplified().isEmpty() && !ui.tableWidget->item(i,1)->text().simplified().isEmpty() ) {
 				m_fitData->paramNames.append( ui.tableWidget->item(i,0)->text() );
 				m_fitData->paramStartValues.append( ui.tableWidget->item(i,1)->text().toDouble() );
+				if ( !ui.tableWidget->item(i,3)->text().isEmpty() )
+					m_fitData->paramLowerLimits.append( ui.tableWidget->item(i,3)->text().toDouble() );
+				else
+					m_fitData->paramLowerLimits.append(-DBL_MAX);
+				if ( !ui.tableWidget->item(i,4)->text().isEmpty() )
+					m_fitData->paramUpperLimits.append( ui.tableWidget->item(i,4)->text().toDouble() );
+				else
+					m_fitData->paramUpperLimits.append(DBL_MAX);
 			}
 		}
 	}
