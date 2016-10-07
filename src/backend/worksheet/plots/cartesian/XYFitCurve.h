@@ -48,7 +48,7 @@ class XYFitCurve : public XYCurve {
 						degree(1),
 						maxIterations(500),
 						eps(1e-4),
-						fittedPoints(100),
+						evaluatedPoints(100),
 						autoRange(true), xRange() {};
 
 			ModelType modelType;
@@ -63,7 +63,7 @@ class XYFitCurve : public XYCurve {
 
 			int maxIterations;
 			double eps;
-			int fittedPoints;
+			int evaluatedPoints;
 
 			bool autoRange;			// use all data?
 			std::array<double, 2> xRange;	// x range for integration

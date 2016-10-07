@@ -186,6 +186,7 @@ XYFitCurvePrivate::~XYFitCurvePrivate() {
 	//when the parent aspect is removed
 }
 
+/* data structure to pass parameter to functions */
 struct data {
 	size_t n;	//number of data points
 	double* x;	//pointer to the vector with x-data values
@@ -198,7 +199,7 @@ struct data {
 };
 
 /*!
- * \param v vector containing current values of the fit parameters
+ * \param paramValues vector containing current values of the fit parameters
  * \param params
  * \param f vector with the weighted residuals (Yi - y[i])/sigma[i]
  */
@@ -208,14 +209,14 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	double* y = ((struct data*)params)->y;
 	double* sigma = ((struct data*)params)->sigma;
 	QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
-	const char *func = funcba.data();
+	const char *func = funcba.data();	// function to evaluate
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 
 	// set current values of the parameters
-	// TODO: scale values if upper or lower limit is set
 	QByteArray paramba;
 	for (int j=0; j < paramNames->size(); j++) {
 		paramba = paramNames->at(j).toLocal8Bit();
+		// TODO: scale values if upper or lower limit is set
 		assign_variable(paramba.data(), gsl_vector_get(paramValues,j));
 	}
 
@@ -270,6 +271,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	double x;
 	double sigma = 1.0;
 
+	// TODO: scale parameter values if bounded: a,b,...
 	switch (modelType) {
 	case XYFitCurve::Polynomial:
 		// Y(x) = c0 + c1*x + ... + cn*x^n
@@ -594,7 +596,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	//fit settings
 	int maxIters = fitData.maxIterations;	//maximal number of iterations
-	float delta = fitData.eps;		//fit tolerance
+	double delta = fitData.eps;		//fit tolerance
 	const unsigned int np = fitData.paramNames.size(); //number of fit parameters
 	if (np == 0) {
 		fitResult.available = true;
@@ -690,17 +692,26 @@ void XYFitCurvePrivate::recalculate() {
 	struct data params = {n, xdata, ydata, sigma, fitData.modelType, fitData.degree, &fitData.model, &fitData.paramNames};
 	f.f = &func_f;
 	f.df = &func_df;
+	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
 	f.fdf = &func_fdf;
 	f.n = n;
 	f.p = np;
 	f.params = &params;
 
-	//initialize the solver
+	//initialize the derivative solver (using Levenberg-Marquardt robust solver)
+	// GSL >= 2 has a complete new interface! But the old one is still supported.
 	const gsl_multifit_fdfsolver_type* T = gsl_multifit_fdfsolver_lmsder;
 	gsl_multifit_fdfsolver* s = gsl_multifit_fdfsolver_alloc(T, n, np);
-	//TODO: scale start values if limits are set
+
 	double* x_init = fitData.paramStartValues.data();
+	//TODO: scale start values if limits are set (see https://lmfit.github.io/lmfit-py/bounds.html)
+	for (unsigned int i=0; i < np; i++) {
+		// if ()
+		//TODO: x_init[i] = asin(...);
+	}
+	//TODO: remove fixed parameter?
 	gsl_vector_view x = gsl_vector_view_array(x_init, np);
+	// initialize solver with function f and inital guess x
 	gsl_multifit_fdfsolver_set(s, &f, &x.vector);
 
 	//iterate
@@ -717,8 +728,10 @@ void XYFitCurvePrivate::recalculate() {
 	} while (status == GSL_CONTINUE && iter < maxIters);
 
 	//get the covariance matrix
+	//TODO: if parameters are scaled: scale the Jacobian before constructing the covar matrix
 	gsl_matrix* covar = gsl_matrix_alloc(np, np);
-#if GSL_MAJOR_VERSION >=2
+#if GSL_MAJOR_VERSION >= 2
+	// the Jacobian is not part of the solver anymore
 	gsl_matrix *J = gsl_matrix_alloc(s->fdf->n, s->fdf->p);
 	gsl_multifit_fdfsolver_jac(s, J);
 	gsl_multifit_covar(J, 0.0, covar);
@@ -760,7 +773,7 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.rsd = sqrt(fitResult.rms);
 	}
 
-	//Coefficient of determination, R-squared
+	//coefficient of determination, R-squared
 	double ybar = 0; //mean value of the y-data
 	for (unsigned int i=0; i < n; ++i)
 		ybar += ydata[i];
@@ -776,6 +789,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
 	for (unsigned int i=0; i < np; i++) {
+		//TODO: scale resulting values if they are bounded
 		fitResult.paramValues[i] = gsl_vector_get(s->x, i);
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar,i,i));
 	}
@@ -786,9 +800,9 @@ void XYFitCurvePrivate::recalculate() {
 
 	//calculate the fit function (vectors)
 	ExpressionParser* parser = ExpressionParser::getInstance();
-	xVector->resize(fitData.fittedPoints);
-	yVector->resize(fitData.fittedPoints);
-	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), fitData.fittedPoints, xVector, yVector,
+	xVector->resize(fitData.evaluatedPoints);
+	yVector->resize(fitData.evaluatedPoints);
+	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), fitData.evaluatedPoints, xVector, yVector,
 						fitData.paramNames, fitResult.paramValues);
 	if (!rc) {
 		xVector->clear();
@@ -848,7 +862,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "model", d->fitData.model );
 	writer->writeAttribute( "maxIterations", QString::number(d->fitData.maxIterations) );
 	writer->writeAttribute( "eps", QString::number(d->fitData.eps) );
-	writer->writeAttribute( "fittedPoints", QString::number(d->fitData.fittedPoints) );
+	writer->writeAttribute( "fittedPoints", QString::number(d->fitData.evaluatedPoints) );
 
 	writer->writeStartElement("paramNames");
 	for (int i=0; i<d->fitData.paramNames.size(); ++i)
@@ -951,7 +965,7 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_STRING_VALUE("model", fitData.model);
 			READ_INT_VALUE("maxIterations", fitData.maxIterations, int);
 			READ_DOUBLE_VALUE("eps", fitData.eps);
-			READ_INT_VALUE("fittedPoints", fitData.fittedPoints, int);
+			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, int);
 		} else if (reader->name() == "name") {
 			d->fitData.paramNames<<reader->readElementText();
 		} else if (reader->name() == "startValue") {
