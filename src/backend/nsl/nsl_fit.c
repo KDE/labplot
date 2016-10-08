@@ -39,7 +39,7 @@
 */
 double nsl_fit_map_bound(double x, double min, double max) {
 	if (max <= min) {
-		printf("given bounds must fulfill max > min! Giving up.\n");
+		printf("given bounds must fulfill max > min (min = %g, max = %g)! Giving up.\n", min, max);
 		return DBL_MAX;
 	}
 
@@ -62,7 +62,7 @@ double nsl_fit_map_bound(double x, double min, double max) {
 */
 double nsl_fit_map_unbound(double x, double min, double max) {
 	if (max <= min) {
-		printf("given bounds must fulfill max > min! Giving up.\n");
+		printf("given bounds must fulfill max > min (min = %g, max = %g)! Giving up.\n", min, max);
 		return DBL_MAX;
 	}
 	if (x < min || x > max) {

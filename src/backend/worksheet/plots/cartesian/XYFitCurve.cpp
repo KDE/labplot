@@ -199,6 +199,7 @@ struct data {
 	QStringList* paramNames;
 	double* paramMin;	// lower parameter limits
 	double* paramMax;	// upper parameter limits
+	// TODO: bool* fixed;
 };
 
 /*!
@@ -214,7 +215,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 	double *min = ((struct data*)params)->paramMin;
-	double *max = ((struct data*)params)->paramMin;
+	double *max = ((struct data*)params)->paramMax;
 
 	const char *func = funcba.data();	// function to evaluate
 	double np = paramNames->size();		// number of parameter
@@ -270,7 +271,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	int degree = ((struct data*)params)->degree;
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 	double *min = ((struct data*)params)->paramMin;
-	double *max = ((struct data*)params)->paramMin;
+	double *max = ((struct data*)params)->paramMax;
 
 	// calculate the Jacobian matrix:
 	// Jacobian matrix J(i,j) = dfi / dxj
@@ -754,7 +755,7 @@ void XYFitCurvePrivate::recalculate() {
 	//write the result
 	fitResult.available = true;
 	fitResult.valid = true;
-	fitResult.status = QString(gsl_strerror(status)); //TODO: add i18n
+	fitResult.status = QString(gsl_strerror(status)); //TODO: add i18n?
 	fitResult.iterations = iter;
 	fitResult.dof = n-np;
 
@@ -769,6 +770,7 @@ void XYFitCurvePrivate::recalculate() {
 	//Coefficient of determination, R-squared = 1 - SSE/SSTOT with the total sum of squares SSTOT = \sum_i (y_i - ybar)^2 and ybar = 1/n \sum_i y_i
 	//Adjusted Coefficient of determination  adj. R-squared = 1 - (1-R-squared^2)*(n-1)/(n-np-1);
 
+	//TODO: scale residuals?
 	residualsVector->resize(n);
 	for (unsigned int i=0; i < n; ++i)
 		residualsVector->data()[i] = gsl_vector_get(s->f, i);
@@ -801,8 +803,8 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
 	for (unsigned int i=0; i < np; i++) {
-		//TODO: scale resulting values if they are bounded
-		fitResult.paramValues[i] = gsl_vector_get(s->x, i);
+		// scale resulting values if they are bounded
+		fitResult.paramValues[i] = nsl_fit_map_bound(gsl_vector_get(s->x, i), x_min[i], x_max[i]);
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar,i,i));
 	}
 
@@ -837,6 +839,7 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 	QString state;
 
 	//current parameter values, semicolon separated
+	//TODO: map parameter if bounded
 	for (int i=0; i<fitData.paramNames.size(); ++i)
 		state += QString::number(gsl_vector_get(s->x, i)) + '\t';
 
@@ -876,7 +879,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "model", d->fitData.model );
 	writer->writeAttribute( "maxIterations", QString::number(d->fitData.maxIterations) );
 	writer->writeAttribute( "eps", QString::number(d->fitData.eps) );
-	writer->writeAttribute( "fittedPoints", QString::number(d->fitData.evaluatedPoints) );
+	writer->writeAttribute( "evaluatedPoints", QString::number(d->fitData.evaluatedPoints) );
 
 	writer->writeStartElement("paramNames");
 	for (int i=0; i<d->fitData.paramNames.size(); ++i)
@@ -888,7 +891,8 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 		writer->writeTextElement("startValue", QString::number(d->fitData.paramStartValues.at(i)));
 	writer->writeEndElement();
 
-	//TODO: save fixed state and limits
+	//TODO: save limits
+	//TODO: save fixed state
 
 	writer->writeEndElement();
 
@@ -979,11 +983,14 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_STRING_VALUE("model", fitData.model);
 			READ_INT_VALUE("maxIterations", fitData.maxIterations, int);
 			READ_DOUBLE_VALUE("eps", fitData.eps);
-			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, int);
+			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, int);	// old style
+			READ_INT_VALUE("evaluatedPoints", fitData.evaluatedPoints, int);
 		} else if (reader->name() == "name") {
 			d->fitData.paramNames<<reader->readElementText();
 		} else if (reader->name() == "startValue") {
 			d->fitData.paramStartValues<<reader->readElementText().toDouble();
+		// TODO: read limits
+		// TODO: read fixed
 		} else if (reader->name() == "value") {
 			d->fitResult.paramValues<<reader->readElementText().toDouble();
 		} else if (reader->name() == "error") {
@@ -1019,6 +1026,15 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			else if (column->name()=="residuals")
 				d->residualsColumn = column;
 		}
+	}
+
+	if (d->fitData.paramLowerLimits.size() == 0) {	// lower limits are not saved in project (old project)
+		for (int i=0; i < d->fitData.paramStartValues.size(); i++)
+			d->fitData.paramLowerLimits<<-DBL_MAX;
+	}
+	if (d->fitData.paramUpperLimits.size() == 0) {	// upper limits are not saved in project (old project)
+		for (int i=0; i < d->fitData.paramStartValues.size(); i++)
+			d->fitData.paramUpperLimits<<DBL_MAX;
 	}
 
 	// wait for data to be read before using the pointers
