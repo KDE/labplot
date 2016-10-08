@@ -43,11 +43,11 @@ double nsl_fit_map_bound(double x, double min, double max) {
 		return DBL_MAX;
 	}
 
-	// not bounded
+	/* not bounded */
 	if (min == -DBL_MAX && max == DBL_MAX)
 		return x;
 
-	// open bounds
+	/* open bounds */
 	if (min == -DBL_MAX)
 		return max + 1 - sqrt(x*x + 1);
 	if (max == DBL_MAX)
@@ -70,11 +70,11 @@ double nsl_fit_map_unbound(double x, double min, double max) {
 		return -DBL_MAX;
 	}
 
-	// not bounded
+	/* not bounded */
         if (min == -DBL_MAX && max == DBL_MAX)
                 return x;	
 
-	// open bounds
+	/* open bounds */
         if (min == -DBL_MAX)
                 return sqrt(gsl_pow_2(max - x + 1) -1);
         if (max == DBL_MAX)

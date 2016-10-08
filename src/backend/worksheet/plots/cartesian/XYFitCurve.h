@@ -57,9 +57,9 @@ class XYFitCurve : public XYCurve {
 			QString model;
 			QStringList paramNames;
 			QVector<double> paramStartValues;
-			QVector<bool> paramFixed;
 			QVector<double> paramLowerLimits;
 			QVector<double> paramUpperLimits;
+			QVector<bool> paramFixed;
 
 			int maxIterations;
 			double eps;
