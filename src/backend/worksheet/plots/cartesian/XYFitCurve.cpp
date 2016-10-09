@@ -5,6 +5,7 @@
     Description          : A xy-curve defined by a fit model
     --------------------------------------------------------------------
     Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -55,6 +56,7 @@ extern "C" {
 #include <KLocale>
 #include <QElapsedTimer>
 #include <QThreadPool>
+#include <QDebug>
 
 XYFitCurve::XYFitCurve(const QString& name)
 		: XYCurve(name, new XYFitCurvePrivate(this)) {
@@ -238,12 +240,12 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 
 		assign_variable(var, x[i]);
 		Yi = parse(func);
-// TODO: Debugging needed? -> use NDEBUG
-/*		printf("func=%s, X[%d]=%g\n	",func,i,x[i]);
+#ifndef NDEBUG
+		printf("func=%s, X[%d]=%g\n	",func,i,x[i]);
 		for (int j=0; j<paramNames->size(); j++)
 			printf("%g ",gsl_vector_get(paramValues,j));
 		printf("\n	Y[%d]=%g \n",i,Yi);
-*/
+#endif
 		if (parse_errors() > 0)
 			return GSL_EINVAL;
 
@@ -281,7 +283,6 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	double x;
 	double sigma = 1.0;
 
-	// TODO: scale parameter values if bounded: a,b,...
 	switch (modelType) {
 	case XYFitCurve::Polynomial:
 		// Y(x) = c0 + c1*x + ... + cn*x^n
@@ -891,7 +892,16 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 		writer->writeTextElement("startValue", QString::number(d->fitData.paramStartValues.at(i)));
 	writer->writeEndElement();
 
-	//TODO: save limits
+	writer->writeStartElement("paramLowerLimits");
+	for (int i=0; i<d->fitData.paramLowerLimits.size(); ++i)
+		writer->writeTextElement("lowerLimit", QString::number(d->fitData.paramLowerLimits.at(i)));
+	writer->writeEndElement();
+
+	writer->writeStartElement("paramUpperLimits");
+	for (int i=0; i<d->fitData.paramUpperLimits.size(); ++i)
+		writer->writeTextElement("upperLimit", QString::number(d->fitData.paramUpperLimits.at(i)));
+	writer->writeEndElement();
+
 	//TODO: save fixed state
 
 	writer->writeEndElement();
@@ -989,7 +999,10 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			d->fitData.paramNames<<reader->readElementText();
 		} else if (reader->name() == "startValue") {
 			d->fitData.paramStartValues<<reader->readElementText().toDouble();
-		// TODO: read limits
+		} else if (reader->name() == "lowerLimit") {
+			d->fitData.paramLowerLimits<<reader->readElementText().toDouble();
+		} else if (reader->name() == "upperLimit") {
+			d->fitData.paramUpperLimits<<reader->readElementText().toDouble();
 		// TODO: read fixed
 		} else if (reader->name() == "value") {
 			d->fitResult.paramValues<<reader->readElementText().toDouble();
@@ -1028,17 +1041,26 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 		}
 	}
 
-	if (d->fitData.paramLowerLimits.size() == 0) {	// lower limits are not saved in project (old project)
+	// wait for data to be read before using the pointers
+	QThreadPool::globalInstance()->waitForDone();
+
+	// ATTENTION: "custom" modelType has changed between versions. we fix this here:
+	// Sigmoid in 2.3.0
+	if (d->fitData.modelType == 8 && d->fitData.model != "a/(1+exp(-b*(x-c)))")
+			d->fitData.modelType = XYFitCurve::Custom;
+	// Gompertz, ..., Gumbel in 2.4.0
+	if (d->fitData.modelType == 9 && d->fitData.model != "a*exp(-b*exp(-c*x))")
+			d->fitData.modelType = XYFitCurve::Custom;
+
+	// limits are not saved in project (old project)
+	if (d->fitData.paramLowerLimits.size() == 0) {
 		for (int i=0; i < d->fitData.paramStartValues.size(); i++)
 			d->fitData.paramLowerLimits<<-DBL_MAX;
 	}
-	if (d->fitData.paramUpperLimits.size() == 0) {	// upper limits are not saved in project (old project)
+	if (d->fitData.paramUpperLimits.size() == 0) {
 		for (int i=0; i < d->fitData.paramStartValues.size(); i++)
 			d->fitData.paramUpperLimits<<DBL_MAX;
 	}
-
-	// wait for data to be read before using the pointers
-	QThreadPool::globalInstance()->waitForDone();
 
 	if (d->xColumn && d->yColumn && d->residualsColumn) {
 		d->xColumn->setHidden(true);

@@ -156,7 +156,10 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.sbMax->setValue(m_fitData.xRange.back());
 	this->autoRangeChanged();
 
-	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
+	if (m_fitData.modelType == XYFitCurve::Custom)
+		uiGeneralTab.cbModel->setCurrentIndex(uiGeneralTab.cbModel->count()-1);
+	else
+		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 	this->modelChanged(m_fitData.modelType);
 
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
@@ -323,8 +326,13 @@ void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::modelChanged(int index) {
-	XYFitCurve::ModelType type = (XYFitCurve::ModelType)index;
-	bool custom = (type==XYFitCurve::Custom);
+	XYFitCurve::ModelType type;
+	bool custom = false;
+	if (index == uiGeneralTab.cbModel->count()-1) {
+		type = XYFitCurve::Custom;
+		custom = true;
+	} else
+		type = (XYFitCurve::ModelType)index;
 	uiGeneralTab.teEquation->setReadOnly(!custom);
 	uiGeneralTab.tbFunctions->setVisible(custom);
 	uiGeneralTab.tbConstants->setVisible(custom);
@@ -366,7 +374,10 @@ void XYFitCurveDock::updateModelEquation() {
 	QStringList vars; //variables/parameters that are known in ExpressionTextEdit teEquation
 	vars << "x";
 	QString eq;
-	m_fitData.modelType = (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
+	if (uiGeneralTab.cbModel->currentIndex() == uiGeneralTab.cbModel->count()-1)
+		m_fitData.modelType = XYFitCurve::Custom;
+	else
+		m_fitData.modelType = (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
 	int num = uiGeneralTab.sbDegree->value();
 
 	if (m_fitData.modelType!=XYFitCurve::Custom)
@@ -377,12 +388,12 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.model = eq;
 		vars << "c0" << "c1";
 		m_fitData.paramNames << "c0" << "c1";
-		if (num==2) {
+		if (num == 2) {
 			eq += " + c2*x^2";
 			m_fitData.model += " + c2*x^2";
 			vars << "c2";
 			m_fitData.paramNames << "c2";
-		} else if (num>2) {
+		} else if (num > 2) {
 			QString numStr = QString::number(num);
 			eq += " + ... + c" + numStr + "*x^" + numStr;
 			vars << "c" + numStr << "...";
@@ -393,7 +404,7 @@ void XYFitCurveDock::updateModelEquation() {
 			}
 		}
 	} else if (m_fitData.modelType == XYFitCurve::Power) {
-		if (num==1) {
+		if (num == 1) {
 			eq = "a*x^b";
 			vars << "a" << "b";
 			m_fitData.paramNames << "a" << "b";
@@ -407,11 +418,11 @@ void XYFitCurveDock::updateModelEquation() {
 		eq = "a*exp(b*x)";
 		vars << "a" << "b";
 		m_fitData.paramNames << "a" << "b";
-		if (num==2) {
+		if (num == 2) {
 			eq += " + c*exp(d*x)";
 			vars << "c" << "d";
 			m_fitData.paramNames << "c" << "d";
-		} else if (num==3) {
+		} else if (num == 3) {
 			eq += " + c*exp(d*x) + e*exp(f*x)";
 			vars << "c" << "d" << "e" << "f";
 			m_fitData.paramNames << "c" << "d" << "e" << "f";
@@ -427,12 +438,12 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.model = eq;
 		vars << "w" << "a0" << "a1" << "b1";
 		m_fitData.paramNames << "w" << "a0" << "a1" << "b1";
-		if (num==2) {
+		if (num == 2) {
 			eq += " + (a2*cos(2*w*x) + b2*sin(2*w*x))";
 			m_fitData.model += " + (a2*cos(2*w*x) + b2*sin(2*w*x))";
 			vars << "a2" << "b2";
 			m_fitData.paramNames << "a2" << "b2";
-		} else if (num>2) {
+		} else if (num > 2) {
 			QString numStr = QString::number(num);
 			eq += " + ... + (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
 			vars << "a"+numStr << "b"+numStr << "...";
@@ -447,17 +458,17 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.model = eq;
 		vars << "a1" << "b1";
 		m_fitData.paramNames << "a1" << "b1";
-		if (num==2) {
+		if (num == 2) {
 			eq += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2)";
 			m_fitData.model += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2)";
 			vars << "a2" << "b2";
 			m_fitData.paramNames << "a2" << "b2";
-		} else if (num==3) {
+		} else if (num == 3) {
 			eq += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + 1/sqrt(2*pi)/a3*exp(-((x-b3)/a3)^2/2)";
 			m_fitData.model += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + 1/sqrt(2*pi)/a3*exp(-((x-b3)/a3)^2/2)";
 			vars << "a2" << "b2" << "a3" << "b3";
 			m_fitData.paramNames << "a2" << "b2" << "a3" << "b3";
-		} else if (num>3) {
+		} else if (num > 3) {
 			QString numStr = QString::number(num);
 			eq += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + ... + 1/sqrt(2*pi)/a" + numStr + "*exp(-((x-b" + numStr + ")/a" + numStr + ")^2/2)";
 			vars << "a2" << "b2" << "a"+numStr << "b"+numStr << "...";
@@ -729,7 +740,10 @@ void XYFitCurveDock::curveWeightsColumnChanged(const AbstractColumn* column) {
 void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& data) {
 	m_initializing = true;
 	m_fitData = data;
-	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
+	if (m_fitData.modelType == XYFitCurve::Custom)
+		uiGeneralTab.cbModel->setCurrentIndex(uiGeneralTab.cbModel->count()-1);
+	else
+		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 	this->modelChanged(m_fitData.modelType);
 	if (m_fitData.modelType == XYFitCurve::Custom)
 		uiGeneralTab.teEquation->setPlainText(m_fitData.model);

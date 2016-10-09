@@ -65,7 +65,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 	ui.tableWidget->setHorizontalHeaderItem(4, headerItem);
 
 	ui.tableWidget->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
-	ui.tableWidget->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+	ui.tableWidget->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
 	ui.tableWidget->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
 	ui.tableWidget->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
 	ui.tableWidget->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
