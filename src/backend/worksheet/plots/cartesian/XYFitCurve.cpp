@@ -225,9 +225,12 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	QByteArray paramba;
 	for (int i=0; i < np; i++) {
 		paramba = paramNames->at(i).toLocal8Bit();
-		double x = gsl_vector_get(paramValues,i);
+		double x = gsl_vector_get(paramValues, i);
 		// bound values if limits are set
 		assign_variable(paramba.data(), nsl_fit_map_bound(x, min[i], max[i]));
+#ifndef NDEBUG
+		qDebug()<<"Parameter (free/bound): "<<i<<'['<<min[i]<<','<<max[i]<<']'<<x<<' '<<nsl_fit_map_bound(x, min[i], max[i]);
+#endif
 	}
 
 	char var[]="x";
@@ -241,10 +244,10 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		assign_variable(var, x[i]);
 		Yi = parse(func);
 #ifndef NDEBUG
-		printf("func=%s, X[%d]=%g\n	",func,i,x[i]);
-		for (int j=0; j<paramNames->size(); j++)
-			printf("%g ",gsl_vector_get(paramValues,j));
-		printf("\n	Y[%d]=%g \n",i,Yi);
+//		printf("func=%s, X[%d]=%g",func, i, x[i]);
+//		for (int j=0; j<paramNames->size(); j++)
+//			printf(" %g",nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]));
+//		printf(" Y[%d]=%g\n", i, Yi);
 #endif
 		if (parse_errors() > 0)
 			return GSL_EINVAL;
@@ -255,6 +258,9 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		else
 			gsl_vector_set (f, i, (Yi - y[i]));
 	}
+#ifndef NDEBUG
+	puts("");
+#endif
 
 	return GSL_SUCCESS;
 }
@@ -290,7 +296,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			for (int j=0; j < paramNames->size(); ++j)
-				gsl_matrix_set(J, i, j, pow(x,j)/sigma);
+				gsl_matrix_set(J, i, j, pow(x, j)/sigma);
 		}
 		break;
 	case XYFitCurve::Power:
@@ -301,8 +307,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (int i=0; i < n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
-				gsl_matrix_set(J, i, 0, pow(x,b)/sigma);
-				gsl_matrix_set(J, i, 1, a*pow(x,b)*log(x)/sigma);
+				gsl_matrix_set(J, i, 0, pow(x, b)/sigma);
+				gsl_matrix_set(J, i, 1, a*pow(x, b)*log(x)/sigma);
 			}
 		} else if (degree == 2) {
 			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
@@ -519,7 +525,6 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	case XYFitCurve::Custom: {
 		QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
 		char* func = funcba.data();
-		double eps = 1.0e-5;	// TODO: this value should be adapted to value
 		QByteArray nameba;
 		char* name;
 		double value;
@@ -544,6 +549,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				assign_variable(name, value);
 				double f_p = parse(func);
 
+				double eps = 1.0e-5;	// TODO: adapt to value
 				value = value + eps;
 				assign_variable(name, value);
 				double f_pdp = parse(func);
@@ -741,6 +747,10 @@ void XYFitCurvePrivate::recalculate() {
 		status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
 	} while (status == GSL_CONTINUE && iter < maxIters);
 
+	// unscale start values again
+	for (unsigned int i=0; i < np; i++)
+		x_init[i] = nsl_fit_map_bound(x_init[i], x_min[i], x_max[i]);
+
 	//get the covariance matrix
 	//TODO: if parameters are scaled: scale the Jacobian before constructing the covar matrix
 	gsl_matrix* covar = gsl_matrix_alloc(np, np);
@@ -840,9 +850,13 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 	QString state;
 
 	//current parameter values, semicolon separated
-	//TODO: map parameter if bounded
-	for (int i=0; i<fitData.paramNames.size(); ++i)
-		state += QString::number(gsl_vector_get(s->x, i)) + '\t';
+	double* min = fitData.paramLowerLimits.data();
+	double* max = fitData.paramUpperLimits.data();
+	for (int i=0; i<fitData.paramNames.size(); ++i) {
+		double x = gsl_vector_get(s->x, i);
+		// map parameter if bounded
+		state += QString::number(nsl_fit_map_bound(x, min[i], max[i])) + '\t';
+	}
 
 	//current value of the chi2-function
 	state += QString::number(pow(gsl_blas_dnrm2 (s->f),2));
@@ -889,17 +903,17 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 
 	writer->writeStartElement("paramStartValues");
 	for (int i=0; i<d->fitData.paramStartValues.size(); ++i)
-		writer->writeTextElement("startValue", QString::number(d->fitData.paramStartValues.at(i)));
+		writer->writeTextElement("startValue", QString::number(d->fitData.paramStartValues.at(i), 'g', 16));
 	writer->writeEndElement();
 
 	writer->writeStartElement("paramLowerLimits");
 	for (int i=0; i<d->fitData.paramLowerLimits.size(); ++i)
-		writer->writeTextElement("lowerLimit", QString::number(d->fitData.paramLowerLimits.at(i)));
+		writer->writeTextElement("lowerLimit", QString::number(d->fitData.paramLowerLimits.at(i), 'g', 16));
 	writer->writeEndElement();
 
 	writer->writeStartElement("paramUpperLimits");
 	for (int i=0; i<d->fitData.paramUpperLimits.size(); ++i)
-		writer->writeTextElement("upperLimit", QString::number(d->fitData.paramUpperLimits.at(i)));
+		writer->writeTextElement("upperLimit", QString::number(d->fitData.paramUpperLimits.at(i), 'g', 16));
 	writer->writeEndElement();
 
 	//TODO: save fixed state
@@ -1000,9 +1014,19 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 		} else if (reader->name() == "startValue") {
 			d->fitData.paramStartValues<<reader->readElementText().toDouble();
 		} else if (reader->name() == "lowerLimit") {
-			d->fitData.paramLowerLimits<<reader->readElementText().toDouble();
+			bool ok;
+			double x = reader->readElementText().toDouble(&ok);
+			if (ok)	// -DBL_MAX results in conversion error
+				d->fitData.paramLowerLimits<<x;
+			else
+				d->fitData.paramLowerLimits<<-DBL_MAX;
 		} else if (reader->name() == "upperLimit") {
-			d->fitData.paramUpperLimits<<reader->readElementText().toDouble();
+			bool ok;
+			double x = reader->readElementText().toDouble(&ok);
+			if (ok)	// DBL_MAX results in conversion error
+				d->fitData.paramUpperLimits<<x;
+			else
+				d->fitData.paramUpperLimits<<DBL_MAX;
 		// TODO: read fixed
 		} else if (reader->name() == "value") {
 			d->fitResult.paramValues<<reader->readElementText().toDouble();

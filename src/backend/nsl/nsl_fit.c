@@ -76,9 +76,9 @@ double nsl_fit_map_unbound(double x, double min, double max) {
 
 	/* open bounds */
         if (min == -DBL_MAX)
-                return sqrt(gsl_pow_2(max - x + 1) -1);
+                return sqrt(gsl_pow_2(max - x + 1) - 1);
         if (max == DBL_MAX)
-                return sqrt(gsl_pow_2(x - min + 1) -1);
+                return sqrt(gsl_pow_2(x - min + 1) - 1);
 
 	return -log((max - x)/(x - min));
 }
