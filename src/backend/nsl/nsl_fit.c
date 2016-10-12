@@ -71,14 +71,14 @@ double nsl_fit_map_unbound(double x, double min, double max) {
 	}
 
 	/* not bounded */
-        if (min == -DBL_MAX && max == DBL_MAX)
-                return x;	
+	if (min == -DBL_MAX && max == DBL_MAX)
+		return x;
 
 	/* open bounds */
-        if (min == -DBL_MAX)
-                return sqrt(gsl_pow_2(max - x + 1) - 1);
-        if (max == DBL_MAX)
-                return sqrt(gsl_pow_2(x - min + 1) - 1);
+	if (min == -DBL_MAX)
+		return sqrt(gsl_pow_2(max - x + 1) - 1);
+	if (max == DBL_MAX)
+		return sqrt(gsl_pow_2(x - min + 1) - 1);
 
 	return -log((max - x)/(x - min));
 }

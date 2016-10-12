@@ -229,7 +229,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		// bound values if limits are set
 		assign_variable(paramba.data(), nsl_fit_map_bound(x, min[i], max[i]));
 #ifndef NDEBUG
-		qDebug()<<"Parameter (free/bound): "<<i<<'['<<min[i]<<','<<max[i]<<']'<<x<<' '<<nsl_fit_map_bound(x, min[i], max[i]);
+		qDebug()<<"Parameter"<<i<<'['<<min[i]<<','<<max[i]<<"] free/bound:"<<x<<' '<<nsl_fit_map_bound(x, min[i], max[i]);
 #endif
 	}
 
@@ -286,8 +286,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	// where fi = (Yi - yi)/sigma[i],
 	// Yi = model and the xj are the parameters
 
-	double x;
-	double sigma = 1.0;
+	double x, sigma = 1.0;
 
 	switch (modelType) {
 	case XYFitCurve::Polynomial:
