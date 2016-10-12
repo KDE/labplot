@@ -233,7 +233,7 @@ void WorksheetView::initActions() {
 	snapToGridAction = new KAction(i18n("snap to grid"), this);
 	snapToGridAction->setCheckable(true);
 
-    showPresenterMode = new KAction(i18n("Show in presenter mode"), this);
+    showPresenterMode = new KAction(KIcon("view-fullscreen"), i18n("Show in presenter mode"), this);
 
 	//check the action corresponding to the currently active layout in worksheet
 	this->layoutChanged(m_worksheet->layout());
