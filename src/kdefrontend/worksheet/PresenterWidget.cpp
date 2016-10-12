@@ -41,7 +41,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 PresenterWidget::PresenterWidget(const QPixmap &pixmap, const QString& worksheetName, QWidget *parent) : QWidget(parent),
     m_imageLabel(new QLabel(this)),
-    m_timeLine(new QTimeLine)
+    m_timeLine(new QTimeLine(600))
 {
     setAttribute(Qt::WA_DeleteOnClose);
     m_imageLabel->setPixmap(pixmap);
