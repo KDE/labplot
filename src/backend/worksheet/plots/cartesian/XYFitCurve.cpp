@@ -896,23 +896,23 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "evaluatedPoints", QString::number(d->fitData.evaluatedPoints) );
 
 	writer->writeStartElement("paramNames");
-	for (int i=0; i<d->fitData.paramNames.size(); ++i)
-		writer->writeTextElement("name", d->fitData.paramNames.at(i));
+	for (QString name: d->fitData.paramNames)
+		writer->writeTextElement("name", name);
 	writer->writeEndElement();
 
 	writer->writeStartElement("paramStartValues");
-	for (int i=0; i<d->fitData.paramStartValues.size(); ++i)
-		writer->writeTextElement("startValue", QString::number(d->fitData.paramStartValues.at(i), 'g', 16));
+	for (double value: d->fitData.paramStartValues)
+		writer->writeTextElement("startValue", QString::number(value, 'g', 16));
 	writer->writeEndElement();
 
 	writer->writeStartElement("paramLowerLimits");
-	for (int i=0; i<d->fitData.paramLowerLimits.size(); ++i)
-		writer->writeTextElement("lowerLimit", QString::number(d->fitData.paramLowerLimits.at(i), 'g', 16));
+	for (double limit: d->fitData.paramLowerLimits)
+		writer->writeTextElement("lowerLimit", QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
 	writer->writeStartElement("paramUpperLimits");
-	for (int i=0; i<d->fitData.paramUpperLimits.size(); ++i)
-		writer->writeTextElement("upperLimit", QString::number(d->fitData.paramUpperLimits.at(i), 'g', 16));
+	for (double limit: d->fitData.paramUpperLimits)
+		writer->writeTextElement("upperLimit", QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
 	//TODO: save fixed state
@@ -946,13 +946,13 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "solverOutput", d->fitResult.solverOutput );
 
 	writer->writeStartElement("paramValues");
-	for (int i=0; i<d->fitResult.paramValues.size(); ++i)
-		writer->writeTextElement("value", QString::number(d->fitResult.paramValues.at(i)));
+	for (double value: d->fitResult.paramValues)
+		writer->writeTextElement("value", QString::number(value, 'g', 16));
 	writer->writeEndElement();
 
 	writer->writeStartElement("errorValues");
-	for (int i=0; i<d->fitResult.errorValues.size(); ++i)
-		writer->writeTextElement("error", QString::number(d->fitResult.errorValues.at(i)));
+	for (double value: d->fitResult.errorValues)
+		writer->writeTextElement("error", QString::number(value, 'g', 16));
 	writer->writeEndElement();
 
 	//save calculated columns if available
@@ -1077,11 +1077,11 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 
 	// limits are not saved in project (old project)
 	if (d->fitData.paramLowerLimits.size() == 0) {
-		for (int i=0; i < d->fitData.paramStartValues.size(); i++)
+		for (double __attribute__((unused))v: d->fitData.paramStartValues)
 			d->fitData.paramLowerLimits<<-DBL_MAX;
 	}
 	if (d->fitData.paramUpperLimits.size() == 0) {
-		for (int i=0; i < d->fitData.paramStartValues.size(); i++)
+		for (double __attribute__((unused))v: d->fitData.paramStartValues)
 			d->fitData.paramUpperLimits<<DBL_MAX;
 	}
 
