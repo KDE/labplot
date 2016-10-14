@@ -447,7 +447,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 		double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-		for (int i=0; i<n; i++) {
+		for (int i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			gsl_matrix_set(J, i, 0, 1/(exp(b*(c-x))+1)/sigma);
@@ -461,7 +461,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 		double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-		for (int i=0; i<n; i++) {
+		for (int i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			gsl_matrix_set(J, i, 0, exp(-b*exp(-c*x))/sigma);
@@ -475,7 +475,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 		double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-		for (int i=0; i<n; i++) {
+		for (int i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			//TODO: how to deal correctly with (x-c)/b <=0
@@ -496,7 +496,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		//Y(x) = 1/(sqrt(2*pi)*x*a)*exp(-(log(x)-b)^2/(2*a^2));
 		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-		for (int i=0; i<n; i++) {
+		for (int i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			if (x>0) {
@@ -513,7 +513,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		//Y(x) = 1/a*exp((x-b)/a-exp((x-b)/a));
 		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-		for (int i=0; i<n; i++) {
+		for (int i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			gsl_matrix_set(J, i, 0, (exp((x-2*b)/a-exp((x-b)/a))*(exp(x/a)*(x-b)-exp(b/a)*(a-b+x)))/pow(a,3)/sigma);
@@ -527,7 +527,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		QByteArray nameba;
 		char* name;
 		double value;
-		for (int i=0; i<n; i++) {
+		for (int i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			char var[]="x";
@@ -564,9 +564,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	return GSL_SUCCESS;
 }
 
-int func_fdf(const gsl_vector* x, void* params, gsl_vector* f,gsl_matrix* J) {
-	func_f (x, params, f);
-	func_df (x, params, J);
+int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
+	func_f(x, params, f);
+	func_df(x, params, J);
 	return GSL_SUCCESS;
 }
 
@@ -815,7 +815,7 @@ void XYFitCurvePrivate::recalculate() {
 	for (unsigned int i=0; i < np; i++) {
 		// scale resulting values if they are bounded
 		fitResult.paramValues[i] = nsl_fit_map_bound(gsl_vector_get(s->x, i), x_min[i], x_max[i]);
-		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar,i,i));
+		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
 	}
 
 	//free resources
