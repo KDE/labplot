@@ -61,16 +61,16 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
 	//add available TeX typesetting engines
 #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
 	if (QStandardPaths::findExecutable("luatex").isEmpty())
-		ui.cbTexEngines->addItem("LuaTeX", "luatex");
+		ui.cbTexEngine->addItem("LuaTeX", "luatex");
 
 	if (!QStandardPaths::findExecutable("xetex").isEmpty())
-		ui.cbTexEngines->addItem("XeTex", "xetex");
+		ui.cbTexEngine->addItem("XeTex", "xetex");
 
 	if (!QStandardPaths::findExecutable("pdftex").isEmpty())
-		ui.cbTexEngines->addItem("pdfTeX", "pdftex");
+		ui.cbTexEngine->addItem("pdfTeX", "pdftex");
 
 	if (!QStandardPaths::findExecutable("latex").isEmpty())
-		ui.cbTexEngines->addItem("LaTeX", "latex");
+		ui.cbTexEngine->addItem("LaTeX", "latex");
 
 #else
 	if (!KStandardDirs::findExe("luatex").isEmpty())
