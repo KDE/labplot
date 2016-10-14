@@ -34,6 +34,7 @@
 #include "XYEquationCurve.h"
 #include "XYDataReductionCurve.h"
 #include "XYDifferentiationCurve.h"
+#include "XYIntegrationCurve.h"
 #include "XYInterpolationCurve.h"
 #include "XYSmoothCurve.h"
 #include "XYFitCurve.h"
@@ -421,6 +422,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addAction(addDataReductionCurveAction);
 	addNewMenu->addAction(addDifferentiationCurveAction);
+	addNewMenu->addAction(addIntegrationCurveAction);
 	addNewMenu->addAction(addInterpolationCurveAction);
 	addNewMenu->addAction(addSmoothCurveAction);
 	addNewMenu->addAction(addFitCurveAction);
@@ -753,6 +755,12 @@ XYDataReductionCurve* CartesianPlot::addDataReductionCurve() {
 
 XYDifferentiationCurve* CartesianPlot::addDifferentiationCurve() {
 	XYDifferentiationCurve* curve = new XYDifferentiationCurve("Differentiation");
+	this->addChild(curve);
+	return curve;
+}
+
+XYIntegrationCurve* CartesianPlot::addIntegrationCurve() {
+	XYIntegrationCurve* curve = new XYIntegrationCurve("Integration");
 	this->addChild(curve);
 	return curve;
 }
@@ -2099,6 +2107,12 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 			}
 		} else if (reader->name() == "xyDifferentiationCurve") {
 			XYDifferentiationCurve* curve = addDifferentiationCurve();
+			if (!curve->load(reader)) {
+				removeChild(curve);
+				return false;
+			}
+		} else if (reader->name() == "xyIntegrationCurve") {
+			XYIntegrationCurve* curve = addIntegrationCurve();
 			if (!curve->load(reader)) {
 				removeChild(curve);
 				return false;

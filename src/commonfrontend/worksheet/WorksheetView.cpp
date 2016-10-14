@@ -31,6 +31,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/TextLabel.h"
 #include "kdefrontend/worksheet/GridDialog.h"
+#include "kdefrontend/worksheet/PresenterWidget.h"
 
 #include <QApplication>
 #include <QMenu>
@@ -104,7 +105,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	handleCartesianPlotActions();
 
 	changeZoom(zoomOriginAction);
-	currentZoomAction=zoomInViewAction;
+    currentZoomAction = zoomInViewAction;
 
 	currentMagnificationAction = noMagnificationAction;
 
@@ -232,6 +233,8 @@ void WorksheetView::initActions() {
 	snapToGridAction = new QAction(i18n("snap to grid"), this);
 	snapToGridAction->setCheckable(true);
 
+    showPresenterMode = new KAction(KIcon("view-fullscreen"), i18n("Show in presenter mode"), this);
+
 	//check the action corresponding to the currently active layout in worksheet
 	this->layoutChanged(m_worksheet->layout());
 
@@ -242,6 +245,8 @@ void WorksheetView::initActions() {
 	connect(layoutActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeLayout(QAction*)));
 	connect(gridActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeGrid(QAction*)));
 	connect(snapToGridAction, SIGNAL(triggered()), this, SLOT(changeSnapToGrid()));
+
+    connect(showPresenterMode, SIGNAL(triggered()), this, SLOT(presenterMode()));
 
 
 	//action for cartesian plots
@@ -491,6 +496,8 @@ void WorksheetView::createContextMenu(QMenu* menu) const {
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_cartesianPlotMenu);
 	menu->insertSeparator(firstAction);
+    menu->insertAction(firstAction, showPresenterMode);
+    menu->insertSeparator(firstAction);
 }
 
 void WorksheetView::createAnalysisMenu(QMenu* menu) const {
@@ -1327,7 +1334,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	addDataOperationCurveAction->setEnabled(false);
 	addDataReductionCurveAction->setEnabled(plot);
 	addDifferentiationCurveAction->setEnabled(plot);
-	addIntegrationCurveAction->setEnabled(false);
+	addIntegrationCurveAction->setEnabled(plot);
 	addInterpolationCurveAction->setEnabled(plot);
 	addSmoothCurveAction->setEnabled(plot);
 	addFitCurveAction->setEnabled(plot);
@@ -1355,7 +1362,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	addDataOperationAction->setEnabled(false);
 	m_dataManipulationMenu->setEnabled(plot);
 	addDifferentiationAction->setEnabled(plot);
-	addIntegrationAction->setEnabled(false);
+	addIntegrationAction->setEnabled(plot);
 	addInterpolationAction->setEnabled(plot);
 	addSmoothAction->setEnabled(plot);
 	addFitAction->setEnabled(plot);
@@ -1568,6 +1575,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addDataReductionCurve();
 	else if (action == addDifferentiationCurveAction)
 		plot->addDifferentiationCurve();
+	else if (action == addIntegrationCurveAction)
+		plot->addIntegrationCurve();
 	else if (action == addInterpolationCurveAction)
 		plot->addInterpolationCurve();
 	else if (action == addFitCurveAction)
@@ -1591,6 +1600,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addDataReductionCurve();
 	else if (action == addDifferentiationAction)
 		plot->addDifferentiationCurve();
+	else if (action == addIntegrationAction)
+		plot->addIntegrationCurve();
 	else if (action == addInterpolationAction)
 		plot->addInterpolationCurve();
 	else if (action == addFitAction)
@@ -1614,4 +1625,25 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 		foreach(CartesianPlot* plot, m_worksheet->children<CartesianPlot>() )
 			plot->navigate(op);
 	}
+}
+
+void WorksheetView::presenterMode() {
+
+    QRectF sourceRect (scene()->sceneRect());
+    int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
+    int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+    w = w*QApplication::desktop()->physicalDpiX()/25.4;
+    h = h*QApplication::desktop()->physicalDpiX()/25.4;
+    QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
+    image.fill(Qt::transparent);
+    QRectF targetRect(0, 0, w, h);
+
+    QPainter painter;
+    painter.begin(&image);
+    painter.setRenderHint(QPainter::Antialiasing);
+    exportPaint(&painter, targetRect, sourceRect, true);
+    painter.end();
+
+    PresenterWidget* presenterWidget = new PresenterWidget(QPixmap::fromImage(image), m_worksheet->name());
+    presenterWidget->showFullScreen();
 }

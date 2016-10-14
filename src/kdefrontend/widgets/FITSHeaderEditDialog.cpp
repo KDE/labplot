@@ -47,6 +47,7 @@ FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget *parent) : KDialog(parent), m
     setButtons( KDialog::Ok | KDialog::Cancel );
     setButtonText(KDialog::Ok, i18n("&Save"));
     connect(this, SIGNAL(okClicked()), this, SLOT(save()));
+    setAttribute(Qt::WA_DeleteOnClose);
 }
 
 /*!

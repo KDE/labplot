@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>408</width>
-    <height>568</height>
+    <width>579</width>
+    <height>772</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -152,7 +152,7 @@
        </widget>
       </item>
       <item row="1" column="0" colspan="10">
-       <widget class="QTextEdit" name="teLabel">
+       <widget class="KTextEdit" name="teLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
           <horstretch>0</horstretch>
@@ -162,7 +162,7 @@
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>50</height>
+          <height>350</height>
          </size>
         </property>
        </widget>

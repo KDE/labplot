@@ -56,6 +56,7 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent), m_changed
 	connect(this, &QDialog::accepted, this, &SettingsDialog::onOkButton);
 	//connect(this, &KPageDialog::applyClicked, this, &SettingsDialog::onApplyButton);
 	//TODO: enableButtonApply(false);
+	setAttribute(Qt::WA_DeleteOnClose);
 
 	generalPage = new SettingsGeneralPage(this);
 	connect(generalPage, SIGNAL(settingsChanged()), this, SLOT(changed()));

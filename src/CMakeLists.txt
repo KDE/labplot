@@ -40,6 +40,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYDataReductionCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYDifferentiationCurveDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/XYIntegrationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYInterpolationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYSmoothCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYFitCurveDock.cpp
@@ -55,7 +56,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/StatisticsDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
-	${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
+        ${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
+        ${KDEFRONTEND_DIR}/worksheet/PresenterWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ConstantsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ThemesWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ExpressionTextEdit.cpp
@@ -99,6 +101,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyfitcurvedockgeneraltab.ui
@@ -173,6 +176,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/nsl/nsl_filter.c
 	${BACKEND_DIR}/nsl/nsl_geom.c
 	${BACKEND_DIR}/nsl/nsl_geom_linesim.c
+	${BACKEND_DIR}/nsl/nsl_int.c
 	${BACKEND_DIR}/nsl/nsl_interp.c
 	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
 	${BACKEND_DIR}/nsl/nsl_sf_poly.c
@@ -202,6 +206,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYDataReductionCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYDifferentiationCurve.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/XYIntegrationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYInterpolationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYSmoothCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
@@ -277,5 +282,5 @@ install(FILES ${KDEFRONTEND_DIR}/labplot2ui.rc DESTINATION  ${KXMLGUI_INSTALL_DI
 install(FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico DESTINATION  ${DATA_INSTALL_DIR}/${PROJECT_NAME})
 install(PROGRAMS labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
-install( FILES labplot2_themes.knsrc  DESTINATION  ${KDE_INSTALL_CONFDIR}  )
+install( FILES labplot2_themes.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )

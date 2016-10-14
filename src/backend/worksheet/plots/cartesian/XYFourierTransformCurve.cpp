@@ -219,12 +219,17 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	//copy all valid data point for the transform to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
+	const double xmin = transformData.xRange.front();
+	const double xmax = transformData.xRange.back();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 				&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
-			xdataVector.append(xDataColumn->valueAt(row));
-			ydataVector.append(yDataColumn->valueAt(row));
+			// only when inside given range
+			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(xDataColumn->valueAt(row));
+				ydataVector.append(yDataColumn->valueAt(row));
+			}
 		}
 	}
 
@@ -241,9 +246,6 @@ void XYFourierTransformCurvePrivate::recalculate() {
 
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
-
-	const double xmin = xDataColumn->minimum();
-	const double xmax = xDataColumn->maximum();
 
 	// transform settings
 	const nsl_sf_window_type windowType = transformData.windowType;
@@ -343,6 +345,9 @@ void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement("transformData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
+	writer->writeAttribute( "autoRange", QString::number(d->transformData.autoRange) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->transformData.xRange.front()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->transformData.xRange.back()) );
 	writer->writeAttribute( "type", QString::number(d->transformData.type) );
 	writer->writeAttribute( "twoSided", QString::number(d->transformData.twoSided) );
 	writer->writeAttribute( "shifted", QString::number(d->transformData.shifted) );
@@ -396,62 +401,22 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->transformData.type = (nsl_dft_result_type)str.toInt();
-
-			str = attribs.value("twoSided").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'twoSided'"));
-			else
-				d->transformData.twoSided = (bool)str.toInt();
-
-			str = attribs.value("shifted").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'shifted'"));
-			else
-				d->transformData.shifted = (bool)str.toInt();
-
-			str = attribs.value("xScale").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xScale'"));
-			else
-				d->transformData.xScale = (nsl_dft_xscale)str.toInt();
-
-			str = attribs.value("windowType").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'windowType'"));
-			else
-				d->transformData.windowType = (nsl_sf_window_type)str.toInt();
+			READ_INT_VALUE("autoRange", transformData.autoRange, bool);
+			READ_DOUBLE_VALUE("xRangeMin", transformData.xRange.front());
+			READ_DOUBLE_VALUE("xRangeMax", transformData.xRange.back());
+			READ_INT_VALUE("type", transformData.type, nsl_dft_result_type);
+			READ_INT_VALUE("twoSided", transformData.twoSided, bool);
+			READ_INT_VALUE("shifted", transformData.shifted, bool);
+			READ_INT_VALUE("xScale", transformData.xScale, nsl_dft_xscale);
+			READ_INT_VALUE("windowType", transformData.windowType, nsl_sf_window_type);
 		} else if (reader->name() == "transformResult") {
 
 			attribs = reader->attributes();
 
-			str = attribs.value("available").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'available'"));
-			else
-				d->transformResult.available = str.toInt();
-
-			str = attribs.value("valid").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'valid'"));
-			else
-				d->transformResult.valid = str.toInt();
-			
-			str = attribs.value("status").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'status'"));
-			else
-				d->transformResult.status = str;
-
-			str = attribs.value("time").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'time'"));
-			else
-				d->transformResult.elapsedTime = str.toInt();
+			READ_INT_VALUE("available", transformResult.available, int);
+			READ_INT_VALUE("valid", transformResult.valid, int);
+			READ_STRING_VALUE("status", transformResult.status);
+			READ_INT_VALUE("time", transformResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {

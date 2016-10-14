@@ -46,6 +46,7 @@ extern "C" {
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_spline.h>
 #include "backend/nsl/nsl_diff.h"
+#include "backend/nsl/nsl_int.h"
 }
 
 #include <KLocale>
@@ -222,18 +223,23 @@ void XYInterpolationCurvePrivate::recalculate() {
 	//copy all valid data point for the interpolation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
+	const double xmin = interpolationData.xRange.front();
+	const double xmax = interpolationData.xRange.back();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
-			xdataVector.append(xDataColumn->valueAt(row));
-			ydataVector.append(yDataColumn->valueAt(row));
+			// only when inside given range
+			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(xDataColumn->valueAt(row));
+				ydataVector.append(yDataColumn->valueAt(row));
+			}
 		}
 	}
 
 	//number of data points to interpolate
-	const unsigned int n = ydataVector.size();
+	const unsigned int n = xdataVector.size();
 	if (n < 2) {
 		interpolationResult.available = true;
 		interpolationResult.valid = false;
@@ -245,9 +251,6 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
-
-	const double min = xDataColumn->minimum();
-	const double max = xDataColumn->maximum();
 
 	// interpolation settings
 	const nsl_interp_type type = interpolationData.type;
@@ -308,7 +311,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 	for (unsigned int i = 0; i < npoints; i++) {
 		unsigned int a=0,b=n-1;
 
-		double x = min + i*(max-min)/(npoints-1);
+		double x = xmin + i*(xmax-xmin)/(npoints-1);
 		(*xVector)[i] = x;
 
 		// find index a,b for interval [x[a],x[b]] around x[i] using bisection
@@ -350,7 +353,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 				(*yVector)[i] = gsl_spline_eval_deriv2(spline, x, acc);
 				break;
 			case nsl_interp_evaluate_integral:
-				(*yVector)[i] = gsl_spline_eval_integ(spline, min, x, acc);
+				(*yVector)[i] = gsl_spline_eval_integ(spline, xmin, x, acc);
 				break;
 			}
 			break;
@@ -451,7 +454,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 			nsl_diff_second_deriv_second_order(xVector->data(), yVector->data(), npoints);
 			break;
 		case nsl_interp_evaluate_integral:
-			nsl_interp_integral(xVector->data(), yVector->data(), npoints);
+			nsl_int_trapezoid(xVector->data(), yVector->data(), npoints, 0);
 			break;
 		}
 		break;
@@ -500,6 +503,9 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement("interpolationData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
+	writer->writeAttribute( "autoRange", QString::number(d->interpolationData.autoRange) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->interpolationData.xRange.front()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->interpolationData.xRange.back()) );
 	writer->writeAttribute( "type", QString::number(d->interpolationData.type) );
 	writer->writeAttribute( "variant", QString::number(d->interpolationData.variant) );
 	writer->writeAttribute( "tension", QString::number(d->interpolationData.tension) );
@@ -557,81 +563,25 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->interpolationData.type = (nsl_interp_type) str.toInt();
-
-			str = attribs.value("variant").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'variant'"));
-			else
-				d->interpolationData.variant = (nsl_interp_pch_variant) str.toInt();
-
-			str = attribs.value("tension").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'tension'"));
-			else
-				d->interpolationData.tension = str.toDouble();
-
-			str = attribs.value("continuity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'continuity'"));
-			else
-				d->interpolationData.continuity = str.toDouble();
-
-			str = attribs.value("bias").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'bias'"));
-			else
-				d->interpolationData.bias = str.toDouble();
-
-			str = attribs.value("npoints").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'npoints'"));
-			else
-				d->interpolationData.npoints = str.toInt();
-
-			str = attribs.value("pointsMode").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'pointsMode'"));
-			else
-				d->interpolationData.pointsMode = (XYInterpolationCurve::PointsMode)str.toInt();
-
-			str = attribs.value("evaluate").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'evaluate'"));
-			else
-				d->interpolationData.evaluate = (nsl_interp_evaluate)str.toInt();
-
+			READ_INT_VALUE("autoRange", interpolationData.autoRange, bool);
+			READ_DOUBLE_VALUE("xRangeMin", interpolationData.xRange.front());
+			READ_DOUBLE_VALUE("xRangeMax", interpolationData.xRange.back());
+			READ_INT_VALUE("type", interpolationData.type, nsl_interp_type);
+			READ_INT_VALUE("variant", interpolationData.variant, nsl_interp_pch_variant);
+			READ_DOUBLE_VALUE("tension", interpolationData.tension);
+			READ_DOUBLE_VALUE("continuity", interpolationData.continuity);
+			READ_DOUBLE_VALUE("bias", interpolationData.bias);
+			READ_INT_VALUE("npoints", interpolationData.npoints, int);
+			READ_INT_VALUE("pointsMode", interpolationData.pointsMode, XYInterpolationCurve::PointsMode);
+			READ_INT_VALUE("evaluate", interpolationData.evaluate, nsl_interp_evaluate);
 		} else if (reader->name() == "interpolationResult") {
 
 			attribs = reader->attributes();
 
-			str = attribs.value("available").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'available'"));
-			else
-				d->interpolationResult.available = str.toInt();
-
-			str = attribs.value("valid").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'valid'"));
-			else
-				d->interpolationResult.valid = str.toInt();
-			
-			str = attribs.value("status").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'status'"));
-			else
-				d->interpolationResult.status = str;
-
-			str = attribs.value("time").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'time'"));
-			else
-				d->interpolationResult.elapsedTime = str.toInt();
+			READ_INT_VALUE("available", interpolationResult.available, int);
+			READ_INT_VALUE("valid", interpolationResult.valid, int);
+			READ_STRING_VALUE("status", interpolationResult.status);
+			READ_INT_VALUE("time", interpolationResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {

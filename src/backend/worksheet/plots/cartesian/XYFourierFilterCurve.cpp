@@ -224,17 +224,22 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//copy all valid data point for the filter to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
+	const double xmin = filterData.xRange.front();
+	const double xmax = filterData.xRange.back();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 				&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
-			xdataVector.append(xDataColumn->valueAt(row));
-			ydataVector.append(yDataColumn->valueAt(row));
+			// only when inside given range
+			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(xDataColumn->valueAt(row));
+				ydataVector.append(yDataColumn->valueAt(row));
+			}
 		}
 	}
 
 	//number of data points to filter
-	unsigned int n = ydataVector.size();
+	unsigned int n = xdataVector.size();
 	if (n == 0) {
 		filterResult.available = true;
 		filterResult.valid = false;
@@ -247,8 +252,6 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
-	const double min = xDataColumn->minimum();
-	const double max = xDataColumn->maximum();
 
 	// filter settings
 	const nsl_filter_type type = filterData.type;
@@ -268,7 +271,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	double cutindex=0, cutindex2=0;
 	switch (unit) {
 	case nsl_filter_cutoff_unit_frequency:
-		cutindex = cutoff*(max-min);
+		cutindex = cutoff*(xmax-xmin);
 		break;
 	case nsl_filter_cutoff_unit_fraction:
 		cutindex = cutoff*n;
@@ -278,7 +281,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	}
 	switch (unit2) {
 	case nsl_filter_cutoff_unit_frequency:
-		cutindex2 = cutoff2*(max-min);
+		cutindex2 = cutoff2*(xmax-xmin);
 		break;
 	case nsl_filter_cutoff_unit_fraction:
 		cutindex2 = cutoff2*n;
@@ -334,6 +337,9 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeStartElement("filterData");
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
+	writer->writeAttribute( "autoRange", QString::number(d->filterData.autoRange) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->filterData.xRange.front()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->filterData.xRange.back()) );
 	writer->writeAttribute( "type", QString::number(d->filterData.type) );
 	writer->writeAttribute( "form", QString::number(d->filterData.form) );
 	writer->writeAttribute( "order", QString::number(d->filterData.order) );
@@ -389,74 +395,25 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->filterData.type = (nsl_filter_type)str.toInt();
+			READ_INT_VALUE("autoRange", filterData.autoRange, bool);
+			READ_DOUBLE_VALUE("xRangeMin", filterData.xRange.front());
+			READ_DOUBLE_VALUE("xRangeMax", filterData.xRange.back());
+			READ_INT_VALUE("type", filterData.type, nsl_filter_type);
+			READ_INT_VALUE("form", filterData.form, nsl_filter_form);
+			READ_INT_VALUE("order", filterData.order, int);
+			READ_DOUBLE_VALUE("cutoff", filterData.cutoff);
+			READ_INT_VALUE("unit", filterData.unit, nsl_filter_cutoff_unit);
+			READ_DOUBLE_VALUE("cutoff2", filterData.cutoff2);
+			READ_INT_VALUE("unit2", filterData.unit2, nsl_filter_cutoff_unit);
 
-			str = attribs.value("form").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'form'"));
-			else
-				d->filterData.form = (nsl_filter_form)str.toInt();
-
-			str = attribs.value("order").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'order'"));
-			else
-				d->filterData.order = str.toInt();
-
-			str = attribs.value("cutoff").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'cutoff'"));
-			else
-				d->filterData.cutoff = str.toDouble();
-
-			str = attribs.value("unit").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'unit'"));
-			else
-				d->filterData.unit = (nsl_filter_cutoff_unit)str.toInt();
-
-			str = attribs.value("cutoff2").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'cutoff2'"));
-			else
-				d->filterData.cutoff2 = str.toDouble();
-
-			str = attribs.value("unit2").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'unit2'"));
-			else
-				d->filterData.unit2 = (nsl_filter_cutoff_unit)str.toInt();
 		} else if (reader->name() == "filterResult") {
 
 			attribs = reader->attributes();
 
-			str = attribs.value("available").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'available'"));
-			else
-				d->filterResult.available = str.toInt();
-
-			str = attribs.value("valid").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'valid'"));
-			else
-				d->filterResult.valid = str.toInt();
-			
-			str = attribs.value("status").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'status'"));
-			else
-				d->filterResult.status = str;
-
-			str = attribs.value("time").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'time'"));
-			else
-				d->filterResult.elapsedTime = str.toInt();
+			READ_INT_VALUE("available", filterResult.available, int);
+			READ_INT_VALUE("valid", filterResult.valid, int);
+			READ_STRING_VALUE("status", filterResult.status);
+			READ_INT_VALUE("time", filterResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {

@@ -219,18 +219,23 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	//copy all valid data point for the differentiation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
+	const double xmin = differentiationData.xRange.front();
+	const double xmax = differentiationData.xRange.back();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
 
-			xdataVector.append(xDataColumn->valueAt(row));
-			ydataVector.append(yDataColumn->valueAt(row));
+			// only when inside given range
+			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(xDataColumn->valueAt(row));
+				ydataVector.append(yDataColumn->valueAt(row));
+			}
 		}
 	}
 
 	//number of data points to differentiate
-	const unsigned int n = ydataVector.size();
+	const unsigned int n = xdataVector.size();
 	if (n < 3) {
 		differentiationResult.available = true;
 		differentiationResult.valid = false;
@@ -310,6 +315,9 @@ void XYDifferentiationCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "derivOrder", QString::number(d->differentiationData.derivOrder) );
 	writer->writeAttribute( "accOrder", QString::number(d->differentiationData.accOrder) );
+	writer->writeAttribute( "autoRange", QString::number(d->differentiationData.autoRange) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->differentiationData.xRange.front()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->differentiationData.xRange.back()) );
 	writer->writeEndElement();// differentiationData
 
 	// differentiation results (generated columns)
@@ -359,45 +367,19 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 
-			str = attribs.value("derivOrder").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'derivOrder'"));
-			else
-				d->differentiationData.derivOrder = (nsl_diff_deriv_order_type) str.toInt();
-
-			str = attribs.value("accOrder").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'accOrder'"));
-			else
-				d->differentiationData.accOrder = str.toInt();
-
+			READ_INT_VALUE("autoRange", differentiationData.autoRange, bool);
+			READ_DOUBLE_VALUE("xRangeMin", differentiationData.xRange.front());
+			READ_DOUBLE_VALUE("xRangeMax", differentiationData.xRange.back());
+			READ_INT_VALUE("derivOrder", differentiationData.derivOrder, nsl_diff_deriv_order_type);
+			READ_INT_VALUE("accOrder", differentiationData.accOrder, int);
 		} else if (reader->name() == "differentiationResult") {
 
 			attribs = reader->attributes();
 
-			str = attribs.value("available").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'available'"));
-			else
-				d->differentiationResult.available = str.toInt();
-
-			str = attribs.value("valid").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'valid'"));
-			else
-				d->differentiationResult.valid = str.toInt();
-			
-			str = attribs.value("status").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'status'"));
-			else
-				d->differentiationResult.status = str;
-
-			str = attribs.value("time").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'time'"));
-			else
-				d->differentiationResult.elapsedTime = str.toInt();
+			READ_INT_VALUE("available", differentiationResult.available, int);
+			READ_INT_VALUE("valid", differentiationResult.valid, int);
+			READ_STRING_VALUE("status", differentiationResult.status);
+			READ_INT_VALUE("time", differentiationResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
 			Column* column = new Column("", AbstractColumn::Numeric);
 			if (!column->load(reader)) {

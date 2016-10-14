@@ -29,14 +29,11 @@
 	* add more orders
 */
 
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
-#include <float.h>
+#include "nsl_common.h"
 #include "nsl_diff.h"
 #include "nsl_sf_poly.h"
 
-const char* nsl_diff_deriv_order_name[] = {"first", "second", "third", "fourth", "fifth", "sixth"};
+const char* nsl_diff_deriv_order_name[] = {i18n("first"), i18n("second"), i18n("third"), i18n("fourth"), i18n("fifth"), i18n("sixth")};
 
 double nsl_diff_first_central(double xm, double fm, double xp, double fp) {
 	return (fp - fm)/(xp - xm);

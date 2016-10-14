@@ -1,21 +1,19 @@
 LabPlot
 ==========================================================================================
-https://edu.kde.org/applications/science/labplot/
+https://labplot.kde.org
 
 LabPlot is a KDE-application for interactive graphing and analysis of scientific data.
-LabPlot provides an easy way to create, manage and edit plots. It allows you to produce
-plots based on data from a spreadsheet or on data imported from external files. Plots 
-can be exported to several pixmap and vector graphic formats.
+LabPlot provides an easy way to create, manage and edit plots and to perform data analysis.
 
 Please see INSTALL for installation details.
 
 ==========================================================================================
 The most current stable version is avaible here:
-http://labplot.sourceforge.net/download/
+https://labplot.kde.org/download/
 
 If you want to see the current state of the project or to follow the development, checkout
 our git repository:
 git clone git://anongit.kde.org/labplot
 
 If you're interested in following the development of the project or would like to conribute,
-consider subscribing to kde-edu mailing list. See https://mail.kde.org/mailman/listinfo/kde-edu for more information.
+visit https://labplot.kde.org/contribute/.

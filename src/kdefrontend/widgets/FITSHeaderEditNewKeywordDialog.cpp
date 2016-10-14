@@ -42,6 +42,7 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
     setWindowTitle(i18n("Specify the new keyword"));
     setButtons( KDialog::Ok | KDialog::Cancel );
     setButtonText(KDialog::Ok, i18n("&Add keyword"));
+    setAttribute(Qt::WA_DeleteOnClose);
 
     KCompletion* keyCompletion = new KCompletion;
     keyCompletion->setItems(FITSFilter::standardKeywords());

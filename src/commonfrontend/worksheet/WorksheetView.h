@@ -166,6 +166,7 @@ private:
 	QAction* fourTimesMagnificationAction;
 	QAction* fiveTimesMagnificationAction;
 
+    QAction* showPresenterMode;
 	//Actions for cartesian plots
 	QAction* cartesianPlotApplyToSelectionAction;
 	QAction* cartesianPlotApplyToAllAction;
@@ -244,6 +245,8 @@ private slots:
 
 	void fadeIn(qreal);
 	void fadeOut(qreal);
+
+    void presenterMode();
 
 	//SLOTs for cartesian plots
 	void cartesianPlotActionModeChanged(QAction*);

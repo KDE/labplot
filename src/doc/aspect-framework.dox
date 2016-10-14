@@ -36,7 +36,7 @@ involved in accessing layer 0 from layer 2 (the API class) serves as a reminder 
 %data must be routed through layer 1 (i.e. instantiating a command).
 
 Since encapsulation of an Aspect is already provided by layer 2, private classes can be pretty
-promiscous with their member variables; responsibility for maintaining a coherent state is shared
+promiscuous with their member variables; responsibility for maintaining a coherent state is shared
 with layers 1 and 2 (this is necessary in cases where a single action needs to change %data
 contained in multiple private objects). In addition to the member variables, private classes usually
 provide functionality common to multiple undo commands (layer 1).
@@ -139,7 +139,7 @@ primary view is done via the public API of the Aspect so as to be available via 
 menu.
 
 Views can access layer 2 APIs of other Aspects, although this is expected to be rare. A view
-recieves signals only from its associated Aspect. Should a view need to react on changes to multiple
+receives signals only from its associated Aspect. Should a view need to react on changes to multiple
 Aspects, then one Aspect has to gather signals from the others and relay them to the view.
 
 Because views and scripts make changes to the underlying %data only via the public API, one does not
@@ -148,7 +148,7 @@ layer. Views just have to make sure that they update themselves upon the appropr
 from their Aspect. Also, only the API of layer 2 has to be wrapped for access from within scripting
 languages.
 
-The details of handling primary views is dependant on the kind of Aspect. For example, AbstractPart
+The details of handling primary views is dependent on the kind of Aspect. For example, AbstractPart
 expects its implementations to provide a view() method returning a QWidget. To the outside world,
 it provides the method mdiSubWindow(), which wraps the result of view() into an MDI window and
 makes sure that this window gets closed when the Aspect is removed and vice versa.

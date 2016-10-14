@@ -34,6 +34,12 @@
 #include <KSharedConfig>
 #include <kfiledialog.h>
 
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#include <QStandardPaths>
+#else
+#include <KStandardDirs>
+#endif
+
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
  *
@@ -51,6 +57,35 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
 	connect(ui.chkAutoSave, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
 	connect(ui.sbAutoSaveInterval, SIGNAL(valueChanged(int)), this, SLOT(changed()) );
 	connect(ui.chkDoubleBuffering, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
+	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
+
+	//add available TeX typesetting engines
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+	if (QStandardPaths::findExecutable("luatex").isEmpty())
+		ui.cbTexEngines->addItem("LuaTeX", "luatex");
+
+	if (!QStandardPaths::findExecutable("xetex").isEmpty())
+		ui.cbTexEngines->addItem("XeTex", "xetex");
+
+	if (!QStandardPaths::findExecutable("pdftex").isEmpty())
+		ui.cbTexEngines->addItem("pdfTeX", "pdftex");
+
+	if (!QStandardPaths::findExecutable("latex").isEmpty())
+		ui.cbTexEngines->addItem("LaTeX", "latex");
+
+#else
+	if (!KStandardDirs::findExe("luatex").isEmpty())
+		ui.cbTexEngine->addItem("LuaTeX", "luatex");
+
+	if (!KStandardDirs::findExe("xetex").isEmpty())
+		ui.cbTexEngine->addItem("XeTex", "xetex");
+
+	if (!KStandardDirs::findExe("pdftex").isEmpty())
+		ui.cbTexEngine->addItem("pdfTeX", "pdftex");
+
+	if (!KStandardDirs::findExe("latex").isEmpty())
+		ui.cbTexEngine->addItem("LaTeX", "latex");
+#endif
 
 	loadSettings();
 	interfaceChanged(ui.cbInterface->currentIndex());
@@ -65,6 +100,7 @@ void SettingsGeneralPage::applySettings(){
 	group.writeEntry("AutoSave", ui.chkAutoSave->isChecked());
 	group.writeEntry("AutoSaveInterval", ui.sbAutoSaveInterval->value());
 	group.writeEntry("DoubleBuffering", ui.chkDoubleBuffering->isChecked());
+	group.writeEntry("TeXEngine", ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
 }
 
 void SettingsGeneralPage::restoreDefaults(){
@@ -80,6 +116,15 @@ void SettingsGeneralPage::loadSettings(){
 	ui.chkAutoSave->setChecked(group.readEntry<bool>("AutoSave", 0));
 	ui.sbAutoSaveInterval->setValue(group.readEntry("AutoSaveInterval", 0));
 	ui.chkDoubleBuffering->setChecked(group.readEntry<bool>("DoubleBuffering", 1));
+
+	QString engine = group.readEntry("TeXEngine", "");
+	int index = -1;
+	if (engine.isEmpty())
+		index = ui.cbTexEngine->findData("xetex");
+	else
+		index = ui.cbTexEngine->findData(engine);
+
+	ui.cbTexEngine->setCurrentIndex(index);
 }
 
 void SettingsGeneralPage::retranslateUi() {

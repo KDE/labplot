@@ -400,6 +400,27 @@ do {																				\
 	d->columnName ##Path = str;														\
 } while(0)
 
+#define READ_INT_VALUE(name, var, type) \
+str = attribs.value(name).toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.arg(name)); \
+else \
+	d->var = (type)str.toInt();
+
+#define READ_DOUBLE_VALUE(name, var) \
+str = attribs.value(name).toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.arg(name)); \
+else \
+	d->var = str.toDouble();
+
+#define READ_STRING_VALUE(name, var) \
+str = attribs.value(name).toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.arg(name)); \
+else \
+	d->var = str;
+
 //used in Project::load()
 #define RESTORE_COLUMN_POINTER(obj, col, Col) 										\
 do {																				\

@@ -48,6 +48,7 @@ double my_ldexp(double x, double expo) { return ldexp(x,(int)expo); }
 double my_jn(double n, double x) { return jn((int)n,x); }
 double my_yn(double n,double x) { return yn((int)n,x); }
 #endif
+double my_sgn(double x) { return copysign(1.0, x); }
 
 /* wrapper for GSL functions with integer parameters */
 #define MODE GSL_PREC_DOUBLE
@@ -147,6 +148,7 @@ double hypergeometric(double k, double n1,double n2,double t) {
 }
 double logarithmic(double k, double p) { return gsl_ran_logarithmic_pdf((unsigned int)k,p); }
 
+/* sync with ExpressionParser.cpp */
 struct func _functions[] = {
 	/* Standard functions */
 	/* stdlib.h */
@@ -168,6 +170,7 @@ struct func _functions[] = {
 	{"sqrt", sqrt},
 	{"tan",tan},
 	{"tanh",tanh},
+	{"sgn",my_sgn},
 #ifndef _WIN32
 	{"cbrt",cbrt},
 	{"logb",logb},

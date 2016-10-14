@@ -26,17 +26,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <float.h>
+#include "nsl_common.h"
 #include "nsl_sort.h"
 #include "nsl_stats.h"
 #include "nsl_geom.h"
 #include "nsl_geom_linesim.h"
 
-const char* nsl_geom_linesim_type_name[] = {"Douglas-Peucker (number)", "Douglas-Peucker (tolerance)", "Visvalingam-Whyatt", "Reumann-Witkam", "perpendicular distance", "n-th point",
-	"radial distance", "Interpolation", "Opheim", "Lang"};
+const char* nsl_geom_linesim_type_name[] = {i18n("Douglas-Peucker (number)"), i18n("Douglas-Peucker (tolerance)"), i18n("Visvalingam-Whyatt"), i18n("Reumann-Witkam"), i18n("perpendicular distance"), i18n("n-th point"),
+	i18n("radial distance"), i18n("Interpolation"), i18n("Opheim"), i18n("Lang")};
 
 /*********** error calculation functions *********/
 

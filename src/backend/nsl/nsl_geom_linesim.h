@@ -28,6 +28,7 @@
 
 /*
 	TODO:
+	* accelerate Visvalingam-Whyatt
 	* calculate error statistics
 	* more algorithms: Jenks, Zhao-Saalfeld
 	* non-parametric version of Visvalingam-Whyatt, Opheim and Lang

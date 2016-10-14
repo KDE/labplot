@@ -80,10 +80,11 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 	connect(importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
-    connect(importFileWidget, SIGNAL(checkedFitsTableToMatrix()), this, SLOT(checkOnFitsTableToMatrix()));
+	connect(importFileWidget, SIGNAL(checkedFitsTableToMatrix()), this, SLOT(checkOnFitsTableToMatrix()));
 
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
-    setWindowIcon(QIcon::fromTheme("document-import-database"));
+	setWindowIcon(QIcon::fromTheme("document-import-database"));
+	setAttribute(Qt::WA_DeleteOnClose);
 
 	//restore saved settings
 	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");

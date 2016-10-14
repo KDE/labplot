@@ -45,12 +45,6 @@ typedef enum {nsl_interp_evaluate_function, nsl_interp_evaluate_derivative, nsl_
 	nsl_interp_evaluate_integral} nsl_interp_evaluate;
 extern const char* nsl_interp_evaluate_name[];
 
-
-
-/* calculates integration of n points of xy-data. result in y */
-/* TODO: put in nsl_int.h */
-int nsl_interp_integral(double *x, double *y, size_t n);
-
 /* calculates rational interpolation of n points of xy-data at xn using Burlisch-Stoer method. result in v (error dv) */
 int nsl_interp_ratint(double *x, double *y, int n, double xn, double *v, double *dv);
 

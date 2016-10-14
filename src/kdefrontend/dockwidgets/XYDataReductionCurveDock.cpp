@@ -100,6 +100,9 @@ void XYDataReductionCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
 	connect( uiGeneralTab.leComment, SIGNAL(returnPressed()), this, SLOT(commentChanged()) );
 	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
+	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
+	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
 
 	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
 	connect( uiGeneralTab.chkAuto, SIGNAL(clicked(bool)), this, SLOT(autoToleranceChanged()) );
@@ -135,6 +138,10 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	Q_ASSERT(m_dataReductionCurve);
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_dataReductionCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_dataReductionCurve->yDataColumn());
+	uiGeneralTab.cbAutoRange->setChecked(m_dataReductionData.autoRange);
+	uiGeneralTab.sbMin->setValue(m_dataReductionData.xRange.front());
+	uiGeneralTab.sbMax->setValue(m_dataReductionData.xRange.back());
+	this->autoRangeChanged();
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
@@ -232,12 +239,17 @@ void XYDataReductionCurveDock::updateTolerance() {
 	//copy all valid data points for calculating tolerance to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
+	const double xmin = m_dataReductionData.xRange.front();
+	const double xmax = m_dataReductionData.xRange.back();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
 			&& !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
-				xdataVector.append(xDataColumn->valueAt(row));
-				ydataVector.append(yDataColumn->valueAt(row));
+				// only when inside given range
+				if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
+					xdataVector.append(xDataColumn->valueAt(row));
+					ydataVector.append(yDataColumn->valueAt(row));
+				}
 		}
 	}
 
@@ -292,6 +304,11 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
 
+	if (column != 0 && uiGeneralTab.cbAutoRange->isChecked()) {
+		uiGeneralTab.sbMin->setValue(column->minimum());
+		uiGeneralTab.sbMax->setValue(column->maximum());
+	}
+
 	updateTolerance();
 	updateTolerance2();
 }
@@ -312,6 +329,43 @@ void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	updateTolerance();
 	updateTolerance2();
+}
+
+void XYDataReductionCurveDock::autoRangeChanged() {
+	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
+	m_dataReductionData.autoRange = autoRange;
+
+	if (autoRange) {
+		uiGeneralTab.lMin->setEnabled(false);
+		uiGeneralTab.sbMin->setEnabled(false);
+		uiGeneralTab.lMax->setEnabled(false);
+		uiGeneralTab.sbMax->setEnabled(false);
+		m_dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(m_curve);
+		Q_ASSERT(m_dataReductionCurve);
+		if (m_dataReductionCurve->xDataColumn()) {
+			uiGeneralTab.sbMin->setValue(m_dataReductionCurve->xDataColumn()->minimum());
+			uiGeneralTab.sbMax->setValue(m_dataReductionCurve->xDataColumn()->maximum());
+		}
+	} else {
+		uiGeneralTab.lMin->setEnabled(true);
+		uiGeneralTab.sbMin->setEnabled(true);
+		uiGeneralTab.lMax->setEnabled(true);
+		uiGeneralTab.sbMax->setEnabled(true);
+	}
+
+}
+void XYDataReductionCurveDock::xRangeMinChanged() {
+	double xMin = uiGeneralTab.sbMin->value();
+
+	m_dataReductionData.xRange.front() = xMin;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYDataReductionCurveDock::xRangeMaxChanged() {
+	double xMax = uiGeneralTab.sbMax->value();
+
+	m_dataReductionData.xRange.back() = xMax;
+	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYDataReductionCurveDock::typeChanged() {

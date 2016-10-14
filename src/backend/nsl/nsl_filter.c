@@ -26,20 +26,19 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
-#include <math.h>
 #include <gsl/gsl_sf_pow_int.h>
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_halfcomplex.h>
+#include "nsl_common.h"
 #include "nsl_filter.h"
 #include "nsl_sf_poly.h"
 #ifdef HAVE_FFTW3
 #include <fftw3.h>
 #endif
 
-const char* nsl_filter_type_name[] = { "Low pass", "High pass", "Band pass", "Band reject" };
-const char* nsl_filter_form_name[] = { "Ideal", "Butterworth", "Chebyshev type I", "Chebyshev type II", "Legendre (Optimum L)", "Bessel (Thomson)" };
-const char* nsl_filter_cutoff_unit_name[] = { "Frequency", "Fraction", "Index" };
+const char* nsl_filter_type_name[] = { i18n("Low pass"), i18n("High pass"), i18n("Band pass"), i18n("Band reject") };
+const char* nsl_filter_form_name[] = { i18n("Ideal"), i18n("Butterworth"), i18n("Chebyshev type I"), i18n("Chebyshev type II"), i18n("Legendre (Optimum L)"), i18n("Bessel (Thomson)") };
+const char* nsl_filter_cutoff_unit_name[] = { i18n("Frequency"), i18n("Fraction"), i18n("Index") };
 
 /* n - order, x = w/w0 */
 double nsl_filter_gain_bessel(int n, double x) {

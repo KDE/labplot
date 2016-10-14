@@ -140,7 +140,7 @@ void XYCurve::init() {
 	d->errorBarsCapSize = group.readEntry( "ErrorBarsCapSize", Worksheet::convertToSceneUnits(10, Worksheet::Point) );
 	d->errorBarsPen.setStyle( (Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine) );
 	d->errorBarsPen.setColor( group.readEntry("ErrorBarsColor", QColor(Qt::black)) );
-	d->errorBarsPen.setWidthF( group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
+	d->errorBarsPen.setWidthF( group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
 	d->errorBarsOpacity = group.readEntry("ErrorBarsOpacity", 1.0);
 
 	this->initActions();
@@ -1794,7 +1794,7 @@ void XYCurvePrivate::updatePixmap() {
 // 	timer.start();
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
-	QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
+	QPixmap pixmap(ceil(boundingRectangle.width()), ceil(boundingRectangle.height()));
 	if (boundingRectangle.width()==0 || boundingRectangle.width()==0) {
 		m_pixmap = pixmap;
 		RESET_CURSOR;
@@ -2217,110 +2217,38 @@ bool XYCurve::load(XmlStreamReader* reader) {
 		} else if (reader->name() == "lines") {
 			attribs = reader->attributes();
 
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->lineType = (XYCurve::LineType)str.toInt();
-
-			str = attribs.value("skipGaps").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'skipGps'"));
-			else
-				d->lineSkipGaps = str.toInt();
-
-			str = attribs.value("interpolationPointsCount").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'interpolationPointsCount'"));
-			else
-				d->lineInterpolationPointsCount = str.toInt();
-
+			READ_INT_VALUE("type", lineType, XYCurve::LineType);
+			READ_INT_VALUE("skipGaps", lineSkipGaps, int);
+			READ_INT_VALUE("interpolationPointsCount", lineInterpolationPointsCount, int);
 			READ_QPEN(d->linePen);
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
-			else
-				d->lineOpacity = str.toDouble();
+			READ_DOUBLE_VALUE("opacity", lineOpacity);
 		} else if (reader->name() == "dropLines") {
 			attribs = reader->attributes();
 
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->dropLineType = (XYCurve::DropLineType)str.toInt();
-
+			READ_INT_VALUE("type", dropLineType, XYCurve::DropLineType);
 			READ_QPEN(d->dropLinePen);
+			READ_DOUBLE_VALUE("opacity", dropLineOpacity);
 
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
-			else
-				d->dropLineOpacity = str.toDouble();
 		} else if (reader->name() == "symbols") {
 			attribs = reader->attributes();
 
-			str = attribs.value("symbolsStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'symbolsStyle'"));
-			else
-				d->symbolsStyle = (Symbol::Style)str.toInt();
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
-			else
-				d->symbolsOpacity = str.toDouble();
-
-			str = attribs.value("rotation").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rotation'"));
-			else
-				d->symbolsRotationAngle = str.toDouble();
-
-			str = attribs.value("size").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'size'"));
-			else
-				d->symbolsSize = str.toDouble();
+			READ_INT_VALUE("symbolsStyle", symbolsStyle, Symbol::Style);
+			READ_DOUBLE_VALUE("opacity", symbolsOpacity);
+			READ_DOUBLE_VALUE("rotation", symbolsRotationAngle);
+			READ_DOUBLE_VALUE("size", symbolsSize);
 
 			READ_QBRUSH(d->symbolsBrush);
 			READ_QPEN(d->symbolsPen);
 		} else if (reader->name() == "values") {
 			attribs = reader->attributes();
 
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->valuesType = (XYCurve::ValuesType)str.toInt();
-
+			READ_INT_VALUE("type", valuesType, XYCurve::ValuesType);
 			READ_COLUMN(valuesColumn);
 
-			str = attribs.value("position").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'position'"));
-			else
-				d->valuesPosition = (XYCurve::ValuesPosition)str.toInt();
-
-			str = attribs.value("distance").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'distance'"));
-			else
-				d->valuesDistance = str.toDouble();
-
-			str = attribs.value("rotation").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'rotation'"));
-			else
-				d->valuesRotationAngle = str.toDouble();
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
-			else
-				d->valuesOpacity = str.toDouble();
+			READ_INT_VALUE("position", valuesPosition, XYCurve::ValuesPosition);
+			READ_DOUBLE_VALUE("distance", valuesDistance);
+			READ_DOUBLE_VALUE("rotation", valuesRotationAngle);
+			READ_DOUBLE_VALUE("opacity", valuesOpacity);
 
 			//don't produce any warning if no prefix or suffix is set (empty string is allowd here in xml)
 			d->valuesPrefix = attribs.value("prefix").toString();
@@ -2328,44 +2256,14 @@ bool XYCurve::load(XmlStreamReader* reader) {
 
 			READ_QCOLOR(d->valuesColor);
 			READ_QFONT(d->valuesFont);
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
-			else
-				d->valuesOpacity = str.toDouble();
 		} else if (reader->name() == "filling") {
 			attribs = reader->attributes();
 
-			str = attribs.value("position").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("position"));
-			else
-				d->fillingPosition = XYCurve::FillingPosition(str.toInt());
-
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("type"));
-			else
-				d->fillingType = PlotArea::BackgroundType(str.toInt());
-
-			str = attribs.value("colorStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("colorStyle"));
-			else
-				d->fillingColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
-
-			str = attribs.value("imageStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("imageStyle"));
-			else
-				d->fillingImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
-
-			str = attribs.value("brushStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("brushStyle"));
-			else
-				d->fillingBrushStyle = Qt::BrushStyle(str.toInt());
+			READ_INT_VALUE("position", fillingPosition, XYCurve::FillingPosition);
+			READ_INT_VALUE("type", fillingType, PlotArea::BackgroundType);
+			READ_INT_VALUE("colorStyle", fillingColorStyle, PlotArea::BackgroundColorStyle);
+			READ_INT_VALUE("imageStyle", fillingImageStyle, PlotArea::BackgroundImageStyle );
+			READ_INT_VALUE("brushStyle", fillingBrushStyle, Qt::BrushStyle);
 
 			str = attribs.value("firstColor_r").toString();
 			if (str.isEmpty())
@@ -2403,54 +2301,25 @@ bool XYCurve::load(XmlStreamReader* reader) {
 			else
 				d->fillingSecondColor.setBlue(str.toInt());
 
-			str = attribs.value("fileName").toString();
-			d->fillingFileName = str;
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("opacity"));
-			else
-				d->fillingOpacity = str.toDouble();
+			READ_STRING_VALUE("fileName", fillingFileName);
+			READ_DOUBLE_VALUE("opacity", fillingOpacity);
 		} else if (reader->name() == "errorBars") {
 			attribs = reader->attributes();
 
-			str = attribs.value("xErrorType").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'xErrorType'"));
-			else
-				d->xErrorType = (XYCurve::ErrorType)str.toInt();
-
+			READ_INT_VALUE("xErrorType", xErrorType, XYCurve::ErrorType);
 			READ_COLUMN(xErrorPlusColumn);
 			READ_COLUMN(xErrorMinusColumn);
 
-			str = attribs.value("yErrorType").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'yErrorType'"));
-			else
-				d->yErrorType = (XYCurve::ErrorType)str.toInt();
-
+			READ_INT_VALUE("yErrorType", yErrorType, XYCurve::ErrorType);
 			READ_COLUMN(yErrorPlusColumn);
 			READ_COLUMN(yErrorMinusColumn);
 
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->errorBarsType = (XYCurve::ErrorBarsType)str.toInt();
-
-			str = attribs.value("capSize").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'capSize'"));
-			else
-				d->errorBarsCapSize = str.toDouble();
+			READ_INT_VALUE("type", errorBarsType, XYCurve::ErrorBarsType);
+			READ_DOUBLE_VALUE("capSize", errorBarsCapSize);
 
 			READ_QPEN(d->errorBarsPen);
 
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'opacity'"));
-			else
-				d->errorBarsOpacity = str.toDouble();
+			READ_DOUBLE_VALUE("opacity", errorBarsOpacity);
 		}
 	}
 
@@ -2511,8 +2380,7 @@ QList<QColor> XYCurve::getColorPalette() {
 }
 
 void XYCurve::applyColorPalette(QList<QColor> color) {
-	if(!color.empty())
-	{
+	if(!color.empty()) {
 		m_themeColorPalette = color;
 		QPen p;
 		int index = parentAspect()->indexOfChild<XYCurve>(this);
@@ -2526,55 +2394,54 @@ void XYCurve::applyColorPalette(QList<QColor> color) {
 void XYCurve::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
 
-	QPen p;
+	int index = parentAspect()->indexOfChild<XYCurve>(this);
 	this->setColorPalette(config);
+	QColor themeColor = m_themeColorPalette.at(index);
+	QPen p;
+
+	//Line
+	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)this->linePen().style()));
+	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
+	p.setColor(themeColor);
+	this->setLinePen(p);
+	this->setLineOpacity(group.readEntry("LineOpacity", this->lineOpacity()));
+
 	//Drop line
-	p.setColor(group.readEntry("DropLineColor",(QColor) this->dropLinePen().color()));
 	p.setStyle((Qt::PenStyle)group.readEntry("DropLineStyle",(int) this->dropLinePen().style()));
 	p.setWidthF(group.readEntry("DropLineWidth", this->dropLinePen().widthF()));
+	p.setColor(themeColor);
 	this->setDropLinePen(p);
-	this->setDropLineOpacity(group.readEntry("DropLineOpacity",this->dropLineOpacity()));
-	this->setDropLineType((XYCurve::DropLineType)group.readEntry("DropLineType", (int) this->dropLineType()));
+	this->setDropLineOpacity(group.readEntry("DropLineOpacity", this->dropLineOpacity()));
 
-	//Error Bars
-	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity",this->errorBarsOpacity()));
-	this->setErrorBarsType((XYCurve::ErrorBarsType)group.readEntry("ErrorBarsType",(int) this->errorBarsType()));
-	p.setColor(group.readEntry("ErrorBarsColor",(QColor) this->errorBarsPen().color()));
-	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle",(int) this->errorBarsPen().style()));
-	p.setWidthF(group.readEntry("ErrorBarsWidth", this->errorBarsPen().widthF()));
-	this->setErrorBarsPen(p);
+	//Symbol
+	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", this->symbolsOpacity()));
+	QBrush brush = symbolsBrush();
+	brush.setColor(themeColor);
+	this->setSymbolsBrush(brush);
+	p = symbolsPen();
+	p.setColor(themeColor);
+	this->setSymbolsPen(p);
+
+	//Values
+	this->setValuesOpacity(group.readEntry("ValuesOpacity", this->valuesOpacity()));
+	this->setValuesColor(group.readEntry("ValuesColor", this->valuesColor()));
+	this->setValuesFont(group.readEntry("ValuesFont", QFont()));
 
 	//Filling
 	this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle",(int) this->fillingBrushStyle()));
 	this->setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle",(int) this->fillingColorStyle()));
-	this->setFillingImageStyle((PlotArea::BackgroundImageStyle)group.readEntry("FillingImageStyle",(int) this->fillingImageStyle()));
 	this->setFillingOpacity(group.readEntry("FillingOpacity", this->fillingOpacity()));
 	this->setFillingPosition((XYCurve::FillingPosition)group.readEntry("FillingPosition",(int) this->fillingPosition()));
 	this->setFillingSecondColor(group.readEntry("FillingSecondColor",(QColor) this->fillingSecondColor()));
+	this->setFillingFirstColor(themeColor);
 	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType",(int) this->fillingType()));
 
-	//Line
-	this->setLineOpacity(group.readEntry("LineOpacity", this->lineOpacity()));
-	this->setLineType((XYCurve::LineType)group.readEntry("LineType",(int) this->lineType()));
-	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle",(int) this->linePen().style()));
-	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
-	this->setLinePen(p);
-
-	//Symbol
-	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", this->symbolsOpacity()));
-
-	//Values
-	this->setValuesOpacity(group.readEntry("ValuesOpacity", this->valuesOpacity()));
-	this->setValuesColor(group.readEntry("ValuesColor", (QColor) this->valuesColor()));
-	this->setValuesFont(group.readEntry("ValuesFont", QFont()));
-	this->setValuesType((XYCurve::ValuesType)group.readEntry("ValuesType", (int) this->valuesType()));
-
-	int index = parentAspect()->indexOfChild<XYCurve>(this);
-	p.setColor(m_themeColorPalette.at(index));
-	this->setLinePen(p);
-	this->setFillingFirstColor(m_themeColorPalette.at(index));
-	this->setSymbolsPen(p);
-
+	//Error Bars
+	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle",(int) this->errorBarsPen().style()));
+	p.setWidthF(group.readEntry("ErrorBarsWidth", this->errorBarsPen().widthF()));
+	p.setColor(themeColor);
+	this->setErrorBarsPen(p);
+	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity",this->errorBarsOpacity()));
 }
 
 void XYCurve::saveThemeConfig(const KConfig& config) {
@@ -2585,12 +2452,10 @@ void XYCurve::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("DropLineStyle",(int) this->dropLinePen().style());
 	group.writeEntry("DropLineWidth", this->dropLinePen().widthF());
 	group.writeEntry("DropLineOpacity",this->dropLineOpacity());
-	group.writeEntry("DropLineType", (int) this->dropLineType());
 
 	//Error Bars
 	group.writeEntry("ErrorBarsCapSize",this->errorBarsCapSize());
 	group.writeEntry("ErrorBarsOpacity",this->errorBarsOpacity());
-	group.writeEntry("ErrorBarsType",(int) this->errorBarsType());
 	group.writeEntry("ErrorBarsColor",(QColor) this->errorBarsPen().color());
 	group.writeEntry("ErrorBarsStyle",(int) this->errorBarsPen().style());
 	group.writeEntry("ErrorBarsWidth", this->errorBarsPen().widthF());
@@ -2598,35 +2463,27 @@ void XYCurve::saveThemeConfig(const KConfig& config) {
 	//Filling
 	group.writeEntry("FillingBrushStyle",(int) this->fillingBrushStyle());
 	group.writeEntry("FillingColorStyle",(int) this->fillingColorStyle());
-	group.writeEntry("FillingImageStyle",(int) this->fillingImageStyle());
 	group.writeEntry("FillingOpacity", this->fillingOpacity());
 	group.writeEntry("FillingPosition",(int) this->fillingPosition());
 	group.writeEntry("FillingSecondColor",(QColor) this->fillingSecondColor());
 	group.writeEntry("FillingType",(int) this->fillingType());
 
 	//Line
-	group.writeEntry("LineInterpolationPointsCount",(int) this->lineInterpolationPointsCount());
 	group.writeEntry("LineOpacity", this->lineOpacity());
-	group.writeEntry("LineSkipGaps",(bool) this->lineSkipGaps());
-	group.writeEntry("LineType",(int) this->lineType());
 	group.writeEntry("LineStyle",(int) this->linePen().style());
 	group.writeEntry("LineWidth", this->linePen().widthF());
 
 	//Symbol
 	group.writeEntry("SymbolOpacity", this->symbolsOpacity());
-	group.writeEntry("SymbolRotation",(int) this->symbolsRotationAngle());
-	group.writeEntry("SymbolSize", (int) this->symbolsSize());
 
 	//Values
 	group.writeEntry("ValuesOpacity", this->valuesOpacity());
-	group.writeEntry("ValuesRotation",(int) this->symbolsRotationAngle());
 	group.writeEntry("ValuesColor", (QColor) this->valuesColor());
 	group.writeEntry("ValuesFont", this->valuesFont());
-	group.writeEntry("ValuesType", (int) this->valuesType());
 
-	KConfigGroup themeGroup = config.group("Theme");
 	int index = parentAspect()->indexOfChild<XYCurve>(this);
 	if(index<5) {
+		KConfigGroup themeGroup = config.group("Theme");
 		for(int i = index; i<5; i++) {
 			QString s = "ThemePaletteColor" + QString::number(i+1);
 			themeGroup.writeEntry(s,(QColor) this->linePen().color());

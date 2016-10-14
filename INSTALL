@@ -8,6 +8,7 @@ To compile LabPlot following packages are required:
 optional
 	* HDF5 version 1.8 or higher (including the devel-package, hdf5-devel or similar)
 	* NetCDF version 3 or higher (including the devel-package, netcdf-devel or similar)
+	* CFITSIO version 3 or higher (including the devel-package, cfitsio-devel or similar)
 	* Cantor (only for the kf5 version of LabPlot) version 16.04 or higher (including the devel package, cantor-devel or similar)
 
 ===============================================================================

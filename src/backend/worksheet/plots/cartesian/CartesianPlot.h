@@ -40,6 +40,7 @@ class XYCurve;
 class XYEquationCurve;
 class XYDataReductionCurve;
 class XYDifferentiationCurve;
+class XYIntegrationCurve;
 class XYInterpolationCurve;
 class XYSmoothCurve;
 class XYFitCurve;
@@ -120,6 +121,7 @@ class CartesianPlot:public AbstractPlot{
 		QAction* addEquationCurveAction;
 		QAction* addDataReductionCurveAction;
 		QAction* addDifferentiationCurveAction;
+		QAction* addIntegrationCurveAction;
 		QAction* addInterpolationCurveAction;
 		QAction* addSmoothCurveAction;
 		QAction* addFitCurveAction;
@@ -158,6 +160,7 @@ class CartesianPlot:public AbstractPlot{
 		XYEquationCurve* addEquationCurve();
 		XYDataReductionCurve* addDataReductionCurve();
 		XYDifferentiationCurve* addDifferentiationCurve();
+		XYIntegrationCurve* addIntegrationCurve();
 		XYInterpolationCurve* addInterpolationCurve();
 		XYSmoothCurve* addSmoothCurve();
 		XYFitCurve* addFitCurve();
