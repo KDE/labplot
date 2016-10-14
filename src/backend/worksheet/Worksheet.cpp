@@ -41,7 +41,9 @@
 #include <QPrintPreviewDialog>
 
 #include "QIcon"
+#include <KConfig>
 #include <KConfigGroup>
+#include <KLocalizedString>
 #include <cmath>
 
 /**

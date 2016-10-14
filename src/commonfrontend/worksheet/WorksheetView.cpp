@@ -233,7 +233,7 @@ void WorksheetView::initActions() {
 	snapToGridAction = new QAction(i18n("snap to grid"), this);
 	snapToGridAction->setCheckable(true);
 
-    showPresenterMode = new KAction(KIcon("view-fullscreen"), i18n("Show in presenter mode"), this);
+	showPresenterMode = new QAction(QIcon::fromTheme("view-fullscreen"), i18n("Show in presenter mode"), this);
 
 	//check the action corresponding to the currently active layout in worksheet
 	this->layoutChanged(m_worksheet->layout());
@@ -245,9 +245,7 @@ void WorksheetView::initActions() {
 	connect(layoutActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeLayout(QAction*)));
 	connect(gridActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeGrid(QAction*)));
 	connect(snapToGridAction, SIGNAL(triggered()), this, SLOT(changeSnapToGrid()));
-
-    connect(showPresenterMode, SIGNAL(triggered()), this, SLOT(presenterMode()));
-
+	connect(showPresenterMode, SIGNAL(triggered()), this, SLOT(presenterMode()));
 
 	//action for cartesian plots
 	QActionGroup* cartesianPlotActionModeActionGroup = new QActionGroup(this);
