@@ -146,4 +146,4 @@ add_subdirectory(icons)
 add_subdirectory(src)
 add_subdirectory(doc)
 
-install(FILES labplot.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/)
+install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
