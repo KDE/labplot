@@ -52,6 +52,9 @@ signals:
 
 private slots:
 	void applyClicked();
+	void startValueChanged();
+	void lowerLimitChanged();
+	void upperLimitChanged();
 	void addParameter();
 	void removeParameter();
 	void changed();

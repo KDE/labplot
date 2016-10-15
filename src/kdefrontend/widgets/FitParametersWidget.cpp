@@ -88,7 +88,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			le->setFrame(false);
 			le->insert(QString::number(m_fitData->paramStartValues.at(i), 'g'));
 			ui.tableWidget->setCellWidget(i, 1, le);
-			connect( le, SIGNAL(textChanged(QString)), this, SLOT(changed()) );
+			connect( le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()) );
 
 			//TODO: fixed parameter widget
 			ui.tableWidget->setItem(i, 2, new QTableWidgetItem());
@@ -100,7 +100,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			if (m_fitData->paramLowerLimits.at(i) > -DBL_MAX)
 				le->insert(QString::number(m_fitData->paramLowerLimits.at(i), 'g'));
 			ui.tableWidget->setCellWidget(i, 3, le);
-			connect( le, SIGNAL(textChanged(QString)), this, SLOT(changed()) );
+			connect( le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()) );
 
 			le = new QLineEdit(ui.tableWidget);
 			le->setValidator(new QDoubleValidator(le));
@@ -108,7 +108,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			if (m_fitData->paramUpperLimits.at(i) < DBL_MAX)
 				le->insert(QString::number(m_fitData->paramUpperLimits.at(i), 'g'));
 			ui.tableWidget->setCellWidget(i, 4, le);
-			connect( le, SIGNAL(textChanged(QString)), this, SLOT(changed()) );
+			connect( le, SIGNAL(textChanged(QString)), this, SLOT(upperLimitChanged()) );
 		}
 		ui.tableWidget->setCurrentCell(0, 1);
 		ui.pbAdd->setVisible(false);
@@ -129,7 +129,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 				le->setFrame(false);
 				le->insert(QString::number(m_fitData->paramStartValues.at(i), 'g'));
 				ui.tableWidget->setCellWidget(i, 1, le);
-				connect( le, SIGNAL(textChanged(QString)), this, SLOT(changed()) );
+				connect( le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()) );
 
 				//TODO: fixed parameter
 				ui.tableWidget->setItem(i, 2, new QTableWidgetItem());
@@ -141,7 +141,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 				if (m_fitData->paramLowerLimits.at(i) > -DBL_MAX)
 					le->insert(QString::number(m_fitData->paramLowerLimits.at(i), 'g'));
 				ui.tableWidget->setCellWidget(i, 3, le);
-				connect( le, SIGNAL(textChanged(QString)), this, SLOT(changed()) );
+				connect( le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()) );
 				
 				le = new QLineEdit(ui.tableWidget);
 				le->setValidator(new QDoubleValidator(le));
@@ -149,7 +149,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 				if (m_fitData->paramUpperLimits.at(i) < DBL_MAX)
 					le->insert(QString::number(m_fitData->paramUpperLimits.at(i), 'g'));
 				ui.tableWidget->setCellWidget(i, 4, le);
-				connect( le, SIGNAL(textChanged(QString)), this, SLOT(changed()) );
+				connect( le, SIGNAL(textChanged(QString)), this, SLOT(upperLimitChanged()) );
 			}
 		} else {			// no parameters available yet -> create the first row in the table for the first parameter
 			ui.tableWidget->setRowCount(1);
@@ -163,7 +163,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			le->setValidator(new QDoubleValidator(le));
 			le->setFrame(false);
 			ui.tableWidget->setCellWidget(0, 1, le);
-			connect( le, SIGNAL(textChanged(QString)), this, SLOT(changed()) );
+			connect( le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()) );
 
 			// TODO: fixed
 			ui.tableWidget->setItem(0, 2, new QTableWidgetItem());
@@ -173,13 +173,13 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			le->setValidator(new QDoubleValidator(le));
 			le->setFrame(false);
 			ui.tableWidget->setCellWidget(0, 3, le);
-			connect( le, SIGNAL(textChanged(QString)), this, SLOT(changed()) );
+			connect( le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()) );
 
 			le = new QLineEdit(ui.tableWidget);
 			le->setValidator(new QDoubleValidator(le));
 			le->setFrame(false);
 			ui.tableWidget->setCellWidget(0, 4, le);
-			connect( le, SIGNAL(textChanged(QString)), this, SLOT(changed()) );
+			connect( le, SIGNAL(textChanged(QString)), this, SLOT(upperLimitChanged()) );
 		}
 		ui.tableWidget->setCurrentCell(0, 0);
 		ui.pbAdd->setIcon(KIcon("list-add"));
@@ -278,6 +278,80 @@ void FitParametersWidget::applyClicked() {
 	emit(finished());
 }
 
+void FitParametersWidget::startValueChanged() {
+	int row = ui.tableWidget->currentRow();
+	double value = ((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->text().toDouble();
+
+	double lowerLimit, upperLimit;
+	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().isEmpty() )
+		lowerLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().toDouble();
+	else
+		lowerLimit = -DBL_MAX;
+	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().isEmpty() )
+		upperLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().toDouble();
+	else
+		upperLimit = DBL_MAX;
+
+	QPalette *palette = new QPalette();
+	if(value < lowerLimit || value > upperLimit)
+		palette->setColor(QPalette::Text, Qt::red);
+	else
+		palette->setColor(QPalette::Text, Qt::black);
+	((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->setPalette(*palette);
+
+	m_changed = true;
+}
+
+void FitParametersWidget::lowerLimitChanged() {
+	int row = ui.tableWidget->currentRow();
+
+	double value = ((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->text().toDouble();
+
+	double lowerLimit, upperLimit;
+	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().isEmpty() )
+		lowerLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().toDouble();
+	else
+		lowerLimit = -DBL_MAX;
+	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().isEmpty() )
+		upperLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().toDouble();
+	else
+		upperLimit = DBL_MAX;
+
+	QPalette *palette = new QPalette();
+	if(lowerLimit > value || lowerLimit > upperLimit)
+		palette->setColor(QPalette::Text, Qt::red);
+	else
+		palette->setColor(QPalette::Text, Qt::black);
+	((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->setPalette(*palette);
+
+	m_changed = true;
+}
+
+void FitParametersWidget::upperLimitChanged() {
+	int row = ui.tableWidget->currentRow();
+
+	double value = ((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->text().toDouble();
+
+	double lowerLimit, upperLimit;
+	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().isEmpty() )
+		lowerLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->text().toDouble();
+	else
+		lowerLimit = -DBL_MAX;
+	if ( !((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().isEmpty() )
+		upperLimit = ((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->text().toDouble();
+	else
+		upperLimit = DBL_MAX;
+
+	QPalette *palette = new QPalette();
+	if(upperLimit < value || upperLimit < lowerLimit)
+		palette->setColor(QPalette::Text, Qt::red);
+	else
+		palette->setColor(QPalette::Text, Qt::black);
+	((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->setPalette(*palette);
+
+	m_changed = true;
+}
+
 void FitParametersWidget::addParameter() {
 	int rows = ui.tableWidget->rowCount();
 	ui.tableWidget->setRowCount(rows+1);
@@ -293,7 +367,7 @@ void FitParametersWidget::addParameter() {
 	le->setFrame(false);
 	le->insert("1");
 	ui.tableWidget->setCellWidget(rows, 1, le);
-	connect( le, SIGNAL(textChanged(QString)), this, SLOT(changed()) );
+	connect( le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()) );
 
 	// TODO: fixed
 	ui.tableWidget->setItem(rows, 2, new QTableWidgetItem());
@@ -303,13 +377,13 @@ void FitParametersWidget::addParameter() {
 	le->setValidator(new QDoubleValidator(le));
 	le->setFrame(false);
 	ui.tableWidget->setCellWidget(rows, 3, le);
-	connect( le, SIGNAL(textChanged(QString)), this, SLOT(changed()) );
+	connect( le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()) );
 
 	le = new QLineEdit(ui.tableWidget);
 	le->setValidator(new QDoubleValidator(le));
 	le->setFrame(false);
 	ui.tableWidget->setCellWidget(rows, 4, le);
-	connect( le, SIGNAL(textChanged(QString)), this, SLOT(changed()) );
+	connect( le, SIGNAL(textChanged(QString)), this, SLOT(lowerLimitChanged()) );
 
 	ui.tableWidget->setCurrentCell(rows, 0);
 	ui.pbRemove->setEnabled(true);
