@@ -365,11 +365,22 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (int i=0; i<n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
-	//TODO: use fixed in all models
-				gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
-				gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
-				gsl_matrix_set(J, i, 2, exp(d*x)/sigma);
-				gsl_matrix_set(J, i, 3, c*x*exp(d*x)/sigma);
+				if (fixed[0])
+					gsl_matrix_set(J, i, 0, 0.);
+				else
+					gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
+				if (fixed[1])
+					gsl_matrix_set(J, i, 1, 0.);
+				else
+					gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
+				if (fixed[2])
+					gsl_matrix_set(J, i, 2, 0.);
+				else
+					gsl_matrix_set(J, i, 2, exp(d*x)/sigma);
+				if (fixed[3])
+					gsl_matrix_set(J, i, 3, 0.);
+				else
+					gsl_matrix_set(J, i, 3, c*x*exp(d*x)/sigma);
 			}
 		} else if (degree == 3) {
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
@@ -381,12 +392,30 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (int i=0; i < n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
-				gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
-				gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
-				gsl_matrix_set(J, i, 2, exp(d*x)/sigma);
-				gsl_matrix_set(J, i, 3, c*x*exp(d*x)/sigma);
-				gsl_matrix_set(J, i, 4, exp(f*x)/sigma);
-				gsl_matrix_set(J, i, 5, e*x*exp(f*x)/sigma);
+				if (fixed[0])
+					gsl_matrix_set(J, i, 0, 0.);
+				else
+					gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
+				if (fixed[1])
+					gsl_matrix_set(J, i, 1, 0.);
+				else
+					gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
+				if (fixed[2])
+					gsl_matrix_set(J, i, 2, 0.);
+				else
+					gsl_matrix_set(J, i, 2, exp(d*x)/sigma);
+				if (fixed[3])
+					gsl_matrix_set(J, i, 3, 0.);
+				else
+					gsl_matrix_set(J, i, 3, c*x*exp(d*x)/sigma);
+				if (fixed[4])
+					gsl_matrix_set(J, i, 4, 0.);
+				else
+					gsl_matrix_set(J, i, 4, exp(f*x)/sigma);
+				if (fixed[5])
+					gsl_matrix_set(J, i, 5, 0.);
+				else
+					gsl_matrix_set(J, i, 5, e*x*exp(f*x)/sigma);
 			}
 		}
 		break;
@@ -397,9 +426,18 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		for (int i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
-			gsl_matrix_set(J, i, 0, (1.0-exp(b*x))/sigma);
-			gsl_matrix_set(J, i, 1, -a*x*exp(b*x)/sigma);
-			gsl_matrix_set(J, i, 2, 1.0/sigma);
+			if (fixed[0])
+				gsl_matrix_set(J, i, 0, 0.);
+			else
+				gsl_matrix_set(J, i, 0, (1.0-exp(b*x))/sigma);
+			if (fixed[1])
+				gsl_matrix_set(J, i, 1, 0.);
+			else
+				gsl_matrix_set(J, i, 1, -a*x*exp(b*x)/sigma);
+			if (fixed[2])
+				gsl_matrix_set(J, i, 2, 0.);
+			else
+				gsl_matrix_set(J, i, 2, 1.0/sigma);
 		}
 		break;
 	}
@@ -422,11 +460,23 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (int j=1; j < degree; ++j) {
 				wd += -a[j]*j*x*sin(j*w*x) + b[j]*j*x*cos(j*w*x);
 			}
-			gsl_matrix_set(J, i, 0, wd/sigma);
-			gsl_matrix_set(J, i, 1, 1/sigma);
+			if (fixed[0])
+				gsl_matrix_set(J, i, 0, 0.);
+			else
+				gsl_matrix_set(J, i, 0, wd/sigma);
+			if (fixed[1])
+				gsl_matrix_set(J, i, 1, 0.);
+			else
+				gsl_matrix_set(J, i, 1, 1/sigma);
 			for (int j=1; j <= degree; ++j) {
-				gsl_matrix_set(J, i, 2*j, cos(j*w*x)/sigma);
-				gsl_matrix_set(J, i, 2*j+1, sin(j*w*x)/sigma);
+				if (fixed[2*j])
+					gsl_matrix_set(J, i, 2*j, 0.);
+				else
+					gsl_matrix_set(J, i, 2*j, cos(j*w*x)/sigma);
+				if (fixed[2*j+1])
+					gsl_matrix_set(J, i, 2*j+1, 0.);
+				else
+					gsl_matrix_set(J, i, 2*j+1, sin(j*w*x)/sigma);
 			}
 		}
 		break;
@@ -440,8 +490,14 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (int j=0; j < degree; ++j) {
 				a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2*j), min[2*j], max[2*j]);
 				b = nsl_fit_map_bound(gsl_vector_get(paramValues, 2*j+1), min[2*j+1], max[2*j+1]);
-				gsl_matrix_set(J, i, 2*j, (exp(-pow(b-x,2)/(2*pow(a,2)))*(pow(b-x,2)-pow(a,2)))/(sqrt(2*M_PI)*pow(a,4))/sigma);
-				gsl_matrix_set(J, i, 2*j+1, ((x-b)*exp(-pow(b-x,2)/(2*pow(a,2))))/(sqrt(2*M_PI)*pow(a,3))/sigma);
+				if (fixed[2*j])
+					gsl_matrix_set(J, i, 2*j, 0.);
+				else
+					gsl_matrix_set(J, i, 2*j, (exp(-pow(b-x,2)/(2*pow(a,2)))*(pow(b-x,2)-pow(a,2)))/(sqrt(2*M_PI)*pow(a,4))/sigma);
+				if (fixed[2*j+1])
+					gsl_matrix_set(J, i, 2*j+1, 0.);
+				else
+					gsl_matrix_set(J, i, 2*j+1, ((x-b)*exp(-pow(b-x,2)/(2*pow(a,2))))/(sqrt(2*M_PI)*pow(a,3))/sigma);
 			}
 		}
 		break;
@@ -453,8 +509,14 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		for (int i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
-			gsl_matrix_set(J, i, 0, (-s*s+(x-t)*(x-t))/pow(s*s+(x-t)*(x-t),2)/M_PI/sigma);
-			gsl_matrix_set(J, i, 1, 2*s*(x-t)/pow(s*s+(x-t)*(x-t),2)/M_PI/sigma);
+			if (fixed[0])
+				gsl_matrix_set(J, i, 0, 0.);
+			else
+				gsl_matrix_set(J, i, 0, (-s*s+(x-t)*(x-t))/pow(s*s+(x-t)*(x-t),2)/M_PI/sigma);
+			if (fixed[1])
+				gsl_matrix_set(J, i, 1, 0.);
+			else
+				gsl_matrix_set(J, i, 1, 2*s*(x-t)/pow(s*s+(x-t)*(x-t),2)/M_PI/sigma);
 		}
 		break;
 	}
@@ -464,7 +526,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		for (int i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
-			gsl_matrix_set(J, i, 0, sqrt(2/M_PI)*x*x*(x*x-3*a*a)*exp(-x*x/2/a/a)/pow(a,6)/sigma);
+			if (fixed[0])
+				gsl_matrix_set(J, i, 0, 0.);
+			else
+				gsl_matrix_set(J, i, 0, sqrt(2/M_PI)*x*x*(x*x-3*a*a)*exp(-x*x/2/a/a)/pow(a,6)/sigma);
 		}
 		break;
 	}
@@ -476,9 +541,18 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		for (int i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
-			gsl_matrix_set(J, i, 0, 1/(exp(b*(c-x))+1)/sigma);
-			gsl_matrix_set(J, i, 1, a*(x-c)*exp((c-x)*b)/pow(exp((c-x)*b)+1, 2)/sigma);
-			gsl_matrix_set(J, i, 2, -a*b*exp(b*(c-x))/pow(exp(b*(c-x))+1, 2)/sigma);
+			if (fixed[0])
+				gsl_matrix_set(J, i, 0, 0.);
+			else
+				gsl_matrix_set(J, i, 0, 1/(exp(b*(c-x))+1)/sigma);
+			if (fixed[1])
+				gsl_matrix_set(J, i, 1, 0.);
+			else
+				gsl_matrix_set(J, i, 1, a*(x-c)*exp((c-x)*b)/pow(exp((c-x)*b)+1, 2)/sigma);
+			if (fixed[2])
+				gsl_matrix_set(J, i, 2, 0.);
+			else
+				gsl_matrix_set(J, i, 2, -a*b*exp(b*(c-x))/pow(exp(b*(c-x))+1, 2)/sigma);
 		}
 		break;
 	}
@@ -490,9 +564,18 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		for (int i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
-			gsl_matrix_set(J, i, 0, exp(-b*exp(-c*x))/sigma);
-			gsl_matrix_set(J, i, 1, -a*exp(-c*x-b*exp(-c*x))/sigma);
-			gsl_matrix_set(J, i, 2, a*b*x*exp(-c*x-b*exp(-c*x))/sigma);
+			if (fixed[0])
+				gsl_matrix_set(J, i, 0, 0.);
+			else
+				gsl_matrix_set(J, i, 0, exp(-b*exp(-c*x))/sigma);
+			if (fixed[1])
+				gsl_matrix_set(J, i, 1, 0.);
+			else
+				gsl_matrix_set(J, i, 1, -a*exp(-c*x-b*exp(-c*x))/sigma);
+			if (fixed[2])
+				gsl_matrix_set(J, i, 2, 0.);
+			else
+				gsl_matrix_set(J, i, 2, a*b*x*exp(-c*x-b*exp(-c*x))/sigma);
 		}
 		break;
 	}
@@ -507,9 +590,18 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			//TODO: how to deal correctly with (x-c)/b <=0
 			if (x>0) {
 				const double d = pow((x-c)/b,a);
-				gsl_matrix_set(J, i, 0, (exp(-d)*d*(a*(d-1)*log((x-c)/b)-1))/(c-x)/sigma);
-				gsl_matrix_set(J, i, 1, (pow(a,2)*exp(-d)*d*(d-1))/(b*(x-c))/sigma);
-				gsl_matrix_set(J, i, 2, (a*exp(-d)*d*(a*(d-1)+1))/pow(c-x,2)/sigma);
+				if (fixed[0])
+					gsl_matrix_set(J, i, 0, 0.);
+				else
+					gsl_matrix_set(J, i, 0, (exp(-d)*d*(a*(d-1)*log((x-c)/b)-1))/(c-x)/sigma);
+				if (fixed[1])
+					gsl_matrix_set(J, i, 1, 0.);
+				else
+					gsl_matrix_set(J, i, 1, (pow(a,2)*exp(-d)*d*(d-1))/(b*(x-c))/sigma);
+				if (fixed[2])
+					gsl_matrix_set(J, i, 2, 0.);
+				else
+					gsl_matrix_set(J, i, 2, (a*exp(-d)*d*(a*(d-1)+1))/pow(c-x,2)/sigma);
 			} else {
 				gsl_matrix_set(J, i, 0, 0);
 				gsl_matrix_set(J, i, 1, 0);
@@ -526,8 +618,14 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			if (x>0) {
-				gsl_matrix_set(J, i, 0, -(exp(-pow(b-log(x),2)/(2*pow(a,2)))*(a+b-log(x))*(a-b+log(x)))/(sqrt(2*M_PI)*pow(a,4)*x)/sigma);
-				gsl_matrix_set(J, i, 1, ((log(x)-b)*exp(-pow(b-log(x),2)/(2*pow(a,2))))/(sqrt(2*M_PI)*pow(a,3)*x)/sigma);
+				if (fixed[0])
+					gsl_matrix_set(J, i, 0, 0.);
+				else
+					gsl_matrix_set(J, i, 0, -(exp(-pow(b-log(x),2)/(2*pow(a,2)))*(a+b-log(x))*(a-b+log(x)))/(sqrt(2*M_PI)*pow(a,4)*x)/sigma);
+				if (fixed[1])
+					gsl_matrix_set(J, i, 1, 0.);
+				else
+					gsl_matrix_set(J, i, 1, ((log(x)-b)*exp(-pow(b-log(x),2)/(2*pow(a,2))))/(sqrt(2*M_PI)*pow(a,3)*x)/sigma);
 			} else {
 				gsl_matrix_set(J, i, 0, 0);
 				gsl_matrix_set(J, i, 1, 0);
@@ -542,8 +640,14 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		for (int i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
-			gsl_matrix_set(J, i, 0, (exp((x-2*b)/a-exp((x-b)/a))*(exp(x/a)*(x-b)-exp(b/a)*(a-b+x)))/pow(a,3)/sigma);
-			gsl_matrix_set(J, i, 1, (exp(-exp(x/a-b/a)-(2*b)/a+x/a)*(exp(x/a)-exp(b/a)))/pow(a,2)/sigma);
+			if (fixed[0])
+				gsl_matrix_set(J, i, 0, 0.);
+			else
+				gsl_matrix_set(J, i, 0, (exp((x-2*b)/a-exp((x-b)/a))*(exp(x/a)*(x-b)-exp(b/a)*(a-b+x)))/pow(a,3)/sigma);
+			if (fixed[1])
+				gsl_matrix_set(J, i, 1, 0.);
+			else
+				gsl_matrix_set(J, i, 1, (exp(-exp(x/a-b/a)-(2*b)/a+x/a)*(exp(x/a)-exp(b/a)))/pow(a,2)/sigma);
 		}
 		break;
 	}
@@ -580,7 +684,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				double f_pdp = parse(func);
 
 				// calculate finite difference
-				gsl_matrix_set(J, i, j, (f_pdp-f_p)/eps/sigma);
+				if (fixed[j])
+					gsl_matrix_set(J, i, j, 0.);
+				else
+					gsl_matrix_set(J, i, j, (f_pdp-f_p)/eps/sigma);
 			}
 		}
 		break;
@@ -758,7 +865,6 @@ void XYFitCurvePrivate::recalculate() {
 	// scale start values if limits are set
 	for (unsigned int i=0; i < np; i++)
 		x_init[i] = nsl_fit_map_unbound(x_init[i], x_min[i], x_max[i]);
-	//TODO: how to handle fixed parameter?
 	gsl_vector_view x = gsl_vector_view_array(x_init, np);
 	// initialize solver with function f and inital guess x
 	gsl_multifit_fdfsolver_set(s, &f, &x.vector);
