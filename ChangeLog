@@ -6,6 +6,7 @@ New features:
 	* New pre-defined fit models: Gompertz, Weibull, Log-Normal, Gumbel
 	* Support user specified x range in all analysis functions
 	* Allow to enter complete LaTeX documents in text labels
+	* Configuration parameter to use different LaTex engines (LuaLaTex, XeLatex, pdfLaTex, LaTex)
 	* MacOSX port
 
 Bug fixes:

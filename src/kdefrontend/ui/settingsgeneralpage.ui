@@ -201,7 +201,7 @@
       </font>
      </property>
      <property name="text">
-      <string>TeX</string>
+      <string>LaTeX</string>
      </property>
     </widget>
    </item>

@@ -60,27 +60,27 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
 
 	//add available TeX typesetting engines
 #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-	if (QStandardPaths::findExecutable("luatex").isEmpty())
-		ui.cbTexEngine->addItem("LuaTeX", "luatex");
+	if (QStandardPaths::findExecutable("lualatex").isEmpty())
+		ui.cbTexEngine->addItem("LuaLaTeX", "lualatex");
 
-	if (!QStandardPaths::findExecutable("xetex").isEmpty())
-		ui.cbTexEngine->addItem("XeTex", "xetex");
+	if (!QStandardPaths::findExecutable("xelatex").isEmpty())
+		ui.cbTexEngine->addItem("XeLaTex", "xelatex");
 
-	if (!QStandardPaths::findExecutable("pdftex").isEmpty())
-		ui.cbTexEngine->addItem("pdfTeX", "pdftex");
+	if (!QStandardPaths::findExecutable("pdflatex").isEmpty())
+		ui.cbTexEngine->addItem("pdfLaTeX", "pdflatex");
 
 	if (!QStandardPaths::findExecutable("latex").isEmpty())
 		ui.cbTexEngine->addItem("LaTeX", "latex");
 
 #else
-	if (!KStandardDirs::findExe("luatex").isEmpty())
-		ui.cbTexEngine->addItem("LuaTeX", "luatex");
+	if (!KStandardDirs::findExe("lualatex").isEmpty())
+		ui.cbTexEngine->addItem("LuaLaTeX", "lualatex");
 
-	if (!KStandardDirs::findExe("xetex").isEmpty())
-		ui.cbTexEngine->addItem("XeTex", "xetex");
+	if (!KStandardDirs::findExe("xelatex").isEmpty())
+		ui.cbTexEngine->addItem("XeLaTex", "xelatex");
 
-	if (!KStandardDirs::findExe("pdftex").isEmpty())
-		ui.cbTexEngine->addItem("pdfTeX", "pdftex");
+	if (!KStandardDirs::findExe("pdflatex").isEmpty())
+		ui.cbTexEngine->addItem("pdfLaTeX", "pdflatex");
 
 	if (!KStandardDirs::findExe("latex").isEmpty())
 		ui.cbTexEngine->addItem("LaTeX", "latex");
