@@ -201,7 +201,7 @@ struct data {
 	QStringList* paramNames;
 	double* paramMin;	// lower parameter limits
 	double* paramMax;	// upper parameter limits
-	// TODO: bool* fixed;
+	bool* paramFixed;	// parameter fixed?
 };
 
 /*!
@@ -279,6 +279,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 	double *min = ((struct data*)params)->paramMin;
 	double *max = ((struct data*)params)->paramMax;
+	bool *fixed = ((struct data*)params)->paramFixed;
 
 	// calculate the Jacobian matrix:
 	// Jacobian matrix J(i,j) = df_i / dx_j
@@ -293,8 +294,12 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		for (int i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
-			for (int j=0; j < paramNames->size(); ++j)
-				gsl_matrix_set(J, i, j, pow(x, j)/sigma);
+			for (int j=0; j < paramNames->size(); ++j) {
+				if (fixed[j])
+					gsl_matrix_set(J, i, j, 0.);
+				else
+					gsl_matrix_set(J, i, j, pow(x, j)/sigma);
+			}
 		}
 		break;
 	case XYFitCurve::Power:
@@ -305,8 +310,14 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (int i=0; i < n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
-				gsl_matrix_set(J, i, 0, pow(x, b)/sigma);
-				gsl_matrix_set(J, i, 1, a*pow(x, b)*log(x)/sigma);
+				if (fixed[0])
+					gsl_matrix_set(J, i, 0, 0.);
+				else
+					gsl_matrix_set(J, i, 0, pow(x, b)/sigma);
+				if (fixed[1])
+					gsl_matrix_set(J, i, 1, 0.);
+				else
+					gsl_matrix_set(J, i, 1, a*pow(x, b)*log(x)/sigma);
 			}
 		} else if (degree == 2) {
 			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
@@ -314,9 +325,18 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (int i=0; i < n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
-				gsl_matrix_set(J, i, 0, 1/sigma);
-				gsl_matrix_set(J, i, 1, pow(x,c)/sigma);
-				gsl_matrix_set(J, i, 2, b*pow(x,c)*log(x)/sigma);
+				if (fixed[0])
+					gsl_matrix_set(J, i, 0, 0.);
+				else
+					gsl_matrix_set(J, i, 0, 1./sigma);
+				if (fixed[1])
+					gsl_matrix_set(J, i, 1, 0.);
+				else
+					gsl_matrix_set(J, i, 1, pow(x,c)/sigma);
+				if (fixed[2])
+					gsl_matrix_set(J, i, 2, 0.);
+				else
+					gsl_matrix_set(J, i, 2, b*pow(x,c)*log(x)/sigma);
 			}
 		}
 		break;
@@ -328,8 +348,14 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (int i=0; i<n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
-				gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
-				gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
+				if (fixed[0])
+					gsl_matrix_set(J, i, 0, 0.);
+				else
+					gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
+				if (fixed[1])
+					gsl_matrix_set(J, i, 1, 0.);
+				else
+					gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
 			}
 		} else if (degree == 2) {
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
@@ -339,6 +365,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			for (int i=0; i<n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
+	//TODO: use fixed in all models
 				gsl_matrix_set(J, i, 0, exp(b*x)/sigma);
 				gsl_matrix_set(J, i, 1, a*x*exp(b*x)/sigma);
 				gsl_matrix_set(J, i, 2, exp(d*x)/sigma);
@@ -703,11 +730,15 @@ void XYFitCurvePrivate::recalculate() {
 		sigma = sigmaVector.data();
 
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
+#ifndef NDEBUG
+	for(unsigned int i=0; i<np; i++)
+		qDebug()<<"fixed"<<i<<fitData.paramFixed.data()[i];
+#endif
 
 	//function to fit
 	gsl_multifit_function_fdf f;
 	struct data params = {n, xdata, ydata, sigma, fitData.modelType, fitData.degree, &fitData.model, &fitData.paramNames, 
-				fitData.paramLowerLimits.data(), fitData.paramUpperLimits.data()};
+				fitData.paramLowerLimits.data(), fitData.paramUpperLimits.data(), fitData.paramFixed.data()};
 	f.f = &func_f;
 	f.df = &func_df;
 	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
@@ -750,7 +781,7 @@ void XYFitCurvePrivate::recalculate() {
 		x_init[i] = nsl_fit_map_bound(x_init[i], x_min[i], x_max[i]);
 
 	//get the covariance matrix
-	//TODO: if parameters are scaled: scale the Jacobian before constructing the covar matrix
+	//TODO: scale the Jacobian when limits are present before constructing the covar matrix?
 	gsl_matrix* covar = gsl_matrix_alloc(np, np);
 #if GSL_MAJOR_VERSION >= 2
 	// the Jacobian is not part of the solver anymore
@@ -779,7 +810,6 @@ void XYFitCurvePrivate::recalculate() {
 	//Coefficient of determination, R-squared = 1 - SSE/SSTOT with the total sum of squares SSTOT = \sum_i (y_i - ybar)^2 and ybar = 1/n \sum_i y_i
 	//Adjusted Coefficient of determination  adj. R-squared = 1 - (1-R-squared^2)*(n-1)/(n-np-1);
 
-	//TODO: scale residuals?
 	residualsVector->resize(n);
 	for (unsigned int i=0; i < n; ++i)
 		residualsVector->data()[i] = - gsl_vector_get(s->f, i);
@@ -884,14 +914,14 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	WRITE_COLUMN(d->weightsColumn, weightsColumn);
 	writer->writeAttribute( "autoRange", QString::number(d->fitData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->fitData.xRange.front()) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->fitData.xRange.back()) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->fitData.xRange.front(), 'g', 15) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->fitData.xRange.back(), 'g', 15) );
 	writer->writeAttribute( "modelType", QString::number(d->fitData.modelType) );
 	writer->writeAttribute( "weightsType", QString::number(d->fitData.weightsType) );
 	writer->writeAttribute( "degree", QString::number(d->fitData.degree) );
 	writer->writeAttribute( "model", d->fitData.model );
 	writer->writeAttribute( "maxIterations", QString::number(d->fitData.maxIterations) );
-	writer->writeAttribute( "eps", QString::number(d->fitData.eps) );
+	writer->writeAttribute( "eps", QString::number(d->fitData.eps, 'g', 15) );
 	writer->writeAttribute( "evaluatedPoints", QString::number(d->fitData.evaluatedPoints) );
 
 	writer->writeStartElement("paramNames");
@@ -901,20 +931,25 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 
 	writer->writeStartElement("paramStartValues");
 	for (double value: d->fitData.paramStartValues)
-		writer->writeTextElement("startValue", QString::number(value, 'g', 16));
+		writer->writeTextElement("startValue", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
+	// use 16 digits to handle -DBL_MAX
 	writer->writeStartElement("paramLowerLimits");
 	for (double limit: d->fitData.paramLowerLimits)
 		writer->writeTextElement("lowerLimit", QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
+	// use 16 digits to handle DBL_MAX
 	writer->writeStartElement("paramUpperLimits");
 	for (double limit: d->fitData.paramUpperLimits)
 		writer->writeTextElement("upperLimit", QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
-	//TODO: save fixed state
+	writer->writeStartElement("paramFixed");
+	for (double fixed: d->fitData.paramFixed)
+		writer->writeTextElement("fixed", QString::number(fixed));
+	writer->writeEndElement();
 
 	writer->writeEndElement();
 
@@ -934,24 +969,24 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "iterations", QString::number(d->fitResult.iterations) );
 	writer->writeAttribute( "time", QString::number(d->fitResult.elapsedTime) );
 	writer->writeAttribute( "dof", QString::number(d->fitResult.dof) );
-	writer->writeAttribute( "sse", QString::number(d->fitResult.sse) );
-	writer->writeAttribute( "mse", QString::number(d->fitResult.mse) );
-	writer->writeAttribute( "rmse", QString::number(d->fitResult.rmse) );
-	writer->writeAttribute( "mae", QString::number(d->fitResult.mae) );
-	writer->writeAttribute( "rms", QString::number(d->fitResult.rms) );
-	writer->writeAttribute( "rsd", QString::number(d->fitResult.rsd) );
-	writer->writeAttribute( "rsquared", QString::number(d->fitResult.rsquared) );
-	writer->writeAttribute( "rsquaredAdj", QString::number(d->fitResult.rsquaredAdj) );
+	writer->writeAttribute( "sse", QString::number(d->fitResult.sse, 'g', 15) );
+	writer->writeAttribute( "mse", QString::number(d->fitResult.mse, 'g', 15) );
+	writer->writeAttribute( "rmse", QString::number(d->fitResult.rmse, 'g', 15) );
+	writer->writeAttribute( "mae", QString::number(d->fitResult.mae, 'g', 15) );
+	writer->writeAttribute( "rms", QString::number(d->fitResult.rms, 'g', 15) );
+	writer->writeAttribute( "rsd", QString::number(d->fitResult.rsd, 'g', 15) );
+	writer->writeAttribute( "rsquared", QString::number(d->fitResult.rsquared, 'g', 15) );
+	writer->writeAttribute( "rsquaredAdj", QString::number(d->fitResult.rsquaredAdj, 'g', 15) );
 	writer->writeAttribute( "solverOutput", d->fitResult.solverOutput );
 
 	writer->writeStartElement("paramValues");
 	for (double value: d->fitResult.paramValues)
-		writer->writeTextElement("value", QString::number(value, 'g', 16));
+		writer->writeTextElement("value", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement("errorValues");
 	for (double value: d->fitResult.errorValues)
-		writer->writeTextElement("error", QString::number(value, 'g', 16));
+		writer->writeTextElement("error", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	//save calculated columns if available
@@ -1011,6 +1046,8 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			d->fitData.paramNames<<reader->readElementText();
 		} else if (reader->name() == "startValue") {
 			d->fitData.paramStartValues<<reader->readElementText().toDouble();
+		} else if (reader->name() == "fixed") {
+			d->fitData.paramFixed<<(bool)reader->readElementText().toInt();
 		} else if (reader->name() == "lowerLimit") {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
@@ -1025,7 +1062,6 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 				d->fitData.paramUpperLimits<<x;
 			else
 				d->fitData.paramUpperLimits<<DBL_MAX;
-		// TODO: read fixed
 		} else if (reader->name() == "value") {
 			d->fitResult.paramValues<<reader->readElementText().toDouble();
 		} else if (reader->name() == "error") {
@@ -1074,7 +1110,11 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 	if (d->fitData.modelType == 9 && d->fitData.model != "a*exp(-b*exp(-c*x))")
 			d->fitData.modelType = XYFitCurve::Custom;
 
-	// limits are not saved in project (old project)
+	// fixed and limits are not saved in project (old project)
+	if (d->fitData.paramFixed.size() == 0) {
+		for (double __attribute__((unused))v: d->fitData.paramStartValues)
+			d->fitData.paramFixed<<false;
+	}
 	if (d->fitData.paramLowerLimits.size() == 0) {
 		for (double __attribute__((unused))v: d->fitData.paramStartValues)
 			d->fitData.paramLowerLimits<<-DBL_MAX;

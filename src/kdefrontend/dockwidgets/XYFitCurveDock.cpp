@@ -526,14 +526,15 @@ void XYFitCurveDock::updateModelEquation() {
 	if (m_fitData.modelType != XYFitCurve::Custom &&
 	        !(m_initializing && m_fitData.paramNames.size() == m_fitData.paramStartValues.size())) {
 		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
+		m_fitData.paramFixed.resize(m_fitData.paramNames.size());
 		m_fitData.paramLowerLimits.resize(m_fitData.paramNames.size());
 		m_fitData.paramUpperLimits.resize(m_fitData.paramNames.size());
 
-		for (int i=0; i < m_fitData.paramStartValues.size(); ++i) {
+		for (int i=0; i < m_fitData.paramNames.size(); ++i) {
 			m_fitData.paramStartValues[i] = 1.0;
+			m_fitData.paramFixed[i] = false;
 			m_fitData.paramLowerLimits[i] = -DBL_MAX;
 			m_fitData.paramUpperLimits[i] = DBL_MAX;
-			//TODO: set fixed flag to no
 		}
 	}
 
