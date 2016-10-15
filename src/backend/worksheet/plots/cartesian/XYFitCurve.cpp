@@ -782,7 +782,7 @@ void XYFitCurvePrivate::recalculate() {
 	//TODO: scale residuals?
 	residualsVector->resize(n);
 	for (unsigned int i=0; i < n; ++i)
-		residualsVector->data()[i] = gsl_vector_get(s->f, i);
+		residualsVector->data()[i] = - gsl_vector_get(s->f, i);
 	residualsColumn->setChanged();
 
 	//gsl_blas_dnrm2() - computes the Euclidian norm (||x||_2 = \sqrt {\sum x_i^2}) of the vector with the elements (Yi - y[i])/sigma[i]
