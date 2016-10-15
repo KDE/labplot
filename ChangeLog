@@ -12,7 +12,7 @@ New features:
 Bug fixes:
 	* Correctly load worksheet sizes from saved templates
 	* Don't crash when removing columns in spreadsheet
-	* fixed crash when fitting von GSL >= 2
+	* fixed crash when fitting using GSL >= 2
 	* list of available functions corrected
 	* constants are now available with full accuracy
 	* Windows: open recent files fixed

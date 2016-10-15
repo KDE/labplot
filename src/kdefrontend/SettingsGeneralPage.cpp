@@ -71,7 +71,6 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
 
 	if (!QStandardPaths::findExecutable("latex").isEmpty())
 		ui.cbTexEngine->addItem("LaTeX", "latex");
-
 #else
 	if (!KStandardDirs::findExe("lualatex").isEmpty())
 		ui.cbTexEngine->addItem("LuaLaTeX", "lualatex");
@@ -99,7 +98,7 @@ void SettingsGeneralPage::applySettings(){
 	group.writeEntry("AutoSave", ui.chkAutoSave->isChecked());
 	group.writeEntry("AutoSaveInterval", ui.sbAutoSaveInterval->value());
 	group.writeEntry("DoubleBuffering", ui.chkDoubleBuffering->isChecked());
-	group.writeEntry("TeXEngine", ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
+	group.writeEntry("LaTeXEngine", ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
 }
 
 void SettingsGeneralPage::restoreDefaults(){
@@ -116,10 +115,10 @@ void SettingsGeneralPage::loadSettings(){
 	ui.sbAutoSaveInterval->setValue(group.readEntry("AutoSaveInterval", 0));
 	ui.chkDoubleBuffering->setChecked(group.readEntry<bool>("DoubleBuffering", 1));
 
-	QString engine = group.readEntry("TeXEngine", "");
+	QString engine = group.readEntry("LaTeXEngine", "");
 	int index = -1;
 	if (engine.isEmpty())
-		index = ui.cbTexEngine->findData("xetex");
+		index = ui.cbTexEngine->findData("xelatex");
 	else
 		index = ui.cbTexEngine->findData(engine);
 
