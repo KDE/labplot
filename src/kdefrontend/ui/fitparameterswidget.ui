@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>536</width>
+    <width>403</width>
     <height>270</height>
    </rect>
   </property>
@@ -18,7 +18,14 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="5">
-    <widget class="QTableWidget" name="tableWidget"/>
+    <widget class="QTableWidget" name="tableWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
    <item row="1" column="0">
     <widget class="QPushButton" name="pbAdd">

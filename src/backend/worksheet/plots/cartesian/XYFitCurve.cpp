@@ -252,14 +252,13 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		if (parse_errors() > 0)
 			return GSL_EINVAL;
 
-// 		Yi += base; //TODO: what is this?
 		if (sigma)
 			gsl_vector_set (f, i, (Yi - y[i])/sigma[i]);
 		else
 			gsl_vector_set (f, i, (Yi - y[i]));
 	}
 #ifndef NDEBUG
-	puts("");
+//	puts("");
 #endif
 
 	return GSL_SUCCESS;
@@ -282,9 +281,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	double *max = ((struct data*)params)->paramMax;
 
 	// calculate the Jacobian matrix:
-	// Jacobian matrix J(i,j) = dfi / dxj
-	// where fi = (Yi - yi)/sigma[i],
-	// Yi = model and the xj are the parameters
+	// Jacobian matrix J(i,j) = df_i / dx_j
+	// where f_i = (Y_i - y_i)/sigma[i],
+	// Y_i = model and the x_j are the parameters
 
 	double x, sigma = 1.0;
 
@@ -728,7 +727,7 @@ void XYFitCurvePrivate::recalculate() {
 	// scale start values if limits are set
 	for (unsigned int i=0; i < np; i++)
 		x_init[i] = nsl_fit_map_unbound(x_init[i], x_min[i], x_max[i]);
-	//TODO: remove fixed parameter?
+	//TODO: how to handle fixed parameter?
 	gsl_vector_view x = gsl_vector_view_array(x_init, np);
 	// initialize solver with function f and inital guess x
 	gsl_multifit_fdfsolver_set(s, &f, &x.vector);
@@ -765,7 +764,7 @@ void XYFitCurvePrivate::recalculate() {
 	//write the result
 	fitResult.available = true;
 	fitResult.valid = true;
-	fitResult.status = QString(gsl_strerror(status)); //TODO: add i18n?
+	fitResult.status = QString(gsl_strerror(status)); // i18n? GSL does not support translations
 	fitResult.iterations = iter;
 	fitResult.dof = n-np;
 
