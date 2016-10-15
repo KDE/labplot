@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : TeX renderer class
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2013 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -28,35 +28,39 @@
  ***************************************************************************/
 #include "TeXRenderer.h"
 
-#include <KTempDir>
-#include <KProcess>
-#include <QDebug>
+#include <KConfigGroup>
+#include <KDebug>
+#include <KGlobal>
+#include <KConfig>
 
+#include <QImage>
+#include <QColor>
 #include <QDir>
+#include <QDebug>
 #include <QTemporaryFile>
 #include <QTextStream>
 #include <QProcess>
-#include <QtConcurrent/QtConcurrentRun>
 
-// use (pdf)latex to render LaTeX text (see tex2im, etc.)
+// use latex engine specified by the user (default xelatex) to render LaTeX text (see tex2im, etc.)
 // TODO: test convert to svg and render to qimage, test dvipng
 /*!
  * use latex to render LaTeX text (see tex2im, etc.)
  */
 QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fontColor, const int fontSize, const int dpi){
 	QTemporaryFile file("/dev/shm/labplot_XXXXXX.tex");
-	//file.setAutoRemove(false);
 	if(file.open()) {
 		QDir::setCurrent("/dev/shm");
-	}
-	else {
-		qWarning()<<"/dev/shm failed. using /tmp"<<endl;
+	} else {
 		file.setFileTemplate("/tmp/labplot_XXXXXX.tex");
 		if(file.open())
 			QDir::setCurrent("/tmp");
 		else
 			return QImage();
 	}
+
+	//determine latex engine to be used
+	KConfigGroup group = KGlobal::config()->group( "General" );
+	QString engine = group.readEntry("TeXEngine", "");
 
 	// create latex code
 	QTextStream out(&file);
@@ -69,10 +73,16 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 		body = teXString.mid(headerIndex + 16, footerIndex - headerIndex - 16);
 		out << header;
 	} else {
-		//user simply provided a document body -> add a minimal header
+		//user simply provided a document body (assume it's a math. expression) -> add a minimal header
 		out << "\\documentclass{minimal}";
-		body = teXString;
+		if (engine == "latex")
+			body = '$' + teXString + '$';
+		else
+			body = teXString;
 	}
+
+	if (engine=="xelatex" || engine=="lualatex")
+		out<< "\\usepackage{xltxtra}";
 
 	out << "\\usepackage{color}";
 	out << "\\usepackage[active,displaymath,textmath,tightpage]{preview}";
@@ -83,16 +93,22 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 	out << "{\\color{fontcolor}";
 	out << body;
 	out << "}}\\end{preview}";
-	out << "\\end{preview}";
 	out << "\\end{document}";
 	out.flush();
 
-	// pdflatex: TeX -> PDF
-	QProcess latexProcess, convertProcess;
-	latexProcess.start("pdflatex", QStringList() << "-interaction=batchmode" << file.fileName());
+	if (engine!="latex")
+		return imageFromPDF(file, dpi, engine);
+	else
+		return imageFromDVI(file, dpi);
+}
 
-	QFileInfo fi(file.fileName());
-	if (latexProcess.waitForFinished()) { 	// pdflatex finished
+// TEX -> PDF -> PNG
+QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine) {
+	QProcess latexProcess, convertProcess;
+	latexProcess.start(engine, QStringList() << "-interaction=batchmode" << file.fileName());
+
+	if (latexProcess.waitForFinished()) { // pdflatex finished
+		QFileInfo fi(file.fileName());
 		QFile::remove(fi.completeBaseName()+".aux");
 		QFile::remove(fi.completeBaseName()+".log");
 
@@ -104,17 +120,6 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 		convertProcess.start("convert",  QStringList() << "-density"<< QString::number(dpi) + 'x' + QString::number(dpi)
 														<< fi.completeBaseName() + ".pdf"
 														<< fi.completeBaseName() + ".png");
-		//gs doesn't work here. Why?
-// 		convertProcess.start("gs", QStringList()<< "-sDEVICE=png16m"
-// 												<< "-dTextAlphaBits=4"
-// 												<< "-r" + QString::number(dpi)
-// 												<< "-dGraphicsAlphaBits=4"
-// 												<< "-sDEVICE=pngalpha"
-// 												<< "-dSAFER"
-// 												<< "-q"
-// 												<< "-dNOPAUSE"
-// 												<< "-sOutputFile=" + fi.completeBaseName() + ".png"
-// 												<< fi.completeBaseName() + ".pdf");
 
 		// clean up and read png file
 		if (convertProcess.waitForFinished()) {
@@ -131,20 +136,24 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 		}
 	}else{
 		qWarning()<<"pdflatex failed."<<endl;
+		return QImage();
 	}
+}
 
-	//////////// fallback if pdflatex fails ///////////////
-
-	// latex: TeX -> DVI
+// TEX -> DVI -> PS -> PNG
+QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi) {
+	QProcess latexProcess, convertProcess;
 	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
-	// also possible: latexmf -C
+
+	QFileInfo fi(file.fileName());
 	if (!latexProcess.waitForFinished()) {
 		qWarning()<<"latex failed."<<endl;
 		QFile::remove(fi.completeBaseName()+".aux");
 		QFile::remove(fi.completeBaseName()+".log");
 		return QImage();
 	}
-	if(latexProcess.exitCode() != 0)	// skip if latex failed
+
+	if(latexProcess.exitCode() != 0) // skip if latex failed
 		return QImage();
 
 	// dvips: DVI -> PS

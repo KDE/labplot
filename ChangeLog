@@ -6,12 +6,13 @@ New features:
 	* New pre-defined fit models: Gompertz, Weibull, Log-Normal, Gumbel
 	* Support user specified x range in all analysis functions
 	* Allow to enter complete LaTeX documents in text labels
+	* Configuration parameter to use different LaTex engines (LuaLaTex, XeLatex, pdfLaTex, LaTex)
 	* MacOSX port
 
 Bug fixes:
 	* Correctly load worksheet sizes from saved templates
 	* Don't crash when removing columns in spreadsheet
-	* fixed crash when fitting von GSL >= 2
+	* fixed crash when fitting using GSL >= 2
 	* list of available functions corrected
 	* constants are now available with full accuracy
 	* Windows: open recent files fixed

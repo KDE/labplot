@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : TeX renderer class
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -28,13 +28,17 @@
 #ifndef TEXRENDERER_H
 #define TEXRENDERER_H
 
-#include <QImage>
-#include <QColor>
+class QColor;
+class QImage;
+class QString;
+class QTemporaryFile;
 
-class TeXRenderer{
+class TeXRenderer {
 
 public:
-  static QImage renderImageLaTeX( const QString&, const QColor& fontColor, const int fontSize=12,  const int dpi=300);
+	static QImage renderImageLaTeX( const QString&, const QColor& fontColor, const int fontSize=12,  const int dpi=300);
+	static QImage imageFromPDF(const QTemporaryFile&, const int dpi, const QString& engine);
+	static QImage imageFromDVI(const QTemporaryFile&, const int dpi);
 };
 
 #endif

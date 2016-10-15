@@ -34,18 +34,12 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="4" colspan="2">
-    <widget class="KComboBox" name="cbLoadOnStart"/>
-   </item>
    <item row="1" column="0" colspan="2">
     <widget class="QLabel" name="lInterface">
      <property name="text">
       <string>Interface</string>
      </property>
     </widget>
-   </item>
-   <item row="1" column="4" colspan="2">
-    <widget class="KComboBox" name="cbInterface"/>
    </item>
    <item row="2" column="0" colspan="2">
     <widget class="QLabel" name="lTabPosition">
@@ -54,18 +48,12 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="4" colspan="2">
-    <widget class="KComboBox" name="cbTabPosition"/>
-   </item>
    <item row="3" column="0" colspan="3">
     <widget class="QLabel" name="lMdiVisibility">
      <property name="text">
       <string>Sub-Window visibility</string>
      </property>
     </widget>
-   </item>
-   <item row="3" column="4" colspan="2">
-    <widget class="KComboBox" name="cbMdiVisibility"/>
    </item>
    <item row="4" column="2">
     <spacer name="verticalSpacer_2">
@@ -201,7 +189,7 @@
       </font>
      </property>
      <property name="text">
-      <string>TeX</string>
+      <string>LaTeX</string>
      </property>
     </widget>
    </item>
@@ -211,9 +199,6 @@
       <string>Typesetting engine</string>
      </property>
     </widget>
-   </item>
-   <item row="13" column="4" colspan="2">
-    <widget class="QComboBox" name="cbTexEngine"/>
    </item>
    <item row="14" column="2">
     <spacer name="verticalSpacer">
@@ -227,6 +212,21 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="0" column="4" colspan="3">
+    <widget class="KComboBox" name="cbLoadOnStart"/>
+   </item>
+   <item row="1" column="4" colspan="3">
+    <widget class="KComboBox" name="cbInterface"/>
+   </item>
+   <item row="2" column="4" colspan="3">
+    <widget class="KComboBox" name="cbTabPosition"/>
+   </item>
+   <item row="3" column="4" colspan="3">
+    <widget class="KComboBox" name="cbMdiVisibility"/>
+   </item>
+   <item row="13" column="4" colspan="3">
+    <widget class="QComboBox" name="cbTexEngine"/>
    </item>
   </layout>
  </widget>
