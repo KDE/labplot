@@ -668,7 +668,7 @@ void XYFitCurveDock::showFitResult() {
 	}
 
 	str += i18n("iterations:") + ' ' + QString::number(fitResult.iterations) + "<br>";
-	if (fitResult.elapsedTime>1000)
+	if (fitResult.elapsedTime > 1000)
 		str += i18n("calculation time: %1 s", fitResult.elapsedTime/1000) + "<br>";
 	else
 		str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + "<br>";
@@ -676,18 +676,18 @@ void XYFitCurveDock::showFitResult() {
 	str += i18n("degrees of freedom:") + ' ' + QString::number(fitResult.dof) + "<br><br>";
 
 	str += "<b>" +i18n("Parameters:") + "</b>";
-	for (int i=0; i<fitResult.paramValues.size(); i++) {
+	for (int i=0; i < fitResult.paramValues.size(); i++) {
 		str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
-		       + QString::fromUtf8("\u2213") + QString::number(fitResult.errorValues.at(i));
+		       + QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i));
 	}
 
 	str += "<br><br><b>" + i18n("Goodness of fit:") + "</b><br>";
-	str += i18n("sum of squared errors:") + ' ' + QString::number(fitResult.sse) + "<br>";
+	str += i18n("sum of squared errors") + " (" + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.sse) + "<br>";
 	str += i18n("mean squared error:") + ' ' + QString::number(fitResult.mse) + "<br>";
-	str += i18n("root-mean squared error:") + ' ' + QString::number(fitResult.rmse) + "<br>";
+	str += i18n("root-mean squared error") + " (" + i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.rmse) + "<br>";
 	str += i18n("mean absolute error:") + ' ' + QString::number(fitResult.mae) + "<br>";
 
-	if (fitResult.dof!=0) {
+	if (fitResult.dof != 0) {
 		str += i18n("residual mean square:") + ' ' + QString::number(fitResult.rms) + "<br>";
 		str += i18n("residual standard deviation:") + ' ' + QString::number(fitResult.rsd) + "<br>";
 	}
