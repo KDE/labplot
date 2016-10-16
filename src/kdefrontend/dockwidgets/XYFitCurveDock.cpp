@@ -3,6 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of fit curves
 
  ***************************************************************************/

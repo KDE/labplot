@@ -1,11 +1,12 @@
 -----2.4-----
 New features:
 	* Support themes for plots
-	* Import of FITS support added
-	* New analysis functions: numerical differentiation and integration
+	* Import and editing of FITS data files
+	* Support user specified x range in all analysis functions
+	* Data reduction by removing data points using multiple algorithm
+	* Numerical differentiation and integration with several options
 	* New pre-defined fit models: Gompertz, Weibull, Log-Normal, Gumbel
 	* Fit parameter now support fixed values and also lower and upper limits
-	* Support user specified x range in all analysis functions
 	* Allow to enter complete LaTeX documents in text labels
 	* Configuration parameter to use different LaTex engines (LuaLaTex, XeLatex, pdfLaTex, LaTex)
 	* Presenter mode for worksheets
@@ -13,10 +14,10 @@ New features:
 
 Bug fixes:
 	* Correctly load worksheet sizes from saved templates
-	* Don't crash when removing columns in spreadsheet
-	* fixed crash when fitting using GSL >= 2
-	* list of available functions corrected
-	* constants are now available with full accuracy
+	* Fixed crash when removing columns in spreadsheet
+	* Fixed crash when fitting using GSL >= 2
+	* List of available functions corrected
+	* Constants are now available with full accuracy
 	* Windows: open recent files fixed
 
 -----2.3-----

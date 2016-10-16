@@ -4,6 +4,7 @@
     Description          : A xy-curve defined by a fit model
     --------------------------------------------------------------------
     Copyright            : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -40,9 +41,6 @@ class XYFitCurve : public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum ModelType {Polynomial, Power, Exponential, Inverse_Exponential, Fourier,
-						Gaussian, Lorentz, Maxwell, Sigmoid, Gompertz,
-						Weibull, LogNormal, Gumbel, Custom=99};
 		enum WeightsType {WeightsFromColumn, WeightsFromErrorColumn};
 
 		struct FitData {
