@@ -7,6 +7,7 @@ New features:
 	* Support user specified x range in all analysis functions
 	* Allow to enter complete LaTeX documents in text labels
 	* Configuration parameter to use different LaTex engines (LuaLaTex, XeLatex, pdfLaTex, LaTex)
+	* Presenter mode for worksheets
 	* MacOSX port
 
 Bug fixes:
