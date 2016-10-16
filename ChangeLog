@@ -4,6 +4,7 @@ New features:
 	* Import of FITS support added
 	* New analysis functions: numerical differentiation and integration
 	* New pre-defined fit models: Gompertz, Weibull, Log-Normal, Gumbel
+	* Fit parameter now support fixed values and also lower and upper limits
 	* Support user specified x range in all analysis functions
 	* Allow to enter complete LaTeX documents in text labels
 	* Configuration parameter to use different LaTex engines (LuaLaTex, XeLatex, pdfLaTex, LaTex)
