@@ -82,21 +82,8 @@ void XYFitCurveDock::setupGeneral() {
 	cbWeightsColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbWeightsColumn, 6, 4, 1, 2);
 
-	// TODO: use nsl_fit_model_name
-	uiGeneralTab.cbModel->addItem(i18n("Polynomial"));
-	uiGeneralTab.cbModel->addItem(i18n("Power"));
-	uiGeneralTab.cbModel->addItem(i18n("Exponential"));
-	uiGeneralTab.cbModel->addItem(i18n("Inverse Exponential"));
-	uiGeneralTab.cbModel->addItem(i18n("Fourier"));
-	uiGeneralTab.cbModel->addItem(i18n("Gaussian"));
-	uiGeneralTab.cbModel->addItem(i18n("Lorentz (Cauchy)"));
-	uiGeneralTab.cbModel->addItem(i18n("Maxwell-Boltzmann"));
-	uiGeneralTab.cbModel->addItem(i18n("Sigmoid"));
-	uiGeneralTab.cbModel->addItem(i18n("Gompertz"));
-	uiGeneralTab.cbModel->addItem(i18n("Weibull"));
-	uiGeneralTab.cbModel->addItem(i18n("Log-Normal"));
-	uiGeneralTab.cbModel->addItem(i18n("Gumbel"));
-	uiGeneralTab.cbModel->addItem(i18n("Custom"));
+	for(int i=0; i < NSL_FIT_MODEL_TYPE_COUNT; i++)
+		uiGeneralTab.cbModel->addItem(nsl_fit_model_name[i]);
 
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
 
@@ -384,8 +371,9 @@ void XYFitCurveDock::updateModelEquation() {
 	if (m_fitData.modelType != XYFitCurve::Custom)
 		m_fitData.paramNames.clear();
 
-	// TODO: use switch, nsl_fit_model_type, nsl_fit_model_equation
-	if (m_fitData.modelType == XYFitCurve::Polynomial) {
+	// TODO: use nsl_fit_model_type, nsl_fit_model_equation
+	switch (m_fitData.modelType) {
+	case XYFitCurve::Polynomial:
 		eq = "c0 + c1*x";
 		m_fitData.model = eq;
 		vars << "c0" << "c1";
@@ -405,7 +393,8 @@ void XYFitCurveDock::updateModelEquation() {
 				m_fitData.paramNames << "c"+numStr;
 			}
 		}
-	} else if (m_fitData.modelType == XYFitCurve::Power) {
+		break;
+	case XYFitCurve::Power:
 		if (num == 1) {
 			eq = "a*x^b";
 			vars << "a" << "b";
@@ -416,7 +405,8 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "a" << "b" << "c";
 		}
 		m_fitData.model = eq;
-	} else if (m_fitData.modelType == XYFitCurve::Exponential) {
+		break;
+	case XYFitCurve::Exponential:
 		eq = "a*exp(b*x)";
 		vars << "a" << "b";
 		m_fitData.paramNames << "a" << "b";
@@ -430,12 +420,14 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "c" << "d" << "e" << "f";
 		}
 		m_fitData.model = eq;
-	} else if (m_fitData.modelType == XYFitCurve::Inverse_Exponential) {
+		break;
+	case XYFitCurve::Inverse_Exponential:
 		eq = "a*(1-exp(b*x))+c";
 		m_fitData.model = eq;
 		vars << "a" << "b" << "c";
 		m_fitData.paramNames << "a" << "b" << "c";
-	} else if (m_fitData.modelType == XYFitCurve::Fourier) {
+		break;
+	case XYFitCurve::Fourier:
 		eq = "a0 + (a1*cos(w*x) + b1*sin(w*x))";
 		m_fitData.model = eq;
 		vars << "w" << "a0" << "a1" << "b1";
@@ -455,7 +447,8 @@ void XYFitCurveDock::updateModelEquation() {
 				m_fitData.paramNames << "a"+numStr << "b"+numStr;
 			}
 		}
-	} else if (m_fitData.modelType == XYFitCurve::Gaussian) {
+		break;
+	case XYFitCurve::Gaussian:
 		eq = "1/sqrt(2*pi)/a1*exp(-((x-b1)/a1)^2/2)";
 		m_fitData.model = eq;
 		vars << "a1" << "b1";
@@ -480,42 +473,50 @@ void XYFitCurveDock::updateModelEquation() {
 				m_fitData.paramNames << "a"+numStr << "b"+numStr;
 			}
 		}
-	} else if (m_fitData.modelType == XYFitCurve::Lorentz) {
+		break;
+	case XYFitCurve::Lorentz:
 		eq = "1/pi*s/(s^2+(x-t)^2)";
 		m_fitData.model = eq;
 		vars << "s" << "t";
 		m_fitData.paramNames << "s" << "t";
-	} else if (m_fitData.modelType == XYFitCurve::Maxwell) {
+		break;
+	case XYFitCurve::Maxwell:
 		eq = "sqrt(2/pi)*x^2*exp(-x^2/(2*a^2))/a^3";
 		m_fitData.model = eq;
 		vars << "a";
 		m_fitData.paramNames << "a";
-	} else if (m_fitData.modelType == XYFitCurve::Sigmoid) {
+		break;
+	case XYFitCurve::Sigmoid:
 		eq = "a/(1+exp(-b*(x-c)))";
 		m_fitData.model = eq;
 		vars << "a" << "b" << "c";
 		m_fitData.paramNames << "a" << "b" << "c";
-	} else if (m_fitData.modelType == XYFitCurve::Gompertz) {
+		break;
+	case XYFitCurve::Gompertz:
 		eq = "a*exp(-b*exp(-c*x))";
 		m_fitData.model = eq;
 		vars << "a" << "b" << "c";
 		m_fitData.paramNames << "a" << "b" << "c";
-	} else if (m_fitData.modelType == XYFitCurve::Weibull) {
+		break;
+	case XYFitCurve::Weibull:
 		eq = "a/b*((x-c)/b)^(a-1)*exp(-((x-c)/b)^a)";
 		m_fitData.model = eq;
 		vars << "a" << "b" << "c";
 		m_fitData.paramNames << "a" << "b" << "c";
-	} else if (m_fitData.modelType == XYFitCurve::LogNormal) {
+		break;
+	case XYFitCurve::LogNormal:
 		eq = "1/(sqrt(2*pi)*x*a)*exp(-(log(x)-b)^2/(2*a^2))";
 		m_fitData.model = eq;
 		vars << "a" << "b";
 		m_fitData.paramNames << "a" << "b";
-	} else if (m_fitData.modelType == XYFitCurve::Gumbel) {
+		break;
+	case XYFitCurve::Gumbel:
 		eq = "1/a*exp((x-b)/a-exp((x-b)/a))";
 		m_fitData.model = eq;
 		vars << "a" << "b";
 		m_fitData.paramNames << "a" << "b";
-	} else if (m_fitData.modelType == XYFitCurve::Custom) {
+		break;
+	case XYFitCurve::Custom:
 		//use the equation of the last selected predefined model or of the last available custom model
 		eq = m_fitData.model;
 		vars << m_fitData.paramNames;

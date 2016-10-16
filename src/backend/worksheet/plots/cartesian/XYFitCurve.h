@@ -31,6 +31,9 @@
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include <array>
+extern "C" {
+#include "backend/nsl/nsl_fit.h"
+}
 
 class XYFitCurvePrivate;
 class XYFitCurve : public XYCurve {

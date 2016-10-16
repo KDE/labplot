@@ -26,7 +26,7 @@
  ***************************************************************************/
 
 /* TODO:
-	* nsl_sf_model_deriv(int parindex, ... )
+	* nsl_sf_model_deriv(int param_index, ... )
 */
 
 #include "nsl_common.h"
