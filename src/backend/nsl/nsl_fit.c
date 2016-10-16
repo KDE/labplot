@@ -26,12 +26,21 @@
  ***************************************************************************/
 
 /* TODO:
-	* TODO
+	* nsl_sf_model_deriv(int parindex, ... )
 */
 
 #include "nsl_common.h"
 #include "nsl_fit.h"
 #include <gsl/gsl_math.h>
+
+const char* nsl_fit_model_name[] = {i18n("Polynomial"), i18n("Power"), i18n("Exponential"), i18n("Inverse Exponential"), i18n("Fourier"),
+	i18n("Gaussian"), i18n("Lorentz (Cauchy)"), i18n("Maxwell-Boltzmann"), i18n("Sigmoid"), i18n("Gompertz"), i18n("Weibull"),
+	i18n("Log-Normal"), i18n("Gumbel"), i18n("Custom")};
+
+const char* nsl_fit_model_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(1-exp(b*x))+c", "a0 + (a1*cos(w*x) + b1*sin(w*x))",
+	"1/sqrt(2*pi)/a1*exp(-((x-b1)/a1)^2/2)", "1/pi*s/(s^2+(x-t)^2)", "sqrt(2/pi)*x^2*exp(-x^2/(2*a^2))/a^3", "a/(1+exp(-b*(x-c)))",
+	"a*exp(-b*exp(-c*x))", "a/b*((x-c)/b)^(a-1)*exp(-((x-c)/b)^a)", "1/(sqrt(2*pi)*x*a)*exp(-(log(x)-b)^2/(2*a^2))", 
+	"1/a*exp((x-b)/a-exp((x-b)/a))"};
 
 /* 
 	see http://www.quantcode.com/modules/smartfaq/faq.php?faqid=96

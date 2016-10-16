@@ -29,6 +29,13 @@
 #ifndef NSL_FIT_H
 #define NSL_FIT_H
 
+#define NSL_FIT_MODEL_TYPE_COUNT 14
+typedef enum {nsl_fit_model_polynomial, nsl_fit_model_power, nsl_fit_model_exponential, nsl_fit_model_inverse_exponential,
+	nsl_fit_model_fourier, nsl_fit_model_gaussian, nsl_fit_model_lorentz, nsl_fit_model_maxwell, nsl_fit_model_sigmoid,
+	nsl_fit_model_gompertz, nsl_fit_model_weibull, nsl_fit_model_lognormal, nsl_fit_model_gumbel, nsl_fit_model_custom=99} nsl_fit_model_type;
+extern const char* nsl_fit_model_name[];
+extern const char* nsl_fit_model_equation[];
+
 /* convert unbounded variable x to bounded variable where bounds are [min, max] */
 double nsl_fit_map_bound(double x, double min, double max);
 /* convert bounded variable x to unbounded variable where bounds are [min, max] */

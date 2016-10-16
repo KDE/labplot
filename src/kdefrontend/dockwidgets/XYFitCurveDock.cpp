@@ -82,6 +82,7 @@ void XYFitCurveDock::setupGeneral() {
 	cbWeightsColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbWeightsColumn, 6, 4, 1, 2);
 
+	// TODO: use nsl_fit_model_name
 	uiGeneralTab.cbModel->addItem(i18n("Polynomial"));
 	uiGeneralTab.cbModel->addItem(i18n("Power"));
 	uiGeneralTab.cbModel->addItem(i18n("Exponential"));
@@ -380,9 +381,10 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.modelType = (XYFitCurve::ModelType)uiGeneralTab.cbModel->currentIndex();
 	int num = uiGeneralTab.sbDegree->value();
 
-	if (m_fitData.modelType!=XYFitCurve::Custom)
+	if (m_fitData.modelType != XYFitCurve::Custom)
 		m_fitData.paramNames.clear();
 
+	// TODO: use switch, nsl_fit_model_type, nsl_fit_model_equation
 	if (m_fitData.modelType == XYFitCurve::Polynomial) {
 		eq = "c0 + c1*x";
 		m_fitData.model = eq;
