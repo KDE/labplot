@@ -210,7 +210,7 @@ struct data {
  * \param f vector with the weighted residuals (Yi - y[i])/sigma[i]
  */
 int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
-	int n = ((struct data*)params)->n;
+	size_t n = ((struct data*)params)->n;
 	double* x = ((struct data*)params)->x;
 	double* y = ((struct data*)params)->y;
 	double* sigma = ((struct data*)params)->sigma;
@@ -234,7 +234,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	}
 
 	char var[]="x";
-	for (int i=0; i < n; i++) {
+	for (size_t i=0; i < n; i++) {
 		if (std::isnan(x[i]) || std::isnan(y[i]))
 			continue;
 
@@ -271,7 +271,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
  * \param J Jacobian matrix
  * */
 int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
-	int n = ((struct data*)params)->n;
+	size_t n = ((struct data*)params)->n;
 	double* xVector = ((struct data*)params)->x;
 	double* sigmaVector = ((struct data*)params)->sigma;
 	XYFitCurve::ModelType modelType = ((struct data*)params)->modelType;
@@ -291,7 +291,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	switch (modelType) {
 	case XYFitCurve::Polynomial:
 		// Y(x) = c0 + c1*x + ... + cn*x^n
-		for (int i=0; i < n; i++) {
+		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			for (int j=0; j < paramNames->size(); ++j) {
@@ -307,7 +307,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		if (degree == 1) {
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			for (int i=0; i < n; i++) {
+			for (size_t i=0; i < n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
 				if (fixed[0])
@@ -322,7 +322,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		} else if (degree == 2) {
 			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-			for (int i=0; i < n; i++) {
+			for (size_t i=0; i < n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
 				if (fixed[0])
@@ -345,7 +345,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		if (degree == 1) {
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			for (int i=0; i<n; i++) {
+			for (size_t i=0; i < n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
 				if (fixed[0])
@@ -362,7 +362,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 			double d = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
-			for (int i=0; i<n; i++) {
+			for (size_t i=0; i < n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
 				if (fixed[0])
@@ -389,7 +389,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			double d = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
 			double e = nsl_fit_map_bound(gsl_vector_get(paramValues, 4), min[4], max[4]);
 			double f = nsl_fit_map_bound(gsl_vector_get(paramValues, 5), min[5], max[5]);
-			for (int i=0; i < n; i++) {
+			for (size_t i=0; i < n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
 				if (fixed[0])
@@ -423,7 +423,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		// Y(x) = a*(1-exp(b*x))+c
 		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-		for (int i=0; i < n; i++) {
+		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			if (fixed[0])
@@ -453,7 +453,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			a[i] = nsl_fit_map_bound(gsl_vector_get(paramValues, 2*i), min[2*i], max[2*i]);
 			b[i] = nsl_fit_map_bound(gsl_vector_get(paramValues, 2*i+1), min[2*i+1], max[2*i+1]);
 		}
-		for (int i=0; i < n; i++) {
+		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			double wd = 0; //first derivative with respect to the w parameter
@@ -484,7 +484,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	case XYFitCurve::Gaussian: {
 		// Y(x) = 1/sqrt(2*pi)/a1*exp(-((x-b1)/a1)^2/2) + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + ... 1/sqrt(2*pi)/an*exp(-((x-bn)/an)^2/2)
 		double a,b;
-		for (int i=0; i < n; i++) {
+		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			for (int j=0; j < degree; ++j) {
@@ -506,7 +506,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		// Y(x) = 1/pi*s/(s^2+(x-t)^2)
 		double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 		double t = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-		for (int i=0; i < n; i++) {
+		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			if (fixed[0])
@@ -523,7 +523,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	case XYFitCurve::Maxwell: {
 		// Y(x) = sqrt(2/pi)*x^2*exp(-x^2/(2*a^2))/a^3
 		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-		for (int i=0; i < n; i++) {
+		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			if (fixed[0])
@@ -538,7 +538,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 		double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-		for (int i=0; i < n; i++) {
+		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			if (fixed[0])
@@ -561,7 +561,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 		double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-		for (int i=0; i < n; i++) {
+		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			if (fixed[0])
@@ -584,7 +584,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 		double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-		for (int i=0; i < n; i++) {
+		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			//TODO: how to deal correctly with (x-c)/b <=0
@@ -614,7 +614,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		//Y(x) = 1/(sqrt(2*pi)*x*a)*exp(-(log(x)-b)^2/(2*a^2));
 		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-		for (int i=0; i < n; i++) {
+		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			if (x>0) {
@@ -637,7 +637,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		//Y(x) = 1/a*exp((x-b)/a-exp((x-b)/a));
 		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-		for (int i=0; i < n; i++) {
+		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			if (fixed[0])
@@ -657,7 +657,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		QByteArray nameba;
 		char* name;
 		double value;
-		for (int i=0; i < n; i++) {
+		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 			char var[]="x";
@@ -811,7 +811,7 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	//number of data points to fit
-	unsigned int n = xdataVector.size();
+	size_t n = xdataVector.size();
 	if (n == 0) {
 		fitResult.available = true;
 		fitResult.valid = false;
@@ -838,8 +838,8 @@ void XYFitCurvePrivate::recalculate() {
 
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
 #ifndef NDEBUG
-	for(unsigned int i=0; i<np; i++)
-		qDebug()<<"fixed"<<i<<fitData.paramFixed.data()[i];
+	for (unsigned int i=0; i < np; i++)
+		qDebug()<<"fixed parameter"<<i<<fitData.paramFixed.data()[i];
 #endif
 
 	//function to fit
@@ -887,7 +887,7 @@ void XYFitCurvePrivate::recalculate() {
 		x_init[i] = nsl_fit_map_bound(x_init[i], x_min[i], x_max[i]);
 
 	//get the covariance matrix
-	//TODO: scale the Jacobian when limits are present before constructing the covar matrix?
+	//TODO: scale the Jacobian when limits are used before constructing the covar matrix?
 	gsl_matrix* covar = gsl_matrix_alloc(np, np);
 #if GSL_MAJOR_VERSION >= 2
 	// the Jacobian is not part of the solver anymore
@@ -917,7 +917,7 @@ void XYFitCurvePrivate::recalculate() {
 	//Adjusted Coefficient of determination  adj. R-squared = 1 - (1-R-squared^2)*(n-1)/(n-np-1);
 
 	residualsVector->resize(n);
-	for (unsigned int i=0; i < n; ++i)
+	for (size_t i=0; i < n; ++i)
 		residualsVector->data()[i] = - gsl_vector_get(s->f, i);
 	residualsColumn->setChanged();
 
@@ -934,17 +934,17 @@ void XYFitCurvePrivate::recalculate() {
 
 	//coefficient of determination, R-squared
 	double ybar = 0; //mean value of the y-data
-	for (unsigned int i=0; i < n; ++i)
+	for (size_t i=0; i < n; ++i)
 		ybar += ydata[i];
 	ybar = ybar/n;
 	double sstot = 0;
-	for (unsigned int i=0; i < n; ++i)
+	for (size_t i=0; i < n; ++i)
 		sstot += pow(ydata[i]-ybar, 2);
-	fitResult.rsquared = 1 - fitResult.sse/sstot;
-	fitResult.rsquaredAdj = 1-(1-fitResult.rsquared*fitResult.rsquared)*(n-1)/(n-np-1);
+	fitResult.rsquared = 1. - fitResult.sse/sstot;
+	fitResult.rsquaredAdj = 1. - (1. - fitResult.rsquared*fitResult.rsquared)*(n-1.)/(n-np-1.);
 
 	//parameter values
-	double c = GSL_MIN_DBL(1, sqrt(fitResult.sse)); //limit error for poor fit
+	double c = GSL_MIN_DBL(1., sqrt(fitResult.sse)); //limit error for poor fit
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
 	for (unsigned int i=0; i < np; i++) {
@@ -986,7 +986,7 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 	//current parameter values, semicolon separated
 	double* min = fitData.paramLowerLimits.data();
 	double* max = fitData.paramUpperLimits.data();
-	for (int i=0; i<fitData.paramNames.size(); ++i) {
+	for (int i=0; i < fitData.paramNames.size(); ++i) {
 		double x = gsl_vector_get(s->x, i);
 		// map parameter if bounded
 		state += QString::number(nsl_fit_map_bound(x, min[i], max[i])) + '\t';
@@ -1004,7 +1004,7 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void XYFitCurve::save(QXmlStreamWriter* writer) const{
+void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYFitCurve);
 
 	writer->writeStartElement("xyFitCurve");
@@ -1146,8 +1146,8 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_STRING_VALUE("model", fitData.model);
 			READ_INT_VALUE("maxIterations", fitData.maxIterations, int);
 			READ_DOUBLE_VALUE("eps", fitData.eps);
-			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, int);	// old style
-			READ_INT_VALUE("evaluatedPoints", fitData.evaluatedPoints, int);
+			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, size_t);	// old style
+			READ_INT_VALUE("evaluatedPoints", fitData.evaluatedPoints, size_t);
 		} else if (reader->name() == "name") {
 			d->fitData.paramNames<<reader->readElementText();
 		} else if (reader->name() == "startValue") {
