@@ -46,7 +46,7 @@ class XYFitCurve : public XYCurve {
 		enum WeightsType {WeightsFromColumn, WeightsFromErrorColumn};
 
 		struct FitData {
-			FitData() : modelType(Polynomial),
+			FitData() : modelType(nsl_fit_model_polynomial),
 						weightsType(XYFitCurve::WeightsFromColumn),
 						degree(1),
 						maxIterations(500),
@@ -54,7 +54,7 @@ class XYFitCurve : public XYCurve {
 						evaluatedPoints(100),
 						autoRange(true), xRange() {};
 
-			ModelType modelType;
+			nsl_fit_model_type modelType;
 			WeightsType weightsType;
 			int degree;
 			QString model;

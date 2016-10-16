@@ -76,7 +76,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 	ui.tableWidget->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
 	ui.tableWidget->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
 
-	if (m_fitData->modelType != XYFitCurve::Custom) {	// pre-defined model
+	if (m_fitData->modelType != nsl_fit_model_custom) {	// pre-defined model
 		ui.tableWidget->setRowCount(m_fitData->paramNames.size());
 
 		for (int i=0; i < m_fitData->paramNames.size(); ++i){
@@ -233,7 +233,7 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 		if (event->type() == QEvent::KeyPress) {
 			QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 			if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
-				if (m_fitData->modelType != XYFitCurve::Custom) {
+				if (m_fitData->modelType != nsl_fit_model_custom) {
 					//on the second column with the values is editable.
 					//navigate to the next cell in the second column, or to the apply-button
 					if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount()-1) {
@@ -267,7 +267,7 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 
 void FitParametersWidget::applyClicked() {
 
-	if (m_fitData->modelType != XYFitCurve::Custom) {	// pre-defined models
+	if (m_fitData->modelType != nsl_fit_model_custom) {	// pre-defined models
 		for (int i=0; i < ui.tableWidget->rowCount(); ++i) {
 			m_fitData->paramStartValues[i] = ((QLineEdit *)ui.tableWidget->cellWidget(i, 1))->text().toDouble();
 

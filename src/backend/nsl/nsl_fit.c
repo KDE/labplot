@@ -25,10 +25,6 @@
  *                                                                         *
  ***************************************************************************/
 
-/* TODO:
-	* nsl_sf_model_deriv(int param_index, ... )
-*/
-
 #include "nsl_common.h"
 #include "nsl_fit.h"
 #include <gsl/gsl_math.h>
@@ -90,4 +86,137 @@ double nsl_fit_map_unbound(double x, double min, double max) {
 		return sqrt(gsl_pow_2(x - min + 1) - 1);
 
 	return -log((max - x)/(x - min));
+}
+
+/********************** parameter derivatives ******************/
+
+double nsl_fit_model_polynomial_param_deriv(double x, int j, double sigma) {
+	return pow(x, j)/sigma;	
+}
+double nsl_fit_model_power1_param_deriv(int param, double x, double a, double b, double sigma) {
+	if (param == 0)
+		return pow(x, b)/sigma;
+	if (param == 1)
+		return a*pow(x, b)*log(x)/sigma;
+	return 0;
+}
+double nsl_fit_model_power2_param_deriv(int param, double x, double b, double c, double sigma) {
+	if (param == 0)
+		return 1./sigma;
+	if (param == 1)
+		return pow(x,c)/sigma;
+	if (param == 2)
+		return b*pow(x,c)*log(x)/sigma;
+	return 0;
+}
+double nsl_fit_model_exponential1_param_deriv(int param, double x, double a, double b, double sigma) {
+	if (param == 0)
+		return exp(b*x)/sigma;
+	if (param == 1)
+		return a*x*exp(b*x)/sigma;
+	return 0;
+}
+double nsl_fit_model_exponential2_param_deriv(int param, double x, double a, double b, double c, double d, double sigma) {
+	if (param == 0)
+		return exp(b*x)/sigma;
+	if (param == 1)
+		return a*x*exp(b*x)/sigma;
+	if (param == 2)
+		return exp(d*x)/sigma;
+	if (param == 3)
+		return c*x*exp(d*x)/sigma;
+	return 0;
+}
+double nsl_fit_model_exponential3_param_deriv(int param, double x, double a, double b, double c, double d, double e, double f, double sigma) {
+	if (param == 0)
+		return exp(b*x)/sigma;
+	if (param == 1)
+		return a*x*exp(b*x)/sigma;
+	if (param == 2)
+		return exp(d*x)/sigma;
+	if (param == 3)
+		return c*x*exp(d*x)/sigma;
+	if (param == 4)
+		return exp(f*x)/sigma;
+	if (param == 5)
+		return e*x*exp(f*x)/sigma;
+	return 0;
+}
+double nsl_fit_model_inverse_exponential_param_deriv(int param, double x, double a, double b, double sigma) {
+	if (param == 0)
+		return (1. - exp(b*x))/sigma;
+	if (param == 1)
+		return -a*x*exp(b*x)/sigma;
+	if (param == 2)
+		return 1./sigma;
+	return 0;
+}
+double nsl_fit_model_fourier_param_deriv(int param, int degree, double x, double w, double sigma) {
+	if (param == 0)
+		return cos(degree*w*x)/sigma;
+	if (param == 1)
+		return sin(degree*w*x)/sigma;
+
+	return 0;
+}
+double nsl_fit_model_gaussian_param_deriv(int param, double x, double a, double b, double sigma) {
+	if (param == 0)
+		return (exp(-pow(b-x, 2)/(2.*pow(a, 2)))*(pow(b-x, 2)-pow(a, 2)))/(sqrt(2.*M_PI)*pow(a, 4))/sigma;
+	if (param == 1)
+		return ((x-b)*exp(-pow(b-x, 2)/(2.*pow(a, 2))))/(sqrt(2.*M_PI)*pow(a, 3))/sigma;
+		
+	return 0;
+}
+double nsl_fit_model_lorentz_param_deriv(int param, double x, double s, double t, double sigma) {
+	if (param == 0)
+		return (-s*s+(x-t)*(x-t))/pow(s*s+(x-t)*(x-t), 2)/M_PI/sigma;
+	if (param == 1)
+		return 2.*s*(x-t)/pow(s*s+(x-t)*(x-t), 2)/M_PI/sigma;
+	return 0;
+}
+double nsl_fit_model_maxwell_param_deriv(double x, double a, double sigma) {
+	return sqrt(2./M_PI)*x*x*(x*x-3.*a*a)*exp(-x*x/2./a/a)/pow(a,6)/sigma;
+}
+double nsl_fit_model_sigmoid_param_deriv(int param, double x, double a, double b, double c, double sigma) {
+	if (param == 0)
+		return 1./(exp(b*(c-x)) + 1.)/sigma;
+	if (param == 1)
+		return a*(x-c)*exp((c-x)*b)/pow(exp((c-x)*b) + 1., 2)/sigma;
+	if (param == 2)
+		return -a*b*exp(b*(c-x))/pow(exp(b*(c-x)) + 1., 2)/sigma;
+	return 0;
+}
+double nsl_fit_model_gompertz_param_deriv(int param, double x, double a, double b, double c, double sigma) {
+	if (param == 0)
+		return exp(-b*exp(-c*x))/sigma;
+	if (param == 1)
+		return -a*exp(-c*x-b*exp(-c*x))/sigma;
+	if (param == 2)
+		return a*b*x*exp(-c*x-b*exp(-c*x))/sigma;
+	return 0;
+}
+double nsl_fit_model_weibull_param_deriv(int param, double x, double a, double b, double c, double sigma) {
+	double d = pow((x-c)/b, a);
+
+	if (param == 0)
+		return (exp(-d)*d*(a*(d-1.)*log((x-c)/b)-1.))/(c-x)/sigma;
+	if (param == 1)
+		return (pow(a, 2)*exp(-d)*d*(d-1.))/(b*(x-c))/sigma;
+	if (param == 2)
+		return (a*exp(-d)*d*(a*(d-1.)+1.))/pow(c-x, 2)/sigma;
+	return 0;
+}
+double nsl_fit_model_lognormal_param_deriv(int param, double x, double a, double b, double sigma) {
+	if (param == 0)
+		return -(exp(-pow(b-log(x), 2)/(2.*pow(a, 2)))*(a+b-log(x))*(a-b+log(x)))/(sqrt(2.*M_PI)*pow(a, 4)*x)/sigma;
+	if (param == 1)
+		return ((log(x)-b)*exp(-pow(b-log(x), 2)/(2.*pow(a, 2))))/(sqrt(2.*M_PI)*pow(a, 3)*x)/sigma;
+	return 0;
+}
+double nsl_fit_model_gumbel_param_deriv(int param, double x, double a, double b, double sigma) {
+	if (param == 0)
+		return (exp((x-2.*b)/a-exp((x-b)/a))*(exp(x/a)*(x-b)-exp(b/a)*(a-b+x)))/pow(a, 3)/sigma;
+	if (param == 1)
+		return (exp(-exp(x/a-b/a)-(2.*b)/a+x/a)*(exp(x/a)-exp(b/a)))/pow(a, 2)/sigma;
+	return 0;
 }
