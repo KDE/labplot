@@ -55,7 +55,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/StatisticsDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
-	${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
+        ${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
+        ${KDEFRONTEND_DIR}/worksheet/PresenterWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ConstantsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ThemesWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ExpressionTextEdit.cpp
@@ -265,7 +266,7 @@ ENDIF (HDF5_FOUND)
 
 install(TARGETS labplot2 DESTINATION ${BIN_INSTALL_DIR})
 install(FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png DESTINATION  ${DATA_INSTALL_DIR}/${PROJECT_NAME})
-install(PROGRAMS labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install(PROGRAMS org.kde.labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
 install( FILES labplot2_themes.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )
