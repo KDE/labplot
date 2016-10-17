@@ -151,7 +151,7 @@ MainWin::~MainWin() {
 
 	KSharedConfig::openConfig()->sync();
 
-	if (m_project!=0) {
+	if (m_project != 0) {
 		m_mdiArea->closeAllSubWindows();
 		disconnect(m_project, 0, this, 0);
 		delete m_project;
@@ -489,14 +489,14 @@ void MainWin::updateGUIOnProjectChanges() {
 		return;
 
 	KXMLGUIFactory* factory=this->guiFactory();
-	if (factory->container("worksheet", this)==NULL) {
+	if (factory->container("worksheet", this) == NULL) {
 		//no worksheet menu found, most probably labplot2ui.rc
 		//was not properly installed -> return here in order not to crash
 		return;
 	}
 
 	//disable all menus if there is no project
-	bool b = (m_project==0);
+	bool b = (m_project == 0);
 	m_saveAction->setEnabled(!b);
 	m_saveAsAction->setEnabled(!b);
 	m_printAction->setEnabled(!b);
@@ -747,7 +747,7 @@ bool MainWin::newProject() {
 
 	//newProject is called for the first time, there is no project explorer yet
 	//-> initialize the project explorer,  the GUI-observer and the dock widgets.
-	if ( m_projectExplorer==0 ) {
+	if (m_projectExplorer == 0) {
 		m_projectExplorerDock = new QDockWidget(this);
 		m_projectExplorerDock->setObjectName("projectexplorer");
 		m_projectExplorerDock->setWindowTitle(i18n("Project Explorer"));
@@ -922,7 +922,7 @@ bool MainWin::openXML(QIODevice *file) {
 	Closes the current project, if available. Return \c true, if the project was closed.
 */
 bool MainWin::closeProject() {
-	if (m_project==0)
+	if (m_project == 0)
 		return true; //nothing to close
 
 	if (warnModified())
@@ -1125,7 +1125,7 @@ void MainWin::newMatrix() {
 	adds a new Worksheet to the project.
 */
 void MainWin::newWorksheet() {
-	Worksheet* worksheet= new Worksheet(0,  i18n("Worksheet"));
+	Worksheet* worksheet= new Worksheet(0, i18n("Worksheet"));
 	this->addAspectToProject(worksheet);
 }
 

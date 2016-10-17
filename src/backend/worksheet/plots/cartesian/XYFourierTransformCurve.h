@@ -34,7 +34,6 @@ extern "C" {
 #include "backend/nsl/nsl_dft.h"
 #include "backend/nsl/nsl_sf_window.h"
 }
-#include <array>
 
 class XYFourierTransformCurvePrivate;
 class XYFourierTransformCurve: public XYCurve {
@@ -43,7 +42,7 @@ class XYFourierTransformCurve: public XYCurve {
 	public:
 		struct TransformData {
 			TransformData() : type(nsl_dft_result_magnitude), twoSided(false), shifted(false), 
-				xScale(nsl_dft_xscale_frequency), windowType(nsl_sf_window_uniform), autoRange(true), xRange() {};
+				xScale(nsl_dft_xscale_frequency), windowType(nsl_sf_window_uniform), autoRange(true), xRange(2) {};
 
 			nsl_dft_result_type type;
 			bool twoSided;
@@ -51,7 +50,7 @@ class XYFourierTransformCurve: public XYCurve {
 			nsl_dft_xscale xScale;
 			nsl_sf_window_type windowType;
 			bool autoRange;			// use all data?
-			std::array<double, 2> xRange;	// x range for integration
+			QVector<double> xRange;		// x range for transform
 		};
 		struct TransformResult {
 			TransformResult() : available(false), valid(false), elapsedTime(0) {};

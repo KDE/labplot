@@ -219,8 +219,8 @@ void XYIntegrationCurvePrivate::recalculate() {
 	//copy all valid data point for the integration to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = integrationData.xRange.front();
-	const double xmax = integrationData.xRange.back();
+	const double xmin = integrationData.xRange.first();
+	const double xmax = integrationData.xRange.last();
 	for (int row=0; row < xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
@@ -309,8 +309,8 @@ void XYIntegrationCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "autoRange", QString::number(d->integrationData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->integrationData.xRange.front()) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->integrationData.xRange.back()) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->integrationData.xRange.first()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->integrationData.xRange.last()) );
 	writer->writeAttribute( "method", QString::number(d->integrationData.method) );
 	writer->writeAttribute( "absolute", QString::number(d->integrationData.absolute) );
 	writer->writeEndElement();// integrationData
@@ -363,8 +363,8 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 			READ_INT_VALUE("autoRange", integrationData.autoRange, bool);
-			READ_DOUBLE_VALUE("xRangeMin", integrationData.xRange.front());
-			READ_DOUBLE_VALUE("xRangeMax", integrationData.xRange.back());
+			READ_DOUBLE_VALUE("xRangeMin", integrationData.xRange.first());
+			READ_DOUBLE_VALUE("xRangeMax", integrationData.xRange.last());
 
 			READ_INT_VALUE("method", integrationData.method, nsl_int_method_type);
 			READ_INT_VALUE("absolute", integrationData.absolute, bool);

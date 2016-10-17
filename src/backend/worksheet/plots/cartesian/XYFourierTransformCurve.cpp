@@ -219,8 +219,8 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	//copy all valid data point for the transform to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = transformData.xRange.front();
-	const double xmax = transformData.xRange.back();
+	const double xmin = transformData.xRange.first();
+	const double xmax = transformData.xRange.last();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
@@ -346,8 +346,8 @@ void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "autoRange", QString::number(d->transformData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->transformData.xRange.front()) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->transformData.xRange.back()) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->transformData.xRange.first()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->transformData.xRange.last()) );
 	writer->writeAttribute( "type", QString::number(d->transformData.type) );
 	writer->writeAttribute( "twoSided", QString::number(d->transformData.twoSided) );
 	writer->writeAttribute( "shifted", QString::number(d->transformData.shifted) );
@@ -402,8 +402,8 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(yDataColumn);
 
 			READ_INT_VALUE("autoRange", transformData.autoRange, bool);
-			READ_DOUBLE_VALUE("xRangeMin", transformData.xRange.front());
-			READ_DOUBLE_VALUE("xRangeMax", transformData.xRange.back());
+			READ_DOUBLE_VALUE("xRangeMin", transformData.xRange.first());
+			READ_DOUBLE_VALUE("xRangeMax", transformData.xRange.last());
 			READ_INT_VALUE("type", transformData.type, nsl_dft_result_type);
 			READ_INT_VALUE("twoSided", transformData.twoSided, bool);
 			READ_INT_VALUE("shifted", transformData.shifted, bool);

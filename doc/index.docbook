@@ -58,8 +58,8 @@
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2016-09-30</date>
-<releaseinfo>3.2.6</releaseinfo>
+<date>2016-10-16</date>
+<releaseinfo>3.2.7</releaseinfo>
 
 <abstract>
 	<para>
@@ -931,14 +931,14 @@ The menu is only available when a datapicker object is selected on the <guilabel
   <para>
     Curves contain data points that can be shown in a plot. 
     There are three different method to create curves: the standard xy-curve, a xy-curve from a mathematical expression
-    and a xy-curve from a fit to data.
+    and a xy-curve from a data analysis function.
     </para>
     <para>
     The standard xy-curve can be filled with values of a spreadsheet by selecting the x-data and y-data as column of the 
     spreadsheet in the xy-curve dock widget. Another method to fill a curve is to use a mathematical expression. Here you can
     select any mathematical function and range to create the curve.
-    The third method to create a curve is to fit a function to data. The data to fit and the fit function can be
-    selected in the dock widget of the xy-fit curve.
+    The third method to create a curve is to use a data analysis function. The data and the analysis function can be
+    selected in the dock widget of the analysis function.
   </para>
   <para>
    For all types of curves the line and symbols styles can be changed in the dock widget. Also annotated values
@@ -1090,6 +1090,10 @@ The menu is only available when a datapicker object is selected on the <guilabel
       with an optional weight column. With a custom model any function with unlimited number of parameters
       can be used for fitting. The options (number of iterations, tolerance, number of fitted points) can
       be used to optimize the fitting result which is displayed in the results text.
+    </para>
+    <para>
+    The start values of the parameter can be set in the parameter dialog.
+    It is also possible to fix any parameter and set lower and upper limits to the values there. 
     </para>
   </sect1>
   

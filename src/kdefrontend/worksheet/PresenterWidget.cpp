@@ -25,18 +25,17 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *                                                                         *
 ***************************************************************************/
 #include "PresenterWidget.h"
+
 #include <QKeyEvent>
 #include <QLabel>
-#include <QLayout>
 #include <QHBoxLayout>
 #include <QDesktopWidget>
 #include <QApplication>
-#include <QDebug>
-#include <QFrame>
+#include <QFontMetrics>
 #include <QTimeLine>
 #include <QPushButton>
-#include <QRect>
 #include <QPalette>
+
 #include <KLocalizedString>
 
 PresenterWidget::PresenterWidget(const QPixmap &pixmap, const QString& worksheetName, QWidget *parent) : QWidget(parent),
@@ -46,12 +45,14 @@ PresenterWidget::PresenterWidget(const QPixmap &pixmap, const QString& worksheet
     setAttribute(Qt::WA_DeleteOnClose);
     m_imageLabel->setPixmap(pixmap);
     m_imageLabel->adjustSize();
+
     QDesktopWidget* const dw = QApplication::desktop();
     const int primaryScreenIdx = dw->primaryScreen();
     const QRect& screenSize = dw->availableGeometry(primaryScreenIdx);
     const int moveRight = (screenSize.width() - m_imageLabel->width()) / 2.0;
     const int moveDown = (screenSize.height() - m_imageLabel->height()) / 2.0;
     m_imageLabel->move(moveRight, moveDown);
+
     m_panel = new SlidingPanel(this, worksheetName);
     qApp->installEventFilter(this);
     connect(m_timeLine, SIGNAL(valueChanged(qreal)), m_panel, SLOT(movePanel(qreal)));
@@ -117,13 +118,13 @@ SlidingPanel::SlidingPanel(QWidget *parent, const QString &worksheetName) : QFra
     nameFont.setBold(true);
     m_worksheetName->setFont(nameFont);
 
-    m_worksheetName->adjustSize();
     m_quitPresentingMode = new QPushButton(i18n("Quit presentation"));
-    m_quitPresentingMode->adjustSize();
 
     QHBoxLayout* hlayout = new QHBoxLayout;
-    hlayout->addWidget(m_worksheetName, 4);
-    hlayout->addWidget(m_quitPresentingMode, 1);
+	hlayout->addWidget(m_worksheetName);
+	QSpacerItem* spacer = new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
+	hlayout->addItem(spacer);
+    hlayout->addWidget(m_quitPresentingMode);
     setLayout(hlayout);
 
     QPalette pal(palette());
@@ -146,25 +147,23 @@ void SlidingPanel::movePanel(qreal value) {
     raise();
 }
 
-QSize SlidingPanel::sizeHint() const
-{
-    QSize sh = QFrame::sizeHint();
-    if (!layout()) {
-        return sh;
-    }
-
+QSize SlidingPanel::sizeHint() const {
+    QSize sh;
     QDesktopWidget* const dw = QApplication::desktop();
     const int primaryScreenIdx = dw->primaryScreen();
     const QRect& screenSize = dw->availableGeometry(primaryScreenIdx);
     sh.setWidth(screenSize.width());
-    sh.setHeight(50);
+
+	//for the height use 1.5 times the height of the font used in the label (20 points) in pixels
+	QFont font;
+	font.setPointSize(20);
+	QFontMetrics fm(font);
+	sh.setHeight(1.5*fm.ascent());
+
     return sh;
 }
 
 bool SlidingPanel::shouldHide() {
     const QRect& frameRect = this->rect();
-    if (frameRect.contains(QCursor::pos())) {
-        return false;
-    }
-    return true;
+    return !(frameRect.contains(QCursor::pos()));
 }

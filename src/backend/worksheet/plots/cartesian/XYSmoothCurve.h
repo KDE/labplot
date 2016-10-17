@@ -34,7 +34,6 @@
 extern "C" {
 #include "backend/nsl/nsl_smooth.h"
 }
-#include <array>
 
 class XYSmoothCurvePrivate;
 class XYSmoothCurve: public XYCurve {
@@ -43,7 +42,7 @@ class XYSmoothCurve: public XYCurve {
 	public:
 		struct SmoothData {
 			SmoothData() : type(nsl_smooth_type_moving_average), points(5), weight(nsl_smooth_weight_uniform), percentile(0.5), order(2),
-				mode(nsl_smooth_pad_none), lvalue(0.0), rvalue(0.0), autoRange(true), xRange() {};
+				mode(nsl_smooth_pad_none), lvalue(0.0), rvalue(0.0), autoRange(true), xRange(2) {};
 
 			nsl_smooth_type type;			// type of smoothing
 			unsigned int points;			// number of points
@@ -53,7 +52,7 @@ class XYSmoothCurve: public XYCurve {
 			nsl_smooth_pad_mode mode;		// mode of padding for edges
 			double lvalue, rvalue;			// values for constant padding
 			bool autoRange;				// use all data?
-			std::array<double, 2> xRange;		// x range for integration
+			QVector<double> xRange;			// x range for integration
 		};
 		struct SmoothResult {
 			SmoothResult() : available(false), valid(false), elapsedTime(0) {};

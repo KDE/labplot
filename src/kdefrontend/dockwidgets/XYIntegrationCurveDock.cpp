@@ -133,8 +133,8 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_integrationCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_integrationCurve->yDataColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_integrationData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_integrationData.xRange.front());
-	uiGeneralTab.sbMax->setValue(m_integrationData.xRange.back());
+	uiGeneralTab.sbMin->setValue(m_integrationData.xRange.first());
+	uiGeneralTab.sbMax->setValue(m_integrationData.xRange.last());
 	this->autoRangeChanged();
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
@@ -285,14 +285,14 @@ void XYIntegrationCurveDock::autoRangeChanged() {
 void XYIntegrationCurveDock::xRangeMinChanged() {
 	double xMin = uiGeneralTab.sbMin->value();
 
-	m_integrationData.xRange.front() = xMin;
+	m_integrationData.xRange.first() = xMin;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYIntegrationCurveDock::xRangeMaxChanged() {
 	double xMax = uiGeneralTab.sbMax->value();
 
-	m_integrationData.xRange.back() = xMax;
+	m_integrationData.xRange.last() = xMax;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 

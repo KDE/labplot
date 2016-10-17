@@ -46,16 +46,16 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 
 	ui.leEps->setValidator( new QDoubleValidator(ui.leEps) );
 	ui.leMaxIterations->setValidator( new QIntValidator(ui.leMaxIterations) );
-	ui.leFittedPoints->setValidator( new QIntValidator(ui.leFittedPoints) );
+	ui.leEvaluatedPoints->setValidator( new QIntValidator(ui.leEvaluatedPoints) );
 
 	ui.leEps->setText(QString::number(m_fitData->eps));
 	ui.leMaxIterations->setText(QString::number(m_fitData->maxIterations));
-	ui.leFittedPoints->setText(QString::number(m_fitData->fittedPoints));
+	ui.leEvaluatedPoints->setText(QString::number(m_fitData->evaluatedPoints));
 
 	//SLOTS
 	connect( ui.leEps, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
 	connect( ui.leMaxIterations, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
-	connect( ui.leFittedPoints, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
+	connect( ui.leEvaluatedPoints, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
 	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
 	connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
 }
@@ -63,7 +63,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 void FitOptionsWidget::applyClicked() {
 	m_fitData->maxIterations = ui.leMaxIterations->text().toFloat();
 	m_fitData->eps = ui.leEps->text().toFloat();
-	m_fitData->fittedPoints = ui.leFittedPoints->text().toInt();
+	m_fitData->evaluatedPoints = ui.leEvaluatedPoints->text().toInt();
 
 	if (m_changed)
 		emit(optionsChanged());

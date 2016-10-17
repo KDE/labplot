@@ -153,8 +153,8 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_interpolationCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_interpolationCurve->yDataColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_interpolationData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_interpolationData.xRange.front());
-	uiGeneralTab.sbMax->setValue(m_interpolationData.xRange.back());
+	uiGeneralTab.sbMin->setValue(m_interpolationData.xRange.first());
+	uiGeneralTab.sbMax->setValue(m_interpolationData.xRange.last());
 	this->autoRangeChanged();
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
@@ -375,14 +375,14 @@ void XYInterpolationCurveDock::autoRangeChanged() {
 void XYInterpolationCurveDock::xRangeMinChanged() {
 	double xMin = uiGeneralTab.sbMin->value();
 
-	m_interpolationData.xRange.front() = xMin;
+	m_interpolationData.xRange.first() = xMin;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYInterpolationCurveDock::xRangeMaxChanged() {
 	double xMax = uiGeneralTab.sbMax->value();
 
-	m_interpolationData.xRange.back() = xMax;
+	m_interpolationData.xRange.last() = xMax;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 

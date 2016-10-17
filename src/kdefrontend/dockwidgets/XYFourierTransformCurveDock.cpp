@@ -131,8 +131,8 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_transformCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_transformCurve->yDataColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_transformData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_transformData.xRange.front());
-	uiGeneralTab.sbMax->setValue(m_transformData.xRange.back());
+	uiGeneralTab.sbMin->setValue(m_transformData.xRange.first());
+	uiGeneralTab.sbMax->setValue(m_transformData.xRange.last());
 	this->autoRangeChanged();
 
 	uiGeneralTab.cbWindowType->setCurrentIndex(m_transformData.windowType);
@@ -277,14 +277,14 @@ void XYFourierTransformCurveDock::autoRangeChanged() {
 void XYFourierTransformCurveDock::xRangeMinChanged() {
 	double xMin = uiGeneralTab.sbMin->value();
 
-	m_transformData.xRange.front() = xMin;
+	m_transformData.xRange.first() = xMin;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYFourierTransformCurveDock::xRangeMaxChanged() {
 	double xMax = uiGeneralTab.sbMax->value();
 
-	m_transformData.xRange.back() = xMax;
+	m_transformData.xRange.last() = xMax;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 

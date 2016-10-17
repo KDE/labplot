@@ -31,40 +31,44 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QFrame>
 
 class QLabel;
-class QFrame;
 class QTimeLine;
 class QPushButton;
 class SlidingPanel;
 
-class PresenterWidget : public QWidget
-{
+class PresenterWidget : public QWidget {
     Q_OBJECT
+
 public:
     explicit PresenterWidget(const QPixmap& pixmap,const QString& worksheetName, QWidget *parent = 0);
     ~PresenterWidget();
+
 private:
     QLabel* m_imageLabel;
     QTimeLine* m_timeLine;
     SlidingPanel* m_panel;
     void startTimeline();
+
 protected:
     void keyPressEvent(QKeyEvent* event);
     bool eventFilter(QObject *watched, QEvent *event);
+
 private slots:
     void slideDown();
     void slideUp();
 };
 
-class SlidingPanel : public QFrame
-{
+class SlidingPanel : public QFrame {
     Q_OBJECT
+
 public:
     explicit SlidingPanel(QWidget* parent, const QString& worksheetName);
     ~SlidingPanel();
+
     QLabel* m_worksheetName;
     QPushButton* m_quitPresentingMode;
     virtual QSize sizeHint() const;
     bool shouldHide();
+
 public slots:
     void movePanel(qreal value);
 };

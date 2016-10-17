@@ -151,8 +151,8 @@ void XYSmoothCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_smoothCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_smoothCurve->yDataColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_smoothData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_smoothData.xRange.front());
-	uiGeneralTab.sbMax->setValue(m_smoothData.xRange.back());
+	uiGeneralTab.sbMin->setValue(m_smoothData.xRange.first());
+	uiGeneralTab.sbMax->setValue(m_smoothData.xRange.last());
 	this->autoRangeChanged();
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
@@ -319,14 +319,14 @@ void XYSmoothCurveDock::autoRangeChanged() {
 void XYSmoothCurveDock::xRangeMinChanged() {
 	double xMin = uiGeneralTab.sbMin->value();
 
-	m_smoothData.xRange.front() = xMin;
+	m_smoothData.xRange.first() = xMin;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYSmoothCurveDock::xRangeMaxChanged() {
 	double xMax = uiGeneralTab.sbMax->value();
 
-	m_smoothData.xRange.back() = xMax;
+	m_smoothData.xRange.last() = xMax;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 

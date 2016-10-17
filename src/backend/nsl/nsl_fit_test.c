@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : FitParametersWidget.h
+    File                 : nsl_fit_test.c
     Project              : LabPlot
-    Description          : widget for editing the fit parameters
+    Description          : NSL (non)linear functions test
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -25,39 +25,23 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef FITPARAMETERSWIDGET_H
-#define FITPARAMETERSWIDGET_H
 
-#include <QWidget>
-#include <QStringList>
+#include <stdio.h>
+#include "nsl_fit.h"
 
-#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
-#include "ui_fitparameterswidget.h"
+int main() {
+	const double data[]={-1000, -100, -10, -1, -.1, 0, .1, 1, 10, 100, 1000};
+	const int n=11;
+	int i;
+	for (i=0; i < n; i++) {
+		double x = nsl_fit_map_bound(data[i],-1,2);
+		printf("%g -> %g\n", data[i], x);
+	}
+	puts("");
 
-class FitParametersWidget: public QWidget {
-	Q_OBJECT
-
-public:
-	explicit FitParametersWidget(QWidget*, XYFitCurve::FitData*);
-
-private:
-	Ui::FitParametersWidget ui;
-	XYFitCurve::FitData* m_fitData;
-	bool m_changed;
-	bool eventFilter( QObject * watched, QEvent * event);
-
-signals:
-	void finished();
-	void parametersChanged();
-
-private slots:
-	void applyClicked();
-	void startValueChanged();
-	void lowerLimitChanged();
-	void upperLimitChanged();
-	void addParameter();
-	void removeParameter();
-	void changed();
-};
-
-#endif //FITPARAMETERSWIDGET_H
+	const double data2[]={-1, -.99, -.5, 0, .49, .5, .51, 1, 1.5, 1.99, 2};
+	for (i=0; i < n; i++) {
+		double xb = nsl_fit_map_unbound(data2[i],-1,2);
+		printf("%g -> %g\n", data2[i], xb);
+	}
+}
