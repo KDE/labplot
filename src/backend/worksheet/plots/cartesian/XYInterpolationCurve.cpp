@@ -223,8 +223,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 	//copy all valid data point for the interpolation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = interpolationData.xRange.front();
-	const double xmax = interpolationData.xRange.back();
+	const double xmin = interpolationData.xRange.first();
+	const double xmax = interpolationData.xRange.last();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
@@ -504,8 +504,8 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "autoRange", QString::number(d->interpolationData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->interpolationData.xRange.front()) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->interpolationData.xRange.back()) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->interpolationData.xRange.first()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->interpolationData.xRange.last()) );
 	writer->writeAttribute( "type", QString::number(d->interpolationData.type) );
 	writer->writeAttribute( "variant", QString::number(d->interpolationData.variant) );
 	writer->writeAttribute( "tension", QString::number(d->interpolationData.tension) );
@@ -564,8 +564,8 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(yDataColumn);
 
 			READ_INT_VALUE("autoRange", interpolationData.autoRange, bool);
-			READ_DOUBLE_VALUE("xRangeMin", interpolationData.xRange.front());
-			READ_DOUBLE_VALUE("xRangeMax", interpolationData.xRange.back());
+			READ_DOUBLE_VALUE("xRangeMin", interpolationData.xRange.first());
+			READ_DOUBLE_VALUE("xRangeMax", interpolationData.xRange.last());
 			READ_INT_VALUE("type", interpolationData.type, nsl_interp_type);
 			READ_INT_VALUE("variant", interpolationData.variant, nsl_interp_pch_variant);
 			READ_DOUBLE_VALUE("tension", interpolationData.tension);

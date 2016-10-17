@@ -141,8 +141,8 @@ void XYFitCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_fitCurve->yDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbWeightsColumn, m_fitCurve->weightsColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_fitData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_fitData.xRange.front());
-	uiGeneralTab.sbMax->setValue(m_fitData.xRange.back());
+	uiGeneralTab.sbMin->setValue(m_fitData.xRange.first());
+	uiGeneralTab.sbMax->setValue(m_fitData.xRange.last());
 	this->autoRangeChanged();
 
 	if (m_fitData.modelType == nsl_fit_model_custom)
@@ -288,14 +288,14 @@ void XYFitCurveDock::autoRangeChanged() {
 void XYFitCurveDock::xRangeMinChanged() {
 	double xMin = uiGeneralTab.sbMin->value();
 
-	m_fitData.xRange.front() = xMin;
+	m_fitData.xRange.first() = xMin;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYFitCurveDock::xRangeMaxChanged() {
 	double xMax = uiGeneralTab.sbMax->value();
 
-	m_fitData.xRange.back() = xMax;
+	m_fitData.xRange.last() = xMax;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 

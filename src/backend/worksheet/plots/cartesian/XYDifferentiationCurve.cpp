@@ -219,8 +219,8 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	//copy all valid data point for the differentiation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = differentiationData.xRange.front();
-	const double xmax = differentiationData.xRange.back();
+	const double xmin = differentiationData.xRange.first();
+	const double xmax = differentiationData.xRange.last();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
@@ -316,8 +316,8 @@ void XYDifferentiationCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "derivOrder", QString::number(d->differentiationData.derivOrder) );
 	writer->writeAttribute( "accOrder", QString::number(d->differentiationData.accOrder) );
 	writer->writeAttribute( "autoRange", QString::number(d->differentiationData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->differentiationData.xRange.front()) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->differentiationData.xRange.back()) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->differentiationData.xRange.first()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->differentiationData.xRange.last()) );
 	writer->writeEndElement();// differentiationData
 
 	// differentiation results (generated columns)
@@ -368,8 +368,8 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(yDataColumn);
 
 			READ_INT_VALUE("autoRange", differentiationData.autoRange, bool);
-			READ_DOUBLE_VALUE("xRangeMin", differentiationData.xRange.front());
-			READ_DOUBLE_VALUE("xRangeMax", differentiationData.xRange.back());
+			READ_DOUBLE_VALUE("xRangeMin", differentiationData.xRange.first());
+			READ_DOUBLE_VALUE("xRangeMax", differentiationData.xRange.last());
 			READ_INT_VALUE("derivOrder", differentiationData.derivOrder, nsl_diff_deriv_order_type);
 			READ_INT_VALUE("accOrder", differentiationData.accOrder, int);
 		} else if (reader->name() == "differentiationResult") {

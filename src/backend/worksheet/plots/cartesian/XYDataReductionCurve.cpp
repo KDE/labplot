@@ -215,8 +215,8 @@ void XYDataReductionCurvePrivate::recalculate() {
 	//copy all valid data point for the data reduction to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = dataReductionData.xRange.front();
-	const double xmax = dataReductionData.xRange.back();
+	const double xmin = dataReductionData.xRange.first();
+	const double xmax = dataReductionData.xRange.last();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
@@ -355,8 +355,8 @@ void XYDataReductionCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "autoRange", QString::number(d->dataReductionData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->dataReductionData.xRange.front()) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->dataReductionData.xRange.back()) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->dataReductionData.xRange.first()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->dataReductionData.xRange.last()) );
 	writer->writeAttribute( "type", QString::number(d->dataReductionData.type) );
 	writer->writeAttribute( "autoTolerance", QString::number(d->dataReductionData.autoTolerance) );
 	writer->writeAttribute( "tolerance", QString::number(d->dataReductionData.tolerance) );
@@ -414,8 +414,8 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 			READ_INT_VALUE("autoRange", dataReductionData.autoRange, bool);
-			READ_DOUBLE_VALUE("xRangeMin", dataReductionData.xRange.front());
-			READ_DOUBLE_VALUE("xRangeMax", dataReductionData.xRange.back());
+			READ_DOUBLE_VALUE("xRangeMin", dataReductionData.xRange.first());
+			READ_DOUBLE_VALUE("xRangeMax", dataReductionData.xRange.last());
 
 			READ_INT_VALUE("type", dataReductionData.type, nsl_geom_linesim_type);
 			READ_INT_VALUE("autoTolerance", dataReductionData.autoTolerance, int);

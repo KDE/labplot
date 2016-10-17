@@ -34,7 +34,6 @@ extern "C" {
 #include <gsl/gsl_version.h>
 #include "backend/nsl/nsl_interp.h"
 }
-#include <array>
 
 class XYInterpolationCurvePrivate;
 class XYInterpolationCurve: public XYCurve {
@@ -45,7 +44,7 @@ class XYInterpolationCurve: public XYCurve {
 		struct InterpolationData {
 			InterpolationData() : type(nsl_interp_type_linear), variant(nsl_interp_pch_variant_finite_difference), 
 				tension(0.0), continuity(0.0), bias(0.0), evaluate(nsl_interp_evaluate_function), npoints(100),
-				pointsMode(XYInterpolationCurve::Auto), xRange() {};
+				pointsMode(XYInterpolationCurve::Auto), xRange(2) {};
 
 			nsl_interp_type type;			// type of interpolation
 			nsl_interp_pch_variant variant;		// variant of cubic Hermite interpolation
@@ -54,7 +53,7 @@ class XYInterpolationCurve: public XYCurve {
 			unsigned int npoints;			// nr. of points
 			XYInterpolationCurve::PointsMode pointsMode;	// mode to interpret points
 			bool autoRange;				// use all data?
-			std::array<double, 2> xRange;		// x range for integration
+			QVector<double> xRange;			// x range for interpolation
 		};
 		struct InterpolationResult {
 			InterpolationResult() : available(false), valid(false), elapsedTime(0) {};

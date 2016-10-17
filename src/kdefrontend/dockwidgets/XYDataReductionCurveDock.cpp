@@ -139,8 +139,8 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_dataReductionCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_dataReductionCurve->yDataColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_dataReductionData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_dataReductionData.xRange.front());
-	uiGeneralTab.sbMax->setValue(m_dataReductionData.xRange.back());
+	uiGeneralTab.sbMin->setValue(m_dataReductionData.xRange.first());
+	uiGeneralTab.sbMax->setValue(m_dataReductionData.xRange.last());
 	this->autoRangeChanged();
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
@@ -239,8 +239,8 @@ void XYDataReductionCurveDock::updateTolerance() {
 	//copy all valid data points for calculating tolerance to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = m_dataReductionData.xRange.front();
-	const double xmax = m_dataReductionData.xRange.back();
+	const double xmin = m_dataReductionData.xRange.first();
+	const double xmax = m_dataReductionData.xRange.last();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
@@ -357,14 +357,14 @@ void XYDataReductionCurveDock::autoRangeChanged() {
 void XYDataReductionCurveDock::xRangeMinChanged() {
 	double xMin = uiGeneralTab.sbMin->value();
 
-	m_dataReductionData.xRange.front() = xMin;
+	m_dataReductionData.xRange.first() = xMin;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYDataReductionCurveDock::xRangeMaxChanged() {
 	double xMax = uiGeneralTab.sbMax->value();
 
-	m_dataReductionData.xRange.back() = xMax;
+	m_dataReductionData.xRange.last() = xMax;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 

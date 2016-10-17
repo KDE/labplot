@@ -218,8 +218,8 @@ void XYSmoothCurvePrivate::recalculate() {
 	//copy all valid data point for the smooth to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = smoothData.xRange.front();
-	const double xmax = smoothData.xRange.back();
+	const double xmin = smoothData.xRange.first();
+	const double xmax = smoothData.xRange.last();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
@@ -320,8 +320,8 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "autoRange", QString::number(d->smoothData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->smoothData.xRange.front()) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->smoothData.xRange.back()) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->smoothData.xRange.first()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->smoothData.xRange.last()) );
 	writer->writeAttribute( "type", QString::number(d->smoothData.type) );
 	writer->writeAttribute( "points", QString::number(d->smoothData.points) );
 	writer->writeAttribute( "weight", QString::number(d->smoothData.weight) );
@@ -380,8 +380,8 @@ bool XYSmoothCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(yDataColumn);
 
 			READ_INT_VALUE("autoRange", smoothData.autoRange, bool);
-			READ_DOUBLE_VALUE("xRangeMin", smoothData.xRange.front());
-			READ_DOUBLE_VALUE("xRangeMax", smoothData.xRange.back());
+			READ_DOUBLE_VALUE("xRangeMin", smoothData.xRange.first());
+			READ_DOUBLE_VALUE("xRangeMax", smoothData.xRange.last());
 			READ_INT_VALUE("type", smoothData.type, nsl_smooth_type);
 			READ_INT_VALUE("points", smoothData.points, int);
 			READ_INT_VALUE("weight", smoothData.weight, nsl_smooth_weight_type);

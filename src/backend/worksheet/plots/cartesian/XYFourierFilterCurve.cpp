@@ -224,8 +224,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	//copy all valid data point for the filter to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = filterData.xRange.front();
-	const double xmax = filterData.xRange.back();
+	const double xmin = filterData.xRange.first();
+	const double xmax = filterData.xRange.last();
 	for (int row=0; row<xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x and y, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
@@ -338,8 +338,8 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const{
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	writer->writeAttribute( "autoRange", QString::number(d->filterData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->filterData.xRange.front()) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->filterData.xRange.back()) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->filterData.xRange.first()) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->filterData.xRange.last()) );
 	writer->writeAttribute( "type", QString::number(d->filterData.type) );
 	writer->writeAttribute( "form", QString::number(d->filterData.form) );
 	writer->writeAttribute( "order", QString::number(d->filterData.order) );
@@ -396,8 +396,8 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(yDataColumn);
 
 			READ_INT_VALUE("autoRange", filterData.autoRange, bool);
-			READ_DOUBLE_VALUE("xRangeMin", filterData.xRange.front());
-			READ_DOUBLE_VALUE("xRangeMax", filterData.xRange.back());
+			READ_DOUBLE_VALUE("xRangeMin", filterData.xRange.first());
+			READ_DOUBLE_VALUE("xRangeMax", filterData.xRange.last());
 			READ_INT_VALUE("type", filterData.type, nsl_filter_type);
 			READ_INT_VALUE("form", filterData.form, nsl_filter_form);
 			READ_INT_VALUE("order", filterData.order, int);

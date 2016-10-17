@@ -701,8 +701,8 @@ void XYFitCurvePrivate::recalculate() {
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	QVector<double> sigmaVector;
-	const double xmin = fitData.xRange.front();
-	const double xmax = fitData.xRange.back();
+	const double xmin = fitData.xRange.first();
+	const double xmax = fitData.xRange.last();
 	for (int row=0; row < xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x, y and sigma, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
@@ -941,8 +941,8 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
 	WRITE_COLUMN(d->weightsColumn, weightsColumn);
 	writer->writeAttribute( "autoRange", QString::number(d->fitData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->fitData.xRange.front(), 'g', 15) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->fitData.xRange.back(), 'g', 15) );
+	writer->writeAttribute( "xRangeMin", QString::number(d->fitData.xRange.first(), 'g', 15) );
+	writer->writeAttribute( "xRangeMax", QString::number(d->fitData.xRange.last(), 'g', 15) );
 	writer->writeAttribute( "modelType", QString::number(d->fitData.modelType) );
 	writer->writeAttribute( "weightsType", QString::number(d->fitData.weightsType) );
 	writer->writeAttribute( "degree", QString::number(d->fitData.degree) );
@@ -952,29 +952,29 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "evaluatedPoints", QString::number(d->fitData.evaluatedPoints) );
 
 	writer->writeStartElement("paramNames");
-	for (QString name: d->fitData.paramNames)
+	foreach (const QString &name, d->fitData.paramNames)
 		writer->writeTextElement("name", name);
 	writer->writeEndElement();
 
 	writer->writeStartElement("paramStartValues");
-	for (double value: d->fitData.paramStartValues)
+	foreach (const double &value, d->fitData.paramStartValues)
 		writer->writeTextElement("startValue", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	// use 16 digits to handle -DBL_MAX
 	writer->writeStartElement("paramLowerLimits");
-	for (double limit: d->fitData.paramLowerLimits)
+	foreach (const double &limit, d->fitData.paramLowerLimits)
 		writer->writeTextElement("lowerLimit", QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
 	// use 16 digits to handle DBL_MAX
 	writer->writeStartElement("paramUpperLimits");
-	for (double limit: d->fitData.paramUpperLimits)
+	foreach (const double &limit, d->fitData.paramUpperLimits)
 		writer->writeTextElement("upperLimit", QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
 	writer->writeStartElement("paramFixed");
-	for (double fixed: d->fitData.paramFixed)
+	foreach (const double &fixed, d->fitData.paramFixed)
 		writer->writeTextElement("fixed", QString::number(fixed));
 	writer->writeEndElement();
 
@@ -1007,12 +1007,12 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "solverOutput", d->fitResult.solverOutput );
 
 	writer->writeStartElement("paramValues");
-	for (double value: d->fitResult.paramValues)
+	foreach (const double &value, d->fitResult.paramValues)
 		writer->writeTextElement("value", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement("errorValues");
-	for (double value: d->fitResult.errorValues)
+	foreach (const double value, d->fitResult.errorValues)
 		writer->writeTextElement("error", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
@@ -1059,8 +1059,8 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_COLUMN(weightsColumn);
 
 			READ_INT_VALUE("autoRange", fitData.autoRange, bool);
-			READ_DOUBLE_VALUE("xRangeMin", fitData.xRange.front());
-			READ_DOUBLE_VALUE("xRangeMax", fitData.xRange.back());
+			READ_DOUBLE_VALUE("xRangeMin", fitData.xRange.first());
+			READ_DOUBLE_VALUE("xRangeMax", fitData.xRange.last());
 			READ_INT_VALUE("modelType", fitData.modelType, nsl_fit_model_type);
 			READ_INT_VALUE("weightsType", fitData.weightsType, XYFitCurve::WeightsType);
 			READ_INT_VALUE("degree", fitData.degree, int);
@@ -1139,15 +1139,15 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 
 	// fixed and limits are not saved in project (old project)
 	if (d->fitData.paramFixed.size() == 0) {
-		for (double __attribute__((unused))v: d->fitData.paramStartValues)
+		for (int i=0; i < d->fitData.paramStartValues.size(); i++)
 			d->fitData.paramFixed<<false;
 	}
 	if (d->fitData.paramLowerLimits.size() == 0) {
-		for (double __attribute__((unused))v: d->fitData.paramStartValues)
+		for (int i=0; i < d->fitData.paramStartValues.size(); i++)
 			d->fitData.paramLowerLimits<<-DBL_MAX;
 	}
 	if (d->fitData.paramUpperLimits.size() == 0) {
-		for (double __attribute__((unused))v: d->fitData.paramStartValues)
+		for (int i=0; i < d->fitData.paramStartValues.size(); i++)
 			d->fitData.paramUpperLimits<<DBL_MAX;
 	}
 

@@ -31,7 +31,6 @@
 #define XYFITCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include <array>
 extern "C" {
 #include "backend/nsl/nsl_fit.h"
 }
@@ -50,7 +49,7 @@ class XYFitCurve : public XYCurve {
 						maxIterations(500),
 						eps(1e-4),
 						evaluatedPoints(100),
-						autoRange(true), xRange() {};
+						autoRange(true), xRange(2) {};
 
 			nsl_fit_model_type modelType;
 			WeightsType weightsType;
@@ -67,7 +66,7 @@ class XYFitCurve : public XYCurve {
 			size_t evaluatedPoints;
 
 			bool autoRange;			// use all data?
-			std::array<double, 2> xRange;	// x range for integration
+			QVector<double> xRange;		// x range for integration
 		};
 
 		struct FitResult {

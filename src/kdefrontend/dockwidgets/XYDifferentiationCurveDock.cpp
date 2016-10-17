@@ -133,8 +133,8 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_differentiationCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_differentiationCurve->yDataColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_differentiationData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_differentiationData.xRange.front());
-	uiGeneralTab.sbMax->setValue(m_differentiationData.xRange.back());
+	uiGeneralTab.sbMin->setValue(m_differentiationData.xRange.first());
+	uiGeneralTab.sbMax->setValue(m_differentiationData.xRange.last());
 	this->autoRangeChanged();
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
@@ -332,14 +332,14 @@ void XYDifferentiationCurveDock::autoRangeChanged() {
 void XYDifferentiationCurveDock::xRangeMinChanged() {
 	double xMin = uiGeneralTab.sbMin->value();
 
-	m_differentiationData.xRange.front() = xMin;
+	m_differentiationData.xRange.first() = xMin;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYDifferentiationCurveDock::xRangeMaxChanged() {
 	double xMax = uiGeneralTab.sbMax->value();
 
-	m_differentiationData.xRange.back() = xMax;
+	m_differentiationData.xRange.last() = xMax;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 

@@ -142,8 +142,8 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_filterCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_filterCurve->yDataColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_filterData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_filterData.xRange.front());
-	uiGeneralTab.sbMax->setValue(m_filterData.xRange.back());
+	uiGeneralTab.sbMin->setValue(m_filterData.xRange.first());
+	uiGeneralTab.sbMax->setValue(m_filterData.xRange.last());
 	this->autoRangeChanged();
 
 	uiGeneralTab.cbType->setCurrentIndex(m_filterData.type);
@@ -295,14 +295,14 @@ void XYFourierFilterCurveDock::autoRangeChanged() {
 void XYFourierFilterCurveDock::xRangeMinChanged() {
 	double xMin = uiGeneralTab.sbMin->value();
 
-	m_filterData.xRange.front() = xMin;
+	m_filterData.xRange.first() = xMin;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYFourierFilterCurveDock::xRangeMaxChanged() {
 	double xMax = uiGeneralTab.sbMax->value();
 
-	m_filterData.xRange.back() = xMax;
+	m_filterData.xRange.last() = xMax;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
