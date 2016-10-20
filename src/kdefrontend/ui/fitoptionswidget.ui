@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>230</width>
-    <height>203</height>
+    <height>238</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -59,6 +59,13 @@
       </item>
       <item row="3" column="1">
        <widget class="QLineEdit" name="leEvaluatedPoints"/>
+      </item>
+      <item row="4" column="0" colspan="2">
+       <widget class="QCheckBox" name="cbUseResults">
+        <property name="text">
+         <string>Use results as new start values</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

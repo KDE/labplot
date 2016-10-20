@@ -872,6 +872,9 @@ void XYFitCurvePrivate::recalculate() {
 	for (unsigned int i=0; i < np; i++) {
 		// scale resulting values if they are bounded
 		fitResult.paramValues[i] = nsl_fit_map_bound(gsl_vector_get(s->x, i), x_min[i], x_max[i]);
+		// use results as start values if desired
+		if (fitData.useResults)
+			fitData.paramStartValues.data()[i] = fitResult.paramValues[i];
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
 	}
 
@@ -951,6 +954,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "maxIterations", QString::number(d->fitData.maxIterations) );
 	writer->writeAttribute( "eps", QString::number(d->fitData.eps, 'g', 15) );
 	writer->writeAttribute( "evaluatedPoints", QString::number(d->fitData.evaluatedPoints) );
+	writer->writeAttribute( "useResults", QString::number(d->fitData.useResults) );
 
 	writer->writeStartElement("paramNames");
 	foreach (const QString &name, d->fitData.paramNames)
@@ -1068,8 +1072,9 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_STRING_VALUE("model", fitData.model);
 			READ_INT_VALUE("maxIterations", fitData.maxIterations, int);
 			READ_DOUBLE_VALUE("eps", fitData.eps);
-			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, size_t);	// old style
+			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, size_t);	// old name
 			READ_INT_VALUE("evaluatedPoints", fitData.evaluatedPoints, size_t);
+			READ_INT_VALUE("useResults", fitData.useResults, bool);
 		} else if (reader->name() == "name") {
 			d->fitData.paramNames<<reader->readElementText();
 		} else if (reader->name() == "startValue") {
