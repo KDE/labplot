@@ -665,8 +665,12 @@ void XYFitCurveDock::showFitResult() {
 
 	str += "<b>" +i18n("Parameters:") + "</b>";
 	for (int i=0; i < fitResult.paramValues.size(); i++) {
-		str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
-		       + QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i));
+		if (fitData.paramFixed.at(i))
+			str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i));
+		else
+			str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
+				+ QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
+				+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i))) + " %)";
 	}
 
 	str += "<br><br><b>" + i18n("Goodness of fit:") + "</b><br>";
