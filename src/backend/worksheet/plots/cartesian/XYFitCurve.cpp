@@ -827,7 +827,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.dof = n-np;
 
 	//calculate:
-	//residuals (Y_i-y_i)
+	//residuals r_i = y_i - Y_i = - (Y_i - y_i)
 	//sse = sum of squared errors (SSE) = residual sum of errors (RSS) = sum of sq. residuals (SSR) = \sum_i^n (Y_i-y_i)^2
 	//mse = mean squared error = 1/n \sum_i^n  (Y_i-y_i)^2
 	//rmse = root-mean squared error = \sqrt(mse)
@@ -836,6 +836,7 @@ void XYFitCurvePrivate::recalculate() {
 	//rsd = residual standard deviation = sqrt(rms)
 	//Coefficient of determination, R-squared = 1 - SSE/SSTOT with the total sum of squares SSTOT = \sum_i (y_i - ybar)^2 and ybar = 1/n \sum_i y_i
 	//Adjusted Coefficient of determination  adj. R-squared = 1 - (1-R-squared^2)*(n-1)/(n-np-1);
+	// see also http://www.originlab.com/doc/Origin-Help/NLFit-Algorithm
 
 	residualsVector->resize(n);
 	for (size_t i=0; i < n; ++i)

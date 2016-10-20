@@ -684,8 +684,9 @@ void XYFitCurveDock::showFitResult() {
 		str += i18n("residual standard deviation:") + ' ' + QString::number(fitResult.rsd) + "<br>";
 	}
 
-	str += i18n("coefficient of determination (R²):") + ' ' + QString::number(fitResult.rsquared) + "<br>";
-	str += i18n("adj. coefficient of determination (R²):") + ' ' + QString::number(fitResult.rsquaredAdj) + "<br>";
+	str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.rsquared) + "<br>";
+	str += i18n("adj. coefficient of determination")+ " (R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2")
+		+ "): " + QString::number(fitResult.rsquaredAdj) + "<br>";
 // 	str += "<br><br>";
 //
 // 	QStringList iterations = fitResult.solverOutput.split(';');
