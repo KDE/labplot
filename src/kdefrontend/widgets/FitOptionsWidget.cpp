@@ -51,12 +51,14 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 	ui.leEps->setText(QString::number(m_fitData->eps));
 	ui.leMaxIterations->setText(QString::number(m_fitData->maxIterations));
 	ui.leEvaluatedPoints->setText(QString::number(m_fitData->evaluatedPoints));
+	ui.cbEvaluateFullRange->setChecked(m_fitData->evaluateFullRange);
 	ui.cbUseResults->setChecked(m_fitData->useResults);
 
 	//SLOTS
 	connect( ui.leEps, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
 	connect( ui.leMaxIterations, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
 	connect( ui.leEvaluatedPoints, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
+	connect( ui.cbEvaluateFullRange, SIGNAL(clicked(bool)), this, SLOT(changed()) ) ;
 	connect( ui.cbUseResults, SIGNAL(clicked(bool)), this, SLOT(changed()) ) ;
 	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
 	connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
@@ -66,6 +68,7 @@ void FitOptionsWidget::applyClicked() {
 	m_fitData->maxIterations = ui.leMaxIterations->text().toFloat();
 	m_fitData->eps = ui.leEps->text().toFloat();
 	m_fitData->evaluatedPoints = ui.leEvaluatedPoints->text().toInt();
+	m_fitData->evaluateFullRange = ui.cbEvaluateFullRange->isChecked();
 	m_fitData->useResults = ui.cbUseResults->isChecked();
 
 	if (m_changed)

@@ -701,8 +701,8 @@ void XYFitCurvePrivate::recalculate() {
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	QVector<double> sigmaVector;
-	const double xmin = fitData.xRange.first();
-	const double xmax = fitData.xRange.last();
+	double xmin = fitData.xRange.first();
+	double xmax = fitData.xRange.last();
 	for (int row=0; row < xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x, y and sigma, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
@@ -720,7 +720,7 @@ void XYFitCurvePrivate::recalculate() {
 
 						if (fitData.weightsType == XYFitCurve::WeightsFromColumn) {
 							//weights from a given column -> calculate the square root of the inverse (sigma = sqrt(1/weight))
-							sigmaVector.append( sqrt(1/weightsColumn->valueAt(row)) );
+							sigmaVector.append( sqrt(1./weightsColumn->valueAt(row)) );
 						} else if (fitData.weightsType == XYFitCurve::WeightsFromErrorColumn) {
 							//weights from a given column with error bars (sigma = error)
 							sigmaVector.append( weightsColumn->valueAt(row) );
@@ -838,10 +838,6 @@ void XYFitCurvePrivate::recalculate() {
 	//Adjusted Coefficient of determination  adj. R-squared = 1 - (1-R-squared^2)*(n-1)/(n-np-1);
 	// see also http://www.originlab.com/doc/Origin-Help/NLFit-Algorithm
 
-	residualsVector->resize(n);
-	for (size_t i=0; i < n; ++i)
-		residualsVector->data()[i] = - gsl_vector_get(s->f, i);
-	residualsColumn->setChanged();
 
 	//gsl_blas_dnrm2() - computes the Euclidian norm (||x||_2 = \sqrt {\sum x_i^2}) of the vector with the elements (Yi - y[i])/sigma[i]
 	//gsl_blas_dasum() - computes the absolute sum \sum |x_i| of the elements of the vector with the elements (Yi - y[i])/sigma[i]
@@ -878,14 +874,40 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
 	}
 
+	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
+	residualsVector->resize(xDataColumn->rowCount());
+	if (fitData.evaluateFullRange) {	// evaluate full range of residuals
+		xVector->resize(xDataColumn->rowCount());
+		for (int i=0; i < xDataColumn->rowCount(); i++)
+			(*xVector)[i] = xDataColumn->valueAt(i);
+		ExpressionParser* parser = ExpressionParser::getInstance();
+		bool rc = parser->evaluateCartesian(fitData.model, xVector, residualsVector,
+							fitData.paramNames, fitResult.paramValues);
+		for (int i=0; i < xDataColumn->rowCount(); i++)
+			(*residualsVector)[i] = yDataColumn->valueAt(i) - (*residualsVector)[i];
+		if (!rc)
+			residualsVector->clear();
+	} else {	// only selected range
+		size_t j=0;
+		for (int i=0; i < xDataColumn->rowCount(); i++) {
+			if (xDataColumn->valueAt(i) >= xmin && xDataColumn->valueAt(i) <= xmax)
+				residualsVector->data()[i] = - gsl_vector_get(s->f, j++);
+			else	// outside range
+				residualsVector->data()[i] = 0;
+		}
+	}
+	residualsColumn->setChanged();
+
 	//free resources
 	gsl_multifit_fdfsolver_free(s);
 	gsl_matrix_free(covar);
 
 	//calculate the fit function (vectors)
 	ExpressionParser* parser = ExpressionParser::getInstance();
-	// TODO: evaluate full range (even if only parts of data is used for fitting)?
-	//double xmin = xDataColumn->minimum(), xmax = xDataColumn->maximum();
+	if (fitData.evaluateFullRange) { // evaluate fit on full data range if selected
+		xmin = xDataColumn->minimum();
+		xmax = xDataColumn->maximum();
+	}
 	xVector->resize(fitData.evaluatedPoints);
 	yVector->resize(fitData.evaluatedPoints);
 	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), fitData.evaluatedPoints, xVector, yVector,
@@ -954,6 +976,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "maxIterations", QString::number(d->fitData.maxIterations) );
 	writer->writeAttribute( "eps", QString::number(d->fitData.eps, 'g', 15) );
 	writer->writeAttribute( "evaluatedPoints", QString::number(d->fitData.evaluatedPoints) );
+	writer->writeAttribute( "evaluateFullRange", QString::number(d->fitData.evaluateFullRange) );
 	writer->writeAttribute( "useResults", QString::number(d->fitData.useResults) );
 
 	writer->writeStartElement("paramNames");
@@ -1074,6 +1097,7 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_DOUBLE_VALUE("eps", fitData.eps);
 			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, size_t);	// old name
 			READ_INT_VALUE("evaluatedPoints", fitData.evaluatedPoints, size_t);
+			READ_INT_VALUE("evaluateFullRange", fitData.evaluateFullRange, bool);
 			READ_INT_VALUE("useResults", fitData.useResults, bool);
 		} else if (reader->name() == "name") {
 			d->fitData.paramNames<<reader->readElementText();

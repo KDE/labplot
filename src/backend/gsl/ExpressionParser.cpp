@@ -31,6 +31,7 @@
 #include "backend/gsl/parser_extern.h"
 #include "backend/gsl/parser_struct.h"
 
+#include <QDebug>
 #include <klocale.h>
 
 extern "C" {
@@ -1057,7 +1058,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Energy 1 erg");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_ERG,'g',15); m_constantsUnits << "kg m^2 / s^2";
 
-	for(int i=0;i<4;i++)
+	for (int i=0;i<4;i++)
 		m_constantsGroupIndex << 15;
 }
 
@@ -1130,10 +1131,8 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 	double xMin = parse( min.toLocal8Bit().data() );
 	double xMax = parse( max.toLocal8Bit().data() );
 	double step = (xMax-xMin)/(double)(count-1);
-	QByteArray funcba = expr.toLocal8Bit();
-	const char* func = funcba.data();
+	const char* func = expr.toLocal8Bit().data();
 	double x, y;
-	char xVar[] = "x";
 	gsl_set_error_handler_off();
 
 	for (int i=0; i<paramNames.size(); ++i)
@@ -1141,7 +1140,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 
 	for(int i = 0;i < count; i++) {
 		x = xMin + step*i;
-		assign_variable(xVar,x);
+		assign_variable("x", x);
 		y = parse(func);
 
 		if(parse_errors()>0)
@@ -1162,15 +1161,13 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 	double xMin = parse( min.toLocal8Bit().data() );
 	double xMax = parse( max.toLocal8Bit().data() );
 	double step = (xMax-xMin)/(double)(count-1);
-	QByteArray funcba = expr.toLocal8Bit();
-	const char* func = funcba.data();
+	const char* func = expr.toLocal8Bit().data();
 	double x, y;
-	char xVar[] = "x";
 	gsl_set_error_handler_off();
 
 	for(int i = 0;i < count; i++) {
 		x = xMin + step*i;
-		assign_variable(xVar,x);
+		assign_variable("x", x);
 		y = parse(func);
 
 		if(parse_errors()>0)
@@ -1187,15 +1184,13 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 }
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector) {
-	QByteArray funcba = expr.toLocal8Bit();
-	const char* func = funcba.data();
+	const char* func = expr.toLocal8Bit().data();
 	double x, y;
-	char xVar[] = "x";
 	gsl_set_error_handler_off();
 
 	for(int i = 0; i < xVector->count(); i++) {
 		x = xVector->at(i);
-		assign_variable(xVar,x);
+		assign_variable("x", x);
 		y = parse(func);
 
 		if(parse_errors()>0)
@@ -1210,6 +1205,31 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	return true;
 }
 
+bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector,
+		const QStringList& paramNames, const QVector<double>& paramValues) {
+	const char* func = expr.toLocal8Bit().data();
+	double x, y;
+	gsl_set_error_handler_off();
+
+	for (int i=0; i < paramNames.size(); ++i)
+		assign_variable(paramNames.at(i).toLocal8Bit().data(), paramValues.at(i));
+
+	for (int i = 0; i < xVector->count(); i++) {
+		x = xVector->at(i);
+		assign_variable("x", x);
+		y = parse(func);
+
+		if (parse_errors() > 0)
+			return false;
+
+		if (isfinite(y))
+			(*yVector)[i] = y;
+		else
+			(*yVector)[i] = NAN;
+	}
+
+	return true;
+}
 
 /*!
 	evaluates multivariate function y=f(x_1, x_2, ...).
@@ -1218,8 +1238,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
  */
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector) {
 	Q_ASSERT(vars.size()==xVectors.size());
-	QByteArray funcba = expr.toLocal8Bit();
-	const char* func = funcba.data();
+	const char* func = expr.toLocal8Bit().data();
 	double y, varValue;
 	QString varName;
 
@@ -1265,12 +1284,11 @@ bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, co
 	QByteArray funcba = expr.toLocal8Bit();
 	const char* func = funcba.data();
 	double r, phi;
-	char var[] = "phi";
 	gsl_set_error_handler_off();
 
 	for(int i = 0;i < count; i++) {
 		phi = minValue + step*i;
-		assign_variable(var,phi);
+		assign_variable("phi", phi);
 		r = parse(func);
 		if(parse_errors()>0)
 			return false;
@@ -1297,12 +1315,11 @@ bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& e
 	QByteArray yfuncba = expr2.toLocal8Bit();
 	const char* yFunc = yfuncba.data();
 	double x, y, t;
-	char var[] = "t";
 	gsl_set_error_handler_off();
 
 	for(int i = 0;i < count; i++) {
 		t = minValue + step*i;
-		assign_variable(var,t);
+		assign_variable("t", t);
 		x = parse(xFunc);
 		if(parse_errors()>0)
 			return false;
