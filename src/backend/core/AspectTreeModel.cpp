@@ -36,7 +36,6 @@
 #include <QMenu>
 #include <QApplication>
 #include <QFontMetrics>
-#include <QDebug>
 
 #include <KLocale>
 
@@ -79,7 +78,6 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 	  m_matchCompleteWord(false) {
 
 	QFont font;
-	font.setFamily(font.defaultFamily());
 	QFontMetrics fm(font);
 	m_defaultHeaderHeight = fm.height();
 
