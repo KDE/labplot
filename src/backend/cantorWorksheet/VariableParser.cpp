@@ -44,6 +44,8 @@ VariableParser::VariableParser(const QString& name, const QString& value)
 		parsePythonValues();
 	else if(m_backendName.compare(QStringLiteral("R"), Qt::CaseInsensitive) == 0)
 		parseRValues();
+	else if(m_backendName.compare(QStringLiteral("Julia"), Qt::CaseInsensitive) == 0)
+		parsePythonValues();
 }
 
 void VariableParser::parseMaximaValues() {
