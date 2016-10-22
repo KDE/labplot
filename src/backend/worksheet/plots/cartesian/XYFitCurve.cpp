@@ -220,18 +220,18 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	double *min = ((struct data*)params)->paramMin;
 	double *max = ((struct data*)params)->paramMax;
 
-	const char *func = funcba.data();	// function to evaluate
 	// set current values of the parameters
 	for (int i=0; i < paramNames->size(); i++) {
 		double x = gsl_vector_get(paramValues, i);
 		// bound values if limits are set
 		assign_variable(paramNames->at(i).toLocal8Bit().data(), nsl_fit_map_bound(x, min[i], max[i]));
 #ifndef NDEBUG
-		qDebug()<<"Parameter"<<i<<'['<<min[i]<<','<<max[i]<<"] free/bound:"<<x<<' '<<nsl_fit_map_bound(x, min[i], max[i]);
+		qDebug()<<"Parameter"<<i<<'['<<min[i]<<','<<max[i]<<"] free/bound:"<<QString::number(x, 'g', 15)
+			<<' '<<QString::number(nsl_fit_map_bound(x, min[i], max[i]), 'g', 15);
 #endif
 	}
 
-	double Yi;
+	const char *func = funcba.data();	// function to evaluate
 	for (size_t i=0; i < n; i++) {
 		if (std::isnan(x[i]) || std::isnan(y[i]))
 			continue;
@@ -244,7 +244,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		}
 
 		assign_variable("x", x[i]);
-		Yi = parse(func);
+		double Yi = parse(func);
 #ifndef NDEBUG
 //		qDebug()<<"evaluate function"<<QString(func)<<": f(x["<<i<<"]) ="<<Yi;
 #endif
@@ -572,16 +572,15 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
 		char* func = funcba.data();
 		QByteArray nameba;
-		char* name;
 		double value;
+		const unsigned int np = paramNames->size();
 		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
+			assign_variable("x", x);
 			if (sigmaVector) sigma = sigmaVector[i];
-			char var[]="x";
-			assign_variable(var, x);
 
-			for (int j=0; j < paramNames->size(); j++) {
-				for (int k=0; k < paramNames->size(); k++) {
+			for (unsigned int j=0; j < np; j++) {
+				for (unsigned int k=0; k < np; k++) {
 					if (k != j) {
 						nameba = paramNames->at(k).toLocal8Bit();
 						value = nsl_fit_map_bound(gsl_vector_get(paramValues, k), min[k], max[k]);
@@ -590,13 +589,13 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				}
 
 				nameba = paramNames->at(j).toLocal8Bit();
-				name = nameba.data();
+				char *name = nameba.data();
 				value = nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]);
 				assign_variable(name, value);
 				double f_p = parse(func);
 
 				double eps = 1.e-9*fabs(f_p);	// adapt step size to value
-				value = value + eps;
+				value += eps;
 				assign_variable(name, value);
 				double f_pdp = parse(func);
 #ifndef NDEBUG
@@ -606,7 +605,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 #endif
 				if (fixed[j])
 					gsl_matrix_set(J, i, j, 0.);
-				else // calculate finite difference
+				else	// calculate finite difference
 					gsl_matrix_set(J, i, j, (f_pdp - f_p)/eps/sigma);
 			}
 		}
@@ -620,6 +619,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
 	func_f(x, params, f);
 	func_df(x, params, J);
+
 	return GSL_SUCCESS;
 }
 
@@ -664,8 +664,8 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	//fit settings
-	int maxIters = fitData.maxIterations;	//maximal number of iterations
-	double delta = fitData.eps;		//fit tolerance
+	const int maxIters = fitData.maxIterations;	//maximal number of iterations
+	const double delta = fitData.eps;		//fit tolerance
 	const unsigned int np = fitData.paramNames.size(); //number of fit parameters
 	if (np == 0) {
 		fitResult.available = true;
@@ -731,7 +731,7 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	//number of data points to fit
-	size_t n = xdataVector.size();
+	const size_t n = xdataVector.size();
 	if (n == 0) {
 		fitResult.available = true;
 		fitResult.valid = false;
@@ -861,7 +861,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.rsquaredAdj = 1. - (1. - fitResult.rsquared*fitResult.rsquared)*(n-1.)/(n-np-1.);
 
 	//parameter values
-	double c = GSL_MIN_DBL(1., sqrt(fitResult.sse)); //limit error for poor fit
+	const double c = GSL_MIN_DBL(1., sqrt(fitResult.sse)); //limit error for poor fit
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
 	for (unsigned int i=0; i < np; i++) {
@@ -939,7 +939,7 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 	}
 
 	//current value of the chi2-function
-	state += QString::number(pow(gsl_blas_dnrm2 (s->f),2));
+	state += QString::number(pow(gsl_blas_dnrm2 (s->f), 2));
 	state += ';';
 
 	fitResult.solverOutput += state;
@@ -1146,11 +1146,11 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 				delete column;
 				return false;
 			}
-			if (column->name()=="x")
+			if (column->name() == "x")
 				d->xColumn = column;
-			else if (column->name()=="y")
+			else if (column->name() == "y")
 				d->yColumn = column;
-			else if (column->name()=="residuals")
+			else if (column->name() == "residuals")
 				d->residualsColumn = column;
 		}
 	}
