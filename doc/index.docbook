@@ -51,8 +51,8 @@
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2016-10-16</date>
-<releaseinfo>3.2.7</releaseinfo>
+<date>2016-10-22</date>
+<releaseinfo>3.2.8</releaseinfo>
 
 <abstract>
 	<para>
@@ -918,14 +918,23 @@ The menu is only available when a datapicker object is selected on the <guilabel
       Linear and non-linear curve fitting of data can be done with several predefined fit-models 
       (for instance polynomial, exponential, Gaussian or custom) to data consisting of x- and y-columns 
       with an optional weight column. With a custom model any function with unlimited number of parameters
-      can be used for fitting. The options (number of iterations, tolerance, number of fitted points) can
-      be used to optimize the fitting result which is displayed in the results text.
+      can be used for fitting. The results including statistical properties are displayed in the results text.
     </para>
     <para>
-    The start values of the parameter can be set in the parameter dialog.
-    It is also possible to fix any parameter and set lower and upper limits to the values there. 
+    The start values of the parameter can be set in the parameter dialog. It is also possible to fix any parameter and set lower and upper limits to the values here. Be aware that reducing the parameter space by fixing parameter or specifying limits can slow down convergence or avoid finding a good result. It's always a good idea to remove any parameter limitations when good start values are found.
     </para>
-  </sect1>
+    <para>
+        Following options can be set in the options dialog to optimize the fitting:
+    </para>
+      <itemizedlist>
+	<listitem><para>Max. iterations: number of maximum iterations</para></listitem>
+	<listitem><para>Tolerance: desired tolerance for result</para></listitem>
+	<listitem><para>Evaluated points: number of points to evaluate the fit function</para></listitem>
+	<listitem><para>Evaluate full range: evaluate the fit function for the full data range instead of evaluating only for the given x range</para></listitem>
+	<listitem><para>Use results as new start values: results will be the new parameter start values</para></listitem>
+	</itemizedlist>
+
+    </sect1>
   
   <sect1 id="filter">
     <title>Fourier filter</title>
