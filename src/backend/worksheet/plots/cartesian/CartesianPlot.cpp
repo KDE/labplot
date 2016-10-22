@@ -356,6 +356,7 @@ void CartesianPlot::initActions() {
 // no icons yet
 	addDataReductionCurveAction = new QAction(i18n("xy-curve from a data reduction"), this);
 	addDifferentiationCurveAction = new QAction(i18n("xy-curve from a differentiation"), this);
+	addIntegrationCurveAction = new QAction(i18n("xy-curve from an integration"), this);
 	addInterpolationCurveAction = new QAction(i18n("xy-curve from an interpolation"), this);
 	addSmoothCurveAction = new QAction(i18n("xy-curve from a smooth"), this);
 	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
