@@ -214,40 +214,39 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	double* x = ((struct data*)params)->x;
 	double* y = ((struct data*)params)->y;
 	double* sigma = ((struct data*)params)->sigma;
-	QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
+	nsl_fit_model_type modelType = ((struct data*)params)->modelType;
+	QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();	// a local byte array is needed!
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 	double *min = ((struct data*)params)->paramMin;
 	double *max = ((struct data*)params)->paramMax;
 
 	const char *func = funcba.data();	// function to evaluate
-	double np = paramNames->size();		// number of parameter
 	// set current values of the parameters
-	QByteArray paramba;
-	for (int i=0; i < np; i++) {
-		paramba = paramNames->at(i).toLocal8Bit();
+	for (int i=0; i < paramNames->size(); i++) {
 		double x = gsl_vector_get(paramValues, i);
 		// bound values if limits are set
-		assign_variable(paramba.data(), nsl_fit_map_bound(x, min[i], max[i]));
+		assign_variable(paramNames->at(i).toLocal8Bit().data(), nsl_fit_map_bound(x, min[i], max[i]));
 #ifndef NDEBUG
 		qDebug()<<"Parameter"<<i<<'['<<min[i]<<','<<max[i]<<"] free/bound:"<<x<<' '<<nsl_fit_map_bound(x, min[i], max[i]);
 #endif
 	}
 
-	char var[]="x";
+	double Yi;
 	for (size_t i=0; i < n; i++) {
 		if (std::isnan(x[i]) || std::isnan(y[i]))
 			continue;
 
-		double Yi=0;
-		//TODO: add checks for allowed valus of x for different models if required (x>0 for ln(x) etc.)
+		// checks for allowed values of x for different models
+		// TODO: more to check
+		if (modelType == nsl_fit_model_lognormal) {
+			if (x[i] < 0)
+				x[i]=0;
+		}
 
-		assign_variable(var, x[i]);
+		assign_variable("x", x[i]);
 		Yi = parse(func);
 #ifndef NDEBUG
-//		printf("func=%s, X[%d]=%g",func, i, x[i]);
-//		for (int j=0; j<paramNames->size(); j++)
-//			printf(" %g",nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]));
-//		printf(" Y[%d]=%g\n", i, Yi);
+//		qDebug()<<"evaluate function"<<QString(func)<<": f(x["<<i<<"]) ="<<Yi;
 #endif
 		if (parse_errors() > 0)
 			return GSL_EINVAL;
@@ -257,9 +256,6 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		else
 			gsl_vector_set (f, i, (Yi - y[i]));
 	}
-#ifndef NDEBUG
-//	puts("");
-#endif
 
 	return GSL_SUCCESS;
 }
@@ -599,15 +595,18 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				assign_variable(name, value);
 				double f_p = parse(func);
 
-				double eps = 1.0e-5;	// TODO: adapt to value
+				double eps = 1.e-9*fabs(f_p);	// adapt step size to value
 				value = value + eps;
 				assign_variable(name, value);
 				double f_pdp = parse(func);
-
-				// calculate finite difference
+#ifndef NDEBUG
+//		qDebug()<<"evaluate deriv"<<QString(func)<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15);
+//		qDebug()<<"evaluate deriv"<<QString(func)<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15);
+//		qDebug()<<"	deriv = "<<QString::number((f_pdp-f_p)/eps/sigma, 'g', 15);
+#endif
 				if (fixed[j])
 					gsl_matrix_set(J, i, j, 0.);
-				else
+				else // calculate finite difference
 					gsl_matrix_set(J, i, j, (f_pdp - f_p)/eps/sigma);
 			}
 		}
@@ -758,6 +757,7 @@ void XYFitCurvePrivate::recalculate() {
 		sigma = sigmaVector.data();
 
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
+	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
 #ifndef NDEBUG
 	for (unsigned int i=0; i < np; i++)
 		qDebug()<<"fixed parameter"<<i<<fitData.paramFixed.data()[i];
@@ -769,7 +769,6 @@ void XYFitCurvePrivate::recalculate() {
 				fitData.paramLowerLimits.data(), fitData.paramUpperLimits.data(), fitData.paramFixed.data()};
 	f.f = &func_f;
 	f.df = &func_df;
-	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
 	f.fdf = &func_fdf;
 	f.n = n;
 	f.p = np;
