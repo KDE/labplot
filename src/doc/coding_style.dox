@@ -69,16 +69,16 @@ Very short classes can be bundled in one file which then is named using all lowe
 @endcode
 - Each comma in a function call or semicolon in a for statement is followed by a space character; no space before the first and after the last argument. Example:
 @code   
-    for (int i=0; i < 10; i++) {
+    for (int i = 0; i < 10; i++) {
         ...
         doSomething(arg1, arg2, arg3);
     }
 @endcode
-    "else" (and "catch" if it is ever used) is put after the closing brace (like this: "} else {")
+    "else" (and "catch" if it is ever used) is put after the closing brace like this: "} else {"
 - Use as many brackets and spaces in conditions/math terms as you see fit for optimum readability. '=' should always be surrounded by spaces. '+', '-', '*', '/' is sometimes better written without spaces. Examples:
 @code
     foo/2 + bar/4 + baz/3
-    for (int i=0; i < bar+1; i++)
+    for (int i = 0; i < bar+1; i++)
     var = (foo - 1) + (bar - 2) + (baz - 3)
 @endcode
 - Try to keep lines shorter than 100 characters, inserting line breaks as necessary.

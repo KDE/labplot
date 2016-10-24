@@ -31,7 +31,6 @@
 #include "backend/gsl/parser_extern.h"
 #include "backend/gsl/parser_struct.h"
 
-#include <QDebug>
 #include <klocale.h>
 
 extern "C" {
@@ -162,9 +161,9 @@ void ExpressionParser::initFunctions() {
 //	m_functionsNames << i18n("Sine");
 
 #ifndef _WIN32
-	for (int i=0; i < 23; i++)
+	for (int i = 0; i < 23; i++)
 #else
-	for (int i=0; i < 18; i++)
+	for (int i = 0; i < 18; i++)
 #endif
 		m_functionsGroupIndex << 0;
 
@@ -188,7 +187,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("x^8");
 	m_functionsNames << i18n("x^9");
 
-	for (int i=0; i < 17; i++)
+	for (int i = 0; i < 17; i++)
 		m_functionsGroupIndex << 1;
 
 
@@ -206,7 +205,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("n-th zero of the Airy function derivative of the first kind");
 	m_functionsNames << i18n("n-th zero of the Airy function derivative of the second kind");
 
-	for (int i=0; i < 12; i++)
+	for (int i = 0; i < 12; i++)
 		m_functionsGroupIndex << 2;
 
 	// Bessel Functions
@@ -259,7 +258,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("n-th positive zero of the Bessel function J1");
 	m_functionsNames << i18n("n-th positive zero of the Bessel function Jnu");
 
-	for (int i=0; i < 44; i++)
+	for (int i = 0; i < 44; i++)
 		m_functionsGroupIndex << 3;
 
 	// Clausen Functions
@@ -270,7 +269,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Lowest-order normalized hydrogenic bound state radial wavefunction");
 	m_functionsNames << i18n("n-th normalized hydrogenic bound state radial wavefunction");
 
-	for (int i=0; i < 2; i++)
+	for (int i = 0; i < 2; i++)
 		m_functionsGroupIndex << 5;
 
 	// Dawson Function
@@ -285,7 +284,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Fifth-order Debye function");
 	m_functionsNames << i18n("Sixth-order Debye function");
 
-	for (int i=0; i < 6; i++)
+	for (int i = 0; i < 6; i++)
 		m_functionsGroupIndex << 7;
 
 	// Dilogarithm
@@ -305,7 +304,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Carlson form of incomplete elliptic integral RF");
         m_functionsNames << i18n("Carlson form of incomplete elliptic integral RJ");
 
-	for (int i=0; i < 11; i++)
+	for (int i = 0; i < 11; i++)
 		m_functionsGroupIndex << 9;
 
 	// Error Functions
@@ -316,7 +315,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Upper tail of the Gaussian probability function Q");
         m_functionsNames << i18n("Hazard function for the normal distribution Z/Q");
 
-	for (int i=0; i < 6; i++)
+	for (int i = 0; i < 6; i++)
 		m_functionsGroupIndex << 10;
 
 	// Exponential Functions
@@ -327,7 +326,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("2(exp(x)-1-x)/x^2");
         m_functionsNames << i18n("n-relative exponential");
 
-	for (int i=0; i < 6; i++)
+	for (int i = 0; i < 6; i++)
 		m_functionsGroupIndex << 11;
 
 	// Exponential Integrals
@@ -342,7 +341,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Cosine integral");
         m_functionsNames << i18n("Arctangent integral");
 
-	for (int i=0; i < 10; i++)
+	for (int i = 0; i < 10; i++)
 		m_functionsGroupIndex << 12;
 
 	// Fermi-Dirac Function
@@ -356,7 +355,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Complete Fermi-Dirac integral with index 3/2");
         m_functionsNames << i18n("Incomplete Fermi-Dirac integral with index zero");
 
-	for (int i=0; i < 9; i++)
+	for (int i = 0; i < 9; i++)
 		m_functionsGroupIndex << 13;
 
 	// Gamma and Beta Functions
@@ -385,7 +384,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Logarithm of the beta function");
         m_functionsNames << i18n("Normalized incomplete beta function");
 
-	for (int i=0; i < 22; i++)
+	for (int i = 0; i < 22; i++)
 		m_functionsGroupIndex << 14;
 
 	// Gegenbauer Functions
@@ -394,7 +393,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Gegenbauer polynomial C_3");
         m_functionsNames << i18n("Gegenbauer polynomial C_n");
 
-	for (int i=0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 		m_functionsGroupIndex << 15;
 
 	// Hypergeometric Functions
@@ -409,7 +408,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Renormalized Gauss hypergeometric function 2F1 with complex parameters");
         m_functionsNames << i18n("Hypergeometric function 2F0");
 
-	for (int i=0; i < 10; i++)
+	for (int i = 0; i < 10; i++)
 		m_functionsGroupIndex << 16;
 
 	// Laguerre Functions
@@ -417,14 +416,14 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("generalized Laguerre polynomials L_2");
         m_functionsNames << i18n("generalized Laguerre polynomials L_3");
 
-	for (int i=0; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 		m_functionsGroupIndex << 17;
 
 	// Lambert W Functions
         m_functionsNames << i18n("Principal branch of the Lambert W function");
         m_functionsNames << i18n("Secondary real-valued branch of the Lambert W function");
 
-	for (int i=0; i < 2; i++)
+	for (int i = 0; i < 2; i++)
 		m_functionsGroupIndex << 18;
 
 	// Legendre Functions and Spherical Harmonics
@@ -448,7 +447,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("First radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space");
         m_functionsNames << i18n("l-th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic space");
 
-	for (int i=0; i < 18; i++)
+	for (int i = 0; i < 18; i++)
 		m_functionsGroupIndex << 19;
 
 	// Logarithm and Related Functions
@@ -457,7 +456,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("log(1+x)");
         m_functionsNames << i18n("log(1+x) - x");
 
-	for (int i=0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 		m_functionsGroupIndex << 20;
 
 	// Power Function
@@ -472,14 +471,14 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Trigamma function psi'");
         m_functionsNames << i18n("Polygamma function psi^(n)");
 
-	for (int i=0; i < 6; i++)
+	for (int i = 0; i < 6; i++)
 		m_functionsGroupIndex << 22;
 
 	// Synchrotron Functions
         m_functionsNames << i18n("First synchrotron function");
         m_functionsNames << i18n("Second synchrotron function");
 
-	for (int i=0; i < 2; i++)
+	for (int i = 0; i < 2; i++)
 		m_functionsGroupIndex << 23;
 
 	// Transport Functions
@@ -488,7 +487,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Transport function");
         m_functionsNames << i18n("Transport function");
 
-	for (int i=0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 		m_functionsGroupIndex << 24;
 
 	// Trigonometric Functions
@@ -501,7 +500,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("restrict to [-pi,pi]");
         m_functionsNames << i18n("restrict to [0,2 pi]");
 
-	for (int i=0; i < 8; i++)
+	for (int i = 0; i < 8; i++)
 		m_functionsGroupIndex << 25;
 
 	// Zeta Functions
@@ -513,7 +512,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Eta function for integer n");
         m_functionsNames << i18n("Eta function");
 
-	for (int i=0; i < 7; i++)
+	for (int i = 0; i < 7; i++)
 		m_functionsGroupIndex << 26;
 
 	// GSL Random Number Distributions: see http://www.gnu.org/software/gsl/manual/html_node/Random-Number-Distributions.html
@@ -533,7 +532,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Probability density for unit Gaussian tail distribution");
         m_functionsNames << i18n("Probability density for a bivariate Gaussian distribution");
 
-	for (int i=0; i < 13; i++)
+	for (int i = 0; i < 13; i++)
 		m_functionsGroupIndex << 27;
 
 	// Exponential Distribution
@@ -543,7 +542,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
-	for (int i=0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 		m_functionsGroupIndex << 28;
 
 	// Laplace Distribution
@@ -553,7 +552,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
-	for (int i=0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 		m_functionsGroupIndex << 29;
 
 	// Exponential Power Distribution
@@ -561,7 +560,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("cumulative distribution function P");
         m_functionsNames << i18n("Cumulative distribution function Q");
 
-	for (int i=0; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 		m_functionsGroupIndex << 30;
 
 	// Cauchy Distribution
@@ -571,7 +570,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
-	for (int i=0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 		m_functionsGroupIndex << 31;
 
 	// Rayleigh Distribution
@@ -582,7 +581,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
         m_functionsNames << i18n("Probability density for a Rayleigh tail distribution");
 
-	for (int i=0; i < 6; i++)
+	for (int i = 0; i < 6; i++)
 		m_functionsGroupIndex << 32;
 
 	// Landau Distribution
@@ -596,7 +595,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
-	for (int i=0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 		m_functionsGroupIndex << 34;
 
 	// Flat (Uniform) Distribution
@@ -606,7 +605,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
-	for (int i=0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 		m_functionsGroupIndex << 35;
 
 	// Lognormal Distribution
@@ -616,7 +615,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
-	for (int i=0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 		m_functionsGroupIndex << 36;
 
 	// Chi-squared Distribution
@@ -626,7 +625,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
-	for (int i=0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 		m_functionsGroupIndex << 37;
 
 	// F-distribution
@@ -636,7 +635,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
-	for (int i=0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 		m_functionsGroupIndex << 38;
 
 	// t-distribution
@@ -646,7 +645,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
-	for (int i=0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 		m_functionsGroupIndex << 39;
 
 	// Beta Distribution
@@ -656,7 +655,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
-	for (int i=0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 		m_functionsGroupIndex << 40;
 
 	// Logistic Distribution
@@ -666,7 +665,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
-	for (int i=0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 		m_functionsGroupIndex << 41;
 
 	// Pareto Distribution
@@ -676,7 +675,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
-	for (int i=0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 		m_functionsGroupIndex << 42;
 
 	// Weibull Distribution
@@ -686,7 +685,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
-	for (int i=0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 		m_functionsGroupIndex << 43;
 
 	// Gumbel Distribution
@@ -701,7 +700,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Inverse cumulative distribution function P");
         m_functionsNames << i18n("Inverse cumulative distribution function Q");
 
-	for (int i=0; i < 10; i++)
+	for (int i = 0; i < 10; i++)
 		m_functionsGroupIndex << 44;
 
 	// Poisson Distribution
@@ -709,7 +708,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Cumulative distribution function P");
         m_functionsNames << i18n("Cumulative distribution function Q");
 
-	for (int i=0; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 		m_functionsGroupIndex << 45;
 
 	// Bernoulli Distribution
@@ -724,7 +723,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Cumulative distribution function P");
         m_functionsNames << i18n("Cumulative distribution function Q");
 
-	for (int i=0; i < 6; i++)
+	for (int i = 0; i < 6; i++)
 		m_functionsGroupIndex << 47;
 
 	// Pascal Distribution
@@ -732,7 +731,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Cumulative distribution function P");
         m_functionsNames << i18n("Cumulative distribution function Q");
 
-	for (int i=0; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 		m_functionsGroupIndex << 48;
 
 	// Geometric Distribution
@@ -740,7 +739,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Cumulative distribution function P");
         m_functionsNames << i18n("Cumulative distribution function Q");
 
-	for (int i=0; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 		m_functionsGroupIndex << 49;
 
 	// Hypergeometric Distribution
@@ -748,7 +747,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("Cumulative distribution function P");
         m_functionsNames << i18n("Cumulative distribution function Q");
 
-	for (int i=0; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 		m_functionsGroupIndex << 50;
 
 	// Logarithmic Distribution
@@ -785,7 +784,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Pi");
 	m_constantsValues << QString::number(M_PI,'g',15); m_constantsUnits << "";
 
-	for (int i=0; i < 2; i++)
+	for (int i = 0; i < 2; i++)
 		m_constantsGroupIndex << 0;
 
 	//Fundamental constants
@@ -814,7 +813,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Gauss");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_GAUSS,'g',15); m_constantsUnits << "kg / A s^2";
 
-	for (int i=0; i < 12; i++)
+	for (int i = 0; i < 12; i++)
 		m_constantsGroupIndex << 1;
 
 	// Astronomy and Astrophysics
@@ -831,7 +830,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Solar mass");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_SOLAR_MASS,'g',15); m_constantsUnits << "kg";
 
-	for (int i=0; i < 6; i++)
+	for (int i = 0; i < 6; i++)
 		m_constantsGroupIndex << 2;
 
 	// Atomic and Nuclear Physics;
@@ -872,7 +871,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Electric dipole moment of 1 Debye");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_DEBYE,'g',15); m_constantsUnits << "A s^2 / m^2";
 
-	for (int i=0; i < 18; i++)
+	for (int i = 0; i < 18; i++)
 		m_constantsGroupIndex << 3;
 
 	// Measurement of Time
@@ -885,7 +884,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Number of seconds in 1 week");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_WEEK,'g',15); m_constantsUnits << "s";
 
-	for (int i=0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 		m_constantsGroupIndex << 4;
 
 	// Imperial Units
@@ -900,7 +899,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Length of 1/1000th of an inch");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_MIL,'g',15); m_constantsUnits << "m";
 
-	for (int i=0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 		m_constantsGroupIndex << 5;
 
 	// Speed and Nautical Units
@@ -915,7 +914,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Speed of 1 knot");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_KNOT,'g',15); m_constantsUnits << "m / s";
 
-	for (int i=0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 		m_constantsGroupIndex << 6;
 
 	// Printers Units
@@ -924,7 +923,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("length of 1 TeX point [1/72.27 inch]");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_TEXPOINT,'g',15); m_constantsUnits << "m";
 
-	for (int i=0; i < 2; i++)
+	for (int i = 0; i < 2; i++)
 		m_constantsGroupIndex << 7;
 
 	// Volume, Area and Length
@@ -947,7 +946,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Volume of 1 pint");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_PINT,'g',15); m_constantsUnits << "m^3";
 
-	for (int i=0; i < 9; i++)
+	for (int i = 0; i < 9; i++)
 		m_constantsGroupIndex << 8;
 
 	// Mass and Weight
@@ -974,7 +973,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Force of 1 poundal");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_POUNDAL,'g',15); m_constantsUnits << "kg m / s^2";
 
-	for (int i=0;i < 11; i++)
+	for (int i = 0;i < 11; i++)
 		m_constantsGroupIndex << 9;
 
 	// Thermal Energy and Power
@@ -987,7 +986,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Power of 1 horsepower");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_HORSEPOWER,'g',15); m_constantsUnits << "kg m^2 / s^3";
 
-	for (int i=0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 		m_constantsGroupIndex << 10;
 
 	// Pressure
@@ -1006,7 +1005,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Pressure of 1 pound per square inch");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_PSI,'g',15); m_constantsUnits << "kg / m s^2";
 
-	for (int i=0; i < 7; i++)
+	for (int i = 0; i < 7; i++)
 		m_constantsGroupIndex << 11;
 
 	// Viscosity
@@ -1015,7 +1014,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Kinematic viscosity of 1 stokes");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_STOKES,'g',15); m_constantsUnits << "m^2 / s";
 
-	for (int i=0; i < 2; i++)
+	for (int i = 0; i < 2; i++)
 		m_constantsGroupIndex << 12;
 
 	// Light and Illumination
@@ -1034,7 +1033,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Luminance of 1 footlambert");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_FOOTLAMBERT,'g',15); m_constantsUnits << "cd sr / m^2";
 
-	for (int i=0; i < 7; i++)
+	for (int i = 0; i < 7; i++)
 		m_constantsGroupIndex << 13;
 
 	// Radioactivity
@@ -1045,7 +1044,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Absorbed dose of 1 rad");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_RAD,'g',15); m_constantsUnits << "m^2 / s^2";
 
-	for (int i=0; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 		m_constantsGroupIndex << 14;
 
 	// Force and Energy
@@ -1058,7 +1057,7 @@ void ExpressionParser::initConstants() {
 	m_constantsNames << i18n("Energy 1 erg");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_ERG,'g',15); m_constantsUnits << "kg m^2 / s^2";
 
-	for (int i=0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 		m_constantsGroupIndex << 15;
 }
 
@@ -1115,7 +1114,7 @@ const QVector<int>& ExpressionParser::constantsGroupIndices() {
 }
 
 bool ExpressionParser::isValid(const QString& expr, const QStringList& vars){
-	for (int i=0; i < vars.size(); ++i)
+	for (int i = 0; i < vars.size(); ++i)
 		assign_variable(vars.at(i).toLocal8Bit().data(), 0);
 
 	QByteArray funcba = expr.toLocal8Bit();
@@ -1135,15 +1134,15 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 	double x, y;
 	gsl_set_error_handler_off();
 
-	for (int i=0; i < paramNames.size(); ++i)
+	for (int i = 0; i < paramNames.size(); ++i)
 		assign_variable(paramNames.at(i).toLocal8Bit().data(), paramValues.at(i));
 
-	for (int i = 0;i < count; i++) {
+	for (int i = 0; i < count; i++) {
 		x = xMin + step*i;
 		assign_variable("x", x);
 		y = parse(func);
 
-		if(parse_errors()>0)
+		if (parse_errors() > 0)
 			return false;
 
 		(*xVector)[i] = x;
@@ -1170,7 +1169,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 		assign_variable("x", x);
 		y = parse(func);
 
-		if(parse_errors()>0)
+		if (parse_errors() > 0)
 			return false;
 
 		(*xVector)[i] = x;
@@ -1193,7 +1192,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 		assign_variable("x", x);
 		y = parse(func);
 
-		if(parse_errors()>0)
+		if (parse_errors() > 0)
 			return false;
 
 		if (isfinite(y))
@@ -1211,7 +1210,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	double x, y;
 	gsl_set_error_handler_off();
 
-	for (int i=0; i < paramNames.size(); ++i)
+	for (int i = 0; i < paramNames.size(); ++i)
 		assign_variable(paramNames.at(i).toLocal8Bit().data(), paramValues.at(i));
 
 	for (int i = 0; i < xVector->count(); i++) {
@@ -1247,7 +1246,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 	bool stop = false;
 	for (int i = 0; i < yVector->size(); i++) {
 		//stop iterating over i if one of the x-vectors has no elements anymore.
-		for (int n=0; n < xVectors.size(); ++n) {
+		for (int n = 0; n < xVectors.size(); ++n) {
 			if (i == xVectors.at(n)->size()) {
 				stop = true;
 				break;
@@ -1256,7 +1255,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		if (stop)
 			break;
 
-		for (int n=0; n < vars.size(); ++n) {
+		for (int n = 0; n < vars.size(); ++n) {
 			varName = vars.at(n);
 			varValue = xVectors.at(n)->at(i);
 			assign_variable(varName.toLocal8Bit().data(), varValue);
@@ -1264,7 +1263,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 
 		y = parse(func);
 
-		if(parse_errors()>0)
+		if (parse_errors() > 0)
 			return false;
 
 		if (isfinite(y))
@@ -1290,7 +1289,7 @@ bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, co
 		phi = minValue + step*i;
 		assign_variable("phi", phi);
 		r = parse(func);
-		if(parse_errors()>0)
+		if (parse_errors() > 0)
 			return false;
 
 		if (isfinite(r)) {
@@ -1321,7 +1320,7 @@ bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& e
 		t = minValue + step*i;
 		assign_variable("t", t);
 		x = parse(xFunc);
-		if(parse_errors()>0)
+		if (parse_errors() > 0)
 			return false;
 
 		if (isfinite(x))
@@ -1330,7 +1329,7 @@ bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& e
 			(*xVector)[i] = NAN;
 
 		y = parse(yFunc);
-		if(parse_errors()>0)
+		if (parse_errors() > 0)
 			return false;
 
 		if (isfinite(y))

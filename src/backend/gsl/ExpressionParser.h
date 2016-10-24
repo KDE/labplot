@@ -32,7 +32,7 @@
 #include <QVector>
 #include <QStringList>
 
-class ExpressionParser{
+class ExpressionParser {
 
 public:
 	static ExpressionParser* getInstance();
