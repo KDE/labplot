@@ -33,13 +33,15 @@
 #include <strings.h>
 #include <ctype.h>
 #include <locale.h>
-#include "parser.h"
 #include "parser_struct.h"
 #include "constants.h"
 #include "functions.h"
 
 /* Functions type */
 typedef double (*func_t) ();
+
+int yyerror(const char*);
+int yylex(void);
 
 /* Data type for links in the chain of symbols */
 struct symrec {
@@ -103,13 +105,6 @@ expr:      NUM       { $$ = $1;                         }
 
 %%
 
-
-symrec *putsym(const char *, int); /* put symbol in symbol table */
-symrec *getsym(const char *);
-void init_table(void);		/* initialize symbol table */
-void delete_table(void);	/* delete symbol table */
-int parse_errors();
-
 unsigned int pos;
 #define PARSE_STRING_SIZE 500	/* big enough? */
 char string[PARSE_STRING_SIZE];
@@ -130,65 +125,13 @@ void pdebug(const char *str) {
 /* The symbol table: a chain of `struct symrec'.  */
 symrec *sym_table = (symrec *) 0;
 
-double parse(const char *str) {
-#ifdef PDEBUG
-	printf("\nPARSER: parse(\"%s\")\n", str);
-#endif
-	pos = 0;
-
-	/* reset string, because it's global! */
-	bzero(string, PARSE_STRING_SIZE);
-
-	/* leave space to terminate string by "\n\0" */
-	strncpy(string, str, PARSE_STRING_SIZE - 2);
-	string[strlen(string)] = '\n';
-
-	/* be sure that the symbol table has been initialized */
-	if (!sym_table)
-	   init_table();
-
-	yyparse();
-
-/*	pdebug("PARSER: parse() DONE");*/
-	return res;
-}
-
 int parse_errors() {
 	return yynerrs;
 }
 
-int yyerror (const char *s) {
+int yyerror(const char *s) {
 	printf ("PARSER ERROR: %s\n", s);
 	return 0;
-}
-
-/* put arithmetic functions in table. */
-void init_table (void) {
-/*	pdebug("PARSER: init_table()"); */
-
-	symrec *ptr;
-	int i;
-	/* add functions */
-	for (i = 0; _functions[i].name != 0; i++) {
-		ptr = putsym (_functions[i].name, FNCT);
-		ptr->value.fnctptr = _functions[i].fnct;
-	}
-	/* add constants */
-	for (i = 0; _constants[i].name != 0; i++) {
-		ptr = putsym (_constants[i].name, VAR);
-		ptr->value.var = _constants[i].value;
-	}
-/*	pdebug("PARSER: init_table() DONE"); */
-}
-
-void delete_table(void) {
-	symrec *tmp;
-	while(sym_table) {
-		tmp = sym_table;
-		sym_table = sym_table->next;
-		free(tmp->name);
-		free(tmp);
-	}
 }
 
 symrec* putsym (const char *sym_name, int sym_type) {
@@ -227,6 +170,35 @@ symrec* getsym (const char *sym_name) {
 	return 0;
 }
 
+/* put arithmetic functions in table. */
+void init_table (void) {
+/*	pdebug("PARSER: init_table()"); */
+
+	symrec *ptr;
+	int i;
+	/* add functions */
+	for (i = 0; _functions[i].name != 0; i++) {
+		ptr = putsym (_functions[i].name, FNCT);
+		ptr->value.fnctptr = _functions[i].fnct;
+	}
+	/* add constants */
+	for (i = 0; _constants[i].name != 0; i++) {
+		ptr = putsym (_constants[i].name, VAR);
+		ptr->value.var = _constants[i].value;
+	}
+/*	pdebug("PARSER: init_table() DONE"); */
+}
+
+void delete_table(void) {
+	symrec *tmp;
+	while(sym_table) {
+		tmp = sym_table;
+		sym_table = sym_table->next;
+		free(tmp->name);
+		free(tmp);
+	}
+}
+
 symrec* assign_variable(const char* symb_name, double value) {
 #ifdef PDEBUG
 	printf("PARSER: assign_variable(): symb_name = %s value=%g\n", symb_name, value);
@@ -257,6 +229,29 @@ static int getcharstr(void) {
 static void ungetcstr(void) {
     if (pos > 0)
         pos--;
+}
+
+double parse(const char *str) {
+#ifdef PDEBUG
+	printf("\nPARSER: parse(\"%s\")\n", str);
+#endif
+	pos = 0;
+
+	/* reset string, because it's global! */
+	bzero(string, PARSE_STRING_SIZE);
+
+	/* leave space to terminate string by "\n\0" */
+	strncpy(string, str, PARSE_STRING_SIZE - 2);
+	string[strlen(string)] = '\n';
+
+	/* be sure that the symbol table has been initialized */
+	if (!sym_table)
+	   init_table();
+
+	yyparse();
+
+/*	pdebug("PARSER: parse() DONE");*/
+	return res;
 }
 
 int yylex(void) {

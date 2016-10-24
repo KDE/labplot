@@ -41,13 +41,13 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/gsl/ExpressionParser.h"
-#include "backend/gsl/parser_extern.h"
 
 extern "C" {
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_version.h>
+#include "backend/gsl/parser.h" 
 #include "backend/nsl/nsl_fit.h"
 }
 #include <cmath>

@@ -1,10 +1,10 @@
 /***************************************************************************
     File                 : parser.h
     Project              : LabPlot
-    Description          : Parser for mathematical expressions
+    Description          : some definitions for the linker
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Stefan Gerlach  (stefan.gerlach@uni.kn)
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -30,8 +30,13 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-double parse(const char *str);	/* parse string str */
-int yyerror(const char*);
-int yylex(void);
+double parse(const char[]);
+int parse_errors();
+void init_table();
+void delete_table();
+void* assign_variable(const char* variable, double value);
+
+extern struct con _constants[];
+extern struct func _functions[];
 
 #endif /* PARSER_H */

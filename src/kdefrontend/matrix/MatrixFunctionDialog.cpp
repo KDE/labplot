@@ -28,9 +28,12 @@
 #include "MatrixFunctionDialog.h"
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
-#include "backend/gsl/parser_extern.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
+
+extern "C" {
+#include "backend/gsl/parser.h"
+}
 
 #include <QMenu>
 #include <QWidgetAction>
