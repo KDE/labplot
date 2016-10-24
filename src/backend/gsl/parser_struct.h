@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : definition of structs used in the expression parser
     --------------------------------------------------------------------
-	Copyright            : (C) 2008-2014 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-	Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2014 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -37,11 +37,7 @@ struct con {
 
 struct func {
 	char const *name;
-/*#ifdef HAVE_SOLARIS
-	double (*fnct)(double);
-#else*/
 	double (*fnct)();
-/*#endif*/
 };
 
 #endif /* PARSER_STRUCT_H */

@@ -34,7 +34,8 @@
 
 #include <QMenu>
 #include <QWidgetAction>
-
+#include <QElapsedTimer>
+#include <QDebug>
 
 /*!
 	\class MatrixFunctionDialog
@@ -131,13 +132,10 @@ void MatrixFunctionDialog::generate() {
 
 	m_matrix->beginMacro(i18n("%1: fill matrix with function values", m_matrix->name()) );
 
-
 	QVector<QVector<double> > new_data = m_matrix->data();
 
 	QByteArray funcba = ui.teEquation->toPlainText().toLocal8Bit();
 	char* func = funcba.data();
-	char varX[] = "x";
-	char varY[] = "y";
 
 	double diff = m_matrix->xEnd() - m_matrix->xStart();
 	double xStep = 0.0;
@@ -149,19 +147,26 @@ void MatrixFunctionDialog::generate() {
 	if (m_matrix->rowCount() > 1)
 		yStep = diff/double(m_matrix->rowCount()-1);
 
+	QElapsedTimer timer;
+	timer.start();
+
 	double x = m_matrix->xStart();
 	double y = m_matrix->yStart();
-	for (int col=0; col<m_matrix->columnCount(); ++col) {
-		for (int row=0; row<m_matrix->rowCount(); row++) {
-			assign_variable(varX, x);
-			assign_variable(varY, y);
-			double z = parse(func);
-			new_data[col][row] = z;
+	for (int col = 0; col < m_matrix->columnCount(); col++) {
+		if (col < 10)
+			qDebug() << timer.elapsed();
+		for (int row=0; row < m_matrix->rowCount(); row++) {
+			assign_variable("x", x);
+			assign_variable("y", y);
+			new_data[col][row] = parse(func);
 			y += yStep;
 		}
 		y = m_matrix->yStart();
 		x += xStep;
 	}
+
+	// Timing
+	qDebug() << timer.elapsed();
 
 	m_matrix->setFormula(ui.teEquation->toPlainText());
 	m_matrix->setData(new_data);

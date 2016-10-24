@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : definition of mathematical and physical constants
     --------------------------------------------------------------------
-	Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
-	Copyright            : (C) 2014 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 

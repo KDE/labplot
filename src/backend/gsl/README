@@ -1,3 +1,2 @@
-update parser.tab.c:
-
+when changing parser.y update parser.tab.c with
 bison parser.y

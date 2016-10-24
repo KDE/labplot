@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : some definitions for the linker
     --------------------------------------------------------------------
-	Copyright            : (C) 2008-2014 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-	Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2014 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
