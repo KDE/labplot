@@ -30,7 +30,6 @@
 
 %{
 #include <string.h>
-#include <strings.h>
 #include <ctype.h>
 #include <locale.h>
 #include "parser_struct.h"
@@ -51,11 +50,8 @@
 /* Functions type */
 typedef double (*func_t) ();
 
-int yyerror(const char*);
-int yylex(void);
-
 /* Data type for links in the chain of symbols */
-struct symrec {
+typedef struct symrec {
 	char *name;	/* name of symbol */
 	int type;	/* type of symbol: either VAR or FNCT */
 	union {
@@ -64,9 +60,10 @@ struct symrec {
 		func_t fnctptr;	/* value of a FNCT */
 	} value;
 	struct symrec *next;	/* link field */
-};
+} symrec;
 
-typedef struct symrec symrec;
+int yyerror(const char*);
+int yylex(void);
 
 double res;
 %}
@@ -116,14 +113,14 @@ expr:      NUM       { $$ = $1;                         }
 
 %%
 
-unsigned int pos;
+unsigned int pos = 0;
 #define PARSE_STRING_SIZE 500	/* big enough? */
 char string[PARSE_STRING_SIZE];
 
 /* The symbol table: a chain of `struct symrec'.  */
 symrec *sym_table = (symrec *) 0;
 
-int parse_errors() {
+int parse_errors(void) {
 	return yynerrs;
 }
 
@@ -199,14 +196,13 @@ symrec* assign_variable(const char* symb_name, double value) {
 		pdebug("PARSER: calling putsym(): symb_name = %s\n", symb_name);
 		ptr = putsym(symb_name, VAR);
 	}
-
 	ptr->value.var = value;
 
 	return ptr;
 };
 
 static int getcharstr(void) {
-	pdebug("PARSER: getcharstr()\n");
+	pdebug("PARSER: getcharstr() pos = %d\n", pos);
 
 	if (string[pos] == '\0')
 		return EOF;
@@ -221,10 +217,9 @@ static void ungetcstr(void) {
 double parse(const char *str) {
 	pdebug("\nPARSER: parse(\"%s\")\n", str);
 
-	pos = 0;
-
 	/* reset string, because it's global! */
 	bzero(string, PARSE_STRING_SIZE);
+	pos = 0;
 
 	/* leave space to terminate string by "\n\0" */
 	strncpy(string, str, PARSE_STRING_SIZE - 2);
@@ -244,8 +239,8 @@ int yylex(void) {
 	pdebug("PARSER: yylex()\n");
 	int c;
 
-	/* skip white space  */
-	while ((c = getcharstr ()) == ' ' || c == '\t');
+	/* skip white spaces */
+	while ((c = getcharstr()) == ' ' || c == '\t');
 
 	/* finish if reached EOF */
 	if (c == EOF) {
@@ -320,8 +315,7 @@ int yylex(void) {
 		}
 		/* old behavior */
 		/* if (s == 0)
-			 s = putsym (symbuf, VAR);
-		*/
+			 s = putsym (symbuf, VAR); */
 		yylval.tptr = s;
 		return s->type;
 	}
