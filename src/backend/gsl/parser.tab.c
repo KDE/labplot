@@ -73,6 +73,17 @@
 #include "constants.h"
 #include "functions.h"
 
+/* Enable Parser DEBUGGING */
+/*
+#define PDEBUG
+*/
+
+#ifdef PDEBUG
+#define pdebug(...) fprintf(stderr, __VA_ARGS__)
+#else
+#define pdebug(...) do {} while (0)
+#endif
+
 /* Functions type */
 typedef double (*func_t) ();
 
@@ -96,7 +107,7 @@ typedef struct symrec symrec;
 double res;
 
 /* Line 371 of yacc.c  */
-#line 100 "parser.tab.c"
+#line 111 "parser.tab.c"
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -141,14 +152,14 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 387 of yacc.c  */
-#line 63 "parser.y"
+#line 74 "parser.y"
 
 double dval;  /* For returning numbers */
 symrec *tptr;   /* For returning symbol-table pointers */
 
 
 /* Line 387 of yacc.c  */
-#line 152 "parser.tab.c"
+#line 163 "parser.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -176,7 +187,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 180 "parser.tab.c"
+#line 191 "parser.tab.c"
 
 #ifdef short
 # undef short
@@ -474,9 +485,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    79,    79,    80,    83,    84,    85,    88,    89,    90,
-      91,    92,    93,    94,    95,    96,    97,    98,    99,   100,
-     101,   102,   103
+       0,    90,    90,    91,    94,    95,    96,    99,   100,   101,
+     102,   103,   104,   105,   106,   107,   108,   109,   110,   111,
+     112,   113,   114
 };
 #endif
 
@@ -1405,115 +1416,115 @@ yyreduce:
     {
         case 5:
 /* Line 1792 of yacc.c  */
-#line 84 "parser.y"
+#line 95 "parser.y"
     { res=(yyvsp[(1) - (2)].dval); }
     break;
 
   case 6:
 /* Line 1792 of yacc.c  */
-#line 85 "parser.y"
+#line 96 "parser.y"
     { yyerrok; }
     break;
 
   case 7:
 /* Line 1792 of yacc.c  */
-#line 88 "parser.y"
+#line 99 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (1)].dval);                         }
     break;
 
   case 8:
 /* Line 1792 of yacc.c  */
-#line 89 "parser.y"
+#line 100 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (1)].tptr)->value.var;              }
     break;
 
   case 9:
 /* Line 1792 of yacc.c  */
-#line 90 "parser.y"
+#line 101 "parser.y"
     { (yyval.dval) = (yyvsp[(3) - (3)].dval); (yyvsp[(1) - (3)].tptr)->value.var = (yyvsp[(3) - (3)].dval);     }
     break;
 
   case 10:
 /* Line 1792 of yacc.c  */
-#line 91 "parser.y"
+#line 102 "parser.y"
     { (yyval.dval) = (*((yyvsp[(1) - (3)].tptr)->value.fnctptr))();   }
     break;
 
   case 11:
 /* Line 1792 of yacc.c  */
-#line 92 "parser.y"
+#line 103 "parser.y"
     { (yyval.dval) = (*((yyvsp[(1) - (4)].tptr)->value.fnctptr))((yyvsp[(3) - (4)].dval)); }
     break;
 
   case 12:
 /* Line 1792 of yacc.c  */
-#line 93 "parser.y"
+#line 104 "parser.y"
     { (yyval.dval) = (*((yyvsp[(1) - (6)].tptr)->value.fnctptr))((yyvsp[(3) - (6)].dval),(yyvsp[(5) - (6)].dval)); }
     break;
 
   case 13:
 /* Line 1792 of yacc.c  */
-#line 94 "parser.y"
+#line 105 "parser.y"
     { (yyval.dval) = (*((yyvsp[(1) - (8)].tptr)->value.fnctptr))((yyvsp[(3) - (8)].dval),(yyvsp[(5) - (8)].dval),(yyvsp[(7) - (8)].dval)); }
     break;
 
   case 14:
 /* Line 1792 of yacc.c  */
-#line 95 "parser.y"
+#line 106 "parser.y"
     { (yyval.dval) = (*((yyvsp[(1) - (10)].tptr)->value.fnctptr))((yyvsp[(3) - (10)].dval),(yyvsp[(5) - (10)].dval),(yyvsp[(7) - (10)].dval),(yyvsp[(9) - (10)].dval)); }
     break;
 
   case 15:
 /* Line 1792 of yacc.c  */
-#line 96 "parser.y"
+#line 107 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (3)].dval) + (yyvsp[(3) - (3)].dval);                    }
     break;
 
   case 16:
 /* Line 1792 of yacc.c  */
-#line 97 "parser.y"
+#line 108 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (3)].dval) - (yyvsp[(3) - (3)].dval);                    }
     break;
 
   case 17:
 /* Line 1792 of yacc.c  */
-#line 98 "parser.y"
+#line 109 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (3)].dval) * (yyvsp[(3) - (3)].dval);                    }
     break;
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 99 "parser.y"
+#line 110 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (3)].dval) / (yyvsp[(3) - (3)].dval);                    }
     break;
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 100 "parser.y"
+#line 111 "parser.y"
     { (yyval.dval) = -(yyvsp[(2) - (2)].dval);                        }
     break;
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 101 "parser.y"
+#line 112 "parser.y"
     { (yyval.dval) = pow ((yyvsp[(1) - (3)].dval), (yyvsp[(3) - (3)].dval));               }
     break;
 
   case 21:
 /* Line 1792 of yacc.c  */
-#line 102 "parser.y"
+#line 113 "parser.y"
     { (yyval.dval) = pow ((yyvsp[(1) - (4)].dval), (yyvsp[(4) - (4)].dval));               }
     break;
 
   case 22:
 /* Line 1792 of yacc.c  */
-#line 103 "parser.y"
+#line 114 "parser.y"
     { (yyval.dval) = (yyvsp[(2) - (3)].dval);                         }
     break;
 
 
 /* Line 1792 of yacc.c  */
-#line 1517 "parser.tab.c"
+#line 1528 "parser.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1745,25 +1756,12 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 106 "parser.y"
+#line 117 "parser.y"
 
 
 unsigned int pos;
 #define PARSE_STRING_SIZE 500	/* big enough? */
 char string[PARSE_STRING_SIZE];
-
-/* Enable Parser DEBUGGING */
-/*
-#define PDEBUG
-*/
-
-void pdebug(const char *str) {
-#ifdef PDEBUG
-	printf("%s\n", str);
-#else
-	(void)str;
-#endif
-}
 
 /* The symbol table: a chain of `struct symrec'.  */
 symrec *sym_table = (symrec *) 0;
@@ -1778,9 +1776,8 @@ int yyerror(const char *s) {
 }
 
 symrec* putsym (const char *sym_name, int sym_type) {
-#ifdef PDEBUG
-	printf("PARSER: putsym(): sym_name = %s\n", sym_name);
-#endif
+	pdebug("PARSER: putsym(): sym_name = %s\n", sym_name);
+
 	symrec *ptr = (symrec *) malloc(sizeof(symrec));
 	ptr->name = (char *) malloc(strlen(sym_name) + 1);
 	strcpy(ptr->name, sym_name);
@@ -1789,33 +1786,28 @@ symrec* putsym (const char *sym_name, int sym_type) {
 	ptr->next = (struct symrec *)sym_table;
 	sym_table = ptr;
 
-/*	pdebug("PARSER: putsym() DONE"); */
+	pdebug("PARSER: putsym() DONE\n");
 	return ptr;
 }
 
 symrec* getsym (const char *sym_name) {
-#ifdef PDEBUG
-	printf("PARSER: getsym(): sym_name = %s\n", sym_name);
-#endif
+	pdebug("PARSER: getsym(): sym_name = %s\n", sym_name);
+
 	symrec *ptr;
 	for (ptr = sym_table; ptr != (symrec *) 0; ptr = (symrec *)ptr->next) {
 		if (strcmp (ptr->name, sym_name) == 0) {
-#ifdef PDEBUG
-			printf("PARSER: symbol \'%s\' found\n", sym_name);
-#endif
+			pdebug("PARSER: symbol \'%s\' found\n", sym_name);
 			return ptr;
 		}
 	}
 
-#ifdef PDEBUG
-	printf("PARSER: symbol \'%s\' not found\n", sym_name);
-#endif
+	pdebug("PARSER: symbol \'%s\' not found\n", sym_name);
 	return 0;
 }
 
 /* put arithmetic functions in table. */
 void init_table (void) {
-/*	pdebug("PARSER: init_table()"); */
+	pdebug("PARSER: init_table()\n");
 
 	symrec *ptr;
 	int i;
@@ -1829,7 +1821,7 @@ void init_table (void) {
 		ptr = putsym (_constants[i].name, VAR);
 		ptr->value.var = _constants[i].value;
 	}
-/*	pdebug("PARSER: init_table() DONE"); */
+	pdebug("PARSER: init_table() DONE\n");
 }
 
 void delete_table(void) {
@@ -1843,16 +1835,11 @@ void delete_table(void) {
 }
 
 symrec* assign_variable(const char* symb_name, double value) {
-#ifdef PDEBUG
-	printf("PARSER: assign_variable(): symb_name = %s value=%g\n", symb_name, value);
-#endif
+	pdebug("PARSER: assign_variable(): symb_name = %s value=%g\n", symb_name, value);
 
 	symrec* ptr = getsym(symb_name);
 	if (!ptr) {
-#ifdef PDEBUG
-	printf("PARSER: calling putsym(): symb_name = %s\n", symb_name);
-#endif
-
+		pdebug("PARSER: calling putsym(): symb_name = %s\n", symb_name);
 		ptr = putsym(symb_name, VAR);
 	}
 
@@ -1862,7 +1849,7 @@ symrec* assign_variable(const char* symb_name, double value) {
 };
 
 static int getcharstr(void) {
-/*	pdebug("PARSER: getcharstr()"); */
+	pdebug("PARSER: getcharstr()\n");
 
 	if (string[pos] == '\0')
 		return EOF;
@@ -1875,9 +1862,8 @@ static void ungetcstr(void) {
 }
 
 double parse(const char *str) {
-#ifdef PDEBUG
-	printf("\nPARSER: parse(\"%s\")\n", str);
-#endif
+	pdebug("\nPARSER: parse(\"%s\")\n", str);
+
 	pos = 0;
 
 	/* reset string, because it's global! */
@@ -1889,16 +1875,16 @@ double parse(const char *str) {
 
 	/* be sure that the symbol table has been initialized */
 	if (!sym_table)
-	   init_table();
+		init_table();
 
 	yyparse();
 
-/*	pdebug("PARSER: parse() DONE");*/
+	pdebug("PARSER: parse() DONE\n");
 	return res;
 }
 
 int yylex(void) {
-/*	pdebug("PARSER: yylex()"); */
+	pdebug("PARSER: yylex()\n");
 	int c;
 
 	/* skip white space  */
@@ -1906,17 +1892,15 @@ int yylex(void) {
 
 	/* finish if reached EOF */
 	if (c == EOF) {
-/*		pdebug("FINISHED"); */
+		pdebug("FINISHED\n");
 		return 0;
 	}
 
-#ifdef PDEBUG
-	printf("PARSER: reading character: %c\n", c);
-#endif
+	pdebug("PARSER: reading character: %c\n", c);
 
 	/* process numbers */
 	if (isdigit(c)) {
-/*		pdebug("PARSER: reading number (starts with digit)"); */
+		pdebug("PARSER: reading number (starts with digit)\n");
                 ungetcstr();
                 char *s = &string[pos];
 
@@ -1931,25 +1915,23 @@ int yylex(void) {
 		double result = strtod_l(s, &remain, locale);
 		freelocale(locale);
 #endif
-#ifdef PDEBUG
-		printf("PARSER: reading: %s", s);
-		printf("PARSER: remain = %s", remain);
-#endif
+		pdebug("PARSER: reading: %s", s);
+		pdebug("PARSER: remain = %s", remain);
+
 		/* check conversion */
 		if(strlen(s) == strlen(remain))
 			return 0;
-#ifdef PDEBUG
-		printf("PARSER: result = %g\n", result);
-#endif
-		yylval.dval = result;
 
+		pdebug("PARSER: result = %g\n", result);
+
+		yylval.dval = result;
                 pos += strlen(s) - strlen(remain);
 
 		return NUM;
 	}
 
 	if (isalpha (c) || c == '.') {
-/*		pdebug("PARSER: reading identifier (starts with alpha)"); */
+		pdebug("PARSER: reading identifier (starts with alpha)\n");
 		static char *symbuf = 0;
 		static int length = 0;
 		int i=0;
@@ -1976,9 +1958,7 @@ int yylex(void) {
 
 		symrec *s = getsym(symbuf);
 		if(s == 0) {	/* symbol unknown */
-#ifdef PDEBUG
-			printf("PARSER: ERROR: symbol \"%s\" UNKNOWN\n", symbuf);
-#endif
+			pdebug("PARSER: ERROR: symbol \"%s\" UNKNOWN\n", symbuf);
 			return 0;
 		}
 		/* old behavior */
@@ -1990,6 +1970,6 @@ int yylex(void) {
 	}
 
 	/* else: single operator */
-/*	pdebug("PARSER: single operator"); */
+	pdebug("PARSER: single operator\n");
 	return c;
 }
