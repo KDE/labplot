@@ -66,6 +66,7 @@
 #line 31 "parser.y"
 
 #include <string.h>
+#include <strings.h>	/* bzero */
 #include <ctype.h>
 #include <locale.h>
 #include "parser_struct.h"
@@ -98,13 +99,19 @@ typedef struct symrec {
 	struct symrec *next;	/* link field */
 } symrec;
 
-int yyerror(const char*);
-int yylex(void);
+/* params passed to yylex (and yyerror) */
+typedef struct param {
+	unsigned int pos;
+	char *string;
+} param;
+
+int yyerror(param *p, const char *err);
+int yylex(param *p);
 
 double res;
 
 /* Line 371 of yacc.c  */
-#line 108 "parser.tab.c"
+#line 115 "parser.tab.c"
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -149,14 +156,14 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 387 of yacc.c  */
-#line 71 "parser.y"
+#line 81 "parser.y"
 
 double dval;  /* For returning numbers */
 symrec *tptr;   /* For returning symbol-table pointers */
 
 
 /* Line 387 of yacc.c  */
-#line 160 "parser.tab.c"
+#line 167 "parser.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -173,7 +180,7 @@ int yyparse ();
 #endif
 #else /* ! YYPARSE_PARAM */
 #if defined __STDC__ || defined __cplusplus
-int yyparse (void);
+int yyparse (param *p);
 #else
 int yyparse ();
 #endif
@@ -184,7 +191,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 188 "parser.tab.c"
+#line 195 "parser.tab.c"
 
 #ifdef short
 # undef short
@@ -482,9 +489,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    87,    87,    88,    91,    92,    93,    96,    97,    98,
-      99,   100,   101,   102,   103,   104,   105,   106,   107,   108,
-     109,   110,   111
+       0,    97,    97,    98,   101,   102,   103,   106,   107,   108,
+     109,   110,   111,   112,   113,   114,   115,   116,   117,   118,
+     119,   120,   121
 };
 #endif
 
@@ -653,7 +660,7 @@ do                                                              \
     }                                                           \
   else                                                          \
     {                                                           \
-      yyerror (YY_("syntax error: cannot back up")); \
+      yyerror (p, YY_("syntax error: cannot back up")); \
       YYERROR;							\
     }								\
 while (YYID (0))
@@ -673,7 +680,7 @@ while (YYID (0))
 #ifdef YYLEX_PARAM
 # define YYLEX yylex (YYLEX_PARAM)
 #else
-# define YYLEX yylex ()
+# define YYLEX yylex (p)
 #endif
 
 /* Enable debugging if requested.  */
@@ -696,7 +703,7 @@ do {									  \
     {									  \
       YYFPRINTF (stderr, "%s ", Title);					  \
       yy_symbol_print (stderr,						  \
-		  Type, Value); \
+		  Type, Value, p); \
       YYFPRINTF (stderr, "\n");						  \
     }									  \
 } while (YYID (0))
@@ -710,19 +717,21 @@ do {									  \
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, param *p)
 #else
 static void
-yy_symbol_value_print (yyoutput, yytype, yyvaluep)
+yy_symbol_value_print (yyoutput, yytype, yyvaluep, p)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
+    param *p;
 #endif
 {
   FILE *yyo = yyoutput;
   YYUSE (yyo);
   if (!yyvaluep)
     return;
+  YYUSE (p);
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
     YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
@@ -744,13 +753,14 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, param *p)
 #else
 static void
-yy_symbol_print (yyoutput, yytype, yyvaluep)
+yy_symbol_print (yyoutput, yytype, yyvaluep, p)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
+    param *p;
 #endif
 {
   if (yytype < YYNTOKENS)
@@ -758,7 +768,7 @@ yy_symbol_print (yyoutput, yytype, yyvaluep)
   else
     YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
 
-  yy_symbol_value_print (yyoutput, yytype, yyvaluep);
+  yy_symbol_value_print (yyoutput, yytype, yyvaluep, p);
   YYFPRINTF (yyoutput, ")");
 }
 
@@ -801,12 +811,13 @@ do {								\
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, int yyrule)
+yy_reduce_print (YYSTYPE *yyvsp, int yyrule, param *p)
 #else
 static void
-yy_reduce_print (yyvsp, yyrule)
+yy_reduce_print (yyvsp, yyrule, p)
     YYSTYPE *yyvsp;
     int yyrule;
+    param *p;
 #endif
 {
   int yynrhs = yyr2[yyrule];
@@ -820,7 +831,7 @@ yy_reduce_print (yyvsp, yyrule)
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
 		       &(yyvsp[(yyi + 1) - (yynrhs)])
-		       		       );
+		       		       , p);
       YYFPRINTF (stderr, "\n");
     }
 }
@@ -828,7 +839,7 @@ yy_reduce_print (yyvsp, yyrule)
 # define YY_REDUCE_PRINT(Rule)		\
 do {					\
   if (yydebug)				\
-    yy_reduce_print (yyvsp, Rule); \
+    yy_reduce_print (yyvsp, Rule, p); \
 } while (YYID (0))
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -1108,16 +1119,18 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, param *p)
 #else
 static void
-yydestruct (yymsg, yytype, yyvaluep)
+yydestruct (yymsg, yytype, yyvaluep, p)
     const char *yymsg;
     int yytype;
     YYSTYPE *yyvaluep;
+    param *p;
 #endif
 {
   YYUSE (yyvaluep);
+  YYUSE (p);
 
   if (!yymsg)
     yymsg = "Deleting";
@@ -1171,11 +1184,11 @@ yyparse (YYPARSE_PARAM)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 int
-yyparse (void)
+yyparse (param *p)
 #else
 int
-yyparse ()
-
+yyparse (p)
+    param *p;
 #endif
 #endif
 {
@@ -1413,115 +1426,115 @@ yyreduce:
     {
         case 5:
 /* Line 1792 of yacc.c  */
-#line 92 "parser.y"
+#line 102 "parser.y"
     { res=(yyvsp[(1) - (2)].dval); }
     break;
 
   case 6:
 /* Line 1792 of yacc.c  */
-#line 93 "parser.y"
+#line 103 "parser.y"
     { yyerrok; }
     break;
 
   case 7:
 /* Line 1792 of yacc.c  */
-#line 96 "parser.y"
+#line 106 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (1)].dval);                         }
     break;
 
   case 8:
 /* Line 1792 of yacc.c  */
-#line 97 "parser.y"
+#line 107 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (1)].tptr)->value.var;              }
     break;
 
   case 9:
 /* Line 1792 of yacc.c  */
-#line 98 "parser.y"
+#line 108 "parser.y"
     { (yyval.dval) = (yyvsp[(3) - (3)].dval); (yyvsp[(1) - (3)].tptr)->value.var = (yyvsp[(3) - (3)].dval);     }
     break;
 
   case 10:
 /* Line 1792 of yacc.c  */
-#line 99 "parser.y"
+#line 109 "parser.y"
     { (yyval.dval) = (*((yyvsp[(1) - (3)].tptr)->value.fnctptr))();   }
     break;
 
   case 11:
 /* Line 1792 of yacc.c  */
-#line 100 "parser.y"
+#line 110 "parser.y"
     { (yyval.dval) = (*((yyvsp[(1) - (4)].tptr)->value.fnctptr))((yyvsp[(3) - (4)].dval)); }
     break;
 
   case 12:
 /* Line 1792 of yacc.c  */
-#line 101 "parser.y"
+#line 111 "parser.y"
     { (yyval.dval) = (*((yyvsp[(1) - (6)].tptr)->value.fnctptr))((yyvsp[(3) - (6)].dval),(yyvsp[(5) - (6)].dval)); }
     break;
 
   case 13:
 /* Line 1792 of yacc.c  */
-#line 102 "parser.y"
+#line 112 "parser.y"
     { (yyval.dval) = (*((yyvsp[(1) - (8)].tptr)->value.fnctptr))((yyvsp[(3) - (8)].dval),(yyvsp[(5) - (8)].dval),(yyvsp[(7) - (8)].dval)); }
     break;
 
   case 14:
 /* Line 1792 of yacc.c  */
-#line 103 "parser.y"
+#line 113 "parser.y"
     { (yyval.dval) = (*((yyvsp[(1) - (10)].tptr)->value.fnctptr))((yyvsp[(3) - (10)].dval),(yyvsp[(5) - (10)].dval),(yyvsp[(7) - (10)].dval),(yyvsp[(9) - (10)].dval)); }
     break;
 
   case 15:
 /* Line 1792 of yacc.c  */
-#line 104 "parser.y"
+#line 114 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (3)].dval) + (yyvsp[(3) - (3)].dval);                    }
     break;
 
   case 16:
 /* Line 1792 of yacc.c  */
-#line 105 "parser.y"
+#line 115 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (3)].dval) - (yyvsp[(3) - (3)].dval);                    }
     break;
 
   case 17:
 /* Line 1792 of yacc.c  */
-#line 106 "parser.y"
+#line 116 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (3)].dval) * (yyvsp[(3) - (3)].dval);                    }
     break;
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 107 "parser.y"
+#line 117 "parser.y"
     { (yyval.dval) = (yyvsp[(1) - (3)].dval) / (yyvsp[(3) - (3)].dval);                    }
     break;
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 108 "parser.y"
+#line 118 "parser.y"
     { (yyval.dval) = -(yyvsp[(2) - (2)].dval);                        }
     break;
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 109 "parser.y"
+#line 119 "parser.y"
     { (yyval.dval) = pow ((yyvsp[(1) - (3)].dval), (yyvsp[(3) - (3)].dval));               }
     break;
 
   case 21:
 /* Line 1792 of yacc.c  */
-#line 110 "parser.y"
+#line 120 "parser.y"
     { (yyval.dval) = pow ((yyvsp[(1) - (4)].dval), (yyvsp[(4) - (4)].dval));               }
     break;
 
   case 22:
 /* Line 1792 of yacc.c  */
-#line 111 "parser.y"
+#line 121 "parser.y"
     { (yyval.dval) = (yyvsp[(2) - (3)].dval);                         }
     break;
 
 
 /* Line 1792 of yacc.c  */
-#line 1525 "parser.tab.c"
+#line 1538 "parser.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1571,7 +1584,7 @@ yyerrlab:
     {
       ++yynerrs;
 #if ! YYERROR_VERBOSE
-      yyerror (YY_("syntax error"));
+      yyerror (p, YY_("syntax error"));
 #else
 # define YYSYNTAX_ERROR yysyntax_error (&yymsg_alloc, &yymsg, \
                                         yyssp, yytoken)
@@ -1598,7 +1611,7 @@ yyerrlab:
                 yymsgp = yymsg;
               }
           }
-        yyerror (yymsgp);
+        yyerror (p, yymsgp);
         if (yysyntax_error_status == 2)
           goto yyexhaustedlab;
       }
@@ -1622,7 +1635,7 @@ yyerrlab:
       else
 	{
 	  yydestruct ("Error: discarding",
-		      yytoken, &yylval);
+		      yytoken, &yylval, p);
 	  yychar = YYEMPTY;
 	}
     }
@@ -1678,7 +1691,7 @@ yyerrlab1:
 
 
       yydestruct ("Error: popping",
-		  yystos[yystate], yyvsp);
+		  yystos[yystate], yyvsp, p);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -1715,7 +1728,7 @@ yyabortlab:
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (YY_("memory exhausted"));
+  yyerror (p, YY_("memory exhausted"));
   yyresult = 2;
   /* Fall through.  */
 #endif
@@ -1727,7 +1740,7 @@ yyreturn:
          user semantic actions for why this is necessary.  */
       yytoken = YYTRANSLATE (yychar);
       yydestruct ("Cleanup: discarding lookahead",
-                  yytoken, &yylval);
+                  yytoken, &yylval, p);
     }
   /* Do not reclaim the symbols of the rule which action triggered
      this YYABORT or YYACCEPT.  */
@@ -1736,7 +1749,7 @@ yyreturn:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-		  yystos[*yyssp], yyvsp);
+		  yystos[*yyssp], yyvsp, p);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -1753,13 +1766,10 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 114 "parser.y"
+#line 124 "parser.y"
 
 
-unsigned int pos = 0;
 #define PARSE_STRING_SIZE 500	/* big enough? */
-char string[PARSE_STRING_SIZE];
-
 /* The symbol table: a chain of `struct symrec'.  */
 symrec *sym_table = (symrec *) 0;
 
@@ -1767,8 +1777,8 @@ int parse_errors(void) {
 	return yynerrs;
 }
 
-int yyerror(const char *s) {
-	printf ("PARSER ERROR: %s\n", s);
+int yyerror(param *p, const char *s) {
+	printf ("PARSER ERROR: %s @ position %d of string %s", s, p->pos, p->string);
 	return 0;
 }
 
@@ -1844,46 +1854,49 @@ symrec* assign_variable(const char* symb_name, double value) {
 	return ptr;
 };
 
-static int getcharstr(void) {
-	pdebug("PARSER: getcharstr() pos = %d\n", pos);
+static int getcharstr(param *p) {
+	pdebug("PARSER: getcharstr() pos = %d\n", p->pos);
 
-	if (string[pos] == '\0')
+	if (p->string[p->pos] == '\0')
 		return EOF;
-	return (int)string[pos++];
+	return (int)p->string[(p->pos)++];
 }
 
-static void ungetcstr(void) {
-    if (pos > 0)
-        pos--;
+static void ungetcstr(unsigned int *pos) {
+    if (*pos > 0)
+        (*pos)--;
 }
 
 double parse(const char *str) {
 	pdebug("\nPARSER: parse(\"%s\")\n", str);
 
-	/* reset string, because it's global! */
-	bzero(string, PARSE_STRING_SIZE);
-	pos = 0;
-
-	/* leave space to terminate string by "\n\0" */
-	strncpy(string, str, PARSE_STRING_SIZE - 2);
-	string[strlen(string)] = '\n';
-
 	/* be sure that the symbol table has been initialized */
 	if (!sym_table)
 		init_table();
 
-	yyparse();
+	/* create parameter for yylex */
+	param p;
+	p.pos = 0;
+	p.string = (char *)malloc(PARSE_STRING_SIZE*sizeof(char));
+	bzero(p.string, PARSE_STRING_SIZE);
+
+	/* leave space to terminate string by "\n\0" */
+	strncpy(p.string, str, PARSE_STRING_SIZE - 2);
+	p.string[strlen(p.string)] = '\n';
+
+	yyparse(&p);
 
 	pdebug("PARSER: parse() DONE\n");
+	free(p.string);
 	return res;
 }
 
-int yylex(void) {
+int yylex(param *p) {
 	pdebug("PARSER: yylex()\n");
 	int c;
 
 	/* skip white spaces */
-	while ((c = getcharstr()) == ' ' || c == '\t');
+	while ((c = getcharstr(p)) == ' ' || c == '\t');
 
 	/* finish if reached EOF */
 	if (c == EOF) {
@@ -1896,8 +1909,8 @@ int yylex(void) {
 	/* process numbers */
 	if (isdigit(c)) {
 		pdebug("PARSER: reading number (starts with digit)\n");
-                ungetcstr();
-                char *s = &string[pos];
+                ungetcstr(&(p->pos));
+                char *s = &p->string[p->pos];
 
 		/* convert to double */
 		char *remain;
@@ -1920,7 +1933,7 @@ int yylex(void) {
 		pdebug("PARSER: result = %g\n", result);
 
 		yylval.dval = result;
-                pos += strlen(s) - strlen(remain);
+                p->pos += strlen(s) - strlen(remain);
 
 		return NUM;
 	}
@@ -1944,11 +1957,11 @@ int yylex(void) {
 			/* Add this character to the buffer */
 			symbuf[i++] = c;
 			/* Get another character */
-			c = getcharstr();
+			c = getcharstr(p);
 		}
 		while (c != EOF && (isalnum(c) || c == '_' || c == '.'));
 
-		ungetcstr();
+		ungetcstr(&(p->pos));
 		symbuf[i] = '\0';
 
 		symrec *s = getsym(symbuf);
