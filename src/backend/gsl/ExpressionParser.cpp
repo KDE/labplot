@@ -1121,7 +1121,7 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars){
 	const char* data = funcba.data();
 	gsl_set_error_handler_off();
 	parse(data);
-	return !(parse_errors()>0);
+	return !(parse_errors() > 0);
 }
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
@@ -1236,7 +1236,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	Data is stored in \c dataVectors.
  */
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector) {
-	Q_ASSERT(vars.size()==xVectors.size());
+	Q_ASSERT(vars.size() == xVectors.size());
 	const char* func = expr.toLocal8Bit().data();
 	double y, varValue;
 	QString varName;
