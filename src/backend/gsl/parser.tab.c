@@ -1769,9 +1769,9 @@ yyreturn:
 #line 124 "parser.y"
 
 
-#define PARSE_STRING_SIZE 500	/* big enough? */
 /* The symbol table: a chain of `struct symrec'.  */
 symrec *sym_table = (symrec *) 0;
+#define PARSE_STRING_SIZE 500	/* big enough? */
 
 int parse_errors(void) {
 	return yynerrs;

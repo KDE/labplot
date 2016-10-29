@@ -34,10 +34,12 @@
 extern "C" {
 #include "backend/gsl/parser.h"
 }
+#include <cmath>
 
 #include <QMenu>
 #include <QWidgetAction>
 #include <QElapsedTimer>
+#include <QThreadPool>
 #include <QDebug>
 
 /*!
@@ -130,6 +132,51 @@ void MatrixFunctionDialog::insertConstant(const QString& str) {
 	ui.teEquation->insertPlainText(str);
 }
 
+class GenerateValueTask : public QRunnable {
+public:
+	GenerateValueTask(int startCol, int endCol, QVector<QVector<double>>& matrixData, double xStart,
+					  double yStart, double xStep, double yStep, char* func):
+		m_startCol(startCol), m_matrixData(matrixData) {
+		m_endCol = endCol;
+		m_xStart = xStart;
+		m_yStart = yStart;
+		m_xStep = xStep;
+		m_yStep = yStep;
+		m_func = func;
+	};
+
+	void run() {
+		const int rows = m_matrixData[m_startCol].size();
+		double x = m_xStart;
+		double y = m_yStart;
+#ifndef NDEBUG
+		qDebug()<<"FILL col"<<m_startCol<<"-"<<m_endCol<<" x/y ="<<x<<'/'<<y<<" steps ="<<m_xStep<<'/'<<m_yStep<<" rows ="<<rows;
+#endif
+		for (int col = m_startCol; col < m_endCol; ++col) {
+			for (int row = 0; row < rows; row++) {
+				assign_variable("x", x);
+				assign_variable("y", y);
+				double z = parse(m_func);
+				m_matrixData[col][row] = z;
+				y += m_yStep;
+			}
+
+			y = m_yStart;
+			x += m_xStep;
+		}
+	}
+
+private:
+	int m_startCol;
+	int m_endCol;
+	QVector<QVector<double>>& m_matrixData;
+	double m_xStart;
+	double m_yStart;
+	double m_xStep;
+	double m_yStep;
+	char* m_func;
+};
+
 void MatrixFunctionDialog::generate() {
 	WAIT_CURSOR;
 
@@ -140,22 +187,42 @@ void MatrixFunctionDialog::generate() {
 	QByteArray funcba = ui.teEquation->toPlainText().toLocal8Bit();
 	char* func = funcba.data();
 
+	// check if rows or cols == 1
 	double diff = m_matrix->xEnd() - m_matrix->xStart();
 	double xStep = 0.0;
 	if (m_matrix->columnCount() > 1)
-		xStep = diff/double(m_matrix->columnCount()-1);
+		xStep = diff/double(m_matrix->columnCount() - 1);
 
 	diff = m_matrix->yEnd() - m_matrix->yStart();
 	double yStep = 0.0;
 	if (m_matrix->rowCount() > 1)
-		yStep = diff/double(m_matrix->rowCount()-1);
+		yStep = diff/double(m_matrix->rowCount() - 1);
 
 	QElapsedTimer timer;
 	timer.start();
+	double yStart = m_matrix->yStart();
+	const int cols = m_matrix->columnCount();
+	QThreadPool* pool = QThreadPool::globalInstance();
+	int range = ceil(double(cols)/pool->maxThreadCount());
+#ifndef NDEBUG
+	qDebug() << "Starting" << pool->maxThreadCount() << "threads. cols =" << cols << ", range =" << range;
+#endif
+	for (int i = 0; i < pool->maxThreadCount(); ++i) {
+		const int start = i*range;
+		int end = (i+1)*range;
+		if (end > cols) end = cols;
+		qDebug() << "start/end: " << start << end;
+		const double xStart = m_matrix->xStart() + xStep*start;
+		GenerateValueTask* task = new GenerateValueTask(start, end, new_data, xStart, yStart, xStep, yStep, func);
+		task->setAutoDelete(false);
+		pool->start(task);
+	}
+	pool->waitForDone();
 
-	double x = m_matrix->xStart();
-	double y = m_matrix->yStart();
-	for (int col = 0; col < m_matrix->columnCount(); col++) {
+	// Timing
+	qDebug() << timer.elapsed();
+
+/*	for (int col = 0; col < m_matrix->columnCount(); col++) {
 		if (col < 10)
 			qDebug() << timer.elapsed();
 		for (int row=0; row < m_matrix->rowCount(); row++) {
@@ -167,9 +234,7 @@ void MatrixFunctionDialog::generate() {
 		y = m_matrix->yStart();
 		x += xStep;
 	}
-
-	// Timing
-	qDebug() << timer.elapsed();
+*/
 
 	m_matrix->setFormula(ui.teEquation->toPlainText());
 	m_matrix->setData(new_data);
