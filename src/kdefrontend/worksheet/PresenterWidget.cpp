@@ -48,6 +48,7 @@ PresenterWidget::PresenterWidget(const QPixmap &pixmap, const QString& worksheet
 	QDesktopWidget* const dw = QApplication::desktop();
 	const int primaryScreenIdx = dw->primaryScreen();
 	const QRect& screenSize = dw->availableGeometry(primaryScreenIdx);
+
 	const int moveRight = (screenSize.width() - m_imageLabel->width()) / 2.0;
 	const int moveDown = (screenSize.height() - m_imageLabel->height()) / 2.0;
 	m_imageLabel->move(moveRight, moveDown);
