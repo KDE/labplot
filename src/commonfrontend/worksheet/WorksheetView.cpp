@@ -1635,14 +1635,26 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 void WorksheetView::presenterMode() {
 
     QRectF sourceRect (scene()->sceneRect());
+
     int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
     int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
     w = w*QApplication::desktop()->physicalDpiX()/25.4;
-    h = h*QApplication::desktop()->physicalDpiX()/25.4;
-    QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
-    image.fill(Qt::transparent);
+    h = h*QApplication::desktop()->physicalDpiY()/25.4;
+
     QRectF targetRect(0, 0, w, h);
 
+    QDesktopWidget* const dw = QApplication::desktop();
+    const int primaryScreenIdx = dw->primaryScreen();
+    const QRectF& screenSize = dw->availableGeometry(primaryScreenIdx);
+
+    if (targetRect.width() > screenSize.width() || ((targetRect.height() > screenSize.height())))   {
+        double ratio = qMin(screenSize.width() / targetRect.width(), screenSize.height() / targetRect.height());
+        targetRect.setWidth(targetRect.width()* ratio);
+        targetRect.setHeight(targetRect.height() * ratio);
+    }
+
+    QImage image(QSize(targetRect.width(), targetRect.height()), QImage::Format_ARGB32_Premultiplied);
+    image.fill(Qt::transparent);
     QPainter painter;
     painter.begin(&image);
     painter.setRenderHint(QPainter::Antialiasing);
