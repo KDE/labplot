@@ -3,7 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
-    Copyright        : (C) 2014 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2014-2016 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : C++ wrapper for the bison generated parser.
 
  ***************************************************************************/
@@ -30,7 +30,6 @@
 #include "backend/gsl/ExpressionParser.h"
 
 #include <klocale.h>
-#include <QDebug>
 
 extern "C" {
 #include <gsl/gsl_errno.h>
@@ -39,11 +38,12 @@ extern "C" {
 #include <gsl/gsl_const_num.h>
 #include "backend/gsl/parser.h"
 }
+#include <cmath>
 
 ExpressionParser* ExpressionParser::instance = NULL;
 
 ExpressionParser::ExpressionParser() {
-//	init_table();
+	init_table();
 	initFunctions();
 	initConstants();
 }
@@ -1061,11 +1061,11 @@ void ExpressionParser::initConstants() {
 		m_constantsGroupIndex << 15;
 }
 
-ExpressionParser::~ExpressionParser(){
-	//delete_table();
+ExpressionParser::~ExpressionParser() {
+	delete_table();
 }
 
-ExpressionParser* ExpressionParser::getInstance(){
+ExpressionParser* ExpressionParser::getInstance() {
 	if (!instance)
 		instance = new ExpressionParser();
 
@@ -1114,19 +1114,14 @@ const QVector<int>& ExpressionParser::constantsGroupIndices() {
 }
 
 bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
-	parser_var pvars[vars.size()];
-	for (int i = 0; i < vars.size(); ++i) {
-		strcpy(pvars[i].name, vars.at(i).toLocal8Bit().data());
+	for (int i = 0; i < vars.size(); ++i)
 		assign_variable(vars.at(i).toLocal8Bit().data(), 0);
-		pvars[i].value = 0;
-	}
 
 	QByteArray funcba = expr.toLocal8Bit();
-	const char* fun = funcba.data();
+	const char* data = funcba.data();
 	gsl_set_error_handler_off();
-	//parse_with_vars(fun, pvars, vars.size());
-	parse(fun);
-	return !(parse_errors() > 0);
+	parse(data);
+	return !(parse_errors()>0);
 }
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
@@ -1134,26 +1129,24 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 										 const QStringList& paramNames, const QVector<double>& paramValues) {
 	double xMin = parse(min.toLocal8Bit().data());
 	double xMax = parse(max.toLocal8Bit().data());
-	double step = (xMax-xMin)/(double)(count - 1);
+	double step = (xMax - xMin)/(double)(count - 1);
 	const char* func = expr.toLocal8Bit().data();
 	double x, y;
 	gsl_set_error_handler_off();
 
-	//TODO
-//	for (int i = 0; i < paramNames.size(); ++i)
-//		assign_variable(paramNames.at(i).toLocal8Bit().data(), paramValues.at(i));
+	for (int i = 0; i < paramNames.size(); ++i)
+		assign_variable(paramNames.at(i).toLocal8Bit().data(), paramValues.at(i));
 
 	for (int i = 0; i < count; i++) {
-		x = xMin + step*i;
-		//TODO
-		//assign_variable("x", x);
+		x = xMin + step * i;
+		assign_variable("x", x);
 		y = parse(func);
 
 		if (parse_errors() > 0)
 			return false;
 
 		(*xVector)[i] = x;
-		if (isfinite(y))
+		if (std::isfinite(y))
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;
@@ -1166,22 +1159,21 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 										 int count, QVector<double>* xVector, QVector<double>* yVector) {
 	double xMin = parse(min.toLocal8Bit().data());
 	double xMax = parse(max.toLocal8Bit().data());
-	double step = (xMax-xMin)/(double)(count-1);
+	double step = (xMax - xMin)/(double)(count - 1);
 	const char* func = expr.toLocal8Bit().data();
 	double x, y;
 	gsl_set_error_handler_off();
 
 	for (int i = 0; i < count; i++) {
 		x = xMin + step*i;
-		//TODO
-		//assign_variable("x", x);
+		assign_variable("x", x);
 		y = parse(func);
 
 		if (parse_errors() > 0)
 			return false;
 
 		(*xVector)[i] = x;
-		if (isfinite(y))
+		if (std::isfinite(y))
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;
@@ -1197,13 +1189,13 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 
 	for (int i = 0; i < xVector->count(); i++) {
 		x = xVector->at(i);
-		//assign_variable("x", x);
+		assign_variable("x", x);
 		y = parse(func);
 
 		if (parse_errors() > 0)
 			return false;
 
-		if (isfinite(y))
+		if (std::isfinite(y))
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;
@@ -1218,20 +1210,18 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	double x, y;
 	gsl_set_error_handler_off();
 
-	//TODO
-//	for (int i = 0; i < paramNames.size(); ++i)
-//		assign_variable(paramNames.at(i).toLocal8Bit().data(), paramValues.at(i));
+	for (int i = 0; i < paramNames.size(); ++i)
+		assign_variable(paramNames.at(i).toLocal8Bit().data(), paramValues.at(i));
 
 	for (int i = 0; i < xVector->count(); i++) {
 		x = xVector->at(i);
-		//TODO
-		//assign_variable("x", x);
+		assign_variable("x", x);
 		y = parse(func);
 
 		if (parse_errors() > 0)
 			return false;
 
-		if (isfinite(y))
+		if (std::isfinite(y))
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;
@@ -1246,7 +1236,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	Data is stored in \c dataVectors.
  */
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector) {
-	Q_ASSERT(vars.size() == xVectors.size());
+	Q_ASSERT(vars.size()==xVectors.size());
 	const char* func = expr.toLocal8Bit().data();
 	double y, varValue;
 	QString varName;
@@ -1268,8 +1258,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		for (int n = 0; n < vars.size(); ++n) {
 			varName = vars.at(n);
 			varValue = xVectors.at(n)->at(i);
-	//TODO
-	//		assign_variable(varName.toLocal8Bit().data(), varValue);
+			assign_variable(varName.toLocal8Bit().data(), varValue);
 		}
 
 		y = parse(func);
@@ -1277,7 +1266,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		if (parse_errors() > 0)
 			return false;
 
-		if (isfinite(y))
+		if (std::isfinite(y))
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;
@@ -1290,21 +1279,20 @@ bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, co
 										 int count, QVector<double>* xVector, QVector<double>* yVector) {
 	double minValue = parse(min.toLocal8Bit().data());
 	double maxValue = parse(max.toLocal8Bit().data());
-	double step = (maxValue-minValue)/(double)(count-1);
+	double step = (maxValue - minValue)/(double)(count - 1);
 	QByteArray funcba = expr.toLocal8Bit();
 	const char* func = funcba.data();
 	double r, phi;
 	gsl_set_error_handler_off();
 
 	for (int i = 0; i < count; i++) {
-		phi = minValue + step*i;
-		//TODO
-		//assign_variable("phi", phi);
+		phi = minValue + step * i;
+		assign_variable("phi", phi);
 		r = parse(func);
 		if (parse_errors() > 0)
 			return false;
 
-		if (isfinite(r)) {
+		if (std::isfinite(r)) {
 			(*xVector)[i] = r*cos(phi);
 			(*yVector)[i] = r*sin(phi);
 		} else {
@@ -1320,7 +1308,7 @@ bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& e
 										 int count, QVector<double>* xVector, QVector<double>* yVector) {
 	double minValue = parse(min.toLocal8Bit().data());
 	double maxValue = parse(max.toLocal8Bit().data());
-	double step = (maxValue-minValue)/(double)(count-1);
+	double step = (maxValue - minValue)/(double)(count - 1);
 	QByteArray xfuncba = expr1.toLocal8Bit();
 	const char* xFunc = xfuncba.data();
 	QByteArray yfuncba = expr2.toLocal8Bit();
@@ -1330,23 +1318,21 @@ bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& e
 
 	for (int i = 0; i < count; i++) {
 		t = minValue + step*i;
-		//TODO
-		//assign_variable("t", t);
+		assign_variable("t", t);
 		x = parse(xFunc);
 		if (parse_errors() > 0)
 			return false;
 
-		if (isfinite(x))
+		if (std::isfinite(x))
 			(*xVector)[i] = x;
 		else
 			(*xVector)[i] = NAN;
 
-		//TODO
 		y = parse(yFunc);
 		if (parse_errors() > 0)
 			return false;
 
-		if (isfinite(y))
+		if (std::isfinite(y))
 			(*yVector)[i] = y;
 		else
 			(*yVector)[i] = NAN;

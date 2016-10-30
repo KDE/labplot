@@ -1,2 +1,5 @@
-when changing parser.y update parser.tab.c with
+* when changing parser.y update parser.tab.c with
+
 bison parser.y
+
+* parser_parallel.y is not used yet

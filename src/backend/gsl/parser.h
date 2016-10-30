@@ -1,10 +1,10 @@
 /***************************************************************************
     File                 : parser.h
     Project              : LabPlot
-    Description          : some definitions for the linker
+    Description          : Parser for mathematical expressions
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014 Stefan Gerlach  (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -40,38 +40,36 @@ struct func {
 	double (*fnct)();
 };
 
-#define MAX_VARNAME_LENGTH 10
-
 /* variables to pass to parser */
+#define MAX_VARNAME_LENGTH 10
 typedef struct parser_var {
-	char name[MAX_VARNAME_LENGTH];	/* name of variable */
-	double value;			/* value */
+	char name[MAX_VARNAME_LENGTH];
+	double value;
 } parser_var;
 
 /* Functions type */
 typedef double (*func_t) ();
 
-/* Data type for links in the chain of symbols */
+/* structure for list of symbols */
 typedef struct symrec {
 	char *name;	/* name of symbol */
 	int type;	/* type of symbol: either VAR or FNCT */
 	union {
 		double var;	/* value of a VAR */
-		int intvar;
 		func_t fnctptr;	/* value of a FNCT */
 	} value;
 	struct symrec *next;	/* next field */
 } symrec;
 
-int init_parser();
-double parse(const char[]);
-double parse_with_vars(const char[], const parser_var[], int nvars);
+void init_table();	/* initialize symbol table */
+void delete_table();	/* delete symbol table */
 int parse_errors();
-int finish_parser();
 symrec* assign_variable(const char* symb_name, double value);
-/*symrec* assign_variable(symrec *sym_table, parser_var var);*/
+/*new style: symrec* assign_variable(symrec *sym_table, parser_var var);*/
+double parse(const char *str);
+double parse_with_vars(const char[], const parser_var[], int nvars);
 
 extern struct con _constants[];
 extern struct func _functions[];
 
-#endif /* PARSER_H */
+#endif /*PARSER_H*/

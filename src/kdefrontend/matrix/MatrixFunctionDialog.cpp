@@ -2,8 +2,9 @@
     File                 : MatrixFunctionDialog.cpp
     Project              : LabPlot
     Description          : Dialog for generating matrix values from a mathematical function
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
+    ------------------------------------------------------------------------
+    Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -38,9 +39,11 @@ extern "C" {
 
 #include <QMenu>
 #include <QWidgetAction>
-#include <QElapsedTimer>
 #include <QThreadPool>
+#ifndef NDEBUG
 #include <QDebug>
+#include <QElapsedTimer>
+#endif
 
 /*!
 	\class MatrixFunctionDialog
@@ -61,7 +64,7 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent, Qt::WFlag
 	ui.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
 
 	QStringList vars;
-	vars<<"x"<<"y";
+	vars << "x" << "y";
 	ui.teEquation->setVariables(vars);
 	ui.teEquation->setFocus();
 	ui.teEquation->setMaximumHeight(QLineEdit().sizeHint().height()*2);
@@ -73,16 +76,16 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent, Qt::WFlag
 
 	ui.teEquation->setPlainText(m_matrix->formula());
 
-	setButtons( KDialog::Ok | KDialog::Cancel );
+	setButtons(KDialog::Ok | KDialog::Cancel);
 	setButtonText(KDialog::Ok, i18n("&Generate"));
 	setButtonToolTip(KDialog::Ok, i18n("Generate function values"));
 
-	connect( ui.teEquation, SIGNAL(expressionChanged()), this, SLOT(checkValues()) );
-	connect( ui.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()) );
-	connect( ui.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()) );
+	connect(ui.teEquation, SIGNAL(expressionChanged()), this, SLOT(checkValues()));
+	connect(ui.tbConstants, SIGNAL(clicked()), this, SLOT(showConstants()));
+	connect(ui.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()));
 	connect(this, SIGNAL(okClicked()), this, SLOT(generate()));
 
-	resize( QSize(300,0).expandedTo(minimumSize()) );
+	resize(QSize(300,0).expandedTo(minimumSize()));
 }
 
 void MatrixFunctionDialog::checkValues() {
@@ -132,6 +135,7 @@ void MatrixFunctionDialog::insertConstant(const QString& str) {
 	ui.teEquation->insertPlainText(str);
 }
 
+/* task class for parallel fill (not used) */
 class GenerateValueTask : public QRunnable {
 public:
 	GenerateValueTask(int startCol, int endCol, QVector<QVector<double>>& matrixData, double xStart, double yStart,
@@ -146,9 +150,11 @@ public:
 #ifndef NDEBUG
 		qDebug()<<"FILL col"<<m_startCol<<"-"<<m_endCol<<" x/y ="<<x<<'/'<<y<<" steps ="<<m_xStep<<'/'<<m_yStep<<" rows ="<<rows;
 #endif
+		parser_var vars[] = { {"x", x}, {"y", y}};
 		for (int col = m_startCol; col < m_endCol; ++col) {
+			vars[0].value = x;
 			for (int row = 0; row < rows; row++) {
-				parser_var vars[] = { {"x", x}, {"y", y}};
+				vars[1].value = y;
 				double z = parse_with_vars(m_func, vars, 2);
 				//qDebug()<<" z ="<<z;
 				m_matrixData[col][row] = z;
@@ -174,7 +180,7 @@ private:
 void MatrixFunctionDialog::generate() {
 	WAIT_CURSOR;
 
-	m_matrix->beginMacro(i18n("%1: fill matrix with function values", m_matrix->name()) );
+	m_matrix->beginMacro(i18n("%1: fill matrix with function values", m_matrix->name()));
 
 	QVector<QVector<double> > new_data = m_matrix->data();
 
@@ -192,10 +198,13 @@ void MatrixFunctionDialog::generate() {
 	if (m_matrix->rowCount() > 1)
 		yStep = diff/double(m_matrix->rowCount() - 1);
 
+#ifndef NDEBUG
 	QElapsedTimer timer;
 	timer.start();
+#endif
 
-	// too slow because every parser thread needs an own symbol_table
+	//TODO: too slow because every parser thread needs an own symbol_table
+	// idea: use pool->maxThreadCount() symbol tables and reuse them?
 /*	double yStart = m_matrix->yStart();
 	const int cols = m_matrix->columnCount();
 	QThreadPool* pool = QThreadPool::globalInstance();
@@ -215,26 +224,23 @@ void MatrixFunctionDialog::generate() {
 	}
 	pool->waitForDone();
 */
-	double x=0, y=0;
-	parser_var vars[] = { {"x", x}, {"y", y}};
-	init_parser();
+	double x = 0, y = 0;
+	parser_var vars[] = {{"x", x}, {"y", y}};
 	for (int col = 0; col < m_matrix->columnCount(); col++) {
-		if (col < 10)
-			qDebug() << timer.elapsed();
-		for (int row=0; row < m_matrix->rowCount(); row++) {
-			/*new_data[col][row] = parse_with_vars(func, vars, 2);*/
-			assign_variable("x", x);
-			assign_variable("y", y);
-			new_data[col][row] = parse(func);
+		vars[0].value = x;
+		for (int row = 0; row < m_matrix->rowCount(); row++) {
+			vars[1].value = y;
+			new_data[col][row] = parse_with_vars(func, vars, 2);
 			y += yStep;
 		}
 		y = m_matrix->yStart();
 		x += xStep;
 	}
-	//finish_parser();
 
 	// Timing
-	qDebug() << timer.elapsed();
+#ifndef NDEBUG
+	qDebug() << "elapsed time =" << timer.elapsed() << "ms";
+#endif
 
 	m_matrix->setFormula(ui.teEquation->toPlainText());
 	m_matrix->setData(new_data);

@@ -27,6 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 
+/* TODO: not working yet! */
+
 
 %{
 #include <string.h>
@@ -120,7 +122,7 @@ int parse_errors(void) {
 }
 
 int yyerror(param *p, const char *s) {
-	printf ("PARSER ERROR: %s @ position %d of string %s", s, p->pos, p->string);
+	printf("PARSER ERROR: %s @ position %d of string %s", s, p->pos, p->string);
 	return 0;
 }
 
@@ -203,7 +205,7 @@ static int getcharstr(param *p) {
 
 	if (p->string[p->pos] == '\0')
 		return EOF;
-	return (int)p->string[(p->pos)++];
+	return (int) p->string[(p->pos)++];
 }
 
 static void ungetcstr(unsigned int *pos) {
