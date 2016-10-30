@@ -224,7 +224,8 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	for (int i=0; i < paramNames->size(); i++) {
 		double x = gsl_vector_get(paramValues, i);
 		// bound values if limits are set
-		assign_variable(paramNames->at(i).toLocal8Bit().data(), nsl_fit_map_bound(x, min[i], max[i]));
+		//TODO
+		//assign_variable(paramNames->at(i).toLocal8Bit().data(), nsl_fit_map_bound(x, min[i], max[i]));
 #ifndef NDEBUG
 		qDebug()<<"Parameter"<<i<<'['<<min[i]<<','<<max[i]<<"] free/bound:"<<QString::number(x, 'g', 15)
 			<<' '<<QString::number(nsl_fit_map_bound(x, min[i], max[i]), 'g', 15);
@@ -243,7 +244,8 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 				x[i]=0;
 		}
 
-		assign_variable("x", x[i]);
+		//TODO
+		//assign_variable("x", x[i]);
 		double Yi = parse(func);
 #ifndef NDEBUG
 //		qDebug()<<"evaluate function"<<QString(func)<<": f(x["<<i<<"]) ="<<Yi;
@@ -576,7 +578,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		const unsigned int np = paramNames->size();
 		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
-			assign_variable("x", x);
+			//TODO
+			//assign_variable("x", x);
 			if (sigmaVector) sigma = sigmaVector[i];
 
 			for (unsigned int j=0; j < np; j++) {
@@ -584,19 +587,22 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					if (k != j) {
 						nameba = paramNames->at(k).toLocal8Bit();
 						value = nsl_fit_map_bound(gsl_vector_get(paramValues, k), min[k], max[k]);
-						assign_variable(nameba.data(), value);
+						//TODO
+						//assign_variable(nameba.data(), value);
 					}
 				}
 
 				nameba = paramNames->at(j).toLocal8Bit();
 				char *name = nameba.data();
 				value = nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]);
-				assign_variable(name, value);
+				//TODO
+				//assign_variable(name, value);
 				double f_p = parse(func);
 
 				double eps = 1.e-9*fabs(f_p);	// adapt step size to value
 				value += eps;
-				assign_variable(name, value);
+				//TODO
+				//assign_variable(name, value);
 				double f_pdp = parse(func);
 #ifndef NDEBUG
 //		qDebug()<<"evaluate deriv"<<QString(func)<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15);

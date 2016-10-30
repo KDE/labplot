@@ -134,15 +134,9 @@ void MatrixFunctionDialog::insertConstant(const QString& str) {
 
 class GenerateValueTask : public QRunnable {
 public:
-	GenerateValueTask(int startCol, int endCol, QVector<QVector<double>>& matrixData, double xStart,
-					  double yStart, double xStep, double yStep, char* func):
-		m_startCol(startCol), m_matrixData(matrixData) {
-		m_endCol = endCol;
-		m_xStart = xStart;
-		m_yStart = yStart;
-		m_xStep = xStep;
-		m_yStep = yStep;
-		m_func = func;
+	GenerateValueTask(int startCol, int endCol, QVector<QVector<double>>& matrixData, double xStart, double yStart,
+		double xStep, double yStep, char* func): m_startCol(startCol), m_endCol(endCol), m_matrixData(matrixData),
+		m_xStart(xStart), m_yStart(yStart), m_xStep(xStep), m_yStep(yStep), m_func(func) {
 	};
 
 	void run() {
@@ -154,9 +148,9 @@ public:
 #endif
 		for (int col = m_startCol; col < m_endCol; ++col) {
 			for (int row = 0; row < rows; row++) {
-				assign_variable("x", x);
-				assign_variable("y", y);
-				double z = parse(m_func);
+				parser_var vars[] = { {"x", x}, {"y", y}};
+				double z = parse_with_vars(m_func, vars, 2);
+				//qDebug()<<" z ="<<z;
 				m_matrixData[col][row] = z;
 				y += m_yStep;
 			}
@@ -200,12 +194,14 @@ void MatrixFunctionDialog::generate() {
 
 	QElapsedTimer timer;
 	timer.start();
-	double yStart = m_matrix->yStart();
+
+	// too slow because every parser thread needs an own symbol_table
+/*	double yStart = m_matrix->yStart();
 	const int cols = m_matrix->columnCount();
 	QThreadPool* pool = QThreadPool::globalInstance();
 	int range = ceil(double(cols)/pool->maxThreadCount());
 #ifndef NDEBUG
-	qDebug() << "Starting" << pool->maxThreadCount() << "threads. cols =" << cols << ", range =" << range;
+	qDebug() << "Starting" << pool->maxThreadCount() << "threads. cols =" << cols << ": range =" << range;
 #endif
 	for (int i = 0; i < pool->maxThreadCount(); ++i) {
 		const int start = i*range;
@@ -218,14 +214,15 @@ void MatrixFunctionDialog::generate() {
 		pool->start(task);
 	}
 	pool->waitForDone();
-
-	// Timing
-	qDebug() << timer.elapsed();
-
-/*	for (int col = 0; col < m_matrix->columnCount(); col++) {
+*/
+	double x=0, y=0;
+	parser_var vars[] = { {"x", x}, {"y", y}};
+	init_parser();
+	for (int col = 0; col < m_matrix->columnCount(); col++) {
 		if (col < 10)
 			qDebug() << timer.elapsed();
 		for (int row=0; row < m_matrix->rowCount(); row++) {
+			/*new_data[col][row] = parse_with_vars(func, vars, 2);*/
 			assign_variable("x", x);
 			assign_variable("y", y);
 			new_data[col][row] = parse(func);
@@ -234,7 +231,10 @@ void MatrixFunctionDialog::generate() {
 		y = m_matrix->yStart();
 		x += xStep;
 	}
-*/
+	//finish_parser();
+
+	// Timing
+	qDebug() << timer.elapsed();
 
 	m_matrix->setFormula(ui.teEquation->toPlainText());
 	m_matrix->setData(new_data);

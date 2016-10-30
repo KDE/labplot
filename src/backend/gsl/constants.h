@@ -34,7 +34,7 @@
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_const_num.h>
 
-#include "parser_struct.h"
+#include "parser.h"
 
 struct con _constants[] = {
 	/* Mathematical constants */
