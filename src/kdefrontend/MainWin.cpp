@@ -1510,10 +1510,11 @@ void MainWin::importFileDialog(const QString& fileName) {
 	}
 
 	if (m_importFileDialog->exec() == QDialog::Accepted) {
-		m_importFileDialog->importTo(statusBar());
+        m_importFileDialog->importTo(statusBar());
 		m_project->setChanged(true);
 	}
 
+    delete m_importFileDialog;
 	m_importFileDialog = 0;
 }
 
@@ -1548,6 +1549,7 @@ void MainWin::newFileDataSourceActionTriggered() {
 		dlg->importToFileDataSource(dataSource, statusBar());
 		this->addAspectToProject(dataSource);
 	}
+    delete dlg;
 }
 
 /*!
