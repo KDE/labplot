@@ -46,6 +46,7 @@ class TextLabelPrivate: public QGraphicsItem {
 		TextLabel::TextWrapper textWrapper;
 		int teXFontSize;
 		QColor teXFontColor;
+		QImage teXImage;
 		QFutureWatcher<QImage> teXImageFutureWatcher;
 
 		TextLabel::PositionWrapper position; //position in parent's coordinate system, the label gets aligned around this point.
@@ -82,7 +83,6 @@ class TextLabelPrivate: public QGraphicsItem {
 		TextLabel* const q;
 
 	private:
-		QImage teXImage;
 		virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);

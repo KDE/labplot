@@ -33,6 +33,7 @@
 #include "backend/lib/XmlStreamReader.h"
 
 #include <QApplication>
+#include <QBuffer>
 #include <QtConcurrentRun>
 #include <QDesktopWidget>
 #include <QPainter>
@@ -654,6 +655,16 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "teXFontColor_b", QString::number(d->teXFontColor.blue()) );
 	writer->writeEndElement();
 
+	if (d->textWrapper.teXUsed) {
+		writer->writeStartElement("teXImage");
+		QByteArray ba;
+		QBuffer buffer(&ba);
+		buffer.open(QIODevice::WriteOnly);
+		d->teXImage.save(&buffer, "PNG");
+		writer->writeCharacters(ba.toBase64());
+		writer->writeEndElement();
+	}
+
 	writer->writeEndElement(); // close "textLabel" section
 }
 
@@ -673,6 +684,7 @@ bool TextLabel::load(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs;
 	QString str;
 	QRectF rect;
+	bool teXImageFound = false;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -768,13 +780,24 @@ bool TextLabel::load(XmlStreamReader* reader) {
 				reader->raiseWarning(attributeWarning.arg("'teXFontColor_b'"));
 			else
 				d->teXFontColor.setBlue( str.toInt() );
+		} else if (reader->name() == "teXImage") {
+			reader->readNext();
+			QString content = reader->text().toString().trimmed();
+			QByteArray ba = QByteArray::fromBase64(content.toAscii());
+			teXImageFound = d->teXImage.loadFromData(ba);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;
 		}
 	}
 
-	d->updateText();
+	//in case we use latex and the image was stored (older versions of LabPlot didn't save the image)and loaded,
+	//we just need to retransform.
+	//otherwise, we set the static text and retransform in updateText()
+	if ( !(d->textWrapper.teXUsed && teXImageFound) )
+		d->updateText();
+	else
+		retransform();
 
 	return true;
 }
