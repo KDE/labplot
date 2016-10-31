@@ -2,7 +2,7 @@
     File                 : LabelWidget.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2014 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Description          : label settings widget
 
@@ -36,11 +36,11 @@ class Label;
 class Axis;
 class KMenu;
 
-class LabelWidget: public QWidget{
+class LabelWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit LabelWidget(QWidget *);
+	explicit LabelWidget(QWidget*);
 
 	void setLabels(QList<TextLabel*>);
 	void setAxes(QList<Axis*>);
@@ -54,13 +54,14 @@ public:
 
 private:
 	Ui::LabelWidget ui;
-	TextLabel *m_label;
+	TextLabel* m_label;
 	QList<TextLabel*> m_labelsList;
 	QList<Axis*> m_axesList;
 	bool m_initializing;
 	KMenu* m_dateTimeMenu;
+	bool m_teXAvailable;
 
-	void initConnections();
+	void initConnections() const;
 
 signals:
 	void dataChanged(bool);
@@ -68,7 +69,7 @@ signals:
 private slots:
 	//SLOTs for changes triggered in LabelWidget
 	void textChanged();
-	void charFormatChanged(const QTextCharFormat& format);
+	void charFormatChanged(const QTextCharFormat&);
 	void teXUsedChanged(bool);
 	void fontColorChanged(const QColor&);
 	void fontBoldChanged(bool);

@@ -60,7 +60,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
 
 	//add available TeX typesetting engines
 #if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-	if (QStandardPaths::findExecutable("lualatex").isEmpty())
+	if (!QStandardPaths::findExecutable("lualatex").isEmpty())
 		ui.cbTexEngine->addItem("LuaLaTeX", "lualatex");
 
 	if (!QStandardPaths::findExecutable("xelatex").isEmpty())

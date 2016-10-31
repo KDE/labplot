@@ -33,8 +33,16 @@
 
 #include <QWidgetAction>
 
+#include <KConfigGroup>
 #include <KCharSelect>
+#include <KGlobal>
 #include <KMenu>
+
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#include <QStandardPaths>
+#else
+#include <KStandardDirs>
+#endif
 
 /*!
 	\class LabelWidget
@@ -45,8 +53,6 @@
 
  	\ingroup kdefrontend
  */
-
-// see legacy/LabelWidget.cpp
 LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_initializing(false), m_dateTimeMenu(new KMenu(this)) {
 	ui.setupUi(this);
 
@@ -88,6 +94,21 @@ LabelWidget::LabelWidget(QWidget *parent): QWidget(parent), m_initializing(false
 	ui.cbVerticalAlignment->addItem(i18n("top"));
 	ui.cbVerticalAlignment->addItem(i18n("center"));
 	ui.cbVerticalAlignment->addItem(i18n("bottom"));
+
+	//check whether the used latex compiler is available.
+	//Following logic is implemented (s.a. LabelWidget::teXUsedChanged()):
+	//1. in case latex was used to generate the text label in the stored project
+	//and no latex is available on the target system, latex button is toggled and
+	//the user still can switch to the non-latex mode.
+	//2. in case the label was in the non-latex mode and no latex is available,
+	//deactivate the latex button so the user cannot switch to this mode.
+	KConfigGroup group = KGlobal::config()->group("General");
+	QString engine = group.readEntry("LaTeXEngine", "");
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+	m_teXAvailable = !QStandardPaths::findExecutable(engine).isEmpty());
+#else
+	m_teXAvailable = !KStandardDirs::findExe(engine).isEmpty();
+#endif
 
 	//SLOTS
 	// text properties
@@ -156,7 +177,7 @@ void LabelWidget::setAxes(QList<Axis*> axes){
 	initConnections();
 }
 
-void LabelWidget::initConnections() {
+void LabelWidget::initConnections() const {
 	connect( m_label, SIGNAL(textWrapperChanged(TextLabel::TextWrapper)),
 			 this, SLOT(labelTextWrapperChanged(TextLabel::TextWrapper)) );
 	connect( m_label, SIGNAL(teXFontSizeChanged(int)),
@@ -293,6 +314,13 @@ void LabelWidget::teXUsedChanged(bool checked){
 	ui.kfontRequester->setVisible(!checked);
 	ui.lFontSize->setVisible(checked);
 	ui.sbFontSize->setVisible(checked);
+
+	//no latex is available and the user switched to the text mode,
+	//deactivate the button since it shouldn't be possible anymore to switch to the TeX-mode
+	if (!m_teXAvailable && !checked)
+		ui.tbTexUsed->setEnabled(false);
+	else
+		ui.tbTexUsed->setEnabled(true);
 
 	if (m_initializing)
 		return;
