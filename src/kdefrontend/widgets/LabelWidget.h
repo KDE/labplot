@@ -99,6 +99,7 @@ private slots:
 
 	//SLOTs for changes triggered in TextLabel
 	void labelTextWrapperChanged(const TextLabel::TextWrapper&);
+	void labelTeXImageUpdated(bool);
 	void labelTeXFontSizeChanged(const int);
 	void labelTeXFontColorChanged(const QColor);
 	void labelPositionChanged(const TextLabel::PositionWrapper&);

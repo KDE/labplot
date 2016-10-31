@@ -193,7 +193,6 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
 	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.teXUsed != d->textWrapper.teXUsed) )
 		exec(new TextLabelSetTextCmd(d, textWrapper, i18n("%1: set label text")));
-
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontSize, int, teXFontSize, updateText);
@@ -391,7 +390,6 @@ void TextLabelPrivate::updatePosition() {
 		parentRect = scene()->sceneRect();
 	}
 
-
 	if (position.horizontalPosition != TextLabel::hPositionCustom) {
 		if (position.horizontalPosition == TextLabel::hPositionLeft)
 			position.point.setX( parentRect.x() );
@@ -433,11 +431,17 @@ void TextLabelPrivate::updateText() {
 }
 
 void TextLabelPrivate::updateTeXImage() {
-	teXImage = teXImageFutureWatcher.result();
+	QImage resultImage = teXImageFutureWatcher.result();
+	if (!resultImage.isNull()) {
+		teXImage = resultImage;
 
-	//the size of the tex image was most probably changed.
-	//call retransform() to recalculate the position and the bounding box of the label
-	retransform();
+		//the size of the tex image was most probably changed.
+		//call retransform() to recalculate the position and the bounding box of the label
+		retransform();
+		emit q->teXImageUpdated(true);
+	} else {
+		emit q->teXImageUpdated(false);
+	}
 }
 
 bool TextLabelPrivate::swapVisible(bool on) {

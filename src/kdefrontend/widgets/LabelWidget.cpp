@@ -184,6 +184,7 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
 void LabelWidget::initConnections() const {
 	connect( m_label, SIGNAL(textWrapperChanged(TextLabel::TextWrapper)),
 	         this, SLOT(labelTextWrapperChanged(TextLabel::TextWrapper)) );
+	connect( m_label, SIGNAL(teXImageUpdated(bool)), this, SLOT(labelTeXImageUpdated(bool)) );
 	connect( m_label, SIGNAL(teXFontSizeChanged(int)),
 	         this, SLOT(labelTeXFontSizeChanged(int)) );
 	connect( m_label, SIGNAL(teXFontColorChanged(QColor)),
@@ -325,6 +326,11 @@ void LabelWidget::teXUsedChanged(bool checked) {
 		ui.tbTexUsed->setEnabled(false);
 	else
 		ui.tbTexUsed->setEnabled(true);
+
+	//when swithching to the text mode, set the background color to white just for the case the latex code provided by the user
+	//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
+	if (!checked)
+		ui.teLabel->setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
 
 	if (m_initializing)
 		return;
@@ -594,6 +600,17 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
 	m_initializing = false;
 }
 
+/*!
+ * \brief Highlights the text field red if wrong latex syntax was used (null image was produced)
+ * or something else went wrong during rendering (\sa ExpressionTextEdit::validateExpression())
+ */
+void LabelWidget::labelTeXImageUpdated(bool valid) {
+	if (!valid)
+		ui.teLabel->setStyleSheet("QTextEdit{background: red;}");
+	else
+		ui.teLabel->setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
+}
+
 void LabelWidget::labelTeXFontSizeChanged(const int size) {
 	m_initializing = true;
 	ui.sbFontSize->setValue(size);
@@ -709,6 +726,7 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 
 	//Text
 	ui.tbTexUsed->setChecked(group.readEntry("TeXUsed", (bool) m_label->text().teXUsed));
+	this->teXUsedChanged(m_label->text().teXUsed);
 	ui.sbFontSize->setValue( group.readEntry("TeXFontSize", m_label->teXFontSize()) );
 	if(m_label->text().teXUsed)
 		ui.kcbFontColor->setColor(group.readEntry("TeXFontColor", m_label->teXFontColor()));
