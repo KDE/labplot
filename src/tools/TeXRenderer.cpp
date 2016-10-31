@@ -71,7 +71,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 
 	//determine latex engine to be used
 	KConfigGroup group = KGlobal::config()->group( "General" );
-	QString engine = group.readEntry("TeXEngine", "");
+	QString engine = group.readEntry("LaTeXEngine", "");
 
 	// create latex code
 	QTextStream out(&file);
