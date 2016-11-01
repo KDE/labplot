@@ -1257,73 +1257,6 @@ Here you will find some explanations of advanced topics.
 </sect2>
 
 </sect1>
-<sect1 id="command-line-options">
-<title>Command Line Options</title>
-
-<sect2 id="specify-a-file">
-<title>Specify a File</title>
-
-<para>
-When starting &LabPlot; from the command prompt, you can supply the name of a project file (ending with .lml, .lml.gz, .lml.bz2 or .lml.xz):
-<cmdsynopsis>
-<command>labplot2</command>
-<arg rep="repeat"><replaceable>file.lml</replaceable></arg>
-</cmdsynopsis>
-</para>
-
-</sect2>
-
-<sect2>
-<title>Other Command Line Options</title>
-
-<para>The following command line help options are available</para>
-<variablelist>
-<varlistentry>
-<term><command>labplot2 <option>--help</option></command></term>
-<listitem><para>This lists the most basic options available at the
- command line.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><command>labplot2 <option>--help-qt</option></command></term>
-<listitem><para>This lists the options available for changing the
-way &LabPlot; interacts with &Qt;.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><command>labplot2 <option>--help-kde</option></command></term>
-<listitem><para>This lists the options available for changing the way
-&LabPlot; interacts with &kde;.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><command>labplot2 <option>--help-all</option></command></term>
-<listitem><para>This lists all of the command line options.</para></listitem>
-</varlistentry>
-
-
-<varlistentry>
-<term><command>labplot2 <option>--no-splash</option></command></term>
-<listitem><para>do not show the splash screen</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><command>labplot2 <option>--author</option></command></term>
-<listitem><para>Lists &LabPlot;'s author in the terminal window</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><command>labplot2 <option>--version</option></command></term>
-<listitem><para>Lists version information for &Qt;, &kde;, and &LabPlot;.
-Also available through <command>labplot2 <option>-v</option></command>
-</para></listitem>
-</varlistentry>
-
-</variablelist>
-
-</sect2>
-
-</sect1>
 </chapter>
 
 
@@ -1938,6 +1871,73 @@ Optional &LabPlot; uses the following programs/libraries when available:
 </sect1>
 
 </appendix>
+
+<appendix id="command-line-options">
+<title>Command Line Options</title>
+<sect1 id="specify-a-file">
+<title>Specify a File</title>
+
+<para>
+When starting &LabPlot; from the command prompt, you can supply the name of a project file (ending with .lml, .lml.gz, .lml.bz2 or .lml.xz):
+<cmdsynopsis>
+<command>labplot2</command>
+<arg rep="repeat"><replaceable>file.lml</replaceable></arg>
+</cmdsynopsis>
+</para>
+
+</sect1>
+
+<sect1>
+<title>Other Command Line Options</title>
+
+<para>The following command line help options are available</para>
+<variablelist>
+<varlistentry>
+<term><command>labplot2 <option>--help</option></command></term>
+<listitem><para>This lists the most basic options available at the
+ command line.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>labplot2 <option>--help-qt</option></command></term>
+<listitem><para>This lists the options available for changing the
+way &LabPlot; interacts with &Qt;.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>labplot2 <option>--help-kde</option></command></term>
+<listitem><para>This lists the options available for changing the way
+&LabPlot; interacts with &kde;.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>labplot2 <option>--help-all</option></command></term>
+<listitem><para>This lists all of the command line options.</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><command>labplot2 <option>--no-splash</option></command></term>
+<listitem><para>do not show the splash screen</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>labplot2 <option>--author</option></command></term>
+<listitem><para>Lists &LabPlot;'s author in the terminal window</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><command>labplot2 <option>--version</option></command></term>
+<listitem><para>Lists version information for &Qt;, &kde;, and &LabPlot;.
+Also available through <command>labplot2 <option>-v</option></command>
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+</appendix>
+
 
 <appendix id="parser">
 <title>Parser functions</title>
