@@ -30,47 +30,46 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include "constants.h"
-#include "functions.h"
-#include "parser_struct.h"
-
-#include <string.h>
-#include <strings.h>
-#include <ctype.h>
-
-/* Functions type.                                   */
-/*#ifdef HAVE_SOLARIS
-typedef double (*func_t) (double);
-#else*/
-typedef double (*func_t) ();
-/*#endif*/
-
-/* Data type for links in the chain of symbols.      */
-struct symrec {
-	char *name;  /* name of symbol                     */
-	int type;    /* type of symbol: either VAR or FNCT */
-	union {
-		double var;                  /* value of a VAR   */
-		int intvar;
-		func_t fnctptr;              /* value of a FNCT  */
-	} value;
-	struct symrec *next;    /* link field              */
+struct con {
+	char const *name;
+	double value;
 };
 
-typedef struct symrec symrec;
+struct func {
+	char const *name;
+	double (*fnct)();
+};
 
-double parse(const char *str);
+/* variables to pass to parser */
+#define MAX_VARNAME_LENGTH 10
+typedef struct parser_var {
+	char name[MAX_VARNAME_LENGTH];
+	double value;
+} parser_var;
+
+/* Functions type */
+typedef double (*func_t) ();
+
+/* structure for list of symbols */
+typedef struct symrec {
+	char *name;	/* name of symbol */
+	int type;	/* type of symbol: either VAR or FNCT */
+	union {
+		double var;	/* value of a VAR */
+		func_t fnctptr;	/* value of a FNCT */
+	} value;
+	struct symrec *next;	/* next field */
+} symrec;
+
+void init_table();	/* initialize symbol table */
+void delete_table();	/* delete symbol table */
 int parse_errors();
-symrec *putsym (const char *, int);
-symrec *getsym (const char *);
-void init_table(void);
-int yyerror (const char*);
-int yylex (void);
+symrec* assign_variable(const char* symb_name, double value);
+/*new style: symrec* assign_variable(symrec *sym_table, parser_var var);*/
+double parse(const char *str);
+double parse_with_vars(const char[], const parser_var[], int nvars);
 
-#define PARSE_STRING_SIZE       500
-double res;
-int pos;
-char string[PARSE_STRING_SIZE];
-
+extern struct con _constants[];
+extern struct func _functions[];
 
 #endif /*PARSER_H*/

@@ -13,6 +13,7 @@ include(KDEInstallDirs)
 include(KDECompilerSettings)
 include(KDECMakeSettings)
 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wunused -fno-omit-frame-pointer -fstack-protector -fno-exceptions")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wunused -fno-omit-frame-pointer -fstack-protector -fno-exceptions")
 
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})

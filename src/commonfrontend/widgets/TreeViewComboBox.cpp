@@ -37,6 +37,7 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QTreeView>
+#include <QDebug>
 
 #include <KLocalizedString>
 #include <KLineEdit>

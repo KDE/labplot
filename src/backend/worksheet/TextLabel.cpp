@@ -33,6 +33,7 @@
 #include "backend/lib/XmlStreamReader.h"
 
 #include <QApplication>
+#include <QBuffer>
 #include <QtConcurrent/QtConcurrentRun>
 #include <QDesktopWidget>
 #include <QPainter>
@@ -192,7 +193,6 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
 	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.teXUsed != d->textWrapper.teXUsed) )
 		exec(new TextLabelSetTextCmd(d, textWrapper, i18n("%1: set label text")));
-
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontSize, int, teXFontSize, updateText);
@@ -390,7 +390,6 @@ void TextLabelPrivate::updatePosition() {
 		parentRect = scene()->sceneRect();
 	}
 
-
 	if (position.horizontalPosition != TextLabel::hPositionCustom) {
 		if (position.horizontalPosition == TextLabel::hPositionLeft)
 			position.point.setX( parentRect.x() );
@@ -432,11 +431,17 @@ void TextLabelPrivate::updateText() {
 }
 
 void TextLabelPrivate::updateTeXImage() {
-	teXImage = teXImageFutureWatcher.result();
+	QImage resultImage = teXImageFutureWatcher.result();
+	if (!resultImage.isNull()) {
+		teXImage = resultImage;
 
-	//the size of the tex image was most probably changed.
-	//call retransform() to recalculate the position and the bounding box of the label
-	retransform();
+		//the size of the tex image was most probably changed.
+		//call retransform() to recalculate the position and the bounding box of the label
+		retransform();
+		emit q->teXImageUpdated(true);
+	} else {
+		emit q->teXImageUpdated(false);
+	}
 }
 
 bool TextLabelPrivate::swapVisible(bool on) {
@@ -654,6 +659,16 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "teXFontColor_b", QString::number(d->teXFontColor.blue()) );
 	writer->writeEndElement();
 
+	if (d->textWrapper.teXUsed) {
+		writer->writeStartElement("teXImage");
+		QByteArray ba;
+		QBuffer buffer(&ba);
+		buffer.open(QIODevice::WriteOnly);
+		d->teXImage.save(&buffer, "PNG");
+		writer->writeCharacters(ba.toBase64());
+		writer->writeEndElement();
+	}
+
 	writer->writeEndElement(); // close "textLabel" section
 }
 
@@ -673,6 +688,7 @@ bool TextLabel::load(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs;
 	QString str;
 	QRectF rect;
+	bool teXImageFound = false;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -768,13 +784,24 @@ bool TextLabel::load(XmlStreamReader* reader) {
 				reader->raiseWarning(attributeWarning.arg("'teXFontColor_b'"));
 			else
 				d->teXFontColor.setBlue( str.toInt() );
+		} else if (reader->name() == "teXImage") {
+			reader->readNext();
+			QString content = reader->text().toString().trimmed();
+			QByteArray ba = QByteArray::fromBase64(content.toAscii());
+			teXImageFound = d->teXImage.loadFromData(ba);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;
 		}
 	}
 
-	d->updateText();
+	//in case we use latex and the image was stored (older versions of LabPlot didn't save the image)and loaded,
+	//we just need to retransform.
+	//otherwise, we set the static text and retransform in updateText()
+	if ( !(d->textWrapper.teXUsed && teXImageFound) )
+		d->updateText();
+	else
+		retransform();
 
 	return true;
 }

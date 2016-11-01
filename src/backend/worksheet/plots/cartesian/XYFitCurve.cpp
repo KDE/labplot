@@ -41,13 +41,13 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/gsl/ExpressionParser.h"
-#include "backend/gsl/parser_extern.h"
 
 extern "C" {
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_version.h>
+#include "backend/gsl/parser.h" 
 #include "backend/nsl/nsl_fit.h"
 }
 #include <cmath>
@@ -214,40 +214,39 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	double* x = ((struct data*)params)->x;
 	double* y = ((struct data*)params)->y;
 	double* sigma = ((struct data*)params)->sigma;
-	QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
+	nsl_fit_model_type modelType = ((struct data*)params)->modelType;
+	QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();	// a local byte array is needed!
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 	double *min = ((struct data*)params)->paramMin;
 	double *max = ((struct data*)params)->paramMax;
 
-	const char *func = funcba.data();	// function to evaluate
-	double np = paramNames->size();		// number of parameter
 	// set current values of the parameters
-	QByteArray paramba;
-	for (int i=0; i < np; i++) {
-		paramba = paramNames->at(i).toLocal8Bit();
+	for (int i=0; i < paramNames->size(); i++) {
 		double x = gsl_vector_get(paramValues, i);
 		// bound values if limits are set
-		assign_variable(paramba.data(), nsl_fit_map_bound(x, min[i], max[i]));
+		assign_variable(paramNames->at(i).toLocal8Bit().data(), nsl_fit_map_bound(x, min[i], max[i]));
 #ifndef NDEBUG
-		qDebug()<<"Parameter"<<i<<'['<<min[i]<<','<<max[i]<<"] free/bound:"<<x<<' '<<nsl_fit_map_bound(x, min[i], max[i]);
+		qDebug()<<"Parameter"<<i<<'['<<min[i]<<','<<max[i]<<"] free/bound:"<<QString::number(x, 'g', 15)
+			<<' '<<QString::number(nsl_fit_map_bound(x, min[i], max[i]), 'g', 15);
 #endif
 	}
 
-	char var[]="x";
+	const char *func = funcba.data();	// function to evaluate
 	for (size_t i=0; i < n; i++) {
 		if (std::isnan(x[i]) || std::isnan(y[i]))
 			continue;
 
-		double Yi=0;
-		//TODO: add checks for allowed valus of x for different models if required (x>0 for ln(x) etc.)
+		// checks for allowed values of x for different models
+		// TODO: more to check
+		if (modelType == nsl_fit_model_lognormal) {
+			if (x[i] < 0)
+				x[i] = 0;
+		}
 
-		assign_variable(var, x[i]);
-		Yi = parse(func);
+		assign_variable("x", x[i]);
+		double Yi = parse(func);
 #ifndef NDEBUG
-//		printf("func=%s, X[%d]=%g",func, i, x[i]);
-//		for (int j=0; j<paramNames->size(); j++)
-//			printf(" %g",nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]));
-//		printf(" Y[%d]=%g\n", i, Yi);
+//		qDebug()<<"evaluate function"<<QString(func)<<": f(x["<<i<<"]) ="<<Yi;
 #endif
 		if (parse_errors() > 0)
 			return GSL_EINVAL;
@@ -257,9 +256,6 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		else
 			gsl_vector_set (f, i, (Yi - y[i]));
 	}
-#ifndef NDEBUG
-//	puts("");
-#endif
 
 	return GSL_SUCCESS;
 }
@@ -576,16 +572,15 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
 		char* func = funcba.data();
 		QByteArray nameba;
-		char* name;
 		double value;
+		const unsigned int np = paramNames->size();
 		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
+			assign_variable("x", x);
 			if (sigmaVector) sigma = sigmaVector[i];
-			char var[]="x";
-			assign_variable(var, x);
 
-			for (int j=0; j < paramNames->size(); j++) {
-				for (int k=0; k < paramNames->size(); k++) {
+			for (unsigned int j=0; j < np; j++) {
+				for (unsigned int k=0; k < np; k++) {
 					if (k != j) {
 						nameba = paramNames->at(k).toLocal8Bit();
 						value = nsl_fit_map_bound(gsl_vector_get(paramValues, k), min[k], max[k]);
@@ -594,20 +589,23 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				}
 
 				nameba = paramNames->at(j).toLocal8Bit();
-				name = nameba.data();
+				char *name = nameba.data();
 				value = nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]);
 				assign_variable(name, value);
 				double f_p = parse(func);
 
-				double eps = 1.0e-5;	// TODO: adapt to value
-				value = value + eps;
+				double eps = 1.e-9*fabs(f_p);	// adapt step size to value
+				value += eps;
 				assign_variable(name, value);
 				double f_pdp = parse(func);
-
-				// calculate finite difference
+#ifndef NDEBUG
+//		qDebug()<<"evaluate deriv"<<QString(func)<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15);
+//		qDebug()<<"evaluate deriv"<<QString(func)<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15);
+//		qDebug()<<"	deriv = "<<QString::number((f_pdp-f_p)/eps/sigma, 'g', 15);
+#endif
 				if (fixed[j])
 					gsl_matrix_set(J, i, j, 0.);
-				else
+				else	// calculate finite difference
 					gsl_matrix_set(J, i, j, (f_pdp - f_p)/eps/sigma);
 			}
 		}
@@ -621,6 +619,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
 	func_f(x, params, f);
 	func_df(x, params, J);
+
 	return GSL_SUCCESS;
 }
 
@@ -665,8 +664,8 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	//fit settings
-	int maxIters = fitData.maxIterations;	//maximal number of iterations
-	double delta = fitData.eps;		//fit tolerance
+	const int maxIters = fitData.maxIterations;	//maximal number of iterations
+	const double delta = fitData.eps;		//fit tolerance
 	const unsigned int np = fitData.paramNames.size(); //number of fit parameters
 	if (np == 0) {
 		fitResult.available = true;
@@ -701,8 +700,8 @@ void XYFitCurvePrivate::recalculate() {
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	QVector<double> sigmaVector;
-	const double xmin = fitData.xRange.first();
-	const double xmax = fitData.xRange.last();
+	double xmin = fitData.xRange.first();
+	double xmax = fitData.xRange.last();
 	for (int row=0; row < xDataColumn->rowCount(); ++row) {
 		//only copy those data where _all_ values (for x, y and sigma, if given) are valid
 		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
@@ -720,7 +719,7 @@ void XYFitCurvePrivate::recalculate() {
 
 						if (fitData.weightsType == XYFitCurve::WeightsFromColumn) {
 							//weights from a given column -> calculate the square root of the inverse (sigma = sqrt(1/weight))
-							sigmaVector.append( sqrt(1/weightsColumn->valueAt(row)) );
+							sigmaVector.append( sqrt(1./weightsColumn->valueAt(row)) );
 						} else if (fitData.weightsType == XYFitCurve::WeightsFromErrorColumn) {
 							//weights from a given column with error bars (sigma = error)
 							sigmaVector.append( weightsColumn->valueAt(row) );
@@ -732,7 +731,7 @@ void XYFitCurvePrivate::recalculate() {
 	}
 
 	//number of data points to fit
-	size_t n = xdataVector.size();
+	const size_t n = xdataVector.size();
 	if (n == 0) {
 		fitResult.available = true;
 		fitResult.valid = false;
@@ -758,6 +757,7 @@ void XYFitCurvePrivate::recalculate() {
 		sigma = sigmaVector.data();
 
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
+	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
 #ifndef NDEBUG
 	for (unsigned int i=0; i < np; i++)
 		qDebug()<<"fixed parameter"<<i<<fitData.paramFixed.data()[i];
@@ -769,7 +769,6 @@ void XYFitCurvePrivate::recalculate() {
 				fitData.paramLowerLimits.data(), fitData.paramUpperLimits.data(), fitData.paramFixed.data()};
 	f.f = &func_f;
 	f.df = &func_df;
-	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
 	f.fdf = &func_fdf;
 	f.n = n;
 	f.p = np;
@@ -827,7 +826,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.dof = n-np;
 
 	//calculate:
-	//residuals (Y_i-y_i)
+	//residuals r_i = y_i - Y_i = - (Y_i - y_i)
 	//sse = sum of squared errors (SSE) = residual sum of errors (RSS) = sum of sq. residuals (SSR) = \sum_i^n (Y_i-y_i)^2
 	//mse = mean squared error = 1/n \sum_i^n  (Y_i-y_i)^2
 	//rmse = root-mean squared error = \sqrt(mse)
@@ -836,11 +835,8 @@ void XYFitCurvePrivate::recalculate() {
 	//rsd = residual standard deviation = sqrt(rms)
 	//Coefficient of determination, R-squared = 1 - SSE/SSTOT with the total sum of squares SSTOT = \sum_i (y_i - ybar)^2 and ybar = 1/n \sum_i y_i
 	//Adjusted Coefficient of determination  adj. R-squared = 1 - (1-R-squared^2)*(n-1)/(n-np-1);
+	// see also http://www.originlab.com/doc/Origin-Help/NLFit-Algorithm
 
-	residualsVector->resize(n);
-	for (size_t i=0; i < n; ++i)
-		residualsVector->data()[i] = - gsl_vector_get(s->f, i);
-	residualsColumn->setChanged();
 
 	//gsl_blas_dnrm2() - computes the Euclidian norm (||x||_2 = \sqrt {\sum x_i^2}) of the vector with the elements (Yi - y[i])/sigma[i]
 	//gsl_blas_dasum() - computes the absolute sum \sum |x_i| of the elements of the vector with the elements (Yi - y[i])/sigma[i]
@@ -865,14 +861,41 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.rsquaredAdj = 1. - (1. - fitResult.rsquared*fitResult.rsquared)*(n-1.)/(n-np-1.);
 
 	//parameter values
-	double c = GSL_MIN_DBL(1., sqrt(fitResult.sse)); //limit error for poor fit
+	const double c = GSL_MIN_DBL(1., sqrt(fitResult.sse)); //limit error for poor fit
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
 	for (unsigned int i=0; i < np; i++) {
 		// scale resulting values if they are bounded
 		fitResult.paramValues[i] = nsl_fit_map_bound(gsl_vector_get(s->x, i), x_min[i], x_max[i]);
+		// use results as start values if desired
+		if (fitData.useResults)
+			fitData.paramStartValues.data()[i] = fitResult.paramValues[i];
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
 	}
+
+	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
+	residualsVector->resize(xDataColumn->rowCount());
+	if (fitData.evaluateFullRange) {	// evaluate full range of residuals
+		xVector->resize(xDataColumn->rowCount());
+		for (int i=0; i < xDataColumn->rowCount(); i++)
+			(*xVector)[i] = xDataColumn->valueAt(i);
+		ExpressionParser* parser = ExpressionParser::getInstance();
+		bool rc = parser->evaluateCartesian(fitData.model, xVector, residualsVector,
+							fitData.paramNames, fitResult.paramValues);
+		for (int i=0; i < xDataColumn->rowCount(); i++)
+			(*residualsVector)[i] = yDataColumn->valueAt(i) - (*residualsVector)[i];
+		if (!rc)
+			residualsVector->clear();
+	} else {	// only selected range
+		size_t j=0;
+		for (int i=0; i < xDataColumn->rowCount(); i++) {
+			if (xDataColumn->valueAt(i) >= xmin && xDataColumn->valueAt(i) <= xmax)
+				residualsVector->data()[i] = - gsl_vector_get(s->f, j++);
+			else	// outside range
+				residualsVector->data()[i] = 0;
+		}
+	}
+	residualsColumn->setChanged();
 
 	//free resources
 	gsl_multifit_fdfsolver_free(s);
@@ -880,8 +903,10 @@ void XYFitCurvePrivate::recalculate() {
 
 	//calculate the fit function (vectors)
 	ExpressionParser* parser = ExpressionParser::getInstance();
-	// TODO: evaluate full range (even if only parts of data is used for fitting)?
-	//double xmin = xDataColumn->minimum(), xmax = xDataColumn->maximum();
+	if (fitData.evaluateFullRange) { // evaluate fit on full data range if selected
+		xmin = xDataColumn->minimum();
+		xmax = xDataColumn->maximum();
+	}
 	xVector->resize(fitData.evaluatedPoints);
 	yVector->resize(fitData.evaluatedPoints);
 	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xmin), QString::number(xmax), fitData.evaluatedPoints, xVector, yVector,
@@ -914,7 +939,7 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 	}
 
 	//current value of the chi2-function
-	state += QString::number(pow(gsl_blas_dnrm2 (s->f),2));
+	state += QString::number(pow(gsl_blas_dnrm2 (s->f), 2));
 	state += ';';
 
 	fitResult.solverOutput += state;
@@ -950,6 +975,8 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "maxIterations", QString::number(d->fitData.maxIterations) );
 	writer->writeAttribute( "eps", QString::number(d->fitData.eps, 'g', 15) );
 	writer->writeAttribute( "evaluatedPoints", QString::number(d->fitData.evaluatedPoints) );
+	writer->writeAttribute( "evaluateFullRange", QString::number(d->fitData.evaluateFullRange) );
+	writer->writeAttribute( "useResults", QString::number(d->fitData.useResults) );
 
 	writer->writeStartElement("paramNames");
 	foreach (const QString &name, d->fitData.paramNames)
@@ -1067,8 +1094,10 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_STRING_VALUE("model", fitData.model);
 			READ_INT_VALUE("maxIterations", fitData.maxIterations, int);
 			READ_DOUBLE_VALUE("eps", fitData.eps);
-			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, size_t);	// old style
+			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, size_t);	// old name
 			READ_INT_VALUE("evaluatedPoints", fitData.evaluatedPoints, size_t);
+			READ_INT_VALUE("evaluateFullRange", fitData.evaluateFullRange, bool);
+			READ_INT_VALUE("useResults", fitData.useResults, bool);
 		} else if (reader->name() == "name") {
 			d->fitData.paramNames<<reader->readElementText();
 		} else if (reader->name() == "startValue") {
@@ -1117,11 +1146,11 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 				delete column;
 				return false;
 			}
-			if (column->name()=="x")
+			if (column->name() == "x")
 				d->xColumn = column;
-			else if (column->name()=="y")
+			else if (column->name() == "y")
 				d->yColumn = column;
-			else if (column->name()=="residuals")
+			else if (column->name() == "residuals")
 				d->residualsColumn = column;
 		}
 	}

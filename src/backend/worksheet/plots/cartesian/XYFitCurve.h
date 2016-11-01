@@ -64,6 +64,8 @@ class XYFitCurve : public XYCurve {
 			int maxIterations;
 			double eps;
 			size_t evaluatedPoints;
+			bool useResults;		// use results as new start values
+			bool evaluateFullRange;		// evaluate fit function on full data range
 
 			bool autoRange;			// use all data?
 			QVector<double> xRange;		// x range for integration

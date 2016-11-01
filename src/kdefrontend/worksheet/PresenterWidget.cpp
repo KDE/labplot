@@ -39,120 +39,115 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <KLocalizedString>
 
 PresenterWidget::PresenterWidget(const QPixmap &pixmap, const QString& worksheetName, QWidget *parent) : QWidget(parent),
-    m_imageLabel(new QLabel(this)),
-    m_timeLine(new QTimeLine(600))
-{
-    setAttribute(Qt::WA_DeleteOnClose);
-    m_imageLabel->setPixmap(pixmap);
-    m_imageLabel->adjustSize();
+	m_imageLabel(new QLabel(this)),
+	m_timeLine(new QTimeLine(600)) {
+	setAttribute(Qt::WA_DeleteOnClose);
+	m_imageLabel->setPixmap(pixmap);
+	m_imageLabel->adjustSize();
 
-    QDesktopWidget* const dw = QApplication::desktop();
-    const int primaryScreenIdx = dw->primaryScreen();
-    const QRect& screenSize = dw->availableGeometry(primaryScreenIdx);
-    const int moveRight = (screenSize.width() - m_imageLabel->width()) / 2.0;
-    const int moveDown = (screenSize.height() - m_imageLabel->height()) / 2.0;
-    m_imageLabel->move(moveRight, moveDown);
+	QDesktopWidget* const dw = QApplication::desktop();
+	const int primaryScreenIdx = dw->primaryScreen();
+	const QRect& screenSize = dw->availableGeometry(primaryScreenIdx);
 
-    m_panel = new SlidingPanel(this, worksheetName);
-    qApp->installEventFilter(this);
-    connect(m_timeLine, SIGNAL(valueChanged(qreal)), m_panel, SLOT(movePanel(qreal)));
-    connect(m_panel->m_quitPresentingMode, SIGNAL(clicked(bool)), this, SLOT(close()));
+	const int moveRight = (screenSize.width() - m_imageLabel->width()) / 2.0;
+	const int moveDown = (screenSize.height() - m_imageLabel->height()) / 2.0;
+	m_imageLabel->move(moveRight, moveDown);
 
-    slideUp();
+	m_panel = new SlidingPanel(this, worksheetName);
+	qApp->installEventFilter(this);
+	connect(m_timeLine, SIGNAL(valueChanged(qreal)), m_panel, SLOT(movePanel(qreal)));
+	connect(m_panel->m_quitPresentingMode, SIGNAL(clicked(bool)), this, SLOT(close()));
+
+	slideUp();
 }
 
 PresenterWidget::~PresenterWidget() {
-    delete m_imageLabel;
-    delete m_timeLine;
+	delete m_imageLabel;
+	delete m_timeLine;
 }
 
 bool PresenterWidget::eventFilter(QObject *watched, QEvent *event) {
-    if (event->type() == QEvent::MouseMove) {
-        foreach (const QObject* ob, m_panel->children()) {
-            if (watched == ob) {
-                return false;
-            }
-        }
-        if (qobject_cast<SlidingPanel*>(watched) == m_panel) {
-            return false;
-        }
-        if (!m_panel->shouldHide()) {
-            slideDown();
-        } else if (m_panel->y() == 0) {
-            if (m_panel->shouldHide()) {
-                slideUp();
-            }
-        }
-    }
-    return false;
+	if (event->type() == QEvent::MouseMove) {
+		foreach (const QObject* ob, m_panel->children()) {
+			if (watched == ob)
+				return false;
+		}
+		if (qobject_cast<SlidingPanel*>(watched) == m_panel)
+			return false;
+		if (!m_panel->shouldHide())
+			slideDown();
+		else if (m_panel->y() == 0) {
+			if (m_panel->shouldHide())
+				slideUp();
+		}
+	}
+	return false;
 }
 
 void PresenterWidget::keyPressEvent(QKeyEvent *event) {
-    if (event->key() == Qt::Key_Escape) {
-        close();
-    }
+	if (event->key() == Qt::Key_Escape)
+		close();
 }
 
 void PresenterWidget::slideDown() {
-    m_timeLine->setDirection(QTimeLine::Forward);
-    startTimeline();
+	m_timeLine->setDirection(QTimeLine::Forward);
+	startTimeline();
 }
 
 void PresenterWidget::slideUp() {
-    m_timeLine->setDirection(QTimeLine::Backward);
-    startTimeline();
+	m_timeLine->setDirection(QTimeLine::Backward);
+	startTimeline();
 }
 
 void PresenterWidget::startTimeline() {
-    if (m_timeLine->state() != QTimeLine::Running) {
-        m_timeLine->start();
-    }
+	if (m_timeLine->state() != QTimeLine::Running)
+		m_timeLine->start();
 }
 
 SlidingPanel::SlidingPanel(QWidget *parent, const QString &worksheetName) : QFrame(parent) {
-    setAttribute(Qt::WA_DeleteOnClose);
+	setAttribute(Qt::WA_DeleteOnClose);
 
-    m_worksheetName = new QLabel(worksheetName);
-    QFont nameFont;
-    nameFont.setPointSize(20);
-    nameFont.setBold(true);
-    m_worksheetName->setFont(nameFont);
+	m_worksheetName = new QLabel(worksheetName);
+	QFont nameFont;
+	nameFont.setPointSize(20);
+	nameFont.setBold(true);
+	m_worksheetName->setFont(nameFont);
 
-    m_quitPresentingMode = new QPushButton(i18n("Quit presentation"));
+	m_quitPresentingMode = new QPushButton(i18n("Quit presentation"));
 
-    QHBoxLayout* hlayout = new QHBoxLayout;
+	QHBoxLayout* hlayout = new QHBoxLayout;
 	hlayout->addWidget(m_worksheetName);
 	QSpacerItem* spacer = new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
 	hlayout->addItem(spacer);
-    hlayout->addWidget(m_quitPresentingMode);
-    setLayout(hlayout);
+	hlayout->addWidget(m_quitPresentingMode);
+	setLayout(hlayout);
 
-    QPalette pal(palette());
-    pal.setColor(QPalette::Background, Qt::gray);
-    setAutoFillBackground(true);
-    setPalette(pal);
+	QPalette pal(palette());
+	pal.setColor(QPalette::Background, Qt::gray);
+	setAutoFillBackground(true);
+	setPalette(pal);
 
-    move(0, 0);
-    raise();
-    show();
+	move(0, 0);
+	raise();
+	show();
 }
 
 SlidingPanel::~SlidingPanel() {
-    delete m_worksheetName;
-    delete m_quitPresentingMode;
+	delete m_worksheetName;
+	delete m_quitPresentingMode;
 }
 
 void SlidingPanel::movePanel(qreal value) {
-    move(0, -height() + static_cast<int>(value * height()) );
-    raise();
+	move(0, -height() + static_cast<int>(value * height()) );
+	raise();
 }
 
 QSize SlidingPanel::sizeHint() const {
-    QSize sh;
-    QDesktopWidget* const dw = QApplication::desktop();
-    const int primaryScreenIdx = dw->primaryScreen();
-    const QRect& screenSize = dw->availableGeometry(primaryScreenIdx);
-    sh.setWidth(screenSize.width());
+	QSize sh;
+	QDesktopWidget* const dw = QApplication::desktop();
+	const int primaryScreenIdx = dw->primaryScreen();
+	const QRect& screenSize = dw->availableGeometry(primaryScreenIdx);
+	sh.setWidth(screenSize.width());
 
 	//for the height use 1.5 times the height of the font used in the label (20 points) in pixels
 	QFont font;
@@ -160,10 +155,10 @@ QSize SlidingPanel::sizeHint() const {
 	QFontMetrics fm(font);
 	sh.setHeight(1.5*fm.ascent());
 
-    return sh;
+	return sh;
 }
 
 bool SlidingPanel::shouldHide() {
-    const QRect& frameRect = this->rect();
-    return !(frameRect.contains(QCursor::pos()));
+	const QRect& frameRect = this->rect();
+	return !(frameRect.contains(QCursor::pos()));
 }

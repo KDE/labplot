@@ -36,41 +36,41 @@ class QPushButton;
 class SlidingPanel;
 
 class PresenterWidget : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit PresenterWidget(const QPixmap& pixmap,const QString& worksheetName, QWidget *parent = 0);
-    ~PresenterWidget();
+	explicit PresenterWidget(const QPixmap& pixmap,const QString& worksheetName, QWidget *parent = 0);
+	~PresenterWidget();
 
 private:
-    QLabel* m_imageLabel;
-    QTimeLine* m_timeLine;
-    SlidingPanel* m_panel;
-    void startTimeline();
+	QLabel* m_imageLabel;
+	QTimeLine* m_timeLine;
+	SlidingPanel* m_panel;
+	void startTimeline();
 
 protected:
-    void keyPressEvent(QKeyEvent* event);
-    bool eventFilter(QObject *watched, QEvent *event);
+	void keyPressEvent(QKeyEvent* event);
+	bool eventFilter(QObject *watched, QEvent *event);
 
 private slots:
-    void slideDown();
-    void slideUp();
+	void slideDown();
+	void slideUp();
 };
 
 class SlidingPanel : public QFrame {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit SlidingPanel(QWidget* parent, const QString& worksheetName);
-    ~SlidingPanel();
+	explicit SlidingPanel(QWidget* parent, const QString& worksheetName);
+	~SlidingPanel();
 
-    QLabel* m_worksheetName;
-    QPushButton* m_quitPresentingMode;
-    virtual QSize sizeHint() const;
-    bool shouldHide();
+	QLabel* m_worksheetName;
+	QPushButton* m_quitPresentingMode;
+	virtual QSize sizeHint() const;
+	bool shouldHide();
 
 public slots:
-    void movePanel(qreal value);
+	void movePanel(qreal value);
 };
 
 #endif // PRESENTERWIDGET_H

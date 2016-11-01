@@ -41,26 +41,38 @@
 #include <QTextStream>
 #include <QProcess>
 
-// use latex engine specified by the user (default xelatex) to render LaTeX text (see tex2im, etc.)
-// TODO: test convert to svg and render to qimage, test dvipng
 /*!
- * use latex to render LaTeX text (see tex2im, etc.)
- */
+	\class TeXRenderer
+	\brief Implements rendering of latex code to a PNG image, uses latex engine specified by the user (default xelatex) to render LaTeX text
+
+	\ingroup tools
+*/
 QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fontColor, const int fontSize, const int dpi){
-	QTemporaryFile file("/dev/shm/labplot_XXXXXX.tex");
+	//determine the temp directory where the produced files are going to be created
+	QString tempPath;
+#ifdef Q_OS_LINUX
+	//on linux try to use shared memory device first if available
+	static bool useShm = QDir("/dev/shm/").exists();
+	if (useShm)
+		tempPath = "/dev/shm/";
+	else
+		tempPath = QDir::tempPath();
+#else
+	tempPath = QDir::tempPath();
+#endif
+
+	//create a temporary file
+	QTemporaryFile file(tempPath + QDir::separator() + "labplot_XXXXXX.tex");
 	if(file.open()) {
-		QDir::setCurrent("/dev/shm");
+		QDir::setCurrent(tempPath);
 	} else {
-		file.setFileTemplate("/tmp/labplot_XXXXXX.tex");
-		if(file.open())
-			QDir::setCurrent("/tmp");
-		else
-			return QImage();
+		qWarning() << "Couldn't open the file " << file.fileName();
+		return QImage();
 	}
 
 	//determine latex engine to be used
 	KConfigGroup group = KGlobal::config()->group( "General" );
-	QString engine = group.readEntry("TeXEngine", "");
+	QString engine = group.readEntry("LaTeXEngine", "");
 
 	// create latex code
 	QTextStream out(&file);

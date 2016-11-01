@@ -93,7 +93,6 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 	importFileWidget->showOptions(m_showOptions);
 	restoreDialogSize(conf);
 }
-
 ImportFileDialog::~ImportFileDialog() {
 	//save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");

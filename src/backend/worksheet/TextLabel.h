@@ -135,6 +135,7 @@ class TextLabel : public WorksheetElement {
 		void rotationAngleChanged(float);
 		void visibleChanged(bool);
 
+		void teXImageUpdated(bool);
 		void changed();
 };
 

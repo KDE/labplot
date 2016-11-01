@@ -666,8 +666,12 @@ void XYFitCurveDock::showFitResult() {
 
 	str += "<b>" +i18n("Parameters:") + "</b>";
 	for (int i=0; i < fitResult.paramValues.size(); i++) {
-		str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
-		       + QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i));
+		if (fitData.paramFixed.at(i))
+			str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i));
+		else
+			str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
+				+ QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
+				+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i))) + " %)";
 	}
 
 	str += "<br><br><b>" + i18n("Goodness of fit:") + "</b><br>";
@@ -681,8 +685,9 @@ void XYFitCurveDock::showFitResult() {
 		str += i18n("residual standard deviation:") + ' ' + QString::number(fitResult.rsd) + "<br>";
 	}
 
-	str += i18n("coefficient of determination (R²):") + ' ' + QString::number(fitResult.rsquared) + "<br>";
-	str += i18n("adj. coefficient of determination (R²):") + ' ' + QString::number(fitResult.rsquaredAdj) + "<br>";
+	str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.rsquared) + "<br>";
+	str += i18n("adj. coefficient of determination")+ " (R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2")
+		+ "): " + QString::number(fitResult.rsquaredAdj) + "<br>";
 // 	str += "<br><br>";
 //
 // 	QStringList iterations = fitResult.solverOutput.split(';');
