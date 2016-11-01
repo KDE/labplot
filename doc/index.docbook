@@ -58,8 +58,8 @@
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2016-10-22</date>
-<releaseinfo>3.2.8</releaseinfo>
+<date>2016-11-01</date>
+<releaseinfo>3.3.0</releaseinfo>
 
 <abstract>
 	<para>
@@ -1326,7 +1326,620 @@ Also available through <command>labplot2 <option>-v</option></command>
 </sect1>
 </chapter>
 
-<chapter id="parser">
+
+<!-- TODO:
+
+A short tutorial for the basic workflow (create new project, import data, 
+create worksheet, create plots and layout them, add curves, select columns as 
+data sources for the curves, add legends, export everything to pdf) would also help to become familiar with the software more quickly.
+-->
+
+<chapter id="tutorials">
+<title>Short Tutorials</title>
+<sect1 id="sineplot">
+  <title>Building a sine graph with &LabPlot;</title>
+  <para>
+    In this chapter you will find explanations on how to build a simple plot for a curve in the Cartesian coordinates from a mathematical equation.
+  </para>
+  <screenshot>
+    <screeninfo>&LabPlot; window after the first start</screeninfo>
+    <mediaobject>
+      <imageobject>
+	<imagedata fileref="tutorial-xy-function1.png" format="PNG" />
+      </imageobject>
+      <textobject>
+	<phrase>&LabPlot; window after the first start</phrase>
+      </textobject>
+    </mediaobject>
+  </screenshot>
+  <procedure>
+    <step>
+      <para>
+	Click on the <guibutton>New</guibutton> button or press <keycombo>&Ctrl;<keycap>N</keycap></keycombo> on the keyboard.
+      </para>
+      <screenshot>
+      <screeninfo>New &LabPlot; project</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function2.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>New &LabPlot; project</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Project</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>Worksheet</guimenuitem></menuchoice> or press <keycombo>&Alt;<keycap>X</keycap></keycombo> on the keyboard.
+      </para>
+      <screenshot>
+      <screeninfo>Adding new &LabPlot; worksheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function3.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding new &LabPlot; worksheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Worksheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guisubmenu>xy-plot</guisubmenu><guimenuitem>two axes, centered</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Adding axes to the plot</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function4.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding axes to the plot</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>xy-plot</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>xy-curve from a mathematical equation</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Adding new curve</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function5.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding new curve</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Use the <guilabel>xy-equation-curve properties</guilabel> pane on the right to enter <userinput>sin(x)</userinput> into the <guilabel>y=f(x)</guilabel> field (for the list of available functions please see <xref linkend="parser"/>), <userinput>-6</userinput> into the <guilabel>x, min</guilabel> field, <userinput>6</userinput> into the <guilabel>x, max</guilabel> field and click on the <guibutton>Recalculate</guibutton> button to see the result.
+      </para>
+      <screenshot>
+      <screeninfo>The default curve plot</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function6.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>The default curve plot</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      <note>
+	<para>
+	  &LabPlot; highlights unknown syntax in the <guilabel>y=f(x)</guilabel> field. This is useful to control the correctness of the input.
+	</para>
+      </note>
+      <important>
+	<para>
+	  The list of the known functions can be found in <link linkend="parser">corresponding section of this manual</link>.
+	</para>
+      </important>
+    </step>
+    <step>
+      <para>
+	Switch to the <guilabel>Line</guilabel> tab on the <guilabel>xy-equation-curve properties</guilabel> pane and choose <guimenuitem>cubic spline (natural)</guimenuitem> from the <guilabel>Type</guilabel> drop down box.
+      </para>
+      <screenshot>
+      <screeninfo>Choosing the line type</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function7.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding the line type</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Switch to the <guilabel>Symbol</guilabel> tab on the <guilabel>xy-equation-curve properties</guilabel> pane and choose <guimenuitem>none</guimenuitem> from the <guilabel>Style</guilabel> drop down list.
+      </para>
+      <screenshot>
+      <screeninfo>Removing symbols from the plot</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function8.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Removing symbols from the plot</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>xy-plot</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>legend</guimenuitem></menuchoice>. Switch to the <guilabel>Title</guilabel> tab on the <guilabel>Cartesian plot legend properties</guilabel> pane and enter <userinput>Graph of sine</userinput> into the <guilabel>Text</guilabel> field. 
+      </para>
+      <screenshot>
+      <screeninfo>Changing the legend title</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function9.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Changing the legend title</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem></menuchoice> from the main menu. Select the place and the format to save the plot.
+      </para>
+      <screenshot>
+      <screeninfo>Exporting the plot</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function10.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Exporting the plot</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+  </procedure>
+</sect1>
+
+<sect1 id="spreadsheetplot">
+  <title>Building a graph from spreadsheet data with &LabPlot;</title>
+  <para>
+    In this chapter you will find explanations on how to build a simple plot from spreadsheet data.
+  </para>
+  <screenshot>
+    <screeninfo>&LabPlot; window after the first start</screeninfo>
+    <mediaobject>
+      <imageobject>
+	<imagedata fileref="tutorial-xy-function1.png" format="PNG" />
+      </imageobject>
+      <textobject>
+	<phrase>&LabPlot; window after the first start</phrase>
+      </textobject>
+    </mediaobject>
+  </screenshot>
+  <procedure>
+    <step>
+      <para>
+	Click on the <guibutton>New</guibutton> button or press <keycombo>&Ctrl;<keycap>N</keycap></keycombo> on the keyboard.
+      </para>
+      <screenshot>
+      <screeninfo>New &LabPlot; project</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-xy-function2.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>New &LabPlot; project</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Project</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>Spreadsheet</guimenuitem></menuchoice> or press <keycombo>&Ctrl;<keycap>=</keycap></keycombo> on the keyboard.
+      </para>
+      <screenshot>
+      <screeninfo>Adding new &LabPlot; spreadsheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet1.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding new &LabPlot; spreadsheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the header of the first column of the spreadsheet with the &LMB; then click on any of its cells with &RMB; and choose <menuchoice><guimenu>Selection</guimenu><guisubmenu>Fill Selection with</guisubmenu><guimenuitem>Row Numbers</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Filling the first column of the spreadsheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet2.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Filling the first column of the spreadsheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      <para>
+	Select <guimenuitem>Automatic (g)</guimenuitem> from the <guilabel>Format</guilabel> drop down box on the <guilabel>Column properties</guilabel> right dock to enhance data presentation for the first column.
+      </para>
+    </step>
+    <step>
+      <para>
+	Click on the header of the second column of the spreadsheet with the &RMB; and choose <menuchoice><guimenu>Generate Data</guimenu><guimenuitem>Random Values</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Filling the second column of the spreadsheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet3.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Filling the second column of the spreadsheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Project</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>Worksheet</guimenuitem></menuchoice> or press <keycombo>&Alt;<keycap>X</keycap></keycombo> on the keyboard.
+      </para>
+      <screenshot>
+      <screeninfo>Adding new &LabPlot; worksheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet4.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding new &LabPlot; worksheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Worksheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guisubmenu>xy-plot</guisubmenu><guimenuitem>box plot, four axes</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Adding axes to the plot</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet5.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding axes to the plot</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>xy-plot</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>xy-curve</guimenuitem></menuchoice>.
+      </para>
+      <screenshot>
+      <screeninfo>Adding new curve</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet6.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Adding new curve</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Use the <guilabel>xy-curve properties</guilabel> pane on the right to select <menuchoice><guimenu>Project</guimenu><guisubmenu>Spreadsheet</guisubmenu><guimenuitem>1</guimenuitem></menuchoice> in the <guilabel>x-data</guilabel> field (just click on the item and press &Enter;). Use the same procedure to  select <guimenuitem>2</guimenuitem> for the <guilabel>y-data</guilabel> field. The results will be shown on the worksheet immediately.
+      </para>
+      <screenshot>
+      <screeninfo>The plot for the unsorted data</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet7.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>The plot for the unsorted data</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Spreadsheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &LMB; then click on the second column header with the &RMB; and choose <menuchoice><guimenu>Sort</guimenu><guimenuitem>Ascending</guimenuitem></menuchoice>. 
+      </para>
+      <screenshot>
+      <screeninfo>Sorting the second column of the spreadsheet</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet8.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>Sorting the second column of the spreadsheet</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+    <step>
+      <para>
+	Click on the <guilabel>Worksheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &LMB; to see the results. 
+      </para>
+      <screenshot>
+      <screeninfo>The plot for the sorted data</screeninfo>
+      <mediaobject>
+	<imageobject>
+	  <imagedata fileref="tutorial-spreadsheet9.png" format="PNG" />
+	</imageobject>
+	<textobject>
+	  <phrase>The plot for the sorted data</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+    </step>
+  </procedure>
+</sect1>
+</chapter>
+
+<chapter id="examples">
+<title>Examples</title>
+<sect1 id="example-2d-plotting">
+    <title>2D Plotting</title>
+    <para>Coming soon ...
+        </para>
+    </sect1>
+<sect1 id="example-signal">
+    <title>Signal processing</title>
+    <para>
+        </para>
+    <variablelist>
+    <varlistentry>
+    <term>Fourier filter</term>
+    <listitem>
+        <para>A time signal containing Morse code is Fourier transformed to frequency space to see the main component. By applying a narrow band pass filter the Morse signal is extracted and a nice ‘SOS’ can be seen:
+        </para>
+        
+        <screenshot>
+        <mediaobject><imageobject><imagedata fileref="example-fourier_filter-1024x532.png"/>
+        </imageobject></mediaobject>            
+        </screenshot>
+        
+        </listitem>
+    </varlistentry>
+    </variablelist>
+    </sect1>
+<sect1 id="example-computing">
+    <title>Computing</title>
+    <para>
+        </para>
+    <variablelist>
+    <varlistentry>
+    <term>Maxima</term>
+    <listitem>
+        <para>Maxima session showing the chaotic dynamics of the Duffing oscillator.
+            The differential equation of the forced oscillator are solved with Maxima.
+            Plots of the trajectory, the phase space of the oscillator and the corresponding Poincaré map are done with LabPlot:
+        </para>
+        
+        <screenshot>
+        <mediaobject><imageobject><imagedata fileref="example-maxima_2-1024x532.png"/>
+        </imageobject></mediaobject>            
+        </screenshot>
+        
+        </listitem>
+    </varlistentry>
+    <varlistentry>
+    <term>Python</term>
+    <listitem>
+        <para>Python session illustrating the effect of Blackman windowing on the Fourier transform:
+        </para>
+        
+        <screenshot>
+        <mediaobject><imageobject><imagedata fileref="example-FFT_python-1024x532.png"/>
+        </imageobject></mediaobject>            
+        </screenshot>
+        
+        </listitem>
+    </varlistentry>
+    </variablelist>
+    </sect1>
+<sect1 id="example-import-export">
+    <title>Import/Export</title>
+    <para>Coming soon ...
+        </para>
+    </sect1>
+<sect1 id="example-tools">
+    <title>Tools</title>
+    <para>Coming soon ...
+        </para>
+    </sect1>
+    
+</chapter>
+
+
+<chapter id="faq">
+<title>Questions and Answers</title>
+
+<qandaset id="faqlist">
+
+<qandaentry>
+<question>
+<para>For which platforms is &LabPlot; available?</para>
+</question>
+<answer>
+<para>
+&LabPlot; is developed for Unix platforms and uses the &Qt; toolkit and &kde;. Normally you can expect &LabPlot;
+to build and run on every platform &kde; (&gt;=4) supports.
+A recent list of supported platforms and tips for compiling and running &LabPlot; can be found on
+<ulink url="http://labplot.wiki.sourceforge.net/Download">
+http://labplot.wiki.sourceforge.net/Download</ulink>.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry><question>
+<para>How do I export the active worksheet as image?</para>
+</question>
+<answer><para>
+The standard way is to use <menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem></menuchoice>. All &Qt; supported image formats are allowed. Just select the desired format and the active worksheet is exported.
+</para></answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>How do I use Greek letters for title, axes label, &etc;?</para>
+</question>
+<answer>
+<para>
+  Use <guiicon>&pi;</guiicon> button to open character selector window or <guiicon>&tex;</guiicon> to generate Greek letters and other symbols using &latex;.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question>
+<para>I miss an important feature. What can I do?</para>
+</question>
+<answer>
+<para>
+Please take a look at the TODO file in the documentation of &LabPlot;.
+Here, all planned features are listed in more or
+less sorted order which I will implement in future releases of &LabPlot;.
+If you like to have additional
+features or like to have a listed feature soon, mail me your wishes and, if possible, send me
+example data or a short
+description of what you like to do.
+It is not unlikely that your feature will appear in the next stable release
+of &LabPlot; :-)
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry><question>
+<para>Many Analysis functions are disabled. What can I do?</para>
+</question>
+<answer><para>
+It looks like your &LabPlot; package was compiled without GSL (&GNU; Scientific Library) support. &LabPlot; was designed to even work on systems that
+are missing most of the standard libraries. Many distributions are shipping &LabPlot; packages without this additional functionality. In this case some functions are not available. Fortunately some programs (like <application>pstoedit</application> or <application>texvc</application>) can be added without recompiling &LabPlot;. You can always check your system environment in the help menu of &LabPlot;.
+</para>
+<para>
+The packages provided on the official download page are always built with the standard libraries (GSL, &etc;). You should use them
+to have all the features.
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry><question>
+<para>I want to help. How can I contribute to &LabPlot;?</para>
+</question>
+<answer><para>
+Yes, of course. There are a lot things to do. Even if you don't know anything about programming we always
+need people to find bugs, test things and make suggestions. Also the translation and documentation always
+needs a lot of work.
+</para></answer>
+</qandaentry>
+
+
+</qandaset>
+</chapter>
+
+<chapter id="license">
+
+<title>License</title>
+
+<para>&LabPlot;</para>
+<para>
+Program copyright &copy; 2007-2016 Stefan Gerlach <email>stefan.gerlach@uni-konstanz.de</email>
+Program copyright &copy; 2008-2016 Alexander Semke <email>Alexander.Semke@web.de</email>
+</para>
+
+<important>
+<para>
+&LabPlot; is still under development. There is a long list of missing features that will be implemented in later versions of &LabPlot;.
+</para>
+</important>
+
+<para>
+Because there are a lot things to do, developers need every help you can give. Any contribution like wishes, corrections,
+patches, bug reports or screen shots is welcome.
+</para>
+
+<para>
+Documentation copyright &copy; 2007-2016 Stefan Gerlach
+<email>stefan.gerlach@uni-konstanz.de</email>
+
+Documentation copyright &copy; 2008-2015 Alexander Semke
+<email>Alexander.Semke@web.de</email>
+
+Documentation copyright &copy; 2014 Yuri Chornoivan
+<email>yurchor@ukr.net</email>
+</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;
+&underGPL;
+
+</chapter>
+
+<appendix id="installation">
+<title>Installation</title>
+
+<sect1 id="getting-labplot">
+<title>How to Obtain &LabPlot;</title>
+
+<para>
+&LabPlot; can be found on its homepage at sourceforge.net:
+<ulink url="http://labplot.sf.net">http://labplot.sf.net</ulink>. 
+There is an overview about all available packages at
+<ulink url="http://labplot.wiki.sourceforge.net/Download">http://labplot.wiki.sourceforge.net/Download</ulink>.
+bug-fixed packages are released regular and can be found there too.
+</para>
+</sect1>
+
+<sect1 id="requirements">
+<title>Requirements</title>
+
+<para>
+In order to successfully use &LabPlot;, you need at least a standard &Qt; 5 and &kde; KF5 installation, the &GNU; scientific library (GSL), &cantor; libcantor library.
+</para>
+
+<!-- <para>
+Optional &LabPlot; uses the following programs/libraries when available:
+</para>
+
+<itemizedlist>
+<listitem><para>
+&GNU; scientific library (GSL) : used for special functions in the parser and most of the analysis functions.
+</para></listitem>
+</itemizedlist>
+-->
+
+</sect1>
+
+<sect1 id="compilation">
+<title>Compilation and Installation</title>
+
+&install.compile.documentation;
+
+</sect1>
+
+</appendix>
+
+<appendix id="parser">
 <title>Parser functions</title>
 <para>
 The &LabPlot; parser allows you to use following functions:
@@ -1848,542 +2461,6 @@ For more information about this constants see the documentation of GSL.
 <row><entry>erg</entry><entry><action>The energy of 1 erg</action></entry></row>
 
 </tbody></tgroup></informaltable>
-
-</sect1>
-
-</chapter>
-
-<!-- TODO:
-
-A short tutorial for the basic workflow (create new project, import data, 
-create worksheet, create plots and layout them, add curves, select columns as 
-data sources for the curves, add legends, export everything to pdf) would also help to become familiar with the software more quickly.
--->
-
-<chapter id="tutorials">
-<title>Short Tutorials</title>
-<sect1 id="sineplot">
-  <title>Building a sine graph with &LabPlot;</title>
-  <para>
-    In this chapter you will find explanations on how to build a simple plot for a curve in the Cartesian coordinates from a mathematical equation.
-  </para>
-  <screenshot>
-    <screeninfo>&LabPlot; window after the first start</screeninfo>
-    <mediaobject>
-      <imageobject>
-	<imagedata fileref="tutorial-xy-function1.png" format="PNG" />
-      </imageobject>
-      <textobject>
-	<phrase>&LabPlot; window after the first start</phrase>
-      </textobject>
-    </mediaobject>
-  </screenshot>
-  <procedure>
-    <step>
-      <para>
-	Click on the <guibutton>New</guibutton> button or press <keycombo>&Ctrl;<keycap>N</keycap></keycombo> on the keyboard.
-      </para>
-      <screenshot>
-      <screeninfo>New &LabPlot; project</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-xy-function2.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>New &LabPlot; project</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-    <step>
-      <para>
-	Click on the <guilabel>Project</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>Worksheet</guimenuitem></menuchoice> or press <keycombo>&Alt;<keycap>X</keycap></keycombo> on the keyboard.
-      </para>
-      <screenshot>
-      <screeninfo>Adding new &LabPlot; worksheet</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-xy-function3.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>Adding new &LabPlot; worksheet</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-    <step>
-      <para>
-	Click on the <guilabel>Worksheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guisubmenu>xy-plot</guisubmenu><guimenuitem>two axes, centered</guimenuitem></menuchoice>.
-      </para>
-      <screenshot>
-      <screeninfo>Adding axes to the plot</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-xy-function4.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>Adding axes to the plot</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-    <step>
-      <para>
-	Click on the <guilabel>xy-plot</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>xy-curve from a mathematical equation</guimenuitem></menuchoice>.
-      </para>
-      <screenshot>
-      <screeninfo>Adding new curve</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-xy-function5.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>Adding new curve</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-    <step>
-      <para>
-	Use the <guilabel>xy-equation-curve properties</guilabel> pane on the right to enter <userinput>sin(x)</userinput> into the <guilabel>y=f(x)</guilabel> field (for the list of available functions please see <xref linkend="parser"/>), <userinput>-6</userinput> into the <guilabel>x, min</guilabel> field, <userinput>6</userinput> into the <guilabel>x, max</guilabel> field and click on the <guibutton>Recalculate</guibutton> button to see the result.
-      </para>
-      <screenshot>
-      <screeninfo>The default curve plot</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-xy-function6.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>The default curve plot</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-      <note>
-	<para>
-	  &LabPlot; highlights unknown syntax in the <guilabel>y=f(x)</guilabel> field. This is useful to control the correctness of the input.
-	</para>
-      </note>
-      <important>
-	<para>
-	  The list of the known functions can be found in <link linkend="parser">corresponding section of this manual</link>.
-	</para>
-      </important>
-    </step>
-    <step>
-      <para>
-	Switch to the <guilabel>Line</guilabel> tab on the <guilabel>xy-equation-curve properties</guilabel> pane and choose <guimenuitem>cubic spline (natural)</guimenuitem> from the <guilabel>Type</guilabel> drop down box.
-      </para>
-      <screenshot>
-      <screeninfo>Choosing the line type</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-xy-function7.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>Adding the line type</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-    <step>
-      <para>
-	Switch to the <guilabel>Symbol</guilabel> tab on the <guilabel>xy-equation-curve properties</guilabel> pane and choose <guimenuitem>none</guimenuitem> from the <guilabel>Style</guilabel> drop down list.
-      </para>
-      <screenshot>
-      <screeninfo>Removing symbols from the plot</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-xy-function8.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>Removing symbols from the plot</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-    <step>
-      <para>
-	Click on the <guilabel>xy-plot</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>legend</guimenuitem></menuchoice>. Switch to the <guilabel>Title</guilabel> tab on the <guilabel>Cartesian plot legend properties</guilabel> pane and enter <userinput>Graph of sine</userinput> into the <guilabel>Text</guilabel> field. 
-      </para>
-      <screenshot>
-      <screeninfo>Changing the legend title</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-xy-function9.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>Changing the legend title</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-    <step>
-      <para>
-	Choose <menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem></menuchoice> from the main menu. Select the place and the format to save the plot.
-      </para>
-      <screenshot>
-      <screeninfo>Exporting the plot</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-xy-function10.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>Exporting the plot</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-  </procedure>
-</sect1>
-
-<sect1 id="spreadsheetplot">
-  <title>Building a graph from spreadsheet data with &LabPlot;</title>
-  <para>
-    In this chapter you will find explanations on how to build a simple plot from spreadsheet data.
-  </para>
-  <screenshot>
-    <screeninfo>&LabPlot; window after the first start</screeninfo>
-    <mediaobject>
-      <imageobject>
-	<imagedata fileref="tutorial-xy-function1.png" format="PNG" />
-      </imageobject>
-      <textobject>
-	<phrase>&LabPlot; window after the first start</phrase>
-      </textobject>
-    </mediaobject>
-  </screenshot>
-  <procedure>
-    <step>
-      <para>
-	Click on the <guibutton>New</guibutton> button or press <keycombo>&Ctrl;<keycap>N</keycap></keycombo> on the keyboard.
-      </para>
-      <screenshot>
-      <screeninfo>New &LabPlot; project</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-xy-function2.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>New &LabPlot; project</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-    <step>
-      <para>
-	Click on the <guilabel>Project</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>Spreadsheet</guimenuitem></menuchoice> or press <keycombo>&Ctrl;<keycap>=</keycap></keycombo> on the keyboard.
-      </para>
-      <screenshot>
-      <screeninfo>Adding new &LabPlot; spreadsheet</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-spreadsheet1.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>Adding new &LabPlot; spreadsheet</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-    <step>
-      <para>
-	Click on the header of the first column of the spreadsheet with the &LMB; then click on any of its cells with &RMB; and choose <menuchoice><guimenu>Selection</guimenu><guisubmenu>Fill Selection with</guisubmenu><guimenuitem>Row Numbers</guimenuitem></menuchoice>.
-      </para>
-      <screenshot>
-      <screeninfo>Filling the first column of the spreadsheet</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-spreadsheet2.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>Filling the first column of the spreadsheet</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-      <para>
-	Select <guimenuitem>Automatic (g)</guimenuitem> from the <guilabel>Format</guilabel> drop down box on the <guilabel>Column properties</guilabel> right dock to enhance data presentation for the first column.
-      </para>
-    </step>
-    <step>
-      <para>
-	Click on the header of the second column of the spreadsheet with the &RMB; and choose <menuchoice><guimenu>Generate Data</guimenu><guimenuitem>Random Values</guimenuitem></menuchoice>.
-      </para>
-      <screenshot>
-      <screeninfo>Filling the second column of the spreadsheet</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-spreadsheet3.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>Filling the second column of the spreadsheet</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-    <step>
-      <para>
-	Click on the <guilabel>Project</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>Worksheet</guimenuitem></menuchoice> or press <keycombo>&Alt;<keycap>X</keycap></keycombo> on the keyboard.
-      </para>
-      <screenshot>
-      <screeninfo>Adding new &LabPlot; worksheet</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-spreadsheet4.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>Adding new &LabPlot; worksheet</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-    <step>
-      <para>
-	Click on the <guilabel>Worksheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guisubmenu>xy-plot</guisubmenu><guimenuitem>box plot, four axes</guimenuitem></menuchoice>.
-      </para>
-      <screenshot>
-      <screeninfo>Adding axes to the plot</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-spreadsheet5.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>Adding axes to the plot</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-    <step>
-      <para>
-	Click on the <guilabel>xy-plot</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &RMB; and choose <menuchoice><guimenu>Add new</guimenu><guimenuitem>xy-curve</guimenuitem></menuchoice>.
-      </para>
-      <screenshot>
-      <screeninfo>Adding new curve</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-spreadsheet6.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>Adding new curve</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-    <step>
-      <para>
-	Use the <guilabel>xy-curve properties</guilabel> pane on the right to select <menuchoice><guimenu>Project</guimenu><guisubmenu>Spreadsheet</guisubmenu><guimenuitem>1</guimenuitem></menuchoice> in the <guilabel>x-data</guilabel> field (just click on the item and press &Enter;). Use the same procedure to  select <guimenuitem>2</guimenuitem> for the <guilabel>y-data</guilabel> field. The results will be shown on the worksheet immediately.
-      </para>
-      <screenshot>
-      <screeninfo>The plot for the unsorted data</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-spreadsheet7.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>The plot for the unsorted data</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-    <step>
-      <para>
-	Click on the <guilabel>Spreadsheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &LMB; then click on the second column header with the &RMB; and choose <menuchoice><guimenu>Sort</guimenu><guimenuitem>Ascending</guimenuitem></menuchoice>. 
-      </para>
-      <screenshot>
-      <screeninfo>Sorting the second column of the spreadsheet</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-spreadsheet8.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>Sorting the second column of the spreadsheet</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-    <step>
-      <para>
-	Click on the <guilabel>Worksheet</guilabel> item on the <guilabel>Project Explorer</guilabel> panel with the &LMB; to see the results. 
-      </para>
-      <screenshot>
-      <screeninfo>The plot for the sorted data</screeninfo>
-      <mediaobject>
-	<imageobject>
-	  <imagedata fileref="tutorial-spreadsheet9.png" format="PNG" />
-	</imageobject>
-	<textobject>
-	  <phrase>The plot for the sorted data</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-    </step>
-  </procedure>
-</sect1>
-</chapter>
-
-<chapter id="faq">
-<title>Questions and Answers</title>
-
-<qandaset id="faqlist">
-
-<qandaentry>
-<question>
-<para>For which platforms is &LabPlot; available?</para>
-</question>
-<answer>
-<para>
-&LabPlot; is developed for Unix platforms and uses the &Qt; toolkit and &kde;. Normally you can expect &LabPlot;
-to build and run on every platform &kde; (&gt;=4) supports.
-A recent list of supported platforms and tips for compiling and running &LabPlot; can be found on
-<ulink url="http://labplot.wiki.sourceforge.net/Download">
-http://labplot.wiki.sourceforge.net/Download</ulink>.
-</para>
-</answer>
-</qandaentry>
-
-<qandaentry><question>
-<para>How do I export the active worksheet as image?</para>
-</question>
-<answer><para>
-The standard way is to use <menuchoice><guimenu>File</guimenu><guimenuitem>Export</guimenuitem></menuchoice>. All &Qt; supported image formats are allowed. Just select the desired format and the active worksheet is exported.
-</para></answer>
-</qandaentry>
-
-<qandaentry>
-<question>
-<para>How do I use Greek letters for title, axes label, &etc;?</para>
-</question>
-<answer>
-<para>
-  Use <guiicon>&pi;</guiicon> button to open character selector window or <guiicon>&tex;</guiicon> to generate Greek letters and other symbols using &latex;.
-</para>
-</answer>
-</qandaentry>
-
-<qandaentry>
-<question>
-<para>I miss an important feature. What can I do?</para>
-</question>
-<answer>
-<para>
-Please take a look at the TODO file in the documentation of &LabPlot;.
-Here, all planned features are listed in more or
-less sorted order which I will implement in future releases of &LabPlot;.
-If you like to have additional
-features or like to have a listed feature soon, mail me your wishes and, if possible, send me
-example data or a short
-description of what you like to do.
-It is not unlikely that your feature will appear in the next stable release
-of &LabPlot; :-)
-</para>
-</answer>
-</qandaentry>
-
-<qandaentry><question>
-<para>Many Analysis functions are disabled. What can I do?</para>
-</question>
-<answer><para>
-It looks like your &LabPlot; package was compiled without GSL (&GNU; Scientific Library) support. &LabPlot; was designed to even work on systems that
-are missing most of the standard libraries. Many distributions are shipping &LabPlot; packages without this additional functionality. In this case some functions are not available. Fortunately some programs (like <application>pstoedit</application> or <application>texvc</application>) can be added without recompiling &LabPlot;. You can always check your system environment in the help menu of &LabPlot;.
-</para>
-<para>
-The packages provided on the official download page are always built with the standard libraries (GSL, &etc;). You should use them
-to have all the features.
-</para>
-</answer>
-</qandaentry>
-
-<qandaentry><question>
-<para>I want to help. How can I contribute to &LabPlot;?</para>
-</question>
-<answer><para>
-Yes, of course. There are a lot things to do. Even if you don't know anything about programming we always
-need people to find bugs, test things and make suggestions. Also the translation and documentation always
-needs a lot of work.
-</para></answer>
-</qandaentry>
-
-
-</qandaset>
-</chapter>
-
-<chapter id="license">
-
-<title>License</title>
-
-<para>&LabPlot;</para>
-<para>
-Program copyright &copy; 2007-2016 Stefan Gerlach <email>stefan.gerlach@uni-konstanz.de</email>
-Program copyright &copy; 2008-2016 Alexander Semke <email>Alexander.Semke@web.de</email>
-</para>
-
-<important>
-<para>
-&LabPlot; is still under development. There is a long list of missing features that will be implemented in later versions of &LabPlot;.
-</para>
-</important>
-
-<para>
-Because there are a lot things to do, developers need every help you can give. Any contribution like wishes, corrections,
-patches, bug reports or screen shots is welcome.
-</para>
-
-<para>
-Documentation copyright &copy; 2007-2015 Stefan Gerlach
-<email>stefan.gerlach@uni-konstanz.de</email>
-
-Documentation copyright &copy; 2008-2015 Alexander Semke
-<email>Alexander.Semke@web.de</email>
-
-Documentation copyright &copy; 2014 Yuri Chornoivan
-<email>yurchor@ukr.net</email>
-</para>
-
-<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
-
-&underFDL;
-&underGPL;
-
-</chapter>
-
-<appendix id="installation">
-<title>Installation</title>
-
-<sect1 id="getting-labplot">
-<title>How to Obtain &LabPlot;</title>
-
-<para>
-&LabPlot; can be found on its homepage at sourceforge.net:
-<ulink url="http://labplot.sf.net">http://labplot.sf.net</ulink>. 
-There is an overview about all available packages at
-<ulink url="http://labplot.wiki.sourceforge.net/Download">http://labplot.wiki.sourceforge.net/Download</ulink>.
-bug-fixed packages are released regular and can be found there too.
-</para>
-</sect1>
-
-<sect1 id="requirements">
-<title>Requirements</title>
-
-<para>
-In order to successfully use &LabPlot;, you need at least a standard &Qt; 5 and &kde; KF5 installation, the &GNU; scientific library (GSL), &cantor; libcantor library.
-</para>
-
-<!-- <para>
-Optional &LabPlot; uses the following programs/libraries when available:
-</para>
-
-<itemizedlist>
-<listitem><para>
-&GNU; scientific library (GSL) : used for special functions in the parser and most of the analysis functions.
-</para></listitem>
-</itemizedlist>
--->
-
-</sect1>
-
-<sect1 id="compilation">
-<title>Compilation and Installation</title>
-
-&install.compile.documentation;
 
 </sect1>
 
