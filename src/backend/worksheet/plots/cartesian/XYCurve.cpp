@@ -2335,7 +2335,14 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 
 	int index = parentAspect()->indexOfChild<XYCurve>(this);
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
-	QColor themeColor = plot->themeColorPalette().at(index);
+	QColor themeColor;
+	if (index<plot->themeColorPalette().size()) {
+		themeColor = plot->themeColorPalette().at(index);
+	} else {
+		if (plot->themeColorPalette().size())
+			themeColor = plot->themeColorPalette().last();
+	}
+
 	QPen p;
 
 	//Line
