@@ -1517,11 +1517,11 @@ void CartesianPlotPrivate::retransformScales() {
 
 			//TODO;
 // 			if (axis->position() == Axis::AxisCustom && deltaXMin != 0) {
+
 // 				axis->setOffset(axis->offset() + deltaXMin, false);
 // 			}
 		}
 	}
-
 	// call retransform() on the parent to trigger the update of all axes and curves
 	q->retransform();
 }
@@ -1800,6 +1800,13 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
+	//applied theme
+	if (!m_themeName.isEmpty()){
+		writer->writeStartElement( "theme" );
+		writer->writeAttribute( "name", m_themeName );
+		writer->writeEndElement();
+	}
+
 	//geometry
 	writer->writeStartElement( "geometry" );
 	writer->writeAttribute( "x", QString::number(d->rect.x()) );
@@ -1877,6 +1884,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
+	QString tmpThemeName;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -1889,6 +1897,9 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader))
 				return false;
+		} else if (reader->name() == "theme") {
+			attribs = reader->attributes();
+			tmpThemeName = attribs.value("name").toString();
 		} else if (reader->name() == "geometry") {
 			attribs = reader->attributes();
 
@@ -2177,6 +2188,15 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 		m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem());
 	}
 
+	//if a theme was used, assign the value to the private member at the very end of load()
+	//so we don't try to load the theme in applyThemeOnNewCurve() when adding curves on project load and calculate the palette
+	if (!tmpThemeName.isEmpty()){
+		KConfig config( ThemeHandler::themeFilePath(tmpThemeName), KConfig::SimpleConfig );
+		//TODO: check whether the theme config really exists
+		m_themeName = tmpThemeName;
+		this->setColorPalette(config);
+	}
+
 	return true;
 }
 
@@ -2189,7 +2209,6 @@ void CartesianPlot::loadTheme(KConfig& config) {
 	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), m_themeName) );
 
 	//load the color palettes for the curves
-	KConfigGroup group = config.group("XYCurve");
 	this->setColorPalette(config);
 
 	//load the theme for all the childred
