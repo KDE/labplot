@@ -327,7 +327,7 @@ void LabelWidget::teXUsedChanged(bool checked) {
 	else
 		ui.tbTexUsed->setEnabled(true);
 
-	//when swithching to the text mode, set the background color to white just for the case the latex code provided by the user
+	//when switching to the text mode, set the background color to white just for the case the latex code provided by the user
 	//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
 	if (!checked)
 		ui.teLabel->setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
