@@ -131,13 +131,9 @@ class XYCurve: public WorksheetElement {
 		typedef WorksheetElement BaseClass;
 		typedef XYCurvePrivate Private;
 
-		QList<QColor> getColorPalette();
-		void applyColorPalette(QList<QColor> color);
-
 	public slots:
 		virtual void retransform();
 		virtual void handlePageResize(double horizontalRatio, double verticalRatio);
-		void setColorPalette(const KConfig& config);
 
 	private slots:
 		void updateValues();
@@ -163,7 +159,6 @@ class XYCurve: public WorksheetElement {
 		void initActions();
 
 		QAction* visibilityAction;
-		QList<QColor> m_themeColorPalette;
 
 	signals:
 		//General-Tab

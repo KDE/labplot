@@ -2330,74 +2330,12 @@ bool XYCurve::load(XmlStreamReader* reader) {
 //##############################################################################
 //#########################  Theme management ##################################
 //##############################################################################
-
-//Generating colors from 5-color theme palette
-void XYCurve::setColorPalette(const KConfig& config) {
-	KConfigGroup group = config.group("Theme");
-
-	QList<QColor> color;
-	QColor c;
-	QPen p;
-	color.append(group.readEntry("ThemePaletteColor1",(QColor)p.color()));
-	color.append(group.readEntry("ThemePaletteColor2",(QColor)p.color()));
-	color.append(group.readEntry("ThemePaletteColor3",(QColor)p.color()));
-	color.append(group.readEntry("ThemePaletteColor4",(QColor)p.color()));
-	color.append(group.readEntry("ThemePaletteColor5",(QColor)p.color()));
-
-	if(color.at(0)==color.at(1)) {
-		for(int i=5; i<=35; i++)
-			color.append(color.at(0));
-	}
-	else {
-		float fac[3] = {0.25,0.45,0.65};    //3 factors to create shades from theme's palette
-		//Generating 3 lighter shades of the color
-		for(int i=0;i<5;i++)
-		{
-			for(int j=1;j<4;j++)
-			{
-				c.setRed((int)(color.at(i).red()*(1-fac[j-1])));
-				c.setGreen((int)(color.at(i).green()*(1-fac[j-1])));
-				c.setBlue((int)(color.at(i).blue()*(1-fac[j-1])));
-				color.append(c);
-			}
-		}
-		//Generating 3 darker shades of the color
-		for(int i=0;i<5;i++)
-		{
-			for(int j=4;j<7;j++)
-			{
-				c.setRed((int)(color.at(i).red()+((255-color.at(i).red())*fac[j-4])));
-				c.setGreen((int)(color.at(i).green()+((255-color.at(i).green())*fac[j-4])));
-				c.setBlue((int)(color.at(i).blue()+((255-color.at(i).blue())*fac[j-4])));
-				color.append(c);
-			}
-		}
-	}
-	m_themeColorPalette = color;
-}
-
-QList<QColor> XYCurve::getColorPalette() {
-	return m_themeColorPalette;
-}
-
-void XYCurve::applyColorPalette(QList<QColor> color) {
-	if(!color.empty()) {
-		m_themeColorPalette = color;
-		QPen p;
-		int index = parentAspect()->indexOfChild<XYCurve>(this);
-		p.setColor(m_themeColorPalette.at(index));
-		this->setLinePen(p);
-		this->setFillingFirstColor(m_themeColorPalette.at(index));
-		this->setSymbolsPen(p);
-	}
-}
-
 void XYCurve::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
 
 	int index = parentAspect()->indexOfChild<XYCurve>(this);
-	this->setColorPalette(config);
-	QColor themeColor = m_themeColorPalette.at(index);
+	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
+	QColor themeColor = plot->themeColorPalette().at(index);
 	QPen p;
 
 	//Line

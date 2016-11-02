@@ -2183,22 +2183,19 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 //##############################################################################
 //#########################  Theme management ##################################
 //##############################################################################
-void CartesianPlot::loadTheme(const QString& name) {
-	KConfig config( ThemeHandler::themeFilePath(name), KConfig::SimpleConfig );
-	loadTheme(config);
-}
-
 void CartesianPlot::loadTheme(KConfig& config) {
 	const QString str = config.name();
-	QString themeName = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
-	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), themeName) );
+	m_themeName = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
+	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), m_themeName) );
 
+	//load the color palettes for the curves
+	KConfigGroup group = config.group("XYCurve");
+	this->setColorPalette(config);
+
+	//load the theme for all the childred
 	const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
 	foreach(WorksheetElement *child, childElements)
 		child->loadThemeConfig(config);
-
-	const QList<XYCurve*>& childXYCurve = children<XYCurve>(AbstractAspect::IncludeHidden);
-	m_themeColorPalette = childXYCurve.last()->getColorPalette();
 
 	Q_D(CartesianPlot);
 	d->update(this->rect());
@@ -2220,6 +2217,58 @@ void CartesianPlot::saveTheme(KConfig &config) {
 		child->saveThemeConfig(config);
 }
 
+//Generating colors from 5-color theme palette
+void CartesianPlot::setColorPalette(const KConfig& config) {
+	KConfigGroup group = config.group("Theme");
+
+	QColor c;
+	QPen p;
+	m_themeColorPalette.append(group.readEntry("ThemePaletteColor1",(QColor)p.color()));
+	m_themeColorPalette.append(group.readEntry("ThemePaletteColor2",(QColor)p.color()));
+	m_themeColorPalette.append(group.readEntry("ThemePaletteColor3",(QColor)p.color()));
+	m_themeColorPalette.append(group.readEntry("ThemePaletteColor4",(QColor)p.color()));
+	m_themeColorPalette.append(group.readEntry("ThemePaletteColor5",(QColor)p.color()));
+
+	if(m_themeColorPalette.at(0)==m_themeColorPalette.at(1)) {
+		for(int i=5; i<=35; i++)
+			m_themeColorPalette.append(m_themeColorPalette.at(0));
+	} else {
+		//3 factors to create shades from theme's palette
+		float fac[3] = {0.25,0.45,0.65};
+
+		//Generating 3 lighter shades of the color
+		for(int i=0;i<5;i++)
+		{
+			for(int j=1;j<4;j++)
+			{
+				c.setRed((int)(m_themeColorPalette.at(i).red()*(1-fac[j-1])));
+				c.setGreen((int)(m_themeColorPalette.at(i).green()*(1-fac[j-1])));
+				c.setBlue((int)(m_themeColorPalette.at(i).blue()*(1-fac[j-1])));
+				m_themeColorPalette.append(c);
+			}
+		}
+
+		//Generating 3 darker shades of the color
+		for(int i=0;i<5;i++)
+		{
+			for(int j=4;j<7;j++)
+			{
+				c.setRed((int)(m_themeColorPalette.at(i).red()+((255-m_themeColorPalette.at(i).red())*fac[j-4])));
+				c.setGreen((int)(m_themeColorPalette.at(i).green()+((255-m_themeColorPalette.at(i).green())*fac[j-4])));
+				c.setBlue((int)(m_themeColorPalette.at(i).blue()+((255-m_themeColorPalette.at(i).blue())*fac[j-4])));
+				m_themeColorPalette.append(c);
+			}
+		}
+	}
+}
+
+const QList<QColor>& CartesianPlot::themeColorPalette() const {
+	return m_themeColorPalette;
+}
+
 void CartesianPlot::applyThemeOnNewCurve(XYCurve* curve) {
-	curve->applyColorPalette(m_themeColorPalette);
+	if (!m_themeName.isEmpty()) {
+		KConfig config( ThemeHandler::themeFilePath(m_themeName), KConfig::SimpleConfig );
+		curve->loadThemeConfig(config);
+	}
 }

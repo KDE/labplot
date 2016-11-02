@@ -87,6 +87,8 @@ class CartesianPlot:public AbstractPlot{
 		MouseMode mouseMode() const;
 		void navigate(NavigationOperation);
 
+		const QList<QColor>& themeColorPalette() const;
+
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
 
@@ -110,10 +112,13 @@ class CartesianPlot:public AbstractPlot{
 		void init();
 		void initActions();
 		void initMenus();
+		void setColorPalette(const KConfig&);
 		void applyThemeOnNewCurve(XYCurve* curve);
 
 		CartesianPlotLegend* m_legend;
 		float m_zoomFactor;
+		QString m_themeName;
+		QList<QColor> m_themeColorPalette;
 
 		QAction* visibilityAction;
 
@@ -149,7 +154,6 @@ class CartesianPlot:public AbstractPlot{
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;
 		QMenu* themeMenu;
-		QList<QColor> m_themeColorPalette;
 
 		Q_DECLARE_PRIVATE(CartesianPlot)
 
@@ -196,8 +200,6 @@ class CartesianPlot:public AbstractPlot{
 
 		//SLOTs for changes triggered via QActions in the context menu
 		void visibilityChanged();
-
-		void loadTheme(const QString&);
 
 	protected:
 		CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
