@@ -470,21 +470,21 @@ void XYCurve::setValuesOpacity(qreal opacity) {
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesPrefix, QString, valuesPrefix, updateValues)
 void XYCurve::setValuesPrefix(const QString& prefix) {
 	Q_D(XYCurve);
-	if (prefix!= d->valuesPrefix)
+	if (prefix != d->valuesPrefix)
 		exec(new XYCurveSetValuesPrefixCmd(d, prefix, i18n("%1: set values prefix")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesSuffix, QString, valuesSuffix, updateValues)
 void XYCurve::setValuesSuffix(const QString& suffix) {
 	Q_D(XYCurve);
-	if (suffix!= d->valuesSuffix)
+	if (suffix != d->valuesSuffix)
 		exec(new XYCurveSetValuesSuffixCmd(d, suffix, i18n("%1: set values suffix")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesFont, QFont, valuesFont, updateValues)
 void XYCurve::setValuesFont(const QFont& font) {
 	Q_D(XYCurve);
-	if (font!= d->valuesFont)
+	if (font != d->valuesFont)
 		exec(new XYCurveSetValuesFontCmd(d, font, i18n("%1: set values font")));
 }
 
@@ -534,21 +534,21 @@ void XYCurve::setFillingBrushStyle(Qt::BrushStyle style) {
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFirstColor, QColor, fillingFirstColor, updatePixmap)
 void XYCurve::setFillingFirstColor(const QColor& color) {
 	Q_D(XYCurve);
-	if (color!= d->fillingFirstColor)
+	if (color != d->fillingFirstColor)
 		exec(new XYCurveSetFillingFirstColorCmd(d, color, i18n("%1: set filling first color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingSecondColor, QColor, fillingSecondColor, updatePixmap)
 void XYCurve::setFillingSecondColor(const QColor& color) {
 	Q_D(XYCurve);
-	if (color!= d->fillingSecondColor)
+	if (color != d->fillingSecondColor)
 		exec(new XYCurveSetFillingSecondColorCmd(d, color, i18n("%1: set filling second color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFileName, QString, fillingFileName, updatePixmap)
 void XYCurve::setFillingFileName(const QString& fileName) {
 	Q_D(XYCurve);
-	if (fileName!= d->fillingFileName)
+	if (fileName != d->fillingFileName)
 		exec(new XYCurveSetFillingFileNameCmd(d, fileName, i18n("%1: set filling image")));
 }
 
@@ -663,18 +663,25 @@ void XYCurve::suppressRetransform(bool b) {
 //#################################  SLOTS  ####################################
 //##############################################################################
 void XYCurve::retransform() {
+#ifndef NDEBUG
+	qDebug() << "XYCurve::retransform()";
+#endif
+	Q_D(XYCurve);
+
 	WAIT_CURSOR;
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
-	d_ptr->retransform();
+	d->retransform();
 	RESET_CURSOR;
 }
 
 void XYCurve::updateValues() {
-	d_ptr->updateValues();
+	Q_D(XYCurve);
+	d->updateValues();
 }
 
 void XYCurve::updateErrorBars() {
-	d_ptr->updateErrorBars();
+	Q_D(XYCurve);
+	d->updateErrorBars();
 }
 
 //TODO
@@ -1701,6 +1708,9 @@ void XYCurvePrivate::updateErrorBars() {
   recalculates the outer bounds and the shape of the curve.
 */
 void XYCurvePrivate::recalcShapeAndBoundingRect() {
+#ifndef NDEBUG
+	qDebug() << "XYCurvePrivate::recalcShapeAndBoundingRect()";
+#endif
 	if (m_suppressRecalc)
 		return;
 
@@ -1728,7 +1738,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 
 	boundingRectangle = curveShape.boundingRect();
 
-	foreach(const QPolygonF& pol, fillPolygons)
+	foreach (const QPolygonF& pol, fillPolygons)
 		boundingRectangle = boundingRectangle.united(pol.boundingRect());
 
 	//TODO: when the selection is painted, line intersections are visible.
@@ -1789,18 +1799,20 @@ void XYCurvePrivate::draw(QPainter *painter) {
 }
 
 void XYCurvePrivate::updatePixmap() {
+#ifndef NDEBUG
+	qDebug() << "XYCurvePrivate::updatePixmap()";
+#endif
 	WAIT_CURSOR;
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 // 	QTime timer;
 // 	timer.start();
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
-	QPixmap pixmap(ceil(boundingRectangle.width()), ceil(boundingRectangle.height()));
-	if (boundingRectangle.width()==0 || boundingRectangle.width()==0) {
-		m_pixmap = pixmap;
+	if (boundingRectangle.width() == 0 || boundingRectangle.width() == 0) {
 		RESET_CURSOR;
 		return;
 	}
+	QPixmap pixmap(ceil(boundingRectangle.width()), ceil(boundingRectangle.height()));
 	pixmap.fill(Qt::transparent);
 	QPainter painter(&pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
@@ -1808,8 +1820,8 @@ void XYCurvePrivate::updatePixmap() {
 
 	draw(&painter);
 	painter.end();
-
 	m_pixmap = pixmap;
+
 // 	qDebug() << "Update the pixmap: " << timer.elapsed() << "ms";
 	RESET_CURSOR;
 }
@@ -1887,7 +1899,9 @@ QImage blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnl
   \sa QGraphicsItem::paint().
 */
 void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-// 	qDebug()<<"XYCurvePrivate::paint, " + q->name();
+#ifndef NDEBUG
+ 	qDebug()<<"XYCurvePrivate::paint() name =" << q->name();
+#endif
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 	if (!isVisible())
@@ -1941,7 +1955,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 
 /*!
 	Drawing of symbolsPath is very slow, so we draw every symbol in the loop
-	which us much faster (factor 10)
+	which is much faster (factor 10)
 */
 void XYCurvePrivate::drawSymbols(QPainter* painter) {
 	QPainterPath path = Symbol::pathFromStyle(symbolsStyle);
@@ -1978,7 +1992,7 @@ void XYCurvePrivate::drawValues(QPainter* painter) {
 }
 
 void XYCurvePrivate::drawFilling(QPainter* painter) {
-	foreach(const QPolygonF& pol, fillPolygons) {
+	foreach (const QPolygonF& pol, fillPolygons) {
 		QRectF rect = pol.boundingRect();
 		if (fillingType == PlotArea::Color) {
 			switch (fillingColorStyle) {

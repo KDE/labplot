@@ -55,6 +55,7 @@
 #include <QMenu>
 #include <QToolBar>
 #include <QPainter>
+#include <QDebug>
 
 #include <KConfigGroup>
 #include <KIcon>
@@ -96,7 +97,7 @@ CartesianPlot::~CartesianPlot() {
 void CartesianPlot::init() {
 	Q_D(CartesianPlot);
 
-	d->cSystem = new CartesianCoordinateSystem(this);;
+	d->cSystem = new CartesianCoordinateSystem(this);
 	m_coordinateSystem = d->cSystem;
 
 	d->autoScaleX = true;
@@ -490,19 +491,19 @@ QIcon CartesianPlot::icon() const {
 }
 
 void CartesianPlot::navigate(CartesianPlot::NavigationOperation op) {
-	if (op==ScaleAuto) scaleAuto();
-	else if (op==ScaleAutoX) scaleAutoX();
-	else if (op==ScaleAutoY) scaleAutoY();
-	else if (op==ZoomIn) zoomIn();
-	else if (op==ZoomOut) zoomOut();
-	else if (op==ZoomInX) zoomInX();
-	else if (op==ZoomOutX) zoomOutX();
-	else if (op==ZoomInY) zoomInY();
-	else if (op==ZoomOutY) zoomOutY();
-	else if (op==ShiftLeftX) shiftLeftX();
-	else if (op==ShiftRightX) shiftRightX();
-	else if (op==ShiftUpY) shiftUpY();
-	else if (op==ShiftDownY) shiftDownY();
+	if (op == ScaleAuto) scaleAuto();
+	else if (op == ScaleAutoX) scaleAutoX();
+	else if (op == ScaleAutoY) scaleAutoY();
+	else if (op == ZoomIn) zoomIn();
+	else if (op == ZoomOut) zoomOut();
+	else if (op == ZoomInX) zoomInX();
+	else if (op == ZoomOutX) zoomOutX();
+	else if (op == ZoomInY) zoomInY();
+	else if (op == ZoomOutY) zoomOutY();
+	else if (op == ShiftLeftX) shiftLeftX();
+	else if (op == ShiftRightX) shiftRightX();
+	else if (op == ShiftUpY) shiftUpY();
+	else if (op == ShiftDownY) shiftDownY();
 }
 
 //##############################################################################
@@ -1187,16 +1188,19 @@ void CartesianPlot::scaleAuto() {
 }
 
 void CartesianPlot::zoomIn() {
+#ifndef NDEBUG
+	qDebug() << "CartesianPlot::zoomIn()";
+#endif
 	Q_D(CartesianPlot);
-	float oldRange = (d->xMax-d->xMin);
-	float newRange = (d->xMax-d->xMin)/m_zoomFactor;
-	d->xMax = d->xMax + (newRange-oldRange)/2;
-	d->xMin = d->xMin - (newRange-oldRange)/2;
+	float oldRange = (d->xMax - d->xMin);
+	float newRange = (d->xMax - d->xMin) / m_zoomFactor;
+	d->xMax = d->xMax + (newRange - oldRange) / 2;
+	d->xMin = d->xMin - (newRange - oldRange) / 2;
 
-	oldRange = (d->yMax-d->yMin);
-	newRange = (d->yMax-d->yMin)/m_zoomFactor;
-	d->yMax = d->yMax + (newRange-oldRange)/2;
-	d->yMin = d->yMin - (newRange-oldRange)/2;
+	oldRange = (d->yMax - d->yMin);
+	newRange = (d->yMax - d->yMin) / m_zoomFactor;
+	d->yMax = d->yMax + (newRange - oldRange) / 2;
+	d->yMin = d->yMin - (newRange - oldRange) / 2;
 
 	d->retransformScales();
 }
@@ -1311,6 +1315,9 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner)
 	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
  */
 void CartesianPlotPrivate::retransform() {
+#ifndef NDEBUG
+	qDebug() << "CartesianPlotPrivate::retransform()";
+#endif
 	if (suppressRetransform)
 		return;
 
@@ -1333,6 +1340,9 @@ void CartesianPlotPrivate::retransform() {
 }
 
 void CartesianPlotPrivate::retransformScales() {
+#ifndef NDEBUG
+	qDebug() << "CartesianPlotPrivate::retransformScales()";
+#endif
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
 	QList<CartesianScale*> scales;
 
@@ -1359,21 +1369,21 @@ void CartesianPlotPrivate::retransformScales() {
 		logicalStart = xMin;
 		logicalEnd = xMax;
 
-		//TODO: how should we handle the case sceneStart=sceneEnd
+		//TODO: how should we handle the case sceneStart == sceneEnd?
 		//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
-		if (sceneStart!=sceneEnd)
+		if (sceneStart != sceneEnd)
 			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	} else {
 		int sceneEndLast = plotSceneStart;
 		int logicalEndLast = xMin;
-		for (int i=0; i<xRangeBreaks.list.size(); ++i) {
+		for (int i=0; i < xRangeBreaks.list.size(); ++i) {
 			const CartesianPlot::RangeBreak& curBreak = xRangeBreaks.list.at(i);
 			if (!curBreak.isValid())
 				break;
 
 			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
 			sceneStart = sceneEndLast;
-			if (i!=0) sceneStart+=breakGap;
+			if (i != 0) sceneStart += breakGap;
 			sceneEnd = plotSceneStart+(plotSceneEnd-plotSceneStart)*curBreak.position;
 			logicalStart = logicalEndLast;
 			logicalEnd = curBreak.start;
@@ -1391,7 +1401,7 @@ void CartesianPlotPrivate::retransformScales() {
 		logicalStart = logicalEndLast;
 		logicalEnd = xMax;
 
-		if (sceneStart!=sceneEnd)
+		if (sceneStart != sceneEnd)
 			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	}
 
@@ -1415,24 +1425,24 @@ void CartesianPlotPrivate::retransformScales() {
 		logicalStart = yMin;
 		logicalEnd = yMax;
 
-		if (sceneStart!=sceneEnd)
+		if (sceneStart != sceneEnd)
 			scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	} else {
 		int sceneEndLast = plotSceneStart;
 		int logicalEndLast = yMin;
-		for (int i=0; i<yRangeBreaks.list.size(); ++i) {
+		for (int i=0; i < yRangeBreaks.list.size(); ++i) {
 			const CartesianPlot::RangeBreak& curBreak = yRangeBreaks.list.at(i);
 			if (!curBreak.isValid())
 				break;
 
 			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
 			sceneStart = sceneEndLast;
-			if (i!=0) sceneStart-=breakGap;
+			if (i != 0) sceneStart-=breakGap;
 			sceneEnd = plotSceneStart+(plotSceneEnd-plotSceneStart)*curBreak.position;
 			logicalStart = logicalEndLast;
 			logicalEnd = curBreak.start;
 
-			if (sceneStart!=sceneEnd)
+			if (sceneStart != sceneEnd)
 				scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 
 			sceneEndLast = sceneEnd;
@@ -1489,12 +1499,12 @@ void CartesianPlotPrivate::retransformScales() {
 			continue;
 
 		if (axis->orientation() == Axis::AxisHorizontal) {
-			if (deltaXMax!=0) {
+			if (deltaXMax != 0) {
 				axis->setUndoAware(false);
 				axis->setEnd(xMax);
 				axis->setUndoAware(true);
 			}
-			if (deltaXMin!=0) {
+			if (deltaXMin != 0) {
 				axis->setUndoAware(false);
 				axis->setStart(xMin);
 				axis->setUndoAware(true);
@@ -1504,12 +1514,12 @@ void CartesianPlotPrivate::retransformScales() {
 // 				axis->setOffset(axis->offset() + deltaYMin, false);
 // 			}
 		} else {
-			if (deltaYMax!=0) {
+			if (deltaYMax != 0) {
 				axis->setUndoAware(false);
 				axis->setEnd(yMax);
 				axis->setUndoAware(true);
 			}
-			if (deltaYMin!=0) {
+			if (deltaYMin != 0) {
 				axis->setUndoAware(false);
 				axis->setStart(yMin);
 				axis->setUndoAware(true);
