@@ -38,11 +38,12 @@ class Spreadsheet;
 class TreeViewComboBox;
 class AspectTreeModel;
 
-class FunctionValuesDialog : public KDialog{
+class FunctionValuesDialog : public KDialog {
 	Q_OBJECT
 
 	public:
 		explicit FunctionValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
+		~FunctionValuesDialog();
 		void setColumns(QList<Column*>);
 
 	private:
