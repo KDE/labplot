@@ -30,16 +30,11 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 /*! \class FITSHeaderEditDialog
  * \brief Dialog class for editing FITS header units.
- * \since 2.2.0
+ * \since 2.4.0
  * \ingroup widgets
  */
-FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget *parent) : KDialog(parent), m_saved(false) {
-    QVBoxLayout* vLayout = new QVBoxLayout(this);
-    vLayout->setSpacing(0);
-    vLayout->setContentsMargins(0,0,0,0);
-
+FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : KDialog(parent), m_saved(false) {
     m_HeaderEditWidget = new FITSHeaderEditWidget(this);
-    vLayout->addWidget(m_HeaderEditWidget);
     setMainWidget(m_HeaderEditWidget);
 
     setWindowTitle(i18n("FITS header editor"));

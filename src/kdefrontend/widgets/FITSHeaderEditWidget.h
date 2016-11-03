@@ -28,13 +28,8 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #define FITSHEADEREDITWIDGET_H
 
 #include <QWidget>
-#include <QAction>
-#include <QVector>
-#include <QMap>
-#include <QPair>
-#include "backend/datasources/AbstractDataSource.h"
-#include "ui_fitsheadereditwidget.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "ui_fitsheadereditwidget.h"
 
 class FITSHeaderEditWidget : public QWidget {
     Q_OBJECT
@@ -78,8 +73,10 @@ private:
     void fillTable();
     QList<QString> mandatoryKeywords() const;
     bool eventFilter(QObject*, QEvent*);
+
 public slots:
     bool save();
+
 private slots:
     void openFile();
 
