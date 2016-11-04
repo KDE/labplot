@@ -30,7 +30,9 @@
 #include "backend/gsl/ExpressionParser.h"
 
 #include <klocale.h>
+#include <QDebug>
 
+#include <cmath>
 extern "C" {
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
@@ -38,7 +40,6 @@ extern "C" {
 #include <gsl/gsl_const_num.h>
 #include "backend/gsl/parser.h"
 }
-#include <cmath>
 
 ExpressionParser* ExpressionParser::instance = NULL;
 
@@ -1236,7 +1237,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	Data is stored in \c dataVectors.
  */
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector) {
-	Q_ASSERT(vars.size()==xVectors.size());
+	Q_ASSERT(vars.size() == xVectors.size());
 	const char* func = expr.toLocal8Bit().data();
 	double y, varValue;
 	QString varName;

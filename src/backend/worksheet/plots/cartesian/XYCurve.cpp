@@ -1831,7 +1831,7 @@ void XYCurvePrivate::updatePixmap() {
 	painter.end();
 	m_pixmap = pixmap;
 
-	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	//QApplication::processEvents(QEventLoop::AllEvents, 0);
 
 // 	qDebug() << "Update the pixmap: " << timer.elapsed() << "ms";
 	RESET_CURSOR;
