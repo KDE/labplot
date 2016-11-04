@@ -1360,8 +1360,8 @@ void CartesianPlotPrivate::retransformScales() {
 	double sceneStart, sceneEnd, logicalStart, logicalEnd;
 
 	//create x-scales
-	int plotSceneStart = itemRect.x()+horizontalPadding;
-	int plotSceneEnd = itemRect.x()+itemRect.width()-horizontalPadding;
+	int plotSceneStart = itemRect.x() + horizontalPadding;
+	int plotSceneEnd = itemRect.x() + itemRect.width() - horizontalPadding;
 	if (!hasValidBreak) {
 		//no breaks available -> range goes from the plot beginning to the end of the plot
 		sceneStart = plotSceneStart;
@@ -1376,7 +1376,7 @@ void CartesianPlotPrivate::retransformScales() {
 	} else {
 		int sceneEndLast = plotSceneStart;
 		int logicalEndLast = xMin;
-		for (int i=0; i < xRangeBreaks.list.size(); ++i) {
+		for (int i = 0; i < xRangeBreaks.list.size(); ++i) {
 			const CartesianPlot::RangeBreak& curBreak = xRangeBreaks.list.at(i);
 			if (!curBreak.isValid())
 				break;
@@ -1405,7 +1405,7 @@ void CartesianPlotPrivate::retransformScales() {
 			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	}
 
-	cSystem ->setXScales(scales);
+	cSystem->setXScales(scales);
 
 	//check ranges for log-scales
 	if (yScale != CartesianPlot::ScaleLinear)
@@ -1459,7 +1459,7 @@ void CartesianPlotPrivate::retransformScales() {
 			scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	}
 
-	cSystem ->setYScales(scales);
+	cSystem->setYScales(scales);
 
 	//calculate the changes in x and y and save the current values for xMin, xMax, yMin, yMax
 	float deltaXMin = 0;
@@ -1494,7 +1494,7 @@ void CartesianPlotPrivate::retransformScales() {
 
 	//adjust auto-scale axes
 	QList<Axis*> childElements = q->children<Axis>();
-	foreach(Axis* axis, childElements) {
+	foreach (Axis* axis, childElements) {
 		if (!axis->autoScale())
 			continue;
 

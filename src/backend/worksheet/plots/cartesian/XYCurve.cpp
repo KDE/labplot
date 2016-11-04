@@ -810,6 +810,9 @@ bool XYCurvePrivate::swapVisible(bool on) {
   Triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
+#ifndef NDEBUG
+	qDebug() << "XYCurvePrivate::retransform()";
+#endif
 	if (m_suppressRetransform)
 		return;
 
@@ -904,7 +907,7 @@ void XYCurvePrivate::updateLines() {
 		return;
 	}
 
-	const int count=symbolPointsLogical.count();
+	const int count = symbolPointsLogical.count();
 #ifndef NDEBUG
 //	qDebug()<<"count ="<<count<<", line type ="<<lineType;
 //	for(int i=0;i<qMin(10,count);i++)
@@ -912,7 +915,7 @@ void XYCurvePrivate::updateLines() {
 #endif
 
 	//nothing to do, if no data points available
-	if (count<=1) {
+	if (count <= 1) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -924,50 +927,50 @@ void XYCurvePrivate::updateLines() {
 	case XYCurve::NoLine:
 		break;
 	case XYCurve::Line:
-		for (int i=0; i<count-1; i++) {
+		for (int i = 0; i < count - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
 		break;
 	case XYCurve::StartHorizontal:
-		for (int i=0; i<count-1; i++) {
+		for (int i = 0; i < count - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
-			curPoint=symbolPointsLogical.at(i);
-			nextPoint=symbolPointsLogical.at(i+1);
-			tempPoint1=QPointF(nextPoint.x(), curPoint.y());
+			curPoint = symbolPointsLogical.at(i);
+			nextPoint = symbolPointsLogical.at(i+1);
+			tempPoint1 = QPointF(nextPoint.x(), curPoint.y());
 			lines.append(QLineF(curPoint, tempPoint1));
 			lines.append(QLineF(tempPoint1, nextPoint));
 		}
 		break;
 	case XYCurve::StartVertical:
-		for (int i=0; i<count-1; i++) {
+		for (int i = 0; i < count - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
-			curPoint=symbolPointsLogical.at(i);
-			nextPoint=symbolPointsLogical.at(i+1);
-			tempPoint1=QPointF(curPoint.x(), nextPoint.y());
+			curPoint = symbolPointsLogical.at(i);
+			nextPoint = symbolPointsLogical.at(i+1);
+			tempPoint1 = QPointF(curPoint.x(), nextPoint.y());
 			lines.append(QLineF(curPoint, tempPoint1));
 			lines.append(QLineF(tempPoint1,nextPoint));
 		}
 		break;
 	case XYCurve::MidpointHorizontal:
-		for (int i=0; i<count-1; i++) {
+		for (int i = 0; i < count - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
-			curPoint=symbolPointsLogical.at(i);
-			nextPoint=symbolPointsLogical.at(i+1);
-			tempPoint1=QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, curPoint.y());
-			tempPoint2=QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, nextPoint.y());
+			curPoint = symbolPointsLogical.at(i);
+			nextPoint = symbolPointsLogical.at(i+1);
+			tempPoint1 = QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, curPoint.y());
+			tempPoint2 = QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, nextPoint.y());
 			lines.append(QLineF(curPoint, tempPoint1));
 			lines.append(QLineF(tempPoint1, tempPoint2));
 			lines.append(QLineF(tempPoint2, nextPoint));
 		}
 		break;
 	case XYCurve::MidpointVertical:
-		for (int i=0; i<count-1; i++) {
+		for (int i = 0; i < count - 1; i++) {
 			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
-			curPoint=symbolPointsLogical.at(i);
-			nextPoint=symbolPointsLogical.at(i+1);
-			tempPoint1=QPointF(curPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
-			tempPoint2=QPointF(nextPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
+			curPoint = symbolPointsLogical.at(i);
+			nextPoint = symbolPointsLogical.at(i+1);
+			tempPoint1 = QPointF(curPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
+			tempPoint2 = QPointF(nextPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
 			lines.append(QLineF(curPoint, tempPoint1));
 			lines.append(QLineF(tempPoint1, tempPoint2));
 			lines.append(QLineF(tempPoint2, nextPoint));
@@ -975,32 +978,32 @@ void XYCurvePrivate::updateLines() {
 		break;
 	case XYCurve::Segments2: {
 		int skip=0;
-		for (int i=0; i<count-1; i++) {
-			if (skip!=1) {
+		for (int i = 0; i < count - 1; i++) {
+			if (skip != 1) {
 				if (!lineSkipGaps && !connectedPointsLogical[i]) {
-					skip=0;
+					skip = 0;
 					continue;
 				}
 				lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 				skip++;
 			} else {
-				skip=0;
+				skip = 0;
 			}
 		}
 		break;
 	}
 	case XYCurve::Segments3: {
-		int skip=0;
-		for (int i=0; i<count-1; i++) {
-			if (skip!=2) {
+		int skip = 0;
+		for (int i = 0; i < count - 1; i++) {
+			if (skip != 2) {
 				if (!lineSkipGaps && !connectedPointsLogical[i]) {
-					skip=0;
+					skip = 0;
 					continue;
 				}
 				lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 				skip++;
 			} else {
-				skip=0;
+				skip = 0;
 			}
 		}
 		break;
@@ -1011,32 +1014,32 @@ void XYCurvePrivate::updateLines() {
 	case XYCurve::SplineAkimaPeriodic: {
 		//TODO: optimize! try to omit the copying from the column to the arrays of doubles.
 		//TODO: forward the error message to the UI.
-		gsl_interp_accel *acc  = gsl_interp_accel_alloc();
-		gsl_spline *spline=0;
+		gsl_interp_accel *acc = gsl_interp_accel_alloc();
+		gsl_spline *spline = 0;
 
 		double x[count],  y[count];
-		for (int i=0; i<count; i++) {
-			x[i]=symbolPointsLogical.at(i).x();
-			y[i]=symbolPointsLogical.at(i).y();
+		for (int i = 0; i < count; i++) {
+			x[i] = symbolPointsLogical.at(i).x();
+			y[i] = symbolPointsLogical.at(i).y();
 		}
 
 		gsl_set_error_handler_off();
-		if (lineType==XYCurve::SplineCubicNatural) {
+		if (lineType == XYCurve::SplineCubicNatural) {
 			spline = gsl_spline_alloc(gsl_interp_cspline, count);
-		} else if (lineType==XYCurve::SplineCubicPeriodic) {
+		} else if (lineType == XYCurve::SplineCubicPeriodic) {
 			spline = gsl_spline_alloc(gsl_interp_cspline_periodic, count);
-		} else if (lineType==XYCurve::SplineAkimaNatural) {
+		} else if (lineType == XYCurve::SplineAkimaNatural) {
 			spline = gsl_spline_alloc(gsl_interp_akima, count);
-		} else if (lineType==XYCurve::SplineAkimaPeriodic) {
+		} else if (lineType == XYCurve::SplineAkimaPeriodic) {
 			spline = gsl_spline_alloc(gsl_interp_akima_periodic, count);
 		}
 
 		if (!spline) {
 			QString msg;
-			if ( (lineType==XYCurve::SplineAkimaNatural || lineType==XYCurve::SplineAkimaPeriodic) && count<5)
-				msg=i18n("Error: Akima spline interpolation requires a minimum of 5 points.");
+			if ( (lineType == XYCurve::SplineAkimaNatural || lineType == XYCurve::SplineAkimaPeriodic) && count < 5)
+				msg = i18n("Error: Akima spline interpolation requires a minimum of 5 points.");
 			else
-				msg =i18n("Couldn't initialize spline function");
+				msg = i18n("Couldn't initialize spline function");
 #ifndef NDEBUG
 			qDebug()<<msg;
 #endif
@@ -1063,19 +1066,19 @@ void XYCurvePrivate::updateLines() {
 		std::vector<double> xinterp, yinterp;
 		double step;
 		double xi, yi, x1, x2;
-		for (int i=0; i<count-1; i++) {
+		for (int i = 0; i < count - 1; i++) {
 			x1 = x[i];
 			x2 = x[i+1];
-			step=fabs(x2-x1)/(lineInterpolationPointsCount+1);
+			step=fabs(x2 - x1)/(lineInterpolationPointsCount + 1);
 
-			for (xi=x1; xi<x2; xi += step) {
-				yi = gsl_spline_eval (spline, xi, acc);
+			for (xi = x1; xi < x2; xi += step) {
+				yi = gsl_spline_eval(spline, xi, acc);
 				xinterp.push_back(xi);
 				yinterp.push_back(yi);
 			}
 		}
 
-		for (unsigned int i=0; i<xinterp.size()-1; i++) {
+		for (unsigned int i = 0; i < xinterp.size() - 1; i++) {
 			lines.append(QLineF(xinterp[i], yinterp[i], xinterp[i+1], yinterp[i+1]));
 		}
 		lines.append(QLineF(xinterp[xinterp.size()-1], yinterp[yinterp.size()-1], x[count-1], y[count-1]));
@@ -1656,14 +1659,14 @@ void XYCurvePrivate::updateErrorBars() {
 		}
 
 		//error bars for y
-		if (yErrorType!=XYCurve::NoError) {
+		if (yErrorType != XYCurve::NoError) {
 			//determine the values for the errors
 			if (yErrorPlusColumn && yErrorPlusColumn->isValid(i) && !yErrorPlusColumn->isMasked(i))
 				errorPlus = yErrorPlusColumn->valueAt(i);
 			else
 				errorPlus = 0;
 
-			if (yErrorType==XYCurve::SymmetricError) {
+			if (yErrorType == XYCurve::SymmetricError) {
 				errorMinus = errorPlus;
 			} else {
 				if (yErrorMinusColumn && yErrorMinusColumn->isValid(i) && !yErrorMinusColumn->isMasked(i) )
@@ -1681,10 +1684,10 @@ void XYCurvePrivate::updateErrorBars() {
 			case XYCurve::ErrorBarsWithEnds:
 				lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
 						QPointF(point.x(), point.y()+errorPlus)));
-				if (errorMinus!=0)
+				if (errorMinus != 0)
 					lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()-errorMinus),
 							QPointF(point.x()+capSizeY, point.y()-errorMinus)));
-				if (errorPlus!=0)
+				if (errorPlus != 0)
 					lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()+errorPlus),
 							QPointF(point.x()+capSizeY, point.y()+errorPlus)));
 				break;
@@ -1696,7 +1699,7 @@ void XYCurvePrivate::updateErrorBars() {
 	lines = cSystem->mapLogicalToScene(lines);
 
 	//new painter path for the drop lines
-	foreach (const QLineF& line, lines) {
+	foreach(const QLineF& line, lines) {
 		errorBarsPath.moveTo(line.p1());
 		errorBarsPath.lineTo(line.p2());
 	}
@@ -1750,6 +1753,9 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 }
 
 void XYCurvePrivate::draw(QPainter *painter) {
+#ifndef NDEBUG
+//	qDebug() << "XYCurvePrivate::draw()";
+#endif
 	//draw filling
 	if (fillingPosition != XYCurve::NoFilling) {
 		painter->setOpacity(fillingOpacity);
@@ -1796,6 +1802,9 @@ void XYCurvePrivate::draw(QPainter *painter) {
 		painter->setBrush(Qt::SolidPattern);
 		drawValues(painter);
 	}
+#ifndef NDEBUG
+//	qDebug() << "XYCurvePrivate::draw() DONE";
+#endif
 }
 
 void XYCurvePrivate::updatePixmap() {
@@ -1803,7 +1812,6 @@ void XYCurvePrivate::updatePixmap() {
 	qDebug() << "XYCurvePrivate::updatePixmap()";
 #endif
 	WAIT_CURSOR;
-	QApplication::processEvents(QEventLoop::AllEvents, 0);
 // 	QTime timer;
 // 	timer.start();
 	m_hoverEffectImageIsDirty = true;
@@ -1814,6 +1822,7 @@ void XYCurvePrivate::updatePixmap() {
 	}
 	QPixmap pixmap(ceil(boundingRectangle.width()), ceil(boundingRectangle.height()));
 	pixmap.fill(Qt::transparent);
+	pixmap.fill(Qt::transparent);
 	QPainter painter(&pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
 	painter.translate(-boundingRectangle.topLeft());
@@ -1822,8 +1831,13 @@ void XYCurvePrivate::updatePixmap() {
 	painter.end();
 	m_pixmap = pixmap;
 
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+
 // 	qDebug() << "Update the pixmap: " << timer.elapsed() << "ms";
 	RESET_CURSOR;
+#ifndef NDEBUG
+	qDebug() << "XYCurvePrivate::updatePixmap() DONE";
+#endif
 }
 
 //TODO: move this to a central place
@@ -1900,7 +1914,7 @@ QImage blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnl
 */
 void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
 #ifndef NDEBUG
- 	qDebug()<<"XYCurvePrivate::paint() name =" << q->name();
+// 	qDebug()<<"XYCurvePrivate::paint() name =" << q->name();
 #endif
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
@@ -2041,28 +2055,28 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 				QPixmap pix(fillingFileName);
 				switch (fillingImageStyle) {
 				case PlotArea::ScaledCropped:
-					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
+					pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
 					break;
 				case PlotArea::Scaled:
-					pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+					pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
 					break;
 				case PlotArea::ScaledAspectRatio:
-					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+					pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
 					break;
 				case PlotArea::Centered: {
 					QPixmap backpix(rect.size().toSize());
 					backpix.fill();
 					QPainter p(&backpix);
-					p.drawPixmap(QPointF(0,0),pix);
+					p.drawPixmap(QPointF(0, 0), pix);
 					p.end();
 					painter->setBrush(QBrush(backpix));
-					painter->setBrushOrigin(-pix.size().width()/2,-pix.size().height()/2);
+					painter->setBrushOrigin(-pix.size().width()/2, -pix.size().height()/2);
 					break;
 				}
 				case PlotArea::Tiled:
@@ -2070,11 +2084,11 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 					break;
 				case PlotArea::CenterTiled:
 					painter->setBrush(QBrush(pix));
-					painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
 				}
 			}
 		} else if (fillingType == PlotArea::Pattern) {
-			painter->setBrush(QBrush(fillingFirstColor,fillingBrushStyle));
+			painter->setBrush(QBrush(fillingFirstColor, fillingBrushStyle));
 		}
 
 		painter->drawPolygon(pol);
