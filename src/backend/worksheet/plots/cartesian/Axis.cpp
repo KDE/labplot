@@ -43,7 +43,6 @@
 #include <QTextDocument>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsSceneHoverEvent>
-#include <QDebug>
 
 #include "kdefrontend/GuiTools.h"
 #include <KConfigGroup>
@@ -1725,9 +1724,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	\sa QGraphicsItem::paint()
  */
 void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
-#ifndef NDEBUG
-	qDebug() << "AxisPrivate::paint()";
-#endif
+	DEBUG_LOG("AxisPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -1801,9 +1798,8 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		painter->setOpacity(q->selectedOpacity);
 		painter->drawPath(axisShape);
 	}
-#ifndef NDEBUG
-	qDebug() << "AxisPrivate::paint() DONE";
-#endif
+
+	DEBUG_LOG("AxisPrivate::paint() DONE");
 }
 
 void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {

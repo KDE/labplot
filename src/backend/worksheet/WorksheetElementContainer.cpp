@@ -36,7 +36,6 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
-#include <QDebug>
 
 #include <KLocale>
 
@@ -121,10 +120,9 @@ void WorksheetElementContainer::setPrinting(bool on) {
 }
 
 void WorksheetElementContainer::retransform() {
-#ifndef NDEBUG
-	qDebug() << "WorksheetElementContainer::retransform()";
-#endif
+	DEBUG_LOG("WorksheetElementContainer::retransform()");
 	Q_D(WorksheetElementContainer);
+
 	QList<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
 	foreach (WorksheetElement* elem, childList)
 		elem->retransform();
@@ -246,9 +244,7 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 
 // Inherited from QGraphicsItem
 void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-#ifndef NDEBUG
-	qDebug() << "WorksheetElementContainerPrivate::paint()";
-#endif
+	DEBUG_LOG("WorksheetElementContainerPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -266,7 +262,5 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 		painter->setOpacity(q->selectedOpacity);
 		painter->drawPath(containerShape);
 	}
-#ifndef NDEBUG
-	qDebug() << "WorksheetElementContainerPrivate::paint() DONE";
-#endif
+	DEBUG_LOG("WorksheetElementContainerPrivate::paint() DONE");
 }

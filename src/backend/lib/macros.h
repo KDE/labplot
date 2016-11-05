@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -31,6 +32,13 @@
 #define MACROS_H
 
 #include <QApplication>
+
+#ifndef NDEBUG
+#include <QDebug>
+#define DEBUG_LOG(x) qDebug()<<x;
+#else
+#define DEBUG_LOG(x) {}
+#endif
 
 #define BASIC_ACCESSOR(type, var, method, Method) \
 	type method() const { return var; }; \

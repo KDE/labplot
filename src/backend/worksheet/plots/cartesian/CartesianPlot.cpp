@@ -50,12 +50,12 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 
 #include <QDir>
 #include <QMenu>
 #include <QToolBar>
 #include <QPainter>
-#include <QDebug>
 
 #include <KConfigGroup>
 #include <KIcon>
@@ -1188,10 +1188,9 @@ void CartesianPlot::scaleAuto() {
 }
 
 void CartesianPlot::zoomIn() {
-#ifndef NDEBUG
-	qDebug() << "CartesianPlot::zoomIn()";
-#endif
+	DEBUG_LOG("CartesianPlot::zoomIn()");
 	Q_D(CartesianPlot);
+
 	float oldRange = (d->xMax - d->xMin);
 	float newRange = (d->xMax - d->xMin) / m_zoomFactor;
 	d->xMax = d->xMax + (newRange - oldRange) / 2;
@@ -1315,9 +1314,7 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner)
 	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
  */
 void CartesianPlotPrivate::retransform() {
-#ifndef NDEBUG
-	qDebug() << "CartesianPlotPrivate::retransform()";
-#endif
+	DEBUG_LOG("CartesianPlotPrivate::retransform()");
 	if (suppressRetransform)
 		return;
 
@@ -1340,9 +1337,8 @@ void CartesianPlotPrivate::retransform() {
 }
 
 void CartesianPlotPrivate::retransformScales() {
-#ifndef NDEBUG
-	qDebug() << "CartesianPlotPrivate::retransformScales()";
-#endif
+	DEBUG_LOG("CartesianPlotPrivate::retransformScales()");
+
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
 	QList<CartesianScale*> scales;
 
@@ -1776,9 +1772,8 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 }
 
 void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
-#ifndef NDEBUG
-	qDebug() << "CartesianPlotPrivate::paint()";
-#endif
+	DEBUG_LOG("CartesianPlotPrivate::paint()");
+
 	if (!isVisible())
 		return;
 
@@ -1799,9 +1794,7 @@ void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsIt
 	}
 
 	WorksheetElementContainerPrivate::paint(painter, option, widget);
-#ifndef NDEBUG
-	qDebug() << "CartesianPlotPrivate::paint() DONE";
-#endif
+	DEBUG_LOG("CartesianPlotPrivate::paint() DONE");
 }
 
 //##############################################################################
