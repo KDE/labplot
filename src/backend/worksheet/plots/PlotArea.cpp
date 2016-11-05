@@ -32,6 +32,7 @@
 #include "backend/lib/XmlStreamReader.h"
 
 #include <QPainter>
+#include <QDebug>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
@@ -66,7 +67,7 @@ void PlotArea::init() {
 	d->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 
 	KConfig config;
-	KConfigGroup group = config.group( "PlotArea" );
+	KConfigGroup group = config.group("PlotArea");
 
 	//Background
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int)PlotArea::Color);
@@ -183,21 +184,21 @@ void PlotArea::setBackgroundBrushStyle(Qt::BrushStyle style) {
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundFirstColor, QColor, backgroundFirstColor, update)
 void PlotArea::setBackgroundFirstColor(const QColor &color) {
 	Q_D(PlotArea);
-	if (color!= d->backgroundFirstColor)
+	if (color != d->backgroundFirstColor)
 		exec(new PlotAreaSetBackgroundFirstColorCmd(d, color, i18n("%1: set background first color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundSecondColor, QColor, backgroundSecondColor, update)
 void PlotArea::setBackgroundSecondColor(const QColor &color) {
 	Q_D(PlotArea);
-	if (color!= d->backgroundSecondColor)
+	if (color != d->backgroundSecondColor)
 		exec(new PlotAreaSetBackgroundSecondColorCmd(d, color, i18n("%1: set background second color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundFileName, QString, backgroundFileName, update)
 void PlotArea::setBackgroundFileName(const QString& fileName) {
 	Q_D(PlotArea);
-	if (fileName!= d->backgroundFileName)
+	if (fileName != d->backgroundFileName)
 		exec(new PlotAreaSetBackgroundFileNameCmd(d, fileName, i18n("%1: set background image")));
 }
 
@@ -271,7 +272,7 @@ QRectF PlotAreaPrivate::boundingRect () const {
 
 QPainterPath PlotAreaPrivate::shape() const {
 	QPainterPath path;
-	if ( qFuzzyIsNull(borderCornerRadius) )
+	if (qFuzzyIsNull(borderCornerRadius))
 		path.addRect(rect);
 	else
 		path.addRoundedRect(rect, borderCornerRadius, borderCornerRadius);
@@ -280,6 +281,9 @@ QPainterPath PlotAreaPrivate::shape() const {
 }
 
 void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+#ifndef NDEBUG
+	qDebug()<<"PlotAreaPrivate::paint()";
+#endif
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -385,8 +389,10 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 		else
 			painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 	}
+#ifndef NDEBUG
+	qDebug()<<"PlotAreaPrivate::paint() DONE";
+#endif
 }
-
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
@@ -396,7 +402,7 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 void PlotArea::save(QXmlStreamWriter* writer) const {
 	Q_D(const PlotArea);
 
-	writer->writeStartElement("plotArea");
+	writer->writeStartElement( "plotArea" );
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
@@ -434,19 +440,19 @@ bool PlotArea::load(XmlStreamReader* reader) {
 		return false;
 	}
 
-	if (!readBasicAttributes(reader))
+	if ( !readBasicAttributes(reader) )
 		return false;
 
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
-	while (!reader->atEnd()) {
+	while ( !reader->atEnd() ) {
 		reader->readNext();
 		if (reader->isEndElement() && reader->name() == "plotArea")
 			break;
 
-		if (!reader->isStartElement())
+		if ( !reader->isStartElement() )
 			continue;
 
 		if (reader->name() == "comment") {
@@ -455,61 +461,61 @@ bool PlotArea::load(XmlStreamReader* reader) {
 			attribs = reader->attributes();
 
 			str = attribs.value("type").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("type"));
 			else
 				d->backgroundType = PlotArea::BackgroundType(str.toInt());
 
 			str = attribs.value("colorStyle").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("colorStyle"));
 			else
 				d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
 
 			str = attribs.value("imageStyle").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("imageStyle"));
 			else
 				d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
 
 			str = attribs.value("brushStyle").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("brushStyle"));
 			else
 				d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
 
 			str = attribs.value("firstColor_r").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("firstColor_r"));
 			else
 				d->backgroundFirstColor.setRed(str.toInt());
 
 			str = attribs.value("firstColor_g").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("firstColor_g"));
 			else
 				d->backgroundFirstColor.setGreen(str.toInt());
 
 			str = attribs.value("firstColor_b").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("firstColor_b"));
 			else
 				d->backgroundFirstColor.setBlue(str.toInt());
 
 			str = attribs.value("secondColor_r").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("secondColor_r"));
 			else
 				d->backgroundSecondColor.setRed(str.toInt());
 
 			str = attribs.value("secondColor_g").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("secondColor_g"));
 			else
 				d->backgroundSecondColor.setGreen(str.toInt());
 
 			str = attribs.value("secondColor_b").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("secondColor_b"));
 			else
 				d->backgroundSecondColor.setBlue(str.toInt());
@@ -518,7 +524,7 @@ bool PlotArea::load(XmlStreamReader* reader) {
 			d->backgroundFileName = str;
 
 			str = attribs.value("opacity").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("opacity"));
 			else
 				d->backgroundOpacity = str.toDouble();
@@ -528,13 +534,13 @@ bool PlotArea::load(XmlStreamReader* reader) {
 			READ_QPEN(d->borderPen);
 
 			str = attribs.value("borderOpacity").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("borderOpacity"));
 			else
 				d->borderOpacity = str.toDouble();
 
 			str = attribs.value("borderCornerRadius").toString();
-			if(str.isEmpty())
+			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("borderCornerRadius"));
 			else
 				d->borderCornerRadius = str.toDouble();
@@ -548,7 +554,7 @@ bool PlotArea::load(XmlStreamReader* reader) {
 }
 
 void PlotArea::loadThemeConfig(const KConfig& config) {
-	KConfigGroup group = config.group("CartesianPlot");
+	const KConfigGroup group = config.group("CartesianPlot");
 
 	this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle",(int) this->backgroundBrushStyle()));
 	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle)(group.readEntry("BackgroundColorStyle",(int) this->backgroundColorStyle())));

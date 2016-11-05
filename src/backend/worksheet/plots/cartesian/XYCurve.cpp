@@ -1041,7 +1041,7 @@ void XYCurvePrivate::updateLines() {
 			else
 				msg = i18n("Couldn't initialize spline function");
 #ifndef NDEBUG
-			qDebug()<<msg;
+			qDebug() << msg;
 #endif
 			recalcShapeAndBoundingRect();
 			return;
@@ -1754,7 +1754,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 
 void XYCurvePrivate::draw(QPainter *painter) {
 #ifndef NDEBUG
-//	qDebug() << "XYCurvePrivate::draw()";
+	qDebug() << "XYCurvePrivate::draw()";
 #endif
 	//draw filling
 	if (fillingPosition != XYCurve::NoFilling) {
@@ -1803,7 +1803,7 @@ void XYCurvePrivate::draw(QPainter *painter) {
 		drawValues(painter);
 	}
 #ifndef NDEBUG
-//	qDebug() << "XYCurvePrivate::draw() DONE";
+	qDebug() << "XYCurvePrivate::draw() DONE";
 #endif
 }
 
@@ -1914,7 +1914,7 @@ QImage blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnl
 */
 void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
 #ifndef NDEBUG
-// 	qDebug()<<"XYCurvePrivate::paint() name =" << q->name();
+ 	qDebug()<<"XYCurvePrivate::paint() name =" << q->name();
 #endif
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
@@ -1927,6 +1927,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
+ 	qDebug()<<"XYCurvePrivate::paint() calling draw() 		XXXXXXXXXXXXXXXXXXXX";
 	if ( KGlobal::config()->group("General").readEntry<bool>("DoubleBuffering", true) )
 		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); //draw the cached pixmap (fast)
 	else
@@ -1968,8 +1969,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 }
 
 /*!
-	Drawing of symbolsPath is very slow, so we draw every symbol in the loop
-	which is much faster (factor 10)
+	Drawing of symbolsPath is very slow, so we draw every symbol in the loop which is much faster (factor 10)
 */
 void XYCurvePrivate::drawSymbols(QPainter* painter) {
 	QPainterPath path = Symbol::pathFromStyle(symbolsStyle);

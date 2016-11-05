@@ -43,6 +43,7 @@
 #include <QTextDocument>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsSceneHoverEvent>
+#include <QDebug>
 
 #include "kdefrontend/GuiTools.h"
 #include <KConfigGroup>
@@ -1724,6 +1725,9 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	\sa QGraphicsItem::paint()
  */
 void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+#ifndef NDEBUG
+	qDebug() << "AxisPrivate::paint()";
+#endif
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -1768,7 +1772,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		painter->setFont(labelsFont);
 		QTextDocument td;
 		td.setDefaultFont(labelsFont);
-		for (int i=0; i<tickLabelPoints.size(); i++) {
+		for (int i = 0; i < tickLabelPoints.size(); i++) {
 			painter->translate(tickLabelPoints.at(i));
 			painter->save();
 			painter->rotate(-labelsRotationAngle);
@@ -1797,6 +1801,9 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		painter->setOpacity(q->selectedOpacity);
 		painter->drawPath(axisShape);
 	}
+#ifndef NDEBUG
+	qDebug() << "AxisPrivate::paint() DONE";
+#endif
 }
 
 void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
@@ -2211,7 +2218,7 @@ bool Axis::load(XmlStreamReader* reader) {
 //#########################  Theme management ##################################
 //##############################################################################
 void Axis::loadThemeConfig(const KConfig& config) {
-	KConfigGroup group = config.group("Axis");
+	const KConfigGroup group = config.group("Axis");
 
 	QPen p;
 	// Tick label
@@ -2260,36 +2267,36 @@ void Axis::saveThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("Axis");
 
 	// Tick label
-	group.writeEntry("LabelsFontColor",(QColor) this->labelsColor());
-	group.writeEntry("LabelsOpacity",this->labelsOpacity());
+	group.writeEntry("LabelsFontColor", (QColor) this->labelsColor());
+	group.writeEntry("LabelsOpacity", this->labelsOpacity());
 
 	//Line
-	group.writeEntry("LineOpacity",this->lineOpacity());
+	group.writeEntry("LineOpacity", this->lineOpacity());
 	group.writeEntry("LineColor", (QColor) this->linePen().color());
-	group.writeEntry("LineStyle",(int) this->linePen().style());
+	group.writeEntry("LineStyle", (int) this->linePen().style());
 	group.writeEntry("LineWidth", this->linePen().widthF());
 
 	//Major ticks
 	group.writeEntry("MajorGridOpacity", this->majorGridOpacity());
-	group.writeEntry("MajorGridColor",(QColor) this->majorGridPen().color());
-	group.writeEntry("MajorGridStyle",(int) this->majorGridPen().style());
+	group.writeEntry("MajorGridColor", (QColor) this->majorGridPen().color());
+	group.writeEntry("MajorGridStyle", (int) this->majorGridPen().style());
 	group.writeEntry("MajorGridWidth", this->majorGridPen().widthF());
-	group.writeEntry("MajorTicksColor",(QColor)this->majorTicksPen().color());
-	group.writeEntry("MajorTicksLineStyle",(int) this->majorTicksPen().style());
+	group.writeEntry("MajorTicksColor", (QColor)this->majorTicksPen().color());
+	group.writeEntry("MajorTicksLineStyle", (int) this->majorTicksPen().style());
 	group.writeEntry("MajorTicksWidth", this->majorTicksPen().widthF());
-	group.writeEntry("MajorTicksOpacity",this->majorTicksOpacity());
-	group.writeEntry("MajorTicksType",(int)this->majorTicksType());
+	group.writeEntry("MajorTicksOpacity", this->majorTicksOpacity());
+	group.writeEntry("MajorTicksType", (int)this->majorTicksType());
 
 	//Minor ticks
 	group.writeEntry("MinorGridOpacity", this->minorGridOpacity());
 	group.writeEntry("MinorGridColor",(QColor) this->minorGridPen().color());
-	group.writeEntry("MinorGridStyle",(int) this->minorGridPen().style());
+	group.writeEntry("MinorGridStyle", (int) this->minorGridPen().style());
 	group.writeEntry("MinorGridWidth", this->minorGridPen().widthF());
-	group.writeEntry("MinorTicksColor",(QColor) this->minorTicksPen().color());
-	group.writeEntry("MinorTicksLineStyle",(int) this->minorTicksPen().style());
+	group.writeEntry("MinorTicksColor", (QColor) this->minorTicksPen().color());
+	group.writeEntry("MinorTicksLineStyle",( int) this->minorTicksPen().style());
 	group.writeEntry("MinorTicksWidth", this->minorTicksPen().widthF());
-	group.writeEntry("MinorTicksOpacity",this->minorTicksOpacity());
-	group.writeEntry("MinorTicksType",(int)this->minorTicksType());
+	group.writeEntry("MinorTicksOpacity", this->minorTicksOpacity());
+	group.writeEntry("MinorTicksType", (int)this->minorTicksType());
 
 	const QList<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
 	childElements.at(0)->saveThemeConfig(config);

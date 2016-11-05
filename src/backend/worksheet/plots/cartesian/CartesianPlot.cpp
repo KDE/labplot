@@ -1776,11 +1776,14 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 }
 
 void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+#ifndef NDEBUG
+	qDebug() << "CartesianPlotPrivate::paint()";
+#endif
 	if (!isVisible())
 		return;
 
 	painter->setPen(QPen(Qt::black, 3));
-	if ( (mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode)
+	if ((mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode)
 			&& (!m_selectionBandIsShown)) {
 		painter->drawLine(m_selectionStartLine);
 	}
@@ -1796,6 +1799,9 @@ void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsIt
 	}
 
 	WorksheetElementContainerPrivate::paint(painter, option, widget);
+#ifndef NDEBUG
+	qDebug() << "CartesianPlotPrivate::paint() DONE";
+#endif
 }
 
 //##############################################################################
@@ -1813,7 +1819,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	//applied theme
 	if (!m_themeName.isEmpty()){
 		writer->writeStartElement( "theme" );
-		writer->writeAttribute( "name", m_themeName );
+		writer->writeAttribute("name", m_themeName);
 		writer->writeEndElement();
 	}
 
