@@ -4,8 +4,29 @@ cmake_minimum_required(VERSION 2.8.12)
 find_package(ECM 1.3.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Widgets Svg Concurrent)
-find_package(KF5 REQUIRED COMPONENTS I18n KDELibs4Support NewStuff)
+find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
+	Concurrent
+	Gui
+	PrintSupport
+	Svg
+	Widgets
+)
+find_package(KF5 REQUIRED COMPONENTS
+	Archive
+	Completion
+	Config
+	ConfigWidgets
+	CoreAddons
+	DocTools
+	I18n
+	IconThemes
+	KDELibs4Support
+	KIO
+	NewStuff
+	TextWidgets
+	WidgetsAddons
+	XmlGui
+)
 
 include(FeatureSummary)
 include(ECMInstallIcons)
