@@ -596,11 +596,11 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				value += eps;
 				assign_variable(name, value);
 				double f_pdp = parse(func);
-#ifndef NDEBUG
+
 //		qDebug()<<"evaluate deriv"<<QString(func)<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15);
 //		qDebug()<<"evaluate deriv"<<QString(func)<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15);
 //		qDebug()<<"	deriv = "<<QString::number((f_pdp-f_p)/eps/sigma, 'g', 15);
-#endif
+
 				if (fixed[j])
 					gsl_matrix_set(J, i, j, 0.);
 				else	// calculate finite difference

@@ -35,7 +35,7 @@
 
 #ifndef NDEBUG
 #include <QDebug>
-#define DEBUG_LOG(x) qDebug()<<x;
+#define DEBUG_LOG(x) qDebug()<<x
 #else
 #define DEBUG_LOG(x) {}
 #endif

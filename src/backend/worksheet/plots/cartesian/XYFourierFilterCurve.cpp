@@ -38,6 +38,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 
 #include <cmath>	// isnan
 extern "C" {
@@ -54,9 +55,6 @@ extern "C" {
 #include <KLocale>
 #include <QElapsedTimer>
 #include <QThreadPool>
-#ifndef NDEBUG
-#include <QDebug>
-#endif
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
 		: XYCurve(name, new XYFourierFilterCurvePrivate(this)) {
@@ -259,13 +257,13 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	const unsigned int order = filterData.order;
 	const double cutoff = filterData.cutoff, cutoff2 = filterData.cutoff2;
 	const nsl_filter_cutoff_unit unit = filterData.unit, unit2 = filterData.unit2;
-#ifndef NDEBUG
-	qDebug()<<"n ="<<n;
-	qDebug()<<"type:"<<nsl_filter_type_name[type];
-	qDebug()<<"form (order "<<order<<") :"<<nsl_filter_form_name[form];
-	qDebug()<<"cutoffs ="<<cutoff<<cutoff2;
-	qDebug()<<"unit :"<<nsl_filter_cutoff_unit_name[unit]<<nsl_filter_cutoff_unit_name[unit2];
-#endif
+
+	DEBUG_LOG("n ="<<n);
+	DEBUG_LOG("type:"<<nsl_filter_type_name[type]);
+	DEBUG_LOG("form (order "<<order<<") :"<<nsl_filter_form_name[form]);
+	DEBUG_LOG("cutoffs ="<<cutoff<<cutoff2);
+	DEBUG_LOG("unit :"<<nsl_filter_cutoff_unit_name[unit]<<nsl_filter_cutoff_unit_name[unit2]);
+
 ///////////////////////////////////////////////////////////
 	// calculate index
 	double cutindex=0, cutindex2=0;
@@ -295,10 +293,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		return;
 	}
 
-#ifndef NDEBUG
-	qDebug()<<"cut off @"<<cutindex<<cutindex2;
-	qDebug()<<"bandwidth ="<<bandwidth;
-#endif
+	DEBUG_LOG("cut off @" << cutindex << cutindex2);
+	DEBUG_LOG("bandwidth =" << bandwidth);
 
 	// run filter
 	int status = nsl_filter_fourier(ydata, n, type, form, order, cutindex, bandwidth);

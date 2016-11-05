@@ -38,6 +38,7 @@
 #include "CartesianCoordinateSystem.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 
 #include <cmath>	// isnan
 #include <cfloat>	// DBL_MIN
@@ -49,9 +50,6 @@ extern "C" {
 #include <KLocale>
 #include <QElapsedTimer>
 #include <QThreadPool>
-#ifndef NDEBUG
-#include <QDebug>
-#endif
 
 XYIntegrationCurve::XYIntegrationCurve(const QString& name)
 		: XYCurve(name, new XYIntegrationCurvePrivate(this)) {
@@ -250,10 +248,10 @@ void XYIntegrationCurvePrivate::recalculate() {
 	// integration settings
 	const nsl_int_method_type method = integrationData.method;
 	const bool absolute = integrationData.absolute;
-#ifndef NDEBUG
-	qDebug()<<"method:"<<nsl_int_method_name[method];
-	qDebug()<<"absolute area:"<<absolute;
-#endif
+
+	DEBUG_LOG("method:"<<nsl_int_method_name[method]);
+	DEBUG_LOG("absolute area:"<<absolute);
+
 ///////////////////////////////////////////////////////////
 	int status=0;
 	size_t np=n;
