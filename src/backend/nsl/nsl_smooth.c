@@ -3,7 +3,6 @@
     Project              : LabPlot
     Description          : NSL smooth functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Ion Vasilief (ion_vasilief*yahoo.fr)
     Copyright            : (C) 2010 by Knut Franke (knut.franke*gmx.de)
     Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
