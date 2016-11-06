@@ -108,6 +108,7 @@ ImportFileDialog::~ImportFileDialog() {
 	creates widgets for the frame "Add-To" and sets the current model in the combobox to \c model.
  */
 void ImportFileDialog::setModel(QAbstractItemModel* model) {
+	DEBUG_LOG("ImportFileDialog::setModel() model ="<<model);
 	//Frame for the "Add To"-Stuff
 	frameAddTo = new QGroupBox(this);
 	frameAddTo->setTitle(i18n("Import To"));
@@ -153,16 +154,19 @@ void ImportFileDialog::setModel(QAbstractItemModel* model) {
 	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-spreadsheet-new"), i18n("new Spreadsheet") );
 	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-matrix-new"), i18n("new Matrix") );
 
-	//ok is only available if a valid spreadsheet was selected
+	//ok is only available if a valid container was selected
 	enableButtonOk(false);
 
 	connect(cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkOkButton()));
 	connect(tbNewDataContainer, SIGNAL(clicked(bool)), this, SLOT(newDataContainerMenu()));
 	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
+	DEBUG_LOG("ImportFileDialog::setModel() DONE");
 }
 
 void ImportFileDialog::setCurrentIndex(const QModelIndex& index) {
+	DEBUG_LOG("ImportFileDialog::setCurrentIndex() index ="<<index);
 	cbAddTo->setCurrentModelIndex(index);
+	DEBUG_LOG("cbAddTo->currentModelIndex() ="<<cbAddTo->currentModelIndex());
 	this->checkOkButton();
 }
 
@@ -194,32 +198,29 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
   triggers data import to the currently selected data container
 */
 void ImportFileDialog::importTo(QStatusBar* statusBar) const {
-	DEBUG_LOG("ImportFileDialog::importTo() index =" << cbAddTo->currentModelIndex());
+	DEBUG_LOG("ImportFileDialog::importTo()");
+	DEBUG_LOG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
-		DEBUG_LOG("no aspect available");
+		DEBUG_LOG("ERROR: No aspect available!");
 		return;
 	}
 
-	DEBUG_LOG("ImportFileDialog::importTo() 1");
 	QString fileName = importFileWidget->fileName();
 	AbstractFileFilter* filter = importFileWidget->currentFileFilter();
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
-	DEBUG_LOG("ImportFileDialog::importTo() 2");
 
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
 	progressBar->setMinimum(0);
 	progressBar->setMaximum(100);
 	connect(filter, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
-	DEBUG_LOG("ImportFileDialog::importTo() 3");
 
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
 
 	WAIT_CURSOR;
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
-	DEBUG_LOG("ImportFileDialog::importTo() 4");
 
 	QTime timer;
 	timer.start();
@@ -335,6 +336,7 @@ void ImportFileDialog::newDataContainer(QAction* action) {
 			aspect = new Matrix(0, name);
 
 		m_mainWin->addAspectToProject(aspect);
+		DEBUG_LOG("cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
 		cbAddTo->setCurrentModelIndex(m_mainWin->model()->modelIndexOfAspect(aspect));
 		checkOkButton();
 	}
@@ -348,6 +350,7 @@ void ImportFileDialog::newDataContainerMenu() {
 
 void ImportFileDialog::checkOnFitsTableToMatrix() {
 	if (cbAddTo) {
+		DEBUG_LOG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 		if (!aspect)
 			return;
@@ -358,8 +361,10 @@ void ImportFileDialog::checkOnFitsTableToMatrix() {
 }
 
 void ImportFileDialog::checkOkButton() {
+	DEBUG_LOG("ImportFileDialog::checkOkButton()");
 	if (cbAddTo) { //only check for the target container when no file data source is being added
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
+		DEBUG_LOG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
 		if (!aspect) {
 			enableButtonOk(false);
 			lPosition->setEnabled(false);
