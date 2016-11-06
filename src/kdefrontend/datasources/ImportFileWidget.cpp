@@ -127,7 +127,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 
 	// default filter
 	ui.swOptions->setCurrentIndex(FileDataSource::Ascii);
-#if !defined(HAVE_HDF5) || !defined(HAVE_NETCDF)
+#if !defined(HAVE_HDF5) || !defined(HAVE_NETCDF) || !defined(HAVE_FITS)
 	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbFileType->model());
 #endif
 #ifndef HAVE_HDF5
@@ -141,7 +141,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	item2->setFlags(item2->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 #endif
 #ifndef HAVE_FITS
-	ui.cbFileType->setItemData(FileDataSource::FITS, 0, Qt::UserRole - 1);
+	// disable FITS item
+	QStandardItem* item3 = model->item(FileDataSource::FITS);
+	item3->setFlags(item3->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 #endif
 
 	ui.gbOptions->hide();
