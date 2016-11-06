@@ -1459,10 +1459,9 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 }
 
 double AxisPrivate::round(double value, int precision) {
-	DEBUG_LOG("AxisPrivate::round() value =" << value << "precision =" << precision);
-	double result = double(value * pow(10, precision)) / pow(10, precision);
-	//double result = roundf(value * pow(10, precision)) / pow(10, precision);
-	DEBUG_LOG("	result =" << result);
+	//DEBUG_LOG("AxisPrivate::round() value =" << value << "precision =" << precision);
+	double result = roundf(value * pow(10, precision)) / pow(10, precision);
+	//DEBUG_LOG("	result =" << result);
 	return result;
 }
 
