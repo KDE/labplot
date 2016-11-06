@@ -827,7 +827,7 @@ void Axis::retransformTicks() {
 
 void Axis::majorTicksColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Axis);
-	if (aspect==d->majorTicksColumn) {
+	if (aspect == d->majorTicksColumn) {
 		d->majorTicksColumn = 0;
 		d->retransformTicks();
 	}
@@ -975,12 +975,12 @@ void AxisPrivate::retransformArrow() {
 		return;
 	}
 
-	if (arrowPosition==Axis::ArrowRight || arrowPosition==Axis::ArrowBoth) {
+	if (arrowPosition == Axis::ArrowRight || arrowPosition == Axis::ArrowBoth) {
 		const QPointF& endPoint = lines.at(lines.size()-1).p2();
 		this->addArrow(endPoint, 1);
 	}
 
-	if (arrowPosition==Axis::ArrowLeft || arrowPosition==Axis::ArrowBoth) {
+	if (arrowPosition == Axis::ArrowLeft || arrowPosition == Axis::ArrowBoth) {
 		const QPointF& endPoint = lines.at(0).p1();
 		this->addArrow(endPoint, -1);
 	}
@@ -991,8 +991,8 @@ void AxisPrivate::retransformArrow() {
 void AxisPrivate::addArrow(const QPointF& startPoint, int direction) {
 	static const float cos_phi = cos(3.14159/6);
 
-	if (orientation==Axis::AxisHorizontal) {
-		QPointF endPoint = QPointF(startPoint.x()+direction*arrowSize, startPoint.y());
+	if (orientation == Axis::AxisHorizontal) {
+		QPointF endPoint = QPointF(startPoint.x() + direction*arrowSize, startPoint.y());
 		arrowPath.moveTo(startPoint);
 		arrowPath.lineTo(endPoint);
 
@@ -1106,14 +1106,14 @@ void AxisPrivate::retransformTicks() {
 	minorTickPoints.clear();
 	tickLabelValues.clear();
 
-	if ( majorTicksNumber<1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks) ) {
+	if ( majorTicksNumber < 1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks) ) {
 		retransformTickLabelPositions(); //this calls recalcShapeAndBoundingRect()
 		return;
 	}
 
 	//determine the spacing for the major ticks
-	double majorTicksSpacing=0;
-	int tmpMajorTicksNumber=0;
+	double majorTicksSpacing = 0;
+	int tmpMajorTicksNumber = 0;
 	if (majorTicksType == Axis::TicksTotalNumber) {
 		//the total number of the major ticks is given - > determine the spacing
 		tmpMajorTicksNumber = majorTicksNumber;
@@ -1279,7 +1279,7 @@ void AxisPrivate::retransformTicks() {
 
 					//in the case a custom column is used for the minor ticks, we draw them _once_ for the whole range of the axis.
 					//execute the minor ticks loop only once.
-					if (iMajor>0)
+					if (iMajor > 0)
 						break;
 				}
 
@@ -1335,6 +1335,7 @@ void AxisPrivate::retransformTicks() {
 	(=the smallest possible number of float digits) precision for the floats
 */
 void AxisPrivate::retransformTickLabelStrings() {
+	DEBUG_LOG("AxisPrivate::retransformTickLabelStrings()");
 	if (labelsAutoPrecision) {
 		//check, whether we need to increase the current precision
 		int newPrecision = upperLabelsPrecision(labelsPrecision);
@@ -1350,45 +1351,46 @@ void AxisPrivate::retransformTickLabelStrings() {
 			}
 		}
 	}
+	DEBUG_LOG("labelsPrecision =" << labelsPrecision);
 
 	tickLabelStrings.clear();
 	QString str;
 	if (labelsFormat == Axis::FormatDecimal) {
 		QString nullStr = QString::number(0, 'f', labelsPrecision);
-		foreach(float value, tickLabelValues) {
+		foreach (float value, tickLabelValues) {
 			str = QString::number(value, 'f', labelsPrecision);
-			if (str == "-"+nullStr) str=nullStr;
+			if (str == "-" + nullStr) str = nullStr;
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
 		}
 	} else if (labelsFormat == Axis::FormatScientificE) {
 		QString nullStr = QString::number(0, 'e', labelsPrecision);
-		foreach(float value, tickLabelValues) {
+		foreach (float value, tickLabelValues) {
 			str = QString::number(value, 'e', labelsPrecision);
-			if (str == "-"+nullStr) str=nullStr;
+			if (str == "-" + nullStr) str = nullStr;
 			tickLabelStrings << str;
 		}
 	} else if (labelsFormat == Axis::FormatPowers10) {
-		foreach(float value, tickLabelValues) {
-			str = "10<span style=\"vertical-align:super\">"+ QString::number(log10(value),'f',labelsPrecision)+"</span>";
+		foreach (float value, tickLabelValues) {
+			str = "10<span style=\"vertical-align:super\">" + QString::number(log10(value), 'f', labelsPrecision) + "</span>";
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
 		}
 	} else if (labelsFormat == Axis::FormatPowers2) {
-		foreach(float value, tickLabelValues) {
-			str = "2<span style=\"vertical-align:super\">"+ QString::number(log2(value),'f',labelsPrecision)+"</span>";
+		foreach (float value, tickLabelValues) {
+			str = "2<span style=\"vertical-align:super\">" + QString::number(log2(value), 'f', labelsPrecision) + "</span>";
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
 		}
 	} else if (labelsFormat == Axis::FormatPowersE) {
-		foreach(float value, tickLabelValues) {
-			str = "e<span style=\"vertical-align:super\">"+ QString::number(log(value),'f',labelsPrecision)+"</span>";
+		foreach (float value, tickLabelValues) {
+			str = "e<span style=\"vertical-align:super\">" + QString::number(log(value), 'f', labelsPrecision) + "</span>";
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
 		}
 	} else if (labelsFormat == Axis::FormatMultipliesPi) {
-		foreach(float value, tickLabelValues) {
-			str = "<span>"+ QString::number(value / M_PI,'f',labelsPrecision)+"</span>" + QChar(0x03C0);
+		foreach (float value, tickLabelValues) {
+			str = "<span>" + QString::number(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
 		}
@@ -1399,28 +1401,29 @@ void AxisPrivate::retransformTickLabelStrings() {
 }
 
 /*!
-	returns the smalles upper limit for the precision
+	returns the smallest upper limit for the precision
 	where no duplicates for the tick label float occur.
  */
 int AxisPrivate::upperLabelsPrecision(int precision) {
+	DEBUG_LOG("AxisPrivate::upperLabelsPrecision() precision =" << precision);
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, increase the precision.
 	QList<float> tempValues;
-	for (int i=0; i<tickLabelValues.size(); ++i) {
+	for (int i = 0; i < tickLabelValues.size(); ++i) {
 		tempValues.append( round(tickLabelValues[i], precision) );
 	}
 
-	for (int i=0; i<tempValues.size(); ++i) {
-		for (int j=0; j<tempValues.size(); ++j) {
-			if (i==j) continue;
-			if ( AbstractCoordinateSystem::essentiallyEqual(tempValues.at(i), tempValues.at(j), pow(10,-precision)) ) {
+	for (int i = 0; i < tempValues.size(); ++i) {
+		for (int j = 0; j < tempValues.size(); ++j) {
+			if (i == j) continue;
+			if ( AbstractCoordinateSystem::essentiallyEqual(tempValues.at(i), tempValues.at(j), pow(10, -precision)) ) {
 				//duplicate for the current precision found, increase the precision and check again
-				return upperLabelsPrecision(precision+1);
+				return upperLabelsPrecision(precision + 1);
 			}
 		}
 	}
 
-	//no duplicates for the current precision found, return the current value
+	//no duplicates for the current precision found: return the current value
 	return precision;
 }
 
@@ -1429,20 +1432,21 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	where no duplicates for the tick label float occur.
 */
 int AxisPrivate::lowerLabelsPrecision(int precision) {
+	DEBUG_LOG("AxisPrivate::lowerLabelsPrecision() precision =" << precision);
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
 	QList<float> tempValues;
-	for (int i=0; i<tickLabelValues.size(); ++i) {
+	for (int i = 0; i < tickLabelValues.size(); ++i) {
 		tempValues.append( round(tickLabelValues[i], precision-1) );
 	}
 
-	for (int i=0; i<tempValues.size(); ++i) {
-		for (int j=0; j<tempValues.size(); ++j) {
-			if (i==j) continue;
-			if ( AbstractCoordinateSystem::essentiallyEqual(tempValues.at(i), tempValues.at(j), pow(10,-precision)) ) {
+	for (int i = 0; i < tempValues.size(); ++i) {
+		for (int j = 0; j < tempValues.size(); ++j) {
+			if (i == j) continue;
+			if ( AbstractCoordinateSystem::essentiallyEqual(tempValues.at(i), tempValues.at(j), pow(10, -precision)) ) {
 				//duplicate found for the reduced precision
 				//-> current precision cannot be reduced, return the current value + 1
-				return precision+1;
+				return precision + 1;
 			}
 		}
 	}
@@ -1451,11 +1455,14 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 	if (precision == 0)
 		return 0;
 	else
-		return lowerLabelsPrecision(precision-1);
+		return lowerLabelsPrecision(precision - 1);
 }
 
 double AxisPrivate::round(double value, int precision) {
-	return double(value*pow(10, precision))/pow(10, precision);
+	//DEBUG_LOG("AxisPrivate::round() value =" << value << "precision =" << precision);
+	double result = roundf(value * pow(10, precision)) / pow(10, precision);
+	//DEBUG_LOG("	result =" << result);
+	return result;
 }
 
 /*!
