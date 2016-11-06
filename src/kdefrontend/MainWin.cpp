@@ -42,6 +42,7 @@
 #endif
 #include "backend/datapicker/Datapicker.h"
 #include "backend/note/Note.h"
+#include "backend/lib/macros.h"
 
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/matrix/MatrixView.h"
@@ -70,7 +71,6 @@
 #include <QFileDialog>
 #include <QMimeData>
 #include <QElapsedTimer>
-#include <QDebug>
 #include <QHash>
 
 #include <KActionCollection>
@@ -301,7 +301,7 @@ void MainWin::initActions() {
 	m_importAction = new QAction(QIcon::fromTheme("document-import"), i18n("Import"), this);
 	actionCollection()->setDefaultShortcut(m_importAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
 	actionCollection()->addAction("import", m_importAction);
-	connect(m_importAction, SIGNAL(triggered()),SLOT(importFileDialog()));
+	connect(m_importAction, SIGNAL(triggered()), SLOT(importFileDialog()));
 
 	m_exportAction = new QAction(QIcon::fromTheme("document-export"), i18n("Export"), this);
 	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL+Qt::SHIFT+Qt::Key_E);
@@ -1610,13 +1610,14 @@ void MainWin::historyDialog() {
   Opens the dialog to import data to the selected workbook, spreadsheet or matrix
 */
 void MainWin::importFileDialog(const QString& fileName) {
+	DEBUG_LOG("MainWin::importFileDialog()");
 	m_importFileDialog = new ImportFileDialog(this, false, fileName);
 
 	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook")) {
-		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
+		m_importFileDialog->setCurrentIndex(m_projectExplorer->currentIndex());
 	} else if (m_currentAspect->inherits("Column")) {
 		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
-			m_importFileDialog->setCurrentIndex( m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
+			m_importFileDialog->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 	}
 
 	if (m_importFileDialog->exec() == QDialog::Accepted) {
@@ -1624,7 +1625,7 @@ void MainWin::importFileDialog(const QString& fileName) {
 		m_project->setChanged(true);
 	}
 
-    delete m_importFileDialog;
+	delete m_importFileDialog;
 	m_importFileDialog = 0;
 }
 
