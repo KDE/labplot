@@ -193,7 +193,7 @@ void MainWin::initGUI(const QString& fileName) {
 	m_autoSaveTimer.setInterval(interval);
 	connect(&m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSaveProject()));
 
-	if ( !fileName.isEmpty() ) {
+	if (!fileName.isEmpty()) {
 		openProject(fileName);
 	} else {
 		//There is no file to open. Depending on the settings do nothing,
@@ -206,7 +206,7 @@ void MainWin::initGUI(const QString& fileName) {
 			newWorksheet();
 		} else if (load == 3) { //open last used project
 			if (m_recentProjectsAction->urls().size()) {
-				qDebug()<<"TO OPEN m_recentProjectsAction->urls()="<<m_recentProjectsAction->urls().first()<<endl;
+				DEBUG_LOG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().first());
 				openRecentProject( m_recentProjectsAction->urls().first() );
 			}
 		}
@@ -892,7 +892,13 @@ bool MainWin::saveProjectAs() {
 bool MainWin::save(const QString& fileName) {
 	WAIT_CURSOR;
 	// use file ending to find out how to compress file
-	QIODevice* file = KFilterDev::deviceForFile(fileName);
+	QIODevice* file;
+	// if ending is .lml, do gzip compression anyway
+	if (fileName.endsWith(".lml"))
+		file = KFilterDev::deviceForFile(fileName, "application/x-gzip", true);
+	else
+		file = KFilterDev::deviceForFile(fileName);
+
 	if (file == 0)
 		file = new QFile(fileName);
 
