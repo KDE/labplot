@@ -254,7 +254,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				start=offset;
 
 			// add additional sheets
-			for (int i=start; i < nrNames; i++) {
+			for (int i = start; i < nrNames; i++) {
 				Spreadsheet *spreadsheet = new Spreadsheet(0, i18n("Spreadsheet"));
 				if (mode == AbstractFileFilter::Prepend)
 					workbook->insertChildBefore(spreadsheet,sheets[0]);
@@ -263,11 +263,11 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			}
 
 			if (mode != AbstractFileFilter::Append)
-				offset=0;
+				offset = 0;
 
 			// import to sheets
 			sheets = workbook->children<AbstractAspect>();
-			for (int i=0; i < nrNames; i++) {
+			for (int i = 0; i < nrNames; i++) {
 				if (fileType == FileDataSource::HDF)
 					((HDFFilter*) filter)->setCurrentDataSetName(names[i]);
 				else
@@ -347,15 +347,14 @@ void ImportFileDialog::newDataContainerMenu() {
 }
 
 void ImportFileDialog::checkOnFitsTableToMatrix() {
-    if (cbAddTo) {
-        AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
-        if (!aspect) {
-            return;
-        }
-        if(aspect->inherits("Matrix")) {
-            enableButtonOk(importFileWidget->canReadFitsTableToMatrix());
-        }
-    }
+	if (cbAddTo) {
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
+		if (!aspect)
+			return;
+
+		if(aspect->inherits("Matrix"))
+			enableButtonOk(importFileWidget->canReadFitsTableToMatrix());
+	}
 }
 
 void ImportFileDialog::checkOkButton() {
@@ -373,7 +372,7 @@ void ImportFileDialog::checkOkButton() {
 			//when doing ASCII import to a matrix, hide the options for using the file header (first line)
 			//to name the columns since the column names are fixed in a matrix
 			const Matrix* matrix = dynamic_cast<const Matrix*>(aspect);
-			importFileWidget->showAsciiHeaderOptions(matrix==NULL);
+			importFileWidget->showAsciiHeaderOptions(matrix == NULL);
 		}
 	}
 
