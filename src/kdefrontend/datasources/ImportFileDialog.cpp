@@ -65,7 +65,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 
 	importFileWidget = new ImportFileWidget(mainWidget, fileName);
 	vLayout->addWidget(importFileWidget);
-	setMainWidget( mainWidget );
+	setMainWidget(mainWidget);
 
 	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 
@@ -84,7 +84,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 	setWindowIcon(KIcon("document-import-database"));
 
 	//restore saved settings
-	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
+	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	m_showOptions ? setButtonText(KDialog::User1, i18n("Hide Options")) : setButtonText(KDialog::User1, i18n("Show Options"));
 	importFileWidget->showOptions(m_showOptions);
@@ -93,7 +93,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 
 ImportFileDialog::~ImportFileDialog() {
 	//save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
+	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
 	conf.writeEntry("ShowOptions", m_showOptions);
 	if (cbPosition)
 		conf.writeEntry("Position", cbPosition->currentIndex());
@@ -109,40 +109,40 @@ void ImportFileDialog::setModel(QAbstractItemModel* model) {
 	frameAddTo = new QGroupBox(this);
 	frameAddTo->setTitle(i18n("Import To"));
 	QGridLayout *grid = new QGridLayout(frameAddTo);
-	grid->addWidget( new QLabel(i18n("Data container"),  frameAddTo),0,0 );
+	grid->addWidget(new QLabel(i18n("Data container"), frameAddTo), 0, 0);
 
 	cbAddTo = new TreeViewComboBox(frameAddTo);
-	cbAddTo->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+	cbAddTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	QList<const char *> list;
-	list<<"Folder"<<"Spreadsheet"<<"Matrix"<<"Workbook";
+	list << "Folder" << "Spreadsheet" << "Matrix" << "Workbook";
 	cbAddTo->setTopLevelClasses(list);
-	grid->addWidget(cbAddTo,0,1);
+	grid->addWidget(cbAddTo, 0, 1);
 
 	list.clear();
-	list<<"Spreadsheet"<<"Matrix"<<"Workbook";
+	list << "Spreadsheet" << "Matrix" << "Workbook";
 	cbAddTo->setSelectableClasses(list);
+	cbAddTo->setModel(model);
 
 	tbNewDataContainer = new QToolButton(frameAddTo);
-	tbNewDataContainer->setIcon( KIcon("list-add") );
-	grid->addWidget( tbNewDataContainer,0,2);
+	tbNewDataContainer->setIcon(KIcon("list-add"));
+	grid->addWidget( tbNewDataContainer, 0, 2);
 
 	lPosition = new QLabel(i18n("Position"), frameAddTo);
 	lPosition->setEnabled(false);
-	grid->addWidget(lPosition,1,0);
+	grid->addWidget(lPosition, 1, 0);
 
 	cbPosition = new QComboBox(frameAddTo);
 	cbPosition->setEnabled(false);
 	cbPosition->addItem(i18n("Append"));
 	cbPosition->addItem(i18n("Prepend"));
 	cbPosition->addItem(i18n("Replace"));
-	KConfigGroup conf(KSharedConfig::openConfig(),"ImportFileDialog");
-	cbPosition->setCurrentIndex( conf.readEntry("Position", 0) );
+	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
+	cbPosition->setCurrentIndex(conf.readEntry("Position", 0));
 
 	cbPosition->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-	grid->addWidget(cbPosition,1,1);
+	grid->addWidget(cbPosition, 1, 1);
 
 	vLayout->addWidget(frameAddTo);
-	cbAddTo->setModel(model);
 
 	//menu for new data container
 	m_newDataContainerMenu = new KMenu(this);
@@ -177,39 +177,46 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
 
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
-	QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
+	WAIT_CURSOR;
 
 	QTime timer;
 	timer.start();
 	source->read();
 	statusBar->showMessage( i18n("File data source created in %1 seconds.", (float)timer.elapsed()/1000) );
 
-	QApplication::restoreOverrideCursor();
+	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
 }
 /*!
   triggers data import to the currently selected data container
 */
 void ImportFileDialog::importTo(QStatusBar* statusBar) const {
+	DEBUG_LOG("ImportFileDialog::importTo() index =" << cbAddTo->currentModelIndex());
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
-	if (!aspect)
+	if (!aspect) {
+		DEBUG_LOG("no aspect available");
 		return;
+	}
 
+	DEBUG_LOG("ImportFileDialog::importTo() 1");
 	QString fileName = importFileWidget->fileName();
 	AbstractFileFilter* filter = importFileWidget->currentFileFilter();
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
+	DEBUG_LOG("ImportFileDialog::importTo() 2");
 
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
 	progressBar->setMinimum(0);
 	progressBar->setMaximum(100);
 	connect(filter, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
+	DEBUG_LOG("ImportFileDialog::importTo() 3");
 
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
 
-	QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
+	WAIT_CURSOR;
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
+	DEBUG_LOG("ImportFileDialog::importTo() 4");
 
 	QTime timer;
 	timer.start();
@@ -219,6 +226,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	}
 	else if (aspect->inherits("Spreadsheet")) {
 		Spreadsheet* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
+		DEBUG_LOG("calling filter->read()");
 		filter->read(fileName, spreadsheet, mode);
 	}
 	else if (aspect->inherits("Workbook")) {
@@ -285,7 +293,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	}
 	statusBar->showMessage( i18n("File %1 imported in %2 seconds.", fileName, (float)timer.elapsed()/1000) );
 
-	QApplication::restoreOverrideCursor();
+	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
 	delete filter;
 }
@@ -298,12 +306,12 @@ void ImportFileDialog::toggleOptions() {
 	//resize the dialog
 	mainWidget()->resize(layout()->minimumSize());
 	layout()->activate();
-	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
+	resize( QSize(this->width(), 0).expandedTo(minimumSize()) );
 }
 
 void ImportFileDialog::newDataContainer(QAction* action) {
 	QString path = importFileWidget->fileName();
-	QString name=path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
 
 	QString type = action->iconText().split(' ')[1];
 	if (name.isEmpty())
