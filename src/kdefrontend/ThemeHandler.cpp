@@ -85,15 +85,17 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	connect( pbPublishTheme, SIGNAL(clicked()), this, SLOT(publishThemes()));
 
 	//find all available themes files (system wide and user specific local files)
-	//the list m_themeList contains full pathes (path + file name)
+	//the list m_themeList contains full paths (path + file name)
 	m_themeList = KGlobal::dirs()->findAllResources("appdata", "themes/*");
+	//TODO (does not work for wildcards): m_themeList = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes/*");
+
 	pbLoadTheme->setEnabled(!m_themeList.empty());
 }
 
 void ThemeHandler::loadSelected(QString name) {
 	QString themeFilePath;
-	foreach(QString filePath, m_themeList) {
-		if( filePath.indexOf(name)!=-1 ) {
+	foreach (QString filePath, m_themeList) {
+		if (filePath.indexOf(name) != -1) {
 			themeFilePath = filePath;
 			break;
 		}
@@ -117,7 +119,7 @@ QStringList ThemeHandler::themes() {
 	QStringList pathList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
 	pathList.append(KGlobal::dirs()->findAllResources("appdata", "themes/*"));
 	QStringList themeList;
-	for(int i = 0; i < pathList.size(); ++i) {
+	for (int i = 0; i < pathList.size(); ++i) {
 		QFileInfo fileinfo(pathList.at(i));
 		themeList.append(fileinfo.fileName().split('.').at(0));
 	}
@@ -127,8 +129,8 @@ QStringList ThemeHandler::themes() {
 const QString ThemeHandler::themeFilePath(const QString& name) {
 	QStringList themes = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
 	themes.append(KGlobal::dirs()->findAllResources("appdata", "themes/*"));
-	for (int i=0; i<themes.size(); ++i) {
-		if ( themes.at(i).indexOf(name)!=-1 )
+	for (int i = 0; i < themes.size(); ++i) {
+		if (themes.at(i).indexOf(name) != -1)
 			return themes.at(i);
 	}
 
@@ -171,7 +173,7 @@ void ThemeHandler::saveMenu() {
 	widgetAction->setDefaultWidget(frame);
 	menu.addAction(widgetAction);
 
-	QPoint pos(-menu.sizeHint().width()+pbSaveTheme->width(),-menu.sizeHint().height());
+	QPoint pos(-menu.sizeHint().width() + pbSaveTheme->width(), -menu.sizeHint().height());
 	menu.exec(pbSaveTheme->mapToGlobal(pos));
 	leFilename->setFocus();
 }
@@ -194,8 +196,8 @@ void ThemeHandler::saveNewSelected(const QString& filename) {
  */
 void ThemeHandler::publishThemes() {
 	int ret = KMessageBox::questionYesNo(this,
-					     i18n("Do you want to upload your theme %1 to public web server?").arg(m_currentLocalTheme),
-					     i18n("Publish Theme"));
+			i18n("Do you want to upload your theme %1 to public web server?").arg(m_currentLocalTheme),
+			i18n("Publish Theme"));
 	if (ret != KMessageBox::Yes)
 		return;
 
