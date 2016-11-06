@@ -198,25 +198,21 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		return;
 	}
 
-	DEBUG_LOG("ImportFileDialog::importTo() 1");
 	QString fileName = importFileWidget->fileName();
 	AbstractFileFilter* filter = importFileWidget->currentFileFilter();
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
-	DEBUG_LOG("ImportFileDialog::importTo() 2");
 
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
 	progressBar->setMinimum(0);
 	progressBar->setMaximum(100);
 	connect(filter, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
-	DEBUG_LOG("ImportFileDialog::importTo() 3");
 
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
 
 	WAIT_CURSOR;
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
-	DEBUG_LOG("ImportFileDialog::importTo() 4");
 
 	QTime timer;
 	timer.start();
