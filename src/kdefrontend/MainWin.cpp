@@ -1625,8 +1625,9 @@ void MainWin::importFileDialog(const QString& fileName) {
 		m_project->setChanged(true);
 	}
 
-	delete m_importFileDialog;
-	m_importFileDialog = 0;
+	//TODO: crashes application
+	//delete m_importFileDialog;
+	//m_importFileDialog = 0;
 }
 
 /*!
