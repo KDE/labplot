@@ -1500,8 +1500,10 @@ void MainWin::historyDialog() {
   Opens the dialog to import data to the selected workbook, spreadsheet or matrix
 */
 void MainWin::importFileDialog(const QString& fileName) {
+	DEBUG_LOG("MainWin::importFileDialog()");
 	m_importFileDialog = new ImportFileDialog(this, false, fileName);
 
+	// select existing container
 	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook")) {
 		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
 	} else if (m_currentAspect->inherits("Column")) {
@@ -1516,6 +1518,7 @@ void MainWin::importFileDialog(const QString& fileName) {
 
 	delete m_importFileDialog;
 	m_importFileDialog = 0;
+	DEBUG_LOG("MainWin::importFileDialog() DONE");
 }
 
 /*!

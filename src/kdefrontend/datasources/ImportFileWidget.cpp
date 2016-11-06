@@ -63,11 +63,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 
 	ui.cbFileType->addItems(FileDataSource::fileTypes());
 	QStringList filterItems;
-	filterItems<<i18n("Automatic")<<i18n("Custom");
+	filterItems << i18n("Automatic") << i18n("Custom");
 	ui.cbFilter->addItems( filterItems );
 
 	// file type specific option widgets
-	QWidget* asciiw=new QWidget(0);
+	QWidget* asciiw = new QWidget(0);
 	asciiOptionsWidget.setupUi(asciiw);
 	asciiOptionsWidget.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
 	asciiOptionsWidget.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
@@ -80,15 +80,15 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	binaryOptionsWidget.cbByteOrder->addItems(BinaryFilter::byteOrders());
 	ui.swOptions->insertWidget(FileDataSource::Binary, binaryw);
 
-	QWidget* imagew=new QWidget(0);
+	QWidget* imagew = new QWidget(0);
 	imageOptionsWidget.setupUi(imagew);
 	imageOptionsWidget.cbImportFormat->addItems(ImageFilter::importFormats());
 	ui.swOptions->insertWidget(FileDataSource::Image, imagew);
 
-	QWidget* hdfw=new QWidget(0);
+	QWidget* hdfw = new QWidget(0);
 	hdfOptionsWidget.setupUi(hdfw);
 	QStringList hdfheaders;
-	hdfheaders<<i18n("Name")<<i18n("Link")<<i18n("Type")<<i18n("Properties")<<i18n("Attributes");
+	hdfheaders << i18n("Name") << i18n("Link") << i18n("Type") << i18n("Properties") << i18n("Attributes");
 	hdfOptionsWidget.twContent->setHeaderLabels(hdfheaders);
 	// link and type column are hidden
 	hdfOptionsWidget.twContent->hideColumn(1);
@@ -96,10 +96,10 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	hdfOptionsWidget.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	ui.swOptions->insertWidget(FileDataSource::HDF, hdfw);
 
-	QWidget* netcdfw=new QWidget(0);
+	QWidget* netcdfw = new QWidget(0);
 	netcdfOptionsWidget.setupUi(netcdfw);
 	QStringList headers;
-	headers<<i18n("Name")<<i18n("Type")<<i18n("Properties")<<i18n("Values");
+	headers << i18n("Name") << i18n("Type") << i18n("Properties") << i18n("Values");
 	netcdfOptionsWidget.twContent->setHeaderLabels(headers);
 	// type column is hidden
 	netcdfOptionsWidget.twContent->hideColumn(1);
@@ -214,7 +214,7 @@ void ImportFileWidget::loadSettings() {
 
 ImportFileWidget::~ImportFileWidget() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
+	KConfigGroup conf(KSharedConfig::openConfig(), "Import");
 
 	// general settings
 	conf.writeEntry("LastImportedFile", ui.kleFileName->text());
@@ -443,11 +443,11 @@ void ImportFileWidget::selectFile() {
 	and activates the corresponding options.
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
-	QString fileName=name;
+	QString fileName = name;
 #ifndef _WIN32
 	// make relative path
 	if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator()) {
-		fileName=QDir::homePath() + QDir::separator() + fileName;
+		fileName = QDir::homePath() + QDir::separator() + fileName;
 	}
 #endif
 
@@ -793,7 +793,7 @@ void ImportFileWidget::fileInfoDialog() {
 void ImportFileWidget::filterChanged(int index) {
 	// ignore filter for these formats
 	if (ui.cbFileType->currentIndex() == FileDataSource::HDF || ui.cbFileType->currentIndex() == FileDataSource::NETCDF
-			|| ui.cbFileType->currentIndex() == FileDataSource::Image  || ui.cbFileType->currentIndex() == FileDataSource::FITS) {
+			|| ui.cbFileType->currentIndex() == FileDataSource::Image || ui.cbFileType->currentIndex() == FileDataSource::FITS) {
 		ui.swOptions->setEnabled(true);
 		return;
 	}
@@ -845,8 +845,8 @@ void ImportFileWidget::refreshPreview() {
 
 	int lines = ui.sbPreviewLines->value();
 
-	bool ok=true;
-	QTableWidget *tmpTableWidget=0;
+	bool ok = true;
+	QTableWidget *tmpTableWidget = 0;
 	switch (fileType) {
 	case FileDataSource::Ascii: {
 		ui.tePreview->clear();
