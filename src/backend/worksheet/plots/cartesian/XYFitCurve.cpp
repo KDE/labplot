@@ -40,6 +40,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 #include "backend/gsl/ExpressionParser.h"
 
 extern "C" {
@@ -56,7 +57,6 @@ extern "C" {
 #include <QIcon>
 #include <KLocalizedString>
 #include <QThreadPool>
-#include <QDebug>
 
 XYFitCurve::XYFitCurve(const QString& name)
 		: XYCurve(name, new XYFitCurvePrivate(this)) {
@@ -225,10 +225,8 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		double x = gsl_vector_get(paramValues, i);
 		// bound values if limits are set
 		assign_variable(paramNames->at(i).toLocal8Bit().data(), nsl_fit_map_bound(x, min[i], max[i]));
-#ifndef NDEBUG
-		qDebug()<<"Parameter"<<i<<'['<<min[i]<<','<<max[i]<<"] free/bound:"<<QString::number(x, 'g', 15)
-			<<' '<<QString::number(nsl_fit_map_bound(x, min[i], max[i]), 'g', 15);
-#endif
+		DEBUG_LOG("Parameter"<<i<<'['<<min[i]<<','<<max[i]<<"] free/bound:"<<QString::number(x, 'g', 15)
+			<<' '<<QString::number(nsl_fit_map_bound(x, min[i], max[i]), 'g', 15));
 	}
 
 	const char *func = funcba.data();	// function to evaluate
@@ -245,9 +243,9 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 
 		assign_variable("x", x[i]);
 		double Yi = parse(func);
-#ifndef NDEBUG
-//		qDebug()<<"evaluate function"<<QString(func)<<": f(x["<<i<<"]) ="<<Yi;
-#endif
+
+//		DEBUG_LOG("evaluate function"<<QString(func)<<": f(x["<<i<<"]) ="<<Yi);
+
 		if (parse_errors() > 0)
 			return GSL_EINVAL;
 
@@ -598,11 +596,11 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				value += eps;
 				assign_variable(name, value);
 				double f_pdp = parse(func);
-#ifndef NDEBUG
+
 //		qDebug()<<"evaluate deriv"<<QString(func)<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15);
 //		qDebug()<<"evaluate deriv"<<QString(func)<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15);
 //		qDebug()<<"	deriv = "<<QString::number((f_pdp-f_p)/eps/sigma, 'g', 15);
-#endif
+
 				if (fixed[j])
 					gsl_matrix_set(J, i, j, 0.);
 				else	// calculate finite difference
@@ -758,10 +756,8 @@ void XYFitCurvePrivate::recalculate() {
 
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
 	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
-#ifndef NDEBUG
 	for (unsigned int i=0; i < np; i++)
-		qDebug()<<"fixed parameter"<<i<<fitData.paramFixed.data()[i];
-#endif
+		DEBUG_LOG("fixed parameter"<<i<<fitData.paramFixed.data()[i]);
 
 	//function to fit
 	gsl_multifit_function_fdf f;

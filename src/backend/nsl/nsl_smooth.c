@@ -358,6 +358,7 @@ int nsl_smooth_percentile(double *data, unsigned int n, unsigned int points, dou
 	return 0;
 }
 
+/* taken from SciDAVis */
 int nsl_smooth_savgol_coeff(int points, int order, gsl_matrix *h) {
 	int i, j, error = 0;
 

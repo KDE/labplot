@@ -50,6 +50,7 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 
 #include <QDir>
 #include <QMenu>
@@ -97,7 +98,7 @@ CartesianPlot::~CartesianPlot() {
 void CartesianPlot::init() {
 	Q_D(CartesianPlot);
 
-	d->cSystem = new CartesianCoordinateSystem(this);;
+	d->cSystem = new CartesianCoordinateSystem(this);
 	m_coordinateSystem = d->cSystem;
 
 	d->autoScaleX = true;
@@ -490,19 +491,19 @@ QIcon CartesianPlot::icon() const {
 }
 
 void CartesianPlot::navigate(CartesianPlot::NavigationOperation op) {
-	if (op==ScaleAuto) scaleAuto();
-	else if (op==ScaleAutoX) scaleAutoX();
-	else if (op==ScaleAutoY) scaleAutoY();
-	else if (op==ZoomIn) zoomIn();
-	else if (op==ZoomOut) zoomOut();
-	else if (op==ZoomInX) zoomInX();
-	else if (op==ZoomOutX) zoomOutX();
-	else if (op==ZoomInY) zoomInY();
-	else if (op==ZoomOutY) zoomOutY();
-	else if (op==ShiftLeftX) shiftLeftX();
-	else if (op==ShiftRightX) shiftRightX();
-	else if (op==ShiftUpY) shiftUpY();
-	else if (op==ShiftDownY) shiftDownY();
+	if (op == ScaleAuto) scaleAuto();
+	else if (op == ScaleAutoX) scaleAutoX();
+	else if (op == ScaleAutoY) scaleAutoY();
+	else if (op == ZoomIn) zoomIn();
+	else if (op == ZoomOut) zoomOut();
+	else if (op == ZoomInX) zoomInX();
+	else if (op == ZoomOutX) zoomOutX();
+	else if (op == ZoomInY) zoomInY();
+	else if (op == ZoomOutY) zoomOutY();
+	else if (op == ShiftLeftX) shiftLeftX();
+	else if (op == ShiftRightX) shiftRightX();
+	else if (op == ShiftUpY) shiftUpY();
+	else if (op == ShiftDownY) shiftDownY();
 }
 
 //##############################################################################
@@ -1187,16 +1188,18 @@ void CartesianPlot::scaleAuto() {
 }
 
 void CartesianPlot::zoomIn() {
+	DEBUG_LOG("CartesianPlot::zoomIn()");
 	Q_D(CartesianPlot);
-	float oldRange = (d->xMax-d->xMin);
-	float newRange = (d->xMax-d->xMin)/m_zoomFactor;
-	d->xMax = d->xMax + (newRange-oldRange)/2;
-	d->xMin = d->xMin - (newRange-oldRange)/2;
 
-	oldRange = (d->yMax-d->yMin);
-	newRange = (d->yMax-d->yMin)/m_zoomFactor;
-	d->yMax = d->yMax + (newRange-oldRange)/2;
-	d->yMin = d->yMin - (newRange-oldRange)/2;
+	float oldRange = (d->xMax - d->xMin);
+	float newRange = (d->xMax - d->xMin) / m_zoomFactor;
+	d->xMax = d->xMax + (newRange - oldRange) / 2;
+	d->xMin = d->xMin - (newRange - oldRange) / 2;
+
+	oldRange = (d->yMax - d->yMin);
+	newRange = (d->yMax - d->yMin) / m_zoomFactor;
+	d->yMax = d->yMax + (newRange - oldRange) / 2;
+	d->yMin = d->yMin - (newRange - oldRange) / 2;
 
 	d->retransformScales();
 }
@@ -1311,6 +1314,7 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner)
 	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
  */
 void CartesianPlotPrivate::retransform() {
+	DEBUG_LOG("CartesianPlotPrivate::retransform()");
 	if (suppressRetransform)
 		return;
 
@@ -1333,6 +1337,8 @@ void CartesianPlotPrivate::retransform() {
 }
 
 void CartesianPlotPrivate::retransformScales() {
+	DEBUG_LOG("CartesianPlotPrivate::retransformScales()");
+
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
 	QList<CartesianScale*> scales;
 
@@ -1350,8 +1356,8 @@ void CartesianPlotPrivate::retransformScales() {
 	double sceneStart, sceneEnd, logicalStart, logicalEnd;
 
 	//create x-scales
-	int plotSceneStart = itemRect.x()+horizontalPadding;
-	int plotSceneEnd = itemRect.x()+itemRect.width()-horizontalPadding;
+	int plotSceneStart = itemRect.x() + horizontalPadding;
+	int plotSceneEnd = itemRect.x() + itemRect.width() - horizontalPadding;
 	if (!hasValidBreak) {
 		//no breaks available -> range goes from the plot beginning to the end of the plot
 		sceneStart = plotSceneStart;
@@ -1359,21 +1365,21 @@ void CartesianPlotPrivate::retransformScales() {
 		logicalStart = xMin;
 		logicalEnd = xMax;
 
-		//TODO: how should we handle the case sceneStart=sceneEnd
+		//TODO: how should we handle the case sceneStart == sceneEnd?
 		//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
-		if (sceneStart!=sceneEnd)
+		if (sceneStart != sceneEnd)
 			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	} else {
 		int sceneEndLast = plotSceneStart;
 		int logicalEndLast = xMin;
-		for (int i=0; i<xRangeBreaks.list.size(); ++i) {
+		for (int i = 0; i < xRangeBreaks.list.size(); ++i) {
 			const CartesianPlot::RangeBreak& curBreak = xRangeBreaks.list.at(i);
 			if (!curBreak.isValid())
 				break;
 
 			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
 			sceneStart = sceneEndLast;
-			if (i!=0) sceneStart+=breakGap;
+			if (i != 0) sceneStart += breakGap;
 			sceneEnd = plotSceneStart+(plotSceneEnd-plotSceneStart)*curBreak.position;
 			logicalStart = logicalEndLast;
 			logicalEnd = curBreak.start;
@@ -1391,11 +1397,11 @@ void CartesianPlotPrivate::retransformScales() {
 		logicalStart = logicalEndLast;
 		logicalEnd = xMax;
 
-		if (sceneStart!=sceneEnd)
+		if (sceneStart != sceneEnd)
 			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	}
 
-	cSystem ->setXScales(scales);
+	cSystem->setXScales(scales);
 
 	//check ranges for log-scales
 	if (yScale != CartesianPlot::ScaleLinear)
@@ -1415,24 +1421,24 @@ void CartesianPlotPrivate::retransformScales() {
 		logicalStart = yMin;
 		logicalEnd = yMax;
 
-		if (sceneStart!=sceneEnd)
+		if (sceneStart != sceneEnd)
 			scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	} else {
 		int sceneEndLast = plotSceneStart;
 		int logicalEndLast = yMin;
-		for (int i=0; i<yRangeBreaks.list.size(); ++i) {
+		for (int i=0; i < yRangeBreaks.list.size(); ++i) {
 			const CartesianPlot::RangeBreak& curBreak = yRangeBreaks.list.at(i);
 			if (!curBreak.isValid())
 				break;
 
 			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
 			sceneStart = sceneEndLast;
-			if (i!=0) sceneStart-=breakGap;
+			if (i != 0) sceneStart-=breakGap;
 			sceneEnd = plotSceneStart+(plotSceneEnd-plotSceneStart)*curBreak.position;
 			logicalStart = logicalEndLast;
 			logicalEnd = curBreak.start;
 
-			if (sceneStart!=sceneEnd)
+			if (sceneStart != sceneEnd)
 				scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 
 			sceneEndLast = sceneEnd;
@@ -1449,7 +1455,7 @@ void CartesianPlotPrivate::retransformScales() {
 			scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	}
 
-	cSystem ->setYScales(scales);
+	cSystem->setYScales(scales);
 
 	//calculate the changes in x and y and save the current values for xMin, xMax, yMin, yMax
 	float deltaXMin = 0;
@@ -1484,17 +1490,17 @@ void CartesianPlotPrivate::retransformScales() {
 
 	//adjust auto-scale axes
 	QList<Axis*> childElements = q->children<Axis>();
-	foreach(Axis* axis, childElements) {
+	foreach (Axis* axis, childElements) {
 		if (!axis->autoScale())
 			continue;
 
 		if (axis->orientation() == Axis::AxisHorizontal) {
-			if (deltaXMax!=0) {
+			if (deltaXMax != 0) {
 				axis->setUndoAware(false);
 				axis->setEnd(xMax);
 				axis->setUndoAware(true);
 			}
-			if (deltaXMin!=0) {
+			if (deltaXMin != 0) {
 				axis->setUndoAware(false);
 				axis->setStart(xMin);
 				axis->setUndoAware(true);
@@ -1504,12 +1510,12 @@ void CartesianPlotPrivate::retransformScales() {
 // 				axis->setOffset(axis->offset() + deltaYMin, false);
 // 			}
 		} else {
-			if (deltaYMax!=0) {
+			if (deltaYMax != 0) {
 				axis->setUndoAware(false);
 				axis->setEnd(yMax);
 				axis->setUndoAware(true);
 			}
-			if (deltaYMin!=0) {
+			if (deltaYMin != 0) {
 				axis->setUndoAware(false);
 				axis->setStart(yMin);
 				axis->setUndoAware(true);
@@ -1517,11 +1523,11 @@ void CartesianPlotPrivate::retransformScales() {
 
 			//TODO;
 // 			if (axis->position() == Axis::AxisCustom && deltaXMin != 0) {
+
 // 				axis->setOffset(axis->offset() + deltaXMin, false);
 // 			}
 		}
 	}
-
 	// call retransform() on the parent to trigger the update of all axes and curves
 	q->retransform();
 }
@@ -1766,11 +1772,13 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 }
 
 void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
+	DEBUG_LOG("CartesianPlotPrivate::paint()");
+
 	if (!isVisible())
 		return;
 
 	painter->setPen(QPen(Qt::black, 3));
-	if ( (mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode)
+	if ((mouseMode == CartesianPlot::ZoomXSelectionMode || mouseMode == CartesianPlot::ZoomYSelectionMode)
 			&& (!m_selectionBandIsShown)) {
 		painter->drawLine(m_selectionStartLine);
 	}
@@ -1786,6 +1794,7 @@ void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsIt
 	}
 
 	WorksheetElementContainerPrivate::paint(painter, option, widget);
+	DEBUG_LOG("CartesianPlotPrivate::paint() DONE");
 }
 
 //##############################################################################
@@ -1799,6 +1808,13 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "cartesianPlot" );
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
+
+	//applied theme
+	if (!m_themeName.isEmpty()){
+		writer->writeStartElement( "theme" );
+		writer->writeAttribute("name", m_themeName);
+		writer->writeEndElement();
+	}
 
 	//geometry
 	writer->writeStartElement( "geometry" );
@@ -1877,6 +1893,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
+	QString tmpThemeName;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -1889,6 +1906,9 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 		if (reader->name() == "comment") {
 			if (!readCommentElement(reader))
 				return false;
+		} else if (reader->name() == "theme") {
+			attribs = reader->attributes();
+			tmpThemeName = attribs.value("name").toString();
 		} else if (reader->name() == "geometry") {
 			attribs = reader->attributes();
 
@@ -2177,28 +2197,33 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 		m_title->graphicsItem()->setParentItem(m_plotArea->graphicsItem());
 	}
 
+	//if a theme was used, assign the value to the private member at the very end of load()
+	//so we don't try to load the theme in applyThemeOnNewCurve() when adding curves on project load and calculate the palette
+	if (!tmpThemeName.isEmpty()){
+		KConfig config( ThemeHandler::themeFilePath(tmpThemeName), KConfig::SimpleConfig );
+		//TODO: check whether the theme config really exists
+		m_themeName = tmpThemeName;
+		this->setColorPalette(config);
+	}
+
 	return true;
 }
 
 //##############################################################################
 //#########################  Theme management ##################################
 //##############################################################################
-void CartesianPlot::loadTheme(const QString& name) {
-	KConfig config( ThemeHandler::themeFilePath(name), KConfig::SimpleConfig );
-	loadTheme(config);
-}
-
 void CartesianPlot::loadTheme(KConfig& config) {
 	const QString str = config.name();
-	QString themeName = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
-	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), themeName) );
+	m_themeName = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
+	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), m_themeName) );
 
+	//load the color palettes for the curves
+	this->setColorPalette(config);
+
+	//load the theme for all the childred
 	const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
 	foreach(WorksheetElement *child, childElements)
 		child->loadThemeConfig(config);
-
-	const QList<XYCurve*>& childXYCurve = children<XYCurve>(AbstractAspect::IncludeHidden);
-	m_themeColorPalette = childXYCurve.last()->getColorPalette();
 
 	Q_D(CartesianPlot);
 	d->update(this->rect());
@@ -2220,6 +2245,53 @@ void CartesianPlot::saveTheme(KConfig &config) {
 		child->saveThemeConfig(config);
 }
 
+//Generating colors from 5-color theme palette
+void CartesianPlot::setColorPalette(const KConfig& config) {
+	KConfigGroup group = config.group("Theme");
+
+	//read the five colors defining the palette
+	m_themeColorPalette.append(group.readEntry("ThemePaletteColor1", QColor()));
+	m_themeColorPalette.append(group.readEntry("ThemePaletteColor2", QColor()));
+	m_themeColorPalette.append(group.readEntry("ThemePaletteColor3", QColor()));
+	m_themeColorPalette.append(group.readEntry("ThemePaletteColor4", QColor()));
+	m_themeColorPalette.append(group.readEntry("ThemePaletteColor5", QColor()));
+
+	//generate 30 additional shades if the color palette contains more than one color
+	if(m_themeColorPalette.at(0) != m_themeColorPalette.at(1)) {
+		QColor c;
+
+		//3 factors to create shades from theme's palette
+		float fac[3] = {0.25,0.45,0.65};
+
+		//Generate 15 lighter shades
+		for(int i = 0; i < 5; i++) {
+			for(int j = 1; j < 4; j++) {
+				c.setRed( m_themeColorPalette.at(i).red()*(1-fac[j-1]) );
+				c.setGreen( m_themeColorPalette.at(i).green()*(1-fac[j-1]) );
+				c.setBlue( m_themeColorPalette.at(i).blue()*(1-fac[j-1]) );
+				m_themeColorPalette.append(c);
+			}
+		}
+
+		//Generate 15 darker shades
+		for(int i = 0; i < 5; i++) {
+			for(int j = 4; j < 7; j++) {
+				c.setRed( m_themeColorPalette.at(i).red()+((255-m_themeColorPalette.at(i).red())*fac[j-4]) );
+				c.setGreen( m_themeColorPalette.at(i).green()+((255-m_themeColorPalette.at(i).green())*fac[j-4]) );
+				c.setBlue( m_themeColorPalette.at(i).blue()+((255-m_themeColorPalette.at(i).blue())*fac[j-4]) );
+				m_themeColorPalette.append(c);
+			}
+		}
+	}
+}
+
+const QList<QColor>& CartesianPlot::themeColorPalette() const {
+	return m_themeColorPalette;
+}
+
 void CartesianPlot::applyThemeOnNewCurve(XYCurve* curve) {
-	curve->applyColorPalette(m_themeColorPalette);
+	if (!m_themeName.isEmpty()) {
+		KConfig config( ThemeHandler::themeFilePath(m_themeName), KConfig::SimpleConfig );
+		curve->loadThemeConfig(config);
+	}
 }

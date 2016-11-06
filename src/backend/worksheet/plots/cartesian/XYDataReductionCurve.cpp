@@ -38,6 +38,7 @@
 #include "CartesianCoordinateSystem.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 
 #include <cmath>	// isnan
 
@@ -45,9 +46,6 @@
 #include <KLocale>
 #include <QElapsedTimer>
 #include <QThreadPool>
-#ifndef NDEBUG
-#include <QDebug>
-#endif
 
 XYDataReductionCurve::XYDataReductionCurve(const QString& name)
 		: XYCurve(name, new XYDataReductionCurvePrivate(this)) {
@@ -248,12 +246,12 @@ void XYDataReductionCurvePrivate::recalculate() {
 	const nsl_geom_linesim_type type = dataReductionData.type;
 	const double tol = dataReductionData.tolerance;
 	const double tol2 = dataReductionData.tolerance2;
-#ifndef NDEBUG
-	qDebug()<<"n ="<<n;
-	qDebug()<<"type:"<<nsl_geom_linesim_type_name[type];
-	qDebug()<<"tolerance/step:"<<tol;
-	qDebug()<<"tolerance2/repeat/maxtol/region:"<<tol2;
-#endif
+
+	DEBUG_LOG("n ="<<n);
+	DEBUG_LOG("type:"<<nsl_geom_linesim_type_name[type]);
+	DEBUG_LOG("tolerance/step:"<<tol);
+	DEBUG_LOG("tolerance2/repeat/maxtol/region:"<<tol2);
+
 ///////////////////////////////////////////////////////////
 	int status;
 	emit q->completed(10);
@@ -294,13 +292,13 @@ void XYDataReductionCurvePrivate::recalculate() {
 		npoints = nsl_geom_linesim_opheim(xdata, ydata, n, tol, tol2, index);
 		break;
 	}
-#ifndef NDEBUG
-	qDebug()<<"npoints ="<<npoints;
-	if (type == nsl_geom_linesim_type_douglas_peucker_variant)
-		qDebug()<<"calculated tolerance ="<<calcTolerance;
-#else
-	Q_UNUSED(calcTolerance);
-#endif
+
+	DEBUG_LOG("npoints ="<<npoints);
+	if (type == nsl_geom_linesim_type_douglas_peucker_variant) {
+		DEBUG_LOG("calculated tolerance ="<<calcTolerance);
+	} else
+		Q_UNUSED(calcTolerance);
+
 	if (npoints > 0)
 		status = 0;
 	emit q->completed(80);

@@ -129,7 +129,7 @@ XYEquationCurvePrivate::~XYEquationCurvePrivate() {
 void XYEquationCurvePrivate::recalculate() {
 	//resize the vector if a new number of point to calculate was provided
 	if (equationData.count != xVector->size()) {
-		if (equationData.count>=1) {
+		if (equationData.count >= 1) {
 			xVector->resize(equationData.count);
 			yVector->resize(equationData.count);
 		} else {
@@ -140,31 +140,22 @@ void XYEquationCurvePrivate::recalculate() {
 			return;
 		}
 	} else {
-		if (equationData.count<1)
+		if (equationData.count < 1)
 			return;
 	}
 
 	ExpressionParser* parser = ExpressionParser::getInstance();
 	bool rc = false;
 	if (equationData.type == XYEquationCurve::Cartesian) {
-		rc = parser->evaluateCartesian( equationData.expression1,
-										equationData.min,
-										equationData.max,
-										equationData.count,
-										xVector, yVector );
+		rc = parser->evaluateCartesian( equationData.expression1, equationData.min, equationData.max,
+						equationData.count, xVector, yVector );
 	} else if (equationData.type == XYEquationCurve::Polar) {
-		rc = parser->evaluatePolar( equationData.expression1,
-									equationData.min,
-									equationData.max,
-									equationData.count,
-									xVector, yVector );
+		rc = parser->evaluatePolar( equationData.expression1, equationData.min, equationData.max,
+						equationData.count, xVector, yVector );
 	} else if (equationData.type == XYEquationCurve::Parametric) {
-		rc = parser->evaluateParametric(equationData.expression1,
-									    equationData.expression2,
-										equationData.min,
-										equationData.max,
-										equationData.count,
-										xVector, yVector);
+		rc = parser->evaluateParametric(equationData.expression1, equationData.expression2,
+						equationData.min, equationData.max, equationData.count,
+						xVector, yVector);
 	}
 
 	if (!rc) {
@@ -208,7 +199,7 @@ bool XYEquationCurve::load(XmlStreamReader* reader) {
 		return false;
 	}
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QString attributeWarning = i18n( "Attribute '%1' missing or empty, default value is used" );
 	QXmlStreamAttributes attribs;
 	QString str;
 

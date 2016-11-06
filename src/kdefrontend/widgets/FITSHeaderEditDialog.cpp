@@ -26,34 +26,37 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 
 #include "FITSHeaderEditDialog.h"
-#include <QVBoxLayout>
+#include <KSharedConfig>
 
 /*! \class FITSHeaderEditDialog
  * \brief Dialog class for editing FITS header units.
- * \since 2.2.0
+ * \since 2.4.0
  * \ingroup widgets
  */
-FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget *parent) : KDialog(parent), m_saved(false) {
-    QWidget* mainWidget = new QWidget(this);
-    QVBoxLayout* vLayout = new QVBoxLayout(mainWidget);
-    vLayout->setSpacing(0);
-    vLayout->setContentsMargins(0,0,0,0);
-
+FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : KDialog(parent), m_saved(false) {
     m_HeaderEditWidget = new FITSHeaderEditWidget(this);
-    vLayout->addWidget(m_HeaderEditWidget);
-    setMainWidget( mainWidget );
+    setMainWidget(m_HeaderEditWidget);
 
     setWindowTitle(i18n("FITS header editor"));
     setButtons( KDialog::Ok | KDialog::Cancel );
     setButtonText(KDialog::Ok, i18n("&Save"));
     connect(this, SIGNAL(okClicked()), this, SLOT(save()));
     setAttribute(Qt::WA_DeleteOnClose);
+
+	//restore saved settings if available
+	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditDialog");
+	if (conf.exists())
+		restoreDialogSize(conf);
+	else
+		resize( QSize(400,0).expandedTo(minimumSize()) );
 }
 
 /*!
  * \brief FITSHeaderEditDialog::~FITSHeaderEditDialog
  */
 FITSHeaderEditDialog::~FITSHeaderEditDialog() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditDialog");
+	saveDialogSize(conf);
     delete m_HeaderEditWidget;
 }
 

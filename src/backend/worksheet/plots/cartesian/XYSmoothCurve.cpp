@@ -37,14 +37,12 @@
 #include "XYSmoothCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 
 #include <KLocale>
 #include <QIcon>
 #include <QElapsedTimer>
 #include <QThreadPool>
-#ifndef NDEBUG
-#include <QDebug>
-#endif
 
 extern "C" {
 #include <gsl/gsl_math.h>	// gsl_pow_*
@@ -256,15 +254,15 @@ void XYSmoothCurvePrivate::recalculate() {
 	const nsl_smooth_pad_mode mode = smoothData.mode;
 	const double lvalue = smoothData.lvalue;
 	const double rvalue = smoothData.rvalue;
-#ifndef NDEBUG
-	qDebug()<<"type:"<<nsl_smooth_type_name[type];
-	qDebug()<<"points ="<<points;
-	qDebug()<<"weight:"<<nsl_smooth_weight_type_name[weight];
-	qDebug()<<"percentile ="<<percentile;
-	qDebug()<<"order ="<<order;
-	qDebug()<<"mode ="<<nsl_smooth_pad_mode_name[mode];
-	qDebug()<<"const. values ="<<lvalue<<rvalue;
-#endif
+
+	DEBUG_LOG("type:"<<nsl_smooth_type_name[type]);
+	DEBUG_LOG("points ="<<points);
+	DEBUG_LOG("weight:"<<nsl_smooth_weight_type_name[weight]);
+	DEBUG_LOG("percentile ="<<percentile);
+	DEBUG_LOG("order ="<<order);
+	DEBUG_LOG("mode ="<<nsl_smooth_pad_mode_name[mode]);
+	DEBUG_LOG("const. values ="<<lvalue<<rvalue);
+
 ///////////////////////////////////////////////////////////
 	int status=0;
 

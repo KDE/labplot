@@ -38,6 +38,7 @@
 #include "CartesianCoordinateSystem.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 
 #include <cmath>	// isnan
 #include <cfloat>	// DBL_MIN
@@ -53,9 +54,6 @@ extern "C" {
 #include <QElapsedTimer>
 #include <QThreadPool>
 #include <QIcon>
-#ifndef NDEBUG
-#include <QDebug>
-#endif
 
 XYInterpolationCurve::XYInterpolationCurve(const QString& name)
 		: XYCurve(name, new XYInterpolationCurvePrivate(this)) {
@@ -260,12 +258,12 @@ void XYInterpolationCurvePrivate::recalculate() {
 	const double bias = interpolationData.bias;
 	const nsl_interp_evaluate evaluate = interpolationData.evaluate;
 	const unsigned int npoints = interpolationData.npoints;
-#ifndef NDEBUG
-	qDebug()<<"type:"<<nsl_interp_type_name[type];
-	qDebug()<<"cubic Hermite variant:"<<nsl_interp_pch_variant_name[variant]<<tension<<continuity<<bias;
-	qDebug()<<"evaluate:"<<nsl_interp_evaluate_name[evaluate];
-	qDebug()<<"npoints ="<<npoints;
-#endif
+
+	DEBUG_LOG("type:"<<nsl_interp_type_name[type]);
+	DEBUG_LOG("cubic Hermite variant:"<<nsl_interp_pch_variant_name[variant]<<tension<<continuity<<bias);
+	DEBUG_LOG("evaluate:"<<nsl_interp_evaluate_name[evaluate]);
+	DEBUG_LOG("npoints ="<<npoints);
+
 ///////////////////////////////////////////////////////////
 	int status=0;
 

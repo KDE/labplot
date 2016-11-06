@@ -35,6 +35,7 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
+#include <KSharedConfig>
 
 #include <QMenu>
 #include <QWidgetAction>
@@ -88,7 +89,17 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	connect( ui.tbFunctions, SIGNAL(clicked()), this, SLOT(showFunctions()) );
 	connect(this, SIGNAL(okClicked()), this, SLOT(generate()));
 
-	resize( QSize(300,0).expandedTo(minimumSize()) );
+	//restore saved settings if available
+	KConfigGroup conf(KSharedConfig::openConfig(), "FunctionValuesDialog");
+	if (conf.exists())
+		restoreDialogSize(conf);
+	else
+		resize( QSize(300,0).expandedTo(minimumSize()) );
+}
+
+FunctionValuesDialog::~FunctionValuesDialog() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "FunctionValuesDialog");
+	saveDialogSize(conf);
 }
 
 void FunctionValuesDialog::setColumns(QList<Column*> list) {

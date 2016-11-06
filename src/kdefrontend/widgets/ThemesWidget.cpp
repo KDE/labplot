@@ -29,6 +29,8 @@
 #include "ThemesWidget.h"
 #include "kdefrontend/ThemeHandler.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QListWidgetItem>
 #include <QStandardItemModel>
 #include <QFile>
@@ -51,9 +53,11 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	setViewMode(QListWidget::IconMode);
 	setResizeMode(QListWidget::Adjust);
 
-	//TODO: make this pixel-independent
-	setIconSize(QSize(200,200));
-	setMaximumWidth(225);
+	//make the icon 3x3cm big and show two of them in the height
+	int size = 3/2.54*QApplication::desktop()->physicalDpiX();
+	setIconSize(QSize(size,size));
+	setMinimumSize(1.1*size,2.1*size); //add some offset here to take care of potential scrollbars, etc. (not very precise...)
+	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	//show preview pixmaps
 	QStandardItemModel* mContentItemModel = new QStandardItemModel(this);

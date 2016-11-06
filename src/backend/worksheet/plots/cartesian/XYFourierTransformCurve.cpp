@@ -38,6 +38,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 
 #include <cmath>	// isnan
 extern "C" {
@@ -49,9 +50,6 @@ extern "C" {
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
-#ifndef NDEBUG
-#include <QDebug>
-#endif
 
 XYFourierTransformCurve::XYFourierTransformCurve(const QString& name)
 		: XYCurve(name, new XYFourierTransformCurvePrivate(this)) {
@@ -253,17 +251,19 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	const bool twoSided = transformData.twoSided;
 	const bool shifted = transformData.shifted;
 	const nsl_dft_xscale xScale = transformData.xScale;
+
+	DEBUG_LOG("n =" << n);
+	DEBUG_LOG("window type:" << nsl_sf_window_type_name[windowType]);
+	DEBUG_LOG("type:" << nsl_dft_result_type_name[type]);
+	DEBUG_LOG("scale:" << nsl_dft_xscale_name[xScale]);
+	DEBUG_LOG("two sided:" << twoSided);
+	DEBUG_LOG("shifted:" << shifted);
 #ifndef NDEBUG
-	qDebug()<<"n ="<<n;
-	qDebug()<<"window type:"<<nsl_sf_window_type_name[windowType];
-	qDebug()<<"type:"<<nsl_dft_result_type_name[type];
-	qDebug()<<"scale:"<<nsl_dft_xscale_name[xScale];
-	qDebug()<<"two sided:"<<twoSided;
-	qDebug()<<"shifted:"<<shifted;
 	QDebug out = qDebug();
 	for (unsigned int i=0; i < n; i++)
 		out<<ydata[i];
 #endif
+
 ///////////////////////////////////////////////////////////
 	// transform with window
 	int status = nsl_dft_transform_window(ydata, 1, n, twoSided, type, windowType);
@@ -301,7 +301,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 #ifndef NDEBUG
 	out = qDebug();
 	for (unsigned int i=0; i < N; i++)
-		out<<ydata[i]<<'('<<xdata[i]<<')';
+		out << ydata[i] << '(' << xdata[i] << ')';
 #endif
 
 	xVector->resize(N);

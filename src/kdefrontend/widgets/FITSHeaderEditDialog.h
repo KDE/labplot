@@ -28,8 +28,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #define FITSHEADEREDITDIALOG_H
 
 #include "FITSHeaderEditWidget.h"
-#include "backend/datasources/AbstractDataSource.h"
-#include <QWidget>
 #include <KDialog>
 
 class FITSHeaderEditDialog : public KDialog {
@@ -39,9 +37,11 @@ public:
     explicit FITSHeaderEditDialog( QWidget *parent = 0);
     ~FITSHeaderEditDialog();
     bool saved() const;
+
 private:
     FITSHeaderEditWidget* m_HeaderEditWidget;
     bool m_saved;
+
 private slots:
     void save();
 };

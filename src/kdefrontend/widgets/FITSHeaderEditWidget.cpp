@@ -27,36 +27,41 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include "FITSHeaderEditWidget.h"
 #include "backend/datasources/filters/FITSFilter.h"
-#include "backend/matrix/Matrix.h"
-#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/lib/macros.h"
 #include "FITSHeaderEditNewKeywordDialog.h"
 #include "FITSHeaderEditAddUnitDialog.h"
+
 #include <QMenu>
 #include <QTableWidget>
 #include <QFileDialog>
 #include <QContextMenuEvent>
-#include <QDebug>
 
 /*! \class FITSHeaderEditWidget
  * \brief Widget for listing/editing FITS header keywords
- * \since 2.2.0
+ * \since 2.4.0
  * \ingroup kdefrontend/widgets
  */
-FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget *parent) :
+FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) :
     QWidget(parent), m_initializingTable(false) {
+
     ui.setupUi(this);
     initActions();
     connectActions();
     initContextMenus();
+
     m_fitsFilter = new FITSFilter();
+
     ui.twKeywordsTable->setColumnCount(3);
     ui.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
     ui.twExtensions->headerItem()->setText(0, i18n("Extensions"));
     ui.twKeywordsTable->setHorizontalHeaderItem(0, new QTableWidgetItem(i18n("Key")));
     ui.twKeywordsTable->setHorizontalHeaderItem(1, new QTableWidgetItem(i18n("Value")));
     ui.twKeywordsTable->setHorizontalHeaderItem(2, new QTableWidgetItem(i18n("Comment")));
+	ui.twKeywordsTable->setAlternatingRowColors(true);
+	ui.twKeywordsTable->horizontalHeader()->setStretchLastSection(true);
     ui.twKeywordsTable->installEventFilter(this);
     ui.twExtensions->installEventFilter(this);
+
     setAttribute(Qt::WA_DeleteOnClose);
 
     connect(ui.pbOpenFile, SIGNAL(clicked()), this, SLOT(openFile()));

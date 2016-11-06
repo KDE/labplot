@@ -38,6 +38,7 @@
 #include "CartesianCoordinateSystem.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 
 #include <cmath>	// isnan
 #include <cfloat>	// DBL_MIN
@@ -49,9 +50,6 @@ extern "C" {
 #include <KLocale>
 #include <QElapsedTimer>
 #include <QThreadPool>
-#ifndef NDEBUG
-#include <QDebug>
-#endif
 
 XYDifferentiationCurve::XYDifferentiationCurve(const QString& name)
 		: XYCurve(name, new XYDifferentiationCurvePrivate(this)) {
@@ -251,10 +249,10 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	// differentiation settings
 	const nsl_diff_deriv_order_type derivOrder = differentiationData.derivOrder;
 	const int accOrder = differentiationData.accOrder;
-#ifndef NDEBUG
-	qDebug()<<nsl_diff_deriv_order_name[derivOrder]<<"derivative";
-	qDebug()<<"accuracy order:"<<accOrder;
-#endif
+
+	DEBUG_LOG(nsl_diff_deriv_order_name[derivOrder] << "derivative");
+	DEBUG_LOG("accuracy order:" << accOrder);
+
 ///////////////////////////////////////////////////////////
 	int status=0;
 
