@@ -983,9 +983,9 @@ bool MainWin::save(const QString& fileName) {
 	QIODevice* file;
 	// if ending is .lml, do gzip compression anyway
 	if (fileName.endsWith(".lml"))
-		file = KFilterDev::deviceForFile(fileName, "application/x-gzip", true);
+		file = new KCompressionDevice(fileName, KCompressionDevice::GZip);
 	else
-		file = KFilterDev::deviceForFile(fileName);
+		file = new KFilterDev(fileName);
 
 	if (file == 0)
 		file = new QFile(fileName);
