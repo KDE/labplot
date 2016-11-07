@@ -34,6 +34,7 @@
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KSharedConfig>
+#include <KWindowConfig>
 #include <QStandardItemModel>
 #include <QLabel>
 #include <QComboBox>
@@ -46,7 +47,7 @@
 */
 
 ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(parent),
-    m_matrixMode(false), urlCompletion(new KUrlCompletion) {
+		m_matrixMode(false), urlCompletion(new KUrlCompletion) {
 	mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
 	ui.gbOptions->hide();
@@ -83,7 +84,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	connect( ui.kleFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged(QString)) );
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 	connect(ui.cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(formatChanged(int)));
-    connect(ui.cbExportToFITS, SIGNAL(currentIndexChanged(int)), this, SLOT(fitsExportToChanged(int)));
+	connect(ui.cbExportToFITS, SIGNAL(currentIndexChanged(int)), this, SLOT(fitsExportToChanged(int)));
 
 	setCaption(i18n("Export spreadsheet"));
 	setWindowIcon(QIcon::fromTheme("document-export-database"));
@@ -101,12 +102,13 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	ui.cbLaTeXExport->setCurrentIndex(conf.readEntry("ExportOnly", 0));
 	ui.chkMatrixHHeader->setChecked(conf.readEntry("MatrixHorizontalHeader", true));
 	ui.chkMatrixVHeader->setChecked(conf.readEntry("MatrixVerticalHeader", true));
-    ui.chkMatrixVHeader->setChecked(conf.readEntry("FITSSpreadsheetColumnsUnits", true));
-    ui.cbExportToFITS->setCurrentIndex(conf.readEntry("FITSTo", 0));
+	ui.chkMatrixVHeader->setChecked(conf.readEntry("FITSSpreadsheetColumnsUnits", true));
+	ui.cbExportToFITS->setCurrentIndex(conf.readEntry("FITSTo", 0));
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	ui.gbOptions->setVisible(m_showOptions);
 	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
-	restoreDialogSize(conf);
+
+	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
 
 ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
@@ -123,11 +125,11 @@ ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 	conf.writeEntry("ExportOnly", ui.cbLaTeXExport->currentIndex());
 	conf.writeEntry("MatrixVerticalHeader", ui.chkMatrixVHeader->isChecked());
 	conf.writeEntry("MatrixHorizontalHeader", ui.chkMatrixHHeader->isChecked());
-    conf.writeEntry("FITSTo", ui.cbExportToFITS->currentIndex());
-    conf.writeEntry("FITSSpreadsheetColumnsUnits", ui.chkColumnsAsUnits->isChecked());
+	conf.writeEntry("FITSTo", ui.cbExportToFITS->currentIndex());
+	conf.writeEntry("FITSSpreadsheetColumnsUnits", ui.chkColumnsAsUnits->isChecked());
 
-	saveDialogSize(conf);
-    delete urlCompletion;
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
+	delete urlCompletion;
 }
 
 void ExportSpreadsheetDialog::setFileName(const QString& name) {

@@ -30,15 +30,18 @@
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include <QStandardPaths>
-#include <stdio.h>
-#include <gsl/gsl_rng.h>
-#include <gsl/gsl_randist.h>
 #include <KLocalizedString>
-// 
 #include <QDialogButtonBox>
 // #include <QPushButton>
 #include <KConfigGroup>
 #include <KSharedConfig>
+#include <KWindowConfig>
+
+extern "C" {
+#include <stdio.h>
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_randist.h>
+}
 
 /*!
 	\class RandomValuesDialog
@@ -155,14 +158,15 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 
 	//restore saved settings if available
-	KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
+	const KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
 	if (conf.exists()) {
 		ui.cbDistribution->setCurrentIndex(conf.readEntry("Distribution", 0));
 		this->distributionChanged(ui.cbDistribution->currentIndex()); //if index=0 no signal is emmited above, call this slot directly here
 		ui.kleParameter1->setText(conf.readEntry("Parameter1"));
 		ui.kleParameter2->setText(conf.readEntry("Parameter2"));
 		ui.kleParameter3->setText(conf.readEntry("Parameter3"));
-		restoreDialogSize(conf);
+
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 	} else {
 		//Gaussian distribution as default
 		this->distributionChanged(0);
@@ -178,7 +182,8 @@ RandomValuesDialog::~RandomValuesDialog() {
 	conf.writeEntry("Parameter1", ui.kleParameter1->text());
 	conf.writeEntry("Parameter2", ui.kleParameter2->text());
 	conf.writeEntry("Parameter3", ui.kleParameter3->text());
-	saveDialogSize(conf);
+
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 void RandomValuesDialog::setColumns(QList<Column*> list) {

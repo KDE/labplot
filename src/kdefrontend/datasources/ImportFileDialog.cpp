@@ -42,12 +42,13 @@
 
 #include <KMessageBox>
 #include <KInputDialog>
+#include <KSharedConfig>
+#include <KWindowConfig>
+#include <KLocalizedString>
 #include <QProgressBar>
 #include <QStatusBar>
 #include <QDir>
 #include <QInputDialog>
-#include <KSharedConfig>
-#include <KLocalizedString>
 #include <QMenu>
 
 /*!
@@ -91,7 +92,8 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	m_showOptions ? setButtonText(KDialog::User1, i18n("Hide Options")) : setButtonText(KDialog::User1, i18n("Show Options"));
 	importFileWidget->showOptions(m_showOptions);
-	restoreDialogSize(conf);
+
+	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
 
 ImportFileDialog::~ImportFileDialog() {
@@ -101,7 +103,7 @@ ImportFileDialog::~ImportFileDialog() {
 	if (cbPosition)
 		conf.writeEntry("Position", cbPosition->currentIndex());
 
-	saveDialogSize(conf);
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 /*!

@@ -35,11 +35,12 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
-#include <KSharedConfig>
 
 #include <QMenu>
 #include <QWidgetAction>
 #include <KLocalizedString>
+#include <KSharedConfig>
+#include <KWindowConfig>
 
 #include <cmath>
 
@@ -76,7 +77,7 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 #endif
 	m_aspectTreeModel->setSelectableAspects(m_selectableClasses);
 
-    ui.bAddVariable->setIcon(QIcon::fromTheme("list-add"));
+	ui.bAddVariable->setIcon(QIcon::fromTheme("list-add"));
 	ui.bAddVariable->setToolTip(i18n("Add new variable"));
 
 	setButtons( KDialog::Ok | KDialog::Cancel );
@@ -92,14 +93,14 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent, Qt::
 	//restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), "FunctionValuesDialog");
 	if (conf.exists())
-		restoreDialogSize(conf);
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 	else
-		resize( QSize(300,0).expandedTo(minimumSize()) );
+		resize(QSize(300, 0).expandedTo(minimumSize()));
 }
 
 FunctionValuesDialog::~FunctionValuesDialog() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "FunctionValuesDialog");
-	saveDialogSize(conf);
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 void FunctionValuesDialog::setColumns(QList<Column*> list) {
@@ -117,7 +118,7 @@ void FunctionValuesDialog::setColumns(QList<Column*> list) {
 
 		//add all available variables and select the corresponding columns
 		const QList<AbstractAspect*> columns = m_spreadsheet->project()->children("Column", AbstractAspect::Recursive);
-		for (int i=0; i<variableNames.size(); ++i) {
+		for (int i = 0; i < variableNames.size(); ++i) {
 			addVariable();
 			m_variableNames[i]->setText(variableNames.at(i));
 
@@ -147,7 +148,7 @@ void FunctionValuesDialog::checkValues() {
 	}
 
 	//check whether for the variables where a name was provided also a column was selected.
-	for (int i=0; i<m_variableDataColumns.size(); ++i) {
+	for (int i = 0; i < m_variableDataColumns.size(); ++i) {
 		if (m_variableNames.at(i)->text().simplified().isEmpty())
 			continue;
 
@@ -233,9 +234,9 @@ void FunctionValuesDialog::addVariable() {
 	layout->addWidget(ui.bAddVariable, row+1,3, 1, 1);
 
 	//add delete-button for the just added variable
-	if (row!=0) {
+	if (row != 0) {
 		QToolButton* b = new QToolButton();
-        b->setIcon(QIcon::fromTheme("list-remove"));
+		b->setIcon(QIcon::fromTheme("list-remove"));
 		b->setToolTip(i18n("Delete variable"));
 		layout->addWidget(b, row, 3, 1, 1);
 		m_variableDeleteButtons<<b;
@@ -246,7 +247,7 @@ void FunctionValuesDialog::addVariable() {
 }
 
 void FunctionValuesDialog::deleteVariable() {
-	QObject* ob=QObject::sender();
+	QObject* ob = QObject::sender();
 	int index = m_variableDeleteButtons.indexOf(qobject_cast<QToolButton*>(ob)) ;
 
 	delete m_variableNames.takeAt(index+1);
@@ -266,7 +267,7 @@ void FunctionValuesDialog::deleteVariable() {
 void FunctionValuesDialog::variableNameChanged() {
 	QStringList vars;
 	QString text;
-	for (int i=0; i<m_variableNames.size(); ++i) {
+	for (int i = 0; i < m_variableNames.size(); ++i) {
 		QString name = m_variableNames.at(i)->text().simplified();
 		if (!name.isEmpty()) {
 			vars<<name;
@@ -293,9 +294,8 @@ void FunctionValuesDialog::generate() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18np("%1: fill column with function values",
-									"%1: fill columns with function values",
-									m_spreadsheet->name(),
-									m_columns.size()));
+					"%1: fill columns with function values",
+					m_spreadsheet->name(), m_columns.size()));
 
 	//determine variable names and the data vectors of the specified columns
 	QStringList variableNames;
