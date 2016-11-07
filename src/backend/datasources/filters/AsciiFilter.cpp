@@ -325,8 +325,8 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 				int pos2 = line.indexOf(lineStringList.at(1), length1);
 				separator = line.mid(length1, pos2 - length1);
 			} else {
-				separator = line.right(line.length() - length1);
-				//separator = ' ';
+				//old: separator = line.right(line.length() - length1);
+				separator = ' ';
 			}
 		}
 	} else {
