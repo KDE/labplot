@@ -43,6 +43,7 @@
 #include <cmath>	// isnan
 
 #include <KLocale>
+#include <QIcon>
 #include <QElapsedTimer>
 #include <QThreadPool>
 

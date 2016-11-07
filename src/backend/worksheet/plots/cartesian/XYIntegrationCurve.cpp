@@ -47,6 +47,7 @@ extern "C" {
 }
 
 #include <KLocale>
+#include <QIcon>
 #include <QElapsedTimer>
 #include <QThreadPool>
 
