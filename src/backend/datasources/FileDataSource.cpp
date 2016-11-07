@@ -315,7 +315,7 @@ QString FileDataSource::fileInfoString(const QString &name){
 		}
 		infoString += infoStrings.join("<br/>");
 	} else{
-		infoString+= i18n("Could not open file %1 for reading.", fileName);
+		infoString += i18n("Could not open file %1 for reading.", fileName);
 	}
 
 	return infoString;
