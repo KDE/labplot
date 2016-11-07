@@ -47,8 +47,17 @@ double my_ldexp(double x, double expo) { return ldexp(x, (int)expo); }
 #ifndef _WIN32
 double my_jn(double n, double x) { return jn((int)n, x); }
 double my_yn(double n,double x) { return yn((int)n, x); }
-#endif
 double my_sgn(double x) { return copysign(1.0, x); }
+#else
+double my_sgn(double x) {
+	if (x > 0)
+		return 1;
+	else if (x < 0)
+		return -1;
+	else
+		return 0;
+}
+#endif
 
 /* wrapper for GSL functions with integer parameters */
 #define MODE GSL_PREC_DOUBLE
