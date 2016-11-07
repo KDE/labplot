@@ -72,6 +72,7 @@
 #include <QMimeData>
 #include <QElapsedTimer>
 #include <QHash>
+#include <QtGlobal>
 
 #include <KActionCollection>
 #include <KFileDialog>
