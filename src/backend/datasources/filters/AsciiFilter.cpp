@@ -30,9 +30,9 @@ Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/filters/AsciiFilterPrivate.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/macros.h"
 
 #include <QTextStream>
-#include <QDebug>
 #include <KLocale>
 #include <KFilterDev>
 
@@ -102,16 +102,15 @@ QStringList AsciiFilter::predefinedFilters() {
   returns the list of all predefined separator characters.
 */
 QStringList AsciiFilter::separatorCharacters() {
-	return (QStringList()<<"auto"<<"TAB"<<"SPACE"<<","<<";"<<":"
-				  <<",TAB"<<";TAB"<<":TAB"
-				  <<",SPACE"<<";SPACE"<<":SPACE");
+	return (QStringList() << "auto" << "TAB" << "SPACE" << "," << ";" << ":"
+		<< ",TAB" << ";TAB" << ":TAB" << ",SPACE" << ";SPACE" << ":SPACE");
 }
 
 /*!
 returns the list of all predefined comment characters.
 */
 QStringList AsciiFilter::commentCharacters() {
-	return (QStringList()<<"#"<<"!"<<"//"<<"+"<<"c"<<":"<<";");
+	return (QStringList() << "#" << "!" << "//" << "+" << "c" << ":" << ";");
 }
 
 /*!
@@ -127,7 +126,7 @@ int AsciiFilter::columnNumber(const QString & fileName) {
 
 	QTextStream in(device);
 	line = in.readLine();
-	lineStringList = line.split( QRegExp("\\s+")); //TODO
+	lineStringList = line.split(QRegExp("\\s+")); //TODO
 	return lineStringList.size();
 }
 
@@ -135,14 +134,14 @@ int AsciiFilter::columnNumber(const QString & fileName) {
 /*!
   returns the number of lines in the file \c fileName.
 */
-long AsciiFilter::lineNumber(const QString & fileName) {
+size_t AsciiFilter::lineNumber(const QString & fileName) {
 	//TODO: compare the speed of this function with the speed of wc from GNU-coreutils.
 	QIODevice *device = KFilterDev::deviceForFile(fileName);
 	if (!device->open(QIODevice::ReadOnly))
 		return 0;
 
 	QTextStream in(device);
-	long rows=0;
+	size_t rows = 0;
 	while (!in.atEnd()) {
 		in.readLine();
 		rows++;
@@ -152,7 +151,7 @@ long AsciiFilter::lineNumber(const QString & fileName) {
 }
 
 void AsciiFilter::setTransposed(const bool b) {
-	d->transposed=b;
+	d->transposed = b;
 }
 
 bool AsciiFilter::isTransposed() const{
@@ -160,7 +159,7 @@ bool AsciiFilter::isTransposed() const{
 }
 
 void AsciiFilter::setCommentCharacter(const QString& s) {
-	d->commentCharacter=s;
+	d->commentCharacter = s;
 }
 
 QString AsciiFilter::commentCharacter() const{
@@ -168,7 +167,7 @@ QString AsciiFilter::commentCharacter() const{
 }
 
 void AsciiFilter::setSeparatingCharacter(const QString& s) {
-	d->separatingCharacter=s;
+	d->separatingCharacter = s;
 }
 
 QString AsciiFilter::separatingCharacter() const{
@@ -176,7 +175,7 @@ QString AsciiFilter::separatingCharacter() const{
 }
 
 void AsciiFilter::setAutoModeEnabled(bool b) {
-	d->autoModeEnabled=b;
+	d->autoModeEnabled = b;
 }
 
 bool AsciiFilter::isAutoModeEnabled() const{
@@ -184,7 +183,7 @@ bool AsciiFilter::isAutoModeEnabled() const{
 }
 
 void AsciiFilter::setHeaderEnabled(bool b) {
-	d->headerEnabled=b;
+	d->headerEnabled = b;
 }
 
 bool AsciiFilter::isHeaderEnabled() const{
@@ -192,7 +191,7 @@ bool AsciiFilter::isHeaderEnabled() const{
 }
 
 void AsciiFilter::setVectorNames(const QString s) {
-	d->vectorNames=s.simplified();
+	d->vectorNames = s.simplified();
 }
 
 QString AsciiFilter::vectorNames() const{
@@ -200,7 +199,7 @@ QString AsciiFilter::vectorNames() const{
 }
 
 void AsciiFilter::setSkipEmptyParts(bool b) {
-	d->skipEmptyParts=b;
+	d->skipEmptyParts = b;
 }
 
 bool AsciiFilter::skipEmptyParts() const{
@@ -208,7 +207,7 @@ bool AsciiFilter::skipEmptyParts() const{
 }
 
 void AsciiFilter::setSimplifyWhitespacesEnabled(bool b) {
-	d->simplifyWhitespacesEnabled=b;
+	d->simplifyWhitespacesEnabled = b;
 }
 
 bool AsciiFilter::simplifyWhitespacesEnabled() const{
@@ -216,7 +215,7 @@ bool AsciiFilter::simplifyWhitespacesEnabled() const{
 }
 
 void AsciiFilter::setStartRow(const int r) {
-	d->startRow=r;
+	d->startRow = r;
 }
 
 int AsciiFilter::startRow() const{
@@ -224,7 +223,7 @@ int AsciiFilter::startRow() const{
 }
 
 void AsciiFilter::setEndRow(const int r) {
-	d->endRow=r;
+	d->endRow = r;
 }
 
 int AsciiFilter::endRow() const{
@@ -232,7 +231,7 @@ int AsciiFilter::endRow() const{
 }
 
 void AsciiFilter::setStartColumn(const int c) {
-	d->startColumn=c;
+	d->startColumn = c;
 }
 
 int AsciiFilter::startColumn() const{
@@ -240,7 +239,7 @@ int AsciiFilter::startColumn() const{
 }
 
 void AsciiFilter::setEndColumn(const int c) {
-	d->endColumn=c;
+	d->endColumn = c;
 }
 
 int AsciiFilter::endColumn() const{
@@ -281,7 +280,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	//...
 
 	//skip rows, if required
-	for (int i=0; i < startRow-1; i++) {
+	for (int i = 0; i < startRow - 1; i++) {
 		//if the number of rows to skip is bigger then the actual number of the rows in the file, then quit the function.
 		if (in.atEnd()) {
 			if (mode == AbstractFileFilter::Replace) {
@@ -316,16 +315,18 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	QStringList lineStringList;
 	if (separatingCharacter == "auto") {
 		QRegExp regExp("(\\s+)|(,\\s+)|(;\\s+)|(:\\s+)");
-		lineStringList = line.split( regExp, QString::SplitBehavior(skipEmptyParts) );
+		lineStringList = line.split(regExp, QString::SplitBehavior(skipEmptyParts));
 
 		//determine the separator
+		DEBUG_LOG("auto columns =" << lineStringList.size());
 		if (lineStringList.size()) {
 			int length1 = lineStringList.at(0).length();
-			if (lineStringList.size()>1) {
-				int pos2 = line.indexOf(lineStringList.at(1),length1);
-				separator = line.mid(length1, pos2-length1);
-			}else {
-				separator = line.right(line.length()-length1);
+			if (lineStringList.size() > 1) {
+				int pos2 = line.indexOf(lineStringList.at(1), length1);
+				separator = line.mid(length1, pos2 - length1);
+			} else {
+				separator = line.right(line.length() - length1);
+				//separator = ' ';
 			}
 		}
 	} else {
@@ -333,10 +334,8 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 		separator = separatingCharacter.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
 		lineStringList = line.split(separator, QString::SplitBehavior(skipEmptyParts));
 	}
-#ifndef NDEBUG
- 	qDebug() << "separator '"<<separator << "'";
- 	qDebug() << "headerEnabled ="<<headerEnabled;
-#endif
+ 	DEBUG_LOG("separator: " << separator);
+ 	DEBUG_LOG("headerEnabled =" << headerEnabled);
 
 	if (endColumn == -1)
 		endColumn = lineStringList.size(); //use the last available column index
@@ -356,31 +355,26 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	int actualEndRow;
 	if (endRow == -1)
 		actualEndRow = actualRows;
-	else if (endRow > actualRows-1)
+	else if (endRow > actualRows - 1)
 		actualEndRow = actualRows-1;
 	else
 		actualEndRow = endRow;
-	int actualCols=endColumn-startColumn+1;
+	int actualCols = endColumn - startColumn+1;
 
 	if (headerEnabled)
 		actualRows = actualEndRow-startRow;
 	else
 		actualRows = actualEndRow-startRow+1;
 	if (lines == -1)
-		lines=actualRows;
+		lines = actualRows;
 
-#ifndef NDEBUG
-	qDebug()<<"	start column ="<<startColumn;
-	qDebug()<<"	end column ="<<endColumn;
-	qDebug()<<"	actual cols ="<<actualCols;
-	qDebug()<<"	start row ="<<startRow;
-	qDebug()<<"	end row ="<<actualEndRow;
-	qDebug()<<"	actual rows ="<<actualRows;
-	qDebug()<<"	lines ="<<lines;
-#endif
+	DEBUG_LOG("start/end column: " << startColumn << endColumn);
+	DEBUG_LOG("start/end row: " << startRow << actualEndRow);
+	DEBUG_LOG("actual cols/rows: " << actualCols << actualRows);
+	DEBUG_LOG("lines:" << lines);
 
-	int currentRow=0; //indexes the position in the vector(column)
-	int columnOffset=0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
+	int currentRow = 0; // indexes the position in the vector(column)
+	int columnOffset = 0; // indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
 	QVector<QVector<double>*> dataPointers;	// pointers to the actual data containers
 	QStringList dataString;
 
