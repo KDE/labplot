@@ -46,7 +46,6 @@ extern "C" {
 #include <gsl/gsl_errno.h>
 }
 
-#include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
 #include <QThreadPool>

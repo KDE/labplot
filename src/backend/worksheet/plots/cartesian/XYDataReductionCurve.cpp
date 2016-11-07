@@ -42,7 +42,6 @@
 
 #include <cmath>	// isnan
 
-#include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
 #include <QThreadPool>

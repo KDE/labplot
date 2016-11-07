@@ -46,7 +46,6 @@ extern "C" {
 #include <gsl/gsl_errno.h>
 }
 
-#include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
 #include <QThreadPool>
@@ -84,7 +83,7 @@ void XYIntegrationCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYIntegrationCurve::icon() const {
-	return KIcon("labplot-xy-integration-curve");
+	return QIcon::fromTheme("labplot-xy-integration-curve");
 }
 
 //##############################################################################
