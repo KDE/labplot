@@ -298,7 +298,8 @@ void MainWin::initActions() {
 	actionCollection()->addAction("history", m_historyAction);
 	connect(m_historyAction, SIGNAL(triggered()),SLOT(historyDialog()));
 
-	// Appearance
+	// TODO: more menues
+	//  Appearance
 	// Analysis: see WorksheetView.cpp
 	// Drawing
 	// Script
@@ -488,7 +489,7 @@ void MainWin::updateGUI() {
 	if (m_closing)
 		return;
 
-	KXMLGUIFactory* factory=this->guiFactory();
+	KXMLGUIFactory* factory = this->guiFactory();
 	if (factory->container("worksheet", this) == NULL) {
 		//no worksheet menu found, most probably labplot2ui.rc
 		//was not properly installed -> return here in order not to crash
@@ -521,7 +522,7 @@ void MainWin::updateGUI() {
 		//enable worksheet related menus
 		factory->container("worksheet", this)->setEnabled(true);
  		factory->container("analysis", this)->setEnabled(true);
-// 		factory->container("drawing", this)->setEnabled(true);
+//TODO 		factory->container("drawing", this)->setEnabled(true);
 
 		//disable spreadsheet and matrix related menus
 		factory->container("spreadsheet", this)->setEnabled(false);
@@ -529,17 +530,17 @@ void MainWin::updateGUI() {
 
 		//populate worksheet menu
 		WorksheetView* view=qobject_cast<WorksheetView*>(w->view());
-		QMenu* menu=qobject_cast<QMenu*>(factory->container("worksheet", this));
+		QMenu* menu = qobject_cast<QMenu*>(factory->container("worksheet", this));
 		menu->clear();
 		view->createContextMenu(menu);
 
 		//populate analysis menu
-		menu=qobject_cast<QMenu*>(factory->container("analysis", this));
+		menu = qobject_cast<QMenu*>(factory->container("analysis", this));
 		menu->clear();
 		view->createAnalysisMenu(menu);
 
 		//populate worksheet-toolbar
-		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("worksheet_toolbar", this));
+		QToolBar* toolbar = qobject_cast<QToolBar*>(factory->container("worksheet_toolbar", this));
 		if (group.groupList().indexOf("Toolbar worksheet_toolbar") == -1)
 			toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
 
@@ -573,14 +574,14 @@ void MainWin::updateGUI() {
 		factory->container("spreadsheet", this)->setEnabled(true);
 
 		//populate spreadsheet-menu
-		SpreadsheetView* view=qobject_cast<SpreadsheetView*>(spreadsheet->view());
-		QMenu* menu=qobject_cast<QMenu*>(factory->container("spreadsheet", this));
+		SpreadsheetView* view = qobject_cast<SpreadsheetView*>(spreadsheet->view());
+		QMenu* menu = qobject_cast<QMenu*>(factory->container("spreadsheet", this));
 		menu->clear();
 		view->createContextMenu(menu);
 
 		//populate spreadsheet-toolbar
-		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
-		if (group.groupList().indexOf("Toolbar spreadsheet_toolbar")==-1)
+		QToolBar* toolbar = qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
+		if (group.groupList().indexOf("Toolbar spreadsheet_toolbar") == -1)
 			toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
 
 		toolbar->setVisible(true);
@@ -597,8 +598,8 @@ void MainWin::updateGUI() {
 		factory->container("matrix", this)->setEnabled(true);
 
 		//populate matrix-menu
-		MatrixView* view=qobject_cast<MatrixView*>(matrix->view());
-		QMenu* menu=qobject_cast<QMenu*>(factory->container("matrix", this));
+		MatrixView* view = qobject_cast<MatrixView*>(matrix->view());
+		QMenu* menu = qobject_cast<QMenu*>(factory->container("matrix", this));
 		menu->clear();
 		view->createContextMenu(menu);
 	} else {
@@ -609,14 +610,14 @@ void MainWin::updateGUI() {
 	if (datapicker) {
 		factory->container("datapicker", this)->setEnabled(true);
 		//populate datapicker-menu
-		DatapickerView* view=qobject_cast<DatapickerView*>(datapicker->view());
-		QMenu* menu=qobject_cast<QMenu*>(factory->container("datapicker", this));
+		DatapickerView* view = qobject_cast<DatapickerView*>(datapicker->view());
+		QMenu* menu = qobject_cast<QMenu*>(factory->container("datapicker", this));
 		menu->clear();
 		view->createContextMenu(menu);
 
 		//populate spreadsheet-toolbar
-		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("datapicker_toolbar", this));
-		if (group.groupList().indexOf("Toolbar datapicker_toolbar")==-1)
+		QToolBar* toolbar = qobject_cast<QToolBar*>(factory->container("datapicker_toolbar", this));
+		if (group.groupList().indexOf("Toolbar datapicker_toolbar") == -1)
 			toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
 
 		toolbar->clear();
