@@ -431,7 +431,7 @@ void MainWin::updateGUIOnProjectChanges() {
 	if (m_closing)
 		return;
 
-	KXMLGUIFactory* factory=this->guiFactory();
+	KXMLGUIFactory* factory = this->guiFactory();
 	if (factory->container("worksheet", this) == NULL) {
 		//no worksheet menu found, most probably labplot2ui.rc
 		//was not properly installed -> return here in order not to crash
@@ -489,7 +489,7 @@ void MainWin::updateGUI() {
 		return;
 
 	KXMLGUIFactory* factory=this->guiFactory();
-	if (factory->container("worksheet", this)==NULL) {
+	if (factory->container("worksheet", this) == NULL) {
 		//no worksheet menu found, most probably labplot2ui.rc
 		//was not properly installed -> return here in order not to crash
 		return;
@@ -517,7 +517,7 @@ void MainWin::updateGUI() {
 
 	//Handle the Worksheet-object
 	Worksheet* w = this->activeWorksheet();
-	if (w!=0) {
+	if (w != 0) {
 		//enable worksheet related menus
 		factory->container("worksheet", this)->setEnabled(true);
  		factory->container("analysis", this)->setEnabled(true);
@@ -540,7 +540,7 @@ void MainWin::updateGUI() {
 
 		//populate worksheet-toolbar
 		QToolBar* toolbar=qobject_cast<QToolBar*>(factory->container("worksheet_toolbar", this));
-		if (group.groupList().indexOf("Toolbar worksheet_toolbar")==-1)
+		if (group.groupList().indexOf("Toolbar worksheet_toolbar") == -1)
 			toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
 
 		toolbar->clear();
@@ -549,7 +549,7 @@ void MainWin::updateGUI() {
 
 		//populate the toolbar for cartesian plots
 		toolbar=qobject_cast<QToolBar*>(factory->container("cartesian_plot_toolbar", this));
-		if (group.groupList().indexOf("Toolbar cartesian_plot_toolbar")==-1)
+		if (group.groupList().indexOf("Toolbar cartesian_plot_toolbar") == -1)
 			toolbar->setToolButtonStyle(KToolBar::toolButtonStyleSetting());
 
 		toolbar->clear();
@@ -740,13 +740,13 @@ void MainWin::openProject(const QString& filename) {
 	}
 
 	QIODevice *file;
-	// first try gzip compression, because older files are gzipped but end with .lml
+	// first try gzip compression, because projects can be gzipped and end with .lml
 	if (filename.endsWith(".lml", Qt::CaseInsensitive))
 		file = KFilterDev::deviceForFile(filename, "application/x-gzip", true);
 	else	// opens filename using file ending
 		file = KFilterDev::deviceForFile(filename);
 
-	if (file==0)
+	if (file == 0)
 		file = new QFile(filename);
 
 	if (!file->open(QIODevice::ReadOnly)) {
@@ -818,10 +818,10 @@ bool MainWin::openXML(QIODevice *file) {
 	if (reader.hasWarnings()) {
 		QString msg = i18n("The following problems occurred when loading the project file:\n");
 		const QStringList& warnings = reader.warningStrings();
-		foreach(const QString& str, warnings)
+		foreach (const QString& str, warnings)
 			msg += str + '\n';
 
-		qWarning()<<msg;
+		qWarning() << msg;
 //TODO: show warnings in a kind of "log window" but not in message box
 // 		KMessageBox::error(this, msg, i18n("Project loading partly failed"));
 // 		statusBar()->showMessage(msg);
@@ -841,9 +841,9 @@ bool MainWin::closeProject() {
 		return false;
 
 	delete m_aspectTreeModel;
-	m_aspectTreeModel=0;
+	m_aspectTreeModel = 0;
 	delete m_project;
-	m_project=0;
+	m_project = 0;
 	m_currentFileName = "";
 
 	//update the UI if we're just closing a project
@@ -851,8 +851,8 @@ bool MainWin::closeProject() {
 	if (!m_closing) {
 		m_projectExplorerDock->hide();
 		m_propertiesDock->hide();
-		m_currentAspect=0;
-		m_currentFolder=0;
+		m_currentAspect = 0;
+		m_currentFolder = 0;
 		updateGUIOnProjectChanges();
 
 		if (m_autoSaveActive)
@@ -1236,7 +1236,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
 		aspect = m_project; // should never happen, just in case
 
 	m_suppressCurrentSubWindowChangedEvent = true;
-	if (aspect->folder() != m_currentFolder)	{
+	if (aspect->folder() != m_currentFolder) {
 		m_currentFolder = aspect->folder();
 		updateMdiWindowVisibility();
 	}
@@ -1368,15 +1368,15 @@ void MainWin::redo() {
 */
 void MainWin::updateMdiWindowVisibility() const {
 	QList<QMdiSubWindow *> windows = m_mdiArea->subWindowList();
-	PartMdiView * part_view;
+	PartMdiView* part_view;
 	switch (m_project->mdiWindowVisibility()) {
 	case Project::allMdiWindows:
-		foreach(QMdiSubWindow* window, windows)
+		foreach (QMdiSubWindow* window, windows)
 			window->show();
 
 		break;
 	case Project::folderOnly:
-		foreach(QMdiSubWindow *window, windows) {
+		foreach (QMdiSubWindow *window, windows) {
 			part_view = qobject_cast<PartMdiView *>(window);
 			Q_ASSERT(part_view);
 			if (part_view->part()->folder() == m_currentFolder)
@@ -1386,7 +1386,7 @@ void MainWin::updateMdiWindowVisibility() const {
 		}
 		break;
 	case Project::folderAndSubfolders:
-		foreach(QMdiSubWindow *window, windows) {
+		foreach (QMdiSubWindow *window, windows) {
 			part_view = qobject_cast<PartMdiView *>(window);
 			if (part_view->part()->isDescendantOf(m_currentFolder))
 				part_view->show();
@@ -1472,8 +1472,8 @@ void MainWin::handleSettingsChanges() {
 	}
 
 	int interval = group.readEntry("AutoSaveInterval", 1);
-	interval = interval*60*1000;
-	if (interval!=m_autoSaveTimer.interval())
+	interval *= 60*1000;
+	if (interval != m_autoSaveTimer.interval())
 		m_autoSaveTimer.setInterval(interval);
 }
 
@@ -1573,7 +1573,7 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 	if (!index.isValid())
 		m_project->addChild(aspect);
 	else {
-		AbstractAspect * parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
+		AbstractAspect* parent_aspect = static_cast<AbstractAspect *>(index.internalPointer());
 		// every aspect contained in the project should have a folder
 		Q_ASSERT(parent_aspect->folder());
 		parent_aspect->folder()->addChild(aspect);
