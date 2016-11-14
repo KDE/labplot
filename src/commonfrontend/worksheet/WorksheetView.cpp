@@ -617,44 +617,44 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 	if (m_worksheet->backgroundType() == PlotArea::Color) {
 		switch (m_worksheet->backgroundColorStyle()) {
 		case PlotArea::SingleColor: {
-			painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
-			break;
-		}
+				painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
+				break;
+			}
 		case PlotArea::HorizontalLinearGradient: {
-			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.topRight());
-			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
+				QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.topRight());
+				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
+				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
 		case PlotArea::VerticalLinearGradient: {
-			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomLeft());
-			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
+				QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomLeft());
+				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
+				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
 		case PlotArea::TopLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomRight());
-			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
+				QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomRight());
+				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
+				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
 		case PlotArea::BottomLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(scene_rect.bottomLeft(), scene_rect.topRight());
-			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
+				QLinearGradient linearGrad(scene_rect.bottomLeft(), scene_rect.topRight());
+				linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
+				linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
 		case PlotArea::RadialGradient: {
-			QRadialGradient radialGrad(scene_rect.center(), scene_rect.width()/2);
-			radialGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-			radialGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
-			painter->setBrush(QBrush(radialGrad));
-			break;
-		}
+				QRadialGradient radialGrad(scene_rect.center(), scene_rect.width()/2);
+				radialGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
+				radialGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+				painter->setBrush(QBrush(radialGrad));
+				break;
+			}
 			//default:
 			//	painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
 		}
@@ -780,9 +780,8 @@ void WorksheetView::wheelEvent(QWheelEvent *event) {
 			scale(1.2, 1.2);
 		else if (event->delta() < 0)
 			scale(1.0/1.2, 1.0/1.2);
-	} else {
+	} else
 		QGraphicsView::wheelEvent(event);
-	}
 }
 
 void WorksheetView::mousePressEvent(QMouseEvent* event) {
@@ -834,19 +833,17 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 
 		//set the cursor appearance according to the current mouse mode for the cartesian plots
 		if (plot) {
-			if (m_cartesianPlotMouseMode == CartesianPlot::ZoomSelectionMode) {
+			if (m_cartesianPlotMouseMode == CartesianPlot::ZoomSelectionMode)
 				setCursor(Qt::CrossCursor);
-			} else if (m_cartesianPlotMouseMode == CartesianPlot::ZoomXSelectionMode) {
+			else if (m_cartesianPlotMouseMode == CartesianPlot::ZoomXSelectionMode)
 				setCursor(Qt::SizeHorCursor);
-			} else if (m_cartesianPlotMouseMode == CartesianPlot::ZoomYSelectionMode) {
+			else if (m_cartesianPlotMouseMode == CartesianPlot::ZoomYSelectionMode)
 				setCursor(Qt::SizeVerCursor);
-			}
-		} else {
+		} else
 			setCursor(Qt::ArrowCursor);
-		}
-	} else if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode == CartesianPlot::SelectionMode ) {
+	} else if (m_mouseMode == SelectionMode && m_cartesianPlotMouseMode == CartesianPlot::SelectionMode )
 		setCursor(Qt::ArrowCursor);
-	} else if (m_selectionBandIsShown) {
+	else if (m_selectionBandIsShown) {
 		QRect rect = QRect(m_selectionStart, m_selectionEnd).normalized();
 		m_selectionEnd = event->pos();
 		rect = rect.united(QRect(m_selectionStart, m_selectionEnd).normalized());
@@ -889,9 +886,8 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 		m_magnificationWindow->setPos(pos.x()- px.width()/2, pos.y()- px.height()/2);
 
 		m_magnificationWindow->setVisible(true);
-	} else if (m_magnificationWindow) {
+	} else if (m_magnificationWindow)
 		m_magnificationWindow->setVisible(false);
-	}
 
 	QGraphicsView::mouseMoveEvent(event);
 }
@@ -942,11 +938,11 @@ void WorksheetView::processResize() {
 }
 
 void WorksheetView::changeZoom(QAction* action) {
-	if (action == zoomInViewAction) {
+	if (action == zoomInViewAction)
 		scale(1.2, 1.2);
-	} else if (action == zoomOutViewAction) {
+	else if (action == zoomOutViewAction)
 		scale(1.0/1.2, 1.0/1.2);
-	} else if (action == zoomOriginAction) {
+	else if (action == zoomOriginAction) {
 		static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
 		static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1,Worksheet::Inch));
 		setTransform(QTransform::fromScale(hscale, vscale));
@@ -956,9 +952,8 @@ void WorksheetView::changeZoom(QAction* action) {
 	} else if (action == zoomFitPageHeightAction) {
 		float scaleFactor = viewport()->height()/scene()->sceneRect().height();
 		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
-	} else if (action == zoomFitSelectionAction) {
+	} else if (action == zoomFitSelectionAction)
 		fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
-	}
 	currentZoomAction = action;
 	if (tbZoom)
 		tbZoom->setDefaultAction(action);
@@ -1069,9 +1064,8 @@ void WorksheetView::selectAllElements() {
 	//deselect all previously selected items since there can be some non top-level items belong them
 	m_suppressSelectionChangedEvent = true;
 	QList<QGraphicsItem*> items = scene()->selectedItems();
-	foreach (QGraphicsItem* item, m_selectedItems) {
+	foreach (QGraphicsItem* item, m_selectedItems)
 		m_worksheet->setItemSelectedInView(item, false);
-	}
 
 	//select top-level items
 	items = scene()->items();
@@ -1091,18 +1085,17 @@ void WorksheetView::deleteElement() {
 	if (items.size() == 0)
 		return;
 
-	int rc = KMessageBox::warningYesNo( this, 
-		i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", items.size()),
-		i18n("Delete selected objects"));
+	int rc = KMessageBox::warningYesNo( this,
+	                                    i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", items.size()),
+	                                    i18n("Delete selected objects"));
 
 	if (rc == KMessageBox::No)
 		return;
 
 	m_suppressSelectionChangedEvent = true;
 	m_worksheet->beginMacro(i18n("%1: Remove selected worksheet elements.", m_worksheet->name()));
-	foreach (QGraphicsItem* item, m_selectedItems) {
+	foreach (QGraphicsItem* item, m_selectedItems)
 		m_worksheet->deleteAspectFromGraphicsItem(item);
-	}
 	m_worksheet->endMacro();
 	m_suppressSelectionChangedEvent = false;
 }
@@ -1378,16 +1371,14 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	QRectF sourceRect;
 
 	//determine the rectangular to print
-	if (area == WorksheetView::ExportBoundingBox) {
+	if (area == WorksheetView::ExportBoundingBox)
 		sourceRect = scene()->itemsBoundingRect();
-	} else if (area == WorksheetView::ExportSelection) {
+	else if (area == WorksheetView::ExportSelection) {
 		//TODO doesn't work: rect = scene()->selectionArea().boundingRect();
-		foreach (QGraphicsItem* item, m_selectedItems) {
+		foreach (QGraphicsItem* item, m_selectedItems)
 			sourceRect = sourceRect.united( item->mapToScene(item->boundingRect()).boundingRect() );
-		}
-	} else {
+	} else
 		sourceRect = scene()->sceneRect();
-	}
 
 	//print
 	if (format == WorksheetView::Pdf || format == WorksheetView::Eps) {
