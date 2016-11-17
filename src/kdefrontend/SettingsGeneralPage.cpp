@@ -43,11 +43,26 @@
  * \brief Page for the 'General' settings of the Labplot settings dialog.
  *
  */
-SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
-    SettingsPage(parent), m_changed(false) {
+SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent),
+	m_changed(false) {
 
 	ui.setupUi(this);
 	retranslateUi();
+
+	ui.lLatexWarning->setPixmap( KIcon("state-warning").pixmap(QSize(48,48)) );
+
+	//add available TeX typesetting engines
+	if (executableExists(QLatin1String("lualatex")))
+		ui.cbTexEngine->addItem(QLatin1String("LuaLaTeX"), QLatin1String("lualatex"));
+
+	if (executableExists(QLatin1String("xelatex")))
+		ui.cbTexEngine->addItem(QLatin1String("XeLaTex"), QLatin1String("xelatex"));
+
+	if (executableExists(QLatin1String("pdflatex")))
+		ui.cbTexEngine->addItem(QLatin1String("pdfLaTeX"), QLatin1String("pdflatex"));
+
+	if (executableExists(QLatin1String("latex")))
+		ui.cbTexEngine->addItem(QLatin1String("LaTeX"), QLatin1String("latex"));
 
 	connect(ui.cbLoadOnStart, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
 	connect(ui.cbInterface, SIGNAL(currentIndexChanged(int)), this, SLOT(interfaceChanged(int)) );
@@ -57,33 +72,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
 	connect(ui.sbAutoSaveInterval, SIGNAL(valueChanged(int)), this, SLOT(changed()) );
 	connect(ui.chkDoubleBuffering, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
 	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
-
-	//add available TeX typesetting engines
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-	if (!QStandardPaths::findExecutable("lualatex").isEmpty())
-		ui.cbTexEngine->addItem("LuaLaTeX", "lualatex");
-
-	if (!QStandardPaths::findExecutable("xelatex").isEmpty())
-		ui.cbTexEngine->addItem("XeLaTex", "xelatex");
-
-	if (!QStandardPaths::findExecutable("pdflatex").isEmpty())
-		ui.cbTexEngine->addItem("pdfLaTeX", "pdflatex");
-
-	if (!QStandardPaths::findExecutable("latex").isEmpty())
-		ui.cbTexEngine->addItem("LaTeX", "latex");
-#else
-	if (!KStandardDirs::findExe("lualatex").isEmpty())
-		ui.cbTexEngine->addItem("LuaLaTeX", "lualatex");
-
-	if (!KStandardDirs::findExe("xelatex").isEmpty())
-		ui.cbTexEngine->addItem("XeLaTex", "xelatex");
-
-	if (!KStandardDirs::findExe("pdflatex").isEmpty())
-		ui.cbTexEngine->addItem("pdfLaTeX", "pdflatex");
-
-	if (!KStandardDirs::findExe("latex").isEmpty())
-		ui.cbTexEngine->addItem("LaTeX", "latex");
-#endif
+	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(checkTeX(int)) );
 
 	loadSettings();
 	interfaceChanged(ui.cbInterface->currentIndex());
@@ -160,4 +149,40 @@ void SettingsGeneralPage::interfaceChanged(int index) {
 	ui.lMdiVisibility->setVisible(!tabbedView);
 	ui.cbMdiVisibility->setVisible(!tabbedView);
 	changed();
+}
+
+void SettingsGeneralPage::checkTeX(int engineIndex) {
+	if (engineIndex == -1){
+		ui.lLatexWarning->show();
+		ui.lLatexWarning->setToolTip(i18n("No LaTeX installation found or selected. LaTeX typesetting not possible."));
+		return;
+	}
+
+	//engine found, check the precense of other required tools (s.a. TeXRenderer.cpp):
+	//to convert the generated PDF/PS files to PNG we need 'convert' from the ImageMagic package
+	if (!executableExists(QLatin1String("convert"))) {
+		ui.lLatexWarning->show();
+		ui.lLatexWarning->setToolTip(i18n("No 'convert' found. LaTeX typesetting not possible."));
+		return;
+	}
+
+	QString engine = ui.cbTexEngine->itemData(engineIndex).toString();
+	if (engine=="latex") {
+		//to convert the generated PS files to DVI we need 'dvips'
+		if (!executableExists(QLatin1String("dvips"))) {
+			ui.lLatexWarning->show();
+			ui.lLatexWarning->setToolTip(i18n("No 'dvips' found. LaTeX typesetting not possible."));
+			return;
+		}
+	}
+
+	ui.lLatexWarning->hide();
+}
+
+bool SettingsGeneralPage::executableExists(const QString& exe) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+		return !QStandardPaths::findExecutable(exe).isEmpty();
+#else
+		return !KStandardDirs::findExe(exe).isEmpty();
+#endif
 }
