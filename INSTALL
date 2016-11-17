@@ -6,6 +6,7 @@ To compile LabPlot following packages are required:
 	* GSL version 1.15 or higher (including the devel-package, gsl-devel or similar)
 
 optional
+	* LaTeX to enable LaTeX typesetting in LabPlot, requires also 'convert' from ImageMagick and 'dvips'
 	* HDF5 version 1.8 or higher (including the devel-package, hdf5-devel or similar)
 	* NetCDF version 3 or higher (including the devel-package, netcdf-devel or similar)
 	* CFITSIO version 3 or higher (including the devel-package, cfitsio-devel or similar)
