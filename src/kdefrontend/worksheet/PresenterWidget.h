@@ -27,7 +27,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #ifndef PRESENTERWIDGET_H
 #define PRESENTERWIDGET_H
 
-#include <QWidget>
 #include <QFrame>
 
 class QLabel;
@@ -49,8 +48,8 @@ private:
 	void startTimeline();
 
 protected:
-	void keyPressEvent(QKeyEvent* event);
-	bool eventFilter(QObject *watched, QEvent *event);
+	void keyPressEvent(QKeyEvent*);
+	bool eventFilter(QObject*, QEvent*);
 
 private slots:
 	void slideDown();
@@ -70,7 +69,7 @@ public:
 	bool shouldHide();
 
 public slots:
-	void movePanel(qreal value);
+	void movePanel(qreal);
 };
 
 #endif // PRESENTERWIDGET_H
