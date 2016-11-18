@@ -72,7 +72,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 	interfaceChanged(ui.cbInterface->currentIndex());
 }
 
-void SettingsGeneralPage::applySettings(){
+void SettingsGeneralPage::applySettings() {
 	KConfigGroup group = KGlobal::config()->group( "General" );
 	group.writeEntry("LoadOnStart", ui.cbLoadOnStart->currentIndex());
 	group.writeEntry("ViewMode", ui.cbInterface->currentIndex());
@@ -84,11 +84,11 @@ void SettingsGeneralPage::applySettings(){
 	group.writeEntry("LaTeXEngine", ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
 }
 
-void SettingsGeneralPage::restoreDefaults(){
-    loadSettings();
+void SettingsGeneralPage::restoreDefaults() {
+	loadSettings();
 }
 
-void SettingsGeneralPage::loadSettings(){
+void SettingsGeneralPage::loadSettings() {
 	const KConfigGroup group = KGlobal::config()->group( "General" );
 	ui.cbLoadOnStart->setCurrentIndex(group.readEntry("LoadOnStart", 0));
 	ui.cbInterface->setCurrentIndex(group.readEntry("ViewMode", 0));
@@ -114,11 +114,11 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbLoadOnStart->addItem(i18n("Create new empty project"));
 	ui.cbLoadOnStart->addItem(i18n("Create new project with worksheet"));
 	ui.cbLoadOnStart->addItem(i18n("Load last used project"));
-	
+
 	ui.cbInterface->clear();
 	ui.cbInterface->addItem(i18n("Sub-window view"));
 	ui.cbInterface->addItem(i18n("Tabbed view"));
-	
+
 	ui.cbMdiVisibility->clear();
 	ui.cbMdiVisibility->addItem(i18n("Show windows of the current folder only"));
 	ui.cbMdiVisibility->addItem(i18n("Show windows of the current folder and its subfolders only"));
@@ -150,7 +150,7 @@ void SettingsGeneralPage::interfaceChanged(int index) {
  \sa TeXRenderer::active()
  */
 void SettingsGeneralPage::checkTeX(int engineIndex) {
-	if (engineIndex == -1){
+	if (engineIndex == -1) {
 		ui.lLatexWarning->show();
 		ui.lLatexWarning->setToolTip(i18n("No LaTeX installation found or selected. LaTeX typesetting not possible."));
 		return;
