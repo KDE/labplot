@@ -39,6 +39,8 @@ public:
 	static QImage renderImageLaTeX( const QString&, const QColor& fontColor, const int fontSize=12,  const int dpi=300);
 	static QImage imageFromPDF(const QTemporaryFile&, const int dpi, const QString& engine);
 	static QImage imageFromDVI(const QTemporaryFile&, const int dpi);
+	static bool enabled();
+	static bool executableExists(const QString&);
 };
 
 #endif

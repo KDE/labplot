@@ -46,7 +46,6 @@ private:
 	Ui::SettingsGeneralPage ui;
 	bool m_changed;
 
-	bool executableExists(const QString&);
 	void loadSettings();
 	void retranslateUi();
 

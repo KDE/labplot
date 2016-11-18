@@ -28,20 +28,14 @@
 
 #include "SettingsGeneralPage.h"
 #include "MainWin.h"
+#include "tools/TeXRenderer.h"
 
 #include <KDialog>
 #include <KLocale>
 #include <kfiledialog.h>
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-#include <QStandardPaths>
-#else
-#include <KStandardDirs>
-#endif
-
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
- *
  */
 SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent),
 	m_changed(false) {
@@ -52,16 +46,16 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 	ui.lLatexWarning->setPixmap( KIcon("state-warning").pixmap(QSize(48,48)) );
 
 	//add available TeX typesetting engines
-	if (executableExists(QLatin1String("lualatex")))
+	if (TeXRenderer::executableExists(QLatin1String("lualatex")))
 		ui.cbTexEngine->addItem(QLatin1String("LuaLaTeX"), QLatin1String("lualatex"));
 
-	if (executableExists(QLatin1String("xelatex")))
+	if (TeXRenderer::executableExists(QLatin1String("xelatex")))
 		ui.cbTexEngine->addItem(QLatin1String("XeLaTex"), QLatin1String("xelatex"));
 
-	if (executableExists(QLatin1String("pdflatex")))
+	if (TeXRenderer::executableExists(QLatin1String("pdflatex")))
 		ui.cbTexEngine->addItem(QLatin1String("pdfLaTeX"), QLatin1String("pdflatex"));
 
-	if (executableExists(QLatin1String("latex")))
+	if (TeXRenderer::executableExists(QLatin1String("latex")))
 		ui.cbTexEngine->addItem(QLatin1String("LaTeX"), QLatin1String("latex"));
 
 	connect(ui.cbLoadOnStart, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
@@ -151,6 +145,10 @@ void SettingsGeneralPage::interfaceChanged(int index) {
 	changed();
 }
 
+/*!
+ checks whether all tools required for latex typesetting are available. shows a warning if not.
+ \sa TeXRenderer::active()
+ */
 void SettingsGeneralPage::checkTeX(int engineIndex) {
 	if (engineIndex == -1){
 		ui.lLatexWarning->show();
@@ -160,7 +158,7 @@ void SettingsGeneralPage::checkTeX(int engineIndex) {
 
 	//engine found, check the precense of other required tools (s.a. TeXRenderer.cpp):
 	//to convert the generated PDF/PS files to PNG we need 'convert' from the ImageMagic package
-	if (!executableExists(QLatin1String("convert"))) {
+	if (!TeXRenderer::executableExists(QLatin1String("convert"))) {
 		ui.lLatexWarning->show();
 		ui.lLatexWarning->setToolTip(i18n("No 'convert' found. LaTeX typesetting not possible."));
 		return;
@@ -169,7 +167,7 @@ void SettingsGeneralPage::checkTeX(int engineIndex) {
 	QString engine = ui.cbTexEngine->itemData(engineIndex).toString();
 	if (engine=="latex") {
 		//to convert the generated PS files to DVI we need 'dvips'
-		if (!executableExists(QLatin1String("dvips"))) {
+		if (!TeXRenderer::executableExists(QLatin1String("dvips"))) {
 			ui.lLatexWarning->show();
 			ui.lLatexWarning->setToolTip(i18n("No 'dvips' found. LaTeX typesetting not possible."));
 			return;
@@ -177,12 +175,4 @@ void SettingsGeneralPage::checkTeX(int engineIndex) {
 	}
 
 	ui.lLatexWarning->hide();
-}
-
-bool SettingsGeneralPage::executableExists(const QString& exe) {
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-		return !QStandardPaths::findExecutable(exe).isEmpty();
-#else
-		return !KStandardDirs::findExe(exe).isEmpty();
-#endif
 }

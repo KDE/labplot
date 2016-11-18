@@ -59,7 +59,7 @@ private:
 	QList<Axis*> m_axesList;
 	bool m_initializing;
 	KMenu* m_dateTimeMenu;
-	bool m_teXAvailable;
+	bool m_teXEnabled;
 
 	void initConnections() const;
 
