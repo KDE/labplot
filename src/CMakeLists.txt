@@ -70,6 +70,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditNewKeywordDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
+	${KDEFRONTEND_DIR}/widgets/ImportSQLDatabaseDialog.cpp
+	${KDEFRONTEND_DIR}/widgets/ImportSQLDatabaseWidget.cpp
 )
 
 set(UI_SOURCES
@@ -120,6 +122,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/fitsheadereditwidget.ui
 	${KDEFRONTEND_DIR}/ui/fitsheadereditnewkeywordwidget.ui
 	${KDEFRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
+	${KDEFRONTEND_DIR}/ui/importsqldatabasewidget.ui
 )
 
 set(BACKEND_SOURCES
@@ -256,7 +259,7 @@ set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
 INCLUDE_DIRECTORIES(. ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/..)
 kde4_add_ui_files(LABPLOT_SRCS ${UI_SOURCES})
 kde4_add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES})
-target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KNEWSTUFF3_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${NETCDF_LIBRARY} ${FFTW_LIBRARIES} ${CFITSIO_LIBRARY})
+target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KNEWSTUFF3_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${NETCDF_LIBRARY} ${FFTW_LIBRARIES} ${CFITSIO_LIBRARY} ${QT_QTSQL_LIBRARIES})
 IF (HDF5_FOUND)
 	target_link_libraries(labplot2 ${HDF5_C_LIBRARIES})
 ENDIF (HDF5_FOUND)
