@@ -321,7 +321,7 @@ void LabelWidget::teXUsedChanged(bool checked) {
 	//when switching to the text mode, set the background color to white just for the case the latex code provided by the user
 	//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
 	if (!checked)
-		ui.teLabel->setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
+		ui.teLabel->setStyleSheet("");
 
 	if (m_initializing)
 		return;
@@ -599,7 +599,7 @@ void LabelWidget::labelTeXImageUpdated(bool valid) {
 	if (!valid)
 		ui.teLabel->setStyleSheet("QTextEdit{background: red;}");
 	else
-		ui.teLabel->setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
+		ui.teLabel->setStyleSheet("");
 }
 
 void LabelWidget::labelTeXFontSizeChanged(const int size) {
