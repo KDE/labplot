@@ -53,10 +53,10 @@
 #include <QToolBar>
 #include <QTextStream>
 #include <QProcess>
-// #include <QDebug>
 
 #include <KAction>
 #include <KLocale>
+
 #include "kdefrontend/spreadsheet/DropValuesDialog.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
 #include "kdefrontend/spreadsheet/RandomValuesDialog.h"
