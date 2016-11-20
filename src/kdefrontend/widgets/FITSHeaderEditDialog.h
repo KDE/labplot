@@ -31,19 +31,19 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <KDialog>
 
 class FITSHeaderEditDialog : public KDialog {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit FITSHeaderEditDialog( QWidget *parent = 0);
-    ~FITSHeaderEditDialog();
-    bool saved() const;
+	explicit FITSHeaderEditDialog( QWidget *parent = 0);
+	~FITSHeaderEditDialog();
+	bool saved() const;
 
 private:
-    FITSHeaderEditWidget* m_HeaderEditWidget;
-    bool m_saved;
+	FITSHeaderEditWidget* m_HeaderEditWidget;
+	bool m_saved;
 
 private slots:
-    void save();
+	void save();
 };
 
 #endif // FITSHEADEREDITDIALOG_H

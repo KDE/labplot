@@ -2,15 +2,17 @@
 New features:
 	* Support themes for plots
 	* Import and editing of FITS data files
-	* Support user specified x range in all analysis functions
 	* Data reduction by removing data points using multiple algorithm
 	* Numerical differentiation and integration with several options
 	* New pre-defined fit models: Gompertz, Weibull, Log-Normal, Gumbel
 	* Fit parameter now support fixed values and also lower and upper limits
+	* Support user specified x range in all analysis functions
 	* Allow to enter complete LaTeX documents in text labels
 	* Configuration parameter to use different LaTex engines (LuaLaTex, XeLatex, pdfLaTex, LaTex)
 	* Presenter mode for worksheets
-	* MacOSX port
+	* Support for MacOSX
+	* Support for Julia's vectors and tuples in CAS worksheets (requires Cantor v. 16.12 and higher)
+	* Disable LaTeX typesetting if no LaTex installation (and other required tools) were found at runtime 
 
 Bug fixes:
 	* Correctly load worksheet sizes from saved templates

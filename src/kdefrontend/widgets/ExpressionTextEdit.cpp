@@ -2,7 +2,7 @@
     File             : ExpressionTextEdit.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2014-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright        : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
     Description      : widget for defining mathematical expressions
 					   modified version of
 					   http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
@@ -204,7 +204,7 @@ void ExpressionTextEdit::validateExpression(bool force) {
 		if (!m_isValid)
 			setStyleSheet("QTextEdit{background: red;}");
 		else
-			setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
+			setStyleSheet("");
 
 		m_currentExpression = text;
 		emit(expressionChanged());

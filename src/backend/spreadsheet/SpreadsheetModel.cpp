@@ -90,8 +90,8 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 	if( !index.isValid() )
 		return QVariant();
 
-	int row = index.row();
-	int col = index.column();
+	const int row = index.row();
+	const int col = index.column();
 	Column* col_ptr = m_spreadsheet->column(col);
 
 	if(!col_ptr)
@@ -99,11 +99,14 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 
 	switch(role) {
 		case Qt::ToolTipRole: {
-			if(col_ptr->isValid(row))
-				return QVariant(col_ptr->asStringColumn()->textAt(row));
-			else {
+			if(col_ptr->isValid(row)) {
 				if(col_ptr->isMasked(row))
-					return QVariant(i18n("invalid cell (ignored in all operations) (masked)"));
+					return QVariant(col_ptr->asStringColumn()->textAt(row) + i18n(", masked (ignored in all operations)"));
+				else
+					return QVariant(col_ptr->asStringColumn()->textAt(row));
+			} else {
+				if(col_ptr->isMasked(row))
+					return QVariant(i18n("invalid cell, masked (ignored in all operations)"));
 				else
 					return QVariant(i18n("invalid cell (ignored in all operations)"));
 			}
@@ -112,8 +115,9 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 			if(col_ptr->isValid(row))
 				return QVariant(col_ptr->asStringColumn()->textAt(row));
 
-			if(m_formula_mode)
-				return QVariant(col_ptr->formula(row));
+			//m_formula_mode is not used at the moment
+			//if(m_formula_mode)
+			//	return QVariant(col_ptr->formula(row));
 
 			return QVariant();
 		}
@@ -121,16 +125,15 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 			if(!col_ptr->isValid(row))
 				return QVariant("-");
 
-			if(m_formula_mode)
-				return QVariant(col_ptr->formula(row));
+			//m_formula_mode is not used at the moment
+			//if(m_formula_mode)
+			//	return QVariant(col_ptr->formula(row));
 
 			return QVariant(col_ptr->asStringColumn()->textAt(row));
 		}
 		case Qt::ForegroundRole: {
 			if(!col_ptr->isValid(index.row()))
-				return QVariant(QBrush(QColor(0xff,0,0))); // invalid -> red letters
-			else
-				return QVariant(QBrush(QColor(0,0,0)));
+				return QVariant(QBrush(QColor(Qt::red)));
 		}
 		case MaskingRole:
 			return QVariant(col_ptr->isMasked(row));

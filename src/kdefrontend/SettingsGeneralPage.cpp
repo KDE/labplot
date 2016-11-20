@@ -28,27 +28,36 @@
 
 #include "SettingsGeneralPage.h"
 #include "MainWin.h"
+#include "tools/TeXRenderer.h"
 
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <kfiledialog.h>
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-#include <QStandardPaths>
-#else
-#include <KStandardDirs>
-#endif
-
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
- *
  */
-SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
-	SettingsPage(parent), m_changed(false) {
+SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent),
+	m_changed(false) {
 
 	ui.setupUi(this);
 	retranslateUi();
+
+	ui.lLatexWarning->setPixmap( QIcon::fromTheme("state-warning").pixmap(QSize(48,48)) );
+
+	//add available TeX typesetting engines
+	if (TeXRenderer::executableExists(QLatin1String("lualatex")))
+		ui.cbTexEngine->addItem(QLatin1String("LuaLaTeX"), QLatin1String("lualatex"));
+
+	if (TeXRenderer::executableExists(QLatin1String("xelatex")))
+		ui.cbTexEngine->addItem(QLatin1String("XeLaTex"), QLatin1String("xelatex"));
+
+	if (TeXRenderer::executableExists(QLatin1String("pdflatex")))
+		ui.cbTexEngine->addItem(QLatin1String("pdfLaTeX"), QLatin1String("pdflatex"));
+
+	if (TeXRenderer::executableExists(QLatin1String("latex")))
+		ui.cbTexEngine->addItem(QLatin1String("LaTeX"), QLatin1String("latex"));
 
 	connect(ui.cbLoadOnStart, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
 	connect(ui.cbInterface, SIGNAL(currentIndexChanged(int)), this, SLOT(interfaceChanged(int)) );
@@ -58,33 +67,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
 	connect(ui.sbAutoSaveInterval, SIGNAL(valueChanged(int)), this, SLOT(changed()) );
 	connect(ui.chkDoubleBuffering, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
 	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
-
-	//add available TeX typesetting engines
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-	if (!QStandardPaths::findExecutable("lualatex").isEmpty())
-		ui.cbTexEngine->addItem("LuaLaTeX", "lualatex");
-
-	if (!QStandardPaths::findExecutable("xelatex").isEmpty())
-		ui.cbTexEngine->addItem("XeLaTex", "xelatex");
-
-	if (!QStandardPaths::findExecutable("pdflatex").isEmpty())
-		ui.cbTexEngine->addItem("pdfLaTeX", "pdflatex");
-
-	if (!QStandardPaths::findExecutable("latex").isEmpty())
-		ui.cbTexEngine->addItem("LaTeX", "latex");
-#else
-	if (!KStandardDirs::findExe("lualatex").isEmpty())
-		ui.cbTexEngine->addItem("LuaLaTeX", "lualatex");
-
-	if (!KStandardDirs::findExe("xelatex").isEmpty())
-		ui.cbTexEngine->addItem("XeLaTex", "xelatex");
-
-	if (!KStandardDirs::findExe("pdflatex").isEmpty())
-		ui.cbTexEngine->addItem("pdfLaTeX", "pdflatex");
-
-	if (!KStandardDirs::findExe("latex").isEmpty())
-		ui.cbTexEngine->addItem("LaTeX", "latex");
-#endif
+	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(checkTeX(int)) );
 
 	loadSettings();
 	interfaceChanged(ui.cbInterface->currentIndex());
@@ -132,11 +115,11 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbLoadOnStart->addItem(i18n("Create new empty project"));
 	ui.cbLoadOnStart->addItem(i18n("Create new project with worksheet"));
 	ui.cbLoadOnStart->addItem(i18n("Load last used project"));
-	
+
 	ui.cbInterface->clear();
 	ui.cbInterface->addItem(i18n("Sub-window view"));
 	ui.cbInterface->addItem(i18n("Tabbed view"));
-	
+
 	ui.cbMdiVisibility->clear();
 	ui.cbMdiVisibility->addItem(i18n("Show windows of the current folder only"));
 	ui.cbMdiVisibility->addItem(i18n("Show windows of the current folder and its subfolders only"));
@@ -161,4 +144,52 @@ void SettingsGeneralPage::interfaceChanged(int index) {
 	ui.lMdiVisibility->setVisible(!tabbedView);
 	ui.cbMdiVisibility->setVisible(!tabbedView);
 	changed();
+}
+
+/*!
+ checks whether all tools required for latex typesetting are available. shows a warning if not.
+ \sa TeXRenderer::active()
+ */
+void SettingsGeneralPage::checkTeX(int engineIndex) {
+	if (engineIndex == -1) {
+		ui.lLatexWarning->show();
+		ui.lLatexWarning->setToolTip(i18n("No LaTeX installation found or selected. LaTeX typesetting not possible."));
+		return;
+	}
+
+	//engine found, check the precense of other required tools (s.a. TeXRenderer.cpp):
+	//to convert the generated PDF/PS files to PNG we need 'convert' from the ImageMagic package
+	if (!TeXRenderer::executableExists(QLatin1String("convert"))) {
+		ui.lLatexWarning->show();
+		ui.lLatexWarning->setToolTip(i18n("No 'convert' found. LaTeX typesetting not possible."));
+		return;
+	}
+
+	QString engine = ui.cbTexEngine->itemData(engineIndex).toString();
+	if (engine=="latex") {
+		//to convert the generated PS files to DVI we need 'dvips'
+		if (!TeXRenderer::executableExists(QLatin1String("dvips"))) {
+			ui.lLatexWarning->show();
+			ui.lLatexWarning->setToolTip(i18n("No 'dvips' found. LaTeX typesetting not possible."));
+			return;
+		}
+	}
+
+#ifdef _WIN32
+	if (!TeXRenderer::executableExists(QLatin1String("gswin32c.exe"))) {
+		ui.lLatexWarning->show();
+		ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
+		return;
+	}
+#endif
+
+#ifdef _WIN64
+	if (!TeXRenderer::executableExists(QLatin1String("gswin64c.exe"))) {
+		ui.lLatexWarning->show();
+		ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
+		return;
+	}
+#endif
+
+	ui.lLatexWarning->hide();
 }

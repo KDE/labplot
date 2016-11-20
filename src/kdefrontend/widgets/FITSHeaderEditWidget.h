@@ -32,61 +32,61 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "ui_fitsheadereditwidget.h"
 
 class FITSHeaderEditWidget : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit FITSHeaderEditWidget(QWidget *parent = 0);
-    ~FITSHeaderEditWidget();
+	explicit FITSHeaderEditWidget(QWidget *parent = 0);
+	~FITSHeaderEditWidget();
 
 private:
-    Ui::FITSHeaderEditWidget ui;
-    QAction* action_remove_keyword;
-    QAction* action_add_keyword;
-    QAction* action_addmodify_unit;
-    QMenu* m_KeywordActionsMenu;
+	Ui::FITSHeaderEditWidget ui;
+	QAction* action_remove_keyword;
+	QAction* action_add_keyword;
+	QAction* action_addmodify_unit;
+	QMenu* m_KeywordActionsMenu;
 
-    QMenu* m_ExtensionActionsMenu;
-    QAction* action_remove_extension;
+	QMenu* m_ExtensionActionsMenu;
+	QAction* action_remove_extension;
 
-    struct HeaderUpdate {
-        QList<FITSFilter::Keyword> newKeywords;
-        QVector<FITSFilter::Keyword> updatedKeywords;
-        QList<FITSFilter::Keyword> removedKeywords;
-    };
+	struct HeaderUpdate {
+		QList<FITSFilter::Keyword> newKeywords;
+		QVector<FITSFilter::Keyword> updatedKeywords;
+		QList<FITSFilter::Keyword> removedKeywords;
+	};
 
-    struct ExtensionData {
-        HeaderUpdate updates;
-        QList<FITSFilter::Keyword> keywords;
-    };
+	struct ExtensionData {
+		HeaderUpdate updates;
+		QList<FITSFilter::Keyword> keywords;
+	};
 
-    QMap<QString, ExtensionData> m_extensionDatas;
-    QStringList m_removedExtensions;
-    QString m_seletedExtension;
+	QMap<QString, ExtensionData> m_extensionDatas;
+	QStringList m_removedExtensions;
+	QString m_seletedExtension;
 
-    FITSFilter* m_fitsFilter;
+	FITSFilter* m_fitsFilter;
 
-    bool m_initializingTable;
+	bool m_initializingTable;
 
-    void initActions();
-    void initContextMenus();
-    void connectActions();
-    void fillTable();
-    QList<QString> mandatoryKeywords() const;
-    bool eventFilter(QObject*, QEvent*);
+	void initActions();
+	void initContextMenus();
+	void connectActions();
+	void fillTable();
+	QList<QString> mandatoryKeywords() const;
+	bool eventFilter(QObject*, QEvent*);
 
 public slots:
-    bool save();
+	bool save();
 
 private slots:
-    void openFile();
+	void openFile();
 
-    void fillTable(QTreeWidgetItem* item, int col);
-    void updateKeyword(QTableWidgetItem*);
+	void fillTable(QTreeWidgetItem* item, int col);
+	void updateKeyword(QTableWidgetItem*);
 
-    void removeKeyword();
-    void removeExtension();
-    void addKeyword();
-    void addModifyKeywordUnit();
+	void removeKeyword();
+	void removeExtension();
+	void addKeyword();
+	void addModifyKeywordUnit();
 };
 
 #endif // FITSHEADEREDITWIDGET_H

@@ -625,18 +625,16 @@ void Column::setChanged() {
  * \brief Return an icon to be used for decorating the views and spreadsheet column headers
  */
 QIcon Column::icon() const {
-	//TODO: provide type-specific icons
-// 	switch(columnMode()) {
-// 		case AbstractColumn::Numeric:
-// 			return KIcon("x-shape-text");
-// 		case AbstractColumn::Text:
-// 			return QIcon::fromTheme(QPixmap(":/texttype.png"));
-// 		case AbstractColumn::DateTime:
-// 		case AbstractColumn::Month:
-// 		case AbstractColumn::Day:
-// 			return QIcon::fromTheme(QPixmap(""));
-// 	}
-
+	switch(columnMode()) {
+		case AbstractColumn::Numeric:
+			return QIcon::fromTheme("x-shape-text");
+		case AbstractColumn::Text:
+			return QIcon::fromTheme("draw-text");
+		case AbstractColumn::DateTime:
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
+			return QIcon::fromTheme("chronometer");
+	}
 	return QIcon::fromTheme("x-shape-text");
 }
 

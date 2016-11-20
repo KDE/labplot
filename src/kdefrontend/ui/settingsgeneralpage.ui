@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>753</height>
+    <width>679</width>
+    <height>741</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -34,7 +34,7 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0" colspan="2">
+   <item row="1" column="0">
     <widget class="QLabel" name="lInterface">
      <property name="text">
       <string>Interface</string>
@@ -84,7 +84,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
+   <item row="6" column="0">
     <widget class="QCheckBox" name="chkAutoSave">
      <property name="text">
       <string>enabled</string>
@@ -115,7 +115,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="6">
+   <item row="7" column="6" colspan="2">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -180,7 +180,7 @@
      </property>
     </spacer>
    </item>
-   <item row="12" column="0" colspan="2">
+   <item row="12" column="0">
     <widget class="QLabel" name="lTex">
      <property name="font">
       <font>
@@ -200,6 +200,32 @@
      </property>
     </widget>
    </item>
+   <item row="13" column="4" colspan="3">
+    <widget class="QComboBox" name="cbTexEngine">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="7">
+    <widget class="QLabel" name="lLatexWarning">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
    <item row="14" column="2">
     <spacer name="verticalSpacer">
      <property name="orientation">
@@ -213,20 +239,17 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="4" colspan="3">
-    <widget class="KComboBox" name="cbLoadOnStart"/>
-   </item>
-   <item row="1" column="4" colspan="3">
-    <widget class="KComboBox" name="cbInterface"/>
+   <item row="3" column="4" colspan="3">
+    <widget class="KComboBox" name="cbMdiVisibility"/>
    </item>
    <item row="2" column="4" colspan="3">
     <widget class="KComboBox" name="cbTabPosition"/>
    </item>
-   <item row="3" column="4" colspan="3">
-    <widget class="KComboBox" name="cbMdiVisibility"/>
+   <item row="1" column="4" colspan="3">
+    <widget class="KComboBox" name="cbInterface"/>
    </item>
-   <item row="13" column="4" colspan="3">
-    <widget class="QComboBox" name="cbTexEngine"/>
+   <item row="0" column="4" colspan="3">
+    <widget class="KComboBox" name="cbLoadOnStart"/>
    </item>
   </layout>
  </widget>

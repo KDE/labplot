@@ -39,12 +39,6 @@
 #include <KLocalizedString>
 #include <QMenu>
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-#include <QStandardPaths>
-#else
-#include <KStandardDirs>
-#endif
-
 /*!
 	\class LabelWidget
 	\brief Widget for editing the properties of a TextLabel object, mostly used in an an appropriate dock widget.
@@ -57,7 +51,7 @@
 LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	m_initializing(false),
 	m_dateTimeMenu(new QMenu(this)),
-	m_teXAvailable(false) {
+	m_teXEnabled(false) {
 
 // see legacy/LabelWidget.cpp
 	ui.setupUi(this);
@@ -108,13 +102,7 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	//the user still can switch to the non-latex mode.
 	//2. in case the label was in the non-latex mode and no latex is available,
 	//deactivate the latex button so the user cannot switch to this mode.
-	KConfigGroup group = KSharedConfig::openConfig()->group( "General" );
-	QString engine = group.readEntry("LaTeXEngine", "");
-#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
-	m_teXAvailable = !QStandardPaths::findExecutable(engine).isEmpty();
-#else
-	m_teXAvailable = !KStandardDirs::findExe(engine).isEmpty();
-#endif
+	m_teXEnabled = TeXRenderer::enabled();
 
 	//SLOTS
 	// text properties
@@ -324,15 +312,18 @@ void LabelWidget::teXUsedChanged(bool checked) {
 
 	//no latex is available and the user switched to the text mode,
 	//deactivate the button since it shouldn't be possible anymore to switch to the TeX-mode
-	if (!m_teXAvailable && !checked)
+	if (!m_teXEnabled && !checked) {
 		ui.tbTexUsed->setEnabled(false);
-	else
+		ui.tbTexUsed->setToolTip(i18n("LaTeX typesetting not possible. Please check the settings."));
+	} else {
 		ui.tbTexUsed->setEnabled(true);
+		ui.tbTexUsed->setToolTip("");
+	}
 
 	//when switching to the text mode, set the background color to white just for the case the latex code provided by the user
 	//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
 	if (!checked)
-		ui.teLabel->setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
+		ui.teLabel->setStyleSheet("");
 
 	if (m_initializing)
 		return;
@@ -610,7 +601,7 @@ void LabelWidget::labelTeXImageUpdated(bool valid) {
 	if (!valid)
 		ui.teLabel->setStyleSheet("QTextEdit{background: red;}");
 	else
-		ui.teLabel->setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
+		ui.teLabel->setStyleSheet("");
 }
 
 void LabelWidget::labelTeXFontSizeChanged(const int size) {

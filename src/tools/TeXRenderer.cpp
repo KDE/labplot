@@ -41,6 +41,13 @@
 #include <QTextStream>
 #include <QProcess>
 
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+#include <QStandardPaths>
+#else
+#include <KStandardDirs>
+#endif
+
+
 /*!
 	\class TeXRenderer
 	\brief Implements rendering of latex code to a PNG image, uses latex engine specified by the user (default xelatex) to render LaTeX text
@@ -197,4 +204,42 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi) {
 	QFile::remove(fi.completeBaseName()+".ps");
 
 	return image;
+}
+
+bool TeXRenderer::enabled() {
+	KConfigGroup group = KGlobal::config()->group("General");
+	QString engine = group.readEntry("LaTeXEngine", "");
+	if (engine.isEmpty() || !TeXRenderer::executableExists(engine))
+		return false;
+
+	//engine found, check the precense of other required tools (s.a. TeXRenderer.cpp):
+	//to convert the generated PDF/PS files to PNG we need 'convert' from the ImageMagic package
+	if (!executableExists(QLatin1String("convert")))
+		return false;
+
+	//to convert the generated PS files to DVI we need 'dvips'
+	if (engine=="latex") {
+		if (!executableExists(QLatin1String("dvips")))
+			return false;
+	}
+
+#ifdef _WIN32
+	if (!executableExists(QLatin1String("gswin32c.exe")))
+		return false;
+#endif
+
+#ifdef _WIN64
+	if (!executableExists(QLatin1String("gswin64c.exe")))
+		return false;
+#endif
+
+	return true;
+}
+
+bool TeXRenderer::executableExists(const QString& exe) {
+#if QT_VERSION >= QT_VERSION_CHECK(5,0,0)
+		return !QStandardPaths::findExecutable(exe).isEmpty();
+#else
+		return !KStandardDirs::findExe(exe).isEmpty();
+#endif
 }
