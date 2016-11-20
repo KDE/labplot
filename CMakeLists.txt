@@ -25,31 +25,13 @@ add_definitions(-fvisibility=default)
 cmake_policy(SET CMP0002 OLD)
 #cmake_policy(SET CMP0063 NEW)
 
-### FFTW ######################################
-FIND_LIBRARY(FFTW_LIBRARIES fftw3
-	PATHS
-	/usr/lib
-	/usr/local/lib
-)
-FIND_PATH (FFTW_INCLUDE_DIR fftw3.h
-	/usr/include
-	/usr/local/include
-)
-IF (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
-	SET (FFTW_FOUND TRUE)
-ELSE (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
-	SET (FFTW_FOUND FALSE)
-	SET (FFTW_LIBRARIES "")
-ENDIF (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
+### Options ######################################
+option(ENABLE_FFTW "Build with FFTW support" "ON")
+option(ENABLE_FITS "Build with FITS support" "ON")
+option(ENABLE_HDF5 "Build with HDF5 support" "ON")
+option(ENABLE_NETCDF "Build with NetCDF support" "ON")
 
-IF (FFTW_FOUND)
-	MESSAGE (STATUS "Found FFTW 3 Library: ${FFTW_INCLUDE_DIR} ${FFTW_LIBRARIES}")
-	add_definitions (-DHAVE_FFTW3)
-ELSE (FFTW_FOUND)
-	MESSAGE (STATUS "FFTW 3 Library not found.")
-ENDIF (FFTW_FOUND)
-
-### GSL ######################################
+### GSL (required) ###############################
 FIND_LIBRARY(GSL_LIBRARIES gsl
 	PATHS
 	/usr/lib
@@ -87,14 +69,45 @@ ELSE (GSL_FOUND)
 	MESSAGE (FATAL_ERROR "GNU Scientific Library not found.")
 ENDIF (GSL_FOUND)
 
-### HDF5 #####################################
+### FFTW (optional) ##############################
+IF(ENABLE_FFTW)
+FIND_LIBRARY(FFTW_LIBRARIES fftw3
+	PATHS
+	/usr/lib
+	/usr/local/lib
+)
+FIND_PATH (FFTW_INCLUDE_DIR fftw3.h
+	/usr/include
+	/usr/local/include
+)
+IF(FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
+	SET (FFTW_FOUND TRUE)
+ELSE()
+	SET (FFTW_FOUND FALSE)
+	SET (FFTW_LIBRARIES "")
+ENDIF()
+IF(FFTW_FOUND)
+	MESSAGE (STATUS "Found FFTW 3 Library: ${FFTW_INCLUDE_DIR} ${FFTW_LIBRARIES}")
+	add_definitions (-DHAVE_FFTW3)
+ELSE()
+	MESSAGE (STATUS "FFTW 3 Library not found.")
+ENDIF()
+ENDIF()
+
+### HDF5 (optional) ##############################
+IF(ENABLE_HDF5)
 FIND_PACKAGE(HDF5 COMPONENTS C)
 IF (HDF5_FOUND)
+	MESSAGE (STATUS "Found Hierarchical Data Format (HDF5) Library: ${HDF5_INCLUDE_DIRS} ${HDF5_LIBRARY}")
 	add_definitions (-DHAVE_HDF5)
 	include_directories (${HDF5_INCLUDE_DIRS})
+ELSE()
+	MESSAGE (STATUS "Hierarchical Data Format (HDF5) Library not found.")
 ENDIF (HDF5_FOUND)
+ENDIF()
 
-### NETCDF #####################################
+### NETCDF (optional) #############################
+IF(ENABLE_NETCDF)
 FIND_LIBRARY(NETCDF_LIBRARY netcdf
 	PATHS
 	/usr/lib
@@ -104,43 +117,46 @@ FIND_PATH (NETCDF_INCLUDE_DIR netcdf.h
 	/usr/include/
 	/usr/local/include/
 )
-IF (NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
+IF(NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
 	SET (NETCDF_FOUND TRUE)
-ELSE (NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
+ELSE()
 	SET (NETCDF_FOUND FALSE)
 	SET (NETCDF_LIBRARY "")
-ENDIF (NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
+ENDIF()
 IF (NETCDF_FOUND)
 	MESSAGE (STATUS "Found Network Common Data Format (NetCDF) Library: ${NETCDF_INCLUDE_DIR} ${NETCDF_LIBRARY}")
 	add_definitions (-DHAVE_NETCDF)
 ELSE (NETCDF_FOUND)
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library not found.")
 ENDIF (NETCDF_FOUND)
+ENDIF()
 
 ### FITS ########################################
+IF(ENABLE_FITS)
 FIND_LIBRARY(CFITSIO_LIBRARY cfitsio
-        PATHS
-        /usr/lib
-        /usr/local/lib
+	PATHS
+	/usr/lib
+	/usr/local/lib
 )
 FIND_PATH (CFITSIO_INCLUDE_DIR fitsio.h
-        /usr/include/
-        /usr/include/cfitsio/
-        /usr/local/include/
+	/usr/include/
+	/usr/include/cfitsio/
+	/usr/local/include/
 )
-IF (CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
-        SET (CFITSIO_FOUND TRUE)
-ELSE (CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
-        SET (CFITSIO_FOUND FALSE)
-        SET (CFITSIO_LIBRARY "")
-ENDIF (CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
+IF(CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
+	SET (CFITSIO_FOUND TRUE)
+ELSE()
+	SET (CFITSIO_FOUND FALSE)
+	SET (CFITSIO_LIBRARY "")
+ENDIF()
 IF (CFITSIO_FOUND)
-        MESSAGE (STATUS "Found Flexible Image Transport System Data Format (FITS) Library: ${CFITSIO_INCLUDE_DIR} ${CFITSIO_LIBRARY}")
-        add_definitions (-DHAVE_FITS)
+	MESSAGE (STATUS "Found Flexible Image Transport System Data Format (FITS) Library: ${CFITSIO_INCLUDE_DIR} ${CFITSIO_LIBRARY}")
+	add_definitions (-DHAVE_FITS)
 	include_directories (${CFITSIO_INCLUDE_DIR})
 ELSE (CFITSIO_FOUND)
-        MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library not found.")
+	MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library not found.")
 ENDIF (CFITSIO_FOUND)
+ENDIF()
 #################################################
 
 add_subdirectory(icons)
