@@ -83,45 +83,45 @@
 */
 
 MainWin::MainWin(QWidget *parent, const QString& filename)
-		: KXmlGuiWindow(parent),
-	m_currentSubWindow(0),
-	m_project(0),
-	m_aspectTreeModel(0),
-	m_projectExplorer(0),
-	m_projectExplorerDock(0),
-	m_propertiesDock(0),
-	m_currentAspect(0),
-	m_currentFolder(0),
-	m_suppressCurrentSubWindowChangedEvent(false),
-	m_closing(false),
-	m_autoSaveActive(false),
-	m_visibilityMenu(0),
-	m_newMenu(0),
-	m_editMenu(0),
-	axisDock(0),
-	notesDock(0),
-	cartesianPlotDock(0),
-	cartesianPlotLegendDock(0),
-	columnDock(0),
-	matrixDock(0),
-	spreadsheetDock(0),
-	projectDock(0),
-	xyCurveDock(0),
-	xyEquationCurveDock(0),
-	xyDataReductionCurveDock(0),
-	xyDifferentiationCurveDock(0),
-	xyIntegrationCurveDock(0),
-	xyInterpolationCurveDock(0),
-	xySmoothCurveDock(0),
-	xyFitCurveDock(0),
-	xyFourierFilterCurveDock(0),
-	xyFourierTransformCurveDock(0),
-	worksheetDock(0),
-	textLabelDock(0),
-	customPointDock(0),
-	datapickerImageDock(0),
-	datapickerCurveDock(0),
-	m_guiObserver(0) {
+	: KXmlGuiWindow(parent),
+	  m_currentSubWindow(0),
+	  m_project(0),
+	  m_aspectTreeModel(0),
+	  m_projectExplorer(0),
+	  m_projectExplorerDock(0),
+	  m_propertiesDock(0),
+	  m_currentAspect(0),
+	  m_currentFolder(0),
+	  m_suppressCurrentSubWindowChangedEvent(false),
+	  m_closing(false),
+	  m_autoSaveActive(false),
+	  m_visibilityMenu(0),
+	  m_newMenu(0),
+	  m_editMenu(0),
+	  axisDock(0),
+	  notesDock(0),
+	  cartesianPlotDock(0),
+	  cartesianPlotLegendDock(0),
+	  columnDock(0),
+	  matrixDock(0),
+	  spreadsheetDock(0),
+	  projectDock(0),
+	  xyCurveDock(0),
+	  xyEquationCurveDock(0),
+	  xyDataReductionCurveDock(0),
+	  xyDifferentiationCurveDock(0),
+	  xyIntegrationCurveDock(0),
+	  xyInterpolationCurveDock(0),
+	  xySmoothCurveDock(0),
+	  xyFitCurveDock(0),
+	  xyFourierFilterCurveDock(0),
+	  xyFourierTransformCurveDock(0),
+	  worksheetDock(0),
+	  textLabelDock(0),
+	  customPointDock(0),
+	  datapickerImageDock(0),
+	  datapickerCurveDock(0),
+	  m_guiObserver(0) {
 
 // 	QTimer::singleShot( 0, this, SLOT(initGUI(filename)) );  //TODO doesn't work anymore
 	initGUI(filename);
@@ -155,7 +155,7 @@ void MainWin::initGUI(const QString& fileName) {
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
 	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
-		this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
+	        this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
 
 	statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
 	initActions();
@@ -193,15 +193,15 @@ void MainWin::initGUI(const QString& fileName) {
 	m_autoSaveTimer.setInterval(interval);
 	connect(&m_autoSaveTimer, SIGNAL(timeout()), this, SLOT(autoSaveProject()));
 
-	if (!fileName.isEmpty()) {
+	if (!fileName.isEmpty())
 		openProject(fileName);
-	} else {
+	else {
 		//There is no file to open. Depending on the settings do nothing,
 		//create a new project or open the last used project.
 		int load = group.readEntry("LoadOnStart", 0);
-		if (load == 1) { //create new project
+		if (load == 1)   //create new project
 			newProject();
-		} else if (load == 2) { //create new project with a worksheet
+		else if (load == 2) { //create new project with a worksheet
 			newProject();
 			newWorksheet();
 		} else if (load == 3) { //open last used project
@@ -252,7 +252,7 @@ void MainWin::initActions() {
 // 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
 	actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
 	connect(m_newWorksheetAction, SIGNAL(triggered()), SLOT(newWorksheet()));
-	
+
 	m_newNotesAction= new KAction(KIcon("document-new"),i18n("Note"),this);
 	actionCollection()->addAction("new_notes", m_newNotesAction);
 	connect(m_newNotesAction, SIGNAL(triggered()), SLOT(newNotes()));
@@ -409,8 +409,8 @@ void MainWin::initMenus() {
 bool MainWin::warnModified() {
 	if (m_project->hasChanged()) {
 		int want_save = KMessageBox::warningYesNoCancel( this,
-			i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
-			i18n("Save Project"));
+		                i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
+		                i18n("Save Project"));
 		switch (want_save) {
 		case KMessageBox::Yes:
 			return !saveProject();
@@ -521,7 +521,7 @@ void MainWin::updateGUI() {
 	if (w != 0) {
 		//enable worksheet related menus
 		factory->container("worksheet", this)->setEnabled(true);
- 		factory->container("analysis", this)->setEnabled(true);
+		factory->container("analysis", this)->setEnabled(true);
 //TODO 		factory->container("drawing", this)->setEnabled(true);
 
 		//disable spreadsheet and matrix related menus
@@ -561,7 +561,7 @@ void MainWin::updateGUI() {
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
 	} else {
 		factory->container("worksheet", this)->setEnabled(false);
- 		factory->container("analysis", this)->setEnabled(false);
+		factory->container("analysis", this)->setEnabled(false);
 //		factory->container("drawing", this)->setEnabled(false);
 		factory->container("worksheet_toolbar", this)->setVisible(false);
 		factory->container("cartesian_plot_toolbar", this)->setVisible(false);
@@ -602,9 +602,8 @@ void MainWin::updateGUI() {
 		QMenu* menu = qobject_cast<QMenu*>(factory->container("matrix", this));
 		menu->clear();
 		view->createContextMenu(menu);
-	} else {
+	} else
 		factory->container("matrix", this)->setEnabled(false);
-	}
 
 	const Datapicker* datapicker = this->activeDatapicker();
 	if (datapicker) {
@@ -673,7 +672,7 @@ bool MainWin::newProject() {
 		m_projectExplorerDock->setWidget(m_projectExplorer);
 
 		connect(m_projectExplorer, SIGNAL(currentAspectChanged(AbstractAspect*)),
-			this, SLOT(handleCurrentAspectChanged(AbstractAspect*)));
+		        this, SLOT(handleCurrentAspectChanged(AbstractAspect*)));
 
 		//Properties dock
 		m_propertiesDock = new QDockWidget(this);
@@ -701,9 +700,9 @@ bool MainWin::newProject() {
 
 	connect(m_project, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(m_project, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-		this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
+	        this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
 	connect(m_project, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
+	        this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(m_project, SIGNAL(statusInfo(QString)), statusBar(), SLOT(showMessage(QString)));
 	connect(m_project, SIGNAL(changed()), this, SLOT(projectChanged()));
 	connect(m_project, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
@@ -720,7 +719,7 @@ void MainWin::openProject() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	QString dir = conf.readEntry("LastOpenDir", "");
 	QString path = KFileDialog::getOpenFileName(KUrl(dir),
-		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"), this, i18n("Open project"));
+	               i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"), this, i18n("Open project"));
 
 	if (!path.isEmpty()) {
 		this->openProject(path);
@@ -875,8 +874,8 @@ bool MainWin::saveProjectAs() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	QString dir = conf.readEntry("LastOpenDir", "");
 	QString fileName = KFileDialog::getSaveFileName(KUrl(dir),
-		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"),
-		this, i18n("Save project as"));
+	                   i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"),
+	                   this, i18n("Save project as"));
 
 	if (fileName.isEmpty())// "Cancel" was clicked
 		return false;
@@ -1108,9 +1107,8 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 					spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parentAspect());
 			}
 		}
-	} else {
+	} else
 		spreadsheet = dynamic_cast<Spreadsheet*>(part);
-	}
 
 	return spreadsheet;
 }
@@ -1137,9 +1135,8 @@ Matrix* MainWin::activeMatrix() const {
 			//->check whether we have a matrix currently selected in the project explorer
 			matrix = dynamic_cast<Matrix*>(m_currentAspect);
 		}
-	} else {
+	} else
 		matrix = dynamic_cast<Matrix*>(part);
-	}
 
 	return matrix;
 }
@@ -1186,9 +1183,8 @@ void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win) {
 		//This event happens, when labplot loses the focus (modal window is opened or the user switches to another application)
 		//and gets it back (modal window is closed or the user switches back to labplot).
 		return;
-	} else {
+	} else
 		m_currentSubWindow = view;
-	}
 
 	updateGUI();
 	if (!m_suppressCurrentSubWindowChangedEvent)
@@ -1295,11 +1291,10 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
 				if (!datapicker)
 					datapicker = dynamic_cast<Datapicker*>(parent->parentAspect()->parentAspect());
 
-				if (workbook) {
+				if (workbook)
 					workbook->childSelected(parent);
-				} else if (datapicker) {
+				else if (datapicker)
 					datapicker->childSelected(parent);
-				}
 			}
 		}
 	}
@@ -1413,9 +1408,9 @@ void MainWin::toggleDockWidget(QAction* action) const {
 }
 
 void MainWin::toggleFullScreen() {
-	if (this->windowState() == Qt::WindowFullScreen) {
+	if (this->windowState() == Qt::WindowFullScreen)
 		this->setWindowState(m_lastWindowState);
-	} else {
+	else {
 		m_lastWindowState = this->windowState();
 		this->showFullScreen();
 	}
@@ -1511,9 +1506,9 @@ void MainWin::importFileDialog(const QString& fileName) {
 	m_importFileDialog = new ImportFileDialog(this, false, fileName);
 
 	// select existing container
-	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook")) {
+	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook"))
 		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
-	} else if (m_currentAspect->inherits("Column")) {
+	else if (m_currentAspect->inherits("Column")) {
 		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
 			m_importFileDialog->setCurrentIndex( m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 	}
@@ -1559,7 +1554,7 @@ void MainWin::newFileDataSourceActionTriggered() {
 		dlg->importToFileDataSource(dataSource, statusBar());
 		this->addAspectToProject(dataSource);
 	}
-    delete dlg;
+	delete dlg;
 }
 
 /*!
