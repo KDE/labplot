@@ -94,12 +94,13 @@ ELSE ()
 ENDIF ()
 
 ### Cantorlibs #####################################
+IF (ENABLE_CANTOR)
 FIND_LIBRARY (CANTOR_LIBS cantorlibs)
 FIND_PATH (CANTOR_INCLUDE_DIR worksheetaccess.h
 	/usr/include/cantor
 	/usr/local/include/cantor
 )
-IF(ENABLE_CANTOR AND CANTOR_LIBS AND CANTOR_INCLUDE_DIR)
+IF (CANTOR_LIBS AND CANTOR_INCLUDE_DIR)
 	SET (CANTOR_LIBS_FOUND TRUE)
 ELSE()
 	SET (CANTOR_LIBS_FOUND FALSE)
@@ -108,16 +109,18 @@ ENDIF()
 IF (CANTOR_LIBS_FOUND)
 	MESSAGE (STATUS "Found CantorLibs ${CANTOR_INCLUDE_DIR} ${CANTOR_LIBS}")
 	add_definitions (-DHAVE_CANTOR_LIBS)
-ELSE (CANTOR_LIBS_FOUND)
+ELSE ()
 	MESSAGE (STATUS "CantorLibs not found.")
-ENDIF (CANTOR_LIBS_FOUND)
+ENDIF ()
+ENDIF ()
 
 ### FFTW (optional) #####################################
+IF (ENABLE_FFTW)
 FIND_PATH (FFTW_INCLUDE_DIR fftw3.h
 	/usr/include
 	/usr/local/include
 )
-IF (ENABLE_FFTW AND FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
+IF (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
 	SET (FFTW_FOUND TRUE)
 ELSE ()
 	SET (FFTW_FOUND FALSE)
@@ -128,18 +131,22 @@ IF (FFTW_FOUND)
 ELSE ()
 	MESSAGE (STATUS "FFTW 3 Library not found.")
 ENDIF ()
+ENDIF ()
 
 ### HDF5 (optional) ##############################
+IF (ENABLE_HDF5)
 FIND_PACKAGE(HDF5 COMPONENTS C)
-IF (ENABLE_HDF5 AND HDF5_FOUND)
+IF (HDF5_FOUND)
 	MESSAGE (STATUS "Found Hierarchical Data Format (HDF5) Library: ${HDF5_INCLUDE_DIRS} ${HDF5_LIBRARY}")
 	add_definitions (-DHAVE_HDF5)
 	include_directories (${HDF5_INCLUDE_DIRS})
 ELSE ()
 	MESSAGE (STATUS "Hierarchical Data Format (HDF5) Library not found.")
 ENDIF ()
+ENDIF ()
 
 ### NETCDF (optional) #############################
+IF(ENABLE_NETCDF)
 FIND_LIBRARY (NETCDF_LIBRARY netcdf
 	PATHS
 	/usr/lib
@@ -149,7 +156,7 @@ FIND_PATH (NETCDF_INCLUDE_DIR netcdf.h
 	/usr/include/
 	/usr/local/include/
 )
-IF(ENABLE_NETCDF AND NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
+IF(NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
 	SET (NETCDF_FOUND TRUE)
 ELSE ()
 	SET (NETCDF_FOUND FALSE)
@@ -160,8 +167,10 @@ IF (NETCDF_FOUND)
 ELSE ()
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library not found.")
 ENDIF ()
+ENDIF ()
 
 ### FITS ########################################
+IF(ENABLE_FITS)
 FIND_LIBRARY (CFITSIO_LIBRARY cfitsio
 	PATHS
 	/usr/lib
@@ -172,7 +181,7 @@ FIND_PATH (CFITSIO_INCLUDE_DIR fitsio.h
 	/usr/include/cfitsio/
 	/usr/local/include/
 )
-IF(ENABLE_FITE AND CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
+IF(CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
         SET (CFITSIO_FOUND TRUE)
 ELSE()
         SET (CFITSIO_FOUND FALSE)
@@ -184,6 +193,8 @@ IF (CFITSIO_FOUND)
 ELSE ()
 	MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library not found.")
 ENDIF ()
+ENDIF ()
+
 #################################################
 
 add_subdirectory(icons)
