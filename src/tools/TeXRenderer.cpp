@@ -222,6 +222,16 @@ bool TeXRenderer::enabled() {
 			return false;
 	}
 
+#ifdef _WIN32
+	if (!executableExists(QLatin1String("gswin32c.exe")))
+		return false;
+#endif
+
+#ifdef _WIN64
+	if (!executableExists(QLatin1String("gswin64c.exe")))
+		return false;
+#endif
+
 	return true;
 }
 

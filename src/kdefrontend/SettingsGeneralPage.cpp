@@ -174,5 +174,21 @@ void SettingsGeneralPage::checkTeX(int engineIndex) {
 		}
 	}
 
+#ifdef _WIN32
+	if (!TeXRenderer::executableExists(QLatin1String("gswin32c.exe""))) {
+		ui.lLatexWarning->show();
+		ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
+		return;
+	}
+#endif
+
+#ifdef _WIN64
+	if (!TeXRenderer::executableExists(QLatin1String("gswin64c.exe""))) {
+		ui.lLatexWarning->show();
+		ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
+		return;
+	}
+#endif
+
 	ui.lLatexWarning->hide();
 }

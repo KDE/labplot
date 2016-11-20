@@ -312,7 +312,7 @@ void LabelWidget::teXUsedChanged(bool checked) {
 	//deactivate the button since it shouldn't be possible anymore to switch to the TeX-mode
 	if (!m_teXEnabled && !checked) {
 		ui.tbTexUsed->setEnabled(false);
-		ui.tbTexUsed->setToolTip(i18n("LaTeX typesetting not possible. Please check the settings"));
+		ui.tbTexUsed->setToolTip(i18n("LaTeX typesetting not possible. Please check the settings."));
 	} else {
 		ui.tbTexUsed->setEnabled(true);
 		ui.tbTexUsed->setToolTip("");
