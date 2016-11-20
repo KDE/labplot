@@ -53,25 +53,25 @@ FIND_PROGRAM (GSL_CONFIG gsl-config
 IF (GSL_CONFIG)
 	EXEC_PROGRAM (${GSL_CONFIG} ARGS "--version" OUTPUT_VARIABLE gsl_version)
 	SET (GSL_VERSION ${gsl_version} CACHE STRING "GNU Scientific Library Version")
-ENDIF (GSL_CONFIG)
+ENDIF ()
 IF (GSL_LIBRARIES AND GSL_CBLAS_LIBRARIES AND GSL_INCLUDE_DIR)
 	SET (GSL_FOUND TRUE)
-ELSE (GSL_LIBRARIES AND GSL_CBLAS_LIBRARIES AND GSL_INCLUDE_DIR)
+ELSE ()
 	SET (GSL_FOUND FALSE)
-ENDIF (GSL_LIBRARIES AND GSL_CBLAS_LIBRARIES AND GSL_INCLUDE_DIR)
+ENDIF ()
 
 IF (GSL_FOUND)
 	MESSAGE (STATUS "Found GNU Scientific Library ${GSL_VERSION}: ${GSL_INCLUDE_DIR} ${GSL_LIBRARIES};${GSL_CBLAS_LIBRARIES}")
 	add_definitions (-DHAVE_GSL)
 	# TODO : set version ?
 	add_definitions (-DGSL_VERSION=GSL_VERSION)
-ELSE (GSL_FOUND)
+ELSE ()
 	MESSAGE (FATAL_ERROR "GNU Scientific Library not found.")
-ENDIF (GSL_FOUND)
+ENDIF ()
 
 ### FFTW (optional) ##############################
-IF(ENABLE_FFTW)
-FIND_LIBRARY(FFTW_LIBRARIES fftw3
+IF (ENABLE_FFTW)
+FIND_LIBRARY (FFTW_LIBRARIES fftw3
 	PATHS
 	/usr/lib
 	/usr/local/lib
@@ -80,35 +80,35 @@ FIND_PATH (FFTW_INCLUDE_DIR fftw3.h
 	/usr/include
 	/usr/local/include
 )
-IF(FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
+IF (FFTW_LIBRARIES AND FFTW_INCLUDE_DIR)
 	SET (FFTW_FOUND TRUE)
-ELSE()
+ELSE ()
 	SET (FFTW_FOUND FALSE)
 	SET (FFTW_LIBRARIES "")
-ENDIF()
-IF(FFTW_FOUND)
+ENDIF ()
+IF (FFTW_FOUND)
 	MESSAGE (STATUS "Found FFTW 3 Library: ${FFTW_INCLUDE_DIR} ${FFTW_LIBRARIES}")
 	add_definitions (-DHAVE_FFTW3)
-ELSE()
+ELSE ()
 	MESSAGE (STATUS "FFTW 3 Library not found.")
-ENDIF()
-ENDIF()
+ENDIF ()
+ENDIF ()
 
 ### HDF5 (optional) ##############################
-IF(ENABLE_HDF5)
+IF (ENABLE_HDF5)
 FIND_PACKAGE(HDF5 COMPONENTS C)
 IF (HDF5_FOUND)
 	MESSAGE (STATUS "Found Hierarchical Data Format (HDF5) Library: ${HDF5_INCLUDE_DIRS} ${HDF5_LIBRARY}")
 	add_definitions (-DHAVE_HDF5)
 	include_directories (${HDF5_INCLUDE_DIRS})
-ELSE()
+ELSE ()
 	MESSAGE (STATUS "Hierarchical Data Format (HDF5) Library not found.")
-ENDIF (HDF5_FOUND)
-ENDIF()
+ENDIF ()
+ENDIF ()
 
 ### NETCDF (optional) #############################
-IF(ENABLE_NETCDF)
-FIND_LIBRARY(NETCDF_LIBRARY netcdf
+IF (ENABLE_NETCDF)
+FIND_LIBRARY (NETCDF_LIBRARY netcdf
 	PATHS
 	/usr/lib
 	/usr/local/lib
@@ -117,23 +117,23 @@ FIND_PATH (NETCDF_INCLUDE_DIR netcdf.h
 	/usr/include/
 	/usr/local/include/
 )
-IF(NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
+IF (NETCDF_LIBRARY AND NETCDF_INCLUDE_DIR)
 	SET (NETCDF_FOUND TRUE)
-ELSE()
+ELSE ()
 	SET (NETCDF_FOUND FALSE)
 	SET (NETCDF_LIBRARY "")
-ENDIF()
+ENDIF ()
 IF (NETCDF_FOUND)
 	MESSAGE (STATUS "Found Network Common Data Format (NetCDF) Library: ${NETCDF_INCLUDE_DIR} ${NETCDF_LIBRARY}")
 	add_definitions (-DHAVE_NETCDF)
-ELSE (NETCDF_FOUND)
+ELSE ()
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library not found.")
-ENDIF (NETCDF_FOUND)
-ENDIF()
+ENDIF ()
+ENDIF ()
 
 ### FITS ########################################
-IF(ENABLE_FITS)
-FIND_LIBRARY(CFITSIO_LIBRARY cfitsio
+IF (ENABLE_FITS)
+FIND_LIBRARY (CFITSIO_LIBRARY cfitsio
 	PATHS
 	/usr/lib
 	/usr/local/lib
@@ -143,20 +143,20 @@ FIND_PATH (CFITSIO_INCLUDE_DIR fitsio.h
 	/usr/include/cfitsio/
 	/usr/local/include/
 )
-IF(CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
+IF (CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
 	SET (CFITSIO_FOUND TRUE)
-ELSE()
+ELSE ()
 	SET (CFITSIO_FOUND FALSE)
 	SET (CFITSIO_LIBRARY "")
-ENDIF()
+ENDIF ()
 IF (CFITSIO_FOUND)
 	MESSAGE (STATUS "Found Flexible Image Transport System Data Format (FITS) Library: ${CFITSIO_INCLUDE_DIR} ${CFITSIO_LIBRARY}")
 	add_definitions (-DHAVE_FITS)
 	include_directories (${CFITSIO_INCLUDE_DIR})
-ELSE (CFITSIO_FOUND)
+ELSE ()
 	MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library not found.")
-ENDIF (CFITSIO_FOUND)
-ENDIF()
+ENDIF ()
+ENDIF ()
 #################################################
 
 add_subdirectory(icons)
