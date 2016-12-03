@@ -109,7 +109,8 @@ private:
 	KAction* m_saveAsAction;
 	KAction* m_printAction;
 	KAction* m_printPreviewAction;
-	KAction* m_importAction;
+	KAction* m_importFileAction;
+	KAction* m_importSqlAction;
 	KAction* m_exportAction;
 	KAction* m_closeAction;
 	KAction* m_newFolderAction;
@@ -230,6 +231,7 @@ private slots:
 
 	void historyDialog();
 	void importFileDialog(const QString& fileName = QString());
+	void importSqlDialog();
 	void exportDialog();
 	void editFitsFileDialog();
 	void settingsDialog();
@@ -244,7 +246,6 @@ private slots:
 	void newDatapicker();
 	//TODO: void newScript();
 	void newFileDataSourceActionTriggered();
-	void newSqlDataSourceActionTriggered();
 
 	void createContextMenu(QMenu*) const;
 	void createFolderContextMenu(const Folder*, QMenu*) const;

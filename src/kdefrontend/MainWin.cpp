@@ -271,15 +271,15 @@ void MainWin::initActions() {
 	actionCollection()->addAction("new_file_datasource", m_newFileDataSourceAction);
 	connect(m_newFileDataSourceAction, SIGNAL(triggered()), this, SLOT(newFileDataSourceActionTriggered()));
 
-	//"New database datasources"
-	m_newSqlDataSourceAction = new KAction(KIcon("server-database"),i18n("SQL Data Source "),this);
-	actionCollection()->addAction("new_database_datasource", m_newSqlDataSourceAction);
-	connect(m_newSqlDataSourceAction, SIGNAL(triggered()), this, SLOT(newSqlDataSourceActionTriggered()));
+	//Import/Export
+	m_importFileAction = new KAction(KIcon("document-import"), i18n("Import from File"), this);
+	m_importFileAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I);
+	actionCollection()->addAction("import_file", m_importFileAction);
+	connect(m_importFileAction, SIGNAL(triggered()),SLOT(importFileDialog()));
 
-	m_importAction = new KAction(KIcon("document-import-database"), i18n("Import"), this);
-	m_importAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I);
-	actionCollection()->addAction("import", m_importAction);
-	connect(m_importAction, SIGNAL(triggered()),SLOT(importFileDialog()));
+	m_importSqlAction = new KAction(KIcon("document-import-database"), i18n("Import from SQL Database"), this);
+	actionCollection()->addAction("import_sql", m_importSqlAction);
+	connect(m_importSqlAction, SIGNAL(triggered()),SLOT(importSqlDialog()));
 
 	m_exportAction = new KAction(KIcon("document-export-database"), i18n("Export"), this);
 	m_exportAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E);
@@ -446,7 +446,8 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_saveAsAction->setEnabled(!b);
 	m_printAction->setEnabled(!b);
 	m_printPreviewAction->setEnabled(!b);
-	m_importAction->setEnabled(!b);
+	m_importFileAction->setEnabled(!b);
+	m_importSqlAction->setEnabled(!b);
 	m_exportAction->setEnabled(!b);
 	m_newWorkbookAction->setEnabled(!b);
 	m_newSpreadsheetAction->setEnabled(!b);
@@ -1524,6 +1525,11 @@ void MainWin::importFileDialog(const QString& fileName) {
 	DEBUG_LOG("MainWin::importFileDialog() DONE");
 }
 
+void MainWin::importSqlDialog() {
+	ImportSQLDatabaseDialog* dlg = new ImportSQLDatabaseDialog(this, m_project);
+	dlg->exec();
+}
+
 /*!
 	opens the dialog for the export of the currently active worksheet, spreadsheet or matrix.
  */
@@ -1556,14 +1562,6 @@ void MainWin::newFileDataSourceActionTriggered() {
 		this->addAspectToProject(dataSource);
 	}
 	delete dlg;
-}
-
-/*!
-  adds a new SQL data source to the current project.
-*/
-void MainWin::newSqlDataSourceActionTriggered() {
-	ImportSQLDatabaseDialog* dlg = new ImportSQLDatabaseDialog(this, m_project);
-	dlg->exec();
 }
 
 void MainWin::addAspectToProject(AbstractAspect* aspect) {

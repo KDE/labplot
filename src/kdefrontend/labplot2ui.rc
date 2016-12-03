@@ -52,7 +52,10 @@
 	<Action name="new_database_datasource" />
 </Menu>
 <Separator/>
-<Action name="import" />
+<Menu name="Import"><text>Import</text>
+	<Action name="import_file" />
+	<Action name="import_sql" />
+</Menu>
 <Action name="export" />
 <Action name="project" />
 </Menu>
