@@ -122,8 +122,17 @@ void ProjectExplorer::createActions() {
 	expandTreeAction = new QAction(i18n("expand all"), this);
 	connect(expandTreeAction, SIGNAL(triggered()), m_treeView, SLOT(expandAll()));
 
+	expandSelectedTreeAction = new QAction(i18n("expand selected"), this);
+	connect(expandSelectedTreeAction, SIGNAL(triggered()), this, SLOT(expandSelected()));
+
 	collapseTreeAction = new QAction(i18n("collapse all"), this);
 	connect(collapseTreeAction, SIGNAL(triggered()), m_treeView, SLOT(collapseAll()));
+
+	collapseSelectedTreeAction = new QAction(i18n("collapse selected"), this);
+	connect(collapseSelectedTreeAction, SIGNAL(triggered()), this, SLOT(collapseSelected()));
+
+	deleteSelectedTreeAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("delete selected"), this);
+	connect(deleteSelectedTreeAction, SIGNAL(triggered()), this, SLOT(deleteSelected()));
 
 	toggleFilterAction = new QAction(i18n("hide search/filter options"), this);
 	connect(toggleFilterAction, SIGNAL(triggered()), this, SLOT(toggleFilterWidgets()));
@@ -144,13 +153,24 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 		return;
 
 	QModelIndex index = m_treeView->indexAt(m_treeView->viewport()->mapFrom(this, event->pos()));
-	QVariant menu_value = m_treeView->model()->data(index, AspectTreeModel::ContextMenuRole);
-	QMenu *menu = static_cast<QMenu*>(menu_value.value<QWidget*>());
+	if (!index.isValid())
+		m_treeView->clearSelection();
 
+	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
+	QMenu *menu = 0;
+	if (items.size()/4 == 1) {
+		QVariant menu_value = m_treeView->model()->data(index, AspectTreeModel::ContextMenuRole);
+		menu = static_cast<QMenu*>(menu_value.value<QWidget*>());
+	}
 	if (!menu) {
 		menu = new QMenu();
-
 		menu->addSeparator()->setText(i18n("Tree options"));
+		if (items.size()/4 > 1) {
+			menu->addAction(expandSelectedTreeAction);
+			menu->addAction(collapseSelectedTreeAction);
+			menu->addAction(deleteSelectedTreeAction);
+			menu->addSeparator();
+		}
 		menu->addAction(expandTreeAction);
 		menu->addAction(collapseTreeAction);
 		menu->addSeparator();
@@ -165,10 +185,8 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 
 		//TODO
 		//Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
-// 		QMenu* objectsMenu = menu->addMenu(i18n("show/hide objects"));
-
+		// QMenu* objectsMenu = menu->addMenu(i18n("show/hide objects"));
 	}
-
 	menu->exec(event->globalPos());
 	delete menu;
 }
@@ -489,6 +507,29 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	}
 
 	emit selectedAspectsChanged(selectedAspects);
+}
+
+void ProjectExplorer::expandSelected() {
+	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
+	foreach(QModelIndex index, items) {
+		m_treeView->setExpanded(index, true);
+	}
+}
+
+void ProjectExplorer::collapseSelected() {
+	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
+	foreach(QModelIndex index, items) {
+		m_treeView->setExpanded(index, false);
+	}
+}
+
+void ProjectExplorer::deleteSelected() {
+	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
+	// TODO: Delete selected aspects
+	foreach(QModelIndex index, items) {
+		AbstractAspect *aspect = static_cast<AbstractAspect *>(index.internalPointer());
+		aspect->remove();
+	}
 }
 
 //##############################################################################
