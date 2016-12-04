@@ -43,6 +43,7 @@ class QSignalMapper;
 class QTreeView;
 class QXmlStreamWriter;
 class QItemSelection;
+class QMenu;
 
 class ProjectExplorer : public QWidget {
 	Q_OBJECT
@@ -68,7 +69,10 @@ class ProjectExplorer : public QWidget {
 		QAction* caseSensitiveAction;
 		QAction* matchCompleteWordAction;
 		QAction* expandTreeAction;
+		QAction* expandSelectedTreeAction;
 		QAction* collapseTreeAction;
+		QAction* collapseSelectedTreeAction;
+		QAction* deleteSelectedTreeAction;
 		QAction* toggleFilterAction;
 		QAction* showAllColumnsAction;
 		QList<QAction*> list_showColumnActions;
@@ -90,6 +94,9 @@ class ProjectExplorer : public QWidget {
 		void toggleFilterWidgets();
 		void toggleFilterOptionsMenu(bool);
 		void resizeHeader();
+		void expandSelected();
+		void collapseSelected();
+		void deleteSelected();
 
 		void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 		void selectIndex(const QModelIndex&);
