@@ -27,12 +27,10 @@
 
 #include "ImportSQLDatabaseWidget.h"
 #include "DatabaseManagerDialog.h"
-#include "kdefrontend/MainWin.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "backend/core/Project.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "kdefrontend/MainWin.h"
 
 #include <QTableWidget>
 #include <QStandardItem>
@@ -45,28 +43,6 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent):QWidget(parent
 	ui.bDatabaseManager->setIcon(KIcon("network-server-database"));
 	connect( ui.bDatabaseManager, SIGNAL(clicked()), this, SLOT(showDatabaseManager()) );
 
-// 	vendorList.append("QDB2");
-// 	ui.cbVendor->addItem(i18n("DB2"));
-// 	vendorList.append("QIBASE");
-// 	ui.cbVendor->addItem(i18n("IBASE"));
-// 	vendorList.append("QMYSQL");
-// 	ui.cbVendor->addItem(i18n("MYSQL"));
-// 	vendorList.append("QOCI");
-// 	ui.cbVendor->addItem(i18n("OCI"));
-// 	vendorList.append("QODBC");
-// 	ui.cbVendor->addItem(i18n("ODBC"));
-// 	vendorList.append("QPSQL");
-// 	ui.cbVendor->addItem(i18n("PSQL"));
-// 	vendorList.append("QSQLITE");
-// 	ui.cbVendor->addItem(i18n("SQLITE"));
-// 	vendorList.append("QSQLITE2");
-// 	ui.cbVendor->addItem(i18n("SQLITE2"));
-// 	vendorList.append("QTDS");
-// 	ui.cbVendor->addItem(i18n("TDS"));
-// 
-// 	connect( ui.pbConnect, SIGNAL(clicked()), this, SLOT(connectDatabase()) );
-// 	connect( ui.pbRefreshPreview, SIGNAL(clicked()), this, SLOT(showPreview()) );
-// 	connect( ui.cbShowPreview, SIGNAL(clicked()), this, SLOT(togglePreviewWidget()) );
 // 	loadSettings();
 }
 

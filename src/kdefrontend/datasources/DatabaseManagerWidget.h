@@ -42,6 +42,8 @@ private:
 
 private slots:
 	void loadSettings();
+	void driverChanged();
+	void selectFile();
 };
 
 #endif

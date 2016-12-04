@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>446</width>
-    <height>374</height>
+    <width>501</width>
+    <height>376</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,24 +37,24 @@
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <widget class="QLabel" name="lVendor">
+       <widget class="QLabel" name="lDriver">
         <property name="text">
-         <string>Vendor</string>
+         <string>Driver</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="cbVendor"/>
+       <widget class="QComboBox" name="cbDriver"/>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="lHostName">
+       <widget class="QLabel" name="lHost">
         <property name="text">
          <string>Host</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="leHostName"/>
+       <widget class="QLineEdit" name="leHost"/>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="lPort">
@@ -84,13 +84,20 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QLineEdit" name="leDatabaseName"/>
+       <widget class="KLineEdit" name="kleDatabase"/>
+      </item>
+      <item row="3" column="2">
+       <widget class="QPushButton" name="bOpen">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="gbAuthentication">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -171,7 +178,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pbTestConnection">
+       <widget class="QPushButton" name="bTestConnection">
         <property name="text">
          <string>Test</string>
         </property>
@@ -182,6 +189,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
