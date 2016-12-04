@@ -66,7 +66,6 @@ class XYFourierFilterCurveDock;
 class XYFourierTransformCurveDock;
 class WorksheetDock;
 class LabelWidget;
-class ImportFileDialog;
 class DatapickerImageWidget;
 class DatapickerCurveWidget;
 
@@ -97,7 +96,6 @@ private:
 	Folder* m_currentFolder;
 	QString m_currentFileName;
 	QString m_undoViewEmptyLabel;
-	ImportFileDialog* m_importFileDialog;
 	bool m_suppressCurrentSubWindowChangedEvent;
 	bool m_closing;
 	bool m_autoSaveActive;

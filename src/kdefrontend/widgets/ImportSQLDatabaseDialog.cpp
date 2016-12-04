@@ -4,6 +4,7 @@
     Description          : import file data dialog
     --------------------------------------------------------------------
     Copyright            : (C) 2016 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,37 +30,43 @@
 #include "ImportSQLDatabaseDialog.h"
 #include "ImportSQLDatabaseWidget.h"
 #include "kdefrontend/MainWin.h"
+#include "backend/core/AspectTreeModel.h"
 
-#include <QStatusBar>
+// #include <QStatusBar>
 
 /*!
     \class ImportSQLDatabaseDialog
-    \brief Dialog for importing data from a file. Embeds \c ImportSQLDatabaseWidget and provides the standard buttons.
+    \brief Dialog for importing data from a SQL database. Embeds \c ImportSQLDatabaseWidget and provides the standard buttons.
 
 	\ingroup kdefrontend
  */
 
-ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent, Project* project):
-	KDialog(parent), m_mainWin(parent), importSQLDatabaseWidget(new ImportSQLDatabaseWidget(parent, project)) {
-
-	QWidget* mainWidget = new QWidget(this);
-	vLayout = new QVBoxLayout(mainWidget);
-	vLayout->setSpacing(0);
-	vLayout->setContentsMargins(0,0,0,0);
+ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent, AbstractAspect* currentAspect): ImportDialog(parent),
+	importSQLDatabaseWidget(new ImportSQLDatabaseWidget(this)) {
 
 	vLayout->addWidget(importSQLDatabaseWidget);
-	setMainWidget( mainWidget );
 
 	setButtons( KDialog::Ok | KDialog::Cancel );
 
-	m_statusBar = new QStatusBar();
-	vLayout ->addWidget( m_statusBar );
+	setModel(parent->model(), currentAspect);
 
-	connect( importSQLDatabaseWidget, SIGNAL(statusChanged(QString)), m_statusBar, SLOT(showMessage(QString)) );
+// 	connect( importSQLDatabaseWidget, SIGNAL(statusChanged(QString)), m_statusBar, SLOT(showMessage(QString)) );
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
 	setWindowIcon(KIcon("document-import-database"));
 	setAttribute(Qt::WA_DeleteOnClose);
 }
 
 ImportSQLDatabaseDialog::~ImportSQLDatabaseDialog() {
+}
+
+void ImportSQLDatabaseDialog::importTo(QStatusBar*) const {
+	
+}
+
+QString ImportSQLDatabaseDialog::selectedObject() const {
+	return QString();
+}
+
+void ImportSQLDatabaseDialog::checkOkButton() {
+	
 }

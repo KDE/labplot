@@ -22,6 +22,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/HDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FileInfoDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp

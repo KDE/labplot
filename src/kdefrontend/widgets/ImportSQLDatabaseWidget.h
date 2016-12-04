@@ -44,7 +44,7 @@ class ImportSQLDatabaseWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit ImportSQLDatabaseWidget(MainWin*, Project*);
+	explicit ImportSQLDatabaseWidget(QWidget*);
 	~ImportSQLDatabaseWidget();
 
 private:

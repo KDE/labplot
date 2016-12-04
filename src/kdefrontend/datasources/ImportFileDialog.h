@@ -30,55 +30,33 @@
 #ifndef IMPORTFILEDIALOG_H
 #define IMPORTFILEDIALOG_H
 
-#include <KDialog>
+#include "kdefrontend/datasources/ImportDialog.h"
 
+class AbstractAspect;
 class MainWin;
 class ImportFileWidget;
 class FileDataSource;
-class TreeViewComboBox;
-
-class KMenu;
 class QStatusBar;
-class QAbstractItemModel;
-class QModelIndex;
-class QVBoxLayout;
-class QLabel;
-class QComboBox;
-class QGroupBox;
-class QToolButton;
 
-class ImportFileDialog: public KDialog {
+class ImportFileDialog : public ImportDialog {
 	Q_OBJECT
 
 public:
-	explicit ImportFileDialog(MainWin*, bool fileDataSource = false, const QString& fileName = QString());
+	explicit ImportFileDialog(MainWin*, AbstractAspect* currentAspect = 0, const QString& fileName = QString(), bool fileDataSource = false);
 	~ImportFileDialog();
+
+	virtual QString selectedObject() const;
+	virtual void checkOkButton();
 
 	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
 	void importTo(QStatusBar*) const;
-	void setCurrentIndex(const QModelIndex&);
-private:
-	void setModel(QAbstractItemModel*);
 
-	MainWin* m_mainWin;
-	QVBoxLayout* vLayout;
+private:
 	ImportFileWidget* importFileWidget;
-	QGroupBox* frameAddTo;
-	TreeViewComboBox* cbAddTo;
-	QLabel* lPosition;
-	QComboBox* cbPosition;
-	QPushButton* bNewSpreadsheet;
-	QPushButton* bNewMatrix;
-	QPushButton* bNewWorkbook;
-	QToolButton* tbNewDataContainer;
 	bool m_showOptions;
-	KMenu* m_newDataContainerMenu;
 
 private slots:
 	void toggleOptions();
-	void newDataContainerMenu();
-	void newDataContainer(QAction*);
-	void checkOkButton();
 	void checkOnFitsTableToMatrix();
 };
 

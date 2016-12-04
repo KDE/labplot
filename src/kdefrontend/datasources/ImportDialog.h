@@ -1,9 +1,8 @@
 /***************************************************************************
-    File                 : ImportFileDialog.h
+    File                 : ImportDialog.h
     Project              : LabPlot
     Description          : import data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 by Ankit Wagadre (wagadre.ankit@gmail.com)
     Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -27,34 +26,53 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef IMPORTSQLDATABASEDIALOG_H
-#define IMPORTSQLDATABASEDIALOG_H
-
-#include "kdefrontend/datasources/ImportDialog.h"
+#ifndef IMPORTDIALOG_H
+#define IMPORTDIALOG_H
 
 #include <KDialog>
-#include <QVBoxLayout>
 
+class AbstractAspect;
 class MainWin;
+class TreeViewComboBox;
+
+class KMenu;
+class QAbstractItemModel;
+class QLabel;
+class QModelIndex;
 class QVBoxLayout;
-class QStatusBar;
-class ImportSQLDatabaseWidget;
-class Project;
+class QComboBox;
+class QGroupBox;
+class QToolButton;
 
-
-class ImportSQLDatabaseDialog: public ImportDialog {
+class ImportDialog : public KDialog {
 	Q_OBJECT
 
 public:
-	explicit ImportSQLDatabaseDialog(MainWin* , AbstractAspect* currentAspect);
-	~ImportSQLDatabaseDialog();
+	explicit ImportDialog(MainWin*);
+	~ImportDialog();
 
-	void importTo(QStatusBar*) const;
-	virtual QString selectedObject() const;
-	virtual void checkOkButton();
+	void setCurrentIndex(const QModelIndex&);
+	virtual QString selectedObject() const = 0;
+	virtual void checkOkButton() = 0;
+
+protected:
+	QVBoxLayout* vLayout;
+	void setModel(QAbstractItemModel*, AbstractAspect*);
+
+	TreeViewComboBox* cbAddTo;
+	QLabel* lPosition;
+	QComboBox* cbPosition;
 
 private:
-	ImportSQLDatabaseWidget* importSQLDatabaseWidget;
+	MainWin* m_mainWin;
+	QGroupBox* frameAddTo;
+	QToolButton* tbNewDataContainer;
+	KMenu* m_newDataContainerMenu;
+
+private slots:
+	void newDataContainerMenu();
+	void newDataContainer(QAction*);
+	void modelIndexChanged();
 };
 
-#endif //IMPORTSQLDATABASEDIALOG_H
+#endif //IMPORTDIALOG_H

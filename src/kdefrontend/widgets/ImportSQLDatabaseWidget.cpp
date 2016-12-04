@@ -31,13 +31,14 @@
 #include "backend/core/Project.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "kdefrontend/MainWin.h"
 
 #include <QTableWidget>
 #include <QStandardItem>
 #include <QTreeView>
 
-ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(MainWin *parent, Project *project):
-	QWidget(parent), m_mainWin(parent), mainProject(project),
+ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent):QWidget(parent),
+// , m_mainWin(parent), mainProject(project),
 	cbSheet(0), m_sheet(0), m_aspectTreeModel(0), m_databaseTreeModel(0) {
 	ui.setupUi(this);
 
@@ -123,22 +124,22 @@ void ImportSQLDatabaseWidget::setDatabaseModel() {
 }
 
 void ImportSQLDatabaseWidget::setProjectModel() {
-	QList<const char*>  list;
-	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet";
-
-	if (cbSheet)
-		cbSheet->setTopLevelClasses(list);
-
-	list.clear();
-	list<<"Spreadsheet";
-	if (cbSheet)
-		cbSheet->setSelectableClasses(list);
-
-	m_aspectTreeModel = new AspectTreeModel(mainProject);
-	m_aspectTreeModel->setSelectableAspects(list);
-
-	if (cbSheet)
-		cbSheet->setModel(m_aspectTreeModel);
+// 	QList<const char*>  list;
+// 	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet";
+// 
+// 	if (cbSheet)
+// 		cbSheet->setTopLevelClasses(list);
+// 
+// 	list.clear();
+// 	list<<"Spreadsheet";
+// 	if (cbSheet)
+// 		cbSheet->setSelectableClasses(list);
+// 
+// 	m_aspectTreeModel = new AspectTreeModel(mainProject);
+// 	m_aspectTreeModel->setSelectableAspects(list);
+// 
+// 	if (cbSheet)
+// 		cbSheet->setModel(m_aspectTreeModel);
 }
 
 void ImportSQLDatabaseWidget::currentSheetChanged(const QModelIndex& index) {

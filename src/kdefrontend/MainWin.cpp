@@ -389,7 +389,6 @@ void MainWin::initMenus() {
 	m_newMenu->addAction(m_newDatapickerAction);
 	m_newMenu->addSeparator();
 	m_newMenu->addAction(m_newFileDataSourceAction);
-	m_newMenu->addAction(m_newSqlDataSourceAction);
 
 	//menu subwindow visibility policy
 	m_visibilityMenu = new QMenu(i18n("Window visibility policy"), this);
@@ -1505,29 +1504,28 @@ void MainWin::historyDialog() {
 */
 void MainWin::importFileDialog(const QString& fileName) {
 	DEBUG_LOG("MainWin::importFileDialog()");
-	m_importFileDialog = new ImportFileDialog(this, false, fileName);
+	ImportFileDialog* dlg= new ImportFileDialog(this, m_currentAspect, fileName);
 
-	// select existing container
-	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook"))
-		m_importFileDialog->setCurrentIndex( m_projectExplorer->currentIndex());
-	else if (m_currentAspect->inherits("Column")) {
-		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
-			m_importFileDialog->setCurrentIndex( m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
-	}
-
-	if (m_importFileDialog->exec() == QDialog::Accepted) {
-		m_importFileDialog->importTo(statusBar());
+	if (dlg->exec() == QDialog::Accepted) {
+		dlg->importTo(statusBar());
 		m_project->setChanged(true);
 	}
 
-	delete m_importFileDialog;
-	m_importFileDialog = 0;
+	delete dlg;
 	DEBUG_LOG("MainWin::importFileDialog() DONE");
 }
 
 void MainWin::importSqlDialog() {
-	ImportSQLDatabaseDialog* dlg = new ImportSQLDatabaseDialog(this, m_project);
-	dlg->exec();
+	DEBUG_LOG("MainWin::importSqlDialog()");
+	ImportSQLDatabaseDialog* dlg = new ImportSQLDatabaseDialog(this, m_currentAspect);
+
+	if (dlg->exec() == QDialog::Accepted) {
+		dlg->importTo(statusBar());
+		m_project->setChanged(true);
+	}
+
+	delete dlg;
+	DEBUG_LOG("MainWin::importSqlDialog() DONE");
 }
 
 /*!
@@ -1555,7 +1553,7 @@ void MainWin::editFitsFileDialog() {
 	adds a new file data source to the current project.
 */
 void MainWin::newFileDataSourceActionTriggered() {
-	ImportFileDialog* dlg = new ImportFileDialog(this, true);
+	ImportFileDialog* dlg = new ImportFileDialog(this, 0, "", true);
 	if (dlg->exec() == QDialog::Accepted) {
 		FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1", 1));
 		dlg->importToFileDataSource(dataSource, statusBar());

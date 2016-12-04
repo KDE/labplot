@@ -55,23 +55,19 @@
 	\ingroup kdefrontend
  */
 
-ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const QString& fileName) : KDialog(parent), m_mainWin(parent),
-	cbAddTo(0), cbPosition(0), m_showOptions(false), m_newDataContainerMenu(0) {
+ImportFileDialog::ImportFileDialog(MainWin* parent, AbstractAspect* currentAspect, const QString& fileName, bool fileDataSource) : ImportDialog(parent)
+// , m_mainWin(parent),
+, m_showOptions(false)
+	{
 
-	QWidget* mainWidget = new QWidget(this);
-	vLayout = new QVBoxLayout(mainWidget);
-	vLayout->setSpacing(0);
-	vLayout->setContentsMargins(0,0,0,0);
-
-	importFileWidget = new ImportFileWidget(mainWidget, fileName);
+	importFileWidget = new ImportFileWidget(this, fileName);
 	vLayout->addWidget(importFileWidget);
-	setMainWidget(mainWidget);
 
 	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 
 	//hide the data-source related widgets
 	if (!fileDataSource) {
-		this->setModel(m_mainWin->model());
+		setModel(parent->model(), currentAspect);
 		//TODO: disable for file data sources
 		importFileWidget->hideDataSource();
 	}
@@ -99,72 +95,6 @@ ImportFileDialog::~ImportFileDialog() {
 		conf.writeEntry("Position", cbPosition->currentIndex());
 
 	saveDialogSize(conf);
-}
-
-/*!
-	creates widgets for the frame "Add-To" and sets the current model in the combobox to \c model.
- */
-void ImportFileDialog::setModel(QAbstractItemModel* model) {
-	DEBUG_LOG("ImportFileDialog::setModel() model ="<<model);
-	//Frame for the "Add To"-Stuff
-	frameAddTo = new QGroupBox(this);
-	frameAddTo->setTitle(i18n("Import To"));
-	QGridLayout *grid = new QGridLayout(frameAddTo);
-	grid->addWidget(new QLabel(i18n("Data container"), frameAddTo), 0, 0);
-
-	cbAddTo = new TreeViewComboBox(frameAddTo);
-	cbAddTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	QList<const char *> list;
-	list << "Folder" << "Spreadsheet" << "Matrix" << "Workbook";
-	cbAddTo->setTopLevelClasses(list);
-	grid->addWidget(cbAddTo, 0, 1);
-
-	list.clear();
-	list << "Spreadsheet" << "Matrix" << "Workbook";
-	cbAddTo->setSelectableClasses(list);
-	cbAddTo->setModel(model);
-
-	tbNewDataContainer = new QToolButton(frameAddTo);
-	tbNewDataContainer->setIcon(KIcon("list-add"));
-	grid->addWidget( tbNewDataContainer, 0, 2);
-
-	lPosition = new QLabel(i18n("Position"), frameAddTo);
-	lPosition->setEnabled(false);
-	grid->addWidget(lPosition, 1, 0);
-
-	cbPosition = new QComboBox(frameAddTo);
-	cbPosition->setEnabled(false);
-	cbPosition->addItem(i18n("Append"));
-	cbPosition->addItem(i18n("Prepend"));
-	cbPosition->addItem(i18n("Replace"));
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
-	cbPosition->setCurrentIndex(conf.readEntry("Position", 0));
-
-	cbPosition->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-	grid->addWidget(cbPosition, 1, 1);
-
-	vLayout->addWidget(frameAddTo);
-
-	//menu for new data container
-	m_newDataContainerMenu = new KMenu(this);
-	m_newDataContainerMenu->addAction( KIcon("labplot-workbook-new"), i18n("new Workbook") );
-	m_newDataContainerMenu->addAction( KIcon("labplot-spreadsheet-new"), i18n("new Spreadsheet") );
-	m_newDataContainerMenu->addAction( KIcon("labplot-matrix-new"), i18n("new Matrix") );
-
-	//ok is only available if a valid container was selected
-	enableButtonOk(false);
-
-	connect(cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkOkButton()));
-	connect(tbNewDataContainer, SIGNAL(clicked(bool)), this, SLOT(newDataContainerMenu()));
-	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
-	DEBUG_LOG("ImportFileDialog::setModel() DONE");
-}
-
-void ImportFileDialog::setCurrentIndex(const QModelIndex& index) {
-	DEBUG_LOG("ImportFileDialog::setCurrentIndex() index ="<<index);
-	cbAddTo->setCurrentModelIndex(index);
-	DEBUG_LOG("cbAddTo->currentModelIndex() ="<<cbAddTo->currentModelIndex());
-	this->checkOkButton();
 }
 
 /*!
@@ -310,41 +240,6 @@ void ImportFileDialog::toggleOptions() {
 	resize( QSize(this->width(), 0).expandedTo(minimumSize()) );
 }
 
-void ImportFileDialog::newDataContainer(QAction* action) {
-	QString path = importFileWidget->fileName();
-	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
-
-	QString type = action->iconText().split(' ')[1];
-	if (name.isEmpty())
-		name = action->iconText();
-
-	bool ok;
-	// child widgets can't have own icons
-	QInputDialog* dlg = new QInputDialog(this);
-	name = dlg->getText(this, i18n("Add %1", action->iconText()), i18n("%1 name:", type), QLineEdit::Normal, name, &ok);
-	if (ok) {
-		AbstractAspect* aspect;
-		int actionIndex = m_newDataContainerMenu->actions().indexOf(action);
-		if (actionIndex == 0)
-			aspect = new Workbook(0, name);
-		else if (actionIndex == 1)
-			aspect = new Spreadsheet(0, name);
-		else
-			aspect = new Matrix(0, name);
-
-		m_mainWin->addAspectToProject(aspect);
-		DEBUG_LOG("cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
-		cbAddTo->setCurrentModelIndex(m_mainWin->model()->modelIndexOfAspect(aspect));
-		checkOkButton();
-	}
-
-	delete dlg;
-}
-
-void ImportFileDialog::newDataContainerMenu() {
-	m_newDataContainerMenu->exec( tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
-}
-
 void ImportFileDialog::checkOnFitsTableToMatrix() {
 	if (cbAddTo) {
 		DEBUG_LOG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
@@ -404,4 +299,10 @@ void ImportFileDialog::checkOkButton() {
 		}
     	}
     	enableButtonOk( QFile::exists(fileName) ) ;
+}
+
+QString ImportFileDialog::selectedObject() const {
+	QString path = importFileWidget->fileName();
+	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+	return name;
 }
