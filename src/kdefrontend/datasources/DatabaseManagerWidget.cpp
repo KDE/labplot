@@ -56,8 +56,11 @@ DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent) : QWidget(parent) 
 		ui.cbDriver->addItem(driver);
 
 	//SIGNALs/SLOTs
-	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );
-	connect(ui.cbDriver, SIGNAL(currentIndexChanged(int)), SLOT(driverChanged()) );
+	connect( ui.lwConnections, SIGNAL(currentRowChanged(int)), this, SLOT(connectionChanged(int)) );
+	connect( ui.tbAdd, SIGNAL(clicked()), this, SLOT(addConnection()) );
+	connect( ui.tbDelete, SIGNAL(clicked()), this, SLOT(deleteConnection()) );
+	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT(selectFile()) );
+	connect( ui.cbDriver, SIGNAL(currentIndexChanged(int)), SLOT(driverChanged()) );
 
 	QTimer::singleShot( 100, this, SLOT(loadSettings()) );
 }
@@ -66,13 +69,13 @@ DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent) : QWidget(parent) 
 	read and show all available database connections
  */
 void DatabaseManagerWidget::loadSettings() {
-	KConfigGroup conf(KSharedConfig::openConfig(),"DatabaseManager");
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("DatabaseManager"));
 	//TODO
 }
 
 DatabaseManagerWidget::~DatabaseManagerWidget() {
 	// save available database connections
-	KConfigGroup conf(KSharedConfig::openConfig(), "DatabaseManager");
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("DatabaseManager"));
 	//TODO
 }
 
@@ -88,8 +91,8 @@ void DatabaseManagerWidget::driverChanged() {
 }
 
 void DatabaseManagerWidget::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "DatabaseManagerWidget");
-	QString dir = conf.readEntry("LastDir", "");
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("DatabaseManagerWidget"));
+	QString dir = conf.readEntry(QLatin1String("LastDir"), "");
 	QString path = QFileDialog::getOpenFileName(this, i18n("Select the database file"), dir);
 	if (path.isEmpty())
 		return; //cancel was clicked in the file-dialog
@@ -98,8 +101,23 @@ void DatabaseManagerWidget::selectFile() {
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != dir)
-			conf.writeEntry("LastDir", newDir);
+			conf.writeEntry(QLatin1String("LastDir"), newDir);
 	}
 
 	ui.kleDatabase->setText(path);
+}
+
+/*!
+	shows the settings of the currently selected connection
+ */
+void DatabaseManagerWidget::connectionChanged(int index) {
+
+}
+
+void DatabaseManagerWidget::addConnection() {
+
+}
+
+void DatabaseManagerWidget::deleteConnection() {
+
 }

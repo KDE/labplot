@@ -44,6 +44,9 @@ private slots:
 	void loadSettings();
 	void driverChanged();
 	void selectFile();
+	void addConnection();
+	void deleteConnection();
+	void connectionChanged(int);
 };
 
 #endif
