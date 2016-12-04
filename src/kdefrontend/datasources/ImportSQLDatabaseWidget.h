@@ -53,8 +53,6 @@ private:
 	QList<QString> vendorList;
 	QList<QString> tableNamesList;
 	QSqlDatabase m_db;
-	TreeViewComboBox* cbSheet;
-	AbstractAspect* m_sheet;
 	AspectTreeModel* m_aspectTreeModel;
 	Project* mainProject;
 	QStandardItemModel* m_databaseTreeModel;
@@ -66,11 +64,10 @@ private:
 	void previewColumn(QString, QString, int, bool showPreview = false);
 
 private slots:
+	void showDatabaseManager();
 	void connectDatabase();
-	void togglePreviewWidget();
 	void showPreview();
 	void importData(bool showPreview = false);
-	void currentSheetChanged(const QModelIndex&);
 
 signals:
 	void statusChanged(QString);

@@ -29,10 +29,10 @@
 
 #include "ImportSQLDatabaseDialog.h"
 #include "ImportSQLDatabaseWidget.h"
-#include "kdefrontend/MainWin.h"
 #include "backend/core/AspectTreeModel.h"
+#include "kdefrontend/MainWin.h"
 
-// #include <QStatusBar>
+#include <QStatusBar>
 
 /*!
     \class ImportSQLDatabaseDialog
@@ -53,13 +53,19 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent, AbstractAspect
 // 	connect( importSQLDatabaseWidget, SIGNAL(statusChanged(QString)), m_statusBar, SLOT(showMessage(QString)) );
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
 	setWindowIcon(KIcon("document-import-database"));
-	setAttribute(Qt::WA_DeleteOnClose);
+
+	//restore saved settings
+	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseDialog");
+	restoreDialogSize(conf);
 }
 
 ImportSQLDatabaseDialog::~ImportSQLDatabaseDialog() {
+	//save current settings
+	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseDialog");
+	saveDialogSize(conf);
 }
 
-void ImportSQLDatabaseDialog::importTo(QStatusBar*) const {
+void ImportSQLDatabaseDialog::import(QStatusBar*) const {
 	
 }
 

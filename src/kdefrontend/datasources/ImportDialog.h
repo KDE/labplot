@@ -43,6 +43,7 @@ class QVBoxLayout;
 class QComboBox;
 class QGroupBox;
 class QToolButton;
+class QStatusBar;
 
 class ImportDialog : public KDialog {
 	Q_OBJECT
@@ -51,14 +52,15 @@ public:
 	explicit ImportDialog(MainWin*);
 	~ImportDialog();
 
+	virtual void import(QStatusBar*) const = 0;
 	void setCurrentIndex(const QModelIndex&);
 	virtual QString selectedObject() const = 0;
 	virtual void checkOkButton() = 0;
 
 protected:
-	QVBoxLayout* vLayout;
 	void setModel(QAbstractItemModel*, AbstractAspect*);
 
+	QVBoxLayout* vLayout;
 	TreeViewComboBox* cbAddTo;
 	QLabel* lPosition;
 	QComboBox* cbPosition;

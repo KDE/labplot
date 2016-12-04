@@ -19,6 +19,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/ThemeHandler.cpp
 	${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/DatabaseManagerDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/DatabaseManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/HDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FileInfoDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
@@ -85,9 +87,11 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/databasemanagerwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/hdfoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/importsqldatabasewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/netcdfoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
@@ -123,7 +127,6 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/fitsheadereditwidget.ui
 	${KDEFRONTEND_DIR}/ui/fitsheadereditnewkeywordwidget.ui
 	${KDEFRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
-	${KDEFRONTEND_DIR}/ui/importsqldatabasewidget.ui
 )
 
 set(BACKEND_SOURCES

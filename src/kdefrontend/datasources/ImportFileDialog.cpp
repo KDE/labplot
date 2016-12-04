@@ -55,12 +55,10 @@
 	\ingroup kdefrontend
  */
 
-ImportFileDialog::ImportFileDialog(MainWin* parent, AbstractAspect* currentAspect, const QString& fileName, bool fileDataSource) : ImportDialog(parent)
-// , m_mainWin(parent),
-, m_showOptions(false)
-	{
+ImportFileDialog::ImportFileDialog(MainWin* parent, AbstractAspect* currentAspect, const QString& fileName, bool fileDataSource) : ImportDialog(parent),
+	importFileWidget(new ImportFileWidget(this, fileName)),
+	m_showOptions(false) {
 
-	importFileWidget = new ImportFileWidget(this, fileName);
 	vLayout->addWidget(importFileWidget);
 
 	setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
@@ -124,7 +122,7 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
 /*!
   triggers data import to the currently selected data container
 */
-void ImportFileDialog::importTo(QStatusBar* statusBar) const {
+void ImportFileDialog::import(QStatusBar* statusBar) const {
 	DEBUG_LOG("ImportFileDialog::importTo()");
 	DEBUG_LOG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());

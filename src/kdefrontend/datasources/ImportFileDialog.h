@@ -49,7 +49,7 @@ public:
 	virtual void checkOkButton();
 
 	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
-	void importTo(QStatusBar*) const;
+	virtual void import(QStatusBar*) const;
 
 private:
 	ImportFileWidget* importFileWidget;

@@ -1507,7 +1507,7 @@ void MainWin::importFileDialog(const QString& fileName) {
 	ImportFileDialog* dlg= new ImportFileDialog(this, m_currentAspect, fileName);
 
 	if (dlg->exec() == QDialog::Accepted) {
-		dlg->importTo(statusBar());
+		dlg->import(statusBar());
 		m_project->setChanged(true);
 	}
 
@@ -1520,7 +1520,7 @@ void MainWin::importSqlDialog() {
 	ImportSQLDatabaseDialog* dlg = new ImportSQLDatabaseDialog(this, m_currentAspect);
 
 	if (dlg->exec() == QDialog::Accepted) {
-		dlg->importTo(statusBar());
+		dlg->import(statusBar());
 		m_project->setChanged(true);
 	}
 

@@ -26,6 +26,7 @@
  ***************************************************************************/
 
 #include "ImportSQLDatabaseWidget.h"
+#include "DatabaseManagerDialog.h"
 #include "kdefrontend/MainWin.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "backend/core/Project.h"
@@ -38,55 +39,50 @@
 #include <QTreeView>
 
 ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent):QWidget(parent),
-// , m_mainWin(parent), mainProject(project),
-	cbSheet(0), m_sheet(0), m_aspectTreeModel(0), m_databaseTreeModel(0) {
+	m_aspectTreeModel(0), m_databaseTreeModel(0) {
 	ui.setupUi(this);
 
-	vendorList.append("QDB2");
-	ui.cbVendor->addItem(i18n("DB2"));
-	vendorList.append("QIBASE");
-	ui.cbVendor->addItem(i18n("IBASE"));
-	vendorList.append("QMYSQL");
-	ui.cbVendor->addItem(i18n("MYSQL"));
-	vendorList.append("QOCI");
-	ui.cbVendor->addItem(i18n("OCI"));
-	vendorList.append("QODBC");
-	ui.cbVendor->addItem(i18n("ODBC"));
-	vendorList.append("QPSQL");
-	ui.cbVendor->addItem(i18n("PSQL"));
-	vendorList.append("QSQLITE");
-	ui.cbVendor->addItem(i18n("SQLITE"));
-	vendorList.append("QSQLITE2");
-	ui.cbVendor->addItem(i18n("SQLITE2"));
-	vendorList.append("QTDS");
-	ui.cbVendor->addItem(i18n("TDS"));
+	ui.bDatabaseManager->setIcon(KIcon("network-server-database"));
+	connect( ui.bDatabaseManager, SIGNAL(clicked()), this, SLOT(showDatabaseManager()) );
 
-	cbSheet = new TreeViewComboBox();
-	setProjectModel();
-	//  TODO: change layout
-	ui.wProjectTree->layout()->addWidget(cbSheet);
-
-	connect( ui.pbConnect, SIGNAL(clicked()), this, SLOT(connectDatabase()) );
-	connect( ui.pbRefreshPreview, SIGNAL(clicked()), this, SLOT(showPreview()) );
-	connect( ui.cbShowPreview, SIGNAL(clicked()), this, SLOT(togglePreviewWidget()) );
-	connect( cbSheet, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(currentSheetChanged(QModelIndex)) );
-	connect( ui.pbImport, SIGNAL(clicked()), this, SLOT(importData()) );
-	loadSettings();
+// 	vendorList.append("QDB2");
+// 	ui.cbVendor->addItem(i18n("DB2"));
+// 	vendorList.append("QIBASE");
+// 	ui.cbVendor->addItem(i18n("IBASE"));
+// 	vendorList.append("QMYSQL");
+// 	ui.cbVendor->addItem(i18n("MYSQL"));
+// 	vendorList.append("QOCI");
+// 	ui.cbVendor->addItem(i18n("OCI"));
+// 	vendorList.append("QODBC");
+// 	ui.cbVendor->addItem(i18n("ODBC"));
+// 	vendorList.append("QPSQL");
+// 	ui.cbVendor->addItem(i18n("PSQL"));
+// 	vendorList.append("QSQLITE");
+// 	ui.cbVendor->addItem(i18n("SQLITE"));
+// 	vendorList.append("QSQLITE2");
+// 	ui.cbVendor->addItem(i18n("SQLITE2"));
+// 	vendorList.append("QTDS");
+// 	ui.cbVendor->addItem(i18n("TDS"));
+// 
+// 	connect( ui.pbConnect, SIGNAL(clicked()), this, SLOT(connectDatabase()) );
+// 	connect( ui.pbRefreshPreview, SIGNAL(clicked()), this, SLOT(showPreview()) );
+// 	connect( ui.cbShowPreview, SIGNAL(clicked()), this, SLOT(togglePreviewWidget()) );
+// 	loadSettings();
 }
 
 void ImportSQLDatabaseWidget::loadSettings() {
 	//load last used settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "SQLImport");
-
-	ui.cbVendor->setCurrentIndex( conf.readEntry( "VendorIndex", 0) );
-	ui.leHostName->setText( conf.readEntry( "HostName", "127.0.0.1") );
-	ui.sbPort->setValue( conf.readEntry( "Port", 3306) );
-	ui.leDatabaseName->setText( conf.readEntry( "DatabaseName", "") );
-	ui.leUserName->setText( conf.readEntry("UserName", "root") );
-	ui.lePassword->setText( conf.readEntry("Password", "root") );
-	ui.cbShowPreview->setChecked( conf.readEntry("ShowPreview", false));
-
-	togglePreviewWidget();
+// 	KConfigGroup conf(KSharedConfig::openConfig(), "SQLImport");
+// 
+// 	ui.cbVendor->setCurrentIndex( conf.readEntry( "VendorIndex", 0) );
+// 	ui.leHostName->setText( conf.readEntry( "HostName", "127.0.0.1") );
+// 	ui.sbPort->setValue( conf.readEntry( "Port", 3306) );
+// 	ui.leDatabaseName->setText( conf.readEntry( "DatabaseName", "") );
+// 	ui.leUserName->setText( conf.readEntry("UserName", "root") );
+// 	ui.lePassword->setText( conf.readEntry("Password", "root") );
+// 	ui.cbShowPreview->setChecked( conf.readEntry("ShowPreview", false));
+// 
+// 	togglePreviewWidget();
 }
 
 void ImportSQLDatabaseWidget::setDatabaseModel() {
@@ -123,62 +119,39 @@ void ImportSQLDatabaseWidget::setDatabaseModel() {
 	ui.cbDatabaseTree->setView(databaseTreeView);
 }
 
-void ImportSQLDatabaseWidget::setProjectModel() {
-// 	QList<const char*>  list;
-// 	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet";
-// 
-// 	if (cbSheet)
-// 		cbSheet->setTopLevelClasses(list);
-// 
-// 	list.clear();
-// 	list<<"Spreadsheet";
-// 	if (cbSheet)
-// 		cbSheet->setSelectableClasses(list);
-// 
-// 	m_aspectTreeModel = new AspectTreeModel(mainProject);
-// 	m_aspectTreeModel->setSelectableAspects(list);
-// 
-// 	if (cbSheet)
-// 		cbSheet->setModel(m_aspectTreeModel);
-}
-
-void ImportSQLDatabaseWidget::currentSheetChanged(const QModelIndex& index) {
-	m_sheet = static_cast<AbstractAspect*>(index.internalPointer());
-}
-
 ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
-	if (m_aspectTreeModel)
-		delete m_aspectTreeModel;
-
-	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "SQLImport");
-
-	conf.writeEntry( "VendorIndex", ui.cbVendor->currentIndex() );
-	conf.writeEntry( "HostName", ui.leHostName->text() );
-	conf.writeEntry( "Port", ui.sbPort->value() );
-	conf.writeEntry( "DatabaseName", ui.leDatabaseName->text() );
-	conf.writeEntry( "UserName", ui.leUserName->text() );
-	conf.writeEntry( "Password", ui.lePassword->text() );
-	conf.writeEntry( "ShowPreview", ui.cbShowPreview->isChecked() );
+// 	if (m_aspectTreeModel)
+// 		delete m_aspectTreeModel;
+// 
+// 	// save current settings
+// 	KConfigGroup conf(KSharedConfig::openConfig(), "SQLImport");
+// 
+// 	conf.writeEntry( "VendorIndex", ui.cbVendor->currentIndex() );
+// 	conf.writeEntry( "HostName", ui.leHostName->text() );
+// 	conf.writeEntry( "Port", ui.sbPort->value() );
+// 	conf.writeEntry( "DatabaseName", ui.leDatabaseName->text() );
+// 	conf.writeEntry( "UserName", ui.leUserName->text() );
+// 	conf.writeEntry( "Password", ui.lePassword->text() );
+// 	conf.writeEntry( "ShowPreview", ui.cbShowPreview->isChecked() );
 }
 
 void ImportSQLDatabaseWidget::connectDatabase() {
-	m_db = QSqlDatabase::addDatabase( vendorList.at(ui.cbVendor->currentIndex()) );
-	m_db.setHostName( ui.leHostName->text() );
-	m_db.setPort( ui.sbPort->value() );
-	m_db.setDatabaseName( ui.leDatabaseName->text() );
-	m_db.setUserName( ui.leUserName->text() );
-	m_db.setPassword( ui.lePassword->text() );
-
-	if (m_db.isValid()) {
-		m_db.open();
-		if (m_db.isOpen()) {
-			setDatabaseModel();
-			m_db.close();
-		}
-	}
-
-	updateStatus();
+// 	m_db = QSqlDatabase::addDatabase( vendorList.at(ui.cbVendor->currentIndex()) );
+// 	m_db.setHostName( ui.leHostName->text() );
+// 	m_db.setPort( ui.sbPort->value() );
+// 	m_db.setDatabaseName( ui.leDatabaseName->text() );
+// 	m_db.setUserName( ui.leUserName->text() );
+// 	m_db.setPassword( ui.lePassword->text() );
+// 
+// 	if (m_db.isValid()) {
+// 		m_db.open();
+// 		if (m_db.isOpen()) {
+// 			setDatabaseModel();
+// 			m_db.close();
+// 		}
+// 	}
+// 
+// 	updateStatus();
 }
 
 void ImportSQLDatabaseWidget::previewColumn(QString columnNameList, QString tableName, int columnCount, bool showPreview) {
@@ -203,32 +176,26 @@ void ImportSQLDatabaseWidget::previewColumn(QString columnNameList, QString tabl
 				row++;
 			}
 		} else {
-			Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(m_sheet);
-			if (spreadsheet) {
-				int prevColumnCount = spreadsheet->columnCount();
-				spreadsheet->setColumnCount(prevColumnCount + columnCount);
-				if (rowCount > spreadsheet->rowCount()) spreadsheet->setRowCount(rowCount);
-				while(searchQuery.next()) {
-					if (row >= ui.sbStartRow->value() && row <= ui.sbEndRow->value()) {
-						for(int index = 0; index < columnCount; index++) {
-							spreadsheet->column(index + prevColumnCount)->setColumnMode(AbstractColumn::Text);
-							spreadsheet->column(index + prevColumnCount)->setTextAt(row - ui.sbStartRow->value(), searchQuery.value(index).toString());
-						}
-					}
-					row++;
-				}
-			}
+			//TODO
+// 			Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(m_sheet);
+// 			if (spreadsheet) {
+// 				int prevColumnCount = spreadsheet->columnCount();
+// 				spreadsheet->setColumnCount(prevColumnCount + columnCount);
+// 				if (rowCount > spreadsheet->rowCount()) spreadsheet->setRowCount(rowCount);
+// 				while(searchQuery.next()) {
+// 					if (row >= ui.sbStartRow->value() && row <= ui.sbEndRow->value()) {
+// 						for(int index = 0; index < columnCount; index++) {
+// 							spreadsheet->column(index + prevColumnCount)->setColumnMode(AbstractColumn::Text);
+// 							spreadsheet->column(index + prevColumnCount)->setTextAt(row - ui.sbStartRow->value(), searchQuery.value(index).toString());
+// 						}
+// 					}
+// 					row++;
+// 				}
+// 			}
 		}
 	}
 
 	updateStatus();
-}
-
-void ImportSQLDatabaseWidget::togglePreviewWidget() {
-	if (ui.cbShowPreview->isChecked())
-		ui.wPreviewTable->setVisible(true);
-	else
-		ui.wPreviewTable->setVisible(false);
 }
 
 void ImportSQLDatabaseWidget::showPreview() {
@@ -272,4 +239,20 @@ void ImportSQLDatabaseWidget::updateStatus() {
 		msg = "Done";
 
 	emit statusChanged( msg );
+}
+
+/*!
+	shows the database manager where the connections edited and created.
+	The selected connection is selected in the connection combo box in this widget.
+**/
+void ImportSQLDatabaseWidget::showDatabaseManager() {
+	DatabaseManagerDialog* dlg = new DatabaseManagerDialog(this);
+
+	if (dlg->exec() == QDialog::Accepted) {
+		//TODO:
+		//1. add new connections that were created in the database manager to ui.cbConnection
+		//2. make the connection that were selected in the database manager current in ui.cbConnection
+	}
+
+	delete dlg;
 }

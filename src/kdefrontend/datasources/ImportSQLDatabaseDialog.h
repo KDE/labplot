@@ -32,24 +32,18 @@
 
 #include "kdefrontend/datasources/ImportDialog.h"
 
-#include <KDialog>
-#include <QVBoxLayout>
-
 class MainWin;
-class QVBoxLayout;
 class QStatusBar;
 class ImportSQLDatabaseWidget;
-class Project;
 
-
-class ImportSQLDatabaseDialog: public ImportDialog {
+class ImportSQLDatabaseDialog : public ImportDialog {
 	Q_OBJECT
 
 public:
-	explicit ImportSQLDatabaseDialog(MainWin* , AbstractAspect* currentAspect);
+	explicit ImportSQLDatabaseDialog(MainWin*, AbstractAspect*);
 	~ImportSQLDatabaseDialog();
 
-	void importTo(QStatusBar*) const;
+	void import(QStatusBar*) const;
 	virtual QString selectedObject() const;
 	virtual void checkOkButton();
 
