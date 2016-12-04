@@ -49,12 +49,12 @@
 #include "commonfrontend/note/NoteView.h"
 
 #include "kdefrontend/datasources/ImportFileDialog.h"
+#include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/HistoryDialog.h"
 #include "kdefrontend/SettingsDialog.h"
 #include "kdefrontend/GuiObserver.h"
 #include "kdefrontend/widgets/FITSHeaderEditDialog.h"
-#include "kdefrontend/widgets/ImportSQLDatabaseDialog.h"
 
 #include <QMdiArea>
 #include <QMenu>

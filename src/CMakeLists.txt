@@ -25,6 +25,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ImportDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
@@ -71,8 +73,6 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditNewKeywordDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
-	${KDEFRONTEND_DIR}/widgets/ImportSQLDatabaseDialog.cpp
-	${KDEFRONTEND_DIR}/widgets/ImportSQLDatabaseWidget.cpp
 )
 
 set(UI_SOURCES
