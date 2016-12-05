@@ -40,14 +40,14 @@ class DynamicPresenterWidget : public QWidget {
 	Q_OBJECT
 
 public:
-    explicit DynamicPresenterWidget(Worksheet* worksheet, QWidget *parent = 0);
-    ~DynamicPresenterWidget();
+	explicit DynamicPresenterWidget(Worksheet* worksheet, QWidget *parent = 0);
+	~DynamicPresenterWidget();
 
 private:
-    WorksheetView* m_view;
+	WorksheetView* m_view;
 	QTimeLine* m_timeLine;
 	SlidingPanel* m_panel;
-    void startTimeline();
+	void startTimeline();
 
 protected:
 	void keyPressEvent(QKeyEvent*);
