@@ -32,6 +32,7 @@
 #include "backend/worksheet/TextLabel.h"
 #include "kdefrontend/worksheet/GridDialog.h"
 #include "kdefrontend/worksheet/PresenterWidget.h"
+#include "kdefrontend/worksheet/DynamicPresenterWidget.h"
 
 #include <QApplication>
 #include <QMenu>
@@ -1633,6 +1634,7 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 
 void WorksheetView::presenterMode() {
 
+    //check worksheet presenting mode config here
 	QRectF sourceRect(scene()->sceneRect());
 
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
@@ -1660,6 +1662,9 @@ void WorksheetView::presenterMode() {
 	exportPaint(&painter, targetRect, sourceRect, true);
 	painter.end();
 
-	PresenterWidget* presenterWidget = new PresenterWidget(QPixmap::fromImage(image), m_worksheet->name());
-	presenterWidget->showFullScreen();
+    /*PresenterWidget* presenterWidget = new PresenterWidget(QPixmap::fromImage(image), m_worksheet->name());
+    presenterWidget->showFullScreen();*/
+
+    DynamicPresenterWidget* dynamicPresenterWidget = new DynamicPresenterWidget(m_worksheet);
+    dynamicPresenterWidget->showFullScreen();
 }

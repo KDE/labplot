@@ -1,7 +1,7 @@
 /***************************************************************************
-File                 : PresenterWidget.h
+File                 : DynamicPresenterWidget.h
 Project              : LabPlot
-Description          : Widget for static presenting of worksheets
+Description          : Widget for dynamic presenting of worksheets
 --------------------------------------------------------------------
 Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
@@ -24,28 +24,30 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
-#ifndef PRESENTERWIDGET_H
-#define PRESENTERWIDGET_H
+#ifndef DYNAMICPRESENTERWIDGET_H
+#define DYNAMICPRESENTERWIDGET_H
 
 #include <QFrame>
+#include <QGraphicsView>
 
 class QLabel;
 class QTimeLine;
 class QPushButton;
 class SlidingPanel;
-
-class PresenterWidget : public QWidget {
+class WorksheetView;
+class Worksheet;
+class DynamicPresenterWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit PresenterWidget(const QPixmap& pixmap,const QString& worksheetName, QWidget *parent = 0);
-	~PresenterWidget();
+    explicit DynamicPresenterWidget(Worksheet* worksheet, QWidget *parent = 0);
+    ~DynamicPresenterWidget();
 
 private:
-	QLabel* m_imageLabel;
+    WorksheetView* m_view;
 	QTimeLine* m_timeLine;
 	SlidingPanel* m_panel;
-	void startTimeline();
+    void startTimeline();
 
 protected:
 	void keyPressEvent(QKeyEvent*);
@@ -56,4 +58,4 @@ private slots:
 	void slideUp();
 };
 
-#endif // PRESENTERWIDGET_H
+#endif // DYNAMICPRESENTERWIDGET_H
