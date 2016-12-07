@@ -53,7 +53,7 @@ class ProjectExplorer : public QWidget {
 
 		void setCurrentAspect(const AbstractAspect*);
 		void setModel(AspectTreeModel*);
-		void setProject(const Project*);
+		void setProject(Project*);
 		QModelIndex currentIndex() const;
 
 	private:
@@ -64,7 +64,7 @@ class ProjectExplorer : public QWidget {
 		bool filter(const QModelIndex&, const QString&);
 		int m_columnToHide;
 		QTreeView* m_treeView;
-		const Project* m_project;
+		Project* m_project;
 
 		QAction* caseSensitiveAction;
 		QAction* matchCompleteWordAction;

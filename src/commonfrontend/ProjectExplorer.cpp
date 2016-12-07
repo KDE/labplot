@@ -237,7 +237,7 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 	QTimer::singleShot(0, this, SLOT(resizeHeader()));
 }
 
-void ProjectExplorer::setProject( const Project* project) {
+void ProjectExplorer::setProject(Project* project) {
 	connect(project, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(aspectAdded(const AbstractAspect*)));
 	connect(project, SIGNAL(requestSaveState(QXmlStreamWriter*)), this, SLOT(save(QXmlStreamWriter*)));
 	connect(project, SIGNAL(requestLoadState(XmlStreamReader*)), this, SLOT(load(XmlStreamReader*)));
@@ -525,11 +525,16 @@ void ProjectExplorer::collapseSelected() {
 
 void ProjectExplorer::deleteSelected() {
 	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
-	// TODO: Delete selected aspects
-	foreach(QModelIndex index, items) {
-		AbstractAspect *aspect = static_cast<AbstractAspect *>(index.internalPointer());
+	if (!items.size())
+		return;
+
+	m_project->beginMacro(i18n("Porject Explorer: removed %1 selected objects.").arg(items.size()/4));
+	for (int i=0; i<items.size()/4; ++i) {
+		const QModelIndex& index = items.at(i*4);
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		aspect->remove();
 	}
+	m_project->endMacro();
 }
 
 //##############################################################################
