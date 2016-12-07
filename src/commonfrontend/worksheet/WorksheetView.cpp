@@ -50,6 +50,8 @@
 #include <KAction>
 #include <KLocale>
 #include <KMessageBox>
+#include <KConfigGroup>
+#include <KGlobal>
 
 #include <limits>
 
@@ -1633,8 +1635,16 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 }
 
 void WorksheetView::presenterMode() {
+	KConfigGroup group = KGlobal::config()->group(QLatin1String("Worksheet"));
 
-	//check worksheet presenting mode config here
+	//show dynamic presenter widget, if enabled
+	if (group.readEntry("PresenterModeDynamic", false)) {
+		DynamicPresenterWidget* dynamicPresenterWidget = new DynamicPresenterWidget(m_worksheet);
+		dynamicPresenterWidget->showFullScreen();
+		return;
+	}
+
+	//show static presenter widget (default)
 	QRectF sourceRect(scene()->sceneRect());
 
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
@@ -1662,9 +1672,6 @@ void WorksheetView::presenterMode() {
 	exportPaint(&painter, targetRect, sourceRect, true);
 	painter.end();
 
-	/*PresenterWidget* presenterWidget = new PresenterWidget(QPixmap::fromImage(image), m_worksheet->name());
-	presenterWidget->showFullScreen();*/
-
-	DynamicPresenterWidget* dynamicPresenterWidget = new DynamicPresenterWidget(m_worksheet);
-	dynamicPresenterWidget->showFullScreen();
+	PresenterWidget* presenterWidget = new PresenterWidget(QPixmap::fromImage(image), m_worksheet->name());
+	presenterWidget->showFullScreen();
 }
