@@ -96,6 +96,7 @@ void SettingsDialog::changed() {
 void SettingsDialog::applySettings() {
 	m_changed = false;
 	generalPage->applySettings();
+	worksheetPage->applySettings();
 	KGlobal::config()->sync();	
 	emit settingsChanged();
 }
@@ -103,4 +104,5 @@ void SettingsDialog::applySettings() {
 void SettingsDialog::restoreDefaults(){
 	m_changed = false;
 	generalPage->restoreDefaults();
+	worksheetPage->restoreDefaults();
 }

@@ -1635,10 +1635,10 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 }
 
 void WorksheetView::presenterMode() {
-	KConfigGroup group = KGlobal::config()->group(QLatin1String("Worksheet"));
+	KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_Worksheet"));
 
 	//show dynamic presenter widget, if enabled
-	if (group.readEntry("PresenterModeDynamic", false)) {
+	if (group.readEntry("PresenterModeInteractive", false)) {
 		DynamicPresenterWidget* dynamicPresenterWidget = new DynamicPresenterWidget(m_worksheet);
 		dynamicPresenterWidget->showFullScreen();
 		return;

@@ -29,13 +29,10 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include <QKeyEvent>
 #include <QLabel>
-#include <QHBoxLayout>
 #include <QDesktopWidget>
 #include <QApplication>
-#include <QFontMetrics>
 #include <QTimeLine>
 #include <QPushButton>
-#include <QPalette>
 
 #include <KLocalizedString>
 

@@ -56,6 +56,7 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 	if (TeXRenderer::executableExists(QLatin1String("latex")))
 		ui.cbTexEngine->addItem(QLatin1String("LaTeX"), QLatin1String("latex"));
 
+	connect(ui.chkPresenterModeInteractive, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
 	connect(ui.chkDoubleBuffering, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
 	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
 	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(checkTeX(int)) );
