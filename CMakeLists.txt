@@ -1,5 +1,6 @@
 project(labplot2)
-cmake_minimum_required(VERSION 2.8.12)
+# minimum 3.2.0 for FindGSL.cmake
+cmake_minimum_required(VERSION 3.2.0)
 
 find_package(ECM 1.3.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
@@ -51,49 +52,14 @@ cmake_policy(SET CMP0002 OLD)
 ### Options ######################################
 option(ENABLE_CANTOR "Build with Cantor support" ON)
 option(ENABLE_FFTW "Build with FFTW support" ON)
-option(ENABLE_HDF5 "Build with HDF5 support" "ON")
+option(ENABLE_HDF5 "Build with HDF5 support" ON)
 option(ENABLE_NETCDF "Build with NetCDF support" ON)
 option(ENABLE_FITS "Build with FITS support" ON)
 
 ### GSL (required) ###############################
-FIND_LIBRARY(GSL_LIBRARIES gsl
-	PATHS
-	/usr/lib
-	/usr/local/lib
-)
-FIND_LIBRARY (GSL_CBLAS_LIBRARIES gslcblas
-	PATHS
-	/usr/lib
-	/usr/local/lib
-)
-FIND_PATH (GSL_INCLUDE_DIR gsl/gsl_multimin.h
-	/usr/include
-	/usr/local/include
-)
-FIND_PROGRAM (GSL_CONFIG gsl-config
-	/usr/bin
-	/usr/local/bin
-)
+FIND_PACKAGE(GSL REQUIRED)
 
-IF (GSL_CONFIG)
-	EXEC_PROGRAM (${GSL_CONFIG} ARGS "--version" OUTPUT_VARIABLE gsl_version)
-	SET (GSL_VERSION ${gsl_version} CACHE STRING "GNU Scientific Library Version")
-ENDIF ()
-IF (GSL_LIBRARIES AND GSL_CBLAS_LIBRARIES AND GSL_INCLUDE_DIR)
-	SET (GSL_FOUND TRUE)
-ELSE ()
-	SET (GSL_FOUND FALSE)
-ENDIF ()
-
-IF (GSL_FOUND)
-	MESSAGE (STATUS "Found GNU Scientific Library ${GSL_VERSION}: ${GSL_INCLUDE_DIR} ${GSL_LIBRARIES};${GSL_CBLAS_LIBRARIES}")
-	add_definitions (-DHAVE_GSL)
-	add_definitions (-DGSL_VERSION=GSL_VERSION)
-ELSE ()
-	MESSAGE (FATAL_ERROR "GNU Scientific Library not found.")
-ENDIF ()
-
-### Cantorlibs #####################################
+### Cantorlibs (optional) ###############################
 IF (ENABLE_CANTOR)
 FIND_LIBRARY (CANTOR_LIBS cantorlibs)
 FIND_PATH (CANTOR_INCLUDE_DIR worksheetaccess.h
