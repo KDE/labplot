@@ -27,12 +27,7 @@
  ***************************************************************************/
 
 #include "SettingsGeneralPage.h"
-#include "MainWin.h"
-#include "tools/TeXRenderer.h"
-
-#include <KDialog>
 #include <KLocale>
-#include <kfiledialog.h>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
@@ -43,45 +38,24 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 	ui.setupUi(this);
 	retranslateUi();
 
-	ui.lLatexWarning->setPixmap( KIcon("state-warning").pixmap(QSize(48,48)) );
-
-	//add available TeX typesetting engines
-	if (TeXRenderer::executableExists(QLatin1String("lualatex")))
-		ui.cbTexEngine->addItem(QLatin1String("LuaLaTeX"), QLatin1String("lualatex"));
-
-	if (TeXRenderer::executableExists(QLatin1String("xelatex")))
-		ui.cbTexEngine->addItem(QLatin1String("XeLaTex"), QLatin1String("xelatex"));
-
-	if (TeXRenderer::executableExists(QLatin1String("pdflatex")))
-		ui.cbTexEngine->addItem(QLatin1String("pdfLaTeX"), QLatin1String("pdflatex"));
-
-	if (TeXRenderer::executableExists(QLatin1String("latex")))
-		ui.cbTexEngine->addItem(QLatin1String("LaTeX"), QLatin1String("latex"));
-
 	connect(ui.cbLoadOnStart, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
 	connect(ui.cbInterface, SIGNAL(currentIndexChanged(int)), this, SLOT(interfaceChanged(int)) );
 	connect(ui.cbMdiVisibility, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
 	connect(ui.cbTabPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
 	connect(ui.chkAutoSave, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
-	connect(ui.sbAutoSaveInterval, SIGNAL(valueChanged(int)), this, SLOT(changed()) );
-	connect(ui.chkDoubleBuffering, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
-	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
-	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(checkTeX(int)) );
 
 	loadSettings();
 	interfaceChanged(ui.cbInterface->currentIndex());
 }
 
 void SettingsGeneralPage::applySettings() {
-	KConfigGroup group = KGlobal::config()->group( "General" );
-	group.writeEntry("LoadOnStart", ui.cbLoadOnStart->currentIndex());
-	group.writeEntry("ViewMode", ui.cbInterface->currentIndex());
-	group.writeEntry("TabPosition", ui.cbTabPosition->currentIndex());
-	group.writeEntry("MdiWindowVisibility", ui.cbMdiVisibility->currentIndex());
-	group.writeEntry("AutoSave", ui.chkAutoSave->isChecked());
-	group.writeEntry("AutoSaveInterval", ui.sbAutoSaveInterval->value());
-	group.writeEntry("DoubleBuffering", ui.chkDoubleBuffering->isChecked());
-	group.writeEntry("LaTeXEngine", ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
+	KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_General"));
+	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentIndex());
+	group.writeEntry(QLatin1String("ViewMode"), ui.cbInterface->currentIndex());
+	group.writeEntry(QLatin1String("TabPosition"), ui.cbTabPosition->currentIndex());
+	group.writeEntry(QLatin1String("MdiWindowVisibility"), ui.cbMdiVisibility->currentIndex());
+	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
+	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
 }
 
 void SettingsGeneralPage::restoreDefaults() {
@@ -89,23 +63,13 @@ void SettingsGeneralPage::restoreDefaults() {
 }
 
 void SettingsGeneralPage::loadSettings() {
-	const KConfigGroup group = KGlobal::config()->group( "General" );
-	ui.cbLoadOnStart->setCurrentIndex(group.readEntry("LoadOnStart", 0));
-	ui.cbInterface->setCurrentIndex(group.readEntry("ViewMode", 0));
-	ui.cbTabPosition->setCurrentIndex(group.readEntry("TabPosition", 0));
-	ui.cbMdiVisibility->setCurrentIndex(group.readEntry("MdiWindowVisibility", 0));
-	ui.chkAutoSave->setChecked(group.readEntry<bool>("AutoSave", 0));
-	ui.sbAutoSaveInterval->setValue(group.readEntry("AutoSaveInterval", 0));
-	ui.chkDoubleBuffering->setChecked(group.readEntry<bool>("DoubleBuffering", 1));
-
-	QString engine = group.readEntry("LaTeXEngine", "");
-	int index = -1;
-	if (engine.isEmpty())
-		index = ui.cbTexEngine->findData("xelatex");
-	else
-		index = ui.cbTexEngine->findData(engine);
-
-	ui.cbTexEngine->setCurrentIndex(index);
+	const KConfigGroup group = KGlobal::config()->group(QLatin1String("Setttings_General"));
+	ui.cbLoadOnStart->setCurrentIndex(group.readEntry(QLatin1String("LoadOnStart"), 0));
+	ui.cbInterface->setCurrentIndex(group.readEntry(QLatin1String("ViewMode"), 0));
+	ui.cbTabPosition->setCurrentIndex(group.readEntry(QLatin1String("TabPosition"), 0));
+	ui.cbMdiVisibility->setCurrentIndex(group.readEntry(QLatin1String("MdiWindowVisibility"), 0));
+	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), 0));
+	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
 }
 
 void SettingsGeneralPage::retranslateUi() {
@@ -143,52 +107,4 @@ void SettingsGeneralPage::interfaceChanged(int index) {
 	ui.lMdiVisibility->setVisible(!tabbedView);
 	ui.cbMdiVisibility->setVisible(!tabbedView);
 	changed();
-}
-
-/*!
- checks whether all tools required for latex typesetting are available. shows a warning if not.
- \sa TeXRenderer::active()
- */
-void SettingsGeneralPage::checkTeX(int engineIndex) {
-	if (engineIndex == -1) {
-		ui.lLatexWarning->show();
-		ui.lLatexWarning->setToolTip(i18n("No LaTeX installation found or selected. LaTeX typesetting not possible."));
-		return;
-	}
-
-	//engine found, check the precense of other required tools (s.a. TeXRenderer.cpp):
-	//to convert the generated PDF/PS files to PNG we need 'convert' from the ImageMagic package
-	if (!TeXRenderer::executableExists(QLatin1String("convert"))) {
-		ui.lLatexWarning->show();
-		ui.lLatexWarning->setToolTip(i18n("No 'convert' found. LaTeX typesetting not possible."));
-		return;
-	}
-
-	QString engine = ui.cbTexEngine->itemData(engineIndex).toString();
-	if (engine=="latex") {
-		//to convert the generated PS files to DVI we need 'dvips'
-		if (!TeXRenderer::executableExists(QLatin1String("dvips"))) {
-			ui.lLatexWarning->show();
-			ui.lLatexWarning->setToolTip(i18n("No 'dvips' found. LaTeX typesetting not possible."));
-			return;
-		}
-	}
-
-#ifdef _WIN32
-	if (!TeXRenderer::executableExists(QLatin1String("gswin32c.exe"))) {
-		ui.lLatexWarning->show();
-		ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
-		return;
-	}
-#endif
-
-#ifdef _WIN64
-	if (!TeXRenderer::executableExists(QLatin1String("gswin64c.exe"))) {
-		ui.lLatexWarning->show();
-		ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
-		return;
-	}
-#endif
-
-	ui.lLatexWarning->hide();
 }

@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
-    Description          : general settings dialog
+    Description          : application settings dialog
                            
  ***************************************************************************/
 
@@ -31,6 +31,7 @@
 #include <KPageDialog>
 
 class SettingsGeneralPage;
+class SettingsWorksheetPage;
 
 class SettingsDialog : public KPageDialog {
 	Q_OBJECT
@@ -48,6 +49,7 @@ class SettingsDialog : public KPageDialog {
 	private:
 		bool m_changed;
 		SettingsGeneralPage* generalPage;
+		SettingsWorksheetPage* worksheetPage;
 
 		void applySettings();
 		void restoreDefaults();

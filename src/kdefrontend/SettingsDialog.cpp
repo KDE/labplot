@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
-    Description          : general settings dialog
+    Description          : application settings dialog
                            
  ***************************************************************************/
 
@@ -27,6 +27,7 @@
  ***************************************************************************/
 #include "SettingsDialog.h"
 #include "SettingsGeneralPage.h"
+#include "SettingsWorksheetPage.h"
 
 #include <KMessageBox>
 
@@ -52,6 +53,11 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent), m_changed
 	KPageWidgetItem* generalFrame = addPage(generalPage, i18n("General"));
 	generalFrame->setIcon(KIcon("system-run"));
 	connect(generalPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
+
+	worksheetPage = new SettingsWorksheetPage(this);
+	KPageWidgetItem* worksheetFrame = addPage(worksheetPage, i18n("Worksheet"));
+	worksheetFrame->setIcon(KIcon(QLatin1String("labplot-worksheet")));
+	connect(worksheetPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
 
 	KConfigGroup conf(KSharedConfig::openConfig(), "SettingsDialog");
 	restoreDialogSize(conf);

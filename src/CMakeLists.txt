@@ -7,13 +7,14 @@ set(TOOLS_DIR tools)
 set(CMAKE_AUTOMOC ON)
 
 set(GUI_SOURCES
-  	${KDEFRONTEND_DIR}/GuiObserver.cpp
+	${KDEFRONTEND_DIR}/GuiObserver.cpp
 	${KDEFRONTEND_DIR}/GuiTools.cpp
 	${KDEFRONTEND_DIR}/HistoryDialog.cpp
 	${KDEFRONTEND_DIR}/LabPlot.cpp
-  	${KDEFRONTEND_DIR}/MainWin.cpp
+	${KDEFRONTEND_DIR}/MainWin.cpp
 	${KDEFRONTEND_DIR}/SettingsDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
+	${KDEFRONTEND_DIR}/SettingsWorksheetPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPage.h
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
 	${KDEFRONTEND_DIR}/ThemeHandler.cpp
@@ -55,11 +56,10 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/StatisticsDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
-        ${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
+	${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/DynamicPresenterWidget.cpp
 	${KDEFRONTEND_DIR}/worksheet/PresenterWidget.cpp
 	${KDEFRONTEND_DIR}/worksheet/SlidingPanel.cpp
-
 	${KDEFRONTEND_DIR}/widgets/ConstantsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ThemesWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ExpressionTextEdit.cpp
@@ -82,6 +82,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/fitparameterswidget.ui
 	${KDEFRONTEND_DIR}/ui/labelwidget.ui
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
+	${KDEFRONTEND_DIR}/ui/settingsworksheetpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
