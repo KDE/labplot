@@ -528,7 +528,7 @@ void ProjectExplorer::deleteSelected() {
 	if (!items.size())
 		return;
 
-	m_project->beginMacro(i18np("Project Explorer: removed %1 selected object.", "Project Explorer: removed %1 selected objects.",  arg(items.size()/4)));
+	m_project->beginMacro(i18np("Project Explorer: removed %1 selected object.", "Project Explorer: removed %1 selected objects.",  items.size()/4));
 	for (int i=0; i<items.size()/4; ++i) {
 		const QModelIndex& index = items.at(i*4);
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
