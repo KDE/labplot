@@ -27,8 +27,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #ifndef DYNAMICPRESENTERWIDGET_H
 #define DYNAMICPRESENTERWIDGET_H
 
-#include <QFrame>
-#include <QGraphicsView>
+#include <QWidget>
 
 class QLabel;
 class QTimeLine;
@@ -36,6 +35,7 @@ class QPushButton;
 class SlidingPanel;
 class WorksheetView;
 class Worksheet;
+
 class DynamicPresenterWidget : public QWidget {
 	Q_OBJECT
 

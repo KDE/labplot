@@ -1910,7 +1910,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
  	DEBUG_LOG("XYCurvePrivate::paint() calling drawPixmap() or draw() 		XXXXXXXXXXXXXXXXXXXX");
-	if ( KGlobal::config()->group("General").readEntry<bool>("DoubleBuffering", true) )
+	if ( KGlobal::config()->group("Settings_Worksheet").readEntry(QLatin1String("DoubleBuffering"), true) )
 		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); //draw the cached pixmap (fast)
 	else
 		draw(painter); //draw directly again (slow)

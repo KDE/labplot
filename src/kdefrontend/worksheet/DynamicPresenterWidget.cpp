@@ -29,15 +29,9 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "SlidingPanel.h"
 
 #include <QKeyEvent>
-#include <QLabel>
-#include <QHBoxLayout>
 #include <QDesktopWidget>
-#include <QApplication>
-#include <QFontMetrics>
 #include <QTimeLine>
 #include <QPushButton>
-#include <QPalette>
-#include <QGraphicsView>
 
 #include <KLocalizedString>
 DynamicPresenterWidget::DynamicPresenterWidget(Worksheet *worksheet, QWidget *parent) : QWidget(parent),

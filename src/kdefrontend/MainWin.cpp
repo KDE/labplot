@@ -174,7 +174,7 @@ void MainWin::initGUI(const QString& fileName) {
 	m_recentProjectsAction->loadEntries( KGlobal::config()->group("Recent Files") );
 
 	//set the view mode of the mdi area
-	KConfigGroup group = KGlobal::config()->group("General");
+	KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_General"));
 	int viewMode = group.readEntry("ViewMode", 0);
 	if (viewMode == 1) {
 		m_mdiArea->setViewMode(QMdiArea::TabbedView);
@@ -648,7 +648,7 @@ bool MainWin::newProject() {
 	m_currentAspect = m_project;
 	m_currentFolder = m_project;
 
-	KConfigGroup group = KGlobal::config()->group("General");
+	KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_General"));
 	Project::MdiWindowVisibility vis = Project::MdiWindowVisibility(group.readEntry("MdiWindowVisibility", 0));
 	m_project->setMdiWindowVisibility( vis );
 	if (vis == Project::folderOnly)
@@ -1437,7 +1437,7 @@ void MainWin::dropEvent(QDropEvent* event) {
 }
 
 void MainWin::handleSettingsChanges() {
-	const KConfigGroup group = KGlobal::config()->group( "General" );
+	const KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_General"));
 
 	QMdiArea::ViewMode viewMode = QMdiArea::ViewMode(group.readEntry("ViewMode", 0));
 	if (m_mdiArea->viewMode() != viewMode) {
