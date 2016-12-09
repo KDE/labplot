@@ -2,10 +2,9 @@
     File                 : SettingsDialog.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2013 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
-    Description          : general settings dialog
-
+    Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
+    Description          : application settings dialog
+ 
  ***************************************************************************/
 
 /***************************************************************************
@@ -31,6 +30,7 @@
 #include "MainWin.h"
 #include "SettingsGeneralPage.h"
 // #include "SettingsPrintingPage.h"
+#include "SettingsWorksheetPage.h"
 
 #include <kmessagebox.h>
 #include <KConfigGroup>
@@ -82,6 +82,14 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent), m_changed
 SettingsDialog::~SettingsDialog(){
 	KConfigGroup dialogConfig = KSharedConfig::openConfig()->group("SettingsDialog");
 	KWindowConfig::saveWindowSize(windowHandle(), dialogConfig);
+
+	worksheetPage = new SettingsWorksheetPage(this);
+	KPageWidgetItem* worksheetFrame = addPage(worksheetPage, i18n("Worksheet"));
+	worksheetFrame->setIcon(QIcon::fromTheme(QLatin1String("labplot-worksheet")));
+	connect(worksheetPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
+
+	KConfigGroup conf(KSharedConfig::openConfig(), "SettingsDialog");
+	//restoreDialogSize(conf);
 }
 
 void SettingsDialog::onOkButton(){
@@ -121,6 +129,7 @@ void SettingsDialog::applySettings(){
 	m_changed = false;
 	generalPage->applySettings();
 //     printingPage->applySettings();
+	worksheetPage->applySettings();
 	KSharedConfig::openConfig()->sync();
 	emit settingsChanged();
 }
@@ -129,4 +138,5 @@ void SettingsDialog::restoreDefaults(){
 	m_changed = false;
 	generalPage->restoreDefaults();
 //    printingPage->restoreDefaults();
+	worksheetPage->restoreDefaults();
 }

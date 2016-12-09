@@ -78,7 +78,7 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 	}
 
 	//determine latex engine to be used
-	KConfigGroup group = KSharedConfig::openConfig()->group( "General" );
+	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
 	QString engine = group.readEntry("LaTeXEngine", "");
 
 	// create latex code
@@ -207,7 +207,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi) {
 }
 
 bool TeXRenderer::enabled() {
-	KConfigGroup group = KGlobal::config()->group("General");
+	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
 	QString engine = group.readEntry("LaTeXEngine", "");
 	if (engine.isEmpty() || !TeXRenderer::executableExists(engine))
 		return false;

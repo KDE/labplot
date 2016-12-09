@@ -64,7 +64,7 @@ public:
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
 	void setIsClosing();
-
+	void setIsBeingPresented(bool presenting);
 private:
 	enum MouseMode {SelectionMode, NavigationMode, ZoomSelectionMode};
 	enum CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll};
@@ -102,7 +102,7 @@ private:
 	QTimeLine* m_fadeInTimeLine;
 	QTimeLine* m_fadeOutTimeLine;
 	bool m_isClosing;
-
+	bool m_isBeingPresented;
 	//Menus
 	QMenu* m_addNewMenu;
 	QMenu* m_addNewCartesianPlotMenu;
@@ -166,7 +166,7 @@ private:
 	QAction* fourTimesMagnificationAction;
 	QAction* fiveTimesMagnificationAction;
 
-    QAction* showPresenterMode;
+	QAction* showPresenterMode;
 	//Actions for cartesian plots
 	QAction* cartesianPlotApplyToSelectionAction;
 	QAction* cartesianPlotApplyToAllAction;
@@ -246,7 +246,7 @@ private slots:
 	void fadeIn(qreal);
 	void fadeOut(qreal);
 
-    void presenterMode();
+	void presenterMode();
 
 	//SLOTs for cartesian plots
 	void cartesianPlotActionModeChanged(QAction*);

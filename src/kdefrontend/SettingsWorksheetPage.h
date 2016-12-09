@@ -1,10 +1,10 @@
 /***************************************************************************
-    File                 : SettingsGeneralPage.h
+    File                 : SettingsWorksheetPage.h
     Project              : LabPlot
-    Description          : general settings page
+    Description          : settings page for Worksheet
     --------------------------------------------------------------------
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,31 +27,30 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SETTINGSGENERALPAGE_H
-#define SETTINGSGENERALPAGE_H
+#ifndef SETTINGSWORKSHEETGENERALPAGE_H
+#define SETTINGSWORKSHEETGENERALPAGE_H
 
 #include "SettingsPage.h"
-#include "ui_settingsgeneralpage.h"
+#include "ui_settingsworksheetpage.h"
 
-class SettingsGeneralPage : public SettingsPage {
+class SettingsWorksheetPage : public SettingsPage {
 	Q_OBJECT
 
 public:
-	explicit SettingsGeneralPage(QWidget*);
+	explicit SettingsWorksheetPage(QWidget*);
 
 	virtual void applySettings();
 	virtual void restoreDefaults();
 
 private:
-	Ui::SettingsGeneralPage ui;
+	Ui::SettingsWorksheetPage ui;
 	bool m_changed;
 
 	void loadSettings();
-	void retranslateUi();
 
 private slots:
-	void interfaceChanged(int);
 	void changed();
+	void checkTeX(int);
 
 signals:
 	void settingsChanged();

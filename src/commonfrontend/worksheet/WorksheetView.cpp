@@ -32,6 +32,7 @@
 #include "backend/worksheet/TextLabel.h"
 #include "kdefrontend/worksheet/GridDialog.h"
 #include "kdefrontend/worksheet/PresenterWidget.h"
+#include "kdefrontend/worksheet/DynamicPresenterWidget.h"
 
 #include <QApplication>
 #include <QMenu>
@@ -49,6 +50,8 @@
 #include <QAction>
 #include <KLocale>
 #include <KMessageBox>
+#include <KConfigGroup>
+#include <KGlobal>
 
 #include <limits>
 
@@ -1626,7 +1629,16 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 }
 
 void WorksheetView::presenterMode() {
+	KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_Worksheet"));
 
+	//show dynamic presenter widget, if enabled
+	if (group.readEntry("PresenterModeInteractive", false)) {
+		DynamicPresenterWidget* dynamicPresenterWidget = new DynamicPresenterWidget(m_worksheet);
+		dynamicPresenterWidget->showFullScreen();
+		return;
+	}
+
+	//show static presenter widget (default)
 	QRectF sourceRect(scene()->sceneRect());
 
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);

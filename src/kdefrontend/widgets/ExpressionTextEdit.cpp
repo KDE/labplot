@@ -154,6 +154,12 @@ void ExpressionTextEdit::focusInEvent(QFocusEvent *e) {
 	QTextEdit::focusInEvent(e);
 }
 
+void ExpressionTextEdit::focusOutEvent(QFocusEvent *e) {
+	//when loosing focus, rehighlight to remove potential highlighting of openning and closing brackets
+	m_highlighter->rehighlight();
+	QTextEdit::focusOutEvent(e);
+}
+
 void ExpressionTextEdit::keyPressEvent(QKeyEvent *e) {
 	switch (e->key()) {
 		case Qt::Key_Enter:

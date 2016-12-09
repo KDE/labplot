@@ -34,6 +34,7 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <kfiledialog.h>
+#include <KLocale>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
@@ -64,17 +65,13 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 	connect(ui.cbMdiVisibility, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
 	connect(ui.cbTabPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
 	connect(ui.chkAutoSave, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
-	connect(ui.sbAutoSaveInterval, SIGNAL(valueChanged(int)), this, SLOT(changed()) );
-	connect(ui.chkDoubleBuffering, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
-	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
-	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(checkTeX(int)) );
 
 	loadSettings();
 	interfaceChanged(ui.cbInterface->currentIndex());
 }
 
 void SettingsGeneralPage::applySettings(){
-	KConfigGroup group = KSharedConfig::openConfig()->group( "General" );
+	KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_General" );
 	group.writeEntry("LoadOnStart", ui.cbLoadOnStart->currentIndex());
 	group.writeEntry("ViewMode", ui.cbInterface->currentIndex());
 	group.writeEntry("TabPosition", ui.cbTabPosition->currentIndex());
@@ -90,7 +87,7 @@ void SettingsGeneralPage::restoreDefaults(){
 }
 
 void SettingsGeneralPage::loadSettings(){
-	const KConfigGroup group = KSharedConfig::openConfig()->group( "General" );
+	const KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_General" );
 	ui.cbLoadOnStart->setCurrentIndex(group.readEntry("LoadOnStart", 0));
 	ui.cbInterface->setCurrentIndex(group.readEntry("ViewMode", 0));
 	ui.cbTabPosition->setCurrentIndex(group.readEntry("TabPosition", 0));
@@ -144,52 +141,4 @@ void SettingsGeneralPage::interfaceChanged(int index) {
 	ui.lMdiVisibility->setVisible(!tabbedView);
 	ui.cbMdiVisibility->setVisible(!tabbedView);
 	changed();
-}
-
-/*!
- checks whether all tools required for latex typesetting are available. shows a warning if not.
- \sa TeXRenderer::active()
- */
-void SettingsGeneralPage::checkTeX(int engineIndex) {
-	if (engineIndex == -1) {
-		ui.lLatexWarning->show();
-		ui.lLatexWarning->setToolTip(i18n("No LaTeX installation found or selected. LaTeX typesetting not possible."));
-		return;
-	}
-
-	//engine found, check the precense of other required tools (s.a. TeXRenderer.cpp):
-	//to convert the generated PDF/PS files to PNG we need 'convert' from the ImageMagic package
-	if (!TeXRenderer::executableExists(QLatin1String("convert"))) {
-		ui.lLatexWarning->show();
-		ui.lLatexWarning->setToolTip(i18n("No 'convert' found. LaTeX typesetting not possible."));
-		return;
-	}
-
-	QString engine = ui.cbTexEngine->itemData(engineIndex).toString();
-	if (engine=="latex") {
-		//to convert the generated PS files to DVI we need 'dvips'
-		if (!TeXRenderer::executableExists(QLatin1String("dvips"))) {
-			ui.lLatexWarning->show();
-			ui.lLatexWarning->setToolTip(i18n("No 'dvips' found. LaTeX typesetting not possible."));
-			return;
-		}
-	}
-
-#ifdef _WIN32
-	if (!TeXRenderer::executableExists(QLatin1String("gswin32c.exe"))) {
-		ui.lLatexWarning->show();
-		ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
-		return;
-	}
-#endif
-
-#ifdef _WIN64
-	if (!TeXRenderer::executableExists(QLatin1String("gswin64c.exe"))) {
-		ui.lLatexWarning->show();
-		ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
-		return;
-	}
-#endif
-
-	ui.lLatexWarning->hide();
 }

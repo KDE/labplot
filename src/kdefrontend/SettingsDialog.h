@@ -2,10 +2,9 @@
     File                 : SettingsDialog.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2013 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
-    Description          : general settings dialog
-                           
+    Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
+    Description          : application settings dialog
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -32,7 +31,7 @@
 #include <kpagedialog.h>
 
 class SettingsGeneralPage;
-// class SettingsPrintingPage;
+class SettingsWorksheetPage;
 
 class SettingsDialog : public KPageDialog {
 	Q_OBJECT
@@ -52,6 +51,7 @@ private:
 //	QPushButton* applybutton;
 	SettingsGeneralPage* generalPage;
 //     SettingsPrintingPage* printingPage;
+	SettingsWorksheetPage* worksheetPage;
 
 	void applySettings();
 	void restoreDefaults();

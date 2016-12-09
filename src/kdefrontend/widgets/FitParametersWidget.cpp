@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for editing fit parameters
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -44,7 +44,8 @@
 
 	\ingroup kdefrontend
  */
-FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* data) : QWidget(parent), m_fitData(data), m_changed(false) {
+FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* data) : QWidget(parent),
+	m_fitData(data), m_changed(false), m_rehighlighting(false) {
 	ui.setupUi(this);
 	ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
 	ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
@@ -71,11 +72,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 	headerItem->setText(i18n("Upper limit"));
 	ui.tableWidget->setHorizontalHeaderItem(4, headerItem);
 
-	ui.tableWidget->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
-	ui.tableWidget->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
-	ui.tableWidget->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
-	ui.tableWidget->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
-	ui.tableWidget->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
+	ui.tableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 
 	if (m_fitData->modelType != nsl_fit_model_custom) {	// pre-defined model
 		ui.tableWidget->setRowCount(m_fitData->paramNames.size());
@@ -333,12 +330,17 @@ void FitParametersWidget::startValueChanged() {
 	else
 		upperLimit = DBL_MAX;
 
-	QPalette *palette = new QPalette();
-	if(value < lowerLimit || value > upperLimit)
-		palette->setColor(QPalette::Text, Qt::red);
-	else
-		palette->setColor(QPalette::Text, Qt::black);
-	((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->setPalette(*palette);
+	bool invalid = (value < lowerLimit || value > upperLimit);
+	highlightInvalid(row, 1, invalid);
+
+	if (m_rehighlighting)
+		return;
+
+	//start value was changed -> check whether the lower and upper limits are valid and highlight them if not
+	m_rehighlighting = true;
+	lowerLimitChanged();
+	upperLimitChanged();
+	m_rehighlighting = false;
 
 	m_changed = true;
 }
@@ -359,12 +361,17 @@ void FitParametersWidget::lowerLimitChanged() {
 	else
 		upperLimit = DBL_MAX;
 
-	QPalette *palette = new QPalette();
-	if(lowerLimit > value || lowerLimit > upperLimit)
-		palette->setColor(QPalette::Text, Qt::red);
-	else
-		palette->setColor(QPalette::Text, Qt::black);
-	((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->setPalette(*palette);
+	bool invalid = (lowerLimit > value || lowerLimit > upperLimit);
+	highlightInvalid(row, 3, invalid);
+
+	if (m_rehighlighting)
+		return;
+
+	//lower limit was changed -> check whether the start value and the upper limit are valid and highlight them if not
+	m_rehighlighting = true;
+	startValueChanged();
+	upperLimitChanged();
+	m_rehighlighting = false;
 
 	m_changed = true;
 }
@@ -385,12 +392,17 @@ void FitParametersWidget::upperLimitChanged() {
 	else
 		upperLimit = DBL_MAX;
 
-	QPalette *palette = new QPalette();
-	if(upperLimit < value || upperLimit < lowerLimit)
-		palette->setColor(QPalette::Text, Qt::red);
-	else
-		palette->setColor(QPalette::Text, Qt::black);
-	((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->setPalette(*palette);
+	bool invalid = (upperLimit < value || upperLimit < lowerLimit);
+	highlightInvalid(row, 4, invalid);
+
+	if (m_rehighlighting)
+		return;
+
+	//upper limit was changed -> check whether the start value and the lower limit are valid and highlight them if not
+	m_rehighlighting = true;
+	startValueChanged();
+	lowerLimitChanged();
+	m_rehighlighting = false;
 
 	m_changed = true;
 }
@@ -448,4 +460,12 @@ void FitParametersWidget::removeParameter() {
 
 void FitParametersWidget::changed() {
 	m_changed = true;
+}
+
+void FitParametersWidget::highlightInvalid(int row, int col, bool invalid) const {
+	QLineEdit* le = ((QLineEdit*)ui.tableWidget->cellWidget(row, col));
+	if (invalid)
+		le->setStyleSheet("QLineEdit{background: red;}");
+	else
+		le->setStyleSheet("");
 }
