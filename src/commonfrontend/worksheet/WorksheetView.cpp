@@ -1629,7 +1629,7 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 }
 
 void WorksheetView::presenterMode() {
-	KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_Worksheet"));
+	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
 
 	//show dynamic presenter widget, if enabled
 	if (group.readEntry("PresenterModeInteractive", false)) {
