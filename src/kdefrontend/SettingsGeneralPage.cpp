@@ -63,7 +63,7 @@ void SettingsGeneralPage::restoreDefaults() {
 }
 
 void SettingsGeneralPage::loadSettings() {
-	const KConfigGroup group = KGlobal::config()->group(QLatin1String("Setttings_General"));
+	const KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_General"));
 	ui.cbLoadOnStart->setCurrentIndex(group.readEntry(QLatin1String("LoadOnStart"), 0));
 	ui.cbInterface->setCurrentIndex(group.readEntry(QLatin1String("ViewMode"), 0));
 	ui.cbTabPosition->setCurrentIndex(group.readEntry(QLatin1String("TabPosition"), 0));
