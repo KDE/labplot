@@ -91,8 +91,8 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 
 void ThemeHandler::loadSelected(QString name) {
 	QString themeFilePath;
-	foreach(QString filePath, m_themeList) {
-		if( filePath.indexOf(name)!=-1 ) {
+	foreach (QString filePath, m_themeList) {
+		if ( filePath.indexOf(name)!=-1 ) {
 			themeFilePath = filePath;
 			break;
 		}
@@ -116,7 +116,7 @@ QStringList ThemeHandler::themes() {
 	QStringList pathList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
 	pathList.append(KGlobal::dirs()->findAllResources("appdata", "themes/*"));
 	QStringList themeList;
-	for(int i = 0; i < pathList.size(); ++i) {
+	for (int i = 0; i < pathList.size(); ++i) {
 		QFileInfo fileinfo(pathList.at(i));
 		themeList.append(fileinfo.fileName().split('.').at(0));
 	}
@@ -126,8 +126,8 @@ QStringList ThemeHandler::themes() {
 const QString ThemeHandler::themeFilePath(const QString& name) {
 	QStringList themes = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
 	themes.append(KGlobal::dirs()->findAllResources("appdata", "themes/*"));
-	for (int i=0; i<themes.size(); ++i) {
-		if ( themes.at(i).indexOf(name)!=-1 )
+	for (int i = 0; i < themes.size(); ++i) {
+		if ( themes.at(i).indexOf(name) != -1 )
 			return themes.at(i);
 	}
 
