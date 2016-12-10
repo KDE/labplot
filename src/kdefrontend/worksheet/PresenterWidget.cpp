@@ -57,6 +57,7 @@ PresenterWidget::PresenterWidget(const QPixmap &pixmap, const QString& worksheet
 	connect(m_panel->m_quitPresentingMode, SIGNAL(clicked(bool)), this, SLOT(close()));
 
 	slideUp();
+	setFocus();
 }
 
 PresenterWidget::~PresenterWidget() {
@@ -85,6 +86,10 @@ bool PresenterWidget::eventFilter(QObject *watched, QEvent *event) {
 void PresenterWidget::keyPressEvent(QKeyEvent *event) {
 	if (event->key() == Qt::Key_Escape)
 		close();
+}
+
+void PresenterWidget::focusOutEvent(QFocusEvent*) {
+	close();
 }
 
 void PresenterWidget::slideDown() {
