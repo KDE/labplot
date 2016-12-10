@@ -38,9 +38,6 @@
  *
  */
 SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent), m_changed(false) {
-	const QSize minSize = minimumSize();
-	setMinimumSize(QSize(512, minSize.height()));
-
 	setFaceType(List);
 	setCaption(i18n("Preferences"));
 	setWindowIcon(KIcon("preferences-other"));
