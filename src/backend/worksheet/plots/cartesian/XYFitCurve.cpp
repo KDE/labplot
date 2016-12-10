@@ -425,20 +425,22 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		break;
 	}
-	case nsl_fit_model_gaussian: {	// Y(x) = 1/sqrt(2*pi)/a1*exp(-((x-b1)/a1)^2/2) + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + ... 1/sqrt(2*pi)/an*exp(-((x-bn)/an)^2/2)
-		double a,b;
-		for (size_t i=0; i < n; i++) {
+	case nsl_fit_model_gaussian: {	// Y(x) = c1/sqrt(2*pi)/a1*exp(-((x-b1)/a1)^2/2) + c2/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + ... cn/sqrt(2*pi)/an*exp(-((x-bn)/an)^2/2)
+		double a,b, c;
+		for (size_t i = 0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
-			for (int j=0; j < degree; ++j) {
-				a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2*j), min[2*j], max[2*j]);
-				b = nsl_fit_map_bound(gsl_vector_get(paramValues, 2*j+1), min[2*j+1], max[2*j+1]);
+			for (int j = 0; j < degree; ++j) {
+				a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j), min[3*j], max[3*j]);
+				b = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j+1), min[3*j+1], max[3*j+1]);
+				c = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j+2), min[3*j+2], max[3*j+2]);
 				
-				gsl_matrix_set(J, i, 2*j, nsl_fit_model_gaussian_param_deriv(0, x, a, b, sigma));
-				gsl_matrix_set(J, i, 2*j+1, nsl_fit_model_gaussian_param_deriv(1, x, a, b, sigma));
+				gsl_matrix_set(J, i, 3*j, nsl_fit_model_gaussian_param_deriv(0, x, a, b, c, sigma));
+				gsl_matrix_set(J, i, 3*j+1, nsl_fit_model_gaussian_param_deriv(1, x, a, b, c,  sigma));
+				gsl_matrix_set(J, i, 3*j+2, nsl_fit_model_gaussian_param_deriv(2, x, a, b, c, sigma));
 			}
 
-			for (int j=0; j < 2*degree; j++)
+			for (int j = 0; j < 3*degree; j++)
 				if (fixed[j])
 					gsl_matrix_set(J, i, j, 0.);
 		}

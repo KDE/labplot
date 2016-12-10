@@ -34,7 +34,7 @@ const char* nsl_fit_model_name[] = {i18n("Polynomial"), i18n("Power"), i18n("Exp
 	i18n("Log-Normal"), i18n("Gumbel"), i18n("Custom")};
 
 const char* nsl_fit_model_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(1-exp(b*x))+c", "a0 + (a1*cos(w*x) + b1*sin(w*x))",
-	"1/sqrt(2*pi)/a1*exp(-((x-b1)/a1)^2/2)", "1/pi*s/(s^2+(x-t)^2)", "sqrt(2/pi)*x^2*exp(-x^2/(2*a^2))/a^3", "a/(1+exp(-b*(x-c)))",
+	"c1/sqrt(2*pi)/a1*exp(-((x-b1)/a1)^2/2)", "1/pi*s/(s^2+(x-t)^2)", "sqrt(2/pi)*x^2*exp(-x^2/(2*a^2))/a^3", "a/(1+exp(-b*(x-c)))",
 	"a*exp(-b*exp(-c*x))", "a/b*((x-c)/b)^(a-1)*exp(-((x-c)/b)^a)", "1/(sqrt(2*pi)*x*a)*exp(-(log(x)-b)^2/(2*a^2))", 
 	"1/a*exp((x-b)/a-exp((x-b)/a))"};
 
@@ -159,11 +159,15 @@ double nsl_fit_model_fourier_param_deriv(int param, int degree, double x, double
 
 	return 0;
 }
-double nsl_fit_model_gaussian_param_deriv(int param, double x, double a, double b, double sigma) {
+double nsl_fit_model_gaussian_param_deriv(int param, double x, double a, double b, double c, double sigma) {
+	double a2 = a*a, norm = 1./sqrt(2.*M_PI)/a, efactor = exp(-(b-x)*(b-x)/(2.*a2));
+
 	if (param == 0)
-		return (exp(-pow(b-x, 2)/(2.*pow(a, 2)))*(pow(b-x, 2)-pow(a, 2)))/(sqrt(2.*M_PI)*pow(a, 4))/sigma;
+		return c*norm/(a*a2)/sigma * ((b-x)*(b-x) - a2) * efactor;
 	if (param == 1)
-		return ((x-b)*exp(-pow(b-x, 2)/(2.*pow(a, 2))))/(sqrt(2.*M_PI)*pow(a, 3))/sigma;
+		return c*norm/a2/sigma * (x-b) * efactor;
+	if (param == 2)
+		return norm/sigma * efactor;
 		
 	return 0;
 }

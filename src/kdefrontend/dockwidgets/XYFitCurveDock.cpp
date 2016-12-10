@@ -451,26 +451,26 @@ void XYFitCurveDock::updateModelEquation() {
 		}
 		break;
 	case nsl_fit_model_gaussian:
-		vars << "a1" << "b1";
-		m_fitData.paramNames << "a1" << "b1";
+		vars << "a1" << "b1" << "c1";
+		m_fitData.paramNames << "a1" << "b1" << "c1";
 		if (num == 2) {
-			eq += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2)";
-			m_fitData.model += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2)";
-			vars << "a2" << "b2";
-			m_fitData.paramNames << "a2" << "b2";
+			eq += " + c2/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2)";
+			m_fitData.model += " + c2/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2)";
+			vars << "a2" << "b2" << "c2";
+			m_fitData.paramNames << "a2" << "b2" << "c2";
 		} else if (num == 3) {
-			eq += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + 1/sqrt(2*pi)/a3*exp(-((x-b3)/a3)^2/2)";
-			m_fitData.model += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + 1/sqrt(2*pi)/a3*exp(-((x-b3)/a3)^2/2)";
-			vars << "a2" << "b2" << "a3" << "b3";
-			m_fitData.paramNames << "a2" << "b2" << "a3" << "b3";
+			eq += " + c2/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + c3/sqrt(2*pi)/a3*exp(-((x-b3)/a3)^2/2)";
+			m_fitData.model += " + c2/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + c3/sqrt(2*pi)/a3*exp(-((x-b3)/a3)^2/2)";
+			vars << "a2" << "b2" << "c2" << "a3" << "b3" << "c3";
+			m_fitData.paramNames << "a2" << "b2" << "c2" << "a3" << "b3" << "c3";
 		} else if (num > 3) {
 			QString numStr = QString::number(num);
-			eq += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + ... + 1/sqrt(2*pi)/a" + numStr + "*exp(-((x-b" + numStr + ")/a" + numStr + ")^2/2)";
-			vars << "a2" << "b2" << "a"+numStr << "b"+numStr << "...";
-			for (int i=2; i<=num; ++i) {
+			eq += " + c2/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + ... + c" + numStr + "/sqrt(2*pi)/a" + numStr + "*exp(-((x-b" + numStr + ")/a" + numStr + ")^2/2)";
+			vars << "a2" << "b2" << "c2" << "a"+numStr << "b"+numStr << "c"+numStr  << "...";
+			for (int i = 2; i <= num; ++i) {
 				numStr = QString::number(i);
-				m_fitData.model += "+ 1/sqrt(2*pi)/a" + numStr + "*exp(-((x-b" + numStr + ")/a" + numStr + ")^2/2)";
-				m_fitData.paramNames << "a"+numStr << "b"+numStr;
+				m_fitData.model += "+ c" + numStr + "/sqrt(2*pi)/a" + numStr + "*exp(-((x-b" + numStr + ")/a" + numStr + ")^2/2)";
+				m_fitData.paramNames << "a"+numStr << "b"+numStr << "c"+numStr;
 			}
 		}
 		break;
