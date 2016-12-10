@@ -36,6 +36,7 @@
 #include <QLabel>
 #include <QFileInfo>
 #include <QWidgetAction>
+#include <QDirIterator>
 
 #include <KGlobal>
 #include <KLocale>
@@ -86,15 +87,19 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 
 	//find all available themes files (system wide and user specific local files)
 	//the list m_themeList contains full paths (path + file name)
-	m_themeList = KGlobal::dirs()->findAllResources("appdata", "themes/*");
-	//TODO (does not work for wildcards): m_themeList = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes/*");
+	const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory);
+	foreach (const QString& dir, dirs) {
+		QDirIterator it(dir, QStringList() << QStringLiteral("*"));
+		while (it.hasNext())
+			m_themeList.append(it.next());
+	}
 
 	pbLoadTheme->setEnabled(!m_themeList.empty());
 }
 
 void ThemeHandler::loadSelected(QString name) {
 	QString themeFilePath;
-	foreach (QString filePath, m_themeList) {
+	foreach (const QString& filePath, m_themeList) {
 		if (filePath.indexOf(name) != -1) {
 			themeFilePath = filePath;
 			break;
@@ -116,8 +121,16 @@ void ThemeHandler::loadSelected(QString name) {
 }
 
 QStringList ThemeHandler::themes() {
-	QStringList pathList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
-	pathList.append(KGlobal::dirs()->findAllResources("appdata", "themes/*"));
+	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "labplot2/themes", QStandardPaths::LocateDirectory);
+	dirs.append(QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory));
+
+	QStringList pathList;
+	foreach (const QString& dir, dirs) {
+		QDirIterator it(dir, QStringList() << QStringLiteral("*"));
+		while (it.hasNext())
+			pathList.append(it.next());
+	}
+
 	QStringList themeList;
 	for (int i = 0; i < pathList.size(); ++i) {
 		QFileInfo fileinfo(pathList.at(i));
@@ -127,8 +140,16 @@ QStringList ThemeHandler::themes() {
 }
 
 const QString ThemeHandler::themeFilePath(const QString& name) {
-	QStringList themes = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
-	themes.append(KGlobal::dirs()->findAllResources("appdata", "themes/*"));
+	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "labplot2/themes", QStandardPaths::LocateDirectory);
+	dirs.append(QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory));
+
+	QStringList themes;
+	foreach (const QString& dir, dirs) {
+		QDirIterator it(dir, QStringList() << QStringLiteral("*"));
+		while (it.hasNext())
+			themes.append(it.next());
+	}
+
 	for (int i = 0; i < themes.size(); ++i) {
 		if (themes.at(i).indexOf(name) != -1)
 			return themes.at(i);
