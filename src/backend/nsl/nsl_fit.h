@@ -52,7 +52,7 @@ double nsl_fit_model_inverse_exponential_param_deriv(int param, double x, double
 double nsl_fit_model_fourier_param_deriv(int param, int degree, double x, double w, double sigma);
 double nsl_fit_model_gaussian_param_deriv(int param, double x, double a, double b, double c, double sigma);
 double nsl_fit_model_lorentz_param_deriv(int param, double x, double s, double t, double a, double sigma);
-double nsl_fit_model_maxwell_param_deriv(double x, double a, double sigma);
+double nsl_fit_model_maxwell_param_deriv(int param, double x, double a, double c, double sigma);
 double nsl_fit_model_sigmoid_param_deriv(int param, double x, double a, double b, double c, double sigma);
 double nsl_fit_model_gompertz_param_deriv(int param, double x, double a, double b, double c, double sigma);
 double nsl_fit_model_weibull_param_deriv(int param, double x, double a, double b, double c, double sigma);

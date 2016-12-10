@@ -477,10 +477,13 @@ void XYFitCurveDock::updateModelEquation() {
 	case nsl_fit_model_lorentz:
 		vars << "s" << "t" << "a";
 		m_fitData.paramNames << "s" << "t" << "a";
+		// TODO: multiple peaks
+		if (num == 2) {
+		}
 		break;
 	case nsl_fit_model_maxwell:
-		vars << "a";
-		m_fitData.paramNames << "a";
+		vars << "a" << "c";
+		m_fitData.paramNames << "a" << "c";
 		break;
 	case nsl_fit_model_sigmoid:
 		vars << "a" << "b" << "c";

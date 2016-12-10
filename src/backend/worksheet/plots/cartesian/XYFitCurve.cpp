@@ -425,7 +425,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		break;
 	}
-	case nsl_fit_model_gaussian: {	// Y(x) = c1/sqrt(2*pi)/a1*exp(-((x-b1)/a1)^2/2) + c2/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + ... cn/sqrt(2*pi)/an*exp(-((x-bn)/an)^2/2)
+	case nsl_fit_model_gaussian: {	// Y(x) = 1./sqrt(2*pi)*( c1/a1*exp(-((x-b1)/a1)^2/2) + c2/a2*exp(-((x-b2)/a2)^2/2) + ... + cn/an*exp(-((x-bn)/an)^2/2) )
 		double a, b, c;
 		for (size_t i = 0; i < n; i++) {
 			x = xVector[i];
@@ -436,7 +436,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				c = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j+2), min[3*j+2], max[3*j+2]);
 				
 				gsl_matrix_set(J, i, 3*j, nsl_fit_model_gaussian_param_deriv(0, x, a, b, c, sigma));
-				gsl_matrix_set(J, i, 3*j+1, nsl_fit_model_gaussian_param_deriv(1, x, a, b, c,  sigma));
+				gsl_matrix_set(J, i, 3*j+1, nsl_fit_model_gaussian_param_deriv(1, x, a, b, c, sigma));
 				gsl_matrix_set(J, i, 3*j+2, nsl_fit_model_gaussian_param_deriv(2, x, a, b, c, sigma));
 			}
 
@@ -464,16 +464,19 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		break;
 	}
-	case nsl_fit_model_maxwell: {	// Y(x) = sqrt(2/pi)*x^2*exp(-x^2/(2*a^2))/a^3
+	case nsl_fit_model_maxwell: {	// Y(x) = c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)
 		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+		double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 		for (size_t i=0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
 
-			if (fixed[0])
-				gsl_matrix_set(J, i, 0, 0.);
-			else
-				gsl_matrix_set(J, i, 0, nsl_fit_model_maxwell_param_deriv(x, a, sigma));
+			for (int j = 0; j < 2; j++) {
+				if (fixed[j])
+					gsl_matrix_set(J, i, j, 0.);
+				else
+					gsl_matrix_set(J, i, j, nsl_fit_model_maxwell_param_deriv(j, x, a, c, sigma));
+			}
 		}
 		break;
 	}
