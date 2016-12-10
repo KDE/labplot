@@ -475,8 +475,8 @@ void XYFitCurveDock::updateModelEquation() {
 		}
 		break;
 	case nsl_fit_model_lorentz:
-		vars << "s" << "t";
-		m_fitData.paramNames << "s" << "t";
+		vars << "s" << "t" << "a";
+		m_fitData.paramNames << "s" << "t" << "a";
 		break;
 	case nsl_fit_model_maxwell:
 		vars << "a";
