@@ -459,6 +459,7 @@ void CartesianPlot::initMenus() {
 
 	themeMenu = new QMenu(i18n("Apply Theme"));
 	ThemesWidget* themeWidget = new ThemesWidget(0);
+	// TODO: SLOT: loadTheme(KConfig config)
 	connect(themeWidget, SIGNAL(themeSelected(QString)), this, SLOT(loadTheme(QString)));
 	connect(themeWidget, SIGNAL(themeSelected(QString)), themeMenu, SLOT(close()));
 
@@ -2222,7 +2223,7 @@ void CartesianPlot::loadTheme(KConfig& config) {
 
 	//load the theme for all the childred
 	const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
-	foreach(WorksheetElement *child, childElements)
+	foreach (WorksheetElement *child, childElements)
 		child->loadThemeConfig(config);
 
 	Q_D(CartesianPlot);

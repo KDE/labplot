@@ -111,7 +111,7 @@ void ThemeHandler::loadSelected(QString name) {
 	emit info( i18n("Theme \"%1\" was loaded.", name) );
 
 	//in case a local theme file was loaded (we have write access), allow to publish it
-	if (KGlobal::dirs()->checkAccess(themeFilePath, W_OK)) {
+	if (KStandardDirs::checkAccess(themeFilePath, W_OK)) {
 		pbPublishTheme->setEnabled(true);
 		m_currentLocalTheme = themeFilePath.right(themeFilePath.length() - themeFilePath.lastIndexOf(QDir::separator()) - 1);
 	} else {
@@ -200,7 +200,7 @@ void ThemeHandler::saveMenu() {
 }
 
 void ThemeHandler::saveNewSelected(const QString& filename) {
-	KConfig config(KGlobal::dirs()->locateLocal("appdata", "themes") + '/' + filename, KConfig::SimpleConfig);
+	KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + '/' + "themes" + '/' + filename, KConfig::SimpleConfig);
 	emit (saveThemeRequested(config));
 	emit info( i18n("New theme \"%1\" was saved.", filename) );
 
@@ -224,7 +224,7 @@ void ThemeHandler::publishThemes() {
 
 	// creating upload dialog
 	KNS3::UploadDialog dialog("labplot2_themes.knsrc", this);
-	dialog.setUploadFile(KGlobal::dirs()->locateLocal("appdata", "themes") + '/' + m_currentLocalTheme);
+	dialog.setUploadFile(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + '/' + "themes" + '/' + m_currentLocalTheme);
 	dialog.setUploadName(m_currentLocalTheme);
 	//dialog.setDescription(); TODO: allow the user to provide a short description for the theme to be uploaded
 	dialog.exec();
