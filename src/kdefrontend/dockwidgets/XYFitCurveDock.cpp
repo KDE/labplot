@@ -529,7 +529,7 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramUpperLimits[i] = DBL_MAX;
 		}
 
-		// model-dependend start values
+		// model-dependent start values
 		if (m_fitData.modelType == nsl_fit_model_weibull)
 			m_fitData.paramStartValues[2] = 0.0;
 	}
