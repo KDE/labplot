@@ -149,7 +149,6 @@ void XYFitCurveDock::initGeneralTab() {
 		uiGeneralTab.cbModel->setCurrentIndex(uiGeneralTab.cbModel->count()-1);
 	else
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
-	this->modelChanged(m_fitData.modelType);
 
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 	this->showFitResult();
@@ -315,6 +314,7 @@ void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::modelChanged(int index) {
+	DEBUG_LOG("modelChanged()");
 	nsl_fit_model_type type;
 	bool custom = false;
 	if (index == uiGeneralTab.cbModel->count() - 1) {
@@ -366,6 +366,7 @@ void XYFitCurveDock::modelChanged(int index) {
 }
 
 void XYFitCurveDock::updateModelEquation() {
+	DEBUG_LOG("updateModelEquation()");
 	QStringList vars; //variables/parameters that are known in ExpressionTextEdit teEquation
 	vars << "x";
 
@@ -451,6 +452,7 @@ void XYFitCurveDock::updateModelEquation() {
 		}
 		break;
 	case nsl_fit_model_gaussian:
+		DEBUG_LOG("degree = "<<num);
 		vars << "s1" << "mu1" << "a1";
 		m_fitData.paramNames << "s1" << "mu1" << "a1";
 		if (num == 2) {
@@ -517,6 +519,7 @@ void XYFitCurveDock::updateModelEquation() {
 	//available - unless there're no values available
 	if (m_fitData.modelType != nsl_fit_model_custom &&
 	        !(m_initializing && m_fitData.paramNames.size() == m_fitData.paramStartValues.size())) {
+		DEBUG_LOG(" number of start values"<<m_fitData.paramNames.size()<<m_fitData.paramStartValues.size());
 		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
 		m_fitData.paramFixed.resize(m_fitData.paramNames.size());
 		m_fitData.paramLowerLimits.resize(m_fitData.paramNames.size());
@@ -742,10 +745,9 @@ void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& data) {
 	m_initializing = true;
 	m_fitData = data;
 	if (m_fitData.modelType == nsl_fit_model_custom)
-		uiGeneralTab.cbModel->setCurrentIndex(uiGeneralTab.cbModel->count()-1);
+		uiGeneralTab.cbModel->setCurrentIndex(uiGeneralTab.cbModel->count() - 1);
 	else
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
-	this->modelChanged(m_fitData.modelType);
 	if (m_fitData.modelType == nsl_fit_model_custom)
 		uiGeneralTab.teEquation->setPlainText(m_fitData.model);
 

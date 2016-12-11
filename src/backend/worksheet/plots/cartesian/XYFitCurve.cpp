@@ -876,8 +876,10 @@ void XYFitCurvePrivate::recalculate() {
 		// scale resulting values if they are bounded
 		fitResult.paramValues[i] = nsl_fit_map_bound(gsl_vector_get(s->x, i), x_min[i], x_max[i]);
 		// use results as start values if desired
-		if (fitData.useResults)
+		if (fitData.useResults) {
 			fitData.paramStartValues.data()[i] = fitResult.paramValues[i];
+			DEBUG_LOG("saving parameter"<<i<<fitResult.paramValues[i]<<fitData.paramStartValues.data()[i]);
+		}
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
 	}
 
