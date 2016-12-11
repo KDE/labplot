@@ -83,7 +83,7 @@ void XYFitCurveDock::setupGeneral() {
 	cbWeightsColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbWeightsColumn, 6, 4, 1, 2);
 
-	for(int i=0; i < NSL_FIT_MODEL_TYPE_COUNT; i++)
+	for(int i = 0; i < NSL_FIT_MODEL_TYPE_COUNT; i++)
 		uiGeneralTab.cbModel->addItem(nsl_fit_model_name[i]);
 
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
@@ -317,7 +317,7 @@ void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index) {
 void XYFitCurveDock::modelChanged(int index) {
 	nsl_fit_model_type type;
 	bool custom = false;
-	if (index == uiGeneralTab.cbModel->count()-1) {
+	if (index == uiGeneralTab.cbModel->count() - 1) {
 		type = nsl_fit_model_custom;
 		custom = true;
 	} else
@@ -369,7 +369,7 @@ void XYFitCurveDock::updateModelEquation() {
 	QStringList vars; //variables/parameters that are known in ExpressionTextEdit teEquation
 	vars << "x";
 
-	if (uiGeneralTab.cbModel->currentIndex() == uiGeneralTab.cbModel->count()-1)
+	if (uiGeneralTab.cbModel->currentIndex() == uiGeneralTab.cbModel->count() - 1)
 		m_fitData.modelType = nsl_fit_model_custom;
 	else
 		m_fitData.modelType = (nsl_fit_model_type)uiGeneralTab.cbModel->currentIndex();
@@ -395,7 +395,7 @@ void XYFitCurveDock::updateModelEquation() {
 			QString numStr = QString::number(num);
 			eq += " + ... + c" + numStr + "*x^" + numStr;
 			vars << "c" + numStr << "...";
-			for (int i=2; i<=num; ++i) {
+			for (int i = 2; i<=num; ++i) {
 				numStr = QString::number(i);
 				m_fitData.model += "+c" + numStr + "*x^" + numStr;
 				m_fitData.paramNames << "c"+numStr;
@@ -443,7 +443,7 @@ void XYFitCurveDock::updateModelEquation() {
 			QString numStr = QString::number(num);
 			eq += " + ... + (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
 			vars << "a"+numStr << "b"+numStr << "...";
-			for (int i=2; i <= num; ++i) {
+			for (int i = 2; i <= num; ++i) {
 				numStr = QString::number(i);
 				m_fitData.model += "+ (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
 				m_fitData.paramNames << "a"+numStr << "b"+numStr;
@@ -522,12 +522,16 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.paramLowerLimits.resize(m_fitData.paramNames.size());
 		m_fitData.paramUpperLimits.resize(m_fitData.paramNames.size());
 
-		for (int i=0; i < m_fitData.paramNames.size(); ++i) {
+		for (int i = 0; i < m_fitData.paramNames.size(); ++i) {
 			m_fitData.paramStartValues[i] = 1.0;
 			m_fitData.paramFixed[i] = false;
 			m_fitData.paramLowerLimits[i] = -DBL_MAX;
 			m_fitData.paramUpperLimits[i] = DBL_MAX;
 		}
+
+		// model-dependend start values
+		if (m_fitData.modelType == nsl_fit_model_weibull)
+			m_fitData.paramStartValues[2] = 0.0;
 	}
 
 	uiGeneralTab.teEquation->setVariables(vars);
@@ -667,7 +671,7 @@ void XYFitCurveDock::showFitResult() {
 	str += i18n("degrees of freedom:") + ' ' + QString::number(fitResult.dof) + "<br><br>";
 
 	str += "<b>" +i18n("Parameters:") + "</b>";
-	for (int i=0; i < fitResult.paramValues.size(); i++) {
+	for (int i = 0; i < fitResult.paramValues.size(); i++) {
 		if (fitData.paramFixed.at(i))
 			str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i));
 		else
@@ -693,7 +697,7 @@ void XYFitCurveDock::showFitResult() {
 // 	str += "<br><br>";
 //
 // 	QStringList iterations = fitResult.solverOutput.split(';');
-// 	for (int i=0; i<iterations.size(); ++i)
+// 	for (int i = 0; i<iterations.size(); ++i)
 // 		str += "<br>" + iterations.at(i);
 
 	uiGeneralTab.teResult->setText(str);
