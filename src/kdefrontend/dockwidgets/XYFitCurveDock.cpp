@@ -499,13 +499,16 @@ void XYFitCurveDock::updateModelEquation() {
 		vars << "k" << "l" << "mu" << "a";
 		m_fitData.paramNames << "k" << "l" << "mu" << "a";
 		break;
-	case nsl_fit_model_lognormal:
-		vars << "s" << "mu" << "a";
-		m_fitData.paramNames << "s" << "mu" << "a";
-		break;
 	case nsl_fit_model_gumbel:
 		vars << "b" << "mu" << "a";
 		m_fitData.paramNames << "b" << "mu" << "a";
+		break;
+	case nsl_fit_model_frechet:
+		//TODO
+		break;
+	case nsl_fit_model_lognormal:
+		vars << "s" << "mu" << "a";
+		m_fitData.paramNames << "s" << "mu" << "a";
 		break;
 	case nsl_fit_model_custom:
 		//use the equation of the last selected predefined model or of the last available custom model

@@ -539,6 +539,27 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		break;
 	}
+	case nsl_fit_model_gumbel: {	// Y(x) = a/b * exp((x-mu)/b - exp((x-mu)/b));
+		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+		double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+		for (size_t i = 0; i < n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+
+			for (int j = 0; j < 3; j++) {
+				if (fixed[j])
+					gsl_matrix_set(J, i, j, 0.);
+				else
+					gsl_matrix_set(J, i, j, nsl_fit_model_gumbel_param_deriv(j, x, b, mu, a, sigma));
+			}
+		}
+		break;
+	}
+	case nsl_fit_model_frechet: {
+		// TODO
+		break;
+	}
 	case nsl_fit_model_lognormal: {	// Y(x) = a/(sqrt(2*pi)*x*s) * exp(-(log(x)-mu)^2/(2*s^2));
 		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 		double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
@@ -557,23 +578,6 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				gsl_matrix_set(J, i, 0, 0);
 				gsl_matrix_set(J, i, 1, 0);
 				gsl_matrix_set(J, i, 2, 0);
-			}
-		}
-		break;
-	}
-	case nsl_fit_model_gumbel: {	// Y(x) = a/b * exp((x-mu)/b - exp((x-mu)/b));
-		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-		double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-		for (size_t i = 0; i < n; i++) {
-			x = xVector[i];
-			if (sigmaVector) sigma = sigmaVector[i];
-
-			for (int j = 0; j < 3; j++) {
-				if (fixed[j])
-					gsl_matrix_set(J, i, j, 0.);
-				else
-					gsl_matrix_set(J, i, j, nsl_fit_model_gumbel_param_deriv(j, x, b, mu, a, sigma));
 			}
 		}
 		break;
