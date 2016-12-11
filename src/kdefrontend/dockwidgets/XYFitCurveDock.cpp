@@ -451,26 +451,26 @@ void XYFitCurveDock::updateModelEquation() {
 		}
 		break;
 	case nsl_fit_model_gaussian:
-		vars << "a1" << "b1" << "c1";
-		m_fitData.paramNames << "a1" << "b1" << "c1";
+		vars << "s1" << "mu1" << "a1";
+		m_fitData.paramNames << "s1" << "mu1" << "a1";
 		if (num == 2) {
-			eq += " + c2/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2)";
-			m_fitData.model += " + c2/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2)";
-			vars << "a2" << "b2" << "c2";
-			m_fitData.paramNames << "a2" << "b2" << "c2";
+			eq += " + a2/sqrt(2*pi)/s2 * exp(-((x-mu2)/s2)^2/2)";
+			m_fitData.model += " + a2/sqrt(2*pi)/s2 * exp(-((x-mu2)/s2)^2/2)";
+			vars << "s2" << "mu2" << "a2";
+			m_fitData.paramNames << "s2" << "mu2" << "a2";
 		} else if (num == 3) {
-			eq += " + c2/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + c3/sqrt(2*pi)/a3*exp(-((x-b3)/a3)^2/2)";
-			m_fitData.model += " + c2/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + c3/sqrt(2*pi)/a3*exp(-((x-b3)/a3)^2/2)";
-			vars << "a2" << "b2" << "c2" << "a3" << "b3" << "c3";
-			m_fitData.paramNames << "a2" << "b2" << "c2" << "a3" << "b3" << "c3";
+			eq += " + a2/sqrt(2*pi)/s2 * exp(-((x-mu2)/s2)^2/2) + a3/sqrt(2*pi)/s3 * exp(-((x-mu3)/s3)^2/2)";
+			m_fitData.model += " + a2/sqrt(2*pi)/s2 * exp(-((x-mu2)/s2)^2/2) + a3/sqrt(2*pi)/s3 * exp(-((x-mu3)/s3)^2/2)";
+			vars << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
+			m_fitData.paramNames << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
 		} else if (num > 3) {
 			QString numStr = QString::number(num);
-			eq += " + c2/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + ... + c" + numStr + "/sqrt(2*pi)/a" + numStr + "*exp(-((x-b" + numStr + ")/a" + numStr + ")^2/2)";
-			vars << "a2" << "b2" << "c2" << "a"+numStr << "b"+numStr << "c"+numStr  << "...";
+			eq += " + a2/sqrt(2*pi)/s2 * exp(-((x-mu2)/s2)^2/2) + ... + a" + numStr + "/sqrt(2*pi)/s" + numStr + "*exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2)";
+			vars << "s2" << "mu2" << "a2" << "s"+numStr << "mu"+numStr << "a"+numStr  << "...";
 			for (int i = 2; i <= num; ++i) {
 				numStr = QString::number(i);
-				m_fitData.model += "+ c" + numStr + "/sqrt(2*pi)/a" + numStr + "*exp(-((x-b" + numStr + ")/a" + numStr + ")^2/2)";
-				m_fitData.paramNames << "a"+numStr << "b"+numStr << "c"+numStr;
+				m_fitData.model += "+ a" + numStr + "/sqrt(2*pi)/s" + numStr + " * exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2)";
+				m_fitData.paramNames << "s"+numStr << "mu"+numStr << "a"+numStr;
 			}
 		}
 		break;
@@ -494,16 +494,16 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.paramNames << "a" << "b" << "c";
 		break;
 	case nsl_fit_model_weibull:
-		vars << "a" << "b" << "c";
-		m_fitData.paramNames << "a" << "b" << "c";
+		vars << "k" << "l" << "mu" << "a";
+		m_fitData.paramNames << "k" << "l" << "mu" << "a";
 		break;
 	case nsl_fit_model_lognormal:
-		vars << "a" << "b";
-		m_fitData.paramNames << "a" << "b";
+		vars << "s" << "mu" << "a";
+		m_fitData.paramNames << "s" << "mu" << "a";
 		break;
 	case nsl_fit_model_gumbel:
-		vars << "a" << "b";
-		m_fitData.paramNames << "a" << "b";
+		vars << "b" << "mu" << "a";
+		m_fitData.paramNames << "b" << "mu" << "a";
 		break;
 	case nsl_fit_model_custom:
 		//use the equation of the last selected predefined model or of the last available custom model

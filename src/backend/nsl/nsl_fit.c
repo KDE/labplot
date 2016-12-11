@@ -33,10 +33,10 @@ const char* nsl_fit_model_name[] = {i18n("Polynomial"), i18n("Power"), i18n("Exp
 	i18n("Gaussian"), i18n("Lorentz (Cauchy)"), i18n("Maxwell-Boltzmann"), i18n("Sigmoid"), i18n("Gompertz"), i18n("Weibull"),
 	i18n("Log-Normal"), i18n("Gumbel"), i18n("Custom")};
 
-const char* nsl_fit_model_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(1-exp(b*x))+c", "a0 + (a1*cos(w*x) + b1*sin(w*x))",
-	"c1/sqrt(2*pi)/a1*exp(-((x-b1)/a1)^2/2)", "a/pi*s/(s^2+(x-t)^2)", "c*sqrt(2/pi)*x^2*exp(-x^2/(2*a^2))/a^3", "a/(1+exp(-b*(x-c)))",
-	"a*exp(-b*exp(-c*x))", "a/b*((x-c)/b)^(a-1)*exp(-((x-c)/b)^a)", "1/(sqrt(2*pi)*x*a)*exp(-(log(x)-b)^2/(2*a^2))", 
-	"1/a*exp((x-b)/a-exp((x-b)/a))"};
+const char* nsl_fit_model_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(1-exp(b*x)) + c", "a0 + (a1*cos(w*x) + b1*sin(w*x))",
+	"a1/sqrt(2*pi)/s1 * exp(-((x-mu1)/s1)^2/2)", "a/pi * s/(s^2+(x-t)^2)", "c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)", "a/(1+exp(-b*(x-c)))",
+	"a*exp(-b*exp(-c*x))", "a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)", "a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)", 
+	"a/b * exp((x-mu)/b - exp((x-mu)/b))"};
 
 /* 
 	see http://www.quantcode.com/modules/smartfaq/faq.php?faqid=96
@@ -159,13 +159,13 @@ double nsl_fit_model_fourier_param_deriv(int param, int degree, double x, double
 
 	return 0;
 }
-double nsl_fit_model_gaussian_param_deriv(int param, double x, double a, double b, double c, double sigma) {
-	double a2 = a*a, norm = 1./sqrt(2.*M_PI)/a/sigma, efactor = exp(-(x-b)*(x-b)/(2.*a2));
+double nsl_fit_model_gaussian_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
+	double s2 = s*s, norm = 1./sqrt(2.*M_PI)/s/sigma, efactor = exp(-(x-mu)*(x-mu)/(2.*s2));
 
 	if (param == 0)
-		return c * norm/(a*a2) * ((x-b)*(x-b) - a2) * efactor;
+		return a * norm/(s*s2) * ((x-mu)*(x-mu) - s2) * efactor;
 	if (param == 1)
-		return c * norm/a2 * (x-b) * efactor;
+		return a * norm/s2 * (x-mu) * efactor;
 	if (param == 2)
 		return norm * efactor;
 		
@@ -211,28 +211,41 @@ double nsl_fit_model_gompertz_param_deriv(int param, double x, double a, double 
 		return a*b*x*exp(-c*x-b*exp(-c*x))/sigma;
 	return 0;
 }
-double nsl_fit_model_weibull_param_deriv(int param, double x, double a, double b, double c, double sigma) {
-	double d = pow((x-c)/b, a);
+double nsl_fit_model_weibull_param_deriv(int param, double x, double k, double l, double mu, double a, double sigma) {
+	double y = (x-mu)/l, z = pow(y, k), efactor = exp(-z);
 
 	if (param == 0)
-		return (exp(-d)*d*(a*(d-1.)*log((x-c)/b)-1.))/(c-x)/sigma;
+		return a/sigma * z*(k*log(y)*(z-1.) - 1.) * efactor;
 	if (param == 1)
-		return (pow(a, 2)*exp(-d)*d*(d-1.))/(b*(x-c))/sigma;
+		return a/sigma * k*k*z*(z-1.) * efactor;
 	if (param == 2)
-		return (a*exp(-d)*d*(a*(d-1.)+1.))/pow(c-x, 2)/sigma;
+		return a/sigma * k*z/y*(k-1. - k*z) * efactor;
+	if (param == 3)
+		return k/l/sigma * z/y * efactor;
+
 	return 0;
 }
-double nsl_fit_model_lognormal_param_deriv(int param, double x, double a, double b, double sigma) {
+double nsl_fit_model_lognormal_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
+	double norm = 1./sqrt(2.*M_PI)/(x*s)/sigma, y = log(x)-mu, efactor = exp(-(y/s)*(y/s)/2.);
+
 	if (param == 0)
-		return -(exp(-pow(b-log(x), 2)/(2.*pow(a, 2)))*(a+b-log(x))*(a-b+log(x)))/(sqrt(2.*M_PI)*pow(a, 4)*x)/sigma;
+		return a * norm * (y*y - s*s) * efactor;
 	if (param == 1)
-		return ((log(x)-b)*exp(-pow(b-log(x), 2)/(2.*pow(a, 2))))/(sqrt(2.*M_PI)*pow(a, 3)*x)/sigma;
+		return a * norm * y/(s*s) * efactor;
+	if (param == 2)
+		return norm * efactor;
+
 	return 0;
 }
-double nsl_fit_model_gumbel_param_deriv(int param, double x, double a, double b, double sigma) {
+double nsl_fit_model_gumbel_param_deriv(int param, double x, double b, double mu, double a, double sigma) {
+	double norm = 1./b/sigma, y = (x-mu)/b, efactor = exp(y - exp(y));
+
 	if (param == 0)
-		return (exp((x-2.*b)/a-exp((x-b)/a))*(exp(x/a)*(x-b)-exp(b/a)*(a-b+x)))/pow(a, 3)/sigma;
+		return a * norm/b * (y*exp(y) - y - 1) * efactor;
 	if (param == 1)
-		return (exp(-exp(x/a-b/a)-(2.*b)/a+x/a)*(exp(x/a)-exp(b/a)))/pow(a, 2)/sigma;
+		return a * norm/b * (exp(y) - 1) * efactor;
+	if (param == 2)
+		return norm * efactor;
+
 	return 0;
 }

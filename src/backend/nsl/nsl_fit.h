@@ -50,13 +50,13 @@ double nsl_fit_model_exponential2_param_deriv(int param, double x, double a, dou
 double nsl_fit_model_exponential3_param_deriv(int param, double x, double a, double b, double c, double d, double e, double f, double sigma);
 double nsl_fit_model_inverse_exponential_param_deriv(int param, double x, double a, double b, double sigma);
 double nsl_fit_model_fourier_param_deriv(int param, int degree, double x, double w, double sigma);
-double nsl_fit_model_gaussian_param_deriv(int param, double x, double a, double b, double c, double sigma);
+double nsl_fit_model_gaussian_param_deriv(int param, double x, double s, double mu, double a, double sigma);
 double nsl_fit_model_lorentz_param_deriv(int param, double x, double s, double t, double a, double sigma);
 double nsl_fit_model_maxwell_param_deriv(int param, double x, double a, double c, double sigma);
 double nsl_fit_model_sigmoid_param_deriv(int param, double x, double a, double b, double c, double sigma);
 double nsl_fit_model_gompertz_param_deriv(int param, double x, double a, double b, double c, double sigma);
-double nsl_fit_model_weibull_param_deriv(int param, double x, double a, double b, double c, double sigma);
-double nsl_fit_model_lognormal_param_deriv(int param, double x, double a, double b, double sigma);
-double nsl_fit_model_gumbel_param_deriv(int param, double x, double a, double b, double sigma);
+double nsl_fit_model_weibull_param_deriv(int param, double x, double k, double l, double mu, double a, double sigma);
+double nsl_fit_model_lognormal_param_deriv(int param, double x, double b, double mu, double a, double sigma);
+double nsl_fit_model_gumbel_param_deriv(int param, double x, double b, double mu, double a, double sigma);
 
 #endif /* NSL_FIT_H */
