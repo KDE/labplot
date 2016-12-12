@@ -357,7 +357,7 @@ void XYFitCurveDock::modelChanged(int index) {
 		uiGeneralTab.sbDegree->setMaximum(10);
 		uiGeneralTab.sbDegree->setValue(1);
 		break;
-	case nsl_fit_model_lorentz:
+	case nsl_fit_model_cauchy_lorentz:
 		uiGeneralTab.lDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setMaximum(10);
@@ -481,7 +481,7 @@ void XYFitCurveDock::updateModelEquation() {
 			}
 		}
 		break;
-	case nsl_fit_model_lorentz:
+	case nsl_fit_model_cauchy_lorentz:
 		if (num == 1) {
 			m_fitData.paramNames << "s" << "t" << "a";
 		} else if (num == 2) {

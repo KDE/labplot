@@ -172,7 +172,7 @@ double nsl_fit_model_gaussian_param_deriv(int param, double x, double s, double 
 		
 	return 0;
 }
-double nsl_fit_model_lorentz_param_deriv(int param, double x, double s, double t, double a, double sigma) {
+double nsl_fit_model_cauchy_lorentz_param_deriv(int param, double x, double s, double t, double a, double sigma) {
 	double norm = 1./M_PI/sigma, denom = s*s+(x-t)*(x-t);
 
 	if (param == 0)
