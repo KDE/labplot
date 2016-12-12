@@ -87,7 +87,8 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 
 	//find all available themes files (system wide and user specific local files)
 	//the list m_themeList contains full paths (path + file name)
-	const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory);
+	const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "labplot2/themes", QStandardPaths::LocateDirectory);
+	dirs.append(QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory));
 	foreach (const QString& dir, dirs) {
 		QDirIterator it(dir, QStringList() << QStringLiteral("*"));
 		while (it.hasNext())
