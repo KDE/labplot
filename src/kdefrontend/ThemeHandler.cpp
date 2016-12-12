@@ -129,7 +129,7 @@ QStringList ThemeHandler::themes() {
 }
 
 const QString ThemeHandler::themeFilePath(const QString& name) {
-	QStringList themes QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "labplot2/themes");
+	QStringList themes = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "labplot2/themes");
 	themes.append(QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes"));
 
 	for (int i = 0; i < themes.size(); ++i) {
