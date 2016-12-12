@@ -326,6 +326,7 @@ void XYFitCurveDock::modelChanged(int index) {
 	uiGeneralTab.tbFunctions->setVisible(custom);
 	uiGeneralTab.tbConstants->setVisible(custom);
 
+	uiGeneralTab.lDegree->setText(i18n("Degree"));
 	switch (type) {
 	case nsl_fit_model_polynomial:
 		uiGeneralTab.lDegree->setVisible(true);
@@ -352,12 +353,14 @@ void XYFitCurveDock::modelChanged(int index) {
 		uiGeneralTab.sbDegree->setValue(1);
 		break;
 	case nsl_fit_model_gaussian:
+		uiGeneralTab.lDegree->setText(i18n("Number of peaks"));
 		uiGeneralTab.lDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setMaximum(10);
 		uiGeneralTab.sbDegree->setValue(1);
 		break;
 	case nsl_fit_model_cauchy_lorentz:
+		uiGeneralTab.lDegree->setText(i18n("Number of peaks"));
 		uiGeneralTab.lDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setMaximum(10);
