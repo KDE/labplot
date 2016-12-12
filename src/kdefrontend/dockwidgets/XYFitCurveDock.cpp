@@ -357,6 +357,12 @@ void XYFitCurveDock::modelChanged(int index) {
 		uiGeneralTab.sbDegree->setMaximum(10);
 		uiGeneralTab.sbDegree->setValue(1);
 		break;
+	case nsl_fit_model_lorentz:
+		uiGeneralTab.lDegree->setVisible(true);
+		uiGeneralTab.sbDegree->setVisible(true);
+		uiGeneralTab.sbDegree->setMaximum(10);
+		uiGeneralTab.sbDegree->setValue(1);
+		break;
 	default:
 		uiGeneralTab.lDegree->setVisible(false);
 		uiGeneralTab.sbDegree->setVisible(false);
@@ -378,8 +384,7 @@ void XYFitCurveDock::updateModelEquation() {
 
 	QString eq;
 	if (m_fitData.modelType != nsl_fit_model_custom) {
-		eq = nsl_fit_model_equation[m_fitData.modelType];
-		m_fitData.model = eq;
+		m_fitData.model = eq = nsl_fit_model_equation[m_fitData.modelType];
 		m_fitData.paramNames.clear();
 	}
 
@@ -477,11 +482,29 @@ void XYFitCurveDock::updateModelEquation() {
 		}
 		break;
 	case nsl_fit_model_lorentz:
-		vars << "s" << "t" << "a";
-		m_fitData.paramNames << "s" << "t" << "a";
-		// TODO: multiple peaks
-		if (num == 2) {
+		if (num == 1) {
+			m_fitData.paramNames << "s" << "t" << "a";
+		} else if (num == 2) {
+			m_fitData.model = eq = "1./pi * (a1 * s1/(s1^2+(x-t1)^2) + a2 * s2/(s2^2+(x-t2)^2))";
+			m_fitData.paramNames << "s1" << "t1" << "a1" << "s2" << "t2" << "a2";
+		} else if (num == 3) {
+			m_fitData.model = eq = "1./pi * (a1 * s1/(s1^2+(x-t1)^2) + a2 * s2/(s2^2+(x-t2)^2) + a3 * s3/(s3^2+(x-t3)^2))";
+			m_fitData.paramNames << "s1" << "t1" << "a1" << "s2" << "t2" << "a2" << "s3" << "t3" << "a3";
+		} else if (num > 3) {
+			QString numStr = QString::number(num);
+			eq = "1./pi * (a1 * s1/(s1^2+(x-t1)^2) + ... + a" + numStr + " * s" + numStr + "/(s" + numStr + "^2+(x-t" + numStr + ")^2))";
+			m_fitData.model = "1./pi * (";
+			for (int i = 1; i <= num; ++i) {
+				numStr = QString::number(i);
+				if (i > 1)
+					m_fitData.model += " + ";
+				m_fitData.model += "a" + numStr + " * s" + numStr + "/(s" + numStr + "^2+(x-t" + numStr + ")^2)";
+				m_fitData.paramNames << "s" + numStr << "t" + numStr << "a" + numStr;
+			}
+			m_fitData.model += ")";
 		}
+		vars << m_fitData.paramNames;
+
 		break;
 	case nsl_fit_model_maxwell:
 		vars << "a" << "c";
