@@ -460,29 +460,29 @@ void XYFitCurveDock::updateModelEquation() {
 		}
 		break;
 	case nsl_fit_model_gaussian:
-		DEBUG_LOG("degree = "<<num);
-		vars << "s1" << "mu1" << "a1";
-		m_fitData.paramNames << "s1" << "mu1" << "a1";
-		if (num == 2) {
-			eq += " + a2/sqrt(2*pi)/s2 * exp(-((x-mu2)/s2)^2/2)";
-			m_fitData.model += " + a2/sqrt(2*pi)/s2 * exp(-((x-mu2)/s2)^2/2)";
-			vars << "s2" << "mu2" << "a2";
-			m_fitData.paramNames << "s2" << "mu2" << "a2";
+		if (num == 1) {
+			m_fitData.paramNames << "s" << "mu" << "a";
+		} else if (num == 2) {
+			m_fitData.model = eq = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2))";
+			m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
 		} else if (num == 3) {
-			eq += " + a2/sqrt(2*pi)/s2 * exp(-((x-mu2)/s2)^2/2) + a3/sqrt(2*pi)/s3 * exp(-((x-mu3)/s3)^2/2)";
-			m_fitData.model += " + a2/sqrt(2*pi)/s2 * exp(-((x-mu2)/s2)^2/2) + a3/sqrt(2*pi)/s3 * exp(-((x-mu3)/s3)^2/2)";
-			vars << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
-			m_fitData.paramNames << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
+			m_fitData.model = eq = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2) + a3/s3 * exp(-((x-mu3)/s3)^2/2))";
+			m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
 		} else if (num > 3) {
 			QString numStr = QString::number(num);
-			eq += " + a2/sqrt(2*pi)/s2 * exp(-((x-mu2)/s2)^2/2) + ... + a" + numStr + "/sqrt(2*pi)/s" + numStr + "*exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2)";
-			vars << "s2" << "mu2" << "a2" << "s"+numStr << "mu"+numStr << "a"+numStr  << "...";
-			for (int i = 2; i <= num; ++i) {
+			eq = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + ... + a" + numStr + "/s" + numStr + " * exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2))";
+			m_fitData.model = "1./sqrt(2*pi) * (";
+			for (int i = 1; i <= num; ++i) {
 				numStr = QString::number(i);
-				m_fitData.model += "+ a" + numStr + "/sqrt(2*pi)/s" + numStr + " * exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2)";
-				m_fitData.paramNames << "s"+numStr << "mu"+numStr << "a"+numStr;
+				if (i > 1)
+					m_fitData.model += " + ";
+				m_fitData.model += "a" + numStr + "/s" + numStr + "* exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2)";
+				m_fitData.paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
 			}
+			m_fitData.model += ")";
 		}
+		vars << m_fitData.paramNames;
+
 		break;
 	case nsl_fit_model_cauchy_lorentz:
 		if (num == 1) {

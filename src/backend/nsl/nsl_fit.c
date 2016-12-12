@@ -35,7 +35,7 @@ const char* nsl_fit_model_name[] = {i18n("Polynomial"), i18n("Power"), i18n("Exp
 	i18n("Chi-Square"), i18n("Student-t"), i18n("Custom")};
 
 const char* nsl_fit_model_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(1-exp(b*x)) + c", "a0 + (a1*cos(w*x) + b1*sin(w*x))",
-	"a1/sqrt(2*pi)/s1 * exp(-((x-mu1)/s1)^2/2)", "a/pi * s/(s^2+(x-t)^2)", "c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)", "a/(1+exp(-b*(x-c)))",
+	"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * s/(s^2+(x-t)^2)", "c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)", "a/(1+exp(-b*(x-c)))",
 	"a*exp(-b*exp(-c*x))", "a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)", "a/b * exp((x-mu)/b - exp((x-mu)/b))", "Frechet",
 	"a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)", "Gamma", "Laplace", "Rayleigh", "Levy", "Chi-Square", "Student-t"};
 
