@@ -525,16 +525,21 @@ void XYFitCurveDock::updateModelEquation() {
 		vars << "k" << "l" << "mu" << "a";
 		m_fitData.paramNames << "k" << "l" << "mu" << "a";
 		break;
+	case nsl_fit_model_frechet:
+		m_fitData.paramNames << "a" << "mu" << "s" << "c";
+		vars << m_fitData.paramNames;
+		break;
 	case nsl_fit_model_gumbel:
 		vars << "b" << "mu" << "a";
 		m_fitData.paramNames << "b" << "mu" << "a";
 		break;
-	case nsl_fit_model_frechet:
-		//TODO
-		break;
 	case nsl_fit_model_lognormal:
 		vars << "s" << "mu" << "a";
 		m_fitData.paramNames << "s" << "mu" << "a";
+		break;
+	case nsl_fit_model_gamma:
+		m_fitData.paramNames << "b" << "p" << "a";
+		vars << m_fitData.paramNames;
 		break;
 	case nsl_fit_model_custom:
 		//use the equation of the last selected predefined model or of the last available custom model
@@ -564,6 +569,8 @@ void XYFitCurveDock::updateModelEquation() {
 		// model-dependent start values
 		if (m_fitData.modelType == nsl_fit_model_weibull)
 			m_fitData.paramStartValues[2] = 0.0;
+		if (m_fitData.modelType == nsl_fit_model_frechet)
+			m_fitData.paramStartValues[1] = 0.0;
 	}
 
 	uiGeneralTab.teEquation->setVariables(vars);

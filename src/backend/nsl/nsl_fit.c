@@ -28,16 +28,19 @@
 #include "nsl_common.h"
 #include "nsl_fit.h"
 #include <gsl/gsl_math.h>
+#include <gsl/gsl_sf_gamma.h>
+#include <gsl/gsl_sf_psi.h>
 
 const char* nsl_fit_model_name[] = {i18n("Polynomial"), i18n("Power"), i18n("Exponential"), i18n("Inverse Exponential"), i18n("Fourier"),
 	i18n("Gaussian (normal)"), i18n("Cauchy-Lorentz"), i18n("Maxwell-Boltzmann"), i18n("Sigmoid"), i18n("Gompertz"), i18n("Weibull"),
-	i18n("Gumbel"), i18n("Frechet"), i18n("Log-Normal"), i18n("Gamma"), i18n("Laplace"), i18n("Rayleigh"), i18n("Levy"),
-	i18n("Chi-Square"), i18n("Student-t"), i18n("Custom")};
+	i18n("Frechet (inverse Weibull)"), i18n("Gumbel"), i18n("Log-Normal"), i18n("Gamma"), i18n("Laplace"), i18n("Rayleigh"), i18n("Levy"),
+	i18n("Chi-Square"), i18n("Custom")};
 
 const char* nsl_fit_model_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(1-exp(b*x)) + c", "a0 + (a1*cos(w*x) + b1*sin(w*x))",
 	"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * s/(s^2+(x-t)^2)", "c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)", "a/(1+exp(-b*(x-c)))",
-	"a*exp(-b*exp(-c*x))", "a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)", "a/b * exp((x-mu)/b - exp((x-mu)/b))", "Frechet",
-	"a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)", "Gamma", "Laplace", "Rayleigh", "Levy", "Chi-Square", "Student-t"};
+	"a*exp(-b*exp(-c*x))", "a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)", "c * a/s*((x-mu)/s)^(-a-1) * exp(-((x-mu)/s)^(-a))",
+	"a/b * exp((x-mu)/b - exp((x-mu)/b))", "a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)", "a * b^p/gamma(p)*x^(p-1)*exp(-b*x)",
+	"Laplace", "Rayleigh", "Levy", "Chi-Square"};
 
 /* 
 	see http://www.quantcode.com/modules/smartfaq/faq.php?faqid=96
@@ -226,6 +229,20 @@ double nsl_fit_model_weibull_param_deriv(int param, double x, double k, double l
 
 	return 0;
 }
+double nsl_fit_model_frechet_param_deriv(int param, double x, double a, double mu, double s, double c, double sigma) {
+	double y = (x-mu)/s, efactor = exp(-pow(y, -a));
+
+	if (param == 0)
+		return c/s * pow(y, -2.*a-1.) * (a*log(y)*(1.-pow(y, a))+pow(y, a)) * efactor;
+	if (param == 1)
+		return c * a/(s*s)*pow(y, -a-2.) * (a+1-a*pow(y, -a)) * efactor;
+	if (param == 2)
+		return c * pow(a/s, 2.)*pow(y, -2.*a-1.) * (pow(y, a)-1) * efactor;
+	if (param == 3)
+		return a/sigma/s * pow(y, -a-1) * efactor;
+
+	return 0;
+}
 double nsl_fit_model_gumbel_param_deriv(int param, double x, double b, double mu, double a, double sigma) {
 	double norm = 1./b/sigma, y = (x-mu)/b, efactor = exp(y - exp(y));
 
@@ -238,7 +255,6 @@ double nsl_fit_model_gumbel_param_deriv(int param, double x, double b, double mu
 
 	return 0;
 }
-/* frechet */
 double nsl_fit_model_lognormal_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
 	double norm = 1./sqrt(2.*M_PI)/(x*s)/sigma, y = log(x)-mu, efactor = exp(-(y/s)*(y/s)/2.);
 
@@ -248,6 +264,18 @@ double nsl_fit_model_lognormal_param_deriv(int param, double x, double s, double
 		return a * norm * y/(s*s) * efactor;
 	if (param == 2)
 		return norm * efactor;
+
+	return 0;
+}
+double nsl_fit_model_gamma_param_deriv(int param, double x, double b, double p, double a, double sigma) {
+	double factor = pow(b, p)*pow(x, p-1.)/gsl_sf_gamma(p)/sigma, efactor = exp(-b*x);
+
+	if (param == 0)
+		return a * factor/b * (p-b*x) * efactor;
+	if (param == 1)
+		return a * factor * (log(b*x) - gsl_sf_psi(p)) * efactor;
+	if (param == 2)
+		return factor * efactor;
 
 	return 0;
 }
