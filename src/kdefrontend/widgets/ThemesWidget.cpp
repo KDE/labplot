@@ -63,7 +63,7 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	QStandardItemModel* mContentItemModel = new QStandardItemModel(this);
 	QStringList themeList = ThemeHandler::themes();
 	QStringList themeImgPathList = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "labplot2/themes/screenshots", QStandardPaths::LocateDirectory);
-	themeImgPathList.append(QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes/screenshots", QStandardPaths::LocateDirectory);
+	themeImgPathList.append(QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes/screenshots", QStandardPaths::LocateDirectory));
 	if (themeImgPathList.isEmpty())
 		return;
 	QString themeImgPath = themeImgPathList.first();
