@@ -393,71 +393,61 @@ void XYFitCurveDock::updateModelEquation() {
 
 	switch (m_fitData.modelType) {
 	case nsl_fit_model_polynomial:
-		vars << "c0" << "c1";
 		m_fitData.paramNames << "c0" << "c1";
 		if (num == 2) {
 			eq += " + c2*x^2";
 			m_fitData.model += " + c2*x^2";
-			vars << "c2";
 			m_fitData.paramNames << "c2";
 		} else if (num > 2) {
 			QString numStr = QString::number(num);
 			eq += " + ... + c" + numStr + "*x^" + numStr;
-			vars << "c" + numStr << "...";
-			for (int i = 2; i<=num; ++i) {
+			for (int i = 2; i <= num; ++i) {
 				numStr = QString::number(i);
 				m_fitData.model += "+c" + numStr + "*x^" + numStr;
 				m_fitData.paramNames << "c"+numStr;
 			}
 		}
+		vars << "...";
 		break;
 	case nsl_fit_model_power:
 		if (num == 1) {
-			vars << "a" << "b";
 			m_fitData.paramNames << "a" << "b";
 		} else {
 			eq = "a + b*x^c";
-			vars << "a" << "b" << "c";
 			m_fitData.paramNames << "a" << "b" << "c";
 			m_fitData.model = eq;
 		}
 		break;
 	case nsl_fit_model_exponential:
-		vars << "a" << "b";
 		m_fitData.paramNames << "a" << "b";
 		if (num == 2) {
 			eq += " + c*exp(d*x)";
-			vars << "c" << "d";
 			m_fitData.paramNames << "c" << "d";
 		} else if (num == 3) {
 			eq += " + c*exp(d*x) + e*exp(f*x)";
-			vars << "c" << "d" << "e" << "f";
 			m_fitData.paramNames << "c" << "d" << "e" << "f";
 		}
 		m_fitData.model = eq;
 		break;
 	case nsl_fit_model_inverse_exponential:
-		vars << "a" << "b" << "c";
 		m_fitData.paramNames << "a" << "b" << "c";
 		break;
 	case nsl_fit_model_fourier:
-		vars << "w" << "a0" << "a1" << "b1";
 		m_fitData.paramNames << "w" << "a0" << "a1" << "b1";
 		if (num == 2) {
 			eq += " + (a2*cos(2*w*x) + b2*sin(2*w*x))";
 			m_fitData.model += " + (a2*cos(2*w*x) + b2*sin(2*w*x))";
-			vars << "a2" << "b2";
 			m_fitData.paramNames << "a2" << "b2";
 		} else if (num > 2) {
 			QString numStr = QString::number(num);
 			eq += " + ... + (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
-			vars << "a"+numStr << "b"+numStr << "...";
 			for (int i = 2; i <= num; ++i) {
 				numStr = QString::number(i);
 				m_fitData.model += "+ (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
 				m_fitData.paramNames << "a"+numStr << "b"+numStr;
 			}
 		}
+		vars << "...";
 		break;
 	case nsl_fit_model_gaussian:
 		if (num == 1) {
@@ -481,8 +471,6 @@ void XYFitCurveDock::updateModelEquation() {
 			}
 			m_fitData.model += ")";
 		}
-		vars << m_fitData.paramNames;
-
 		break;
 	case nsl_fit_model_cauchy_lorentz:
 		if (num == 1) {
@@ -506,46 +494,34 @@ void XYFitCurveDock::updateModelEquation() {
 			}
 			m_fitData.model += ")";
 		}
-		vars << m_fitData.paramNames;
-
 		break;
 	case nsl_fit_model_maxwell:
-		vars << "a" << "c";
 		m_fitData.paramNames << "a" << "c";
 		break;
 	case nsl_fit_model_sigmoid:
-		vars << "a" << "b" << "c";
-		m_fitData.paramNames << "a" << "b" << "c";
-		break;
 	case nsl_fit_model_gompertz:
-		vars << "a" << "b" << "c";
 		m_fitData.paramNames << "a" << "b" << "c";
 		break;
 	case nsl_fit_model_weibull:
-		vars << "k" << "l" << "mu" << "a";
 		m_fitData.paramNames << "k" << "l" << "mu" << "a";
 		break;
 	case nsl_fit_model_frechet:
 		m_fitData.paramNames << "a" << "mu" << "s" << "c";
-		vars << m_fitData.paramNames;
 		break;
 	case nsl_fit_model_gumbel:
-		vars << "b" << "mu" << "a";
 		m_fitData.paramNames << "b" << "mu" << "a";
 		break;
 	case nsl_fit_model_lognormal:
-		vars << "s" << "mu" << "a";
 		m_fitData.paramNames << "s" << "mu" << "a";
 		break;
 	case nsl_fit_model_gamma:
 		m_fitData.paramNames << "b" << "p" << "a";
-		vars << m_fitData.paramNames;
 		break;
 	case nsl_fit_model_custom:
 		//use the equation of the last selected predefined model or of the last available custom model
 		eq = m_fitData.model;
-		vars << m_fitData.paramNames;
 	}
+	vars << m_fitData.paramNames;
 
 	//resize the vector for the start values and set the elements to 1.0
 	//in case a custom model is used, do nothing, we take over the previous values
