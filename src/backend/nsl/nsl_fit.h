@@ -62,6 +62,7 @@ double nsl_fit_model_frechet_param_deriv(int param, double x, double a, double m
 double nsl_fit_model_gumbel_param_deriv(int param, double x, double b, double mu, double a, double sigma);
 double nsl_fit_model_lognormal_param_deriv(int param, double x, double b, double mu, double a, double sigma);
 double nsl_fit_model_gamma_param_deriv(int param, double x, double b, double p, double a, double sigma);
+double nsl_fit_model_laplace_param_deriv(int param, double x, double s, double mu, double a, double sigma);
 /* more */
 
 #endif /* NSL_FIT_H */

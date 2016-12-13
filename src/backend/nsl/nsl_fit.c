@@ -27,6 +27,7 @@
 
 #include "nsl_common.h"
 #include "nsl_fit.h"
+#include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_psi.h>
@@ -40,7 +41,7 @@ const char* nsl_fit_model_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(
 	"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * s/(s^2+(x-t)^2)", "c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)", "a/(1+exp(-b*(x-c)))",
 	"a*exp(-b*exp(-c*x))", "a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)", "c * a/s*((x-mu)/s)^(-a-1) * exp(-((x-mu)/s)^(-a))",
 	"a/b * exp((x-mu)/b - exp((x-mu)/b))", "a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)", "a * b^p/gamma(p)*x^(p-1)*exp(-b*x)",
-	"Laplace", "Rayleigh", "Levy", "Chi-Square"};
+	"a/(2*s) * exp(-fabs(x-mu)/s)", "Rayleigh", "Levy", "Chi-Square"};
 
 /* 
 	see http://www.quantcode.com/modules/smartfaq/faq.php?faqid=96
@@ -276,6 +277,18 @@ double nsl_fit_model_gamma_param_deriv(int param, double x, double b, double p, 
 		return a * factor * (log(b*x) - gsl_sf_psi(p)) * efactor;
 	if (param == 2)
 		return factor * efactor;
+
+	return 0;
+}
+double nsl_fit_model_laplace_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
+	double norm = 1./(2.*s)/sigma, y = fabs(x-mu)/s, efactor = exp(-y);
+
+	if (param == 0)
+		return a/s*norm * (y-1.) * efactor;
+	if (param == 1)
+		return a/(s*s)*norm * (x-mu)/y * efactor;
+	if (param == 2)
+		return norm * efactor;
 
 	return 0;
 }

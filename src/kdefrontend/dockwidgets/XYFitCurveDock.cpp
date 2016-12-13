@@ -517,6 +517,9 @@ void XYFitCurveDock::updateModelEquation() {
 	case nsl_fit_model_gamma:
 		m_fitData.paramNames << "b" << "p" << "a";
 		break;
+	case nsl_fit_model_laplace:
+		m_fitData.paramNames << "s" << "mu" << "a";
+		break;
 	case nsl_fit_model_custom:
 		//use the equation of the last selected predefined model or of the last available custom model
 		eq = m_fitData.model;
@@ -529,7 +532,7 @@ void XYFitCurveDock::updateModelEquation() {
 	//available - unless there're no values available
 	if (m_fitData.modelType != nsl_fit_model_custom &&
 	        !(m_initializing && m_fitData.paramNames.size() == m_fitData.paramStartValues.size())) {
-		DEBUG_LOG(" number of start values"<<m_fitData.paramNames.size()<<m_fitData.paramStartValues.size());
+		DEBUG_LOG(" number of start values" << m_fitData.paramNames.size() << m_fitData.paramStartValues.size());
 		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
 		m_fitData.paramFixed.resize(m_fitData.paramNames.size());
 		m_fitData.paramLowerLimits.resize(m_fitData.paramNames.size());
