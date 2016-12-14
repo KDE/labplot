@@ -523,6 +523,9 @@ void XYFitCurveDock::updateModelEquation() {
 	case nsl_fit_model_rayleigh:
 		m_fitData.paramNames << "s" << "a";
 		break;
+	case nsl_fit_model_levy:
+		m_fitData.paramNames << "g" << "mu" << "a";
+		break;
 	case nsl_fit_model_custom:
 		//use the equation of the last selected predefined model or of the last available custom model
 		eq = m_fitData.model;
@@ -551,7 +554,7 @@ void XYFitCurveDock::updateModelEquation() {
 		// model-dependent start values
 		if (m_fitData.modelType == nsl_fit_model_weibull)
 			m_fitData.paramStartValues[2] = 0.0;
-		if (m_fitData.modelType == nsl_fit_model_frechet)
+		if (m_fitData.modelType == nsl_fit_model_frechet || m_fitData.modelType == nsl_fit_model_levy)
 			m_fitData.paramStartValues[1] = 0.0;
 	}
 

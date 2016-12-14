@@ -41,7 +41,8 @@ const char* nsl_fit_model_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(
 	"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * s/(s^2+(x-t)^2)", "c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)", "a/(1+exp(-b*(x-c)))",
 	"a*exp(-b*exp(-c*x))", "a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)", "c * a/s*((x-mu)/s)^(-a-1) * exp(-((x-mu)/s)^(-a))",
 	"a/b * exp((x-mu)/b - exp((x-mu)/b))", "a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)", "a * b^p/gamma(p)*x^(p-1)*exp(-b*x)",
-	"a/(2*s) * exp(-fabs(x-mu)/s)", "a * x/(s*s) * exp(-x*x/(s*s)/2)", "Levy", "Chi-Square"};
+	"a/(2*s) * exp(-fabs(x-mu)/s)", "a * x/(s*s) * exp(-x*x/(s*s)/2)", "a * sqrt(g/(2*pi))/pow(x-mu, 1.5) * exp(-g/2./(x-mu))", 
+	"Chi-Square"};
 
 /* 
 	see http://www.quantcode.com/modules/smartfaq/faq.php?faqid=96
@@ -298,6 +299,18 @@ double nsl_fit_model_rayleigh_param_deriv(int param, double x, double s, double 
 	if (param == 0)
 		return a*y/(s*s) * (y*y-2.)*efactor;
 	if (param == 1)
+		return norm * efactor;
+
+	return 0;
+}
+double nsl_fit_model_levy_param_deriv(int param, double x, double g, double mu, double a, double sigma) {
+	double y=x-mu, norm = sqrt(g/(2.*M_PI))/pow(y, 1.5)/sigma, efactor = exp(-g/2./y);
+
+	if (param == 0)
+		return a/2.*norm/g/y * (y - g) * efactor;
+	if (param == 1)
+		return a/2.*norm/y/y * (3.*y - g) * efactor;
+	if (param == 2)
 		return norm * efactor;
 
 	return 0;
