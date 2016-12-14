@@ -520,6 +520,9 @@ void XYFitCurveDock::updateModelEquation() {
 	case nsl_fit_model_laplace:
 		m_fitData.paramNames << "s" << "mu" << "a";
 		break;
+	case nsl_fit_model_rayleigh:
+		m_fitData.paramNames << "s" << "a";
+		break;
 	case nsl_fit_model_custom:
 		//use the equation of the last selected predefined model or of the last available custom model
 		eq = m_fitData.model;
