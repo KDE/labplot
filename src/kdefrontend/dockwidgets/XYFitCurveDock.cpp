@@ -526,6 +526,9 @@ void XYFitCurveDock::updateModelEquation() {
 	case nsl_fit_model_levy:
 		m_fitData.paramNames << "g" << "mu" << "a";
 		break;
+	case nsl_fit_model_chi_square:
+		m_fitData.paramNames << "n" << "a";
+		break;
 	case nsl_fit_model_custom:
 		//use the equation of the last selected predefined model or of the last available custom model
 		eq = m_fitData.model;

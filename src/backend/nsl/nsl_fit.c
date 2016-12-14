@@ -42,7 +42,7 @@ const char* nsl_fit_model_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(
 	"a*exp(-b*exp(-c*x))", "a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)", "c * a/s*((x-mu)/s)^(-a-1) * exp(-((x-mu)/s)^(-a))",
 	"a/b * exp((x-mu)/b - exp((x-mu)/b))", "a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)", "a * b^p/gamma(p)*x^(p-1)*exp(-b*x)",
 	"a/(2*s) * exp(-fabs(x-mu)/s)", "a * x/(s*s) * exp(-x*x/(s*s)/2)", "a * sqrt(g/(2*pi))/pow(x-mu, 1.5) * exp(-g/2./(x-mu))", 
-	"Chi-Square"};
+	"a * pow(x,n/2.-1.)/pow(2, n/2.)/gamma(n/2.) * exp(-x/2.)"};
 
 /* 
 	see http://www.quantcode.com/modules/smartfaq/faq.php?faqid=96
@@ -311,6 +311,16 @@ double nsl_fit_model_levy_param_deriv(int param, double x, double g, double mu, 
 	if (param == 1)
 		return a/2.*norm/y/y * (3.*y - g) * efactor;
 	if (param == 2)
+		return norm * efactor;
+
+	return 0;
+}
+double nsl_fit_model_chi_square_param_deriv(int param, double x, double n, double a, double sigma) {
+	double y=n/2., norm = pow(x, y-1.)/pow(2., y)/gamma(y)/sigma, efactor = exp(-x/2.);
+
+	if (param == 0)
+		return a/2. * norm * (log(x/2.) - gsl_sf_psi(y)) * efactor;
+	if (param == 1)
 		return norm * efactor;
 
 	return 0;

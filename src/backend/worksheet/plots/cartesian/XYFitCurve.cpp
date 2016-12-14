@@ -668,6 +668,22 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		break;
 	}
+	case nsl_fit_model_chi_square: {
+		double n = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+		for (size_t i = 0; i < n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+
+			for (int j = 0; j < 2; j++) {
+				if (fixed[j])
+					gsl_matrix_set(J, i, j, 0.);
+				else
+					gsl_matrix_set(J, i, j, nsl_fit_model_chi_square_param_deriv(j, x, n, a, sigma));
+			}
+		}
+		break;
+	}
 	case nsl_fit_model_custom: {
 		QByteArray funcba = ((struct data*)params)->func->toLocal8Bit();
 		char* func = funcba.data();

@@ -65,6 +65,7 @@ double nsl_fit_model_gamma_param_deriv(int param, double x, double b, double p, 
 double nsl_fit_model_laplace_param_deriv(int param, double x, double s, double mu, double a, double sigma);
 double nsl_fit_model_rayleigh_param_deriv(int param, double x, double s, double a, double sigma);
 double nsl_fit_model_levy_param_deriv(int param, double x, double g, double mu, double a, double sigma);
+double nsl_fit_model_chi_square_param_deriv(int param, double x, double n, double a, double sigma);
 /* more */
 
 #endif /* NSL_FIT_H */
