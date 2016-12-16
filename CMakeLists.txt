@@ -82,6 +82,11 @@ ENDIF ()
 
 ### FFTW (optional) #####################################
 IF (ENABLE_FFTW)
+FIND_LIBRARY (FFTW_LIBRARIES fftw3
+        PATHS
+        /usr/lib
+        /usr/local/lib
+)
 FIND_PATH (FFTW_INCLUDE_DIR fftw3.h
 	/usr/include
 	/usr/local/include
