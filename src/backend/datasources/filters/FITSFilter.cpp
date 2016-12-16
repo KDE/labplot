@@ -1103,7 +1103,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
                 }
             }
         }
-        delete keyVal;
+        delete[] keyVal;
         status = 0;
         extName = extName.trimmed();
         switch (hduType) {
