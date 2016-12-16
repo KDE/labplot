@@ -509,7 +509,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		for (size_t i = 0; i < n; i++) {
 			x = xVector[i];
 			if (sigmaVector) sigma = sigmaVector[i];
-			
+
 			for (int j = 0; j < 3; j++) {
 				if (fixed[j])
 					gsl_matrix_set(J, i, j, 0.);
@@ -519,51 +519,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		break;
 	}
-	case nsl_fit_model_weibull: {	//Y(x) = a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k);
-		double k = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-		double l = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-		double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
-		for (size_t i = 0; i < n; i++) {
-			x = xVector[i];
-			if (sigmaVector) sigma = sigmaVector[i];
-
-			if (x > 0) {
-				for (int j = 0; j < 4; j++) {
-					if (fixed[j])
-						gsl_matrix_set(J, i, j, 0.);
-					else
-						gsl_matrix_set(J, i, j, nsl_fit_model_weibull_param_deriv(j, x, k, l, mu, a, sigma));
-				}
-			} else {	// TODO: how to deal correctly with (x-c)/b <=0
-				gsl_matrix_set(J, i, 0, 0);
-				gsl_matrix_set(J, i, 1, 0);
-				gsl_matrix_set(J, i, 2, 0);
-				gsl_matrix_set(J, i, 3, 0);
-			}
-		}
-		break;
-	}
-	case nsl_fit_model_frechet: {
-		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-		double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-		double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-		double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
-		for (size_t i = 0; i < n; i++) {
-			x = xVector[i];
-			if (sigmaVector) sigma = sigmaVector[i];
-
-			for (int j = 0; j < 4; j++) {
-				if (fixed[j])
-					gsl_matrix_set(J, i, j, 0.);
-				else
-					gsl_matrix_set(J, i, j, nsl_fit_model_frechet_param_deriv(j, x, a, mu, s, c, sigma));
-			}
-		}
-		break;
-	}
-	case nsl_fit_model_gumbel: {	// Y(x) = a/b * exp((x-mu)/b - exp((x-mu)/b));
-		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+	case nsl_fit_model_sech: {
+		double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 		double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
 		for (size_t i = 0; i < n; i++) {
@@ -574,7 +531,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				if (fixed[j])
 					gsl_matrix_set(J, i, j, 0.);
 				else
-					gsl_matrix_set(J, i, j, nsl_fit_model_gumbel_param_deriv(j, x, b, mu, a, sigma));
+					gsl_matrix_set(J, i, j, nsl_fit_model_sech_param_deriv(j, x, s, mu, a, sigma));
 			}
 		}
 		break;
@@ -680,6 +637,66 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					gsl_matrix_set(J, i, j, 0.);
 				else
 					gsl_matrix_set(J, i, j, nsl_fit_model_chi_square_param_deriv(j, x, n, a, sigma));
+			}
+		}
+		break;
+	}
+	case nsl_fit_model_weibull: {	//Y(x) = a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k);
+		double k = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+		double l = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+		double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+		for (size_t i = 0; i < n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+
+			if (x > 0) {
+				for (int j = 0; j < 4; j++) {
+					if (fixed[j])
+						gsl_matrix_set(J, i, j, 0.);
+					else
+						gsl_matrix_set(J, i, j, nsl_fit_model_weibull_param_deriv(j, x, k, l, mu, a, sigma));
+				}
+			} else {	// TODO: how to deal correctly with (x-c)/b <=0
+				gsl_matrix_set(J, i, 0, 0);
+				gsl_matrix_set(J, i, 1, 0);
+				gsl_matrix_set(J, i, 2, 0);
+				gsl_matrix_set(J, i, 3, 0);
+			}
+		}
+		break;
+	}
+	case nsl_fit_model_frechet: {
+		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+		double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+		double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+		double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+		for (size_t i = 0; i < n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+
+			for (int j = 0; j < 4; j++) {
+				if (fixed[j])
+					gsl_matrix_set(J, i, j, 0.);
+				else
+					gsl_matrix_set(J, i, j, nsl_fit_model_frechet_param_deriv(j, x, a, mu, s, c, sigma));
+			}
+		}
+		break;
+	}
+	case nsl_fit_model_gumbel: {	// Y(x) = a/b * exp((x-mu)/b - exp((x-mu)/b));
+		double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+		double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+		double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+		for (size_t i = 0; i < n; i++) {
+			x = xVector[i];
+			if (sigmaVector) sigma = sigmaVector[i];
+
+			for (int j = 0; j < 3; j++) {
+				if (fixed[j])
+					gsl_matrix_set(J, i, j, 0.);
+				else
+					gsl_matrix_set(J, i, j, nsl_fit_model_gumbel_param_deriv(j, x, b, mu, a, sigma));
 			}
 		}
 		break;
