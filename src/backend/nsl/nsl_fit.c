@@ -32,17 +32,21 @@
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_psi.h>
 
-const char* nsl_fit_model_name[] = {i18n("Polynomial"), i18n("Power"), i18n("Exponential"), i18n("Inverse Exponential"), i18n("Fourier"),
-	i18n("Gaussian (normal)"), i18n("Cauchy-Lorentz"), i18n("Maxwell-Boltzmann"), i18n("Sigmoid"), i18n("Gompertz"), i18n("Hyperbolic secant (sech)"),
-	i18n("Log-Normal"), i18n("Gamma"), i18n("Laplace"), i18n("Rayleigh"), i18n("Levy"), i18n("Chi-Square"), i18n("Weibull"),
-	i18n("Frechet (inverse Weibull)"), i18n("Gumbel"), i18n("Custom")};
+const char* nsl_fit_model_category_name[] = {i18n("Basic functions"), i18n("Peak Functions"), i18n("Growth/Sigmoidal"), i18n("Statistics"), i18n("Custom")};
 
-const char* nsl_fit_model_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(1-exp(b*x)) + c", "a0 + (a1*cos(w*x) + b1*sin(w*x))",
-	"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * s/(s^2+(x-t)^2)", "c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)", "a/(1+exp(-b*(x-c)))",
-	"a*exp(-b*exp(-c*x))", "a/cosh((x - mu)/s)", "a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)", "a * b^p/gamma(p)*x^(p-1)*exp(-b*x)",
-	"a/(2*s) * exp(-fabs(x-mu)/s)", "a * x/(s*s) * exp(-x*x/(s*s)/2)", "a * sqrt(g/(2*pi))/pow(x-mu, 1.5) * exp(-g/2./(x-mu))", 
-	"a * pow(x,n/2.-1.)/pow(2, n/2.)/gamma(n/2.) * exp(-x/2.)", "a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)",
-	"c * a/s*((x-mu)/s)^(-a-1) * exp(-((x-mu)/s)^(-a))", "a/b * exp((x-mu)/b - exp((x-mu)/b))"};
+const char* nsl_fit_model_basic_name[] = {i18n("Polynomial"), i18n("Power"), i18n("Exponential"), i18n("Inverse Exponential"), i18n("Fourier")};
+const char* nsl_fit_model_peak_name[] = {i18n("Gaussian (normal)"), i18n("Cauchy-Lorentz"), i18n("Hyperbolic secant (sech)")};
+const char* nsl_fit_model_growth_name[] = {i18n("Sigmoid"), i18n("Gompertz")};
+const char* nsl_fit_model_distribution_name[] = {i18n("Maxwell-Boltzmann"), i18n("Log-Normal"), i18n("Gamma"), i18n("Laplace"), i18n("Rayleigh"), 
+	i18n("Levy"), i18n("Chi-Square"), i18n("Weibull"), i18n("Frechet (inverse Weibull)"), i18n("Gumbel")};
+
+const char* nsl_fit_model_basic_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(1-exp(b*x)) + c", "a0 + (a1*cos(w*x) + b1*sin(w*x))"};
+const char* nsl_fit_model_peak_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * s/(s^2+(x-t)^2)", "a/cosh((x - mu)/s)"};
+const char* nsl_fit_model_growth_equation[] = {"a/(1+exp(-b*(x-c)))", "a*exp(-b*exp(-c*x))"};
+const char* nsl_fit_model_distribution_equation[] = {"c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)", "a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)",
+	"a * b^p/gamma(p)*x^(p-1)*exp(-b*x)", "a/(2*s) * exp(-fabs(x-mu)/s)", "a * x/(s*s) * exp(-x*x/(s*s)/2)",
+	"a * sqrt(g/(2*pi))/pow(x-mu, 1.5) * exp(-g/2./(x-mu))", "a * pow(x,n/2.-1.)/pow(2, n/2.)/gamma(n/2.) * exp(-x/2.)",
+	"a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)", "c * a/s*((x-mu)/s)^(-a-1) * exp(-((x-mu)/s)^(-a))", "a/b * exp((x-mu)/b - exp((x-mu)/b))"};
 
 /* 
 	see http://www.quantcode.com/modules/smartfaq/faq.php?faqid=96
@@ -96,6 +100,7 @@ double nsl_fit_map_unbound(double x, double min, double max) {
 
 /********************** parameter derivatives ******************/
 
+/* basic */
 double nsl_fit_model_polynomial_param_deriv(double x, int j, double sigma) {
 	return pow(x, j)/sigma;	
 }
@@ -165,6 +170,8 @@ double nsl_fit_model_fourier_param_deriv(int param, int degree, double x, double
 
 	return 0;
 }
+
+/* peak */
 double nsl_fit_model_gaussian_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
 	double s2 = s*s, norm = 1./sqrt(2.*M_PI)/s/sigma, efactor = exp(-(x-mu)*(x-mu)/(2.*s2));
 
@@ -189,16 +196,20 @@ double nsl_fit_model_cauchy_lorentz_param_deriv(int param, double x, double s, d
 
 	return 0;
 }
-double nsl_fit_model_maxwell_param_deriv(int param, double x, double a, double c, double sigma) {
-	double a2 = a*a, a3 = a*a2, norm = sqrt(2./M_PI)/a3/sigma, x2 = x*x, efactor = exp(-x2/2./a2);
+double nsl_fit_model_sech_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
+	double y = (x-mu)/s, norm = 1./sigma;
 
 	if (param == 0)
-		return c * norm * x2*(x2-3.*a2)/a3 * efactor;
+		return a/s * norm * y*tanh(y)/cosh(y);
 	if (param == 1)
-		return norm * x2 * efactor;
+		return a/s * norm * tanh(y)/cosh(y);
+	if (param == 2)
+		return norm/cosh(y);
 
 	return 0;
 }
+
+/* growth */
 double nsl_fit_model_sigmoid_param_deriv(int param, double x, double a, double b, double c, double sigma) {
 	if (param == 0)
 		return 1./(exp(b*(c-x)) + 1.)/sigma;
@@ -217,20 +228,18 @@ double nsl_fit_model_gompertz_param_deriv(int param, double x, double a, double 
 		return a*b*x*exp(-c*x-b*exp(-c*x))/sigma;
 	return 0;
 }
-double nsl_fit_model_sech_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
-	double y = (x-mu)/s, norm = 1./sigma;
+
+/* distributions */
+double nsl_fit_model_maxwell_param_deriv(int param, double x, double a, double c, double sigma) {
+	double a2 = a*a, a3 = a*a2, norm = sqrt(2./M_PI)/a3/sigma, x2 = x*x, efactor = exp(-x2/2./a2);
 
 	if (param == 0)
-		return a/s * norm * y*tanh(y)/cosh(y);
+		return c * norm * x2*(x2-3.*a2)/a3 * efactor;
 	if (param == 1)
-		return a/s * norm * tanh(y)/cosh(y);
-	if (param == 2)
-		return norm/cosh(y);
+		return norm * x2 * efactor;
 
 	return 0;
 }
-
-/* distributions */
 double nsl_fit_model_lognormal_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
 	double norm = 1./sqrt(2.*M_PI)/(x*s)/sigma, y = log(x)-mu, efactor = exp(-(y/s)*(y/s)/2.);
 
@@ -339,4 +348,3 @@ double nsl_fit_model_gumbel_param_deriv(int param, double x, double b, double mu
 
 	return 0;
 }
-/*more*/
