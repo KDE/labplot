@@ -72,6 +72,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 	ui.tableWidget->setHorizontalHeaderItem(4, headerItem);
 
 	ui.tableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+	ui.tableWidget->horizontalHeader()->setStretchLastSection(true);
 
 	if (m_fitData->modelType != nsl_fit_model_custom) {	// pre-defined model
 		ui.tableWidget->setRowCount(m_fitData->paramNames.size());
