@@ -85,11 +85,10 @@ void XYFitCurveDock::setupGeneral() {
 
 	for(int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
 		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
+	//show the fit-model category for the currently selected default (first) fit-model category
+	categoryChanged(uiGeneralTab.cbCategory->currentIndex());
 
-	//show the fit-model for the currently selected default (first) fit-model
-	modelChanged(uiGeneralTab.cbModel->currentIndex());
-
-	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
+	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height() * 2);
 
 	uiGeneralTab.tbConstants->setIcon( KIcon("labplot-format-text-symbol") );
 	uiGeneralTab.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
@@ -149,6 +148,7 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.sbMax->setValue(m_fitData.xRange.last());
 	this->autoRangeChanged();
 
+	uiGeneralTab.cbCategory->setCurrentIndex(m_fitData.modelCategory);
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
@@ -317,11 +317,14 @@ void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index) {
 
 void XYFitCurveDock::categoryChanged(int index) {
 	DEBUG_LOG("categoryChanged() category =" << nsl_fit_model_category_name[index] << ", type =" << m_fitData.modelType);
-	m_fitData.modelCategory = (nsl_fit_model_category)index;
+	if (uiGeneralTab.cbCategory->currentIndex() == uiGeneralTab.cbCategory->count() - 1)
+		m_fitData.modelCategory = nsl_fit_model_custom;
+	else
+		m_fitData.modelCategory = (nsl_fit_model_category)index;
 	m_initializing = true;
 	uiGeneralTab.cbModel->clear();
 
-	switch (index) {
+	switch (m_fitData.modelCategory) {
 	case nsl_fit_model_basic:
 		for(int i = 0; i < NSL_FIT_MODEL_BASIC_COUNT; i++)
 			uiGeneralTab.cbModel->addItem(nsl_fit_model_basic_name[i]);
@@ -341,12 +344,18 @@ void XYFitCurveDock::categoryChanged(int index) {
 	case nsl_fit_model_custom:
 		uiGeneralTab.cbModel->addItem(i18n("Custom"));
 	}
+
+	m_fitData.modelType = 0;
+	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
+
 	m_initializing = false;
-	this->updateModelEquation();
+
+	//show the fit-model for the currently selected default (first) fit-model
+	modelChanged(m_fitData.modelType);
 }
 
 void XYFitCurveDock::modelChanged(int index) {
-	DEBUG_LOG("modelChanged() category =" << nsl_fit_model_category_name[m_fitData.modelCategory] << ", type =" << index << ", initializing =" << m_initializing);
+	DEBUG_LOG("modelChanged() type =" << index << ", initializing =" << m_initializing);
 	if(m_initializing)
 		return;
 
@@ -390,6 +399,7 @@ void XYFitCurveDock::modelChanged(int index) {
 			uiGeneralTab.lDegree->setVisible(false);
 			uiGeneralTab.sbDegree->setVisible(false);
 		}
+		break;
 	case nsl_fit_model_peak:
 		if (type == nsl_fit_model_gaussian || type == nsl_fit_model_cauchy_lorentz) {
 			uiGeneralTab.lDegree->setText(i18n("Number of peaks"));
@@ -401,6 +411,7 @@ void XYFitCurveDock::modelChanged(int index) {
 			uiGeneralTab.lDegree->setVisible(false);
 			uiGeneralTab.sbDegree->setVisible(false);
 		}
+		break;
 	default:
 		uiGeneralTab.lDegree->setVisible(false);
 		uiGeneralTab.sbDegree->setVisible(false);
@@ -410,8 +421,8 @@ void XYFitCurveDock::modelChanged(int index) {
 }
 
 void XYFitCurveDock::updateModelEquation() {
-	DEBUG_LOG("updateModelEquation() category =" << nsl_fit_model_category_name[m_fitData.modelCategory] << ", type =" << m_fitData.modelType);
-	QStringList vars; //variables/parameters that are known in ExpressionTextEdit teEquation
+	DEBUG_LOG("updateModelEquation() type =" << m_fitData.modelType);
+	QStringList vars; // variables/parameter that are known in ExpressionTextEdit teEquation
 	vars << "x";
 
 	int num = uiGeneralTab.sbDegree->value();
