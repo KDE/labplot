@@ -35,13 +35,14 @@
 const char* nsl_fit_model_category_name[] = {i18n("Basic functions"), i18n("Peak Functions"), i18n("Growth/Sigmoidal"), i18n("Statistics"), i18n("Custom")};
 
 const char* nsl_fit_model_basic_name[] = {i18n("Polynomial"), i18n("Power"), i18n("Exponential"), i18n("Inverse Exponential"), i18n("Fourier")};
-const char* nsl_fit_model_peak_name[] = {i18n("Gaussian (normal)"), i18n("Cauchy-Lorentz"), i18n("Hyperbolic secant (sech)")};
+const char* nsl_fit_model_peak_name[] = {i18n("Gaussian (normal)"), i18n("Cauchy-Lorentz"), i18n("Hyperbolic secant (sech)"), i18n("Logistic (sech squared)")};
 const char* nsl_fit_model_growth_name[] = {i18n("Sigmoid"), i18n("Gompertz")};
 const char* nsl_fit_model_distribution_name[] = {i18n("Maxwell-Boltzmann"), i18n("Log-Normal"), i18n("Gamma"), i18n("Laplace"), i18n("Rayleigh"), 
 	i18n("Levy"), i18n("Chi-Square"), i18n("Weibull"), i18n("Frechet (inverse Weibull)"), i18n("Gumbel")};
 
 const char* nsl_fit_model_basic_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(1-exp(b*x)) + c", "a0 + (a1*cos(w*x) + b1*sin(w*x))"};
-const char* nsl_fit_model_peak_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * s/(s^2+(x-t)^2)", "a/cosh((x - mu)/s)"};
+const char* nsl_fit_model_peak_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * s/(s^2+(x-t)^2)", "a/pi/s * 1/cosh((x-mu)/s)",
+	"a/4/s * 1/cosh((x-mu)/2/s)**2"};
 const char* nsl_fit_model_growth_equation[] = {"a/(1+exp(-b*(x-c)))", "a*exp(-b*exp(-c*x))"};
 const char* nsl_fit_model_distribution_equation[] = {"c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)", "a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)",
 	"a * b^p/gamma(p)*x^(p-1)*exp(-b*x)", "a/(2*s) * exp(-fabs(x-mu)/s)", "a * x/(s*s) * exp(-x*x/(s*s)/2)",
@@ -197,14 +198,26 @@ double nsl_fit_model_cauchy_lorentz_param_deriv(int param, double x, double s, d
 	return 0;
 }
 double nsl_fit_model_sech_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
-	double y = (x-mu)/s, norm = 1./sigma;
+	double y = (x-mu)/s, norm = 1./M_PI/s/sigma;
 
 	if (param == 0)
-		return a/s * norm * y*tanh(y)/cosh(y);
+		return a/s * norm * (y*tanh(y)-1.)/cosh(y);
 	if (param == 1)
 		return a/s * norm * tanh(y)/cosh(y);
 	if (param == 2)
 		return norm/cosh(y);
+
+	return 0;
+}
+double nsl_fit_model_logistic_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
+	double y = (x-mu)/2/s, norm = 1./4/s/sigma;
+
+	if (param == 0)
+		return a/s * norm * (2.*y*tanh(y)-1.)/cosh(y);
+	if (param == 1)
+		return a/s * norm * tanh(y)/cosh(y)/cosh(y);
+	if (param == 2)
+		return norm/cosh(y)/cosh(y);
 
 	return 0;
 }

@@ -560,6 +560,7 @@ void XYFitCurveDock::updateModelEquation() {
 			}
 			break;
 		case nsl_fit_model_sech:
+		case nsl_fit_model_logistic:
 			m_fitData.paramNames << "s" << "mu" << "a";
 			break;
 		}

@@ -35,15 +35,16 @@ typedef enum {nsl_fit_model_basic, nsl_fit_model_peak, nsl_fit_model_growth, nsl
 #define NSL_FIT_MODEL_BASIC_COUNT 5
 typedef enum {nsl_fit_model_polynomial, nsl_fit_model_power, nsl_fit_model_exponential, nsl_fit_model_inverse_exponential,
 	nsl_fit_model_fourier} nsl_fit_model_type_basic;
-#define NSL_FIT_MODEL_PEAK_COUNT 3
-typedef enum {nsl_fit_model_gaussian, nsl_fit_model_cauchy_lorentz, nsl_fit_model_sech} nsl_fit_model_type_peak;
+#define NSL_FIT_MODEL_PEAK_COUNT 4
+typedef enum {nsl_fit_model_gaussian, nsl_fit_model_lorentz, nsl_fit_model_sech, nsl_fit_model_logistic} nsl_fit_model_type_peak;
+/*TODO: Voigt */
 #define NSL_FIT_MODEL_GROWTH_COUNT 2
-/*TODO: logistic*/
 typedef enum {nsl_fit_model_sigmoid, nsl_fit_model_gompertz} nsl_fit_model_type_growth;
-#define NSL_FIT_MODEL_DISTRIBUTION_COUNT 10
+/*TODO: logistic*/
+#define NSL_FIT_MODEL_DISTRIBUTION_COUNT 12
 typedef enum {
-	nsl_fit_model_maxwell, nsl_fit_model_lognormal, nsl_fit_model_gamma, nsl_fit_model_laplace, nsl_fit_model_rayleigh,
-	nsl_fit_model_levy, nsl_fit_model_chi_square, nsl_fit_model_weibull, nsl_fit_model_frechet,
+	nsl_fit_model_normal, nsl_fit_model_cauchy_lorentz, nsl_fit_model_maxwell, nsl_fit_model_lognormal, nsl_fit_model_gamma, 
+	nsl_fit_model_laplace, nsl_fit_model_rayleigh, nsl_fit_model_levy, nsl_fit_model_chi_square, nsl_fit_model_weibull, nsl_fit_model_frechet,
 	nsl_fit_model_gumbel} nsl_fit_model_type_distribution;
 
 extern const char* nsl_fit_model_category_name[];
@@ -74,10 +75,11 @@ double nsl_fit_model_fourier_param_deriv(int param, int degree, double x, double
 /* peak */
 double nsl_fit_model_gaussian_param_deriv(int param, double x, double s, double mu, double a, double sigma);
 double nsl_fit_model_cauchy_lorentz_param_deriv(int param, double x, double s, double t, double a, double sigma);
+double nsl_fit_model_sech_param_deriv(int param, double x, double s, double mu, double a, double sigma);
+double nsl_fit_model_logistic_param_deriv(int param, double x, double s, double mu, double a, double sigma);
 /* growth */
 double nsl_fit_model_sigmoid_param_deriv(int param, double x, double a, double b, double c, double sigma);
 double nsl_fit_model_gompertz_param_deriv(int param, double x, double a, double b, double c, double sigma);
-double nsl_fit_model_sech_param_deriv(int param, double x, double s, double mu, double a, double sigma);
 /* distributions */
 double nsl_fit_model_maxwell_param_deriv(int param, double x, double a, double c, double sigma);
 double nsl_fit_model_lognormal_param_deriv(int param, double x, double b, double mu, double a, double sigma);
