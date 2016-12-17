@@ -86,6 +86,9 @@ void XYFitCurveDock::setupGeneral() {
 	for(int i = 0; i < NSL_FIT_MODEL_TYPE_COUNT; i++)
 		uiGeneralTab.cbModel->addItem(nsl_fit_model_name[i]);
 
+	//show the fit-model for the currently selected default (first) fit-model
+	modelChanged(uiGeneralTab.cbModel->currentIndex());
+
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
 
 	uiGeneralTab.tbConstants->setIcon( KIcon("labplot-format-text-symbol") );
