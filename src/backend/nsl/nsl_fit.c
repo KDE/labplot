@@ -45,7 +45,7 @@ const char* nsl_fit_model_basic_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)"
 const char* nsl_fit_model_peak_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * s/(s^2+(x-t)^2)", "a/pi/s * 1/cosh((x-mu)/s)",
 	"a/4/s * 1/cosh((x-mu)/2/s)**2"};
 const char* nsl_fit_model_growth_equation[] = {"a * atan((x-mu)/s)", "a * tanh((x-mu)/s)", "a * (x-mu)/s/sqrt(1+((x-mu)/s)^2)", "a/(1+exp(-k*(x-mu)))",
-	"a * erf((x-mu)/s/sqrt(2))", "a * x^n/(k^n + x^n)", "a*exp(-b*exp(-c*x))", "a * asin(tanh((x-mu)/s))"};
+	"a/2 * erf((x-mu)/s/sqrt(2))", "a * x^n/(k^n + x^n)", "a*exp(-b*exp(-c*x))", "a * asin(tanh((x-mu)/s))"};
 const char* nsl_fit_model_distribution_equation[] = {"Normal","Cauchy-Lorentz", "c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)",
 	"a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)", "a * b^p/gamma(p)*x^(p-1)*exp(-b*x)", "a/(2*s) * exp(-fabs(x-mu)/s)",
 	"a * x/(s*s) * exp(-x*x/(s*s)/2)", "a * sqrt(g/(2*pi))/pow(x-mu, 1.5) * exp(-g/2./(x-mu))", "a * pow(x,n/2.-1.)/pow(2, n/2.)/gamma(n/2.) * exp(-x/2.)",
@@ -258,6 +258,16 @@ double nsl_fit_model_sigmoid_param_deriv(int param, double x, double k, double m
 		return -a*k * norm * exp(-y)/pow(1. + exp(-y), 2);
 	if (param == 2)
 		return norm/(1. + exp(-y));
+	return 0;
+}
+double nsl_fit_model_erf_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
+	double norm = 1./sigma, y = (x-mu)/(sqrt(2.)*s);
+	if (param == 0)
+		return -a/sqrt(M_PI)/s * norm * y*exp(-y*y);
+	if (param == 1)
+		return -a/sqrt(2.*M_PI)/s * norm * exp(-y*y);
+	if (param == 2)
+		return norm/2. * erf(y);
 	return 0;
 }
 double nsl_fit_model_gompertz_param_deriv(int param, double x, double a, double b, double c, double sigma) {
