@@ -250,13 +250,14 @@ double nsl_fit_model_algebraic_sigmoid_param_deriv(int param, double x, double s
 		return norm * y/sqrt(1.+y2);
 	return 0;
 }
-double nsl_fit_model_sigmoid_param_deriv(int param, double x, double a, double b, double c, double sigma) {
+double nsl_fit_model_sigmoid_param_deriv(int param, double x, double k, double mu, double a, double sigma) {
+	double norm = 1./sigma, y = k*(x-mu);
 	if (param == 0)
-		return 1./(exp(b*(c-x)) + 1.)/sigma;
+		return a/k * norm * y*exp(-y)/pow(1. + exp(-y), 2);
 	if (param == 1)
-		return a*(x-c)*exp((c-x)*b)/pow(exp((c-x)*b) + 1., 2)/sigma;
+		return -a*k * norm * exp(-y)/pow(1. + exp(-y), 2);
 	if (param == 2)
-		return -a*b*exp(b*(c-x))/pow(exp(b*(c-x)) + 1., 2)/sigma;
+		return norm/(1. + exp(-y));
 	return 0;
 }
 double nsl_fit_model_gompertz_param_deriv(int param, double x, double a, double b, double c, double sigma) {
