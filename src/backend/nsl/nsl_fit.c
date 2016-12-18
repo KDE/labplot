@@ -37,7 +37,7 @@ const char* nsl_fit_model_category_name[] = {i18n("Basic functions"), i18n("Peak
 const char* nsl_fit_model_basic_name[] = {i18n("Polynomial"), i18n("Power"), i18n("Exponential"), i18n("Inverse Exponential"), i18n("Fourier")};
 const char* nsl_fit_model_peak_name[] = {i18n("Gaussian (normal)"), i18n("Cauchy-Lorentz"), i18n("Hyperbolic secant (sech)"), i18n("Logistic (sech squared)")};
 const char* nsl_fit_model_growth_name[] = {i18n("Arctangent"), i18n("Hyperbolic tangent"), i18n("Algebraic sigmoid"), i18n("Logistic function"), 
-	i18n("Error function"), i18n("Hill"), i18n("Gompertz"), i18n("Gudermann")};
+	i18n("Error function (erf)"), i18n("Hill"), i18n("Gompertz"), i18n("Gudermann (gd)")};
 const char* nsl_fit_model_distribution_name[] = {i18n("Maxwell-Boltzmann"), i18n("Log-Normal"), i18n("Gamma"), i18n("Laplace"), i18n("Rayleigh"), 
 	i18n("Levy"), i18n("Chi-Square"), i18n("Weibull"), i18n("Frechet (inverse Weibull)"), i18n("Gumbel")};
 
@@ -287,6 +287,16 @@ double nsl_fit_model_gompertz_param_deriv(int param, double x, double a, double 
 		return -a*exp(-c*x-b*exp(-c*x))/sigma;
 	if (param == 2)
 		return a*b*x*exp(-c*x-b*exp(-c*x))/sigma;
+	return 0;
+}
+double nsl_fit_model_gudermann_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
+	double norm = 1./sigma, y = (x-mu)/s;
+	if (param == 0)
+		return -a/s * norm * y/cosh(y);
+	if (param == 1)
+		return -a/s * norm * 1./cosh(y);
+	if (param == 2)
+		return -asin(tanh(y));
 	return 0;
 }
 

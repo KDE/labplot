@@ -521,7 +521,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		case nsl_fit_model_algebraic_sigmoid:
 		case nsl_fit_model_sigmoid: 		// Y(x) = a/(1+exp(-k*(x-mu)))
 		case nsl_fit_model_erf:
-		case nsl_fit_model_hill: {
+		case nsl_fit_model_hill:
+		case nsl_fit_model_gompertz:		// Y(x) = a*exp(-b*exp(-c*x));
+		case nsl_fit_model_gudermann: {
 			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
@@ -545,24 +547,11 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 							gsl_matrix_set(J, i, j, nsl_fit_model_erf_param_deriv(j, x, s, mu, a, sigma));
 						else if (modelType == nsl_fit_model_hill)
 							gsl_matrix_set(J, i, j, nsl_fit_model_hill_param_deriv(j, x, s, mu, a, sigma));
+						else if (modelType == nsl_fit_model_gompertz)
+							gsl_matrix_set(J, i, j, nsl_fit_model_gompertz_param_deriv(j, x, s, mu, a, sigma));
+						else if (modelType == nsl_fit_model_gudermann)
+							gsl_matrix_set(J, i, j, nsl_fit_model_gudermann_param_deriv(j, x, s, mu, a, sigma));
 					}
-				}
-			}
-			break;
-		}
-		case nsl_fit_model_gompertz: {	// Y(x) = a*exp(-b*exp(-c*x));
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-			for (size_t i = 0; i < n; i++) {
-				x = xVector[i];
-				if (sigmaVector) sigma = sigmaVector[i];
-
-				for (int j = 0; j < 3; j++) {
-					if (fixed[j])
-						gsl_matrix_set(J, i, j, 0.);
-					else
-						gsl_matrix_set(J, i, j, nsl_fit_model_gompertz_param_deriv(j, x, a, b, c, sigma));
 				}
 			}
 			break;
