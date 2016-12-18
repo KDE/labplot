@@ -516,6 +516,28 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		break;
 	case nsl_fit_model_growth:
 		switch (modelType) {
+		case nsl_fit_model_atan:
+		case nsl_fit_model_tanh: {
+			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
+				if (sigmaVector) sigma = sigmaVector[i];
+
+				for (int j = 0; j < 3; j++) {
+					if (fixed[j])
+						gsl_matrix_set(J, i, j, 0.);
+					else {
+						if (modelType == nsl_fit_model_atan)
+							gsl_matrix_set(J, i, j, nsl_fit_model_atan_param_deriv(j, x, s, mu, a, sigma));
+						else if (modelType == nsl_fit_model_tanh)
+							gsl_matrix_set(J, i, j, nsl_fit_model_tanh_param_deriv(j, x, s, mu, a, sigma));
+					}
+				}
+			}
+			break;
+		}
 		case nsl_fit_model_sigmoid: {	// Y(x) = a/(1+exp(-b*(x-c)))
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
