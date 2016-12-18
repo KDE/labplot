@@ -520,7 +520,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		case nsl_fit_model_tanh: 
 		case nsl_fit_model_algebraic_sigmoid:
 		case nsl_fit_model_sigmoid: 		// Y(x) = a/(1+exp(-k*(x-mu)))
-		case nsl_fit_model_erf: {
+		case nsl_fit_model_erf:
+		case nsl_fit_model_hill: {
 			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
@@ -542,6 +543,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 							gsl_matrix_set(J, i, j, nsl_fit_model_sigmoid_param_deriv(j, x, s, mu, a, sigma));
 						else if (modelType == nsl_fit_model_erf)
 							gsl_matrix_set(J, i, j, nsl_fit_model_erf_param_deriv(j, x, s, mu, a, sigma));
+						else if (modelType == nsl_fit_model_hill)
+							gsl_matrix_set(J, i, j, nsl_fit_model_hill_param_deriv(j, x, s, mu, a, sigma));
 					}
 				}
 			}
