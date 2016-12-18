@@ -44,7 +44,7 @@ const char* nsl_fit_model_distribution_name[] = {i18n("Maxwell-Boltzmann"), i18n
 const char* nsl_fit_model_basic_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(1-exp(b*x)) + c", "a0 + (a1*cos(w*x) + b1*sin(w*x))"};
 const char* nsl_fit_model_peak_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * s/(s^2+(x-t)^2)", "a/pi/s * 1/cosh((x-mu)/s)",
 	"a/4/s * 1/cosh((x-mu)/2/s)**2"};
-const char* nsl_fit_model_growth_equation[] = {"a * atan((x-mu)/s)", "a * tanh((x-mu)/s)", "x/sqrt(1+x^2)", "a/(1+exp(-k*(x-mu)))",
+const char* nsl_fit_model_growth_equation[] = {"a * atan((x-mu)/s)", "a * tanh((x-mu)/s)", "a * (x-mu)/s/sqrt(1+((x-mu)/s)^2)", "a/(1+exp(-k*(x-mu)))",
 	"a * erf((x-mu)/s/sqrt(2))", "a * x^n/(k^n + x^n)", "a*exp(-b*exp(-c*x))", "a * asin(tanh((x-mu)/s))"};
 const char* nsl_fit_model_distribution_equation[] = {"Normal","Cauchy-Lorentz", "c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)",
 	"a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)", "a * b^p/gamma(p)*x^(p-1)*exp(-b*x)", "a/(2*s) * exp(-fabs(x-mu)/s)",
@@ -238,6 +238,16 @@ double nsl_fit_model_tanh_param_deriv(int param, double x, double s, double mu, 
 		return -a/s * norm * 1./cosh(y)/cosh(y);
 	if (param == 2)
 		return norm * tanh(y);
+	return 0;
+}
+double nsl_fit_model_algebraic_sigmoid_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
+	double norm = 1./sigma, y = (x-mu)/s, y2 = y*y;
+	if (param == 0)
+		return -a/s * norm * y/pow(1+y2, 1.5);
+	if (param == 1)
+		return -a/s * norm * 1./pow(1+y2, 1.5);
+	if (param == 2)
+		return norm * y/sqrt(1.+y2);
 	return 0;
 }
 double nsl_fit_model_sigmoid_param_deriv(int param, double x, double a, double b, double c, double sigma) {

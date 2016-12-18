@@ -517,7 +517,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	case nsl_fit_model_growth:
 		switch (modelType) {
 		case nsl_fit_model_atan:
-		case nsl_fit_model_tanh: {
+		case nsl_fit_model_tanh: 
+		case nsl_fit_model_algebraic_sigmoid: {
 			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
@@ -533,6 +534,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 							gsl_matrix_set(J, i, j, nsl_fit_model_atan_param_deriv(j, x, s, mu, a, sigma));
 						else if (modelType == nsl_fit_model_tanh)
 							gsl_matrix_set(J, i, j, nsl_fit_model_tanh_param_deriv(j, x, s, mu, a, sigma));
+						else if (modelType == nsl_fit_model_algebraic_sigmoid)
+							gsl_matrix_set(J, i, j, nsl_fit_model_algebraic_sigmoid_param_deriv(j, x, s, mu, a, sigma));
 					}
 				}
 			}

@@ -80,6 +80,7 @@ double nsl_fit_model_logistic_param_deriv(int param, double x, double s, double 
 /* growth */
 double nsl_fit_model_atan_param_deriv(int param, double x, double s, double mu, double a, double sigma);
 double nsl_fit_model_tanh_param_deriv(int param, double x, double s, double mu, double a, double sigma);
+double nsl_fit_model_algebraic_sigmoid_param_deriv(int param, double x, double s, double mu, double a, double sigma);
 double nsl_fit_model_sigmoid_param_deriv(int param, double x, double a, double b, double c, double sigma);
 double nsl_fit_model_gompertz_param_deriv(int param, double x, double a, double b, double c, double sigma);
 /* distributions */

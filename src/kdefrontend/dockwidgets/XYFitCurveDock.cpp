@@ -569,6 +569,7 @@ void XYFitCurveDock::updateModelEquation() {
 		switch (m_fitData.modelType) {
 		case nsl_fit_model_atan:
 		case nsl_fit_model_tanh:
+		case nsl_fit_model_algebraic_sigmoid:
 			m_fitData.paramNames << "s" << "mu" << "a";
 			break;
 		case nsl_fit_model_sigmoid:
