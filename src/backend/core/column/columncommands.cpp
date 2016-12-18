@@ -544,43 +544,6 @@ void ColumnSetPlotDesignationCmd::undo()
 }
 
 /** ***************************************************************************
- * \class ColumnSetWidthCmd
- * \brief Sets a column's width
- ** ***************************************************************************/
-
-/**
- * \var ColumnSetWidthCmd::m_col
- * \brief The private column data to modify
- */
-
-/**
- * \brief Ctor
- */
-ColumnSetWidthCmd::ColumnSetWidthCmd( ColumnPrivate * col, int new_value , QUndoCommand * parent )
-: QUndoCommand( parent ), m_col(col), m_other_value(new_value)
-{
-	setText(i18n("%1: set width", col->name()));
-}
-
-/**
- * \brief Execute the command
- */
-void ColumnSetWidthCmd::redo()
-{
-	int tmp = m_col->width();
-	m_col->setWidth(m_other_value);
-	m_other_value = tmp;
-}
-
-/**
- * \brief Undo the command
- */
-void ColumnSetWidthCmd::undo()
-{
-	redo();
-}
-
-/** ***************************************************************************
  * \class ColumnClearCmd
  * \brief Clear the column
  ** ***************************************************************************/

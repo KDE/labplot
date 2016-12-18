@@ -257,10 +257,8 @@ int Column::width() const
 /**
  * \brief Set width
  */
-void Column::setWidth(int value)
-{
-	if (value != m_column_private->width())
-		exec(new ColumnSetWidthCmd(m_column_private, value));
+void Column::setWidth(int value) {
+	m_column_private->setWidth(value);
 }
 
 /**

@@ -148,19 +148,6 @@ private:
 	AbstractColumn::PlotDesignation m_old_pd;
 };
 
-class ColumnSetWidthCmd : public QUndoCommand
-{
-public:
-	explicit ColumnSetWidthCmd(ColumnPrivate* col, int new_value, QUndoCommand* parent = 0);
-
-	virtual void redo();
-	virtual void undo();
-
-private:
-	ColumnPrivate* m_col;
-	int m_other_value;
-};
-
 class ColumnClearCmd : public QUndoCommand
 {
 public:
