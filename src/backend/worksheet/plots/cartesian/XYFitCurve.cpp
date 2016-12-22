@@ -479,19 +479,24 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			break;
 		}
 		case nsl_fit_model_sech: {
-			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			double s, mu, a;
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
 
-				for (int j = 0; j < 3; j++) {
+				for (int j = 0; j < degree; j++) {
+					s = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j), min[3*j], max[3*j]);
+					mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j+1), min[3*j+1], max[3*j+1]);
+					a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j+2), min[3*j+2], max[3*j+2]);
+
+					gsl_matrix_set(J, i, 3*j, nsl_fit_model_sech_param_deriv(0, x, s, mu, a, sigma));
+					gsl_matrix_set(J, i, 3*j+1, nsl_fit_model_sech_param_deriv(1, x, s, mu, a, sigma));
+					gsl_matrix_set(J, i, 3*j+2, nsl_fit_model_sech_param_deriv(2, x, s, mu, a, sigma));
+				}
+
+				for (int j = 0; j < 3*degree; j++)
 					if (fixed[j])
 						gsl_matrix_set(J, i, j, 0.);
-					else
-						gsl_matrix_set(J, i, j, nsl_fit_model_sech_param_deriv(j, x, s, mu, a, sigma));
-				}
 			}
 			break;
 		}
