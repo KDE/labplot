@@ -1011,7 +1011,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	//gsl_blas_dnrm2() - computes the Euclidian norm (||x||_2 = \sqrt {\sum x_i^2}) of the vector with the elements (Yi - y[i])/sigma[i]
 	//gsl_blas_dasum() - computes the absolute sum \sum |x_i| of the elements of the vector with the elements (Yi - y[i])/sigma[i]
-	fitResult.sse = pow(gsl_blas_dnrm2(s->f), 2);
+	fitResult.sse = gsl_pow_2(gsl_blas_dnrm2(s->f));
 	fitResult.mse = fitResult.sse/n;
 	fitResult.rmse = sqrt(fitResult.mse);
 	fitResult.mae = gsl_blas_dasum(s->f);
@@ -1027,7 +1027,7 @@ void XYFitCurvePrivate::recalculate() {
 	ybar = ybar/n;
 	double sstot = 0;
 	for (size_t i = 0; i < n; ++i)
-		sstot += pow(ydata[i]-ybar, 2);
+		sstot += gsl_pow_2(ydata[i]-ybar);
 	fitResult.rsquared = 1. - fitResult.sse/sstot;
 	fitResult.rsquaredAdj = 1. - (1. - fitResult.rsquared*fitResult.rsquared)*(n-1.)/(n-np-1.);
 
@@ -1112,7 +1112,7 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 	}
 
 	//current value of the chi2-function
-	state += QString::number(pow(gsl_blas_dnrm2 (s->f), 2));
+	state += QString::number(gsl_pow_2(gsl_blas_dnrm2(s->f)));
 	state += ';';
 
 	fitResult.solverOutput += state;
