@@ -41,11 +41,11 @@ typedef enum {nsl_fit_model_gaussian, nsl_fit_model_lorentz, nsl_fit_model_sech,
 #define NSL_FIT_MODEL_GROWTH_COUNT 8
 typedef enum {nsl_fit_model_atan, nsl_fit_model_tanh, nsl_fit_model_algebraic_sigmoid, nsl_fit_model_sigmoid, nsl_fit_model_erf, 
 	nsl_fit_model_hill, nsl_fit_model_gompertz, nsl_fit_model_gudermann} nsl_fit_model_type_growth;
-#define NSL_FIT_MODEL_DISTRIBUTION_COUNT 12
+#define NSL_FIT_MODEL_DISTRIBUTION_COUNT 15
 typedef enum {
-	nsl_fit_model_normal, nsl_fit_model_cauchy_lorentz, nsl_fit_model_maxwell, nsl_fit_model_lognormal, nsl_fit_model_gamma, 
-	nsl_fit_model_laplace, nsl_fit_model_rayleigh, nsl_fit_model_levy, nsl_fit_model_chi_square, nsl_fit_model_weibull, nsl_fit_model_frechet,
-	nsl_fit_model_gumbel} nsl_fit_model_type_distribution;
+	nsl_fit_model_normal, nsl_fit_model_cauchy_lorentz, nsl_fit_model_maxwell, nsl_fit_model_poisson, nsl_fit_model_logistic_dist,
+	nsl_fit_model_lognormal, nsl_fit_model_gamma, nsl_fit_model_laplace, nsl_fit_model_rayleigh, nsl_fit_model_levy,
+	nsl_fit_model_chi_square, nsl_fit_model_weibull, nsl_fit_model_frechet, nsl_fit_model_gumbel, nsl_fit_model_sech_dist} nsl_fit_model_type_distribution;
 
 extern const char* nsl_fit_model_category_name[];
 extern const char* nsl_fit_model_basic_name[];
