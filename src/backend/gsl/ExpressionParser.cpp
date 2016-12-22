@@ -117,21 +117,13 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("pseudo-random integer [0,RAND_MAX]");
 	m_functionsNames << i18n("nonlinear additive feedback rng [0,RAND_MAX]");
 	m_functionsNames << i18n("nonlinear additive feedback rng [0,1]");
-	m_functionsNames << i18n("Arc cosine");
-	m_functionsNames << i18n("Principal value of the arc sine");
-	m_functionsNames << i18n("Principal value of the arc tangent");
-	m_functionsNames << i18n("atan() using sign");
 	m_functionsNames << i18n("Smallest integral value not less");
-	m_functionsNames << i18n("Hyperbolic cosine");
 	m_functionsNames << i18n("Absolute value");
 
 	m_functionsNames << i18n("x * 2^y");
 	m_functionsNames << i18n("Base 10 logarithm");
 	m_functionsNames << i18n("Power function [x^y]");
-	m_functionsNames << i18n("Hyperbolic sine");
 	m_functionsNames << i18n("Nonnegative square root");
-	m_functionsNames << i18n("Tangent");
-	m_functionsNames << i18n("Hyperbolic tangent");
 	m_functionsNames << i18n("Sign function");
 
 #ifndef _WIN32
@@ -162,16 +154,13 @@ void ExpressionParser::initFunctions() {
 //	m_functionsNames << i18n("Sine");
 
 #ifndef _WIN32
-	for (int i = 0; i < 23; i++)
+	for (int i = 0; i < 15; i++)
 #else
-	for (int i = 0; i < 18; i++)
+	for (int i = 0; i < 10; i++)
 #endif
 		m_functionsGroupIndex << 0;
 
 	// GSL mathematical functions
-	m_functionsNames << i18n("Inverse hyperbolic cosine");
-	m_functionsNames << i18n("Inverse hyperbolic sine");
-	m_functionsNames << i18n("Inverse hyperbolic tangent");
 	m_functionsNames << i18n("log(1+x)");
 	m_functionsNames << i18n("exp(x)-1");
 	m_functionsNames << i18n("sqrt(x^2+y^2)");
@@ -188,7 +177,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("x^8");
 	m_functionsNames << i18n("x^9");
 
-	for (int i = 0; i < 17; i++)
+	for (int i = 0; i < 14; i++)
 		m_functionsGroupIndex << 1;
 
 
@@ -492,16 +481,27 @@ void ExpressionParser::initFunctions() {
 		m_functionsGroupIndex << 24;
 
 	// Trigonometric Functions
-        m_functionsNames << i18n("sine");
-        m_functionsNames << i18n("cosine");
-        m_functionsNames << i18n("hypotenuse function");
-        m_functionsNames << i18n("sin(x)/x");
+        m_functionsNames << i18n("Sine");
+        m_functionsNames << i18n("Cosine");
+	m_functionsNames << i18n("Tangent");
+	m_functionsNames << i18n("Inverse sine");
+	m_functionsNames << i18n("Inverse cosine");
+	m_functionsNames << i18n("Inverse tangent");
+	m_functionsNames << i18n("Inverse tangent using sign");
+	m_functionsNames << i18n("Hyperbolic sine");
+	m_functionsNames << i18n("Hyperbolic cosine");
+	m_functionsNames << i18n("Hyperbolic tangent");
+	m_functionsNames << i18n("Inverse hyperbolic cosine");
+	m_functionsNames << i18n("Inverse hyperbolic sine");
+	m_functionsNames << i18n("Inverse hyperbolic tangent");
+        m_functionsNames << i18n("Sinc function sin(x)/x");
         m_functionsNames << i18n("log(sinh(x))");
         m_functionsNames << i18n("log(cosh(x))");
+        m_functionsNames << i18n("Hypotenuse function");
         m_functionsNames << i18n("restrict to [-pi,pi]");
         m_functionsNames << i18n("restrict to [0,2 pi]");
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 19; i++)
 		m_functionsGroupIndex << 25;
 
 	// Zeta Functions
