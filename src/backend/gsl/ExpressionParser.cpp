@@ -494,6 +494,18 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Inverse hyperbolic cosine");
 	m_functionsNames << i18n("Inverse hyperbolic sine");
 	m_functionsNames << i18n("Inverse hyperbolic tangent");
+	m_functionsNames << i18n("Secant");
+	m_functionsNames << i18n("Cosecant");
+	m_functionsNames << i18n("Cotangent");
+	m_functionsNames << i18n("Inverse secant");
+	m_functionsNames << i18n("Inverse cosecant");
+	m_functionsNames << i18n("Inverse cotangent");
+	m_functionsNames << i18n("Hyperbolic secant");
+	m_functionsNames << i18n("Hyperbolic cosecant");
+	m_functionsNames << i18n("Hyperbolic cotangent");
+	m_functionsNames << i18n("Inverse hyperbolic secant");
+	m_functionsNames << i18n("Inverse hyperbolic cosecant");
+	m_functionsNames << i18n("Inverse hyperbolic cotangent");
         m_functionsNames << i18n("Sinc function sin(x)/x");
         m_functionsNames << i18n("log(sinh(x))");
         m_functionsNames << i18n("log(cosh(x))");
@@ -501,7 +513,7 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("restrict to [-pi,pi]");
         m_functionsNames << i18n("restrict to [0,2 pi]");
 
-	for (int i = 0; i < 19; i++)
+	for (int i = 0; i < 31; i++)
 		m_functionsGroupIndex << 25;
 
 	// Zeta Functions
