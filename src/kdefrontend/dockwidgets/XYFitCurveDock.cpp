@@ -649,6 +649,9 @@ void XYFitCurveDock::updateModelEquation() {
 		case nsl_fit_model_maxwell:
 			m_fitData.paramNames << "a" << "c";
 			break;
+		case nsl_fit_model_poisson:
+			m_fitData.paramNames << "l" << "a";
+			break;
 		case nsl_fit_model_lognormal:
 		case nsl_fit_model_laplace:
 			m_fitData.paramNames << "s" << "mu" << "a";
