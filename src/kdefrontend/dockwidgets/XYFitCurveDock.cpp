@@ -400,17 +400,12 @@ void XYFitCurveDock::modelChanged(int index) {
 			uiGeneralTab.sbDegree->setVisible(false);
 		}
 		break;
-	case nsl_fit_model_peak:
-		if (type == nsl_fit_model_gaussian || type == nsl_fit_model_cauchy_lorentz || type == nsl_fit_model_sech) {
-			uiGeneralTab.lDegree->setText(i18n("Number of peaks"));
-			uiGeneralTab.lDegree->setVisible(true);
-			uiGeneralTab.sbDegree->setVisible(true);
-			uiGeneralTab.sbDegree->setMaximum(10);
-			uiGeneralTab.sbDegree->setValue(1);
-		} else {
-			uiGeneralTab.lDegree->setVisible(false);
-			uiGeneralTab.sbDegree->setVisible(false);
-		}
+	case nsl_fit_model_peak:	// all models support multiple peaks
+		uiGeneralTab.lDegree->setText(i18n("Number of peaks"));
+		uiGeneralTab.lDegree->setVisible(true);
+		uiGeneralTab.sbDegree->setVisible(true);
+		uiGeneralTab.sbDegree->setMaximum(10);
+		uiGeneralTab.sbDegree->setValue(1);
 		break;
 	default:
 		uiGeneralTab.lDegree->setVisible(false);
@@ -573,17 +568,17 @@ void XYFitCurveDock::updateModelEquation() {
 				m_fitData.paramNames << "s" << "mu" << "a";
 				break;
 			case 2:
-				m_fitData.model = eq = "1./pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2))";
+				m_fitData.model = eq = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2))";
 				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
 				break;
 			case 3:
-				m_fitData.model = eq = "1./pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2) + a3/s3 * sech((x-mu3)/s3))";
+				m_fitData.model = eq = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2) + a3/s3 * sech((x-mu3)/s3))";
 				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
 				break;
 			default:
 				QString numStr = QString::number(num);
-				eq = "1./pi * (a1/s1 * sech((x-mu1)/s1) + ... + a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/s" + numStr + "))";
-				m_fitData.model = "1./pi * (";
+				eq = "1/pi * (a1/s1 * sech((x-mu1)/s1) + ... + a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/s" + numStr + "))";
+				m_fitData.model = "1/pi * (";
 				for (int i = 1; i <= num; ++i) {
 					numStr = QString::number(i);
 					if (i > 1)
@@ -595,7 +590,31 @@ void XYFitCurveDock::updateModelEquation() {
 			}
 			break;
 		case nsl_fit_model_logistic:
-			m_fitData.paramNames << "s" << "mu" << "a";
+			switch (num) {
+			case 1:
+				m_fitData.paramNames << "s" << "mu" << "a";
+				break;
+			case 2:
+				m_fitData.model = eq = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2)";
+				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
+				break;
+			case 3:
+				m_fitData.model = eq = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2 + a3/s3 * sech((x-mu3)/2/s3)**2)";
+				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
+				break;
+			default:
+				QString numStr = QString::number(num);
+				eq = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + ... + a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/2/s" + numStr + ")**2)";
+				m_fitData.model = "1/4 * (";
+				for (int i = 1; i <= num; ++i) {
+					numStr = QString::number(i);
+					if (i > 1)
+						m_fitData.model += " + ";
+					m_fitData.model += "a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/2/s" + numStr + ")**2";
+					m_fitData.paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
+				}
+				m_fitData.model += ")";
+			}
 			break;
 		}
 		break;

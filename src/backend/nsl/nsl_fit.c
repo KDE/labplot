@@ -211,7 +211,7 @@ double nsl_fit_model_sech_param_deriv(int param, double x, double s, double mu, 
 	return 0;
 }
 double nsl_fit_model_logistic_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
-	double y = (x-mu)/2/s, norm = 1./4/s/sigma;
+	double y = (x-mu)/2./s, norm = 1./4./s/sigma;
 
 	if (param == 0)
 		return a/s * norm * (2.*y*tanh(y)-1.)/cosh(y);
