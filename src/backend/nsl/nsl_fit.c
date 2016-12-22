@@ -52,7 +52,7 @@ const char* nsl_fit_model_distribution_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-
 	"a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)", "a * b^p/gamma(p)*x^(p-1)*exp(-b*x)", "a/(2*s) * exp(-fabs(x-mu)/s)",
 	"a * x/(s*s) * exp(-x*x/(s*s)/2)", "a * sqrt(g/(2*pi))/pow(x-mu, 1.5) * exp(-g/2./(x-mu))", "a * pow(x,n/2.-1.)/pow(2, n/2.)/gamma(n/2.) * exp(-x/2.)",
 	"a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)", "c * a/s*((x-mu)/s)^(-a-1) * exp(-((x-mu)/s)^(-a))", "a/b * exp((x-mu)/b - exp((x-mu)/b))",
-	"1./2. * sech(pi*x/2.)"};
+	"a/2/s * sech(pi/2*(x-mu)/s)"};
 
 /* 
 	see http://www.quantcode.com/modules/smartfaq/faq.php?faqid=96
@@ -410,5 +410,16 @@ double nsl_fit_model_gumbel_param_deriv(int param, double x, double b, double mu
 		return a * norm/b * (exp(y) - 1) * efactor;
 	if (param == 2)
 		return norm * efactor;
+	return 0;
+}
+double nsl_fit_model_sech_dist_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
+	double norm = 1./2./s/sigma, y = M_PI/2.*(x-mu)/s;
+
+	if (param == 0)
+		return -a/s * norm * (y*tanh(y)+1.)/cosh(y);
+	if (param == 1)
+		return a*M_PI/2./s * norm * tanh(y)/cosh(y);
+	if (param == 2)
+		return norm * 1./cosh(y);
 	return 0;
 }

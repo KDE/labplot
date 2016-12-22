@@ -674,6 +674,9 @@ void XYFitCurveDock::updateModelEquation() {
 		case nsl_fit_model_gumbel:
 			m_fitData.paramNames << "b" << "mu" << "a";
 			break;
+		case nsl_fit_model_sech_dist:
+			m_fitData.paramNames << "s" << "mu" << "a";
+			break;
 		}
 		break;
 	case nsl_fit_model_custom:
