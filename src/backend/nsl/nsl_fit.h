@@ -74,7 +74,7 @@ double nsl_fit_model_inverse_exponential_param_deriv(int param, double x, double
 double nsl_fit_model_fourier_param_deriv(int param, int degree, double x, double w, double sigma);
 /* peak */
 double nsl_fit_model_gaussian_param_deriv(int param, double x, double s, double mu, double a, double sigma);
-double nsl_fit_model_cauchy_lorentz_param_deriv(int param, double x, double s, double t, double a, double sigma);
+double nsl_fit_model_lorentz_param_deriv(int param, double x, double s, double t, double a, double sigma);
 double nsl_fit_model_sech_param_deriv(int param, double x, double s, double mu, double a, double sigma);
 double nsl_fit_model_logistic_param_deriv(int param, double x, double s, double mu, double a, double sigma);
 /* growth */

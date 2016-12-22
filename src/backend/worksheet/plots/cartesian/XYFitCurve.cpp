@@ -435,7 +435,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	case nsl_fit_model_peak:
 		switch (modelType) {
 		case nsl_fit_model_gaussian:
-		case nsl_fit_model_cauchy_lorentz:
+		case nsl_fit_model_lorentz:
 		case nsl_fit_model_sech:
 		case nsl_fit_model_logistic: {
 			double s, mu, a;
@@ -454,10 +454,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 						gsl_matrix_set(J, i, 3*j+1, nsl_fit_model_gaussian_param_deriv(1, x, s, mu, a, sigma));
 						gsl_matrix_set(J, i, 3*j+2, nsl_fit_model_gaussian_param_deriv(2, x, s, mu, a, sigma));
 						break;
-					case nsl_fit_model_cauchy_lorentz:	// s,t,a
-						gsl_matrix_set(J, i, 3*j, nsl_fit_model_cauchy_lorentz_param_deriv(0, x, s, mu, a, sigma));
-						gsl_matrix_set(J, i, 3*j+1, nsl_fit_model_cauchy_lorentz_param_deriv(1, x, s, mu, a, sigma));
-						gsl_matrix_set(J, i, 3*j+2, nsl_fit_model_cauchy_lorentz_param_deriv(2, x, s, mu, a, sigma));
+					case nsl_fit_model_lorentz:	// s,t,a
+						gsl_matrix_set(J, i, 3*j, nsl_fit_model_lorentz_param_deriv(0, x, s, mu, a, sigma));
+						gsl_matrix_set(J, i, 3*j+1, nsl_fit_model_lorentz_param_deriv(1, x, s, mu, a, sigma));
+						gsl_matrix_set(J, i, 3*j+2, nsl_fit_model_lorentz_param_deriv(2, x, s, mu, a, sigma));
 						break;
 					case nsl_fit_model_sech:
 						gsl_matrix_set(J, i, 3*j, nsl_fit_model_sech_param_deriv(0, x, s, mu, a, sigma));
@@ -526,6 +526,40 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		break;
 	case nsl_fit_model_distribution:
 		switch (modelType) {
+		case nsl_fit_model_normal: {
+			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
+				if (sigmaVector) sigma = sigmaVector[i];
+	
+				for (int j = 0; j < 3; j++) {
+					if (fixed[j])
+						gsl_matrix_set(J, i, j, 0.);
+					else
+						gsl_matrix_set(J, i, j, nsl_fit_model_gaussian_param_deriv(j, x, s, mu, a, sigma));
+				}
+			}
+			break;
+		}
+		case nsl_fit_model_cauchy_lorentz: {
+			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			double t = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
+				if (sigmaVector) sigma = sigmaVector[i];
+	
+				for (int j = 0; j < 3; j++) {
+					if (fixed[j])
+						gsl_matrix_set(J, i, j, 0.);
+					else
+						gsl_matrix_set(J, i, j, nsl_fit_model_lorentz_param_deriv(j, x, s, t, a, sigma));
+				}
+			}
+			break;
+		}
 		case nsl_fit_model_maxwell: {	// Y(x) = c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double c = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);

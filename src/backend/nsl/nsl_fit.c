@@ -48,11 +48,11 @@ const char* nsl_fit_model_peak_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2
 const char* nsl_fit_model_growth_equation[] = {"a * atan((x-mu)/s)", "a * tanh((x-mu)/s)", "a * (x-mu)/s/sqrt(1+((x-mu)/s)^2)", "a/(1+exp(-k*(x-mu)))",
 	"a/2 * erf((x-mu)/s/sqrt(2))", "a * x^n/(s^n + x^n)", "a*exp(-b*exp(-c*x))", "a * asin(tanh((x-mu)/s))"};
 const char* nsl_fit_model_distribution_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * s/(s^2+(x-t)^2)",
-	"c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)", "Poisson", "a/4/s * 1/cosh((x-mu)/2/s)**2",
+	"c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)", "Poisson", "a/4/s * sech((x-mu)/2/s)**2",
 	"a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)", "a * b^p/gamma(p)*x^(p-1)*exp(-b*x)", "a/(2*s) * exp(-fabs(x-mu)/s)",
 	"a * x/(s*s) * exp(-x*x/(s*s)/2)", "a * sqrt(g/(2*pi))/pow(x-mu, 1.5) * exp(-g/2./(x-mu))", "a * pow(x,n/2.-1.)/pow(2, n/2.)/gamma(n/2.) * exp(-x/2.)",
 	"a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)", "c * a/s*((x-mu)/s)^(-a-1) * exp(-((x-mu)/s)^(-a))", "a/b * exp((x-mu)/b - exp((x-mu)/b))",
-	"1./2. * 1./cosh(pi*x/2.)"};
+	"1./2. * sech(pi*x/2.)"};
 
 /* 
 	see http://www.quantcode.com/modules/smartfaq/faq.php?faqid=96
@@ -188,7 +188,7 @@ double nsl_fit_model_gaussian_param_deriv(int param, double x, double s, double 
 		return norm * efactor;
 	return 0;
 }
-double nsl_fit_model_cauchy_lorentz_param_deriv(int param, double x, double s, double t, double a, double sigma) {
+double nsl_fit_model_lorentz_param_deriv(int param, double x, double s, double t, double a, double sigma) {
 	double norm = 1./M_PI/sigma, denom = s*s+(x-t)*(x-t);
 
 	if (param == 0)

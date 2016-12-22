@@ -640,6 +640,12 @@ void XYFitCurveDock::updateModelEquation() {
 		break;
 	case nsl_fit_model_distribution:
 		switch (m_fitData.modelType) {
+		case nsl_fit_model_normal:
+			m_fitData.paramNames << "s" << "mu" << "a";
+			break;
+		case nsl_fit_model_cauchy_lorentz:
+			m_fitData.paramNames << "s" << "t" << "a";
+			break;
 		case nsl_fit_model_maxwell:
 			m_fitData.paramNames << "a" << "c";
 			break;
