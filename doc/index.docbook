@@ -2151,7 +2151,7 @@ When starting &LabPlot; from the command prompt, you can supply the name of a pr
 
 </sect1>
 
-<sect1>
+<sect1 id="other-command-line-options">
 <title>Other Command Line Options</title>
 
 <para>The following command line help options are available</para>
@@ -2198,8 +2198,8 @@ Also available through <command>labplot2 <option>-v</option></command>
 </varlistentry>
 
 </variablelist>
-
 </sect1>
+
 </chapter>
 
 
