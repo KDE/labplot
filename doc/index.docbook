@@ -1550,15 +1550,24 @@ The &LabPlot; parser allows you to use following functions:
 
 <row><entry>cbrt(x)</entry><entry><action>Cube root</action></entry></row>
 <row><entry>ceil(x)</entry><entry><action>Truncate upward to integer</action></entry></row>
-<row><entry>exp(x)</entry><entry><action>Exponential, base e</action></entry></row>
-<row><entry>expm1(x)</entry><entry><action>exp(x)-1</action></entry></row>
 <row><entry>fabs(x)</entry><entry><action>Absolute value</action></entry></row>
 <row><entry>gamma(x)</entry><entry><action>Gamma function</action></entry></row>
+<row><entry>ldexp(x,y)</entry><entry><action>x * 2<superscript>y</superscript></action></entry></row>
 <row><entry>ln(x)</entry><entry><action>Logarithm, base e</action></entry></row>
 <row><entry>log(x)</entry><entry><action>Logarithm, base e</action></entry></row>
+<row><entry>log1p(x)</entry><entry><action>log(1+x)</action></entry></row>
 <row><entry>log10(x)</entry><entry><action>Logarithm, base 10</action></entry></row>
 <row><entry>logb(x)</entry><entry><action>Radix-independent exponent</action></entry></row>
 <row><entry>pow(x,n)</entry><entry><action>power function x<superscript>n</superscript></action></entry></row>
+<row><entry>powint(x,n)</entry><entry><action>integer power function x<superscript>n</superscript></action></entry></row>
+<row><entry>pow2(x)</entry><entry><action>power function x<superscript>2</superscript></action></entry></row>
+<row><entry>pow3(x)</entry><entry><action>power function x<superscript>3</superscript></action></entry></row>
+<row><entry>pow4(x)</entry><entry><action>power function x<superscript>4</superscript></action></entry></row>
+<row><entry>pow5(x)</entry><entry><action>power function x<superscript>5</superscript></action></entry></row>
+<row><entry>pow6(x)</entry><entry><action>power function x<superscript>6</superscript></action></entry></row>
+<row><entry>pow7(x)</entry><entry><action>power function x<superscript>7</superscript></action></entry></row>
+<row><entry>pow8(x)</entry><entry><action>power function x<superscript>8</superscript></action></entry></row>
+<row><entry>pow9(x)</entry><entry><action>power function x<superscript>9</superscript></action></entry></row>
 <row><entry>rint(x)</entry><entry><action>round to nearest integer</action></entry></row>
 <row><entry>round(x)</entry><entry><action>round to nearest integer</action></entry></row>
 <row><entry>sqrt(x)</entry><entry><action>Square root</action></entry></row>
@@ -1708,7 +1717,9 @@ For more information about the functions see the documentation of GSL.
 <row><entry>erf_Z(x)</entry><entry><action>Gaussian probability function Z(x) = (1/(2&pi;)) exp(-x<superscript>2</superscript>/2)</action></entry></row>
 <row><entry>erf_Q(x)</entry><entry><action>upper tail of the Gaussian probability function Q(x) = (1/(2&pi;)) &int;<subscript>x</subscript><superscript>&infin;</superscript> exp(-t<superscript>2</superscript>/2) dt</action></entry></row>
 <row><entry>hazard(x)</entry><entry><action>hazard function for the normal distribution</action></entry></row>
-<row><entry>exp_mult(x,x)</entry><entry><action>exponentiate x and multiply by the factor y to return the product y exp(x)</action></entry></row>
+<row><entry>exp(x)</entry><entry><action>Exponential, base e</action></entry></row>
+<row><entry>expm1(x)</entry><entry><action>exp(x)-1</action></entry></row>
+<row><entry>exp_mult(x,y)</entry><entry><action>exponentiate x and multiply by the factor y to return the product y exp(x)</action></entry></row>
 <row><entry>exprel(x)</entry><entry><action>(exp(x)-1)/x using an algorithm that is accurate for small x</action></entry></row>
 <row><entry>exprel2(x)</entry><entry><action>2(exp(x)-1-x)/x<superscript>2</superscript> using an algorithm that is accurate for small x</action></entry></row>
 <row><entry>expreln(n,x)</entry><entry><action>n-relative exponential, which is the n-th generalization of the functions `exprel'</action></entry></row>
@@ -1810,8 +1821,6 @@ For more information about the functions see the documentation of GSL.
 <row><entry>hzeta(s,q)</entry><entry><action>Hurwitz zeta function &zeta;(s,q) for s &gt; 1, q &gt; 0</action></entry></row>
 <row><entry>etaint(n)</entry><entry><action>eta function &eta;(n) for integer n</action></entry></row>
 <row><entry>eta(s)</entry><entry><action>eta function &eta;(s) for arbitrary s</action></entry></row>
-<row><entry>gsl_log1p(x)</entry><entry><action>log(1+x)</action></entry></row>
-<row><entry>gsl_expm1(x)</entry><entry><action>exp(x)-1</action></entry></row>
 </tbody>
 </tgroup>
 </informaltable>

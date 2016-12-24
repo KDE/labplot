@@ -43,7 +43,6 @@ double my_rand() { return rand(); }
 double my_random() { return random(); }
 double my_drand() { return random()/(double)RAND_MAX; }
 /* math.h */
-double my_ldexp(double x, double expo) { return ldexp(x, (int)expo); }
 #ifndef _WIN32
 double my_jn(double n, double x) { return jn((int)n, x); }
 double my_yn(double n,double x) { return yn((int)n, x); }
@@ -186,7 +185,6 @@ struct func _functions[] = {
 	/* math.h */
 	{"ceil", ceil},
 	{"fabs", fabs},
-	{"ldexp", my_ldexp},
 	{"log10", log10},
 	{"pow", pow},
 	{"sqrt", sqrt},
@@ -220,10 +218,9 @@ struct func _functions[] = {
 	{"yn", my_yn},
 */
 	/* GSL mathematical functions: see http://www.gnu.org/software/gsl/manual/gsl-ref.html#Mathematical-Functions */
-	{"gsl_log1p", gsl_log1p},
-	{"gsl_expm1", gsl_expm1},
-	{"gsl_ldexp", gsl_ldexp},
-	{"gsl_powint", my_gsl_powint},
+	{"log1p", gsl_log1p},
+	{"ldexp", my_gsl_ldexp},
+	{"powint", my_gsl_powint},
 	{"pow2", gsl_pow_2},
 	{"pow3", gsl_pow_3},
 	{"pow4", gsl_pow_4},
@@ -423,7 +420,7 @@ struct func _functions[] = {
 	{"logp", gsl_sf_log_1plusx},
 	{"logpm", gsl_sf_log_1plusx_mx},
 	/* Power Function */
-	{"powint", powint},
+	{"gsl_powint", powint},
 	/* Psi (Digamma) Function */
 	{"psiint", psiint},
 	{"psi", gsl_sf_psi},
