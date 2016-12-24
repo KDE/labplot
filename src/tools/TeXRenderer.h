@@ -30,13 +30,15 @@
 
 class QColor;
 class QImage;
-class QString;
 class QTemporaryFile;
+
+#include <QString>
 
 class TeXRenderer {
 
 public:
-	static QImage renderImageLaTeX( const QString&, const QColor& fontColor, const int fontSize=12,  const int dpi=300);
+	static QImage renderImageLaTeX( const QString&, const QColor& fontColor, const int fontSize=12,
+									const QString& fontFamily=QString(), const int dpi=300);
 	static QImage imageFromPDF(const QTemporaryFile&, const int dpi, const QString& engine);
 	static QImage imageFromDVI(const QTemporaryFile&, const int dpi);
 	static bool enabled();

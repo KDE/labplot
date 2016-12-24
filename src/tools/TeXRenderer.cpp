@@ -53,7 +53,7 @@
 
 	\ingroup tools
 */
-QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fontColor, const int fontSize, const int dpi){
+QImage TeXRenderer::renderImageLaTeX(const QString& teXString, const QColor& fontColor, const int fontSize, const QString& fontFamily, const int dpi){
 	//determine the temp directory where the produced files are going to be created
 	QString tempPath;
 #ifdef Q_OS_LINUX
@@ -99,8 +99,12 @@ QImage TeXRenderer::renderImageLaTeX( const QString& teXString, const QColor& fo
 			body = teXString;
 	}
 
-	if (engine=="xelatex" || engine=="lualatex")
-		out<< "\\usepackage{xltxtra}";
+	if (engine=="xelatex" || engine=="lualatex") {
+		out << "\\usepackage{xltxtra}";
+		out << "\\defaultfontfeatures{Ligatures=TeX}";
+		if (!fontFamily.isEmpty())
+			out << "\\setmainfont[Mapping=tex-text]{" << fontFamily << "}";
+	}
 
 	out << "\\usepackage{color}";
 	out << "\\usepackage[active,displaymath,textmath,tightpage]{preview}";
