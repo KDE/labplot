@@ -163,8 +163,6 @@ void ExpressionParser::initFunctions() {
 	// GSL mathematical functions
 	m_functionsNames << i18n("log(1+x)");
 	m_functionsNames << i18n("exp(x)-1");
-	m_functionsNames << i18n("sqrt(x^2+y^2)");
-	m_functionsNames << i18n("sqrt(x^2+y^2+z^2)");
 	m_functionsNames << i18n("x * 2^e");
 	m_functionsNames << i18n("x^n");
 	m_functionsNames << i18n("x^2");
@@ -177,7 +175,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("x^8");
 	m_functionsNames << i18n("x^9");
 
-	for (int i = 0; i < 14; i++)
+	for (int i = 0; i < 12; i++)
 		m_functionsGroupIndex << 1;
 
 
@@ -510,10 +508,11 @@ void ExpressionParser::initFunctions() {
         m_functionsNames << i18n("log(sinh(x))");
         m_functionsNames << i18n("log(cosh(x))");
         m_functionsNames << i18n("Hypotenuse function");
+        m_functionsNames << i18n("Three component hypotenuse function");
         m_functionsNames << i18n("restrict to [-pi,pi]");
         m_functionsNames << i18n("restrict to [0,2 pi]");
 
-	for (int i = 0; i < 31; i++)
+	for (int i = 0; i < 32; i++)
 		m_functionsGroupIndex << 25;
 
 	// Zeta Functions

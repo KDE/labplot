@@ -222,8 +222,6 @@ struct func _functions[] = {
 	/* GSL mathematical functions: see http://www.gnu.org/software/gsl/manual/gsl-ref.html#Mathematical-Functions */
 	{"gsl_log1p", gsl_log1p},
 	{"gsl_expm1", gsl_expm1},
-	{"gsl_hypot", gsl_hypot},
-	{"gsl_hypot3", gsl_hypot3},
 	{"gsl_ldexp", gsl_ldexp},
 	{"gsl_powint", my_gsl_powint},
 	{"pow2", gsl_pow_2},
@@ -471,6 +469,7 @@ struct func _functions[] = {
 	{"logsinh", gsl_sf_lnsinh},
 	{"logcosh", gsl_sf_lncosh},
 	{"hypot", gsl_sf_hypot},
+	{"hypot3", gsl_hypot3},
 	{"anglesymm", gsl_sf_angle_restrict_symm},
 	{"anglepos", gsl_sf_angle_restrict_pos},
 	/* Zeta Functions */
