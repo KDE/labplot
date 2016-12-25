@@ -195,6 +195,10 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 	emit changed();
 }
 
+void Project::navigateTo(const QString& path) {
+	requestNavigateTo(path);
+}
+
 bool Project::isLoading() const {
 	return d->loading;
 }

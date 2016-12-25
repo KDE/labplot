@@ -40,6 +40,8 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/core/Project.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
@@ -149,6 +151,9 @@ void XYCurve::initActions() {
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+
+	navigateToAction = new QAction(KIcon("go-next-view"), "", this);
+	connect(navigateToAction, SIGNAL(triggered()), this, SLOT(navigateTo()));
 }
 
 QMenu* XYCurve::createContextMenu() {
@@ -156,6 +161,21 @@ QMenu* XYCurve::createContextMenu() {
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
+
+	//"Navigate to spreadsheet"-action, show only if x- or y-columns have data from a spreadsheet
+	AbstractAspect* parentSpreadsheet = 0;
+	if (xColumn() && dynamic_cast<Spreadsheet*>(xColumn()->parentAspect()) )
+		parentSpreadsheet = xColumn()->parentAspect();
+	else if (yColumn() && dynamic_cast<Spreadsheet*>(yColumn()->parentAspect()) )
+		parentSpreadsheet = yColumn()->parentAspect();
+
+	if (parentSpreadsheet) {
+		navigateToAction->setText(i18n("Navigate to \"%1\"", parentSpreadsheet->name()));
+		navigateToAction->setData(parentSpreadsheet->path());
+		menu->insertAction(visibilityAction, navigateToAction);
+		menu->insertSeparator(visibilityAction);
+	}
+
 	return menu;
 }
 
@@ -764,6 +784,10 @@ void XYCurve::yErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 void XYCurve::visibilityChanged() {
 	Q_D(const XYCurve);
 	this->setVisible(!d->isVisible());
+}
+
+void XYCurve::navigateTo() {
+	project()->navigateTo(navigateToAction->data().toString());
 }
 
 //##############################################################################

@@ -148,6 +148,7 @@ class XYCurve: public WorksheetElement {
 
 		//SLOTs for changes triggered via QActions in the context menu
 		void visibilityChanged();
+		void navigateTo();
 
 	protected:
 		XYCurve(const QString& name, XYCurvePrivate* dd);
@@ -159,6 +160,7 @@ class XYCurve: public WorksheetElement {
 		void initActions();
 
 		QAction* visibilityAction;
+		QAction* navigateToAction;
 
 	signals:
 		//General-Tab

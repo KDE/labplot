@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
 	Copyright            : (C) 2007-2009 by Knut Franke (knut.franke@gmx.de)
     Copyright            : (C) 2007-2009 by Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2011-2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -321,10 +321,28 @@ bool AspectTreeModel::setData(const QModelIndex &index, const QVariant &value, i
 	return true;
 }
 
-QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect *aspect, int column) const{
-  AbstractAspect * parent = aspect->parentAspect();
-  return createIndex(parent ? parent->indexOfChild<AbstractAspect>(aspect) : 0,
+QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect* aspect, int column) const{
+	AbstractAspect* parent = aspect->parentAspect();
+	return createIndex(parent ? parent->indexOfChild<AbstractAspect>(aspect) : 0,
 					  column, const_cast<AbstractAspect*>(aspect));
+}
+
+/*!
+	returns the model index of an aspect defined via its path.
+ */
+QModelIndex AspectTreeModel::modelIndexOfAspect(const QString& path, int column) const{
+	//determine the aspect out of aspect path
+	AbstractAspect* aspect = 0;
+	QList<AbstractAspect*> children = m_root->children("AbstractAspect", AbstractAspect::Recursive);
+	foreach (AbstractAspect* child, children) {
+		if (child->path() == path) {
+			aspect = child;
+			break;
+		}
+	}
+
+	//return the model index of the aspect
+	return modelIndexOfAspect(aspect, column);
 }
 
 void AspectTreeModel::setFilterString(const QString & s){
