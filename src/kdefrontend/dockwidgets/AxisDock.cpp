@@ -192,6 +192,11 @@ void AxisDock::init() {
 	ui.leMinorTicksIncrement->setValidator( new QDoubleValidator(ui.leMinorTicksIncrement) );
 
 	//TODO move this stuff to retranslateUI()
+	ui.cbPosition->addItem(i18n("top"));
+	ui.cbPosition->addItem(i18n("bottom"));
+	ui.cbPosition->addItem(i18n("centered"));
+	ui.cbPosition->addItem(i18n("custom"));
+
 	ui.cbScale->addItem( i18n("linear") );
 	ui.cbScale->addItem( QLatin1String("log(x)") );
 	ui.cbScale->addItem( QLatin1String("log2(x)") );
@@ -315,6 +320,11 @@ void AxisDock::init() {
 	GuiTools::updatePenStyles(ui.cbLineStyle, QColor(Qt::black));
 	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, QColor(Qt::black));
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, QColor(Qt::black));
+
+	//labels
+	ui.cbLabelsPosition->addItem(i18n("no labels"));
+	ui.cbLabelsPosition->addItem(i18n("top"));
+	ui.cbLabelsPosition->addItem(i18n("bottom"));
 
 	ui.cbLabelsFormat->addItem( i18n("Decimal notation") );
 	ui.cbLabelsFormat->addItem( i18n("Scientific notation") );
@@ -478,20 +488,13 @@ void AxisDock::visibilityChanged(bool state) {
 /*!
 	called if the orientation (horizontal or vertical) of the current axis is changed.
 */
-
 void AxisDock::orientationChanged(int index) {
 	Axis::AxisOrientation orientation = (Axis::AxisOrientation)index;
-	int oldIndex = ui.cbPosition->currentIndex();
-	int oldLabelsIndex = ui.cbLabelsPosition->currentIndex();
-
-	ui.cbPosition->clear();
-	ui.cbLabelsPosition->clear();
-	ui.cbLabelsPosition->addItem(i18n("no labels"));
 	if (orientation == Axis::AxisHorizontal) {
-		ui.cbPosition->addItem( i18n("top") );
-		ui.cbPosition->addItem( i18n("bottom") );
-		ui.cbLabelsPosition->addItem( i18n("top") );
-		ui.cbLabelsPosition->addItem( i18n("bottom") );
+		ui.cbPosition->setItemText(0, i18n("top") );
+		ui.cbPosition->setItemText(1, i18n("bottom") );
+		ui.cbLabelsPosition->setItemText(1, i18n("top") );
+		ui.cbLabelsPosition->setItemText(2, i18n("bottom") );
 
 		ui.cbScale->setItemText(1, QLatin1String("log(x)") );
 		ui.cbScale->setItemText(2, QLatin1String("log2(x)") );
@@ -499,10 +502,10 @@ void AxisDock::orientationChanged(int index) {
 		ui.cbScale->setItemText(4, QLatin1String("sqrt(x)") );
 		ui.cbScale->setItemText(5, QLatin1String("x^2") );
 	} else { //vertical
-		ui.cbPosition->addItem( i18n("left") );
-		ui.cbPosition->addItem( i18n("right") );
-		ui.cbLabelsPosition->addItem( i18n("right") );
-		ui.cbLabelsPosition->addItem( i18n("left") );
+		ui.cbPosition->setItemText(0, i18n("left") );
+		ui.cbPosition->setItemText(1, i18n("right") );
+		ui.cbLabelsPosition->setItemText(1, i18n("right") );
+		ui.cbLabelsPosition->setItemText(2, i18n("left") );
 
 		ui.cbScale->setItemText(1, QLatin1String("log(y)") );
 		ui.cbScale->setItemText(2, QLatin1String("log2(y)") );
@@ -510,19 +513,34 @@ void AxisDock::orientationChanged(int index) {
 		ui.cbScale->setItemText(4, QLatin1String("sqrt(y)") );
 		ui.cbScale->setItemText(5, QLatin1String("y^2") );
 	}
-	ui.cbPosition->addItem( i18n("centered") );
-	ui.cbPosition->addItem( i18n("custom") );
-
-	//TODO: orientation was changed
-	//-> update also the properties of axis and not only the ComboBoxes for the position and labels position.
-	ui.cbPosition->setCurrentIndex(oldIndex);
-	ui.cbLabelsPosition->setCurrentIndex(oldLabelsIndex);
 
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	//depending on the current orientation we need to update axis possition and labels position
+
+	//axis position, map from the current index in the combobox to the enum value in Axis::AxisPosition
+	Axis::AxisPosition axisPosition;
+	int posIndex = ui.cbPosition->currentIndex();
+	if (orientation == Axis::AxisHorizontal) {
+		if (posIndex>1)
+			posIndex += 2;
+		axisPosition = Axis::AxisPosition(posIndex);
+	} else {
+		axisPosition = Axis::AxisPosition(posIndex+2);
+	}
+
+	//labels position
+	posIndex = ui.cbLabelsPosition->currentIndex();
+	Axis::LabelsPosition labelsPosition = Axis::LabelsPosition(posIndex);
+
+	foreach(Axis* axis, m_axesList) {
+		axis->beginMacro(i18n("%1: set axis orientation", axis->name()));
 		axis->setOrientation(orientation);
+		axis->setPosition(axisPosition);
+		axis->setLabelsPosition(labelsPosition);
+		axis->endMacro();
+	}
 }
 
 /*!

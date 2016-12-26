@@ -42,14 +42,12 @@
 #include <QMenu>
 #include <QTextDocument>
 #include <QGraphicsSceneContextMenuEvent>
-#include <QGraphicsSceneHoverEvent>
 
 #include "kdefrontend/GuiTools.h"
 #include <KConfigGroup>
 #include <KIcon>
 #include <KLocale>
 
-#include <cmath>
 #include <cfloat>
 
 /**
@@ -565,7 +563,6 @@ void Axis::setArrowPosition(ArrowPosition position) {
 	if (position != d->arrowPosition)
 		exec(new AxisSetArrowPositionCmd(d, position, i18n("%1: set arrow position")));
 }
-
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowSize, float, arrowSize, retransformArrow);
 void Axis::setArrowSize(float arrowSize) {
