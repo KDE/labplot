@@ -193,11 +193,11 @@ void AxisDock::init() {
 
 	//TODO move this stuff to retranslateUI()
 	ui.cbScale->addItem( i18n("linear") );
-	ui.cbScale->addItem( i18n("log(x)") );
-	ui.cbScale->addItem( i18n("log2(x)") );
-	ui.cbScale->addItem( i18n("ln(x)") );
-	ui.cbScale->addItem( i18n("sqrt(x)") );
-	ui.cbScale->addItem( i18n("x^2") );
+	ui.cbScale->addItem( QLatin1String("log(x)") );
+	ui.cbScale->addItem( QLatin1String("log2(x)") );
+	ui.cbScale->addItem( QLatin1String("ln(x)") );
+	ui.cbScale->addItem( QLatin1String("sqrt(x)") );
+	ui.cbScale->addItem( QLatin1String("x^2") );
 
 	ui.cbOrientation->addItem( i18n("horizontal") );
 	ui.cbOrientation->addItem( i18n("vertical") );
@@ -493,22 +493,22 @@ void AxisDock::orientationChanged(int index) {
 		ui.cbLabelsPosition->addItem( i18n("top") );
 		ui.cbLabelsPosition->addItem( i18n("bottom") );
 
-		ui.cbScale->setItemText(1, i18n("log(x)") );
-		ui.cbScale->setItemText(2, i18n("log2(x)") );
-		ui.cbScale->setItemText(3, i18n("ln(x)") );
-		ui.cbScale->setItemText(4, i18n("sqrt(x)") );
-		ui.cbScale->setItemText(5, i18n("x^2") );
+		ui.cbScale->setItemText(1, QLatin1String("log(x)") );
+		ui.cbScale->setItemText(2, QLatin1String("log2(x)") );
+		ui.cbScale->setItemText(3, QLatin1String("ln(x)") );
+		ui.cbScale->setItemText(4, QLatin1String("sqrt(x)") );
+		ui.cbScale->setItemText(5, QLatin1String("x^2") );
 	} else { //vertical
 		ui.cbPosition->addItem( i18n("left") );
 		ui.cbPosition->addItem( i18n("right") );
 		ui.cbLabelsPosition->addItem( i18n("right") );
 		ui.cbLabelsPosition->addItem( i18n("left") );
 
-		ui.cbScale->setItemText(1, i18n("log(y)") );
-		ui.cbScale->setItemText(2, i18n("log2(y)") );
-		ui.cbScale->setItemText(3, i18n("ln(y)") );
-		ui.cbScale->setItemText(4, i18n("sqrt(y)") );
-		ui.cbScale->setItemText(5, i18n("y^2") );
+		ui.cbScale->setItemText(1, QLatin1String("log(y)") );
+		ui.cbScale->setItemText(2, QLatin1String("log2(y)") );
+		ui.cbScale->setItemText(3, QLatin1String("ln(y)") );
+		ui.cbScale->setItemText(4, QLatin1String("sqrt(y)") );
+		ui.cbScale->setItemText(5, QLatin1String("y^2") );
 	}
 	ui.cbPosition->addItem( i18n("centered") );
 	ui.cbPosition->addItem( i18n("custom") );
