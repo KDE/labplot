@@ -1809,8 +1809,9 @@ void XYCurvePrivate::draw(QPainter *painter) {
 	//draw values
 	if (valuesType != XYCurve::NoValues) {
 		painter->setOpacity(valuesOpacity);
-		painter->setPen(valuesColor);
-		painter->setBrush(Qt::SolidPattern);
+		//don't use any painter pen, since this will force QPainter to render the text outline which is expensive
+		painter->setPen(Qt::NoPen);
+		painter->setBrush(valuesColor);
 		drawValues(painter);
 	}
 
