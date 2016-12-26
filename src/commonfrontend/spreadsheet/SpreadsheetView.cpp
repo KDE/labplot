@@ -1668,19 +1668,20 @@ void SpreadsheetView::selectionChanged(const QItemSelection &selected, const QIt
   prints the complete spreadsheet to \c printer.
  */
 void SpreadsheetView::print(QPrinter* printer) const {
+	WAIT_CURSOR;
 	QPainter painter (printer);
 
-	int dpiy = printer->logicalDpiY();
+	const int dpiy = printer->logicalDpiY();
 	const int margin = (int) ( (1/2.54)*dpiy ); // 1 cm margins
 
 	QHeaderView *hHeader = m_tableView->horizontalHeader();
 	QHeaderView *vHeader = m_tableView->verticalHeader();
 
-	int rows = m_spreadsheet->rowCount();
-	int cols = m_spreadsheet->columnCount();
+	const int rows = m_spreadsheet->rowCount();
+	const int cols = m_spreadsheet->columnCount();
 	int height = margin;
 	int i;
-	int vertHeaderWidth = vHeader->width();
+	const int vertHeaderWidth = vHeader->width();
 	int right = margin + vertHeaderWidth;
 
 	int columnsPerTable = 0;
@@ -1789,6 +1790,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 			}
 		}
 	}
+	RESET_CURSOR;
 }
 
 void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader, const QString& separator) const {
