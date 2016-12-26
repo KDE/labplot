@@ -436,19 +436,22 @@ void SpreadsheetView::createContextMenu(QMenu* menu) const {
 }
 
 //SLOTS
-void SpreadsheetView::handleAspectAdded(const AbstractAspect * aspect) {
-	const Column * col = qobject_cast<const Column*>(aspect);
-	if (!col || col->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
+void SpreadsheetView::handleAspectAdded(const AbstractAspect* aspect) {
+	const Column* col = dynamic_cast<const Column*>(aspect);
+	if (!col || col->parentAspect() != m_spreadsheet)
 		return;
+
+	int index = m_spreadsheet->indexOfChild<Column>(col);
+	m_horizontalHeader->resizeSection(index, col->width());
 }
 
-void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect * aspect) {
-	const Column * col = qobject_cast<const Column*>(aspect);
-	if (!col || col->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
+void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
+	const Column* col = dynamic_cast<const Column*>(aspect);
+	if (!col || col->parentAspect() != m_spreadsheet)
 		return;
+
 	disconnect(col, 0, this, 0);
 }
-
 
 void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize) {
 	Q_UNUSED(logicalIndex);
