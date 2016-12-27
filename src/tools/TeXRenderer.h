@@ -33,14 +33,21 @@ class QImage;
 class QTemporaryFile;
 
 #include <QString>
+#include <QColor>
 
 class TeXRenderer {
 
 public:
-	static QImage renderImageLaTeX( const QString&, const QColor& fontColor, const int fontSize=12,
-									const QString& fontFamily=QString(), const int dpi=300);
-	static QImage imageFromPDF(const QTemporaryFile&, const int dpi, const QString& engine);
-	static QImage imageFromDVI(const QTemporaryFile&, const int dpi);
+	struct Formatting {
+		QColor fontColor;
+		int fontSize;
+		QString fontFamily;
+		int dpi;
+	};
+
+	static QImage renderImageLaTeX(const QString&, bool* success, const TeXRenderer::Formatting&);
+	static QImage imageFromPDF(const QTemporaryFile&, const int dpi, const QString& engine, bool* success);
+	static QImage imageFromDVI(const QTemporaryFile&, const int dpi, bool* success);
 	static bool enabled();
 	static bool executableExists(const QString&);
 };

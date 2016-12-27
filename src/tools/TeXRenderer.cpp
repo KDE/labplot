@@ -49,11 +49,18 @@
 
 /*!
 	\class TeXRenderer
-	\brief Implements rendering of latex code to a PNG image, uses latex engine specified by the user (default xelatex) to render LaTeX text
+	\brief Implements rendering of latex code to a PNG image.
+
+	Uses latex engine specified by the user (default xelatex) to render LaTeX text
 
 	\ingroup tools
 */
-QImage TeXRenderer::renderImageLaTeX(const QString& teXString, const QColor& fontColor, const int fontSize, const QString& fontFamily, const int dpi){
+QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, const TeXRenderer::Formatting& format) {
+	const QColor& fontColor =format.fontColor;
+	const int fontSize = format.fontSize;
+	const QString& fontFamily = format.fontFamily;
+	const int dpi = format.dpi;
+
 	//determine the temp directory where the produced files are going to be created
 	QString tempPath;
 #ifdef Q_OS_LINUX
@@ -73,6 +80,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, const QColor& fon
 		QDir::setCurrent(tempPath);
 	} else {
 		qWarning() << "Couldn't open the file " << file.fileName();
+		*success = false;
 		return QImage();
 	}
 
@@ -93,7 +101,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, const QColor& fon
 	} else {
 		//user simply provided a document body (assume it's a math. expression) -> add a minimal header
 		out << "\\documentclass{minimal}";
-		if (engine == "latex")
+		if (teXString.indexOf('$')==-1)
 			body = '$' + teXString + '$';
 		else
 			body = teXString;
@@ -119,78 +127,84 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, const QColor& fon
 	out.flush();
 
 	if (engine!="latex")
-		return imageFromPDF(file, dpi, engine);
+		return imageFromPDF(file, dpi, engine, success);
 	else
-		return imageFromDVI(file, dpi);
+		return imageFromDVI(file, dpi, success);
 }
 
 // TEX -> PDF -> PNG
-QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine) {
-	QProcess latexProcess, convertProcess;
+QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine, bool* success) {
+	QFileInfo fi(file.fileName());
+	QProcess latexProcess;
 	latexProcess.start(engine, QStringList() << "-interaction=batchmode" << file.fileName());
-
-	if (latexProcess.waitForFinished()) { // pdflatex finished
-		QFileInfo fi(file.fileName());
+	if (!latexProcess.waitForFinished()) {
+		kWarning() << engine << "process failed." << endl;
+		*success = false;
 		QFile::remove(fi.completeBaseName()+".aux");
 		QFile::remove(fi.completeBaseName()+".log");
-
-		//TODO: pdflatex doesn't come back with EX_OK
-// 		if(latexProcess.exitCode() != 0)	// skip if pdflatex failed
-// 			return QImage();
-
-		// convert: PDF -> PNG
-		convertProcess.start("convert",  QStringList() << "-density"<< QString::number(dpi) + 'x' + QString::number(dpi)
-														<< fi.completeBaseName() + ".pdf"
-														<< fi.completeBaseName() + ".png");
-
-		// clean up and read png file
-		if (convertProcess.waitForFinished()) {
-			QFile::remove(fi.completeBaseName()+".pdf");
-
-			QImage image;
-			image.load(fi.completeBaseName()+".png");
-			QFile::remove(fi.completeBaseName()+".png");
-
-			return image;
-		}else{
-			QFile::remove(fi.completeBaseName()+".pdf");
-			return QImage();
-		}
-	}else{
-		kWarning()<<"pdflatex failed."<<endl;
 		return QImage();
 	}
+
+	*success = (latexProcess.exitCode()==0);
+
+	QFile::remove(fi.completeBaseName()+".aux");
+	QFile::remove(fi.completeBaseName()+".log");
+
+	// convert: PDF -> PNG
+	QProcess convertProcess;
+	convertProcess.start("convert",  QStringList() << "-density"<< QString::number(dpi) + 'x' + QString::number(dpi)
+													<< fi.completeBaseName() + ".pdf"
+													<< fi.completeBaseName() + ".png");
+	if (!convertProcess.waitForFinished()) {
+		kWarning() << "convert process failed." << endl;
+		*success = false;
+		QFile::remove(fi.completeBaseName()+".pdf");
+		return QImage();
+	}
+
+	// read png file and clean up
+	QImage image;
+	image.load(fi.completeBaseName()+".png");
+
+	// final clean up
+	QFile::remove(fi.completeBaseName()+".png");
+	QFile::remove(fi.completeBaseName()+".pdf");
+
+	return image;
 }
 
 // TEX -> DVI -> PS -> PNG
-QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi) {
-	QProcess latexProcess, convertProcess;
-	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
-
+QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool* success) {
 	QFileInfo fi(file.fileName());
+	QProcess latexProcess;
+	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
 	if (!latexProcess.waitForFinished()) {
-		kWarning()<<"latex failed."<<endl;
+		kWarning() << "latex process failed." << endl;
 		QFile::remove(fi.completeBaseName()+".aux");
 		QFile::remove(fi.completeBaseName()+".log");
 		return QImage();
 	}
 
-	if(latexProcess.exitCode() != 0) // skip if latex failed
-		return QImage();
+	*success = (latexProcess.exitCode()==0);
+
+	QFile::remove(fi.completeBaseName()+".aux");
+	QFile::remove(fi.completeBaseName()+".log");
 
 	// dvips: DVI -> PS
 	QProcess dvipsProcess;
 	dvipsProcess.start("dvips", QStringList() << "-E" << fi.completeBaseName());
 	if (!dvipsProcess.waitForFinished()) {
-		kWarning()<<"dvips failed."<<endl;
+		kWarning() << "dvips process failed." << endl;
 		QFile::remove(fi.completeBaseName()+".dvi");
 		return QImage();
 	}
 
 	// convert: PS -> PNG
+	QProcess convertProcess;
 	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)  << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
 	if (!convertProcess.waitForFinished()) {
-		kWarning()<<"convert failed."<<endl;
+		kWarning() << "convert process failed." << endl;
+		QFile::remove(fi.completeBaseName()+".dvi");
 		QFile::remove(fi.completeBaseName()+".ps");
 		return QImage();
 	}
@@ -199,10 +213,8 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi) {
 	QImage image;
 	image.load(fi.completeBaseName()+".png", "png");
 
-	//clean up
+	// final clean up
 	QFile::remove(fi.completeBaseName()+".png");
-	QFile::remove(fi.completeBaseName()+".aux");
-	QFile::remove(fi.completeBaseName()+".log");
 	QFile::remove(fi.completeBaseName()+".dvi");
 	QFile::remove(fi.completeBaseName()+".ps");
 

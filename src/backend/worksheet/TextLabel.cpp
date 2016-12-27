@@ -292,8 +292,9 @@ void TextLabel::visibilityChanged() {
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-TextLabelPrivate::TextLabelPrivate(TextLabel *owner)
-	: positionInvalid(false),
+TextLabelPrivate::TextLabelPrivate(TextLabel* owner)
+	: teXRenderSuccessful(false),
+	  positionInvalid(false),
 	  suppressItemChangeEvent(false),
 	  suppressRetransform(false),
 	  m_printing(false),
@@ -417,8 +418,12 @@ void TextLabelPrivate::updatePosition() {
  */
 void TextLabelPrivate::updateText() {
 	if (textWrapper.teXUsed) {
-		QFuture<QImage> future = QtConcurrent::run(TeXRenderer::renderImageLaTeX, textWrapper.text,
-												   teXFontColor, teXFont.pointSize(), teXFont.family(), teXImageResolution);
+		TeXRenderer::Formatting format;
+		format.fontColor = teXFontColor;
+		format.fontSize = teXFont.pointSize();
+		format.fontFamily = teXFont.family();
+		format.dpi = teXImageResolution;
+		QFuture<QImage> future = QtConcurrent::run(TeXRenderer::renderImageLaTeX, textWrapper.text, &teXRenderSuccessful, format);
 		teXImageFutureWatcher.setFuture(future);
 
 		//don't need to call retransorm() here since it is done in updateTeXImage
@@ -433,17 +438,9 @@ void TextLabelPrivate::updateText() {
 }
 
 void TextLabelPrivate::updateTeXImage() {
-	QImage resultImage = teXImageFutureWatcher.result();
-	if (!resultImage.isNull()) {
-		teXImage = resultImage;
-
-		//the size of the tex image was most probably changed.
-		//call retransform() to recalculate the position and the bounding box of the label
-		retransform();
-		emit q->teXImageUpdated(true);
-	} else {
-		emit q->teXImageUpdated(false);
-	}
+	teXImage = teXImageFutureWatcher.result();
+	retransform();
+	emit q->teXImageUpdated(teXRenderSuccessful);
 }
 
 bool TextLabelPrivate::swapVisible(bool on) {
