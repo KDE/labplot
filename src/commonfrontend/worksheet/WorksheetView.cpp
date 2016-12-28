@@ -29,11 +29,11 @@
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/TextLabel.h"
 #include "kdefrontend/worksheet/GridDialog.h"
 #include "kdefrontend/worksheet/PresenterWidget.h"
 #include "kdefrontend/worksheet/DynamicPresenterWidget.h"
-
 #include <QApplication>
 #include <QMenu>
 #include <QToolBar>
@@ -798,6 +798,29 @@ void WorksheetView::mousePressEvent(QMouseEvent* event) {
 	if (event->button() == Qt::LeftButton && m_mouseMode == ZoomSelectionMode) {
 		m_selectionStart = event->pos();
 		m_selectionBandIsShown = true;
+		QGraphicsView::mousePressEvent(event);
+		return;
+	}
+
+	//to select curves having overlapping bounding boxes we need to check whether the cursor
+	//is inside of item's shapes and not inside of the bounding boxes (Qt's default behaviour).
+	QList<QGraphicsItem*> itemsList = items(event->pos());
+	foreach(QGraphicsItem* item, itemsList) {
+		if (!dynamic_cast<XYCurvePrivate*>(item))
+			continue;
+
+		if ( item->shape().contains(item->mapFromScene(mapToScene(event->pos()))) ) {
+			//deselect currently selected items
+			QList<QGraphicsItem*> selectedItems = scene()->selectedItems();
+			foreach(QGraphicsItem* selectedItem, selectedItems)
+				selectedItem->setSelected(false);
+
+			//select the item under the cursor and update the current selection
+			item->setSelected(true);
+			selectionChanged();
+
+			return;
+		}
 	}
 
 	// select the worksheet in the project explorer if the view was clicked
@@ -820,6 +843,7 @@ void WorksheetView::mouseReleaseEvent(QMouseEvent* event) {
 		if ( abs(m_selectionEnd.x() - m_selectionStart.x()) > 20 && abs(m_selectionEnd.y() - m_selectionStart.y()) > 20 )
 			fitInView(mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect(), Qt::KeepAspectRatio);
 	}
+
 	QGraphicsView::mouseReleaseEvent(event);
 }
 
