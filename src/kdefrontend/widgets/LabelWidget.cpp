@@ -121,6 +121,7 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	connect(ui.tbDateTime, SIGNAL(clicked(bool)), this, SLOT(dateTimeMenu()));
 	connect(m_dateTimeMenu, SIGNAL(triggered(QAction*)), this, SLOT(insertDateTime(QAction*)) );
 	connect(ui.kfontRequester, SIGNAL(fontSelected(QFont)), this, SLOT(fontChanged(QFont)));
+	connect(ui.kfontRequesterTeX, SIGNAL(fontSelected(QFont)), this, SLOT(teXFontChanged(QFont)));
 	connect(ui.sbFontSize, SIGNAL(valueChanged(int)), this, SLOT(fontSizeChanged(int)) );
 
 	// geometry
@@ -175,8 +176,8 @@ void LabelWidget::initConnections() const {
 	connect( m_label, SIGNAL(textWrapperChanged(TextLabel::TextWrapper)),
 	         this, SLOT(labelTextWrapperChanged(TextLabel::TextWrapper)) );
 	connect( m_label, SIGNAL(teXImageUpdated(bool)), this, SLOT(labelTeXImageUpdated(bool)) );
-	connect( m_label, SIGNAL(teXFontSizeChanged(int)),
-	         this, SLOT(labelTeXFontSizeChanged(int)) );
+	connect( m_label, SIGNAL(teXFontChanged(QFont)),
+	         this, SLOT(labelTeXFontChanged(QFont)) );
 	connect( m_label, SIGNAL(teXFontColorChanged(QColor)),
 	         this, SLOT(labelTeXFontColorChanged(QColor)) );
 	connect( m_label, SIGNAL(positionChanged(TextLabel::PositionWrapper)),
@@ -307,8 +308,27 @@ void LabelWidget::teXUsedChanged(bool checked) {
 
 	ui.lFont->setVisible(!checked);
 	ui.kfontRequester->setVisible(!checked);
-	ui.lFontSize->setVisible(checked);
-	ui.sbFontSize->setVisible(checked);
+
+	if (checked) {
+		KConfigGroup conf(KSharedConfig::openConfig(), "Settings_Worksheet");
+		QString engine = conf.readEntry("LaTeXEngine", "");
+		if (engine == "xelatex" || engine == "lualatex") {
+			ui.lFontTeX->setVisible(true);
+			ui.kfontRequesterTeX->setVisible(true);
+			ui.lFontSize->setVisible(false);
+			ui.sbFontSize->setVisible(false);
+		} else {
+			ui.lFontTeX->setVisible(false);
+			ui.kfontRequesterTeX->setVisible(false);
+			ui.lFontSize->setVisible(true);
+			ui.sbFontSize->setVisible(true);
+		}
+	} else {
+		ui.lFontTeX->setVisible(false);
+		ui.kfontRequesterTeX->setVisible(false);
+		ui.lFontSize->setVisible(false);
+		ui.sbFontSize->setVisible(false);
+	}
 
 	//no latex is available and the user switched to the text mode,
 	//deactivate the button since it shouldn't be possible anymore to switch to the TeX-mode
@@ -347,8 +367,10 @@ void LabelWidget::fontSizeChanged(int value) {
 	if (m_initializing)
 		return;
 
+	QFont font = m_label->teXFont();
+	font.setPointSize(value);
 	foreach(TextLabel* label, m_labelsList)
-		label->setTeXFontSize(value);
+		label->setTeXFont(font);
 }
 
 void LabelWidget::fontBoldChanged(bool checked) {
@@ -419,6 +441,14 @@ void LabelWidget::fontChanged(const QFont& font) {
 	ui.teLabel->setFontPointSize(font.pointSize());
 	ui.teLabel->setFontItalic(font.italic());
 	ui.teLabel->setFontWeight(font.weight());
+}
+
+void LabelWidget::teXFontChanged(const QFont& font) {
+	if (m_initializing)
+		return;
+
+	foreach(TextLabel* label, m_labelsList)
+		label->setTeXFont(font);
 }
 
 void LabelWidget::charMenu() {
@@ -604,9 +634,10 @@ void LabelWidget::labelTeXImageUpdated(bool valid) {
 		ui.teLabel->setStyleSheet("");
 }
 
-void LabelWidget::labelTeXFontSizeChanged(const int size) {
+void LabelWidget::labelTeXFontChanged(const QFont& font) {
 	m_initializing = true;
-	ui.sbFontSize->setValue(size);
+	ui.kfontRequesterTeX->setFont(font);
+	ui.sbFontSize->setValue(font.pointSize());
 	m_initializing = false;
 }
 
@@ -676,11 +707,14 @@ void LabelWidget::load() {
 	ui.teLabel->setHtml( m_label->text().text );
 	ui.teLabel->selectAll();
 	ui.teLabel->setFocus();
+
+	//TeX
 	ui.tbTexUsed->setChecked( (bool) m_label->text().teXUsed );
 	this->teXUsedChanged(m_label->text().teXUsed);
-	ui.sbFontSize->setValue( m_label->teXFontSize() );
+	ui.kfontRequesterTeX->setFont(m_label->teXFont());
+	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
 	if(m_label->text().teXUsed)
-		ui.kcbFontColor->setColor( m_label->teXFontColor() );
+		ui.kcbFontColor->setColor(m_label->teXFontColor());
 
 	//Set text format
 	ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);
@@ -717,10 +751,11 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 
 	m_initializing = true;
 
-	//Text
+	//TeX
 	ui.tbTexUsed->setChecked(group.readEntry("TeXUsed", (bool) m_label->text().teXUsed));
 	this->teXUsedChanged(m_label->text().teXUsed);
-	ui.sbFontSize->setValue( group.readEntry("TeXFontSize", m_label->teXFontSize()) );
+	ui.sbFontSize->setValue( group.readEntry("TeXFontSize", m_label->teXFont().pointSize()) );
+	ui.kfontRequester->setFont(group.readEntry("TeXFont", m_label->teXFont()));
 	if(m_label->text().teXUsed)
 		ui.kcbFontColor->setColor(group.readEntry("TeXFontColor", m_label->teXFontColor()));
 
@@ -752,10 +787,10 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 }
 
 void LabelWidget::saveConfig(KConfigGroup& group) {
-	//Text
+	//TeX
 	group.writeEntry("TeXUsed", ui.tbTexUsed->isChecked());
 	group.writeEntry("TeXFontColor", ui.kcbFontColor->color());
-	group.writeEntry("TeXFontSize", ui.sbFontSize->value());
+	group.writeEntry("TeXFont", ui.kfontRequesterTeX->font());
 
 	// Geometry
 	group.writeEntry("PositionX", ui.cbPositionX->currentIndex());

@@ -241,6 +241,7 @@ void ProjectExplorer::setProject(Project* project) {
 	connect(project, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(aspectAdded(const AbstractAspect*)));
 	connect(project, SIGNAL(requestSaveState(QXmlStreamWriter*)), this, SLOT(save(QXmlStreamWriter*)));
 	connect(project, SIGNAL(requestLoadState(XmlStreamReader*)), this, SLOT(load(XmlStreamReader*)));
+	connect(project, SIGNAL(requestNavigateTo(QString)), this, SLOT(navigateTo(QString)));
 	m_project = project;
 }
 
@@ -312,6 +313,12 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 	m_treeView->scrollTo(index);
 	m_treeView->setCurrentIndex(index);
 	m_treeView->resizeColumnToContents(0);
+}
+
+void ProjectExplorer::navigateTo(const QString& path) {
+	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
+	if(tree_model)
+		m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(path));
 }
 
 void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous) {

@@ -135,24 +135,24 @@ void SpreadsheetView::init() {
 	showComments(false);
 
 	connect(m_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this,
-			SLOT(updateHeaderGeometry(Qt::Orientation,int,int)) );
+	        SLOT(updateHeaderGeometry(Qt::Orientation,int,int)) );
 	connect(m_model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)), this,
-			SLOT(handleHeaderDataChanged(Qt::Orientation,int,int)) );
+	        SLOT(handleHeaderDataChanged(Qt::Orientation,int,int)) );
 	connect(m_spreadsheet, SIGNAL(aspectAdded(const AbstractAspect*)),
-			this, SLOT(handleAspectAdded(const AbstractAspect*)));
+	        this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(m_spreadsheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-			this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
+	        this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(m_spreadsheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
 
 
 	//selection relevant connections
 	QItemSelectionModel* sel_model = m_tableView->selectionModel();
 	connect(sel_model, SIGNAL(currentColumnChanged(QModelIndex,QModelIndex)),
-			this, SLOT(currentColumnChanged(QModelIndex,QModelIndex)));
+	        this, SLOT(currentColumnChanged(QModelIndex,QModelIndex)));
 	connect(sel_model, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-			this, SLOT(selectionChanged(QItemSelection,QItemSelection)));
+	        this, SLOT(selectionChanged(QItemSelection,QItemSelection)));
 	connect(sel_model, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-			this, SLOT(selectionChanged(QItemSelection,QItemSelection)) );
+	        this, SLOT(selectionChanged(QItemSelection,QItemSelection)) );
 
 	connect(m_spreadsheet, SIGNAL(columnSelected(int)), this, SLOT(selectColumn(int)) );
 	connect(m_spreadsheet, SIGNAL(columnDeselected(int)), this, SLOT(deselectColumn(int)) );
@@ -390,13 +390,13 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
 	toolBar->addAction(action_insert_rows);
 	toolBar->addAction(action_add_rows);
 	toolBar->addAction(action_remove_rows);
-    toolBar->addAction(action_statistics_rows);
+	toolBar->addAction(action_statistics_rows);
 
 	toolBar->addSeparator();
 	toolBar->addAction(action_insert_columns);
 	toolBar->addAction(action_add_column);
 	toolBar->addAction(action_remove_columns);
-    toolBar->addAction(action_statistics_columns);
+	toolBar->addAction(action_statistics_columns);
 
 	toolBar->addSeparator();
 	toolBar->addAction(action_sort_asc_column);
@@ -437,19 +437,22 @@ void SpreadsheetView::createContextMenu(QMenu* menu) const {
 }
 
 //SLOTS
-void SpreadsheetView::handleAspectAdded(const AbstractAspect * aspect) {
-	const Column * col = qobject_cast<const Column*>(aspect);
-	if (!col || col->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
+void SpreadsheetView::handleAspectAdded(const AbstractAspect* aspect) {
+	const Column* col = dynamic_cast<const Column*>(aspect);
+	if (!col || col->parentAspect() != m_spreadsheet)
 		return;
+
+	int index = m_spreadsheet->indexOfChild<Column>(col);
+	m_horizontalHeader->resizeSection(index, col->width());
 }
 
-void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect * aspect) {
-	const Column * col = qobject_cast<const Column*>(aspect);
-	if (!col || col->parentAspect() != static_cast<AbstractAspect*>(m_spreadsheet))
+void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
+	const Column* col = dynamic_cast<const Column*>(aspect);
+	if (!col || col->parentAspect() != m_spreadsheet)
 		return;
+
 	disconnect(col, 0, this, 0);
 }
-
 
 void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize) {
 	Q_UNUSED(logicalIndex);
@@ -685,7 +688,7 @@ IntervalAttribute<bool> SpreadsheetView::selectedRows(bool full) {
  */
 void SpreadsheetView::setCellSelected(int row, int col, bool select) {
 	m_tableView->selectionModel()->select(m_model->index(row, col),
-		select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
+	                                      select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
 }
 
 /*!
@@ -695,7 +698,7 @@ void SpreadsheetView::setCellsSelected(int first_row, int first_col, int last_ro
 	QModelIndex top_left = m_model->index(first_row, first_col);
 	QModelIndex bottom_right = m_model->index(last_row, last_col);
 	m_tableView->selectionModel()->select(QItemSelection(top_left, bottom_right),
-		select ? QItemSelectionModel::SelectCurrent : QItemSelectionModel::Deselect);
+	                                      select ? QItemSelectionModel::SelectCurrent : QItemSelectionModel::Deselect);
 }
 
 /*!
@@ -732,8 +735,8 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				QItemSelectionModel *sel_model = m_tableView->selectionModel();
 				sel_model->clearSelection();
 				sel_model->select(QItemSelection(m_model->index(0, col, QModelIndex()),
-						m_model->index(m_model->rowCount()-1, col, QModelIndex())),
-						QItemSelectionModel::Select);
+				                                 m_model->index(m_model->rowCount()-1, col, QModelIndex())),
+				                  QItemSelectionModel::Select);
 			}
 
 			if (selectedColumns().size()==1) {
@@ -837,7 +840,7 @@ void SpreadsheetView::copySelection() {
 				else if (col_ptr->columnMode() == AbstractColumn::Numeric) {
 					Double2StringFilter * out_fltr = static_cast<Double2StringFilter *>(col_ptr->outputFilter());
 					output_str += QLocale().toString(col_ptr->valueAt(first_row + r),
-									out_fltr->numericFormat(), 16); // copy with max. precision
+					                                 out_fltr->numericFormat(), 16); // copy with max. precision
 				} else
 					output_str += m_spreadsheet->column(first_col+c)->asStringColumn()->textAt(first_row + r);
 			}
@@ -879,7 +882,7 @@ void SpreadsheetView::pasteIntoSelection() {
 		}
 
 		if ( (first_col == -1 || first_row == -1) ||
-			(last_row == first_row && last_col == first_col) )
+		        (last_row == first_row && last_col == first_col) )
 			// if the is no selection or only one cell selected, the
 			// selection will be expanded to the needed size from the current cell
 		{
@@ -975,7 +978,7 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
-			case AbstractColumn::Numeric: {
+		case AbstractColumn::Numeric: {
 				QVector<double> results(last-first+1);
 				for (int row=first; row <= last; row++)
 					if (isCellSelected(row, col))
@@ -985,7 +988,7 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 				col_ptr->replaceValues(first, results);
 				break;
 			}
-			case AbstractColumn::Text: {
+		case AbstractColumn::Text: {
 				QStringList results;
 				for (int row=first; row<=last; row++)
 					if (isCellSelected(row, col))
@@ -995,11 +998,11 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 				col_ptr->replaceTexts(first, results);
 				break;
 			}
-			//TODO: handle other modes
-			case AbstractColumn::DateTime:
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
-				break;
+		//TODO: handle other modes
+		case AbstractColumn::DateTime:
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
+			break;
 		}
 
 		col_ptr->setSuppressDataChangedSignal(false);
@@ -1014,9 +1017,9 @@ void SpreadsheetView::fillWithRowNumbers() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18np("%1: fill column with row numbers",
-								"%1: fill columns with row numbers",
-								m_spreadsheet->name(),
-								selectedColumnCount()));
+	                                "%1: fill columns with row numbers",
+	                                m_spreadsheet->name(),
+	                                selectedColumnCount()));
 
 	const int rows = m_spreadsheet->rowCount();
 	QVector<double> new_data(rows);
@@ -1047,7 +1050,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
-			case AbstractColumn::Numeric: {
+		case AbstractColumn::Numeric: {
 				QVector<double> results(last-first+1);
 				for (int row=first; row<=last; row++)
 					if (isCellSelected(row, col))
@@ -1057,7 +1060,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 				col_ptr->replaceValues(first, results);
 				break;
 			}
-			case AbstractColumn::Text: {
+		case AbstractColumn::Text: {
 				QStringList results;
 				for (int row=first; row<=last; row++)
 					if (isCellSelected(row, col))
@@ -1067,9 +1070,9 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 				col_ptr->replaceTexts(first, results);
 				break;
 			}
-			case AbstractColumn::DateTime:
-			case AbstractColumn::Month:
-			case AbstractColumn::Day: {
+		case AbstractColumn::DateTime:
+		case AbstractColumn::Month:
+		case AbstractColumn::Day: {
 				QList<QDateTime> results;
 				QDate earliestDate(1,1,1);
 				QDate latestDate(2999,12,31);
@@ -1077,8 +1080,8 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 				for (int row=first; row<=last; row++)
 					if (isCellSelected(row, col))
 						results << QDateTime(
-							earliestDate.addDays(((double)qrand())*((double)earliestDate.daysTo(latestDate))/((double)RAND_MAX)),
-							midnight.addMSecs(((qint64)qrand())*1000*60*60*24/RAND_MAX));
+						            earliestDate.addDays(((double)qrand())*((double)earliestDate.daysTo(latestDate))/((double)RAND_MAX)),
+						            midnight.addMSecs(((qint64)qrand())*1000*60*60*24/RAND_MAX));
 					else
 						results << col_ptr->dateTimeAt(row);
 				col_ptr->replaceDateTimes(first, results);
@@ -1134,10 +1137,10 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
-			case AbstractColumn::Numeric: {
+		case AbstractColumn::Numeric: {
 				if (!doubleOk)
 					doubleValue = QInputDialog::getDouble(this, i18n("Fill the selection with constant value"),
-								i18n("Value"), 0, -2147483647, 2147483647, 6, &doubleOk);
+					                                      i18n("Value"), 0, -2147483647, 2147483647, 6, &doubleOk);
 				if (doubleOk) {
 					WAIT_CURSOR;
 					QVector<double> results(last-first+1);
@@ -1152,10 +1155,10 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 				}
 				break;
 			}
-			case AbstractColumn::Text: {
+		case AbstractColumn::Text: {
 				if (!stringOk)
 					stringValue = QInputDialog::getText(this, i18n("Fill the selection with constant value"),
-								i18n("Value"), QLineEdit::Normal, 0, &stringOk);
+					                                    i18n("Value"), QLineEdit::Normal, 0, &stringOk);
 				if (stringOk && !stringValue.isEmpty()) {
 					WAIT_CURSOR;
 					QStringList results;
@@ -1170,11 +1173,11 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 				}
 				break;
 			}
-			//TODO: handle other modes
-			case AbstractColumn::DateTime:
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
-				break;
+		//TODO: handle other modes
+		case AbstractColumn::DateTime:
+		case AbstractColumn::Month:
+		case AbstractColumn::Day:
+			break;
 		}
 
 		col_ptr->setSuppressDataChangedSignal(false);
@@ -1228,7 +1231,7 @@ void SpreadsheetView::removeSelectedColumns() {
 
 	QList< Column* > list = selectedColumns();
 	foreach(Column* ptr, list)
-	m_spreadsheet->removeChild(ptr);
+		m_spreadsheet->removeChild(ptr);
 
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1299,7 +1302,7 @@ void SpreadsheetView::reverseColumns() {
 	WAIT_CURSOR;
 	QList<Column*> cols = selectedColumns();
 	m_spreadsheet->beginMacro(i18np("%1: reverse column", "%1: reverse columns",
-					m_spreadsheet->name(), cols.size()));
+	                                m_spreadsheet->name(), cols.size()));
 	foreach(Column* col, cols) {
 		if (col->columnMode() != AbstractColumn::Numeric)
 			continue;
@@ -1462,7 +1465,7 @@ void SpreadsheetView::removeSelectedRows() {
 	m_spreadsheet->beginMacro(i18n("%1: remove selected rows", m_spreadsheet->name()));
 	//TODO setSuppressDataChangedSignal
 	foreach(const Interval<int>& i, selectedRows().intervals())
-	m_spreadsheet->removeRows(i.start(), i.size());
+		m_spreadsheet->removeRows(i.start(), i.size());
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
@@ -1477,7 +1480,7 @@ void SpreadsheetView::clearSelectedRows() {
 		col_ptr->setSuppressDataChangedSignal(true);
 		if (formulaModeActive()) {
 			foreach(const Interval<int>& i, selectedRows().intervals())
-			col_ptr->setFormula(i, "");
+				col_ptr->setFormula(i, "");
 		} else {
 			foreach(const Interval<int>& i, selectedRows().intervals()) {
 				if (i.end() == col_ptr->rowCount()-1)
@@ -1532,11 +1535,11 @@ void SpreadsheetView::goToCell() {
 	bool ok;
 
 	int col = QInputDialog::getInteger(0, i18n("Go to Cell"), i18n("Enter column"),
-					1, 1, m_spreadsheet->columnCount(), 1, &ok);
+	                                   1, 1, m_spreadsheet->columnCount(), 1, &ok);
 	if (!ok) return;
 
 	int row = QInputDialog::getInteger(0, i18n("Go to Cell"), i18n("Enter row"),
-					1, 1, m_spreadsheet->rowCount(), 1, &ok);
+	                                   1, 1, m_spreadsheet->rowCount(), 1, &ok);
 	if (!ok) return;
 
 	goToCell(row-1, col-1);
@@ -1547,7 +1550,7 @@ void SpreadsheetView::sortDialog(QList<Column*> cols) {
 	if (cols.isEmpty()) return;
 
 	foreach(Column* col, cols)
-	col->setSuppressDataChangedSignal(true);
+		col->setSuppressDataChangedSignal(true);
 
 	SortDialog* dlg = new SortDialog();
 	dlg->setAttribute(Qt::WA_DeleteOnClose);
@@ -1564,9 +1567,8 @@ void SpreadsheetView::sortDialog(QList<Column*> cols) {
 
 void SpreadsheetView::sortColumnAscending() {
 	QList< Column* > cols = selectedColumns();
-	foreach(Column* col, cols) {
+	foreach(Column* col, cols)
 		col->setSuppressDataChangedSignal(true);
-	}
 	m_spreadsheet->sortColumns(cols.first(), cols, true);
 	foreach(Column* col, cols) {
 		col->setSuppressDataChangedSignal(false);
@@ -1576,9 +1578,8 @@ void SpreadsheetView::sortColumnAscending() {
 
 void SpreadsheetView::sortColumnDescending() {
 	QList< Column* > cols = selectedColumns();
-	foreach(Column* col, cols) {
+	foreach(Column* col, cols)
 		col->setSuppressDataChangedSignal(true);
-	}
 	m_spreadsheet->sortColumns(cols.first(), cols, false);
 	foreach(Column* col, cols) {
 		col->setSuppressDataChangedSignal(false);
@@ -1666,19 +1667,20 @@ void SpreadsheetView::selectionChanged(const QItemSelection &selected, const QIt
   prints the complete spreadsheet to \c printer.
  */
 void SpreadsheetView::print(QPrinter* printer) const {
+	WAIT_CURSOR;
 	QPainter painter (printer);
 
-	int dpiy = printer->logicalDpiY();
+	const int dpiy = printer->logicalDpiY();
 	const int margin = (int) ( (1/2.54)*dpiy ); // 1 cm margins
 
 	QHeaderView *hHeader = m_tableView->horizontalHeader();
 	QHeaderView *vHeader = m_tableView->verticalHeader();
 
-	int rows = m_spreadsheet->rowCount();
-	int cols = m_spreadsheet->columnCount();
+	const int rows = m_spreadsheet->rowCount();
+	const int cols = m_spreadsheet->columnCount();
 	int height = margin;
 	int i;
-	int vertHeaderWidth = vHeader->width();
+	const int vertHeaderWidth = vHeader->width();
 	int right = margin + vertHeaderWidth;
 
 	int columnsPerTable = 0;
@@ -1689,7 +1691,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 		headerStringWidth += m_tableView->columnWidth(col);
 		firstRowStringWidth += m_spreadsheet->column(col)->asStringColumn()->textAt(0).length();
 		if ((headerStringWidth >= printer->pageRect().width() -2*margin) ||
-			(firstRowStringWidth >= printer->pageRect().width() - 2*margin)) {
+		        (firstRowStringWidth >= printer->pageRect().width() - 2*margin)) {
 			tablesNeeded = true;
 			break;
 		}
@@ -1767,7 +1769,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 			for (; j< toJ; j++) {
 				int w = m_tableView->columnWidth(j);
 				cellText = m_spreadsheet->column(j)->isValid(i) ? m_spreadsheet->text(i,j)+'\t':
-						QLatin1String("- \t");
+				           QLatin1String("- \t");
 				tr = painter.boundingRect(tr,Qt::AlignCenter,cellText);
 				br.setTopLeft(QPoint(right,height));
 				br.setWidth(w);
@@ -1787,6 +1789,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 			}
 		}
 	}
+	RESET_CURSOR;
 }
 
 void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader, const QString& separator) const {
@@ -1822,9 +1825,9 @@ void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader,
 	}
 }
 
-void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeaders, 
-		const bool gridLines, const bool captions, const bool latexHeaders,
-		const bool skipEmptyRows, const bool exportEntire) const {
+void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeaders,
+                                    const bool gridLines, const bool captions, const bool latexHeaders,
+                                    const bool skipEmptyRows, const bool exportEntire) const {
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;
@@ -1860,13 +1863,12 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 	int columnsPerTable = 0;
 
 	for (int i = 0; i < cols; ++i) {
-        int maxSize = -1;
-        for (int j = 0; j < toExport.at(i)->asStringColumn()->rowCount(); ++j) {
-            if (toExport.at(i)->asStringColumn()->textAt(j).size() > maxSize) {
-                maxSize = toExport.at(i)->asStringColumn()->textAt(j).size();
-            }
-        }
-        columnsStringSize += maxSize;
+		int maxSize = -1;
+		for (int j = 0; j < toExport.at(i)->asStringColumn()->rowCount(); ++j) {
+			if (toExport.at(i)->asStringColumn()->textAt(j).size() > maxSize)
+				maxSize = toExport.at(i)->asStringColumn()->textAt(j).size();
+		}
+		columnsStringSize += maxSize;
 		if (!toExport.at(i)->isValid(0))
 			columnsStringSize+=3;
 		if (columnsStringSize > 65)
@@ -1894,24 +1896,21 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 		}
 	}
 
-	if (texVersionOutput.at(yearidx+1) == QChar('/')) {
+	if (texVersionOutput.at(yearidx+1) == QChar('/'))
 		yearidx-=3;
-	}
 
 	bool ok;
 	texVersionOutput.mid(yearidx, 4).toInt(&ok);
 	int version = -1;
-	if (ok) {
+	if (ok)
 		version = texVersionOutput.mid(yearidx, 4).toInt(&ok);
-	}
 
 	if (latexHeaders) {
 		out << QLatin1String("\\documentclass[11pt,a4paper]{article} \n");
 		out << QLatin1String("\\usepackage{geometry} \n");
 		out << QLatin1String("\\usepackage{xcolor,colortbl} \n");
-		if (version >= 2015) {
+		if (version >= 2015)
 			out << QLatin1String("\\extrafloats{1280} \n");
-		}
 		out << QLatin1String("\\definecolor{HeaderBgColor}{rgb}{0.81,0.81,0.81} \n");
 		out << QLatin1String("\\geometry{ \n");
 		out << QLatin1String("a4paper, \n");
@@ -1961,9 +1960,8 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 				if (gridLines)
 					textable << QLatin1String("\\hline \n");
 			}
-			foreach(const QString& s, textable) {
+			foreach(const QString& s, textable)
 				out << s;
-			}
 
 			QStringList values;
 			for (int row = 0; row < totalRowCount; ++row) {
@@ -1986,9 +1984,8 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 					emptyRowIndices.remove(emptyRowIndices.indexOf(row));
 
 				if (notEmpty || !skipEmptyRows) {
-					foreach(const QString& s, values) {
+					foreach(const QString& s, values)
 						out << s;
-					}
 					out << QLatin1String("\\\\ \n");
 					if (gridLines)
 						out << QLatin1String("\\hline \n");
@@ -2000,9 +1997,8 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 						if (captions)
 							if (!captionRemoved)
 								textable.removeAt(1);
-						foreach(const QString& s, textable) {
+						foreach(const QString& s, textable)
 							out << s;
-						}
 						rowCount = 0;
 						if (!captionRemoved)
 							captionRemoved = true;
@@ -2015,8 +2011,8 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 		//new table for the remaining columns
 		QStringList remainingTable;
 		remainingTable << beginTable;
-        if (captions)
-            remainingTable << tableCaption;
+		if (captions)
+			remainingTable << tableCaption;
 		remainingTable << QLatin1String("\\centering \n");
 		remainingTable << QLatin1String("\\begin{tabular}{") <<  (gridLines ? QLatin1String("|"):QLatin1String(""));
 		for (int c = 0; c < remainingColumns; ++c)
@@ -2037,9 +2033,8 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 				remainingTable << QLatin1String("\\hline \n");
 		}
 
-		foreach (const QString& s, remainingTable) {
+		foreach (const QString& s, remainingTable)
 			out << s;
-		}
 
 		QStringList values;
 		captionRemoved = false;
@@ -2058,9 +2053,8 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 			if (!emptyRowIndices.contains(row) && !notEmpty)
 				notEmpty = true;
 			if (notEmpty || !skipEmptyRows) {
-				foreach (const QString& s, values) {
+				foreach (const QString& s, values)
 					out << s;
-				}
 				out << QLatin1String("\\\\ \n");
 				if (gridLines)
 					out << QLatin1String("\\hline \n");
@@ -2071,9 +2065,8 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 					if (captions)
 						if (!captionRemoved)
 							remainingTable.removeAt(1);
-					foreach(const QString& s, remainingTable) {
+					foreach(const QString& s, remainingTable)
 						out << s;
-					}
 					rowCount = 0;
 					if (!captionRemoved)
 						captionRemoved = true;
@@ -2106,9 +2099,8 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 				textable << QLatin1String("\\hline \n");
 		}
 
-		foreach (const QString& s, textable) {
+		foreach (const QString& s, textable)
 			out << s;
-		}
 		QStringList values;
 		captionRemoved = false;
 		for (int row = 0; row < totalRowCount; ++row) {
@@ -2126,9 +2118,8 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 			}
 
 			if (notEmpty || !skipEmptyRows) {
-				foreach (const QString& s, values) {
+				foreach (const QString& s, values)
 					out << s;
-				}
 				out << QLatin1String("\\\\ \n");
 				if (gridLines)
 					out << QLatin1String("\\hline \n");
@@ -2139,9 +2130,8 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 					if (captions)
 						if (!captionRemoved)
 							textable.removeAt(1);
-					foreach (const QString& s, textable) {
+					foreach (const QString& s, textable)
 						out << s;
-					}
 					rowCount = 0;
 					if (!captionRemoved)
 						captionRemoved = true;
@@ -2156,17 +2146,16 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 	if (!exportEntire) {
 		qDeleteAll(toExport);
 		toExport.clear();
-	} else {
+	} else
 		toExport.clear();
-	}
 }
 
 void SpreadsheetView::exportToFits(const QString &fileName, const int exportTo, const bool commentsAsUnits) const {
-    FITSFilter* filter = new FITSFilter;
+	FITSFilter* filter = new FITSFilter;
 
-    filter->setExportTo(exportTo);
-    filter->setCommentsAsUnits(commentsAsUnits);
-    filter->write(fileName, m_spreadsheet);
+	filter->setExportTo(exportTo);
+	filter->setCommentsAsUnits(commentsAsUnits);
+	filter->write(fileName, m_spreadsheet);
 
-    delete filter;
+	delete filter;
 }

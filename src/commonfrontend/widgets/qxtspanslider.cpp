@@ -41,8 +41,7 @@ QxtSpanSliderPrivate::QxtSpanSliderPrivate()
 {}
 
 // TODO: get rid of this in Qt 4.3
-void QxtSpanSliderPrivate::initStyleOption(QStyleOptionSlider* option, SpanHandle handle) const
-{
+void QxtSpanSliderPrivate::initStyleOption(QStyleOptionSlider* option, SpanHandle handle) const {
     if (!option)
         return;
 
@@ -66,8 +65,7 @@ void QxtSpanSliderPrivate::initStyleOption(QStyleOptionSlider* option, SpanHandl
         option->state |= QStyle::State_Horizontal;
 }
 
-int QxtSpanSliderPrivate::pixelPosToRangeValue(int pos) const
-{
+int QxtSpanSliderPrivate::pixelPosToRangeValue(int pos) const {
     QStyleOptionSlider opt;
     initStyleOption(&opt);
 
@@ -168,18 +166,15 @@ void QxtSpanSliderPrivate::drawHandle(QStylePainter* painter, SpanHandle handle)
     painter->drawComplexControl(QStyle::CC_Slider, opt);
 }
 
-void QxtSpanSliderPrivate::triggerAction(QAbstractSlider::SliderAction action, bool main)
-{
+void QxtSpanSliderPrivate::triggerAction(QAbstractSlider::SliderAction action, bool main) {
     int value = 0;
     bool up = false;
     const int min = qxt_p().minimum();
     const int max = qxt_p().maximum();
     const SpanHandle altControl = (mainControl == LowerHandle ? UpperHandle : LowerHandle);
-    switch (action)
-    {
+    switch (action) {
     case QAbstractSlider::SliderSingleStepAdd:
-        if ((main && mainControl == UpperHandle) || (!main && altControl == UpperHandle))
-        {
+        if ((main && mainControl == UpperHandle) || (!main && altControl == UpperHandle)) {
             value = qBound(min, upper + qxt_p().singleStep(), max);
             up = true;
             break;
@@ -187,8 +182,7 @@ void QxtSpanSliderPrivate::triggerAction(QAbstractSlider::SliderAction action, b
         value = qBound(min, lower + qxt_p().singleStep(), max);
         break;
     case QAbstractSlider::SliderSingleStepSub:
-        if ((main && mainControl == UpperHandle) || (!main && altControl == UpperHandle))
-        {
+        if ((main && mainControl == UpperHandle) || (!main && altControl == UpperHandle)) {
             value = qBound(min, upper - qxt_p().singleStep(), max);
             up = true;
             break;
@@ -205,47 +199,36 @@ void QxtSpanSliderPrivate::triggerAction(QAbstractSlider::SliderAction action, b
         if ((main && mainControl == UpperHandle) || (!main && altControl == UpperHandle))
             up = true;
         break;
-    default:
+    case QAbstractSlider::SliderPageStepAdd:
+    case QAbstractSlider::SliderNoAction:
+    case QAbstractSlider::SliderPageStepSub:
+    case QAbstractSlider::SliderMove:
         qWarning("QxtSpanSliderPrivate::triggerAction: Unknown action");
-        break;
     }
 
-    if (!up)
-    {
-        if (value > upper)
-        {
+    if (!up) {
+        if (value > upper) {
             swapControls();
             qxt_p().setUpperValue(value);
-        }
-        else
-        {
+        } else
             qxt_p().setLowerValue(value);
-        }
-    }
-    else
-    {
-        if (value < lower)
-        {
+    } else {
+        if (value < lower) {
             swapControls();
             qxt_p().setLowerValue(value);
-        }
-        else
-        {
+        } else
             qxt_p().setUpperValue(value);
-        }
     }
 }
 
-void QxtSpanSliderPrivate::swapControls()
-{
+void QxtSpanSliderPrivate::swapControls() {
     qSwap(lower, upper);
     qSwap(lowerPressed, upperPressed);
     lastPressed = (lastPressed == LowerHandle ? UpperHandle : LowerHandle);
     mainControl = (mainControl == LowerHandle ? UpperHandle : LowerHandle);
 }
 
-void QxtSpanSliderPrivate::updateRange(int min, int max)
-{
+void QxtSpanSliderPrivate::updateRange(int min, int max) {
     Q_UNUSED(min);
     Q_UNUSED(max);
     // setSpan() takes care of keeping span in range
@@ -563,13 +546,13 @@ void QxtSpanSlider::paintEvent(QPaintEvent* event)
     qxt_d().drawSpan(&painter, spanRect);
 
     // handles
-    switch (qxt_d().lastPressed)
-    {
+    switch (qxt_d().lastPressed) {
     case QxtSpanSliderPrivate::LowerHandle:
         qxt_d().drawHandle(&painter, QxtSpanSliderPrivate::UpperHandle);
         qxt_d().drawHandle(&painter, QxtSpanSliderPrivate::LowerHandle);
         break;
     case QxtSpanSliderPrivate::UpperHandle:
+    case QxtSpanSliderPrivate::NoHandle:
     default:
         qxt_d().drawHandle(&painter, QxtSpanSliderPrivate::LowerHandle);
         qxt_d().drawHandle(&painter, QxtSpanSliderPrivate::UpperHandle);

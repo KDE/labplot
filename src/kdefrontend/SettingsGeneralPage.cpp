@@ -45,10 +45,10 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 	ui.setupUi(this);
 	retranslateUi();
 
-	ui.lLatexWarning->setPixmap( QIcon::fromTheme("state-warning").pixmap(QSize(48,48)) );
+//TODO	ui.lLatexWarning->setPixmap( QIcon::fromTheme("state-warning").pixmap(QSize(48,48)) );
 
 	//add available TeX typesetting engines
-	if (TeXRenderer::executableExists(QLatin1String("lualatex")))
+/*TODO	if (TeXRenderer::executableExists(QLatin1String("lualatex")))
 		ui.cbTexEngine->addItem(QLatin1String("LuaLaTeX"), QLatin1String("lualatex"));
 
 	if (TeXRenderer::executableExists(QLatin1String("xelatex")))
@@ -59,7 +59,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 
 	if (TeXRenderer::executableExists(QLatin1String("latex")))
 		ui.cbTexEngine->addItem(QLatin1String("LaTeX"), QLatin1String("latex"));
-
+*/
 	connect(ui.cbLoadOnStart, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
 	connect(ui.cbInterface, SIGNAL(currentIndexChanged(int)), this, SLOT(interfaceChanged(int)) );
 	connect(ui.cbMdiVisibility, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
@@ -78,8 +78,8 @@ void SettingsGeneralPage::applySettings(){
 	group.writeEntry("MdiWindowVisibility", ui.cbMdiVisibility->currentIndex());
 	group.writeEntry("AutoSave", ui.chkAutoSave->isChecked());
 	group.writeEntry("AutoSaveInterval", ui.sbAutoSaveInterval->value());
-	group.writeEntry("DoubleBuffering", ui.chkDoubleBuffering->isChecked());
-	group.writeEntry("LaTeXEngine", ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
+//TODO	group.writeEntry("DoubleBuffering", ui.chkDoubleBuffering->isChecked());
+//TODO	group.writeEntry("LaTeXEngine", ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
 }
 
 void SettingsGeneralPage::restoreDefaults(){
@@ -94,16 +94,17 @@ void SettingsGeneralPage::loadSettings(){
 	ui.cbMdiVisibility->setCurrentIndex(group.readEntry("MdiWindowVisibility", 0));
 	ui.chkAutoSave->setChecked(group.readEntry<bool>("AutoSave", 0));
 	ui.sbAutoSaveInterval->setValue(group.readEntry("AutoSaveInterval", 0));
-	ui.chkDoubleBuffering->setChecked(group.readEntry<bool>("DoubleBuffering", 1));
+//TODO	ui.chkDoubleBuffering->setChecked(group.readEntry<bool>("DoubleBuffering", 1));
 
 	QString engine = group.readEntry("LaTeXEngine", "");
 	int index = -1;
-	if (engine.isEmpty())
+/*TODO	if (engine.isEmpty())
 		index = ui.cbTexEngine->findData("xelatex");
 	else
 		index = ui.cbTexEngine->findData(engine);
 
 	ui.cbTexEngine->setCurrentIndex(index);
+*/
 }
 
 void SettingsGeneralPage::retranslateUi() {

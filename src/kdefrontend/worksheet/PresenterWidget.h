@@ -49,6 +49,7 @@ private:
 
 protected:
 	void keyPressEvent(QKeyEvent*);
+	void focusOutEvent(QFocusEvent*);
 	bool eventFilter(QObject*, QEvent*);
 
 private slots:

@@ -4,8 +4,7 @@
     Project              : LabPlot
     Description          : history dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2012 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -32,20 +31,20 @@
 #define HISTORYDIALOG_H
 
 #include <KDialog>
-class Project;
 class QUndoStack;
 
 class HistoryDialog: public KDialog {
-  Q_OBJECT
+	Q_OBJECT
 
-  public:
-	HistoryDialog(QWidget* parent, QUndoStack* project, QString& emptyLabel);
+public:
+	HistoryDialog(QWidget*, QUndoStack*, const QString&);
+	~HistoryDialog();
 
-  private:
+private:
 	QUndoStack* m_undoStack;
-	
-  private slots:
-	  void clearUndoStack();
+
+private slots:
+	void clearUndoStack();
 };
 
 #endif

@@ -72,17 +72,17 @@ class TextLabel : public WorksheetElement {
 		Type type() const;
 		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
-		virtual QGraphicsItem *graphicsItem() const;
+		virtual QGraphicsItem* graphicsItem() const;
 		void setParentGraphicsItem(QGraphicsItem*);
 
-		virtual void save(QXmlStreamWriter *) const;
-		virtual bool load(XmlStreamReader *);
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
 		virtual void loadThemeConfig(const KConfig& config);
 		virtual void saveThemeConfig(const KConfig& config);
 
 		CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text);
-		BASIC_D_ACCESSOR_DECL(int, teXFontSize, TeXFontSize);
 		BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor);
+		CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont);
 		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
 		void setPosition(const QPointF&);
 		void setPositionInvalid(bool);
@@ -120,7 +120,7 @@ class TextLabel : public WorksheetElement {
 
 	signals:
 		friend class TextLabelSetTextCmd;
-		friend class TextLabelSetTeXFontSizeCmd;
+		friend class TextLabelSetTeXFontCmd;
 		friend class TextLabelSetTeXFontColorCmd;
 		friend class TextLabelSetPositionCmd;
 		friend class TextLabelSetHorizontalAlignmentCmd;
@@ -128,6 +128,7 @@ class TextLabel : public WorksheetElement {
 		friend class TextLabelSetRotationAngleCmd;
 		void textWrapperChanged(const TextLabel::TextWrapper&);
 		void teXFontSizeChanged(const int);
+		void teXFontChanged(const QFont);
 		void teXFontColorChanged(const QColor);
 		void positionChanged(const TextLabel::PositionWrapper&);
 		void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);

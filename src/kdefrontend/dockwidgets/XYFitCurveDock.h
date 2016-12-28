@@ -65,6 +65,7 @@ private slots:
 	//general tab
 	void nameChanged();
 	void commentChanged();
+	void categoryChanged(int);
 	void modelChanged(int);
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);

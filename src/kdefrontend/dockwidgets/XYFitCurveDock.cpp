@@ -83,10 +83,12 @@ void XYFitCurveDock::setupGeneral() {
 	cbWeightsColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbWeightsColumn, 6, 4, 1, 2);
 
-	for(int i=0; i < NSL_FIT_MODEL_TYPE_COUNT; i++)
-		uiGeneralTab.cbModel->addItem(nsl_fit_model_name[i]);
+	for(int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
+		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
+	//show the fit-model category for the currently selected default (first) fit-model category
+	categoryChanged(uiGeneralTab.cbCategory->currentIndex());
 
-	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height()*2);
+	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height() * 2);
 
 	uiGeneralTab.tbConstants->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
 	uiGeneralTab.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
@@ -105,6 +107,7 @@ void XYFitCurveDock::setupGeneral() {
 	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
 	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
 
+	connect( uiGeneralTab.cbCategory, SIGNAL(currentIndexChanged(int)), this, SLOT(categoryChanged(int)) );
 	connect( uiGeneralTab.cbModel, SIGNAL(currentIndexChanged(int)), this, SLOT(modelChanged(int)) );
 	connect( uiGeneralTab.sbDegree, SIGNAL(valueChanged(int)), this, SLOT(updateModelEquation()) );
 	connect( uiGeneralTab.teEquation, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()) );
@@ -117,7 +120,7 @@ void XYFitCurveDock::setupGeneral() {
 
 void XYFitCurveDock::initGeneralTab() {
 	//if there are more then one curve in the list, disable the tab "general"
-	if (m_curvesList.size()==1) {
+	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
@@ -146,11 +149,9 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.sbMax->setValue(m_fitData.xRange.last());
 	this->autoRangeChanged();
 
-	if (m_fitData.modelType == nsl_fit_model_custom)
-		uiGeneralTab.cbModel->setCurrentIndex(uiGeneralTab.cbModel->count()-1);
-	else
+	uiGeneralTab.cbCategory->setCurrentIndex(m_fitData.modelCategory);
+	if (m_fitData.modelCategory != nsl_fit_model_custom)
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
-	this->modelChanged(m_fitData.modelType);
 
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 	this->showFitResult();
@@ -315,50 +316,101 @@ void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYFitCurve*>(curve)->setWeightsColumn(column);
 }
 
+void XYFitCurveDock::categoryChanged(int index) {
+	DEBUG_LOG("categoryChanged() category =" << nsl_fit_model_category_name[index] << ", type =" << m_fitData.modelType);
+	if (uiGeneralTab.cbCategory->currentIndex() == uiGeneralTab.cbCategory->count() - 1)
+		m_fitData.modelCategory = nsl_fit_model_custom;
+	else
+		m_fitData.modelCategory = (nsl_fit_model_category)index;
+	m_initializing = true;
+	uiGeneralTab.cbModel->clear();
+
+	switch (m_fitData.modelCategory) {
+	case nsl_fit_model_basic:
+		for(int i = 0; i < NSL_FIT_MODEL_BASIC_COUNT; i++)
+			uiGeneralTab.cbModel->addItem(nsl_fit_model_basic_name[i]);
+		break;
+	case nsl_fit_model_peak:
+		for(int i = 0; i < NSL_FIT_MODEL_PEAK_COUNT; i++)
+			uiGeneralTab.cbModel->addItem(nsl_fit_model_peak_name[i]);
+		break;
+	case nsl_fit_model_growth:
+		for(int i = 0; i < NSL_FIT_MODEL_GROWTH_COUNT; i++)
+			uiGeneralTab.cbModel->addItem(nsl_fit_model_growth_name[i]);
+		break;
+	case nsl_fit_model_distribution:
+		for(int i = 0; i < NSL_FIT_MODEL_DISTRIBUTION_COUNT; i++)
+			uiGeneralTab.cbModel->addItem(nsl_fit_model_distribution_name[i]);
+		break;
+	case nsl_fit_model_custom:
+		uiGeneralTab.cbModel->addItem(i18n("Custom"));
+	}
+
+	m_fitData.modelType = 0;
+	uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
+
+	m_initializing = false;
+
+	//show the fit-model for the currently selected default (first) fit-model
+	modelChanged(m_fitData.modelType);
+}
+
 void XYFitCurveDock::modelChanged(int index) {
-	nsl_fit_model_type type;
+	DEBUG_LOG("modelChanged() type =" << index << ", initializing =" << m_initializing);
+	if(m_initializing)
+		return;
+
+	unsigned int type = 0;
 	bool custom = false;
-	if (index == uiGeneralTab.cbModel->count()-1) {
-		type = nsl_fit_model_custom;
+	if (m_fitData.modelCategory == nsl_fit_model_custom)
 		custom = true;
-	} else
-		type = (nsl_fit_model_type)index;
+	else
+		type = (unsigned int)index;
+	m_fitData.modelType = type;
 	uiGeneralTab.teEquation->setReadOnly(!custom);
 	uiGeneralTab.tbFunctions->setVisible(custom);
 	uiGeneralTab.tbConstants->setVisible(custom);
 
-	switch (type) {
-	case nsl_fit_model_polynomial:
+	// default settings
+	uiGeneralTab.lDegree->setText(i18n("Degree"));
+
+	switch (m_fitData.modelCategory) {
+	case nsl_fit_model_basic:
+		switch (type) {
+		case nsl_fit_model_polynomial:
+		case nsl_fit_model_fourier:
+			uiGeneralTab.lDegree->setVisible(true);
+			uiGeneralTab.sbDegree->setVisible(true);
+			uiGeneralTab.sbDegree->setMaximum(10);
+			uiGeneralTab.sbDegree->setValue(1);
+			break;
+		case nsl_fit_model_power:
+			uiGeneralTab.lDegree->setVisible(true);
+			uiGeneralTab.sbDegree->setVisible(true);
+			uiGeneralTab.sbDegree->setMaximum(2);
+			uiGeneralTab.sbDegree->setValue(1);
+			break;
+		case nsl_fit_model_exponential:
+			uiGeneralTab.lDegree->setVisible(true);
+			uiGeneralTab.sbDegree->setVisible(true);
+			uiGeneralTab.sbDegree->setMaximum(3);
+			uiGeneralTab.sbDegree->setValue(1);
+			break;
+		default:
+			uiGeneralTab.lDegree->setVisible(false);
+			uiGeneralTab.sbDegree->setVisible(false);
+		}
+		break;
+	case nsl_fit_model_peak:	// all models support multiple peaks
+		uiGeneralTab.lDegree->setText(i18n("Number of peaks"));
 		uiGeneralTab.lDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setMaximum(10);
 		uiGeneralTab.sbDegree->setValue(1);
 		break;
-	case nsl_fit_model_power:
-		uiGeneralTab.lDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setMaximum(2);
-		uiGeneralTab.sbDegree->setValue(1);
-		break;
-	case nsl_fit_model_exponential:
-		uiGeneralTab.lDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setMaximum(3);
-		uiGeneralTab.sbDegree->setValue(1);
-		break;
-	case nsl_fit_model_fourier:
-		uiGeneralTab.lDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setMaximum(10);
-		uiGeneralTab.sbDegree->setValue(1);
-		break;
-	case nsl_fit_model_gaussian:
-		uiGeneralTab.lDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setMaximum(10);
-		uiGeneralTab.sbDegree->setValue(1);
-		break;
-	default:
+	case nsl_fit_model_growth:
+	case nsl_fit_model_distribution:
+	case nsl_fit_model_custom:
 		uiGeneralTab.lDegree->setVisible(false);
 		uiGeneralTab.sbDegree->setVisible(false);
 	}
@@ -367,164 +419,302 @@ void XYFitCurveDock::modelChanged(int index) {
 }
 
 void XYFitCurveDock::updateModelEquation() {
-	QStringList vars; //variables/parameters that are known in ExpressionTextEdit teEquation
+	DEBUG_LOG("updateModelEquation() type =" << m_fitData.modelType);
+	QStringList vars; // variables/parameter that are known in ExpressionTextEdit teEquation
 	vars << "x";
 
-	if (uiGeneralTab.cbModel->currentIndex() == uiGeneralTab.cbModel->count()-1)
-		m_fitData.modelType = nsl_fit_model_custom;
-	else
-		m_fitData.modelType = (nsl_fit_model_type)uiGeneralTab.cbModel->currentIndex();
 	int num = uiGeneralTab.sbDegree->value();
 
 	QString eq;
-	if (m_fitData.modelType != nsl_fit_model_custom) {
-		eq = nsl_fit_model_equation[m_fitData.modelType];
-		m_fitData.model = eq;
-		m_fitData.paramNames.clear();
-	}
-
-	switch (m_fitData.modelType) {
-	case nsl_fit_model_polynomial:
-		vars << "c0" << "c1";
-		m_fitData.paramNames << "c0" << "c1";
-		if (num == 2) {
-			eq += " + c2*x^2";
-			m_fitData.model += " + c2*x^2";
-			vars << "c2";
-			m_fitData.paramNames << "c2";
-		} else if (num > 2) {
-			QString numStr = QString::number(num);
-			eq += " + ... + c" + numStr + "*x^" + numStr;
-			vars << "c" + numStr << "...";
-			for (int i=2; i<=num; ++i) {
-				numStr = QString::number(i);
-				m_fitData.model += "+c" + numStr + "*x^" + numStr;
-				m_fitData.paramNames << "c"+numStr;
-			}
-		}
+	switch(m_fitData.modelCategory) {
+        case nsl_fit_model_basic:
+		m_fitData.model = eq = nsl_fit_model_basic_equation[m_fitData.modelType];
 		break;
-	case nsl_fit_model_power:
-		if (num == 1) {
-			vars << "a" << "b";
-			m_fitData.paramNames << "a" << "b";
-		} else {
-			eq = "a + b*x^c";
-			vars << "a" << "b" << "c";
-			m_fitData.paramNames << "a" << "b" << "c";
-			m_fitData.model = eq;
-		}
+        case nsl_fit_model_peak:
+		m_fitData.model = eq = nsl_fit_model_peak_equation[m_fitData.modelType];
 		break;
-	case nsl_fit_model_exponential:
-		vars << "a" << "b";
-		m_fitData.paramNames << "a" << "b";
-		if (num == 2) {
-			eq += " + c*exp(d*x)";
-			vars << "c" << "d";
-			m_fitData.paramNames << "c" << "d";
-		} else if (num == 3) {
-			eq += " + c*exp(d*x) + e*exp(f*x)";
-			vars << "c" << "d" << "e" << "f";
-			m_fitData.paramNames << "c" << "d" << "e" << "f";
-		}
-		m_fitData.model = eq;
+        case nsl_fit_model_growth:
+		m_fitData.model = eq = nsl_fit_model_growth_equation[m_fitData.modelType];
 		break;
-	case nsl_fit_model_inverse_exponential:
-		vars << "a" << "b" << "c";
-		m_fitData.paramNames << "a" << "b" << "c";
+        case nsl_fit_model_distribution:
+		m_fitData.model = eq = nsl_fit_model_distribution_equation[m_fitData.modelType];
 		break;
-	case nsl_fit_model_fourier:
-		vars << "w" << "a0" << "a1" << "b1";
-		m_fitData.paramNames << "w" << "a0" << "a1" << "b1";
-		if (num == 2) {
-			eq += " + (a2*cos(2*w*x) + b2*sin(2*w*x))";
-			m_fitData.model += " + (a2*cos(2*w*x) + b2*sin(2*w*x))";
-			vars << "a2" << "b2";
-			m_fitData.paramNames << "a2" << "b2";
-		} else if (num > 2) {
-			QString numStr = QString::number(num);
-			eq += " + ... + (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
-			vars << "a"+numStr << "b"+numStr << "...";
-			for (int i=2; i <= num; ++i) {
-				numStr = QString::number(i);
-				m_fitData.model += "+ (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
-				m_fitData.paramNames << "a"+numStr << "b"+numStr;
-			}
-		}
-		break;
-	case nsl_fit_model_gaussian:
-		vars << "a1" << "b1";
-		m_fitData.paramNames << "a1" << "b1";
-		if (num == 2) {
-			eq += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2)";
-			m_fitData.model += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2)";
-			vars << "a2" << "b2";
-			m_fitData.paramNames << "a2" << "b2";
-		} else if (num == 3) {
-			eq += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + 1/sqrt(2*pi)/a3*exp(-((x-b3)/a3)^2/2)";
-			m_fitData.model += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + 1/sqrt(2*pi)/a3*exp(-((x-b3)/a3)^2/2)";
-			vars << "a2" << "b2" << "a3" << "b3";
-			m_fitData.paramNames << "a2" << "b2" << "a3" << "b3";
-		} else if (num > 3) {
-			QString numStr = QString::number(num);
-			eq += " + 1/sqrt(2*pi)/a2*exp(-((x-b2)/a2)^2/2) + ... + 1/sqrt(2*pi)/a" + numStr + "*exp(-((x-b" + numStr + ")/a" + numStr + ")^2/2)";
-			vars << "a2" << "b2" << "a"+numStr << "b"+numStr << "...";
-			for (int i=2; i<=num; ++i) {
-				numStr = QString::number(i);
-				m_fitData.model += "+ 1/sqrt(2*pi)/a" + numStr + "*exp(-((x-b" + numStr + ")/a" + numStr + ")^2/2)";
-				m_fitData.paramNames << "a"+numStr << "b"+numStr;
-			}
-		}
-		break;
-	case nsl_fit_model_lorentz:
-		vars << "s" << "t";
-		m_fitData.paramNames << "s" << "t";
-		break;
-	case nsl_fit_model_maxwell:
-		vars << "a";
-		m_fitData.paramNames << "a";
-		break;
-	case nsl_fit_model_sigmoid:
-		vars << "a" << "b" << "c";
-		m_fitData.paramNames << "a" << "b" << "c";
-		break;
-	case nsl_fit_model_gompertz:
-		vars << "a" << "b" << "c";
-		m_fitData.paramNames << "a" << "b" << "c";
-		break;
-	case nsl_fit_model_weibull:
-		vars << "a" << "b" << "c";
-		m_fitData.paramNames << "a" << "b" << "c";
-		break;
-	case nsl_fit_model_lognormal:
-		vars << "a" << "b";
-		m_fitData.paramNames << "a" << "b";
-		break;
-	case nsl_fit_model_gumbel:
-		vars << "a" << "b";
-		m_fitData.paramNames << "a" << "b";
-		break;
-	case nsl_fit_model_custom:
+        case nsl_fit_model_custom:
 		//use the equation of the last selected predefined model or of the last available custom model
 		eq = m_fitData.model;
-		vars << m_fitData.paramNames;
+		break;
 	}
+	if (m_fitData.modelCategory != nsl_fit_model_custom)
+		m_fitData.paramNames.clear();
+
+	switch(m_fitData.modelCategory) {
+	case nsl_fit_model_basic:
+		switch (m_fitData.modelType) {
+		case nsl_fit_model_polynomial:
+			m_fitData.paramNames << "c0" << "c1";
+			if (num == 2) {
+				eq += " + c2*x^2";
+				m_fitData.model += " + c2*x^2";
+				m_fitData.paramNames << "c2";
+			} else if (num > 2) {
+				QString numStr = QString::number(num);
+				eq += " + ... + c" + numStr + "*x^" + numStr;
+				for (int i = 2; i <= num; ++i) {
+					numStr = QString::number(i);
+					m_fitData.model += "+c" + numStr + "*x^" + numStr;
+					m_fitData.paramNames << "c"+numStr;
+				}
+			}
+			vars << "...";
+			break;
+		case nsl_fit_model_power:
+			if (num == 1) {
+				m_fitData.paramNames << "a" << "b";
+			} else {
+				eq = "a + b*x^c";
+				m_fitData.paramNames << "a" << "b" << "c";
+				m_fitData.model = eq;
+			}
+			break;
+		case nsl_fit_model_exponential:
+			m_fitData.paramNames << "a" << "b";
+			if (num == 2) {
+				eq += " + c*exp(d*x)";
+				m_fitData.paramNames << "c" << "d";
+			} else if (num == 3) {
+				eq += " + c*exp(d*x) + e*exp(f*x)";
+				m_fitData.paramNames << "c" << "d" << "e" << "f";
+			}
+			m_fitData.model = eq;
+			break;
+		case nsl_fit_model_inverse_exponential:
+			m_fitData.paramNames << "a" << "b" << "c";
+			break;
+		case nsl_fit_model_fourier:
+			m_fitData.paramNames << "w" << "a0" << "a1" << "b1";
+			if (num == 2) {
+				eq += " + (a2*cos(2*w*x) + b2*sin(2*w*x))";
+				m_fitData.model += " + (a2*cos(2*w*x) + b2*sin(2*w*x))";
+				m_fitData.paramNames << "a2" << "b2";
+			} else if (num > 2) {
+				QString numStr = QString::number(num);
+				eq += " + ... + (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
+				for (int i = 2; i <= num; ++i) {
+					numStr = QString::number(i);
+					m_fitData.model += "+ (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
+					m_fitData.paramNames << "a"+numStr << "b"+numStr;
+				}
+			}
+			vars << "...";
+			break;
+		}
+		break;
+	case nsl_fit_model_peak:
+		switch (m_fitData.modelType) {
+		case nsl_fit_model_gaussian:
+			switch (num) {
+			case 1:
+				m_fitData.paramNames << "s" << "mu" << "a";
+				break;
+			case 2:
+				m_fitData.model = eq = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2))";
+				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
+				break;
+			case 3:
+				m_fitData.model = eq = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2) + a3/s3 * exp(-((x-mu3)/s3)^2/2))";
+				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
+				break;
+			default:
+				QString numStr = QString::number(num);
+				eq = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + ... + a" + numStr + "/s" + numStr + " * exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2))";
+				m_fitData.model = "1./sqrt(2*pi) * (";
+				for (int i = 1; i <= num; ++i) {
+					numStr = QString::number(i);
+					if (i > 1)
+						m_fitData.model += " + ";
+					m_fitData.model += "a" + numStr + "/s" + numStr + "* exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2)";
+					m_fitData.paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
+				}
+				m_fitData.model += ")";
+			}
+			break;
+		case nsl_fit_model_cauchy_lorentz:
+			switch (num) {
+			case 1:
+				m_fitData.paramNames << "s" << "t" << "a";
+				break;
+			case 2:
+				m_fitData.model = eq = "1./pi * (a1 * s1/(s1^2+(x-t1)^2) + a2 * s2/(s2^2+(x-t2)^2))";
+				m_fitData.paramNames << "s1" << "t1" << "a1" << "s2" << "t2" << "a2";
+				break;
+			case 3:
+				m_fitData.model = eq = "1./pi * (a1 * s1/(s1^2+(x-t1)^2) + a2 * s2/(s2^2+(x-t2)^2) + a3 * s3/(s3^2+(x-t3)^2))";
+				m_fitData.paramNames << "s1" << "t1" << "a1" << "s2" << "t2" << "a2" << "s3" << "t3" << "a3";
+				break;
+			default:
+				QString numStr = QString::number(num);
+				eq = "1./pi * (a1 * s1/(s1^2+(x-t1)^2) + ... + a" + numStr + " * s" + numStr + "/(s" + numStr + "^2+(x-t" + numStr + ")^2))";
+				m_fitData.model = "1./pi * (";
+				for (int i = 1; i <= num; ++i) {
+					numStr = QString::number(i);
+					if (i > 1)
+						m_fitData.model += " + ";
+					m_fitData.model += "a" + numStr + " * s" + numStr + "/(s" + numStr + "^2+(x-t" + numStr + ")^2)";
+					m_fitData.paramNames << "s" + numStr << "t" + numStr << "a" + numStr;
+				}
+				m_fitData.model += ")";
+			}
+			break;
+		case nsl_fit_model_sech:
+			switch (num) {
+			case 1:
+				m_fitData.paramNames << "s" << "mu" << "a";
+				break;
+			case 2:
+				m_fitData.model = eq = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2))";
+				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
+				break;
+			case 3:
+				m_fitData.model = eq = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2) + a3/s3 * sech((x-mu3)/s3))";
+				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
+				break;
+			default:
+				QString numStr = QString::number(num);
+				eq = "1/pi * (a1/s1 * sech((x-mu1)/s1) + ... + a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/s" + numStr + "))";
+				m_fitData.model = "1/pi * (";
+				for (int i = 1; i <= num; ++i) {
+					numStr = QString::number(i);
+					if (i > 1)
+						m_fitData.model += " + ";
+					m_fitData.model += "a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/s" + numStr + ")";
+					m_fitData.paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
+				}
+				m_fitData.model += ")";
+			}
+			break;
+		case nsl_fit_model_logistic:
+			switch (num) {
+			case 1:
+				m_fitData.paramNames << "s" << "mu" << "a";
+				break;
+			case 2:
+				m_fitData.model = eq = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2)";
+				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
+				break;
+			case 3:
+				m_fitData.model = eq = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2 + a3/s3 * sech((x-mu3)/2/s3)**2)";
+				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
+				break;
+			default:
+				QString numStr = QString::number(num);
+				eq = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + ... + a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/2/s" + numStr + ")**2)";
+				m_fitData.model = "1/4 * (";
+				for (int i = 1; i <= num; ++i) {
+					numStr = QString::number(i);
+					if (i > 1)
+						m_fitData.model += " + ";
+					m_fitData.model += "a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/2/s" + numStr + ")**2";
+					m_fitData.paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
+				}
+				m_fitData.model += ")";
+			}
+			break;
+		}
+		break;
+	case nsl_fit_model_growth:
+		switch (m_fitData.modelType) {
+		case nsl_fit_model_atan:
+		case nsl_fit_model_tanh:
+		case nsl_fit_model_algebraic_sigmoid:
+		case nsl_fit_model_erf:
+		case nsl_fit_model_gudermann:
+			m_fitData.paramNames << "s" << "mu" << "a";
+			break;
+		case nsl_fit_model_sigmoid:
+			m_fitData.paramNames << "k" << "mu" << "a";
+			break;
+		case nsl_fit_model_hill:
+			m_fitData.paramNames << "s" << "n" << "a";
+			break;
+		case nsl_fit_model_gompertz:
+			m_fitData.paramNames << "a" << "b" << "c";
+			break;
+		}
+		break;
+	case nsl_fit_model_distribution:
+		switch (m_fitData.modelType) {
+		case nsl_fit_model_normal:
+			m_fitData.paramNames << "s" << "mu" << "a";
+			break;
+		case nsl_fit_model_cauchy_lorentz:
+			m_fitData.paramNames << "s" << "t" << "a";
+			break;
+		case nsl_fit_model_maxwell:
+			m_fitData.paramNames << "a" << "c";
+			break;
+		case nsl_fit_model_poisson:
+			m_fitData.paramNames << "l" << "a";
+			break;
+		case nsl_fit_model_lognormal:
+		case nsl_fit_model_laplace:
+			m_fitData.paramNames << "s" << "mu" << "a";
+			break;
+		case nsl_fit_model_gamma:
+			m_fitData.paramNames << "b" << "p" << "a";
+			break;
+		case nsl_fit_model_rayleigh:
+			m_fitData.paramNames << "s" << "a";
+			break;
+		case nsl_fit_model_levy:
+			m_fitData.paramNames << "g" << "mu" << "a";
+			break;
+		case nsl_fit_model_chi_square:
+			m_fitData.paramNames << "n" << "a";
+			break;
+		case nsl_fit_model_weibull:
+			m_fitData.paramNames << "k" << "l" << "mu" << "a";
+			break;
+		case nsl_fit_model_frechet:
+			m_fitData.paramNames << "a" << "mu" << "s" << "c";
+			break;
+		case nsl_fit_model_gumbel:
+			m_fitData.paramNames << "b" << "mu" << "a";
+			break;
+		case nsl_fit_model_sech_dist:
+			m_fitData.paramNames << "s" << "mu" << "a";
+			break;
+		}
+		break;
+	case nsl_fit_model_custom:
+		break;
+	}
+	vars << m_fitData.paramNames;
 
 	//resize the vector for the start values and set the elements to 1.0
 	//in case a custom model is used, do nothing, we take over the previous values
 	//when initializing, don't do anything - we use start values already
 	//available - unless there're no values available
-	if (m_fitData.modelType != nsl_fit_model_custom &&
+	if (m_fitData.modelCategory != nsl_fit_model_custom || 
 	        !(m_initializing && m_fitData.paramNames.size() == m_fitData.paramStartValues.size())) {
+		DEBUG_LOG(" number of start values" << m_fitData.paramNames.size() << m_fitData.paramStartValues.size());
 		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
 		m_fitData.paramFixed.resize(m_fitData.paramNames.size());
 		m_fitData.paramLowerLimits.resize(m_fitData.paramNames.size());
 		m_fitData.paramUpperLimits.resize(m_fitData.paramNames.size());
 
-		for (int i=0; i < m_fitData.paramNames.size(); ++i) {
+		for (int i = 0; i < m_fitData.paramNames.size(); ++i) {
 			m_fitData.paramStartValues[i] = 1.0;
 			m_fitData.paramFixed[i] = false;
 			m_fitData.paramLowerLimits[i] = -DBL_MAX;
 			m_fitData.paramUpperLimits[i] = DBL_MAX;
+		}
+
+		// model-dependent start values
+		if (m_fitData.modelCategory == nsl_fit_model_distribution) {
+			if (m_fitData.modelType == nsl_fit_model_weibull)
+				m_fitData.paramStartValues[2] = 0.0;
+			if (m_fitData.modelType == nsl_fit_model_frechet || m_fitData.modelType == nsl_fit_model_levy)
+				m_fitData.paramStartValues[1] = 0.0;
 		}
 	}
 
@@ -611,7 +801,7 @@ void XYFitCurveDock::insertConstant(const QString& str) {
 void XYFitCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	m_fitData.degree = uiGeneralTab.sbDegree->value();
-	if (m_fitData.modelType == nsl_fit_model_custom)
+	if (m_fitData.modelCategory == nsl_fit_model_custom)
 		m_fitData.model = uiGeneralTab.teEquation->toPlainText();
 
 	foreach(XYCurve* curve, m_curvesList)
@@ -629,10 +819,10 @@ void XYFitCurveDock::enableRecalculate() const {
 	//no fitting possible without the x- and y-data
 	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-	bool data = (aspectX!=0 && aspectY!=0);
+	bool data = (aspectX != 0 && aspectY != 0);
 
-	nsl_fit_model_type type = (nsl_fit_model_type)uiGeneralTab.cbModel->currentIndex();
-	if (type == nsl_fit_model_custom)
+	nsl_fit_model_category category = (nsl_fit_model_category)uiGeneralTab.cbCategory->currentIndex();
+	if (category == nsl_fit_model_custom)
 		uiGeneralTab.pbRecalculate->setEnabled( data && uiGeneralTab.teEquation->isValid() );
 	else
 		uiGeneralTab.pbRecalculate->setEnabled(data);
@@ -665,7 +855,7 @@ void XYFitCurveDock::showFitResult() {
 	str += i18n("degrees of freedom:") + ' ' + QString::number(fitResult.dof) + "<br><br>";
 
 	str += "<b>" +i18n("Parameters:") + "</b>";
-	for (int i=0; i < fitResult.paramValues.size(); i++) {
+	for (int i = 0; i < fitResult.paramValues.size(); i++) {
 		if (fitData.paramFixed.at(i))
 			str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i));
 		else
@@ -691,7 +881,7 @@ void XYFitCurveDock::showFitResult() {
 // 	str += "<br><br>";
 //
 // 	QStringList iterations = fitResult.solverOutput.split(';');
-// 	for (int i=0; i<iterations.size(); ++i)
+// 	for (int i = 0; i<iterations.size(); ++i)
 // 		str += "<br>" + iterations.at(i);
 
 	uiGeneralTab.teResult->setText(str);
@@ -735,13 +925,10 @@ void XYFitCurveDock::curveWeightsColumnChanged(const AbstractColumn* column) {
 void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& data) {
 	m_initializing = true;
 	m_fitData = data;
-	if (m_fitData.modelType == nsl_fit_model_custom)
-		uiGeneralTab.cbModel->setCurrentIndex(uiGeneralTab.cbModel->count()-1);
+	if (m_fitData.modelCategory == nsl_fit_model_custom)
+		uiGeneralTab.teEquation->setPlainText(m_fitData.model);
 	else
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
-	this->modelChanged(m_fitData.modelType);
-	if (m_fitData.modelType == nsl_fit_model_custom)
-		uiGeneralTab.teEquation->setPlainText(m_fitData.model);
 
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 	this->showFitResult();

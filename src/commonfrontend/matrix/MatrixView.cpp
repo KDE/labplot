@@ -927,19 +927,20 @@ void MatrixView::clearSelectedRows() {
  */
 
 void MatrixView::print(QPrinter* printer) const {
+	WAIT_CURSOR;
 	QPainter painter (printer);
 
-	int dpiy = printer->logicalDpiY();
+	const int dpiy = printer->logicalDpiY();
 	const int margin = (int) ( (1/2.54)*dpiy ); // 1 cm margins
 
 	QHeaderView *hHeader = m_tableView->horizontalHeader();
 	QHeaderView *vHeader = m_tableView->verticalHeader();
 	const QVector<QVector<double> >& matrixData = m_matrix->data();
 
-	int rows = m_matrix->rowCount();
-	int cols = m_matrix->columnCount();
+	const int rows = m_matrix->rowCount();
+	const int cols = m_matrix->columnCount();
 	int height = margin;
-	int vertHeaderWidth = vHeader->width();
+	const int vertHeaderWidth = vHeader->width();
 	int right = margin + vertHeaderWidth;
 
 	int columnsPerTable = 0;
@@ -1055,6 +1056,7 @@ void MatrixView::print(QPrinter* printer) const {
 			}
 		}
 	}
+	RESET_CURSOR;
 }
 
 void MatrixView::exportToFile(const QString& path, const QString& separator) const {

@@ -4,7 +4,7 @@
     Description          : Parser for mathematical expressions
     --------------------------------------------------------------------
     Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2014-2016 Stefan Gerlach  (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2014-2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -225,12 +225,15 @@ double parse(const char *str) {
 
 	strncpy(p.string, str, slen);
 	p.string[strlen(p.string)] = '\n';
+	pdebug("\nPARSER: yyparse(\"%s\") len=%zu\n", p.string, strlen(p.string));
 
 	/* parameter for yylex */
 	yyparse(&p);
 
 	pdebug("PARSER: parse() DONE (res = %g, parse errors = %d)\n", res, parse_errors());
 	free(p.string);
+	p.string = 0;
+
 	return res;
 }
 
@@ -299,9 +302,9 @@ int yylex(param *p) {
 		static int length = 0;
 		int i = 0;
 
-		/* Initially make the buffer long enough for a 20-character symbol name */
+		/* Initially make the buffer long enough for a 10-character symbol name */
 		if (length == 0)
-			length = 20, symbuf = (char *) malloc(length + 1);
+			length = 10, symbuf = (char *) malloc(length + 1);
 
 		do {
 			/* If buffer is full, make it bigger */

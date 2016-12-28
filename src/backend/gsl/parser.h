@@ -30,6 +30,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+/* #define PDEBUG 1 */
+
 struct con {
 	char const *name;
 	double value;
@@ -71,5 +73,6 @@ double parse_with_vars(const char[], const parser_var[], int nvars);
 
 extern struct con _constants[];
 extern struct func _functions[];
+
 
 #endif /*PARSER_H*/

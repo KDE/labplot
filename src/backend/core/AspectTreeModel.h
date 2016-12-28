@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
 	Copyright            : (C) 2007-2009 by Knut Franke (knut.franke@gmx.de)
     Copyright            : (C) 2007-2009 by Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2011 Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2011-2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -54,7 +54,8 @@ class AspectTreeModel : public QAbstractItemModel{
 		bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 		Qt::ItemFlags flags(const QModelIndex &index) const;
 		void setSelectableAspects(QList<const char*>);
-		QModelIndex modelIndexOfAspect(const AbstractAspect *aspect, int column=0) const;
+		QModelIndex modelIndexOfAspect(const AbstractAspect*, int column=0) const;
+		QModelIndex modelIndexOfAspect(const QString& path, int column=0) const;
 
 		void setFilterString(const QString&);
 		void setFilterCaseSensitivity(Qt::CaseSensitivity);

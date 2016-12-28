@@ -395,7 +395,16 @@ void XYInterpolationCurveDock::typeChanged() {
 		uiGeneralTab.lVariant->show();
 		uiGeneralTab.cbVariant->show();
 		break;
-	default:
+	case nsl_interp_type_linear:
+	case nsl_interp_type_polynomial:
+	case nsl_interp_type_cspline:
+	case nsl_interp_type_cspline_periodic:
+	case nsl_interp_type_akima:
+	case nsl_interp_type_akima_periodic:
+	case nsl_interp_type_steffen:
+	case nsl_interp_type_cosine:
+	case nsl_interp_type_exponential:
+	case nsl_interp_type_rational:
 		uiGeneralTab.lVariant->hide();
 		uiGeneralTab.cbVariant->hide();
 		uiGeneralTab.cbVariant->setCurrentIndex(nsl_interp_pch_variant_finite_difference);

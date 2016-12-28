@@ -98,6 +98,7 @@ class ProjectExplorer : public QWidget {
 		void collapseSelected();
 		void deleteSelected();
 
+		void navigateTo(const QString& path);
 		void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 		void selectIndex(const QModelIndex&);
 		void deselectIndex(const QModelIndex&);
