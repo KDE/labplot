@@ -1392,7 +1392,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 				case 4:
 				case 8:
 #ifndef NDEBUG
-					qDebug()<<"WARNING: size of H5T_NATIVE_UCHAR =" << sizeof(H5T_NATIVE_UCHAR;
+					qDebug()<<"WARNING: size of H5T_NATIVE_UCHAR =" << sizeof(H5T_NATIVE_UCHAR);
 #endif
 					dataString = readHDFData2D<unsigned int>(dataset, H5T_NATIVE_UCHAR, rows, cols, lines, dataPointers);
 					break;
