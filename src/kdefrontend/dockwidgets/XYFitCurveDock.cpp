@@ -407,7 +407,9 @@ void XYFitCurveDock::modelChanged(int index) {
 		uiGeneralTab.sbDegree->setMaximum(10);
 		uiGeneralTab.sbDegree->setValue(1);
 		break;
-	default:
+	case nsl_fit_model_growth:
+	case nsl_fit_model_distribution:
+	case nsl_fit_model_custom:
 		uiGeneralTab.lDegree->setVisible(false);
 		uiGeneralTab.sbDegree->setVisible(false);
 	}

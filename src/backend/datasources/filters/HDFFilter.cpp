@@ -332,10 +332,11 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 				data[m] = readHDFData1D<char>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
 				break;
 			case 4:
+			case 8:
 #ifndef NDEBUG
-				qDebug()<<"WARNING: size of H5T_NATIVE_CHAR = 4!";
+				qDebug()<<"WARNING: size of H5T_NATIVE_CHAR =" << sizeof(H5T_NATIVE_CHAR);
 #endif
-				data[m]=readHDFData1D<int>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT),rows,lines,dataP);
+				data[m] = readHDFData1D<int>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
 				break;
 			}
 		}
@@ -345,8 +346,9 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 				data[m] = readHDFData1D<unsigned char>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
 				break;
 			case 4:
+			case 8:
 #ifndef NDEBUG
-				qDebug()<<"WARNING: size of H5T_NATIVE_UCHAR = 4!";
+				qDebug()<<"WARNING: size of H5T_NATIVE_UCHAR =" << sizeof(H5T_NATIVE_UCHAR);
 #endif
 				data[m] = readHDFData1D<unsigned int>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, lines, dataP);
 				break;
@@ -462,6 +464,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 				data[m] = readHDFData2D<char>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, cols, lines, dummy);
 				break;
 			case 4:
+			case 8:
 				data[m] = readHDFData2D<int>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, cols, lines, dummy);
 				break;
 			}
@@ -472,6 +475,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 				data[m] = readHDFData2D<unsigned char>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, cols, lines, dummy);
 				break;
 			case 4:
+			case 8:
 				data[m] = readHDFData2D<unsigned int>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, cols, lines, dummy);
 				break;
 			}
@@ -1240,8 +1244,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 					dataString = readHDFData1D<char>(dataset, H5T_NATIVE_CHAR, rows, lines, dataPointers[0]);
 					break;
 				case 4:
+				case 8:
 #ifndef NDEBUG
-					qDebug()<<"WARNING: size of H5T_NATIVE_CHAR = 4!";
+					qDebug()<<"WARNING: size of H5T_NATIVE_CHAR =" << sizeof(H5T_NATIVE_CHAR);
 #endif
 					dataString = readHDFData1D<int>(dataset, H5T_NATIVE_CHAR, rows, lines, dataPointers[0]);
 					break;
@@ -1253,8 +1258,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 					dataString = readHDFData1D<unsigned char>(dataset, H5T_NATIVE_UCHAR, rows, lines, dataPointers[0]);
 					break;
 				case 4:
+				case 8:
 #ifndef NDEBUG
-					qDebug()<<"WARNING: size of H5T_NATIVE_UCHAR = 4!";
+					qDebug()<<"WARNING: size of H5T_NATIVE_UCHAR =" << sizeof(H5T_NATIVE_UCHAR);
 #endif
 					dataString = readHDFData1D<unsigned int>(dataset, H5T_NATIVE_UCHAR, rows, lines, dataPointers[0]);
 					break;
@@ -1370,8 +1376,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 					dataString = readHDFData2D<char>(dataset, H5T_NATIVE_CHAR, rows, cols, lines, dataPointers);
 					break;
 				case 4:
+				case 8:
 #ifndef NDEBUG
-					qDebug()<<"WARNING: size of H5T_NATIVE_CHAR = 4!";
+					qDebug()<<"WARNING: size of H5T_NATIVE_CHAR =" << sizeof(H5T_NATIVE_CHAR);
 #endif
 					dataString = readHDFData2D<int>(dataset, H5T_NATIVE_CHAR, rows, cols, lines, dataPointers);
 					break;
@@ -1383,8 +1390,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 					dataString = readHDFData2D<unsigned char>(dataset, H5T_NATIVE_UCHAR, rows, cols, lines, dataPointers);
 					break;
 				case 4:
+				case 8:
 #ifndef NDEBUG
-					qDebug()<<"WARNING: size of H5T_NATIVE_UCHAR = 4!";
+					qDebug()<<"WARNING: size of H5T_NATIVE_UCHAR =" << sizeof(H5T_NATIVE_UCHAR;
 #endif
 					dataString = readHDFData2D<unsigned int>(dataset, H5T_NATIVE_UCHAR, rows, cols, lines, dataPointers);
 					break;

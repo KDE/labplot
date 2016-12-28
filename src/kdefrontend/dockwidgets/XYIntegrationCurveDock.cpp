@@ -306,7 +306,8 @@ void XYIntegrationCurveDock::methodChanged() {
 	case nsl_int_method_trapezoid:
 		uiGeneralTab.cbAbsolute->setEnabled(true);
 		break;
-	default:
+	case nsl_int_method_simpson:
+	case nsl_int_method_simpson_3_8:
 		uiGeneralTab.cbAbsolute->setChecked(false);
 		uiGeneralTab.cbAbsolute->setEnabled(false);
 	}
