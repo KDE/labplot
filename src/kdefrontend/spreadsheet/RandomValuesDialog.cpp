@@ -140,8 +140,8 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_laplace:
-		ui.lParameter1->setText(QString::fromUtf8("μ ="));
-		ui.lParameter2->setText("a =");
+		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
 		break;

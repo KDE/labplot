@@ -337,7 +337,7 @@ double nsl_fit_model_gamma_param_deriv(int param, double x, double b, double p, 
 	return 0;
 }
 double nsl_fit_model_laplace_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
-	double norm = 1./(2.*s)/sigma, y = fabs(x-mu)/s, efactor = exp(-y);
+	double norm = 1./(2.*s)/sigma, y = fabs((x-mu)/s), efactor = exp(-y);
 
 	if (param == 0)
 		return a/s*norm * (y-1.) * efactor;

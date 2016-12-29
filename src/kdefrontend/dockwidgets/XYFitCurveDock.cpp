@@ -351,6 +351,10 @@ void XYFitCurveDock::categoryChanged(int index) {
         	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
 
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
+			//TODO: Testing
+			if (i == nsl_sf_stats_laplace)
+				continue;
+
 			QStandardItem* item = model->item(i);
 			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
 		}
@@ -660,23 +664,22 @@ void XYFitCurveDock::updateModelEquation() {
 	case nsl_fit_model_distribution:
 		switch (m_fitData.modelType) {
 		case nsl_sf_stats_gaussian:
+		case nsl_sf_stats_laplace:
 			m_fitData.paramNames << "s" << "mu" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 			break;
-		case nsl_sf_stats_gaussian_tail: {
+		case nsl_sf_stats_gaussian_tail:
 			break;
-		}
+		case nsl_sf_stats_exponential:
+			break;
 	// TODO: use nsl_sf_stats
 //		case nsl_fit_model_cauchy_lorentz:
 //			m_fitData.paramNames << "s" << "t" << "a";
-		case nsl_fit_model_maxwell:
-			m_fitData.paramNames << "a" << "c";
-			break;
-		case nsl_fit_model_poisson:
-			m_fitData.paramNames << "l" << "a";
-			break;
+//		case nsl_fit_model_maxwell:
+//			m_fitData.paramNames << "a" << "c";
+//		case nsl_fit_model_poisson:
+//			m_fitData.paramNames << "l" << "a";
 		case nsl_fit_model_lognormal:
-		case nsl_fit_model_laplace:
 			m_fitData.paramNames << "s" << "mu" << "a";
 			break;
 		case nsl_fit_model_gamma:
@@ -754,8 +757,10 @@ void XYFitCurveDock::updateModelEquation() {
 		uiGeneralTab.lFuncPic->show();
 
 		// hide uiGeneralTab.teEquation
-		if (m_fitData.modelType == nsl_sf_stats_gaussian)
+		if (m_fitData.modelType == nsl_sf_stats_gaussian || m_fitData.modelType == nsl_sf_stats_laplace)
 			uiGeneralTab.teEquation->hide();
+		else
+			uiGeneralTab.teEquation->show();
 		// set label
 		uiGeneralTab.lEquation->setText(("f(x)/A ="));
 	} else {

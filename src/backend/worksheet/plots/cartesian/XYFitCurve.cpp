@@ -527,7 +527,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		break;
 	case nsl_fit_model_distribution:
 		switch (modelType) {
-		case nsl_sf_stats_gaussian: {
+		case nsl_sf_stats_gaussian:
+		case nsl_sf_stats_laplace: {
 			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
@@ -538,8 +539,16 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				for (int j = 0; j < 3; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, i, j, 0.);
-					else
-						gsl_matrix_set(J, i, j, nsl_fit_model_gaussian_param_deriv(j, x, s, mu, a, sigma));
+					else {
+						switch (modelType) {
+						case nsl_sf_stats_gaussian:
+							gsl_matrix_set(J, i, j, nsl_fit_model_gaussian_param_deriv(j, x, s, mu, a, sigma));
+							break;
+						case nsl_sf_stats_laplace:
+							gsl_matrix_set(J, i, j, nsl_fit_model_laplace_param_deriv(j, x, s, mu, a, sigma));
+							break;
+						}
+					}
 				}
 			}
 			break;
@@ -578,7 +587,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
-		case nsl_fit_model_poisson: {
+/*		case nsl_fit_model_poisson: {
 			double l = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			for (size_t i = 0; i < n; i++) {
@@ -594,6 +603,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
+*/
 		case nsl_fit_model_lognormal: {	// Y(x) = a/(sqrt(2*pi)*x*s) * exp(-(log(x)-mu)^2/(2*s^2));
 			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
@@ -633,7 +643,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
-		case nsl_fit_model_laplace: {
+/*		case nsl_fit_model_laplace: {
 			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
@@ -650,6 +660,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
+*/
 		case nsl_fit_model_rayleigh: {
 			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
