@@ -84,16 +84,12 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	ui.cbDistribution->addItem(i18n("Beta Distribution"), Beta);
 	ui.cbDistribution->addItem(i18n("Logistic Distribution"), Logistic);
 	ui.cbDistribution->addItem(i18n("Pareto Distribution"), Pareto);
-// 	ui.cbDistribution->addItem(i18n("Spherical Vector Distributions"));
 	ui.cbDistribution->addItem(i18n("Weibull Distribution"), Weibull);
 	ui.cbDistribution->addItem(i18n("Type-1 Gumbel Distribution"), Gumbel1);
 	ui.cbDistribution->addItem(i18n("Type-2 Gumbel Distribution"), Gumbel2);
-// 	ui.cbDistribution->addItem(i18n("Dirichlet Distribution"));
-// 	ui.cbDistribution->addItem(i18n("General Discrete Distributions"));
 	ui.cbDistribution->addItem(i18n("Poisson Distribution"), Poisson);
 	ui.cbDistribution->addItem(i18n("Bernoulli Distribution"), Bernoulli);
 	ui.cbDistribution->addItem(i18n("Binomial Distribution"), Binomial);
-// 	ui.cbDistribution->addItem(i18n("Multinomial Distribution"));
 	ui.cbDistribution->addItem(i18n("Negative Binomial Distribution"), NegativeBinomial);
 	ui.cbDistribution->addItem(i18n("Pascal Distribution"), Pascal);
 	ui.cbDistribution->addItem(i18n("Geometric Distribution"), Geometric);
