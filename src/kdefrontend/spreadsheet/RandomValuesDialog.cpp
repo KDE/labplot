@@ -56,10 +56,8 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	setButtonText(KDialog::Ok, i18n("&Generate"));
 	setButtonToolTip(KDialog::Ok, i18n("Generate random values according to the selected distribution"));
 
-	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++) {
+	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
                 ui.cbDistribution->addItem(i18n(nsl_sf_stats_distribution_name[i]), i);
-		m_formulaPixs[i] = nsl_sf_stats_distribution_pic_name[i];
-	}
 
 	ui.kleParameter1->setClearButtonShown(true);
 	ui.kleParameter2->setClearButtonShown(true);
@@ -120,10 +118,10 @@ void RandomValuesDialog::distributionChanged(int index) {
 
 	switch (dist) {
 	case nsl_sf_stats_gaussian:
-		ui.lParameter1->setText(QString::fromUtf8("μ ="));
-		ui.lParameter2->setText(QString::fromUtf8("σ ="));
-		ui.kleParameter1->setText("0.0");
-		ui.kleParameter2->setText("1.0");
+		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
+		ui.kleParameter1->setText("1.0");
+		ui.kleParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_gaussian_tail:
 		ui.lParameter3->show();
@@ -158,8 +156,8 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter3->setText("1.0");
 		break;
 	case nsl_sf_stats_cauchy_lorentz:
-		ui.lParameter1->setText(QString::fromUtf8("t ="));
-		ui.lParameter2->setText("s =");
+		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03b3 ="));
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
 		break;
@@ -284,7 +282,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter3->setText("3.0");
 	}
 
-	QString file = KStandardDirs::locate("data", "labplot2/pics/gsl_distributions/" + m_formulaPixs[dist] + ".jpg");
+	QString file = KStandardDirs::locate("data", "labplot2/pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[dist]) + ".jpg");
 	ui.lFuncPic->setPixmap(QPixmap(file));
 }
 
@@ -383,11 +381,11 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_cauchy_lorentz: {
-		double t = ui.kleParameter1->text().toDouble();
-		double s = ui.kleParameter2->text().toDouble();
+		double mu = ui.kleParameter1->text().toDouble();
+		double gamma = ui.kleParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = gsl_ran_cauchy(r, s) + t;
+				new_data[i] = gsl_ran_cauchy(r, gamma) + mu;
 			col->replaceValues(0, new_data);
 		}
 		break;

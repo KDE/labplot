@@ -41,6 +41,7 @@ typedef enum {nsl_fit_model_gaussian, nsl_fit_model_lorentz, nsl_fit_model_sech,
 #define NSL_FIT_MODEL_GROWTH_COUNT 8
 typedef enum {nsl_fit_model_atan, nsl_fit_model_tanh, nsl_fit_model_algebraic_sigmoid, nsl_fit_model_sigmoid, nsl_fit_model_erf, 
 	nsl_fit_model_hill, nsl_fit_model_gompertz, nsl_fit_model_gudermann} nsl_fit_model_type_growth;
+/*TODO: remove later */
 #define NSL_FIT_MODEL_DISTRIBUTION_COUNT 15
 typedef enum {
 	nsl_fit_model_normal, nsl_fit_model_cauchy_lorentz, nsl_fit_model_maxwell, nsl_fit_model_poisson, nsl_fit_model_logistic_dist,

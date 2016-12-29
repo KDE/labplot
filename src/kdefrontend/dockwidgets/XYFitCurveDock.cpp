@@ -36,9 +36,15 @@
 #include "kdefrontend/widgets/FitOptionsWidget.h"
 #include "kdefrontend/widgets/FitParametersWidget.h"
 
+#include <KStandardDirs>
 #include <QMenu>
 #include <QWidgetAction>
+#include <QStandardItemModel>
 #include <cfloat>	// DBL_MAX
+
+extern "C" {
+#include "backend/nsl/nsl_sf_stats.h"
+}
 
 /*!
   \class XYFitCurveDock
@@ -170,14 +176,14 @@ void XYFitCurveDock::initGeneralTab() {
 }
 
 void XYFitCurveDock::setModel() {
-	QList<const char*>  list;
-	list<<"Folder"<<"Workbook"<<"Spreadsheet"<<"FileDataSource"<<"Column"<<"Datapicker";
+	QList<const char*> list;
+	list << "Folder" << "Workbook" << "Spreadsheet" << "FileDataSource" << "Column" << "Datapicker";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbWeightsColumn->setTopLevelClasses(list);
 
 	list.clear();
-	list<<"Column";
+	list << "Column";
 	cbXDataColumn->setSelectableClasses(list);
 	cbYDataColumn->setSelectableClasses(list);
 	cbWeightsColumn->setSelectableClasses(list);
@@ -196,9 +202,9 @@ void XYFitCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing=true;
-	m_curvesList=list;
-	m_curve=list.first();
+	m_initializing = true;
+	m_curvesList = list;
+	m_curve = list.first();
 	m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
 	Q_ASSERT(m_fitCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
@@ -206,7 +212,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_fitData = m_fitCurve->fitData();
 	initGeneralTab();
 	initTabs();
-	m_initializing=false;
+	m_initializing = false;
 }
 
 //*************************************************************
@@ -237,7 +243,7 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach(XYCurve* curve, m_curvesList)
+	foreach (XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setXDataColumn(column);
 
 	if (column != 0) {
@@ -337,10 +343,19 @@ void XYFitCurveDock::categoryChanged(int index) {
 		for(int i = 0; i < NSL_FIT_MODEL_GROWTH_COUNT; i++)
 			uiGeneralTab.cbModel->addItem(nsl_fit_model_growth_name[i]);
 		break;
-	case nsl_fit_model_distribution:
-		for(int i = 0; i < NSL_FIT_MODEL_DISTRIBUTION_COUNT; i++)
-			uiGeneralTab.cbModel->addItem(nsl_fit_model_distribution_name[i]);
+	case nsl_fit_model_distribution: {
+		for(int i = 0; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++)
+			uiGeneralTab.cbModel->addItem(nsl_sf_stats_distribution_name[i]);
+
+		//TODO:  non-used items are disabled here
+        	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
+
+		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
+			QStandardItem* item = model->item(i);
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		}
 		break;
+	}
 	case nsl_fit_model_custom:
 		uiGeneralTab.cbModel->addItem(i18n("Custom"));
 	}
@@ -436,15 +451,17 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.model = eq = nsl_fit_model_growth_equation[m_fitData.modelType];
 		break;
         case nsl_fit_model_distribution:
-		m_fitData.model = eq = nsl_fit_model_distribution_equation[m_fitData.modelType];
+		m_fitData.model = eq = nsl_sf_stats_distribution_equation[m_fitData.modelType];
 		break;
         case nsl_fit_model_custom:
 		//use the equation of the last selected predefined model or of the last available custom model
 		eq = m_fitData.model;
 		break;
 	}
-	if (m_fitData.modelCategory != nsl_fit_model_custom)
+	if (m_fitData.modelCategory != nsl_fit_model_custom) {
 		m_fitData.paramNames.clear();
+		m_fitData.paramNamesUtf8.clear();
+	}
 
 	switch(m_fitData.modelCategory) {
 	case nsl_fit_model_basic:
@@ -537,7 +554,7 @@ void XYFitCurveDock::updateModelEquation() {
 				m_fitData.model += ")";
 			}
 			break;
-		case nsl_fit_model_cauchy_lorentz:
+		case nsl_fit_model_lorentz:
 			switch (num) {
 			case 1:
 				m_fitData.paramNames << "s" << "t" << "a";
@@ -642,12 +659,16 @@ void XYFitCurveDock::updateModelEquation() {
 		break;
 	case nsl_fit_model_distribution:
 		switch (m_fitData.modelType) {
-		case nsl_fit_model_normal:
+		case nsl_sf_stats_gaussian:
 			m_fitData.paramNames << "s" << "mu" << "a";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "a";
 			break;
-		case nsl_fit_model_cauchy_lorentz:
-			m_fitData.paramNames << "s" << "t" << "a";
+		case nsl_sf_stats_gaussian_tail: {
 			break;
+		}
+	// TODO: use nsl_sf_stats
+//		case nsl_fit_model_cauchy_lorentz:
+//			m_fitData.paramNames << "s" << "t" << "a";
 		case nsl_fit_model_maxwell:
 			m_fitData.paramNames << "a" << "c";
 			break;
@@ -689,6 +710,10 @@ void XYFitCurveDock::updateModelEquation() {
 	}
 	vars << m_fitData.paramNames;
 
+	// use normal param names if no utf8 param names are defined
+	if (m_fitData.paramNamesUtf8.isEmpty()) 
+		m_fitData.paramNamesUtf8 << m_fitData.paramNames;
+
 	//resize the vector for the start values and set the elements to 1.0
 	//in case a custom model is used, do nothing, we take over the previous values
 	//when initializing, don't do anything - we use start values already
@@ -709,6 +734,7 @@ void XYFitCurveDock::updateModelEquation() {
 		}
 
 		// model-dependent start values
+		// TODO: use nsl_sf_stats
 		if (m_fitData.modelCategory == nsl_fit_model_distribution) {
 			if (m_fitData.modelType == nsl_fit_model_weibull)
 				m_fitData.paramStartValues[2] = 0.0;
@@ -719,6 +745,24 @@ void XYFitCurveDock::updateModelEquation() {
 
 	uiGeneralTab.teEquation->setVariables(vars);
 	uiGeneralTab.teEquation->setText(eq);
+
+	// only for dists for testing
+	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
+		// show formula pic
+		QString file = KStandardDirs::locate("data", "labplot2/pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
+		uiGeneralTab.lFuncPic->setPixmap(QPixmap(file));
+		uiGeneralTab.lFuncPic->show();
+
+		// hide uiGeneralTab.teEquation
+		if (m_fitData.modelType == nsl_sf_stats_gaussian)
+			uiGeneralTab.teEquation->hide();
+		// set label
+		uiGeneralTab.lEquation->setText(("f(x)/a ="));
+	} else {
+		uiGeneralTab.lEquation->setText(("f(x) ="));
+		uiGeneralTab.teEquation->show();
+		uiGeneralTab.lFuncPic->hide();
+	}
 }
 
 void XYFitCurveDock::showConstants() {
@@ -856,9 +900,9 @@ void XYFitCurveDock::showFitResult() {
 	str += "<b>" +i18n("Parameters:") + "</b>";
 	for (int i = 0; i < fitResult.paramValues.size(); i++) {
 		if (fitData.paramFixed.at(i))
-			str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i));
+			str += "<br>" + fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i));
 		else
-			str += "<br>" + fitData.paramNames.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
+			str += "<br>" + fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
 				+ QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
 				+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i))) + " %)";
 	}

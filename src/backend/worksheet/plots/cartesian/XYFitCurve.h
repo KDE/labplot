@@ -57,6 +57,7 @@ class XYFitCurve : public XYCurve {
 			int degree;
 			QString model;
 			QStringList paramNames;
+			QStringList paramNamesUtf8;	// Utf8 version of paramNames
 			QVector<double> paramStartValues;
 			QVector<double> paramLowerLimits;
 			QVector<double> paramUpperLimits;

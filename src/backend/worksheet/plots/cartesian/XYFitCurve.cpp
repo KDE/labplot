@@ -50,6 +50,7 @@ extern "C" {
 #include <gsl/gsl_version.h>
 #include "backend/gsl/parser.h" 
 #include "backend/nsl/nsl_fit.h"
+#include "backend/nsl/nsl_sf_stats.h"
 }
 #include <cmath>
 
@@ -227,8 +228,8 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		double x = gsl_vector_get(paramValues, i);
 		// bound values if limits are set
 		assign_variable(paramNames->at(i).toLocal8Bit().data(), nsl_fit_map_bound(x, min[i], max[i]));
-		DEBUG_LOG("Parameter"<<i<<'['<<min[i]<<','<<max[i]<<"] free/bound:"<<QString::number(x, 'g', 15)
-			<<' '<<QString::number(nsl_fit_map_bound(x, min[i], max[i]), 'g', 15));
+		DEBUG_LOG("Parameter"<<i<<" (\" "<<paramNames->at(i).toLocal8Bit().data()<<"\")"<<'['<<min[i]<<','<<max[i]
+			<<"] free/bound:"<<QString::number(x, 'g', 15)<<' '<<QString::number(nsl_fit_map_bound(x, min[i], max[i]), 'g', 15));
 	}
 
 	const char *func = funcba.data();	// function to evaluate
@@ -526,7 +527,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		break;
 	case nsl_fit_model_distribution:
 		switch (modelType) {
-		case nsl_fit_model_normal: {
+		case nsl_sf_stats_gaussian: {
 			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
@@ -543,6 +544,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
+		// TODO: nsl_sf_stats
 		case nsl_fit_model_cauchy_lorentz: {
 			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double t = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
@@ -1189,6 +1191,10 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	foreach (const QString &name, d->fitData.paramNames)
 		writer->writeTextElement("name", name);
 	writer->writeEndElement();
+	writer->writeStartElement("paramNamesUtf8");
+	foreach (const QString &name, d->fitData.paramNamesUtf8)
+		writer->writeTextElement("nameUtf8", name);
+	writer->writeEndElement();
 
 	writer->writeStartElement("paramStartValues");
 	foreach (const double &value, d->fitData.paramStartValues)
@@ -1308,6 +1314,8 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("useResults", fitData.useResults, bool);
 		} else if (reader->name() == "name") {
 			d->fitData.paramNames<<reader->readElementText();
+		} else if (reader->name() == "nameUtf8") {
+			d->fitData.paramNamesUtf8<<reader->readElementText();
 		} else if (reader->name() == "startValue") {
 			d->fitData.paramStartValues<<reader->readElementText().toDouble();
 		} else if (reader->name() == "fixed") {
@@ -1369,6 +1377,10 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 	// new fit model style
 	if (d->fitData.modelCategory == nsl_fit_model_basic && d->fitData.modelType >= NSL_FIT_MODEL_BASIC_COUNT)
 		d->fitData.modelType = 0;
+
+	// use normal param names if no utf8 param names are defined
+	if (d->fitData.paramNamesUtf8.isEmpty())
+		d->fitData.paramNamesUtf8 << d->fitData.paramNames;
 
 	// fixed and limits are not saved in project (old project)
 	if (d->fitData.paramFixed.size() == 0) {

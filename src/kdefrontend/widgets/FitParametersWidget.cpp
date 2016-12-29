@@ -79,7 +79,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 
 		for (int i=0; i < m_fitData->paramNames.size(); ++i){
 			// name
-			QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNames.at(i));
+			QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNamesUtf8.at(i));
 			item->setFlags(item->flags() ^ Qt::ItemIsEditable);
 			item->setBackground(QBrush(Qt::lightGray));
 			ui.tableWidget->setItem(i, 0, item);

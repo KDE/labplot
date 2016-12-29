@@ -43,5 +43,6 @@ typedef enum {nsl_sf_stats_gaussian, nsl_sf_stats_gaussian_tail, nsl_sf_stats_ex
 
 extern const char* nsl_sf_stats_distribution_name[];
 extern const char* nsl_sf_stats_distribution_pic_name[];
+extern const char* nsl_sf_stats_distribution_equation[];
 
 #endif /* NSL_SF_STATS_H */

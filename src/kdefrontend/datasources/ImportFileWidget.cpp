@@ -644,8 +644,8 @@ const QStringList ImportFileWidget::selectedHDFNames() const {
 	QList<QTreeWidgetItem *> items = hdfOptionsWidget.twContent->selectedItems();
 
 	// the data link is saved in the second column
-	for (int i=0; i < items.size(); i++)
-		names<<items[i]->data(1,Qt::DisplayRole).toString();
+	for (int i = 0; i < items.size(); i++)
+		names<<items[i]->data(1, Qt::DisplayRole).toString();
 
 	return names;
 }
