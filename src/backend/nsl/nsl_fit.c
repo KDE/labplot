@@ -27,7 +27,6 @@
 
 #include "nsl_common.h"
 #include "nsl_fit.h"
-#include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_psi.h>

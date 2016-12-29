@@ -32,7 +32,7 @@
 #include <KStandardDirs>
 
 extern "C" {
-#include <stdio.h>
+#include "backend/nsl/nsl_sf_stats.h"
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 }
@@ -58,75 +58,16 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 
 	QWidget* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
-	setMainWidget( mainWidget );
+	setMainWidget(mainWidget);
 
-	setButtons( KDialog::Ok | KDialog::Cancel );
+	setButtons(KDialog::Ok | KDialog::Cancel);
 	setButtonText(KDialog::Ok, i18n("&Generate"));
 	setButtonToolTip(KDialog::Ok, i18n("Generate random values according to the selected distribution"));
 
-	ui.cbDistribution->addItem(i18n("Gaussian Distribution"), Gaussian);
- 	ui.cbDistribution->addItem(i18n("Gaussian Tail Distribution"), GaussianTail);
-	ui.cbDistribution->addItem(i18n("Exponential Distribution"), Exponential);
-	ui.cbDistribution->addItem(i18n("Laplace Distribution"), Laplace);
-	ui.cbDistribution->addItem(i18n("Exponential Power Distribution"), ExponentialPower);
-	ui.cbDistribution->addItem(i18n("Cauchy Distribution"), Cauchy);
-	ui.cbDistribution->addItem(i18n("Rayleigh Distribution"), Rayleigh);
-	ui.cbDistribution->addItem(i18n("Rayleigh Tail Distribution"), RayleighTail);
-	ui.cbDistribution->addItem(i18n("Landau Distribution"), Landau);
-	ui.cbDistribution->addItem(i18n("Levy alpha-stable Distribution"), LevyAlphaStable);
-	ui.cbDistribution->addItem(i18n("Levy skew alpha-stable Distribution"), LevySkewAlphaStable);
-	ui.cbDistribution->addItem(i18n("Gamma Distribution"), Gamma);
-	ui.cbDistribution->addItem(i18n("Flat (Uniform) Distribution"), Flat);
-	ui.cbDistribution->addItem(i18n("Lognormal Distribution"), Lognormal);
-	ui.cbDistribution->addItem(i18n("Chi-squared Distribution"), ChiSquared);
-	ui.cbDistribution->addItem(i18n("F-distribution"), F);
-	ui.cbDistribution->addItem(i18n("t-distribution"), t);
-	ui.cbDistribution->addItem(i18n("Beta Distribution"), Beta);
-	ui.cbDistribution->addItem(i18n("Logistic Distribution"), Logistic);
-	ui.cbDistribution->addItem(i18n("Pareto Distribution"), Pareto);
-	ui.cbDistribution->addItem(i18n("Weibull Distribution"), Weibull);
-	ui.cbDistribution->addItem(i18n("Type-1 Gumbel Distribution"), Gumbel1);
-	ui.cbDistribution->addItem(i18n("Type-2 Gumbel Distribution"), Gumbel2);
-	ui.cbDistribution->addItem(i18n("Poisson Distribution"), Poisson);
-	ui.cbDistribution->addItem(i18n("Bernoulli Distribution"), Bernoulli);
-	ui.cbDistribution->addItem(i18n("Binomial Distribution"), Binomial);
-	ui.cbDistribution->addItem(i18n("Negative Binomial Distribution"), NegativeBinomial);
-	ui.cbDistribution->addItem(i18n("Pascal Distribution"), Pascal);
-	ui.cbDistribution->addItem(i18n("Geometric Distribution"), Geometric);
-	ui.cbDistribution->addItem(i18n("Hypergeometric Distribution"), Hypergeometric);
-	ui.cbDistribution->addItem(i18n("Logarithmic Distribution"), Logarithmic);
-
-	m_formulaPixs[Gaussian] = "gaussian";
-	m_formulaPixs[GaussianTail] = "gaussian_tail";
-	m_formulaPixs[Exponential] = "exponential";
-	m_formulaPixs[Laplace] = "laplace";
-	m_formulaPixs[ExponentialPower] = "exponential_power";
-	m_formulaPixs[Cauchy] = "cauchy";
-	m_formulaPixs[Rayleigh] = "rayleigh";
-	m_formulaPixs[RayleighTail] = "rayleigh_tail";
-	m_formulaPixs[Landau] = "landau";
-	m_formulaPixs[LevyAlphaStable] = "levy_alpha_stable";
-	m_formulaPixs[LevySkewAlphaStable] = "levy_skew_alpha_stable";
-	m_formulaPixs[Gamma] = "gamma";
-	m_formulaPixs[Flat] = "flat";
-	m_formulaPixs[Lognormal] = "lognormal";
-	m_formulaPixs[ChiSquared] = "chi_squared";
-	m_formulaPixs[F] = 'F';
-	m_formulaPixs[t] = 't';
-	m_formulaPixs[Beta] = "beta";
-	m_formulaPixs[Logistic] = "logistic";
-	m_formulaPixs[Pareto] = "pareto";
-	m_formulaPixs[Weibull] = "weibull";
-	m_formulaPixs[Gumbel1] = "gumbel_type_1";
-	m_formulaPixs[Gumbel2] = "gumbel_type_2";
-	m_formulaPixs[Poisson] = "poisson";
-	m_formulaPixs[Bernoulli] = "bernoulli";
-	m_formulaPixs[Binomial] = "binomial";
-	m_formulaPixs[NegativeBinomial] = "binomial_negative";
-	m_formulaPixs[Pascal] = "pascal";
-	m_formulaPixs[Geometric] = "geometric";
-	m_formulaPixs[Hypergeometric] = "hypergeometric";
-	m_formulaPixs[Logarithmic] = "logarithmic";
+	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++) {
+                ui.cbDistribution->addItem(i18n(nsl_sf_stats_distribution_name[i]), i);
+		m_formulaPixs[i] = nsl_sf_stats_distribution_pic_name[i];
+	}
 
 	ui.kleParameter1->setClearButtonShown(true);
 	ui.kleParameter2->setClearButtonShown(true);
@@ -177,6 +118,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 	distribution distr = (distribution)ui.cbDistribution->itemData(index).toInt();
 	//TODO: use "switch"
 	//TODO: use nsl enum
+	// TODO: default settings
 	if (distr == Gaussian) {
 		ui.lParameter1->show();
 		ui.kleParameter1->show();
