@@ -46,8 +46,8 @@ DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent) : KDialog(parent) 
 	setWindowIcon(KIcon("network-server-database"));
 	setWindowTitle(i18n("SQL Database Connections"));
 
-	setButtons( KDialog::Ok | KDialog::Cancel );
-	
+	setButtons(KDialog::Ok);
+
 	//restore saved settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatabaseManagerDialog");
 	restoreDialogSize(conf);

@@ -37,8 +37,22 @@ public:
 	explicit DatabaseManagerWidget(QWidget*);
 	~DatabaseManagerWidget();
 
+	struct SQLConnection {
+		int vendorIndex;
+		int port;
+		QString name;
+		QString hostName;
+		QString dbName;
+		QString userName;
+		QString password;
+	};
+
 private:
 	Ui::DatabaseManagerWidget ui;
+	QString uniqueName();
+	QList<SQLConnection*> connectionList;
+	bool m_initializing;
+	void loadConnection();
 
 private slots:
 	void loadSettings();
@@ -47,6 +61,15 @@ private slots:
 	void addConnection();
 	void deleteConnection();
 	void connectionChanged(int);
+	void testConnection();
+
+	void nameChanged();
+	void hostChanged();
+	void portChanged();
+	void databaseNameChanged();
+	void userNameChanged();
+	void passwordChanged();
+	void saveConnections();
 };
 
 #endif
