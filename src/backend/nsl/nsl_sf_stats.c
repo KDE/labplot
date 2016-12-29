@@ -43,7 +43,7 @@ const char* nsl_sf_stats_distribution_pic_name[] = {
 const char* nsl_sf_stats_distribution_equation[] = {
 	"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "Gaussian Tail", "Exponential",
 	"a/(2*s) * exp(-fabs((x-mu)/s))", "Exp power", "a/pi * g/(g^2 + (x-mu)^2)",
-	"a * x/(s*s) * exp(-x*x/(s*s)/2)", "Rayleigh tail", "Landau",
+	"a * x/s^2 * exp(-(x/s)^2/2)", "Rayleigh tail", "Landau",
 	"Levy alpha-stable", "Levy-skew", "a * b^p/gamma(p)*x^(p-1)*exp(-b*x)",
 	"Flat", "a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)", "a * pow(x,n/2.-1.)/pow(2, n/2.)/gamma(n/2.) * exp(-x/2.)",
 	"F", "t", "Beta",

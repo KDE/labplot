@@ -140,10 +140,10 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_laplace:
-		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03c3 ="));
-		ui.kleParameter1->setText("0.0");
-		ui.kleParameter2->setText("1.0");
+		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
+		ui.kleParameter1->setText("1.0");
+		ui.kleParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_exponential_power:
 		ui.lParameter3->show();
@@ -156,10 +156,10 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter3->setText("1.0");
 		break;
 	case nsl_sf_stats_cauchy_lorentz:
-		ui.lParameter1->setText(QString::fromUtf8("\u03bc ="));
-		ui.lParameter2->setText(QString::fromUtf8("\u03b3 ="));
-		ui.kleParameter1->setText("0.0");
-		ui.kleParameter2->setText("1.0");
+		ui.lParameter1->setText(QString::fromUtf8("\u03b3 ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
+		ui.kleParameter1->setText("1.0");
+		ui.kleParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_rayleigh:
 		ui.lParameter2->hide();
@@ -237,10 +237,10 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("1.0");
 		break;
 	case nsl_sf_stats_logistic:
-		ui.lParameter2->hide();
-		ui.kleParameter2->hide();
-		ui.lParameter1->setText("a =");
+		ui.lParameter1->setText(QString::fromUtf8("\u03c3 ="));
+		ui.lParameter2->setText(QString::fromUtf8("\u03bc ="));
 		ui.kleParameter1->setText("1.0");
+		ui.kleParameter2->setText("0.0");
 		break;
 	case nsl_sf_stats_poisson:
 		ui.lParameter2->hide();
@@ -360,11 +360,11 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_laplace: {
-		double mu = ui.kleParameter1->text().toDouble();
-		double a = ui.kleParameter2->text().toDouble();
+		double s = ui.kleParameter1->text().toDouble();
+		double mu = ui.kleParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = gsl_ran_laplace(r, a) + mu;
+				new_data[i] = gsl_ran_laplace(r, s) + mu;
 			col->replaceValues(0, new_data);
 		}
 		break;
@@ -381,8 +381,8 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_cauchy_lorentz: {
-		double mu = ui.kleParameter1->text().toDouble();
-		double gamma = ui.kleParameter2->text().toDouble();
+		double gamma = ui.kleParameter1->text().toDouble();
+		double mu = ui.kleParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
 				new_data[i] = gsl_ran_cauchy(r, gamma) + mu;
@@ -391,10 +391,10 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_rayleigh: {
-		double sigma = ui.kleParameter1->text().toDouble();
+		double s = ui.kleParameter1->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = gsl_ran_rayleigh(r, sigma);
+				new_data[i] = gsl_ran_rayleigh(r, s);
 			col->replaceValues(0, new_data);
 		}
 		break;
@@ -505,10 +505,11 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_logistic: {
-		double a = ui.kleParameter1->text().toDouble();
+		double s = ui.kleParameter1->text().toDouble();
+		double mu = ui.kleParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = gsl_ran_logistic(r, a);
+				new_data[i] = gsl_ran_logistic(r, s) + mu;
 			col->replaceValues(0, new_data);
 		}
 		break;

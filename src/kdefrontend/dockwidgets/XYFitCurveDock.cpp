@@ -352,7 +352,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			//TODO: Testing
-			if (i == nsl_sf_stats_laplace|| i == nsl_sf_stats_cauchy_lorentz)
+			if (i == nsl_sf_stats_laplace|| i == nsl_sf_stats_cauchy_lorentz || i == nsl_sf_stats_rayleigh || i == nsl_sf_stats_logistic)
 				continue;
 
 			QStandardItem* item = model->item(i);
@@ -665,6 +665,7 @@ void XYFitCurveDock::updateModelEquation() {
 		switch (m_fitData.modelType) {
 		case nsl_sf_stats_gaussian:
 		case nsl_sf_stats_laplace:
+		case nsl_sf_stats_logistic:
 			m_fitData.paramNames << "s" << "mu" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 			break;
@@ -678,9 +679,11 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "g" << "mu" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03b3") << QString::fromUtf8("\u03bc") << "A";
 			break;
+		case nsl_sf_stats_rayleigh:
+			m_fitData.paramNames << "s" << "a";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << "A";
+			break;
 	// TODO: use nsl_sf_stats
-//		case nsl_fit_model_cauchy_lorentz:
-//			m_fitData.paramNames << "s" << "t" << "a";
 //		case nsl_fit_model_maxwell:
 //			m_fitData.paramNames << "a" << "c";
 //		case nsl_fit_model_poisson:
@@ -689,26 +692,19 @@ void XYFitCurveDock::updateModelEquation() {
 //			m_fitData.paramNames << "s" << "mu" << "a";
 //		case nsl_fit_model_gamma:
 //			m_fitData.paramNames << "b" << "p" << "a";
-//		case nsl_fit_model_rayleigh:
-//			m_fitData.paramNames << "s" << "a";
-		case nsl_fit_model_levy:
-			m_fitData.paramNames << "g" << "mu" << "a";
-			break;
-		case nsl_fit_model_chi_square:
-			m_fitData.paramNames << "n" << "a";
-			break;
-		case nsl_fit_model_weibull:
-			m_fitData.paramNames << "k" << "l" << "mu" << "a";
-			break;
-		case nsl_fit_model_frechet:
-			m_fitData.paramNames << "a" << "mu" << "s" << "c";
-			break;
-		case nsl_fit_model_gumbel:
-			m_fitData.paramNames << "b" << "mu" << "a";
-			break;
-		case nsl_fit_model_sech_dist:
-			m_fitData.paramNames << "s" << "mu" << "a";
-			break;
+//		case nsl_fit_model_levy:
+//			m_fitData.paramNames << "g" << "mu" << "a";
+//		case nsl_fit_model_chi_square:
+//			m_fitData.paramNames << "n" << "a";
+//		case nsl_fit_model_weibull:
+//			m_fitData.paramNames << "k" << "l" << "mu" << "a";
+//		case nsl_fit_model_frechet:
+//			m_fitData.paramNames << "a" << "mu" << "s" << "c";
+//		case nsl_fit_model_gumbel:
+//			m_fitData.paramNames << "b" << "mu" << "a";
+//		case nsl_fit_model_sech_dist:
+//			m_fitData.paramNames << "s" << "mu" << "a";
+	// TODO: use nsl_sf_stats
 		}
 		break;
 	case nsl_fit_model_custom:
