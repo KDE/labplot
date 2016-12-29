@@ -46,7 +46,7 @@ extern "C" {
 
 //TODO: use nsl enum
 enum distribution {
-	Gaussian, Exponential, Laplace, ExponentialPower, Cauchy, Rayleigh, RayleighTail, Landau,
+	Gaussian, GaussianTail, Exponential, Laplace, ExponentialPower, Cauchy, Rayleigh, RayleighTail, Landau,
 	LevyAlphaStable, LevySkewAlphaStable, Gamma, Flat, Lognormal, ChiSquared, F, t, Beta,
 	Logistic, Pareto, Weibull, Gumbel1, Gumbel2, Poisson, Bernoulli, Binomial,
 	NegativeBinomial, Pascal, Geometric, Hypergeometric, Logarithmic
@@ -65,7 +65,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	setButtonToolTip(KDialog::Ok, i18n("Generate random values according to the selected distribution"));
 
 	ui.cbDistribution->addItem(i18n("Gaussian Distribution"), Gaussian);
-// 	ui.cbDistribution->addItem(i18n("Gaussian Tail Distribution"));
+ 	ui.cbDistribution->addItem(i18n("Gaussian Tail Distribution"), GaussianTail);
 	ui.cbDistribution->addItem(i18n("Exponential Distribution"), Exponential);
 	ui.cbDistribution->addItem(i18n("Laplace Distribution"), Laplace);
 	ui.cbDistribution->addItem(i18n("Exponential Power Distribution"), ExponentialPower);
@@ -101,6 +101,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	ui.cbDistribution->addItem(i18n("Logarithmic Distribution"), Logarithmic);
 
 	m_formulaPixs[Gaussian] = "gaussian";
+	m_formulaPixs[GaussianTail] = "gaussian_tail";
 	m_formulaPixs[Exponential] = "exponential";
 	m_formulaPixs[Laplace] = "laplace";
 	m_formulaPixs[ExponentialPower] = "exponential_power";
@@ -192,6 +193,20 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.lParameter2->setText(QString::fromUtf8("σ ="));
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
+	} else if (distr == GaussianTail) {
+		ui.lParameter1->show();
+		ui.kleParameter1->show();
+		ui.lParameter2->show();
+		ui.kleParameter2->show();
+		ui.lParameter3->show();
+		ui.kleParameter3->show();
+		ui.lFunc->setText("p(x) =");
+		ui.lParameter1->setText(QString::fromUtf8("μ ="));
+		ui.lParameter2->setText(QString::fromUtf8("σ ="));
+		ui.lParameter3->setText("a =");
+		ui.kleParameter1->setText("0.0");
+		ui.kleParameter2->setText("1.0");
+		ui.kleParameter3->setText("0.0");
 	} else if (distr == Exponential) {
 		ui.lParameter1->show();
 		ui.kleParameter1->show();
@@ -295,7 +310,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("1.0");
-	} else if (distr==Flat) {
+	} else if (distr == Flat) {
 		ui.lParameter1->show();
 		ui.kleParameter1->show();
 		ui.lParameter1->show();
@@ -309,7 +324,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.lParameter2->setText("b =");
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
-	} else if (distr==Gamma || distr==Flat || distr==Beta || distr==Pareto || distr==Weibull || distr==Gumbel1 || distr==Gumbel2) {
+	} else if (distr == Gamma || distr == Flat || distr == Beta || distr == Pareto || distr == Weibull || distr == Gumbel1 || distr == Gumbel2) {
 		ui.lParameter1->show();
 		ui.kleParameter1->show();
 		ui.lParameter1->show();
@@ -475,12 +490,24 @@ void RandomValuesDialog::generate() {
 	QVector<double> new_data(rows);
 
 	//TODO: use switch
+	//TODO: double value
 	if (distr == Gaussian) {
 		double mu = ui.kleParameter1->text().toDouble();
 		double sigma = ui.kleParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i) {
 				double value = gsl_ran_gaussian(r, sigma) + mu;
+				new_data[i] = value;
+			}
+			col->replaceValues(0, new_data);
+		}
+	} else if (distr == GaussianTail) {
+		double mu = ui.kleParameter1->text().toDouble();
+		double sigma = ui.kleParameter2->text().toDouble();
+		double a = ui.kleParameter3->text().toDouble();
+		foreach (Column* col, m_columns) {
+			for (int i = 0; i < rows; ++i) {
+				double value = gsl_ran_gaussian_tail(r, a, sigma) + mu;
 				new_data[i] = value;
 			}
 			col->replaceValues(0, new_data);
