@@ -115,262 +115,172 @@ void RandomValuesDialog::setColumns(QList<Column*> list) {
 }
 
 void RandomValuesDialog::distributionChanged(int index) {
-	distribution distr = (distribution)ui.cbDistribution->itemData(index).toInt();
-	//TODO: use "switch"
-	//TODO: use nsl enum
-	// TODO: default settings
-	if (distr == Gaussian) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
-		ui.lParameter2->show();
-		ui.kleParameter2->show();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(x) =");
+	nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
+
+	//  default settings (used by most distributions)
+	ui.lParameter1->show();
+	ui.kleParameter1->show();
+	ui.lParameter2->show();
+	ui.kleParameter2->show();
+	ui.lParameter3->hide();
+	ui.kleParameter3->hide();
+	ui.lFunc->setText("p(x) =");
+
+	switch (dist) {
+	case nsl_sf_stats_gaussian:
 		ui.lParameter1->setText(QString::fromUtf8("μ ="));
 		ui.lParameter2->setText(QString::fromUtf8("σ ="));
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
-	} else if (distr == GaussianTail) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
-		ui.lParameter2->show();
-		ui.kleParameter2->show();
+		break;
+	case nsl_sf_stats_gaussian_tail:
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
-		ui.lFunc->setText("p(x) =");
 		ui.lParameter1->setText(QString::fromUtf8("μ ="));
 		ui.lParameter2->setText(QString::fromUtf8("σ ="));
 		ui.lParameter3->setText("a =");
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("0.0");
-	} else if (distr == Exponential) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
+		break;
+	case nsl_sf_stats_exponential:
 		ui.lParameter2->hide();
 		ui.kleParameter2->hide();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(x) =");
 		ui.lParameter1->setText(QString::fromUtf8("λ ="));
 		ui.kleParameter1->setText("1.0");
-	} else if (distr == Laplace) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
-		ui.lParameter2->show();
-		ui.kleParameter2->show();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(x) =");
+		break;
+	case nsl_sf_stats_laplace:
 		ui.lParameter1->setText(QString::fromUtf8("μ ="));
 		ui.lParameter2->setText("a =");
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
-	} else if (distr == ExponentialPower) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
-		ui.lParameter2->show();
-		ui.kleParameter2->show();
+		break;
+	case nsl_sf_stats_exponential_power:
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
-		ui.lFunc->setText("p(x) =");
 		ui.lParameter1->setText(QString::fromUtf8("μ ="));
 		ui.lParameter2->setText("a =");
 		ui.lParameter3->setText("b =");
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("1.0");
-	} else if (distr == Cauchy) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
+		break;
+	case nsl_sf_stats_cauchy_lorentz:
 		ui.lParameter2->hide();
 		ui.kleParameter2->hide();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(x) =");
 		ui.lParameter1->setText("a =");
 		ui.kleParameter1->setText("1.0");
-	} else if (distr == Rayleigh) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
+		break;
+	case nsl_sf_stats_rayleigh:
 		ui.lParameter2->hide();
 		ui.kleParameter2->hide();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(x) =");
 		ui.lParameter1->setText(QString::fromUtf8("σ ="));
 		ui.kleParameter1->setText("1.0");
-	} else if (distr == RayleighTail) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
-		ui.lParameter2->show();
-		ui.kleParameter2->show();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(x) =");
+		break;
+	case nsl_sf_stats_rayleigh_tail:
 		ui.lParameter1->setText(QString::fromUtf8("σ ="));
 		ui.lParameter2->setText("a =");
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("0.0");
-	} else if (distr == Landau) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
+		break;
+	case nsl_sf_stats_landau:
 		ui.lParameter1->hide();
 		ui.kleParameter1->hide();
 		ui.lParameter2->hide();
 		ui.kleParameter2->hide();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-	} else if (distr == LevyAlphaStable) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
-		ui.lParameter2->show();
-		ui.kleParameter2->show();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(x) =");
+		break;
+	case nsl_sf_stats_levy_alpha_stable:
 		ui.lParameter1->setText("c =");
 		ui.lParameter2->setText(QString::fromUtf8("α ="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
-	}else if (distr == LevySkewAlphaStable) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
-		ui.lParameter2->show();
-		ui.kleParameter2->show();
+		break;
+	case nsl_sf_stats_levy_skew_alpha_stable:
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
-		ui.lFunc->setText("p(x) =");
 		ui.lParameter1->setText(QString::fromUtf8("c ="));
 		ui.lParameter2->setText(QString::fromUtf8("α ="));
 		ui.lParameter3->setText(QString::fromUtf8("β ="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
 		ui.kleParameter3->setText("1.0");
-	} else if (distr == Flat) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
-		ui.lParameter2->show();
-		ui.kleParameter2->show();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(x) =");
+		break;
+	case nsl_sf_stats_flat:
 		ui.lParameter1->setText("a =");
 		ui.lParameter2->setText("b =");
 		ui.kleParameter1->setText("0.0");
 		ui.kleParameter2->setText("1.0");
-	} else if (distr == Gamma || distr == Flat || distr == Beta || distr == Pareto || distr == Weibull || distr == Gumbel1 || distr == Gumbel2) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
-		ui.lParameter2->show();
-		ui.kleParameter2->show();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(x) =");
+		break;
+	case nsl_sf_stats_gamma:
+	case nsl_sf_stats_beta:
+	case nsl_sf_stats_pareto:
+	case nsl_sf_stats_weibull:
+	case nsl_sf_stats_gumbel1:
+	case nsl_sf_stats_gumbel2:
 		ui.lParameter1->setText("a =");
 		ui.lParameter2->setText("b =");
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
-	}  else if (distr == Lognormal) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
-		ui.lParameter2->show();
-		ui.kleParameter2->show();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(x) =");
+		break;
+	case nsl_sf_stats_lognormal:
 		ui.lParameter1->setText(QString::fromUtf8("σ ="));
 		ui.lParameter2->setText(QString::fromUtf8("ζ ="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
-	} else if (distr == ChiSquared) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
+		break;
+	case nsl_sf_stats_chisquared:
 		ui.lParameter2->hide();
 		ui.kleParameter2->hide();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(x) =");
 		ui.lParameter1->setText(QString::fromUtf8("ν ="));
 		ui.kleParameter1->setText("1.0");
-	} else if (distr == F) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
-		ui.lParameter2->show();
-		ui.kleParameter2->show();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(x) =");
+		break;
+	case nsl_sf_stats_fdist:
 		ui.lParameter1->setText(QString::fromUtf8("ν1 ="));
 		ui.lParameter2->setText(QString::fromUtf8("ν2 ="));
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("1.0");
-	} else if (distr == t) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
+		break;
+	case nsl_sf_stats_tdist:
 		ui.lParameter2->hide();
 		ui.kleParameter2->hide();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(x) =");
 		ui.lParameter1->setText(QString::fromUtf8("ν ="));
 		ui.kleParameter1->setText("1.0");
-	} else if (distr == Logistic) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
+		break;
+	case nsl_sf_stats_logistic:
 		ui.lParameter2->hide();
 		ui.kleParameter2->hide();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		ui.lFunc->setText("p(x) =");
 		ui.lParameter1->setText("a =");
 		ui.kleParameter1->setText("1.0");
-	} else if (distr == Poisson) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
+		break;
+	case nsl_sf_stats_poisson:
 		ui.lParameter2->hide();
 		ui.kleParameter2->hide();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
 		ui.lFunc->setText("p(k) =");
 		ui.lParameter1->setText(QString::fromUtf8("μ ="));
 		ui.kleParameter1->setText("0.0");
-	} else if (distr == Bernoulli || distr == Geometric || distr == Logarithmic) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
+		break;
+	case nsl_sf_stats_bernoulli:
+	case nsl_sf_stats_geometric:
+	case nsl_sf_stats_logarithmic:
 		ui.lParameter2->hide();
 		ui.kleParameter2->hide();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
-		if (distr == Bernoulli) {
+		if (dist == nsl_sf_stats_bernoulli)
 			ui.lFunc->setText("");
-		} else {
+		else
 			ui.lFunc->setText("p(k) =");
-		}
 		ui.lParameter1->setText("p =");
 		ui.kleParameter1->setText("0.5");
-	} else if (distr == Binomial || distr == NegativeBinomial || distr == Pascal) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
-		ui.lParameter2->show();
-		ui.kleParameter2->show();
-		ui.lParameter3->hide();
-		ui.kleParameter3->hide();
+		break;
+	case nsl_sf_stats_binomial:
+	case nsl_sf_stats_negative_bionomial:
+	case nsl_sf_stats_pascal:
 		ui.lFunc->setText("p(k) =");
 		ui.lParameter1->setText("p =");
 		ui.lParameter1->setText("n =");
 		ui.kleParameter1->setText("0.5");
 		ui.kleParameter2->setText("100");
-	} else if (distr == Hypergeometric) {
-		ui.lParameter1->show();
-		ui.kleParameter1->show();
-		ui.lParameter2->show();
-		ui.kleParameter2->show();
+		break;
+	case nsl_sf_stats_hypergeometric:
 		ui.lParameter3->show();
 		ui.kleParameter3->show();
 		ui.lFunc->setText("p(k) =");
@@ -382,7 +292,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter3->setText("3.0");
 	}
 
-	QString file = KStandardDirs::locate("data", "labplot2/pics/gsl_distributions/" + m_formulaPixs[distr] + ".jpg");
+	QString file = KStandardDirs::locate("data", "labplot2/pics/gsl_distributions/" + m_formulaPixs[dist] + ".jpg");
 	ui.lFuncPic->setPixmap(QPixmap(file));
 }
 
