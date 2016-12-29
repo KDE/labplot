@@ -661,7 +661,7 @@ void XYFitCurveDock::updateModelEquation() {
 		switch (m_fitData.modelType) {
 		case nsl_sf_stats_gaussian:
 			m_fitData.paramNames << "s" << "mu" << "a";
-			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "a";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 			break;
 		case nsl_sf_stats_gaussian_tail: {
 			break;
@@ -757,7 +757,7 @@ void XYFitCurveDock::updateModelEquation() {
 		if (m_fitData.modelType == nsl_sf_stats_gaussian)
 			uiGeneralTab.teEquation->hide();
 		// set label
-		uiGeneralTab.lEquation->setText(("f(x)/a ="));
+		uiGeneralTab.lEquation->setText(("f(x)/A ="));
 	} else {
 		uiGeneralTab.lEquation->setText(("f(x) ="));
 		uiGeneralTab.teEquation->show();
