@@ -352,7 +352,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			//TODO: Testing
-			if (i == nsl_sf_stats_laplace)
+			if (i == nsl_sf_stats_laplace|| i == nsl_sf_stats_cauchy_lorentz)
 				continue;
 
 			QStandardItem* item = model->item(i);
@@ -672,6 +672,12 @@ void XYFitCurveDock::updateModelEquation() {
 			break;
 		case nsl_sf_stats_exponential:
 			break;
+		case nsl_sf_stats_exponential_power:
+			break;
+		case nsl_sf_stats_cauchy_lorentz:
+			m_fitData.paramNames << "g" << "mu" << "a";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03b3") << QString::fromUtf8("\u03bc") << "A";
+			break;
 	// TODO: use nsl_sf_stats
 //		case nsl_fit_model_cauchy_lorentz:
 //			m_fitData.paramNames << "s" << "t" << "a";
@@ -679,15 +685,12 @@ void XYFitCurveDock::updateModelEquation() {
 //			m_fitData.paramNames << "a" << "c";
 //		case nsl_fit_model_poisson:
 //			m_fitData.paramNames << "l" << "a";
-		case nsl_fit_model_lognormal:
-			m_fitData.paramNames << "s" << "mu" << "a";
-			break;
-		case nsl_fit_model_gamma:
-			m_fitData.paramNames << "b" << "p" << "a";
-			break;
-		case nsl_fit_model_rayleigh:
-			m_fitData.paramNames << "s" << "a";
-			break;
+//		case nsl_fit_model_lognormal:
+//			m_fitData.paramNames << "s" << "mu" << "a";
+//		case nsl_fit_model_gamma:
+//			m_fitData.paramNames << "b" << "p" << "a";
+//		case nsl_fit_model_rayleigh:
+//			m_fitData.paramNames << "s" << "a";
 		case nsl_fit_model_levy:
 			m_fitData.paramNames << "g" << "mu" << "a";
 			break;
@@ -749,15 +752,15 @@ void XYFitCurveDock::updateModelEquation() {
 	uiGeneralTab.teEquation->setVariables(vars);
 	uiGeneralTab.teEquation->setText(eq);
 
-	// only for dists for testing
+	//TODO: only for dists for testing
 	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
 		// show formula pic
 		QString file = KStandardDirs::locate("data", "labplot2/pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
 		uiGeneralTab.lFuncPic->setPixmap(QPixmap(file));
 		uiGeneralTab.lFuncPic->show();
 
-		// hide uiGeneralTab.teEquation
-		if (m_fitData.modelType == nsl_sf_stats_gaussian || m_fitData.modelType == nsl_sf_stats_laplace)
+		//TODO: hide uiGeneralTab.teEquation
+		if (m_fitData.modelType == nsl_sf_stats_gaussian || m_fitData.modelType == nsl_sf_stats_laplace || m_fitData.modelType == nsl_sf_stats_cauchy_lorentz)
 			uiGeneralTab.teEquation->hide();
 		else
 			uiGeneralTab.teEquation->show();
