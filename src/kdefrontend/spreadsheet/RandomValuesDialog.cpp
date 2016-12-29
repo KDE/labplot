@@ -158,10 +158,10 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter3->setText("1.0");
 		break;
 	case nsl_sf_stats_cauchy_lorentz:
-		ui.lParameter2->hide();
-		ui.kleParameter2->hide();
-		ui.lParameter1->setText("a =");
-		ui.kleParameter1->setText("1.0");
+		ui.lParameter1->setText(QString::fromUtf8("t ="));
+		ui.lParameter2->setText("s =");
+		ui.kleParameter1->setText("0.0");
+		ui.kleParameter2->setText("1.0");
 		break;
 	case nsl_sf_stats_rayleigh:
 		ui.lParameter2->hide();
@@ -383,10 +383,11 @@ void RandomValuesDialog::generate() {
 		break;
 	}
 	case nsl_sf_stats_cauchy_lorentz: {
-		double a = ui.kleParameter1->text().toDouble();
+		double t = ui.kleParameter1->text().toDouble();
+		double s = ui.kleParameter2->text().toDouble();
 		foreach (Column* col, m_columns) {
 			for (int i = 0; i < rows; ++i)
-				new_data[i] = gsl_ran_cauchy(r, a);
+				new_data[i] = gsl_ran_cauchy(r, s) + t;
 			col->replaceValues(0, new_data);
 		}
 		break;
