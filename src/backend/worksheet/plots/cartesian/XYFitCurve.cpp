@@ -530,6 +530,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		case nsl_sf_stats_gaussian:
 		case nsl_sf_stats_laplace:
 		case nsl_sf_stats_cauchy_lorentz:
+		case nsl_sf_stats_lognormal:
 		case nsl_sf_stats_logistic: {
 			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
@@ -551,6 +552,12 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 							break;
 						case nsl_sf_stats_cauchy_lorentz:
 							gsl_matrix_set(J, i, j, nsl_fit_model_lorentz_param_deriv(j, x, s, mu, a, sigma));
+							break;
+						case nsl_sf_stats_lognormal:
+							if (x > 0)
+								gsl_matrix_set(J, i, j, nsl_fit_model_lognormal_param_deriv(j, x, s, mu, a, sigma));
+							else
+								gsl_matrix_set(J, i, j, 0.);
 							break;
 						case nsl_sf_stats_logistic:
 							gsl_matrix_set(J, i, j, nsl_fit_model_logistic_param_deriv(j, x, s, mu, a, sigma));

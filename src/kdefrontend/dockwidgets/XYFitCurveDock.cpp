@@ -352,7 +352,8 @@ void XYFitCurveDock::categoryChanged(int index) {
 
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			//TODO: Testing
-			if (i == nsl_sf_stats_laplace|| i == nsl_sf_stats_cauchy_lorentz || i == nsl_sf_stats_rayleigh || i == nsl_sf_stats_logistic)
+			if (i == nsl_sf_stats_laplace|| i == nsl_sf_stats_cauchy_lorentz || i == nsl_sf_stats_rayleigh || i == nsl_sf_stats_logistic
+				|| i == nsl_sf_stats_lognormal)
 				continue;
 
 			QStandardItem* item = model->item(i);
@@ -665,6 +666,7 @@ void XYFitCurveDock::updateModelEquation() {
 		switch (m_fitData.modelType) {
 		case nsl_sf_stats_gaussian:
 		case nsl_sf_stats_laplace:
+		case nsl_sf_stats_lognormal:
 		case nsl_sf_stats_logistic:
 			m_fitData.paramNames << "s" << "mu" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
