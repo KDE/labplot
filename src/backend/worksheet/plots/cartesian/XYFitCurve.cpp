@@ -584,6 +584,77 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
+		case nsl_sf_stats_gamma: {
+			double t = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			double k = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
+				if (sigmaVector) sigma = sigmaVector[i];
+
+				for (int j = 0; j < 3; j++) {
+					if (fixed[j])
+						gsl_matrix_set(J, i, j, 0.);
+					else
+						gsl_matrix_set(J, i, j, nsl_fit_model_gamma_param_deriv(j, x, t, k, a, sigma));
+				}
+			}
+			break;
+		}
+		case nsl_sf_stats_chi_squared: {
+			double n = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
+				if (sigmaVector) sigma = sigmaVector[i];
+
+				for (int j = 0; j < 2; j++) {
+					if (fixed[j])
+						gsl_matrix_set(J, i, j, 0.);
+					else
+						gsl_matrix_set(J, i, j, nsl_fit_model_chi_square_param_deriv(j, x, n, a, sigma));
+				}
+			}
+			break;
+		}
+		case nsl_sf_stats_weibull: {
+			double k = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			double l = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
+				if (sigmaVector) sigma = sigmaVector[i];
+
+				for (int j = 0; j < 4; j++) {
+					if (fixed[j])
+						gsl_matrix_set(J, i, j, 0.);
+					else {
+						if (x > 0)
+							gsl_matrix_set(J, i, j, nsl_fit_model_weibull_param_deriv(j, x, k, l, mu, a, sigma));
+						else
+							gsl_matrix_set(J, i, j, 0.);
+					}
+				}
+			}
+			break;
+		}
+		case nsl_sf_stats_poisson: {
+			double l = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
+			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
+			for (size_t i = 0; i < n; i++) {
+				x = xVector[i];
+				if (sigmaVector) sigma = sigmaVector[i];
+
+				for (int j = 0; j < 2; j++) {
+					if (fixed[j])
+						gsl_matrix_set(J, i, j, 0.);
+					else
+						gsl_matrix_set(J, i, j, nsl_fit_model_poisson_param_deriv(j, x, l, a, sigma));
+				}
+			}
+			break;
+		}
 		// TODO: nsl_sf_stats
 /*		case nsl_fit_model_maxwell: {	// Y(x) = c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)
 			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
@@ -601,62 +672,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
-		case nsl_fit_model_poisson: {
-			double l = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			for (size_t i = 0; i < n; i++) {
-				x = xVector[i];
-				if (sigmaVector) sigma = sigmaVector[i];
-
-				for (int j = 0; j < 2; j++) {
-					if (fixed[j])
-						gsl_matrix_set(J, i, j, 0.);
-					else
-						gsl_matrix_set(J, i, j, nsl_fit_model_poisson_param_deriv(j, x, l, a, sigma));
-				}
-			}
-			break;
-		}
 */
-/*		case nsl_fit_model_lognormal: {	// Y(x) = a/(sqrt(2*pi)*x*s) * exp(-(log(x)-mu)^2/(2*s^2));
-			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-			for (size_t i = 0; i < n; i++) {
-				x = xVector[i];
-				if (sigmaVector) sigma = sigmaVector[i];
-				if (x > 0) {
-					for (int j = 0; j < 3; j++) {
-						if (fixed[j])
-							gsl_matrix_set(J, i, j, 0.);
-						else
-							gsl_matrix_set(J, i, j, nsl_fit_model_lognormal_param_deriv(j, x, b, mu, a, sigma));
-					}
-				} else {	// TODO: how to deal correctly with x <= 0
-					gsl_matrix_set(J, i, 0, 0);
-					gsl_matrix_set(J, i, 1, 0);
-					gsl_matrix_set(J, i, 2, 0);
-				}
-			}
-			break;
-		}
-		case nsl_fit_model_gamma: {
-			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double p = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-			for (size_t i = 0; i < n; i++) {
-				x = xVector[i];
-				if (sigmaVector) sigma = sigmaVector[i];
-
-				for (int j = 0; j < 3; j++) {
-					if (fixed[j])
-						gsl_matrix_set(J, i, j, 0.);
-					else
-						gsl_matrix_set(J, i, j, nsl_fit_model_gamma_param_deriv(j, x, b, p, a, sigma));
-				}
-			}
-			break;
-		}
+/*		
 */
 /*		case nsl_fit_model_levy: {
 			double g = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
@@ -671,47 +688,6 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 						gsl_matrix_set(J, i, j, 0.);
 					else
 						gsl_matrix_set(J, i, j, nsl_fit_model_levy_param_deriv(j, x, g, mu, a, sigma));
-				}
-			}
-			break;
-		}
-		case nsl_fit_model_chi_square: {
-			double n = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			for (size_t i = 0; i < n; i++) {
-				x = xVector[i];
-				if (sigmaVector) sigma = sigmaVector[i];
-
-				for (int j = 0; j < 2; j++) {
-					if (fixed[j])
-						gsl_matrix_set(J, i, j, 0.);
-					else
-						gsl_matrix_set(J, i, j, nsl_fit_model_chi_square_param_deriv(j, x, n, a, sigma));
-				}
-			}
-			break;
-		}
-		case nsl_fit_model_weibull: {	//Y(x) = a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k);
-			double k = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
-			double l = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
-			for (size_t i = 0; i < n; i++) {
-				x = xVector[i];
-				if (sigmaVector) sigma = sigmaVector[i];
-
-				if (x > 0) {
-					for (int j = 0; j < 4; j++) {
-						if (fixed[j])
-							gsl_matrix_set(J, i, j, 0.);
-						else
-							gsl_matrix_set(J, i, j, nsl_fit_model_weibull_param_deriv(j, x, k, l, mu, a, sigma));
-					}
-				} else {	// TODO: how to deal correctly with (x-c)/b <=0
-					gsl_matrix_set(J, i, 0, 0);
-					gsl_matrix_set(J, i, 1, 0);
-					gsl_matrix_set(J, i, 2, 0);
-					gsl_matrix_set(J, i, 3, 0);
 				}
 			}
 			break;

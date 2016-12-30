@@ -325,13 +325,13 @@ double nsl_fit_model_lognormal_param_deriv(int param, double x, double s, double
 		return norm * efactor;
 	return 0;
 }
-double nsl_fit_model_gamma_param_deriv(int param, double x, double b, double p, double a, double sigma) {
-	double factor = pow(b, p)*pow(x, p-1.)/gsl_sf_gamma(p)/sigma, efactor = exp(-b*x);
+double nsl_fit_model_gamma_param_deriv(int param, double x, double t, double k, double a, double sigma) {
+	double factor = pow(x, k-1.)/pow(t, k)/gsl_sf_gamma(k)/sigma, efactor = exp(-x/t);
 
 	if (param == 0)
-		return a * factor/b * (p-b*x) * efactor;
+		return a * factor/t * (x/t-k) * efactor;
 	if (param == 1)
-		return a * factor * (log(b*x) - gsl_sf_psi(p)) * efactor;
+		return a * factor * (log(x/t) - gsl_sf_psi(k)) * efactor;
 	if (param == 2)
 		return factor * efactor;
 	return 0;
@@ -380,11 +380,11 @@ double nsl_fit_model_weibull_param_deriv(int param, double x, double k, double l
 	double y = (x-mu)/l, z = pow(y, k), efactor = exp(-z);
 
 	if (param == 0)
-		return a/sigma * z*(k*log(y)*(z-1.) - 1.) * efactor;
+		return a/l/sigma * z/y*(k*log(y)*(1.-z) + 1.) * efactor;
 	if (param == 1)
-		return a/sigma * k*k*z*(z-1.) * efactor;
+		return a*k*k/l/l/sigma * z/y*(z-1.) * efactor;
 	if (param == 2)
-		return a/sigma * k*z/y*(k-1. - k*z) * efactor;
+		return a*k/l/l/sigma * z/y/y*(k*z + 1. - k) * efactor;
 	if (param == 3)
 		return k/l/sigma * z/y * efactor;
 	return 0;

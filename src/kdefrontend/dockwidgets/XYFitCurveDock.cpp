@@ -353,7 +353,8 @@ void XYFitCurveDock::categoryChanged(int index) {
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			//TODO: Testing
 			if (i == nsl_sf_stats_laplace|| i == nsl_sf_stats_cauchy_lorentz || i == nsl_sf_stats_rayleigh || i == nsl_sf_stats_logistic
-				|| i == nsl_sf_stats_lognormal)
+				|| i == nsl_sf_stats_lognormal || i == nsl_sf_stats_chi_squared || i == nsl_sf_stats_gamma || i == nsl_sf_stats_poisson
+				|| i == nsl_sf_stats_weibull)
 				continue;
 
 			QStandardItem* item = model->item(i);
@@ -685,21 +686,27 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "s" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << "A";
 			break;
+		case nsl_sf_stats_gamma:
+			m_fitData.paramNames << "t" << "k" << "a";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03b8") << "k" << "A";
+			break;
+		case nsl_sf_stats_chi_squared:
+			m_fitData.paramNames << "n" << "a";
+			m_fitData.paramNamesUtf8 << "n" << "A";
+			break;
+		case nsl_sf_stats_weibull:
+			m_fitData.paramNames << "k" << "l" << "mu" << "a";
+			m_fitData.paramNamesUtf8 << "k" << QString::fromUtf8("\u03bb") << QString::fromUtf8("\u03bc") << "A";
+			break;
+		case nsl_sf_stats_poisson:
+			m_fitData.paramNames << "l" << "a";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03bb") << "A";
+			break;
 	// TODO: use nsl_sf_stats
 //		case nsl_fit_model_maxwell:
 //			m_fitData.paramNames << "a" << "c";
-//		case nsl_fit_model_poisson:
-//			m_fitData.paramNames << "l" << "a";
-//		case nsl_fit_model_lognormal:
-//			m_fitData.paramNames << "s" << "mu" << "a";
-//		case nsl_fit_model_gamma:
-//			m_fitData.paramNames << "b" << "p" << "a";
 //		case nsl_fit_model_levy:
 //			m_fitData.paramNames << "g" << "mu" << "a";
-//		case nsl_fit_model_chi_square:
-//			m_fitData.paramNames << "n" << "a";
-//		case nsl_fit_model_weibull:
-//			m_fitData.paramNames << "k" << "l" << "mu" << "a";
 //		case nsl_fit_model_frechet:
 //			m_fitData.paramNames << "a" << "mu" << "s" << "c";
 //		case nsl_fit_model_gumbel:
@@ -740,7 +747,7 @@ void XYFitCurveDock::updateModelEquation() {
 		// model-dependent start values
 		// TODO: use nsl_sf_stats
 		if (m_fitData.modelCategory == nsl_fit_model_distribution) {
-			if (m_fitData.modelType == nsl_fit_model_weibull)
+			if (m_fitData.modelType == nsl_sf_stats_weibull)
 				m_fitData.paramStartValues[2] = 0.0;
 			if (m_fitData.modelType == nsl_fit_model_frechet || m_fitData.modelType == nsl_fit_model_levy)
 				m_fitData.paramStartValues[1] = 0.0;
@@ -758,12 +765,15 @@ void XYFitCurveDock::updateModelEquation() {
 		uiGeneralTab.lFuncPic->show();
 
 		//TODO: hide uiGeneralTab.teEquation
-		if (m_fitData.modelType == nsl_sf_stats_gaussian || m_fitData.modelType == nsl_sf_stats_laplace || m_fitData.modelType == nsl_sf_stats_cauchy_lorentz)
+		if (m_fitData.modelType == nsl_sf_stats_gaussian)
 			uiGeneralTab.teEquation->hide();
 		else
 			uiGeneralTab.teEquation->show();
 		// set label
-		uiGeneralTab.lEquation->setText(("f(x)/A ="));
+		if (m_fitData.modelType == nsl_sf_stats_poisson)
+			uiGeneralTab.lEquation->setText(("f(k)/A ="));
+		else
+			uiGeneralTab.lEquation->setText(("f(x)/A ="));
 	} else {
 		uiGeneralTab.lEquation->setText(("f(x) ="));
 		uiGeneralTab.teEquation->show();
