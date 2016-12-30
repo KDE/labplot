@@ -393,23 +393,25 @@ double nsl_fit_model_frechet_param_deriv(int param, double x, double a, double m
 	double y = (x-mu)/s, efactor = exp(-pow(y, -a));
 
 	if (param == 0)
-		return c/s * pow(y, -2.*a-1.) * (a*log(y)*(1.-pow(y, a))+pow(y, a)) * efactor;
+		return c/s/sigma * pow(y, -2.*a-1.) * (a*log(y)*(1.-pow(y, a))+pow(y, a)) * efactor;
 	if (param == 1)
-		return c * a/(s*s)*pow(y, -a-2.) * (a+1.-a*pow(y, -a)) * efactor;
+		return c/sigma * a/(s*s)*pow(y, -a-2.) * (a+1.-a*pow(y, -a)) * efactor;
 	if (param == 2)
-		return c * gsl_pow_2(a/s)*pow(y, -2.*a-1.) * (pow(y, a)-1.) * efactor;
+		return c/sigma * gsl_pow_2(a/s)*pow(y, -2.*a-1.) * (pow(y, a)-1.) * efactor;
 	if (param == 3)
 		return a/sigma/s * pow(y, -a-1.) * efactor;
 	return 0;
 }
-double nsl_fit_model_gumbel_param_deriv(int param, double x, double b, double mu, double a, double sigma) {
-	double norm = 1./b/sigma, y = (x-mu)/b, efactor = exp(y - exp(y));
+double nsl_fit_model_gumbel1_param_deriv(int param, double x, double s, double b, double mu, double a, double sigma) {
+	double norm = 1./s/sigma, y = (x-mu)/s, efactor = exp(-y - b*exp(-y));
 
 	if (param == 0)
-		return a * norm/b * (y*exp(y) - y - 1) * efactor;
+		return a/s * norm * (y - 1. - b*exp(-y)) * efactor;
 	if (param == 1)
-		return a * norm/b * (exp(y) - 1) * efactor;
+		return -a * norm * exp(-y) * efactor;
 	if (param == 2)
+		return a/s * norm * (1. - b*exp(-y)) * efactor;
+	if (param == 3)
 		return norm * efactor;
 	return 0;
 }

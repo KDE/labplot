@@ -354,7 +354,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 			//TODO: Testing
 			if (i == nsl_sf_stats_laplace|| i == nsl_sf_stats_cauchy_lorentz || i == nsl_sf_stats_rayleigh || i == nsl_sf_stats_logistic
 				|| i == nsl_sf_stats_lognormal || i == nsl_sf_stats_chi_squared || i == nsl_sf_stats_gamma || i == nsl_sf_stats_poisson
-				|| i == nsl_sf_stats_weibull)
+				|| i == nsl_sf_stats_weibull || i == nsl_sf_stats_gumbel1)
 				continue;
 
 			QStandardItem* item = model->item(i);
@@ -698,6 +698,13 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "k" << "l" << "mu" << "a";
 			m_fitData.paramNamesUtf8 << "k" << QString::fromUtf8("\u03bb") << QString::fromUtf8("\u03bc") << "A";
 			break;
+		case nsl_sf_stats_gumbel1:
+			m_fitData.paramNames << "s" << "b" << "mu" << "a";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03b2") << QString::fromUtf8("\u03bc") << "A";
+			break;
+		case nsl_sf_stats_gumbel2:
+			// TODO
+			break;
 		case nsl_sf_stats_poisson:
 			m_fitData.paramNames << "l" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03bb") << "A";
@@ -709,8 +716,6 @@ void XYFitCurveDock::updateModelEquation() {
 //			m_fitData.paramNames << "g" << "mu" << "a";
 //		case nsl_fit_model_frechet:
 //			m_fitData.paramNames << "a" << "mu" << "s" << "c";
-//		case nsl_fit_model_gumbel:
-//			m_fitData.paramNames << "b" << "mu" << "a";
 //		case nsl_fit_model_sech_dist:
 //			m_fitData.paramNames << "s" << "mu" << "a";
 	// TODO: use nsl_sf_stats

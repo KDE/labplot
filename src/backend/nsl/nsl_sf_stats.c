@@ -30,27 +30,28 @@
 #include "nsl_sf_stats.h"
 
 const char* nsl_sf_stats_distribution_name[] = {i18n("Gaussian (Normal)"), i18n("Gaussian Tail"), i18n("Exponential"), i18n("Laplace"),
-	i18n("Exponential Power"), i18n("Cauchy-Lorentz"), i18n("Rayleigh"), i18n("Rayleigh tail"), i18n("Landau"), i18n("Levy alpha-stable"),
-	i18n("Levy skew alpha-stable"), i18n("Gamma"), i18n("Flat (uniform)"), i18n("Lognormal"), i18n("Chi-squared"), i18n("F"), i18n("t"),
-	i18n("Beta"), i18n("Logistic"), i18n("Pareto"), i18n("Weibull"), i18n("Type-1 Gumbel"), i18n("Type-2 Gumbel"), i18n("Poisson"),
-	i18n("Bernoulli"), i18n("Binomial"), i18n("Negative binomial"), i18n("Pascal"), i18n("Geometric"), i18n("Hypergeometric"), i18n("Logarithmic")};
+	i18n("Exponential Power"), i18n("Cauchy-Lorentz (Breit-Wigner)"), i18n("Rayleigh"), i18n("Rayleigh Tail"), i18n("Landau"), i18n("Levy alpha-stable"),
+	i18n("Levy skew alpha-stable"), i18n("Gamma"), i18n("Flat (uniform)"), i18n("Log-normal (Galton)"), i18n("Chi-squared"), i18n("F (Fisher-Snedecor)"),
+	i18n("Student's t"), i18n("Beta"), i18n("Logistic (sech-squared)"), i18n("Pareto"), i18n("Weibull"), i18n("Gumbel Type-1 (maximum value; log-Weibull)"),
+	i18n("Type-2 Gumbel"), i18n("Poisson"), i18n("Bernoulli"), i18n("Binomial"), i18n("Negative binomial"), i18n("Pascal"), i18n("Geometric"),
+	i18n("Hypergeometric"), i18n("Logarithmic")};
 const char* nsl_sf_stats_distribution_pic_name[] = {
 	"gaussian", "gaussian_tail", "exponential", "laplace", "exponential_power", "cauchy_lorentz", "rayleigh",
 	"rayleigh_tail", "landau","levy_alpha_stable", "levy_skew_alpha_stable","gamma", "flat",
 	"lognormal", "chi_squared", "F", "t", "beta", "logistic",
-	"pareto", "weibull", "gumbel_type_1", "gumbel_type_2", "poisson", "bernoulli",
+	"pareto", "weibull", "gumbel1", "gumbel2", "poisson", "bernoulli",
 	"binomial", "binomial_negative", "pascal", "geometric", "hypergeometric", "logarithmic"};
 const char* nsl_sf_stats_distribution_equation[] = {
-	"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "Gaussian Tail", "Exponential",
+	"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "Gaussian tail", "Exponential",
 	"a/(2*s) * exp(-fabs((x-mu)/s))", "Exp power", "a/pi * g/(g^2 + (x-mu)^2)",
 	"a * x/s^2 * exp(-(x/s)^2/2)", "Rayleigh tail", "Landau",
 	"Levy alpha-stable", "Levy-skew", "a/gamma(k)/t^k * x^(k-1)*exp(-x/t)",
 	"Flat", "a/sqrt(2*pi)/x/s * exp(-( (log(x)-mu)/s )^2/2)", "a * x^(n/2.-1.)/2^(n/2.)/gamma(n/2.) * exp(-x/2.)",
 	"F", "t", "Beta",
 	"a/4/s * sech((x-mu)/2/s)**2", "Pareto", "a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)",
-	"a/b * exp((x-mu)/b - exp((x-mu)/b))", "Gumbel2", "a * l^x/gamma(x+1) * exp(-l)",
-	"Bernoulli", "Binomial", "Neg Binomial",
-	"Pascal", "Geometric", "Hypergeo",
+	"a/s * exp(-(x-mu)/s - b*exp(-(x-mu)/s))", "Gumbel2", "a * l^x/gamma(x+1) * exp(-l)",
+	"Bernoulli", "Binomial", "Negative binomial",
+	"Pascal", "Geometric", "Hypergeometric",
 	"Logarithmic"};
 
 /*TODO: "c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)",	 	Maxwell-Boltzmann

@@ -98,7 +98,7 @@ double nsl_fit_model_levy_param_deriv(int param, double x, double g, double mu, 
 double nsl_fit_model_chi_square_param_deriv(int param, double x, double n, double a, double sigma);
 double nsl_fit_model_weibull_param_deriv(int param, double x, double k, double l, double mu, double a, double sigma);
 double nsl_fit_model_frechet_param_deriv(int param, double x, double a, double mu, double s, double c, double sigma);
-double nsl_fit_model_gumbel_param_deriv(int param, double x, double b, double mu, double a, double sigma);
+double nsl_fit_model_gumbel1_param_deriv(int param, double x, double s, double b, double mu, double a, double sigma);
 double nsl_fit_model_sech_dist_param_deriv(int param, double x, double s, double mu, double a, double sigma);
 
 #endif /* NSL_FIT_H */
