@@ -347,18 +347,20 @@ void XYFitCurveDock::categoryChanged(int index) {
 		for(int i = 0; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++)
 			uiGeneralTab.cbModel->addItem(nsl_sf_stats_distribution_name[i]);
 
-		//TODO:  non-used items are disabled here
+		// non-used items are disabled here
         	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
 
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
-			//TODO: Testing
-			if (i == nsl_sf_stats_laplace|| i == nsl_sf_stats_cauchy_lorentz || i == nsl_sf_stats_rayleigh || i == nsl_sf_stats_logistic
-				|| i == nsl_sf_stats_lognormal || i == nsl_sf_stats_chi_squared || i == nsl_sf_stats_gamma || i == nsl_sf_stats_poisson
-				|| i == nsl_sf_stats_weibull || i == nsl_sf_stats_gumbel1)
-				continue;
-
-			QStandardItem* item = model->item(i);
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+			//TODO: implement following distribution models
+			if (i == nsl_sf_stats_gaussian_tail || i == nsl_sf_stats_exponential || i == nsl_sf_stats_exponential_power ||
+				i == nsl_sf_stats_rayleigh_tail || i == nsl_sf_stats_landau || i == nsl_sf_stats_levy_alpha_stable ||
+				i == nsl_sf_stats_levy_skew_alpha_stable || i == nsl_sf_stats_flat || i == nsl_sf_stats_fdist ||
+				i == nsl_sf_stats_tdist || i == nsl_sf_stats_beta || i == nsl_sf_stats_gumbel2 || i == nsl_sf_stats_bernoulli ||
+				i == nsl_sf_stats_binomial || i == nsl_sf_stats_negative_bionomial || i == nsl_sf_stats_pascal || i == nsl_sf_stats_geometric
+				|| i == nsl_sf_stats_hypergeometric || i ==  nsl_sf_stats_logarithmic || i == nsl_sf_stats_pareto) {
+					QStandardItem* item = model->item(i);
+					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+			}
 		}
 		break;
 	}
@@ -665,10 +667,12 @@ void XYFitCurveDock::updateModelEquation() {
 		break;
 	case nsl_fit_model_distribution:
 		switch (m_fitData.modelType) {
+		// TODO: missing GSL distributions
 		case nsl_sf_stats_gaussian:
 		case nsl_sf_stats_laplace:
 		case nsl_sf_stats_lognormal:
 		case nsl_sf_stats_logistic:
+		case nsl_sf_stats_sech:
 			m_fitData.paramNames << "s" << "mu" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 			break;
@@ -679,6 +683,7 @@ void XYFitCurveDock::updateModelEquation() {
 		case nsl_sf_stats_exponential_power:
 			break;
 		case nsl_sf_stats_cauchy_lorentz:
+		case nsl_sf_stats_levy:
 			m_fitData.paramNames << "g" << "mu" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03b3") << QString::fromUtf8("\u03bc") << "A";
 			break;
@@ -703,22 +708,19 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03b2") << QString::fromUtf8("\u03bc") << "A";
 			break;
 		case nsl_sf_stats_gumbel2:
-			// TODO
 			break;
 		case nsl_sf_stats_poisson:
 			m_fitData.paramNames << "l" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03bb") << "A";
 			break;
-	// TODO: use nsl_sf_stats
-//		case nsl_fit_model_maxwell:
-//			m_fitData.paramNames << "a" << "c";
-//		case nsl_fit_model_levy:
-//			m_fitData.paramNames << "g" << "mu" << "a";
-//		case nsl_fit_model_frechet:
-//			m_fitData.paramNames << "a" << "mu" << "s" << "c";
-//		case nsl_fit_model_sech_dist:
-//			m_fitData.paramNames << "s" << "mu" << "a";
-	// TODO: use nsl_sf_stats
+		case nsl_sf_stats_maxwell_boltzmann:
+			m_fitData.paramNames << "s" << "a";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << "A";
+			break;
+		case nsl_sf_stats_frechet:
+			m_fitData.paramNames << "g" << "mu" << "s" << "a";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03b3") << QString::fromUtf8("\u03bc") << QString::fromUtf8("\u03c3") << "A";
+			break;
 		}
 		break;
 	case nsl_fit_model_custom:
@@ -750,11 +752,10 @@ void XYFitCurveDock::updateModelEquation() {
 		}
 
 		// model-dependent start values
-		// TODO: use nsl_sf_stats
 		if (m_fitData.modelCategory == nsl_fit_model_distribution) {
 			if (m_fitData.modelType == nsl_sf_stats_weibull)
 				m_fitData.paramStartValues[2] = 0.0;
-			if (m_fitData.modelType == nsl_fit_model_frechet || m_fitData.modelType == nsl_fit_model_levy)
+			if (m_fitData.modelType == nsl_sf_stats_frechet || m_fitData.modelType == nsl_sf_stats_levy)
 				m_fitData.paramStartValues[1] = 0.0;
 		}
 	}
@@ -762,18 +763,15 @@ void XYFitCurveDock::updateModelEquation() {
 	uiGeneralTab.teEquation->setVariables(vars);
 	uiGeneralTab.teEquation->setText(eq);
 
-	//TODO: only for dists for testing
+	//TODO: only for dists atm
 	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
 		// show formula pic
 		QString file = KStandardDirs::locate("data", "labplot2/pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
 		uiGeneralTab.lFuncPic->setPixmap(QPixmap(file));
 		uiGeneralTab.lFuncPic->show();
 
-		//TODO: hide uiGeneralTab.teEquation
-		if (m_fitData.modelType == nsl_sf_stats_gaussian)
-			uiGeneralTab.teEquation->hide();
-		else
-			uiGeneralTab.teEquation->show();
+		uiGeneralTab.teEquation->hide();
+		
 		// set label
 		if (m_fitData.modelType == nsl_sf_stats_poisson)
 			uiGeneralTab.lEquation->setText(("f(k)/A ="));

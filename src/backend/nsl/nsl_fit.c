@@ -389,17 +389,17 @@ double nsl_fit_model_weibull_param_deriv(int param, double x, double k, double l
 		return k/l/sigma * z/y * efactor;
 	return 0;
 }
-double nsl_fit_model_frechet_param_deriv(int param, double x, double a, double mu, double s, double c, double sigma) {
-	double y = (x-mu)/s, efactor = exp(-pow(y, -a));
+double nsl_fit_model_frechet_param_deriv(int param, double x, double g, double mu, double s, double a, double sigma) {
+	double y = (x-mu)/s, efactor = exp(-pow(y, -g));
 
 	if (param == 0)
-		return c/s/sigma * pow(y, -2.*a-1.) * (a*log(y)*(1.-pow(y, a))+pow(y, a)) * efactor;
+		return a/s/sigma * pow(y, -2.*g-1.) * (g*log(y)*(1.-pow(y, g))+pow(y, g)) * efactor;
 	if (param == 1)
-		return c/sigma * a/(s*s)*pow(y, -a-2.) * (a+1.-a*pow(y, -a)) * efactor;
+		return a/sigma * g/(s*s)*pow(y, -g-2.) * (g+1.-g*pow(y, -g)) * efactor;
 	if (param == 2)
-		return c/sigma * gsl_pow_2(a/s)*pow(y, -2.*a-1.) * (pow(y, a)-1.) * efactor;
+		return a/sigma * gsl_pow_2(g/s)*pow(y, -2.*g-1.) * (pow(y, g)-1.) * efactor;
 	if (param == 3)
-		return a/sigma/s * pow(y, -a-1.) * efactor;
+		return g/sigma/s * pow(y, -g-1.) * efactor;
 	return 0;
 }
 double nsl_fit_model_gumbel1_param_deriv(int param, double x, double s, double b, double mu, double a, double sigma) {
