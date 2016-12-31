@@ -45,7 +45,7 @@
 #include <KConfigGroup>
 
 #include <KMessageBox>
-#include <knewstuff3/uploaddialog.h>
+// #include <knewstuff3/uploaddialog.h>
 
 #include <unistd.h>
 
@@ -71,17 +71,18 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	horizontalLayout->addWidget(pbSaveTheme);
 	pbSaveTheme->setText("Save theme");
 
+/*
 	pbPublishTheme = new QPushButton(this);
 	horizontalLayout->addWidget(pbPublishTheme);
 	pbPublishTheme->setText("Publish theme");
 	pbPublishTheme->setEnabled(false);
-
+*/
 	QSpacerItem* horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 	horizontalLayout->addItem(horizontalSpacer2);
 
 	connect( pbLoadTheme, SIGNAL(clicked()), this, SLOT(showPanel()));
 	connect( pbSaveTheme, SIGNAL(clicked()), this, SLOT(saveMenu()));
-	connect( pbPublishTheme, SIGNAL(clicked()), this, SLOT(publishThemes()));
+// 	connect( pbPublishTheme, SIGNAL(clicked()), this, SLOT(publishThemes()));
 
 	//find all available themes files (system wide and user specific local files)
 	//the list m_themeList contains full pathes (path + file name)
@@ -103,13 +104,14 @@ void ThemeHandler::loadSelected(QString name) {
 	emit info( i18n("Theme \"%1\" was loaded.", name) );
 
 	//in case a local theme file was loaded (we have write access), allow to publish it
-	if (KGlobal::dirs()->checkAccess(themeFilePath, W_OK)) {
-		pbPublishTheme->setEnabled(true);
-		m_currentLocalTheme = themeFilePath.right(themeFilePath.length() - themeFilePath.lastIndexOf(QDir::separator()) - 1);
-	} else {
-		pbPublishTheme->setEnabled(false);
-		m_currentLocalTheme.clear();
-	}
+	//TODO: activate this later
+// 	if (KGlobal::dirs()->checkAccess(themeFilePath, W_OK)) {
+// 		pbPublishTheme->setEnabled(true);
+// 		m_currentLocalTheme = themeFilePath.right(themeFilePath.length() - themeFilePath.lastIndexOf(QDir::separator()) - 1);
+// 	} else {
+// 		pbPublishTheme->setEnabled(false);
+// 		m_currentLocalTheme.clear();
+// 	}
 }
 
 QStringList ThemeHandler::themes() {
@@ -184,24 +186,25 @@ void ThemeHandler::saveNewSelected(const QString& filename) {
 	m_themeList.append(config.name());
 
 	//enable the publish button so the newly created theme can be published
-	pbPublishTheme->setEnabled(true);
+	//TODO: enable this later
+// 	pbPublishTheme->setEnabled(true);
 }
 
 /*!
 	opens the dialog to upload the currently selected local theme.
 	The publish button is only enabled if a local theme was loaded or one of the themes was modified and saved localy.
  */
-void ThemeHandler::publishThemes() {
-	int ret = KMessageBox::questionYesNo(this,
-					     i18n("Do you want to upload your theme %1 to public web server?").arg(m_currentLocalTheme),
-					     i18n("Publish Theme"));
-	if (ret != KMessageBox::Yes)
-		return;
-
-	// creating upload dialog
-	KNS3::UploadDialog dialog("labplot2_themes.knsrc", this);
-	dialog.setUploadFile(KGlobal::dirs()->locateLocal("appdata", "themes") + '/' + m_currentLocalTheme);
-	dialog.setUploadName(m_currentLocalTheme);
-	//dialog.setDescription(); TODO: allow the user to provide a short description for the theme to be uploaded
-	dialog.exec();
-}
+// void ThemeHandler::publishThemes() {
+// 	int ret = KMessageBox::questionYesNo(this,
+// 					     i18n("Do you want to upload your theme %1 to public web server?").arg(m_currentLocalTheme),
+// 					     i18n("Publish Theme"));
+// 	if (ret != KMessageBox::Yes)
+// 		return;
+// 
+// 	// creating upload dialog
+// 	KNS3::UploadDialog dialog("labplot2_themes.knsrc", this);
+// 	dialog.setUploadFile(KGlobal::dirs()->locateLocal("appdata", "themes") + '/' + m_currentLocalTheme);
+// 	dialog.setUploadName(m_currentLocalTheme);
+// 	//dialog.setDescription(); TODO: allow the user to provide a short description for the theme to be uploaded
+// 	dialog.exec();
+// }
