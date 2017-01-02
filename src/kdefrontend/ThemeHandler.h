@@ -39,7 +39,7 @@ class ThemeHandler : public QWidget {
 	Q_OBJECT
 
 	public:
-		ThemeHandler(QWidget* parent);
+		explicit ThemeHandler(QWidget*);
 		static QStringList themes();
 		static const QString themeFilePath(const QString&);
 

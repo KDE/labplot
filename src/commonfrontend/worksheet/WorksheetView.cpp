@@ -1090,12 +1090,11 @@ void WorksheetView::addNew(QAction* action) {
 void WorksheetView::selectAllElements() {
 	//deselect all previously selected items since there can be some non top-level items belong them
 	m_suppressSelectionChangedEvent = true;
-	QList<QGraphicsItem*> items = scene()->selectedItems();
 	foreach (QGraphicsItem* item, m_selectedItems)
 		m_worksheet->setItemSelectedInView(item, false);
 
 	//select top-level items
-	items = scene()->items();
+	QList<QGraphicsItem*> items = scene()->items();
 	foreach (QGraphicsItem* item, items) {
 		if (!item->parentItem())
 			item->setSelected(true);
@@ -1109,7 +1108,7 @@ void WorksheetView::selectAllElements() {
  */
 void WorksheetView::deleteElement() {
 	QList<QGraphicsItem*> items = scene()->selectedItems();
-	if (items.size() == 0)
+	if (items.isEmpty())
 		return;
 
 	int rc = KMessageBox::warningYesNo( this,
