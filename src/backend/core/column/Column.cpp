@@ -123,7 +123,6 @@ void Column::init() {
 	m_column_private->outputFilter()->setHidden(true);
 	addChild(m_column_private->inputFilter());
 	addChild(m_column_private->outputFilter());
-    m_column_private->statisticsAvailable = false;
 
 	//set the default width, synchronize this with the format used for the header in SpreadsheetModel::updateHorizontalHeader()
 	QString str = name() + QLatin1String(" {") + i18n("Numeric") + QLatin1String("} ");
@@ -502,9 +501,8 @@ void Column::calculateStatistics() {
     double sumForCentralMoment_r4 = 0.0;
 
     gsl_sort(rowData.data(), 1, notNanCount);
-    statistics.median = (notNanCount % 2 ? rowData.at((notNanCount-1)/2) :
-                                             (rowData.at((notNanCount-1)/2) +
-                                              rowData.at(notNanCount/2))/2.0);
+    statistics.median = (notNanCount%2) ? rowData.at((notNanCount-1)/2) :
+                                             (rowData.at((notNanCount-1)/2) + rowData.at(notNanCount/2))/2.0;
     QVector<double> absoluteMedianList;
     absoluteMedianList.reserve(notNanCount);
     absoluteMedianList.resize(notNanCount);
@@ -526,8 +524,8 @@ void Column::calculateStatistics() {
     }
 
     statistics.meanDeviationAroundMedian = columnSumMedianDeviation / notNanCount;
-    statistics.medianDeviation = (notNanCount % 2 ? absoluteMedianList.at((notNanCount-1)/2) :
-                                                      (absoluteMedianList.at((notNanCount-1)/2) + absoluteMedianList.at(notNanCount/2))/2.0);
+    statistics.medianDeviation = (notNanCount%2) ? absoluteMedianList.at((notNanCount-1)/2) :
+                                                      (absoluteMedianList.at((notNanCount-1)/2) + absoluteMedianList.at(notNanCount/2))/2.0;
 
     const double centralMoment_r3 = sumForCentralMoment_r3 / notNanCount;
     const double centralMoment_r4 = sumForCentralMoment_r4 / notNanCount;

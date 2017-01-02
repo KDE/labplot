@@ -138,7 +138,7 @@ bool Matrix::exportView() const {
 	}
 
 	bool ret;
-	if ((ret = dlg->exec()==QDialog::Accepted)) {
+	if ( (ret = (dlg->exec()==QDialog::Accepted)) ) {
 		const QString path = dlg->path();
 		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
 		WAIT_CURSOR;
@@ -169,9 +169,9 @@ bool Matrix::exportView() const {
 bool Matrix::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
-    	bool ret;
+	bool ret;
 	dlg->setWindowTitle(i18n("Print Matrix"));
-    	if ((ret = dlg->exec() == QDialog::Accepted)) {
+	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
 		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
 		view->print(&printer);
 	}

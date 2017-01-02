@@ -97,12 +97,10 @@
  * \brief Ctor
  */
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
- : m_owner(owner) {
+ : statisticsAvailable(false), m_column_mode(mode), m_plot_designation(AbstractColumn::noDesignation), m_owner(owner) {
 	Q_ASSERT(owner != 0); // a ColumnPrivate without owner is not allowed
 					      // because the owner must become the parent aspect of the input and output filters
-	m_column_mode = mode;
-	switch(mode)
-	{
+	switch(mode) {
 		case AbstractColumn::Numeric:
 			m_input_filter = new String2DoubleFilter();
 			m_output_filter = new Double2StringFilter();
@@ -130,11 +128,10 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
 			static_cast<DateTime2StringFilter *>(m_output_filter)->setFormat("dddd");
 			m_data = new QList<QDateTime>();
 			break;
-	} // switch(mode)
+	}
 
 	connect(m_output_filter, SIGNAL(formatChanged()), m_owner, SLOT(handleFormatChange()));
 
-	m_plot_designation = AbstractColumn::noDesignation;
 	m_input_filter->setName("InputFilter");
 	m_output_filter->setName("OutputFilter");
 }
@@ -142,13 +139,10 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
 /**
  * \brief Special ctor (to be called from Column only!)
  */
-ColumnPrivate::ColumnPrivate(Column * owner, AbstractColumn::ColumnMode mode, void * data)
-	: m_owner(owner) {
-	m_column_mode = mode;
-	m_data = data;
+ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, void* data)
+	: statisticsAvailable(false), m_column_mode(mode), m_data(data), m_plot_designation(AbstractColumn::noDesignation), m_owner(owner) {
 
-	switch(mode)
-	{
+	switch(mode) {
 		case AbstractColumn::Numeric:
 			m_input_filter = new String2DoubleFilter();
 			m_output_filter = new Double2StringFilter();
@@ -179,9 +173,8 @@ ColumnPrivate::ColumnPrivate(Column * owner, AbstractColumn::ColumnMode mode, vo
 			connect(static_cast<DateTime2StringFilter *>(m_output_filter), SIGNAL(formatChanged()),
 				m_owner, SLOT(handleFormatChange()));
 			break;
-	} // switch(mode)
+	}
 
-	m_plot_designation = AbstractColumn::noDesignation;
 	m_input_filter->setName("InputFilter");
 	m_output_filter->setName("OutputFilter");
 }

@@ -173,7 +173,7 @@ bool Worksheet::exportView() const {
 	ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
 	dlg->setFileName(name());
 	bool ret;
-	if ((ret = dlg->exec()==QDialog::Accepted)) {
+	if ( (ret = (dlg->exec()==QDialog::Accepted)) ) {
 		QString path = dlg->path();
 		const WorksheetView::ExportFormat format = dlg->exportFormat();
 		const WorksheetView::ExportArea area = dlg->exportArea();
@@ -194,7 +194,7 @@ bool Worksheet::printView() {
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18n("Print Worksheet"));
 	bool ret;
-	if ((ret = dlg->exec() == QDialog::Accepted)) {
+	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
 		WorksheetView* view = reinterpret_cast<WorksheetView*>(m_view);
 		view->print(&printer);
 	}

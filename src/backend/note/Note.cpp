@@ -59,7 +59,7 @@ bool Note::printView() {
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18n("Print Worksheet"));
 	bool ret;
-    if ((ret = dlg->exec() == QDialog::Accepted)) {
+    if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
 		NoteView* view = reinterpret_cast<NoteView*>(m_view);
 		view->print(&printer);
 	}
