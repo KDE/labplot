@@ -1462,7 +1462,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
 
-		image.save(path, "png");
+		image.save(path, "PNG");
 	}
 }
 
