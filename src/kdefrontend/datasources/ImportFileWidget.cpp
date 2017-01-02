@@ -302,10 +302,7 @@ FileDataSource::FileType ImportFileWidget::currentFileType() const {
 	returns the currently used filter.
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
-	//FileDataSource::FileType fileType = this->currentFileType();
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
-
-	//qDebug()<<"	current filter ="<<ui.cbFilter->currentIndex();
 
 	switch (fileType) {
 	case FileDataSource::Ascii: {
@@ -334,7 +331,6 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		filter->setEndColumn( ui.sbEndColumn->value());
 
 		return filter;
-//		source->setFilter(filter);
 	}
 	case FileDataSource::Binary: {
 		BinaryFilter* filter = new BinaryFilter();
@@ -352,7 +348,6 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		filter->setStartRow( ui.sbStartRow->value() );
 		filter->setEndRow( ui.sbEndRow->value() );
 
-//		source->setFilter(filter);
 		return filter;
 	}
 	case FileDataSource::Image: {

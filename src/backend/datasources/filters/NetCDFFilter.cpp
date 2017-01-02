@@ -413,8 +413,10 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 		varItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
 		varItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		// highlight item
-		for (int c=0; c < varItem->columnCount(); c++)
-			varItem->setBackground(c,QBrush(QColor(192,255,192)));
+		for (int c=0; c < varItem->columnCount(); c++) {
+			varItem->setBackground(c, QColor(192,255,192));
+			varItem->setForeground(c, Qt::black);
+		}
 		parentItem->addChild(varItem);
 
 		scanAttrs(ncid,i,-1,varItem);
