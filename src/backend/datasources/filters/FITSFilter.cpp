@@ -1630,7 +1630,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
     bool noImage = false;
     foreach (const QString& ext, imageExtensions) {
         QTreeWidgetItem* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)0, QStringList() << ext);
-        if (ext == QLatin1String("Primary header")) {
+        if (ext == i18n("Primary header")) {
             if (checkPrimary && naxis == 0) {
                 continue;
             }

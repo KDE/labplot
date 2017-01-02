@@ -4,7 +4,7 @@ Project              : LabPlot
 Description          : import file data widget
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
-Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 
@@ -41,7 +41,6 @@ Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 #include <QDir>
 #include <QFileDialog>
 #include <QProcess>
-#include <QTextStream>
 #include <KUrlCompletion>
 #include <QDebug>
 #include <QTimer>
@@ -265,7 +264,7 @@ void ImportFileWidget::showOptions(bool b) {
 QString ImportFileWidget::fileName() const {
 	if (currentFileType() == FileDataSource::FITS) {
 		if (fitsOptionsWidget.twExtensions->currentItem() != 0) {
-			if (fitsOptionsWidget.twExtensions->currentItem()->text(0) != QLatin1String("Primary header")) {
+			if (fitsOptionsWidget.twExtensions->currentItem()->text(0) != i18n("Primary header")) {
 				return ui.kleFileName->text() + QLatin1String("[") +
 						fitsOptionsWidget.twExtensions->currentItem()->text(fitsOptionsWidget.twExtensions->currentColumn()) + QLatin1String("]");
 			}
@@ -625,7 +624,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 */
 void ImportFileWidget::hdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
 	Q_UNUSED(column);
-	if (item->data(2, Qt::DisplayRole).toString() == "data set")
+	if (item->data(2, Qt::DisplayRole).toString() == i18n("data set"))
 		refreshPreview();
 	else
 		qDebug()<<"non data set selected in HDF tree widget";
@@ -636,7 +635,7 @@ void ImportFileWidget::hdfTreeWidgetItemSelected(QTreeWidgetItem* item, int colu
 */
 const QStringList ImportFileWidget::selectedHDFNames() const {
 	QStringList names;
-	QList<QTreeWidgetItem *> items = hdfOptionsWidget.twContent->selectedItems();
+	QList<QTreeWidgetItem*> items = hdfOptionsWidget.twContent->selectedItems();
 
 	// the data link is saved in the second column
 	for (int i = 0; i < items.size(); i++)
@@ -655,20 +654,20 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
 			itemText.contains(QLatin1String("ASCII_TBL #")) ||
 			itemText.contains(QLatin1String("BINARY_TBL #"))){
 		extType = 1;
-	} else if (!itemText.compare(QLatin1String("Primary header"))) {
+	} else if (!itemText.compare(i18n("Primary header"))) {
 		extType = 2;
 	}
 	if (extType == 0) {
 		if (item->parent() != 0) {
 			if (item->parent()->parent() != 0)
-				selectedExtension = item->parent()->parent()->text(0) +"["+ item->text(column)+"]";
+				selectedExtension = item->parent()->parent()->text(0) + QLatin1String("[") + item->text(column) + QLatin1String("]");
 		}
 	} else if (extType == 1) {
 		if (item->parent() != 0) {
 			if (item->parent()->parent() != 0) {
 				bool ok;
 				int hduNum = itemText.right(1).toInt(&ok);
-				selectedExtension = item->parent()->parent()->text(0) +"["+ QString::number(hduNum-1) +"]";
+				selectedExtension = item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum-1) + QLatin1String("]");
 			}
 		}
 	} else {
@@ -679,17 +678,11 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
 
 	if (!selectedExtension.isEmpty()) {
 		FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
-		bool okToMatrix;
-		QString importedText = filter->readChdu(selectedExtension, &okToMatrix, ui.sbPreviewLines->value());
-		if (okToMatrix) {
-			readFitsTableToMatrix = true;
-		} else {
-			readFitsTableToMatrix = false;
-		}
+		QString importedText = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
 		emit checkedFitsTableToMatrix();
 
 		//TODO
-		QStringList lineStrings = importedText.split("\n");
+		QStringList lineStrings = importedText.split(QLatin1Char('\n'));
 		fitsOptionsWidget.twPreview->clear();
 
 		fitsOptionsWidget.twPreview->setRowCount(lineStrings.size() -1);
@@ -712,7 +705,6 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
 	}
 	RESET_CURSOR;
 }
-
 
 /*!
 	updates the selected var name of a NetCDF file when the tree widget item is selected
@@ -900,14 +892,14 @@ void ImportFileWidget::refreshPreview() {
 			if (extType == 0) {
 				if (item->parent() != 0) {
 					if (item->parent()->parent() != 0)
-						fileName = item->parent()->parent()->text(0) +"["+ item->text(currentColumn)+"]";
+						fileName = item->parent()->parent()->text(0) + QLatin1String("[")+ item->text(currentColumn) + QLatin1String("]");
 				}
 			} else if (extType == 1) {
 				if (item->parent() != 0) {
 					if (item->parent()->parent() != 0) {
 						bool ok;
 						int hduNum = itemText.right(1).toInt(&ok);
-						fileName = item->parent()->parent()->text(0) +"["+ QString::number(hduNum-1) +"]";
+						fileName = item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum-1) + QLatin1String("]");
 					}
 				}
 			} else {
@@ -917,13 +909,7 @@ void ImportFileWidget::refreshPreview() {
 			}
 		}
 
-		bool okToMatrix;
-		importedText = filter->readChdu(fileName, &okToMatrix, lines);
-		if (okToMatrix) {
-			readFitsTableToMatrix = true;
-		} else {
-			readFitsTableToMatrix = false;
-		}
+		importedText = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
 		emit checkedFitsTableToMatrix();
 
 		tmpTableWidget = fitsOptionsWidget.twPreview;
@@ -942,7 +928,7 @@ void ImportFileWidget::refreshPreview() {
 			item->setText(importedText);
 			tmpTableWidget->setItem(0,0,item);
 		} else {
-			QStringList lineStrings = importedText.split("\n");
+			QStringList lineStrings = importedText.split(QLatin1Char('\n'));
 			tmpTableWidget->setRowCount(qMax(lineStrings.size()-1,1));
 			int colCount = 0;
 			const int maxColumns = 300;

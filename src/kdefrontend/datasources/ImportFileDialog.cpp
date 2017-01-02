@@ -397,11 +397,11 @@ void ImportFileDialog::checkOkButton() {
 			}
 		}
 
-		if (fileName.left(1) != QDir::separator()) {
+		if (fileName.left(1) != QDir::separator())
 			fileName = QDir::homePath() + QDir::separator() + fileName.mid(0, extensionBraceletPos);
-		} else {
+		else
 			fileName = fileName.mid(0, extensionBraceletPos);
-		}
-    	}
-    	enableButtonOk( QFile::exists(fileName) ) ;
+	}
+
+	enableButtonOk( QFile::exists(fileName) ) ;
 }
