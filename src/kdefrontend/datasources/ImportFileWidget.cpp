@@ -886,7 +886,7 @@ void ImportFileWidget::refreshPreview() {
 					itemText.contains(QLatin1String("ASCII_TBL #")) ||
 					itemText.contains(QLatin1String("BINARY_TBL #"))){
 				extType = 1;
-			} else if (!itemText.compare(QLatin1String("Primary header"))) {
+			} else if (!itemText.compare(i18n("Primary header"))) {
 				extType = 2;
 			}
 			if (extType == 0) {
