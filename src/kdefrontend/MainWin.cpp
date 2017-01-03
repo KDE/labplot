@@ -215,12 +215,10 @@ void MainWin::initGUI(const QString& fileName) {
 }
 
 void MainWin::initActions() {
-	KAction* action;
-
 	// ******************** File-menu *******************************
 	//add some standard actions
-	action = KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
-	action = KStandardAction::open(this, SLOT(openProject()),actionCollection());
+	KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
+	KStandardAction::open(this, SLOT(openProject()),actionCollection());
 	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(KUrl)),actionCollection());
 	m_closeAction = KStandardAction::close(this, SLOT(closeProject()),actionCollection());
 	m_saveAction = KStandardAction::save(this, SLOT(saveProject()),actionCollection());
@@ -305,7 +303,7 @@ void MainWin::initActions() {
 	// Script
 
 	//Windows
-	action = new KAction(i18n("Cl&ose"), this);
+	KAction* action = new KAction(i18n("Cl&ose"), this);
 	action->setShortcut(i18n("Ctrl+W"));
 	action->setStatusTip(i18n("Close the active window"));
 	actionCollection()->addAction("close window", action);
