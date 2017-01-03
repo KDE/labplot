@@ -5,7 +5,8 @@ New features:
 	* Data reduction by removing data points using multiple algorithm
 	* Numerical differentiation and integration with several options
 	* Many new pre-defined fit models (Gompertz, Weibull, Log-Normal, Gumbel, etc.) sorted in categories
-	* Fit parameter now support fixed values and also lower and upper limits
+	* Fit parameter now support fixed values, lower/upper limits and use Unicode
+	* Fit model and random number distribution formulas are now rendered with LaTeX
 	* Support user specified x range in all analysis functions
 	* Allow to enter complete LaTeX documents in text labels
 	* Configuration parameter to use different LaTex engines (LuaLaTex, XeLatex, pdfLaTex, LaTex)
@@ -15,6 +16,7 @@ New features:
 	* Support for Julia's vectors and tuples in CAS worksheets (requires Cantor v. 16.12 and higher)
 	* Allow to jump directly to the data source spreadsheet via XYCurve's context menu
 	* Select and delete multiple objects in project explorer
+	* Improved and extended internal parser for mathematical expressions
 
 Bug fixes:
 	* BUG: 361326 - Allow to select curves with overlapping bounding boxes

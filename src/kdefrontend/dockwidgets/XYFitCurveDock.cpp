@@ -787,7 +787,21 @@ void XYFitCurveDock::updateModelEquation() {
 	//uiGeneralTab.teEquation->setText(eq);
 
 	//TODO: for all fit models
-	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
+	switch (m_fitData.modelCategory) {
+	case nsl_fit_model_peak: {
+		// show formula pic (depends on number of peaks)
+		QString numSuffix = QString::number(num);
+		if (num > 4)
+			numSuffix = "4";
+		QString file = KStandardDirs::locate("data", "labplot2/pics/fit_models/" + QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
+		uiGeneralTab.lFuncPic->setPixmap(QPixmap(file));
+		uiGeneralTab.lFuncPic->show();
+
+		uiGeneralTab.teEquation->hide();
+		uiGeneralTab.lEquation->setText(("f(x) ="));
+		break;
+	}
+	case nsl_fit_model_distribution: {
 		// show formula pic
 		QString file = KStandardDirs::locate("data", "labplot2/pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
 		uiGeneralTab.lFuncPic->setPixmap(QPixmap(file));
@@ -800,18 +814,9 @@ void XYFitCurveDock::updateModelEquation() {
 			uiGeneralTab.lEquation->setText(("f(k)/A ="));
 		else
 			uiGeneralTab.lEquation->setText(("f(x)/A ="));
-	} else if (m_fitData.modelCategory == nsl_fit_model_peak) {
-		// show formula pic (depending on number of peaks)
-		QString numSuffix = QString::number(num);
-		if (num > 4)
-			numSuffix = "4";
-		QString file = KStandardDirs::locate("data", "labplot2/pics/fit_models/" + QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
-		uiGeneralTab.lFuncPic->setPixmap(QPixmap(file));
-		uiGeneralTab.lFuncPic->show();
-
-		uiGeneralTab.teEquation->hide();
-		uiGeneralTab.lEquation->setText(("f(x) ="));
-	} else {
+		break;
+	}
+	default:
 		uiGeneralTab.lEquation->setText(("f(x) ="));
 		uiGeneralTab.teEquation->show();
 		uiGeneralTab.lFuncPic->hide();
