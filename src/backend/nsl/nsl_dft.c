@@ -82,6 +82,7 @@ int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl
 
 	gsl_fft_real_transform(data, stride, n, real, work);
 	gsl_fft_real_wavetable_free(real);
+	gsl_fft_real_workspace_free(work);
 
 	/* 2. unpack data */
 	gsl_fft_halfcomplex_unpack(data, result, stride, n);
