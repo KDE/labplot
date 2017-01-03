@@ -610,7 +610,7 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 			handleError(status,"nc_get_var_double");
 			for (int i=0; i < qMin((int)rows,lines); i++) {
 				for (unsigned int j=0; j < cols; j++) {
-					if (dataPointers.size()>0)
+					if (!dataPointers.isEmpty())
 						dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data[i][j];
 					else
 						dataString<<QString::number(static_cast<double>(data[i][j]))<<" ";

@@ -125,7 +125,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 		ui.pbAdd->setVisible(false);
 		ui.pbRemove->setVisible(false);
 	} else {	// custom model
-		if (m_fitData->paramNames.size()) {	// parameters for the custom model are already available -> show them
+		if (!m_fitData->paramNames.isEmpty()) {	// parameters for the custom model are already available -> show them
 			ui.tableWidget->setRowCount(m_fitData->paramNames.size());
 
 			for (int i=0; i < m_fitData->paramNames.size(); ++i){

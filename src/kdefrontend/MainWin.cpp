@@ -205,7 +205,7 @@ void MainWin::initGUI(const QString& fileName) {
 			newProject();
 			newWorksheet();
 		} else if (load == 3) { //open last used project
-			if (m_recentProjectsAction->urls().size()) {
+			if (!m_recentProjectsAction->urls().isEmpty()) {
 				DEBUG_LOG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().first());
 				openRecentProject( m_recentProjectsAction->urls().first() );
 			}

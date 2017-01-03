@@ -99,7 +99,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) : m_lastCartesianPlot(0) {
   and activates the corresponding dockwidgets, toolbars etc.
 */
 void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects) const {
-	if (selectedAspects.size() == 0) {
+	if (selectedAspects.isEmpty()) {
 		if (mainWindow->stackedWidget->currentWidget())
 			mainWindow->stackedWidget->currentWidget()->hide();
 

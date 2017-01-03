@@ -1549,7 +1549,7 @@ void AxisPrivate::retransformMajorGrid() {
 	//Currently, grid lines disappear somtimes without this flag
 	QList<QPointF> logicalMajorTickPoints = m_cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
 
-	if (!logicalMajorTickPoints.size())
+	if (logicalMajorTickPoints.isEmpty())
 		return;
 
 	//TODO:

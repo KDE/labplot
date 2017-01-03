@@ -93,7 +93,7 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 							   i18n("dot line"), i18n("dash-dot line"), i18n("dash-dot-dot line") };
 
 	QAction* action;
-	if (actionGroup->actions().size() == 0){
+	if (actionGroup->actions().isEmpty()){
 		//TODO setting of the icon size doesn't work here
 		menu->setStyleSheet( "QMenu::icon { width:50px; height:10px; }" );
 		

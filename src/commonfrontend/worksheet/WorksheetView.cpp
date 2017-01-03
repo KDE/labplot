@@ -827,7 +827,7 @@ void WorksheetView::mousePressEvent(QMouseEvent* event) {
 	// and there is no selection currently. We need this for the case when
 	// there is a single worksheet in the project and we change from the project-node
 	// in the project explorer to the worksheet-node by clicking the view.
-	if ( scene()->selectedItems().empty() )
+	if ( scene()->selectedItems().isEmpty() )
 		m_worksheet->setSelectedInView(true);
 
 	QGraphicsView::mousePressEvent(event);
@@ -1306,7 +1306,7 @@ void WorksheetView::selectionChanged() {
 	}
 
 	//select new items
-	if (items.size() == 0 && invisibleDeselected == false) {
+	if (items.isEmpty() && invisibleDeselected == false) {
 		//no items selected -> select the worksheet again.
 		m_worksheet->setSelectedInView(true);
 

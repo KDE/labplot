@@ -621,9 +621,8 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
                         if (columnNumericTypes.at(col-1)) {
                             numericDataPointers[numericixd++]->push_back(str.toDouble());
                         } else {
-                            if (stringDataPointers.size() != 0) {
+                            if (!stringDataPointers.isEmpty())
                                 stringDataPointers[stringidx++]->operator <<( str.simplified());
-                            }
                         }
                     }
                 } else {

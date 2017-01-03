@@ -900,7 +900,7 @@ void XYFitCurvePrivate::recalculate() {
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 	double* sigma = 0;
-	if (sigmaVector.size())
+	if (!sigmaVector.isEmpty())
 		sigma = sigmaVector.data();
 
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
@@ -1322,15 +1322,15 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 		d->fitData.paramNamesUtf8 << d->fitData.paramNames;
 
 	// fixed and limits are not saved in project (old project)
-	if (d->fitData.paramFixed.size() == 0) {
+	if (d->fitData.paramFixed.isEmpty()) {
 		for (int i = 0; i < d->fitData.paramStartValues.size(); i++)
 			d->fitData.paramFixed<<false;
 	}
-	if (d->fitData.paramLowerLimits.size() == 0) {
+	if (d->fitData.paramLowerLimits.isEmpty()) {
 		for (int i = 0; i < d->fitData.paramStartValues.size(); i++)
 			d->fitData.paramLowerLimits<<-DBL_MAX;
 	}
-	if (d->fitData.paramUpperLimits.size() == 0) {
+	if (d->fitData.paramUpperLimits.isEmpty()) {
 		for (int i = 0; i < d->fitData.paramStartValues.size(); i++)
 			d->fitData.paramUpperLimits<<DBL_MAX;
 	}

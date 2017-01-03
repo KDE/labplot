@@ -87,7 +87,7 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	//find all available themes files (system wide and user specific local files)
 	//the list m_themeList contains full pathes (path + file name)
 	m_themeList = KGlobal::dirs()->findAllResources("appdata", "themes/*");
-	pbLoadTheme->setEnabled(!m_themeList.empty());
+	pbLoadTheme->setEnabled(!m_themeList.isEmpty());
 }
 
 void ThemeHandler::loadSelected(QString name) {
