@@ -13,8 +13,11 @@ New features:
 	* Presenter mode for worksheets
 	* Support for MacOSX
 	* Support for Julia's vectors and tuples in CAS worksheets (requires Cantor v. 16.12 and higher)
+	* Allow to jump directly to the data source spreadsheet via XYCurve's context menu
+	* Select and delete multiple objects in project explorer
 
 Bug fixes:
+	* BUG: 361326 - Allow to select curves with overlapping bounding boxes
 	* Correctly load worksheet sizes from saved templates
 	* Fixed crash when removing columns in spreadsheet
 	* Fixed crash when fitting using GSL >= 2
