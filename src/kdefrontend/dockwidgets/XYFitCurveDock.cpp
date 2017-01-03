@@ -427,7 +427,7 @@ void XYFitCurveDock::modelChanged(int index) {
 		uiGeneralTab.lDegree->setText(i18n("Number of peaks"));
 		uiGeneralTab.lDegree->setVisible(true);
 		uiGeneralTab.sbDegree->setVisible(true);
-		uiGeneralTab.sbDegree->setMaximum(10);
+		uiGeneralTab.sbDegree->setMaximum(9);
 		uiGeneralTab.sbDegree->setValue(1);
 		break;
 	case nsl_fit_model_growth:
@@ -442,28 +442,30 @@ void XYFitCurveDock::modelChanged(int index) {
 
 void XYFitCurveDock::updateModelEquation() {
 	DEBUG_LOG("updateModelEquation() type =" << m_fitData.modelType);
-	QStringList vars; // variables/parameter that are known in ExpressionTextEdit teEquation
-	vars << "x";
 
 	int num = uiGeneralTab.sbDegree->value();
+	QStringList vars; // variables/parameter that are known in ExpressionTextEdit teEquation
+	vars << "x";
+	// indices used in multi peak parameter models
+	QStringList indices;
+	indices << QString::fromUtf8("\u2081") << QString::fromUtf8("\u2082") << QString::fromUtf8("\u2083") << QString::fromUtf8("\u2084") << QString::fromUtf8("\u2085")
+		<< QString::fromUtf8("\u2086") << QString::fromUtf8("\u2087") << QString::fromUtf8("\u2088") << QString::fromUtf8("\u2089");
 
-	QString eq;
 	switch(m_fitData.modelCategory) {
         case nsl_fit_model_basic:
-		m_fitData.model = eq = nsl_fit_model_basic_equation[m_fitData.modelType];
+		m_fitData.model = nsl_fit_model_basic_equation[m_fitData.modelType];
 		break;
         case nsl_fit_model_peak:
-		m_fitData.model = eq = nsl_fit_model_peak_equation[m_fitData.modelType];
+		m_fitData.model = nsl_fit_model_peak_equation[m_fitData.modelType];
 		break;
         case nsl_fit_model_growth:
-		m_fitData.model = eq = nsl_fit_model_growth_equation[m_fitData.modelType];
+		m_fitData.model = nsl_fit_model_growth_equation[m_fitData.modelType];
 		break;
         case nsl_fit_model_distribution:
-		m_fitData.model = eq = nsl_sf_stats_distribution_equation[m_fitData.modelType];
+		m_fitData.model = nsl_sf_stats_distribution_equation[m_fitData.modelType];
 		break;
         case nsl_fit_model_custom:
 		//use the equation of the last selected predefined model or of the last available custom model
-		eq = m_fitData.model;
 		break;
 	}
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
@@ -477,12 +479,10 @@ void XYFitCurveDock::updateModelEquation() {
 		case nsl_fit_model_polynomial:
 			m_fitData.paramNames << "c0" << "c1";
 			if (num == 2) {
-				eq += " + c2*x^2";
 				m_fitData.model += " + c2*x^2";
 				m_fitData.paramNames << "c2";
 			} else if (num > 2) {
 				QString numStr = QString::number(num);
-				eq += " + ... + c" + numStr + "*x^" + numStr;
 				for (int i = 2; i <= num; ++i) {
 					numStr = QString::number(i);
 					m_fitData.model += "+c" + numStr + "*x^" + numStr;
@@ -495,21 +495,19 @@ void XYFitCurveDock::updateModelEquation() {
 			if (num == 1) {
 				m_fitData.paramNames << "a" << "b";
 			} else {
-				eq = "a + b*x^c";
 				m_fitData.paramNames << "a" << "b" << "c";
-				m_fitData.model = eq;
+				m_fitData.model = "a + b*x^c";
 			}
 			break;
 		case nsl_fit_model_exponential:
 			m_fitData.paramNames << "a" << "b";
 			if (num == 2) {
-				eq += " + c*exp(d*x)";
+				m_fitData.model += " + c*exp(d*x)";
 				m_fitData.paramNames << "c" << "d";
 			} else if (num == 3) {
-				eq += " + c*exp(d*x) + e*exp(f*x)";
+				m_fitData.model += " + c*exp(d*x) + e*exp(f*x)";
 				m_fitData.paramNames << "c" << "d" << "e" << "f";
 			}
-			m_fitData.model = eq;
 			break;
 		case nsl_fit_model_inverse_exponential:
 			m_fitData.paramNames << "a" << "b" << "c";
@@ -517,12 +515,10 @@ void XYFitCurveDock::updateModelEquation() {
 		case nsl_fit_model_fourier:
 			m_fitData.paramNames << "w" << "a0" << "a1" << "b1";
 			if (num == 2) {
-				eq += " + (a2*cos(2*w*x) + b2*sin(2*w*x))";
 				m_fitData.model += " + (a2*cos(2*w*x) + b2*sin(2*w*x))";
 				m_fitData.paramNames << "a2" << "b2";
 			} else if (num > 2) {
 				QString numStr = QString::number(num);
-				eq += " + ... + (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
 				for (int i = 2; i <= num; ++i) {
 					numStr = QString::number(i);
 					m_fitData.model += "+ (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
@@ -539,25 +535,31 @@ void XYFitCurveDock::updateModelEquation() {
 			switch (num) {
 			case 1:
 				m_fitData.paramNames << "s" << "mu" << "a";
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 				break;
 			case 2:
-				m_fitData.model = eq = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2))";
+				m_fitData.model = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2))";
 				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081") 
+					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082");
 				break;
 			case 3:
-				m_fitData.model = eq = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2) + a3/s3 * exp(-((x-mu3)/s3)^2/2))";
+				m_fitData.model = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + a2/s2 * exp(-((x-mu2)/s2)^2/2) + a3/s3 * exp(-((x-mu3)/s3)^2/2))";
 				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081") 
+					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082")
+					<< QString::fromUtf8("\u03c3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
 				break;
 			default:
-				QString numStr = QString::number(num);
-				eq = "1./sqrt(2*pi) * (a1/s1 * exp(-((x-mu1)/s1)^2/2) + ... + a" + numStr + "/s" + numStr + " * exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2))";
 				m_fitData.model = "1./sqrt(2*pi) * (";
 				for (int i = 1; i <= num; ++i) {
-					numStr = QString::number(i);
+					QString numStr = QString::number(i);
 					if (i > 1)
 						m_fitData.model += " + ";
 					m_fitData.model += "a" + numStr + "/s" + numStr + "* exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2)";
 					m_fitData.paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
+					m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") + indices[i-1] << QString::fromUtf8("\u03bc") + indices[i-1]
+						<< QString::fromUtf8("A") + indices[i-1];
 				}
 				m_fitData.model += ")";
 			}
@@ -565,26 +567,33 @@ void XYFitCurveDock::updateModelEquation() {
 		case nsl_fit_model_lorentz:
 			switch (num) {
 			case 1:
-				m_fitData.paramNames << "s" << "t" << "a";
+				m_fitData.paramNames << "g" << "mu" << "a";
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03b3") << QString::fromUtf8("\u03bc") << "A";
 				break;
 			case 2:
-				m_fitData.model = eq = "1./pi * (a1 * s1/(s1^2+(x-t1)^2) + a2 * s2/(s2^2+(x-t2)^2))";
-				m_fitData.paramNames << "s1" << "t1" << "a1" << "s2" << "t2" << "a2";
+				m_fitData.model = "1./pi * (a1 * g1/(g1^2+(x-mu1)^2) + a2 * g2/(g2^2+(x-mu2)^2))";
+				m_fitData.paramNames << "g1" << "mu1" << "a1" << "g2" << "mu2" << "a2";
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03b3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
+					<< QString::fromUtf8("\u03b3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082");
 				break;
 			case 3:
-				m_fitData.model = eq = "1./pi * (a1 * s1/(s1^2+(x-t1)^2) + a2 * s2/(s2^2+(x-t2)^2) + a3 * s3/(s3^2+(x-t3)^2))";
-				m_fitData.paramNames << "s1" << "t1" << "a1" << "s2" << "t2" << "a2" << "s3" << "t3" << "a3";
+				m_fitData.model = "1./pi * (a1 * g1/(g1^2+(x-mu1)^2) + a2 * g2/(g2^2+(x-mu2)^2) + a3 * g3/(g3^2+(x-mu3)^2))";
+				m_fitData.paramNames << "g1" << "mu1" << "a1" << "g2" << "mu2" << "a2" << "g3" << "mu3" << "a3";
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03b3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081")
+					<< QString::fromUtf8("\u03b3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082")
+					<< QString::fromUtf8("\u03b3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
 				break;
 			default:
 				QString numStr = QString::number(num);
-				eq = "1./pi * (a1 * s1/(s1^2+(x-t1)^2) + ... + a" + numStr + " * s" + numStr + "/(s" + numStr + "^2+(x-t" + numStr + ")^2))";
 				m_fitData.model = "1./pi * (";
 				for (int i = 1; i <= num; ++i) {
 					numStr = QString::number(i);
 					if (i > 1)
 						m_fitData.model += " + ";
-					m_fitData.model += "a" + numStr + " * s" + numStr + "/(s" + numStr + "^2+(x-t" + numStr + ")^2)";
-					m_fitData.paramNames << "s" + numStr << "t" + numStr << "a" + numStr;
+					m_fitData.model += "a" + numStr + " * g" + numStr + "/(g" + numStr + "^2+(x-mu" + numStr + ")^2)";
+					m_fitData.paramNames << "g" + numStr << "mu" + numStr << "a" + numStr;
+					m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03b3") + indices[i-1] << QString::fromUtf8("\u03bc") + indices[i-1]
+						<< QString::fromUtf8("A") + indices[i-1];
 				}
 				m_fitData.model += ")";
 			}
@@ -593,18 +602,23 @@ void XYFitCurveDock::updateModelEquation() {
 			switch (num) {
 			case 1:
 				m_fitData.paramNames << "s" << "mu" << "a";
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 				break;
 			case 2:
-				m_fitData.model = eq = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2))";
+				m_fitData.model = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2))";
 				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081") 
+					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082");
 				break;
 			case 3:
-				m_fitData.model = eq = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2) + a3/s3 * sech((x-mu3)/s3))";
+				m_fitData.model = "1/pi * (a1/s1 * sech((x-mu1)/s1) + a2/s2 * sech((x-mu2)/s2) + a3/s3 * sech((x-mu3)/s3))";
 				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081") 
+					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082")
+					<< QString::fromUtf8("\u03c3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
 				break;
 			default:
 				QString numStr = QString::number(num);
-				eq = "1/pi * (a1/s1 * sech((x-mu1)/s1) + ... + a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/s" + numStr + "))";
 				m_fitData.model = "1/pi * (";
 				for (int i = 1; i <= num; ++i) {
 					numStr = QString::number(i);
@@ -612,6 +626,8 @@ void XYFitCurveDock::updateModelEquation() {
 						m_fitData.model += " + ";
 					m_fitData.model += "a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/s" + numStr + ")";
 					m_fitData.paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
+					m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") + indices[i-1] << QString::fromUtf8("\u03bc") + indices[i-1]
+						<< QString::fromUtf8("A") + indices[i-1];
 				}
 				m_fitData.model += ")";
 			}
@@ -620,18 +636,23 @@ void XYFitCurveDock::updateModelEquation() {
 			switch (num) {
 			case 1:
 				m_fitData.paramNames << "s" << "mu" << "a";
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 				break;
 			case 2:
-				m_fitData.model = eq = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2)";
+				m_fitData.model = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2)";
 				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2";
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081") 
+					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082");
 				break;
 			case 3:
-				m_fitData.model = eq = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2 + a3/s3 * sech((x-mu3)/2/s3)**2)";
+				m_fitData.model = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + a2/s2 * sech((x-mu2)/2/s2)**2 + a3/s3 * sech((x-mu3)/2/s3)**2)";
 				m_fitData.paramNames << "s1" << "mu1" << "a1" << "s2" << "mu2" << "a2" << "s3" << "mu3" << "a3";
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3\u2081") << QString::fromUtf8("\u03bc\u2081") << QString::fromUtf8("A\u2081") 
+					<< QString::fromUtf8("\u03c3\u2082") << QString::fromUtf8("\u03bc\u2082") << QString::fromUtf8("A\u2082")
+					<< QString::fromUtf8("\u03c3\u2083") << QString::fromUtf8("\u03bc\u2083") << QString::fromUtf8("A\u2083");
 				break;
 			default:
 				QString numStr = QString::number(num);
-				eq = "1/4 * (a1/s1 * sech((x-mu1)/2/s1)**2 + ... + a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/2/s" + numStr + ")**2)";
 				m_fitData.model = "1/4 * (";
 				for (int i = 1; i <= num; ++i) {
 					numStr = QString::number(i);
@@ -639,6 +660,8 @@ void XYFitCurveDock::updateModelEquation() {
 						m_fitData.model += " + ";
 					m_fitData.model += "a" + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/2/s" + numStr + ")**2";
 					m_fitData.paramNames << "s" + numStr << "mu" + numStr << "a" + numStr;
+					m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") + indices[i-1] << QString::fromUtf8("\u03bc") + indices[i-1]
+						<< QString::fromUtf8("A") + indices[i-1];
 				}
 				m_fitData.model += ")";
 			}
@@ -667,7 +690,7 @@ void XYFitCurveDock::updateModelEquation() {
 		break;
 	case nsl_fit_model_distribution:
 		switch (m_fitData.modelType) {
-		// TODO: missing GSL distributions
+		// TODO: add missing GSL distributions
 		case nsl_sf_stats_gaussian:
 		case nsl_sf_stats_laplace:
 		case nsl_sf_stats_lognormal:
@@ -761,9 +784,9 @@ void XYFitCurveDock::updateModelEquation() {
 	}
 
 	uiGeneralTab.teEquation->setVariables(vars);
-	uiGeneralTab.teEquation->setText(eq);
+	//uiGeneralTab.teEquation->setText(eq);
 
-	//TODO: only for dists atm
+	//TODO: for all fit models
 	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
 		// show formula pic
 		QString file = KStandardDirs::locate("data", "labplot2/pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
@@ -777,6 +800,17 @@ void XYFitCurveDock::updateModelEquation() {
 			uiGeneralTab.lEquation->setText(("f(k)/A ="));
 		else
 			uiGeneralTab.lEquation->setText(("f(x)/A ="));
+	} else if (m_fitData.modelCategory == nsl_fit_model_peak) {
+		// show formula pic (depending on number of peaks)
+		QString numSuffix = QString::number(num);
+		if (num > 4)
+			numSuffix = "4";
+		QString file = KStandardDirs::locate("data", "labplot2/pics/fit_models/" + QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
+		uiGeneralTab.lFuncPic->setPixmap(QPixmap(file));
+		uiGeneralTab.lFuncPic->show();
+
+		uiGeneralTab.teEquation->hide();
+		uiGeneralTab.lEquation->setText(("f(x) ="));
 	} else {
 		uiGeneralTab.lEquation->setText(("f(x) ="));
 		uiGeneralTab.teEquation->show();

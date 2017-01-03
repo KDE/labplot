@@ -37,6 +37,7 @@ typedef enum {nsl_fit_model_polynomial, nsl_fit_model_power, nsl_fit_model_expon
 	nsl_fit_model_fourier} nsl_fit_model_type_basic;
 #define NSL_FIT_MODEL_PEAK_COUNT 4
 typedef enum {nsl_fit_model_gaussian, nsl_fit_model_lorentz, nsl_fit_model_sech, nsl_fit_model_logistic} nsl_fit_model_type_peak;
+extern const char* nsl_fit_model_peak_pic_name[];
 /*TODO: Voigt */
 #define NSL_FIT_MODEL_GROWTH_COUNT 8
 typedef enum {nsl_fit_model_atan, nsl_fit_model_tanh, nsl_fit_model_algebraic_sigmoid, nsl_fit_model_sigmoid, nsl_fit_model_erf, 
