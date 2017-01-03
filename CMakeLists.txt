@@ -17,7 +17,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2 -Wall -Wextra -Wundef -Wp
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION=\"2.3.0\")
+add_definitions (-DLVERSION=\"2.4.0\")
 # add_definitions (-DLDEBUG='1')
 set(BUILD_SHARED_LIBS true)
 add_definitions(-fvisibility=default)

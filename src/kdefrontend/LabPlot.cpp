@@ -42,7 +42,7 @@ int main (int argc, char *argv[]) {
 		ki18n("LabPlot2"), LVERSION,
 		ki18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
 		KAboutData::License_GPL,
-		ki18n("(c) 2007-2016") );
+		ki18n("(c) 2007-2017") );
 	aboutData.setHomepage("http://www.labplot.sourceforge.net");
 	aboutData.addAuthor(ki18n("Stefan Gerlach"), ki18n("developer"), "stefan.gerlach@uni-konstanz.de", 0);
 	aboutData.addAuthor(ki18n("Alexander Semke"), ki18n("developer"), "alexander.semke@web.de", 0);
