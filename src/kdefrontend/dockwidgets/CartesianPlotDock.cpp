@@ -178,6 +178,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 
 	ui.verticalLayout->addWidget(frame);
 
+	//TODO: activate the tab again once the functionality is implemented
+	ui.tabWidget->removeTab(2);
+
 	init();
 }
 
