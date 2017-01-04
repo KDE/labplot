@@ -918,8 +918,8 @@ void ImportFileWidget::refreshPreview() {
 	}
 
 	// fill the table widget
+	tmpTableWidget->clear();
 	if( !importedText.isEmpty() ) {
-		tmpTableWidget->clear();
 		if (!ok) {
 			// show importedText as error message
 			tmpTableWidget->setRowCount(1);
@@ -935,10 +935,11 @@ void ImportFileWidget::refreshPreview() {
 			for (int i=0; i < lineStrings.size(); i++) {
 				QStringList lineString = lineStrings[i].split(" ");
 				if (i == 0) {
-					colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
-					tmpTableWidget->setColumnCount(qMax( colCount,1));
+					colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
+					tmpTableWidget->setColumnCount(colCount);
 				}
-				colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
+				//TODO: why do we need to calculate colCount again and again?
+// 				colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
 
 				for (int j=0; j < colCount; j++) {
 					QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
