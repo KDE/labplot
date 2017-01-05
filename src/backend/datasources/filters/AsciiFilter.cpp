@@ -330,8 +330,8 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 			}
 		}
 	} else {
-		separator = separatingCharacter.replace(QLatin1String("TAB"), QLatin1String("\t"), Qt::CaseInsensitive);
-		separator = separatingCharacter.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
+		separator = separatingCharacter.replace(QLatin1String("TAB"), QLatin1String(" "), Qt::CaseInsensitive);
+		separator = separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
 		lineStringList = line.split(separator, QString::SplitBehavior(skipEmptyParts));
 	}
  	DEBUG_LOG("separator: " << separator);
