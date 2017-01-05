@@ -35,13 +35,14 @@ typedef enum {nsl_fit_model_basic, nsl_fit_model_peak, nsl_fit_model_growth, nsl
 #define NSL_FIT_MODEL_BASIC_COUNT 5
 typedef enum {nsl_fit_model_polynomial, nsl_fit_model_power, nsl_fit_model_exponential, nsl_fit_model_inverse_exponential,
 	nsl_fit_model_fourier} nsl_fit_model_type_basic;
+extern const char* nsl_fit_model_basic_pic_name[];
 #define NSL_FIT_MODEL_PEAK_COUNT 4
 typedef enum {nsl_fit_model_gaussian, nsl_fit_model_lorentz, nsl_fit_model_sech, nsl_fit_model_logistic} nsl_fit_model_type_peak;
 extern const char* nsl_fit_model_peak_pic_name[];
-/*TODO: Voigt */
 #define NSL_FIT_MODEL_GROWTH_COUNT 8
 typedef enum {nsl_fit_model_atan, nsl_fit_model_tanh, nsl_fit_model_algebraic_sigmoid, nsl_fit_model_sigmoid, nsl_fit_model_erf, 
 	nsl_fit_model_hill, nsl_fit_model_gompertz, nsl_fit_model_gudermann} nsl_fit_model_type_growth;
+extern const char* nsl_fit_model_growth_pic_name[];
 
 extern const char* nsl_fit_model_category_name[];
 extern const char* nsl_fit_model_basic_name[];

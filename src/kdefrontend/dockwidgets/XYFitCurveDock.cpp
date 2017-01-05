@@ -403,7 +403,7 @@ void XYFitCurveDock::modelChanged(int index) {
 		case nsl_fit_model_fourier:
 			uiGeneralTab.lDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setVisible(true);
-			uiGeneralTab.sbDegree->setMaximum(10);
+			uiGeneralTab.sbDegree->setMaximum(9);
 			uiGeneralTab.sbDegree->setValue(1);
 			break;
 		case nsl_fit_model_power:
@@ -465,7 +465,7 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.model = nsl_sf_stats_distribution_equation[m_fitData.modelType];
 		break;
         case nsl_fit_model_custom:
-		//use the equation of the last selected predefined model or of the last available custom model
+		//TODO: use the equation of the last selected predefined model or of the last available custom model
 		break;
 	}
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
@@ -478,54 +478,66 @@ void XYFitCurveDock::updateModelEquation() {
 		switch (m_fitData.modelType) {
 		case nsl_fit_model_polynomial:
 			m_fitData.paramNames << "c0" << "c1";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("c\u2080") << QString::fromUtf8("c\u2081");
 			if (num == 2) {
 				m_fitData.model += " + c2*x^2";
 				m_fitData.paramNames << "c2";
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("c\u2082");
 			} else if (num > 2) {
 				QString numStr = QString::number(num);
 				for (int i = 2; i <= num; ++i) {
 					numStr = QString::number(i);
 					m_fitData.model += "+c" + numStr + "*x^" + numStr;
-					m_fitData.paramNames << "c"+numStr;
+					m_fitData.paramNames << "c" + numStr;
+					m_fitData.paramNamesUtf8 << "c" + indices[i-1];
 				}
 			}
-			vars << "...";
 			break;
 		case nsl_fit_model_power:
-			if (num == 1) {
+			if (num == 1)
 				m_fitData.paramNames << "a" << "b";
-			} else {
+			else {
 				m_fitData.paramNames << "a" << "b" << "c";
 				m_fitData.model = "a + b*x^c";
 			}
 			break;
 		case nsl_fit_model_exponential:
-			m_fitData.paramNames << "a" << "b";
-			if (num == 2) {
-				m_fitData.model += " + c*exp(d*x)";
-				m_fitData.paramNames << "c" << "d";
-			} else if (num == 3) {
-				m_fitData.model += " + c*exp(d*x) + e*exp(f*x)";
-				m_fitData.paramNames << "c" << "d" << "e" << "f";
+			switch (num) {
+			case 1:
+				m_fitData.paramNames << "a" << "b";
+				break;
+			case 2:
+				m_fitData.model = "a1*exp(b1*x) + a2*exp(b2*x)";
+				m_fitData.paramNames << "a1" << "b1" << "a2" << "b2";
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("a\u2081") << QString::fromUtf8("b\u2081")
+						<< QString::fromUtf8("a\u2082") << QString::fromUtf8("b\u2082");
+				break;
+			case 3:
+				m_fitData.model = "a1*exp(b1*x) + a2*exp(b2*x) + a3*exp(b3*x)";
+				m_fitData.paramNames << "a1" << "b1" << "a2" << "b2" << "a3" << "b3";
+				m_fitData.paramNamesUtf8 << QString::fromUtf8("a\u2081") << QString::fromUtf8("b\u2081")
+						<< QString::fromUtf8("a\u2082") << QString::fromUtf8("b\u2082")
+						<< QString::fromUtf8("a\u2083") << QString::fromUtf8("b\u2083");
+				break;
+			//TODO: up to 9 exponentials
 			}
 			break;
 		case nsl_fit_model_inverse_exponential:
+			num = 1;
 			m_fitData.paramNames << "a" << "b" << "c";
 			break;
 		case nsl_fit_model_fourier:
 			m_fitData.paramNames << "w" << "a0" << "a1" << "b1";
-			if (num == 2) {
-				m_fitData.model += " + (a2*cos(2*w*x) + b2*sin(2*w*x))";
-				m_fitData.paramNames << "a2" << "b2";
-			} else if (num > 2) {
-				QString numStr = QString::number(num);
-				for (int i = 2; i <= num; ++i) {
-					numStr = QString::number(i);
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c9") << QString::fromUtf8("a\u2080")
+				<< QString::fromUtf8("a\u2081") << QString::fromUtf8("b\u2081");
+			if (num > 1) {
+				for (int i = 1; i <= num; ++i) {
+					QString numStr = QString::number(i);
 					m_fitData.model += "+ (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
 					m_fitData.paramNames << "a"+numStr << "b"+numStr;
+					m_fitData.paramNamesUtf8 << "a" + indices[i-1] << "b" + indices[i-1];
 				}
 			}
-			vars << "...";
 			break;
 		}
 		break;
@@ -676,12 +688,15 @@ void XYFitCurveDock::updateModelEquation() {
 		case nsl_fit_model_erf:
 		case nsl_fit_model_gudermann:
 			m_fitData.paramNames << "s" << "mu" << "a";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 			break;
 		case nsl_fit_model_sigmoid:
 			m_fitData.paramNames << "k" << "mu" << "a";
+			m_fitData.paramNamesUtf8 << "k" << QString::fromUtf8("\u03bc") << "A";
 			break;
 		case nsl_fit_model_hill:
 			m_fitData.paramNames << "s" << "n" << "a";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << "n" << "A";
 			break;
 		case nsl_fit_model_gompertz:
 			m_fitData.paramNames << "a" << "b" << "c";
@@ -786,40 +801,48 @@ void XYFitCurveDock::updateModelEquation() {
 	uiGeneralTab.teEquation->setVariables(vars);
 	//uiGeneralTab.teEquation->setText(eq);
 
-	//TODO: for all fit models
+	// set formula picture
+	uiGeneralTab.lEquation->setText(("f(x) ="));
+	QString file;
 	switch (m_fitData.modelCategory) {
-	case nsl_fit_model_peak: {
-		// show formula pic (depends on number of peaks)
+	case nsl_fit_model_basic: {
+		// formula pic depends on degree
 		QString numSuffix = QString::number(num);
 		if (num > 4)
 			numSuffix = "4";
-		QString file = KStandardDirs::locate("data", "labplot2/pics/fit_models/" + QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
-		uiGeneralTab.lFuncPic->setPixmap(QPixmap(file));
-		uiGeneralTab.lFuncPic->show();
-
-		uiGeneralTab.teEquation->hide();
-		uiGeneralTab.lEquation->setText(("f(x) ="));
+		if (m_fitData.modelType == nsl_fit_model_power && num > 2)
+			numSuffix = "2";
+		file = KStandardDirs::locate("data", "labplot2/pics/fit_models/" + QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
 		break;
 	}
-	case nsl_fit_model_distribution: {
-		// show formula pic
-		QString file = KStandardDirs::locate("data", "labplot2/pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
-		uiGeneralTab.lFuncPic->setPixmap(QPixmap(file));
-		uiGeneralTab.lFuncPic->show();
-
-		uiGeneralTab.teEquation->hide();
-		
-		// set label
+	case nsl_fit_model_peak: {
+		// formula pic depends on number of peaks
+		QString numSuffix = QString::number(num);
+		if (num > 4)
+			numSuffix = "4";
+		file = KStandardDirs::locate("data", "labplot2/pics/fit_models/" + QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
+		break;
+	}
+	case nsl_fit_model_growth:
+		file = KStandardDirs::locate("data", "labplot2/pics/fit_models/" + QString(nsl_fit_model_growth_pic_name[m_fitData.modelType]) + ".jpg");
+		break;
+	case nsl_fit_model_distribution:
+		file = KStandardDirs::locate("data", "labplot2/pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
+		// change label
 		if (m_fitData.modelType == nsl_sf_stats_poisson)
 			uiGeneralTab.lEquation->setText(("f(k)/A ="));
 		else
 			uiGeneralTab.lEquation->setText(("f(x)/A ="));
 		break;
-	}
-	default:
-		uiGeneralTab.lEquation->setText(("f(x) ="));
+	case nsl_fit_model_custom:
 		uiGeneralTab.teEquation->show();
 		uiGeneralTab.lFuncPic->hide();
+	}
+
+	if (m_fitData.modelCategory != nsl_fit_model_custom) {
+		uiGeneralTab.lFuncPic->setPixmap(QPixmap(file));
+		uiGeneralTab.lFuncPic->show();
+		uiGeneralTab.teEquation->hide();
 	}
 }
 
