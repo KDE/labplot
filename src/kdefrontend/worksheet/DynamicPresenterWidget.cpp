@@ -39,7 +39,6 @@ DynamicPresenterWidget::DynamicPresenterWidget(Worksheet *worksheet, QWidget *pa
 	m_timeLine(new QTimeLine(600)) {
 	setAttribute(Qt::WA_DeleteOnClose);
 	setFocus();
-	setAttribute(Qt::WA_KeyboardFocusChange);
 
 	m_view->setParent(this);
 	m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
