@@ -3,7 +3,7 @@ File                 : NetCDFFilter.cpp
 Project              : LabPlot
 Description          : NetCDF I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
@@ -66,7 +66,7 @@ QString NetCDFFilter::readAttribute(const QString & fileName, const QString & na
 /*!
   reads the content of the current variable from file \c fileName.
 */
-QString NetCDFFilter::readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  int lines) {
+QString NetCDFFilter::readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	return d->readCurrentVar(fileName, dataSource, importMode, lines);
 }
 
@@ -135,7 +135,7 @@ int NetCDFFilter::startColumn() const {
 }
 
 void NetCDFFilter::setEndColumn(const int c) {
-	d->endColumn=c;
+	d->endColumn = c;
 }
 
 int NetCDFFilter::endColumn() const {
@@ -147,13 +147,13 @@ int NetCDFFilter::endColumn() const {
 //#####################################################################
 
 NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) :
-	q(owner),startRow(1), endRow(-1),startColumn(1),endColumn(-1), status(0) {
+	q(owner), startRow(1), endRow(-1), startColumn(1), endColumn(-1), status(0) {
 }
 
 #ifdef HAVE_NETCDF
 void NetCDFFilterPrivate::handleError(int err, QString function) {
 	if (err != NC_NOERR)
-		qDebug()<<"ERROR:"<<function<<"() - "<<nc_strerror(status);
+		qDebug() << "NETCDF ERROR:" << function << "() - " << nc_strerror(status);
 }
 
 QString NetCDFFilterPrivate::translateDataType(nc_type type) {
@@ -161,43 +161,43 @@ QString NetCDFFilterPrivate::translateDataType(nc_type type) {
 
 	switch (type) {
 	case NC_BYTE:
-		typeString="BYTE";
+		typeString = "BYTE";
 		break;
 	case NC_UBYTE:
-		typeString="UBYTE";
+		typeString = "UBYTE";
 		break;
 	case NC_CHAR:
-		typeString="CHAR";
+		typeString = "CHAR";
 		break;
 	case NC_SHORT:
-		typeString="SHORT";
+		typeString = "SHORT";
 		break;
 	case NC_USHORT:
-		typeString="USHORT";
+		typeString = "USHORT";
 		break;
 	case NC_INT:
-		typeString="INT";
+		typeString = "INT";
 		break;
 	case NC_UINT:
-		typeString="UINT";
+		typeString = "UINT";
 		break;
 	case NC_INT64:
-		typeString="INT64";
+		typeString = "INT64";
 		break;
 	case NC_UINT64:
-		typeString="UINT64";
+		typeString = "UINT64";
 		break;
 	case NC_FLOAT:
-		typeString="FLOAT";
+		typeString = "FLOAT";
 		break;
 	case NC_DOUBLE:
-		typeString="DOUBLE";
+		typeString = "DOUBLE";
 		break;
 	case NC_STRING:
-		typeString="STRING";
+		typeString = "STRING";
 		break;
 	default:
-		typeString="UNKNOWN";
+		typeString = "UNKNOWN";
 	}
 
 	return typeString;
@@ -206,132 +206,130 @@ QString NetCDFFilterPrivate::translateDataType(nc_type type) {
 QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem) {
 	char name[NC_MAX_NAME + 1];
 
-	int nattr, nstart=0;
+	int nattr, nstart = 0;
 	if (attid == -1) {
 		status = nc_inq_varnatts(ncid, varid, &nattr);
-		handleError(status,"nc_inq_varnatts");
+		handleError(status, "nc_inq_varnatts");
 	} else {
-		nstart=attid;
-		nattr=attid+1;
+		nstart = attid;
+		nattr = attid+1;
 	}
 
 	nc_type type;
 	size_t len;
 	QStringList valueString;
-	for (int i=nstart; i < nattr; i++) {
+	for (int i = nstart; i < nattr; i++) {
 		valueString.clear();
-		status = nc_inq_attname(ncid,varid,i,name);
-		handleError(status,"nc_inq_attname");
+		status = nc_inq_attname(ncid, varid, i, name);
+		handleError(status, "nc_inq_attname");
 
 		status = nc_inq_att(ncid, varid, name, &type, &len);
-		handleError(status,"nc_inq_att");
-#ifdef QT_DEBUG
-		qDebug()<<"	attr"<<i+1<<": name/type/len="<<name<<translateDataType(type)<<len;
-#endif
+		handleError(status, "nc_inq_att");
+		DEBUG_LOG("	attr" << i+1 << ": name/type/len =" << name << translateDataType(type) << len);
 
 		//read attribute
 		switch (type) {
 		case NC_BYTE: {
 				signed char *value = (signed char *)malloc(len*sizeof(signed char));
 				status = nc_get_att_schar(ncid, varid, name, value);
-				handleError(status,"nc_get_att_schar");
-				for (unsigned int l=0; l < len; l++)
-					valueString<<QString::number(value[l]);
+				handleError(status, "nc_get_att_schar");
+				for (unsigned int l = 0; l < len; l++)
+					valueString << QString::number(value[l]);
 				free(value);
 				break;
 			}
 		case NC_UBYTE: {
 				unsigned char *value = (unsigned char *)malloc(len*sizeof(unsigned char));
 				status = nc_get_att_uchar(ncid, varid, name, value);
-				handleError(status,"nc_get_att_uchar");
-				for (unsigned int l=0; l < len; l++)
-					valueString<<QString::number(value[l]);
+				handleError(status, "nc_get_att_uchar");
+				for (unsigned int l = 0; l < len; l++)
+					valueString << QString::number(value[l]);
 				free(value);
 				break;
 			}
 		case NC_CHAR: {
 				char *value = (char *)malloc((len+1)*sizeof(char));
 				status = nc_get_att_text(ncid, varid, name, value);
-				handleError(status,"nc_get_att_text");
-				value[len]=0;
-				valueString<<value;
+				handleError(status, "nc_get_att_text");
+				value[len] = 0;
+				valueString << value;
 				free(value);
 				break;
 			}
 		case NC_SHORT: {
 				short *value = (short *)malloc(len*sizeof(short));
 				status = nc_get_att_short(ncid, varid, name, value);
-				handleError(status,"nc_get_att_short");
-				for (unsigned int l=0; l < len; l++)
-					valueString<<QString::number(value[l]);
+				handleError(status, "nc_get_att_short");
+				for (unsigned int l = 0; l < len; l++)
+					valueString << QString::number(value[l]);
 				free(value);
 				break;
 			}
 		case NC_USHORT: {
 				unsigned short *value = (unsigned short *)malloc(len*sizeof(unsigned short));
 				status = nc_get_att_ushort(ncid, varid, name, value);
-				handleError(status,"nc_get_att_ushort");
-				for (unsigned int l=0; l < len; l++)
-					valueString<<QString::number(value[l]);
+				handleError(status, "nc_get_att_ushort");
+				for (unsigned int l = 0; l < len; l++)
+					valueString << QString::number(value[l]);
 				free(value);
 				break;
 			}
 		case NC_INT: {
 				int *value = (int *)malloc(len*sizeof(int));
 				status = nc_get_att_int(ncid, varid, name, value);
-				handleError(status,"nc_get_att_int");
-				for (unsigned int l=0; l < len; l++)
-					valueString<<QString::number(value[l]);
+				handleError(status, "nc_get_att_int");
+				for (unsigned int l = 0; l < len; l++)
+					valueString << QString::number(value[l]);
 				free(value);
 				break;
 			}
 		case NC_UINT: {
 				unsigned int *value = (unsigned int *)malloc(len*sizeof(unsigned int));
 				status = nc_get_att_uint(ncid, varid, name, value);
-				handleError(status,"nc_get_att_uint");
-				for (unsigned int l=0; l < len; l++)
-					valueString<<QString::number(value[l]);
+				handleError(status, "nc_get_att_uint");
+				for (unsigned int l = 0; l < len; l++)
+					valueString << QString::number(value[l]);
 				free(value);
 				break;
 			}
 		case NC_INT64: {
 				long long *value = (long long *)malloc(len*sizeof(long long));
 				status = nc_get_att_longlong(ncid, varid, name, value);
-				handleError(status,"nc_get_att_longlong");
-				for (unsigned int l=0; l < len; l++)
-					valueString<<QString::number(value[l]);
+				handleError(status, "nc_get_att_longlong");
+				for (unsigned int l = 0; l < len; l++)
+					valueString << QString::number(value[l]);
 				free(value);
 				break;
 			}
 		case NC_UINT64: {
 				unsigned long long *value = (unsigned long long *)malloc(len*sizeof(unsigned long long));
 				status = nc_get_att_ulonglong(ncid, varid, name, value);
-				handleError(status,"nc_get_att_ulonglong");
-				for (unsigned int l=0; l < len; l++)
-					valueString<<QString::number(value[l]);
+				handleError(status, "nc_get_att_ulonglong");
+				for (unsigned int l = 0; l < len; l++)
+					valueString << QString::number(value[l]);
 				free(value);
 				break;
 			}
 		case NC_FLOAT: {
 				float *value = (float *)malloc(len*sizeof(float));
 				status = nc_get_att_float(ncid, varid, name, value);
-				handleError(status,"nc_get_att_float");
-				for (unsigned int l=0; l < len; l++)
-					valueString<<QString::number(value[l]);
+				handleError(status, "nc_get_att_float");
+				for (unsigned int l = 0; l < len; l++)
+					valueString << QString::number(value[l]);
 				free(value);
 				break;
 			}
 		case NC_DOUBLE: {
 				double *value = (double *)malloc(len*sizeof(double));
 				status = nc_get_att_double(ncid, varid, name, value);
-				handleError(status,"nc_get_att_double");
-				for (unsigned int l=0; l < len; l++)
-					valueString<<QString::number(value[l]);
+				handleError(status, "nc_get_att_double");
+				for (unsigned int l = 0; l < len; l++)
+					valueString << QString::number(value[l]);
 				free(value);
 				break;
 			}
 		default:
-			valueString<<"not supported";
+			valueString << "not supported";
 		}
 
 		if (parentItem != NULL) {
@@ -344,9 +342,10 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 				typeName=QString(varName) + ' ' + i18n("attribute");
 			}
 			QStringList props;
-			props<<translateDataType(type)<<" ("<<QString::number(len)<<")";
-			QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<typeName<<props.join("")<<valueString.join(", "));
-			attrItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
+			props << translateDataType(type) << " (" << QString::number(len) << ")";
+			QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0,
+				QStringList() << QString(name) << typeName << props.join("") << valueString.join(", "));
+			attrItem->setIcon(0, QIcon(KIcon("accessories-calculator")));
 			attrItem->setFlags(Qt::ItemIsEnabled);
 			parentItem->addChild(attrItem);
 		}
@@ -357,25 +356,23 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 
 void NetCDFFilterPrivate::scanDims(int ncid, int ndims, QTreeWidgetItem* parentItem) {
 	int ulid;
-	status = nc_inq_unlimdim(ncid,&ulid);
-	handleError(status,"nc_inq_att");
+	status = nc_inq_unlimdim(ncid, &ulid);
+	handleError(status, "nc_inq_att");
 
 	char name[NC_MAX_NAME + 1];
 	size_t len;
-	for (int i=0; i < ndims; i++) {
+	for (int i = 0; i < ndims; i++) {
 		status = nc_inq_dim(ncid, i, name, &len);
-		handleError(status,"nc_inq_att");
-#ifdef QT_DEBUG
-		qDebug()<<"	dim"<<i+1<<": name/len="<<name<<len;
-#endif
+		handleError(status, "nc_inq_att");
+		DEBUG_LOG("	dim" << i+1 << ": name/len =" << name << len);
 
 		QStringList props;
 		props<<i18n("length") << QLatin1String(" = ") << QString::number(len);
 		QString value;
 		if (i == ulid)
 			value = i18n("unlimited");
-		QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<i18n("dimension")<<props.join("")<<value);
-		attrItem->setIcon(0,QIcon(KIcon("accessories-calculator")));
+		QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList() << QString(name) << i18n("dimension") << props.join("") << value);
+		attrItem->setIcon(0, QIcon(KIcon("accessories-calculator")));
 		attrItem->setFlags(Qt::ItemIsEnabled);
 		parentItem->addChild(attrItem);
 	}
@@ -387,39 +384,37 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 	int ndims, nattrs;
 	int dimids[NC_MAX_VAR_DIMS];
 
-	for (int i=0; i < nvars; i++) {
+	for (int i = 0; i < nvars; i++) {
 		status = nc_inq_var(ncid, i, name, &type, &ndims, dimids, &nattrs);
-		handleError(status,"nc_inq_att");
+		handleError(status, "nc_inq_att");
 
-#ifdef QT_DEBUG
-		qDebug()<<"	var"<<i+1<<": name/type="<<name<<translateDataType(type);
-		qDebug()<<"		ndims/nattr"<<ndims<<nattrs;
-#endif
+		DEBUG_LOG("	var" << i+1 << ": name/type=" << name << translateDataType(type));
+		DEBUG_LOG("		ndims/nattr" << ndims << nattrs);
 
 		QStringList props;
-		props<<translateDataType(type);
+		props << translateDataType(type);
 		char dname[NC_MAX_NAME + 1];
 		size_t dlen;
-		props<<"(";
-		for (int j=0; j < ndims; j++) {
+		props << "(";
+		for (int j = 0; j < ndims; j++) {
 			status = nc_inq_dim(ncid, dimids[j], dname, &dlen);
 			if (j != 0)
-				props<<"x";
-			props<<QString::number(dlen);
+				props << "x";
+			props << QString::number(dlen);
 		}
-		props<<")";
+		props << ")";
 
-		QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(name)<<i18n("variable")<<props.join("")<<"");
-		varItem->setIcon(0,QIcon(KIcon("x-office-spreadsheet")));
+		QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList() << QString(name) << i18n("variable") << props.join("") << "");
+		varItem->setIcon(0, QIcon(KIcon("x-office-spreadsheet")));
 		varItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		// highlight item
-		for (int c=0; c < varItem->columnCount(); c++) {
+		for (int c = 0; c < varItem->columnCount(); c++) {
 			varItem->setBackground(c, QColor(192,255,192));
 			varItem->setForeground(c, Qt::black);
 		}
 		parentItem->addChild(varItem);
 
-		scanAttrs(ncid,i,-1,varItem);
+		scanAttrs(ncid, i, -1, varItem);
 	}
 }
 #endif
@@ -433,32 +428,30 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 
 	int ncid;
 	status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
-	handleError(status,"nc_open");
+	handleError(status, "nc_open");
 
 	int ndims, nvars, nattr, uldid;
 	status = nc_inq(ncid, &ndims, &nvars, &nattr, &uldid);
-	handleError(status,"nc_inq");
-#ifdef QT_DEBUG
-	qDebug()<<" nattr/ndims/nvars ="<<nattr<<ndims<<nvars;
-#endif
+	handleError(status, "nc_inq");
+	DEBUG_LOG(" nattr/ndims/nvars =" << nattr << ndims << nvars);
 
-	QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(i18n("Attributes")));
-	attrItem->setIcon(0,QIcon(KIcon("folder")));
+	QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList() << QString(i18n("Attributes")));
+	attrItem->setIcon(0, QIcon(KIcon("folder")));
 	attrItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(attrItem);
-	scanAttrs(ncid,NC_GLOBAL,-1,attrItem);
+	scanAttrs(ncid, NC_GLOBAL, -1, attrItem);
 
-	QTreeWidgetItem *dimItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(i18n("Dimensions")));
-	dimItem->setIcon(0,QIcon(KIcon("folder")));
+	QTreeWidgetItem *dimItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList() << QString(i18n("Dimensions")));
+	dimItem->setIcon(0, QIcon(KIcon("folder")));
 	dimItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(dimItem);
-	scanDims(ncid,ndims,dimItem);
+	scanDims(ncid, ndims, dimItem);
 
-	QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList()<<QString(i18n("Variables")));
-	varItem->setIcon(0,QIcon(KIcon("folder")));
+	QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList() << QString(i18n("Variables")));
+	varItem->setIcon(0, QIcon(KIcon("folder")));
 	varItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(varItem);
-	scanVars(ncid,nvars,varItem);
+	scanVars(ncid, nvars, varItem);
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(rootItem)
@@ -470,7 +463,7 @@ QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QStri
 	int ncid;
 	QByteArray bafileName = fileName.toLatin1();
 	status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
-	handleError(status,"nc_open");
+	handleError(status, "nc_open");
 
 	// get varid
 	int varid;
@@ -479,16 +472,16 @@ QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QStri
 	else {
 		QByteArray bavarName = varName.toLatin1();
 		status = nc_inq_varid(ncid, bavarName.data(), &varid);
-		handleError(status,"nc_inq_varid");
+		handleError(status, "nc_inq_varid");
 	}
 
 	// attribute 'name'
 	int attid;
 	QByteArray baName = name.toLatin1();
 	status = nc_inq_attid(ncid, varid, baName.data(), &attid);
-	handleError(status,"nc_inq_attid");
+	handleError(status, "nc_inq_attid");
 
-	return scanAttrs(ncid,varid,attid);
+	return scanAttrs(ncid, varid, attid);
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(name)
@@ -505,55 +498,51 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 
 	if (currentVarName.isEmpty())
 		return i18n("No variable selected");
-#ifdef QT_DEBUG
-	qDebug()<<" current variable ="<<currentVarName;
-#endif
+	DEBUG_LOG(" current variable =" << currentVarName);
 
 #ifdef HAVE_NETCDF
 	int ncid;
 	QByteArray bafileName = fileName.toLatin1();
 	status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
-	handleError(status,"nc_open");
+	handleError(status, "nc_open");
 
 	int varid;
 	QByteArray baVarName = currentVarName.toLatin1();
-	status = nc_inq_varid(ncid,baVarName.data(),&varid);
-	handleError(status,"nc_inq_varid");
+	status = nc_inq_varid(ncid, baVarName.data(), &varid);
+	handleError(status, "nc_inq_varid");
 
 	int ndims;
 	nc_type type;
 	status = nc_inq_varndims(ncid, varid, &ndims);
-	handleError(status,"nc_inq_varndims");
+	handleError(status, "nc_inq_varndims");
 	status = nc_inq_vartype(ncid, varid, &type);
-	handleError(status,"nc_inq_type");
+	handleError(status, "nc_inq_type");
 
-	int* dimids = (int *) malloc(ndims*sizeof(int));
+	int* dimids = (int *) malloc(ndims * sizeof(int));
 	status = nc_inq_vardimid(ncid, varid, dimids);
-	handleError(status,"nc_inq_vardimid");
+	handleError(status, "nc_inq_vardimid");
 
-	int actualRows=0, actualCols=0;
-	int columnOffset=0;
+	int actualRows = 0, actualCols = 0;
+	int columnOffset = 0;
 	QVector<QVector<double>*> dataPointers;
 	switch (ndims) {
 	case 0:
-		qDebug()<<"zero dimensions";
+		qDebug() << "zero dimensions";
 		break;
 	case 1: {
 			size_t size;
 			status = nc_inq_dimlen(ncid, dimids[0], &size);
-			handleError(status,"nc_inq_dimlen");
+			handleError(status, "nc_inq_dimlen");
 
 			if (endRow == -1)
-				endRow=size;
+				endRow = size;
 			if (lines == -1)
-				lines=endRow;
-			actualRows=endRow-startRow+1;
-			actualCols=1;
+				lines = endRow;
+			actualRows = endRow-startRow+1;
+			actualCols = 1;
 
-#ifdef QT_DEBUG
-			qDebug()<<"start/end row"<<startRow<<endRow;
-			qDebug()<<"act rows/cols"<<actualRows<<actualCols;
-#endif
+			DEBUG_LOG("start/end row" << startRow << endRow);
+			DEBUG_LOG("act rows/cols" << actualRows << actualCols);
 
 			if (dataSource != NULL)
 				columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
@@ -562,15 +551,15 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 			if (dataSource)
 				data = dataPointers[0]->data();
 			else
-				data = (double *)malloc(actualRows*sizeof(double));
+				data = (double *)malloc(actualRows * sizeof(double));
 
-			size_t start=startRow-1, count=actualRows;
+			size_t start = startRow-1, count=actualRows;
 			status = nc_get_vara_double(ncid, varid, &start, &count, data);
-			handleError(status,"nc_get_vara_double");
+			handleError(status, "nc_get_vara_double");
 
 			if (!dataSource) {
-				for (int i=0; i < actualRows; i++)
-					dataString<<QString::number(data[i])<<"\n";
+				for (int i = 0; i < actualRows; i++)
+					dataString << QString::number(data[i]) << "\n";
 				free(data);
 			}
 			break;
@@ -578,44 +567,42 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 	case 2: {
 			size_t rows, cols;
 			status = nc_inq_dimlen(ncid, dimids[0], &rows);
-			handleError(status,"nc_inq_dimlen");
+			handleError(status, "nc_inq_dimlen");
 			status = nc_inq_dimlen(ncid, dimids[1], &cols);
-			handleError(status,"nc_inq_dimlen");
+			handleError(status, "nc_inq_dimlen");
 
 			if (endRow == -1)
-				endRow=rows;
+				endRow = rows;
 			if (lines == -1)
-				lines=endRow;
+				lines = endRow;
 			if (endColumn == -1)
-				endColumn=cols;
-			actualRows=endRow-startRow+1;
-			actualCols=endColumn-startColumn+1;
+				endColumn = cols;
+			actualRows = endRow-startRow+1;
+			actualCols = endColumn-startColumn+1;
 
-#ifdef QT_DEBUG
-			qDebug()<<"dim ="<<rows<<"x"<<cols;
-			qDebug()<<"startRow/endRow"<<startRow<<endRow;
-			qDebug()<<"startColumn/endColumn"<<startColumn<<endColumn;
-			qDebug()<<"actual rows/cols"<<actualRows<<actualCols;
-			qDebug()<<"lines"<<lines;
-#endif
+			DEBUG_LOG("dim =" << rows << "x" << cols);
+			DEBUG_LOG("startRow/endRow:" << startRow << endRow);
+			DEBUG_LOG("startColumn/endColumn:" << startColumn << endColumn);
+			DEBUG_LOG("actual rows/cols:" << actualRows << actualCols);
+			DEBUG_LOG("lines:" << lines);
 
 			if (dataSource != NULL)
 				columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
 
-			double** data = (double**) malloc(rows*sizeof(double*));
-			data[0] = (double*)malloc( cols*rows*sizeof(double) );
-			for (unsigned int i=1; i < rows; i++) data[i] = data[0]+i*cols;
+			double** data = (double**) malloc(rows * sizeof(double*));
+			data[0] = (double*)malloc( cols * rows * sizeof(double) );
+			for (unsigned int i = 1; i < rows; i++) data[i] = data[0] + i*cols;
 
 			status = nc_get_var_double(ncid, varid, &data[0][0]);
-			handleError(status,"nc_get_var_double");
-			for (int i=0; i < qMin((int)rows,lines); i++) {
-				for (unsigned int j=0; j < cols; j++) {
+			handleError(status, "nc_get_var_double");
+			for (int i = 0; i < qMin((int)rows, lines); i++) {
+				for (unsigned int j = 0; j < cols; j++) {
 					if (!dataPointers.isEmpty())
 						dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data[i][j];
 					else
-						dataString<<QString::number(static_cast<double>(data[i][j]))<<" ";
+						dataString << QString::number(static_cast<double>(data[i][j]))<<" ";
 				}
-				dataString<<"\n";
+				dataString << "\n";
 				emit q->completed(100*i/actualRows);
 			}
 			free(data[0]);
@@ -624,7 +611,7 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 			break;
 		}
 	default:
-		qDebug()<<"strange number of dimensions:"<<ndims;
+		qDebug() << "strange number of dimensions:" << ndims;
 	}
 
 	free(dimids);
@@ -637,11 +624,11 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
-		for (int n=0; n < actualCols; n++) {
+		for (int n = 0; n < actualCols; n++) {
 			Column* column = spreadsheet->column(columnOffset+n);
 			column->setComment(comment);
 			column->setUndoAware(true);
-			if (mode==AbstractFileFilter::Replace) {
+			if (mode == AbstractFileFilter::Replace) {
 				column->setSuppressDataChangedSignal(false);
 				column->setChanged();
 			}
@@ -678,12 +665,8 @@ void NetCDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 		return;
 	}
 
-#ifdef QT_DEBUG
-	else
-		qDebug()<<" current variable ="<<currentVarName;
-#endif
-
-	readCurrentVar(fileName,dataSource,mode);
+	DEBUG_LOG(" current variable =" << currentVarName);
+	readCurrentVar(fileName, dataSource, mode);
 }
 
 /*!
@@ -692,7 +675,7 @@ void NetCDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dat
 void NetCDFFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
 	Q_UNUSED(fileName);
 	Q_UNUSED(dataSource);
-	//TODO
+	//TODO: not implemented yet
 }
 
 //##############################################################################
