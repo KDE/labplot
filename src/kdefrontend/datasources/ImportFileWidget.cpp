@@ -129,17 +129,17 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 #ifndef HAVE_HDF5
 	// disable HDF5 item
 	QStandardItem* item = model->item(FileDataSource::HDF);
-	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 #ifndef HAVE_NETCDF
 	// disable NETCDF item
 	QStandardItem* item2 = model->item(FileDataSource::NETCDF);
-	item2->setFlags(item2->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+	item2->setFlags(item2->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 #ifndef HAVE_FITS
 	// disable FITS item
 	QStandardItem* item3 = model->item(FileDataSource::FITS);
-	item3->setFlags(item3->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+	item3->setFlags(item3->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 
 	ui.gbOptions->hide();
@@ -179,7 +179,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 
 void ImportFileWidget::loadSettings() {
 	//load last used settings
-	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
+	KConfigGroup conf(KSharedConfig::openConfig(), "Import");
 
 	//settings for data type specific widgets
 	// ascii data
@@ -332,9 +332,9 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		}
 	case FileDataSource::Binary: {
 			BinaryFilter* filter = new BinaryFilter();
-			if ( ui.cbFilter->currentIndex()==0 ) 	//"automatic"
+			if ( ui.cbFilter->currentIndex() == 0 ) 	//"automatic"
 				filter->setAutoModeEnabled(true);
-			else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
+			else if ( ui.cbFilter->currentIndex() == 1 ) {	//"custom"
 				filter->setAutoModeEnabled(false);
 				filter->setVectors( binaryOptionsWidget.niVectors->value() );
 				filter->setDataType( (BinaryFilter::DataType) binaryOptionsWidget.cbDataType->currentIndex() );
@@ -463,10 +463,10 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	//check, if we can guess the file type by content
 	QProcess *proc = new QProcess(this);
 	QStringList args;
-	args<<"-b"<<ui.kleFileName->text();
+	args << "-b" << ui.kleFileName->text();
 	proc->start("file", args);
 	if (proc->waitForReadyRead(1000) == false) {
-		qDebug()<<"ERROR: reading file type of file"<<fileName;
+		qDebug() << "ERROR: reading file type of file" << fileName;
 		return;
 	}
 	fileInfo = proc->readLine();
@@ -487,7 +487,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		QTreeWidgetItem *rootItem = hdfOptionsWidget.twContent->invisibleRootItem();
 		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
 		filter->parse(fileName, rootItem);
-		hdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
+		hdfOptionsWidget.twContent->insertTopLevelItem(0, rootItem);
 		hdfOptionsWidget.twContent->expandAll();
 		hdfOptionsWidget.twContent->resizeColumnToContents(0);
 		hdfOptionsWidget.twContent->resizeColumnToContents(3);
@@ -501,7 +501,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		QTreeWidgetItem *rootItem = netcdfOptionsWidget.twContent->invisibleRootItem();
 		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 		filter->parse(fileName, rootItem);
-		netcdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
+		netcdfOptionsWidget.twContent->insertTopLevelItem(0, rootItem);
 		netcdfOptionsWidget.twContent->expandAll();
 		netcdfOptionsWidget.twContent->resizeColumnToContents(0);
 		netcdfOptionsWidget.twContent->resizeColumnToContents(2);
@@ -556,8 +556,8 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 
 	//if we switch from netCDF-format (only two tabs available), add the data preview-tab again
 	if (ui.tabWidget->count() == 2) {
-		ui.tabWidget->setTabText(0,i18n("Data format"));
-		ui.tabWidget->insertTab(1,ui.tabDataPreview,i18n("Preview"));
+		ui.tabWidget->setTabText(0, i18n("Data format"));
+		ui.tabWidget->insertTab(1, ui.tabDataPreview, i18n("Preview"));
 	}
 	ui.lPreviewLines->show();
 	ui.sbPreviewLines->show();
@@ -580,7 +580,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		// hide global preview tab. we have our own
-		ui.tabWidget->setTabText(0,i18n("Data format && preview"));
+		ui.tabWidget->setTabText(0, i18n("Data format && preview"));
 		ui.tabWidget->removeTab(1);
 		ui.tabWidget->setCurrentIndex(0);
 		break;
@@ -593,7 +593,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	case FileDataSource::FITS:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
-		ui.tabWidget->setTabText(0,i18n("Data format && preview"));
+		ui.tabWidget->setTabText(0, i18n("Data format && preview"));
 		ui.tabWidget->removeTab(1);
 		ui.tabWidget->setCurrentIndex(0);
 		break;
@@ -681,20 +681,20 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
 		QStringList lineStrings = importedText.split(QLatin1Char('\n'));
 		fitsOptionsWidget.twPreview->clear();
 
-		fitsOptionsWidget.twPreview->setRowCount(lineStrings.size() -1);
+		fitsOptionsWidget.twPreview->setRowCount(lineStrings.size() - 1);
 		int colCount = 0;
 		const int maxColumns = 300;
-		for(int i=0; i<lineStrings.size(); i++) {
+		for (int i = 0; i < lineStrings.size(); i++) {
 			QStringList lineString = lineStrings[i].split(" ");
-			if(i==0) {
-				colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
+			if (i == 0) {
+				colCount = lineString.size() - 1 > maxColumns ? maxColumns : lineString.size() - 1;
 				fitsOptionsWidget.twPreview->setColumnCount(colCount);
 			}
-			colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
+			colCount = lineString.size() - 1 > maxColumns ? maxColumns : lineString.size() - 1;
 
-			for(int j=0; j<colCount; j++) {
+			for (int j = 0; j < colCount; j++) {
 				QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
-				fitsOptionsWidget.twPreview->setItem(i,j,item);
+				fitsOptionsWidget.twPreview->setItem(i, j, item);
 			}
 		}
 		fitsOptionsWidget.twPreview->resizeColumnsToContents();
@@ -713,20 +713,20 @@ void ImportFileWidget::netcdfTreeWidgetItemSelected(QTreeWidgetItem* item, int c
 		// reads attributes (only for preview)
 		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 		QString fileName = ui.kleFileName->text();
-		QString name = item->data(0,Qt::DisplayRole).toString();
-		QString varName = item->data(1,Qt::DisplayRole).toString().split(" ")[0];
+		QString name = item->data(0, Qt::DisplayRole).toString();
+		QString varName = item->data(1, Qt::DisplayRole).toString().split(" ")[0];
 
-		QString importedText = filter->readAttribute(fileName,name,varName);
+		QString importedText = filter->readAttribute(fileName, name, varName);
 		netcdfOptionsWidget.twPreview->clear();
 
 		QStringList lineStrings = importedText.split("\n");
 		netcdfOptionsWidget.twPreview->setRowCount(lineStrings.size());
-		for (int i=0; i < lineStrings.size(); i++) {
+		for (int i = 0; i < lineStrings.size(); i++) {
 			QStringList lineString = lineStrings[i].split(" ");
 			if (i == 0)
 				netcdfOptionsWidget.twPreview->setColumnCount(lineString.size()-1);
 
-			for (int j=0; j < lineString.size(); j++) {
+			for (int j = 0; j < lineString.size(); j++) {
 				QTableWidgetItem* item = new QTableWidgetItem();
 				item->setText(lineString[j]);
 				netcdfOptionsWidget.twPreview->setItem(i,j,item);
@@ -743,8 +743,8 @@ const QStringList ImportFileWidget::selectedNetCDFNames() const {
 	QStringList names;
 	QList<QTreeWidgetItem *> items = netcdfOptionsWidget.twContent->selectedItems();
 
-	for (int i=0; i < items.size(); i++)
-		names<<items[i]->data(0,Qt::DisplayRole).toString();
+	for (int i = 0; i < items.size(); i++)
+		names << items[i]->data(0, Qt::DisplayRole).toString();
 
 	return names;
 }
@@ -918,13 +918,13 @@ void ImportFileWidget::refreshPreview() {
 			tmpTableWidget->setColumnCount(1);
 			QTableWidgetItem* item = new QTableWidgetItem();
 			item->setText(importedText);
-			tmpTableWidget->setItem(0,0,item);
+			tmpTableWidget->setItem(0, 0, item);
 		} else {
 			QStringList lineStrings = importedText.split(QLatin1Char('\n'));
 			tmpTableWidget->setRowCount(qMax(lineStrings.size()-1,1));
 			int colCount = 0;
 			const int maxColumns = 300;
-			for (int i=0; i < lineStrings.size(); i++) {
+			for (int i = 0; i < lineStrings.size(); i++) {
 				QStringList lineString = lineStrings[i].split(" ");
 				if (i == 0) {
 					colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
@@ -933,9 +933,9 @@ void ImportFileWidget::refreshPreview() {
 				//TODO: why do we need to calculate colCount again and again?
 				colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
 
-				for (int j=0; j < colCount; j++) {
+				for (int j = 0; j < colCount; j++) {
 					QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
-					tmpTableWidget->setItem(i,j,item);
+					tmpTableWidget->setItem(i, j, item);
 				}
 			}
 		}
