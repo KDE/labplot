@@ -678,8 +678,9 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
 
 	if (!selectedExtension.isEmpty()) {
 		FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
+        bool readFitsTableToMatrix;
 		QString importedText = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
-		emit checkedFitsTableToMatrix();
+        emit checkedFitsTableToMatrix(readFitsTableToMatrix);
 
 		//TODO
 		QStringList lineStrings = importedText.split(QLatin1Char('\n'));
@@ -908,9 +909,9 @@ void ImportFileWidget::refreshPreview() {
 				}
 			}
 		}
-
+        bool readFitsTableToMatrix;
 		importedText = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
-		emit checkedFitsTableToMatrix();
+        emit checkedFitsTableToMatrix(readFitsTableToMatrix);
 
 		tmpTableWidget = fitsOptionsWidget.twPreview;
 		break;
@@ -939,7 +940,7 @@ void ImportFileWidget::refreshPreview() {
 					tmpTableWidget->setColumnCount(colCount);
 				}
 				//TODO: why do we need to calculate colCount again and again?
-// 				colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
+                colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
 
 				for (int j=0; j < colCount; j++) {
 					QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
@@ -951,8 +952,4 @@ void ImportFileWidget::refreshPreview() {
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	}
 	RESET_CURSOR;
-}
-
-bool ImportFileWidget::canReadFitsTableToMatrix() const {
-	return readFitsTableToMatrix;
 }

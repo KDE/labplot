@@ -54,8 +54,8 @@ class AspectTreeModel : public QAbstractItemModel{
 		bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 		Qt::ItemFlags flags(const QModelIndex &index) const;
 		void setSelectableAspects(QList<const char*>);
+        QModelIndex modelIndexOfAspect(const QString& path, int column=0) const;
 		QModelIndex modelIndexOfAspect(const AbstractAspect*, int column=0) const;
-		QModelIndex modelIndexOfAspect(const QString& path, int column=0) const;
 
 		void setFilterString(const QString&);
 		void setFilterCaseSensitivity(Qt::CaseSensitivity);
