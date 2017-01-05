@@ -921,17 +921,16 @@ void ImportFileWidget::refreshPreview() {
 			tmpTableWidget->setItem(0, 0, item);
 		} else {
 			QStringList lineStrings = importedText.split(QLatin1Char('\n'));
-			tmpTableWidget->setRowCount(qMax(lineStrings.size()-1,1));
-			int colCount = 0;
+			tmpTableWidget->setRowCount(qMax(lineStrings.size() - 1, 1));
 			const int maxColumns = 300;
 			for (int i = 0; i < lineStrings.size(); i++) {
 				QStringList lineString = lineStrings[i].split(" ");
-				if (i == 0) {
-					colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
+				DEBUG_LOG("reading line" << i << "of size" << lineString.size());
+				DEBUG_LOG(lineString);
+
+				int colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
+				if (i == 0)
 					tmpTableWidget->setColumnCount(colCount);
-				}
-				//TODO: why do we need to calculate colCount again and again?
-				colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
 
 				for (int j = 0; j < colCount; j++) {
 					QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);

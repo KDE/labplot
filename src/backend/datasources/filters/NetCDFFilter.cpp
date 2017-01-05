@@ -599,8 +599,11 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 				for (unsigned int j = 0; j < cols; j++) {
 					if (!dataPointers.isEmpty())
 						dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data[i][j];
-					else
-						dataString << QString::number(static_cast<double>(data[i][j]))<<" ";
+					else {
+						dataString << QString::number(static_cast<double>(data[i][j]));
+						if (j < cols-1)
+							dataString << " ";
+					}
 				}
 				dataString << "\n";
 				emit q->completed(100*i/actualRows);
