@@ -90,7 +90,7 @@ private slots:
 
 signals:
 	void fileNameChanged();
-    void checkedFitsTableToMatrix(const bool enable);
+	void checkedFitsTableToMatrix(const bool enable);
 };
 
 #endif

@@ -78,7 +78,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 
 	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 	connect(importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
-    connect(importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
+	connect(importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
 
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
 	setWindowIcon(KIcon("document-import-database"));
@@ -224,13 +224,11 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	if (aspect->inherits("Matrix")) {
 		Matrix* matrix = qobject_cast<Matrix*>(aspect);
 		filter->read(fileName, matrix, mode);
-	}
-	else if (aspect->inherits("Spreadsheet")) {
+	} else if (aspect->inherits("Spreadsheet")) {
 		Spreadsheet* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
 		DEBUG_LOG("calling filter->read()");
 		filter->read(fileName, spreadsheet, mode);
-	}
-	else if (aspect->inherits("Workbook")) {
+	} else if (aspect->inherits("Workbook")) {
 		Workbook* workbook = qobject_cast<Workbook*>(aspect);
 		QList<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
 
@@ -240,8 +238,8 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			names = importFileWidget->selectedHDFNames();
 		else if (fileType == FileDataSource::NETCDF)
 			names = importFileWidget->selectedNetCDFNames();
-        //TODO
-        //multiple extensions selected
+		//TODO
+		//multiple extensions selected
 
 		// multiple data sets/variables for HDF/NetCDF
 		if (fileType == FileDataSource::HDF || fileType == FileDataSource::NETCDF) {
@@ -353,7 +351,7 @@ void ImportFileDialog::checkOnFitsTableToMatrix(const bool enable) {
 			return;
 
 		if(aspect->inherits("Matrix"))
-            enableButtonOk(enable);
+			enableButtonOk(enable);
 	}
 }
 
