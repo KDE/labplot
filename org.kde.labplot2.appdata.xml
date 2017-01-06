@@ -77,7 +77,13 @@
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?product=LabPlot2&amp;format=guided</url>
   <screenshots>
     <screenshot type="default">
-      <image>http://labplot.sourceforge.net/wp-content/uploads/2014/01/LabPlot.jpg</image>
+      <image>https://labplot.kde.org/wp-content/uploads/2017/01/labplot2_appdata_01.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <image>https://labplot.kde.org/wp-content/uploads/2017/01/labplot2_appdata_02.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <image>https://labplot.kde.org/wp-content/uploads/2017/01/labplot2_appdata_03.png</image>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
