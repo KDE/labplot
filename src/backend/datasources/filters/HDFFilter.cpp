@@ -1068,7 +1068,7 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 	dataSetProps<<", "<<readHDFPropertyList(pid).join("");
 
 	QTreeWidgetItem* dataSetItem = new QTreeWidgetItem(QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data set")<<dataSetProps.join("")<<attr);
-	dataSetItem->setIcon(0, QIcon::fromTheme(("x-office-spreadsheet"));
+	dataSetItem->setIcon(0, QIcon::fromTheme("x-office-spreadsheet"));
 	for (int i=0; i < dataSetItem->columnCount(); i++) {
 		dataSetItem->setBackground(i, QColor(192,255,192));
 		dataSetItem->setForeground(i, Qt::black);
