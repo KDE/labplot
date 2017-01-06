@@ -27,26 +27,6 @@
   <name xml:lang="uk">LabPlot</name>
   <name xml:lang="x-test">xxLabPlotxx</name>
   <summary>LabPlot is a KDE application for interactive graphing and analysis of scientific data</summary>
-  <summary xml:lang="bs">LabPlot je KDE aplikacija za interaktivne grafove i analizu naučnih podataka</summary>
-  <summary xml:lang="ca">El LabPlot és una aplicació KDE per a la representació interactiva de grafs i anàlisi de dades científiques.</summary>
-  <summary xml:lang="ca-valencia">El LabPlot és una aplicació KDE per a la representació interactiva de grafs i anàlisi de dades científiques.</summary>
-  <summary xml:lang="cs">LabPlot je aplikace KDE pro interaktivní vykreslování grafů a analýzu vědeckých dat</summary>
-  <summary xml:lang="de">LabPlot ist eine KDE-Anwendung zur interaktiven Erstellung von Grafiken und Analyse wissenschaftlicher Daten</summary>
-  <summary xml:lang="en-GB">LabPlot is a KDE application for interactive graphing and analysis of scientific data</summary>
-  <summary xml:lang="es">LabPlot es una aplicación de KDE para gráficos interactivos y análisis de datos científicos</summary>
-  <summary xml:lang="fi">LabPlot on KDE-sovellus tieteellisen datan vuorovaikutteiseen kuvaamiseen ja analysointiin</summary>
-  <summary xml:lang="fr">LabPlot est une application KDE pour le tracé interactif de courbes et l'analyse de données scientifiques</summary>
-  <summary xml:lang="gl">LabPlot é un programa de KDE para a xeración interactiva de gráficos e a análise de datos científicos.</summary>
-  <summary xml:lang="it">LabPlot è un'applicazione di KDE per la grafica interattiva e per l'analisi dei dati scientifici</summary>
-  <summary xml:lang="nl">LabPlot is een KDE-toepassing voor het interactief maken van grafieken en het analyseren van wetenschappelijke gegevens</summary>
-  <summary xml:lang="pl">LabPlot jest aplikacją KDE do interaktywnego przestawiania graficznego i analizy danych naukowych.</summary>
-  <summary xml:lang="pt">O LabPlot é uma aplicação do KDE para gráficos interactivos e para a análise de dados científicos</summary>
-  <summary xml:lang="pt-BR">LabPlot é um aplicativo do KDE para criação de gráficos interativos e análise de dados científicos</summary>
-  <summary xml:lang="ru">LabPlot — программа от KDE для анализа экспериментальных данных с возможностью интерактивного построения графиков</summary>
-  <summary xml:lang="sk">LabPlot je KDE aplikácia pre interaktívne grafy a analýzu vedeckých údajov.</summary>
-  <summary xml:lang="sv">Labplot är ett KDE-program för interaktiv diagramritning och analys av vetenskaplig data</summary>
-  <summary xml:lang="uk">LabPlot — програма KDE для інтерактивної побудови графіків та аналізу наукових даних.</summary>
-  <summary xml:lang="x-test">xxLabPlot is a KDE application for interactive graphing and analysis of scientific dataxx</summary>
   <description>
     <p>
       LabPlot is a KDE-application for interactive graphing and analysis of scientific data.
@@ -60,9 +40,9 @@
     <p xml:lang="es">LabPlot es una aplicación de KDE para gráficos interactivos y análisis de datos científicos.</p>
     <p xml:lang="fi">LabPlot on KDE-sovellus tieteellisen datan vuorovaikutteiseen kuvaamiseen ja analysointiin</p>
     <p xml:lang="fr">LabPlot est une application KDE pour le tracé interactif de courbes et l'analyse de données scientifiques.</p>
-    <p xml:lang="gl">LabPlot é un programa de KDE para a xeración interactiva de gráficos e a análise de datos científicos.</p>
+    <p xml:lang="gl">LabPlot2 é un programa de KDE para a xeración interactiva de gráficos e a análise de datos científicos.</p>
     <p xml:lang="it">LabPlot è un'applicazione di KDE per la grafica interattiva e per l'analisi dei dati scientifici.</p>
-    <p xml:lang="nl">LabPlot is een KDE-toepassing voor het interactief maken van grafieken en het analyseren van wetenschappelijke gegevens.</p>
+    <p xml:lang="nl">LabPlot2 is een KDE-toepassing voor het interactief maken van grafieken en het analyseren van wetenschappelijke gegevens.</p>
     <p xml:lang="pl">LabPlot jest aplikacją KDE do interaktywnego przestawiania graficznego i analizy danych naukowych.</p>
     <p xml:lang="pt">O LabPlot é uma aplicação do KDE para gráficos interactivos e para a análise de dados científicos.</p>
     <p xml:lang="pt-BR">LabPlot é um aplicativo do KDE para criação de gráficos interativos e análise de dados científicos.</p>
