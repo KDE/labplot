@@ -44,7 +44,7 @@ int main (int argc, char *argv[]) {
 		KAboutData::License_GPL,
 		ki18n("(c) 2007-2017") );
 	aboutData.setHomepage("https://www.labplot.kde.org");
-	aboutData.addAuthor(ki18n("Stefan Gerlach"), ki18n("developer"), "stefan.gerlach@uni-konstanz.de", 0);
+	aboutData.addAuthor(ki18n("Stefan Gerlach"), ki18n("developer"), "stefan.gerlach@uni.kn", 0);
 	aboutData.addAuthor(ki18n("Alexander Semke"), ki18n("developer"), "alexander.semke@web.de", 0);
 	aboutData.addAuthor(ki18n("Andreas Kainz"), ki18n("icon designer"), "kainz.a@gmail.com", 0);
 	aboutData.addCredit(ki18n("Yuri Chornoivan"), ki18n("Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", 0);
