@@ -1310,16 +1310,28 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 
 			switch (dclass) {
 			case H5T_STRING: {
-					char **data = (char **) malloc(rows * sizeof(char *));
-
+					DEBUG_LOG("rank 1 H5T_STRING");
 					hid_t memtype = H5Tcopy(H5T_C_S1);
 					handleError((int)memtype, "H5Tcopy");
-					//status = H5Tset_size(memtype, typeSize);
-					status = H5Tset_size(memtype, H5T_VARIABLE);
-					handleError((int)memtype, "H5Tset_size");
 
-					status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
-					handleError(status, "H5Dread");
+					char** data = (char **) malloc(rows * sizeof (char *));
+
+					if (H5Tis_variable_str(dtype)) {
+						status = H5Tset_size(memtype, H5T_VARIABLE);
+						handleError((int)memtype, "H5Tset_size");
+						status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
+						handleError(status, "H5Dread");
+					} else {
+						data[0] = (char *) malloc(rows * typeSize * sizeof (char));
+						for (int i = 1; i < rows; i++)
+							data[i] = data[0] + i * typeSize;
+
+						status = H5Tset_size(memtype, typeSize);
+						handleError((int)memtype, "H5Tset_size");
+
+						status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data[0]);
+						handleError(status, "H5Dread");
+					}
 
 					for (int i = startRow-1; i < qMin(endRow, lines+startRow-1); i++) {
 						dataString << data[i];
