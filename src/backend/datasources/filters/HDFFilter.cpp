@@ -289,18 +289,21 @@ QStringList HDFFilterPrivate::readHDFCompound(hid_t tid) {
 
 template <typename T>
 QStringList HDFFilterPrivate::readHDFData1D(hid_t dataset, hid_t type, int rows, int lines, QVector<double> *dataPointer) {
+	DEBUG_LOG("readHDFData1D()");
 	QStringList dataString;
 
 	T* data = (T*) malloc(rows*sizeof(T));
 
 	status = H5Dread(dataset, type, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
-	handleError(status,"H5Dread");
-	for (int i=startRow-1; i < qMin(endRow,lines+startRow-1); i++) {
+	handleError(status, "H5Dread");
+	DEBUG_LOG(" startRow =" << startRow << "endRow =" << endRow << "lines =" << lines);
+	DEBUG_LOG( "dataPointer =" << dataPointer);
+	for (int i = startRow-1; i < qMin(endRow, lines+startRow-1); i++) {
 		if (dataPointer != NULL)
 			dataPointer->operator[](i-startRow+1) = data[i];
 		else
-			dataString<<QString::number(static_cast<double>(data[i]));
-		dataString<<QLatin1String("\n");
+			dataString << QString::number(static_cast<double>(data[i]));
+		dataString << QLatin1String("\n");
 	}
 
 	free(data);
@@ -1013,25 +1016,25 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 
 	char link[MAXNAMELENGTH];
 	status = H5Iget_name(did, link, MAXNAMELENGTH);
-	handleError(status,"H5Iget_name");
+	handleError(status, "H5Iget_name");
 
 	QStringList dataSetProps;
 	hsize_t size = H5Dget_storage_size(did);
-	handleError((int)size,"H5Dget_storage_size");
+	handleError((int)size, "H5Dget_storage_size");
 	hid_t datatype  = H5Dget_type(did);
-	handleError((int)datatype,"H5Dget_type");
+	handleError((int)datatype, "H5Dget_type");
 	size_t typeSize  = H5Tget_size(datatype);
-	handleError((int)typeSize,"H5Dget_size");
+	handleError((int)typeSize, "H5Dget_size");
 
 	dataSetProps<<readHDFDataType(datatype);
 
 	hid_t dataspace = H5Dget_space(did);
 	int rank = H5Sget_simple_extent_ndims(dataspace);
-	handleError(rank,"H5Sget_simple_extent_ndims");
+	handleError(rank, "H5Sget_simple_extent_ndims");
 	if (rank == 2) {
 		hsize_t dims_out[2];
 		status = H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
-		handleError(status,"H5Sget_simple_extent_dims");
+		handleError(status, "H5Sget_simple_extent_dims");
 		unsigned int rows = dims_out[0];
 		unsigned int cols = dims_out[1];
 		dataSetProps<<QLatin1String(", ")<<QString::number(rows)<<QLatin1String("x")<<QString::number(cols)
@@ -1039,7 +1042,7 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 	} else if (rank == 3) {
 		hsize_t dims_out[3];
 		status = H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
-		handleError(status,"H5Sget_simple_extent_dims");
+		handleError(status, "H5Sget_simple_extent_dims");
 		unsigned int rows = dims_out[0];
 		unsigned int cols = dims_out[1];
 		unsigned int regs = dims_out[2];
@@ -1048,7 +1051,7 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 	}
 
 	hid_t pid = H5Dget_create_plist(did);
-	handleError((int)pid,"H5Dget_create_plist");
+	handleError((int)pid, "H5Dget_create_plist");
 	dataSetProps<<", "<<readHDFPropertyList(pid).join("");
 
 	QTreeWidgetItem* dataSetItem = new QTreeWidgetItem(QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data set")<<dataSetProps.join("")<<attr);
@@ -1181,6 +1184,7 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
     reads the content of the date set in the file \c fileName to a string (for preview) or to the data source.
 */
 QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, bool &ok, AbstractFileFilter::ImportMode mode, int lines) {
+	DEBUG_LOG("HDFFilter::readCurrentDataSet()");
 	QStringList dataString;
 
 	if (currentDataSetName.isEmpty()) {
@@ -1188,7 +1192,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 		ok=false;
 		return i18n("No data set selected");
 	}
-	DEBUG_LOG(" current data set ="<<currentDataSetName);
+	DEBUG_LOG(" current data set =" << currentDataSetName);
 
 #ifdef HAVE_HDF5
 	QByteArray bafileName = fileName.toLatin1();
@@ -1210,18 +1214,20 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	handleError((int)dataspace, "H5Dget_space");
 	int rank = H5Sget_simple_extent_ndims(dataspace);
 	handleError(rank, "H5Dget_simple_extent_ndims");
-	DEBUG_LOG(" rank ="<<rank);
+	DEBUG_LOG(" rank =" << rank);
 
-	int columnOffset = 0;	// offset to import data
-	int actualRows=0, actualCols=0;	// rows and cols to read
+	int columnOffset = 0;			// offset to import data
+	int actualRows = 0, actualCols = 0;	// rows and cols to read
 
-	// this is used to store the data read from the dataSource
-	// check for dataPointers[0] != NULL to decide if dataSource should be used
-	QVector<QVector<double>*> dataPointers(1,NULL);
+	// dataPointers is used to store the data read from the dataSource
+	// it contains the pointers of all columns
+	// initially there is one pointer set to NULL
+	// check for dataPointers[0] != NULL to decide if dataSource can be used
+	QVector<QVector<double>*> dataPointers(1, NULL);
 	switch (rank) {
 	case 0: {
-			actualRows=1;
-			actualCols=1;
+			actualRows = 1;
+			actualCols = 1;
 
 			switch (dclass) {
 			case H5T_STRING: {
@@ -1233,10 +1239,10 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 
 					status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
 					handleError(status, "H5Tread");
-					dataString<<data<<QLatin1String("\n");
+					dataString << data << QLatin1String("\n");
 					free(data);
 					break;
-				}
+			}
 			case H5T_INTEGER:
 			case H5T_FLOAT:
 			case H5T_TIME:
@@ -1249,10 +1255,10 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			case H5T_ARRAY:
 			case H5T_NO_CLASS:
 			case H5T_NCLASSES: {
-					ok=false;
-					dataString<<i18n("rank = 0 not implemented yet for type %1").arg(translateHDFClass(dclass));
-					qDebug()<<dataString.join("");
-				}
+					ok = false;
+					dataString << i18n("rank = 0 not implemented yet for type %1").arg(translateHDFClass(dclass));
+					qDebug() << dataString.join("");
+			}
 			default:
 				break;
 			}
@@ -1262,17 +1268,18 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			hsize_t size, maxSize;
 			status = H5Sget_simple_extent_dims(dataspace, &size, &maxSize);
 			handleError(status, "H5Sget_simple_extent_dims");
-			int rows=size;
+			int rows = size;
 			if (endRow == -1)
-				endRow=rows;
+				endRow = rows;
 			if (lines == -1)
-				lines=endRow;
-			actualRows=endRow-startRow+1;
-			actualCols=1;
+				lines = endRow;
+			actualRows = endRow-startRow+1;
+			actualCols = 1;
 #ifndef NDEBUG
 			H5T_order_t order = H5Tget_order(dtype);
 			handleError((int)order, "H5Sget_order");
-			qDebug()<<translateHDFClass(dclass)<<"("<<typeSize<<")"<<translateHDFOrder(order)<<", rows:"<<rows<<" max:"<<maxSize;
+			qDebug() << translateHDFClass(dclass) << "(" << typeSize << ")" << translateHDFOrder(order)
+				<< ", rows:" << rows << " max:" << maxSize;
 #endif
 			if (dataSource != NULL)
 				columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
@@ -1281,7 +1288,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 			case H5T_STRING: {
 					char** data = (char **) malloc(rows * sizeof (char *));
 					data[0] = (char *) malloc(rows * typeSize * sizeof (char));
-					for (int i=1; i<rows; i++)
+					for (int i = 1; i < rows; i++)
 						data[i] = data[0] + i * typeSize;
 
 					hid_t memtype = H5Tcopy(H5T_C_S1);
@@ -1292,8 +1299,8 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 					status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data[0]);
 					handleError(status,"H5Dread");
 
-					for (int i=startRow-1; i<qMin(endRow,lines+startRow-1); i++)
-						dataString<<data[i]<<QLatin1String("\n");
+					for (int i = startRow-1; i < qMin(endRow, lines+startRow-1); i++)
+						dataString << data[i] << QLatin1String("\n");
 
 					free(data[0]);
 					free(data);
@@ -1355,9 +1362,9 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 					else if (H5Tequal(dtype, H5T_STD_U64LE) || H5Tequal(dtype, H5T_STD_U64BE) || H5Tequal(dtype, H5T_NATIVE_ULLONG))
 						dataString = readHDFData1D<unsigned long long>(dataset, H5T_NATIVE_ULLONG, rows, lines, dataPointers[0]);
 					else {
-						ok=false;
-						dataString<<i18n("Unsupported integer type for rank=1");
-						qDebug()<<dataString.join(" ");
+						ok = false;
+						dataString << i18n("Unsupported integer type for rank=1");
+						qDebug() << dataString.join(" ");
 					}
 
 					break;
@@ -1554,13 +1561,13 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	}
 
 	status = H5Sclose(dataspace);
-	handleError(status,"H5Sclose");
+	handleError(status, "H5Sclose");
 	status = H5Tclose(dtype);
-	handleError(status,"H5Tclose");
+	handleError(status, "H5Tclose");
 	status = H5Dclose(dataset);
-	handleError(status,"H5Dclose");
+	handleError(status, "H5Dclose");
 	status = H5Fclose(file);
-	handleError(status,"H5Fclose");
+	handleError(status, "H5Fclose");
 
 	if (!dataSource)
 		return dataString.join("");
@@ -1570,11 +1577,11 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", actualRows);
-		for (int n=0; n<actualCols; n++) {
+		for (int n = 0; n < actualCols; n++) {
 			Column* column = spreadsheet->column(columnOffset+n);
 			column->setComment(comment);
 			column->setUndoAware(true);
-			if (mode==AbstractFileFilter::Replace) {
+			if (mode == AbstractFileFilter::Replace) {
 				column->setSuppressDataChangedSignal(false);
 				column->setChanged();
 			}
@@ -1605,16 +1612,14 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
     Uses the settings defined in the data source.
 */
 void HDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+	DEBUG_LOG("HDFFilter::read()");
 	if (currentDataSetName.isEmpty()) {
 		qDebug()<<" No data set selected";
 		return;
 	}
-#ifndef NDEBUG
-	else
-		qDebug()<<" current data set ="<<currentDataSetName;
-#endif
-	bool ok=true;
-	readCurrentDataSet(fileName,dataSource,ok,mode);
+
+	bool ok = true;
+	readCurrentDataSet(fileName, dataSource, ok, mode);
 }
 
 /*!

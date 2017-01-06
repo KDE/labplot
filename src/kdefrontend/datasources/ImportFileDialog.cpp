@@ -175,8 +175,7 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
 
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
-	progressBar->setMinimum(0);
-	progressBar->setMaximum(100);
+	progressBar->setRange(0, 100);
 	connect(source->filter(), SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
 
 	statusBar->clearMessage();
@@ -226,7 +225,6 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		filter->read(fileName, matrix, mode);
 	} else if (aspect->inherits("Spreadsheet")) {
 		Spreadsheet* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
-		DEBUG_LOG("calling filter->read()");
 		filter->read(fileName, spreadsheet, mode);
 	} else if (aspect->inherits("Workbook")) {
 		Workbook* workbook = qobject_cast<Workbook*>(aspect);
