@@ -1255,7 +1255,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 
 			switch (dclass) {
 			case H5T_STRING: {
-					char* data = (char *) malloc(typeSize * sizeof (char));
+					char* data = (char *) malloc(typeSize * sizeof(char));
 					hid_t memtype = H5Tcopy(H5T_C_S1);
 					handleError((int)memtype, "H5Tcopy");
 					status = H5Tset_size(memtype, typeSize);
@@ -1263,7 +1263,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 
 					status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
 					handleError(status, "H5Tread");
-					dataString << data << QLatin1String("\n");
+					dataString << data;
 					free(data);
 					break;
 			}
@@ -1310,23 +1310,23 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 
 			switch (dclass) {
 			case H5T_STRING: {
-					char** data = (char **) malloc(rows * sizeof (char *));
-					data[0] = (char *) malloc(rows * typeSize * sizeof (char));
-					for (int i = 1; i < rows; i++)
-						data[i] = data[0] + i * typeSize;
+					char **data = (char **) malloc(rows * sizeof(char *));
 
 					hid_t memtype = H5Tcopy(H5T_C_S1);
 					handleError((int)memtype, "H5Tcopy");
-					status = H5Tset_size(memtype, typeSize);
+					//status = H5Tset_size(memtype, typeSize);
+					status = H5Tset_size(memtype, H5T_VARIABLE);
 					handleError((int)memtype, "H5Tset_size");
 
-					status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data[0]);
-					handleError(status,"H5Dread");
+					status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
+					handleError(status, "H5Dread");
 
-					for (int i = startRow-1; i < qMin(endRow, lines+startRow-1); i++)
-						dataString << data[i] << QLatin1String("\n");
+					for (int i = startRow-1; i < qMin(endRow, lines+startRow-1); i++) {
+						dataString << data[i];
+						if (i < qMin(endRow, lines+startRow-1)-1)
+							dataString << QLatin1String("\n");
+					}
 
-					free(data[0]);
 					free(data);
 					break;
 				}
