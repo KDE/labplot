@@ -260,53 +260,57 @@ QStringList HDFFilterPrivate::readHDFCompound(hid_t tid) {
 	QStringList dataString;
 	size_t typeSize = H5Tget_size(tid);
 
-	dataString<<QLatin1String("COMPOUND(")<<QString::number(typeSize)<<QLatin1String("):(");
+	dataString << QLatin1String("COMPOUND(") << QString::number(typeSize) << QLatin1String("):(");
 	int members = H5Tget_nmembers(tid);
-	handleError(members,"H5Tget_nmembers");
+	handleError(members, "H5Tget_nmembers");
 	for (int i=0; i < members; i++) {
 		H5T_class_t mclass = H5Tget_member_class(tid,i);
-		handleError((int)mclass,"H5Tget_member_class");
+		handleError((int)mclass, "H5Tget_member_class");
 		hid_t mtype = H5Tget_member_type(tid,i);
-		handleError((int)mtype,"H5Tget_member_type");
+		handleError((int)mtype, "H5Tget_member_type");
 		size_t size = H5Tget_size(mtype);
-		handleError((int)size,"H5Tget_size");
-		QString typeString=translateHDFClass(mclass);
+		handleError((int)size, "H5Tget_size");
+		QString typeString = translateHDFClass(mclass);
 		if (mclass == H5T_INTEGER || mclass == H5T_FLOAT)
-			typeString=translateHDFType(mtype);
-		dataString<<H5Tget_member_name(tid,i)<<QLatin1String("[")<<typeString<<QLatin1String("(")<<QString::number(size)<<QLatin1String(")]");
+			typeString = translateHDFType(mtype);
+		dataString << H5Tget_member_name(tid,i) << QLatin1String("[") << typeString << QLatin1String("(") << QString::number(size) << QLatin1String(")]");
 		if (i == members-1)
-			dataString<<QLatin1String(")");
+			dataString << QLatin1String(")");
 		else
-			dataString<<QLatin1String(",");
+			dataString << QLatin1String(",");
 		status = H5Tclose(mtype);
 		handleError(status,"H5Tclose");
 	}
-	dataString<<QLatin1String("\n");
-
+	dataString << QLatin1String("\n");
 
 	return dataString;
 }
 
 template <typename T>
 QStringList HDFFilterPrivate::readHDFData1D(hid_t dataset, hid_t type, int rows, int lines, QVector<double> *dataPointer) {
-	DEBUG_LOG("readHDFData1D()");
+	DEBUG_LOG("readHDFData1D() rows =" << rows << "lines =" << lines);
 	QStringList dataString;
 
+	// we read all rows of data
 	T* data = (T*) malloc(rows*sizeof(T));
 
 	status = H5Dread(dataset, type, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
 	handleError(status, "H5Dread");
-	DEBUG_LOG(" startRow =" << startRow << "endRow =" << endRow << "lines =" << lines);
-	DEBUG_LOG( "dataPointer =" << dataPointer);
+	DEBUG_LOG(" startRow =" << startRow << "endRow =" << endRow);
+	DEBUG_LOG("dataPointer =" << dataPointer);
 	for (int i = startRow-1; i < qMin(endRow, lines+startRow-1); i++) {
-		if (dataPointer != NULL)
+		if (dataPointer != NULL)	// read to data source
 			dataPointer->operator[](i-startRow+1) = data[i];
-		else
+		else {				// for preview
 			dataString << QString::number(static_cast<double>(data[i]));
-		dataString << QLatin1String("\n");
+			if (i < qMin(endRow, lines+startRow-1)-1)	// no newline for last data
+				dataString << QLatin1String("\n");
+		}
 	}
 
 	free(data);
+
+	// DEBUG_LOG("dataString =" << dataString);
 	return dataString;
 }
 
@@ -404,10 +408,10 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 	QStringList dataString;
 	if (dataPointer[0] == NULL) {
 		for (int i=0; i < qMin(rows,lines); i++) {
-			dataString<<QLatin1String("(");
+			dataString << QLatin1String("(");
 
-			for (int m=0; m < members; m++) {
-				if (i<data[m].size()) {
+			for (int m = 0; m < members; m++) {
+				if (i < data[m].size()) {
 					// ignore newlines
 					dataString<<data[m][2*i];
 				}
@@ -416,7 +420,8 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 				else
 					dataString<<QLatin1String(",");
 			}
-			dataString<<QLatin1String("\n");
+			if (i < qMin(rows,lines)-1)
+				dataString << QLatin1String("\n");
 		}
 	}
 
@@ -427,6 +432,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 
 template <typename T>
 QStringList HDFFilterPrivate::readHDFData2D(hid_t dataset, hid_t type, int rows, int cols, int lines, QVector< QVector<double>* >& dataPointer) {
+	DEBUG_LOG("readHDFData2D() rows =" << rows << "cols =" << cols << "lines =" << lines);
 	QStringList dataString;
 
 	T** data = (T**) malloc(rows*sizeof(T*));
@@ -437,7 +443,7 @@ QStringList HDFFilterPrivate::readHDFData2D(hid_t dataset, hid_t type, int rows,
 	status = H5Dread(dataset, type, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data[0][0]);
 	handleError(status,"H5Dread");
 
-	for (int i = 0; i < qMin(rows,lines); i++) {
+	for (int i = 0; i < qMin(rows, lines); i++) {
 		for (int j = 0; j < cols; j++) {
 			if (dataPointer[0] != NULL)
 				dataPointer[j-startColumn+1]->operator[](i-startRow+1) = data[i][j];
@@ -447,17 +453,20 @@ QStringList HDFFilterPrivate::readHDFData2D(hid_t dataset, hid_t type, int rows,
 					dataString << QLatin1String(" ");
 			}
 		}
-		dataString<<QLatin1String("\n");
+		if (i < qMin(rows, lines)-1)
+			dataString << QLatin1String("\n");
 	}
 	free(data[0]);
 	free(data);
 
+	DEBUG_LOG(dataString);
 	return dataString;
 }
 
 QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, int rows, int cols, int lines) {
+	DEBUG_LOG("readHDFCompoundData2D() rows =" << rows << "cols =" << cols << "lines =" << lines);
 	int members = H5Tget_nmembers(tid);
-	handleError(members,"H5Tget_nmembers");
+	handleError(members, "H5Tget_nmembers");
 
 	QStringList* data = new QStringList[members];
 	for (int m=0; m < members; m++) {
@@ -470,6 +479,8 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 		status = H5Tinsert(ctype, H5Tget_member_name(tid,m), 0, mtype);
 		handleError(status, "H5Tinsert");
 
+		// dummy container for all data columns
+		// initially contains one pointer set to NULL
 		QVector< QVector<double>* > dummy(1, NULL);
 		if (H5Tequal(mtype, H5T_STD_I8LE) || H5Tequal(mtype, H5T_STD_I8BE)) {
 				data[m] = readHDFData2D<int8_t>(dataset, H5Tget_native_type(ctype, H5T_DIR_DEFAULT), rows, cols, lines, dummy);
@@ -528,13 +539,13 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 		else if (H5Tequal(mtype, H5T_NATIVE_LDOUBLE))
 			data[m] = readHDFData2D<long double>(dataset, ctype, rows, cols, lines, dummy);
 		else {
-			for (int i=0; i < rows; i++) {
-				for (int j=0; j < cols; j++)
-					data[m]<<QLatin1String("_")<<QLatin1String(" ");
-				data[m]<<QLatin1String("\n");
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++)
+					data[m] << QLatin1String("_") << QLatin1String(" ");
+				data[m] << QLatin1String("\n");
 			}
 			H5T_class_t mclass = H5Tget_member_class(tid,m);
-			qDebug()<<"	not supported class"<<translateHDFClass(mclass);
+			qDebug() << "	not supported class" << translateHDFClass(mclass);
 		}
 
 		status = H5Tclose(ctype);
@@ -543,21 +554,24 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 
 	// create dataString from data
 	QStringList dataString;
-	for (int i=0; i < qMin(rows, lines); i++) {
-		for (int j=0; j < cols; j++) {
-			dataString<<QLatin1String("(");
+	for (int i = 0; i < qMin(rows, lines); i++) {
+		for (int j = 0; j < cols; j++) {
+			dataString << QLatin1String("(");
 
-			for (int m=0; m < members; m++) {
+			for (int m = 0; m < members; m++) {
+				DEBUG_LOG("data [" << m << "][" << i*(2*cols)+2*j << "] =" << data[m][i*(2*cols)+2*j]);
 				// ignore newline and spaces
-				dataString<<data[m][i*(2*cols+1)+2*j];
+				dataString << data[m][i*(2*cols)+2*j];
 				if (m == members-1)
-					dataString<<QLatin1String(")");
+					dataString << QLatin1String(")");
 				else
-					dataString<<QLatin1String(",");
+					dataString << QLatin1String(",");
 			}
-			dataString<<QLatin1String(" ");
+			if (j < cols-1)
+				dataString << QLatin1String(" ");
 		}
-		dataString<<QLatin1String("\n");
+		if (i < qMin(rows, lines)-1)
+			dataString << QLatin1String("\n");
 	}
 
 	delete[] data;
@@ -760,7 +774,7 @@ QStringList HDFFilterPrivate::scanHDFAttrs(hid_t oid) {
 		hid_t aid = H5Aopen_idx(oid, i);
 		handleError((int)aid, "H5Aopen_idx");
 		attrList << readHDFAttr(aid);
-		if (i != numAttr-1)
+		if (i < numAttr-1)
 			attrList << QLatin1String(", ");
 		status = H5Aclose(aid);
 		handleError(status,"H5Aclose");
@@ -1224,6 +1238,8 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 	// initially there is one pointer set to NULL
 	// check for dataPointers[0] != NULL to decide if dataSource can be used
 	QVector<QVector<double>*> dataPointers(1, NULL);
+
+	// rank= 0: single value, 1: vector, 2: matrix, 3: 3D data, ...
 	switch (rank) {
 	case 0: {
 			actualRows = 1;

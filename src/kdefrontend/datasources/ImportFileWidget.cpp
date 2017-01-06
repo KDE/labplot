@@ -910,8 +910,11 @@ void ImportFileWidget::refreshPreview() {
 	}
 
 	// fill the table widget
-	tmpTableWidget->clear();
+	//tmpTableWidget->clear();
+	tmpTableWidget->setRowCount(0);
+	tmpTableWidget->setColumnCount(0);
 	if( !importedText.isEmpty() ) {
+		DEBUG_LOG("importedText =" << importedText);
 		if (!ok) {
 			// show importedText as error message
 			tmpTableWidget->setRowCount(1);
@@ -921,7 +924,7 @@ void ImportFileWidget::refreshPreview() {
 			tmpTableWidget->setItem(0, 0, item);
 		} else {
 			QStringList lineStrings = importedText.split(QLatin1Char('\n'));
-			tmpTableWidget->setRowCount(qMax(lineStrings.size() - 1, 1));
+			tmpTableWidget->setRowCount(qMax(lineStrings.size(), 1));
 			const int maxColumns = 300;
 			for (int i = 0; i < lineStrings.size(); i++) {
 				QStringList lineString = lineStrings[i].split(" ");
@@ -929,7 +932,7 @@ void ImportFileWidget::refreshPreview() {
 				DEBUG_LOG(lineString);
 
 				int colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
-				if (i == 0)
+				if (colCount > tmpTableWidget->columnCount())
 					tmpTableWidget->setColumnCount(colCount);
 
 				for (int j = 0; j < colCount; j++) {
