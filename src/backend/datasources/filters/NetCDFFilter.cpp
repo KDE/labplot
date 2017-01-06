@@ -553,7 +553,7 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 			else
 				data = (double *)malloc(actualRows * sizeof(double));
 
-			size_t start = startRow-1, count=actualRows;
+			size_t start = startRow-1, count = actualRows;
 			status = nc_get_vara_double(ncid, varid, &start, &count, data);
 			handleError(status, "nc_get_vara_double");
 
