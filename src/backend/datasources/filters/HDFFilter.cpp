@@ -438,8 +438,11 @@ QStringList HDFFilterPrivate::readHDFData2D(hid_t dataset, hid_t type, int rows,
 		for (int j = 0; j < cols; j++) {
 			if (dataPointer[0] != NULL)
 				dataPointer[j-startColumn+1]->operator[](i-startRow+1) = data[i][j];
-			else
-				dataString<<QString::number(static_cast<double>(data[i][j]))<<QLatin1String(" ");
+			else {
+				dataString << QString::number(static_cast<double>(data[i][j]));
+				if (j < cols-1)
+					dataString << QLatin1String(" ");
+			}
 		}
 		dataString<<QLatin1String("\n");
 	}
@@ -575,6 +578,7 @@ QStringList HDFFilterPrivate::readHDFAttr(hid_t aid) {
 	handleError((int)aclass, "H5Aget_class");
 
 	if (aclass == H5T_STRING) {
+		DEBUG_LOG("H5T_STRING");
 		hid_t amem = H5Tget_native_type(atype, H5T_DIR_ASCEND);
 		handleError((int)amem, "H5Tget_native_type");
 		status = H5Aread(aid, amem, name);
@@ -583,6 +587,7 @@ QStringList HDFFilterPrivate::readHDFAttr(hid_t aid) {
 		status = H5Tclose(amem);
 		handleError(status, "H5Tclose");
 	} else if (aclass == H5T_INTEGER) {
+		DEBUG_LOG("H5T_INTEGER");
 		if (H5Tequal(atype, H5T_STD_I8LE)) {
 			int8_t value;
 			status = H5Aread(aid, H5T_STD_I8LE, &value);
@@ -714,6 +719,7 @@ QStringList HDFFilterPrivate::readHDFAttr(hid_t aid) {
 		} else
 			attr<<" (unknown integer)";
 	} else if (aclass == H5T_FLOAT) {
+		DEBUG_LOG("H5T_FLOAT");
 		if (H5Tequal(atype, H5T_IEEE_F32LE) || H5Tequal(atype, H5T_IEEE_F32BE)) {
 			float value;
 			status = H5Aread(aid, H5T_NATIVE_FLOAT, &value);
@@ -723,12 +729,12 @@ QStringList HDFFilterPrivate::readHDFAttr(hid_t aid) {
 			double value;
 			status = H5Aread(aid, H5T_NATIVE_DOUBLE, &value);
 			handleError(status, "H5Aread");
-			attr<<QLatin1String("=")<<QString::number(value);
+			attr << QLatin1String("=") << QString::number(value);
 		} else if (H5Tequal(atype, H5T_NATIVE_LDOUBLE)) {
 			long double value;
 			status = H5Aread(aid, H5T_NATIVE_LDOUBLE, &value);
 			handleError(status, "H5Aread");
-			attr<<QLatin1String("=")<<QString::number((double)value);
+			attr << QLatin1String("=") << QString::number((double)value);
 		} else
 			attr<<" (unknown float)";
 	}
@@ -1414,8 +1420,8 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 				lines=endRow;
 			if (endColumn == -1)
 				endColumn=cols;
-			actualRows=endRow-startRow+1;
-			actualCols=endColumn-startColumn+1;
+			actualRows = endRow-startRow+1;
+			actualCols = endColumn-startColumn+1;
 
 #ifndef NDEBUG
 			H5T_order_t order = H5Tget_order(dtype);
