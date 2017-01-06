@@ -566,9 +566,10 @@ QStringList HDFFilterPrivate::readHDFAttr(hid_t aid) {
 	QStringList attr;
 
 	char name[MAXNAMELENGTH];
-	status = H5Aget_name(aid, MAXNAMELENGTH, name );
+	status = H5Aget_name(aid, MAXNAMELENGTH, name);
 	handleError(status, "H5Aget_name");
 	attr << QString(name);
+	// DEBUG_LOG("	name =" << QString(name));
 
 	hid_t aspace = H5Aget_space(aid); // the dimensions of the attribute data
 	handleError((int)aspace, "H5Aget_space");
@@ -578,16 +579,15 @@ QStringList HDFFilterPrivate::readHDFAttr(hid_t aid) {
 	handleError((int)aclass, "H5Aget_class");
 
 	if (aclass == H5T_STRING) {
-		DEBUG_LOG("H5T_STRING");
+		char buf[MAXSTRINGLENGTH];	// buffer to read attr value
 		hid_t amem = H5Tget_native_type(atype, H5T_DIR_ASCEND);
 		handleError((int)amem, "H5Tget_native_type");
-		status = H5Aread(aid, amem, name);
+		status = H5Aread(aid, amem, buf);
 		handleError(status, "H5Aread");
-		attr<<QLatin1String("=")<<QString(name);
+		attr << QLatin1String("=") << QString(buf);
 		status = H5Tclose(amem);
 		handleError(status, "H5Tclose");
 	} else if (aclass == H5T_INTEGER) {
-		DEBUG_LOG("H5T_INTEGER");
 		if (H5Tequal(atype, H5T_STD_I8LE)) {
 			int8_t value;
 			status = H5Aread(aid, H5T_STD_I8LE, &value);
@@ -719,7 +719,6 @@ QStringList HDFFilterPrivate::readHDFAttr(hid_t aid) {
 		} else
 			attr<<" (unknown integer)";
 	} else if (aclass == H5T_FLOAT) {
-		DEBUG_LOG("H5T_FLOAT");
 		if (H5Tequal(atype, H5T_IEEE_F32LE) || H5Tequal(atype, H5T_IEEE_F32BE)) {
 			float value;
 			status = H5Aread(aid, H5T_NATIVE_FLOAT, &value);
@@ -740,30 +739,31 @@ QStringList HDFFilterPrivate::readHDFAttr(hid_t aid) {
 	}
 
 	status = H5Tclose(atype);
-	handleError(status,"H5Tclose");
+	handleError(status, "H5Tclose");
 	status = H5Sclose(aspace);
-	handleError(status,"H5Sclose");
+	handleError(status, "H5Sclose");
 
 	return attr;
 }
 
 QStringList HDFFilterPrivate::scanHDFAttrs(hid_t oid) {
-	QStringList attr;
+	QStringList attrList;
 
 	int numAttr = H5Aget_num_attrs(oid);
 	handleError(numAttr,"H5Aget_num_attrs");
+	DEBUG_LOG("number of attr =" << numAttr);
 
 	for (int i = 0; i < numAttr; i++) {
 		hid_t aid = H5Aopen_idx(oid, i);
-		handleError((int)aid,"H5Aopen_idx");
-		attr<<readHDFAttr(aid);
+		handleError((int)aid, "H5Aopen_idx");
+		attrList << readHDFAttr(aid);
 		if (i != numAttr-1)
-			attr<<QLatin1String(", ");
+			attrList << QLatin1String(", ");
 		status = H5Aclose(aid);
 		handleError(status,"H5Aclose");
 	}
 
-	return attr;
+	return attrList;
 }
 
 QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {

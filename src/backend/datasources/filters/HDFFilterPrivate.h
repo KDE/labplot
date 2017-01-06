@@ -56,6 +56,7 @@ class HDFFilterPrivate {
 	private:
 		int status;
 		const static int MAXNAMELENGTH=1024;
+		const static int MAXSTRINGLENGTH=1024*1024;
 		QList<unsigned long> multiLinkList;	// used to find hard links
 #ifdef HAVE_HDF5
 		void handleError(int err, QString function, QString arg=QString());
