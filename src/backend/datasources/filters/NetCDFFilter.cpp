@@ -343,8 +343,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 			}
 			QStringList props;
 			props << translateDataType(type) << " (" << QString::number(len) << ")";
-			QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0,
-				QStringList() << QString(name) << typeName << props.join("") << valueString.join(", "));
+			QTreeWidgetItem *attrItem = new QTreeWidgetItem(QStringList() << QString(name) << typeName << props.join("") << valueString.join(", "));
 			attrItem->setIcon(0, QIcon::fromTheme("accessories-calculator"));
 			attrItem->setFlags(Qt::ItemIsEnabled);
 			parentItem->addChild(attrItem);
@@ -371,7 +370,7 @@ void NetCDFFilterPrivate::scanDims(int ncid, int ndims, QTreeWidgetItem* parentI
 		QString value;
 		if (i == ulid)
 			value = i18n("unlimited");
-		QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList() << QString(name) << i18n("dimension") << props.join("") << value);
+		QTreeWidgetItem *attrItem = new QTreeWidgetItem(QStringList() << QString(name) << i18n("dimension") << props.join("") << value);
 		attrItem->setIcon(0, QIcon::fromTheme("accessories-calculator"));
 		attrItem->setFlags(Qt::ItemIsEnabled);
 		parentItem->addChild(attrItem);
@@ -404,12 +403,12 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 		}
 		props << ")";
 
-		QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList() << QString(name) << i18n("variable") << props.join("")<<"");
+		QTreeWidgetItem *varItem = new QTreeWidgetItem(QStringList() << QString(name) << i18n("variable") << props.join("")<<"");
 		varItem->setIcon(0, QIcon::fromTheme("x-office-spreadsheet"));
 		varItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		// highlight item
 		for (int c = 0; c < varItem->columnCount(); c++) {
-			varItem->setBackground(c, QColor(192,255,192));
+			varItem->setBackground(c, QColor(192, 255, 192));
 			varItem->setForeground(c, Qt::black);
 		}
 		parentItem->addChild(varItem);
@@ -435,19 +434,19 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 	handleError(status, "nc_inq");
 	DEBUG_LOG(" nattr/ndims/nvars =" << nattr << ndims << nvars);
 
-	QTreeWidgetItem *attrItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList() << QString(i18n("Attributes")));
+	QTreeWidgetItem *attrItem = new QTreeWidgetItem(QStringList() << QString(i18n("Attributes")));
 	attrItem->setIcon(0,QIcon::fromTheme("folder"));
 	attrItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(attrItem);
 	scanAttrs(ncid, NC_GLOBAL, -1, attrItem);
 
-	QTreeWidgetItem *dimItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList() << QString(i18n("Dimensions")));
+	QTreeWidgetItem *dimItem = new QTreeWidgetItem(QStringList() << QString(i18n("Dimensions")));
 	dimItem->setIcon(0, QIcon::fromTheme("folder"));
 	dimItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(dimItem);
 	scanDims(ncid, ndims, dimItem);
 
-	QTreeWidgetItem *varItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList() << QString(i18n("Variables")));
+	QTreeWidgetItem *varItem = new QTreeWidgetItem(QStringList() << QString(i18n("Variables")));
 	varItem->setIcon(0, QIcon::fromTheme("folder"));
 	varItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(varItem);
@@ -558,8 +557,11 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 			handleError(status, "nc_get_vara_double");
 
 			if (!dataSource) {
-				for (int i = 0; i < actualRows; i++)
-					dataString << QString::number(data[i]) << "\n";
+				for (int i = 0; i < actualRows; i++) {
+					dataString << QString::number(data[i]);
+					if (i < actualRows-1)
+						dataString << "\n";
+				}
 				free(data);
 			}
 			break;
@@ -605,7 +607,8 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 							dataString << " ";
 					}
 				}
-				dataString << "\n";
+				if (i < qMin((int)rows, lines)-1)
+					dataString << "\n";
 				emit q->completed(100*i/actualRows);
 			}
 			free(data[0]);

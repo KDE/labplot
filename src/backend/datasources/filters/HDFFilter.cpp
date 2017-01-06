@@ -1039,19 +1039,26 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 	size_t typeSize  = H5Tget_size(datatype);
 	handleError((int)typeSize, "H5Dget_size");
 
-	dataSetProps<<readHDFDataType(datatype);
+	dataSetProps << readHDFDataType(datatype);
 
 	hid_t dataspace = H5Dget_space(did);
 	int rank = H5Sget_simple_extent_ndims(dataspace);
 	handleError(rank, "H5Sget_simple_extent_ndims");
-	if (rank == 2) {
+	if (rank == 1) {
+		hsize_t dims_out[1];
+		status = H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
+		handleError(status, "H5Sget_simple_extent_dims");
+		unsigned int rows = dims_out[0];
+		dataSetProps << QLatin1String(", ") << QString::number(rows)
+				<< QLatin1String(" (") << QString::number(size/typeSize) << QLatin1String(")");
+	} else if (rank == 2) {
 		hsize_t dims_out[2];
 		status = H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
 		handleError(status, "H5Sget_simple_extent_dims");
 		unsigned int rows = dims_out[0];
 		unsigned int cols = dims_out[1];
-		dataSetProps<<QLatin1String(", ")<<QString::number(rows)<<QLatin1String("x")<<QString::number(cols)
-					<<QLatin1String(" (")<<QString::number(size/typeSize)<<QLatin1String(")");
+		dataSetProps << QLatin1String(", ") << QString::number(rows) << QLatin1String("x") << QString::number(cols)
+				<< QLatin1String(" (") << QString::number(size/typeSize) << QLatin1String(")");
 	} else if (rank == 3) {
 		hsize_t dims_out[3];
 		status = H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
@@ -1059,8 +1066,9 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 		unsigned int rows = dims_out[0];
 		unsigned int cols = dims_out[1];
 		unsigned int regs = dims_out[2];
-		dataSetProps<<QLatin1String(", ")<<QString::number(rows)<<QLatin1String("x")<<QString::number(cols)
-					<<QLatin1String("x")<<QString::number(regs)<<QLatin1String(" (")<<QString::number(size/typeSize)<<QLatin1String(")");
+		dataSetProps << QLatin1String(", ")
+			<< QString::number(rows) << QLatin1String("x") << QString::number(cols) << QLatin1String("x") << QString::number(regs)
+			<< QLatin1String(" (") << QString::number(size/typeSize) << QLatin1String(")");
 	}
 
 	hid_t pid = H5Dget_create_plist(did);
@@ -1115,7 +1123,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 
 	QString attr = scanHDFAttrs(gid).join(" ");
 
-	QTreeWidgetItem* groupItem = new QTreeWidgetItem(QStringList()<<QString(groupName)<<QString(link)<<QLatin1String("group ")<<attr);
+	QTreeWidgetItem* groupItem = new QTreeWidgetItem(QStringList() << QString(groupName) << QString(link) << QLatin1String("group ") << attr);
 	groupItem->setIcon(0, QIcon::fromTheme("folder"));
 	groupItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(groupItem);
@@ -1161,7 +1169,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 				break;
 			}
 		default:
-			QTreeWidgetItem* objectItem = new QTreeWidgetItem(QStringList()<<QString(memberName)<<QLatin1String(" " ) << i18n("unknown"));
+			QTreeWidgetItem* objectItem = new QTreeWidgetItem(QStringList()<<QString(memberName)<<QLatin1String(" ") << i18n("unknown"));
 			objectItem->setFlags(Qt::ItemIsEnabled);
 			groupItem->addChild(objectItem);
 			break;
