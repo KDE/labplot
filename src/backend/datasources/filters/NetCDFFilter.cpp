@@ -408,7 +408,7 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 		varItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		// highlight item
 		for (int c = 0; c < varItem->columnCount(); c++) {
-			varItem->setBackground(c, QColor(192,255,192));
+			varItem->setBackground(c, QColor(192, 255, 192));
 			varItem->setForeground(c, Qt::black);
 		}
 		parentItem->addChild(varItem);
@@ -557,8 +557,11 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 			handleError(status, "nc_get_vara_double");
 
 			if (!dataSource) {
-				for (int i = 0; i < actualRows; i++)
-					dataString << QString::number(data[i]) << "\n";
+				for (int i = 0; i < actualRows; i++) {
+					dataString << QString::number(data[i]);
+					if (i < actualRows-1)
+						dataString << "\n";
+				}
 				free(data);
 			}
 			break;
@@ -604,7 +607,8 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 							dataString << " ";
 					}
 				}
-				dataString << "\n";
+				if (i < qMin((int)rows, lines)-1)
+					dataString << "\n";
 				emit q->completed(100*i/actualRows);
 			}
 			free(data[0]);
