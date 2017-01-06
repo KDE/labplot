@@ -52,6 +52,7 @@ private:
 protected:
 	void keyPressEvent(QKeyEvent*);
 	bool eventFilter(QObject*, QEvent*);
+	void focusOutEvent(QFocusEvent*);
 
 private slots:
 	void slideDown();

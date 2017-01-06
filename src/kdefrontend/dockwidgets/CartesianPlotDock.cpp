@@ -178,6 +178,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 
 	ui.verticalLayout->addWidget(frame);
 
+	//TODO: activate the tab again once the functionality is implemented
+	ui.tabWidget->removeTab(2);
+
 	init();
 }
 
@@ -1394,11 +1397,11 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 }
 
 void CartesianPlotDock::loadTheme(KConfig& config) {
-	foreach(CartesianPlot *plot, m_plotList)
+	foreach(CartesianPlot* plot, m_plotList)
 		plot->loadTheme(config);
 }
 
 void CartesianPlotDock::saveTheme(KConfig& config) {
-	if(m_plotList.empty()==false)
+	if(!m_plotList.isEmpty())
 		m_plotList.at(0)->saveTheme(config);
 }

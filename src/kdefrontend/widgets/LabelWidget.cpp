@@ -734,7 +734,7 @@ void LabelWidget::load() {
 	positionYChanged(ui.cbPositionY->currentIndex());
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(),Worksheet::Centimeter) );
 
-	if (m_axesList.size()) {
+	if (!m_axesList.isEmpty()) {
 		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetX(), Worksheet::Point) );
 		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetY(), Worksheet::Point) );
 	}
@@ -775,7 +775,7 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_label->position().verticalPosition ) );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()),Worksheet::Centimeter) );
 
-	if (m_axesList.size()) {
+	if (!m_axesList.isEmpty()) {
 		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetX", m_axesList.first()->titleOffsetX()), Worksheet::Point) );
 		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetY", m_axesList.first()->titleOffsetY()), Worksheet::Point) );
 	}
@@ -798,7 +798,7 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 	group.writeEntry("PositionY", ui.cbPositionY->currentIndex());
 	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),Worksheet::Centimeter) );
 
-	if (m_axesList.size()) {
+	if (!m_axesList.isEmpty()) {
 		group.writeEntry("OffsetX",  Worksheet::convertToSceneUnits(ui.sbOffsetX->value(), Worksheet::Point) );
 		group.writeEntry("OffsetY",  Worksheet::convertToSceneUnits(ui.sbOffsetY->value(), Worksheet::Point) );
 	}

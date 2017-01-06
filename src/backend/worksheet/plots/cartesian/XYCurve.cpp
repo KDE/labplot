@@ -887,7 +887,7 @@ void XYCurvePrivate::retransform() {
 			symbolPointsLogical.append(tempPoint);
 			connectedPointsLogical.push_back(true);
 		} else {
-			if (connectedPointsLogical.size())
+			if (!connectedPointsLogical.empty())
 				connectedPointsLogical[connectedPointsLogical.size()-1] = false;
 		}
 	}
@@ -1364,7 +1364,7 @@ void XYCurvePrivate::updateFilling() {
 
 	//if there're no interpolation lines available (XYCurve::NoLine selected), create line-interpolation,
 	//use already available lines otherwise.
-	if (lines.size()) {
+	if (!lines.isEmpty()) {
 		fillLines = lines;
 	} else {
 		for (int i=0; i<symbolPointsLogical.count()-1; i++) {
@@ -1372,11 +1372,11 @@ void XYCurvePrivate::updateFilling() {
 			fillLines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
 		fillLines = cSystem->mapLogicalToScene(fillLines);
-	}
 
-	//no lines available (no points), nothing to do
-	if (!fillLines.size())
-		return;
+		//no lines available (no points), nothing to do
+		if (fillLines.isEmpty())
+			return;
+	}
 
 	//create polygon(s):
 	//1. Depending on the current zoom-level, only a subset of the curve may be visible in the plot

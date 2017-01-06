@@ -92,13 +92,12 @@ QVector3D Transform::mapSceneToLogical(const QPointF& scenePoint, const Datapick
 	Y[3] = scenePoint.y();
 
 	if (mapTypeToCartesian(axisPoints)) {
-		double tan;
 		double sin;
 		double cos;
 		double scaleOfX;
 		double scaleOfY;
 		if (((Y[1] - Y[0])*(x[2] - x[0]) - (Y[2] - Y[0])*(x[1] - x[0]))!=0) {
-			tan = ((X[1] - X[0])*(x[2] - x[0]) - (X[2] - X[0])*(x[1] - x[0]))/((Y[1] - Y[0])*(x[2] - x[0]) - (Y[2] - Y[0])*(x[1] - x[0]));
+			double tan = ((X[1] - X[0])*(x[2] - x[0]) - (X[2] - X[0])*(x[1] - x[0]))/((Y[1] - Y[0])*(x[2] - x[0]) - (Y[2] - Y[0])*(x[1] - x[0]));
 			sin = tan/sqrt(1 + tan*tan);
 			cos = sqrt(1 - sin*sin);
 		} else {

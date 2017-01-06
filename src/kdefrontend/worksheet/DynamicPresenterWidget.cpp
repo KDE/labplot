@@ -38,6 +38,7 @@ DynamicPresenterWidget::DynamicPresenterWidget(Worksheet *worksheet, QWidget *pa
 	m_view(new WorksheetView(worksheet)),
 	m_timeLine(new QTimeLine(600)) {
 	setAttribute(Qt::WA_DeleteOnClose);
+	setFocus();
 
 	m_view->setParent(this);
 	m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -107,4 +108,12 @@ void DynamicPresenterWidget::slideUp() {
 void DynamicPresenterWidget::startTimeline() {
 	if (m_timeLine->state() != QTimeLine::Running)
 		m_timeLine->start();
+}
+
+void DynamicPresenterWidget::focusOutEvent(QFocusEvent *e) {
+	if (m_view->hasFocus())
+		setFocus();
+
+	if (e->reason() & Qt::BacktabFocusReason)
+		close();
 }

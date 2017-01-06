@@ -227,7 +227,7 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const {
 	Qt::ItemFlags result;
 	AbstractAspect *aspect = static_cast<AbstractAspect*>(index.internalPointer());
 
-	if (m_selectableAspects.size() != 0) {
+	if (!m_selectableAspects.isEmpty()) {
 		foreach(const char * classString, m_selectableAspects) {
 			if (aspect->inherits(classString)) {
 				result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;

@@ -41,7 +41,7 @@
 int main (int argc, char *argv[]) {
 	KAboutData aboutData( QStringLiteral("labplot2"), QString("labplot2"),
 		LVERSION, i18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
-		KAboutLicense::GPL,i18n("(c) 2007-2016"), QString(), QStringLiteral("http://www.labplot.sourceforge.net"));
+		KAboutLicense::GPL,i18n("(c) 2007-2017"), QString(), QStringLiteral("http://www.labplot.sourceforge.net"));
 
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18n("developer"), "stefan.gerlach@uni-konstanz.de", 0);
 	aboutData.addAuthor(i18n("Alexander Semke"), i18n("developer"), "alexander.semke@web.de", 0);

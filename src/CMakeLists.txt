@@ -185,6 +185,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/nsl/nsl_interp.c
 	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
 	${BACKEND_DIR}/nsl/nsl_sf_poly.c
+	${BACKEND_DIR}/nsl/nsl_sf_stats.c
 	${BACKEND_DIR}/nsl/nsl_sf_window.c
 	${BACKEND_DIR}/nsl/nsl_smooth.c
 	${BACKEND_DIR}/nsl/nsl_sort.c
@@ -265,6 +266,7 @@ set(TOOLS_SOURCES
 
 add_subdirectory( pics )
 add_subdirectory( pics/gsl_distributions )
+add_subdirectory( pics/fit_models )
 add_subdirectory( pics/colorchooser )
 add_subdirectory( themes )
 
@@ -273,7 +275,8 @@ set( LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} )
 INCLUDE_DIRECTORIES( . ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/.. )
 qt5_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
 add_executable( labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS} )
-target_link_libraries( labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui KF5::NewStuff Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} )
+target_link_libraries( labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} )
+#KF5::NewStuff
 IF (CANTOR_LIBS_FOUND)
 	target_link_libraries( labplot2 ${CANTOR_LIBS} )
 ENDIF ()

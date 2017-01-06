@@ -27,32 +27,27 @@
 
 #include "nsl_common.h"
 #include "nsl_fit.h"
-#include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_psi.h>
 
-const char* nsl_fit_model_category_name[] = {i18n("Basic functions"), i18n("Peak Functions"), i18n("Growth (Sigmoidal)"), i18n("Statistics"), i18n("Custom")};
+const char* nsl_fit_model_category_name[] = {i18n("Basic functions"), i18n("Peak functions"), i18n("Growth (sigmoidal)"), i18n("Statistics (distributions)"),
+	i18n("Custom")};
 
-const char* nsl_fit_model_basic_name[] = {i18n("Polynomial"), i18n("Power"), i18n("Exponential"), i18n("Inverse Exponential"), i18n("Fourier")};
-const char* nsl_fit_model_peak_name[] = {i18n("Gaussian (normal)"), i18n("Cauchy-Lorentz"), i18n("Hyperbolic secant (sech)"), i18n("Logistic (sech squared)")};
-const char* nsl_fit_model_growth_name[] = {i18n("Arctangent"), i18n("Hyperbolic tangent"), i18n("Algebraic sigmoid"), i18n("Logistic function"), 
-	i18n("Error function (erf)"), i18n("Hill"), i18n("Gompertz"), i18n("Gudermann (gd)")};
-const char* nsl_fit_model_distribution_name[] = {i18n("Normal (Gauss)"), i18n("Cauchy-Lorentz"), i18n("Maxwell-Boltzmann"), i18n("Poisson"), i18n("Logistic"),
-	i18n("Log-Normal"), i18n("Gamma"), i18n("Laplace"), i18n("Rayleigh"), i18n("Levy"), i18n("Chi-Square"), i18n("Weibull"), i18n("Frechet (inverse Weibull)"),
-	i18n("Gumbel"), i18n("Hyperbolic secant (sech)")};
-
+const char* nsl_fit_model_basic_name[] = {i18n("Polynomial"), i18n("Power"), i18n("Exponential"), i18n("Inverse exponential"), i18n("Fourier")};
 const char* nsl_fit_model_basic_equation[] = {"c0 + c1*x", "a*x^b", "a*exp(b*x)", "a*(1-exp(b*x)) + c", "a0 + (a1*cos(w*x) + b1*sin(w*x))"};
-const char* nsl_fit_model_peak_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * s/(s^2+(x-t)^2)", "a/pi/s * sech((x-mu)/s)",
+const char* nsl_fit_model_basic_pic_name[] = {"polynom", "power", "exponential", "inv_exponential", "fourier"};
+
+const char* nsl_fit_model_peak_name[] = {i18n("Gaussian (normal)"), i18n("Cauchy-Lorentz"), i18n("Hyperbolic secant (sech)"), i18n("Logistic (sech squared)")};
+const char* nsl_fit_model_peak_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * g/(g^2+(x-mu)^2)", "a/pi/s * sech((x-mu)/s)",
 	"a/4/s * sech((x-mu)/2/s)**2"};
+const char* nsl_fit_model_peak_pic_name[] = {"gaussian", "cauchy_lorentz", "sech", "logistic"};
+
+const char* nsl_fit_model_growth_name[] = {i18n("Inverse tangent"), i18n("Hyperbolic tangent"), i18n("Algebraic sigmoid"), i18n("Logistic function"), 
+	i18n("Error function (erf)"), i18n("Hill"), i18n("Gompertz"), i18n("Gudermann (gd)")};
 const char* nsl_fit_model_growth_equation[] = {"a * atan((x-mu)/s)", "a * tanh((x-mu)/s)", "a * (x-mu)/s/sqrt(1+((x-mu)/s)^2)", "a/(1+exp(-k*(x-mu)))",
 	"a/2 * erf((x-mu)/s/sqrt(2))", "a * x^n/(s^n + x^n)", "a*exp(-b*exp(-c*x))", "a * asin(tanh((x-mu)/s))"};
-const char* nsl_fit_model_distribution_equation[] = {"a/sqrt(2*pi)/s * exp(-((x-mu)/s)^2/2)", "a/pi * s/(s^2+(x-t)^2)",
-	"c*sqrt(2/pi) * x^2/a^3 * exp(-(x/a)^2/2)", "a * l^x/gamma(x+1) * exp(-l)", "a/4/s * sech((x-mu)/2/s)**2",
-	"a/(sqrt(2*pi)*x*s) * exp(-( (log(x)-mu)/s )^2/2)", "a * b^p/gamma(p)*x^(p-1)*exp(-b*x)", "a/(2*s) * exp(-fabs(x-mu)/s)",
-	"a * x/(s*s) * exp(-x*x/(s*s)/2)", "a * sqrt(g/(2*pi))/pow(x-mu, 1.5) * exp(-g/2./(x-mu))", "a * pow(x,n/2.-1.)/pow(2, n/2.)/gamma(n/2.) * exp(-x/2.)",
-	"a * k/l * ((x-mu)/l)^(k-1) * exp(-((x-mu)/l)^k)", "c * a/s*((x-mu)/s)^(-a-1) * exp(-((x-mu)/s)^(-a))", "a/b * exp((x-mu)/b - exp((x-mu)/b))",
-	"a/2/s * sech(pi/2*(x-mu)/s)"};
+const char* nsl_fit_model_growth_pic_name[] = {"atan", "tanh", "alg_sigmoid", "logistic_function", "erf", "hill", "gompertz", "gd"};
 
 /* 
 	see http://www.quantcode.com/modules/smartfaq/faq.php?faqid=96
@@ -333,19 +328,19 @@ double nsl_fit_model_lognormal_param_deriv(int param, double x, double s, double
 		return norm * efactor;
 	return 0;
 }
-double nsl_fit_model_gamma_param_deriv(int param, double x, double b, double p, double a, double sigma) {
-	double factor = pow(b, p)*pow(x, p-1.)/gsl_sf_gamma(p)/sigma, efactor = exp(-b*x);
+double nsl_fit_model_gamma_param_deriv(int param, double x, double t, double k, double a, double sigma) {
+	double factor = pow(x, k-1.)/pow(t, k)/gsl_sf_gamma(k)/sigma, efactor = exp(-x/t);
 
 	if (param == 0)
-		return a * factor/b * (p-b*x) * efactor;
+		return a * factor/t * (x/t-k) * efactor;
 	if (param == 1)
-		return a * factor * (log(b*x) - gsl_sf_psi(p)) * efactor;
+		return a * factor * (log(x/t) - gsl_sf_psi(k)) * efactor;
 	if (param == 2)
 		return factor * efactor;
 	return 0;
 }
 double nsl_fit_model_laplace_param_deriv(int param, double x, double s, double mu, double a, double sigma) {
-	double norm = 1./(2.*s)/sigma, y = fabs(x-mu)/s, efactor = exp(-y);
+	double norm = 1./(2.*s)/sigma, y = fabs((x-mu)/s), efactor = exp(-y);
 
 	if (param == 0)
 		return a/s*norm * (y-1.) * efactor;
@@ -388,36 +383,38 @@ double nsl_fit_model_weibull_param_deriv(int param, double x, double k, double l
 	double y = (x-mu)/l, z = pow(y, k), efactor = exp(-z);
 
 	if (param == 0)
-		return a/sigma * z*(k*log(y)*(z-1.) - 1.) * efactor;
+		return a/l/sigma * z/y*(k*log(y)*(1.-z) + 1.) * efactor;
 	if (param == 1)
-		return a/sigma * k*k*z*(z-1.) * efactor;
+		return a*k*k/l/l/sigma * z/y*(z-1.) * efactor;
 	if (param == 2)
-		return a/sigma * k*z/y*(k-1. - k*z) * efactor;
+		return a*k/l/l/sigma * z/y/y*(k*z + 1. - k) * efactor;
 	if (param == 3)
 		return k/l/sigma * z/y * efactor;
 	return 0;
 }
-double nsl_fit_model_frechet_param_deriv(int param, double x, double a, double mu, double s, double c, double sigma) {
-	double y = (x-mu)/s, efactor = exp(-pow(y, -a));
+double nsl_fit_model_frechet_param_deriv(int param, double x, double g, double mu, double s, double a, double sigma) {
+	double y = (x-mu)/s, efactor = exp(-pow(y, -g));
 
 	if (param == 0)
-		return c/s * pow(y, -2.*a-1.) * (a*log(y)*(1.-pow(y, a))+pow(y, a)) * efactor;
+		return a/s/sigma * pow(y, -2.*g-1.) * (g*log(y)*(1.-pow(y, g))+pow(y, g)) * efactor;
 	if (param == 1)
-		return c * a/(s*s)*pow(y, -a-2.) * (a+1.-a*pow(y, -a)) * efactor;
+		return a/sigma * g/(s*s)*pow(y, -g-2.) * (g+1.-g*pow(y, -g)) * efactor;
 	if (param == 2)
-		return c * gsl_pow_2(a/s)*pow(y, -2.*a-1.) * (pow(y, a)-1.) * efactor;
+		return a/sigma * gsl_pow_2(g/s)*pow(y, -2.*g-1.) * (pow(y, g)-1.) * efactor;
 	if (param == 3)
-		return a/sigma/s * pow(y, -a-1.) * efactor;
+		return g/sigma/s * pow(y, -g-1.) * efactor;
 	return 0;
 }
-double nsl_fit_model_gumbel_param_deriv(int param, double x, double b, double mu, double a, double sigma) {
-	double norm = 1./b/sigma, y = (x-mu)/b, efactor = exp(y - exp(y));
+double nsl_fit_model_gumbel1_param_deriv(int param, double x, double s, double b, double mu, double a, double sigma) {
+	double norm = 1./s/sigma, y = (x-mu)/s, efactor = exp(-y - b*exp(-y));
 
 	if (param == 0)
-		return a * norm/b * (y*exp(y) - y - 1) * efactor;
+		return a/s * norm * (y - 1. - b*exp(-y)) * efactor;
 	if (param == 1)
-		return a * norm/b * (exp(y) - 1) * efactor;
+		return -a * norm * exp(-y) * efactor;
 	if (param == 2)
+		return a/s * norm * (1. - b*exp(-y)) * efactor;
+	if (param == 3)
 		return norm * efactor;
 	return 0;
 }

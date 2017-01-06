@@ -80,7 +80,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 
 		for (int i=0; i < m_fitData->paramNames.size(); ++i){
 			// name
-			QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNames.at(i));
+			QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNamesUtf8.at(i));
 			item->setFlags(item->flags() ^ Qt::ItemIsEditable);
 			item->setBackground(QBrush(Qt::lightGray));
 			ui.tableWidget->setItem(i, 0, item);
@@ -126,7 +126,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 		ui.pbAdd->setVisible(false);
 		ui.pbRemove->setVisible(false);
 	} else {	// custom model
-		if (m_fitData->paramNames.size()) {	// parameters for the custom model are already available -> show them
+		if (!m_fitData->paramNames.isEmpty()) {	// parameters for the custom model are already available -> show them
 			ui.tableWidget->setRowCount(m_fitData->paramNames.size());
 
 			for (int i=0; i < m_fitData->paramNames.size(); ++i){

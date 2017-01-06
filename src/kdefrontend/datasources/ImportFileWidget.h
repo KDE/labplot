@@ -59,7 +59,6 @@ public:
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedFITSExtensions() const;
 	void hideDataSource() const;
-	bool canReadFitsTableToMatrix() const;
 	void showAsciiHeaderOptions(bool);
 
 private:
@@ -72,7 +71,6 @@ private:
 	Ui::FITSOptionsWidget fitsOptionsWidget;
 	QTableWidget* twPreview;
 	const QString& m_fileName;
-	bool readFitsTableToMatrix;
 
 private slots:
 	void fileNameChanged(const QString&);
@@ -92,7 +90,7 @@ private slots:
 
 signals:
 	void fileNameChanged();
-	void checkedFitsTableToMatrix();
+	void checkedFitsTableToMatrix(const bool enable);
 };
 
 #endif

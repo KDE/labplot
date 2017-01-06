@@ -230,7 +230,7 @@ void MainWin::initGUI(const QString& fileName) {
 			newProject();
 			newWorksheet();
 		} else if (load == 3) { //open last used project
-			if (m_recentProjectsAction->urls().size()) {
+			if (!m_recentProjectsAction->urls().isEmpty()) {
 				DEBUG_LOG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().first());
 				openRecentProject( m_recentProjectsAction->urls().first() );
 			}
@@ -240,12 +240,10 @@ void MainWin::initGUI(const QString& fileName) {
 }
 
 void MainWin::initActions() {
-	QAction* action;
-
 	// ******************** File-menu *******************************
 	//add some standard actions
-	action = KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
-	action = KStandardAction::open(this, SLOT(openProject()),actionCollection());
+	KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
+	KStandardAction::open(this, SLOT(openProject()),actionCollection());
 	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(QUrl)),actionCollection());
 	m_closeAction = KStandardAction::close(this, SLOT(closeProject()),actionCollection());
 	m_saveAction = KStandardAction::save(this, SLOT(saveProject()),actionCollection());
@@ -330,7 +328,7 @@ void MainWin::initActions() {
 	// Script
 
 	//Windows
-	action  = new QAction(i18n("Cl&ose"), this);
+	QAction* action  = new QAction(i18n("Cl&ose"), this);
 	actionCollection()->setDefaultShortcut(action, Qt::CTRL+Qt::Key_W);
 	action->setStatusTip(i18n("Close the active window"));
 	actionCollection()->addAction("close window", action);

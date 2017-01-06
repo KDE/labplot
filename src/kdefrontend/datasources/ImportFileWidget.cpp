@@ -4,7 +4,7 @@ Project              : LabPlot
 Description          : import file data widget
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
-Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 
@@ -41,7 +41,6 @@ Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 #include <QDir>
 #include <QFileDialog>
 #include <QProcess>
-#include <QTextStream>
 #include <KUrlCompletion>
 #include <KLocalizedString>
 #include <KSharedConfig>
@@ -133,17 +132,17 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 #ifndef HAVE_HDF5
 	// disable HDF5 item
 	QStandardItem* item = model->item(FileDataSource::HDF);
-	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 #ifndef HAVE_NETCDF
 	// disable NETCDF item
 	QStandardItem* item2 = model->item(FileDataSource::NETCDF);
-	item2->setFlags(item2->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+	item2->setFlags(item2->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 #ifndef HAVE_FITS
 	// disable FITS item
 	QStandardItem* item3 = model->item(FileDataSource::FITS);
-	item3->setFlags(item3->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+	item3->setFlags(item3->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 
 	ui.gbOptions->hide();
@@ -183,7 +182,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 
 void ImportFileWidget::loadSettings() {
 	//load last used settings
-	KConfigGroup conf(KSharedConfig::openConfig(),"Import");
+	KConfigGroup conf(KSharedConfig::openConfig(), "Import");
 
 	//settings for data type specific widgets
 	// ascii data
@@ -268,9 +267,9 @@ void ImportFileWidget::showOptions(bool b) {
 QString ImportFileWidget::fileName() const {
 	if (currentFileType() == FileDataSource::FITS) {
 		if (fitsOptionsWidget.twExtensions->currentItem() != 0) {
-			if (fitsOptionsWidget.twExtensions->currentItem()->text(0) != QLatin1String("Primary header")) {
+			if (fitsOptionsWidget.twExtensions->currentItem()->text(0) != i18n("Primary header")) {
 				return ui.kleFileName->text() + QLatin1String("[") +
-						fitsOptionsWidget.twExtensions->currentItem()->text(fitsOptionsWidget.twExtensions->currentColumn()) + QLatin1String("]");
+				       fitsOptionsWidget.twExtensions->currentItem()->text(fitsOptionsWidget.twExtensions->currentColumn()) + QLatin1String("]");
 			}
 		}
 
@@ -305,102 +304,96 @@ FileDataSource::FileType ImportFileWidget::currentFileType() const {
 	returns the currently used filter.
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
-	//FileDataSource::FileType fileType = this->currentFileType();
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
-
-	//qDebug()<<"	current filter ="<<ui.cbFilter->currentIndex();
 
 	switch (fileType) {
 	case FileDataSource::Ascii: {
-		//TODO use auto_ptr
-		AsciiFilter* filter = new AsciiFilter();
+			//TODO use auto_ptr
+			AsciiFilter* filter = new AsciiFilter();
 
-		if (ui.cbFilter->currentIndex() == 0) { //"automatic"
-			filter->setAutoModeEnabled(true);
-		} else if (ui.cbFilter->currentIndex() == 1) { //"custom"
-			filter->setAutoModeEnabled(false);
-			filter->setCommentCharacter( asciiOptionsWidget.cbCommentCharacter->currentText() );
-			filter->setSeparatingCharacter( asciiOptionsWidget.cbSeparatingCharacter->currentText() );
-			filter->setSimplifyWhitespacesEnabled( asciiOptionsWidget.chbSimplifyWhitespaces->isChecked() );
-			filter->setSkipEmptyParts( asciiOptionsWidget.chbSkipEmptyParts->isChecked() );
-			filter->setTransposed( asciiOptionsWidget.chbTranspose->isChecked() );
-			filter->setVectorNames( asciiOptionsWidget.kleVectorNames->text() );
-			filter->setHeaderEnabled( asciiOptionsWidget.chbHeader->isChecked() );
-		} else {
-			filter->loadFilterSettings( ui.cbFilter->currentText() );
+			if (ui.cbFilter->currentIndex() == 0)   //"automatic"
+				filter->setAutoModeEnabled(true);
+			else if (ui.cbFilter->currentIndex() == 1) { //"custom"
+				filter->setAutoModeEnabled(false);
+				filter->setCommentCharacter( asciiOptionsWidget.cbCommentCharacter->currentText() );
+				filter->setSeparatingCharacter( asciiOptionsWidget.cbSeparatingCharacter->currentText() );
+				filter->setSimplifyWhitespacesEnabled( asciiOptionsWidget.chbSimplifyWhitespaces->isChecked() );
+				filter->setSkipEmptyParts( asciiOptionsWidget.chbSkipEmptyParts->isChecked() );
+				filter->setTransposed( asciiOptionsWidget.chbTranspose->isChecked() );
+				filter->setVectorNames( asciiOptionsWidget.kleVectorNames->text() );
+				filter->setHeaderEnabled( asciiOptionsWidget.chbHeader->isChecked() );
+			} else
+				filter->loadFilterSettings( ui.cbFilter->currentText() );
+
+			//save the data portion to import
+			filter->setStartRow( ui.sbStartRow->value());
+			filter->setEndRow( ui.sbEndRow->value() );
+			filter->setStartColumn( ui.sbStartColumn->value());
+			filter->setEndColumn( ui.sbEndColumn->value());
+
+			return filter;
 		}
-
-		//save the data portion to import
-		filter->setStartRow( ui.sbStartRow->value());
-		filter->setEndRow( ui.sbEndRow->value() );
-		filter->setStartColumn( ui.sbStartColumn->value());
-		filter->setEndColumn( ui.sbEndColumn->value());
-
-		return filter;
-//		source->setFilter(filter);
-	}
 	case FileDataSource::Binary: {
-		BinaryFilter* filter = new BinaryFilter();
-		if ( ui.cbFilter->currentIndex()==0 ) {	//"automatic"
-			filter->setAutoModeEnabled(true);
-		} else if ( ui.cbFilter->currentIndex()==1 ) { //"custom"
-			filter->setAutoModeEnabled(false);
-			filter->setVectors( binaryOptionsWidget.niVectors->value() );
-			filter->setDataType( (BinaryFilter::DataType) binaryOptionsWidget.cbDataType->currentIndex() );
-		} else {
-			//TODO: load filter settings
+			BinaryFilter* filter = new BinaryFilter();
+			if ( ui.cbFilter->currentIndex() == 0 ) 	//"automatic"
+				filter->setAutoModeEnabled(true);
+			else if ( ui.cbFilter->currentIndex() == 1 ) {	//"custom"
+				filter->setAutoModeEnabled(false);
+				filter->setVectors( binaryOptionsWidget.niVectors->value() );
+				filter->setDataType( (BinaryFilter::DataType) binaryOptionsWidget.cbDataType->currentIndex() );
+			} else {
+				//TODO: load filter settings
 // 			filter->setFilterName( ui.cbFilter->currentText() );
+			}
+
+			filter->setStartRow( ui.sbStartRow->value() );
+			filter->setEndRow( ui.sbEndRow->value() );
+
+			return filter;
 		}
-
-		filter->setStartRow( ui.sbStartRow->value() );
-		filter->setEndRow( ui.sbEndRow->value() );
-
-//		source->setFilter(filter);
-		return filter;
-	}
 	case FileDataSource::Image: {
-		ImageFilter* filter = new ImageFilter();
+			ImageFilter* filter = new ImageFilter();
 
-		filter->setImportFormat((ImageFilter::ImportFormat)imageOptionsWidget.cbImportFormat->currentIndex());
-		filter->setStartRow( ui.sbStartRow->value() );
-		filter->setEndRow( ui.sbEndRow->value() );
-		filter->setStartColumn( ui.sbStartColumn->value() );
-		filter->setEndColumn( ui.sbEndColumn->value() );
+			filter->setImportFormat((ImageFilter::ImportFormat)imageOptionsWidget.cbImportFormat->currentIndex());
+			filter->setStartRow( ui.sbStartRow->value() );
+			filter->setEndRow( ui.sbEndRow->value() );
+			filter->setStartColumn( ui.sbStartColumn->value() );
+			filter->setEndColumn( ui.sbEndColumn->value() );
 
-		return filter;
-	}
+			return filter;
+		}
 	case FileDataSource::HDF: {
-		HDFFilter* filter = new HDFFilter();
+			HDFFilter* filter = new HDFFilter();
 
-		if (!selectedHDFNames().isEmpty())
-			filter->setCurrentDataSetName(selectedHDFNames()[0]);
-		filter->setStartRow( ui.sbStartRow->value() );
-		filter->setEndRow( ui.sbEndRow->value() );
-		filter->setStartColumn( ui.sbStartColumn->value() );
-		filter->setEndColumn( ui.sbEndColumn->value() );
+			if (!selectedHDFNames().isEmpty())
+				filter->setCurrentDataSetName(selectedHDFNames()[0]);
+			filter->setStartRow( ui.sbStartRow->value() );
+			filter->setEndRow( ui.sbEndRow->value() );
+			filter->setStartColumn( ui.sbStartColumn->value() );
+			filter->setEndColumn( ui.sbEndColumn->value() );
 
-		return filter;
-	}
+			return filter;
+		}
 	case FileDataSource::NETCDF: {
-		NetCDFFilter* filter = new NetCDFFilter();
+			NetCDFFilter* filter = new NetCDFFilter();
 
-		if (!selectedNetCDFNames().isEmpty())
-			filter->setCurrentVarName(selectedNetCDFNames()[0]);
-		filter->setStartRow( ui.sbStartRow->value() );
-		filter->setEndRow( ui.sbEndRow->value() );
-		filter->setStartColumn( ui.sbStartColumn->value() );
-		filter->setEndColumn( ui.sbEndColumn->value() );
+			if (!selectedNetCDFNames().isEmpty())
+				filter->setCurrentVarName(selectedNetCDFNames()[0]);
+			filter->setStartRow( ui.sbStartRow->value() );
+			filter->setEndRow( ui.sbEndRow->value() );
+			filter->setStartColumn( ui.sbStartColumn->value() );
+			filter->setEndColumn( ui.sbEndColumn->value() );
 
-		return filter;
-	}
+			return filter;
+		}
 	case FileDataSource::FITS: {
-		FITSFilter* filter = new FITSFilter();
-		filter->setStartRow( ui.sbStartRow->value());
-		filter->setEndRow( ui.sbEndRow->value() );
-		filter->setStartColumn( ui.sbStartColumn->value());
-		filter->setEndColumn( ui.sbEndColumn->value());
-		return filter;
-	}
+			FITSFilter* filter = new FITSFilter();
+			filter->setStartRow( ui.sbStartRow->value());
+			filter->setEndRow( ui.sbEndRow->value() );
+			filter->setStartColumn( ui.sbStartColumn->value());
+			filter->setEndColumn( ui.sbEndColumn->value());
+			return filter;
+		}
 	}
 
 	return 0;
@@ -449,9 +442,8 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	QString fileName = name;
 #ifndef _WIN32
 	// make relative path
-	if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator()) {
+	if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator())
 		fileName = QDir::homePath() + QDir::separator() + fileName;
-	}
 #endif
 
 	bool fileExists = QFile::exists(fileName);
@@ -474,10 +466,10 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	//check, if we can guess the file type by content
 	QProcess *proc = new QProcess(this);
 	QStringList args;
-	args<<"-b"<<ui.kleFileName->text();
+	args << "-b" << ui.kleFileName->text();
 	proc->start("file", args);
 	if (proc->waitForReadyRead(1000) == false) {
-		qDebug()<<"ERROR: reading file type of file"<<fileName;
+		qDebug() << "ERROR: reading file type of file" << fileName;
 		return;
 	}
 	fileInfo = proc->readLine();
@@ -485,11 +477,11 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 	QByteArray imageFormat = QImageReader::imageFormat(fileName);
 	if (fileInfo.contains("compressed data") || fileInfo.contains("ASCII") ||
-			fileName.endsWith("dat", Qt::CaseInsensitive) || fileName.endsWith("txt", Qt::CaseInsensitive)) {
+	        fileName.endsWith("dat", Qt::CaseInsensitive) || fileName.endsWith("txt", Qt::CaseInsensitive)) {
 		//probably ascii data
 		ui.cbFileType->setCurrentIndex(FileDataSource::Ascii);
 	} else if (fileInfo.contains("Hierarchical Data Format") || fileName.endsWith("h5", Qt::CaseInsensitive) ||
-			fileName.endsWith("hdf", Qt::CaseInsensitive) || fileName.endsWith("hdf5", Qt::CaseInsensitive) ) {
+	           fileName.endsWith("hdf", Qt::CaseInsensitive) || fileName.endsWith("hdf5", Qt::CaseInsensitive) ) {
 		ui.cbFileType->setCurrentIndex(FileDataSource::HDF);
 
 		// update HDF tree widget using current selected file
@@ -498,12 +490,12 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		QTreeWidgetItem *rootItem = hdfOptionsWidget.twContent->invisibleRootItem();
 		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
 		filter->parse(fileName, rootItem);
-		hdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
+		hdfOptionsWidget.twContent->insertTopLevelItem(0, rootItem);
 		hdfOptionsWidget.twContent->expandAll();
 		hdfOptionsWidget.twContent->resizeColumnToContents(0);
 		hdfOptionsWidget.twContent->resizeColumnToContents(3);
 	} else if (fileInfo.contains("NetCDF Data Format") || fileName.endsWith("nc", Qt::CaseInsensitive) ||
-			fileName.endsWith("netcdf", Qt::CaseInsensitive) || fileName.endsWith("cdf", Qt::CaseInsensitive)) {
+	           fileName.endsWith("netcdf", Qt::CaseInsensitive) || fileName.endsWith("cdf", Qt::CaseInsensitive)) {
 		ui.cbFileType->setCurrentIndex(FileDataSource::NETCDF);
 
 		// update NetCDF tree widget using current selected file
@@ -512,12 +504,12 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		QTreeWidgetItem *rootItem = netcdfOptionsWidget.twContent->invisibleRootItem();
 		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 		filter->parse(fileName, rootItem);
-		netcdfOptionsWidget.twContent->insertTopLevelItem(0,rootItem);
+		netcdfOptionsWidget.twContent->insertTopLevelItem(0, rootItem);
 		netcdfOptionsWidget.twContent->expandAll();
 		netcdfOptionsWidget.twContent->resizeColumnToContents(0);
 		netcdfOptionsWidget.twContent->resizeColumnToContents(2);
 	} else if (fileInfo.contains("FITS image data") || fileName.endsWith("fits", Qt::CaseInsensitive) ||
-		fileName.endsWith("fit", Qt::CaseInsensitive) || fileName.endsWith("fts", Qt::CaseInsensitive)) {
+	           fileName.endsWith("fit", Qt::CaseInsensitive) || fileName.endsWith("fts", Qt::CaseInsensitive)) {
 #ifdef HAVE_FITS
 		ui.cbFileType->setCurrentIndex(FileDataSource::FITS);
 #endif
@@ -525,11 +517,10 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		QString fileName = ui.kleFileName->text();
 		FITSFilter *filter = (FITSFilter *)this->currentFileFilter();
 		filter->parseExtensions(fileName, fitsOptionsWidget.twExtensions, true);
-	} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty()) {
+	} else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
 		ui.cbFileType->setCurrentIndex(FileDataSource::Image);
-	} else  {
+	else
 		ui.cbFileType->setCurrentIndex(FileDataSource::Binary);
-	}
 
 	refreshPreview();
 	emit fileNameChanged();
@@ -541,7 +532,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 void ImportFileWidget::saveFilter() {
 	bool ok;
 	QString text = QInputDialog::getText(this, i18n("Save Filter Settings as"),
-				i18n("Filter name:"), QLineEdit::Normal, i18n("new filter"), &ok);
+	                                     i18n("Filter name:"), QLineEdit::Normal, i18n("new filter"), &ok);
 	if (ok && !text.isEmpty()) {
 		//TODO
 		//AsciiFilter::saveFilter()
@@ -568,8 +559,8 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 
 	//if we switch from netCDF-format (only two tabs available), add the data preview-tab again
 	if (ui.tabWidget->count() == 2) {
-		ui.tabWidget->setTabText(0,i18n("Data format"));
-		ui.tabWidget->insertTab(1,ui.tabDataPreview,i18n("Preview"));
+		ui.tabWidget->setTabText(0, i18n("Data format"));
+		ui.tabWidget->insertTab(1, ui.tabDataPreview, i18n("Preview"));
 	}
 	ui.lPreviewLines->show();
 	ui.sbPreviewLines->show();
@@ -592,7 +583,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		// hide global preview tab. we have our own
-		ui.tabWidget->setTabText(0,i18n("Data format && preview"));
+		ui.tabWidget->setTabText(0, i18n("Data format && preview"));
 		ui.tabWidget->removeTab(1);
 		ui.tabWidget->setCurrentIndex(0);
 		break;
@@ -605,7 +596,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	case FileDataSource::FITS:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
-		ui.tabWidget->setTabText(0,i18n("Data format && preview"));
+		ui.tabWidget->setTabText(0, i18n("Data format && preview"));
 		ui.tabWidget->removeTab(1);
 		ui.tabWidget->setCurrentIndex(0);
 		break;
@@ -633,7 +624,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 */
 void ImportFileWidget::hdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
 	Q_UNUSED(column);
-	if (item->data(2, Qt::DisplayRole).toString() == "data set")
+	if (item->data(2, Qt::DisplayRole).toString() == i18n("data set"))
 		refreshPreview();
 	else
 		qDebug()<<"non data set selected in HDF tree widget";
@@ -644,11 +635,11 @@ void ImportFileWidget::hdfTreeWidgetItemSelected(QTreeWidgetItem* item, int colu
 */
 const QStringList ImportFileWidget::selectedHDFNames() const {
 	QStringList names;
-	QList<QTreeWidgetItem *> items = hdfOptionsWidget.twContent->selectedItems();
+	QList<QTreeWidgetItem*> items = hdfOptionsWidget.twContent->selectedItems();
 
 	// the data link is saved in the second column
-	for (int i=0; i < items.size(); i++)
-		names<<items[i]->data(1,Qt::DisplayRole).toString();
+	for (int i = 0; i < items.size(); i++)
+		names<<items[i]->data(1, Qt::DisplayRole).toString();
 
 	return names;
 }
@@ -660,60 +651,53 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
 	QString selectedExtension;
 	int extType = 0;
 	if (itemText.contains(QLatin1String("IMAGE #")) ||
-			itemText.contains(QLatin1String("ASCII_TBL #")) ||
-			itemText.contains(QLatin1String("BINARY_TBL #"))){
+	        itemText.contains(QLatin1String("ASCII_TBL #")) ||
+	        itemText.contains(QLatin1String("BINARY_TBL #")))
 		extType = 1;
-	} else if (!itemText.compare(QLatin1String("Primary header"))) {
+	else if (!itemText.compare(i18n("Primary header")))
 		extType = 2;
-	}
 	if (extType == 0) {
 		if (item->parent() != 0) {
 			if (item->parent()->parent() != 0)
-				selectedExtension = item->parent()->parent()->text(0) +"["+ item->text(column)+"]";
+				selectedExtension = item->parent()->parent()->text(0) + QLatin1String("[") + item->text(column) + QLatin1String("]");
 		}
 	} else if (extType == 1) {
 		if (item->parent() != 0) {
 			if (item->parent()->parent() != 0) {
 				bool ok;
 				int hduNum = itemText.right(1).toInt(&ok);
-				selectedExtension = item->parent()->parent()->text(0) +"["+ QString::number(hduNum-1) +"]";
+				selectedExtension = item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum-1) + QLatin1String("]");
 			}
 		}
 	} else {
-		if (item->parent()->parent() != 0) {
+		if (item->parent()->parent() != 0)
 			selectedExtension = item->parent()->parent()->text(column);
-		}
 	}
 
 	if (!selectedExtension.isEmpty()) {
 		FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
-		bool okToMatrix;
-		QString importedText = filter->readChdu(selectedExtension, &okToMatrix, ui.sbPreviewLines->value());
-		if (okToMatrix) {
-			readFitsTableToMatrix = true;
-		} else {
-			readFitsTableToMatrix = false;
-		}
-		emit checkedFitsTableToMatrix();
+		bool readFitsTableToMatrix;
+		QString importedText = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
+		emit checkedFitsTableToMatrix(readFitsTableToMatrix);
 
 		//TODO
-		QStringList lineStrings = importedText.split("\n");
+		QStringList lineStrings = importedText.split(QLatin1Char('\n'));
 		fitsOptionsWidget.twPreview->clear();
 
-		fitsOptionsWidget.twPreview->setRowCount(lineStrings.size() -1);
+		fitsOptionsWidget.twPreview->setRowCount(lineStrings.size() - 1);
 		int colCount = 0;
 		const int maxColumns = 300;
-		for(int i=0; i<lineStrings.size(); i++) {
+		for (int i = 0; i < lineStrings.size(); i++) {
 			QStringList lineString = lineStrings[i].split(" ");
-			if(i==0) {
-				colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
+			if (i == 0) {
+				colCount = lineString.size() - 1 > maxColumns ? maxColumns : lineString.size() - 1;
 				fitsOptionsWidget.twPreview->setColumnCount(colCount);
 			}
-			colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
+			colCount = lineString.size() - 1 > maxColumns ? maxColumns : lineString.size() - 1;
 
-			for(int j=0; j<colCount; j++) {
+			for (int j = 0; j < colCount; j++) {
 				QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
-				fitsOptionsWidget.twPreview->setItem(i,j,item);
+				fitsOptionsWidget.twPreview->setItem(i, j, item);
 			}
 		}
 		fitsOptionsWidget.twPreview->resizeColumnsToContents();
@@ -721,39 +705,37 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
 	RESET_CURSOR;
 }
 
-
 /*!
 	updates the selected var name of a NetCDF file when the tree widget item is selected
 */
 void ImportFileWidget::netcdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
 	Q_UNUSED(column);
-	if (item->data(1, Qt::DisplayRole).toString() == "variable") {
+	if (item->data(1, Qt::DisplayRole).toString() == "variable")
 		refreshPreview();
-	} else if (item->data(1, Qt::DisplayRole).toString().contains("attribute")) {
+	else if (item->data(1, Qt::DisplayRole).toString().contains("attribute")) {
 		// reads attributes (only for preview)
 		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 		QString fileName = ui.kleFileName->text();
-		QString name = item->data(0,Qt::DisplayRole).toString();
-		QString varName = item->data(1,Qt::DisplayRole).toString().split(" ")[0];
+		QString name = item->data(0, Qt::DisplayRole).toString();
+		QString varName = item->data(1, Qt::DisplayRole).toString().split(" ")[0];
 
-		QString importedText = filter->readAttribute(fileName,name,varName);
+		QString importedText = filter->readAttribute(fileName, name, varName);
 		netcdfOptionsWidget.twPreview->clear();
 
 		QStringList lineStrings = importedText.split("\n");
 		netcdfOptionsWidget.twPreview->setRowCount(lineStrings.size());
-		for (int i=0; i < lineStrings.size(); i++) {
+		for (int i = 0; i < lineStrings.size(); i++) {
 			QStringList lineString = lineStrings[i].split(" ");
 			if (i == 0)
 				netcdfOptionsWidget.twPreview->setColumnCount(lineString.size()-1);
 
-			for (int j=0; j < lineString.size(); j++) {
+			for (int j = 0; j < lineString.size(); j++) {
 				QTableWidgetItem* item = new QTableWidgetItem();
 				item->setText(lineString[j]);
 				netcdfOptionsWidget.twPreview->setItem(i,j,item);
 			}
 		}
-	}
-	else
+	} else
 		qDebug()<<"non showable object selected in NetCDF tree widget";
 }
 
@@ -764,8 +746,8 @@ const QStringList ImportFileWidget::selectedNetCDFNames() const {
 	QStringList names;
 	QList<QTreeWidgetItem *> items = netcdfOptionsWidget.twContent->selectedItems();
 
-	for (int i=0; i < items.size(); i++)
-		names<<items[i]->data(0,Qt::DisplayRole).toString();
+	for (int i = 0; i < items.size(); i++)
+		names << items[i]->data(0, Qt::DisplayRole).toString();
 
 	return names;
 }
@@ -774,9 +756,8 @@ const QStringList ImportFileWidget::selectedFITSExtensions() const {
 	QStringList extensionNames;
 	//TODO
 	QList<QTreeWidgetItem* > items = fitsOptionsWidget.twExtensions->selectedItems();
-	foreach (QTreeWidgetItem*  item, items) {
+	foreach (QTreeWidgetItem*  item, items)
 		extensionNames << item->text(0);
-	}
 	return extensionNames;
 }
 
@@ -796,7 +777,7 @@ void ImportFileWidget::fileInfoDialog() {
 void ImportFileWidget::filterChanged(int index) {
 	// ignore filter for these formats
 	if (ui.cbFileType->currentIndex() == FileDataSource::HDF || ui.cbFileType->currentIndex() == FileDataSource::NETCDF
-			|| ui.cbFileType->currentIndex() == FileDataSource::Image || ui.cbFileType->currentIndex() == FileDataSource::FITS) {
+	        || ui.cbFileType->currentIndex() == FileDataSource::Image || ui.cbFileType->currentIndex() == FileDataSource::FITS) {
 		ui.swOptions->setEnabled(true);
 		return;
 	}
@@ -852,119 +833,114 @@ void ImportFileWidget::refreshPreview() {
 	QTableWidget *tmpTableWidget = 0;
 	switch (fileType) {
 	case FileDataSource::Ascii: {
-		ui.tePreview->clear();
+			ui.tePreview->clear();
 
-		AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
-		importedText = filter->readData(fileName, NULL, AbstractFileFilter::Replace, lines);
-		tmpTableWidget = twPreview;
-		break;
-	}
+			AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
+			importedText = filter->readData(fileName, NULL, AbstractFileFilter::Replace, lines);
+			tmpTableWidget = twPreview;
+			break;
+		}
 	case FileDataSource::Binary: {
-		ui.tePreview->clear();
+			ui.tePreview->clear();
 
-		BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
-		importedText = filter->readData(fileName, NULL, AbstractFileFilter::Replace, lines);
-		tmpTableWidget = twPreview;
-		break;
-	}
+			BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
+			importedText = filter->readData(fileName, NULL, AbstractFileFilter::Replace, lines);
+			tmpTableWidget = twPreview;
+			break;
+		}
 	case FileDataSource::Image: {
-		ui.tePreview->clear();
+			ui.tePreview->clear();
 
-		QImage image(fileName);
-		QTextCursor cursor = ui.tePreview->textCursor();
-		cursor.insertImage(image);
-		RESET_CURSOR;
-		return;
-	}
+			QImage image(fileName);
+			QTextCursor cursor = ui.tePreview->textCursor();
+			cursor.insertImage(image);
+			RESET_CURSOR;
+			return;
+		}
 	case FileDataSource::HDF: {
-		HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
-		lines = hdfOptionsWidget.sbPreviewLines->value();
-		importedText = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
-		tmpTableWidget = hdfOptionsWidget.twPreview;
-		break;
-	}
+			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
+			lines = hdfOptionsWidget.sbPreviewLines->value();
+			importedText = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
+			tmpTableWidget = hdfOptionsWidget.twPreview;
+			break;
+		}
 	case FileDataSource::NETCDF: {
-		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
-		lines = netcdfOptionsWidget.sbPreviewLines->value();
-		importedText = filter->readCurrentVar(fileName, NULL, AbstractFileFilter::Replace, lines);
-		tmpTableWidget = netcdfOptionsWidget.twPreview;
-		break;
-	}
+			NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
+			lines = netcdfOptionsWidget.sbPreviewLines->value();
+			importedText = filter->readCurrentVar(fileName, NULL, AbstractFileFilter::Replace, lines);
+			tmpTableWidget = netcdfOptionsWidget.twPreview;
+			break;
+		}
 	case FileDataSource::FITS: {
-		FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
-		lines = fitsOptionsWidget.sbPreviewLines->value();
-		if (fitsOptionsWidget.twExtensions->currentItem() != 0) {
-			const QTreeWidgetItem* item = fitsOptionsWidget.twExtensions->currentItem();
-			const int currentColumn = fitsOptionsWidget.twExtensions->currentColumn();
-			QString itemText = item->text(currentColumn);
-			int extType = 0;
-			if (itemText.contains(QLatin1String("IMAGE #")) ||
-					itemText.contains(QLatin1String("ASCII_TBL #")) ||
-					itemText.contains(QLatin1String("BINARY_TBL #"))){
-				extType = 1;
-			} else if (!itemText.compare(QLatin1String("Primary header"))) {
-				extType = 2;
-			}
-			if (extType == 0) {
-				if (item->parent() != 0) {
-					if (item->parent()->parent() != 0)
-						fileName = item->parent()->parent()->text(0) +"["+ item->text(currentColumn)+"]";
-				}
-			} else if (extType == 1) {
-				if (item->parent() != 0) {
-					if (item->parent()->parent() != 0) {
-						bool ok;
-						int hduNum = itemText.right(1).toInt(&ok);
-						fileName = item->parent()->parent()->text(0) +"["+ QString::number(hduNum-1) +"]";
+			FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
+			lines = fitsOptionsWidget.sbPreviewLines->value();
+			if (fitsOptionsWidget.twExtensions->currentItem() != 0) {
+				const QTreeWidgetItem* item = fitsOptionsWidget.twExtensions->currentItem();
+				const int currentColumn = fitsOptionsWidget.twExtensions->currentColumn();
+				QString itemText = item->text(currentColumn);
+				int extType = 0;
+				if (itemText.contains(QLatin1String("IMAGE #")) ||
+				        itemText.contains(QLatin1String("ASCII_TBL #")) ||
+				        itemText.contains(QLatin1String("BINARY_TBL #")))
+					extType = 1;
+				else if (!itemText.compare(i18n("Primary header")))
+					extType = 2;
+				if (extType == 0) {
+					if (item->parent() != 0) {
+						if (item->parent()->parent() != 0)
+							fileName = item->parent()->parent()->text(0) + QLatin1String("[")+ item->text(currentColumn) + QLatin1String("]");
 					}
-				}
-			} else {
-				if (item->parent()->parent() != 0) {
-					fileName = item->parent()->parent()->text(currentColumn);
+				} else if (extType == 1) {
+					if (item->parent() != 0) {
+						if (item->parent()->parent() != 0) {
+							bool ok;
+							int hduNum = itemText.right(1).toInt(&ok);
+							fileName = item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum-1) + QLatin1String("]");
+						}
+					}
+				} else {
+					if (item->parent()->parent() != 0)
+						fileName = item->parent()->parent()->text(currentColumn);
 				}
 			}
-		}
+			bool readFitsTableToMatrix;
+			importedText = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
+			emit checkedFitsTableToMatrix(readFitsTableToMatrix);
 
-		bool okToMatrix;
-		importedText = filter->readChdu(fileName, &okToMatrix, lines);
-		if (okToMatrix) {
-			readFitsTableToMatrix = true;
-		} else {
-			readFitsTableToMatrix = false;
+			tmpTableWidget = fitsOptionsWidget.twPreview;
+			break;
 		}
-		emit checkedFitsTableToMatrix();
-
-		tmpTableWidget = fitsOptionsWidget.twPreview;
-		break;
-	}
 	}
 
 	// fill the table widget
+	//tmpTableWidget->clear();
+	tmpTableWidget->setRowCount(0);
+	tmpTableWidget->setColumnCount(0);
 	if( !importedText.isEmpty() ) {
-		tmpTableWidget->clear();
+		DEBUG_LOG("importedText =" << importedText);
 		if (!ok) {
 			// show importedText as error message
 			tmpTableWidget->setRowCount(1);
 			tmpTableWidget->setColumnCount(1);
 			QTableWidgetItem* item = new QTableWidgetItem();
 			item->setText(importedText);
-			tmpTableWidget->setItem(0,0,item);
+			tmpTableWidget->setItem(0, 0, item);
 		} else {
-			QStringList lineStrings = importedText.split("\n");
-			tmpTableWidget->setRowCount(qMax(lineStrings.size()-1,1));
-			int colCount = 0;
+			QStringList lineStrings = importedText.split(QLatin1Char('\n'));
+			tmpTableWidget->setRowCount(qMax(lineStrings.size(), 1));
 			const int maxColumns = 300;
-			for (int i=0; i < lineStrings.size(); i++) {
+			for (int i = 0; i < lineStrings.size(); i++) {
 				QStringList lineString = lineStrings[i].split(" ");
-				if (i == 0) {
-					colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
-					tmpTableWidget->setColumnCount(qMax( colCount,1));
-				}
-				colCount = lineString.size()-1 > maxColumns ? maxColumns : lineString.size()-1;
+				DEBUG_LOG("reading line" << i << "of size" << lineString.size());
+				DEBUG_LOG(lineString);
 
-				for (int j=0; j < colCount; j++) {
+				int colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
+				if (colCount > tmpTableWidget->columnCount())
+					tmpTableWidget->setColumnCount(colCount);
+
+				for (int j = 0; j < colCount; j++) {
 					QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
-					tmpTableWidget->setItem(i,j,item);
+					tmpTableWidget->setItem(i, j, item);
 				}
 			}
 		}
@@ -972,8 +948,4 @@ void ImportFileWidget::refreshPreview() {
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	}
 	RESET_CURSOR;
-}
-
-bool ImportFileWidget::canReadFitsTableToMatrix() const {
-	return readFitsTableToMatrix;
 }

@@ -2229,7 +2229,7 @@ void CartesianPlot::loadTheme(KConfig& config) {
 
 	//load the theme for all the children
 	const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
-	foreach (WorksheetElement *child, childElements)
+	foreach (WorksheetElement* child, childElements)
 		child->loadThemeConfig(config);
 
 	Q_D(CartesianPlot);

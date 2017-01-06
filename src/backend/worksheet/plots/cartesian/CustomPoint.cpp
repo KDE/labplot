@@ -245,7 +245,7 @@ void CustomPointPrivate::retransform() {
 	QList<QPointF> list, listScene;
 	list<<position;
 	listScene = cSystem->mapLogicalToScene(list, CartesianCoordinateSystem::DefaultMapping);
-	if (listScene.size()) {
+	if (!listScene.isEmpty()) {
 		m_visible = true;
 		positionScene = listScene.at(0);
 		suppressItemChangeEvent=true;

@@ -35,60 +35,60 @@
 
 class AbstractAspect;
 
-class AspectTreeModel : public QAbstractItemModel{
+class AspectTreeModel : public QAbstractItemModel {
 	Q_OBJECT
 
-	public:
-		explicit AspectTreeModel(AbstractAspect* root, QObject *parent=0);
+public:
+	explicit AspectTreeModel(AbstractAspect* root, QObject *parent=0);
 
-		enum CustomDataRole {
-			ContextMenuRole = Qt::UserRole,
-		};
+	enum CustomDataRole {
+		ContextMenuRole = Qt::UserRole,
+	};
 
-		QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-		QModelIndex parent(const QModelIndex &index) const;
-		int rowCount(const QModelIndex &parent = QModelIndex()) const;
-		int columnCount(const QModelIndex &parent = QModelIndex()) const;
-		QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-		QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-		bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-		Qt::ItemFlags flags(const QModelIndex &index) const;
-		void setSelectableAspects(QList<const char*>);
-		QModelIndex modelIndexOfAspect(const AbstractAspect*, int column=0) const;
-		QModelIndex modelIndexOfAspect(const QString& path, int column=0) const;
+	QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+	QModelIndex parent(const QModelIndex &index) const;
+	int rowCount(const QModelIndex &parent = QModelIndex()) const;
+	int columnCount(const QModelIndex &parent = QModelIndex()) const;
+	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+	bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+	Qt::ItemFlags flags(const QModelIndex &index) const;
+	void setSelectableAspects(QList<const char*>);
+	QModelIndex modelIndexOfAspect(const AbstractAspect*, int column=0) const;
+	QModelIndex modelIndexOfAspect(const QString& path, int column=0) const;
 
-		void setFilterString(const QString&);
-		void setFilterCaseSensitivity(Qt::CaseSensitivity);
-		void setFilterMatchCompleteWord(bool);
+	void setFilterString(const QString&);
+	void setFilterCaseSensitivity(Qt::CaseSensitivity);
+	void setFilterMatchCompleteWord(bool);
 
-	private slots:
-		void aspectDescriptionChanged(const AbstractAspect *aspect);
-		void aspectAboutToBeAdded(const AbstractAspect *parent, const AbstractAspect *before, const AbstractAspect *child);
-		void aspectAdded(const AbstractAspect *parent);
-		void aspectAboutToBeRemoved(const AbstractAspect *aspect);
-		void aspectRemoved();
-		void aspectHiddenAboutToChange(const AbstractAspect * aspect);
-		void aspectHiddenChanged(const AbstractAspect *aspect);
-		void aspectSelectedInView(const AbstractAspect* aspect);
-		void aspectDeselectedInView(const AbstractAspect* aspect);
-		void renameRequested();
+private slots:
+	void aspectDescriptionChanged(const AbstractAspect *aspect);
+	void aspectAboutToBeAdded(const AbstractAspect *parent, const AbstractAspect *before, const AbstractAspect *child);
+	void aspectAdded(const AbstractAspect *parent);
+	void aspectAboutToBeRemoved(const AbstractAspect *aspect);
+	void aspectRemoved();
+	void aspectHiddenAboutToChange(const AbstractAspect * aspect);
+	void aspectHiddenChanged(const AbstractAspect *aspect);
+	void aspectSelectedInView(const AbstractAspect* aspect);
+	void aspectDeselectedInView(const AbstractAspect* aspect);
+	void renameRequested();
 
-	private:
-		AbstractAspect* m_root;
-		bool m_folderSelectable;
-		QList<const char*> m_selectableAspects;
-		int m_defaultHeaderHeight;
+private:
+	AbstractAspect* m_root;
+	bool m_folderSelectable;
+	QList<const char*> m_selectableAspects;
+	int m_defaultHeaderHeight;
 
-		QString m_filterString;
-		Qt::CaseSensitivity m_filterCaseSensitivity;
-		bool m_matchCompleteWord;
-		bool containsFilterString(const AbstractAspect*) const;
+	QString m_filterString;
+	Qt::CaseSensitivity m_filterCaseSensitivity;
+	bool m_matchCompleteWord;
+	bool containsFilterString(const AbstractAspect*) const;
 
-	signals:
-		void renameRequested(const QModelIndex&);
-		void indexSelected(const QModelIndex&);
-		void indexDeselected(const QModelIndex&);
-		void hiddenAspectSelected(const AbstractAspect*);
+signals:
+	void renameRequested(const QModelIndex&);
+	void indexSelected(const QModelIndex&);
+	void indexDeselected(const QModelIndex&);
+	void hiddenAspectSelected(const AbstractAspect*);
 };
 
 #endif // ifndef ASPECT_TREE_MODEL_H
