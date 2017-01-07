@@ -1271,7 +1271,7 @@ QList <QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileNam
 			case H5T_NO_CLASS:
 			case H5T_NCLASSES: {
 					ok = false;
-					dataStrings << (QStringList() << i18n("rank = 0 not implemented yet for type %1").arg(translateHDFClass(dclass)));
+					dataStrings << (QStringList() << i18n("rank 0 not implemented yet for type %1").arg(translateHDFClass(dclass)));
 					qDebug() << dataStrings;
 			}
 			default:
@@ -1388,7 +1388,7 @@ QList <QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileNam
 						dataString = readHDFData1D<unsigned long long>(dataset, H5T_NATIVE_ULLONG, rows, lines, dataPointers[0]);
 					else {
 						ok = false;
-						dataString = (QStringList() << i18n("Unsupported integer type for rank=1"));
+						dataString = (QStringList() << i18n("unsupported integer type for rank 1"));
 						qDebug() << dataString;
 					}
 
@@ -1404,7 +1404,7 @@ QList <QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileNam
 						dataString = readHDFData1D<long double>(dataset, H5T_NATIVE_LDOUBLE, rows, lines, dataPointers[0]);
 					else {
 						ok = false;
-						dataString = (QStringList() << i18n("Unsupported float type for rank=1"));
+						dataString = (QStringList() << i18n("unsupported float type for rank 1"));
 						qDebug() << dataString;
 					}
 					break;
@@ -1432,7 +1432,7 @@ QList <QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileNam
 			case H5T_NO_CLASS:
 			case H5T_NCLASSES: {
 					ok = false;
-					dataString = (QStringList() << i18n("rank = 1 not implemented yet for type %1").arg(translateHDFClass(dclass)));
+					dataString = (QStringList() << i18n("rank 1 not implemented yet for type %1").arg(translateHDFClass(dclass)));
 					qDebug() << dataString;
 				}
 			default:
@@ -1535,7 +1535,7 @@ QList <QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileNam
 						dataStrings << readHDFData2D<unsigned long long>(dataset, H5T_NATIVE_ULLONG, rows, cols, lines, dataPointers);
 					else {
 						ok=false;
-						dataStrings << (QStringList() << i18n("Unsupported integer type for rank=2"));
+						dataStrings << (QStringList() << i18n("unsupported integer type for rank 2"));
 						qDebug() << dataStrings;
 					}
 					break;
@@ -1548,23 +1548,24 @@ QList <QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileNam
 					else if (H5Tequal(dtype, H5T_NATIVE_LDOUBLE))
 						dataStrings << readHDFData2D<long double>(dataset, H5T_NATIVE_LDOUBLE, rows, cols, lines, dataPointers);
 					else {
-						ok=false;
-						dataStrings << (QStringList() << i18n("Unsupported float type for rank=2"));
+						ok = false;
+						dataStrings << (QStringList() << i18n("unsupported float type for rank 2"));
 						qDebug() << dataStrings;
 					}
 					break;
 				}
 			case H5T_COMPOUND: {
 					dataStrings << readHDFCompound(dtype);
-					qDebug()<<dataStrings;
-					dataStrings << readHDFCompoundData2D(dataset,dtype,rows,cols,lines);
+					qDebug() << dataStrings;
+					//TODO: crashes right now
+					//dataStrings << readHDFCompoundData2D(dataset,dtype,rows,cols,lines);
 					break;
 				}
 			case H5T_STRING: {
-					ok=false;
-					//TODO
-					dataStrings << (QStringList() << " rank 2" << translateHDFClass(dclass) << " "<< i18n("not implemented yet"));
-					//dataStrings << ", " << i18n("size = %1").arg(typeSize);
+					// TODO: implement this
+					ok = false;
+					dataStrings << (QStringList() << i18n("rank 2 not implemented yet for type %1").arg(translateHDFClass(dclass))
+						+ ", " + i18n("size = %1").arg(typeSize));
 					qDebug() << dataStrings;
 					break;
 				}
@@ -1577,8 +1578,8 @@ QList <QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileNam
 			case H5T_ARRAY:
 			case H5T_NO_CLASS:
 			case H5T_NCLASSES: {
-					ok=false;
-					dataStrings << (QStringList() << i18n("rank = 2 not implemented yet for type %1").arg(translateHDFClass(dclass)));
+					ok = false;
+					dataStrings << (QStringList() << i18n("rank 2 not implemented yet for type %1").arg(translateHDFClass(dclass)));
 					qDebug() << dataStrings;
 				}
 			default:
@@ -1588,8 +1589,8 @@ QList <QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileNam
 		}
 	default: {
 			ok = false;
-			QString message = i18n("rank = %1 not supported").arg(rank);
-			qDebug() << message;
+			dataStrings << (QStringList() << i18n("rank %1 not implemented yet for type %2").arg(rank).arg(translateHDFClass(dclass)));
+			qDebug() << dataStrings;
 		}
 	}
 
