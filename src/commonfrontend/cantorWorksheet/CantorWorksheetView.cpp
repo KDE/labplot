@@ -43,11 +43,13 @@ CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget()
 	QHBoxLayout* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
 	part = worksheet->part();
-	layout->addWidget(part->widget());
-	initActions();
-	initMenus();
-	connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
-	connect(m_worksheet, SIGNAL(statusChanged(Cantor::Session::Status)), this, SLOT(statusChanged(Cantor::Session::Status)));
+	if (part) {
+		layout->addWidget(part->widget());
+		initActions();
+		initMenus();
+		connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
+		connect(m_worksheet, SIGNAL(statusChanged(Cantor::Session::Status)), this, SLOT(statusChanged(Cantor::Session::Status)));
+	}
 }
 
 void CantorWorksheetView::initActions() {
@@ -211,7 +213,8 @@ void CantorWorksheetView::triggerCantorAction(QAction* action) {
 }
 
 CantorWorksheetView::~CantorWorksheetView() {
-	part->widget()->setParent(0);
+	if (part)
+		part->widget()->setParent(0);
 }
 
 void CantorWorksheetView::statusChanged(Cantor::Session::Status status) {
