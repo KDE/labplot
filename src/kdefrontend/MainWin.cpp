@@ -155,7 +155,7 @@ void MainWin::initGUI(const QString& fileName) {
 	m_mdiArea = new QMdiArea;
 	setCentralWidget(m_mdiArea);
 	connect(m_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
-	        this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
+		this, SLOT(handleCurrentSubWindowChanged(QMdiSubWindow*)));
 
 	statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
 	initActions();
@@ -957,8 +957,11 @@ void MainWin::print() {
 		return;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printView())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
+	else
+		statusBar()->showMessage("");
 }
 
 void MainWin::printPreview() {
@@ -967,8 +970,11 @@ void MainWin::printPreview() {
 		return;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printPreview())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
+	else
+		statusBar()->showMessage("");
 }
 
 /**************************************************************************************/
