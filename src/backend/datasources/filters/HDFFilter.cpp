@@ -438,6 +438,7 @@ QList <QStringList> HDFFilterPrivate::readHDFData2D(hid_t dataset, hid_t type, i
 
 	for (int i = 0; i < qMin(rows, lines); i++) {
 		QStringList line;
+		line.reserve(cols);
 		for (int j = 0; j < cols; j++) {
 			if (dataPointer[0] != NULL)
 				dataPointer[j-startColumn+1]->operator[](i-startRow+1) = data[i][j];

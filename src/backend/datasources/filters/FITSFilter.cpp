@@ -57,7 +57,7 @@ void FITSFilter::read(const QString &fileName, AbstractDataSource *dataSource, A
 	d->readCHDU(fileName, dataSource, importMode);
 }
 
-QString FITSFilter::readChdu(const QString &fileName, bool* okToMatrix, int lines) {
+QList<QStringList> FITSFilter::readChdu(const QString &fileName, bool* okToMatrix, int lines) {
 	return d->readCHDU(fileName, NULL, AbstractFileFilter::Replace, okToMatrix, lines);
 }
 
@@ -273,8 +273,8 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
  * \param dataSource the data source to be filled
  * \param importMode
  */
-QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode, bool *okToMatrix, int lines) {
-	QStringList dataString;
+QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode, bool *okToMatrix, int lines) {
+	QList<QStringList> dataStrings;
 
 #ifdef HAVE_FITS
 	int status = 0;
@@ -282,14 +282,14 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 	if(fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status)) {
 		qDebug() << fileName;
 		printError(status);
-		return QString();
+		return dataStrings << (QStringList() << QString());
 	}
 
 	int chduType;
 
 	if (fits_get_hdu_type(fitsFile, &chduType, &status)) {
 		printError(status);
-		return QString();
+		return dataStrings << (QStringList() << QString());
 	}
 
 	long actualRows;
@@ -308,7 +308,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 		double* data;
 		if (fits_get_img_param(fitsFile, maxdim,&bitpix, &naxis, naxes, &status)) {
 			printError(status);
-			return QString();
+			return dataStrings << (QStringList() << QString());
 		}
 
 		actualRows = naxes[1];
@@ -325,12 +325,12 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 
 		if (!data) {
 			qDebug() << i18n("Not enough memory for data");
-			return QString();
+			return dataStrings << (QStringList() << QString());
 		}
 
 		if (fits_read_img(fitsFile, TDOUBLE, 1, pixelCount, NULL, data, NULL, &status)) {
 			printError(status);
-			return QString("Error");
+			return dataStrings << (QStringList() << QString("Error"));
 		}
 
 		QVector<QVector<double>*> dataPointers;
@@ -342,10 +342,8 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 		if (endColumn != -1)
 			actualCols = endColumn;
 		if (noDataSource)
-			dataString.reserve(lines * actualCols);
+			dataStrings.reserve(lines);
 
-		QLatin1String ws = QLatin1String(" ");
-		QLatin1String nl = QLatin1String("\n");
 		int i = 0;
 		int j = 0;
 		if (startRow != 1)
@@ -362,16 +360,17 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 		int ii = 0;
 		for (; i < lines; ++i) {
 			int jj = 0;
+			QStringList line;
+			line.reserve(actualCols);
 			for (; j < actualCols; ++j) {
-				if (!noDataSource)
-					dataPointers[jj++]->operator [](ii) = data[i* naxes[0] + j];
+				if (noDataSource)
+					line << QString::number(data[i*naxes[0] +j]);
 				else
-					dataString << QString::number(data[i*naxes[0] +j]) << ws;
+					dataPointers[jj++]->operator [](ii) = data[i* naxes[0] + j];
 			}
+			dataStrings << line;
 			j = jstart;
 			ii++;
-			if (noDataSource)
-				dataString << nl;
 		}
 
 		delete[] data;
@@ -399,7 +398,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 		}
 		fits_close_file(fitsFile, &status);
 
-		return dataString.join(QLatin1String(""));
+		return dataStrings;
 
 	} else if ((chduType == ASCII_TBL) || (chduType == BINARY_TBL)) {
 
@@ -548,7 +547,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 			numericDataPointers.squeeze();
 		}
 
-		char* array = new char[1000];
+		char* array = new char[1000];	//TODO: why 1000?
 		int row = 1;
 		if (startRow != 1) {
 			if (startRow != 0)
@@ -574,6 +573,8 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 		for (; row <= lines; ++row) {
 			int numericixd = 0;
 			int stringidx = 0;
+			QStringList line;
+			line.reserve(actualCols-coll);
 			for (int col = coll; col <= actualCols; ++col) {
 				if (isMatrix) {
 					if (!matrixNumericColumnIndices.contains(col))
@@ -581,8 +582,6 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 				}
 				if(fits_read_col_str(fitsFile, col, row, 1, 1, NULL, &array, NULL, &status)) {
 					printError(status);
-					if (noDataSource)
-						dataString << QLatin1String(" ");
 				}
 				if (!noDataSource) {
 					const QString& str = QString::fromLatin1(array);
@@ -600,18 +599,15 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 						}
 					}
 				} else {
-					//TODO - whitespaces can appear in cells too
 					QString tmpColstr = QString::fromLatin1(array);
 					tmpColstr = tmpColstr.simplified();
-					tmpColstr.replace(QLatin1String(" "), QLatin1String(""));
 					if (tmpColstr.isEmpty())
-						dataString << QLatin1String("NULL");
+						line << QLatin1String("NULL");
 					else
-						dataString << tmpColstr << QLatin1String(" ");
+						line << tmpColstr;
 				}
 			}
-			if (noDataSource)
-				dataString << QLatin1String("\n");
+			dataStrings << line;
 		}
 
 		delete[] array;
@@ -639,7 +635,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 			}
 		}
 		fits_close_file(fitsFile, &status);
-		return dataString.join(QLatin1String(""));
+		return dataStrings;
 	} else
 		qDebug() << i18n("Incorrect header type!");
 
@@ -652,7 +648,7 @@ QString FITSFilterPrivate::readCHDU(const QString &fileName, AbstractDataSource 
 	Q_UNUSED(okToMatrix)
 	Q_UNUSED(lines)
 #endif
-	return dataString.join(QLatin1String(""));
+	return dataStrings;
 }
 
 /*!

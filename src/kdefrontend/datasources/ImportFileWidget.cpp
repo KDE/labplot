@@ -675,23 +675,22 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
 	if (!selectedExtension.isEmpty()) {
 		FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
 		bool readFitsTableToMatrix;
-		QString importedText = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
+		QList<QStringList> importedStrings = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
 		emit checkedFitsTableToMatrix(readFitsTableToMatrix);
 
-		//TODO
-		QStringList lineStrings = importedText.split(QLatin1Char('\n'));
+		const int rows = importedStrings.size();
 		fitsOptionsWidget.twPreview->clear();
 
-		fitsOptionsWidget.twPreview->setRowCount(lineStrings.size() - 1);
+		fitsOptionsWidget.twPreview->setRowCount(rows);
 		int colCount = 0;
 		const int maxColumns = 300;
-		for (int i = 0; i < lineStrings.size(); i++) {
-			QStringList lineString = lineStrings[i].split(" ");
+		for (int i = 0; i < rows; i++) {
+			QStringList lineString = importedStrings[i];
 			if (i == 0) {
-				colCount = lineString.size() - 1 > maxColumns ? maxColumns : lineString.size() - 1;
+				colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
 				fitsOptionsWidget.twPreview->setColumnCount(colCount);
 			}
-			colCount = lineString.size() - 1 > maxColumns ? maxColumns : lineString.size() - 1;
+			colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
 
 			for (int j = 0; j < colCount; j++) {
 				QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
@@ -906,7 +905,7 @@ void ImportFileWidget::refreshPreview() {
 				}
 			}
 			bool readFitsTableToMatrix;
-			importedText = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
+			importedStrings = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
 			emit checkedFitsTableToMatrix(readFitsTableToMatrix);
 
 			tmpTableWidget = fitsOptionsWidget.twPreview;
