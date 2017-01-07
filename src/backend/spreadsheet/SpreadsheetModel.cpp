@@ -158,13 +158,10 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 				case Qt::ToolTipRole:
 				case Qt::EditRole:
 					return m_horizontal_header_data.at(section);
-
 				case Qt::DecorationRole:
 					return m_spreadsheet->child<Column>(section)->icon();
-
 				case SpreadsheetModel::CommentRole:
 					return m_spreadsheet->child<Column>(section)->comment();
-
 				case Qt::SizeHintRole:
 					return QSize(m_spreadsheet->child<Column>(section)->width(), m_defaultHeaderHeight);
 			}

@@ -107,8 +107,8 @@ void SpreadsheetView::init() {
 	m_horizontalHeader->setMovable(true);
 	m_horizontalHeader->installEventFilter(this);
 
-	int i=0;
 	//set the column sizes to the saved values
+	int i=0;
 	foreach(Column* col, m_spreadsheet->children<Column>())
 		m_horizontalHeader->resizeSection(i++, col->width());
 
@@ -118,10 +118,9 @@ void SpreadsheetView::init() {
 	connect(m_horizontalHeader, SIGNAL(sectionClicked(int)), this, SLOT(columnClicked(int)) );
 
 	// vertical header
-	QHeaderView * v_header = m_tableView->verticalHeader();
+	QHeaderView* v_header = m_tableView->verticalHeader();
 	v_header->setResizeMode(QHeaderView::Fixed);
-	QFont font;
-	font.setFamily(font.defaultFamily());
+	QFont font; //application's default font
 	QFontMetrics fm(font);
 	v_header->setDefaultSectionSize(fm.height());
 	v_header->setMovable(false);
@@ -142,7 +141,6 @@ void SpreadsheetView::init() {
 	connect(m_spreadsheet, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
 	        this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(m_spreadsheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
-
 
 	//selection relevant connections
 	QItemSelectionModel* sel_model = m_tableView->selectionModel();
