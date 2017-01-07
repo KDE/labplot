@@ -304,6 +304,7 @@ FileDataSource::FileType ImportFileWidget::currentFileType() const {
 	returns the currently used filter.
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
+	DEBUG_LOG("currentFileFilter()");
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 
 	switch (fileType) {
@@ -677,23 +678,22 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
 	if (!selectedExtension.isEmpty()) {
 		FITSFilter* filter = (FITSFilter*)this->currentFileFilter();
 		bool readFitsTableToMatrix;
-		QString importedText = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
+		QList<QStringList> importedStrings = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
 		emit checkedFitsTableToMatrix(readFitsTableToMatrix);
 
-		//TODO
-		QStringList lineStrings = importedText.split(QLatin1Char('\n'));
+		const int rows = importedStrings.size();
 		fitsOptionsWidget.twPreview->clear();
 
-		fitsOptionsWidget.twPreview->setRowCount(lineStrings.size() - 1);
+		fitsOptionsWidget.twPreview->setRowCount(rows);
 		int colCount = 0;
 		const int maxColumns = 300;
-		for (int i = 0; i < lineStrings.size(); i++) {
-			QStringList lineString = lineStrings[i].split(" ");
+		for (int i = 0; i < rows; i++) {
+			QStringList lineString = importedStrings[i];
 			if (i == 0) {
-				colCount = lineString.size() - 1 > maxColumns ? maxColumns : lineString.size() - 1;
+				colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
 				fitsOptionsWidget.twPreview->setColumnCount(colCount);
 			}
-			colCount = lineString.size() - 1 > maxColumns ? maxColumns : lineString.size() - 1;
+			colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
 
 			for (int j = 0; j < colCount; j++) {
 				QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
@@ -709,6 +709,8 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
 	updates the selected var name of a NetCDF file when the tree widget item is selected
 */
 void ImportFileWidget::netcdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
+	DEBUG_LOG("netcdfTreeWidgetItemSelected()");
+	DEBUG_LOG("SELECTED ITEMS =" << netcdfOptionsWidget.twContent->selectedItems());
 	Q_UNUSED(column);
 	if (item->data(1, Qt::DisplayRole).toString() == "variable")
 		refreshPreview();
@@ -810,6 +812,7 @@ void ImportFileWidget::headerChanged(int state) {
 }
 
 void ImportFileWidget::refreshPreview() {
+	DEBUG_LOG("refreshPreview()");
 	WAIT_CURSOR;
 
 	QString fileName = ui.kleFileName->text();
@@ -818,7 +821,8 @@ void ImportFileWidget::refreshPreview() {
 		fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
 
-	QString importedText;
+	QString importedText;	// old
+	QList<QStringList> importedStrings;	// new
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 
 	// generic table widget
@@ -860,14 +864,14 @@ void ImportFileWidget::refreshPreview() {
 	case FileDataSource::HDF: {
 			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
 			lines = hdfOptionsWidget.sbPreviewLines->value();
-			importedText = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
+			importedStrings = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
 			tmpTableWidget = hdfOptionsWidget.twPreview;
 			break;
 		}
 	case FileDataSource::NETCDF: {
 			NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 			lines = netcdfOptionsWidget.sbPreviewLines->value();
-			importedText = filter->readCurrentVar(fileName, NULL, AbstractFileFilter::Replace, lines);
+			importedStrings = filter->readCurrentVar(fileName, NULL, AbstractFileFilter::Replace, lines);
 			tmpTableWidget = netcdfOptionsWidget.twPreview;
 			break;
 		}
@@ -904,7 +908,7 @@ void ImportFileWidget::refreshPreview() {
 				}
 			}
 			bool readFitsTableToMatrix;
-			importedText = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
+			importedStrings = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
 			emit checkedFitsTableToMatrix(readFitsTableToMatrix);
 
 			tmpTableWidget = fitsOptionsWidget.twPreview;
@@ -913,11 +917,10 @@ void ImportFileWidget::refreshPreview() {
 	}
 
 	// fill the table widget
-	//tmpTableWidget->clear();
 	tmpTableWidget->setRowCount(0);
 	tmpTableWidget->setColumnCount(0);
-	if( !importedText.isEmpty() ) {
-		DEBUG_LOG("importedText =" << importedText);
+	if( !importedText.isEmpty() || !importedStrings.isEmpty() ) {
+		DEBUG_LOG("importedStrings =" << importedStrings);	// new
 		if (!ok) {
 			// show importedText as error message
 			tmpTableWidget->setRowCount(1);
@@ -926,20 +929,19 @@ void ImportFileWidget::refreshPreview() {
 			item->setText(importedText);
 			tmpTableWidget->setItem(0, 0, item);
 		} else {
-			QStringList lineStrings = importedText.split(QLatin1Char('\n'));
-			tmpTableWidget->setRowCount(qMax(lineStrings.size(), 1));
+			//TODO: maxrows not used
+			const int rows = qMax(importedStrings.size(), 1);
 			const int maxColumns = 300;
-			for (int i = 0; i < lineStrings.size(); i++) {
-				QStringList lineString = lineStrings[i].split(" ");
-				DEBUG_LOG("reading line" << i << "of size" << lineString.size());
-				DEBUG_LOG(lineString);
+			tmpTableWidget->setRowCount(rows);	// new
+			for (int i = 0; i < rows; i++) {
+				DEBUG_LOG(importedStrings[i]);
 
-				int colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
-				if (colCount > tmpTableWidget->columnCount())
-					tmpTableWidget->setColumnCount(colCount);
+				int cols = importedStrings[i].size() > maxColumns ? maxColumns : importedStrings[i].size();	// new
+				if (cols > tmpTableWidget->columnCount())
+					tmpTableWidget->setColumnCount(cols);
 
-				for (int j = 0; j < colCount; j++) {
-					QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
+				for (int j = 0; j < cols; j++) {
+					QTableWidgetItem* item = new QTableWidgetItem(importedStrings[i][j]);
 					tmpTableWidget->setItem(i, j, item);
 				}
 			}

@@ -66,7 +66,7 @@ QString NetCDFFilter::readAttribute(const QString & fileName, const QString & na
 /*!
   reads the content of the current variable from file \c fileName.
 */
-QString NetCDFFilter::readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+QList <QStringList> NetCDFFilter::readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	return d->readCurrentVar(fileName, dataSource, importMode, lines);
 }
 
@@ -492,11 +492,11 @@ QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QStri
 /*!
     reads the content of the variable in the file \c fileName to a string (for preview) or to the data source.
 */
-QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
-	QStringList dataString;
+QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	QList<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty())
-		return i18n("No variable selected");
+		return dataStrings << (QStringList() << i18n("No variable selected"));
 	DEBUG_LOG(" current variable =" << currentVarName);
 
 #ifdef HAVE_NETCDF
@@ -557,10 +557,10 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 			handleError(status, "nc_get_vara_double");
 
 			if (!dataSource) {
+				QStringList line;
 				for (int i = 0; i < actualRows; i++) {
-					dataString << QString::number(data[i]);
-					if (i < actualRows-1)
-						dataString << "\n";
+					line << QString::number(data[i]);
+					dataStrings << line;
 				}
 				free(data);
 			}
@@ -598,17 +598,15 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 			status = nc_get_var_double(ncid, varid, &data[0][0]);
 			handleError(status, "nc_get_var_double");
 			for (int i = 0; i < qMin((int)rows, lines); i++) {
+				QStringList line;
 				for (unsigned int j = 0; j < cols; j++) {
 					if (!dataPointers.isEmpty())
 						dataPointers[j-startColumn+1]->operator[](i-startRow+1) = data[i][j];
 					else {
-						dataString << QString::number(static_cast<double>(data[i][j]));
-						if (j < cols-1)
-							dataString << " ";
+						line << QString::number(static_cast<double>(data[i][j]));
 					}
 				}
-				if (i < qMin((int)rows, lines)-1)
-					dataString << "\n";
+				dataStrings << line;
 				emit q->completed(100*i/actualRows);
 			}
 			free(data[0]);
@@ -623,7 +621,7 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 	free(dimids);
 
 	if (!dataSource)
-		return dataString.join("");
+		return dataStrings;
 
 	// make everything undo/redo-able again
 	// set column comments in spreadsheet
@@ -640,7 +638,7 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 			}
 		}
 		spreadsheet->setUndoAware(true);
-		return dataString.join("");
+		return dataStrings;
 	}
 
 	Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
@@ -658,7 +656,7 @@ QString NetCDFFilterPrivate::readCurrentVar(const QString & fileName, AbstractDa
 	Q_UNUSED(lines)
 #endif
 
-	return dataString.join("");
+	return dataStrings;
 }
 
 /*!

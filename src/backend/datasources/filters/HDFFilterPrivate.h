@@ -42,7 +42,7 @@ class HDFFilterPrivate {
 		void parse(const QString & fileName, QTreeWidgetItem* rootItem);
 		void read(const QString & fileName, AbstractDataSource* dataSource,
 					AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
-		QString readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, bool &ok, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
+		QList <QStringList> readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, bool &ok, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
 		void write(const QString & fileName, AbstractDataSource* dataSource);
 
 		const HDFFilter* q;
@@ -66,7 +66,7 @@ class HDFFilterPrivate {
 		QStringList readHDFCompound(hid_t tid);
 		template <typename T> QStringList readHDFData1D(hid_t dataset, hid_t type, int rows, int lines, QVector<double> *dataPointer=NULL);
 		QStringList readHDFCompoundData1D(hid_t dataset, hid_t tid, int rows, int lines,QVector< QVector<double>* >& dataPointer);
-		template <typename T> QStringList readHDFData2D(hid_t dataset, hid_t ctype, int rows, int cols, int lines, QVector< QVector<double>* >& dataPointer);
+		template <typename T> QList <QStringList> readHDFData2D(hid_t dataset, hid_t ctype, int rows, int cols, int lines, QVector< QVector<double>* >& dataPointer);
 		QStringList readHDFCompoundData2D(hid_t dataset, hid_t tid, int rows, int cols, int lines);
 		QStringList readHDFAttr(hid_t aid);
 		QStringList scanHDFAttrs(hid_t oid);

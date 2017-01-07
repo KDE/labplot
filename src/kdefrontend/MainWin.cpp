@@ -1046,8 +1046,11 @@ void MainWin::print() {
 		return;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printView())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
+	else
+		statusBar()->showMessage("");
 }
 
 void MainWin::printPreview() {
@@ -1056,8 +1059,11 @@ void MainWin::printPreview() {
 		return;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printPreview())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
+	else
+		statusBar()->showMessage("");
 }
 
 /**************************************************************************************/
