@@ -42,7 +42,7 @@ public:
 
 	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
 	void read(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
-	QString readCurrentDataSet(const QString& fileName, AbstractDataSource* dataSource, bool& ok, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
+	QList <QStringList> readCurrentDataSet(const QString& fileName, AbstractDataSource* dataSource, bool& ok, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
 	void write(const QString& fileName, AbstractDataSource*);
 
 	void loadFilterSettings(const QString&);

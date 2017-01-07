@@ -862,7 +862,7 @@ void ImportFileWidget::refreshPreview() {
 	case FileDataSource::HDF: {
 			HDFFilter *filter = (HDFFilter *)this->currentFileFilter();
 			lines = hdfOptionsWidget.sbPreviewLines->value();
-			importedText = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
+			importedStrings = filter->readCurrentDataSet(fileName, NULL, ok, AbstractFileFilter::Replace, lines);
 			tmpTableWidget = hdfOptionsWidget.twPreview;
 			break;
 		}
