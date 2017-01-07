@@ -1334,7 +1334,7 @@ QString HDFFilterPrivate::readCurrentDataSet(const QString & fileName, AbstractD
 					}
 
 					for (int i = startRow-1; i < qMin(endRow, lines+startRow-1); i++) {
-						// spaces are used to seperate columns. Replace with special space here.
+						// spaces are used to separate columns. Replace with special space here.
 						dataString << QString(data[i]).replace(" ", QString::fromUtf8("\u00a0"));
 						if (i < qMin(endRow, lines+startRow-1)-1)
 							dataString << QLatin1String("\n");

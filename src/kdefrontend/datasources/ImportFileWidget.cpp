@@ -819,7 +819,8 @@ void ImportFileWidget::refreshPreview() {
 		fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
 
-	QString importedText;
+	QString importedText;	// old
+	QList<QStringList> importedStrings;	// new
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 
 	// generic table widget
@@ -868,7 +869,7 @@ void ImportFileWidget::refreshPreview() {
 	case FileDataSource::NETCDF: {
 			NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 			lines = netcdfOptionsWidget.sbPreviewLines->value();
-			importedText = filter->readCurrentVar(fileName, NULL, AbstractFileFilter::Replace, lines);
+			importedStrings = filter->readCurrentVar(fileName, NULL, AbstractFileFilter::Replace, lines);
 			tmpTableWidget = netcdfOptionsWidget.twPreview;
 			break;
 		}
@@ -916,8 +917,8 @@ void ImportFileWidget::refreshPreview() {
 	// fill the table widget
 	tmpTableWidget->setRowCount(0);
 	tmpTableWidget->setColumnCount(0);
-	if( !importedText.isEmpty() ) {
-		DEBUG_LOG("importedText =" << importedText);
+	if( !importedText.isEmpty() || !importedStrings.isEmpty() ) {
+		DEBUG_LOG("importedStrings =" << importedStrings);	// new
 		if (!ok) {
 			// show importedText as error message
 			tmpTableWidget->setRowCount(1);
@@ -926,20 +927,19 @@ void ImportFileWidget::refreshPreview() {
 			item->setText(importedText);
 			tmpTableWidget->setItem(0, 0, item);
 		} else {
-			QStringList lineStrings = importedText.split(QLatin1Char('\n'));
-			tmpTableWidget->setRowCount(qMax(lineStrings.size(), 1));
+			//TODO: maxrows not used
+			const int rows = qMax(importedStrings.size(), 1);
 			const int maxColumns = 300;
-			for (int i = 0; i < lineStrings.size(); i++) {
-				QStringList lineString = lineStrings[i].split(" ");
-				DEBUG_LOG("reading line" << i << "of size" << lineString.size());
-				DEBUG_LOG(lineString);
+			tmpTableWidget->setRowCount(rows);	// new
+			for (int i = 0; i < rows; i++) {
+				DEBUG_LOG(importedStrings[i]);
 
-				int colCount = lineString.size() > maxColumns ? maxColumns : lineString.size();
-				if (colCount > tmpTableWidget->columnCount())
-					tmpTableWidget->setColumnCount(colCount);
+				int cols = importedStrings[i].size() > maxColumns ? maxColumns : importedStrings[i].size();	// new
+				if (cols > tmpTableWidget->columnCount())
+					tmpTableWidget->setColumnCount(cols);
 
-				for (int j = 0; j < colCount; j++) {
-					QTableWidgetItem* item = new QTableWidgetItem(lineString[j]);
+				for (int j = 0; j < cols; j++) {
+					QTableWidgetItem* item = new QTableWidgetItem(importedStrings[i][j]);
 					tmpTableWidget->setItem(i, j, item);
 				}
 			}
