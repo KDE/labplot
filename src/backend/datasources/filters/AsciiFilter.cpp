@@ -3,7 +3,7 @@ File                 : AsciiFilter.cpp
 Project              : LabPlot
 Description          : ASCII I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2009-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2009-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
@@ -56,7 +56,7 @@ AsciiFilter::~AsciiFilter() {
 /*!
   reads the content of the file \c fileName.
 */
-QString AsciiFilter::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  int lines) {
+QList <QStringList> AsciiFilter::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	return d->readData(fileName, dataSource, importMode, lines);
 }
 
@@ -266,11 +266,12 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner),
     reads the content of the file \c fileName to the data source \c dataSource or return as string for preview.
     Uses the settings defined in the data source.
 */
-QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+QList<QStringList> AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
 
 	KFilterDev device(fileName);
+	QList<QStringList> dataStrings;
 	if (!device.open(QIODevice::ReadOnly))
-		return QString();
+		return dataStrings << (QStringList() << QString());
 
 	//TODO implement
 	// if (transposed)
@@ -285,7 +286,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 				if (dataSource != NULL)
 					dataSource->clear();
 			}
-			return QString();
+			return dataStrings << (QStringList() << QString());
 		}
 
 		device.readLine();
@@ -300,7 +301,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 			if (dataSource != NULL)
 				dataSource->clear();
 		}
-		return QString();
+		return dataStrings << (QStringList() << QString());
 	}
 
 	QString line = device.readLine();
@@ -373,7 +374,6 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	int currentRow = 0; // indexes the position in the vector(column)
 	int columnOffset = 0; // indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
 	QVector<QVector<double>*> dataPointers;	// pointers to the actual data containers
-	QStringList dataString;
 
 	if (dataSource != NULL)
 		columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols, vectorNameList);
@@ -381,21 +381,22 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 	//header: import the values in the first line, if they were not used as the header (as the names for the columns)
 	bool isNumber;
 	if (!headerEnabled) {
+		QStringList lineString;
 		for (int n=0; n < actualCols; n++) {
 			if (n < lineStringList.size()) {
 				const double value = lineStringList.at(n).toDouble(&isNumber);
 				if (dataSource != NULL)
 					isNumber ? dataPointers[n]->operator[](0) = value : dataPointers[n]->operator[](0) = NAN;
 				else
-					isNumber ? dataString<<QString::number(value)<<" " : dataString<<QLatin1String("NAN ");
+					isNumber ? lineString << QString::number(value) : lineString << QLatin1String("NAN");
 			} else {
 				if (dataSource != NULL)
 					dataPointers[n]->operator[](0) = NAN;
 				else
-					dataString<<QLatin1String("NAN ");
+					lineString << QLatin1String("NAN");
 			}
 		}
-		dataString<<"\n";
+		dataStrings << lineString;
 		currentRow++;
 	}
 
@@ -410,36 +411,37 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 		if (line.isEmpty())
 			continue;
 
-		if (line.startsWith(commentCharacter) == true ) {
+		if (line.startsWith(commentCharacter) == true) {
 			currentRow++;
 			continue;
 		}
 
-		lineStringList = line.split( separator, QString::SplitBehavior(skipEmptyParts) );
+		lineStringList = line.split(separator, QString::SplitBehavior(skipEmptyParts));
 
 		// TODO : read strings (comments) or datetime too
-		for (int n=0; n < actualCols; n++) {
+		QStringList lineString;
+		for (int n = 0; n < actualCols; n++) {
 			if (n < lineStringList.size()) {
 				const double value = lineStringList.at(n).toDouble(&isNumber);
 				if (dataSource != NULL)
 					isNumber ? dataPointers[n]->operator[](currentRow) = value : dataPointers[n]->operator[](currentRow) = NAN;
 				else
-					isNumber ? dataString<<QString::number(value)<<" " : dataString<<QString("NAN ");
+					isNumber ? lineString += QString::number(value) : lineString += QString("NAN");
 			} else {
 				if (dataSource != NULL)
 					dataPointers[n]->operator[](currentRow) = NAN;
 				else
-					dataString<<QLatin1String("NAN ");
+					lineString += QLatin1String("NAN");
 			}
 		}
 
-		dataString<<"\n";
+		dataStrings << lineString;
 		currentRow++;
 		emit q->completed(100*currentRow/actualRows);
 	}
 
 	if (!dataSource)
-		return dataString.join("");
+		return dataStrings;
 
 	//make everything undo/redo-able again
 	//set the comments for each of the columns
@@ -457,7 +459,7 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 			}
 		}
 		spreadsheet->setUndoAware(true);
-		return dataString.join("");
+		return dataStrings;
 	}
 
 
@@ -468,14 +470,14 @@ QString AsciiFilterPrivate::readData(const QString & fileName, AbstractDataSourc
 		matrix->setUndoAware(true);
 	}
 
-	return dataString.join("");
+	return dataStrings;
 }
 
 /*!
     reads the content of the file \c fileName to the data source \c dataSource.
 */
 void AsciiFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
-	readData(fileName,dataSource,mode);
+	readData(fileName, dataSource, mode);
 }
 
 /*!

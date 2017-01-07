@@ -3,7 +3,7 @@ File                 : BinaryFilter.cpp
 Project              : LabPlot
 Description          : Binary I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2015-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
 ***************************************************************************/
 
 /***************************************************************************
@@ -51,7 +51,7 @@ BinaryFilter::~BinaryFilter() {
 /*!
   reads the content of the file \c fileName.
 */
-QString BinaryFilter::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  int lines) {
+QList <QStringList> BinaryFilter::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  int lines) {
 	return d->readData(fileName, dataSource, importMode, lines);
 }
 
@@ -208,12 +208,12 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
     reads the content of the file \c fileName to the data source \c dataSource or return as string for preview.
     Uses the settings defined in the data source.
 */
-QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
-	QStringList dataString;
+QList<QStringList> BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	QList<QStringList> dataStrings;
 
 	KFilterDev device(fileName);
 	if (! device.open(QIODevice::ReadOnly))
-		return QString();
+		return dataStrings << (QStringList() << i18n("could not open device"));
 
 	QDataStream in(&device);
 
@@ -228,18 +228,18 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 	if (skipStartBytes >= BinaryFilter::dataSize(dataType)*vectors*numRows || startRow > numRows) {
 		if (dataSource != NULL)
 			dataSource->clear();
-		return QString();
+		return dataStrings << (QStringList() << i18n("data selection empty"));
 	}
 
 	// skip bytes at start
-	for (int i=0; i < skipStartBytes; i++) {
+	for (int i = 0; i < skipStartBytes; i++) {
 		qint8 tmp;
 		in >> tmp;
 	}
 
 	// skip until start row
-	for (int i=0; i < (startRow-1)*vectors; ++i) {
-		for (int j=0; j < BinaryFilter::dataSize(dataType); ++j) {
+	for (int i = 0; i < (startRow-1)*vectors; ++i) {
+		for (int j = 0; j < BinaryFilter::dataSize(dataType); ++j) {
 			qint8 tmp;
 			in >> tmp;
 		}
@@ -253,10 +253,10 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 		actualRows = numRows;
 	else
 		actualRows = endRow-startRow+1;
-	int actualCols=vectors;
+	int actualCols = vectors;
 	if (lines == -1)
-		lines=actualRows;
-#ifdef QT_DEBUG
+		lines = actualRows;
+#ifndef NDEBUG
 	qDebug()<<"	numRows ="<<numRows;
 	qDebug()<<"	startRow ="<<startRow;
 	qDebug()<<"	endRow ="<<endRow;
@@ -271,8 +271,9 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 		columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
 
 	// read data
-	for (int i=0; i<qMin(actualRows,lines); i++) {
-		for ( int n=0; n<actualCols; n++ ) {
+	for (int i = 0; i < qMin(actualRows, lines); i++) {
+		QStringList lineString;
+		for (int n = 0; n < actualCols; n++) {
 			switch (dataType) {
 			case BinaryFilter::INT8: {
 				qint8 value;
@@ -280,7 +281,7 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 				if (dataSource != NULL)
 					dataPointers[n]->operator[](i) = value;
 				else
-					dataString<<QString::number(value)<<" ";
+					lineString << QString::number(value);
 				break;
 			}
 			case BinaryFilter::INT16: {
@@ -289,7 +290,7 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 				if (dataSource != NULL)
 					dataPointers[n]->operator[](i) = value;
 				else
-					dataString<<QString::number(value)<<" ";
+					lineString << QString::number(value);
 				break;
 			}
 			case BinaryFilter::INT32: {
@@ -298,7 +299,7 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 				if (dataSource != NULL)
 					dataPointers[n]->operator[](i) = value;
 				else
-					dataString<<QString::number(value)<<" ";
+					lineString << QString::number(value);
 				break;
 			}
 			case BinaryFilter::INT64: {
@@ -307,7 +308,7 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 				if (dataSource != NULL)
 					dataPointers[n]->operator[](i) = value;
 				else
-					dataString<<QString::number(value)<<" ";
+					lineString << QString::number(value);
 				break;
 			}
 			case BinaryFilter::UINT8: {
@@ -316,7 +317,7 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 				if (dataSource != NULL)
 					dataPointers[n]->operator[](i) = value;
 				else
-					dataString<<QString::number(value)<<" ";
+					lineString << QString::number(value);
 				break;
 			}
 			case BinaryFilter::UINT16: {
@@ -325,7 +326,7 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 				if (dataSource != NULL)
 					dataPointers[n]->operator[](i) = value;
 				else
-					dataString<<QString::number(value)<<" ";
+					lineString << QString::number(value);
 				break;
 			}
 			case BinaryFilter::UINT32: {
@@ -334,7 +335,7 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 				if (dataSource != NULL)
 					dataPointers[n]->operator[](i) = value;
 				else
-					dataString<<QString::number(value)<<" ";
+					lineString << QString::number(value);
 				break;
 			}
 			case BinaryFilter::UINT64: {
@@ -343,7 +344,7 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 				if (dataSource != NULL)
 					dataPointers[n]->operator[](i) = value;
 				else
-					dataString<<QString::number(value)<<" ";
+					lineString << QString::number(value);
 				break;
 			}
 			case BinaryFilter::REAL32: {
@@ -352,7 +353,7 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 				if (dataSource != NULL)
 					dataPointers[n]->operator[](i) = value;
 				else
-					dataString<<QString::number(value)<<" ";
+					lineString << QString::number(value);
 				break;
 			}
 			case BinaryFilter::REAL64: {
@@ -361,17 +362,17 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 				if (dataSource != NULL)
 					dataPointers[n]->operator[](i) = value;
 				else
-					dataString<<QString::number(value)<<" ";
+					lineString << QString::number(value);
 				break;
 			}
 			}
 		}
-		dataString<<"\n";
+		dataStrings << lineString;
 		emit q->completed(100*i/actualRows);
 	}
 
 	if (!dataSource)
-		return dataString.join("");
+		return dataStrings;
 
 	//make everything undo/redo-able again
 	//set the comments for each of the columns
@@ -389,7 +390,7 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 			}
 		}
 		spreadsheet->setUndoAware(true);
-		return dataString.join("");
+		return dataStrings;
 	}
 
 	Matrix* matrix = dynamic_cast<Matrix*>(dataSource);
@@ -399,7 +400,7 @@ QString BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSour
 		matrix->setUndoAware(true);
 	}
 
-	return dataString.join("");
+	return dataStrings;
 }
 
 
