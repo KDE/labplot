@@ -818,8 +818,7 @@ void ImportFileWidget::refreshPreview() {
 		fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
 
-	QString importedText;	// old
-	QList<QStringList> importedStrings;	// new
+	QList<QStringList> importedStrings;
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 
 	// generic table widget
@@ -845,8 +844,7 @@ void ImportFileWidget::refreshPreview() {
 			ui.tePreview->clear();
 
 			BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
-			//TODO: use new importedStrings
-			importedText = filter->readData(fileName, NULL, AbstractFileFilter::Replace, lines);
+			importedStrings = filter->readData(fileName, NULL, AbstractFileFilter::Replace, lines);
 			tmpTableWidget = twPreview;
 			break;
 		}

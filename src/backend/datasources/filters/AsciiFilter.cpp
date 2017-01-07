@@ -3,7 +3,7 @@ File                 : AsciiFilter.cpp
 Project              : LabPlot
 Description          : ASCII I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2009-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2009-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
