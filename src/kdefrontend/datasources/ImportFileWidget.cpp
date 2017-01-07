@@ -301,6 +301,7 @@ FileDataSource::FileType ImportFileWidget::currentFileType() const {
 	returns the currently used filter.
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
+	DEBUG_LOG("currentFileFilter()");
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 
 	switch (fileType) {
@@ -706,6 +707,8 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
 	updates the selected var name of a NetCDF file when the tree widget item is selected
 */
 void ImportFileWidget::netcdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
+	DEBUG_LOG("netcdfTreeWidgetItemSelected()");
+	DEBUG_LOG("SELECTED ITEMS =" << netcdfOptionsWidget.twContent->selectedItems());
 	Q_UNUSED(column);
 	if (item->data(1, Qt::DisplayRole).toString() == "variable")
 		refreshPreview();
@@ -807,6 +810,7 @@ void ImportFileWidget::headerChanged(int state) {
 }
 
 void ImportFileWidget::refreshPreview() {
+	DEBUG_LOG("refreshPreview()");
 	WAIT_CURSOR;
 
 	QString fileName = ui.kleFileName->text();
@@ -910,7 +914,6 @@ void ImportFileWidget::refreshPreview() {
 	}
 
 	// fill the table widget
-	//tmpTableWidget->clear();
 	tmpTableWidget->setRowCount(0);
 	tmpTableWidget->setColumnCount(0);
 	if( !importedText.isEmpty() ) {
