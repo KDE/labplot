@@ -413,11 +413,12 @@ void MainWin::initMenus() {
 
 #ifdef HAVE_CANTOR_LIBS
 	m_newMenu->addSeparator();
+	m_newCantorWorksheetMenu = new QMenu(i18n("CAS Worksheet"));
+	m_newCantorWorksheetMenu->setIcon(QIcon::fromTheme("archive-insert"));
+
 	//"Adding Cantor backends to menue and context menu"
 	QStringList m_availableBackend = Cantor::Backend::listAvailableBackends();
 	if(m_availableBackend.count() > 0) {
-		m_newCantorWorksheetMenu = new QMenu(i18n("CAS Worksheet"));
-		m_newCantorWorksheetMenu->setIcon(QIcon::fromTheme("archive-insert"));
 		unplugActionList(QLatin1String("backends_list"));
 		QList<QAction*> newBackendActions;
 		foreach (Cantor::Backend* backend, Cantor::Backend::availableBackends()) {
@@ -430,15 +431,8 @@ void MainWin::initMenus() {
 
 		connect(m_newCantorWorksheetMenu, SIGNAL(triggered(QAction*)), this, SLOT(newCantorWorksheet(QAction*)));
 		plugActionList(QLatin1String("backends_list"), newBackendActions);
-		m_newMenu->addMenu(m_newCantorWorksheetMenu);
-	} else {
-		int choice = KMessageBox::warningContinueCancel(this, i18n("No backend for Cantor is installed."), i18n("Warning"));
-		switch(choice) {
-			case KMessageBox::Cancel:
-			close();
-			break;
-		}
 	}
+	m_newMenu->addMenu(m_newCantorWorksheetMenu);
 #else
 	delete this->guiFactory()->container("cas_worksheet", this);
 	delete this->guiFactory()->container("new_casWorksheet", this);
