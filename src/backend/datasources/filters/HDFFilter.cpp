@@ -304,16 +304,14 @@ QStringList HDFFilterPrivate::readHDFData1D(hid_t dataset, hid_t type, int rows,
 		else				// for preview
 			dataString << QString::number(static_cast<double>(data[i]));
 	}
-
 	free(data);
 
-	DEBUG_LOG("dataString =" << dataString);
 	return dataString;
 }
 
 QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, int rows, int lines, QVector< QVector<double>* >& dataPointer) {
 	int members = H5Tget_nmembers(tid);
-	handleError(members,"H5Tget_nmembers");
+	handleError(members, "H5Tget_nmembers");
 
 	QStringList* data = new QStringList[members];
 	for (int m=0; m < members; m++) {
@@ -388,7 +386,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 			data[m]=readHDFData1D<long double>(dataset, ctype, rows, lines, dataP);
 		else {
 			for (int i=0; i < rows; i++)
-				data[m]<<QLatin1String("_")<<QLatin1String("\n");
+				data[m] << QLatin1String("_");
 			if (dataP != NULL) {
 				for (int i=startRow-1; i < qMin(endRow, lines+startRow-1); i++)
 					dataP->operator[](i-startRow+1) = 0;
@@ -404,7 +402,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData1D(hid_t dataset, hid_t tid, in
 	// create dataString from data
 	QStringList dataString;
 	if (dataPointer[0] == NULL) {
-		for (int i=0; i < qMin(rows,lines); i++) {
+		for (int i = 0; i < qMin(rows,lines); i++) {
 			dataString << QLatin1String("(");
 
 			for (int m = 0; m < members; m++) {
@@ -1438,8 +1436,11 @@ QList <QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileNam
 				break;
 			}
 
-			for (int i = 0; i < rows; i++)
-				dataStrings << (QStringList() << dataString[i]);
+			if (dataSource == NULL) {
+				DEBUG_LOG("dataString =" << dataString);
+				for (int i = 0; i < rows; i++)
+					dataStrings << (QStringList() << dataString[i]);
+			}
 
 			break;
 		}
