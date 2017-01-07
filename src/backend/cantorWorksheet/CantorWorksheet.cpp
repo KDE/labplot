@@ -63,9 +63,9 @@ CantorWorksheet::CantorWorksheet(AbstractScriptingEngine* engine, const QString 
 bool CantorWorksheet::init(QByteArray* content) {
 	KPluginFactory* factory = KPluginLoader(QLatin1String("libcantorpart")).factory();
 	if (factory) {
-		m_part = factory->create<KParts::ReadWritePart>(this, QVariantList()<<m_backendName<<"--noprogress");
+		m_part = factory->create<KParts::ReadWritePart>(this, QVariantList() << m_backendName << QLatin1String("--noprogress"));
 		if (!m_part) {
-			KMessageBox::error(view(), i18n("Could not create the Cantor Part."));
+			qDebug() << "Could not create the Cantor Part.";
 			return false;
 		}
 		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
@@ -95,11 +95,8 @@ bool CantorWorksheet::init(QByteArray* content) {
 		m_plugins = handler->plugins();
 	}
 	else {
-		// if we couldn't find our Part, we exit since the Shell by
-		// itself can't do anything useful
-		KMessageBox::error(view(), i18n("Could not find the Cantor Part."));
-		// we return here, cause qApp->quit() only means "exit the
-		// next time we enter the event loop...
+		//we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
+		//return false here, a proper error message will be created in load() and propagated further.
 		return false;
 	}
 	return true;
@@ -287,6 +284,11 @@ bool CantorWorksheet::load(XmlStreamReader* reader){
 
 			QByteArray content = QByteArray::fromBase64(str.toAscii());
 			rc = init(&content);
+			if  (!rc) {
+				QString msg = i18n("This project has Cantor content but no Cantor plugins were found. Please check your installation. The project will be closed.");
+				reader->raiseError(msg);
+				return false;
+			}
 		} else if(reader->name() == "column") {
 			Column* column = new Column("");
 			column->setUndoAware(false);
@@ -301,5 +303,5 @@ bool CantorWorksheet::load(XmlStreamReader* reader){
 		}
 	}
 
-	return rc;
+	return true;
 }
