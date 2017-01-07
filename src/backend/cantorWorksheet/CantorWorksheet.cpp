@@ -38,6 +38,7 @@
 
 #include <QAction>
 #include <QModelIndex>
+#include <QDebug>
 
 #include "cantor/cantor_part.h"
 #include <cantor/panelpluginhandler.h>
