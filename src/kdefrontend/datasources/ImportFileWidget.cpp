@@ -3,7 +3,7 @@ File                 : ImportFileWidget.cpp
 Project              : LabPlot
 Description          : import file data widget
 --------------------------------------------------------------------
-Copyright            : (C) 2009-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2009-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
@@ -837,7 +837,7 @@ void ImportFileWidget::refreshPreview() {
 			ui.tePreview->clear();
 
 			AsciiFilter *filter = (AsciiFilter *)this->currentFileFilter();
-			importedText = filter->readData(fileName, NULL, AbstractFileFilter::Replace, lines);
+			importedStrings = filter->readData(fileName, NULL, AbstractFileFilter::Replace, lines);
 			tmpTableWidget = twPreview;
 			break;
 		}
@@ -845,6 +845,7 @@ void ImportFileWidget::refreshPreview() {
 			ui.tePreview->clear();
 
 			BinaryFilter *filter = (BinaryFilter *)this->currentFileFilter();
+			//TODO: use new importedStrings
 			importedText = filter->readData(fileName, NULL, AbstractFileFilter::Replace, lines);
 			tmpTableWidget = twPreview;
 			break;
@@ -916,14 +917,14 @@ void ImportFileWidget::refreshPreview() {
 	// fill the table widget
 	tmpTableWidget->setRowCount(0);
 	tmpTableWidget->setColumnCount(0);
-	if( !importedText.isEmpty() || !importedStrings.isEmpty() ) {
+	if( !importedStrings.isEmpty() ) {
 		DEBUG_LOG("importedStrings =" << importedStrings);	// new
 		if (!ok) {
-			// show importedText as error message
+			// show imported strings as error message
 			tmpTableWidget->setRowCount(1);
 			tmpTableWidget->setColumnCount(1);
 			QTableWidgetItem* item = new QTableWidgetItem();
-			item->setText(importedText);
+			item->setText(importedStrings[0][0]);
 			tmpTableWidget->setItem(0, 0, item);
 		} else {
 			//TODO: maxrows not used
