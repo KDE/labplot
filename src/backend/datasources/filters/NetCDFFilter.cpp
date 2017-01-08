@@ -526,7 +526,8 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 	QVector<QVector<double>*> dataPointers;
 	switch (ndims) {
 	case 0:
-		qDebug() << "zero dimensions";
+		dataStrings << (QStringList() << i18n("zero dimensions"));
+		qDebug() << dataStrings;
 		break;
 	case 1: {
 			size_t size;
@@ -612,7 +613,8 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 			break;
 		}
 	default:
-		qDebug() << "strange number of dimensions:" << ndims;
+		dataStrings << (QStringList() << i18n("%1 dimensional data of type %2 not supported yet").arg(ndims).arg(translateDataType(type)));
+		qDebug() << dataStrings;
 	}
 
 	free(dimids);
