@@ -225,7 +225,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 
 		status = nc_inq_att(ncid, varid, name, &type, &len);
 		handleError(status, "nc_inq_att");
-		DEBUG_LOG("	attr" << i+1 << ": name/type/len =" << name << translateDataType(type) << len);
+		DEBUG_LOG("	attr" << i+1 << "name/type/len =" << name << translateDataType(type) << len);
 
 		//read attribute
 		switch (type) {
@@ -339,7 +339,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 			else {
 				char varName[NC_MAX_NAME + 1];
 				status = nc_inq_varname(ncid, varid, varName);
-				typeName=QString(varName) + ' ' + i18n("attribute");
+				typeName = QString(varName) + ' ' + i18n("attribute");
 			}
 			QStringList props;
 			props << translateDataType(type) << " (" << QString::number(len) << ")";
@@ -526,7 +526,8 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 	QVector<QVector<double>*> dataPointers;
 	switch (ndims) {
 	case 0:
-		qDebug() << "zero dimensions";
+		dataStrings << (QStringList() << i18n("zero dimensions"));
+		qDebug() << dataStrings;
 		break;
 	case 1: {
 			size_t size;
@@ -557,11 +558,8 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 			handleError(status, "nc_get_vara_double");
 
 			if (!dataSource) {
-				QStringList line;
-				for (int i = 0; i < actualRows; i++) {
-					line << QString::number(data[i]);
-					dataStrings << line;
-				}
+				for (int i = 0; i < qMin(actualRows, lines); i++)
+					dataStrings << (QStringList() << QString::number(data[i]));
 				free(data);
 			}
 			break;
@@ -615,7 +613,8 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 			break;
 		}
 	default:
-		qDebug() << "strange number of dimensions:" << ndims;
+		dataStrings << (QStringList() << i18n("%1 dimensional data of type %2 not supported yet").arg(ndims).arg(translateDataType(type)));
+		qDebug() << dataStrings;
 	}
 
 	free(dimids);
