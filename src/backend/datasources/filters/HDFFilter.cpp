@@ -25,6 +25,12 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
+
+/* TODO:
+	* Feature: implement missing data types and ranks
+	* Performance: only fill dataPointer or dataStrings (not both)
+*/
+
 #include "backend/datasources/filters/HDFFilter.h"
 #include "backend/datasources/filters/HDFFilterPrivate.h"
 #include "backend/datasources/FileDataSource.h"
@@ -431,7 +437,7 @@ QList <QStringList> HDFFilterPrivate::readHDFData2D(hid_t dataset, hid_t type, i
 	QList <QStringList> dataStrings;
 
 	T** data = (T**) malloc(rows*sizeof(T*));
-	data[0] = (T*)malloc( cols*rows*sizeof(T) );
+	data[0] = (T*) malloc(cols*rows*sizeof(T));
 	for (int i = 1; i < rows; i++)
 		data[i] = data[0]+i*cols;
 
@@ -473,7 +479,7 @@ QStringList HDFFilterPrivate::readHDFCompoundData2D(hid_t dataset, hid_t tid, in
 		handleError((int)msize, "H5Tget_size");
 		hid_t ctype = H5Tcreate(H5T_COMPOUND, msize);
 		handleError((int)ctype, "H5Tcreate");
-		status = H5Tinsert(ctype, H5Tget_member_name(tid,m), 0, mtype);
+		status = H5Tinsert(ctype, H5Tget_member_name(tid, m), 0, mtype);
 		handleError(status, "H5Tinsert");
 
 		// dummy container for all data columns
@@ -758,7 +764,7 @@ QStringList HDFFilterPrivate::scanHDFAttrs(hid_t oid) {
 	QStringList attrList;
 
 	int numAttr = H5Aget_num_attrs(oid);
-	handleError(numAttr,"H5Aget_num_attrs");
+	handleError(numAttr, "H5Aget_num_attrs");
 	DEBUG_LOG("number of attr =" << numAttr);
 
 	for (int i = 0; i < numAttr; i++) {
@@ -768,7 +774,7 @@ QStringList HDFFilterPrivate::scanHDFAttrs(hid_t oid) {
 		if (i < numAttr-1)
 			attrList << QLatin1String(", ");
 		status = H5Aclose(aid);
-		handleError(status,"H5Aclose");
+		handleError(status, "H5Aclose");
 	}
 
 	return attrList;
@@ -776,7 +782,7 @@ QStringList HDFFilterPrivate::scanHDFAttrs(hid_t oid) {
 
 QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 	H5T_class_t typeClass = H5Tget_class(tid);
-	handleError((int)typeClass,"H5Tget_class");
+	handleError((int)typeClass, "H5Tget_class");
 
 	QStringList typeProps;
 	QString typeString = translateHDFClass(typeClass);
@@ -785,11 +791,11 @@ QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 	typeProps<<typeString;
 
 	size_t size = H5Tget_size(tid);
-	typeProps<<QLatin1String(" (")<<QString::number(size)<<QLatin1String(") ");
+	typeProps << QLatin1String(" (") << QString::number(size) << QLatin1String(") ");
 
 	H5T_order_t order = H5Tget_order(tid);
-	handleError((int)order,"H5Tget_order");
-	typeProps<<translateHDFOrder(order);
+	handleError((int)order, "H5Tget_order");
+	typeProps << translateHDFOrder(order);
 
 	// type specific props
 	switch (typeClass) {
@@ -824,7 +830,7 @@ QStringList HDFFilterPrivate::readHDFDataType(hid_t tid) {
 				break;
 			}
 			H5T_str_t strpad = H5Tget_strpad(tid);
-			handleError((int)strpad,"H5Tget_strpad");
+			handleError((int)strpad, "H5Tget_strpad");
 			switch (strpad) {
 			case H5T_STR_NULLTERM:
 				typeProps<<QLatin1String(" NULLTERM");
@@ -905,13 +911,13 @@ QStringList HDFFilterPrivate::readHDFPropertyList(hid_t pid) {
 	hsize_t chunk_dims_out[2];
 	if (H5D_CHUNKED == H5Pget_layout(pid)) {
 		int rank_chunk = H5Pget_chunk(pid, 2, chunk_dims_out);
-		handleError(rank_chunk,"H5Pget_chunk");
+		handleError(rank_chunk, "H5Pget_chunk");
 		props << QLatin1String("chunk rank=") << QString::number(rank_chunk) << QLatin1String(", dimension=")
 			<< QString::number(chunk_dims_out[0]) << QString::number(chunk_dims_out[1]);
 	}
 
 	int nfilters = H5Pget_nfilters(pid);
-	handleError(nfilters,"H5Pget_nfilters");
+	handleError(nfilters, "H5Pget_nfilters");
 	props << QLatin1String(" ") << QString::number(nfilters) << QLatin1String(" filter");
 	for (int i = 0; i < nfilters; i++) {
 		size_t cd_nelmts = 32;
@@ -970,7 +976,7 @@ QStringList HDFFilterPrivate::readHDFPropertyList(hid_t pid) {
 	props << QLatin1String(", FILL_TIME:");
 	H5D_fill_time_t ft;
 	status = H5Pget_fill_time(pid, &ft);
-	handleError(status,"H5Pget_fill_time");
+	handleError(status, "H5Pget_fill_time");
 	switch (ft) {
 	case H5D_FILL_TIME_ALLOC:
 		props << QLatin1String(" ALLOW");
@@ -988,7 +994,7 @@ QStringList HDFFilterPrivate::readHDFPropertyList(hid_t pid) {
 
 	H5D_fill_value_t fvstatus;
 	status = H5Pfill_value_defined(pid, &fvstatus);
-	handleError(status,"H5Pfill_value_defined");
+	handleError(status, "H5Pfill_value_defined");
 	if (fvstatus == H5D_FILL_VALUE_UNDEFINED)
 		props << QLatin1String(" No fill value defined");
 	else {
@@ -1080,7 +1086,7 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 void HDFFilterPrivate::scanHDFLink(hid_t gid, char *linkName, QTreeWidgetItem* parentItem) {
 	char target[MAXNAMELENGTH];
 	status = H5Gget_linkval(gid, linkName, MAXNAMELENGTH, target) ;
-	handleError(status,"H5Gget_linkval");
+	handleError(status, "H5Gget_linkval");
 
 	QTreeWidgetItem* linkItem = new QTreeWidgetItem(QStringList()<<QString(linkName) << i18n("symbolic link") << i18n("link to") + QString(target));
 	linkItem->setIcon(0, KIcon("emblem-symbolic-link"));
@@ -1202,7 +1208,7 @@ QList <QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileNam
 
 	if (currentDataSetName.isEmpty()) {
 		//return QString("No data set selected").replace(' ',QChar::Nbsp);
-		ok=false;
+		ok = false;
 		return dataStrings << (QStringList() << i18n("No data set selected"));
 	}
 	DEBUG_LOG(" current data set =" << currentDataSetName);
@@ -1410,11 +1416,10 @@ QList <QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileNam
 					break;
 				}
 			case H5T_COMPOUND: {
-					// read compound data into dataPointers
-					//TODO: check
 					int members = H5Tget_nmembers(dtype);
 					handleError(members, "H5Tget_nmembers");
 					if (dataSource != NULL) {
+						// re-create data pointer
 						dataPointers.clear();
 						dataSource->create(dataPointers, mode, actualRows, members);
 					} else
@@ -1450,7 +1455,7 @@ QList <QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileNam
 	case 2: {
 			hsize_t dims_out[2];
 			status = H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
-			handleError(status,"H5Sget_simple_extent_dims");
+			handleError(status, "H5Sget_simple_extent_dims");
 			int rows = dims_out[0];
 			int cols = dims_out[1];
 
@@ -1465,7 +1470,7 @@ QList <QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileNam
 
 #ifndef NDEBUG
 			H5T_order_t order = H5Tget_order(dtype);
-			handleError((int)order,"H5Tget_order");
+			handleError((int)order, "H5Tget_order");
 			qDebug()<<translateHDFClass(dclass)<<"("<<typeSize<<")"<<translateHDFOrder(order)<<","<<rows<<"x"<<cols;
 			qDebug()<<"startRow/endRow"<<startRow<<endRow;
 			qDebug()<<"startColumn/endColumn"<<startColumn<<endColumn;
