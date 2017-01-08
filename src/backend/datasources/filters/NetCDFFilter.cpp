@@ -225,7 +225,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 
 		status = nc_inq_att(ncid, varid, name, &type, &len);
 		handleError(status, "nc_inq_att");
-		DEBUG_LOG("	attr" << i+1 << ": name/type/len =" << name << translateDataType(type) << len);
+		DEBUG_LOG("	attr" << i+1 << "name/type/len =" << name << translateDataType(type) << len);
 
 		//read attribute
 		switch (type) {
@@ -339,7 +339,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 			else {
 				char varName[NC_MAX_NAME + 1];
 				status = nc_inq_varname(ncid, varid, varName);
-				typeName=QString(varName) + ' ' + i18n("attribute");
+				typeName = QString(varName) + ' ' + i18n("attribute");
 			}
 			QStringList props;
 			props << translateDataType(type) << " (" << QString::number(len) << ")";

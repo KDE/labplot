@@ -717,21 +717,25 @@ void ImportFileWidget::netcdfTreeWidgetItemSelected(QTreeWidgetItem* item, int c
 		QString fileName = ui.kleFileName->text();
 		QString name = item->data(0, Qt::DisplayRole).toString();
 		QString varName = item->data(1, Qt::DisplayRole).toString().split(" ")[0];
+		DEBUG_LOG("name =" << name << "varName =" << varName);
 
 		QString importedText = filter->readAttribute(fileName, name, varName);
-		netcdfOptionsWidget.twPreview->clear();
+		DEBUG_LOG("importedText =" << importedText);
 
 		QStringList lineStrings = importedText.split("\n");
-		netcdfOptionsWidget.twPreview->setRowCount(lineStrings.size());
-		for (int i = 0; i < lineStrings.size(); i++) {
+		int rows = lineStrings.size();
+		netcdfOptionsWidget.twPreview->setRowCount(rows);
+		netcdfOptionsWidget.twPreview->setColumnCount(0);
+		for (int i = 0; i < rows; i++) {
 			QStringList lineString = lineStrings[i].split(" ");
-			if (i == 0)
-				netcdfOptionsWidget.twPreview->setColumnCount(lineString.size()-1);
+			int cols = lineString.size();
+			if (netcdfOptionsWidget.twPreview->columnCount() < cols)
+				netcdfOptionsWidget.twPreview->setColumnCount(cols);
 
-			for (int j = 0; j < lineString.size(); j++) {
+			for (int j = 0; j < cols; j++) {
 				QTableWidgetItem* item = new QTableWidgetItem();
 				item->setText(lineString[j]);
-				netcdfOptionsWidget.twPreview->setItem(i,j,item);
+				netcdfOptionsWidget.twPreview->setItem(i, j, item);
 			}
 		}
 	} else
