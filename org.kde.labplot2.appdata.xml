@@ -28,8 +28,11 @@
   <name xml:lang="x-test">xxLabPlotxx</name>
   <summary>LabPlot is a KDE application for interactive graphing and analysis of scientific data</summary>
   <summary xml:lang="ca">El LabPlot és una aplicació KDE per a la representació interactiva de grafs i anàlisi de dades científiques.</summary>
+  <summary xml:lang="ca-valencia">El LabPlot és una aplicació KDE per a la representació interactiva de grafs i anàlisi de dades científiques.</summary>
+  <summary xml:lang="en-GB">LabPlot is a KDE application for interactive graphing and analysis of scientific data</summary>
   <summary xml:lang="nl">LabPlot2 is een KDE-toepassing voor het interactief maken van grafieken en het analyseren van wetenschappelijke gegevens</summary>
   <summary xml:lang="pt">O LabPlot é uma aplicação do KDE para gráficos interactivos e para a análise de dados científicos</summary>
+  <summary xml:lang="sv">Labplot är ett KDE-program för interaktiv diagramritning och analys av vetenskaplig data</summary>
   <summary xml:lang="uk">LabPlot — програма KDE для інтерактивної побудови графіків та аналізу наукових даних.</summary>
   <summary xml:lang="x-test">xxLabPlot is a KDE application for interactive graphing and analysis of scientific dataxx</summary>
   <description>
