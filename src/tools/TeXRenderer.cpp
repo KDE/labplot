@@ -107,6 +107,9 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 			body = teXString;
 	}
 
+	//replace line breaks with tex command for a line break '\\'
+	body = body.replace(QLatin1String("\n"), QLatin1String("\\\\"));
+
 	if (engine=="xelatex" || engine=="lualatex") {
 		out << "\\usepackage{xltxtra}";
 		out << "\\defaultfontfeatures{Ligatures=TeX}";
