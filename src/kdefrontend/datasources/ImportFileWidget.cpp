@@ -89,6 +89,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	QStringList hdfheaders;
 	hdfheaders << i18n("Name") << i18n("Link") << i18n("Type") << i18n("Properties") << i18n("Attributes");
 	hdfOptionsWidget.twContent->setHeaderLabels(hdfheaders);
+	hdfOptionsWidget.twContent->setAlternatingRowColors(true);
 	// link and type column are hidden
 	hdfOptionsWidget.twContent->hideColumn(1);
 	hdfOptionsWidget.twContent->hideColumn(2);
@@ -103,12 +104,14 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	// type column is hidden
 	netcdfOptionsWidget.twContent->hideColumn(1);
 	netcdfOptionsWidget.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
+	netcdfOptionsWidget.twContent->setAlternatingRowColors(true);
 	ui.swOptions->insertWidget(FileDataSource::NETCDF, netcdfw);
 
 	QWidget* fitsw = new QWidget(0);
 	fitsOptionsWidget.setupUi(fitsw);
 	fitsOptionsWidget.twExtensions->headerItem()->setText(0, i18n("Extensions"));
 	fitsOptionsWidget.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
+	fitsOptionsWidget.twExtensions->setAlternatingRowColors(true);
 	ui.swOptions->insertWidget(FileDataSource::FITS, fitsw);
 
 	// the table widget for preview
