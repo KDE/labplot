@@ -41,36 +41,36 @@
 // a couple of standard sizes in mm, taken from qprinter.cpp
 const int numOfPaperSizes = 30;
 const float qt_paperSizes[numOfPaperSizes][2] = {
-    {210, 297}, // A4
-    {176, 250}, // B5
-    {215.9f, 279.4f}, // Letter
-    {215.9f, 355.6f}, // Legal
-    {190.5f, 254}, // Executive
-    {841, 1189}, // A0
-    {594, 841}, // A1
-    {420, 594}, // A2
-    {297, 420}, // A3
-    {148, 210}, // A5
-    {105, 148}, // A6
-    {74, 105}, // A7
-    {52, 74}, // A8
-    {37, 52}, // A8
-    {1000, 1414}, // B0
-    {707, 1000}, // B1
-    {31, 44}, // B10
-    {500, 707}, // B2
-    {353, 500}, // B3
-    {250, 353}, // B4
-    {125, 176}, // B6
-    {88, 125}, // B7
-    {62, 88}, // B8
-    {33, 62}, // B9
-    {163, 229}, // C5E
-    {105, 241}, // US Common
-    {110, 220}, // DLE
-    {210, 330}, // Folio
-    {431.8f, 279.4f}, // Ledger
-    {279.4f, 431.8f} // Tabloid
+	{210, 297}, // A4
+	{176, 250}, // B5
+	{215.9f, 279.4f}, // Letter
+	{215.9f, 355.6f}, // Legal
+	{190.5f, 254}, // Executive
+	{841, 1189}, // A0
+	{594, 841}, // A1
+	{420, 594}, // A2
+	{297, 420}, // A3
+	{148, 210}, // A5
+	{105, 148}, // A6
+	{74, 105}, // A7
+	{52, 74}, // A8
+	{37, 52}, // A8
+	{1000, 1414}, // B0
+	{707, 1000}, // B1
+	{31, 44}, // B10
+	{500, 707}, // B2
+	{353, 500}, // B3
+	{250, 353}, // B4
+	{125, 176}, // B6
+	{88, 125}, // B7
+	{62, 88}, // B8
+	{33, 62}, // B9
+	{163, 229}, // C5E
+	{105, 241}, // US Common
+	{110, 220}, // DLE
+	{210, 330}, // Folio
+	{431.8f, 279.4f}, // Ledger
+	{279.4f, 431.8f} // Tabloid
 };
 
 /*!
@@ -162,7 +162,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 
 		ui.leName->setText(m_worksheet->name());
 		ui.leComment->setText(m_worksheet->comment());
-	}else{
+	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
@@ -173,7 +173,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	}
 
 	//show the properties of the first worksheet
-  	this->load();
+	this->load();
 	this->worksheetLayoutChanged(m_worksheet->layout());
 
 	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
@@ -219,18 +219,16 @@ void WorksheetDock::updatePaperSize() {
 	float h=(float)ui.sbHeight->value()*10;
 
 	//check the portrait-orientation first
-	while ( i<numOfPaperSizes && !(w==qt_paperSizes[i][0] && h==qt_paperSizes[i][1]) ) {
+	while ( i<numOfPaperSizes && !(w==qt_paperSizes[i][0] && h==qt_paperSizes[i][1]) )
 		i++;
-	}
 
 	if (i!=numOfPaperSizes) {
 		ui.cbOrientation->setCurrentIndex(0);  //a QPrinter::PaperSize  in portrait-orientation was found
-	}else{
+	} else {
 		//check for the landscape-orientation
 		i=0;
-		while ( i<numOfPaperSizes && !(w==qt_paperSizes[i][1] && h==qt_paperSizes[i][0]) ) {
+		while ( i<numOfPaperSizes && !(w==qt_paperSizes[i][1] && h==qt_paperSizes[i][0]) )
 			i++;
-		}
 
 		if (i!=numOfPaperSizes)
 			ui.cbOrientation->setCurrentIndex(1); //a QPrinter::PaperSize  in landscape-orientation was found
@@ -319,17 +317,17 @@ void WorksheetDock::retranslateUi() {
 
 // "General"-tab
 void WorksheetDock::nameChanged() {
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-  m_worksheet->setName(ui.leName->text());
+	m_worksheet->setName(ui.leName->text());
 }
 
 void WorksheetDock::commentChanged() {
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-  m_worksheet->setComment(ui.leComment->text());
+	m_worksheet->setComment(ui.leComment->text());
 }
 
 void WorksheetDock::scaleContentChanged(bool scaled) {
@@ -348,7 +346,7 @@ void WorksheetDock::sizeChanged(int i) {
 		ui.sbHeight->setEnabled(true);
 		ui.lOrientation->hide();
 		ui.cbOrientation->hide();
-	}else{
+	} else {
 		ui.sbWidth->setEnabled(false);
 		ui.sbHeight->setEnabled(false);
 		if (i==0) { //no orientation available when using the complete view size (first item in the combox is selected)
@@ -367,11 +365,10 @@ void WorksheetDock::sizeChanged(int i) {
 		//use the complete view size (first item in the combox is selected)
 		foreach(Worksheet* worksheet, m_worksheetList)
 			worksheet->setUseViewSize(true);
-	}else if (index==QPrinter::Custom) {
+	} else if (index==QPrinter::Custom) {
 		if (m_worksheet->useViewSize()) {
-			foreach(Worksheet* worksheet, m_worksheetList) {
+			foreach(Worksheet* worksheet, m_worksheetList)
 				worksheet->setUseViewSize(false);
-			}
 		}
 	} else {
 		//determine the width and the height of the to be used predefined layout
@@ -379,7 +376,7 @@ void WorksheetDock::sizeChanged(int i) {
 		if (ui.cbOrientation->currentIndex() == 0) {
 			w=qt_paperSizes[index][0];
 			h=qt_paperSizes[index][1];
-		}else{
+		} else {
 			w=qt_paperSizes[index][1];
 			h=qt_paperSizes[index][0];
 		}
@@ -403,7 +400,7 @@ void WorksheetDock::sizeChanged() {
 	if (m_initializing)
 		return;
 
-  	int w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter);
+	int w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Centimeter);
 	int h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), Worksheet::Centimeter);
 	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setPageRect(QRect(0,0,w,h));
@@ -437,17 +434,17 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 		ui.kcbBackgroundFirstColor->show();
 
 		PlotArea::BackgroundColorStyle style =
-			(PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
+		    (PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
 		if (style == PlotArea::SingleColor) {
 			ui.lBackgroundFirstColor->setText(i18n("Color"));
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
-		}else{
+		} else {
 			ui.lBackgroundFirstColor->setText(i18n("First Color"));
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
 		}
-	}else if (type == PlotArea::Image) {
+	} else if (type == PlotArea::Image) {
 		ui.lBackgroundFirstColor->hide();
 		ui.kcbBackgroundFirstColor->hide();
 		ui.lBackgroundSecondColor->hide();
@@ -462,7 +459,7 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundFileName->show();
 		ui.kleBackgroundFileName->show();
 		ui.bOpen->show();
-	}else if (type == PlotArea::Pattern) {
+	} else if (type == PlotArea::Pattern) {
 		ui.lBackgroundFirstColor->setText(i18n("Color"));
 		ui.lBackgroundFirstColor->show();
 		ui.kcbBackgroundFirstColor->show();
@@ -483,9 +480,8 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList) {
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setBackgroundType(type);
-  }
 }
 
 void WorksheetDock::backgroundColorStyleChanged(int index) {
@@ -495,7 +491,7 @@ void WorksheetDock::backgroundColorStyleChanged(int index) {
 		ui.lBackgroundFirstColor->setText(i18n("Color"));
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
-	}else{
+	} else {
 		ui.lBackgroundFirstColor->setText(i18n("First Color"));
 		ui.lBackgroundSecondColor->show();
 		ui.kcbBackgroundSecondColor->show();
@@ -507,13 +503,11 @@ void WorksheetDock::backgroundColorStyleChanged(int index) {
 	int size = m_worksheetList.size();
 	if (size>1) {
 		m_worksheet->beginMacro(i18n("%1 worksheets: background color style changed", size));
-		foreach(Worksheet* w, m_worksheetList) {
+		foreach(Worksheet* w, m_worksheetList)
 			w->setBackgroundColorStyle(style);
-		}
 		m_worksheet->endMacro();
-	} else {
+	} else
 		m_worksheet->setBackgroundColorStyle(style);
-	}
 }
 
 void WorksheetDock::backgroundImageStyleChanged(int index) {
@@ -521,9 +515,8 @@ void WorksheetDock::backgroundImageStyleChanged(int index) {
 		return;
 
 	PlotArea::BackgroundImageStyle style = (PlotArea::BackgroundImageStyle)index;
-	foreach(Worksheet* worksheet, m_worksheetList) {
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setBackgroundImageStyle(style);
-	}
 }
 
 void WorksheetDock::backgroundBrushStyleChanged(int index) {
@@ -531,31 +524,28 @@ void WorksheetDock::backgroundBrushStyleChanged(int index) {
 		return;
 
 	Qt::BrushStyle style = (Qt::BrushStyle)index;
-	foreach(Worksheet* worksheet, m_worksheetList) {
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setBackgroundBrushStyle(style);
-	}
 }
 
 void WorksheetDock::backgroundFirstColorChanged(const QColor& c) {
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList) {
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setBackgroundFirstColor(c);
-	}
 }
 
 void WorksheetDock::backgroundSecondColorChanged(const QColor& c) {
-  if (m_initializing)
-	return;
+	if (m_initializing)
+		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList) {
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setBackgroundSecondColor(c);
-	}
 }
 
 void WorksheetDock::backgroundOpacityChanged(int value) {
-  	if (m_initializing)
+	if (m_initializing)
 		return;
 
 	float opacity = (float)value/100;
@@ -568,72 +558,64 @@ void WorksheetDock::layoutTopMarginChanged(double margin) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList) {
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setLayoutTopMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
-	}
 }
 
 void WorksheetDock::layoutBottomMarginChanged(double margin) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList) {
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setLayoutBottomMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
-	}
 }
 
 void WorksheetDock::layoutLeftMarginChanged(double margin) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList) {
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setLayoutLeftMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
-	}
 }
 
 void WorksheetDock::layoutRightMarginChanged(double margin) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList) {
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setLayoutRightMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
-	}
 }
 
 void WorksheetDock::layoutHorizontalSpacingChanged(double spacing) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList) {
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setLayoutHorizontalSpacing(Worksheet::convertToSceneUnits(spacing, Worksheet::Centimeter));
-	}
 }
 
 void WorksheetDock::layoutVerticalSpacingChanged(double spacing) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList) {
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setLayoutVerticalSpacing(Worksheet::convertToSceneUnits(spacing, Worksheet::Centimeter));
-	}
 }
 
 void WorksheetDock::layoutRowCountChanged(int count) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList) {
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setLayoutRowCount(count);
-	}
 }
 
 void WorksheetDock::layoutColumnCountChanged(int count) {
 	if (m_initializing)
 		return;
 
-	foreach(Worksheet* worksheet, m_worksheetList) {
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setLayoutColumnCount(count);
-	}
 }
 
 /*!
@@ -676,9 +658,8 @@ void WorksheetDock::fileNameChanged() {
 	else
 		ui.kleBackgroundFileName->setStyleSheet("");
 
-	foreach(Worksheet* worksheet, m_worksheetList) {
+	foreach(Worksheet* worksheet, m_worksheetList)
 		worksheet->setBackgroundFileName(fileName);
-	}
 }
 
 //*************************************************************
@@ -689,11 +670,10 @@ void WorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspect) {
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != ui.leName->text()) {
+	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.leComment->text()) {
+	else if (aspect->comment() != ui.leComment->text())
 		ui.leComment->setText(aspect->comment());
-	}
 	m_initializing = false;
 }
 
@@ -777,7 +757,7 @@ void WorksheetDock::worksheetLayoutChanged(Worksheet::Layout layout) {
 		ui.sbLayoutRowCount->setVisible(grid);
 		ui.lColumnCount->setVisible(grid);
 		ui.sbLayoutColumnCount->setVisible(grid);
-	}else {
+	} else {
 		ui.lGrid->setVisible(true);
 		ui.lRowCount->setVisible(true);
 		ui.sbLayoutRowCount->setVisible(true);
