@@ -141,7 +141,6 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0), 
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
 
-
 	this->retranslateUi();
 }
 
@@ -672,6 +671,11 @@ void WorksheetDock::fileNameChanged() {
 		return;
 
 	QString fileName = ui.kleBackgroundFileName->text();
+	if (!fileName.isEmpty() && !QFile::exists(fileName))
+		ui.kleBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
+	else
+		ui.kleBackgroundFileName->setStyleSheet("");
+
 	foreach(Worksheet* worksheet, m_worksheetList) {
 		worksheet->setBackgroundFileName(fileName);
 	}
@@ -849,6 +853,12 @@ void WorksheetDock::load() {
 	ui.kcbBackgroundFirstColor->setColor( m_worksheet->backgroundFirstColor() );
 	ui.kcbBackgroundSecondColor->setColor( m_worksheet->backgroundSecondColor() );
 	ui.sbBackgroundOpacity->setValue( round(m_worksheet->backgroundOpacity()*100) );
+
+	//highlight the text field for the background image red if an image is used and cannot be found
+	if (!m_worksheet->backgroundFileName().isEmpty() && !QFile::exists(m_worksheet->backgroundFileName()))
+		ui.kleBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
+	else
+		ui.kleBackgroundFileName->setStyleSheet("");
 
 	// Layout
 	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(m_worksheet->layoutTopMargin(), Worksheet::Centimeter) );
