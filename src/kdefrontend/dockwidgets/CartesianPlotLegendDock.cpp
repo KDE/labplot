@@ -47,7 +47,6 @@
 
   \ingroup kdefrontend
 */
-
 CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget *parent): QWidget(parent),
 	m_legend(0),
 	labelWidget(0),
@@ -549,6 +548,11 @@ void CartesianPlotLegendDock::fileNameChanged() {
 		return;
 
 	QString fileName = ui.kleBackgroundFileName->text();
+	if (!fileName.isEmpty() && !QFile::exists(fileName))
+		ui.kleBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
+	else
+		ui.kleBackgroundFileName->setStyleSheet("");
+
 	foreach(CartesianPlotLegend* legend, m_legendList)
 		legend->setBackgroundFileName(fileName);
 }
@@ -894,6 +898,12 @@ void CartesianPlotLegendDock::load() {
 	ui.kcbBackgroundFirstColor->setColor( m_legend->backgroundFirstColor() );
 	ui.kcbBackgroundSecondColor->setColor( m_legend->backgroundSecondColor() );
 	ui.sbBackgroundOpacity->setValue( round(m_legend->backgroundOpacity()*100.0) );
+
+	//highlight the text field for the background image red if an image is used and cannot be found
+	if (!m_legend->backgroundFileName().isEmpty() && !QFile::exists(m_legend->backgroundFileName()))
+		ui.kleBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
+	else
+		ui.kleBackgroundFileName->setStyleSheet("");
 
 	//Border
 	ui.kcbBorderColor->setColor( m_legend->borderPen().color() );

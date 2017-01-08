@@ -72,7 +72,7 @@ private slots:
 	void orientationChanged(int);
 
 	//"Background"-tab
-  	void backgroundTypeChanged(int);
+	void backgroundTypeChanged(int);
 	void backgroundColorStyleChanged(int);
 	void backgroundImageStyleChanged(int);
 	void backgroundBrushStyleChanged(int);

@@ -319,6 +319,12 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.kleParameter1->setText("1.0");
 		ui.kleParameter2->setText("2.0");
 		ui.kleParameter3->setText("3.0");
+		break;
+	case nsl_sf_stats_maxwell_boltzmann:	// additional non-GSL distros
+	case nsl_sf_stats_sech:
+	case nsl_sf_stats_levy:
+	case nsl_sf_stats_frechet:
+		break;
 	}
 
 	QString file = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "labplot2/pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[dist]) + ".jpg");
@@ -673,6 +679,11 @@ void RandomValuesDialog::generate() {
 		}
 		break;
 	}
+	case nsl_sf_stats_maxwell_boltzmann:	// additional non-GSL distros
+	case nsl_sf_stats_sech:
+	case nsl_sf_stats_levy:
+	case nsl_sf_stats_frechet:
+		break;
 	}
 
 	foreach (Column* col, m_columns) {

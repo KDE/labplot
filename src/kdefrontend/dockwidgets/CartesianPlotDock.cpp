@@ -950,6 +950,11 @@ void CartesianPlotDock::fileNameChanged() {
 		return;
 
 	QString fileName = ui.kleBackgroundFileName->text();
+	if (!fileName.isEmpty() && !QFile::exists(fileName))
+		ui.kleBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
+	else
+		ui.kleBackgroundFileName->setStyleSheet("");
+
 	foreach(CartesianPlot* plot, m_plotList)
 		plot->plotArea()->setBackgroundFileName(fileName);
 }
@@ -1304,6 +1309,12 @@ void CartesianPlotDock::load() {
 	ui.kcbBackgroundFirstColor->setColor( m_plot->plotArea()->backgroundFirstColor() );
 	ui.kcbBackgroundSecondColor->setColor( m_plot->plotArea()->backgroundSecondColor() );
 	ui.sbBackgroundOpacity->setValue( round(m_plot->plotArea()->backgroundOpacity()*100.0) );
+
+	//highlight the text field for the background image red if an image is used and cannot be found
+	if (!m_plot->plotArea()->backgroundFileName().isEmpty() && !QFile::exists(m_plot->plotArea()->backgroundFileName()))
+		ui.kleBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
+	else
+		ui.kleBackgroundFileName->setStyleSheet("");
 
 	//Padding
 	ui.sbPaddingHorizontal->setValue( Worksheet::convertFromSceneUnits(m_plot->horizontalPadding(), Worksheet::Centimeter) );
