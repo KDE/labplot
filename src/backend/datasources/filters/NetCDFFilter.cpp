@@ -558,7 +558,7 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 			handleError(status, "nc_get_vara_double");
 
 			if (!dataSource) {
-				for (int i = 0; i < actualRows; i++)
+				for (int i = 0; i < qMin(actualRows, lines); i++)
 					dataStrings << (QStringList() << QString::number(data[i]));
 				free(data);
 			}
