@@ -28,6 +28,7 @@
 #include "nsl_common.h"
 #include "nsl_fit.h"
 #include <gsl/gsl_math.h>
+#include <gsl/gsl_sf_erf.h>
 #include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_sf_psi.h>
 
@@ -265,7 +266,7 @@ double nsl_fit_model_erf_param_deriv(int param, double x, double s, double mu, d
 	if (param == 1)
 		return -a/sqrt(2.*M_PI)/s * norm * exp(-y*y);
 	if (param == 2)
-		return norm/2. * erf(y);
+		return norm/2. * gsl_sf_erf(y);
 	return 0;
 }
 double nsl_fit_model_hill_param_deriv(int param, double x, double s, double n, double a, double sigma) {
@@ -371,7 +372,7 @@ double nsl_fit_model_levy_param_deriv(int param, double x, double g, double mu, 
 	return 0;
 }
 double nsl_fit_model_chi_square_param_deriv(int param, double x, double n, double a, double sigma) {
-	double y=n/2., norm = pow(x, y-1.)/pow(2., y)/gamma(y)/sigma, efactor = exp(-x/2.);
+	double y=n/2., norm = pow(x, y-1.)/pow(2., y)/gsl_sf_gamma(y)/sigma, efactor = exp(-x/2.);
 
 	if (param == 0)
 		return a/2. * norm * (log(x/2.) - gsl_sf_psi(y)) * efactor;
