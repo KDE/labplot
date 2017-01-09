@@ -75,9 +75,9 @@ private:
 private slots:
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int);
-	void hdfTreeWidgetItemSelected(QTreeWidgetItem*, int);
-	void netcdfTreeWidgetItemSelected(QTreeWidgetItem*, int);
-	void fitsTreeWidgetItemSelected(QTreeWidgetItem*, int);
+	void hdfTreeWidgetSelectionChanged();
+	void netcdfTreeWidgetSelectionChanged();
+	void fitsTreeWidgetSelectionChanged();
 
 	void saveFilter();
 	void manageFilters();
