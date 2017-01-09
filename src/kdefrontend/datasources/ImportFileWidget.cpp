@@ -165,11 +165,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	connect( ui.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 	connect( asciiOptionsWidget.chbHeader, SIGNAL(stateChanged(int)), SLOT(headerChanged(int)) );
-	connect( hdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(hdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
+	connect( hdfOptionsWidget.twContent, SIGNAL(itemSelectionChanged()), SLOT(hdfTreeWidgetSelectionChanged()) );
 	connect( hdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
-	connect( netcdfOptionsWidget.twContent, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(netcdfTreeWidgetItemSelected(QTreeWidgetItem*,int)) );
+	connect( netcdfOptionsWidget.twContent, SIGNAL(itemSelectionChanged()), SLOT(netcdfTreeWidgetSelectionChanged()) );
 	connect( netcdfOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
-	connect( fitsOptionsWidget.twExtensions, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(fitsTreeWidgetItemSelected(QTreeWidgetItem*,int)));
+	connect( fitsOptionsWidget.twExtensions, SIGNAL(itemSelectionChanged()), SLOT(fitsTreeWidgetSelectionChanged()));
 	connect( fitsOptionsWidget.bRefreshPreview, SIGNAL(clicked()), SLOT(refreshPreview()) );
 
 	//TODO: implement save/load of user-defined settings later and activate these buttons again
@@ -621,10 +621,13 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 }
 
 /*!
-	updates the selected data set of a HDF file when the tree widget item is selected
+	updates the selected data set of a HDF file when a new tree widget item is selected
 */
-void ImportFileWidget::hdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
-	Q_UNUSED(column);
+void ImportFileWidget::hdfTreeWidgetSelectionChanged() {
+	DEBUG_LOG("hdfTreeWidgetItemSelected()");
+	DEBUG_LOG("SELECTED ITEMS =" << hdfOptionsWidget.twContent->selectedItems());
+	QTreeWidgetItem* item = hdfOptionsWidget.twContent->selectedItems().first();
+
 	if (item->data(2, Qt::DisplayRole).toString() == i18n("data set"))
 		refreshPreview();
 	else
@@ -646,7 +649,12 @@ const QStringList ImportFileWidget::selectedHDFNames() const {
 }
 
 //TODO
-void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int column) {
+void ImportFileWidget::fitsTreeWidgetSelectionChanged() {
+	DEBUG_LOG("fitsTreeWidgetItemSelected()");
+	DEBUG_LOG("SELECTED ITEMS =" << fitsOptionsWidget.twExtensions->selectedItems());
+	QTreeWidgetItem* item = fitsOptionsWidget.twExtensions->selectedItems().first();
+	int column = fitsOptionsWidget.twExtensions->currentColumn();
+
 	WAIT_CURSOR;
 	const QString& itemText = item->text(column);
 	QString selectedExtension;
@@ -708,10 +716,11 @@ void ImportFileWidget::fitsTreeWidgetItemSelected(QTreeWidgetItem * item, int co
 /*!
 	updates the selected var name of a NetCDF file when the tree widget item is selected
 */
-void ImportFileWidget::netcdfTreeWidgetItemSelected(QTreeWidgetItem* item, int column) {
+void ImportFileWidget::netcdfTreeWidgetSelectionChanged() {
 	DEBUG_LOG("netcdfTreeWidgetItemSelected()");
 	DEBUG_LOG("SELECTED ITEMS =" << netcdfOptionsWidget.twContent->selectedItems());
-	Q_UNUSED(column);
+	QTreeWidgetItem* item = netcdfOptionsWidget.twContent->selectedItems().first();
+
 	if (item->data(1, Qt::DisplayRole).toString() == "variable")
 		refreshPreview();
 	else if (item->data(1, Qt::DisplayRole).toString().contains("attribute")) {
