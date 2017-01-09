@@ -73,9 +73,9 @@ double my_acot(double x) {
 double my_sech(double x) { return 1./cosh(x); }
 double my_csch(double x) { return 1./sinh(x); }
 double my_coth(double x) { return 1./tanh(x); }
-double my_asech(double x) { return acosh(1./x); }
-double my_acsch(double x) { return asinh(1./x); }
-double my_acoth(double x) { return atanh(1./x); }
+double my_asech(double x) { return gsl_acosh(1./x); }
+double my_acsch(double x) { return gsl_asinh(1./x); }
+double my_acoth(double x) { return gsl_atanh(1./x); }
 
 /* wrapper for GSL functions with integer parameters */
 #define MODE GSL_PREC_DOUBLE
