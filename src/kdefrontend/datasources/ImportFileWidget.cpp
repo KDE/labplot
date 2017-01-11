@@ -626,8 +626,11 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 void ImportFileWidget::hdfTreeWidgetSelectionChanged() {
 	DEBUG_LOG("hdfTreeWidgetItemSelected()");
 	DEBUG_LOG("SELECTED ITEMS =" << hdfOptionsWidget.twContent->selectedItems());
-	QTreeWidgetItem* item = hdfOptionsWidget.twContent->selectedItems().first();
 
+	if (hdfOptionsWidget.twContent->selectedItems().isEmpty())
+		return;
+
+	QTreeWidgetItem* item = hdfOptionsWidget.twContent->selectedItems().first();
 	if (item->data(2, Qt::DisplayRole).toString() == i18n("data set"))
 		refreshPreview();
 	else
@@ -652,6 +655,10 @@ const QStringList ImportFileWidget::selectedHDFNames() const {
 void ImportFileWidget::fitsTreeWidgetSelectionChanged() {
 	DEBUG_LOG("fitsTreeWidgetItemSelected()");
 	DEBUG_LOG("SELECTED ITEMS =" << fitsOptionsWidget.twExtensions->selectedItems());
+
+	if (fitsOptionsWidget.twExtensions->selectedItems().isEmpty())
+		return;
+
 	QTreeWidgetItem* item = fitsOptionsWidget.twExtensions->selectedItems().first();
 	int column = fitsOptionsWidget.twExtensions->currentColumn();
 
@@ -719,8 +726,11 @@ void ImportFileWidget::fitsTreeWidgetSelectionChanged() {
 void ImportFileWidget::netcdfTreeWidgetSelectionChanged() {
 	DEBUG_LOG("netcdfTreeWidgetItemSelected()");
 	DEBUG_LOG("SELECTED ITEMS =" << netcdfOptionsWidget.twContent->selectedItems());
-	QTreeWidgetItem* item = netcdfOptionsWidget.twContent->selectedItems().first();
 
+	if (netcdfOptionsWidget.twContent->selectedItems().isEmpty())
+		return;
+
+	QTreeWidgetItem* item = netcdfOptionsWidget.twContent->selectedItems().first();
 	if (item->data(1, Qt::DisplayRole).toString() == "variable")
 		refreshPreview();
 	else if (item->data(1, Qt::DisplayRole).toString().contains("attribute")) {
