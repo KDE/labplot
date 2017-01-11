@@ -645,8 +645,8 @@ const QStringList ImportFileWidget::selectedHDFNames() const {
 	QList<QTreeWidgetItem*> items = hdfOptionsWidget.twContent->selectedItems();
 
 	// the data link is saved in the second column
-	for (int i = 0; i < items.size(); i++)
-		names<<items[i]->data(1, Qt::DisplayRole).toString();
+	foreach (QTreeWidgetItem* item, items)
+		names << item->text(1);
 
 	return names;
 }
@@ -771,8 +771,8 @@ const QStringList ImportFileWidget::selectedNetCDFNames() const {
 	QStringList names;
 	QList<QTreeWidgetItem *> items = netcdfOptionsWidget.twContent->selectedItems();
 
-	for (int i = 0; i < items.size(); i++)
-		names << items[i]->data(0, Qt::DisplayRole).toString();
+	foreach (QTreeWidgetItem* item, items)
+		names << item->text(0);
 
 	return names;
 }
@@ -781,7 +781,7 @@ const QStringList ImportFileWidget::selectedFITSExtensions() const {
 	QStringList extensionNames;
 	//TODO
 	QList<QTreeWidgetItem* > items = fitsOptionsWidget.twExtensions->selectedItems();
-	foreach (QTreeWidgetItem*  item, items)
+	foreach (QTreeWidgetItem* item, items)
 		extensionNames << item->text(0);
 	return extensionNames;
 }
