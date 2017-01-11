@@ -78,7 +78,7 @@ void SettingsWorksheetPage::restoreDefaults() {
 }
 
 void SettingsWorksheetPage::loadSettings() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_Worksheet" );
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
 	ui.chkPresenterModeInteractive->setChecked(group.readEntry(QLatin1String("PresenterModeInteractive"), false));
 	ui.chkDoubleBuffering->setChecked(group.readEntry(QLatin1String("DoubleBuffering"), true));
 
