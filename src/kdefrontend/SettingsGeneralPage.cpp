@@ -27,7 +27,6 @@
  ***************************************************************************/
 
 #include "SettingsGeneralPage.h"
-#include <KLocale>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
