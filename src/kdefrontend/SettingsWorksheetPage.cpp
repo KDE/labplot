@@ -31,7 +31,6 @@
 #include "tools/TeXRenderer.h"
 
 #include <KLocale>
-#include <kfiledialog.h>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
