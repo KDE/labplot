@@ -91,10 +91,17 @@ void XYFitCurveDock::setupGeneral() {
 
 	for(int i = 0; i < NSL_FIT_MODEL_CATEGORY_COUNT; i++)
 		uiGeneralTab.cbCategory->addItem(nsl_fit_model_category_name[i]);
+
 	//show the fit-model category for the currently selected default (first) fit-model category
 	categoryChanged(uiGeneralTab.cbCategory->currentIndex());
 
 	uiGeneralTab.teEquation->setMaximumHeight(uiGeneralTab.leName->sizeHint().height() * 2);
+
+	//use white background in the preview label
+	QPalette p;
+	p.setColor(QPalette::Window, Qt::white);
+	uiGeneralTab.lFuncPic->setAutoFillBackground(true);
+	uiGeneralTab.lFuncPic->setPalette(p);
 
 	uiGeneralTab.tbConstants->setIcon( KIcon("labplot-format-text-symbol") );
 	uiGeneralTab.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
