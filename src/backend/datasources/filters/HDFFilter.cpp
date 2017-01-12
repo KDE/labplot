@@ -1046,31 +1046,34 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 	hid_t dataspace = H5Dget_space(did);
 	int rank = H5Sget_simple_extent_ndims(dataspace);
 	handleError(rank, "H5Sget_simple_extent_ndims");
+	unsigned int rows = 1, cols = 1, regs = 1;
 	if (rank == 1) {
 		hsize_t dims_out[1];
 		status = H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
 		handleError(status, "H5Sget_simple_extent_dims");
-		unsigned int rows = dims_out[0];
+		rows = dims_out[0];
 		dataSetProps << QLatin1String(", ") << QString::number(rows)
 				<< QLatin1String(" (") << QString::number(size/typeSize) << QLatin1String(")");
 	} else if (rank == 2) {
 		hsize_t dims_out[2];
 		status = H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
 		handleError(status, "H5Sget_simple_extent_dims");
-		unsigned int rows = dims_out[0];
-		unsigned int cols = dims_out[1];
+		rows = dims_out[0];
+		cols = dims_out[1];
 		dataSetProps << QLatin1String(", ") << QString::number(rows) << QLatin1String("x") << QString::number(cols)
 				<< QLatin1String(" (") << QString::number(size/typeSize) << QLatin1String(")");
 	} else if (rank == 3) {
 		hsize_t dims_out[3];
 		status = H5Sget_simple_extent_dims(dataspace, dims_out, NULL);
 		handleError(status, "H5Sget_simple_extent_dims");
-		unsigned int rows = dims_out[0];
-		unsigned int cols = dims_out[1];
-		unsigned int regs = dims_out[2];
+		rows = dims_out[0];
+		cols = dims_out[1];
+		regs = dims_out[2];
 		dataSetProps << QLatin1String(", ")
 			<< QString::number(rows) << QLatin1String("x") << QString::number(cols) << QLatin1String("x") << QString::number(regs)
 			<< QLatin1String(" (") << QString::number(size/typeSize) << QLatin1String(")");
+	} else {
+		dataSetProps << QLatin1String(", ") << i18n("rank %1 not supported yet").arg(rank);
 	}
 
 	hid_t pid = H5Dget_create_plist(did);
@@ -1080,10 +1083,14 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 	QTreeWidgetItem* dataSetItem = new QTreeWidgetItem(QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data set")<<dataSetProps.join("")<<attr);
 	dataSetItem->setIcon(0, KIcon("x-office-spreadsheet"));
 	for (int i = 0; i < dataSetItem->columnCount(); i++) {
-		dataSetItem->setBackground(i, QColor(192,255,192));
-		dataSetItem->setForeground(i, Qt::black);
+		if (rows > 0 && cols > 0 && regs > 0) {
+			dataSetItem->setBackground(i, QColor(192,255,192));
+			dataSetItem->setForeground(i, Qt::black);
+			dataSetItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+		}
+		else
+			dataSetItem->setFlags(Qt::NoItemFlags);
 	}
-	dataSetItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 	parentItem->addChild(dataSetItem);
 }
 
