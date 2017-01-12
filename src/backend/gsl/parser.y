@@ -200,8 +200,9 @@ symrec* assign_variable(const char* symb_name, double value) {
 static int getcharstr(param *p) {
 	pdebug("PARSER: getcharstr() pos = %d\n", p->pos);
 
-	if (p->string[p->pos] == '\0' )
+	if (p->string[p->pos] == '\0')
 		return EOF;
+	pdebug("next char is %c\n", p->string[p->pos]);
 	return (int) p->string[(p->pos)++];
 }
 
@@ -297,7 +298,7 @@ int yylex(param *p) {
 	}
 
 	if (isalpha (c) || c == '.') {
-		pdebug("PARSER: reading identifier (starts with alpha)\n");
+		pdebug("PARSER: reading identifier (starts with alpha: %c)\n", c);
 		static char *symbuf = 0;
 		static int length = 0;
 		int i = 0;
@@ -307,6 +308,7 @@ int yylex(param *p) {
 			length = 10, symbuf = (char *) malloc(length + 1);
 
 		do {
+			pdebug("reading symbol .. ");
 			/* If buffer is full, make it bigger */
 			if (i == length) {
 				length *= 2;
@@ -314,10 +316,13 @@ int yylex(param *p) {
 			}
 			symbuf[i++] = c;
 			c = getcharstr(p);
+			pdebug("got %c\n", c);
 		}
 		while (c != EOF && (isalnum(c) || c == '_' || c == '.'));
+		pdebug("reading symbol done\n");
 
-		ungetcstr(&(p->pos));
+		if (c != EOF)
+			ungetcstr(&(p->pos));
 		symbuf[i] = '\0';
 
 		symrec *s = getsym(symbuf);

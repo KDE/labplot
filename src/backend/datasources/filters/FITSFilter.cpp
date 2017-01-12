@@ -311,6 +311,9 @@ QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, Abstract
 			return dataStrings << (QStringList() << QString());
 		}
 
+        if (naxis == 0) {
+            return dataStrings << (QStringList() << QString());
+        }
 		actualRows = naxes[1];
 		actualCols = naxes[0];
 		if (lines == -1)
