@@ -1937,7 +1937,7 @@ int yylex(param *p) {
 
 		pdebug("PARSER: result = %g\n", result);
 
-		yylval.dval=result;
+		yylval.dval = result;
 
                 p->pos += strlen(s) - strlen(remain);
 
@@ -1975,6 +1975,7 @@ int yylex(param *p) {
 		symrec *s = getsym(symbuf);
 		if(s == 0) {	/* symbol unknown */
 			pdebug("PARSER: ERROR: symbol \"%s\" UNKNOWN\n", symbuf);
+			yynerrs++;
 			return 0;
 		}
 		/* old behavior */
