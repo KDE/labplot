@@ -161,7 +161,9 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.sbMax->setValue(m_fitData.xRange.last());
 	this->autoRangeChanged();
 
+	unsigned int tmpModelType = m_fitData.modelType;	// save type because it's reset when category changes
 	uiGeneralTab.cbCategory->setCurrentIndex(m_fitData.modelCategory);
+	m_fitData.modelType = tmpModelType;
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
@@ -272,7 +274,7 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach(XYCurve* curve, m_curvesList)
+	foreach (XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYDataColumn(column);
 }
 
@@ -324,7 +326,7 @@ void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach(XYCurve* curve, m_curvesList)
+	foreach (XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setWeightsColumn(column);
 }
 
@@ -386,7 +388,8 @@ void XYFitCurveDock::categoryChanged(int index) {
 
 void XYFitCurveDock::modelChanged(int index) {
 	DEBUG_LOG("modelChanged() type =" << index << ", initializing =" << m_initializing);
-	if(m_initializing)
+	// leave if there is no selection
+	if(index == -1)
 		return;
 
 	unsigned int type = 0;
