@@ -65,11 +65,11 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 
 	pbLoadTheme = new QPushButton(this);
 	horizontalLayout->addWidget(pbLoadTheme);
-	pbLoadTheme->setText("Apply theme");
+	pbLoadTheme->setText(i18n("Apply theme"));
 
 	pbSaveTheme = new QPushButton(this);
 	horizontalLayout->addWidget(pbSaveTheme);
-	pbSaveTheme->setText("Save theme");
+	pbSaveTheme->setText(i18n("Save theme"));
 
 /*
 	pbPublishTheme = new QPushButton(this);
