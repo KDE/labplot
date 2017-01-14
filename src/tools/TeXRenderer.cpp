@@ -93,7 +93,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	QTextStream out(&file);
 	int headerIndex = teXString.indexOf("\\begin{document}");
 	QString body;
-	if (headerIndex!=-1) {
+	if (headerIndex != -1) {
 		//user provided a complete latex document -> extract the document header and body
 		QString header = teXString.left(headerIndex);
 		int footerIndex = teXString.indexOf("\\end{document}");
@@ -102,7 +102,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	} else {
 		//user simply provided a document body (assume it's a math. expression) -> add a minimal header
 		out << "\\documentclass{minimal}";
-		if (teXString.indexOf('$')==-1)
+		if (teXString.indexOf('$') == -1)
 			body = '$' + teXString + '$';
 		else
 			body = teXString;
@@ -111,7 +111,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	//replace line breaks with tex command for a line break '\\'
 	body = body.replace(QLatin1String("\n"), QLatin1String("\\\\"));
 
-	if (engine=="xelatex" || engine=="lualatex") {
+	if (engine == "xelatex" || engine == "lualatex") {
 		out << "\\usepackage{xltxtra}";
 		out << "\\defaultfontfeatures{Ligatures=TeX}";
 		if (!fontFamily.isEmpty())
@@ -130,7 +130,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	out << "\\end{document}";
 	out.flush();
 
-	if (engine!="latex")
+	if (engine != "latex")
 		return imageFromPDF(file, dpi, engine, success);
 	else
 		return imageFromDVI(file, dpi, success);
@@ -182,22 +182,21 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 	// convert: PDF -> PNG
 	QProcess convertProcess;
 	convertProcess.start("convert",  QStringList() << "-density"<< QString::number(dpi) + 'x' + QString::number(dpi)
-													<< fi.completeBaseName() + ".pdf"
-													<< fi.completeBaseName() + ".png");
+							<< fi.completeBaseName() + ".pdf" << fi.completeBaseName() + ".png");
 	if (!convertProcess.waitForFinished()) {
 		kWarning() << "convert process failed." << endl;
 		*success = false;
-		QFile::remove(fi.completeBaseName()+".pdf");
+		QFile::remove(fi.completeBaseName() + ".pdf");
 		return QImage();
 	}
 
 	// read png file and clean up
 	QImage image;
-	image.load(fi.completeBaseName()+".png");
+	image.load(fi.completeBaseName() + ".png");
 
 	// final clean up
-	QFile::remove(fi.completeBaseName()+".png");
-	QFile::remove(fi.completeBaseName()+".pdf");
+	QFile::remove(fi.completeBaseName() + ".png");
+	QFile::remove(fi.completeBaseName() + ".pdf");
 
 	return image;
 }
@@ -209,22 +208,22 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
 	if (!latexProcess.waitForFinished()) {
 		qWarning() << "latex process failed." << endl;
-		QFile::remove(fi.completeBaseName()+".aux");
-		QFile::remove(fi.completeBaseName()+".log");
+		QFile::remove(fi.completeBaseName() + ".aux");
+		QFile::remove(fi.completeBaseName() + ".log");
 		return QImage();
 	}
 
-	*success = (latexProcess.exitCode()==0);
+	*success = (latexProcess.exitCode() == 0);
 
-	QFile::remove(fi.completeBaseName()+".aux");
-	QFile::remove(fi.completeBaseName()+".log");
+	QFile::remove(fi.completeBaseName() + ".aux");
+	QFile::remove(fi.completeBaseName() + ".log");
 
 	// dvips: DVI -> PS
 	QProcess dvipsProcess;
 	dvipsProcess.start("dvips", QStringList() << "-E" << fi.completeBaseName());
 	if (!dvipsProcess.waitForFinished()) {
 		qWarning() << "dvips process failed." << endl;
-		QFile::remove(fi.completeBaseName()+".dvi");
+		QFile::remove(fi.completeBaseName() + ".dvi");
 		return QImage();
 	}
 
@@ -234,19 +233,19 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	if (!convertProcess.waitForFinished()) {
 		qWarning() << "convert process failed." << endl;
 		kWarning() << "convert process failed." << endl;
-		QFile::remove(fi.completeBaseName()+".dvi");
-		QFile::remove(fi.completeBaseName()+".ps");
+		QFile::remove(fi.completeBaseName() + ".dvi");
+		QFile::remove(fi.completeBaseName() + ".ps");
 		return QImage();
 	}
 
 	// read png file
 	QImage image;
-	image.load(fi.completeBaseName()+".png", "png");
+	image.load(fi.completeBaseName() + ".png", "png");
 
 	// final clean up
-	QFile::remove(fi.completeBaseName()+".png");
-	QFile::remove(fi.completeBaseName()+".dvi");
-	QFile::remove(fi.completeBaseName()+".ps");
+	QFile::remove(fi.completeBaseName() + ".png");
+	QFile::remove(fi.completeBaseName() + ".dvi");
+	QFile::remove(fi.completeBaseName() + ".ps");
 
 	return image;
 }
@@ -263,18 +262,16 @@ bool TeXRenderer::enabled() {
 		return false;
 
 	//to convert the generated PS files to DVI we need 'dvips'
-	if (engine=="latex") {
+	if (engine == "latex") {
 		if (!executableExists(QLatin1String("dvips")))
 			return false;
 	}
 
-#ifdef _WIN32
-	if (!executableExists(QLatin1String("gswin32c.exe")))
-		return false;
-#endif
-
-#ifdef _WIN64
+#if defined(_WIN64)
 	if (!executableExists(QLatin1String("gswin64c.exe")))
+		return false;
+#elif defined(_WIN32)
+	if (!executableExists(QLatin1String("gswin32c.exe")))
 		return false;
 #endif
 
