@@ -162,7 +162,10 @@ void XYFitCurveDock::initGeneralTab() {
 	this->autoRangeChanged();
 
 	unsigned int tmpModelType = m_fitData.modelType;	// save type because it's reset when category changes
-	uiGeneralTab.cbCategory->setCurrentIndex(m_fitData.modelCategory);
+	if (m_fitData.modelCategory == nsl_fit_model_custom)
+		uiGeneralTab.cbCategory->setCurrentIndex(uiGeneralTab.cbCategory->count() - 1);
+	else
+		uiGeneralTab.cbCategory->setCurrentIndex(m_fitData.modelCategory);
 	m_fitData.modelType = tmpModelType;
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
@@ -475,7 +478,8 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.model = nsl_sf_stats_distribution_equation[m_fitData.modelType];
 		break;
         case nsl_fit_model_custom:
-		//TODO: use the equation of the last selected predefined model or of the last available custom model
+		// use the equation of the last selected predefined model
+		uiGeneralTab.teEquation->setText(m_fitData.model);
 		break;
 	}
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
@@ -809,7 +813,6 @@ void XYFitCurveDock::updateModelEquation() {
 	}
 
 	uiGeneralTab.teEquation->setVariables(vars);
-	//uiGeneralTab.teEquation->setText(eq);
 
 	// set formula picture
 	uiGeneralTab.lEquation->setText(("f(x) ="));
