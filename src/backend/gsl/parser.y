@@ -261,6 +261,12 @@ int yylex(param *p) {
 		pdebug("FINISHED\n");
 		return 0;
 	}
+	/* check for non-ASCII chars */
+	if (!isascii(c)) {
+		pdebug("non-ASCII character found. Giving up\n");
+		yynerrs++;
+		return 0;
+	}
 
 	pdebug("PARSER: reading character: %c\n", c);
 
@@ -290,7 +296,7 @@ int yylex(param *p) {
 
 		pdebug("PARSER: result = %g\n", result);
 
-		yylval.dval=result;
+		yylval.dval = result;
 
                 p->pos += strlen(s) - strlen(remain);
 
@@ -328,6 +334,7 @@ int yylex(param *p) {
 		symrec *s = getsym(symbuf);
 		if(s == 0) {	/* symbol unknown */
 			pdebug("PARSER: ERROR: symbol \"%s\" UNKNOWN\n", symbuf);
+			yynerrs++;
 			return 0;
 		}
 		/* old behavior */
