@@ -482,6 +482,7 @@ void XYFitCurveDock::updateModelEquation() {
 		uiGeneralTab.teEquation->setText(m_fitData.model);
 		break;
 	}
+	// custom keeps the parameter from previous selected model
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
 		m_fitData.paramNames.clear();
 		m_fitData.paramNamesUtf8.clear();
