@@ -452,12 +452,14 @@ void FitParametersWidget::addParameter() {
 
 	ui.tableWidget->setCurrentCell(rows, 0);
 	ui.pbRemove->setEnabled(true);
+	changed();
 }
 
 void FitParametersWidget::removeParameter() {
 	ui.tableWidget->removeRow(ui.tableWidget->currentRow());
 	if (ui.tableWidget->rowCount() == 1)
 		ui.pbRemove->setEnabled(false);
+	changed();
 }
 
 void FitParametersWidget::changed() {
