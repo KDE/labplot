@@ -1908,6 +1908,12 @@ int yylex(param *p) {
 		pdebug("FINISHED\n");
 		return 0;
 	}
+	/* check for non-ASCII chars */
+	if (!isascii(c)) {
+		pdebug("non-ASCII character found. Giving up\n");
+		yynerrs++;
+		return 0;
+	}
 
 	pdebug("PARSER: reading character: %c\n", c);
 
