@@ -630,6 +630,7 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 		for (int n = 0; n < actualCols; n++) {
 			Column* column = spreadsheet->column(columnOffset+n);
 			column->setComment(comment);
+			column->setName(currentVarName);
 			column->setUndoAware(true);
 			if (mode == AbstractFileFilter::Replace) {
 				column->setSuppressDataChangedSignal(false);

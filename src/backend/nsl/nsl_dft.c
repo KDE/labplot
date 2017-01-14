@@ -40,11 +40,8 @@ const char* nsl_dft_xscale_name[] = {i18n("Frequency"), i18n("Index"), i18n("Per
 
 int nsl_dft_transform_window(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type, nsl_sf_window_type window_type) {
 	/* apply window function */
-	if (window_type != nsl_sf_window_uniform) {
-		size_t i;
-		for (i=0; i < n; i++)
-			data[i] *= nsl_sf_window(i, n, window_type);
-	}
+	if (window_type != nsl_sf_window_uniform)
+		nsl_sf_apply_window(data, n, window_type);
 
 	/* transform */
 	int status = nsl_dft_transform(data, stride, n, two_sided, type);

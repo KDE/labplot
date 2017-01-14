@@ -75,7 +75,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 	ui.tableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	ui.tableWidget->horizontalHeader()->setStretchLastSection(true);
 
-	if (m_fitData->modelType != nsl_fit_model_custom) {	// pre-defined model
+	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined model
 		ui.tableWidget->setRowCount(m_fitData->paramNames.size());
 
 		for (int i=0; i < m_fitData->paramNames.size(); ++i){
@@ -129,7 +129,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 		if (!m_fitData->paramNames.isEmpty()) {	// parameters for the custom model are already available -> show them
 			ui.tableWidget->setRowCount(m_fitData->paramNames.size());
 
-			for (int i=0; i < m_fitData->paramNames.size(); ++i){
+			for (int i = 0; i < m_fitData->paramNames.size(); ++i){
 				// name
 				QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNames.at(i));
 				item->setBackground(QBrush(Qt::lightGray));
@@ -220,7 +220,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 
 	ui.tableWidget->installEventFilter(this);
 
-	connect( ui.tableWidget, SIGNAL(cellChanged(int,int)), this, SLOT(changed()) );
+	connect( ui.tableWidget, SIGNAL(cellChanged(int, int)), this, SLOT(changed()) );
 	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
 	connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
 	connect( ui.pbAdd, SIGNAL(clicked()), this, SLOT(addParameter()) );
@@ -232,14 +232,14 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 		if (event->type() == QEvent::KeyPress) {
 			QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 			if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
-				if (m_fitData->modelType != nsl_fit_model_custom) {
+				if (m_fitData->modelCategory != nsl_fit_model_custom) {
 					//on the second column with the values is editable.
 					//navigate to the next cell in the second column, or to the apply-button
-					if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount()-1) {
+					if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount() - 1) {
 						ui.pbApply->setFocus();
 						ui.tableWidget->clearSelection();
 					} else {
-						ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow()+1, 1);
+						ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow() + 1, 1);
 					}
 				} else {
 					//both columns (names and start values) are editable
@@ -248,11 +248,11 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 						ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow(), 1);
 					} else {
 						//start value was entered, navigate to the next name-cell or to the apply-button
-						if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount()-1) {
+						if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount() - 1) {
 							ui.pbApply->setFocus();
 							ui.tableWidget->clearSelection();
 						} else {
-							ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow()+1, 0);
+							ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow() + 1, 0);
 						}
 					}
 				}
@@ -266,7 +266,7 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 
 void FitParametersWidget::applyClicked() {
 
-	if (m_fitData->modelType != nsl_fit_model_custom) {	// pre-defined models
+	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined models
 		for (int i=0; i < ui.tableWidget->rowCount(); ++i) {
 			m_fitData->paramStartValues[i] = ((QLineEdit *)ui.tableWidget->cellWidget(i, 1))->text().toDouble();
 
@@ -284,6 +284,7 @@ void FitParametersWidget::applyClicked() {
 		}
 	} else {	// custom model
 		m_fitData->paramNames.clear();
+		m_fitData->paramNamesUtf8.clear();
 		m_fitData->paramStartValues.clear();
 		m_fitData->paramFixed.clear();
 		m_fitData->paramLowerLimits.clear();
@@ -293,6 +294,7 @@ void FitParametersWidget::applyClicked() {
 			if ( !ui.tableWidget->item(i, 0)->text().simplified().isEmpty()
 				&& !((QLineEdit *)ui.tableWidget->cellWidget(i, 1))->text().simplified().isEmpty() ) {
 				m_fitData->paramNames.append( ui.tableWidget->item(i, 0)->text() );
+				m_fitData->paramNamesUtf8.append( ui.tableWidget->item(i, 0)->text() );
 				m_fitData->paramStartValues.append( ((QLineEdit *)ui.tableWidget->cellWidget(i, 1))->text().toDouble() );
 
 				QWidget *widget = ui.tableWidget->cellWidget(i, 2)->layout()->itemAt(0)->widget();
@@ -451,12 +453,14 @@ void FitParametersWidget::addParameter() {
 
 	ui.tableWidget->setCurrentCell(rows, 0);
 	ui.pbRemove->setEnabled(true);
+	changed();
 }
 
 void FitParametersWidget::removeParameter() {
 	ui.tableWidget->removeRow(ui.tableWidget->currentRow());
 	if (ui.tableWidget->rowCount() == 1)
 		ui.pbRemove->setEnabled(false);
+	changed();
 }
 
 void FitParametersWidget::changed() {

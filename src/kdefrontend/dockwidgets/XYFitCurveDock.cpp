@@ -161,7 +161,12 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.sbMax->setValue(m_fitData.xRange.last());
 	this->autoRangeChanged();
 
-	uiGeneralTab.cbCategory->setCurrentIndex(m_fitData.modelCategory);
+	unsigned int tmpModelType = m_fitData.modelType;	// save type because it's reset when category changes
+	if (m_fitData.modelCategory == nsl_fit_model_custom)
+		uiGeneralTab.cbCategory->setCurrentIndex(uiGeneralTab.cbCategory->count() - 1);
+	else
+		uiGeneralTab.cbCategory->setCurrentIndex(m_fitData.modelCategory);
+	m_fitData.modelType = tmpModelType;
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
@@ -272,7 +277,7 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach(XYCurve* curve, m_curvesList)
+	foreach (XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setYDataColumn(column);
 }
 
@@ -324,7 +329,7 @@ void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
-	foreach(XYCurve* curve, m_curvesList)
+	foreach (XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setWeightsColumn(column);
 }
 
@@ -386,7 +391,8 @@ void XYFitCurveDock::categoryChanged(int index) {
 
 void XYFitCurveDock::modelChanged(int index) {
 	DEBUG_LOG("modelChanged() type =" << index << ", initializing =" << m_initializing);
-	if(m_initializing)
+	// leave if there is no selection
+	if(index == -1)
 		return;
 
 	unsigned int type = 0;
@@ -472,9 +478,11 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.model = nsl_sf_stats_distribution_equation[m_fitData.modelType];
 		break;
         case nsl_fit_model_custom:
-		//TODO: use the equation of the last selected predefined model or of the last available custom model
+		// use the equation of the last selected predefined model
+		uiGeneralTab.teEquation->setText(m_fitData.model);
 		break;
 	}
+	// custom keeps the parameter from previous selected model
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
 		m_fitData.paramNames.clear();
 		m_fitData.paramNamesUtf8.clear();
@@ -806,7 +814,6 @@ void XYFitCurveDock::updateModelEquation() {
 	}
 
 	uiGeneralTab.teEquation->setVariables(vars);
-	//uiGeneralTab.teEquation->setText(eq);
 
 	// set formula picture
 	uiGeneralTab.lEquation->setText(("f(x) ="));

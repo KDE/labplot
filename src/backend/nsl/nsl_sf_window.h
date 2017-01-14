@@ -41,6 +41,6 @@ extern const char* nsl_sf_window_type_name[];
 /* u range: [0:1] or [0:N-1] ? */
 
 /* uniform */
-double nsl_sf_window(int i, int N, nsl_sf_window_type type);
+int nsl_sf_apply_window(double data[], size_t N, nsl_sf_window_type type);
 
 #endif /* NSL_SF_WINDOW_H */
