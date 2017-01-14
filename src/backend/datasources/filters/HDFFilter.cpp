@@ -126,7 +126,7 @@ int HDFFilter::endRow() const {
 }
 
 void HDFFilter::setStartColumn(const int c) {
-	d->startColumn=c;
+	d->startColumn = c;
 }
 
 int HDFFilter::startColumn() const {
@@ -134,7 +134,7 @@ int HDFFilter::startColumn() const {
 }
 
 void HDFFilter::setEndColumn(const int c) {
-	d->endColumn=c;
+	d->endColumn = c;
 }
 
 int HDFFilter::endColumn() const {
@@ -1629,6 +1629,7 @@ QList<QStringList> HDFFilterPrivate::readCurrentDataSet(const QString & fileName
 		for (int n = 0; n < actualCols; n++) {
 			Column* column = spreadsheet->column(columnOffset+n);
 			column->setComment(comment);
+			column->setName(currentDataSetName);
 			column->setUndoAware(true);
 			if (mode == AbstractFileFilter::Replace) {
 				column->setSuppressDataChangedSignal(false);

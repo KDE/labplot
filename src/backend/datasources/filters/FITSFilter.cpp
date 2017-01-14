@@ -384,6 +384,7 @@ QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, Abstract
 			for (int n = 0; n < actualCols; n++) {
 				Column* column = spreadsheet->column(columnOffset + n);
 				column->setComment(comment);
+				//TODO: column->setName(); ?
 				column->setUndoAware(true);
 				if (importMode == AbstractFileFilter::Replace) {
 					column->setSuppressDataChangedSignal(false);
@@ -621,6 +622,7 @@ QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, Abstract
 				for ( int n = 0; n < actualCols - startRrow; ++n) {
 					Column* column = spreadsheet->column(columnOffset+n);
 					column->setComment(columnUnits.at(n));
+					//TODO: column->setName(); ?
 					column->setUndoAware(true);
 					if (importMode==AbstractFileFilter::Replace) {
 						column->setSuppressDataChangedSignal(false);
