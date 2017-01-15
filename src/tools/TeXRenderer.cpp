@@ -27,6 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "TeXRenderer.h"
+#include "backend/lib/macros.h"
 
 #include <KConfigGroup>
 #include <KDebug>
@@ -120,7 +121,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	out << "\\usepackage{color}";
 	out << "\\usepackage[active,displaymath,textmath,tightpage]{preview}";
 	out << "\\begin{document}";
-	out << "\\definecolor{fontcolor}{rgb}{" << fontColor.redF() << ',' << fontColor.greenF() << ','<<fontColor.blueF() << "}";
+	out << "\\definecolor{fontcolor}{rgb}{" << fontColor.redF() << ',' << fontColor.greenF() << ',' << fontColor.blueF() << "}";
 	out << "\\begin{preview}";
 	out << "{\\fontsize{" << QString::number(fontSize) << "}{" << QString::number(fontSize) << "}\\selectfont";
 	out << "{\\color{fontcolor}";
@@ -129,10 +130,10 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	out << "\\end{document}";
 	out.flush();
 
-	if (engine != "latex")
-		return imageFromPDF(file, dpi, engine, success);
-	else
+	if (engine == "latex")
 		return imageFromDVI(file, dpi, success);
+	else
+		return imageFromPDF(file, dpi, engine, success);
 }
 
 // TEX -> PDF -> PNG
@@ -143,19 +144,20 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 	if (!latexProcess.waitForFinished()) {
 		kWarning() << engine << "process failed." << endl;
 		*success = false;
-		QFile::remove(fi.completeBaseName()+".aux");
-		QFile::remove(fi.completeBaseName()+".log");
+		QFile::remove(fi.completeBaseName() + ".aux");
+		QFile::remove(fi.completeBaseName() + ".log");
 		return QImage();
 	}
+	DEBUG_LOG("latex exit code =" << latexProcess.exitCode());
 
 	*success = (latexProcess.exitCode() == 0);
 
-	QFile::remove(fi.completeBaseName()+".aux");
-	QFile::remove(fi.completeBaseName()+".log");
+	QFile::remove(fi.completeBaseName() + ".aux");
+	QFile::remove(fi.completeBaseName() + ".log");
 
 	// convert: PDF -> PNG
 	QProcess convertProcess;
-	convertProcess.start("convert",  QStringList() << "-density"<< QString::number(dpi) + 'x' + QString::number(dpi)
+	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)
 							<< fi.completeBaseName() + ".pdf" << fi.completeBaseName() + ".png");
 	if (!convertProcess.waitForFinished()) {
 		kWarning() << "convert process failed." << endl;
@@ -203,7 +205,8 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 
 	// convert: PS -> PNG
 	QProcess convertProcess;
-	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)  << fi.completeBaseName()+".ps" << fi.completeBaseName()+".png");
+	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)
+			<< fi.completeBaseName() + ".ps" << fi.completeBaseName() + ".png");
 	if (!convertProcess.waitForFinished()) {
 		kWarning() << "convert process failed." << endl;
 		QFile::remove(fi.completeBaseName() + ".dvi");
