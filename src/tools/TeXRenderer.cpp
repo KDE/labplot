@@ -261,22 +261,29 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 bool TeXRenderer::enabled() {
 	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
 	QString engine = group.readEntry("LaTeXEngine", "");
-	if (engine.isEmpty() || !executableExists(engine))
+	if (engine.isEmpty() || !executableExists(engine)) {
+		DEBUG_WIN("LaTeX engine does not exist");
 		return false;
+	}
 
 	//engine found, check the precense of other required tools (s.a. TeXRenderer.cpp):
 	//to convert the generated PDF/PS files to PNG we need 'convert' from the ImageMagic package
-	if (!executableExists(QLatin1String("convert")))
+	if (!executableExists(QLatin1String("convert"))) {
+		DEBUG_WIN("program \"convert\" does not exist");
 		return false;
+	}
 
 	//to convert the generated PS files to DVI we need 'dvips'
 	if (engine == "latex") {
-		if (!executableExists(QLatin1String("dvips")))
+		if (!executableExists(QLatin1String("dvips"))) {
+			DEBUG_WIN("program \"dvips\" does not exist");
 			return false;
+		}
 	}
 
 #if defined(_WIN64)
-	if (!executableExists(QLatin1String("gswin64c")) && !QDir(getenv("PROGRAMFILES") + QString("/gs")).exists())
+	if (!executableExists(QLatin1String("gswin64c")) && !QDir(getenv("PROGRAMFILES") + QString("/gs")).exists() 
+		&& !QDir(getenv("PROGRAMFILES(X86)") + QString("/gs")).exists())
 		return false;
 #elif defined(_WIN32)
 	if (!executableExists(QLatin1String("gswin32c")) && !QDir(getenv("PROGRAMFILES") + QString("/gs")).exists())
