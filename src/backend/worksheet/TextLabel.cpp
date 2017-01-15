@@ -342,31 +342,31 @@ void TextLabelPrivate::retransform() {
 	QPointF itemPos;
 	switch (horizontalAlignment) {
 	case TextLabel::hAlignLeft:
-		itemPos.setX( x - w/2 );
+		itemPos.setX(x - w/2);
 		break;
 	case TextLabel::hAlignCenter:
-		itemPos.setX( x );
+		itemPos.setX(x);
 		break;
 	case TextLabel::hAlignRight:
-		itemPos.setX( x +w/2);
+		itemPos.setX(x + w/2);
 		break;
 	}
 
 	switch (verticalAlignment) {
 	case TextLabel::vAlignTop:
-		itemPos.setY( y - h/2 );
+		itemPos.setY(y - h/2);
 		break;
 	case TextLabel::vAlignCenter:
-		itemPos.setY( y );
+		itemPos.setY(y);
 		break;
 	case TextLabel::vAlignBottom:
-		itemPos.setY( y + h/2 );
+		itemPos.setY(y + h/2);
 		break;
 	}
 
-	suppressItemChangeEvent=true;
+	suppressItemChangeEvent = true;
 	setPos(itemPos);
-	suppressItemChangeEvent=false;
+	suppressItemChangeEvent = false;
 
 	boundingRectangle.setX(-w/2);
 	boundingRectangle.setY(-h/2);
@@ -440,6 +440,7 @@ void TextLabelPrivate::updateText() {
 void TextLabelPrivate::updateTeXImage() {
 	teXImage = teXImageFutureWatcher.result();
 	retransform();
+	DEBUG_LOG("teXRenderSuccessful =" << teXRenderSuccessful);
 	emit q->teXImageUpdated(teXRenderSuccessful);
 }
 
@@ -496,7 +497,7 @@ void TextLabelPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	painter->rotate(-rotationAngle);
 
 	if (textWrapper.teXUsed) {
-		if (boundingRect().width()!=0.0 &&  boundingRect().height()!=0.0) {
+		if (boundingRect().width() != 0.0 &&  boundingRect().height() != 0.0) {
 			QImage todraw = teXImage.scaled(boundingRect().width(), boundingRect().height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 			painter->drawImage(boundingRect(), todraw);
 		}
@@ -578,25 +579,25 @@ QPointF TextLabelPrivate::positionFromItemPosition(const QPointF& itemPos) {
 	//depending on the alignment, calculate the new position
 	switch (horizontalAlignment) {
 	case TextLabel::hAlignLeft:
-		tmpPosition.setX( x + w/2 );
+		tmpPosition.setX(x + w/2);
 		break;
 	case TextLabel::hAlignCenter:
-		tmpPosition.setX( x );
+		tmpPosition.setX(x);
 		break;
 	case TextLabel::hAlignRight:
-		tmpPosition.setX( x - w/2 );
+		tmpPosition.setX(x - w/2);
 		break;
 	}
 
 	switch (verticalAlignment) {
 	case TextLabel::vAlignTop:
-		tmpPosition.setY( y + h/2 );
+		tmpPosition.setY(y + h/2);
 		break;
 	case TextLabel::vAlignCenter:
-		tmpPosition.setY( y );
+		tmpPosition.setY(y);
 		break;
 	case TextLabel::vAlignBottom:
-		tmpPosition.setY( y - h/2 );
+		tmpPosition.setY(y - h/2);
 		break;
 	}
 
