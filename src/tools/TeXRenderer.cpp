@@ -249,10 +249,10 @@ bool TeXRenderer::enabled() {
 	}
 
 #if defined(_WIN64)
-	if (!executableExists(QLatin1String("gswin64c")) && !QDir("C:/Program Files/gs"))
+	if (!executableExists(QLatin1String("gswin64c")) && !QDir(getenv("PROGRAMMFILES") + QString("/gs")).exists())
 		return false;
 #elif defined(_WIN32)
-	if (!executableExists(QLatin1String("gswin32c")) && !QDir("C:/Program Files/gs"))
+	if (!executableExists(QLatin1String("gswin32c")) && !QDir(getenv("PROGRAMMFILES") + QString("/gs")).exists())
 		return false;
 #endif
 
