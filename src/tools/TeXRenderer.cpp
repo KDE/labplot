@@ -140,7 +140,12 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine, bool* success) {
 	QFileInfo fi(file.fileName());
 	QProcess latexProcess;
+#if defined(_WIN32)
+	latexProcess.setNativeArguments("-interaction=batchmode " + file.fileName());
+	latexProcess.start(engine, QStringList() << "");
+#else	// TODO: what about MAC?
 	latexProcess.start(engine, QStringList() << "-interaction=batchmode" << file.fileName());
+#endif
 	if (!latexProcess.waitForFinished()) {
 		kWarning() << engine << "process failed." << endl;
 		*success = false;
