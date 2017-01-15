@@ -226,7 +226,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 bool TeXRenderer::enabled() {
 	KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_Worksheet"));
 	QString engine = group.readEntry("LaTeXEngine", "");
-	if (engine.isEmpty() || !TeXRenderer::executableExists(engine))
+	if (engine.isEmpty() || !executableExists(engine))
 		return false;
 
 	//engine found, check the precense of other required tools (s.a. TeXRenderer.cpp):
@@ -241,10 +241,10 @@ bool TeXRenderer::enabled() {
 	}
 
 #if defined(_WIN64)
-	if (!executableExists(QLatin1String("gswin64c.exe")))
+	if (!executableExists(QLatin1String("gswin64c")) && !QDir("C:/Program Files/gs"))
 		return false;
 #elif defined(_WIN32)
-	if (!executableExists(QLatin1String("gswin32c.exe")))
+	if (!executableExists(QLatin1String("gswin32c")) && !QDir("C:/Program Files/gs"))
 		return false;
 #endif
 
