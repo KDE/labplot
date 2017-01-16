@@ -198,7 +198,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	DEBUG_LOG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
-		DEBUG_LOG("ERROR: No aspect available!");
+		DEBUG_LOG("ERROR: No aspect available");
 		return;
 	}
 

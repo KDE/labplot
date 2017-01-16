@@ -418,7 +418,7 @@ int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigne
 		return -1;
 	}
 	if (order < 1 || order > points-1) {
-		printf("The polynomial order must be between 1 and %u (%u given)!", points-1, order);
+		printf("The polynomial order must be between 1 and %u (%u given).", points-1, order);
 		return -2;
 	}
 

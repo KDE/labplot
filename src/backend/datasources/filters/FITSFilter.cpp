@@ -642,7 +642,7 @@ QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, Abstract
 		fits_close_file(fitsFile, &status);
 		return dataStrings;
 	} else
-		qDebug() << i18n("Incorrect header type!");
+		qDebug() << i18n("Incorrect header type");
 
 	fits_close_file(fitsFile, &status);
 
