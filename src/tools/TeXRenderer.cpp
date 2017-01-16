@@ -187,12 +187,14 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 	QFile::remove(fi.completeBaseName() + ".log");
 
 	// convert: PDF -> PNG
+	QProcess convertProcess;
 #if defined(_WIN32)
 	// need to set path to magick coder modules
+	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 	QFileInfo exeInfo(QStandardPaths::findExecutable(QLatin1String("convert")));
-	setenv("MAGICK_CODER_MODULE_PATH", qPrintable(exeInfo.absolutePath()), 0);
+	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(exeInfo.absolutePath()));
+	convertProcess.setProcessEnvironment(env);
 #endif
-	QProcess convertProcess;
 	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)
 							<< fi.completeBaseName() + ".pdf" << fi.completeBaseName() + ".png");
 	if (!convertProcess.waitForFinished()) {
@@ -240,12 +242,14 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	}
 
 	// convert: PS -> PNG
+	QProcess convertProcess;
 #if defined(_WIN32)
 	// need to set path to magick coder modules
+	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 	QFileInfo exeInfo(QStandardPaths::findExecutable(QLatin1String("convert")));
-	setenv("MAGICK_CODER_MODULE_PATH", qPrintable(exeInfo.absolutePath()), 0);
+	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(exeInfo.absolutePath()));
+	convertProcess.setProcessEnvironment(env);
 #endif
-	QProcess convertProcess;
 	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)
 			<< fi.completeBaseName() + ".ps" << fi.completeBaseName() + ".png");
 	if (!convertProcess.waitForFinished()) {
