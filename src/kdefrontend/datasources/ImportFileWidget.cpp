@@ -602,7 +602,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.tabWidget->setCurrentIndex(0);
 		break;
 	default:
-		qDebug()<<"unknown file type!";
+		qDebug()<<"unknown file type";
 	}
 
 	hdfOptionsWidget.twContent->clear();

@@ -189,8 +189,8 @@ void FITSHeaderEditWidget::openFile() {
 		if (ui.twExtensions->selectedItems().size() > 0)
 			fillTable(ui.twExtensions->selectedItems().at(0), 0);
 	} else {
-		KMessageBox::information(this, i18n("Cannot open file, file already opened!"),
-		                         i18n("File already opened!"));
+		KMessageBox::information(this, i18n("Cannot open file, file already opened."),
+		                         i18n("File already opened"));
 	}
 	RESET_CURSOR;
 }
@@ -357,7 +357,7 @@ void FITSHeaderEditWidget::removeKeyword() {
 			m_extensionDatas[m_seletedExtension].keywords.removeAt(row);
 			m_extensionDatas[m_seletedExtension].updates.removedKeywords.append(toRemove);
 		} else
-			KMessageBox::information(this, i18n("Cannot remove mandatory keyword!"), i18n("Removing keyword"));
+			KMessageBox::information(this, i18n("Cannot remove mandatory keyword."), i18n("Removing keyword"));
 	}
 }
 
