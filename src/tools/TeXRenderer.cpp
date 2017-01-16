@@ -239,12 +239,17 @@ bool TeXRenderer::enabled() {
 		return false;
 	}
 
-	//engine found, check the precense of other required tools (s.a. TeXRenderer.cpp):
+	//engine found, check the presence of other required tools (s.a. TeXRenderer.cpp):
 	//to convert the generated PDF/PS files to PNG we need 'convert' from the ImageMagic package
 	if (!executableExists(QLatin1String("convert"))) {
 		DEBUG_WIN("program \"convert\" does not exist");
 		return false;
 	}
+#if defined(_WIN32)
+	// need to set path to magick coder modules
+	QFileInfo exeInfo(QStandardPaths::findExecutable(QLatin1String("convert")));
+	setenv("MAGICK_CODER_MODULE_PATH", qPrintable(exeInfo.absolutePath()), 0);
+#endif
 
 	//to convert the generated PS files to DVI we need 'dvips'
 	if (engine == "latex") {
