@@ -47,7 +47,7 @@
 */
 
 ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(parent),
-		m_matrixMode(false), urlCompletion(new KUrlCompletion) {
+		m_matrixMode(false), m_format(Format::ASCII), urlCompletion(new KUrlCompletion) {
 	mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
 	ui.gbOptions->hide();
