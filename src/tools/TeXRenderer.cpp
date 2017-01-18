@@ -153,9 +153,9 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 		QFile::remove(fi.completeBaseName() + ".log");
 		return QImage();
 	}
-	DEBUG_LOG("latex exit code =" << latexProcess.exitCode());
-
 	*success = (latexProcess.exitCode() == 0);
+	if (*success != 0)
+		DEBUG_WIN("latex exit code =" << *success);
 
 	QFile::remove(fi.completeBaseName() + ".aux");
 	QFile::remove(fi.completeBaseName() + ".log");
@@ -268,11 +268,15 @@ bool TeXRenderer::enabled() {
 
 #if defined(_WIN64)
 	if (!executableExists(QLatin1String("gswin64c")) && !QDir(getenv("PROGRAMFILES") + QString("/gs")).exists() 
-		&& !QDir(getenv("PROGRAMFILES(X86)") + QString("/gs")).exists())
+		&& !QDir(getenv("PROGRAMFILES(X86)") + QString("/gs")).exists()) {
+		DEBUG_WIN("ghostscript (64bit) does not exist");
 		return false;
+	}
 #elif defined(_WIN32)
-	if (!executableExists(QLatin1String("gswin32c")) && !QDir(getenv("PROGRAMFILES") + QString("/gs")).exists())
+	if (!executableExists(QLatin1String("gswin32c")) && !QDir(getenv("PROGRAMFILES") + QString("/gs")).exists()) {
+		DEBUG_WIN("ghostscript (32bit) does not exist");
 		return false;
+	}
 #endif
 
 	return true;
