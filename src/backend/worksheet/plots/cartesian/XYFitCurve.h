@@ -49,6 +49,8 @@ class XYFitCurve : public XYCurve {
 						maxIterations(500),
 						eps(1e-4),
 						evaluatedPoints(100),
+						useResults(true),
+						evaluateFullRange(true),
 						autoRange(true), xRange(2) {};
 
 			nsl_fit_model_category modelCategory;
