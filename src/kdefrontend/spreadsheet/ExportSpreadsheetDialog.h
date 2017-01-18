@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : export spreadsheet dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2014-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -30,61 +30,61 @@
 #define EXPORTSPREADSHEETDIALOG_H
 
 #include <KDialog>
-#include <KUrlCompletion>
-#include "kdefrontend/widgets/FITSHeaderEditWidget.h"
 #include "ui_exportspreadsheetwidget.h"
 
-class ExportSpreadsheetDialog: public KDialog {
+class KUrlCompletion;
+
+class ExportSpreadsheetDialog : public KDialog {
 	Q_OBJECT
 
-	public:
-		explicit ExportSpreadsheetDialog(QWidget*);
-		virtual ~ExportSpreadsheetDialog();
+public:
+	explicit ExportSpreadsheetDialog(QWidget*);
+	virtual ~ExportSpreadsheetDialog();
 
-		QString path() const;
-		void setFileName(const QString&);
-		void setMatrixMode(bool);
-        void setExportSelection(bool);
-		bool exportHeader() const;
-        bool exportLatexHeader() const;
-        bool gridLines() const;
-        bool captions() const;
-        bool skipEmptyRows() const;
-        bool exportSelection() const;
-        bool entireSpreadheet() const;
-        bool matrixVerticalHeader() const;
-        bool matrixHorizontalHeader() const;
-		QString separator() const;
-        int exportToFits() const;
-        bool commentsAsUnitsFits() const;
-        void setExportTo(const QStringList& to);
-        void setExportToImage(bool possible);
+	QString path() const;
+	void setFileName(const QString&);
+	void setMatrixMode(bool);
+	void setExportSelection(bool);
+	bool exportHeader() const;
+	bool exportLatexHeader() const;
+	bool gridLines() const;
+	bool captions() const;
+	bool skipEmptyRows() const;
+	bool exportSelection() const;
+	bool entireSpreadheet() const;
+	bool matrixVerticalHeader() const;
+	bool matrixHorizontalHeader() const;
+	QString separator() const;
+	int exportToFits() const;
+	bool commentsAsUnitsFits() const;
+	void setExportTo(const QStringList& to);
+	void setExportToImage(bool possible);
 
-        enum Format {
-            ASCII = 0,
-            Binary,
-            LaTeX,
-            FITS,
-        };
+	enum Format {
+		ASCII = 0,
+		Binary,
+		LaTeX,
+		FITS,
+	};
 
-        Format format() const;
-	private:
-		QWidget* mainWidget;
-		Ui::ExportSpreadsheetWidget ui;
-		bool m_showOptions;
-        bool m_matrixMode;
-        Format m_format;
-        KUrlCompletion *urlCompletion;
+	Format format() const;
+private:
+	QWidget* mainWidget;
+	Ui::ExportSpreadsheetWidget ui;
+	bool m_showOptions;
+	bool m_matrixMode;
+	Format m_format;
+	KUrlCompletion *urlCompletion;
 
-	private slots:
-        void setFormat(Format format);
-		void slotButtonClicked(int);
-		void okClicked();
-		void toggleOptions();
-		void selectFile();
-		void formatChanged(int);
-		void fileNameChanged(const QString&);
-        void fitsExportToChanged(int);
+private slots:
+	void setFormat(Format format);
+	void slotButtonClicked(int);
+	void okClicked();
+	void toggleOptions();
+	void selectFile();
+	void formatChanged(int);
+	void fileNameChanged(const QString&);
+	void fitsExportToChanged(int);
 };
 
 #endif

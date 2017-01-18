@@ -189,10 +189,9 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 	// convert: PDF -> PNG
 	QProcess convertProcess;
 #if defined(_WIN32)
-	// need to set path to magick coder modules (which are in the same directory as the executable labplot2.exe)
+	// need to set path to magick coder modules (which are in the labplot2 directory)
 	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-	QFileInfo exeInfo(QStandardPaths::findExecutable(QLatin1String("labplot2")));
-	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(exeInfo.absolutePath()));
+	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(getenv("PROGRAMFILES") + QString("\\labplot2")));
 	convertProcess.setProcessEnvironment(env);
 #endif
 	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)
@@ -244,10 +243,9 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	// convert: PS -> PNG
 	QProcess convertProcess;
 #if defined(_WIN32)
-	// need to set path to magick coder modules (which are in the same directory as the executable labplot2.exe)
+	// need to set path to magick coder modules (which are in the labplot2 directory)
 	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-	QFileInfo exeInfo(QStandardPaths::findExecutable(QLatin1String("labplot2")));
-	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(exeInfo.absolutePath()));
+	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(getenv("PROGRAMFILES") + QString("\\labplot2")));
 	convertProcess.setProcessEnvironment(env);
 #endif
 	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)
