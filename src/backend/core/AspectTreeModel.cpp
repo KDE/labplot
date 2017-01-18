@@ -355,7 +355,10 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const QString& path, int column)
 	}
 
 	//return the model index of the aspect
-	return modelIndexOfAspect(aspect, column);
+	if (aspect)
+		return modelIndexOfAspect(aspect, column);
+	else
+		return QModelIndex();
 }
 
 void AspectTreeModel::setFilterString(const QString & s) {
