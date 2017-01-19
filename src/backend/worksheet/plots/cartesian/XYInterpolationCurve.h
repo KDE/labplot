@@ -44,7 +44,7 @@ class XYInterpolationCurve: public XYCurve {
 		struct InterpolationData {
 			InterpolationData() : type(nsl_interp_type_linear), variant(nsl_interp_pch_variant_finite_difference), 
 				tension(0.0), continuity(0.0), bias(0.0), evaluate(nsl_interp_evaluate_function), npoints(100),
-				pointsMode(XYInterpolationCurve::Auto), xRange(2) {};
+				pointsMode(XYInterpolationCurve::Auto), autoRange(true), xRange(2) {};
 
 			nsl_interp_type type;			// type of interpolation
 			nsl_interp_pch_variant variant;		// variant of cubic Hermite interpolation

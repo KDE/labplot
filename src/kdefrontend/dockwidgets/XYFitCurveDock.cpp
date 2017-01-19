@@ -557,7 +557,7 @@ void XYFitCurveDock::updateModelEquation() {
 		}
 		break;
 	case nsl_fit_model_peak:
-		switch (m_fitData.modelType) {
+		switch ((nsl_fit_model_type_peak)m_fitData.modelType) {
 		case nsl_fit_model_gaussian:
 			switch (num) {
 			case 1:

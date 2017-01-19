@@ -526,6 +526,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		break;
 	case nsl_fit_model_distribution:
+		//TODO: switch ((nsl_sf_stats_distribution)modelType) {
 		switch (modelType) {
 		case nsl_sf_stats_gaussian:
 		case nsl_sf_stats_laplace:

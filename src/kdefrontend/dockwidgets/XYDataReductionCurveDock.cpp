@@ -115,7 +115,7 @@ void XYDataReductionCurveDock::setupGeneral() {
 
 void XYDataReductionCurveDock::initGeneralTab() {
 	//if there are more then one curve in the list, disable the tab "general"
-	if (m_curvesList.size()==1) {
+	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
@@ -134,7 +134,8 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	}
 
 	//show the properties of the first curve
-	m_dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(m_curve);
+	if (m_curve != 0)
+		m_dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(m_curve);
 	Q_ASSERT(m_dataReductionCurve);
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_dataReductionCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_dataReductionCurve->yDataColumn());
@@ -302,7 +303,8 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	}
 
 	foreach(XYCurve* curve, m_curvesList)
-		dynamic_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
+		if (curve != 0)
+			dynamic_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
 
 	if (column != 0 && uiGeneralTab.cbAutoRange->isChecked()) {
 		uiGeneralTab.sbMin->setValue(column->minimum());
@@ -325,7 +327,8 @@ void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	}
 
 	foreach(XYCurve* curve, m_curvesList)
-		dynamic_cast<XYDataReductionCurve*>(curve)->setYDataColumn(column);
+		if (curve != 0)
+			dynamic_cast<XYDataReductionCurve*>(curve)->setYDataColumn(column);
 
 	updateTolerance();
 	updateTolerance2();
@@ -340,7 +343,8 @@ void XYDataReductionCurveDock::autoRangeChanged() {
 		uiGeneralTab.sbMin->setEnabled(false);
 		uiGeneralTab.lMax->setEnabled(false);
 		uiGeneralTab.sbMax->setEnabled(false);
-		m_dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(m_curve);
+		if (m_curve != 0)
+			m_dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(m_curve);
 		Q_ASSERT(m_dataReductionCurve);
 		if (m_dataReductionCurve->xDataColumn()) {
 			uiGeneralTab.sbMin->setValue(m_dataReductionCurve->xDataColumn()->minimum());
