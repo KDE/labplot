@@ -182,7 +182,7 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 ///		qWarning()<<"pdflatex failed."<<endl;
 	*success = (latexProcess.exitCode() == 0);
 	if (*success != 0) {
-		DEBUG_WIN("latex exit code =" << *success);
+		WARNING_WIN("latex exit code =" << *success);
 	} else {
 		QFile::remove(fi.completeBaseName() + ".aux");
 		QFile::remove(fi.completeBaseName() + ".log");
@@ -276,21 +276,21 @@ bool TeXRenderer::enabled() {
 	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
 	QString engine = group.readEntry("LaTeXEngine", "");
 	if (engine.isEmpty() || !executableExists(engine)) {
-		DEBUG_WIN("LaTeX engine does not exist");
+		WARNING_WIN("LaTeX engine does not exist");
 		return false;
 	}
 
 	//engine found, check the presence of other required tools (s.a. TeXRenderer.cpp):
 	//to convert the generated PDF/PS files to PNG we need 'convert' from the ImageMagic package
 	if (!executableExists(QLatin1String("convert"))) {
-		DEBUG_WIN("program \"convert\" does not exist");
+		WARNING_WIN("program \"convert\" does not exist");
 		return false;
 	}
 
 	//to convert the generated PS files to DVI we need 'dvips'
 	if (engine == "latex") {
 		if (!executableExists(QLatin1String("dvips"))) {
-			DEBUG_WIN("program \"dvips\" does not exist");
+			WARNING_WIN("program \"dvips\" does not exist");
 			return false;
 		}
 	}
@@ -298,12 +298,12 @@ bool TeXRenderer::enabled() {
 #if defined(_WIN64)
 	if (!executableExists(QLatin1String("gswin64c")) && !QDir(getenv("PROGRAMFILES") + QString("/gs")).exists() 
 		&& !QDir(getenv("PROGRAMFILES(X86)") + QString("/gs")).exists()) {
-		DEBUG_WIN("ghostscript (64bit) does not exist");
+		WARNING_WIN("ghostscript (64bit) does not exist");
 		return false;
 	}
 #elif defined(_WIN32)
 	if (!executableExists(QLatin1String("gswin32c")) && !QDir(getenv("PROGRAMFILES") + QString("/gs")).exists()) {
-		DEBUG_WIN("ghostscript (32bit) does not exist");
+		WARNING_WIN("ghostscript (32bit) does not exist");
 		return false;
 	}
 #endif

@@ -33,14 +33,15 @@
 
 #include <QApplication>
 
+// Windows style warning
+#include <iostream>
+#define WARNING_WIN(x) std::cout<<x
+
 #ifndef NDEBUG
 #include <QDebug>
 #define DEBUG_LOG(x) qDebug()<<x
-
 // Windows style debugging
-#include <iostream>
 #define DEBUG_WIN(x) std::cout<<x
-
 #else
 #define DEBUG_LOG(x) {}
 #define DEBUG_WIN(x) {}
