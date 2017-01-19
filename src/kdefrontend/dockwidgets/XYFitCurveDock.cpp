@@ -557,7 +557,7 @@ void XYFitCurveDock::updateModelEquation() {
 		}
 		break;
 	case nsl_fit_model_peak:
-		switch (m_fitData.modelType) {
+		switch ((nsl_fit_model_type_peak)m_fitData.modelType) {
 		case nsl_fit_model_gaussian:
 			switch (num) {
 			case 1:
@@ -824,7 +824,7 @@ void XYFitCurveDock::updateModelEquation() {
 		QString numSuffix = QString::number(num);
 		if (num > 4)
 			numSuffix = "4";
-		if (m_fitData.modelType == nsl_fit_model_power && num > 2)
+		if ((nsl_fit_model_type_basic)m_fitData.modelType == nsl_fit_model_power && num > 2)
 			numSuffix = "2";
 		file = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "labplot2/pics/fit_models/"
 			+ QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");

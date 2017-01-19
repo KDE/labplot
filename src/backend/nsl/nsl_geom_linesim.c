@@ -149,7 +149,7 @@ void nsl_geom_linesim_douglas_peucker_step(const double xdata[], const double yd
 }
 
 size_t nsl_geom_linesim_douglas_peucker(const double xdata[], const double ydata[], const size_t n, const double tol, size_t index[]) {
-	size_t nout=0;
+	size_t nout = 0;
 
 	/*first point*/
 	index[nout++] = 0;

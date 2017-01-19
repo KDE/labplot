@@ -128,7 +128,8 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	}
 
 	//show the properties of the first curve
-	m_differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(m_curve);
+	if (m_curve != 0)
+		m_differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(m_curve);
 	Q_ASSERT(m_differentiationCurve);
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_differentiationCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_differentiationCurve->yDataColumn());
@@ -227,7 +228,8 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	}
 
 	foreach(XYCurve* curve, m_curvesList)
-		dynamic_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
+		if (curve != 0)
+			dynamic_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
 
 	// disable deriv orders and accuracies that need more data points
 	if (column != 0) {
@@ -315,7 +317,8 @@ void XYDifferentiationCurveDock::autoRangeChanged() {
 		uiGeneralTab.sbMin->setEnabled(false);
 		uiGeneralTab.lMax->setEnabled(false);
 		uiGeneralTab.sbMax->setEnabled(false);
-		m_differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(m_curve);
+		if (m_curve != 0)
+			m_differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(m_curve);
 		Q_ASSERT(m_differentiationCurve);
 		if (m_differentiationCurve->xDataColumn()) {
 			uiGeneralTab.sbMin->setValue(m_differentiationCurve->xDataColumn()->minimum());
@@ -410,7 +413,8 @@ void XYDifferentiationCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	foreach(XYCurve* curve, m_curvesList)
-		dynamic_cast<XYDifferentiationCurve*>(curve)->setDifferentiationData(m_differentiationData);
+		if (curve != 0)
+			dynamic_cast<XYDifferentiationCurve*>(curve)->setDifferentiationData(m_differentiationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	QApplication::restoreOverrideCursor();

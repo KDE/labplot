@@ -128,7 +128,8 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	}
 
 	//show the properties of the first curve
-	m_integrationCurve = dynamic_cast<XYIntegrationCurve*>(m_curve);
+	if (m_curve != 0)
+		m_integrationCurve = dynamic_cast<XYIntegrationCurve*>(m_curve);
 	Q_ASSERT(m_integrationCurve);
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_integrationCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_integrationCurve->yDataColumn());
