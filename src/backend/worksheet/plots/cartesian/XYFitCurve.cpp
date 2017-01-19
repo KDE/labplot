@@ -526,8 +526,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		break;
 	case nsl_fit_model_distribution:
-		//TODO: switch ((nsl_sf_stats_distribution)modelType) {
-		switch (modelType) {
+		switch ((nsl_sf_stats_distribution)modelType) {
 		case nsl_sf_stats_gaussian:
 		case nsl_sf_stats_laplace:
 		case nsl_sf_stats_cauchy_lorentz:
@@ -716,6 +715,28 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
+		// TODO
+		case nsl_sf_stats_gaussian_tail:
+		case nsl_sf_stats_exponential:
+		case nsl_sf_stats_exponential_power:
+		case nsl_sf_stats_rayleigh_tail:
+		case nsl_sf_stats_landau:
+		case nsl_sf_stats_levy_alpha_stable:
+		case nsl_sf_stats_levy_skew_alpha_stable:
+		case nsl_sf_stats_flat:
+		case nsl_sf_stats_fdist:
+		case nsl_sf_stats_tdist:
+		case nsl_sf_stats_beta:
+		case nsl_sf_stats_pareto:
+		case nsl_sf_stats_gumbel2:
+		case nsl_sf_stats_bernoulli:
+		case nsl_sf_stats_binomial:
+		case nsl_sf_stats_negative_bionomial:
+		case nsl_sf_stats_pascal:
+		case nsl_sf_stats_geometric:
+		case nsl_sf_stats_hypergeometric:
+		case nsl_sf_stats_logarithmic:
+			break;
 		}
 		break;
 	case nsl_fit_model_custom:
