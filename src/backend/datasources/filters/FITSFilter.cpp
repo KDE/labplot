@@ -263,7 +263,10 @@ int FITSFilter::tablesCount(const QString &fileName) {
 //#####################################################################
 
 FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
-	q(owner), fitsFile(0) {
+	q(owner) {
+#ifdef HAVE_FITS
+	fitsFile = 0;
+#endif
 }
 
 /*!
