@@ -152,6 +152,7 @@ FIND_PATH (CFITSIO_INCLUDE_DIR fitsio.h
 	/usr/include/
 	/usr/include/cfitsio/
 	/usr/local/include/
+	$ENV{CFITSIO}/include
 )
 IF(CFITSIO_LIBRARY AND CFITSIO_INCLUDE_DIR)
         SET (CFITSIO_FOUND TRUE)
