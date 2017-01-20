@@ -140,12 +140,13 @@ ELSE ()
 ENDIF ()
 ENDIF ()
 
-### FITS ########################################
-IF(ENABLE_FITS)
+### FITS (optional) ###############################
+IF (ENABLE_FITS)
 FIND_LIBRARY (CFITSIO_LIBRARY cfitsio
 	PATHS
 	/usr/lib
 	/usr/local/lib
+	$ENV{CFITSIO}
 )
 FIND_PATH (CFITSIO_INCLUDE_DIR fitsio.h
 	/usr/include/
