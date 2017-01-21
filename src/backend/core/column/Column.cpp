@@ -34,15 +34,13 @@
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 
-#include <QFont>
-#include <QFontMetrics>
 #include <QThreadPool>
-
-#include <KIcon>
-#include <KLocale>
 #ifndef NDEBUG
 #include <QDebug>
 #endif
+
+#include <KIcon>
+#include <KLocale>
 
 extern "C" {
 #include <gsl/gsl_sort.h>
@@ -119,13 +117,6 @@ void Column::init() {
 	m_column_private->outputFilter()->setHidden(true);
 	addChild(m_column_private->inputFilter());
 	addChild(m_column_private->outputFilter());
-
-	//set the default width, synchronize this with the format used for the header in SpreadsheetModel::updateHorizontalHeader()
-	QString str = name() + QLatin1String(" {") + i18n("Numeric") + QLatin1String("} ");
-	QFont font;
-	QFontMetrics fm(font);
-	m_column_private->setWidth(fm.width(str)*1.1);
-
 	m_suppressDataChangedSignal = false;
 }
 
