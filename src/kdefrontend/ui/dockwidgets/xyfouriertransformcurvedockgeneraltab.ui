@@ -167,7 +167,11 @@
     </widget>
    </item>
    <item row="21" column="2" colspan="2">
-    <widget class="QTextEdit" name="teResult"/>
+    <widget class="QTextEdit" name="teResult">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="22" column="0" colspan="4">
     <widget class="Line" name="line_2">
