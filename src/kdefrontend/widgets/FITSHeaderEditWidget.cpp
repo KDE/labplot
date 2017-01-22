@@ -430,6 +430,7 @@ void FITSHeaderEditWidget::addModifyKeywordUnit() {
 		fromNewKeyword = true;
 	} else
 		idx = selectedRow;
+
 	QString unit;
 	if (fromNewKeyword) {
 		if (!m_extensionDatas[m_seletedExtension].updates.newKeywords.at(idx).unit.isEmpty())
@@ -439,11 +440,7 @@ void FITSHeaderEditWidget::addModifyKeywordUnit() {
 			unit = m_extensionDatas[m_seletedExtension].keywords.at(idx).unit;
 	}
 
-	if (!unit.isNull())
-		addUnitDialog = new FITSHeaderEditAddUnitDialog(unit);
-	else
-		addUnitDialog = new FITSHeaderEditAddUnitDialog;
-
+	addUnitDialog = new FITSHeaderEditAddUnitDialog(unit);
 	if (addUnitDialog->exec() == KDialog::Accepted) {
 		if (fromNewKeyword) {
 			m_extensionDatas[m_seletedExtension].updates.newKeywords.operator [](idx).unit = addUnitDialog->unit();
@@ -458,6 +455,7 @@ void FITSHeaderEditWidget::addModifyKeywordUnit() {
 
 		fillTable();
 	}
+
 	delete addUnitDialog;
 }
 
