@@ -25,41 +25,42 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 *                                                                         *
 ***************************************************************************/
 #include "FITSHeaderEditNewKeywordDialog.h"
-#include <QDebug>
+// #include <QDebug>
+#include <KDialog>
+#include <KLineEdit>
+#include <KCompletion>
+#include <KMessageBox>
+
 #define FLEN_KEYWORD   75  /* max length of a keyword (HIERARCH convention) */
 #define FLEN_VALUE     71  /* max length of a keyword value string */
 #define FLEN_COMMENT   73  /* max length of a keyword comment string */
 
 /*! \class FITSHeaderEditNewKeywordDialog
  * \brief Dialog class for adding new keywords to the FITSHeaderEditDialog's table.
- * \since 2.2.0
+ * \since 2.4.0
  * \ingroup widgets
  */
 FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) : KDialog(parent) {
-    QWidget* mainWidget = new QWidget(this);
-    ui.setupUi(mainWidget);
-    setMainWidget( mainWidget );
-    setWindowTitle(i18n("Specify the new keyword"));
-    setButtons( KDialog::Ok | KDialog::Cancel );
-    setButtonText(KDialog::Ok, i18n("&Add keyword"));
-    setAttribute(Qt::WA_DeleteOnClose);
+	QWidget* mainWidget = new QWidget(this);
+	ui.setupUi(mainWidget);
+	setMainWidget(mainWidget);
 
-    KCompletion* keyCompletion = new KCompletion;
-    keyCompletion->setItems(FITSFilter::standardKeywords());
-    ui.kleKey->setCompletionObject(keyCompletion);
-    ui.kleKey->setAutoDeleteCompletionObject(true);
+	setWindowTitle(i18n("Specify the new keyword"));
+	setWindowIcon(KIcon("document-new"));
+	setButtons(KDialog::Ok | KDialog::Cancel);
+	setButtonText(KDialog::Ok, i18n("&Add keyword"));
 
-    ui.kleValue->setPlaceholderText(i18n("Specify the value"));
-    ui.kleComment->setPlaceholderText(i18n("Specify the comment"));
+	KCompletion* keyCompletion = new KCompletion;
+	keyCompletion->setItems(FITSFilter::standardKeywords());
+	ui.kleKey->setCompletionObject(keyCompletion);
+	ui.kleKey->setAutoDeleteCompletionObject(true);
 
-    ui.kleKey->setMaxLength(FLEN_KEYWORD);
-    ui.kleValue->setMaxLength(FLEN_VALUE);
-    ui.kleComment->setMaxLength(FLEN_COMMENT);
-}
-/*!
- * \brief FITSHeaderEditNewKeywordDialog::~FITSHeaderEditNewKeywordDialog
- */
-FITSHeaderEditNewKeywordDialog::~FITSHeaderEditNewKeywordDialog() {
+	ui.kleValue->setPlaceholderText(i18n("Specify the value"));
+	ui.kleComment->setPlaceholderText(i18n("Specify the comment"));
+
+	ui.kleKey->setMaxLength(FLEN_KEYWORD);
+	ui.kleValue->setMaxLength(FLEN_VALUE);
+	ui.kleComment->setMaxLength(FLEN_COMMENT);
 }
 
 /*!
@@ -67,17 +68,16 @@ FITSHeaderEditNewKeywordDialog::~FITSHeaderEditNewKeywordDialog() {
  * \return Whether the keyword was "Ok" or not.
  */
 int FITSHeaderEditNewKeywordDialog::okClicked() {
-    if (!ui.kleKey->text().isEmpty()) {
-        m_newKeyword = FITSFilter::Keyword(ui.kleKey->text(), ui.kleValue->text(), ui.kleComment->text());
-        return KDialog::Ok;
-    } else {
-        const int yesNo = KMessageBox::warningYesNo(this, i18n("Can't add new keyword without key, would you like to try again?"),
-                                  i18n("Cannot add empty key"));
-        if (yesNo == KMessageBox::No) {
-            return KDialog::Cancel;
-        }
-        return yesNo;
-    }
+	if (!ui.kleKey->text().isEmpty()) {
+		m_newKeyword = FITSFilter::Keyword(ui.kleKey->text(), ui.kleValue->text(), ui.kleComment->text());
+		return KDialog::Ok;
+	} else {
+		const int yesNo = KMessageBox::warningYesNo(this, i18n("Can't add new keyword without key, would you like to try again?"),
+		                  i18n("Cannot add empty key"));
+		if (yesNo == KMessageBox::No)
+			return KDialog::Cancel;
+		return yesNo;
+	}
 }
 
 /*!
@@ -85,7 +85,7 @@ int FITSHeaderEditNewKeywordDialog::okClicked() {
  * \return The newly constructed keyword from the line edits.
  */
 FITSFilter::Keyword FITSHeaderEditNewKeywordDialog::newKeyword() const {
-    return m_newKeyword;
+	return m_newKeyword;
 }
 
 /*!
@@ -94,15 +94,12 @@ FITSFilter::Keyword FITSHeaderEditNewKeywordDialog::newKeyword() const {
  * \param button the code of the button clicked
  */
 void FITSHeaderEditNewKeywordDialog::slotButtonClicked(int button) {
-    if (button == KDialog::Ok) {
-        int okClickedBtn = okClicked();
-        if (okClickedBtn == KDialog::Ok) {
-            accept();
-        } else if (okClickedBtn == KDialog::Cancel) {
-            reject();
-        }
-    }
-    else {
-        KDialog::slotButtonClicked(button);
-    }
+	if (button == KDialog::Ok) {
+		int okClickedBtn = okClicked();
+		if (okClickedBtn == KDialog::Ok)
+			accept();
+		else if (okClickedBtn == KDialog::Cancel)
+			reject();
+	} else
+		KDialog::slotButtonClicked(button);
 }

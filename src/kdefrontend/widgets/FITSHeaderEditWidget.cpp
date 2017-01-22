@@ -36,6 +36,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QFileDialog>
 #include <QContextMenuEvent>
 
+#include <KMessageBox>
 #include <KUrlCompletion>
 
 /*! \class FITSHeaderEditWidget
