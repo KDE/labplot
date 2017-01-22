@@ -34,16 +34,17 @@ class FITSHeaderEditDialog : public KDialog {
 	Q_OBJECT
 
 public:
-	explicit FITSHeaderEditDialog( QWidget *parent = 0);
+	explicit FITSHeaderEditDialog(QWidget* parent = 0);
 	~FITSHeaderEditDialog();
 	bool saved() const;
 
 private:
-	FITSHeaderEditWidget* m_HeaderEditWidget;
+	FITSHeaderEditWidget* m_headerEditWidget;
 	bool m_saved;
 
 private slots:
 	void save();
+	void headersChanged(bool);
 };
 
 #endif // FITSHEADEREDITDIALOG_H

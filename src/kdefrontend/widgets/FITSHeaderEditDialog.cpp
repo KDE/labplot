@@ -34,15 +34,19 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
  * \ingroup widgets
  */
 FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : KDialog(parent), m_saved(false) {
-	m_HeaderEditWidget = new FITSHeaderEditWidget(this);
-	setMainWidget(m_HeaderEditWidget);
+	m_headerEditWidget = new FITSHeaderEditWidget(this);
+	setMainWidget(m_headerEditWidget);
 
 	setWindowTitle(i18n("FITS Header Editor"));
 	setWindowIcon(KIcon("document-edit"));
 
 	setButtons( KDialog::Ok | KDialog::Cancel );
 	setButtonText(KDialog::Ok, i18n("&Save"));
+	enableButtonOk(false);
+
 	connect(this, SIGNAL(okClicked()), this, SLOT(save()));
+	connect(m_headerEditWidget, SIGNAL(changed(bool)), this, SLOT(headersChanged(bool)));
+
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	//restore saved settings if available
@@ -59,14 +63,24 @@ FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : KDialog(parent), m
 FITSHeaderEditDialog::~FITSHeaderEditDialog() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditDialog");
 	saveDialogSize(conf);
-	delete m_HeaderEditWidget;
+	delete m_headerEditWidget;
+}
+
+void FITSHeaderEditDialog::headersChanged(bool changed) {
+	if (changed) {
+		setWindowTitle(i18n("FITS Header Editor  [Changed]"));
+		enableButtonOk(true);
+	} else {
+		setWindowTitle(i18n("FITS Header Editor"));
+		enableButtonOk(false);
+	}
 }
 
 /*!
  * \brief This slot is triggered when the Save button was clicked in the ui.
  */
 void FITSHeaderEditDialog::save() {
-	m_saved = m_HeaderEditWidget->save();
+	m_saved = m_headerEditWidget->save();
 }
 
 /*!

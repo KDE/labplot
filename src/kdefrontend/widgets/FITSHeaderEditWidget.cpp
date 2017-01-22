@@ -54,7 +54,15 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
 	KUrlCompletion* comp = new KUrlCompletion();
 	ui.kleFileName->setCompletionObject(comp);
 
-	ui.bOpen->setIcon( KIcon("document-open") );
+	ui.bOpen->setIcon(KIcon("document-open"));
+
+	ui.bAddKey->setIcon(KIcon("list-add"));
+	ui.bAddKey->setEnabled(false);
+	ui.bAddKey->setToolTip(i18n("Add new keyword"));
+
+	ui.bRemoveKey->setIcon(KIcon("list-remove"));
+	ui.bRemoveKey->setEnabled(false);
+	ui.bRemoveKey->setToolTip(i18n("Remove selected keyword"));
 
 	ui.twKeywordsTable->setColumnCount(3);
 	ui.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -70,8 +78,10 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
 
 	setAttribute(Qt::WA_DeleteOnClose);
 
-	connect( ui.kleFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
+// 	connect(ui.kleFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)));
 	connect(ui.bOpen, SIGNAL(clicked()), this, SLOT(openFile()));
+	connect(ui.bAddKey, SIGNAL(clicked()), this, SLOT(addKeyword()));
+	connect(ui.bRemoveKey, SIGNAL(clicked()), this, SLOT(removeKeyword()));
 	connect(ui.twKeywordsTable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(updateKeyword(QTableWidgetItem*)));
 	connect(ui.twExtensions, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(fillTable(QTreeWidgetItem*, int)));
 }
@@ -163,7 +173,6 @@ void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
  * then the file is parsed, so the treeview for the extensions is built and the table is filled.
  */
 void FITSHeaderEditWidget::openFile() {
-
 	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditWidget");
 	QString dir = conf.readEntry("LastDir", "");
 	QString fileName = QFileDialog::getOpenFileName(this, i18n("Open FITS file"), dir,
@@ -197,11 +206,16 @@ void FITSHeaderEditWidget::openFile() {
 		ui.twExtensions->resizeColumnToContents(0);
 		if (ui.twExtensions->selectedItems().size() > 0)
 			fillTable(ui.twExtensions->selectedItems().at(0), 0);
+
+		ui.bAddKey->setEnabled(true);
+		ui.bRemoveKey->setEnabled(true);
 	} else {
 		KMessageBox::information(this, i18n("Cannot open file, file already opened."),
 		                         i18n("File already opened"));
 	}
 	RESET_CURSOR;
+
+	emit changed(false);
 }
 
 /*!
@@ -249,8 +263,8 @@ bool FITSHeaderEditWidget::save() {
  * \brief Initializes the context menu's actions.
  */
 void FITSHeaderEditWidget::initActions() {
-	action_add_keyword = new QAction(i18n("Add new keyword"), this);
-	action_remove_keyword = new QAction(i18n("Remove keyword"), this);
+	action_add_keyword = new QAction(KIcon("list-add"), i18n("Add new keyword"), this);
+	action_remove_keyword = new QAction(KIcon("list-remove"), i18n("Remove keyword"), this);
 	action_remove_extension = new QAction(i18n("Delete"), this);
 	action_addmodify_unit = new QAction(i18n("Add unit"), this);
 }
@@ -272,6 +286,7 @@ void FITSHeaderEditWidget::initContextMenus() {
 	m_KeywordActionsMenu = new QMenu(this);
 	m_KeywordActionsMenu->addAction(action_add_keyword);
 	m_KeywordActionsMenu->addAction(action_remove_keyword);
+	m_KeywordActionsMenu->addSeparator();
 	m_KeywordActionsMenu->addAction(action_addmodify_unit);
 
 	m_ExtensionActionsMenu = new QMenu(this);
@@ -336,6 +351,7 @@ void FITSHeaderEditWidget::addKeyword() {
 	}
 	m_initializingTable = false;
 	delete newKeywordDialog;
+	emit changed(true);
 }
 
 /*!
@@ -343,12 +359,14 @@ void FITSHeaderEditWidget::addKeyword() {
  * Mandatory keywords cannot be deleted.
  */
 void FITSHeaderEditWidget::removeKeyword() {
-	const int removeKeyWordMb = KMessageBox::questionYesNo(this,"Are you sure you want to delete this keyword?",
-	                            "Confirm deletion");
-	if (removeKeyWordMb == KMessageBox::Yes) {
-		const int row = ui.twKeywordsTable->currentRow();
-		QString key = ui.twKeywordsTable->item(row, 0)->text();
+	const int row = ui.twKeywordsTable->currentRow();
+	if (row == -1)
+		return;
 
+	QString key = ui.twKeywordsTable->item(row, 0)->text();
+	const int rc = KMessageBox::questionYesNo(this,i18n("Are you sure you want to delete the keyword '%1'?").arg(key),
+	                            i18n("Confirm deletion"));
+	if (rc == KMessageBox::Yes) {
 		bool remove = true;
 		foreach (const QString& k, mandatoryKeywords()) {
 			if (!k.compare(key)) {
@@ -368,6 +386,8 @@ void FITSHeaderEditWidget::removeKeyword() {
 		} else
 			KMessageBox::information(this, i18n("Cannot remove mandatory keyword."), i18n("Removing keyword"));
 	}
+
+	emit changed(true);
 }
 
 /*!
@@ -412,6 +432,8 @@ void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem *item) {
 			}
 		}
 	}
+
+	emit changed(true);
 }
 
 /*!
@@ -457,6 +479,7 @@ void FITSHeaderEditWidget::addModifyKeywordUnit() {
 	}
 
 	delete addUnitDialog;
+	emit changed(true);
 }
 
 /*!
@@ -482,6 +505,7 @@ void FITSHeaderEditWidget::removeExtension() {
 		fillTable();
 	}
 	ui.twExtensions->setCurrentItem(newCurrent);
+	emit changed(true);
 }
 
 /*!
