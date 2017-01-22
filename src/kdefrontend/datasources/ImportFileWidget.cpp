@@ -41,11 +41,11 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include <QDir>
 #include <QFileDialog>
 #include <QProcess>
-#include <KUrlCompletion>
-#include <QDebug>
 #include <QTimer>
 #include <QStandardItemModel>
 #include <QImageReader>
+
+#include <KUrlCompletion>
 
 /*!
    \class ImportFileWidget
@@ -53,7 +53,6 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 
    \ingroup kdefrontend
 */
-
 ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : QWidget(parent), m_fileName(fileName) {
 	ui.setupUi(this);
 

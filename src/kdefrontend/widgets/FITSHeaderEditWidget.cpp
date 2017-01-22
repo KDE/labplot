@@ -36,20 +36,25 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QFileDialog>
 #include <QContextMenuEvent>
 
+#include <KUrlCompletion>
+
 /*! \class FITSHeaderEditWidget
  * \brief Widget for listing/editing FITS header keywords
  * \since 2.4.0
  * \ingroup kdefrontend/widgets
  */
-FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) :
-	QWidget(parent), m_initializingTable(false) {
+FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
+	m_fitsFilter(new FITSFilter()), m_initializingTable(false) {
 
 	ui.setupUi(this);
 	initActions();
 	connectActions();
 	initContextMenus();
 
-	m_fitsFilter = new FITSFilter();
+	KUrlCompletion* comp = new KUrlCompletion();
+	ui.kleFileName->setCompletionObject(comp);
+
+	ui.bOpen->setIcon( KIcon("document-open") );
 
 	ui.twKeywordsTable->setColumnCount(3);
 	ui.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -58,13 +63,15 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) :
 	ui.twKeywordsTable->setHorizontalHeaderItem(1, new QTableWidgetItem(i18n("Value")));
 	ui.twKeywordsTable->setHorizontalHeaderItem(2, new QTableWidgetItem(i18n("Comment")));
 	ui.twKeywordsTable->setAlternatingRowColors(true);
+	ui.twKeywordsTable->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	ui.twKeywordsTable->horizontalHeader()->setStretchLastSection(true);
 	ui.twKeywordsTable->installEventFilter(this);
 	ui.twExtensions->installEventFilter(this);
 
 	setAttribute(Qt::WA_DeleteOnClose);
 
-	connect(ui.pbOpenFile, SIGNAL(clicked()), this, SLOT(openFile()));
+	connect( ui.kleFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
+	connect(ui.bOpen, SIGNAL(clicked()), this, SLOT(openFile()));
 	connect(ui.twKeywordsTable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(updateKeyword(QTableWidgetItem*)));
 	connect(ui.twExtensions, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(fillTable(QTreeWidgetItem*, int)));
 }
@@ -170,6 +177,8 @@ void FITSHeaderEditWidget::openFile() {
 		if (newDir!=dir)
 			conf.writeEntry("LastDir", newDir);
 	}
+
+	ui.kleFileName->setText(fileName);
 
 	WAIT_CURSOR;
 	QTreeWidgetItem* root = ui.twExtensions->invisibleRootItem();
