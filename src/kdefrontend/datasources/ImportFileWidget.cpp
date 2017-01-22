@@ -447,6 +447,11 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 #endif
 
 	bool fileExists = QFile::exists(fileName);
+	if (fileExists)
+		ui.kleFileName->setStyleSheet("");
+	else
+		ui.kleFileName->setStyleSheet("QLineEdit{background:red;}");
+
 	ui.gbOptions->setEnabled(fileExists);
 	ui.bFileInfo->setEnabled(fileExists);
 	ui.cbFileType->setEnabled(fileExists);
