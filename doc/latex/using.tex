@@ -29,7 +29,42 @@
 \section{Smoothing}
 \section{Curve Fitting}
 \section{Fourier Filter}
+
+\newpage
 \section{Fourier Fransform}
+Available window functions are
+\begin{eqnarray*}
+\text{rectangular(uniform):} \quad  w(n) &=& 1 \\
+\text{triangular:} \quad w(n) &=& 1 - \frac{2}{N} \left| n-\frac{N-1}{2} \right| \\
+\text{triangular (Bartlett):} \quad  w(n) &=&  1 - \frac{2}{N-1} \left|n-\frac{N-1}{2}\right| \\
+\text{triangular (Parzen):} \quad  w(n) &=& 1 - \frac{2}{N+1} \left| n-\frac{N-1}{2} \right| \\
+\text{Welch (parabolic):} \quad  w(n) &=& 1 - \left(2 \frac{n-(N-1)/2}{N+1} \right)^2 \\
+\text{Cosine:} \quad  w(n) &=& \sin\left( \frac{\pi n}{N-1} \right) \\
+\text{Bartlett-Hann:} \quad  w(n) &=& 0.62 - 0.48 \left| \frac{n}{N-1}-0.5 \right| - 0.38 \cos\left(\frac{2\pi n}{N-1}\right) \\
+\text{Lanczos:} \quad  w(n) &=& \mathrm{sinc} \left(\frac{2n}{N-1}-1\right) \\
+\end{eqnarray*}
+
+Higher-order generalized cosine window functions:
+\begin{eqnarray*}
+\text{Hann (raised cosine):} \;  w(n) &=& 0.5 - 0.5 \cos \left(\frac{2 \pi n}{N-1}\right) \\
+%
+\text{Hamming:} \;  w(n) &=& 0.54 - 0.46 \cos\left( \frac{2\pi n}{N-1} \right) \\
+%
+\text{Blackman:} \;  w(n) &=& 0.42 - 0.5 \cos\left(\frac{2\pi n}{N-1}\right) + 0.08 \cos\left(\frac{4\pi n}{N-1} \right) \\
+%
+\text{Nuttall:} \;  w(n) &=& a_0 + a_1 \cos\left(\frac{2\pi n}{N-1}\right) + a_2 \cos\left(\frac{4\pi n}{N-1}\right) + a_3 \cos\left(\frac{6\pi n}{N-1}\right) \\
+&& a_0 = 0.355768,\; a_1 =  -0.487396,\; a_2 = 0.144232,\; a_3 = -0.012604 \\
+%
+\text{Blackman-Nuttall:} \;  w(n) &=& a_0 + a_1 \cos\left(\frac{2\pi n}{N-1}\right) + a_2 \cos\left(\frac{4\pi n}{N-1}\right) + a_3 \cos\left(\frac{6\pi n}{N-1}\right) \\
+&& a_0 = 0.3635819,\; a_1 =  -0.4891775,\; a_2 = 0.1365995,\; a_3 = -0.0106411 \\
+%
+\text{Blackman-Harris:} \;  w(n) &=& a_0 + a_1 \cos\left(\frac{2\pi n}{N-1}\right) + a_2 \cos\left(\frac{4\pi n}{N-1}\right) + a_3 \cos\left(\frac{6\pi n}{N-1}\right) \\
+&& a_0 = 0.35875,\; a_1 =  -0.48829,\; a_2 = 0.14128,\; a_3 = -0.01168 \\
+%
+\text{Flat top:} \;  w(n) &=& a_0 + a_1 \cos\left(\frac{2\pi n}{N-1}\right) + a_2 \cos\left(\frac{4\pi n}{N-1}\right) +a_3 \cos\left(\frac{6\pi n}{N-1}\right) + a_4 \cos\left(\frac{8\pi n}{N-1}\right); \\
+&& a_0 = 1, \; a_1 =  -1.93,\; a_2 = 1.29,\; a_3 = -0.388,\; a_4 = 0.028 \\
+\end{eqnarray*}
+
 
 \chapter{CAS Computing}
 LabPlot can be used as a frontend to different open-source computer algebra systems (CAS) like Maxima, Octave, R, Scilab and Sage  or programming languages providing similar capabilities like Python and Julia. LabPlot recognizes different CAS variables holding array-like data and allows to select them as the source for curves. So, instead of providing columns of a spreadsheet as the source for x- and y-data, the user provides the names of the corresponding CAS-variables. Currently supported CAS data containers are
