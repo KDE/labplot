@@ -252,12 +252,12 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	const bool shifted = transformData.shifted;
 	const nsl_dft_xscale xScale = transformData.xScale;
 
-	DEBUG_LOG("n =" << n);
-	DEBUG_LOG("window type:" << nsl_sf_window_type_name[windowType]);
-	DEBUG_LOG("type:" << nsl_dft_result_type_name[type]);
-	DEBUG_LOG("scale:" << nsl_dft_xscale_name[xScale]);
-	DEBUG_LOG("two sided:" << twoSided);
-	DEBUG_LOG("shifted:" << shifted);
+	DEBUG("n =" << n);
+	DEBUG("window type:" << nsl_sf_window_type_name[windowType]);
+	DEBUG("type:" << nsl_dft_result_type_name[type]);
+	DEBUG("scale:" << nsl_dft_xscale_name[xScale]);
+	DEBUG("two sided:" << twoSided);
+	DEBUG("shifted:" << shifted);
 #ifndef NDEBUG
 	QDebug out = qDebug();
 	for (unsigned int i=0; i < n; i++)

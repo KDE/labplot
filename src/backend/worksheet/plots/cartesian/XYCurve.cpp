@@ -680,7 +680,7 @@ void XYCurve::suppressRetransform(bool b) {
 //#################################  SLOTS  ####################################
 //##############################################################################
 void XYCurve::retransform() {
-	DEBUG_LOG("XYCurve::retransform()");
+	DEBUG("XYCurve::retransform()");
 	Q_D(XYCurve);
 
 	WAIT_CURSOR;
@@ -829,7 +829,7 @@ bool XYCurvePrivate::swapVisible(bool on) {
   Triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-	DEBUG_LOG("XYCurvePrivate::retransform()");
+	DEBUG("XYCurvePrivate::retransform()");
 	if (m_suppressRetransform)
 		return;
 
@@ -925,9 +925,9 @@ void XYCurvePrivate::updateLines() {
 	}
 
 	const int count = symbolPointsLogical.count();
-//	DEBUG_LOG("count ="<<count<<", line type ="<<lineType);
+//	DEBUG("count ="<<count<<", line type ="<<lineType);
 //	for(int i=0;i<qMin(10,count);i++)
-//		DEBUG_LOG(symbolPointsLogical.at(i));
+//		DEBUG(symbolPointsLogical.at(i));
 
 	//nothing to do, if no data points available
 	if (count <= 1) {
@@ -1055,7 +1055,7 @@ void XYCurvePrivate::updateLines() {
 				msg = i18n("Error: Akima spline interpolation requires a minimum of 5 points.");
 			else
 				msg = i18n("Couldn't initialize spline function");
-			DEBUG_LOG(msg);
+			QDEBUG(msg);
 
 			recalcShapeAndBoundingRect();
 			return;
@@ -1069,7 +1069,7 @@ void XYCurvePrivate::updateLines() {
 				gslError = "x values must be monotonically increasing.";
 			else
 				gslError = gsl_strerror (status);
-			DEBUG_LOG("Error in spline calculation. " << gslError);
+			QDEBUG("Error in spline calculation. " << gslError);
 
 			recalcShapeAndBoundingRect();
 			return;
@@ -1724,7 +1724,7 @@ void XYCurvePrivate::updateErrorBars() {
   recalculates the outer bounds and the shape of the curve.
 */
 void XYCurvePrivate::recalcShapeAndBoundingRect() {
-	DEBUG_LOG("XYCurvePrivate::recalcShapeAndBoundingRect()");
+	DEBUG("XYCurvePrivate::recalcShapeAndBoundingRect()");
 	if (m_suppressRecalc)
 		return;
 
@@ -1764,7 +1764,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 }
 
 void XYCurvePrivate::draw(QPainter *painter) {
-	DEBUG_LOG("XYCurvePrivate::draw()");
+	DEBUG("XYCurvePrivate::draw()");
 
 	//draw filling
 	if (fillingPosition != XYCurve::NoFilling) {
@@ -1814,11 +1814,11 @@ void XYCurvePrivate::draw(QPainter *painter) {
 		drawValues(painter);
 	}
 
-	DEBUG_LOG("XYCurvePrivate::draw() DONE");
+	DEBUG("XYCurvePrivate::draw() DONE");
 }
 
 void XYCurvePrivate::updatePixmap() {
-	DEBUG_LOG("XYCurvePrivate::updatePixmap()");
+	DEBUG("XYCurvePrivate::updatePixmap()");
 	WAIT_CURSOR;
 
 // 	QTime timer;
@@ -1844,7 +1844,7 @@ void XYCurvePrivate::updatePixmap() {
 
 // 	qDebug() << "Update the pixmap: " << timer.elapsed() << "ms";
 	RESET_CURSOR;
-	DEBUG_LOG("XYCurvePrivate::updatePixmap() DONE");
+	DEBUG("XYCurvePrivate::updatePixmap() DONE");
 }
 
 //TODO: move this to a central place
@@ -1920,7 +1920,7 @@ QImage blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnl
   \sa QGraphicsItem::paint().
 */
 void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	DEBUG_LOG("XYCurvePrivate::paint() name =" << q->name());
+	QDEBUG("XYCurvePrivate::paint() name =" << q->name());
 
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
@@ -1933,7 +1933,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
- 	DEBUG_LOG("XYCurvePrivate::paint() calling drawPixmap() or draw() 		XXXXXXXXXXXXXXXXXXXX");
+ 	DEBUG("XYCurvePrivate::paint() calling drawPixmap() or draw() 		XXXXXXXXXXXXXXXXXXXX");
 	if ( KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true) )
 		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); //draw the cached pixmap (fast)
 	else

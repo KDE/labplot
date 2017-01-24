@@ -249,8 +249,8 @@ void XYIntegrationCurvePrivate::recalculate() {
 	const nsl_int_method_type method = integrationData.method;
 	const bool absolute = integrationData.absolute;
 
-	DEBUG_LOG("method:"<<nsl_int_method_name[method]);
-	DEBUG_LOG("absolute area:"<<absolute);
+	DEBUG("method:"<<nsl_int_method_name[method]);
+	DEBUG("absolute area:"<<absolute);
 
 ///////////////////////////////////////////////////////////
 	int status=0;

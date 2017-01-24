@@ -50,13 +50,14 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include <QStandardItemModel>
 #include <QImageReader>
 
+#include <KUrlCompletion>
+
 /*!
    \class ImportFileWidget
    \brief Widget for importing data from a file.
 
    \ingroup kdefrontend
 */
-
 ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : QWidget(parent), m_fileName(fileName) {
 	ui.setupUi(this);
 
@@ -307,7 +308,7 @@ FileDataSource::FileType ImportFileWidget::currentFileType() const {
 	returns the currently used filter.
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
-	DEBUG_LOG("currentFileFilter()");
+	DEBUG("currentFileFilter()");
 	FileDataSource::FileType fileType = (FileDataSource::FileType)ui.cbFileType->currentIndex();
 
 	switch (fileType) {
@@ -451,6 +452,11 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 #endif
 
 	bool fileExists = QFile::exists(fileName);
+	if (fileExists)
+		ui.kleFileName->setStyleSheet("");
+	else
+		ui.kleFileName->setStyleSheet("QLineEdit{background:red;}");
+
 	ui.gbOptions->setEnabled(fileExists);
 	ui.bFileInfo->setEnabled(fileExists);
 	ui.cbFileType->setEnabled(fileExists);
@@ -473,7 +479,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	args << "-b" << ui.kleFileName->text();
 	proc->start("file", args);
 	if (proc->waitForReadyRead(1000) == false) {
-		qDebug() << "ERROR: reading file type of file" << fileName;
+		QDEBUG("ERROR: reading file type of file" << fileName);
 		return;
 	}
 	fileInfo = proc->readLine();
@@ -605,7 +611,7 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 		ui.tabWidget->setCurrentIndex(0);
 		break;
 	default:
-		qDebug()<<"unknown file type";
+		DEBUG("unknown file type");
 	}
 
 	hdfOptionsWidget.twContent->clear();
@@ -627,8 +633,8 @@ void ImportFileWidget::fileTypeChanged(int fileType) {
 	updates the selected data set of a HDF file when a new tree widget item is selected
 */
 void ImportFileWidget::hdfTreeWidgetSelectionChanged() {
-	DEBUG_LOG("hdfTreeWidgetItemSelected()");
-	DEBUG_LOG("SELECTED ITEMS =" << hdfOptionsWidget.twContent->selectedItems());
+	DEBUG("hdfTreeWidgetItemSelected()");
+	QDEBUG("SELECTED ITEMS =" << hdfOptionsWidget.twContent->selectedItems());
 
 	if (hdfOptionsWidget.twContent->selectedItems().isEmpty())
 		return;
@@ -637,7 +643,7 @@ void ImportFileWidget::hdfTreeWidgetSelectionChanged() {
 	if (item->data(2, Qt::DisplayRole).toString() == i18n("data set"))
 		refreshPreview();
 	else
-		qDebug()<<"non data set selected in HDF tree widget";
+		DEBUG("non data set selected in HDF tree widget");
 }
 
 /*!
@@ -656,8 +662,8 @@ const QStringList ImportFileWidget::selectedHDFNames() const {
 
 //TODO
 void ImportFileWidget::fitsTreeWidgetSelectionChanged() {
-	DEBUG_LOG("fitsTreeWidgetItemSelected()");
-	DEBUG_LOG("SELECTED ITEMS =" << fitsOptionsWidget.twExtensions->selectedItems());
+	DEBUG("fitsTreeWidgetItemSelected()");
+	QDEBUG("SELECTED ITEMS =" << fitsOptionsWidget.twExtensions->selectedItems());
 
 	if (fitsOptionsWidget.twExtensions->selectedItems().isEmpty())
 		return;
@@ -727,8 +733,8 @@ void ImportFileWidget::fitsTreeWidgetSelectionChanged() {
 	updates the selected var name of a NetCDF file when the tree widget item is selected
 */
 void ImportFileWidget::netcdfTreeWidgetSelectionChanged() {
-	DEBUG_LOG("netcdfTreeWidgetItemSelected()");
-	DEBUG_LOG("SELECTED ITEMS =" << netcdfOptionsWidget.twContent->selectedItems());
+	DEBUG("netcdfTreeWidgetItemSelected()");
+	QDEBUG("SELECTED ITEMS =" << netcdfOptionsWidget.twContent->selectedItems());
 
 	if (netcdfOptionsWidget.twContent->selectedItems().isEmpty())
 		return;
@@ -742,10 +748,10 @@ void ImportFileWidget::netcdfTreeWidgetSelectionChanged() {
 		QString fileName = ui.kleFileName->text();
 		QString name = item->data(0, Qt::DisplayRole).toString();
 		QString varName = item->data(1, Qt::DisplayRole).toString().split(" ")[0];
-		DEBUG_LOG("name =" << name << "varName =" << varName);
+		QDEBUG("name =" << name << "varName =" << varName);
 
 		QString importedText = filter->readAttribute(fileName, name, varName);
-		DEBUG_LOG("importedText =" << importedText);
+		QDEBUG("importedText =" << importedText);
 
 		QStringList lineStrings = importedText.split("\n");
 		int rows = lineStrings.size();
@@ -764,7 +770,7 @@ void ImportFileWidget::netcdfTreeWidgetSelectionChanged() {
 			}
 		}
 	} else
-		qDebug()<<"non showable object selected in NetCDF tree widget";
+		DEBUG("non showable object selected in NetCDF tree widget");
 }
 
 /*!
@@ -838,7 +844,7 @@ void ImportFileWidget::headerChanged(int state) {
 }
 
 void ImportFileWidget::refreshPreview() {
-	DEBUG_LOG("refreshPreview()");
+	DEBUG("refreshPreview()");
 	WAIT_CURSOR;
 
 	QString fileName = ui.kleFileName->text();
@@ -945,7 +951,7 @@ void ImportFileWidget::refreshPreview() {
 	tmpTableWidget->setRowCount(0);
 	tmpTableWidget->setColumnCount(0);
 	if( !importedStrings.isEmpty() ) {
-		DEBUG_LOG("importedStrings =" << importedStrings);	// new
+		QDEBUG("importedStrings =" << importedStrings);	// new
 		if (!ok) {
 			// show imported strings as error message
 			tmpTableWidget->setRowCount(1);
@@ -959,7 +965,7 @@ void ImportFileWidget::refreshPreview() {
 			const int maxColumns = 300;
 			tmpTableWidget->setRowCount(rows);	// new
 			for (int i = 0; i < rows; i++) {
-				DEBUG_LOG(importedStrings[i]);
+				QDEBUG(importedStrings[i]);
 
 				int cols = importedStrings[i].size() > maxColumns ? maxColumns : importedStrings[i].size();	// new
 				if (cols > tmpTableWidget->columnCount())

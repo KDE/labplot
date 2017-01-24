@@ -1556,9 +1556,9 @@ void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
 
 void WorksheetView::cartesianPlotAddNew(QAction* action) {
 	QList<CartesianPlot*> plots = m_worksheet->children<CartesianPlot>();
-	DEBUG_LOG("WorksheetView::cartesianPlotAddNew() plots =" << plots << "mode =" << m_cartesianPlotActionMode);
+	QDEBUG("WorksheetView::cartesianPlotAddNew() plots =" << plots << "mode =" << m_cartesianPlotActionMode);
 	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-		DEBUG_LOG("ApplyActionToSelection");
+		DEBUG("ApplyActionToSelection");
 		int selectedPlots = 0;
 		foreach (CartesianPlot* plot, plots) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
@@ -1577,7 +1577,7 @@ void WorksheetView::cartesianPlotAddNew(QAction* action) {
 		if (selectedPlots > 1)
 			m_worksheet->endMacro();
 	} else {
-		DEBUG_LOG("not ApplyActionToSelection");
+		DEBUG("not ApplyActionToSelection");
 		if  (plots.size() > 1)
 			m_worksheet->beginMacro(i18n("%1: Add curve to %2 plots", m_worksheet->name(), plots.size()));
 
@@ -1590,7 +1590,7 @@ void WorksheetView::cartesianPlotAddNew(QAction* action) {
 }
 
 void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
-	DEBUG_LOG("WorksheetView::cartesianPlotAdd()");
+	DEBUG("WorksheetView::cartesianPlotAdd()");
 	if (action == addCurveAction)
 		plot->addCurve();
 	else if (action == addEquationCurveAction)

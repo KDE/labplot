@@ -334,7 +334,7 @@ void XYFitCurveDock::weightsColumnChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::categoryChanged(int index) {
-	DEBUG_LOG("categoryChanged() category =" << nsl_fit_model_category_name[index] << ", type =" << m_fitData.modelType);
+	QDEBUG("categoryChanged() category =" << nsl_fit_model_category_name[index] << ", type =" << m_fitData.modelType);
 	if (uiGeneralTab.cbCategory->currentIndex() == uiGeneralTab.cbCategory->count() - 1)
 		m_fitData.modelCategory = nsl_fit_model_custom;
 	else
@@ -390,7 +390,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 }
 
 void XYFitCurveDock::modelChanged(int index) {
-	DEBUG_LOG("modelChanged() type =" << index << ", initializing =" << m_initializing);
+	QDEBUG("modelChanged() type =" << index << ", initializing =" << m_initializing);
 	// leave if there is no selection
 	if(index == -1)
 		return;
@@ -454,7 +454,7 @@ void XYFitCurveDock::modelChanged(int index) {
 }
 
 void XYFitCurveDock::updateModelEquation() {
-	DEBUG_LOG("updateModelEquation() type =" << m_fitData.modelType);
+	DEBUG("updateModelEquation() type =" << m_fitData.modelType);
 
 	int num = uiGeneralTab.sbDegree->value();
 	QStringList vars; // variables/parameter that are known in ExpressionTextEdit teEquation
@@ -791,7 +791,7 @@ void XYFitCurveDock::updateModelEquation() {
 	//available - unless there're no values available
 	if (m_fitData.modelCategory != nsl_fit_model_custom || 
 	        !(m_initializing && m_fitData.paramNames.size() == m_fitData.paramStartValues.size())) {
-		DEBUG_LOG(" number of start values" << m_fitData.paramNames.size() << m_fitData.paramStartValues.size());
+		QDEBUG(" number of start values" << m_fitData.paramNames.size() << m_fitData.paramStartValues.size());
 		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
 		m_fitData.paramFixed.resize(m_fitData.paramNames.size());
 		m_fitData.paramLowerLimits.resize(m_fitData.paramNames.size());

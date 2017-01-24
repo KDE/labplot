@@ -258,11 +258,11 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	const double cutoff = filterData.cutoff, cutoff2 = filterData.cutoff2;
 	const nsl_filter_cutoff_unit unit = filterData.unit, unit2 = filterData.unit2;
 
-	DEBUG_LOG("n ="<<n);
-	DEBUG_LOG("type:"<<nsl_filter_type_name[type]);
-	DEBUG_LOG("form (order "<<order<<") :"<<nsl_filter_form_name[form]);
-	DEBUG_LOG("cutoffs ="<<cutoff<<cutoff2);
-	DEBUG_LOG("unit :"<<nsl_filter_cutoff_unit_name[unit]<<nsl_filter_cutoff_unit_name[unit2]);
+	DEBUG("n ="<<n);
+	DEBUG("type:"<<nsl_filter_type_name[type]);
+	DEBUG("form (order "<<order<<") :"<<nsl_filter_form_name[form]);
+	DEBUG("cutoffs ="<<cutoff<<cutoff2);
+	DEBUG("unit :"<<nsl_filter_cutoff_unit_name[unit]<<nsl_filter_cutoff_unit_name[unit2]);
 
 ///////////////////////////////////////////////////////////
 	// calculate index
@@ -293,8 +293,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		return;
 	}
 
-	DEBUG_LOG("cut off @" << cutindex << cutindex2);
-	DEBUG_LOG("bandwidth =" << bandwidth);
+	DEBUG("cut off @" << cutindex << cutindex2);
+	DEBUG("bandwidth =" << bandwidth);
 
 	// run filter
 	int status = nsl_filter_fourier(ydata, n, type, form, order, cutindex, bandwidth);

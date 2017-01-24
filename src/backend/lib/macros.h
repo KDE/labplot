@@ -33,18 +33,18 @@
 
 #include <QApplication>
 
-// Windows style warning
+// C++ style warning (works on Windows)
 #include <iostream>
-#define WARNING_WIN(x) std::cout<<x
+#define WARNING(x) std::cout << x << std::endl
 
 #ifndef NDEBUG
 #include <QDebug>
-#define DEBUG_LOG(x) qDebug()<<x
-// Windows style debugging
-#define DEBUG_WIN(x) std::cout<<x
+#define QDEBUG(x) qDebug() << x
+// C++ style debugging (works on Windows)
+#define DEBUG(x) std::cout << x << std::endl
 #else
-#define DEBUG_LOG(x) {}
-#define DEBUG_WIN(x) {}
+#define QDEBUG(x) {}
+#define DEBUG(x) {}
 #endif
 
 #define BASIC_ACCESSOR(type, var, method, Method) \

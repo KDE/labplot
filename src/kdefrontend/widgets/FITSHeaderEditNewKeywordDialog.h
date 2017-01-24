@@ -31,23 +31,21 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "ui_fitsheadereditnewkeywordwidget.h"
 
 #include <KDialog>
-#include <KLineEdit>
-#include <KCompletion>
-#include <KMessageBox>
+
 class FITSHeaderEditNewKeywordDialog : public KDialog {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit FITSHeaderEditNewKeywordDialog(QWidget *parent = 0);
-    ~FITSHeaderEditNewKeywordDialog();
-    FITSFilter::Keyword newKeyword() const;
+	explicit FITSHeaderEditNewKeywordDialog(QWidget *parent = 0);
+	FITSFilter::Keyword newKeyword() const;
 
 private:
-    Ui::FITSHeaderEditNewKeywordDialog ui;
-    FITSFilter::Keyword m_newKeyword;
-    int okClicked();
+	Ui::FITSHeaderEditNewKeywordDialog ui;
+	FITSFilter::Keyword m_newKeyword;
+	int okClicked();
+
 protected slots:
-    virtual void slotButtonClicked(int button);
+	virtual void slotButtonClicked(int button);
 };
 
 #endif // FITSHEADEREDITNEWKEYWORDDIALOG_H

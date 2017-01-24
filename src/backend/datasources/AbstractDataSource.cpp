@@ -130,7 +130,7 @@ int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList 
 //TODO: use polymorphism instead  - provide Spreadsheet::create() and Matrix::create() instead of this function.
 int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
 							   int actualRows, int actualCols, QStringList colNameList) {
-	DEBUG_LOG("create() rows =" << actualRows << " cols =" << actualCols);
+	QDEBUG("create() rows =" << actualRows << " cols =" << actualCols);
 	int columnOffset = 0;
 	setUndoAware(false);
 
@@ -154,7 +154,7 @@ int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, Abstract
 			vector->resize(actualRows);
 			dataPointers[n] = vector;
 		}
-		DEBUG_LOG("dataPointers =" << dataPointers);
+		QDEBUG("dataPointers =" << dataPointers);
 
 		return columnOffset;
 	}

@@ -27,37 +27,37 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "FITSHeaderEditAddUnitDialog.h"
 #include "backend/datasources/filters/FITSFilter.h"
 
-FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QWidget *parent) :
-    KDialog(parent) {
-    QWidget* mainWidget = new QWidget(this);
-    ui.setupUi(mainWidget);
-    setMainWidget( mainWidget );
+FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QWidget* parent) : KDialog(parent) {
+	QWidget* mainWidget = new QWidget(this);
+	ui.setupUi(mainWidget);
+	setMainWidget(mainWidget);
 
-    setWindowTitle(i18n("Specify the new unit"));
-    setButtons( KDialog::Ok | KDialog::Cancel );
-    setButtonText(KDialog::Ok, i18n("&Add unit"));
-    KCompletion* keyCompletion = new KCompletion;
-    keyCompletion->setItems(FITSFilter::units());
-    if (!unit.isEmpty()) {
-        ui.kleUnit->setText(unit);
-    }
-    ui.kleUnit->setCompletionObject(keyCompletion);
-    ui.kleUnit->setAutoDeleteCompletionObject(true);
-    connect(this, SIGNAL(okClicked()), this, SLOT(addUnit()));
-    setAttribute(Qt::WA_DeleteOnClose);
-}
+	setWindowTitle(i18n("Add New Unit"));
+	setWindowIcon(QIcon::fromTheme("document-new"));
+	setButtons(KDialog::Ok | KDialog::Cancel);
+	setButtonText(KDialog::Ok, i18n("&Add"));
+	enableButtonOk(false);
 
-FITSHeaderEditAddUnitDialog::~FITSHeaderEditAddUnitDialog() {
+	KCompletion* keyCompletion = new KCompletion;
+	keyCompletion->setItems(FITSFilter::units());
+	ui.kleUnit->setCompletionObject(keyCompletion);
+	ui.kleUnit->setAutoDeleteCompletionObject(true);
+	ui.kleUnit->setPlaceholderText(i18n("Enter unit name here"));
+
+	connect(ui.kleUnit, SIGNAL(textChanged(QString)), this, SLOT(unitChanged()));
+	connect(ui.kleUnit, SIGNAL(clearButtonClicked()), this, SLOT(unitChanged()));
+
+	ui.kleUnit->setText(unit);
 }
 
 QString FITSHeaderEditAddUnitDialog::unit() const {
-    return m_unit;
+	QString unit = ui.kleUnit->text();
+	if (unit.contains(QLatin1Char('(')))
+		unit = unit.left(unit.indexOf(QLatin1Char('('))-1);
+
+	return unit;
 }
 
-void FITSHeaderEditAddUnitDialog::addUnit() {
-    if (ui.kleUnit->text().contains(QLatin1Char('('))) {
-        m_unit = ui.kleUnit->text().left(ui.kleUnit->text().indexOf(QLatin1Char('('))-1);
-    } else {
-        m_unit = ui.kleUnit->text();
-    }
+void FITSHeaderEditAddUnitDialog::unitChanged() {
+	enableButtonOk(!ui.kleUnit->text().isEmpty());
 }

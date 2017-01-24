@@ -87,6 +87,9 @@ private slots:
 	void removeExtension();
 	void addKeyword();
 	void addModifyKeywordUnit();
+
+signals:
+	void changed(bool);
 };
 
 #endif // FITSHEADEREDITWIDGET_H

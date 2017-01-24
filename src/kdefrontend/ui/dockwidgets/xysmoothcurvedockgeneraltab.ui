@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>586</width>
-    <height>639</height>
+    <width>753</width>
+    <height>863</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -162,7 +162,11 @@
     </widget>
    </item>
    <item row="21" column="3" colspan="2">
-    <widget class="QTextEdit" name="teResult"/>
+    <widget class="QTextEdit" name="teResult">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="23" column="3">
     <spacer name="horizontalSpacer_2">

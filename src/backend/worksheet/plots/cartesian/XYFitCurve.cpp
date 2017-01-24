@@ -228,7 +228,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		double x = gsl_vector_get(paramValues, i);
 		// bound values if limits are set
 		assign_variable(paramNames->at(i).toLocal8Bit().data(), nsl_fit_map_bound(x, min[i], max[i]));
-		DEBUG_LOG("Parameter"<<i<<" (\" "<<paramNames->at(i).toLocal8Bit().data()<<"\")"<<'['<<min[i]<<','<<max[i]
+		QDEBUG("Parameter"<<i<<" (\" "<<paramNames->at(i).toLocal8Bit().data()<<"\")"<<'['<<min[i]<<','<<max[i]
 			<<"] free/bound:"<<QString::number(x, 'g', 15)<<' '<<QString::number(nsl_fit_map_bound(x, min[i], max[i]), 'g', 15));
 	}
 
@@ -247,7 +247,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		assign_variable("x", x[i]);
 		double Yi = parse(func);
 
-//		DEBUG_LOG("evaluate function"<<QString(func)<<": f(x["<<i<<"]) ="<<Yi);
+//		DEBUG("evaluate function"<<QString(func)<<": f(x["<<i<<"]) ="<<Yi);
 
 		if (parse_errors() > 0)
 			return GSL_EINVAL;
@@ -928,7 +928,7 @@ void XYFitCurvePrivate::recalculate() {
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
 	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
 	for (unsigned int i = 0; i < np; i++)
-		DEBUG_LOG("fixed parameter"<<i<<fitData.paramFixed.data()[i]);
+		DEBUG("fixed parameter"<<i<<fitData.paramFixed.data()[i]);
 
 	//function to fit
 	gsl_multifit_function_fdf f;
@@ -1037,7 +1037,7 @@ void XYFitCurvePrivate::recalculate() {
 		// use results as start values if desired
 		if (fitData.useResults) {
 			fitData.paramStartValues.data()[i] = fitResult.paramValues[i];
-			DEBUG_LOG("saving parameter"<<i<<fitResult.paramValues[i]<<fitData.paramStartValues.data()[i]);
+			DEBUG("saving parameter"<<i<<fitResult.paramValues[i]<<fitData.paramStartValues.data()[i]);
 		}
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
 	}

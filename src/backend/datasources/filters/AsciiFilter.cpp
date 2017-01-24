@@ -316,7 +316,7 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString & fileName, Abstra
 		lineStringList = line.split(regExp, QString::SplitBehavior(skipEmptyParts));
 
 		//determine the separator
-		DEBUG_LOG("auto columns =" << lineStringList.size());
+		DEBUG("auto columns =" << lineStringList.size());
 		if (!lineStringList.isEmpty()) {
 			int length1 = lineStringList.at(0).length();
 			if (lineStringList.size() > 1) {
@@ -332,8 +332,8 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString & fileName, Abstra
 		separator = separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
 		lineStringList = line.split(separator, QString::SplitBehavior(skipEmptyParts));
 	}
- 	DEBUG_LOG("separator: " << separator);
- 	DEBUG_LOG("headerEnabled =" << headerEnabled);
+ 	QDEBUG("separator: " << separator);
+ 	DEBUG("headerEnabled =" << headerEnabled);
 
 	if (endColumn == -1)
 		endColumn = lineStringList.size(); //use the last available column index
@@ -366,10 +366,10 @@ QList<QStringList> AsciiFilterPrivate::readData(const QString & fileName, Abstra
 	if (lines == -1)
 		lines = actualRows;
 
-	DEBUG_LOG("start/end column: " << startColumn << endColumn);
-	DEBUG_LOG("start/end row: " << startRow << actualEndRow);
-	DEBUG_LOG("actual cols/rows: " << actualCols << actualRows);
-	DEBUG_LOG("lines:" << lines);
+	DEBUG("start/end column: " << startColumn << endColumn);
+	DEBUG("start/end row: " << startRow << actualEndRow);
+	DEBUG("actual cols/rows: " << actualCols << actualRows);
+	DEBUG("lines:" << lines);
 
 	int currentRow = 0; // indexes the position in the vector(column)
 	int columnOffset = 0; // indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.

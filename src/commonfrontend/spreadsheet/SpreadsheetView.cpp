@@ -108,10 +108,23 @@ void SpreadsheetView::init() {
 	m_horizontalHeader->setMovable(true);
 	m_horizontalHeader->installEventFilter(this);
 
-	//set the column sizes to the saved values
+	//set the column sizes to the saved values or resize to content if no size was saved yet
 	int i=0;
-	foreach(Column* col, m_spreadsheet->children<Column>())
-		m_horizontalHeader->resizeSection(i++, col->width());
+	foreach(Column* col, m_spreadsheet->children<Column>()) {
+		if (col->width()==0) {
+			QFont font;
+			QFontMetrics fm(font);
+			int width = fm.width( m_model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString() );
+
+			//TODO: figure out how to determine the icon size used in the header (the line below returns 0)
+			//and activate icons in SpreadsheetModel::headerData() again
+			//width += m_horizontalHeader->iconSize().width();
+
+			col->setWidth(width*1.1);
+		}
+		m_horizontalHeader->resizeSection(i, col->width());
+		i++;
+	}
 
 	connect(m_horizontalHeader, SIGNAL(sectionMoved(int,int,int)), this, SLOT(handleHorizontalSectionMoved(int,int,int)));
 	connect(m_horizontalHeader, SIGNAL(sectionDoubleClicked(int)), this, SLOT(handleHorizontalHeaderDoubleClicked(int)));

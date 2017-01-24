@@ -120,7 +120,7 @@ void WorksheetElementContainer::setPrinting(bool on) {
 }
 
 void WorksheetElementContainer::retransform() {
-	DEBUG_LOG("WorksheetElementContainer::retransform()");
+	DEBUG("WorksheetElementContainer::retransform()");
 	Q_D(WorksheetElementContainer);
 
 	QList<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
@@ -244,7 +244,7 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 
 // Inherited from QGraphicsItem
 void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	DEBUG_LOG("WorksheetElementContainerPrivate::paint()");
+	DEBUG("WorksheetElementContainerPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -262,5 +262,5 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 		painter->setOpacity(q->selectedOpacity);
 		painter->drawPath(containerShape);
 	}
-	DEBUG_LOG("WorksheetElementContainerPrivate::paint() DONE");
+	DEBUG("WorksheetElementContainerPrivate::paint() DONE");
 }

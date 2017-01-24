@@ -31,17 +31,17 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "ui_fitsheadereditaddunitwidget.h"
 
 class FITSHeaderEditAddUnitDialog : public KDialog {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit FITSHeaderEditAddUnitDialog(const QString& unit = QString(), QWidget *parent = 0);
-    ~FITSHeaderEditAddUnitDialog();
-    QString unit() const;
+	explicit FITSHeaderEditAddUnitDialog(const QString& unit = QString(), QWidget* parent = 0);
+	QString unit() const;
+
 private:
-    Ui::FITSHeaderEditAddUnitDialog  ui;
-    QString m_unit;
+	Ui::FITSHeaderEditAddUnitDialog  ui;
+
 private slots:
-    void addUnit();
+	void unitChanged();
 };
 
 #endif // FITSHEADEREDITADDUNITDIALOG_H
