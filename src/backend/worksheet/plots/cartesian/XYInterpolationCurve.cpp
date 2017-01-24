@@ -259,10 +259,10 @@ void XYInterpolationCurvePrivate::recalculate() {
 	const nsl_interp_evaluate evaluate = interpolationData.evaluate;
 	const unsigned int npoints = interpolationData.npoints;
 
-	DEBUG_LOG("type:"<<nsl_interp_type_name[type]);
-	DEBUG_LOG("cubic Hermite variant:"<<nsl_interp_pch_variant_name[variant]<<tension<<continuity<<bias);
-	DEBUG_LOG("evaluate:"<<nsl_interp_evaluate_name[evaluate]);
-	DEBUG_LOG("npoints ="<<npoints);
+	DEBUG("type:"<<nsl_interp_type_name[type]);
+	DEBUG("cubic Hermite variant:"<<nsl_interp_pch_variant_name[variant]<<tension<<continuity<<bias);
+	DEBUG("evaluate:"<<nsl_interp_evaluate_name[evaluate]);
+	DEBUG("npoints ="<<npoints);
 
 ///////////////////////////////////////////////////////////
 	int status=0;

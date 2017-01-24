@@ -105,7 +105,7 @@ ImportFileDialog::~ImportFileDialog() {
 	creates widgets for the frame "Add-To" and sets the current model in the combobox to \c model.
  */
 void ImportFileDialog::setModel(QAbstractItemModel* model) {
-	DEBUG_LOG("ImportFileDialog::setModel() model ="<<model);
+	QDEBUG("ImportFileDialog::setModel() model ="<<model);
 	//Frame for the "Add To"-Stuff
 	frameAddTo = new QGroupBox(this);
 	frameAddTo->setTitle(i18n("Import To"));
@@ -157,13 +157,13 @@ void ImportFileDialog::setModel(QAbstractItemModel* model) {
 	connect(cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkOkButton()));
 	connect(tbNewDataContainer, SIGNAL(clicked(bool)), this, SLOT(newDataContainerMenu()));
 	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
-	DEBUG_LOG("ImportFileDialog::setModel() DONE");
+	DEBUG("ImportFileDialog::setModel() DONE");
 }
 
 void ImportFileDialog::setCurrentIndex(const QModelIndex& index) {
-	DEBUG_LOG("ImportFileDialog::setCurrentIndex() index ="<<index);
+	QDEBUG("ImportFileDialog::setCurrentIndex() index =" << index);
 	cbAddTo->setCurrentModelIndex(index);
-	DEBUG_LOG("cbAddTo->currentModelIndex() ="<<cbAddTo->currentModelIndex());
+	QDEBUG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	this->checkOkButton();
 }
 
@@ -194,11 +194,11 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
   triggers data import to the currently selected data container
 */
 void ImportFileDialog::importTo(QStatusBar* statusBar) const {
-	DEBUG_LOG("ImportFileDialog::importTo()");
-	DEBUG_LOG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
+	DEBUG("ImportFileDialog::importTo()");
+	QDEBUG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
-		DEBUG_LOG("ERROR: No aspect available");
+		DEBUG("ERROR: No aspect available");
 		return;
 	}
 
@@ -329,7 +329,7 @@ void ImportFileDialog::newDataContainer(QAction* action) {
 			aspect = new Matrix(0, name);
 
 		m_mainWin->addAspectToProject(aspect);
-		DEBUG_LOG("cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
+		QDEBUG("cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
 		cbAddTo->setCurrentModelIndex(m_mainWin->model()->modelIndexOfAspect(aspect));
 		checkOkButton();
 	}
@@ -343,7 +343,7 @@ void ImportFileDialog::newDataContainerMenu() {
 
 void ImportFileDialog::checkOnFitsTableToMatrix(const bool enable) {
 	if (cbAddTo) {
-		DEBUG_LOG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
+		QDEBUG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 		if (!aspect)
 			return;
@@ -354,10 +354,10 @@ void ImportFileDialog::checkOnFitsTableToMatrix(const bool enable) {
 }
 
 void ImportFileDialog::checkOkButton() {
-	DEBUG_LOG("ImportFileDialog::checkOkButton()");
+	DEBUG("ImportFileDialog::checkOkButton()");
 	if (cbAddTo) { //only check for the target container when no file data source is being added
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
-		DEBUG_LOG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
+		QDEBUG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
 		if (!aspect) {
 			enableButtonOk(false);
 			lPosition->setEnabled(false);

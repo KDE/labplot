@@ -225,7 +225,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 
 		status = nc_inq_att(ncid, varid, name, &type, &len);
 		handleError(status, "nc_inq_att");
-		DEBUG_LOG("	attr" << i+1 << "name/type/len =" << name << translateDataType(type) << len);
+		QDEBUG("	attr" << i+1 << "name/type/len =" << name << translateDataType(type) << len);
 
 		//read attribute
 		switch (type) {
@@ -363,7 +363,7 @@ void NetCDFFilterPrivate::scanDims(int ncid, int ndims, QTreeWidgetItem* parentI
 	for (int i = 0; i < ndims; i++) {
 		status = nc_inq_dim(ncid, i, name, &len);
 		handleError(status, "nc_inq_att");
-		DEBUG_LOG("	dim" << i+1 << ": name/len =" << name << len);
+		DEBUG("	dim" << i+1 << ": name/len =" << name << len);
 
 		QStringList props;
 		props<<i18n("length") << QLatin1String(" = ") << QString::number(len);
@@ -387,8 +387,8 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 		status = nc_inq_var(ncid, i, name, &type, &ndims, dimids, &nattrs);
 		handleError(status, "nc_inq_att");
 
-		DEBUG_LOG("	var" << i+1 << ": name/type=" << name << translateDataType(type));
-		DEBUG_LOG("		ndims/nattr" << ndims << nattrs);
+		QDEBUG("	var" << i+1 << ": name/type=" << name << translateDataType(type));
+		DEBUG("		ndims/nattr" << ndims << nattrs);
 
 		QStringList props;
 		props << translateDataType(type);
@@ -432,7 +432,7 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 	int ndims, nvars, nattr, uldid;
 	status = nc_inq(ncid, &ndims, &nvars, &nattr, &uldid);
 	handleError(status, "nc_inq");
-	DEBUG_LOG(" nattr/ndims/nvars =" << nattr << ndims << nvars);
+	DEBUG(" nattr/ndims/nvars =" << nattr << ndims << nvars);
 
 	QTreeWidgetItem *attrItem = new QTreeWidgetItem(QStringList() << QString(i18n("Attributes")));
 	attrItem->setIcon(0, QIcon(KIcon("folder")));
@@ -497,7 +497,7 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 
 	if (currentVarName.isEmpty())
 		return dataStrings << (QStringList() << i18n("No variable selected"));
-	DEBUG_LOG(" current variable =" << currentVarName);
+	QDEBUG(" current variable =" << currentVarName);
 
 #ifdef HAVE_NETCDF
 	int ncid;
@@ -541,8 +541,8 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 			actualRows = endRow-startRow+1;
 			actualCols = 1;
 
-			DEBUG_LOG("start/end row" << startRow << endRow);
-			DEBUG_LOG("act rows/cols" << actualRows << actualCols);
+			DEBUG("start/end row" << startRow << endRow);
+			DEBUG("act rows/cols" << actualRows << actualCols);
 
 			if (dataSource != NULL)
 				columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
@@ -580,11 +580,11 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 			actualRows = endRow-startRow+1;
 			actualCols = endColumn-startColumn+1;
 
-			DEBUG_LOG("dim =" << rows << "x" << cols);
-			DEBUG_LOG("startRow/endRow:" << startRow << endRow);
-			DEBUG_LOG("startColumn/endColumn:" << startColumn << endColumn);
-			DEBUG_LOG("actual rows/cols:" << actualRows << actualCols);
-			DEBUG_LOG("lines:" << lines);
+			DEBUG("dim =" << rows << "x" << cols);
+			DEBUG("startRow/endRow:" << startRow << endRow);
+			DEBUG("startColumn/endColumn:" << startColumn << endColumn);
+			DEBUG("actual rows/cols:" << actualRows << actualCols);
+			DEBUG("lines:" << lines);
 
 			if (dataSource != NULL)
 				columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
@@ -665,11 +665,11 @@ QList<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString & fileName,
 */
 void NetCDFFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
 	if (currentVarName.isEmpty()) {
-		qDebug()<<" No variable selected";
+		DEBUG(" No variable selected");
 		return;
 	}
 
-	DEBUG_LOG(" current variable =" << currentVarName);
+	QDEBUG(" current variable =" << currentVarName);
 	readCurrentVar(fileName, dataSource, mode);
 }
 

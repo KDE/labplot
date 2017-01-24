@@ -281,7 +281,7 @@ QPainterPath PlotAreaPrivate::shape() const {
 }
 
 void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-	DEBUG_LOG("PlotAreaPrivate::paint()");
+	DEBUG("PlotAreaPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -387,7 +387,7 @@ void PlotAreaPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 		else
 			painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 	}
-	DEBUG_LOG("PlotAreaPrivate::paint() DONE");
+	DEBUG("PlotAreaPrivate::paint() DONE");
 }
 
 //##############################################################################

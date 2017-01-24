@@ -206,7 +206,7 @@ void MainWin::initGUI(const QString& fileName) {
 			newWorksheet();
 		} else if (load == 3) { //open last used project
 			if (!m_recentProjectsAction->urls().isEmpty()) {
-				DEBUG_LOG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().first());
+				QDEBUG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().first());
 				openRecentProject( m_recentProjectsAction->urls().first() );
 			}
 		}
@@ -1506,7 +1506,7 @@ void MainWin::historyDialog() {
   Opens the dialog to import data to the selected workbook, spreadsheet or matrix
 */
 void MainWin::importFileDialog(const QString& fileName) {
-	DEBUG_LOG("MainWin::importFileDialog()");
+	DEBUG("MainWin::importFileDialog()");
 	m_importFileDialog = new ImportFileDialog(this, false, fileName);
 
 	// select existing container
@@ -1524,7 +1524,7 @@ void MainWin::importFileDialog(const QString& fileName) {
 
 	delete m_importFileDialog;
 	m_importFileDialog = 0;
-	DEBUG_LOG("MainWin::importFileDialog() DONE");
+	DEBUG("MainWin::importFileDialog() DONE");
 }
 
 /*!

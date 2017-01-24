@@ -440,7 +440,7 @@ void TextLabelPrivate::updateText() {
 void TextLabelPrivate::updateTeXImage() {
 	teXImage = teXImageFutureWatcher.result();
 	retransform();
-	DEBUG_LOG("teXRenderSuccessful =" << teXRenderSuccessful);
+	DEBUG("teXRenderSuccessful =" << teXRenderSuccessful);
 	emit q->teXImageUpdated(teXRenderSuccessful);
 }
 

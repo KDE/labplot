@@ -1188,7 +1188,7 @@ void CartesianPlot::scaleAuto() {
 }
 
 void CartesianPlot::zoomIn() {
-	DEBUG_LOG("CartesianPlot::zoomIn()");
+	DEBUG("CartesianPlot::zoomIn()");
 	Q_D(CartesianPlot);
 
 	float oldRange = (d->xMax - d->xMin);
@@ -1314,7 +1314,7 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner)
 	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
  */
 void CartesianPlotPrivate::retransform() {
-	DEBUG_LOG("CartesianPlotPrivate::retransform()");
+	DEBUG("CartesianPlotPrivate::retransform()");
 	if (suppressRetransform)
 		return;
 
@@ -1337,7 +1337,7 @@ void CartesianPlotPrivate::retransform() {
 }
 
 void CartesianPlotPrivate::retransformScales() {
-	DEBUG_LOG("CartesianPlotPrivate::retransformScales()");
+	DEBUG("CartesianPlotPrivate::retransformScales()");
 
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
 	QList<CartesianScale*> scales;
@@ -1773,7 +1773,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 }
 
 void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
-	DEBUG_LOG("CartesianPlotPrivate::paint()");
+	DEBUG("CartesianPlotPrivate::paint()");
 
 	if (!isVisible())
 		return;
@@ -1795,7 +1795,7 @@ void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsIt
 	}
 
 	WorksheetElementContainerPrivate::paint(painter, option, widget);
-	DEBUG_LOG("CartesianPlotPrivate::paint() DONE");
+	DEBUG("CartesianPlotPrivate::paint() DONE");
 }
 
 //##############################################################################

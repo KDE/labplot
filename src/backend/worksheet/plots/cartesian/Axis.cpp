@@ -1332,7 +1332,7 @@ void AxisPrivate::retransformTicks() {
 	(=the smallest possible number of float digits) precision for the floats
 */
 void AxisPrivate::retransformTickLabelStrings() {
-	DEBUG_LOG("AxisPrivate::retransformTickLabelStrings()");
+	DEBUG("AxisPrivate::retransformTickLabelStrings()");
 	if (labelsAutoPrecision) {
 		//check, whether we need to increase the current precision
 		int newPrecision = upperLabelsPrecision(labelsPrecision);
@@ -1348,7 +1348,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			}
 		}
 	}
-	DEBUG_LOG("labelsPrecision =" << labelsPrecision);
+	DEBUG("labelsPrecision =" << labelsPrecision);
 
 	tickLabelStrings.clear();
 	QString str;
@@ -1402,7 +1402,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	where no duplicates for the tick label float occur.
  */
 int AxisPrivate::upperLabelsPrecision(int precision) {
-	DEBUG_LOG("AxisPrivate::upperLabelsPrecision() precision =" << precision);
+	DEBUG("AxisPrivate::upperLabelsPrecision() precision =" << precision);
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, increase the precision.
 	QList<float> tempValues;
@@ -1429,7 +1429,7 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	where no duplicates for the tick label float occur.
 */
 int AxisPrivate::lowerLabelsPrecision(int precision) {
-	DEBUG_LOG("AxisPrivate::lowerLabelsPrecision() precision =" << precision);
+	DEBUG("AxisPrivate::lowerLabelsPrecision() precision =" << precision);
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
 	QList<float> tempValues;
@@ -1456,9 +1456,9 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 }
 
 double AxisPrivate::round(double value, int precision) {
-	//DEBUG_LOG("AxisPrivate::round() value =" << value << "precision =" << precision);
+	//DEBUG("AxisPrivate::round() value =" << value << "precision =" << precision);
 	double result = roundf(value * pow(10, precision)) / pow(10, precision);
-	//DEBUG_LOG("	result =" << result);
+	//DEBUG("	result =" << result);
 	return result;
 }
 
@@ -1728,7 +1728,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	\sa QGraphicsItem::paint()
  */
 void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
-	DEBUG_LOG("AxisPrivate::paint()");
+	DEBUG("AxisPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -1803,7 +1803,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		painter->drawPath(axisShape);
 	}
 
-	DEBUG_LOG("AxisPrivate::paint() DONE");
+	DEBUG("AxisPrivate::paint() DONE");
 }
 
 void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
