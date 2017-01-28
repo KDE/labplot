@@ -13,8 +13,7 @@ chapterprefix,
 ]{scrbook}
 
 \usepackage[colorlinks]{hyperref}
-\usepackage{colortbl}
-\usepackage{color}
+\usepackage{xcolor}
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{fullpage}
@@ -25,6 +24,9 @@ chapterprefix,
 \newcommand{\colortext}[2]{\begingroup\color{#1}#2\endgroup}
 \newcommand{\bulletline}{\newline \centerline{$ \bullet\quad \bullet\quad \bullet $} \newline}
 \newcommand{\smallfrac}[2]{\textstyle{\frac #1 #2}}
+\newcommand{\menuitem}[1]{\fcolorbox{black}{lightgray}{$#1$}}
+\newcommand{\menuchoice}[2]{\fcolorbox{black}{lightgray}{$#1$} $\rightarrow$ \fcolorbox{black}{lightgray}{$#2$}}
+\newcommand{\rmb}{right mouse button click}
 
 
 \begin{document}
