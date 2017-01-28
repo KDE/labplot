@@ -1190,8 +1190,11 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
     parses the content of the file \c fileName and fill the tree using rootItem.
 */
 void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem) {
+	DEBUG("HDFFilterPrivate::parse()");
 #ifdef HAVE_HDF5
 	QByteArray bafileName = fileName.toLatin1();
+	DEBUG("fileName = " << bafileName.data());
+	//TODO: H5Fopen() crashes on Windows!
 	hid_t file = H5Fopen(bafileName.data(), H5F_ACC_RDONLY, H5P_DEFAULT);
 	handleError((int)file, "H5Fopen", fileName);
 	char rootName[]="/";
@@ -1204,6 +1207,7 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
 	status = H5Fclose(file);
 	handleError(status, "H5Fclose", "");
 #else
+	DEBUG("HDF not available");
 	Q_UNUSED(fileName)
 	Q_UNUSED(rootItem)
 #endif

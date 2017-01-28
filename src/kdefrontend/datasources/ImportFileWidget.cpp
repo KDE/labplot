@@ -98,6 +98,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	hdfOptionsWidget.twContent->hideColumn(1);
 	hdfOptionsWidget.twContent->hideColumn(2);
 	hdfOptionsWidget.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
+	hdfOptionsWidget.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	ui.swOptions->insertWidget(FileDataSource::HDF, hdfw);
 
 	QWidget* netcdfw = new QWidget(0);
@@ -109,6 +110,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	netcdfOptionsWidget.twContent->hideColumn(1);
 	netcdfOptionsWidget.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	netcdfOptionsWidget.twContent->setAlternatingRowColors(true);
+	netcdfOptionsWidget.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	ui.swOptions->insertWidget(FileDataSource::NETCDF, netcdfw);
 
 	QWidget* fitsw = new QWidget(0);
@@ -116,6 +118,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 	fitsOptionsWidget.twExtensions->headerItem()->setText(0, i18n("Extensions"));
 	fitsOptionsWidget.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
 	fitsOptionsWidget.twExtensions->setAlternatingRowColors(true);
+	fitsOptionsWidget.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	ui.swOptions->insertWidget(FileDataSource::FITS, fitsw);
 
 	// the table widget for preview
@@ -466,7 +469,17 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	ui.chbWatchFile->setEnabled(fileExists);
 	ui.chbLinkFile->setEnabled(fileExists);
 	if (!fileExists) {
-		refreshPreview();
+		//file doesn't exist -> delete the content preview that is still potentially
+		//available from the previously selected file
+		ui.tePreview->clear();
+		twPreview->clear();
+		hdfOptionsWidget.twContent->clear();
+		hdfOptionsWidget.twPreview->clear();
+		netcdfOptionsWidget.twContent->clear();
+		netcdfOptionsWidget.twPreview->clear();
+		fitsOptionsWidget.twExtensions->clear();
+		fitsOptionsWidget.twPreview->clear();
+
 		emit fileNameChanged();
 		return;
 	}
