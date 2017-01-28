@@ -461,7 +461,17 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	ui.chbWatchFile->setEnabled(fileExists);
 	ui.chbLinkFile->setEnabled(fileExists);
 	if (!fileExists) {
-		refreshPreview();
+		//file doesn't exist -> delete the content preview that is still potentially
+		//available from the previously selected file
+		ui.tePreview->clear();
+		twPreview->clear();
+		hdfOptionsWidget.twContent->clear();
+		hdfOptionsWidget.twPreview->clear();
+		netcdfOptionsWidget.twContent->clear();
+		netcdfOptionsWidget.twPreview->clear();
+		fitsOptionsWidget.twExtensions->clear();
+		fitsOptionsWidget.twPreview->clear();
+
 		emit fileNameChanged();
 		return;
 	}
