@@ -59,6 +59,12 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
                 ui.cbDistribution->addItem(i18n(nsl_sf_stats_distribution_name[i]), i);
 
+	//use white background in the preview label
+	QPalette p;
+	p.setColor(QPalette::Window, Qt::white);
+	ui.lFuncPic->setAutoFillBackground(true);
+	ui.lFuncPic->setPalette(p);
+
 	ui.kleParameter1->setClearButtonShown(true);
 	ui.kleParameter2->setClearButtonShown(true);
 	ui.kleParameter3->setClearButtonShown(true);
