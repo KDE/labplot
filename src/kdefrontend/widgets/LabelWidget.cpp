@@ -72,7 +72,6 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	ui.tbFontSubScript->setIcon( KIcon("format-text-subscript") );
 	ui.tbSymbols->setIcon( KIcon("labplot-format-text-symbol") );
 	ui.tbDateTime->setIcon( KIcon("chronometer") );
-	ui.tbTexUsed->setIconSize(QSize(20, 20));
 	ui.tbTexUsed->setIcon( KIcon("labplot-TeX-logo") );
 
 	//Positioning and alignment
