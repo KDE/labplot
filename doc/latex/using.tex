@@ -182,7 +182,48 @@ With this, powerfull calculations carried out inside of different CAS environmen
 \section{Import}\label{sec:import}
 \section{Export}\label{sec:export}
 
-\chapter{\LaTeX Typesetting}\label{ch:latex_typesetting}
+\chapter{\LaTeX\, Typesetting}\label{ch:latex_typesetting}
+Besides rich text formatting, LabPlot supports \LaTeX\, typesetting in different areas of the application like in text labels, plot title, axis title, etc. In case the \LaTeX\, environment is available on the system (more about the prerequisites below), the user can switch between the \LaTeX\, and rich-text typesettings in the text fields for objects that support this.
+
+In \LaTeX\, mode when entering text in the text field, LabPlot automatically adds a mathematical environment, if not available yes. The user can simply start typing the mathematical expression which will be rendered correctly or, e.g. when combining with text, explicitly specify at which position the mathematical environment has to be used. LabPlot will add the propper header and footer Following examples are valid inputs
+\begin{itemize}
+\item {
+\begin{lstlisting}
+\sum
+\end{lstlisting}
+}
+%
+\item {
+\begin{lstlisting}
+$\sum$
+\end{lstlisting}
+}
+%
+\item {
+\begin{lstlisting}
+\begin{displaymath}
+\sum
+\end{displaymath}
+\end{lstlisting}
+}
+%
+\item {
+\begin{lstlisting}
+summation symbol $\sum$
+\end{lstlisting}
+}
+\end{itemize}
+
+Furthermore, it is possible to provide a complete and valid \LaTeX\, document in the text field. With this it is possible to use user-specific header and footer and to include additional packages that are not included by LabPlot on default. This allows to use texts and graphics of arbitrary complexity supported by \LaTeX.
+
+Default rendering engine is, if available, \textit{pdflatex}. In application settings dialog (\menuchoice{Settings}{Configure\, LabPlot}) it is possible to choose between other available rendering engines like \textit{latex, pdflatex, xelatex} or \textit{lualatex}.
+
+To modify the apprearence of the rendered text, the user can specifiy the font size and color. For engines that support OpenType and TrueType fonts (\textit{xelatex} and \textit{lualatex}) it is also possible to provide the main font.
+
+%TODO
+\textbf{Note about the technical implementation:}
+
+\textbf{Prerequisites:}
 
 \chapter{Tools}\label{ch:tools}
 \section{Curve Tracing}\label{sec:curve_tracing}
