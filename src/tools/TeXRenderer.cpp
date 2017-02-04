@@ -155,7 +155,7 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 		return QImage();
 	}
 	*success = (latexProcess.exitCode() == 0);
-	if (*success != 0) {
+	if (*success != 0)
 		WARNING("latex exit code =" << *success);
 
 	QFile::remove(fi.completeBaseName() + ".aux");
