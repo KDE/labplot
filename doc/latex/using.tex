@@ -119,6 +119,41 @@ With Workbook the user has the possibility for another additional grouping.
 \section{Interpolation}\label{sec:interpolation}
 \section{Smoothing}\label{sec:smoothing}
 \section{Curve Fitting}\label{sec:curve_fitting}
+LabPlot calculates several statistical measures that help to estimate the goodness of the fit.
+
+\textbf{Sum of squared errors (SSE)} (also known as residual sum of squares (RSS) or sum of squared residuals (SSR)):
+\begin{eqnarray*}
+SSE = \sum_{i=1}^n (\bar y -y)^2.
+\end{eqnarray*}
+\textbf{Mean squared error (MSE):}
+\begin{eqnarray*}
+MSE = \frac{1}{n} \sum_{i=1}^n (\bar y -y)^2.
+\end{eqnarray*}
+\textbf{Root-mean squared error (RMSE):}
+\begin{eqnarray*}
+RMSE = \sqrt{MSE}.
+\end{eqnarray*}
+\textbf{Mean absolute error (MAE):}
+\begin{eqnarray*}
+MAE = \frac{1}{n} \sum_{i=1}^n |\bar y -y|^2.
+\end{eqnarray*}
+\textbf{Residual mean square (RMS):}
+\begin{eqnarray*}
+RMS = \frac{SSE}{n-p}.
+\end{eqnarray*}
+\textbf{Residual standard deviation (RSD):}
+\begin{eqnarray*}
+RSD = \sqrt{RMS}
+\end{eqnarray*}
+\textbf{Coefficient of determination ($\mathbf{R^2}$):}
+\begin{eqnarray*}
+R^2 = 1 - \frac{SSE}{TSS},\; \text{with the total sum of squares}\; TTS = \sum_i (y_i - \hat y)^2\; \text{and}\; \hat y = \frac 1n \sum_{i=1}^n y_i.
+\end{eqnarray*}
+\textbf{Adjusted coefficient of determination (}$\mathbf{R^2_{Adj.}}$\textbf{):}
+\begin{eqnarray*}
+R^2_{\mathrm{Adj.}} = 1 - \frac{SSE/(n-1)}{TSS/(n-p-1)} =  1 - (1-R^2) \frac{n-1}{n-np-1}.
+\end{eqnarray*}
+
 \section{Fourier Filter}\label{sec:fourier_filter}
 
 \newpage
@@ -201,9 +236,9 @@ $\sum$
 %
 \item {
 \begin{lstlisting}
-\begin{displaymath}
+\begin{eqnarray}
 \sum
-\end{displaymath}
+\end{eqnarray}
 \end{lstlisting}
 }
 %
