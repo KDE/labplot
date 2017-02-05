@@ -41,7 +41,7 @@
 
 /*!
 	\class LabelWidget
- 	\brief Widget for editing the properties of a TextLabel object, mostly used in an an appropriate dock widget.
+ 	\brief Widget for editing the properties of a TextLabel object, mostly used in an appropriate dock widget.
 
  	In order the properties of the label to be shown, \c loadConfig() has to be called with the correspondig KConfigGroup
  	(settings for a label in *Plot, Axis etc. or for an independent label on the worksheet).
