@@ -1010,7 +1010,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.sse = gsl_pow_2(gsl_blas_dnrm2(s->f));
 	fitResult.mse = fitResult.sse/n;
 	fitResult.rmse = sqrt(fitResult.mse);
-	fitResult.mae = gsl_blas_dasum(s->f);
+	fitResult.mae = gsl_blas_dasum(s->f)/n;
 	if (fitResult.dof != 0) {
 		fitResult.rms = fitResult.sse/fitResult.dof;
 		fitResult.rsd = sqrt(fitResult.rms);
