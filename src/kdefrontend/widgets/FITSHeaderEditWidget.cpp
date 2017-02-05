@@ -52,9 +52,6 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
 	connectActions();
 	initContextMenus();
 
-	KUrlCompletion* comp = new KUrlCompletion();
-	ui.kleFileName->setCompletionObject(comp);
-
 	ui.bOpen->setIcon(KIcon("document-open"));
 
 	ui.bAddKey->setIcon(KIcon("list-add"));
@@ -79,7 +76,6 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
 
 	setAttribute(Qt::WA_DeleteOnClose);
 
-// 	connect(ui.kleFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)));
 	connect(ui.bOpen, SIGNAL(clicked()), this, SLOT(openFile()));
 	connect(ui.bAddKey, SIGNAL(clicked()), this, SLOT(addKeyword()));
 	connect(ui.bRemoveKey, SIGNAL(clicked()), this, SLOT(removeKeyword()));
@@ -188,8 +184,6 @@ void FITSHeaderEditWidget::openFile() {
 			conf.writeEntry("LastDir", newDir);
 	}
 
-	ui.kleFileName->setText(fileName);
-
 	WAIT_CURSOR;
 	QTreeWidgetItem* root = ui.twExtensions->invisibleRootItem();
 	const int childCount = root->childCount();
@@ -215,8 +209,6 @@ void FITSHeaderEditWidget::openFile() {
 		                         i18n("File already opened"));
 	}
 	RESET_CURSOR;
-
-	emit changed(false);
 }
 
 /*!
