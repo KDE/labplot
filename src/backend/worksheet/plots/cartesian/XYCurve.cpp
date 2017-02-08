@@ -1867,7 +1867,7 @@ QImage blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnl
 	int i2 = 3;
 
 	if (alphaOnly)
-		i1 = i2 = (QSysInfo::ByteOrder == QSysInfo::BigEndian ? 0 : 3);
+		i1 = i2 = (QSysInfo::ByteOrder == QSysInfo::LittleEndian)*3;
 
 	for (int col = c1; col <= c2; col++) {
 		p = result.scanLine(r1) + col * 4;
