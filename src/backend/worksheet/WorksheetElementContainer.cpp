@@ -95,7 +95,7 @@ void WorksheetElementContainer::setVisible(bool on) {
 
 	//if visible is set false, change the visibility of the container last
 	if (!on)
-		exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
+		exec(new WorksheetElementContainerSetVisibleCmd(d, false, i18n("%1: set invisible")));
 
 	endMacro();
 }
