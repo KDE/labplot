@@ -263,7 +263,13 @@ int FITSFilter::tablesCount(const QString &fileName) {
 //#####################################################################
 
 FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) :
-	q(owner) {
+	q(owner),
+	startRow(-1),
+	endRow(-1),
+	startColumn(-1),
+	endColumn(-1),
+	commentsAsUnits(false),
+	exportTo(0) {
 #ifdef HAVE_FITS
 	fitsFile = 0;
 #endif
@@ -314,9 +320,8 @@ QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, Abstract
 			return dataStrings << (QStringList() << QString());
 		}
 
-        if (naxis == 0) {
-            return dataStrings << (QStringList() << QString());
-        }
+		if (naxis == 0)
+			return dataStrings << (QStringList() << QString());
 		actualRows = naxes[1];
 		actualCols = naxes[0];
 		if (lines == -1)
@@ -587,9 +592,8 @@ QList<QStringList> FITSFilterPrivate::readCHDU(const QString &fileName, Abstract
 					if (!matrixNumericColumnIndices.contains(col))
 						continue;
 				}
-				if(fits_read_col_str(fitsFile, col, row, 1, 1, NULL, &array, NULL, &status)) {
+				if(fits_read_col_str(fitsFile, col, row, 1, 1, NULL, &array, NULL, &status))
 					printError(status);
-				}
 				if (!noDataSource) {
 					const QString& str = QString::fromLatin1(array);
 					if (str.isEmpty()) {

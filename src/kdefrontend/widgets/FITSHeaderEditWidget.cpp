@@ -573,9 +573,10 @@ void FITSHeaderEditWidget::closeFile() {
 			}
 		}
 
-		QTreeWidgetItem* newCurrent;
+		QTreeWidgetItem* newCurrent = (QTreeWidgetItem*)0;
 		if (idxOfCurrentAsTopLevel == 0) {
 			if (ui.twExtensions->topLevelItemCount() == 1) {
+                //last file closed, deactivate action buttons, clear keywords table
 				ui.twKeywordsTable->setRowCount(0);
 				ui.bClose->setEnabled(false);
 				ui.bAddUnit->setEnabled(false);
@@ -585,6 +586,7 @@ void FITSHeaderEditWidget::closeFile() {
 				newCurrent = ui.twExtensions->topLevelItem(idxOfCurrentAsTopLevel + 1);
 		} else
 			newCurrent = ui.twExtensions->topLevelItem(idxOfCurrentAsTopLevel - 1);
+
 		if (newCurrent) {
 			m_seletedExtension = newCurrent->text(0);
 			fillTable();
