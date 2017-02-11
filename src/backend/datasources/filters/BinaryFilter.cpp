@@ -204,7 +204,8 @@ bool BinaryFilter::isAutoModeEnabled() const {
 //#####################################################################
 
 BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
-	q(owner), vectors(2), dataType(BinaryFilter::INT8), byteOrder(BinaryFilter::LittleEndian), skipStartBytes(0), startRow(1), endRow(-1), skipBytes(0) {
+	q(owner), vectors(2), dataType(BinaryFilter::INT8), byteOrder(BinaryFilter::LittleEndian),
+	skipStartBytes(0), startRow(1), endRow(-1), skipBytes(0), autoModeEnabled(true) {
 }
 
 /*!

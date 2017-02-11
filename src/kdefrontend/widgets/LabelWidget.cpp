@@ -49,6 +49,7 @@
  	\ingroup kdefrontend
  */
 LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
+	m_label(0),
 	m_initializing(false),
 	m_dateTimeMenu(new KMenu(this)),
 	m_teXEnabled(false) {
