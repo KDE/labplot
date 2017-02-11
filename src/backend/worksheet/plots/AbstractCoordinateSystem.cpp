@@ -38,11 +38,11 @@
  *  \ingroup backend\worksheet
  */
 
-AbstractCoordinateSystem::AbstractCoordinateSystem(AbstractPlot* plot){
-    Q_UNUSED(plot)
+AbstractCoordinateSystem::AbstractCoordinateSystem(AbstractPlot* plot) {
+	Q_UNUSED(plot)
 }
 
-AbstractCoordinateSystem::~AbstractCoordinateSystem(){
+AbstractCoordinateSystem::~AbstractCoordinateSystem() {
 }
 
 /**
@@ -89,113 +89,113 @@ AbstractCoordinateSystem::~AbstractCoordinateSystem(){
  * \return false if line is completely outside, otherwise true
  */
 
-float round(float value, int precision){
+float round(float value, int precision) {
 	return int(value*pow(10, precision) + (value<0 ? -0.5 : 0.5))/pow(10, precision);
 }
 
-bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult){
+bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult) {
 	//we usually clip on large rectangles, so we don't need high precision here -> round to one float digit
 	//this prevents some subtle float rounding artefacts that lead to disappearance
 	//of lines along the boundaries of the rect. (e.g. axis lines).
 	qreal x1 = (int)(line->x1()*10)/10;
-    qreal x2 = (int)(line->x2()*10)/10;
-    qreal y1 = (int)(line->y1()*10)/10;
-    qreal y2 = (int)(line->y2()*10)/10;
-    qreal left;
-    qreal right;
-    qreal top;
-    qreal bottom;
+	qreal x2 = (int)(line->x2()*10)/10;
+	qreal y1 = (int)(line->y1()*10)/10;
+	qreal y2 = (int)(line->y2()*10)/10;
+	qreal left;
+	qreal right;
+	qreal top;
+	qreal bottom;
 	rect.getCoords(&left, &top, &right, &bottom);
 
 	if (clipResult)
 		clipResult->reset();
 
-    enum { Left, Right, Top, Bottom };
-    // clip the lines, after cohen-sutherland, see e.g. http://www.nondot.org/~sabre/graphpro/line6.html
-    int p1 = ((x1 < left) << Left)
-             | ((x1 > right) << Right)
-             | ((y1 < top) << Top)
-             | ((y1 > bottom) << Bottom);
-    int p2 = ((x2 < left) << Left)
-             | ((x2 > right) << Right)
-             | ((y2 < top) << Top)
-             | ((y2 > bottom) << Bottom);
+	enum { Left, Right, Top, Bottom };
+	// clip the lines, after cohen-sutherland, see e.g. http://www.nondot.org/~sabre/graphpro/line6.html
+	int p1 = ((x1 < left) << Left)
+	         | ((x1 > right) << Right)
+	         | ((y1 < top) << Top)
+	         | ((y1 > bottom) << Bottom);
+	int p2 = ((x2 < left) << Left)
+	         | ((x2 > right) << Right)
+	         | ((y2 < top) << Top)
+	         | ((y2 > bottom) << Bottom);
 
-    if (p1 & p2)
-        // completely outside
-        return false;
+	if (p1 & p2)
+		// completely outside
+		return false;
 
-    if (p1 | p2) {
-        qreal dx = x2 - x1;
-        qreal dy = y2 - y1;
+	if (p1 | p2) {
+		qreal dx = x2 - x1;
+		qreal dy = y2 - y1;
 
-        // clip x coordinates
-        if (x1 < left) {
-            y1 += dy/dx * (left - x1);
-            x1 = left;
+		// clip x coordinates
+		if (x1 < left) {
+			y1 += dy/dx * (left - x1);
+			x1 = left;
 			if (clipResult)
 				clipResult->xClippedLeft[0] = true;
-        } else if (x1 > right) {
-            y1 -= dy/dx * (x1 - right);
-            x1 = right;
+		} else if (x1 > right) {
+			y1 -= dy/dx * (x1 - right);
+			x1 = right;
 			if (clipResult)
 				clipResult->xClippedRight[0] = true;
-        }
-        if (x2 < left) {
-            y2 += dy/dx * (left - x2);
-            x2 = left;
+		}
+		if (x2 < left) {
+			y2 += dy/dx * (left - x2);
+			x2 = left;
 			if (clipResult)
 				clipResult->xClippedLeft[1] = true;
-        } else if (x2 > right) {
-            y2 -= dy/dx * (x2 - right);
-            x2 = right;
+		} else if (x2 > right) {
+			y2 -= dy/dx * (x2 - right);
+			x2 = right;
 			if (clipResult)
 				clipResult->xClippedRight[1] = true;
-        }
-        p1 = ((y1 < top) << Top)
-             | ((y1 > bottom) << Bottom);
-        p2 = ((y2 < top) << Top)
-             | ((y2 > bottom) << Bottom);
-        if (p1 & p2)
-            return false;
-        // clip y coordinates
-        if (y1 < top) {
-            x1 += dx/dy * (top - y1);
-            y1 = top;
+		}
+		p1 = ((y1 < top) << Top)
+		     | ((y1 > bottom) << Bottom);
+		p2 = ((y2 < top) << Top)
+		     | ((y2 > bottom) << Bottom);
+		if (p1 & p2)
+			return false;
+		// clip y coordinates
+		if (y1 < top) {
+			x1 += dx/dy * (top - y1);
+			y1 = top;
 			if (clipResult) {
 				clipResult->xClippedRight[0] = false;
 				clipResult->xClippedLeft[0] = false;
 				clipResult->yClippedTop[0] = true;
 			}
-        } else if (y1 > bottom) {
-            x1 -= dx/dy * (y1 - bottom);
-            y1 = bottom;
+		} else if (y1 > bottom) {
+			x1 -= dx/dy * (y1 - bottom);
+			y1 = bottom;
 			if (clipResult) {
 				clipResult->xClippedRight[0] = false;
 				clipResult->xClippedLeft[0] = false;
 				clipResult->yClippedBottom[0] = true;
 			}
-        }
-        if (y2 < top) {
-            x2 += dx/dy * (top - y2);
-            y2 = top;
+		}
+		if (y2 < top) {
+			x2 += dx/dy * (top - y2);
+			y2 = top;
 			if (clipResult) {
 				clipResult->xClippedRight[1] = false;
 				clipResult->xClippedLeft[1] = false;
 				clipResult->yClippedTop[1] = true;
 			}
-        } else if (y2 > bottom) {
-            x2 -= dx/dy * (y2 - bottom);
-            y2 = bottom;
+		} else if (y2 > bottom) {
+			x2 -= dx/dy * (y2 - bottom);
+			y2 = bottom;
 			if (clipResult) {
 				clipResult->xClippedRight[1] = false;
 				clipResult->xClippedLeft[1] = false;
 				clipResult->yClippedBottom[1] = true;
 			}
-        }
-        *line = QLineF(QPointF(x1, y1), QPointF(x2, y2));
-    }
-    return true;
+		}
+		*line = QLineF(QPointF(x1, y1), QPointF(x2, y2));
+	}
+	return true;
 }
 
 //more intelligent comparison of floats,
