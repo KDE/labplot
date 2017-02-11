@@ -221,7 +221,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 			foreach(WorksheetElement* elem, childElements)
 				elem->graphicsItem()->setZValue(zVal++);
 
-			if (!d->suppressUpdateLayout) {
+			if (!isLoading()) {
 				if (d->layout != Worksheet::NoLayout)
 					d->updateLayout();
 			}
@@ -579,8 +579,7 @@ void Worksheet::setPrinting(bool on) const {
 //##############################################################################
 WorksheetPrivate::WorksheetPrivate(Worksheet* owner):q(owner),
 	m_scene(new QGraphicsScene()),
-	scaleContent(false),
-	suppressUpdateLayout(false) {
+	scaleContent(false) {
 }
 
 QString WorksheetPrivate::name() const {
@@ -760,7 +759,6 @@ bool Worksheet::load(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs;
 	QString str;
 	QRectF rect;
-	d->suppressUpdateLayout = true;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -933,11 +931,14 @@ bool Worksheet::load(XmlStreamReader* reader) {
 				d->backgroundOpacity = str.toDouble();
 		} else if(reader->name() == "cartesianPlot") {
 			CartesianPlot* plot = new CartesianPlot("");
+			plot->setIsLoading(true);
 			if (!plot->load(reader)) {
 				delete plot;
 				return false;
-			} else
+			} else {
 				addChild(plot);
+				plot->setIsLoading(true);
+			}
 		} else if(reader->name() == "textLabel") {
 			TextLabel* label = new TextLabel("");
 			if (!label->load(reader)) {
@@ -951,7 +952,6 @@ bool Worksheet::load(XmlStreamReader* reader) {
 		}
 	}
 
-	d->suppressUpdateLayout = false;
 	d->m_scene->setSceneRect(rect);
 	d->updateLayout();
 

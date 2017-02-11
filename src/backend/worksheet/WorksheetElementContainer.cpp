@@ -153,7 +153,8 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 			elem->setZValue(zVal++);
 	}
 
-	d->recalcShapeAndBoundingRect();
+	if (!isLoading())
+		d->recalcShapeAndBoundingRect();
 }
 
 void WorksheetElementContainer::childHovered() {
