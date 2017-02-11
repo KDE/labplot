@@ -121,16 +121,15 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	out << "\\usepackage{color}";
 	out << "\\usepackage[active,displaymath,textmath,tightpage]{preview}";
 	out << "\\usepackage{mathtools}";
-	out << "\\begin{document}";
 	out << "\\definecolor{fontcolor}{rgb}{" << fontColor.redF() << ',' << fontColor.greenF() << ',' << fontColor.blueF() << "}";
+	out << "\\begin{document}";
 	out << "\\begin{preview}";
-	out << "{\\fontsize{" << QString::number(fontSize) << "}{" << QString::number(fontSize) << "}\\selectfont";
-	out << "{\\color{fontcolor}";
+	out << "\\fontsize{" << QString::number(fontSize) << "}{" << QString::number(fontSize) << "}\\selectfont";
+	out << "\\color{fontcolor}";
 	out << body;
-	out << "}}\\end{preview}";
+	out << "\\end{preview}";
 	out << "\\end{document}";
 	out.flush();
-
 	if (engine == "latex")
 		return imageFromDVI(file, dpi, success);
 	else
