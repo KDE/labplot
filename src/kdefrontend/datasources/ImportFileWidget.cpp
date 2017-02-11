@@ -110,7 +110,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 
 	QWidget* fitsw = new QWidget(0);
 	fitsOptionsWidget.setupUi(fitsw);
-    fitsOptionsWidget.twExtensions->headerItem()->setText(0, i18n("Content"));
+	fitsOptionsWidget.twExtensions->headerItem()->setText(0, i18n("Content"));
 	fitsOptionsWidget.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
 	fitsOptionsWidget.twExtensions->setAlternatingRowColors(true);
 	fitsOptionsWidget.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);

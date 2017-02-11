@@ -74,7 +74,7 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
 
 	ui.twKeywordsTable->setColumnCount(3);
 	ui.twExtensions->setSelectionMode(QAbstractItemView::SingleSelection);
-    ui.twExtensions->headerItem()->setText(0, i18n("Content"));
+	ui.twExtensions->headerItem()->setText(0, i18n("Content"));
 	ui.twKeywordsTable->setHorizontalHeaderItem(0, new QTableWidgetItem(i18n("Key")));
 	ui.twKeywordsTable->setHorizontalHeaderItem(1, new QTableWidgetItem(i18n("Value")));
 	ui.twKeywordsTable->setHorizontalHeaderItem(2, new QTableWidgetItem(i18n("Comment")));
@@ -576,7 +576,7 @@ void FITSHeaderEditWidget::closeFile() {
 		QTreeWidgetItem* newCurrent = (QTreeWidgetItem*)0;
 		if (idxOfCurrentAsTopLevel == 0) {
 			if (ui.twExtensions->topLevelItemCount() == 1) {
-                //last file closed, deactivate action buttons, clear keywords table
+				//last file closed, deactivate action buttons, clear keywords table
 				ui.twKeywordsTable->setRowCount(0);
 				ui.bClose->setEnabled(false);
 				ui.bAddUnit->setEnabled(false);
