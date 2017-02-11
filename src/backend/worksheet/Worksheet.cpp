@@ -213,25 +213,26 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (addedElement) {
 		if (aspect->parentAspect() == this) {
-			QGraphicsItem *item = addedElement->graphicsItem();
-			Q_ASSERT(item != NULL);
+			QGraphicsItem* item = addedElement->graphicsItem();
 			d->m_scene->addItem(item);
 
 			qreal zVal = 0;
-			QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
-			foreach(WorksheetElement *elem, childElements)
+			QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
+			foreach(WorksheetElement* elem, childElements)
 				elem->graphicsItem()->setZValue(zVal++);
 
-			if (d->layout != Worksheet::NoLayout)
-				d->updateLayout();
+			if (!d->suppressUpdateLayout) {
+				if (d->layout != Worksheet::NoLayout)
+					d->updateLayout();
+			}
 		}
 	}
 }
 
 void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-	const WorksheetElement *removedElement = qobject_cast<const WorksheetElement*>(aspect);
+	const WorksheetElement* removedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (removedElement) {
-		QGraphicsItem *item = removedElement->graphicsItem();
+		QGraphicsItem* item = removedElement->graphicsItem();
 		Q_ASSERT(item != NULL);
 		d->m_scene->removeItem(item);
 	}
@@ -578,7 +579,8 @@ void Worksheet::setPrinting(bool on) const {
 //##############################################################################
 WorksheetPrivate::WorksheetPrivate(Worksheet* owner):q(owner),
 	m_scene(new QGraphicsScene()),
-	scaleContent(false) {
+	scaleContent(false),
+	suppressUpdateLayout(false) {
 }
 
 QString WorksheetPrivate::name() const {
@@ -758,6 +760,7 @@ bool Worksheet::load(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs;
 	QString str;
 	QRectF rect;
+	d->suppressUpdateLayout = true;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -948,6 +951,7 @@ bool Worksheet::load(XmlStreamReader* reader) {
 		}
 	}
 
+	d->suppressUpdateLayout = false;
 	d->m_scene->setSceneRect(rect);
 	d->updateLayout();
 

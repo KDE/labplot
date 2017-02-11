@@ -44,6 +44,7 @@ class WorksheetPrivate{
 		QGraphicsScene* m_scene;
 		bool useViewSize;
 		bool scaleContent;
+		bool suppressUpdateLayout;
 
 		QString name() const;
 		void update();
