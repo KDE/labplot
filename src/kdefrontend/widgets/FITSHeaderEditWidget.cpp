@@ -66,9 +66,11 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
 	ui.bRemoveKey->setEnabled(false);
 	ui.bRemoveKey->setToolTip(i18n("Remove selected keyword"));
 
+	ui.bAddUnit->setIcon(KIcon("document-new"));
 	ui.bAddUnit->setEnabled(false);
 	ui.bAddUnit->setToolTip(i18n("Add unit to keyword"));
 
+	ui.bClose->setIcon(KIcon("document-close"));
 	ui.bClose->setEnabled(false);
 	ui.bClose->setToolTip(i18n("Close file"));
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>727</width>
-    <height>470</height>
+    <width>804</width>
+    <height>501</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -23,7 +23,7 @@
       <string/>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0" colspan="5">
+      <item row="0" column="0" colspan="7">
        <widget class="QSplitter" name="splitter">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -57,6 +57,13 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="bClose">
+        <property name="text">
+         <string>Close File</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="2">
        <spacer name="horizontalSpacer">
         <property name="orientation">
@@ -71,28 +78,37 @@
        </spacer>
       </item>
       <item row="1" column="3">
-       <widget class="QPushButton" name="bAddKey">
+       <widget class="QPushButton" name="bAddUnit">
         <property name="text">
          <string/>
         </property>
        </widget>
       </item>
       <item row="1" column="4">
-       <widget class="QPushButton" name="bRemoveKey">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="5">
+       <widget class="QPushButton" name="bAddKey">
         <property name="text">
          <string/>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QPushButton" name="bClose">
-        <property name="text">
-         <string>Close File</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="5">
-       <widget class="QPushButton" name="bAddUnit">
+      <item row="1" column="6">
+       <widget class="QPushButton" name="bRemoveKey">
         <property name="text">
          <string/>
         </property>

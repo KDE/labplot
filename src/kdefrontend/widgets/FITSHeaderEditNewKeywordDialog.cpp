@@ -55,6 +55,7 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
 	ui.kleKey->setCompletionObject(keyCompletion);
 	ui.kleKey->setAutoDeleteCompletionObject(true);
 
+	ui.kleValue->setPlaceholderText(i18n("Specify the name"));
 	ui.kleValue->setPlaceholderText(i18n("Specify the value"));
 	ui.kleComment->setPlaceholderText(i18n("Specify the comment"));
 
