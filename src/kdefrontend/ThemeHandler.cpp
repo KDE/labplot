@@ -34,6 +34,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QLabel>
+#include <QMenu>
 #include <QFileInfo>
 #include <QWidgetAction>
 #include <QDirIterator>
@@ -42,7 +43,6 @@
 #include <KLocale>
 #include <KStandardDirs>
 #include <KLineEdit>
-#include <KMenu>
 #include <KConfig>
 #include <KConfigGroup>
 
@@ -178,8 +178,8 @@ void ThemeHandler::showPanel() {
 }
 
 void ThemeHandler::saveMenu() {
-	KMenu menu;
-	menu.addTitle(i18n("Save as"));
+	QMenu menu;
+	menu.addSection(i18n("Save as"));
 
 	// add editable action
 	QWidgetAction* widgetAction = new QWidgetAction(this);
