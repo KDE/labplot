@@ -348,7 +348,7 @@ void ImportFileDialog::checkOnFitsTableToMatrix(const bool enable) {
 		QDEBUG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 		if (!aspect) {
-			DEBUG("Error: no aspect avaiable.");
+			DEBUG("ERROR: no aspect available.");
 			return;
 		}
 
@@ -360,15 +360,16 @@ void ImportFileDialog::checkOnFitsTableToMatrix(const bool enable) {
 void ImportFileDialog::checkOkButton() {
 	DEBUG("ImportFileDialog::checkOkButton()");
 	if (cbAddTo) { //only check for the target container when no file data source is being added
-		QDEBUG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
+		QDEBUG(" cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 		if (!aspect) {
 			enableButtonOk(false);
 			lPosition->setEnabled(false);
 			cbPosition->setEnabled(false);
-			DEBUG("WARNING: no aspect avaiable.");
+			DEBUG("WARNING: no aspect available.");
 			return;
 		} else {
+			DEBUG("Aspect available.");
 			lPosition->setEnabled(true);
 			cbPosition->setEnabled(true);
 
