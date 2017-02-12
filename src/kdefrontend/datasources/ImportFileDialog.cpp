@@ -110,7 +110,8 @@ ImportFileDialog::~ImportFileDialog() {
 	creates widgets for the frame "Add-To" and sets the current model in the combobox to \c model.
  */
 void ImportFileDialog::setModel(QAbstractItemModel* model) {
-	QDEBUG("ImportFileDialog::setModel() model ="<<model);
+	DEBUG("ImportFileDialog::setModel()");
+	QDEBUG(" model =" << model);
 	//Frame for the "Add To"-Stuff
 	frameAddTo = new QGroupBox(this);
 	frameAddTo->setTitle(i18n("Import To"));
@@ -166,7 +167,8 @@ void ImportFileDialog::setModel(QAbstractItemModel* model) {
 }
 
 void ImportFileDialog::setCurrentIndex(const QModelIndex& index) {
-	QDEBUG("ImportFileDialog::setCurrentIndex() index =" << index);
+	DEBUG("ImportFileDialog::setCurrentIndex()");
+	QDEBUG(" index =" << index);
 	cbAddTo->setCurrentModelIndex(index);
 	QDEBUG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	this->checkOkButton();
@@ -350,8 +352,10 @@ void ImportFileDialog::checkOnFitsTableToMatrix(const bool enable) {
 	if (cbAddTo) {
 		QDEBUG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
-		if (!aspect)
+		if (!aspect) {
+			DEBUG("Error: no aspect avaiable.");
 			return;
+		}
 
 		if(aspect->inherits("Matrix"))
 			enableButtonOk(enable);
@@ -361,12 +365,13 @@ void ImportFileDialog::checkOnFitsTableToMatrix(const bool enable) {
 void ImportFileDialog::checkOkButton() {
 	DEBUG("ImportFileDialog::checkOkButton()");
 	if (cbAddTo) { //only check for the target container when no file data source is being added
-		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 		QDEBUG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 		if (!aspect) {
 			enableButtonOk(false);
 			lPosition->setEnabled(false);
 			cbPosition->setEnabled(false);
+			DEBUG("WARNING: no aspect avaiable.");
 			return;
 		} else {
 			lPosition->setEnabled(true);
@@ -403,6 +408,7 @@ void ImportFileDialog::checkOkButton() {
 		else
 			fileName = fileName.mid(0, extensionBraceletPos);
 	}
+	DEBUG(" fileName = " << fileName.toStdString());
 
 	enableButtonOk( QFile::exists(fileName) ) ;
 }
