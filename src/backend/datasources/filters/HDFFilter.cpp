@@ -1195,7 +1195,6 @@ void HDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem
 #ifdef HAVE_HDF5
 	QByteArray bafileName = fileName.toLatin1();
 	DEBUG("fileName = " << bafileName.data());
-	//TODO: H5Fopen() crashes on Windows!
 	hid_t file = H5Fopen(bafileName.data(), H5F_ACC_RDONLY, H5P_DEFAULT);
 	handleError((int)file, "H5Fopen", fileName);
 	char rootName[]="/";
