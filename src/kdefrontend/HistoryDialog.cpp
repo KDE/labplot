@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <QUndoStack>
 #include <QUndoView>
+#include <KWindowConfig>
 
 /*!
 	\class HistoryDialog
