@@ -39,7 +39,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QHeaderView>
 #include <QTableWidgetItem>
 #include <QFile>
-#include <KIcon>
 
 /*! \class FITSFilter
  * \brief Manages the import/export of data from/to a FITS file.
@@ -1583,7 +1582,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 	}
 	if (imageExtensionItem->childCount() > 0) {
 		treeNameItem->addChild(imageExtensionItem);
-		imageExtensionItem->setIcon(0,QIcon(KIcon("view-preview")));
+		imageExtensionItem->setIcon(0,QIcon::fromTheme("view-preview"));
 		imageExtensionItem->setExpanded(true);
 		imageExtensionItem->child(0)->setSelected(true);
 
