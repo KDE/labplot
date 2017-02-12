@@ -239,7 +239,7 @@ bool AbstractColumn::isMasked(int row) const {
 }
 
 /**
- * \brief Return whether a certain interval of rows rows is fully masked
+ * \brief Return whether a certain interval of rows is fully masked
  */
 bool AbstractColumn::isMasked(Interval<int> i) const {
 	return m_abstract_column_private->m_masking.isSet(i);

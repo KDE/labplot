@@ -1,12 +1,13 @@
 \part{Using LabPlot}
 
-\chapter{Interface}
-\section{Main Area}
-\section{Project Explorer}
-\section{Properties Explorer}
+\chapter{Interface}\label{ch:interface}
+\section{Main Area}\label{sec:main_area}
+\section{Project Explorer}\label{sec:project_explorer}
+\section{Properties Explorer}\label{sec:properties_explorer}
+\section{Worksheet}\label{sec:worksheet}
 
-\chapter{Data Containers}
-\section{Spreadsheet}
+\chapter{Data Containers}\label{ch:data_container}
+\section{Spreadsheet}\label{sec:spreadsheet}
 The spreadsheet is the main part of LabPlot when working with data and consists of columns.
 Column is the basic data set in LabPlot used for plotting and data analysis.
 Every column of the spreadsheet is specified by its name and the type - numeric, text, month names, day names and date and time.
@@ -22,6 +23,7 @@ Any spreadsheet function can be reached via the context menu (\rmb).
 You can cut, copy and paste between spreadsheets, generate, normalize and sort data and finally make plots out of your data.
 \begin{figure}
 \includegraphics[width=\textwidth]{images/spreadsheet.png}
+\caption{Spreadsheet showing some imported data.}
 \end{figure}
 
 New data can be produced either by entering it manually in the spreadsheet or by generating the data according to a certain prescription.
@@ -46,11 +48,11 @@ It is possible to define a multivariant function and to provide a data set (a co
 The corresponding dialog supports the creation of arbitrary number of variables
 \end{itemize}
 
+% TODO
 % \begin{figure}
 % \includegraphics[width=\linewidth]{images/spreadsheet_generate_equidistant_values.png}
 % \caption{Dialog for generating equidistant numbers}
 % \end{figure}
-% 
 % \begin{figure}
 % \includegraphics[width=\linewidth]{images/spreadsheet_generate_random_values.png}
 % \caption{Dialog for generating equidistant numbers}
@@ -60,36 +62,99 @@ The corresponding dialog supports the creation of arbitrary number of variables
 % \caption{Dialog for generating equidistant numbers}
 % \end{figure}
 
-Already existing data can be imported into a spreadsheet from external files via the "Import Data" dialog.
+Already existing data can be imported into a spreadsheet from external files via the "Import Data" dialog (s.a. \nameref{sec:import}).
 Imported data will be stored in the project file. Changes on data, performed either in the spreadsheet or in the external file after the import, are not synchronized anymore.
 
-The data in the spreadsheet can be exported to an external file (see "Export Dialog").
+The data in the spreadsheet can be exported to an external file (s.a. \nameref{sec:export}).
 
 
 
+\section{Matrix}\label{sec:matrix}
+Matrix is another container for matrix-like data. This container is presented like a table or, alternatively, as a two-dimensional greyscale image.
+The elements of such a table/matrix can be thought as being the$z$-values, $z=z(x,y)$, with $x$ and $y$ values being the row and column numbers, respectively.
+The transition from the row and column numbers to the logical coordinates is done via an explicit user-defined mapping of both representations.
+\begin{figure}
+\includegraphics[width=\textwidth]{images/matrix.png}
+\caption{Matrix with 500x500 values in the ranges $x=[0,1]$ and $y=[0,1]$. The cell values, $z$, are given by $z=z(x,y)$.}
+\end{figure}
 
-\section{Matrix}
-\section{Workbook}
+The matrix data can either be entered manually or via an import from an external file.
+Similar to the data generation for a column in a \nameref{sec:spreadsheet}, the matrix can be filled with constant values or via a formula, too.
+% TODO
+% \begin{figure}
+% \includegraphics[width=\textwidth]{images/matrix_function_values.png}
+% \caption{Image view of a matrix together with the formula that was used to generate the matrix elements}
+% \end{figure}
 
-\chapter{2D Plotting}
-\section{Plots}
-\section{Curves}
-\section{Legends}
+%TODO: export matrix to different formats
+
+\section{Workbook}\label{sec:workbook}
+Workbook helps the user to better organize and to group different data containers (Spreadsheet and Matrix).
+This object serves as the parent container for multiple Spreadsheet- and/or Matrix-objects and puts them together in a view with multiple tabs.
+\begin{figure}
+\includegraphics[width=\textwidth]{images/workbook.png}
+\caption{Workbook combining two spreadsheets and one matrix in one container.}
+\end{figure}
+
+With folders it is already possible to bring some structure in the \nameref{sec:project_explorer} and to group together several related objects
+(spreadsheets with data stemming from text files of similar origin, red, green and blue values of an image imported into three different matrices, etc.).
+With Workbook the user has the possibility for another additional grouping.
+
+
+\chapter{2D Plotting}\label{ch:2d_plotting}
+\section{Plots}\label{sec:2d_plots}
+\section{Curves}\label{sec:2d_curves}
+\section{Legends}\label{sec:2d_legends}
 
 
 % \chapter{3D Plotting}
 
-\chapter{Themes and Templates}
+\chapter{Themes and Templates}\label{ch:themes_templates}
 
 
-\chapter{Data Analysis}
-\section{Data reduction}
-\section{Differentiation}
-\section{Integration}
-\section{Interpolation}
-\section{Smoothing}
-\section{Curve Fitting}
-\section{Fourier Filter}
+\chapter{Data Analysis}\label{ch:data_analysis}
+\section{Data reduction}\label{sec:data_reduction}
+\section{Differentiation}\label{sec:differentiation}
+\section{Integration}\label{sec:integration}
+\section{Interpolation}\label{sec:interpolation}
+\section{Smoothing}\label{sec:smoothing}
+\section{Curve Fitting}\label{sec:curve_fitting}
+LabPlot calculates several statistical measures that help to estimate the goodness of the fit.
+
+\textbf{Sum of squared errors (SSE)} (also known as residual sum of squares (RSS) or sum of squared residuals (SSR)):
+\begin{eqnarray*}
+SSE = \sum_{i=1}^n (\bar y -y)^2.
+\end{eqnarray*}
+\textbf{Mean squared error (MSE):}
+\begin{eqnarray*}
+MSE = \frac{1}{n} \sum_{i=1}^n (\bar y -y)^2.
+\end{eqnarray*}
+\textbf{Root-mean squared error (RMSE):}
+\begin{eqnarray*}
+RMSE = \sqrt{MSE}.
+\end{eqnarray*}
+\textbf{Mean absolute error (MAE):}
+\begin{eqnarray*}
+MAE = \frac{1}{n} \sum_{i=1}^n |\bar y -y|^2.
+\end{eqnarray*}
+\textbf{Residual mean square (RMS):}
+\begin{eqnarray*}
+RMS = \frac{SSE}{n-p}.
+\end{eqnarray*}
+\textbf{Residual standard deviation (RSD):}
+\begin{eqnarray*}
+RSD = \sqrt{RMS}
+\end{eqnarray*}
+\textbf{Coefficient of determination ($\mathbf{R^2}$):}
+\begin{eqnarray*}
+R^2 = 1 - \frac{SSE}{TSS},\; \text{with the total sum of squares}\; TTS = \sum_i (y_i - \hat y)^2\; \text{and}\; \hat y = \frac 1n \sum_{i=1}^n y_i.
+\end{eqnarray*}
+\textbf{Adjusted coefficient of determination (}$\mathbf{R^2_{Adj.}}$\textbf{):}
+\begin{eqnarray*}
+R^2_{\mathrm{Adj.}} = 1 - \frac{SSE/(n-1)}{TSS/(n-p-1)} =  1 - (1-R^2) \frac{n-1}{n-np-1}.
+\end{eqnarray*}
+
+\section{Fourier Filter}\label{sec:fourier_filter}
 
 \newpage
 \section{Fourier Fransform}
@@ -127,7 +192,7 @@ Higher-order generalized cosine window functions:
 \end{eqnarray*}
 
 
-\chapter{CAS Computing}
+\chapter{CAS Computing}\label{ch:cas_computing}
 LabPlot can be used as a frontend to different open-source computer algebra systems (CAS) like Maxima, Octave, R, Scilab and Sage  or programming languages providing similar capabilities like Python and Julia. LabPlot recognizes different CAS variables holding array-like data and allows to select them as the source for curves. So, instead of providing columns of a spreadsheet as the source for x- and y-data, the user provides the names of the corresponding CAS-variables. Currently supported CAS data containers are
 \begin{itemize}
 \item \textbf{Maxima} lists
@@ -148,14 +213,103 @@ With this, powerfull calculations carried out inside of different CAS environmen
 
 
 
-\chapter{Import and Export}
-\section{Import}
-\section{Export}
+\chapter{Import and Export}\label{ch:import_export}
+\section{Import}\label{sec:import}
+\section{Export}\label{sec:export}
 
-\chapter{Latex Typesetting}
+\chapter{\LaTeX\, Typesetting}\label{ch:latex_typesetting}
+Besides rich text formatting, LabPlot supports \LaTeX\, typesetting in different areas of the application like in text labels, plot title, axis title, etc. In case the \LaTeX\, environment is available on the system (more about the prerequisites below), the user can switch between the \LaTeX\, and rich-text typesettings in the text fields for objects that support this.
 
-\chapter{Tools}
-\section{Curve Tracing}
+In \LaTeX\, mode when entering text in the text field, LabPlot automatically adds a mathematical environment, if not available yet. The user can simply start typing the mathematical expression which will be rendered correctly or, e.g. when combining with text, explicitly specify at which position the mathematical environment has to be used. LabPlot will add the propper header and footer. Following examples are valid inputs
+\begin{itemize}
+\item {
+\begin{lstlisting}
+\sum
+\end{lstlisting}
+}
+%
+\item {
+\begin{lstlisting}
+$\sum$
+\end{lstlisting}
+}
+%
+\item {
+\begin{lstlisting}
+\begin{displaymath}
+\sum
+\end{displaymath}
+\end{lstlisting}
+}
+%
+\item {
+\begin{lstlisting}
+summation symbol $\sum$
+\end{lstlisting}
+}
+\end{itemize}
+Furthermore, it is possible to provide a complete \LaTeX\, document
+\begin{lstlisting}[language={[Latex]TeX}, backgroundcolor=\color{lightgray}, frame=single]
+\documentclass{...}
+\begin{document}
+...
+\end{document}
+\end{lstlisting}
+
+With this it is possible to use user-specific header and footer and to include additional packages that are not included by LabPlot on default. This allows to use texts and graphics of arbitrary complexity supported by \LaTeX.
+
+Default rendering engine is, if available, \textit{pdflatex}. In application settings dialog (\menuchoice{Settings}{Configure\, LabPlot}) it is possible to choose between other available rendering engines like \textit{latex, pdflatex, xelatex} or \textit{lualatex}.
+
+To modify the apprearence of the rendered text, the user can specifiy the font size and color. For engines that support OpenType and TrueType fonts (\textit{xelatex} and \textit{lualatex}) it is also possible to provide the main font.
+
+
+\textbf{Prerequisites:}\\
+To render the text set using \LaTeX\, syntax, LabPlot relies on the existence of a \LaTeX\, environment. The rendered document is converted to a PNG image that is imported into and shown in LabPlot. The conversion process depends on the rendering engine used:
+\begin{itemize}
+\item When using \textit{latex}, the produced DVI file is converted first to a PostScript file with the help of \textit{dvips}. The intermediate PostScript file is converted after that to a PNG file using \textit{convert} from the \textit{ImageMagick} package.
+\item For rendering engines producing a PDF file (\textit{pdflate, xelatex} and \textit{lualatex}), the result PDF file is directly converted to a PNG file with \textit{convert}.
+\end{itemize}
+
+In case no \LaTeX\, installation is found on the system or one of the required tools for the conversion to PNG is missing, \LaTeX\, typesetting is disabled. On Unix/Linux the required packages are installed via the package manager. The Windows installer for LabPlot and the Mac OS X \textit{dmg}-bundle include already \textit{convert} - everything else has to be installed by the user on the system prior to using this typesetting mode in LabPlot.
+
+When openning a LabPlot project file already containing \LaTeX\, rendered text on systems with no \LaTeX\, typesetting enabled (because of missing prerequisites), the rendered image is  correctly shown but no editing is possible - the user still can switch to the rich-text format mode instead and modify the text.
+
+
+\textbf{Note about the technical implementation:}\\
+The text provided by the user is enriched with an appropriate header and footer to obtain a valid and complete \LaTeX\, document that is processed, as described above, by the rendering engine.
+The overall structure of the document generated by LabPlot is
+\begin{lstlisting}[language={[Latex]TeX}, backgroundcolor=\color{lightgray}, frame=single, morekeywords={definecolor,color,defaultfontfeatures,setmainfont}]
+\documentclass{minimal}
+\usepackage{color}
+\usepackage[active,displaymath,textmath,tightpage]{preview}
+\usepackage{mathtools}
+\definecolor{fontcolor}{rgb}{red, green, blue}
+
+%% for xelatex and lualatex engines only
+\usepackage{xltxtra}
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont[Mapping=tex-text]{font family}
+%%
+
+\begin{document}
+\begin{preview}
+\fontsize{font size}{font size}
+\selectfont
+\color{fontcolor}
+
+...
+
+\end{preview}
+\end{document}
+\end{lstlisting}
+Here, "red", "green" and "blue" are the font colors provided by the user, "font family" is the OpenType or TrueType font family for the main document font (relevant for xelatex and lualatex only) and "font size" is the size of the font to be used. The text entered by the user, shown as "..." in the listing above, is wrapped into a preview-environment to render the document in a minimal possible size.
+
+In case a complete \LaTeX document is provided, LabPlot merges the definitions of user's header and footer with the definitions shown in the above listing.
+
+
+
+\chapter{Tools}\label{ch:tools}
+\section{Curve Tracing}\label{sec:curve_tracing}
 \textit{Datapicker} is a tool that allows to easily extract data from image files. The process of extraction consists mainly out of the following steps:
 \begin{itemize}
 \item Import an image containing plots and curves where you want to read the data points from
@@ -166,7 +320,7 @@ With this, powerfull calculations carried out inside of different CAS environmen
 \end{itemize}
 
 It is possible to add more then one datapicker curve. This is useful in case the imported image contains several curves that need to be digitized.
-The datapicker curve that is currently being selected in the Project Explorer is the "active" one - points clicked on the datapicker image will be calculated and added to its data spreadsheet.
+The datapicker curve that is currently being selected in the \nameref{sec:project_explorer} is the "active" one - points clicked on the datapicker image will be calculated and added to its data spreadsheet.
 \begin{figure}
 \includegraphics[width=\textwidth]{images/datapicker_active_curve_data_spreadsheet.png}
 \caption{Coordinates of the digitized data points stored in a spreadsheet}
@@ -204,7 +358,7 @@ The transformed black and white image contains only the curves the user is inter
 \caption{Original image, image with the reduced color space and automatically created points for the recognized curve.}
 \end{figure}
 
-Similar to Worksheet, the currently visible area in the datapicker can be exported. The supported image formats as described in the section "Export".
+Similar to \nameref{sec:worksheet}, the currently visible area in the datapicker can be exported. The supported image formats as described in the section \nameref{sec:export}.
 
 
 \section{FITS Metadata Editor}

@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2013-2016 Alexander Semke (alexander.semke@web.de)
-    Description          : widget for cartesian legend legend properties
+    Description          : widget for cartesian legend properties
 
  ***************************************************************************/
 

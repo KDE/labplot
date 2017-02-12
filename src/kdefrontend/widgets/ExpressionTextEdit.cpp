@@ -78,7 +78,7 @@
 
 /*!
   \class ExpressionTextEdit
-  \brief  Provides a widget for for defining mathematical expressions
+  \brief  Provides a widget for defining mathematical expressions
 		  Supports syntax-highlighting and completion.
 
 		  Modified version of http://qt-project.org/doc/qt-4.8/tools-customcompleter.html

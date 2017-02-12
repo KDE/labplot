@@ -215,25 +215,26 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (addedElement) {
 		if (aspect->parentAspect() == this) {
-			QGraphicsItem *item = addedElement->graphicsItem();
-			Q_ASSERT(item != NULL);
+			QGraphicsItem* item = addedElement->graphicsItem();
 			d->m_scene->addItem(item);
 
 			qreal zVal = 0;
-			QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
-			foreach(WorksheetElement *elem, childElements)
+			QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
+			foreach(WorksheetElement* elem, childElements)
 				elem->graphicsItem()->setZValue(zVal++);
 
-			if (d->layout != Worksheet::NoLayout)
-				d->updateLayout();
+			if (!isLoading()) {
+				if (d->layout != Worksheet::NoLayout)
+					d->updateLayout();
+			}
 		}
 	}
 }
 
 void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-	const WorksheetElement *removedElement = qobject_cast<const WorksheetElement*>(aspect);
+	const WorksheetElement* removedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (removedElement) {
-		QGraphicsItem *item = removedElement->graphicsItem();
+		QGraphicsItem* item = removedElement->graphicsItem();
 		Q_ASSERT(item != NULL);
 		d->m_scene->removeItem(item);
 	}
@@ -932,11 +933,14 @@ bool Worksheet::load(XmlStreamReader* reader) {
 				d->backgroundOpacity = str.toDouble();
 		} else if(reader->name() == "cartesianPlot") {
 			CartesianPlot* plot = new CartesianPlot("");
+			plot->setIsLoading(true);
 			if (!plot->load(reader)) {
 				delete plot;
 				return false;
-			} else
+			} else {
 				addChild(plot);
+				plot->setIsLoading(true);
+			}
 		} else if(reader->name() == "textLabel") {
 			TextLabel* label = new TextLabel("");
 			if (!label->load(reader)) {

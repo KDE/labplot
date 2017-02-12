@@ -41,7 +41,7 @@
 
 /*!
 	\class LabelWidget
-	\brief Widget for editing the properties of a TextLabel object, mostly used in an an appropriate dock widget.
+ 	\brief Widget for editing the properties of a TextLabel object, mostly used in an appropriate dock widget.
 
 	In order the properties of the label to be shown, \c loadConfig() has to be called with the correspondig KConfigGroup
 	(settings for a label in *Plot, Axis etc. or for an independent label on the worksheet).
@@ -49,6 +49,7 @@
 	\ingroup kdefrontend
  */
 LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
+	m_label(0),
 	m_initializing(false),
 	m_dateTimeMenu(new QMenu(this)),
 	m_teXEnabled(false) {
@@ -73,7 +74,6 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	ui.tbFontSubScript->setIcon( QIcon::fromTheme("format-text-subscript") );
 	ui.tbSymbols->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
 	ui.tbDateTime->setIcon( QIcon::fromTheme("chronometer") );
-	ui.tbTexUsed->setIconSize(QSize(20, 20));
 	ui.tbTexUsed->setIcon( QIcon::fromTheme("labplot-TeX-logo") );
 
 	//Positioning and alignment

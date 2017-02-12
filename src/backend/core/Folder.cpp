@@ -155,11 +155,13 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 		addChild(matrix);
 	} else if (element_name == "worksheet") {
 		Worksheet* worksheet = new Worksheet(0, "");
+		worksheet->setIsLoading(true);
 		if (!worksheet->load(reader)){
 			delete worksheet;
 			return false;
 		}
 		addChild(worksheet);
+		worksheet->setIsLoading(false);
 #ifdef HAVE_CANTOR_LIBS
 	}else if (element_name == "cantorWorksheet"){
 		CantorWorksheet * cantorWorksheet = new CantorWorksheet(0, QLatin1String("null"), true);

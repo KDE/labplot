@@ -88,7 +88,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 
 	//determine latex engine to be used
 	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
-	QString engine = group.readEntry("LaTeXEngine", "");
+	QString engine = group.readEntry("LaTeXEngine", "pdflatex");
 
 	// create latex code
 	QTextStream out(&file);
@@ -121,16 +121,16 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 
 	out << "\\usepackage{color}";
 	out << "\\usepackage[active,displaymath,textmath,tightpage]{preview}";
-	out << "\\begin{document}";
+	out << "\\usepackage{mathtools}";
 	out << "\\definecolor{fontcolor}{rgb}{" << fontColor.redF() << ',' << fontColor.greenF() << ',' << fontColor.blueF() << "}";
+	out << "\\begin{document}";
 	out << "\\begin{preview}";
-	out << "{\\fontsize{" << QString::number(fontSize) << "}{" << QString::number(fontSize) << "}\\selectfont";
-	out << "{\\color{fontcolor}";
+	out << "\\fontsize{" << QString::number(fontSize) << "}{" << QString::number(fontSize) << "}\\selectfont";
+	out << "\\color{fontcolor}";
 	out << body;
-	out << "}}\\end{preview}";
+	out << "\\end{preview}";
 	out << "\\end{document}";
 	out.flush();
-
 	if (engine == "latex")
 		return imageFromDVI(file, dpi, success);
 	else
@@ -181,12 +181,11 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 ///	}else{
 ///		qWarning()<<"pdflatex failed."<<endl;
 	*success = (latexProcess.exitCode() == 0);
-	if (*success != 0) {
+	if (*success != 0)
 		WARNING("latex exit code =" << *success);
-	} else {
-		QFile::remove(fi.completeBaseName() + ".aux");
-		QFile::remove(fi.completeBaseName() + ".log");
-	}
+
+	QFile::remove(fi.completeBaseName() + ".aux");
+	QFile::remove(fi.completeBaseName() + ".log");
 
 	// convert: PDF -> PNG
 	QProcess convertProcess;
@@ -274,7 +273,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 
 bool TeXRenderer::enabled() {
 	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
-	QString engine = group.readEntry("LaTeXEngine", "");
+	QString engine = group.readEntry("LaTeXEngine", "pdflatex");
 	if (engine.isEmpty() || !executableExists(engine)) {
 		WARNING("LaTeX engine does not exist");
 		return false;
