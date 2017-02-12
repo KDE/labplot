@@ -63,7 +63,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 	//restore saved dialog size if available
 	KConfigGroup conf(KSharedConfig::openConfig(), "HistoryDialog");
 	if (conf.exists())
-		restoreDialogSize(conf);
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 	else
 		resize( QSize(500, 300).expandedTo(minimumSize()) );
 }
@@ -71,7 +71,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 HistoryDialog::~HistoryDialog() {
 	//save dialog size
 	KConfigGroup conf(KSharedConfig::openConfig(), "HistoryDialog");
-	saveDialogSize(conf);
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 void HistoryDialog::clearUndoStack() {
