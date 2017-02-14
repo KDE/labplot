@@ -46,6 +46,7 @@
 #include <QMessageBox>
 #include <QGraphicsOpacityEffect>
 #include <QTimeLine>
+#include <QClipboard>
 
 #include <KAction>
 #include <KLocale>
@@ -1465,6 +1466,32 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	}
 }
 
+void WorksheetView::exportToClipboard() {
+#ifndef QT_NO_CLIPBOARD
+// if no items are selected then we copy the worksheet to the clipboard
+	if (m_worksheet->scene()->selectedItems().size() == 0) {
+		QRectF sourceRect = scene()->itemsBoundingRect();
+
+		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
+		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+		w = w*QApplication::desktop()->physicalDpiX()/25.4;
+		h = h*QApplication::desktop()->physicalDpiY()/25.4;
+		QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
+		image.fill(Qt::transparent);
+		QRectF targetRect(0, 0, w, h);
+
+		QPainter painter;
+		painter.begin(&image);
+		painter.setRenderHint(QPainter::Antialiasing);
+		exportPaint(&painter, targetRect, sourceRect, true);
+		painter.end();
+
+		QClipboard* clipboard = QApplication::clipboard();
+		clipboard->setImage(image, QClipboard::Clipboard);
+	}
+#endif
+}
+
 void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background) {
 	//draw the background
 	if (background) {
@@ -1697,4 +1724,9 @@ void WorksheetView::presenterMode() {
 
 	PresenterWidget* presenterWidget = new PresenterWidget(QPixmap::fromImage(image), m_worksheet->name());
 	presenterWidget->showFullScreen();
+}
+
+void WorksheetView::keyPressEvent(QKeyEvent *event) {
+	if (event->matches(QKeySequence::Copy))
+		exportToClipboard();
 }

@@ -62,6 +62,7 @@ public:
 
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
+	void exportToClipboard();
 	void setIsClosing();
 	void setIsBeingPresented(bool presenting);
 private:
@@ -84,6 +85,7 @@ private:
 	void mousePressEvent(QMouseEvent*);
 	void mouseReleaseEvent(QMouseEvent*);
 	void mouseMoveEvent(QMouseEvent*);
+	void keyPressEvent(QKeyEvent*);
 
 	Worksheet* m_worksheet;
 	MouseMode m_mouseMode;
