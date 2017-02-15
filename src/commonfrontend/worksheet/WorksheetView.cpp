@@ -1468,27 +1468,32 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 
 void WorksheetView::exportToClipboard() {
 #ifndef QT_NO_CLIPBOARD
-// if no items are selected then we copy the worksheet to the clipboard
-	if (m_worksheet->scene()->selectedItems().size() == 0) {
-		QRectF sourceRect = scene()->itemsBoundingRect();
+	QRectF sourceRect;
 
-		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
-		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
-		w = w*QApplication::desktop()->physicalDpiX()/25.4;
-		h = h*QApplication::desktop()->physicalDpiY()/25.4;
-		QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
-		image.fill(Qt::transparent);
-		QRectF targetRect(0, 0, w, h);
-
-		QPainter painter;
-		painter.begin(&image);
-		painter.setRenderHint(QPainter::Antialiasing);
-		exportPaint(&painter, targetRect, sourceRect, true);
-		painter.end();
-
-		QClipboard* clipboard = QApplication::clipboard();
-		clipboard->setImage(image, QClipboard::Clipboard);
+	if (m_selectedItems.size() == 0)
+		sourceRect = scene()->itemsBoundingRect();
+	else {
+		//export selection
+		foreach (QGraphicsItem* item, m_selectedItems)
+			sourceRect = sourceRect.united( item->mapToScene(item->boundingRect()).boundingRect() );
 	}
+
+	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
+	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+	w = w*QApplication::desktop()->physicalDpiX()/25.4;
+	h = h*QApplication::desktop()->physicalDpiY()/25.4;
+	QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
+	image.fill(Qt::transparent);
+	QRectF targetRect(0, 0, w, h);
+
+	QPainter painter;
+	painter.begin(&image);
+	painter.setRenderHint(QPainter::Antialiasing);
+	exportPaint(&painter, targetRect, sourceRect, true);
+	painter.end();
+
+	QClipboard* clipboard = QApplication::clipboard();
+	clipboard->setImage(image, QClipboard::Clipboard);
 #endif
 }
 
@@ -1709,7 +1714,7 @@ void WorksheetView::presenterMode() {
 	const QRectF& screenSize = dw->availableGeometry(primaryScreenIdx);
 
 	if (targetRect.width() > screenSize.width() || ((targetRect.height() > screenSize.height()))) {
-		double ratio = qMin(screenSize.width() / targetRect.width(), screenSize.height() / targetRect.height());
+		const double ratio = qMin(screenSize.width() / targetRect.width(), screenSize.height() / targetRect.height());
 		targetRect.setWidth(targetRect.width()* ratio);
 		targetRect.setHeight(targetRect.height() * ratio);
 	}
@@ -1728,5 +1733,6 @@ void WorksheetView::presenterMode() {
 
 void WorksheetView::keyPressEvent(QKeyEvent *event) {
 	if (event->matches(QKeySequence::Copy))
+		//add here copying of objects
 		exportToClipboard();
 }
