@@ -1108,12 +1108,11 @@ void WorksheetView::selectAllElements() {
  * deletes selected worksheet elements
  */
 void WorksheetView::deleteElement() {
-	QList<QGraphicsItem*> items = scene()->selectedItems();
-	if (items.isEmpty())
+	if (m_selectedItems.isEmpty())
 		return;
 
 	int rc = KMessageBox::warningYesNo( this,
-	                                    i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", items.size()),
+	                                    i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
 	                                    i18n("Delete selected objects"));
 
 	if (rc == KMessageBox::No)
