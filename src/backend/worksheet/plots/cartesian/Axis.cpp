@@ -870,7 +870,7 @@ void Axis::visibilityChanged() {
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-AxisPrivate::AxisPrivate(Axis *owner) : m_plot(0), m_cSystem(0), m_printing(false), m_hovered(false),
+AxisPrivate::AxisPrivate(Axis *owner) : m_plot(0), m_cSystem(0), m_printing(false), m_hovered(false), m_suppressRecalc(false),
 	majorTicksColumn(0), minorTicksColumn(0), gridItem(new AxisGrid(this)), q(owner) {
 
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -913,7 +913,10 @@ void AxisPrivate::retransform() {
 	if (!m_cSystem)
 		return;
 
+	m_suppressRecalc = true;
 	retransformLine();
+	m_suppressRecalc = false;
+	recalcShapeAndBoundingRect();
 }
 
 void AxisPrivate::retransformLine() {
@@ -1654,6 +1657,9 @@ void AxisPrivate::retransformMinorGrid() {
 }
 
 void AxisPrivate::recalcShapeAndBoundingRect() {
+	if (m_suppressRecalc)
+		return;
+
 	prepareGeometryChange();
 
 	if (linePath.isEmpty()) {

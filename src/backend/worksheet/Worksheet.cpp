@@ -937,7 +937,7 @@ bool Worksheet::load(XmlStreamReader* reader) {
 				return false;
 			} else {
 				addChild(plot);
-				plot->setIsLoading(true);
+				plot->setIsLoading(false);
 			}
 		} else if(reader->name() == "textLabel") {
 			TextLabel* label = new TextLabel("");

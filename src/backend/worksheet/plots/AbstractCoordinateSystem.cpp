@@ -97,10 +97,10 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, 
 	//we usually clip on large rectangles, so we don't need high precision here -> round to one float digit
 	//this prevents some subtle float rounding artefacts that lead to disappearance
 	//of lines along the boundaries of the rect. (e.g. axis lines).
-	qreal x1 = round(line->x1());
-	qreal x2 = round(line->x2());
-	qreal y1 = round(line->y1());
-	qreal y2 = round(line->y2());
+	qreal x1 = round(line->x1(), 1);
+	qreal x2 = round(line->x2(), 1);
+	qreal y1 = round(line->y1(), 1);
+	qreal y2 = round(line->y2(), 1);
 
 	qreal left;
 	qreal right;
