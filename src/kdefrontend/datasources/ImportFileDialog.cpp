@@ -404,7 +404,7 @@ void ImportFileDialog::checkOkButton() {
 		else
 			fileName = fileName.mid(0, extensionBraceletPos);
 	}
-	DEBUG(" fileName = " << fileName.toStdString());
+	DEBUG(" fileName = " << fileName.toUtf8().constData());
 
 	enableButtonOk( QFile::exists(fileName) ) ;
 }
