@@ -452,7 +452,7 @@ void Worksheet::setBackgroundOpacity(float opacity) {
 }
 
 /* ============================ setter methods and undo commands  for layout options  ================= */
-STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayout, Worksheet::Layout, layout, updateLayout)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayout, Worksheet::Layout, layout, updateLayout)
 void Worksheet::setLayout(Worksheet::Layout layout) {
 	if (layout != d->layout) {
 		beginMacro(i18n("%1: set layout", name()));
