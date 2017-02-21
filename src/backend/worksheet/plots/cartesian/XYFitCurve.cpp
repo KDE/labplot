@@ -502,21 +502,21 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					if (fixed[j])
 						gsl_matrix_set(J, i, j, 0.);
 					else {
-						if (modelType == nsl_fit_model_atan)
+						if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_atan)
 							gsl_matrix_set(J, i, j, nsl_fit_model_atan_param_deriv(j, x, s, mu, a, sigma));
-						else if (modelType == nsl_fit_model_tanh)
+						else if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_tanh)
 							gsl_matrix_set(J, i, j, nsl_fit_model_tanh_param_deriv(j, x, s, mu, a, sigma));
-						else if (modelType == nsl_fit_model_algebraic_sigmoid)
+						else if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_algebraic_sigmoid)
 							gsl_matrix_set(J, i, j, nsl_fit_model_algebraic_sigmoid_param_deriv(j, x, s, mu, a, sigma));
-						else if (modelType == nsl_fit_model_sigmoid)
+						else if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_sigmoid)
 							gsl_matrix_set(J, i, j, nsl_fit_model_sigmoid_param_deriv(j, x, s, mu, a, sigma));
-						else if (modelType == nsl_fit_model_erf)
+						else if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_erf)
 							gsl_matrix_set(J, i, j, nsl_fit_model_erf_param_deriv(j, x, s, mu, a, sigma));
-						else if (modelType == nsl_fit_model_hill)
+						else if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_hill)
 							gsl_matrix_set(J, i, j, nsl_fit_model_hill_param_deriv(j, x, s, mu, a, sigma));
-						else if (modelType == nsl_fit_model_gompertz)
+						else if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_gompertz)
 							gsl_matrix_set(J, i, j, nsl_fit_model_gompertz_param_deriv(j, x, s, mu, a, sigma));
-						else if (modelType == nsl_fit_model_gudermann)
+						else if ((nsl_fit_model_type_growth)modelType == nsl_fit_model_gudermann)
 							gsl_matrix_set(J, i, j, nsl_fit_model_gudermann_param_deriv(j, x, s, mu, a, sigma));
 					}
 				}
