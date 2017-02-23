@@ -76,7 +76,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 		importFileWidget->hideDataSource();
 	}
 
-	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
+	connect(this, SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 	connect(importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
 	connect(importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
 
@@ -166,7 +166,7 @@ void ImportFileDialog::setCurrentIndex(const QModelIndex& index) {
 	QDEBUG(" index =" << index);
 	cbAddTo->setCurrentModelIndex(index);
 	QDEBUG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
-	this->checkOkButton();
+	checkOkButton();
 }
 
 /*!
@@ -200,7 +200,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	QDEBUG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
-		DEBUG("ERROR: No aspect available");
+		DEBUG("ERROR in importTo(): No aspect available");
 		return;
 	}
 
@@ -309,6 +309,7 @@ void ImportFileDialog::toggleOptions() {
 }
 
 void ImportFileDialog::newDataContainer(QAction* action) {
+	DEBUG("ImportFileDialog::newDataContainer()");
 	QString path = importFileWidget->fileName();
 	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
 
