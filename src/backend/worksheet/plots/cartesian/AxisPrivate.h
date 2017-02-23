@@ -49,6 +49,7 @@ class AxisPrivate: public QGraphicsItem {
 		const CartesianCoordinateSystem* m_cSystem;
 		bool m_printing;
 		bool m_hovered;
+		bool m_suppressRecalc;
 
 		//general
 		bool autoScale;

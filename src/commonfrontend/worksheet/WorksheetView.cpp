@@ -46,6 +46,7 @@
 #include <QMessageBox>
 #include <QGraphicsOpacityEffect>
 #include <QTimeLine>
+#include <QClipboard>
 
 #include <QAction>
 #include <KLocale>
@@ -1104,12 +1105,11 @@ void WorksheetView::selectAllElements() {
  * deletes selected worksheet elements
  */
 void WorksheetView::deleteElement() {
-	QList<QGraphicsItem*> items = scene()->selectedItems();
-	if (items.isEmpty())
+	if (m_selectedItems.isEmpty())
 		return;
 
 	int rc = KMessageBox::warningYesNo( this,
-	                                    i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", items.size()),
+	                                    i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
 	                                    i18n("Delete selected objects"));
 
 	if (rc == KMessageBox::No)
@@ -1459,6 +1459,37 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	}
 }
 
+void WorksheetView::exportToClipboard() {
+#ifndef QT_NO_CLIPBOARD
+	QRectF sourceRect;
+
+	if (m_selectedItems.size() == 0)
+		sourceRect = scene()->itemsBoundingRect();
+	else {
+		//export selection
+		foreach (QGraphicsItem* item, m_selectedItems)
+			sourceRect = sourceRect.united( item->mapToScene(item->boundingRect()).boundingRect() );
+	}
+
+	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
+	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+	w = w*QApplication::desktop()->physicalDpiX()/25.4;
+	h = h*QApplication::desktop()->physicalDpiY()/25.4;
+	QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
+	image.fill(Qt::transparent);
+	QRectF targetRect(0, 0, w, h);
+
+	QPainter painter;
+	painter.begin(&image);
+	painter.setRenderHint(QPainter::Antialiasing);
+	exportPaint(&painter, targetRect, sourceRect, true);
+	painter.end();
+
+	QClipboard* clipboard = QApplication::clipboard();
+	clipboard->setImage(image, QClipboard::Clipboard);
+#endif
+}
+
 void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background) {
 	//draw the background
 	if (background) {
@@ -1676,7 +1707,7 @@ void WorksheetView::presenterMode() {
 	const QRectF& screenSize = dw->availableGeometry(primaryScreenIdx);
 
 	if (targetRect.width() > screenSize.width() || ((targetRect.height() > screenSize.height()))) {
-		double ratio = qMin(screenSize.width() / targetRect.width(), screenSize.height() / targetRect.height());
+		const double ratio = qMin(screenSize.width() / targetRect.width(), screenSize.height() / targetRect.height());
 		targetRect.setWidth(targetRect.width()* ratio);
 		targetRect.setHeight(targetRect.height() * ratio);
 	}
@@ -1691,4 +1722,10 @@ void WorksheetView::presenterMode() {
 
 	PresenterWidget* presenterWidget = new PresenterWidget(QPixmap::fromImage(image), m_worksheet->name());
 	presenterWidget->showFullScreen();
+}
+
+void WorksheetView::keyPressEvent(QKeyEvent *event) {
+	if (event->matches(QKeySequence::Copy))
+		//add here copying of objects
+		exportToClipboard();
 }

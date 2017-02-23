@@ -254,22 +254,22 @@ void MainWin::initActions() {
 	//New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
 	m_newWorkbookAction = new QAction(QIcon::fromTheme("labplot-workbook-new"),i18n("Workbook"),this);
 	actionCollection()->addAction("new_workbook", m_newWorkbookAction);
-	connect(m_newWorkbookAction, SIGNAL(triggered()),SLOT(newWorkbook()));
+	connect(m_newWorkbookAction, SIGNAL(triggered()), SLOT(newWorkbook()));
 
 	m_newDatapickerAction = new QAction(QIcon::fromTheme("color-picker-black"), i18n("Datapicker"), this);
 	actionCollection()->addAction("new_datapicker", m_newDatapickerAction);
-	connect(m_newDatapickerAction, SIGNAL(triggered()),SLOT(newDatapicker()));
+	connect(m_newDatapickerAction, SIGNAL(triggered()), SLOT(newDatapicker()));
 
 	m_newSpreadsheetAction = new QAction(QIcon::fromTheme("labplot-spreadsheet-new"),i18n("Spreadsheet"),this);
 
 // 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new_spreadsheet", m_newSpreadsheetAction);
-	connect(m_newSpreadsheetAction, SIGNAL(triggered()),SLOT(newSpreadsheet()));
+	connect(m_newSpreadsheetAction, SIGNAL(triggered()), SLOT(newSpreadsheet()));
 
 	m_newMatrixAction = new QAction(QIcon::fromTheme("labplot-matrix-new"),i18n("Matrix"),this);
 // 	m_newMatrixAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new_matrix", m_newMatrixAction);
-	connect(m_newMatrixAction, SIGNAL(triggered()),SLOT(newMatrix()));
+	connect(m_newMatrixAction, SIGNAL(triggered()), SLOT(newMatrix()));
 
 	m_newWorksheetAction= new QAction(QIcon::fromTheme("labplot-worksheet-new"),i18n("Worksheet"),this);
 // 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
@@ -286,7 +286,7 @@ void MainWin::initActions() {
 
 	m_newFolderAction = new QAction(QIcon::fromTheme("folder-new"),i18n("Folder"),this);
 	actionCollection()->addAction("new_folder", m_newFolderAction);
-	connect(m_newFolderAction, SIGNAL(triggered()),SLOT(newFolder()));
+	connect(m_newFolderAction, SIGNAL(triggered()), SLOT(newFolder()));
 
 	//"New file datasources"
 	m_newFileDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("File Data Source"),this);
@@ -306,7 +306,7 @@ void MainWin::initActions() {
 	m_exportAction = new QAction(QIcon::fromTheme("document-export"), i18n("Export"), this);
 	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL+Qt::SHIFT+Qt::Key_E);
 	actionCollection()->addAction("export", m_exportAction);
-	connect(m_exportAction, SIGNAL(triggered()),SLOT(exportDialog()));
+	connect(m_exportAction, SIGNAL(triggered()), SLOT(exportDialog()));
 
 	m_editFitsFileAction = new QAction(i18n("Edit FITS file header"), this);
 	actionCollection()->addAction("edit_fits", m_editFitsFileAction);
@@ -319,7 +319,7 @@ void MainWin::initActions() {
 
 	m_historyAction = new QAction(QIcon::fromTheme("view-history"), i18n("Undo/Redo History"),this);
 	actionCollection()->addAction("history", m_historyAction);
-	connect(m_historyAction, SIGNAL(triggered()),SLOT(historyDialog()));
+	connect(m_historyAction, SIGNAL(triggered()), SLOT(historyDialog()));
 
 	// TODO: more menues
 	//  Appearance

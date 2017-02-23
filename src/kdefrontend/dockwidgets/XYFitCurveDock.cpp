@@ -806,9 +806,9 @@ void XYFitCurveDock::updateModelEquation() {
 
 		// model-dependent start values
 		if (m_fitData.modelCategory == nsl_fit_model_distribution) {
-			if (m_fitData.modelType == nsl_sf_stats_weibull)
+			if ((nsl_sf_stats_distribution)m_fitData.modelType == nsl_sf_stats_weibull)
 				m_fitData.paramStartValues[2] = 0.0;
-			if (m_fitData.modelType == nsl_sf_stats_frechet || m_fitData.modelType == nsl_sf_stats_levy)
+			if ((nsl_sf_stats_distribution)m_fitData.modelType == nsl_sf_stats_frechet || (nsl_sf_stats_distribution)m_fitData.modelType == nsl_sf_stats_levy)
 				m_fitData.paramStartValues[1] = 0.0;
 		}
 	}

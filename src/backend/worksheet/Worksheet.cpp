@@ -225,7 +225,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 
 			if (!isLoading()) {
 				if (d->layout != Worksheet::NoLayout)
-					d->updateLayout();
+					d->updateLayout(false);
 			}
 		}
 	}
@@ -246,7 +246,7 @@ void Worksheet::handleAspectRemoved(const AbstractAspect* parent, const Abstract
 	Q_UNUSED(child);
 
 	if (d->layout != Worksheet::NoLayout)
-		d->updateLayout();
+		d->updateLayout(false);
 }
 
 QGraphicsScene *Worksheet::scene() const {
@@ -454,7 +454,7 @@ void Worksheet::setBackgroundOpacity(float opacity) {
 }
 
 /* ============================ setter methods and undo commands  for layout options  ================= */
-STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayout, Worksheet::Layout, layout, updateLayout)
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayout, Worksheet::Layout, layout, updateLayout)
 void Worksheet::setLayout(Worksheet::Layout layout) {
 	if (layout != d->layout) {
 		beginMacro(i18n("%1: set layout", name()));
@@ -622,7 +622,7 @@ WorksheetPrivate::~WorksheetPrivate() {
 	delete m_scene;
 }
 
-void WorksheetPrivate::updateLayout() {
+void WorksheetPrivate::updateLayout(bool undoable) {
 	QList<WorksheetElementContainer*> list = q->children<WorksheetElementContainer>();
 	if (layout==Worksheet::NoLayout) {
 		foreach(WorksheetElementContainer* elem, list)
@@ -638,26 +638,14 @@ void WorksheetPrivate::updateLayout() {
 		w= m_scene->sceneRect().width() - layoutLeftMargin - layoutRightMargin;
 		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (count-1)*layoutVerticalSpacing)/count;
 		foreach(WorksheetElementContainer* elem, list) {
-			if (useViewSize) {
-				elem->setUndoAware(false);
-				elem->setRect(QRectF(x,y,w,h));
-				elem->setUndoAware(true);
-			} else
-				elem->setRect(QRectF(x,y,w,h));
-			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+			setContainerRect(elem, x, y, h, w, undoable);
 			y+=h + layoutVerticalSpacing;
 		}
 	} else if (layout == Worksheet::HorizontalLayout) {
 		w=(m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (count-1)*layoutHorizontalSpacing)/count;
 		h= m_scene->sceneRect().height() - layoutTopMargin-layoutBottomMargin;
 		foreach(WorksheetElementContainer* elem, list) {
-			if (useViewSize) {
-				elem->setUndoAware(false);
-				elem->setRect(QRectF(x,y,w,h));
-				elem->setUndoAware(true);
-			} else
-				elem->setRect(QRectF(x,y,w,h));
-			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+			setContainerRect(elem, x, y, h, w, undoable);
 			x+=w + layoutHorizontalSpacing;
 		}
 	} else { //GridLayout
@@ -671,13 +659,7 @@ void WorksheetPrivate::updateLayout() {
 		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (layoutRowCount-1)*layoutVerticalSpacing)/layoutRowCount;
 		int columnIndex=0; //counts the columns in a row
 		foreach(WorksheetElementContainer* elem, list) {
-			if (useViewSize) {
-				elem->setUndoAware(false);
-				elem->setRect(QRectF(x,y,w,h));
-				elem->setUndoAware(true);
-			} else
-				elem->setRect(QRectF(x,y,w,h));
-			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+			setContainerRect(elem, x, y, h, w, undoable);
 			x+=w + layoutHorizontalSpacing;
 			columnIndex++;
 			if (columnIndex==layoutColumnCount) {
@@ -689,6 +671,24 @@ void WorksheetPrivate::updateLayout() {
 	}
 }
 
+void WorksheetPrivate::setContainerRect(WorksheetElementContainer* elem, float x, float y, float h, float w, bool undoable) {
+	if (useViewSize) {
+		//when using the view size, no need to put rect changes onto the undo-stack
+		elem->setUndoAware(false);
+		elem->setRect(QRectF(x,y,w,h));
+		elem->setUndoAware(true);
+	} else {
+		//don't put rect changed onto the undo-stack if undoable-flag is set to true,
+		//e.g. when new child is added or removed (the layout and the childrend rects will be updated anyway)
+		if (!undoable) {
+			elem->setUndoAware(false);
+			elem->setRect(QRectF(x,y,w,h));
+			elem->setUndoAware(true);
+		} else
+			elem->setRect(QRectF(x,y,w,h));
+	}
+	elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+}
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
@@ -939,7 +939,7 @@ bool Worksheet::load(XmlStreamReader* reader) {
 				return false;
 			} else {
 				addChild(plot);
-				plot->setIsLoading(true);
+				plot->setIsLoading(false);
 			}
 		} else if(reader->name() == "textLabel") {
 			TextLabel* label = new TextLabel("");
