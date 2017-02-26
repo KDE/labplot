@@ -132,7 +132,7 @@ void SettingsWorksheetPage::checkTeX(int engineIndex) {
 		ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
 		return;
 	}
-#elif defined(_WIN32)
+#elif defined(HAVE_WINDOWS)
 	if (!TeXRenderer::executableExists(QLatin1String("gswin32c"))) {
 		ui.lLatexWarning->show();
 		ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));

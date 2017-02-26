@@ -321,7 +321,7 @@ void MainWin::initActions() {
 	actionCollection()->addAction("history", m_historyAction);
 	connect(m_historyAction, SIGNAL(triggered()), SLOT(historyDialog()));
 
-	// TODO: more menues
+	// TODO: more menus
 	//  Appearance
 	// Analysis: see WorksheetView.cpp
 	// Drawing
@@ -820,7 +820,7 @@ void MainWin::openProject(const QString& filename) {
 
 	QIODevice *file;
 	// first try gzip compression, because projects can be gzipped and end with .lml
-	if (filename.endsWith(".lml", Qt::CaseInsensitive))
+	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
 		file = new KCompressionDevice(filename,KFilterDev::compressionTypeForMimeType("application/x-gzip"));
 	else	// opens filename using file ending
 		file = new KFilterDev(filename);
@@ -975,7 +975,7 @@ bool MainWin::save(const QString& fileName) {
 	// use file ending to find out how to compress file
 	QIODevice* file;
 	// if ending is .lml, do gzip compression anyway
-	if (fileName.endsWith(".lml"))
+	if (fileName.endsWith(QLatin1String(".lml")))
 		file = new KCompressionDevice(fileName, KCompressionDevice::GZip);
 	else
 		file = new KFilterDev(fileName);

@@ -141,7 +141,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine, bool* success) {
 	QFileInfo fi(file.fileName());
 	QProcess latexProcess;
-#if defined(_WIN32)
+#if defined(HAVE_WINDOWS)
 	latexProcess.setNativeArguments("-interaction=batchmode " + file.fileName());
 	latexProcess.start(engine, QStringList() << "");
 #else	// TODO: what about MAC?
@@ -189,10 +189,10 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 
 	// convert: PDF -> PNG
 	QProcess convertProcess;
-#if defined(_WIN32)
+#if defined(HAVE_WINDOWS)
 	// need to set path to magick coder modules (which are in the labplot2 directory)
 	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(getenv("PROGRAMFILES") + QString("\\labplot2")));
+	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(qgetenv("PROGRAMFILES") + QString("\\labplot2")));
 	convertProcess.setProcessEnvironment(env);
 #endif
 	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)
@@ -243,10 +243,10 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 
 	// convert: PS -> PNG
 	QProcess convertProcess;
-#if defined(_WIN32)
+#if defined(HAVE_WINDOWS)
 	// need to set path to magick coder modules (which are in the labplot2 directory)
 	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(getenv("PROGRAMFILES") + QString("\\labplot2")));
+	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(qgetenv("PROGRAMFILES") + QString("\\labplot2")));
 	convertProcess.setProcessEnvironment(env);
 #endif
 	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)
@@ -295,13 +295,13 @@ bool TeXRenderer::enabled() {
 	}
 
 #if defined(_WIN64)
-	if (!executableExists(QLatin1String("gswin64c")) && !QDir(getenv("PROGRAMFILES") + QString("/gs")).exists() 
-		&& !QDir(getenv("PROGRAMFILES(X86)") + QString("/gs")).exists()) {
+	if (!executableExists(QLatin1String("gswin64c")) && !QDir(qgetenv("PROGRAMFILES") + QString("/gs")).exists() 
+		&& !QDir(qgetenv("PROGRAMFILES(X86)") + QString("/gs")).exists()) {
 		WARNING("ghostscript (64bit) does not exist");
 		return false;
 	}
-#elif defined(_WIN32)
-	if (!executableExists(QLatin1String("gswin32c")) && !QDir(getenv("PROGRAMFILES") + QString("/gs")).exists()) {
+#elif defined(HAVE_WINDOWS)
+	if (!executableExists(QLatin1String("gswin32c")) && !QDir(qgetenv("PROGRAMFILES") + QString("/gs")).exists()) {
 		WARNING("ghostscript (32bit) does not exist");
 		return false;
 	}

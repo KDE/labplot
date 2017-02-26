@@ -217,7 +217,7 @@ void ThemeHandler::saveNewSelected(const QString& filename) {
 
 /*!
 	opens the dialog to upload the currently selected local theme.
-	The publish button is only enabled if a local theme was loaded or one of the themes was modified and saved localy.
+	The publish button is only enabled if a local theme was loaded or one of the themes was modified and saved locally.
  */
 // void ThemeHandler::publishThemes() {
 // 	int ret = KMessageBox::questionYesNo(this,

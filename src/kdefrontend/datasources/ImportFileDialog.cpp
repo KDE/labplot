@@ -389,7 +389,7 @@ void ImportFileDialog::checkOkButton() {
 
 	QString fileName = importFileWidget->fileName();
 	if (importFileWidget->currentFileType() != FileDataSource::FITS) {
-#ifndef _WIN32
+#ifndef HAVE_WINDOWS
 		if (!fileName.isEmpty() && fileName.left(1) != QDir::separator())
 			fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif

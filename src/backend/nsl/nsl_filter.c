@@ -26,12 +26,12 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "nsl_filter.h"
+#include "nsl_common.h"
+#include "nsl_sf_poly.h"
 #include <gsl/gsl_sf_pow_int.h>
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_halfcomplex.h>
-#include "nsl_common.h"
-#include "nsl_filter.h"
-#include "nsl_sf_poly.h"
 #ifdef HAVE_FFTW3
 #include <fftw3.h>
 #endif

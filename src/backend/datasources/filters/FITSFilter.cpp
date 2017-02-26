@@ -240,7 +240,7 @@ void FITSFilter::setCommentsAsUnits(const bool commentsAsUnits) {
 /*!
  * \brief Sets exportTo to \a exportTo
  *
- * This is used to decide wether the container should be exported to a FITS image or a FITS table
+ * This is used to decide whether the container should be exported to a FITS image or a FITS table
  * For an image \a exportTo should be 0, for a table 1
  * \param exportTo
  */

@@ -385,7 +385,7 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 
 			QRectF scaleRect = QRectF(xInterval.start(), yInterval.start(),
 					xInterval.end() - xInterval.start(), yInterval.end() - yInterval.start()).normalized();
-			foreach(QLineF line, lines) {
+			foreach (QLineF line, lines) {
 				LineClipResult clipResult;
 				if (!AbstractCoordinateSystem::clipLineToRect(&line, scaleRect, &clipResult))
 					continue;

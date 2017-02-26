@@ -953,7 +953,7 @@ void XYFitCurvePrivate::recalculate() {
 	for (unsigned int i = 0; i < np; i++)
 		x_init[i] = nsl_fit_map_unbound(x_init[i], x_min[i], x_max[i]);
 	gsl_vector_view x = gsl_vector_view_array(x_init, np);
-	// initialize solver with function f and inital guess x
+	// initialize solver with function f and initial guess x
 	gsl_multifit_fdfsolver_set(s, &f, &x.vector);
 
 	//iterate

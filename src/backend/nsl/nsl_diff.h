@@ -29,6 +29,8 @@
 #ifndef NSL_DIFF_H
 #define NSL_DIFF_H
 
+#include <stdlib.h>
+
 #define NSL_DIFF_DERIV_ORDER_COUNT 6
 typedef enum {nsl_diff_deriv_order_first, nsl_diff_deriv_order_second, nsl_diff_deriv_order_third,
 	nsl_diff_deriv_order_fourth, nsl_diff_deriv_order_fifth, nsl_diff_deriv_order_sixth} nsl_diff_deriv_order_type;

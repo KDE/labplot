@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : SpreadsheetDoubleHeaderView.cpp
+    File                 : SpreadsheetHeaderView.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
 	Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)

@@ -26,10 +26,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "nsl_sf_kernel.h"
 #include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_randist.h>	/* Gaussian and Cauchy */
-#include "nsl_sf_kernel.h"
 
 /* kernel on [-1,1] */
 

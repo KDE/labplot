@@ -509,7 +509,7 @@ void CartesianPlotLegendDock::backgroundSecondColorChanged(const QColor& c) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlotLegend* legend, m_legendList)
+	foreach (CartesianPlotLegend* legend, m_legendList)
 		legend->setBackgroundSecondColor(c);
 }
 
@@ -521,7 +521,7 @@ void CartesianPlotLegendDock::selectFile() {
 	QString dir = conf.readEntry("LastImageDir", "");
 
 	QString formats;
-	foreach(const QByteArray format, QImageReader::supportedImageFormats()) {
+	foreach (const QByteArray& format, QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
 		formats.isEmpty() ? formats+=f : formats+=' '+f;
 	}
@@ -531,15 +531,15 @@ void CartesianPlotLegendDock::selectFile() {
 		return; //cancel was clicked in the file-dialog
 
 	int pos = path.lastIndexOf(QDir::separator());
-	if (pos!=-1) {
+	if (pos != -1) {
 		QString newDir = path.left(pos);
-		if (newDir!=dir)
+		if (newDir != dir)
 			conf.writeEntry("LastImageDir", newDir);
 	}
 
     ui.kleBackgroundFileName->setText( path );
 
-	foreach(CartesianPlotLegend* legend, m_legendList)
+	foreach (CartesianPlotLegend* legend, m_legendList)
 		legend->setBackgroundFileName(path);
 }
 
@@ -553,7 +553,7 @@ void CartesianPlotLegendDock::fileNameChanged() {
 	else
 		ui.kleBackgroundFileName->setStyleSheet("");
 
-	foreach(CartesianPlotLegend* legend, m_legendList)
+	foreach (CartesianPlotLegend* legend, m_legendList)
 		legend->setBackgroundFileName(fileName);
 }
 
@@ -562,7 +562,7 @@ void CartesianPlotLegendDock::backgroundOpacityChanged(int value) {
 		return;
 
 	float opacity = (float)value/100.;
-	foreach(CartesianPlotLegend* legend, m_legendList)
+	foreach (CartesianPlotLegend* legend, m_legendList)
 		legend->setBackgroundOpacity(opacity);
 }
 
@@ -573,8 +573,8 @@ void CartesianPlotLegendDock::borderStyleChanged(int index) {
 
 	Qt::PenStyle penStyle=Qt::PenStyle(index);
 	QPen pen;
-	foreach(CartesianPlotLegend* legend, m_legendList) {
-		pen=legend->borderPen();
+	foreach (CartesianPlotLegend* legend, m_legendList) {
+		pen = legend->borderPen();
 		pen.setStyle(penStyle);
 		legend->setBorderPen(pen);
 	}
@@ -585,15 +585,15 @@ void CartesianPlotLegendDock::borderColorChanged(const QColor& color) {
 		return;
 
 	QPen pen;
-	foreach(CartesianPlotLegend* legend, m_legendList) {
-		pen=legend->borderPen();
+	foreach (CartesianPlotLegend* legend, m_legendList) {
+		pen = legend->borderPen();
 		pen.setColor(color);
 		legend->setBorderPen(pen);
 	}
 
-	m_initializing=true;
+	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-	m_initializing=false;
+	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::borderWidthChanged(double value) {
@@ -601,8 +601,8 @@ void CartesianPlotLegendDock::borderWidthChanged(double value) {
 		return;
 
 	QPen pen;
-	foreach(CartesianPlotLegend* legend, m_legendList) {
-		pen=legend->borderPen();
+	foreach (CartesianPlotLegend* legend, m_legendList) {
+		pen = legend->borderPen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 		legend->setBorderPen(pen);
 	}
@@ -612,7 +612,7 @@ void CartesianPlotLegendDock::borderCornerRadiusChanged(double value) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlotLegend* legend, m_legendList)
+	foreach (CartesianPlotLegend* legend, m_legendList)
 		legend->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
 }
 
@@ -621,7 +621,7 @@ void CartesianPlotLegendDock::borderOpacityChanged(int value) {
 		return;
 
 	float opacity = (float)value/100.;
-	foreach(CartesianPlotLegend* legend, m_legendList)
+	foreach (CartesianPlotLegend* legend, m_legendList)
 		legend->setBorderOpacity(opacity);
 }
 
@@ -630,7 +630,7 @@ void CartesianPlotLegendDock::layoutTopMarginChanged(double margin) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlotLegend* legend, m_legendList)
+	foreach (CartesianPlotLegend* legend, m_legendList)
 		legend->setLayoutTopMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
 }
 
@@ -638,7 +638,7 @@ void CartesianPlotLegendDock::layoutBottomMarginChanged(double margin) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlotLegend* legend, m_legendList)
+	foreach (CartesianPlotLegend* legend, m_legendList)
 		legend->setLayoutBottomMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
 }
 
@@ -646,7 +646,7 @@ void CartesianPlotLegendDock::layoutLeftMarginChanged(double margin) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlotLegend* legend, m_legendList)
+	foreach (CartesianPlotLegend* legend, m_legendList)
 		legend->setLayoutLeftMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
 }
 
@@ -654,7 +654,7 @@ void CartesianPlotLegendDock::layoutRightMarginChanged(double margin) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlotLegend* legend, m_legendList)
+	foreach (CartesianPlotLegend* legend, m_legendList)
 		legend->setLayoutRightMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
 }
 
@@ -662,7 +662,7 @@ void CartesianPlotLegendDock::layoutHorizontalSpacingChanged(double spacing) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlotLegend* legend, m_legendList)
+	foreach (CartesianPlotLegend* legend, m_legendList)
 		legend->setLayoutHorizontalSpacing(Worksheet::convertToSceneUnits(spacing, Worksheet::Centimeter));
 }
 
@@ -670,7 +670,7 @@ void CartesianPlotLegendDock::layoutVerticalSpacingChanged(double spacing) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlotLegend* legend, m_legendList)
+	foreach (CartesianPlotLegend* legend, m_legendList)
 		legend->setLayoutVerticalSpacing(Worksheet::convertToSceneUnits(spacing, Worksheet::Centimeter));
 }
 
@@ -681,7 +681,7 @@ void CartesianPlotLegendDock::layoutColumnCountChanged(int count) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlotLegend* legend, m_legendList)
+	foreach (CartesianPlotLegend* legend, m_legendList)
 		legend->setLayoutColumnCount(count);
 }
 

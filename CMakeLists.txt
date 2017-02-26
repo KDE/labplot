@@ -56,6 +56,11 @@ option(ENABLE_HDF5 "Build with HDF5 support" ON)
 option(ENABLE_NETCDF "Build with NetCDF support" ON)
 option(ENABLE_FITS "Build with FITS support" ON)
 
+### OS macros ####################################
+IF (WIN32)
+	add_definitions (-DHAVE_WINDOWS)
+ENDIF ()
+
 ### GSL (required) ###############################
 FIND_PACKAGE(GSL REQUIRED)
 

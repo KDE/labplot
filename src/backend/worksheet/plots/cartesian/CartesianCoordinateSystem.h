@@ -76,7 +76,7 @@ class CartesianScale {
 
 class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 	public:
-		CartesianCoordinateSystem(CartesianPlot*);
+		explicit CartesianCoordinateSystem(CartesianPlot*);
 		virtual ~CartesianCoordinateSystem();
 
 		virtual QList<QPointF> mapLogicalToScene(const QList<QPointF>&, const MappingFlags &flags = DefaultMapping) const;

@@ -231,10 +231,10 @@ namespace Loki
         
 ////////////////////////////////////////////////////////////////////////////////
 // class template Erase
-// Erases the first occurence, if any, of a type in a typelist
+// Erases the first occurrence, if any, of a type in a typelist
 // Invocation (TList is a typelist and T is a type):
 // Erase<TList, T>::Result
-// returns a typelist that is TList without the first occurence of T
+// returns a typelist that is TList without the first occurrence of T
 ////////////////////////////////////////////////////////////////////////////////
 
         template <class TList, class T> struct Erase;
@@ -261,10 +261,10 @@ namespace Loki
 
 ////////////////////////////////////////////////////////////////////////////////
 // class template EraseAll
-// Erases all first occurences, if any, of a type in a typelist
+// Erases all first occurrences, if any, of a type in a typelist
 // Invocation (TList is a typelist and T is a type):
 // EraseAll<TList, T>::Result
-// returns a typelist that is TList without any occurence of T
+// returns a typelist that is TList without any occurrence of T
 ////////////////////////////////////////////////////////////////////////////////
 
         template <class TList, class T> struct EraseAll;
@@ -314,10 +314,10 @@ namespace Loki
 
 ////////////////////////////////////////////////////////////////////////////////
 // class template Replace
-// Replaces the first occurence of a type in a typelist, with another type
+// Replaces the first occurrence of a type in a typelist, with another type
 // Invocation (TList is a typelist, T, U are types):
 // Replace<TList, T, U>::Result
-// returns a typelist in which the first occurence of T is replaced with U
+// returns a typelist in which the first occurrence of T is replaced with U
 ////////////////////////////////////////////////////////////////////////////////
 
         template <class TList, class T, class U> struct Replace;
@@ -344,10 +344,10 @@ namespace Loki
 
 ////////////////////////////////////////////////////////////////////////////////
 // class template ReplaceAll
-// Replaces all occurences of a type in a typelist, with another type
+// Replaces all occurrences of a type in a typelist, with another type
 // Invocation (TList is a typelist, T, U are types):
 // Replace<TList, T, U>::Result
-// returns a typelist in which all occurences of T is replaced with U
+// returns a typelist in which all occurrences of T is replaced with U
 ////////////////////////////////////////////////////////////////////////////////
 
         template <class TList, class T, class U> struct ReplaceAll;

@@ -27,8 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SETTINGSWORKSHEETGENERALPAGE_H
-#define SETTINGSWORKSHEETGENERALPAGE_H
+#ifndef SETTINGSWORKSHEETPAGE_H
+#define SETTINGSWORKSHEETPAGE_H
 
 #include "SettingsPage.h"
 #include "ui_settingsworksheetpage.h"

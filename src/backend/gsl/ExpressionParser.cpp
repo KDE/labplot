@@ -126,7 +126,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Nonnegative square root");
 	m_functionsNames << i18n("Sign function");
 
-#ifndef _WIN32
+#ifndef HAVE_WINDOWS
 	m_functionsNames << i18n("Cube root");
 	m_functionsNames << i18n("Extract the exponent");
 	m_functionsNames << i18n("Round to an integer value");
@@ -145,7 +145,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("x^8");
 	m_functionsNames << i18n("x^9");
 
-#ifndef _WIN32
+#ifndef HAVE_WINDOWS
 	for (int i = 0; i < 25; i++)
 #else
 	for (int i = 0; i < 20; i++)

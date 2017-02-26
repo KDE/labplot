@@ -500,7 +500,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	}
 
 	items = deselected.indexes();
-	for (int i=0; i<items.size()/4; ++i) {
+	for (int i = 0; i < items.size()/4; ++i) {
 		index = items.at(i*4);
 		aspect = static_cast<AbstractAspect *>(index.internalPointer());
 		aspect->setSelected(false);
@@ -508,7 +508,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 	items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
-	foreach(const QModelIndex& index,items) {
+	foreach (const QModelIndex& index, items) {
 		aspect = static_cast<AbstractAspect *>(index.internalPointer());
 		selectedAspects<<aspect;
 	}
@@ -518,14 +518,14 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 void ProjectExplorer::expandSelected() {
 	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
-	foreach(QModelIndex index, items) {
+	foreach (const QModelIndex& index, items) {
 		m_treeView->setExpanded(index, true);
 	}
 }
 
 void ProjectExplorer::collapseSelected() {
 	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
-	foreach(QModelIndex index, items) {
+	foreach (const QModelIndex& index, items) {
 		m_treeView->setExpanded(index, false);
 	}
 }
@@ -597,19 +597,19 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("state");
 
 	writer->writeStartElement("expanded");
-	for (int i=0; i<expanded.size(); ++i) {
+	for (int i = 0; i < expanded.size(); ++i) {
 		writer->writeTextElement("row", QString::number(expanded.at(i)));
 	}
 	writer->writeEndElement();
 
 	writer->writeStartElement("selected");
-	for (int i=0; i<selected.size(); ++i) {
+	for (int i = 0; i < selected.size(); ++i) {
 		writer->writeTextElement("row", QString::number(selected.at(i)));
 	}
 	writer->writeEndElement();
 
 	writer->writeStartElement("view");
-	for (int i=0; i<withView.size(); ++i) {
+	for (int i = 0; i < withView.size(); ++i) {
 		writer->writeStartElement("row");
 		const ViewState& s = viewStates.at(i);
 		writer->writeAttribute( "state", QString::number(s.state) );
@@ -682,9 +682,9 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 			row = reader->readElementText().toInt();
 
 			QModelIndex index;
-			if (row==-1)
+			if (row == -1)
 				index = model->modelIndexOfAspect(m_project); //-1 corresponds tothe project-item (s.a. ProjectExplorer::save())
-			else if (row>=aspects.size())
+			else if (row >= aspects.size())
 				continue;
 			else
 				index = model->modelIndexOfAspect(aspects.at(row));
@@ -743,12 +743,12 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 		}
 	}
 
-	foreach(const QModelIndex& index, expanded) {
+	foreach (const QModelIndex& index, expanded) {
 		m_treeView->setExpanded(index, true);
 		collapseParents(index, expanded);//collapse all parent indices if they are not expanded
 	}
 
-	foreach(const QModelIndex& index, selected)
+	foreach (const QModelIndex& index, selected)
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 
 	m_treeView->setCurrentIndex(currentIndex);
@@ -761,14 +761,14 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 }
 
 void ProjectExplorer::collapseParents(const QModelIndex& index, const QList<QModelIndex>& expanded) {
-	//root index doesn't have any parents - this case is not catched by the second if-statement below
+	//root index doesn't have any parents - this case is not caught by the second if-statement below
 	if (index.column()==0 && index.row()==0)
 		return;
 
 	QModelIndex parent = index.parent();
-	if (parent==QModelIndex())
+	if (parent == QModelIndex())
 		return;
 
-	if (expanded.indexOf(parent)==-1)
+	if (expanded.indexOf(parent) == -1)
 		m_treeView->collapse(parent);
 }
