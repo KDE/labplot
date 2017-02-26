@@ -443,7 +443,7 @@ void ImportFileWidget::selectFile() {
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
 	QString fileName = name;
-#ifndef _WIN32
+#ifndef HAVE_WINDOWS
 	// make relative path
 	if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator())
 		fileName = QDir::homePath() + QDir::separator() + fileName;
@@ -480,7 +480,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	}
 
 	QString fileInfo;
-#ifndef _WIN32
+#ifndef HAVE_WINDOWS
 	//check, if we can guess the file type by content
 	QProcess *proc = new QProcess(this);
 	QStringList args;
@@ -856,7 +856,7 @@ void ImportFileWidget::refreshPreview() {
 	WAIT_CURSOR;
 
 	QString fileName = ui.kleFileName->text();
-#ifndef _WIN32
+#ifndef HAVE_WINDOWS
 	if (fileName.left(1) != QDir::separator())
 		fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif

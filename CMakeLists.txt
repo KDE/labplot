@@ -31,6 +31,11 @@ option(ENABLE_FITS "Build with FITS support" "ON")
 option(ENABLE_HDF5 "Build with HDF5 support" "ON")
 option(ENABLE_NETCDF "Build with NetCDF support" "ON")
 
+### OS macros ####################################
+IF (WIN32)
+	add_definitions (-DHAVE_WINDOWS)
+ENDIF ()
+
 ### GSL (required) ###############################
 FIND_LIBRARY(GSL_LIBRARIES gsl
 	PATHS
@@ -63,7 +68,6 @@ ENDIF ()
 IF (GSL_FOUND)
 	MESSAGE (STATUS "Found GNU Scientific Library ${GSL_VERSION}: ${GSL_INCLUDE_DIR} ${GSL_LIBRARIES};${GSL_CBLAS_LIBRARIES}")
 	add_definitions (-DHAVE_GSL)
-	# TODO : set version ?
 	add_definitions (-DGSL_VERSION=GSL_VERSION)
 ELSE ()
 	MESSAGE (FATAL_ERROR "GNU Scientific Library not found.")
