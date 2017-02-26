@@ -25,8 +25,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "nsl_common.h"
 #include "nsl_fit.h"
+#include "nsl_common.h"
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_erf.h>
 #include <gsl/gsl_sf_gamma.h>

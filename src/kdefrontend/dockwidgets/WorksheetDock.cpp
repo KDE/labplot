@@ -626,7 +626,7 @@ void WorksheetDock::selectFile() {
 	QString dir = conf.readEntry("LastImageDir", "");
 
 	QString formats;
-	foreach(const QByteArray format, QImageReader::supportedImageFormats()) {
+	foreach(const QByteArray& format, QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
 		formats.isEmpty() ? formats+=f : formats+=' '+f;
 	}

@@ -26,8 +26,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <math.h>
 #include "nsl_geom.h"
+#include <math.h>
 
 double nsl_geom_point_point_dist(double x1, double y1, double x2, double y2) {
 	return sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );

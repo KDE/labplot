@@ -373,7 +373,7 @@ void FITSHeaderEditWidget::removeKeyword() {
 		return;
 
 	QString key = ui.twKeywordsTable->item(row, 0)->text();
-	const int rc = KMessageBox::questionYesNo(this,i18n("Are you sure you want to delete the keyword '%1'?").arg(key),
+	const int rc = KMessageBox::questionYesNo(this, i18n("Are you sure you want to delete the keyword '%1'?").arg(key),
 	               i18n("Confirm deletion"));
 	if (rc == KMessageBox::Yes) {
 		bool remove = true;
@@ -535,7 +535,7 @@ QList<QString> FITSHeaderEditWidget::mandatoryKeywords() const {
 
 /*!
  * \brief Manipulates the contextmenu event of the widget
- * \param watched the object on which the event occoured
+ * \param watched the object on which the event occured
  * \param event the event watched
  * \return
  */

@@ -25,8 +25,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "nsl_common.h"
 #include "nsl_interp.h"
+#include "nsl_common.h"
 
 const char* nsl_interp_type_name[] = { i18n("linear"), i18n("polynomial"), i18n("cubic spline (natural)"), i18n("cubic spline (periodic)"),
 	i18n("Akima-spline (natural)"), i18n("Akima-spline (periodic)"), i18n("Steffen spline"), i18n("cosine"), i18n("exponential"),

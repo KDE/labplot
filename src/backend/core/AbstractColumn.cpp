@@ -628,7 +628,7 @@ bool AbstractColumn::XmlReadMask(XmlStreamReader *reader) {
  * \brief Write XML mask element
  */
 void AbstractColumn::XmlWriteMask(QXmlStreamWriter *writer) const {
-	foreach(const Interval<int>& interval, maskedIntervals()) {
+	foreach (const Interval<int>& interval, maskedIntervals()) {
 		writer->writeStartElement("mask");
 		writer->writeAttribute("start_row", QString::number(interval.start()));
 		writer->writeAttribute("end_row", QString::number(interval.end()));

@@ -26,14 +26,14 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "nsl_smooth.h"
+#include "nsl_common.h"
+#include "nsl_sf_kernel.h"
+#include "nsl_stats.h"
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_sf_gamma.h>   /* gsl_sf_choose */
-#include "nsl_common.h"
-#include "nsl_smooth.h"
-#include "nsl_sf_kernel.h"
-#include "nsl_stats.h"
 
 const char* nsl_smooth_type_name[] = { i18n("moving average (central)"), i18n("moving average (lagged)"), i18n("percentile"), i18n("Savitzky-Golay") };
 const char* nsl_smooth_pad_mode_name[] = { i18n("none"), i18n("interpolating"), i18n("mirror"), i18n("nearest"), i18n("constant"), i18n("periodic") };

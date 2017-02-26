@@ -26,10 +26,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "nsl_dft.h"
+#include "nsl_common.h"
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_halfcomplex.h>
-#include "nsl_common.h"
-#include "nsl_dft.h"
 #ifdef HAVE_FFTW3
 #include <fftw3.h>
 #endif

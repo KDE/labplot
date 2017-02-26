@@ -78,7 +78,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent) : QComboBox(parent) {
 	addItem("");
 	setCurrentIndex(0);
 
-	// signal activated() is platform dependend
+	// signal activated() is platform dependent
 	connect(m_treeView, SIGNAL(pressed(QModelIndex)), this, SLOT(treeViewIndexActivated(QModelIndex)) );
 	connect(m_lineEdit, SIGNAL(textChanged(QString)), this, SLOT(filterChanged(QString)));
 }

@@ -296,7 +296,7 @@ void MainWin::initActions() {
 	actionCollection()->addAction("history", m_historyAction);
 	connect(m_historyAction, SIGNAL(triggered()), SLOT(historyDialog()));
 
-	// TODO: more menues
+	// TODO: more menus
 	//  Appearance
 	// Analysis: see WorksheetView.cpp
 	// Drawing

@@ -26,8 +26,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "nsl_common.h"
 #include "nsl_sf_stats.h"
+#include "nsl_common.h"
 
 const char* nsl_sf_stats_distribution_name[] = {i18n("Gaussian (Normal)"), i18n("Gaussian Tail"), i18n("Exponential"), i18n("Laplace"),
 	i18n("Exponential Power"), i18n("Cauchy-Lorentz (Breit-Wigner)"), i18n("Rayleigh"), i18n("Rayleigh Tail"), i18n("Landau"), i18n("Levy alpha-stable"),

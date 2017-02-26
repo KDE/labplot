@@ -26,9 +26,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "nsl_stats.h"
 #include <math.h>
 #include <gsl/gsl_sort.h>
-#include "nsl_stats.h"
 
 double nsl_stats_minimum(const double data[], const size_t n, size_t *index) {
 	size_t i;

@@ -1474,7 +1474,7 @@ void SpreadsheetView::removeSelectedRows() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: remove selected rows", m_spreadsheet->name()));
 	//TODO setSuppressDataChangedSignal
-	foreach(const Interval<int>& i, selectedRows().intervals())
+	foreach (const Interval<int>& i, selectedRows().intervals())
 		m_spreadsheet->removeRows(i.start(), i.size());
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
@@ -1486,18 +1486,18 @@ void SpreadsheetView::clearSelectedRows() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: clear selected rows", m_spreadsheet->name()));
 	QList<Column*> list = selectedColumns();
-	foreach(Column* col_ptr, list) {
+	foreach (Column* col_ptr, list) {
 		col_ptr->setSuppressDataChangedSignal(true);
 		if (formulaModeActive()) {
-			foreach(const Interval<int>& i, selectedRows().intervals())
+			foreach (const Interval<int>& i, selectedRows().intervals())
 				col_ptr->setFormula(i, "");
 		} else {
-			foreach(const Interval<int>& i, selectedRows().intervals()) {
+			foreach (const Interval<int>& i, selectedRows().intervals()) {
 				if (i.end() == col_ptr->rowCount()-1)
 					col_ptr->removeRows(i.start(), i.size());
 				else {
 					QStringList empties;
-					for (int j=0; j<i.size(); j++)
+					for (int j = 0; j < i.size(); j++)
 						empties << QString();
 					col_ptr->asStringColumn()->replaceTexts(i.start(), empties);
 				}
@@ -1519,16 +1519,16 @@ void SpreadsheetView::clearSelectedCells() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: clear selected cells", m_spreadsheet->name()));
 	QList<Column*> list = selectedColumns();
-	foreach(Column* col_ptr, list) {
+	foreach (Column* col_ptr, list) {
 		col_ptr->setSuppressDataChangedSignal(true);
 		if (formulaModeActive()) {
 			int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
-			for (int row=last; row>=first; row--)
+			for (int row = last; row >= first; row--)
 				if (isCellSelected(row, col))
 					col_ptr->setFormula(row, "");
 		} else {
 			int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
-			for (int row=last; row>=first; row--)
+			for (int row = last; row >= first; row--)
 				if (isCellSelected(row, col)) {
 					if (row < col_ptr->rowCount())
 						col_ptr->asStringColumn()->setTextAt(row, QString());
