@@ -542,4 +542,3 @@ int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigne
 int nsl_smooth_savgol_default( double *data, unsigned int n, unsigned int points, unsigned int order) {
 	return nsl_smooth_savgol(data, n, points, order, nsl_smooth_pad_constant);
 }
-
