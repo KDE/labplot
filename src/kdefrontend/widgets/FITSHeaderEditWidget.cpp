@@ -92,7 +92,7 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
 	connect(ui.bAddKey, SIGNAL(clicked()), this, SLOT(addKeyword()));
 	connect(ui.bRemoveKey, SIGNAL(clicked()), this, SLOT(removeKeyword()));
 	connect(ui.twKeywordsTable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(updateKeyword(QTableWidgetItem*)));
-	connect(ui.twExtensions, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(fillTable(QTreeWidgetItem*, int)));
+	connect(ui.twExtensions, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(fillTable(QTreeWidgetItem*,int)));
 	connect(ui.twExtensions, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(enableButtonCloseFile(QTreeWidgetItem*,int)));
 }
 
@@ -153,14 +153,14 @@ void FITSHeaderEditWidget::fillTable(QTreeWidgetItem *item, int col) {
 	if (extType == 0) {
 		if (item->parent() != 0) {
 			if (item->parent()->parent() != 0)
-				selectedExtension = item->parent()->parent()->text(0) +"["+ item->text(col)+"]";
+				selectedExtension = item->parent()->parent()->text(0) + '[' + item->text(col) + ']';
 		}
 	} else if (extType == 1) {
 		if (item->parent() != 0) {
 			if (item->parent()->parent() != 0) {
 				bool ok;
 				int hduNum = itemText.right(1).toInt(&ok);
-				selectedExtension = item->parent()->parent()->text(0) +"["+ QString::number(hduNum-1) +"]";
+				selectedExtension = item->parent()->parent()->text(0) + '[' + QString::number(hduNum-1) + ']';
 			}
 		}
 	} else {

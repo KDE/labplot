@@ -1,7 +1,8 @@
 /***************************************************************************
-    File                 : SpreadsheetDoubleHeaderView.h
+    File                 : SpreadsheetHeaderView.h
     Project              : LabPlot
     --------------------------------------------------------------------
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
     Description          : Horizontal header for SpreadsheetView displaying comments in a second header
 
@@ -26,8 +27,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SPREADSHEETDOUBLEHEADERVIEW_H
-#define SPREADSHEETDOUBLEHEADERVIEW_H
+#ifndef SPREADSHEETHEADERVIEW_H
+#define SPREADSHEETHEADERVIEW_H
 
 #include <QHeaderView>
 

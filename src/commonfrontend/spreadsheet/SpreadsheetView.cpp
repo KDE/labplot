@@ -1564,7 +1564,7 @@ void SpreadsheetView::sortDialog(QList<Column*> cols) {
 
 	SortDialog* dlg = new SortDialog();
 	dlg->setAttribute(Qt::WA_DeleteOnClose);
-	connect(dlg, SIGNAL(sort(Column*,QList<Column*>,bool)), m_spreadsheet, SLOT(sortColumns(Column*, QList<Column*>, bool)));
+	connect(dlg, SIGNAL(sort(Column*,QList<Column*>,bool)), m_spreadsheet, SLOT(sortColumns(Column*,QList<Column*>,bool)));
 	dlg->setColumnsList(cols);
 	int rc = dlg->exec();
 

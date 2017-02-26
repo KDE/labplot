@@ -89,7 +89,7 @@ bool AbstractScriptingEngine::isRunning() const {
  * \brief If an exception / error occurred, return a nicely formated stack backtrace.
  */
 QString AbstractScriptingEngine::stackTraceString() {
-	return QString::null;
+	return QString();
 }
 
 /**
@@ -122,7 +122,7 @@ const QStringList AbstractScriptingEngine::mathFunctions() const {
  * \brief Return a documentation string for the given mathematical function.
  */
 const QString AbstractScriptingEngine::mathFunctionDoc(const QString&) const {
-	return QString::null;
+	return QString();
 }
 
 /**

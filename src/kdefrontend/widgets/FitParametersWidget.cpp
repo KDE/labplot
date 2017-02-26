@@ -219,7 +219,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 
 	ui.tableWidget->installEventFilter(this);
 
-	connect( ui.tableWidget, SIGNAL(cellChanged(int, int)), this, SLOT(changed()) );
+	connect( ui.tableWidget, SIGNAL(cellChanged(int,int)), this, SLOT(changed()) );
 	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
 	connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
 	connect( ui.pbAdd, SIGNAL(clicked()), this, SLOT(addParameter()) );

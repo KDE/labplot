@@ -26,8 +26,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYDIFFERENTATIONCURVEPRIVATE_H
-#define XYDIFFERENTATIONCURVEPRIVATE_H
+#ifndef XYINTEGRATIONCURVEPRIVATE_H
+#define XYINTEGRATIONCURVEPRIVATE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"

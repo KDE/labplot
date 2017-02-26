@@ -739,8 +739,8 @@ void MainWin::openProject(const QString& filename) {
 
 	QIODevice *file;
 	// first try gzip compression, because projects can be gzipped and end with .lml
-	if (filename.endsWith(".lml", Qt::CaseInsensitive))
-		file = KFilterDev::deviceForFile(filename, "application/x-gzip", true);
+	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
+		file = KFilterDev::deviceForFile(filename, QLatin1String("application/x-gzip"), true);
 	else	// opens filename using file ending
 		file = KFilterDev::deviceForFile(filename);
 
@@ -892,8 +892,8 @@ bool MainWin::save(const QString& fileName) {
 	// use file ending to find out how to compress file
 	QIODevice* file;
 	// if ending is .lml, do gzip compression anyway
-	if (fileName.endsWith(".lml"))
-		file = KFilterDev::deviceForFile(fileName, "application/x-gzip", true);
+	if (fileName.endsWith(QLatin1String(".lml")))
+		file = KFilterDev::deviceForFile(fileName, QLatin1String("application/x-gzip"), true);
 	else
 		file = KFilterDev::deviceForFile(fileName);
 

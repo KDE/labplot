@@ -494,12 +494,12 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 #endif
 
 	QByteArray imageFormat = QImageReader::imageFormat(fileName);
-	if (fileInfo.contains("compressed data") || fileInfo.contains("ASCII") ||
-	        fileName.endsWith("dat", Qt::CaseInsensitive) || fileName.endsWith("txt", Qt::CaseInsensitive)) {
+	if (fileInfo.contains(QLatin1String("compressed data")) || fileInfo.contains(QLatin1String("ASCII")) ||
+	        fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)) {
 		//probably ascii data
 		ui.cbFileType->setCurrentIndex(FileDataSource::Ascii);
-	} else if (fileInfo.contains("Hierarchical Data Format") || fileName.endsWith("h5", Qt::CaseInsensitive) ||
-	           fileName.endsWith("hdf", Qt::CaseInsensitive) || fileName.endsWith("hdf5", Qt::CaseInsensitive) ) {
+	} else if (fileInfo.contains(QLatin1String("Hierarchical Data Format")) || fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive) ||
+	           fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) ) {
 		ui.cbFileType->setCurrentIndex(FileDataSource::HDF);
 
 		// update HDF tree widget using current selected file
@@ -512,8 +512,8 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		hdfOptionsWidget.twContent->expandAll();
 		hdfOptionsWidget.twContent->resizeColumnToContents(0);
 		hdfOptionsWidget.twContent->resizeColumnToContents(3);
-	} else if (fileInfo.contains("NetCDF Data Format") || fileName.endsWith("nc", Qt::CaseInsensitive) ||
-	           fileName.endsWith("netcdf", Qt::CaseInsensitive) || fileName.endsWith("cdf", Qt::CaseInsensitive)) {
+	} else if (fileInfo.contains(QLatin1String("NetCDF Data Format")) || fileName.endsWith(QLatin1String("nc"), Qt::CaseInsensitive) ||
+	           fileName.endsWith(QLatin1String("netcdf"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("cdf"), Qt::CaseInsensitive)) {
 		ui.cbFileType->setCurrentIndex(FileDataSource::NETCDF);
 
 		// update NetCDF tree widget using current selected file
@@ -526,8 +526,8 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		netcdfOptionsWidget.twContent->expandAll();
 		netcdfOptionsWidget.twContent->resizeColumnToContents(0);
 		netcdfOptionsWidget.twContent->resizeColumnToContents(2);
-	} else if (fileInfo.contains("FITS image data") || fileName.endsWith("fits", Qt::CaseInsensitive) ||
-	           fileName.endsWith("fit", Qt::CaseInsensitive) || fileName.endsWith("fts", Qt::CaseInsensitive)) {
+	} else if (fileInfo.contains(QLatin1String("FITS image data")) || fileName.endsWith(QLatin1String("fits"), Qt::CaseInsensitive) ||
+	           fileName.endsWith(QLatin1String("fit"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("fts"), Qt::CaseInsensitive)) {
 #ifdef HAVE_FITS
 		ui.cbFileType->setCurrentIndex(FileDataSource::FITS);
 #endif
@@ -755,18 +755,18 @@ void ImportFileWidget::netcdfTreeWidgetSelectionChanged() {
 		NetCDFFilter *filter = (NetCDFFilter *)this->currentFileFilter();
 		QString fileName = ui.kleFileName->text();
 		QString name = item->data(0, Qt::DisplayRole).toString();
-		QString varName = item->data(1, Qt::DisplayRole).toString().split(" ")[0];
+		QString varName = item->data(1, Qt::DisplayRole).toString().split(' ')[0];
 		QDEBUG("name =" << name << "varName =" << varName);
 
 		QString importedText = filter->readAttribute(fileName, name, varName);
 		QDEBUG("importedText =" << importedText);
 
-		QStringList lineStrings = importedText.split("\n");
+		QStringList lineStrings = importedText.split('\n');
 		int rows = lineStrings.size();
 		netcdfOptionsWidget.twPreview->setRowCount(rows);
 		netcdfOptionsWidget.twPreview->setColumnCount(0);
 		for (int i = 0; i < rows; i++) {
-			QStringList lineString = lineStrings[i].split(" ");
+			QStringList lineString = lineStrings[i].split(' ');
 			int cols = lineString.size();
 			if (netcdfOptionsWidget.twPreview->columnCount() < cols)
 				netcdfOptionsWidget.twPreview->setColumnCount(cols);
