@@ -393,7 +393,7 @@ void ImportFileDialog::checkOkButton() {
 		if (!fileName.isEmpty() && fileName.left(1) != QDir::separator())
 			fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
-	} else {
+	} else {	// FileDataSource::FITS
 		int extensionBraceletPos = -1;
 		if (!fileName.isEmpty()) {
 			if(fileName.right(1) == QLatin1String("]")) {
@@ -405,10 +405,11 @@ void ImportFileDialog::checkOkButton() {
 				}
 			}
 		}
-
+#ifndef HAVE_WINDOWS
 		if (fileName.left(1) != QDir::separator())
 			fileName = QDir::homePath() + QDir::separator() + fileName.mid(0, extensionBraceletPos);
 		else
+#endif
 			fileName = fileName.mid(0, extensionBraceletPos);
 	}
 	DEBUG(" fileName = " << fileName.toUtf8().constData());
