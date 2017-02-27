@@ -52,7 +52,7 @@ extern "C" {
 	\ingroup kdefrontend
  */
 
-RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : KDialog(parent, fl), m_spreadsheet(s) {
+RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl), m_spreadsheet(s) {
 	setWindowTitle(i18n("Random values"));
 
 	QWidget* mainWidget = new QWidget(this);
