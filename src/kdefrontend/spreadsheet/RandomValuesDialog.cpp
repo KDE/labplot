@@ -31,6 +31,7 @@
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include <KStandardDirs>
+#include <QFileInfo>
 
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
@@ -318,6 +319,8 @@ void RandomValuesDialog::distributionChanged(int index) {
 	}
 
 	QString file = KStandardDirs::locate("data", "labplot2/pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[dist]) + ".jpg");
+	if (!QFileInfo(file).exists())
+		file = KStandardDirs::locate("appdata", "pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[dist]) + ".jpg");
 	ui.lFuncPic->setPixmap(QPixmap(file));
 }
 
