@@ -77,6 +77,8 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 
 	//create a temporary file
 	QTemporaryFile file(tempPath + QDir::separator() + "labplot_XXXXXX.tex");
+	// FOR DEBUG: file.setAutoRemove(false);
+	// DEBUG("temp file path = " << file.fileName().toUtf8().constData());
 	if(file.open()) {
 		QDir::setCurrent(tempPath);
 	} else {
@@ -120,7 +122,8 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 
 	out << "\\usepackage{color}";
 	out << "\\usepackage[active,displaymath,textmath,tightpage]{preview}";
-	out << "\\usepackage{mathtools}";
+	// TODO: this fails with pdflatex
+	//out << "\\usepackage{mathtools}";
 	out << "\\definecolor{fontcolor}{rgb}{" << fontColor.redF() << ',' << fontColor.greenF() << ',' << fontColor.blueF() << "}";
 	out << "\\begin{document}";
 	out << "\\begin{preview}";
@@ -143,19 +146,20 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 #if defined(HAVE_WINDOWS)
 	latexProcess.setNativeArguments("-interaction=batchmode " + file.fileName());
 	latexProcess.start(engine, QStringList() << "");
-#else	// TODO: what about MAC?
+#else
 	latexProcess.start(engine, QStringList() << "-interaction=batchmode" << file.fileName());
 #endif
 	if (!latexProcess.waitForFinished()) {
 		kWarning() << engine << "process failed." << endl;
+		DEBUG("latex process failed!");
 		*success = false;
 		QFile::remove(fi.completeBaseName() + ".aux");
 		QFile::remove(fi.completeBaseName() + ".log");
 		return QImage();
 	}
 	*success = (latexProcess.exitCode() == 0);
-	if (*success != 0)
-		WARNING("latex exit code =" << *success);
+	if (*success == false)
+		WARNING("latex exit code = " << latexProcess.exitCode());
 
 	QFile::remove(fi.completeBaseName() + ".aux");
 	QFile::remove(fi.completeBaseName() + ".log");
@@ -172,6 +176,7 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 							<< fi.completeBaseName() + ".pdf" << fi.completeBaseName() + ".png");
 	if (!convertProcess.waitForFinished()) {
 		kWarning() << "convert process failed." << endl;
+		DEBUG("convert process failed!");
 		*success = false;
 		QFile::remove(fi.completeBaseName() + ".pdf");
 		return QImage();
