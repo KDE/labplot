@@ -12,8 +12,8 @@ New features:
 	* Configuration parameter to use different LaTex engines (LuaLaTex, XeLatex, pdfLaTex, LaTex)
 	* Disable LaTeX typesetting if no LaTex installation (and other required tools) were found at runtime
 	* Presenter mode for worksheets
-	* Support for MacOSX
-	* Support for Julia's vectors and tuples in CAS worksheets (requires Cantor v. 16.12 and higher)
+	* Support for macOS added
+	* Support for Julia's vectors and tuples in CAS worksheets (requires Cantor v. 16.12 or higher)
 	* Allow to jump directly to the data source spreadsheet via XYCurve's context menu
 	* Select and delete multiple objects in project explorer
 	* Improved and extended internal parser for mathematical expressions
@@ -25,7 +25,7 @@ Bug fixes:
 	* Fixed crash when fitting using GSL >= 2
 	* List of available functions corrected
 	* Constants are now available with full accuracy
-	* Windows: open recent files fixed
+	* Windows: Import of files and open recent files fixed
 
 -----2.3-----
 New features:
