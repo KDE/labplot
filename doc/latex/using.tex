@@ -358,7 +358,15 @@ The transformed black and white image contains only the curves the user is inter
 \caption{Original image, image with the reduced color space and automatically created points for the recognized curve.}
 \end{figure}
 
-Similar to \nameref{sec:worksheet}, the currently visible area in the datapicker can be exported. The supported image formats as described in the section \nameref{sec:export}.
+Similar to \nameref{sec:worksheet}, the currently visible area in the datapicker can be exported. The supported image formats are described in the section \nameref{sec:export}.
 
 
 \section{FITS Metadata Editor}
+FITS is an open standard file format widely used in the scientific community to store structured as well as unstructured multi-dimenstional data. One of the major features of the FITS format is the ability to store the metadata in human-readable \textit{headers}. Such headers are stored in the file, in addition to the actual data, as key-value pairs in the ASCII format and provide additional information about the origin of the data, its size, used measurement devices, etc. As described in more details in the section \nameref{sec:import}, LabPlot supports the import of data stored in the FITS format. In addition to that, LabPlot also provides the tool \textit{"FITS Metadata Editor"} that allows to inspect and to modify the metadata.
+
+In general, a FITS file consists of one or more \textit{Header + Data Unit}s (HDUs), where the first HDU is usually called the \textit{primary HDU}. A FITS file can have any number of additional HDUs, commonly called FITS \textit{extensions}. LabPlot's FITS Metadata Editor parses the metadata part of the selected FITS file only and shows all available headers (primary and extensional) in a tree view. Already existing key-value pairs can be modified or deleted, new pairs can be added. It is also possible to open and to edit more then one file at the same time.
+
+\begin{figure}
+\includegraphics[width=\textwidth]{images/fits_metadata_editor.png}
+\caption{FITS Metadata Editor with four opened files and a dialog for adding a new keyword.}
+\end{figure}
