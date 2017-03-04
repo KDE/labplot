@@ -38,7 +38,7 @@ FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : KDialog(parent), m
 	m_headerEditWidget = new FITSHeaderEditWidget(this);
 	setMainWidget(m_headerEditWidget);
 
-	setWindowTitle(i18n("FITS Header Editor"));
+	setWindowTitle(i18n("FITS Metadata Editor"));
 	setWindowIcon(QIcon::fromTheme("document-edit"));
 
 	setButtons( KDialog::Ok | KDialog::Cancel );
@@ -69,10 +69,10 @@ FITSHeaderEditDialog::~FITSHeaderEditDialog() {
 
 void FITSHeaderEditDialog::headersChanged(bool changed) {
 	if (changed) {
-		setWindowTitle(i18n("FITS Header Editor  [Changed]"));
+		setWindowTitle(i18n("FITS Metadata Editor  [Changed]"));
 		enableButtonOk(true);
 	} else {
-		setWindowTitle(i18n("FITS Header Editor"));
+		setWindowTitle(i18n("FITS Metadata Editor"));
 		enableButtonOk(false);
 	}
 }
