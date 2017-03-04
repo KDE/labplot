@@ -283,7 +283,7 @@ void MainWin::initActions() {
 	actionCollection()->addAction("export", m_exportAction);
 	connect(m_exportAction, SIGNAL(triggered()), SLOT(exportDialog()));
 
-	m_editFitsFileAction = new KAction(KIcon("document-edit"), i18n("Edit FITS file header"), this);
+	m_editFitsFileAction = new KAction(KIcon("document-edit"), i18n("FITS Metadata Editor"), this);
 	actionCollection()->addAction("edit_fits", m_editFitsFileAction);
 	connect(m_editFitsFileAction, SIGNAL(triggered()), SLOT(editFitsFileDialog()));
 
