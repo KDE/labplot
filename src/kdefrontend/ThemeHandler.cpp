@@ -77,8 +77,6 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	pbPublishTheme->setText("Publish theme");
 	pbPublishTheme->setEnabled(false);
 */
-	QSpacerItem* horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
-	horizontalLayout->addItem(horizontalSpacer2);
 
 	connect( pbLoadTheme, SIGNAL(clicked()), this, SLOT(showPanel()));
 	connect( pbSaveTheme, SIGNAL(clicked()), this, SLOT(saveMenu()));

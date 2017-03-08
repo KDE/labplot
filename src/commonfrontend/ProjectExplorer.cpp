@@ -84,8 +84,6 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) {
 	bFilterOptions->setIcon(QIcon::fromTheme("configure"));
 	bFilterOptions->setEnabled(true);
 	bFilterOptions->setCheckable(true);
-	int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
-	bFilterOptions->setIconSize(QSize(size, size));
 	layoutFilter->addWidget(bFilterOptions);
 
 	layout->addWidget(frameFilter);

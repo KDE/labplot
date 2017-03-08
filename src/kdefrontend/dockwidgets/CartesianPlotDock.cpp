@@ -79,7 +79,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	hboxLayout->addWidget(labelWidget);
 	hboxLayout->setContentsMargins(2,2,2,2);
 	hboxLayout->setSpacing(2);
-
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i) {
 		QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
@@ -191,6 +190,8 @@ CartesianPlotDock::~CartesianPlotDock() {
 void CartesianPlotDock::init() {
 	this->retranslateUi();
 
+	/*
+	 //TODO: activate later once range breaking is implemented
 	//create icons for the different styles for scale breaking
 	QPainter pa;
 	pa.setPen( QPen(Qt::SolidPattern, 0) );
@@ -234,6 +235,7 @@ void CartesianPlotDock::init() {
 	pa.end();
 	ui.cbXBreakStyle->setItemIcon(2, pm);
 	ui.cbYBreakStyle->setItemIcon(2, pm);
+	*/
 }
 
 void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
@@ -358,10 +360,10 @@ void CartesianPlotDock::retranslateUi() {
 	ui.cbBackgroundType->addItem(i18n("pattern"));
 
 	ui.cbBackgroundColorStyle->addItem(i18n("single color"));
-	ui.cbBackgroundColorStyle->addItem(i18n("horizontal linear gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("vertical linear gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from top left)"));
-	ui.cbBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from bottom left)"));
+	ui.cbBackgroundColorStyle->addItem(i18n("horizontal gradient"));
+	ui.cbBackgroundColorStyle->addItem(i18n("vertical gradient"));
+	ui.cbBackgroundColorStyle->addItem(i18n("diag. gradient (from top left)"));
+	ui.cbBackgroundColorStyle->addItem(i18n("diag. gradient (from bottom left)"));
 	ui.cbBackgroundColorStyle->addItem(i18n("radial gradient"));
 
 	ui.cbBackgroundImageStyle->addItem(i18n("scaled and cropped"));
