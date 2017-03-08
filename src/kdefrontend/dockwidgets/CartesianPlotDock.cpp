@@ -334,48 +334,6 @@ void CartesianPlotDock::activateTitleTab() {
 void CartesianPlotDock::retranslateUi() {
 	m_initializing = true;
 
-    //general
-    ui.cbXScaling->addItem( i18n("linear") );
-    ui.cbXScaling->addItem( i18n("log(x)") );
-    ui.cbXScaling->addItem( i18n("log2(x)") );
-    ui.cbXScaling->addItem( i18n("ln(x)") );
-
-    ui.cbYScaling->addItem( i18n("linear") );
-    ui.cbYScaling->addItem( i18n("log(y)") );
-    ui.cbYScaling->addItem( i18n("log2(y)") );
-    ui.cbYScaling->addItem( i18n("ln(y)") );
-
-    //scale breakings
-    ui.cbXBreakStyle->addItem( i18n("simple") );
-    ui.cbXBreakStyle->addItem( i18n("vertical") );
-    ui.cbXBreakStyle->addItem( i18n("sloped") );
-
-    ui.cbYBreakStyle->addItem( i18n("simple") );
-    ui.cbYBreakStyle->addItem( i18n("vertical") );
-    ui.cbYBreakStyle->addItem( i18n("sloped") );
-
-    //plot area
-    ui.cbBackgroundType->addItem(i18n("color"));
-    ui.cbBackgroundType->addItem(i18n("image"));
-    ui.cbBackgroundType->addItem(i18n("pattern"));
-
-    ui.cbBackgroundColorStyle->addItem(i18n("single color"));
-    ui.cbBackgroundColorStyle->addItem(i18n("horizontal linear gradient"));
-    ui.cbBackgroundColorStyle->addItem(i18n("vertical linear gradient"));
-    ui.cbBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from top left)"));
-    ui.cbBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from bottom left)"));
-    ui.cbBackgroundColorStyle->addItem(i18n("radial gradient"));
-
-    ui.cbBackgroundImageStyle->addItem(i18n("scaled and cropped"));
-    ui.cbBackgroundImageStyle->addItem(i18n("scaled"));
-    ui.cbBackgroundImageStyle->addItem(i18n("scaled, keep proportions"));
-    ui.cbBackgroundImageStyle->addItem(i18n("centered"));
-    ui.cbBackgroundImageStyle->addItem(i18n("tiled"));
-    ui.cbBackgroundImageStyle->addItem(i18n("center tiled"));
-
-    GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
-    GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
-
 	//general
 	ui.cbXScaling->addItem( i18n("linear") );
 	ui.cbXScaling->addItem( i18n("log(x)") );
