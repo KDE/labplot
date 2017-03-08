@@ -62,6 +62,7 @@
 ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	QHBoxLayout* horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
+	horizontalLayout->setMargin(0);
 
 	pbLoadTheme = new QPushButton(this);
 	horizontalLayout->addWidget(pbLoadTheme);

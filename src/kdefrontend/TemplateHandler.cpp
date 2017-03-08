@@ -56,6 +56,7 @@
 TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(parent){
 	QHBoxLayout* horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
+	horizontalLayout->setMargin(0);
 
 	QSpacerItem* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 	horizontalLayout->addItem(horizontalSpacer);
@@ -74,8 +75,8 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 	tbSaveDefault->setIconSize(QSize(size, size));
 	horizontalLayout->addWidget(tbSaveDefault);
 
-	QSpacerItem* horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
-	horizontalLayout->addItem(horizontalSpacer2);
+// 	QSpacerItem* horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+// 	horizontalLayout->addItem(horizontalSpacer2);
 
 	tbCopy = new QToolButton(this);
 	tbCopy->setIconSize(QSize(size, size));
