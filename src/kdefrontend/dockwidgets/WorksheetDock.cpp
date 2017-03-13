@@ -299,10 +299,10 @@ void WorksheetDock::retranslateUi() {
 
 	ui.cbBackgroundColorStyle->clear();
 	ui.cbBackgroundColorStyle->addItem(i18n("single color"));
-	ui.cbBackgroundColorStyle->addItem(i18n("horizontal linear gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("vertical linear gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from top left)"));
-	ui.cbBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from bottom left)"));
+	ui.cbBackgroundColorStyle->addItem(i18n("horizontal gradient"));
+	ui.cbBackgroundColorStyle->addItem(i18n("vertical gradient"));
+	ui.cbBackgroundColorStyle->addItem(i18n("diag. gradient (from top left)"));
+	ui.cbBackgroundColorStyle->addItem(i18n("diag. gradient (from bottom left)"));
 	ui.cbBackgroundColorStyle->addItem(i18n("radial gradient"));
 
 	ui.cbBackgroundImageStyle->clear();

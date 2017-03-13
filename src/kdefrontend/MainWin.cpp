@@ -328,8 +328,8 @@ void MainWin::initActions() {
 	// Script
 
 	//Windows
-	QAction* action  = new QAction(i18n("Cl&ose"), this);
-	actionCollection()->setDefaultShortcut(action, Qt::CTRL+Qt::Key_W);
+	QAction* action  = new QAction(i18n("&Close"), this);
+	actionCollection()->setDefaultShortcut(action, Qt::CTRL+Qt::Key_C);
 	action->setStatusTip(i18n("Close the active window"));
 	actionCollection()->addAction("close window", action);
 	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(closeActiveSubWindow()));
