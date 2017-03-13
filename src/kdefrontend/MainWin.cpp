@@ -303,8 +303,8 @@ void MainWin::initActions() {
 	// Script
 
 	//Windows
-	KAction* action = new KAction(i18n("Cl&ose"), this);
-	action->setShortcut(i18n("Ctrl+W"));
+	KAction* action = new KAction(i18n("&Close"), this);
+	action->setShortcut(i18n("Ctrl+C"));
 	action->setStatusTip(i18n("Close the active window"));
 	actionCollection()->addAction("close window", action);
 	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(closeActiveSubWindow()));
