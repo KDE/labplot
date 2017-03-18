@@ -204,6 +204,7 @@ void QxtSpanSliderPrivate::triggerAction(QAbstractSlider::SliderAction action, b
     case QAbstractSlider::SliderMove:
         if ((main && mainControl == QxtSpanSlider::UpperHandle) || (!main && altControl == QxtSpanSlider::UpperHandle))
             up = true;
+		break;
     case QAbstractSlider::SliderNoAction:
         no = true;
         break;
@@ -286,6 +287,7 @@ void QxtSpanSliderPrivate::movePressedHandle()
                 triggerAction(QAbstractSlider::SliderMove, main);
             }
             break;
+        case QxtSpanSlider::NoHandle:
         default:
             break;
     }
@@ -737,6 +739,8 @@ void QxtSpanSlider::paintEvent(QPaintEvent* event)
     // handles
     switch (qxt_d().lastPressed)
     {
+    case QxtSpanSlider::NoHandle:
+		break;
     case QxtSpanSlider::LowerHandle:
         qxt_d().drawHandle(&painter, QxtSpanSlider::UpperHandle);
         qxt_d().drawHandle(&painter, QxtSpanSlider::LowerHandle);
