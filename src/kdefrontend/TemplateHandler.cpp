@@ -28,9 +28,9 @@
  ***************************************************************************/
 
 #include "TemplateHandler.h"
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QSpacerItem>
-#include <QtGui/QToolButton>
+#include <QHBoxLayout>
+#include <QSpacerItem>
+#include <QToolButton>
 #include <QLabel>
 #include <QFileInfo>
 #include <QWidgetAction>

@@ -29,13 +29,12 @@
  ***************************************************************************/
 
 #include "AbstractSimpleFilter.h"
-
-#include <QtCore/QString>
-#include <QtCore/QDateTime>
-#include <QtCore/QDate>
-#include <QtCore/QTime>
-#include <QtXml/QXmlStreamWriter>
 #include "backend/lib/XmlStreamReader.h"
+
+#include <QDateTime>
+#include <QDate>
+#include <QTime>
+
 #include <KLocale>
 
 /**
