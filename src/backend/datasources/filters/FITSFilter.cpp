@@ -158,7 +158,7 @@ QStringList FITSFilter::mandatoryTableExtensionKeywords() {
  */
 QStringList FITSFilter::units() {
 	return QStringList() << QLatin1String("m (Metre)") << QLatin1String("kg (Kilogram)") << QLatin1String("s (Second)")
-	       << QLatin1String("M☉ (Solar mass)") << QLatin1String("AU (Astronomical unit") << QLatin1String("l.y (Light year)")
+	       << QString("M☉ (Solar mass)") << QLatin1String("AU (Astronomical unit") << QLatin1String("l.y (Light year)")
 	       << QLatin1String("km (Kilometres") << QLatin1String("pc (Parsec)") << QLatin1String("K (Kelvin)")
 	       << QLatin1String("mol (Mole)") << QLatin1String("cd (Candela)");
 }

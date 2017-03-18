@@ -95,12 +95,12 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 }
 
 void ThemesWidget::applyClicked() {
-	QString themeName = currentIndex().data(Qt::UserRole).value<QString>();
+	QString themeName = currentIndex().data(Qt::UserRole).toString();
 	//TODO: activate this later
 // 	if(themeName=="file_download_theme")
 // 		this->downloadThemes();
 // 	else
-		emit(themeSelected(themeName));
+	emit themeSelected(themeName);
 }
 
 //TODO: activate this later

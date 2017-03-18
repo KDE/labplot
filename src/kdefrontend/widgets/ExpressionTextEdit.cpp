@@ -213,6 +213,6 @@ void ExpressionTextEdit::validateExpression(bool force) {
 			setStyleSheet("");
 
 		m_currentExpression = text;
-		emit(expressionChanged());
+		emit expressionChanged();
 	}
 }

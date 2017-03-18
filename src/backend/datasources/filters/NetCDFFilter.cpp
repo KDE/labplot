@@ -703,7 +703,7 @@ bool NetCDFFilter::load(XmlStreamReader* reader) {
 		return false;
 	}
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-	QXmlStreamAttributes attribs = reader->attributes();
+// 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+// 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;
 }

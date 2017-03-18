@@ -91,7 +91,7 @@ AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name),
 }
 
 AbstractColumn::~AbstractColumn() {
-	aboutToBeDestroyed(this);
+	emit aboutToBeDestroyed(this);
 	delete m_abstract_column_private;
 }
 

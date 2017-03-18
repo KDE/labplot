@@ -35,6 +35,7 @@ Copyright	: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <QStringList>
 
 class AbstractDataSource : public AbstractPart, public scripted{
+	Q_OBJECT
 
 	public:
    		AbstractDataSource(AbstractScriptingEngine *engine, const QString& name);
