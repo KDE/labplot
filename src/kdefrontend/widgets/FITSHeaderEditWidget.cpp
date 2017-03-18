@@ -535,11 +535,11 @@ QList<QString> FITSHeaderEditWidget::mandatoryKeywords() const {
 
 /*!
  * \brief Manipulates the contextmenu event of the widget
- * \param watched the object on which the event occured
+ * \param watched the object on which the event occurred
  * \param event the event watched
  * \return
  */
-bool FITSHeaderEditWidget::eventFilter(QObject * watched, QEvent * event) {
+bool FITSHeaderEditWidget::eventFilter(QObject* watched, QEvent* event) {
 	if (event->type() == QEvent::ContextMenu) {
 		QContextMenuEvent *cm_event = static_cast<QContextMenuEvent*>(event);
 		const QPoint& global_pos = cm_event->globalPos();
