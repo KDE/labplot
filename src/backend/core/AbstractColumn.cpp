@@ -29,17 +29,10 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AbstractColumnPrivate.h"
 #include "backend/core/abstractcolumncommands.h"
-#include "backend/lib/Interval.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/SignallingUndoCommand.h"
 
-#include <QXmlStreamWriter>
-#include <QString>
 #include <QDateTime>
-#include <QDate>
-#include <QTime>
-#include <QMetaType>
-#include <QDebug>
 #include <KLocale>
 #include <cmath>
 
@@ -635,4 +628,3 @@ void AbstractColumn::XmlWriteMask(QXmlStreamWriter *writer) const {
 		writer->writeEndElement();
 	}
 }
-
