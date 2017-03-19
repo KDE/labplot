@@ -1827,6 +1827,7 @@ void XYCurvePrivate::updatePixmap() {
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
 	if (boundingRectangle.width() == 0 || boundingRectangle.width() == 0) {
+		m_pixmap = QPixmap();
 		RESET_CURSOR;
 		return;
 	}
