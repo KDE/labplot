@@ -28,7 +28,7 @@
 #ifndef EQUATIONHIGHLIGHTER_H
 #define EQUATIONHIGHLIGHTER_H
 
-#include <QtGui/QSyntaxHighlighter>
+#include <QSyntaxHighlighter>
 #include <QStringList>
 
 class KTextEdit;

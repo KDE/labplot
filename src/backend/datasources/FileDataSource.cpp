@@ -244,7 +244,7 @@ QString FileDataSource::fileInfoString(const QString &name){
 	QIODevice *file = new QFile(name);
 
 	QString fileName;
-    if (name.left(1)!=QDir::separator()) {
+    if (name.at(0) != QDir::separator()) {
         fileName = QDir::homePath() + QDir::separator() + name;
     } else {
         fileName = name;

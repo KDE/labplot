@@ -109,10 +109,10 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 			body = '$' + teXString + '$';
 		else
 			body = teXString;
-	}
 
-	//replace line breaks with tex command for a line break '\\'
-	body = body.replace(QLatin1String("\n"), QLatin1String("\\\\"));
+		//replace line breaks with tex command for a line break '\\'
+		body = body.replace(QLatin1String("\n"), QLatin1String("\\\\"));
+	}
 
 	if (engine == "xelatex" || engine == "lualatex") {
 		out << "\\usepackage{xltxtra}";

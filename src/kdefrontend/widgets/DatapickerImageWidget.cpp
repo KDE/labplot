@@ -213,11 +213,11 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget *parent): QWidget(parent) {
 	editTabLayout->addWidget(gvForeground, 10, 2);
 	gvForeground->setScalePixmap(valueFile);
 
-	connect( ssIntensity, SIGNAL(spanSliderMoved(int,int)), gvIntensity, SLOT(setSpan(int,int)) );
-	connect( ssForeground, SIGNAL(spanSliderMoved(int,int)), gvForeground, SLOT(setSpan(int,int)) );
-	connect( ssHue, SIGNAL(spanSliderMoved(int,int)), gvHue, SLOT(setSpan(int,int)) );
-	connect( ssSaturation, SIGNAL(spanSliderMoved(int,int)), gvSaturation, SLOT(setSpan(int,int)) );
-	connect( ssValue, SIGNAL(spanSliderMoved(int,int)), gvValue, SLOT(setSpan(int,int)) );
+	connect( ssIntensity, SIGNAL(spanChanged(int,int)), gvIntensity, SLOT(setSpan(int,int)) );
+	connect( ssForeground, SIGNAL(spanChanged(int,int)), gvForeground, SLOT(setSpan(int,int)) );
+	connect( ssHue, SIGNAL(spanChanged(int,int)), gvHue, SLOT(setSpan(int,int)) );
+	connect( ssSaturation, SIGNAL(spanChanged(int,int)), gvSaturation, SLOT(setSpan(int,int)) );
+	connect( ssValue, SIGNAL(spanChanged(int,int)), gvValue, SLOT(setSpan(int,int)) );
 
 	//SLOTS
 	//general

@@ -752,6 +752,7 @@ bool MainWin::newProject() {
 
 		connect(m_projectExplorer, SIGNAL(currentAspectChanged(AbstractAspect*)),
 		        this, SLOT(handleCurrentAspectChanged(AbstractAspect*)));
+		connect(m_projectExplorerDock, SIGNAL(visibilityChanged(bool)), SLOT(projectExplorerDockVisibilityChanged(bool)));
 
 		//Properties dock
 		m_propertiesDock = new QDockWidget(this);
@@ -764,6 +765,8 @@ bool MainWin::newProject() {
 		sa->setWidget(stackedWidget);
 		sa->setWidgetResizable(true);
 		m_propertiesDock->setWidget(sa);
+
+		connect(m_propertiesDock, SIGNAL(visibilityChanged(bool)), SLOT(propertiesDockVisibilityChanged(bool)));
 
 		//GUI-observer;
 		m_guiObserver = new GuiObserver(this);
@@ -1515,6 +1518,14 @@ void MainWin::toggleDockWidget(QAction* action) const {
 		else
 			m_propertiesDock->show();
 	}
+}
+
+void MainWin::projectExplorerDockVisibilityChanged(bool visible) {
+	m_toggleProjectExplorerDockAction->setChecked(visible);
+}
+
+void MainWin::propertiesDockVisibilityChanged(bool visible) {
+	m_togglePropertiesDockAction->setChecked(visible);
 }
 
 void MainWin::toggleFullScreen() {

@@ -69,8 +69,6 @@ FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 void FileInfoDialog::setFiles(QStringList& files) {
 	QString fileName;
 	QString infoString;
-	QFileInfo fileInfo;
-	QString fileTypeString;
 
 	 for ( int i=0; i<files.size(); i++ ) {
 		fileName = files.at(i);

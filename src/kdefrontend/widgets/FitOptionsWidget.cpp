@@ -72,9 +72,9 @@ void FitOptionsWidget::applyClicked() {
 	m_fitData->useResults = ui.cbUseResults->isChecked();
 
 	if (m_changed)
-		emit(optionsChanged());
+		emit optionsChanged();
 
-	emit(finished());
+	emit finished();
 }
 
 void FitOptionsWidget::changed() {

@@ -34,11 +34,10 @@
 #include "backend/lib/SignallingUndoCommand.h"
 
 #include <QXmlStreamWriter>
-#include <QtCore/QString>
-#include <QtCore/QDateTime>
-#include <QtCore/QDate>
-#include <QtCore/QTime>
-
+#include <QString>
+#include <QDateTime>
+#include <QDate>
+#include <QTime>
 #include <QMetaType>
 #include <QDebug>
 #include <KLocale>
@@ -92,7 +91,7 @@ AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name),
 }
 
 AbstractColumn::~AbstractColumn() {
-	aboutToBeDestroyed(this);
+	emit aboutToBeDestroyed(this);
 	delete m_abstract_column_private;
 }
 
