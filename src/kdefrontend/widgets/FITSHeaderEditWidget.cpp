@@ -504,12 +504,14 @@ void FITSHeaderEditWidget::removeExtension() {
 		else
 			delete current;
 	}
-	const int selectedidx = m_extensionDatas.keys().indexOf(m_seletedExtension);
+    const QStringList keys = m_extensionDatas.keys();
+    const int selectedidx = keys.indexOf(m_seletedExtension);
+
 	if (selectedidx > 0) {
 		const QString& ext = m_seletedExtension;
 		m_extensionDatas.remove(ext);
 		m_removedExtensions.append(ext);
-		m_seletedExtension = m_extensionDatas.keys().at(selectedidx-1);
+        m_seletedExtension = keys.at(selectedidx-1);
 
 		fillTable();
 	}
