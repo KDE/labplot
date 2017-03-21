@@ -385,6 +385,7 @@ bool Project::load(XmlStreamReader* reader) {
 	}
 
 	d->loading = false;
+	emit loaded();
 	return !reader->hasError();
 }
 

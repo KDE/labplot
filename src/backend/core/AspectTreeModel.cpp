@@ -77,10 +77,6 @@ AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 	  m_filterCaseSensitivity(Qt::CaseInsensitive),
 	  m_matchCompleteWord(false) {
 
-	QFont font;
-	QFontMetrics fm(font);
-	m_defaultHeaderHeight = fm.height();
-
 	connect(m_root, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
 	        this, SLOT(aspectDescriptionChanged(const AbstractAspect*)));
 	connect(m_root, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
@@ -158,20 +154,6 @@ QVariant AspectTreeModel::headerData(int section, Qt::Orientation orientation, i
 			return i18n("Comment");
 		default:
 			return QVariant();
-		}
-	case Qt::SizeHintRole: {
-			switch(section) {
-			case 0:
-				return QSize(300, m_defaultHeaderHeight);
-			case 1:
-				return QSize(80, m_defaultHeaderHeight);
-			case 2:
-				return QSize(160, m_defaultHeaderHeight);
-			case 3:
-				return QSize(400, m_defaultHeaderHeight);
-			default:
-				return QVariant();
-			}
 		}
 	default:
 		return QVariant();
