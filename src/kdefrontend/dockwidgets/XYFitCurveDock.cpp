@@ -697,7 +697,7 @@ void XYFitCurveDock::updateModelEquation() {
 		}
 		break;
 	case nsl_fit_model_growth:
-		switch (m_fitData.modelType) {
+		switch ((nsl_fit_model_type_growth)m_fitData.modelType) {
 		case nsl_fit_model_atan:
 		case nsl_fit_model_tanh:
 		case nsl_fit_model_algebraic_sigmoid:
