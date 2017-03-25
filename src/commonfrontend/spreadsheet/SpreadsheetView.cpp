@@ -112,7 +112,7 @@ void SpreadsheetView::init() {
 		if (col->width() == 0)
 			m_tableView->resizeColumnToContents(i);
 		else
-			m_horizontalHeader->resizeSection(i, col->width());
+			m_tableView->setColumnWidth(i, col->width());
 	}
 
 	connect(m_horizontalHeader, SIGNAL(sectionMoved(int,int,int)), this, SLOT(handleHorizontalSectionMoved(int,int,int)));
@@ -443,7 +443,7 @@ void SpreadsheetView::handleAspectAdded(const AbstractAspect* aspect) {
 	if (col->width() == 0)
 		m_tableView->resizeColumnToContents(index);
 	else
-		m_horizontalHeader->resizeSection(index, col->width());
+		m_tableView->setColumnWidth(index, col->width());
 }
 
 void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
