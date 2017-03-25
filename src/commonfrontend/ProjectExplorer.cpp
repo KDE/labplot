@@ -82,7 +82,6 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) {
 
 	bFilterOptions = new QPushButton(frameFilter);
 	bFilterOptions->setIcon(QIcon::fromTheme("configure"));
-	bFilterOptions->setEnabled(true);
 	bFilterOptions->setCheckable(true);
 	layoutFilter->addWidget(bFilterOptions);
 

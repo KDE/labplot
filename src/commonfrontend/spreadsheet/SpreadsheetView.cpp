@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -103,26 +103,16 @@ void SpreadsheetView::init() {
 	m_horizontalHeader->setClickable(true);
 	m_horizontalHeader->setHighlightSections(true);
 	m_tableView->setHorizontalHeader(m_horizontalHeader);
-	m_horizontalHeader->setResizeMode(QHeaderView::Interactive);
 	m_horizontalHeader->setMovable(true);
 	m_horizontalHeader->installEventFilter(this);
 
 	//set the column sizes to the saved values or resize to content if no size was saved yet
-	int i=0;
-	foreach(Column* col, m_spreadsheet->children<Column>()) {
-		if (col->width()==0) {
-			QFont font;
-			QFontMetrics fm(font);
-			int width = fm.width( m_model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString() );
-
-			//TODO: figure out how to determine the icon size used in the header (the line below returns 0)
-			//and activate icons in SpreadsheetModel::headerData() again
-			//width += m_horizontalHeader->iconSize().width();
-
-			col->setWidth(width*1.1);
-		}
-		m_horizontalHeader->resizeSection(i, col->width());
-		i++;
+	for (int i=0; i<m_spreadsheet->children<Column>().size(); ++i) {
+		Column* col = m_spreadsheet->child<Column>(i);
+		if (col->width() == 0)
+			m_tableView->resizeColumnToContents(i);
+		else
+			m_horizontalHeader->resizeSection(i, col->width());
 	}
 
 	connect(m_horizontalHeader, SIGNAL(sectionMoved(int,int,int)), this, SLOT(handleHorizontalSectionMoved(int,int,int)));
@@ -133,9 +123,6 @@ void SpreadsheetView::init() {
 	// vertical header
 	QHeaderView* v_header = m_tableView->verticalHeader();
 	v_header->setResizeMode(QHeaderView::Fixed);
-	QFont font; //application's default font
-	QFontMetrics fm(font);
-	v_header->setDefaultSectionSize(fm.height());
 	v_header->setMovable(false);
 	v_header->installEventFilter(this);
 
@@ -453,7 +440,10 @@ void SpreadsheetView::handleAspectAdded(const AbstractAspect* aspect) {
 		return;
 
 	int index = m_spreadsheet->indexOfChild<Column>(col);
-	m_horizontalHeader->resizeSection(index, col->width());
+	if (col->width() == 0)
+		m_tableView->resizeColumnToContents(index);
+	else
+		m_horizontalHeader->resizeSection(index, col->width());
 }
 
 void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
