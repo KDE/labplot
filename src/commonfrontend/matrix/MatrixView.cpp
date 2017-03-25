@@ -102,16 +102,12 @@ void MatrixView::init() {
 
 	//horizontal header
 	QHeaderView* h_header = m_tableView->horizontalHeader();
-	h_header->setResizeMode(QHeaderView::Interactive);
 	h_header->setMovable(false);
-	h_header->setDefaultSectionSize(m_matrix->defaultColumnWidth());
 	h_header->installEventFilter(this);
 
 	//vertical header
 	QHeaderView* v_header = m_tableView->verticalHeader();
-	v_header->setResizeMode(QHeaderView::Interactive);
 	v_header->setMovable(false);
-	v_header->setDefaultSectionSize(m_matrix->defaultRowHeight());
 	v_header->installEventFilter(this);
 
 	//set the header sizes to the (potentially user customized) sizes stored in Matrix
@@ -338,12 +334,23 @@ void MatrixView::adjustHeaders() {
 	disconnect(v_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleVerticalSectionResized(int,int,int)));
 	disconnect(h_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
 
+	//resize columns
 	int cols = m_matrix->columnCount();
-	for (int i=0; i<cols; i++)
-		h_header->resizeSection(i, m_matrix->columnWidth(i));
+	for (int i=0; i<cols; i++) {
+		if (m_matrix->columnWidth(i) == 0)
+			m_tableView->resizeColumnToContents(i);
+		else
+			m_tableView->setColumnWidth(i, m_matrix->columnWidth(i));
+	}
+
+	//resize rows
 	int rows = m_matrix->rowCount();
-	for (int i=0; i<rows; i++)
-		v_header->resizeSection(i, m_matrix->rowHeight(i));
+	for (int i=0; i<rows; i++) {
+		if (m_matrix->rowHeight(i) == 0)
+			m_tableView->resizeRowToContents(i);
+		else
+			m_tableView->setRowHeight(i, m_matrix->rowHeight(i));
+	}
 
 	connect(v_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleVerticalSectionResized(int,int,int)));
 	connect(h_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
