@@ -82,7 +82,6 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) {
 
 	bFilterOptions = new QPushButton(frameFilter);
 	bFilterOptions->setIcon(QIcon::fromTheme("configure"));
-	bFilterOptions->setEnabled(true);
 	bFilterOptions->setCheckable(true);
 	layoutFilter->addWidget(bFilterOptions);
 
@@ -240,6 +239,11 @@ void ProjectExplorer::setProject(Project* project) {
 	connect(project, SIGNAL(requestNavigateTo(QString)), this, SLOT(navigateTo(QString)));
 	connect(project, SIGNAL(loaded()), this, SLOT(resizeHeader()));
 	m_project = project;
+
+	//for newly created projects, resize the header to fit the size of the header section names.
+	//for projects loaded from a file, this function will be called laterto fit the sizes
+	//of the content once the project is loaded
+	resizeHeader();
 }
 
 QModelIndex ProjectExplorer::currentIndex() const {
@@ -310,6 +314,7 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 	m_treeView->scrollTo(index);
 	m_treeView->setCurrentIndex(index);
 	m_treeView->resizeColumnToContents(0);
+	m_treeView->header()->resizeSection(0, m_treeView->header()->sectionSize(0)*1.2);
 }
 
 void ProjectExplorer::navigateTo(const QString& path) {
@@ -403,6 +408,7 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 
 void ProjectExplorer::resizeHeader() {
 	m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
+	m_treeView->header()->resizeSection(0, m_treeView->header()->sectionSize(0)*1.2); //make the column "Name" somewhat bigger
 }
 
 /*!

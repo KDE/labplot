@@ -37,7 +37,7 @@ class MatrixModel;
 class MatrixView;
 
 class Matrix : public AbstractDataSource {
-    Q_OBJECT
+	Q_OBJECT
 
 	public:
 		Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading = false);
@@ -49,9 +49,9 @@ class Matrix : public AbstractDataSource {
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
-        virtual bool exportView() const;
-        virtual bool printView();
-        virtual bool printPreview() const;
+		virtual bool exportView() const;
+		virtual bool printView();
+		virtual bool printPreview() const;
 
 		BASIC_D_ACCESSOR_DECL(int, rowCount, RowCount)
 		BASIC_D_ACCESSOR_DECL(int, columnCount, ColumnCount)
@@ -68,9 +68,6 @@ class Matrix : public AbstractDataSource {
 		void setData(const QVector<QVector<double> >&);
 		void setSuppressDataChangedSignal(bool);
 		void setChanged();
-
-		int defaultRowHeight() const;
-		int defaultColumnWidth() const;
 
 		int rowHeight(int row) const;
 		void setRowHeight(int row, int height);

@@ -564,6 +564,9 @@ void CartesianPlotDock::removeXBreak() {
 }
 
 void CartesianPlotDock::currentXBreakChanged(int index) {
+	if (m_initializing)
+		return;
+
 	if (index==-1)
 		return;
 
@@ -682,6 +685,9 @@ void CartesianPlotDock::removeYBreak() {
 }
 
 void CartesianPlotDock::currentYBreakChanged(int index) {
+	if (m_initializing)
+		return;
+
 	if (index==-1)
 		return;
 
@@ -1286,10 +1292,7 @@ void CartesianPlotDock::load() {
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderPen().widthF(), Worksheet::Point) );
 	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderCornerRadius(), Worksheet::Centimeter) );
 	ui.sbBorderOpacity->setValue( round(m_plot->plotArea()->borderOpacity()*100) );
-
-	m_initializing=true;
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
-	m_initializing=false;
 }
 
 void CartesianPlotDock::loadConfig(KConfig& config) {
