@@ -102,16 +102,12 @@ void MatrixView::init() {
 
 	//horizontal header
 	QHeaderView* h_header = m_tableView->horizontalHeader();
-	h_header->setResizeMode(QHeaderView::Interactive);
 	h_header->setMovable(false);
-	h_header->setDefaultSectionSize(m_matrix->defaultColumnWidth());
 	h_header->installEventFilter(this);
 
 	//vertical header
 	QHeaderView* v_header = m_tableView->verticalHeader();
-	v_header->setResizeMode(QHeaderView::Interactive);
 	v_header->setMovable(false);
-	v_header->setDefaultSectionSize(m_matrix->defaultRowHeight());
 	v_header->installEventFilter(this);
 
 	//set the header sizes to the (potentially user customized) sizes stored in Matrix
@@ -338,12 +334,23 @@ void MatrixView::adjustHeaders() {
 	disconnect(v_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleVerticalSectionResized(int,int,int)));
 	disconnect(h_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
 
+	//resize columns to the saved sizes or to fit the contents if the widht is 0
 	int cols = m_matrix->columnCount();
-	for (int i=0; i<cols; i++)
-		h_header->resizeSection(i, m_matrix->columnWidth(i));
+	for (int i=0; i<cols; i++) {
+		if (m_matrix->columnWidth(i) == 0)
+			m_tableView->resizeColumnToContents(i);
+		else
+			m_tableView->setColumnWidth(i, m_matrix->columnWidth(i));
+	}
+
+	//resize rows to the saved sizes or to fit the contents if the height is 0
 	int rows = m_matrix->rowCount();
-	for (int i=0; i<rows; i++)
-		v_header->resizeSection(i, m_matrix->rowHeight(i));
+	for (int i=0; i<rows; i++) {
+		if (m_matrix->rowHeight(i) == 0)
+			m_tableView->resizeRowToContents(i);
+		else
+			m_tableView->setRowHeight(i, m_matrix->rowHeight(i));
+	}
 
 	connect(v_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleVerticalSectionResized(int,int,int)));
 	connect(h_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
@@ -353,10 +360,8 @@ void MatrixView::adjustHeaders() {
 	Resizes the headers/columns to fit the new content. Called on changes of the header format in Matrix.
 */
 void MatrixView::resizeHeaders() {
-	//hide and unhide the table view in order to trigger the refresh of the view and to get the new sizes
-	m_tableView->setVisible(false);
 	m_tableView->resizeColumnsToContents();
-	m_tableView->setVisible(true);
+	m_tableView->resizeRowsToContents();
 
 	if (m_matrix->headerFormat() == Matrix::HeaderRowsColumns)
 		action_header_format_1->setChecked(true);
@@ -805,8 +810,6 @@ void MatrixView::headerFormatChanged(QAction* action) {
 		m_matrix->setHeaderFormat(Matrix::HeaderValues);
 	else
 		m_matrix->setHeaderFormat(Matrix::HeaderRowsColumnsValues);
-
-	resizeHeaders();
 }
 
 //############################# column related slots ###########################

@@ -86,6 +86,7 @@ class Project : public Folder {
 		void mdiWindowVisibilityChanged();
 		void changed() const;
 		void requestNavigateTo(const QString& path) const;
+		void loaded();
 
 	private:
 		class Private;

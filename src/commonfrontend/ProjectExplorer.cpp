@@ -82,7 +82,6 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) {
 
 	bFilterOptions = new QPushButton(frameFilter);
 	bFilterOptions->setIcon(QIcon::fromTheme("configure"));
-	bFilterOptions->setEnabled(true);
 	bFilterOptions->setCheckable(true);
 	layoutFilter->addWidget(bFilterOptions);
 
@@ -231,8 +230,6 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 				m_treeView->hideColumn(i);
 		}
 	}
-
-	QTimer::singleShot(0, this, SLOT(resizeHeader()));
 }
 
 void ProjectExplorer::setProject(Project* project) {
@@ -240,7 +237,13 @@ void ProjectExplorer::setProject(Project* project) {
 	connect(project, SIGNAL(requestSaveState(QXmlStreamWriter*)), this, SLOT(save(QXmlStreamWriter*)));
 	connect(project, SIGNAL(requestLoadState(XmlStreamReader*)), this, SLOT(load(XmlStreamReader*)));
 	connect(project, SIGNAL(requestNavigateTo(QString)), this, SLOT(navigateTo(QString)));
+	connect(project, SIGNAL(loaded()), this, SLOT(resizeHeader()));
 	m_project = project;
+
+	//for newly created projects, resize the header to fit the size of the header section names.
+	//for projects loaded from a file, this function will be called laterto fit the sizes
+	//of the content once the project is loaded
+	resizeHeader();
 }
 
 QModelIndex ProjectExplorer::currentIndex() const {
@@ -311,6 +314,7 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 	m_treeView->scrollTo(index);
 	m_treeView->setCurrentIndex(index);
 	m_treeView->resizeColumnToContents(0);
+	m_treeView->header()->resizeSection(0, m_treeView->header()->sectionSize(0)*1.2);
 }
 
 void ProjectExplorer::navigateTo(const QString& path) {
@@ -404,6 +408,7 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 
 void ProjectExplorer::resizeHeader() {
 	m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
+	m_treeView->header()->resizeSection(0, m_treeView->header()->sectionSize(0)*1.2); //make the column "Name" somewhat bigger
 }
 
 /*!
@@ -413,8 +418,6 @@ void ProjectExplorer::filterTextChanged(const QString& text) {
 	QModelIndex root = m_treeView->model()->index(0,0);
 	filter(root, text);
 }
-
-#include <QDebug>
 
 bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 	Qt::CaseSensitivity sensitivity = caseSensitiveAction->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
@@ -459,7 +462,6 @@ void ProjectExplorer::toggleFilterCaseSensitivity() {
 	filterTextChanged(leFilter->text());
 }
 
-
 void ProjectExplorer::toggleFilterMatchCompleteWord() {
 	filterTextChanged(leFilter->text());
 }
@@ -493,21 +495,21 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	items = selected.indexes();
 	for (int i=0; i<items.size()/4; ++i) {
 		index = items.at(i*4);
-		aspect = static_cast<AbstractAspect *>(index.internalPointer());
+		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		aspect->setSelected(true);
 	}
 
 	items = deselected.indexes();
 	for (int i = 0; i < items.size()/4; ++i) {
 		index = items.at(i*4);
-		aspect = static_cast<AbstractAspect *>(index.internalPointer());
+		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		aspect->setSelected(false);
 	}
 
 	items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
 	foreach (const QModelIndex& index, items) {
-		aspect = static_cast<AbstractAspect *>(index.internalPointer());
+		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		selectedAspects<<aspect;
 	}
 
@@ -516,16 +518,14 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 void ProjectExplorer::expandSelected() {
 	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
-	foreach (const QModelIndex& index, items) {
+	foreach (const QModelIndex& index, items)
 		m_treeView->setExpanded(index, true);
-	}
 }
 
 void ProjectExplorer::collapseSelected() {
 	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
-	foreach (const QModelIndex& index, items) {
+	foreach (const QModelIndex& index, items)
 		m_treeView->setExpanded(index, false);
-	}
 }
 
 void ProjectExplorer::deleteSelected() {
@@ -595,15 +595,13 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("state");
 
 	writer->writeStartElement("expanded");
-	for (int i = 0; i < expanded.size(); ++i) {
+	for (int i = 0; i < expanded.size(); ++i)
 		writer->writeTextElement("row", QString::number(expanded.at(i)));
-	}
 	writer->writeEndElement();
 
 	writer->writeStartElement("selected");
-	for (int i = 0; i < selected.size(); ++i) {
+	for (int i = 0; i < selected.size(); ++i)
 		writer->writeTextElement("row", QString::number(selected.at(i)));
-	}
 	writer->writeEndElement();
 
 	writer->writeStartElement("view");
@@ -687,13 +685,13 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 			else
 				index = model->modelIndexOfAspect(aspects.at(row));
 
-			if (expandedItem) {
+			if (expandedItem)
 				expanded.push_back(index);
-			} else if (selectedItem) {
+			else if (selectedItem)
 				selected.push_back(index);
-			} else if (currentItem) {
+			else if (currentItem)
 				currentIndex = index;
-			} else if (viewItem) {
+			else if (viewItem) {
 				AbstractPart* part = dynamic_cast<AbstractPart*>(aspects.at(row));
 				if (!part)
 					continue; //TODO: add error/warning message here?

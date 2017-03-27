@@ -32,6 +32,7 @@
 #include "tools/TeXRenderer.h"
 
 #include <QWidgetAction>
+#include <QSplitter>
 
 #include <KConfigGroup>
 #include <KCharSelect>
@@ -56,12 +57,16 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 
 	ui.setupUi(this);
 
+	QSplitter* splitter = new QSplitter(Qt::Vertical, this);
+	splitter->setHandleWidth(1);
+	splitter->addWidget(ui.frameTop);
+	splitter->addWidget(ui.frameBottom);
+	splitter->setChildrenCollapsible(false);
+	ui.lText->setMinimumWidth(ui.lGeometry->width());
+	this->layout()->addWidget(splitter);
+
 	m_dateTimeMenu->setSeparatorsCollapsible(false); //we don't want the first separator to be removed
 
-	QGridLayout* layout = static_cast<QGridLayout*>(this->layout());
-	layout->setContentsMargins(2,2,2,2);
-	layout->setHorizontalSpacing(2);
-	layout->setVerticalSpacing(2);
 	ui.kcbFontColor->setColor(Qt::black); // default color
 
 	//Icons

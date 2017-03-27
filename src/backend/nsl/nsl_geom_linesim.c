@@ -410,8 +410,10 @@ size_t nsl_geom_linesim_interp_auto(const double xdata[], const double ydata[], 
 }
 
 size_t nsl_geom_linesim_visvalingam_whyatt(const double xdata[], const double ydata[], const size_t n, const double tol, size_t index[]) {
-	size_t i, nout = n;
+	if (n < 3)	/* we need at least three points */
+		return 0;
 
+	size_t i, nout = n;
 	double *area = (double *) malloc((n-2)*sizeof(double));	/* area associated with every point */
 	for (i = 0; i < n; i++)
 		index[i] = i;
