@@ -208,6 +208,9 @@ void QxtSpanSliderPrivate::triggerAction(QAbstractSlider::SliderAction action, b
     case QAbstractSlider::SliderNoAction:
         no = true;
         break;
+    case QAbstractSlider::SliderPageStepAdd:
+    case QAbstractSlider::SliderPageStepSub:
+	break;
     default:
         qWarning("QxtSpanSliderPrivate::triggerAction: Unknown action");
         break;
