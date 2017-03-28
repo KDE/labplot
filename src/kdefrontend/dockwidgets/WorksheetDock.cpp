@@ -440,7 +440,7 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
 		} else {
-			ui.lBackgroundFirstColor->setText(i18n("First Color"));
+			ui.lBackgroundFirstColor->setText(i18n("First color"));
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
 		}
@@ -492,7 +492,7 @@ void WorksheetDock::backgroundColorStyleChanged(int index) {
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
 	} else {
-		ui.lBackgroundFirstColor->setText(i18n("First Color"));
+		ui.lBackgroundFirstColor->setText(i18n("First color"));
 		ui.lBackgroundSecondColor->show();
 		ui.kcbBackgroundSecondColor->show();
 	}

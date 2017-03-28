@@ -1365,7 +1365,7 @@ void XYCurveDock::fillingTypeChanged(int index) {
 			ui.lFillingSecondColor->hide();
 			ui.kcbFillingSecondColor->hide();
 		} else {
-			ui.lFillingFirstColor->setText(i18n("First Color"));
+			ui.lFillingFirstColor->setText(i18n("First color"));
 			ui.lFillingSecondColor->show();
 			ui.kcbFillingSecondColor->show();
 		}
@@ -1417,7 +1417,7 @@ void XYCurveDock::fillingColorStyleChanged(int index) {
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
 	} else {
-		ui.lFillingFirstColor->setText(i18n("First Color"));
+		ui.lFillingFirstColor->setText(i18n("First color"));
 		ui.lFillingSecondColor->show();
 		ui.kcbFillingSecondColor->show();
 		ui.lFillingBrushStyle->hide();

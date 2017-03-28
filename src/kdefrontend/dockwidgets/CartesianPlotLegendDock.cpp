@@ -412,7 +412,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
 		}else{
-			ui.lBackgroundFirstColor->setText(i18n("First Color"));
+			ui.lBackgroundFirstColor->setText(i18n("First color"));
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
 		}
@@ -464,7 +464,7 @@ void CartesianPlotLegendDock::backgroundColorStyleChanged(int index) {
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
 	}else{
-		ui.lBackgroundFirstColor->setText(i18n("First Color"));
+		ui.lBackgroundFirstColor->setText(i18n("First color"));
 		ui.lBackgroundSecondColor->show();
 		ui.kcbBackgroundSecondColor->show();
 		ui.lBackgroundBrushStyle->hide();
