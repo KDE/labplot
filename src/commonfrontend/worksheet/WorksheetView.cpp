@@ -122,6 +122,17 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	connect(m_worksheet, SIGNAL(useViewSizeRequested()), this, SLOT(useViewSizeRequested()) );
 	connect(m_worksheet, SIGNAL(layoutChanged(Worksheet::Layout)), this, SLOT(layoutChanged(Worksheet::Layout)) );
 	connect(scene(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
+
+	//resize the view to make the complete scene visible.
+	//no need to resize the view when the project is being opened,
+	//all views will be resized to the stored values at the end
+	if (!m_worksheet->isLoading()) {
+		float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Inch);
+		float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Inch);
+		w *= QApplication::desktop()->physicalDpiX();
+		h *= QApplication::desktop()->physicalDpiY();
+		resize(w*1.1, h*1.1);
+	}
 }
 
 void WorksheetView::initActions() {

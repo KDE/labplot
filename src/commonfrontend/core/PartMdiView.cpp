@@ -50,10 +50,7 @@ PartMdiView::PartMdiView(AbstractPart* part) : QMdiSubWindow(0), m_part(part) {
 	handleAspectDescriptionChanged(m_part);
 
 	//resize the MDI sub window to fit the content of the view
-	//TODO: for worksheet the size returned here seems to be wrong,
-	//the worksheet view is already properly resized without any need to call here resize
-	if (!dynamic_cast<const Worksheet*>(m_part))
-		resize(m_part->view()->size());
+	resize(m_part->view()->size());
 
 	connect(m_part, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
 		this, SLOT(handleAspectDescriptionChanged(const AbstractAspect*)));
