@@ -365,7 +365,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 
 		for(int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			//TODO: implement following distribution models
-			if (i == nsl_sf_stats_gaussian_tail || i == nsl_sf_stats_exponential || i == nsl_sf_stats_exponential_power ||
+			if (i == nsl_sf_stats_exponential || i == nsl_sf_stats_exponential_power ||
 				i == nsl_sf_stats_rayleigh_tail || i == nsl_sf_stats_landau || i == nsl_sf_stats_levy_alpha_stable ||
 				i == nsl_sf_stats_levy_skew_alpha_stable || i == nsl_sf_stats_flat || i == nsl_sf_stats_fdist ||
 				i == nsl_sf_stats_tdist || i == nsl_sf_stats_beta || i == nsl_sf_stats_gumbel2 || i == nsl_sf_stats_bernoulli ||
@@ -721,7 +721,7 @@ void XYFitCurveDock::updateModelEquation() {
 		break;
 	case nsl_fit_model_distribution:
 		switch ((nsl_sf_stats_distribution)m_fitData.modelType) {
-		// TODO: add missing GSL distributions
+		// TODO: add missing GSL distributions (see nsl_sf_stats.c)
 		case nsl_sf_stats_gaussian:
 		case nsl_sf_stats_laplace:
 		case nsl_sf_stats_lognormal:
@@ -731,6 +731,9 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 			break;
 		case nsl_sf_stats_gaussian_tail:
+			m_fitData.paramNames << "s" << "mu" << "a" << "b";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A" << "b";
+			break;
 		case nsl_sf_stats_exponential:
 		case nsl_sf_stats_exponential_power:
 			break;

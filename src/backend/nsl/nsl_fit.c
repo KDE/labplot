@@ -300,6 +300,20 @@ double nsl_fit_model_gudermann_param_deriv(int param, double x, double s, double
 }
 
 /* distributions */
+double nsl_fit_model_gaussian_tail_param_deriv(int param, double x, double s, double mu, double a, double b, double sigma) {
+	if (x < b)
+		return 0;
+	//TODO
+	double s2 = s*s, norm = 1./sqrt(2.*M_PI)/s/sigma, efactor = exp(-(x-mu)*(x-mu)/(2.*s2));
+
+	if (param == 0)
+		return a * norm/(s*s2) * ((x-mu)*(x-mu) - s2) * efactor;
+	if (param == 1)
+		return a * norm/s2 * (x-mu) * efactor;
+	if (param == 2)
+		return norm * efactor;
+	return 0;
+}
 double nsl_fit_model_maxwell_param_deriv(int param, double x, double a, double c, double sigma) {
 	double a2 = a*a, a3 = a*a2, norm = sqrt(2./M_PI)/a3/sigma, x2 = x*x, efactor = exp(-x2/2./a2);
 
