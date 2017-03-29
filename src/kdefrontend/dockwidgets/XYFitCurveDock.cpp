@@ -720,7 +720,7 @@ void XYFitCurveDock::updateModelEquation() {
 		}
 		break;
 	case nsl_fit_model_distribution:
-		switch (m_fitData.modelType) {
+		switch ((nsl_sf_stats_distribution)m_fitData.modelType) {
 		// TODO: add missing GSL distributions
 		case nsl_sf_stats_gaussian:
 		case nsl_sf_stats_laplace:

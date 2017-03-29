@@ -482,7 +482,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		break;
 	case nsl_fit_model_growth:
-		switch (modelType) {
+		switch ((nsl_fit_model_type_growth)modelType) {
 		case nsl_fit_model_atan:
 		case nsl_fit_model_tanh: 
 		case nsl_fit_model_algebraic_sigmoid:

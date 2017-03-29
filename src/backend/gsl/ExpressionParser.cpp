@@ -133,17 +133,17 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Round to the nearest integer");
 	m_functionsNames << i18n("Round to the nearest integer");
 #endif
-	m_functionsNames << i18n("log(1+x)");
-	m_functionsNames << i18n("x * 2^e");
-	m_functionsNames << i18n("x^n");
-	m_functionsNames << i18n("x^2");
-	m_functionsNames << i18n("x^3");
-	m_functionsNames << i18n("x^4");
-	m_functionsNames << i18n("x^5");
-	m_functionsNames << i18n("x^6");
-	m_functionsNames << i18n("x^7");
-	m_functionsNames << i18n("x^8");
-	m_functionsNames << i18n("x^9");
+	m_functionsNames << QString("log(1+x)");
+	m_functionsNames << QString("x * 2^e");
+	m_functionsNames << QString("x^n");
+	m_functionsNames << QString("x^2");
+	m_functionsNames << QString("x^3");
+	m_functionsNames << QString("x^4");
+	m_functionsNames << QString("x^5");
+	m_functionsNames << QString("x^6");
+	m_functionsNames << QString("x^7");
+	m_functionsNames << QString("x^8");
+	m_functionsNames << QString("x^9");
 
 #ifndef HAVE_WINDOWS
 	for (int i = 0; i < 25; i++)
@@ -282,9 +282,9 @@ void ExpressionParser::initFunctions() {
 	// Exponential Functions
         m_functionsNames << i18n("Exponential function");
         m_functionsNames << i18n("exponentiate x and multiply by y");
-        m_functionsNames << i18n("exp(x) - 1");
-        m_functionsNames << i18n("(exp(x)-1)/x");
-        m_functionsNames << i18n("2(exp(x)-1-x)/x^2");
+        m_functionsNames << QString("exp(x) - 1");
+        m_functionsNames << QString("(exp(x)-1)/x");
+        m_functionsNames << QString("2(exp(x)-1-x)/x^2");
         m_functionsNames << i18n("n-relative exponential");
 
 	for (int i = 0; i < 6; i++)
@@ -414,8 +414,8 @@ void ExpressionParser::initFunctions() {
 	// Logarithm and Related Functions
         m_functionsNames << i18n("Logarithm");
         m_functionsNames << i18n("Logarithm of the magnitude");
-        m_functionsNames << i18n("log(1+x)");
-        m_functionsNames << i18n("log(1+x) - x");
+        m_functionsNames << QString("log(1+x)");
+        m_functionsNames << QString("log(1+x) - x");
 
 	for (int i = 0; i < 4; i++)
 		m_functionsGroupIndex << 19;
@@ -478,8 +478,8 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Inverse hyperbolic cosecant");
 	m_functionsNames << i18n("Inverse hyperbolic cotangent");
         m_functionsNames << i18n("Sinc function sin(x)/x");
-        m_functionsNames << i18n("log(sinh(x))");
-        m_functionsNames << i18n("log(cosh(x))");
+        m_functionsNames << QString("log(sinh(x))");
+        m_functionsNames << QString("log(cosh(x))");
         m_functionsNames << i18n("Hypotenuse function");
         m_functionsNames << i18n("Three component hypotenuse function");
         m_functionsNames << i18n("restrict to [-pi,pi]");
