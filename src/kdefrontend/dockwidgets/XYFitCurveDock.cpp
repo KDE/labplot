@@ -731,9 +731,7 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 			break;
 		case nsl_sf_stats_gaussian_tail:
-			break;
 		case nsl_sf_stats_exponential:
-			break;
 		case nsl_sf_stats_exponential_power:
 			break;
 		case nsl_sf_stats_cauchy_lorentz:
@@ -745,13 +743,25 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNames << "s" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << "A";
 			break;
+		case nsl_sf_stats_rayleigh_tail:
+		case nsl_sf_stats_landau:
+		case nsl_sf_stats_levy_alpha_stable:
+		case nsl_sf_stats_levy_skew_alpha_stable:
+			break;
 		case nsl_sf_stats_gamma:
 			m_fitData.paramNames << "t" << "k" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03b8") << "k" << "A";
 			break;
+		case nsl_sf_stats_flat:
+			break;
 		case nsl_sf_stats_chi_squared:
 			m_fitData.paramNames << "n" << "a";
 			m_fitData.paramNamesUtf8 << "n" << "A";
+			break;
+		case nsl_sf_stats_fdist:
+		case nsl_sf_stats_tdist:
+		case nsl_sf_stats_beta:
+		case nsl_sf_stats_pareto:
 			break;
 		case nsl_sf_stats_weibull:
 			m_fitData.paramNames << "k" << "l" << "mu" << "a";
@@ -766,6 +776,14 @@ void XYFitCurveDock::updateModelEquation() {
 		case nsl_sf_stats_poisson:
 			m_fitData.paramNames << "l" << "a";
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03bb") << "A";
+			break;
+		case nsl_sf_stats_bernoulli:
+		case nsl_sf_stats_binomial:
+		case nsl_sf_stats_negative_bionomial:
+		case nsl_sf_stats_pascal:
+		case nsl_sf_stats_geometric:
+		case nsl_sf_stats_hypergeometric:
+		case nsl_sf_stats_logarithmic:
 			break;
 		case nsl_sf_stats_maxwell_boltzmann:
 			m_fitData.paramNames << "s" << "a";
