@@ -70,9 +70,9 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 	horizontalLayout->addWidget(pbLoadTheme);
 	pbLoadTheme->setText(i18n("Apply theme"));
 
-	pbSaveTheme = new QPushButton(this);
-	horizontalLayout->addWidget(pbSaveTheme);
-	pbSaveTheme->setText(i18n("Save theme"));
+// 	pbSaveTheme = new QPushButton(this);
+// 	horizontalLayout->addWidget(pbSaveTheme);
+// 	pbSaveTheme->setText(i18n("Save theme"));
 
 /*
 	pbPublishTheme = new QPushButton(this);
@@ -82,7 +82,7 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 */
 
 	connect( pbLoadTheme, SIGNAL(clicked()), this, SLOT(showPanel()));
-	connect( pbSaveTheme, SIGNAL(clicked()), this, SLOT(saveMenu()));
+// 	connect( pbSaveTheme, SIGNAL(clicked()), this, SLOT(saveMenu()));
 // 	connect( pbPublishTheme, SIGNAL(clicked()), this, SLOT(publishThemes()));
 
 	//find all available themes files (system wide and user specific local files)

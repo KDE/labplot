@@ -85,6 +85,23 @@ SpreadsheetView::SpreadsheetView(Spreadsheet *spreadsheet):QWidget(),
 	layout->addWidget(m_tableView);
 
 	init();
+
+	//resize the view to show alls columns and the first 50 rows.
+	//no need to resize the view when the project is being opened,
+	//all views will be resized to the stored values at the end
+	if (!m_spreadsheet->isLoading()) {
+		int w = m_tableView->verticalHeader()->width();
+		int h = m_horizontalHeader->height();
+		for (int i=0; i<m_horizontalHeader->count(); ++i)
+			w += m_horizontalHeader->sectionSize(i);
+
+		if (m_tableView->verticalHeader()->count()>50)
+			h += m_tableView->verticalHeader()->sectionSize(0)*50;
+		else
+			h += m_tableView->verticalHeader()->sectionSize(0)*m_tableView->verticalHeader()->count();
+
+		resize(w*1.1, h);
+	}
 }
 
 SpreadsheetView::~SpreadsheetView() {

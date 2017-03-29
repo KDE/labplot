@@ -192,6 +192,8 @@ double nsl_geom_linesim_douglas_peucker_variant(const double xdata[], const doub
 		dist[i] = nsl_geom_point_line_dist(xdata[0], ydata[0], xdata[n-1], ydata[n-1], xdata[i], ydata[i]);
 		/*printf("%zu: %g\n", i, dist[i]);*/
 	}
+	for (i = 0; i < nout; i++)
+		maxdist[i] = 0;
 
 	double newmaxdist;
 	while (ntmp < nout) {
@@ -199,7 +201,6 @@ double nsl_geom_linesim_douglas_peucker_variant(const double xdata[], const doub
 
 		/* find edge of maximum */
 		size_t maxindex;
-		/* TODO: maxdist not initialized! */
 		nsl_stats_maximum(maxdist, ntmp, &maxindex);
 		/*printf("found edge of max at index %zu\n", maxindex);*/
 		/*newmaxdist = nsl_stats_maximum(dist, n, &key);*/
