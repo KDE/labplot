@@ -84,7 +84,7 @@ double nsl_fit_model_hill_param_deriv(int param, double x, double s, double n, d
 double nsl_fit_model_gompertz_param_deriv(int param, double x, double a, double b, double c, double sigma);
 double nsl_fit_model_gudermann_param_deriv(int param, double x, double s, double mu, double a, double sigma);
 /* distributions */
-double nsl_fit_model_gaussian_tail_param_deriv(int param, double x, double s, double mu, double a, double b, double sigma);
+double nsl_fit_model_gaussian_tail_param_deriv(int param, double x, double s, double mu, double A, double a, double sigma);
 double nsl_fit_model_poisson_param_deriv(int param, double x, double l, double a, double sigma);
 double nsl_fit_model_lognormal_param_deriv(int param, double x, double b, double mu, double a, double sigma);
 double nsl_fit_model_gamma_param_deriv(int param, double x, double t, double k, double a, double sigma);

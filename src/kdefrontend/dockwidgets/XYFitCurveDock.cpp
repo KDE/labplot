@@ -731,8 +731,8 @@ void XYFitCurveDock::updateModelEquation() {
 			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A";
 			break;
 		case nsl_sf_stats_gaussian_tail:
-			m_fitData.paramNames << "s" << "mu" << "a" << "b";
-			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A" << "b";
+			m_fitData.paramNames << "s" << "mu" << "A" << "a";
+			m_fitData.paramNamesUtf8 << QString::fromUtf8("\u03c3") << QString::fromUtf8("\u03bc") << "A" << "a";
 			break;
 		case nsl_sf_stats_exponential:
 		case nsl_sf_stats_exponential_power:

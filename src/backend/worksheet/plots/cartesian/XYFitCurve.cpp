@@ -579,8 +579,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		case nsl_sf_stats_gaussian_tail: {
 			double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
-			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
-			double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
+			double A = nsl_fit_map_bound(gsl_vector_get(paramValues, 2), min[2], max[2]);
+			double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3), min[3], max[3]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 				if (sigmaVector) sigma = sigmaVector[i];
@@ -589,7 +589,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					if (fixed[j])
 						gsl_matrix_set(J, i, j, 0.);
 					else
-						gsl_matrix_set(J, i, j, nsl_fit_model_gaussian_tail_param_deriv(j, x, s, mu, a, b, sigma));
+						gsl_matrix_set(J, i, j, nsl_fit_model_gaussian_tail_param_deriv(j, x, s, mu, A, a, sigma));
 				}
 			}
 			break;
