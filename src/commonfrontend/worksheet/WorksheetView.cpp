@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Worksheet view
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/

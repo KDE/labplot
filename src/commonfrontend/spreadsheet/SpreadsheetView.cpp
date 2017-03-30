@@ -99,7 +99,7 @@ SpreadsheetView::SpreadsheetView(Spreadsheet *spreadsheet):QWidget(),
 		else
 			h += m_tableView->verticalHeader()->sectionSize(0)*m_tableView->verticalHeader()->count();
 
-		resize(w*1.1, h);
+		resize(w+50, h);
 	}
 }
 
