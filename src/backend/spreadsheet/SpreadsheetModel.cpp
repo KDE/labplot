@@ -96,7 +96,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 		case Qt::ToolTipRole: {
 			if(col_ptr->isValid(row)) {
 				if(col_ptr->isMasked(row))
-					return QVariant(col_ptr->asStringColumn()->textAt(row) + i18n(", masked (ignored in all operations)"));
+					return QVariant(i18n("%1, masked (ignored in all operations)").arg(col_ptr->asStringColumn()->textAt(row)));
 				else
 					return QVariant(col_ptr->asStringColumn()->textAt(row));
 			} else {

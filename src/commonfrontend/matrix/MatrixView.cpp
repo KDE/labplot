@@ -72,6 +72,15 @@ MatrixView::MatrixView(Matrix* matrix) : QWidget(),
 	m_imageIsDirty(true) {
 
 	init();
+
+	//resize the view to show a 10x10 region of the matrix.
+	//no need to resize the view when the project is being opened,
+	//all views will be resized to the stored values at the end
+	if (!m_matrix->isLoading()) {
+		int w = m_tableView->horizontalHeader()->sectionSize(0)*10 + m_tableView->verticalHeader()->width();
+		int h = m_tableView->verticalHeader()->sectionSize(0)*10 + m_tableView->horizontalHeader()->height();
+		resize(w+50, h+50);
+	}
 }
 
 MatrixView::~MatrixView() {

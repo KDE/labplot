@@ -57,6 +57,12 @@ double my_sgn(double x) {
 		return 0;
 }
 #endif
+double my_theta(double x) {
+	if (x >= 0)
+		return 1;
+	else
+		return 0;
+}
 
 /* missing trig. functions */
 double my_sec(double x) { return 1./cos(x); }
@@ -189,6 +195,7 @@ struct func _functions[] = {
 	{"pow", pow},
 	{"sqrt", sqrt},
 	{"sgn", my_sgn},
+	{"theta", my_theta},
 #ifndef _WIN32
 	{"cbrt", cbrt},
 	{"logb", logb},
