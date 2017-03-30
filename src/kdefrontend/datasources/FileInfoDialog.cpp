@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : import file data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
+    Copyright            : (C) 2009-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2016 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -42,14 +42,25 @@
  */
 
 FileInfoDialog::FileInfoDialog(QWidget* parent) : KDialog(parent) {
-
 	textEditWidget.setReadOnly(true);
 	textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
 	setMainWidget( &textEditWidget );
- 	setButtons( KDialog::Ok);
- 	setWindowIcon(KIcon("help-about"));
+	setButtons( KDialog::Ok);
+	setWindowIcon(KIcon("help-about"));
 	setCaption(i18n("File info"));
- 	resize( QSize(500,300) );
+	setAttribute(Qt::WA_DeleteOnClose);
+
+	//restore saved settings if available
+	KConfigGroup conf(KSharedConfig::openConfig(), "FileInfoDialog");
+	if (conf.exists())
+		restoreDialogSize(conf);
+	else
+		resize( QSize(500,300).expandedTo(minimumSize()) );
+}
+
+FileInfoDialog::~FileInfoDialog() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "FileInfoDialog");
+	saveDialogSize(conf);
 }
 
 void FileInfoDialog::setFiles(QStringList& files) {
