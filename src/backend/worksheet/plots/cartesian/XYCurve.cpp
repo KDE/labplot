@@ -362,7 +362,7 @@ void XYCurve::setLinePen(const QPen &pen) {
 		exec(new XYCurveSetLinePenCmd(d, pen, i18n("%1: set line style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineOpacity, qreal, lineOpacity, update);
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineOpacity, qreal, lineOpacity, updatePixmap);
 void XYCurve::setLineOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->lineOpacity)
@@ -1833,7 +1833,6 @@ void XYCurvePrivate::updatePixmap() {
 	}
 	QPixmap pixmap(ceil(boundingRectangle.width()), ceil(boundingRectangle.height()));
 	pixmap.fill(Qt::transparent);
-	pixmap.fill(Qt::transparent);
 	QPainter painter(&pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
 	painter.translate(-boundingRectangle.topLeft());
@@ -1845,6 +1844,7 @@ void XYCurvePrivate::updatePixmap() {
 	//QApplication::processEvents(QEventLoop::AllEvents, 0);
 
 // 	qDebug() << "Update the pixmap: " << timer.elapsed() << "ms";
+	update();
 	RESET_CURSOR;
 	DEBUG("XYCurvePrivate::updatePixmap() DONE");
 }
