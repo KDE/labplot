@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Worksheet view
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -63,7 +63,9 @@ public:
 
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
-
+	void exportToClipboard();
+	void setIsClosing();
+	void setIsBeingPresented(bool presenting);
 private:
 	enum MouseMode {SelectionMode, NavigationMode, ZoomSelectionMode};
 	enum CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll};
@@ -84,6 +86,7 @@ private:
 	void mousePressEvent(QMouseEvent*);
 	void mouseReleaseEvent(QMouseEvent*);
 	void mouseMoveEvent(QMouseEvent*);
+	void keyPressEvent(QKeyEvent*);
 
 	Worksheet* m_worksheet;
 	MouseMode m_mouseMode;
@@ -100,7 +103,8 @@ private:
 	WorksheetElement* lastAddedWorksheetElement;
 	QTimeLine* m_fadeInTimeLine;
 	QTimeLine* m_fadeOutTimeLine;
-
+	bool m_isClosing;
+	bool m_isBeingPresented;
 	//Menus
 	QMenu* m_addNewMenu;
 	QMenu* m_addNewCartesianPlotMenu;
@@ -114,7 +118,8 @@ private:
 	QMenu* m_cartesianPlotAddNewMenu;
 	QMenu* m_cartesianPlotZoomMenu;
 	QMenu* m_cartesianPlotActionModeMenu;
-	QMenu* m_filterMenu;
+	// Data manipulation menu
+	QMenu* m_dataManipulationMenu;
 
 	QToolButton* tbNewCartesianPlot;
 	QToolButton* tbZoom;
@@ -165,6 +170,7 @@ private:
 	QAction* fourTimesMagnificationAction;
 	QAction* fiveTimesMagnificationAction;
 
+	QAction* showPresenterMode;
 	//Actions for cartesian plots
 	QAction* cartesianPlotApplyToSelectionAction;
 	QAction* cartesianPlotApplyToAllAction;
@@ -175,9 +181,15 @@ private:
 
 	QAction* addCurveAction;
 	QAction* addEquationCurveAction;
+	QAction* addDataOperationCurveAction;
+	QAction* addDataReductionCurveAction;
+	QAction* addDifferentiationCurveAction;
+	QAction* addIntegrationCurveAction;
+	QAction* addInterpolationCurveAction;
+	QAction* addSmoothCurveAction;
 	QAction* addFitCurveAction;
 	QAction* addFourierFilterCurveAction;
-	QAction* addInterpolationCurveAction;
+	QAction* addFourierTransformCurveAction;
 	QAction* addHorizontalAxisAction;
 	QAction* addVerticalAxisAction;
 	QAction* addLegendAction;
@@ -197,10 +209,16 @@ private:
 	QAction* shiftUpYAction;
 	QAction* shiftDownYAction;
 
-	// filter menu
+	// Analysis menu
+	QAction* addDataOperationAction;
+	QAction* addDataReductionAction;
+	QAction* addDifferentiationAction;
+	QAction* addIntegrationAction;
+	QAction* addInterpolationAction;
+	QAction* addSmoothAction;
 	QAction* addFitAction;
 	QAction* addFourierFilterAction;
-	QAction* addInterpolationAction;
+	QAction* addFourierTransformAction;
 
 public slots:
 	void createContextMenu(QMenu*) const;
@@ -231,6 +249,8 @@ private slots:
 
 	void fadeIn(qreal);
 	void fadeOut(qreal);
+
+	void presenterMode();
 
 	//SLOTs for cartesian plots
 	void cartesianPlotActionModeChanged(QAction*);

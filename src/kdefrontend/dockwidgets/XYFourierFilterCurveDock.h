@@ -50,7 +50,6 @@ private:
 	Ui::XYFourierFilterCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbXDataColumn;
 	TreeViewComboBox* cbYDataColumn;
-	TreeViewComboBox* cbWeightsColumn;
 
 	XYFourierFilterCurve* m_filterCurve;
 	XYFourierFilterCurve::FilterData m_filterData;
@@ -65,11 +64,14 @@ private slots:
 	void commentChanged();
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
-	void typeChanged(int);
-	void formChanged(int);
-	void orderChanged(int);
-	void unitChanged(int);
-	void unit2Changed(int);
+	void autoRangeChanged();
+	void xRangeMinChanged();
+	void xRangeMaxChanged();
+	void typeChanged();
+	void formChanged();
+	void orderChanged();
+	void unitChanged();
+	void unit2Changed();
 
 //	void showOptions();
 	void recalculateClicked();

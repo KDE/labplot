@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
-	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-	Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni.kn)
+	Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -28,17 +28,19 @@
  ***************************************************************************/
 
 #include "TemplateHandler.h"
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QSpacerItem>
-#include <QtWidgets/QToolButton>
+#include <QHBoxLayout>
+#include <QSpacerItem>
+#include <QToolButton>
 #include <QLabel>
 #include <QFileInfo>
 #include <QWidgetAction>
 
+#include <KIconLoader>
 #include <KLocalizedString>
 #include <KLineEdit>
 #include <QMenu>
 #include <KConfig>
+
  /*!
   \class TemplateHandler
   \brief Provides a widget with buttons for saving and loading of templates.
@@ -50,37 +52,45 @@
 */
 
 TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(parent){
-	horizontalLayout = new QHBoxLayout(this);
+	QHBoxLayout* horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
+	horizontalLayout->setMargin(0);
 
-	horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+	QSpacerItem* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 	horizontalLayout->addItem(horizontalSpacer);
 
+	int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
+
 	tbLoad = new QToolButton(this);
+	tbLoad->setIconSize(QSize(size, size));
 	horizontalLayout->addWidget(tbLoad);
 
 	tbSave = new QToolButton(this);
+	tbSave->setIconSize(QSize(size, size));
 	horizontalLayout->addWidget(tbSave);
 
 	tbSaveDefault = new QToolButton(this);
+	tbSaveDefault->setIconSize(QSize(size, size));
 	horizontalLayout->addWidget(tbSaveDefault);
 
-	horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
-	horizontalLayout->addItem(horizontalSpacer2);
+// 	QSpacerItem* horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+// 	horizontalLayout->addItem(horizontalSpacer2);
 
 	tbCopy = new QToolButton(this);
+	tbCopy->setIconSize(QSize(size, size));
 	tbCopy->setEnabled(false);
 	horizontalLayout->addWidget(tbCopy);
 
 	tbPaste = new QToolButton(this);
+	tbPaste->setIconSize(QSize(size, size));
 	tbPaste->setEnabled(false);
 	horizontalLayout->addWidget(tbPaste);
 
-    tbLoad->setIcon(QIcon::fromTheme("document-open"));
-    tbSave->setIcon(QIcon::fromTheme("document-save"));
-    tbSaveDefault->setIcon(QIcon::fromTheme("document-save-as"));
-    tbCopy->setIcon(QIcon::fromTheme("edit-copy"));
-    tbPaste->setIcon(QIcon::fromTheme("edit-paste"));
+	tbLoad->setIcon(QIcon::fromTheme("document-open"));
+	tbSave->setIcon(QIcon::fromTheme("document-save"));
+	tbSaveDefault->setIcon(QIcon::fromTheme("document-save-as"));
+	tbCopy->setIcon(QIcon::fromTheme("edit-copy"));
+	tbPaste->setIcon(QIcon::fromTheme("edit-paste"));
 
 	connect( tbLoad, SIGNAL(clicked()), this, SLOT(loadMenu()));
 	connect( tbSave, SIGNAL(clicked()), this, SLOT(saveMenu()));
@@ -96,6 +106,10 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 	//disable the load-button if no templates are available yet
     QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/" + dirNames.at(className) + "/*");
 	tbLoad->setEnabled(list.size());
+
+	//TODO: implement copy&paste of properties and activate copy- and paste-buttons again
+	tbCopy->hide();
+	tbPaste->hide();
 }
 
 void TemplateHandler::retranslateUi(){
@@ -110,10 +124,10 @@ void TemplateHandler::retranslateUi(){
 //##################################  Slots ####################################
 //##############################################################################
 void TemplateHandler::loadMenu() {
-    QMenu menu;
-    menu.addSection(i18n("Load from"));
+	QMenu menu;
+	menu.addSection(i18n("Load from"));
 
-    QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/" + dirNames.at(className) + "/*");
+	QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/" + dirNames.at(className) + "/*");
 	for (int i = 0; i < list.size(); ++i) {
 			QFileInfo fileinfo(list.at(i));
 			QAction* action = menu.addAction(fileinfo.fileName());
@@ -133,10 +147,10 @@ void TemplateHandler::loadMenuSelected(QAction* action) {
 }
 
 void TemplateHandler::saveMenu() {
-    QMenu menu;
-    menu.addSection(i18n("Save as"));
+	QMenu menu;
+	menu.addSection(i18n("Save as"));
 
-    QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/"+ dirNames.at(className) + "/*");
+	QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/"+ dirNames.at(className) + "/*");
 	for (int i = 0; i < list.size(); ++i) {
 			QFileInfo fileinfo(list.at(i));
 			QAction* action = menu.addAction(fileinfo.fileName());
@@ -173,7 +187,7 @@ void TemplateHandler::saveMenu() {
  * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
 void TemplateHandler::saveNewSelected(const QString& filename) {
-    KConfig config(QStandardPaths::locate(QStandardPaths::ApplicationsLocation, "templates") + '/' + dirNames.at(className) + '/' + filename, KConfig::SimpleConfig);
+	KConfig config(QStandardPaths::locate(QStandardPaths::ApplicationsLocation, "templates") + '/' + dirNames.at(className) + '/' + filename, KConfig::SimpleConfig);
 	emit (saveConfigRequested(config));
 
 	//we have at least one saved template now -> enable the load button

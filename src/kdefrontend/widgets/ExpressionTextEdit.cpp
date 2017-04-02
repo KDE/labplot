@@ -2,7 +2,7 @@
     File             : ExpressionTextEdit.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2014-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright        : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
     Description      : widget for defining mathematical expressions
 					   modified version of
 					   http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
@@ -78,7 +78,7 @@
 
 /*!
   \class ExpressionTextEdit
-  \brief  Provides a widget for for defining mathematical expressions
+  \brief  Provides a widget for defining mathematical expressions
 		  Supports syntax-highlighting and completion.
 
 		  Modified version of http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
@@ -154,6 +154,12 @@ void ExpressionTextEdit::focusInEvent(QFocusEvent *e) {
 	QTextEdit::focusInEvent(e);
 }
 
+void ExpressionTextEdit::focusOutEvent(QFocusEvent *e) {
+	//when loosing focus, rehighlight to remove potential highlighting of openning and closing brackets
+	m_highlighter->rehighlight();
+	QTextEdit::focusOutEvent(e);
+}
+
 void ExpressionTextEdit::keyPressEvent(QKeyEvent *e) {
 	switch (e->key()) {
 		case Qt::Key_Enter:
@@ -204,9 +210,9 @@ void ExpressionTextEdit::validateExpression(bool force) {
 		if (!m_isValid)
 			setStyleSheet("QTextEdit{background: red;}");
 		else
-			setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
+			setStyleSheet("");
 
 		m_currentExpression = text;
-		emit(expressionChanged());
+		emit expressionChanged();
 	}
 }

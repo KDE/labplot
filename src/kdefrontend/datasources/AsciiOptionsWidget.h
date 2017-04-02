@@ -31,7 +31,7 @@
 
 #include "ui_asciioptionswidget.h"
 
-class AsciiOptionsWidget : public QWidget{
+class AsciiOptionsWidget : public QWidget {
     Q_OBJECT
 
 public:

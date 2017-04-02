@@ -3,7 +3,8 @@
     Project              : LabPlot
     Description          : widget for editing the fit parameters
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
 
@@ -44,7 +45,10 @@ private:
 	Ui::FitParametersWidget ui;
 	XYFitCurve::FitData* m_fitData;
 	bool m_changed;
-	bool eventFilter( QObject * watched, QEvent * event);
+	bool m_rehighlighting;
+
+	bool eventFilter( QObject*, QEvent*);
+	void highlightInvalid(int row, int col, bool invalid) const;
 
 signals:
 	void finished();
@@ -52,6 +56,9 @@ signals:
 
 private slots:
 	void applyClicked();
+	void startValueChanged();
+	void lowerLimitChanged();
+	void upperLimitChanged();
 	void addParameter();
 	void removeParameter();
 	void changed();

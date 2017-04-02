@@ -28,7 +28,7 @@
  ***************************************************************************/
 #include "StatisticsFilter.h"
 #include "core/AbstractColumn.h"
-#include <math.h>
+#include <cmath>
 
 class StatisticsColumn : public AbstractColumn {
 	public:

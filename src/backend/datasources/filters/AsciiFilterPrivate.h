@@ -1,10 +1,10 @@
 /***************************************************************************
     File                 : AsciiFilterPrivate.h
-    Project              : LabPlot/SciDAVis
+    Project              : LabPlot
     Description          : Private implementation class for AsciiFilter.
     --------------------------------------------------------------------
-	Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke*web.de)
-						   (replace * with @ in the email addresses)
+    Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -37,7 +37,7 @@ class AsciiFilterPrivate {
 		explicit AsciiFilterPrivate(AsciiFilter*);
 
 		void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
-		QString readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
+		QList <QStringList> readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
 		void write(const QString & fileName, AbstractDataSource* dataSource);
 
 		const AsciiFilter* q;

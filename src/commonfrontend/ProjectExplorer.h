@@ -43,6 +43,7 @@ class QSignalMapper;
 class QTreeView;
 class QXmlStreamWriter;
 class QItemSelection;
+class QMenu;
 
 class ProjectExplorer : public QWidget {
 	Q_OBJECT
@@ -52,7 +53,7 @@ class ProjectExplorer : public QWidget {
 
 		void setCurrentAspect(const AbstractAspect*);
 		void setModel(AspectTreeModel*);
-		void setProject(const Project*);
+		void setProject(Project*);
 		QModelIndex currentIndex() const;
 
 	private:
@@ -60,14 +61,18 @@ class ProjectExplorer : public QWidget {
 	  	void contextMenuEvent(QContextMenuEvent*);
 		bool eventFilter(QObject*, QEvent*);
 		void collapseParents(const QModelIndex& index, const QList<QModelIndex>& expanded);
+		bool filter(const QModelIndex&, const QString&);
 		int m_columnToHide;
 		QTreeView* m_treeView;
-		const Project* m_project;
+		Project* m_project;
 
 		QAction* caseSensitiveAction;
 		QAction* matchCompleteWordAction;
 		QAction* expandTreeAction;
+		QAction* expandSelectedTreeAction;
 		QAction* collapseTreeAction;
+		QAction* collapseSelectedTreeAction;
+		QAction* deleteSelectedTreeAction;
 		QAction* toggleFilterAction;
 		QAction* showAllColumnsAction;
 		QList<QAction*> list_showColumnActions;
@@ -89,7 +94,11 @@ class ProjectExplorer : public QWidget {
 		void toggleFilterWidgets();
 		void toggleFilterOptionsMenu(bool);
 		void resizeHeader();
+		void expandSelected();
+		void collapseSelected();
+		void deleteSelected();
 
+		void navigateTo(const QString& path);
 		void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 		void selectIndex(const QModelIndex&);
 		void deselectIndex(const QModelIndex&);

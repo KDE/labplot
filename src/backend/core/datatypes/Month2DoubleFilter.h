@@ -32,7 +32,7 @@
 
 #include "../AbstractSimpleFilter.h"
 #include <QDate>
-#include <math.h>
+#include <cmath>
 
 /**
  * \brief Conversion filter QDateTime -> double, translating dates into months (January -> 1).

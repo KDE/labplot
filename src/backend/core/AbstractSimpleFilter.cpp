@@ -29,13 +29,12 @@
  ***************************************************************************/
 
 #include "AbstractSimpleFilter.h"
-
-#include <QtCore/QString>
-#include <QtCore/QDateTime>
-#include <QtCore/QDate>
-#include <QtCore/QTime>
-#include <QXmlStreamWriter>
 #include "backend/lib/XmlStreamReader.h"
+
+#include <QDateTime>
+#include <QDate>
+#include <QTime>
+
 #include <KLocale>
 
 /**
@@ -275,7 +274,7 @@ void AbstractSimpleFilter::inputRowsAboutToBeInserted(const AbstractColumn * sou
 {
 	Q_UNUSED(source);
 	Q_UNUSED(count);
-	foreach(const Interval<int>& output_range, dependentRows(Interval<int>(before, before)))
+	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(before, before)))
 		emit m_output_column->rowsAboutToBeInserted(m_output_column, output_range.start(), output_range.size());
 }
 
@@ -283,21 +282,21 @@ void AbstractSimpleFilter::inputRowsInserted(const AbstractColumn * source, int 
 {
 	Q_UNUSED(source);
 	Q_UNUSED(count);
-	foreach(const Interval<int>& output_range, dependentRows(Interval<int>(before, before)))
+	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(before, before)))
 		emit m_output_column->rowsInserted(m_output_column, output_range.start(), output_range.size());
 }
 
 void AbstractSimpleFilter::inputRowsAboutToBeRemoved(const AbstractColumn * source, int first, int count)
 {
 	Q_UNUSED(source);
-	foreach(const Interval<int>& output_range, dependentRows(Interval<int>(first, first+count-1)))
+	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(first, first+count-1)))
 		emit m_output_column->rowsAboutToBeRemoved(m_output_column, output_range.start(), output_range.size());
 }
 
 void AbstractSimpleFilter::inputRowsRemoved(const AbstractColumn * source, int first, int count)
 {
 	Q_UNUSED(source);
-	foreach(const Interval<int>& output_range, dependentRows(Interval<int>(first, first+count-1)))
+	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(first, first+count-1)))
 		emit m_output_column->rowsRemoved(m_output_column, output_range.start(), output_range.size());
 }
 

@@ -39,9 +39,15 @@ class CartesianPlotPrivate;
 class CartesianPlotLegend;
 class XYCurve;
 class XYEquationCurve;
+class XYDataReductionCurve;
+class XYDifferentiationCurve;
+class XYIntegrationCurve;
+class XYInterpolationCurve;
+class XYSmoothCurve;
 class XYFitCurve;
 class XYFourierFilterCurve;
-class XYInterpolationCurve;
+class KConfig;
+class XYFourierTransformCurve;
 
 class CartesianPlot:public AbstractPlot{
 	Q_OBJECT
@@ -58,17 +64,19 @@ class CartesianPlot:public AbstractPlot{
 									ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
 
 		struct RangeBreak {
-			RangeBreak() : start(NAN), end(NAN), position(0.5), isValid(true) {};
+			RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakSloped) {}
+			bool isValid() const {return (!std::isnan(start) && !std::isnan(end)); }
 			float start;
 			float end;
 			float position;
 			RangeBreakStyle style;
-			bool isValid;
 		};
 
 		//simple wrapper for QList<RangeBreaking> in order to get our macros working
 		struct RangeBreaks {
+			RangeBreaks() : lastChanged(-1) { RangeBreak b; list<<b;};
 			QList<RangeBreak> list;
+			int lastChanged;
 		};
 
 		void initDefault(Type=FourAxes);
@@ -79,6 +87,8 @@ class CartesianPlot:public AbstractPlot{
 		void setMouseMode(const MouseMode);
 		MouseMode mouseMode() const;
 		void navigate(NavigationOperation);
+
+		const QList<QColor>& themeColorPalette() const;
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
@@ -103,18 +113,27 @@ class CartesianPlot:public AbstractPlot{
 		void init();
 		void initActions();
 		void initMenus();
+		void setColorPalette(const KConfig&);
+		void applyThemeOnNewCurve(XYCurve* curve);
 
 		CartesianPlotLegend* m_legend;
 		float m_zoomFactor;
+		QString m_themeName;
+		QList<QColor> m_themeColorPalette;
 
 		QAction* visibilityAction;
 
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
 		QAction* addHistogramPlot;
+		QAction* addDataReductionCurveAction;
+		QAction* addDifferentiationCurveAction;
+		QAction* addIntegrationCurveAction;
+		QAction* addInterpolationCurveAction;
+		QAction* addSmoothCurveAction;
 		QAction* addFitCurveAction;
 		QAction* addFourierFilterCurveAction;
-		QAction* addInterpolationCurveAction;
+		QAction* addFourierTransformCurveAction;
 		QAction* addHorizontalAxisAction;
 		QAction* addVerticalAxisAction;
  		QAction* addLegendAction;
@@ -136,6 +155,7 @@ class CartesianPlot:public AbstractPlot{
 
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;
+		QMenu* themeMenu;
 
 		Q_DECLARE_PRIVATE(CartesianPlot)
 
@@ -145,9 +165,14 @@ class CartesianPlot:public AbstractPlot{
 		XYCurve* addCurve();
 		Histogram* addHistogram();
 		XYEquationCurve* addEquationCurve();
+		XYDataReductionCurve* addDataReductionCurve();
+		XYDifferentiationCurve* addDifferentiationCurve();
+		XYIntegrationCurve* addIntegrationCurve();
+		XYInterpolationCurve* addInterpolationCurve();
+		XYSmoothCurve* addSmoothCurve();
 		XYFitCurve* addFitCurve();
 		XYFourierFilterCurve* addFourierFilterCurve();
-		XYInterpolationCurve* addInterpolationCurve();
+		XYFourierTransformCurve* addFourierTransformCurve();
 		void addLegend();
 		void addCustomPoint();
 		void scaleAuto();
@@ -163,6 +188,8 @@ class CartesianPlot:public AbstractPlot{
 		void shiftRightX();
 		void shiftUpY();
 		void shiftDownY();
+		void loadTheme(KConfig& config);
+		void saveTheme(KConfig& config);
 
 	private slots:
 		void updateLegend();
@@ -179,6 +206,7 @@ class CartesianPlot:public AbstractPlot{
 
 		//SLOTs for changes triggered via QActions in the context menu
 		void visibilityChanged();
+		void loadTheme(const QString&);
 
 	protected:
 		CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
@@ -210,6 +238,7 @@ class CartesianPlot:public AbstractPlot{
 		void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 		void yRangeBreakingEnabledChanged(bool);
 		void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
+		void themeLoaded();
 };
 
 #endif

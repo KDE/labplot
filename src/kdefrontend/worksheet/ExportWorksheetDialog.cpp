@@ -33,7 +33,7 @@
 #include <QDesktopWidget>
 #include <KLocalizedString>
 #include <KSharedConfig>
-#include <QDebug>
+#include <KWindowConfig>
 #include <QWidget>
 
 /*!
@@ -44,13 +44,13 @@
 */
 
 ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent),
-    urlCompletion(new KUrlCompletion){
+		urlCompletion(new KUrlCompletion) {
 	mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
 
-    ui.kleFileName->setCompletionObject(urlCompletion);
+	ui.kleFileName->setCompletionObject(urlCompletion);
 
-	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
+	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
 
 	ui.cbFormat->addItem(QIcon::fromTheme("application-pdf"), "Portable data format (PDF)");
 	ui.cbFormat->addItem(QIcon::fromTheme("image-svg+xml"), "Scalable Vector Graphics (SVG)");
@@ -90,7 +90,8 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : KDialog(parent),
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	ui.gbOptions->setVisible(m_showOptions);
 	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
-	restoreDialogSize(conf);
+
+	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
 
 ExportWorksheetDialog::~ExportWorksheetDialog() {
@@ -101,8 +102,10 @@ ExportWorksheetDialog::~ExportWorksheetDialog() {
 	conf.writeEntry("Background", ui.chkExportBackground->isChecked());
 	conf.writeEntry("Resolution", ui.cbResolution->currentIndex());
 	conf.writeEntry("ShowOptions", m_showOptions);
-	saveDialogSize(conf);
-    delete urlCompletion;
+
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
+	
+	delete urlCompletion;
 }
 
 void ExportWorksheetDialog::setFileName(const QString& name) {
@@ -121,8 +124,8 @@ WorksheetView::ExportFormat ExportWorksheetDialog::exportFormat() const {
 	int index = ui.cbFormat->currentIndex();
 
 	//we have a separator in the format combobox at the 3th position -> skip it
-	if (index>2)
-		index --;
+	if (index > 2)
+		index--;
 
 	return WorksheetView::ExportFormat(index);
 }
@@ -153,8 +156,8 @@ void ExportWorksheetDialog::slotButtonClicked(int button) {
 //SLOTS
 void ExportWorksheetDialog::okClicked() {
 	if ( QFile::exists(ui.kleFileName->text()) ) {
-		int r=KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
-		if (r==KMessageBox::No)
+		int r = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
+		if (r == KMessageBox::No)
 			return;
 	}
 

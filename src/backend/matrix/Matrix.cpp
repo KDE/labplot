@@ -64,7 +64,6 @@ Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QStrin
 	appendRows(rows);
 
 	init();
-
 }
 
 Matrix::Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading)
@@ -129,48 +128,61 @@ bool Matrix::exportView() const {
 	ExportSpreadsheetDialog* dlg = new ExportSpreadsheetDialog(m_view);
 	dlg->setFileName(name());
 	dlg->setMatrixMode(true);
-    bool ret;
-    if ((ret = dlg->exec()==QDialog::Accepted)) {
-        const QString path = dlg->path();
-        const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
-        WAIT_CURSOR;
-        if (dlg->format() == ExportSpreadsheetDialog::LaTeX){
-            const bool verticalHeader = dlg->matrixVerticalHeader();
-            const bool horizontalHeader = dlg->matrixHorizontalHeader();
-            const bool latexHeader = dlg->exportHeader();
-            const bool gridLines = dlg->gridLines();
-            const bool entire = dlg->entireSpreadheet();
-            const bool captions = dlg->captions();
-            view->exportToLaTeX(path, verticalHeader, horizontalHeader,
-                                latexHeader, gridLines, entire, captions);
-        }else {
-            const QString separator = dlg->separator();
-            view->exportToFile(path, separator);
-        }
-        RESET_CURSOR;
-    }
+
+	//TODO FITS filter to decide if it can be exported to both
+	dlg->setExportTo(QStringList() << i18n("FITS image") << i18n("FITS table"));
+	if (reinterpret_cast<const MatrixView*>(m_view)->selectedColumnCount() == 0) {
+		dlg->setExportSelection(false);
+	}
+
+	bool ret;
+	if ( (ret = (dlg->exec()==QDialog::Accepted)) ) {
+		const QString path = dlg->path();
+		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
+		WAIT_CURSOR;
+
+		if (dlg->format() == ExportSpreadsheetDialog::LaTeX) {
+			const bool verticalHeader = dlg->matrixVerticalHeader();
+			const bool horizontalHeader = dlg->matrixHorizontalHeader();
+			const bool latexHeader = dlg->exportHeader();
+			const bool gridLines = dlg->gridLines();
+			const bool entire = dlg->entireSpreadheet();
+			const bool captions = dlg->captions();
+			view->exportToLaTeX(path, verticalHeader, horizontalHeader,
+				latexHeader, gridLines, entire, captions);
+		} else if (dlg->format() == ExportSpreadsheetDialog::FITS) {
+			const int exportTo = dlg->exportToFits();
+			view->exportToFits(path, exportTo );
+		} else {
+			const QString separator = dlg->separator();
+			view->exportToFile(path, separator);
+		}
+		RESET_CURSOR;
+    	}
 	delete dlg;
-    return ret;
+
+	return ret;
 }
 
 bool Matrix::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
-    bool ret;
+	bool ret;
 	dlg->setWindowTitle(i18n("Print Matrix"));
-    if ((ret = dlg->exec() == QDialog::Accepted)) {
+	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
 		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
 		view->print(&printer);
 	}
 	delete dlg;
-    return ret;
+
+	return ret;
 }
 
 bool Matrix::printPreview() const {
 	const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
-    return dlg->exec();
+	return dlg->exec();
 }
 
 //##############################################################################
@@ -199,14 +211,6 @@ void Matrix::setSuppressDataChangedSignal(bool b) {
 void Matrix::setChanged() {
 	if (m_model)
 		m_model->setChanged();
-}
-
-int Matrix::defaultRowHeight() const {
-	return d->defaultRowHeight;
-}
-
-int Matrix::defaultColumnWidth() const {
-	return d->defaultRowHeight*3;
 }
 
 //##############################################################################
@@ -398,7 +402,6 @@ void Matrix::copy(Matrix* other) {
 	RESET_CURSOR;
 }
 
-
 //! Duplicate the matrix inside its folder
 void Matrix::duplicate() {
 	Matrix* matrix = new Matrix(0, rowCount(), columnCount(), name());
@@ -524,10 +527,7 @@ void Matrix::mirrorVertically() {
 //##############################################################################
 
 MatrixPrivate::MatrixPrivate(Matrix* owner) : q(owner), columnCount(0), rowCount(0), suppressDataChange(false) {
-	QFont font;
-	font.setFamily(font.defaultFamily());
-	QFontMetrics fm(font);
-	defaultRowHeight = fm.height();
+
 }
 
 void MatrixPrivate::updateViewHeader() {
@@ -544,7 +544,7 @@ void MatrixPrivate::insertColumns(int before, int count) {
 	emit q->columnsAboutToBeInserted(before, count);
 	for(int i=0; i<count; i++) {
 		matrixData.insert(before+i, QVector<double>(rowCount));
-		columnWidths.insert(before+i, q->defaultColumnWidth());
+		columnWidths.insert(before+i, 0);
 	}
 
 	columnCount += count;
@@ -576,7 +576,7 @@ void MatrixPrivate::insertRows(int before, int count) {
 		for(int i=0; i<count; i++)
 			matrixData[col].insert(before+i, 0.0);
 	for(int i=0; i<count; i++)
-		rowHeights.insert(before+i, defaultRowHeight);
+		rowHeights.insert(before+i, 0);
 
 	rowCount += count;
 	emit q->rowsInserted(before, count);

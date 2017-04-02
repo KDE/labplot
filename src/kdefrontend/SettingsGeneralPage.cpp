@@ -1,11 +1,10 @@
 /***************************************************************************
     File                 : SettingsGeneralPage.cpp
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2008-2013 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
     Description          : general settings page
-                           
+    --------------------------------------------------------------------
+    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,20 +25,18 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include "SettingsGeneralPage.h"
-#include "MainWin.h"
 
-#include <KLocalizedString>
+#include "SettingsGeneralPage.h"
+
+#include <KLocale>
 #include <KConfigGroup>
 #include <KSharedConfig>
-#include <kfiledialog.h>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
- *
  */
-SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
-	SettingsPage(parent), m_changed(false) {
+SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent),
+	m_changed(false) {
 
 	ui.setupUi(this);
 	retranslateUi();
@@ -49,20 +46,19 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) :
 	connect(ui.cbMdiVisibility, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
 	connect(ui.cbTabPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
 	connect(ui.chkAutoSave, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
-	connect(ui.sbAutoSaveInterval, SIGNAL(valueChanged(int)), this, SLOT(changed()) );
 
 	loadSettings();
 	interfaceChanged(ui.cbInterface->currentIndex());
 }
 
 void SettingsGeneralPage::applySettings(){
-	KConfigGroup group = KSharedConfig::openConfig()->group( "General" );
-	group.writeEntry("LoadOnStart", ui.cbLoadOnStart->currentIndex());
-	group.writeEntry("ViewMode", ui.cbInterface->currentIndex());
-	group.writeEntry("TabPosition", ui.cbTabPosition->currentIndex());
-	group.writeEntry("MdiWindowVisibility", ui.cbMdiVisibility->currentIndex());
-	group.writeEntry("AutoSave", ui.chkAutoSave->isChecked());
-	group.writeEntry("AutoSaveInterval", ui.sbAutoSaveInterval->value());
+	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentIndex());
+	group.writeEntry(QLatin1String("ViewMode"), ui.cbInterface->currentIndex());
+	group.writeEntry(QLatin1String("TabPosition"), ui.cbTabPosition->currentIndex());
+	group.writeEntry(QLatin1String("MdiWindowVisibility"), ui.cbMdiVisibility->currentIndex());
+	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
+	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
 }
 
 void SettingsGeneralPage::restoreDefaults(){
@@ -70,13 +66,13 @@ void SettingsGeneralPage::restoreDefaults(){
 }
 
 void SettingsGeneralPage::loadSettings(){
-	const KConfigGroup group = KSharedConfig::openConfig()->group( "General" );
-	ui.cbLoadOnStart->setCurrentIndex(group.readEntry("LoadOnStart", 0));
-	ui.cbInterface->setCurrentIndex(group.readEntry("ViewMode", 0));
-	ui.cbTabPosition->setCurrentIndex(group.readEntry("TabPosition", 0));
-	ui.cbMdiVisibility->setCurrentIndex(group.readEntry("MdiWindowVisibility", 0));
-	ui.chkAutoSave->setChecked(group.readEntry<bool>("AutoSave", 0));
-	ui.sbAutoSaveInterval->setValue(group.readEntry("AutoSaveInterval", 0));
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	ui.cbLoadOnStart->setCurrentIndex(group.readEntry(QLatin1String("LoadOnStart"), 0));
+	ui.cbInterface->setCurrentIndex(group.readEntry(QLatin1String("ViewMode"), 0));
+	ui.cbTabPosition->setCurrentIndex(group.readEntry(QLatin1String("TabPosition"), 0));
+	ui.cbMdiVisibility->setCurrentIndex(group.readEntry(QLatin1String("MdiWindowVisibility"), 0));
+	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), 0));
+	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
 }
 
 void SettingsGeneralPage::retranslateUi() {
@@ -85,11 +81,11 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbLoadOnStart->addItem(i18n("Create new empty project"));
 	ui.cbLoadOnStart->addItem(i18n("Create new project with worksheet"));
 	ui.cbLoadOnStart->addItem(i18n("Load last used project"));
-	
+
 	ui.cbInterface->clear();
 	ui.cbInterface->addItem(i18n("Sub-window view"));
 	ui.cbInterface->addItem(i18n("Tabbed view"));
-	
+
 	ui.cbMdiVisibility->clear();
 	ui.cbMdiVisibility->addItem(i18n("Show windows of the current folder only"));
 	ui.cbMdiVisibility->addItem(i18n("Show windows of the current folder and its subfolders only"));
@@ -113,6 +109,5 @@ void SettingsGeneralPage::interfaceChanged(int index) {
 	ui.cbTabPosition->setVisible(tabbedView);
 	ui.lMdiVisibility->setVisible(!tabbedView);
 	ui.cbMdiVisibility->setVisible(!tabbedView);
-	
 	changed();
 }

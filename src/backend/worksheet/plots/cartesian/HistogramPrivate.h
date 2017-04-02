@@ -29,10 +29,14 @@
 #ifndef HISTOGRAMPRIVATE_H
 #define HISTOGRAMPRIVATE_H
 
+#include <QGraphicsItem>
 #include <vector>
-#include <gsl_histogram.h>
 
-class HistogramPrivate: public QGraphicsItem {
+extern "C" {
+#include <gsl/gsl_histogram.h>
+}
+
+class HistogramPrivate : public QGraphicsItem {
   public:
 		explicit HistogramPrivate(Histogram *owner);
 

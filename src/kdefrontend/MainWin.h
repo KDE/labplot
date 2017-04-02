@@ -38,6 +38,7 @@ class Folder;
 class ProjectExplorer;
 class Project;
 class Worksheet;
+class Note;
 class Workbook;
 class Datapicker;
 class Image;
@@ -45,6 +46,7 @@ class Spreadsheet;
 class Matrix;
 class GuiObserver;
 class AxisDock;
+class NoteDock;
 class CartesianPlotDock;
 class HistogramDock;
 class BarChartPlotDock;
@@ -56,14 +58,24 @@ class ProjectDock;
 class SpreadsheetDock;
 class XYCurveDock;
 class XYEquationCurveDock;
+class XYDataReductionCurveDock;
+class XYDifferentiationCurveDock;
+class XYIntegrationCurveDock;
+class XYInterpolationCurveDock;
+class XYSmoothCurveDock;
 class XYFitCurveDock;
 class XYFourierFilterCurveDock;
-class XYInterpolationCurveDock;
+class XYFourierTransformCurveDock;
 class WorksheetDock;
 class LabelWidget;
 class ImportFileDialog;
 class DatapickerImageWidget;
 class DatapickerCurveWidget;
+
+#ifdef HAVE_CANTOR_LIBS
+class CantorWorksheet;
+class CantorWorksheetDock;
+#endif
 
 class QDockWidget;
 class QStackedWidget;
@@ -112,6 +124,7 @@ private:
 	QAction* m_newSpreadsheetAction;
 	QAction* m_newMatrixAction;
 	QAction* m_newWorksheetAction;
+	QAction* m_newNotesAction;
 	QAction* m_newFileDataSourceAction;
 	QAction* m_newSqlDataSourceAction;
 	QAction* m_newScriptAction;
@@ -122,6 +135,7 @@ private:
 	QAction* m_tileWindows;
 	QAction* m_cascadeWindows;
 	QAction* m_newDatapickerAction;
+	QAction* m_editFitsFileAction;
 
 	//toggling doch widgets
 	QAction* m_toggleProjectExplorerDocQAction;
@@ -153,22 +167,29 @@ private:
 	//Menus
 	QMenu* m_visibilityMenu;
 	QMenu* m_newMenu;
+	QMenu* m_editMenu;
 
 	//Docks
 	QStackedWidget* stackedWidget;
 	AxisDock* axisDock;
+	NoteDock* notesDock;
 	CartesianPlotDock* cartesianPlotDock;
 	CartesianPlotLegendDock* cartesianPlotLegendDock;
-	HistogramDock* histogramDock;
 	ColumnDock* columnDock;
 	MatrixDock* matrixDock;
 	SpreadsheetDock* spreadsheetDock;
 	ProjectDock* projectDock;
 	XYCurveDock* xyCurveDock;
 	XYEquationCurveDock* xyEquationCurveDock;
+	XYDataReductionCurveDock* xyDataReductionCurveDock;
+	XYDifferentiationCurveDock* xyDifferentiationCurveDock;
+	XYIntegrationCurveDock* xyIntegrationCurveDock;
 	XYInterpolationCurveDock* xyInterpolationCurveDock;
+	XYSmoothCurveDock* xySmoothCurveDock;
 	XYFitCurveDock* xyFitCurveDock;
 	XYFourierFilterCurveDock* xyFourierFilterCurveDock;
+	XYFourierTransformCurveDock* xyFourierTransformCurveDock;
+	HistogramDock* histogramDock;
 	WorksheetDock* worksheetDock;
 	LabelWidget* textLabelDock;
 	CustomPointDock* customPointDock;
@@ -189,6 +210,13 @@ private:
 	Matrix* activeMatrix() const;
 	Worksheet* activeWorksheet() const;
 	Datapicker* activeDatapicker() const;
+
+	//cantor
+#ifdef HAVE_CANTOR_LIBS
+	QMenu* m_newCantorWorksheetMenu;
+	CantorWorksheetDock* cantorWorksheetDock;
+	CantorWorksheet* activeCantorWorksheet() const;
+#endif
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver;
@@ -220,14 +248,21 @@ private slots:
 	void historyDialog();
 	void importFileDialog(const QString& fileName = QString());
 	void exportDialog();
+	void editFitsFileDialog();
 	void settingsDialog();
 	void projectChanged();
+	
+	//Cantor
+	#ifdef HAVE_CANTOR_LIBS
+	void newCantorWorksheet(QAction* action);
+	#endif
 
 	void newFolder();
 	void newWorkbook();
 	void newSpreadsheet();
 	void newMatrix();
 	void newWorksheet();
+	void newNotes();
 	void newDatapicker();
 	//TODO: void newScript();
 	void newFileDataSourceActionTriggered();
@@ -249,6 +284,8 @@ private slots:
 	void updateMdiWindowVisibility() const;
 	void toggleDockWidget(QAction*) const;
 	void toggleFullScreen();
+	void projectExplorerDockVisibilityChanged(bool);
+	void propertiesDockVisibilityChanged(bool);
 };
 
 #endif

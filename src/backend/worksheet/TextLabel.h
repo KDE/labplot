@@ -1,7 +1,7 @@
 /***************************************************************************
     File                 : TextLabel.h
     Project              : LabPlot
-    Description          : A one-line text label supporting floating point font sizes.
+    Description          : Text label supporting reach text and latex formatting
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2012-2014 Alexander Semke (alexander.semke@web.de)
@@ -39,7 +39,7 @@
 #include "backend/worksheet/WorksheetElement.h"
 
 class TextLabelPrivate;
-class TextLabel : public WorksheetElement{
+class TextLabel : public WorksheetElement {
 	Q_OBJECT
 
 	public:
@@ -51,16 +51,16 @@ class TextLabel : public WorksheetElement{
 		enum HorizontalAlignment {hAlignLeft, hAlignCenter, hAlignRight};
 		enum VerticalAlignment {vAlignTop, vAlignCenter, vAlignBottom};
 
-		struct TextWrapper{
-			TextWrapper() : teXUsed(false){}
-			TextWrapper(const QString& t, bool b) : text(t), teXUsed(b){}
-			TextWrapper(const QString& t) : text(t), teXUsed(false){}
+		struct TextWrapper {
+			TextWrapper() : teXUsed(false) {}
+			TextWrapper(const QString& t, bool b) : text(t), teXUsed(b) {}
+			TextWrapper(const QString& t) : text(t), teXUsed(false) {}
 
 			QString text;
 			bool teXUsed;
 		};
 
-		struct PositionWrapper{
+		struct PositionWrapper {
 			QPointF 		   point;
 			HorizontalPosition horizontalPosition;
 			VerticalPosition   verticalPosition;
@@ -70,17 +70,19 @@ class TextLabel : public WorksheetElement{
 		~TextLabel();
 
 		Type type() const;
-        virtual QIcon icon() const;
+		virtual QIcon icon() const;
 		virtual QMenu* createContextMenu();
-		virtual QGraphicsItem *graphicsItem() const;
+		virtual QGraphicsItem* graphicsItem() const;
 		void setParentGraphicsItem(QGraphicsItem*);
 
-		virtual void save(QXmlStreamWriter *) const;
-		virtual bool load(XmlStreamReader *);
+		virtual void save(QXmlStreamWriter*) const;
+		virtual bool load(XmlStreamReader*);
+		virtual void loadThemeConfig(const KConfig& config);
+		virtual void saveThemeConfig(const KConfig& config);
 
 		CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text);
-		BASIC_D_ACCESSOR_DECL(int, teXFontSize, TeXFontSize);
 		BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor);
+		CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont);
 		CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position);
 		void setPosition(const QPointF&);
 		void setPositionInvalid(bool);
@@ -109,7 +111,7 @@ class TextLabel : public WorksheetElement{
 		TextLabel(const QString& name, TextLabelPrivate* dd, Type type = General);
 
 	private:
-    	Q_DECLARE_PRIVATE(TextLabel)
+		Q_DECLARE_PRIVATE(TextLabel)
 		void init();
 		void initActions();
 
@@ -118,7 +120,7 @@ class TextLabel : public WorksheetElement{
 
 	signals:
 		friend class TextLabelSetTextCmd;
-		friend class TextLabelSetTeXFontSizeCmd;
+		friend class TextLabelSetTeXFontCmd;
 		friend class TextLabelSetTeXFontColorCmd;
 		friend class TextLabelSetPositionCmd;
 		friend class TextLabelSetHorizontalAlignmentCmd;
@@ -126,6 +128,7 @@ class TextLabel : public WorksheetElement{
 		friend class TextLabelSetRotationAngleCmd;
 		void textWrapperChanged(const TextLabel::TextWrapper&);
 		void teXFontSizeChanged(const int);
+		void teXFontChanged(const QFont);
 		void teXFontColorChanged(const QColor);
 		void positionChanged(const TextLabel::PositionWrapper&);
 		void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
@@ -133,6 +136,7 @@ class TextLabel : public WorksheetElement{
 		void rotationAngleChanged(float);
 		void visibleChanged(bool);
 
+		void teXImageUpdated(bool);
 		void changed();
 };
 

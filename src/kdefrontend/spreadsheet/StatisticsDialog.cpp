@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dialog showing statistics for column values
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 by Fabian Kristof (f-kristof@hotmail.com)
+    Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com))
     Copyright            : (C) 2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -29,11 +29,12 @@
 
 #include "StatisticsDialog.h"
 #include "backend/core/column/Column.h"
-#include <cmath>
 
 #include <QTextEdit>
 #include <QTabWidget>
 #include <KLocale>
+
+#include <cmath>
 
 StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 	KDialog(parent) {
@@ -190,19 +191,19 @@ void StatisticsDialog::currentTabChanged(int index) {
 	RESET_CURSOR;
 
 	QTextEdit* textEdit = static_cast<QTextEdit*>(twStatistics->currentWidget());
-	textEdit->setHtml(m_htmlText.arg(isNanValue(statistics.minimum)).
-	                  arg(isNanValue(statistics.maximum)).
-	                  arg(isNanValue(statistics.arithmeticMean)).
-	                  arg(isNanValue(statistics.geometricMean)).
-	                  arg(isNanValue(statistics.harmonicMean)).
-	                  arg(isNanValue(statistics.contraharmonicMean)).
-	                  arg(isNanValue(statistics.median)).
-	                  arg(isNanValue(statistics.variance)).
-	                  arg(isNanValue(statistics.standardDeviation)).
-	                  arg(isNanValue(statistics.meanDeviation)).
-	                  arg(isNanValue(statistics.meanDeviationAroundMedian)).
-	                  arg(isNanValue(statistics.medianDeviation)).
-	                  arg(isNanValue(statistics.skewness)).
-	                  arg(isNanValue(statistics.kurtosis)).
-	                  arg(isNanValue(statistics.entropy)));
+	textEdit->setHtml(m_htmlText.arg(isNanValue(statistics.minimum),
+	                  isNanValue(statistics.maximum),
+	                  isNanValue(statistics.arithmeticMean),
+	                  isNanValue(statistics.geometricMean),
+	                  isNanValue(statistics.harmonicMean),
+	                  isNanValue(statistics.contraharmonicMean),
+	                  isNanValue(statistics.median),
+	                  isNanValue(statistics.variance),
+	                  isNanValue(statistics.standardDeviation)).
+	                  arg(isNanValue(statistics.meanDeviation),
+	                  isNanValue(statistics.meanDeviationAroundMedian),
+	                  isNanValue(statistics.medianDeviation),
+	                  isNanValue(statistics.skewness),
+	                  isNanValue(statistics.kurtosis),
+	                  isNanValue(statistics.entropy)));
 }

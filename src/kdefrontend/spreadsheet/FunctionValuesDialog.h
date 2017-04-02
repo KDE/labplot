@@ -38,19 +38,23 @@ class Spreadsheet;
 class TreeViewComboBox;
 class AspectTreeModel;
 
-class FunctionValuesDialog : public KDialog{
+class FunctionValuesDialog : public KDialog {
 	Q_OBJECT
 
 	public:
 		explicit FunctionValuesDialog(Spreadsheet* s, QWidget* parent = 0, Qt::WFlags fl = 0);
+		~FunctionValuesDialog();
 		void setColumns(QList<Column*>);
 
 	private:
 		Ui::FunctionValuesWidget ui;
 		QList<Column*> m_columns;
 		Spreadsheet* m_spreadsheet;
-        // TODO - Change this to a modern smart pointer
+#if __cplusplus < 201103L
 		std::auto_ptr<AspectTreeModel> m_aspectTreeModel;
+#else
+		std::unique_ptr<AspectTreeModel> m_aspectTreeModel;
+#endif
 		QList<const char*>  m_topLevelClasses;
 		QList<const char*>  m_selectableClasses;
 

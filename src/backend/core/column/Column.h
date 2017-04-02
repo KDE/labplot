@@ -77,14 +77,14 @@ class Column : public AbstractColumn {
 
 		friend class ColumnPrivate;
 
-		Column(const QString& name, AbstractColumn::ColumnMode mode = AbstractColumn::Numeric);
+		explicit Column(const QString& name, AbstractColumn::ColumnMode mode = AbstractColumn::Numeric);
 		Column(const QString& name, QVector<double> data);
 		Column(const QString& name, QStringList data);
 		Column(const QString& name, QList<QDateTime> data);
 		void init();
 		~Column();
 
-        virtual QIcon icon() const;
+		virtual QIcon icon() const;
 
 		bool isReadOnly() const;
 		AbstractColumn::ColumnMode columnMode() const;
@@ -143,10 +143,7 @@ class Column : public AbstractColumn {
 
 		void calculateStatistics();
 		void setStatisticsAvailable(bool available);
-        bool statisticsAvailable() const;
-
-		static QString enumValueToString(int key, const QString& enum_name);
-		static int enumStringToValue(const QString& string, const QString& enum_name);
+		bool statisticsAvailable() const;
 
 		ColumnPrivate* m_column_private;
 		ColumnStringIO* m_string_io;

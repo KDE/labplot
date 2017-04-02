@@ -71,7 +71,7 @@ void GuiTools::updatePenStyles(QComboBox* comboBox, const QColor& color){
 		pa.setPen( QPen( color, 1, (Qt::PenStyle)i ) );
 		pa.drawLine( offset, h/2, w-offset, h/2);
 		pa.end();
-        comboBox->addItem( QIcon(pm), list[i] );
+		comboBox->addItem( QIcon(pm), list[i] );
 	}
 	comboBox->setCurrentIndex(index);
 }
@@ -93,7 +93,7 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 							   i18n("dot line"), i18n("dash-dot line"), i18n("dash-dot-dot line") };
 
 	QAction* action;
-	if (actionGroup->actions().size() == 0){
+	if (actionGroup->actions().isEmpty()){
 		//TODO setting of the icon size doesn't work here
 		menu->setStyleSheet( "QMenu::icon { width:50px; height:10px; }" );
 		
@@ -103,10 +103,9 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 			pa.setPen( QPen( color, 1, (Qt::PenStyle)i ) );
 			pa.drawLine( offset, h/2, w-offset, h/2);
 			pa.end();
-            action = new QAction( QIcon(pm), list[i], actionGroup );
+			action = new QAction( QIcon(pm), list[i], actionGroup );
 			action->setCheckable(true);
 			menu->addAction( action );
-			
 		}
 	}else{
 		for (int i=0;i<6;i++){
@@ -115,8 +114,8 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 			pa.setPen( QPen( color, 1, (Qt::PenStyle)i ) );
 			pa.drawLine( offset, h/2, w-offset, h/2);
 			pa.end();
-			action = actionGroup->actions()[i];
-            action->setIcon( QIcon(pm) );
+			action = actionGroup->actions().at(i);
+			action->setIcon( QIcon(pm) );
 		}
 	}
 }
@@ -124,7 +123,7 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 void GuiTools::selectPenStyleAction(QActionGroup* actionGroup, Qt::PenStyle style) {
 	int index = (int)style;
 	Q_ASSERT(index < actionGroup->actions().size());
-	actionGroup->actions()[index]->setChecked(true);
+	actionGroup->actions().at(index)->setChecked(true);
 }
 
 Qt::PenStyle GuiTools::penStyleFromAction(QActionGroup* actionGroup, QAction* action) {
@@ -136,7 +135,7 @@ Qt::PenStyle GuiTools::penStyleFromAction(QActionGroup* actionGroup, QAction* ac
 	fills the ComboBox for the symbol filling patterns with the 14 possible Qt::BrushStyles.
 */
 void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color){
-  	int index=comboBox->currentIndex();
+	int index=comboBox->currentIndex();
 	comboBox->clear();
 
 	QPainter pa;
@@ -147,7 +146,7 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color){
 	comboBox->setIconSize( QSize(w,h) );
 
 	QPen pen(Qt::SolidPattern, 1);
- 	pa.setPen( pen );
+	pa.setPen( pen );
 	
 	static QString list[15] = { i18n("none"), i18n("uniform"), i18n("extremely dense"),
 								i18n("very dense"), i18n("somewhat dense"), i18n("half dense"),
@@ -161,7 +160,7 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color){
  		pa.setBrush( QBrush(color, (Qt::BrushStyle)i) );
 		pa.drawRect( offset, offset, w - 2*offset, h - 2*offset);
 		pa.end();
-        comboBox->addItem( QIcon(pm), list[i] );
+		comboBox->addItem( QIcon(pm), list[i] );
 	}
 
 	comboBox->setCurrentIndex(index);
@@ -181,10 +180,9 @@ void GuiTools::fillColorMenu(QMenu* menu, QActionGroup* actionGroup){
 
 	QPixmap pix(16,16);
 	QPainter p(&pix);
-	
 	for (int i=0; i<colorsCount; ++i) {
 		p.fillRect(pix.rect(), colors[i]);
-        QAction* action = new QAction(QIcon(pix), colorNames[i], actionGroup);
+		QAction* action = new QAction(QIcon(pix), colorNames[i], actionGroup);
 		action->setCheckable(true);
 		menu->addAction(action);
 	}
@@ -199,7 +197,7 @@ void GuiTools::selectColorAction(QActionGroup* actionGroup, const QColor& color)
 	int index;
 	for (index=0; index<colorsCount; ++index) {
 		if (color==colors[index]) {
-			actionGroup->actions()[index]->setChecked(true);
+			actionGroup->actions().at(index)->setChecked(true);
 			break;
 		}
 	}

@@ -1,0 +1,16 @@
+* when changing parser.y update parser.tab.c with
+
+bison parser.y
+
+and change
+
+  if (/*CONSTCOND*/ 0)
+
+to
+
+  if (/*CONSTCOND*/ (0))
+
+to suppress warning about unreachable code.
+
+
+* parser_parallel.y is not used yet

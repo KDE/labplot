@@ -32,7 +32,8 @@
 
 #include <QThreadPool>
 #include <KLocalizedString>
-#include <math.h>
+
+#include <cmath>
 
 /*!
 	\class DropValuesDialog

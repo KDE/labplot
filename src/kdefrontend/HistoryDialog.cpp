@@ -3,8 +3,7 @@
     Project              : LabPlot
     Description          : history dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2012-2013 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
+    Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -31,42 +30,55 @@
 #include <klocale.h>
 #include <QUndoStack>
 #include <QUndoView>
+#include <KWindowConfig>
 
 /*!
 	\class HistoryDialog
-	\brief Display the content of the project's undo stack.
+	\brief Display the content of project's undo stack.
 
 	\ingroup kdefrontend
  */
-HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, QString& emptyLabel) : KDialog(parent){
-	m_undoStack = stack;
+HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& emptyLabel) : KDialog(parent), m_undoStack(stack) {
 	QUndoView* undoView = new QUndoView(stack, this);
-    undoView->setCleanIcon( QIcon::fromTheme("edit-clear-history") );
- 	undoView->setEmptyLabel(emptyLabel);
+	undoView->setCleanIcon( QIcon::fromTheme("edit-clear-history") );
+	undoView->setEmptyLabel(emptyLabel);
 	undoView->setMinimumWidth(350);
 	undoView->setWhatsThis(i18n("List of all performed steps/actions.\n"
-			"Select an item in the list to navigate to the corresponding step."));
-    setMainWidget(undoView);
+	                            "Select an item in the list to navigate to the corresponding step."));
+	setMainWidget(undoView);
 
-    setWindowIcon( QIcon::fromTheme("view-history") );
+	setWindowIcon( QIcon::fromTheme("view-history") );
 	setWindowTitle(i18n("Undo/Redo History"));
-    showButtonSeparator(true);
+	showButtonSeparator(true);
+	setAttribute(Qt::WA_DeleteOnClose);
 
-    if (stack->count()) {
-        setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
-        setButtonToolTip(KDialog::User1, i18n("Clears the undo history. Commands are not undone or redone; the state of the project remains unchanged."));
-        setButtonIcon(KDialog::User1, QIcon::fromTheme("edit-clear"));
-        setButtonText(KDialog::User1, i18n("Clear"));
-        connect(this,SIGNAL(user1Clicked()), this, SLOT(clearUndoStack()));
-	}else{
-        setButtons( KDialog::Ok | KDialog::Cancel );
-    }
+	if (stack->count()) {
+		setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
+		setButtonToolTip(KDialog::User1, i18n("Clears the undo history. Commands are not undone or redone; the state of the project remains unchanged."));
+		setButtonIcon(KDialog::User1, QIcon::fromTheme("edit-clear"));
+		setButtonText(KDialog::User1, i18n("Clear"));
+		connect(this,SIGNAL(user1Clicked()), this, SLOT(clearUndoStack()));
+	} else
+		setButtons( KDialog::Ok | KDialog::Cancel );
+
+	//restore saved dialog size if available
+	KConfigGroup conf(KSharedConfig::openConfig(), "HistoryDialog");
+	if (conf.exists())
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+	else
+		resize( QSize(500, 300).expandedTo(minimumSize()) );
 }
 
-void HistoryDialog::clearUndoStack(){
+HistoryDialog::~HistoryDialog() {
+	//save dialog size
+	KConfigGroup conf(KSharedConfig::openConfig(), "HistoryDialog");
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
+}
+
+void HistoryDialog::clearUndoStack() {
 	if (KMessageBox::questionYesNo( this,
-									i18n("Do you really want to clear the undo history?"),
-									i18n("Clear history")
-								  ) == KMessageBox::Yes)
+	                                i18n("Do you really want to clear the undo history?"),
+	                                i18n("Clear history")
+	                              ) == KMessageBox::Yes)
 		m_undoStack->clear();
 }

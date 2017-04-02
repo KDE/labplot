@@ -57,7 +57,6 @@ private:
 	bool m_initializing;
 	KUrlCompletion* m_completion;
 
-	void load();
 	void loadConfig(KConfig&);
 
 private slots:
@@ -82,7 +81,7 @@ private slots:
 	void yMaxChanged();
 	void yScaleChanged(int);
 
-	//"Scale breaking"-tab
+	//"Range Breaks"-tab
 	void toggleXBreak(bool);
 	void addXBreak();
 	void removeXBreak();
@@ -90,6 +89,7 @@ private slots:
 	void xBreakStartChanged();
 	void xBreakEndChanged();
 	void xBreakPositionChanged(int);
+	void xBreakStyleChanged(int);
 
 	void toggleYBreak(bool);
 	void addYBreak();
@@ -98,6 +98,7 @@ private slots:
 	void yBreakStartChanged();
 	void yBreakEndChanged();
 	void yBreakPositionChanged(int);
+	void yBreakStyleChanged(int);
 
 	//"Plot area"-tab
   	void backgroundTypeChanged(int);
@@ -131,8 +132,10 @@ private slots:
 	void plotYScaleChanged(int);
 	void plotVisibleChanged(bool);
 
-	//scale breakings
+	//range breaks
+	void plotXRangeBreakingEnabledChanged(bool);
 	void plotXRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
+	void plotYRangeBreakingEnabledChanged(bool);
 	void plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 
 	//background
@@ -156,6 +159,12 @@ private slots:
 
 signals:
 	void info(const QString&);
+
+public slots:
+	void load();
+	void loadTheme(KConfig& config);
+	void saveTheme(KConfig& config);
+
 };
 
 #endif

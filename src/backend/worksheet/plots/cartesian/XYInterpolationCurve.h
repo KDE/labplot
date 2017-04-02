@@ -30,24 +30,30 @@
 #define XYINTERPOLATIONCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+extern "C" {
 #include <gsl/gsl_version.h>
+#include "backend/nsl/nsl_interp.h"
+}
 
 class XYInterpolationCurvePrivate;
 class XYInterpolationCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum InterpolationType {Linear,Polynomial,CSpline,CSplinePeriodic,Akima,AkimaPeriodic,Steffen};	// TODO:more
-		enum InterpolationEval {Function,Derivative,Derivative2,Integral};
-		static constexpr double LIMIT_MAX = 1e15;
-		static constexpr double LIMIT_MIN = -1e15;
-
+		enum PointsMode {Auto, Multiple, Custom};
 		struct InterpolationData {
-			InterpolationData() : type(Linear), evaluate(Function), npoints(100) {};
+			InterpolationData() : type(nsl_interp_type_linear), variant(nsl_interp_pch_variant_finite_difference), 
+				tension(0.0), continuity(0.0), bias(0.0), evaluate(nsl_interp_evaluate_function), npoints(100),
+				pointsMode(XYInterpolationCurve::Auto), autoRange(true), xRange(2) {};
 
-			XYInterpolationCurve::InterpolationType type;		// type of interpolation
-			XYInterpolationCurve::InterpolationEval evaluate;	// what to evaluate
-			unsigned int npoints;					// nr. of points
+			nsl_interp_type type;			// type of interpolation
+			nsl_interp_pch_variant variant;		// variant of cubic Hermite interpolation
+			double tension, continuity, bias;	// TCB values
+			nsl_interp_evaluate evaluate;		// what to evaluate
+			unsigned int npoints;			// nr. of points
+			XYInterpolationCurve::PointsMode pointsMode;	// mode to interpret points
+			bool autoRange;				// use all data?
+			QVector<double> xRange;			// x range for interpolation
 		};
 		struct InterpolationResult {
 			InterpolationResult() : available(false), valid(false), elapsedTime(0) {};

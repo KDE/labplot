@@ -32,8 +32,6 @@
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 
-#include <QDebug>
-
 class XYInterpolationCurve;
 class Column;
 
@@ -60,9 +58,6 @@ class XYInterpolationCurvePrivate: public XYCurvePrivate {
 		bool sourceDataChangedSinceLastInterpolation; //<! \c true if the data in the source columns (x, y) was changed, \c false otherwise
 
 		XYInterpolationCurve* const q;
-
-//	private:
-//		void writeSolverState(gsl_multifit_fdfsolver* s);
 };
 
 #endif

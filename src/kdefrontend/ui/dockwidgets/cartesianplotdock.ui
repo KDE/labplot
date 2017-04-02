@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>573</width>
-    <height>1144</height>
+    <height>1160</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -464,12 +464,6 @@
           </property>
           <item>
            <widget class="QPushButton" name="bAddXBreak">
-            <property name="maximumSize">
-             <size>
-              <width>30</width>
-              <height>16777215</height>
-             </size>
-            </property>
             <property name="toolTip">
              <string>Add new scale breaking</string>
             </property>
@@ -480,12 +474,6 @@
           </item>
           <item>
            <widget class="QPushButton" name="bRemoveXBreak">
-            <property name="maximumSize">
-             <size>
-              <width>30</width>
-              <height>16777215</height>
-             </size>
-            </property>
             <property name="toolTip">
              <string>Remove scale breaking</string>
             </property>
@@ -496,12 +484,6 @@
           </item>
           <item>
            <widget class="QComboBox" name="cbXBreak">
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>16777215</height>
-             </size>
-            </property>
             <property name="toolTip">
              <string>Current scale breaking</string>
             </property>
@@ -623,12 +605,6 @@
           </property>
           <item>
            <widget class="QPushButton" name="bAddYBreak">
-            <property name="maximumSize">
-             <size>
-              <width>30</width>
-              <height>16777215</height>
-             </size>
-            </property>
             <property name="toolTip">
              <string>Add new scale breaking</string>
             </property>
@@ -639,12 +615,6 @@
           </item>
           <item>
            <widget class="QPushButton" name="bRemoveYBreak">
-            <property name="maximumSize">
-             <size>
-              <width>30</width>
-              <height>16777215</height>
-             </size>
-            </property>
             <property name="toolTip">
              <string>Remove scale breaking</string>
             </property>
@@ -655,12 +625,6 @@
           </item>
           <item>
            <widget class="QComboBox" name="cbYBreak">
-            <property name="maximumSize">
-             <size>
-              <width>40</width>
-              <height>16777215</height>
-             </size>
-            </property>
             <property name="toolTip">
              <string>Current scale breaking</string>
             </property>

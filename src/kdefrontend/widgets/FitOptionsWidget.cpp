@@ -35,8 +35,8 @@
  */
 FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData): QWidget(parent), m_fitData(fitData), m_changed(false) {
 	ui.setupUi(this);
-    ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
-    ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
+	ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
+	ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
 
 	//TODO: show "robust" option when robust fitting is possible
 // 	ui.cbRobust->addItem(i18n("on"));
@@ -46,16 +46,20 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 
 	ui.leEps->setValidator( new QDoubleValidator(ui.leEps) );
 	ui.leMaxIterations->setValidator( new QIntValidator(ui.leMaxIterations) );
-	ui.leFittedPoints->setValidator( new QIntValidator(ui.leFittedPoints) );
+	ui.leEvaluatedPoints->setValidator( new QIntValidator(ui.leEvaluatedPoints) );
 
 	ui.leEps->setText(QString::number(m_fitData->eps));
 	ui.leMaxIterations->setText(QString::number(m_fitData->maxIterations));
-	ui.leFittedPoints->setText(QString::number(m_fitData->fittedPoints));
+	ui.leEvaluatedPoints->setText(QString::number(m_fitData->evaluatedPoints));
+	ui.cbEvaluateFullRange->setChecked(m_fitData->evaluateFullRange);
+	ui.cbUseResults->setChecked(m_fitData->useResults);
 
 	//SLOTS
 	connect( ui.leEps, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
 	connect( ui.leMaxIterations, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
-	connect( ui.leFittedPoints, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
+	connect( ui.leEvaluatedPoints, SIGNAL(textChanged(QString)), this, SLOT(changed()) ) ;
+	connect( ui.cbEvaluateFullRange, SIGNAL(clicked(bool)), this, SLOT(changed()) ) ;
+	connect( ui.cbUseResults, SIGNAL(clicked(bool)), this, SLOT(changed()) ) ;
 	connect( ui.pbApply, SIGNAL(clicked()), this, SLOT(applyClicked()) );
 	connect( ui.pbCancel, SIGNAL(clicked()), this, SIGNAL(finished()) );
 }
@@ -63,12 +67,14 @@ FitOptionsWidget::FitOptionsWidget(QWidget *parent, XYFitCurve::FitData* fitData
 void FitOptionsWidget::applyClicked() {
 	m_fitData->maxIterations = ui.leMaxIterations->text().toFloat();
 	m_fitData->eps = ui.leEps->text().toFloat();
-	m_fitData->fittedPoints = ui.leFittedPoints->text().toInt();
+	m_fitData->evaluatedPoints = ui.leEvaluatedPoints->text().toInt();
+	m_fitData->evaluateFullRange = ui.cbEvaluateFullRange->isChecked();
+	m_fitData->useResults = ui.cbUseResults->isChecked();
 
 	if (m_changed)
-		emit(optionsChanged());
+		emit optionsChanged();
 
-	emit(finished());
+	emit finished();
 }
 
 void FitOptionsWidget::changed() {

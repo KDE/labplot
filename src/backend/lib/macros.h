@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -31,6 +32,20 @@
 #define MACROS_H
 
 #include <QApplication>
+
+// C++ style warning (works on Windows)
+#include <iostream>
+#define WARNING(x) std::cout << x << std::endl
+
+#ifndef NDEBUG
+#include <QDebug>
+#define QDEBUG(x) qDebug() << x
+// C++ style debugging (works on Windows)
+#define DEBUG(x) std::cout << x << std::endl
+#else
+#define QDEBUG(x) {}
+#define DEBUG(x) {}
+#endif
 
 #define BASIC_ACCESSOR(type, var, method, Method) \
 	type method() const { return var; }; \
@@ -297,6 +312,7 @@ else																		\
 do {																		\
 writer->writeAttribute( "fontFamily", font.family() );						\
 writer->writeAttribute( "fontSize", QString::number(font.pixelSize()) );	\
+writer->writeAttribute( "fontPointSize", QString::number(font.pointSize()));\
 writer->writeAttribute( "fontWeight", QString::number(font.weight()) );		\
 writer->writeAttribute( "fontItalic", QString::number(font.italic()) );		\
 } while(0)
@@ -312,8 +328,20 @@ else																		\
 str = attribs.value("fontSize").toString();									\
 if(str.isEmpty())															\
 	reader->raiseWarning(attributeWarning.arg("'fontSize'"));				\
-else																		\
-	font.setPixelSize( str.toInt() );										\
+else {																		\
+	int size = str.toInt();													\
+	if (size != -1)															\
+		font.setPixelSize(size);											\
+}																			\
+																			\
+str = attribs.value("fontPointSize").toString();							\
+if(str.isEmpty())															\
+	reader->raiseWarning(attributeWarning.arg("'fontPointSize'"));			\
+else {																		\
+	int size = str.toInt();													\
+	if (size != -1)															\
+		font.setPointSize(size);											\
+}																			\
 																			\
 str = attribs.value("fontWeight").toString();								\
 if(str.isEmpty())															\
@@ -386,6 +414,27 @@ do {																				\
 	str = attribs.value(#columnName).toString();									\
 	d->columnName ##Path = str;														\
 } while(0)
+
+#define READ_INT_VALUE(name, var, type) \
+str = attribs.value(name).toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.arg(name)); \
+else \
+	d->var = (type)str.toInt();
+
+#define READ_DOUBLE_VALUE(name, var) \
+str = attribs.value(name).toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.arg(name)); \
+else \
+	d->var = str.toDouble();
+
+#define READ_STRING_VALUE(name, var) \
+str = attribs.value(name).toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.arg(name)); \
+else \
+	d->var = str;
 
 //used in Project::load()
 #define RESTORE_COLUMN_POINTER(obj, col, Col) 										\

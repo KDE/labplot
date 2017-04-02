@@ -2,7 +2,7 @@
     File             : ExpressionTextEdit.h
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2014-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright        : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
     Description      : widget for defining mathematical expressions
 					   modified version of
 					   http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
@@ -89,6 +89,7 @@ public:
 protected:
 	void keyPressEvent(QKeyEvent*);
 	void focusInEvent(QFocusEvent*);
+	void focusOutEvent(QFocusEvent*);
 
 private slots:
 	void insertCompletion(const QString&);

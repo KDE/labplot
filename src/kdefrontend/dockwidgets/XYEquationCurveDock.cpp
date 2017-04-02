@@ -88,7 +88,7 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.cbType->addItem(i18n("parametric"));
 // 	uiGeneralTab.cbType->addItem(i18n("implicit"));
 
-    uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	uiGeneralTab.teEquation2->setExpressionType(XYEquationCurve::Parametric);
 

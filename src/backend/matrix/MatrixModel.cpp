@@ -97,7 +97,11 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 		case Qt::DisplayRole:
 			return QVariant(m_matrix->text(row, col));
 		case Qt::BackgroundRole:
+			//use bluish background color to distinguish Matrix from Spreadsheet
 			return QVariant(QBrush(QColor(192,255,255)));
+		case Qt::ForegroundRole:
+			//ignore current theme settings and always use black foreground color so Matrix is usable with dark themes, too.
+			return QVariant(QBrush(QColor(Qt::black)));
 	}
 
 	return QVariant();
@@ -121,7 +125,7 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 						result = QLocale().toString(m_matrix->xStart()+double(section)*step,
 								m_matrix->numericFormat(), m_matrix->precision());
 					} else {
-						result = QString::number(section+1) + QString(" (");
+						result = QString::number(section+1) + QLatin1String(" (");
 						double diff = m_matrix->xEnd() - m_matrix->xStart();
 						double step = 0.0;
 						if (m_matrix->columnCount() > 1)
@@ -129,7 +133,7 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 						result += QLocale().toString(m_matrix->xStart()+double(section)*step,
 								m_matrix->numericFormat(), m_matrix->precision());
 
-						result += QString(")");
+						result += ')';
 					}
 					return QVariant(result);
 			}
@@ -160,7 +164,7 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 
 						result += QLocale().toString(m_matrix->yStart()+double(section)*step,
 									m_matrix->numericFormat(), m_matrix->precision());
-						result += QString(")");
+						result += ')';
 					}
 					return QVariant(result);
 			}

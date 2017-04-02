@@ -30,26 +30,29 @@
 #define XYFOURIERFILTERCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+extern "C" {
+#include "backend/nsl/nsl_filter.h"
+}
 
 class XYFourierFilterCurvePrivate;
 class XYFourierFilterCurve: public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum FilterType {LowPass, HighPass, BandPass, BandReject};	// TODO: Threshold
-		enum FilterForm {Ideal, Butterworth, ChebyshevI, ChebyshevII};	// TODO: Gaussian, Bessel, etc.
-		enum CutoffUnit {Frequency, Fraction, Index};	// Frequency=0..N/(xmax-xmin), Fraction=0..1, Index=0..N-1
-
 		struct FilterData {
-			FilterData() : type(LowPass), form(Ideal), order(1), cutoff(0), unit(Index), cutoff2(0), unit2(Index) {};
+			FilterData() : type(nsl_filter_type_low_pass), form(nsl_filter_form_ideal), order(1),
+				cutoff(0), unit(nsl_filter_cutoff_unit_frequency), cutoff2(0), unit2(nsl_filter_cutoff_unit_frequency),
+				autoRange(true), xRange(2) {};
 
-			FilterType type;
-			FilterForm form;
+			nsl_filter_type type;
+			nsl_filter_form form;
 			unsigned int order;
-			double cutoff;		// (low) cutoff
-			CutoffUnit unit;	// (low) value unit
-			double cutoff2;		// high cutoff
-			CutoffUnit unit2;	// high value unit
+			double cutoff;			// (low) cutoff
+			nsl_filter_cutoff_unit unit;	// (low) value unit
+			double cutoff2;			// high cutoff
+			nsl_filter_cutoff_unit unit2;	// high value unit
+			bool autoRange;			// use all data?
+			QVector<double> xRange;		// x range for integration
 		};
 		struct FilterResult {
 			FilterResult() : available(false), valid(false), elapsedTime(0) {};

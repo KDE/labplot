@@ -70,12 +70,13 @@ class Project : public Folder {
 		bool isLoading() const;
 		void setChanged(const bool value=true);
 		bool hasChanged() const;
+		void navigateTo(const QString& path);
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
 
 	public slots:
-		void descriptionChanged(const AbstractAspect* aspect);
+		void descriptionChanged(const AbstractAspect*);
 
 	signals:
 		void requestSaveState(QXmlStreamWriter*) const;
@@ -84,6 +85,8 @@ class Project : public Folder {
 		void requestFolderContextMenu(const Folder*, QMenu*);
 		void mdiWindowVisibilityChanged();
 		void changed() const;
+		void requestNavigateTo(const QString& path) const;
+		void loaded();
 
 	private:
 		class Private;

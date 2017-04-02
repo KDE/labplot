@@ -32,14 +32,18 @@ Copyright	: (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/core/AbstractScriptingEngine.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
+#include <QStringList>
+
 class AbstractDataSource : public AbstractPart, public scripted{
+	Q_OBJECT
 
 	public:
    		AbstractDataSource(AbstractScriptingEngine *engine, const QString& name);
-		virtual ~AbstractDataSource() {};
+        virtual ~AbstractDataSource() {}
 		void clear();
 		int resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols);
-		int create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode, int actualRows, int actualCols);
+		int create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+				   int actualRows, int actualCols, QStringList colNameList = QStringList());
 };
 
 #endif // ifndef ABSTRACTDATASOURCE_H

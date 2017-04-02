@@ -44,6 +44,7 @@
 #include <QSignalMapper>
 #include <QTimer>
 
+#include <KIconLoader>
 #include <KLineEdit>
 #include <KLocale>
 #include <QMenu>
@@ -81,9 +82,7 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) {
 
 	bFilterOptions = new QPushButton(frameFilter);
 	bFilterOptions->setIcon(QIcon::fromTheme("configure"));
-	bFilterOptions->setEnabled(true);
 	bFilterOptions->setCheckable(true);
-	bFilterOptions->setMaximumWidth(20);
 	layoutFilter->addWidget(bFilterOptions);
 
 	layout->addWidget(frameFilter);
@@ -120,8 +119,17 @@ void ProjectExplorer::createActions() {
 	expandTreeAction = new QAction(i18n("expand all"), this);
 	connect(expandTreeAction, SIGNAL(triggered()), m_treeView, SLOT(expandAll()));
 
+	expandSelectedTreeAction = new QAction(i18n("expand selected"), this);
+	connect(expandSelectedTreeAction, SIGNAL(triggered()), this, SLOT(expandSelected()));
+
 	collapseTreeAction = new QAction(i18n("collapse all"), this);
 	connect(collapseTreeAction, SIGNAL(triggered()), m_treeView, SLOT(collapseAll()));
+
+	collapseSelectedTreeAction = new QAction(i18n("collapse selected"), this);
+	connect(collapseSelectedTreeAction, SIGNAL(triggered()), this, SLOT(collapseSelected()));
+
+	deleteSelectedTreeAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("delete selected"), this);
+	connect(deleteSelectedTreeAction, SIGNAL(triggered()), this, SLOT(deleteSelected()));
 
 	toggleFilterAction = new QAction(i18n("hide search/filter options"), this);
 	connect(toggleFilterAction, SIGNAL(triggered()), this, SLOT(toggleFilterWidgets()));
@@ -142,13 +150,24 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 		return;
 
 	QModelIndex index = m_treeView->indexAt(m_treeView->viewport()->mapFrom(this, event->pos()));
-	QVariant menu_value = m_treeView->model()->data(index, AspectTreeModel::ContextMenuRole);
-	QMenu *menu = static_cast<QMenu*>(menu_value.value<QWidget*>());
+	if (!index.isValid())
+		m_treeView->clearSelection();
 
+	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
+	QMenu *menu = 0;
+	if (items.size()/4 == 1) {
+		QVariant menu_value = m_treeView->model()->data(index, AspectTreeModel::ContextMenuRole);
+		menu = static_cast<QMenu*>(menu_value.value<QWidget*>());
+	}
 	if (!menu) {
 		menu = new QMenu();
-
 		menu->addSeparator()->setText(i18n("Tree options"));
+		if (items.size()/4 > 1) {
+			menu->addAction(expandSelectedTreeAction);
+			menu->addAction(collapseSelectedTreeAction);
+			menu->addAction(deleteSelectedTreeAction);
+			menu->addSeparator();
+		}
 		menu->addAction(expandTreeAction);
 		menu->addAction(collapseTreeAction);
 		menu->addSeparator();
@@ -163,10 +182,8 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 
 		//TODO
 		//Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
-// 		QMenu* objectsMenu = menu->addMenu(i18n("show/hide objects"));
-
+		// QMenu* objectsMenu = menu->addMenu(i18n("show/hide objects"));
 	}
-
 	menu->exec(event->globalPos());
 	delete menu;
 }
@@ -213,15 +230,20 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 				m_treeView->hideColumn(i);
 		}
 	}
-
-	QTimer::singleShot(0, this, SLOT(resizeHeader()));
 }
 
-void ProjectExplorer::setProject( const Project* project) {
+void ProjectExplorer::setProject(Project* project) {
 	connect(project, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(aspectAdded(const AbstractAspect*)));
 	connect(project, SIGNAL(requestSaveState(QXmlStreamWriter*)), this, SLOT(save(QXmlStreamWriter*)));
 	connect(project, SIGNAL(requestLoadState(XmlStreamReader*)), this, SLOT(load(XmlStreamReader*)));
+	connect(project, SIGNAL(requestNavigateTo(QString)), this, SLOT(navigateTo(QString)));
+	connect(project, SIGNAL(loaded()), this, SLOT(resizeHeader()));
 	m_project = project;
+
+	//for newly created projects, resize the header to fit the size of the header section names.
+	//for projects loaded from a file, this function will be called laterto fit the sizes
+	//of the content once the project is loaded
+	resizeHeader();
 }
 
 QModelIndex ProjectExplorer::currentIndex() const {
@@ -292,6 +314,13 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 	m_treeView->scrollTo(index);
 	m_treeView->setCurrentIndex(index);
 	m_treeView->resizeColumnToContents(0);
+	m_treeView->header()->resizeSection(0, m_treeView->header()->sectionSize(0)*1.2);
+}
+
+void ProjectExplorer::navigateTo(const QString& path) {
+	AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
+	if(tree_model)
+		m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(path));
 }
 
 void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous) {
@@ -379,44 +408,62 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 
 void ProjectExplorer::resizeHeader() {
 	m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
+	m_treeView->header()->resizeSection(0, m_treeView->header()->sectionSize(0)*1.2); //make the column "Name" somewhat bigger
 }
 
 /*!
   called when the filter/search text was changend.
 */
 void ProjectExplorer::filterTextChanged(const QString& text) {
-	AspectTreeModel * model = qobject_cast<AspectTreeModel *>(m_treeView->model());
-	if(!model)
-		return;
+	QModelIndex root = m_treeView->model()->index(0,0);
+	filter(root, text);
+}
 
-	model->setFilterString(text);
-	m_treeView->update();
+bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
+	Qt::CaseSensitivity sensitivity = caseSensitiveAction->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+	bool matchCompleteWord = matchCompleteWordAction->isChecked();
+
+	bool childVisible = false;
+	const int rows = index.model()->rowCount(index);
+	for (int i=0; i<rows; i++) {
+		QModelIndex child = index.child(i, 0);
+		AbstractAspect* aspect =  static_cast<AbstractAspect*>(child.internalPointer());
+		bool visible;
+		if(text.isEmpty())
+			visible = true;
+		else if (matchCompleteWord)
+			visible = aspect->name().startsWith(text, sensitivity);
+		else
+			visible = aspect->name().contains(text, sensitivity);
+
+		if (visible) {
+			//current item is visible -> make all its children visible without applying the filter
+			for (int j=0; j<child.model()->rowCount(child); ++j) {
+				m_treeView->setRowHidden(j, child, false);
+				if(text.isEmpty())
+					filter(child, text);
+			}
+
+			childVisible = true;
+		} else {
+			//check children items. if one of the children is visible, make the parent (current) item visible too.
+			visible = filter(child, text);
+			if (visible)
+				childVisible = true;
+		}
+
+		m_treeView->setRowHidden(i, index, !visible);
+	}
+
+	return childVisible;
 }
 
 void ProjectExplorer::toggleFilterCaseSensitivity() {
-	AspectTreeModel * model = qobject_cast<AspectTreeModel *>(m_treeView->model());
-	if(!model)
-		return;
-
-	if (caseSensitiveAction->isChecked())
-		model->setFilterCaseSensitivity(Qt::CaseSensitive);
-	else
-		model->setFilterCaseSensitivity(Qt::CaseInsensitive);
-
-	model->setFilterString(leFilter->text());
-	m_treeView->update();
+	filterTextChanged(leFilter->text());
 }
 
-
 void ProjectExplorer::toggleFilterMatchCompleteWord() {
-	AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	if(!model)
-		return;
-
-	model->setFilterMatchCompleteWord(matchCompleteWordAction->isChecked());
-
-	model->setFilterString(leFilter->text());
-	m_treeView->update();
+	filterTextChanged(leFilter->text());
 }
 
 void ProjectExplorer::selectIndex(const QModelIndex&  index) {
@@ -448,25 +495,51 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	items = selected.indexes();
 	for (int i=0; i<items.size()/4; ++i) {
 		index = items.at(i*4);
-		aspect = static_cast<AbstractAspect *>(index.internalPointer());
+		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		aspect->setSelected(true);
 	}
 
 	items = deselected.indexes();
-	for (int i=0; i<items.size()/4; ++i) {
+	for (int i = 0; i < items.size()/4; ++i) {
 		index = items.at(i*4);
-		aspect = static_cast<AbstractAspect *>(index.internalPointer());
+		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		aspect->setSelected(false);
 	}
 
 	items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
-	foreach(const QModelIndex& index,items) {
-		aspect = static_cast<AbstractAspect *>(index.internalPointer());
+	foreach (const QModelIndex& index, items) {
+		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		selectedAspects<<aspect;
 	}
 
 	emit selectedAspectsChanged(selectedAspects);
+}
+
+void ProjectExplorer::expandSelected() {
+	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
+	foreach (const QModelIndex& index, items)
+		m_treeView->setExpanded(index, true);
+}
+
+void ProjectExplorer::collapseSelected() {
+	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
+	foreach (const QModelIndex& index, items)
+		m_treeView->setExpanded(index, false);
+}
+
+void ProjectExplorer::deleteSelected() {
+	QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
+	if (!items.size())
+		return;
+
+	m_project->beginMacro(i18np("Project Explorer: removed %1 selected object.", "Project Explorer: removed %1 selected objects.", items.size()/4));
+	for (int i = 0; i < items.size()/4; ++i) {
+		const QModelIndex& index = items.at(i*4);
+		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		aspect->remove();
+	}
+	m_project->endMacro();
 }
 
 //##############################################################################
@@ -490,6 +563,10 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 
 	int currentRow = -1; //row corresponding to the current index in the tree view, -1 for the root element (=project)
 	QModelIndexList selectedRows = m_treeView->selectionModel()->selectedRows();
+
+	//check whether the project node itself is expanded
+	if (m_treeView->isExpanded(m_treeView->model()->index(0,0)))
+		expanded.push_back(-1);
 
 	int row = 0;
 	QList<AbstractAspect*> aspects = const_cast<Project*>(m_project)->children("AbstractAspect", AbstractAspect::Recursive);
@@ -518,19 +595,17 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("state");
 
 	writer->writeStartElement("expanded");
-	for (int i=0; i<expanded.size(); ++i) {
+	for (int i = 0; i < expanded.size(); ++i)
 		writer->writeTextElement("row", QString::number(expanded.at(i)));
-	}
 	writer->writeEndElement();
 
 	writer->writeStartElement("selected");
-	for (int i=0; i<selected.size(); ++i) {
+	for (int i = 0; i < selected.size(); ++i)
 		writer->writeTextElement("row", QString::number(selected.at(i)));
-	}
 	writer->writeEndElement();
 
 	writer->writeStartElement("view");
-	for (int i=0; i<withView.size(); ++i) {
+	for (int i = 0; i < withView.size(); ++i) {
 		writer->writeStartElement("row");
 		const ViewState& s = viewStates.at(i);
 		writer->writeAttribute( "state", QString::number(s.state) );
@@ -602,23 +677,21 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 			attribs = reader->attributes();
 			row = reader->readElementText().toInt();
 
-			if (row==-1) {
-				//-1 can only be stored for no current item or for the project-item being the current item (s.a. ProjectExplorer::save())
-				//-> make the project item current in this case
-				currentIndex = model->modelIndexOfAspect(m_project);
+			QModelIndex index;
+			if (row == -1)
+				index = model->modelIndexOfAspect(m_project); //-1 corresponds tothe project-item (s.a. ProjectExplorer::save())
+			else if (row >= aspects.size())
 				continue;
-			} else if (row>=aspects.size())
-				continue;
+			else
+				index = model->modelIndexOfAspect(aspects.at(row));
 
-			const QModelIndex& index = model->modelIndexOfAspect(aspects.at(row));
-
-			if (expandedItem) {
+			if (expandedItem)
 				expanded.push_back(index);
-			} else if (selectedItem) {
+			else if (selectedItem)
 				selected.push_back(index);
-			} else if (currentItem) {
+			else if (currentItem)
 				currentIndex = index;
-			} else if (viewItem) {
+			else if (viewItem) {
 				AbstractPart* part = dynamic_cast<AbstractPart*>(aspects.at(row));
 				if (!part)
 					continue; //TODO: add error/warning message here?
@@ -666,27 +739,32 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 		}
 	}
 
-	foreach(const QModelIndex& index, expanded) {
+	foreach (const QModelIndex& index, expanded) {
 		m_treeView->setExpanded(index, true);
 		collapseParents(index, expanded);//collapse all parent indices if they are not expanded
 	}
 
-	foreach(const QModelIndex& index, selected)
+	foreach (const QModelIndex& index, selected)
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 
 	m_treeView->setCurrentIndex(currentIndex);
 	m_treeView->scrollTo(currentIndex);
-//TODO
-	collapseParents(currentIndex, expanded);//even if it's the current index, collapse all parent indices if they are not expanded when saved
+
+	//when setting the current index above it gets expanded, collapse all parent indices if they are were not expanded when saved
+	collapseParents(currentIndex, expanded);
 
 	return true;
 }
 
 void ProjectExplorer::collapseParents(const QModelIndex& index, const QList<QModelIndex>& expanded) {
-	QModelIndex parent = index.parent();
-	if (parent==QModelIndex())
+	//root index doesn't have any parents - this case is not caught by the second if-statement below
+	if (index.column()==0 && index.row()==0)
 		return;
 
-	if (expanded.indexOf(parent)==-1)
+	QModelIndex parent = index.parent();
+	if (parent == QModelIndex())
+		return;
+
+	if (expanded.indexOf(parent) == -1)
 		m_treeView->collapse(parent);
 }

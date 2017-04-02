@@ -31,12 +31,14 @@
 #define WORKSHEETELEMENT_H
 
 #include "backend/core/AbstractAspect.h"
-#include <QGraphicsItem>
-#include <QPen>
+#include <QPainterPath>
 
 class QAction;
+class QGraphicsItem;
+class QPen;
+class KConfig;
 
-class WorksheetElement: public AbstractAspect {
+class WorksheetElement : public AbstractAspect {
 	Q_OBJECT
 
 	public:
@@ -52,7 +54,8 @@ class WorksheetElement: public AbstractAspect {
 		virtual bool isFullyVisible() const;
 		virtual void setPrinting(bool) = 0;
 		virtual QMenu* createContextMenu();
-
+		virtual void loadThemeConfig(const KConfig&);
+		virtual void saveThemeConfig(const KConfig&);
 		static QPainterPath shapeFromPath(const QPainterPath&, const QPen&);
 
 	public slots:

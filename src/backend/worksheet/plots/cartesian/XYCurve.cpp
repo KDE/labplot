@@ -37,40 +37,36 @@
 #include "XYCurve.h"
 #include "XYCurvePrivate.h"
 #include "backend/core/column/Column.h"
-#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/core/Project.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/macros.h"
 
-#include <QGraphicsDropShadowEffect>
-#include <QGraphicsItem>
-#include <QGraphicsItemGroup>
-#include <QGraphicsPathItem>
-#include <QGraphicsEllipseItem>
-#include <QPainterPath>
 #include <QPainter>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
-#include <QtDebug>
-#include <QElapsedTimer>
+// #include <QElapsedTimer>
 
 #include <KConfigGroup>
+#include <KGlobal>
 #include <KLocale>
 
+#include <cmath>
+#include <vector>
+extern "C" {
 #include <gsl/gsl_spline.h>
 #include <gsl/gsl_errno.h>
-#include <math.h>
-#include <vector>
+}
 
-XYCurve::XYCurve(const QString &name)
-		: WorksheetElement(name), d_ptr(new XYCurvePrivate(this)){
+XYCurve::XYCurve(const QString &name) : WorksheetElement(name), d_ptr(new XYCurvePrivate(this)) {
 	init();
 }
 
-XYCurve::XYCurve(const QString &name, XYCurvePrivate *dd)
-		: WorksheetElement(name), d_ptr(dd){
+XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd) : WorksheetElement(name), d_ptr(dd) {
 	init();
 }
 
@@ -79,7 +75,7 @@ XYCurve::~XYCurve() {
 	//and is deleted during the cleanup in QGraphicsScene
 }
 
-void XYCurve::init(){
+void XYCurve::init() {
 	Q_D(XYCurve);
 
 	KConfig config;
@@ -106,10 +102,10 @@ void XYCurve::init(){
 	d->symbolsSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Point));
 	d->symbolsRotationAngle = group.readEntry("SymbolRotation", 0.0);
 	d->symbolsOpacity = group.readEntry("SymbolOpacity", 1.0);
-  	d->symbolsBrush.setStyle( (Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::NoBrush) );
-  	d->symbolsBrush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::black)) );
-  	d->symbolsPen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
-  	d->symbolsPen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
+	d->symbolsBrush.setStyle( (Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::NoBrush) );
+	d->symbolsBrush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::black)) );
+	d->symbolsPen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
+	d->symbolsPen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
 	d->symbolsPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
 
 	d->valuesType = (XYCurve::ValuesType) group.readEntry("ValuesType", (int)XYCurve::NoValues);
@@ -144,44 +140,62 @@ void XYCurve::init(){
 	d->errorBarsCapSize = group.readEntry( "ErrorBarsCapSize", Worksheet::convertToSceneUnits(10, Worksheet::Point) );
 	d->errorBarsPen.setStyle( (Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine) );
 	d->errorBarsPen.setColor( group.readEntry("ErrorBarsColor", QColor(Qt::black)) );
-	d->errorBarsPen.setWidthF( group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
+	d->errorBarsPen.setWidthF( group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)) );
 	d->errorBarsOpacity = group.readEntry("ErrorBarsOpacity", 1.0);
 
 	this->initActions();
 }
 
-void XYCurve::initActions(){
+void XYCurve::initActions() {
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+
+	navigateToAction = new QAction(QIcon::fromTheme("go-next-view"), "", this);
+	connect(navigateToAction, SIGNAL(triggered()), this, SLOT(navigateTo()));
 }
 
-QMenu* XYCurve::createContextMenu(){
+QMenu* XYCurve::createContextMenu() {
 	QMenu *menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
+
+	//"Navigate to spreadsheet"-action, show only if x- or y-columns have data from a spreadsheet
+	AbstractAspect* parentSpreadsheet = 0;
+	if (xColumn() && dynamic_cast<Spreadsheet*>(xColumn()->parentAspect()) )
+		parentSpreadsheet = xColumn()->parentAspect();
+	else if (yColumn() && dynamic_cast<Spreadsheet*>(yColumn()->parentAspect()) )
+		parentSpreadsheet = yColumn()->parentAspect();
+
+	if (parentSpreadsheet) {
+		navigateToAction->setText(i18n("Navigate to \"%1\"", parentSpreadsheet->name()));
+		navigateToAction->setData(parentSpreadsheet->path());
+		menu->insertAction(visibilityAction, navigateToAction);
+		menu->insertSeparator(visibilityAction);
+	}
+
 	return menu;
 }
 
 /*!
 	Returns an icon to be used in the project explorer.
 */
-QIcon XYCurve::icon() const{
+QIcon XYCurve::icon() const {
 	return QIcon::fromTheme("labplot-xy-curve");
 }
 
-QGraphicsItem* XYCurve::graphicsItem() const{
+QGraphicsItem* XYCurve::graphicsItem() const {
 	return d_ptr;
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(XYCurve, SetVisible, bool, swapVisible)
-void XYCurve::setVisible(bool on){
+void XYCurve::setVisible(bool on) {
 	Q_D(XYCurve);
 	exec(new XYCurveSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
 }
 
-bool XYCurve::isVisible() const{
+bool XYCurve::isVisible() const {
 	Q_D(const XYCurve);
 	return d->isVisible();
 }
@@ -196,8 +210,12 @@ void XYCurve::setPrinting(bool on) {
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xColumn, xColumn)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yColumn, yColumn)
-QString& XYCurve::xColumnPath() const { return d_ptr->xColumnPath; }
-QString& XYCurve::yColumnPath() const {	return d_ptr->yColumnPath; }
+QString& XYCurve::xColumnPath() const {
+	return d_ptr->xColumnPath;
+}
+QString& XYCurve::yColumnPath() const {
+	return d_ptr->yColumnPath;
+}
 
 //line
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::LineType, lineType, lineType)
@@ -222,7 +240,9 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, symbolsPen, symbolsPen)
 //values
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesType, valuesType, valuesType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, valuesColumn, valuesColumn)
-QString& XYCurve::valuesColumnPath() const { return d_ptr->valuesColumnPath; }
+QString& XYCurve::valuesColumnPath() const {
+	return d_ptr->valuesColumnPath;
+}
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesPosition, valuesPosition, valuesPosition)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesDistance, valuesDistance)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesRotationAngle, valuesRotationAngle)
@@ -246,15 +266,23 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, fillingOpacity, fillingOpacity)
 //error bars
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, xErrorType, xErrorType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xErrorPlusColumn, xErrorPlusColumn)
-QString& XYCurve::xErrorPlusColumnPath() const { return d_ptr->xErrorPlusColumnPath; }
+QString& XYCurve::xErrorPlusColumnPath() const {
+	return d_ptr->xErrorPlusColumnPath;
+}
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xErrorMinusColumn, xErrorMinusColumn)
-QString& XYCurve::xErrorMinusColumnPath() const { return d_ptr->xErrorMinusColumnPath; }
+QString& XYCurve::xErrorMinusColumnPath() const {
+	return d_ptr->xErrorMinusColumnPath;
+}
 
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, yErrorType, yErrorType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yErrorPlusColumn, yErrorPlusColumn)
-QString& XYCurve::yErrorPlusColumnPath() const { return d_ptr->yErrorPlusColumnPath; }
+QString& XYCurve::yErrorPlusColumnPath() const {
+	return d_ptr->yErrorPlusColumnPath;
+}
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yErrorMinusColumn, yErrorMinusColumn)
-QString& XYCurve::yErrorMinusColumnPath() const { return d_ptr->yErrorMinusColumnPath; }
+QString& XYCurve::yErrorMinusColumnPath() const {
+	return d_ptr->yErrorMinusColumnPath;
+}
 
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsCapSize, errorBarsCapSize)
@@ -459,21 +487,21 @@ void XYCurve::setValuesOpacity(qreal opacity) {
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesPrefix, QString, valuesPrefix, updateValues)
 void XYCurve::setValuesPrefix(const QString& prefix) {
 	Q_D(XYCurve);
-	if (prefix!= d->valuesPrefix)
+	if (prefix != d->valuesPrefix)
 		exec(new XYCurveSetValuesPrefixCmd(d, prefix, i18n("%1: set values prefix")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesSuffix, QString, valuesSuffix, updateValues)
 void XYCurve::setValuesSuffix(const QString& suffix) {
 	Q_D(XYCurve);
-	if (suffix!= d->valuesSuffix)
+	if (suffix != d->valuesSuffix)
 		exec(new XYCurveSetValuesSuffixCmd(d, suffix, i18n("%1: set values suffix")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesFont, QFont, valuesFont, updateValues)
 void XYCurve::setValuesFont(const QFont& font) {
 	Q_D(XYCurve);
-	if (font!= d->valuesFont)
+	if (font != d->valuesFont)
 		exec(new XYCurveSetValuesFontCmd(d, font, i18n("%1: set values font")));
 }
 
@@ -523,21 +551,21 @@ void XYCurve::setFillingBrushStyle(Qt::BrushStyle style) {
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFirstColor, QColor, fillingFirstColor, updatePixmap)
 void XYCurve::setFillingFirstColor(const QColor& color) {
 	Q_D(XYCurve);
-	if (color!= d->fillingFirstColor)
+	if (color != d->fillingFirstColor)
 		exec(new XYCurveSetFillingFirstColorCmd(d, color, i18n("%1: set filling first color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingSecondColor, QColor, fillingSecondColor, updatePixmap)
 void XYCurve::setFillingSecondColor(const QColor& color) {
 	Q_D(XYCurve);
-	if (color!= d->fillingSecondColor)
+	if (color != d->fillingSecondColor)
 		exec(new XYCurveSetFillingSecondColorCmd(d, color, i18n("%1: set filling second color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFileName, QString, fillingFileName, updatePixmap)
 void XYCurve::setFillingFileName(const QString& fileName) {
 	Q_D(XYCurve);
-	if (fileName!= d->fillingFileName)
+	if (fileName != d->fillingFileName)
 		exec(new XYCurveSetFillingFileNameCmd(d, fileName, i18n("%1: set filling image")));
 }
 
@@ -652,19 +680,27 @@ void XYCurve::suppressRetransform(bool b) {
 //#################################  SLOTS  ####################################
 //##############################################################################
 void XYCurve::retransform() {
-	d_ptr->retransform();
+	DEBUG("XYCurve::retransform()");
+	Q_D(XYCurve);
+
+	WAIT_CURSOR;
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	d->retransform();
+	RESET_CURSOR;
 }
 
 void XYCurve::updateValues() {
-	d_ptr->updateValues();
+	Q_D(XYCurve);
+	d->updateValues();
 }
 
 void XYCurve::updateErrorBars() {
-	d_ptr->updateErrorBars();
+	Q_D(XYCurve);
+	d->updateErrorBars();
 }
 
 //TODO
-void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio){
+void XYCurve::handlePageResize(double horizontalRatio, double verticalRatio) {
 	Q_D(const XYCurve);
 
 	setSymbolsSize(d->symbolsSize * horizontalRatio);
@@ -749,6 +785,10 @@ void XYCurve::visibilityChanged() {
 	this->setVisible(!d->isVisible());
 }
 
+void XYCurve::navigateTo() {
+	project()->navigateTo(navigateToAction->data().toString());
+}
+
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
@@ -773,11 +813,11 @@ QPainterPath XYCurvePrivate::shape() const {
 	return curveShape;
 }
 
-void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event){
-    q->createContextMenu()->exec(event->screenPos());
+void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+	q->createContextMenu()->exec(event->screenPos());
 }
 
-bool XYCurvePrivate::swapVisible(bool on){
+bool XYCurvePrivate::swapVisible(bool on) {
 	bool oldValue = isVisible();
 	setVisible(on);
 	emit q->visibilityChanged(on);
@@ -788,17 +828,16 @@ bool XYCurvePrivate::swapVisible(bool on){
   recalculates the position of the points to be drawn. Called when the data was changed.
   Triggers the update of lines, drop lines, symbols etc.
 */
-void XYCurvePrivate::retransform(){
-	if (m_suppressRetransform){
+void XYCurvePrivate::retransform() {
+	DEBUG("XYCurvePrivate::retransform()");
+	if (m_suppressRetransform)
 		return;
-	}
 
-// 	qDebug()<<"XYCurvePrivate::retransform() " << q->name();
 	symbolPointsLogical.clear();
 	symbolPointsScene.clear();
 	connectedPointsLogical.clear();
 
-	if ( (NULL == xColumn) || (NULL == yColumn) ){
+	if ( (NULL == xColumn) || (NULL == yColumn) ) {
 		linePath = QPainterPath();
 		dropLinePath = QPainterPath();
 		symbolsPath = QPainterPath();
@@ -816,39 +855,39 @@ void XYCurvePrivate::retransform(){
 	AbstractColumn::ColumnMode yColMode = yColumn->columnMode();
 
 	//take over only valid and non masked points.
-	for (int row = startRow; row <= endRow; row++ ){
+	for (int row = startRow; row <= endRow; row++) {
 		if ( xColumn->isValid(row) && yColumn->isValid(row)
-			&& (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
+				&& (!xColumn->isMasked(row)) && (!yColumn->isMasked(row)) ) {
 
-			switch(xColMode) {
-				case AbstractColumn::Numeric:
-					tempPoint.setX(xColumn->valueAt(row));
-					break;
-				case AbstractColumn::Text:
-					//TODO
-				case AbstractColumn::DateTime:
-				case AbstractColumn::Month:
-				case AbstractColumn::Day:
-					//TODO
-					break;
+			switch (xColMode) {
+			case AbstractColumn::Numeric:
+				tempPoint.setX(xColumn->valueAt(row));
+				break;
+			case AbstractColumn::Text:
+			//TODO
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
+				//TODO
+				break;
 			}
 
-			switch(yColMode) {
-				case AbstractColumn::Numeric:
-					tempPoint.setY(yColumn->valueAt(row));
-					break;
-				case AbstractColumn::Text:
-					//TODO
-				case AbstractColumn::DateTime:
-				case AbstractColumn::Month:
-				case AbstractColumn::Day:
-					//TODO
-					break;
+			switch (yColMode) {
+			case AbstractColumn::Numeric:
+				tempPoint.setY(yColumn->valueAt(row));
+				break;
+			case AbstractColumn::Text:
+			//TODO
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
+				//TODO
+				break;
 			}
 			symbolPointsLogical.append(tempPoint);
 			connectedPointsLogical.push_back(true);
 		} else {
-			if (connectedPointsLogical.size())
+			if (!connectedPointsLogical.empty())
 				connectedPointsLogical[connectedPointsLogical.size()-1] = false;
 		}
 	}
@@ -876,157 +915,161 @@ void XYCurvePrivate::retransform(){
   recalculates the painter path for the lines connecting the data points.
   Called each time when the type of this connection is changed.
 */
-void XYCurvePrivate::updateLines(){
-  	linePath = QPainterPath();
+void XYCurvePrivate::updateLines() {
+	linePath = QPainterPath();
 	lines.clear();
-	if (lineType == XYCurve::NoLine){
-	  updateFilling();
-	  recalcShapeAndBoundingRect();
-	  return;
+	if (lineType == XYCurve::NoLine) {
+		updateFilling();
+		recalcShapeAndBoundingRect();
+		return;
 	}
 
-	const int count=symbolPointsLogical.count();
+	const int count = symbolPointsLogical.count();
+//	DEBUG("count ="<<count<<", line type ="<<lineType);
+//	for(int i=0;i<qMin(10,count);i++)
+//		DEBUG(symbolPointsLogical.at(i));
 
 	//nothing to do, if no data points available
-	if (count<=1){
-	  	recalcShapeAndBoundingRect();
+	if (count <= 1) {
+		recalcShapeAndBoundingRect();
 		return;
 	}
 
 	//calculate the lines connecting the data points
 	QPointF tempPoint1, tempPoint2;
 	QPointF curPoint, nextPoint;
-	switch(lineType){
-          case XYCurve::NoLine:
+	switch (lineType) {
+	case XYCurve::NoLine:
 		break;
-	  case XYCurve::Line:{
-		for (int i=0; i<count-1; i++){
-		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
-		  lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
-		}
-		break;
-	  }
-	  case XYCurve::StartHorizontal:{
-		for (int i=0; i<count-1; i++){
-		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
-		  curPoint=symbolPointsLogical.at(i);
-		  nextPoint=symbolPointsLogical.at(i+1);
-		  tempPoint1=QPointF(nextPoint.x(), curPoint.y());
-		  lines.append(QLineF(curPoint, tempPoint1));
-		  lines.append(QLineF(tempPoint1, nextPoint));
-		}
-		break;
-	  }
-	  case XYCurve::StartVertical:{
-		for (int i=0; i<count-1; i++){
-		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
-		  curPoint=symbolPointsLogical.at(i);
-		  nextPoint=symbolPointsLogical.at(i+1);
-		  tempPoint1=QPointF(curPoint.x(), nextPoint.y());
-		  lines.append(QLineF(curPoint, tempPoint1));
-		  lines.append(QLineF(tempPoint1,nextPoint));
-		}
-		break;
-	  }
-	  case XYCurve::MidpointHorizontal:{
-		for (int i=0; i<count-1; i++){
-		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
-		  curPoint=symbolPointsLogical.at(i);
-		  nextPoint=symbolPointsLogical.at(i+1);
-		  tempPoint1=QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, curPoint.y());
-		  tempPoint2=QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, nextPoint.y());
-		  lines.append(QLineF(curPoint, tempPoint1));
-		  lines.append(QLineF(tempPoint1, tempPoint2));
-		  lines.append(QLineF(tempPoint2, nextPoint));
-		}
-		break;
-	  }
-	  case XYCurve::MidpointVertical:{
-		for (int i=0; i<count-1; i++){
-		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
-		  curPoint=symbolPointsLogical.at(i);
-		  nextPoint=symbolPointsLogical.at(i+1);
-		  tempPoint1=QPointF(curPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
-		  tempPoint2=QPointF(nextPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
-		  lines.append(QLineF(curPoint, tempPoint1));
-		  lines.append(QLineF(tempPoint1, tempPoint2));
-		  lines.append(QLineF(tempPoint2, nextPoint));
-		}
-		break;
-	  }
-	  case XYCurve::Segments2:{
-		int skip=0;
-		for (int i=0; i<count-1; i++){
-		  if (skip!=1){
-			if (!lineSkipGaps && !connectedPointsLogical[i]) {skip=0; continue;}
+	case XYCurve::Line:
+		for (int i = 0; i < count - 1; i++) {
+			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
 			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
-			skip++;
-		  }else{
-			skip=0;
-		  }
 		}
 		break;
-	  }
-	  case XYCurve::Segments3:{
+	case XYCurve::StartHorizontal:
+		for (int i = 0; i < count - 1; i++) {
+			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
+			curPoint = symbolPointsLogical.at(i);
+			nextPoint = symbolPointsLogical.at(i+1);
+			tempPoint1 = QPointF(nextPoint.x(), curPoint.y());
+			lines.append(QLineF(curPoint, tempPoint1));
+			lines.append(QLineF(tempPoint1, nextPoint));
+		}
+		break;
+	case XYCurve::StartVertical:
+		for (int i = 0; i < count - 1; i++) {
+			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
+			curPoint = symbolPointsLogical.at(i);
+			nextPoint = symbolPointsLogical.at(i+1);
+			tempPoint1 = QPointF(curPoint.x(), nextPoint.y());
+			lines.append(QLineF(curPoint, tempPoint1));
+			lines.append(QLineF(tempPoint1,nextPoint));
+		}
+		break;
+	case XYCurve::MidpointHorizontal:
+		for (int i = 0; i < count - 1; i++) {
+			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
+			curPoint = symbolPointsLogical.at(i);
+			nextPoint = symbolPointsLogical.at(i+1);
+			tempPoint1 = QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, curPoint.y());
+			tempPoint2 = QPointF(curPoint.x() + (nextPoint.x()-curPoint.x())/2, nextPoint.y());
+			lines.append(QLineF(curPoint, tempPoint1));
+			lines.append(QLineF(tempPoint1, tempPoint2));
+			lines.append(QLineF(tempPoint2, nextPoint));
+		}
+		break;
+	case XYCurve::MidpointVertical:
+		for (int i = 0; i < count - 1; i++) {
+			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
+			curPoint = symbolPointsLogical.at(i);
+			nextPoint = symbolPointsLogical.at(i+1);
+			tempPoint1 = QPointF(curPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
+			tempPoint2 = QPointF(nextPoint.x(), curPoint.y() + (nextPoint.y()-curPoint.y())/2);
+			lines.append(QLineF(curPoint, tempPoint1));
+			lines.append(QLineF(tempPoint1, tempPoint2));
+			lines.append(QLineF(tempPoint2, nextPoint));
+		}
+		break;
+	case XYCurve::Segments2: {
 		int skip=0;
-		for (int i=0; i<count-1; i++){
-		  if (skip!=2){
-			if (!lineSkipGaps && !connectedPointsLogical[i]) {skip=0; continue;}
-			lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
-			skip++;
-		  }else{
-			skip=0;
-		  }
+		for (int i = 0; i < count - 1; i++) {
+			if (skip != 1) {
+				if (!lineSkipGaps && !connectedPointsLogical[i]) {
+					skip = 0;
+					continue;
+				}
+				lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
+				skip++;
+			} else {
+				skip = 0;
+			}
 		}
 		break;
-	  }
-	  case XYCurve::SplineCubicNatural:
-	  case XYCurve::SplineCubicPeriodic:
-	  case XYCurve::SplineAkimaNatural:
-	  case XYCurve::SplineAkimaPeriodic:{
+	}
+	case XYCurve::Segments3: {
+		int skip = 0;
+		for (int i = 0; i < count - 1; i++) {
+			if (skip != 2) {
+				if (!lineSkipGaps && !connectedPointsLogical[i]) {
+					skip = 0;
+					continue;
+				}
+				lines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
+				skip++;
+			} else {
+				skip = 0;
+			}
+		}
+		break;
+	}
+	case XYCurve::SplineCubicNatural:
+	case XYCurve::SplineCubicPeriodic:
+	case XYCurve::SplineAkimaNatural:
+	case XYCurve::SplineAkimaPeriodic: {
 		//TODO: optimize! try to omit the copying from the column to the arrays of doubles.
 		//TODO: forward the error message to the UI.
-		gsl_interp_accel *acc  = gsl_interp_accel_alloc();
-		gsl_spline *spline=0;
+		gsl_interp_accel *acc = gsl_interp_accel_alloc();
+		gsl_spline *spline = 0;
 
 		double x[count],  y[count];
-		for (int i=0; i<count; i++){
-		  x[i]=symbolPointsLogical.at(i).x();
-		  y[i]=symbolPointsLogical.at(i).y();
+		for (int i = 0; i < count; i++) {
+			x[i] = symbolPointsLogical.at(i).x();
+			y[i] = symbolPointsLogical.at(i).y();
 		}
 
 		gsl_set_error_handler_off();
-		if (lineType==XYCurve::SplineCubicNatural){
+		if (lineType == XYCurve::SplineCubicNatural) {
 			spline = gsl_spline_alloc(gsl_interp_cspline, count);
-		}else if (lineType==XYCurve::SplineCubicPeriodic){
+		} else if (lineType == XYCurve::SplineCubicPeriodic) {
 			spline = gsl_spline_alloc(gsl_interp_cspline_periodic, count);
-		}else if (lineType==XYCurve::SplineAkimaNatural){
+		} else if (lineType == XYCurve::SplineAkimaNatural) {
 			spline = gsl_spline_alloc(gsl_interp_akima, count);
-		}else if (lineType==XYCurve::SplineAkimaPeriodic){
+		} else if (lineType == XYCurve::SplineAkimaPeriodic) {
 			spline = gsl_spline_alloc(gsl_interp_akima_periodic, count);
 		}
 
 		if (!spline) {
 			QString msg;
-			if ( (lineType==XYCurve::SplineAkimaNatural || lineType==XYCurve::SplineAkimaPeriodic) && count<5)
-				msg=i18n("Error: Akima spline interpolation requires a minimum of 5 points.");
+			if ( (lineType == XYCurve::SplineAkimaNatural || lineType == XYCurve::SplineAkimaPeriodic) && count < 5)
+				msg = i18n("Error: Akima spline interpolation requires a minimum of 5 points.");
 			else
-				msg =i18n("Couldn't initialize spline function");
-			qDebug()<<msg;
+				msg = i18n("Couldn't initialize spline function");
+			QDEBUG(msg);
+
 			recalcShapeAndBoundingRect();
 			return;
 		}
 
 		int status = gsl_spline_init (spline, x, y, count);
-		if (status ) {
+		if (status) {
 			//TODO: check in gsl/interp.c when GSL_EINVAL is thrown
 			QString gslError;
 			if (status == GSL_EINVAL)
 				gslError = "x values must be monotonically increasing.";
 			else
 				gslError = gsl_strerror (status);
-
-			qDebug() << "Error in spline calculation. " << gslError;
+			QDEBUG("Error in spline calculation. " << gslError);
 
 			recalcShapeAndBoundingRect();
 			return;
@@ -1036,29 +1079,27 @@ void XYCurvePrivate::updateLines(){
 		std::vector<double> xinterp, yinterp;
 		double step;
 		double xi, yi, x1, x2;
-		for (int i=0; i<count-1; i++){
-		   x1 = x[i];
-		   x2 = x[i+1];
-		   step=fabs(x2-x1)/(lineInterpolationPointsCount+1);
+		for (int i = 0; i < count - 1; i++) {
+			x1 = x[i];
+			x2 = x[i+1];
+			step=fabs(x2 - x1)/(lineInterpolationPointsCount + 1);
 
-		  for (xi=x1; xi<x2; xi += step){
-			yi = gsl_spline_eval (spline, xi, acc);
-			xinterp.push_back(xi);
-			yinterp.push_back(yi);
-		  }
+			for (xi = x1; xi < x2; xi += step) {
+				yi = gsl_spline_eval(spline, xi, acc);
+				xinterp.push_back(xi);
+				yinterp.push_back(yi);
+			}
 		}
 
-		for (unsigned int i=0; i<xinterp.size()-1; i++){
-		  lines.append(QLineF(xinterp[i], yinterp[i], xinterp[i+1], yinterp[i+1]));
+		for (unsigned int i = 0; i < xinterp.size() - 1; i++) {
+			lines.append(QLineF(xinterp[i], yinterp[i], xinterp[i+1], yinterp[i+1]));
 		}
 		lines.append(QLineF(xinterp[xinterp.size()-1], yinterp[yinterp.size()-1], x[count-1], y[count-1]));
 
 		gsl_spline_free (spline);
-        gsl_interp_accel_free (acc);
+		gsl_interp_accel_free (acc);
 		break;
-	  }
-	  default:
-		break;
+	}
 	}
 
 	//map the lines to scene coordinates
@@ -1067,7 +1108,7 @@ void XYCurvePrivate::updateLines(){
 	lines = cSystem->mapLogicalToScene(lines);
 
 	//new line path
-	foreach (const QLineF& line, lines){
+	foreach (const QLineF& line, lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
@@ -1080,11 +1121,11 @@ void XYCurvePrivate::updateLines(){
   recalculates the painter path for the drop lines.
   Called each time when the type of the drop lines is changed.
 */
-void XYCurvePrivate::updateDropLines(){
-  	dropLinePath = QPainterPath();
-	if (dropLineType == XYCurve::NoDropLine){
-	  recalcShapeAndBoundingRect();
-	  return;
+void XYCurvePrivate::updateDropLines() {
+	dropLinePath = QPainterPath();
+	if (dropLineType == XYCurve::NoDropLine) {
+		recalcShapeAndBoundingRect();
+		return;
 	}
 
 	//calculate drop lines
@@ -1095,59 +1136,51 @@ void XYCurvePrivate::updateDropLines(){
 
 	xMin = plot->xMin();
 	yMin = plot->yMin();
-	switch(dropLineType){
-	  case XYCurve::NoDropLine:
+	switch (dropLineType) {
+	case XYCurve::NoDropLine:
 		break;
-	  case XYCurve::DropLineX:{
-		for(int i=0; i<symbolPointsLogical.size(); ++i){
+	case XYCurve::DropLineX:
+		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append(QLineF(point, QPointF(point.x(), yMin)));
 		}
 		break;
-	  }
-	  case XYCurve::DropLineY:{
-		for(int i=0; i<symbolPointsLogical.size(); ++i){
+	case XYCurve::DropLineY:
+		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append(QLineF(point, QPointF(xMin, point.y())));
 		}
 		break;
-	  }
-	  case XYCurve::DropLineXY:{
-		for(int i=0; i<symbolPointsLogical.size(); ++i){
+	case XYCurve::DropLineXY:
+		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append(QLineF(point, QPointF(point.x(), yMin)));
 			lines.append(QLineF(point, QPointF(xMin, point.y())));
 		}
 		break;
-	  }
-	  case XYCurve::DropLineXZeroBaseline:{
-		for(int i=0; i<symbolPointsLogical.size(); ++i){
+	case XYCurve::DropLineXZeroBaseline:
+		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append(QLineF(point, QPointF(point.x(), 0)));
 		}
 		break;
-	  }
-	  case XYCurve::DropLineXMinBaseline:{
-		for(int i=0; i<symbolPointsLogical.size(); ++i){
+	case XYCurve::DropLineXMinBaseline:
+		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append( QLineF(point, QPointF(point.x(), dynamic_cast<const Column*>(yColumn)->minimum())) );
 		}
 		break;
-	  }
-	  case XYCurve::DropLineXMaxBaseline:{
-		for(int i=0; i<symbolPointsLogical.size(); ++i){
+	case XYCurve::DropLineXMaxBaseline:
+		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			const QPointF& point = symbolPointsLogical.at(i);
 			lines.append( QLineF(point, QPointF(point.x(), dynamic_cast<const Column*>(yColumn)->maximum())) );
 		}
-		break;
-	  }
-	  default:
 		break;
 	}
 
@@ -1156,7 +1189,7 @@ void XYCurvePrivate::updateDropLines(){
 	lines = cSystem->mapLogicalToScene(lines);
 
 	//new painter path for the drop lines
-	foreach (const QLineF& line, lines){
+	foreach (const QLineF& line, lines) {
 		dropLinePath.moveTo(line.p1());
 		dropLinePath.lineTo(line.p2());
 	}
@@ -1164,9 +1197,9 @@ void XYCurvePrivate::updateDropLines(){
 	recalcShapeAndBoundingRect();
 }
 
-void XYCurvePrivate::updateSymbols(){
+void XYCurvePrivate::updateSymbols() {
 	symbolsPath = QPainterPath();
-	if (symbolsStyle != Symbol::NoSymbols){
+	if (symbolsStyle != Symbol::NoSymbols) {
 		QPainterPath path = Symbol::pathFromStyle(symbolsStyle);
 
 		QTransform trafo;
@@ -1192,53 +1225,53 @@ void XYCurvePrivate::updateSymbols(){
 /*!
   recreates the value strings to be shown and recalculates their draw position.
 */
-void XYCurvePrivate::updateValues(){
-  	valuesPath = QPainterPath();
+void XYCurvePrivate::updateValues() {
+	valuesPath = QPainterPath();
 	valuesPoints.clear();
 	valuesStrings.clear();
 
-	if (valuesType == XYCurve::NoValues){
+	if (valuesType == XYCurve::NoValues) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
 
 	//determine the value string for all points that are currently visible in the plot
-	switch (valuesType){
-	  case XYCurve::NoValues:
-	  case XYCurve::ValuesX:{
-		for(int i=0; i<symbolPointsLogical.size(); ++i){
+	switch (valuesType) {
+	case XYCurve::NoValues:
+	case XYCurve::ValuesX: {
+		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
- 			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).x()) + valuesSuffix;
-		}
-	  break;
-	  }
-	  case XYCurve::ValuesY:{
-		for(int i=0; i<symbolPointsLogical.size(); ++i){
-			if (!visiblePoints[i]) continue;
- 			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).y()) + valuesSuffix;
+			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).x()) + valuesSuffix;
 		}
 		break;
-	  }
-	  case XYCurve::ValuesXY:{
-		for(int i=0; i<symbolPointsLogical.size(); ++i){
+	}
+	case XYCurve::ValuesY: {
+		for(int i=0; i<symbolPointsLogical.size(); ++i) {
+			if (!visiblePoints[i]) continue;
+			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).y()) + valuesSuffix;
+		}
+		break;
+	}
+	case XYCurve::ValuesXY: {
+		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			valuesStrings << valuesPrefix + QString::number(symbolPointsLogical.at(i).x()) + ','
-							+ QString::number(symbolPointsLogical.at(i).y()) + valuesSuffix;
+						  + QString::number(symbolPointsLogical.at(i).y()) + valuesSuffix;
 		}
 		break;
-	  }
-	  case XYCurve::ValuesXYBracketed:{
-		for(int i=0; i<symbolPointsLogical.size(); ++i){
+	}
+	case XYCurve::ValuesXYBracketed: {
+		for(int i=0; i<symbolPointsLogical.size(); ++i) {
 			if (!visiblePoints[i]) continue;
 			valuesStrings <<  valuesPrefix + '(' + QString::number(symbolPointsLogical.at(i).x()) + ','
-							+ QString::number(symbolPointsLogical.at(i).y()) +')' + valuesSuffix;
+						  + QString::number(symbolPointsLogical.at(i).y()) +')' + valuesSuffix;
 		}
 		break;
-	  }
-	  case XYCurve::ValuesCustomColumn:{
-		if (!valuesColumn){
-		  recalcShapeAndBoundingRect();
-		  return;
+	}
+	case XYCurve::ValuesCustomColumn: {
+		if (!valuesColumn) {
+			recalcShapeAndBoundingRect();
+			return;
 		}
 
 		int endRow;
@@ -1248,26 +1281,26 @@ void XYCurvePrivate::updateValues(){
 			endRow = symbolPointsLogical.size();
 
 		AbstractColumn::ColumnMode xColMode = valuesColumn->columnMode();
-		for (int i=0; i<endRow; ++i){
+		for (int i=0; i<endRow; ++i) {
 			if (!visiblePoints[i]) continue;
 
 			if ( !valuesColumn->isValid(i) || valuesColumn->isMasked(i) )
 				continue;
 
-			switch (xColMode){
-				case AbstractColumn::Numeric:
-					valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
-					break;
-				case AbstractColumn::Text:
-					valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
-				case AbstractColumn::DateTime:
-				case AbstractColumn::Month:
-				case AbstractColumn::Day:
-					//TODO
-					break;
+			switch (xColMode) {
+			case AbstractColumn::Numeric:
+				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
+				break;
+			case AbstractColumn::Text:
+				valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
+			case AbstractColumn::DateTime:
+			case AbstractColumn::Month:
+			case AbstractColumn::Day:
+				//TODO
+				break;
 			}
 		}
-	  }
+	}
 	}
 
 	//Calculate the coordinates where to paint the value strings.
@@ -1277,48 +1310,32 @@ void XYCurvePrivate::updateValues(){
 	qreal w;
 	qreal h=fm.ascent();
 
-	switch(valuesPosition){
-	  case XYCurve::ValuesAbove:{
-		for (int i=0; i<valuesStrings.size(); i++){
-		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPointsScene.at(i).x() - w/2);
-		  tempPoint.setY( symbolPointsScene.at(i).y() - valuesDistance );
-		  valuesPoints.append(tempPoint);
-		  }
-		  break;
+	for (int i=0; i<valuesStrings.size(); i++) {
+		w=fm.width(valuesStrings.at(i));
+		switch (valuesPosition) {
+		case XYCurve::ValuesAbove:
+			tempPoint.setX( symbolPointsScene.at(i).x() - w/2);
+			tempPoint.setY( symbolPointsScene.at(i).y() - valuesDistance );
+			break;
+		case XYCurve::ValuesUnder:
+			tempPoint.setX( symbolPointsScene.at(i).x() -w/2 );
+			tempPoint.setY( symbolPointsScene.at(i).y() + valuesDistance + h/2);
+			break;
+		case XYCurve::ValuesLeft:
+			tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1 );
+			tempPoint.setY( symbolPointsScene.at(i).y());
+			break;
+		case XYCurve::ValuesRight:
+			tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1 );
+			tempPoint.setY( symbolPointsScene.at(i).y() );
+			break;
 		}
-	  case XYCurve::ValuesUnder:{
-		for (int i=0; i<valuesStrings.size(); i++){
-		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPointsScene.at(i).x() -w/2 );
-		  tempPoint.setY( symbolPointsScene.at(i).y() + valuesDistance + h/2);
-		  valuesPoints.append(tempPoint);
-		}
-		break;
-	  }
-	  case XYCurve::ValuesLeft:{
-		for (int i=0; i<valuesStrings.size(); i++){
-		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPointsScene.at(i).x() - valuesDistance - w - 1 );
-		  tempPoint.setY( symbolPointsScene.at(i).y());
-		  valuesPoints.append(tempPoint);
-		}
-		break;
-	  }
-	  case XYCurve::ValuesRight:{
-		for (int i=0; i<valuesStrings.size(); i++){
-		  w=fm.width(valuesStrings.at(i));
-		  tempPoint.setX( symbolPointsScene.at(i).x() + valuesDistance - 1 );
-		  tempPoint.setY( symbolPointsScene.at(i).y() );
-		  valuesPoints.append(tempPoint);
-		}
-		break;
-	  }
+		valuesPoints.append(tempPoint);
 	}
 
 	QTransform trafo;
 	QPainterPath path;
-	for (int i=0; i<valuesPoints.size(); i++){
+	for (int i=0; i<valuesPoints.size(); i++) {
 		path = QPainterPath();
 		path.addText( QPoint(0,0), valuesFont, valuesStrings.at(i) );
 
@@ -1347,20 +1364,19 @@ void XYCurvePrivate::updateFilling() {
 
 	//if there're no interpolation lines available (XYCurve::NoLine selected), create line-interpolation,
 	//use already available lines otherwise.
-	if (lines.size()) {
+	if (!lines.isEmpty()) {
 		fillLines = lines;
 	} else {
-		for (int i=0; i<symbolPointsLogical.count()-1; i++){
-		  if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
-		  fillLines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
+		for (int i=0; i<symbolPointsLogical.count()-1; i++) {
+			if (!lineSkipGaps && !connectedPointsLogical[i]) continue;
+			fillLines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
 		fillLines = cSystem->mapLogicalToScene(fillLines);
+
+		//no lines available (no points), nothing to do
+		if (fillLines.isEmpty())
+			return;
 	}
-
-	//no lines available (no points), nothing to do
-	if (!fillLines.size())
-		return;
-
 
 	//create polygon(s):
 	//1. Depending on the current zoom-level, only a subset of the curve may be visible in the plot
@@ -1466,7 +1482,7 @@ void XYCurvePrivate::updateFilling() {
 		}
 
 		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()>0 ? plot->yMin() : 0)).y();
-	}else if (fillingPosition == XYCurve::FillingLeft) {
+	} else if (fillingPosition == XYCurve::FillingLeft) {
 		edge = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
 
 		//start point
@@ -1567,9 +1583,9 @@ void XYCurvePrivate::updateFilling() {
 	recalcShapeAndBoundingRect();
 }
 
-void XYCurvePrivate::updateErrorBars(){
-  	errorBarsPath = QPainterPath();
-	if (xErrorType==XYCurve::NoError && yErrorType==XYCurve::NoError){
+void XYCurvePrivate::updateErrorBars() {
+	errorBarsPath = QPainterPath();
+	if (xErrorType==XYCurve::NoError && yErrorType==XYCurve::NoError) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1592,10 +1608,10 @@ void XYCurvePrivate::updateErrorBars(){
 	if (errorBarsType != XYCurve::ErrorBarsSimple && !symbolPointsLogical.isEmpty()) {
 		//determine the index of the first visible point
 		size_t i = 0;
-		while( i<visiblePoints.size() && !visiblePoints[i])
+		while (i<visiblePoints.size() && !visiblePoints[i])
 			i++;
 
-		if (i==visiblePoints.size())
+		if (i == visiblePoints.size())
 			return; //no visible points -> no error bars to draw
 
 		//cap size for x-error bars
@@ -1611,14 +1627,14 @@ void XYCurvePrivate::updateErrorBars(){
 		capSizeY = (pointLogical.x() - symbolPointsLogical.at(i).x())/2;
 	}
 
-	for (int i=0; i<symbolPointsLogical.size(); ++i){
+	for (int i=0; i < symbolPointsLogical.size(); ++i) {
 		if (!visiblePoints[i])
 			continue;
 
 		const QPointF& point = symbolPointsLogical.at(i);
 
 		//error bars for x
-		if (xErrorType!=XYCurve::NoError) {
+		if (xErrorType != XYCurve::NoError) {
 			//determine the values for the errors
 			if (xErrorPlusColumn && xErrorPlusColumn->isValid(i) && !xErrorPlusColumn->isMasked(i))
 				errorPlus = xErrorPlusColumn->valueAt(i);
@@ -1635,36 +1651,35 @@ void XYCurvePrivate::updateErrorBars(){
 			}
 
 			//draw the error bars
-			switch(errorBarsType) {
-				case XYCurve::ErrorBarsSimple:
-					lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
-										QPointF(point.x()+errorPlus, point.y())));
-					break;
-				case XYCurve::ErrorBarsWithEnds: {
-					lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
-										QPointF(point.x()+errorPlus, point.y())));
-					if (errorMinus!=0) {
-						lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()-capSizeX),
-											QPointF(point.x()-errorMinus, point.y()+capSizeX)));
-					}
-					if (errorPlus!=0) {
-						lines.append(QLineF(QPointF(point.x()+errorPlus, point.y()-capSizeX),
-											QPointF(point.x()+errorPlus, point.y()+capSizeX)));
-					}
-					break;
+			switch (errorBarsType) {
+			case XYCurve::ErrorBarsSimple:
+				lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
+						QPointF(point.x()+errorPlus, point.y())));
+				break;
+			case XYCurve::ErrorBarsWithEnds:
+				lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
+						QPointF(point.x()+errorPlus, point.y())));
+				if (errorMinus!=0) {
+					lines.append(QLineF(QPointF(point.x()-errorMinus, point.y()-capSizeX),
+							QPointF(point.x()-errorMinus, point.y()+capSizeX)));
 				}
+				if (errorPlus!=0) {
+					lines.append(QLineF(QPointF(point.x()+errorPlus, point.y()-capSizeX),
+							QPointF(point.x()+errorPlus, point.y()+capSizeX)));
+				}
+				break;
 			}
 		}
 
 		//error bars for y
-		if (yErrorType!=XYCurve::NoError) {
+		if (yErrorType != XYCurve::NoError) {
 			//determine the values for the errors
 			if (yErrorPlusColumn && yErrorPlusColumn->isValid(i) && !yErrorPlusColumn->isMasked(i))
 				errorPlus = yErrorPlusColumn->valueAt(i);
 			else
 				errorPlus = 0;
 
-			if (yErrorType==XYCurve::SymmetricError) {
+			if (yErrorType == XYCurve::SymmetricError) {
 				errorMinus = errorPlus;
 			} else {
 				if (yErrorMinusColumn && yErrorMinusColumn->isValid(i) && !yErrorMinusColumn->isMasked(i) )
@@ -1674,24 +1689,21 @@ void XYCurvePrivate::updateErrorBars(){
 			}
 
 			//draw the error bars
-			switch(errorBarsType) {
-				case XYCurve::ErrorBarsSimple:
-					lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
-										QPointF(point.x(), point.y()+errorPlus)));
-					break;
-				case XYCurve::ErrorBarsWithEnds: {
-					lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
-										QPointF(point.x(), point.y()+errorPlus)));
-					if (errorMinus!=0) {
-						lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()-errorMinus),
-											QPointF(point.x()+capSizeY, point.y()-errorMinus)));
-					}
-					if (errorPlus!=0) {
-						lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()+errorPlus),
-											QPointF(point.x()+capSizeY, point.y()+errorPlus)));
-					}
-					break;
-				}
+			switch (errorBarsType) {
+			case XYCurve::ErrorBarsSimple:
+				lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
+						QPointF(point.x(), point.y()+errorPlus)));
+				break;
+			case XYCurve::ErrorBarsWithEnds:
+				lines.append(QLineF(QPointF(point.x(), point.y()-errorMinus),
+						QPointF(point.x(), point.y()+errorPlus)));
+				if (errorMinus != 0)
+					lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()-errorMinus),
+							QPointF(point.x()+capSizeY, point.y()-errorMinus)));
+				if (errorPlus != 0)
+					lines.append(QLineF(QPointF(point.x()-capSizeY, point.y()+errorPlus),
+							QPointF(point.x()+capSizeY, point.y()+errorPlus)));
+				break;
 			}
 		}
 	}
@@ -1700,7 +1712,7 @@ void XYCurvePrivate::updateErrorBars(){
 	lines = cSystem->mapLogicalToScene(lines);
 
 	//new painter path for the drop lines
-	foreach (const QLineF& line, lines){
+	foreach (const QLineF& line, lines) {
 		errorBarsPath.moveTo(line.p1());
 		errorBarsPath.lineTo(line.p2());
 	}
@@ -1712,34 +1724,35 @@ void XYCurvePrivate::updateErrorBars(){
   recalculates the outer bounds and the shape of the curve.
 */
 void XYCurvePrivate::recalcShapeAndBoundingRect() {
+	DEBUG("XYCurvePrivate::recalcShapeAndBoundingRect()");
 	if (m_suppressRecalc)
 		return;
 
 	prepareGeometryChange();
 	curveShape = QPainterPath();
-	if (lineType != XYCurve::NoLine){
+	if (lineType != XYCurve::NoLine) {
 		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, linePen));
 	}
 
-	if (dropLineType != XYCurve::NoDropLine){
+	if (dropLineType != XYCurve::NoDropLine) {
 		curveShape.addPath(WorksheetElement::shapeFromPath(dropLinePath, dropLinePen));
 	}
 
-	if (symbolsStyle != Symbol::NoSymbols){
+	if (symbolsStyle != Symbol::NoSymbols) {
 		curveShape.addPath(symbolsPath);
 	}
 
-	if (valuesType != XYCurve::NoValues){
+	if (valuesType != XYCurve::NoValues) {
 		curveShape.addPath(valuesPath);
 	}
 
-	if (xErrorType != XYCurve::NoError || yErrorType != XYCurve::NoError){
+	if (xErrorType != XYCurve::NoError || yErrorType != XYCurve::NoError) {
 		curveShape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsPen));
 	}
 
 	boundingRectangle = curveShape.boundingRect();
 
-	foreach(const QPolygonF& pol, fillPolygons)
+	foreach (const QPolygonF& pol, fillPolygons)
 		boundingRectangle = boundingRectangle.united(pol.boundingRect());
 
 	//TODO: when the selection is painted, line intersections are visible.
@@ -1751,6 +1764,8 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 }
 
 void XYCurvePrivate::draw(QPainter *painter) {
+	DEBUG("XYCurvePrivate::draw()");
+
 	//draw filling
 	if (fillingPosition != XYCurve::NoFilling) {
 		painter->setOpacity(fillingOpacity);
@@ -1759,7 +1774,7 @@ void XYCurvePrivate::draw(QPainter *painter) {
 	}
 
 	//draw lines
-	if (lineType != XYCurve::NoLine){
+	if (lineType != XYCurve::NoLine) {
 		painter->setOpacity(lineOpacity);
 		painter->setPen(linePen);
 		painter->setBrush(Qt::NoBrush);
@@ -1767,7 +1782,7 @@ void XYCurvePrivate::draw(QPainter *painter) {
 	}
 
 	//draw drop lines
-	if (dropLineType != XYCurve::NoDropLine){
+	if (dropLineType != XYCurve::NoDropLine) {
 		painter->setOpacity(dropLineOpacity);
 		painter->setPen(dropLinePen);
 		painter->setBrush(Qt::NoBrush);
@@ -1775,7 +1790,7 @@ void XYCurvePrivate::draw(QPainter *painter) {
 	}
 
 	//draw error bars
-	if ( (xErrorType != XYCurve::NoError) || (yErrorType != XYCurve::NoError) ){
+	if ( (xErrorType != XYCurve::NoError) || (yErrorType != XYCurve::NoError) ) {
 		painter->setOpacity(errorBarsOpacity);
 		painter->setPen(errorBarsPen);
 		painter->setBrush(Qt::NoBrush);
@@ -1783,7 +1798,7 @@ void XYCurvePrivate::draw(QPainter *painter) {
 	}
 
 	//draw symbols
-	if (symbolsStyle != Symbol::NoSymbols){
+	if (symbolsStyle != Symbol::NoSymbols) {
 		painter->setOpacity(symbolsOpacity);
 		painter->setPen(symbolsPen);
 		painter->setBrush(symbolsBrush);
@@ -1791,24 +1806,32 @@ void XYCurvePrivate::draw(QPainter *painter) {
 	}
 
 	//draw values
-	if (valuesType != XYCurve::NoValues){
+	if (valuesType != XYCurve::NoValues) {
 		painter->setOpacity(valuesOpacity);
-		painter->setPen(valuesColor);
-		painter->setBrush(Qt::SolidPattern);
+		//don't use any painter pen, since this will force QPainter to render the text outline which is expensive
+		painter->setPen(Qt::NoPen);
+		painter->setBrush(valuesColor);
 		drawValues(painter);
 	}
+
+	DEBUG("XYCurvePrivate::draw() DONE");
 }
 
 void XYCurvePrivate::updatePixmap() {
+	DEBUG("XYCurvePrivate::updatePixmap()");
+	WAIT_CURSOR;
+
 // 	QTime timer;
 // 	timer.start();
-	QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
-	if (boundingRectangle.width()==0 || boundingRectangle.width()==0) {
-		m_pixmap = pixmap;
-		m_hoverEffectImageIsDirty = true;
-		m_selectionEffectImageIsDirty = true;
+	m_hoverEffectImageIsDirty = true;
+	m_selectionEffectImageIsDirty = true;
+	if (boundingRectangle.width() == 0 || boundingRectangle.width() == 0) {
+		m_pixmap = QPixmap();
+		RESET_CURSOR;
 		return;
 	}
+	QPixmap pixmap(ceil(boundingRectangle.width()), ceil(boundingRectangle.height()));
+	pixmap.fill(Qt::transparent);
 	pixmap.fill(Qt::transparent);
 	QPainter painter(&pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
@@ -1816,88 +1839,90 @@ void XYCurvePrivate::updatePixmap() {
 
 	draw(&painter);
 	painter.end();
-
 	m_pixmap = pixmap;
-	m_hoverEffectImageIsDirty = true;
-	m_selectionEffectImageIsDirty = true;
+
+	//QApplication::processEvents(QEventLoop::AllEvents, 0);
+
 // 	qDebug() << "Update the pixmap: " << timer.elapsed() << "ms";
+	RESET_CURSOR;
+	DEBUG("XYCurvePrivate::updatePixmap() DONE");
 }
 
 //TODO: move this to a central place
-QImage blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnly = false)
-{
-    int tab[] = { 14, 10, 8, 6, 5, 5, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2 };
-    int alpha = (radius < 1)  ? 16 : (radius > 17) ? 1 : tab[radius-1];
+QImage blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnly = false) {
+	int tab[] = { 14, 10, 8, 6, 5, 5, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2 };
+	int alpha = (radius < 1)  ? 16 : (radius > 17) ? 1 : tab[radius-1];
 
-    QImage result = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
-    int r1 = rect.top();
-    int r2 = rect.bottom();
-    int c1 = rect.left();
-    int c2 = rect.right();
+	QImage result = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
+	int r1 = rect.top();
+	int r2 = rect.bottom();
+	int c1 = rect.left();
+	int c2 = rect.right();
 
-    int bpl = result.bytesPerLine();
-    int rgba[4];
-    unsigned char* p;
+	int bpl = result.bytesPerLine();
+	int rgba[4];
+	unsigned char* p;
 
-    int i1 = 0;
-    int i2 = 3;
+	int i1 = 0;
+	int i2 = 3;
 
-    if (alphaOnly)
-        i1 = i2 = (QSysInfo::ByteOrder == QSysInfo::BigEndian ? 0 : 3);
+	if (alphaOnly)
+		i1 = i2 = (QSysInfo::ByteOrder == QSysInfo::LittleEndian)*3;
 
-    for (int col = c1; col <= c2; col++) {
-        p = result.scanLine(r1) + col * 4;
-        for (int i = i1; i <= i2; i++)
-            rgba[i] = p[i] << 4;
+	for (int col = c1; col <= c2; col++) {
+		p = result.scanLine(r1) + col * 4;
+		for (int i = i1; i <= i2; i++)
+			rgba[i] = p[i] << 4;
 
-        p += bpl;
-        for (int j = r1; j < r2; j++, p += bpl)
-            for (int i = i1; i <= i2; i++)
-                p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
-    }
+		p += bpl;
+		for (int j = r1; j < r2; j++, p += bpl)
+			for (int i = i1; i <= i2; i++)
+				p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
+	}
 
-    for (int row = r1; row <= r2; row++) {
-        p = result.scanLine(row) + c1 * 4;
-        for (int i = i1; i <= i2; i++)
-            rgba[i] = p[i] << 4;
+	for (int row = r1; row <= r2; row++) {
+		p = result.scanLine(row) + c1 * 4;
+		for (int i = i1; i <= i2; i++)
+			rgba[i] = p[i] << 4;
 
-        p += 4;
-        for (int j = c1; j < c2; j++, p += 4)
-            for (int i = i1; i <= i2; i++)
-                p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
-    }
+		p += 4;
+		for (int j = c1; j < c2; j++, p += 4)
+			for (int i = i1; i <= i2; i++)
+				p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
+	}
 
-    for (int col = c1; col <= c2; col++) {
-        p = result.scanLine(r2) + col * 4;
-        for (int i = i1; i <= i2; i++)
-            rgba[i] = p[i] << 4;
+	for (int col = c1; col <= c2; col++) {
+		p = result.scanLine(r2) + col * 4;
+		for (int i = i1; i <= i2; i++)
+			rgba[i] = p[i] << 4;
 
-        p -= bpl;
-        for (int j = r1; j < r2; j++, p -= bpl)
-            for (int i = i1; i <= i2; i++)
-                p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
-    }
+		p -= bpl;
+		for (int j = r1; j < r2; j++, p -= bpl)
+			for (int i = i1; i <= i2; i++)
+				p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
+	}
 
-    for (int row = r1; row <= r2; row++) {
-        p = result.scanLine(row) + c2 * 4;
-        for (int i = i1; i <= i2; i++)
-            rgba[i] = p[i] << 4;
+	for (int row = r1; row <= r2; row++) {
+		p = result.scanLine(row) + c2 * 4;
+		for (int i = i1; i <= i2; i++)
+			rgba[i] = p[i] << 4;
 
-        p -= 4;
-        for (int j = c1; j < c2; j++, p -= 4)
-            for (int i = i1; i <= i2; i++)
-                p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
-    }
+		p -= 4;
+		for (int j = c1; j < c2; j++, p -= 4)
+			for (int i = i1; i <= i2; i++)
+				p[i] = (rgba[i] += ((p[i] << 4) - rgba[i]) * alpha / 16) >> 4;
+	}
 
-    return result;
+	return result;
 }
 
 /*!
   Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the curve.
   \sa QGraphicsItem::paint().
 */
-void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget){
-// 	qDebug()<<"XYCurvePrivate::paint, " + q->name();
+void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
+	QDEBUG("XYCurvePrivate::paint() name =" << q->name());
+
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 	if (!isVisible())
@@ -1909,13 +1934,15 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-// TODO: draw directly
-	draw(painter);
-// or use pixmap for double buffering
-// 	painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap);
+ 	DEBUG("XYCurvePrivate::paint() calling drawPixmap() or draw() 		XXXXXXXXXXXXXXXXXXXX");
+	if ( KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true) )
+		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); //draw the cached pixmap (fast)
+	else
+		draw(painter); //draw directly again (slow)
+
 // 	qDebug() << "Paint the pixmap: " << timer.elapsed() << "ms";
 
-	if (m_hovered && !isSelected() && !m_printing){
+	if (m_hovered && !isSelected() && !m_printing) {
 // 		timer.start();
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
@@ -1931,7 +1958,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 		return;
 	}
 
-	if (isSelected() && !m_printing){
+	if (isSelected() && !m_printing) {
 // 		timer.start();
 		if (m_selectionEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
@@ -1949,8 +1976,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 }
 
 /*!
-	Drawing of symbolsPath is very slow, so we draw every symbol in the loop
-	which us much faster (factor 10)
+	Drawing of symbolsPath is very slow, so we draw every symbol in the loop which is much faster (factor 10)
 */
 void XYCurvePrivate::drawSymbols(QPainter* painter) {
 	QPainterPath path = Symbol::pathFromStyle(symbolsStyle);
@@ -1973,7 +1999,7 @@ void XYCurvePrivate::drawSymbols(QPainter* painter) {
 void XYCurvePrivate::drawValues(QPainter* painter) {
 	QTransform trafo;
 	QPainterPath path;
-	for (int i=0; i<valuesPoints.size(); i++){
+	for (int i=0; i<valuesPoints.size(); i++) {
 		path = QPainterPath();
 		path.addText( QPoint(0,0), valuesFont, valuesStrings.at(i) );
 
@@ -1987,89 +2013,89 @@ void XYCurvePrivate::drawValues(QPainter* painter) {
 }
 
 void XYCurvePrivate::drawFilling(QPainter* painter) {
-	foreach(const QPolygonF& pol, fillPolygons) {
+	foreach (const QPolygonF& pol, fillPolygons) {
 		QRectF rect = pol.boundingRect();
-		if (fillingType == PlotArea::Color){
-			switch (fillingColorStyle){
-				case PlotArea::SingleColor:{
-					painter->setBrush(QBrush(fillingFirstColor));
-					break;
-				}
-				case PlotArea::HorizontalLinearGradient:{
-					QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-					linearGrad.setColorAt(0, fillingFirstColor);
-					linearGrad.setColorAt(1, fillingSecondColor);
-					painter->setBrush(QBrush(linearGrad));
-					break;
-				}
-				case PlotArea::VerticalLinearGradient:{
-					QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-					linearGrad.setColorAt(0, fillingFirstColor);
-					linearGrad.setColorAt(1, fillingSecondColor);
-					painter->setBrush(QBrush(linearGrad));
-					break;
-				}
-				case PlotArea::TopLeftDiagonalLinearGradient:{
-					QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-					linearGrad.setColorAt(0, fillingFirstColor);
-					linearGrad.setColorAt(1, fillingSecondColor);
-					painter->setBrush(QBrush(linearGrad));
-					break;
-				}
-				case PlotArea::BottomLeftDiagonalLinearGradient:{
-					QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-					linearGrad.setColorAt(0, fillingFirstColor);
-					linearGrad.setColorAt(1, fillingSecondColor);
-					painter->setBrush(QBrush(linearGrad));
-					break;
-				}
-				case PlotArea::RadialGradient:{
-					QRadialGradient radialGrad(rect.center(), rect.width()/2);
-					radialGrad.setColorAt(0, fillingFirstColor);
-					radialGrad.setColorAt(1, fillingSecondColor);
-					painter->setBrush(QBrush(radialGrad));
-					break;
-				}
+		if (fillingType == PlotArea::Color) {
+			switch (fillingColorStyle) {
+			case PlotArea::SingleColor: {
+				painter->setBrush(QBrush(fillingFirstColor));
+				break;
 			}
-		}else if (fillingType == PlotArea::Image){
+			case PlotArea::HorizontalLinearGradient: {
+				QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
+				linearGrad.setColorAt(0, fillingFirstColor);
+				linearGrad.setColorAt(1, fillingSecondColor);
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::VerticalLinearGradient: {
+				QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
+				linearGrad.setColorAt(0, fillingFirstColor);
+				linearGrad.setColorAt(1, fillingSecondColor);
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::TopLeftDiagonalLinearGradient: {
+				QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
+				linearGrad.setColorAt(0, fillingFirstColor);
+				linearGrad.setColorAt(1, fillingSecondColor);
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::BottomLeftDiagonalLinearGradient: {
+				QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
+				linearGrad.setColorAt(0, fillingFirstColor);
+				linearGrad.setColorAt(1, fillingSecondColor);
+				painter->setBrush(QBrush(linearGrad));
+				break;
+			}
+			case PlotArea::RadialGradient: {
+				QRadialGradient radialGrad(rect.center(), rect.width()/2);
+				radialGrad.setColorAt(0, fillingFirstColor);
+				radialGrad.setColorAt(1, fillingSecondColor);
+				painter->setBrush(QBrush(radialGrad));
+				break;
+			}
+			}
+		} else if (fillingType == PlotArea::Image) {
 			if ( !fillingFileName.trimmed().isEmpty() ) {
 				QPixmap pix(fillingFileName);
-				switch (fillingImageStyle){
-					case PlotArea::ScaledCropped:
-						pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
-						painter->setBrush(QBrush(pix));
-						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-						break;
-					case PlotArea::Scaled:
-						pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-						painter->setBrush(QBrush(pix));
-						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-						break;
-					case PlotArea::ScaledAspectRatio:
-						pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-						painter->setBrush(QBrush(pix));
-						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
-						break;
-					case PlotArea::Centered:{
-						QPixmap backpix(rect.size().toSize());
-						backpix.fill();
-						QPainter p(&backpix);
-						p.drawPixmap(QPointF(0,0),pix);
-						p.end();
-						painter->setBrush(QBrush(backpix));
-						painter->setBrushOrigin(-pix.size().width()/2,-pix.size().height()/2);
-						break;
-					}
-					case PlotArea::Tiled:
-						painter->setBrush(QBrush(pix));
-						break;
-					case PlotArea::CenterTiled:
-						painter->setBrush(QBrush(pix));
-						painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
+				switch (fillingImageStyle) {
+				case PlotArea::ScaledCropped:
+					pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+					painter->setBrush(QBrush(pix));
+					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
+					break;
+				case PlotArea::Scaled:
+					pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+					painter->setBrush(QBrush(pix));
+					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
+					break;
+				case PlotArea::ScaledAspectRatio:
+					pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+					painter->setBrush(QBrush(pix));
+					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
+					break;
+				case PlotArea::Centered: {
+					QPixmap backpix(rect.size().toSize());
+					backpix.fill();
+					QPainter p(&backpix);
+					p.drawPixmap(QPointF(0, 0), pix);
+					p.end();
+					painter->setBrush(QBrush(backpix));
+					painter->setBrushOrigin(-pix.size().width()/2, -pix.size().height()/2);
+					break;
+				}
+				case PlotArea::Tiled:
+					painter->setBrush(QBrush(pix));
+					break;
+				case PlotArea::CenterTiled:
+					painter->setBrush(QBrush(pix));
+					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
 				}
 			}
-		} else if (fillingType == PlotArea::Pattern){
-			painter->setBrush(QBrush(fillingFirstColor,fillingBrushStyle));
+		} else if (fillingType == PlotArea::Pattern) {
+			painter->setBrush(QBrush(fillingFirstColor, fillingBrushStyle));
 		}
 
 		painter->drawPolygon(pol);
@@ -2098,12 +2124,12 @@ void XYCurvePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void XYCurve::save(QXmlStreamWriter* writer) const{
+void XYCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYCurve);
 
-    writer->writeStartElement( "xyCurve" );
-    writeBasicAttributes( writer );
-    writeCommentElement( writer );
+	writer->writeStartElement( "xyCurve" );
+	writeBasicAttributes( writer );
+	writeCommentElement( writer );
 
 	//general
 	writer->writeStartElement( "general" );
@@ -2113,7 +2139,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeEndElement();
 
 	//Line
-    writer->writeStartElement( "lines" );
+	writer->writeStartElement( "lines" );
 	writer->writeAttribute( "type", QString::number(d->lineType) );
 	writer->writeAttribute( "skipGaps", QString::number(d->lineSkipGaps) );
 	writer->writeAttribute( "interpolationPointsCount", QString::number(d->lineInterpolationPointsCount) );
@@ -2156,17 +2182,17 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 	//Filling
 	writer->writeStartElement( "filling" );
 	writer->writeAttribute( "position", QString::number(d->fillingPosition) );
-    writer->writeAttribute( "type", QString::number(d->fillingType) );
-    writer->writeAttribute( "colorStyle", QString::number(d->fillingColorStyle) );
-    writer->writeAttribute( "imageStyle", QString::number(d->fillingImageStyle) );
-    writer->writeAttribute( "brushStyle", QString::number(d->fillingBrushStyle) );
-    writer->writeAttribute( "firstColor_r", QString::number(d->fillingFirstColor.red()) );
-    writer->writeAttribute( "firstColor_g", QString::number(d->fillingFirstColor.green()) );
-    writer->writeAttribute( "firstColor_b", QString::number(d->fillingFirstColor.blue()) );
-    writer->writeAttribute( "secondColor_r", QString::number(d->fillingSecondColor.red()) );
-    writer->writeAttribute( "secondColor_g", QString::number(d->fillingSecondColor.green()) );
-    writer->writeAttribute( "secondColor_b", QString::number(d->fillingSecondColor.blue()) );
-    writer->writeAttribute( "fileName", d->fillingFileName );
+	writer->writeAttribute( "type", QString::number(d->fillingType) );
+	writer->writeAttribute( "colorStyle", QString::number(d->fillingColorStyle) );
+	writer->writeAttribute( "imageStyle", QString::number(d->fillingImageStyle) );
+	writer->writeAttribute( "brushStyle", QString::number(d->fillingBrushStyle) );
+	writer->writeAttribute( "firstColor_r", QString::number(d->fillingFirstColor.red()) );
+	writer->writeAttribute( "firstColor_g", QString::number(d->fillingFirstColor.green()) );
+	writer->writeAttribute( "firstColor_b", QString::number(d->fillingFirstColor.blue()) );
+	writer->writeAttribute( "secondColor_r", QString::number(d->fillingSecondColor.red()) );
+	writer->writeAttribute( "secondColor_g", QString::number(d->fillingSecondColor.green()) );
+	writer->writeAttribute( "secondColor_b", QString::number(d->fillingSecondColor.blue()) );
+	writer->writeAttribute( "fileName", d->fillingFileName );
 	writer->writeAttribute( "opacity", QString::number(d->fillingOpacity) );
 	writer->writeEndElement();
 
@@ -2188,149 +2214,77 @@ void XYCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYCurve::load(XmlStreamReader* reader){
+bool XYCurve::load(XmlStreamReader* reader) {
 	Q_D(XYCurve);
 
-    if(!reader->isStartElement() || reader->name() != "xyCurve"){
-        reader->raiseError(i18n("no xy-curve element found"));
-        return false;
-    }
+	if (!reader->isStartElement() || reader->name() != "xyCurve") {
+		reader->raiseError(i18n("no xy-curve element found"));
+		return false;
+	}
 
-    if (!readBasicAttributes(reader))
-        return false;
+	if (!readBasicAttributes(reader))
+		return false;
 
-    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-    QXmlStreamAttributes attribs;
-    QString str;
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QXmlStreamAttributes attribs;
+	QString str;
 
-    while (!reader->atEnd()){
-        reader->readNext();
-        if (reader->isEndElement() && reader->name() == "xyCurve")
-            break;
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == "xyCurve")
+			break;
 
-        if (!reader->isStartElement())
-            continue;
+		if (!reader->isStartElement())
+			continue;
 
-        if (reader->name() == "comment"){
-            if (!readCommentElement(reader)) return false;
-		}else if (reader->name() == "general"){
+		if (reader->name() == "comment") {
+			if (!readCommentElement(reader)) return false;
+		} else if (reader->name() == "general") {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xColumn);
 			READ_COLUMN(yColumn);
 
 			str = attribs.value("visible").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'visible'"));
-            else
-                d->setVisible(str.toInt());
-		}else if (reader->name() == "lines"){
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'visible'"));
+			else
+				d->setVisible(str.toInt());
+		} else if (reader->name() == "lines") {
 			attribs = reader->attributes();
 
-			str = attribs.value("type").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'type'"));
-            else
-                d->lineType = (XYCurve::LineType)str.toInt();
-
-			str = attribs.value("skipGaps").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'skipGps'"));
-            else
-                d->lineSkipGaps = str.toInt();
-
-			str = attribs.value("interpolationPointsCount").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'interpolationPointsCount'"));
-            else
-                d->lineInterpolationPointsCount = str.toInt();
-
+			READ_INT_VALUE("type", lineType, XYCurve::LineType);
+			READ_INT_VALUE("skipGaps", lineSkipGaps, int);
+			READ_INT_VALUE("interpolationPointsCount", lineInterpolationPointsCount, int);
 			READ_QPEN(d->linePen);
-
-			str = attribs.value("opacity").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'opacity'"));
-            else
-                d->lineOpacity = str.toDouble();
-		}else if (reader->name() == "dropLines"){
+			READ_DOUBLE_VALUE("opacity", lineOpacity);
+		} else if (reader->name() == "dropLines") {
 			attribs = reader->attributes();
 
-			str = attribs.value("type").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'type'"));
-            else
-                d->dropLineType = (XYCurve::DropLineType)str.toInt();
-
+			READ_INT_VALUE("type", dropLineType, XYCurve::DropLineType);
 			READ_QPEN(d->dropLinePen);
+			READ_DOUBLE_VALUE("opacity", dropLineOpacity);
 
-			str = attribs.value("opacity").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'opacity'"));
-            else
-                d->dropLineOpacity = str.toDouble();
-		}else if (reader->name() == "symbols"){
+		} else if (reader->name() == "symbols") {
 			attribs = reader->attributes();
 
-			str = attribs.value("symbolsStyle").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'symbolsStyle'"));
-            else
-                d->symbolsStyle = (Symbol::Style)str.toInt();
-
-			str = attribs.value("opacity").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'opacity'"));
-            else
-                d->symbolsOpacity = str.toDouble();
-
-			str = attribs.value("rotation").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'rotation'"));
-            else
-                d->symbolsRotationAngle = str.toDouble();
-
-			str = attribs.value("size").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'size'"));
-            else
-                d->symbolsSize = str.toDouble();
+			READ_INT_VALUE("symbolsStyle", symbolsStyle, Symbol::Style);
+			READ_DOUBLE_VALUE("opacity", symbolsOpacity);
+			READ_DOUBLE_VALUE("rotation", symbolsRotationAngle);
+			READ_DOUBLE_VALUE("size", symbolsSize);
 
 			READ_QBRUSH(d->symbolsBrush);
 			READ_QPEN(d->symbolsPen);
-		}else if (reader->name() == "values"){
+		} else if (reader->name() == "values") {
 			attribs = reader->attributes();
 
-			str = attribs.value("type").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'type'"));
-            else
-                d->valuesType = (XYCurve::ValuesType)str.toInt();
-
+			READ_INT_VALUE("type", valuesType, XYCurve::ValuesType);
 			READ_COLUMN(valuesColumn);
 
-			str = attribs.value("position").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'position'"));
-            else
-                d->valuesPosition = (XYCurve::ValuesPosition)str.toInt();
-
-			str = attribs.value("distance").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'distance'"));
-            else
-                d->valuesDistance = str.toDouble();
-
-			str = attribs.value("rotation").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'rotation'"));
-            else
-                d->valuesRotationAngle = str.toDouble();
-
-			str = attribs.value("opacity").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'opacity'"));
-            else
-                d->valuesOpacity = str.toDouble();
+			READ_INT_VALUE("position", valuesPosition, XYCurve::ValuesPosition);
+			READ_DOUBLE_VALUE("distance", valuesDistance);
+			READ_DOUBLE_VALUE("rotation", valuesRotationAngle);
+			READ_DOUBLE_VALUE("opacity", valuesOpacity);
 
 			//don't produce any warning if no prefix or suffix is set (empty string is allowd here in xml)
 			d->valuesPrefix = attribs.value("prefix").toString();
@@ -2338,131 +2292,182 @@ bool XYCurve::load(XmlStreamReader* reader){
 
 			READ_QCOLOR(d->valuesColor);
 			READ_QFONT(d->valuesFont);
-
-			str = attribs.value("opacity").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'opacity'"));
-            else
-                d->valuesOpacity = str.toDouble();
-		}else if (reader->name() == "filling"){
-            attribs = reader->attributes();
-
-			str = attribs.value("position").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("position"));
-            else
-                d->fillingPosition = XYCurve::FillingPosition(str.toInt());
-
-            str = attribs.value("type").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("type"));
-            else
-                d->fillingType = PlotArea::BackgroundType(str.toInt());
-
-            str = attribs.value("colorStyle").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("colorStyle"));
-            else
-                d->fillingColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
-
-            str = attribs.value("imageStyle").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("imageStyle"));
-            else
-                d->fillingImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
-
-            str = attribs.value("brushStyle").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("brushStyle"));
-            else
-                d->fillingBrushStyle = Qt::BrushStyle(str.toInt());
-
-            str = attribs.value("firstColor_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("firstColor_r"));
-            else
-                d->fillingFirstColor.setRed(str.toInt());
-
-            str = attribs.value("firstColor_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("firstColor_g"));
-            else
-                d->fillingFirstColor.setGreen(str.toInt());
-
-            str = attribs.value("firstColor_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("firstColor_b"));
-            else
-                d->fillingFirstColor.setBlue(str.toInt());
-
-            str = attribs.value("secondColor_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("secondColor_r"));
-            else
-                d->fillingSecondColor.setRed(str.toInt());
-
-            str = attribs.value("secondColor_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("secondColor_g"));
-            else
-                d->fillingSecondColor.setGreen(str.toInt());
-
-            str = attribs.value("secondColor_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("secondColor_b"));
-            else
-                d->fillingSecondColor.setBlue(str.toInt());
-
-            str = attribs.value("fileName").toString();
-            d->fillingFileName = str;
-
-            str = attribs.value("opacity").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("opacity"));
-            else
-                d->fillingOpacity = str.toDouble();
-		}else if (reader->name() == "errorBars"){
+		} else if (reader->name() == "filling") {
 			attribs = reader->attributes();
 
-			str = attribs.value("xErrorType").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'xErrorType'"));
-            else
-                d->xErrorType = (XYCurve::ErrorType)str.toInt();
+			READ_INT_VALUE("position", fillingPosition, XYCurve::FillingPosition);
+			READ_INT_VALUE("type", fillingType, PlotArea::BackgroundType);
+			READ_INT_VALUE("colorStyle", fillingColorStyle, PlotArea::BackgroundColorStyle);
+			READ_INT_VALUE("imageStyle", fillingImageStyle, PlotArea::BackgroundImageStyle );
+			READ_INT_VALUE("brushStyle", fillingBrushStyle, Qt::BrushStyle);
 
+			str = attribs.value("firstColor_r").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("firstColor_r"));
+			else
+				d->fillingFirstColor.setRed(str.toInt());
+
+			str = attribs.value("firstColor_g").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("firstColor_g"));
+			else
+				d->fillingFirstColor.setGreen(str.toInt());
+
+			str = attribs.value("firstColor_b").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("firstColor_b"));
+			else
+				d->fillingFirstColor.setBlue(str.toInt());
+
+			str = attribs.value("secondColor_r").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("secondColor_r"));
+			else
+				d->fillingSecondColor.setRed(str.toInt());
+
+			str = attribs.value("secondColor_g").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("secondColor_g"));
+			else
+				d->fillingSecondColor.setGreen(str.toInt());
+
+			str = attribs.value("secondColor_b").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("secondColor_b"));
+			else
+				d->fillingSecondColor.setBlue(str.toInt());
+
+			READ_STRING_VALUE("fileName", fillingFileName);
+			READ_DOUBLE_VALUE("opacity", fillingOpacity);
+		} else if (reader->name() == "errorBars") {
+			attribs = reader->attributes();
+
+			READ_INT_VALUE("xErrorType", xErrorType, XYCurve::ErrorType);
 			READ_COLUMN(xErrorPlusColumn);
 			READ_COLUMN(xErrorMinusColumn);
 
-			str = attribs.value("yErrorType").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'yErrorType'"));
-            else
-                d->yErrorType = (XYCurve::ErrorType)str.toInt();
-
+			READ_INT_VALUE("yErrorType", yErrorType, XYCurve::ErrorType);
 			READ_COLUMN(yErrorPlusColumn);
 			READ_COLUMN(yErrorMinusColumn);
 
-			str = attribs.value("type").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'type'"));
-            else
-                d->errorBarsType = (XYCurve::ErrorBarsType)str.toInt();
-
-			str = attribs.value("capSize").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'capSize'"));
-            else
-                d->errorBarsCapSize = str.toDouble();
+			READ_INT_VALUE("type", errorBarsType, XYCurve::ErrorBarsType);
+			READ_DOUBLE_VALUE("capSize", errorBarsCapSize);
 
 			READ_QPEN(d->errorBarsPen);
 
-			str = attribs.value("opacity").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'opacity'"));
-            else
-                d->errorBarsOpacity = str.toDouble();
+			READ_DOUBLE_VALUE("opacity", errorBarsOpacity);
 		}
 	}
 
 	return true;
+}
+
+//##############################################################################
+//#########################  Theme management ##################################
+//##############################################################################
+void XYCurve::loadThemeConfig(const KConfig& config) {
+	KConfigGroup group = config.group("XYCurve");
+
+	int index = parentAspect()->indexOfChild<XYCurve>(this);
+	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
+	QColor themeColor;
+	if (index<plot->themeColorPalette().size()) {
+		themeColor = plot->themeColorPalette().at(index);
+	} else {
+		if (plot->themeColorPalette().size())
+			themeColor = plot->themeColorPalette().last();
+	}
+
+	QPen p;
+
+	//Line
+	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)this->linePen().style()));
+	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
+	p.setColor(themeColor);
+	this->setLinePen(p);
+	this->setLineOpacity(group.readEntry("LineOpacity", this->lineOpacity()));
+
+	//Drop line
+	p.setStyle((Qt::PenStyle)group.readEntry("DropLineStyle",(int) this->dropLinePen().style()));
+	p.setWidthF(group.readEntry("DropLineWidth", this->dropLinePen().widthF()));
+	p.setColor(themeColor);
+	this->setDropLinePen(p);
+	this->setDropLineOpacity(group.readEntry("DropLineOpacity", this->dropLineOpacity()));
+
+	//Symbol
+	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", this->symbolsOpacity()));
+	QBrush brush = symbolsBrush();
+	brush.setColor(themeColor);
+	this->setSymbolsBrush(brush);
+	p = symbolsPen();
+	p.setColor(themeColor);
+	this->setSymbolsPen(p);
+
+	//Values
+	this->setValuesOpacity(group.readEntry("ValuesOpacity", this->valuesOpacity()));
+	this->setValuesColor(group.readEntry("ValuesColor", this->valuesColor()));
+	this->setValuesFont(group.readEntry("ValuesFont", QFont()));
+
+	//Filling
+	this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle",(int) this->fillingBrushStyle()));
+	this->setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle",(int) this->fillingColorStyle()));
+	this->setFillingOpacity(group.readEntry("FillingOpacity", this->fillingOpacity()));
+	this->setFillingPosition((XYCurve::FillingPosition)group.readEntry("FillingPosition",(int) this->fillingPosition()));
+	this->setFillingSecondColor(group.readEntry("FillingSecondColor",(QColor) this->fillingSecondColor()));
+	this->setFillingFirstColor(themeColor);
+	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType",(int) this->fillingType()));
+
+	//Error Bars
+	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle",(int) this->errorBarsPen().style()));
+	p.setWidthF(group.readEntry("ErrorBarsWidth", this->errorBarsPen().widthF()));
+	p.setColor(themeColor);
+	this->setErrorBarsPen(p);
+	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity",this->errorBarsOpacity()));
+}
+
+void XYCurve::saveThemeConfig(const KConfig& config) {
+	KConfigGroup group = config.group("XYCurve");
+
+	//Drop line
+	group.writeEntry("DropLineColor",(QColor) this->dropLinePen().color());
+	group.writeEntry("DropLineStyle",(int) this->dropLinePen().style());
+	group.writeEntry("DropLineWidth", this->dropLinePen().widthF());
+	group.writeEntry("DropLineOpacity",this->dropLineOpacity());
+
+	//Error Bars
+	group.writeEntry("ErrorBarsCapSize",this->errorBarsCapSize());
+	group.writeEntry("ErrorBarsOpacity",this->errorBarsOpacity());
+	group.writeEntry("ErrorBarsColor",(QColor) this->errorBarsPen().color());
+	group.writeEntry("ErrorBarsStyle",(int) this->errorBarsPen().style());
+	group.writeEntry("ErrorBarsWidth", this->errorBarsPen().widthF());
+
+	//Filling
+	group.writeEntry("FillingBrushStyle",(int) this->fillingBrushStyle());
+	group.writeEntry("FillingColorStyle",(int) this->fillingColorStyle());
+	group.writeEntry("FillingOpacity", this->fillingOpacity());
+	group.writeEntry("FillingPosition",(int) this->fillingPosition());
+	group.writeEntry("FillingSecondColor",(QColor) this->fillingSecondColor());
+	group.writeEntry("FillingType",(int) this->fillingType());
+
+	//Line
+	group.writeEntry("LineOpacity", this->lineOpacity());
+	group.writeEntry("LineStyle",(int) this->linePen().style());
+	group.writeEntry("LineWidth", this->linePen().widthF());
+
+	//Symbol
+	group.writeEntry("SymbolOpacity", this->symbolsOpacity());
+
+	//Values
+	group.writeEntry("ValuesOpacity", this->valuesOpacity());
+	group.writeEntry("ValuesColor", (QColor) this->valuesColor());
+	group.writeEntry("ValuesFont", this->valuesFont());
+
+	int index = parentAspect()->indexOfChild<XYCurve>(this);
+	if(index<5) {
+		KConfigGroup themeGroup = config.group("Theme");
+		for(int i = index; i<5; i++) {
+			QString s = "ThemePaletteColor" + QString::number(i+1);
+			themeGroup.writeEntry(s,(QColor) this->linePen().color());
+		}
+	}
 }

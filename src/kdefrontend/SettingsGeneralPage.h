@@ -1,11 +1,11 @@
 /***************************************************************************
     File                 : SettingsGeneralPage.h
     Project              : LabPlot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2008-2013 by Alexander Semke
-    Email (use @ for *)  : alexander.semke*web.de
     Description          : general settings page
-                           
+    --------------------------------------------------------------------
+    --------------------------------------------------------------------
+    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,6 +26,7 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+
 #ifndef SETTINGSGENERALPAGE_H
 #define SETTINGSGENERALPAGE_H
 
@@ -36,7 +37,7 @@ class SettingsGeneralPage : public SettingsPage {
 	Q_OBJECT
 
 public:
-	explicit SettingsGeneralPage(QWidget* parent);
+	explicit SettingsGeneralPage(QWidget*);
 
 	virtual void applySettings();
 	virtual void restoreDefaults();

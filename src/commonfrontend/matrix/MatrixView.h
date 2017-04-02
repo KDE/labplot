@@ -32,6 +32,9 @@
 
 #include <QWidget>
 #include <QPrinter>
+#include <QList>
+#include "backend/datasources/filters/FITSFilter.h"
+#include "kdefrontend/widgets/FITSHeaderEditWidget.h"
 
 class Matrix;
 class MatrixModel;
@@ -50,10 +53,6 @@ class MatrixView : public QWidget {
 		virtual ~MatrixView();
 
 		MatrixModel* model() const;
-		void setRowHeight(int row, int height);
-		void setColumnWidth(int col, int width);
-		int rowHeight(int row) const;
-		int columnWidth(int col) const;
 
 		int selectedColumnCount(bool full = false) const;
 		bool isColumnSelected(int col, bool full = false) const;
@@ -74,6 +73,7 @@ class MatrixView : public QWidget {
         void exportToLaTeX(const QString&, const bool verticalHeaders, const bool horizontalHeaders,
                            const bool latexHeaders, const bool gridLines,
                            const bool entire, const bool captions) const;
+        void exportToFits(const QString& fileName, const int exportTo) const;
 	public slots:
 		void createContextMenu(QMenu*) const;
 		void print(QPrinter*) const;
@@ -133,6 +133,7 @@ class MatrixView : public QWidget {
 		QAction* action_image_view;
 		QAction* action_fill_function;
 		QAction* action_fill_const;
+
 
 		//Menus
 		QMenu* m_selectionMenu;

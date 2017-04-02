@@ -34,8 +34,6 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/datapicker/ImageEditor.h"
 
-#include "math.h"
-
 #include <QPainter>
 #include <KUrlCompletion>
 #include <KStandardDirs>
@@ -47,6 +45,8 @@
 #include <KSharedConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
+
+#include <cmath>
 
 HistogramView::HistogramView(QWidget* parent, int range) :
 	QGraphicsView(parent),
@@ -184,9 +184,9 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget *parent): QWidget(parent) {
 	ui.cbPlotImageType->addItem(i18n("Original Image"));
 	ui.cbPlotImageType->addItem(i18n("Processed Image"));
 
-	QString valueFile = KStandardDirs::locate("data", "labplot2/pics/colorchooser/colorchooser_value.xpm");
-	QString hueFile = KStandardDirs::locate("data", "labplot2/pics/colorchooser/colorchooser_hue.xpm");
-	QString saturationFile = KStandardDirs::locate("data", "labplot2/pics/colorchooser/colorchooser_saturation.xpm");
+	QString valueFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "labplot2/pics/colorchooser/colorchooser_value.xpm");
+	QString hueFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "labplot2/pics/colorchooser/colorchooser_hue.xpm");
+	QString saturationFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "labplot2/pics/colorchooser/colorchooser_saturation.xpm");
 
 	gvHue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Hue));
 	gvHue->setToolTip(i18n("Select the range for the hue.\nEverything outside of this range will be set to white."));
@@ -213,11 +213,11 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget *parent): QWidget(parent) {
 	editTabLayout->addWidget(gvForeground, 10, 2);
 	gvForeground->setScalePixmap(valueFile);
 
-	connect( ssIntensity, SIGNAL(spanSliderMoved(int,int)), gvIntensity, SLOT(setSpan(int,int)) );
-	connect( ssForeground, SIGNAL(spanSliderMoved(int,int)), gvForeground, SLOT(setSpan(int,int)) );
-	connect( ssHue, SIGNAL(spanSliderMoved(int,int)), gvHue, SLOT(setSpan(int,int)) );
-	connect( ssSaturation, SIGNAL(spanSliderMoved(int,int)), gvSaturation, SLOT(setSpan(int,int)) );
-	connect( ssValue, SIGNAL(spanSliderMoved(int,int)), gvValue, SLOT(setSpan(int,int)) );
+	connect( ssIntensity, SIGNAL(spanChanged(int,int)), gvIntensity, SLOT(setSpan(int,int)) );
+	connect( ssForeground, SIGNAL(spanChanged(int,int)), gvForeground, SLOT(setSpan(int,int)) );
+	connect( ssHue, SIGNAL(spanChanged(int,int)), gvHue, SLOT(setSpan(int,int)) );
+	connect( ssSaturation, SIGNAL(spanChanged(int,int)), gvSaturation, SLOT(setSpan(int,int)) );
+	connect( ssValue, SIGNAL(spanChanged(int,int)), gvValue, SLOT(setSpan(int,int)) );
 
 	//SLOTS
 	//general

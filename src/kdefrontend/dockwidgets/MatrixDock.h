@@ -29,7 +29,6 @@
 #ifndef MATRIXDOCK_H
 #define MATRIXDOCK_H
 
-#include <QtWidgets/QWidget>
 #include "backend/matrix/Matrix.h"
 #include "ui_matrixdock.h"
 

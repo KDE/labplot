@@ -1,13 +1,20 @@
 To compile LabPlot following packages are required:
-	* CMake version 2.8.12 or higher
+	* CMake version 2.8.12 or higher (3.2.0 or higher for the kf5 version)
 	* ECM (extra cmake modules)
 	* KDE Frameworks 5.12.0 or higher (including the devel-package)
 	* Qt version 5.4.2 or higher (including the devel-package, libqt5-devel or similar)
 	* GSL version 1.15 or higher (including the devel-package, gsl-devel or similar)
 
 optional
+	* LaTeX to enable LaTeX typesetting in LabPlot, requires also 'convert' from ImageMagick and 'dvips'.
+		On Windows you need a LaTeX installation (like MiKTeX) and ghostscript for LaTeX support.
+		On macOS you need a LaTeX installation (like MacTeX) and ImageMagick for LaTeX support.
+	* FFTW version 3.3 or higher (including the devel-package, fftw3-devel or similar)
 	* HDF5 version 1.8 or higher (including the devel-package, hdf5-devel or similar)
 	* NetCDF version 3 or higher (including the devel-package, netcdf-devel or similar)
+	* CFITSIO version 3 or higher (including the devel-package, cfitsio-devel or similar)
+	* Cantor (only for the kf5 version of LabPlot) version 16.04 or higher (including the devel package, cantor-devel or similar)
+
 
 ===============================================================================
 To build LabPlot execute
@@ -19,6 +26,17 @@ E.g. specify a custom installation path via
 
 or build a debug build via
 -DCMAKE_BUILD_TYPE=DebugFull
+
+
+LabPlot's cmake configuration script searches for the optional packages and uses them if they are found.
+To compile LabPlot without optional dependencies even if they are present on the system, use the following parameters (default is "ON"):
+-DENABLE_FFTW=OFF
+-DENABLE_HDF5=OFF
+-DENABLE_NETCDF=OFF
+-DENABLE_FITS=OFF
+-DENABLE_CANTOR=OFF
+
+Note, by switching off these libraries the feature set of LabPlot will be reduced.
 
 ================================================================================
 To install LabPlot execute

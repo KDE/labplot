@@ -4,7 +4,7 @@
     Description          : Worksheet
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-	Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -35,34 +35,35 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
-#include <math.h>
 
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 
 #include "QIcon"
+#include <KConfig>
 #include <KConfigGroup>
-#include <KLocale>
-#include <QDebug>
+#include <KLocalizedString>
+#include <cmath>
 
 /**
  * \class Worksheet
- * \brief The plotting part.
+ * \brief Top-level container for worksheet elements like plot, labels, etc.
  *
- * Top-level container for WorksheetElements.
+ * The worksheet is, besides the data containers \c Spreadsheet and \c Matrix, another central part of the application
+ * and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels &etc;
  *
  * * \ingroup worksheet
  */
 Worksheet::Worksheet(AbstractScriptingEngine* engine, const QString& name, bool loading)
-		: AbstractPart(name), scripted(engine), d(new WorksheetPrivate(this)){
+	: AbstractPart(name), scripted(engine), d(new WorksheetPrivate(this)) {
 
 	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
-		this, SLOT(handleAspectAdded(const AbstractAspect*)));
+	        this, SLOT(handleAspectAdded(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectAboutToBeRemoved(const AbstractAspect*)),
-		this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
+	        this, SLOT(handleAspectAboutToBeRemoved(const AbstractAspect*)));
 	connect(this, SIGNAL(aspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
-		this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)) );
+	        this, SLOT(handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)) );
 
 	if (!loading)
 		init();
@@ -83,6 +84,7 @@ void Worksheet::init() {
 	d->pageRect.setY(0);
 	d->pageRect.setWidth(group.readEntry("Width", 1500));
 	d->pageRect.setHeight(group.readEntry("Height",1500));
+	d->m_scene->setSceneRect(d->pageRect);
 
 	//background
 	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
@@ -109,8 +111,8 @@ void Worksheet::init() {
 /*!
 	converts from \c unit to the scene units. At the moment, 1 scene unit corresponds to 1/10 mm.
  */
-float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit unit){
-	switch (unit){
+float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit unit) {
+	switch (unit) {
 	case Worksheet::Millimeter:
 		return value*10.0;
 	case Worksheet::Centimeter:
@@ -127,8 +129,8 @@ float Worksheet::convertToSceneUnits(const float value, const Worksheet::Unit un
 /*!
 	converts from the scene units to \c unit . At the moment, 1 scene unit corresponds to 1/10 mm.
  */
-float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit unit){
-	switch (unit){
+float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit unit) {
+	switch (unit) {
 	case Worksheet::Millimeter:
 		return value/10.0;
 	case Worksheet::Centimeter:
@@ -142,14 +144,12 @@ float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit 
 	return 0;
 }
 
-//! Return an icon to be used for decorating my views.
 QIcon Worksheet::icon() const {
 	return QIcon::fromTheme("labplot-worksheet");
 }
 
-//! Return a new context menu.
 /**
- * The caller takes ownership of the menu.
+ * Return a new context menu. The caller takes ownership of the menu.
  */
 QMenu *Worksheet::createContextMenu() {
 	QMenu *menu = AbstractPart::createContextMenu();
@@ -174,8 +174,8 @@ QWidget *Worksheet::view() const {
 bool Worksheet::exportView() const {
 	ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
 	dlg->setFileName(name());
-    bool ret;
-    if ((ret = dlg->exec()==QDialog::Accepted)){
+	bool ret;
+	if ( (ret = (dlg->exec()==QDialog::Accepted)) ) {
 		QString path = dlg->path();
 		const WorksheetView::ExportFormat format = dlg->exportFormat();
 		const WorksheetView::ExportArea area = dlg->exportArea();
@@ -188,65 +188,65 @@ bool Worksheet::exportView() const {
 		RESET_CURSOR;
 	}
 	delete dlg;
-    return ret;
+	return ret;
 }
 
 bool Worksheet::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18n("Print Worksheet"));
-    bool ret;
-    if ((ret = dlg->exec() == QDialog::Accepted)) {
+	bool ret;
+	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
 		WorksheetView* view = reinterpret_cast<WorksheetView*>(m_view);
 		view->print(&printer);
 	}
 	delete dlg;
-    return ret;
+	return ret;
 }
 
 bool Worksheet::printPreview() const {
 	const WorksheetView* view = reinterpret_cast<const WorksheetView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
-    return dlg->exec();
+	return dlg->exec();
 }
 
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (addedElement) {
-		if (aspect->parentAspect() == this){
-			QGraphicsItem *item = addedElement->graphicsItem();
-			Q_ASSERT(item != NULL);
+		if (aspect->parentAspect() == this) {
+			QGraphicsItem* item = addedElement->graphicsItem();
 			d->m_scene->addItem(item);
 
 			qreal zVal = 0;
-			QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
-			foreach(WorksheetElement *elem, childElements) {
+			QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
+			foreach(WorksheetElement* elem, childElements)
 				elem->graphicsItem()->setZValue(zVal++);
-			}
 
-			if (d->layout != Worksheet::NoLayout)
-				d->updateLayout();
+			if (!isLoading()) {
+				if (d->layout != Worksheet::NoLayout)
+					d->updateLayout(false);
+			}
 		}
 	}
 }
 
 void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
-	const WorksheetElement *removedElement = qobject_cast<const WorksheetElement*>(aspect);
+	const WorksheetElement* removedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (removedElement) {
-		QGraphicsItem *item = removedElement->graphicsItem();
+		QGraphicsItem* item = removedElement->graphicsItem();
 		Q_ASSERT(item != NULL);
 		d->m_scene->removeItem(item);
 	}
 }
 
-void Worksheet::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child){
+void Worksheet::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
 	Q_UNUSED(parent);
 	Q_UNUSED(before);
 	Q_UNUSED(child);
 
 	if (d->layout != Worksheet::NoLayout)
-		d->updateLayout();
+		d->updateLayout(false);
 }
 
 QGraphicsScene *Worksheet::scene() const {
@@ -262,7 +262,7 @@ QRectF Worksheet::pageRect() const {
 	emits \c itemSelected() which forwards this event to the \c WorksheetView
 	in order to select the corresponding \c QGraphicsItem.
  */
-void Worksheet::childSelected(const AbstractAspect* aspect){
+void Worksheet::childSelected(const AbstractAspect* aspect) {
 	WorksheetElement* element=qobject_cast<WorksheetElement*>(const_cast<AbstractAspect*>(aspect));
 	if (element)
 		emit itemSelected(element->graphicsItem());
@@ -273,7 +273,7 @@ void Worksheet::childSelected(const AbstractAspect* aspect){
 	emits \c itemDeselected() which forwards this event to \c WorksheetView
 	in order to deselect the corresponding \c QGraphicsItem.
  */
-void Worksheet::childDeselected(const AbstractAspect* aspect){
+void Worksheet::childDeselected(const AbstractAspect* aspect) {
 	WorksheetElement* element=qobject_cast<WorksheetElement*>(const_cast<AbstractAspect*>(aspect));
 	if (element)
 		emit itemDeselected(element->graphicsItem());
@@ -285,10 +285,10 @@ void Worksheet::childDeselected(const AbstractAspect* aspect){
  *  The signal is handled in \c AspectTreeModel and forwarded to the tree view in \c ProjectExplorer.
  * This function is called in \c WorksheetView upon selection changes.
  */
-void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b){
+void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b) {
 	//determine the corresponding aspect
 	const AbstractAspect* aspect = 0;
-	foreach( const WorksheetElement* child, children<WorksheetElement>(IncludeHidden) ){
+	foreach( const WorksheetElement* child, children<WorksheetElement>(IncludeHidden) ) {
 		aspect = this->aspectFromGraphicsItem(child, item);
 		if (aspect)
 			break;
@@ -308,11 +308,11 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b){
  * helper function:  checks whether \c aspect or one of its children has the \c GraphicsItem \c item
  * Returns a pointer to \c WorksheetElement having this item.
  */
-WorksheetElement* Worksheet::aspectFromGraphicsItem(const WorksheetElement* aspect, const QGraphicsItem* item) const{
-	if ( aspect->graphicsItem() == item ){
+WorksheetElement* Worksheet::aspectFromGraphicsItem(const WorksheetElement* aspect, const QGraphicsItem* item) const {
+	if ( aspect->graphicsItem() == item )
 		return const_cast<WorksheetElement*>(aspect);
-	}else{
-		foreach( const WorksheetElement* child, aspect->children<WorksheetElement>(AbstractAspect::IncludeHidden) ){
+	else {
+		foreach( const WorksheetElement* child, aspect->children<WorksheetElement>(AbstractAspect::IncludeHidden) ) {
 			WorksheetElement* a = this->aspectFromGraphicsItem(child, item);
 			if (a)
 				return a;
@@ -327,18 +327,18 @@ WorksheetElement* Worksheet::aspectFromGraphicsItem(const WorksheetElement* aspe
 	The worksheet gets deselected if there are selected items in the view,
 	and selected if there are no selected items in the view.
 */
-void Worksheet::setSelectedInView(const bool b){
+void Worksheet::setSelectedInView(const bool b) {
 	if (b)
 		emit childAspectSelectedInView(this);
 	else
 		emit childAspectDeselectedInView(this);
 }
 
-void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item){
+void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item) {
 	Q_ASSERT(item);
 	//determine the corresponding aspect
 	AbstractAspect* aspect = 0;
-	foreach( const WorksheetElement* child, children<WorksheetElement>(IncludeHidden) ){
+	foreach( const WorksheetElement* child, children<WorksheetElement>(IncludeHidden) ) {
 		aspect = this->aspectFromGraphicsItem(child, item);
 		if (aspect)
 			break;
@@ -353,7 +353,14 @@ void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item){
 		this->removeChild(aspect);
 }
 
-void Worksheet::update(){
+void Worksheet::setIsClosing() {
+	if (m_view) {
+		WorksheetView* view = reinterpret_cast<WorksheetView*>(m_view);
+		view->setIsClosing();
+	}
+}
+
+void Worksheet::update() {
 	emit requestUpdate();
 }
 
@@ -384,7 +391,7 @@ BASIC_D_READER_IMPL(Worksheet, int, layoutColumnCount, layoutColumnCount)
 
 
 /* ============================ setter methods and undo commands for general options  ===================== */
-void Worksheet::setUseViewSize(bool useViewSize){
+void Worksheet::setUseViewSize(bool useViewSize) {
 	if (useViewSize != d->useViewSize) {
 		d->useViewSize = useViewSize;
 		emit useViewSizeRequested();
@@ -392,7 +399,7 @@ void Worksheet::setUseViewSize(bool useViewSize){
 }
 
 STD_SETTER_CMD_IMPL_S(Worksheet, SetScaleContent, bool, scaleContent)
-void Worksheet::setScaleContent(bool scaleContent){
+void Worksheet::setScaleContent(bool scaleContent) {
 	if (scaleContent != d->scaleContent)
 		exec(new WorksheetSetScaleContentCmd(d, scaleContent, i18n("%1: change \"rescale the content\" property")));
 }
@@ -447,8 +454,8 @@ void Worksheet::setBackgroundOpacity(float opacity) {
 }
 
 /* ============================ setter methods and undo commands  for layout options  ================= */
-STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayout, Worksheet::Layout, layout, updateLayout)
-void Worksheet::setLayout(Worksheet::Layout layout){
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayout, Worksheet::Layout, layout, updateLayout)
+void Worksheet::setLayout(Worksheet::Layout layout) {
 	if (layout != d->layout) {
 		beginMacro(i18n("%1: set layout", name()));
 		exec(new WorksheetSetLayoutCmd(d, layout, i18n("%1: set layout")));
@@ -457,7 +464,7 @@ void Worksheet::setLayout(Worksheet::Layout layout){
 }
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutTopMargin, float, layoutTopMargin, updateLayout)
-void Worksheet::setLayoutTopMargin(float margin){
+void Worksheet::setLayoutTopMargin(float margin) {
 	if (margin != d->layoutTopMargin) {
 		beginMacro(i18n("%1: set layout top margin", name()));
 		exec(new WorksheetSetLayoutTopMarginCmd(d, margin, i18n("%1: set layout top margin")));
@@ -466,7 +473,7 @@ void Worksheet::setLayoutTopMargin(float margin){
 }
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutBottomMargin, float, layoutBottomMargin, updateLayout)
-void Worksheet::setLayoutBottomMargin(float margin){
+void Worksheet::setLayoutBottomMargin(float margin) {
 	if (margin != d->layoutBottomMargin) {
 		beginMacro(i18n("%1: set layout bottom margin", name()));
 		exec(new WorksheetSetLayoutBottomMarginCmd(d, margin, i18n("%1: set layout bottom margin")));
@@ -475,7 +482,7 @@ void Worksheet::setLayoutBottomMargin(float margin){
 }
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutLeftMargin, float, layoutLeftMargin, updateLayout)
-void Worksheet::setLayoutLeftMargin(float margin){
+void Worksheet::setLayoutLeftMargin(float margin) {
 	if (margin != d->layoutLeftMargin) {
 		beginMacro(i18n("%1: set layout left margin", name()));
 		exec(new WorksheetSetLayoutLeftMarginCmd(d, margin, i18n("%1: set layout left margin")));
@@ -484,7 +491,7 @@ void Worksheet::setLayoutLeftMargin(float margin){
 }
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutRightMargin, float, layoutRightMargin, updateLayout)
-void Worksheet::setLayoutRightMargin(float margin){
+void Worksheet::setLayoutRightMargin(float margin) {
 	if (margin != d->layoutRightMargin) {
 		beginMacro(i18n("%1: set layout right margin", name()));
 		exec(new WorksheetSetLayoutRightMarginCmd(d, margin, i18n("%1: set layout right margin")));
@@ -493,7 +500,7 @@ void Worksheet::setLayoutRightMargin(float margin){
 }
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutVerticalSpacing, float, layoutVerticalSpacing, updateLayout)
-void Worksheet::setLayoutVerticalSpacing(float spacing){
+void Worksheet::setLayoutVerticalSpacing(float spacing) {
 	if (spacing != d->layoutVerticalSpacing) {
 		beginMacro(i18n("%1: set layout vertical spacing", name()));
 		exec(new WorksheetSetLayoutVerticalSpacingCmd(d, spacing, i18n("%1: set layout vertical spacing")));
@@ -502,7 +509,7 @@ void Worksheet::setLayoutVerticalSpacing(float spacing){
 }
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutHorizontalSpacing, float, layoutHorizontalSpacing, updateLayout)
-void Worksheet::setLayoutHorizontalSpacing(float spacing){
+void Worksheet::setLayoutHorizontalSpacing(float spacing) {
 	if (spacing != d->layoutHorizontalSpacing) {
 		beginMacro(i18n("%1: set layout horizontal spacing", name()));
 		exec(new WorksheetSetLayoutHorizontalSpacingCmd(d, spacing, i18n("%1: set layout horizontal spacing")));
@@ -511,7 +518,7 @@ void Worksheet::setLayoutHorizontalSpacing(float spacing){
 }
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutRowCount, int, layoutRowCount, updateLayout)
-void Worksheet::setLayoutRowCount(int count){
+void Worksheet::setLayoutRowCount(int count) {
 	if (count != d->layoutRowCount) {
 		beginMacro(i18n("%1: set layout row count", name()));
 		exec(new WorksheetSetLayoutRowCountCmd(d, count, i18n("%1: set layout row count")));
@@ -520,7 +527,7 @@ void Worksheet::setLayoutRowCount(int count){
 }
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutColumnCount, int, layoutColumnCount, updateLayout)
-void Worksheet::setLayoutColumnCount(int count){
+void Worksheet::setLayoutColumnCount(int count) {
 	if (count != d->layoutColumnCount) {
 		beginMacro(i18n("%1: set layout column count", name()));
 		exec(new WorksheetSetLayoutColumnCountCmd(d, count, i18n("%1: set layout column count")));
@@ -529,8 +536,8 @@ void Worksheet::setLayoutColumnCount(int count){
 }
 
 class WorksheetSetPageRectCmd : public StandardMacroSetterCmd<Worksheet::Private, QRectF> {
-	public:
-		WorksheetSetPageRectCmd(Worksheet::Private* target, Loki::TypeTraits<QRectF>::ParameterType newValue, const QString& description)
+public:
+	WorksheetSetPageRectCmd(Worksheet::Private* target, Loki::TypeTraits<QRectF>::ParameterType newValue, const QString& description)
 		: StandardMacroSetterCmd<Worksheet::Private, QRectF>(target, &Worksheet::Private::pageRect, newValue, description) {}
 	virtual void finalize() {
 		m_target->updatePageRect();
@@ -544,7 +551,7 @@ class WorksheetSetPageRectCmd : public StandardMacroSetterCmd<Worksheet::Private
 
 void Worksheet::setPageRect(const QRectF& rect) {
 	//don't allow any rectangulars of width/height equal to zero
-	if (qFuzzyCompare(rect.width(), 0.) || qFuzzyCompare(rect.height(), 0.)){
+	if (qFuzzyCompare(rect.width(), 0.) || qFuzzyCompare(rect.height(), 0.)) {
 		pageRectChanged(d->pageRect);
 		return;
 	}
@@ -572,13 +579,12 @@ void Worksheet::setPrinting(bool on) const {
 //##############################################################################
 //######################  Private implementation ###############################
 //##############################################################################
-WorksheetPrivate::WorksheetPrivate(Worksheet *owner):q(owner),
-	pageRect(0, 0, 1500, 1500),
-	m_scene(new QGraphicsScene(pageRect)),
+WorksheetPrivate::WorksheetPrivate(Worksheet* owner):q(owner),
+	m_scene(new QGraphicsScene()),
 	scaleContent(false) {
 }
 
-QString WorksheetPrivate::name() const{
+QString WorksheetPrivate::name() const {
 	return q->name();
 }
 
@@ -586,9 +592,9 @@ void WorksheetPrivate::updatePageRect() {
 	QRectF oldRect = m_scene->sceneRect();
 	m_scene->setSceneRect(pageRect);
 
-	if (layout != Worksheet::NoLayout) {
+	if (layout != Worksheet::NoLayout)
 		updateLayout();
-	} else {
+	else {
 		if (scaleContent) {
 			qreal horizontalRatio = pageRect.width() / oldRect.width();
 			qreal verticalRatio = pageRect.height() / oldRect.height();
@@ -608,21 +614,19 @@ void WorksheetPrivate::updatePageRect() {
 	}
 }
 
-void WorksheetPrivate::update(){
+void WorksheetPrivate::update() {
 	q->update();
 }
 
-WorksheetPrivate::~WorksheetPrivate(){
+WorksheetPrivate::~WorksheetPrivate() {
 	delete m_scene;
 }
 
-void WorksheetPrivate::updateLayout(){
-	emit q->layoutChanged(layout);
+void WorksheetPrivate::updateLayout(bool undoable) {
 	QList<WorksheetElementContainer*> list = q->children<WorksheetElementContainer>();
-	if (layout==Worksheet::NoLayout){
-		foreach(WorksheetElementContainer* elem, list) {
+	if (layout==Worksheet::NoLayout) {
+		foreach(WorksheetElementContainer* elem, list)
 			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
-		}
 		return;
 	}
 
@@ -630,37 +634,23 @@ void WorksheetPrivate::updateLayout(){
 	float y=layoutTopMargin;
 	float w, h;
 	int count=list.count();
-	if (layout == Worksheet::VerticalLayout){
+	if (layout == Worksheet::VerticalLayout) {
 		w= m_scene->sceneRect().width() - layoutLeftMargin - layoutRightMargin;
 		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (count-1)*layoutVerticalSpacing)/count;
-		foreach(WorksheetElementContainer* elem, list){
-			if (useViewSize) {
-				elem->setUndoAware(false);
-				elem->setRect(QRectF(x,y,w,h));
-				elem->setUndoAware(true);
-			} else {
-				elem->setRect(QRectF(x,y,w,h));
-			}
-			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+		foreach(WorksheetElementContainer* elem, list) {
+			setContainerRect(elem, x, y, h, w, undoable);
 			y+=h + layoutVerticalSpacing;
 		}
-	}else if (layout == Worksheet::HorizontalLayout){
+	} else if (layout == Worksheet::HorizontalLayout) {
 		w=(m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (count-1)*layoutHorizontalSpacing)/count;
 		h= m_scene->sceneRect().height() - layoutTopMargin-layoutBottomMargin;
-		foreach(WorksheetElementContainer* elem, list){
-			if (useViewSize) {
-				elem->setUndoAware(false);
-				elem->setRect(QRectF(x,y,w,h));
-				elem->setUndoAware(true);
-			} else {
-				elem->setRect(QRectF(x,y,w,h));
-			}
-			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+		foreach(WorksheetElementContainer* elem, list) {
+			setContainerRect(elem, x, y, h, w, undoable);
 			x+=w + layoutHorizontalSpacing;
 		}
-	}else{ //GridLayout
+	} else { //GridLayout
 		//add new rows, if not sufficient
-		if (count>layoutRowCount*layoutColumnCount){
+		if (count>layoutRowCount*layoutColumnCount) {
 			layoutRowCount = floor( (float)count/layoutColumnCount + 0.5);
 			emit q->layoutRowCountChanged(layoutRowCount);
 		}
@@ -668,18 +658,11 @@ void WorksheetPrivate::updateLayout(){
 		w=(m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (layoutColumnCount-1)*layoutHorizontalSpacing)/layoutColumnCount;
 		h=(m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (layoutRowCount-1)*layoutVerticalSpacing)/layoutRowCount;
 		int columnIndex=0; //counts the columns in a row
-		foreach(WorksheetElementContainer* elem, list){
-			if (useViewSize) {
-				elem->setUndoAware(false);
-				elem->setRect(QRectF(x,y,w,h));
-				elem->setUndoAware(true);
-			} else {
-				elem->setRect(QRectF(x,y,w,h));
-			}
-			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+		foreach(WorksheetElementContainer* elem, list) {
+			setContainerRect(elem, x, y, h, w, undoable);
 			x+=w + layoutHorizontalSpacing;
 			columnIndex++;
-			if (columnIndex==layoutColumnCount){
+			if (columnIndex==layoutColumnCount) {
 				columnIndex=0;
 				x=layoutLeftMargin;
 				y+=h + layoutVerticalSpacing;
@@ -688,272 +671,291 @@ void WorksheetPrivate::updateLayout(){
 	}
 }
 
+void WorksheetPrivate::setContainerRect(WorksheetElementContainer* elem, float x, float y, float h, float w, bool undoable) {
+	if (useViewSize) {
+		//when using the view size, no need to put rect changes onto the undo-stack
+		elem->setUndoAware(false);
+		elem->setRect(QRectF(x,y,w,h));
+		elem->setUndoAware(true);
+	} else {
+		//don't put rect changed onto the undo-stack if undoable-flag is set to true,
+		//e.g. when new child is added or removed (the layout and the childrend rects will be updated anyway)
+		if (!undoable) {
+			elem->setUndoAware(false);
+			elem->setRect(QRectF(x,y,w,h));
+			elem->setUndoAware(true);
+		} else
+			elem->setRect(QRectF(x,y,w,h));
+	}
+	elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+}
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 
 //! Save as XML
-void Worksheet::save(QXmlStreamWriter* writer) const{
-    writer->writeStartElement( "worksheet" );
-    writeBasicAttributes(writer);
-    writeCommentElement(writer);
+void Worksheet::save(QXmlStreamWriter* writer) const {
+	writer->writeStartElement( "worksheet" );
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
 
-    //geometry
-    writer->writeStartElement( "geometry" );
-    QRectF rect = d->m_scene->sceneRect();
-    writer->writeAttribute( "x", QString::number(rect.x()) );
-    writer->writeAttribute( "y", QString::number(rect.y()) );
-    writer->writeAttribute( "width", QString::number(rect.width()) );
-    writer->writeAttribute( "height", QString::number(rect.height()) );
+	//geometry
+	writer->writeStartElement( "geometry" );
+	QRectF rect = d->m_scene->sceneRect();
+	writer->writeAttribute( "x", QString::number(rect.x()) );
+	writer->writeAttribute( "y", QString::number(rect.y()) );
+	writer->writeAttribute( "width", QString::number(rect.width()) );
+	writer->writeAttribute( "height", QString::number(rect.height()) );
 	writer->writeAttribute( "useViewSize", QString::number(d->useViewSize) );
-    writer->writeEndElement();
+	writer->writeEndElement();
 
-    //layout
-    writer->writeStartElement( "layout" );
-    writer->writeAttribute( "layout", QString::number(d->layout) );
-    writer->writeAttribute( "topMargin", QString::number(d->layoutTopMargin) );
-    writer->writeAttribute( "bottomMargin", QString::number(d->layoutBottomMargin) );
-    writer->writeAttribute( "leftMargin", QString::number(d->layoutLeftMargin) );
-    writer->writeAttribute( "rightMargin", QString::number(d->layoutRightMargin) );
-    writer->writeAttribute( "verticalSpacing", QString::number(d->layoutVerticalSpacing) );
-    writer->writeAttribute( "horizontalSpacing", QString::number(d->layoutHorizontalSpacing) );
-    writer->writeAttribute( "columnCount", QString::number(d->layoutColumnCount) );
-    writer->writeAttribute( "rowCount", QString::number(d->layoutRowCount) );
-    writer->writeEndElement();
+	//layout
+	writer->writeStartElement( "layout" );
+	writer->writeAttribute( "layout", QString::number(d->layout) );
+	writer->writeAttribute( "topMargin", QString::number(d->layoutTopMargin) );
+	writer->writeAttribute( "bottomMargin", QString::number(d->layoutBottomMargin) );
+	writer->writeAttribute( "leftMargin", QString::number(d->layoutLeftMargin) );
+	writer->writeAttribute( "rightMargin", QString::number(d->layoutRightMargin) );
+	writer->writeAttribute( "verticalSpacing", QString::number(d->layoutVerticalSpacing) );
+	writer->writeAttribute( "horizontalSpacing", QString::number(d->layoutHorizontalSpacing) );
+	writer->writeAttribute( "columnCount", QString::number(d->layoutColumnCount) );
+	writer->writeAttribute( "rowCount", QString::number(d->layoutRowCount) );
+	writer->writeEndElement();
 
-    //background properties
-    writer->writeStartElement( "background" );
-    writer->writeAttribute( "type", QString::number(d->backgroundType) );
-    writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
-    writer->writeAttribute( "imageStyle", QString::number(d->backgroundImageStyle) );
-    writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrushStyle) );
-    writer->writeAttribute( "firstColor_r", QString::number(d->backgroundFirstColor.red()) );
-    writer->writeAttribute( "firstColor_g", QString::number(d->backgroundFirstColor.green()) );
-    writer->writeAttribute( "firstColor_b", QString::number(d->backgroundFirstColor.blue()) );
-    writer->writeAttribute( "secondColor_r", QString::number(d->backgroundSecondColor.red()) );
-    writer->writeAttribute( "secondColor_g", QString::number(d->backgroundSecondColor.green()) );
-    writer->writeAttribute( "secondColor_b", QString::number(d->backgroundSecondColor.blue()) );
-    writer->writeAttribute( "fileName", d->backgroundFileName );
-    writer->writeAttribute( "opacity", QString::number(d->backgroundOpacity) );
-    writer->writeEndElement();
+	//background properties
+	writer->writeStartElement( "background" );
+	writer->writeAttribute( "type", QString::number(d->backgroundType) );
+	writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
+	writer->writeAttribute( "imageStyle", QString::number(d->backgroundImageStyle) );
+	writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrushStyle) );
+	writer->writeAttribute( "firstColor_r", QString::number(d->backgroundFirstColor.red()) );
+	writer->writeAttribute( "firstColor_g", QString::number(d->backgroundFirstColor.green()) );
+	writer->writeAttribute( "firstColor_b", QString::number(d->backgroundFirstColor.blue()) );
+	writer->writeAttribute( "secondColor_r", QString::number(d->backgroundSecondColor.red()) );
+	writer->writeAttribute( "secondColor_g", QString::number(d->backgroundSecondColor.green()) );
+	writer->writeAttribute( "secondColor_b", QString::number(d->backgroundSecondColor.blue()) );
+	writer->writeAttribute( "fileName", d->backgroundFileName );
+	writer->writeAttribute( "opacity", QString::number(d->backgroundOpacity) );
+	writer->writeEndElement();
 
-    //serialize all children
-    QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
-    foreach(WorksheetElement *elem, childElements)
-        elem->save(writer);
+	//serialize all children
+	QList<WorksheetElement *> childElements = children<WorksheetElement>(IncludeHidden);
+	foreach(WorksheetElement *elem, childElements)
+		elem->save(writer);
 
-    writer->writeEndElement(); // close "worksheet" section
+	writer->writeEndElement(); // close "worksheet" section
 }
 
 //! Load from XML
-bool Worksheet::load(XmlStreamReader* reader){
-    if(!reader->isStartElement() || reader->name() != "worksheet"){
-        reader->raiseError(i18n("no worksheet element found"));
-        return false;
-    }
+bool Worksheet::load(XmlStreamReader* reader) {
+	if(!reader->isStartElement() || reader->name() != "worksheet") {
+		reader->raiseError(i18n("no worksheet element found"));
+		return false;
+	}
 
-    if (!readBasicAttributes(reader))
-        return false;
+	if (!readBasicAttributes(reader))
+		return false;
 
-    QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-    QXmlStreamAttributes attribs;
-    QString str;
-    QRectF rect;
+	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QXmlStreamAttributes attribs;
+	QString str;
+	QRectF rect;
 
-    while (!reader->atEnd()){
-        reader->readNext();
-        if (reader->isEndElement() && reader->name() == "worksheet")
-            break;
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == "worksheet")
+			break;
 
-        if (!reader->isStartElement())
-            continue;
+		if (!reader->isStartElement())
+			continue;
 
-        if (reader->name() == "comment"){
-            if (!readCommentElement(reader)) return false;
-        }else if (reader->name() == "geometry"){
-            attribs = reader->attributes();
+		if (reader->name() == "comment") {
+			if (!readCommentElement(reader)) return false;
+		} else if (reader->name() == "geometry") {
+			attribs = reader->attributes();
 
-            str = attribs.value("x").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'x'"));
-            else
-                rect.setX(str.toDouble());
+			str = attribs.value("x").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'x'"));
+			else
+				rect.setX(str.toDouble());
 
-            str = attribs.value("y").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'y'"));
-            else
-                rect.setY(str.toDouble());
+			str = attribs.value("y").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'y'"));
+			else
+				rect.setY(str.toDouble());
 
-            str = attribs.value("width").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'width'"));
-            else
-                rect.setWidth(str.toDouble());
+			str = attribs.value("width").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'width'"));
+			else
+				rect.setWidth(str.toDouble());
 
-            str = attribs.value("height").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'height'"));
-            else
-                rect.setHeight(str.toDouble());
+			str = attribs.value("height").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'height'"));
+			else
+				rect.setHeight(str.toDouble());
 
-            str = attribs.value("useViewSize").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("'useViewSize'"));
-            else
-                d->useViewSize = str.toInt();
-        }else if (reader->name() == "layout"){
-            attribs = reader->attributes();
+			str = attribs.value("useViewSize").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("'useViewSize'"));
+			else
+				d->useViewSize = str.toInt();
+		} else if (reader->name() == "layout") {
+			attribs = reader->attributes();
 
-            str = attribs.value("layout").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("layout"));
-            else
-                d->layout = Worksheet::Layout(str.toInt());
+			str = attribs.value("layout").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("layout"));
+			else
+				d->layout = Worksheet::Layout(str.toInt());
 
-            str = attribs.value("topMargin").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("topMargin"));
-            else
-                d->layoutTopMargin = str.toDouble();
+			str = attribs.value("topMargin").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("topMargin"));
+			else
+				d->layoutTopMargin = str.toDouble();
 
-            str = attribs.value("bottomMargin").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("bottomMargin"));
-            else
-                d->layoutBottomMargin = str.toDouble();
+			str = attribs.value("bottomMargin").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("bottomMargin"));
+			else
+				d->layoutBottomMargin = str.toDouble();
 
-            str = attribs.value("leftMargin").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("leftMargin"));
-            else
-                d->layoutLeftMargin = str.toDouble();
+			str = attribs.value("leftMargin").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("leftMargin"));
+			else
+				d->layoutLeftMargin = str.toDouble();
 
-            str = attribs.value("rightMargin").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("rightMargin"));
-            else
-                d->layoutRightMargin = str.toDouble();
+			str = attribs.value("rightMargin").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("rightMargin"));
+			else
+				d->layoutRightMargin = str.toDouble();
 
-            str = attribs.value("verticalSpacing").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("verticalSpacing"));
-            else
-                d->layoutVerticalSpacing = str.toDouble();
+			str = attribs.value("verticalSpacing").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("verticalSpacing"));
+			else
+				d->layoutVerticalSpacing = str.toDouble();
 
-            str = attribs.value("horizontalSpacing").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("horizontalSpacing"));
-            else
-                d->layoutHorizontalSpacing = str.toDouble();
+			str = attribs.value("horizontalSpacing").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("horizontalSpacing"));
+			else
+				d->layoutHorizontalSpacing = str.toDouble();
 
-            str = attribs.value("columnCount").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("columnCount"));
-            else
-                d->layoutColumnCount = str.toInt();
+			str = attribs.value("columnCount").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("columnCount"));
+			else
+				d->layoutColumnCount = str.toInt();
 
-            str = attribs.value("rowCount").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("rowCount"));
-            else
-                d->layoutRowCount = str.toInt();
-        }else if (reader->name() == "background"){
-            attribs = reader->attributes();
+			str = attribs.value("rowCount").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("rowCount"));
+			else
+				d->layoutRowCount = str.toInt();
+		} else if (reader->name() == "background") {
+			attribs = reader->attributes();
 
-            str = attribs.value("type").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("type"));
-            else
-                d->backgroundType = PlotArea::BackgroundType(str.toInt());
+			str = attribs.value("type").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("type"));
+			else
+				d->backgroundType = PlotArea::BackgroundType(str.toInt());
 
-            str = attribs.value("colorStyle").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("colorStyle"));
-            else
-                d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
+			str = attribs.value("colorStyle").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("colorStyle"));
+			else
+				d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
 
-            str = attribs.value("imageStyle").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("imageStyle"));
-            else
-                d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
+			str = attribs.value("imageStyle").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("imageStyle"));
+			else
+				d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
 
-            str = attribs.value("brushStyle").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("brushStyle"));
-            else
-                d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
+			str = attribs.value("brushStyle").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("brushStyle"));
+			else
+				d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
 
-            str = attribs.value("firstColor_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("firstColor_r"));
-            else
-                d->backgroundFirstColor.setRed(str.toInt());
+			str = attribs.value("firstColor_r").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("firstColor_r"));
+			else
+				d->backgroundFirstColor.setRed(str.toInt());
 
-            str = attribs.value("firstColor_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("firstColor_g"));
-            else
-                d->backgroundFirstColor.setGreen(str.toInt());
+			str = attribs.value("firstColor_g").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("firstColor_g"));
+			else
+				d->backgroundFirstColor.setGreen(str.toInt());
 
-            str = attribs.value("firstColor_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("firstColor_b"));
-            else
-                d->backgroundFirstColor.setBlue(str.toInt());
+			str = attribs.value("firstColor_b").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("firstColor_b"));
+			else
+				d->backgroundFirstColor.setBlue(str.toInt());
 
-            str = attribs.value("secondColor_r").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("secondColor_r"));
-            else
-                d->backgroundSecondColor.setRed(str.toInt());
+			str = attribs.value("secondColor_r").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("secondColor_r"));
+			else
+				d->backgroundSecondColor.setRed(str.toInt());
 
-            str = attribs.value("secondColor_g").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("secondColor_g"));
-            else
-                d->backgroundSecondColor.setGreen(str.toInt());
+			str = attribs.value("secondColor_g").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("secondColor_g"));
+			else
+				d->backgroundSecondColor.setGreen(str.toInt());
 
-            str = attribs.value("secondColor_b").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("secondColor_b"));
-            else
-                d->backgroundSecondColor.setBlue(str.toInt());
+			str = attribs.value("secondColor_b").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("secondColor_b"));
+			else
+				d->backgroundSecondColor.setBlue(str.toInt());
 
-            str = attribs.value("fileName").toString();
-            d->backgroundFileName = str;
+			str = attribs.value("fileName").toString();
+			d->backgroundFileName = str;
 
-            str = attribs.value("opacity").toString();
-            if(str.isEmpty())
-                reader->raiseWarning(attributeWarning.arg("opacity"));
-            else
-                d->backgroundOpacity = str.toDouble();
-        }else if(reader->name() == "cartesianPlot"){
-            CartesianPlot* plot = new CartesianPlot("");
-            if (!plot->load(reader)){
-                delete plot;
-                return false;
-            }else{
-                addChild(plot);
-            }
-        }else if(reader->name() == "textLabel"){
-            TextLabel* label = new TextLabel("");
-            if (!label->load(reader)){
-                delete label;
-                return false;
-            }else{
-                addChild(label);
-            }
-        }else{ // unknown element
-            reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-            if (!reader->skipToEndElement()) return false;
-        }
-    }
+			str = attribs.value("opacity").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.arg("opacity"));
+			else
+				d->backgroundOpacity = str.toDouble();
+		} else if(reader->name() == "cartesianPlot") {
+			CartesianPlot* plot = new CartesianPlot("");
+			plot->setIsLoading(true);
+			if (!plot->load(reader)) {
+				delete plot;
+				return false;
+			} else {
+				addChild(plot);
+				plot->setIsLoading(false);
+			}
+		} else if(reader->name() == "textLabel") {
+			TextLabel* label = new TextLabel("");
+			if (!label->load(reader)) {
+				delete label;
+				return false;
+			} else
+				addChild(label);
+		} else { // unknown element
+			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			if (!reader->skipToEndElement()) return false;
+		}
+	}
 
-    d->m_scene->setSceneRect(rect);
+	d->m_scene->setSceneRect(rect);
 	d->updateLayout();
 
-    return true;
+	return true;
 }
