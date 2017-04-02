@@ -334,9 +334,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		break;
 	}
 
-	QString file = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "labplot2/pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[dist]) + ".jpg");
-	if (!QFileInfo(file).exists())
-		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[dist]) + ".jpg");
+	QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[dist]) + ".jpg");
 	ui.lFuncPic->setPixmap(QPixmap(file));
 }
 
