@@ -849,9 +849,7 @@ void XYFitCurveDock::updateModelEquation() {
 			numSuffix = "4";
 		if ((nsl_fit_model_type_basic)m_fitData.modelType == nsl_fit_model_power && num > 2)
 			numSuffix = "2";
-		file = KStandardDirs::locate("data", "labplot2/pics/fit_models/" + QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
-		if (!QFileInfo(file).exists())
-			file = KStandardDirs::locate("appdata", "pics/fit_models/" + QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
+		file = KStandardDirs::locate("appdata", "pics/fit_models/" + QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
 		break;
 	}
 	case nsl_fit_model_peak: {
@@ -859,20 +857,14 @@ void XYFitCurveDock::updateModelEquation() {
 		QString numSuffix = QString::number(num);
 		if (num > 4)
 			numSuffix = "4";
-		file = KStandardDirs::locate("data", "labplot2/pics/fit_models/" + QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
-		if (!QFileInfo(file).exists())
-			file = KStandardDirs::locate("appdata", "pics/fit_models/" + QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
+		file = KStandardDirs::locate("appdata", "pics/fit_models/" + QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
 		break;
 	}
 	case nsl_fit_model_growth:
-		file = KStandardDirs::locate("data", "labplot2/pics/fit_models/" + QString(nsl_fit_model_growth_pic_name[m_fitData.modelType]) + ".jpg");
-		if (!QFileInfo(file).exists())
-			file = KStandardDirs::locate("appdata", "pics/fit_models/" + QString(nsl_fit_model_growth_pic_name[m_fitData.modelType]) + ".jpg");
+		file = KStandardDirs::locate("appdata", "pics/fit_models/" + QString(nsl_fit_model_growth_pic_name[m_fitData.modelType]) + ".jpg");
 		break;
 	case nsl_fit_model_distribution:
-		file = KStandardDirs::locate("data", "labplot2/pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
-		if (!QFileInfo(file).exists())
-			file = KStandardDirs::locate("appdata", "pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
+		file = KStandardDirs::locate("appdata", "pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
 		// change label
 		if (m_fitData.modelType == nsl_sf_stats_poisson)
 			uiGeneralTab.lEquation->setText(("f(k)/A ="));
