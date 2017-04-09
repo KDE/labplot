@@ -3,7 +3,7 @@ File                 : DatabaseManagerWidget.cpp
 Project              : LabPlot
 Description          : widget for managing database connections
 --------------------------------------------------------------------
-Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 
@@ -27,16 +27,17 @@ Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 #include "DatabaseManagerWidget.h"
+#include "backend/lib/macros.h"
 
 #include <KConfig>
 #include <KConfigGroup>
+#include <KMessageBox>
 #include <KStandardDirs>
 
 #include <QFileDialog>
 #include <QTimer>
 #include <QSqlDatabase>
 #include <QtSql>
-#include <QDebug>
 
 /*!
    \class DatabaseManagerWidget
@@ -44,8 +45,11 @@ Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
 
    \ingroup kdefrontend
 */
+DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent) : QWidget(parent),
+	m_initializing(false), m_changed(false) {
 
-DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent) : QWidget(parent), m_initializing(false) {
+	m_configPath = KGlobal::dirs()->locateLocal("appdata", "") + QLatin1String("sql_connections");
+
 	ui.setupUi(this);
 
 	ui.tbAdd->setIcon(KIcon("list-add"));
@@ -68,62 +72,70 @@ DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent) : QWidget(parent),
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT(selectFile()) );
 	connect( ui.cbDriver, SIGNAL(currentIndexChanged(int)), SLOT(driverChanged()) );
 
-	connect( ui.leName, SIGNAL(returnPressed()), this, SLOT(nameChanged()) );
+	connect( ui.leName, SIGNAL(textChanged(const QString&)), this, SLOT(nameChanged(const QString&)) );
 	connect( ui.kleDatabase, SIGNAL(textChanged(QString)), this, SLOT(databaseNameChanged()) );
 	connect( ui.leHost, SIGNAL(textChanged(QString)), this, SLOT(hostChanged()) );
 	connect( ui.sbPort, SIGNAL(valueChanged(int)), this, SLOT(portChanged()) );
 	connect( ui.leUserName, SIGNAL(textChanged(QString)), this, SLOT(userNameChanged()) );
 	connect( ui.lePassword, SIGNAL(textChanged(QString)), this, SLOT(passwordChanged()) );
 
-	QTimer::singleShot( 100, this, SLOT(loadSettings()) );
-	loadConnection();
-	driverChanged();
-}
-
-/*!
-	read and show all available database connections
- */
-void DatabaseManagerWidget::loadSettings() {
-//	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("DatabaseManager"));
-
-//    ui.leName->setText( conf.readEntry("Name", "") );
-//    ui.cbDriver->setCurrentIndex( conf.readEntry( "VendorIndex", 0) );
-//    ui.kleDatabase->setText( conf.readEntry( "DatabaseName", "") );
-
-//    QString driver =  QSqlDatabase::drivers().at(ui.cbDriver->currentIndex());
-//    bool fileDB = driver == QLatin1String("QSQLITE") ||
-//            driver == QLatin1String("QSQLITE3");
-//    if (!fileDB) {
-//        ui.leHost->setText( conf.readEntry( "HostName", "127.0.0.1") );
-//        ui.sbPort->setValue( conf.readEntry( "Port", 3306) );
-//        ui.leUserName->setText( conf.readEntry("UserName", "root") );
-//        ui.lePassword->setText( conf.readEntry("Password", "") );
-//    }
+	QTimer::singleShot( 100, this, SLOT(loadConnections()) );
 }
 
 DatabaseManagerWidget::~DatabaseManagerWidget() {
 	// save available database connections
 	saveConnections();
-//	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("DatabaseManager"));
-//    conf.writeEntry( "Name", ui.leName->text() );
-//    conf.writeEntry( "VendorIndex", ui.cbDriver->currentIndex() );
-//    conf.writeEntry( "DatabaseName", ui.kleDatabase->text() );
+}
 
-//    QString driver =  QSqlDatabase::drivers().at(ui.cbDriver->currentIndex());
-//    bool fileDB = driver == QLatin1String("QSQLITE") ||
-//            driver == QLatin1String("QSQLITE3");
-//    if (!fileDB) {
-//        conf.writeEntry( "HostName", ui.leHost->text() );
-//        conf.writeEntry( "Port", ui.sbPort->value() );
-//        conf.writeEntry( "UserName", ui.leUserName->text() );
-//        conf.writeEntry( "Password", ui.lePassword->text() );
-//    }
+/*!
+	shows the settings of the currently selected connection
+ */
+void DatabaseManagerWidget::connectionChanged(int index) {
+	if (m_initializing)
+		return;
+
+	if (index == -1)
+		return;
+
+	//show the settings for the selected connection
+	m_initializing = true;
+	ui.leName->setText(m_connections[index].name);
+	ui.cbDriver->setCurrentIndex(ui.cbDriver->findText(m_connections[index].driver));
+	ui.kleDatabase->setText(m_connections[index].dbName);
+
+	if (!isFileDB(m_connections[index].driver)) {
+		ui.leHost->setText(m_connections[index].hostName);
+		ui.sbPort->setValue(m_connections[index].port);
+		ui.leUserName->setText(m_connections[index].userName);
+		ui.lePassword->setText(m_connections[index].password);
+	}
+	m_initializing = false;
+}
+
+void DatabaseManagerWidget::nameChanged(const QString& name) {
+	if (m_initializing)
+		return;
+
+	//check uniqueness of the provided name
+	bool unique = true;
+	for(int i = 0; i < ui.lwConnections->count(); ++i) {
+		if (name == ui.lwConnections->item(i)->text()) {
+			unique = false;
+			break;
+		}
+	}
+
+	if (unique) {
+		ui.leName->setStyleSheet("");
+		ui.lwConnections->currentItem()->setText(name);
+		m_connections[ui.lwConnections->currentRow()].name = name;
+	} else
+		ui.leName->setStyleSheet("QLineEdit{background: red;}");
 }
 
 void DatabaseManagerWidget::driverChanged() {
-	//determine whether it's a file database (like SQLite) and hide non-relevant fields (like host name, etc.)
-	bool fileDB = ui.cbDriver->currentText() == QLatin1String("QSQLITE") ||
-	              ui.cbDriver->currentText() == QLatin1String("QSQLITE3");
+	//hide non-relevant fields (like host name, etc.) for file DBs
+	bool fileDB = isFileDB(ui.cbDriver->currentText());
 	ui.lHost->setVisible(!fileDB);
 	ui.leHost->setVisible(!fileDB);
 	ui.lPort->setVisible(!fileDB);
@@ -131,10 +143,11 @@ void DatabaseManagerWidget::driverChanged() {
 	ui.bOpen->setVisible(fileDB);
 	ui.gbAuthentication->setVisible(!fileDB);
 
-	if (m_initializing || ui.lwConnections->currentRow() == -1)
+	if (m_initializing)
 		return;
 
-	connectionList[ui.lwConnections->currentRow()]->vendorIndex = ui.cbDriver->currentIndex();
+	m_connections[ui.lwConnections->currentRow()].driver = ui.cbDriver->currentText();
+	dataChanged();
 }
 
 void DatabaseManagerWidget::selectFile() {
@@ -154,146 +167,212 @@ void DatabaseManagerWidget::selectFile() {
 	ui.kleDatabase->setText(path);
 }
 
-/*!
-	shows the settings of the currently selected connection
- */
-void DatabaseManagerWidget::connectionChanged(int index) {
-	if (m_initializing || index == -1)
-		return;
-
-	ui.leName->setText( connectionList[index]->name );
-	ui.cbDriver->setCurrentIndex( connectionList[index]->vendorIndex );
-	ui.kleDatabase->setText( connectionList[index]->dbName );
-
-	QString driver =  QSqlDatabase::drivers().at(connectionList[index]->vendorIndex);
-	bool fileDB = driver == QLatin1String("QSQLITE") ||
-	              driver == QLatin1String("QSQLITE3");
-	if (!fileDB) {
-		ui.leHost->setText( connectionList[index]->hostName );
-		ui.sbPort->setValue( connectionList[index]->port );
-		ui.leUserName->setText( connectionList[index]->userName );
-		ui.lePassword->setText( connectionList[index]->password );
-	}
-}
-
-void DatabaseManagerWidget::testConnection() {
-	if (ui.lwConnections->currentRow() == -1)
-		return;
-
-	int row = ui.lwConnections->currentRow();
-	QSqlDatabase db = QSqlDatabase::addDatabase( QSqlDatabase::drivers().at(connectionList[row]->vendorIndex) );
-	db.setDatabaseName(connectionList[row]->dbName);
-	QString driver =  QSqlDatabase::drivers().at(connectionList[row]->vendorIndex);
-	bool fileDB = driver == QLatin1String("QSQLITE") ||
-	              driver == QLatin1String("QSQLITE3");
-	if (!fileDB) {
-		db.setHostName(connectionList[row]->hostName);
-		db.setPort(connectionList[row]->port);
-		db.setUserName(connectionList[row]->userName);
-		db.setPassword(connectionList[row]->password);
-	}
-
-	if (db.isValid() && db.open() && db.isOpen()) {
-		qDebug() << "connected";
-		db.close();
-	} else
-		qDebug() << db.lastError().text();
-}
-
-void DatabaseManagerWidget::nameChanged() {
-	if (m_initializing || ui.lwConnections->currentRow() == -1)
-		return;
-
-	QString new_name = uniqueName();
-	m_initializing = true;
-	ui.leName->setText(new_name);
-	m_initializing = false;
-	ui.lwConnections->currentItem()->setText(new_name);
-	connectionList[ui.lwConnections->currentRow()]->name = uniqueName();
-}
-
 void DatabaseManagerWidget::hostChanged() {
-	if (m_initializing || ui.lwConnections->currentRow() == -1)
+	if (m_initializing)
 		return;
 
-	connectionList[ui.lwConnections->currentRow()]->hostName = ui.leHost->text();
+	m_connections[ui.lwConnections->currentRow()].hostName = ui.leHost->text();
+	dataChanged();
 }
 
 void DatabaseManagerWidget::portChanged() {
-	if (m_initializing || ui.lwConnections->currentRow() == -1)
+	if (m_initializing)
 		return;
 
-	connectionList[ui.lwConnections->currentRow()]->port = ui.sbPort->value();
+	m_connections[ui.lwConnections->currentRow()].port = ui.sbPort->value();
+	dataChanged();
 }
 
 void DatabaseManagerWidget::databaseNameChanged() {
-	if (m_initializing || ui.lwConnections->currentRow() == -1)
+	if (m_initializing)
 		return;
 
-	connectionList[ui.lwConnections->currentRow()]->dbName = ui.kleDatabase->text();
+	m_connections[ui.lwConnections->currentRow()].dbName = ui.kleDatabase->text();
+	dataChanged();
 }
 
 void DatabaseManagerWidget::userNameChanged() {
-	if (m_initializing || ui.lwConnections->currentRow() == -1)
+	if (m_initializing)
 		return;
 
-	connectionList[ui.lwConnections->currentRow()]->userName = ui.leUserName->text();
+	m_connections[ui.lwConnections->currentRow()].userName = ui.leUserName->text();
+	dataChanged();
 }
 
 void DatabaseManagerWidget::passwordChanged() {
-	if (m_initializing || ui.lwConnections->currentRow() == -1)
+	if (m_initializing)
 		return;
 
-	connectionList[ui.lwConnections->currentRow()]->password = ui.lePassword->text();
+	m_connections[ui.lwConnections->currentRow()].password = ui.lePassword->text();
+	dataChanged();
 }
 
 void DatabaseManagerWidget::addConnection() {
-	SQLConnection* new_conn = new SQLConnection;
-	new_conn->name = uniqueName();
-	new_conn->vendorIndex = ui.cbDriver->currentIndex();
-	new_conn->dbName = ui.kleDatabase->text();
+	DEBUG_LOG("Adding new connection");
+	SQLConnection conn;
+	conn.name = uniqueName();
+	conn.driver = ui.cbDriver->currentText();
+	conn.hostName = QLatin1String("localhost");
 
-	bool fileDB = ui.cbDriver->currentText() == QLatin1String("QSQLITE") ||
-	              ui.cbDriver->currentText() == QLatin1String("QSQLITE3");
-	if (!fileDB) {
-		new_conn->hostName = ui.leHost->text();
-		new_conn->port = ui.sbPort->value();
-		new_conn->userName = ui.leUserName->text();
-		new_conn->password = ui.lePassword->text();
-	}
+	if (!isFileDB(conn.driver))
+		conn.port = defaultPort(conn.driver);
+
+	m_connections.append(conn);
+	ui.lwConnections->addItem(conn.name);
+	ui.lwConnections->setCurrentRow(m_connections.size()-1);
 
 	m_initializing = true;
-	connectionList.append(new_conn);
-	ui.lwConnections->addItem(new_conn->name);
-	ui.lwConnections->setCurrentRow(ui.lwConnections->count()-1);
-	ui.leName->setText(new_conn->name);
+	//call this to properly update the widgets for the very first added connection
+	driverChanged();
 	m_initializing = false;
+
+	//we have now more then one connection, enable widgets
+	ui.tbDelete->setEnabled(true);
+	ui.bTestConnection->setEnabled(true);
+	ui.leName->setEnabled(true);
+	ui.kleDatabase->setEnabled(true);
+	ui.cbDriver->setEnabled(true);
+	ui.leHost->setEnabled(true);
+	ui.sbPort->setEnabled(true);
+	ui.leUserName->setEnabled(true);
+	ui.lePassword->setEnabled(true);
 }
 
+/*!
+	removes the current selected connection.
+ */
 void DatabaseManagerWidget::deleteConnection() {
-	int row = ui.lwConnections->currentRow();
-	if (row == -1)
+	int ret = KMessageBox::questionYesNo(this,
+				i18n("Do you really want to delete the connection '%1'?").arg(ui.lwConnections->currentItem()->text()),
+				i18n("Delete Connection"));
+	if (ret != KMessageBox::Yes)
 		return;
 
-	SQLConnection* conn = connectionList[row];
-	connectionList.erase(connectionList.begin() + row);
-	delete conn;
+	//remove the current selected connection
+	m_connections.removeAt(ui.lwConnections->currentRow());
 	m_initializing = true;
-	delete ui.lwConnections->item(row);
+	QListWidgetItem* item = ui.lwConnections->takeItem(ui.lwConnections->currentRow());
+	if (item) delete item;
 	m_initializing = false;
+
+	//show the connection for the item that was automatically selected afte the deletion
+	connectionChanged(ui.lwConnections->currentRow());
+
+	//disable widgets if there're no connections anymore
+	if (m_connections.size() == 0) {
+		m_initializing = true;
+		ui.tbDelete->setEnabled(false);
+		ui.bTestConnection->setEnabled(false);
+		ui.leName->clear();
+		ui.leName->setEnabled(false);
+		ui.kleDatabase->clear();
+		ui.kleDatabase->setEnabled(false);
+		ui.cbDriver->setEnabled(false);
+		ui.leHost->clear();
+		ui.leHost->setEnabled(false);
+		ui.sbPort->clear();
+		ui.sbPort->setEnabled(false);
+		ui.leUserName->clear();
+		ui.leUserName->setEnabled(false);
+		ui.lePassword->clear();
+		ui.lePassword->setEnabled(false);
+		m_initializing = false;
+	}
+}
+
+void DatabaseManagerWidget::loadConnections() {
+	DEBUG_LOG("Loading connections from " + m_configPath);
+
+	KConfig config(m_configPath, KConfig::SimpleConfig);
+	m_initializing = true;
+	foreach(QString groupName, config.groupList()) {
+		KConfigGroup group = config.group(groupName);
+		SQLConnection conn;
+		conn.name = groupName;
+		conn.driver = group.readEntry("Driver","");
+		conn.dbName = group.readEntry("DatabaseName", "");
+		if (!isFileDB(conn.driver)) {
+			conn.hostName = group.readEntry("HostName", "localhost");
+			conn.port = group.readEntry("Port", defaultPort(conn.driver));
+			conn.userName = group.readEntry("UserName", "root");
+			conn.password = group.readEntry("Password", "");
+		}
+
+		m_connections.append(conn);
+		ui.lwConnections->addItem(conn.name);
+	}
+	m_initializing = false;
+
+	//show the first connection if available, create a new connection otherwise
+	if (m_connections.size())
+		ui.lwConnections->setCurrentRow(ui.lwConnections->count()-1);
+	else
+		addConnection();
+
 	connectionChanged(ui.lwConnections->currentRow());
 }
 
+void DatabaseManagerWidget::saveConnections() {
+	DEBUG_LOG("Saving connections to " + m_configPath);
+	//delete saved connections
+	KConfig config(m_configPath, KConfig::SimpleConfig);
+	foreach(QString group, config.groupList())
+		config.deleteGroup(group);
+
+	//save connections
+	foreach(SQLConnection conn, m_connections) {
+		KConfigGroup group = config.group(conn.name);
+		group.writeEntry("Driver", conn.driver);
+		group.writeEntry("DatabaseName", conn.dbName);
+		if (!isFileDB(conn.driver)) {
+			group.writeEntry("HostName", conn.hostName);
+			group.writeEntry("Port", conn.port);
+			group.writeEntry("UserName", conn.userName);
+			group.writeEntry("Password", conn.password);
+		}
+	}
+
+	config.sync();
+}
+
+void DatabaseManagerWidget::testConnection() {
+	int row = ui.lwConnections->currentRow();
+	QSqlDatabase db = QSqlDatabase::addDatabase(m_connections[row].driver);
+	db.setDatabaseName(m_connections[row].dbName);
+	if (!isFileDB(m_connections[row].driver)) {
+		db.setHostName(m_connections[row].hostName);
+		db.setPort(m_connections[row].port);
+		db.setUserName(m_connections[row].userName);
+		db.setPassword(m_connections[row].password);
+	}
+
+	if (db.isValid() && db.open() && db.isOpen()) {
+		db.close();
+		KMessageBox::information(this, i18n("Connection to the database '%1' was successful.", m_connections[row].dbName),
+								 i18n("Connection successful"));
+	} else {
+		KMessageBox::information(this, i18n("Failed to connect to the database '%1'.", m_connections[row].dbName),
+								 i18n("Connection failed"));
+	}
+}
+
+bool DatabaseManagerWidget::isFileDB(const QString& driver) const {
+	return (driver == QLatin1String("QSQLITE"))
+			|| (driver == QLatin1String("QSQLITE3"));
+}
+
 QString DatabaseManagerWidget::uniqueName() {
-	QString current_name = ui.leName->text();
+	QString name = i18n("New connection");
+
+	//TODO
 	QStringList connection_names;
 	for(int row = 0; row < ui.lwConnections->count(); row++)
 		connection_names << ui.lwConnections->item(row)->text();
 
-	if (!connection_names.contains(current_name))
-		return current_name;
+	if (!connection_names.contains(name))
+		return name;
 
-	QString base = current_name;
+	QString base = name;
 	int last_non_digit;
 	for (last_non_digit = base.size()-1; last_non_digit>=0 &&
 	        base[last_non_digit].category() == QChar::Number_DecimalDigit; --last_non_digit)
@@ -302,7 +381,7 @@ QString DatabaseManagerWidget::uniqueName() {
 	if (last_non_digit >=0 && base[last_non_digit].category() != QChar::Separator_Space)
 		base.append(" ");
 
-	int new_nr = current_name.right(current_name.size() - base.size()).toInt();
+	int new_nr = name.right(name.size() - base.size()).toInt();
 	QString new_name;
 	do
 		new_name = base + QString::number(++new_nr);
@@ -311,59 +390,12 @@ QString DatabaseManagerWidget::uniqueName() {
 	return new_name;
 }
 
-void DatabaseManagerWidget::loadConnection() {
-	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/sql connections/*");
-	for (int i = 0; i < list.size(); ++i) {
-		KConfig config(list.at(i), KConfig::SimpleConfig);
-		KConfigGroup group = config.group( "SQLConnection" );
-
-		QFileInfo fileinfo(list.at(i));
-		SQLConnection* new_conn = new SQLConnection;
-		new_conn->name = fileinfo.fileName();
-		new_conn->vendorIndex = group.readEntry("VendorIndex", 0);
-		new_conn->dbName = group.readEntry( "DatabaseName", "" );
-
-		QString driver =  QSqlDatabase::drivers().at(new_conn->vendorIndex);
-		bool fileDB = driver == QLatin1String("QSQLITE") ||
-		              driver == QLatin1String("QSQLITE3");
-		if (!fileDB) {
-			new_conn->hostName = group.readEntry("HostName", "127.0.0.1");
-			new_conn->port = group.readEntry("Port", 3306);
-			new_conn->userName = group.readEntry("UserName", "root");
-			new_conn->password = group.readEntry("Password", "");
-		}
-
-		m_initializing = true;
-		connectionList.append(new_conn);
-		ui.lwConnections->addItem(new_conn->name);
-		ui.lwConnections->setCurrentRow(ui.lwConnections->count()-1);
-		m_initializing = false;
-	}
-
-	connectionChanged(ui.lwConnections->currentRow());
+//TODO
+int DatabaseManagerWidget::defaultPort(const QString& driver) const {
+	return 3306;
 }
 
-void DatabaseManagerWidget::saveConnections() {
-	//delete saved connections
-	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/sql connections/*");
-	for (int i = 0; i < list.size(); ++i)
-		QFile::remove(list.at(i));
-
-	QString template_dir = KGlobal::dirs()->locateLocal("appdata", "templates") + "/sql connections/";
-	foreach(SQLConnection* conn, connectionList) {
-		KConfig config(template_dir + conn->name, KConfig::SimpleConfig);
-		KConfigGroup group = config.group( "SQLConnection" );
-		group.writeEntry("VendorIndex", conn->vendorIndex);
-		group.writeEntry("DatabaseName", conn->dbName);
-
-		QString driver =  QSqlDatabase::drivers().at(conn->vendorIndex);
-		bool fileDB = driver == QLatin1String("QSQLITE") ||
-		              driver == QLatin1String("QSQLITE3");
-		if (!fileDB) {
-			group.writeEntry( "HostName", conn->hostName );
-			group.writeEntry( "Port", conn->port );
-			group.writeEntry( "UserName", conn->userName );
-			group.writeEntry( "Password", conn->password );
-		}
-	}
+void DatabaseManagerWidget::dataChanged() {
+	m_changed = true;
+	emit changed();
 }

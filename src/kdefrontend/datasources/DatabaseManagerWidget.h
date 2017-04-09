@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for managing database connections
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -38,9 +38,9 @@ public:
 	~DatabaseManagerWidget();
 
 	struct SQLConnection {
-		int vendorIndex;
 		int port;
 		QString name;
+		QString driver;
 		QString hostName;
 		QString dbName;
 		QString userName;
@@ -49,27 +49,36 @@ public:
 
 private:
 	Ui::DatabaseManagerWidget ui;
-	QString uniqueName();
-	QList<SQLConnection*> connectionList;
+	QList<SQLConnection> m_connections;
 	bool m_initializing;
+	bool m_changed;
+	QString m_configPath;
+
+	QString uniqueName();
 	void loadConnection();
+	int defaultPort(const QString&) const;
+	bool isFileDB(const QString&) const;
+	void dataChanged();
 
 private slots:
-	void loadSettings();
-	void driverChanged();
-	void selectFile();
+	void loadConnections();
 	void addConnection();
 	void deleteConnection();
-	void connectionChanged(int);
 	void testConnection();
+	void connectionChanged(int);
 
-	void nameChanged();
+	void nameChanged(const QString&);
+	void driverChanged();
+	void selectFile();
 	void hostChanged();
 	void portChanged();
 	void databaseNameChanged();
 	void userNameChanged();
 	void passwordChanged();
 	void saveConnections();
+
+signals:
+	void changed();
 };
 
 #endif
