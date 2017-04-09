@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : dialog for managing database connections
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,24 +29,24 @@
 #include "DatabaseManagerDialog.h"
 #include "DatabaseManagerWidget.h"
 
-#include <QTimer>
-
 /*!
 	\class DatabaseManagerDialog
 	\brief dialog for managing database connections
 
 	\ingroup kdefrontend
- */
+*/
+DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent) : KDialog(parent),
+	mainWidget(new DatabaseManagerWidget(this)), m_changed(false) {
 
-DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent) : KDialog(parent) {
-
-	DatabaseManagerWidget* mainWidget = new DatabaseManagerWidget(this);
 	setMainWidget(mainWidget);
 
 	setWindowIcon(KIcon("network-server-database"));
 	setWindowTitle(i18n("SQL Database Connections"));
 
-	setButtons(KDialog::Ok);
+	setButtons(KDialog::Ok | KDialog::Cancel);
+
+	connect(mainWidget, SIGNAL(changed()), this, SLOT(changed()));
+	connect(this, SIGNAL(okClicked()), this, SLOT(save()));
 
 	//restore saved settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatabaseManagerDialog");
@@ -57,4 +57,15 @@ DatabaseManagerDialog::~DatabaseManagerDialog() {
 	//save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatabaseManagerDialog");
 	saveDialogSize(conf);
+}
+
+void DatabaseManagerDialog::changed() {
+	setWindowTitle(i18n("SQL Database Connections  [Changed]"));
+	m_changed = true;
+}
+
+void DatabaseManagerDialog::save() {
+	//ok-button was clicked, save the connections if they were changed
+	if (m_changed)
+		mainWidget->saveConnections();
 }

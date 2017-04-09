@@ -45,9 +45,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
    \ingroup kdefrontend
 */
-DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent) : QWidget(parent),
-	m_initializing(false), m_changed(false) {
-
+DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent) : QWidget(parent), m_initializing(false) {
 	m_configPath = KGlobal::dirs()->locateLocal("appdata", "") + QLatin1String("sql_connections");
 
 	ui.setupUi(this);
@@ -80,11 +78,6 @@ DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent) : QWidget(parent),
 	connect( ui.lePassword, SIGNAL(textChanged(QString)), this, SLOT(passwordChanged()) );
 
 	QTimer::singleShot( 100, this, SLOT(loadConnections()) );
-}
-
-DatabaseManagerWidget::~DatabaseManagerWidget() {
-	// save available database connections
-	saveConnections();
 }
 
 /*!
@@ -129,6 +122,7 @@ void DatabaseManagerWidget::nameChanged(const QString& name) {
 		ui.leName->setStyleSheet("");
 		ui.lwConnections->currentItem()->setText(name);
 		m_connections[ui.lwConnections->currentRow()].name = name;
+		emit changed();
 	} else
 		ui.leName->setStyleSheet("QLineEdit{background: red;}");
 }
@@ -147,7 +141,7 @@ void DatabaseManagerWidget::driverChanged() {
 		return;
 
 	m_connections[ui.lwConnections->currentRow()].driver = ui.cbDriver->currentText();
-	dataChanged();
+	emit changed();
 }
 
 void DatabaseManagerWidget::selectFile() {
@@ -172,7 +166,7 @@ void DatabaseManagerWidget::hostChanged() {
 		return;
 
 	m_connections[ui.lwConnections->currentRow()].hostName = ui.leHost->text();
-	dataChanged();
+	emit changed();
 }
 
 void DatabaseManagerWidget::portChanged() {
@@ -180,7 +174,7 @@ void DatabaseManagerWidget::portChanged() {
 		return;
 
 	m_connections[ui.lwConnections->currentRow()].port = ui.sbPort->value();
-	dataChanged();
+	emit changed();
 }
 
 void DatabaseManagerWidget::databaseNameChanged() {
@@ -188,7 +182,7 @@ void DatabaseManagerWidget::databaseNameChanged() {
 		return;
 
 	m_connections[ui.lwConnections->currentRow()].dbName = ui.kleDatabase->text();
-	dataChanged();
+	emit changed();
 }
 
 void DatabaseManagerWidget::userNameChanged() {
@@ -196,7 +190,7 @@ void DatabaseManagerWidget::userNameChanged() {
 		return;
 
 	m_connections[ui.lwConnections->currentRow()].userName = ui.leUserName->text();
-	dataChanged();
+	emit changed();
 }
 
 void DatabaseManagerWidget::passwordChanged() {
@@ -204,7 +198,7 @@ void DatabaseManagerWidget::passwordChanged() {
 		return;
 
 	m_connections[ui.lwConnections->currentRow()].password = ui.lePassword->text();
-	dataChanged();
+	emit changed();
 }
 
 void DatabaseManagerWidget::addConnection() {
@@ -393,9 +387,4 @@ QString DatabaseManagerWidget::uniqueName() {
 //TODO
 int DatabaseManagerWidget::defaultPort(const QString& driver) const {
 	return 3306;
-}
-
-void DatabaseManagerWidget::dataChanged() {
-	m_changed = true;
-	emit changed();
 }

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : dialog for managing database connections
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -31,12 +31,22 @@
 
 #include <KDialog>
 
+class DatabaseManagerWidget;
+
 class DatabaseManagerDialog : public KDialog {
 	Q_OBJECT
 
 public:
 	explicit DatabaseManagerDialog(QWidget*);
 	~DatabaseManagerDialog();
+
+private:
+	DatabaseManagerWidget* mainWidget;
+	bool m_changed;
+
+private slots:
+	void changed();
+	void save();
 };
 
 #endif

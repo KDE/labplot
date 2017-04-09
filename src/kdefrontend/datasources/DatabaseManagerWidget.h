@@ -35,7 +35,6 @@ class DatabaseManagerWidget : public QWidget {
 
 public:
 	explicit DatabaseManagerWidget(QWidget*);
-	~DatabaseManagerWidget();
 
 	struct SQLConnection {
 		int port;
@@ -47,11 +46,12 @@ public:
 		QString password;
 	};
 
+	void saveConnections();
+
 private:
 	Ui::DatabaseManagerWidget ui;
 	QList<SQLConnection> m_connections;
 	bool m_initializing;
-	bool m_changed;
 	QString m_configPath;
 
 	QString uniqueName();
@@ -75,7 +75,6 @@ private slots:
 	void databaseNameChanged();
 	void userNameChanged();
 	void passwordChanged();
-	void saveConnections();
 
 signals:
 	void changed();
