@@ -40,7 +40,6 @@
 
 	\ingroup kdefrontend
  */
-
 ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent, AbstractAspect* currentAspect): ImportDialog(parent),
 	importSQLDatabaseWidget(new ImportSQLDatabaseWidget(this)) {
 

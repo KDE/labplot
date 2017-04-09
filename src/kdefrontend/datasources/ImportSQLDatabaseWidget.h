@@ -4,6 +4,7 @@
     Description          : SQLDatabase
     --------------------------------------------------------------------
     Copyright            : (C) 2016 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -28,14 +29,10 @@
 #ifndef IMPORTSQLDATABASEWIDGET_H
 #define IMPORTSQLDATABASEWIDGET_H
 
-#include <QWidget>
-#include <QtSql>
+#include <QSqlDatabase>
 
 #include "ui_importsqldatabasewidget.h"
 
-class MainWin;
-class TreeViewComboBox;
-class AbstractAspect;
 class AspectTreeModel;
 class Project;
 class QStandardItemModel;
@@ -49,7 +46,6 @@ public:
 
 private:
 	Ui::ImportSQLDatabaseWidget ui;
-	MainWin* m_mainWin;
 	QList<QString> vendorList;
 	QList<QString> tableNamesList;
 	QSqlDatabase m_db;
@@ -58,12 +54,12 @@ private:
 	QStandardItemModel* m_databaseTreeModel;
 
 	void updateStatus();
-	void loadSettings();
 	void setProjectModel();
 	void setDatabaseModel();
 	void previewColumn(QString, QString, int, bool showPreview = false);
 
 private slots:
+	void loadSettings();
 	void showDatabaseManager();
 	void connectDatabase();
 	void showPreview();

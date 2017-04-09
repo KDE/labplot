@@ -4,6 +4,7 @@
     Description          : Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2016 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -27,12 +28,10 @@
 
 #include "ImportSQLDatabaseWidget.h"
 #include "DatabaseManagerDialog.h"
-#include "commonfrontend/widgets/TreeViewComboBox.h"
-#include "backend/core/Project.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 
-#include <QTableWidget>
+#include <KStandardDirs>
+
+#include <QtSql>
 #include <QStandardItem>
 #include <QTreeView>
 
@@ -43,22 +42,28 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent):QWidget(parent
 	ui.bDatabaseManager->setIcon(KIcon("network-server-database"));
 	connect( ui.bDatabaseManager, SIGNAL(clicked()), this, SLOT(showDatabaseManager()) );
 
-// 	loadSettings();
+	//defer the loading of settings a bit in order to show the dialog prior to blocking the GUI in refreshPreview()
+	QTimer::singleShot( 100, this, SLOT(loadSettings()) );
 }
 
 void ImportSQLDatabaseWidget::loadSettings() {
-	//load last used settings
-// 	KConfigGroup conf(KSharedConfig::openConfig(), "SQLImport");
-// 
-// 	ui.cbVendor->setCurrentIndex( conf.readEntry( "VendorIndex", 0) );
-// 	ui.leHostName->setText( conf.readEntry( "HostName", "127.0.0.1") );
-// 	ui.sbPort->setValue( conf.readEntry( "Port", 3306) );
-// 	ui.leDatabaseName->setText( conf.readEntry( "DatabaseName", "") );
-// 	ui.leUserName->setText( conf.readEntry("UserName", "root") );
-// 	ui.lePassword->setText( conf.readEntry("Password", "root") );
-// 	ui.cbShowPreview->setChecked( conf.readEntry("ShowPreview", false));
-// 
-// 	togglePreviewWidget();
+	//load all available saved connections
+	const QString m_configPath = KGlobal::dirs()->locateLocal("appdata", "") + QLatin1String("sql_connections");
+	KConfig confConn(m_configPath, KConfig::SimpleConfig);
+	foreach(QString name, confConn.groupList())
+		ui.cbConnection->addItem(name);
+
+	//load last used connection and other settings
+	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
+	ui.cbConnection->setCurrentIndex(conf.readEntry("Connection", -1));
+	//TODO
+}
+
+ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
+	// save current settings
+	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
+	conf.writeEntry("Connection", ui.cbConnection->currentIndex());
+	//TODO
 }
 
 void ImportSQLDatabaseWidget::setDatabaseModel() {
@@ -93,22 +98,6 @@ void ImportSQLDatabaseWidget::setDatabaseModel() {
 	ui.cbDatabaseTree->setModel(m_databaseTreeModel);
 	databaseTreeView->header()->close();
 	ui.cbDatabaseTree->setView(databaseTreeView);
-}
-
-ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
-// 	if (m_aspectTreeModel)
-// 		delete m_aspectTreeModel;
-// 
-// 	// save current settings
-// 	KConfigGroup conf(KSharedConfig::openConfig(), "SQLImport");
-// 
-// 	conf.writeEntry( "VendorIndex", ui.cbVendor->currentIndex() );
-// 	conf.writeEntry( "HostName", ui.leHostName->text() );
-// 	conf.writeEntry( "Port", ui.sbPort->value() );
-// 	conf.writeEntry( "DatabaseName", ui.leDatabaseName->text() );
-// 	conf.writeEntry( "UserName", ui.leUserName->text() );
-// 	conf.writeEntry( "Password", ui.lePassword->text() );
-// 	conf.writeEntry( "ShowPreview", ui.cbShowPreview->isChecked() );
 }
 
 void ImportSQLDatabaseWidget::connectDatabase() {
