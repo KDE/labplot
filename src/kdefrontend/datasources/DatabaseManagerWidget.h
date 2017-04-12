@@ -46,6 +46,7 @@ public:
 		QString password;
 	};
 
+	QString connection() const;
 	void saveConnections();
 
 private:

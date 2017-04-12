@@ -80,6 +80,10 @@ DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent) : QWidget(parent),
 	QTimer::singleShot( 100, this, SLOT(loadConnections()) );
 }
 
+QString DatabaseManagerWidget::connection() const {
+	return ui.lwConnections->currentItem()->text();
+}
+
 /*!
 	shows the settings of the currently selected connection
  */

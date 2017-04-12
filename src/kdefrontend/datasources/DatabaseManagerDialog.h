@@ -40,6 +40,8 @@ public:
 	explicit DatabaseManagerDialog(QWidget*);
 	~DatabaseManagerDialog();
 
+	QString connection() const;
+
 private:
 	DatabaseManagerWidget* mainWidget;
 	bool m_changed;

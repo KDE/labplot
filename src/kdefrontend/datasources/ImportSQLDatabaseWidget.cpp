@@ -28,6 +28,7 @@
 
 #include "ImportSQLDatabaseWidget.h"
 #include "DatabaseManagerDialog.h"
+#include "backend/lib/macros.h"
 
 #include <KStandardDirs>
 
@@ -47,23 +48,31 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent):QWidget(parent
 }
 
 void ImportSQLDatabaseWidget::loadSettings() {
-	//load all available saved connections
-	const QString m_configPath = KGlobal::dirs()->locateLocal("appdata", "") + QLatin1String("sql_connections");
-	KConfig confConn(m_configPath, KConfig::SimpleConfig);
-	foreach(QString name, confConn.groupList())
-		ui.cbConnection->addItem(name);
+	//read available connections
+	readConnections();
 
 	//load last used connection and other settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
-	ui.cbConnection->setCurrentIndex(conf.readEntry("Connection", -1));
+	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conf.readEntry("Connection", "")));
 	//TODO
 }
 
 ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 	// save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
-	conf.writeEntry("Connection", ui.cbConnection->currentIndex());
+	conf.writeEntry("Connection", ui.cbConnection->currentText());
 	//TODO
+}
+
+/*!
+	loads all available saved connections
+*/
+void ImportSQLDatabaseWidget::readConnections() {
+	DEBUG_LOG("ImportSQLDatabaseWidget: reading available connections");
+	const QString m_configPath = KGlobal::dirs()->locateLocal("appdata", "") + QLatin1String("sql_connections");
+	KConfig confConn(m_configPath, KConfig::SimpleConfig);
+	foreach(QString name, confConn.groupList())
+		ui.cbConnection->addItem(name);
 }
 
 void ImportSQLDatabaseWidget::setDatabaseModel() {
@@ -207,16 +216,20 @@ void ImportSQLDatabaseWidget::updateStatus() {
 }
 
 /*!
-	shows the database manager where the connections edited and created.
+	shows the database manager where the connections are created and edited.
 	The selected connection is selected in the connection combo box in this widget.
 **/
 void ImportSQLDatabaseWidget::showDatabaseManager() {
 	DatabaseManagerDialog* dlg = new DatabaseManagerDialog(this);
 
 	if (dlg->exec() == QDialog::Accepted) {
-		//TODO:
-		//1. add new connections that were created in the database manager to ui.cbConnection
-		//2. make the connection that were selected in the database manager current in ui.cbConnection
+		//re-read the available connections to be in sync with the changes in DatabaseManager
+		ui.cbConnection->clear();
+		readConnections();
+
+		//select the connection the user has selected in DataabaseManager
+		QString conn = dlg->connection();
+		ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conn));
 	}
 
 	delete dlg;

@@ -53,6 +53,7 @@ private:
 	Project* mainProject;
 	QStandardItemModel* m_databaseTreeModel;
 
+	void readConnections();
 	void updateStatus();
 	void setProjectModel();
 	void setDatabaseModel();

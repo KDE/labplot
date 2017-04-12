@@ -53,6 +53,10 @@ DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent) : KDialog(parent),
 	restoreDialogSize(conf);
 }
 
+QString DatabaseManagerDialog::connection() const {
+	return mainWidget->connection();
+}
+
 DatabaseManagerDialog::~DatabaseManagerDialog() {
 	//save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatabaseManagerDialog");
