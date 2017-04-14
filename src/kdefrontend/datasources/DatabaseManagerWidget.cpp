@@ -433,7 +433,26 @@ QString DatabaseManagerWidget::uniqueName() {
 	return new_name;
 }
 
-//TODO
 int DatabaseManagerWidget::defaultPort(const QString& driver) const {
-	return 3306;
+	// QDB2     IBM DB2 (version 7.1 and above)
+	// QIBASE   Borland InterBase
+	// QMYSQL   MySQL
+	// QOCI     Oracle Call Interface Driver
+	// QODBC    Open Database Connectivity (ODBC) - Microsoft SQL Server and other ODBC-compliant databases
+	// QPSQL    PostgreSQL (versions 7.3 and above)
+
+	if (driver == "QDB2")
+		return 50000;
+	else if (driver == "QIBASE")
+		return 3050;
+	else if (driver == "QMYSQL")
+		return 3306;
+	else if (driver == "QOCI")
+		return 1521;
+	else if (driver == "QODBC")
+		return 1433;
+	else if (driver == "QPSQL")
+		return 5432;
+	else
+		return 0;
 }
