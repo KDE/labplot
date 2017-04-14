@@ -220,7 +220,7 @@ void ImportSQLDatabaseWidget::updateStatus() {
 	The selected connection is selected in the connection combo box in this widget.
 **/
 void ImportSQLDatabaseWidget::showDatabaseManager() {
-	DatabaseManagerDialog* dlg = new DatabaseManagerDialog(this);
+	DatabaseManagerDialog* dlg = new DatabaseManagerDialog(this, ui.cbConnection->currentText());
 
 	if (dlg->exec() == QDialog::Accepted) {
 		//re-read the available connections to be in sync with the changes in DatabaseManager

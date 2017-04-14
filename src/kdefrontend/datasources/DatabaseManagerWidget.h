@@ -34,7 +34,7 @@ class DatabaseManagerWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit DatabaseManagerWidget(QWidget*);
+	explicit DatabaseManagerWidget(QWidget*, const QString&);
 
 	struct SQLConnection {
 		int port;
@@ -47,6 +47,7 @@ public:
 	};
 
 	QString connection() const;
+	void setCurrentConnection(const QString&);
 	void saveConnections();
 
 private:
@@ -54,6 +55,7 @@ private:
 	QList<SQLConnection> m_connections;
 	bool m_initializing;
 	QString m_configPath;
+	QString m_initConnName;
 
 	QString uniqueName();
 	void loadConnection();

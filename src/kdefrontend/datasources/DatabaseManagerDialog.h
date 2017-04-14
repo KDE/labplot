@@ -37,7 +37,7 @@ class DatabaseManagerDialog : public KDialog {
 	Q_OBJECT
 
 public:
-	explicit DatabaseManagerDialog(QWidget*);
+	explicit DatabaseManagerDialog(QWidget*, const QString&);
 	~DatabaseManagerDialog();
 
 	QString connection() const;

@@ -35,8 +35,8 @@
 
 	\ingroup kdefrontend
 */
-DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent) : KDialog(parent),
-	mainWidget(new DatabaseManagerWidget(this)), m_changed(false) {
+DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& conn) : KDialog(parent),
+	mainWidget(new DatabaseManagerWidget(this, conn)), m_changed(false) {
 
 	setMainWidget(mainWidget);
 

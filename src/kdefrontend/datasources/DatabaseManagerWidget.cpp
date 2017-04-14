@@ -45,7 +45,9 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
    \ingroup kdefrontend
 */
-DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent) : QWidget(parent), m_initializing(false) {
+DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent, const QString& conn) : QWidget(parent),
+	m_initializing(false), m_initConnName(conn) {
+
 	m_configPath = KGlobal::dirs()->locateLocal("appdata", "") + QLatin1String("sql_connections");
 
 	ui.setupUi(this);
@@ -276,6 +278,8 @@ void DatabaseManagerWidget::deleteConnection() {
 		ui.lePassword->setEnabled(false);
 		m_initializing = false;
 	}
+
+	emit changed();
 }
 
 void DatabaseManagerWidget::loadConnections() {
@@ -302,10 +306,19 @@ void DatabaseManagerWidget::loadConnections() {
 	m_initializing = false;
 
 	//show the first connection if available, create a new connection otherwise
-	if (m_connections.size())
-		ui.lwConnections->setCurrentRow(ui.lwConnections->count()-1);
-	else
+	if (m_connections.size()) {
+		if (!m_initConnName.isEmpty()) {
+			QListWidgetItem* item = ui.lwConnections->findItems(m_initConnName, Qt::MatchExactly).first();
+			if (item)
+				ui.lwConnections->setCurrentItem(item);
+			else
+				ui.lwConnections->setCurrentRow(ui.lwConnections->count()-1);
+		} else {
+			ui.lwConnections->setCurrentRow(ui.lwConnections->count()-1);
+		}
+	} else {
 		addConnection();
+	}
 
 	connectionChanged(ui.lwConnections->currentRow());
 }
