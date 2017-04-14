@@ -187,6 +187,21 @@ void DatabaseManagerWidget::databaseNameChanged() {
 	if (m_initializing)
 		return;
 
+	if (isFileDB(ui.cbDriver->currentText())) {
+		QString fileName = ui.kleDatabase->text();
+#ifndef HAVE_WINDOWS
+		// make relative path
+		if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator())
+			fileName = QDir::homePath() + QDir::separator() + fileName;
+#endif
+
+		bool fileExists = QFile::exists(fileName);
+		if (fileExists)
+			ui.kleDatabase->setStyleSheet("");
+		else
+			ui.kleDatabase->setStyleSheet("QLineEdit{background:red;}");
+	}
+
 	m_connections[ui.lwConnections->currentRow()].dbName = ui.kleDatabase->text();
 	emit changed();
 }
