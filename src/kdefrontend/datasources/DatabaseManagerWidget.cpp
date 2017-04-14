@@ -363,6 +363,23 @@ void DatabaseManagerWidget::saveConnections() {
 
 void DatabaseManagerWidget::testConnection() {
 	int row = ui.lwConnections->currentRow();
+
+	//don't allow to test the connection for file DBs if the file doesn't exist
+	if (isFileDB(ui.cbDriver->currentText())) {
+		QString fileName = ui.kleDatabase->text();
+#ifndef HAVE_WINDOWS
+		// make relative path
+		if ( !fileName.isEmpty() && fileName.left(1) != QDir::separator())
+			fileName = QDir::homePath() + QDir::separator() + fileName;
+#endif
+
+		if (!QFile::exists(fileName)) {
+			KMessageBox::error(this, i18n("Failed to connect to the database '%1'.", m_connections[row].dbName),
+								 i18n("Connection failed"));
+			return;
+		}
+	}
+
 	QSqlDatabase db = QSqlDatabase::addDatabase(m_connections[row].driver);
 	db.setDatabaseName(m_connections[row].dbName);
 	if (!isFileDB(m_connections[row].driver)) {
@@ -377,7 +394,7 @@ void DatabaseManagerWidget::testConnection() {
 		KMessageBox::information(this, i18n("Connection to the database '%1' was successful.", m_connections[row].dbName),
 								 i18n("Connection successful"));
 	} else {
-		KMessageBox::information(this, i18n("Failed to connect to the database '%1'.", m_connections[row].dbName),
+		KMessageBox::error(this, i18n("Failed to connect to the database '%1'.", m_connections[row].dbName),
 								 i18n("Connection failed"));
 	}
 }
