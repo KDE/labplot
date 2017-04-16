@@ -49,6 +49,7 @@ public:
 	QString connection() const;
 	void setCurrentConnection(const QString&);
 	void saveConnections();
+	static bool isFileDB(const QString&);
 
 private:
 	Ui::DatabaseManagerWidget ui;
@@ -60,7 +61,6 @@ private:
 	QString uniqueName();
 	void loadConnection();
 	int defaultPort(const QString&) const;
-	bool isFileDB(const QString&) const;
 	void dataChanged();
 
 private slots:

@@ -33,8 +33,6 @@
 
 #include "ui_importsqldatabasewidget.h"
 
-class AspectTreeModel;
-class Project;
 class QStandardItemModel;
 
 class ImportSQLDatabaseWidget : public QWidget {
@@ -49,21 +47,20 @@ private:
 	QList<QString> vendorList;
 	QList<QString> tableNamesList;
 	QSqlDatabase m_db;
-	AspectTreeModel* m_aspectTreeModel;
-	Project* mainProject;
 	QStandardItemModel* m_databaseTreeModel;
+	QString m_configPath;
+	bool m_initializing;
 
 	void readConnections();
 	void updateStatus();
-	void setProjectModel();
-	void setDatabaseModel();
-	void previewColumn(QString, QString, int, bool showPreview = false);
 
 private slots:
 	void loadSettings();
 	void showDatabaseManager();
-	void connectDatabase();
-	void showPreview();
+	void connectionChanged();
+	void importFromChanged(int);
+	void tableChanged(int);
+
 	void importData(bool showPreview = false);
 
 signals:

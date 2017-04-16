@@ -399,7 +399,7 @@ void DatabaseManagerWidget::testConnection() {
 	}
 }
 
-bool DatabaseManagerWidget::isFileDB(const QString& driver) const {
+bool DatabaseManagerWidget::isFileDB(const QString& driver) {
 	return (driver == QLatin1String("QSQLITE"))
 			|| (driver == QLatin1String("QSQLITE3"));
 }

@@ -28,39 +28,63 @@
 
 #include "ImportSQLDatabaseWidget.h"
 #include "DatabaseManagerDialog.h"
+#include "DatabaseManagerWidget.h"
 #include "backend/lib/macros.h"
 
+#include <KMessageBox>
 #include <KStandardDirs>
 
 #include <QtSql>
 #include <QStandardItem>
 #include <QTreeView>
 
-ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent):QWidget(parent),
-	m_aspectTreeModel(0), m_databaseTreeModel(0) {
+ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(parent), m_databaseTreeModel(0), m_initializing(0) {
 	ui.setupUi(this);
 
+	ui.cbImportFrom->addItem(i18n("Table"));
+	ui.cbImportFrom->addItem(i18n("Custom query"));
+
 	ui.bDatabaseManager->setIcon(KIcon("network-server-database"));
+
+	m_configPath = KGlobal::dirs()->locateLocal("appdata", "") + QLatin1String("sql_connections");
+
+	connect( ui.cbConnection, SIGNAL(currentIndexChanged(int)), SLOT(connectionChanged()) );
+	connect( ui.cbImportFrom, SIGNAL(currentIndexChanged(int)), SLOT(importFromChanged(int)) );
 	connect( ui.bDatabaseManager, SIGNAL(clicked()), this, SLOT(showDatabaseManager()) );
+	connect( ui.lwTables, SIGNAL(currentRowChanged(int)), this, SLOT(tableChanged(int)) );
 
 	//defer the loading of settings a bit in order to show the dialog prior to blocking the GUI in refreshPreview()
 	QTimer::singleShot( 100, this, SLOT(loadSettings()) );
 }
 
 void ImportSQLDatabaseWidget::loadSettings() {
+	m_initializing = true;
 	//read available connections
 	readConnections();
 
 	//load last used connection and other settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
-	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(conf.readEntry("Connection", "")));
+	KConfigGroup config(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
+	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(config.readEntry("Connection", "")));
+	ui.cbImportFrom->setCurrentIndex(config.readEntry("ImportFrom", 0));
+	importFromChanged(ui.cbImportFrom->currentIndex());
+	QList<int> defaultSizes;
+	defaultSizes << 100 << 100;
+	ui.splitter->setSizes(config.readEntry("SplitterSizes", defaultSizes));
 	//TODO
+
+
+	m_initializing = false;
+
+	//all settings loaded -> trigger the selection of the last used connection in order to get the data preview
+	connectionChanged();
 }
 
 ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
-	conf.writeEntry("Connection", ui.cbConnection->currentText());
+	KConfigGroup config(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
+	config.writeEntry("Connection", ui.cbConnection->currentText());
+	config.writeEntry("ImportFrom", ui.cbImportFrom->currentIndex());
+	config.writeEntry("SplitterSizes", ui.splitter->sizes());
 	//TODO
 }
 
@@ -69,142 +93,123 @@ ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 */
 void ImportSQLDatabaseWidget::readConnections() {
 	DEBUG_LOG("ImportSQLDatabaseWidget: reading available connections");
-	const QString m_configPath = KGlobal::dirs()->locateLocal("appdata", "") + QLatin1String("sql_connections");
-	KConfig confConn(m_configPath, KConfig::SimpleConfig);
-	foreach(QString name, confConn.groupList())
+	KConfig config(m_configPath, KConfig::SimpleConfig);
+	foreach(QString name, config.groupList())
 		ui.cbConnection->addItem(name);
 }
 
-void ImportSQLDatabaseWidget::setDatabaseModel() {
-	m_databaseTreeModel = new QStandardItemModel();
-	QTreeView* databaseTreeView = new QTreeView(this);
-	QSqlQuery tableListQuery(m_db);
-	tableListQuery.prepare("SHOW TABLES");
-	tableListQuery.exec();
-	if(tableListQuery.isActive()) {
-		while(tableListQuery.next()) {
-			QString tableName = tableListQuery.value(0).toString().simplified();
-			QStandardItem* tableItem = new QStandardItem(tableName);
-			tableItem->setSelectable(false);
-			m_databaseTreeModel->appendRow(tableItem);
-			QSqlQuery columnListQuery(m_db);
-			columnListQuery.prepare("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS \
-                          WHERE TABLE_NAME = '" + tableName + "'");
-			columnListQuery.exec();
-			if (columnListQuery.isActive()) {
-				while(columnListQuery.next()) {
-					QString columnName = columnListQuery.value(0).toString().simplified();
-					QStandardItem* columnItem = new QStandardItem(columnName);
-					columnItem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-					columnItem->setData(Qt::Unchecked, Qt::CheckStateRole);
-					tableItem->appendRow(columnItem);
-				}
-			}
-		}
+void ImportSQLDatabaseWidget::connectionChanged() {
+	if (m_initializing)
+		return;
+
+	DEBUG_LOG("ImportSQLDatabaseWidget: connecting to " + ui.cbConnection->currentText());
+
+	//clear the previously shown content
+	ui.teQuery->clear();
+	ui.lwTables->clear();
+	ui.twPreview->clear();
+
+	//connection name was changed, determine the current connections settings
+	KConfig config(m_configPath, KConfig::SimpleConfig);
+	KConfigGroup group = config.group(ui.cbConnection->currentText());
+
+	//open the selected connection
+	const QString driver = group.readEntry("Driver");
+	m_db = QSqlDatabase::addDatabase(driver);
+	m_db.setDatabaseName( group.readEntry("DatabaseName"));
+	if (!DatabaseManagerWidget::isFileDB(driver)) {
+		m_db.setHostName( group.readEntry("HostName") );
+		m_db.setPort( group.readEntry("Port", 0) );
+		m_db.setUserName( group.readEntry("UserName") );
+		m_db.setPassword( group.readEntry("Password") );
 	}
 
-	databaseTreeView->setModel(m_databaseTreeModel);
-	ui.cbDatabaseTree->setModel(m_databaseTreeModel);
-	databaseTreeView->header()->close();
-	ui.cbDatabaseTree->setView(databaseTreeView);
-}
-
-void ImportSQLDatabaseWidget::connectDatabase() {
-// 	m_db = QSqlDatabase::addDatabase( vendorList.at(ui.cbVendor->currentIndex()) );
-// 	m_db.setHostName( ui.leHostName->text() );
-// 	m_db.setPort( ui.sbPort->value() );
-// 	m_db.setDatabaseName( ui.leDatabaseName->text() );
-// 	m_db.setUserName( ui.leUserName->text() );
-// 	m_db.setPassword( ui.lePassword->text() );
-// 
-// 	if (m_db.isValid()) {
-// 		m_db.open();
-// 		if (m_db.isOpen()) {
-// 			setDatabaseModel();
-// 			m_db.close();
-// 		}
-// 	}
-// 
-// 	updateStatus();
-}
-
-void ImportSQLDatabaseWidget::previewColumn(QString columnNameList, QString tableName, int columnCount, bool showPreview) {
-	QSqlQuery searchQuery(m_db);
-	QString query = "SELECT " + columnNameList + " FROM " + tableName;
-	searchQuery.prepare(query);
-	searchQuery.exec();
-	if(searchQuery.isActive()) {
-		int row = 0;
-		int rowCount = ui.sbEndRow->value()-ui.sbStartRow->value()+1;
-		if (showPreview) {
-			int row = 0;
-			int prevColumnCount = ui.twPreviewTable->columnCount();
-			ui.twPreviewTable->setColumnCount(prevColumnCount + columnCount);
-			while(searchQuery.next()) {
-				if (row >= ui.sbStartRow->value() && row <= ui.sbEndRow->value()) {
-					for(int column = 0; column < columnCount; column++) {
-						ui.twPreviewTable->setItem( row - ui.sbStartRow->value(), column + prevColumnCount,
-						                            new QTableWidgetItem(searchQuery.value(column).toString()) );
-					}
-				}
-				row++;
-			}
-		} else {
-			//TODO
-// 			Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(m_sheet);
-// 			if (spreadsheet) {
-// 				int prevColumnCount = spreadsheet->columnCount();
-// 				spreadsheet->setColumnCount(prevColumnCount + columnCount);
-// 				if (rowCount > spreadsheet->rowCount()) spreadsheet->setRowCount(rowCount);
-// 				while(searchQuery.next()) {
-// 					if (row >= ui.sbStartRow->value() && row <= ui.sbEndRow->value()) {
-// 						for(int index = 0; index < columnCount; index++) {
-// 							spreadsheet->column(index + prevColumnCount)->setColumnMode(AbstractColumn::Text);
-// 							spreadsheet->column(index + prevColumnCount)->setTextAt(row - ui.sbStartRow->value(), searchQuery.value(index).toString());
-// 						}
-// 					}
-// 					row++;
-// 				}
-// 			}
-		}
+	if (!m_db.open()) {
+		KMessageBox::error(this, i18n("Failed to connect to the database '%1'. Please check the connection setttings.", ui.cbConnection->currentText()),
+								 i18n("Connection failed"));
+		return;
 	}
 
-	updateStatus();
+	if (m_db.tables().size()) {
+		ui.lwTables->addItems(m_db.tables());
+		ui.lwTables->setCurrentRow(0);
+		for (int i = 0; i < ui.lwTables->count(); ++i)
+			ui.lwTables->item(i)->setIcon(KIcon("view-form-table"));
+	}
 }
 
-void ImportSQLDatabaseWidget::showPreview() {
-	importData(true);
+void ImportSQLDatabaseWidget::tableChanged(int index) {
+	if (index==-1)
+		return;
+
+	WAIT_CURSOR;
+	ui.twPreview->clear();
+	QString tableName = ui.lwTables->item(index)->text();
+	QSqlQuery q(QLatin1String("SELECT * FROM ") + tableName);
+
+	if (!q.isActive())
+		return;
+
+	//resize the table (number of columns equal to the number of fields in the result set)
+	int columnCount = q.record().count();
+	ui.twPreview->setColumnCount(columnCount);
+	QStringList headerLabels;
+	for (int i = 0; i < columnCount; ++i)
+		headerLabels << q.record().fieldName(i);
+
+	ui.twPreview->setHorizontalHeaderLabels(headerLabels);
+
+	//preview the data
+	int row = 0;
+	while(q.next()) {
+		for(int col = 0; col < columnCount; ++col) {
+			ui.twPreview->setRowCount(row+1);
+			ui.twPreview->setItem(row, col, new QTableWidgetItem(q.value(col).toString()) );
+		}
+		row++;
+	}
+
+	ui.twPreview->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+	RESET_CURSOR;
+}
+
+void ImportSQLDatabaseWidget::importFromChanged(int index) {
+	if (index==0) {
+		ui.gbQuery->hide();
+	} else {
+		ui.gbQuery->show();
+	}
 }
 
 void ImportSQLDatabaseWidget::importData(bool showPreview) {
-	if (!m_db.isValid()) return;
-	if (ui.sbEndRow->value() < ui.sbStartRow->value()) return;
-
-	if (showPreview) {
-		ui.twPreviewTable->setColumnCount(0);
-		ui.twPreviewTable->setRowCount(ui.sbEndRow->value() - ui.sbStartRow->value() + 1);
-	}
-
-	m_db.open();
-	if (m_db.isOpen()) {
-		for(int tableIndex = 0; tableIndex < m_databaseTreeModel->rowCount(); tableIndex++) {
-			QString tableName = m_databaseTreeModel->item(tableIndex)->text();
-			QString columnNameList;
-			int columnCount = 0;
-			for(int columnIndex = 0; columnIndex < m_databaseTreeModel->item(tableIndex)->rowCount(); columnIndex++) {
-				QStandardItem* columnItem = m_databaseTreeModel->item(tableIndex)->child(columnIndex);
-				if (columnItem->checkState() == Qt::Checked) {
-					if (!columnNameList.isEmpty()) columnNameList += " , ";
-					columnNameList += columnItem->text();
-					columnCount++;
-				}
-			}
-			if (columnCount) previewColumn(columnNameList, tableName, columnCount, showPreview);
-		}
-		m_db.close();
-	}
-
-	updateStatus();
+// 	if (!m_db.isValid()) return;
+// 	if (ui.sbEndRow->value() < ui.sbStartRow->value()) return;
+// 
+// 	if (showPreview) {
+// 		ui.twPreviewTable->setColumnCount(0);
+// 		ui.twPreviewTable->setRowCount(ui.sbEndRow->value() - ui.sbStartRow->value() + 1);
+// 	}
+// 
+// 	m_db.open();
+// 	if (m_db.isOpen()) {
+// 		for(int tableIndex = 0; tableIndex < m_databaseTreeModel->rowCount(); tableIndex++) {
+// 			QString tableName = m_databaseTreeModel->item(tableIndex)->text();
+// 			QString columnNameList;
+// 			int columnCount = 0;
+// 			for(int columnIndex = 0; columnIndex < m_databaseTreeModel->item(tableIndex)->rowCount(); columnIndex++) {
+// 				QStandardItem* columnItem = m_databaseTreeModel->item(tableIndex)->child(columnIndex);
+// 				if (columnItem->checkState() == Qt::Checked) {
+// 					if (!columnNameList.isEmpty()) columnNameList += " , ";
+// 					columnNameList += columnItem->text();
+// 					columnCount++;
+// 				}
+// 			}
+// 			if (columnCount) previewColumn(columnNameList, tableName, columnCount, showPreview);
+// 		}
+// 		m_db.close();
+// 	}
+// 
+// 	updateStatus();
 }
 
 void ImportSQLDatabaseWidget::updateStatus() {
