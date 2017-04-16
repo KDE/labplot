@@ -140,6 +140,7 @@ void ImportDialog::setCurrentIndex(const QModelIndex& index) {
 }
 
 void ImportDialog::newDataContainer(QAction* action) {
+	DEBUG("ImportDialog::newDataContainer()");
 	QString name = selectedObject();
 	QString type = action->iconText().split(' ')[1];
 	if (name.isEmpty())

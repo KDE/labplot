@@ -57,8 +57,6 @@ private:
 
 private slots:
 	void toggleOptions();
-	void newDataContainerMenu();
-	void newDataContainer(QAction*);
 	void checkOnFitsTableToMatrix(const bool enable);
 };
 

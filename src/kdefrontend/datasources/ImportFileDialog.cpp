@@ -235,42 +235,6 @@ void ImportFileDialog::toggleOptions() {
 	resize( QSize(this->width(), 0).expandedTo(minimumSize()) );
 }
 
-void ImportFileDialog::newDataContainer(QAction* action) {
-	DEBUG("ImportFileDialog::newDataContainer()");
-	QString path = importFileWidget->fileName();
-	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
-
-	QString type = action->iconText().split(' ')[1];
-	if (name.isEmpty())
-		name = action->iconText();
-
-	bool ok;
-	// child widgets can't have own icons
-	QInputDialog* dlg = new QInputDialog(this);
-	name = dlg->getText(this, i18n("Add %1", action->iconText()), i18n("%1 name:", type), QLineEdit::Normal, name, &ok);
-	if (ok) {
-		AbstractAspect* aspect;
-		int actionIndex = m_newDataContainerMenu->actions().indexOf(action);
-		if (actionIndex == 0)
-			aspect = new Workbook(0, name);
-		else if (actionIndex == 1)
-			aspect = new Spreadsheet(0, name);
-		else
-			aspect = new Matrix(0, name);
-
-		m_mainWin->addAspectToProject(aspect);
-		QDEBUG("cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
-		cbAddTo->setCurrentModelIndex(m_mainWin->model()->modelIndexOfAspect(aspect));
-		checkOkButton();
-	}
-
-	delete dlg;
-}
-
-void ImportFileDialog::newDataContainerMenu() {
-	m_newDataContainerMenu->exec( tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
-}
-
 void ImportFileDialog::checkOnFitsTableToMatrix(const bool enable) {
 	if (cbAddTo) {
 		QDEBUG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
