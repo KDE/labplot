@@ -148,20 +148,32 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	QString tableName = ui.lwTables->currentItem()->text();
 
 	QString query;
-	const QString driver = m_db.driverName();
-	if ( (driver == QLatin1String("QSQLITE")) || (driver == QLatin1String("QSQLITE3")) || (driver == QLatin1String("QMYSQL")) || (driver == QLatin1String("QPSQL")) )
-		query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" LIMIT ") +  QString::number(ui.sbPreviewLines->value());
-	else if (driver == QLatin1String("QOCI"))
-		query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWNUM<=") +  QString::number(ui.sbPreviewLines->value());
-	else if (driver == QLatin1String("QDB2"))
-		query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" FETCH FIRST ") +  QString::number(ui.sbPreviewLines->value()) + QLatin1String(" ROWS ONLY");
-	else if (driver == QLatin1String("QIBASE"))
-		query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWS ") +  QString::number(ui.sbPreviewLines->value());
-	else
-		query = QLatin1String("SELECT TOP ") + QString::number(ui.sbPreviewLines->value()) + QLatin1String(" * FROM ") + tableName;
+	bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
+	if ( !customQuery ) {
+		//preview the content of the currently selected table
+		const QString driver = m_db.driverName();
+		if ( (driver == QLatin1String("QSQLITE")) || (driver == QLatin1String("QSQLITE3")) || (driver == QLatin1String("QMYSQL")) || (driver == QLatin1String("QPSQL")) )
+			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" LIMIT ") +  QString::number(ui.sbPreviewLines->value());
+		else if (driver == QLatin1String("QOCI"))
+			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWNUM<=") +  QString::number(ui.sbPreviewLines->value());
+		else if (driver == QLatin1String("QDB2"))
+			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" FETCH FIRST ") +  QString::number(ui.sbPreviewLines->value()) + QLatin1String(" ROWS ONLY");
+		else if (driver == QLatin1String("QIBASE"))
+			query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWS ") +  QString::number(ui.sbPreviewLines->value());
+		else
+			query = QLatin1String("SELECT TOP ") + QString::number(ui.sbPreviewLines->value()) + QLatin1String(" * FROM ") + tableName;
+	} else {
+		//preview the result of a custom query
+		query = ui.teQuery->toPlainText();
+		if ( query.trimmed().isEmpty() ) {
+			RESET_CURSOR;
+			return;
+		}
+	}
 
 	QSqlQuery q(query);
 	if (!q.isActive()) {
+		updateStatus();
 		RESET_CURSOR;
 		return;
 	}
@@ -183,6 +195,10 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 			ui.twPreview->setItem(row, col, new QTableWidgetItem(q.value(col).toString()) );
 		}
 		row++;
+
+		//in case a custom query is executed, check whether the row number limit is reached
+		if (customQuery && row >= ui.sbPreviewLines->value())
+			break;
 	}
 
 	ui.twPreview->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
@@ -190,11 +206,16 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 }
 
 void ImportSQLDatabaseWidget::importFromChanged(int index) {
-	if (index==0) {
+	if (index==0) { //import from a table
 		ui.gbQuery->hide();
-	} else {
+		ui.lwTables->show();
+	} else { //import the result set of a custom query
 		ui.gbQuery->show();
+		ui.lwTables->hide();
+		ui.twPreview->clear();
 	}
+
+	refreshPreview();
 }
 
 void ImportSQLDatabaseWidget::importData(bool showPreview) {
