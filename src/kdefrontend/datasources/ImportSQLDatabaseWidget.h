@@ -59,7 +59,7 @@ private slots:
 	void showDatabaseManager();
 	void connectionChanged();
 	void importFromChanged(int);
-	void tableChanged(int);
+	void refreshPreview();
 
 	void importData(bool showPreview = false);
 

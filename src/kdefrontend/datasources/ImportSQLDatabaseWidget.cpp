@@ -51,7 +51,8 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(pare
 	connect( ui.cbConnection, SIGNAL(currentIndexChanged(int)), SLOT(connectionChanged()) );
 	connect( ui.cbImportFrom, SIGNAL(currentIndexChanged(int)), SLOT(importFromChanged(int)) );
 	connect( ui.bDatabaseManager, SIGNAL(clicked()), this, SLOT(showDatabaseManager()) );
-	connect( ui.lwTables, SIGNAL(currentRowChanged(int)), this, SLOT(tableChanged(int)) );
+	connect( ui.lwTables, SIGNAL(currentRowChanged(int)), this, SLOT(refreshPreview()) );
+	connect( ui.bRefreshPreview, SIGNAL(clicked()), this, SLOT(refreshPreview()) );
 
 	//defer the loading of settings a bit in order to show the dialog prior to blocking the GUI in refreshPreview()
 	QTimer::singleShot( 100, this, SLOT(loadSettings()) );
@@ -138,17 +139,32 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	}
 }
 
-void ImportSQLDatabaseWidget::tableChanged(int index) {
-	if (index==-1)
+void ImportSQLDatabaseWidget::refreshPreview() {
+	if (!ui.lwTables->currentItem())
 		return;
 
 	WAIT_CURSOR;
 	ui.twPreview->clear();
-	QString tableName = ui.lwTables->item(index)->text();
-	QSqlQuery q(QLatin1String("SELECT * FROM ") + tableName);
+	QString tableName = ui.lwTables->currentItem()->text();
 
-	if (!q.isActive())
+	QString query;
+	const QString driver = m_db.driverName();
+	if ( (driver == QLatin1String("QSQLITE")) || (driver == QLatin1String("QSQLITE3")) || (driver == QLatin1String("QMYSQL")) || (driver == QLatin1String("QPSQL")) )
+		query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" LIMIT ") +  QString::number(ui.sbPreviewLines->value());
+	else if (driver == QLatin1String("QOCI"))
+		query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWNUM<=") +  QString::number(ui.sbPreviewLines->value());
+	else if (driver == QLatin1String("QDB2"))
+		query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" FETCH FIRST ") +  QString::number(ui.sbPreviewLines->value()) + QLatin1String(" ROWS ONLY");
+	else if (driver == QLatin1String("QIBASE"))
+		query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWS ") +  QString::number(ui.sbPreviewLines->value());
+	else
+		query = QLatin1String("SELECT TOP ") + QString::number(ui.sbPreviewLines->value()) + QLatin1String(" * FROM ") + tableName;
+
+	QSqlQuery q(query);
+	if (!q.isActive()) {
+		RESET_CURSOR;
 		return;
+	}
 
 	//resize the table (number of columns equal to the number of fields in the result set)
 	int columnCount = q.record().count();
