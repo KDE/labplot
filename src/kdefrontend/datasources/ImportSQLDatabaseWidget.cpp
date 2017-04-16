@@ -89,6 +89,15 @@ ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 	//TODO
 }
 
+QString ImportSQLDatabaseWidget::selectedTable() const {
+	if (ui.cbImportFrom->currentIndex() == 0) {
+		if (ui.lwTables->currentItem())
+			return ui.lwTables->currentItem()->text();
+	}
+
+	return QString();
+}
+
 /*!
 	loads all available saved connections
 */
@@ -218,7 +227,7 @@ void ImportSQLDatabaseWidget::importFromChanged(int index) {
 	refreshPreview();
 }
 
-void ImportSQLDatabaseWidget::importData(bool showPreview) {
+void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 // 	if (!m_db.isValid()) return;
 // 	if (ui.sbEndRow->value() < ui.sbStartRow->value()) return;
 // 
@@ -251,10 +260,8 @@ void ImportSQLDatabaseWidget::importData(bool showPreview) {
 
 void ImportSQLDatabaseWidget::updateStatus() {
 	QString msg = m_db.lastError().text().simplified();
-	if (msg.isEmpty())
-		msg = "Done";
-
-	emit statusChanged( msg );
+	if (!msg.isEmpty())
+		KMessageBox::error(this, msg, i18n("Database Error"));
 }
 
 /*!

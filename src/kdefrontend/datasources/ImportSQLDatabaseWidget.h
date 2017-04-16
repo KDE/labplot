@@ -30,7 +30,7 @@
 #define IMPORTSQLDATABASEWIDGET_H
 
 #include <QSqlDatabase>
-
+#include "backend/datasources/filters/AbstractFileFilter.h"
 #include "ui_importsqldatabasewidget.h"
 
 class QStandardItemModel;
@@ -41,6 +41,9 @@ class ImportSQLDatabaseWidget : public QWidget {
 public:
 	explicit ImportSQLDatabaseWidget(QWidget*);
 	~ImportSQLDatabaseWidget();
+
+	void read(AbstractDataSource*, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
+	QString selectedTable() const;
 
 private:
 	Ui::ImportSQLDatabaseWidget ui;
@@ -61,11 +64,8 @@ private slots:
 	void importFromChanged(int);
 	void refreshPreview();
 
-	void importData(bool showPreview = false);
-
 signals:
-	void statusChanged(QString);
-
+	void completed(int);
 };
 
 #endif // IMPORTSQLDATABASEWIDGET_H

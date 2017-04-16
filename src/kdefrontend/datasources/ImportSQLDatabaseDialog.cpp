@@ -30,8 +30,14 @@
 #include "ImportSQLDatabaseDialog.h"
 #include "ImportSQLDatabaseWidget.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/lib/macros.h"
 #include "kdefrontend/MainWin.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/matrix/Matrix.h"
+#include "backend/core/Workbook.h"
+#include "commonfrontend/widgets/TreeViewComboBox.h"
 
+#include <QProgressBar>
 #include <QStatusBar>
 
 /*!
@@ -64,14 +70,49 @@ ImportSQLDatabaseDialog::~ImportSQLDatabaseDialog() {
 	saveDialogSize(conf);
 }
 
-void ImportSQLDatabaseDialog::importTo(QStatusBar*) const {
+void ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
+	DEBUG("ImportSQLDatabaseDialog::import()");
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
+	if (!aspect) {
+		DEBUG("ERROR: No aspect available!");
+		return;
+	}
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
+
+	//show a progress bar in the status bar
+	QProgressBar* progressBar = new QProgressBar();
+	progressBar->setMinimum(0);
+	progressBar->setMaximum(100);
+	connect(importSQLDatabaseWidget, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
+
+	statusBar->clearMessage();
+	statusBar->addWidget(progressBar, 1);
+
+	WAIT_CURSOR;
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
+
+	QTime timer;
+	timer.start();
+	if (aspect->inherits("Matrix")) {
+		Matrix* matrix = qobject_cast<Matrix*>(aspect);
+		importSQLDatabaseWidget->read(matrix, mode);
+	}
+	else if (aspect->inherits("Spreadsheet")) {
+		Spreadsheet* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
+		importSQLDatabaseWidget->read(spreadsheet, mode);
+	}
 	
+	statusBar->showMessage( i18n("Data imported in %1 seconds.", (float)timer.elapsed()/1000) );
+
+	RESET_CURSOR;
+	statusBar->removeWidget(progressBar);
 }
 
 QString ImportSQLDatabaseDialog::selectedObject() const {
-	return QString();
+	return importSQLDatabaseWidget->selectedTable();
 }
 
 void ImportSQLDatabaseDialog::checkOkButton() {
-	
+	//don't allow to import into a workbook, the user has to create/select spreadsheet or matrix first.
 }
