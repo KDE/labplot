@@ -40,10 +40,10 @@ class ImportSQLDatabaseDialog : public ImportDialog {
 	Q_OBJECT
 
 public:
-	explicit ImportSQLDatabaseDialog(MainWin*, AbstractAspect*);
+	explicit ImportSQLDatabaseDialog(MainWin*);
 	~ImportSQLDatabaseDialog();
 
-	void import(QStatusBar*) const;
+	void importTo(QStatusBar*) const;
 	virtual QString selectedObject() const;
 	virtual void checkOkButton();
 

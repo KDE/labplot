@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL smooth functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2010 by Knut Franke (knut.franke*gmx.de)
+    Copyright            : (C) 2010 by Knut Franke (knut.franke@gmx.de)
     Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
@@ -26,14 +26,14 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "nsl_smooth.h"
+#include "nsl_common.h"
+#include "nsl_sf_kernel.h"
+#include "nsl_stats.h"
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_sf_gamma.h>   /* gsl_sf_choose */
-#include "nsl_common.h"
-#include "nsl_smooth.h"
-#include "nsl_sf_kernel.h"
-#include "nsl_stats.h"
 
 const char* nsl_smooth_type_name[] = { i18n("moving average (central)"), i18n("moving average (lagged)"), i18n("percentile"), i18n("Savitzky-Golay") };
 const char* nsl_smooth_pad_mode_name[] = { i18n("none"), i18n("interpolating"), i18n("mirror"), i18n("nearest"), i18n("constant"), i18n("periodic") };
@@ -409,16 +409,16 @@ void nsl_smooth_pad_constant_set(double lvalue, double rvalue) {
 }
 
 int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigned int order, nsl_smooth_pad_mode mode) {
-	unsigned int i,k;
-	int error=0;
-	unsigned int half=(points-1)/2;	/* n//2 */
+	unsigned int i, k;
+	int error = 0;
+	unsigned int half = (points-1)/2;	/* n//2 */
 
 	if (points > n) {
-		printf("Tried to smooth over more points (points=%d) than given as input (%d).",points, n);
+		printf("Tried to smooth over more points (points=%u) than given as input (%u).", points, n);
 		return -1;
 	}
-	if (order <1 || order > points-1) {
-		printf("The polynomial order must be between 1 and %d (%d given)!",points-1,order);
+	if (order < 1 || order > points-1) {
+		printf("The polynomial order must be between 1 and %u (%u given).", points-1, order);
 		return -2;
 	}
 
@@ -432,14 +432,14 @@ int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigne
 	}
 
 	double *result = (double *)malloc(n*sizeof(double));
-	for (i=0; i<n; i++)
-		result[i]=0;
+	for (i = 0; i < n; i++)
+		result[i] = 0;
 
 	/* left edge */
 	if(mode == nsl_smooth_pad_none) {
-		for (i=0; i<half; i++) {
+		for (i = 0; i < half; i++) {
 			/*reduce points and order*/
-			unsigned int rpoints=2*i+1, rorder=GSL_MIN(order,rpoints-GSL_MIN(rpoints,2));
+			unsigned int rpoints = 2*i+1, rorder = GSL_MIN(order, rpoints-GSL_MIN(rpoints, 2));
 
 			gsl_matrix *rh = gsl_matrix_alloc(rpoints, rpoints);
 			error = nsl_smooth_savgol_coeff(rpoints, rorder, rh);
@@ -450,12 +450,12 @@ int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigne
 				return error;
 			}
 			
-			for (k=0; k<rpoints; k++)
+			for (k = 0; k < rpoints; k++)
 				result[i] += gsl_matrix_get(rh, i, k) * data[k];
 		}
 	} else {
-		for (i=0; i<half; i++) {
-			for (k=0; k<points; k++)
+		for (i = 0; i < half; i++) {
+			for (k = 0; k < points; k++)
 				switch(mode) {
 				case nsl_smooth_pad_interp:
 					result[i] += gsl_matrix_get(h, i, k) * data[k];
@@ -474,22 +474,22 @@ int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigne
 					break;
 				case nsl_smooth_pad_periodic:
 					result[i] += gsl_matrix_get(h, half, k) * data[k<half-i?n+i+k-half:i-half+k];
-				default:
+				case nsl_smooth_pad_none:
 					break;
 				}
 		}
 	}
 
 	/* central part: convolve with fixed row of h */
-	for (i=half; i<n-half; i++)
-		for (k=0; k<points; k++)
+	for (i = half; i < n-half; i++)
+		for (k = 0; k < points; k++)
 			result[i] += gsl_matrix_get(h, half, k) * data[i-half+k];
 
 	/* right edge */
 	if(mode == nsl_smooth_pad_none) {
-		for (i=n-half; i<n; i++) {
+		for (i = n-half; i < n; i++) {
 			/*reduce points and order*/
-			unsigned int rpoints=2*(n-1-i)+1, rorder=GSL_MIN(order,rpoints-GSL_MIN(2,rpoints));
+			unsigned int rpoints = 2*(n-1-i) + 1, rorder=GSL_MIN(order, rpoints-GSL_MIN(2, rpoints));
 
 			gsl_matrix *rh = gsl_matrix_alloc(rpoints, rpoints);
 			error = nsl_smooth_savgol_coeff(rpoints, rorder, rh);
@@ -500,12 +500,12 @@ int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigne
 				return error;
 			}
 			
-			for (k=0; k<rpoints; k++)
+			for (k = 0; k < rpoints; k++)
 				result[i] += gsl_matrix_get(rh, n-1-i, k) * data[n-rpoints+k];
 		}
 	} else {
-		for (i=n-half; i<n; i++) {
-			for (k=0; k<points; k++)
+		for (i = n-half; i < n; i++) {
+			for (k = 0; k < points; k++)
 				switch(mode) {
 				case nsl_smooth_pad_interp:
 					result[i] += gsl_matrix_get(h, points-n+i, k) * data[n-points+k];
@@ -524,7 +524,7 @@ int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigne
 					break;
 				case nsl_smooth_pad_periodic:
 					result[i] += gsl_matrix_get(h, half, k) * data[(i-half+k) % n];
-				default:
+				case nsl_smooth_pad_none:
 					break;
 				}
 		}
@@ -532,8 +532,8 @@ int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigne
 
 	gsl_matrix_free(h);
 
-	for (i=0; i<n; i++)
-		data[i]=result[i];
+	for (i = 0; i < n; i++)
+		data[i] = result[i];
 	free(result);
 
 	return 0;
@@ -542,4 +542,3 @@ int nsl_smooth_savgol(double *data, unsigned int n, unsigned int points, unsigne
 int nsl_smooth_savgol_default( double *data, unsigned int n, unsigned int points, unsigned int order) {
 	return nsl_smooth_savgol(data, n, points, order, nsl_smooth_pad_constant);
 }
-

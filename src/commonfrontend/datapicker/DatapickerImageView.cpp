@@ -578,7 +578,7 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 		point->setPosition(newPos);
 
 		int pointIndex = m_image->indexOfChild<DatapickerPoint>(point, AbstractAspect::IncludeHidden);
-		Q_ASSERT(pointIndex != -1);
+		if (pointIndex == -1) continue;
 		DatapickerImage::ReferencePoints points = m_image->axisPoints();
 		points.scenePos[pointIndex].setX(point->position().x());
 		points.scenePos[pointIndex].setY(point->position().y());

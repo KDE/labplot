@@ -52,20 +52,18 @@ public:
 	explicit ImportDialog(MainWin*);
 	~ImportDialog();
 
-	virtual void import(QStatusBar*) const = 0;
+	virtual void importTo(QStatusBar*) const = 0;
 	void setCurrentIndex(const QModelIndex&);
 	virtual QString selectedObject() const = 0;
 	virtual void checkOkButton() = 0;
 
 protected:
-	void setModel(QAbstractItemModel*, AbstractAspect*);
+	void setModel(QAbstractItemModel*);
 
 	QVBoxLayout* vLayout;
 	TreeViewComboBox* cbAddTo;
 	QLabel* lPosition;
 	QComboBox* cbPosition;
-
-private:
 	MainWin* m_mainWin;
 	QGroupBox* frameAddTo;
 	QToolButton* tbNewDataContainer;

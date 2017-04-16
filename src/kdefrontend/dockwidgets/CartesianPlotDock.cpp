@@ -79,7 +79,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	hboxLayout->addWidget(labelWidget);
 	hboxLayout->setContentsMargins(2,2,2,2);
 	hboxLayout->setSpacing(2);
-
 	//adjust layouts in the tabs
 	for (int i=0; i<ui.tabWidget->count(); ++i) {
 		QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
@@ -178,6 +177,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 
 	ui.verticalLayout->addWidget(frame);
 
+	//TODO: activate the tab again once the functionality is implemented
+	ui.tabWidget->removeTab(2);
+
 	init();
 }
 
@@ -188,6 +190,8 @@ CartesianPlotDock::~CartesianPlotDock() {
 void CartesianPlotDock::init() {
 	this->retranslateUi();
 
+	/*
+	 //TODO: activate later once range breaking is implemented
 	//create icons for the different styles for scale breaking
 	QPainter pa;
 	pa.setPen( QPen(Qt::SolidPattern, 0) );
@@ -231,6 +235,7 @@ void CartesianPlotDock::init() {
 	pa.end();
 	ui.cbXBreakStyle->setItemIcon(2, pm);
 	ui.cbYBreakStyle->setItemIcon(2, pm);
+	*/
 }
 
 void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
@@ -355,10 +360,10 @@ void CartesianPlotDock::retranslateUi() {
 	ui.cbBackgroundType->addItem(i18n("pattern"));
 
 	ui.cbBackgroundColorStyle->addItem(i18n("single color"));
-	ui.cbBackgroundColorStyle->addItem(i18n("horizontal linear gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("vertical linear gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from top left)"));
-	ui.cbBackgroundColorStyle->addItem(i18n("diagonal linear gradient (start from bottom left)"));
+	ui.cbBackgroundColorStyle->addItem(i18n("horizontal gradient"));
+	ui.cbBackgroundColorStyle->addItem(i18n("vertical gradient"));
+	ui.cbBackgroundColorStyle->addItem(i18n("diag. gradient (from top left)"));
+	ui.cbBackgroundColorStyle->addItem(i18n("diag. gradient (from bottom left)"));
 	ui.cbBackgroundColorStyle->addItem(i18n("radial gradient"));
 
 	ui.cbBackgroundImageStyle->addItem(i18n("scaled and cropped"));
@@ -559,6 +564,9 @@ void CartesianPlotDock::removeXBreak() {
 }
 
 void CartesianPlotDock::currentXBreakChanged(int index) {
+	if (m_initializing)
+		return;
+
 	if (index==-1)
 		return;
 
@@ -677,6 +685,9 @@ void CartesianPlotDock::removeYBreak() {
 }
 
 void CartesianPlotDock::currentYBreakChanged(int index) {
+	if (m_initializing)
+		return;
+
 	if (index==-1)
 		return;
 
@@ -770,7 +781,7 @@ void CartesianPlotDock::backgroundTypeChanged(int index) {
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
 		} else {
-			ui.lBackgroundFirstColor->setText(i18n("First Color"));
+			ui.lBackgroundFirstColor->setText(i18n("First color"));
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
 		}
@@ -822,7 +833,7 @@ void CartesianPlotDock::backgroundColorStyleChanged(int index) {
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
 	} else {
-		ui.lBackgroundFirstColor->setText(i18n("First Color"));
+		ui.lBackgroundFirstColor->setText(i18n("First color"));
 		ui.lBackgroundSecondColor->show();
 		ui.kcbBackgroundSecondColor->show();
 		ui.lBackgroundBrushStyle->hide();
@@ -878,7 +889,7 @@ void CartesianPlotDock::selectFile() {
 	QString dir = conf.readEntry("LastImageDir", "");
 
 	QString formats;
-	foreach(const QByteArray format, QImageReader::supportedImageFormats()) {
+	foreach(const QByteArray& format, QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
 		formats.isEmpty() ? formats+=f : formats+=' '+f;
 	}
@@ -905,6 +916,11 @@ void CartesianPlotDock::fileNameChanged() {
 		return;
 
 	QString fileName = ui.kleBackgroundFileName->text();
+	if (!fileName.isEmpty() && !QFile::exists(fileName))
+		ui.kleBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
+	else
+		ui.kleBackgroundFileName->setStyleSheet("");
+
 	foreach(CartesianPlot* plot, m_plotList)
 		plot->plotArea()->setBackgroundFileName(fileName);
 }
@@ -1260,6 +1276,12 @@ void CartesianPlotDock::load() {
 	ui.kcbBackgroundSecondColor->setColor( m_plot->plotArea()->backgroundSecondColor() );
 	ui.sbBackgroundOpacity->setValue( round(m_plot->plotArea()->backgroundOpacity()*100.0) );
 
+	//highlight the text field for the background image red if an image is used and cannot be found
+	if (!m_plot->plotArea()->backgroundFileName().isEmpty() && !QFile::exists(m_plot->plotArea()->backgroundFileName()))
+		ui.kleBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
+	else
+		ui.kleBackgroundFileName->setStyleSheet("");
+
 	//Padding
 	ui.sbPaddingHorizontal->setValue( Worksheet::convertFromSceneUnits(m_plot->horizontalPadding(), Worksheet::Centimeter) );
 	ui.sbPaddingVertical->setValue( Worksheet::convertFromSceneUnits(m_plot->verticalPadding(), Worksheet::Centimeter) );
@@ -1270,10 +1292,7 @@ void CartesianPlotDock::load() {
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderPen().widthF(), Worksheet::Point) );
 	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderCornerRadius(), Worksheet::Centimeter) );
 	ui.sbBorderOpacity->setValue( round(m_plot->plotArea()->borderOpacity()*100) );
-
-	m_initializing=true;
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
-	m_initializing=false;
 }
 
 void CartesianPlotDock::loadConfig(KConfig& config) {
@@ -1352,11 +1371,11 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 }
 
 void CartesianPlotDock::loadTheme(KConfig& config) {
-	foreach(CartesianPlot *plot, m_plotList)
+	foreach(CartesianPlot* plot, m_plotList)
 		plot->loadTheme(config);
 }
 
 void CartesianPlotDock::saveTheme(KConfig& config) {
-	if(m_plotList.empty()==false)
+	if(!m_plotList.isEmpty())
 		m_plotList.at(0)->saveTheme(config);
 }

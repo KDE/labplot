@@ -26,10 +26,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "nsl_sf_poly.h"
 #include <math.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_pow_int.h>
-#include "nsl_sf_poly.h"
 
 /* see https://en.wikipedia.org/wiki/Chebyshev_polynomials */
 double nsl_sf_poly_chebyshev_T(int n, double x) {

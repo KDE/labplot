@@ -250,8 +250,8 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	const nsl_diff_deriv_order_type derivOrder = differentiationData.derivOrder;
 	const int accOrder = differentiationData.accOrder;
 
-	DEBUG_LOG(nsl_diff_deriv_order_name[derivOrder] << "derivative");
-	DEBUG_LOG("accuracy order:" << accOrder);
+	DEBUG(nsl_diff_deriv_order_name[derivOrder] << "derivative");
+	DEBUG("accuracy order:" << accOrder);
 
 ///////////////////////////////////////////////////////////
 	int status=0;

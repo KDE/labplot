@@ -44,10 +44,11 @@ class TextLabelPrivate: public QGraphicsItem {
 		int teXImageResolution;
 		float teXImageScaleFactor;
 		TextLabel::TextWrapper textWrapper;
-		int teXFontSize;
+		QFont teXFont;
 		QColor teXFontColor;
 		QImage teXImage;
 		QFutureWatcher<QImage> teXImageFutureWatcher;
+		bool teXRenderSuccessful;
 
 		TextLabel::PositionWrapper position; //position in parent's coordinate system, the label gets aligned around this point.
 		bool positionInvalid;

@@ -38,7 +38,7 @@
 
 #include <KMessageBox>
 #include <kdebug.h>
-#include <knewstuff3/downloaddialog.h>
+// #include <knewstuff3/downloaddialog.h>
 
 /*!
 	\class ThemesWidget
@@ -81,11 +81,12 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	}
 
 	//adding download themes option
-	QStandardItem* listItem = new QStandardItem();
-	listItem->setIcon(QIcon::fromTheme("get-hot-new-stuff"));
-	listItem->setText("Download Themes");
-	listItem->setData("file_download_theme", Qt::UserRole);
-	mContentItemModel->appendRow(listItem);
+	//TODO: activate this later
+// 	QStandardItem* listItem = new QStandardItem();
+// 	listItem->setIcon(QIcon::fromTheme("get-hot-new-stuff"));
+// 	listItem->setText("Download Themes");
+// 	listItem->setData("file_download_theme", Qt::UserRole);
+// 	mContentItemModel->appendRow(listItem);
 
 	setModel(mContentItemModel);
 
@@ -94,17 +95,19 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 }
 
 void ThemesWidget::applyClicked() {
-	QString themeName = currentIndex().data(Qt::UserRole).value<QString>();
-	if(themeName=="file_download_theme")
-		this->downloadThemes();
-	else
-		emit(themeSelected(themeName));
+	QString themeName = currentIndex().data(Qt::UserRole).toString();
+	//TODO: activate this later
+// 	if(themeName=="file_download_theme")
+// 		this->downloadThemes();
+// 	else
+	emit themeSelected(themeName);
 }
 
-void ThemesWidget::downloadThemes() {
-	KNS3::DownloadDialog dialog("labplot2_themes.knsrc", this);
-	dialog.exec();
-	foreach (const KNS3::Entry& e, dialog.changedEntries()) {
-	    kDebug() << "Changed Entry: " << e.name();
-	}
-}
+//TODO: activate this later
+// void ThemesWidget::downloadThemes() {
+// 	KNS3::DownloadDialog dialog("labplot2_themes.knsrc", this);
+// 	dialog.exec();
+// 	foreach (const KNS3::Entry& e, dialog.changedEntries()) {
+// 	    kDebug() << "Changed Entry: " << e.name();
+// 	}
+// }

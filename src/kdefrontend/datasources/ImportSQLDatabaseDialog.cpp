@@ -40,14 +40,14 @@
 
 	\ingroup kdefrontend
  */
-ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent, AbstractAspect* currentAspect): ImportDialog(parent),
+ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent) : ImportDialog(parent),
 	importSQLDatabaseWidget(new ImportSQLDatabaseWidget(this)) {
 
 	vLayout->addWidget(importSQLDatabaseWidget);
 
 	setButtons( KDialog::Ok | KDialog::Cancel );
 
-	setModel(parent->model(), currentAspect);
+	setModel(parent->model());
 
 // 	connect( importSQLDatabaseWidget, SIGNAL(statusChanged(QString)), m_statusBar, SLOT(showMessage(QString)) );
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
@@ -64,7 +64,7 @@ ImportSQLDatabaseDialog::~ImportSQLDatabaseDialog() {
 	saveDialogSize(conf);
 }
 
-void ImportSQLDatabaseDialog::import(QStatusBar*) const {
+void ImportSQLDatabaseDialog::importTo(QStatusBar*) const {
 	
 }
 

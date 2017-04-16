@@ -65,7 +65,6 @@ Matrix::Matrix(AbstractScriptingEngine* engine, int rows, int cols, const QStrin
 	appendRows(rows);
 
 	init();
-
 }
 
 Matrix::Matrix(AbstractScriptingEngine* engine, const QString& name, bool loading)
@@ -138,7 +137,7 @@ bool Matrix::exportView() const {
 	}
 
 	bool ret;
-	if ((ret = dlg->exec()==QDialog::Accepted)) {
+	if ( (ret = (dlg->exec()==QDialog::Accepted)) ) {
 		const QString path = dlg->path();
 		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
 		WAIT_CURSOR;
@@ -169,9 +168,9 @@ bool Matrix::exportView() const {
 bool Matrix::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
-    	bool ret;
+	bool ret;
 	dlg->setWindowTitle(i18n("Print Matrix"));
-    	if ((ret = dlg->exec() == QDialog::Accepted)) {
+	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
 		const MatrixView* view = reinterpret_cast<const MatrixView*>(m_view);
 		view->print(&printer);
 	}
@@ -213,14 +212,6 @@ void Matrix::setSuppressDataChangedSignal(bool b) {
 void Matrix::setChanged() {
 	if (m_model)
 		m_model->setChanged();
-}
-
-int Matrix::defaultRowHeight() const {
-	return d->defaultRowHeight;
-}
-
-int Matrix::defaultColumnWidth() const {
-	return d->defaultRowHeight*3;
 }
 
 //##############################################################################
@@ -412,7 +403,6 @@ void Matrix::copy(Matrix* other) {
 	RESET_CURSOR;
 }
 
-
 //! Duplicate the matrix inside its folder
 void Matrix::duplicate() {
 	Matrix* matrix = new Matrix(0, rowCount(), columnCount(), name());
@@ -538,10 +528,7 @@ void Matrix::mirrorVertically() {
 //##############################################################################
 
 MatrixPrivate::MatrixPrivate(Matrix* owner) : q(owner), columnCount(0), rowCount(0), suppressDataChange(false) {
-	QFont font;
-	font.setFamily(font.defaultFamily());
-	QFontMetrics fm(font);
-	defaultRowHeight = fm.height();
+
 }
 
 void MatrixPrivate::updateViewHeader() {
@@ -558,7 +545,7 @@ void MatrixPrivate::insertColumns(int before, int count) {
 	emit q->columnsAboutToBeInserted(before, count);
 	for(int i=0; i<count; i++) {
 		matrixData.insert(before+i, QVector<double>(rowCount));
-		columnWidths.insert(before+i, q->defaultColumnWidth());
+		columnWidths.insert(before+i, 0);
 	}
 
 	columnCount += count;
@@ -590,7 +577,7 @@ void MatrixPrivate::insertRows(int before, int count) {
 		for(int i=0; i<count; i++)
 			matrixData[col].insert(before+i, 0.0);
 	for(int i=0; i<count; i++)
-		rowHeights.insert(before+i, defaultRowHeight);
+		rowHeights.insert(before+i, 0);
 
 	rowCount += count;
 	emit q->rowsInserted(before, count);

@@ -93,7 +93,7 @@ ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 	loads all available saved connections
 */
 void ImportSQLDatabaseWidget::readConnections() {
-	DEBUG_LOG("ImportSQLDatabaseWidget: reading available connections");
+	DEBUG("ImportSQLDatabaseWidget: reading available connections");
 	KConfig config(m_configPath, KConfig::SimpleConfig);
 	foreach(QString name, config.groupList())
 		ui.cbConnection->addItem(name);
@@ -103,7 +103,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	if (m_initializing)
 		return;
 
-	DEBUG_LOG("ImportSQLDatabaseWidget: connecting to " + ui.cbConnection->currentText());
+	QDEBUG("ImportSQLDatabaseWidget: connecting to " + ui.cbConnection->currentText());
 
 	//clear the previously shown content
 	ui.teQuery->clear();

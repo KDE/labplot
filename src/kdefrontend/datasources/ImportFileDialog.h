@@ -42,14 +42,14 @@ class ImportFileDialog : public ImportDialog {
 	Q_OBJECT
 
 public:
-	explicit ImportFileDialog(MainWin*, AbstractAspect* currentAspect = 0, const QString& fileName = QString(), bool fileDataSource = false);
+	explicit ImportFileDialog(MainWin*, bool fileDataSource = false, const QString& fileName = QString());
 	~ImportFileDialog();
 
 	virtual QString selectedObject() const;
 	virtual void checkOkButton();
 
 	void importToFileDataSource(FileDataSource*, QStatusBar*) const;
-	virtual void import(QStatusBar*) const;
+	virtual void importTo(QStatusBar*) const;
 
 private:
 	ImportFileWidget* importFileWidget;
@@ -57,7 +57,9 @@ private:
 
 private slots:
 	void toggleOptions();
-	void checkOnFitsTableToMatrix();
+	void newDataContainerMenu();
+	void newDataContainer(QAction*);
+	void checkOnFitsTableToMatrix(const bool enable);
 };
 
 #endif //IMPORTFILEDIALOG_H

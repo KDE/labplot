@@ -152,11 +152,13 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 		addChild(matrix);
 	} else if (element_name == "worksheet") {
 		Worksheet* worksheet = new Worksheet(0, "");
+		worksheet->setIsLoading(true);
 		if (!worksheet->load(reader)){
 			delete worksheet;
 			return false;
 		}
 		addChild(worksheet);
+		worksheet->setIsLoading(false);
 	} else if (element_name == "fileDataSource") {
 		FileDataSource* fileDataSource = new FileDataSource(0, "", true);
 		if (!fileDataSource->load(reader)){

@@ -269,6 +269,14 @@ void AbstractAspect::setHidden(bool value) {
 			"aspectHiddenAboutToChange", "aspectHiddenChanged", Q_ARG(const AbstractAspect*,this));
 }
 
+void AbstractAspect::setIsLoading(bool load) {
+	d->m_isLoading = load;
+}
+
+bool AbstractAspect::isLoading() const {
+	return d->m_isLoading;
+}
+
 /**
  * \brief Return an icon to be used for decorating my views.
  */
@@ -301,7 +309,7 @@ QMenu* AbstractAspect::createContextMenu() {
 /**
  * \brief Return my parent Aspect or 0 if I currently don't have one.
  */
-AbstractAspect * AbstractAspect::parentAspect() const {
+AbstractAspect* AbstractAspect::parentAspect() const {
 	return d->m_parent;
 }
 
@@ -783,7 +791,8 @@ void AbstractAspect::connectChild(AbstractAspect* child) {
 //######################  Private implementation ###############################
 //##############################################################################
 AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QString& name)
-	: m_name(name.isEmpty() ? "1" : name), m_hidden(false), q(owner), m_parent(0), m_undoAware(true)
+	: m_name(name.isEmpty() ? "1" : name), m_hidden(false), q(owner), m_parent(0),
+	m_undoAware(true), m_isLoading(false) 
 {
 	m_creation_time = QDateTime::currentDateTime();
 }

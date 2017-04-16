@@ -32,6 +32,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/core/Workbook.h"
+#include "backend/lib/macros.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/MainWin.h"
 
@@ -72,8 +73,8 @@ ImportDialog::~ImportDialog() {
 /*!
 	creates widgets for the frame "Import-To" and sets the current model in the combobox to \c model.
  */
-void ImportDialog::setModel(QAbstractItemModel* model, AbstractAspect* currentAspect) {
-	DEBUG_LOG("ImportDialog::setModel() model ="<<model);
+void ImportDialog::setModel(QAbstractItemModel* model) {
+	DEBUG("ImportDialog::setModel() model ="<<model);
 
 	//Frame for the "Import To"-Stuff
 	frameAddTo = new QGroupBox(this);
@@ -126,24 +127,15 @@ void ImportDialog::setModel(QAbstractItemModel* model, AbstractAspect* currentAs
 	connect(cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(modelIndexChanged()));
 	connect(tbNewDataContainer, SIGNAL(clicked(bool)), this, SLOT(newDataContainerMenu()));
 	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
-	
-	// select existing container
-	if (currentAspect) {
-		if (currentAspect->inherits("Spreadsheet") || currentAspect->inherits("Matrix") || currentAspect->inherits("Workbook"))
-			setCurrentIndex( static_cast<AspectTreeModel*>(model)->modelIndexOfAspect(currentAspect) );
-		else if (currentAspect->inherits("Column")) {
-			if (currentAspect->parentAspect()->inherits("Spreadsheet"))
-				setCurrentIndex( static_cast<AspectTreeModel*>(model)->modelIndexOfAspect(currentAspect->parentAspect()) );
-		}
-	}
 
-	DEBUG_LOG("ImportDialog::setModel() DONE");
+	DEBUG("ImportDialog::setModel() DONE");
 }
 
 void ImportDialog::setCurrentIndex(const QModelIndex& index) {
-	DEBUG_LOG("ImportDialog::setCurrentIndex() index ="<<index);
+	DEBUG("ImportFileDialog::setCurrentIndex()");
+	QDEBUG(" index =" << index);
 	cbAddTo->setCurrentModelIndex(index);
-	DEBUG_LOG("cbAddTo->currentModelIndex() ="<<cbAddTo->currentModelIndex());
+	QDEBUG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	checkOkButton();
 }
 
@@ -168,7 +160,7 @@ void ImportDialog::newDataContainer(QAction* action) {
 			aspect = new Matrix(0, name);
 
 		m_mainWin->addAspectToProject(aspect);
-		DEBUG_LOG("cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
+		QDEBUG("cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
 		cbAddTo->setCurrentModelIndex(m_mainWin->model()->modelIndexOfAspect(aspect));
 		checkOkButton();
 	}

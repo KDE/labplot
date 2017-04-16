@@ -3,7 +3,7 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
-    Description          : general settings dialog
+    Description          : application settings dialog
                            
  ***************************************************************************/
 
@@ -27,6 +27,7 @@
  ***************************************************************************/
 #include "SettingsDialog.h"
 #include "SettingsGeneralPage.h"
+#include "SettingsWorksheetPage.h"
 
 #include <KMessageBox>
 
@@ -37,9 +38,6 @@
  *
  */
 SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent), m_changed(false) {
-	const QSize minSize = minimumSize();
-	setMinimumSize(QSize(512, minSize.height()));
-
 	setFaceType(List);
 	setCaption(i18n("Preferences"));
 	setWindowIcon(KIcon("preferences-other"));
@@ -52,6 +50,11 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent), m_changed
 	KPageWidgetItem* generalFrame = addPage(generalPage, i18n("General"));
 	generalFrame->setIcon(KIcon("system-run"));
 	connect(generalPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
+
+	worksheetPage = new SettingsWorksheetPage(this);
+	KPageWidgetItem* worksheetFrame = addPage(worksheetPage, i18n("Worksheet"));
+	worksheetFrame->setIcon(KIcon(QLatin1String("labplot-worksheet")));
+	connect(worksheetPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
 
 	KConfigGroup conf(KSharedConfig::openConfig(), "SettingsDialog");
 	restoreDialogSize(conf);
@@ -90,6 +93,7 @@ void SettingsDialog::changed() {
 void SettingsDialog::applySettings() {
 	m_changed = false;
 	generalPage->applySettings();
+	worksheetPage->applySettings();
 	KGlobal::config()->sync();	
 	emit settingsChanged();
 }
@@ -97,4 +101,5 @@ void SettingsDialog::applySettings() {
 void SettingsDialog::restoreDefaults(){
 	m_changed = false;
 	generalPage->restoreDefaults();
+	worksheetPage->restoreDefaults();
 }

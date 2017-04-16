@@ -38,6 +38,7 @@ class FileInfoDialog: public KDialog {
 
 	public:
 		explicit FileInfoDialog(QWidget* parent);
+		~FileInfoDialog();
 		void setFiles(QStringList&);
 
 	private:

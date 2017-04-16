@@ -7,25 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>457</width>
-    <height>147</height>
+    <height>93</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Enter the unit</string>
+      <string>Unit</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item>
     <widget class="KLineEdit" name="kleUnit">
-     <property name="placeholderText">
-      <string>Enter search term here</string>
-     </property>
      <property name="showClearButton" stdset="0">
       <bool>true</bool>
      </property>

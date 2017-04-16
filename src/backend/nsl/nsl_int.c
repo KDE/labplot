@@ -29,8 +29,8 @@
 	* absolute area for Simpson/Simpson-3/8 rules (needs more numerics)
 */
 
-#include "nsl_common.h"
 #include "nsl_int.h"
+#include "nsl_common.h"
 #include "nsl_sf_poly.h"
 
 

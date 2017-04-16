@@ -55,7 +55,7 @@
 	\ingroup kdefrontend
  */
 
-ImportFileDialog::ImportFileDialog(MainWin* parent, AbstractAspect* currentAspect, const QString& fileName, bool fileDataSource) : ImportDialog(parent),
+ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const QString& fileName) : ImportDialog(parent),
 	importFileWidget(new ImportFileWidget(this, fileName)),
 	m_showOptions(false) {
 
@@ -65,14 +65,14 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, AbstractAspect* currentAspec
 
 	//hide the data-source related widgets
 	if (!fileDataSource) {
-		setModel(parent->model(), currentAspect);
+		setModel(parent->model());
 		//TODO: disable for file data sources
 		importFileWidget->hideDataSource();
 	}
 
-	connect(this,SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
+	connect(this, SIGNAL(user1Clicked()), this, SLOT(toggleOptions()));
 	connect(importFileWidget, SIGNAL(fileNameChanged()), this, SLOT(checkOkButton()));
-    connect(importFileWidget, SIGNAL(checkedFitsTableToMatrix()), this, SLOT(checkOnFitsTableToMatrix()));
+	connect(importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
 
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
 	setWindowIcon(KIcon("document-import-database"));
@@ -103,8 +103,7 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
 
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
-	progressBar->setMinimum(0);
-	progressBar->setMaximum(100);
+	progressBar->setRange(0, 100);
 	connect(source->filter(), SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
 
 	statusBar->clearMessage();
@@ -122,12 +121,14 @@ void ImportFileDialog::importToFileDataSource(FileDataSource* source, QStatusBar
 /*!
   triggers data import to the currently selected data container
 */
-void ImportFileDialog::import(QStatusBar* statusBar) const {
-	DEBUG_LOG("ImportFileDialog::importTo()");
-	DEBUG_LOG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
+void ImportFileDialog::importTo(QStatusBar* statusBar) const {
+	DEBUG("ImportFileDialog::importTo()");
+	QDEBUG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
-		DEBUG_LOG("ERROR: No aspect available!");
+		DEBUG("ERROR in importTo(): No aspect available");
+		DEBUG("cbAddTo->currentModelIndex().isValid() = " << cbAddTo->currentModelIndex().isValid());
+		DEBUG("cbAddTo->currentModelIndex() row/column = " << cbAddTo->currentModelIndex().row() << ' ' << cbAddTo->currentModelIndex().column());
 		return;
 	}
 
@@ -137,8 +138,7 @@ void ImportFileDialog::import(QStatusBar* statusBar) const {
 
 	//show a progress bar in the status bar
 	QProgressBar* progressBar = new QProgressBar();
-	progressBar->setMinimum(0);
-	progressBar->setMaximum(100);
+	progressBar->setRange(0, 100);
 	connect(filter, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
 
 	statusBar->clearMessage();
@@ -152,13 +152,10 @@ void ImportFileDialog::import(QStatusBar* statusBar) const {
 	if (aspect->inherits("Matrix")) {
 		Matrix* matrix = qobject_cast<Matrix*>(aspect);
 		filter->read(fileName, matrix, mode);
-	}
-	else if (aspect->inherits("Spreadsheet")) {
+	} else if (aspect->inherits("Spreadsheet")) {
 		Spreadsheet* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
-		DEBUG_LOG("calling filter->read()");
 		filter->read(fileName, spreadsheet, mode);
-	}
-	else if (aspect->inherits("Workbook")) {
+	} else if (aspect->inherits("Workbook")) {
 		Workbook* workbook = qobject_cast<Workbook*>(aspect);
 		QList<AbstractAspect*> sheets = workbook->children<AbstractAspect>();
 
@@ -168,8 +165,8 @@ void ImportFileDialog::import(QStatusBar* statusBar) const {
 			names = importFileWidget->selectedHDFNames();
 		else if (fileType == FileDataSource::NETCDF)
 			names = importFileWidget->selectedNetCDFNames();
-        //TODO
-        //multiple extensions selected
+		//TODO
+		//multiple extensions selected
 
 		// multiple data sets/variables for HDF/NetCDF
 		if (fileType == FileDataSource::HDF || fileType == FileDataSource::NETCDF) {
@@ -238,29 +235,69 @@ void ImportFileDialog::toggleOptions() {
 	resize( QSize(this->width(), 0).expandedTo(minimumSize()) );
 }
 
-void ImportFileDialog::checkOnFitsTableToMatrix() {
+void ImportFileDialog::newDataContainer(QAction* action) {
+	DEBUG("ImportFileDialog::newDataContainer()");
+	QString path = importFileWidget->fileName();
+	QString name = path.right( path.length()-path.lastIndexOf(QDir::separator())-1 );
+
+	QString type = action->iconText().split(' ')[1];
+	if (name.isEmpty())
+		name = action->iconText();
+
+	bool ok;
+	// child widgets can't have own icons
+	QInputDialog* dlg = new QInputDialog(this);
+	name = dlg->getText(this, i18n("Add %1", action->iconText()), i18n("%1 name:", type), QLineEdit::Normal, name, &ok);
+	if (ok) {
+		AbstractAspect* aspect;
+		int actionIndex = m_newDataContainerMenu->actions().indexOf(action);
+		if (actionIndex == 0)
+			aspect = new Workbook(0, name);
+		else if (actionIndex == 1)
+			aspect = new Spreadsheet(0, name);
+		else
+			aspect = new Matrix(0, name);
+
+		m_mainWin->addAspectToProject(aspect);
+		QDEBUG("cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
+		cbAddTo->setCurrentModelIndex(m_mainWin->model()->modelIndexOfAspect(aspect));
+		checkOkButton();
+	}
+
+	delete dlg;
+}
+
+void ImportFileDialog::newDataContainerMenu() {
+	m_newDataContainerMenu->exec( tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
+}
+
+void ImportFileDialog::checkOnFitsTableToMatrix(const bool enable) {
 	if (cbAddTo) {
-		DEBUG_LOG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
+		QDEBUG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
-		if (!aspect)
+		if (!aspect) {
+			DEBUG("ERROR: no aspect available.");
 			return;
+		}
 
 		if(aspect->inherits("Matrix"))
-			enableButtonOk(importFileWidget->canReadFitsTableToMatrix());
+			enableButtonOk(enable);
 	}
 }
 
 void ImportFileDialog::checkOkButton() {
-	DEBUG_LOG("ImportFileDialog::checkOkButton()");
+	DEBUG("ImportFileDialog::checkOkButton()");
 	if (cbAddTo) { //only check for the target container when no file data source is being added
+		QDEBUG(" cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
-		DEBUG_LOG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
 		if (!aspect) {
 			enableButtonOk(false);
 			lPosition->setEnabled(false);
 			cbPosition->setEnabled(false);
+			DEBUG("WARNING: no aspect available.");
 			return;
 		} else {
+			DEBUG("Aspect available.");
 			lPosition->setEnabled(true);
 			cbPosition->setEnabled(true);
 
@@ -273,7 +310,7 @@ void ImportFileDialog::checkOkButton() {
 
 	QString fileName = importFileWidget->fileName();
 	if (importFileWidget->currentFileType() != FileDataSource::FITS) {
-#ifndef _WIN32
+#ifndef HAVE_WINDOWS
 		if (!fileName.isEmpty() && fileName.left(1) != QDir::separator())
 			fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
@@ -290,13 +327,14 @@ void ImportFileDialog::checkOkButton() {
 			}
 		}
 
-		if (fileName.left(1) != QDir::separator()) {
+		if (fileName.left(1) != QDir::separator())
 			fileName = QDir::homePath() + QDir::separator() + fileName.mid(0, extensionBraceletPos);
-		} else {
+		else
 			fileName = fileName.mid(0, extensionBraceletPos);
-		}
-    	}
-    	enableButtonOk( QFile::exists(fileName) ) ;
+	}
+	DEBUG(" fileName = " << fileName.toUtf8().constData());
+
+	enableButtonOk( QFile::exists(fileName) ) ;
 }
 
 QString ImportFileDialog::selectedObject() const {

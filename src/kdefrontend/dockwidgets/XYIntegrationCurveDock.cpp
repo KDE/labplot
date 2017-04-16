@@ -128,7 +128,8 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	}
 
 	//show the properties of the first curve
-	m_integrationCurve = dynamic_cast<XYIntegrationCurve*>(m_curve);
+	if (m_curve != 0)
+		m_integrationCurve = dynamic_cast<XYIntegrationCurve*>(m_curve);
 	Q_ASSERT(m_integrationCurve);
 	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_integrationCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_integrationCurve->yDataColumn());
@@ -306,7 +307,8 @@ void XYIntegrationCurveDock::methodChanged() {
 	case nsl_int_method_trapezoid:
 		uiGeneralTab.cbAbsolute->setEnabled(true);
 		break;
-	default:
+	case nsl_int_method_simpson:
+	case nsl_int_method_simpson_3_8:
 		uiGeneralTab.cbAbsolute->setChecked(false);
 		uiGeneralTab.cbAbsolute->setEnabled(false);
 	}

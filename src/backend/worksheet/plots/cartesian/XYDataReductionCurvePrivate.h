@@ -26,8 +26,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef XYINTERPOLATIONCURVEPRIVATE_H
-#define XYINTERPOLATIONCURVEPRIVATE_H
+#ifndef XYDATAREDUCTIONCURVEPRIVATE_H
+#define XYDATAREDUCTIONCURVEPRIVATE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"

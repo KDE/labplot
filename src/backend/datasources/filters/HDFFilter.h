@@ -27,23 +27,23 @@ Copyright            : (C) 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
 #ifndef HDFFILTER_H
 #define HDFFILTER_H
 
-#include <QStringList>
-#include <QTreeWidgetItem>
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include <QStringList>
 
+class QTreeWidgetItem;
 class HDFFilterPrivate;
-class HDFFilter : public AbstractFileFilter{
+
+class HDFFilter : public AbstractFileFilter {
 	Q_OBJECT
 
-  public:
-
+public:
 	HDFFilter();
 	~HDFFilter();
 
-	void parse(const QString & fileName, QTreeWidgetItem* rootItem);
-	void read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
-	QString readCurrentDataSet(const QString & fileName, AbstractDataSource* dataSource, bool &ok, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
-	void write(const QString & fileName, AbstractDataSource* dataSource);
+	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
+	void read(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace);
+	QList <QStringList> readCurrentDataSet(const QString& fileName, AbstractDataSource* dataSource, bool& ok, AbstractFileFilter::ImportMode importMode=AbstractFileFilter::Replace, int lines=-1);
+	void write(const QString& fileName, AbstractDataSource*);
 
 	void loadFilterSettings(const QString&);
 	void saveFilterSettings(const QString&) const;
@@ -63,7 +63,7 @@ class HDFFilter : public AbstractFileFilter{
 	virtual void save(QXmlStreamWriter*) const;
 	virtual bool load(XmlStreamReader*);
 
-  private:
+private:
 	HDFFilterPrivate* const d;
 	friend class HDFFilterPrivate;
 };

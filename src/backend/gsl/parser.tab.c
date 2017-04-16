@@ -1635,7 +1635,7 @@ yyerrorlab:
   /* Pacify compilers like GCC when the user code never invokes
      YYERROR and the label yyerrorlab therefore never appears in user
      code.  */
-  if (/*CONSTCOND*/ 0)
+  if (/*CONSTCOND*/ (0))
      goto yyerrorlab;
 
   /* Do not reclaim the symbols of the rule which action triggered
@@ -1847,8 +1847,9 @@ symrec* assign_variable(const char* symb_name, double value) {
 static int getcharstr(param *p) {
 	pdebug("PARSER: getcharstr() pos = %d\n", p->pos);
 
-	if (p->string[p->pos] == '\0' )
+	if (p->string[p->pos] == '\0')
 		return EOF;
+	pdebug("next char is %c\n", p->string[p->pos]);
 	return (int) p->string[(p->pos)++];
 }
 
@@ -1872,12 +1873,15 @@ double parse(const char *str) {
 
 	strncpy(p.string, str, slen);
 	p.string[strlen(p.string)] = '\n';
+	pdebug("\nPARSER: yyparse(\"%s\") len=%zu\n", p.string, strlen(p.string));
 
 	/* parameter for yylex */
 	yyparse(&p);
 
 	pdebug("PARSER: parse() DONE (res = %g, parse errors = %d)\n", res, parse_errors());
 	free(p.string);
+	p.string = 0;
+
 	return res;
 }
 
@@ -1902,6 +1906,12 @@ int yylex(param *p) {
 	/* finish if reached EOF */
 	if (c == EOF) {
 		pdebug("FINISHED\n");
+		return 0;
+	}
+	/* check for non-ASCII chars */
+	if (!isascii(c)) {
+		pdebug("non-ASCII character found. Giving up\n");
+		yynerrs++;
 		return 0;
 	}
 
@@ -1933,7 +1943,7 @@ int yylex(param *p) {
 
 		pdebug("PARSER: result = %g\n", result);
 
-		yylval.dval=result;
+		yylval.dval = result;
 
                 p->pos += strlen(s) - strlen(remain);
 
@@ -1941,16 +1951,17 @@ int yylex(param *p) {
 	}
 
 	if (isalpha (c) || c == '.') {
-		pdebug("PARSER: reading identifier (starts with alpha)\n");
+		pdebug("PARSER: reading identifier (starts with alpha: %c)\n", c);
 		static char *symbuf = 0;
 		static int length = 0;
 		int i = 0;
 
-		/* Initially make the buffer long enough for a 20-character symbol name */
+		/* Initially make the buffer long enough for a 10-character symbol name */
 		if (length == 0)
-			length = 20, symbuf = (char *) malloc(length + 1);
+			length = 10, symbuf = (char *) malloc(length + 1);
 
 		do {
+			pdebug("reading symbol .. ");
 			/* If buffer is full, make it bigger */
 			if (i == length) {
 				length *= 2;
@@ -1958,15 +1969,19 @@ int yylex(param *p) {
 			}
 			symbuf[i++] = c;
 			c = getcharstr(p);
+			pdebug("got %c\n", c);
 		}
 		while (c != EOF && (isalnum(c) || c == '_' || c == '.'));
+		pdebug("reading symbol done\n");
 
-		ungetcstr(&(p->pos));
+		if (c != EOF)
+			ungetcstr(&(p->pos));
 		symbuf[i] = '\0';
 
 		symrec *s = getsym(symbuf);
 		if(s == 0) {	/* symbol unknown */
 			pdebug("PARSER: ERROR: symbol \"%s\" UNKNOWN\n", symbuf);
+			yynerrs++;
 			return 0;
 		}
 		/* old behavior */

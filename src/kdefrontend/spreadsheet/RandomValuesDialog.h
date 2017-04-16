@@ -47,7 +47,7 @@ class RandomValuesDialog : public KDialog{
 		Ui::RandomValuesWidget ui;
 		QList<Column*> m_columns;
 		Spreadsheet* m_spreadsheet;
-		QMap<int, QString> m_formulaPixs;
+//		QMap<int, QString> m_formulaPixs;
 
 	private slots:
 		void generate();

@@ -29,17 +29,10 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AbstractColumnPrivate.h"
 #include "backend/core/abstractcolumncommands.h"
-#include "backend/lib/Interval.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/SignallingUndoCommand.h"
 
-#include <QtXml/QXmlStreamWriter>
-#include <QtCore/QString>
-#include <QtCore/QDateTime>
-#include <QtCore/QDate>
-#include <QtCore/QTime>
-#include <QMetaType>
-#include <QDebug>
+#include <QDateTime>
 #include <KLocale>
 #include <cmath>
 
@@ -91,7 +84,7 @@ AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name),
 }
 
 AbstractColumn::~AbstractColumn() {
-	aboutToBeDestroyed(this);
+	emit aboutToBeDestroyed(this);
 	delete m_abstract_column_private;
 }
 
@@ -238,7 +231,7 @@ bool AbstractColumn::isMasked(int row) const {
 }
 
 /**
- * \brief Return whether a certain interval of rows rows is fully masked
+ * \brief Return whether a certain interval of rows is fully masked
  */
 bool AbstractColumn::isMasked(Interval<int> i) const {
 	return m_abstract_column_private->m_masking.isSet(i);
@@ -628,11 +621,10 @@ bool AbstractColumn::XmlReadMask(XmlStreamReader *reader) {
  * \brief Write XML mask element
  */
 void AbstractColumn::XmlWriteMask(QXmlStreamWriter *writer) const {
-	foreach(const Interval<int>& interval, maskedIntervals()) {
+	foreach (const Interval<int>& interval, maskedIntervals()) {
 		writer->writeStartElement("mask");
 		writer->writeAttribute("start_row", QString::number(interval.start()));
 		writer->writeAttribute("end_row", QString::number(interval.end()));
 		writer->writeEndElement();
 	}
 }
-

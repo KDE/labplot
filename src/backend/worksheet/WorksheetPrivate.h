@@ -32,6 +32,7 @@
 #include <QBrush>
 
 class Worksheet;
+class WorksheetElementContainer;
 class QGraphicsScene;
 
 class WorksheetPrivate{
@@ -47,7 +48,8 @@ class WorksheetPrivate{
 
 		QString name() const;
 		void update();
-		void updateLayout();
+		void updateLayout(bool undoable = true);
+		void setContainerRect(WorksheetElementContainer*, float x, float y, float h, float w, bool undoable);
 		void updatePageRect();
 
 		PlotArea::BackgroundType backgroundType;

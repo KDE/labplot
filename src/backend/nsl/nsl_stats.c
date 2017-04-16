@@ -26,9 +26,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "nsl_stats.h"
 #include <math.h>
 #include <gsl/gsl_sort.h>
-#include "nsl_stats.h"
 
 double nsl_stats_minimum(const double data[], const size_t n, size_t *index) {
 	size_t i;
@@ -37,7 +37,7 @@ double nsl_stats_minimum(const double data[], const size_t n, size_t *index) {
 	if (index != NULL) 
 		*index = 0;
 
-	for (i=1; i < n; i++) {
+	for (i = 1; i < n; i++) {
 		if (data[i] < min) {
 			min = data[i];
 			if (index != NULL) 
@@ -55,7 +55,7 @@ double nsl_stats_maximum(const double data[], const size_t n, size_t *index) {
 	if (index != NULL) 
 		*index = 0;
 
-	for (i=1; i < n; i++) {
+	for (i = 1; i < n; i++) {
 		if (data[i] > max) {
 			 max = data[i];
 			 if (index != NULL) 

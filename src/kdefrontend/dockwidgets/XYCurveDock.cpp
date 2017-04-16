@@ -434,10 +434,10 @@ void XYCurveDock::init() {
 
 	ui.cbFillingColorStyle->clear();
 	ui.cbFillingColorStyle->addItem(i18n("single color"));
-	ui.cbFillingColorStyle->addItem(i18n("horizontal linear gradient"));
-	ui.cbFillingColorStyle->addItem(i18n("vertical linear gradient"));
-	ui.cbFillingColorStyle->addItem(i18n("diagonal linear gradient (start from top left)"));
-	ui.cbFillingColorStyle->addItem(i18n("diagonal linear gradient (start from bottom left)"));
+	ui.cbFillingColorStyle->addItem(i18n("horizontal gradient"));
+	ui.cbFillingColorStyle->addItem(i18n("vertical gradient"));
+	ui.cbFillingColorStyle->addItem(i18n("diag. gradient (from top left)"));
+	ui.cbFillingColorStyle->addItem(i18n("diag. gradient (from bottom left)"));
 	ui.cbFillingColorStyle->addItem(i18n("radial gradient"));
 
 	ui.cbFillingImageStyle->clear();
@@ -1365,7 +1365,7 @@ void XYCurveDock::fillingTypeChanged(int index) {
 			ui.lFillingSecondColor->hide();
 			ui.kcbFillingSecondColor->hide();
 		} else {
-			ui.lFillingFirstColor->setText(i18n("First Color"));
+			ui.lFillingFirstColor->setText(i18n("First color"));
 			ui.lFillingSecondColor->show();
 			ui.kcbFillingSecondColor->show();
 		}
@@ -1417,7 +1417,7 @@ void XYCurveDock::fillingColorStyleChanged(int index) {
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
 	} else {
-		ui.lFillingFirstColor->setText(i18n("First Color"));
+		ui.lFillingFirstColor->setText(i18n("First color"));
 		ui.lFillingSecondColor->show();
 		ui.kcbFillingSecondColor->show();
 		ui.lFillingBrushStyle->hide();

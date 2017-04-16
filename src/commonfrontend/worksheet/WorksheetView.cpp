@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Worksheet view
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -29,10 +29,11 @@
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/TextLabel.h"
 #include "kdefrontend/worksheet/GridDialog.h"
 #include "kdefrontend/worksheet/PresenterWidget.h"
-
+#include "kdefrontend/worksheet/DynamicPresenterWidget.h"
 #include <QApplication>
 #include <QMenu>
 #include <QToolBar>
@@ -45,10 +46,13 @@
 #include <QMessageBox>
 #include <QGraphicsOpacityEffect>
 #include <QTimeLine>
+#include <QClipboard>
 
 #include <KAction>
 #include <KLocale>
 #include <KMessageBox>
+#include <KConfigGroup>
+#include <KGlobal>
 
 #include <limits>
 
@@ -118,6 +122,17 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(),
 	connect(m_worksheet, SIGNAL(useViewSizeRequested()), this, SLOT(useViewSizeRequested()) );
 	connect(m_worksheet, SIGNAL(layoutChanged(Worksheet::Layout)), this, SLOT(layoutChanged(Worksheet::Layout)) );
 	connect(scene(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()) );
+
+	//resize the view to make the complete scene visible.
+	//no need to resize the view when the project is being opened,
+	//all views will be resized to the stored values at the end
+	if (!m_worksheet->isLoading()) {
+		float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Inch);
+		float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Inch);
+		w *= QApplication::desktop()->physicalDpiX();
+		h *= QApplication::desktop()->physicalDpiY();
+		resize(w*1.1, h*1.1);
+	}
 }
 
 void WorksheetView::initActions() {
@@ -795,13 +810,36 @@ void WorksheetView::mousePressEvent(QMouseEvent* event) {
 	if (event->button() == Qt::LeftButton && m_mouseMode == ZoomSelectionMode) {
 		m_selectionStart = event->pos();
 		m_selectionBandIsShown = true;
+		QGraphicsView::mousePressEvent(event);
+		return;
+	}
+
+	//to select curves having overlapping bounding boxes we need to check whether the cursor
+	//is inside of item's shapes and not inside of the bounding boxes (Qt's default behaviour).
+	QList<QGraphicsItem*> itemsList = items(event->pos());
+	foreach(QGraphicsItem* item, itemsList) {
+		if (!dynamic_cast<XYCurvePrivate*>(item))
+			continue;
+
+		if ( item->shape().contains(item->mapFromScene(mapToScene(event->pos()))) ) {
+			//deselect currently selected items
+			QList<QGraphicsItem*> selectedItems = scene()->selectedItems();
+			foreach(QGraphicsItem* selectedItem, selectedItems)
+				selectedItem->setSelected(false);
+
+			//select the item under the cursor and update the current selection
+			item->setSelected(true);
+			selectionChanged();
+
+			return;
+		}
 	}
 
 	// select the worksheet in the project explorer if the view was clicked
 	// and there is no selection currently. We need this for the case when
 	// there is a single worksheet in the project and we change from the project-node
 	// in the project explorer to the worksheet-node by clicking the view.
-	if ( scene()->selectedItems().empty() )
+	if ( scene()->selectedItems().isEmpty() )
 		m_worksheet->setSelectedInView(true);
 
 	QGraphicsView::mousePressEvent(event);
@@ -817,6 +855,7 @@ void WorksheetView::mouseReleaseEvent(QMouseEvent* event) {
 		if ( abs(m_selectionEnd.x() - m_selectionStart.x()) > 20 && abs(m_selectionEnd.y() - m_selectionStart.y()) > 20 )
 			fitInView(mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect(), Qt::KeepAspectRatio);
 	}
+
 	QGraphicsView::mouseReleaseEvent(event);
 }
 
@@ -1063,12 +1102,11 @@ void WorksheetView::addNew(QAction* action) {
 void WorksheetView::selectAllElements() {
 	//deselect all previously selected items since there can be some non top-level items belong them
 	m_suppressSelectionChangedEvent = true;
-	QList<QGraphicsItem*> items = scene()->selectedItems();
 	foreach (QGraphicsItem* item, m_selectedItems)
 		m_worksheet->setItemSelectedInView(item, false);
 
 	//select top-level items
-	items = scene()->items();
+	QList<QGraphicsItem*> items = scene()->items();
 	foreach (QGraphicsItem* item, items) {
 		if (!item->parentItem())
 			item->setSelected(true);
@@ -1081,12 +1119,11 @@ void WorksheetView::selectAllElements() {
  * deletes selected worksheet elements
  */
 void WorksheetView::deleteElement() {
-	QList<QGraphicsItem*> items = scene()->selectedItems();
-	if (items.size() == 0)
+	if (m_selectedItems.isEmpty())
 		return;
 
 	int rc = KMessageBox::warningYesNo( this,
-	                                    i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", items.size()),
+	                                    i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
 	                                    i18n("Delete selected objects"));
 
 	if (rc == KMessageBox::No)
@@ -1280,7 +1317,7 @@ void WorksheetView::selectionChanged() {
 	}
 
 	//select new items
-	if (items.size() == 0 && invisibleDeselected == false) {
+	if (items.isEmpty() && invisibleDeselected == false) {
 		//no items selected -> select the worksheet again.
 		m_worksheet->setSelectedInView(true);
 
@@ -1435,8 +1472,39 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
 
-		image.save(path, "png");
+		image.save(path, "PNG");
 	}
+}
+
+void WorksheetView::exportToClipboard() {
+#ifndef QT_NO_CLIPBOARD
+	QRectF sourceRect;
+
+	if (m_selectedItems.size() == 0)
+		sourceRect = scene()->itemsBoundingRect();
+	else {
+		//export selection
+		foreach (QGraphicsItem* item, m_selectedItems)
+			sourceRect = sourceRect.united( item->mapToScene(item->boundingRect()).boundingRect() );
+	}
+
+	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
+	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+	w = w*QApplication::desktop()->physicalDpiX()/25.4;
+	h = h*QApplication::desktop()->physicalDpiY()/25.4;
+	QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
+	image.fill(Qt::transparent);
+	QRectF targetRect(0, 0, w, h);
+
+	QPainter painter;
+	painter.begin(&image);
+	painter.setRenderHint(QPainter::Antialiasing);
+	exportPaint(&painter, targetRect, sourceRect, true);
+	painter.end();
+
+	QClipboard* clipboard = QApplication::clipboard();
+	clipboard->setImage(image, QClipboard::Clipboard);
+#endif
 }
 
 void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background) {
@@ -1536,9 +1604,9 @@ void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
 
 void WorksheetView::cartesianPlotAddNew(QAction* action) {
 	QList<CartesianPlot*> plots = m_worksheet->children<CartesianPlot>();
-	DEBUG_LOG("WorksheetView::cartesianPlotAddNew() plots =" << plots << "mode =" << m_cartesianPlotActionMode);
+	QDEBUG("WorksheetView::cartesianPlotAddNew() plots =" << plots << "mode =" << m_cartesianPlotActionMode);
 	if (m_cartesianPlotActionMode == ApplyActionToSelection) {
-		DEBUG_LOG("ApplyActionToSelection");
+		DEBUG("ApplyActionToSelection");
 		int selectedPlots = 0;
 		foreach (CartesianPlot* plot, plots) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
@@ -1557,7 +1625,7 @@ void WorksheetView::cartesianPlotAddNew(QAction* action) {
 		if (selectedPlots > 1)
 			m_worksheet->endMacro();
 	} else {
-		DEBUG_LOG("not ApplyActionToSelection");
+		DEBUG("not ApplyActionToSelection");
 		if  (plots.size() > 1)
 			m_worksheet->beginMacro(i18n("%1: Add curve to %2 plots", m_worksheet->name(), plots.size()));
 
@@ -1570,7 +1638,7 @@ void WorksheetView::cartesianPlotAddNew(QAction* action) {
 }
 
 void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
-	DEBUG_LOG("WorksheetView::cartesianPlotAdd()");
+	DEBUG("WorksheetView::cartesianPlotAdd()");
 	if (action == addCurveAction)
 		plot->addCurve();
 	else if (action == addEquationCurveAction)
@@ -1632,7 +1700,16 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 }
 
 void WorksheetView::presenterMode() {
+	KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_Worksheet"));
 
+	//show dynamic presenter widget, if enabled
+	if (group.readEntry("PresenterModeInteractive", false)) {
+		DynamicPresenterWidget* dynamicPresenterWidget = new DynamicPresenterWidget(m_worksheet);
+		dynamicPresenterWidget->showFullScreen();
+		return;
+	}
+
+	//show static presenter widget (default)
 	QRectF sourceRect(scene()->sceneRect());
 
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
@@ -1647,7 +1724,7 @@ void WorksheetView::presenterMode() {
 	const QRectF& screenSize = dw->availableGeometry(primaryScreenIdx);
 
 	if (targetRect.width() > screenSize.width() || ((targetRect.height() > screenSize.height()))) {
-		double ratio = qMin(screenSize.width() / targetRect.width(), screenSize.height() / targetRect.height());
+		const double ratio = qMin(screenSize.width() / targetRect.width(), screenSize.height() / targetRect.height());
 		targetRect.setWidth(targetRect.width()* ratio);
 		targetRect.setHeight(targetRect.height() * ratio);
 	}
@@ -1662,4 +1739,10 @@ void WorksheetView::presenterMode() {
 
 	PresenterWidget* presenterWidget = new PresenterWidget(QPixmap::fromImage(image), m_worksheet->name());
 	presenterWidget->showFullScreen();
+}
+
+void WorksheetView::keyPressEvent(QKeyEvent *event) {
+	if (event->matches(QKeySequence::Copy))
+		//add here copying of objects
+		exportToClipboard();
 }

@@ -175,7 +175,7 @@ void MainWin::initGUI(const QString& fileName) {
 	m_recentProjectsAction->loadEntries( KGlobal::config()->group("Recent Files") );
 
 	//set the view mode of the mdi area
-	KConfigGroup group = KGlobal::config()->group("General");
+	KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_General"));
 	int viewMode = group.readEntry("ViewMode", 0);
 	if (viewMode == 1) {
 		m_mdiArea->setViewMode(QMdiArea::TabbedView);
@@ -206,8 +206,8 @@ void MainWin::initGUI(const QString& fileName) {
 			newProject();
 			newWorksheet();
 		} else if (load == 3) { //open last used project
-			if (m_recentProjectsAction->urls().size()) {
-				DEBUG_LOG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().first());
+			if (!m_recentProjectsAction->urls().isEmpty()) {
+				QDEBUG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().first());
 				openRecentProject( m_recentProjectsAction->urls().first() );
 			}
 		}
@@ -216,12 +216,10 @@ void MainWin::initGUI(const QString& fileName) {
 }
 
 void MainWin::initActions() {
-	KAction* action;
-
 	// ******************** File-menu *******************************
 	//add some standard actions
-	action = KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
-	action = KStandardAction::open(this, SLOT(openProject()),actionCollection());
+	KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
+	KStandardAction::open(this, SLOT(openProject()),actionCollection());
 	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(KUrl)),actionCollection());
 	m_closeAction = KStandardAction::close(this, SLOT(closeProject()),actionCollection());
 	m_saveAction = KStandardAction::save(this, SLOT(saveProject()),actionCollection());
@@ -233,21 +231,21 @@ void MainWin::initActions() {
 	//New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
 	m_newWorkbookAction = new KAction(KIcon("labplot-workbook-new"),i18n("Workbook"),this);
 	actionCollection()->addAction("new_workbook", m_newWorkbookAction);
-	connect(m_newWorkbookAction, SIGNAL(triggered()),SLOT(newWorkbook()));
+	connect(m_newWorkbookAction, SIGNAL(triggered()), SLOT(newWorkbook()));
 
 	m_newDatapickerAction = new KAction(KIcon("color-picker-black"),i18n("Datapicker"),this);
 	actionCollection()->addAction("new_datapicker", m_newDatapickerAction);
-	connect(m_newDatapickerAction, SIGNAL(triggered()),SLOT(newDatapicker()));
+	connect(m_newDatapickerAction, SIGNAL(triggered()), SLOT(newDatapicker()));
 
 	m_newSpreadsheetAction = new KAction(KIcon("labplot-spreadsheet-new"),i18n("Spreadsheet"),this);
 // 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new_spreadsheet", m_newSpreadsheetAction);
-	connect(m_newSpreadsheetAction, SIGNAL(triggered()),SLOT(newSpreadsheet()));
+	connect(m_newSpreadsheetAction, SIGNAL(triggered()), SLOT(newSpreadsheet()));
 
 	m_newMatrixAction = new KAction(KIcon("labplot-matrix-new"),i18n("Matrix"),this);
 // 	m_newMatrixAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	actionCollection()->addAction("new_matrix", m_newMatrixAction);
-	connect(m_newMatrixAction, SIGNAL(triggered()),SLOT(newMatrix()));
+	connect(m_newMatrixAction, SIGNAL(triggered()), SLOT(newMatrix()));
 
 	m_newWorksheetAction= new KAction(KIcon("labplot-worksheet-new"),i18n("Worksheet"),this);
 // 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
@@ -264,7 +262,7 @@ void MainWin::initActions() {
 
 	m_newFolderAction = new KAction(KIcon("folder-new"),i18n("Folder"),this);
 	actionCollection()->addAction("new_folder", m_newFolderAction);
-	connect(m_newFolderAction, SIGNAL(triggered()),SLOT(newFolder()));
+	connect(m_newFolderAction, SIGNAL(triggered()), SLOT(newFolder()));
 
 	//"New file datasources"
 	m_newFileDataSourceAction = new KAction(KIcon("application-octet-stream"),i18n("File Data Source"),this);
@@ -284,9 +282,9 @@ void MainWin::initActions() {
 	m_exportAction = new KAction(KIcon("document-export-database"), i18n("Export"), this);
 	m_exportAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_E);
 	actionCollection()->addAction("export", m_exportAction);
-	connect(m_exportAction, SIGNAL(triggered()),SLOT(exportDialog()));
+	connect(m_exportAction, SIGNAL(triggered()), SLOT(exportDialog()));
 
-	m_editFitsFileAction = new KAction(i18n("Edit FITS file header"), this);
+	m_editFitsFileAction = new KAction(KIcon("document-edit"), i18n("FITS Metadata Editor"), this);
 	actionCollection()->addAction("edit_fits", m_editFitsFileAction);
 	connect(m_editFitsFileAction, SIGNAL(triggered()), SLOT(editFitsFileDialog()));
 
@@ -297,17 +295,17 @@ void MainWin::initActions() {
 
 	m_historyAction = new KAction(KIcon("view-history"), i18n("Undo/Redo History"),this);
 	actionCollection()->addAction("history", m_historyAction);
-	connect(m_historyAction, SIGNAL(triggered()),SLOT(historyDialog()));
+	connect(m_historyAction, SIGNAL(triggered()), SLOT(historyDialog()));
 
-	// TODO: more menues
+	// TODO: more menus
 	//  Appearance
 	// Analysis: see WorksheetView.cpp
 	// Drawing
 	// Script
 
 	//Windows
-	action = new KAction(i18n("Cl&ose"), this);
-	action->setShortcut(i18n("Ctrl+W"));
+	KAction* action = new KAction(i18n("&Close"), this);
+	action->setShortcut(i18n("Ctrl+C"));
 	action->setStatusTip(i18n("Close the active window"));
 	actionCollection()->addAction("close window", action);
 	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(closeActiveSubWindow()));
@@ -649,7 +647,7 @@ bool MainWin::newProject() {
 	m_currentAspect = m_project;
 	m_currentFolder = m_project;
 
-	KConfigGroup group = KGlobal::config()->group("General");
+	KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_General"));
 	Project::MdiWindowVisibility vis = Project::MdiWindowVisibility(group.readEntry("MdiWindowVisibility", 0));
 	m_project->setMdiWindowVisibility( vis );
 	if (vis == Project::folderOnly)
@@ -674,6 +672,7 @@ bool MainWin::newProject() {
 
 		connect(m_projectExplorer, SIGNAL(currentAspectChanged(AbstractAspect*)),
 		        this, SLOT(handleCurrentAspectChanged(AbstractAspect*)));
+		connect(m_projectExplorerDock, SIGNAL(visibilityChanged(bool)), SLOT(projectExplorerDockVisibilityChanged(bool)));
 
 		//Properties dock
 		m_propertiesDock = new QDockWidget(this);
@@ -686,6 +685,8 @@ bool MainWin::newProject() {
 		sa->setWidget(stackedWidget);
 		sa->setWidgetResizable(true);
 		m_propertiesDock->setWidget(sa);
+
+		connect(m_propertiesDock, SIGNAL(visibilityChanged(bool)), SLOT(propertiesDockVisibilityChanged(bool)));
 
 		//GUI-observer;
 		m_guiObserver = new GuiObserver(this);
@@ -742,8 +743,8 @@ void MainWin::openProject(const QString& filename) {
 
 	QIODevice *file;
 	// first try gzip compression, because projects can be gzipped and end with .lml
-	if (filename.endsWith(".lml", Qt::CaseInsensitive))
-		file = KFilterDev::deviceForFile(filename, "application/x-gzip", true);
+	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
+		file = KFilterDev::deviceForFile(filename, QLatin1String("application/x-gzip"), true);
 	else	// opens filename using file ending
 		file = KFilterDev::deviceForFile(filename);
 
@@ -895,8 +896,8 @@ bool MainWin::save(const QString& fileName) {
 	// use file ending to find out how to compress file
 	QIODevice* file;
 	// if ending is .lml, do gzip compression anyway
-	if (fileName.endsWith(".lml"))
-		file = KFilterDev::deviceForFile(fileName, "application/x-gzip", true);
+	if (fileName.endsWith(QLatin1String(".lml")))
+		file = KFilterDev::deviceForFile(fileName, QLatin1String("application/x-gzip"), true);
 	else
 		file = KFilterDev::deviceForFile(fileName);
 
@@ -960,8 +961,11 @@ void MainWin::print() {
 		return;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printView())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
+	else
+		statusBar()->showMessage("");
 }
 
 void MainWin::printPreview() {
@@ -970,8 +974,11 @@ void MainWin::printPreview() {
 		return;
 
 	AbstractPart* part = dynamic_cast<PartMdiView*>(win)->part();
+	statusBar()->showMessage(i18n("Preparing printing of %1", part->name()));
 	if (part->printPreview())
 		statusBar()->showMessage(i18n("%1 printed", part->name()));
+	else
+		statusBar()->showMessage("");
 }
 
 /**************************************************************************************/
@@ -1408,6 +1415,14 @@ void MainWin::toggleDockWidget(QAction* action) const {
 	}
 }
 
+void MainWin::projectExplorerDockVisibilityChanged(bool visible) {
+	m_toggleProjectExplorerDockAction->setChecked(visible);
+}
+
+void MainWin::propertiesDockVisibilityChanged(bool visible) {
+	m_togglePropertiesDockAction->setChecked(visible);
+}
+
 void MainWin::toggleFullScreen() {
 	if (this->windowState() == Qt::WindowFullScreen)
 		this->setWindowState(m_lastWindowState);
@@ -1438,7 +1453,7 @@ void MainWin::dropEvent(QDropEvent* event) {
 }
 
 void MainWin::handleSettingsChanges() {
-	const KConfigGroup group = KGlobal::config()->group( "General" );
+	const KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_General"));
 
 	QMdiArea::ViewMode viewMode = QMdiArea::ViewMode(group.readEntry("ViewMode", 0));
 	if (m_mdiArea->viewMode() != viewMode) {
@@ -1503,29 +1518,45 @@ void MainWin::historyDialog() {
   Opens the dialog to import data to the selected workbook, spreadsheet or matrix
 */
 void MainWin::importFileDialog(const QString& fileName) {
-	DEBUG_LOG("MainWin::importFileDialog()");
-	ImportFileDialog* dlg= new ImportFileDialog(this, m_currentAspect, fileName);
+	DEBUG("MainWin::importFileDialog()");
+	ImportFileDialog* dlg = new ImportFileDialog(this, false, fileName);
+
+	// select existing container
+	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook"))
+		dlg->setCurrentIndex( m_projectExplorer->currentIndex());
+	else if (m_currentAspect->inherits("Column")) {
+		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
+			dlg->setCurrentIndex( m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
+	}
 
 	if (dlg->exec() == QDialog::Accepted) {
-		dlg->import(statusBar());
+		dlg->importTo(statusBar());
 		m_project->setChanged(true);
 	}
 
 	delete dlg;
-	DEBUG_LOG("MainWin::importFileDialog() DONE");
+	DEBUG("MainWin::importFileDialog() DONE");
 }
 
 void MainWin::importSqlDialog() {
-	DEBUG_LOG("MainWin::importSqlDialog()");
-	ImportSQLDatabaseDialog* dlg = new ImportSQLDatabaseDialog(this, m_currentAspect);
+	DEBUG("MainWin::importSqlDialog()");
+	ImportSQLDatabaseDialog* dlg = new ImportSQLDatabaseDialog(this);
+
+	// select existing container
+	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook"))
+		dlg->setCurrentIndex( m_projectExplorer->currentIndex());
+	else if (m_currentAspect->inherits("Column")) {
+		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
+			dlg->setCurrentIndex( m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
+	}
 
 	if (dlg->exec() == QDialog::Accepted) {
-		dlg->import(statusBar());
+		dlg->importTo(statusBar());
 		m_project->setChanged(true);
 	}
 
 	delete dlg;
-	DEBUG_LOG("MainWin::importSqlDialog() DONE");
+	DEBUG("MainWin::importSqlDialog() DONE");
 }
 
 /*!
@@ -1553,7 +1584,7 @@ void MainWin::editFitsFileDialog() {
 	adds a new file data source to the current project.
 */
 void MainWin::newFileDataSourceActionTriggered() {
-	ImportFileDialog* dlg = new ImportFileDialog(this, 0, "", true);
+	ImportFileDialog* dlg = new ImportFileDialog(this, true);
 	if (dlg->exec() == QDialog::Accepted) {
 		FileDataSource* dataSource = new FileDataSource(0,  i18n("File data source%1", 1));
 		dlg->importToFileDataSource(dataSource, statusBar());

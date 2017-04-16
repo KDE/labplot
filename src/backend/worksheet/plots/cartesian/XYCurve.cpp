@@ -40,6 +40,8 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/core/Project.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
@@ -149,6 +151,9 @@ void XYCurve::initActions() {
 	visibilityAction = new QAction(i18n("visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
+
+	navigateToAction = new QAction(KIcon("go-next-view"), "", this);
+	connect(navigateToAction, SIGNAL(triggered()), this, SLOT(navigateTo()));
 }
 
 QMenu* XYCurve::createContextMenu() {
@@ -156,6 +161,21 @@ QMenu* XYCurve::createContextMenu() {
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
+
+	//"Navigate to spreadsheet"-action, show only if x- or y-columns have data from a spreadsheet
+	AbstractAspect* parentSpreadsheet = 0;
+	if (xColumn() && dynamic_cast<Spreadsheet*>(xColumn()->parentAspect()) )
+		parentSpreadsheet = xColumn()->parentAspect();
+	else if (yColumn() && dynamic_cast<Spreadsheet*>(yColumn()->parentAspect()) )
+		parentSpreadsheet = yColumn()->parentAspect();
+
+	if (parentSpreadsheet) {
+		navigateToAction->setText(i18n("Navigate to \"%1\"", parentSpreadsheet->name()));
+		navigateToAction->setData(parentSpreadsheet->path());
+		menu->insertAction(visibilityAction, navigateToAction);
+		menu->insertSeparator(visibilityAction);
+	}
+
 	return menu;
 }
 
@@ -342,7 +362,7 @@ void XYCurve::setLinePen(const QPen &pen) {
 		exec(new XYCurveSetLinePenCmd(d, pen, i18n("%1: set line style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineOpacity, qreal, lineOpacity, update);
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineOpacity, qreal, lineOpacity, updatePixmap);
 void XYCurve::setLineOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->lineOpacity)
@@ -661,7 +681,7 @@ void XYCurve::suppressRetransform(bool b) {
 //#################################  SLOTS  ####################################
 //##############################################################################
 void XYCurve::retransform() {
-	DEBUG_LOG("XYCurve::retransform()");
+	DEBUG("XYCurve::retransform()");
 	Q_D(XYCurve);
 
 	WAIT_CURSOR;
@@ -766,6 +786,10 @@ void XYCurve::visibilityChanged() {
 	this->setVisible(!d->isVisible());
 }
 
+void XYCurve::navigateTo() {
+	project()->navigateTo(navigateToAction->data().toString());
+}
+
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
@@ -806,7 +830,7 @@ bool XYCurvePrivate::swapVisible(bool on) {
   Triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-	DEBUG_LOG("XYCurvePrivate::retransform()");
+	DEBUG("XYCurvePrivate::retransform()");
 	if (m_suppressRetransform)
 		return;
 
@@ -864,7 +888,7 @@ void XYCurvePrivate::retransform() {
 			symbolPointsLogical.append(tempPoint);
 			connectedPointsLogical.push_back(true);
 		} else {
-			if (connectedPointsLogical.size())
+			if (!connectedPointsLogical.empty())
 				connectedPointsLogical[connectedPointsLogical.size()-1] = false;
 		}
 	}
@@ -902,9 +926,9 @@ void XYCurvePrivate::updateLines() {
 	}
 
 	const int count = symbolPointsLogical.count();
-//	DEBUG_LOG("count ="<<count<<", line type ="<<lineType);
+//	DEBUG("count ="<<count<<", line type ="<<lineType);
 //	for(int i=0;i<qMin(10,count);i++)
-//		DEBUG_LOG(symbolPointsLogical.at(i));
+//		DEBUG(symbolPointsLogical.at(i));
 
 	//nothing to do, if no data points available
 	if (count <= 1) {
@@ -1032,7 +1056,7 @@ void XYCurvePrivate::updateLines() {
 				msg = i18n("Error: Akima spline interpolation requires a minimum of 5 points.");
 			else
 				msg = i18n("Couldn't initialize spline function");
-			DEBUG_LOG(msg);
+			QDEBUG(msg);
 
 			recalcShapeAndBoundingRect();
 			return;
@@ -1046,7 +1070,7 @@ void XYCurvePrivate::updateLines() {
 				gslError = "x values must be monotonically increasing.";
 			else
 				gslError = gsl_strerror (status);
-			DEBUG_LOG("Error in spline calculation. " << gslError);
+			QDEBUG("Error in spline calculation. " << gslError);
 
 			recalcShapeAndBoundingRect();
 			return;
@@ -1341,7 +1365,7 @@ void XYCurvePrivate::updateFilling() {
 
 	//if there're no interpolation lines available (XYCurve::NoLine selected), create line-interpolation,
 	//use already available lines otherwise.
-	if (lines.size()) {
+	if (!lines.isEmpty()) {
 		fillLines = lines;
 	} else {
 		for (int i=0; i<symbolPointsLogical.count()-1; i++) {
@@ -1349,11 +1373,11 @@ void XYCurvePrivate::updateFilling() {
 			fillLines.append(QLineF(symbolPointsLogical.at(i), symbolPointsLogical.at(i+1)));
 		}
 		fillLines = cSystem->mapLogicalToScene(fillLines);
-	}
 
-	//no lines available (no points), nothing to do
-	if (!fillLines.size())
-		return;
+		//no lines available (no points), nothing to do
+		if (fillLines.isEmpty())
+			return;
+	}
 
 	//create polygon(s):
 	//1. Depending on the current zoom-level, only a subset of the curve may be visible in the plot
@@ -1701,7 +1725,7 @@ void XYCurvePrivate::updateErrorBars() {
   recalculates the outer bounds and the shape of the curve.
 */
 void XYCurvePrivate::recalcShapeAndBoundingRect() {
-	DEBUG_LOG("XYCurvePrivate::recalcShapeAndBoundingRect()");
+	DEBUG("XYCurvePrivate::recalcShapeAndBoundingRect()");
 	if (m_suppressRecalc)
 		return;
 
@@ -1741,7 +1765,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 }
 
 void XYCurvePrivate::draw(QPainter *painter) {
-	DEBUG_LOG("XYCurvePrivate::draw()");
+	DEBUG("XYCurvePrivate::draw()");
 
 	//draw filling
 	if (fillingPosition != XYCurve::NoFilling) {
@@ -1785,16 +1809,17 @@ void XYCurvePrivate::draw(QPainter *painter) {
 	//draw values
 	if (valuesType != XYCurve::NoValues) {
 		painter->setOpacity(valuesOpacity);
-		painter->setPen(valuesColor);
-		painter->setBrush(Qt::SolidPattern);
+		//don't use any painter pen, since this will force QPainter to render the text outline which is expensive
+		painter->setPen(Qt::NoPen);
+		painter->setBrush(valuesColor);
 		drawValues(painter);
 	}
 
-	DEBUG_LOG("XYCurvePrivate::draw() DONE");
+	DEBUG("XYCurvePrivate::draw() DONE");
 }
 
 void XYCurvePrivate::updatePixmap() {
-	DEBUG_LOG("XYCurvePrivate::updatePixmap()");
+	DEBUG("XYCurvePrivate::updatePixmap()");
 	WAIT_CURSOR;
 
 // 	QTime timer;
@@ -1802,11 +1827,11 @@ void XYCurvePrivate::updatePixmap() {
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
 	if (boundingRectangle.width() == 0 || boundingRectangle.width() == 0) {
+		m_pixmap = QPixmap();
 		RESET_CURSOR;
 		return;
 	}
 	QPixmap pixmap(ceil(boundingRectangle.width()), ceil(boundingRectangle.height()));
-	pixmap.fill(Qt::transparent);
 	pixmap.fill(Qt::transparent);
 	QPainter painter(&pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
@@ -1819,8 +1844,9 @@ void XYCurvePrivate::updatePixmap() {
 	//QApplication::processEvents(QEventLoop::AllEvents, 0);
 
 // 	qDebug() << "Update the pixmap: " << timer.elapsed() << "ms";
+	update();
 	RESET_CURSOR;
-	DEBUG_LOG("XYCurvePrivate::updatePixmap() DONE");
+	DEBUG("XYCurvePrivate::updatePixmap() DONE");
 }
 
 //TODO: move this to a central place
@@ -1842,7 +1868,7 @@ QImage blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnl
 	int i2 = 3;
 
 	if (alphaOnly)
-		i1 = i2 = (QSysInfo::ByteOrder == QSysInfo::BigEndian ? 0 : 3);
+		i1 = i2 = (QSysInfo::ByteOrder == QSysInfo::LittleEndian)*3;
 
 	for (int col = c1; col <= c2; col++) {
 		p = result.scanLine(r1) + col * 4;
@@ -1896,7 +1922,7 @@ QImage blurred(const QImage& image, const QRect& rect, int radius, bool alphaOnl
   \sa QGraphicsItem::paint().
 */
 void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	DEBUG_LOG("XYCurvePrivate::paint() name =" << q->name());
+	QDEBUG("XYCurvePrivate::paint() name =" << q->name());
 
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
@@ -1909,8 +1935,8 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
- 	DEBUG_LOG("XYCurvePrivate::paint() calling drawPixmap() or draw() 		XXXXXXXXXXXXXXXXXXXX");
-	if ( KGlobal::config()->group("General").readEntry<bool>("DoubleBuffering", true) )
+ 	DEBUG("XYCurvePrivate::paint() calling drawPixmap() or draw() 		XXXXXXXXXXXXXXXXXXXX");
+	if ( KGlobal::config()->group("Settings_Worksheet").readEntry(QLatin1String("DoubleBuffering"), true) )
 		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); //draw the cached pixmap (fast)
 	else
 		draw(painter); //draw directly again (slow)

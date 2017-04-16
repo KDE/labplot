@@ -39,7 +39,7 @@ class ThemeHandler : public QWidget {
 	Q_OBJECT
 
 	public:
-		ThemeHandler(QWidget* parent);
+		explicit ThemeHandler(QWidget*);
 		static QStringList themes();
 		static const QString themeFilePath(const QString&);
 
@@ -50,14 +50,14 @@ class ThemeHandler : public QWidget {
 
 		QPushButton* pbLoadTheme;
 		QPushButton* pbSaveTheme;
-		QPushButton* pbPublishTheme;
+// 		QPushButton* pbPublishTheme;
 
 	private slots:
 		void loadSelected(QString);
 		void showPanel();
 		void saveMenu();
 		void saveNewSelected(const QString&);
-		void publishThemes();
+// 		void publishThemes();
 
 	signals:
 		void loadThemeRequested(KConfig&);

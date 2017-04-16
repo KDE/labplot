@@ -26,8 +26,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdlib.h>
 #include "nsl_sort.h"
+#include <stdlib.h>
 
 int nsl_sort_compare_size_t(const void* a, const void* b) {
 	size_t _a = * ( (size_t*) a );

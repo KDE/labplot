@@ -195,6 +195,10 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 	emit changed();
 }
 
+void Project::navigateTo(const QString& path) {
+	requestNavigateTo(path);
+}
+
 bool Project::isLoading() const {
 	return d->loading;
 }
@@ -292,7 +296,7 @@ bool Project::load(XmlStreamReader* reader) {
 			QList<AbstractAspect*> curves = children("XYCurve", AbstractAspect::Recursive);
 			QList<AbstractAspect*> axes = children("Axes", AbstractAspect::Recursive);
 			QList<AbstractAspect*> dataPickerCurves = children("DatapickerCurve", AbstractAspect::Recursive);
-			if (curves.size()!=0 || axes.size()!=0) {
+			if (!curves.isEmpty() || !axes.isEmpty()) {
 				QList<AbstractAspect*> columns = children("Column", AbstractAspect::Recursive);
 
 				//XY-curves
@@ -381,6 +385,7 @@ bool Project::load(XmlStreamReader* reader) {
 	}
 
 	d->loading = false;
+	emit loaded();
 	return !reader->hasError();
 }
 

@@ -26,10 +26,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "nsl_dft.h"
+#include "nsl_common.h"
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_halfcomplex.h>
-#include "nsl_common.h"
-#include "nsl_dft.h"
 #ifdef HAVE_FFTW3
 #include <fftw3.h>
 #endif
@@ -40,9 +40,8 @@ const char* nsl_dft_xscale_name[] = {i18n("Frequency"), i18n("Index"), i18n("Per
 
 int nsl_dft_transform_window(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type, nsl_sf_window_type window_type) {
 	/* apply window function */
-	size_t i;
-	for (i=0; i < n; i++)
-		data[i] *= nsl_sf_window(i, n, window_type);
+	if (window_type != nsl_sf_window_uniform)
+		nsl_sf_apply_window(data, n, window_type);
 
 	/* transform */
 	int status = nsl_dft_transform(data, stride, n, two_sided, type);
@@ -82,6 +81,7 @@ int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl
 
 	gsl_fft_real_transform(data, stride, n, real, work);
 	gsl_fft_real_wavetable_free(real);
+	gsl_fft_real_workspace_free(work);
 
 	/* 2. unpack data */
 	gsl_fft_halfcomplex_unpack(data, result, stride, n);

@@ -7,13 +7,14 @@ set(TOOLS_DIR tools)
 set(CMAKE_AUTOMOC ON)
 
 set(GUI_SOURCES
-  	${KDEFRONTEND_DIR}/GuiObserver.cpp
+	${KDEFRONTEND_DIR}/GuiObserver.cpp
 	${KDEFRONTEND_DIR}/GuiTools.cpp
 	${KDEFRONTEND_DIR}/HistoryDialog.cpp
 	${KDEFRONTEND_DIR}/LabPlot.cpp
-  	${KDEFRONTEND_DIR}/MainWin.cpp
+	${KDEFRONTEND_DIR}/MainWin.cpp
 	${KDEFRONTEND_DIR}/SettingsDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
+	${KDEFRONTEND_DIR}/SettingsWorksheetPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPage.h
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
 	${KDEFRONTEND_DIR}/ThemeHandler.cpp
@@ -60,8 +61,10 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/StatisticsDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
-        ${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
-        ${KDEFRONTEND_DIR}/worksheet/PresenterWidget.cpp
+	${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
+	${KDEFRONTEND_DIR}/worksheet/DynamicPresenterWidget.cpp
+	${KDEFRONTEND_DIR}/worksheet/PresenterWidget.cpp
+	${KDEFRONTEND_DIR}/worksheet/SlidingPanel.cpp
 	${KDEFRONTEND_DIR}/widgets/ConstantsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ThemesWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ExpressionTextEdit.cpp
@@ -84,6 +87,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/fitparameterswidget.ui
 	${KDEFRONTEND_DIR}/ui/labelwidget.ui
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
+	${KDEFRONTEND_DIR}/ui/settingsworksheetpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
@@ -187,6 +191,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/nsl/nsl_interp.c
 	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
 	${BACKEND_DIR}/nsl/nsl_sf_poly.c
+	${BACKEND_DIR}/nsl/nsl_sf_stats.c
 	${BACKEND_DIR}/nsl/nsl_sf_window.c
 	${BACKEND_DIR}/nsl/nsl_smooth.c
 	${BACKEND_DIR}/nsl/nsl_sort.c
@@ -254,26 +259,36 @@ set(TOOLS_SOURCES
 
 add_subdirectory( pics )
 add_subdirectory( pics/gsl_distributions )
+add_subdirectory( pics/fit_models )
 add_subdirectory( pics/colorchooser )
 add_subdirectory( themes )
 
 ##############################################################################
-# set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} parser/parser.tab.c)
-set(LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES})
-INCLUDE_DIRECTORIES(. ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/..)
-kde4_add_ui_files(LABPLOT_SRCS ${UI_SOURCES})
-kde4_add_executable(labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES})
-target_link_libraries(labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KNEWSTUFF3_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${NETCDF_LIBRARY} ${FFTW_LIBRARIES} ${CFITSIO_LIBRARY} ${QT_QTSQL_LIBRARIES})
+set( LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} )
+INCLUDE_DIRECTORIES( . ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/.. )
+kde4_add_ui_files( LABPLOT_SRCS ${UI_SOURCES} )
+kde4_add_executable( labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} )
+target_link_libraries( labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTSQL_LIBRARIES})
+# ${KDE4_KNEWSTUFF3_LIBS}
 IF (HDF5_FOUND)
-	target_link_libraries(labplot2 ${HDF5_C_LIBRARIES})
-ENDIF (HDF5_FOUND)
+	target_link_libraries( labplot2 ${HDF5_C_LIBRARIES} )
+ENDIF ()
+IF (FFTW_FOUND)
+	target_link_libraries( labplot2 ${FFTW_LIBRARIES} )
+ENDIF ()
+IF (NETCDF_FOUND)
+	target_link_libraries( labplot2 ${NETCDF_LIBRARY} )
+ENDIF ()
+IF (CFITSIO_FOUND)
+	target_link_libraries( labplot2 ${CFITSIO_LIBRARY} )
+ENDIF ()
 # ${OPJ_LIBRARY}
 
 ############## installation ################################
 
-install(TARGETS labplot2 DESTINATION ${BIN_INSTALL_DIR})
-install(FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png DESTINATION  ${DATA_INSTALL_DIR}/${PROJECT_NAME})
-install(PROGRAMS org.kde.labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install( TARGETS labplot2 DESTINATION ${BIN_INSTALL_DIR} )
+install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png DESTINATION  ${DATA_INSTALL_DIR}/${PROJECT_NAME} )
+install( PROGRAMS org.kde.labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
 install( FILES labplot2_themes.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )

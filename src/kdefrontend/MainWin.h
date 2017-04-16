@@ -261,6 +261,8 @@ private slots:
 	void updateMdiWindowVisibility() const;
 	void toggleDockWidget(QAction*) const;
 	void toggleFullScreen();
+	void projectExplorerDockVisibilityChanged(bool);
+	void propertiesDockVisibilityChanged(bool);
 };
 
 #endif

@@ -53,6 +53,7 @@ class AbstractAspectPrivate {
 		AbstractAspect* const q;
 		AbstractAspect* m_parent;
 		bool m_undoAware;
+		bool m_isLoading;
 };
 
 #endif // ifndef ASPECT_PRIVATE_H

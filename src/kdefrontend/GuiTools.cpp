@@ -93,7 +93,7 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 							   i18n("dot line"), i18n("dash-dot line"), i18n("dash-dot-dot line") };
 
 	QAction* action;
-	if (actionGroup->actions().size() == 0){
+	if (actionGroup->actions().isEmpty()){
 		//TODO setting of the icon size doesn't work here
 		menu->setStyleSheet( "QMenu::icon { width:50px; height:10px; }" );
 		
@@ -115,7 +115,7 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 			pa.setPen( QPen( color, 1, (Qt::PenStyle)i ) );
 			pa.drawLine( offset, h/2, w-offset, h/2);
 			pa.end();
-			action = actionGroup->actions()[i];
+			action = actionGroup->actions().at(i);
 			action->setIcon( QIcon(pm) );
 		}
 	}
@@ -124,7 +124,7 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 void GuiTools::selectPenStyleAction(QActionGroup* actionGroup, Qt::PenStyle style) {
 	int index = (int)style;
 	Q_ASSERT(index < actionGroup->actions().size());
-	actionGroup->actions()[index]->setChecked(true);
+	actionGroup->actions().at(index)->setChecked(true);
 }
 
 Qt::PenStyle GuiTools::penStyleFromAction(QActionGroup* actionGroup, QAction* action) {
@@ -199,7 +199,7 @@ void GuiTools::selectColorAction(QActionGroup* actionGroup, const QColor& color)
 	int index;
 	for (index=0; index<colorsCount; ++index) {
 		if (color==colors[index]) {
-			actionGroup->actions()[index]->setChecked(true);
+			actionGroup->actions().at(index)->setChecked(true);
 			break;
 		}
 	}

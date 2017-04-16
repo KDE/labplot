@@ -259,10 +259,10 @@ void XYInterpolationCurvePrivate::recalculate() {
 	const nsl_interp_evaluate evaluate = interpolationData.evaluate;
 	const unsigned int npoints = interpolationData.npoints;
 
-	DEBUG_LOG("type:"<<nsl_interp_type_name[type]);
-	DEBUG_LOG("cubic Hermite variant:"<<nsl_interp_pch_variant_name[variant]<<tension<<continuity<<bias);
-	DEBUG_LOG("evaluate:"<<nsl_interp_evaluate_name[evaluate]);
-	DEBUG_LOG("npoints ="<<npoints);
+	DEBUG("type:"<<nsl_interp_type_name[type]);
+	DEBUG("cubic Hermite variant:"<<nsl_interp_pch_variant_name[variant]<<tension<<continuity<<bias);
+	DEBUG("evaluate:"<<nsl_interp_evaluate_name[evaluate]);
+	DEBUG("npoints ="<<npoints);
 
 ///////////////////////////////////////////////////////////
 	int status=0;
@@ -300,7 +300,10 @@ void XYInterpolationCurvePrivate::recalculate() {
 		status = gsl_spline_init(spline, xdata, ydata, n);
 #endif
 		break;
-	default:
+	case nsl_interp_type_cosine:
+	case nsl_interp_type_pch:
+	case nsl_interp_type_rational:
+	case nsl_interp_type_exponential:
 		break;
 	}
 
@@ -314,10 +317,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 		// find index a,b for interval [x[a],x[b]] around x[i] using bisection
 		int j=0;
-		switch (type) {
-		case nsl_interp_type_cosine:
-		case nsl_interp_type_exponential:
-		case nsl_interp_type_pch:
+		if (type == nsl_interp_type_cosine || type == nsl_interp_type_exponential || type == nsl_interp_type_pch) {
 			while (b-a > 1) {
 				j=floor((a+b)/2.);
 				if (xdata[j] > x)
@@ -325,9 +325,6 @@ void XYInterpolationCurvePrivate::recalculate() {
 				else
 					a=j;
 			}
-			break;
-		default:
-			break;
 		}
 
 		// evaluate interpolation
@@ -437,11 +434,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 	}
 
 	// calculate "evaluate" option for own types
-	switch (type) {
-	case nsl_interp_type_cosine:
-	case nsl_interp_type_exponential:
-	case nsl_interp_type_pch:
-	case nsl_interp_type_rational:
+	if (type == nsl_interp_type_cosine || type == nsl_interp_type_exponential || type == nsl_interp_type_pch || type == nsl_interp_type_rational) {
 		switch (evaluate) {
 		case nsl_interp_evaluate_function:
 			break;
@@ -455,9 +448,6 @@ void XYInterpolationCurvePrivate::recalculate() {
 			nsl_int_trapezoid(xVector->data(), yVector->data(), npoints, 0);
 			break;
 		}
-		break;
-	default:
-		break;
 	}
 
 	// check values

@@ -36,7 +36,7 @@
 
 EquationHighlighter::EquationHighlighter(KTextEdit* parent)
 	: QSyntaxHighlighter(parent),
-	m_parent(parent)
+	  m_parent(parent)
 // 	m_errorPosition = -1
 {}
 
@@ -51,28 +51,28 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 	if (text.isEmpty())
 		return;
 
-    QTextCharFormat number;
-    QTextCharFormat function;
-    QTextCharFormat variable;
+	QTextCharFormat number;
+	QTextCharFormat function;
+	QTextCharFormat variable;
 	QTextCharFormat constant;
-    QTextCharFormat matchedParenthesis;
+	QTextCharFormat matchedParenthesis;
 
-    QPalette palette;
-    if (qGray(palette.color(QPalette::Base).rgb()) > 160) {
-        number.setForeground(QColor(0, 0, 127));
-        function.setForeground(QColor(85, 0, 0));
+	QPalette palette;
+	if (qGray(palette.color(QPalette::Base).rgb()) > 160) {
+		number.setForeground(QColor(0, 0, 127));
+		function.setForeground(QColor(85, 0, 0));
 		function.setFontWeight(QFont::Bold);
-        variable.setForeground(QColor(0, 85, 0));
+		variable.setForeground(QColor(0, 85, 0));
 		constant.setForeground(QColor(85, 0, 0));
-        matchedParenthesis.setBackground(QColor(255, 255, 183));
-    } else {
-        number.setForeground(QColor(160, 160, 255));
-        function.setForeground(QColor(255, 160, 160));
+		matchedParenthesis.setBackground(QColor(255, 255, 183));
+	} else {
+		number.setForeground(QColor(160, 160, 255));
+		function.setForeground(QColor(255, 160, 160));
 		function.setFontWeight(QFont::Bold);
-        variable.setForeground(QColor(160, 255, 160));
+		variable.setForeground(QColor(160, 255, 160));
 		constant.setForeground(QColor(255, 160, 160));
-        matchedParenthesis.setBackground(QColor(85, 85, 0));
-    }
+		matchedParenthesis.setBackground(QColor(85, 85, 0));
+	}
 
 	QTextCharFormat other;
 
@@ -86,10 +86,14 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 		//variables
 		foreach (const QString& var, m_variables) {
 			if (remaining.startsWith(var)) {
-				setFormat(i, var.length(), variable);
-				i += var.length() - 1;
-				found = true;
-				break;
+				QString nextChar = remaining.mid(var.length(), 1);
+				if (nextChar==" " || nextChar==")" || nextChar=="+" || nextChar=="-"
+					|| nextChar=="*" || nextChar=="/" || nextChar=="^") {
+					setFormat(i, var.length(), variable);
+					i += var.length() - 1;
+					found = true;
+					break;
+				}
 			}
 		}
 		if (found)

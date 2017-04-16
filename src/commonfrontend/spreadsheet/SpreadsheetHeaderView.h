@@ -1,7 +1,8 @@
 /***************************************************************************
-    File                 : SpreadsheetDoubleHeaderView.h
+    File                 : SpreadsheetHeaderView.h
     Project              : LabPlot
     --------------------------------------------------------------------
+    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
     Description          : Horizontal header for SpreadsheetView displaying comments in a second header
 
@@ -26,49 +27,45 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SPREADSHEETDOUBLEHEADERVIEW_H
-#define SPREADSHEETDOUBLEHEADERVIEW_H
+#ifndef SPREADSHEETHEADERVIEW_H
+#define SPREADSHEETHEADERVIEW_H
 
 #include <QHeaderView>
-#include <backend/spreadsheet/SpreadsheetModel.h>
 
 class SpreadsheetCommentsHeaderView : public QHeaderView {
 	Q_OBJECT
 
-	public:
-		explicit SpreadsheetCommentsHeaderView(QWidget* parent = 0);
-		virtual ~SpreadsheetCommentsHeaderView();
+public:
+	explicit SpreadsheetCommentsHeaderView(QWidget* parent = 0);
+	virtual ~SpreadsheetCommentsHeaderView();
 
-		virtual void setModel(QAbstractItemModel*);
-		friend class SpreadsheetHeaderView; // access to paintSection (protected)
+	virtual void setModel(QAbstractItemModel*);
+	friend class SpreadsheetHeaderView; // access to paintSection (protected)
 };
 
-class SpreadsheetHeaderView : public QHeaderView{
+class SpreadsheetHeaderView : public QHeaderView {
 	Q_OBJECT
 
-	public:
-		explicit SpreadsheetHeaderView(QWidget* parent = 0);
-		~SpreadsheetHeaderView();
+public:
+	explicit SpreadsheetHeaderView(QWidget* parent = 0);
+	~SpreadsheetHeaderView();
 
-		virtual void setModel(QAbstractItemModel*);
-		virtual QSize sizeHint () const;
-		
-		void showComments(bool on = true);
-		bool areCommentsShown() const;
+	virtual void setModel(QAbstractItemModel*);
+	virtual QSize sizeHint () const;
 
-	private:
-		SpreadsheetCommentsHeaderView* m_slave;
-		bool m_showComments;
-		
-	public slots:
-		void refresh();
-		void headerDataChanged(Qt::Orientation orientation, int logicalFirst, int logicalLast);
+	void showComments(bool on = true);
+	bool areCommentsShown() const;
 
-	protected slots:
-		void sectionsInserted(const QModelIndex & parent, int logicalFirst, int logicalLast);
+private:
+	SpreadsheetCommentsHeaderView* m_slave;
+	bool m_showComments;
 
-	protected:
-		virtual void paintSection(QPainter * painter, const QRect & rect, int logicalIndex) const;
+private slots:
+	void refresh();
+	void headerDataChanged(Qt::Orientation, int logicalFirst, int logicalLast);
+
+protected:
+	virtual void paintSection(QPainter*, const QRect&, int logicalIndex) const;
 };
 
 #endif

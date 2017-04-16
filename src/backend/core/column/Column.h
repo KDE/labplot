@@ -143,7 +143,7 @@ class Column : public AbstractColumn {
 
 		void calculateStatistics();
 		void setStatisticsAvailable(bool available);
-        bool statisticsAvailable() const;
+		bool statisticsAvailable() const;
 
 		ColumnPrivate* m_column_private;
 		ColumnStringIO* m_string_io;

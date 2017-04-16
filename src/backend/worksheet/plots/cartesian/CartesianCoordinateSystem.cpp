@@ -346,8 +346,7 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 			double x1 = xInterval.end();
 			double x2 = nextXInterval.start();
 
-			bool valid = true;
-			valid = xScale->map(&x1);
+			bool valid = xScale->map(&x1);
 			if (valid)
 				valid = nextXScale->map(&x2);
 			if (valid)
@@ -374,8 +373,7 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 				double y1 = yInterval.end();
 				double y2 = nextYInterval.start();
 
-				bool valid = true;
-				valid = yScale->map(&y1);
+				bool valid = yScale->map(&y1);
 				if (valid)
 					valid = nextYScale->map(&y2);
 				if (valid)
@@ -387,7 +385,7 @@ QList<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QList<QLineF> &
 
 			QRectF scaleRect = QRectF(xInterval.start(), yInterval.start(),
 					xInterval.end() - xInterval.start(), yInterval.end() - yInterval.start()).normalized();
-			foreach(QLineF line, lines) {
+			foreach (QLineF line, lines) {
 				LineClipResult clipResult;
 				if (!AbstractCoordinateSystem::clipLineToRect(&line, scaleRect, &clipResult))
 					continue;

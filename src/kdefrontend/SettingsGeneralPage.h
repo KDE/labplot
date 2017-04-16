@@ -37,7 +37,7 @@ class SettingsGeneralPage : public SettingsPage {
 	Q_OBJECT
 
 public:
-	explicit SettingsGeneralPage(QWidget* parent);
+	explicit SettingsGeneralPage(QWidget*);
 
 	virtual void applySettings();
 	virtual void restoreDefaults();
@@ -52,7 +52,6 @@ private:
 private slots:
 	void interfaceChanged(int);
 	void changed();
-	void checkTeX(int);
 
 signals:
 	void settingsChanged();

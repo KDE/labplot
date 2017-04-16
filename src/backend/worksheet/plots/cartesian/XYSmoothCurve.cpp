@@ -255,13 +255,13 @@ void XYSmoothCurvePrivate::recalculate() {
 	const double lvalue = smoothData.lvalue;
 	const double rvalue = smoothData.rvalue;
 
-	DEBUG_LOG("type:"<<nsl_smooth_type_name[type]);
-	DEBUG_LOG("points ="<<points);
-	DEBUG_LOG("weight:"<<nsl_smooth_weight_type_name[weight]);
-	DEBUG_LOG("percentile ="<<percentile);
-	DEBUG_LOG("order ="<<order);
-	DEBUG_LOG("mode ="<<nsl_smooth_pad_mode_name[mode]);
-	DEBUG_LOG("const. values ="<<lvalue<<rvalue);
+	DEBUG("type:"<<nsl_smooth_type_name[type]);
+	DEBUG("points ="<<points);
+	DEBUG("weight:"<<nsl_smooth_weight_type_name[weight]);
+	DEBUG("percentile ="<<percentile);
+	DEBUG("order ="<<order);
+	DEBUG("mode ="<<nsl_smooth_pad_mode_name[mode]);
+	DEBUG("const. values ="<<lvalue<<rvalue);
 
 ///////////////////////////////////////////////////////////
 	int status=0;

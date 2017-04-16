@@ -3,7 +3,8 @@
     Project              : LabPlot
     Description          : widget for editing the fit parameters
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
 
@@ -29,12 +30,11 @@
 #define FITPARAMETERSWIDGET_H
 
 #include <QWidget>
-#include <QStringList>
 
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "ui_fitparameterswidget.h"
 
-class FitParametersWidget: public QWidget {
+class FitParametersWidget : public QWidget {
 	Q_OBJECT
 
 public:
@@ -44,7 +44,10 @@ private:
 	Ui::FitParametersWidget ui;
 	XYFitCurve::FitData* m_fitData;
 	bool m_changed;
-	bool eventFilter( QObject * watched, QEvent * event);
+	bool m_rehighlighting;
+
+	bool eventFilter(QObject*, QEvent*);
+	void highlightInvalid(int row, int col, bool invalid) const;
 
 signals:
 	void finished();

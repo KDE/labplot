@@ -1,7 +1,7 @@
 /***************************************************************************
 File                 : PresenterWidget.h
 Project              : LabPlot
-Description          : Widget for presenting worksheets
+Description          : Widget for static presenting of worksheets
 --------------------------------------------------------------------
 Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
@@ -49,27 +49,12 @@ private:
 
 protected:
 	void keyPressEvent(QKeyEvent*);
+	void focusOutEvent(QFocusEvent*);
 	bool eventFilter(QObject*, QEvent*);
 
 private slots:
 	void slideDown();
 	void slideUp();
-};
-
-class SlidingPanel : public QFrame {
-	Q_OBJECT
-
-public:
-	explicit SlidingPanel(QWidget* parent, const QString& worksheetName);
-	~SlidingPanel();
-
-	QLabel* m_worksheetName;
-	QPushButton* m_quitPresentingMode;
-	virtual QSize sizeHint() const;
-	bool shouldHide();
-
-public slots:
-	void movePanel(qreal);
 };
 
 #endif // PRESENTERWIDGET_H

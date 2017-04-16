@@ -43,19 +43,23 @@ class XYFitCurve : public XYCurve {
 		enum WeightsType {WeightsFromColumn, WeightsFromErrorColumn};
 
 		struct FitData {
-			FitData() : modelType(nsl_fit_model_polynomial),
+			FitData() : modelCategory(nsl_fit_model_basic), modelType(0),
 						weightsType(XYFitCurve::WeightsFromColumn),
 						degree(1),
 						maxIterations(500),
 						eps(1e-4),
 						evaluatedPoints(100),
+						useResults(true),
+						evaluateFullRange(true),
 						autoRange(true), xRange(2) {};
 
-			nsl_fit_model_type modelType;
+			nsl_fit_model_category modelCategory;
+			unsigned int modelType;
 			WeightsType weightsType;
 			int degree;
 			QString model;
 			QStringList paramNames;
+			QStringList paramNamesUtf8;	// Utf8 version of paramNames
 			QVector<double> paramStartValues;
 			QVector<double> paramLowerLimits;
 			QVector<double> paramUpperLimits;

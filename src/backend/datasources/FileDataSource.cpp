@@ -244,7 +244,7 @@ QString FileDataSource::fileInfoString(const QString &name){
 	QIODevice *file = new QFile(name);
 
 	QString fileName;
-    if (name.left(1)!=QDir::separator()) {
+    if (name.at(0) != QDir::separator()) {
         fileName = QDir::homePath() + QDir::separator() + name;
     } else {
         fileName = name;
@@ -257,7 +257,7 @@ QString FileDataSource::fileInfoString(const QString &name){
 		QStringList infoStrings;
 
 		//general information about the file
-		infoStrings << i18n("<u><b>%1:</b></u>", fileName);
+		infoStrings << "<u><b>" + fileName + "</b></u><br>";
 		fileInfo.setFile(fileName);
 
 		infoStrings << i18n("Readable: %1", fileInfo.isReadable() ? i18n("yes") : i18n("no"));

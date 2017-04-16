@@ -32,15 +32,17 @@
 #include "tools/TeXRenderer.h"
 
 #include <QWidgetAction>
+#include <QSplitter>
 
 #include <KConfigGroup>
 #include <KCharSelect>
 #include <KGlobal>
+#include <KConfig>
 #include <KMenu>
 
 /*!
 	\class LabelWidget
- 	\brief Widget for editing the properties of a TextLabel object, mostly used in an an appropriate dock widget.
+ 	\brief Widget for editing the properties of a TextLabel object, mostly used in an appropriate dock widget.
 
  	In order the properties of the label to be shown, \c loadConfig() has to be called with the correspondig KConfigGroup
  	(settings for a label in *Plot, Axis etc. or for an independent label on the worksheet).
@@ -48,18 +50,23 @@
  	\ingroup kdefrontend
  */
 LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
+	m_label(0),
 	m_initializing(false),
 	m_dateTimeMenu(new KMenu(this)),
 	m_teXEnabled(false) {
 
 	ui.setupUi(this);
 
+	QSplitter* splitter = new QSplitter(Qt::Vertical, this);
+	splitter->setHandleWidth(1);
+	splitter->addWidget(ui.frameTop);
+	splitter->addWidget(ui.frameBottom);
+	splitter->setChildrenCollapsible(false);
+	ui.lText->setMinimumWidth(ui.lGeometry->width());
+	this->layout()->addWidget(splitter);
+
 	m_dateTimeMenu->setSeparatorsCollapsible(false); //we don't want the first separator to be removed
 
-	QGridLayout* layout = static_cast<QGridLayout*>(this->layout());
-	layout->setContentsMargins(2,2,2,2);
-	layout->setHorizontalSpacing(2);
-	layout->setVerticalSpacing(2);
 	ui.kcbFontColor->setColor(Qt::black); // default color
 
 	//Icons
@@ -71,7 +78,6 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	ui.tbFontSubScript->setIcon( KIcon("format-text-subscript") );
 	ui.tbSymbols->setIcon( KIcon("labplot-format-text-symbol") );
 	ui.tbDateTime->setIcon( KIcon("chronometer") );
-	ui.tbTexUsed->setIconSize(QSize(20, 20));
 	ui.tbTexUsed->setIcon( KIcon("labplot-TeX-logo") );
 
 	//Positioning and alignment
@@ -119,6 +125,7 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	connect(ui.tbDateTime, SIGNAL(clicked(bool)), this, SLOT(dateTimeMenu()));
 	connect(m_dateTimeMenu, SIGNAL(triggered(QAction*)), this, SLOT(insertDateTime(QAction*)) );
 	connect(ui.kfontRequester, SIGNAL(fontSelected(QFont)), this, SLOT(fontChanged(QFont)));
+	connect(ui.kfontRequesterTeX, SIGNAL(fontSelected(QFont)), this, SLOT(teXFontChanged(QFont)));
 	connect(ui.sbFontSize, SIGNAL(valueChanged(int)), this, SLOT(fontSizeChanged(int)) );
 
 	// geometry
@@ -155,7 +162,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 
 void LabelWidget::setAxes(QList<Axis*> axes) {
 	m_labelsList.clear();
-	foreach(Axis* axis, axes) {
+	foreach (Axis* axis, axes) {
 		m_labelsList.append(axis->title());
 		connect(axis, SIGNAL(titleOffsetXChanged(float)), this, SLOT(labelOffsetxChanged(float)) );
 		connect(axis, SIGNAL(titleOffsetYChanged(float)), this, SLOT(labelOffsetyChanged(float)) );
@@ -173,8 +180,8 @@ void LabelWidget::initConnections() const {
 	connect( m_label, SIGNAL(textWrapperChanged(TextLabel::TextWrapper)),
 	         this, SLOT(labelTextWrapperChanged(TextLabel::TextWrapper)) );
 	connect( m_label, SIGNAL(teXImageUpdated(bool)), this, SLOT(labelTeXImageUpdated(bool)) );
-	connect( m_label, SIGNAL(teXFontSizeChanged(int)),
-	         this, SLOT(labelTeXFontSizeChanged(int)) );
+	connect( m_label, SIGNAL(teXFontChanged(QFont)),
+	         this, SLOT(labelTeXFontChanged(QFont)) );
 	connect( m_label, SIGNAL(teXFontColorChanged(QColor)),
 	         this, SLOT(labelTeXFontColorChanged(QColor)) );
 	connect( m_label, SIGNAL(positionChanged(TextLabel::PositionWrapper)),
@@ -248,7 +255,7 @@ void LabelWidget::textChanged() {
 		QString text=ui.teLabel->toPlainText();
 		TextLabel::TextWrapper wrapper(text, true);
 
-		foreach(TextLabel* label, m_labelsList)
+		foreach (TextLabel* label, m_labelsList)
 			label->setText(wrapper);
 	} else {
 		//save an empty string instead of a html-string with empty body, if no text available in QTextEdit
@@ -259,7 +266,7 @@ void LabelWidget::textChanged() {
 			text = ui.teLabel->toHtml();
 
 		TextLabel::TextWrapper wrapper(text, false);
-		foreach(TextLabel* label, m_labelsList)
+		foreach (TextLabel* label, m_labelsList)
 			label->setText(wrapper);
 	}
 }
@@ -305,14 +312,33 @@ void LabelWidget::teXUsedChanged(bool checked) {
 
 	ui.lFont->setVisible(!checked);
 	ui.kfontRequester->setVisible(!checked);
-	ui.lFontSize->setVisible(checked);
-	ui.sbFontSize->setVisible(checked);
+
+	if (checked) {
+		KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_Worksheet"));
+		QString engine = group.readEntry("LaTeXEngine", "");
+		if (engine == "xelatex" || engine == "lualatex") {
+			ui.lFontTeX->setVisible(true);
+			ui.kfontRequesterTeX->setVisible(true);
+			ui.lFontSize->setVisible(false);
+			ui.sbFontSize->setVisible(false);
+		} else {
+			ui.lFontTeX->setVisible(false);
+			ui.kfontRequesterTeX->setVisible(false);
+			ui.lFontSize->setVisible(true);
+			ui.sbFontSize->setVisible(true);
+		}
+	} else {
+		ui.lFontTeX->setVisible(false);
+		ui.kfontRequesterTeX->setVisible(false);
+		ui.lFontSize->setVisible(false);
+		ui.sbFontSize->setVisible(false);
+	}
 
 	//no latex is available and the user switched to the text mode,
 	//deactivate the button since it shouldn't be possible anymore to switch to the TeX-mode
 	if (!m_teXEnabled && !checked) {
 		ui.tbTexUsed->setEnabled(false);
-		ui.tbTexUsed->setToolTip(i18n("LaTeX typesetting not possible. Please check the settings"));
+		ui.tbTexUsed->setToolTip(i18n("LaTeX typesetting not possible. Please check the settings."));
 	} else {
 		ui.tbTexUsed->setEnabled(true);
 		ui.tbTexUsed->setToolTip("");
@@ -321,14 +347,14 @@ void LabelWidget::teXUsedChanged(bool checked) {
 	//when switching to the text mode, set the background color to white just for the case the latex code provided by the user
 	//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
 	if (!checked)
-		ui.teLabel->setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
+		ui.teLabel->setStyleSheet("");
 
 	if (m_initializing)
 		return;
 
 	QString text = checked ? ui.teLabel->toPlainText() : ui.teLabel->toHtml();
 	TextLabel::TextWrapper wrapper(text, checked);
-	foreach(TextLabel* label, m_labelsList)
+	foreach (TextLabel* label, m_labelsList)
 		label->setText(wrapper);
 }
 
@@ -337,7 +363,7 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 		return;
 
 	ui.teLabel->setTextColor(color);
-	foreach(TextLabel* label, m_labelsList)
+	foreach (TextLabel* label, m_labelsList)
 		label->setTeXFontColor(color);
 }
 
@@ -345,15 +371,17 @@ void LabelWidget::fontSizeChanged(int value) {
 	if (m_initializing)
 		return;
 
-	foreach(TextLabel* label, m_labelsList)
-		label->setTeXFontSize(value);
+	QFont font = m_label->teXFont();
+	font.setPointSize(value);
+	foreach (TextLabel* label, m_labelsList)
+		label->setTeXFont(font);
 }
 
 void LabelWidget::fontBoldChanged(bool checked) {
 	if (m_initializing)
 		return;
 
-	if(checked)
+	if (checked)
 		ui.teLabel->setFontWeight(QFont::Bold);
 	else
 		ui.teLabel->setFontWeight(QFont::Normal);
@@ -419,9 +447,17 @@ void LabelWidget::fontChanged(const QFont& font) {
 	ui.teLabel->setFontWeight(font.weight());
 }
 
+void LabelWidget::teXFontChanged(const QFont& font) {
+	if (m_initializing)
+		return;
+
+	foreach (TextLabel* label, m_labelsList)
+		label->setTeXFont(font);
+}
+
 void LabelWidget::charMenu() {
 	QMenu menu;
-	KCharSelect selection(this,0,KCharSelect::SearchLine | KCharSelect::CharacterTable | KCharSelect::BlockCombos | KCharSelect::HistoryButtons);
+	KCharSelect selection(this, 0, KCharSelect::SearchLine | KCharSelect::CharacterTable | KCharSelect::BlockCombos | KCharSelect::HistoryButtons);
 	selection.setCurrentFont(ui.teLabel->currentFont());
 	connect(&selection, SIGNAL(charSelected(QChar)), this, SLOT(insertChar(QChar)));
 	connect(&selection, SIGNAL(charSelected(QChar)), &menu, SLOT(close()));
@@ -481,7 +517,7 @@ void LabelWidget::positionXChanged(int index) {
 
 	TextLabel::PositionWrapper position = m_label->position();
 	position.horizontalPosition = TextLabel::HorizontalPosition(index);
-	foreach(TextLabel* label, m_labelsList)
+	foreach (TextLabel* label, m_labelsList)
 		label->setPosition(position);
 }
 
@@ -500,7 +536,7 @@ void LabelWidget::positionYChanged(int index) {
 
 	TextLabel::PositionWrapper position = m_label->position();
 	position.verticalPosition = TextLabel::VerticalPosition(index);
-	foreach(TextLabel* label, m_labelsList)
+	foreach (TextLabel* label, m_labelsList)
 		label->setPosition(position);
 }
 
@@ -510,7 +546,7 @@ void LabelWidget::customPositionXChanged(double value) {
 
 	TextLabel::PositionWrapper position = m_label->position();
 	position.point.setX(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
-	foreach(TextLabel* label, m_labelsList)
+	foreach (TextLabel* label, m_labelsList)
 		label->setPosition(position);
 }
 
@@ -520,7 +556,7 @@ void LabelWidget::customPositionYChanged(double value) {
 
 	TextLabel::PositionWrapper position = m_label->position();
 	position.point.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
-	foreach(TextLabel* label, m_labelsList)
+	foreach (TextLabel* label, m_labelsList)
 		label->setPosition(position);
 }
 
@@ -528,7 +564,7 @@ void LabelWidget::horizontalAlignmentChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(TextLabel* label, m_labelsList)
+	foreach (TextLabel* label, m_labelsList)
 		label->setHorizontalAlignment(TextLabel::HorizontalAlignment(index));
 }
 
@@ -536,7 +572,7 @@ void LabelWidget::verticalAlignmentChanged(int index) {
 	if (m_initializing)
 		return;
 
-	foreach(TextLabel* label, m_labelsList)
+	foreach (TextLabel* label, m_labelsList)
 		label->setVerticalAlignment(TextLabel::VerticalAlignment(index));
 }
 
@@ -544,7 +580,7 @@ void LabelWidget::rotationChanged(int value) {
 	if (m_initializing)
 		return;
 
-	foreach(TextLabel* label, m_labelsList)
+	foreach (TextLabel* label, m_labelsList)
 		label->setRotationAngle(value);
 }
 
@@ -552,7 +588,7 @@ void LabelWidget::offsetXChanged(double value) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	foreach (Axis* axis, m_axesList)
 		axis->setTitleOffsetX( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
@@ -560,7 +596,7 @@ void LabelWidget::offsetYChanged(double value) {
 	if (m_initializing)
 		return;
 
-	foreach(Axis* axis, m_axesList)
+	foreach (Axis* axis, m_axesList)
 		axis->setTitleOffsetY( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
 }
 
@@ -568,7 +604,7 @@ void LabelWidget::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
 
-	foreach(TextLabel* label, m_labelsList)
+	foreach (TextLabel* label, m_labelsList)
 		label->setVisible(state);
 }
 
@@ -599,12 +635,13 @@ void LabelWidget::labelTeXImageUpdated(bool valid) {
 	if (!valid)
 		ui.teLabel->setStyleSheet("QTextEdit{background: red;}");
 	else
-		ui.teLabel->setStyleSheet("QTextEdit{background: white;}"); //TODO: assign the default color for the current style/theme
+		ui.teLabel->setStyleSheet("");
 }
 
-void LabelWidget::labelTeXFontSizeChanged(const int size) {
+void LabelWidget::labelTeXFontChanged(const QFont& font) {
 	m_initializing = true;
-	ui.sbFontSize->setValue(size);
+	ui.kfontRequesterTeX->setFont(font);
+	ui.sbFontSize->setValue(font.pointSize());
 	m_initializing = false;
 }
 
@@ -668,17 +705,20 @@ void LabelWidget::load() {
 
 	m_initializing = true;
 
-	ui.chbVisible->setChecked( m_label->isVisible() );
+	ui.chbVisible->setChecked(m_label->isVisible());
 
 	//Text
-	ui.teLabel->setHtml( m_label->text().text );
+	ui.teLabel->setHtml(m_label->text().text);
 	ui.teLabel->selectAll();
 	ui.teLabel->setFocus();
+
+	//TeX
 	ui.tbTexUsed->setChecked( (bool) m_label->text().teXUsed );
 	this->teXUsedChanged(m_label->text().teXUsed);
-	ui.sbFontSize->setValue( m_label->teXFontSize() );
+	ui.kfontRequesterTeX->setFont(m_label->teXFont());
+	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
 	if(m_label->text().teXUsed)
-		ui.kcbFontColor->setColor( m_label->teXFontColor() );
+		ui.kcbFontColor->setColor(m_label->teXFontColor());
 
 	//Set text format
 	ui.tbFontBold->setChecked(ui.teLabel->fontWeight()==QFont::Bold);
@@ -698,7 +738,7 @@ void LabelWidget::load() {
 	positionYChanged(ui.cbPositionY->currentIndex());
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(),Worksheet::Centimeter) );
 
-	if (m_axesList.size()) {
+	if (!m_axesList.isEmpty()) {
 		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetX(), Worksheet::Point) );
 		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetY(), Worksheet::Point) );
 	}
@@ -715,10 +755,11 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 
 	m_initializing = true;
 
-	//Text
+	//TeX
 	ui.tbTexUsed->setChecked(group.readEntry("TeXUsed", (bool) m_label->text().teXUsed));
 	this->teXUsedChanged(m_label->text().teXUsed);
-	ui.sbFontSize->setValue( group.readEntry("TeXFontSize", m_label->teXFontSize()) );
+	ui.sbFontSize->setValue( group.readEntry("TeXFontSize", m_label->teXFont().pointSize()) );
+	ui.kfontRequester->setFont(group.readEntry("TeXFont", m_label->teXFont()));
 	if(m_label->text().teXUsed)
 		ui.kcbFontColor->setColor(group.readEntry("TeXFontColor", m_label->teXFontColor()));
 
@@ -738,7 +779,7 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_label->position().verticalPosition ) );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()),Worksheet::Centimeter) );
 
-	if (m_axesList.size()) {
+	if (!m_axesList.isEmpty()) {
 		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetX", m_axesList.first()->titleOffsetX()), Worksheet::Point) );
 		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetY", m_axesList.first()->titleOffsetY()), Worksheet::Point) );
 	}
@@ -750,10 +791,10 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 }
 
 void LabelWidget::saveConfig(KConfigGroup& group) {
-	//Text
+	//TeX
 	group.writeEntry("TeXUsed", ui.tbTexUsed->isChecked());
 	group.writeEntry("TeXFontColor", ui.kcbFontColor->color());
-	group.writeEntry("TeXFontSize", ui.sbFontSize->value());
+	group.writeEntry("TeXFont", ui.kfontRequesterTeX->font());
 
 	// Geometry
 	group.writeEntry("PositionX", ui.cbPositionX->currentIndex());
@@ -761,7 +802,7 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 	group.writeEntry("PositionY", ui.cbPositionY->currentIndex());
 	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),Worksheet::Centimeter) );
 
-	if (m_axesList.size()) {
+	if (!m_axesList.isEmpty()) {
 		group.writeEntry("OffsetX",  Worksheet::convertToSceneUnits(ui.sbOffsetX->value(), Worksheet::Point) );
 		group.writeEntry("OffsetY",  Worksheet::convertToSceneUnits(ui.sbOffsetY->value(), Worksheet::Point) );
 	}

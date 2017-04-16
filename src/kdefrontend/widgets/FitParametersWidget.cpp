@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for editing fit parameters
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -43,7 +43,8 @@
 
 	\ingroup kdefrontend
  */
-FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* data) : QWidget(parent), m_fitData(data), m_changed(false) {
+FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* data) : QWidget(parent),
+	m_fitData(data), m_changed(false), m_rehighlighting(false) {
 	ui.setupUi(this);
 	ui.pbApply->setIcon(KIcon("dialog-ok-apply"));
 	ui.pbCancel->setIcon(KIcon("dialog-cancel"));
@@ -70,18 +71,15 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 	headerItem->setText(i18n("Upper limit"));
 	ui.tableWidget->setHorizontalHeaderItem(4, headerItem);
 
-	ui.tableWidget->horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
-	ui.tableWidget->horizontalHeader()->setResizeMode(1, QHeaderView::Stretch);
-	ui.tableWidget->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
-	ui.tableWidget->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
-	ui.tableWidget->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
+	ui.tableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+	ui.tableWidget->horizontalHeader()->setStretchLastSection(true);
 
-	if (m_fitData->modelType != nsl_fit_model_custom) {	// pre-defined model
+	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined model
 		ui.tableWidget->setRowCount(m_fitData->paramNames.size());
 
 		for (int i=0; i < m_fitData->paramNames.size(); ++i){
 			// name
-			QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNames.at(i));
+			QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNamesUtf8.at(i));
 			item->setFlags(item->flags() ^ Qt::ItemIsEditable);
 			item->setBackground(QBrush(Qt::lightGray));
 			ui.tableWidget->setItem(i, 0, item);
@@ -127,10 +125,10 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 		ui.pbAdd->setVisible(false);
 		ui.pbRemove->setVisible(false);
 	} else {	// custom model
-		if (m_fitData->paramNames.size()) {	// parameters for the custom model are already available -> show them
+		if (!m_fitData->paramNames.isEmpty()) {	// parameters for the custom model are already available -> show them
 			ui.tableWidget->setRowCount(m_fitData->paramNames.size());
 
-			for (int i=0; i < m_fitData->paramNames.size(); ++i){
+			for (int i = 0; i < m_fitData->paramNames.size(); ++i){
 				// name
 				QTableWidgetItem* item = new QTableWidgetItem(m_fitData->paramNames.at(i));
 				item->setBackground(QBrush(Qt::lightGray));
@@ -233,14 +231,14 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 		if (event->type() == QEvent::KeyPress) {
 			QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 			if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
-				if (m_fitData->modelType != nsl_fit_model_custom) {
+				if (m_fitData->modelCategory != nsl_fit_model_custom) {
 					//on the second column with the values is editable.
 					//navigate to the next cell in the second column, or to the apply-button
-					if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount()-1) {
+					if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount() - 1) {
 						ui.pbApply->setFocus();
 						ui.tableWidget->clearSelection();
 					} else {
-						ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow()+1, 1);
+						ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow() + 1, 1);
 					}
 				} else {
 					//both columns (names and start values) are editable
@@ -249,11 +247,11 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 						ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow(), 1);
 					} else {
 						//start value was entered, navigate to the next name-cell or to the apply-button
-						if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount()-1) {
+						if (ui.tableWidget->currentRow() == ui.tableWidget->rowCount() - 1) {
 							ui.pbApply->setFocus();
 							ui.tableWidget->clearSelection();
 						} else {
-							ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow()+1, 0);
+							ui.tableWidget->setCurrentCell(ui.tableWidget->currentRow() + 1, 0);
 						}
 					}
 				}
@@ -267,7 +265,7 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 
 void FitParametersWidget::applyClicked() {
 
-	if (m_fitData->modelType != nsl_fit_model_custom) {	// pre-defined models
+	if (m_fitData->modelCategory != nsl_fit_model_custom) {	// pre-defined models
 		for (int i=0; i < ui.tableWidget->rowCount(); ++i) {
 			m_fitData->paramStartValues[i] = ((QLineEdit *)ui.tableWidget->cellWidget(i, 1))->text().toDouble();
 
@@ -285,6 +283,7 @@ void FitParametersWidget::applyClicked() {
 		}
 	} else {	// custom model
 		m_fitData->paramNames.clear();
+		m_fitData->paramNamesUtf8.clear();
 		m_fitData->paramStartValues.clear();
 		m_fitData->paramFixed.clear();
 		m_fitData->paramLowerLimits.clear();
@@ -294,6 +293,7 @@ void FitParametersWidget::applyClicked() {
 			if ( !ui.tableWidget->item(i, 0)->text().simplified().isEmpty()
 				&& !((QLineEdit *)ui.tableWidget->cellWidget(i, 1))->text().simplified().isEmpty() ) {
 				m_fitData->paramNames.append( ui.tableWidget->item(i, 0)->text() );
+				m_fitData->paramNamesUtf8.append( ui.tableWidget->item(i, 0)->text() );
 				m_fitData->paramStartValues.append( ((QLineEdit *)ui.tableWidget->cellWidget(i, 1))->text().toDouble() );
 
 				QWidget *widget = ui.tableWidget->cellWidget(i, 2)->layout()->itemAt(0)->widget();
@@ -312,9 +312,9 @@ void FitParametersWidget::applyClicked() {
 	}
 
 	if (m_changed)
-		emit(parametersChanged());
+		emit parametersChanged();
 
-	emit(finished());
+	emit finished() ;
 }
 
 // check if start values are inside limits
@@ -332,12 +332,17 @@ void FitParametersWidget::startValueChanged() {
 	else
 		upperLimit = DBL_MAX;
 
-	QPalette *palette = new QPalette();
-	if(value < lowerLimit || value > upperLimit)
-		palette->setColor(QPalette::Text, Qt::red);
-	else
-		palette->setColor(QPalette::Text, Qt::black);
-	((QLineEdit *)ui.tableWidget->cellWidget(row, 1))->setPalette(*palette);
+	bool invalid = (value < lowerLimit || value > upperLimit);
+	highlightInvalid(row, 1, invalid);
+
+	if (m_rehighlighting)
+		return;
+
+	//start value was changed -> check whether the lower and upper limits are valid and highlight them if not
+	m_rehighlighting = true;
+	lowerLimitChanged();
+	upperLimitChanged();
+	m_rehighlighting = false;
 
 	m_changed = true;
 }
@@ -358,12 +363,17 @@ void FitParametersWidget::lowerLimitChanged() {
 	else
 		upperLimit = DBL_MAX;
 
-	QPalette *palette = new QPalette();
-	if(lowerLimit > value || lowerLimit > upperLimit)
-		palette->setColor(QPalette::Text, Qt::red);
-	else
-		palette->setColor(QPalette::Text, Qt::black);
-	((QLineEdit *)ui.tableWidget->cellWidget(row, 3))->setPalette(*palette);
+	bool invalid = (lowerLimit > value || lowerLimit > upperLimit);
+	highlightInvalid(row, 3, invalid);
+
+	if (m_rehighlighting)
+		return;
+
+	//lower limit was changed -> check whether the start value and the upper limit are valid and highlight them if not
+	m_rehighlighting = true;
+	startValueChanged();
+	upperLimitChanged();
+	m_rehighlighting = false;
 
 	m_changed = true;
 }
@@ -384,12 +394,17 @@ void FitParametersWidget::upperLimitChanged() {
 	else
 		upperLimit = DBL_MAX;
 
-	QPalette *palette = new QPalette();
-	if(upperLimit < value || upperLimit < lowerLimit)
-		palette->setColor(QPalette::Text, Qt::red);
-	else
-		palette->setColor(QPalette::Text, Qt::black);
-	((QLineEdit *)ui.tableWidget->cellWidget(row, 4))->setPalette(*palette);
+	bool invalid = (upperLimit < value || upperLimit < lowerLimit);
+	highlightInvalid(row, 4, invalid);
+
+	if (m_rehighlighting)
+		return;
+
+	//upper limit was changed -> check whether the start value and the lower limit are valid and highlight them if not
+	m_rehighlighting = true;
+	startValueChanged();
+	lowerLimitChanged();
+	m_rehighlighting = false;
 
 	m_changed = true;
 }
@@ -437,14 +452,24 @@ void FitParametersWidget::addParameter() {
 
 	ui.tableWidget->setCurrentCell(rows, 0);
 	ui.pbRemove->setEnabled(true);
+	changed();
 }
 
 void FitParametersWidget::removeParameter() {
 	ui.tableWidget->removeRow(ui.tableWidget->currentRow());
 	if (ui.tableWidget->rowCount() == 1)
 		ui.pbRemove->setEnabled(false);
+	changed();
 }
 
 void FitParametersWidget::changed() {
 	m_changed = true;
+}
+
+void FitParametersWidget::highlightInvalid(int row, int col, bool invalid) const {
+	QLineEdit* le = ((QLineEdit*)ui.tableWidget->cellWidget(row, col));
+	if (invalid)
+		le->setStyleSheet("QLineEdit{background: red;}");
+	else
+		le->setStyleSheet("");
 }

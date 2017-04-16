@@ -87,6 +87,11 @@ private slots:
 	void removeExtension();
 	void addKeyword();
 	void addModifyKeywordUnit();
+	void closeFile();
+	void enableButtonCloseFile(QTreeWidgetItem *, int);
+
+signals:
+	void changed(bool);
 };
 
 #endif // FITSHEADEREDITWIDGET_H

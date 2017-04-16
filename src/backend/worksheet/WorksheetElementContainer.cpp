@@ -95,7 +95,7 @@ void WorksheetElementContainer::setVisible(bool on) {
 
 	//if visible is set false, change the visibility of the container last
 	if (!on)
-		exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
+		exec(new WorksheetElementContainerSetVisibleCmd(d, false, i18n("%1: set invisible")));
 
 	endMacro();
 }
@@ -120,7 +120,7 @@ void WorksheetElementContainer::setPrinting(bool on) {
 }
 
 void WorksheetElementContainer::retransform() {
-	DEBUG_LOG("WorksheetElementContainer::retransform()");
+	DEBUG("WorksheetElementContainer::retransform()");
 	Q_D(WorksheetElementContainer);
 
 	QList<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
@@ -153,7 +153,8 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 			elem->setZValue(zVal++);
 	}
 
-	d->recalcShapeAndBoundingRect();
+	if (!isLoading())
+		d->recalcShapeAndBoundingRect();
 }
 
 void WorksheetElementContainer::childHovered() {
@@ -244,7 +245,7 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 
 // Inherited from QGraphicsItem
 void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	DEBUG_LOG("WorksheetElementContainerPrivate::paint()");
+	DEBUG("WorksheetElementContainerPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -262,5 +263,5 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 		painter->setOpacity(q->selectedOpacity);
 		painter->drawPath(containerShape);
 	}
-	DEBUG_LOG("WorksheetElementContainerPrivate::paint() DONE");
+	DEBUG("WorksheetElementContainerPrivate::paint() DONE");
 }

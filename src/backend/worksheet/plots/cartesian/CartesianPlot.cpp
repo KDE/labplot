@@ -558,9 +558,8 @@ void CartesianPlot::setRect(const QRectF& rect) {
 
 class CartesianPlotSetAutoScaleXCmd : public QUndoCommand {
 public:
-	CartesianPlotSetAutoScaleXCmd(CartesianPlotPrivate* private_obj, bool autoScale) {
-		m_private = private_obj;
-		m_autoScale = autoScale;
+	CartesianPlotSetAutoScaleXCmd(CartesianPlotPrivate* private_obj, bool autoScale) :
+		m_private(private_obj), m_autoScale(autoScale), m_minOld(0.0), m_maxOld(0.0) {
 		setText(i18n("%1: change x-range auto scaling", m_private->name()));
 	};
 
@@ -635,9 +634,8 @@ void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
 
 class CartesianPlotSetAutoScaleYCmd : public QUndoCommand {
 public:
-	CartesianPlotSetAutoScaleYCmd(CartesianPlotPrivate* private_obj, bool autoScale) {
-		m_private = private_obj;
-		m_autoScale = autoScale;
+	CartesianPlotSetAutoScaleYCmd(CartesianPlotPrivate* private_obj, bool autoScale) :
+		m_private(private_obj), m_autoScale(autoScale), m_minOld(0.0), m_maxOld(0.0) {
 		setText(i18n("%1: change y-range auto scaling", m_private->name()));
 	};
 
@@ -1188,7 +1186,7 @@ void CartesianPlot::scaleAuto() {
 }
 
 void CartesianPlot::zoomIn() {
-	DEBUG_LOG("CartesianPlot::zoomIn()");
+	DEBUG("CartesianPlot::zoomIn()");
 	Q_D(CartesianPlot);
 
 	float oldRange = (d->xMax - d->xMin);
@@ -1314,7 +1312,7 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot *owner)
 	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
  */
 void CartesianPlotPrivate::retransform() {
-	DEBUG_LOG("CartesianPlotPrivate::retransform()");
+	DEBUG("CartesianPlotPrivate::retransform()");
 	if (suppressRetransform)
 		return;
 
@@ -1337,7 +1335,7 @@ void CartesianPlotPrivate::retransform() {
 }
 
 void CartesianPlotPrivate::retransformScales() {
-	DEBUG_LOG("CartesianPlotPrivate::retransformScales()");
+	DEBUG("CartesianPlotPrivate::retransformScales()");
 
 	CartesianPlot* plot = dynamic_cast<CartesianPlot*>(q);
 	QList<CartesianScale*> scales;
@@ -1565,6 +1563,7 @@ void CartesianPlotPrivate::checkYRange() {
 CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
 // 	Interval<double> interval (logicalStart-0.01, logicalEnd+0.01); //TODO: move this to CartesianScale
 	Interval<double> interval (-1E15, 1E15);
+// 	Interval<double> interval (logicalStart, logicalEnd);
 	if (type == CartesianPlot::ScaleLinear) {
 		return CartesianScale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	} else {
@@ -1772,7 +1771,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 }
 
 void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * widget) {
-	DEBUG_LOG("CartesianPlotPrivate::paint()");
+	DEBUG("CartesianPlotPrivate::paint()");
 
 	if (!isVisible())
 		return;
@@ -1794,7 +1793,7 @@ void CartesianPlotPrivate::paint(QPainter *painter, const QStyleOptionGraphicsIt
 	}
 
 	WorksheetElementContainerPrivate::paint(painter, option, widget);
-	DEBUG_LOG("CartesianPlotPrivate::paint() DONE");
+	DEBUG("CartesianPlotPrivate::paint() DONE");
 }
 
 //##############################################################################
@@ -2212,6 +2211,11 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 //##############################################################################
 //#########################  Theme management ##################################
 //##############################################################################
+void CartesianPlot::loadTheme(const QString& theme) {
+	KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
+	loadTheme(config);
+}
+
 void CartesianPlot::loadTheme(KConfig& config) {
 	const QString str = config.name();
 	m_themeName = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
@@ -2220,9 +2224,9 @@ void CartesianPlot::loadTheme(KConfig& config) {
 	//load the color palettes for the curves
 	this->setColorPalette(config);
 
-	//load the theme for all the childred
+	//load the theme for all the children
 	const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
-	foreach(WorksheetElement *child, childElements)
+	foreach (WorksheetElement* child, childElements)
 		child->loadThemeConfig(config);
 
 	Q_D(CartesianPlot);

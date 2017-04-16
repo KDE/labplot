@@ -223,7 +223,7 @@ void DatabaseManagerWidget::passwordChanged() {
 }
 
 void DatabaseManagerWidget::addConnection() {
-	DEBUG_LOG("Adding new connection");
+	DEBUG("Adding new connection");
 	SQLConnection conn;
 	conn.name = uniqueName();
 	conn.driver = ui.cbDriver->currentText();
@@ -298,7 +298,7 @@ void DatabaseManagerWidget::deleteConnection() {
 }
 
 void DatabaseManagerWidget::loadConnections() {
-	DEBUG_LOG("Loading connections from " + m_configPath);
+	QDEBUG("Loading connections from " << m_configPath);
 
 	KConfig config(m_configPath, KConfig::SimpleConfig);
 	m_initializing = true;
@@ -339,7 +339,7 @@ void DatabaseManagerWidget::loadConnections() {
 }
 
 void DatabaseManagerWidget::saveConnections() {
-	DEBUG_LOG("Saving connections to " + m_configPath);
+	QDEBUG("Saving connections to " + m_configPath);
 	//delete saved connections
 	KConfig config(m_configPath, KConfig::SimpleConfig);
 	foreach(QString group, config.groupList())

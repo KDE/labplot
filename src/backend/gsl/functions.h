@@ -43,7 +43,6 @@ double my_rand() { return rand(); }
 double my_random() { return random(); }
 double my_drand() { return random()/(double)RAND_MAX; }
 /* math.h */
-double my_ldexp(double x, double expo) { return ldexp(x, (int)expo); }
 #ifndef _WIN32
 double my_jn(double n, double x) { return jn((int)n, x); }
 double my_yn(double n,double x) { return yn((int)n, x); }
@@ -58,6 +57,31 @@ double my_sgn(double x) {
 		return 0;
 }
 #endif
+double my_theta(double x) {
+	if (x >= 0)
+		return 1;
+	else
+		return 0;
+}
+
+/* missing trig. functions */
+double my_sec(double x) { return 1./cos(x); }
+double my_csc(double x) { return 1./sin(x); }
+double my_cot(double x) { return 1./tan(x); }
+double my_asec(double x) { return acos(1./x); }
+double my_acsc(double x) { return asin(1./x); }
+double my_acot(double x) {
+	if (x > 0)
+		return atan(1./x);
+	else
+		return atan(1./x) + M_PI;
+}
+double my_sech(double x) { return 1./cosh(x); }
+double my_csch(double x) { return 1./sinh(x); }
+double my_coth(double x) { return 1./tanh(x); }
+double my_asech(double x) { return gsl_acosh(1./x); }
+double my_acsch(double x) { return gsl_asinh(1./x); }
+double my_acoth(double x) { return gsl_atanh(1./x); }
 
 /* wrapper for GSL functions with integer parameters */
 #define MODE GSL_PREC_DOUBLE
@@ -165,21 +189,13 @@ struct func _functions[] = {
 	{"random", my_random},
 	{"drand", my_drand},
 	/* math.h */
-	{"acos", acos},
-	{"asin", asin},
-	{"atan", atan},
-	{"atan2", atan2},
 	{"ceil", ceil},
-	{"cosh", cosh},
 	{"fabs", fabs},
-	{"ldexp", my_ldexp},
 	{"log10", log10},
 	{"pow", pow},
-	{"sinh", sinh},
 	{"sqrt", sqrt},
-	{"tan", tan},
-	{"tanh", tanh},
 	{"sgn", my_sgn},
+	{"theta", my_theta},
 #ifndef _WIN32
 	{"cbrt", cbrt},
 	{"logb", logb},
@@ -209,15 +225,9 @@ struct func _functions[] = {
 	{"yn", my_yn},
 */
 	/* GSL mathematical functions: see http://www.gnu.org/software/gsl/manual/gsl-ref.html#Mathematical-Functions */
-	{"acosh", gsl_acosh},
-	{"asinh", gsl_asinh},
-	{"atanh", gsl_atanh},
-	{"gsl_log1p", gsl_log1p},
-	{"gsl_expm1", gsl_expm1},
-	{"gsl_hypot", gsl_hypot},
-	{"gsl_hypot3", gsl_hypot3},
-	{"gsl_ldexp", gsl_ldexp},
-	{"gsl_powint", my_gsl_powint},
+	{"log1p", gsl_log1p},
+	{"ldexp", my_gsl_ldexp},
+	{"powint", my_gsl_powint},
 	{"pow2", gsl_pow_2},
 	{"pow3", gsl_pow_3},
 	{"pow4", gsl_pow_4},
@@ -417,7 +427,7 @@ struct func _functions[] = {
 	{"logp", gsl_sf_log_1plusx},
 	{"logpm", gsl_sf_log_1plusx_mx},
 	/* Power Function */
-	{"powint", powint},
+	{"gsl_powint", powint},
 	/* Psi (Digamma) Function */
 	{"psiint", psiint},
 	{"psi", gsl_sf_psi},
@@ -436,10 +446,34 @@ struct func _functions[] = {
 	/* Trigonometric Functions */
 	{"sin", gsl_sf_sin},
 	{"cos", gsl_sf_cos},
-	{"hypot", gsl_sf_hypot},
+	{"tan", tan},
+	{"asin", asin},
+	{"acos", acos},
+	{"atan", atan},
+	{"atan2", atan2},
+	{"sinh", sinh},
+	{"cosh", cosh},
+	{"tanh", tanh},
+	{"acosh", gsl_acosh},
+	{"asinh", gsl_asinh},
+	{"atanh", gsl_atanh},
+	{"sec", my_sec},
+	{"csc", my_csc},
+	{"cot", my_cot},
+	{"asec", my_asec},
+	{"acsc", my_acsc},
+	{"acot", my_acot},
+	{"sech", my_sech},
+	{"csch", my_csch},
+	{"coth", my_coth},
+	{"asech", my_asech},
+	{"acsch", my_acsch},
+	{"acoth", my_acoth},
 	{"sinc", gsl_sf_sinc},
 	{"logsinh", gsl_sf_lnsinh},
 	{"logcosh", gsl_sf_lncosh},
+	{"hypot", gsl_sf_hypot},
+	{"hypot3", gsl_hypot3},
 	{"anglesymm", gsl_sf_angle_restrict_symm},
 	{"anglepos", gsl_sf_angle_restrict_pos},
 	/* Zeta Functions */
