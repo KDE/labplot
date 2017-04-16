@@ -44,6 +44,8 @@ public:
 
 	void read(AbstractDataSource*, AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace);
 	QString selectedTable() const;
+	bool isValid() const;
+	bool isNumericData() const;
 
 private:
 	Ui::ImportSQLDatabaseWidget ui;
@@ -53,6 +55,7 @@ private:
 	QStandardItemModel* m_databaseTreeModel;
 	QString m_configPath;
 	bool m_initializing;
+	bool m_valid;
 
 	void readConnections();
 	void updateStatus();

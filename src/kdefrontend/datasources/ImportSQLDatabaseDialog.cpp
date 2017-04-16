@@ -114,5 +114,31 @@ QString ImportSQLDatabaseDialog::selectedObject() const {
 }
 
 void ImportSQLDatabaseDialog::checkOkButton() {
-	//don't allow to import into a workbook, the user has to create/select spreadsheet or matrix first.
+	DEBUG("ImportSQLDatabaseDialog::checkOkButton()");
+
+	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
+	if (!aspect) {
+		enableButtonOk(false);
+		return;
+	}
+
+	//don't allow to import into a workbook, the user has to create/select spreadsheet or matrix first
+	if(dynamic_cast<const Workbook*>(aspect)) {
+		enableButtonOk(false);
+		return;
+	}
+
+	//check whether a valid connection and an object to import were selected
+	if (!importSQLDatabaseWidget->isValid()) {
+		enableButtonOk(false);
+		return;
+	}
+
+	//for matrix containers allow to import only numerical data
+	if (dynamic_cast<const Matrix*>(aspect) && importSQLDatabaseWidget->isNumericData()) {
+		enableButtonOk(false);
+		return;
+	}
+
+	enableButtonOk(true);
 }

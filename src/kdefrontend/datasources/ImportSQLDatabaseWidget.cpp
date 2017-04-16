@@ -38,7 +38,7 @@
 #include <QStandardItem>
 #include <QTreeView>
 
-ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(parent), m_databaseTreeModel(0), m_initializing(0) {
+ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(parent), m_databaseTreeModel(0), m_initializing(0), m_valid(false) {
 	ui.setupUi(this);
 
 	ui.cbImportFrom->addItem(i18n("Table"));
@@ -60,6 +60,7 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(pare
 
 void ImportSQLDatabaseWidget::loadSettings() {
 	m_initializing = true;
+
 	//read available connections
 	readConnections();
 
@@ -96,6 +97,23 @@ QString ImportSQLDatabaseWidget::selectedTable() const {
 	}
 
 	return QString();
+}
+
+/*!
+	returns \c true if a working connections was selected and a table (or custom query) is provided and ready to be imported.
+	returns \c false otherwise.
+ */
+bool ImportSQLDatabaseWidget::isValid() const {
+	return m_valid;
+}
+
+/*!
+	returns \c true if the selected table or the result of a custom query contains numeric data only.
+	returns \c false otherwise.
+ */
+bool ImportSQLDatabaseWidget::isNumericData() const {
+	//TODO
+	return true;
 }
 
 /*!
