@@ -4,7 +4,7 @@
     Description          : import data dialog
     --------------------------------------------------------------------
     Copyright            : (C) 2016 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -49,6 +49,9 @@ public:
 
 private:
 	ImportSQLDatabaseWidget* importSQLDatabaseWidget;
+
+private slots:
+	void importWidgetStateChanged();
 };
 
 #endif //IMPORTSQLDATABASEDIALOG_H

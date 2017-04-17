@@ -59,6 +59,8 @@ private:
 
 	void readConnections();
 	void updateStatus();
+	void setInvalid();
+	void setValid();
 
 private slots:
 	void loadSettings();
@@ -69,6 +71,7 @@ private slots:
 
 signals:
 	void completed(int);
+	void stateChanged();
 };
 
 #endif // IMPORTSQLDATABASEWIDGET_H

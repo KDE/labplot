@@ -155,6 +155,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	if (!m_db.open()) {
 		KMessageBox::error(this, i18n("Failed to connect to the database '%1'. Please check the connection setttings.", ui.cbConnection->currentText()),
 								 i18n("Connection failed"));
+		setInvalid();
 		return;
 	}
 
@@ -163,12 +164,15 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 		ui.lwTables->setCurrentRow(0);
 		for (int i = 0; i < ui.lwTables->count(); ++i)
 			ui.lwTables->item(i)->setIcon(KIcon("view-form-table"));
-	}
+	} else
+		setInvalid();
 }
 
 void ImportSQLDatabaseWidget::refreshPreview() {
-	if (!ui.lwTables->currentItem())
+	if (!ui.lwTables->currentItem()) {
+		setInvalid();
 		return;
+	}
 
 	WAIT_CURSOR;
 	ui.twPreview->clear();
@@ -193,6 +197,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 		//preview the result of a custom query
 		query = ui.teQuery->toPlainText();
 		if ( query.trimmed().isEmpty() ) {
+			setInvalid();
 			RESET_CURSOR;
 			return;
 		}
@@ -200,6 +205,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 
 	QSqlQuery q(query);
 	if (!q.isActive()) {
+		setInvalid();
 		updateStatus();
 		RESET_CURSOR;
 		return;
@@ -229,6 +235,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	}
 
 	ui.twPreview->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+	setValid();
 	RESET_CURSOR;
 }
 
@@ -300,4 +307,18 @@ void ImportSQLDatabaseWidget::showDatabaseManager() {
 	}
 
 	delete dlg;
+}
+
+void ImportSQLDatabaseWidget::setInvalid() {
+	if (m_valid) {
+		m_valid = false;
+		emit stateChanged();
+	}
+}
+
+void ImportSQLDatabaseWidget::setValid() {
+	if (!m_valid) {
+		m_valid = true;
+		emit stateChanged();
+	}
 }

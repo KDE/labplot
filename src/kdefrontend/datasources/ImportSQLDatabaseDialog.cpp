@@ -4,7 +4,7 @@
     Description          : import file data dialog
     --------------------------------------------------------------------
     Copyright            : (C) 2016 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -55,9 +55,10 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent) : ImportDialog
 
 	setModel(parent->model());
 
-// 	connect( importSQLDatabaseWidget, SIGNAL(statusChanged(QString)), m_statusBar, SLOT(showMessage(QString)) );
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
 	setWindowIcon(KIcon("document-import-database"));
+
+	connect( importSQLDatabaseWidget, SIGNAL(stateChanged()), this, SLOT(importWidgetStateChanged()) );
 
 	//restore saved settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseDialog");
@@ -141,4 +142,8 @@ void ImportSQLDatabaseDialog::checkOkButton() {
 	}
 
 	enableButtonOk(true);
+}
+
+void ImportSQLDatabaseDialog::importWidgetStateChanged() {
+	checkOkButton();
 }
