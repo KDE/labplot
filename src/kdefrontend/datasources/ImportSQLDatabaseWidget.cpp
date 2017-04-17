@@ -217,7 +217,6 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	for (int i = 0; i < columnCount; ++i)
 		headerLabels << q.record().fieldName(i);
 
-	ui.twPreview->setHorizontalHeaderLabels(headerLabels);
 
 	//preview the data
 	int row = 0;
@@ -229,10 +228,15 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 			for (int i = 0; i < record.count(); ++i ) {
 				const QVariant value = record.field(i).value();
 				bool ok;
-				value.toString().toDouble(&ok);
-				if (!ok) {
+				value.toDouble(&ok);
+				if (ok) {
+					headerLabels[i] = headerLabels[i] + "  {" + i18n("Numeric") + "}";
+				} else {
 					numeric = false;
-					break;
+					if (value.toDateTime().isValid())
+						headerLabels[i] = headerLabels[i] + "  {" + i18n("Date and Time") + "}";
+					else
+						headerLabels[i] = headerLabels[i] + "  {" + i18n("Text") + "}";
 				}
 			}
 		}
@@ -248,6 +252,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 			break;
 	}
 
+	ui.twPreview->setHorizontalHeaderLabels(headerLabels);
 	ui.twPreview->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 
 	setValid();
