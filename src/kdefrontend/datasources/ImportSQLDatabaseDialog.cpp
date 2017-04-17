@@ -136,7 +136,7 @@ void ImportSQLDatabaseDialog::checkOkButton() {
 	}
 
 	//for matrix containers allow to import only numerical data
-	if (dynamic_cast<const Matrix*>(aspect) && importSQLDatabaseWidget->isNumericData()) {
+	if (dynamic_cast<const Matrix*>(aspect) && !importSQLDatabaseWidget->isNumericData()) {
 		enableButtonOk(false);
 		return;
 	}

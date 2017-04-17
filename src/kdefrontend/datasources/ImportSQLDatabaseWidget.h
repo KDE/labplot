@@ -56,6 +56,7 @@ private:
 	QString m_configPath;
 	bool m_initializing;
 	bool m_valid;
+	bool m_numeric;
 
 	void readConnections();
 	void updateStatus();

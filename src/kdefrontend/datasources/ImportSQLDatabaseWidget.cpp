@@ -38,7 +38,7 @@
 #include <QStandardItem>
 #include <QTreeView>
 
-ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(parent), m_databaseTreeModel(0), m_initializing(0), m_valid(false) {
+ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(parent), m_databaseTreeModel(0), m_initializing(0), m_valid(false), m_numeric(false) {
 	ui.setupUi(this);
 
 	ui.cbImportFrom->addItem(i18n("Table"));
@@ -112,8 +112,7 @@ bool ImportSQLDatabaseWidget::isValid() const {
 	returns \c false otherwise.
  */
 bool ImportSQLDatabaseWidget::isNumericData() const {
-	//TODO
-	return true;
+	return m_numeric;
 }
 
 /*!
@@ -222,7 +221,22 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 
 	//preview the data
 	int row = 0;
+	bool numeric = true;
 	while(q.next()) {
+		//check whether we have numerical data only by checking the data types of the first record
+		if (row == 0) {
+			const QSqlRecord record = q.record();
+			for (int i = 0; i < record.count(); ++i ) {
+				const QVariant value = record.field(i).value();
+				bool ok;
+				value.toString().toDouble(&ok);
+				if (!ok) {
+					numeric = false;
+					break;
+				}
+			}
+		}
+
 		for(int col = 0; col < columnCount; ++col) {
 			ui.twPreview->setRowCount(row+1);
 			ui.twPreview->setItem(row, col, new QTableWidgetItem(q.value(col).toString()) );
@@ -235,7 +249,14 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	}
 
 	ui.twPreview->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+
 	setValid();
+
+	if (numeric != m_numeric) {
+		m_numeric = numeric;
+		emit stateChanged();
+	}
+
 	RESET_CURSOR;
 }
 
