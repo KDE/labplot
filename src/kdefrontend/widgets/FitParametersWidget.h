@@ -30,12 +30,11 @@
 #define FITPARAMETERSWIDGET_H
 
 #include <QWidget>
-#include <QStringList>
 
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "ui_fitparameterswidget.h"
 
-class FitParametersWidget: public QWidget {
+class FitParametersWidget : public QWidget {
 	Q_OBJECT
 
 public:
@@ -47,7 +46,7 @@ private:
 	bool m_changed;
 	bool m_rehighlighting;
 
-	bool eventFilter( QObject*, QEvent*);
+	bool eventFilter(QObject*, QEvent*);
 	void highlightInvalid(int row, int col, bool invalid) const;
 
 signals:
