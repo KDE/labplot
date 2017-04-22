@@ -3,8 +3,7 @@
     Project              : LabPlot
     Description          : Provides a QTreeView in a QComboBox
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2011 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -30,37 +29,48 @@
 #ifndef TREEVIEWCOMBOBOX_H
 #define TREEVIEWCOMBOBOX_H
 
-#include <QTreeView>
 #include <QComboBox>
-#include <QEvent>
 
 class AbstractAspect;
+class QGroupBox;
+class QLineEdit;
+class QTreeView;
 
-class TreeViewComboBox : public QComboBox{
-Q_OBJECT
+class TreeViewComboBox : public QComboBox {
+	Q_OBJECT
 
-public:
-    explicit TreeViewComboBox(QWidget* parent = 0);
+	public:
+		explicit TreeViewComboBox(QWidget* parent = 0);
 
- 	void setModel(QAbstractItemModel *model);
-	void setCurrentModelIndex(const QModelIndex&);
-	void setTopLevelClasses(QList<const char*>);
-	void setSelectableClasses(QList<const char*>);
-	QModelIndex currentModelIndex() const;
-	virtual void showPopup();
+		void setModel(QAbstractItemModel*);
+		void setCurrentModelIndex(const QModelIndex&);
+		QModelIndex currentModelIndex() const;
 
-private:
-	QTreeView m_treeView;
-	QList<const char*> m_topLevelClasses;
-	QList<const char*> m_selectableClasses;
-	void showTopLevelOnly(const QModelIndex & index);
-	bool eventFilter(QObject *obj, QEvent *event);
+		void setTopLevelClasses(QList<const char*>);
+		void setSelectableClasses(QList<const char*>);
 
-private slots:
-	void treeViewIndexActivated(const QModelIndex&);
+		virtual void showPopup();
+		virtual void hidePopup();
 
-signals:
-	void currentModelIndexChanged(const QModelIndex&);
+	private:
+		QTreeView* m_treeView;
+		QGroupBox* m_groupBox;
+		QLineEdit* m_lineEdit;
+
+		QList<const char*> m_topLevelClasses;
+		QList<const char*> m_selectableClasses;
+
+		void showTopLevelOnly(const QModelIndex&);
+		bool eventFilter(QObject*, QEvent*);
+		bool filter(const QModelIndex&, const QString&);
+		bool isTopLevel(const AbstractAspect* aspect) const;
+
+	private slots:
+		void treeViewIndexActivated(const QModelIndex&);
+		void filterChanged(const QString&);
+
+	signals:
+		void currentModelIndexChanged(const QModelIndex&);
 };
 
 #endif

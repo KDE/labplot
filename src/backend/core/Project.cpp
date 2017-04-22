@@ -29,8 +29,16 @@
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
+#include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/3d/Surface3D.h"
 #include "backend/worksheet/plots/3d/Curve3D.h"
@@ -120,6 +128,12 @@ Project::Project() : Folder(i18n("Project")), d(new Private()) {
 }
 
 Project::~Project() {
+	//if the project is being closed, in Worksheet the scene items are being removed and the selection in the view can change.
+	//don't react on these changes since this can lead crashes (worksheet object is already in the destructor).
+	//->notify all worksheets about the project being closed.
+	foreach(Worksheet* w, children<Worksheet>())
+		w->setIsClosing();
+
 	d->undo_stack.clear();
 	delete d;
 }
@@ -182,6 +196,10 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 
 	d->changed = true;
 	emit changed();
+}
+
+void Project::navigateTo(const QString& path) {
+	requestNavigateTo(path);
 }
 
 bool Project::isLoading() const {
@@ -280,11 +298,11 @@ bool Project::load(XmlStreamReader* reader) {
 			//restore the pointer to the data sets (columns) in xy-curves etc.
 			QList<AbstractAspect*> curves = children("XYCurve", AbstractAspect::Recursive);
 			QList<AbstractAspect*> axes = children("Axes", AbstractAspect::Recursive);
-            QList<AbstractAspect*> dataPickerCurves = children("DatapickerCurve", AbstractAspect::Recursive);
+			QList<AbstractAspect*> dataPickerCurves = children("DatapickerCurve", AbstractAspect::Recursive);
 			QList<AbstractAspect*> surfaces = children("Surface3D", AbstractAspect::Recursive);
 			QList<AbstractAspect*> curves3d = children("Curve3D", AbstractAspect::Recursive);
 
-			if (curves.size()!=0 || axes.size()!=0 || !surfaces.isEmpty()) {
+			if (!curves.isEmpty() || !axes.isEmpty() || !surfaces.isEmpty()) {
 				QList<AbstractAspect*> columns = children("Column", AbstractAspect::Recursive);
 				QList<AbstractAspect*> matrices = children("Matrix", AbstractAspect::Recursive);
 
@@ -294,25 +312,52 @@ bool Project::load(XmlStreamReader* reader) {
 					if (!curve) continue;
 
 					curve->suppressRetransform(true);
+
 					XYEquationCurve* equationCurve = dynamic_cast<XYEquationCurve*>(aspect);
+					XYDataReductionCurve* dataReductionCurve = dynamic_cast<XYDataReductionCurve*>(aspect);
+					XYDifferentiationCurve* differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(aspect);
+					XYIntegrationCurve* integrationCurve = dynamic_cast<XYIntegrationCurve*>(aspect);
+					XYInterpolationCurve* interpolationCurve = dynamic_cast<XYInterpolationCurve*>(aspect);
+					XYSmoothCurve* smoothCurve = dynamic_cast<XYSmoothCurve*>(aspect);
+					XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(aspect);
+					XYFourierFilterCurve* filterCurve = dynamic_cast<XYFourierFilterCurve*>(aspect);
+					XYFourierTransformCurve* dftCurve = dynamic_cast<XYFourierTransformCurve*>(aspect);
 					if (equationCurve) {
 						//curves defined by a mathematical equations recalculate their own columns on load again.
 						equationCurve->recalculate();
+					} else if (dataReductionCurve) {
+						RESTORE_COLUMN_POINTER(dataReductionCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(dataReductionCurve, yDataColumn, YDataColumn);
+					} else if (differentiationCurve) {
+						RESTORE_COLUMN_POINTER(differentiationCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(differentiationCurve, yDataColumn, YDataColumn);
+					} else if (integrationCurve) {
+						RESTORE_COLUMN_POINTER(integrationCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(integrationCurve, yDataColumn, YDataColumn);
+					} else if (interpolationCurve) {
+						RESTORE_COLUMN_POINTER(interpolationCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(interpolationCurve, yDataColumn, YDataColumn);
+					} else if (smoothCurve) {
+						RESTORE_COLUMN_POINTER(smoothCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(smoothCurve, yDataColumn, YDataColumn);
+					} else if (fitCurve) {
+						RESTORE_COLUMN_POINTER(fitCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(fitCurve, yDataColumn, YDataColumn);
+						RESTORE_COLUMN_POINTER(fitCurve, weightsColumn, WeightsColumn);
+					} else if (filterCurve) {
+						RESTORE_COLUMN_POINTER(filterCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(filterCurve, yDataColumn, YDataColumn);
+					} else if (dftCurve) {
+						RESTORE_COLUMN_POINTER(dftCurve, xDataColumn, XDataColumn);
+						RESTORE_COLUMN_POINTER(dftCurve, yDataColumn, YDataColumn);
 					} else {
-						XYFitCurve* fitCurve = dynamic_cast<XYFitCurve*>(aspect);
-						if (fitCurve) {
-							RESTORE_COLUMN_POINTER(fitCurve, xDataColumn, XDataColumn);
-							RESTORE_COLUMN_POINTER(fitCurve, yDataColumn, YDataColumn);
-							RESTORE_COLUMN_POINTER(fitCurve, weightsColumn, WeightsColumn);
-						} else {
-							RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
-							RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
-							RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
-							RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
-							RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
-							RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
-							RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
-						}
+						RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
+						RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
+						RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
+						RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
+						RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
+						RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
+						RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
 					}
 					curve->suppressRetransform(false);
 					curve->retransform();
@@ -371,8 +416,8 @@ bool Project::load(XmlStreamReader* reader) {
 	} else {// no start document
 		reader->raiseError(i18n("no valid XML document found"));
 	}
-
 	d->loading = false;
+	emit loaded();
 	return !reader->hasError();
 }
 

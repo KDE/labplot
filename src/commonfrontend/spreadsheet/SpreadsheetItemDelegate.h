@@ -2,9 +2,7 @@
     File                 : SpreadsheetItemDelegate.h
     Project              : SciDAVis
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Tilman Benkert,
-    Email (use @ for *)  : thzs*gmx.net
-    Description          : Item delegate for SpreadsheetView
+    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
 
@@ -33,23 +31,22 @@
 #include <QItemDelegate>
 #include <QAbstractItemModel>
 
-
-class SpreadsheetItemDelegate : public QItemDelegate{
+class SpreadsheetItemDelegate : public QItemDelegate {
 	Q_OBJECT
 
-	public:
-		explicit SpreadsheetItemDelegate(QObject * parent = 0);
+public:
+	explicit SpreadsheetItemDelegate(QObject * parent = 0);
 
-		void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+	void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
 
-		void setMaskingColor(const QColor& color);
-		QColor maskingColor() const;
-		
-		void setEditorData ( QWidget * editor, const QModelIndex & index ) const;
-		void setModelData ( QWidget * editor, QAbstractItemModel * model, const QModelIndex & index ) const;
+	void setMaskingColor(const QColor&);
+	QColor maskingColor() const;
 
-	private:
-		QColor m_maskingColor;
+	void setEditorData(QWidget*, const QModelIndex&) const;
+	void setModelData(QWidget*, QAbstractItemModel*, const QModelIndex&) const;
+
+private:
+	QColor m_maskingColor;
 };
 
 #endif

@@ -29,19 +29,12 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AbstractColumnPrivate.h"
 #include "backend/core/abstractcolumncommands.h"
-#include "backend/lib/Interval.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/SignallingUndoCommand.h"
 
-#include <QtXml/QXmlStreamWriter>
-#include <QtCore/QString>
-#include <QtCore/QDateTime>
-#include <QtCore/QDate>
-#include <QtCore/QTime>
-#include <math.h>
-#include <QMetaType>
-#include <QDebug>
+#include <QDateTime>
 #include <KLocale>
+#include <cmath>
 
 /**
  * \class AbstractColumn
@@ -91,7 +84,7 @@ AbstractColumn::AbstractColumn(const QString &name) : AbstractAspect(name),
 }
 
 AbstractColumn::~AbstractColumn() {
-	aboutToBeDestroyed(this);
+	emit aboutToBeDestroyed(this);
 	delete m_abstract_column_private;
 }
 
@@ -213,7 +206,7 @@ void AbstractColumn::clear() {}
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
 		case AbstractColumn::Numeric:
-			return !isnan(valueAt(row));
+			return !std::isnan(valueAt(row));
 		case AbstractColumn::Text:
 			return !textAt(row).isNull();
 		case AbstractColumn::DateTime:
@@ -238,7 +231,7 @@ bool AbstractColumn::isMasked(int row) const {
 }
 
 /**
- * \brief Return whether a certain interval of rows rows is fully masked
+ * \brief Return whether a certain interval of rows is fully masked
  */
 bool AbstractColumn::isMasked(Interval<int> i) const {
 	return m_abstract_column_private->m_masking.isSet(i);
@@ -459,15 +452,14 @@ void AbstractColumn::setValueAt(int row, double new_value) {
  */
 void AbstractColumn::replaceValues(int first, const QVector<double>& new_values) {
 	Q_UNUSED(first) Q_UNUSED(new_values)
-};
-
+}
 
 double AbstractColumn::minimum() const{
 	double val;
 	double min = INFINITY;
 	for (int row = 0; row < rowCount(); row++) {
 		val = valueAt(row);
-		if (isnan(val))
+		if (std::isnan(val))
 			continue;
 
 		if (val < min)
@@ -481,7 +473,7 @@ double AbstractColumn::maximum() const{
 	double max = -INFINITY;
 	for (int row = 0; row < rowCount(); row++) {
 		val = valueAt(row);
-		if (isnan(val))
+		if (std::isnan(val))
 			continue;
 
 		if (val > max)
@@ -629,11 +621,10 @@ bool AbstractColumn::XmlReadMask(XmlStreamReader *reader) {
  * \brief Write XML mask element
  */
 void AbstractColumn::XmlWriteMask(QXmlStreamWriter *writer) const {
-	foreach(const Interval<int>& interval, maskedIntervals()) {
+	foreach (const Interval<int>& interval, maskedIntervals()) {
 		writer->writeStartElement("mask");
 		writer->writeAttribute("start_row", QString::number(interval.start()));
 		writer->writeAttribute("end_row", QString::number(interval.end()));
 		writer->writeEndElement();
 	}
 }
-

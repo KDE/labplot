@@ -70,6 +70,8 @@ class Axis: public WorksheetElement {
 
 		virtual void save(QXmlStreamWriter *) const;
 		virtual bool load(XmlStreamReader *);
+		virtual void loadThemeConfig(const KConfig& config);
+		virtual void saveThemeConfig(const KConfig& config);
 
 		BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale)
 		BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation)
@@ -83,7 +85,8 @@ class Axis: public WorksheetElement {
 		BASIC_D_ACCESSOR_DECL(qreal, zeroOffset, ZeroOffset)
 
 		POINTER_D_ACCESSOR_DECL(TextLabel, title, Title)
-		BASIC_D_ACCESSOR_DECL(float, titleOffset, TitleOffset)
+		BASIC_D_ACCESSOR_DECL(float, titleOffsetX, TitleOffsetX)
+		BASIC_D_ACCESSOR_DECL(float, titleOffsetY, TitleOffsetY)
 
 		CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
 		BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
@@ -195,8 +198,10 @@ class Axis: public WorksheetElement {
 		void scalingFactorChanged(qreal);
 
 		//title
-		friend class AxisSetTitleOffsetCmd;
-		void titleOffsetChanged(float);
+		friend class AxisSetTitleOffsetXCmd;
+		friend class AxisSetTitleOffsetYCmd;
+		void titleOffsetXChanged(float);
+		void titleOffsetYChanged(float);
 
 		// line
 		friend class AxisSetLinePenCmd;

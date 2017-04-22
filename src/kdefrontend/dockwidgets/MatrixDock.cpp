@@ -30,6 +30,7 @@
 #include "commonfrontend/matrix/MatrixView.h"
 #include "kdefrontend/TemplateHandler.h"
 #include <QDir>
+#include <KLocalizedString>
 
  /*!
   \class MatrixDock
@@ -75,6 +76,7 @@ MatrixDock::MatrixDock(QWidget* parent): QWidget(parent), m_matrix(0), m_initial
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
 }
 
 /*!

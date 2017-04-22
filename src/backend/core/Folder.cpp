@@ -35,11 +35,15 @@
 #include "backend/core/column/Column.h"
 #include "backend/datasources/FileDataSource.h"
 #include "backend/matrix/Matrix.h"
+#include "backend/note/Note.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#ifdef HAVE_CANTOR_LIBS
+#include "backend/cantorWorksheet/CantorWorksheet.h"
+#endif
 #include "backend/worksheet/Worksheet.h"
 
-#include <KIcon>
-#include <KLocale>
+#include <QIcon>
+#include <KLocalizedString>
 
 /**
  * \class Folder
@@ -48,10 +52,8 @@
 
 Folder::Folder(const QString &name) : AbstractAspect(name) {}
 
-Folder::~Folder(){}
-
 QIcon Folder::icon() const {
-	return KIcon("folder");
+	return QIcon::fromTheme("folder");
 }
 
 /**
@@ -86,10 +88,8 @@ void Folder::save(QXmlStreamWriter* writer) const {
  */
 bool Folder::load(XmlStreamReader* reader) {
 	if(reader->isStartElement() && reader->name() == "folder") {
-		setComment("");
-		removeAllChildren();
-
-		if (!readBasicAttributes(reader)) return false;
+		if (!readBasicAttributes(reader))
+			return false;
 
 		// read child elements
 		while (!reader->atEnd()) {
@@ -121,9 +121,6 @@ bool Folder::load(XmlStreamReader* reader) {
  * \brief Read child aspect from XML
  */
 bool Folder::readChildAspectElement(XmlStreamReader* reader) {
-	bool loaded = false;
-	Q_ASSERT(reader->isStartElement() && reader->name() == "child_aspect");
-
 	if (!reader->skipToNextTag()) return false;
 	if (reader->isEndElement() && reader->name() == "child_aspect") return true; // empty element tag
 
@@ -135,7 +132,6 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(folder);
-		loaded = true;
 	} else if (element_name == "workbook") {
 		Workbook* workbook = new Workbook(0, "");
 		if (!workbook->load(reader)) {
@@ -143,7 +139,6 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(workbook);
-		loaded = true;
 	} else if (element_name == "spreadsheet") {
 		Spreadsheet* spreadsheet = new Spreadsheet(0, "", true);
 		if (!spreadsheet->load(reader)) {
@@ -151,7 +146,6 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(spreadsheet);
-		loaded = true;
 	} else if (element_name == "matrix") {
 		Matrix* matrix = new Matrix(0, "", true);
 		if (!matrix->load(reader)) {
@@ -159,15 +153,24 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(matrix);
-		loaded = true;
 	} else if (element_name == "worksheet") {
 		Worksheet* worksheet = new Worksheet(0, "");
+		worksheet->setIsLoading(true);
 		if (!worksheet->load(reader)){
 			delete worksheet;
 			return false;
 		}
 		addChild(worksheet);
-		loaded = true;
+		worksheet->setIsLoading(false);
+#ifdef HAVE_CANTOR_LIBS
+	}else if (element_name == "cantorWorksheet"){
+		CantorWorksheet * cantorWorksheet = new CantorWorksheet(0, QLatin1String("null"), true);
+		if (!cantorWorksheet->load(reader)){
+			delete cantorWorksheet;
+			return false;
+		}
+		addChild(cantorWorksheet);
+#endif
 	} else if (element_name == "fileDataSource") {
 		FileDataSource* fileDataSource = new FileDataSource(0, "", true);
 		if (!fileDataSource->load(reader)){
@@ -175,7 +178,6 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(fileDataSource);
-		loaded = true;
 	} else if (element_name == "datapicker") {
 		Datapicker* datapicker = new Datapicker(0, "", true);
 		if (!datapicker->load(reader)){
@@ -183,15 +185,19 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 			return false;
 		}
 		addChild(datapicker);
-		loaded = true;
-	}
-
-	if (!loaded) {
+	} else if (element_name == "note") {
+		Note* note = new Note("");
+		if (!note->load(reader)){
+			delete note;
+			return false;
+		}
+		addChild(note);
+	} else {
 		reader->raiseWarning(i18n("unknown element '%1' found", element_name));
-		if (!reader->skipToEndElement()) return false;
+		if (!reader->skipToEndElement())
+			return false;
 	}
 
 	if (!reader->skipToNextTag()) return false;
-	Q_ASSERT(reader->isEndElement() && reader->name() == "child_aspect");
 	return !reader->hasError();
 }

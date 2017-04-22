@@ -45,24 +45,21 @@
  * \ingroup worksheet
  * This class provides the functionality for a containers of multiple
  * worksheet elements. Such a container can be a plot or group of elements.
- *
  */
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name)
 	: WorksheetElement(name), d_ptr(new WorksheetElementContainerPrivate(this)) {
 
-	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
-		this, SLOT(handleAspectAdded(const AbstractAspect*)));
+	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
 }
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd)
     : WorksheetElement(name), d_ptr(dd) {
 
-	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)),
-		this, SLOT(handleAspectAdded(const AbstractAspect*)));
+	connect(this, SIGNAL(aspectAdded(const AbstractAspect*)), this, SLOT(handleAspectAdded(const AbstractAspect*)));
 }
 
-WorksheetElementContainer::~WorksheetElementContainer(){
+WorksheetElementContainer::~WorksheetElementContainer() {
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
 }
@@ -71,32 +68,34 @@ QGraphicsItem* WorksheetElementContainer::graphicsItem() const {
 	return const_cast<QGraphicsItem*>(static_cast<const QGraphicsItem*>(d_ptr));
 }
 
-QRectF WorksheetElementContainer::rect() const{
+QRectF WorksheetElementContainer::rect() const {
 	Q_D(const WorksheetElementContainer);
 	return d->rect;
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(WorksheetElementContainer, SetVisible, bool, swapVisible)
-void WorksheetElementContainer::setVisible(bool on){
+void WorksheetElementContainer::setVisible(bool on) {
 	Q_D(WorksheetElementContainer);
-
-	beginMacro(on ? i18n("%1: set visible", name()) : i18n("%1: set invisible", name()));
 
 	//take care of proper ordering on the undo-stack,
 	//when making the container and all its children visible/invisible.
 	//if visible is set true, change the visibility of the container first
-	if (on)
-    	exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
+	if (on) {
+		beginMacro( i18n("%1: set visible", name()) );
+    	exec( new WorksheetElementContainerSetVisibleCmd(d, on, i18n("%1: set visible")) );
+	} else {
+		beginMacro( i18n("%1: set invisible", name()) );
+	}
 
 	//change the visibility of all children
 	QList<WorksheetElement *> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(WorksheetElement *elem, childList){
+	foreach (WorksheetElement *elem, childList) {
 		elem->setVisible(on);
 	}
 
 	//if visible is set false, change the visibility of the container last
 	if (!on)
-    	exec(new WorksheetElementContainerSetVisibleCmd(d, on, on ? i18n("%1: set visible") : i18n("%1: set invisible")));
+		exec(new WorksheetElementContainerSetVisibleCmd(d, false, i18n("%1: set invisible")));
 
 	endMacro();
 }
@@ -108,7 +107,7 @@ bool WorksheetElementContainer::isVisible() const {
 
 bool WorksheetElementContainer::isFullyVisible() const {
 	QList<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(const WorksheetElement* elem, childList) {
+	foreach (const WorksheetElement* elem, childList) {
 		if (!elem->isVisible())
 			return false;
 	}
@@ -121,16 +120,18 @@ void WorksheetElementContainer::setPrinting(bool on) {
 }
 
 void WorksheetElementContainer::retransform() {
+	DEBUG("WorksheetElementContainer::retransform()");
 	Q_D(WorksheetElementContainer);
+
 	QList<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(WorksheetElement* elem, childList)
+	foreach (WorksheetElement* elem, childList)
 		elem->retransform();
 
 	d->recalcShapeAndBoundingRect();
 }
 
 void WorksheetElementContainer::handlePageResize(double horizontalRatio, double verticalRatio) {
-	Q_D(WorksheetElementContainer);
+	Q_D(const WorksheetElementContainer);
 	QRectF rect(d->rect);
 	rect.setWidth(d->rect.width()*horizontalRatio);
 	rect.setHeight(d->rect.height()*verticalRatio);
@@ -152,7 +153,8 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 			elem->setZValue(zVal++);
 	}
 
-	d->recalcShapeAndBoundingRect();
+	if (!isLoading())
+		d->recalcShapeAndBoundingRect();
 }
 
 void WorksheetElementContainer::childHovered() {
@@ -226,8 +228,8 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 	boundingRectangle = QRectF();
 	containerShape = QPainterPath();
 	QList<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	foreach(const WorksheetElement* elem, childList)
-		boundingRectangle |= elem->graphicsItem()->mapRectToParent( elem->graphicsItem()->boundingRect() );
+	foreach (const WorksheetElement* elem, childList)
+		boundingRectangle |= elem->graphicsItem()->mapRectToParent(elem->graphicsItem()->boundingRect());
 
 	QPainterPath path;
 	path.addRect(boundingRectangle);
@@ -243,6 +245,7 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 
 // Inherited from QGraphicsItem
 void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
+	DEBUG("WorksheetElementContainerPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -259,5 +262,6 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 		painter->setPen(q->selectedPen);
 		painter->setOpacity(q->selectedOpacity);
 		painter->drawPath(containerShape);
-  }
+	}
+	DEBUG("WorksheetElementContainerPrivate::paint() DONE");
 }

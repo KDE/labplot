@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : main function
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -26,11 +26,12 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include <KApplication>
+#include <QApplication>
+#include <QCommandLineParser>
 #include <KAboutData>
-#include <KCmdLineArgs>
-#include <KStandardDirs>
-#include <KSplashScreen>
+#include <KLocalizedString>
+#include <QStandardPaths>
+#include <QSplashScreen>
 #include <KMessageBox>
 #include <QFile>
 
@@ -38,43 +39,48 @@
 #include "backend/core/AbstractColumn.h"
 
 int main (int argc, char *argv[]) {
-	KAboutData aboutData( "labplot2", "labplot2",
-	                      ki18n("LabPlot2"), LVERSION,
-	                      ki18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
-	                      KAboutData::License_GPL,
-	                      ki18n("(c) 2007-2016") );
-	aboutData.setHomepage("http://www.labplot.sourceforge.net");
-	aboutData.addAuthor(ki18n("Stefan Gerlach"), ki18n("developer"), "stefan.gerlach@uni-konstanz.de", 0);
-	aboutData.addAuthor(ki18n("Alexander Semke"), ki18n("developer"), "alexander.semke@web.de", 0);
-	aboutData.addAuthor(ki18n("Andreas Kainz"), ki18n("icon designer"), "kainz.a@gmail.com", 0);
-	aboutData.addCredit(ki18n("Yuri Chornoivan"), ki18n("Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", 0);
+	KAboutData aboutData( QStringLiteral("labplot2"), QString("labplot2"),
+		LVERSION, i18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
+		KAboutLicense::GPL,i18n("(c) 2007-2017"), QString(), QStringLiteral("http://www.labplot.sourceforge.net"));
+	aboutData.addAuthor(i18n("Stefan Gerlach"), i18n("developer"), "stefan.gerlach@uni.kn", 0);
+	aboutData.addAuthor(i18n("Alexander Semke"), i18n("developer"), "alexander.semke@web.de", 0);
+	aboutData.addAuthor(i18n("Andreas Kainz"), i18n("icon designer"), "kainz.a@gmail.com", 0);
+	aboutData.addCredit(i18n("Yuri Chornoivan"), i18n("Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", 0);
+	aboutData.addCredit(i18n("Garvit Khatri"), i18n("Porting LabPlot2 to KF5 and Integration with Cantor"), "garvitdelhi@gmail.com", 0);
+	KAboutData::setApplicationData(aboutData);
 
-	KCmdLineArgs::init( argc, argv, &aboutData );
-	KCmdLineOptions options;
-	options.add("no-splash",ki18n("do not show the splash screen"));
-	options.add("+[file]",ki18n("open a project file"));
-	KCmdLineArgs::addCmdLineOptions( options );
+	QApplication app(argc, argv);
+	QCoreApplication::setApplicationVersion(QLatin1String(LVERSION));
+	QCommandLineParser parser;
+	parser.addHelpOption();
+	parser.addVersionOption();
+	QCommandLineOption nosplashOption("no-splash", i18n("disable splash screen"));
+	parser.addOption(nosplashOption);
 
-	KApplication app;
-	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+	parser.addPositionalArgument("+[file]", i18n( "open a project file"));
+
+	aboutData.setupCommandLine(&parser);
+	parser.process(app);
+	aboutData.processCommandLine(&parser);
+	const QStringList args = parser.positionalArguments();
 	QString filename;
-	if (args->count() > 0)
-		filename = args->arg(0);
+	if (args.count() > 0)
+		filename = args[0];
 
 	if(!filename.isEmpty() ) {
 		if ( !QFile::exists(filename)) {
 			if ( KMessageBox::warningContinueCancel( 0,
-			        i18n( "Could not open file \'%1\'. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
-			        i18n("Failed to open")) == KMessageBox::Cancel) {
+					i18n( "Could not open file \'%1\'. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
+					i18n("Failed to open")) == KMessageBox::Cancel) {
 				exit(-1);  //"Cancel" clicked -> exit the application
 			} else {
 				filename=""; //Wrong file -> clear the file name and continue
 			}
 		} else if ( !(filename.contains(".lml", Qt::CaseInsensitive) || filename.contains(".lml.gz", Qt::CaseInsensitive)
-				  || filename.contains(".lml.bz2", Qt::CaseInsensitive) ) ) {
+				  || filename.contains(".lml.bz2", Qt::CaseInsensitive) || filename.contains(".lml.xz", Qt::CaseInsensitive) ) ) {
 			if ( KMessageBox::warningContinueCancel( 0,
-			        i18n( "File \'%1\' doesn't contain any LabPlot data. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
-			        i18n("Failed to open")) == KMessageBox::Cancel) {
+					i18n( "File \'%1\' doesn't contain any LabPlot data. Click \'Continue\' to proceed starting or \'Cancel\' to exit the application.", filename),
+					i18n("Failed to open")) == KMessageBox::Cancel) {
 				exit(-1); //"Cancel" clicked -> exit the application
 			} else {
 				filename=""; //Wrong file -> clear the file name and continue
@@ -82,10 +88,10 @@ int main (int argc, char *argv[]) {
 		}
 	}
 
-	KSplashScreen* splash = 0;
-	if (args->isSet("-splash")) {
-		QString file = KStandardDirs::locate("appdata", "splash.png");
-		splash = new KSplashScreen(QPixmap(file));
+	QSplashScreen *splash=0;
+	if (!parser.isSet("no-splash")) {
+		QString file = QStandardPaths::locate(QStandardPaths::DataLocation, "splash.png");
+		splash = new QSplashScreen(QPixmap(file));
 		splash->show();
 	}
 

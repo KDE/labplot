@@ -36,7 +36,6 @@
 #include <QMenu>
 #include <QStyle>
 
-#include <KIcon>
 #include <KLocale>
 
 /**
@@ -121,9 +120,9 @@ QMenu* AbstractPart::createContextMenu(){
 	menu->addSeparator();
 
 	if (m_mdiWindow) {
-		menu->addAction(KIcon("document-export-database"), i18n("Export"), this, SIGNAL(exportRequested()));
-		menu->addAction(KIcon("document-print"), i18n("Print"), this, SIGNAL(printRequested()));
-		menu->addAction(KIcon("document-print-preview"), i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
+		menu->addAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this, SIGNAL(exportRequested()));
+		menu->addAction(QIcon::fromTheme("document-print"), i18n("Print"), this, SIGNAL(printRequested()));
+		menu->addAction(QIcon::fromTheme("document-print-preview"), i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
 		menu->addSeparator();
 
 		const QStyle *widget_style = m_mdiWindow->style();

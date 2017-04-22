@@ -35,7 +35,7 @@ class QPushButton;
 class QComboBox;
 class QLabel;
 
-class SortDialog : public KDialog{
+class SortDialog : public QDialog{
 	Q_OBJECT
 
 	public:

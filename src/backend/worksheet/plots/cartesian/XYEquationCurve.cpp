@@ -40,16 +40,16 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/gsl/ExpressionParser.h"
 
-#include <KIcon>
+#include <QIcon>
 #include <KLocale>
 
 XYEquationCurve::XYEquationCurve(const QString& name)
-		: XYCurve(name, new XYEquationCurvePrivate(this)){
+		: XYCurve(name, new XYEquationCurvePrivate(this)) {
 	init();
 }
 
 XYEquationCurve::XYEquationCurve(const QString& name, XYEquationCurvePrivate* dd)
-		: XYCurve(name, dd){
+		: XYCurve(name, dd) {
 	init();
 }
 
@@ -87,7 +87,7 @@ void XYEquationCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYEquationCurve::icon() const {
-	return KIcon("labplot-xy-equation-curve");
+	return QIcon::fromTheme("labplot-xy-equation-curve");
 }
 
 //##############################################################################
@@ -129,7 +129,7 @@ XYEquationCurvePrivate::~XYEquationCurvePrivate() {
 void XYEquationCurvePrivate::recalculate() {
 	//resize the vector if a new number of point to calculate was provided
 	if (equationData.count != xVector->size()) {
-		if (equationData.count>=1) {
+		if (equationData.count >= 1) {
 			xVector->resize(equationData.count);
 			yVector->resize(equationData.count);
 		} else {
@@ -140,31 +140,22 @@ void XYEquationCurvePrivate::recalculate() {
 			return;
 		}
 	} else {
-		if (equationData.count<1)
+		if (equationData.count < 1)
 			return;
 	}
 
 	ExpressionParser* parser = ExpressionParser::getInstance();
 	bool rc = false;
 	if (equationData.type == XYEquationCurve::Cartesian) {
-		rc = parser->evaluateCartesian( equationData.expression1,
-										equationData.min,
-										equationData.max,
-										equationData.count,
-										xVector, yVector );
+		rc = parser->evaluateCartesian( equationData.expression1, equationData.min, equationData.max,
+						equationData.count, xVector, yVector );
 	} else if (equationData.type == XYEquationCurve::Polar) {
-		rc = parser->evaluatePolar( equationData.expression1,
-									equationData.min,
-									equationData.max,
-									equationData.count,
-									xVector, yVector );
+		rc = parser->evaluatePolar( equationData.expression1, equationData.min, equationData.max,
+						equationData.count, xVector, yVector );
 	} else if (equationData.type == XYEquationCurve::Parametric) {
-		rc = parser->evaluateParametric(equationData.expression1,
-									    equationData.expression2,
-										equationData.min,
-										equationData.max,
-										equationData.count,
-										xVector, yVector);
+		rc = parser->evaluateParametric(equationData.expression1, equationData.expression2,
+						equationData.min, equationData.max, equationData.count,
+						xVector, yVector);
 	}
 
 	if (!rc) {
@@ -200,19 +191,19 @@ void XYEquationCurve::save(QXmlStreamWriter* writer) const{
 }
 
 //! Load from XML
-bool XYEquationCurve::load(XmlStreamReader* reader){
+bool XYEquationCurve::load(XmlStreamReader* reader) {
 	Q_D(XYEquationCurve);
 
-	if(!reader->isStartElement() || reader->name() != "xyEquationCurve"){
+	if (!reader->isStartElement() || reader->name() != "xyEquationCurve") {
 		reader->raiseError(i18n("no xy equation curve element found"));
 		return false;
 	}
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	QString attributeWarning = i18n( "Attribute '%1' missing or empty, default value is used" );
 	QXmlStreamAttributes attribs;
 	QString str;
 
-	while (!reader->atEnd()){
+	while (!reader->atEnd()) {
 		reader->readNext();
 		if (reader->isEndElement() && reader->name() == "xyEquationCurve")
 			break;
@@ -225,27 +216,13 @@ bool XYEquationCurve::load(XmlStreamReader* reader){
 				return false;
 		} else if (reader->name() == "equationData") {
 			attribs = reader->attributes();
-			str = attribs.value("type").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'type'"));
-			else
-				d->equationData.type = (XYEquationCurve::EquationType)str.toInt();
 
-			str = attribs.value("expression1").toString();
-			d->equationData.expression1 = str;
-
-			str = attribs.value("expression2").toString();
-			d->equationData.expression2 = str;
-
-			str = attribs.value("min").toString();
-			d->equationData.min = str;
-
-			str = attribs.value("max").toString();
-			d->equationData.max = str;
-
-			str = attribs.value("count").toString();
-			if(!str.isEmpty())
-				d->equationData.count = str.toInt();
+			READ_INT_VALUE("type", equationData.type, XYEquationCurve::EquationType);
+			READ_STRING_VALUE("expression1", equationData.expression1);
+			READ_STRING_VALUE("expression2", equationData.expression2);
+			READ_STRING_VALUE("min", equationData.min);
+			READ_STRING_VALUE("max", equationData.max);
+			READ_INT_VALUE("count", equationData.count, int);
 		}
 	}
 

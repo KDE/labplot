@@ -36,7 +36,7 @@
 #include "backend/datapicker/DatapickerPoint.h"
 
 #include <QGraphicsScene>
-#include "KIcon"
+#include "QIcon"
 #include <KLocale>
 
 /**
@@ -74,7 +74,7 @@ void Datapicker::init() {
     Returns an icon to be used in the project explorer.
 */
 QIcon Datapicker::icon() const {
-	return KIcon("color-picker-black");
+	return QIcon::fromTheme("color-picker-black");
 }
 
 /*!
@@ -95,31 +95,37 @@ QWidget* Datapicker::view() const {
 }
 
 
-void Datapicker::exportView() const {
+bool Datapicker::exportView() const {
 	Spreadsheet* s = currentSpreadsheet();
+    bool ret;
 	if (s) {
-		s->exportView();
+        ret = s->exportView();
 	} else {
-		m_image->exportView();
+        ret = m_image->exportView();
 	}
+    return ret;
 }
 
-void Datapicker::printView() {
+bool Datapicker::printView() {
 	Spreadsheet* s = currentSpreadsheet();
+    bool ret;
 	if (s) {
-		s->printView();
+        ret = s->printView();
 	} else {
-		m_image->printView();
+        ret = m_image->printView();
 	}
+    return ret;
 }
 
-void Datapicker::printPreview() const {
+bool Datapicker::printPreview() const {
 	Spreadsheet* s = currentSpreadsheet();
+    bool ret;
 	if (s) {
-		s->printPreview();
+        ret = s->printPreview();
 	} else {
-		m_image->printPreview();
+        ret = m_image->printPreview();
 	}
+    return ret;
 }
 
 DatapickerCurve* Datapicker::activeCurve() {

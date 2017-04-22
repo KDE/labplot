@@ -34,9 +34,7 @@
 #include "commonfrontend/workbook/WorkbookView.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 
-#include "KIcon"
 #include <KLocale>
-#include <QDebug>
 
 /**
  * \class Workbook
@@ -48,7 +46,7 @@ Workbook::Workbook(AbstractScriptingEngine* engine, const QString& name)
 }
 
 QIcon Workbook::icon() const {
-	return KIcon("labplot-workbook");
+    return QIcon::fromTheme("labplot-workbook");
 }
 
 /*!
@@ -68,37 +66,43 @@ QWidget* Workbook::view() const {
 	return m_view;
 }
 
-void Workbook::exportView() const {
+bool Workbook::exportView() const {
 	Spreadsheet* s = currentSpreadsheet();
+    bool ret = false;
 	if (s) {
-		s->exportView();
+        ret = s->exportView();
 	} else {
 		Matrix* m = currentMatrix();
 		if (m)
-			m->exportView();
+            ret = m->exportView();
 	}
+    return ret;
 }
 
-void Workbook::printView() {
+bool Workbook::printView() {
 	Spreadsheet* s = currentSpreadsheet();
+    bool ret = false;
 	if (s) {
-		s->printView();
+        ret = s->printView();
 	} else {
 		Matrix* m = currentMatrix();
 		if (m)
-			m->printView();
+            ret = m->printView();
 	}
+    return ret;
 }
 
-void Workbook::printPreview() const {
+bool Workbook::printPreview() const {
 	Spreadsheet* s = currentSpreadsheet();
+    bool ret = false;
 	if (s) {
-		s->printPreview();
+        ret = s->printPreview();
 	} else {
 		Matrix* m = currentMatrix();
 		if (m)
-			m->printPreview();
+            ret = m->printPreview();
 	}
+    return ret;
 }
 
 Spreadsheet* Workbook::currentSpreadsheet() const {

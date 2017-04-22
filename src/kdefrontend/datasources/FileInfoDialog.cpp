@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : import file data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008 by Stefan Gerlach
-    Email (use @ for *)  : stefan.gerlach*uni-konstanz.de, alexander.semke*web.de
+    Copyright            : (C) 2009-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2016 Stefan-Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -31,9 +31,11 @@
 #include "backend/datasources/FileDataSource.h"
 
 #include <KLocale>
-#include <KFilterDev>
 #include <QFileInfo>
 #include <QProcess>
+#include <QDialogButtonBox>
+#include <QIcon>
+#include <QVBoxLayout>
 
  /*!
 	\class ImportWidget
@@ -42,32 +44,41 @@
 	\ingroup kdefrontend
  */
 
-FileInfoDialog::FileInfoDialog(QWidget* parent) : KDialog(parent) {
+FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
 
 	textEditWidget.setReadOnly(true);
 	textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
-	setMainWidget( &textEditWidget );
- 	setButtons( KDialog::Ok);
- 	setWindowIcon(KIcon("help-about"));
-	setCaption(i18n("File info"));
- 	resize( QSize(500,300) );
+
+	QVBoxLayout *layout = new QVBoxLayout(this);
+	layout->addWidget(&textEditWidget);
+
+	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+
+	layout->addWidget(buttonBox);
+
+	setWindowIcon(QIcon::fromTheme("help-about"));
+	setWindowTitle(i18n("File info"));
+
+	setLayout(layout);
+
+	resize( QSize(500,300) );
 }
 
-void FileInfoDialog::setFiles(QStringList& files){
+void FileInfoDialog::setFiles(QStringList& files) {
 	QString fileName;
 	QString infoString;
-	QFileInfo fileInfo;
-	QString fileTypeString;
 
 	 for ( int i=0; i<files.size(); i++ ) {
 		fileName = files.at(i);
 		if(fileName.isEmpty())
 			continue;
 
-        if (!infoString.isEmpty())
-            infoString += "<br><br><br>";
+		if (!infoString.isEmpty())
+			infoString += "<br><br><br>";
 
-        infoString += FileDataSource::fileInfoString(fileName);
+		infoString += FileDataSource::fileInfoString(fileName);
 	}
 
 	textEditWidget.document()->setHtml(infoString);

@@ -30,6 +30,7 @@
 #include "ProjectDock.h"
 #include "backend/core/Project.h"
 #include "kdefrontend/TemplateHandler.h"
+#include <KConfigGroup>
 
 /*!
   \class ProjectDock

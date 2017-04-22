@@ -31,13 +31,13 @@
 #define IMPORTFILEDIALOG_H
 
 #include <KDialog>
+#include <QMenu>
 
 class MainWin;
 class ImportFileWidget;
 class FileDataSource;
 class TreeViewComboBox;
 
-class KMenu;
 class QStatusBar;
 class QAbstractItemModel;
 class QModelIndex;
@@ -72,13 +72,14 @@ private:
 	QPushButton* bNewWorkbook;
 	QToolButton* tbNewDataContainer;
 	bool m_showOptions;
-	KMenu* m_newDataContainerMenu;
+	QMenu* m_newDataContainerMenu;
 
 private slots:
 	void toggleOptions();
 	void newDataContainerMenu();
 	void newDataContainer(QAction*);
 	void checkOkButton();
+	void checkOnFitsTableToMatrix(const bool enable);
 };
 
 #endif //IMPORTFILEDIALOG_H

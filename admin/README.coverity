@@ -1,0 +1,7 @@
+1. download Coverity scan build tool https://scan.coverity.com/download
+2. build with
+	cd build
+	make clean
+	cov-build --dir cov-int make -j 4
+	tar czvf labplot.tgz cov-int
+3. upload labplot.tgz to https://scan.coverity.com/projects/labplot/builds/new

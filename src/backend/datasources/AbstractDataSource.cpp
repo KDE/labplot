@@ -127,29 +127,34 @@ int AbstractDataSource::resize(AbstractFileFilter::ImportMode mode, QStringList 
 }
 
 
-//TODO: use polymorphism instead  - provide Spreadsheet::create() and Matrix::create() instead if this function.
-int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode, int actualRows, int actualCols) {
+//TODO: use polymorphism instead  - provide Spreadsheet::create() and Matrix::create() instead of this function.
+int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, AbstractFileFilter::ImportMode mode,
+							   int actualRows, int actualCols, QStringList colNameList) {
+	QDEBUG("create() rows =" << actualRows << " cols =" << actualCols);
 	int columnOffset = 0;
 	setUndoAware(false);
 
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(this);
 	if(spreadsheet) {
-		columnOffset = this->resize(mode,QStringList(),actualCols);
+		columnOffset = this->resize(mode, colNameList, actualCols);
 
 		// resize the spreadsheet
-		if (mode==AbstractFileFilter::Replace) {
+		if (mode == AbstractFileFilter::Replace) {
 			spreadsheet->clear();
 			spreadsheet->setRowCount(actualRows);
-		}else{
+		}  else {
 			if (spreadsheet->rowCount() < actualRows)
 				spreadsheet->setRowCount(actualRows);
 		}
-		for (int n=0; n<actualCols; n++ ){
+
+		dataPointers.resize(actualCols);
+		for (int n = 0; n < actualCols; n++) {
 			QVector<double>* vector = static_cast<QVector<double>* >(this->child<Column>(columnOffset+n)->data());
 			vector->reserve(actualRows);
 			vector->resize(actualRows);
-			dataPointers.push_back(vector);
+			dataPointers[n] = vector;
 		}
+		QDEBUG("dataPointers =" << dataPointers);
 
 		return columnOffset;
 	}
@@ -159,10 +164,10 @@ int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, Abstract
 		matrix->setSuppressDataChangedSignal(true);
 
 		// resize the matrix
-		if (mode==AbstractFileFilter::Replace) {
+		if (mode == AbstractFileFilter::Replace) {
 			matrix->clear();
 			matrix->setDimensions(actualRows,actualCols);
-		}else{
+		} else {
 			if (matrix->rowCount() < actualRows)
 				matrix->setDimensions(actualRows,actualCols);
 			else
@@ -170,11 +175,12 @@ int AbstractDataSource::create(QVector<QVector<double>*>& dataPointers, Abstract
 		}
 
 		QVector<QVector<double> >& matrixColumns = matrix->data();
-		for ( int n=0; n<actualCols; n++ ){
+		dataPointers.resize(actualCols);
+		for (int n = 0; n < actualCols; n++ ) {
 			QVector<double>* vector = &matrixColumns[n];
 			vector->reserve(actualRows);
 			vector->resize(actualRows);
-			dataPointers.push_back(vector);
+			dataPointers[n] = vector;
 		}
 	}
 

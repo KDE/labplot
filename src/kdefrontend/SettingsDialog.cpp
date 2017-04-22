@@ -2,9 +2,9 @@
     File                 : SettingsDialog.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
-    Description          : general settings dialog
-                           
+    Copyright            : (C) 2008-2017 by Alexander Semke (alexander.semke@web.de)
+    Description          : application settings dialog
+ 
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,9 +26,20 @@
  *                                                                         *
  ***************************************************************************/
 #include "SettingsDialog.h"
-#include "SettingsGeneralPage.h"
 
+#include "MainWin.h"
+#include "SettingsGeneralPage.h"
+#include "SettingsWorksheetPage.h"
+
+#include <QPushButton>
+#include <QDialogButtonBox>
+
+#include <KDialog>
 #include <KMessageBox>
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KWindowConfig>
+#include <KLocalizedString>
 
 /**
  * \brief Settings dialog for Labplot.
@@ -37,63 +48,67 @@
  *
  */
 SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent), m_changed(false) {
-	const QSize minSize = minimumSize();
-	setMinimumSize(QSize(512, minSize.height()));
-
 	setFaceType(List);
-	setCaption(i18n("Preferences"));
-	setWindowIcon(KIcon("preferences-other"));
-	setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Default);
-	setDefaultButton(KDialog::Ok);
-	enableButton(KDialog::Apply, false);
+	setWindowTitle(i18n("Preferences"));
+	setWindowIcon(QIcon::fromTheme("preferences-other"));
+	setAttribute(Qt::WA_DeleteOnClose);
+
+	buttonBox()->addButton(QDialogButtonBox::Apply)->setEnabled(false);
+	buttonBox()->addButton(QDialogButtonBox::RestoreDefaults);
+	connect(buttonBox(), SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonClicked(QAbstractButton*)));
 
 	generalPage = new SettingsGeneralPage(this);
 	KPageWidgetItem* generalFrame = addPage(generalPage, i18n("General"));
-	generalFrame->setIcon(KIcon("system-run"));
+	generalFrame->setIcon(QIcon::fromTheme("system-run"));
 	connect(generalPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
 
-	KConfigGroup conf(KSharedConfig::openConfig(), "SettingsDialog");
-	restoreDialogSize(conf);
+	worksheetPage = new SettingsWorksheetPage(this);
+	KPageWidgetItem* worksheetFrame = addPage(worksheetPage, i18n("Worksheet"));
+	worksheetFrame->setIcon(QIcon::fromTheme(QLatin1String("labplot-worksheet")));
+	connect(worksheetPage, SIGNAL(settingsChanged()), this, SLOT(changed()));
+
+	const KConfigGroup dialogConfig = KSharedConfig::openConfig()->group("SettingsDialog");
+	KWindowConfig::restoreWindowSize(windowHandle(), dialogConfig);
 }
 
-SettingsDialog::~SettingsDialog() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "SettingsDialog");
-	saveDialogSize(conf);
+SettingsDialog::~SettingsDialog(){
+	KConfigGroup dialogConfig = KSharedConfig::openConfig()->group("SettingsDialog");
+	KWindowConfig::saveWindowSize(windowHandle(), dialogConfig);
 }
 
-void SettingsDialog::slotButtonClicked(int button) {
-	if ((button == KDialog::Ok) || (button == KDialog::Apply)) {
+void SettingsDialog::slotButtonClicked(QAbstractButton* button) {
+	if ((button == buttonBox()->button(QDialogButtonBox::Ok)) || (button == buttonBox()->button(QDialogButtonBox::Apply))) {
 		if (m_changed){
 			applySettings();
-			setCaption(i18n("Preferences"));
-			enableButton(KDialog::Apply, false);
+			setWindowTitle(i18n("Preferences"));
+			buttonBox()->button(QDialogButtonBox::Apply)->setEnabled(false);
 		}
-	} else if (button == KDialog::Default) {
+	} else if (button == buttonBox()->button(QDialogButtonBox::RestoreDefaults)) {
 		const QString text(i18n("All settings will be reset to default values. Do you want to continue?"));
 		if (KMessageBox::questionYesNo(this, text) == KMessageBox::Yes) {
 			restoreDefaults();
-			setCaption(i18n("Preferences"));
-			enableButton(KDialog::Apply, false);
+			setWindowTitle(i18n("Preferences"));
+			buttonBox()->button(QDialogButtonBox::Apply)->setEnabled(false);
 		}
 	}
-
-    KPageDialog::slotButtonClicked(button);
 }
 
 void SettingsDialog::changed() {
 	m_changed = true;
-	setCaption(i18n("Preferences    [Changed]"));
-	enableButton(KDialog::Apply, true);
+	setWindowTitle(i18n("Preferences    [Changed]"));
+	buttonBox()->button(QDialogButtonBox::Apply)->setEnabled(true);
 }
 
-void SettingsDialog::applySettings() {
+void SettingsDialog::applySettings(){
 	m_changed = false;
 	generalPage->applySettings();
-	KGlobal::config()->sync();	
+	worksheetPage->applySettings();
+	KSharedConfig::openConfig()->sync();
 	emit settingsChanged();
 }
 
 void SettingsDialog::restoreDefaults(){
 	m_changed = false;
 	generalPage->restoreDefaults();
+	worksheetPage->restoreDefaults();
 }

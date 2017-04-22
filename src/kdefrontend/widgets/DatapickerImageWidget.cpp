@@ -34,8 +34,6 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/datapicker/ImageEditor.h"
 
-#include "math.h"
-
 #include <QPainter>
 #include <KUrlCompletion>
 #include <KStandardDirs>
@@ -43,6 +41,12 @@
 #include <QDir>
 #include <QGraphicsScene>
 #include <QImageReader>
+
+#include <KSharedConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+
+#include <cmath>
 
 HistogramView::HistogramView(QWidget* parent, int range) :
 	QGraphicsView(parent),
@@ -57,23 +61,26 @@ HistogramView::HistogramView(QWidget* parent, int range) :
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-	lowerSlider = new QGraphicsRectItem(pageRect, 0, m_scene);
+	lowerSlider = new QGraphicsRectItem(pageRect, 0);
 	lowerSlider->setPen(QPen(Qt::black, 0.5));
 	lowerSlider->setBrush(Qt::blue);
 	lowerSlider->setOpacity(0.2);
+	m_scene->addItem(lowerSlider);
 
-	upperSlider = new QGraphicsRectItem(pageRect, 0, m_scene);
+	upperSlider = new QGraphicsRectItem(pageRect, 0);
 	upperSlider->setPen(QPen(Qt::black, 0.5));
 	upperSlider->setBrush(Qt::blue);
 	upperSlider->setOpacity(0.2);
+	m_scene->addItem(upperSlider);
 }
 
 void HistogramView::setScalePixmap(const QString& file) {
 	// scene rect is 1000*100 where upper 1000*80 is for histogram graph
 	// and lower 1000*20 is for histogram scale
-	QGraphicsPixmapItem* pixmap = new QGraphicsPixmapItem(QPixmap(file).scaled( 1000, 20, Qt::IgnoreAspectRatio), 0, m_scene);
+	QGraphicsPixmapItem* pixmap = new QGraphicsPixmapItem(QPixmap(file).scaled( 1000, 20, Qt::IgnoreAspectRatio), 0);
 	pixmap->setZValue(-1);
 	pixmap->setPos(0, 90);
+	m_scene->addItem(pixmap);
 }
 
 void HistogramView::setSpan(int l, int h) {
@@ -122,7 +129,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
 
 	ui.kleFileName->setClearButtonShown(true);
-	ui.bOpen->setIcon( KIcon("document-open") );
+	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	KUrlCompletion *comp = new KUrlCompletion();
 	ui.kleFileName->setCompletionObject(comp);
@@ -177,9 +184,9 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget *parent): QWidget(parent) {
 	ui.cbPlotImageType->addItem(i18n("Original Image"));
 	ui.cbPlotImageType->addItem(i18n("Processed Image"));
 
-	QString valueFile = KStandardDirs::locate("data", "labplot2/pics/colorchooser/colorchooser_value.xpm");
-	QString hueFile = KStandardDirs::locate("data", "labplot2/pics/colorchooser/colorchooser_hue.xpm");
-	QString saturationFile = KStandardDirs::locate("data", "labplot2/pics/colorchooser/colorchooser_saturation.xpm");
+	QString valueFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "labplot2/pics/colorchooser/colorchooser_value.xpm");
+	QString hueFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "labplot2/pics/colorchooser/colorchooser_hue.xpm");
+	QString saturationFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "labplot2/pics/colorchooser/colorchooser_saturation.xpm");
 
 	gvHue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::Hue));
 	gvHue->setToolTip(i18n("Select the range for the hue.\nEverything outside of this range will be set to white."));
@@ -206,11 +213,11 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget *parent): QWidget(parent) {
 	editTabLayout->addWidget(gvForeground, 10, 2);
 	gvForeground->setScalePixmap(valueFile);
 
-	connect( ssIntensity, SIGNAL(spanSliderMoved(int,int)), gvIntensity, SLOT(setSpan(int,int)) );
-	connect( ssForeground, SIGNAL(spanSliderMoved(int,int)), gvForeground, SLOT(setSpan(int,int)) );
-	connect( ssHue, SIGNAL(spanSliderMoved(int,int)), gvHue, SLOT(setSpan(int,int)) );
-	connect( ssSaturation, SIGNAL(spanSliderMoved(int,int)), gvSaturation, SLOT(setSpan(int,int)) );
-	connect( ssValue, SIGNAL(spanSliderMoved(int,int)), gvValue, SLOT(setSpan(int,int)) );
+	connect( ssIntensity, SIGNAL(spanChanged(int,int)), gvIntensity, SLOT(setSpan(int,int)) );
+	connect( ssForeground, SIGNAL(spanChanged(int,int)), gvForeground, SLOT(setSpan(int,int)) );
+	connect( ssHue, SIGNAL(spanChanged(int,int)), gvHue, SLOT(setSpan(int,int)) );
+	connect( ssSaturation, SIGNAL(spanChanged(int,int)), gvSaturation, SLOT(setSpan(int,int)) );
+	connect( ssValue, SIGNAL(spanChanged(int,int)), gvValue, SLOT(setSpan(int,int)) );
 
 	//SLOTS
 	//general
@@ -379,7 +386,7 @@ void DatapickerImageWidget::commentChanged() {
 }
 
 void DatapickerImageWidget::selectFile() {
-    KConfigGroup conf(KSharedConfig::openConfig(), "DatapickerImageWidget");
+	KConfigGroup conf(KSharedConfig::openConfig(), "DatapickerImageWidget");
 	QString dir = conf.readEntry("LastImageDir", "");
 	QString formats;
 	foreach(QByteArray format, QImageReader::supportedImageFormats()) {

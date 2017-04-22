@@ -31,11 +31,13 @@
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
 
-#include "math.h"
-
 #include <QPainter>
 #include <QDir>
+#include <KLocale>
+#include <KConfig>
+#include <KConfigGroup>
 
+#include <cmath>
 
 CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
@@ -45,7 +47,7 @@ CustomPointDock::CustomPointDock(QWidget *parent): QWidget(parent) {
 	ui.klePositionY->setValidator( new QDoubleValidator(ui.klePositionY) );
 
 	//adjust layouts in the tabs
-	for (int i=0; i<ui.tabWidget->count(); ++i){
+	for (int i=0; i<ui.tabWidget->count(); ++i) {
 	  QGridLayout* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 	  if (!layout)
 		continue;
@@ -117,7 +119,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 	Q_ASSERT(m_point);
 
 	//if there are more then one point in the list, disable the comment and name widgets in the tab "general"
-	if (list.size()==1){
+	if (list.size()==1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
@@ -155,14 +157,14 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 //**** SLOTs for changes triggered in CustomPointDock ******
 //**********************************************************
 //"General"-tab
-void CustomPointDock::nameChanged(){
+void CustomPointDock::nameChanged() {
 	if (m_initializing)
 		return;
 
 	m_point->setName(ui.leName->text());
 }
 
-void CustomPointDock::commentChanged(){
+void CustomPointDock::commentChanged() {
 	if (m_initializing)
 		return;
 
@@ -424,7 +426,7 @@ void CustomPointDock::pointVisibilityChanged(bool on) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void CustomPointDock::load() {
-	if(m_point == NULL)
+	if (m_point == NULL)
 		return;
 
 	m_initializing = true;

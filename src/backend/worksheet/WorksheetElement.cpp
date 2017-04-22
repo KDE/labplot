@@ -29,9 +29,12 @@
 
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 
+#include <QGraphicsItem>
 #include <QMenu>
+#include <QPen>
 #include <KLocale>
 
 QPen WorksheetElement::hoveredPen = QPen(QColor(128,179,255), 3, Qt::SolidLine);
@@ -66,7 +69,6 @@ WorksheetElement::~WorksheetElement() {
 /**
  * \fn QGraphicsItem *WorksheetElement::graphicsItem() const
  * \brief Return the graphics item representing this element.
- *
  *
  */
 
@@ -113,91 +115,116 @@ void WorksheetElement::setZValue(qreal value) {
     This does exactly what Qt internally does to creates a shape from a painter path.
 */
 QPainterPath WorksheetElement::shapeFromPath(const QPainterPath &path, const QPen &pen) {
-    // We unfortunately need this hack as QPainterPathStroker will set a width of 1.0
-    // if we pass a value of 0.0 to QPainterPathStroker::setWidth()
-    const qreal penWidthZero = qreal(0.00000001);
+	// TODO: We unfortunately need this hack as QPainterPathStroker will set a width of 1.0
+	// if we pass a value of 0.0 to QPainterPathStroker::setWidth()
+	const qreal penWidthZero = qreal(0.00000001);
 
-    if (path == QPainterPath())
-        return path;
-    QPainterPathStroker ps;
-    ps.setCapStyle(pen.capStyle());
-    if (pen.widthF() <= 0.0)
-        ps.setWidth(penWidthZero);
-    else
-        ps.setWidth(pen.widthF());
-    ps.setJoinStyle(pen.joinStyle());
-    ps.setMiterLimit(pen.miterLimit());
-    QPainterPath p = ps.createStroke(path);
-    p.addPath(path);
-    return p;
+	if (path == QPainterPath())
+		return path;
+	QPainterPathStroker ps;
+	ps.setCapStyle(pen.capStyle());
+	if (pen.widthF() <= 0.0)
+		ps.setWidth(penWidthZero);
+	else
+		ps.setWidth(pen.widthF());
+	ps.setJoinStyle(pen.joinStyle());
+	ps.setMiterLimit(pen.miterLimit());
+	QPainterPath p = ps.createStroke(path);
+	p.addPath(path);
+
+	return p;
 }
 
-QMenu *WorksheetElement::createContextMenu() {
-	QMenu *menu = AbstractAspect::createContextMenu();
+QMenu* WorksheetElement::createContextMenu() {
+	QMenu* menu = AbstractAspect::createContextMenu();
 
-	if (!dynamic_cast<Axis*>(this)) {
-		if (parentAspect()->childCount<WorksheetElement>()>1){
-			menu->addSeparator();
-			menu->addMenu(m_drawingOrderMenu);
-			menu->addSeparator();
-		}
+	//add the sub-menu for the drawing order
+
+	//don't add the drawing order menu for axes, they're always drawn on top of each other elements
+	if (dynamic_cast<Axis*>(this))
+		return menu;
+
+	//don't add the drawing order menu for plots that are placed in a worksheet with an active layout
+	if (dynamic_cast<AbstractPlot*>(this) ) {
+		const Worksheet* w = dynamic_cast<const Worksheet*>(this->parentAspect());
+		if (w && w->layout()!=Worksheet::NoLayout)
+			return menu;
 	}
+
+	//don't add the drawing order menu if the parent element has no other children
+	int children = 0;
+	foreach (WorksheetElement* e, parentAspect()->children<WorksheetElement>()) {
+		if( !dynamic_cast<Axis*>(e) )
+			children++;
+	}
+
+	if (children > 1) {
+		menu->addSeparator();
+		menu->addMenu(m_drawingOrderMenu);
+	}
+
 	return menu;
 }
 
 void WorksheetElement::prepareMoveBehindMenu() {
 	m_moveBehindMenu->clear();
-	AbstractAspect *parent = parentAspect();
-	if (parent) {
-		QList<WorksheetElement *> childElements = parent->children<WorksheetElement>();
-		foreach(const WorksheetElement *elem, childElements) {
-			if (elem != this && !dynamic_cast<const Axis*>(elem)) {
-				QAction *action = m_moveBehindMenu->addAction(elem->name());
-				action->setData(parent->indexOfChild<WorksheetElement>(elem));
-			}
+	AbstractAspect* parent = parentAspect();
+	int index = parent->indexOfChild<WorksheetElement>(this);
+	const QList<WorksheetElement*>& children = parent->children<WorksheetElement>();
+
+	for (int i=0; i<index; ++i) {
+		const WorksheetElement* elem = children.at(i);
+		//axes are always drawn on top of other elements, don't add them to the menu
+		if (!dynamic_cast<const Axis*>(elem)) {
+			QAction* action = m_moveBehindMenu->addAction(elem->name());
+			action->setData(i);
 		}
 	}
+
+	//TODO: doesn't alway work properly
+	//hide the "move behind" menu if it doesn't have any entries, show if not shown yet otherwise
+	//m_moveBehindMenu->menuAction()->setVisible(!m_moveBehindMenu->isEmpty());
 }
 
 void WorksheetElement::prepareMoveInFrontOfMenu() {
 	m_moveInFrontOfMenu->clear();
-	AbstractAspect *parent = parentAspect();
-	if (parent) {
-		QList<WorksheetElement *> childElements = parent->children<WorksheetElement>();
-		foreach(const WorksheetElement *elem, childElements) {
-			if (elem != this && !dynamic_cast<const Axis*>(elem)) {
-				QAction *action = m_moveInFrontOfMenu->addAction(elem->name());
-				action->setData(parent->indexOfChild<WorksheetElement>(elem));
-			}
+	AbstractAspect* parent = parentAspect();
+	int index = parent->indexOfChild<WorksheetElement>(this);
+	const QList<WorksheetElement*>& children = parent->children<WorksheetElement>();
+
+	for (int i = index + 1; i < children.size(); ++i) {
+		const WorksheetElement* elem = children.at(i);
+		//axes are always drawn on top of other elements, don't add them to the menu
+		if (!dynamic_cast<const Axis*>(elem)) {
+			QAction* action = m_moveInFrontOfMenu->addAction(elem->name());
+			action->setData(i);
 		}
 	}
+
+	//TODO: doesn't alway work properly
+	//hide the "move in front" menu if it doesn't have any entries, show if not shown yet otherwise
+	//m_moveInFrontOfMenu->menuAction()->setVisible(!m_moveInFrontOfMenu->isEmpty());
 }
 
-void WorksheetElement::execMoveBehind(QAction *action) {
-	Q_ASSERT(action != NULL);
-	AbstractAspect *parent = parentAspect();
-	if (parent) {
-		int index = action->data().toInt();
-		AbstractAspect *sibling1 = parent->child<WorksheetElement>(index);
-		beginMacro(i18n("%1: move behind %2.", name(), sibling1->name()));
-		remove();
-		AbstractAspect *sibling2 = parent->child<WorksheetElement>(index + 1);
-		parent->insertChildBefore(this, sibling2);
-		endMacro();
-	}
+void WorksheetElement::execMoveInFrontOf(QAction* action) {
+	AbstractAspect* parent = parentAspect();
+	int index = action->data().toInt();
+	AbstractAspect* sibling1 = parent->child<WorksheetElement>(index);
+	AbstractAspect* sibling2 = parent->child<WorksheetElement>(index + 1);
+	beginMacro(i18n("%1: move behind %2.", name(), sibling1->name()));
+	remove();
+	parent->insertChildBefore(this, sibling2);
+	endMacro();
 }
 
-void WorksheetElement::execMoveInFrontOf(QAction *action) {
-	Q_ASSERT(action != NULL);
-	AbstractAspect *parent = parentAspect();
-	if (parent) {
-		int index = action->data().toInt();
-		AbstractAspect *sibling = parent->child<WorksheetElement>(index);
-		beginMacro(i18n("%1: move in front of %2.", name(), sibling->name()));
-		remove();
-		parent->insertChildBefore(this, sibling);
-		endMacro();
-	}
+void WorksheetElement::execMoveBehind(QAction* action) {
+	AbstractAspect* parent = parentAspect();
+	int index = action->data().toInt();
+	AbstractAspect* sibling = parent->child<WorksheetElement>(index);
+	beginMacro(i18n("%1: move in front of %2.", name(), sibling->name()));
+	remove();
+	parent->insertChildBefore(this, sibling);
+	endMacro();
 }
 
 /**
@@ -213,4 +240,14 @@ void WorksheetElement::execMoveInFrontOf(QAction *action) {
 void WorksheetElement::handlePageResize(double horizontalRatio, double verticalRatio){
 	Q_UNUSED(horizontalRatio);
 	Q_UNUSED(verticalRatio);
+}
+
+void WorksheetElement::loadThemeConfig(const KConfig &)
+{
+
+}
+
+void WorksheetElement::saveThemeConfig(const KConfig &)
+{
+
 }

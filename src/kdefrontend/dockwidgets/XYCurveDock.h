@@ -36,6 +36,8 @@
 #include "backend/worksheet/plots/PlotArea.h"
 #include "ui_xycurvedock.h"
 #include "ui_xycurvedockgeneraltab.h"
+#include <KConfig>
+#include <KLocalizedString>
 
 class XYCurve;
 class TreeViewComboBox;
@@ -48,7 +50,7 @@ class XYCurveDock : public QWidget {
 
 public:
 	explicit XYCurveDock(QWidget*);
-    virtual ~XYCurveDock();
+	virtual ~XYCurveDock();
 
 	void setCurves(QList<XYCurve*>);
 	virtual void setupGeneral();

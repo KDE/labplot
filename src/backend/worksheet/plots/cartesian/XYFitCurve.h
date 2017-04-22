@@ -3,7 +3,8 @@
     Project              : LabPlot
     Description          : A xy-curve defined by a fit model
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -30,37 +31,53 @@
 #define XYFITCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+extern "C" {
+#include "backend/nsl/nsl_fit.h"
+}
 
 class XYFitCurvePrivate;
-class XYFitCurve: public XYCurve {
+class XYFitCurve : public XYCurve {
 	Q_OBJECT
 
 	public:
-		enum ModelType {Polynomial, Power, Exponential, Inverse_Exponential, Fourier, Gaussian, Lorentz, Maxwell, Custom};
 		enum WeightsType {WeightsFromColumn, WeightsFromErrorColumn};
 
 		struct FitData {
-			FitData() : modelType(Polynomial),
+			FitData() : modelCategory(nsl_fit_model_basic), modelType(0),
 						weightsType(XYFitCurve::WeightsFromColumn),
 						degree(1),
 						maxIterations(500),
 						eps(1e-4),
-						fittedPoints(100) {};
+						evaluatedPoints(100),
+						useResults(true),
+						evaluateFullRange(true),
+						autoRange(true), xRange(2) {};
 
-			ModelType modelType;
+			nsl_fit_model_category modelCategory;
+			unsigned int modelType;
 			WeightsType weightsType;
 			int degree;
 			QString model;
 			QStringList paramNames;
+			QStringList paramNamesUtf8;	// Utf8 version of paramNames
 			QVector<double> paramStartValues;
+			QVector<double> paramLowerLimits;
+			QVector<double> paramUpperLimits;
+			QVector<bool> paramFixed;
 
 			int maxIterations;
 			double eps;
-			int fittedPoints;
+			size_t evaluatedPoints;
+			bool useResults;		// use results as new start values
+			bool evaluateFullRange;		// evaluate fit function on full data range
+
+			bool autoRange;			// use all data?
+			QVector<double> xRange;		// x range for integration
 		};
 
 		struct FitResult {
-			FitResult() : available(false), valid(false), iterations(0), elapsedTime(0), dof(0), sse(0), mse(0), rmse(0), mae(0), rms(0), rsd(0), rsquared(0), rsquaredAdj(0) {};
+			FitResult() : available(false), valid(false), iterations(0), elapsedTime(0),
+				dof(0), sse(0), mse(0), rmse(0), mae(0), rms(0), rsd(0), rsquared(0), rsquaredAdj(0) {};
 
 			bool available;
 			bool valid;

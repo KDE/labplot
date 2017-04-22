@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2010 by Knut Franke (knut.franke@gmx.de)
 	Copyright            : (C) 2007-2009 Tilman Benkert(thzs@gmx.net)
-	Copyright            : (C) 2013 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2013-2017 by Alexander Semke (alexander.semke@web.de)
     Description          : Undo commands used by AbstractAspect.
                            Only meant to be used within AbstractAspect.cpp
 
@@ -36,95 +36,95 @@
 #include <KLocale>
 
 class AspectChildRemoveCmd : public QUndoCommand {
-	public:
-		AspectChildRemoveCmd(AbstractAspect::Private* target, AbstractAspect* child)
-			: m_target(target), m_child(child), m_index(-1), m_removed(false) {
-				setText(i18n("%1: remove %2", m_target->m_name, m_child->name()));
-			}
+public:
+	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child)
+		: m_target(target), m_child(child), m_index(-1) {
+// 			, m_removed(false) {
+		setText(i18n("%1: remove %2", m_target->m_name, m_child->name()));
+	}
 
-		~AspectChildRemoveCmd() {
-			if (m_removed)
-				delete m_child;
-		}
+	~AspectChildRemoveCmd() {
+		//TODO: this makes labplot crashing on project close/save.
+// 			if (m_removed)
+// 				delete m_child;
+	}
 
-		// calling redo transfers ownership of m_child to the undo command
-		virtual void redo() {
-			AbstractAspect *nextSibling;
-			if (m_child == m_target->m_children.last())
-				nextSibling = 0;
-			else
-				nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
+	// calling redo transfers ownership of m_child to the undo command
+	virtual void redo() {
+		AbstractAspect* nextSibling;
+		if (m_child == m_target->m_children.last())
+			nextSibling = 0;
+		else
+			nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
 
-			emit m_target->m_owner->aspectAboutToBeRemoved(m_child);
-			m_index = m_target->removeChild(m_child);
-			emit m_target->m_owner->aspectRemoved(m_target->m_owner, nextSibling, m_child);
+		emit m_target->q->aspectAboutToBeRemoved(m_child);
+		m_index = m_target->removeChild(m_child);
+		emit m_target->q->aspectRemoved(m_target->q, nextSibling, m_child);
+//		m_removed = true;
+	}
 
-			m_removed = true;
-		}
+	// calling undo transfers ownership of m_child back to its parent aspect
+	virtual void undo() {
+		Q_ASSERT(m_index != -1); // m_child must be a child of m_target->q
 
-		// calling undo transfers ownership of m_child back to its parent aspect
-		virtual void undo() {
-			Q_ASSERT(m_index != -1); // m_child must be a child of m_target->m_owner
+		emit m_target->q->aspectAboutToBeAdded(m_target->q, 0, m_child);
+		m_target->insertChild(m_index, m_child);
+		emit m_target->q->aspectAdded(m_child);
+// 		m_removed = false;
+	}
 
-			emit m_target->m_owner->aspectAboutToBeAdded(m_target->m_owner, 0, m_child);
-			m_target->insertChild(m_index, m_child);
-			emit m_target->m_owner->aspectAdded(m_child);
-
-			m_removed = false;
-		}
-
-	protected:
-		AbstractAspect::Private * m_target;
-		AbstractAspect* m_child;
-		int m_index;
-		bool m_removed;
+protected:
+	AbstractAspectPrivate* m_target;
+	AbstractAspect* m_child;
+	int m_index;
+// 	bool m_removed;
 };
 
 class AspectChildAddCmd : public AspectChildRemoveCmd {
-	public:
-		AspectChildAddCmd(AbstractAspect::Private * target, AbstractAspect* child, int index)
-			: AspectChildRemoveCmd(target, child) {
-				setText(i18n("%1: add %2", m_target->m_name, m_child->name()));
-				m_index = index;
-				m_removed = true;
-			}
+public:
+	AspectChildAddCmd(AbstractAspectPrivate* target, AbstractAspect* child, int index)
+		: AspectChildRemoveCmd(target, child) {
+		setText(i18n("%1: add %2", m_target->m_name, m_child->name()));
+		m_index = index;
+// 		m_removed = true;
+	}
 
-		virtual void redo() { AspectChildRemoveCmd::undo(); }
+	virtual void redo() {
+		AspectChildRemoveCmd::undo();
+	}
 
-		virtual void undo() { AspectChildRemoveCmd::redo(); }
+	virtual void undo() {
+		AspectChildRemoveCmd::redo();
+	}
 };
 
 class AspectChildReparentCmd : public QUndoCommand {
-	public:
-		AspectChildReparentCmd(AbstractAspect::Private * target, AbstractAspect::Private * new_parent,
-				AbstractAspect* child, int new_index)
-			: m_target(target), m_new_parent(new_parent), m_child(child), m_index(-1), m_new_index(new_index)
-		{
-			setText(i18n("%1: move %2 to %3.", m_target->m_name, m_child->name(), m_new_parent->m_name));
-		}
-		~AspectChildReparentCmd() {}
+public:
+	AspectChildReparentCmd(AbstractAspectPrivate* target, AbstractAspectPrivate* new_parent,
+	                       AbstractAspect* child, int new_index)
+		: m_target(target), m_new_parent(new_parent), m_child(child), m_index(-1), m_new_index(new_index) {
+		setText(i18n("%1: move %2 to %3.", m_target->m_name, m_child->name(), m_new_parent->m_name));
+	}
 
-		// calling redo transfers ownership of m_child to the new parent aspect
-		virtual void redo()
-		{
-			m_index = m_target->removeChild(m_child);
-			m_new_parent->insertChild(m_new_index, m_child);
-		}
+	// calling redo transfers ownership of m_child to the new parent aspect
+	virtual void redo() {
+		m_index = m_target->removeChild(m_child);
+		m_new_parent->insertChild(m_new_index, m_child);
+	}
 
-		// calling undo transfers ownership of m_child back to its previous parent aspect
-		virtual void undo()
-		{
-			Q_ASSERT(m_index != -1);
-			m_new_parent->removeChild(m_child);
-			m_target->insertChild(m_index, m_child);
-		}
+	// calling undo transfers ownership of m_child back to its previous parent aspect
+	virtual void undo() {
+		Q_ASSERT(m_index != -1);
+		m_new_parent->removeChild(m_child);
+		m_target->insertChild(m_index, m_child);
+	}
 
-	protected:
-		AbstractAspect::Private * m_target;
-		AbstractAspect::Private * m_new_parent;
-		AbstractAspect* m_child;
-		int m_index;
-		int m_new_index;
+protected:
+	AbstractAspectPrivate * m_target;
+	AbstractAspectPrivate * m_new_parent;
+	AbstractAspect* m_child;
+	int m_index;
+	int m_new_index;
 };
 
 #endif

@@ -33,7 +33,11 @@
 #include "backend/matrix/MatrixModel.h"
 #include "backend/matrix/matrixcommands.h"
 #include "backend/lib/macros.h"
+#include "backend/core/column/Column.h"
+
 #include "kdefrontend/matrix/MatrixFunctionDialog.h"
+#include "kdefrontend/spreadsheet/StatisticsDialog.h"
+#include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 
 #include <QStackedWidget>
 #include <QTableView>
@@ -49,14 +53,15 @@
 #include <QTextStream>
 #include <QThreadPool>
 #include <QMutex>
+#include <QProcess>
 // #include <QElapsedTimer>
 
 #include <KLocale>
 #include <KAction>
-#include <KIcon>
+#include <QIcon>
 
-#include <float.h>
-#include "math.h"
+#include <cfloat>
+#include <cmath>
 
 MatrixView::MatrixView(Matrix* matrix) : QWidget(),
 	m_stackedWidget(new QStackedWidget(this)),
@@ -67,6 +72,15 @@ MatrixView::MatrixView(Matrix* matrix) : QWidget(),
 	m_imageIsDirty(true) {
 
 	init();
+
+	//resize the view to show a 10x10 region of the matrix.
+	//no need to resize the view when the project is being opened,
+	//all views will be resized to the stored values at the end
+	if (!m_matrix->isLoading()) {
+		int w = m_tableView->horizontalHeader()->sectionSize(0)*10 + m_tableView->verticalHeader()->width();
+		int h = m_tableView->verticalHeader()->sectionSize(0)*10 + m_tableView->horizontalHeader()->height();
+		resize(w+50, h+50);
+	}
 }
 
 MatrixView::~MatrixView() {
@@ -97,16 +111,12 @@ void MatrixView::init() {
 
 	//horizontal header
 	QHeaderView* h_header = m_tableView->horizontalHeader();
-	h_header->setResizeMode(QHeaderView::Interactive);
 	h_header->setMovable(false);
-	h_header->setDefaultSectionSize(m_matrix->defaultColumnWidth());
 	h_header->installEventFilter(this);
 
 	//vertical header
 	QHeaderView* v_header = m_tableView->verticalHeader();
-	v_header->setResizeMode(QHeaderView::Interactive);
 	v_header->setMovable(false);
-	v_header->setDefaultSectionSize(m_matrix->defaultRowHeight());
 	v_header->installEventFilter(this);
 
 	//set the header sizes to the (potentially user customized) sizes stored in Matrix
@@ -131,32 +141,33 @@ void MatrixView::init() {
 
 void MatrixView::initActions() {
 	// selection related actions
-	action_cut_selection = new KAction(KIcon("edit-cut"), i18n("Cu&t"), this);
-	action_copy_selection = new KAction(KIcon("edit-copy"), i18n("&Copy"), this);
-	action_paste_into_selection = new KAction(KIcon("edit-paste"), i18n("Past&e"), this);
-	action_clear_selection = new KAction(KIcon("edit-clear"), i18n("Clea&r Selection"), this);
-	action_select_all = new KAction(KIcon("edit-select-all"), i18n("Select All"), this);
+    action_cut_selection = new QAction(QIcon::fromTheme("edit-cut"), i18n("Cu&t"), this);
+    action_copy_selection = new QAction(QIcon::fromTheme("edit-copy"), i18n("&Copy"), this);
+    action_paste_into_selection = new QAction(QIcon::fromTheme("edit-paste"), i18n("Past&e"), this);
+    action_clear_selection = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Selection"), this);
+    action_select_all = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this);
 
 	// matrix related actions
 	QActionGroup* viewActionGroup = new QActionGroup(this);
 	viewActionGroup->setExclusive(true);
-	action_data_view = new KAction(KIcon("labplot-matrix"), i18n("Data"), viewActionGroup);
+    action_data_view = new QAction(QIcon::fromTheme("labplot-matrix"), i18n("Data"), viewActionGroup);
 	action_data_view->setCheckable(true);
 	action_data_view->setChecked(true);
-	action_image_view = new KAction(KIcon("image-x-generic"), i18n("Image"), viewActionGroup);
+    action_image_view = new QAction(QIcon::fromTheme("image-x-generic"), i18n("Image"), viewActionGroup);
 	action_image_view->setCheckable(true);
 	connect(viewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(switchView(QAction*)));
 
-	action_fill_function = new KAction(KIcon(""), i18n("Function Values"), this);
-	action_fill_const = new KAction(KIcon(""), i18n("Const Values"), this);
-	action_clear_matrix = new KAction(KIcon("edit-clear"), i18n("Clear Matrix"), this);
-	action_go_to_cell = new KAction(KIcon("go-jump"), i18n("&Go to Cell"), this);
+    action_fill_function = new QAction(QIcon::fromTheme(""), i18n("Function Values"), this);
+    action_fill_const = new QAction(QIcon::fromTheme(""), i18n("Const Values"), this);
+    action_clear_matrix = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Matrix"), this);
+    action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell"), this);
 
-	action_transpose = new KAction(i18n("&Transpose"), this);
-	action_mirror_horizontally = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
-	action_mirror_vertically = new KAction(KIcon("object-flip-vertical"), i18n("Mirror &Vertically"), this);
+    action_transpose = new QAction(i18n("&Transpose"), this);
+    action_mirror_horizontally = new QAction(QIcon::fromTheme("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
+    action_mirror_vertically = new QAction(QIcon::fromTheme("object-flip-vertical"), i18n("Mirror &Vertically"), this);
 // 	action_duplicate = new QAction(i18nc("duplicate matrix", "&Duplicate"), this);
-
+	//TODO
+	//icon
 	QActionGroup* headerFormatActionGroup = new QActionGroup(this);
 	headerFormatActionGroup->setExclusive(true);
 	action_header_format_1= new QAction(i18n("Rows and Columns"), headerFormatActionGroup);
@@ -168,16 +179,18 @@ void MatrixView::initActions() {
 	connect(headerFormatActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(headerFormatChanged(QAction*)));
 
 	// column related actions
-	action_add_columns = new KAction(KIcon("edit-table-insert-column-right"), i18n("&Add Columns"), this);
-	action_insert_columns = new KAction(KIcon("edit-table-insert-column-left"), i18n("&Insert Empty Columns"), this);
-	action_remove_columns = new KAction(KIcon("edit-table-delete-column"), i18n("Remo&ve Columns"), this);
-	action_clear_columns = new KAction(KIcon("edit-clear"), i18n("Clea&r Columns"), this);
+	action_add_columns = new QAction(QIcon::fromTheme("edit-table-insert-column-right"), i18n("&Add Columns"), this);
+	action_insert_columns = new QAction(QIcon::fromTheme("edit-table-insert-column-left"), i18n("&Insert Empty Columns"), this);
+	action_remove_columns = new QAction(QIcon::fromTheme("edit-table-delete-column"), i18n("Remo&ve Columns"), this);
+	action_clear_columns = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Columns"), this);
+	action_statistics_columns = new QAction(QIcon::fromTheme("view-statistics"), i18n("Statisti&cs"), this);
 
 	// row related actions
-	action_add_rows = new KAction(KIcon("edit-table-insert-row-above"), i18n("&Add Rows"), this);
-	action_insert_rows = new KAction(KIcon("edit-table-insert-row-above") ,i18n("&Insert Empty Rows"), this);
-	action_remove_rows = new KAction(KIcon("edit-table-delete-row"), i18n("Remo&ve Rows"), this);
-	action_clear_rows = new KAction(KIcon("edit-clear"), i18n("Clea&r Rows"), this);
+	action_add_rows = new QAction(QIcon::fromTheme("edit-table-insert-row-above"), i18n("&Add Rows"), this);
+	action_insert_rows = new QAction(QIcon::fromTheme("edit-table-insert-row-above") ,i18n("&Insert Empty Rows"), this);
+	action_remove_rows = new QAction(QIcon::fromTheme("edit-table-delete-row"), i18n("Remo&ve Rows"), this);
+	action_clear_rows = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Rows"), this);
+	action_statistics_rows = new QAction(QIcon::fromTheme("view-statistics"), i18n("Statisti&cs"), this);
 }
 
 void MatrixView::connectActions() {
@@ -204,12 +217,14 @@ void MatrixView::connectActions() {
 	connect(action_insert_columns, SIGNAL(triggered()), this, SLOT(insertEmptyColumns()));
 	connect(action_remove_columns, SIGNAL(triggered()), this, SLOT(removeSelectedColumns()));
 	connect(action_clear_columns, SIGNAL(triggered()), this, SLOT(clearSelectedColumns()));
+	connect(action_statistics_columns, SIGNAL(triggered()), this, SLOT(showColumnStatistics()));
 
 	// row related actions
 	connect(action_add_rows, SIGNAL(triggered()), this, SLOT(addRows()));
 	connect(action_insert_rows, SIGNAL(triggered()), this, SLOT(insertEmptyRows()));
 	connect(action_remove_rows, SIGNAL(triggered()), this, SLOT(removeSelectedRows()));
 	connect(action_clear_rows, SIGNAL(triggered()), this, SLOT(clearSelectedRows()));
+	connect(action_statistics_rows, SIGNAL(triggered()), this, SLOT(showRowStatistics()));
 }
 
 void MatrixView::initMenus() {
@@ -225,12 +240,14 @@ void MatrixView::initMenus() {
 	m_columnMenu->addAction(action_insert_columns);
 	m_columnMenu->addAction(action_remove_columns);
 	m_columnMenu->addAction(action_clear_columns);
+	m_columnMenu->addAction(action_statistics_columns);
 
 	//row menu
 	m_rowMenu = new QMenu(this);
 	m_rowMenu->addAction(action_insert_rows);
 	m_rowMenu->addAction(action_remove_rows);
 	m_rowMenu->addAction(action_clear_rows);
+	m_rowMenu->addAction(action_statistics_rows);
 
 	//matrix menu
 	m_matrixMenu = new QMenu(this);
@@ -314,10 +331,6 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_go_to_cell);
 	menu->insertSeparator(firstAction);
-
-	// TODO:
-	// Convert to Spreadsheet
-	// Export
 }
 
 /*!
@@ -330,25 +343,34 @@ void MatrixView::adjustHeaders() {
 	disconnect(v_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleVerticalSectionResized(int,int,int)));
 	disconnect(h_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
 
+	//resize columns to the saved sizes or to fit the contents if the widht is 0
 	int cols = m_matrix->columnCount();
-	for (int i=0; i<cols; i++)
-		h_header->resizeSection(i, m_matrix->columnWidth(i));
+	for (int i=0; i<cols; i++) {
+		if (m_matrix->columnWidth(i) == 0)
+			m_tableView->resizeColumnToContents(i);
+		else
+			m_tableView->setColumnWidth(i, m_matrix->columnWidth(i));
+	}
+
+	//resize rows to the saved sizes or to fit the contents if the height is 0
 	int rows = m_matrix->rowCount();
-	for (int i=0; i<rows; i++)
-		v_header->resizeSection(i, m_matrix->rowHeight(i));
+	for (int i=0; i<rows; i++) {
+		if (m_matrix->rowHeight(i) == 0)
+			m_tableView->resizeRowToContents(i);
+		else
+			m_tableView->setRowHeight(i, m_matrix->rowHeight(i));
+	}
 
 	connect(v_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleVerticalSectionResized(int,int,int)));
 	connect(h_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
 }
 
 /*!
-	Resizes the headers/columns to fit the new content. Called on changed of the header format in Matrix.
+	Resizes the headers/columns to fit the new content. Called on changes of the header format in Matrix.
 */
 void MatrixView::resizeHeaders() {
-	//hide and unhide the table view in order to trigger the refresh of the view and to get the new sizes
-	m_tableView->setVisible(false);
 	m_tableView->resizeColumnsToContents();
-	m_tableView->setVisible(true);
+	m_tableView->resizeRowsToContents();
 
 	if (m_matrix->headerFormat() == Matrix::HeaderRowsColumns)
 		action_header_format_1->setChecked(true);
@@ -356,22 +378,6 @@ void MatrixView::resizeHeaders() {
 		action_header_format_2->setChecked(true);
 	else
 		action_header_format_3->setChecked(true);
-}
-
-void MatrixView::setRowHeight(int row, int height) {
-	m_tableView->verticalHeader()->resizeSection(row, height);
-}
-
-void MatrixView::setColumnWidth(int col, int width) {
-	m_tableView->horizontalHeader()->resizeSection(col, width);
-}
-
-int MatrixView::rowHeight(int row) const {
-	return m_tableView->verticalHeader()->sectionSize(row);
-}
-
-int MatrixView::columnWidth(int col) const {
-	return m_tableView->horizontalHeader()->sectionSize(col);
 }
 
 /*!
@@ -382,7 +388,7 @@ int MatrixView::selectedColumnCount(bool full) const {
 	int count = 0;
 	int cols = m_matrix->columnCount();
 	for (int i=0; i<cols; i++)
-		if(isColumnSelected(i, full)) count++;
+		if (isColumnSelected(i, full)) count++;
 	return count;
 }
 
@@ -391,7 +397,7 @@ int MatrixView::selectedColumnCount(bool full) const {
 	If full is true, this function only returns true if the whole column is selected.
 */
 bool MatrixView::isColumnSelected(int col, bool full) const {
-	if(full)
+	if (full)
 		return m_tableView->selectionModel()->isColumnSelected(col, QModelIndex());
 	else
 		return m_tableView->selectionModel()->columnIntersectsSelection(col, QModelIndex());
@@ -404,8 +410,8 @@ bool MatrixView::isColumnSelected(int col, bool full) const {
 int MatrixView::selectedRowCount(bool full) const {
 	int count = 0;
 	int rows = m_matrix->rowCount();
-	for (int i=0; i<rows; i++)
-		if(isRowSelected(i, full)) count++;
+	for (int i=0; i < rows; i++)
+		if (isRowSelected(i, full)) count++;
 	return count;
 }
 
@@ -414,7 +420,7 @@ int MatrixView::selectedRowCount(bool full) const {
 	If full is true, this function only returns true if the whole row is selected.
 */
 bool MatrixView::isRowSelected(int row, bool full) const {
-	if(full)
+	if (full)
 		return m_tableView->selectionModel()->isRowSelected(row, QModelIndex());
 	else
 		return m_tableView->selectionModel()->rowIntersectsSelection(row, QModelIndex());
@@ -426,9 +432,8 @@ bool MatrixView::isRowSelected(int row, bool full) const {
 */
 int MatrixView::firstSelectedColumn(bool full) const {
 	int cols = m_matrix->columnCount();
-	for (int i=0; i<cols; i++)
-	{
-		if(isColumnSelected(i, full))
+	for (int i=0; i<cols; i++) {
+		if (isColumnSelected(i, full))
 			return i;
 	}
 	return -1;
@@ -440,8 +445,8 @@ int MatrixView::firstSelectedColumn(bool full) const {
 */
 int MatrixView::lastSelectedColumn(bool full) const {
 	int cols = m_matrix->columnCount();
-	for(int i=cols-1; i>=0; i--)
-		if(isColumnSelected(i, full)) return i;
+	for (int i=cols-1; i >= 0; i--)
+		if (isColumnSelected(i, full)) return i;
 
 	return -2;
 }
@@ -452,8 +457,8 @@ int MatrixView::lastSelectedColumn(bool full) const {
 */
 int MatrixView::firstSelectedRow(bool full) const {
 	int rows = m_matrix->rowCount();
-	for (int i=0; i<rows; i++) 	{
-		if(isRowSelected(i, full))
+	for (int i=0; i < rows; i++) 	{
+		if (isRowSelected(i, full))
 			return i;
 	}
 	return -1;
@@ -465,20 +470,20 @@ int MatrixView::firstSelectedRow(bool full) const {
 */
 int MatrixView::lastSelectedRow(bool full) const {
 	int rows = m_matrix->rowCount();
-	for(int i=rows-1; i>=0; i--)
-		if(isRowSelected(i, full)) return i;
+	for (int i=rows-1; i >= 0; i--)
+		if (isRowSelected(i, full)) return i;
 
 	return -2;
 }
 
 bool MatrixView::isCellSelected(int row, int col) const {
-	if(row < 0 || col < 0 || row >= m_matrix->rowCount() || col >= m_matrix->columnCount()) return false;
+	if (row < 0 || col < 0 || row >= m_matrix->rowCount() || col >= m_matrix->columnCount()) return false;
 
 	return m_tableView->selectionModel()->isSelected(m_model->index(row, col));
 }
 
 void MatrixView::setCellSelected(int row, int col) {
-	 m_tableView->selectionModel()->select(m_model->index(row, col), QItemSelectionModel::Select);
+	m_tableView->selectionModel()->select(m_model->index(row, col), QItemSelectionModel::Select);
 }
 
 void MatrixView::setCellsSelected(int first_row, int first_col, int last_row, int last_col) {
@@ -492,7 +497,7 @@ void MatrixView::setCellsSelected(int first_row, int first_col, int last_row, in
 */
 void MatrixView::getCurrentCell(int* row, int* col) const {
 	QModelIndex index = m_tableView->selectionModel()->currentIndex();
-	if(index.isValid()) {
+	if (index.isValid()) {
 		*row = index.row();
 		*col = index.column();
 	} else {
@@ -502,27 +507,25 @@ void MatrixView::getCurrentCell(int* row, int* col) const {
 }
 
 bool MatrixView::eventFilter(QObject * watched, QEvent * event) {
-	if (event->type() == QEvent::ContextMenu){
+	if (event->type() == QEvent::ContextMenu) {
 		QContextMenuEvent* cm_event = static_cast<QContextMenuEvent*>(event);
 		QPoint global_pos = cm_event->globalPos();
-		if (watched == m_tableView->verticalHeader()) {
+		if (watched == m_tableView->verticalHeader())
 			m_rowMenu->exec(global_pos);
-		} else if (watched == m_tableView->horizontalHeader()) {
+		else if (watched == m_tableView->horizontalHeader())
 			m_columnMenu->exec(global_pos);
-		} else if (watched == this) {
+		else if (watched == this)
 			m_matrixMenu->exec(global_pos);
-		} else {
+		else
 			return QWidget::eventFilter(watched, event);
-		}
 		return true;
-	} else {
+	} else
 		return QWidget::eventFilter(watched, event);
-	}
 }
 
 void MatrixView::keyPressEvent(QKeyEvent* event) {
-    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
-	  advanceCell();
+	if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
+		advanceCell();
 }
 
 //##############################################################################
@@ -533,20 +536,20 @@ void MatrixView::keyPressEvent(QKeyEvent* event) {
 */
 void MatrixView::advanceCell() {
 	QModelIndex idx = m_tableView->currentIndex();
-    if(idx.row()+1 < m_matrix->rowCount())
+	if (idx.row()+1 < m_matrix->rowCount())
 		m_tableView->setCurrentIndex(idx.sibling(idx.row()+1, idx.column()));
 }
 
-void MatrixView::goToCell(){
+void MatrixView::goToCell() {
 	bool ok;
 
 	int col = QInputDialog::getInteger(0, i18n("Go to Cell"), i18n("Enter column"),
-			1, 1, m_matrix->columnCount(), 1, &ok);
-	if ( !ok ) return;
+	                                   1, 1, m_matrix->columnCount(), 1, &ok);
+	if (!ok) return;
 
 	int row = QInputDialog::getInteger(0, i18n("Go to Cell"), i18n("Enter row"),
-			1, 1, m_matrix->rowCount(), 1, &ok);
-	if ( !ok ) return;
+	                                   1, 1, m_matrix->rowCount(), 1, &ok);
+	if (!ok) return;
 
 	goToCell(row-1, col-1);
 }
@@ -559,34 +562,12 @@ void MatrixView::goToCell(int row, int col) {
 
 void MatrixView::handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize) {
 	Q_UNUSED(oldSize)
-	static bool inside = false;
 	m_matrix->setColumnWidth(logicalIndex, newSize);
-	if (inside) return;
-	inside = true;
-
-	QHeaderView* h_header = m_tableView->horizontalHeader();
-	int cols = m_matrix->columnCount();
-	for (int i=0; i<cols; i++)
-		if(isColumnSelected(i, true))
-			h_header->resizeSection(i, newSize);
-
-	inside = false;
 }
 
 void MatrixView::handleVerticalSectionResized(int logicalIndex, int oldSize, int newSize) {
 	Q_UNUSED(oldSize)
-	static bool inside = false;
 	m_matrix->setRowHeight(logicalIndex, newSize);
-	if (inside) return;
-	inside = true;
-
-	QHeaderView* v_header = m_tableView->verticalHeader();
-	int rows = m_matrix->rowCount();
-	for (int i=0; i<rows; i++)
-		if(isRowSelected(i, true))
-			v_header->resizeSection(i, newSize);
-
-	inside = false;
 }
 
 void MatrixView::fillWithFunctionValues() {
@@ -598,14 +579,13 @@ void MatrixView::fillWithFunctionValues() {
 void MatrixView::fillWithConstValues() {
 	bool ok = false;
 	double value = QInputDialog::getDouble(this, i18n("Fill the matrix with constant value"),
-												i18n("Value"), 0, -2147483647, 2147483647, 6, &ok);
+	                                       i18n("Value"), 0, -2147483647, 2147483647, 6, &ok);
 	if (ok) {
 		WAIT_CURSOR;
 		QVector<QVector<double> > newData = m_matrix->data();
 		for (int col=0; col<m_matrix->columnCount(); ++col) {
-			for (int row=0; row<m_matrix->rowCount(); ++row) {
+			for (int row=0; row<m_matrix->rowCount(); ++row)
 				newData[col][row] = value;
-			}
 		}
 		m_matrix->setData(newData);
 		RESET_CURSOR;
@@ -614,8 +594,7 @@ void MatrixView::fillWithConstValues() {
 
 //############################ selection related slots #########################
 void MatrixView::cutSelection() {
-	int first = firstSelectedRow();
-	if( first < 0 ) return;
+	if (firstSelectedRow() < 0) return;
 
 	WAIT_CURSOR;
 	m_matrix->beginMacro(i18n("%1: cut selected cell(s)", m_matrix->name()));
@@ -627,28 +606,28 @@ void MatrixView::cutSelection() {
 
 void MatrixView::copySelection() {
 	int first_col = firstSelectedColumn(false);
-	if(first_col == -1) return;
+	if (first_col == -1) return;
 	int last_col = lastSelectedColumn(false);
-	if(last_col == -2) return;
+	if (last_col == -2) return;
 	int first_row = firstSelectedRow(false);
-	if(first_row == -1)	return;
+	if (first_row == -1)	return;
 	int last_row = lastSelectedRow(false);
-	if(last_row == -2) return;
+	if (last_row == -2) return;
 	int cols = last_col - first_col +1;
 	int rows = last_row - first_row +1;
 
 	WAIT_CURSOR;
 	QString output_str;
 
-	for(int r=0; r<rows; r++) 	{
-		for(int c=0; c<cols; c++) {
-			if(isCellSelected(first_row + r, first_col + c))
+	for (int r=0; r < rows; r++) 	{
+		for (int c=0; c < cols; c++) {
+			if (isCellSelected(first_row + r, first_col + c))
 				output_str += QLocale().toString(m_matrix->cell(first_row + r, first_col + c),
-						m_matrix->numericFormat(), 16); // copy with max. precision
-			if(c < cols-1)
+				                                 m_matrix->numericFormat(), 16); // copy with max. precision
+			if (c < cols-1)
 				output_str += '\t';
 		}
-		if(r < rows-1)
+		if (r < rows-1)
 			output_str += '\n';
 	}
 	QApplication::clipboard()->setText(output_str);
@@ -656,10 +635,10 @@ void MatrixView::copySelection() {
 }
 
 void MatrixView::pasteIntoSelection() {
-	if(m_matrix->columnCount() < 1 || m_matrix->rowCount() < 1) return;
+	if (m_matrix->columnCount() < 1 || m_matrix->rowCount() < 1) return;
 
 	const QMimeData* mime_data = QApplication::clipboard()->mimeData();
-	if(!mime_data->hasFormat("text/plain"))
+	if (!mime_data->hasFormat("text/plain"))
 		return;
 
 	WAIT_CURSOR;
@@ -678,28 +657,28 @@ void MatrixView::pasteIntoSelection() {
 	QStringList input_rows(input_str.split('\n'));
 	input_row_count = input_rows.count();
 	input_col_count = 0;
-	for(int i=0; i<input_row_count; i++) {
+	for (int i=0; i < input_row_count; i++) {
 		cell_texts.append(input_rows.at(i).split('\t'));
-		if(cell_texts.at(i).count() > input_col_count) input_col_count = cell_texts.at(i).count();
+		if (cell_texts.at(i).count() > input_col_count) input_col_count = cell_texts.at(i).count();
 	}
 
 	// if the is no selection or only one cell selected, the
 	// selection will be expanded to the needed size from the current cell
-	if( (first_col == -1 || first_row == -1) ||
-		(last_row == first_row && last_col == first_col) ) {
+	if ( (first_col == -1 || first_row == -1) ||
+	        (last_row == first_row && last_col == first_col) ) {
 		int current_row, current_col;
 		getCurrentCell(&current_row, &current_col);
-		if(current_row == -1) current_row = 0;
-		if(current_col == -1) current_col = 0;
+		if (current_row == -1) current_row = 0;
+		if (current_col == -1) current_col = 0;
 		setCellSelected(current_row, current_col);
 		first_col = current_col;
 		first_row = current_row;
 		last_row = first_row + input_row_count -1;
 		last_col = first_col + input_col_count -1;
 		// resize the matrix if necessary
-		if(last_col >= m_matrix->columnCount())
+		if (last_col >= m_matrix->columnCount())
 			m_matrix->appendColumns(last_col+1-m_matrix->columnCount());
-		if(last_row >= m_matrix->rowCount())
+		if (last_row >= m_matrix->rowCount())
 			m_matrix->appendRows(last_row+1-m_matrix->rowCount());
 		// select the rectangle to be pasted in
 		setCellsSelected(first_row, first_col, last_row, last_col);
@@ -707,11 +686,10 @@ void MatrixView::pasteIntoSelection() {
 
 	rows = last_row - first_row + 1;
 	cols = last_col - first_col + 1;
-	for(int r=0; r<rows && r<input_row_count; r++) {
-		for(int c=0; c<cols && c<input_col_count; c++) {
-			if(isCellSelected(first_row + r, first_col + c) && (c < cell_texts.at(r).count()) ) {
+	for (int r=0; r<rows && r<input_row_count; r++) {
+		for (int c=0; c<cols && c<input_col_count; c++) {
+			if (isCellSelected(first_row + r, first_col + c) && (c < cell_texts.at(r).count()) )
 				m_matrix->setCell(first_row + r, first_col + c, cell_texts.at(r).at(c).toDouble());
-			}
 		}
 	}
 
@@ -721,11 +699,11 @@ void MatrixView::pasteIntoSelection() {
 
 void MatrixView::clearSelectedCells() {
 	int first_row = firstSelectedRow();
-	if(first_row<0)
+	if (first_row<0)
 		return;
 
 	int first_col = firstSelectedColumn();
-	if(first_col<0)
+	if (first_col<0)
 		return;
 
 	int last_row = lastSelectedRow();
@@ -733,9 +711,9 @@ void MatrixView::clearSelectedCells() {
 
 	WAIT_CURSOR;
 	m_matrix->beginMacro(i18n("%1: clear selected cell(s)", m_matrix->name()));
-	for(int i=first_row; i<=last_row; i++) {
-		for(int j=first_col; j<=last_col; j++) {
-			if(isCellSelected(i, j))
+	for (int i=first_row; i <= last_row; i++) {
+		for (int j=first_col; j <= last_col; j++) {
+			if (isCellSelected(i, j))
 				m_matrix->clearCell(i, j);
 		}
 	}
@@ -745,34 +723,34 @@ void MatrixView::clearSelectedCells() {
 
 
 class UpdateImageTask : public QRunnable {
-	public:
-		UpdateImageTask(int start, int end, QImage& image, QVector<QVector<double> > matrixData, double scaleFactor, double min) : m_image(image), m_matrixData(matrixData) {
-			m_start = start;
-			m_end = end;
-			m_scaleFactor = scaleFactor;
-			m_min = min;
-		};
+public:
+	UpdateImageTask(int start, int end, QImage& image, const QVector<QVector<double> >& matrixData, double scaleFactor, double min) : m_image(image), m_matrixData(matrixData) {
+		m_start = start;
+		m_end = end;
+		m_scaleFactor = scaleFactor;
+		m_min = min;
+	};
 
-		void run() {
-			for (int row=m_start; row<m_end; ++row) {
-				mutex.lock();
-				QRgb* line = (QRgb*)m_image.scanLine(row);
-				mutex.unlock();
-				for (int col=0; col<m_image.width(); ++col) {
-					const int gray = (m_matrixData[col][row]-m_min)*m_scaleFactor;
-					line[col] = qRgb(gray, gray, gray);
-				}
+	void run() {
+		for (int row=m_start; row<m_end; ++row) {
+			mutex.lock();
+			QRgb* line = (QRgb*)m_image.scanLine(row);
+			mutex.unlock();
+			for (int col=0; col<m_image.width(); ++col) {
+				const int gray = (m_matrixData[col][row]-m_min)*m_scaleFactor;
+				line[col] = qRgb(gray, gray, gray);
 			}
 		}
+	}
 
-	private:
-		QMutex mutex;
-		int m_start;
-		int m_end;
-		QImage& m_image;
-		const QVector<QVector<double> >& m_matrixData;
-		double m_scaleFactor;
-		double m_min;
+private:
+	QMutex mutex;
+	int m_start;
+	int m_end;
+	QImage& m_image;
+	const QVector<QVector<double> >& m_matrixData;
+	double m_scaleFactor;
+	double m_min;
 };
 
 void MatrixView::updateImage() {
@@ -818,9 +796,9 @@ void MatrixView::updateImage() {
 
 //############################# matrix related slots ###########################
 void MatrixView::switchView(QAction* action) {
-	if (action == action_data_view) {
+	if (action == action_data_view)
 		m_stackedWidget->setCurrentIndex(0);
-	} else {
+	else {
 		if (m_imageIsDirty)
 			this->updateImage();
 
@@ -841,8 +819,6 @@ void MatrixView::headerFormatChanged(QAction* action) {
 		m_matrix->setHeaderFormat(Matrix::HeaderValues);
 	else
 		m_matrix->setHeaderFormat(Matrix::HeaderRowsColumnsValues);
-
-	resizeHeaders();
 }
 
 //############################# column related slots ###########################
@@ -856,19 +832,19 @@ void MatrixView::addColumns() {
 void MatrixView::insertEmptyColumns() {
 	int first = firstSelectedColumn();
 	int last = lastSelectedColumn();
-	if( first < 0 ) return;
+	if (first < 0) return;
 	int count, current = first;
 
 	WAIT_CURSOR;
 	m_matrix->beginMacro(i18n("%1: insert empty column(s)", m_matrix->name()));
-	while( current <= last ) {
+	while (current <= last) {
 		current = first+1;
-		while( current <= last && isColumnSelected(current) ) current++;
+		while (current <= last && isColumnSelected(current)) current++;
 		count = current-first;
 		m_matrix->insertColumns(first, count);
 		current += count;
 		last += count;
-		while( current <= last && isColumnSelected(current) ) current++;
+		while (current <= last && isColumnSelected(current)) current++;
 		first = current;
 	}
 	m_matrix->endMacro();
@@ -878,12 +854,12 @@ void MatrixView::insertEmptyColumns() {
 void MatrixView::removeSelectedColumns() {
 	int first = firstSelectedColumn();
 	int last = lastSelectedColumn();
-	if( first < 0 ) return;
+	if (first < 0) return;
 
 	WAIT_CURSOR;
 	m_matrix->beginMacro(i18n("%1: remove selected column(s)", m_matrix->name()));
-	for(int i=last; i>=first; i--)
-		if(isColumnSelected(i, false)) m_matrix->removeColumns(i, 1);
+	for (int i=last; i >= first; i--)
+		if (isColumnSelected(i, false)) m_matrix->removeColumns(i, 1);
 	m_matrix->endMacro();
 	RESET_CURSOR;
 }
@@ -891,8 +867,8 @@ void MatrixView::removeSelectedColumns() {
 void MatrixView::clearSelectedColumns() {
 	WAIT_CURSOR;
 	m_matrix->beginMacro(i18n("%1: clear selected column(s)", m_matrix->name()));
-	for(int i=0; i<m_matrix->columnCount(); i++) {
-		if(isColumnSelected(i, false))
+	for (int i=0; i < m_matrix->columnCount(); i++) {
+		if (isColumnSelected(i, false))
 			m_matrix->clearColumn(i);
 	}
 	m_matrix->endMacro();
@@ -903,7 +879,7 @@ void MatrixView::clearSelectedColumns() {
 /*!
   Append as many rows as are selected.
 */
-void MatrixView::addRows(){
+void MatrixView::addRows() {
 	m_matrix->appendRows(selectedRowCount(false));
 }
 
@@ -912,18 +888,18 @@ void MatrixView::insertEmptyRows() {
 	int last = lastSelectedRow();
 	int count, current = first;
 
-	if( first < 0 ) return;
+	if (first < 0) return;
 
 	WAIT_CURSOR;
 	m_matrix->beginMacro(i18n("%1: insert empty rows(s)", m_matrix->name()));
-	while( current <= last ) {
+	while (current <= last) {
 		current = first+1;
-		while( current <= last && isRowSelected(current) ) current++;
+		while (current <= last && isRowSelected(current)) current++;
 		count = current-first;
 		m_matrix->insertRows(first, count);
 		current += count;
 		last += count;
-		while( current <= last && !isRowSelected(current) ) current++;
+		while (current <= last && !isRowSelected(current)) current++;
 		first = current;
 	}
 	m_matrix->endMacro();
@@ -933,12 +909,12 @@ void MatrixView::insertEmptyRows() {
 void MatrixView::removeSelectedRows() {
 	int first = firstSelectedRow();
 	int last = lastSelectedRow();
-	if( first < 0 ) return;
+	if (first < 0) return;
 
 	WAIT_CURSOR;
 	m_matrix->beginMacro(i18n("%1: remove selected rows(s)", m_matrix->name()));
-	for(int i=last; i>=first; i--)
-		if(isRowSelected(i, false)) m_matrix->removeRows(i, 1);
+	for (int i=last; i >= first; i--)
+		if (isRowSelected(i, false)) m_matrix->removeRows(i, 1);
 	m_matrix->endMacro();
 	RESET_CURSOR;
 }
@@ -946,12 +922,12 @@ void MatrixView::removeSelectedRows() {
 void MatrixView::clearSelectedRows() {
 	int first = firstSelectedRow();
 	int last = lastSelectedRow();
-	if( first < 0 ) return;
+	if (first < 0) return;
 
 	WAIT_CURSOR;
 	m_matrix->beginMacro(i18n("%1: clear selected rows(s)", m_matrix->name()));
-	for(int i=first; i<=last; i++) {
-		if(isRowSelected(i))
+	for (int i=first; i <= last; i++) {
+		if (isRowSelected(i))
 			m_matrix->clearRow(i);
 	}
 	m_matrix->endMacro();
@@ -961,90 +937,138 @@ void MatrixView::clearSelectedRows() {
 /*!
   prints the complete matrix to \c printer.
  */
+
 void MatrixView::print(QPrinter* printer) const {
+	WAIT_CURSOR;
 	QPainter painter (printer);
 
-	int dpiy = printer->logicalDpiY();
+	const int dpiy = printer->logicalDpiY();
 	const int margin = (int) ( (1/2.54)*dpiy ); // 1 cm margins
 
-	QHeaderView* hHeader = m_tableView->horizontalHeader();
-	QHeaderView* vHeader = m_tableView->verticalHeader();
+	QHeaderView *hHeader = m_tableView->horizontalHeader();
+	QHeaderView *vHeader = m_tableView->verticalHeader();
+	const QVector<QVector<double> >& matrixData = m_matrix->data();
 
-	int rows = m_matrix->rowCount();
-	int cols = m_matrix->columnCount();
+	const int rows = m_matrix->rowCount();
+	const int cols = m_matrix->columnCount();
 	int height = margin;
-	int i;
-	int vertHeaderWidth = vHeader->width();
+	const int vertHeaderWidth = vHeader->width();
 	int right = margin + vertHeaderWidth;
 
-	//Paint the horizontal header first
-	painter.setFont(hHeader->font());
-	QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();
+	int columnsPerTable = 0;
+	int headerStringWidth = 0;
+	int firstRowStringWidth = vertHeaderWidth;
+	bool tablesNeeded = false;
+	QVector<int> firstRowCeilSizes;
+	firstRowCeilSizes.reserve(matrixData[0].size());
+	firstRowCeilSizes.resize(matrixData[0].size());
 	QRect br;
-	br = painter.boundingRect(br, Qt::AlignCenter, headerString);
-	painter.drawLine(right, height, right, height+br.height());
-	QRect tr(br);
 
-	int w;
-	for (i=0; i<cols; ++i) {
-		headerString = m_tableView->model()->headerData(i, Qt::Horizontal).toString();
-		w = m_tableView->columnWidth(i);
-		tr.setTopLeft(QPoint(right,height));
-		tr.setWidth(w);
-		tr.setHeight(br.height());
-
-		painter.drawText(tr, Qt::AlignCenter, headerString);
-		right += w;
-		painter.drawLine(right, height, right, height+tr.height());
-
-		if (right >= printer->pageRect().width()-2*margin )
+	for (int i = 0; i < matrixData.size(); ++i) {
+		br = painter.boundingRect(br, Qt::AlignCenter,QString::number(matrixData[i][0]) + '\t');
+		firstRowCeilSizes[i] = br.width() > m_tableView->columnWidth(i) ?
+		                       br.width() : m_tableView->columnWidth(i);
+	}
+	for (int col = 0; col < cols; ++col) {
+		headerStringWidth += m_tableView->columnWidth(col);
+		br = painter.boundingRect(br, Qt::AlignCenter,QString::number(matrixData[col][0]) + '\t');
+		firstRowStringWidth += br.width();
+		if ((headerStringWidth >= printer->pageRect().width() -2*margin) ||
+		        (firstRowStringWidth >= printer->pageRect().width() - 2*margin)) {
+			tablesNeeded = true;
 			break;
+		}
+		columnsPerTable++;
 	}
 
-	painter.drawLine(margin + vertHeaderWidth, height, right-1, height);//first horizontal line
-	height += tr.height();
-	painter.drawLine(margin, height, right-1, height);
+	int tablesCount = (columnsPerTable != 0) ? cols/columnsPerTable : 0;
+	const int remainingColumns = (columnsPerTable != 0) ? cols % columnsPerTable : cols;
 
+	if (!tablesNeeded) {
+		tablesCount = 1;
+		columnsPerTable = cols;
+	}
+	if (remainingColumns > 0)
+		tablesCount++;
+	for (int table = 0; table < tablesCount; ++table) {
+		right = margin + vertHeaderWidth;
+		//Paint the horizontal header first
+		painter.setFont(hHeader->font());
+		QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();
+		QRect br;
+		br = painter.boundingRect(br, Qt::AlignCenter, headerString);
+		QRect tr(br);
+		if (table != 0)
+			height += tr.height();
+		painter.drawLine(right, height, right, height+br.height());
 
-	// print table values
-	const QVector<QVector<double> >& matrixData = m_matrix->data();
-	QString cellText;
-	for (i=0; i<rows; ++i) {
-		right = margin;
-		cellText = m_tableView->model()->headerData(i, Qt::Vertical).toString()+'\t';
-		tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
-		painter.drawLine(right, height, right, height+tr.height());
+		int w;
+		int i = table * columnsPerTable;
+		int toI = table * columnsPerTable + columnsPerTable;
+		if ((remainingColumns > 0) && (table == tablesCount-1)) {
+			i = (tablesCount-1)*columnsPerTable;
+			toI = (tablesCount-1)* columnsPerTable + remainingColumns;
+		}
 
-		br.setTopLeft(QPoint(right,height));
-		br.setWidth(vertHeaderWidth);
-		br.setHeight(tr.height());
-		painter.drawText(br, Qt::AlignCenter, cellText);
-		right += vertHeaderWidth;
-		painter.drawLine(right, height, right, height+tr.height());
+		for (; i<toI; ++i) {
+			headerString = m_tableView->model()->headerData(i, Qt::Horizontal).toString();
+			w = /*m_tableView->columnWidth(i)*/ firstRowCeilSizes[i];
+			tr.setTopLeft(QPoint(right,height));
+			tr.setWidth(w);
+			tr.setHeight(br.height());
 
-		for(int j=0;j<cols;j++){
-			int w = m_tableView->columnWidth(j);
-			cellText = QString::number(matrixData[j][i]) +'\t';
-			tr = painter.boundingRect(tr,Qt::AlignCenter,cellText);
-			br.setTopLeft(QPoint(right,height));
-			br.setWidth(w);
-			br.setHeight(tr.height());
-			painter.drawText(br, Qt::AlignCenter, cellText);
+			painter.drawText(tr, Qt::AlignCenter, headerString);
 			right += w;
 			painter.drawLine(right, height, right, height+tr.height());
 
-			if (right >= printer->width()-2*margin )
-				break;
 		}
-		height += br.height();
+		//first horizontal line
+		painter.drawLine(margin + vertHeaderWidth, height, right-1, height);
+		height += tr.height();
 		painter.drawLine(margin, height, right-1, height);
 
-		if (height >= printer->height()-margin ){
-			printer->newPage();
-			height = margin;
-			painter.drawLine(margin, height, right, height);
+		// print table values
+		QString cellText;
+		for (i=0; i<rows; ++i) {
+			right = margin;
+			cellText = m_tableView->model()->headerData(i, Qt::Vertical).toString()+'\t';
+			tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
+			painter.drawLine(right, height, right, height+tr.height());
+
+			br.setTopLeft(QPoint(right,height));
+			br.setWidth(vertHeaderWidth);
+			br.setHeight(tr.height());
+			painter.drawText(br, Qt::AlignCenter, cellText);
+			right += vertHeaderWidth;
+			painter.drawLine(right, height, right, height+tr.height());
+			int j = table * columnsPerTable;
+			int toJ = table * columnsPerTable + columnsPerTable;
+			if ((remainingColumns > 0) && (table == tablesCount-1)) {
+				j = (tablesCount-1)*columnsPerTable;
+				toJ = (tablesCount-1)* columnsPerTable + remainingColumns;
+			}
+			for (; j< toJ; j++) {
+				int w = /*m_tableView->columnWidth(j)*/ firstRowCeilSizes[j];
+				cellText = QString::number(matrixData[j][i]) + '\t';
+				tr = painter.boundingRect(tr,Qt::AlignCenter,cellText);
+				br.setTopLeft(QPoint(right,height));
+				br.setWidth(w);
+				br.setHeight(tr.height());
+				painter.drawText(br, Qt::AlignCenter, cellText);
+				right += w;
+				painter.drawLine(right, height, right, height+tr.height());
+			}
+			height += br.height();
+			painter.drawLine(margin, height, right-1, height);
+
+			if (height >= printer->height()-margin ) {
+				printer->newPage();
+				height = margin;
+				painter.drawLine(margin, height, right, height);
+			}
 		}
 	}
+	RESET_CURSOR;
 }
 
 void MatrixView::exportToFile(const QString& path, const QString& separator) const {
@@ -1055,8 +1079,8 @@ void MatrixView::exportToFile(const QString& path, const QString& separator) con
 	QTextStream out(&file);
 
 	QString sep = separator;
-	sep = sep.replace(QString("TAB"), QString("\t"), Qt::CaseInsensitive);
-	sep = sep.replace(QString("SPACE"), QString(" "), Qt::CaseInsensitive);
+	sep = sep.replace(QLatin1String("TAB"), QLatin1String("\t"), Qt::CaseInsensitive);
+	sep = sep.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
 
 	//export values
 	const int cols = m_matrix->columnCount();
@@ -1071,3 +1095,391 @@ void MatrixView::exportToFile(const QString& path, const QString& separator) con
 		out << '\n';
 	}
 }
+
+void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, const bool horizontalHeaders,
+                               const bool latexHeaders, const bool gridLines, const bool entire, const bool captions) const {
+
+	QFile file(path);
+	if (!file.open(QFile::WriteOnly | QFile::Truncate))
+		return;
+
+	QVector<QVector<QString> > toExport;
+
+	int firstSelectedCol = 0;
+	int firstSelectedRowi = 0;
+	int totalRowCount = 0;
+	int cols = 0;
+	if (entire) {
+		cols = m_matrix->columnCount();
+		totalRowCount = m_matrix->rowCount();
+		toExport.reserve(totalRowCount);
+		toExport.resize(totalRowCount);
+		for (int row = 0; row < totalRowCount; ++row) {
+			toExport[row].reserve(cols);
+			toExport[row].resize(cols);
+			for (int col = 0; col < cols; ++col)
+				toExport[row][col] = m_matrix->text(row,col);
+		}
+		firstSelectedCol = 0;
+		firstSelectedRowi = 0;
+	} else {
+		cols = selectedColumnCount();
+		totalRowCount = selectedRowCount();
+
+		firstSelectedCol = firstSelectedColumn();
+		if (firstSelectedCol == -1)
+			return;
+		firstSelectedRowi = firstSelectedRow();
+		if (firstSelectedRowi == -1)
+			return;
+		const int lastSelectedCol = lastSelectedColumn();
+		const int lastSelectedRowi = lastSelectedRow();
+
+		toExport.reserve(lastSelectedRowi - firstSelectedRowi+1);
+		toExport.resize(lastSelectedRowi - firstSelectedRowi+1);
+		int r = 0;
+		int c = 0;
+		for (int row = firstSelectedRowi; row <= lastSelectedRowi; ++row, ++r) {
+			toExport[r].reserve(lastSelectedCol - firstSelectedCol+1);
+			toExport[r].resize(lastSelectedCol - firstSelectedCol+1);
+			c = 0;
+			for (int col = firstSelectedCol; col <= lastSelectedCol; ++col,++c)
+				toExport[r][c] = m_matrix->text(row, col);
+		}
+	}
+
+	int columnsStringSize = 0;
+	int headerStringSize = 0;
+	int columnsPerTable = 0;
+	const int firstHHeaderSectionLength = m_tableView->model()->headerData(0, Qt::Horizontal).toString().length();
+	const int firstSelectedVHeaderSectionLength = m_tableView->model()->headerData(firstSelectedRow(), Qt::Vertical).toString().length();
+	if (verticalHeaders) {
+		if (entire)
+			headerStringSize += firstHHeaderSectionLength;
+		else
+			headerStringSize += firstSelectedVHeaderSectionLength;
+	}
+	if (!horizontalHeaders && verticalHeaders) {
+		if (entire)
+			columnsStringSize += firstHHeaderSectionLength;
+		else
+			columnsStringSize += firstSelectedVHeaderSectionLength;
+	}
+
+	for (int col = 0; col < cols; ++col) {
+		int maxSize = -1;
+		for (int row = 0; row < toExport.size(); ++row) {
+			if (toExport.at(row).at(col).size() > maxSize)
+				maxSize = toExport.at(row).at(col).size();
+		}
+		columnsStringSize += maxSize;
+		if (horizontalHeaders)
+			headerStringSize += m_tableView->model()->headerData(col, Qt::Horizontal).toString().length();
+		if ((columnsStringSize > 65) || (headerStringSize > 65))
+			break;
+		++columnsPerTable;
+	}
+
+	int tablesCount = (columnsPerTable != 0) ? cols/columnsPerTable : 0;
+	const int remainingColumns = (columnsPerTable != 0) ? cols % columnsPerTable : cols;
+
+	bool columnsSeparating = (cols > columnsPerTable);
+	QTextStream out(&file);
+
+	QProcess tex;
+	tex.start("latex", QStringList() << "--version", QProcess::ReadOnly);
+	tex.waitForFinished(500);
+	QString texVersionOutput = QString(tex.readAllStandardOutput());
+	texVersionOutput = texVersionOutput.split('\n')[0];
+
+	int yearidx = -1;
+	for (int i = texVersionOutput.size() - 1; i >= 0; --i) {
+		if (texVersionOutput.at(i) == QChar('2')) {
+			yearidx = i;
+			break;
+		}
+	}
+
+	if (texVersionOutput.at(yearidx+1) == QChar('/'))
+		yearidx-=3;
+
+	bool ok;
+	texVersionOutput.mid(yearidx, 4).toInt(&ok);
+	int version = -1;
+	if (ok)
+		version = texVersionOutput.mid(yearidx, 4).toInt(&ok);
+
+	if (latexHeaders) {
+		out << QLatin1String("\\documentclass[11pt,a4paper]{article} \n");
+		out << QLatin1String("\\usepackage{geometry} \n");
+		out << QLatin1String("\\usepackage{xcolor,colortbl} \n");
+		if (version >= 2015)
+			out << QLatin1String("\\extrafloats{1280} \n");
+		out << QLatin1String("\\definecolor{HeaderBgColor}{rgb}{0.81,0.81,0.81} \n");
+		out << QLatin1String("\\geometry{ \n");
+		out << QLatin1String("a4paper, \n");
+		out << QLatin1String("total={170mm,257mm}, \n");
+		out << QLatin1String("left=10mm, \n");
+		out << QLatin1String("top=10mm } \n");
+
+		out << QLatin1String("\\begin{document} \n");
+		out << QLatin1String("\\title{LabPlot Matrix Export to \\LaTeX{} } \n");
+		out << QLatin1String("\\author{LabPlot} \n");
+		out << QLatin1String("\\date{\\today} \n");
+		// out << "\\maketitle \n";
+	}
+
+	const QString endTabularTable ("\\end{tabular} \n \\end{table} \n");
+	const QString tableCaption ("\\caption{"+ m_matrix->name() + "} \n");
+	const QString beginTable ("\\begin{table}[ht] \n");
+	const QString centeredColumn( gridLines ? QLatin1String(" c |") : QLatin1String(" c "));
+	int rowCount = 0;
+	const int maxRows = 45;
+	bool captionRemoved = false;
+
+	if (columnsSeparating) {
+		for (int table = 0; table < tablesCount; ++table) {
+			QStringList textable;
+			captionRemoved = false;
+
+			textable << beginTable;
+			if (captions)
+				textable << tableCaption;
+			textable << QLatin1String("\\centering \n");
+			textable << QLatin1String("\\begin{tabular}{");
+			textable<< (gridLines ?QLatin1String("|") : QLatin1String(""));
+			for (int i = 0; i < columnsPerTable; ++i)
+				textable << centeredColumn;
+			if (verticalHeaders)
+				textable << centeredColumn;
+			textable << QLatin1String("} \n");
+			if (gridLines)
+				textable << QLatin1String("\\hline \n");
+
+			if (horizontalHeaders) {
+				if (latexHeaders)
+					textable << QLatin1String("\\rowcolor{HeaderBgColor} \n");
+				if (verticalHeaders)
+					textable << QLatin1String(" & ");
+				for (int col = table*columnsPerTable; col < (table * columnsPerTable) + columnsPerTable; ++col) {
+					textable << m_tableView->model()->headerData(col + firstSelectedCol, Qt::Horizontal).toString();
+					if (col != ((table * columnsPerTable)+ columnsPerTable)-1)
+						textable << QLatin1String(" & ");
+				}
+				textable << QLatin1String("\\\\ \n");
+				if (gridLines)
+					textable << QLatin1String("\\hline \n");
+			}
+			foreach (const QString& s, textable)
+				out << s;
+			for (int row = 0; row < totalRowCount; ++row) {
+				if (verticalHeaders) {
+					out << "\\cellcolor{HeaderBgColor} ";
+					out << m_tableView->model()->headerData(row + firstSelectedRowi, Qt::Vertical).toString();
+					out << QLatin1String(" & ");
+				}
+				for (int col = table*columnsPerTable; col < (table * columnsPerTable) + columnsPerTable; ++col ) {
+					out << toExport.at(row).at(col);
+					if (col != ((table * columnsPerTable)+ columnsPerTable)-1)
+						out << QLatin1String(" & ");
+				}
+
+				out << QLatin1String("\\\\ \n");
+				if (gridLines)
+					out << QLatin1String("\\hline \n");
+				rowCount++;
+				if (rowCount == maxRows) {
+					out << endTabularTable;
+					out << QLatin1String("\\newpage \n");
+					if (captions)
+						if (!captionRemoved)
+							textable.removeAt(1);
+					foreach (const QString& s, textable)
+						out << s;
+					rowCount = 0;
+					if (!captionRemoved)
+						captionRemoved = true;
+				}
+			}
+			out << endTabularTable;
+		}
+		captionRemoved = false;
+
+		QStringList remainingTable;
+		remainingTable << beginTable;
+		if (captions)
+			remainingTable << tableCaption;
+		remainingTable << QLatin1String("\\centering \n");
+		remainingTable << QLatin1String("\\begin{tabular}{") <<  (gridLines ? QLatin1String("|"):QLatin1String(""));
+		for (int c = 0; c < remainingColumns; ++c)
+			remainingTable << centeredColumn;
+		if (verticalHeaders)
+			remainingTable << centeredColumn;
+		remainingTable << QLatin1String("} \n");
+		if (gridLines)
+			remainingTable << QLatin1String("\\hline \n");
+
+		if (horizontalHeaders) {
+			if (latexHeaders)
+				remainingTable << QLatin1String("\\rowcolor{HeaderBgColor} \n");
+			if (verticalHeaders)
+				remainingTable << QLatin1String(" & ");
+			for (int col = 0; col < remainingColumns; ++col) {
+				remainingTable << m_tableView->model()->headerData(firstSelectedCol+col + (tablesCount * columnsPerTable), Qt::Horizontal).toString();
+				if (col != remainingColumns-1)
+					remainingTable << QLatin1String(" & ");
+			}
+			remainingTable << QLatin1String("\\\\ \n");
+			if (gridLines)
+				remainingTable << QLatin1String("\\hline \n");
+		}
+
+		foreach (const QString& s, remainingTable)
+			out << s;
+
+		for (int row = 0; row < totalRowCount; ++row) {
+			if (verticalHeaders) {
+				out << "\\cellcolor{HeaderBgColor}";
+				out << m_tableView->model()->headerData(row+ firstSelectedRowi, Qt::Vertical).toString();
+				out << QLatin1String(" & ");
+			}
+			for (int col = 0; col < remainingColumns; ++col ) {
+				out << toExport.at(row).at(col + (tablesCount * columnsPerTable));
+				if (col != remainingColumns-1)
+					out << QLatin1String(" & ");
+			}
+
+			out << QLatin1String("\\\\ \n");
+			if (gridLines)
+				out << QLatin1String("\\hline \n");
+			rowCount++;
+			if (rowCount == maxRows) {
+				out << endTabularTable;
+				out << QLatin1String("\\pagebreak[4] \n");
+				if (captions)
+					if (!captionRemoved)
+						remainingTable.removeAt(1);
+				foreach (const QString& s, remainingTable)
+					out << s;
+				rowCount = 0;
+				if (!captionRemoved)
+					captionRemoved = true;
+			}
+		}
+		out << endTabularTable;
+	} else {
+		QStringList textable;
+		textable << beginTable;
+		if (captions)
+			textable << tableCaption;
+		textable << QLatin1String("\\centering \n");
+		textable << QLatin1String("\\begin{tabular}{") << (gridLines ? QLatin1String("|"):QLatin1String(""));
+		for (int c = 0; c < cols; ++c)
+			textable << centeredColumn;
+		if (verticalHeaders)
+			textable << centeredColumn;
+		textable << QLatin1String("} \n");
+		if (gridLines)
+			textable << QLatin1String("\\hline \n");
+
+		if (horizontalHeaders) {
+			if (latexHeaders)
+				textable << QLatin1String("\\rowcolor{HeaderBgColor} \n");
+			if (verticalHeaders)
+				textable << QLatin1String(" & ");
+			for (int col = 0; col < cols ; ++col) {
+				textable << m_tableView->model()->headerData(col+firstSelectedCol, Qt::Horizontal).toString();
+				if (col != cols-1)
+					textable << QLatin1String(" & ");
+			}
+			textable << QLatin1String("\\\\ \n");
+			if (gridLines)
+				textable << QLatin1String("\\hline \n");
+		}
+
+		foreach (const QString& s, textable)
+			out << s;
+		for (int row = 0; row < totalRowCount; ++row) {
+			if (verticalHeaders) {
+				out << "\\cellcolor{HeaderBgColor}";
+				out << m_tableView->model()->headerData(row + firstSelectedRowi, Qt::Vertical).toString();
+				out << QLatin1String(" & ");
+			}
+			for (int col = 0; col < cols; ++col ) {
+				out << toExport.at(row).at(col);
+				if (col != cols-1)
+					out << " & ";
+			}
+			out << QLatin1String("\\\\ \n");
+			if (gridLines)
+				out << QLatin1String("\\hline \n");
+			rowCount++;
+			if (rowCount == maxRows) {
+				out << endTabularTable;
+				out << QLatin1String("\\newpage \n");
+				if (captions)
+					if (!captionRemoved)
+						textable.removeAt(1);
+				foreach (const QString& s, textable)
+					out << s;
+				if (!captionRemoved)
+					captionRemoved = true;
+				rowCount = 0;
+				if (!captionRemoved)
+					captionRemoved = true;
+			}
+		}
+		out << endTabularTable;
+	}
+	if (latexHeaders)
+		out << QLatin1String("\\end{document} \n");
+}
+
+void MatrixView::showColumnStatistics() {
+	if (selectedColumnCount() > 0) {
+		QString dlgTitle (m_matrix->name() + " column statistics");
+		StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
+		dlg->setAttribute(Qt::WA_DeleteOnClose);
+		QList<Column*> list;
+		for (int col = 0; col < m_matrix->columnCount(); ++col) {
+			if (isColumnSelected(col, false)) {
+				QString headerString = m_tableView->model()->headerData(col, Qt::Horizontal).toString();
+				list << new Column(headerString, m_matrix->data().at(col));
+			}
+		}
+		dlg->setColumns(list);
+		if (dlg->exec() == KDialog::Accepted) {
+			qDeleteAll(list);
+			list.clear();
+		}
+	}
+}
+
+void MatrixView::showRowStatistics() {
+	if (selectedRowCount() > 0) {
+		QString dlgTitle (m_matrix->name() + " row statistics");
+		StatisticsDialog* dlg = new StatisticsDialog(dlgTitle);
+		dlg->setAttribute(Qt::WA_DeleteOnClose);
+		QList<Column*> list;
+		for (int row = 0; row < m_matrix->rowCount(); ++row) {
+			if (isRowSelected(row, false)) {
+				QString headerString = m_tableView->model()->headerData(row, Qt::Vertical).toString();
+				list << new Column(headerString, m_matrix->rowCells(row, 0, m_matrix->columnCount()-1));
+			}
+		}
+		dlg->setColumns(list);
+		if (dlg->exec() == KDialog::Accepted) {
+			qDeleteAll(list);
+			list.clear();
+		}
+	}
+}
+
+void MatrixView::exportToFits(const QString &fileName, const int exportTo) const {
+	FITSFilter* filter = new FITSFilter;
+	filter->setExportTo(exportTo);
+	filter->write(fileName, m_matrix);
+
+	delete filter;
+}
+

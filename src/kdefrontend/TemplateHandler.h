@@ -4,7 +4,7 @@
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
 	Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-	Copyright            : (C) 2012-2013 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -30,13 +30,12 @@
 #ifndef TEMPLATEHANDLER_H
 #define TEMPLATEHANDLER_H
 
-#include <QtGui/QWidget>
-class QHBoxLayout;
+#include <QWidget>
+
 class QToolButton;
-class QSpacerItem;
 class KConfig;
 
-class TemplateHandler : public QWidget{
+class TemplateHandler : public QWidget {
 	Q_OBJECT
 
 	public:
@@ -50,14 +49,11 @@ class TemplateHandler : public QWidget{
 		ClassName className;
 		QList<QString> dirNames;
 
-		QHBoxLayout *horizontalLayout;
-		QSpacerItem *horizontalSpacer;
-		QToolButton *tbLoad;
-		QToolButton *tbSave;
-		QToolButton *tbSaveDefault;
-		QSpacerItem *horizontalSpacer2;
-		QToolButton *tbCopy;
-		QToolButton *tbPaste;
+		QToolButton* tbLoad;
+		QToolButton* tbSave;
+		QToolButton* tbSaveDefault;
+		QToolButton* tbCopy;
+		QToolButton* tbPaste;
 
 	private slots:
 		void loadMenu();

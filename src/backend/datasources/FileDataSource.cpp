@@ -38,8 +38,8 @@ Copyright	: (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
 #include <QMenu>
 #include <QFileSystemWatcher>
 
-#include <KIcon>
-#include <KAction>
+#include <QIcon>
+#include <QAction>
 #include <KLocale>
 
 /*!
@@ -63,14 +63,14 @@ FileDataSource::~FileDataSource(){
 }
 
 void FileDataSource::initActions(){
-	m_reloadAction = new KAction(KIcon("view-refresh"), i18n("Reload"), this);
+	m_reloadAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Reload"), this);
 	connect(m_reloadAction, SIGNAL(triggered()), this, SLOT(read()));
 
-	m_toggleWatchAction = new KAction(i18n("Watch the file"), this);
+	m_toggleWatchAction = new QAction(i18n("Watch the file"), this);
 	m_toggleWatchAction->setCheckable(true);
 	connect(m_toggleWatchAction, SIGNAL(triggered()), this, SLOT(watchToggled()));
 
-	m_toggleLinkAction = new KAction(i18n("Link the file"), this);
+	m_toggleLinkAction = new QAction(i18n("Link the file"), this);
 	m_toggleLinkAction->setCheckable(true);
 	connect(m_toggleLinkAction, SIGNAL(triggered()), this, SLOT(linkToggled()));
 }
@@ -94,7 +94,7 @@ QStringList FileDataSource::fileTypes(){
 		<< i18n("Hierarchical Data Format (HDF)")
 		<< i18n("Network Common Data Format (NetCDF)")
 //		<< "CDF"
-//		<< "FITS"
+        << i18n("Flexible Image Transport System Data Format (FITS)")
 //		<< i18n("Sound")
 		);
 }
@@ -155,11 +155,11 @@ bool FileDataSource::isFileLinked() const{
 QIcon FileDataSource::icon() const{
 	QIcon icon;
 	if (m_fileType == FileDataSource::Ascii)
-		icon = KIcon("text-plain");
+		icon = QIcon::fromTheme("text-plain");
 	else if (m_fileType == FileDataSource::Binary)
-		icon = KIcon("application-octet-stream");
+		icon = QIcon::fromTheme("application-octet-stream");
 	else if (m_fileType == FileDataSource::Image)
-		icon = KIcon("image-x-generic");
+		icon = QIcon::fromTheme("image-x-generic");
 	// TODO: HDF, NetCDF
 
 	return icon;
@@ -244,10 +244,10 @@ QString FileDataSource::fileInfoString(const QString &name){
 	QIODevice *file = new QFile(name);
 
 	QString fileName;
-	if ( name.left(1)!=QDir::separator()){
-		fileName=QDir::homePath() + QDir::separator() + name;
-	}else{
-		fileName=name;
+    if (name.at(0) != QDir::separator()) {
+        fileName = QDir::homePath() + QDir::separator() + name;
+    } else {
+        fileName = name;
 	}
 
 	if(file==0)
@@ -257,7 +257,7 @@ QString FileDataSource::fileInfoString(const QString &name){
 		QStringList infoStrings;
 
 		//general information about the file
-		infoStrings << i18n("<u><b>%1:</b></u>", fileName);
+		infoStrings << "<u><b>" + fileName + "</b></u><br>";
 		fileInfo.setFile(fileName);
 
 		infoStrings << i18n("Readable: %1", fileInfo.isReadable() ? i18n("yes") : i18n("no"));
@@ -272,6 +272,17 @@ QString FileDataSource::fileInfoString(const QString &name){
 		infoStrings << i18n("Owner: %1", fileInfo.owner());
 		infoStrings << i18n("Group: %1", fileInfo.group());
 		infoStrings << i18n("Size: %1", i18np("%1 cByte", "%1 cBytes", fileInfo.size()));
+
+#ifdef HAVE_FITS
+        if (fileName.endsWith(QLatin1String(".fits"))) {
+            FITSFilter* fitsFilter = new FITSFilter;
+
+            infoStrings << i18n("Images: %1", QString::number(fitsFilter->imagesCount(fileName) ));
+            infoStrings << i18n("Tables: %1", QString::number(fitsFilter->tablesCount(fileName) ));
+
+            delete fitsFilter;
+        }
+#endif
 
 		// file type and type specific information about the file
 #ifdef Q_OS_LINUX
@@ -304,7 +315,7 @@ QString FileDataSource::fileInfoString(const QString &name){
 		}
 		infoString += infoStrings.join("<br/>");
 	} else{
-		infoString+= i18n("Could not open file %1 for reading.", fileName);
+		infoString += i18n("Could not open file %1 for reading.", fileName);
 	}
 
 	return infoString;

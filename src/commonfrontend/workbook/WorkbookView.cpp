@@ -70,8 +70,8 @@ WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
 	m_initializing = false;
 
 	//Actions
-	action_add_spreadsheet = new KAction(KIcon("labplot-spreadsheet"), i18n("Add new Spreadsheet"), this);
-	action_add_matrix = new KAction(KIcon("labplot-matrix"), i18n("Add new Matrix"), this);
+	action_add_spreadsheet = new QAction(QIcon::fromTheme("labplot-spreadsheet"), i18n("Add new Spreadsheet"), this);
+	action_add_matrix = new QAction(QIcon::fromTheme("labplot-matrix"), i18n("Add new Matrix"), this);
 	connect(action_add_spreadsheet, SIGNAL(triggered()), this, SLOT(addSpreadsheet()));
 	connect(action_add_matrix, SIGNAL(triggered()), this, SLOT(addMatrix()));
 

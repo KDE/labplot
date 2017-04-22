@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2009 Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2013-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -32,6 +32,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 
+#include <QBrush>
 #include <QIcon>
 #include <QFontMetrics>
 
@@ -55,11 +56,6 @@ SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet)
 	: QAbstractItemModel(0), m_spreadsheet(spreadsheet), m_formula_mode(false) {
 	updateVerticalHeader();
 	updateHorizontalHeader();
-
-	QFont font;
-	font.setFamily(font.defaultFamily());
-	QFontMetrics fm(font);
-	m_defaultHeaderHeight = fm.height()+5;
 
 	connect(m_spreadsheet, SIGNAL(aspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)),
 	        this, SLOT(handleAspectAboutToBeAdded(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*)));
@@ -89,8 +85,8 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 	if( !index.isValid() )
 		return QVariant();
 
-	int row = index.row();
-	int col = index.column();
+	const int row = index.row();
+	const int col = index.column();
 	Column* col_ptr = m_spreadsheet->column(col);
 
 	if(!col_ptr)
@@ -98,11 +94,14 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 
 	switch(role) {
 		case Qt::ToolTipRole: {
-			if(col_ptr->isValid(row))
-				return QVariant(col_ptr->asStringColumn()->textAt(row));
-			else {
+			if(col_ptr->isValid(row)) {
 				if(col_ptr->isMasked(row))
-					return QVariant(i18n("invalid cell (ignored in all operations) (masked)"));
+					return QVariant(i18n("%1, masked (ignored in all operations)").arg(col_ptr->asStringColumn()->textAt(row)));
+				else
+					return QVariant(col_ptr->asStringColumn()->textAt(row));
+			} else {
+				if(col_ptr->isMasked(row))
+					return QVariant(i18n("invalid cell, masked (ignored in all operations)"));
 				else
 					return QVariant(i18n("invalid cell (ignored in all operations)"));
 			}
@@ -111,8 +110,9 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 			if(col_ptr->isValid(row))
 				return QVariant(col_ptr->asStringColumn()->textAt(row));
 
-			if(m_formula_mode)
-				return QVariant(col_ptr->formula(row));
+			//m_formula_mode is not used at the moment
+			//if(m_formula_mode)
+			//	return QVariant(col_ptr->formula(row));
 
 			return QVariant();
 		}
@@ -120,31 +120,31 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 			if(!col_ptr->isValid(row))
 				return QVariant("-");
 
-			if(m_formula_mode)
-				return QVariant(col_ptr->formula(row));
+			//m_formula_mode is not used at the moment
+			//if(m_formula_mode)
+			//	return QVariant(col_ptr->formula(row));
 
 			return QVariant(col_ptr->asStringColumn()->textAt(row));
 		}
 		case Qt::ForegroundRole: {
 			if(!col_ptr->isValid(index.row()))
-				return QVariant(QBrush(QColor(0xff,0,0))); // invalid -> red letters
-			else
-				return QVariant(QBrush(QColor(0,0,0)));
+				return QVariant(QBrush(Qt::red));
 		}
 		case MaskingRole:
 			return QVariant(col_ptr->isMasked(row));
 		case FormulaRole:
 			return QVariant(col_ptr->formula(row));
-		case Qt::DecorationRole:
-			if(m_formula_mode)
-				return QIcon(QPixmap(":/equals.png")); //TODO
+// 		case Qt::DecorationRole:
+// 			if(m_formula_mode)
+// 				return QIcon(QPixmap(":/equals.png")); //TODO
 	}
 
 	return QVariant();
 }
 
 QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, int role) const {
-	if ( (orientation==Qt::Horizontal && section>m_spreadsheet->columnCount()-1) || (orientation==Qt::Vertical && section>m_spreadsheet->rowCount()-1) )
+	if ( (orientation == Qt::Horizontal && section > m_spreadsheet->columnCount()-1)
+		|| (orientation == Qt::Vertical && section > m_spreadsheet->rowCount()-1) )
 		return QVariant();
 
 	switch(orientation) {
@@ -154,15 +154,10 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 				case Qt::ToolTipRole:
 				case Qt::EditRole:
 					return m_horizontal_header_data.at(section);
-
 				case Qt::DecorationRole:
 					return m_spreadsheet->child<Column>(section)->icon();
-
 				case SpreadsheetModel::CommentRole:
 					return m_spreadsheet->child<Column>(section)->comment();
-
-				case Qt::SizeHintRole:
-					return QSize(m_spreadsheet->child<Column>(section)->width(), m_defaultHeaderHeight);
 			}
 			break;
 		case Qt::Vertical:
@@ -176,7 +171,7 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 	return QVariant();
 }
 
-int SpreadsheetModel::rowCount(const QModelIndex&parent) const {
+int SpreadsheetModel::rowCount(const QModelIndex& parent) const {
 	Q_UNUSED(parent)
 	return m_spreadsheet->rowCount();
 }
@@ -253,10 +248,6 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect * aspect) {
 	updateVerticalHeader();
 	updateHorizontalHeader();
 
-	emit headerDataChanged(Qt::Horizontal, 0, m_spreadsheet->columnCount()-1);
-	//emit headerDataChanged(Qt::Vertical, old_rows, m_spreadsheet->rowCount()-1);
-	emit headerDataChanged(Qt::Vertical, 0, m_spreadsheet->rowCount()-1);
-
 	connect(col, SIGNAL(plotDesignationChanged(const AbstractColumn*)), this,
 	        SLOT(handlePlotDesignationChange(const AbstractColumn*)));
 	connect(col, SIGNAL(modeChanged(const AbstractColumn*)), this,
@@ -298,13 +289,8 @@ void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* parent, const A
 	if (!col || parent != static_cast<AbstractAspect*>(m_spreadsheet))
 		return;
 
-	int old_rows = m_vertical_header_data.size();
-
 	updateVerticalHeader();
 	updateHorizontalHeader();
-
-	emit headerDataChanged(Qt::Horizontal, 0, m_spreadsheet->columnCount()-1);
-	emit headerDataChanged(Qt::Vertical, old_rows, m_spreadsheet->rowCount()-1);
 
 	beginResetModel();
 	endRemoveColumns();
@@ -376,8 +362,6 @@ void SpreadsheetModel::updateVerticalHeader() {
 
 		endRemoveRows();
 	}
-
-	Q_ASSERT(m_vertical_header_data.size() == m_spreadsheet->rowCount());
 }
 
 void SpreadsheetModel::updateHorizontalHeader() {
@@ -389,60 +373,30 @@ void SpreadsheetModel::updateHorizontalHeader() {
 	while(m_horizontal_header_data.size() > column_count)
 		m_horizontal_header_data.removeLast();
 
-// 	int x_cols;
-// 	if(m_spreadsheet->columnCount(AbstractColumn::X) <= 1)
-// 		x_cols = -1;
-// 	else
-// 		x_cols = 0;
-
 	for (int i=0; i<column_count; i++) {
 		Column* col = m_spreadsheet->child<Column>(i);
 
-		QString middle_section;
-
-		//TODO: add i18n?
+		QString type;
 		switch(col->columnMode()) {
 			case AbstractColumn::Numeric:
-				middle_section = " {numeric} ";
+				type = QLatin1String(" {") + i18n("Numeric") + QLatin1Char('}');
 				break;
 			case AbstractColumn::Text:
-				middle_section = " {text} ";
+				type = QLatin1String(" {") + i18n("Text") + QLatin1Char('}');
+				break;
+			case AbstractColumn::Month:
+				type = QLatin1String(" {") + i18n("Month names") + QLatin1Char('}');
+				break;
+			case AbstractColumn::Day:
+				type = QLatin1String(" {") + i18n("Day names") + QLatin1Char('}');
 				break;
 			case AbstractColumn::DateTime:
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
-				middle_section = " {datetime} ";
+				type = QLatin1String(" {") + i18n("Date and time") + QLatin1Char('}');
 				break;
 		}
 
-		/*
-		 //TODO: activate later when plot designation is somehow used in the application
-		QString designation_section;
-		switch(col->plotDesignation()) {
-			case AbstractColumn::X:
-				designation_section = x_cols>-1 ? QString("[X%1]").arg(++x_cols) : QString("[X]");
-				break;
-			case AbstractColumn::Y:
-				designation_section = x_cols>0 ? QString("[Y%1]").arg(x_cols) : QString("[Y]");
-				break;
-			case AbstractColumn::Z:
-				designation_section = x_cols>0 ? QString("[Z%1]").arg(x_cols) : QString("[Z]");
-				break;
-			case AbstractColumn::xErr:
-				designation_section = x_cols>0 ? QString("[xEr%1]").arg(x_cols) : QString("[xEr]");
-				break;
-			case AbstractColumn::yErr:
-				designation_section = x_cols>0 ? QString("[yEr%1]").arg(x_cols) : QString("[yEr]");
-				break;
-			case AbstractColumn::noDesignation:
-				break;
-		}
-		m_horizontal_header_data.replace(i, col->name() + middle_section + designation_section);
-		*/
-		m_horizontal_header_data.replace(i, col->name() + middle_section);
+		m_horizontal_header_data.replace(i, col->name() + type);
 	}
-
-	Q_ASSERT(m_horizontal_header_data.size() == m_spreadsheet->columnCount());
 }
 
 Column* SpreadsheetModel::column(int index) {

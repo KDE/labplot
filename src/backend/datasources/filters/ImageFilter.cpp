@@ -29,12 +29,12 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/FileDataSource.h"
 #include "backend/core/column/Column.h"
 
-#include <math.h>
-
 #include <QFile>
 #include <QTextStream>
 #include <QDebug>
 #include <KLocale>
+
+#include <cmath>
 
  /*!
 	\class ImageFilter
@@ -42,32 +42,31 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
 	\ingroup datasources
  */
-ImageFilter::ImageFilter():AbstractFileFilter(), d(new ImageFilterPrivate(this)){
-
+ImageFilter::ImageFilter():AbstractFileFilter(), d(new ImageFilterPrivate(this)) {
 }
 
-ImageFilter::~ImageFilter(){
+ImageFilter::~ImageFilter() {
 	delete d;
 }
 
 /*!
 returns the list of all predefined import formats.
 */
-QStringList ImageFilter::importFormats(){
+QStringList ImageFilter::importFormats() {
 	return (QStringList()<<i18n("Matrix (grayscale)")<<i18n("XYZ (grayscale)")<<i18n("XYRGB"));
 }
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void ImageFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode){
+void ImageFilter::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	d->read(fileName, dataSource, importMode);
 }
 
 /*!
 writes the content of the data source \c dataSource to the file \c fileName.
 */
-void ImageFilter::write(const QString & fileName, AbstractDataSource* dataSource){
+void ImageFilter::write(const QString & fileName, AbstractDataSource* dataSource) {
  	d->write(fileName, dataSource);
 // 	emit()
 }
@@ -76,7 +75,7 @@ void ImageFilter::write(const QString & fileName, AbstractDataSource* dataSource
 /*!
   loads the predefined filter settings for \c filterName
 */
-void ImageFilter::loadFilterSettings(const QString& filterName){
+void ImageFilter::loadFilterSettings(const QString& filterName) {
 	Q_UNUSED(filterName);
 }
 
@@ -140,9 +139,9 @@ ImageFilterPrivate::ImageFilterPrivate(ImageFilter* owner) :
     reads the content of the file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
-void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode){
+void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
 	QImage image = QImage(fileName);
-	if(image.isNull() || image.format() == QImage::Format_Invalid) {
+	if (image.isNull() || image.format() == QImage::Format_Invalid) {
 		qDebug()<<"failed to read image"<<fileName<<"or invalid image format";
 		return;
 	}
@@ -157,7 +156,7 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 		endRow = rows;
 	int actualCols=0, actualRows=0;
 
-	switch(importFormat) {
+	switch (importFormat) {
 	case ImageFilter::MATRIX: {
 		actualCols = endColumn-startColumn+1;
 		actualRows = endRow-startRow+1;
@@ -184,7 +183,7 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	//make sure we have enough columns in the data source.
 	int columnOffset = 0;
 	QVector<QVector<double>*> dataPointers;
-	if(dataSource != 0)
+	if (dataSource != 0)
 		columnOffset = dataSource->create(dataPointers, mode, actualRows, actualCols);
 	else {
 		qDebug()<<"data source in image import not defined! Giving up.";
@@ -192,10 +191,10 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	}
 
 	// read data
-	switch(importFormat) {
+	switch (importFormat) {
 	case ImageFilter::MATRIX: {
-		for (int i=0; i<actualRows; i++){
-			for ( int j=0; j<actualCols; j++ ){
+		for (int i=0; i<actualRows; i++) {
+			for ( int j=0; j<actualCols; j++ ) {
 				double value=qGray(image.pixel(j+startColumn-1,i+startRow-1));
 				dataPointers[j]->operator[](i) = value;
 			}
@@ -205,8 +204,8 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	}
 	case ImageFilter::XYZ: {
 		int currentRow=0;
-		for (int i=startRow-1; i<endRow; i++){
-			for ( int j=startColumn-1; j<endColumn; j++ ){
+		for (int i=startRow-1; i<endRow; i++) {
+			for ( int j=startColumn-1; j<endColumn; j++ ) {
 				QRgb color=image.pixel(j, i);
 				dataPointers[0]->operator[](currentRow) = i+1;
 				dataPointers[1]->operator[](currentRow) = j+1;
@@ -219,8 +218,8 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	}
 	case ImageFilter::XYRGB: {
 		int currentRow=0;
-		for (int i=startRow-1; i<endRow; i++){
-			for ( int j=startColumn-1; j<endColumn; j++ ){
+		for (int i=startRow-1; i<endRow; i++) {
+			for ( int j=startColumn-1; j<endColumn; j++ ) {
 				QRgb color=image.pixel(j, i);
 				dataPointers[0]->operator[](currentRow) = i+1;
 				dataPointers[1]->operator[](currentRow) = j+1;
@@ -238,7 +237,7 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
 		QString comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
-		for ( int n=0; n<actualCols; n++ ){
+		for ( int n=0; n<actualCols; n++ ) {
 			Column* column = spreadsheet->column(columnOffset+n);
 			column->setComment(comment);
 			column->setUndoAware(true);
@@ -262,7 +261,7 @@ void ImageFilterPrivate::read(const QString & fileName, AbstractDataSource* data
 /*!
     writes the content of \c dataSource to the file \c fileName.
 */
-void ImageFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource){
+void ImageFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
 	Q_UNUSED(fileName);
 	Q_UNUSED(dataSource);
 	//TODO
@@ -284,13 +283,13 @@ void ImageFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool ImageFilter::load(XmlStreamReader* reader) {
-	if(!reader->isStartElement() || reader->name() != "imageFilter"){
+	if (!reader->isStartElement() || reader->name() != "imageFilter") {
 		reader->raiseError(i18n("no binary filter element found"));
 		return false;
 	}
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-	QXmlStreamAttributes attribs = reader->attributes();
+// 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+// 	QXmlStreamAttributes attribs = reader->attributes();
 
 	return true;
 }

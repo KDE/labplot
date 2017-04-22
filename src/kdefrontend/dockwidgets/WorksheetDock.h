@@ -33,6 +33,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "ui_worksheetdock.h"
+#include <KConfig>
 
 class Worksheet;
 class AbstractAspect;
@@ -71,7 +72,7 @@ private slots:
 	void orientationChanged(int);
 
 	//"Background"-tab
-  	void backgroundTypeChanged(int);
+	void backgroundTypeChanged(int);
 	void backgroundColorStyleChanged(int);
 	void backgroundImageStyleChanged(int);
 	void backgroundBrushStyleChanged(int);

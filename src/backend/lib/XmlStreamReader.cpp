@@ -1,10 +1,10 @@
 /***************************************************************************
     File                 : XmlStreamReader.cpp
-    Project           : LabPlot
-    Description    : XML stream parser that supports errors as well as warnings
+    Project              : LabPlot
+    Description          : XML stream parser that supports errors and warnings
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2016 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -27,7 +27,6 @@
  ***************************************************************************/
 
 #include "backend/lib/XmlStreamReader.h"
-
 #include <KLocale>
 
 /**
@@ -36,30 +35,18 @@
  * This class also adds line and column numbers to the error message.
  */
 XmlStreamReader::XmlStreamReader() {
-	init();
 }
 
 XmlStreamReader::XmlStreamReader(QIODevice* device) : QXmlStreamReader(device) {
-	init();
 }
 
 XmlStreamReader::XmlStreamReader(const QByteArray& data) : QXmlStreamReader(data) {
-	init();
 }
 
 XmlStreamReader::XmlStreamReader(const QString& data) : QXmlStreamReader(data) {
-	init();
 }
 
 XmlStreamReader::XmlStreamReader(const char* data) : QXmlStreamReader(data) {
-	init();
-}
-
-void XmlStreamReader::init() {
-	m_error_prefix = i18nc("prefix for XML error messages", "XML reader error: ");
-	m_error_postfix = i18nc("postfix for XML error messages", " (loading failed)");
-	m_warning_prefix = i18nc("prefix for XML warning messages", "XML reader warning: ");
-	m_warning_postfix = i18nc("postfix for XML warning messages", " ");
 }
 
 QStringList XmlStreamReader::warningStrings() const {
@@ -71,13 +58,13 @@ bool XmlStreamReader::hasWarnings() const {
 }
 
 void XmlStreamReader::raiseError(const QString & message) {
-	QString prefix2 = QString(i18n("line %1, column %2: ", lineNumber(), columnNumber()));
-	QXmlStreamReader::raiseError(m_error_prefix+prefix2+message+m_error_postfix);
+	QString prefix = QString(i18n("line %1, column %2: ", lineNumber(), columnNumber()));
+	QXmlStreamReader::raiseError(prefix+message);
 }
 
 void XmlStreamReader::raiseWarning(const QString & message) {
-	QString prefix2 = QString(i18n("line %1, column %2: ", lineNumber(), columnNumber()));
-	m_warnings.append(m_warning_prefix+prefix2+message+m_warning_postfix);
+	QString prefix = QString(i18n("line %1, column %2: ", lineNumber(), columnNumber()));
+	m_warnings.append(prefix+message);
 }
 
 /*!

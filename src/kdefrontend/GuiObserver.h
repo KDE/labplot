@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : GUI observer
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -28,29 +28,27 @@
 #ifndef GUIOBSERVER_H
 #define GUIOBSERVER_H
 
-#include <QModelIndex>
-#include <QItemSelection>
+#include <QObject>
+
 class MainWin;
 class AbstractAspect;
 class CartesianPlot;
 
-class GuiObserver:public QObject{
+class GuiObserver : public QObject {
 	Q_OBJECT
 
-  public:
-		explicit GuiObserver(MainWin*);
+public:
+	explicit GuiObserver(MainWin*);
 
-  private:
-		MainWin* mainWindow;
-		CartesianPlot* m_lastCartesianPlot;
+private:
+	MainWin* mainWindow;
+	CartesianPlot* m_lastCartesianPlot;
+	template<class TDockWidget>
+	void initDockWidget(TDockWidget*& dockWidget);
 
-	private:
-		template<class TDockWidget>
-		void initDockWidget(TDockWidget*& dockWidget);
-
-  private slots:
-		void selectedAspectsChanged(QList<AbstractAspect*>&);
-		void hiddenAspectSelected(const AbstractAspect*);
+private slots:
+	void selectedAspectsChanged(QList<AbstractAspect*>&) const;
+	void hiddenAspectSelected(const AbstractAspect*) const;
 };
 
 #endif

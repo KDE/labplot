@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Worksheet view
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -32,6 +32,7 @@
 #include <QGraphicsView>
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include <QtPrintSupport/QPrinter>
 
 class QMenu;
 class QToolBar;
@@ -50,7 +51,7 @@ class WorksheetView : public QGraphicsView {
 public:
 	explicit WorksheetView(Worksheet* worksheet);
 
-	enum ExportFormat {Pdf, Eps, Svg, Png};
+	enum ExportFormat {Pdf, Svg, Png};
 	enum GridStyle {NoGrid, LineGrid, DotGrid};
 	enum ExportArea {ExportBoundingBox, ExportSelection, ExportWorksheet};
 
@@ -64,7 +65,9 @@ public:
 
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
-
+	void exportToClipboard();
+	void setIsClosing();
+	void setIsBeingPresented(bool presenting);
 private:
 	enum MouseMode {SelectionMode, NavigationMode, ZoomSelectionMode};
 	enum CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll};
@@ -85,6 +88,7 @@ private:
 	void mousePressEvent(QMouseEvent*);
 	void mouseReleaseEvent(QMouseEvent*);
 	void mouseMoveEvent(QMouseEvent*);
+	void keyPressEvent(QKeyEvent*);
 
 	Worksheet* m_worksheet;
 	MouseMode m_mouseMode;
@@ -101,7 +105,8 @@ private:
 	WorksheetElement* lastAddedWorksheetElement;
 	QTimeLine* m_fadeInTimeLine;
 	QTimeLine* m_fadeOutTimeLine;
-
+	bool m_isClosing;
+	bool m_isBeingPresented;
 	//Menus
 	QMenu* m_addNewMenu;
 	QMenu* m_addNewCartesianPlotMenu;
@@ -115,6 +120,8 @@ private:
 	QMenu* m_cartesianPlotAddNewMenu;
 	QMenu* m_cartesianPlotZoomMenu;
 	QMenu* m_cartesianPlotActionModeMenu;
+	// Data manipulation menu
+	QMenu* m_dataManipulationMenu;
 
 	QToolButton* tbNewCartesianPlot;
 	QToolButton* tbZoom;
@@ -164,6 +171,7 @@ private:
 	QAction* fourTimesMagnificationAction;
 	QAction* fiveTimesMagnificationAction;
 
+	QAction* showPresenterMode;
 	//Actions for cartesian plots
 	QAction* cartesianPlotApplyToSelectionAction;
 	QAction* cartesianPlotApplyToAllAction;
@@ -174,7 +182,15 @@ private:
 
 	QAction* addCurveAction;
 	QAction* addEquationCurveAction;
+	QAction* addDataOperationCurveAction;
+	QAction* addDataReductionCurveAction;
+	QAction* addDifferentiationCurveAction;
+	QAction* addIntegrationCurveAction;
+	QAction* addInterpolationCurveAction;
+	QAction* addSmoothCurveAction;
 	QAction* addFitCurveAction;
+	QAction* addFourierFilterCurveAction;
+	QAction* addFourierTransformCurveAction;
 	QAction* addHorizontalAxisAction;
 	QAction* addVerticalAxisAction;
 	QAction* addLegendAction;
@@ -196,9 +212,20 @@ private:
 
 	QGLContext* const glContext;
 	QVTKWidget2* vtkWidget;
+	// Analysis menu
+	QAction* addDataOperationAction;
+	QAction* addDataReductionAction;
+	QAction* addDifferentiationAction;
+	QAction* addIntegrationAction;
+	QAction* addInterpolationAction;
+	QAction* addSmoothAction;
+	QAction* addFitAction;
+	QAction* addFourierFilterAction;
+	QAction* addFourierTransformAction;
 
 public slots:
 	void createContextMenu(QMenu*) const;
+	void createAnalysisMenu(QMenu*) const;
 	void fillToolBar(QToolBar*);
 	void fillCartesianPlotToolBar(QToolBar*);
 	void print(QPrinter*);
@@ -225,6 +252,8 @@ private slots:
 
 	void fadeIn(qreal);
 	void fadeOut(qreal);
+
+	void presenterMode();
 
 	//SLOTs for cartesian plots
 	void cartesianPlotActionModeChanged(QAction*);

@@ -1,10 +1,9 @@
 /***************************************************************************
     File                 : TextLabelPrivate.h
-    Project              : LabPlot/SciDAVis
-    Description          : Private members of Worksheet.
+    Project              : LabPlot
+    Description          : Private members of TextLabel
     --------------------------------------------------------------------
-    Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke*web.de)
-                           (replace * with @ in the email addresses)
+    Copyright            : (C) 2012-2014 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -45,9 +44,11 @@ class TextLabelPrivate: public QGraphicsItem {
 		int teXImageResolution;
 		float teXImageScaleFactor;
 		TextLabel::TextWrapper textWrapper;
-		int teXFontSize;
+		QFont teXFont;
 		QColor teXFontColor;
+		QImage teXImage;
 		QFutureWatcher<QImage> teXImageFutureWatcher;
+		bool teXRenderSuccessful;
 
 		TextLabel::PositionWrapper position; //position in parent's coordinate system, the label gets aligned around this point.
 		bool positionInvalid;
@@ -83,8 +84,7 @@ class TextLabelPrivate: public QGraphicsItem {
 		TextLabel* const q;
 
 	private:
-		QImage teXImage;
-        virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
+		virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*);
 		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*);
 		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*);

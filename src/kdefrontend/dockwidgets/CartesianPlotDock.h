@@ -34,6 +34,8 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "ui_cartesianplotdock.h"
 #include <QList>
+#include <KConfig>
+#include <KLocalizedString>
 
 class LabelWidget;
 class KUrlCompletion;
@@ -55,7 +57,6 @@ private:
 	bool m_initializing;
 	KUrlCompletion* m_completion;
 
-	void load();
 	void loadConfig(KConfig&);
 
 private slots:
@@ -80,22 +81,24 @@ private slots:
 	void yMaxChanged();
 	void yScaleChanged(int);
 
-	//"Scale breaking"-tab
-	void toggleXBreak(int);
+	//"Range Breaks"-tab
+	void toggleXBreak(bool);
 	void addXBreak();
 	void removeXBreak();
 	void currentXBreakChanged(int);
 	void xBreakStartChanged();
 	void xBreakEndChanged();
 	void xBreakPositionChanged(int);
+	void xBreakStyleChanged(int);
 
-	void toggleYBreak(int);
+	void toggleYBreak(bool);
 	void addYBreak();
 	void removeYBreak();
 	void currentYBreakChanged(int);
 	void yBreakStartChanged();
 	void yBreakEndChanged();
 	void yBreakPositionChanged(int);
+	void yBreakStyleChanged(int);
 
 	//"Plot area"-tab
   	void backgroundTypeChanged(int);
@@ -129,9 +132,11 @@ private slots:
 	void plotYScaleChanged(int);
 	void plotVisibleChanged(bool);
 
-	//scale breakings
-	void plotXScaleBreakingChanged(const CartesianPlot::ScaleBreakings&);
-	void plotYScaleBreakingChanged(const CartesianPlot::ScaleBreakings&);
+	//range breaks
+	void plotXRangeBreakingEnabledChanged(bool);
+	void plotXRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
+	void plotYRangeBreakingEnabledChanged(bool);
+	void plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 
 	//background
 	void plotBackgroundTypeChanged(PlotArea::BackgroundType);
@@ -154,6 +159,12 @@ private slots:
 
 signals:
 	void info(const QString&);
+
+public slots:
+	void load();
+	void loadTheme(KConfig& config);
+	void saveTheme(KConfig& config);
+
 };
 
 #endif

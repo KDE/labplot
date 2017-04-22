@@ -1,0 +1,120 @@
+Statistics generated using David A. Wheeler's 'SLOCCount'."
+
+
+-----2.3-----
+SLOC    Directory       SLOC-by-Language (Sorted)
+36609   backend         cpp=33601,ansic=2991,python=17
+18102   kdefrontend     cpp=18102
+7092    commonfrontend  cpp=7092
+256     tools           cpp=256
+
+
+Totals grouped by language (dominant language first):
+cpp:          59051 (95.15%)
+ansic:         2991 (4.82%)
+python:          17 (0.03%)
+
+
+* Total Physical Source Lines of Code (SLOC)                = 62,059
+* Development Effort Estimate, Person-Years (Person-Months) = 15.26 (183.09)
+  (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))
+* Schedule Estimate, Years (Months)                         = 1.51 (18.10)
+  (Basic COCOMO model, Months = 2.5 * (person-months**0.38))
+* Estimated Average Number of Developers (Effort/Schedule)  = 10.11
+* Total Estimated Cost to Develop                           = $ 2,061,041
+  (average salary = $56,286/year, overhead = 2.40).
+
+
+### kf5-version ###
+SLOC    Directory       SLOC-by-Language (Sorted)
+36952   backend         cpp=33944,ansic=2991,python=17
+18380   kdefrontend     cpp=18380
+7297    commonfrontend  cpp=7297
+256     tools           cpp=256
+152     cantor          cpp=152
+
+
+Totals grouped by language (dominant language first):
+cpp:          60029 (95.23%)
+ansic:         2991 (4.74%)
+python:          17 (0.03%)
+
+
+* Total Physical Source Lines of Code (SLOC)                = 63,037
+* Development Effort Estimate, Person-Years (Person-Months) = 15.51 (186.12)
+  (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))
+* Schedule Estimate, Years (Months)                         = 1.52 (18.22)
+  (Basic COCOMO model, Months = 2.5 * (person-months**0.38))
+* Estimated Average Number of Developers (Effort/Schedule)  = 10.22
+* Total Estimated Cost to Develop                           = $ 2,095,159
+  (average salary = $56,286/year, overhead = 2.40).
+
+
+
+-----2.2-----
+SLOC    Directory       SLOC-by-Language (Sorted)
+32480   backend         cpp=32480
+15680   kdefrontend     cpp=15680
+6131    commonfrontend  cpp=6131
+256     tools           cpp=256
+
+
+Totals grouped by language (dominant language first):
+cpp:          54547 (100.00%)
+
+
+* Total Physical Source Lines of Code (SLOC)                = 54,547
+* Development Effort Estimate, Person-Years (Person-Months) = 13.32 (159.89)
+  (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))
+* Schedule Estimate, Years (Months)                         = 1.43 (17.19)
+  (Basic COCOMO model, Months = 2.5 * (person-months**0.38))
+* Estimated Average Number of Developers (Effort/Schedule)  = 9.30
+* Total Estimated Cost to Develop                           = $ 1,799,911
+  (average salary = $56,286/year, overhead = 2.40).
+
+
+
+-----2.1-----
+SLOC    Directory       SLOC-by-Language (Sorted)
+28516   backend         cpp=28516
+13913   kdefrontend     cpp=13913
+4636    commonfrontend  cpp=4636
+256     tools           cpp=256
+
+
+Totals grouped by language (dominant language first):
+cpp:          47321 (100.00%)
+
+
+* Total Physical Source Lines of Code (SLOC)                = 47,321
+* Development Effort Estimate, Person-Years (Person-Months) = 11.48 (137.73)
+  (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))
+* Schedule Estimate, Years (Months)                         = 1.35 (16.25)
+  (Basic COCOMO model, Months = 2.5 * (person-months**0.38))
+* Estimated Average Number of Developers (Effort/Schedule)  = 8.48
+* Total Estimated Cost to Develop                           = $ 1,550,416
+  (average salary = $56,286/year, overhead = 2.40).
+
+
+
+-----2.0-----
+SLOC    Directory       SLOC-by-Language (Sorted)
+23460   backend         cpp=23460
+13766   kdefrontend     cpp=13559,yacc=207
+3064    commonfrontend  cpp=3064
+137     tools           cpp=137
+
+
+Totals grouped by language (dominant language first):
+cpp:          40220 (99.49%)
+yacc:           207 (0.51%)
+
+
+* Total Physical Source Lines of Code (SLOC)                = 40,427
+* Development Effort Estimate, Person-Years (Person-Months) = 9.73 (116.74)
+  (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))
+* Schedule Estimate, Years (Months)                         = 1.27 (15.26)
+  (Basic COCOMO model, Months = 2.5 * (person-months**0.38))
+* Estimated Average Number of Developers (Effort/Schedule)  = 7.65
+* Total Estimated Cost to Develop                           = $ 1,314,155
+  (average salary = $56,286/year, overhead = 2.40).

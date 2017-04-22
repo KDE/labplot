@@ -203,7 +203,7 @@ template<> class IntervalAttribute<bool>
 		IntervalAttribute<bool>& operator=(const IntervalAttribute<bool>& other)
 		{
 			m_intervals.clear();
-			foreach( Interval<int> iv, other.intervals())
+			foreach(const Interval<int>& iv, other.intervals())
 				m_intervals.append(iv);
 			return *this;
 		}
@@ -212,7 +212,7 @@ template<> class IntervalAttribute<bool>
 		{
 			if(value)
 			{
-				foreach(Interval<int> iv, m_intervals)
+				foreach(const Interval<int>& iv, m_intervals)
 					if(iv.contains(i))
 						return;
 

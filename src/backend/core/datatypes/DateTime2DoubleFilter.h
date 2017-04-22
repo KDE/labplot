@@ -31,7 +31,7 @@
 
 #include "../AbstractSimpleFilter.h"
 #include <QDateTime>
-#include <math.h>
+#include <cmath>
 
 //! Conversion filter QDateTime -> double (using Julian day).
 class DateTime2DoubleFilter : public AbstractSimpleFilter

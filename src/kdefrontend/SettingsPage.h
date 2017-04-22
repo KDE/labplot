@@ -28,17 +28,17 @@
 #ifndef SETTINGSPAGE_H
 #define SETTINGSPAGE_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class SettingsPage : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit SettingsPage(QWidget*) {};
-    virtual ~SettingsPage() {};
+	explicit SettingsPage(QWidget*) {};
+	virtual ~SettingsPage() {};
 
-    virtual void applySettings() = 0;
-    virtual void restoreDefaults() = 0;
+	virtual void applySettings() = 0;
+	virtual void restoreDefaults() = 0;
 };
 
 #endif

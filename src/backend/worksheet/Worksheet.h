@@ -4,7 +4,7 @@
     Description          : Worksheet (2D visualization) part
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2014 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2016 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -35,6 +35,7 @@
 #include "backend/lib/macros.h"
 
 class QGraphicsItem;
+class QGraphicsScene;
 class QRectF;
 
 class WorksheetPrivate;
@@ -55,22 +56,23 @@ class Worksheet: public AbstractPart, public scripted {
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
-		virtual void exportView() const;
-		virtual void printView();
-		virtual void printPreview() const;
+        virtual bool exportView() const;
+        virtual bool printView();
+        virtual bool printPreview() const;
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
 
 		QRectF pageRect() const;
 		void setPageRect(const QRectF&);
-		QGraphicsScene *scene() const;
+		QGraphicsScene* scene() const;
 		void update();
 		void setPrinting(bool) const;
 
 		void setItemSelectedInView(const QGraphicsItem* item, const bool b);
 		void setSelectedInView(const bool);
 		void deleteAspectFromGraphicsItem(const QGraphicsItem*);
+		void setIsClosing();
 
 		BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
 		BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)

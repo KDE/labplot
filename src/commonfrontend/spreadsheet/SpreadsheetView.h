@@ -30,15 +30,17 @@
 #define SPREADSHEETVIEW_H
 
 #include <QWidget>
+#include <QPrinter>
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"
+#include "backend/datasources/filters/FITSFilter.h"
 
 class Column;
 class Spreadsheet;
 class SpreadsheetModel;
 class SpreadsheetItemDelegate;
-class SpreadsheetDoubleHeaderView;
+class SpreadsheetHeaderView;
 class AbstractAspect;
 class QTableView;
 
@@ -73,7 +75,10 @@ class SpreadsheetView : public QWidget {
 		void setCellsSelected(int first_row, int first_col, int last_row, int last_col, bool select = true);
 		void getCurrentCell(int* row, int* col);
 		void exportToFile(const QString&, const bool, const QString&) const;
-
+        void exportToLaTeX(const QString&, const bool exportHeaders,
+                           const bool gridLines, const bool captions, const bool latexHeaders,
+                           const bool skipEmptyRows,const bool exportEntire) const;
+        void exportToFits(const QString &fileName, const int exportTo, const bool commentsAsUnits) const;
 	private:
 	  	void init();
 		void initActions();
@@ -84,7 +89,7 @@ class SpreadsheetView : public QWidget {
 		Spreadsheet* m_spreadsheet;
 		SpreadsheetItemDelegate* m_delegate;
 		SpreadsheetModel* m_model;
-		SpreadsheetDoubleHeaderView* m_horizontalHeader;
+		SpreadsheetHeaderView* m_horizontalHeader;
 		bool m_suppressSelectionChangedEvent;
 
 		bool eventFilter(QObject*, QEvent*);
@@ -100,6 +105,7 @@ class SpreadsheetView : public QWidget {
 // 		QAction* action_set_formula;
 // 		QAction* action_recalculate;
 		QAction* action_fill_row_numbers;
+		QAction* action_fill_sel_row_numbers;
 		QAction* action_fill_random;
 		QAction* action_fill_equidistant;
 		QAction* action_fill_random_nonuniform;
@@ -114,6 +120,7 @@ class SpreadsheetView : public QWidget {
 		QAction* action_clear_masks;
 		QAction* action_sort_spreadsheet;
 		QAction* action_go_to_cell;
+        QAction* action_statistics_all_columns;
 
 		//column related actions
 		QAction* action_insert_columns;
@@ -174,6 +181,7 @@ class SpreadsheetView : public QWidget {
 // 		void recalculateSelectedCells();
 
 		void fillSelectedCellsWithRowNumbers();
+		void fillWithRowNumbers();
 		void fillSelectedCellsWithRandomNumbers();
 		void fillWithRandomValues();
 		void fillWithEquidistantValues();
@@ -208,8 +216,9 @@ class SpreadsheetView : public QWidget {
 // 		void setSelectedColumnsAsYError();
 // 		void setSelectedColumnsAsNone();
 
-		void statisticsOnSelectedColumns();
-		void statisticsOnSelectedRows();
+		void showColumnStatistics(bool forAll = false);
+		void showAllColumnsStatistics();
+		void showRowStatistics();
 
 		bool formulaModeActive() const;
 
@@ -221,7 +230,6 @@ class SpreadsheetView : public QWidget {
 		void currentColumnChanged(const QModelIndex& current, const QModelIndex & previous);
 		void handleAspectAdded(const AbstractAspect* aspect);
 		void handleAspectAboutToBeRemoved(const AbstractAspect* aspect);
-		void updateSectionSize(const Column*);
 		void updateHeaderGeometry(Qt::Orientation o, int first, int last);
 
 		void selectColumn(int);

@@ -35,6 +35,7 @@
 #include "HDFOptionsWidget.h"
 #include "ImageOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
+#include "FITSOptionsWidget.h"
 #include "backend/datasources/FileDataSource.h"
 
 
@@ -56,7 +57,9 @@ public:
 	QString fileName() const;
 	const QStringList selectedHDFNames() const;
 	const QStringList selectedNetCDFNames() const;
+	const QStringList selectedFITSExtensions() const;
 	void hideDataSource() const;
+	void showAsciiHeaderOptions(bool);
 
 private:
 	Ui::ImportFileWidget ui;
@@ -65,14 +68,17 @@ private:
 	Ui::HDFOptionsWidget hdfOptionsWidget;
 	Ui::ImageOptionsWidget imageOptionsWidget;
 	Ui::NetCDFOptionsWidget netcdfOptionsWidget;
+	Ui::FITSOptionsWidget fitsOptionsWidget;
 	QTableWidget* twPreview;
 	const QString& m_fileName;
 
 private slots:
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int);
-	void hdfTreeWidgetItemSelected(QTreeWidgetItem*,int);
-	void netcdfTreeWidgetItemSelected(QTreeWidgetItem*,int);
+	void hdfTreeWidgetSelectionChanged();
+	void netcdfTreeWidgetSelectionChanged();
+	void fitsTreeWidgetSelectionChanged();
+
 	void saveFilter();
 	void manageFilters();
 	void filterChanged(int);
@@ -84,6 +90,7 @@ private slots:
 
 signals:
 	void fileNameChanged();
+	void checkedFitsTableToMatrix(const bool enable);
 };
 
 #endif

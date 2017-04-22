@@ -61,6 +61,8 @@ class XYCurve: public WorksheetElement {
 		virtual QGraphicsItem *graphicsItem() const;
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
+		virtual void loadThemeConfig(const KConfig& config);
+		virtual void saveThemeConfig(const KConfig& config);
 
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
@@ -146,6 +148,7 @@ class XYCurve: public WorksheetElement {
 
 		//SLOTs for changes triggered via QActions in the context menu
 		void visibilityChanged();
+		void navigateTo();
 
 	protected:
 		XYCurve(const QString& name, XYCurvePrivate* dd);
@@ -157,6 +160,7 @@ class XYCurve: public WorksheetElement {
 		void initActions();
 
 		QAction* visibilityAction;
+		QAction* navigateToAction;
 
 	signals:
 		//General-Tab

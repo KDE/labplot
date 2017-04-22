@@ -1,10 +1,10 @@
 /***************************************************************************
     File                 : XmlStreamReader.h
-    Project           : LabPlot
-    Description    : XML stream parser that supports errors as well as warnings
+    Project              : LabPlot
+    Description          : XML stream parser that supports errors and warnings
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2016 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -32,7 +32,6 @@
 #include <QXmlStreamReader>
 #include <QString>
 #include <QStringList>
-#include "backend/lib/macros.h"
 
 class XmlStreamReader : public QXmlStreamReader {
 	public:
@@ -44,13 +43,8 @@ class XmlStreamReader : public QXmlStreamReader {
 
 		QStringList warningStrings() const;
 		bool hasWarnings() const;
-		void raiseWarning(const QString & message = QString());
-		void raiseError(const QString & message = QString());
-		CLASS_ACCESSOR(QString, m_error_prefix, errorPrefix, ErrorPrefix);
-		CLASS_ACCESSOR(QString, m_error_postfix, errorPostfix, ErrorPostfix);
-		CLASS_ACCESSOR(QString, m_warning_prefix, warningPrefix, WarningPrefix);
-		CLASS_ACCESSOR(QString, m_warning_postfix, warningPostfix, WarningPostfix);
-
+		void raiseWarning(const QString&);
+		void raiseError(const QString&);
 
 		bool skipToNextTag();
 		bool skipToEndElement();
@@ -58,11 +52,6 @@ class XmlStreamReader : public QXmlStreamReader {
 
 	private:
 		QStringList m_warnings;
-		QString m_error_prefix;
-		QString m_error_postfix;
-		QString m_warning_prefix;
-		QString m_warning_postfix;
-
 		void init();
 };
 

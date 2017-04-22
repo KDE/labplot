@@ -1,0 +1,43 @@
+/**\page api_design API design guide
+
+\section header Header files
+
+Try to reduce as much as possible the number of includes in header files. This will generally help reduce the compilation time, especially for developers when just one header has been modified.
+It may also avoid errors that can be caused by conflicts between headers. Most of the time, forward declarations are sufficient.
+In MyClass.cpp, the first include should be MyClass.h. This ensures that MyClass.h is standalone.
+
+\section naming Naming schemes
+
+Names of classes with pure virtual methods, and of classes whose instances are not usable (e.g., because of virtual methods with a do-nothing implementation, one or more of which are expected to be reimplemented in subclasses), are prefixed with the string ?Abstract?.
+Names of classes providing a primary view on an Aspect, and other classes providing the view part of a model/view construct, are suffixed with 'View'.
+Methods that return a 'count' value, i.e. the number of objects of some kind, use the singular form for the object name, suffixed with 'Count'. Example: columnCount().
+
+\section mistakes Avoiding common mistakes
+
+    Avoid large, cryptic constructors in favour of sensible defaults plus setter methods. Example (from [http://doc.trolltech.com/qq/qq13-apis.html Designing Qt-Style C++ APIs]):
+@code
+    QSlider *slider = new QSlider(12, 18, 3, 13, Qt::Vertical, 0, "volume");
+@endcode
+    is much harder to understand for someone reading the code than
+@code
+    QSlider *slider = new QSlider(Qt::Vertical);
+    slider->setRange(12, 18);
+    slider->setPageStep(3);
+    slider->setValue(13);
+    slider->setObjectName("volume");
+@endcode
+    Avoid boolean function parameters. It's often hard to figure out what such a function call does without referring to the API documentation every time. Replacements can be either two distinct methods or flags, depending on the details of the problem. Example:
+@code
+    aspect->children(true, true)
+@endcode
+    would be mucher harder to read than
+@code
+    aspect->children(AbstractAspect::IncludeHidden | AbstractAspect::Recursive).
+@endcode
+    Also, this allows you to add more flags later on without breaking binary compatibility, so it can be a good idea even if you only have a single flag for now. Using QFlags is recommended in order to make flags type safe, and because it adds implicit documentation to the API (particularly useful when using an
+    IDE with code completion).
+    Except for basic types, parameters should be passed by const reference. This avoids copying the object. Returning references is not a good idea in most cases, because the referenced object changes when calling the method again. Example:
+@code
+    QString myMethod(const QString &string, int number);
+@endcode
+*/

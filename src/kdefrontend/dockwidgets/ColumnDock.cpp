@@ -38,6 +38,8 @@
 #include "backend/datasources/FileDataSource.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
+#include <KLocalizedString>
+
 /*!
   \class ColumnDock
   \brief Provides a widget for editing the properties of the spreadsheet columns currently selected in the project explorer.
@@ -299,11 +301,10 @@ void ColumnDock::typeChanged(int index){
   switch(columnMode) {
 	  case AbstractColumn::Numeric:{
 		int digits = ui.sbPrecision->value();
-		Double2StringFilter * filter;
 		foreach(Column* col, m_columnsList) {
 		  col->beginMacro(i18n("%1: change column type", col->name()));
 		  col->setColumnMode(columnMode);
-		  filter = static_cast<Double2StringFilter*>(col->outputFilter());
+		  Double2StringFilter* filter = static_cast<Double2StringFilter*>(col->outputFilter());
 		  filter->setNumericFormat(ui.cbFormat->itemData(format_index).toChar().toLatin1());
 		  filter->setNumDigits(digits);
 		  col->endMacro();
@@ -319,12 +320,11 @@ void ColumnDock::typeChanged(int index){
 	  case AbstractColumn::Day:
 	  case AbstractColumn::DateTime:{
 		QString format;
-		DateTime2StringFilter * filter;
 		foreach(Column* col, m_columnsList) {
 		  col->beginMacro(i18n("%1: change column type", col->name()));
 		  format = ui.cbFormat->currentText();
 		  col->setColumnMode(columnMode);
-		  filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+		  DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 		  filter->setFormat(format);
 		  col->endMacro();
 		}
@@ -345,9 +345,8 @@ void ColumnDock::formatChanged(int index){
 
   switch(mode) {
 	  case AbstractColumn::Numeric:{
-		Double2StringFilter * filter;
 		foreach(Column* col, m_columnsList) {
-		  filter = static_cast<Double2StringFilter*>(col->outputFilter());
+		  Double2StringFilter* filter = static_cast<Double2StringFilter*>(col->outputFilter());
 		  filter->setNumericFormat(ui.cbFormat->itemData(format_index).toChar().toLatin1());
 		}
 		break;
@@ -357,10 +356,9 @@ void ColumnDock::formatChanged(int index){
 	  case AbstractColumn::Month:
 	  case AbstractColumn::Day:
 	  case AbstractColumn::DateTime:{
-		DateTime2StringFilter * filter;
 		QString format = ui.cbFormat->itemData( ui.cbFormat->currentIndex() ).toString();
 		foreach(Column* col, m_columnsList){
-		  filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+		  DateTime2StringFilter* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 		  filter->setFormat(format);
 		}
 		break;

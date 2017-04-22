@@ -37,7 +37,7 @@
  * \brief Generic undo command changing a single variable.
  *
  * Given a pointer to a variable (usually a member of the class instantiating the command, or of
- * its private implementation class) and a new value, assigns the value to to the variable. A backup
+ * its private implementation class) and a new value, assigns the value to the variable. A backup
  * of the old value is made, so that undo/redo can switch back and forth between the two values.
  * The value type needs to support copy construction and assignment.
  */

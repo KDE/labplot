@@ -37,8 +37,8 @@
  */
 FunctionsWidget::FunctionsWidget(QWidget *parent): QWidget(parent) {
 	ui.setupUi(this);
-	ui.bInsert->setIcon(KIcon("edit-paste"));
-	ui.bCancel->setIcon(KIcon("dialog-cancel"));
+	ui.bInsert->setIcon(QIcon::fromTheme("edit-paste"));
+	ui.bCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
 	m_expressionParser = ExpressionParser::getInstance();
 	ui.cbGroup->addItems(m_expressionParser->functionsGroups());
 
@@ -101,5 +101,5 @@ void FunctionsWidget::insertClicked() {
 	const QString& name = text.left( text.indexOf(" (") );
 	int index = names.indexOf(name);
 
-	emit(functionSelected(functions.at(index)));
+	emit functionSelected(functions.at(index));
 }

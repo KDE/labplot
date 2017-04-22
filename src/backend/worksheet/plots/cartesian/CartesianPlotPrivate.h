@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Private members of CartesianPlot.
     --------------------------------------------------------------------
-    Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -33,14 +33,11 @@
 #include "CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 
-#include <QGraphicsSceneWheelEvent>
 #include <QGraphicsSceneMouseEvent>
-#include <QGraphicsItem>
-#include <QRubberBand>
 
-class CartesianPlotPrivate:public AbstractPlotPrivate{
+class CartesianPlotPrivate : public AbstractPlotPrivate {
     public:
-		explicit CartesianPlotPrivate(CartesianPlot* owner);
+		explicit CartesianPlotPrivate(CartesianPlot*);
 		CartesianPlot* const q;
 
 		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
@@ -55,19 +52,19 @@ class CartesianPlotPrivate:public AbstractPlotPrivate{
 		void retransformScales();
 		void checkXRange();
 		void checkYRange();
-		CartesianCoordinateSystem::Scale* createScale(CartesianPlot::Scale type, Interval<double>& interval,
-													  double sceneStart, double sceneEnd,
-													  double logicalStart, double logicalEnd);
+		CartesianScale* createScale(CartesianPlot::Scale type,
+									double sceneStart, double sceneEnd,
+									double logicalStart, double logicalEnd);
 
 		float xMin, xMax, yMin, yMax;
 		float xMinPrev, xMaxPrev, yMinPrev, yMaxPrev;
 		bool autoScaleX, autoScaleY;
 		float autoScaleOffsetFactor;
 		CartesianPlot::Scale xScale, yScale;
-		bool xScaleBreakingEnabled;
-		bool yScaleBreakingEnabled;
-		CartesianPlot::ScaleBreakings xScaleBreakings;
-		CartesianPlot::ScaleBreakings yScaleBreakings;
+		bool xRangeBreakingEnabled;
+		bool yRangeBreakingEnabled;
+		CartesianPlot::RangeBreaks xRangeBreaks;
+		CartesianPlot::RangeBreaks yRangeBreaks;
 
 		//cached values of minimum and maximum for all visible curves
 		bool curvesXMinMaxIsDirty, curvesYMinMaxIsDirty;

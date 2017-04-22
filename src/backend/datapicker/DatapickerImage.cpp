@@ -44,7 +44,6 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 
-#include <KIcon>
 #include <KConfigGroup>
 #include <KLocale>
 
@@ -120,7 +119,7 @@ void DatapickerImage::init() {
     Returns an icon to be used in the project explorer.
 */
 QIcon DatapickerImage::icon() const {
-	return KIcon("image-x-generic");
+	return QIcon::fromTheme("image-x-generic");
 }
 
 /*!
@@ -149,10 +148,11 @@ QWidget* DatapickerImage::view() const {
 	return m_view;
 }
 
-void DatapickerImage::exportView() const {
+bool DatapickerImage::exportView() const {
 	ExportWorksheetDialog* dlg = new ExportWorksheetDialog(m_view);
 	dlg->setFileName(name());
-	if (dlg->exec()==QDialog::Accepted){
+    bool ret;
+    if ( (ret = (dlg->exec()==QDialog::Accepted)) ){
 		const QString path = dlg->path();
 		const WorksheetView::ExportFormat format = dlg->exportFormat();
 		const int resolution = dlg->exportResolution();
@@ -163,24 +163,27 @@ void DatapickerImage::exportView() const {
 		RESET_CURSOR;
 	}
 	delete dlg;
+    return ret;
 }
 
-void DatapickerImage::printView() {
+bool DatapickerImage::printView() {
 	QPrinter printer;
 	QPrintDialog* dlg = new QPrintDialog(&printer, m_view);
+    bool ret;
 	dlg->setWindowTitle(i18n("Print Datapicker Image"));
-	if (dlg->exec() == QDialog::Accepted) {
+    if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
 		DatapickerImageView* view = reinterpret_cast<DatapickerImageView*>(m_view);
 		view->print(&printer);
 	}
 	delete dlg;
+    return ret;
 }
 
-void DatapickerImage::printPreview() const {
+bool DatapickerImage::printPreview() const {
 	const DatapickerImageView* view = reinterpret_cast<const DatapickerImageView*>(m_view);
 	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, SIGNAL(paintRequested(QPrinter*)), view, SLOT(print(QPrinter*)));
-	dlg->exec();
+    return dlg->exec();
 }
 
 /*!
