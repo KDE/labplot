@@ -34,6 +34,7 @@
 #include "kdefrontend/worksheet/GridDialog.h"
 #include "kdefrontend/worksheet/PresenterWidget.h"
 #include "kdefrontend/worksheet/DynamicPresenterWidget.h"
+
 #include <QApplication>
 #include <QMenu>
 #include <QToolBar>
@@ -48,7 +49,7 @@
 #include <QTimeLine>
 #include <QClipboard>
 
-#include <QAction>
+#include <KColorScheme>
 #include <KLocale>
 #include <KMessageBox>
 #include <KConfigGroup>
@@ -757,16 +758,19 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 
 	if (!m_worksheet->useViewSize()) {
 		// background
+		KColorScheme scheme(QPalette::Active, KColorScheme::Window);
+		const QColor& color = scheme.background().color();
 		if (!scene_rect.contains(rect))
-			painter->fillRect(rect, Qt::lightGray);
+			painter->fillRect(rect, color);
 
 		//shadow
-		int shadowSize = scene_rect.width()*0.02;
-		QRectF rightShadowRect(scene_rect.right(), scene_rect.top() + shadowSize, shadowSize, scene_rect.height());
-		QRectF bottomShadowRect(scene_rect.left() + shadowSize, scene_rect.bottom(), scene_rect.width(), shadowSize);
-
-		painter->fillRect(rightShadowRect.intersected(rect), Qt::darkGray);
-		painter->fillRect(bottomShadowRect.intersected(rect), Qt::darkGray);
+// 		int shadowSize = scene_rect.width()*0.02;
+// 		QRectF rightShadowRect(scene_rect.right(), scene_rect.top() + shadowSize, shadowSize, scene_rect.height());
+// 		QRectF bottomShadowRect(scene_rect.left() + shadowSize, scene_rect.bottom(), scene_rect.width(), shadowSize);
+//
+// 		const QColor& shadeColor = scheme.shade(color, KColorScheme::MidShade);
+// 		painter->fillRect(rightShadowRect.intersected(rect), shadeColor);
+// 		painter->fillRect(bottomShadowRect.intersected(rect), shadeColor);
 	}
 
 	drawBackgroundItems(painter, scene_rect);
