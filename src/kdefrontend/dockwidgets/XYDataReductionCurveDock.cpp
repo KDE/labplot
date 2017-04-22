@@ -90,7 +90,7 @@ void XYDataReductionCurveDock::setupGeneral() {
 		uiGeneralTab.cbType->addItem(i18n(nsl_geom_linesim_type_name[i]));
 	uiGeneralTab.cbType->setItemData(nsl_geom_linesim_type_visvalingam_whyatt, i18n("This method is much slower than any other"), Qt::ToolTipRole);
 
-	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);

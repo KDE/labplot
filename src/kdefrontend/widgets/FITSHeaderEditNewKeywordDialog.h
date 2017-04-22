@@ -30,6 +30,8 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "backend/datasources/filters/FITSFilter.h"
 #include "ui_fitsheadereditnewkeywordwidget.h"
 
+#include <KDialog>
+
 class FITSHeaderEditNewKeywordDialog : public KDialog {
 	Q_OBJECT
 

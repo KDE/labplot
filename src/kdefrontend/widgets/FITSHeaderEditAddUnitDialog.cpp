@@ -33,7 +33,7 @@ FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QW
 	setMainWidget(mainWidget);
 
 	setWindowTitle(i18n("Add New Unit"));
-	setWindowIcon(KIcon("document-new"));
+	setWindowIcon(QIcon::fromTheme("document-new"));
 	setButtons(KDialog::Ok | KDialog::Cancel);
 	setButtonText(KDialog::Ok, i18n("&Add"));
 	enableButtonOk(false);

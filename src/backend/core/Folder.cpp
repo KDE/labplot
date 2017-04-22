@@ -37,10 +37,13 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/note/Note.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#ifdef HAVE_CANTOR_LIBS
+#include "backend/cantorWorksheet/CantorWorksheet.h"
+#endif
 #include "backend/worksheet/Worksheet.h"
 
-#include <KIcon>
-#include <KLocale>
+#include <QIcon>
+#include <KLocalizedString>
 
 /**
  * \class Folder
@@ -50,7 +53,7 @@
 Folder::Folder(const QString &name) : AbstractAspect(name) {}
 
 QIcon Folder::icon() const {
-	return KIcon("folder");
+	return QIcon::fromTheme("folder");
 }
 
 /**
@@ -159,6 +162,15 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader) {
 		}
 		addChild(worksheet);
 		worksheet->setIsLoading(false);
+#ifdef HAVE_CANTOR_LIBS
+	}else if (element_name == "cantorWorksheet"){
+		CantorWorksheet * cantorWorksheet = new CantorWorksheet(0, QLatin1String("null"), true);
+		if (!cantorWorksheet->load(reader)){
+			delete cantorWorksheet;
+			return false;
+		}
+		addChild(cantorWorksheet);
+#endif
 	} else if (element_name == "fileDataSource") {
 		FileDataSource* fileDataSource = new FileDataSource(0, "", true);
 		if (!fileDataSource->load(reader)){

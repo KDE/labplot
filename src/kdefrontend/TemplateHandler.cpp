@@ -35,12 +35,10 @@
 #include <QFileInfo>
 #include <QWidgetAction>
 
-#include <KLocale>
-#include <KStandardDirs>
-#include <KLineEdit>
-#include <KIcon>
 #include <KIconLoader>
-#include <KMenu>
+#include <KLocalizedString>
+#include <KLineEdit>
+#include <QMenu>
 #include <KConfig>
 
  /*!
@@ -88,11 +86,11 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 	tbPaste->setEnabled(false);
 	horizontalLayout->addWidget(tbPaste);
 
-	tbLoad->setIcon(KIcon("document-open"));
-	tbSave->setIcon(KIcon("document-save"));
-	tbSaveDefault->setIcon(KIcon("document-save-as"));
-	tbCopy->setIcon(KIcon("edit-copy"));
-	tbPaste->setIcon(KIcon("edit-paste"));
+	tbLoad->setIcon(QIcon::fromTheme("document-open"));
+	tbSave->setIcon(QIcon::fromTheme("document-save"));
+	tbSaveDefault->setIcon(QIcon::fromTheme("document-save-as"));
+	tbCopy->setIcon(QIcon::fromTheme("edit-copy"));
+	tbPaste->setIcon(QIcon::fromTheme("edit-paste"));
 
 	connect( tbLoad, SIGNAL(clicked()), this, SLOT(loadMenu()));
 	connect( tbSave, SIGNAL(clicked()), this, SLOT(saveMenu()));
@@ -106,7 +104,7 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 	this->retranslateUi();
 
 	//disable the load-button if no templates are available yet
-	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/" + dirNames.at(className) + "/*");
+    QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/" + dirNames.at(className) + "/*");
 	tbLoad->setEnabled(list.size());
 
 	//TODO: implement copy&paste of properties and activate copy- and paste-buttons again
@@ -126,10 +124,10 @@ void TemplateHandler::retranslateUi(){
 //##################################  Slots ####################################
 //##############################################################################
 void TemplateHandler::loadMenu() {
-	KMenu menu;
-	menu.addTitle(i18n("Load from"));
+	QMenu menu;
+	menu.addSection(i18n("Load from"));
 
-	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/" + dirNames.at(className) + "/*");
+	QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/" + dirNames.at(className) + "/*");
 	for (int i = 0; i < list.size(); ++i) {
 			QFileInfo fileinfo(list.at(i));
 			QAction* action = menu.addAction(fileinfo.fileName());
@@ -149,10 +147,10 @@ void TemplateHandler::loadMenuSelected(QAction* action) {
 }
 
 void TemplateHandler::saveMenu() {
-	KMenu menu;
-	menu.addTitle(i18n("Save as"));
+	QMenu menu;
+	menu.addSection(i18n("Save as"));
 
-	QStringList list = KGlobal::dirs()->findAllResources("appdata", "templates/"+ dirNames.at(className) + "/*");
+	QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/"+ dirNames.at(className) + "/*");
 	for (int i = 0; i < list.size(); ++i) {
 			QFileInfo fileinfo(list.at(i));
 			QAction* action = menu.addAction(fileinfo.fileName());
@@ -189,7 +187,7 @@ void TemplateHandler::saveMenu() {
  * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
 void TemplateHandler::saveNewSelected(const QString& filename) {
-	KConfig config(KGlobal::dirs()->locateLocal("appdata", "templates") + '/' + dirNames.at(className) + '/' + filename, KConfig::SimpleConfig);
+	KConfig config(QStandardPaths::locate(QStandardPaths::ApplicationsLocation, "templates") + '/' + dirNames.at(className) + '/' + filename, KConfig::SimpleConfig);
 	emit (saveConfigRequested(config));
 
 	//we have at least one saved template now -> enable the load button

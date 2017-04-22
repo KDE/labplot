@@ -31,6 +31,9 @@
 #include "tools/TeXRenderer.h"
 
 #include <KLocale>
+#include <KSharedConfig>
+#include <KConfigGroup>
+#include <kfiledialog.h>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
@@ -40,7 +43,7 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 
 	ui.setupUi(this);
 
-	ui.lLatexWarning->setPixmap( KIcon(QLatin1String("state-warning")).pixmap(QSize(48,48)) );
+	ui.lLatexWarning->setPixmap( QIcon::fromTheme(QLatin1String("state-warning")).pixmap(QSize(48,48)) );
 
 	//add available TeX typesetting engines
 	if (TeXRenderer::executableExists(QLatin1String("lualatex")))
@@ -64,7 +67,7 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 }
 
 void SettingsWorksheetPage::applySettings() {
-	KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_Worksheet"));
+	KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_Worksheet" );
 	group.writeEntry(QLatin1String("PresenterModeInteractive"), ui.chkPresenterModeInteractive->isChecked());
 	group.writeEntry(QLatin1String("DoubleBuffering"), ui.chkDoubleBuffering->isChecked());
 	group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
@@ -75,7 +78,7 @@ void SettingsWorksheetPage::restoreDefaults() {
 }
 
 void SettingsWorksheetPage::loadSettings() {
-	const KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_Worksheet"));
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
 	ui.chkPresenterModeInteractive->setChecked(group.readEntry(QLatin1String("PresenterModeInteractive"), false));
 	ui.chkDoubleBuffering->setChecked(group.readEntry(QLatin1String("DoubleBuffering"), true));
 

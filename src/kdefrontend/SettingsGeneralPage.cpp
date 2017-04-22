@@ -28,6 +28,10 @@
 
 #include "SettingsGeneralPage.h"
 
+#include <KLocale>
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
  */
@@ -47,8 +51,8 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 	interfaceChanged(ui.cbInterface->currentIndex());
 }
 
-void SettingsGeneralPage::applySettings() {
-	KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_General"));
+void SettingsGeneralPage::applySettings(){
+	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentIndex());
 	group.writeEntry(QLatin1String("ViewMode"), ui.cbInterface->currentIndex());
 	group.writeEntry(QLatin1String("TabPosition"), ui.cbTabPosition->currentIndex());
@@ -57,12 +61,12 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
 }
 
-void SettingsGeneralPage::restoreDefaults() {
+void SettingsGeneralPage::restoreDefaults(){
 	loadSettings();
 }
 
-void SettingsGeneralPage::loadSettings() {
-	const KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_General"));
+void SettingsGeneralPage::loadSettings(){
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	ui.cbLoadOnStart->setCurrentIndex(group.readEntry(QLatin1String("LoadOnStart"), 0));
 	ui.cbInterface->setCurrentIndex(group.readEntry(QLatin1String("ViewMode"), 0));
 	ui.cbTabPosition->setCurrentIndex(group.readEntry(QLatin1String("TabPosition"), 0));

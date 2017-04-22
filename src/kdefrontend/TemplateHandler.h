@@ -31,6 +31,7 @@
 #define TEMPLATEHANDLER_H
 
 #include <QWidget>
+
 class QToolButton;
 class KConfig;
 

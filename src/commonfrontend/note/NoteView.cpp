@@ -31,6 +31,7 @@
 #include "backend/note/Note.h"
 
 #include <QHBoxLayout>
+#include <QPrinter>
 #include <QTextEdit>
 
 NoteView::NoteView(Note* notes) : m_notes(notes) {

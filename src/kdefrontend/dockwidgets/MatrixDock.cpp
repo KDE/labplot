@@ -30,6 +30,7 @@
 #include "commonfrontend/matrix/MatrixView.h"
 #include "kdefrontend/TemplateHandler.h"
 #include <QDir>
+#include <KLocalizedString>
 
  /*!
   \class MatrixDock

@@ -34,6 +34,7 @@
 
 class Note;
 class QTextEdit;
+class QPrinter;
 
 class NoteView : public QWidget {
 	Q_OBJECT

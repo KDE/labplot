@@ -33,6 +33,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "ui_worksheetdock.h"
+#include <KConfig>
 
 class Worksheet;
 class AbstractAspect;

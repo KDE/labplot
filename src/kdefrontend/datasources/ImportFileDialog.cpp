@@ -42,11 +42,14 @@
 
 #include <KMessageBox>
 #include <KInputDialog>
+#include <KSharedConfig>
+#include <KWindowConfig>
+#include <KLocalizedString>
 #include <QProgressBar>
 #include <QStatusBar>
 #include <QDir>
 #include <QInputDialog>
-#include <KMenu>
+#include <QMenu>
 
 /*!
 	\class ImportFileDialog
@@ -75,14 +78,16 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool fileDataSource, const Q
 	connect(importFileWidget, SIGNAL(checkedFitsTableToMatrix(bool)), this, SLOT(checkOnFitsTableToMatrix(bool)));
 
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
-	setWindowIcon(KIcon("document-import-database"));
+	setWindowIcon(QIcon::fromTheme("document-import-database"));
+	setAttribute(Qt::WA_DeleteOnClose);
 
 	//restore saved settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	m_showOptions ? setButtonText(KDialog::User1, i18n("Hide Options")) : setButtonText(KDialog::User1, i18n("Show Options"));
 	importFileWidget->showOptions(m_showOptions);
-	restoreDialogSize(conf);
+
+	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
 
 ImportFileDialog::~ImportFileDialog() {
@@ -92,7 +97,77 @@ ImportFileDialog::~ImportFileDialog() {
 	if (cbPosition)
 		conf.writeEntry("Position", cbPosition->currentIndex());
 
-	saveDialogSize(conf);
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
+}
+
+/*!
+<<<<<<< HEAD
+=======
+	creates widgets for the frame "Add-To" and sets the current model in the combobox to \c model.
+ */
+void ImportFileDialog::setModel(QAbstractItemModel* model) {
+	DEBUG("ImportFileDialog::setModel()");
+	QDEBUG(" model =" << model);
+	//Frame for the "Add To"-Stuff
+	frameAddTo = new QGroupBox(this);
+	frameAddTo->setTitle(i18n("Import To"));
+	QGridLayout *grid = new QGridLayout(frameAddTo);
+	grid->addWidget(new QLabel(i18n("Data container"), frameAddTo), 0, 0);
+
+	cbAddTo = new TreeViewComboBox(frameAddTo);
+	cbAddTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	QList<const char *> list;
+	list << "Folder" << "Spreadsheet" << "Matrix" << "Workbook";
+	cbAddTo->setTopLevelClasses(list);
+	grid->addWidget(cbAddTo, 0, 1);
+
+	list.clear();
+	list << "Spreadsheet" << "Matrix" << "Workbook";
+	cbAddTo->setSelectableClasses(list);
+	cbAddTo->setModel(model);
+
+	tbNewDataContainer = new QToolButton(frameAddTo);
+	tbNewDataContainer->setIcon(QIcon::fromTheme("list-add"));
+	grid->addWidget(tbNewDataContainer, 0, 2);
+
+	lPosition = new QLabel(i18n("Position"), frameAddTo);
+	lPosition->setEnabled(false);
+	grid->addWidget(lPosition, 1, 0);
+
+	cbPosition = new QComboBox(frameAddTo);
+	cbPosition->setEnabled(false);
+	cbPosition->addItem(i18n("Append"));
+	cbPosition->addItem(i18n("Prepend"));
+	cbPosition->addItem(i18n("Replace"));
+	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
+	cbPosition->setCurrentIndex(conf.readEntry("Position", 0));
+
+	cbPosition->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+	grid->addWidget(cbPosition, 1, 1);
+
+	vLayout->addWidget(frameAddTo);
+
+	//menu for new data container
+	m_newDataContainerMenu = new QMenu(this);
+	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-workbook-new"), i18n("new Workbook") );
+	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-spreadsheet-new"), i18n("new Spreadsheet") );
+	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-matrix-new"), i18n("new Matrix") );
+
+	//ok is only available if a valid container was selected
+	enableButtonOk(false);
+
+	connect(cbAddTo, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(checkOkButton()));
+	connect(tbNewDataContainer, SIGNAL(clicked(bool)), this, SLOT(newDataContainerMenu()));
+	connect(m_newDataContainerMenu, SIGNAL(triggered(QAction*)), this, SLOT(newDataContainer(QAction*)));
+	DEBUG("ImportFileDialog::setModel() DONE");
+}
+
+void ImportFileDialog::setCurrentIndex(const QModelIndex& index) {
+	DEBUG("ImportFileDialog::setCurrentIndex()");
+	QDEBUG(" index =" << index);
+	cbAddTo->setCurrentModelIndex(index);
+	QDEBUG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
+	checkOkButton();
 }
 
 /*!
@@ -278,7 +353,7 @@ void ImportFileDialog::checkOkButton() {
 		if (!fileName.isEmpty() && fileName.left(1) != QDir::separator())
 			fileName = QDir::homePath() + QDir::separator() + fileName;
 #endif
-	} else {
+	} else {	// FileDataSource::FITS
 		int extensionBraceletPos = -1;
 		if (!fileName.isEmpty()) {
 			if(fileName.right(1) == QLatin1String("]")) {
@@ -290,10 +365,11 @@ void ImportFileDialog::checkOkButton() {
 				}
 			}
 		}
-
+#ifndef HAVE_WINDOWS
 		if (fileName.left(1) != QDir::separator())
 			fileName = QDir::homePath() + QDir::separator() + fileName.mid(0, extensionBraceletPos);
 		else
+#endif
 			fileName = fileName.mid(0, extensionBraceletPos);
 	}
 	DEBUG(" fileName = " << fileName.toUtf8().constData());

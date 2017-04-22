@@ -33,6 +33,9 @@
 
 #include <QPainter>
 #include <QDir>
+#include <KLocale>
+#include <KConfig>
+#include <KConfigGroup>
 
 #include <cmath>
 

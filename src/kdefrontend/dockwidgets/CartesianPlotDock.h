@@ -34,6 +34,8 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "ui_cartesianplotdock.h"
 #include <QList>
+#include <KConfig>
+#include <KLocalizedString>
 
 class LabelWidget;
 class KUrlCompletion;

@@ -39,6 +39,8 @@
 #include <QMenu>
 #include <QWidgetAction>
 
+#include <KLocalizedString>
+
 /*!
   \class XYEquationCurveDock
   \brief  Provides a widget for editing the properties of the XYEquationCurves
@@ -75,18 +77,18 @@ void XYEquationCurveDock::setupGeneral() {
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
-	uiGeneralTab.tbConstants1->setIcon( KIcon("labplot-format-text-symbol") );
-	uiGeneralTab.tbFunctions1->setIcon( KIcon("preferences-desktop-font") );
+	uiGeneralTab.tbConstants1->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
+	uiGeneralTab.tbFunctions1->setIcon( QIcon::fromTheme("preferences-desktop-font") );
 
-	uiGeneralTab.tbConstants2->setIcon( KIcon("labplot-format-text-symbol") );
-	uiGeneralTab.tbFunctions2->setIcon( KIcon("preferences-desktop-font") );
+	uiGeneralTab.tbConstants2->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
+	uiGeneralTab.tbFunctions2->setIcon( QIcon::fromTheme("preferences-desktop-font") );
 
 	uiGeneralTab.cbType->addItem(i18n("cartesian"));
 	uiGeneralTab.cbType->addItem(i18n("polar"));
 	uiGeneralTab.cbType->addItem(i18n("parametric"));
 // 	uiGeneralTab.cbType->addItem(i18n("implicit"));
 
-	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	uiGeneralTab.teEquation2->setExpressionType(XYEquationCurve::Parametric);
 

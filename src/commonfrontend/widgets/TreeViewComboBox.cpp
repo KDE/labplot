@@ -207,6 +207,7 @@ void TreeViewComboBox::treeViewIndexActivated(const QModelIndex& index) {
 	setCurrentIndex(0);
 	QComboBox::setItemText(0, "");
 	emit currentModelIndexChanged(QModelIndex());
+
 	m_groupBox->hide();
 }
 

@@ -34,14 +34,14 @@
 
 #include <QApplication>
 #include <QBuffer>
-#include <QtConcurrentRun>
+#include <QtConcurrent/QtConcurrentRun>
 #include <QDesktopWidget>
 #include <QPainter>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 
-#include <KIcon>
+#include <QIcon>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
@@ -165,8 +165,8 @@ void TextLabel::handlePageResize(double horizontalRatio, double verticalRatio) {
 /*!
 	Returns an icon to be used in the project explorer.
 */
-QIcon TextLabel::icon() const {
-	return  KIcon("draw-text");
+QIcon TextLabel::icon() const{
+	return  QIcon::fromTheme("draw-text");
 }
 
 QMenu* TextLabel::createContextMenu() {

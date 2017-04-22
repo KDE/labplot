@@ -30,12 +30,15 @@
 #ifndef IMPORTFILEDIALOG_H
 #define IMPORTFILEDIALOG_H
 
-#include "kdefrontend/datasources/ImportDialog.h"
+#include <KDialog>
+#include <QMenu>
 
 class AbstractAspect;
 class MainWin;
 class ImportFileWidget;
 class FileDataSource;
+class TreeViewComboBox;
+
 class QStatusBar;
 
 class ImportFileDialog : public ImportDialog {
@@ -54,6 +57,7 @@ public:
 private:
 	ImportFileWidget* importFileWidget;
 	bool m_showOptions;
+	QMenu* m_newDataContainerMenu;
 
 private slots:
 	void toggleOptions();

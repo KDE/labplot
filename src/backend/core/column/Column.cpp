@@ -34,6 +34,15 @@
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 
+extern "C" {
+#include <gsl/gsl_sort.h>
+}
+
+#include <QFont>
+#include <QFontMetrics>
+#include <QThreadPool>
+#include <QIcon>
+#include <KLocale>
 #include <QThreadPool>
 #ifndef NDEBUG
 #include <QDebug>
@@ -578,15 +587,15 @@ void Column::setChanged() {
 QIcon Column::icon() const {
 	switch(columnMode()) {
 	case AbstractColumn::Numeric:
-		return KIcon("x-shape-text");
+		return QIcon::fromTheme("x-shape-text");
 	case AbstractColumn::Text:
-		return KIcon("draw-text");
+		return QIcon::fromTheme("draw-text");
 	case AbstractColumn::DateTime:
 	case AbstractColumn::Month:
 	case AbstractColumn::Day:
-		return KIcon("chronometer");
+		return QIcon::fromTheme("chronometer");
 	}
-	return KIcon("x-shape-text");
+	return QIcon::fromTheme("x-shape-text");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

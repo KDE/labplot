@@ -38,8 +38,6 @@
 #include <QVector3D>
 
 #include <KLocale>
-#include <KIcon>
-#include <KAction>
 #include <KConfigGroup>
 
 /**
@@ -98,7 +96,7 @@ void DatapickerCurve::init() {
 }
 
 void DatapickerCurve::initAction() {
-	updateDatasheetAction = new KAction(KIcon("view-refresh"), i18n("Update Spreadsheet"), this);
+	updateDatasheetAction = new QAction(QIcon::fromTheme("view-refresh"), i18n("Update Spreadsheet"), this);
 	connect( updateDatasheetAction, SIGNAL(triggered()), this, SLOT(updateDatasheet()) );
 }
 
@@ -106,7 +104,7 @@ void DatapickerCurve::initAction() {
     Returns an icon to be used in the project explorer.
 */
 QIcon DatapickerCurve::icon() const {
-	return  KIcon("labplot-xy-curve");
+	return  QIcon::fromTheme("labplot-xy-curve");
 }
 
 /*!

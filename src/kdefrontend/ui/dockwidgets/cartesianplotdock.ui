@@ -241,7 +241,7 @@
        </item>
        <item row="11" column="2">
         <widget class="KLineEdit" name="kleXMin">
-         <property name="clickMessage">
+         <property name="placeholderText">
           <string>Auto</string>
          </property>
          <property name="showClearButton" stdset="0">
@@ -258,7 +258,7 @@
        </item>
        <item row="12" column="2">
         <widget class="KLineEdit" name="kleXMax">
-         <property name="clickMessage">
+         <property name="placeholderText">
           <string>Auto</string>
          </property>
          <property name="showClearButton" stdset="0">
@@ -274,7 +274,7 @@
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="KComboBox" name="cbXScaling"/>
+        <widget class="QComboBox" name="cbXScaling"/>
        </item>
        <item row="14" column="0">
         <spacer name="verticalSpacer_6">
@@ -314,7 +314,7 @@
        </item>
        <item row="17" column="2">
         <widget class="KLineEdit" name="kleYMin">
-         <property name="clickMessage">
+         <property name="placeholderText">
           <string>Auto</string>
          </property>
          <property name="showClearButton" stdset="0">
@@ -344,7 +344,7 @@
        </item>
        <item row="18" column="2">
         <widget class="KLineEdit" name="kleYMax">
-         <property name="clickMessage">
+         <property name="placeholderText">
           <string>Auto</string>
          </property>
          <property name="showClearButton" stdset="0">
@@ -367,7 +367,7 @@
         </widget>
        </item>
        <item row="19" column="2">
-        <widget class="KComboBox" name="cbYScaling"/>
+        <widget class="QComboBox" name="cbYScaling"/>
        </item>
        <item row="21" column="0">
         <widget class="QCheckBox" name="chkVisible">
@@ -483,7 +483,7 @@
            </widget>
           </item>
           <item>
-           <widget class="KComboBox" name="cbXBreak">
+           <widget class="QComboBox" name="cbXBreak">
             <property name="toolTip">
              <string>Current scale breaking</string>
             </property>
@@ -624,7 +624,7 @@
            </widget>
           </item>
           <item>
-           <widget class="KComboBox" name="cbYBreak">
+           <widget class="QComboBox" name="cbYBreak">
             <property name="toolTip">
              <string>Current scale breaking</string>
             </property>
@@ -691,7 +691,7 @@
         </widget>
        </item>
        <item row="5" column="3" colspan="3">
-        <widget class="KComboBox" name="cbXBreakStyle"/>
+        <widget class="QComboBox" name="cbXBreakStyle"/>
        </item>
        <item row="11" column="3" colspan="3">
         <widget class="QSpinBox" name="sbYBreakPosition">
@@ -704,7 +704,7 @@
         </widget>
        </item>
        <item row="12" column="3" colspan="3">
-        <widget class="KComboBox" name="cbYBreakStyle"/>
+        <widget class="QComboBox" name="cbYBreakStyle"/>
        </item>
       </layout>
      </widget>
@@ -750,7 +750,7 @@
         </spacer>
        </item>
        <item row="1" column="2">
-        <widget class="KComboBox" name="cbBackgroundType">
+        <widget class="QComboBox" name="cbBackgroundType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -800,7 +800,7 @@
         </widget>
        </item>
        <item row="3" column="2">
-        <widget class="KComboBox" name="cbBackgroundColorStyle"/>
+        <widget class="QComboBox" name="cbBackgroundColorStyle"/>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="lBackgroundImageStyle">
@@ -810,7 +810,7 @@
         </widget>
        </item>
        <item row="4" column="2">
-        <widget class="KComboBox" name="cbBackgroundImageStyle"/>
+        <widget class="QComboBox" name="cbBackgroundImageStyle"/>
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="lBackgroundBrushStyle">
@@ -820,7 +820,7 @@
         </widget>
        </item>
        <item row="5" column="2">
-        <widget class="KComboBox" name="cbBackgroundBrushStyle"/>
+        <widget class="QComboBox" name="cbBackgroundBrushStyle"/>
        </item>
        <item row="6" column="0">
         <widget class="QLabel" name="lBackgroundFirstColor">
@@ -917,7 +917,7 @@
         </widget>
        </item>
        <item row="11" column="2">
-        <widget class="KComboBox" name="cbBorderStyle">
+        <widget class="QComboBox" name="cbBorderStyle">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -1114,16 +1114,6 @@
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

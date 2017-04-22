@@ -46,7 +46,7 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
 	setMainWidget(mainWidget);
 
 	setWindowTitle(i18n("Specify the new keyword"));
-	setWindowIcon(KIcon("document-new"));
+	setWindowIcon(QIcon::fromTheme("document-new"));
 	setButtons(KDialog::Ok | KDialog::Cancel);
 	setButtonText(KDialog::Ok, i18n("&Add keyword"));
 

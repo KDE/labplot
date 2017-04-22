@@ -44,7 +44,6 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 
-#include <KIcon>
 #include <KConfigGroup>
 #include <KLocale>
 
@@ -120,7 +119,7 @@ void DatapickerImage::init() {
     Returns an icon to be used in the project explorer.
 */
 QIcon DatapickerImage::icon() const {
-	return KIcon("image-x-generic");
+	return QIcon::fromTheme("image-x-generic");
 }
 
 /*!

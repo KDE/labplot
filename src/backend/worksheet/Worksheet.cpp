@@ -40,8 +40,10 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 
-#include <KIcon>
+#include "QIcon"
+#include <KConfig>
 #include <KConfigGroup>
+#include <KLocalizedString>
 #include <cmath>
 
 /**
@@ -143,7 +145,7 @@ float Worksheet::convertFromSceneUnits(const float value, const Worksheet::Unit 
 }
 
 QIcon Worksheet::icon() const {
-	return KIcon("labplot-worksheet");
+	return QIcon::fromTheme("labplot-worksheet");
 }
 
 /**

@@ -33,6 +33,9 @@
 #include <KLocale>
 #include <QFileInfo>
 #include <QProcess>
+#include <QDialogButtonBox>
+#include <QIcon>
+#include <QVBoxLayout>
 
  /*!
 	\class ImportWidget
@@ -41,26 +44,26 @@
 	\ingroup kdefrontend
  */
 
-FileInfoDialog::FileInfoDialog(QWidget* parent) : KDialog(parent) {
+FileInfoDialog::FileInfoDialog(QWidget* parent) : QDialog(parent) {
+
 	textEditWidget.setReadOnly(true);
 	textEditWidget.setLineWrapMode(QTextEdit::NoWrap);
-	setMainWidget( &textEditWidget );
-	setButtons( KDialog::Ok);
-	setWindowIcon(KIcon("help-about"));
-	setCaption(i18n("File info"));
-	setAttribute(Qt::WA_DeleteOnClose);
 
-	//restore saved settings if available
-	KConfigGroup conf(KSharedConfig::openConfig(), "FileInfoDialog");
-	if (conf.exists())
-		restoreDialogSize(conf);
-	else
-		resize( QSize(500,300).expandedTo(minimumSize()) );
-}
+	QVBoxLayout *layout = new QVBoxLayout(this);
+	layout->addWidget(&textEditWidget);
 
-FileInfoDialog::~FileInfoDialog() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "FileInfoDialog");
-	saveDialogSize(conf);
+	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+
+	layout->addWidget(buttonBox);
+
+	setWindowIcon(QIcon::fromTheme("help-about"));
+	setWindowTitle(i18n("File info"));
+
+	setLayout(layout);
+
+	resize( QSize(500,300) );
 }
 
 void FileInfoDialog::setFiles(QStringList& files) {
@@ -72,10 +75,10 @@ void FileInfoDialog::setFiles(QStringList& files) {
 		if(fileName.isEmpty())
 			continue;
 
-        if (!infoString.isEmpty())
-            infoString += "<br><br><br>";
+		if (!infoString.isEmpty())
+			infoString += "<br><br><br>";
 
-        infoString += FileDataSource::fileInfoString(fileName);
+		infoString += FileDataSource::fileInfoString(fileName);
 	}
 
 	textEditWidget.document()->setHtml(infoString);

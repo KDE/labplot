@@ -87,7 +87,7 @@ void XYIntegrationCurveDock::setupGeneral() {
 	for (int i=0; i < NSL_INT_NETHOD_COUNT; i++)
 		uiGeneralTab.cbMethod->addItem(i18n(nsl_int_method_name[i]));
 
-	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);

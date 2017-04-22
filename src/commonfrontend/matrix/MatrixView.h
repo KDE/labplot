@@ -31,6 +31,7 @@
 #define MATRIXVIEW_H
 
 #include <QWidget>
+#include <QPrinter>
 #include <QList>
 #include "backend/datasources/filters/FITSFilter.h"
 #include "kdefrontend/widgets/FITSHeaderEditWidget.h"

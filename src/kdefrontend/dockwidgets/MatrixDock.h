@@ -32,6 +32,8 @@
 #include "backend/matrix/Matrix.h"
 #include "ui_matrixdock.h"
 
+#include <KConfig>
+#include <KConfigGroup>
 class MatrixDock: public QWidget {
 	Q_OBJECT
 

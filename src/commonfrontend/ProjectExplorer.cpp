@@ -47,7 +47,7 @@
 #include <KIconLoader>
 #include <KLineEdit>
 #include <KLocale>
-#include <KMenu>
+#include <QMenu>
 
 /*!
   \class ProjectExplorer
@@ -77,7 +77,7 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) {
 
 	leFilter= new KLineEdit(frameFilter);
 	qobject_cast<KLineEdit*>(leFilter)->setClearButtonShown(true);
-	qobject_cast<KLineEdit*>(leFilter)->setClickMessage(i18n("Search/Filter text"));
+	qobject_cast<KLineEdit*>(leFilter)->setPlaceholderText(i18n("Search/Filter text"));
 	layoutFilter->addWidget(leFilter);
 
 	bFilterOptions = new QPushButton(frameFilter);
@@ -265,8 +265,8 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 	QContextMenuEvent* e = static_cast<QContextMenuEvent*>(event);
 
 	//Menu for showing/hiding the columns in the tree view
-	KMenu* columnsMenu = new KMenu(h);
-	columnsMenu->addTitle(i18n("Columns"));
+	QMenu* columnsMenu = new QMenu(h);
+	columnsMenu->addSection(i18n("Columns"));
 	columnsMenu->addAction(showAllColumnsAction);
 	columnsMenu->addSeparator();
 	for (int i=0; i<list_showColumnActions.size(); i++)

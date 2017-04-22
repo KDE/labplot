@@ -41,6 +41,8 @@ extern "C" {
 #include "backend/gsl/parser.h"
 }
 
+#include <cmath>
+
 ExpressionParser* ExpressionParser::instance = NULL;
 
 ExpressionParser::ExpressionParser() {

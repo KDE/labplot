@@ -33,6 +33,7 @@
 
 class AbstractAspect;
 class CustomPoint;
+class KConfig;
 
 class CustomPointDock : public QWidget {
 	Q_OBJECT

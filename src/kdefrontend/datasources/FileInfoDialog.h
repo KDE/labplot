@@ -30,15 +30,14 @@
 #ifndef FILEINFODIALOG_H
 #define FILEINFODIALOG_H
 
-#include <KDialog>
+#include <QDialog>
 #include <QTextEdit>
 
-class FileInfoDialog: public KDialog {
+class FileInfoDialog: public QDialog {
 	Q_OBJECT
 
 	public:
 		explicit FileInfoDialog(QWidget* parent);
-		~FileInfoDialog();
 		void setFiles(QStringList&);
 
 	private:

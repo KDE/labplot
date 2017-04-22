@@ -37,7 +37,7 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 
-#include <KIcon>
+#include <QIcon>
 #include <KConfigGroup>
 #include <KLocale>
 
@@ -665,7 +665,7 @@ void Spreadsheet::sortColumns(Column *leading, QList<Column*> cols, bool ascendi
   Returns an icon to be used for decorating my views.
   */
 QIcon Spreadsheet::icon() const {
-	return KIcon("labplot-spreadsheet");
+	return QIcon::fromTheme("labplot-spreadsheet");
 }
 
 /*!

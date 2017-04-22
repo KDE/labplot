@@ -56,10 +56,11 @@
 #include <QMenu>
 #include <QToolBar>
 #include <QPainter>
+#include <QIcon>
+#include <QAction>
+#include <QWidgetAction>
 
 #include <KConfigGroup>
-#include <KIcon>
-#include <KAction>
 #include <KLocale>
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
@@ -351,26 +352,25 @@ void CartesianPlot::initDefault(Type type) {
 
 void CartesianPlot::initActions() {
 	//"add new" actions
-	addCurveAction = new KAction(KIcon("labplot-xy-curve"), i18n("xy-curve"), this);
-	addEquationCurveAction = new KAction(KIcon("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
+	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), this);
+	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical equation"), this);
 // no icons yet
-	addDataReductionCurveAction = new KAction(i18n("xy-curve from a data reduction"), this);
-	addDifferentiationCurveAction = new KAction(i18n("xy-curve from a differentiation"), this);
-	addIntegrationCurveAction = new KAction(i18n("xy-curve from an integration"), this);
-	addInterpolationCurveAction = new KAction(i18n("xy-curve from an interpolation"), this);
-	addSmoothCurveAction = new KAction(i18n("xy-curve from a smooth"), this);
-	addFitCurveAction = new KAction(KIcon("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
-	addFourierFilterCurveAction = new KAction(i18n("xy-curve from a Fourier filter"), this);
-	addFourierTransformCurveAction = new KAction(i18n("xy-curve from a Fourier transform"), this);
-//	addInterpolationCurveAction = new KAction(KIcon("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), this);
-//	addSmoothCurveAction = new KAction(KIcon("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), this);
-//	addFourierFilterCurveAction = new KAction(KIcon("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
-//	addFourierTransformCurveAction = new KAction(KIcon("labplot-xy-fourier_transform-curve"), i18n("xy-curve from a Fourier transform"), this);
-
-	addLegendAction = new KAction(KIcon("text-field"), i18n("legend"), this);
-	addHorizontalAxisAction = new KAction(KIcon("labplot-axis-horizontal"), i18n("horizontal axis"), this);
-	addVerticalAxisAction = new KAction(KIcon("labplot-axis-vertical"), i18n("vertical axis"), this);
-	addCustomPointAction = new KAction(KIcon("draw-cross"), i18n("custom point"), this);
+	addDataReductionCurveAction = new QAction(i18n("xy-curve from a data reduction"), this);
+	addDifferentiationCurveAction = new QAction(i18n("xy-curve from a differentiation"), this);
+	addIntegrationCurveAction = new QAction(i18n("xy-curve from an integration"), this);
+	addInterpolationCurveAction = new QAction(i18n("xy-curve from an interpolation"), this);
+	addSmoothCurveAction = new QAction(i18n("xy-curve from a smooth"), this);
+	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("xy-curve from a fit to data"), this);
+	addFourierFilterCurveAction = new QAction(i18n("xy-curve from a Fourier filter"), this);
+	addFourierTransformCurveAction = new QAction(i18n("xy-curve from a Fourier transform"), this);
+//	addInterpolationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("xy-curve from an interpolation"), this);
+//	addSmoothCurveAction = new QAction(QIcon::fromTheme("labplot-xy-smooth-curve"), i18n("xy-curve from a smooth"), this);
+//	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_filter-curve"), i18n("xy-curve from a Fourier filter"), this);
+//	addFourierTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier_transform-curve"), i18n("xy-curve from a Fourier transform"), this);
+	addLegendAction = new QAction(QIcon::fromTheme("text-field"), i18n("legend"), this);
+	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("horizontal axis"), this);
+	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("vertical axis"), this);
+	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("custom point"), this);
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
@@ -384,19 +384,19 @@ void CartesianPlot::initActions() {
 	connect(addCustomPointAction, SIGNAL(triggered()), SLOT(addCustomPoint()));
 
 	//zoom/navigate actions
-	scaleAutoAction = new KAction(KIcon("labplot-auto-scale-all"), i18n("auto scale"), this);
-	scaleAutoXAction = new KAction(KIcon("labplot-auto-scale-x"), i18n("auto scale X"), this);
-	scaleAutoYAction = new KAction(KIcon("labplot-auto-scale-y"), i18n("auto scale Y"), this);
-	zoomInAction = new KAction(KIcon("zoom-in"), i18n("zoom in"), this);
-	zoomOutAction = new KAction(KIcon("zoom-out"), i18n("zoom out"), this);
-	zoomInXAction = new KAction(KIcon("labplot-zoom-in-x"), i18n("zoom in X"), this);
-	zoomOutXAction = new KAction(KIcon("labplot-zoom-out-x"), i18n("zoom out X"), this);
-	zoomInYAction = new KAction(KIcon("labplot-zoom-in-y"), i18n("zoom in Y"), this);
-	zoomOutYAction = new KAction(KIcon("labplot-zoom-out-y"), i18n("zoom out Y"), this);
-	shiftLeftXAction = new KAction(KIcon("labplot-shift-left-x"), i18n("shift left X"), this);
-	shiftRightXAction = new KAction(KIcon("labplot-shift-right-x"), i18n("shift right X"), this);
-	shiftUpYAction = new KAction(KIcon("labplot-shift-up-y"), i18n("shift up Y"), this);
-	shiftDownYAction = new KAction(KIcon("labplot-shift-down-y"), i18n("shift down Y"), this);
+	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("auto scale"), this);
+	scaleAutoXAction = new QAction(QIcon::fromTheme("labplot-auto-scale-x"), i18n("auto scale X"), this);
+	scaleAutoYAction = new QAction(QIcon::fromTheme("labplot-auto-scale-y"), i18n("auto scale Y"), this);
+	zoomInAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("zoom in"), this);
+	zoomOutAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("zoom out"), this);
+	zoomInXAction = new QAction(QIcon::fromTheme("labplot-zoom-in-x"), i18n("zoom in X"), this);
+	zoomOutXAction = new QAction(QIcon::fromTheme("labplot-zoom-out-x"), i18n("zoom out X"), this);
+	zoomInYAction = new QAction(QIcon::fromTheme("labplot-zoom-in-y"), i18n("zoom in Y"), this);
+	zoomOutYAction = new QAction(QIcon::fromTheme("labplot-zoom-out-y"), i18n("zoom out Y"), this);
+	shiftLeftXAction = new QAction(QIcon::fromTheme("labplot-shift-left-x"), i18n("shift left X"), this);
+	shiftRightXAction = new QAction(QIcon::fromTheme("labplot-shift-right-x"), i18n("shift right X"), this);
+	shiftUpYAction = new QAction(QIcon::fromTheme("labplot-shift-up-y"), i18n("shift up Y"), this);
+	shiftDownYAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("shift down Y"), this);
 
 	connect(scaleAutoAction, SIGNAL(triggered()), SLOT(scaleAuto()));
 	connect(scaleAutoXAction, SIGNAL(triggered()), SLOT(scaleAutoX()));
@@ -459,6 +459,7 @@ void CartesianPlot::initMenus() {
 
 	themeMenu = new QMenu(i18n("Apply Theme"));
 	ThemesWidget* themeWidget = new ThemesWidget(0);
+	// TODO: SLOT: loadTheme(KConfig config)
 	connect(themeWidget, SIGNAL(themeSelected(QString)), this, SLOT(loadTheme(QString)));
 	connect(themeWidget, SIGNAL(themeSelected(QString)), themeMenu, SLOT(close()));
 
@@ -487,7 +488,7 @@ QMenu* CartesianPlot::createContextMenu() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon CartesianPlot::icon() const {
-	return KIcon("office-chart-line");
+	return QIcon::fromTheme("office-chart-line");
 }
 
 void CartesianPlot::navigate(CartesianPlot::NavigationOperation op) {

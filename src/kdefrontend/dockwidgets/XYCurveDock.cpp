@@ -43,6 +43,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <KUrlCompletion>
+#include <KConfigGroup>
 
 /*!
   \class XYCurveDock
@@ -71,7 +72,7 @@ XYCurveDock::XYCurveDock(QWidget *parent): QWidget(parent),
 	//Tab "Filling"
 	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.kleFillingFileName->setClearButtonShown(true);
-	ui.bFillingOpen->setIcon( KIcon("document-open") );
+	ui.bFillingOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	ui.kleFillingFileName->setCompletionObject(m_completion);
 
@@ -399,7 +400,7 @@ void XYCurveDock::init() {
 		pa.translate(iconSize/2,iconSize/2);
 		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
 		pa.end();
-		ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style));
+        ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style));
 	}
 
 	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
@@ -487,7 +488,7 @@ void XYCurveDock::init() {
 void XYCurveDock::setModel() {
 	QList<const char*>  list;
 	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
-	    <<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
+		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve"<<"CantorWorksheet";
 
 	if (cbXColumn) {
 		cbXColumn->setTopLevelClasses(list);

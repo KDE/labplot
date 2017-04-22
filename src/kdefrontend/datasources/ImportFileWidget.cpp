@@ -41,6 +41,11 @@ Copyright            : (C) 2009-2017 Alexander Semke (alexander.semke@web.de)
 #include <QDir>
 #include <QFileDialog>
 #include <QProcess>
+#include <KUrlCompletion>
+#include <KLocalizedString>
+#include <KSharedConfig>
+#include <KConfigGroup>
+#include <QDebug>
 #include <QTimer>
 #include <QStandardItemModel>
 #include <QImageReader>
@@ -149,13 +154,13 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, const QString& fileName) : Q
 
 	ui.gbOptions->hide();
 
-	ui.bOpen->setIcon( KIcon("document-open") );
-	ui.bFileInfo->setIcon( KIcon("help-about") );
-	ui.bManageFilters->setIcon( KIcon("configure") );
-	ui.bSaveFilter->setIcon( KIcon("document-save") );
-	ui.bRefreshPreview->setIcon( KIcon("view-refresh") );
-	hdfOptionsWidget.bRefreshPreview->setIcon( KIcon("view-refresh") );
-	netcdfOptionsWidget.bRefreshPreview->setIcon( KIcon("view-refresh") );
+	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
+	ui.bFileInfo->setIcon( QIcon::fromTheme("help-about") );
+	ui.bManageFilters->setIcon( QIcon::fromTheme("configure") );
+	ui.bSaveFilter->setIcon( QIcon::fromTheme("document-save") );
+	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+	hdfOptionsWidget.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+	netcdfOptionsWidget.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
 
 	connect( ui.kleFileName, SIGNAL(textChanged(QString)), SLOT(fileNameChanged(QString)) );
 	connect( ui.bOpen, SIGNAL(clicked()), this, SLOT (selectFile()) );

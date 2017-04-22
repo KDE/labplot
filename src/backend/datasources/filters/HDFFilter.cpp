@@ -40,7 +40,6 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include <QDebug>
 #include <QTreeWidgetItem>
 #include <KLocale>
-#include <KIcon>
 #include <cmath>
 
 /*!
@@ -1021,7 +1020,7 @@ void HDFFilterPrivate::scanHDFDataType(hid_t tid, char *dataSetName, QTreeWidget
 	handleError(status, "H5Iget_name");
 
 	QTreeWidgetItem* dataTypeItem = new QTreeWidgetItem(QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data type")<<typeProps.join("")<<attr);
-	dataTypeItem->setIcon(0, KIcon("accessories-calculator"));
+	dataTypeItem->setIcon(0, QIcon::fromTheme("accessories-calculator"));
 	dataTypeItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(dataTypeItem);
 }
@@ -1081,7 +1080,7 @@ void HDFFilterPrivate::scanHDFDataSet(hid_t did, char *dataSetName, QTreeWidgetI
 	dataSetProps << ", " << readHDFPropertyList(pid).join("");
 
 	QTreeWidgetItem* dataSetItem = new QTreeWidgetItem(QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data set")<<dataSetProps.join("")<<attr);
-	dataSetItem->setIcon(0, KIcon("x-office-spreadsheet"));
+	dataSetItem->setIcon(0, QIcon::fromTheme("x-office-spreadsheet"));
 	for (int i = 0; i < dataSetItem->columnCount(); i++) {
 		if (rows > 0 && cols > 0 && regs > 0) {
 			dataSetItem->setBackground(i, QColor(192,255,192));
@@ -1100,7 +1099,7 @@ void HDFFilterPrivate::scanHDFLink(hid_t gid, char *linkName, QTreeWidgetItem* p
 	handleError(status, "H5Gget_linkval");
 
 	QTreeWidgetItem* linkItem = new QTreeWidgetItem(QStringList()<<QString(linkName) << i18n("symbolic link") << i18n("link to") + QString(target));
-	linkItem->setIcon(0, KIcon("emblem-symbolic-link"));
+	linkItem->setIcon(0, QIcon::fromTheme("emblem-symbolic-link"));
 	linkItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(linkItem);
 }
@@ -1114,7 +1113,7 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 	if (statbuf.nlink > 1) {
 		if (multiLinkList.contains(statbuf.objno[0])) {
 			QTreeWidgetItem* objectItem = new QTreeWidgetItem(QStringList()<<QString(groupName) << i18n("hard link"));
-			objectItem->setIcon(0, KIcon("link"));
+			objectItem->setIcon(0, QIcon::fromTheme("link"));
 			objectItem->setFlags(Qt::ItemIsEnabled);
 			parentItem->addChild(objectItem);
 			return;
@@ -1132,8 +1131,8 @@ void HDFFilterPrivate::scanHDFGroup(hid_t gid, char *groupName, QTreeWidgetItem*
 
 	QString attr = scanHDFAttrs(gid).join(" ");
 
-	QTreeWidgetItem* groupItem = new QTreeWidgetItem(QStringList() << QString(groupName) << QString(link) << QLatin1String("group ")<<attr);
-	groupItem->setIcon(0, KIcon("folder"));
+	QTreeWidgetItem* groupItem = new QTreeWidgetItem(QStringList() << QString(groupName) << QString(link) << QLatin1String("group ") << attr);
+	groupItem->setIcon(0, QIcon::fromTheme("folder"));
 	groupItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(groupItem);
 

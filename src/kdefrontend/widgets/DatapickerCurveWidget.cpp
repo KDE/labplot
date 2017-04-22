@@ -33,6 +33,8 @@
 
 #include <QPainter>
 
+#include <KLocale>
+
 #include <cmath>
 
 DatapickerCurveWidget::DatapickerCurveWidget(QWidget *parent) : QWidget(parent), m_suppressTypeChange(false) {

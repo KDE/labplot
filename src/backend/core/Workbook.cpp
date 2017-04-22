@@ -34,9 +34,7 @@
 #include "commonfrontend/workbook/WorkbookView.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 
-#include "KIcon"
 #include <KLocale>
-#include <QDebug>
 
 /**
  * \class Workbook
@@ -48,7 +46,7 @@ Workbook::Workbook(AbstractScriptingEngine* engine, const QString& name)
 }
 
 QIcon Workbook::icon() const {
-	return KIcon("labplot-workbook");
+    return QIcon::fromTheme("labplot-workbook");
 }
 
 /*!

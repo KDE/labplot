@@ -34,8 +34,9 @@
 #include <QListWidgetItem>
 #include <QStandardItemModel>
 #include <QFile>
-#include <KStandardDirs>
 
+#include <KGlobal>
+#include <KStandardDirs>
 #include <KMessageBox>
 #include <kdebug.h>
 // #include <knewstuff3/downloaddialog.h>
@@ -53,15 +54,16 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	setResizeMode(QListWidget::Adjust);
 
 	//make the icon 3x3cm big and show two of them in the height
-	int size = 3/2.54*QApplication::desktop()->physicalDpiX();
-	setIconSize(QSize(size,size));
-	setMinimumSize(1.1*size,2.1*size); //add some offset here to take care of potential scrollbars, etc. (not very precise...)
+	int size = 3.0/2.54 * QApplication::desktop()->physicalDpiX();
+	setIconSize(QSize(size, size));
+	setMinimumSize(1.1*size, 2.1*size); //add some offset here to take care of potential scrollbars, etc. (not very precise...)
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	//show preview pixmaps
 	QStandardItemModel* mContentItemModel = new QStandardItemModel(this);
 	QStringList themeList = ThemeHandler::themes();
-	QStringList themeImgPathList = KGlobal::dirs()->findDirs("data", "labplot2/themes/screenshots/");
+	QStringList themeImgPathList = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "labplot2/themes/screenshots/", QStandardPaths::LocateDirectory);
+	themeImgPathList.append(QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes/screenshots/", QStandardPaths::LocateDirectory));
 	if (themeImgPathList.isEmpty())
 		return;
 	QString themeImgPath = themeImgPathList.first();
@@ -71,7 +73,7 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 		QStandardItem* listItem = new QStandardItem();
 
 		tempPath = themeImgPath + themeList.at(i) + ".png";
-		if(!QFile::exists(tempPath))
+		if (!QFile::exists(tempPath))
 			tempPath = themeImgPath + "Unavailable.png";
 
 		listItem->setIcon(QIcon(QPixmap(tempPath)));
@@ -91,7 +93,7 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	setModel(mContentItemModel);
 
 	//SLOTS
-	connect( this, SIGNAL(clicked(QModelIndex)), this, SLOT(applyClicked()) );
+	connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(applyClicked()));
 }
 
 void ThemesWidget::applyClicked() {

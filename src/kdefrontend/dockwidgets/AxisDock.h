@@ -31,6 +31,7 @@
 
 #include "ui_axisdock.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include <KConfig>
 
 class AbstractAspect;
 class LabelWidget;

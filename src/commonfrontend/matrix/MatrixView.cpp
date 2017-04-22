@@ -58,7 +58,7 @@
 
 #include <KLocale>
 #include <KAction>
-#include <KIcon>
+#include <QIcon>
 
 #include <cfloat>
 #include <cmath>
@@ -141,30 +141,30 @@ void MatrixView::init() {
 
 void MatrixView::initActions() {
 	// selection related actions
-	action_cut_selection = new KAction(KIcon("edit-cut"), i18n("Cu&t"), this);
-	action_copy_selection = new KAction(KIcon("edit-copy"), i18n("&Copy"), this);
-	action_paste_into_selection = new KAction(KIcon("edit-paste"), i18n("Past&e"), this);
-	action_clear_selection = new KAction(KIcon("edit-clear"), i18n("Clea&r Selection"), this);
-	action_select_all = new KAction(KIcon("edit-select-all"), i18n("Select All"), this);
+    action_cut_selection = new QAction(QIcon::fromTheme("edit-cut"), i18n("Cu&t"), this);
+    action_copy_selection = new QAction(QIcon::fromTheme("edit-copy"), i18n("&Copy"), this);
+    action_paste_into_selection = new QAction(QIcon::fromTheme("edit-paste"), i18n("Past&e"), this);
+    action_clear_selection = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Selection"), this);
+    action_select_all = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this);
 
 	// matrix related actions
 	QActionGroup* viewActionGroup = new QActionGroup(this);
 	viewActionGroup->setExclusive(true);
-	action_data_view = new KAction(KIcon("labplot-matrix"), i18n("Data"), viewActionGroup);
+    action_data_view = new QAction(QIcon::fromTheme("labplot-matrix"), i18n("Data"), viewActionGroup);
 	action_data_view->setCheckable(true);
 	action_data_view->setChecked(true);
-	action_image_view = new KAction(KIcon("image-x-generic"), i18n("Image"), viewActionGroup);
+    action_image_view = new QAction(QIcon::fromTheme("image-x-generic"), i18n("Image"), viewActionGroup);
 	action_image_view->setCheckable(true);
 	connect(viewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(switchView(QAction*)));
 
-	action_fill_function = new KAction(KIcon(""), i18n("Function Values"), this);
-	action_fill_const = new KAction(KIcon(""), i18n("Const Values"), this);
-	action_clear_matrix = new KAction(KIcon("edit-clear"), i18n("Clear Matrix"), this);
-	action_go_to_cell = new KAction(KIcon("go-jump"), i18n("&Go to Cell"), this);
+    action_fill_function = new QAction(QIcon::fromTheme(""), i18n("Function Values"), this);
+    action_fill_const = new QAction(QIcon::fromTheme(""), i18n("Const Values"), this);
+    action_clear_matrix = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Matrix"), this);
+    action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell"), this);
 
-	action_transpose = new KAction(i18n("&Transpose"), this);
-	action_mirror_horizontally = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
-	action_mirror_vertically = new KAction(KIcon("object-flip-vertical"), i18n("Mirror &Vertically"), this);
+    action_transpose = new QAction(i18n("&Transpose"), this);
+    action_mirror_horizontally = new QAction(QIcon::fromTheme("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
+    action_mirror_vertically = new QAction(QIcon::fromTheme("object-flip-vertical"), i18n("Mirror &Vertically"), this);
 // 	action_duplicate = new QAction(i18nc("duplicate matrix", "&Duplicate"), this);
 	//TODO
 	//icon
@@ -179,18 +179,18 @@ void MatrixView::initActions() {
 	connect(headerFormatActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(headerFormatChanged(QAction*)));
 
 	// column related actions
-	action_add_columns = new KAction(KIcon("edit-table-insert-column-right"), i18n("&Add Columns"), this);
-	action_insert_columns = new KAction(KIcon("edit-table-insert-column-left"), i18n("&Insert Empty Columns"), this);
-	action_remove_columns = new KAction(KIcon("edit-table-delete-column"), i18n("Remo&ve Columns"), this);
-	action_clear_columns = new KAction(KIcon("edit-clear"), i18n("Clea&r Columns"), this);
-	action_statistics_columns = new KAction(KIcon("view-statistics"), i18n("Statisti&cs"), this);
+	action_add_columns = new QAction(QIcon::fromTheme("edit-table-insert-column-right"), i18n("&Add Columns"), this);
+	action_insert_columns = new QAction(QIcon::fromTheme("edit-table-insert-column-left"), i18n("&Insert Empty Columns"), this);
+	action_remove_columns = new QAction(QIcon::fromTheme("edit-table-delete-column"), i18n("Remo&ve Columns"), this);
+	action_clear_columns = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Columns"), this);
+	action_statistics_columns = new QAction(QIcon::fromTheme("view-statistics"), i18n("Statisti&cs"), this);
 
 	// row related actions
-	action_add_rows = new KAction(KIcon("edit-table-insert-row-above"), i18n("&Add Rows"), this);
-	action_insert_rows = new KAction(KIcon("edit-table-insert-row-above") ,i18n("&Insert Empty Rows"), this);
-	action_remove_rows = new KAction(KIcon("edit-table-delete-row"), i18n("Remo&ve Rows"), this);
-	action_clear_rows = new KAction(KIcon("edit-clear"), i18n("Clea&r Rows"), this);
-	action_statistics_rows = new KAction(KIcon("view-statistics"), i18n("Statisti&cs"), this);
+	action_add_rows = new QAction(QIcon::fromTheme("edit-table-insert-row-above"), i18n("&Add Rows"), this);
+	action_insert_rows = new QAction(QIcon::fromTheme("edit-table-insert-row-above") ,i18n("&Insert Empty Rows"), this);
+	action_remove_rows = new QAction(QIcon::fromTheme("edit-table-delete-row"), i18n("Remo&ve Rows"), this);
+	action_clear_rows = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Rows"), this);
+	action_statistics_rows = new QAction(QIcon::fromTheme("view-statistics"), i18n("Statisti&cs"), this);
 }
 
 void MatrixView::connectActions() {

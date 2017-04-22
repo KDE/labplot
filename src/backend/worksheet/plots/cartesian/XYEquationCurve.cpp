@@ -40,7 +40,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/gsl/ExpressionParser.h"
 
-#include <KIcon>
+#include <QIcon>
 #include <KLocale>
 
 XYEquationCurve::XYEquationCurve(const QString& name)
@@ -87,7 +87,7 @@ void XYEquationCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYEquationCurve::icon() const {
-	return KIcon("labplot-xy-equation-curve");
+	return QIcon::fromTheme("labplot-xy-equation-curve");
 }
 
 //##############################################################################

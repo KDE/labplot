@@ -383,7 +383,6 @@ bool Project::load(XmlStreamReader* reader) {
 	} else {// no start document
 		reader->raiseError(i18n("no valid XML document found"));
 	}
-
 	d->loading = false;
 	emit loaded();
 	return !reader->hasError();

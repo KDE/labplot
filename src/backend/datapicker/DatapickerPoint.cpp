@@ -36,7 +36,6 @@
 #include <QMenu>
 #include <QGraphicsSceneMouseEvent>
 
-#include <KIcon>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
@@ -49,11 +48,12 @@ float DatapickerPoint::selectedOpacity = 0.3;
  * \brief A customizable error-bar for DatapickerPoint.
  */
 
-ErrorBarItem::ErrorBarItem(DatapickerPoint *parent, const ErrorBarType& type) : QGraphicsRectItem(parent->graphicsItem(), 0),
-	barLineItem(new QGraphicsLineItem(parent->graphicsItem(), 0)),
+ErrorBarItem::ErrorBarItem(DatapickerPoint *parent, const ErrorBarType& type) :
+    QGraphicsRectItem(parent->graphicsItem()),
+    barLineItem(new QGraphicsLineItem(parent->graphicsItem())),
 	m_type(type),
-	m_parentItem(parent) {
-
+    m_parentItem(parent)
+{
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
@@ -176,7 +176,7 @@ void DatapickerPoint::initErrorBar(const DatapickerCurve::Errors& errors) {
     Returns an icon to be used in the project explorer.
 */
 QIcon DatapickerPoint::icon() const {
-	return  KIcon("draw-cross");
+    return QIcon::fromTheme("draw-cross");
 }
 
 QMenu* DatapickerPoint::createContextMenu() {

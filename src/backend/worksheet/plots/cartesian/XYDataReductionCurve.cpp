@@ -42,8 +42,8 @@
 
 #include <cmath>	// isnan
 
-#include <KIcon>
 #include <KLocale>
+#include <QIcon>
 #include <QElapsedTimer>
 #include <QThreadPool>
 
@@ -80,7 +80,7 @@ void XYDataReductionCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYDataReductionCurve::icon() const {
-	return KIcon("labplot-xy-data-reduction-curve");
+	return QIcon::fromTheme("labplot-xy-data-reduction-curve");
 }
 
 //##############################################################################

@@ -2,9 +2,9 @@
     File                 : SettingsDialog.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2017 by Alexander Semke (alexander.semke@web.de)
     Description          : application settings dialog
-                           
+
  ***************************************************************************/
 
 /***************************************************************************
@@ -30,6 +30,7 @@
 
 #include <KPageDialog>
 
+class QAbstractButton;
 class SettingsGeneralPage;
 class SettingsWorksheetPage;
 
@@ -42,9 +43,7 @@ class SettingsDialog : public KPageDialog {
 
 	private slots:
 		void changed();
-
-	protected slots:
-		virtual void slotButtonClicked(int button);
+		void slotButtonClicked(QAbstractButton*);
 
 	private:
 		bool m_changed;

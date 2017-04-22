@@ -30,10 +30,17 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include <KStandardDirs>
+#include <QStandardPaths>
+#include <KLocalizedString>
+#include <QDialogButtonBox>
+// #include <QPushButton>
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KWindowConfig>
 #include <QFileInfo>
 
 extern "C" {
+#include <stdio.h>
 #include "backend/nsl/nsl_sf_stats.h"
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
@@ -46,16 +53,21 @@ extern "C" {
 	\ingroup kdefrontend
  */
 
-RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : KDialog(parent, fl), m_spreadsheet(s) {
+RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFlags fl) : QDialog(parent, fl), m_spreadsheet(s) {
 	setWindowTitle(i18n("Random values"));
 
 	QWidget* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
-	setMainWidget(mainWidget);
+	QVBoxLayout *layout = new QVBoxLayout(this);
 
-	setButtons(KDialog::Ok | KDialog::Cancel);
-	setButtonText(KDialog::Ok, i18n("&Generate"));
-	setButtonToolTip(KDialog::Ok, i18n("Generate random values according to the selected distribution"));
+	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	okButton = buttonBox->button(QDialogButtonBox::Ok);
+	okButton->setDefault(true);
+	okButton->setToolTip(i18n("Generate random values according to the selected distribution"));
+	okButton->setText(i18n("&Generate"));
+	layout->addWidget(mainWidget);
+	layout->addWidget(buttonBox);
+	setLayout(layout);
 
 	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
                 ui.cbDistribution->addItem(i18n(nsl_sf_stats_distribution_name[i]), i);
@@ -78,17 +90,20 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent, Qt::WFla
 	connect( ui.kleParameter1, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
 	connect( ui.kleParameter2, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
 	connect( ui.kleParameter3, SIGNAL(textChanged(QString)), this, SLOT(checkValues()) );
-	connect(this, SIGNAL(okClicked()), this, SLOT(generate()));
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(generate()));
+	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
 
 	//restore saved settings if available
-	KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
+	const KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
 	if (conf.exists()) {
 		ui.cbDistribution->setCurrentIndex(conf.readEntry("Distribution", 0));
 		this->distributionChanged(ui.cbDistribution->currentIndex()); //if index=0 no signal is emmited above, call this slot directly here
 		ui.kleParameter1->setText(conf.readEntry("Parameter1"));
 		ui.kleParameter2->setText(conf.readEntry("Parameter2"));
 		ui.kleParameter3->setText(conf.readEntry("Parameter3"));
-		restoreDialogSize(conf);
+
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 	} else {
 		//Gaussian distribution as default
 		this->distributionChanged(0);
@@ -104,7 +119,8 @@ RandomValuesDialog::~RandomValuesDialog() {
 	conf.writeEntry("Parameter1", ui.kleParameter1->text());
 	conf.writeEntry("Parameter2", ui.kleParameter2->text());
 	conf.writeEntry("Parameter3", ui.kleParameter3->text());
-	saveDialogSize(conf);
+
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 void RandomValuesDialog::setColumns(QList<Column*> list) {
@@ -318,27 +334,28 @@ void RandomValuesDialog::distributionChanged(int index) {
 		break;
 	}
 
-	QString file = KStandardDirs::locate("appdata", "pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[dist]) + ".jpg");
+	QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[dist]) + ".jpg");
 	ui.lFuncPic->setPixmap(QPixmap(file));
 }
 
 void RandomValuesDialog::checkValues() {
 	if (ui.kleParameter1->text().simplified().isEmpty()) {
-		enableButton(KDialog::Ok, false);
+		okButton->setEnabled(false);
 		return;
 	}
 
 	if (ui.kleParameter2->isVisible() && ui.kleParameter2->text().simplified().isEmpty()) {
-		enableButton(KDialog::Ok, false);
+		okButton->setEnabled(false);
 		return;
 	}
 
 	if (ui.kleParameter3->isVisible() && ui.kleParameter3->text().simplified().isEmpty()) {
-		enableButton(KDialog::Ok, false);
+		okButton->setEnabled(false);
 		return;
 	}
 
-	enableButton(KDialog::Ok, true);
+	okButton->setEnabled(true);
+	return;
 }
 
 void RandomValuesDialog::generate() {

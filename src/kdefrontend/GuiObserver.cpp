@@ -39,6 +39,9 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/TextLabel.h"
+#ifdef HAVE_CANTOR_LIBS
+#include "backend/cantorWorksheet/CantorWorksheet.h"
+#endif
 #include "backend/core/Project.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/DatapickerImage.h"
@@ -65,6 +68,9 @@
 #include "kdefrontend/dockwidgets/XYSmoothCurveDock.h"
 #include "kdefrontend/dockwidgets/CustomPointDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
+#ifdef HAVE_CANTOR_LIBS
+#include "kdefrontend/dockwidgets/CantorWorksheetDock.h"
+#endif
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/widgets/DatapickerImageWidget.h"
 #include "kdefrontend/widgets/DatapickerCurveWidget.h"
@@ -74,6 +80,8 @@
 #include <QDockWidget>
 #include <QStackedWidget>
 #include <QToolBar>
+#include <QDebug>
+#include <KLocalizedString>
 
 /*!
   \class GuiObserver
@@ -459,9 +467,29 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		mainWindow->projectDock->setProject(mainWindow->m_project);
 
 		mainWindow->stackedWidget->setCurrentWidget(mainWindow->projectDock);
+	} else if (className=="CantorWorksheet"){
+		#ifdef HAVE_CANTOR_LIBS
+		if (!mainWindow->cantorWorksheetDock){
+			mainWindow->cantorWorksheetDock = new CantorWorksheetDock(mainWindow->stackedWidget);
+			connect(mainWindow->cantorWorksheetDock, SIGNAL(info(QString)), mainWindow->statusBar(), SLOT(showMessage(QString)));
+			mainWindow->stackedWidget->addWidget(mainWindow->cantorWorksheetDock);
+		}
 
-	} else if (className == "Note") {
-		mainWindow->m_propertiesDock->setWindowTitle(i18n("Note"));
+		QList<CantorWorksheet*> list;
+		foreach(aspect, selectedAspects){
+			list<<qobject_cast<CantorWorksheet *>(aspect);
+		}
+		if (list.size()==1){
+			mainWindow->m_propertiesDock->setWindowTitle(list.first()->backendName() + " Properties");
+		} else {
+			mainWindow->m_propertiesDock->setWindowTitle("CAS Properties");
+		}
+		mainWindow->cantorWorksheetDock->setCantorWorksheets(list);
+
+		mainWindow->stackedWidget->setCurrentWidget(mainWindow->cantorWorksheetDock);
+		#endif
+	} else if (className == "Notes") {
+		mainWindow->m_propertiesDock->setWindowTitle(i18n("Notes"));
 
 		if (!mainWindow->notesDock) {
 			mainWindow->notesDock = new NoteDock(mainWindow->stackedWidget);
@@ -512,3 +540,4 @@ void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect) const {
 		mainWindow->cartesianPlotLegendDock->activateTitleTab();
 	}
 }
+

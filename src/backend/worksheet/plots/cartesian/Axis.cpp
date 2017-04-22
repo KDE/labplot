@@ -45,7 +45,7 @@
 
 #include "kdefrontend/GuiTools.h"
 #include <KConfigGroup>
-#include <KIcon>
+#include <QIcon>
 #include <KLocale>
 
 #include <cfloat>
@@ -293,9 +293,9 @@ QIcon Axis::icon() const{
 	Q_D(const Axis);
 	QIcon ico;
 	if (d->orientation == Axis::AxisHorizontal)
-		ico = KIcon("labplot-axis-horizontal");
+		ico = QIcon::fromTheme("labplot-axis-horizontal");
 	else
-		ico = KIcon("labplot-axis-vertical");
+		ico = QIcon::fromTheme("labplot-axis-vertical");
 
 	return ico;
 }

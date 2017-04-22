@@ -30,6 +30,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QKeyEvent>
+#include <KLocalizedString>
 #ifndef NDEBUG
 #include <QDebug>
 #endif
@@ -46,8 +47,8 @@
 FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* data) : QWidget(parent),
 	m_fitData(data), m_changed(false), m_rehighlighting(false) {
 	ui.setupUi(this);
-	ui.pbApply->setIcon(KIcon("dialog-ok-apply"));
-	ui.pbCancel->setIcon(KIcon("dialog-cancel"));
+	ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
+	ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
 
 	ui.tableWidget->setColumnCount(5);
 
@@ -210,9 +211,9 @@ FitParametersWidget::FitParametersWidget(QWidget* parent, XYFitCurve::FitData* d
 			connect(le, SIGNAL(textChanged(QString)), this, SLOT(upperLimitChanged()) );
 		}
 		ui.tableWidget->setCurrentCell(0, 0);
-		ui.pbAdd->setIcon(KIcon("list-add"));
+		ui.pbAdd->setIcon(QIcon::fromTheme("list-add"));
 		ui.pbAdd->setVisible(true);
-		ui.pbRemove->setIcon(KIcon("list-remove"));
+		ui.pbRemove->setIcon(QIcon::fromTheme("list-remove"));
 		ui.pbRemove->setVisible(true);
 		ui.pbRemove->setEnabled(m_fitData->paramNames.size() > 1);
 	}

@@ -51,7 +51,6 @@
 #include <QMenu>
 // #include <QElapsedTimer>
 
-#include <KIcon>
 #include <KConfigGroup>
 #include <KGlobal>
 #include <KLocale>
@@ -152,7 +151,7 @@ void XYCurve::initActions() {
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, SIGNAL(triggered()), this, SLOT(visibilityChanged()));
 
-	navigateToAction = new QAction(KIcon("go-next-view"), "", this);
+	navigateToAction = new QAction(QIcon::fromTheme("go-next-view"), "", this);
 	connect(navigateToAction, SIGNAL(triggered()), this, SLOT(navigateTo()));
 }
 
@@ -183,7 +182,7 @@ QMenu* XYCurve::createContextMenu() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYCurve::icon() const {
-	return KIcon("labplot-xy-curve");
+	return QIcon::fromTheme("labplot-xy-curve");
 }
 
 QGraphicsItem* XYCurve::graphicsItem() const {
@@ -1936,7 +1935,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
  	DEBUG("XYCurvePrivate::paint() calling drawPixmap() or draw() 		XXXXXXXXXXXXXXXXXXXX");
-	if ( KGlobal::config()->group("Settings_Worksheet").readEntry(QLatin1String("DoubleBuffering"), true) )
+	if ( KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true) )
 		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); //draw the cached pixmap (fast)
 	else
 		draw(painter); //draw directly again (slow)

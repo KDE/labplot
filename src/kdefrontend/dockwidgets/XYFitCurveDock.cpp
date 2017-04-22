@@ -104,9 +104,9 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.lFuncPic->setAutoFillBackground(true);
 	uiGeneralTab.lFuncPic->setPalette(p);
 
-	uiGeneralTab.tbConstants->setIcon( KIcon("labplot-format-text-symbol") );
-	uiGeneralTab.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
-	uiGeneralTab.pbRecalculate->setIcon(KIcon("run-build"));
+	uiGeneralTab.tbConstants->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
+	uiGeneralTab.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -190,8 +190,8 @@ void XYFitCurveDock::initGeneralTab() {
 }
 
 void XYFitCurveDock::setModel() {
-	QList<const char*> list;
-	list << "Folder" << "Workbook" << "Spreadsheet" << "FileDataSource" << "Column" << "Datapicker";
+	QList<const char*>  list;
+	list << "Folder" << "Workbook" << "Spreadsheet" << "FileDataSource" << "Column" << "CantorWorksheet" << "Datapicker";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbWeightsColumn->setTopLevelClasses(list);
@@ -849,7 +849,8 @@ void XYFitCurveDock::updateModelEquation() {
 			numSuffix = "4";
 		if ((nsl_fit_model_type_basic)m_fitData.modelType == nsl_fit_model_power && num > 2)
 			numSuffix = "2";
-		file = KStandardDirs::locate("appdata", "pics/fit_models/" + QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
+		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
+			+ QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
 		break;
 	}
 	case nsl_fit_model_peak: {
@@ -857,14 +858,17 @@ void XYFitCurveDock::updateModelEquation() {
 		QString numSuffix = QString::number(num);
 		if (num > 4)
 			numSuffix = "4";
-		file = KStandardDirs::locate("appdata", "pics/fit_models/" + QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
+		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
+			+ QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".jpg");
 		break;
 	}
 	case nsl_fit_model_growth:
-		file = KStandardDirs::locate("appdata", "pics/fit_models/" + QString(nsl_fit_model_growth_pic_name[m_fitData.modelType]) + ".jpg");
+		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
+			+ QString(nsl_fit_model_growth_pic_name[m_fitData.modelType]) + ".jpg");
 		break;
 	case nsl_fit_model_distribution:
-		file = KStandardDirs::locate("appdata", "pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
+		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/gsl_distributions/"
+			+ QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".jpg");
 		// change label
 		if (m_fitData.modelType == nsl_sf_stats_poisson)
 			uiGeneralTab.lEquation->setText(("f(k)/A ="));

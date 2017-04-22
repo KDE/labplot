@@ -37,10 +37,15 @@
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/PropertyChangeCommand.h"
 
-#include <KIcon>
+#include <QIcon>
+#include <QMenu>
+#include <QStyle>
+#include <QApplication>
+#include <QXmlStreamWriter>
+
 #include <KAction>
 #include <KStandardAction>
-#include <KMenu>
+#include <QMenu>
 
 /**
  * \class AbstractAspect
@@ -290,18 +295,18 @@ QIcon AbstractAspect::icon() const {
  * The caller takes ownership of the menu.
  */
 QMenu* AbstractAspect::createContextMenu() {
-	KMenu* menu = new KMenu();
-	menu->addTitle(this->name());
+	QMenu* menu = new QMenu();
+	menu->addSection(this->name());
 	//TODO: activate this again when the functionality is implemented
 // 	menu->addAction( KStandardAction::cut(this) );
 // 	menu->addAction(KStandardAction::copy(this));
 // 	menu->addAction(KStandardAction::paste(this));
 // 	menu->addSeparator();
-	menu->addAction(QIcon(KIcon("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
+    menu->addAction(QIcon::fromTheme("edit-rename"), i18n("Rename"), this, SIGNAL(renameRequested()));
 
 	//don't allow to delete data spreadsheets in the datapicker curves
     if ( !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect())) )
-		menu->addAction(QIcon(KIcon("edit-delete")), i18n("Delete"), this, SLOT(remove()));
+		menu->addAction(QIcon::fromTheme("edit-delete"), i18n("Delete"), this, SLOT(remove()));
 
 	return menu;
 }
@@ -719,7 +724,8 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//the child column for calculated residuals
 	if (aspect->parentAspect() != 0
 		&& !aspect->parentAspect()->inherits("Folder")
-		&& !aspect->parentAspect()->inherits("XYFitCurve"))
+		&& !aspect->parentAspect()->inherits("XYFitCurve")
+		&& !aspect->parentAspect()->inherits("CantorWorksheet"))
 		emit aspect->parentAspect()->selected(aspect);
 }
 
@@ -730,7 +736,8 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	//the child column for calculated residuals
 	if (aspect->parentAspect() != 0
 		&& !aspect->parentAspect()->inherits("Folder")
-		&& !aspect->parentAspect()->inherits("XYFitCurve"))
+		&& !aspect->parentAspect()->inherits("XYFitCurve")
+		&& !aspect->parentAspect()->inherits("CantorWorksheet"))
 		emit aspect->parentAspect()->deselected(aspect);
 }
 

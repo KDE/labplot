@@ -34,18 +34,20 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QLabel>
+#include <QMenu>
 #include <QFileInfo>
 #include <QWidgetAction>
+#include <QDirIterator>
 
+#include <KGlobal>
 #include <KLocale>
 #include <KStandardDirs>
 #include <KLineEdit>
-#include <KMenu>
 #include <KConfig>
 #include <KConfigGroup>
 
 #include <KMessageBox>
-// #include <knewstuff3/uploaddialog.h>
+// #include <KNS3/UploadDialog>
 
 #include <unistd.h>
 
@@ -84,15 +86,22 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 // 	connect( pbPublishTheme, SIGNAL(clicked()), this, SLOT(publishThemes()));
 
 	//find all available themes files (system wide and user specific local files)
-	//the list m_themeList contains full pathes (path + file name)
-	m_themeList = KGlobal::dirs()->findAllResources("appdata", "themes/*");
+	//the list m_themeList contains full paths (path + file name)
+	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "labplot2/themes", QStandardPaths::LocateDirectory);
+	dirs.append(QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory));
+	foreach (const QString& dir, dirs) {
+		QDirIterator it(dir, QStringList() << QStringLiteral("*"), QDir::Files);
+		while (it.hasNext())
+			m_themeList.append(it.next());
+	}
+
 	pbLoadTheme->setEnabled(!m_themeList.isEmpty());
 }
 
 void ThemeHandler::loadSelected(QString name) {
 	QString themeFilePath;
-	foreach (QString filePath, m_themeList) {
-		if ( filePath.indexOf(name)!=-1 ) {
+	foreach (const QString& filePath, m_themeList) {
+		if (filePath.indexOf(name) != -1) {
 			themeFilePath = filePath;
 			break;
 		}
@@ -104,7 +113,7 @@ void ThemeHandler::loadSelected(QString name) {
 
 	//in case a local theme file was loaded (we have write access), allow to publish it
 	//TODO: activate this later
-// 	if (KGlobal::dirs()->checkAccess(themeFilePath, W_OK)) {
+// 	if (KStandardDirs::checkAccess(themeFilePath, W_OK)) {
 // 		pbPublishTheme->setEnabled(true);
 // 		m_currentLocalTheme = themeFilePath.right(themeFilePath.length() - themeFilePath.lastIndexOf(QDir::separator()) - 1);
 // 	} else {
@@ -114,8 +123,16 @@ void ThemeHandler::loadSelected(QString name) {
 }
 
 QStringList ThemeHandler::themes() {
-	QStringList pathList = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
-	pathList.append(KGlobal::dirs()->findAllResources("appdata", "themes/*"));
+	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "labplot2/themes", QStandardPaths::LocateDirectory);
+	dirs.append(QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory));
+
+	QStringList pathList;
+	foreach (const QString& dir, dirs) {
+		QDirIterator it(dir, QStringList() << QStringLiteral("*"), QDir::Files);
+		while (it.hasNext())
+			pathList.append(it.next());
+	}
+
 	QStringList themeList;
 	for (int i = 0; i < pathList.size(); ++i) {
 		QFileInfo fileinfo(pathList.at(i));
@@ -125,10 +142,18 @@ QStringList ThemeHandler::themes() {
 }
 
 const QString ThemeHandler::themeFilePath(const QString& name) {
-	QStringList themes = KGlobal::dirs()->findAllResources("data", "labplot2/themes/*");
-	themes.append(KGlobal::dirs()->findAllResources("appdata", "themes/*"));
+	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "labplot2/themes", QStandardPaths::LocateDirectory);
+	dirs.append(QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes", QStandardPaths::LocateDirectory));
+
+	QStringList themes;
+	foreach (const QString& dir, dirs) {
+		QDirIterator it(dir, QStringList() << QStringLiteral("*"), QDir::Files);
+		while (it.hasNext())
+			themes.append(it.next());
+	}
+
 	for (int i = 0; i < themes.size(); ++i) {
-		if ( themes.at(i).indexOf(name) != -1 )
+		if (themes.at(i).indexOf(name) != -1)
 			return themes.at(i);
 	}
 
@@ -152,8 +177,8 @@ void ThemeHandler::showPanel() {
 }
 
 void ThemeHandler::saveMenu() {
-	KMenu menu;
-	menu.addTitle(i18n("Save as"));
+	QMenu menu;
+	menu.addSection(i18n("Save as"));
 
 	// add editable action
 	QWidgetAction* widgetAction = new QWidgetAction(this);
@@ -171,13 +196,13 @@ void ThemeHandler::saveMenu() {
 	widgetAction->setDefaultWidget(frame);
 	menu.addAction(widgetAction);
 
-	QPoint pos(-menu.sizeHint().width()+pbSaveTheme->width(),-menu.sizeHint().height());
+	QPoint pos(-menu.sizeHint().width() + pbSaveTheme->width(), -menu.sizeHint().height());
 	menu.exec(pbSaveTheme->mapToGlobal(pos));
 	leFilename->setFocus();
 }
 
 void ThemeHandler::saveNewSelected(const QString& filename) {
-	KConfig config(KGlobal::dirs()->locateLocal("appdata", "themes") + '/' + filename, KConfig::SimpleConfig);
+	KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + '/' + "themes" + '/' + filename, KConfig::SimpleConfig);
 	emit (saveThemeRequested(config));
 	emit info( i18n("New theme \"%1\" was saved.", filename) );
 
@@ -195,14 +220,14 @@ void ThemeHandler::saveNewSelected(const QString& filename) {
  */
 // void ThemeHandler::publishThemes() {
 // 	int ret = KMessageBox::questionYesNo(this,
-// 					     i18n("Do you want to upload your theme %1 to public web server?").arg(m_currentLocalTheme),
-// 					     i18n("Publish Theme"));
+// 			i18n("Do you want to upload your theme %1 to public web server?").arg(m_currentLocalTheme),
+// 			i18n("Publish Theme"));
 // 	if (ret != KMessageBox::Yes)
 // 		return;
 // 
 // 	// creating upload dialog
 // 	KNS3::UploadDialog dialog("labplot2_themes.knsrc", this);
-// 	dialog.setUploadFile(KGlobal::dirs()->locateLocal("appdata", "themes") + '/' + m_currentLocalTheme);
+// 	dialog.setUploadFile(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + '/' + "themes" + '/' + m_currentLocalTheme);
 // 	dialog.setUploadName(m_currentLocalTheme);
 // 	//dialog.setDescription(); TODO: allow the user to provide a short description for the theme to be uploaded
 // 	dialog.exec();

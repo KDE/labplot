@@ -59,17 +59,17 @@ CartesianPlotDock::CartesianPlotDock(QWidget *parent): QWidget(parent),
 	ui.setupUi(this);
 
 	//"Coordinate system"-tab
-	ui.bAddXBreak->setIcon( KIcon("list-add") );
-	ui.bRemoveXBreak->setIcon( KIcon("list-remove") );
+	ui.bAddXBreak->setIcon( QIcon::fromTheme("list-add") );
+	ui.bRemoveXBreak->setIcon( QIcon::fromTheme("list-remove") );
 	ui.cbXBreak->addItem("1");
 
-	ui.bAddYBreak->setIcon( KIcon("list-add") );
-	ui.bRemoveYBreak->setIcon( KIcon("list-remove") );
+	ui.bAddYBreak->setIcon( QIcon::fromTheme("list-add") );
+	ui.bRemoveYBreak->setIcon( QIcon::fromTheme("list-remove") );
 	ui.cbYBreak->addItem("1");
 
 	//"Background"-tab
 	ui.kleBackgroundFileName->setClearButtonShown(true);
-	ui.bOpen->setIcon( KIcon("document-open") );
+	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	ui.kleBackgroundFileName->setCompletionObject(m_completion);
 
@@ -398,8 +398,8 @@ void CartesianPlotDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
 
-	foreach(CartesianPlot* plot, m_plotList)
-		plot->setVisible(state);
+    foreach(CartesianPlot* plot, m_plotList)
+            plot->setVisible(state);
 }
 
 void CartesianPlotDock::geometryChanged() {
@@ -416,9 +416,9 @@ void CartesianPlotDock::geometryChanged() {
 }
 
 /*!
-	Called when the layout in the worksheet gets changed.
-	Enables/disables the geometry widgets if the layout was deactivated/activated.
-	Shows the new geometry values of the first plot if the layout was activated.
+    Called when the layout in the worksheet gets changed.
+    Enables/disables the geometry widgets if the layout was deactivated/activated.
+    Shows the new geometry values of the first plot if the layout was activated.
  */
 void CartesianPlotDock::layoutChanged(Worksheet::Layout layout) {
 	bool b = (layout == Worksheet::NoLayout);
@@ -459,7 +459,7 @@ void CartesianPlotDock::xMaxChanged() {
 }
 
 /*!
-	called on scale changes (linear, log) for the x-axis
+    called on scale changes (linear, log) for the x-axis
  */
 void CartesianPlotDock::xScaleChanged(int scale) {
 	if (m_initializing)
@@ -500,7 +500,7 @@ void CartesianPlotDock::yMaxChanged() {
 }
 
 /*!
-	called on scale changes (linear, log) for the y-axis
+    called on scale changes (linear, log) for the y-axis
  */
 void CartesianPlotDock::yScaleChanged(int index) {
 	if (m_initializing)
@@ -882,11 +882,11 @@ void CartesianPlotDock::backgroundSecondColorChanged(const QColor& c) {
 }
 
 /*!
-	opens a file dialog and lets the user select the image file.
+    opens a file dialog and lets the user select the image file.
 */
 void CartesianPlotDock::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "CartesianPlotDock");
-	QString dir = conf.readEntry("LastImageDir", "");
+    KConfigGroup conf(KSharedConfig::openConfig(), "CartesianPlotDock");
+    QString dir = conf.readEntry("LastImageDir", "");
 
 	QString formats;
 	foreach(const QByteArray& format, QImageReader::supportedImageFormats()) {
@@ -898,12 +898,12 @@ void CartesianPlotDock::selectFile() {
 	if (path.isEmpty())
 		return; //cancel was clicked in the file-dialog
 
-	int pos = path.lastIndexOf(QDir::separator());
-	if (pos!=-1) {
-		QString newDir = path.left(pos);
-		if (newDir!=dir)
-			conf.writeEntry("LastImageDir", newDir);
-	}
+    int pos = path.lastIndexOf(QDir::separator());
+    if (pos!=-1) {
+        QString newDir = path.left(pos);
+        if (newDir!=dir)
+            conf.writeEntry("LastImageDir", newDir);
+    }
 
 	ui.kleBackgroundFileName->setText( path );
 

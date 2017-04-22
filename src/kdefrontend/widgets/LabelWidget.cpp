@@ -35,26 +35,27 @@
 #include <QSplitter>
 
 #include <KConfigGroup>
+#include <KSharedConfig>
 #include <KCharSelect>
-#include <KGlobal>
-#include <KConfig>
-#include <KMenu>
+#include <KLocalizedString>
+#include <QMenu>
 
 /*!
 	\class LabelWidget
  	\brief Widget for editing the properties of a TextLabel object, mostly used in an appropriate dock widget.
 
- 	In order the properties of the label to be shown, \c loadConfig() has to be called with the correspondig KConfigGroup
- 	(settings for a label in *Plot, Axis etc. or for an independent label on the worksheet).
+	In order the properties of the label to be shown, \c loadConfig() has to be called with the correspondig KConfigGroup
+	(settings for a label in *Plot, Axis etc. or for an independent label on the worksheet).
 
- 	\ingroup kdefrontend
+	\ingroup kdefrontend
  */
 LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	m_label(0),
 	m_initializing(false),
-	m_dateTimeMenu(new KMenu(this)),
+	m_dateTimeMenu(new QMenu(this)),
 	m_teXEnabled(false) {
 
+// see legacy/LabelWidget.cpp
 	ui.setupUi(this);
 
 	QSplitter* splitter = new QSplitter(Qt::Vertical, this);
@@ -70,15 +71,15 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	ui.kcbFontColor->setColor(Qt::black); // default color
 
 	//Icons
-	ui.tbFontBold->setIcon( KIcon("format-text-bold") );
-	ui.tbFontItalic->setIcon( KIcon("format-text-italic") );
-	ui.tbFontUnderline->setIcon( KIcon("format-text-underline") );
-	ui.tbFontStrikeOut->setIcon( KIcon("format-text-strikethrough") );
-	ui.tbFontSuperScript->setIcon( KIcon("format-text-superscript") );
-	ui.tbFontSubScript->setIcon( KIcon("format-text-subscript") );
-	ui.tbSymbols->setIcon( KIcon("labplot-format-text-symbol") );
-	ui.tbDateTime->setIcon( KIcon("chronometer") );
-	ui.tbTexUsed->setIcon( KIcon("labplot-TeX-logo") );
+	ui.tbFontBold->setIcon( QIcon::fromTheme("format-text-bold") );
+	ui.tbFontItalic->setIcon( QIcon::fromTheme("format-text-italic") );
+	ui.tbFontUnderline->setIcon( QIcon::fromTheme("format-text-underline") );
+	ui.tbFontStrikeOut->setIcon( QIcon::fromTheme("format-text-strikethrough") );
+	ui.tbFontSuperScript->setIcon( QIcon::fromTheme("format-text-superscript") );
+	ui.tbFontSubScript->setIcon( QIcon::fromTheme("format-text-subscript") );
+	ui.tbSymbols->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
+	ui.tbDateTime->setIcon( QIcon::fromTheme("chronometer") );
+	ui.tbTexUsed->setIcon( QIcon::fromTheme("labplot-TeX-logo") );
 
 	//Positioning and alignment
 	ui.cbPositionX->addItem(i18n("left"));
@@ -314,8 +315,8 @@ void LabelWidget::teXUsedChanged(bool checked) {
 	ui.kfontRequester->setVisible(!checked);
 
 	if (checked) {
-		KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_Worksheet"));
-		QString engine = group.readEntry("LaTeXEngine", "");
+		KConfigGroup conf(KSharedConfig::openConfig(), "Settings_Worksheet");
+		QString engine = conf.readEntry("LaTeXEngine", "");
 		if (engine == "xelatex" || engine == "lualatex") {
 			ui.lFontTeX->setVisible(true);
 			ui.kfontRequesterTeX->setVisible(true);
@@ -503,7 +504,7 @@ void LabelWidget::insertDateTime(QAction* action) {
 // geometry slots
 
 /*!
-	called when label's current horizontal position relative to its parent (left, center, right, custom ) is changed.
+    called when label's current horizontal position relative to its parent (left, center, right, custom ) is changed.
 */
 void LabelWidget::positionXChanged(int index) {
 	//Enable/disable the spinbox for the x- oordinates if the "custom position"-item is selected/deselected
@@ -522,7 +523,7 @@ void LabelWidget::positionXChanged(int index) {
 }
 
 /*!
-	called when label's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
+    called when label's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
 */
 void LabelWidget::positionYChanged(int index) {
 	//Enable/disable the spinbox for the y-coordinates if the "custom position"-item is selected/deselected

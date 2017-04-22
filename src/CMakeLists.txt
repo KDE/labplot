@@ -3,6 +3,7 @@ set(KDE_FRONTEND true)
 set(KDEFRONTEND_DIR kdefrontend)
 set(BACKEND_DIR backend)
 set(COMMONFRONTEND_DIR commonfrontend)
+set(CANTOR_DIR cantor)
 set(TOOLS_DIR tools)
 set(CMAKE_AUTOMOC ON)
 
@@ -252,6 +253,19 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/datapicker/DatapickerImageView.cpp
 )
 
+IF (${CANTOR_LIBS_FOUND})
+	set(CANTOR_SOURCES
+		${KDEFRONTEND_DIR}/dockwidgets/CantorWorksheetDock.cpp
+		${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp
+		${BACKEND_DIR}/cantorWorksheet/CantorWorksheet.cpp
+		${COMMONFRONTEND_DIR}/cantorWorksheet/CantorWorksheetView.cpp
+	)
+	set(CANTOR_UI_SOURCES ${KDEFRONTEND_DIR}/ui/dockwidgets/cantorworksheetdock.ui)
+	set(UI_SOURCES ${UI_SOURCES} ${CANTOR_UI_SOURCES})
+ELSE (${CANTOR_LIBS_FOUND})
+	set(CANTOR_SOURCES "")
+ENDIF (${CANTOR_LIBS_FOUND})
+
 set(TOOLS_SOURCES
 	${TOOLS_DIR}/TeXRenderer.cpp
 	${TOOLS_DIR}/EquationHighlighter.cpp
@@ -266,10 +280,13 @@ add_subdirectory( themes )
 ##############################################################################
 set( LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} )
 INCLUDE_DIRECTORIES( . ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/.. )
-kde4_add_ui_files( LABPLOT_SRCS ${UI_SOURCES} )
-kde4_add_executable( labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} )
-target_link_libraries( labplot2 ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTSQL_LIBRARIES})
-# ${KDE4_KNEWSTUFF3_LIBS}
+qt5_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
+add_executable( labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS} )
+target_link_libraries( labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTSQL_LIBRARIES} )
+#KF5::NewStuff
+IF (CANTOR_LIBS_FOUND)
+	target_link_libraries( labplot2 ${CANTOR_LIBS} )
+ENDIF ()
 IF (HDF5_FOUND)
 	target_link_libraries( labplot2 ${HDF5_C_LIBRARIES} )
 ENDIF ()
@@ -286,8 +303,9 @@ ENDIF ()
 
 ############## installation ################################
 
-install( TARGETS labplot2 DESTINATION ${BIN_INSTALL_DIR} )
-install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png DESTINATION  ${DATA_INSTALL_DIR}/${PROJECT_NAME} )
+install( TARGETS labplot2 DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc DESTINATION  ${KXMLGUI_INSTALL_DIR}/${PROJECT_NAME} )
+install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico DESTINATION  ${DATA_INSTALL_DIR}/${PROJECT_NAME} )
 install( PROGRAMS org.kde.labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
 install( FILES labplot2_themes.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )

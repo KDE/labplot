@@ -32,6 +32,8 @@
 
 #include "ui_spreadsheetdock.h"
 
+#include <KConfig>
+
 class Spreadsheet;
 class AbstractAspect;
 

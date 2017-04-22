@@ -46,8 +46,8 @@ extern "C" {
 #include <gsl/gsl_errno.h>
 }
 
-#include <KIcon>
 #include <KLocale>
+#include <QIcon>
 #include <QElapsedTimer>
 #include <QThreadPool>
 
@@ -84,7 +84,7 @@ void XYDifferentiationCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYDifferentiationCurve::icon() const {
-	return KIcon("labplot-xy-differentiation-curve");
+	return QIcon::fromTheme("labplot-xy-differentiation-curve");
 }
 
 //##############################################################################

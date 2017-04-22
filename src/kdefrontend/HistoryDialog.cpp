@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <QUndoStack>
 #include <QUndoView>
+#include <KWindowConfig>
 
 /*!
 	\class HistoryDialog
@@ -39,13 +40,14 @@
  */
 HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& emptyLabel) : KDialog(parent), m_undoStack(stack) {
 	QUndoView* undoView = new QUndoView(stack, this);
-	undoView->setCleanIcon( KIcon("edit-clear-history") );
+	undoView->setCleanIcon( QIcon::fromTheme("edit-clear-history") );
 	undoView->setEmptyLabel(emptyLabel);
+	undoView->setMinimumWidth(350);
 	undoView->setWhatsThis(i18n("List of all performed steps/actions.\n"
 	                            "Select an item in the list to navigate to the corresponding step."));
 	setMainWidget(undoView);
 
-	setWindowIcon( KIcon("view-history") );
+	setWindowIcon( QIcon::fromTheme("view-history") );
 	setWindowTitle(i18n("Undo/Redo History"));
 	showButtonSeparator(true);
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -53,7 +55,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 	if (stack->count()) {
 		setButtons( KDialog::Ok | KDialog::User1 | KDialog::Cancel );
 		setButtonToolTip(KDialog::User1, i18n("Clears the undo history. Commands are not undone or redone; the state of the project remains unchanged."));
-		setButtonIcon(KDialog::User1, KIcon("edit-clear"));
+		setButtonIcon(KDialog::User1, QIcon::fromTheme("edit-clear"));
 		setButtonText(KDialog::User1, i18n("Clear"));
 		connect(this,SIGNAL(user1Clicked()), this, SLOT(clearUndoStack()));
 	} else
@@ -62,7 +64,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 	//restore saved dialog size if available
 	KConfigGroup conf(KSharedConfig::openConfig(), "HistoryDialog");
 	if (conf.exists())
-		restoreDialogSize(conf);
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 	else
 		resize( QSize(500, 300).expandedTo(minimumSize()) );
 }
@@ -70,7 +72,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 HistoryDialog::~HistoryDialog() {
 	//save dialog size
 	KConfigGroup conf(KSharedConfig::openConfig(), "HistoryDialog");
-	saveDialogSize(conf);
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 void HistoryDialog::clearUndoStack() {

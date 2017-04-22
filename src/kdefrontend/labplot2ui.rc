@@ -31,6 +31,10 @@
 <text>Spreadsheet</text>
 </ToolBar>
 
+<ToolBar name="cas_worksheet_toolbar" >
+<text>CAS Worksheet</text>
+</ToolBar>
+
 <ToolBar name="cartesian_plot_toolbar" >
 <text>CartesianPlot</text>
 </ToolBar>
@@ -49,6 +53,10 @@
 	<Separator/>
 	<Action name="new_file_datasource" />
 	<Action name="new_database_datasource" />
+	<Separator/>
+	<Menu name="new_cas_worksheet"><text>&amp;CAS Worksheet</text>
+	    <ActionList name="backends_list" />
+	</Menu>
 </Menu>
 <Separator/>
 <Menu name="import"><text>Import</text>
@@ -66,6 +74,7 @@
 <Menu name="spreadsheet"><text>&amp;Spreadsheet</text></Menu>
 <Menu name="matrix"><text>&amp;Matrix</text></Menu>
 <Menu name="worksheet"><text>&amp;Worksheet</text></Menu>
+<Menu name="cas_worksheet"><text>&amp;CAS Worksheet</text></Menu>
 <Menu name="analysis"><text>&amp;Analysis</text></Menu>
 <Menu name="datapicker"><text>&amp;Datapicker</text></Menu>
 <!-- <Menu name="drawing"><text>&amp;Drawing</text></Menu> -->

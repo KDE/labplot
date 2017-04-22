@@ -54,9 +54,9 @@ extern "C" {
 }
 #include <cmath>
 
-#include <KIcon>
-#include <KLocale>
 #include <QElapsedTimer>
+#include <QIcon>
+#include <KLocalizedString>
 #include <QThreadPool>
 
 XYFitCurve::XYFitCurve(const QString& name)
@@ -91,7 +91,7 @@ void XYFitCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYFitCurve::icon() const {
-	return KIcon("labplot-xy-fit-curve");
+	return QIcon::fromTheme("labplot-xy-fit-curve");
 }
 
 //##############################################################################

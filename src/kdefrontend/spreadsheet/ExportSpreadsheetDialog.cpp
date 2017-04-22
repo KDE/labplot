@@ -32,6 +32,13 @@
 #include <QStandardItemModel>
 
 #include <KMessageBox>
+#include <KLocalizedString>
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KWindowConfig>
+#include <QStandardItemModel>
+#include <QLabel>
+#include <QComboBox>
 #include <KUrlCompletion>
 
 /*!
@@ -41,7 +48,7 @@
 	\ingroup kdefrontend
 */
 ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(parent),
-	m_matrixMode(false), m_format(Format::ASCII), urlCompletion(new KUrlCompletion) {
+		m_matrixMode(false), m_format(Format::ASCII), urlCompletion(new KUrlCompletion) {
 	mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
 	ui.gbOptions->hide();
@@ -68,7 +75,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	ui.cbLaTeXExport->addItem(i18n("Export spreadsheet"));
 	ui.cbLaTeXExport->addItem(i18n("Export selection"));
 
-	ui.bOpen->setIcon( KIcon("document-open") );
+	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 
 	setMainWidget( mainWidget );
 
@@ -81,7 +88,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	connect(ui.cbExportToFITS, SIGNAL(currentIndexChanged(int)), this, SLOT(fitsExportToChanged(int)));
 
 	setCaption(i18n("Export spreadsheet"));
-	setWindowIcon(KIcon("document-export-database"));
+	setWindowIcon(QIcon::fromTheme("document-export-database"));
 
 	//restore saved settings
 
@@ -101,7 +108,8 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : KDialog(pare
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	ui.gbOptions->setVisible(m_showOptions);
 	m_showOptions ? setButtonText(KDialog::User1,i18n("Hide Options")) : setButtonText(KDialog::User1,i18n("Show Options"));
-	restoreDialogSize(conf);
+
+	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
 
 ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
@@ -121,7 +129,7 @@ ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 	conf.writeEntry("FITSTo", ui.cbExportToFITS->currentIndex());
 	conf.writeEntry("FITSSpreadsheetColumnsUnits", ui.chkColumnsAsUnits->isChecked());
 
-	saveDialogSize(conf);
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 	delete urlCompletion;
 }
 

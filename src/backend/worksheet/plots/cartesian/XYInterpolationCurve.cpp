@@ -50,10 +50,10 @@ extern "C" {
 #include "backend/nsl/nsl_int.h"
 }
 
-#include <KIcon>
 #include <KLocale>
 #include <QElapsedTimer>
 #include <QThreadPool>
+#include <QIcon>
 
 XYInterpolationCurve::XYInterpolationCurve(const QString& name)
 		: XYCurve(name, new XYInterpolationCurvePrivate(this)) {
@@ -88,7 +88,7 @@ void XYInterpolationCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYInterpolationCurve::icon() const {
-	return KIcon("labplot-xy-interpolation-curve");
+	return QIcon::fromTheme("labplot-xy-interpolation-curve");
 }
 
 //##############################################################################

@@ -99,19 +99,16 @@ int BinaryFilter::dataSize(BinaryFilter::DataType type) {
   returns the number of rows (length of vectors) in the file \c fileName.
 */
 long BinaryFilter::rowNumber(const QString & fileName, const int vectors, const BinaryFilter::DataType type) {
-	QIODevice *device = KFilterDev::deviceForFile(fileName);
-	if (!device->open(QIODevice::ReadOnly))
+	KFilterDev device(fileName);
+	if (!device.open(QIODevice::ReadOnly))
 		return 0;
 
-	QDataStream in(device);
 	long rows=0;
-	while (!in.atEnd()) {
+	while (!device.atEnd()) {
 		// one row
-		for (int i=0; i < vectors; ++i) {
-			for (int j=0; j < BinaryFilter::dataSize(type); ++j) {
-				qint8 tmp;
-				in >> tmp;
-			}
+		for (int i=0; i < vectors; ++i){
+			for (int j=0; j < BinaryFilter::dataSize(type); ++j)
+				device.read(1);
 		}
 		rows++;
 	}
@@ -215,11 +212,11 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) :
 QList<QStringList> BinaryFilterPrivate::readData(const QString & fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
 	QList<QStringList> dataStrings;
 
-	QIODevice *device = KFilterDev::deviceForFile(fileName);
-	if (! device->open(QIODevice::ReadOnly))
+	KFilterDev device(fileName);
+	if (! device.open(QIODevice::ReadOnly))
 		return dataStrings << (QStringList() << i18n("could not open device"));
 
-	QDataStream in(device);
+	QDataStream in(&device);
 
 	if (byteOrder == BinaryFilter::BigEndian)
 		in.setByteOrder(QDataStream::BigEndian);

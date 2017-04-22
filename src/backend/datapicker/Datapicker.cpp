@@ -36,7 +36,7 @@
 #include "backend/datapicker/DatapickerPoint.h"
 
 #include <QGraphicsScene>
-#include "KIcon"
+#include "QIcon"
 #include <KLocale>
 
 /**
@@ -74,7 +74,7 @@ void Datapicker::init() {
     Returns an icon to be used in the project explorer.
 */
 QIcon Datapicker::icon() const {
-	return KIcon("color-picker-black");
+	return QIcon::fromTheme("color-picker-black");
 }
 
 /*!

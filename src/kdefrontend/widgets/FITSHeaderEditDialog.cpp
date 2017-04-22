@@ -27,6 +27,7 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 
 #include "FITSHeaderEditDialog.h"
 #include <KSharedConfig>
+#include <KWindowConfig>
 
 /*! \class FITSHeaderEditDialog
  * \brief Dialog class for editing FITS header units.
@@ -38,7 +39,7 @@ FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : KDialog(parent), m
 	setMainWidget(m_headerEditWidget);
 
 	setWindowTitle(i18n("FITS Metadata Editor"));
-	setWindowIcon(KIcon("document-edit"));
+	setWindowIcon(QIcon::fromTheme("document-edit"));
 
 	setButtons( KDialog::Ok | KDialog::Cancel );
 	setButtonText(KDialog::Ok, i18n("&Save"));
@@ -52,7 +53,7 @@ FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : KDialog(parent), m
 	//restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditDialog");
 	if (conf.exists())
-		restoreDialogSize(conf);
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 	else
 		resize( QSize(400,0).expandedTo(minimumSize()) );
 }
@@ -62,7 +63,7 @@ FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : KDialog(parent), m
  */
 FITSHeaderEditDialog::~FITSHeaderEditDialog() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditDialog");
-	saveDialogSize(conf);
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 	delete m_headerEditWidget;
 }
 

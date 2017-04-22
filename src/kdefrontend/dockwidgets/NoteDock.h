@@ -32,6 +32,7 @@
 #include <QWidget>
 #include "backend/note/Note.h"
 #include "ui_notedock.h"
+#include <KConfig>
 
 class NoteDock : public QWidget {
 	Q_OBJECT

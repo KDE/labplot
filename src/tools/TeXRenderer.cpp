@@ -37,6 +37,7 @@
 #include <QImage>
 #include <QColor>
 #include <QDir>
+#include <QDebug>
 #include <QTemporaryFile>
 #include <QTextStream>
 #include <QProcess>
@@ -88,7 +89,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	}
 
 	//determine latex engine to be used
-	KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_Worksheet"));
+	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
 	QString engine = group.readEntry("LaTeXEngine", "pdflatex");
 
 	// create latex code
@@ -157,6 +158,32 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 		QFile::remove(fi.completeBaseName() + ".log");
 		return QImage();
 	}
+
+/// HEAD
+		//TODO: pdflatex doesn't come back with EX_OK
+// 		if(latexProcess.exitCode() != 0)	// skip if pdflatex failed
+// 			return QImage();
+
+		// convert: PDF -> PNG
+///		convertProcess.start("convert",  QStringList() << "-density"<< QString::number(dpi) + 'x' + QString::number(dpi)
+///														<< fi.completeBaseName() + ".pdf"
+///														<< fi.completeBaseName() + ".png");
+
+		// clean up and read png file
+///		if (convertProcess.waitForFinished()) {
+///			QFile::remove(fi.completeBaseName()+".pdf");
+
+///			QImage image;
+///			image.load(fi.completeBaseName()+".png");
+///			QFile::remove(fi.completeBaseName()+".png");
+
+///			return image;
+///		}else{
+///			QFile::remove(fi.completeBaseName()+".pdf");
+///			return QImage();
+///		}
+///	}else{
+///		qWarning()<<"pdflatex failed."<<endl;
 	*success = (latexProcess.exitCode() == 0);
 	if (*success == false)
 		WARNING("latex exit code = " << latexProcess.exitCode());
@@ -199,7 +226,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	QProcess latexProcess;
 	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
 	if (!latexProcess.waitForFinished()) {
-		kWarning() << "latex process failed." << endl;
+		qWarning() << "latex process failed." << endl;
 		QFile::remove(fi.completeBaseName() + ".aux");
 		QFile::remove(fi.completeBaseName() + ".log");
 		return QImage();
@@ -214,7 +241,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	QProcess dvipsProcess;
 	dvipsProcess.start("dvips", QStringList() << "-E" << fi.completeBaseName());
 	if (!dvipsProcess.waitForFinished()) {
-		kWarning() << "dvips process failed." << endl;
+		qWarning() << "dvips process failed." << endl;
 		QFile::remove(fi.completeBaseName() + ".dvi");
 		return QImage();
 	}
@@ -230,6 +257,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	convertProcess.start("convert", QStringList() << "-density" << QString::number(dpi) + 'x' + QString::number(dpi)
 			<< fi.completeBaseName() + ".ps" << fi.completeBaseName() + ".png");
 	if (!convertProcess.waitForFinished()) {
+		qWarning() << "convert process failed." << endl;
 		kWarning() << "convert process failed." << endl;
 		QFile::remove(fi.completeBaseName() + ".dvi");
 		QFile::remove(fi.completeBaseName() + ".ps");
@@ -249,7 +277,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 }
 
 bool TeXRenderer::enabled() {
-	KConfigGroup group = KGlobal::config()->group(QLatin1String("Settings_Worksheet"));
+	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
 	QString engine = group.readEntry("LaTeXEngine", "pdflatex");
 	if (engine.isEmpty() || !executableExists(engine)) {
 		WARNING("LaTeX engine does not exist");

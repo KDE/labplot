@@ -39,8 +39,8 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-#include <KIcon>
 #include <KLocale>
+#include <QIcon>
 #include <QElapsedTimer>
 #include <QThreadPool>
 
@@ -83,7 +83,7 @@ void XYSmoothCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYSmoothCurve::icon() const {
-	return KIcon("labplot-xy-smooth-curve");
+	return QIcon::fromTheme("labplot-xy-smooth-curve");
 }
 
 //##############################################################################

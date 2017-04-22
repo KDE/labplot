@@ -56,21 +56,21 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent) : QWidget(parent),
 	connect(ui.bAddUnit, SIGNAL(clicked(bool)), action_addmodify_unit, SIGNAL(toggled(bool)));
 	connect(ui.bClose, SIGNAL(clicked(bool)), this, SLOT(closeFile()));
 
-	ui.bOpen->setIcon(KIcon("document-open"));
+	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
 
-	ui.bAddKey->setIcon(KIcon("list-add"));
+	ui.bAddKey->setIcon(QIcon::fromTheme("list-add"));
 	ui.bAddKey->setEnabled(false);
 	ui.bAddKey->setToolTip(i18n("Add new keyword"));
 
-	ui.bRemoveKey->setIcon(KIcon("list-remove"));
+	ui.bRemoveKey->setIcon(QIcon::fromTheme("list-remove"));
 	ui.bRemoveKey->setEnabled(false);
 	ui.bRemoveKey->setToolTip(i18n("Remove selected keyword"));
 
-	ui.bAddUnit->setIcon(KIcon("document-new"));
+	ui.bAddUnit->setIcon(QIcon::fromTheme("document-new"));
 	ui.bAddUnit->setEnabled(false);
 	ui.bAddUnit->setToolTip(i18n("Add unit to keyword"));
 
-	ui.bClose->setIcon(KIcon("document-close"));
+	ui.bClose->setIcon(QIcon::fromTheme("document-close"));
 	ui.bClose->setEnabled(false);
 	ui.bClose->setToolTip(i18n("Close file"));
 
@@ -272,8 +272,8 @@ bool FITSHeaderEditWidget::save() {
  * \brief Initializes the context menu's actions.
  */
 void FITSHeaderEditWidget::initActions() {
-	action_add_keyword = new QAction(KIcon("list-add"), i18n("Add new keyword"), this);
-	action_remove_keyword = new QAction(KIcon("list-remove"), i18n("Remove keyword"), this);
+	action_add_keyword = new QAction(QIcon::fromTheme("list-add"), i18n("Add new keyword"), this);
+	action_remove_keyword = new QAction(QIcon::fromTheme("list-remove"), i18n("Remove keyword"), this);
 	action_remove_extension = new QAction(i18n("Delete"), this);
 	action_addmodify_unit = new QAction(i18n("Add unit"), this);
 }

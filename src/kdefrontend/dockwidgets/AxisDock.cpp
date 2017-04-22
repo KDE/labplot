@@ -39,6 +39,7 @@
 #include <QTimer>
 #include <QDir>
 #include <QPainter>
+#include <KLocalizedString>
 #include <KMessageBox>
 
 #include <cmath>

@@ -39,6 +39,7 @@ extern "C" {
 
 #include <QMenu>
 #include <QWidgetAction>
+#include <KLocalizedString>
 #include <QThreadPool>
 #ifndef NDEBUG
 #include <QDebug>
@@ -60,8 +61,8 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent, Qt::WFlag
 	ui.setupUi(mainWidget);
 	setMainWidget( mainWidget );
 
-	ui.tbConstants->setIcon( KIcon("labplot-format-text-symbol") );
-	ui.tbFunctions->setIcon( KIcon("preferences-desktop-font") );
+	ui.tbConstants->setIcon( QIcon::fromTheme("labplot-format-text-symbol") );
+	ui.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
 
 	QStringList vars;
 	vars << "x" << "y";
