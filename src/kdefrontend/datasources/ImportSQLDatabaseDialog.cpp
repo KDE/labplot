@@ -40,6 +40,8 @@
 #include <QProgressBar>
 #include <QStatusBar>
 
+#include <KLocale>
+
 /*!
     \class ImportSQLDatabaseDialog
     \brief Dialog for importing data from a SQL database. Embeds \c ImportSQLDatabaseWidget and provides the standard buttons.
@@ -56,7 +58,7 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent) : ImportDialog
 	setModel(parent->model());
 
 	setCaption(i18n("Import Data to Spreadsheet or Matrix"));
-	setWindowIcon(KIcon("document-import-database"));
+	setWindowIcon(QIcon::fromTheme("document-import-database"));
 
 	connect( importSQLDatabaseWidget, SIGNAL(stateChanged()), this, SLOT(importWidgetStateChanged()) );
 

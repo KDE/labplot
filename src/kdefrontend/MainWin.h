@@ -112,7 +112,8 @@ private:
 	QAction* m_saveAsAction;
 	QAction* m_printAction;
 	QAction* m_printPreviewAction;
-	QAction* m_importAction;
+	QAction* m_importFileAction;
+	QAction* m_importSqlAction;
 	QAction* m_exportAction;
 	QAction* m_closeAction;
 	QAction* m_newFolderAction;

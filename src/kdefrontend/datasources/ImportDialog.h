@@ -35,7 +35,7 @@ class AbstractAspect;
 class MainWin;
 class TreeViewComboBox;
 
-class KMenu;
+class QMenu;
 class QAbstractItemModel;
 class QLabel;
 class QModelIndex;
@@ -67,7 +67,7 @@ protected:
 	MainWin* m_mainWin;
 	QGroupBox* frameAddTo;
 	QToolButton* tbNewDataContainer;
-	KMenu* m_newDataContainerMenu;
+	QMenu* m_newDataContainerMenu;
 
 private slots:
 	void newDataContainerMenu();

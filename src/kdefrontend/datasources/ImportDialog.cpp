@@ -95,7 +95,7 @@ void ImportDialog::setModel(QAbstractItemModel* model) {
 	cbAddTo->setModel(model);
 
 	tbNewDataContainer = new QToolButton(frameAddTo);
-	tbNewDataContainer->setIcon(KIcon("list-add"));
+	tbNewDataContainer->setIcon(QIcon::fromTheme("list-add"));
 	grid->addWidget( tbNewDataContainer, 0, 2);
 
 	lPosition = new QLabel(i18n("Position"), frameAddTo);
@@ -116,10 +116,10 @@ void ImportDialog::setModel(QAbstractItemModel* model) {
 	vLayout->addWidget(frameAddTo);
 
 	//menu for new data container
-	m_newDataContainerMenu = new KMenu(this);
-	m_newDataContainerMenu->addAction( KIcon("labplot-workbook-new"), i18n("new Workbook") );
-	m_newDataContainerMenu->addAction( KIcon("labplot-spreadsheet-new"), i18n("new Spreadsheet") );
-	m_newDataContainerMenu->addAction( KIcon("labplot-matrix-new"), i18n("new Matrix") );
+	m_newDataContainerMenu = new QMenu(this);
+	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-workbook-new"), i18n("new Workbook") );
+	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-spreadsheet-new"), i18n("new Spreadsheet") );
+	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-matrix-new"), i18n("new Matrix") );
 
 	//ok is only available if a valid container was selected
 	enableButtonOk(false);

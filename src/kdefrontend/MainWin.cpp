@@ -196,7 +196,7 @@ void MainWin::initGUI(const QString& fileName) {
 	tbImport->setDefaultAction(m_importFileAction);
 	mainToolBar->addWidget(tbImport);
 
-	qobject_cast<QMenu*>(factory()->container("import", this))->setIcon(KIcon("document-import"));
+	qobject_cast<QMenu*>(factory()->container("import", this))->setIcon(QIcon::fromTheme("document-import"));
 	setWindowIcon(QIcon::fromTheme("LabPlot2"));
 	setAttribute( Qt::WA_DeleteOnClose );
 
@@ -305,12 +305,12 @@ void MainWin::initActions() {
 	connect(m_newFileDataSourceAction, SIGNAL(triggered()), this, SLOT(newFileDataSourceActionTriggered()));
 
 	//Import/Export
-	m_importAction = new QAction(QIcon::fromTheme("document-import"), i18n("Import"), this);
-	actionCollection()->setDefaultShortcut(m_importAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
-	actionCollection()->addAction("import", m_importAction);
-	connect(m_importAction, SIGNAL(triggered()), SLOT(importFileDialog()));
+	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("From File"), this);
+	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
+	actionCollection()->addAction("import_file", m_importFileAction);
+	connect(m_importFileAction, SIGNAL(triggered()), SLOT(importFileDialog()));
 
-	m_importSqlAction = new QAction(QIcon::fromeTheme("document-import-database"), i18n("From SQL Database"), this);
+	m_importSqlAction = new QAction(QIcon::fromTheme("document-import-database"), i18n("From SQL Database"), this);
 	actionCollection()->addAction("import_sql", m_importSqlAction);
 	connect(m_importSqlAction, SIGNAL(triggered()),SLOT(importSqlDialog()));
 
@@ -424,7 +424,7 @@ void MainWin::initMenus() {
 
 	//import menu
 	m_importMenu = new QMenu(this);
-	m_importMenu->setIcon(KIcon("document-import"));
+	m_importMenu->setIcon(QIcon::fromTheme("document-import"));
 	m_importMenu ->addAction(m_importFileAction);
 	m_importMenu ->addAction(m_importSqlAction);
 #ifdef HAVE_CANTOR_LIBS
@@ -1643,14 +1643,14 @@ void MainWin::importFileDialog(const QString& fileName) {
 	ImportFileDialog* dlg = new ImportFileDialog(this, false, fileName);
 
 	// explicitly do not delete on close (Windows does this!)
-	m_importFileDialog->setAttribute(Qt::WA_DeleteOnClose, false);
+	dlg->setAttribute(Qt::WA_DeleteOnClose, false);
 
 	// select existing container
 	if (m_currentAspect->inherits("Spreadsheet") || m_currentAspect->inherits("Matrix") || m_currentAspect->inherits("Workbook"))
 		dlg->setCurrentIndex( m_projectExplorer->currentIndex());
 	else if (m_currentAspect->inherits("Column")) {
 		if (m_currentAspect->parentAspect()->inherits("Spreadsheet"))
-			m_importFileDialog->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
+			dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 	}
 
 	if (dlg->exec() == QDialog::Accepted) {

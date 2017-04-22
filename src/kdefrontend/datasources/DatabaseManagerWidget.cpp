@@ -31,6 +31,8 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
 #include <KConfig>
 #include <KConfigGroup>
+#include <KGlobal>
+#include <KLocale>
 #include <KMessageBox>
 #include <KStandardDirs>
 
@@ -52,9 +54,9 @@ DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent, const QString& con
 
 	ui.setupUi(this);
 
-	ui.tbAdd->setIcon(KIcon("list-add"));
-	ui.tbDelete->setIcon(KIcon("list-remove"));
-	ui.bOpen->setIcon(KIcon("document-open"));
+	ui.tbAdd->setIcon(QIcon::fromTheme("list-add"));
+	ui.tbDelete->setIcon(QIcon::fromTheme("list-remove"));
+	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
 
 	ui.tbAdd->setToolTip(i18n("Add new database connection"));
 	ui.tbDelete->setToolTip(i18n("Delete selected database connection"));

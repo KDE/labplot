@@ -30,8 +30,7 @@
 #ifndef IMPORTFILEDIALOG_H
 #define IMPORTFILEDIALOG_H
 
-#include <KDialog>
-#include <QMenu>
+#include "ImportDialog.h"
 
 class AbstractAspect;
 class MainWin;
@@ -40,6 +39,7 @@ class FileDataSource;
 class TreeViewComboBox;
 
 class QStatusBar;
+class QMenu;
 
 class ImportFileDialog : public ImportDialog {
 	Q_OBJECT

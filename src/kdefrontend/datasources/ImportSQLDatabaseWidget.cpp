@@ -31,6 +31,8 @@
 #include "DatabaseManagerWidget.h"
 #include "backend/lib/macros.h"
 
+#include <KGlobal>
+#include <KLocale>
 #include <KMessageBox>
 #include <KStandardDirs>
 
@@ -44,7 +46,7 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(pare
 	ui.cbImportFrom->addItem(i18n("Table"));
 	ui.cbImportFrom->addItem(i18n("Custom query"));
 
-	ui.bDatabaseManager->setIcon(KIcon("network-server-database"));
+	ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
 
 	m_configPath = KGlobal::dirs()->locateLocal("appdata", "") + QLatin1String("sql_connections");
 
@@ -162,7 +164,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 		ui.lwTables->addItems(m_db.tables());
 		ui.lwTables->setCurrentRow(0);
 		for (int i = 0; i < ui.lwTables->count(); ++i)
-			ui.lwTables->item(i)->setIcon(KIcon("view-form-table"));
+			ui.lwTables->item(i)->setIcon(QIcon::fromTheme("view-form-table"));
 	} else
 		setInvalid();
 }

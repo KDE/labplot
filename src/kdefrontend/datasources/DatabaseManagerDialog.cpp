@@ -29,6 +29,9 @@
 #include "DatabaseManagerDialog.h"
 #include "DatabaseManagerWidget.h"
 
+#include <KLocale>
+#include <KSharedConfig>
+
 /*!
 	\class DatabaseManagerDialog
 	\brief dialog for managing database connections
@@ -40,7 +43,7 @@ DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& con
 
 	setMainWidget(mainWidget);
 
-	setWindowIcon(KIcon("network-server-database"));
+	setWindowIcon(QIcon::fromTheme("network-server-database"));
 	setWindowTitle(i18n("SQL Database Connections"));
 
 	setButtons(KDialog::Ok | KDialog::Cancel);
