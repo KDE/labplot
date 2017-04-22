@@ -157,6 +157,7 @@ private:
 	//Menus
 	QMenu* m_visibilityMenu;
 	QMenu* m_newMenu;
+	QMenu* m_importMenu;
 	QMenu* m_editMenu;
 
 	//Docks

@@ -98,6 +98,7 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	  m_autoSaveActive(false),
 	  m_visibilityMenu(0),
 	  m_newMenu(0),
+	  m_importMenu(0),
 	  m_editMenu(0),
 	  axisDock(0),
 	  notesDock(0),
@@ -162,6 +163,15 @@ void MainWin::initGUI(const QString& fileName) {
 	initActions();
 	initMenus();
 	setupGUI();
+
+	QToolBar* mainToolBar = qobject_cast<QToolBar*>(factory()->container("main_toolbar", this));
+	QToolButton* tbImport = new QToolButton(mainToolBar);
+	tbImport->setPopupMode(QToolButton::MenuButtonPopup);
+	tbImport->setMenu(m_importMenu);
+	tbImport->setDefaultAction(m_importFileAction);
+	mainToolBar->addWidget(tbImport);
+
+	qobject_cast<QMenu*>(factory()->container("import", this))->setIcon(KIcon("document-import"));
 	setWindowIcon(KIcon("LabPlot2"));
 	setAttribute( Qt::WA_DeleteOnClose );
 
@@ -270,12 +280,12 @@ void MainWin::initActions() {
 	connect(m_newFileDataSourceAction, SIGNAL(triggered()), this, SLOT(newFileDataSourceActionTriggered()));
 
 	//Import/Export
-	m_importFileAction = new KAction(KIcon("document-import"), i18n("Import from File"), this);
+	m_importFileAction = new KAction(KIcon("document-import"), i18n("From File"), this);
 	m_importFileAction->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_I);
 	actionCollection()->addAction("import_file", m_importFileAction);
 	connect(m_importFileAction, SIGNAL(triggered()),SLOT(importFileDialog()));
 
-	m_importSqlAction = new KAction(KIcon("document-import-database"), i18n("Import from SQL Database"), this);
+	m_importSqlAction = new KAction(KIcon("document-import-database"), i18n("From SQL Database"), this);
 	actionCollection()->addAction("import_sql", m_importSqlAction);
 	connect(m_importSqlAction, SIGNAL(triggered()),SLOT(importSqlDialog()));
 
@@ -388,6 +398,12 @@ void MainWin::initMenus() {
 	m_newMenu->addSeparator();
 	m_newMenu->addAction(m_newFileDataSourceAction);
 
+	//import menu
+	m_importMenu = new QMenu(this);
+	m_importMenu->setIcon(KIcon("document-import"));
+	m_importMenu ->addAction(m_importFileAction);
+	m_importMenu ->addAction(m_importSqlAction);
+
 	//menu subwindow visibility policy
 	m_visibilityMenu = new QMenu(i18n("Window visibility policy"), this);
 	m_visibilityMenu->setIcon(KIcon("window-duplicate"));
@@ -469,6 +485,7 @@ void MainWin::updateGUIOnProjectChanges() {
 
 	factory->container("new", this)->setEnabled(!b);
 	factory->container("edit", this)->setEnabled(!b);
+	factory->container("import", this)->setEnabled(!b);
 
 	if (b)
 		setCaption("LabPlot2");
