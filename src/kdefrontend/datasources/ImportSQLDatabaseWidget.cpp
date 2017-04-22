@@ -34,7 +34,6 @@
 #include <KGlobal>
 #include <KLocale>
 #include <KMessageBox>
-#include <KStandardDirs>
 
 #include <QtSql>
 #include <QStandardItem>
@@ -48,7 +47,7 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(pare
 
 	ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
 
-	m_configPath = KGlobal::dirs()->locateLocal("appdata", "") + QLatin1String("sql_connections");
+	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first() +  "sql_connections";
 
 	connect( ui.cbConnection, SIGNAL(currentIndexChanged(int)), SLOT(connectionChanged()) );
 	connect( ui.cbImportFrom, SIGNAL(currentIndexChanged(int)), SLOT(importFromChanged(int)) );

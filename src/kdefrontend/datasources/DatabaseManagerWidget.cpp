@@ -50,7 +50,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent, const QString& conn) : QWidget(parent),
 	m_initializing(false), m_initConnName(conn) {
 
-	m_configPath = KGlobal::dirs()->locateLocal("appdata", "") + QLatin1String("sql_connections");
+	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first() +  "sql_connections";
 
 	ui.setupUi(this);
 

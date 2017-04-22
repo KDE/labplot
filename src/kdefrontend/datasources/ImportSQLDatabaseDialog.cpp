@@ -41,6 +41,7 @@
 #include <QStatusBar>
 
 #include <KLocale>
+#include <KWindowConfig>
 
 /*!
     \class ImportSQLDatabaseDialog
@@ -64,13 +65,13 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent) : ImportDialog
 
 	//restore saved settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseDialog");
-	restoreDialogSize(conf);
+	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
 
 ImportSQLDatabaseDialog::~ImportSQLDatabaseDialog() {
 	//save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseDialog");
-	saveDialogSize(conf);
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 void ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {

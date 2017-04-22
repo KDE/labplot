@@ -31,6 +31,7 @@
 
 #include <KLocale>
 #include <KSharedConfig>
+#include <KWindowConfig>
 
 /*!
 	\class DatabaseManagerDialog
@@ -53,7 +54,7 @@ DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& con
 
 	//restore saved settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatabaseManagerDialog");
-	restoreDialogSize(conf);
+	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 }
 
 QString DatabaseManagerDialog::connection() const {
@@ -63,7 +64,7 @@ QString DatabaseManagerDialog::connection() const {
 DatabaseManagerDialog::~DatabaseManagerDialog() {
 	//save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatabaseManagerDialog");
-	saveDialogSize(conf);
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 void DatabaseManagerDialog::changed() {
