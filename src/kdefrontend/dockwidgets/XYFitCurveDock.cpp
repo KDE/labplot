@@ -172,6 +172,7 @@ void XYFitCurveDock::initGeneralTab() {
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
+	updateModelEquation();
 	this->showFitResult();
 
 	//enable the "recalculate"-button if the source data was changed since the last fit
