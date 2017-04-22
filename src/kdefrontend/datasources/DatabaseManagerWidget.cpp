@@ -335,7 +335,9 @@ void DatabaseManagerWidget::loadConnections() {
 		addConnection();
 	}
 
+	//initialize the widgets (enable/disable) on load appropriately
 	connectionChanged(ui.lwConnections->currentRow());
+	driverChanged();
 }
 
 void DatabaseManagerWidget::saveConnections() {
