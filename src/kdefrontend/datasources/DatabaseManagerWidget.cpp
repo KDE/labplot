@@ -85,7 +85,10 @@ DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent, const QString& con
 }
 
 QString DatabaseManagerWidget::connection() const {
-	return ui.lwConnections->currentItem()->text();
+	if (ui.lwConnections->currentItem())
+		return ui.lwConnections->currentItem()->text();
+	else
+		return QString();
 }
 
 /*!

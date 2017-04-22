@@ -137,6 +137,9 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	ui.lwTables->clear();
 	ui.twPreview->clear();
 
+	if (ui.cbConnection->currentIndex() == -1)
+		return;
+
 	//connection name was changed, determine the current connections settings
 	KConfig config(m_configPath, KConfig::SimpleConfig);
 	KConfigGroup group = config.group(ui.cbConnection->currentText());
