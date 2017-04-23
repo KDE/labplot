@@ -52,6 +52,7 @@ class XYCurve: public WorksheetElement {
 		enum ErrorType {NoError, SymmetricError, AsymmetricError};
 		enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
 		enum ErrorBarsType {ErrorBarsSimple, ErrorBarsWithEnds};
+		enum DataSourceType {DataSourceSpreadsheet, DataSourceCurve};
 
 		explicit XYCurve(const QString &name);
 		virtual ~XYCurve();
@@ -64,6 +65,8 @@ class XYCurve: public WorksheetElement {
 		virtual void loadThemeConfig(const KConfig& config);
 		virtual void saveThemeConfig(const KConfig& config);
 
+		BASIC_D_ACCESSOR_DECL(DataSourceType, dataSourceType, DataSourceType)
+		POINTER_D_ACCESSOR_DECL(const XYCurve, dataSourceCurve, DataSourceCurve)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
 		QString& xColumnPath() const;
@@ -169,8 +172,12 @@ class XYCurve: public WorksheetElement {
 		void yDataChanged();
 		void visibilityChanged(bool);
 
+		friend class XYCurveSetDataSourceTypeCmd;
+		friend class XYCurveSetDataSourceCurveCmd;
 		friend class XYCurveSetXColumnCmd;
 		friend class XYCurveSetYColumnCmd;
+		void dataSourceTypeChanged(XYCurve::DataSourceType);
+		void dataSourceCurveChanged(const XYCurve*);
 		void xColumnChanged(const AbstractColumn*);
 		void yColumnChanged(const AbstractColumn*);
 

@@ -81,8 +81,10 @@ void XYCurve::init() {
 	KConfig config;
 	KConfigGroup group = config.group("XYCurve");
 
+	d->dataSourceType = (XYCurve::DataSourceType) group.readEntry("DataSourceType", (int)XYCurve::DataSourceSpreadsheet);
 	d->xColumn = NULL;
 	d->yColumn = NULL;
+	d->dataSourceCurve = NULL;
 
 	d->lineType = (XYCurve::LineType) group.readEntry("LineType", (int)XYCurve::Line);
 	d->lineSkipGaps = group.readEntry("SkipLineGaps", false);
@@ -212,6 +214,10 @@ void XYCurve::setPrinting(bool on) {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
+
+//data source
+BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::DataSourceType, dataSourceType, dataSourceType)
+BASIC_SHARED_D_READER_IMPL(XYCurve, const XYCurve*, dataSourceCurve, dataSourceCurve)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xColumn, xColumn)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yColumn, yColumn)
 QString& XYCurve::xColumnPath() const {
@@ -296,11 +302,27 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsOpacity, errorBarsOpacity)
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
+
+//data source
+STD_SETTER_CMD_IMPL_S(XYCurve, SetDataSourceType, XYCurve::DataSourceType, dataSourceType)
+void XYCurve::setDataSourceType(DataSourceType type) {
+	Q_D(XYCurve);
+	if (type != d->dataSourceType)
+		exec(new XYCurveSetDataSourceTypeCmd(d, type, i18n("%1: data source type changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetDataSourceCurve, const XYCurve*, dataSourceCurve, retransform)
+void XYCurve::setDataSourceCurve(const XYCurve* curve) {
+	Q_D(XYCurve);
+	if (curve != d->dataSourceCurve)
+		exec(new XYCurveSetDataSourceCurveCmd(d, curve, i18n("%1: data source curve changed")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXColumn, const AbstractColumn*, xColumn, retransform)
 void XYCurve::setXColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xColumn) {
-		exec(new XYCurveSetXColumnCmd(d, column, i18n("%1: assign x values")));
+		exec(new XYCurveSetXColumnCmd(d, column, i18n("%1: x-data source changed")));
 
 		//emit xDataChanged() in order to notify the plot about the changes
 		emit xDataChanged();
@@ -320,7 +342,7 @@ STD_SETTER_CMD_IMPL_F_S(XYCurve, SetYColumn, const AbstractColumn*, yColumn, ret
 void XYCurve::setYColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->yColumn) {
-		exec(new XYCurveSetYColumnCmd(d, column, i18n("%1: assign y values")));
+		exec(new XYCurveSetYColumnCmd(d, column, i18n("%1: y-data source changed")));
 
 		//emit yDataChanged() in order to notify the plot about the changes
 		emit yDataChanged();
