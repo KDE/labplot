@@ -161,6 +161,10 @@ QMenu* XYCurve::createContextMenu() {
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
 
+	//"data analysis" menu
+	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
+	menu->insertMenu(visibilityAction, plot->analysisMenu());
+
 	//"Navigate to spreadsheet"-action, show only if x- or y-columns have data from a spreadsheet
 	AbstractAspect* parentSpreadsheet = 0;
 	if (xColumn() && dynamic_cast<Spreadsheet*>(xColumn()->parentAspect()) )

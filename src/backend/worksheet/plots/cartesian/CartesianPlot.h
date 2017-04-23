@@ -81,6 +81,7 @@ class CartesianPlot:public AbstractPlot{
 		void initDefault(Type=FourAxes);
 		QIcon icon() const;
 		QMenu* createContextMenu();
+		QMenu* analysisMenu() const;
 		void setRect(const QRectF&);
 		QRectF plotRect();
 		void setMouseMode(const MouseMode);
@@ -124,6 +125,7 @@ class CartesianPlot:public AbstractPlot{
 
 		QAction* visibilityAction;
 
+		//"add new" actions
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
 		QAction* addDataReductionCurveAction;
@@ -139,6 +141,7 @@ class CartesianPlot:public AbstractPlot{
  		QAction* addLegendAction;
 		QAction* addCustomPointAction;
 
+		//scaling, zooming, navigation actions
 		QAction* scaleAutoXAction;
 		QAction* scaleAutoYAction;
 		QAction* scaleAutoAction;
@@ -153,8 +156,21 @@ class CartesianPlot:public AbstractPlot{
 		QAction* shiftUpYAction;
 		QAction* shiftDownYAction;
 
+		//analysis menu actions
+		QAction* addDataOperationAction;
+		QAction* addDataReductionAction;
+		QAction* addDifferentiationAction;
+		QAction* addIntegrationAction;
+		QAction* addInterpolationAction;
+		QAction* addSmoothAction;
+		QAction* addFitAction;
+		QAction* addFourierFilterAction;
+		QAction* addFourierTransformAction;
+
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;
+		QMenu* dataManipulationMenu;
+		QMenu* dataAnalysisMenu;
 		QMenu* themeMenu;
 
 		Q_DECLARE_PRIVATE(CartesianPlot)

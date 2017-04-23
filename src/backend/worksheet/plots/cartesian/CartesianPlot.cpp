@@ -373,7 +373,11 @@ void CartesianPlot::initActions() {
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
-	// TODO: other analysis functions?
+	connect(addDataReductionCurveAction, SIGNAL(triggered()), SLOT(addDataReductionCurve()));
+	connect(addDifferentiationCurveAction, SIGNAL(triggered()), SLOT(addDifferentiationCurve()));
+	connect(addIntegrationCurveAction, SIGNAL(triggered()), SLOT(addIntegrationCurve()));
+	connect(addInterpolationCurveAction, SIGNAL(triggered()), SLOT(addInterpolationCurve()));
+	connect(addSmoothCurveAction, SIGNAL(triggered()), SLOT(addSmoothCurve()));
 	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addFourierFilterCurveAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
 	connect(addFourierTransformCurveAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
@@ -381,6 +385,26 @@ void CartesianPlot::initActions() {
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
 	connect(addCustomPointAction, SIGNAL(triggered()), SLOT(addCustomPoint()));
+
+	//Analysis menu actions
+	addDataOperationAction = new QAction(i18n("Data operation"), this);
+	addDataReductionAction = new QAction(i18n("Data reduction"), this);
+	addDifferentiationAction = new QAction(i18n("Differentiation"), this);
+	addIntegrationAction = new QAction(i18n("Integration"), this);
+	addInterpolationAction = new QAction(i18n("Interpolation"), this);
+	addSmoothAction = new QAction(i18n("Smooth"), this);
+	addFitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Data fitting"), this);
+	addFourierFilterAction = new QAction(i18n("Fourier filter"), this);
+	addFourierTransformAction = new QAction(i18n("Fourier transform"), this);
+
+	connect(addDataReductionAction, SIGNAL(triggered()), SLOT(addDataReductionCurve()));
+	connect(addDifferentiationAction, SIGNAL(triggered()), SLOT(addDifferentiationCurve()));
+	connect(addIntegrationAction, SIGNAL(triggered()), SLOT(addIntegrationCurve()));
+	connect(addInterpolationAction, SIGNAL(triggered()), SLOT(addInterpolationCurve()));
+	connect(addSmoothAction, SIGNAL(triggered()), SLOT(addSmoothCurve()));
+	connect(addFitAction, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
+	connect(addFourierTransformAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
 
 	//zoom/navigate actions
 	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("auto scale"), this);
@@ -421,6 +445,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu = new QMenu(i18n("Add new"));
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
+	addNewMenu->addSeparator();
 	addNewMenu->addAction(addDataReductionCurveAction);
 	addNewMenu->addAction(addDifferentiationCurveAction);
 	addNewMenu->addAction(addIntegrationCurveAction);
@@ -429,6 +454,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addFitCurveAction);
 	addNewMenu->addAction(addFourierFilterCurveAction);
 	addNewMenu->addAction(addFourierTransformCurveAction);
+	addNewMenu->addSeparator();
 	addNewMenu->addAction(addLegendAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addHorizontalAxisAction);
@@ -456,6 +482,24 @@ void CartesianPlot::initMenus() {
 	zoomMenu->addAction(shiftUpYAction);
 	zoomMenu->addAction(shiftDownYAction);
 
+	// Data manipulation menu
+	dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
+	dataManipulationMenu->setIcon(QIcon::fromTheme("zoom-draw"));
+	dataManipulationMenu->addAction(addDataOperationAction);
+	dataManipulationMenu->addAction(addDataReductionAction);
+
+	//analysis menu
+	dataAnalysisMenu = new QMenu(i18n("Analysis"));
+	dataAnalysisMenu->insertMenu(0, dataManipulationMenu);
+	dataAnalysisMenu->addAction(addDifferentiationAction);
+	dataAnalysisMenu->addAction(addIntegrationAction);
+	dataAnalysisMenu->addAction(addInterpolationAction);
+	dataAnalysisMenu->addAction(addSmoothAction);
+	dataAnalysisMenu->addAction(addFitAction);
+	dataAnalysisMenu->addAction(addFourierFilterAction);
+	dataAnalysisMenu->addAction(addFourierTransformAction);
+
+	//themes menu
 	themeMenu = new QMenu(i18n("Apply Theme"));
 	ThemesWidget* themeWidget = new ThemesWidget(0);
 	// TODO: SLOT: loadTheme(KConfig config)
@@ -481,6 +525,10 @@ QMenu* CartesianPlot::createContextMenu() {
 	menu->insertSeparator(firstAction);
 
 	return menu;
+}
+
+QMenu* CartesianPlot::analysisMenu() const {
+	return dataAnalysisMenu;
 }
 
 /*!
