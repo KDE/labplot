@@ -388,12 +388,12 @@ void CartesianPlot::initActions() {
 
 	//Analysis menu actions
 	addDataOperationAction = new QAction(i18n("Data operation"), this);
-	addDataReductionAction = new QAction(i18n("Data reduction"), this);
-	addDifferentiationAction = new QAction(i18n("Differentiation"), this);
-	addIntegrationAction = new QAction(i18n("Integration"), this);
-	addInterpolationAction = new QAction(i18n("Interpolation"), this);
+	addDataReductionAction = new QAction(i18n("Reduce data"), this);
+	addDifferentiationAction = new QAction(i18n("Differentiate"), this);
+	addIntegrationAction = new QAction(i18n("Integrate"), this);
+	addInterpolationAction = new QAction(i18n("Interpolate"), this);
 	addSmoothAction = new QAction(i18n("Smooth"), this);
-	addFitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Data fitting"), this);
+	addFitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit"), this);
 	addFourierFilterAction = new QAction(i18n("Fourier filter"), this);
 	addFourierTransformAction = new QAction(i18n("Fourier transform"), this);
 
@@ -491,12 +491,16 @@ void CartesianPlot::initMenus() {
 	//analysis menu
 	dataAnalysisMenu = new QMenu(i18n("Analysis"));
 	dataAnalysisMenu->insertMenu(0, dataManipulationMenu);
+	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addDifferentiationAction);
 	dataAnalysisMenu->addAction(addIntegrationAction);
+	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addInterpolationAction);
 	dataAnalysisMenu->addAction(addSmoothAction);
-	dataAnalysisMenu->addAction(addFitAction);
 	dataAnalysisMenu->addAction(addFourierFilterAction);
+	dataAnalysisMenu->addSeparator();
+	dataAnalysisMenu->addAction(addFitAction);
+	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addFourierTransformAction);
 
 	//themes menu
