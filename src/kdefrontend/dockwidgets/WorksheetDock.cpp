@@ -28,8 +28,9 @@
  ***************************************************************************/
 
 #include "WorksheetDock.h"
-#include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
+#include "kdefrontend/ThemeHandler.h"
+#include "kdefrontend/TemplateHandler.h"
 
 #include <QPrinter>
 #include <QFileDialog>
@@ -136,12 +137,22 @@ WorksheetDock::WorksheetDock(QWidget *parent): QWidget(parent), m_worksheet(0), 
 	connect( ui.sbLayoutRowCount, SIGNAL(valueChanged(int)), this, SLOT(layoutRowCountChanged(int)) );
 	connect( ui.sbLayoutColumnCount, SIGNAL(valueChanged(int)), this, SLOT(layoutColumnCountChanged(int)) );
 
-	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::Worksheet);
-	ui.verticalLayout->addWidget(templateHandler, 0, 0);
-	templateHandler->show();
+	//theme and template handlers
+	QFrame* frame = new QFrame(this);
+	QHBoxLayout* layout = new QHBoxLayout(frame);
+
+	ThemeHandler* themeHandler = new ThemeHandler(this);
+	layout->addWidget(themeHandler);
+	connect(themeHandler, SIGNAL(loadThemeRequested(KConfig&)), this, SLOT(loadTheme(KConfig&)));
+	connect(themeHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+	TemplateHandler* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlot);
+	layout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+
+	ui.verticalLayout->addWidget(frame);
 
 	this->retranslateUi();
 }
@@ -934,4 +945,9 @@ void WorksheetDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LayoutColumnCount", ui.sbLayoutColumnCount->value());
 
 	config.sync();
+}
+
+void WorksheetDock::loadTheme(KConfig& config) {
+	foreach(Worksheet* worksheet, m_worksheetList)
+		worksheet->loadTheme(config);
 }

@@ -91,6 +91,8 @@ class CartesianPlot:public AbstractPlot{
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
+		virtual void loadThemeConfig(const KConfig&);
+		void saveTheme(KConfig& config);
 
 		BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
 		BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
@@ -185,8 +187,6 @@ class CartesianPlot:public AbstractPlot{
 		void shiftRightX();
 		void shiftUpY();
 		void shiftDownY();
-		void loadTheme(KConfig& config);
-		void saveTheme(KConfig& config);
 
 	private slots:
 		void updateLegend();

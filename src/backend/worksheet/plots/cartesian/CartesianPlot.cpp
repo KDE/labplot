@@ -2214,10 +2214,10 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 //##############################################################################
 void CartesianPlot::loadTheme(const QString& theme) {
 	KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
-	loadTheme(config);
+	loadThemeConfig(config);
 }
 
-void CartesianPlot::loadTheme(KConfig& config) {
+void CartesianPlot::loadThemeConfig(const KConfig& config) {
 	const QString str = config.name();
 	m_themeName = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
 	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), m_themeName) );

@@ -35,12 +35,13 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
+#include "kdefrontend/ThemeHandler.h"
 
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
+#include <QDir>
 
-#include "QIcon"
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -958,4 +959,35 @@ bool Worksheet::load(XmlStreamReader* reader) {
 	d->updateLayout();
 
 	return true;
+}
+
+//##############################################################################
+//#########################  Theme management ##################################
+//##############################################################################
+void Worksheet::loadTheme(const QString& theme) {
+	KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
+	loadTheme(config);
+}
+#include <QDebug>
+void Worksheet::loadTheme(KConfig& config) {
+	const QString str = config.name();
+	m_themeName = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
+	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), m_themeName) );
+
+	//apply the same background color for Worksheet as for the CartesianPlot
+	const KConfigGroup group = config.group("CartesianPlot");
+	this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle",(int) this->backgroundBrushStyle()));
+	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle)(group.readEntry("BackgroundColorStyle",(int) this->backgroundColorStyle())));
+	this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor",(QColor) this->backgroundFirstColor()));
+	this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle)group.readEntry("BackgroundImageStyle",(int) this->backgroundImageStyle()));
+	this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", this->backgroundOpacity()));
+	this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor",(QColor) this->backgroundSecondColor()));
+	this->setBackgroundType((PlotArea::BackgroundType)(group.readEntry("BackgroundType",(int) this->backgroundType())));
+
+	//load the theme for all the children
+	const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
+	foreach (WorksheetElement* child, childElements)
+		child->loadThemeConfig(config);
+
+	endMacro();
 }

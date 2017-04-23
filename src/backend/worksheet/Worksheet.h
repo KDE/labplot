@@ -56,12 +56,13 @@ class Worksheet: public AbstractPart, public scripted {
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
-        virtual bool exportView() const;
-        virtual bool printView();
-        virtual bool printPreview() const;
+		virtual bool exportView() const;
+		virtual bool printView();
+		virtual bool printPreview() const;
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
+		void loadTheme(KConfig& config);
 
 		QRectF pageRect() const;
 		void setPageRect(const QRectF&);
@@ -100,8 +101,11 @@ class Worksheet: public AbstractPart, public scripted {
 	private:
 		void init();
 		WorksheetElement* aspectFromGraphicsItem(const WorksheetElement*, const QGraphicsItem*) const;
+		void loadTheme(const QString&);
+
 		WorksheetPrivate* const d;
 		friend class WorksheetPrivate;
+		QString m_themeName;
 
 	 private slots:
 		void handleAspectAdded(const AbstractAspect*);

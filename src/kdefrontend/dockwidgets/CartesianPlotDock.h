@@ -157,14 +157,14 @@ private slots:
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 
-signals:
-	void info(const QString&);
-
-public slots:
-	void load();
+	//save/load themes
 	void loadTheme(KConfig& config);
 	void saveTheme(KConfig& config);
 
+	void load();
+
+signals:
+	void info(const QString&);
 };
 
 #endif
