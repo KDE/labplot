@@ -152,8 +152,8 @@ QIcon Worksheet::icon() const {
 /**
  * Return a new context menu. The caller takes ownership of the menu.
  */
-QMenu *Worksheet::createContextMenu() {
-	QMenu *menu = AbstractPart::createContextMenu();
+QMenu* Worksheet::createContextMenu() {
+	QMenu* menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
 	emit requestProjectContextMenu(menu);
 	return menu;
@@ -164,9 +164,9 @@ QMenu *Worksheet::createContextMenu() {
  * This method may be called multiple times during the life time of an Aspect, or it might not get
  * called at all. Aspects must not depend on the existence of a view for their operation.
  */
-QWidget *Worksheet::view() const {
+QWidget* Worksheet::view() const {
 	if (!m_view) {
-		m_view = new WorksheetView(const_cast<Worksheet *>(this));
+		m_view = new WorksheetView(const_cast<Worksheet*>(this));
 		connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 	}
 	return m_view;
@@ -229,7 +229,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	foreach(WorksheetElement* elem, childElements)
 		elem->graphicsItem()->setZValue(zVal++);
 
-	//if a theme was selected in the worksheet, apply this theme for newly added plots and labels
+	//if a theme was selected in the worksheet, apply this theme for newly added children
 	if (!m_themeName.isEmpty()) {
 		KConfig config(ThemeHandler::themeFilePath(m_themeName), KConfig::SimpleConfig);
 		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);

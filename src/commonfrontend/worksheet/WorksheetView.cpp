@@ -31,6 +31,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/TextLabel.h"
+#include "kdefrontend/widgets/ThemesWidget.h"
 #include "kdefrontend/worksheet/GridDialog.h"
 #include "kdefrontend/worksheet/PresenterWidget.h"
 #include "kdefrontend/worksheet/DynamicPresenterWidget.h"
@@ -48,6 +49,7 @@
 #include <QGraphicsOpacityEffect>
 #include <QTimeLine>
 #include <QClipboard>
+#include <QWidgetAction>
 
 #include <KColorScheme>
 #include <KLocale>
@@ -482,6 +484,16 @@ void WorksheetView::initMenus() {
 	m_dataManipulationMenu->setIcon(QIcon::fromTheme("zoom-draw"));
 	m_dataManipulationMenu->addAction(addDataOperationAction);
 	m_dataManipulationMenu->addAction(addDataReductionAction);
+
+	//themes menu
+	m_themeMenu = new QMenu(i18n("Apply Theme"));
+	ThemesWidget* themeWidget = new ThemesWidget(0);
+	connect(themeWidget, SIGNAL(themeSelected(QString)), m_worksheet, SLOT(loadTheme(QString)));
+	connect(themeWidget, SIGNAL(themeSelected(QString)), m_themeMenu, SLOT(close()));
+
+	QWidgetAction* widgetAction = new QWidgetAction(this);
+	widgetAction->setDefaultWidget(themeWidget);
+	m_themeMenu->addAction(widgetAction);
 }
 
 /*!
@@ -508,6 +520,7 @@ void WorksheetView::createContextMenu(QMenu* menu) const {
 	menu->insertMenu(firstAction, m_magnificationMenu);
 	menu->insertMenu(firstAction, m_layoutMenu);
 	menu->insertMenu(firstAction, m_gridMenu);
+	menu->insertMenu(firstAction, m_themeMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_cartesianPlotMenu);
 	menu->insertSeparator(firstAction);

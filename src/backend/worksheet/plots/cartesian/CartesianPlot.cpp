@@ -51,19 +51,19 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/ThemeHandler.h"
+#include "kdefrontend/widgets/ThemesWidget.h"
 
 #include <QDir>
 #include <QMenu>
 #include <QToolBar>
 #include <QPainter>
 #include <QIcon>
-#include <QAction>
+// #include <QAction>
 #include <QWidgetAction>
 
 #include <KConfigGroup>
 #include <KLocale>
-#include "kdefrontend/ThemeHandler.h"
-#include "kdefrontend/widgets/ThemesWidget.h"
 
 /**
  * \class CartesianPlot

@@ -98,10 +98,12 @@ class Worksheet: public AbstractPart, public scripted {
 
 		typedef WorksheetPrivate Private;
 
+public slots:
+		void loadTheme(const QString&);
+
 	private:
 		void init();
 		WorksheetElement* aspectFromGraphicsItem(const WorksheetElement*, const QGraphicsItem*) const;
-		void loadTheme(const QString&);
 
 		WorksheetPrivate* const d;
 		friend class WorksheetPrivate;
