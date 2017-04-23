@@ -39,18 +39,21 @@
 #include "backend/core/AbstractColumn.h"
 
 int main (int argc, char *argv[]) {
+	QApplication app(argc, argv);
+	KLocalizedString::setApplicationDomain("labplot2");
+
 	KAboutData aboutData( QStringLiteral("labplot2"), QString("labplot2"),
 		LVERSION, i18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
-		KAboutLicense::GPL,i18n("(c) 2007-2017"), QString(), QStringLiteral("http://www.labplot.sourceforge.net"));
+		KAboutLicense::GPL,i18n("(c) 2007-2017"), QString(), QStringLiteral("https://labplot.kde.org"));
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18n("developer"), "stefan.gerlach@uni.kn", 0);
 	aboutData.addAuthor(i18n("Alexander Semke"), i18n("developer"), "alexander.semke@web.de", 0);
 	aboutData.addAuthor(i18n("Andreas Kainz"), i18n("icon designer"), "kainz.a@gmail.com", 0);
 	aboutData.addCredit(i18n("Yuri Chornoivan"), i18n("Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", 0);
 	aboutData.addCredit(i18n("Garvit Khatri"), i18n("Porting LabPlot2 to KF5 and Integration with Cantor"), "garvitdelhi@gmail.com", 0);
+	aboutData.setOrganizationDomain(QByteArray("kde.org"));
+	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot2"));
 	KAboutData::setApplicationData(aboutData);
 
-	QApplication app(argc, argv);
-	QCoreApplication::setApplicationVersion(QLatin1String(LVERSION));
 	QCommandLineParser parser;
 	parser.addHelpOption();
 	parser.addVersionOption();
