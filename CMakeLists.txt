@@ -29,6 +29,8 @@ find_package(KF5 REQUIRED COMPONENTS
 	XmlGui
 )
 
+find_package(BISON REQUIRED)
+
 include(FeatureSummary)
 include(ECMInstallIcons)
 include(KDEInstallDirs)

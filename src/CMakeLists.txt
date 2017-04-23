@@ -171,7 +171,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
 
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
-	${BACKEND_DIR}/gsl/parser.tab.c
 	${BACKEND_DIR}/matrix/Matrix.cpp
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp
@@ -264,6 +263,14 @@ set(TOOLS_SOURCES
 	${TOOLS_DIR}/EquationHighlighter.cpp
 )
 
+bison_target(GslParser
+	${BACKEND_DIR}/gsl/parser.y
+	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.c
+)
+set(GENERATED_SOURCES
+	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.c
+)
+
 add_subdirectory( pics )
 add_subdirectory( pics/gsl_distributions )
 add_subdirectory( pics/fit_models )
@@ -272,9 +279,9 @@ add_subdirectory( themes )
 
 ##############################################################################
 set( LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} )
-INCLUDE_DIRECTORIES( . ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/.. )
+INCLUDE_DIRECTORIES( . ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/.. )
 ki18n_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
-add_executable( labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS} )
+add_executable( labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
 target_link_libraries( labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} )
 #KF5::NewStuff
 IF (CANTOR_LIBS_FOUND)
