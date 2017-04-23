@@ -93,6 +93,7 @@ class CartesianPlot:public AbstractPlot{
 		virtual bool load(XmlStreamReader*);
 		virtual void loadThemeConfig(const KConfig&);
 		void saveTheme(KConfig& config);
+		void setThemeName(const QString&);
 
 		BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
 		BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
@@ -119,7 +120,6 @@ class CartesianPlot:public AbstractPlot{
 
 		CartesianPlotLegend* m_legend;
 		float m_zoomFactor;
-		QString m_themeName;
 		QList<QColor> m_themeColorPalette;
 
 		QAction* visibilityAction;

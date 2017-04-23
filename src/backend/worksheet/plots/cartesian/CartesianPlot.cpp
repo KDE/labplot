@@ -708,6 +708,13 @@ void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, i18n("%1: y-range breaks changed")));
 }
 
+
+STD_SETTER_CMD_IMPL(CartesianPlot, SetThemeName, QString, themeName)
+void CartesianPlot::setThemeName(const QString& name) {
+	Q_D(CartesianPlot);
+	if (name != d->themeName)
+		exec(new CartesianPlotSetThemeNameCmd(d, name, i18n("%1: set theme name")));
+}
 //################################################################
 //########################## Slots ###############################
 //################################################################
@@ -1809,9 +1816,9 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	//applied theme
-	if (!m_themeName.isEmpty()){
+	if (!d->themeName.isEmpty()){
 		writer->writeStartElement( "theme" );
-		writer->writeAttribute("name", m_themeName);
+		writer->writeAttribute("name", d->themeName);
 		writer->writeEndElement();
 	}
 
@@ -2201,7 +2208,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 	if (!tmpThemeName.isEmpty()){
 		KConfig config( ThemeHandler::themeFilePath(tmpThemeName), KConfig::SimpleConfig );
 		//TODO: check whether the theme config really exists
-		m_themeName = tmpThemeName;
+		d->themeName = tmpThemeName;
 		this->setColorPalette(config);
 	}
 
@@ -2217,9 +2224,10 @@ void CartesianPlot::loadTheme(const QString& theme) {
 }
 
 void CartesianPlot::loadThemeConfig(const KConfig& config) {
-	const QString str = config.name();
-	m_themeName = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
-	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), m_themeName) );
+	QString str = config.name();
+	str = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
+	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), str) );
+	this->setThemeName(str);
 
 	//load the color palettes for the curves
 	this->setColorPalette(config);
@@ -2294,8 +2302,9 @@ const QList<QColor>& CartesianPlot::themeColorPalette() const {
 }
 
 void CartesianPlot::applyThemeOnNewCurve(XYCurve* curve) {
-	if (!m_themeName.isEmpty()) {
-		KConfig config( ThemeHandler::themeFilePath(m_themeName), KConfig::SimpleConfig );
+	Q_D(const CartesianPlot);
+	if (!d->themeName.isEmpty()) {
+		KConfig config( ThemeHandler::themeFilePath(d->themeName), KConfig::SimpleConfig );
 		curve->loadThemeConfig(config);
 	}
 }
