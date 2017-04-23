@@ -214,21 +214,31 @@ bool Worksheet::printPreview() const {
 
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
-	if (addedElement) {
-		if (aspect->parentAspect() == this) {
-			QGraphicsItem* item = addedElement->graphicsItem();
-			d->m_scene->addItem(item);
+	if (!addedElement)
+		return;
 
-			qreal zVal = 0;
-			QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
-			foreach(WorksheetElement* elem, childElements)
-				elem->graphicsItem()->setZValue(zVal++);
+	if (aspect->parentAspect() != this)
+		return;
 
-			if (!isLoading()) {
-				if (d->layout != Worksheet::NoLayout)
-					d->updateLayout(false);
-			}
-		}
+	//add the GraphicsItem of the added child to the scene
+	QGraphicsItem* item = addedElement->graphicsItem();
+	d->m_scene->addItem(item);
+
+	qreal zVal = 0;
+	QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
+	foreach(WorksheetElement* elem, childElements)
+		elem->graphicsItem()->setZValue(zVal++);
+
+	//if a theme was selected in the worksheet, apply this theme for newly added plots and labels
+	if (!m_themeName.isEmpty()) {
+		KConfig config(ThemeHandler::themeFilePath(m_themeName), KConfig::SimpleConfig);
+		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);
+	}
+
+	//recalculated the layout
+	if (!isLoading()) {
+		if (d->layout != Worksheet::NoLayout)
+			d->updateLayout(false);
 	}
 }
 
@@ -968,7 +978,7 @@ void Worksheet::loadTheme(const QString& theme) {
 	KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
 	loadTheme(config);
 }
-#include <QDebug>
+
 void Worksheet::loadTheme(KConfig& config) {
 	const QString str = config.name();
 	m_themeName = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
