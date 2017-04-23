@@ -444,9 +444,9 @@ void AbstractAspect::removeAllChildren() {
 	QList<AbstractAspect*> children_list = children();
 	QList<AbstractAspect*>::const_iterator i = children_list.constBegin();
 	AbstractAspect *current = 0, *nextSibling = 0;
-	if (i != children_list.end()) {
+	if (i != children_list.constEnd()) {
 		current = *i;
-		if (++i != children_list.end())
+		if (++i != children_list.constEnd())
 			nextSibling = *i;
 	}
 
@@ -456,7 +456,7 @@ void AbstractAspect::removeAllChildren() {
 		emit aspectRemoved(this, nextSibling, current);
 
 		current = nextSibling;
-		if (i != children_list.end() && ++i != children_list.end())
+		if (i != children_list.constEnd() && ++i != children_list.constEnd())
 			nextSibling = *i;
 		else
 			nextSibling = 0;
