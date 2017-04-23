@@ -69,6 +69,7 @@ class Worksheet: public AbstractPart, public scripted {
 		QGraphicsScene* scene() const;
 		void update();
 		void setPrinting(bool) const;
+		void setThemeName(const QString&);
 
 		void setItemSelectedInView(const QGraphicsItem* item, const bool b);
 		void setSelectedInView(const bool);
@@ -107,7 +108,6 @@ public slots:
 
 		WorksheetPrivate* const d;
 		friend class WorksheetPrivate;
-		QString m_themeName;
 
 	 private slots:
 		void handleAspectAdded(const AbstractAspect*);

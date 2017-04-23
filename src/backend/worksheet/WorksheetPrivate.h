@@ -70,6 +70,7 @@ class WorksheetPrivate{
 		float layoutHorizontalSpacing;
 		int layoutColumnCount;
 		int layoutRowCount;
+		QString themeName;
 };
 
 #endif

@@ -59,7 +59,6 @@
 #include <QToolBar>
 #include <QPainter>
 #include <QIcon>
-// #include <QAction>
 #include <QWidgetAction>
 
 #include <KConfigGroup>

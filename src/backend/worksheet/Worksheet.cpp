@@ -230,8 +230,8 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		elem->graphicsItem()->setZValue(zVal++);
 
 	//if a theme was selected in the worksheet, apply this theme for newly added children
-	if (!m_themeName.isEmpty()) {
-		KConfig config(ThemeHandler::themeFilePath(m_themeName), KConfig::SimpleConfig);
+	if (!d->themeName.isEmpty()) {
+		KConfig config(ThemeHandler::themeFilePath(d->themeName), KConfig::SimpleConfig);
 		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);
 	}
 
@@ -586,6 +586,11 @@ void Worksheet::setPrinting(bool on) const {
 		elem->setPrinting(on);
 }
 
+STD_SETTER_CMD_IMPL(Worksheet, SetThemeName, QString, themeName)
+void Worksheet::setThemeName(const QString& name) {
+	if (name != d->themeName)
+		exec(new WorksheetSetThemeNameCmd(d, name, i18n("%1: set theme name")));
+}
 
 //##############################################################################
 //######################  Private implementation ###############################
@@ -980,9 +985,10 @@ void Worksheet::loadTheme(const QString& theme) {
 }
 
 void Worksheet::loadTheme(KConfig& config) {
-	const QString str = config.name();
-	m_themeName = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
-	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), m_themeName) );
+	QString str = config.name();
+	str = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
+	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), str) );
+	this->setThemeName(str);
 
 	//apply the same background color for Worksheet as for the CartesianPlot
 	const KConfigGroup group = config.group("CartesianPlot");
