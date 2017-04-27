@@ -829,11 +829,12 @@ XYDifferentiationCurve* CartesianPlot::addDifferentiationCurve() {
 	XYDifferentiationCurve* curve = new XYDifferentiationCurve("Differentiation");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
-		beginMacro( i18n("Differentiate '%1'.", curCurve->name()) );
+		beginMacro( i18n("Differentiate '%1'", curCurve->name()) );
+		curve->setName( i18n("Derivative of '%1'.", curCurve->name()) );
 		curve->setDataSourceType(XYCurve::DataSourceCurve);
 		curve->setDataSourceCurve(curCurve);
-		curve->recalculate();
 		this->addChild(curve);
+		curve->recalculate();
 		endMacro();
 	} else {
 		this->addChild(curve);

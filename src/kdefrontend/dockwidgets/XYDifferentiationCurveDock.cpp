@@ -382,9 +382,16 @@ void XYDifferentiationCurveDock::autoRangeChanged() {
 		if (m_curve != 0)
 			m_differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(m_curve);
 		Q_ASSERT(m_differentiationCurve);
-		if (m_differentiationCurve->xDataColumn()) {
-			uiGeneralTab.sbMin->setValue(m_differentiationCurve->xDataColumn()->minimum());
-			uiGeneralTab.sbMax->setValue(m_differentiationCurve->xDataColumn()->maximum());
+
+		const AbstractColumn* xDataColumn = 0;
+		if (m_differentiationCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
+			xDataColumn = m_differentiationCurve->xDataColumn();
+		else
+			xDataColumn = m_differentiationCurve->dataSourceCurve()->xColumn();
+
+		if (xDataColumn) {
+			uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
+			uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
 		}
 	} else {
 		uiGeneralTab.lMin->setEnabled(true);
