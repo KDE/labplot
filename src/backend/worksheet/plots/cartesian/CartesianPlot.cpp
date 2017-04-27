@@ -812,9 +812,32 @@ XYDataReductionCurve* CartesianPlot::addDataReductionCurve() {
 	return curve;
 }
 
+/*!
+ * returns the first selected XYCurve in the plot
+ */
+const XYCurve* CartesianPlot::currentCurve() const {
+	QList<const XYCurve*> children = this->children<const XYCurve>();
+	foreach(const XYCurve* curve, children) {
+		if (curve->graphicsItem()->isSelected())
+			return curve;
+	}
+
+	return 0;
+}
+
 XYDifferentiationCurve* CartesianPlot::addDifferentiationCurve() {
 	XYDifferentiationCurve* curve = new XYDifferentiationCurve("Differentiation");
-	this->addChild(curve);
+	const XYCurve* curCurve = currentCurve();
+	if (curCurve) {
+		beginMacro( i18n("Differentiate '%1'.", curCurve->name()) );
+		curve->setDataSourceType(XYCurve::DataSourceCurve);
+		curve->setDataSourceCurve(curCurve);
+		curve->recalculate();
+		this->addChild(curve);
+		endMacro();
+	} else {
+		this->addChild(curve);
+	}
 	return curve;
 }
 

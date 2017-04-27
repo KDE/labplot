@@ -118,6 +118,7 @@ class CartesianPlot:public AbstractPlot{
 		void initMenus();
 		void setColorPalette(const KConfig&);
 		void applyThemeOnNewCurve(XYCurve* curve);
+		const XYCurve* currentCurve() const;
 
 		CartesianPlotLegend* m_legend;
 		float m_zoomFactor;

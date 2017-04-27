@@ -36,7 +36,6 @@
 #include "kdefrontend/widgets/FitOptionsWidget.h"
 #include "kdefrontend/widgets/FitParametersWidget.h"
 
-#include <KStandardDirs>
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
@@ -154,9 +153,9 @@ void XYFitCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
 	Q_ASSERT(m_fitCurve);
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_fitCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_fitCurve->yDataColumn());
-	XYCurveDock::setModelIndexFromColumn(cbWeightsColumn, m_fitCurve->weightsColumn());
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_fitCurve->xDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_fitCurve->yDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbWeightsColumn, m_fitCurve->weightsColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_fitData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_fitData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_fitData.xRange.last());
@@ -881,7 +880,7 @@ void XYFitCurveDock::updateModelEquation() {
 	}
 
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
-		uiGeneralTab.lFuncPic->setPixmap(QPixmap(file));
+		uiGeneralTab.lFuncPic->setPixmap(file);
 		uiGeneralTab.lFuncPic->show();
 		uiGeneralTab.teEquation->hide();
 	}
@@ -1071,19 +1070,19 @@ void XYFitCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 
 void XYFitCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
 	m_initializing = false;
 }
 
 void XYFitCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
 	m_initializing = false;
 }
 
 void XYFitCurveDock::curveWeightsColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbWeightsColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbWeightsColumn, column);
 	m_initializing = false;
 }
 

@@ -139,8 +139,8 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	m_filterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
 	Q_ASSERT(m_filterCurve);
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_filterCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_filterCurve->yDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_filterCurve->xDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_filterCurve->yDataColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_filterData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_filterData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_filterData.xRange.last());
@@ -586,13 +586,13 @@ void XYFourierFilterCurveDock::curveDescriptionChanged(const AbstractAspect* asp
 
 void XYFourierFilterCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
 	m_initializing = false;
 }
 
 void XYFourierFilterCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
 	m_initializing = false;
 }
 

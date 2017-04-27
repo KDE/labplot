@@ -131,8 +131,8 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	if (m_curve != 0)
 		m_integrationCurve = dynamic_cast<XYIntegrationCurve*>(m_curve);
 	Q_ASSERT(m_integrationCurve);
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_integrationCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_integrationCurve->yDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_integrationCurve->xDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_integrationCurve->yDataColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_integrationData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_integrationData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_integrationData.xRange.last());
@@ -393,13 +393,13 @@ void XYIntegrationCurveDock::curveDescriptionChanged(const AbstractAspect* aspec
 
 void XYIntegrationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
 	m_initializing = false;
 }
 
 void XYIntegrationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
 	m_initializing = false;
 }
 
