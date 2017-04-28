@@ -30,7 +30,9 @@
 %{
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 #include <locale.h>
+#include <xlocale.h>
 #include "parser.h"
 #include "constants.h"
 #include "functions.h"

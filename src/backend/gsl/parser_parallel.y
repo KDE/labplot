@@ -34,7 +34,9 @@
 #include <string.h>
 #include <strings.h>	/* bzero */
 #include <ctype.h>
+#include <stdlib.h>
 #include <locale.h>
+#include <xlocale.h>
 #include "constants.h"
 #include "functions.h"
 #include "parser.h"
