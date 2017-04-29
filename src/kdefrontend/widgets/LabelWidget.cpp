@@ -39,8 +39,10 @@
 #include <KSharedConfig>
 #include <KCharSelect>
 #include <KLocalizedString>
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KF5/KSyntaxHighlighting/SyntaxHighlighter>
 #include <KF5/KSyntaxHighlighting/Definition>
+#endif
 
 /*!
 	\class LabelWidget
@@ -111,8 +113,10 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	//deactivate the latex button so the user cannot switch to this mode.
 	m_teXEnabled = TeXRenderer::enabled();
 
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teLabel->document());
 	m_highlighter->setDefinition(m_repository.definitionForName("LaTeX"));
+#endif
 
 	//SLOTS
 	// text properties
@@ -320,7 +324,9 @@ void LabelWidget::teXUsedChanged(bool checked) {
 	ui.kfontRequester->setVisible(!checked);
 
 	if (checked) {
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 		m_highlighter->setDocument(ui.teLabel->document());
+#endif
 		KConfigGroup conf(KSharedConfig::openConfig(), "Settings_Worksheet");
 		QString engine = conf.readEntry("LaTeXEngine", "");
 		if (engine == "xelatex" || engine == "lualatex") {
@@ -335,7 +341,9 @@ void LabelWidget::teXUsedChanged(bool checked) {
 			ui.sbFontSize->setVisible(true);
 		}
 	} else {
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 		m_highlighter->setDocument(0);
+#endif
 		ui.lFontTeX->setVisible(false);
 		ui.kfontRequesterTeX->setVisible(false);
 		ui.lFontSize->setVisible(false);

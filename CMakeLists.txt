@@ -27,8 +27,15 @@ find_package(KF5 REQUIRED COMPONENTS
 	TextWidgets
 	WidgetsAddons
 	XmlGui
+		OPTIONAL_COMPONENTS
 	SyntaxHighlighting
 )
+IF (SyntaxHighlighting_FOUND)
+        MESSAGE (STATUS "Found KF5 syntax highlighting")
+	add_definitions (-DHAVE_KF5_SYNTAX_HIGHLIGHTING)
+ELSE ()
+        MESSAGE (STATUS "KF5 syntax highlighting not found")
+ENDIF ()
 
 find_package(BISON REQUIRED)
 
@@ -76,7 +83,7 @@ FIND_PATH (CANTOR_INCLUDE_DIR worksheetaccess.h
 )
 IF (CANTOR_LIBS AND CANTOR_INCLUDE_DIR)
 	SET (CANTOR_LIBS_FOUND TRUE)
-ELSE()
+ELSE ()
 	SET (CANTOR_LIBS_FOUND FALSE)
 	SET (CANTOR_LIBS "")
 ENDIF()
