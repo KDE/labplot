@@ -266,15 +266,18 @@ void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
-
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	XYCurve* curve = 0;
 	if (aspect) {
 		curve = dynamic_cast<XYCurve*>(aspect);
 		Q_ASSERT(curve);
 	}
+
+	// disable deriv orders and accuracies that need more data points
+	this->updateDifferentiationSettings(curve->xColumn());
+
+	if (m_initializing)
+		return;
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYDifferentiationCurve*>(curve)->setDataSourceCurve(curve);
@@ -289,85 +292,97 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		Q_ASSERT(column);
 	}
 
+	// disable deriv orders and accuracies that need more data points
+	this->updateDifferentiationSettings(column);
+
+	if (m_initializing)
+		return;
+
 	foreach(XYCurve* curve, m_curvesList)
 		if (curve != 0)
 			dynamic_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
+}
 
-	// disable deriv orders and accuracies that need more data points
-	if (column != 0) {
-		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			uiGeneralTab.sbMin->setValue(column->minimum());
-			uiGeneralTab.sbMax->setValue(column->maximum());
-		}
 
-		size_t n=0;
-		for (int row=0; row < column->rowCount(); row++)
-			if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
-				n++;
+/*!
+ * disable deriv orders and accuracies that need more data points
+ */
+void XYDifferentiationCurveDock::updateDifferentiationSettings(const AbstractColumn* column) {
+	if (!column)
+		return;
 
-		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbDerivOrder->model());
-		QStandardItem* item = model->item(nsl_diff_deriv_order_first);
-		if (n < 3)
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-		else {
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-			if (n < 5)
-				uiGeneralTab.sbAccOrder->setMinimum(2);
-		}
-
-		item = model->item(nsl_diff_deriv_order_second);
-		if (n < 3) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_second)
-					uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
-		}
-		else {
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-			if (n < 4)
-				uiGeneralTab.sbAccOrder->setMinimum(1);
-			else if (n < 5)
-				uiGeneralTab.sbAccOrder->setMinimum(2);
-		}
-
-		item = model->item(nsl_diff_deriv_order_third);
-		if (n < 5) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_third)
-					uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-
-		item = model->item(nsl_diff_deriv_order_fourth);
-		if (n < 5) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_fourth)
-					uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
-		}
-		else {
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-			if (n < 7)
-				uiGeneralTab.sbAccOrder->setMinimum(1);
-		}
-
-		item = model->item(nsl_diff_deriv_order_fifth);
-		if (n < 7) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_fifth)
-					uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-
-		item = model->item(nsl_diff_deriv_order_sixth);
-		if (n < 7) {
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
-			if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_sixth)
-					uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
-		}
-		else
-			item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+	if (uiGeneralTab.cbAutoRange->isChecked()) {
+		uiGeneralTab.sbMin->setValue(column->minimum());
+		uiGeneralTab.sbMax->setValue(column->maximum());
 	}
+
+	size_t n=0;
+	for (int row=0; row < column->rowCount(); row++)
+		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
+			n++;
+
+	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbDerivOrder->model());
+	QStandardItem* item = model->item(nsl_diff_deriv_order_first);
+	if (n < 3)
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+	else {
+		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+		if (n < 5)
+			uiGeneralTab.sbAccOrder->setMinimum(2);
+	}
+
+	item = model->item(nsl_diff_deriv_order_second);
+	if (n < 3) {
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_second)
+				uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
+	}
+	else {
+		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+		if (n < 4)
+			uiGeneralTab.sbAccOrder->setMinimum(1);
+		else if (n < 5)
+			uiGeneralTab.sbAccOrder->setMinimum(2);
+	}
+
+	item = model->item(nsl_diff_deriv_order_third);
+	if (n < 5) {
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_third)
+				uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
+	}
+	else
+		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+
+	item = model->item(nsl_diff_deriv_order_fourth);
+	if (n < 5) {
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_fourth)
+				uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
+	}
+	else {
+		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+		if (n < 7)
+			uiGeneralTab.sbAccOrder->setMinimum(1);
+	}
+
+	item = model->item(nsl_diff_deriv_order_fifth);
+	if (n < 7) {
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_fifth)
+				uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
+	}
+	else
+		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+
+	item = model->item(nsl_diff_deriv_order_sixth);
+	if (n < 7) {
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_sixth)
+				uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
+	}
+	else
+		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
 }
 
 void XYDifferentiationCurveDock::autoRangeChanged() {
