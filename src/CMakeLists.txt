@@ -284,7 +284,7 @@ ki18n_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
 add_executable( labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
 target_link_libraries( labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} )
 #KF5::NewStuff
-IF (SyntaxHighlighting_FOUND)
+IF (KF5SyntaxHighlighting_FOUND)
 	target_link_libraries( labplot2 KF5::SyntaxHighlighting )
 ENDIF ()
 IF (CANTOR_LIBS_FOUND)
