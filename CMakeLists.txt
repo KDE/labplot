@@ -30,7 +30,7 @@ find_package(KF5 REQUIRED COMPONENTS
 		OPTIONAL_COMPONENTS
 	SyntaxHighlighting
 )
-IF (SyntaxHighlighting_FOUND)
+IF (KF5SyntaxHighlighting_FOUND)
         MESSAGE (STATUS "Found KF5 syntax highlighting")
 	add_definitions (-DHAVE_KF5_SYNTAX_HIGHLIGHTING)
 ELSE ()
