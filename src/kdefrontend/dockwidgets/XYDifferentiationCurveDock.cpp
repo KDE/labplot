@@ -33,8 +33,6 @@
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
-#include <QMenu>
-#include <QWidgetAction>
 #include <QStandardItemModel>
 
 extern "C" {
@@ -56,7 +54,7 @@ extern "C" {
   \ingroup kdefrontend
 */
 
-XYDifferentiationCurveDock::XYDifferentiationCurveDock(QWidget *parent): 
+XYDifferentiationCurveDock::XYDifferentiationCurveDock(QWidget* parent):
 	XYCurveDock(parent), cbDataSourceCurve(0), cbXDataColumn(0), cbYDataColumn(0), m_differentiationCurve(0) {
 
 	//hide the line connection type
@@ -205,9 +203,9 @@ void XYDifferentiationCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYDifferentiationCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing=true;
-	m_curvesList=list;
-	m_curve=list.first();
+	m_initializing = true;
+	m_curvesList = list;
+	m_curve = list.first();
 	m_differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(m_curve);
 	Q_ASSERT(m_differentiationCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
@@ -215,7 +213,7 @@ void XYDifferentiationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_differentiationData = m_differentiationCurve->differentiationData();
 	initGeneralTab();
 	initTabs();
-	m_initializing=false;
+	m_initializing = false;
 
 	//hide the "skip gaps" option after the curves were set
 	ui.lLineSkipGaps->hide();
@@ -259,7 +257,6 @@ void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
 
 	if (m_initializing)
 		return;
-
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYDifferentiationCurve*>(curve)->setDataSourceType(type);
@@ -416,6 +413,7 @@ void XYDifferentiationCurveDock::autoRangeChanged() {
 	}
 
 }
+
 void XYDifferentiationCurveDock::xRangeMinChanged() {
 	double xMin = uiGeneralTab.sbMin->value();
 
@@ -545,7 +543,7 @@ void XYDifferentiationCurveDock::showDifferentiationResult() {
 }
 
 //*************************************************************
-//*********** SLOTs for changes triggered in XYCurve **********
+//*** SLOTs for changes triggered in XYDifferentiationCurve ***
 //*************************************************************
 //General-Tab
 void XYDifferentiationCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
