@@ -839,6 +839,7 @@ XYDifferentiationCurve* CartesianPlot::addDifferentiationCurve() {
 	} else {
 		this->addChild(curve);
 	}
+	this->applyThemeOnNewCurve(curve);
 	return curve;
 }
 
