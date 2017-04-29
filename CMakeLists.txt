@@ -27,6 +27,7 @@ find_package(KF5 REQUIRED COMPONENTS
 	TextWidgets
 	WidgetsAddons
 	XmlGui
+	SyntaxHighlighting
 )
 
 find_package(BISON REQUIRED)

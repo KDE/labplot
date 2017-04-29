@@ -32,10 +32,15 @@
 #include "ui_labelwidget.h"
 #include "backend/worksheet/TextLabel.h"
 #include <KConfigGroup>
+#include <repository.h>
 
 class Label;
 class Axis;
 class QMenu;
+
+namespace KSyntaxHighlighting {
+	class SyntaxHighlighter;
+}
 
 class LabelWidget : public QWidget {
 	Q_OBJECT
@@ -61,6 +66,8 @@ private:
 	bool m_initializing;
 	QMenu* m_dateTimeMenu;
 	bool m_teXEnabled;
+	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
+	KSyntaxHighlighting::Repository m_repository;
 
 	void initConnections() const;
 

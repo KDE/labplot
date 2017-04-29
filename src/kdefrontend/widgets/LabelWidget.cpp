@@ -31,6 +31,7 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "tools/TeXRenderer.h"
 
+#include <QMenu>
 #include <QWidgetAction>
 #include <QSplitter>
 
@@ -38,7 +39,8 @@
 #include <KSharedConfig>
 #include <KCharSelect>
 #include <KLocalizedString>
-#include <QMenu>
+#include <KF5/KSyntaxHighlighting/SyntaxHighlighter>
+#include <KF5/KSyntaxHighlighting/Definition>
 
 /*!
 	\class LabelWidget
@@ -108,6 +110,9 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	//2. in case the label was in the non-latex mode and no latex is available,
 	//deactivate the latex button so the user cannot switch to this mode.
 	m_teXEnabled = TeXRenderer::enabled();
+
+	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teLabel->document());
+	m_highlighter->setDefinition(m_repository.definitionForName("LaTeX"));
 
 	//SLOTS
 	// text properties
@@ -315,6 +320,7 @@ void LabelWidget::teXUsedChanged(bool checked) {
 	ui.kfontRequester->setVisible(!checked);
 
 	if (checked) {
+		m_highlighter->setDocument(ui.teLabel->document());
 		KConfigGroup conf(KSharedConfig::openConfig(), "Settings_Worksheet");
 		QString engine = conf.readEntry("LaTeXEngine", "");
 		if (engine == "xelatex" || engine == "lualatex") {
@@ -329,6 +335,7 @@ void LabelWidget::teXUsedChanged(bool checked) {
 			ui.sbFontSize->setVisible(true);
 		}
 	} else {
+		m_highlighter->setDocument(0);
 		ui.lFontTeX->setVisible(false);
 		ui.kfontRequesterTeX->setVisible(false);
 		ui.lFontSize->setVisible(false);
