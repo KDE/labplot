@@ -48,6 +48,7 @@ class TreeViewComboBox : public QComboBox {
 
 		void setTopLevelClasses(QList<const char*>);
 		void setSelectableClasses(QList<const char*>);
+		void setHiddenAspects(QList<const AbstractAspect*>);
 
 		virtual void showPopup();
 		virtual void hidePopup();
@@ -59,11 +60,13 @@ class TreeViewComboBox : public QComboBox {
 
 		QList<const char*> m_topLevelClasses;
 		QList<const char*> m_selectableClasses;
+		QList<const AbstractAspect*> m_hiddenAspects;
 
 		void showTopLevelOnly(const QModelIndex&);
 		bool eventFilter(QObject*, QEvent*);
 		bool filter(const QModelIndex&, const QString&);
-		bool isTopLevel(const AbstractAspect* aspect) const;
+		bool isTopLevel(const AbstractAspect*) const;
+		bool isHidden(const AbstractAspect*) const;
 
 	private slots:
 		void treeViewIndexActivated(const QModelIndex&);

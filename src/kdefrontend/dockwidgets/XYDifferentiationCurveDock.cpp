@@ -177,6 +177,11 @@ void XYDifferentiationCurveDock::setModel() {
 	list<<"Folder"<<"Datapicker"<<"Worksheet"<<"CartesianPlot"<<"XYCurve";
 	cbDataSourceCurve->setTopLevelClasses(list);
 
+	QList<const AbstractAspect*> hiddenAspects;
+	foreach (XYCurve* curve, m_curvesList)
+		hiddenAspects << curve;
+	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
+
 	list.clear();
 	list<<"XYCurve"<<"DatapickerCurve";
 	cbDataSourceCurve->setSelectableClasses(list);
