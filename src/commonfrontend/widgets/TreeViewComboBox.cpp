@@ -261,5 +261,5 @@ bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
 }
 
 bool TreeViewComboBox::isHidden(const AbstractAspect* aspect) const {
-	return (m_hiddenAspects.indeOf(aspect) != -1);
+	return (m_hiddenAspects.indexOf(aspect) != -1);
 }
