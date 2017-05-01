@@ -23,13 +23,19 @@ find_package(KF5 REQUIRED COMPONENTS
 	IconThemes
 	KDELibs4Support
 	KIO
-	NewStuff
 	TextWidgets
 	WidgetsAddons
 	XmlGui
 		OPTIONAL_COMPONENTS
+	NewStuff
 	SyntaxHighlighting
 )
+IF (KF5NewStuff_FOUND)
+        MESSAGE (STATUS "Found KF5 new stuff")
+	add_definitions (-DHAVE_KF5_NEW_STUFF)
+ELSE ()
+        MESSAGE (STATUS "KF5 new stuff not found")
+ENDIF ()
 IF (KF5SyntaxHighlighting_FOUND)
         MESSAGE (STATUS "Found KF5 syntax highlighting")
 	add_definitions (-DHAVE_KF5_SYNTAX_HIGHLIGHTING)
