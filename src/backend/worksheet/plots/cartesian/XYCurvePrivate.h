@@ -74,6 +74,7 @@ class XYCurvePrivate: public QGraphicsItem {
 		const XYCurve* dataSourceCurve;
 		const AbstractColumn* xColumn;
 		const AbstractColumn* yColumn;
+		QString dataSourceCurvePath;
 		QString xColumnPath;
 		QString yColumnPath;
 

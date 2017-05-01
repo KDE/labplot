@@ -220,10 +220,13 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::DataSourceType, dataSourceType, dat
 BASIC_SHARED_D_READER_IMPL(XYCurve, const XYCurve*, dataSourceCurve, dataSourceCurve)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xColumn, xColumn)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yColumn, yColumn)
-QString& XYCurve::xColumnPath() const {
+const QString& XYCurve::dataSourceCurvePath() const {
+	return d_ptr->dataSourceCurvePath;
+}
+const QString& XYCurve::xColumnPath() const {
 	return d_ptr->xColumnPath;
 }
-QString& XYCurve::yColumnPath() const {
+const QString& XYCurve::yColumnPath() const {
 	return d_ptr->yColumnPath;
 }
 
@@ -250,7 +253,7 @@ CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, symbolsPen, symbolsPen)
 //values
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesType, valuesType, valuesType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, valuesColumn, valuesColumn)
-QString& XYCurve::valuesColumnPath() const {
+const QString& XYCurve::valuesColumnPath() const {
 	return d_ptr->valuesColumnPath;
 }
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesPosition, valuesPosition, valuesPosition)
@@ -276,21 +279,21 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, fillingOpacity, fillingOpacity)
 //error bars
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, xErrorType, xErrorType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xErrorPlusColumn, xErrorPlusColumn)
-QString& XYCurve::xErrorPlusColumnPath() const {
+const QString& XYCurve::xErrorPlusColumnPath() const {
 	return d_ptr->xErrorPlusColumnPath;
 }
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xErrorMinusColumn, xErrorMinusColumn)
-QString& XYCurve::xErrorMinusColumnPath() const {
+const QString& XYCurve::xErrorMinusColumnPath() const {
 	return d_ptr->xErrorMinusColumnPath;
 }
 
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, yErrorType, yErrorType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yErrorPlusColumn, yErrorPlusColumn)
-QString& XYCurve::yErrorPlusColumnPath() const {
+const QString& XYCurve::yErrorPlusColumnPath() const {
 	return d_ptr->yErrorPlusColumnPath;
 }
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yErrorMinusColumn, yErrorMinusColumn)
-QString& XYCurve::yErrorMinusColumnPath() const {
+const QString& XYCurve::yErrorMinusColumnPath() const {
 	return d_ptr->yErrorMinusColumnPath;
 }
 
@@ -314,8 +317,12 @@ void XYCurve::setDataSourceType(DataSourceType type) {
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetDataSourceCurve, const XYCurve*, dataSourceCurve, retransform)
 void XYCurve::setDataSourceCurve(const XYCurve* curve) {
 	Q_D(XYCurve);
-	if (curve != d->dataSourceCurve)
+	if (curve != d->dataSourceCurve) {
 		exec(new XYCurveSetDataSourceCurveCmd(d, curve, i18n("%1: data source curve changed")));
+		connect(curve, SIGNAL(xColumnChanged()), this, SIGNAL(xDataChanged()));
+		connect(curve, SIGNAL(yColumnChanged()), this, SIGNAL(yDataChanged()));
+		//TODO: add disconnect in the undo-function
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetXColumn, const AbstractColumn*, xColumn, retransform)
@@ -2159,6 +2166,8 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 
 	//general
 	writer->writeStartElement( "general" );
+	writer->writeAttribute( "dataSourceType", QString::number(d->dataSourceType) );
+	WRITE_PATH(d->dataSourceCurve, dataSourceCurve);
 	WRITE_COLUMN(d->xColumn, xColumn);
 	WRITE_COLUMN(d->yColumn, yColumn);
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
@@ -2268,6 +2277,8 @@ bool XYCurve::load(XmlStreamReader* reader) {
 		} else if (reader->name() == "general") {
 			attribs = reader->attributes();
 
+			READ_INT_VALUE("dataSourceType", dataSourceType, XYCurve::DataSourceType);
+			READ_PATH(dataSourceCurve);
 			READ_COLUMN(xColumn);
 			READ_COLUMN(yColumn);
 

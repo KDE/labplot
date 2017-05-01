@@ -451,4 +451,35 @@ if (!obj->col ##Path().isEmpty()) {													\
 }																					\
 } while(0)
 
+
+
+#define WRITE_PATH(obj, name) 														\
+do {																				\
+if (obj){																			\
+	writer->writeAttribute( #name, obj->path() );									\
+} else {																			\
+	writer->writeAttribute( #name, "" );											\
+}																					\
+} while(0)
+
+#define READ_PATH(name)																\
+do {																				\
+	str = attribs.value(#name).toString();											\
+	d->name ##Path = str;															\
+} while(0)
+
+#define RESTORE_POINTER(obj, name, Name, Type, list) 								\
+do {																				\
+if (!obj->name ##Path().isEmpty()) {												\
+	foreach (AbstractAspect* aspect, list) {										\
+		if (aspect->path() == obj->name ##Path()) {									\
+			Type * a = dynamic_cast<Type*>(aspect);									\
+			if (!a) continue;														\
+ 			obj->set## Name(a);														\
+			break;				 													\
+		}																			\
+	}																				\
+}																					\
+} while(0)
+
 #endif // MACROS_H
