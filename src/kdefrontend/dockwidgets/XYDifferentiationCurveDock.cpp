@@ -285,7 +285,6 @@ void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index
 		dynamic_cast<XYDifferentiationCurve*>(curve)->setDataSourceCurve(curve);
 }
 
-
 void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = 0;
@@ -403,8 +402,10 @@ void XYDifferentiationCurveDock::autoRangeChanged() {
 		const AbstractColumn* xDataColumn = 0;
 		if (m_differentiationCurve->dataSourceType() == XYCurve::DataSourceSpreadsheet)
 			xDataColumn = m_differentiationCurve->xDataColumn();
-		else
-			xDataColumn = m_differentiationCurve->dataSourceCurve()->xColumn();
+		else {
+			if (m_differentiationCurve->dataSourceCurve())
+				xDataColumn = m_differentiationCurve->dataSourceCurve()->xColumn();
+		}
 
 		if (xDataColumn) {
 			uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
@@ -416,7 +417,6 @@ void XYDifferentiationCurveDock::autoRangeChanged() {
 		uiGeneralTab.lMax->setEnabled(true);
 		uiGeneralTab.sbMax->setEnabled(true);
 	}
-
 }
 
 void XYDifferentiationCurveDock::xRangeMinChanged() {
