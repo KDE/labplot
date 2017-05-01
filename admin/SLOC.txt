@@ -1,5 +1,56 @@
 Statistics generated using David A. Wheeler's 'SLOCCount'."
 
+-----2.4-----
+SLOC    Directory       SLOC-by-Language (Sorted)
+41803   backend         cpp=36475,ansic=4844,yacc=467,python=17
+21807   kdefrontend     cpp=21807
+7633    commonfrontend  cpp=7633
+388     tools           cpp=388
+
+
+Totals grouped by language (dominant language first):
+cpp:          66303 (92.56%)
+ansic:         4844 (6.76%)
+yacc:           467 (0.65%)
+python:          17 (0.02%)
+
+
+* Total Physical Source Lines of Code (SLOC)                = 71,631
+* Development Effort Estimate, Person-Years (Person-Months) = 17.74 (212.85)
+  (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))
+* Schedule Estimate, Years (Months)                         = 1.60 (19.17)
+  (Basic COCOMO model, Months = 2.5 * (person-months**0.38))
+* Estimated Average Number of Developers (Effort/Schedule)  = 11.10
+* Total Estimated Cost to Develop                           = $ 2,396,060
+  (average salary = $56,286/year, overhead = 2.40).
+
+
+### kf5-version ###
+SLOC    Directory       SLOC-by-Language (Sorted)
+42159   backend         cpp=36831,ansic=4844,yacc=467,python=17
+22096   kdefrontend     cpp=22096
+7841    commonfrontend  cpp=7841
+390     tools           cpp=390
+152     cantor          cpp=152
+
+
+Totals grouped by language (dominant language first):
+cpp:          67310 (92.66%)
+ansic:         4844 (6.67%)
+yacc:           467 (0.64%)
+python:          17 (0.02%)
+
+
+* Total Physical Source Lines of Code (SLOC)                = 72,638
+* Development Effort Estimate, Person-Years (Person-Months) = 18.00 (215.99)
+  (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))
+* Schedule Estimate, Years (Months)                         = 1.61 (19.28)
+  (Basic COCOMO model, Months = 2.5 * (person-months**0.38))
+* Estimated Average Number of Developers (Effort/Schedule)  = 11.20
+* Total Estimated Cost to Develop                           = $ 2,431,441
+  (average salary = $56,286/year, overhead = 2.40).
+
+
 
 -----2.3-----
 SLOC    Directory       SLOC-by-Language (Sorted)
