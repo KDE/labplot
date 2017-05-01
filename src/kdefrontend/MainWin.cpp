@@ -836,8 +836,8 @@ void MainWin::openProject(const QString& filename) {
 		return;
 	}
 
-	char* c;
-	bool rc = file->getChar(c);
+	char c;
+	bool rc = file->getChar(&c);
 	if (!rc) {
 		KMessageBox::error(this, i18n("The project file is empty."), i18n("Error opening project"));
 		file->close();
