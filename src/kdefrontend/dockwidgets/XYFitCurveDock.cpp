@@ -3,7 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
-    Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2016-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of fit curves
 
  ***************************************************************************/
@@ -1005,18 +1005,27 @@ void XYFitCurveDock::showFitResult() {
 	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
 	QString str = i18n("status:") + ' ' + fitResult.status + "<br>";
 
+	uiGeneralTab.lstatus->setText(fitResult.status);
 	if (!fitResult.valid) {
 		uiGeneralTab.teResult->setText(str);
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
 	str += i18n("iterations:") + ' ' + QString::number(fitResult.iterations) + "<br>";
-	if (fitResult.elapsedTime > 1000)
+	uiGeneralTab.literations->setText(QString::number(fitResult.iterations));
+	if (fitResult.elapsedTime > 1000) {
 		str += i18n("calculation time: %1 s", fitResult.elapsedTime/1000) + "<br>";
-	else
+		uiGeneralTab.lcalculation_time->setText(QString::number(fitResult.elapsedTime/1000) + " s");
+	} else {
 		str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + "<br>";
+		uiGeneralTab.lcalculation_time->setText(QString::number(fitResult.elapsedTime) + " ms");
+	}
 
 	str += i18n("degrees of freedom:") + ' ' + QString::number(fitResult.dof) + "<br><br>";
+	uiGeneralTab.ltolerance->setText(QString::number(m_fitData.eps));
+	uiGeneralTab.ldegrees_of_freedom->setText(QString::number(fitResult.dof));
+	uiGeneralTab.lnumber_of_parameter->setText(QString::number(fitResult.paramValues.size()));
+	uiGeneralTab.lx_range->setText(QString::number(uiGeneralTab.sbMin->value()) + " .. " + QString::number(uiGeneralTab.sbMax->value()) );
 
 	str += "<b>" +i18n("Parameters:") + "</b>";
 	for (int i = 0; i < fitResult.paramValues.size(); i++) {
