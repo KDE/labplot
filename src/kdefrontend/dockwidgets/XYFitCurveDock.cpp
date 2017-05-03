@@ -1028,13 +1028,28 @@ void XYFitCurveDock::showFitResult() {
 	uiGeneralTab.lx_range->setText(QString::number(uiGeneralTab.sbMin->value()) + " .. " + QString::number(uiGeneralTab.sbMax->value()) );
 
 	str += "<b>" +i18n("Parameters:") + "</b>";
+	uiGeneralTab.twParameter->setRowCount(fitResult.paramValues.size());
+	uiGeneralTab.twParameter->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	QStringList headerLabels;
+	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %");
+	uiGeneralTab.twParameter->setHorizontalHeaderLabels(headerLabels);
 	for (int i = 0; i < fitResult.paramValues.size(); i++) {
 		if (fitData.paramFixed.at(i))
 			str += "<br>" + fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i));
 		else
 			str += "<br>" + fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
 				+ QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
-				+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i))) + " %)";
+				+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %)";
+		QTableWidgetItem *newItem = new QTableWidgetItem(fitData.paramNamesUtf8.at(i));
+		uiGeneralTab.twParameter->setItem(i, 0, newItem);
+		newItem = new QTableWidgetItem(QString::number(fitResult.paramValues.at(i)));
+		uiGeneralTab.twParameter->setItem(i, 1, newItem);
+		if (!fitData.paramFixed.at(i)) {
+			newItem = new QTableWidgetItem(QString::number(fitResult.errorValues.at(i)));
+			uiGeneralTab.twParameter->setItem(i, 2, newItem);
+			newItem = new QTableWidgetItem(QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3));
+			uiGeneralTab.twParameter->setItem(i, 3, newItem);
+		}
 	}
 
 	str += "<br><br><b>" + i18n("Goodness of fit:") + "</b><br>";
