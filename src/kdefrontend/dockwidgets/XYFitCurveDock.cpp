@@ -1003,36 +1003,39 @@ void XYFitCurveDock::showFitResult() {
 	}
 
 	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
-	QString str = i18n("status:") + ' ' + fitResult.status + "<br>";
 
-	uiGeneralTab.lstatus->setText(fitResult.status);
+	// General (str contains summary info)
+	QString str = i18n("status:") + ' ' + fitResult.status + "<br>";
+	uiGeneralTab.twGeneral->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	uiGeneralTab.twGeneral->item(0, 1)->setText(fitResult.status);
 	if (!fitResult.valid) {
 		uiGeneralTab.teResult->setText(str);
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	str += i18n("iterations:") + ' ' + QString::number(fitResult.iterations) + "<br>";
-	uiGeneralTab.literations->setText(QString::number(fitResult.iterations));
+	//str += i18n("iterations:") + ' ' + QString::number(fitResult.iterations) + "<br>";
+	uiGeneralTab.twGeneral->item(1, 1)->setText(QString::number(fitResult.iterations));
+	uiGeneralTab.twGeneral->item(2, 1)->setText(QString::number(m_fitData.eps));
 	if (fitResult.elapsedTime > 1000) {
-		str += i18n("calculation time: %1 s", fitResult.elapsedTime/1000) + "<br>";
-		uiGeneralTab.lcalculation_time->setText(QString::number(fitResult.elapsedTime/1000) + " s");
+		//str += i18n("calculation time: %1 s", fitResult.elapsedTime/1000) + "<br>";
+		uiGeneralTab.twGeneral->item(3, 1)->setText(QString::number(fitResult.elapsedTime/1000) + " s");
 	} else {
-		str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + "<br>";
-		uiGeneralTab.lcalculation_time->setText(QString::number(fitResult.elapsedTime) + " ms");
+		//str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + "<br>";
+		uiGeneralTab.twGeneral->item(3, 1)->setText(QString::number(fitResult.elapsedTime) + " ms");
 	}
 
 	str += i18n("degrees of freedom:") + ' ' + QString::number(fitResult.dof) + "<br><br>";
-	uiGeneralTab.ltolerance->setText(QString::number(m_fitData.eps));
-	uiGeneralTab.ldegrees_of_freedom->setText(QString::number(fitResult.dof));
-	uiGeneralTab.lnumber_of_parameter->setText(QString::number(fitResult.paramValues.size()));
-	uiGeneralTab.lx_range->setText(QString::number(uiGeneralTab.sbMin->value()) + " .. " + QString::number(uiGeneralTab.sbMax->value()) );
+	uiGeneralTab.twGeneral->item(4, 1)->setText(QString::number(fitResult.dof));
+	uiGeneralTab.twGeneral->item(5, 1)->setText(QString::number(fitResult.paramValues.size()));
+	uiGeneralTab.twGeneral->item(6, 1)->setText(QString::number(uiGeneralTab.sbMin->value()) + " .. " + QString::number(uiGeneralTab.sbMax->value()) );
 
+	// Parameters
 	str += "<b>" +i18n("Parameters:") + "</b>";
-	uiGeneralTab.twParameter->setRowCount(fitResult.paramValues.size());
-	uiGeneralTab.twParameter->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	uiGeneralTab.twParameters->setRowCount(fitResult.paramValues.size());
+	uiGeneralTab.twParameters->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	QStringList headerLabels;
 	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %");
-	uiGeneralTab.twParameter->setHorizontalHeaderLabels(headerLabels);
+	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
 	for (int i = 0; i < fitResult.paramValues.size(); i++) {
 		if (fitData.paramFixed.at(i))
 			str += "<br>" + fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i));
@@ -1041,33 +1044,48 @@ void XYFitCurveDock::showFitResult() {
 				+ QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
 				+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %)";
 		QTableWidgetItem *newItem = new QTableWidgetItem(fitData.paramNamesUtf8.at(i));
-		uiGeneralTab.twParameter->setItem(i, 0, newItem);
+		uiGeneralTab.twParameters->setItem(i, 0, newItem);
 		newItem = new QTableWidgetItem(QString::number(fitResult.paramValues.at(i)));
-		uiGeneralTab.twParameter->setItem(i, 1, newItem);
+		uiGeneralTab.twParameters->setItem(i, 1, newItem);
 		if (!fitData.paramFixed.at(i)) {
 			newItem = new QTableWidgetItem(QString::number(fitResult.errorValues.at(i)));
-			uiGeneralTab.twParameter->setItem(i, 2, newItem);
+			uiGeneralTab.twParameters->setItem(i, 2, newItem);
 			newItem = new QTableWidgetItem(QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3));
-			uiGeneralTab.twParameter->setItem(i, 3, newItem);
+			uiGeneralTab.twParameters->setItem(i, 3, newItem);
 		}
 	}
 
+	// Goodness of fit
 	str += "<br><br><b>" + i18n("Goodness of fit:") + "</b><br>";
-	str += i18n("sum of squared errors") + " (" + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.sse) + "<br>";
-	str += i18n("mean squared error:") + ' ' + QString::number(fitResult.mse) + "<br>";
-	str += i18n("root-mean squared error") + " (" + i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.rmse) + "<br>";
-	str += i18n("mean absolute error:") + ' ' + QString::number(fitResult.mae) + "<br>";
+	//str += i18n("sum of squared residuals") + " (" + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.sse) + "<br>";
+	uiGeneralTab.twGoodness->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	uiGeneralTab.twGoodness->item(0, 1)->setText(QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2"));
+	uiGeneralTab.twGoodness->item(0, 2)->setText(QString::number(fitResult.sse));
 
 	if (fitResult.dof != 0) {
-		str += i18n("residual mean square:") + ' ' + QString::number(fitResult.rms) + "<br>";
-		str += i18n("residual standard deviation:") + ' ' + QString::number(fitResult.rsd) + "<br>";
+		str += i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ": " + QString::number(fitResult.rms) + "<br>";
+		uiGeneralTab.twGoodness->item(1, 1)->setText(i18n("reduced") + " " + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ", " + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "/dof");
+		uiGeneralTab.twGoodness->item(1, 2)->setText(QString::number(fitResult.rms));
+		//str += i18n("residual standard deviation:") + ' ' + QString::number(fitResult.rsd) + "<br>";
+		uiGeneralTab.twGoodness->item(2, 1)->setText(i18n("RMSE") + ", " + "SD" );
+		uiGeneralTab.twGoodness->item(2, 2)->setText(QString::number(fitResult.rsd));
 	}
 
-	str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.rsquared) + "<br>";
+	//str += i18n("coefficient of determination") + " (R" + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.rsquared) + "<br>";
+	uiGeneralTab.twGoodness->item(3, 1)->setText("R" + QString::fromUtf8("\u00b2"));
+	uiGeneralTab.twGoodness->item(3, 2)->setText(QString::number(fitResult.rsquared, 'g', 15));
 	str += i18n("adj. coefficient of determination")+ " (R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2")
-		+ "): " + QString::number(fitResult.rsquaredAdj) + "<br>";
+		+ "): " + QString::number(fitResult.rsquaredAdj, 'g', 15);
+	uiGeneralTab.twGoodness->item(4, 1)->setText("R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2"));
+	uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(fitResult.rsquaredAdj, 'g', 15));
+
+	//str += i18n("mean squared error:") + ' ' + QString::number(fitResult.mse) + "<br>";
+	//str += i18n("root-mean squared error") + " (" + i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.rmse) + "<br>";
+	//str += i18n("mean absolute error:") + ' ' + QString::number(fitResult.mae) + "<br>";
+	uiGeneralTab.twGoodness->item(5, 2)->setText(QString::number(fitResult.mae));
 // 	str += "<br><br>";
-//
+
+	// do not show all iterations
 // 	QStringList iterations = fitResult.solverOutput.split(';');
 // 	for (int i = 0; i<iterations.size(); ++i)
 // 		str += "<br>" + iterations.at(i);

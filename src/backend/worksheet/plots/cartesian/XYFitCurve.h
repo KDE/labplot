@@ -77,7 +77,7 @@ class XYFitCurve : public XYCurve {
 
 		struct FitResult {
 			FitResult() : available(false), valid(false), iterations(0), elapsedTime(0),
-				dof(0), sse(0), mse(0), rmse(0), mae(0), rms(0), rsd(0), rsquared(0), rsquaredAdj(0) {};
+				dof(0), sse(0), rms(0), rsd(0), rsquared(0), rsquaredAdj(0), mse(0), rmse(0), mae(0) {};
 
 			bool available;
 			bool valid;
@@ -85,14 +85,17 @@ class XYFitCurve : public XYCurve {
 			int iterations;
 			qint64 elapsedTime;
 			double dof; //degrees of freedom
-			double sse; //sum of squared errors (SSE) / residual sum of errors (RSS) / sum of sq. residuals (SSR) = \sum_i^n (Y_i-y_i)^2
-			double mse; //mean squared error = 1/n \sum_i^n  (Y_i-y_i)^2
-			double rmse; //root-mean squared error = \sqrt(mse)
-			double mae; //mean absolute error = \sum_i^n |Y_i-y_i|
-			double rms; //residual mean square = SSE/d.o.f.
-			double rsd; //residual standard deviation = sqrt(SSE/d.o.f)
-			double rsquared; //Coefficient of determination (R^2)
-			double rsquaredAdj; //Adjusted coefficient of determination (R^2)
+			// residuals: r_i = y_i - Y_i
+			double sse; // sum of squared errors (SSE) / residual sum of squares (RSS) / sum of sq. residuals (SSR) / S = chi^2 = \sum_i^n r_i^2
+			double rms; // residual mean square / reduced chi^2 = SSE/dof
+			double rsd; // residual standard deviation = sqrt(SSE/dof)
+			double rsquared; // coefficient of determination (COD, R^2) = 1 - SSE/SST
+				// with the total sum of squares SST = \sum_i (y_i - ybar)^2 and ybar = 1/n \sum_i y_i
+			double rsquaredAdj; // adjusted coefficient of determination (\hat R^2) = 1 - (1-R^2)*(n-1)/(n-p-1);
+			double mse; // mean squared error = SSE/n
+			double rmse; // root-mean squared error = \sqrt(mse)
+			double mae; // mean absolute error = \sum_i^n |r_i|
+			// see also http://www.originlab.com/doc/Origin-Help/NLFit-Algorithm
 			QVector<double> paramValues;
 			QVector<double> errorValues;
 			QString solverOutput;

@@ -1009,21 +1009,8 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.iterations = iter;
 	fitResult.dof = n - np;
 
-	//calculate:
-	//residuals r_i = y_i - Y_i = - (Y_i - y_i)
-	//sse = sum of squared errors (SSE) = residual sum of errors (RSS) = sum of sq. residuals (SSR) = \sum_i^n (Y_i-y_i)^2
-	//mse = mean squared error = 1/n \sum_i^n  (Y_i-y_i)^2
-	//rmse = root-mean squared error = \sqrt(mse)
-	//mae = mean absolute error = \sum_i^n |Y_i-y_i|
-	//rms = residual mean square = sse/d.o.f.
-	//rsd = residual standard deviation = sqrt(rms)
-	//Coefficient of determination, R-squared = 1 - SSE/SSTOT with the total sum of squares SSTOT = \sum_i (y_i - ybar)^2 and ybar = 1/n \sum_i y_i
-	//Adjusted Coefficient of determination  adj. R-squared = 1 - (1-R-squared^2)*(n-1)/(n-np-1);
-	// see also http://www.originlab.com/doc/Origin-Help/NLFit-Algorithm
-
-
-	//gsl_blas_dnrm2() - computes the Euclidian norm (||x||_2 = \sqrt {\sum x_i^2}) of the vector with the elements (Yi - y[i])/sigma[i]
-	//gsl_blas_dasum() - computes the absolute sum \sum |x_i| of the elements of the vector with the elements (Yi - y[i])/sigma[i]
+	//gsl_blas_dnrm2() - computes the Euclidian norm (||r||_2 = \sqrt {\sum r_i^2}) of the vector with the elements (Yi - y[i])/sigma[i]
+	//gsl_blas_dasum() - computes the absolute sum \sum |r_i| of the elements of the vector with the elements (Yi - y[i])/sigma[i]
 	fitResult.sse = gsl_pow_2(gsl_blas_dnrm2(s->f));
 	fitResult.mse = fitResult.sse/n;
 	fitResult.rmse = sqrt(fitResult.mse);
@@ -1038,10 +1025,10 @@ void XYFitCurvePrivate::recalculate() {
 	for (size_t i = 0; i < n; ++i)
 		ybar += ydata[i];
 	ybar = ybar/n;
-	double sstot = 0;
+	double sst = 0;
 	for (size_t i = 0; i < n; ++i)
-		sstot += gsl_pow_2(ydata[i]-ybar);
-	fitResult.rsquared = 1. - fitResult.sse/sstot;
+		sst += gsl_pow_2(ydata[i]-ybar);
+	fitResult.rsquared = 1. - fitResult.sse/sst;
 	fitResult.rsquaredAdj = 1. - (1. - fitResult.rsquared*fitResult.rsquared)*(n-1.)/(n-np-1.);
 
 	//parameter values
@@ -1199,14 +1186,6 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//fit results (generated columns and goodness of the fit)
-	//sse = sum of squared errors (SSE) = residual sum of errors (RSS) = sum of sq. residuals (SSR) = \sum_i^n (Y_i-y_i)^2
-	//mse = mean squared error = 1/n \sum_i^n  (Y_i-y_i)^2
-	//rmse = root-mean squared error = \sqrt(mse)
-	//mae = mean absolute error = \sum_i^n |Y_i-y_i|
-	//rms = residual mean square = sse/d.o.f.
-	//rsd = residual standard deviation = sqrt(rms)
-	//R-squared
-	//adjusted R-squared
 	writer->writeStartElement("fitResult");
 	writer->writeAttribute( "available", QString::number(d->fitResult.available) );
 	writer->writeAttribute( "valid", QString::number(d->fitResult.valid) );
