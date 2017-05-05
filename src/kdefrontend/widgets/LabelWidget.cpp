@@ -2,8 +2,8 @@
     File                 : LabelWidget.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2012-2014 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2008-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2017 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Description          : label settings widget
 
  ***************************************************************************/
@@ -42,6 +42,7 @@
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KF5/KSyntaxHighlighting/SyntaxHighlighter>
 #include <KF5/KSyntaxHighlighting/Definition>
+#include <KF5/KSyntaxHighlighting/Theme>
 #endif
 
 /*!
@@ -116,6 +117,9 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teLabel->document());
 	m_highlighter->setDefinition(m_repository.definitionForName("LaTeX"));
+	m_highlighter->setTheme(  (palette().color(QPalette::Base).lightness() < 128)
+								? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+								: m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme) );
 #endif
 
 	//SLOTS

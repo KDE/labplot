@@ -1,6 +1,7 @@
 -----2.5-----
 New features:
-	* Apply themes to worksheet and to all its childred
+	* Apply themes to worksheet and to all its children
+	* Syntax highlighting for LaTeX in the text label
 
 -----2.4-----
 New features:
