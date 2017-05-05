@@ -34,6 +34,11 @@
 #include <KGlobal>
 #include <KLocale>
 #include <KMessageBox>
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+#include <KF5/KSyntaxHighlighting/SyntaxHighlighter>
+#include <KF5/KSyntaxHighlighting/Definition>
+#include <KF5/KSyntaxHighlighting/Theme>
+#endif
 
 #include <QtSql>
 #include <QStandardItem>
@@ -46,6 +51,14 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(pare
 	ui.cbImportFrom->addItem(i18n("Custom query"));
 
 	ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
+
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teQuery->document());
+	m_highlighter->setDefinition(m_repository.definitionForName("SQL"));
+	m_highlighter->setTheme(  (palette().color(QPalette::Base).lightness() < 128)
+								? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+								: m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme) );
+#endif
 
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first() +  "sql_connections";
 

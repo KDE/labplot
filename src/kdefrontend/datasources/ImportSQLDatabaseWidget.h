@@ -33,6 +33,13 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "ui_importsqldatabasewidget.h"
 
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+#include <repository.h>
+namespace KSyntaxHighlighting {
+	class SyntaxHighlighter;
+}
+#endif
+
 class QStandardItemModel;
 
 class ImportSQLDatabaseWidget : public QWidget {
@@ -57,6 +64,10 @@ private:
 	bool m_initializing;
 	bool m_valid;
 	bool m_numeric;
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
+	KSyntaxHighlighting::Repository m_repository;
+#endif
 
 	void readConnections();
 	void updateStatus();
