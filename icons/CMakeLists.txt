@@ -1,6 +1,7 @@
 ecm_install_icons(
 ICONS
 128-apps-labplot2.png
+16-apps-labplot2.png
 22-apps-labplot2.png
 256-apps-labplot2.png
 32-apps-labplot2.png

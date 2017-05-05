@@ -187,9 +187,10 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 	*success = (latexProcess.exitCode() == 0);
 	if (*success == false)
 		WARNING("latex exit code = " << latexProcess.exitCode());
-
-	QFile::remove(fi.completeBaseName() + ".aux");
-	QFile::remove(fi.completeBaseName() + ".log");
+	else {
+		QFile::remove(fi.completeBaseName() + ".aux");
+		QFile::remove(fi.completeBaseName() + ".log");
+	}
 
 	// convert: PDF -> PNG
 	QProcess convertProcess;

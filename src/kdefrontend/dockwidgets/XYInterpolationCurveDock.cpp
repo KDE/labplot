@@ -150,8 +150,8 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	m_interpolationCurve = dynamic_cast<XYInterpolationCurve*>(m_curve);
 	Q_ASSERT(m_interpolationCurve);
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_interpolationCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_interpolationCurve->yDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_interpolationCurve->xDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_interpolationCurve->yDataColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_interpolationData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_interpolationData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_interpolationData.xRange.last());
@@ -612,13 +612,13 @@ void XYInterpolationCurveDock::curveDescriptionChanged(const AbstractAspect* asp
 
 void XYInterpolationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
 	m_initializing = false;
 }
 
 void XYInterpolationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
 	m_initializing = false;
 }
 

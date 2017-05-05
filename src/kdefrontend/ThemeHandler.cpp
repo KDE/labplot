@@ -41,7 +41,6 @@
 
 #include <KGlobal>
 #include <KLocale>
-#include <KStandardDirs>
 #include <KLineEdit>
 #include <KConfig>
 #include <KConfigGroup>

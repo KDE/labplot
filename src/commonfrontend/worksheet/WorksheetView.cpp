@@ -31,9 +31,11 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/TextLabel.h"
+#include "kdefrontend/widgets/ThemesWidget.h"
 #include "kdefrontend/worksheet/GridDialog.h"
 #include "kdefrontend/worksheet/PresenterWidget.h"
 #include "kdefrontend/worksheet/DynamicPresenterWidget.h"
+
 #include <QApplication>
 #include <QMenu>
 #include <QToolBar>
@@ -47,8 +49,9 @@
 #include <QGraphicsOpacityEffect>
 #include <QTimeLine>
 #include <QClipboard>
+#include <QWidgetAction>
 
-#include <QAction>
+#include <KColorScheme>
 #include <KLocale>
 #include <KMessageBox>
 #include <KConfigGroup>
@@ -481,6 +484,16 @@ void WorksheetView::initMenus() {
 	m_dataManipulationMenu->setIcon(QIcon::fromTheme("zoom-draw"));
 	m_dataManipulationMenu->addAction(addDataOperationAction);
 	m_dataManipulationMenu->addAction(addDataReductionAction);
+
+	//themes menu
+	m_themeMenu = new QMenu(i18n("Apply Theme"));
+	ThemesWidget* themeWidget = new ThemesWidget(0);
+	connect(themeWidget, SIGNAL(themeSelected(QString)), m_worksheet, SLOT(loadTheme(QString)));
+	connect(themeWidget, SIGNAL(themeSelected(QString)), m_themeMenu, SLOT(close()));
+
+	QWidgetAction* widgetAction = new QWidgetAction(this);
+	widgetAction->setDefaultWidget(themeWidget);
+	m_themeMenu->addAction(widgetAction);
 }
 
 /*!
@@ -507,6 +520,7 @@ void WorksheetView::createContextMenu(QMenu* menu) const {
 	menu->insertMenu(firstAction, m_magnificationMenu);
 	menu->insertMenu(firstAction, m_layoutMenu);
 	menu->insertMenu(firstAction, m_gridMenu);
+	menu->insertMenu(firstAction, m_themeMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_cartesianPlotMenu);
 	menu->insertSeparator(firstAction);
@@ -757,16 +771,19 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 
 	if (!m_worksheet->useViewSize()) {
 		// background
+		KColorScheme scheme(QPalette::Active, KColorScheme::Window);
+		const QColor& color = scheme.background().color();
 		if (!scene_rect.contains(rect))
-			painter->fillRect(rect, Qt::lightGray);
+			painter->fillRect(rect, color);
 
 		//shadow
-		int shadowSize = scene_rect.width()*0.02;
-		QRectF rightShadowRect(scene_rect.right(), scene_rect.top() + shadowSize, shadowSize, scene_rect.height());
-		QRectF bottomShadowRect(scene_rect.left() + shadowSize, scene_rect.bottom(), scene_rect.width(), shadowSize);
-
-		painter->fillRect(rightShadowRect.intersected(rect), Qt::darkGray);
-		painter->fillRect(bottomShadowRect.intersected(rect), Qt::darkGray);
+// 		int shadowSize = scene_rect.width()*0.02;
+// 		QRectF rightShadowRect(scene_rect.right(), scene_rect.top() + shadowSize, shadowSize, scene_rect.height());
+// 		QRectF bottomShadowRect(scene_rect.left() + shadowSize, scene_rect.bottom(), scene_rect.width(), shadowSize);
+//
+// 		const QColor& shadeColor = scheme.shade(color, KColorScheme::MidShade);
+// 		painter->fillRect(rightShadowRect.intersected(rect), shadeColor);
+// 		painter->fillRect(bottomShadowRect.intersected(rect), shadeColor);
 	}
 
 	drawBackgroundItems(painter, scene_rect);

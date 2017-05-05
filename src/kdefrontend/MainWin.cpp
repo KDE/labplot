@@ -340,7 +340,7 @@ void MainWin::initActions() {
 
 	//Windows
 	QAction* action  = new QAction(i18n("&Close"), this);
-	actionCollection()->setDefaultShortcut(action, Qt::CTRL+Qt::Key_C);
+	actionCollection()->setDefaultShortcut(action, Qt::CTRL+Qt::Key_U);
 	action->setStatusTip(i18n("Close the active window"));
 	actionCollection()->addAction("close window", action);
 	connect(action, SIGNAL(triggered()), m_mdiArea, SLOT(closeActiveSubWindow()));
@@ -852,17 +852,15 @@ void MainWin::openProject(const QString& filename) {
 		return;
 	}
 
-	//TODO: this solves the problem with empty files (the application doesn't hang anymore)
-	//but it crashes from time to time at unexpected places within Qt.
-// 	char* c;
-// 	bool rc = file->getChar(c);
-// 	if (!rc) {
-// 		KMessageBox::error(this, "The project file is empty.", i18n("Error opening project"));
-// 		file->close();
-// 		delete file;
-// 		return;
-// 	}
-// 	file->seek(0);
+	char c;
+	bool rc = file->getChar(&c);
+	if (!rc) {
+		KMessageBox::error(this, i18n("The project file is empty."), i18n("Error opening project"));
+		file->close();
+		delete file;
+		return;
+	}
+	file->seek(0);
 
 	if (!newProject()) {
 		file->close();
@@ -873,7 +871,7 @@ void MainWin::openProject(const QString& filename) {
 	WAIT_CURSOR;
 	QElapsedTimer timer;
 	timer.start();
-	bool rc = openXML(file);
+	rc = openXML(file);
 	file->close();
 	delete file;
 	if (!rc) {

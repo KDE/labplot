@@ -69,9 +69,12 @@ class XYCurvePrivate: public QGraphicsItem {
 
 		virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0);
 
-		//data columns
+		//data source
+		XYCurve::DataSourceType dataSourceType;
+		const XYCurve* dataSourceCurve;
 		const AbstractColumn* xColumn;
 		const AbstractColumn* yColumn;
+		QString dataSourceCurvePath;
 		QString xColumnPath;
 		QString yColumnPath;
 

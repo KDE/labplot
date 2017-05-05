@@ -178,7 +178,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
 
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
-	${BACKEND_DIR}/gsl/parser.tab.c
 	${BACKEND_DIR}/matrix/Matrix.cpp
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp
@@ -271,6 +270,14 @@ set(TOOLS_SOURCES
 	${TOOLS_DIR}/EquationHighlighter.cpp
 )
 
+bison_target(GslParser
+	${BACKEND_DIR}/gsl/parser.y
+	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.c
+)
+set(GENERATED_SOURCES
+	${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.c
+)
+
 add_subdirectory( pics )
 add_subdirectory( pics/gsl_distributions )
 add_subdirectory( pics/fit_models )
@@ -279,11 +286,14 @@ add_subdirectory( themes )
 
 ##############################################################################
 set( LABPLOT_SRCS ${GUI_SOURCES} ${PLOTS_SOURCES} )
-INCLUDE_DIRECTORIES( . ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/.. )
-qt5_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
-add_executable( labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS} )
+INCLUDE_DIRECTORIES( . ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} ${GSL_INCLUDEDIR}/.. )
+ki18n_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
+add_executable( labplot2 ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
 target_link_libraries( labplot2 KF5::KDELibs4Support KF5::Archive KF5::XmlGui Qt5::Svg ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${QT_QTSQL_LIBRARIES} )
 #KF5::NewStuff
+IF (KF5SyntaxHighlighting_FOUND)
+	target_link_libraries( labplot2 KF5::SyntaxHighlighting )
+ENDIF ()
 IF (CANTOR_LIBS_FOUND)
 	target_link_libraries( labplot2 ${CANTOR_LIBS} )
 ENDIF ()
@@ -305,7 +315,7 @@ ENDIF ()
 
 install( TARGETS labplot2 DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS} )
 install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc DESTINATION  ${KXMLGUI_INSTALL_DIR}/${PROJECT_NAME} )
-install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico DESTINATION  ${DATA_INSTALL_DIR}/${PROJECT_NAME} )
+install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico DESTINATION ${DATA_INSTALL_DIR}/${PROJECT_NAME} )
 install( PROGRAMS org.kde.labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
 install( FILES labplot2_themes.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )

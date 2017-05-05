@@ -1372,7 +1372,7 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 
 void CartesianPlotDock::loadTheme(KConfig& config) {
 	foreach(CartesianPlot* plot, m_plotList)
-		plot->loadTheme(config);
+		plot->loadThemeConfig(config);
 }
 
 void CartesianPlotDock::saveTheme(KConfig& config) {

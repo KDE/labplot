@@ -552,8 +552,8 @@ void XYCurveDock::initGeneralTab() {
 		uiGeneralTab.lYColumn->setEnabled(true);
 		cbYColumn->setEnabled(true);
 
-		this->setModelIndexFromColumn(cbXColumn, m_curve->xColumn());
-		this->setModelIndexFromColumn(cbYColumn, m_curve->yColumn());
+		this->setModelIndexFromAspect(cbXColumn, m_curve->xColumn());
+		this->setModelIndexFromAspect(cbYColumn, m_curve->yColumn());
 
 		uiGeneralTab.leName->setText(m_curve->name());
 		uiGeneralTab.leComment->setText(m_curve->comment());
@@ -588,11 +588,11 @@ void XYCurveDock::initGeneralTab() {
 void XYCurveDock::initTabs() {
 	//if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
-		this->setModelIndexFromColumn(cbValuesColumn, m_curve->valuesColumn());
-		this->setModelIndexFromColumn(cbXErrorPlusColumn, m_curve->xErrorPlusColumn());
-		this->setModelIndexFromColumn(cbXErrorMinusColumn, m_curve->xErrorMinusColumn());
-		this->setModelIndexFromColumn(cbYErrorPlusColumn, m_curve->yErrorPlusColumn());
-		this->setModelIndexFromColumn(cbYErrorMinusColumn, m_curve->yErrorMinusColumn());
+		this->setModelIndexFromAspect(cbValuesColumn, m_curve->valuesColumn());
+		this->setModelIndexFromAspect(cbXErrorPlusColumn, m_curve->xErrorPlusColumn());
+		this->setModelIndexFromAspect(cbXErrorMinusColumn, m_curve->xErrorMinusColumn());
+		this->setModelIndexFromAspect(cbYErrorPlusColumn, m_curve->yErrorPlusColumn());
+		this->setModelIndexFromAspect(cbYErrorMinusColumn, m_curve->yErrorMinusColumn());
 	} else {
 		cbValuesColumn->setCurrentModelIndex(QModelIndex());
 		cbXErrorPlusColumn->setCurrentModelIndex(QModelIndex());
@@ -773,9 +773,9 @@ void XYCurveDock::showValuesColumnFormat(const Column* column) {
 	}
 }
 
-void XYCurveDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column) {
-	if (column)
-		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
+void XYCurveDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
+	if (aspect)
+		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(aspect));
 	else
 		cb->setCurrentModelIndex(QModelIndex());
 }
@@ -1737,13 +1737,13 @@ void XYCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 
 void XYCurveDock::curveXColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbXColumn, column);
+	this->setModelIndexFromAspect(cbXColumn, column);
 	m_initializing = false;
 }
 
 void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbYColumn, column);
+	this->setModelIndexFromAspect(cbYColumn, column);
 	m_initializing = false;
 }
 
@@ -1846,7 +1846,7 @@ void XYCurveDock::curveValuesTypeChanged(XYCurve::ValuesType type) {
 }
 void XYCurveDock::curveValuesColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbValuesColumn, column);
+	this->setModelIndexFromAspect(cbValuesColumn, column);
 	m_initializing = false;
 }
 void XYCurveDock::curveValuesPositionChanged(XYCurve::ValuesPosition position) {
@@ -1946,12 +1946,12 @@ void XYCurveDock::curveXErrorTypeChanged(XYCurve::ErrorType type) {
 }
 void XYCurveDock::curveXErrorPlusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbXErrorPlusColumn, column);
+	this->setModelIndexFromAspect(cbXErrorPlusColumn, column);
 	m_initializing = false;
 }
 void XYCurveDock::curveXErrorMinusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbXErrorMinusColumn, column);
+	this->setModelIndexFromAspect(cbXErrorMinusColumn, column);
 	m_initializing = false;
 }
 void XYCurveDock::curveYErrorTypeChanged(XYCurve::ErrorType type) {
@@ -1961,13 +1961,13 @@ void XYCurveDock::curveYErrorTypeChanged(XYCurve::ErrorType type) {
 }
 void XYCurveDock::curveYErrorPlusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbYErrorPlusColumn, column);
+	this->setModelIndexFromAspect(cbYErrorPlusColumn, column);
 	m_initializing = false;
 }
 
 void XYCurveDock::curveYErrorMinusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbYErrorMinusColumn, column);
+	this->setModelIndexFromAspect(cbYErrorMinusColumn, column);
 	m_initializing = false;
 }
 void XYCurveDock::curveErrorBarsCapSizeChanged(qreal size) {

@@ -81,6 +81,7 @@ class CartesianPlot:public AbstractPlot{
 		void initDefault(Type=FourAxes);
 		QIcon icon() const;
 		QMenu* createContextMenu();
+		QMenu* analysisMenu() const;
 		void setRect(const QRectF&);
 		QRectF plotRect();
 		void setMouseMode(const MouseMode);
@@ -91,6 +92,9 @@ class CartesianPlot:public AbstractPlot{
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
+		virtual void loadThemeConfig(const KConfig&);
+		void saveTheme(KConfig& config);
+		void setThemeName(const QString&);
 
 		BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
 		BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
@@ -114,14 +118,15 @@ class CartesianPlot:public AbstractPlot{
 		void initMenus();
 		void setColorPalette(const KConfig&);
 		void applyThemeOnNewCurve(XYCurve* curve);
+		const XYCurve* currentCurve() const;
 
 		CartesianPlotLegend* m_legend;
 		float m_zoomFactor;
-		QString m_themeName;
 		QList<QColor> m_themeColorPalette;
 
 		QAction* visibilityAction;
 
+		//"add new" actions
 		QAction* addCurveAction;
 		QAction* addEquationCurveAction;
 		QAction* addDataReductionCurveAction;
@@ -137,6 +142,7 @@ class CartesianPlot:public AbstractPlot{
  		QAction* addLegendAction;
 		QAction* addCustomPointAction;
 
+		//scaling, zooming, navigation actions
 		QAction* scaleAutoXAction;
 		QAction* scaleAutoYAction;
 		QAction* scaleAutoAction;
@@ -151,8 +157,21 @@ class CartesianPlot:public AbstractPlot{
 		QAction* shiftUpYAction;
 		QAction* shiftDownYAction;
 
+		//analysis menu actions
+		QAction* addDataOperationAction;
+		QAction* addDataReductionAction;
+		QAction* addDifferentiationAction;
+		QAction* addIntegrationAction;
+		QAction* addInterpolationAction;
+		QAction* addSmoothAction;
+		QAction* addFitAction;
+		QAction* addFourierFilterAction;
+		QAction* addFourierTransformAction;
+
 		QMenu* addNewMenu;
 		QMenu* zoomMenu;
+		QMenu* dataManipulationMenu;
+		QMenu* dataAnalysisMenu;
 		QMenu* themeMenu;
 
 		Q_DECLARE_PRIVATE(CartesianPlot)
@@ -185,8 +204,6 @@ class CartesianPlot:public AbstractPlot{
 		void shiftRightX();
 		void shiftUpY();
 		void shiftDownY();
-		void loadTheme(KConfig& config);
-		void saveTheme(KConfig& config);
 
 	private slots:
 		void updateLegend();

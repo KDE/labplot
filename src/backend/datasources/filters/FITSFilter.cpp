@@ -1268,7 +1268,7 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName,
 
 		if (!updatedKeyword.comment.isEmpty()) {
 			if (fits_modify_comment(fitsFile, keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
-			                        updatedKeyword.comment.toLatin1(), &status)) {
+			                        updatedKeyword.comment.toLatin1().data(), &status)) {
 				printError(status);
 				status = 0;
 			}
@@ -1276,7 +1276,7 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName,
 			if (keywordUpdate.commentUpdated) {
 				if (fits_modify_comment(fitsFile,
 				                        keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
-				                        "", &status)) {
+				                        QString("").toLatin1().data(), &status)) {
 					printError(status);
 					status = 0;
 				}
@@ -1336,7 +1336,7 @@ void FITSFilterPrivate::addKeywordUnit(const QString &fileName, const QList<FITS
 
 	foreach (const FITSFilter::Keyword& keyword, keywords) {
 		if (keyword.updates.unitUpdated) {
-			if (fits_write_key_unit(fitsFile, keyword.key.toLatin1(), keyword.unit.toLatin1().constData(), &status)) {
+			if (fits_write_key_unit(fitsFile, keyword.key.toLatin1(), keyword.unit.toLatin1().data(), &status)) {
 				printError(status);
 				status = 0;
 			}

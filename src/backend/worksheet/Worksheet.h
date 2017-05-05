@@ -56,18 +56,20 @@ class Worksheet: public AbstractPart, public scripted {
 		virtual QMenu* createContextMenu();
 		virtual QWidget* view() const;
 
-        virtual bool exportView() const;
-        virtual bool printView();
-        virtual bool printPreview() const;
+		virtual bool exportView() const;
+		virtual bool printView();
+		virtual bool printPreview() const;
 
 		virtual void save(QXmlStreamWriter*) const;
 		virtual bool load(XmlStreamReader*);
+		void loadTheme(KConfig& config);
 
 		QRectF pageRect() const;
 		void setPageRect(const QRectF&);
 		QGraphicsScene* scene() const;
 		void update();
 		void setPrinting(bool) const;
+		void setThemeName(const QString&);
 
 		void setItemSelectedInView(const QGraphicsItem* item, const bool b);
 		void setSelectedInView(const bool);
@@ -97,9 +99,13 @@ class Worksheet: public AbstractPart, public scripted {
 
 		typedef WorksheetPrivate Private;
 
+public slots:
+		void loadTheme(const QString&);
+
 	private:
 		void init();
 		WorksheetElement* aspectFromGraphicsItem(const WorksheetElement*, const QGraphicsItem*) const;
+
 		WorksheetPrivate* const d;
 		friend class WorksheetPrivate;
 

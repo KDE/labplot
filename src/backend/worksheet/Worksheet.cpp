@@ -35,12 +35,13 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
+#include "kdefrontend/ThemeHandler.h"
 
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
+#include <QDir>
 
-#include "QIcon"
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -151,8 +152,8 @@ QIcon Worksheet::icon() const {
 /**
  * Return a new context menu. The caller takes ownership of the menu.
  */
-QMenu *Worksheet::createContextMenu() {
-	QMenu *menu = AbstractPart::createContextMenu();
+QMenu* Worksheet::createContextMenu() {
+	QMenu* menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
 	emit requestProjectContextMenu(menu);
 	return menu;
@@ -163,9 +164,9 @@ QMenu *Worksheet::createContextMenu() {
  * This method may be called multiple times during the life time of an Aspect, or it might not get
  * called at all. Aspects must not depend on the existence of a view for their operation.
  */
-QWidget *Worksheet::view() const {
+QWidget* Worksheet::view() const {
 	if (!m_view) {
-		m_view = new WorksheetView(const_cast<Worksheet *>(this));
+		m_view = new WorksheetView(const_cast<Worksheet*>(this));
 		connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 	}
 	return m_view;
@@ -213,21 +214,31 @@ bool Worksheet::printPreview() const {
 
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	const WorksheetElement* addedElement = qobject_cast<const WorksheetElement*>(aspect);
-	if (addedElement) {
-		if (aspect->parentAspect() == this) {
-			QGraphicsItem* item = addedElement->graphicsItem();
-			d->m_scene->addItem(item);
+	if (!addedElement)
+		return;
 
-			qreal zVal = 0;
-			QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
-			foreach(WorksheetElement* elem, childElements)
-				elem->graphicsItem()->setZValue(zVal++);
+	if (aspect->parentAspect() != this)
+		return;
 
-			if (!isLoading()) {
-				if (d->layout != Worksheet::NoLayout)
-					d->updateLayout(false);
-			}
-		}
+	//add the GraphicsItem of the added child to the scene
+	QGraphicsItem* item = addedElement->graphicsItem();
+	d->m_scene->addItem(item);
+
+	qreal zVal = 0;
+	QList<WorksheetElement*> childElements = children<WorksheetElement>(IncludeHidden);
+	foreach(WorksheetElement* elem, childElements)
+		elem->graphicsItem()->setZValue(zVal++);
+
+	//if a theme was selected in the worksheet, apply this theme for newly added children
+	if (!d->themeName.isEmpty()) {
+		KConfig config(ThemeHandler::themeFilePath(d->themeName), KConfig::SimpleConfig);
+		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);
+	}
+
+	//recalculated the layout
+	if (!isLoading()) {
+		if (d->layout != Worksheet::NoLayout)
+			d->updateLayout(false);
 	}
 }
 
@@ -575,6 +586,11 @@ void Worksheet::setPrinting(bool on) const {
 		elem->setPrinting(on);
 }
 
+STD_SETTER_CMD_IMPL(Worksheet, SetThemeName, QString, themeName)
+void Worksheet::setThemeName(const QString& name) {
+	if (name != d->themeName)
+		exec(new WorksheetSetThemeNameCmd(d, name, i18n("%1: set theme name")));
+}
 
 //##############################################################################
 //######################  Private implementation ###############################
@@ -958,4 +974,36 @@ bool Worksheet::load(XmlStreamReader* reader) {
 	d->updateLayout();
 
 	return true;
+}
+
+//##############################################################################
+//#########################  Theme management ##################################
+//##############################################################################
+void Worksheet::loadTheme(const QString& theme) {
+	KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
+	loadTheme(config);
+}
+
+void Worksheet::loadTheme(KConfig& config) {
+	QString str = config.name();
+	str = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
+	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), str) );
+	this->setThemeName(str);
+
+	//apply the same background color for Worksheet as for the CartesianPlot
+	const KConfigGroup group = config.group("CartesianPlot");
+	this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle",(int) this->backgroundBrushStyle()));
+	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle)(group.readEntry("BackgroundColorStyle",(int) this->backgroundColorStyle())));
+	this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor",(QColor) this->backgroundFirstColor()));
+	this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle)group.readEntry("BackgroundImageStyle",(int) this->backgroundImageStyle()));
+	this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", this->backgroundOpacity()));
+	this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor",(QColor) this->backgroundSecondColor()));
+	this->setBackgroundType((PlotArea::BackgroundType)(group.readEntry("BackgroundType",(int) this->backgroundType())));
+
+	//load the theme for all the children
+	const QList<WorksheetElement*>& childElements = children<WorksheetElement>(AbstractAspect::IncludeHidden);
+	foreach (WorksheetElement* child, childElements)
+		child->loadThemeConfig(config);
+
+	endMacro();
 }

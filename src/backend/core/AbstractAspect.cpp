@@ -371,7 +371,7 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 	Q_CHECK_PTR(child);
 
 	QString new_name = uniqueNameFor(child->name());
-	beginMacro(i18n("%1: add %2.", name(), new_name));
+	beginMacro(i18n("%1: add %2", name(), new_name));
 	if (new_name != child->name()) {
 		info(i18n("Renaming \"%1\" to \"%2\" in order to avoid name collision.", child->name(), new_name));
 		child->setName(new_name);
@@ -395,7 +395,7 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 	Q_CHECK_PTR(child);
 
 	QString new_name = uniqueNameFor(child->name());
-	beginMacro(i18n("%1: insert %2 before %3.", name(), new_name, before ? before->name() : "end"));
+	beginMacro(i18n("%1: insert %2 before %3", name(), new_name, before ? before->name() : "end"));
 	if (new_name != child->name()) {
 		info(i18n("Renaming \"%1\" to \"%2\" in order to avoid name collision.", child->name(), new_name));
 		child->setName(new_name);
@@ -430,7 +430,7 @@ void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect
  */
 void AbstractAspect::removeChild(AbstractAspect* child) {
 	Q_ASSERT(child->parentAspect() == this);
-	beginMacro(i18n("%1: remove %2.", name(), child->name()));
+	beginMacro(i18n("%1: remove %2", name(), child->name()));
 	exec(new AspectChildRemoveCmd(d, child));
 	endMacro();
 }
@@ -439,14 +439,14 @@ void AbstractAspect::removeChild(AbstractAspect* child) {
  * \brief Remove all child Aspects.
  */
 void AbstractAspect::removeAllChildren() {
-	beginMacro(i18n("%1: remove all children.", name()));
+	beginMacro(i18n("%1: remove all children", name()));
 
 	QList<AbstractAspect*> children_list = children();
 	QList<AbstractAspect*>::const_iterator i = children_list.constBegin();
 	AbstractAspect *current = 0, *nextSibling = 0;
-	if (i != children_list.end()) {
+	if (i != children_list.constEnd()) {
 		current = *i;
-		if (++i != children_list.end())
+		if (++i != children_list.constEnd())
 			nextSibling = *i;
 	}
 
@@ -456,7 +456,7 @@ void AbstractAspect::removeAllChildren() {
 		emit aspectRemoved(this, nextSibling, current);
 
 		current = nextSibling;
-		if (i != children_list.end() && ++i != children_list.end())
+		if (i != children_list.constEnd() && ++i != children_list.constEnd())
 			nextSibling = *i;
 		else
 			nextSibling = 0;

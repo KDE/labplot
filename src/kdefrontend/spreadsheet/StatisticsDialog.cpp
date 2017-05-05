@@ -44,7 +44,6 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) :
 
 	setWindowTitle(title);
 	setButtons(KDialog::Ok);
-	setButtonText(KDialog::Ok, i18n("&Ok"));
 
 	m_htmlText = QString("<table border=0 width=100%>"
 	                     "<tr>"

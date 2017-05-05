@@ -3,7 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014-2016 Alexander Semke (alexander.semke@web.de)
-    Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2016-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of fit curves
 
  ***************************************************************************/
@@ -36,7 +36,6 @@
 #include "kdefrontend/widgets/FitOptionsWidget.h"
 #include "kdefrontend/widgets/FitParametersWidget.h"
 
-#include <KStandardDirs>
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
@@ -154,9 +153,9 @@ void XYFitCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
 	Q_ASSERT(m_fitCurve);
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, m_fitCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, m_fitCurve->yDataColumn());
-	XYCurveDock::setModelIndexFromColumn(cbWeightsColumn, m_fitCurve->weightsColumn());
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_fitCurve->xDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_fitCurve->yDataColumn());
+	XYCurveDock::setModelIndexFromAspect(cbWeightsColumn, m_fitCurve->weightsColumn());
 	uiGeneralTab.cbAutoRange->setChecked(m_fitData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_fitData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_fitData.xRange.last());
@@ -881,7 +880,7 @@ void XYFitCurveDock::updateModelEquation() {
 	}
 
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
-		uiGeneralTab.lFuncPic->setPixmap(QPixmap(file));
+		uiGeneralTab.lFuncPic->setPixmap(file);
 		uiGeneralTab.lFuncPic->show();
 		uiGeneralTab.teEquation->hide();
 	}
@@ -1006,27 +1005,51 @@ void XYFitCurveDock::showFitResult() {
 	const XYFitCurve::FitData& fitData = m_fitCurve->fitData();
 	QString str = i18n("status:") + ' ' + fitResult.status + "<br>";
 
+	uiGeneralTab.lstatus->setText(fitResult.status);
 	if (!fitResult.valid) {
 		uiGeneralTab.teResult->setText(str);
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
 	str += i18n("iterations:") + ' ' + QString::number(fitResult.iterations) + "<br>";
-	if (fitResult.elapsedTime > 1000)
+	uiGeneralTab.literations->setText(QString::number(fitResult.iterations));
+	if (fitResult.elapsedTime > 1000) {
 		str += i18n("calculation time: %1 s", fitResult.elapsedTime/1000) + "<br>";
-	else
+		uiGeneralTab.lcalculation_time->setText(QString::number(fitResult.elapsedTime/1000) + " s");
+	} else {
 		str += i18n("calculation time: %1 ms", fitResult.elapsedTime) + "<br>";
+		uiGeneralTab.lcalculation_time->setText(QString::number(fitResult.elapsedTime) + " ms");
+	}
 
 	str += i18n("degrees of freedom:") + ' ' + QString::number(fitResult.dof) + "<br><br>";
+	uiGeneralTab.ltolerance->setText(QString::number(m_fitData.eps));
+	uiGeneralTab.ldegrees_of_freedom->setText(QString::number(fitResult.dof));
+	uiGeneralTab.lnumber_of_parameter->setText(QString::number(fitResult.paramValues.size()));
+	uiGeneralTab.lx_range->setText(QString::number(uiGeneralTab.sbMin->value()) + " .. " + QString::number(uiGeneralTab.sbMax->value()) );
 
 	str += "<b>" +i18n("Parameters:") + "</b>";
+	uiGeneralTab.twParameter->setRowCount(fitResult.paramValues.size());
+	uiGeneralTab.twParameter->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	QStringList headerLabels;
+	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %");
+	uiGeneralTab.twParameter->setHorizontalHeaderLabels(headerLabels);
 	for (int i = 0; i < fitResult.paramValues.size(); i++) {
 		if (fitData.paramFixed.at(i))
 			str += "<br>" + fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i));
 		else
 			str += "<br>" + fitData.paramNamesUtf8.at(i) + QString(" = ") + QString::number(fitResult.paramValues.at(i))
 				+ QString::fromUtf8("\u00b1") + QString::number(fitResult.errorValues.at(i))
-				+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i))) + " %)";
+				+ " (" + QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3) + " %)";
+		QTableWidgetItem *newItem = new QTableWidgetItem(fitData.paramNamesUtf8.at(i));
+		uiGeneralTab.twParameter->setItem(i, 0, newItem);
+		newItem = new QTableWidgetItem(QString::number(fitResult.paramValues.at(i)));
+		uiGeneralTab.twParameter->setItem(i, 1, newItem);
+		if (!fitData.paramFixed.at(i)) {
+			newItem = new QTableWidgetItem(QString::number(fitResult.errorValues.at(i)));
+			uiGeneralTab.twParameter->setItem(i, 2, newItem);
+			newItem = new QTableWidgetItem(QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3));
+			uiGeneralTab.twParameter->setItem(i, 3, newItem);
+		}
 	}
 
 	str += "<br><br><b>" + i18n("Goodness of fit:") + "</b><br>";
@@ -1071,19 +1094,19 @@ void XYFitCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 
 void XYFitCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbXDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
 	m_initializing = false;
 }
 
 void XYFitCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbYDataColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
 	m_initializing = false;
 }
 
 void XYFitCurveDock::curveWeightsColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromColumn(cbWeightsColumn, column);
+	XYCurveDock::setModelIndexFromAspect(cbWeightsColumn, column);
 	m_initializing = false;
 }
 

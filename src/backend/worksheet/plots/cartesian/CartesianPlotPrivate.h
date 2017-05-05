@@ -65,6 +65,7 @@ class CartesianPlotPrivate : public AbstractPlotPrivate {
 		bool yRangeBreakingEnabled;
 		CartesianPlot::RangeBreaks xRangeBreaks;
 		CartesianPlot::RangeBreaks yRangeBreaks;
+		QString themeName;
 
 		//cached values of minimum and maximum for all visible curves
 		bool curvesXMinMaxIsDirty, curvesYMinMaxIsDirty;

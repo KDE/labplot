@@ -52,6 +52,7 @@ class XYCurve: public WorksheetElement {
 		enum ErrorType {NoError, SymmetricError, AsymmetricError};
 		enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
 		enum ErrorBarsType {ErrorBarsSimple, ErrorBarsWithEnds};
+		enum DataSourceType {DataSourceSpreadsheet, DataSourceCurve};
 
 		explicit XYCurve(const QString &name);
 		virtual ~XYCurve();
@@ -64,10 +65,13 @@ class XYCurve: public WorksheetElement {
 		virtual void loadThemeConfig(const KConfig& config);
 		virtual void saveThemeConfig(const KConfig& config);
 
+		BASIC_D_ACCESSOR_DECL(DataSourceType, dataSourceType, DataSourceType)
+		POINTER_D_ACCESSOR_DECL(const XYCurve, dataSourceCurve, DataSourceCurve)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
-		QString& xColumnPath() const;
-		QString& yColumnPath() const;
+		const QString& dataSourceCurvePath() const;
+		const QString& xColumnPath() const;
+		const QString& yColumnPath() const;
 
 		BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType)
 		BASIC_D_ACCESSOR_DECL(bool, lineSkipGaps, LineSkipGaps)
@@ -88,7 +92,7 @@ class XYCurve: public WorksheetElement {
 
 		BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
-		QString& valuesColumnPath() const;
+		const QString& valuesColumnPath() const;
 		BASIC_D_ACCESSOR_DECL(ValuesPosition, valuesPosition, ValuesPosition)
 		BASIC_D_ACCESSOR_DECL(qreal, valuesDistance, ValuesDistance)
 		BASIC_D_ACCESSOR_DECL(qreal, valuesRotationAngle, ValuesRotationAngle)
@@ -110,14 +114,14 @@ class XYCurve: public WorksheetElement {
 
 		BASIC_D_ACCESSOR_DECL(ErrorType, xErrorType, XErrorType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorPlusColumn, XErrorPlusColumn)
-		QString& xErrorPlusColumnPath() const;
+		const QString& xErrorPlusColumnPath() const;
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorMinusColumn, XErrorMinusColumn)
-		QString& xErrorMinusColumnPath() const;
+		const QString& xErrorMinusColumnPath() const;
 		BASIC_D_ACCESSOR_DECL(ErrorType, yErrorType, YErrorType)
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorPlusColumn, YErrorPlusColumn)
-		QString& yErrorPlusColumnPath() const;
+		const QString& yErrorPlusColumnPath() const;
 		POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorMinusColumn, YErrorMinusColumn)
-		QString& yErrorMinusColumnPath() const;
+		const QString& yErrorMinusColumnPath() const;
 		BASIC_D_ACCESSOR_DECL(ErrorBarsType, errorBarsType, ErrorBarsType)
 		BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
 		CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
@@ -169,8 +173,12 @@ class XYCurve: public WorksheetElement {
 		void yDataChanged();
 		void visibilityChanged(bool);
 
+		friend class XYCurveSetDataSourceTypeCmd;
+		friend class XYCurveSetDataSourceCurveCmd;
 		friend class XYCurveSetXColumnCmd;
 		friend class XYCurveSetYColumnCmd;
+		void dataSourceTypeChanged(XYCurve::DataSourceType);
+		void dataSourceCurveChanged(const XYCurve*);
 		void xColumnChanged(const AbstractColumn*);
 		void yColumnChanged(const AbstractColumn*);
 

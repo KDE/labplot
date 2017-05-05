@@ -2,8 +2,8 @@
     File                 : LabelWidget.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2012-2014 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2008-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2017 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Description          : label settings widget
 
  ***************************************************************************/
@@ -31,6 +31,7 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "tools/TeXRenderer.h"
 
+#include <QMenu>
 #include <QWidgetAction>
 #include <QSplitter>
 
@@ -38,7 +39,11 @@
 #include <KSharedConfig>
 #include <KCharSelect>
 #include <KLocalizedString>
-#include <QMenu>
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+#include <KF5/KSyntaxHighlighting/SyntaxHighlighter>
+#include <KF5/KSyntaxHighlighting/Definition>
+#include <KF5/KSyntaxHighlighting/Theme>
+#endif
 
 /*!
 	\class LabelWidget
@@ -108,6 +113,14 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent),
 	//2. in case the label was in the non-latex mode and no latex is available,
 	//deactivate the latex button so the user cannot switch to this mode.
 	m_teXEnabled = TeXRenderer::enabled();
+
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teLabel->document());
+	m_highlighter->setDefinition(m_repository.definitionForName("LaTeX"));
+	m_highlighter->setTheme(  (palette().color(QPalette::Base).lightness() < 128)
+								? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+								: m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme) );
+#endif
 
 	//SLOTS
 	// text properties
@@ -315,6 +328,9 @@ void LabelWidget::teXUsedChanged(bool checked) {
 	ui.kfontRequester->setVisible(!checked);
 
 	if (checked) {
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+		m_highlighter->setDocument(ui.teLabel->document());
+#endif
 		KConfigGroup conf(KSharedConfig::openConfig(), "Settings_Worksheet");
 		QString engine = conf.readEntry("LaTeXEngine", "");
 		if (engine == "xelatex" || engine == "lualatex") {
@@ -329,6 +345,9 @@ void LabelWidget::teXUsedChanged(bool checked) {
 			ui.sbFontSize->setVisible(true);
 		}
 	} else {
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+		m_highlighter->setDocument(0);
+#endif
 		ui.lFontTeX->setVisible(false);
 		ui.kfontRequesterTeX->setVisible(false);
 		ui.lFontSize->setVisible(false);

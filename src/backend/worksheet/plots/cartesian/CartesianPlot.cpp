@@ -51,19 +51,18 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/ThemeHandler.h"
+#include "kdefrontend/widgets/ThemesWidget.h"
 
 #include <QDir>
 #include <QMenu>
 #include <QToolBar>
 #include <QPainter>
 #include <QIcon>
-#include <QAction>
 #include <QWidgetAction>
 
 #include <KConfigGroup>
 #include <KLocale>
-#include "kdefrontend/ThemeHandler.h"
-#include "kdefrontend/widgets/ThemesWidget.h"
 
 /**
  * \class CartesianPlot
@@ -374,7 +373,11 @@ void CartesianPlot::initActions() {
 
 	connect(addCurveAction, SIGNAL(triggered()), SLOT(addCurve()));
 	connect(addEquationCurveAction, SIGNAL(triggered()), SLOT(addEquationCurve()));
-	// TODO: other analysis functions?
+	connect(addDataReductionCurveAction, SIGNAL(triggered()), SLOT(addDataReductionCurve()));
+	connect(addDifferentiationCurveAction, SIGNAL(triggered()), SLOT(addDifferentiationCurve()));
+	connect(addIntegrationCurveAction, SIGNAL(triggered()), SLOT(addIntegrationCurve()));
+	connect(addInterpolationCurveAction, SIGNAL(triggered()), SLOT(addInterpolationCurve()));
+	connect(addSmoothCurveAction, SIGNAL(triggered()), SLOT(addSmoothCurve()));
 	connect(addFitCurveAction, SIGNAL(triggered()), SLOT(addFitCurve()));
 	connect(addFourierFilterCurveAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
 	connect(addFourierTransformCurveAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
@@ -382,6 +385,26 @@ void CartesianPlot::initActions() {
 	connect(addHorizontalAxisAction, SIGNAL(triggered()), SLOT(addHorizontalAxis()));
 	connect(addVerticalAxisAction, SIGNAL(triggered()), SLOT(addVerticalAxis()));
 	connect(addCustomPointAction, SIGNAL(triggered()), SLOT(addCustomPoint()));
+
+	//Analysis menu actions
+	addDataOperationAction = new QAction(i18n("Data operation"), this);
+	addDataReductionAction = new QAction(i18n("Reduce data"), this);
+	addDifferentiationAction = new QAction(i18n("Differentiate"), this);
+	addIntegrationAction = new QAction(i18n("Integrate"), this);
+	addInterpolationAction = new QAction(i18n("Interpolate"), this);
+	addSmoothAction = new QAction(i18n("Smooth"), this);
+	addFitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit"), this);
+	addFourierFilterAction = new QAction(i18n("Fourier filter"), this);
+	addFourierTransformAction = new QAction(i18n("Fourier transform"), this);
+
+	connect(addDataReductionAction, SIGNAL(triggered()), SLOT(addDataReductionCurve()));
+	connect(addDifferentiationAction, SIGNAL(triggered()), SLOT(addDifferentiationCurve()));
+	connect(addIntegrationAction, SIGNAL(triggered()), SLOT(addIntegrationCurve()));
+	connect(addInterpolationAction, SIGNAL(triggered()), SLOT(addInterpolationCurve()));
+	connect(addSmoothAction, SIGNAL(triggered()), SLOT(addSmoothCurve()));
+	connect(addFitAction, SIGNAL(triggered()), SLOT(addFitCurve()));
+	connect(addFourierFilterAction, SIGNAL(triggered()), SLOT(addFourierFilterCurve()));
+	connect(addFourierTransformAction, SIGNAL(triggered()), SLOT(addFourierTransformCurve()));
 
 	//zoom/navigate actions
 	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("auto scale"), this);
@@ -422,6 +445,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu = new QMenu(i18n("Add new"));
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addEquationCurveAction);
+	addNewMenu->addSeparator();
 	addNewMenu->addAction(addDataReductionCurveAction);
 	addNewMenu->addAction(addDifferentiationCurveAction);
 	addNewMenu->addAction(addIntegrationCurveAction);
@@ -430,6 +454,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addFitCurveAction);
 	addNewMenu->addAction(addFourierFilterCurveAction);
 	addNewMenu->addAction(addFourierTransformCurveAction);
+	addNewMenu->addSeparator();
 	addNewMenu->addAction(addLegendAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addHorizontalAxisAction);
@@ -457,6 +482,28 @@ void CartesianPlot::initMenus() {
 	zoomMenu->addAction(shiftUpYAction);
 	zoomMenu->addAction(shiftDownYAction);
 
+	// Data manipulation menu
+	dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
+	dataManipulationMenu->setIcon(QIcon::fromTheme("zoom-draw"));
+	dataManipulationMenu->addAction(addDataOperationAction);
+	dataManipulationMenu->addAction(addDataReductionAction);
+
+	//analysis menu
+	dataAnalysisMenu = new QMenu(i18n("Analysis"));
+	dataAnalysisMenu->insertMenu(0, dataManipulationMenu);
+	dataAnalysisMenu->addSeparator();
+	dataAnalysisMenu->addAction(addDifferentiationAction);
+	dataAnalysisMenu->addAction(addIntegrationAction);
+	dataAnalysisMenu->addSeparator();
+	dataAnalysisMenu->addAction(addInterpolationAction);
+	dataAnalysisMenu->addAction(addSmoothAction);
+	dataAnalysisMenu->addAction(addFourierFilterAction);
+	dataAnalysisMenu->addSeparator();
+	dataAnalysisMenu->addAction(addFitAction);
+	dataAnalysisMenu->addSeparator();
+	dataAnalysisMenu->addAction(addFourierTransformAction);
+
+	//themes menu
 	themeMenu = new QMenu(i18n("Apply Theme"));
 	ThemesWidget* themeWidget = new ThemesWidget(0);
 	// TODO: SLOT: loadTheme(KConfig config)
@@ -482,6 +529,10 @@ QMenu* CartesianPlot::createContextMenu() {
 	menu->insertSeparator(firstAction);
 
 	return menu;
+}
+
+QMenu* CartesianPlot::analysisMenu() const {
+	return dataAnalysisMenu;
 }
 
 /*!
@@ -709,6 +760,13 @@ void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, i18n("%1: y-range breaks changed")));
 }
 
+
+STD_SETTER_CMD_IMPL(CartesianPlot, SetThemeName, QString, themeName)
+void CartesianPlot::setThemeName(const QString& name) {
+	Q_D(CartesianPlot);
+	if (name != d->themeName)
+		exec(new CartesianPlotSetThemeNameCmd(d, name, i18n("%1: set theme name")));
+}
 //################################################################
 //########################## Slots ###############################
 //################################################################
@@ -754,9 +812,37 @@ XYDataReductionCurve* CartesianPlot::addDataReductionCurve() {
 	return curve;
 }
 
+/*!
+ * returns the first selected XYCurve in the plot
+ */
+const XYCurve* CartesianPlot::currentCurve() const {
+	QList<const XYCurve*> children = this->children<const XYCurve>();
+	foreach(const XYCurve* curve, children) {
+		if (curve->graphicsItem()->isSelected())
+			return curve;
+	}
+
+	return 0;
+}
+
 XYDifferentiationCurve* CartesianPlot::addDifferentiationCurve() {
 	XYDifferentiationCurve* curve = new XYDifferentiationCurve("Differentiation");
-	this->addChild(curve);
+	const XYCurve* curCurve = currentCurve();
+	if (curCurve) {
+		beginMacro( i18n("%1: differentiate '%2'", name(), curCurve->name()) );
+		curve->setName( i18n("Derivative of '%1'", curCurve->name()) );
+		curve->setDataSourceType(XYCurve::DataSourceCurve);
+		curve->setDataSourceCurve(curCurve);
+		this->addChild(curve);
+		curve->recalculate();
+	} else {
+		beginMacro(i18n("%1: add differentiation curve", name()));
+		this->addChild(curve);
+	}
+
+	this->applyThemeOnNewCurve(curve);
+	endMacro();
+
 	return curve;
 }
 
@@ -1810,9 +1896,9 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	//applied theme
-	if (!m_themeName.isEmpty()){
+	if (!d->themeName.isEmpty()){
 		writer->writeStartElement( "theme" );
-		writer->writeAttribute("name", m_themeName);
+		writer->writeAttribute("name", d->themeName);
 		writer->writeEndElement();
 	}
 
@@ -2202,7 +2288,7 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 	if (!tmpThemeName.isEmpty()){
 		KConfig config( ThemeHandler::themeFilePath(tmpThemeName), KConfig::SimpleConfig );
 		//TODO: check whether the theme config really exists
-		m_themeName = tmpThemeName;
+		d->themeName = tmpThemeName;
 		this->setColorPalette(config);
 	}
 
@@ -2214,13 +2300,14 @@ bool CartesianPlot::load(XmlStreamReader* reader) {
 //##############################################################################
 void CartesianPlot::loadTheme(const QString& theme) {
 	KConfig config(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
-	loadTheme(config);
+	loadThemeConfig(config);
 }
 
-void CartesianPlot::loadTheme(KConfig& config) {
-	const QString str = config.name();
-	m_themeName = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
-	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), m_themeName) );
+void CartesianPlot::loadThemeConfig(const KConfig& config) {
+	QString str = config.name();
+	str = str.right(str.length() - str.lastIndexOf(QDir::separator()) - 1);
+	beginMacro( i18n("%1: Load theme %2.", AbstractAspect::name(), str) );
+	this->setThemeName(str);
 
 	//load the color palettes for the curves
 	this->setColorPalette(config);
@@ -2295,8 +2382,9 @@ const QList<QColor>& CartesianPlot::themeColorPalette() const {
 }
 
 void CartesianPlot::applyThemeOnNewCurve(XYCurve* curve) {
-	if (!m_themeName.isEmpty()) {
-		KConfig config( ThemeHandler::themeFilePath(m_themeName), KConfig::SimpleConfig );
+	Q_D(const CartesianPlot);
+	if (!d->themeName.isEmpty()) {
+		KConfig config( ThemeHandler::themeFilePath(d->themeName), KConfig::SimpleConfig );
 		curve->loadThemeConfig(config);
 	}
 }

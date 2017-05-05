@@ -85,7 +85,7 @@ protected:
 
 	void initTabs();
 	virtual void setModel();
-	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
+	void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
 
 private slots:
 	void init();
