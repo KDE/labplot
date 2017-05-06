@@ -242,6 +242,8 @@ void FunctionValuesDialog::addVariable() {
 		connect(b, SIGNAL(pressed()), this, SLOT(deleteVariable()));
 	}
 
+	ui.lVariable->setText(i18n("Variables:"));
+
 	//TODO: adjust the tab-ordering after new widgets were added
 }
 
@@ -259,6 +261,8 @@ void FunctionValuesDialog::deleteVariable() {
 
 	//adjust the layout
 	resize( QSize(width(),0).expandedTo(minimumSize()) );
+
+	m_variableNames.size()>1 ? ui.lVariable->setText(i18n("Variables:")) : ui.lVariable->setText(i18n("Variable:"));
 
 	//TODO: adjust the tab-ordering after some widgets were deleted
 }
@@ -280,9 +284,9 @@ void FunctionValuesDialog::variableNameChanged() {
 	}
 
 	if (!text.isEmpty())
-		text = "f(" + text + ')';
+		text = "f(" + text + ") = ";
 	else
-		text = 'f';
+		text = "f = ";
 
 	ui.lFunction->setText(text);
 	ui.teEquation->setVariables(vars);
