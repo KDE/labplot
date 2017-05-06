@@ -684,7 +684,7 @@
             <bool>true</bool>
            </property>
            <property name="rowCount">
-            <number>6</number>
+            <number>7</number>
            </property>
            <property name="columnCount">
             <number>3</number>
@@ -707,6 +707,7 @@
            <attribute name="verticalHeaderVisible">
             <bool>false</bool>
            </attribute>
+           <row/>
            <row/>
            <row/>
            <row/>
@@ -753,7 +754,7 @@
            </item>
            <item row="2" column="1">
             <property name="text">
-             <string/>
+             <string>RMSE, SD</string>
             </property>
            </item>
            <item row="2" column="2">
@@ -793,15 +794,30 @@
            </item>
            <item row="5" column="0">
             <property name="text">
-             <string>Mean absolute error</string>
+             <string/>
             </property>
            </item>
            <item row="5" column="1">
             <property name="text">
-             <string>MAE</string>
+             <string>p</string>
             </property>
            </item>
            <item row="5" column="2">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="6" column="0">
+            <property name="text">
+             <string>Mean absolute error</string>
+            </property>
+           </item>
+           <item row="6" column="1">
+            <property name="text">
+             <string>MAE</string>
+            </property>
+           </item>
+           <item row="6" column="2">
             <property name="text">
              <string/>
             </property>

@@ -48,6 +48,7 @@ extern "C" {
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_version.h>
+#include <gsl/gsl_cdf.h>
 #include "backend/gsl/parser.h" 
 #include "backend/nsl/nsl_fit.h"
 #include "backend/nsl/nsl_sf_stats.h"
@@ -1012,13 +1013,14 @@ void XYFitCurvePrivate::recalculate() {
 	//gsl_blas_dnrm2() - computes the Euclidian norm (||r||_2 = \sqrt {\sum r_i^2}) of the vector with the elements (Yi - y[i])/sigma[i]
 	//gsl_blas_dasum() - computes the absolute sum \sum |r_i| of the elements of the vector with the elements (Yi - y[i])/sigma[i]
 	fitResult.sse = gsl_pow_2(gsl_blas_dnrm2(s->f));
-	fitResult.mse = fitResult.sse/n;
-	fitResult.rmse = sqrt(fitResult.mse);
-	fitResult.mae = gsl_blas_dasum(s->f)/n;
 	if (fitResult.dof != 0) {
 		fitResult.rms = fitResult.sse/fitResult.dof;
 		fitResult.rsd = sqrt(fitResult.rms);
 	}
+	fitResult.mse = fitResult.sse/n;
+	fitResult.rmse = sqrt(fitResult.mse);
+	fitResult.mae = gsl_blas_dasum(s->f)/n;
+	fitResult.pvalue = gsl_cdf_chisq_Q(fitResult.sse, fitResult.dof);
 
 	//coefficient of determination, R-squared
 	double ybar = 0; //mean value of the y-data
@@ -1194,11 +1196,12 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "time", QString::number(d->fitResult.elapsedTime) );
 	writer->writeAttribute( "dof", QString::number(d->fitResult.dof) );
 	writer->writeAttribute( "sse", QString::number(d->fitResult.sse, 'g', 15) );
+	writer->writeAttribute( "rms", QString::number(d->fitResult.rms, 'g', 15) );
+	writer->writeAttribute( "rsd", QString::number(d->fitResult.rsd, 'g', 15) );
 	writer->writeAttribute( "mse", QString::number(d->fitResult.mse, 'g', 15) );
 	writer->writeAttribute( "rmse", QString::number(d->fitResult.rmse, 'g', 15) );
 	writer->writeAttribute( "mae", QString::number(d->fitResult.mae, 'g', 15) );
-	writer->writeAttribute( "rms", QString::number(d->fitResult.rms, 'g', 15) );
-	writer->writeAttribute( "rsd", QString::number(d->fitResult.rsd, 'g', 15) );
+	writer->writeAttribute( "pvalue", QString::number(d->fitResult.pvalue, 'g', 15) );
 	writer->writeAttribute( "rsquared", QString::number(d->fitResult.rsquared, 'g', 15) );
 	writer->writeAttribute( "rsquaredAdj", QString::number(d->fitResult.rsquaredAdj, 'g', 15) );
 	writer->writeAttribute( "solverOutput", d->fitResult.solverOutput );
@@ -1305,11 +1308,12 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			READ_INT_VALUE("time", fitResult.elapsedTime, int);
 			READ_DOUBLE_VALUE("dof", fitResult.dof);
 			READ_DOUBLE_VALUE("sse", fitResult.sse);
+			READ_DOUBLE_VALUE("rms", fitResult.rms);
+			READ_DOUBLE_VALUE("rsd", fitResult.rsd);
 			READ_DOUBLE_VALUE("mse", fitResult.mse);
 			READ_DOUBLE_VALUE("rmse", fitResult.rmse);
 			READ_DOUBLE_VALUE("mae", fitResult.mae);
-			READ_DOUBLE_VALUE("rms", fitResult.rms);
-			READ_DOUBLE_VALUE("rsd", fitResult.rsd);
+			READ_DOUBLE_VALUE("pvalue", fitResult.pvalue);
 			READ_DOUBLE_VALUE("rsquared", fitResult.rsquared);
 			READ_DOUBLE_VALUE("rsquaredAdj", fitResult.rsquaredAdj);
 			READ_STRING_VALUE("solverOutput", fitResult.solverOutput);

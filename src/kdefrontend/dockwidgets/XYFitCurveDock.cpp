@@ -1067,7 +1067,6 @@ void XYFitCurveDock::showFitResult() {
 		uiGeneralTab.twGoodness->item(1, 1)->setText(i18n("reduced") + " " + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ", " + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "/dof");
 		uiGeneralTab.twGoodness->item(1, 2)->setText(QString::number(fitResult.rms));
 		//str += i18n("residual standard deviation:") + ' ' + QString::number(fitResult.rsd) + "<br>";
-		uiGeneralTab.twGoodness->item(2, 1)->setText(i18n("RMSE") + ", " + "SD" );
 		uiGeneralTab.twGoodness->item(2, 2)->setText(QString::number(fitResult.rsd));
 	}
 
@@ -1079,10 +1078,13 @@ void XYFitCurveDock::showFitResult() {
 	uiGeneralTab.twGoodness->item(4, 1)->setText("R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2"));
 	uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(fitResult.rsquaredAdj, 'g', 15));
 
+	uiGeneralTab.twGoodness->item(5, 0)->setText(QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ' ' + i18n("test"));
+	uiGeneralTab.twGoodness->item(5, 2)->setText(QString::number(fitResult.pvalue, 'g', 15));
+
 	//str += i18n("mean squared error:") + ' ' + QString::number(fitResult.mse) + "<br>";
 	//str += i18n("root-mean squared error") + " (" + i18n("reduced") + ' ' + QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + "): " + QString::number(fitResult.rmse) + "<br>";
 	//str += i18n("mean absolute error:") + ' ' + QString::number(fitResult.mae) + "<br>";
-	uiGeneralTab.twGoodness->item(5, 2)->setText(QString::number(fitResult.mae));
+	uiGeneralTab.twGoodness->item(6, 2)->setText(QString::number(fitResult.mae));
 // 	str += "<br><br>";
 
 	// do not show all iterations

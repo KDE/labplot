@@ -77,7 +77,7 @@ class XYFitCurve : public XYCurve {
 
 		struct FitResult {
 			FitResult() : available(false), valid(false), iterations(0), elapsedTime(0),
-				dof(0), sse(0), rms(0), rsd(0), rsquared(0), rsquaredAdj(0), mse(0), rmse(0), mae(0) {};
+				dof(0), sse(0), rms(0), rsd(0), rsquared(0), rsquaredAdj(0), mse(0), rmse(0), mae(0), pvalue(0) {};
 
 			bool available;
 			bool valid;
@@ -95,6 +95,7 @@ class XYFitCurve : public XYCurve {
 			double mse; // mean squared error = SSE/n
 			double rmse; // root-mean squared error = \sqrt(mse)
 			double mae; // mean absolute error = \sum_i^n |r_i|
+			double pvalue; // p value for chi-square test
 			// see also http://www.originlab.com/doc/Origin-Help/NLFit-Algorithm
 			QVector<double> paramValues;
 			QVector<double> errorValues;
