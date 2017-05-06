@@ -49,7 +49,7 @@
   \class XYCurveDock
   \brief  Provides a widget for editing the properties of the XYCurves (2D-curves) currently selected in the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown. The changes of the properties are applied to all curves.
+  If more than one curves are set, the properties of the first column are shown. The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of the curves  - these properties can only be changed if there is only one single curve.
 
   \ingroup kdefrontend
@@ -501,17 +501,8 @@ void XYCurveDock::setModel() {
 	cbYErrorPlusColumn->setTopLevelClasses(list);
 
 	list.clear();
-	list<<"Column";
+	list<<"Column"<<"XYCurve";
 	m_aspectTreeModel->setSelectableAspects(list);
-	if (cbXColumn) {
-		cbXColumn->setSelectableClasses(list);
-		cbYColumn->setSelectableClasses(list);
-	}
-	cbValuesColumn->setSelectableClasses(list);
-	cbXErrorMinusColumn->setSelectableClasses(list);
-	cbXErrorPlusColumn->setSelectableClasses(list);
-	cbYErrorMinusColumn->setSelectableClasses(list);
-	cbYErrorPlusColumn->setSelectableClasses(list);
 
 	if (cbXColumn) {
 		cbXColumn->setModel(m_aspectTreeModel);
@@ -540,7 +531,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 void XYCurveDock::initGeneralTab() {
-	//if there are more then one curve in the list, disable the content in the tab "general"
+	//if there are more than one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -586,7 +577,7 @@ void XYCurveDock::initGeneralTab() {
 }
 
 void XYCurveDock::initTabs() {
-	//if there are more then one curve in the list, disable the tab "general"
+	//if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		this->setModelIndexFromAspect(cbValuesColumn, m_curve->valuesColumn());
 		this->setModelIndexFromAspect(cbXErrorPlusColumn, m_curve->xErrorPlusColumn());

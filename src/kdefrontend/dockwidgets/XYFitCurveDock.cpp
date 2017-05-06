@@ -195,12 +195,6 @@ void XYFitCurveDock::setModel() {
 	cbYDataColumn->setTopLevelClasses(list);
 	cbWeightsColumn->setTopLevelClasses(list);
 
-	list.clear();
-	list << "Column";
-	cbXDataColumn->setSelectableClasses(list);
-	cbYDataColumn->setSelectableClasses(list);
-	cbWeightsColumn->setSelectableClasses(list);
-
 	cbXDataColumn->setModel(m_aspectTreeModel);
 	cbYDataColumn->setModel(m_aspectTreeModel);
 	cbWeightsColumn->setModel(m_aspectTreeModel);

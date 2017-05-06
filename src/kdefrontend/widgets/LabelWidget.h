@@ -32,17 +32,17 @@
 #include "ui_labelwidget.h"
 #include "backend/worksheet/TextLabel.h"
 #include <KConfigGroup>
+
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <repository.h>
+namespace KSyntaxHighlighting {
+	class SyntaxHighlighter;
+}
 #endif
 
 class Label;
 class Axis;
 class QMenu;
-
-namespace KSyntaxHighlighting {
-	class SyntaxHighlighter;
-}
 
 class LabelWidget : public QWidget {
 	Q_OBJECT

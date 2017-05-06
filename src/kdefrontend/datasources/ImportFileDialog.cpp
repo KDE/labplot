@@ -127,7 +127,6 @@ void ImportFileDialog::setModel(QAbstractItemModel* model) {
 
 	list.clear();
 	list << "Spreadsheet" << "Matrix" << "Workbook";
-	cbAddTo->setSelectableClasses(list);
 	cbAddTo->setModel(model);
 
 	tbNewDataContainer = new QToolButton(frameAddTo);

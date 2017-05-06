@@ -87,10 +87,6 @@ void TreeViewComboBox::setTopLevelClasses(QList<const char*> list) {
 	m_topLevelClasses = list;
 }
 
-void TreeViewComboBox::setSelectableClasses(QList<const char*> list) {
-	m_selectableClasses = list;
-}
-
 void TreeViewComboBox::setHiddenAspects(QList<const AbstractAspect*> list) {
 	m_hiddenAspects = list;
 }
@@ -180,24 +176,17 @@ bool TreeViewComboBox::eventFilter(QObject* object, QEvent* event) {
 void TreeViewComboBox::treeViewIndexActivated(const QModelIndex& index) {
 	DEBUG("TreeViewComboBox::treeViewIndexActivated()");
 	if (index.internalPointer()) {
-		AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		const char* currentClassName = aspect->metaObject()->className();
-		foreach (const char* className, m_selectableClasses) {
-			if ( strcmp(currentClassName, className) == 0 ) {
-				QComboBox::setCurrentIndex(0);
-				QComboBox::setItemText(0, index.data().toString());
-				emit currentModelIndexChanged(index);
-				m_groupBox->hide();
-				return;
-			}
-		}
+		QComboBox::setCurrentIndex(0);
+		QComboBox::setItemText(0, index.data().toString());
+		emit currentModelIndexChanged(index);
+		m_groupBox->hide();
+		return;
 	}
 
 	m_treeView->setCurrentIndex(QModelIndex());
 	setCurrentIndex(0);
 	QComboBox::setItemText(0, "");
 	emit currentModelIndexChanged(QModelIndex());
-
 	m_groupBox->hide();
 }
 

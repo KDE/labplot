@@ -225,7 +225,6 @@ void FunctionValuesDialog::addVariable() {
 	m_variableDataColumns<<cb;
 
 	cb->setTopLevelClasses(m_topLevelClasses);
-	cb->setSelectableClasses(m_selectableClasses);
 	cb->setModel(m_aspectTreeModel.get());
 	cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(m_spreadsheet->column(0)));
 

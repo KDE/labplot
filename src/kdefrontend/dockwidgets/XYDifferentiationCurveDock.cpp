@@ -46,7 +46,7 @@ extern "C" {
 		(2D-curves defined by a differentiation) currently selected in
 		the project explorer.
 
-  If more then one curves are set, the properties of the first column are shown.
+  If more than one curves are set, the properties of the first column are shown.
   The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
@@ -115,7 +115,7 @@ void XYDifferentiationCurveDock::setupGeneral() {
 }
 
 void XYDifferentiationCurveDock::initGeneralTab() {
-	//if there are more then one curve in the list, disable the tab "general"
+	//if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size()==1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -141,6 +141,7 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_differentiationCurve->dataSourceType());
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
+	if (m_differentiationCurve->dataSourceCurve())
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_differentiationCurve->dataSourceCurve());
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_differentiationCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_differentiationCurve->yDataColumn());
@@ -183,19 +184,10 @@ void XYDifferentiationCurveDock::setModel() {
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
 	list.clear();
-	list<<"XYCurve"<<"DatapickerCurve";
-	cbDataSourceCurve->setSelectableClasses(list);
-
-	list.clear();
 	list<<"Folder"<<"Workbook"<<"Datapicker"<<"DatapickerCurve"<<"Spreadsheet"
 		<<"FileDataSource"<<"Column"<<"Worksheet"<<"CartesianPlot"<<"XYFitCurve";
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
-
- 	list.clear();
-	list<<"Column";
-	cbXDataColumn->setSelectableClasses(list);
-	cbYDataColumn->setSelectableClasses(list);
 
 	cbDataSourceCurve->setModel(m_aspectTreeModel);
 	cbXDataColumn->setModel(m_aspectTreeModel);
@@ -269,20 +261,20 @@ void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
 
 void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* curve = 0;
+	XYCurve* dataSourceCurve = 0;
 	if (aspect) {
-		curve = dynamic_cast<XYCurve*>(aspect);
-		Q_ASSERT(curve);
+		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+		Q_ASSERT(dataSourceCurve);
 	}
 
 	// disable deriv orders and accuracies that need more data points
-	this->updateDifferentiationSettings(curve->xColumn());
+	this->updateDifferentiationSettings(dataSourceCurve->xColumn());
 
 	if (m_initializing)
 		return;
 
 	foreach(XYCurve* curve, m_curvesList)
-		dynamic_cast<XYDifferentiationCurve*>(curve)->setDataSourceCurve(curve);
+		dynamic_cast<XYDifferentiationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
