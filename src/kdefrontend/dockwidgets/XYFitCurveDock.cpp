@@ -107,6 +107,14 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.tbFunctions->setIcon( QIcon::fromTheme("preferences-desktop-font") );
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
+	uiGeneralTab.twGeneral->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	uiGeneralTab.twParameters->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	uiGeneralTab.twGoodness->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+	uiGeneralTab.twGeneral->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+	uiGeneralTab.twGoodness->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+	uiGeneralTab.twGoodness->item(5, 0)->setText(QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ' ' + i18n("test"));
+
 	QHBoxLayout* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
@@ -1072,7 +1080,6 @@ void XYFitCurveDock::showFitResult() {
 	uiGeneralTab.twGoodness->item(4, 1)->setText("R" + QString::fromUtf8("\u0304") + QString::fromUtf8("\u00b2"));
 	uiGeneralTab.twGoodness->item(4, 2)->setText(QString::number(fitResult.rsquaredAdj, 'g', 15));
 
-	uiGeneralTab.twGoodness->item(5, 0)->setText(QString::fromUtf8("\u03c7") + QString::fromUtf8("\u00b2") + ' ' + i18n("test"));
 	uiGeneralTab.twGoodness->item(5, 2)->setText(QString::number(fitResult.pvalue, 'g', 15));
 
 	//str += i18n("mean squared error:") + ' ' + QString::number(fitResult.mse) + "<br>";
