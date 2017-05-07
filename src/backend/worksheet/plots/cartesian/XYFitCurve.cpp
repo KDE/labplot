@@ -5,7 +5,7 @@
     Description          : A xy-curve defined by a fit model
     --------------------------------------------------------------------
     Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 

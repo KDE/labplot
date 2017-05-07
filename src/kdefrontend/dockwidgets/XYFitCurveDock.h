@@ -76,6 +76,7 @@ private slots:
 
 	void showConstants();
 	void showFunctions();
+	void updateParameterList();
 	void showParameters();
 	void parametersChanged();
 	void showOptions();

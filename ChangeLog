@@ -2,8 +2,10 @@
 New features:
 	* Apply themes to worksheet and to all its children
 	* Syntax highlighting for LaTeX in the text label
-	* Improved fit result presentation
-	* Added p-value for chi-square test in nonlinear fitting
+	* Improved data fitting
+		* Automatically guess parameter of custom models
+		* Better result presentation
+		* Added p-value for chi-square test in nonlinear fitting
 
 -----2.4-----
 New features:

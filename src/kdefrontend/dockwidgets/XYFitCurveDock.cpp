@@ -30,6 +30,8 @@
 #include "XYFitCurveDock.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/lib/macros.h"
+#include "backend/gsl/ExpressionParser.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
@@ -393,7 +395,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 }
 
 void XYFitCurveDock::modelChanged(int index) {
-	QDEBUG("modelChanged() type =" << index << ", initializing =" << m_initializing);
+	DEBUG("modelChanged() type =" << index << ", initializing =" << m_initializing);
 	// leave if there is no selection
 	if(index == -1)
 		return;
@@ -460,7 +462,7 @@ void XYFitCurveDock::updateModelEquation() {
 	DEBUG("updateModelEquation() type =" << m_fitData.modelType);
 
 	int num = uiGeneralTab.sbDegree->value();
-	QStringList vars; // variables/parameter that are known in ExpressionTextEdit teEquation
+	QStringList vars; // variables/parameter that are known
 	vars << "x";
 	// indices used in multi peak parameter models
 	QStringList indices;
@@ -815,7 +817,7 @@ void XYFitCurveDock::updateModelEquation() {
 	//available - unless there're no values available
 	if (m_fitData.modelCategory != nsl_fit_model_custom || 
 	        !(m_initializing && m_fitData.paramNames.size() == m_fitData.paramStartValues.size())) {
-		QDEBUG(" number of start values" << m_fitData.paramNames.size() << m_fitData.paramStartValues.size());
+		DEBUG(" number of start values" << m_fitData.paramNames.size() << m_fitData.paramStartValues.size());
 		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
 		m_fitData.paramFixed.resize(m_fitData.paramNames.size());
 		m_fitData.paramLowerLimits.resize(m_fitData.paramNames.size());
@@ -919,7 +921,40 @@ void XYFitCurveDock::showFunctions() {
 	menu.exec(uiGeneralTab.tbFunctions->mapToGlobal(pos));
 }
 
+void XYFitCurveDock::updateParameterList() {
+	// use current model function
+	m_fitData.model = uiGeneralTab.teEquation->toPlainText();
+
+	ExpressionParser* parser = ExpressionParser::getInstance();
+	QStringList vars; // variables that are known
+	vars << "x";	//TODO: others?
+	m_fitData.paramNames = m_fitData.paramNamesUtf8 = parser->getParameter(m_fitData.model, vars);
+
+	// if number of parameter changed
+	bool moreParameter = false;
+	if (m_fitData.paramNames.size() > m_fitData.paramStartValues.size())
+		moreParameter = true;
+	if (m_fitData.paramNames.size() != m_fitData.paramStartValues.size()) {
+		m_fitData.paramStartValues.resize(m_fitData.paramNames.size());
+		m_fitData.paramFixed.resize(m_fitData.paramNames.size());
+		m_fitData.paramLowerLimits.resize(m_fitData.paramNames.size());
+		m_fitData.paramUpperLimits.resize(m_fitData.paramNames.size());
+	}
+	if (moreParameter) {
+		for (int i = m_fitData.paramStartValues.size() - 1; i < m_fitData.paramNames.size(); ++i) {
+			m_fitData.paramStartValues[i] = 1.0;
+			m_fitData.paramFixed[i] = false;
+			m_fitData.paramLowerLimits[i] = -DBL_MAX;
+			m_fitData.paramUpperLimits[i] = DBL_MAX;
+		}
+	}
+	parametersChanged();
+}
+
 void XYFitCurveDock::showParameters() {
+	if (m_fitData.modelCategory == nsl_fit_model_custom)
+		updateParameterList();
+
 	QMenu menu;
 	FitParametersWidget w(&menu, &m_fitData);
 	connect(&w, SIGNAL(finished()), &menu, SLOT(close()));
@@ -929,7 +964,7 @@ void XYFitCurveDock::showParameters() {
 	widgetAction->setDefaultWidget(&w);
 	menu.addAction(widgetAction);
 
-	QPoint pos(-menu.sizeHint().width()+uiGeneralTab.pbParameters->width(),-menu.sizeHint().height());
+	QPoint pos(-menu.sizeHint().width() + uiGeneralTab.pbParameters->width(), -menu.sizeHint().height());
 	menu.exec(uiGeneralTab.pbParameters->mapToGlobal(pos));
 }
 
@@ -968,7 +1003,7 @@ void XYFitCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	m_fitData.degree = uiGeneralTab.sbDegree->value();
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
-		m_fitData.model = uiGeneralTab.teEquation->toPlainText();
+		updateParameterList();
 
 	foreach(XYCurve* curve, m_curvesList)
 		dynamic_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
@@ -987,11 +1022,7 @@ void XYFitCurveDock::enableRecalculate() const {
 	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 	bool data = (aspectX != 0 && aspectY != 0);
 
-	nsl_fit_model_category category = (nsl_fit_model_category)uiGeneralTab.cbCategory->currentIndex();
-	if (category == nsl_fit_model_custom)
-		uiGeneralTab.pbRecalculate->setEnabled( data && uiGeneralTab.teEquation->isValid() );
-	else
-		uiGeneralTab.pbRecalculate->setEnabled(data);
+	uiGeneralTab.pbRecalculate->setEnabled(data);
 }
 
 /*!

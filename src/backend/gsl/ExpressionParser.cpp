@@ -27,6 +27,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "backend/lib/macros.h"
 #include "backend/gsl/ExpressionParser.h"
 
 #include <klocale.h>
@@ -1107,7 +1108,27 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	const char* data = funcba.data();
 	gsl_set_error_handler_off();
 	parse(data);
-	return !(parse_errors()>0);
+	return !(parse_errors() > 0);
+}
+
+QStringList ExpressionParser::getParameter(const QString& expr, const QStringList& vars) {
+	QDEBUG("variables:" << vars);
+	QStringList parameters;
+
+	QStringList strings = expr.split(QRegExp("\\W+"), QString::SkipEmptyParts);
+	QDEBUG("found strings:" << strings);
+	for (int i = 0; i < strings.size(); ++i) {
+		// check if token is not a known constant/function/variable or number
+		if (constants().indexOf(strings[i]) == -1 && functions().indexOf(strings[i]) == -1
+			&& vars.indexOf(strings[i]) == -1 && QRegExp("[0-9]*").exactMatch(strings[i]) == 0)
+				parameters << strings[i];
+		else
+			QDEBUG(strings[i] << ':' << constants().indexOf(strings[i]) << ' ' << functions().indexOf(strings[i]) << ' '
+				<< vars.indexOf(strings[i]) << ' ' << QRegExp("[0-9]*").exactMatch(strings[i]));
+	}
+	QDEBUG("parameters found:" << parameters);
+
+        return parameters;
 }
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,

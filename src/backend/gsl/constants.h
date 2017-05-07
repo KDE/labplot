@@ -45,22 +45,22 @@ struct con _constants[] = {
 	/* Physical constants in MKSA system */
 
 	/* Fundamental Constants */
-	{"c", GSL_CONST_MKSA_SPEED_OF_LIGHT},
+	{"c0", GSL_CONST_MKSA_SPEED_OF_LIGHT},
 	{"mu0", GSL_CONST_MKSA_VACUUM_PERMEABILITY},
 	{"e0", GSL_CONST_MKSA_VACUUM_PERMITTIVITY},
-	{"h", GSL_CONST_MKSA_PLANCKS_CONSTANT_H},
+	{"hPlanck", GSL_CONST_MKSA_PLANCKS_CONSTANT_H},
 	{"hbar", GSL_CONST_MKSA_PLANCKS_CONSTANT_HBAR},
-	{"na", GSL_CONST_NUM_AVOGADRO},
-	{"f", GSL_CONST_MKSA_FARADAY},
-	{"k", GSL_CONST_MKSA_BOLTZMANN},
+	{"NA", GSL_CONST_NUM_AVOGADRO},
+	{"Faraday", GSL_CONST_MKSA_FARADAY},
+	{"kB", GSL_CONST_MKSA_BOLTZMANN},
 	{"r0", GSL_CONST_MKSA_MOLAR_GAS},
 	{"v0", GSL_CONST_MKSA_STANDARD_GAS_VOLUME},
 	{"sigma", GSL_CONST_MKSA_STEFAN_BOLTZMANN_CONSTANT},
-	{"gauss", GSL_CONST_MKSA_GAUSS},
+	{"Gauss", GSL_CONST_MKSA_GAUSS},
 
 	/* Astronomy and Astrophysics */
 	{"au", GSL_CONST_MKSA_ASTRONOMICAL_UNIT},
-	{"G", GSL_CONST_MKSA_GRAVITATIONAL_CONSTANT},
+	{"gamma", GSL_CONST_MKSA_GRAVITATIONAL_CONSTANT},
 	{"ly", GSL_CONST_MKSA_LIGHT_YEAR},
 	{"pc", GSL_CONST_MKSA_PARSEC},
 	{"gg", GSL_CONST_MKSA_GRAV_ACCEL},
@@ -75,9 +75,9 @@ struct con _constants[] = {
 	{"mp", GSL_CONST_MKSA_MASS_PROTON},
 	{"mn", GSL_CONST_MKSA_MASS_NEUTRON},
 	{"alpha", GSL_CONST_NUM_FINE_STRUCTURE},
-	{"ry", GSL_CONST_MKSA_RYDBERG},
+	{"Ry", GSL_CONST_MKSA_RYDBERG},
 	{"a0", GSL_CONST_MKSA_BOHR_RADIUS},
-	{"a", GSL_CONST_MKSA_ANGSTROM},
+	{"ao", GSL_CONST_MKSA_ANGSTROM},
 	{"barn", GSL_CONST_MKSA_BARN},
 	{"muB", GSL_CONST_MKSA_BOHR_MAGNETON},
 	{"mun", GSL_CONST_MKSA_NUCLEAR_MAGNETON},
@@ -88,8 +88,8 @@ struct con _constants[] = {
 
 	/* Measurement of Time */
 	{"min", GSL_CONST_MKSA_MINUTE},
-	{"h", GSL_CONST_MKSA_HOUR},
-	{"d", GSL_CONST_MKSA_DAY},
+	{"hour", GSL_CONST_MKSA_HOUR},
+	{"day", GSL_CONST_MKSA_DAY},
 	{"week", GSL_CONST_MKSA_WEEK},
 
 	/* Imperial Units */
@@ -163,14 +163,14 @@ struct con _constants[] = {
 	{"ftlambert", GSL_CONST_MKSA_FOOTLAMBERT},
 
 	/* Radioactivity */
-	{"curie", GSL_CONST_MKSA_CURIE},
-	{"roentgen", GSL_CONST_MKSA_ROENTGEN},
+	{"Curie", GSL_CONST_MKSA_CURIE},
+	{"Roentgen", GSL_CONST_MKSA_ROENTGEN},
 	{"rad", GSL_CONST_MKSA_RAD},
 
 	/* Force and Energy */
-	{"N", GSL_CONST_MKSA_NEWTON},
+	{"Newton", GSL_CONST_MKSA_NEWTON},
 	{"dyne", GSL_CONST_MKSA_DYNE},
-	{"J", GSL_CONST_MKSA_JOULE},
+	{"Joule", GSL_CONST_MKSA_JOULE},
 	{"erg", GSL_CONST_MKSA_ERG},
 
 	/* ignore '...' */
