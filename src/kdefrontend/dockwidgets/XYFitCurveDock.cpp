@@ -1066,9 +1066,9 @@ void XYFitCurveDock::showFitResult() {
 	// Parameters
 	str += "<b>" + i18n("Parameters:") + "</b>";
 	uiGeneralTab.twParameters->setRowCount(fitResult.paramValues.size());
-	uiGeneralTab.twParameters->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	//uiGeneralTab.twParameters->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 	QStringList headerLabels;
-	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << i18n("P > |t|");
+	headerLabels << i18n("Name") << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << i18n("P > |t|") << i18n("Conf. Interval");
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
 	for (int i = 0; i < fitResult.paramValues.size(); i++) {
 		if (fitData.paramFixed.at(i))
@@ -1086,9 +1086,13 @@ void XYFitCurveDock::showFitResult() {
 			uiGeneralTab.twParameters->setItem(i, 2, item);
 			item = new QTableWidgetItem(QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3));
 			uiGeneralTab.twParameters->setItem(i, 3, item);
+
+			// t values
 			double t = fitResult.paramValues.at(i)/fitResult.errorValues.at(i);
 			item = new QTableWidgetItem(QString::number(t, 'g', 3));
 			uiGeneralTab.twParameters->setItem(i, 4, item);
+
+			// p values
 			double p = 2. * gsl_cdf_tdist_Q(fabs(t), fitResult.dof);
 			if (p < 1.e-9)	// limit range
 				p = 0;
@@ -1105,6 +1109,13 @@ void XYFitCurveDock::showFitResult() {
 			else
 				item->setTextColor(Qt::darkBlue);
 			uiGeneralTab.twParameters->setItem(i, 5, item);
+
+			// Conf. interval
+			double alpha = 0.05;
+			t = gsl_cdf_tdist_Pinv(1. - alpha/2., fitResult.dof);
+			item = new QTableWidgetItem(QString::number(fitResult.paramValues.at(i) - t*fitResult.errorValues.at(i))
+				+ " .. " + QString::number(fitResult.paramValues.at(i) + t*fitResult.errorValues.at(i)));
+			uiGeneralTab.twParameters->setItem(i, 6, item);
 		}
 	}
 

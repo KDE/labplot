@@ -648,7 +648,7 @@
             <bool>true</bool>
            </property>
            <property name="columnCount">
-            <number>6</number>
+            <number>7</number>
            </property>
            <attribute name="horizontalHeaderCascadingSectionResizes">
             <bool>false</bool>
@@ -665,6 +665,7 @@
            <attribute name="verticalHeaderVisible">
             <bool>false</bool>
            </attribute>
+           <column/>
            <column/>
            <column/>
            <column/>
