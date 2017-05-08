@@ -1037,8 +1037,6 @@ void XYFitCurvePrivate::recalculate() {
 	const double c = GSL_MIN_DBL(1., sqrt(fitResult.rms)); //limit error for poor fit
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
-	fitResult.tValues.resize(np);
-	fitResult.pValues.resize(np);
 	for (unsigned int i = 0; i < np; i++) {
 		// scale resulting values if they are bounded
 		fitResult.paramValues[i] = nsl_fit_map_bound(gsl_vector_get(s->x, i), x_min[i], x_max[i]);
@@ -1048,10 +1046,6 @@ void XYFitCurvePrivate::recalculate() {
 			DEBUG("saving parameter"<<i<<fitResult.paramValues[i]<<fitData.paramStartValues.data()[i]);
 		}
 		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
-		fitResult.tValues[i] = fitResult.paramValues[i]/fitResult.errorValues[i];
-		fitResult.pValues[i] = 2*gsl_cdf_tdist_Q(fabs(fitResult.tValues[i]), fitResult.dof);
-		if (fitResult.pValues[i] < 1.e-9)
-			fitResult.pValues[i] = 0;
 	}
 
 	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
@@ -1222,16 +1216,6 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 		writer->writeTextElement("error", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
-	writer->writeStartElement("tValues");
-	foreach (const double value, d->fitResult.tValues)
-		writer->writeTextElement("t", QString::number(value, 'g', 15));
-	writer->writeEndElement();
-
-	writer->writeStartElement("pValues");
-	foreach (const double value, d->fitResult.pValues)
-		writer->writeTextElement("p", QString::number(value, 'g', 15));
-	writer->writeEndElement();
-
 	//save calculated columns if available
 	if (d->xColumn && d->yColumn && d->residualsColumn) {
 		d->xColumn->save(writer);
@@ -1314,10 +1298,6 @@ bool XYFitCurve::load(XmlStreamReader* reader) {
 			d->fitResult.paramValues << reader->readElementText().toDouble();
 		} else if (reader->name() == "error") {
 			d->fitResult.errorValues << reader->readElementText().toDouble();
-		} else if (reader->name() == "t") {
-			d->fitResult.tValues << reader->readElementText().toDouble();
-		} else if (reader->name() == "p") {
-			d->fitResult.pValues << reader->readElementText().toDouble();
 		} else if (reader->name() == "fitResult") {
 			attribs = reader->attributes();
 

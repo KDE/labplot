@@ -46,6 +46,7 @@
 
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
+#include <gsl/gsl_cdf.h>
 }
 
 /*!
@@ -1085,25 +1086,25 @@ void XYFitCurveDock::showFitResult() {
 			uiGeneralTab.twParameters->setItem(i, 2, item);
 			item = new QTableWidgetItem(QString::number(100.*fitResult.errorValues.at(i)/fabs(fitResult.paramValues.at(i)), 'g', 3));
 			uiGeneralTab.twParameters->setItem(i, 3, item);
-			if (fitResult.tValues.size() > 0) {
-				item = new QTableWidgetItem(QString::number(fitResult.tValues.at(i), 'g', 3));
-				uiGeneralTab.twParameters->setItem(i, 4, item);
-			}
-			if (fitResult.pValues.size() > 0) {
-				item = new QTableWidgetItem(QString::number(fitResult.pValues.at(i), 'g', 3));
-				// color p values depending on value
-				if (fitResult.pValues.at(i) > 0.05)
-					item->setTextColor(Qt::red);
-				else if (fitResult.pValues.at(i) > 0.01)
-					item->setTextColor(Qt::darkGreen);
-				else if (fitResult.pValues.at(i) > 0.001)
-					item->setTextColor(Qt::darkCyan);
-				else if (fitResult.pValues.at(i) > 0.0001)
-					item->setTextColor(Qt::blue);
-				else
-					item->setTextColor(Qt::darkBlue);
-				uiGeneralTab.twParameters->setItem(i, 5, item);
-			}
+			double t = fitResult.paramValues.at(i)/fitResult.errorValues.at(i);
+			item = new QTableWidgetItem(QString::number(t, 'g', 3));
+			uiGeneralTab.twParameters->setItem(i, 4, item);
+			double p = 2. * gsl_cdf_tdist_Q(fabs(t), fitResult.dof);
+			if (p < 1.e-9)	// limit range
+				p = 0;
+			item = new QTableWidgetItem(QString::number(p, 'g', 3));
+			// color p values depending on value
+			if (p > 0.05)
+				item->setTextColor(Qt::red);
+			else if (p > 0.01)
+				item->setTextColor(Qt::darkGreen);
+			else if (p > 0.001)
+				item->setTextColor(Qt::darkCyan);
+			else if (p > 0.0001)
+				item->setTextColor(Qt::blue);
+			else
+				item->setTextColor(Qt::darkBlue);
+			uiGeneralTab.twParameters->setItem(i, 5, item);
 		}
 	}
 

@@ -99,8 +99,6 @@ class XYFitCurve : public XYCurve {
 			// see also http://www.originlab.com/doc/Origin-Help/NLFit-Algorithm
 			QVector<double> paramValues;
 			QVector<double> errorValues;
-			QVector<double> tValues;
-			QVector<double> pValues;
 			QString solverOutput;
 		};
 
